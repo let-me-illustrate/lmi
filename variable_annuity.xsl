@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.30 2007-06-20 00:03:07 etarassov Exp $
+    $Id: variable_annuity.xsl,v 1.31 2007-06-20 00:26:36 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -405,7 +405,7 @@
             <xsl:with-param name="logo_only" select="0"/>
           </xsl:call-template>
           <fo:block font-size="11.0pt" text-align="center" font-family="sans-serif" font-weight="bold" padding-top=".8em">
-            <xsl:text>Explanation and Footnotes</xsl:text>
+            Explanation and Footnotes
           </fo:block>
         </fo:static-content>
 
@@ -416,124 +416,113 @@
         </fo:static-content>
 
         <fo:flow flow-name="xsl-region-body">
-          <fo:block font-size="10.0pt" text-align="left" font-family="sans-serif" font-weight="bold" text-decoration="underline">
-            <xsl:text>The Illustration</xsl:text>
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
+            <fo:block font-size="10.0pt" font-weight="bold" text-decoration="underline">
+              The Illustration
+            </fo:block>
+            <fo:block padding-top="1em">
+              The hypothetical Net Rate of Return is the rate of return net
+              of investment management, custody and other expenses charged
+              by the investment manager of the underlying fund(s).
+            </fo:block>
+            <!--
+            TODO ?? This formatting is different, but not different enough
+            to be spotted easilly by a human.
+            -->
+            <fo:block font-size="10.0pt" font-family="Times" padding-top="1em">
+              The information provided in this illustration is not written
+              or intended as tax or legal advice and may not be relied on
+              for purposes of avoiding any Federal tax penalties.
+              <xsl:value-of select="$scalars/InsCoShortName"/>, its employees
+              and representatives are not authorized to give tax
+              or legal advice. Individuals are encouraged to seek advice
+              from their own tax or legal counsel.
+            </fo:block>
+            <fo:block padding-top="1em">
+              This illustration is not a Contract or an offer or solicitation
+              to enter into a Contract. Offers are made only through
+              the Confidential Private Placement Memorandum for
+              <xsl:value-of select="$scalars/PolicyMktgName"/>
+              <fo:inline vertical-align="super" font-size="7.0pt">SM</fo:inline>.
+            </fo:block>
+            <fo:block padding-top="1em">
+              This material must be preceded or accompanied by the current
+              Confidential Private Placement Memorandum for
+              <xsl:value-of select="$scalars/PolicyMktgName"/>
+              <fo:inline vertical-align="super" font-size="7.0pt">SM</fo:inline>
+              and the current prospectuses and private placement memoranda
+              for its underlying underlying investment choices. Investors
+              should carefully consider the investment objectives, risks,
+              charges and expenses of the variable annuity Contract and its
+              underlying investment choices. Please read the prospectuses
+              and private placement memoranda carefully before investing
+              or sending money.
+            </fo:block>
           </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
-            <xsl:text>
-              The hypothetical Net Rate of Return is the rate of return net of investment
-              management, custody and other expenses charged by the investment manager of the
-              underlying fund(s).
-            </xsl:text>
-          </fo:block>
-          <fo:block font-size="10.0pt" text-align="left" font-family="Times" font-weight="normal" padding-top="1em">
-            <xsl:text>
-              The information provided in this illustration is not written or intended
-              as tax or legal advice and may not be relied on for purposes of avoiding
-              any Federal tax penalties.
-            </xsl:text>
-            <xsl:value-of select="$scalars/InsCoShortName"/>
-            <xsl:text>, its employees and representatives are not authorized to give tax or legal
-              advice. Individuals are encouraged to seek advice from their own tax or legal counsel.
-            </xsl:text>
-          </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
-            <xsl:text>
-              This illustration is not a Contract or an offer or solicitation to enter into a
-              Contract. Offers are made only through the Confidential Private Placement
-              Memorandum for
-            </xsl:text>
-            <xsl:value-of select="$scalars/PolicyMktgName"/>
-            <fo:inline vertical-align="super" font-size="7.0pt">SM</fo:inline>
-            <xsl:text>.</xsl:text>
-          </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="bold" padding-top="1em">
-            <xsl:text>
-              This material must be preceded or accompanied by the current Confidential Private
-              Placement Memorandum for
-            </xsl:text>
-            <xsl:value-of select="$scalars/PolicyMktgName"/>
-            <fo:inline vertical-align="super" font-size="7.0pt">SM</fo:inline>
-            <xsl:text>
-              and the current prospectuses and private placement memoranda for its underlying
-              underlying investment choices. Investors should carefully consider the investment
-              objectives, risks, charges and expenses of the variable annuity Contract and its
-              underlying investment choices. Please read the prospectuses and private placement
-              memoranda carefully before investing or sending money.
-            </xsl:text>
-          </fo:block>
-          <fo:block font-size="10.0pt" text-align="left" font-family="sans-serif" font-weight="bold" padding-top="2em" text-decoration="underline">
-            <xsl:text>The Contract</xsl:text>
-          </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
-            <fo:inline font-weight="bold">Contract Requirements: </fo:inline>
-            <xsl:text>
-              This Contract is only available to persons who are deemed accredited investors
-              and qualified purchasers under applicable federal securities laws. The minimum
-              initial premium is $500,000. You must be able to bear the risk of loss of your
-              entire investment in the Contract. You will be required to represent to
-            </xsl:text>
-            <xsl:value-of select="$scalars/InsCoShortName"/>
-            <xsl:text>
-              that you are familiar with and understand the fundamental risks and financial
+
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
+            <fo:block font-size="10.0pt" font-weight="bold" padding-top="2em" text-decoration="underline">
+              The Contract
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">Contract Requirements:</fo:inline>
+              This Contract is only available to persons who are deemed
+              accredited investors and qualified purchasers under applicable
+              federal securities laws. The minimum initial premium is $500,000.
+              You must be able to bear the risk of loss of your entire investment
+              in the Contract. You will be required to represent to
+              <xsl:value-of select="$scalars/InsCoShortName"/> that you are
+              familiar with and understand the fundamental risks and financial
               hazards of investing in the Contract.
-            </xsl:text>
-          </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
-            <fo:inline font-weight="bold">Purchase Payment Charges: </fo:inline>
-            <xsl:text>
-              The sum of the negotiated Purchase Payment Distribution Charge and Purchase
-              Payment Expense Charge plus state premium tax, if applicable.
-            </xsl:text>
-          </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
-            <fo:inline font-weight="bold">Monthly Charges: </fo:inline>
-            <xsl:text>
-              Monthly Charges will be deducted from the Contract Value. The Company may assess
-              Monthly Charges of three (3) types:  Mortality and Expense Risk Charges, Asset
-              Based Distribution Charges and Administrative Charges. The Monthly Charges will
-              be taken from the Money Market Sub-Account.
-            </xsl:text>
-          </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
-            <xsl:text>
-              Due to the limitations on withdrawals from investment options offered under the
-              Contract, we reserve the right to (i) allocate a portion of each purchase
-              payment to the Money Market Sub-Account and (ii) transfer Contract Value to
-              the Money Market Sub-Account from time to time to ensure that monthly charges
-              can be deducted from the Money Market Sub-Account when due. The illustrated
-              values do not reflect any amounts that may be allocated to meet the minimum
-              Money Market requirement.
-            </xsl:text>
-          </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
-            <fo:inline font-weight="bold">Mortality and Expense Charge ("M&amp;E"): </fo:inline>
-            <xsl:text>
-              The current and guaranteed maximum charges are described in the Table of Charges
-              of the Confidential Private Placement Memorandum for
-            </xsl:text>
-            <xsl:value-of select="$scalars/PolicyMktgName"/>
-            <fo:inline vertical-align="super" font-size="7.0pt">SM</fo:inline>
-            <xsl:text>.</xsl:text>
-          </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
-            <fo:inline font-weight="bold">Administrative Charge: </fo:inline>
-            <xsl:value-of select="$scalars/InterestDisclaimer"/>
-          </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
-            <fo:inline font-weight="bold">Asset Based Distribution Charge: </fo:inline>
-            <xsl:text>
-              The current and guaranteed charges are equal to annual negotiated asset based
-              compensation, if any.
-            </xsl:text>
-          </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
-            <fo:inline font-weight="bold">Withdrawals: </fo:inline>
-            <xsl:text>
-              Withdrawals are taxed to the extent of any gain in the contract. In some cases, an
-              additional 10% federal income tax penalty will apply to the taxable portion of the
-              withdrawal. This illustration does not reflect the tax consequences of withdrawals.
-            </xsl:text>
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">Purchase Payment Charges:</fo:inline>
+              The sum of the negotiated Purchase Payment Distribution Charge
+              and Purchase Payment Expense Charge plus state premium tax,
+              if applicable.
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">Monthly Charges:</fo:inline>
+              Monthly Charges will be deducted from the Contract Value.
+              The Company may assess Monthly Charges of three (3) types:
+              Mortality and Expense Risk Charges, Asset Based
+              Distribution Charges and Administrative Charges. The Monthly
+              Charges will be taken from the Money Market Sub-Account.
+            </fo:block>
+            <fo:block padding-top="1em">
+              Due to the limitations on withdrawals from investment options
+              offered under the Contract, we reserve the right to (i) allocate
+              a portion of each purchase payment to the Money Market Sub-Account
+              and (ii) transfer Contract Value to the Money Market Sub-Account
+              from time to time to ensure that monthly charges can be deducted
+              from the Money Market Sub-Account when due. The illustrated
+              values do not reflect any amounts that may be allocated
+              to meet the minimum Money Market requirement.
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">Mortality and Expense Charge ("M&amp;E"):</fo:inline>
+              The current and guaranteed maximum charges are described
+              in the Table of Charges of the Confidential Private Placement
+              Memorandum for <xsl:value-of select="$scalars/PolicyMktgName"/>
+              <fo:inline vertical-align="super" font-size="7.0pt">SM</fo:inline>.
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">Administrative Charge:</fo:inline>
+              <xsl:value-of select="$scalars/InterestDisclaimer"/>
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">Asset Based Distribution Charge:</fo:inline>
+              The current and guaranteed charges are equal to annual negotiated
+              asset based compensation, if any.
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">Withdrawals:</fo:inline>
+              Withdrawals are taxed to the extent of any gain in the contract.
+              In some cases, an additional 10% federal income tax penalty
+              will apply to the taxable portion of the withdrawal.
+              This illustration does not reflect the tax consequences
+              of withdrawals.
+            </fo:block>
           </fo:block>
         </fo:flow>
 
