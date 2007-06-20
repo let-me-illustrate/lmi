@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.781.2.34 2007-06-20 00:37:24 etarassov Exp $
+// $Id: ChangeLog,v 1.781.2.35 2007-06-20 00:53:54 etarassov Exp $
 
 MAINTENANCE
 
@@ -12673,4 +12673,9 @@ Reformat 'explanation-and-footnotes-1'.
 
   variable_annuity.xsl
 Reformat 'explanation-and-footnotes-2'.
+
+20070620T0053Z <etarassov@tt-solutions.com> [1232]
+
+  variable_annuity.xsl
+Remove 'xsl:text'.
 
