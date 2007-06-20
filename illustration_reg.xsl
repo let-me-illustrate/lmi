@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.42 2007-06-20 13:45:31 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.43 2007-06-20 13:55:50 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -752,7 +752,7 @@
           <xsl:variable name="columns" select="$tabular-detail-report2-columns-raw[not(@composite) or boolean(boolean(@composite='1')=$is_composite)]"/>
 
           <fo:block font-size="9.0pt" font-family="serif">
-            <fo:table table-layout="fixed" width="33em">
+            <fo:table table-layout="fixed" width="{8*count($columns)}em">
               <xsl:call-template name="generate-table-columns">
                 <xsl:with-param name="columns" select="$columns"/>
               </xsl:call-template>
