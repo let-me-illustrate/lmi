@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.33 2007-06-20 00:53:54 etarassov Exp $
+    $Id: variable_annuity.xsl,v 1.34 2007-06-20 01:22:21 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -820,16 +820,17 @@
   <xsl:template name="scalar-header">
     <xsl:param name="basis"/>
     <fo:table table-layout="fixed" width="100%" padding-before="2.5pt" padding-after="2.5pt" font-weight="normal" font-size="9.5pt" font-family="sans-serif" border-bottom="1pt solid black">
-      <fo:table-column column-width="125mm"/>
-      <fo:table-column column-width="10mm"/>
-      <fo:table-column column-width="45mm"/>
-      <fo:table-column column-width="10mm"/>
+      <fo:table-column column-width="135mm"/>
+      <fo:table-column column-width="55mm"/>
       <fo:table-body>
         <fo:table-row>
-          <fo:table-cell>
+          <fo:table-cell padding-right="10mm">
             <fo:block text-align="left">
-              <xsl:text>Prepared for: </xsl:text>
-              <!-- Properly adjust for long user input strings limit output to 140 characters for appox. 2 lines -->
+              Prepared for:
+              <!--
+              Properly adjust for long user input strings limit output
+              to 140 characters for appox. 2 lines
+              -->
               <xsl:call-template name="limitstring">
                 <xsl:with-param name="length" select="140"/>
                 <xsl:with-param name="passString">
@@ -844,32 +845,68 @@
                 </xsl:with-param>
               </xsl:call-template>
             </fo:block>
-          </fo:table-cell>
-          <fo:table-cell>
-            <fo:block/>
-          </fo:table-cell>
-          <fo:table-cell>
-            <fo:block text-align="left">
-              <xsl:text>Issue State: </xsl:text>
-              <xsl:value-of select="$scalars/StatePostalAbbrev"/>
-            </fo:block>
-          </fo:table-cell>
-          <fo:table-cell>
-            <fo:block/>
-          </fo:table-cell>
-        </fo:table-row>
-        <fo:table-row>
-          <fo:table-cell>
             <fo:block text-align="left">
               <xsl:choose>
                 <xsl:when test="not($is_composite)">
-                  <xsl:text>Annuitant Age at Issue: </xsl:text>
-                  <xsl:value-of select="$scalars/Age"/>
+                  Annuitant Age at Issue: <xsl:value-of select="$scalars/Age"/>
                 </xsl:when>
                 <xsl:otherwise>
                   <xsl:if test="$scalars/Franchise!=''">
                     <fo:block text-align="left">
-                      <xsl:text>Master contract: </xsl:text>
+                      Master contract:
+                      <xsl:call-template name="limitstring">
+                        <xsl:with-param name="passString" select="$scalars/Franchise"/>
+                        <xsl:with-param name="length" select="30"/>
+                      </xsl:call-template>
+                    </fo:block>
+                  </xsl:if>
+                </xsl:otherwise>
+              </xsl:choose>
+            </fo:block>
+            <xsl:if test="not($is_composite)">
+              <!--
+              This monstrosity truncates 'Franchise' and 'PolicyNumber' to:
+              * 30 characters if both are present;
+              * 15 characters if only one is present.
+              Note: This code snippet is different from the one in other files.
+              -->
+              <xsl:variable name="has_franchise" select="number($scalars/Franchise!='')"/>
+              <xsl:variable name="has_polnumber" select="number($scalars/PolicyNumber!='')"/>
+              <xsl:variable name="contracts" select="$has_franchise + $has_polnumber"/>
+              <xsl:if test="$contracts">
+                <xsl:variable name="number_length" select="floor(30 div $contracts)"/>
+                <fo:block text-align="left">
+                  <xsl:if test="$has_franchise">
+                    Master contract:
+                    <xsl:call-template name="limitstring">
+                      <xsl:with-param name="passString" select="$scalars/Franchise"/>
+                      <xsl:with-param name="length" select="$number_length"/>
+                    </xsl:call-template>
+                  </xsl:if>
+                  <xsl:if test="$has_polnumber">
+                    Contract number:
+                    <xsl:call-template name="limitstring">
+                      <xsl:with-param name="passString" select="$scalars/PolicyNumber"/>
+                      <xsl:with-param name="length" select="$number_length"/>
+                    </xsl:call-template>
+                  </xsl:if>
+                </fo:block>
+              </xsl:if>
+            </xsl:if>
+          </fo:table-cell>
+          <fo:table-cell padding-right="10mm">
+            <fo:block text-align="left">
+              Issue State: <xsl:value-of select="$scalars/StatePostalAbbrev"/>
+            </fo:block>
+            <fo:block text-align="left">
+              <xsl:choose>
+                <xsl:when test="not($is_composite)">
+                  Annuitant Age at Issue: <xsl:value-of select="$scalars/Age"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:if test="$scalars/Franchise!=''">
+                    <fo:block text-align="left">
+                      Master contract:
                       <xsl:call-template name="limitstring">
                         <xsl:with-param name="passString" select="$scalars/Franchise"/>
                         <xsl:with-param name="length" select="30"/>
@@ -880,72 +917,7 @@
               </xsl:choose>
             </fo:block>
           </fo:table-cell>
-          <fo:table-cell>
-            <fo:block/>
-          </fo:table-cell>
-          <fo:table-cell>
-            <fo:block text-align="left">
-              <xsl:choose>
-                <xsl:when test="($basis='Current') or ($basis='CurrentZero') or ($basis='Guaranteed') or ($basis='GuaranteedZero')">
-                  <xsl:text>Net Rate of Return: </xsl:text>
-                  <xsl:value-of select="$scalars/*[name()=concat('InitAnnSepAcctNetInt_', $basis)]"/>
-                </xsl:when>
-                <xsl:when test="$basis='NoBasis'"/>
-              </xsl:choose>
-            </fo:block>
-          </fo:table-cell>
-          <fo:table-cell>
-            <fo:block/>
-          </fo:table-cell>
         </fo:table-row>
-        <xsl:if test="not($is_composite)">
-          <xsl:choose>
-            <xsl:when test="$scalars/Franchise!='' and $scalars/PolicyNumber!=''">
-              <fo:table-row>
-                <fo:table-cell>
-                  <fo:block text-align="left">
-                    <xsl:text>Master contract: </xsl:text>
-                    <xsl:call-template name="limitstring">
-                      <xsl:with-param name="passString" select="$scalars/Franchise"/>
-                      <xsl:with-param name="length" select="15"/>
-                    </xsl:call-template>
-                    <xsl:text>&nbsp;&nbsp;&nbsp;Contract number: </xsl:text>
-                    <xsl:call-template name="limitstring">
-                      <xsl:with-param name="passString" select="$scalars/PolicyNumber"/>
-                      <xsl:with-param name="length" select="15"/>
-                    </xsl:call-template>
-                  </fo:block>
-                </fo:table-cell>
-              </fo:table-row>
-            </xsl:when>
-            <xsl:when test="$scalars/Franchise!=''">
-              <fo:table-row>
-                <fo:table-cell>
-                  <fo:block text-align="left">
-                    <xsl:text>Master contract: </xsl:text>
-                    <xsl:call-template name="limitstring">
-                      <xsl:with-param name="passString" select="$scalars/Franchise"/>
-                      <xsl:with-param name="length" select="30"/>
-                    </xsl:call-template>
-                  </fo:block>
-                </fo:table-cell>
-              </fo:table-row>
-            </xsl:when>
-            <xsl:when test="$scalars/PolicyNumber!=''">
-              <fo:table-row>
-                <fo:table-cell>
-                  <fo:block text-align="left">
-                    <xsl:text>Contract number: </xsl:text>
-                    <xsl:call-template name="limitstring">
-                      <xsl:with-param name="passString" select="$scalars/PolicyNumber"/>
-                      <xsl:with-param name="length" select="30"/>
-                    </xsl:call-template>
-                  </fo:block>
-                </fo:table-cell>
-              </fo:table-row>
-            </xsl:when>
-          </xsl:choose>
-        </xsl:if>
       </fo:table-body>
     </fo:table>
   </xsl:template>
