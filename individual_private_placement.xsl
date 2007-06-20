@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.43 2007-06-20 12:03:59 etarassov Exp $
+    $Id: individual_private_placement.xsl,v 1.44 2007-06-20 13:47:54 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -914,91 +914,6 @@
     </fo:table>
   </xsl:template>
 
-  <xsl:template name="current-illustration-values">
-    <xsl:param name="counter"/>
-    <xsl:param name="inforceyear"/>
-    <xsl:if test="$counter &lt;= $max-lapse-year">
-      <fo:table-row>
-        <fo:table-cell padding=".6pt">
-          <fo:block text-align="right">
-            <xsl:value-of select="$vectors[@name='PolicyYear']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <xsl:choose>
-          <xsl:when test="$is_composite">
-            <fo:table-cell>
-              <fo:block/>
-            </fo:table-cell>
-          </xsl:when>
-          <xsl:otherwise>
-            <fo:table-cell>
-              <fo:block text-align="right">
-                <xsl:value-of select="$vectors[@name='AttainedAge']/duration[$counter]/@column_value"/>
-              </fo:block>
-            </fo:table-cell>
-          </xsl:otherwise>
-        </xsl:choose>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="$vectors[@name='GrossPmt']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="format-number(translate($vectors[@name='GrossPmt']/duration[$counter]/@column_value,$numberswc,$numberswoc)-translate($vectors[@name='NetPmt_Current']/duration[$counter]/@column_value,$numberswc,$numberswoc),'###,###,###')"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="format-number(translate($vectors[@name='SpecAmtLoad_Current']/duration[$counter]/@column_value,$numberswc,$numberswoc)+translate($vectors[@name='PolicyFee_Current']/duration[$counter]/@column_value,$numberswc,$numberswoc),'###,###,###')"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="$vectors[@name='COICharge_Current']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="format-number(translate($vectors[@name='GrossIntCredited_Current']/duration[$counter]/@column_value,$numberswc,$numberswoc)-translate($vectors[@name='NetIntCredited_Current']/duration[$counter]/@column_value,$numberswc,$numberswoc)+translate($vectors[@name='SepAcctLoad_Current']/duration[$counter]/@column_value,$numberswc,$numberswoc),'###,###,###')"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="$vectors[@name='GrossIntCredited_Current']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="$vectors[@name='AcctVal_Current']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="$vectors[@name='CSVNet_Current']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="$vectors[@name='EOYDeathBft_Current']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-      </fo:table-row>
-      <!-- Blank Row Every 5th Year -->
-      <xsl:if test="($counter + $inforceyear) mod 5=0">
-        <fo:table-row>
-          <fo:table-cell padding="4pt">
-            <fo:block padding=".7em"/>
-          </fo:table-cell>
-        </fo:table-row>
-      </xsl:if>
-      <xsl:call-template name="current-illustration-values">
-        <xsl:with-param name="counter" select="$counter + 1"/>
-        <xsl:with-param name="inforceyear" select="$inforceyear"/>
-      </xsl:call-template>
-    </xsl:if>
-  </xsl:template>
-
   <xsl:template name="irr-guaranteed-illustration-report">
     <xsl:variable name="irr_guaranteed_illustration_columns_raw">
       <column name="PolicyYear">Policy _Year</column>
@@ -1138,136 +1053,77 @@
   </xsl:template>
 
   <xsl:template name="current-illustration-report">
+    <xsl:variable name="current_illustration_columns_raw">
+      <column name="PolicyYear">Policy _Year</column>
+      <column composite="1"/>
+      <column composite="0" name="AttainedAge">End of _Year Age</column>
+      <column name="GrossPmt">Premium _Outlay</column>
+      <column special="Premium_Loads">Premium _Loads</column>
+      <column special="Admin_Charges">Admin _Charges</column>
+      <column name="COICharge_Current">Mortality _Charges</column>
+      <column special="Asset_Charges">Asset _Charges</column>
+      <column name="GrossIntCredited_Current">Investment _Income</column>
+      <column name="AcctVal_Current">Account _Value</column>
+      <column name="CSVNet_Current">Cash _Surr Value</column>
+      <column name="EOYDeathBft_Current">Death_ Benefit</column>
+    </xsl:variable>
+    <xsl:variable name="columns_raw" select="document('')//xsl:variable[@name='current_illustration_columns_raw']/column"/>
+    <xsl:variable name="columns" select="$columns_raw[not(@composite)] | $columns_raw[boolean(@composite='1')=$is_composite]"/>
+
     <!-- The main contents of the body page -->
     <fo:flow flow-name="xsl-region-body">
       <fo:block font-size="9.0pt" font-family="serif">
         <fo:table table-layout="fixed" width="100%">
-          <fo:table-column column-width="proportional-column-width(1)"/>
-          <fo:table-column column-width="proportional-column-width(1)"/>
-          <fo:table-column column-width="proportional-column-width(1)"/>
-          <fo:table-column column-width="proportional-column-width(1)"/>
-          <fo:table-column column-width="proportional-column-width(1)"/>
-          <fo:table-column column-width="proportional-column-width(1)"/>
-          <fo:table-column column-width="proportional-column-width(1)"/>
-          <fo:table-column column-width="proportional-column-width(1)"/>
-          <fo:table-column column-width="proportional-column-width(1)"/>
-          <fo:table-column column-width="proportional-column-width(1)"/>
-          <fo:table-column column-width="proportional-column-width(1)"/>
+          <xsl:call-template name="generate-table-columns">
+            <xsl:with-param name="columns" select="$columns"/>
+          </xsl:call-template>
+
           <fo:table-header>
-            <fo:table-row>
-              <fo:table-cell padding="2pt">
-                <fo:block/>
-              </fo:table-cell>
-            </fo:table-row>
-            <fo:table-row>
-              <fo:table-cell>
-                <fo:block text-align="right">Policy</fo:block>
-              </fo:table-cell>
-              <xsl:choose>
-                <xsl:when test="$is_composite">
-                  <fo:table-cell>
-                    <fo:block/>
-                  </fo:table-cell>
-                </xsl:when>
-                <xsl:otherwise>
-                  <fo:table-cell>
-                    <fo:block text-align="right">End of</fo:block>
-                  </fo:table-cell>
-                </xsl:otherwise>
-              </xsl:choose>
-              <fo:table-cell>
-                <fo:block text-align="right">Premium</fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right">Premium</fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right">Admin</fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right">Mortality</fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right">Asset</fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right">Investment</fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right">Account</fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right">Cash</fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right">Death</fo:block>
-              </fo:table-cell>
-            </fo:table-row>
-
-            <fo:table-row>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Year</fo:block>
-              </fo:table-cell>
-              <xsl:choose>
-                <xsl:when test="$is_composite">
-                  <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                    <fo:block/>
-                  </fo:table-cell>
-                </xsl:when>
-                <xsl:otherwise>
-                  <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                    <fo:block text-align="right">Year Age</fo:block>
-                  </fo:table-cell>
-                </xsl:otherwise>
-              </xsl:choose>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Outlay</fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Loads</fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Charges</fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Charges</fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Charges</fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Income</fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Value</fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Surr Value</fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Benefit</fo:block>
-              </fo:table-cell>
-            </fo:table-row>
-
-            <fo:table-row>
-              <fo:table-cell padding="2pt">
-                <fo:block>
-                </fo:block>
-              </fo:table-cell>
-            </fo:table-row>
+            <!-- Generic part of the table header -->
+            <xsl:call-template name="generate-table-headers">
+              <xsl:with-param name="columns" select="$columns"/>
+            </xsl:call-template>
           </fo:table-header>
 
-          <!-- Create Current Values -->
-          <!-- make inforce illustration start in the inforce year -->
           <fo:table-body>
-            <xsl:call-template name="current-illustration-values">
+            <xsl:call-template name="generate-table-values">
+              <xsl:with-param name="columns" select="$columns"/>
               <xsl:with-param name="counter" select="$scalars/InforceYear + 1"/>
+              <xsl:with-param name="max-counter" select="$max-lapse-year"/>
               <xsl:with-param name="inforceyear" select="0 - $scalars/InforceYear"/>
             </xsl:call-template>
           </fo:table-body>
         </fo:table>
       </fo:block>
     </fo:flow>
+  </xsl:template>
+
+  <xsl:template name="get-special-column-value">
+    <xsl:param name="special"/>
+    <xsl:param name="column"/>
+    <xsl:param name="counter"/>
+    <xsl:param name="special-param"/>
+    <xsl:choose>
+      <xsl:when test="$special='Premium_Loads'">
+        <xsl:variable name="GrossPmt" select="$vectors[@name='GrossPmt']/duration[$counter]/@column_value"/>
+        <xsl:variable name="NetPmt_Current" select="$vectors[@name='NetPmt_Current']/duration[$counter]/@column_value"/>
+        <xsl:value-of select="format-number(translate($GrossPmt,$numberswc,$numberswoc) - translate($NetPmt_Current,$numberswc,$numberswoc),'###,###,###')"/>
+      </xsl:when>
+      <xsl:when test="$special='Admin_Charges'">
+        <xsl:variable name="SpecAmtLoad_Current" select="$vectors[@name='SpecAmtLoad_Current']/duration[$counter]/@column_value"/>
+        <xsl:variable name="PolicyFee_Current" select="$vectors[@name='PolicyFee_Current']/duration[$counter]/@column_value"/>
+        <xsl:value-of select="format-number(translate($SpecAmtLoad_Current,$numberswc,$numberswoc) + translate($PolicyFee_Current,$numberswc,$numberswoc),'###,###,###')"/>
+      </xsl:when>
+      <xsl:when test="$special='Asset_Charges'">
+        <xsl:variable name="GrossIntCredited_Current" select="$vectors[@name='GrossIntCredited_Current']/duration[$counter]/@column_value"/>
+        <xsl:variable name="NetIntCredited_Current" select="$vectors[@name='NetIntCredited_Current']/duration[$counter]/@column_value"/>
+        <xsl:variable name="SepAcctLoad_Current" select="$vectors[@name='SepAcctLoad_Current']/duration[$counter]/@column_value"/>
+        <xsl:value-of select="format-number(translate($GrossIntCredited_Current,$numberswc,$numberswoc) - translate($NetIntCredited_Current,$numberswc,$numberswoc) + translate($SepAcctLoad_Current,$numberswc,$numberswoc),'###,###,###')"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="ERROR_Unknown_Special_Column_Name_Specified"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template name="standardfooter">
