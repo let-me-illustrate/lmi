@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.786 2007-06-20 13:43:38 etarassov Exp $
+// $Id: ChangeLog,v 1.787 2007-06-20 13:45:31 etarassov Exp $
 
 MAINTENANCE
 
@@ -12527,4 +12527,9 @@ Center 'Net Crediting Rate' cell over two cells it spans over.
 
   fo_common.xsl
 Fix the string-truncating template 'limitstring'.
+
+20070620T1345Z <etarassov@tt-solutions.com> [1231]
+
+  illustration_reg.xsl
+Remove some extra space.
 
