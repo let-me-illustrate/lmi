@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.43 2007-06-20 13:55:50 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.44 2007-06-20 14:00:50 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -85,7 +85,7 @@
         <!-- Define the Tabular Detail page. -->
         <fo:simple-page-master master-name="tabular-detail" page-height="11in" page-width="8.5in" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
           <!-- Central part of page -->
-          <fo:region-body column-count="1" margin-top="3.1in" margin-bottom="1.20in"/>
+          <fo:region-body column-count="1" margin-top="3.1in" margin-bottom="1.3in"/>
           <!-- Header -->
           <fo:region-before extent="3.1in"/>
           <!-- Footer -->
@@ -95,7 +95,7 @@
         <!-- Define the Tabular Detail (Report 2) page. -->
         <fo:simple-page-master master-name="tabular-detail-report2" page-height="11in" page-width="8.5in" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
           <!-- Central part of page -->
-          <fo:region-body column-count="1" margin-top="3.2in" margin-bottom="1.25in"/>
+          <fo:region-body column-count="1" margin-top="3.2in" margin-bottom="1.35in"/>
           <!-- Header -->
           <fo:region-before extent="3.1in"/>
           <!-- Footer -->
@@ -106,7 +106,7 @@
         <xsl:if test="$has_supplemental_report">
           <fo:simple-page-master master-name="supplemental-report" page-height="11in" page-width="8.5in" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
             <!-- Central part of page -->
-            <fo:region-body column-count="1" margin-top="2.90in" margin-bottom="1.25in"/>
+            <fo:region-body column-count="1" margin-top="3.0in" margin-bottom="1.25in"/>
             <!-- Header -->
             <fo:region-before extent="3.0in"/>
             <!-- Footer -->
@@ -135,7 +135,7 @@
         <!-- Define the contents of the header. -->
         <fo:static-content flow-name="xsl-region-before">
           <fo:block text-align="left">
-            <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
+            <xsl:call-template name="company-logo"/>
           </fo:block>
         </fo:static-content>
 
@@ -499,7 +499,7 @@
         <!-- Define the contents of the header. -->
         <fo:static-content flow-name="xsl-region-before">
           <fo:block text-align="left">
-            <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
+            <xsl:call-template name="company-logo"/>
           </fo:block>
         </fo:static-content>
 
@@ -632,7 +632,7 @@
           <!-- Define the contents of the header. -->
           <fo:static-content flow-name="xsl-region-before">
             <fo:block text-align="left">
-              <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
+              <xsl:call-template name="company-logo"/>
             </fo:block>
             <xsl:call-template name="standardheader"/>
             <fo:block text-align="center" font-size="10.0pt" space-before="5.0pt">
@@ -655,7 +655,7 @@
         <!-- Define the contents of the header. -->
         <fo:static-content flow-name="xsl-region-before">
           <fo:block text-align="left">
-            <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
+            <xsl:call-template name="company-logo"/>
           </fo:block>
           <xsl:call-template name="standardheader"/>
           <fo:block text-align="center" font-size="10.0pt" space-before="5.0pt">
@@ -721,7 +721,7 @@
         <!-- Define the contents of the header. -->
         <fo:static-content flow-name="xsl-region-before">
           <fo:block text-align="left">
-            <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
+            <xsl:call-template name="company-logo"/>
           </fo:block>
           <xsl:call-template name="standardheader"/>
           <fo:block text-align="center" font-size="10.0pt" space-before="5.0pt">
@@ -791,7 +791,7 @@
           <!-- Define the contents of the header. -->
           <fo:static-content flow-name="xsl-region-before">
             <fo:block text-align="left">
-              <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
+              <xsl:call-template name="company-logo"/>
             </fo:block>
             <xsl:call-template name="standardheader"/>
             <fo:block text-align="center" font-size="10.0pt" space-before="3.0pt">
@@ -824,7 +824,7 @@
           <!-- Define the contents of the header. -->
           <fo:static-content flow-name="xsl-region-before">
             <fo:block text-align="left">
-              <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
+              <xsl:call-template name="company-logo"/>
             </fo:block>
             <xsl:call-template name="standardheader"/>
             <fo:block text-align="center" font-size="10.0pt">
