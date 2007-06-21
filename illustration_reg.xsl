@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.44 2007-06-20 14:00:50 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.45 2007-06-21 10:00:07 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -1366,7 +1366,7 @@
     <!-- The main contents of the body page -->
     <fo:flow flow-name="xsl-region-body">
       <fo:block font-size="9.0pt" font-family="serif">
-        <fo:table table-layout="fixed" width="100%" border-collapse="separate" border-separation.inline-progression-direction="2pt">
+        <fo:table table-layout="fixed" width="100%">
           <xsl:call-template name="generate-table-columns">
             <xsl:with-param name="columns" select="$columns"/>
           </xsl:call-template>
