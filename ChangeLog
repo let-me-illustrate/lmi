@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.794 2007-06-21 10:00:07 etarassov Exp $
+// $Id: ChangeLog,v 1.795 2007-06-21 16:36:18 etarassov Exp $
 
 MAINTENANCE
 
@@ -12570,4 +12570,9 @@ Fix supplemental report generation: stripped spacers, proper titles.
 
   illustration_reg.xsl
 Remove border breaks in table header.
+
+20070621T1636Z <etarassov@tt-solutions.com> [1231]
+
+  fo_common.xsl
+Adjust spacing in 'generic-cover' template.
 

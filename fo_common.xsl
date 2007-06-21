@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.42 2007-06-21 09:45:43 etarassov Exp $
+    $Id: fo_common.xsl,v 1.43 2007-06-21 16:36:18 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -665,7 +665,7 @@
               Prepared for:
           </fo:block>
           <fo:block margin-left="0.15in" margin-right="0.15in" padding-top="1em">
-            <xsl:variable name="prepared-for">
+            <xsl:variable name="prepared-for-raw">
               <xsl:choose>
                 <xsl:when test="not($is_composite)">
                   <xsl:value-of select="$scalars/Insured1"/>
@@ -675,17 +675,21 @@
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:variable>
+            <xsl:variable name="prepared-for" select="normalize-space($prepared-for-raw)"/>
             <!-- Properly adjust for long user input strings limit output to 140 characters for appox. 2 lines -->
             <xsl:call-template name="limitstring">
               <xsl:with-param name="passString" select="$prepared-for"/>
               <xsl:with-param name="length" select="140"/>
             </xsl:call-template>
             <xsl:if test="string-length($prepared-for) &lt; 70">
-              <fo:block padding=".7em"/>
+              <fo:block padding=".5em"/>
+            </xsl:if>
+            <xsl:if test="string-length($prepared-for) = 0">
+              <fo:block padding=".5em"/>
             </xsl:if>
           </fo:block>
 
-          <fo:block text-align="center" font-weight="bold" padding-top="5em">
+          <fo:block text-align="center" font-weight="bold" padding-top="4em">
             Presented by:
           </fo:block>
           <fo:block text-align="center" padding-top="1em">
