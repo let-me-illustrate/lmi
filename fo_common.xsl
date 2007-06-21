@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.41 2007-06-20 14:03:44 etarassov Exp $
+    $Id: fo_common.xsl,v 1.42 2007-06-21 09:45:43 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -65,7 +65,7 @@
   "/illustration/supplementalreport"
   -->
   <xsl:variable name="supplemental_report" select="$illustration/supplementalreport"/>
-  <xsl:variable name="NO_SUPPLEMENTAL_COLUMN" select="'[None]'"/>
+  <xsl:variable name="NO_SUPPLEMENTAL_COLUMN" select="'[none]'"/>
 
   <!--
   Prepare to use new format of XML input files:
@@ -228,6 +228,14 @@
         <xsl:with-param name="counter" select="$counter + 1"/>
         <xsl:with-param name="inforceyear" select="$inforceyear"/>
       </xsl:call-template>
+    </xsl:if>
+    <!-- Add a dummy row if the table content is empty to supress errors -->
+    <xsl:if test="not($max-lapse-year) or not($supplemental_report_columns)">
+      <fo:table-row>
+        <fo:table-cell>
+          <fo:block/>
+        </fo:table-cell>
+      </fo:table-row>
     </xsl:if>
   </xsl:template>
 

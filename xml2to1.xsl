@@ -21,9 +21,9 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml2to1.xsl,v 1.1 2007-06-14 16:15:08 etarassov Exp $
+    $Id: xml2to1.xsl,v 1.2 2007-06-21 09:45:43 etarassov Exp $
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+<xsl:stylesheet xmlns:lmi="http://savannah.nongnu.org/projects/lmi" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
   <xsl:import href="fo_common.xsl"/>
 
   <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
@@ -33,8 +33,8 @@
       <scalar>
         <xsl:for-each select="string_scalar|double_scalar">
           <xsl:variable name="name-raw">
-            <xsl:call-template name="get-name1-for-node">
-              <xsl:with-param name="node" select="."/>
+            <xsl:call-template name="get-column-old-name">
+              <xsl:with-param name="column" select="."/>
             </xsl:call-template>
           </xsl:variable>
           <xsl:variable name="name" select="normalize-space($name-raw)"/>
@@ -45,8 +45,8 @@
       <data>
         <xsl:for-each select="string_vector|double_vector">
           <xsl:variable name="name-raw">
-            <xsl:call-template name="get-name1-for-node">
-              <xsl:with-param name="node" select="."/>
+            <xsl:call-template name="get-column-old-name">
+              <xsl:with-param name="column" select="."/>
             </xsl:call-template>
           </xsl:variable>
           <xsl:variable name="name" select="normalize-space($name-raw)"/>
@@ -73,14 +73,18 @@
                   <title/>
                 </xsl:when>
                 <xsl:otherwise>
-                  <xsl:variable name="name-raw">
-                    <xsl:call-template name="get-name1-for-node">
-                      <xsl:with-param name="node" select="."/>
+                  <xsl:variable name="name">
+                    <xsl:call-template name="get-column-old-name">
+                      <xsl:with-param name="column" select="."/>
                     </xsl:call-template>
                   </xsl:variable>
-                  <xsl:variable name="name" select="normalize-space($name-raw)"/>
-                  <name><xsl:value-of select="$name"/></name>
-                  <title><xsl:value-of select="$name"/></title>
+                  <xsl:variable name="title">
+                    <xsl:call-template name="get-column-old-title">
+                      <xsl:with-param name="column" select="."/>
+                    </xsl:call-template>
+                  </xsl:variable>
+                  <name><xsl:value-of select="normalize-space($name)"/></name>
+                  <title><xsl:value-of select="normalize-space($title)"/></title>
                 </xsl:otherwise>
               </xsl:choose>
             </columns>
@@ -90,10 +94,10 @@
     </illustration>
   </xsl:template>
 
-  <xsl:template name="get-name1-for-node">
-    <xsl:param name="node"/>
-    <xsl:variable name="name" select="$node/@name"/>
-    <xsl:variable name="basis" select="$node/@basis"/>
+  <xsl:template name="get-column-old-name">
+    <xsl:param name="column"/>
+    <xsl:variable name="name" select="$column/@name"/>
+    <xsl:variable name="basis" select="$column/@basis"/>
     <xsl:choose>
       <xsl:when test="@basis='run_curr_basis'">
         <xsl:value-of select="concat($name, '_Current')"/>
@@ -117,6 +121,22 @@
 
       <xsl:otherwise>
         <xsl:value-of select="$name"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:variable name="ledger_columns" select="document('ledger_formats.xml')/lmi:columns/lmi:column"/>
+  <xsl:template name="get-column-old-title">
+    <xsl:param name="column"/>
+    <xsl:variable name="name" select="$column/@name"/>
+    <xsl:variable name="basis" select="$column/@basis"/>
+    <xsl:variable name="ledger_column" select="$ledger_columns[@name=$name]"/>
+    <xsl:choose>
+      <xsl:when test="not(@basis)">
+        <xsl:value-of select="$ledger_column/lmi:title"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$ledger_column/lmi:title[@basis=$basis]"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
