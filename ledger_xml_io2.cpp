@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io2.cpp,v 1.21 2007-02-27 00:03:30 chicares Exp $
+// $Id: ledger_xml_io2.cpp,v 1.22 2007-06-21 09:45:43 etarassov Exp $
 
 #include "ledger.hpp"
 
@@ -1253,14 +1253,6 @@ void Ledger::write_excerpt
     xml::element supplemental_report("supplementalreport");
     if(ledger_invariant_->SupplementalReport)
         {
-        // now pop back trailing empty supplemental report columns
-        while
-            (!supplemental_report_columns.empty()
-            && supplemental_report_columns.back().empty()
-            )
-            {
-            supplemental_report_columns.pop_back();
-            }
 
 #if 0 // TODO ?? CALCULATION_SUMMARY Clean this up.
 // EVGENIY The original code added a supplemental-report element
@@ -1287,7 +1279,7 @@ void Ledger::write_excerpt
                 xml::element spacer("spacer");
                 supplemental_report.push_back(spacer);
                 }
-            else // *j != "[None]"
+            else // *j != "[none]"
                 {
                 xml::element column("column");
                 j->set_to_xml_element(column);

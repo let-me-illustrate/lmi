@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.792 2007-06-20 19:57:42 wboutin Exp $
+// $Id: ChangeLog,v 1.793 2007-06-21 09:45:42 etarassov Exp $
 
 MAINTENANCE
 
@@ -12558,4 +12558,11 @@ Prevent splitting the groups of 5 rows across multiple pages.
 
   xml_notebook_coli_boli.xrc
 Remove misleading format.
- 
+
+20070621T0945Z <etarassov@tt-solutions.com> [1231]
+
+  fo_common.xsl
+  ledger_xml_io2.cpp
+  xml2to1.xsl
+Fix supplemental report generation: stripped spacers, proper titles.
+
