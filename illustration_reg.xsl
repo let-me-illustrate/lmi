@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.45 2007-06-21 10:00:07 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.46 2007-06-22 11:11:19 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -683,6 +683,7 @@
             <column name="AcctVal_Guaranteed">      Guaranteed Values| Account _Value  </column>
             <column name="CSVNet_Guaranteed">       Guaranteed Values| Cash Surr _Value</column>
             <column name="EOYDeathBft_Guaranteed">  Guaranteed Values| Death _Benefit  </column>
+            <column/>
             <column name="AcctVal_Current">     Non-Guaranteed Values| Account _Value  </column>
             <column name="CSVNet_Current">      Non-Guaranteed Values| Cash Surr _Value</column>
             <column name="EOYDeathBft_Current"> Non-Guaranteed Values| Death _Benefit  </column>
@@ -1354,9 +1355,11 @@
       <column name="AcctVal_Guaranteed">    Guaranteed Values  |               |Account _Value  </column>
       <column name="CSVNet_Guaranteed">     Guaranteed Values  |               |Cash Surr _Value</column>
       <column name="EOYDeathBft_Guaranteed">Guaranteed Values  |               |Death _Benefit  </column>
+      <column/>
       <column name="AcctVal_Midpoint">    Non-Guaranteed Values|Midpoint Values|Account _Value  </column>
       <column name="CSVNet_Midpoint">     Non-Guaranteed Values|Midpoint Values|Cash Surr _Value</column>
       <column name="EOYDeathBft_Midpoint">Non-Guaranteed Values|Midpoint Values|Death _Benefit  </column>
+      <column>                            Non-Guaranteed Values|</column>
       <column name="AcctVal_Current">     Non-Guaranteed Values| Current Values|Account _Value  </column>
       <column name="CSVNet_Current">      Non-Guaranteed Values| Current Values|Cash Surr _Value</column>
       <column name="EOYDeathBft_Current"> Non-Guaranteed Values| Current Values|Death _Benefit  </column>
