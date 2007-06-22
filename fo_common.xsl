@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.43 2007-06-21 16:36:18 etarassov Exp $
+    $Id: fo_common.xsl,v 1.44 2007-06-22 12:50:09 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -72,7 +72,7 @@
   The $supplemental_report_columns variable below should become
   "$supplemental_report/column"
   -->
-  <xsl:variable name="supplemental_report_columns" select="$supplemental_report/columns[string(name)!=$NO_SUPPLEMENTAL_COLUMN]"/>
+  <xsl:variable name="supplemental_report_columns" select="$supplemental_report/columns"/>
 
   <xsl:variable name="has_supplemental_report" select="boolean($scalars/SupplementalReport='1')"/>
 
@@ -166,6 +166,7 @@
             <xsl:for-each select="$supplemental_report_columns">
               <fo:table-column column-width="proportional-column-width(100)"/>
             </xsl:for-each>
+            <fo:table-column column-width="proportional-column-width(1)"/>
             <fo:table-header>
               <fo:table-row>
                 <xsl:for-each select="$supplemental_report_columns">
@@ -215,6 +216,11 @@
             </fo:block>
           </fo:table-cell>
         </xsl:for-each>
+        <xsl:if test="($counter + $inforceyear) mod 5 = 1">
+          <fo:table-cell number-rows-spanned="5">
+            <fo:block/>
+          </fo:table-cell>
+        </xsl:if>
       </fo:table-row>
       <!-- Blank Row Every 5th Year -->
       <xsl:if test="($counter + $inforceyear) mod 5=0">
