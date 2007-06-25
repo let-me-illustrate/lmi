@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.801 2007-06-25 20:40:22 chicares Exp $
+// $Id: ChangeLog,v 1.802 2007-06-25 20:52:39 chicares Exp $
 
 MAINTENANCE
 
@@ -12605,4 +12605,12 @@ Mark release candidate.
 
   [ChangeLog only]
 Fix incorrect defect count.
+
+20070625T2052Z <chicares@cox.net> [1231]
+
+  ihs_funddata.cpp
+  ihs_proddata.cpp
+  ihs_rnddata.cpp
+  stratified_charges.cpp
+Remove needless diagnostics.
 
