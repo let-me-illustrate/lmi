@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.cpp,v 1.12 2007-04-24 19:23:30 wboutin Exp $
+// $Id: stratified_charges.cpp,v 1.13 2007-06-25 20:52:39 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -508,15 +508,6 @@ void stratified_charges::read(std::string const& filename)
 void stratified_charges::write(std::string const& filename) const
 {
     std::ofstream os(filename.c_str());
-    if(!os.good())
-        {
-        warning()
-            << "Cannot open stratified-data file '"
-            << filename
-            << "' for writing."
-            << LMI_FLUSH
-            ;
-        }
 
     os << raw_entity(e_curr_sepacct_load_banded_by_premium  );
     os << raw_entity(e_guar_sepacct_load_banded_by_premium  );
