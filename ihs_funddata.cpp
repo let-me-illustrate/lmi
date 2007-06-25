@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_funddata.cpp,v 1.8 2007-03-09 16:27:23 chicares Exp $
+// $Id: ihs_funddata.cpp,v 1.9 2007-06-25 20:52:39 chicares Exp $
 
 // This class describes funds: their names and investment mgmt fees.
 // TODO ?? An extension other than .fnd would be preferable: msw uses
@@ -126,15 +126,6 @@ void FundData::Read(std::string const& a_Filename)
 void FundData::Write(std::string const& a_Filename)
 {
     std::ofstream os(a_Filename.c_str());
-    if(!os.good())
-        {
-        warning()
-            << "File '"
-            << a_Filename
-            << "': std::ofstream error."
-            << LMI_FLUSH
-            ;
-        }
 
     std::vector<FundInfo>::const_iterator i = FundInfo_.begin();
     for(;i != FundInfo_.end(); i++)

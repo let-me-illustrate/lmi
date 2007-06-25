@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_rnddata.cpp,v 1.6 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ihs_rnddata.cpp,v 1.7 2007-06-25 20:52:39 chicares Exp $
 
 // Rounding rules for a policy form
 
@@ -141,15 +141,6 @@ void StreamableRoundingRules::Read(std::string const& a_Filename)
 void StreamableRoundingRules::Write(std::string const& a_Filename)
 {
     std::ofstream os(a_Filename.c_str());
-    if(!os.good())
-        {
-        warning()
-            << "Cannot open rounding file '"
-            << a_Filename
-            << "' for writing."
-            << LMI_FLUSH
-            ;
-        }
 
     os << round_specamt_;
     os << round_death_benefit_;

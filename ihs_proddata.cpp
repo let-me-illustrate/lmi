@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_proddata.cpp,v 1.14 2007-03-09 16:27:23 chicares Exp $
+// $Id: ihs_proddata.cpp,v 1.15 2007-06-25 20:52:39 chicares Exp $
 
 // This class contains names of files containing a product's tables as well
 // as strings that are the same for all instances of that product.
@@ -155,15 +155,7 @@ void TProductData::Read(std::string const& a_Filename)
 void TProductData::Write(std::string const& a_Filename) const
 {
     std::ofstream os(a_Filename.c_str());
-    if(!os.good())
-        {
-        warning()
-            << "Cannot open product data file '"
-            << a_Filename
-            << "' for writing."
-            << LMI_FLUSH
-            ;
-        }
+
     os << DatabaseFilename       << '\n';
     os << FundFilename           << '\n';
     os << CorridorFilename       << '\n';
