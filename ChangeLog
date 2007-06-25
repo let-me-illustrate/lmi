@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.797 2007-06-22 12:50:09 etarassov Exp $
+// $Id: ChangeLog,v 1.798 2007-06-25 17:15:18 wboutin Exp $
 
 MAINTENANCE
 
@@ -12585,4 +12585,9 @@ Add missing line breaks in table headers.
 
   fo_common.xsl
 Restore discarded empty columns in supplemental report.
+
+20070625T1715Z <wboutin@massmutual.com> [1231]
+
+  offshore_private_placement.xsl
+Correct a defect.
 
