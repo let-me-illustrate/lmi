@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: offshore_private_placement.xsl,v 1.38 2007-06-20 14:00:51 etarassov Exp $
+    $Id: offshore_private_placement.xsl,v 1.39 2007-06-25 17:15:18 wboutin Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -1019,7 +1019,7 @@
       <column composite="0" name="AttainedAge">End of _Year Age</column>
       <column name="Outlay">Premium _Outlay</column>
       <column composite="1"/>
-      <column name="PolFee_Current">Admin _Charge</column>
+      <column name="PolicyFee_Current">Admin _Charge</column>
       <column name="PremTaxLoad_Current">Premium _Tax Load</column>
       <column name="DacTaxLoad_Current">DAC _Tax Load</column>
       <column name="NetPmt_Current">Net _Premium</column>
