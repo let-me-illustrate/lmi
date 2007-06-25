@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.36 2007-06-09 21:10:32 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.37 2007-06-25 21:13:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -251,7 +251,7 @@ void configurable_settings::save() const
     ofs << document;
     if(!ofs)
         {
-        warning()
+        fatal_error()
             << "Configurable-settings file '"
             << configuration_filepath().string()
             << "' is not writeable."

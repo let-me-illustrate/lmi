@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.cpp,v 1.11 2007-06-06 02:15:34 chicares Exp $
+// $Id: illustrator.cpp,v 1.12 2007-06-25 21:13:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -101,7 +101,7 @@ bool illustrator::operator()(fs::path const& file_path)
         }
     else
         {
-        warning()
+        fatal_error()
             << "File '"
             << file_path.string()
             << "': extension '"

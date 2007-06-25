@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.22 2007-06-14 18:10:23 chicares Exp $
+// $Id: ledger_xsl.cpp,v 1.23 2007-06-25 21:13:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -149,14 +149,9 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath, 
 #endif // !defined LMI_USE_NEW_REPORTS
 
     int rc = system_command(oss.str());
-
-    // TODO ?? Using apache fop on the msw platform, following the
-    // procedure suggested at the apache website, this seems not to
-    // catch all problems--perhaps because they use a batch file that
-    // eats the error code?
     if(rc)
         {
-        warning()
+        fatal_error()
             << "Report formatting failed.\n"
             << "The specific command that failed was '"
             << oss.str()

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.68 2007-06-07 19:05:47 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.69 2007-06-25 21:13:30 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -966,7 +966,6 @@ void Ledger::write(xml::element& x) const
         {
         // Eventually customize the report name.
         supplementalreport.push_back(xml::element("title", "Supplemental Report"));
-//warning() << "size " << ledger_invariant_->SupplementalReportColumns.size() << LMI_FLUSH;
 
         std::vector<std::string>::const_iterator j;
         for
@@ -975,7 +974,6 @@ void Ledger::write(xml::element& x) const
             ;++j
             )
             {
-//warning() << "column " << *j << " title " << title_map[*j] << LMI_FLUSH;
             xml::element columns("columns");
             columns.push_back(xml::element("name", (*j).c_str()));
             columns.push_back(xml::element("title", title_map[*j].c_str()));
@@ -1048,7 +1046,7 @@ void Ledger::write(xml::element& x) const
             }
         if(!ofs)
             {
-            warning()
+            fatal_error()
                 << "Unable to write "
                 << fs::system_complete(filepath).string()
                 << LMI_FLUSH

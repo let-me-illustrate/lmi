@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.61 2007-06-01 01:24:17 chicares Exp $
+// $Id: census_view.cpp,v 1.62 2007-06-25 21:13:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1069,11 +1069,11 @@ std::string GetClipboardText()
     wxClipboardLocker lock;
     if(!lock)
         {
-        warning() << "Unable to acquire lock for clipboard." << LMI_FLUSH;
+        fatal_error() << "Unable to acquire lock for clipboard." << LMI_FLUSH;
         }
     else if(!wxTheClipboard->IsSupported(wxDF_TEXT))
         {
-        warning() << "Clipboard does not support text format." << LMI_FLUSH;
+        fatal_error() << "Clipboard does not support text format." << LMI_FLUSH;
         }
     else
         {
