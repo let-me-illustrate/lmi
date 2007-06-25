@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.15 2007-04-16 08:01:31 chicares Exp $
+// $Id: multidimgrid_any.cpp,v 1.16 2007-06-25 21:13:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -768,12 +768,13 @@ bool MultiDimGrid::SetGridAxisSelection(int firstAxis, int secondAxis)
 {
     if(firstAxis == secondAxis && firstAxis != wxNOT_FOUND)
         {
-        warning() << "Select different axes." << LMI_FLUSH;
+        fatal_error() << "Select different axes." << LMI_FLUSH;
         return false;
         }
-    bool update =  first_grid_axis_ != firstAxis
-                || second_grid_axis_ != secondAxis
-                ;
+    bool update =
+            first_grid_axis_  != firstAxis
+        ||  second_grid_axis_ != secondAxis
+        ;
     first_grid_axis_ = firstAxis;
     second_grid_axis_ = secondAxis;
     DoSetGridAxisSelection();

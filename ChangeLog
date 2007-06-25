@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.802 2007-06-25 20:52:39 chicares Exp $
+// $Id: ChangeLog,v 1.803 2007-06-25 21:13:30 chicares Exp $
 
 MAINTENANCE
 
@@ -12613,4 +12613,17 @@ Fix incorrect defect count.
   ihs_rnddata.cpp
   stratified_charges.cpp
 Remove needless diagnostics.
+
+20070625T2113Z <chicares@cox.net> [1230]
+
+  census_view.cpp
+  configurable_settings.cpp
+  ihs_dbdict.cpp
+  illustrator.cpp
+  ledger_formatter.cpp
+  ledger_xml_io.cpp
+  ledger_xml_io2.cpp
+  ledger_xsl.cpp
+  multidimgrid_any.cpp
+Increase the severity of numerous diagnostics.
 

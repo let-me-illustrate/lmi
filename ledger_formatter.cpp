@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_formatter.cpp,v 1.10 2007-06-14 16:15:07 etarassov Exp $
+// $Id: ledger_formatter.cpp,v 1.11 2007-06-25 21:13:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -180,7 +180,7 @@ void LedgerFormatter::FormatAsHtml(std::ostream& os) const
         }
     catch(std::exception const& e)
         {
-        warning()
+        fatal_error()
             << "Error formatting ledger values as html: '"
             << e.what()
             << "'."
@@ -208,7 +208,7 @@ void LedgerFormatter::FormatAsLightTSV(std::ostream& os) const
         }
     catch(std::exception const& e)
         {
-        warning()
+        fatal_error()
             << "Error formatting ledger calculation summary as tsv: '"
             << e.what()
             << "'."
@@ -234,7 +234,7 @@ void LedgerFormatter::FormatAsTabDelimited(std::ostream& os) const
         }
     catch(std::exception const& e)
         {
-        warning()
+        fatal_error()
             << "Error formatting ledger values as tsv: '"
             << e.what()
             << "'."
@@ -278,7 +278,7 @@ void LedgerFormatter::FormatAsXslFo(std::ostream& os) const
         }
     catch(std::exception const& e)
         {
-        warning()
+        fatal_error()
             << "Error formatting ledger values as xsl-fo: '"
             << e.what()
             << "'."
@@ -299,7 +299,7 @@ void LedgerFormatter::FormatAsXml
         }
     catch(std::exception const& e)
         {
-        warning()
+        fatal_error()
             << "Error generating xml for ledger: '"
             << e.what()
             << "'."

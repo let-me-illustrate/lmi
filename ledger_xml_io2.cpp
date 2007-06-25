@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io2.cpp,v 1.22 2007-06-21 09:45:43 etarassov Exp $
+// $Id: ledger_xml_io2.cpp,v 1.23 2007-06-25 21:13:30 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -526,10 +526,9 @@ double_formatter_t::double_formatter_t()
 
             xml::element const& format_element = *formats[0];
 
-            // format has already been specified. show a warning and continue
             if(format_map.find(id.name()) != format_map.end())
                 {
-                warning()
+                fatal_error()
                     << "Formats file '"
                     << format_path
                     << "' contains more than one format definition for '"
@@ -547,10 +546,9 @@ double_formatter_t::double_formatter_t()
 
             std::string const format_name = xml_lmi::get_content(format_element);
 
-            // unknown format specified
             if(known_formats.find(format_name) == known_formats.end())
                 {
-                warning()
+                fatal_error()
                     << "Unknown format '"
                     << format_name
                     << "' specified in '"
@@ -573,7 +571,7 @@ double_formatter_t::double_formatter_t()
         }
     catch(std::exception const& e)
         {
-        warning()
+        fatal_error()
             << "Error reading format information from '"
             << format_path
             << "'. Error: "
@@ -800,7 +798,7 @@ void Ledger::write_excerpt
         }
     catch(std::exception const& e)
         {
-        warning()
+        fatal_error()
             << "Cannot read calculation summary columns "
             << "from 'configurable_settings.xml': "
             << e.what()

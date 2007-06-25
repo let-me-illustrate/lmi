@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbdict.cpp,v 1.16 2007-02-21 03:07:24 chicares Exp $
+// $Id: ihs_dbdict.cpp,v 1.17 2007-06-25 21:13:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -173,7 +173,7 @@ void DBDictionary::WriteDB(std::string const& filename)
         }
     if(NumberOfEntries != static_cast<int>(dictionary.size()))
         {
-        warning()
+        fatal_error()
             << "Error writing database '"
             << filename
             << "': the database has " << dictionary.size()
@@ -183,10 +183,10 @@ void DBDictionary::WriteDB(std::string const& filename)
             {
             if(!dictionary.count(j))
                 {
-                warning() << " Key " << j << " not found.";
+                fatal_error() << " Key " << j << " not found.";
                 }
             }
-        warning() << LMI_FLUSH;
+        fatal_error() << LMI_FLUSH;
         }
     ops << dictionary.size();
     for(unsigned int j = 0; j < dictionary.size(); j++)
