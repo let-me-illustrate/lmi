@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.45 2007-06-20 14:00:50 etarassov Exp $
+    $Id: individual_private_placement.xsl,v 1.46 2007-06-25 18:30:18 wboutin Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -411,7 +411,7 @@
               <xsl:text>If extensive loans or withdrawals are made, additional premium payments may be necessary to avoid lapse of the Contract. Periods of poor performance </xsl:text>
               <xsl:text>in the underlying investment portfolios may also contribute to the potential need for additional premium payments.</xsl:text>
             </fo:block>
-            <fo:block>
+            <fo:block padding-top="1em">
               <xsl:text>Certain investment divisions have restrictions on the ability to access account values allocated to those divisions. If account values are allocated to such </xsl:text>
               <xsl:text>divisions, the Owner will not be able to transfer account values or effect a loan, withdrawal or surrender of the Contract until specified dates. In addition, </xsl:text>
               <xsl:text>payment of a portion of the death benefit may be deferred until the account values in such division can be liquidated. Refer to the private placement memorandum for details.</xsl:text>
@@ -799,8 +799,8 @@
                   <xsl:otherwise>
                     <xsl:choose>
                       <xsl:when test="$scalars/UWClass='Rated'">
-                        <fo:block text-align="left" padding-left="3em">
-                          <xsl:text>Table Rating: </xsl:text>
+                        <fo:block text-align="left">
+                          <xsl:text>&nbsp;&nbsp;Table Rating: </xsl:text>
                           <xsl:value-of select="$scalars/SubstandardTable"/>
                         </fo:block>
                       </xsl:when>
@@ -840,8 +840,8 @@
                   <xsl:otherwise>
                     <xsl:choose>
                       <xsl:when test="$scalars/UWClass='Rated'">
-                        <fo:block text-align="left" padding-left="3em">
-                          <xsl:text>Initial Annual Flat Extra: </xsl:text>
+                        <fo:block text-align="left">
+                          <xsl:text>&nbsp;&nbsp;Initial Annual Flat Extra: </xsl:text>
                           <xsl:value-of select="$vectors[@name='MonthlyFlatExtra']/duration[1]/@column_value"/>
                           <xsl:text> per 1,000</xsl:text>
                         </fo:block>
