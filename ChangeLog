@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.798 2007-06-25 17:15:18 wboutin Exp $
+// $Id: ChangeLog,v 1.799 2007-06-25 18:30:18 wboutin Exp $
 
 MAINTENANCE
 
@@ -12590,4 +12590,9 @@ Restore discarded empty columns in supplemental report.
 
   offshore_private_placement.xsl
 Correct a defect.
+
+20070625T1830Z <wboutin@massmutual.com> [1231]
+
+  individual_private_placement.xsl
+Improve formatting.
 
