@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: system_command_test.cpp,v 1.1 2007-06-11 00:45:31 chicares Exp $
+// $Id: system_command_test.cpp,v 1.2 2007-06-26 00:29:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -40,9 +40,19 @@ int test_main(int, char*[])
     os << "abc\n";
     os.close();
 
-    BOOST_TEST_EQUAL(   0, system_command("grep --quiet abc eraseme"));
-    BOOST_TEST_EQUAL(   1, system_command("grep --quiet xyz eraseme"));
-    BOOST_TEST_EQUAL(-123, system_command("xyzzy"));
+    system_command("grep --quiet abc eraseme");
+
+    BOOST_TEST_THROW
+        (system_command("grep --quiet xyz eraseme")
+        ,std::runtime_error
+        ,"Exit code 1 from command 'grep --quiet xyz eraseme'."
+        );
+
+    BOOST_TEST_THROW
+        (system_command("xyzzy")
+        ,std::runtime_error
+        ,"Exit code 12345 from command 'xyzzy'."
+        );
 
     std::remove("eraseme");
 

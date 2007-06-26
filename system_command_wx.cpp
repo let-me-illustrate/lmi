@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: system_command_wx.cpp,v 1.5 2007-06-18 11:22:22 chicares Exp $
+// $Id: system_command_wx.cpp,v 1.6 2007-06-26 00:29:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,17 +31,15 @@
 #include "alert.hpp"
 #include "timer.hpp"
 
-#include <wx/app.h> // wxTheApp
-#include <wx/msgdlg.h>
 #include <wx/utils.h>
 
 #include <cstddef>  // std::size_t
-#include <sstream>
+#include <ostream>
 
 namespace
 {
 void assemble_console_lines
-    (std::ostringstream&  oss
+    (std::ostream&        os
     ,wxArrayString const& lines
     ,std::string const&   category
     )
@@ -51,31 +49,28 @@ void assemble_console_lines
         return;
         }
 
-    oss << category << '\n';
+    os << category << '\n';
     for(std::size_t j = 0; j < lines.GetCount(); ++j)
         {
-        oss << lines[j] << '\n';
+        os << lines[j] << '\n';
         }
 }
 
 /// Execute a system command using wxExecute().
 ///
-/// If wxExecute() returns -1L, then exit immediately: the command
-/// could not be run, and wxExecute() itself pops up a messagebox
-/// explaining why.
-///
 /// If wxExecute() returns 0L, then exit immediately: the command
 /// succeeded.
+///
+/// If wxExecute() returns -1L, then the command could not be
+/// executed, and wxExecute() itself displays rich diagnostics;
+/// throw an exception to fulfill the system_command() contract,
+/// even though doing so displays a redundant diagnostic.
 ///
 /// Otherwise, show what would have appeared on stdout and stderr if
 /// the command had been run in an interactive shell, along with the
 /// exit code and the command itself.
-///
-/// In all cases, return wxExecute()'s exit code, truncated to 'int',
-/// provided that truncation does not change its boolean sense; else
-/// return -13.
 
-int concrete_system_command(std::string const& command_line)
+void concrete_system_command(std::string const& command_line)
 {
     Timer timer;
     wxBusyCursor wait;
@@ -86,34 +81,31 @@ int concrete_system_command(std::string const& command_line)
     long int exit_code = wxExecute(command_line, output, errors);
     status() << timer.stop().elapsed_msec_str() << std::flush;
 
-    if(-1L != exit_code && 0L != exit_code)
+    if(0L == exit_code)
         {
-        std::ostringstream oss;
-        oss
+        return;
+        }
+    else if(-1L == exit_code)
+        {
+        fatal_error()
+            << "Command '"
+            << command_line
+            << "' not recognized."
+            << std::flush
+            ;
+        }
+    else
+        {
+        fatal_error()
             << "Exit code "
             << exit_code
             << " from command '"
             << command_line
             << "'.\n"
             ;
-        assemble_console_lines(oss, output, "Output:");
-        assemble_console_lines(oss, errors, "Errors:");
-        wxMessageBox
-            (oss.str()
-            ,"Problem executing command"
-            ,wxICON_ERROR
-            ,wxTheApp->GetTopWindow()
-            );
-        }
-
-    int return_value = static_cast<int>(exit_code);
-    if(0 == return_value && 0 != exit_code)
-        {
-        return -13;
-        }
-    else
-        {
-        return return_value;
+        assemble_console_lines(fatal_error(), output, "Output:");
+        assemble_console_lines(fatal_error(), errors, "Errors:");
+        fatal_error() << std::flush;
         }
 }
 
