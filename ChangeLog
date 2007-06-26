@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.803 2007-06-25 21:13:30 chicares Exp $
+// $Id: ChangeLog,v 1.804 2007-06-26 00:29:26 chicares Exp $
 
 MAINTENANCE
 
@@ -12626,4 +12626,17 @@ Remove needless diagnostics.
   ledger_xsl.cpp
   multidimgrid_any.cpp
 Increase the severity of numerous diagnostics.
+
+20070626T0029Z <chicares@cox.net> [1230]
+
+  authenticity.cpp
+  authenticity_test.cpp
+  elapsed_time.cpp
+  ledger_xsl.cpp
+  system_command.cpp
+  system_command.hpp
+  system_command_non_wx.cpp
+  system_command_test.cpp
+  system_command_wx.cpp
+Let system_command() throw on failure.
 

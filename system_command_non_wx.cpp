@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: system_command_non_wx.cpp,v 1.1 2007-06-12 21:41:38 chicares Exp $
+// $Id: system_command_non_wx.cpp,v 1.2 2007-06-26 00:29:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,11 +28,13 @@
 
 #include "system_command.hpp"
 
+#include "alert.hpp"
+
 #if !defined LMI_MSW
 
 #   include <cstdlib>
 
-#else // defined LMI_MSW
+#else  // defined LMI_MSW
 
 #   include <windows.h>
 
@@ -44,14 +46,25 @@ namespace
 {
 #if !defined LMI_MSW
 
-int concrete_system_command(std::string const& command_line)
+void concrete_system_command(std::string const& command_line)
 {
-    return std::system(command_line.c_str());
+    int exit_code = std::system(command_line.c_str());
+    if(EXIT_SUCCESS != exit_code)
+        {
+        fatal_error()
+            << "Exit code "
+            << exit_code
+            << " from command '"
+            << command_line
+            << "'."
+            << std::flush
+            ;
+        }
 }
 
-#else // defined LMI_MSW
+#else  // defined LMI_MSW
 
-int concrete_system_command(std::string const& command_line)
+void concrete_system_command(std::string const& command_line)
 {
     STARTUPINFO startup_info;
     std::memset(&startup_info, 0, sizeof(STARTUPINFO));
@@ -75,21 +88,22 @@ int concrete_system_command(std::string const& command_line)
         );
     delete[]non_const_cmd_line_copy;
 
-    DWORD exit_code = 0;
-    exit_code -= 123;
+    DWORD exit_code = 12345;
     ::CloseHandle(process_info.hThread);
     ::WaitForSingleObject(process_info.hProcess, INFINITE);
     ::GetExitCodeProcess(process_info.hProcess, &exit_code);
     ::CloseHandle(process_info.hProcess);
 
-    int return_value = static_cast<int>(exit_code);
-    if(0 == return_value && 0 != exit_code)
+    if(0 != exit_code)
         {
-        return -13;
-        }
-    else
-        {
-        return return_value;
+        fatal_error()
+            << "Exit code "
+            << exit_code
+            << " from command '"
+            << command_line
+            << "'."
+            << std::flush
+            ;
         }
 }
 

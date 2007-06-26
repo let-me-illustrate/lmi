@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: system_command.cpp,v 1.11 2007-06-12 21:41:38 chicares Exp $
+// $Id: system_command.cpp,v 1.12 2007-06-26 00:29:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -44,8 +44,8 @@ bool system_command_initialize(system_command_fp_type f)
     return true;
 }
 
-int system_command(std::string const& command_line)
+void system_command(std::string const& command_line)
 {
-    return system_command_callback()(command_line);
+    system_command_callback()(command_line);
 }
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: authenticity_test.cpp,v 1.5 2007-05-23 12:29:45 chicares Exp $
+// $Id: authenticity_test.cpp,v 1.6 2007-06-26 00:29:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -120,7 +120,7 @@ PasskeyTest::~PasskeyTest()
 void PasskeyTest::EnsureMd5sumBinaryIsFound() const
 {
     std::cout << "  Result of 'md5sum --version':" << std::endl;
-    BOOST_TEST_EQUAL(0, system_command("md5sum --version"));
+    system_command("md5sum --version");
 }
 
 void PasskeyTest::RemoveTestFiles(char const* file, int line) const
@@ -201,7 +201,7 @@ void PasskeyTest::InitializeMd5sumFile() const
     os.close();
 
     std::string s = "md5sum --check --status " + std::string(md5sum_file());
-    BOOST_TEST_EQUAL(0, system_command(s));
+    system_command(s);
 }
 
 /// The passkey is the md5 sum of the md5 sum of the '.md5' file.

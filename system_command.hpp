@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: system_command.hpp,v 1.10 2007-06-13 00:03:25 chicares Exp $
+// $Id: system_command.hpp,v 1.11 2007-06-26 00:29:26 chicares Exp $
 
 #ifndef system_command_hpp
 #define system_command_hpp
@@ -30,11 +30,22 @@
 
 #include <string>
 
-typedef int (*system_command_fp_type)(std::string const&);
+typedef void (*system_command_fp_type)(std::string const&);
 
 bool LMI_SO system_command_initialize(system_command_fp_type);
 
-/// Cover function for std::system().
+/// Wrapper for std::system() that throws on failure.
+///
+/// Postcondition: the command returned EXIT_SUCCESS.
+///
+/// Throws if the postcondition was not established.
+///
+/// Rationale for throwing: A failing system command is generally an
+/// irrecoverable error that makes it pointless to continue normally.
+/// Throwing an informative exception favors uniform presentation and
+/// obviates testing a return code downstream. Richer diagnostic
+/// information may be available only where the command is invoked;
+/// see the wx implementation for an example.
 ///
 /// For the wx interface, it's implemented in terms of wxExecute().
 ///
@@ -56,7 +67,7 @@ bool LMI_SO system_command_initialize(system_command_fp_type);
 /// that platform: it just makes it do what a posix platform would do
 /// without such complicated workarounds.
 
-int LMI_SO system_command(std::string const& command_line);
+void LMI_SO system_command(std::string const& command_line);
 
 #endif // system_command_hpp
 
