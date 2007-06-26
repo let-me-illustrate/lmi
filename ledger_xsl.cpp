@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.23 2007-06-25 21:13:30 chicares Exp $
+// $Id: ledger_xsl.cpp,v 1.24 2007-06-26 00:29:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -148,17 +148,7 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath, 
         ;
 #endif // !defined LMI_USE_NEW_REPORTS
 
-    int rc = system_command(oss.str());
-    if(rc)
-        {
-        fatal_error()
-            << "Report formatting failed.\n"
-            << "The specific command that failed was '"
-            << oss.str()
-            << "'."
-            << LMI_FLUSH
-            ;
-        }
+    system_command(oss.str());
     return pdf_out_file.string();
 }
 
@@ -240,6 +230,8 @@ void experiment0
     ,fs::path const& pdf_out_file
     )
 {
+#if 0
+// Expunge: use libxslt instead.
     // Use apache tools to produce intermediate xsl-fo output.
     //
     // EVGENIY !! This is strange: apache 'xalan' fails unless I
@@ -268,19 +260,14 @@ void experiment0
         << " -out "  << '"' << fo_out_file.leaf()          << '"'
         ;
     std::cout << "Executing command:\n" << "  " << oss.str() << std::endl;
-    if(system_command(oss.str()))
-        {
-        warning() << "*** Command failed.\n" << LMI_FLUSH;
-        }
-    else
-        {
-        std::cout
-            << "...wrote '" << fo_out_file.string() << "'.\n"
-            << "  time: " << timer.stop().elapsed_msec_str()
-            << std::endl
-            ;
-        }
+    system_command(oss.str());
+    std::cout
+        << "...wrote '" << fo_out_file.string() << "'.\n"
+        << "  time: " << timer.stop().elapsed_msec_str()
+        << std::endl
+        ;
     }
+#endif // 0
 
     // apache "area tree" output.
     {
@@ -294,18 +281,12 @@ void experiment0
         << " -at "   << '"' << at_out_file.string()        << '"'
         ;
     std::cout << "Executing command:\n" << "  " << oss.str() << std::endl;
-    if(system_command(oss.str()))
-        {
-        warning() << "*** Command failed.\n" << LMI_FLUSH;
-        }
-    else
-        {
-        std::cout
-            << "...wrote '" << at_out_file.string() << "'.\n"
-            << "  time: " << timer.stop().elapsed_msec_str()
-            << std::endl
-            ;
-        }
+    system_command(oss.str());
+    std::cout
+        << "...wrote '" << at_out_file.string() << "'.\n"
+        << "  time: " << timer.stop().elapsed_msec_str()
+        << std::endl
+        ;
     }
 
     // apache 'fop' call to produce pdf output: same as production,
@@ -321,20 +302,16 @@ void experiment0
         << " "       << '"' << pdf_out_file0.string()      << '"'
         ;
     std::cout << "Executing command:\n" << "  " << oss.str() << std::endl;
-    if(system_command(oss.str()))
-        {
-        warning() << "*** Command failed.\n" << LMI_FLUSH;
-        }
-    else
-        {
-        std::cout
-            << "...wrote '" << pdf_out_file0.string() << "' as usual.\n"
-            << "  time: " << timer.stop().elapsed_msec_str()
-            << std::endl
-            ;
-        }
+    system_command(oss.str());
+    std::cout
+        << "...wrote '" << pdf_out_file0.string() << "' as usual.\n"
+        << "  time: " << timer.stop().elapsed_msec_str()
+        << std::endl
+        ;
     }
 
+#if 0
+// Expunge: use libxslt instead.
     // apache 'fop' call to produce pdf output: differs from the
     // preceding call--this one uses already-transformed fo output
     // from apache 'xalan'.
@@ -349,19 +326,14 @@ void experiment0
         << " "       << '"' << pdf_out_file1.string()      << '"'
         ;
     std::cout << "Executing command:\n" << "  " << oss.str() << std::endl;
-    if(system_command(oss.str()))
-        {
-        warning() << "*** Command failed.\n" << LMI_FLUSH;
-        }
-    else
-        {
-        std::cout
-            << "...wrote '" << pdf_out_file1.string() << "' using pre-tranformed fo output from 'xalan'.\n"
-            << "  time: " << timer.stop().elapsed_msec_str()
-            << std::endl
-            ;
-        }
+    system_command(oss.str());
+    std::cout
+        << "...wrote '" << pdf_out_file1.string() << "' using pre-tranformed fo output from 'xalan'.\n"
+        << "  time: " << timer.stop().elapsed_msec_str()
+        << std::endl
+        ;
     }
+#endif // 0
 
     // apache 'fop' call to produce pdf output: differs from the
     // preceding call--this one uses already-transformed fo output
@@ -387,18 +359,12 @@ void experiment0
         << " "       << '"' << pdf_out_file2.string()      << '"'
         ;
     std::cout << "Executing command:\n" << "  " << oss.str() << std::endl;
-    if(system_command(oss.str()))
-        {
-        warning() << "*** Command failed.\n" << LMI_FLUSH;
-        }
-    else
-        {
-        std::cout
-            << "...wrote '" << pdf_out_file2.string() << "' using pre-tranformed fo output from 'libxslt'.\n"
-            << "  time: " << timer.stop().elapsed_msec_str()
-            << std::endl
-            ;
-        }
+    system_command(oss.str());
+    std::cout
+        << "...wrote '" << pdf_out_file2.string() << "' using pre-tranformed fo output from 'libxslt'.\n"
+        << "  time: " << timer.stop().elapsed_msec_str()
+        << std::endl
+        ;
     }
 }
 

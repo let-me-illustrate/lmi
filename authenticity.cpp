@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: authenticity.cpp,v 1.6 2007-06-09 21:10:32 chicares Exp $
+// $Id: authenticity.cpp,v 1.7 2007-06-26 00:29:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -215,7 +215,11 @@ std::string Authenticity::Assay
             ;
         return oss.str();
         }
-    if(system_command("md5sum --check --status " + std::string(md5sum_file())))
+    try
+        {
+        system_command("md5sum --check --status " + std::string(md5sum_file()));
+        }
+    catch(...)
         {
         oss
             << "At least one required file is missing, altered, or invalid."

@@ -19,8 +19,9 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: elapsed_time.cpp,v 1.6 2007-01-13 02:11:32 chicares Exp $
+// $Id: elapsed_time.cpp,v 1.7 2007-06-26 00:29:25 chicares Exp $
 
+#include "handle_exceptions.hpp"
 #include "main_common.hpp"
 #include "system_command.hpp"
 #include "timer.hpp"
@@ -38,23 +39,27 @@ int try_main(int argc, char* argv[])
         }
 
     std::string command_line;
-    std::string space(" ");
     for(int j = 1; j < argc; ++j)
         {
-        command_line += argv[j] + space;
+        command_line += argv[j];
+        if(argc != 1 + j)
+            {
+            command_line += " ";
+            }
         }
 
+    int return_value = EXIT_FAILURE;
     Timer timer;
-    int rc = system_command(command_line);
-    if(rc)
+    try
         {
-        std::cerr
-            << "elapsed_time: CreateProcess() failed."
-            << "\nreturn code: "  << rc
-            << "\ncommand line: " << command_line << '\n'
-            ;
+        system_command(command_line);
+        return_value = EXIT_SUCCESS;
+        }
+    catch(...)
+        {
+        report_exception();
         }
     std::cout << "Elapsed time: " << timer.stop().elapsed_msec_str() << '\n';
-    return rc;
+    return return_value;
 }
 
