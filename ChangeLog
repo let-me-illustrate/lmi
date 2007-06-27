@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.811 2007-06-27 17:58:47 etarassov Exp $
+// $Id: ChangeLog,v 1.812 2007-06-27 18:03:54 etarassov Exp $
 
 MAINTENANCE
 
@@ -12674,4 +12674,12 @@ Fix typo in a comment.
 
   nasd.xsl
 Reformat 'EXPLANATORY NOTES'.
+
+20070627T1803Z <etarassov@tt-solutions.com> [1230]
+
+  group_private_placement.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+  offshore_private_placement.xsl
+Use '//' XPath construct to shorten expressions.
 
