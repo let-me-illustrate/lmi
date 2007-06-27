@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.814 2007-06-27 18:14:05 etarassov Exp $
+// $Id: ChangeLog,v 1.815 2007-06-27 23:07:38 chicares Exp $
 
 MAINTENANCE
 
@@ -12650,6 +12650,20 @@ Remove empty 'get-special-column-value' template.
   nasd.xsl
 Reformat 'column-definitions' page.
 
+20070627T1325Z <chicares@cox.net> [1230]
+
+  illustrator.cpp
+Rename a variable and change its initial value, for compatibility with
+the function it gets its value from (in 'group_values.cpp'). This
+change has no present effect because the initial value is not yet
+actually used anywhere.
+
+20070627T1326Z <chicares@cox.net> [1230]
+
+  group_values.cpp
+  group_values.hpp
+Refactor.
+
 20070627T1327Z <etarassov@tt-solutions.com> [1230]
 
   nasd.xsl
@@ -12693,4 +12707,26 @@ Remove the rest of xsl:text.
   group_private_placement.xsl
   offshore_private_placement.xsl
 Reformat a block of code.
+
+20070627T1821Z <chicares@cox.net> [1230]
+
+  census_view.cpp
+  group_values.cpp
+  group_values.hpp
+  illustrator.cpp
+Refactor.
+
+20070627T1848Z <chicares@cox.net> [1229]
+
+  group_values.cpp
+  group_values.hpp
+  illustrator.cpp
+Refactor.
+
+20070627T2307Z <chicares@cox.net> [1229]
+
+  group_values.cpp
+  illustrator.cpp
+Rearrange 'mce_emit_timings' code. Now, timings are printed at the
+same moment, in one module, for all file types.
 
