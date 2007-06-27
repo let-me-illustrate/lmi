@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.72 2007-06-27 18:48:32 chicares Exp $
+// $Id: group_values.cpp,v 1.73 2007-06-27 23:07:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -44,7 +44,6 @@
 #include "value_cast.hpp"
 
 #include <algorithm> // std::max()
-#include <iostream>
 #include <iterator>  // std::back_inserter()
 #include <string>
 
@@ -67,13 +66,11 @@ progress_meter::enum_display_mode progress_meter_mode(mcenum_emission emission)
 }
 } // Unnamed namespace.
 
-// Functors run_census_in_series and run_census_in_parallel aren't in
-// an unnamed namespace because that would make it difficult to
-// implement friendship.
-
-// TODO ?? Maintain timings as part of functor state, instead of
-// merely writing them to std::cerr (an odd practice anyway, intended
-// only to mimic obsolete code).
+// Functors run_census_in_series and run_census_in_parallel exist as
+// such only to make it easier for class AccountValue to extend its
+// friendship to the latter but not the former. They aren't in an
+// unnamed namespace because that would make friendship harder to
+// implement.
 
 class run_census_in_series
 {
@@ -180,17 +177,6 @@ census_run_result run_census_in_series::operator()
     double total_usec = timer.stop().elapsed_usec();
     status() << Timer::elapsed_msec_str(total_usec) << std::flush;
     result.usec_for_calculations_ = total_usec - result.usec_for_output_;
-    if(mce_emit_timings & emission)
-        {
-        std::cerr
-            << "    Calculations: "
-            << Timer::elapsed_msec_str(result.usec_for_calculations_)
-            << '\n'
-            << "    Output:       "
-            << Timer::elapsed_msec_str(result.usec_for_output_)
-            << '\n'
-            ;
-        }
     return result;
 }
 
@@ -675,17 +661,6 @@ census_run_result run_census_in_parallel::operator()
     double total_usec = timer.stop().elapsed_usec();
     status() << Timer::elapsed_msec_str(total_usec) << std::flush;
     result.usec_for_calculations_ = total_usec - result.usec_for_output_;
-    if(mce_emit_timings & emission)
-        {
-        std::cerr
-            << "    Calculations: "
-            << Timer::elapsed_msec_str(result.usec_for_calculations_)
-            << '\n'
-            << "    Output:       "
-            << Timer::elapsed_msec_str(result.usec_for_output_)
-            << '\n'
-            ;
-        }
     return result;
 }
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.cpp,v 1.15 2007-06-27 18:48:32 chicares Exp $
+// $Id: illustrator.cpp,v 1.16 2007-06-27 23:07:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -65,14 +65,6 @@ bool illustrator::operator()(fs::path const& file_path)
         multiple_cell_document doc(file_path.string());
         run_census::assert_consistency(doc.case_parms()[0], doc.cell_parms()[0]);
         usec_for_input_ = timer.stop().elapsed_usec();
-        if(mce_emit_timings & emission_)
-            {
-            std::cerr
-                << "    Input:        "
-                << Timer::elapsed_msec_str(usec_for_input_)
-                << '\n'
-                ;
-            }
         census_run_result result;
         result = run_census()(file_path, emission_, doc.cell_parms());
         completed_normally     = result.completed_normally_   ;
@@ -111,6 +103,24 @@ bool illustrator::operator()(fs::path const& file_path)
             << extension
             << "' not supported."
             << LMI_FLUSH
+            ;
+        }
+
+    // TODO ?? Revise this legacy behavior. Probably the data should
+    // be written to std::cout instead.
+
+    if(mce_emit_timings & emission_)
+        {
+        std::cerr
+            << "    Input:        "
+            << Timer::elapsed_msec_str(usec_for_input_)
+            << '\n'
+            << "    Calculations: "
+            << Timer::elapsed_msec_str(usec_for_calculations_)
+            << '\n'
+            << "    Output:       "
+            << Timer::elapsed_msec_str(usec_for_output_)
+            << '\n'
             ;
         }
 
