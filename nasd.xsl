@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.61 2007-06-27 18:03:55 etarassov Exp $
+    $Id: nasd.xsl,v 1.62 2007-06-27 18:08:20 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -194,7 +194,7 @@
             <xsl:with-param name="reporttitle" select="'Supplemental Illustration'"/>
           </xsl:call-template>
           <fo:block text-align="center" font-size="9pt" font-family="sans-serif" padding-top="1em">
-            <xsl:text>Using Current charges</xsl:text>
+            Using Current charges
           </fo:block>
           <xsl:call-template name="dollar-units"/>
         </fo:static-content>
@@ -349,7 +349,7 @@
             </fo:block>
 
             <fo:block font-weight="bold" text-align="center" padding-top="2em">
-              <xsl:text>EXPLANATORY NOTES</xsl:text>
+              EXPLANATORY NOTES
             </fo:block>
 
             <fo:block padding-top="1em">
@@ -412,7 +412,7 @@
                   level premium is $<xsl:value-of select="$scalars/InitGLP"/>.
                 </xsl:when>
                 <xsl:otherwise>
-                  <xsl:text>cash value accumulation test.</xsl:text>
+                  cash value accumulation test.
                 </xsl:otherwise>
               </xsl:choose>
             </fo:block>
@@ -815,7 +815,7 @@
               </xsl:if>
               <xsl:if test="not($is_composite) and $scalars/UWClass='Rated'">
                 <fo:block text-align="left">
-                  <xsl:text>Table Rating: </xsl:text>
+                  Table Rating:
                   <xsl:value-of select="$scalars/SubstandardTable"/>
                 </fo:block>
               </xsl:if>
@@ -917,33 +917,33 @@
               </fo:table-cell>
               <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">
-                <xsl:text>Return (</xsl:text>
-                <xsl:value-of select="$scalars/InitAnnSepAcctNetInt_GuaranteedZero"/>
-                <xsl:text> net)</xsl:text>
+                Return
+                (<xsl:value-of select="$scalars/InitAnnSepAcctNetInt_GuaranteedZero"/>
+                net)
                 </fo:block>
               </fo:table-cell>
               <fo:table-cell><fo:block/></fo:table-cell>
               <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">
-                  <xsl:text>Return (</xsl:text>
-                  <xsl:value-of select="$scalars/InitAnnSepAcctNetInt_Guaranteed"/>
-                  <xsl:text> net)</xsl:text>
+                  Return
+                  (<xsl:value-of select="$scalars/InitAnnSepAcctNetInt_Guaranteed"/>
+                  net)
                 </fo:block>
               </fo:table-cell>
               <fo:table-cell><fo:block/></fo:table-cell>
               <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">
-                  <xsl:text>Return (</xsl:text>
-                  <xsl:value-of select="$scalars/InitAnnSepAcctNetInt_CurrentZero"/>
-                  <xsl:text> net)</xsl:text>
+                  Return
+                  (<xsl:value-of select="$scalars/InitAnnSepAcctNetInt_CurrentZero"/>
+                  net)
                 </fo:block>
               </fo:table-cell>
               <fo:table-cell><fo:block/></fo:table-cell>
               <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">
-                  <xsl:text>Return (</xsl:text>
-                  <xsl:value-of select="$scalars/InitAnnSepAcctNetInt_Current"/>
-                  <xsl:text> net)</xsl:text>
+                  Return
+                  (<xsl:value-of select="$scalars/InitAnnSepAcctNetInt_Current"/>
+                  net)
                 </fo:block>
               </fo:table-cell>
             </fo:table-row>
@@ -1145,9 +1145,8 @@
   <xsl:template name="list-fund-allocation">
     <xsl:param name="counter"/>
     <xsl:if test="$vectors[@name='FundNames']/duration[$counter]/@column_value!=''">
-        <fo:block>
+      <fo:block>
         <xsl:value-of select="$vectors[@name='FundAllocations']/duration[$counter]/@column_value"/>
-        <xsl:text> </xsl:text>
         <xsl:value-of select="$vectors[@name='FundNames']/duration[$counter]/@column_value"/>
       </fo:block>
       <xsl:call-template name="list-fund-allocation">
