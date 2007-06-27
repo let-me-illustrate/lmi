@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.70 2007-06-27 13:26:39 chicares Exp $
+// $Id: group_values.cpp,v 1.71 2007-06-27 18:21:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -112,7 +112,7 @@ census_run_result run_census_in_series::operator()
     )
 {
     Timer timer;
-    census_run_result completed_normally = true;
+    census_run_result result;
     double usec_for_calculations = 0.0;
     double usec_for_output       = 0.0;
     boost::shared_ptr<progress_meter> meter
@@ -166,7 +166,7 @@ census_run_result run_census_in_series::operator()
 
         if(!meter->reflect_progress())
             {
-            completed_normally = false;
+            result.completed_normally_ = false;
             goto done;
             }
         }
@@ -193,7 +193,7 @@ census_run_result run_census_in_series::operator()
             << '\n'
             ;
         }
-    return completed_normally;
+    return result;
 }
 
 /// Illustrations with group experience rating
@@ -270,7 +270,7 @@ census_run_result run_census_in_parallel::operator()
     )
 {
     Timer timer;
-    census_run_result completed_normally = true;
+    census_run_result result;
     double usec_for_calculations = 0.0;
     double usec_for_output       = 0.0;
 
@@ -336,7 +336,7 @@ census_run_result run_census_in_parallel::operator()
 
             if(!meter->reflect_progress())
                 {
-                completed_normally = false;
+                result.completed_normally_ = false;
                 goto done;
                 }
             }
@@ -631,7 +631,7 @@ census_run_result run_census_in_parallel::operator()
 
             if(!meter->reflect_progress())
                 {
-                completed_normally = false;
+                result.completed_normally_ = false;
                 goto done;
                 }
             } // End for year.
@@ -690,7 +690,7 @@ census_run_result run_census_in_parallel::operator()
             << '\n'
             ;
         }
-    return completed_normally;
+    return result;
 }
 
 run_census::run_census()
@@ -707,7 +707,7 @@ census_run_result run_census::operator()
     ,std::vector<IllusInputParms> const& cells
     )
 {
-    census_run_result completed_normally = true;
+    census_run_result result;
 
     composite_.reset
         (new Ledger
@@ -722,7 +722,7 @@ census_run_result run_census::operator()
         {
         case e_life_by_life:
             {
-            completed_normally = run_census_in_series()
+            result = run_census_in_series()
                 (file
                 ,emission
                 ,cells
@@ -732,7 +732,7 @@ census_run_result run_census::operator()
             break;
         case e_month_by_month:
             {
-            completed_normally = run_census_in_parallel()
+            result = run_census_in_parallel()
                 (file
                 ,emission
                 ,cells
@@ -751,7 +751,7 @@ census_run_result run_census::operator()
             }
         }
 
-    return completed_normally;
+    return result;
 }
 
 boost::shared_ptr<Ledger const> run_census::composite()

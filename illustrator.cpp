@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.cpp,v 1.13 2007-06-27 13:25:23 chicares Exp $
+// $Id: illustrator.cpp,v 1.14 2007-06-27 18:21:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -74,7 +74,9 @@ bool illustrator::operator()(fs::path const& file_path)
                 ;
             }
         // TODO ?? Set usec_for_calculations_ and usec_for_output_ here.
-        completed_normally = run_census()(file_path, emission_, doc.cell_parms());
+        census_run_result result;
+        result = run_census()(file_path, emission_, doc.cell_parms());
+        completed_normally = result.completed_normally_;
         }
 #if 0
     else if(".ill" == extension)

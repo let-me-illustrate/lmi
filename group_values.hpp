@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.hpp,v 1.22 2007-06-27 13:26:40 chicares Exp $
+// $Id: group_values.hpp,v 1.23 2007-06-27 18:21:29 chicares Exp $
 
 #ifndef group_values_hpp
 #define group_values_hpp
@@ -39,12 +39,24 @@ class IllusInputParms;
 class Input;
 class Ledger;
 
-typedef bool census_run_result; // This will become a struct.
+/// Result of running a census.
+///
+/// completed_normally_ is true if the process was allowed to run to
+/// completion, and false if it was cancelled, e.g. by cancelling a
+/// GUI progress dialog.
+///
+/// Implicitly-declared special member functions do the right thing.
+
+struct census_run_result
+{
+    census_run_result()
+        :completed_normally_(true)
+        {}
+
+    bool completed_normally_;
+};
 
 /// Run all cells in a census.
-///
-/// operator() returns true if the process was allowed to run to
-/// completion, or false if it was cancelled.
 ///
 /// Output is emitted to specified targets for all cells as well as
 /// the composite. When output is wanted only for the composite, use
