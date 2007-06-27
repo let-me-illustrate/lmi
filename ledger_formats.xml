@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: ledger_formats.xml,v 1.4 2007-01-27 00:00:51 wboutin Exp $
+    $Id: ledger_formats.xml,v 1.5 2007-06-27 13:40:56 etarassov Exp $
 
     TODO ?? This file contains only 'column' elements, but they don't
     all correspond to columns: e.g., 'LapseYear' is a scalar and
@@ -390,8 +390,8 @@
         <format>f4</format>
     </column>
     <column name="MlyPostHoneymoonRate">
-        <title basis="run_curr_basis">Curr Monthly Post HM Rate</title>
-        <title basis="run_guar_basis">Guar Monthly Post HM Rate</title>
+        <title basis="run_curr_basis">Curr Monthly Post Honeymoon Rate</title>
+        <title basis="run_guar_basis">Guar Monthly Post Honeymoon Rate</title>
         <format>f4</format>
     </column>
     <column name="MlySAIntRate">
@@ -586,7 +586,7 @@
         <format>f1</format>
     </column>
     <column name="GptForceout">
-        <title>ForceOut</title>
+        <title>Forceout</title>
         <format>f1</format>
     </column>
     <column name="GrossIntCredited">
@@ -626,7 +626,7 @@
         <format>f1</format>
     </column>
     <column name="NetCOICharge">
-        <title basis="run_curr_basis">Curr Net COI Charge</title><!-- _____________ Curr Net COI Charge -->
+        <title basis="run_curr_basis">Experience _Rating _Net COI Charge</title><!-- Experience _______Rating _______Net COI Charge -->
         <format>f1</format>
     </column>
     <column name="NetDeathBenefit">
