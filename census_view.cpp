@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.62 2007-06-25 21:13:29 chicares Exp $
+// $Id: census_view.cpp,v 1.63 2007-06-27 18:21:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -931,7 +931,7 @@ bool CensusView::DoAllCells(mcenum_emission emission)
         cells.push_back(cell);
         }
     run_census runner;
-    if(!runner(base_filename(), emission, cells))
+    if(!runner(base_filename(), emission, cells).completed_normally_)
         {
         return false;
         }
