@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: ledger_common.xsl,v 1.4 2007-01-27 00:00:51 wboutin Exp $
+    $Id: ledger_common.xsl,v 1.5 2007-06-27 13:35:22 etarassov Exp $
 -->
 
 <xsl:stylesheet xmlns:lmi="http://savannah.nongnu.org/projects/lmi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" xsi:schemaLocation="http://savannah.nongnu.org/projects/lmi ledger.xsd">
@@ -146,7 +146,7 @@
     -->
     <xsl:variable name="lapse_year_nodes" select="$illustration/double_scalar[@name='LapseYear']"/>
     <xsl:template name="get_max_lapse_year">
-        <xsl:param name="max_value"/>
+        <xsl:param name="value"/>
         <xsl:param name="pos"/>
         <xsl:choose>
             <xsl:when test="$pos &gt; count($lapse_year_nodes)">
