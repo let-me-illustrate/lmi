@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.71 2007-06-27 18:21:29 chicares Exp $
+// $Id: group_values.cpp,v 1.72 2007-06-27 18:48:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -113,8 +113,6 @@ census_run_result run_census_in_series::operator()
 {
     Timer timer;
     census_run_result result;
-    double usec_for_calculations = 0.0;
-    double usec_for_output       = 0.0;
     boost::shared_ptr<progress_meter> meter
         (create_progress_meter
             (cells.size()
@@ -152,7 +150,7 @@ census_run_result run_census_in_series::operator()
             } // End fenv_guard scope.
             LMI_ASSERT(resulting_ledger.get());
 
-            usec_for_output += emit_ledger
+            result.usec_for_output_ += emit_ledger
                 (file
                 ,j
                 ,*resulting_ledger
@@ -171,7 +169,7 @@ census_run_result run_census_in_series::operator()
             }
         }
 
-    usec_for_output += emit_ledger
+    result.usec_for_output_ += emit_ledger
         (file
         ,-1
         ,composite
@@ -181,15 +179,15 @@ census_run_result run_census_in_series::operator()
   done:
     double total_usec = timer.stop().elapsed_usec();
     status() << Timer::elapsed_msec_str(total_usec) << std::flush;
-    usec_for_calculations = total_usec - usec_for_output;
+    result.usec_for_calculations_ = total_usec - result.usec_for_output_;
     if(mce_emit_timings & emission)
         {
         std::cerr
             << "    Calculations: "
-            << Timer::elapsed_msec_str(usec_for_calculations)
+            << Timer::elapsed_msec_str(result.usec_for_calculations_)
             << '\n'
             << "    Output:       "
-            << Timer::elapsed_msec_str(usec_for_output)
+            << Timer::elapsed_msec_str(result.usec_for_output_)
             << '\n'
             ;
         }
@@ -271,8 +269,6 @@ census_run_result run_census_in_parallel::operator()
 {
     Timer timer;
     census_run_result result;
-    double usec_for_calculations = 0.0;
-    double usec_for_output       = 0.0;
 
     std::vector<IllusInputParms>::const_iterator ip;
     std::vector<boost::shared_ptr<AccountValue> > cell_values;
@@ -659,7 +655,7 @@ census_run_result run_census_in_parallel::operator()
     int j = 0;
     for(i = cell_values.begin(); i != cell_values.end(); ++i, ++j)
         {
-        usec_for_output += emit_ledger
+        result.usec_for_output_ += emit_ledger
             (file
             ,j
             ,*(*i)->ledger_from_av()
@@ -668,7 +664,7 @@ census_run_result run_census_in_parallel::operator()
         }
     }
 
-    usec_for_output += emit_ledger
+    result.usec_for_output_ += emit_ledger
         (file
         ,-1
         ,composite
@@ -678,15 +674,15 @@ census_run_result run_census_in_parallel::operator()
   done:
     double total_usec = timer.stop().elapsed_usec();
     status() << Timer::elapsed_msec_str(total_usec) << std::flush;
-    usec_for_calculations = total_usec - usec_for_output;
+    result.usec_for_calculations_ = total_usec - result.usec_for_output_;
     if(mce_emit_timings & emission)
         {
         std::cerr
             << "    Calculations: "
-            << Timer::elapsed_msec_str(usec_for_calculations)
+            << Timer::elapsed_msec_str(result.usec_for_calculations_)
             << '\n'
             << "    Output:       "
-            << Timer::elapsed_msec_str(usec_for_output)
+            << Timer::elapsed_msec_str(result.usec_for_output_)
             << '\n'
             ;
         }
