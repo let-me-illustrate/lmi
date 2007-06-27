@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.hpp,v 1.23 2007-06-27 18:21:29 chicares Exp $
+// $Id: group_values.hpp,v 1.24 2007-06-27 18:48:32 chicares Exp $
 
 #ifndef group_values_hpp
 #define group_values_hpp
@@ -45,15 +45,22 @@ class Ledger;
 /// completion, and false if it was cancelled, e.g. by cancelling a
 /// GUI progress dialog.
 ///
+/// Time is measured for calculations and output but not for input,
+/// because the census-run classes accept only preread input.
+///
 /// Implicitly-declared special member functions do the right thing.
 
 struct census_run_result
 {
     census_run_result()
-        :completed_normally_(true)
+        :completed_normally_    (true)
+        ,usec_for_calculations_ (0.0)
+        ,usec_for_output_       (0.0)
         {}
 
     bool completed_normally_;
+    double usec_for_calculations_;
+    double usec_for_output_;
 };
 
 /// Run all cells in a census.
