@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.807 2007-06-27 13:27:47 etarassov Exp $
+// $Id: ChangeLog,v 1.808 2007-06-27 13:35:22 etarassov Exp $
 
 MAINTENANCE
 
@@ -12643,7 +12643,7 @@ Let system_command() throw on failure.
 20070627T1233Z <etarassov@tt-solutions.com> [1230]
 
   nasd.xsl
-Remove empty'get-special-column-value' template.
+Remove empty 'get-special-column-value' template.
 
 20070627T1323Z <etarassov@tt-solutions.com> [1230]
 
@@ -12654,4 +12654,9 @@ Reformat 'column-definitions' page.
 
   nasd.xsl
 Slightly reformat 'basic-illustration' header.
+
+20070627T1335Z <etarassov@tt-solutions.com> [1230]
+
+  ledger_common.xsl
+Fix a defect in 'get_max_lapse_year'.
 
