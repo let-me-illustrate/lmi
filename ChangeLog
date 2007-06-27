@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.804 2007-06-26 00:29:26 chicares Exp $
+// $Id: ChangeLog,v 1.805 2007-06-27 12:33:16 etarassov Exp $
 
 MAINTENANCE
 
@@ -12639,4 +12639,9 @@ Increase the severity of numerous diagnostics.
   system_command_test.cpp
   system_command_wx.cpp
 Let system_command() throw on failure.
+
+20070627T1233Z <etarassov@tt-solutions.com> [1230]
+
+  nasd.xsl
+Remove empty'get-special-column-value' template.
 

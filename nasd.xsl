@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.56 2007-06-20 14:00:50 etarassov Exp $
+    $Id: nasd.xsl,v 1.57 2007-06-27 12:33:16 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -1303,8 +1303,6 @@
       </xsl:with-param>
     </xsl:call-template>
   </xsl:template>
-
-  <xsl:template name="get-special-column-value"/>
 
 </xsl:stylesheet>
 
