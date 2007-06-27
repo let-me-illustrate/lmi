@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.44 2007-06-22 12:50:09 etarassov Exp $
+    $Id: fo_common.xsl,v 1.45 2007-06-27 17:32:38 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -592,8 +592,8 @@
           </fo:table-cell>
         </xsl:for-each>
         <!--
-        Feature requested: ensure that a group of 5 rows is never splitted
-        accross multiple pages.
+        Feature requested: ensure that a group of 5 rows is never split
+        across multiple pages.
         Add a special cell, that spans 5 rows. Since FOP avoids breaking cells,
         this cell remains on one page, so will the group of 5 rows.
         -->

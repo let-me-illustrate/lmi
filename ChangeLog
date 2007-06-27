@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.809 2007-06-27 13:40:55 etarassov Exp $
+// $Id: ChangeLog,v 1.810 2007-06-27 17:32:38 etarassov Exp $
 
 MAINTENANCE
 
@@ -12664,4 +12664,9 @@ Fix a defect in 'get_max_lapse_year'.
 
   ledger_formats.xml
 Fix column names.
+
+20070627T1732Z <etarassov@tt-solutions.com> [1230]
+
+  fo_common.xsl
+Fix typo in a comment.
 
