@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.806 2007-06-27 13:23:09 etarassov Exp $
+// $Id: ChangeLog,v 1.807 2007-06-27 13:27:47 etarassov Exp $
 
 MAINTENANCE
 
@@ -12645,8 +12645,13 @@ Let system_command() throw on failure.
   nasd.xsl
 Remove empty'get-special-column-value' template.
 
-20070627T1322Z <etarassov@tt-solutions.com> [1230]
+20070627T1323Z <etarassov@tt-solutions.com> [1230]
 
   nasd.xsl
 Reformat 'column-definitions' page.
+
+20070627T1327Z <etarassov@tt-solutions.com> [1230]
+
+  nasd.xsl
+Slightly reformat 'basic-illustration' header.
 
