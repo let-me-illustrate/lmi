@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.hpp,v 1.21 2007-06-01 01:24:18 chicares Exp $
+// $Id: group_values.hpp,v 1.22 2007-06-27 13:26:40 chicares Exp $
 
 #ifndef group_values_hpp
 #define group_values_hpp
@@ -38,6 +38,8 @@
 class IllusInputParms;
 class Input;
 class Ledger;
+
+typedef bool census_run_result; // This will become a struct.
 
 /// Run all cells in a census.
 ///
@@ -65,7 +67,7 @@ class LMI_SO run_census
     run_census();
     ~run_census();
 
-    bool operator()
+    census_run_result operator()
         (fs::path const&                     file
         ,mcenum_emission                     emission
         ,std::vector<IllusInputParms> const& cells

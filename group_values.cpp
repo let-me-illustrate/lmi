@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.69 2007-06-05 12:47:47 chicares Exp $
+// $Id: group_values.cpp,v 1.70 2007-06-27 13:26:39 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -78,7 +78,7 @@ progress_meter::enum_display_mode progress_meter_mode(mcenum_emission emission)
 class run_census_in_series
 {
   public:
-    bool operator()
+    census_run_result operator()
         (fs::path const&                     file
         ,mcenum_emission                     emission
         ,std::vector<IllusInputParms> const& cells
@@ -89,7 +89,7 @@ class run_census_in_series
 class run_census_in_parallel
 {
   public:
-    bool operator()
+    census_run_result operator()
         (fs::path const&                     file
         ,mcenum_emission                     emission
         ,std::vector<IllusInputParms> const& cells
@@ -104,17 +104,17 @@ class run_census_in_parallel
 // which, for now at least, are handled much more gracefully. Yet perhaps
 // they should be moved into run_census.
 
-bool run_census_in_series::operator()
+census_run_result run_census_in_series::operator()
     (fs::path const&                     file
     ,mcenum_emission                     emission
     ,std::vector<IllusInputParms> const& cells
     ,Ledger&                             composite
     )
 {
-    bool completed_normally = true;
+    Timer timer;
+    census_run_result completed_normally = true;
     double usec_for_calculations = 0.0;
     double usec_for_output       = 0.0;
-    Timer timer;
     boost::shared_ptr<progress_meter> meter
         (create_progress_meter
             (cells.size()
@@ -262,17 +262,17 @@ bool run_census_in_series::operator()
 /// EOY DB reflects EOY AV: thus, they're the values normally printed
 /// on an illustration.
 
-bool run_census_in_parallel::operator()
+census_run_result run_census_in_parallel::operator()
     (fs::path const&                     file
     ,mcenum_emission                     emission
     ,std::vector<IllusInputParms> const& cells
     ,Ledger&                             composite
     )
 {
-    bool completed_normally = true;
+    Timer timer;
+    census_run_result completed_normally = true;
     double usec_for_calculations = 0.0;
     double usec_for_output       = 0.0;
-    Timer timer;
 
     std::vector<IllusInputParms>::const_iterator ip;
     std::vector<boost::shared_ptr<AccountValue> > cell_values;
@@ -701,13 +701,13 @@ run_census::~run_census()
 {
 }
 
-bool run_census::operator()
+census_run_result run_census::operator()
     (fs::path const&                     file
     ,mcenum_emission                     emission
     ,std::vector<IllusInputParms> const& cells
     )
 {
-    bool completed_normally = true;
+    census_run_result completed_normally = true;
 
     composite_.reset
         (new Ledger
