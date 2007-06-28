@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: offshore_private_placement.xsl,v 1.41 2007-06-27 18:14:05 etarassov Exp $
+    $Id: offshore_private_placement.xsl,v 1.42 2007-06-28 09:10:27 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -36,12 +36,12 @@
       <fo:layout-master-set>
 
         <!-- Define the cover page. -->
-        <fo:simple-page-master master-name="cover" page-height="11in" page-width="8.5in" margin-top="0.1in" margin-bottom="0in" margin-left="0.35in" margin-right="0.35in">
+        <fo:simple-page-master master-name="cover" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.1in" margin-bottom="0in" margin-left="0.35in" margin-right="0.35in">
           <fo:region-body margin-top="0.25in" margin-bottom="0.10in"/>
         </fo:simple-page-master>
 
         <!-- Define the Column Definitions page. -->
-        <fo:simple-page-master master-name="column-definitions" page-height="11in" page-width="8.5in" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
+        <fo:simple-page-master master-name="column-definitions" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
           <!-- Central part of page -->
           <fo:region-body column-count="1" margin-top="2.25in" margin-bottom="1in"/>
           <!-- Header -->
@@ -51,7 +51,7 @@
         </fo:simple-page-master>
 
         <!-- Define the explanatory notes page. -->
-        <fo:simple-page-master master-name="explanatory-notes" page-height="11in" page-width="8.5in" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
+        <fo:simple-page-master master-name="explanatory-notes" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
           <!-- Central part of page -->
           <fo:region-body column-count="1" margin-top="2.35in" margin-bottom="0.90in"/>
           <!-- Header -->
@@ -61,7 +61,7 @@
         </fo:simple-page-master>
 
         <!-- Define the explanatory notes page. -->
-        <fo:simple-page-master master-name="explanatory-notes-separate-account" page-height="11in" page-width="8.5in" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
+        <fo:simple-page-master master-name="explanatory-notes-separate-account" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
           <!-- Central part of page -->
           <!--<fo:region-body column-count="2" margin-top="2.25in" margin-bottom="2.70in"/> -->
           <fo:region-body column-count="2" margin-top="2.35in" margin-bottom="1.3in"/>
@@ -72,7 +72,7 @@
         </fo:simple-page-master>
 
         <!-- Define the Basic Illustration page. -->
-        <fo:simple-page-master master-name="basic-illustration" page-height="11in" page-width="8.5in" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
+        <fo:simple-page-master master-name="basic-illustration" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
           <!-- Central part of page -->
           <fo:region-body column-count="1" margin-top="3.00in" margin-bottom="1.25in"/>
           <!-- Header -->
@@ -82,7 +82,7 @@
         </fo:simple-page-master>
 
         <!-- Define the Supplemental Illustration page. -->
-        <fo:simple-page-master master-name="supplemental-illustration" page-height="11in" page-width="8.5in" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
+        <fo:simple-page-master master-name="supplemental-illustration" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
           <!-- Central part of page -->
           <fo:region-body column-count="1" margin-top="3.00in" margin-bottom="1.00in"/>
           <!-- Header -->
@@ -93,7 +93,7 @@
 
         <!-- Define the Illustration Assumption Detail page. -->
         <xsl:if test="not($is_composite)">
-          <fo:simple-page-master master-name="illustration-assumption" page-height="11in" page-width="8.5in" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
+          <fo:simple-page-master master-name="illustration-assumption" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
             <!-- Central part of page -->
             <fo:region-body column-count="1" margin-top="2.80in" margin-bottom="1.00in"/>
             <!-- Header -->
@@ -105,7 +105,7 @@
 
         <!-- Define the Supplemental Report page. -->
         <xsl:if test="$has_supplemental_report">
-          <fo:simple-page-master master-name="supplemental-report" page-height="11in" page-width="8.5in" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
+          <fo:simple-page-master master-name="supplemental-report" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
             <!-- Central part of page -->
             <fo:region-body column-count="1" margin-top="2.80in" margin-bottom="1.10in"/>
             <!-- Header -->

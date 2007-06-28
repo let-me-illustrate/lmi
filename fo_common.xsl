@@ -21,12 +21,23 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.45 2007-06-27 17:32:38 etarassov Exp $
+    $Id: fo_common.xsl,v 1.46 2007-06-28 09:10:26 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
 ]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
+  <!--
+  Global parameter, that controls the output media size.
+  Refer to http://en.wikipedia.org/wiki/Paper_size for details.
+  North American paper size standards are accepted:
+  'letter', 'legal', 'emperor'.
+  Any unknown page size keyword is treated as 'letter'.
+  -->
+  <xsl:param name="page-type" select="'letter'"/>
+  <!-- Page orientation has to be 'portrait' or 'landscape' -->
+  <xsl:param name="page-orientation" select="'portrait'"/>
+
   <!--
   In some xsl:for-each loop we could iterate over a node set from some
   other document (not the current document being transformed, for example
@@ -80,6 +91,38 @@
   Frequently used value. For a composite case the variable is_composite is true.
   -->
   <xsl:variable name="is_composite" select="boolean($scalars/Composite='1')"/>
+
+  <!-- Page size in a form of 'width x height' (portrait orientation) -->
+  <xsl:variable name="page-size">
+    <xsl:choose>
+      <xsl:when test="$page-type='legal'">
+        8.5in x 14in
+      </xsl:when>
+      <xsl:when test="$page-type='emperor'">
+        48in x 72in
+      </xsl:when>
+      <xsl:otherwise><!-- fall back to 'letter' -->
+        8.5in x 11in
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <!-- These variables should be used in every 'simple-page-master'. -->
+  <xsl:variable name="portrait-width" select="normalize-space(substring-before($page-size, 'x'))"/>
+  <xsl:variable name="portrait-height" select="normalize-space(substring-after($page-size, 'x'))"/>
+  <!-- Account for page orientation in a form 'horizontal x vertical' -->
+  <xsl:variable name="page-geometry">
+    <xsl:choose>
+      <xsl:when test="$page-orientation='landscape'">
+        <xsl:value-of select="concat($portrait-height,' x ',$portrait-width)"/>
+      </xsl:when>
+      <xsl:otherwise><!-- fall back to 'portrait' -->
+        <xsl:value-of select="concat($portrait-width,' x ',$portrait-height)"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <!-- These variables should be used in every 'simple-page-master'. -->
+  <xsl:variable name="page-width" select="normalize-space(substring-before($page-geometry, 'x'))"/>
+  <xsl:variable name="page-height" select="normalize-space(substring-after($page-geometry, 'x'))"/>
 
   <!--
   This may appear to be a clumsy way to get the max value but there is no clean way

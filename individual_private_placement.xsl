@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.47 2007-06-27 18:03:54 etarassov Exp $
+    $Id: individual_private_placement.xsl,v 1.48 2007-06-28 09:10:26 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -40,12 +40,12 @@
       <fo:layout-master-set>
 
         <!-- Define the cover page. -->
-        <fo:simple-page-master master-name="cover" page-height="11in" page-width="8.5in" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
+        <fo:simple-page-master master-name="cover" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
           <fo:region-body margin-top="0.25in" margin-bottom="0.25in"/>
         </fo:simple-page-master>
 
         <!-- Define the IRR (Guaranteed Charges) Illustration page. -->
-        <fo:simple-page-master master-name="irr-guaranteed-illustration" page-height="11in" page-width="8.5in" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
+        <fo:simple-page-master master-name="irr-guaranteed-illustration" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
           <!-- Central part of page -->
           <fo:region-body column-count="1" margin-top="2.60in" margin-bottom="1.10in"/>
           <!-- Header -->
@@ -55,7 +55,7 @@
         </fo:simple-page-master>
 
         <!-- Define the IRR (Current Charges) Illustration page -->
-        <fo:simple-page-master master-name="irr-current-illustration" page-height="11in" page-width="8.5in" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
+        <fo:simple-page-master master-name="irr-current-illustration" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
           <!-- Central part of page -->
           <fo:region-body column-count="1" margin-top="2.60in" margin-bottom="1.10in"/>
           <!-- Header -->
@@ -65,7 +65,7 @@
         </fo:simple-page-master>
 
         <!-- Define the Current Values Illustration page -->
-        <fo:simple-page-master master-name="current-illustration" page-height="11in" page-width="8.5in" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
+        <fo:simple-page-master master-name="current-illustration" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
           <!-- Central part of page -->
           <fo:region-body column-count="1" margin-top="2.60in" margin-bottom="1.20in"/>
           <!-- Header -->
@@ -75,7 +75,7 @@
         </fo:simple-page-master>
 
         <!-- Define the footnotes page. -->
-        <fo:simple-page-master master-name="footnotes" page-height="11in" page-width="8.5in" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
+        <fo:simple-page-master master-name="footnotes" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
           <!-- Central part of page -->
           <fo:region-body column-count="1" margin-top="2.25in" margin-bottom=".6in"/>
           <!-- Header -->
@@ -86,7 +86,7 @@
 
         <!-- Define the Supplemental Illustration page. -->
         <xsl:if test="$has_supplemental_report">
-          <fo:simple-page-master master-name="supplemental-report" page-height="11in" page-width="8.5in" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
+          <fo:simple-page-master master-name="supplemental-report" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
             <!-- Central part of page -->
             <fo:region-body column-count="1" margin-top="2.60in" margin-bottom="1.5in"/>
             <!-- Header -->
