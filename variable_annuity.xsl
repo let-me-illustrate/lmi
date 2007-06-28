@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.38 2007-06-28 14:48:44 etarassov Exp $
+    $Id: variable_annuity.xsl,v 1.39 2007-06-28 15:02:56 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -41,7 +41,7 @@
         <!-- Define the Cover page. -->
         <fo:simple-page-master master-name="cover-page" page-height="{$page-height}" page-width="{$page-width}" margin="0.25in">
           <!-- Central part of page -->
-          <fo:region-body column-count="1" margin-top="1.5in" margin-bottom="1.0in"/>
+          <fo:region-body margin-top="1.5in" margin-bottom="1.0in"/>
           <!-- Header -->
           <fo:region-before extent="3.0in"/>
           <!-- Footer -->
@@ -51,7 +51,7 @@
         <!-- Define the Hypothetical Illustration Current page. -->
         <fo:simple-page-master master-name="hypothetical-illustration-current" page-height="{$page-height}" page-width="{$page-width}" margin="0.25in">
           <!-- Central part of page -->
-          <fo:region-body column-count="1" margin-top="2.70in" margin-bottom="1.20in"/>
+          <fo:region-body margin-top="2.70in" margin-bottom="1.20in"/>
           <!-- Header -->
           <fo:region-before extent="3.0in"/>
           <!-- Footer -->
@@ -61,7 +61,7 @@
         <!-- Define the Hypothetical Illustration CurrentZero page. -->
         <fo:simple-page-master master-name="hypothetical-illustration-current-zero" page-height="{$page-height}" page-width="{$page-width}" margin="0.25in">
           <!-- Central part of page -->
-          <fo:region-body column-count="1" margin-top="2.70in" margin-bottom="1.20in"/>
+          <fo:region-body margin-top="2.70in" margin-bottom="1.20in"/>
           <!-- Header -->
           <fo:region-before extent="3.0in"/>
           <!-- Footer -->
@@ -71,7 +71,7 @@
         <!-- Define the Hypothetical Illustration Guaranteed page. -->
         <fo:simple-page-master master-name="hypothetical-illustration-guaranteed" page-height="{$page-height}" page-width="{$page-width}" margin="0.25in">
           <!-- Central part of page -->
-          <fo:region-body column-count="1" margin-top="2.70in" margin-bottom="1.20in"/>
+          <fo:region-body margin-top="2.70in" margin-bottom="1.20in"/>
           <!-- Header -->
           <fo:region-before extent="3.0in"/>
           <!-- Footer -->
@@ -81,7 +81,7 @@
         <!-- Define the Hypothetical Illustration GuaranteedZero page. -->
         <fo:simple-page-master master-name="hypothetical-illustration-guaranteed-zero" page-height="{$page-height}" page-width="{$page-width}" margin="0.25in">
           <!-- Central part of page -->
-          <fo:region-body column-count="1" margin-top="2.70in" margin-bottom="1.20in"/>
+          <fo:region-body margin-top="2.70in" margin-bottom="1.20in"/>
           <!-- Header -->
           <fo:region-before extent="3.0in"/>
           <!-- Footer -->
@@ -91,7 +91,7 @@
         <!-- Define the Explanation and Footnotes page 1. -->
         <fo:simple-page-master master-name="explanation-and-footnotes-1" page-height="{$page-height}" page-width="{$page-width}" margin="0.25in">
           <!-- Central part of page -->
-          <fo:region-body column-count="1" margin-top="1.5in" margin-bottom="1.0in"/>
+          <fo:region-body margin-top="1.5in" margin-bottom="1.0in"/>
           <!-- Header -->
           <fo:region-before extent="3.0in"/>
           <!-- Footer -->
@@ -101,7 +101,7 @@
         <!-- Define the Explanation and Footnotes page 2. -->
         <fo:simple-page-master master-name="explanation-and-footnotes-2" page-height="{$page-height}" page-width="{$page-width}" margin="0.25in">
           <!-- Central part of page -->
-          <fo:region-body column-count="1" margin-top="1.5in" margin-bottom="1.0in"/>
+          <fo:region-body margin-top="1.5in" margin-bottom="1.0in"/>
           <!-- Header -->
           <fo:region-before extent="3.0in"/>
           <!-- Footer -->
@@ -111,7 +111,7 @@
         <!-- Define the Certification Statements page. -->
         <fo:simple-page-master master-name="certification-statements" page-height="{$page-height}" page-width="{$page-width}" margin="0.25in">
           <!-- Central part of page -->
-          <fo:region-body column-count="1" margin-top="2.0in" margin-bottom="1.0in"/>
+          <fo:region-body margin-top="2.0in" margin-bottom="1.0in"/>
           <!-- Header -->
           <fo:region-before extent="3.0in"/>
           <!-- Footer -->
@@ -122,7 +122,7 @@
         <xsl:if test="$has_supplemental_report">
           <fo:simple-page-master master-name="supplemental-report" page-height="{$page-height}" page-width="{$page-width}" margin="0.25in">
             <!-- Central part of page -->
-            <fo:region-body column-count="1" margin-top="2.70in" margin-bottom="1.20in"/>
+            <fo:region-body margin-top="2.70in" margin-bottom="1.20in"/>
             <!-- Header -->
             <fo:region-before extent="3.0in"/>
             <!-- Footer -->
