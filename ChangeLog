@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.836 2007-06-28 18:14:19 chicares Exp $
+// $Id: ChangeLog,v 1.837 2007-06-28 18:22:17 chicares Exp $
 
 MAINTENANCE
 
@@ -12855,4 +12855,9 @@ Rework '.ill' handling for command-line interface.
 
   main_cgi.cpp
 Refactor.
+
+20070628T1822Z <chicares@cox.net> [1226]
+
+  main_cgi.cpp
+Remove redundant timings.
 
