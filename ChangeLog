@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.837 2007-06-28 18:22:17 chicares Exp $
+// $Id: ChangeLog,v 1.838 2007-06-28 19:52:20 etarassov Exp $
 
 MAINTENANCE
 
@@ -12860,4 +12860,9 @@ Refactor.
 
   main_cgi.cpp
 Remove redundant timings.
+
+20070628T1952Z <etarassov@tt-solutions.com> [1226]
+
+  variable_annuity.xsl
+Reformat 'explanation-and-footnotes-1'.
 
