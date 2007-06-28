@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.46 2007-06-28 09:10:26 etarassov Exp $
+    $Id: fo_common.xsl,v 1.47 2007-06-28 09:28:56 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -37,6 +37,12 @@
   <xsl:param name="page-type" select="'letter'"/>
   <!-- Page orientation has to be 'portrait' or 'landscape' -->
   <xsl:param name="page-orientation" select="'portrait'"/>
+
+  <!--
+  Define this parameter to true to exclude company logo. This should useful
+  for text output where any graphics is replaced by a grid of '#' symbols.
+  -->
+  <xsl:param name="hide-company-logo" select="boolean(0)"/>
 
   <!--
   In some xsl:for-each loop we could iterate over a node set from some
@@ -687,7 +693,9 @@
   </xsl:template>
 
   <xsl:template name="company-logo">
-    <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
+    <xsl:if test="not($hide-company-logo)">
+      <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
+    </xsl:if>
   </xsl:template>
 
   <!-- The cover page -->

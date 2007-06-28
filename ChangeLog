@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.815 2007-06-27 23:07:38 chicares Exp $
+// $Id: ChangeLog,v 1.816 2007-06-28 09:28:56 etarassov Exp $
 
 MAINTENANCE
 
@@ -12729,4 +12729,20 @@ Refactor.
   illustrator.cpp
 Rearrange 'mce_emit_timings' code. Now, timings are printed at the
 same moment, in one module, for all file types.
+
+20070628T0910Z <etarassov@tt-solutions.com> [1229]
+
+  fo_common.xsl
+  group_private_placement.xsl
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+  offshore_private_placement.xsl
+  variable_annuity.xsl
+Use common variables for page sizes.
+
+20070628T0928Z <etarassov@tt-solutions.com> [1229]
+
+  fo_common.xsl
+Add global parameter 'hide-company-logo'.
 
