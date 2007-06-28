@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.48 2007-06-28 11:00:13 etarassov Exp $
+    $Id: fo_common.xsl,v 1.49 2007-06-28 11:02:38 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -39,7 +39,7 @@
   <xsl:param name="page-orientation" select="'portrait'"/>
 
   <!--
-  Define this parameter to true to exclude company logo. This should useful
+  Define this parameter to true to exclude company logo. This should be useful
   for text output where any graphics is replaced by a grid of '#' symbols.
   -->
   <xsl:param name="hide-company-logo" select="boolean(0)"/>
