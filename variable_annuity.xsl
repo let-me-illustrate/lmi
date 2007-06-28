@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.41 2007-06-28 19:55:56 etarassov Exp $
+    $Id: variable_annuity.xsl,v 1.42 2007-06-28 20:26:06 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -646,14 +646,14 @@
 
         <fo:flow flow-name="xsl-region-body">
           <fo:block padding-after="25.0pt" font-size="11.0pt" text-align="center" font-family="sans-serif" font-weight="bold">
-            <xsl:text>Certification Statements</xsl:text>
+            Certification Statements
           </fo:block>
           <fo:block padding-after="20.0pt" font-size="10.0pt" text-align="left" font-family="Times" font-weight="normal">
-            <xsl:text>
-              I have received a copy of this illustration, and I understand that any non-guaranteed
-              charges illustrated are subject to change and could be either higher or lower.
-              Additionally, I have been informed by my agent that these values are not guaranteed.
-            </xsl:text>
+            I have received a copy of this illustration, and I understand
+            that any non-guaranteed charges illustrated are subject
+            to change and could be either higher or lower. Additionally,
+            I have been informed by my agent that these values
+            are not guaranteed.
           </fo:block>
           <fo:table table-layout="fixed" width="100%" padding-before="2.5pt" padding-after="50.0pt" font-weight="normal" font-size="10.0pt" font-family="Times">
             <fo:table-column column-width="120mm"/>
@@ -663,9 +663,7 @@
               <fo:table-row>
                 <fo:table-cell>
                   <fo:block>
-                    <xsl:text>
-                      ________________________________________________________________
-                    </xsl:text>
+                    ________________________________________________________________
                   </fo:block>
                 </fo:table-cell>
                 <fo:table-cell>
@@ -673,18 +671,14 @@
                 </fo:table-cell>
                 <fo:table-cell>
                   <fo:block>
-                    <xsl:text>
-                      ______________
-                    </xsl:text>
+                    ______________
                   </fo:block>
                 </fo:table-cell>
               </fo:table-row>
               <fo:table-row>
                 <fo:table-cell>
                   <fo:block>
-                    <xsl:text>
-                      Contract Owner/Applicant Signature
-                    </xsl:text>
+                    Contract Owner/Applicant Signature
                   </fo:block>
                 </fo:table-cell>
                 <fo:table-cell>
@@ -692,25 +686,20 @@
                 </fo:table-cell>
                 <fo:table-cell>
                   <fo:block>
-                    <xsl:text>
-                      Date
-                    </xsl:text>
+                    Date
                   </fo:block>
                 </fo:table-cell>
               </fo:table-row>
             </fo:table-body>
           </fo:table>
           <fo:block padding-after="20.0pt" font-size="10.0pt" text-align="left" font-family="Times" font-weight="normal" text-decoration="underline">
-            <xsl:text>
-              AGENT/REGISTERED REPRESENTATIVE
-            </xsl:text>
+            AGENT/REGISTERED REPRESENTATIVE
           </fo:block>
           <fo:block padding-after="20.0pt" font-size="10.0pt" text-align="left" font-family="Times" font-weight="normal">
-            <xsl:text>
-              I certify that this illustration has been presented to the applicant, and that I have
-              explained that any non-guaranteed charges  illustrated are subject to change. I have
-              made no statements that are inconsistent with the illustration.
-            </xsl:text>
+            I certify that this illustration has been presented
+            to the applicant, and that I have explained that any
+            non-guaranteed charges illustrated are subject to change. I have
+            made no statements that are inconsistent with the illustration.
           </fo:block>
           <fo:table table-layout="fixed" width="100%" padding-before="2.5pt" padding-after="25.0pt" font-weight="normal" font-size="10.0pt" font-family="Times">
             <fo:table-column column-width="120mm"/>
@@ -720,9 +709,7 @@
               <fo:table-row>
                 <fo:table-cell>
                   <fo:block>
-                    <xsl:text>
-                      ________________________________________________________________
-                    </xsl:text>
+                    ________________________________________________________________
                   </fo:block>
                 </fo:table-cell>
                 <fo:table-cell>
@@ -730,18 +717,14 @@
                 </fo:table-cell>
                 <fo:table-cell>
                   <fo:block>
-                    <xsl:text>
-                      ______________
-                    </xsl:text>
+                    ______________
                   </fo:block>
                 </fo:table-cell>
               </fo:table-row>
               <fo:table-row>
                 <fo:table-cell>
                   <fo:block>
-                    <xsl:text>
-                      Agent/Registered Representative
-                    </xsl:text>
+                    Agent/Registered Representative
                   </fo:block>
                 </fo:table-cell>
                 <fo:table-cell>
@@ -749,9 +732,7 @@
                 </fo:table-cell>
                 <fo:table-cell>
                   <fo:block>
-                    <xsl:text>
-                      Date
-                    </xsl:text>
+                    Date
                   </fo:block>
                 </fo:table-cell>
               </fo:table-row>
@@ -779,7 +760,7 @@
               <xsl:with-param name="basis" select="NoBasis"/>
             </xsl:call-template>
             <fo:block font-size="13.0pt" text-align="center" font-family="sans-serif" font-weight="bold" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="black" padding-before="2.5pt" padding-after="2.5pt">
-              <xsl:text>SUPPLEMENTAL REPORT</xsl:text>
+              SUPPLEMENTAL REPORT
             </fo:block>
             <xsl:call-template name="dollar-units"/>
           </fo:static-content>
@@ -813,9 +794,7 @@
             </fo:block>
           </fo:table-cell>
           <fo:table-cell>
-            <fo:block text-align="center">
-              <xsl:text/>
-            </fo:block>
+            <fo:block/>
           </fo:table-cell>
           <fo:table-cell>
             <fo:block/>
@@ -970,19 +949,19 @@
   <xsl:template name="titles">
     <xsl:param name="basis"/>
     <fo:block font-size="13.0pt" text-align="center" font-family="sans-serif" font-weight="bold" padding-top=".5em">
-      <xsl:text>HYPOTHETICAL ILLUSTRATION</xsl:text>
+      HYPOTHETICAL ILLUSTRATION
     </fo:block>
     <fo:block font-size="11.0pt" text-align="center" font-family="sans-serif" font-weight="bold" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="black" padding-after="2.5pt">
-      <xsl:text>Accumulation Phase - </xsl:text>
+      Accumulation Phase -
       <xsl:choose>
         <xsl:when test="($basis='Current') or ($basis='CurrentZero')">
-          <xsl:text>Current Charges</xsl:text>
+          Current Charges
         </xsl:when>
         <xsl:when test="($basis='Guaranteed') or ($basis='GuaranteedZero')">
-          <xsl:text>Guaranteed Charges</xsl:text>
+          Guaranteed Charges
         </xsl:when>
         <xsl:when test="$basis='NoBasis'"/>
-        </xsl:choose>
+      </xsl:choose>
     </fo:block>
   </xsl:template>
 
@@ -1063,16 +1042,13 @@
     <fo:block font-size="8.5pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-after="15pt">
       <xsl:choose>
         <xsl:when test="($basis='Current') or ($basis='CurrentZero')">
-          <xsl:text>
-            Contract values are net of CURRENT monthly charges which are not guaranteed.
-            See the Explanation and Footnotes for important Contract information.
-          </xsl:text>
+          Contract values are net of CURRENT monthly charges which
+          are not guaranteed. See the Explanation and Footnotes
+          for important Contract information.
         </xsl:when>
         <xsl:when test="($basis='Guaranteed') or ($basis='GuaranteedZero')">
-          <xsl:text>
-            Contract values are net of GUARANTEED monthly charges.
-            See the Explanation and Footnotes for important Contract information.
-          </xsl:text>
+          Contract values are net of GUARANTEED monthly charges.
+          See the Explanation and Footnotes for important Contract information.
         </xsl:when>
       </xsl:choose>
     </fo:block>
@@ -1081,7 +1057,8 @@
   <xsl:template name="standard-footer">
     <xsl:param name="displaypagenumber"/>
     <fo:block font-size="8.5pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="2em" padding-before="5pt" border-top="1pt solid blue">
-      <xsl:text>This illustration is not complete unless all pages as noted below are included.</xsl:text>
+      This illustration is not complete unless all pages as noted below
+      are included.
     </fo:block>
     <fo:table table-layout="fixed" width="100%" padding-top="1em" font-size="9.0pt" font-family="sans-serif">
       <fo:table-column column-width="proportional-column-width(1)"/>
@@ -1091,17 +1068,14 @@
         <fo:table-row>
           <fo:table-cell>
             <fo:block text-align="left">
-              <xsl:text>Date Prepared: </xsl:text>
+              Date Prepared:
               <xsl:call-template name="date-prepared"/>
             </fo:block>
           </fo:table-cell>
           <fo:table-cell>
             <fo:block text-align="center">
               <xsl:if test="$displaypagenumber=1">
-                <xsl:text>Page: </xsl:text>
-                <fo:page-number/>
-                <xsl:text> of </xsl:text>
-                <fo:page-number-citation ref-id="endofdoc"/>
+                <xsl:call-template name="page-of"/>
               </xsl:if>
             </fo:block>
           </fo:table-cell>
