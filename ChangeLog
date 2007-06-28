@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.834 2007-06-28 16:25:23 chicares Exp $
+// $Id: ChangeLog,v 1.835 2007-06-28 17:55:32 chicares Exp $
 
 MAINTENANCE
 
@@ -12840,4 +12840,14 @@ Remove needless 'column-count' and 'span' attributes.
 
   GNUmakefile
 Detect non-ASCII characters in the 'xmllint' test.
+
+20070628T1755Z <chicares@cox.net> [1227]
+
+  calculate.hpp [expunged]
+  illustrator.cpp
+Refactor, inheriting copyright.
+
+  main_cgi.cpp
+  main_cli.cpp
+Rework '.ill' handling for command-line interface.
 

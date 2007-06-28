@@ -31,7 +31,7 @@
 // other reasons evident in cvs or explained in 'ChangeLog'. Any
 // defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.22 2007-06-04 00:59:24 chicares Exp $
+// $Id: main_cgi.cpp,v 1.23 2007-06-28 17:55:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -40,7 +40,6 @@
 
 #include "alert.hpp"
 #include "argv0.hpp"
-#include "calculate.hpp"
 #include "illustrator.hpp"
 #include "inputillus.hpp"
 #include "inputs.hpp"
@@ -540,19 +539,26 @@ void ShowOutput(cgicc::Cgicc const& data)
 
 void ShowIllusOutput(IllusInputParms const& a_input)
 {
-    RunIllustration run_functor(std::cout);
+    static mcenum_emission const emission = mcenum_emission
+        (   mce_emit_text_stream
+        |   mce_emit_composite_only
+        |   mce_emit_quietly
+        |   mce_emit_timings
+        );
+    illustrator run_functor(emission);
     std::cout << "<pre><small>";
-    run_functor(a_input);
+    temporary_file_kludge(a_input);
+    run_functor("eraseme.ill");
     std::cout << "</small></pre>";
     std::cout << "<hr>\n\n";
     std::cout
         << "    Calculations: "
-        << Timer::elapsed_msec_str(run_functor.time_for_calculations)
+        << Timer::elapsed_msec_str(run_functor.usec_for_calculations())
         << "<BR>\n"
         ;
     std::cout
         << "    Output:       "
-        << Timer::elapsed_msec_str(run_functor.time_for_output)
+        << Timer::elapsed_msec_str(run_functor.usec_for_output())
         << "<BR>\n"
         ;
 }
