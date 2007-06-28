@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.93 2007-06-11 20:42:20 chicares Exp $
+# $Id: GNUmakefile,v 1.94 2007-06-28 16:25:23 chicares Exp $
 
 ################################################################################
 
@@ -560,10 +560,11 @@ check_concinnity: source_clean custom_tools
 	@$(ECHO) "  Problems detected by xmllint:"
 	@for z in $(xml_files); \
 	  do \
-	    $(XMLLINT) $$z \
+	    $(XMLLINT) --encode ASCII $$z \
 	    | $(TR) --delete '\r' \
 	    | $(DIFF) \
 	      --ignore-blank-lines \
+	      --ignore-matching-lines='<\?xml' \
 	      --unified=0 \
 	      $$z - \
 	      || $(ECHO) "... in file $$z"; \
