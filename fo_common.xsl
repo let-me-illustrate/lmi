@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.47 2007-06-28 09:28:56 etarassov Exp $
+    $Id: fo_common.xsl,v 1.48 2007-06-28 11:00:13 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -284,7 +284,7 @@
         <xsl:with-param name="inforceyear" select="$inforceyear"/>
       </xsl:call-template>
     </xsl:if>
-    <!-- Add a dummy row if the table content is empty to supress errors -->
+    <!-- Add a dummy row if the table content is empty to suppress errors -->
     <xsl:if test="not($max-lapse-year) or not($supplemental_report_columns)">
       <fo:table-row>
         <fo:table-cell>
