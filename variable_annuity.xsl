@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.40 2007-06-28 19:52:20 etarassov Exp $
+    $Id: variable_annuity.xsl,v 1.41 2007-06-28 19:55:56 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -533,7 +533,7 @@
             <xsl:with-param name="logo_only" select="0"/>
           </xsl:call-template>
           <fo:block font-size="11.0pt" text-align="center" font-family="sans-serif" font-weight="bold" padding-top=".8em">
-            <xsl:text>Explanation and Footnotes</xsl:text>
+            Explanation and Footnotes
           </fo:block>
         </fo:static-content>
 
@@ -544,90 +544,85 @@
         </fo:static-content>
 
         <fo:flow flow-name="xsl-region-body">
-          <fo:block font-size="10.0pt" text-align="left" font-family="sans-serif" font-weight="bold" padding-top="2em" text-decoration="underline">
-            <xsl:text>The Contract continued</xsl:text>
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
+            <fo:block font-size="10.0pt" font-weight="bold" padding-top="2em" text-decoration="underline">
+              The Contract continued
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">Illiquid Sub-Accounts:</fo:inline>
+              We have also made available under the Contract the ability
+              to allocate purchase payments and Contract Value to sub-accounts
+              that will provide for investment in certain alternative
+              investments including hedge funds. Because of the liquidity
+              restrictions imposed by these alternative investment funds,
+              these sub-accounts are referred to in the Contract
+              and in the private placement memorandum as illiquid sub-accounts.
+              Contract owners must understand, and be willing to bear, the risks
+              associated with such investments. If Contract Value is allocated
+              to illiquid sub-accounts, the Owner will not be able to transfer
+              Contract Value or effect a withdrawal or surrender
+              of the Contract until specified dates. Refer to the Confidential
+              Private Placement Memorandum for details.
+            </fo:block>
+            <fo:block font-weight="bold" padding-top="1em">
+              Note: Please refer to the Contract for complete explanation
+              of benefits, rights and obligations. In the event of a conflict
+              between the illustration and the Contract, the terms
+              of the Contract will control.
+            </fo:block>
           </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
-            <fo:inline font-weight="bold">Illiquid Sub-Accounts: </fo:inline>
-            <xsl:text>
-              We have also made available under the Contract the ability to allocate purchase
-              payments and Contract Value to sub-accounts that will provide for investment in
-              certain alternative investments including hedge funds. Because of the liquidity
-              restrictions imposed by these alternative investment funds, these sub-accounts
-              are referred to in the Contract and in the private placement memorandum as illiquid
-              sub-accounts. Contract owners must understand, and be willing to bear, the risks
-              associated with such investments. If Contract Value is allocated to illiquid
-              sub-accounts, the Owner will not be able to transfer Contract Value or effect
-              a withdrawal or surrender of the Contract until specified dates. Refer to the
-              Confidential Private Placement Memorandum for details.
-            </xsl:text>
-          </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="bold" padding-top="1em">
-            <xsl:text>
-              Note:  Please refer to the Contract for complete explanation of benefits, rights
-              and obligations. In the event of a conflict between the illustration and the
-              Contract, the terms of the Contract will control.
-            </xsl:text>
-          </fo:block>
-          <fo:block font-size="10.0pt" text-align="left" font-family="sans-serif" font-weight="bold" padding-top="2em" text-decoration="underline">
-            <xsl:text>Column Definitions</xsl:text>
-          </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
-            <fo:inline font-weight="bold">Year: </fo:inline>
-            <xsl:text> The annual period beginning on the hypothetical Contract issue date.</xsl:text>
-          </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
-            <fo:inline font-weight="bold">Purchase Payment: </fo:inline>
-            <xsl:text>
-              A payment made by or on behalf of a Contract Owner during the Accumulation
-              Period of the Contract.
-            </xsl:text>
-          </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
-            <fo:inline font-weight="bold">Purchase Payment Charges: </fo:inline>
-            <xsl:text>
-              The sum of the negotiated Purchase Payment Distribution Charge and Purchase Payment
-              Expense Charge, if any, and state premium tax charged on an upfront basis, if any.
-            </xsl:text>
-          </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
-            <fo:inline font-weight="bold">Withdrawal(s): </fo:inline>
-            <xsl:text>
-              The dollar amount redeemed from the Contract. Withdrawals are reflected
-              at the beginning of each year.
-            </xsl:text>
-          </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
-            <fo:inline font-weight="bold">Monthly Charges: </fo:inline>
-            <xsl:text>
-              The annual M&amp;E charge and administrative charge, plus any asset based distribution
-              charge, which is subject to negotiation prior to contract issuance, deducted from
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
+            <fo:block font-size="10.0pt" font-weight="bold" padding-top="2em" text-decoration="underline">
+              Column Definitions
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">Year:</fo:inline>
+              The annual period beginning on the hypothetical Contract
+              issue date.
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">Purchase Payment:</fo:inline>
+              A payment made by or on behalf of a Contract Owner during
+              the Accumulation Period of the Contract.
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">Purchase Payment Charges:</fo:inline>
+              The sum of the negotiated Purchase Payment Distribution Charge
+              and Purchase Payment Expense Charge, if any, and state premium tax
+              charged on an upfront basis, if any.
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">Withdrawal(s):</fo:inline>
+              The dollar amount redeemed from the Contract. Withdrawals
+              are reflected at the beginning of each year.
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">Monthly Charges:</fo:inline>
+              The annual M&amp;E charge and administrative charge, plus
+              any asset based distribution charge, which is subject
+              to negotiation prior to contract issuance, deducted from
               Contract Value.
-            </xsl:text>
-          </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
-            <fo:inline font-weight="bold">Investment Experience: </fo:inline>
-            <xsl:text>
-              The annual investment income credited to the Contract sub-accounts using
-              the hypothetical Net Rate of Return.
-            </xsl:text>
-          </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
-            <fo:inline font-weight="bold">End of Year Contract Value: </fo:inline>
-            <xsl:text>
-              The value of the Contract sub-account(s) after applying any Purchase Payments
-              (less Purchase Payment Charges), deducting any Withdrawals and crediting annual
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">Investment Experience:</fo:inline>
+              The annual investment income credited to the Contract
+              sub-accounts using the hypothetical Net Rate of Return.
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">End of Year Contract Value:</fo:inline>
+              The value of the Contract sub-account(s) after applying
+              any Purchase Payments (less Purchase Payment Charges),
+              deducting any Withdrawals and crediting annual
               hypothetical Investment Experience.
-            </xsl:text>
-          </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
-            <fo:inline font-weight="bold">Cumulative Contract Value IRR: </fo:inline>
-            <xsl:text>
-              The Contract Value Internal Rate of Return ("IRR") is an interest rate at which
-              the Net Purchase Payment demonstrated would have to be invested outside the
-              Contract to generate the Contract Value. The IRR is illustrative only and does
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">Cumulative Contract Value IRR:</fo:inline>
+              The Contract Value Internal Rate of Return ("IRR")
+              is an interest rate at which the Net Purchase Payment demonstrated
+              would have to be invested outside the Contract to generate
+              the Contract Value. The IRR is illustrative only and does
               not predict future results.
-            </xsl:text>
+            </fo:block>
           </fo:block>
         </fo:flow>
 
