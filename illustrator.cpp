@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.cpp,v 1.16 2007-06-27 23:07:38 chicares Exp $
+// $Id: illustrator.cpp,v 1.17 2007-06-28 17:55:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -64,19 +64,26 @@ bool illustrator::operator()(fs::path const& file_path)
         Timer timer;
         multiple_cell_document doc(file_path.string());
         run_census::assert_consistency(doc.case_parms()[0], doc.cell_parms()[0]);
-        usec_for_input_ = timer.stop().elapsed_usec();
+        usec_for_input_        = timer.stop().elapsed_usec();
         census_run_result result;
         result = run_census()(file_path, emission_, doc.cell_parms());
         completed_normally     = result.completed_normally_   ;
         usec_for_calculations_ = result.usec_for_calculations_;
         usec_for_output_       = result.usec_for_output_      ;
         }
-#if 0
     else if(".ill" == extension)
         {
-// TODO ?? Implement this too.
+        Timer timer;
+        single_cell_document doc(file_path.string());
+        usec_for_input_        = timer.stop().elapsed_usec();
+        timer.restart();
+        IllusVal IV;
+        IV.Run(&doc.input_data());
+        usec_for_calculations_ = timer.stop().elapsed_usec();
+        timer.restart();
+        IV.Print(std::cout);
+        usec_for_output_       = timer.stop().elapsed_usec();
         }
-#endif // 0
     else if(".ini" == extension)
         {
         Timer timer;
@@ -144,13 +151,23 @@ double illustrator::usec_for_output() const
 
 #include <fstream> // Needed only for this temporary kludge.
 
-template<> void temporary_file_kludge(std::vector<IllusInputParms> const& other)
+template<> void temporary_file_kludge(std::vector<IllusInputParms> const& z)
 {
     multiple_cell_document document;
     typedef std::vector<IllusInputParms> T;
-    std::vector<IllusInputParms>& cells = const_cast<T&>(document.cell_parms());
-    cells = other;
+    T& cells = const_cast<T&>(document.cell_parms());
+    cells = z;
     std::ofstream ofs("eraseme.cns");
+    document.write(ofs);
+}
+
+template<> void temporary_file_kludge(IllusInputParms const& z)
+{
+    single_cell_document document;
+    typedef IllusInputParms T;
+    T& cell = const_cast<T&>(document.input_data());
+    cell = z;
+    std::ofstream ofs("eraseme.ill");
     document.write(ofs);
 }
 
