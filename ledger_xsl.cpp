@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.24 2007-06-26 00:29:25 chicares Exp $
+// $Id: ledger_xsl.cpp,v 1.25 2007-06-28 20:40:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,8 +30,10 @@
 
 #include "alert.hpp"
 #include "configurable_settings.hpp"
+#include "dev_null_stream_buffer.hpp" // "idiosyncrasy_spreadsheet" workaround
 #include "global_settings.hpp"
 #include "ledger.hpp"
+#include "ledger_invariant.hpp"       // "idiosyncrasy_spreadsheet" workaround
 #include "ledger_formatter.hpp"
 #include "miscellany.hpp"
 #include "path_utility.hpp"
@@ -41,6 +43,7 @@
 #include <boost/filesystem/operations.hpp>
 
 #include <ios>
+#include <ostream>                    // "idiosyncrasy_spreadsheet" workaround
 #include <sstream>
 
 // Define this macro here, after including all the headers that it
@@ -118,6 +121,16 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath, 
     LedgerFormatterFactory& factory = LedgerFormatterFactory::Instance();
     LedgerFormatter formatter(factory.CreateFormatter(scaled_ledger));
     formatter.FormatAsXslFo(ofs);
+    // TODO ?? Eliminate the problem that this works around.
+    if
+        (   ledger.GetIsComposite()
+        &&  std::string::npos != ledger.GetLedgerInvariant().Comments.find("idiosyncrasy_spreadsheet")
+        )
+        {
+        static dev_null_stream_buffer<char> no_output;
+        std::ostream null_stream(&no_output);
+        scaled_ledger.write(null_stream);
+        }
 #else  // !defined LMI_USE_NEW_REPORTS
     scaled_ledger.write(ofs);
 #endif // !defined LMI_USE_NEW_REPORTS
