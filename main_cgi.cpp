@@ -31,7 +31,7 @@
 // other reasons evident in cvs or explained in 'ChangeLog'. Any
 // defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.24 2007-06-28 18:14:19 chicares Exp $
+// $Id: main_cgi.cpp,v 1.25 2007-06-28 18:22:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -543,7 +543,6 @@ void ShowIllusOutput(IllusInputParms const& a_input)
         (   mce_emit_text_stream
         |   mce_emit_composite_only
         |   mce_emit_quietly
-        |   mce_emit_timings
         );
     illustrator run_functor(emission);
     std::cout << "<pre><small>";
@@ -651,12 +650,10 @@ void ShowCensusOutput
     std::cout << "Composite illustration:<BR>";
 
     // Calculate and print results.
-    // TODO ?? Would it be better not to show timings?
     static mcenum_emission const emission = mcenum_emission
         (   mce_emit_text_stream
         |   mce_emit_composite_only
         |   mce_emit_quietly
-        |   mce_emit_timings
         );
     illustrator run_functor(emission);
     std::cout << "<pre><small>";
