@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.821 2007-06-28 11:10:39 etarassov Exp $
+// $Id: ChangeLog,v 1.822 2007-06-28 11:21:24 etarassov Exp $
 
 MAINTENANCE
 
@@ -12770,4 +12770,9 @@ Fix a typo.
 
   group_private_placement.xsl
 Remove the rest of needless xsl:text.
+
+20070628T1121Z <etarassov@tt-solutions.com> [1229]
+
+  individual_private_placement.xsl
+Reformat 'cover'.
 
