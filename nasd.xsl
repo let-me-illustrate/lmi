@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.63 2007-06-28 09:10:26 etarassov Exp $
+    $Id: nasd.xsl,v 1.64 2007-06-28 15:02:56 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -74,7 +74,7 @@
         <!-- Define the Column Definitions page. -->
         <fo:simple-page-master master-name="column-definitions" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
           <!-- Central part of page -->
-          <fo:region-body column-count="1" margin-top="2.25in" margin-bottom="1in"/>
+          <fo:region-body margin-top="2.25in" margin-bottom="1in"/>
           <!-- Header -->
           <fo:region-before extent="3.0in"/>
           <!-- Footer -->
@@ -84,7 +84,7 @@
         <!-- Define the explanatory notes page. -->
         <fo:simple-page-master master-name="explanatory-notes" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
           <!-- Central part of page -->
-          <fo:region-body column-count="1" margin-top="2.35in" margin-bottom="0.90in"/>
+          <fo:region-body margin-top="2.35in" margin-bottom="0.90in"/>
           <!-- Header -->
           <fo:region-before extent="3.0in"/>
           <!-- Footer -->
@@ -94,8 +94,8 @@
         <!-- Define the explanatory notes page. -->
         <fo:simple-page-master master-name="explanatory-notes-separate-account" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
           <!-- Central part of page -->
-          <!--<fo:region-body column-count="2" margin-top="2.25in" margin-bottom="2.70in"/> -->
-          <fo:region-body column-count="2" margin-top="2.35in" margin-bottom="1.3in"/>
+          <!-- column-count="2" -->
+          <fo:region-body margin-top="2.35in" margin-bottom="1.3in"/>
           <!-- Header -->
           <fo:region-before extent="3in"/>
           <!-- Footer -->
@@ -105,7 +105,7 @@
         <!-- Define the Basic Illustration page. -->
         <fo:simple-page-master master-name="basic-illustration" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
           <!-- Central part of page -->
-          <fo:region-body column-count="1" margin-top="3.00in" margin-bottom="1.25in"/>
+          <fo:region-body margin-top="3.00in" margin-bottom="1.25in"/>
           <!-- Header -->
           <fo:region-before extent="3in"/>
           <!-- Footer -->
@@ -115,7 +115,7 @@
         <!-- Define the Supplemental Illustration page. -->
         <fo:simple-page-master master-name="supplemental-illustration" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
           <!-- Central part of page -->
-          <fo:region-body column-count="1" margin-top="3.00in" margin-bottom="1.00in"/>
+          <fo:region-body margin-top="3.00in" margin-bottom="1.00in"/>
           <!-- Header -->
           <fo:region-before extent="3in"/>
           <!-- Footer -->
@@ -126,7 +126,7 @@
         <xsl:if test="not($is_composite)">
           <fo:simple-page-master master-name="illustration-assumption" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
             <!-- Central part of page -->
-            <fo:region-body column-count="1" margin-top="2.80in" margin-bottom="1.00in"/>
+            <fo:region-body margin-top="2.80in" margin-bottom="1.00in"/>
             <!-- Header -->
             <fo:region-before extent="3in"/>
             <!-- Footer -->
@@ -138,7 +138,7 @@
         <xsl:if test="$has_supplemental_report">
           <fo:simple-page-master master-name="supplemental-report" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
             <!-- Central part of page -->
-            <fo:region-body column-count="1" margin-top="2.80in" margin-bottom="1.10in"/>
+            <fo:region-body margin-top="2.80in" margin-bottom="1.10in"/>
             <!-- Header -->
             <fo:region-before extent="3in"/>
             <!-- Footer -->
@@ -450,7 +450,7 @@
 
         <!-- Explanatory Notes Summary Body  -->
         <fo:flow flow-name="xsl-region-body">
-          <fo:block span="all" text-align="left" font-size="9.75pt" font-family="sans-serif">
+          <fo:block text-align="left" font-size="9.75pt" font-family="sans-serif">
             <fo:block font-weight="bold" text-align="center">
               EXPLANATORY NOTES
             </fo:block>

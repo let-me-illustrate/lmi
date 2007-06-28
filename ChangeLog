@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.832 2007-06-28 14:48:44 etarassov Exp $
+// $Id: ChangeLog,v 1.833 2007-06-28 15:02:55 etarassov Exp $
 
 MAINTENANCE
 
@@ -12825,4 +12825,14 @@ Remove needless attribute span="all".
 
   variable_annuity.xsl
 Reformat 'cover-page'.
+
+20070628T1502Z <etarassov@tt-solutions.com> [1229]
+
+  group_private_placement.xsl
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+  offshore_private_placement.xsl
+  variable_annuity.xsl
+Remove needless 'column-count' and 'span' attributes.
 
