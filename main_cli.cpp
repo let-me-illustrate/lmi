@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.48 2007-06-07 19:26:36 chicares Exp $
+// $Id: main_cli.cpp,v 1.49 2007-06-28 17:55:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,7 +30,6 @@
 #include "argv0.hpp"
 #include "assert_lmi.hpp"
 #include "authenticity.hpp" // timestamp_of_production_release()
-#include "calculate.hpp"
 #include "getopt.hpp"
 #include "global_settings.hpp"
 #include "handle_exceptions.hpp"
@@ -505,36 +504,11 @@ void process_command_line(int argc, char* argv[])
 
     if(run_illustration)
         {
-        RunIllustrationFromFile run_functor = std::for_each
+        std::for_each
             (ill_names.begin()
             ,ill_names.end()
-            ,RunIllustrationFromFile(std::cout)
+            ,illustrator(emission.value())
             );
-        std::cerr
-            << "File"
-            << ((1U < ill_names.size()) ? "s" : "")
-            << ":\n"
-            ;
-        std::copy
-            (ill_names.begin()
-            ,ill_names.end()
-            ,std::ostream_iterator<std::string>(std::cerr, "\n")
-            );
-        std::cerr
-            << "    Input:        "
-            << Timer::elapsed_msec_str(run_functor.time_for_input)
-            << '\n'
-            ;
-        std::cerr
-            << "    Calculations: "
-            << Timer::elapsed_msec_str(run_functor.time_for_calculations)
-            << '\n'
-            ;
-        std::cerr
-            << "    Output:       "
-            << Timer::elapsed_msec_str(run_functor.time_for_output)
-            << '\n'
-            ;
         }
 
     if(run_census)
