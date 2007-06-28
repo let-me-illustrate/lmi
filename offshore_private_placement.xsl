@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: offshore_private_placement.xsl,v 1.43 2007-06-28 14:11:54 etarassov Exp $
+    $Id: offshore_private_placement.xsl,v 1.44 2007-06-28 14:29:29 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -272,104 +272,122 @@
         <fo:flow flow-name="xsl-region-body">
           <fo:block text-align="left" font-size="9.75pt" font-family="sans-serif">
             <fo:block font-weight="bold" text-align="center">
-              <xsl:text>IMPORTANT TAX DISCLOSURE</xsl:text>
-            </fo:block>
-            <fo:block padding-top="1em" padding-bottom="1em">
-              <xsl:text>As illustrated, this contract </xsl:text>
-              <xsl:choose>
-                <xsl:when test="$scalars/IsMec='1'">
-                  <xsl:text>becomes </xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:text>would not become </xsl:text>
-                </xsl:otherwise>
-              </xsl:choose>
-              <xsl:text>a Modified Endowment Contract (MEC) under the Internal Revenue Code</xsl:text>
-              <xsl:choose>
-                <xsl:when test="$scalars/IsMec='1'">
-                  <xsl:text> in year </xsl:text>
-                  <xsl:value-of select="$scalars/MecYear+1"/>
-                  <xsl:text>. </xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:text>. </xsl:text>
-                </xsl:otherwise>
-              </xsl:choose>
-              <xsl:text>To the extent of gain in the contract, loans, distributions and withdrawals from a MEC are subject to income tax and may also trigger a penalty tax.</xsl:text>
-            </fo:block>
-            <xsl:if test="$scalars/IsInforce!='1'">
-              <fo:block padding-bottom="1em">
-                <xsl:text>The initial 7-pay premium limit is $</xsl:text>
-                <xsl:value-of select="$scalars/InitSevenPayPrem"/>
-                <xsl:text>. </xsl:text>
-              </fo:block>
-            </xsl:if>
-            <fo:block>
-              <xsl:text>No tax charge is made to the Separate Account. However, such a charge may be made in the future.</xsl:text>
-            </fo:block>
-            <fo:block font-weight="bold" padding-top="1em">
-              <xsl:text>The information contained in this illustration is not written or intended as tax or legal advice, and may not be relied upon for purposes of avoiding any federal tax penalties. Neither </xsl:text>
-              <xsl:value-of select="$scalars/InsCoShortName"/>
-              <xsl:text> nor any of its employees or representatives are authorized to give tax or legal advice.  For more information pertaining to the tax consequences of purchasing or owning this policy, consult with your own independent tax or legal counsel.</xsl:text>
-            </fo:block>
-            <fo:block font-weight="bold" text-align="center" padding-top="2em">
-               <xsl:text>EXPLANATORY NOTES</xsl:text>
+              IMPORTANT TAX DISCLOSURE
             </fo:block>
             <fo:block padding-top="1em">
-              <xsl:value-of select="$scalars/PolicyMktgName"/>
-              <xsl:text> is a </xsl:text>
-              <xsl:value-of select="$scalars/PolicyLegalName"/>
-              <xsl:text> issued by </xsl:text>
-              <xsl:value-of select="$scalars/InsCoName"/>
-              <xsl:text>. The policy provides lifetime insurance protection for as long as it remains in force. The policy is available at issue with at least two death benefit options: Option 1 (death benefit equal to the greater of (a) the selected face amount at death or (b) the minimum face amount at death); and Option 2 (death benefit equal to the greater of (a) the selected face amount plus account value at death or (b) the minimum face amount at death). If available under the policy, Option 3 is a death benefit option equal to the greatest of (a) the selected face amount at death plus the sum of premiums paid less withdrawals; or (b) selected face amount at death; or (c) minimum face amount at death.</xsl:text>
+              As illustrated, this contract
+              <xsl:choose>
+                <xsl:when test="$scalars/IsMec='1'">
+                  becomes
+                </xsl:when>
+                <xsl:otherwise>
+                  would not become
+                </xsl:otherwise>
+              </xsl:choose>
+              a Modified Endowment Contract (MEC) under the Internal
+              Revenue Code
+              <xsl:if test="$scalars/IsMec='1'">
+                in year <xsl:value-of select="$scalars/MecYear+1"/>
+              </xsl:if>.
+              To the extent of gain in the contract, loans, distributions
+              and withdrawals from a MEC are subject to income tax and may also
+              trigger a penalty tax.
             </fo:block>
-            <fo:block padding-top="1em" padding-bottom="1em">
-              <xsl:text>Account values may be used to pay contract charges. Contract charges are due during the life of the insured; depending on actual results, the premium payer may need to continue or resume premium outlays.</xsl:text>
+            <xsl:if test="$scalars/IsInforce!='1'">
+              <fo:block padding-top="1em">
+                The initial 7-pay premium limit
+                is $<xsl:value-of select="$scalars/InitSevenPayPrem"/>.
+              </fo:block>
+            </xsl:if>
+            <fo:block padding-top="1em">
+              No tax charge is made to the Separate Account. However,
+              such a charge may be made in the future.
+            </fo:block>
+            <fo:block font-weight="bold" padding-top="1em">
+              The information contained in this illustration is not written
+              or intended as tax or legal advice, and may not be relied upon
+              for purposes of avoiding any federal tax penalties.
+              Neither <xsl:value-of select="$scalars/InsCoShortName"/>
+              nor any of its employees or representatives are authorized
+              to give tax or legal advice.  For more information pertaining
+              to the tax consequences of purchasing or owning this policy,
+              consult with your own independent tax or legal counsel.
+            </fo:block>
+            <fo:block font-weight="bold" text-align="center" padding-top="2em">
+               EXPLANATORY NOTES
+            </fo:block>
+            <fo:block padding-top="1em">
+              <xsl:value-of select="$scalars/PolicyMktgName"/> is
+              a <xsl:value-of select="$scalars/PolicyLegalName"/> issued
+              by <xsl:value-of select="$scalars/InsCoName"/>. The policy
+              provides lifetime insurance protection for as long as it remains
+              in force. The policy is available at issue with at least
+              two death benefit options: Option 1 (death benefit equal
+              to the greater of (a) the selected face amount at death
+              or (b) the minimum face amount at death);
+              and Option 2 (death benefit equal to the greater of
+              (a) the selected face amount plus account value at death or
+              (b) the minimum face amount at death).
+              If available under the policy, Option 3 is a death benefit option
+              equal to the greatest of (a) the selected face amount
+              at death plus the sum of premiums paid less withdrawals;
+              or (b) selected face amount at death;
+              or (c) minimum face amount at death.
+            </fo:block>
+            <fo:block padding-top="1em">
+              Account values may be used to pay contract charges.
+              Contract charges are due during the life of the insured;
+              depending on actual results, the premium payer may need
+              to continue or resume premium outlays.
             </fo:block>
             <xsl:if test="$scalars/NoLapse='1' and $scalars/StatePostalAbbrev!='NY'">
-              <fo:block padding-bottom="1em">
-                <xsl:value-of select="$scalars/NoLapseProvisionName"/>
-                <xsl:text>: The </xsl:text>
-                <xsl:value-of select="$scalars/NoLapseProvisionName"/>
-                <xsl:text> is a lapse protection feature. If met, this test allows your contract to stay in force for a period of time even if there is insufficient </xsl:text>
-                <xsl:value-of select="$scalars/AvName"/>
-                <xsl:text> Value to cover the </xsl:text>
-                <xsl:value-of select="$scalars/AvName"/>
-                <xsl:text> Value charges. Refer to your policy for specific requirements of meeting the </xsl:text>
-                <xsl:value-of select="$scalars/NoLapseProvisionName"/>
-                <xsl:text>.</xsl:text>
+              <fo:block padding-top="1em">
+                <xsl:value-of select="$scalars/NoLapseProvisionName"/>:
+                The <xsl:value-of select="$scalars/NoLapseProvisionName"/>
+                is a lapse protection feature. If met, this test allows
+                your contract to stay in force for a period of time even if
+                there is insufficient <xsl:value-of select="$scalars/AvName"/>
+                Value to cover the <xsl:value-of select="$scalars/AvName"/>
+                Value charges. Refer to your policy
+                for specific requirements of meeting
+                the <xsl:value-of select="$scalars/NoLapseProvisionName"/>.
               </fo:block>
             </xsl:if>
             <xsl:if test="$scalars/NoLapseAlwaysActive='1'">
-              <fo:block padding-bottom="1em">
-                <xsl:text>No-Lapse Guarantee: The contract will remain in force after the first premium has been paid, even if there is insufficient </xsl:text>
-                <xsl:value-of select="$scalars/AvName"/>
-                <xsl:text> Value to cover the monthly charges provided that the insured is not in a substandard rating class and the policy debt does not exceed </xsl:text>
-                <xsl:value-of select="$scalars/AvName"/>
-                <xsl:text> Value.</xsl:text>
+              <fo:block padding-top="1em">
+                No-Lapse Guarantee: The contract will remain in force
+                after the first premium has been paid, even if there is
+                insufficient <xsl:value-of select="$scalars/AvName"/> Value
+                to cover the monthly charges provided that the insured
+                is not in a substandard rating class and the policy debt
+                does not exceed <xsl:value-of select="$scalars/AvName"/> Value.
               </fo:block>
             </xsl:if>
-            <fo:block>
-              <xsl:text>The definition of life insurance elected for this contract is the </xsl:text>
+            <fo:block padding-top="1em">
+              The definition of life insurance elected for this contract
+              is the
               <xsl:choose>
                 <xsl:when test="$scalars/DefnLifeIns='GPT'">
-                  <xsl:text>guideline premium test. The guideline single premium is $</xsl:text>
-                  <xsl:value-of select="$scalars/InitGSP"/>
-                  <xsl:text> and the guideline level premium is $</xsl:text>
-                  <xsl:value-of select="$scalars/InitGLP"/>
+                  guideline premium test. The guideline single premium
+                  is $<xsl:value-of select="$scalars/InitGSP"/>
+                  and the guideline level premium
+                  is $<xsl:value-of select="$scalars/InitGLP"/>.
                 </xsl:when>
                 <xsl:otherwise>
-                  <xsl:text>cash value accumulation test.</xsl:text>
+                  cash value accumulation test.
                 </xsl:otherwise>
               </xsl:choose>
             </fo:block>
             <fo:block padding-top="1em">
-              <xsl:value-of select="$scalars/InsCoName"/>
-              <xsl:text> has the right to promptly refund any amount of premium paid if it will increase the net amount at risk </xsl:text>
-              <xsl:text>(referred to in the contract as the Amount of Insurance that Requires a Charge).</xsl:text>
+              <xsl:value-of select="$scalars/InsCoName"/> has the right
+              to promptly refund any amount of premium paid if it will increase
+              the net amount at risk (referred to in the contract
+              as the Amount of Insurance that Requires a Charge).
             </fo:block>
             <fo:block padding-top="1em">
-              <xsl:text>Premium payments are assumed to be made at the beginning of the year. Account values, cash surrender values, and death benefits are illustrated as of the end of the year.</xsl:text>
+              Premium payments are assumed to be made at the beginning
+              of the year. Account values, cash surrender values,
+              and death benefits are illustrated as of the end of the year.
             </fo:block>
           </fo:block>
         </fo:flow>
