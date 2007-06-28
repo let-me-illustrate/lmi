@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: group_private_placement.xsl,v 1.42 2007-06-28 09:33:18 etarassov Exp $
+    $Id: group_private_placement.xsl,v 1.43 2007-06-28 10:41:26 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -241,98 +241,138 @@
           <fo:block text-align="left" font-size="10pt" font-family="sans-serif">
             <fo:block>
               <xsl:value-of select="$scalars/PolicyMktgName"/>
-              <xsl:text> is a </xsl:text>
-              <xsl:value-of select="$scalars/PolicyLegalName"/>
-              <xsl:text> issued by </xsl:text>
-              <xsl:value-of select="$scalars/InsCoName"/>
-              <xsl:text>. The policy provides lifetime insurance protection for as long as it remains in force. The policy is available at issue with at least two death benefit options: Option 1 (death benefit equal to the greater of (a) the selected face amount in effect on the date of death or (b) the minimum face amount in effect on the date of death); and Option 2 (death benefit equal to the greater of (a) the selected face amount in effect on the date of death plus account value on that date or (b) the minimum face amount in effect on the date of death).  A policy with the stable value endorsement requires Death Benefit Option 1.</xsl:text>
+              is a <xsl:value-of select="$scalars/PolicyLegalName"/>
+              issued by <xsl:value-of select="$scalars/InsCoName"/>.
+              The policy provides lifetime insurance protection for as long
+              as it remains in force. The policy is available at issue
+              with at least two death benefit options:
+              Option 1 (death benefit equal to the greater of
+              (a) the selected face amount in effect on the date of death or
+              (b) the minimum face amount in effect on the date of death);
+              and Option 2 (death benefit equal to the greater of
+              (a) the selected face amount in effect on the date of death plus
+              account value on that date or (b) the minimum face amount
+              in effect on the date of death). A policy with the stable
+              value endorsement requires Death Benefit Option 1.
             </fo:block>
-          <fo:block padding-top="1em">
-            <xsl:text>This illustration assumes Initial Death Benefit Option </xsl:text>
-            <xsl:value-of select="$scalars/DBOptInitInteger+1"/>
-            <xsl:text>.</xsl:text>
-          </fo:block>
-          <fo:block padding-top="1em">
-            <xsl:text>This policy is only available to entities that meet the definition of "accredited investor" or "qualified purchaser" under applicable Federal securities laws.  Purchase of this policy is suitable only for entities of substantial economic means.  Each prospective purchaser will be required to represent that it is familiar with and understands the fundamental risks and financial hazards of purchasing the policy.  Each prospective purchaser must also represent that it meets minimum financial and other suitability standards.</xsl:text>
-          </fo:block>
-          <fo:block padding-top="1em">
-            <xsl:text>Account values may be used to pay contract charges. Contract charges are due during the life of the insured; depending on actual results, the premium payer may need to continue or resume premium outlays.</xsl:text>
-          </fo:block>
-          <fo:block padding-top="1em">
-            <xsl:text>The definition of life insurance elected for this contract is the </xsl:text>
-            <xsl:choose>
-              <xsl:when test="$scalars/DefnLifeIns='GPT'">
-                <xsl:text>guideline premium test. The guideline single premium is $</xsl:text>
-                <xsl:value-of select="$scalars/InitGSP"/>
-                <xsl:text> and the guideline level premium is $</xsl:text>
-                <xsl:value-of select="$scalars/InitGLP"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:text>cash value accumulation test.</xsl:text>
-              </xsl:otherwise>
-            </xsl:choose>
-          </fo:block>
-          <fo:block padding-top="1em">
-            <xsl:value-of select="$scalars/InsCoName"/>
-            <xsl:text> has the right to promptly return any amount of premium paid if it will increase the net amount at risk </xsl:text>
-            <xsl:text>(referred to in the contract as the Amount of Insurance that Requires a Charge).</xsl:text>
-          </fo:block>
-          <fo:block padding-top="1em">
-            <xsl:text>Account values, cash surrender values, and death benefits are illustrated as of the end of the year.</xsl:text>
-          </fo:block>
-          <fo:block padding-top="1em">
-            <xsl:text>PLEASE READ THE FOLLOWING IMPORTANT TAX DISCLOSURE</xsl:text>
-          </fo:block>
-          <fo:block>
-            <xsl:text>The initial 7-pay premium limit is $</xsl:text>
-            <xsl:value-of select="$scalars/InitSevenPayPrem"/>
-            <xsl:text>. As illustrated, this contract </xsl:text>
-            <xsl:choose>
-              <xsl:when test="$scalars/IsMec='1'">
-                <xsl:text>fails </xsl:text>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:text>passes </xsl:text>
-              </xsl:otherwise>
-            </xsl:choose>
-            <xsl:text>the seven-pay test defined in Section 7702A of the Internal Revenue Code and therefore </xsl:text>
-            <xsl:choose>
-              <xsl:when test="$scalars/IsMec='1'">
-                <xsl:choose>
-                  <xsl:when test="$scalars/MecYear!='0'">
-                    <xsl:text>becomes a Modified Endowment Contract (MEC) </xsl:text>
-                    <xsl:text>in policy year </xsl:text>
-                    <xsl:value-of select="$scalars/MecYear+1"/>
-                    <xsl:text>.  As a MEC, any loans or withdrawals are taxed to the extent of any gain in the contract, and an additional 10% penalty tax will apply to the taxable portion of the loan or withdrawal.</xsl:text>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:text>is a Modified Endowment Contract (MEC)</xsl:text>
-                    <xsl:text>.  As a MEC, any loans or withdrawals are taxed to the extent of any gain in the contract, and an additional 10% penalty tax will apply to the taxable portion of the loan or withdrawal.</xsl:text>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:text>is not a Modified Endowment Contract (MEC)</xsl:text>
-                <xsl:text>.  Subsequent changes in the contract, including but not limited to increases and decreases in premiums or benefits, may cause the contract to be retested and may result in the contract becoming a MEC.</xsl:text>
-              </xsl:otherwise>
-            </xsl:choose>
+            <fo:block padding-top="1em">
+              This illustration assumes Initial Death Benefit Option
+              <xsl:value-of select="$scalars/DBOptInitInteger+1"/>.
+            </fo:block>
+            <fo:block padding-top="1em">
+              This policy is only available to entities that meet the definition
+              of "accredited investor" or "qualified purchaser" under applicable
+              Federal securities laws.  Purchase of this policy is suitable
+              only for entities of substantial economic means. Each prospective
+              purchaser will be required to represent that it is familiar
+              with and understands the fundamental risks and financial hazards
+              of purchasing the policy. Each prospective purchaser must
+              also represent that it meets minimum financial and other
+              suitability standards.
+            </fo:block>
+            <fo:block padding-top="1em">
+              Account values may be used to pay contract charges.
+              Contract charges are due during the life of the insured;
+              depending on actual results, the premium payer may need
+              to continue or resume premium outlays.
+            </fo:block>
+            <fo:block padding-top="1em">
+              The definition of life insurance elected for this contract
+              is the
+              <xsl:choose>
+                <xsl:when test="$scalars/DefnLifeIns='GPT'">
+                  guideline premium test. The guideline single premium
+                  is $<xsl:value-of select="$scalars/InitGSP"/>
+                  and the guideline level premium
+                  is $<xsl:value-of select="$scalars/InitGLP"/>.
+                </xsl:when>
+                <xsl:otherwise>
+                  cash value accumulation test.
+                </xsl:otherwise>
+              </xsl:choose>
+            </fo:block>
+            <fo:block padding-top="1em">
+              <xsl:value-of select="$scalars/InsCoName"/> has the right
+              to promptly return any amount of premium paid if it will increase
+              the net amount at risk (referred to in the contract as
+              the Amount of Insurance that Requires a Charge).
+            </fo:block>
+            <fo:block padding-top="1em">
+              Account values, cash surrender values, and death benefits
+              are illustrated as of the end of the year.
+            </fo:block>
+            <fo:block padding-top="1em">
+              PLEASE READ THE FOLLOWING IMPORTANT TAX DISCLOSURE
+            </fo:block>
+            <fo:block>
+              The initial 7-pay premium limit is
+              $<xsl:value-of select="$scalars/InitSevenPayPrem"/>.
+              As illustrated, this contract
+              <xsl:choose>
+                <xsl:when test="$scalars/IsMec='1'">
+                  fails
+                </xsl:when>
+                <xsl:otherwise>
+                  passes
+                </xsl:otherwise>
+              </xsl:choose>
+              the seven-pay test defined in Section 7702A
+              of the Internal Revenue Code and therefore
+              <xsl:choose>
+                <xsl:when test="$scalars/IsMec='1'">
+                  <xsl:choose>
+                    <xsl:when test="$scalars/MecYear!='0'">
+                      becomes a Modified Endowment Contract (MEC) in policy year.
+                      <xsl:value-of select="$scalars/MecYear+1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      is a Modified Endowment Contract (MEC).
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  As a MEC, any loans or withdrawals are taxed to the extent
+                  of any gain in the contract, and an additional 10% penalty
+                  tax will apply to the taxable portion of the loan
+                  or withdrawal.
+                </xsl:when>
+                <xsl:otherwise>
+                  is not a Modified Endowment Contract (MEC).
+                  Subsequent changes in the contract, including but not limited
+                  to increases and decreases in premiums or benefits, may cause
+                  the contract to be retested and may result in the contract
+                  becoming a MEC.
+                </xsl:otherwise>
+              </xsl:choose>
             </fo:block>
             <fo:block font-weight="bold" padding-top="1em">
-              <xsl:text>This illustration is not written or intended as tax or legal advice and may not be relied on for purposes of avoiding any federal tax penalties.  For more information pertaining to the tax consequences of purchasing or owning this policy, consult with your own independent tax or legal counsel.</xsl:text>
+              This illustration is not written or intended as tax
+              or legal advice and may not be relied on for purposes
+              of avoiding any federal tax penalties. For more information
+              pertaining to the tax consequences of purchasing
+              or owning this policy, consult with your own independent tax
+              or legal counsel.
             </fo:block>
             <fo:block padding-top="1em">
-              <xsl:text>This contract has a guaranteed maximum cost of insurance (based on 1980 CSO mortality tables) and maximum administrative charges. The actual current charges are lower than these and are reflected in the values. However, these current charges are subject to change.</xsl:text>
+              This contract has a guaranteed maximum cost of insurance
+              (based on 1980 CSO mortality tables) and maximum administrative
+              charges. The actual current charges are lower than these
+              and are reflected in the values. However, these current charges
+              are subject to change.
             </fo:block>
             <fo:block padding-top="1em">
-              <xsl:text>The loan interest rate may be fixed or adjustable as elected by the policy owner.</xsl:text>
+              The loan interest rate may be fixed or adjustable as elected
+              by the policy owner.
             </fo:block>
             <fo:block padding-top="1em" padding-bottom="1em">
               <xsl:choose>
                 <xsl:when test="$scalars/UseExperienceRating='1'">
-                  <xsl:text>The illustration assumes mortality experience rating.  To the extent that other clients participate in the pool your results will be affected by the experience of the entire pool.</xsl:text>
+                  The illustration assumes mortality experience rating.
+                  To the extent that other clients participate in the pool
+                  your results will be affected by the experience
+                  of the entire pool.
                 </xsl:when>
                 <xsl:otherwise>
-                  <xsl:text>The illustration does not assume any mortality experience rating.</xsl:text>
+                  The illustration does not assume any mortality
+                  experience rating.
                 </xsl:otherwise>
               </xsl:choose>
             </fo:block>
@@ -341,73 +381,98 @@
             <fo:block break-after="page"/>
 
             <fo:block font-style="italic">
-              <xsl:text>This illustration may only be used when preceded or accompanied by the offering memorandum for </xsl:text>
+              This illustration may only be used when preceded or accompanied
+              by the offering memorandum for
               <xsl:value-of select="$scalars/PolicyLegalName"/>
-              <xsl:text> (</xsl:text>
-              <xsl:value-of select="$scalars/PolicyMktgName"/>
-              <xsl:text>)</xsl:text>
-              <xsl:text> insurance contract and its underlying investment choices. For a complete listing of the underlying investment choices, please refer to the offering memorandum.  Before purchasing a variable life insurance contract, investors should carefully consider the investment objectives, risks, charges and expenses of the variable life insurance contract and its underlying investment choices. Please read the offering memorandum carefully before investing or sending money.</xsl:text>
+              (<xsl:value-of select="$scalars/PolicyMktgName"/>)
+              insurance contract and its underlying investment choices.
+              For a complete listing of the underlying investment choices,
+              please refer to the offering memorandum. Before purchasing
+              a variable life insurance contract, investors should
+              carefully consider the investment objectives, risks, charges
+              and expenses of the variable life insurance contract
+              and its underlying investment choices. Please read
+              the offering memorandum carefully before investing
+              or sending money.
             </fo:block>
-          </fo:block>
 
-          <fo:block text-align="left" font-size="10pt" font-family="sans-serif" padding-top="1em">
             <xsl:if test="$scalars/HasTerm='1'">
-              <fo:block>
-                <xsl:text>A Term Rider is available for attachment to this policy. The Term Rider provides the option to purchase monthly term insurance on the life of the insured. </xsl:text>
-                <xsl:text>The term rider selected face amount supplements the selected face amount of the contract. If the Term Rider is attached, the policy to which it is attached may have a lower annual cutoff premium and, as a result, the lower overall sales loads paid may be lower than a contract having the same total face amount, but with no Term Rider. Also, the lapse protection feature of the contract's</xsl:text>
+              <fo:block padding-top="1em">
+                A Term Rider is available for attachment to this policy.
+                The Term Rider provides the option to purchase monthly
+                term insurance on the life of the insured.
+                The term rider selected face amount supplements the selected
+                face amount of the contract. If the Term Rider is attached,
+                the policy to which it is attached may have a lower annual
+                cutoff premium and, as a result, the lower overall sales
+                loads paid may be lower than a contract having the same total
+                face amount, but with no Term Rider. Also, the lapse protection
+                feature of the contract's
                 <xsl:value-of select="$scalars/NoLapseProvisionName"/>
-                <xsl:text> does not apply to the Term Rider's selected face amount.</xsl:text>
+                does not apply to the Term Rider's selected face amount.
               </fo:block>
             </xsl:if>
             <xsl:if test="$scalars/HasWP='1'">
               <fo:block padding-top="1em">
-                <xsl:text>A Waiver of Monthly Charges rider is available for attachment to this policy for insureds with ages 20-64. The Waiver of Monthly Charges Rider provides that in the event of the disability of the insured that begins before attained age 65 and continues for at least 6 months, </xsl:text>
-                <xsl:value-of select="$scalars/InsCoShortName"/>
-                <xsl:text> will waive certain monthly charges up to age 65, but not less than two years, while the insured remains totally disabled. An additional charge is associated with this rider, if elected. Please refer to your contract for specific provisions and a detailed schedule of charges.</xsl:text>
+                A Waiver of Monthly Charges rider is available for attachment
+                to this policy for insureds with ages 20-64. The Waiver
+                of Monthly Charges Rider provides that in the event
+                of the disability of the insured that begins before attained
+                age 65 and continues for at least 6 months,
+                <xsl:value-of select="$scalars/InsCoShortName"/> will waive
+                certain monthly charges up to age 65, but not less than
+                two years, while the insured remains totally disabled.
+                An additional charge is associated with this rider, if elected.
+                Please refer to your contract for specific provisions
+                and a detailed schedule of charges.
               </fo:block>
             </xsl:if>
             <xsl:if test="$scalars/UsePartialMort='1'">
               <fo:block padding-top="1em">
-                <xsl:text>This illustration reflects an initial mortality assumption of </xsl:text>
-                <xsl:value-of select="$vectors[@name='PartMortTableMult']/duration[1]/@column_value"/>
-                <xsl:text> of the </xsl:text>
-                <xsl:value-of select="$scalars/PartMortTableName"/>
-                <xsl:text> table with all deaths at the end of the year.</xsl:text>
+                This illustration reflects an initial mortality assumption
+                of <xsl:value-of select="$vectors[@name='PartMortTableMult']/duration[1]/@column_value"/>
+                of the <xsl:value-of select="$scalars/PartMortTableName"/> table
+                with all deaths at the end of the year.
               </fo:block>
             </xsl:if>
             <xsl:choose>
               <xsl:when test="$scalars/GenderBlended='1'">
                 <fo:block padding-top="1em">
-                  <xsl:text>Custom blending of cost of insurance charges is based on the plan's assumed distribution of initial selected face amount by gender and tobacco use.  This illustration assumes that the distribution remains constant in future years. Custom blending is available only on plans of 100 or more lives. Custom blend assumptions: </xsl:text>
+                  Custom blending of cost of insurance charges is based
+                  on the plan's assumed distribution of initial selected
+                  face amount by gender and tobacco use. This illustration
+                  assumes that the distribution remains constant
+                  in future years. Custom blending is available only on plans
+                  of 100 or more lives.
+                  Custom blend assumptions:
                   <xsl:choose>
                     <xsl:when test="$scalars/SmokerBlended='1'">
-                      <xsl:text>tobacco = </xsl:text>
-                      <xsl:value-of select="$scalars/SmokerPct"/>
-                      <xsl:text>; </xsl:text>
+                      tobacco = <xsl:value-of select="$scalars/SmokerPct"/>;
                     </xsl:when>
                     <xsl:otherwise>
-                      <xsl:text>no blending by tobacco use; </xsl:text>
+                      no blending by tobacco use;
                     </xsl:otherwise>
                   </xsl:choose>
-                  <xsl:text> male = </xsl:text>
-                  <xsl:value-of select="$scalars/MalePct"/>
-                  <xsl:text>.</xsl:text>
+                  male = <xsl:value-of select="$scalars/MalePct"/>.
                 </fo:block>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:if test="$scalars/SmokerBlended='1'">
                   <fo:block padding-top="1em">
-                    <xsl:text>Custom blending of cost of insurance charges is based on the plan's assumed distribution of initial selected face amount by gender and tobacco use.  This illustration assumes that the distribution remains constant in future years. Custom blending is available only on plans of 100 or more lives. Custom blend assumptions: </xsl:text>
-                    <xsl:text>tobacco = </xsl:text>
-                    <xsl:value-of select="$scalars/SmokerPct"/>
-                    <xsl:text>; </xsl:text>
+                    Custom blending of cost of insurance charges is based
+                    on the plan's assumed distribution of initial selected
+                    face amount by gender and tobacco use. This illustration
+                    assumes that the distribution remains constant
+                    in future years. Custom blending is available only on plans
+                    of 100 or more lives.
+                    Custom blend assumptions:
+                    tobacco = <xsl:value-of select="$scalars/SmokerPct"/>;
                     <xsl:choose>
                       <xsl:when test="$scalars/GenderBlended='1'">
-                        <xsl:text> male = </xsl:text>
-                        <xsl:value-of select="$scalars/MalePct"/>
+                        male = <xsl:value-of select="$scalars/MalePct"/>.
                       </xsl:when>
                       <xsl:otherwise>
-                        <xsl:text> no blending by gender.</xsl:text>
+                        no blending by gender.
                       </xsl:otherwise>
                     </xsl:choose>
                   </fo:block>
@@ -415,15 +480,14 @@
               </xsl:otherwise>
             </xsl:choose>
             <fo:block padding-top="1em">
-              <xsl:text>The state of issue is </xsl:text>
-              <xsl:value-of select="$scalars/StatePostalAbbrev"/>
-              <xsl:text>.</xsl:text>
+              The state of issue
+              is <xsl:value-of select="$scalars/StatePostalAbbrev"/>.
             </fo:block>
             <xsl:choose>
               <xsl:when test="$scalars/IsInforce!='1'">
                 <xsl:if test="string-length($scalars/InsCoPhone) &gt; 14">
                   <fo:block padding-top="1em">
-                    <xsl:text>Compliance tracking number: </xsl:text>
+                    Compliance tracking number:
                     <xsl:value-of select="substring($scalars/InsCoPhone, 1, 15)"/>
                   </fo:block>
                 </xsl:if>
@@ -431,52 +495,60 @@
               <xsl:otherwise>
                 <xsl:if test="string-length($scalars/InsCoPhone) &gt; 16">
                   <fo:block padding-top="1em">
-                    <xsl:text>Compliance Tracking Number: </xsl:text>
+                    Compliance Tracking Number:
                     <xsl:value-of select="substring($scalars/InsCoPhone, 16)"/>
                   </fo:block>
                 </xsl:if>
               </xsl:otherwise>
             </xsl:choose>
+
             <fo:block padding-top="1em">
-              <xsl:text>SEPARATE ACCOUNT</xsl:text>
+              SEPARATE ACCOUNT
             </fo:block>
             <fo:block padding-top="1em">
-              <xsl:text>This illustration shows how the death benefit could vary over an extend period of time, assuming hypothetical gross rates of investment return for the funds.  </xsl:text>
-              <xsl:text> These hypothetical returns do not reflect past performance and are not predictive of future results.  </xsl:text>
-              <xsl:text>Actual results could be less than or greater than the hypothetical results and in all likelihood will vary </xsl:text>
-              <xsl:text>year to year. Timing of premium payments, investment allocations and withdrawals or loans, if taken, may impact investment results. </xsl:text>
-              <xsl:text>Separate Account Charges are deducted from the gross investment rate to determine the net investment rate. These charges include a mortality </xsl:text>
-              <xsl:text>and expense charge, and an investment management fee and other fund operating expenses. The total fund operating expenses charged vary </xsl:text>
-              <xsl:text>by fund. No tax charge is made to the Separate Account. However, such a charge may be made in the future.  SEE OFFERING MEMORANDUM.</xsl:text>
+              This illustration shows how the death benefit could vary over
+              an extend period of time, assuming hypothetical gross rates
+              of investment return for the funds.
+              These hypothetical returns do not reflect past performance
+              and are not predictive of future results.
+              Actual results could be less than or greater than
+              the hypothetical results and in all likelihood will vary
+              year to year. Timing of premium payments, investment allocations
+              and withdrawals or loans, if taken, may impact investment results.
+              Separate Account Charges are deducted from the gross
+              investment rate to determine the net investment rate.
+              These charges include a mortality and expense charge,
+              and an investment management fee and other fund operating
+              expenses. The total fund operating expenses charged vary by fund.
+              No tax charge is made to the Separate Account. However, such
+              a charge may be made in the future.
+              SEE OFFERING MEMORANDUM.
             </fo:block>
             <fo:block padding-top="1em">
-              <xsl:text>This illustration is based on total Separate Account fund expenses of </xsl:text>
-              <xsl:value-of select="$vectors[@name='TotalIMF']/duration[1]/@column_value"/>
-              <xsl:text>.</xsl:text>
+              This illustration is based on total Separate Account fund expenses
+              of <xsl:value-of select="$vectors[@name='TotalIMF']/duration[1]/@column_value"/>.
             </fo:block>
             <fo:block font-size="10.5pt" font-weight="bold" padding-top="1em">
-              <xsl:text>This illustration may not reflect your actual tax and accounting consequences and is not intended as tax advice nor may it be relied on for purposes of avoiding any federal tax penalties. Consult professional tax advisors for tax advice.</xsl:text>
+              This illustration may not reflect your actual tax
+              and accounting consequences and is not intended as tax advice
+              nor may it be relied on for purposes of avoiding any federal
+              tax penalties. Consult professional tax advisors for tax advice.
             </fo:block>
             <fo:block padding-top="1em">
-              <xsl:text>Placement Agent: </xsl:text>
-              <xsl:value-of select="$scalars/MainUnderwriter"/>
-              <xsl:text> (a registered broker-dealer)</xsl:text>
+              Placement Agent: <xsl:value-of select="$scalars/MainUnderwriter"/>
+              (a registered broker-dealer)
             </fo:block>
             <fo:block>
               <xsl:value-of select="$scalars/MainUnderwriterAddress"/>
             </fo:block>
             <fo:block padding-top="1em">
-              <xsl:text>Wholly owned subsidiary of </xsl:text>
+              Wholly owned subsidiary of
               <xsl:value-of select="$scalars/InsCoName"/>
             </fo:block>
           </fo:block>
-          <xsl:choose>
-            <xsl:when test="$has_supplemental_report">
-            </xsl:when>
-            <xsl:otherwise>
-              <fo:block id="endofdoc"/>
-            </xsl:otherwise>
-          </xsl:choose>
+          <xsl:if test="not($has_supplemental_report)">
+            <fo:block id="endofdoc"/>
+          </xsl:if>
         </fo:flow>
       </fo:page-sequence>
 

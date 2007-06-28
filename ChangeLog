@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.817 2007-06-28 09:33:18 etarassov Exp $
+// $Id: ChangeLog,v 1.818 2007-06-28 10:41:26 etarassov Exp $
 
 MAINTENANCE
 
@@ -12750,4 +12750,9 @@ Add global parameter 'hide-company-logo'.
 
   group_private_placement.xsl
 Reformat 'column-definitions'.
+
+20070628T1041Z <etarassov@tt-solutions.com> [1229]
+
+  group_private_placement.xsl
+Reformat 'narrative-summary'.
 
