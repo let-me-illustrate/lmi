@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.835 2007-06-28 17:55:32 chicares Exp $
+// $Id: ChangeLog,v 1.836 2007-06-28 18:14:19 chicares Exp $
 
 MAINTENANCE
 
@@ -12850,4 +12850,9 @@ Refactor, inheriting copyright.
   main_cgi.cpp
   main_cli.cpp
 Rework '.ill' handling for command-line interface.
+
+20070628T1814Z <chicares@cox.net> [1227]
+
+  main_cgi.cpp
+Refactor.
 

@@ -31,7 +31,7 @@
 // other reasons evident in cvs or explained in 'ChangeLog'. Any
 // defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.23 2007-06-28 17:55:32 chicares Exp $
+// $Id: main_cgi.cpp,v 1.24 2007-06-28 18:14:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -555,8 +555,6 @@ void ShowIllusOutput(IllusInputParms const& a_input)
         << "    Calculations: "
         << Timer::elapsed_msec_str(run_functor.usec_for_calculations())
         << "<BR>\n"
-        ;
-    std::cout
         << "    Output:       "
         << Timer::elapsed_msec_str(run_functor.usec_for_output())
         << "<BR>\n"
@@ -670,8 +668,6 @@ void ShowCensusOutput
         << "    Calculations: "
         << Timer::elapsed_msec_str(run_functor.usec_for_calculations())
         << "<BR>\n"
-        ;
-    std::cout
         << "    Output:       "
         << Timer::elapsed_msec_str(run_functor.usec_for_output())
         << "<BR>\n"
