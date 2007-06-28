@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.52 2007-06-28 13:25:18 etarassov Exp $
+    $Id: individual_private_placement.xsl,v 1.53 2007-06-28 15:02:56 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -48,7 +48,7 @@
         <!-- Define the IRR (Guaranteed Charges) Illustration page. -->
         <fo:simple-page-master master-name="irr-guaranteed-illustration" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
           <!-- Central part of page -->
-          <fo:region-body column-count="1" margin-top="2.60in" margin-bottom="1.10in"/>
+          <fo:region-body margin-top="2.60in" margin-bottom="1.10in"/>
           <!-- Header -->
           <fo:region-before extent="3in"/>
           <!-- Footer -->
@@ -58,7 +58,7 @@
         <!-- Define the IRR (Current Charges) Illustration page -->
         <fo:simple-page-master master-name="irr-current-illustration" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
           <!-- Central part of page -->
-          <fo:region-body column-count="1" margin-top="2.60in" margin-bottom="1.10in"/>
+          <fo:region-body margin-top="2.60in" margin-bottom="1.10in"/>
           <!-- Header -->
           <fo:region-before extent="3in"/>
           <!-- Footer -->
@@ -68,7 +68,7 @@
         <!-- Define the Current Values Illustration page -->
         <fo:simple-page-master master-name="current-illustration" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
           <!-- Central part of page -->
-          <fo:region-body column-count="1" margin-top="2.60in" margin-bottom="1.20in"/>
+          <fo:region-body margin-top="2.60in" margin-bottom="1.20in"/>
           <!-- Header -->
           <fo:region-before extent="3in"/>
           <!-- Footer -->
@@ -78,7 +78,7 @@
         <!-- Define the footnotes page. -->
         <fo:simple-page-master master-name="footnotes" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
           <!-- Central part of page -->
-          <fo:region-body column-count="1" margin-top="2.25in" margin-bottom=".6in"/>
+          <fo:region-body margin-top="2.25in" margin-bottom=".6in"/>
           <!-- Header -->
           <fo:region-before extent="3in"/>
           <!-- Footer -->
@@ -89,7 +89,7 @@
         <xsl:if test="$has_supplemental_report">
           <fo:simple-page-master master-name="supplemental-report" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
             <!-- Central part of page -->
-            <fo:region-body column-count="1" margin-top="2.60in" margin-bottom="1.5in"/>
+            <fo:region-body margin-top="2.60in" margin-bottom="1.5in"/>
             <!-- Header -->
             <fo:region-before extent="3in"/>
             <!-- Footer -->
