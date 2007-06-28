@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: offshore_private_placement.xsl,v 1.47 2007-06-28 14:44:28 etarassov Exp $
+    $Id: offshore_private_placement.xsl,v 1.48 2007-06-28 14:46:20 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -411,14 +411,7 @@
 
         <!-- Explanatory Notes Summary Body  -->
         <fo:flow flow-name="xsl-region-body">
-          <!--
-          TODO ?? Why the span="all" attribute? From W3 specs:
-          span = all   The areas resulting from this flow object shall span
-                       all the columns of a multi-column region.
-          Was this page divided into columns?
-          ATM it is not, so span="all" should be removed.
-          -->
-          <fo:block span="all" text-align="left" font-size="9.75pt" font-family="sans-serif">
+          <fo:block text-align="left" font-size="9.75pt" font-family="sans-serif">
             <fo:block font-weight="bold" text-align="center">
               EXPLANATORY NOTES
             </fo:block>
