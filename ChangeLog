@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.827 2007-06-28 14:29:29 etarassov Exp $
+// $Id: ChangeLog,v 1.828 2007-06-28 14:34:35 etarassov Exp $
 
 MAINTENANCE
 
@@ -12800,4 +12800,9 @@ Reformat 'column-definitions'.
 
   offshore_private_placement.xsl
 Reformat 'explanatory-notes'.
+
+20070628T1434Z <etarassov@tt-solutions.com> [1230]
+
+  offshore_private_placement.xsl
+Reformat 'explanatory-notes-separate-account'.
 
