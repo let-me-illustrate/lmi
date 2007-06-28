@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.37 2007-06-28 09:10:27 etarassov Exp $
+    $Id: variable_annuity.xsl,v 1.38 2007-06-28 14:48:44 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -149,79 +149,72 @@
         </fo:static-content>
 
         <fo:flow flow-name="xsl-region-body">
-          <fo:block font-size="18.0pt" text-align="center" font-family="sans-serif" font-weight="bold" padding-top="1em" padding-after="25.0pt">
-            <xsl:value-of select="$scalars/PolicyMktgName"/>
-            <fo:inline vertical-align="super" font-size="7.0pt">SM</fo:inline>
-          </fo:block>
-          <fo:block font-size="12.0pt" text-align="center" font-family="sans-serif" font-weight="bold" padding-after="45.0pt">
-            <xsl:text>
+          <fo:block font-size="11.0pt" text-align="center" font-family="sans-serif" font-weight="bold">
+            <fo:block font-size="18.0pt" padding-top="1em" padding-after="25.0pt">
+              <xsl:value-of select="$scalars/PolicyMktgName"/>
+              <fo:inline vertical-align="super" font-size="7.0pt">SM</fo:inline>
+            </fo:block>
+            <fo:block font-size="12.0pt" padding-after="45.0pt">
               Hypothetical Annuity Illustration - Accumulation Phase
-            </xsl:text>
+            </fo:block>
+            <fo:block padding-after="25.0pt">
+              Prepared by: <xsl:value-of select="$scalars/InsCoShortName"/>
+            </fo:block>
+            <fo:block padding-after="25.0pt">
+              Prepared for:
+              <!--
+              Properly adjust for long user input strings limit output
+              to 140 characters for appox. 2 lines
+              -->
+              <xsl:call-template name="limitstring">
+                <xsl:with-param name="length" select="140"/>
+                <xsl:with-param name="passString">
+                  <xsl:choose>
+                    <xsl:when test="not($is_composite)">
+                      <xsl:value-of select="$scalars/Insured1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:value-of select="$scalars/CorpName"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:with-param>
+              </xsl:call-template>
+            </fo:block>
+            <fo:block padding-after="225.0pt">
+              Date Prepared: <xsl:call-template name="date-prepared"/>
+            </fo:block>
           </fo:block>
-          <fo:block font-size="11.0pt" text-align="center" font-family="sans-serif" font-weight="bold" padding-after="25.0pt">
-            <xsl:text>Prepared by: </xsl:text>
-            <xsl:value-of select="$scalars/InsCoShortName"/>
-          </fo:block>
-          <fo:block font-size="11.0pt" text-align="center" font-family="sans-serif" font-weight="bold" padding-after="25.0pt">
-            <xsl:text>Prepared for: </xsl:text>
-            <!-- Properly adjust for long user input strings limit output to 140 characters for appox. 2 lines -->
-            <xsl:call-template name="limitstring">
-              <xsl:with-param name="length" select="140"/>
-              <xsl:with-param name="passString">
-                <xsl:choose>
-                  <xsl:when test="not($is_composite)">
-                    <xsl:value-of select="$scalars/Insured1"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:value-of select="$scalars/CorpName"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:with-param>
-            </xsl:call-template>
-          </fo:block>
-          <fo:block font-size="11.0pt" text-align="center" font-family="sans-serif" font-weight="bold" padding-after="225.0pt">
-            <xsl:text>Date Prepared: </xsl:text>
-            <xsl:call-template name="date-prepared"/>
-          </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-after="10.0pt">
-            <xsl:text>
-              The purpose of this illustration is to show how hypothetical rates of return will
-              affect Contract Value. These hypothetical returns do not reflect past performance
-              and are not predictive of future results. Actual results could be less than or greater
-              than the hypothetical rates and in all likelihood will vary from year to year.
-            </xsl:text>
-          </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-after="10.0pt">
-            <xsl:value-of select="$scalars/PolicyMktgName"/>
-            <fo:inline vertical-align="super" font-size="7.0pt">SM</fo:inline>
-            <xsl:text>
-              is an individual variable deferred annuity contract with flexible purchase payments issued by
-            </xsl:text>
-            <xsl:value-of select="$scalars/InsCoName"/>
-            <xsl:text> (</xsl:text>
-            <xsl:value-of select="$scalars/InsCoShortName"/>
-            <xsl:text>), </xsl:text>
-            <xsl:value-of select="$scalars/InsCoStreet"/>
-            <xsl:text>.</xsl:text>
-          </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-after="10.0pt">
-            <xsl:text>Placement Agent: </xsl:text>
-            <xsl:value-of select="$scalars/MainUnderwriter"/>
-            <xsl:text>, </xsl:text>
-            <xsl:value-of select="$scalars/MainUnderwriterAddress"/>
-            <xsl:text>. </xsl:text>
-            <xsl:value-of select="$scalars/MainUnderwriter"/>
-            <xsl:text> is a wholly owned subsidiary of </xsl:text>
-            <xsl:value-of select="$scalars/InsCoName"/>
-        <xsl:text>.</xsl:text>
-          </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-after="10.0pt">
-            <xsl:value-of select="$scalars/InsCoShortName"/>
-            <xsl:text> Financial Group is a marketing designation for </xsl:text>
-            <xsl:value-of select="$scalars/InsCoName"/>
-            <xsl:text> (</xsl:text>
-            <xsl:value-of select="$scalars/InsCoShortName"/>
-            <xsl:text>) and its subsidiaries.</xsl:text>
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
+            <fo:block padding-after="10.0pt">
+              The purpose of this illustration is to show how hypothetical rates
+              of return will affect Contract Value. These hypothetical returns
+              do not reflect past performance and are not predictive
+              of future results. Actual results could be less than or greater
+              than the hypothetical rates and in all likelihood will vary
+              from year to year.
+            </fo:block>
+            <fo:block padding-after="10.0pt">
+              <xsl:value-of select="$scalars/PolicyMktgName"/>
+              <fo:inline vertical-align="super" font-size="7.0pt">SM</fo:inline>
+              is an individual variable deferred annuity contract with flexible
+              purchase payments issued by <xsl:value-of select="$scalars/InsCoName"/>
+              (<xsl:value-of select="$scalars/InsCoShortName"/>),
+              <xsl:value-of select="$scalars/InsCoStreet"/>.
+            </fo:block>
+            <fo:block padding-after="10.0pt">
+              Placement Agent:
+              <xsl:value-of select="$scalars/MainUnderwriter"/>,
+              <xsl:value-of select="$scalars/MainUnderwriterAddress"/>.
+              <xsl:value-of select="$scalars/MainUnderwriter"/> is a wholly
+              owned subsidiary of <xsl:value-of select="$scalars/InsCoName"/>.
+            </fo:block>
+            <fo:block padding-after="10.0pt">
+              <xsl:value-of select="$scalars/InsCoShortName"/> Financial Group
+              is a marketing designation
+              for <xsl:value-of select="$scalars/InsCoName"/>
+              (<xsl:value-of select="$scalars/InsCoShortName"/>)
+              and its subsidiaries.
+            </fo:block>
           </fo:block>
         </fo:flow>
 
