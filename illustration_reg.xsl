@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.48 2007-06-28 15:02:56 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.49 2007-06-29 11:37:36 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -48,14 +48,14 @@
       <fo:layout-master-set>
 
         <!-- Define the cover page. -->
-        <fo:simple-page-master master-name="cover" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.1in" margin-bottom="0in" margin-left="0.35in" margin-right="0.35in">
-          <fo:region-body margin-top="0.25in" margin-bottom="0.10in"/>
+        <fo:simple-page-master master-name="cover" page-height="{$page-height}" page-width="{$page-width}" margin=".1in .35in 0">
+          <fo:region-body margin=".25in 0 .1in"/>
         </fo:simple-page-master>
 
         <!-- Define the narrative summary page. -->
-        <fo:simple-page-master master-name="narrative-summary" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
+        <fo:simple-page-master master-name="narrative-summary" page-height="{$page-height}" page-width="{$page-width}" margin=".25in">
           <!-- Central part of page -->
-          <fo:region-body margin-top="0.5in" margin-bottom="1in"/>
+          <fo:region-body margin=".5in 0 1in"/>
           <!-- Header -->
           <fo:region-before extent="3in"/>
           <!-- Footer -->
@@ -63,9 +63,9 @@
         </fo:simple-page-master>
 
         <!-- Define the column headings and key terms page. -->
-        <fo:simple-page-master master-name="column-headings-and-key-terms" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
+        <fo:simple-page-master master-name="column-headings-and-key-terms" page-height="{$page-height}" page-width="{$page-width}" margin=".25in">
           <!-- Central part of page -->
-          <fo:region-body margin-top="0.15in" margin-bottom=".45in"/>
+          <fo:region-body margin=".15in 0 .45in"/>
           <!-- Header -->
           <fo:region-before extent="2in"/>
           <!-- Footer -->
@@ -73,9 +73,9 @@
         </fo:simple-page-master>
 
         <!-- Define the Numeric Summary page. -->
-        <fo:simple-page-master master-name="numeric-summary" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
+        <fo:simple-page-master master-name="numeric-summary" page-height="{$page-height}" page-width="{$page-width}" margin=".25in">
           <!-- Central part of page -->
-          <fo:region-body margin-top="3.1in" margin-bottom=".52in"/>
+          <fo:region-body margin="3.1in 0 .52in"/>
           <!-- Header -->
           <fo:region-before extent="3.1in"/>
           <!-- Footer -->
@@ -83,9 +83,9 @@
         </fo:simple-page-master>
 
         <!-- Define the Tabular Detail page. -->
-        <fo:simple-page-master master-name="tabular-detail" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
+        <fo:simple-page-master master-name="tabular-detail" page-height="{$page-height}" page-width="{$page-width}" margin=".25in">
           <!-- Central part of page -->
-          <fo:region-body margin-top="3.1in" margin-bottom="1.3in"/>
+          <fo:region-body margin="3.1in 0 1.3in"/>
           <!-- Header -->
           <fo:region-before extent="3.1in"/>
           <!-- Footer -->
@@ -93,9 +93,9 @@
         </fo:simple-page-master>
 
         <!-- Define the Tabular Detail (Report 2) page. -->
-        <fo:simple-page-master master-name="tabular-detail-report2" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
+        <fo:simple-page-master master-name="tabular-detail-report2" page-height="{$page-height}" page-width="{$page-width}" margin=".25in">
           <!-- Central part of page -->
-          <fo:region-body margin-top="3.2in" margin-bottom="1.35in"/>
+          <fo:region-body margin="3.2in 0 1.35in"/>
           <!-- Header -->
           <fo:region-before extent="3.1in"/>
           <!-- Footer -->
@@ -104,9 +104,9 @@
 
         <!-- Define the Supplemental Report page. -->
         <xsl:if test="$has_supplemental_report">
-          <fo:simple-page-master master-name="supplemental-report" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
+          <fo:simple-page-master master-name="supplemental-report" page-height="{$page-height}" page-width="{$page-width}" margin=".25in">
             <!-- Central part of page -->
-            <fo:region-body margin-top="3.0in" margin-bottom="1.25in"/>
+            <fo:region-body margin="3in 0 1.25in"/>
             <!-- Header -->
             <fo:region-before extent="3.0in"/>
             <!-- Footer -->
@@ -115,9 +115,9 @@
         </xsl:if>
 
         <!-- Define the Numeric Summary Attachment page. -->
-        <fo:simple-page-master master-name="numeric-summary-attachment" page-height="{$page-height}" page-width="{$page-width}" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
+        <fo:simple-page-master master-name="numeric-summary-attachment" page-height="{$page-height}" page-width="{$page-width}" margin=".25in">
           <!-- Central part of page -->
-          <fo:region-body margin-top="3.1in" margin-bottom=".52in"/>
+          <fo:region-body margin="3.1in 0 .52in"/>
           <!-- Header -->
           <fo:region-before extent="3.1in"/>
           <!-- Footer -->
