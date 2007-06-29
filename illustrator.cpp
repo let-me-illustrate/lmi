@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.cpp,v 1.18 2007-06-29 03:27:32 chicares Exp $
+// $Id: illustrator.cpp,v 1.19 2007-06-29 05:14:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,7 +33,6 @@
 #include "emit_ledger.hpp"
 #include "group_values.hpp"
 #include "inputillus.hpp"
-#include "ledger_text_formats.hpp" // PrintLedgerFlatText()
 #include "ledgervalues.hpp"
 #include "multiple_cell_document.hpp"
 #include "single_cell_document.hpp"
@@ -65,7 +64,7 @@ bool illustrator::operator()(fs::path const& file_path)
         Timer timer;
         multiple_cell_document doc(file_path.string());
         run_census::assert_consistency(doc.case_parms()[0], doc.cell_parms()[0]);
-        usec_for_input_        = timer.stop().elapsed_usec();
+        usec_for_input_ = timer.stop().elapsed_usec();
         census_run_result result;
         result = run_census()(file_path, emission_, doc.cell_parms());
         completed_normally     = result.completed_normally_   ;
@@ -81,9 +80,7 @@ bool illustrator::operator()(fs::path const& file_path)
         IllusVal IV;
         IV.Run(&doc.input_data());
         usec_for_calculations_ = timer.stop().elapsed_usec();
-        timer.restart();
-        PrintLedgerFlatText(IV.ledger(), std::cout);
-        usec_for_output_       = timer.stop().elapsed_usec();
+        usec_for_output_ = emit_ledger(file_path, 0, IV.ledger(), emission_);
         }
     else if(".ini" == extension)
         {
