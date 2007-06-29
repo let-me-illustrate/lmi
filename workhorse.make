@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.94 2007-06-29 04:54:15 chicares Exp $
+# $Id: workhorse.make,v 1.95 2007-06-29 05:13:13 chicares Exp $
 
 ################################################################################
 
@@ -921,7 +921,7 @@ cli_test-sample.ill: file_option := --illfile
 cli_test-sample.cns: file_option := --cnsfile
 
 cli_test_common_options := emit_text_stream,emit_quietly,emit_timings
-cli_test-sample.ill: emission := $(cli_test_common_options),emit_composite_only
+cli_test-sample.ill: emission := $(cli_test_common_options)
 cli_test-sample.cns: emission := $(cli_test_common_options),emit_composite_only
 
 .PHONY: cli_test-%
