@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.hpp,v 1.17 2007-06-03 14:32:30 chicares Exp $
+// $Id: ledgervalues.hpp,v 1.18 2007-06-29 03:27:32 chicares Exp $
 
 #ifndef ledgervalues_hpp
 #define ledgervalues_hpp
@@ -32,7 +32,6 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/utility.hpp>
 
-#include <iosfwd>
 #include <string>
 
 class InputParms;
@@ -58,7 +57,6 @@ class LMI_SO IllusVal
     ~IllusVal();
 
     double Run(InputParms const* ip);
-    void Print(std::ostream&) const;
 
     Ledger const& ledger() const {return *ledger_;}
 

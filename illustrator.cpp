@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.cpp,v 1.17 2007-06-28 17:55:28 chicares Exp $
+// $Id: illustrator.cpp,v 1.18 2007-06-29 03:27:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,6 +33,7 @@
 #include "emit_ledger.hpp"
 #include "group_values.hpp"
 #include "inputillus.hpp"
+#include "ledger_text_formats.hpp" // PrintLedgerFlatText()
 #include "ledgervalues.hpp"
 #include "multiple_cell_document.hpp"
 #include "single_cell_document.hpp"
@@ -81,7 +82,7 @@ bool illustrator::operator()(fs::path const& file_path)
         IV.Run(&doc.input_data());
         usec_for_calculations_ = timer.stop().elapsed_usec();
         timer.restart();
-        IV.Print(std::cout);
+        PrintLedgerFlatText(IV.ledger(), std::cout);
         usec_for_output_       = timer.stop().elapsed_usec();
         }
     else if(".ini" == extension)
