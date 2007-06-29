@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.50 2007-06-29 11:37:36 etarassov Exp $
+    $Id: fo_common.xsl,v 1.51 2007-06-29 12:00:22 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -129,6 +129,17 @@
   <!-- These variables should be used in every 'simple-page-master'. -->
   <xsl:variable name="page-width" select="normalize-space(substring-before($page-geometry, 'x'))"/>
   <xsl:variable name="page-height" select="normalize-space(substring-after($page-geometry, 'x'))"/>
+
+  <!--
+  Helper template to be used in 'fo:simple-page-master' to improve readability.
+  Use template parameters 'width' and 'height' to override default page size.
+  -->
+  <xsl:template name="set-page-size">
+    <xsl:param name="width" select="$page-width"/>
+    <xsl:param name="height" select="$page-height"/>
+    <xsl:attribute name="page-width"><xsl:value-of select="$width"/></xsl:attribute>
+    <xsl:attribute name="page-height"><xsl:value-of select="$height"/></xsl:attribute>
+  </xsl:template>
 
   <!--
   This may appear to be a clumsy way to get the max value but there is no clean way
