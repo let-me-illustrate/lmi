@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.842 2007-06-29 03:27:32 chicares Exp $
+// $Id: ChangeLog,v 1.843 2007-06-29 05:14:24 chicares Exp $
 
 MAINTENANCE
 
@@ -12892,4 +12892,20 @@ Reformat 'scalar-header'.
   ledgervalues.cpp
   ledgervalues.hpp
 Remove an unneeded member function.
+
+20070629T0454Z <chicares@cox.net> [1227]
+
+  workhorse.make
+Refactor.
+
+20070629T0513Z <chicares@cox.net> [1227]
+
+  main_cgi.cpp
+  workhorse.make
+Remove a deleterious option.
+
+20070629T0514Z <chicares@cox.net> [1227]
+
+  illustrator.cpp
+Refactor.
 
