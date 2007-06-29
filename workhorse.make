@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.93 2007-06-04 14:25:24 chicares Exp $
+# $Id: workhorse.make,v 1.94 2007-06-29 04:54:15 chicares Exp $
 
 ################################################################################
 
@@ -917,14 +917,21 @@ cli_tests: cli_tests_init $(addprefix cli_test-,$(test_data)) cli_selftest
 cli_tests_init:
 	@$(ECHO) Test command line interface:
 
+cli_test-sample.ill: file_option := --illfile
+cli_test-sample.cns: file_option := --cnsfile
+
+cli_test_common_options := emit_text_stream,emit_quietly,emit_timings
+cli_test-sample.ill: emission := $(cli_test_common_options),emit_composite_only
+cli_test-sample.cns: emission := $(cli_test_common_options),emit_composite_only
+
 .PHONY: cli_test-%
 cli_test-%: $(test_data) lmi_cli_shared$(EXEEXT)
 	@$(ECHO) Test $*:
 	@./lmi_cli_shared$(EXEEXT) \
 	  --accept \
 	  --data_path=$(data_dir) \
-	  --emit=emit_text_stream,emit_composite_only,emit_quietly,emit_timings \
-	  --$(subst .,,$(suffix $*))file=$* \
+	  --emit=$(emission) \
+	  $(file_option)=$* \
 	  >$*.touchstone
 	@<$*.touchstone \
 	  $(DIFF) \
