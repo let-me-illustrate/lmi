@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.49 2007-06-28 11:02:38 etarassov Exp $
+    $Id: fo_common.xsl,v 1.50 2007-06-29 11:37:36 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -721,7 +721,7 @@
           <fo:block font-weight="bold" padding-top="8em">
               Prepared for:
           </fo:block>
-          <fo:block margin-left="0.15in" margin-right="0.15in" padding-top="1em">
+          <fo:block padding-top="1em" margin="0 .15in">
             <xsl:variable name="prepared-for-raw">
               <xsl:choose>
                 <xsl:when test="not($is_composite)">
