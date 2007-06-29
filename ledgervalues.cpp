@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.cpp,v 1.27 2007-06-03 15:47:47 chicares Exp $
+// $Id: ledgervalues.cpp,v 1.28 2007-06-29 03:27:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,13 +33,9 @@
 #include "fenv_guard.hpp"
 #include "inputs.hpp"
 #include "ledger.hpp"
-#include "ledger_text_formats.hpp" // PrintLedgerFlatText()
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/path.hpp>
-
-#include <ostream>
-#include <string>
 
 //============================================================================
 IllusVal::IllusVal(std::string const& filename)
@@ -71,11 +67,5 @@ double IllusVal::Run(InputParms const* IP)
     ledger_ = boost::shared_ptr<Ledger>(new Ledger(*av.ledger_from_av()));
 
     return z;
-}
-
-//============================================================================
-void IllusVal::Print(std::ostream& os) const
-{
-    PrintLedgerFlatText(ledger(), os);
 }
 
