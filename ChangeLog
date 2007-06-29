@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.841 2007-06-28 20:53:25 etarassov Exp $
+// $Id: ChangeLog,v 1.842 2007-06-29 03:27:32 chicares Exp $
 
 MAINTENANCE
 
@@ -12876,8 +12876,20 @@ Reformat 'explanation-and-footnotes-2'.
   variable_annuity.xsl
 Reformat 'certification-statements'.
 
-20070628T2053Z <etarassov@tt-solutions.com> [1226]
+20070628T2040Z <chicares@cox.net> [1227]
+
+  ledger_xsl.cpp
+Work around a mistake.
+
+20070628T2053Z <etarassov@tt-solutions.com> [1227]
 
   variable_annuity.xsl
 Reformat 'scalar-header'.
+
+20070629T0327Z <chicares@cox.net> [1227]
+
+  illustrator.cpp
+  ledgervalues.cpp
+  ledgervalues.hpp
+Remove an unneeded member function.
 
