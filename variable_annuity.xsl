@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.44 2007-06-29 11:37:36 etarassov Exp $
+    $Id: variable_annuity.xsl,v 1.45 2007-06-29 12:00:23 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -39,7 +39,8 @@
       <fo:layout-master-set>
 
         <!-- Define the Cover page. -->
-        <fo:simple-page-master master-name="cover-page" page-height="{$page-height}" page-width="{$page-width}" margin=".25in">
+        <fo:simple-page-master master-name="cover-page" margin=".25in">
+          <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
           <fo:region-body margin="1.5in 0 1in"/>
           <!-- Header -->
@@ -49,7 +50,8 @@
         </fo:simple-page-master>
 
         <!-- Define the Hypothetical Illustration Current page. -->
-        <fo:simple-page-master master-name="hypothetical-illustration-current" page-height="{$page-height}" page-width="{$page-width}" margin=".25in">
+        <fo:simple-page-master master-name="hypothetical-illustration-current" margin=".25in">
+          <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
           <fo:region-body margin="2.7in 0 1.2in"/>
           <!-- Header -->
@@ -59,7 +61,8 @@
         </fo:simple-page-master>
 
         <!-- Define the Hypothetical Illustration CurrentZero page. -->
-        <fo:simple-page-master master-name="hypothetical-illustration-current-zero" page-height="{$page-height}" page-width="{$page-width}" margin=".25in">
+        <fo:simple-page-master master-name="hypothetical-illustration-current-zero" margin=".25in">
+          <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
           <fo:region-body margin="2.7in 0 1.2in"/>
           <!-- Header -->
@@ -69,7 +72,8 @@
         </fo:simple-page-master>
 
         <!-- Define the Hypothetical Illustration Guaranteed page. -->
-        <fo:simple-page-master master-name="hypothetical-illustration-guaranteed" page-height="{$page-height}" page-width="{$page-width}" margin=".25in">
+        <fo:simple-page-master master-name="hypothetical-illustration-guaranteed" margin=".25in">
+          <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
           <fo:region-body margin="2.7in 0 1.2in"/>
           <!-- Header -->
@@ -79,7 +83,8 @@
         </fo:simple-page-master>
 
         <!-- Define the Hypothetical Illustration GuaranteedZero page. -->
-        <fo:simple-page-master master-name="hypothetical-illustration-guaranteed-zero" page-height="{$page-height}" page-width="{$page-width}" margin=".25in">
+        <fo:simple-page-master master-name="hypothetical-illustration-guaranteed-zero" margin=".25in">
+          <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
           <fo:region-body margin="2.7in 0 1.2in"/>
           <!-- Header -->
@@ -89,7 +94,8 @@
         </fo:simple-page-master>
 
         <!-- Define the Explanation and Footnotes page 1. -->
-        <fo:simple-page-master master-name="explanation-and-footnotes-1" page-height="{$page-height}" page-width="{$page-width}" margin=".25in">
+        <fo:simple-page-master master-name="explanation-and-footnotes-1" margin=".25in">
+          <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
           <fo:region-body margin="1.5in 0 1in"/>
           <!-- Header -->
@@ -99,7 +105,8 @@
         </fo:simple-page-master>
 
         <!-- Define the Explanation and Footnotes page 2. -->
-        <fo:simple-page-master master-name="explanation-and-footnotes-2" page-height="{$page-height}" page-width="{$page-width}" margin=".25in">
+        <fo:simple-page-master master-name="explanation-and-footnotes-2" margin=".25in">
+          <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
           <fo:region-body margin="1.5in 0 1in"/>
           <!-- Header -->
@@ -109,7 +116,8 @@
         </fo:simple-page-master>
 
         <!-- Define the Certification Statements page. -->
-        <fo:simple-page-master master-name="certification-statements" page-height="{$page-height}" page-width="{$page-width}" margin=".25in">
+        <fo:simple-page-master master-name="certification-statements" margin=".25in">
+          <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
           <fo:region-body margin="2in 0 1in"/>
           <!-- Header -->
@@ -120,7 +128,8 @@
 
         <!-- Define the Supplemental Report page. -->
         <xsl:if test="$has_supplemental_report">
-          <fo:simple-page-master master-name="supplemental-report" page-height="{$page-height}" page-width="{$page-width}" margin=".25in">
+          <fo:simple-page-master master-name="supplemental-report" margin=".25in">
+            <xsl:call-template name="set-page-size"/>
             <!-- Central part of page -->
             <fo:region-body margin="2.7in 0 1.2in"/>
             <!-- Header -->

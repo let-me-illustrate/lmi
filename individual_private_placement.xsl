@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.54 2007-06-29 11:37:36 etarassov Exp $
+    $Id: individual_private_placement.xsl,v 1.55 2007-06-29 12:00:23 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -41,12 +41,14 @@
       <fo:layout-master-set>
 
         <!-- Define the cover page. -->
-        <fo:simple-page-master master-name="cover" page-height="{$page-height}" page-width="{$page-width}" margin=".25in">
+        <fo:simple-page-master master-name="cover" margin=".25in">
+          <xsl:call-template name="set-page-size"/>
           <fo:region-body margin=".25in 0"/>
         </fo:simple-page-master>
 
         <!-- Define the IRR (Guaranteed Charges) Illustration page. -->
-        <fo:simple-page-master master-name="irr-guaranteed-illustration" page-height="{$page-height}" page-width="{$page-width}" margin=".25in">
+        <fo:simple-page-master master-name="irr-guaranteed-illustration" margin=".25in">
+          <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
           <fo:region-body margin="2.6in 0 1.1in"/>
           <!-- Header -->
@@ -56,7 +58,8 @@
         </fo:simple-page-master>
 
         <!-- Define the IRR (Current Charges) Illustration page -->
-        <fo:simple-page-master master-name="irr-current-illustration" page-height="{$page-height}" page-width="{$page-width}" margin=".25in">
+        <fo:simple-page-master master-name="irr-current-illustration" margin=".25in">
+          <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
           <fo:region-body margin="2.6in 0 1.1in"/>
           <!-- Header -->
@@ -66,7 +69,8 @@
         </fo:simple-page-master>
 
         <!-- Define the Current Values Illustration page -->
-        <fo:simple-page-master master-name="current-illustration" page-height="{$page-height}" page-width="{$page-width}" margin=".25in">
+        <fo:simple-page-master master-name="current-illustration" margin=".25in">
+          <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
           <fo:region-body margin="2.6in 0 1.2in"/>
           <!-- Header -->
@@ -76,7 +80,8 @@
         </fo:simple-page-master>
 
         <!-- Define the footnotes page. -->
-        <fo:simple-page-master master-name="footnotes" page-height="{$page-height}" page-width="{$page-width}" margin=".25in">
+        <fo:simple-page-master master-name="footnotes" margin=".25in">
+          <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
           <fo:region-body margin="2.25in 0 .6in"/>
           <!-- Header -->
@@ -87,7 +92,8 @@
 
         <!-- Define the Supplemental Illustration page. -->
         <xsl:if test="$has_supplemental_report">
-          <fo:simple-page-master master-name="supplemental-report" page-height="{$page-height}" page-width="{$page-width}" margin=".25in">
+          <fo:simple-page-master master-name="supplemental-report" margin=".25in">
+            <xsl:call-template name="set-page-size"/>
             <!-- Central part of page -->
             <fo:region-body margin="2.6in 0 1.5in"/>
             <!-- Header -->
