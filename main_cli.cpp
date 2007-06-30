@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.49 2007-06-28 17:55:32 chicares Exp $
+// $Id: main_cli.cpp,v 1.50 2007-06-30 13:04:46 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -181,7 +181,7 @@ void SelfTest()
 
     std::cout
         << "Test solve speed: "
-        << TimeAnAliquot(boost::bind(&IllusVal::Run, &IV, &IP), 5)
+        << TimeAnAliquot(boost::bind(&IllusVal::Run, &IV, &IP), 0.1)
         << '\n'
         ;
 }
