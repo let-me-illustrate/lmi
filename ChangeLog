@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.845 2007-06-29 12:00:22 etarassov Exp $
+// $Id: ChangeLog,v 1.846 2007-06-30 13:29:20 chicares Exp $
 
 MAINTENANCE
 
@@ -12930,4 +12930,42 @@ Use shorthand property 'fo:margin'.
   offshore_private_placement.xsl
   variable_annuity.xsl
 Use template 'set-page-size' to eliminate some excessively long lines.
+
+20070629T2233Z <chicares@cox.net> [1227]
+
+  illustrator.cpp
+Commit and...
+
+20070629T2252Z <chicares@cox.net> [1227]
+
+  illustrator.cpp
+...revert a premature change.
+
+20070630T1302Z <chicares@cox.net> [1227]
+
+  workhorse.make
+Refactor.
+
+20070630T1303Z <chicares@cox.net> [1226]
+
+  illustrator.cpp
+Remove a marked defect, preserving visible output of 'make cli_tests'.
+
+20070630T1304Z <chicares@cox.net> [1226]
+
+  main_cli.cpp
+Make 'make cli_tests' run about three times as fast.
+
+20070630T1328Z <chicares@cox.net> [1226]
+
+  workhorse.make
+Rearrange 'cli_tests' target. 'cli_selftest' had been placed last due
+to its slowness, so that other tests' error counts could be seen right
+away. Now that 'cli_selftest' is faster, placing it first secures its
+documented caching benefit for other targets' timings.
+
+20070630T1329Z <chicares@cox.net> [1226]
+
+  group_values.cpp
+Guard pointer dereferencing.
 
