@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.96 2007-06-30 13:02:19 chicares Exp $
+# $Id: workhorse.make,v 1.97 2007-06-30 13:28:18 chicares Exp $
 
 ################################################################################
 
@@ -911,11 +911,23 @@ mpatrol.log:
 # Test command-line interface.
 
 .PHONY: cli_tests
-cli_tests: cli_tests_init $(addprefix cli_test-,$(test_data)) cli_selftest
+cli_tests: cli_tests_init cli_selftest $(addprefix cli_test-,$(test_data))
 
 .PHONY: cli_tests_init
 cli_tests_init:
 	@$(ECHO) Test command line interface:
+
+# Run the self test once, discarding the results, just to get the
+# program into the disk cache. Then run it again and report results.
+
+self_test_options := --accept --data_path=$(data_dir) --selftest
+
+.PHONY: cli_selftest
+cli_selftest: antediluvian_cli$(EXEEXT) lmi_cli_shared$(EXEEXT)
+	@./antediluvian_cli$(EXEEXT) $(self_test_options) > /dev/null
+	@./antediluvian_cli$(EXEEXT) $(self_test_options)
+	@./lmi_cli_shared$(EXEEXT) $(self_test_options) > /dev/null
+	@./lmi_cli_shared$(EXEEXT) $(self_test_options)
 
 cli_test-sample.ill: file_option := --illfile
 cli_test-sample.cns: file_option := --cnsfile
@@ -945,18 +957,6 @@ cli_test-%: $(test_data) lmi_cli_shared$(EXEEXT)
 	      - $(src_dir)/$*.touchstone \
 	  | $(WC)   -l \
 	  | $(SED)  -e 's/^/  /' -e 's/$$/ errors/'
-
-# Run the self test once, discarding the results, just to get the
-# program into the disk cache. Then run it again and report results.
-
-self_test_options := --accept --data_path=$(data_dir) --selftest
-
-.PHONY: cli_selftest
-cli_selftest: antediluvian_cli$(EXEEXT) lmi_cli_shared$(EXEEXT)
-	@./antediluvian_cli$(EXEEXT) $(self_test_options) > /dev/null
-	@./antediluvian_cli$(EXEEXT) $(self_test_options)
-	@./lmi_cli_shared$(EXEEXT) $(self_test_options) > /dev/null
-	@./lmi_cli_shared$(EXEEXT) $(self_test_options)
 
 ################################################################################
 
