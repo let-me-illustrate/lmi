@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.cpp,v 1.21 2007-06-29 22:52:10 chicares Exp $
+// $Id: illustrator.cpp,v 1.22 2007-06-30 13:03:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -111,19 +111,14 @@ bool illustrator::operator()(fs::path const& file_path)
             ;
         }
 
-    // TODO ?? Revise this legacy behavior. Probably the data should
-    // be written to std::cout instead.
-
     if(mce_emit_timings & emission_)
         {
-        std::cerr
-            << "    Input:        "
+        std::cout
+            << "\n    Input:        "
             << Timer::elapsed_msec_str(usec_for_input_)
-            << '\n'
-            << "    Calculations: "
+            << "\n    Calculations: "
             << Timer::elapsed_msec_str(usec_for_calculations_)
-            << '\n'
-            << "    Output:       "
+            << "\n    Output:       "
             << Timer::elapsed_msec_str(usec_for_output_)
             << '\n'
             ;
