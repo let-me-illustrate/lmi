@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.95 2007-06-29 05:13:13 chicares Exp $
+# $Id: workhorse.make,v 1.96 2007-06-30 13:02:19 chicares Exp $
 
 ################################################################################
 
@@ -920,9 +920,8 @@ cli_tests_init:
 cli_test-sample.ill: file_option := --illfile
 cli_test-sample.cns: file_option := --cnsfile
 
-cli_test_common_options := emit_text_stream,emit_quietly,emit_timings
-cli_test-sample.ill: emission := $(cli_test_common_options)
-cli_test-sample.cns: emission := $(cli_test_common_options),emit_composite_only
+cli_test-sample.ill: special_emission :=
+cli_test-sample.cns: special_emission := emit_composite_only
 
 .PHONY: cli_test-%
 cli_test-%: $(test_data) lmi_cli_shared$(EXEEXT)
@@ -930,7 +929,13 @@ cli_test-%: $(test_data) lmi_cli_shared$(EXEEXT)
 	@./lmi_cli_shared$(EXEEXT) \
 	  --accept \
 	  --data_path=$(data_dir) \
-	  --emit=$(emission) \
+	  --emit=$(special_emission),emit_text_stream,emit_quietly,emit_timings \
+	  $(file_option)=$* \
+	  | $(SED) -e '/milliseconds/!d'
+	@./lmi_cli_shared$(EXEEXT) \
+	  --accept \
+	  --data_path=$(data_dir) \
+	  --emit=$(special_emission),emit_text_stream,emit_quietly \
 	  $(file_option)=$* \
 	  >$*.touchstone
 	@<$*.touchstone \
