@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.51 2007-06-29 12:00:22 etarassov Exp $
+    $Id: fo_common.xsl,v 1.52 2007-07-02 23:03:24 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -218,6 +218,20 @@
     <xsl:value-of select="$scalars/PrepYear"/>
   </xsl:template>
 
+  <!-- Two helper templates. Usefull in custom table headers -->
+  <xsl:template name="header-cell">
+    <xsl:attribute name="display-align">after</xsl:attribute>
+    <xsl:attribute name="padding-top">4pt</xsl:attribute>
+    <xsl:attribute name="padding-bottom">2pt</xsl:attribute>
+    <xsl:attribute name="text-align">right</xsl:attribute>
+    <xsl:attribute name="border-bottom-style">solid</xsl:attribute>
+    <xsl:attribute name="border-bottom-color">blue</xsl:attribute>
+  </xsl:template>
+  <xsl:template name="header-cell-with-border">
+    <xsl:call-template name="header-cell"/>
+    <xsl:attribute name="border-bottom-width">1pt</xsl:attribute>
+  </xsl:template>
+
   <xsl:template name="supplemental-report-body">
     <xsl:if test="count($supplemental_report_columns) &gt; 0">
       <fo:flow flow-name="xsl-region-body">
@@ -230,8 +244,9 @@
             <fo:table-header>
               <fo:table-row>
                 <xsl:for-each select="$supplemental_report_columns">
-                  <fo:table-cell display-align="after" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
-                    <fo:block text-align="right">
+                  <fo:table-cell>
+                    <xsl:call-template name="header-cell-with-border"/>
+                    <fo:block>
                       <xsl:call-template name="text-word-wrap">
                         <xsl:with-param name="text" select="./title"/>
                       </xsl:call-template>
@@ -475,16 +490,12 @@
       </xsl:if>
     </xsl:variable>
     <xsl:if test="($cell_text != $next_cell_text) or ($cell = count($columns))">
-      <fo:table-cell display-align="after" padding-top="4pt" padding-bottom="2pt" border-bottom-style="solid" border-bottom-color="blue">
-        <xsl:if test="$spans != 1">
-          <xsl:attribute name="number-columns-spanned">
-            <xsl:value-of select="$spans"/>
-          </xsl:attribute>
-        </xsl:if>
-          <xsl:attribute name="text-align">
-            <xsl:if test="$spans = 1">right</xsl:if>
-            <xsl:if test="$spans != 1">center</xsl:if>
-          </xsl:attribute>
+      <fo:table-cell number-columns-spanned="{$spans}">
+       <xsl:call-template name="header-cell"/>
+        <xsl:attribute name="text-align">
+          <xsl:if test="$spans = 1">right</xsl:if>
+          <xsl:if test="$spans != 1">center</xsl:if>
+        </xsl:attribute>
         <xsl:choose>
           <xsl:when test="$last_row or (($spans &gt; 1) and ($cell_text != ''))">
             <xsl:attribute name="border-bottom-width">1pt</xsl:attribute>

@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.66 2007-06-29 12:00:23 etarassov Exp $
+    $Id: nasd.xsl,v 1.67 2007-07-02 23:03:24 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -30,37 +30,6 @@
   <xsl:import href="fo_common.xsl"/>
   <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
   <xsl:variable name="counter" select="1"/>
-
-  <!--
-  Attribute set used in 'illustration-assumption-report' template:
-  Define a table header cell with top/bottom padding, right-bottom aligned,
-  with bottom blue border.
-  -->
-  <xsl:attribute-set name="cell-single">
-    <xsl:attribute name="display-align">after</xsl:attribute>
-    <xsl:attribute name="padding-top">4pt</xsl:attribute>
-    <xsl:attribute name="padding-bottom">2pt</xsl:attribute>
-    <xsl:attribute name="border-bottom-style">solid</xsl:attribute>
-    <xsl:attribute name="border-bottom-color">blue</xsl:attribute>
-    <xsl:attribute name="text-align">right</xsl:attribute>
-    <xsl:attribute name="border-bottom-width">1pt</xsl:attribute>
-  </xsl:attribute-set>
-  <!--
-  Attribute set used in 'illustration-assumption-report' template:
-  Define a table header cell that spans 2 rows. Based on 'cell-single'.
-  -->
-  <xsl:attribute-set use-attribute-sets="cell-single" name="cell-span-2rows">
-    <xsl:attribute name="number-rows-spanned">2</xsl:attribute>
-  </xsl:attribute-set>
-  <!--
-  Attribute set used in 'illustration-assumption-report' template:
-  Define a table header cell that spans 2 columns, and has no bottom border.
-  Based on 'cell-single'.
-  -->
-  <xsl:attribute-set use-attribute-sets="cell-single" name="cell-span-2cols">
-    <xsl:attribute name="number-columns-spanned">2</xsl:attribute>
-    <xsl:attribute name="border-bottom-width">0pt</xsl:attribute>
-  </xsl:attribute-set>
 
   <xsl:template match="/">
     <fo:root>
@@ -874,48 +843,19 @@
               <fo:table-cell number-columns-spanned="3">
                 <fo:block/>
               </fo:table-cell>
-              <fo:table-cell number-columns-spanned="5" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
-                <fo:block text-align="center">Using guaranteed charges</fo:block>
+              <fo:table-cell number-columns-spanned="5">
+                <xsl:call-template name="header-cell-with-border"/>
+                <fo:block text-align="center">
+                  Using guaranteed charges
+                </fo:block>
               </fo:table-cell>
-              <fo:table-cell><fo:block/></fo:table-cell>
-              <fo:table-cell number-columns-spanned="5" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
-                <fo:block text-align="center">Using current charges</fo:block>
-              </fo:table-cell>
-            </fo:table-row>
-            <fo:table-row>
-              <fo:table-cell padding="2pt">
+              <fo:table-cell>
                 <fo:block/>
               </fo:table-cell>
-            </fo:table-row>
-            <fo:table-row>
-              <fo:table-cell number-columns-spanned="3">
-                <fo:block/>
-              </fo:table-cell>
-              <fo:table-cell number-columns-spanned="2" padding="0pt">
+              <fo:table-cell number-columns-spanned="5">
+                <xsl:call-template name="header-cell-with-border"/>
                 <fo:block text-align="center">
-                <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_GuaranteedZero"/>
-                Hypothetical Gross
-                </fo:block>
-              </fo:table-cell>
-              <fo:table-cell><fo:block/></fo:table-cell>
-              <fo:table-cell number-columns-spanned="2" padding="0pt">
-                <fo:block text-align="center">
-                <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_Guaranteed"/>
-                Hypothetical Gross
-                </fo:block>
-              </fo:table-cell>
-              <fo:table-cell><fo:block/></fo:table-cell>
-              <fo:table-cell number-columns-spanned="2" padding="0pt">
-                <fo:block text-align="center">
-                <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_CurrentZero"/>
-                Hypothetical Gross
-                </fo:block>
-              </fo:table-cell>
-              <fo:table-cell><fo:block/></fo:table-cell>
-              <fo:table-cell number-columns-spanned="2" padding="0pt">
-                <fo:block text-align="center">
-                <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_Current"/>
-                Hypothetical Gross
+                  Using current charges
                 </fo:block>
               </fo:table-cell>
             </fo:table-row>
@@ -923,31 +863,57 @@
               <fo:table-cell number-columns-spanned="3">
                 <fo:block/>
               </fo:table-cell>
-              <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
+              <fo:table-cell number-columns-spanned="2">
+                <xsl:call-template name="header-cell-with-border"/>
                 <fo:block text-align="center">
-                Return
-                (<xsl:value-of select="$scalars/InitAnnSepAcctNetInt_GuaranteedZero"/>
-                net)
+                  <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_GuaranteedZero"/>
+                  Hypothetical Gross
+                </fo:block>
+                <fo:block text-align="center">
+                  Return
+                  (<xsl:value-of select="$scalars/InitAnnSepAcctNetInt_GuaranteedZero"/>
+                  net)
                 </fo:block>
               </fo:table-cell>
-              <fo:table-cell><fo:block/></fo:table-cell>
-              <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
+              <fo:table-cell>
+                <fo:block/>
+              </fo:table-cell>
+              <fo:table-cell number-columns-spanned="2">
+                <xsl:call-template name="header-cell-with-border"/>
+                <fo:block text-align="center">
+                  <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_Guaranteed"/>
+                  Hypothetical Gross
+                </fo:block>
                 <fo:block text-align="center">
                   Return
                   (<xsl:value-of select="$scalars/InitAnnSepAcctNetInt_Guaranteed"/>
                   net)
                 </fo:block>
               </fo:table-cell>
-              <fo:table-cell><fo:block/></fo:table-cell>
-              <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
+              <fo:table-cell>
+                <fo:block/>
+              </fo:table-cell>
+              <fo:table-cell number-columns-spanned="2">
+                <xsl:call-template name="header-cell-with-border"/>
+                <fo:block text-align="center">
+                  <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_CurrentZero"/>
+                  Hypothetical Gross
+                </fo:block>
                 <fo:block text-align="center">
                   Return
                   (<xsl:value-of select="$scalars/InitAnnSepAcctNetInt_CurrentZero"/>
                   net)
                 </fo:block>
               </fo:table-cell>
-              <fo:table-cell><fo:block/></fo:table-cell>
-              <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
+              <fo:table-cell>
+                <fo:block/>
+              </fo:table-cell>
+              <fo:table-cell number-columns-spanned="2">
+                <xsl:call-template name="header-cell-with-border"/>
+                <fo:block text-align="center">
+                  <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_Current"/>
+                  Hypothetical Gross
+                </fo:block>
                 <fo:block text-align="center">
                   Return
                   (<xsl:value-of select="$scalars/InitAnnSepAcctNetInt_Current"/>
@@ -1051,79 +1017,72 @@
             <xsl:with-param name="columns" select="$columns"/>
           </xsl:call-template>
 
-          <!--
-          Do not use 'generic-table-header' template. Instead customize
-          table headers.
-          The special feature requested: the cell 'Net Crediting Rate' to be
-          nicely centered over two cells.
-          -->
           <fo:table-header>
             <xsl:choose>
               <xsl:when test="$is_composite">
-                <fo:table-row>
-                  <xsl:element name="fo:table-cell" use-attribute-sets="cell-single">
-                    <fo:block>Policy</fo:block>
-                    <fo:block>Year</fo:block>
-                  </xsl:element>
-                  <xsl:element name="fo:table-cell" use-attribute-sets="cell-single">
-                    <fo:block/>
-                  </xsl:element>
-                  <xsl:element name="fo:table-cell" use-attribute-sets="cell-single">
-                    <fo:block>Withdrawal</fo:block>
-                  </xsl:element>
-                  <xsl:element name="fo:table-cell" use-attribute-sets="cell-single">
-                    <fo:block/>
-                  </xsl:element>
-                  <xsl:element name="fo:table-cell" use-attribute-sets="cell-single">
-                    <fo:block>Loan</fo:block>
-                  </xsl:element>
-                  <xsl:element name="fo:table-cell" use-attribute-sets="cell-single">
-                    <fo:block/>
-                  </xsl:element>
-                </fo:table-row>
+                <fo:table-header>
+                  <xsl:call-template name="generate-table-headers">
+                    <xsl:with-param name="columns" select="$columns"/>
+                  </xsl:call-template>
+                </fo:table-header>
               </xsl:when>
-              <xsl:otherwise>
+              <xsl:otherwise><!-- not($is_composite) -->
+                <!--
+                Do not use 'generic-table-header' template.
+                Instead customize table headers.
+                The special feature requested: the cell 'Net Crediting Rate'
+                to be nicely centered over two cells.
+                -->
                 <fo:table-row>
-                  <xsl:element name="fo:table-cell" use-attribute-sets="cell-span-2rows">
+                  <fo:table-cell number-rows-spanned="2">
+                    <xsl:call-template name="header-cell-with-border"/>
                     <fo:block>Policy</fo:block>
                     <fo:block>Year</fo:block>
-                  </xsl:element>
-                  <xsl:element name="fo:table-cell" use-attribute-sets="cell-span-2rows">
+                  </fo:table-cell>
+                  <fo:table-cell number-rows-spanned="2">
+                    <xsl:call-template name="header-cell-with-border"/>
                     <fo:block>End of</fo:block>
                     <fo:block>Year Age</fo:block>
-                  </xsl:element>
-                  <xsl:element name="fo:table-cell" use-attribute-sets="cell-span-2cols">
-                    <!-- this padding ensures the cell content is nicely centered -->
-                    <xsl:attribute name="padding-right">1.4em</xsl:attribute>
+                  </fo:table-cell>
+                  <!-- The 'padding-right' is to center the cell content -->
+                  <fo:table-cell number-columns-spanned="2" padding-right="1.4em">
+                    <xsl:call-template name="header-cell-with-border"/>
                     <fo:block>Net Crediting Rate</fo:block>
-                  </xsl:element>
-                  <xsl:element name="fo:table-cell" use-attribute-sets="cell-span-2rows">
+                  </fo:table-cell>
+                  <fo:table-cell number-rows-spanned="2">
+                    <xsl:call-template name="header-cell-with-border"/>
                     <fo:block>M&amp;E</fo:block>
-                  </xsl:element>
-                  <xsl:element name="fo:table-cell" use-attribute-sets="cell-span-2rows">
+                  </fo:table-cell>
+                  <fo:table-cell number-rows-spanned="2">
+                    <xsl:call-template name="header-cell-with-border"/>
                     <fo:block>Indiv</fo:block>
                     <fo:block>Pmt Mode</fo:block>
-                  </xsl:element>
-                  <xsl:element name="fo:table-cell" use-attribute-sets="cell-span-2rows">
+                  </fo:table-cell>
+                  <fo:table-cell number-rows-spanned="2">
+                    <xsl:call-template name="header-cell-with-border"/>
                     <fo:block>Corp</fo:block>
                     <fo:block>Pmt Mode</fo:block>
-                  </xsl:element>
-                  <xsl:element name="fo:table-cell" use-attribute-sets="cell-span-2rows">
+                  </fo:table-cell>
+                  <fo:table-cell number-rows-spanned="2">
+                    <xsl:call-template name="header-cell-with-border"/>
                     <fo:block>Assumed</fo:block>
                     <fo:block>Loan Interest</fo:block>
-                  </xsl:element>
-                  <xsl:element name="fo:table-cell" use-attribute-sets="cell-span-2rows">
+                  </fo:table-cell>
+                  <fo:table-cell number-rows-spanned="2">
+                    <xsl:call-template name="header-cell-with-border"/>
                     <fo:block>Flat Extra</fo:block>
                     <fo:block>Per 1,000</fo:block>
-                  </xsl:element>
+                  </fo:table-cell>
                 </fo:table-row>
                 <fo:table-row>
-                  <xsl:element name="fo:table-cell" use-attribute-sets="cell-single">
+                  <fo:table-cell>
+                    <xsl:call-template name="header-cell-with-border"/>
                     <fo:block>Sep Acct</fo:block>
-                  </xsl:element>
-                  <xsl:element name="fo:table-cell" use-attribute-sets="cell-single">
+                  </fo:table-cell>
+                  <fo:table-cell number-rows-spanned="2">
+                    <xsl:call-template name="header-cell-with-border"/>
                     <fo:block>Gen Acct</fo:block>
-                  </xsl:element>
+                  </fo:table-cell>
                 </fo:table-row>
               </xsl:otherwise>
             </xsl:choose>

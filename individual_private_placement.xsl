@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.55 2007-06-29 12:00:23 etarassov Exp $
+    $Id: individual_private_placement.xsl,v 1.56 2007-07-02 23:03:24 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -848,7 +848,8 @@
               <fo:table-cell number-columns-spanned="3">
                 <fo:block/>
               </fo:table-cell>
-              <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
+              <fo:table-cell number-columns-spanned="2">
+                <xsl:call-template name="header-cell-with-border"/>
                 <fo:block text-align="center">
                   <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_GuaranteedZero"/>
                   Gross / Net Rate
@@ -857,7 +858,8 @@
               <fo:table-cell number-columns-spanned="3">
                 <fo:block/>
               </fo:table-cell>
-              <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
+              <fo:table-cell number-columns-spanned="2">
+                <xsl:call-template name="header-cell-with-border"/>
                 <fo:block text-align="center">
                   <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_Guaranteed"/>
                   Gross / Net Rate
@@ -917,7 +919,8 @@
               <fo:table-cell number-columns-spanned="3">
                 <fo:block/>
               </fo:table-cell>
-              <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
+              <fo:table-cell number-columns-spanned="2">
+                <xsl:call-template name="header-cell-with-border"/>
                 <fo:block text-align="center">
                   <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_CurrentZero"/>
                   Gross / Net Rate
@@ -926,7 +929,8 @@
               <fo:table-cell number-columns-spanned="3">
                 <fo:block/>
               </fo:table-cell>
-              <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
+              <fo:table-cell number-columns-spanned="2">
+                <xsl:call-template name="header-cell-with-border"/>
                 <fo:block text-align="center">
                   <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_Current"/>
                   Gross / Net Rate
