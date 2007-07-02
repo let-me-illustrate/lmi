@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: offshore_private_placement.xsl,v 1.51 2007-06-29 12:00:23 etarassov Exp $
+    $Id: offshore_private_placement.xsl,v 1.52 2007-07-02 23:03:25 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -857,17 +857,20 @@
               <fo:table-cell number-columns-spanned="3">
                 <fo:block/>
               </fo:table-cell>
-              <fo:table-cell number-columns-spanned="5" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
-                <fo:block text-align="center">Using guaranteed charges</fo:block>
+              <fo:table-cell number-columns-spanned="5">
+                <xsl:call-template name="header-cell-with-border"/>
+                <fo:block text-align="center">
+                  Using guaranteed charges
+                </fo:block>
               </fo:table-cell>
-              <fo:table-cell><fo:block/></fo:table-cell>
-              <fo:table-cell number-columns-spanned="5" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
-                <fo:block text-align="center">Using current charges</fo:block>
-              </fo:table-cell>
-            </fo:table-row>
-            <fo:table-row>
-              <fo:table-cell padding="2pt">
+              <fo:table-cell>
                 <fo:block/>
+              </fo:table-cell>
+              <fo:table-cell number-columns-spanned="5">
+                <xsl:call-template name="header-cell-with-border"/>
+                <fo:block text-align="center">
+                  Using current charges
+                </fo:block>
               </fo:table-cell>
             </fo:table-row>
             <fo:table-row>
@@ -875,62 +878,56 @@
                 <fo:block/>
               </fo:table-cell>
               <fo:table-cell number-columns-spanned="2">
+                <xsl:call-template name="header-cell-with-border"/>
                 <fo:block text-align="center">
                   <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_GuaranteedZero"/>
                   Hypothetical Gross
                 </fo:block>
-              </fo:table-cell>
-              <fo:table-cell><fo:block/></fo:table-cell>
-              <fo:table-cell number-columns-spanned="2">
-                <fo:block text-align="center">
-                  <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_Guaranteed"/>
-                  Hypothetical Gross
-                </fo:block>
-              </fo:table-cell>
-              <fo:table-cell><fo:block/></fo:table-cell>
-              <fo:table-cell number-columns-spanned="2">
-                <fo:block text-align="center">
-                  <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_CurrentZero"/>
-                  Hypothetical Gross
-                </fo:block>
-              </fo:table-cell>
-              <fo:table-cell><fo:block/></fo:table-cell>
-              <fo:table-cell number-columns-spanned="2">
-                <fo:block text-align="center">
-                  <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_Current"/>
-                  Hypothetical Gross
-                </fo:block>
-              </fo:table-cell>
-            </fo:table-row>
-            <fo:table-row>
-              <fo:table-cell number-columns-spanned="3">
-                <fo:block/>
-              </fo:table-cell>
-              <fo:table-cell number-columns-spanned="2" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">
                   Return
                   (<xsl:value-of select="$scalars/InitAnnSepAcctNetInt_GuaranteedZero"/>
                   net)
                 </fo:block>
               </fo:table-cell>
-              <fo:table-cell><fo:block/></fo:table-cell>
-              <fo:table-cell number-columns-spanned="2" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
+              <fo:table-cell>
+                <fo:block/>
+              </fo:table-cell>
+              <fo:table-cell number-columns-spanned="2">
+                <xsl:call-template name="header-cell-with-border"/>
+                <fo:block text-align="center">
+                  <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_Guaranteed"/>
+                  Hypothetical Gross
+                </fo:block>
                 <fo:block text-align="center">
                   Return
                   (<xsl:value-of select="$scalars/InitAnnSepAcctNetInt_Guaranteed"/>
                   net)
                 </fo:block>
               </fo:table-cell>
-              <fo:table-cell><fo:block/></fo:table-cell>
-              <fo:table-cell number-columns-spanned="2" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
+              <fo:table-cell>
+                <fo:block/>
+              </fo:table-cell>
+              <fo:table-cell number-columns-spanned="2">
+                <xsl:call-template name="header-cell-with-border"/>
+                <fo:block text-align="center">
+                  <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_CurrentZero"/>
+                  Hypothetical Gross
+                </fo:block>
                 <fo:block text-align="center">
                   Return
                   (<xsl:value-of select="$scalars/InitAnnSepAcctNetInt_CurrentZero"/>
                   net)
                 </fo:block>
               </fo:table-cell>
-              <fo:table-cell><fo:block/></fo:table-cell>
-              <fo:table-cell number-columns-spanned="2" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
+              <fo:table-cell>
+                <fo:block/>
+              </fo:table-cell>
+              <fo:table-cell number-columns-spanned="2">
+                <xsl:call-template name="header-cell-with-border"/>
+                <fo:block text-align="center">
+                  <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_Current"/>
+                  Hypothetical Gross
+                </fo:block>
                 <fo:block text-align="center">
                   Return
                   (<xsl:value-of select="$scalars/InitAnnSepAcctNetInt_Current"/>
@@ -1101,8 +1098,12 @@
         </fo:block>
       </xsl:with-param>
       <xsl:with-param name="left-block">
-        <fo:block><xsl:value-of select="$scalars/InsCoName"/></fo:block>
-        <fo:block><xsl:value-of select="$scalars/InsCoAddr"/></fo:block>
+        <fo:block>
+          <xsl:value-of select="$scalars/InsCoName"/>
+        </fo:block>
+        <fo:block>
+          <xsl:value-of select="$scalars/InsCoAddr"/>
+        </fo:block>
       </xsl:with-param>
       <xsl:with-param name="center-block">
         <fo:block>

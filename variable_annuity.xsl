@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.45 2007-06-29 12:00:23 etarassov Exp $
+    $Id: variable_annuity.xsl,v 1.46 2007-07-02 23:03:25 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -768,8 +768,10 @@
             <xsl:call-template name="scalar-header">
               <xsl:with-param name="basis" select="NoBasis"/>
             </xsl:call-template>
-            <fo:block font-size="13.0pt" text-align="center" font-family="sans-serif" font-weight="bold" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="black" padding-before="2.5pt" padding-after="2.5pt">
-              SUPPLEMENTAL REPORT
+            <fo:block text-align="center" border-bottom="1pt solid black">
+              <fo:block padding="2.5pt 0" font="bold 13pt sans-serif">
+                SUPPLEMENTAL REPORT
+              </fo:block>
             </fo:block>
             <xsl:call-template name="dollar-units"/>
           </fo:static-content>
@@ -791,7 +793,7 @@
 
   <xsl:template name="standard-header">
     <xsl:param name="logo_only"/>
-    <fo:table table-layout="fixed" width="100%" padding-after="2.5pt" font-weight="bold" font-size="13.0pt" font-family="sans-serif">
+    <fo:table table-layout="fixed" padding-after="2.5pt" font="bold 13.0pt sans-serif">
       <fo:table-column column-width="50mm"/>
       <fo:table-column column-width="90mm"/>
       <fo:table-column column-width="50mm"/>
@@ -816,7 +818,7 @@
         <xsl:value-of select="$scalars/PolicyMktgName"/>
         <fo:inline vertical-align="super" font-size="7.0pt">SM</fo:inline>
       </fo:block>
-      <fo:block font-size="11.0pt" text-align="center" font-family="sans-serif" font-weight="normal" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="black" padding-after="8.0pt">
+      <fo:block font="normal 11pt sans-serif" text-align="center" border-bottom="1pt solid black" padding-after="8.0pt">
         <xsl:value-of select="$scalars/PolicyLegalName"/>
       </fo:block>
     </xsl:if>
@@ -918,7 +920,7 @@
     <fo:block font-size="13.0pt" text-align="center" font-family="sans-serif" font-weight="bold" padding-top=".5em">
       HYPOTHETICAL ILLUSTRATION
     </fo:block>
-    <fo:block font-size="11.0pt" text-align="center" font-family="sans-serif" font-weight="bold" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="black" padding-after="2.5pt">
+    <fo:block font="bold 11.0pt sans-serif" text-align="center" border-bottom="1pt solid black" padding-after="2.5pt">
       Accumulation Phase -
       <xsl:choose>
         <xsl:when test="($basis='Current') or ($basis='CurrentZero')">
