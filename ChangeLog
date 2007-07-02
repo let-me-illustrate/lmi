@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.846 2007-06-30 13:29:20 chicares Exp $
+// $Id: ChangeLog,v 1.847 2007-07-02 23:03:24 etarassov Exp $
 
 MAINTENANCE
 
@@ -12968,4 +12968,14 @@ documented caching benefit for other targets' timings.
 
   group_values.cpp
 Guard pointer dereferencing.
+
+20070702T2303Z <etarassov@tt-solutions.com> [1226]
+
+  fo_common.xsl
+  group_private_placement.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+  offshore_private_placement.xsl
+  variable_annuity.xsl
+Use 'header-cell' template to specify common header cell formatting.
 
