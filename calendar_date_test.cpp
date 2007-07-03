@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date_test.cpp,v 1.16 2007-07-03 18:48:22 chicares Exp $
+// $Id: calendar_date_test.cpp,v 1.17 2007-07-03 19:42:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,6 +28,7 @@
 
 #include "calendar_date.hpp"
 
+#include "alert.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
 
@@ -43,6 +44,7 @@ struct CalendarDateTest
     static void Test()
         {
         TestFundamentals();
+        TestAlgorithm199Bounds();
         TestYMDBounds();
         TestYmdToJdnAndJdnToYmd();
         TestLeapYear();
@@ -56,6 +58,7 @@ struct CalendarDateTest
         }
 
     static void TestFundamentals();
+    static void TestAlgorithm199Bounds();
     static void TestYMDBounds();
     static void TestYmdToJdnAndJdnToYmd();
     static void TestLeapYear();
@@ -120,6 +123,40 @@ void CalendarDateTest::TestFundamentals()
     // Assign from ymd_t.
     date3 = ymd_t(17520914);
     BOOST_TEST_EQUAL(gregorian_epoch(), date3);
+}
+
+/// Verify an upper and a lower bound for ACM Algorithm 199. The upper
+/// bound tested here is arbitrary but seems ample. The lower bound of
+/// 0000-03-01 is strict: see, e.g., news:331C2530.5944@primenet.com
+///   http://groups.google.com/group/alt.comp.lang.borland-delphi/msg/037f08a18f157636
+/// but ignore that article's suggestion that 4000 is not a leap year,
+/// which does not conform to ISO 8601:2004 3.2.1, second sentence.
+
+void CalendarDateTest::TestAlgorithm199Bounds()
+{
+    for
+        (int j =  calendar_date::min_verified_jdn
+        ;    j <= calendar_date::max_verified_jdn
+        ;++j
+        )
+        {
+        calendar_date c = calendar_date(jdn_t(j));
+        if
+            (   j != YmdToJdn(ymd_t(JdnToYmd(jdn_t(j)))).value()
+            ||  !(0 < c.month() && c.month() < 13)
+            ||  !(0 < c.day()   && c.day()   < 32)
+            )
+            {
+            fatal_error()
+                << "Algorithm 199 failed for jdn "
+                << j
+                << ", which it would translate to gregorian date '"
+                << c.str()
+                << "'."
+                << LMI_FLUSH
+                ;
+            }
+        }
 }
 
 void CalendarDateTest::TestYMDBounds()
@@ -192,6 +229,7 @@ void CalendarDateTest::TestLeapYear()
     BOOST_TEST( calendar_date(2000,  1,  1).is_leap_year());
     BOOST_TEST(!calendar_date(2003,  1,  1).is_leap_year());
     BOOST_TEST( calendar_date(2004,  1,  1).is_leap_year());
+    BOOST_TEST( calendar_date(4000,  1,  1).is_leap_year());
 }
 
 void CalendarDateTest::TestIncrementing()
@@ -594,6 +632,9 @@ void CalendarDateTest::TestIo()
 {
     BOOST_TEST_EQUAL("1752-09-14", gregorian_epoch().str());
     BOOST_TEST_EQUAL("9999-12-31", last_yyyy_date().str());
+
+    jdn_t min_jdn(calendar_date::min_verified_jdn);
+    BOOST_TEST_EQUAL("0000-03-01", calendar_date(min_jdn).str());
 
     BOOST_TEST_EQUAL("1752-09-14", calendar_date(1752,  9, 14).str());
     BOOST_TEST_EQUAL("2001-01-01", calendar_date(2001,  1,  1).str());
