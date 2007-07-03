@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.74 2007-06-30 13:29:20 chicares Exp $
+// $Id: group_values.cpp,v 1.75 2007-07-03 00:21:55 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -127,7 +127,6 @@ census_run_result run_census_in_series::operator()
                 continue;
                 }
 /*
-// TODO ?? Rethink. Old code set debug filename to base.debug .
 // TODO ?? Why use class IllusVal at all? What's the advantage over
 // the account-value class?
             IllusVal IV(serialized_file_path(file, j, "MISTAKE").string());
