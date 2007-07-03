@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.52 2007-07-03 11:24:06 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.53 2007-07-03 11:29:31 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -802,7 +802,6 @@
         <!-- Numeric Summary (only for new business)-->
         <!-- Body page -->
         <fo:page-sequence master-reference="numeric-summary">
-
           <!-- Define the contents of the header. -->
           <fo:static-content flow-name="xsl-region-before">
             <fo:block text-align="left">
@@ -810,7 +809,7 @@
             </fo:block>
             <xsl:call-template name="standardheader"/>
             <fo:block text-align="center" font-size="10.0pt" space-before="5.0pt">
-              <xsl:text>Numeric Summary</xsl:text>
+              Numeric Summary
             </fo:block>
             <xsl:call-template name="dollar-units"/>
           </fo:static-content>
@@ -833,7 +832,7 @@
           </fo:block>
           <xsl:call-template name="standardheader"/>
           <fo:block text-align="center" font-size="10.0pt" space-before="5.0pt">
-            <xsl:text>Tabular Detail</xsl:text>
+            Tabular Detail
           </fo:block>
           <xsl:call-template name="dollar-units"/>
         </fo:static-content>
@@ -841,11 +840,18 @@
         <!-- Define the contents of the footer. -->
         <xsl:call-template name="standardfooter">
           <xsl:with-param name="disclaimer">
-            The Non-Guaranteed Values depicted above reflect interest rates described in the Tabular Detail, and current monthly charges. These values
-            are not guaranteed and depend upon company experience. Column headings indicate whether benefits and values are guaranteed or not guaranteed. This
-            illustration assumes that non-guaranteed elements will continue unchanged for all years shown. This is not likely to occur and actual results may be
-            more or less favorable than shown. Non-guaranteed elements are subject to change by the insurer. Factors that may affect future policy performance
-            include the company's expectations for future mortality, investments, persistency, profits and expenses.
+            The Non-Guaranteed Values depicted above reflect interest rates
+            described in the Tabular Detail, and current monthly charges.
+            These values are not guaranteed and depend upon company experience.
+            Column headings indicate whether benefits and values are guaranteed
+            or not guaranteed. This illustration assumes
+            that non-guaranteed elements will continue unchanged
+            for all years shown. This is not likely to occur
+            and actual results may be more or less favorable than shown.
+            Non-guaranteed elements are subject to change by the insurer.
+            Factors that may affect future policy performance include
+            the company's expectations for future mortality, investments,
+            persistency, profits and expenses.
           </xsl:with-param>
         </xsl:call-template>
 
@@ -889,10 +895,10 @@
           </fo:block>
         </fo:flow>
       </fo:page-sequence>
+
       <!-- Tabular Detail (Report 2)-->
       <!-- Body page -->
       <fo:page-sequence master-reference="tabular-detail-report2">
-
         <!-- Define the contents of the header. -->
         <fo:static-content flow-name="xsl-region-before">
           <fo:block text-align="left">
@@ -900,7 +906,7 @@
           </fo:block>
           <xsl:call-template name="standardheader"/>
           <fo:block text-align="center" font-size="10.0pt" space-before="5.0pt">
-            <xsl:text>Tabular Detail, continued</xsl:text>
+            Tabular Detail, continued
           </fo:block>
           <xsl:call-template name="dollar-units"/>
         </fo:static-content>
@@ -908,11 +914,18 @@
         <!-- Define the contents of the footer. -->
         <xsl:call-template name="standardfooter">
           <xsl:with-param name="disclaimer">
-            The Non-Guaranteed Values depicted above reflect interest rates described in the Tabular Detail, and current monthly charges. These values
-            are not guaranteed and depend upon company experience. Column headings indicate whether benefits and values are guaranteed or not guaranteed. This
-            illustration assumes that non-guaranteed elements will continue unchanged for all years shown. This is not likely to occur and actual results may be
-            more or less favorable than shown. Non-guaranteed elements are subject to change by the insurer. Factors that may affect future policy performance
-            include the company's expectations for future mortality, investments, persistency, profits and expenses.
+            The Non-Guaranteed Values depicted above reflect interest rates
+            described in the Tabular Detail, and current monthly charges.
+            These values are not guaranteed and depend upon company experience.
+            Column headings indicate whether benefits and values
+            are guaranteed or not guaranteed. This illustration assumes
+            that non-guaranteed elements will continue unchanged
+            for all years shown. This is not likely to occur
+            and actual results may be more or less favorable than shown.
+            Non-guaranteed elements are subject to change by the insurer.
+            Factors that may affect future policy performance include
+            the company's expectations for future mortality, investments,
+            persistency, profits and expenses.
           </xsl:with-param>
         </xsl:call-template>
 
@@ -962,7 +975,6 @@
       <!-- Body page -->
       <xsl:if test="$has_supplemental_report">
         <fo:page-sequence master-reference="supplemental-report">
-
           <!-- Define the contents of the header. -->
           <fo:static-content flow-name="xsl-region-before">
             <fo:block text-align="left">
