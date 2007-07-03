@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.55 2007-07-03 13:58:44 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.56 2007-07-03 23:19:39 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -1706,57 +1706,19 @@
   </xsl:template>
 
   <xsl:template name="set_single_premium">
-    <xsl:choose>
-      <xsl:when test="string-length($scalars/PolicyMktgName) &gt; 5">
-        <xsl:choose>
-          <xsl:when test="substring($scalars/PolicyLegalName, 1, 6) !='Single'">
-            <xsl:text>0</xsl:text>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:text>1</xsl:text>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>0</xsl:text>
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:variable name="A" select="string-length($scalars/PolicyMktgName) &gt; 5"/>
+    <xsl:variable name="B" select="substring($scalars/PolicyLegalName, 1, 6) = 'Single'"/>
+    <xsl:value-of select="number($A and $B)"/>
   </xsl:template>
 
   <xsl:template name="set_modified_single_premium">
-    <xsl:choose>
-      <xsl:when test="string-length($scalars/PolicyMktgName) &gt; 5">
-        <xsl:choose>
-          <xsl:when test="substring($scalars/PolicyLegalName, 1, 6) !='Single'">
-            <xsl:text>0</xsl:text>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:choose>
-              <xsl:when test="$scalars/StatePostalAbbrev='MA'">
-                <xsl:text>1</xsl:text>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:text>0</xsl:text>
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>0</xsl:text>
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:variable name="A" select="string-length($scalars/PolicyMktgName) &gt; 5"/>
+    <xsl:variable name="B" select="substring($scalars/PolicyLegalName, 1, 6) = 'Single'"/>
+    <xsl:variable name="C" select="$scalars/StatePostalAbbrev = 'MA'"/>
+    <xsl:value-of select="number($A and $B and $C)"/>
   </xsl:template>
 
   <xsl:template name="set_group_experience_rating">
-    <xsl:choose>
-      <xsl:when test="$scalars/PolicyLegalName='Group Flexible Premium Adjustable Life Insurance Policy'">
-        <xsl:text>1</xsl:text>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>0</xsl:text>
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:value-of select="number($scalars/PolicyLegalName='Group Flexible Premium Adjustable Life Insurance Policy')"/>
   </xsl:template>
-
 </xsl:stylesheet>
