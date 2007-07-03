@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date.hpp,v 1.10 2007-07-03 18:48:22 chicares Exp $
+// $Id: calendar_date.hpp,v 1.11 2007-07-03 19:42:36 chicares Exp $
 
 #ifndef calendar_date_hpp
 #define calendar_date_hpp
@@ -132,6 +132,8 @@ class LMI_SO calendar_date
     enum
         {gregorian_epoch_jdn = 2361222
         ,last_yyyy_date_jdn  = 5373484
+        ,min_verified_jdn    = 1721120
+        ,max_verified_jdn    = 9999999
         };
 
     calendar_date();
