@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date.hpp,v 1.11 2007-07-03 19:42:36 chicares Exp $
+// $Id: calendar_date.hpp,v 1.12 2007-07-03 20:33:47 chicares Exp $
 
 #ifndef calendar_date_hpp
 #define calendar_date_hpp
@@ -164,6 +164,8 @@ class LMI_SO calendar_date
     bool is_leap_year() const;
 
     std::string str() const;
+
+    static bool is_verified_jdn(int);
 
   private:
     void assign_from_gregorian(int year, int month, int day);
