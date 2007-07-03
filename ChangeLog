@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.855 2007-07-03 20:33:47 chicares Exp $
+// $Id: ChangeLog,v 1.856 2007-07-03 23:19:38 etarassov Exp $
 
 MAINTENANCE
 
@@ -13035,4 +13035,9 @@ Demonstrate a defect.
   calendar_date.cpp
   calendar_date.hpp
 Remove the defect noted 20070703T2032Z.
+
+20070703T2319Z <etarassov@tt-solutions.com> [1225]
+
+  illustration_reg.xsl
+Reformat helper templates.
 
