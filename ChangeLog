@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.848 2007-07-03 00:21:55 chicares Exp $
+// $Id: ChangeLog,v 1.849 2007-07-03 10:38:19 etarassov Exp $
 
 MAINTENANCE
 
@@ -12986,4 +12986,9 @@ Remove an obsolete defect marker. If the monthly-values filename were
 wrong, it'd be wrong for all censuses because the other call to
 SetDebugFilename() in this file is identical, and that would have been
 noticed since 2005-04 when the marker was added.
+
+20070703T1038Z <etarassov@tt-solutions.com> [1226]
+
+  illustration_reg.xsl
+Reformat 'narrative-summary'.
 
