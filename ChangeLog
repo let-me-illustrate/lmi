@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.854 2007-07-03 13:58:44 etarassov Exp $
+// $Id: ChangeLog,v 1.855 2007-07-03 20:33:47 chicares Exp $
 
 MAINTENANCE
 
@@ -13011,4 +13011,28 @@ Reformat 'supplemental-report'.
 
   illustration_reg.xsl
 Reformat 'numeric-summary-report'.
+
+20070703T1848Z <chicares@cox.net> [1225]
+
+  calendar_date.cpp
+  calendar_date.hpp
+  calendar_date_test.cpp
+Refactor.
+
+20070703T1942Z <chicares@cox.net> [1225]
+
+  calendar_date.hpp
+  calendar_date_test.cpp
+Prove certain bounds for ACM Algorithm 199.
+
+20070703T2032Z <chicares@cox.net> [1225]
+
+  calendar_date_test.cpp
+Demonstrate a defect.
+
+20070703T2033Z <chicares@cox.net> [1225]
+
+  calendar_date.cpp
+  calendar_date.hpp
+Remove the defect noted 20070703T2032Z.
 

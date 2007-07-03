@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date.cpp,v 1.17 2007-07-03 18:48:22 chicares Exp $
+// $Id: calendar_date.cpp,v 1.18 2007-07-03 20:33:46 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -49,6 +49,7 @@ namespace boost
 #include <algorithm> // std::max(), std::min()
 #include <ctime>
 #include <iomanip>
+#include <ios>
 #include <istream>
 #include <iterator>
 #include <locale>
@@ -344,6 +345,11 @@ void calendar_date::cache_gregorian_elements() const
     JdnToGregorian(jdn_, cached_year_, cached_month_, cached_day_);
 }
 
+bool calendar_date::is_verified_jdn(int z)
+{
+    return min_verified_jdn <= z && z <= max_verified_jdn;
+}
+
 std::ostream& operator<<(std::ostream& os, calendar_date const& date)
 {
     return os << date.julian_day_number();
@@ -351,9 +357,19 @@ std::ostream& operator<<(std::ostream& os, calendar_date const& date)
 
 std::istream& operator>>(std::istream& is, calendar_date& date)
 {
-    int z;
+    int z = 0;
     is >> z;
-    date.julian_day_number(z);
+    if(is)
+        {
+        if(calendar_date::is_verified_jdn(z))
+            {
+            date.julian_day_number(z);
+            }
+        else
+            {
+            is.setstate(std::ios_base::failbit);
+            }
+        }
     return is;
 }
 
