@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.54 2007-07-03 13:40:20 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.55 2007-07-03 13:58:44 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -1161,7 +1161,7 @@
                 <xsl:variable name="contracts" select="$has_franchise + $has_polnumber"/>
                 <xsl:if test="$contracts">
                   <xsl:variable name="number_length" select="floor(30 div $contracts)"/>
-                  <fo:block text-align="left">
+                  <fo:block>
                     <xsl:if test="$has_franchise">
                       Master contract:
                       <xsl:call-template name="limitstring">
@@ -1524,103 +1524,119 @@
           </fo:table-body>
         </fo:table>
       </fo:block>
-      <xsl:choose>
-        <xsl:when test="$is_composite">
-          <fo:block text-align="left" font-size="9.0pt" padding-top="2em">
-            <xsl:text>The year of policy lapse on a guaranteed, midpoint and current basis is not depicted in the above table of values for this composite illustration because it is not applicable on a case basis.</xsl:text>
-          </fo:block>
-        </xsl:when>
-        <xsl:when test="$scalars/LapseYear_Guaranteed &lt; $scalars/MaxDuration">
-          <fo:block text-align="left" font-size="9.0pt" padding-top="2em">
-            <xsl:text>Additional premium will be required in year </xsl:text>
-            <xsl:value-of select="$scalars/LapseYear_Guaranteed+1"/>
-            <xsl:text> or contract will lapse based on guaranteed monthly charges and interest rate.</xsl:text>
-          </fo:block>
-          <xsl:if test="$scalars/LapseYear_Midpoint &lt; $scalars/MaxDuration">
-            <fo:block text-align="left" font-size="9.0pt">
-              <xsl:text>Additional premium will be required in year </xsl:text>
-              <xsl:value-of select="$scalars/LapseYear_Midpoint+1"/>
-              <xsl:text> or contract will lapse based on midpoint monthly charges and interest rate.</xsl:text>
+
+      <fo:block text-align="left" font-size="9.0pt">
+        <xsl:choose>
+          <xsl:when test="$is_composite">
+            <fo:block padding-top="2em">
+              The year of policy lapse on a guaranteed, midpoint
+              and current basis is not depicted in the above table of values
+              for this composite illustration because it is not applicable
+              on a case basis.
             </fo:block>
-          </xsl:if>
-          <xsl:if test="$scalars/LapseYear_Current &lt; $scalars/MaxDuration">
-            <fo:block text-align="left" font-size="9.0pt">
-              <xsl:text>Additional premium will be required in year </xsl:text>
-              <xsl:value-of select="$scalars/LapseYear_Current+1"/>
-              <xsl:text> or contract will lapse based on current monthly charges and interest rate.</xsl:text>
+          </xsl:when>
+          <xsl:when test="$scalars/LapseYear_Guaranteed &lt; $scalars/MaxDuration">
+            <fo:block padding-top="2em">
+              Additional premium will be required
+              in year <xsl:value-of select="$scalars/LapseYear_Guaranteed+1"/>
+              or contract will lapse based on guaranteed monthly charges
+              and interest rate.
             </fo:block>
-          </xsl:if>
-        </xsl:when>
-      </xsl:choose>
-      <xsl:if test="$scalars/IsMec='1'">
-        <fo:block text-align="left" font-size="9.0pt" padding-top="1em">
-          <xsl:text>IMPORTANT TAX DISCLOSURE: This is a Modified Endowment Contract. Please refer to the Narrative Summary for additional information.</xsl:text>
-        </fo:block>
-      </xsl:if>
-      <fo:block text-align="center" font-size="9.0pt" padding-top="2em">
-        <xsl:text>Certification Statements</xsl:text>
-      </fo:block>
-      <fo:block text-align="left" font-size="9.0pt" padding-top="1em">
-        <xsl:text>CONTRACT OWNER / APPLICANT</xsl:text>
-      </fo:block>
-      <xsl:if test="$scalars/InterestDisclaimer!=''">
-        <fo:block text-align="left" font-size="9.0pt" padding-bottom="1em">
-          <xsl:text>I understand that at the present time higher current interest rates are credited for policies with case premiums in the amount of </xsl:text>
-          <xsl:value-of select="$scalars/InterestDisclaimer"/>
-        </fo:block>
-      </xsl:if>
-      <xsl:choose>
-        <xsl:when test="$scalars/StatePostalAbbrev='IL'">
-          <fo:block text-align="left" font-size="9.0pt">
-            <xsl:text>I have received a copy of this illustration and understand that this illustration assumes that the currently illustrated non-guaranteed elements will continue unchanged for all years shown. This is not likely to occur, and actual results may be more or less favorable than those shown.</xsl:text>
-          </fo:block>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:choose>
-            <xsl:when test="$scalars/StatePostalAbbrev='TX'">
-              <fo:block text-align="left" font-size="9.0pt">
-                <xsl:text>A copy of this illustration has been provided to the Applicant/Policyowner. </xsl:text>
+            <xsl:if test="$scalars/LapseYear_Midpoint &lt; $scalars/MaxDuration">
+              <fo:block padding-top="2em">
+                Additional premium will be required
+                in year <xsl:value-of select="$scalars/LapseYear_Midpoint+1"/>
+                or contract will lapse based on midpoint monthly charges
+                and interest rate.
               </fo:block>
+            </xsl:if>
+            <xsl:if test="$scalars/LapseYear_Current &lt; $scalars/MaxDuration">
+              <fo:block>
+                Additional premium will be required
+                in year <xsl:value-of select="$scalars/LapseYear_Current+1"/>
+                or contract will lapse based on current monthly charges
+                and interest rate.
+              </fo:block>
+            </xsl:if>
+          </xsl:when>
+        </xsl:choose>
+        <xsl:if test="$scalars/IsMec='1'">
+          <fo:block padding-top="1em">
+            IMPORTANT TAX DISCLOSURE: This is a Modified Endowment Contract.
+            Please refer to the Narrative Summary for additional information.
+          </fo:block>
+        </xsl:if>
+        <fo:block padding-top="2em">
+          Certification Statements
+        </fo:block>
+        <fo:block padding-top="1em">
+          CONTRACT OWNER / APPLICANT
+        </fo:block>
+        <xsl:if test="$scalars/InterestDisclaimer!=''">
+          <fo:block padding-bottom="1em">
+            I understand that at the present time higher current interest rates
+            are credited for policies with case premiums in the amount
+            of <xsl:value-of select="$scalars/InterestDisclaimer"/>
+          </fo:block>
+        </xsl:if>
+        <fo:block padding-bottom="1em">
+          <xsl:choose>
+            <xsl:when test="$scalars/StatePostalAbbrev='IL'">
+              I have received a copy of this illustration and understand
+              that this illustration assumes that the currently illustrated
+              non-guaranteed elements will continue unchanged
+              for all years shown. This is not likely to occur,
+              and actual results may be more or less favorable than those shown.
+            </xsl:when>
+            <xsl:when test="$scalars/StatePostalAbbrev='TX'">
+              A copy of this illustration has been provided
+              to the Applicant/Policyowner.
             </xsl:when>
             <xsl:otherwise>
-              <fo:block text-align="left" font-size="9.0pt">
-                <xsl:text>I have received a copy of this illustration, and I understand that any non-guaranteed elements illustrated are subject to change and could be either higher or lower.  Additionally, I have been informed by my agent that these values are not guaranteed.</xsl:text>
-              </fo:block>
+              I have received a copy of this illustration, and I understand
+              that any non-guaranteed elements illustrated are subject
+              to change and could be either higher or lower. Additionally,
+              I have been informed by my agent that these values
+              are not guaranteed.
             </xsl:otherwise>
           </xsl:choose>
-        </xsl:otherwise>
-      </xsl:choose>
-      <fo:block text-align="left" font-size="9.0pt" text-decoration="overline" padding-top="2em">
-        CONTRACT OWNER OR APPLICANT SIGNATURE &nbsp;&nbsp;&nbsp;
-        <fo:inline text-decoration="no-overline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</fo:inline>DATE &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      </fo:block>
-      <fo:block text-align="left" font-size="9.0pt" padding-top="2em">
-        <xsl:text>AGENT / AUTHORIZED REPRESENTATIVE</xsl:text>
-      </fo:block>
-      <xsl:choose>
-        <xsl:when test="$scalars/StatePostalAbbrev='IL'">
-          <fo:block text-align="left" font-size="9.0pt">
-            <xsl:text>I have informed the applicant or policyowner that this illustration assumes that the currently illustrated non-guaranted elements will continue unchanged for all years shown. This is not likely to occur, and actual results may be more or less favorable than those shown.</xsl:text>
-          </fo:block>
-        </xsl:when>
-        <xsl:otherwise>
+        </fo:block>
+        <fo:block text-decoration="overline" padding-top="2em">
+          CONTRACT OWNER OR APPLICANT SIGNATURE &nbsp;&nbsp;&nbsp;
+          <fo:inline text-decoration="no-overline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</fo:inline>DATE
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </fo:block>
+        <fo:block padding-top="2em">
+          AGENT / AUTHORIZED REPRESENTATIVE
+        </fo:block>
+        <fo:block padding-bottom="1em">
           <xsl:choose>
+            <xsl:when test="$scalars/StatePostalAbbrev='IL'">
+              I have informed the applicant or policyowner
+              that this illustration assumes that the currently illustrated
+              non-guaranted elements will continue unchanged
+              for all years shown. This is not likely to occur,
+              and actual results may be more or less favorable than those shown.
+            </xsl:when>
             <xsl:when test="$scalars/StatePostalAbbrev='TX'">
-              <fo:block text-align="left" font-size="9.0pt">
-                <xsl:text>A copy of this illustration has been provided to the Applicant/Policyowner.</xsl:text>
-              </fo:block>
+              A copy of this illustration has been provided
+              to the Applicant/Policyowner.
             </xsl:when>
             <xsl:otherwise>
-              <fo:block text-align="left" font-size="9.0pt">
-                <xsl:text>I certify that this illustration has been presented to the applicant, and that I have explained that any non-guaranteed elements illustrated are subject to change.  I have made no statements that are inconsistent with the illustration.</xsl:text>
-              </fo:block>
+              I certify that this illustration has been presented
+              to the applicant, and that I have explained
+              that any non-guaranteed elements illustrated
+              are subject to change. I have made no statements
+              that are inconsistent with the illustration.
             </xsl:otherwise>
           </xsl:choose>
-        </xsl:otherwise>
-      </xsl:choose>
-      <fo:block text-align="left" font-size="9.0pt" text-decoration="overline" padding-top="2em">
-        AGENT OR AUTHORIZED REPRESENTATIVE &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <fo:inline text-decoration="no-overline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</fo:inline>DATE &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </fo:block>
+        <fo:block text-decoration="overline" padding-top="2em">
+          AGENT OR AUTHORIZED REPRESENTATIVE
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <fo:inline text-decoration="no-overline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</fo:inline>DATE
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </fo:block>
       </fo:block>
     </fo:flow>
   </xsl:template>
