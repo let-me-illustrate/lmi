@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date_test.cpp,v 1.15 2007-01-27 00:00:51 wboutin Exp $
+// $Id: calendar_date_test.cpp,v 1.16 2007-07-03 18:48:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -592,6 +592,9 @@ void CalendarDateTest::TestBirthdateLimitsExhaustively(bool anb)
 
 void CalendarDateTest::TestIo()
 {
+    BOOST_TEST_EQUAL("1752-09-14", gregorian_epoch().str());
+    BOOST_TEST_EQUAL("9999-12-31", last_yyyy_date().str());
+
     BOOST_TEST_EQUAL("1752-09-14", calendar_date(1752,  9, 14).str());
     BOOST_TEST_EQUAL("2001-01-01", calendar_date(2001,  1,  1).str());
 
