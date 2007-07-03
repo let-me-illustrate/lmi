@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date_test.cpp,v 1.17 2007-07-03 19:42:37 chicares Exp $
+// $Id: calendar_date_test.cpp,v 1.18 2007-07-03 20:32:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -639,10 +639,30 @@ void CalendarDateTest::TestIo()
     BOOST_TEST_EQUAL("1752-09-14", calendar_date(1752,  9, 14).str());
     BOOST_TEST_EQUAL("2001-01-01", calendar_date(2001,  1,  1).str());
 
-    calendar_date z;
+    calendar_date z(1956, 1, 13);
     std::stringstream ss;
+
+    ss >> z;
+    BOOST_TEST( ss.eof ());
+    BOOST_TEST( ss.fail());
+    BOOST_TEST(!ss.bad ());
+    BOOST_TEST_EQUAL(calendar_date(1956, 1, 13), z);
+
+    ss.clear();
+    ss.str("0");
+    ss >> z;
+    BOOST_TEST( ss.eof ());
+    BOOST_TEST( ss.fail());
+    BOOST_TEST(!ss.bad ());
+    BOOST_TEST_EQUAL(calendar_date(1956, 1, 13), z);
+
+    ss.clear();
+    ss.str("");
     ss << calendar_date(1752, 9, 14);
     ss >> z;
+    BOOST_TEST( ss.eof ());
+    BOOST_TEST(!ss.fail());
+    BOOST_TEST(!ss.bad ());
     BOOST_TEST_EQUAL(gregorian_epoch(), z);
 
     // Of course, a different locale might use different strings.
