@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date.cpp,v 1.16 2007-03-09 16:27:23 chicares Exp $
+// $Id: calendar_date.cpp,v 1.17 2007-07-03 18:48:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -57,8 +57,6 @@ namespace boost
 
 namespace
 {
-    int const gregorian_epoch_jdn = 2361222;
-
     std::string format_yyyy_mm_dd_with_hyphens(int year, int month, int day)
     {
         std::ostringstream oss;
@@ -534,7 +532,7 @@ namespace
 /// Details of iterative root finding.
 ///
 /// A priori limits are set to the generally-useful range
-///   [gregorian_epoch(), last_yyyy_date()]
+///   [gregorian_epoch_jdn, last_yyyy_date_jdn]
 /// augmented by 366 days on each end in order to ensure that they
 /// bracket a root. The number 366 is chosen on the assumption that
 /// no plausible age-nearest-birthday definition can skew results
@@ -572,8 +570,8 @@ class birthdate_limit
         ,limit_age_        (limit_age)
         ,use_anb_          (use_anb)
         ,bias_             (bias)
-        ,a_priori_minimum_ (gregorian_epoch().julian_day_number())
-        ,a_priori_maximum_ (last_yyyy_date ().julian_day_number())
+        ,a_priori_minimum_ (calendar_date::gregorian_epoch_jdn)
+        ,a_priori_maximum_ (calendar_date::last_yyyy_date_jdn)
         {
         if(bias_lower == bias_)
             {
@@ -669,13 +667,13 @@ std::string month_name(int month)
 
 calendar_date const& gregorian_epoch()
 {
-    static calendar_date const z((jdn_t(gregorian_epoch_jdn)));
+    static calendar_date const z((jdn_t(calendar_date::gregorian_epoch_jdn)));
     return z;
 }
 
 calendar_date const& last_yyyy_date()
 {
-    static calendar_date const z(9999, 12, 31);
+    static calendar_date const z((jdn_t(calendar_date::last_yyyy_date_jdn)));
     return z;
 }
 
