@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.51 2007-07-03 10:38:19 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.52 2007-07-03 11:24:06 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -586,121 +586,218 @@
         <!-- Column Headings and Key Terms Body  -->
         <fo:flow flow-name="xsl-region-body">
           <fo:block text-align="center" font-size="10.0pt" padding-top="1em">
-            <xsl:text>Column Headings and Key Terms Used in This Illustration</xsl:text>
+            Column Headings and Key Terms Used in This Illustration
           </fo:block>
           <fo:block text-align="left" font-size="9pt" font-family="sans-serif" padding-top="1em">
-            <fo:block font-weight="bold">
-              <xsl:value-of select="$scalars/AvName"/>
-              <!-- Single Premium Logic -->
-              <xsl:choose>
-                <xsl:when test="$SinglePremium!='1'">
-                   Value: <fo:inline font-weight="normal">The accumulation at interest of the net premiums paid, less any withdrawals, less any monthly charges deducted.</fo:inline>
-                </xsl:when>
-                <xsl:otherwise>
-                   Value: <fo:inline font-weight="normal">The accumulation at interest of the net premiums paid, less any monthly charges deducted.</fo:inline>
-                </xsl:otherwise>
-              </xsl:choose>
+            <fo:block>
+              <fo:inline font-weight="bold">
+                <xsl:value-of select="$scalars/AvName"/> Value:
+              </fo:inline>
+              The accumulation at interest of the net premiums paid,
+              <xsl:if test="$SinglePremium!='1'">
+                less any withdrawals,
+              </xsl:if>
+              less any monthly charges deducted.
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">
-                <xsl:value-of select="$scalars/CsvName"/>
-                 Value:
+                <xsl:value-of select="$scalars/CsvName"/> Value:
               </fo:inline>
-              <xsl:value-of select="$scalars/AvName"/>
-              <xsl:text> Value less policy debt.</xsl:text>
-              <xsl:text> The </xsl:text>
-              <xsl:value-of select="$scalars/CsvName"/>
-              <xsl:text> Value does not reflect an Exchange Charge, which may be assessed under the policy where surrender proceeds are intended to be applied to an insurance policy or certificate issued with an intent to qualify the exchange as a tax free exchange under Section 1035 of the Internal Revenue Code.</xsl:text>
+              <xsl:value-of select="$scalars/AvName"/> Value less policy debt.
+              The <xsl:value-of select="$scalars/CsvName"/> Value
+              does not reflect an Exchange Charge, which may be assessed
+              under the policy where surrender proceeds are intended
+              to be applied to an insurance policy or certificate issued
+              with an intent to qualify the exchange as a tax free exchange
+              under Section 1035 of the Internal Revenue Code.
             </fo:block>
             <fo:block padding-top="1em">
-              <fo:inline font-weight="bold">Current Values:</fo:inline>  Values assuming current interest crediting rates and current monthly charges. These values are not guaranteed and are based on the assumption that premium is paid as illustrated.
+              <fo:inline font-weight="bold">
+                Current Values:
+              </fo:inline>
+              Values assuming current interest crediting rates
+              and current monthly charges. These values are not guaranteed
+              and are based on the assumption that premium is paid
+              as illustrated.
             </fo:block>
             <fo:block padding-top="1em">
-              <fo:inline font-weight="bold">Death Benefit:</fo:inline>  The amount of benefit provided by the Death Benefit Option in effect on the date of death, prior to adjustments for policy debt and monthly charges payable to the date of death.
+              <fo:inline font-weight="bold">
+                Death Benefit:
+              </fo:inline>
+              The amount of benefit provided by the Death Benefit Option
+              in effect on the date of death, prior to adjustments
+              for policy debt and monthly charges payable to the date of death.
             </fo:block>
             <fo:block padding-top="1em">
-              <fo:inline font-weight="bold">Death Benefit Option 1:</fo:inline>  Option in which the death benefit is equal to the selected face amount of the contract on the date of death of the insured, or if greater the
-              <xsl:value-of select="$scalars/AvName"/>
-              <xsl:text> Value </xsl:text>
+              <fo:inline font-weight="bold">
+                Death Benefit Option 1:
+              </fo:inline>
+              Option in which the death benefit is equal to the selected
+              face amount of the contract on the date of death of the insured,
+              or if greater the <xsl:value-of select="$scalars/AvName"/> Value
               <xsl:if test="$scalars/SalesLoadRefund!='0%'">
-                <xsl:text>plus the refund of sales loads (if applicable) </xsl:text>
+                plus the refund of sales loads (if applicable)
               </xsl:if>
-              <xsl:text>on the insured's date of death multiplied by the minimum face amount percentage for the insured's attained age at death (minimum face amount). Please refer to the contract for a detailed schedule of death benefit factors.</xsl:text>
+              on the insured's date of death multiplied by the minimum face
+              amount percentage for the insured's attained age at death
+              (minimum face amount). Please refer to the contract
+              for a detailed schedule of death benefit factors.
             </fo:block>
             <!-- Group Experience Rating Logic -->
             <xsl:if test="$GroupExperienceRating!='1'">
               <fo:block padding-top="1em">
-                <fo:inline font-weight="bold">Death Benefit Option 2:</fo:inline>  Option in which the death benefit is equal to the selected face amount of the contract plus the
-                <xsl:value-of select="$scalars/AvName"/>
-                <xsl:text> Value on the date of death of the insured, or if greater, the </xsl:text>
-                <xsl:value-of select="$scalars/AvName"/>
-                <xsl:text> Value </xsl:text>
+                <fo:inline font-weight="bold">
+                  Death Benefit Option 2:
+                </fo:inline>
+                Option in which the death benefit is equal to the selected
+                face amount of the contract
+                plus the <xsl:value-of select="$scalars/AvName"/> Value
+                on the date of death of the insured, or if greater,
+                the <xsl:value-of select="$scalars/AvName"/> Value
                 <xsl:if test="$scalars/SalesLoadRefund!='0%'">
-                  <xsl:text>plus the refund of sales loads (if applicable) </xsl:text>
+                  plus the refund of sales loads (if applicable)
                 </xsl:if>
-                <xsl:text>on the insured's date of death multiplied by the death benefit factor for the insured's attained age at death (minimum face amount). Please refer to the contract for a detailed schedule of death benefit factors.</xsl:text>
+                on the insured's date of death multiplied
+                by the death benefit factor for the insured's attained age
+                at death (minimum face amount). Please refer to the contract
+                for a detailed schedule of death benefit factors.
               </fo:block>
             </xsl:if>
             <!-- Group Experience Rating Logic -->
             <xsl:if test="$GroupExperienceRating='1'">
               <fo:block padding-top="1em">
-                <fo:inline font-weight="bold">Experience Rating Risk Charge:</fo:inline>  Applies only to certain experience rated groups. This charge is based on the cost of insurance charges assessed during the certificate year. It may be assessed against the account value once per certificate anniversary date and upon surrender of the group policy.
+                <fo:inline font-weight="bold">
+                  Experience Rating Risk Charge:
+                </fo:inline>
+                Applies only to certain experience rated groups.
+                This charge is based on the cost of insurance charges
+                assessed during the certificate year. It may be assessed against
+                the account value once per certificate anniversary date
+                and upon surrender of the group policy.
               </fo:block>
             </xsl:if>
             <!-- Group Experience Rating Logic -->
             <xsl:if test="$GroupExperienceRating!='1'">
               <fo:block padding-top="1em">
-                <fo:inline font-weight="bold">Exchange Charge:</fo:inline>  Where surrender proceeds are intended to be applied to an insurance policy or certificate issued with an intent to qualify the exchange as a tax free exchange under Section 1035 of the Internal Revenue Code, there is a potential reduction in surrender proceeds.  Please see the contract endorsement for a detailed description of the Exchange Charge.
+                <fo:inline font-weight="bold">
+                  Exchange Charge:
+                </fo:inline>
+                Where surrender proceeds are intended to be applied
+                to an insurance policy or certificate issued with an intent
+                to qualify the exchange as a tax free exchange
+                under Section 1035 of the Internal Revenue Code,
+                there is a potential reduction in surrender proceeds.
+                Please see the contract endorsement for a detailed description
+                of the Exchange Charge.
               </fo:block>
             </xsl:if>
             <fo:block padding-top="1em">
-              <fo:inline font-weight="bold">Flexible Premiums:</fo:inline>  Premiums that may be increased, reduced, or not paid, if the account value is sufficient to cover the monthly charges.
+              <fo:inline font-weight="bold">
+                Flexible Premiums:
+              </fo:inline>
+              Premiums that may be increased, reduced, or not paid,
+              if the account value is sufficient to cover the monthly charges.
             </fo:block>
             <fo:block padding-top="1em">
-              <fo:inline font-weight="bold">Guaranteed Values:</fo:inline>  Values assuming the guaranteed crediting rate and the guaranteed maximum monthly charges. These values are based on the assumption that premium is paid as illustrated.
+              <fo:inline font-weight="bold">
+                Guaranteed Values:
+              </fo:inline>
+              Values assuming the guaranteed crediting rate
+              and the guaranteed maximum monthly charges. These values
+              are based on the assumption that premium is paid as illustrated.
             </fo:block>
             <xsl:if test="$scalars/IsInforce!='1'">
               <fo:block padding-top="1em">
-                <fo:inline font-weight="bold">Initial Illustrated Crediting Rate:</fo:inline>  The current interest rate illustrated for the first policy year.  This rate is not guaranteed and is subject to change by
-                <xsl:value-of select="$scalars/InsCoName"/>.
+                <fo:inline font-weight="bold">
+                  Initial Illustrated Crediting Rate:
+                </fo:inline>
+                The current interest rate illustrated for the first policy year.
+                This rate is not guaranteed and is subject
+                to change by <xsl:value-of select="$scalars/InsCoName"/>.
               </fo:block>
             </xsl:if>
             <fo:block padding-top="1em">
-              <fo:inline font-weight="bold">MEC:</fo:inline>  Modified Endowment Contract - this classification is given to a contract in violation of TAMRA (Technical and Miscellaneous Revenues Act), which limits the amount of premium that can be paid into a life insurance contract. To the extent of gain in the contract, loans, distributions and withdrawals from a MEC are subject to income tax and may also trigger a tax penalty.
+              <fo:inline font-weight="bold">
+                MEC:
+              </fo:inline>
+              Modified Endowment Contract - this classification is given
+              to a contract in violation of TAMRA
+              (Technical and Miscellaneous Revenues Act), which limits
+              the amount of premium that can be paid into a life
+              insurance contract. To the extent of gain in the contract, loans,
+              distributions and withdrawals from a MEC are subject
+              to income tax and may also trigger a tax penalty.
             </fo:block>
             <fo:block padding-top="1em">
-              <fo:inline font-weight="bold">Midpoint Values:</fo:inline>  Values assuming interest rates that are the average of the illustrated current crediting rates and the guaranteed minimum interest rate, and monthly charges that are the average of the current monthly charges and the guaranteed monthly charges. These values are not guaranteed and are based on the assumption that premium is paid as illustrated.
+              <fo:inline font-weight="bold">
+                Midpoint Values:
+              </fo:inline>
+              Values assuming interest rates that are the average
+              of the illustrated current crediting rates
+              and the guaranteed minimum interest rate, and monthly charges
+              that are the average of the current monthly charges
+              and the guaranteed monthly charges.
+              These values are not guaranteed and are based on the assumption
+              that premium is paid as illustrated.
             </fo:block>
             <!-- Single Premium Logic -->
             <xsl:if test="$ModifiedSinglePremium='1'">
               <fo:block padding-top="1em">
-                <fo:inline font-weight="bold">Modified Single Premium:</fo:inline> After the single premium is paid, additional payment under this policy will only be accepted for repayment of policy debt, payment required to keep the policy from lapsing, or payment required to reinstate the policy.
+                <fo:inline font-weight="bold">
+                  Modified Single Premium:
+                </fo:inline>
+                After the single premium is paid, additional payment
+                under this policy will only be accepted for repayment
+                of policy debt, payment required to keep the policy
+                from lapsing, or payment required to reinstate the policy.
               </fo:block>
             </xsl:if>
             <fo:block padding-top="1em">
-              <fo:inline font-weight="bold">Monthly Charges:</fo:inline> The monthly charges for the following month which include: cost of insurance, plus face amount charges (if applicable), plus the administrative charge shown on the contract schedule page.
+              <fo:inline font-weight="bold">
+                Monthly Charges:
+              </fo:inline>
+              The monthly charges for the following month which include:
+              cost of insurance, plus face amount charges (if applicable),
+              plus the administrative charge shown
+              on the contract schedule page.
             </fo:block>
             <fo:block padding-top="1em">
-              <fo:inline font-weight="bold">Premium Outlay:</fo:inline>  The amount of premium assumed to be paid by the contract owner or other premium payor.
+              <fo:inline font-weight="bold">
+                Premium Outlay:
+              </fo:inline>
+              The amount of premium assumed to be paid by the contract owner
+              or other premium payor.
             </fo:block>
             <!-- Single Premium Logic -->
             <xsl:if test="$SinglePremium='1' and $ModifiedSinglePremium!='1'">
               <fo:block padding-top="1em">
-                <fo:inline font-weight="bold">Single Premium:</fo:inline> After the single premium is paid, additional payment under this policy will only be accepted for repayment of policy debt, payment required to keep the policy from lapsing, or payment required to reinstate the policy.
+                <fo:inline font-weight="bold">
+                  Single Premium:
+                </fo:inline>
+                After the single premium is paid, additional payment
+                under this policy will only be accepted for repayment
+                of policy debt, payment required to keep the policy
+                from lapsing, or payment required to reinstate the policy.
               </fo:block>
             </xsl:if>
             <!-- Single Premium Logic -->
             <xsl:if test="$SinglePremium='1'">
               <fo:block padding-top="1em">
-                <fo:inline font-weight="bold">Ultimate Illustrated Crediting Rate:</fo:inline>
-                <xsl:text> The current interest rate illustrated for policy years 6 and later.  The illustrated crediting rates for policy years 2 through 5 are based on a blend of the Initial and Ultimate Illustrated Crediting Rates.  These rates are not guaranteed and are subject to change by </xsl:text>
-                <xsl:value-of select="$scalars/InsCoName"/>
-                <xsl:text>.</xsl:text>
+                <fo:inline font-weight="bold">
+                  Ultimate Illustrated Crediting Rate:
+                </fo:inline>
+                The current interest rate illustrated for policy years
+                6 and later. The illustrated crediting rates for policy years
+                2 through 5 are based on a blend of the Initial
+                and Ultimate Illustrated Crediting Rates.
+                These rates are not guaranteed and are subject
+                to change by <xsl:value-of select="$scalars/InsCoName"/>.
               </fo:block>
             </xsl:if>
           </fo:block>
         </fo:flow>
       </fo:page-sequence>
+
       <xsl:if test="$scalars/IsInforce!='1'">
         <!-- Numeric Summary (only for new business)-->
         <!-- Body page -->
