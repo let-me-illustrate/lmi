@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.48 2007-07-04 00:31:41 etarassov Exp $
+    $Id: variable_annuity.xsl,v 1.49 2007-07-04 12:50:16 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -154,18 +154,18 @@
         </fo:static-content>
 
         <fo:flow flow-name="xsl-region-body">
-          <fo:block font-size="11.0pt" text-align="center" font-family="sans-serif" font-weight="bold">
-            <fo:block font-size="18.0pt" padding-top="1em" padding-after="25.0pt">
+          <fo:block font="bold 11pt sans-serif" text-align="center">
+            <fo:block font-size="18pt" padding-top="1em 0 25pt">
               <xsl:value-of select="$scalars/PolicyMktgName"/>
-              <fo:inline vertical-align="super" font-size="7.0pt">SM</fo:inline>
+              <fo:inline vertical-align="super" font-size="7pt">SM</fo:inline>
             </fo:block>
-            <fo:block font-size="12.0pt" padding-after="45.0pt">
+            <fo:block font-size="12pt" padding-after="45pt">
               Hypothetical Annuity Illustration - Accumulation Phase
             </fo:block>
-            <fo:block padding-after="25.0pt">
+            <fo:block padding-after="25pt">
               Prepared by: <xsl:value-of select="$scalars/InsCoShortName"/>
             </fo:block>
-            <fo:block padding-after="25.0pt">
+            <fo:block padding-after="25pt">
               Prepared for:
               <!--
               Properly adjust for long user input strings limit output
@@ -189,7 +189,7 @@
               Date Prepared: <xsl:call-template name="date-prepared"/>
             </fo:block>
           </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
+          <fo:block font="normal 9pt sans-serif" text-align="left">
             <fo:block padding-after="10.0pt">
               The purpose of this illustration is to show how hypothetical rates
               of return will affect Contract Value. These hypothetical returns
@@ -200,7 +200,7 @@
             </fo:block>
             <fo:block padding-after="10.0pt">
               <xsl:value-of select="$scalars/PolicyMktgName"/>
-              <fo:inline vertical-align="super" font-size="7.0pt">SM</fo:inline>
+              <fo:inline vertical-align="super" font-size="7pt">SM</fo:inline>
               is an individual variable deferred annuity contract with flexible
               purchase payments issued by <xsl:value-of select="$scalars/InsCoName"/>
               (<xsl:value-of select="$scalars/InsCoShortName"/>),
@@ -409,7 +409,7 @@
           <xsl:call-template name="standard-header">
             <xsl:with-param name="logo_only" select="0"/>
           </xsl:call-template>
-          <fo:block font-size="11.0pt" text-align="center" font-family="sans-serif" font-weight="bold" padding-top=".8em">
+          <fo:block font="bold 11pt sans-serif" text-align="center" padding-top=".8em">
             Explanation and Footnotes
           </fo:block>
         </fo:static-content>
@@ -421,8 +421,8 @@
         </fo:static-content>
 
         <fo:flow flow-name="xsl-region-body">
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
-            <fo:block font-size="10.0pt" font-weight="bold" text-decoration="underline">
+          <fo:block font="normal 9pt sans-serif" text-align="left">
+            <fo:block font-size="10pt" font-weight="bold" text-decoration="underline">
               The Illustration
             </fo:block>
             <fo:block padding-top="1em">
@@ -430,7 +430,7 @@
               of investment management, custody and other expenses charged
               by the investment manager of the underlying fund(s).
             </fo:block>
-            <fo:block font-size="10.0pt" font-family="Times" padding-top="1em">
+            <fo:block font="10pt Times" padding-top="1em">
               The information provided in this illustration is not written
               or intended as tax or legal advice and may not be relied on
               for purposes of avoiding any Federal tax penalties.
@@ -444,13 +444,13 @@
               to enter into a Contract. Offers are made only through
               the Confidential Private Placement Memorandum for
               <xsl:value-of select="$scalars/PolicyMktgName"/>
-              <fo:inline vertical-align="super" font-size="7.0pt">SM</fo:inline>.
+              <fo:inline vertical-align="super" font-size="7pt">SM</fo:inline>.
             </fo:block>
             <fo:block padding-top="1em">
               This material must be preceded or accompanied by the current
               Confidential Private Placement Memorandum for
               <xsl:value-of select="$scalars/PolicyMktgName"/>
-              <fo:inline vertical-align="super" font-size="7.0pt">SM</fo:inline>
+              <fo:inline vertical-align="super" font-size="7pt">SM</fo:inline>
               and the current prospectuses and private placement memoranda
               for its underlying underlying investment choices. Investors
               should carefully consider the investment objectives, risks,
@@ -461,8 +461,8 @@
             </fo:block>
           </fo:block>
 
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
-            <fo:block font-size="10.0pt" font-weight="bold" padding-top="2em" text-decoration="underline">
+          <fo:block font="normal 9pt sans-serif" text-align="left">
+            <fo:block font-size="10pt" font-weight="bold" padding-top="2em" text-decoration="underline">
               The Contract
             </fo:block>
             <fo:block padding-top="1em">
@@ -505,7 +505,7 @@
               The current and guaranteed maximum charges are described
               in the Table of Charges of the Confidential Private Placement
               Memorandum for <xsl:value-of select="$scalars/PolicyMktgName"/>
-              <fo:inline vertical-align="super" font-size="7.0pt">SM</fo:inline>.
+              <fo:inline vertical-align="super" font-size="7pt">SM</fo:inline>.
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">Administrative Charge:</fo:inline>
@@ -537,7 +537,7 @@
           <xsl:call-template name="standard-header">
             <xsl:with-param name="logo_only" select="0"/>
           </xsl:call-template>
-          <fo:block font-size="11.0pt" text-align="center" font-family="sans-serif" font-weight="bold" padding-top=".8em">
+          <fo:block font="bold 11pt sans-serif" text-align="center" padding-top=".8em">
             Explanation and Footnotes
           </fo:block>
         </fo:static-content>
@@ -549,7 +549,7 @@
         </fo:static-content>
 
         <fo:flow flow-name="xsl-region-body">
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
+          <fo:block font="normal 9pt sans-serif" text-align="left">
             <fo:block font-size="10.0pt" font-weight="bold" padding-top="2em" text-decoration="underline">
               The Contract continued
             </fo:block>
@@ -576,7 +576,7 @@
               of the Contract will control.
             </fo:block>
           </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
+          <fo:block font="normal 9pt sans-serif" text-align="left">
             <fo:block font-size="10.0pt" font-weight="bold" padding-top="2em" text-decoration="underline">
               Column Definitions
             </fo:block>
@@ -650,100 +650,59 @@
         </fo:static-content>
 
         <fo:flow flow-name="xsl-region-body">
-          <fo:block padding-after="25.0pt" font-size="11.0pt" text-align="center" font-family="sans-serif" font-weight="bold">
+          <fo:block padding-after="25pt" font="bold 11pt sans-serif" text-align="center">
             Certification Statements
           </fo:block>
-          <fo:block padding-after="20.0pt" font-size="10.0pt" text-align="left" font-family="Times" font-weight="normal">
-            I have received a copy of this illustration, and I understand
-            that any non-guaranteed charges illustrated are subject
-            to change and could be either higher or lower. Additionally,
-            I have been informed by my agent that these values
-            are not guaranteed.
+          <fo:block font="10pt Times" text-align="left">
+            <fo:block padding-after="20pt">
+              I have received a copy of this illustration, and I understand
+              that any non-guaranteed charges illustrated are subject
+              to change and could be either higher or lower. Additionally,
+              I have been informed by my agent that these values
+              are not guaranteed.
+            </fo:block>
+            <fo:table table-layout="fixed" width="100%" padding="2.5pt 0 50pt">
+              <fo:table-column column-width="120mm"/>
+              <fo:table-column column-width="60mm"/>
+              <fo:table-body>
+                <fo:table-row>
+                  <fo:table-cell padding-right="10mm">
+                    <fo:block>________________________________________________________________</fo:block>
+                    <fo:block>Contract Owner/Applicant Signature                              </fo:block>
+                  </fo:table-cell>
+                  <fo:table-cell>
+                    <fo:block>______________</fo:block>
+                    <fo:block>Date          </fo:block>
+                  </fo:table-cell>
+                </fo:table-row>
+              </fo:table-body>
+            </fo:table>
+            <fo:block padding-after="20pt" text-decoration="underline">
+              AGENT/REGISTERED REPRESENTATIVE
+            </fo:block>
+            <fo:block padding-after="20pt">
+              I certify that this illustration has been presented
+              to the applicant, and that I have explained that any
+              non-guaranteed charges illustrated are subject to change. I have
+              made no statements that are inconsistent with the illustration.
+            </fo:block>
+            <fo:table table-layout="fixed" width="100%" padding="2.5pt 0 25pt">
+              <fo:table-column column-width="120mm"/>
+              <fo:table-column column-width="60mm"/>
+              <fo:table-body>
+                <fo:table-row>
+                  <fo:table-cell padding-right="10mm">
+                    <fo:block>________________________________________________________________</fo:block>
+                    <fo:block>Agent/Registered Representative                                 </fo:block>
+                  </fo:table-cell>
+                  <fo:table-cell>
+                    <fo:block>______________</fo:block>
+                    <fo:block>Date          </fo:block>
+                  </fo:table-cell>
+                </fo:table-row>
+              </fo:table-body>
+            </fo:table>
           </fo:block>
-          <fo:table table-layout="fixed" width="100%" padding-before="2.5pt" padding-after="50.0pt" font-weight="normal" font-size="10.0pt" font-family="Times">
-            <fo:table-column column-width="120mm"/>
-            <fo:table-column column-width="10mm"/>
-            <fo:table-column column-width="60mm"/>
-            <fo:table-body>
-              <fo:table-row>
-                <fo:table-cell>
-                  <fo:block>
-                    ________________________________________________________________
-                  </fo:block>
-                </fo:table-cell>
-                <fo:table-cell>
-                  <fo:block/>
-                </fo:table-cell>
-                <fo:table-cell>
-                  <fo:block>
-                    ______________
-                  </fo:block>
-                </fo:table-cell>
-              </fo:table-row>
-              <fo:table-row>
-                <fo:table-cell>
-                  <fo:block>
-                    Contract Owner/Applicant Signature
-                  </fo:block>
-                </fo:table-cell>
-                <fo:table-cell>
-                  <fo:block/>
-                </fo:table-cell>
-                <fo:table-cell>
-                  <fo:block>
-                    Date
-                  </fo:block>
-                </fo:table-cell>
-              </fo:table-row>
-            </fo:table-body>
-          </fo:table>
-          <fo:block padding-after="20.0pt" font-size="10.0pt" text-align="left" font-family="Times" font-weight="normal" text-decoration="underline">
-            AGENT/REGISTERED REPRESENTATIVE
-          </fo:block>
-          <fo:block padding-after="20.0pt" font-size="10.0pt" text-align="left" font-family="Times" font-weight="normal">
-            I certify that this illustration has been presented
-            to the applicant, and that I have explained that any
-            non-guaranteed charges illustrated are subject to change. I have
-            made no statements that are inconsistent with the illustration.
-          </fo:block>
-          <fo:table table-layout="fixed" width="100%" padding-before="2.5pt" padding-after="25.0pt" font-weight="normal" font-size="10.0pt" font-family="Times">
-            <fo:table-column column-width="120mm"/>
-            <fo:table-column column-width="10mm"/>
-            <fo:table-column column-width="60mm"/>
-            <fo:table-body>
-              <fo:table-row>
-                <fo:table-cell>
-                  <fo:block>
-                    ________________________________________________________________
-                  </fo:block>
-                </fo:table-cell>
-                <fo:table-cell>
-                  <fo:block/>
-                </fo:table-cell>
-                <fo:table-cell>
-                  <fo:block>
-                    ______________
-                  </fo:block>
-                </fo:table-cell>
-              </fo:table-row>
-              <fo:table-row>
-                <fo:table-cell>
-                  <fo:block>
-                    Agent/Registered Representative
-                  </fo:block>
-                </fo:table-cell>
-                <fo:table-cell>
-                  <fo:block/>
-                </fo:table-cell>
-                <fo:table-cell>
-                  <fo:block>
-                    Date
-                  </fo:block>
-                </fo:table-cell>
-              </fo:table-row>
-            </fo:table-body>
-          </fo:table>
-
           <xsl:if test="not($has_supplemental_report)">
             <fo:block id="endofdoc"/>
           </xsl:if>
@@ -810,11 +769,11 @@
       </fo:table-body>
     </fo:table>
     <xsl:if test="not($logo_only)">
-      <fo:block font-size="14.0pt" text-align="center" font-family="sans-serif" font-weight="bold" padding-top="1em">
+      <fo:block font="bold 14pt sans-serif" text-align="center" padding-top="1em">
         <xsl:value-of select="$scalars/PolicyMktgName"/>
-        <fo:inline vertical-align="super" font-size="7.0pt">SM</fo:inline>
+        <fo:inline vertical-align="super" font-size="7pt">SM</fo:inline>
       </fo:block>
-      <fo:block font="normal 11pt sans-serif" text-align="center" border-bottom="1pt solid black" padding-after="8.0pt">
+      <fo:block font="normal 11pt sans-serif" text-align="center" border-bottom="1pt solid black" padding-bottom="8.0pt">
         <xsl:value-of select="$scalars/PolicyLegalName"/>
       </fo:block>
     </xsl:if>
@@ -822,7 +781,7 @@
 
   <xsl:template name="scalar-header">
     <xsl:param name="basis"/>
-    <fo:table table-layout="fixed" width="100%" padding-before="2.5pt" padding-after="2.5pt" font-weight="normal" font-size="9.5pt" font-family="sans-serif" border-bottom="1pt solid black">
+    <fo:table table-layout="fixed" width="100%" padding="2.5pt 0" font="normal 9.5pt sans-serif" border-bottom="1pt solid black">
       <fo:table-column column-width="135mm"/>
       <fo:table-column column-width="55mm"/>
       <fo:table-body>
@@ -848,63 +807,26 @@
                 </xsl:with-param>
               </xsl:call-template>
             </fo:block>
-            <fo:block text-align="left">
-              <xsl:choose>
-                <xsl:when test="not($is_composite)">
-                  Annuitant Age at Issue: <xsl:value-of select="$scalars/Age"/>
-                </xsl:when>
-                <xsl:when test="$scalars/Franchise!=''">
-                  Master contract:
-                  <xsl:call-template name="limitstring">
-                    <xsl:with-param name="passString" select="$scalars/Franchise"/>
-                    <xsl:with-param name="length" select="30"/>
-                  </xsl:call-template>
-                </xsl:when>
-              </xsl:choose>
-            </fo:block>
             <xsl:if test="not($is_composite)">
-              <!--
-              This monstrosity truncates 'Franchise' and 'PolicyNumber' to:
-              * 30 characters if both are present;
-              * 15 characters if only one is present.
-              -->
-              <xsl:variable name="has_franchise" select="number($scalars/Franchise!='')"/>
-              <xsl:variable name="has_polnumber" select="number($scalars/PolicyNumber!='')"/>
-              <xsl:variable name="contracts" select="$has_franchise + $has_polnumber"/>
-              <xsl:if test="$contracts">
-                <xsl:variable name="number_length" select="floor(30 div $contracts)"/>
-                <fo:block text-align="left">
-                  <xsl:if test="$has_franchise">
-                    Master contract:
-                    <xsl:call-template name="limitstring">
-                      <xsl:with-param name="passString" select="$scalars/Franchise"/>
-                      <xsl:with-param name="length" select="$number_length"/>
-                    </xsl:call-template>
-                  </xsl:if>
-                  <xsl:if test="$has_polnumber">
-                    Contract number:
-                    <xsl:call-template name="limitstring">
-                      <xsl:with-param name="passString" select="$scalars/PolicyNumber"/>
-                      <xsl:with-param name="length" select="$number_length"/>
-                    </xsl:call-template>
-                  </xsl:if>
-                </fo:block>
-              </xsl:if>
+              <fo:block text-align="left">
+                Annuitant Age at Issue: <xsl:value-of select="$scalars/Age"/>
+              </fo:block>
             </xsl:if>
+            <xsl:call-template name="print-franchise-and-policynumber"/>
           </fo:table-cell>
-          <fo:table-cell>
-            <fo:block text-align="left">
+          <fo:table-cell text-align="left">
+            <fo:block>
               Issue State: <xsl:value-of select="$scalars/StatePostalAbbrev"/>
             </fo:block>
-            <fo:block text-align="left">
-              <xsl:choose>
-                <xsl:when test="($basis='Current') or ($basis='CurrentZero') or ($basis='Guaranteed') or ($basis='GuaranteedZero')">
+            <xsl:choose>
+              <xsl:when test="($basis='Current') or ($basis='CurrentZero') or ($basis='Guaranteed') or ($basis='GuaranteedZero')">
+                <fo:block>
                   Net Rate of Return:
                   <xsl:value-of select="$scalars/*[name()=concat('InitAnnSepAcctNetInt_', $basis)]"/>
-                </xsl:when>
-                <xsl:when test="$basis='NoBasis'"/>
-              </xsl:choose>
-            </fo:block>
+                </fo:block>
+              </xsl:when>
+              <xsl:when test="$basis='NoBasis'"/>
+            </xsl:choose>
           </fo:table-cell>
         </fo:table-row>
       </fo:table-body>
@@ -913,7 +835,7 @@
 
   <xsl:template name="titles">
     <xsl:param name="basis"/>
-    <fo:block font-size="13.0pt" text-align="center" font-family="sans-serif" font-weight="bold" padding-top=".5em">
+    <fo:block font="bold 13pt sans-serif" text-align="center" padding-top=".5em">
       HYPOTHETICAL ILLUSTRATION
     </fo:block>
     <fo:block font="bold 11.0pt sans-serif" text-align="center" border-bottom="1pt solid black" padding-after="2.5pt">
@@ -933,7 +855,7 @@
   <xsl:template name="illustration-table">
     <xsl:param name="basis"/>
     <xsl:param name="basis-lapse-year"/>
-    <fo:table table-layout="fixed" width="100%" font-weight="normal" font-size="9.0pt" font-family="serif">
+    <fo:table table-layout="fixed" width="100%" font="normal 9pt serif">
       <xsl:variable name="column-values-columns">
         <column name="PolicyYear">Year</column>
         <column name="GrossPmt">Purchase _Payment</column>
@@ -1004,7 +926,7 @@
 
   <xsl:template name="preliminary-footer">
     <xsl:param name="basis"/>
-    <fo:block font-size="8.5pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-after="15pt">
+    <fo:block font="normal 8.5pt sans-serif" text-align="left" padding-after="15pt">
       <xsl:choose>
         <xsl:when test="($basis='Current') or ($basis='CurrentZero')">
           Contract values are net of CURRENT monthly charges which
@@ -1021,11 +943,11 @@
 
   <xsl:template name="standard-footer">
     <xsl:param name="displaypagenumber"/>
-    <fo:block font-size="8.5pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="2em" padding-before="5pt" border-top="1pt solid blue">
+    <fo:block font="normal 8.5pt sans-serif" text-align="left" padding-top="2em 0 5pt" border-top="1pt solid blue">
       This illustration is not complete unless all pages as noted below
       are included.
     </fo:block>
-    <fo:table table-layout="fixed" width="100%" padding-top="1em" font-size="9.0pt" font-family="sans-serif">
+    <fo:table table-layout="fixed" width="100%" font="9pt sans-serif" padding-top="1em">
       <fo:table-column column-width="proportional-column-width(1)"/>
       <fo:table-column column-width="proportional-column-width(1)"/>
       <fo:table-column column-width="proportional-column-width(1)"/>
