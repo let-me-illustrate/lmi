@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.859 2007-07-04 00:26:39 etarassov Exp $
+// $Id: ChangeLog,v 1.860 2007-07-04 00:31:40 etarassov Exp $
 
 MAINTENANCE
 
@@ -13060,4 +13060,12 @@ Replace &rsquo; with typewriter apostrophe '.
   offshore_private_placement.xsl
   variable_annuity.xsl
 Remove unused variables.
+
+20070704T0031Z <etarassov@tt-solutions.com> [1225]
+
+  fo_common.xsl
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  variable_annuity.xsl
+Move some variable to fo_common.xsl.
 

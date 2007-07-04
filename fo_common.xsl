@@ -21,12 +21,27 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.53 2007-07-04 00:14:37 etarassov Exp $
+    $Id: fo_common.xsl,v 1.54 2007-07-04 00:31:40 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
 ]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
+
+  <!--
+  Used in an expression like translate($sometext, $lcletters, $ucletters)
+  to transform $sometext into uppercase.
+  -->
+  <xsl:variable name="lcletters">abcdefghijklmnopqrstuvwxyz</xsl:variable>
+  <xsl:variable name="ucletters">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:variable>
+
+  <!--
+  Strip commas from numbers:
+  translate($string_Representation_of_a_number, $numberswc, $numberswoc).
+  -->
+  <xsl:variable name="numberswoc">0123456789</xsl:variable>
+  <xsl:variable name="numberswc">0123456789,</xsl:variable>
+
   <!--
   Global parameter, that controls the output media size.
   Refer to http://en.wikipedia.org/wiki/Paper_size for details.
