@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: authenticity.cpp,v 1.7 2007-06-26 00:29:25 chicares Exp $
+// $Id: authenticity.cpp,v 1.8 2007-07-04 04:40:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -153,8 +153,8 @@ std::string Authenticity::Assay
     }
 
     // Read valid date range [begin, end) from file.
-    calendar_date begin;
-    calendar_date end;
+    calendar_date begin(last_yyyy_date ());
+    calendar_date end  (gregorian_epoch());
     {
     fs::path expiry_path(data_path / "expiry");
     fs::ifstream is(expiry_path);
