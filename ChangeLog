@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.856 2007-07-03 23:19:38 etarassov Exp $
+// $Id: ChangeLog,v 1.857 2007-07-04 00:14:37 etarassov Exp $
 
 MAINTENANCE
 
@@ -13040,4 +13040,9 @@ Remove the defect noted 20070703T2032Z.
 
   illustration_reg.xsl
 Reformat helper templates.
+
+20070704T0014Z <etarassov@tt-solutions.com> [1225]
+
+  fo_common.xsl
+Use generic templates in 'supplemental-report-body'.
 
