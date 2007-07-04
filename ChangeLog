@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.860 2007-07-04 00:31:40 etarassov Exp $
+// $Id: ChangeLog,v 1.861 2007-07-04 04:53:23 chicares Exp $
 
 MAINTENANCE
 
@@ -13068,4 +13068,31 @@ Remove unused variables.
   individual_private_placement.xsl
   variable_annuity.xsl
 Move some variable to fo_common.xsl.
+
+20070704T0439Z <chicares@cox.net> [1225]
+
+  authenticity_test.cpp
+Demonstrate a defect associated with the one noted 20070703T2032Z.
+
+20070704T0440Z <chicares@cox.net> [1225]
+
+  authenticity.cpp
+Mitigate the defect noted 20070704T0439Z. Dates 'begin' and 'end' were
+value-initialized to today's date, and intended to be overwritten with
+values extracted from a file--without adequate provision against file
+corruption. Before the 20070703 changes, a failing extractor overwrote
+them with undefined values. Before the present change, a failing
+extractor left their initial values alone, resulting in a misleading
+error message at best, or at worst an invalid authentication of an
+inauthentic system (iff a distribution omitted an md5sum for the
+'expiry' file). With the present change, the worse case is prevented,
+and an error message is displayed in both cases tested. The behavior
+remains defective: the error message names a date on which no one
+would conceivably use the system; if there's an error reading the
+'expiry' file, then the message should say so plainly.
+
+20070704T0453Z <chicares@cox.net> [1225]
+
+  authenticity.cpp
+Remove the defect noted 20070704T0439Z and 20070704T0440Z.
 
