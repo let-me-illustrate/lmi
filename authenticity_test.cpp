@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: authenticity_test.cpp,v 1.6 2007-06-26 00:29:25 chicares Exp $
+// $Id: authenticity_test.cpp,v 1.7 2007-07-04 04:39:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -44,7 +44,7 @@
 #include <string>
 #include <vector>
 
-// TODO ?? Add tests for diagnostics that aren't tested yet.
+// TODO ?? Add tests for conditions and diagnostics that aren't tested yet.
 
 template<typename T, std::size_t n>
 std::string md5_str(T(&md5sum)[n])
@@ -445,15 +445,40 @@ void PasskeyTest::TestExpiry() const
         ,Authenticity::Assay(BeginDate_, ".")
         );
 
+    {
     std::ofstream os("expiry");
     BOOST_TEST(!!os);
-    os << "bogus dates";
     os.close();
     Authenticity::ResetCache();
     BOOST_TEST_EQUAL
         ("Error reading expiry file 'expiry'. Try reinstalling."
         ,Authenticity::Assay(BeginDate_, ".")
         );
+    }
+
+    {
+    std::ofstream os("expiry");
+    os << "2400000";
+    BOOST_TEST(!!os);
+    os.close();
+    Authenticity::ResetCache();
+    BOOST_TEST_EQUAL
+        ("Error reading expiry file 'expiry'. Try reinstalling."
+        ,Authenticity::Assay(BeginDate_, ".")
+        );
+    }
+
+    {
+    std::ofstream os("expiry");
+    os << "bogus dates";
+    BOOST_TEST(!!os);
+    os.close();
+    Authenticity::ResetCache();
+    BOOST_TEST_EQUAL
+        ("Error reading expiry file 'expiry'. Try reinstalling."
+        ,Authenticity::Assay(BeginDate_, ".")
+        );
+    }
 
     InitializeExpiryFile();
     CheckNominal(__FILE__, __LINE__);
