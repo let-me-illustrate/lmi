@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.862 2007-07-04 10:21:57 etarassov Exp $
+// $Id: ChangeLog,v 1.863 2007-07-04 12:50:15 etarassov Exp $
 
 MAINTENANCE
 
@@ -13100,4 +13100,15 @@ Remove the defect noted 20070704T0439Z and 20070704T0440Z.
 
   fo_common.xsl
 Improve comments.
+
+20070704T1250Z <etarassov@tt-solutions.com> [1226]
+
+  fo_common.xsl
+  group_private_placement.xsl
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+  offshore_private_placement.xsl
+  variable_annuity.xsl
+Refactor and reformat using CSS shortcuts.
 

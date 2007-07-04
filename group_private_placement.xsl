@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: group_private_placement.xsl,v 1.50 2007-07-04 00:26:39 etarassov Exp $
+    $Id: group_private_placement.xsl,v 1.51 2007-07-04 12:50:15 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -172,7 +172,7 @@
 
         <!-- Column Definitions Summary Body  -->
         <fo:flow flow-name="xsl-region-body">
-          <fo:block text-align="left" font-size="10pt" font-family="sans-serif">
+          <fo:block text-align="left" font="10pt sans-serif">
             <fo:block font-weight="bold" text-align="center" padding-bottom="2em">
               Column Definitions
             </fo:block>
@@ -245,7 +245,7 @@
 
         <!-- narrative summary Summary Body  -->
         <fo:flow flow-name="xsl-region-body">
-          <fo:block text-align="left" font-size="10pt" font-family="sans-serif">
+          <fo:block text-align="left" font="10pt sans-serif">
             <fo:block>
               <xsl:value-of select="$scalars/PolicyMktgName"/>
               is a <xsl:value-of select="$scalars/PolicyLegalName"/>
@@ -607,7 +607,7 @@
     <xsl:variable name="header-field-width">
       <xsl:value-of select="$header-width * 0.44"/>pc
     </xsl:variable>
-    <fo:block padding-before="0pt" font-size="10.0pt" font-family="sans-serif">
+    <fo:block padding-before="0pt" font="10pt sans-serif">
       <fo:table table-layout="fixed" width="100%">
         <fo:table-column column-width="125mm"/>
         <fo:table-column column-width="proportional-column-width(1)"/>
@@ -669,33 +669,7 @@
                   Waiver of Monthly Charges Rider elected.
                 </fo:block>
               </xsl:if>
-              <!--
-              This monstrosity truncates 'Franchise' and 'PolicyNumber' to:
-              * 30 characters if both are present;
-              * 15 characters if only one is present.
-              -->
-              <xsl:variable name="has_franchise" select="number($scalars/Franchise!='')"/>
-              <xsl:variable name="has_polnumber" select="number($scalars/PolicyNumber!='' and not($is_composite))"/>
-              <xsl:variable name="contracts" select="$has_franchise + $has_polnumber"/>
-              <xsl:if test="$contracts">
-                <xsl:variable name="number_length" select="floor(30 div $contracts)"/>
-                <fo:block text-align="left">
-                  <xsl:if test="$has_franchise">
-                    Master contract:
-                    <xsl:call-template name="limitstring">
-                      <xsl:with-param name="passString" select="$scalars/Franchise"/>
-                      <xsl:with-param name="length" select="$number_length"/>
-                    </xsl:call-template>
-                  </xsl:if>
-                  <xsl:if test="$has_polnumber">
-                    Contract number:
-                    <xsl:call-template name="limitstring">
-                      <xsl:with-param name="passString" select="$scalars/PolicyNumber"/>
-                      <xsl:with-param name="length" select="$number_length"/>
-                    </xsl:call-template>
-                  </xsl:if>
-                </fo:block>
-              </xsl:if>
+              <xsl:call-template name="print-franchise-and-policynumber"/>
             </fo:table-cell>
 
             <fo:table-cell>
@@ -758,7 +732,7 @@
 
     <!-- The main contents of the body page -->
     <fo:flow flow-name="xsl-region-body">
-      <fo:block font-size="9.0pt" font-family="serif">
+      <fo:block font="9pt serif">
         <fo:table table-layout="fixed" width="100%">
           <xsl:call-template name="generate-table-columns">
             <xsl:with-param name="columns" select="$columns"/>
@@ -886,7 +860,7 @@
     <xsl:variable name="columns" select="$supplemental_illustration_columns[not(@composite) or boolean(boolean(@composite='1')=$is_composite)]"/>
 
     <fo:flow flow-name="xsl-region-body">
-      <fo:block font-size="9.0pt" font-family="serif">
+      <fo:block font="9pt serif">
         <fo:table table-layout="fixed" width="100%">
           <xsl:call-template name="generate-table-columns">
             <xsl:with-param name="columns" select="$columns"/>
@@ -929,7 +903,7 @@
     <xsl:variable name="columns" select="$illustration_assumption_columns[not(@composite) or (boolean(@composite='1')=$is_composite)]"/>
 
     <fo:flow flow-name="xsl-region-body">
-      <fo:block font-size="9.0pt" font-family="serif">
+      <fo:block font-size="9pt serif">
         <fo:table table-layout="fixed" width="100%">
           <xsl:call-template name="generate-table-columns">
             <xsl:with-param name="columns" select="$columns"/>

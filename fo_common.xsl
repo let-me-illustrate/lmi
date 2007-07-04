@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.55 2007-07-04 10:21:57 etarassov Exp $
+    $Id: fo_common.xsl,v 1.56 2007-07-04 12:50:15 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -260,7 +260,7 @@
   <xsl:template name="supplemental-report-body">
     <xsl:if test="count($supplemental_report_columns) &gt; 0">
       <fo:flow flow-name="xsl-region-body">
-        <fo:block font-size="9.0pt" font-family="serif">
+        <fo:block font="9pt serif">
           <fo:table table-layout="fixed" width="100%">
             <xsl:call-template name="generate-table-columns">
               <xsl:with-param name="columns" select="$supplemental_report_columns"/>
@@ -735,12 +735,12 @@
   <xsl:template name="generic-cover">
     <fo:page-sequence master-reference="cover" force-page-count="no-force">
       <fo:flow flow-name="xsl-region-body">
-        <fo:block border="2pt solid blue" font-size="14.0pt" text-align="center" font-family="sans-serif">
+        <fo:block border="2pt solid blue" font="14pt sans-serif" text-align="center">
 
-          <fo:block font-size="20.0pt" font-weight="bold" padding-top="5em">
+          <fo:block font-size="20pt" font-weight="bold" padding-top="5em">
             <xsl:value-of select="$scalars/PolicyMktgName"/>
           </fo:block>
-          <fo:block font-size="20.0pt" font-weight="bold">
+          <fo:block font-size="20pt" font-weight="bold">
             <xsl:choose>
               <xsl:when test="$scalars/IsInforce!='1'">
                 Life Insurance Illustration
@@ -828,7 +828,7 @@
     <xsl:param name="center-block" select="''"/>
     <xsl:param name="right-block" select="''"/>
     <fo:static-content flow-name="xsl-region-after">
-      <fo:block font-size="8.0pt" font-family="sans-serif" text-align="left">
+      <fo:block font="8pt sans-serif" text-align="left">
         <xsl:if test="$top-block">
           <fo:block padding=".5em 0">
             <xsl:copy-of select="$top-block"/>
@@ -867,6 +867,37 @@
         </fo:block>
       </fo:block>
     </fo:static-content>
+  </xsl:template>
+
+<xsl:template name="print-franchise-and-policynumber">
+  <xsl:param name="omit_policynumber" select="$is_composite"/>
+    <!--
+    This monstrosity truncates 'Franchise' and 'PolicyNumber' to:
+    * 30 characters if both are present;
+    * 15 characters if only one is present.
+    -->
+    <xsl:variable name="has_franchise" select="number($scalars/Franchise!='')"/>
+    <xsl:variable name="has_polnumber" select="number($scalars/PolicyNumber!='' and not($omit_policynumber))"/>
+    <xsl:variable name="contracts" select="$has_franchise + $has_polnumber"/>
+    <xsl:if test="$contracts">
+      <xsl:variable name="number_length" select="floor(30 div $contracts)"/>
+      <fo:block>
+        <xsl:if test="$has_franchise">
+          Master contract:
+          <xsl:call-template name="limitstring">
+            <xsl:with-param name="passString" select="$scalars/Franchise"/>
+            <xsl:with-param name="length" select="$number_length"/>
+          </xsl:call-template>
+        </xsl:if>
+        <xsl:if test="$has_polnumber">
+          Contract number:
+          <xsl:call-template name="limitstring">
+            <xsl:with-param name="passString" select="$scalars/PolicyNumber"/>
+            <xsl:with-param name="length" select="$number_length"/>
+          </xsl:call-template>
+        </xsl:if>
+      </fo:block>
+    </xsl:if>
   </xsl:template>
 
   <!-- Print 'Page n of N' text snippet. -->
