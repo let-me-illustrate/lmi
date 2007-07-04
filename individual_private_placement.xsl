@@ -21,11 +21,10 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.56 2007-07-02 23:03:24 etarassov Exp $
+    $Id: individual_private_placement.xsl,v 1.57 2007-07-04 00:18:10 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
-<!ENTITY rsquo "&#8217;">
 ]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
   <xsl:import href="fo_common.xsl"/>
@@ -402,7 +401,7 @@
               of the separate account. A charge could be made in the future.
             </fo:block>
             <fo:block padding-top="1em">
-              Asset charges in the illustration include the contract&rsquo;s
+              Asset charges in the illustration include the contract's
               mortality and expense (asset charges), separate account
               administrative charges (including in certain cases investment
               management expenses), and, where applicable,
