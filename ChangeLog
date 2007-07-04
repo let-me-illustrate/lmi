@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.861 2007-07-04 04:53:23 chicares Exp $
+// $Id: ChangeLog,v 1.862 2007-07-04 10:21:57 etarassov Exp $
 
 MAINTENANCE
 
@@ -13095,4 +13095,9 @@ would conceivably use the system; if there's an error reading the
 
   authenticity.cpp
 Remove the defect noted 20070704T0439Z and 20070704T0440Z.
+
+20070704T1021Z <etarassov@tt-solutions.com> [1226]
+
+  fo_common.xsl
+Improve comments.
 

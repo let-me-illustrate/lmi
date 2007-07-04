@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.54 2007-07-04 00:31:40 etarassov Exp $
+    $Id: fo_common.xsl,v 1.55 2007-07-04 10:21:57 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -167,11 +167,10 @@
     <value>50</value>
     <value>40</value>
   </values>
-  NOTE: illustration_reg cases do not currently have LapseYear_CurrentZero and
-  LapseYear_GuaranteedZero in their XML. We rely on the fact that a inexistent
+  Note: illustration_reg cases do not currently have LapseYear_CurrentZero and
+  LapseYear_GuaranteedZero in their XML. We rely on the fact that an inexistent
   node evaluates to zero in a comparison expression.
   -->
-
   <xsl:template name="get-max-lapse-year">
     <xsl:call-template name="max-comparison">
       <xsl:with-param name="value1">
@@ -189,6 +188,7 @@
     </xsl:call-template>
   </xsl:template>
 
+  <!-- Return the maximum of two values -->
   <xsl:template name="max-comparison">
     <xsl:param name="value1"/>
     <xsl:param name="value2"/>
@@ -225,6 +225,7 @@
     </fo:block>
   </xsl:template>
 
+  <!-- Generate widely used text snippet 'PrepMonth PrepDay, PrepYear' -->
   <xsl:template name="date-prepared">
     <xsl:value-of select="$scalars/PrepMonth"/>
     <xsl:text>&nbsp;</xsl:text>
@@ -233,7 +234,12 @@
     <xsl:value-of select="$scalars/PrepYear"/>
   </xsl:template>
 
-  <!-- Two helper templates. Usefull in custom table headers -->
+  <!--
+  Helper 'attributes' template for a table cell.
+  Included inside a fo:table-cell, this template adds common cell padding,
+  text alignment (align text toward bottom-right cell corner).
+  Also set (possible) bottom border properties.
+  -->
   <xsl:template name="header-cell">
     <xsl:attribute name="display-align">after</xsl:attribute>
     <xsl:attribute name="padding-top">4pt</xsl:attribute>
@@ -242,11 +248,15 @@
     <xsl:attribute name="border-bottom-style">solid</xsl:attribute>
     <xsl:attribute name="border-bottom-color">blue</xsl:attribute>
   </xsl:template>
+  <!--
+  Same as 'header-cell', but add a bottom border of 1pt.
+  -->
   <xsl:template name="header-cell-with-border">
     <xsl:call-template name="header-cell"/>
     <xsl:attribute name="border-bottom-width">1pt</xsl:attribute>
   </xsl:template>
 
+  <!-- Generate supplemental report data table -->
   <xsl:template name="supplemental-report-body">
     <xsl:if test="count($supplemental_report_columns) &gt; 0">
       <fo:flow flow-name="xsl-region-body">
@@ -255,7 +265,10 @@
             <xsl:call-template name="generate-table-columns">
               <xsl:with-param name="columns" select="$supplemental_report_columns"/>
             </xsl:call-template>
-
+            <!--
+            TODO ?? Use 'generate-table-header' generic template
+            to print table column headers.
+            -->
             <fo:table-header>
               <fo:table-row>
                 <xsl:for-each select="$supplemental_report_columns">
@@ -269,15 +282,14 @@
                   </fo:table-cell>
                 </xsl:for-each>
               </fo:table-row>
+              <!-- Additional empty row to add spacing after the header -->
               <fo:table-row>
                 <fo:table-cell padding="2pt">
                   <fo:block/>
                 </fo:table-cell>
               </fo:table-row>
             </fo:table-header>
-
-            <!-- Create Supplemental Report Values -->
-            <!-- make inforce illustration start in the inforce year -->
+            <!-- Supplemental report table body -->
             <fo:table-body>
               <xsl:call-template name="generate-table-values">
                 <xsl:with-param name="counter" select="$scalars/InforceYear + 1"/>
@@ -297,7 +309,8 @@
 
   <!--
   Generate table columns list.
-  If a column has no name attribute (or an empty one) treat it as a separator.
+  If a column has no name attribute (or an empty one) treat it
+  as a small separator. Also treat a <spacer/> node as a wide separator.
   -->
   <xsl:template name="generate-table-columns">
     <xsl:param name="columns"/>
@@ -602,6 +615,24 @@
     </xsl:choose>
   </xsl:template>
 
+  <!--
+  Print out table body. Each column from $columns defines the data source
+  for the table column.
+    - column/@name   - values are read from $vectors[@name=$column_name]
+    - column/name    - same as above for compatibility with supplemental reports
+    - column/@scalar - values are read from $scalars/*[name(.)=$scalar_name]
+    - column/@special - call 'get-special-column-value' to get values - it is
+                        a hook for any special case, i.e. a column
+                        which is not present in the input XML, but is calculated
+                        on the fly.
+  Parameters:
+    - columns       - nodeset containing table-columns meta information.
+    - counter       - row counter (incrementing with each table data row)
+    - max-counter   - upper limit for 'counter' (including)
+    - inforceyear   - alignment parameter for 'counter'
+    - special-param - an untouched value passed through
+                      directly to 'get-special-column-value'
+  -->
   <xsl:template name="generate-table-values">
     <xsl:param name="columns"/>
     <xsl:param name="counter"/>
@@ -613,7 +644,7 @@
       <fo:table-row>
         <xsl:for-each select="$columns">
           <fo:table-cell padding=".6pt">
-            <!-- Add some space if it the first row and some space after each 5th year -->
+            <!-- Add some space after each 5th year -->
             <xsl:if test="($counter + $inforceyear) mod 5 = 0">
               <xsl:attribute name="padding-bottom">8pt</xsl:attribute>
             </xsl:if>
@@ -644,9 +675,8 @@
           </fo:table-cell>
         </xsl:for-each>
         <!--
-        Feature requested: ensure that a group of 5 rows is never split
-        across multiple pages.
-        Add a special cell, that spans 5 rows. Since FOP avoids breaking cells,
+        Ensure that a group of 5 rows is never split across multiple pages.
+        Add a dummy cell, that spans 5 rows. Since FOP avoids breaking cells,
         this cell remains on one page, so will the group of 5 rows.
         -->
         <xsl:if test="($counter + $inforceyear) mod 5 = 1">
@@ -664,8 +694,8 @@
       </xsl:call-template>
     </xsl:if>
     <!--
-    If there is no data then FOP would complain about it since specification
-    does not allow empty <fo:table-body/> tag.
+    If there is no data at all, then FOP would complain because
+    the specification does not allow empty <fo:table-body/> tag.
     As a workaround add an empty row.
     -->
     <xsl:if test="not($max-counter) and $add-dummy-row-if-empty">
@@ -701,7 +731,7 @@
     </xsl:if>
   </xsl:template>
 
-  <!-- The cover page -->
+  <!-- Generic cover page -->
   <xsl:template name="generic-cover">
     <fo:page-sequence master-reference="cover" force-page-count="no-force">
       <fo:flow flow-name="xsl-region-body">
@@ -722,7 +752,7 @@
           </fo:block>
 
           <fo:block font-weight="bold" padding-top="8em">
-              Prepared for:
+            Prepared for:
           </fo:block>
           <fo:block padding-top="1em" margin="0 .15in">
             <xsl:variable name="prepared-for-raw">
@@ -749,21 +779,22 @@
             </xsl:if>
           </fo:block>
 
-          <fo:block text-align="center" font-weight="bold" padding-top="4em">
-            Presented by:
-          </fo:block>
-          <fo:block text-align="center" padding-top="1em">
-            <xsl:value-of select="$scalars/ProducerName"/>
-          </fo:block>
           <fo:block text-align="center">
-            <xsl:value-of select="$scalars/ProducerStreet"/>
-          </fo:block>
-          <fo:block text-align="center">
-            <xsl:value-of select="$scalars/ProducerCity"/>
-          </fo:block>
-
-          <fo:block text-align="center" padding-top="2em">
-            <xsl:call-template name="date-prepared"/>
+            <fo:block font-weight="bold" padding="4em 0 1em">
+              Presented by:
+            </fo:block>
+            <fo:block>
+              <xsl:value-of select="$scalars/ProducerName"/>
+            </fo:block>
+            <fo:block>
+              <xsl:value-of select="$scalars/ProducerStreet"/>
+            </fo:block>
+            <fo:block>
+              <xsl:value-of select="$scalars/ProducerCity"/>
+            </fo:block>
+            <fo:block padding-top="2em">
+              <xsl:call-template name="date-prepared"/>
+            </fo:block>
           </fo:block>
 
           <fo:block padding-top="9em">
@@ -780,6 +811,16 @@
     </fo:page-sequence>
   </xsl:template>
 
+  <!--
+  Helper template - specify page footer using less code.
+  |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
+  |                 $top-block                 |
+  |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
+  |               $subtop-block                |
+  |============================================|
+  | $left-block | $center-block | $right-block |
+  \~~~~~~~~~~~-~+~~~~~~~~~~~~~~~+~~~~~~~~~~~~~~/
+  -->
   <xsl:template name="generic-footer">
     <xsl:param name="top-block" select="''"/>
     <xsl:param name="subtop-block" select="''"/>
@@ -828,10 +869,12 @@
     </fo:static-content>
   </xsl:template>
 
+  <!-- Print 'Page n of N' text snippet. -->
   <xsl:template name="page-of">
     Page <fo:page-number/> of <fo:page-number-citation ref-id="endofdoc"/>
   </xsl:template>
 
+  <!-- Empty stub for special table column values retrieval hook template -->
   <xsl:template name="get-special-column-value"/>
 
 </xsl:stylesheet>
