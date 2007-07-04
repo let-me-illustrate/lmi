@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.52 2007-07-02 23:03:24 etarassov Exp $
+    $Id: fo_common.xsl,v 1.53 2007-07-04 00:14:37 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -237,10 +237,10 @@
       <fo:flow flow-name="xsl-region-body">
         <fo:block font-size="9.0pt" font-family="serif">
           <fo:table table-layout="fixed" width="100%">
-            <xsl:for-each select="$supplemental_report_columns">
-              <fo:table-column column-width="proportional-column-width(100)"/>
-            </xsl:for-each>
-            <fo:table-column column-width="proportional-column-width(1)"/>
+            <xsl:call-template name="generate-table-columns">
+              <xsl:with-param name="columns" select="$supplemental_report_columns"/>
+            </xsl:call-template>
+
             <fo:table-header>
               <fo:table-row>
                 <xsl:for-each select="$supplemental_report_columns">
@@ -260,12 +260,15 @@
                 </fo:table-cell>
               </fo:table-row>
             </fo:table-header>
+
             <!-- Create Supplemental Report Values -->
             <!-- make inforce illustration start in the inforce year -->
             <fo:table-body>
-              <xsl:call-template name="supplemental-report-values">
+              <xsl:call-template name="generate-table-values">
                 <xsl:with-param name="counter" select="$scalars/InforceYear + 1"/>
                 <xsl:with-param name="inforceyear" select="0 - $scalars/InforceYear"/>
+                <xsl:with-param name="columns" select="$supplemental_report_columns"/>
+                <xsl:with-param name="max-counter" select="$max-lapse-year"/>
               </xsl:call-template>
             </fo:table-body>
           </fo:table>
@@ -277,49 +280,6 @@
     </xsl:if>
   </xsl:template>
 
-  <!-- Create Supplemental Report Values -->
-  <xsl:template name="supplemental-report-values">
-    <xsl:param name="counter"/>
-    <xsl:param name="inforceyear"/>
-    <xsl:if test="$counter &lt;= $max-lapse-year">
-      <fo:table-row>
-        <xsl:for-each select="$supplemental_report_columns">
-          <xsl:variable name="column_name" select="string(./name)"/>
-          <fo:table-cell padding=".2pt">
-            <fo:block text-align="right">
-              <xsl:value-of select="$vectors[@name=$column_name]/duration[$counter]/@column_value"/>
-            </fo:block>
-          </fo:table-cell>
-        </xsl:for-each>
-        <xsl:if test="($counter + $inforceyear) mod 5 = 1">
-          <fo:table-cell number-rows-spanned="5">
-            <fo:block/>
-          </fo:table-cell>
-        </xsl:if>
-      </fo:table-row>
-      <!-- Blank Row Every 5th Year -->
-      <xsl:if test="($counter + $inforceyear) mod 5=0">
-        <fo:table-row>
-          <fo:table-cell padding="4pt">
-            <fo:block text-align="right"/>
-          </fo:table-cell>
-        </fo:table-row>
-      </xsl:if>
-      <xsl:call-template name="supplemental-report-values">
-        <xsl:with-param name="counter" select="$counter + 1"/>
-        <xsl:with-param name="inforceyear" select="$inforceyear"/>
-      </xsl:call-template>
-    </xsl:if>
-    <!-- Add a dummy row if the table content is empty to suppress errors -->
-    <xsl:if test="not($max-lapse-year) or not($supplemental_report_columns)">
-      <fo:table-row>
-        <fo:table-cell>
-          <fo:block/>
-        </fo:table-cell>
-      </fo:table-row>
-    </xsl:if>
-  </xsl:template>
-
   <!--
   Generate table columns list.
   If a column has no name attribute (or an empty one) treat it as a separator.
@@ -328,9 +288,10 @@
     <xsl:param name="columns"/>
     <xsl:for-each select="$columns">
       <xsl:variable name="empty_column" select="boolean(not(@name) and not(@scalar) and not(@special))"/>
+      <xsl:variable name="spacer" select="name() != 'spacer'"/>
       <fo:table-column>
         <xsl:choose>
-          <xsl:when test="$empty_column">
+          <xsl:when test="$empty_column and not($spacer)">
             <xsl:attribute name="column-width">proportional-column-width(33)</xsl:attribute>
           </xsl:when>
           <xsl:otherwise>
@@ -491,11 +452,12 @@
     </xsl:variable>
     <xsl:if test="($cell_text != $next_cell_text) or ($cell = count($columns))">
       <fo:table-cell number-columns-spanned="{$spans}">
-       <xsl:call-template name="header-cell"/>
-        <xsl:attribute name="text-align">
-          <xsl:if test="$spans = 1">right</xsl:if>
-          <xsl:if test="$spans != 1">center</xsl:if>
-        </xsl:attribute>
+        <xsl:call-template name="header-cell"/>
+        <xsl:if test="$spans != 1">
+          <xsl:attribute name="text-align">
+            center
+          </xsl:attribute>
+        </xsl:if>
         <xsl:choose>
           <xsl:when test="$last_row or (($spans &gt; 1) and ($cell_text != ''))">
             <xsl:attribute name="border-bottom-width">1pt</xsl:attribute>
@@ -642,6 +604,10 @@
             </xsl:if>
             <fo:block text-align="right">
               <xsl:choose>
+                <xsl:when test="./name">
+                  <xsl:variable name="column_name" select="string(./name)"/>
+                  <xsl:value-of select="$vectors[@name=$column_name]/duration[$counter]/@column_value"/>
+                </xsl:when>
                 <xsl:when test="@name">
                   <xsl:variable name="column_name" select="@name"/>
                   <xsl:value-of select="$vectors[@name=$column_name]/duration[$counter]/@column_value"/>
