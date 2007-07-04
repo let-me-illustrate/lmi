@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.857 2007-07-04 00:14:37 etarassov Exp $
+// $Id: ChangeLog,v 1.858 2007-07-04 00:18:10 etarassov Exp $
 
 MAINTENANCE
 
@@ -13045,4 +13045,9 @@ Reformat helper templates.
 
   fo_common.xsl
 Use generic templates in 'supplemental-report-body'.
+
+20070704T0018Z <etarassov@tt-solutions.com> [1225]
+
+  individual_private_placement.xsl
+Replace &rsquo; with typewriter apostrophe '.
 
