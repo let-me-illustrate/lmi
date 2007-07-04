@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: authenticity.cpp,v 1.8 2007-07-04 04:40:32 chicares Exp $
+// $Id: authenticity.cpp,v 1.9 2007-07-04 04:53:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -169,7 +169,7 @@ std::string Authenticity::Assay
         }
 
     is >> begin >> end;
-    if(!is.eof())
+    if(!is || !is.eof())
         {
         oss
             << "Error reading expiry file '"
