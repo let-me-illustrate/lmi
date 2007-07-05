@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.864 2007-07-05 01:08:21 chicares Exp $
+// $Id: ChangeLog,v 1.865 2007-07-05 18:54:54 chicares Exp $
 
 MAINTENANCE
 
@@ -13117,4 +13117,9 @@ Refactor and reformat using CSS shortcuts.
   DefectLog [new file]
   GNUmakefile
 Add 'DefectLog'.
+
+20070705T1854Z <chicares@cox.net> [1226]
+
+  DefectLog
+Point to new tracker item.
 
