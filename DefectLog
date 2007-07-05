@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: DefectLog,v 1.1 2007-07-05 01:08:20 chicares Exp $
+// $Id: DefectLog,v 1.2 2007-07-05 18:54:53 chicares Exp $
 
 MAINTENANCE
 
@@ -50,7 +50,7 @@ requoted in email without wrapping.
 
 //
 
-YYYYMMDDTHHMMZ <chicares@cox.net>
+20070705T0108Z <chicares@cox.net>
 
 Symptom: Calendar date displayed as '-4712-02--14'. To reproduce:
   cd /tmp
@@ -142,5 +142,5 @@ Repairs completed:
 
 Repairs postponed: The defects critiqued above are ubiquitous. The
 premonitory defect marker cited above cannot yet be removed. See:
-  [cite tracker item once it's created]
+  https://savannah.nongnu.org/task/index.php?7061
 
