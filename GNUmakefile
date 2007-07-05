@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.94 2007-06-28 16:25:23 chicares Exp $
+# $Id: GNUmakefile,v 1.95 2007-07-05 01:08:21 chicares Exp $
 
 ################################################################################
 
@@ -232,8 +232,11 @@ never_source_files := \
 # Files that are source in some restrictive sense only:
 
 documentation_files := \
-  $(wildcard ChangeLog* README*) \
+  ChangeLog \
+  DefectLog \
   INSTALL \
+  README \
+  README.auto \
 
 makefiles := \
   $(wildcard *.make) \
@@ -431,6 +434,9 @@ expected_source_files := \
   $(xml_files) \
   $(wildcard *.ac *.rc) \
 
+unexpected_files := \
+  $(filter-out $(expected_source_files),$(prerequisite_files))
+
 # Invoke a supplemental makefile, if it exists, to test things that
 # don't belong in the standard sources. For example, it might report
 # occurrences of proprietary names.
@@ -449,7 +455,7 @@ check_concinnity: source_clean custom_tools
 	@$(TOUCH) --date=$(yyyymmdd) TODAY
 	@$(TOUCH) --date=$(yyyymm)22 CANDIDATE
 	@$(ECHO) "  Unexpected or oddly-named source files:"
-	@$(ECHO) $(filter-out $(expected_source_files),$(prerequisite_files))
+	@for z in $(unexpected_files); do $(ECHO) $$z; done;
 	@$(ECHO) "  Files with irregular defect markers:"
 	@$(GREP) --line-number '[A-Za-z]!!' $(licensed_files)                || true
 	@$(GREP) --line-number '[A-Za-z] !![A-Za-z]' $(licensed_files)       || true
@@ -569,8 +575,9 @@ check_concinnity: source_clean custom_tools
 	      $$z - \
 	      || $(ECHO) "... in file $$z"; \
 	  done;
-	@$(ECHO) "  Excessively-long lines in 'ChangeLog':"
-	@$(SED) -e '0,/savannah/d;{/.\{71,\}/!d}' ChangeLog
+	@$(ECHO) "  Excessively-long lines in logs:"
+	@for z in ChangeLog DefectLog; \
+	  do $(SED) -e '0,/savannah/d;{/.\{71,\}/!d}' -e "s/^/$$z: /" $$z ; done;
 	@$(ECHO) "  Miscellaneous problems:"
 	@-test_coding_rules $(licensed_files) $(xpm_files)
 	@$(ECHO) " "
@@ -579,7 +586,7 @@ check_concinnity: source_clean custom_tools
 	@$(ECHO) "Number of source files:"
 	@$(WC) -l $(prerequisite_files) | $(SED) -e ';/[Tt]otal/d' | $(WC) -l
 	@$(ECHO) "Number of marked defects:"
-	@$(GREP) \?\? $(licensed_files) | $(WC) -l
+	@$(GREP) \?\? $(filter-out DefectLog,$(licensed_files)) | $(WC) -l
 	@[ TODAY -nt CANDIDATE ] && [ version.hpp -ot BOM ] \
 	  && $(ECHO) "Is it time to 'make release_candidate'?" || true
 	@[ license.cpp -ot BOY ] \

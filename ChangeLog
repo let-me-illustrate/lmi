@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.863 2007-07-04 12:50:15 etarassov Exp $
+// $Id: ChangeLog,v 1.864 2007-07-05 01:08:21 chicares Exp $
 
 MAINTENANCE
 
@@ -13111,4 +13111,10 @@ Improve comments.
   offshore_private_placement.xsl
   variable_annuity.xsl
 Refactor and reformat using CSS shortcuts.
+
+20070705T0108Z <chicares@cox.net> [1226]
+
+  DefectLog [new file]
+  GNUmakefile
+Add 'DefectLog'.
 
