@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.865 2007-07-05 18:54:54 chicares Exp $
+// $Id: ChangeLog,v 1.866 2007-07-06 01:32:21 chicares Exp $
 
 MAINTENANCE
 
@@ -13122,4 +13122,14 @@ Add 'DefectLog'.
 
   DefectLog
 Point to new tracker item.
+
+20070706T0131Z <chicares@cox.net> [1226]
+
+  fenv_lmi.hpp
+Update a gcc-version conditional.
+
+20070706T0132Z <chicares@cox.net> [1226]
+
+  config.hpp
+Accommodate amd64.
 
