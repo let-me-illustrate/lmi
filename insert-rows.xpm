@@ -1,5 +1,5 @@
 /* XPM */
-static char * insert_rows_xpm[] = {
+static char const* insert_rows_xpm[] = {
 "24 24 49 1",
 " 	c None",
 ".	c #000000",

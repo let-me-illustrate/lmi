@@ -1,5 +1,5 @@
 /* XPM */
-static char * delete_row_xpm[] = {
+static char const* delete_row_xpm[] = {
 "24 24 45 1",
 " 	c None",
 ".	c #000000",
