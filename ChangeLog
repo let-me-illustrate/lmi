@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.867 2007-07-06 10:29:27 etarassov Exp $
+// $Id: ChangeLog,v 1.868 2007-07-06 14:41:48 chicares Exp $
 
 MAINTENANCE
 
@@ -13171,4 +13171,9 @@ Accommodate amd64.
   varying-width.xpm
   write_spreadsheet.xpm
 Fix inner static variable declaration by adding a const modifier.
+
+20070706T1441Z <chicares@cox.net> [1226]
+
+  README
+Add a note about editing '.xpm' files.
 
