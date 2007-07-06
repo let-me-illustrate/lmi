@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi.hpp,v 1.14 2007-05-24 18:36:25 chicares Exp $
+// $Id: fenv_lmi.hpp,v 1.15 2007-07-06 01:31:17 chicares Exp $
 
 #ifndef fenv_lmi_hpp
 #define fenv_lmi_hpp
@@ -40,10 +40,10 @@
 // facilities but defines no such macro), and puts prototypes in
 // <fenv.h> but not in namespace std.
 #   include <fenv.h>
-#   if defined __GNUC__ && LMI_GCC_VERSION <= 40100
-// As of 2005-04-08, the gcc manual here:
+#   if defined __GNUC__ && LMI_GCC_VERSION <= 40300
+// As of 2007-07-05, the gcc manual here:
 //   http://gcc.gnu.org/onlinedocs/gcc/Floating-point-implementation.html
-// which "corresponds to GCC version 4.1.0" says "This pragma is not
+// which "corresponds to GCC version 4.3.0" says "This pragma is not
 // implemented".
 #   else  // Pragma STDC FENV_ACCESS implemented.
 #       pragma STDC FENV_ACCESS ON
