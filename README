@@ -1,4 +1,4 @@
-// README for "Let me illustrate...".
+// README for "Let me illustrate...". Files listed below are:
 //
 // Copyright (C) 2005, 2006, 2007 Gregory W. Chicares.
 //
@@ -19,18 +19,18 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: README,v 1.3 2007-01-27 00:00:52 wboutin Exp $
+// $Id: README,v 1.4 2007-07-06 14:41:48 chicares Exp $
 
 * Copyright and license notices for graphics files
 
 The following graphics files (*.ico *.xpm) in this directory are
-subject to the
+copyrighted and subject to the
   GNU General Public License version 2
 as stated at the top of this file. They are original works except for
 the derived works noted below.
 
-Derived from the gnome-icon-theme/24x24 icon set and
-  Copyright (C) 2005 Gregory W. Chicares
+Derived from the gnome-icon-theme/24x24 icon set and copyrighted as
+stated at the beginning of this file:
 
   about.xpm             from stock_about.png
   close.xpm             from stock_close.png
@@ -57,8 +57,8 @@ Derived from the gnome-icon-theme/24x24 icon set and
   varying-width.xpm     from stock_insert-rows.png
   write_spreadsheet.xpm from stock_insert-rows.png
 
-Derived from the gnome-icon-theme/24x24 icon set and
-  Copyright (C) 2005 Gregory W. Chicares
+Derived from the gnome-icon-theme/24x24 icon set and copyrighted as
+stated at the beginning of this file:
 
   default_cell.xpm      from stock_new.png
 
@@ -69,4 +69,11 @@ Steiner, and here
 is his employer's LGPL notice. The original files adapted here were
 retrieved from the gnome cvs (gnome is GPL), and converted or modified
 with the GIMP.
+
+* Maintenance note for xpm files
+
+Apparently the xpm format prescribes type 'char*' for string literals,
+which are actually of type 'char const*'. Ignore that prescription and
+follow the language standard: make them const. If a graphical editor
+removes the 'const', then restore it before committing any change.
 
