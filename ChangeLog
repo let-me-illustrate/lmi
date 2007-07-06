@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.868 2007-07-06 14:41:48 chicares Exp $
+// $Id: ChangeLog,v 1.869 2007-07-06 21:07:49 etarassov Exp $
 
 MAINTENANCE
 
@@ -13176,4 +13176,9 @@ Fix inner static variable declaration by adding a const modifier.
 
   README
 Add a note about editing '.xpm' files.
+
+20070706T2107Z <etarassov@tt-solutions.com> [1226]
+
+  GNUmakefile
+Add test for valid C++ variable declaration in *.xpm files.
 
