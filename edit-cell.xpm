@@ -1,5 +1,5 @@
 /* XPM */
-static char * edit_cell_xpm[] = {
+static char const* edit_cell_xpm[] = {
 "24 24 130 2",
 "  	c None",
 ". 	c #343434",

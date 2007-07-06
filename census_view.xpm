@@ -1,5 +1,5 @@
 /* XPM */
-static char * census_view_xpm[] = {
+static char const* census_view_xpm[] = {
 "16 16 10 1",
 " 	c None",
 ".	c #000000",

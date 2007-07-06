@@ -1,5 +1,5 @@
 /* XPM */
-static char * edit_class_xpm[] = {
+static char const* edit_class_xpm[] = {
 "24 24 131 2",
 "  	c None",
 ". 	c #343434",

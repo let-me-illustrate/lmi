@@ -1,5 +1,5 @@
 /* XPM */
-static char * print_case_xpm[] = {
+static char const* print_case_xpm[] = {
 "24 24 120 2",
 "  	c None",
 ". 	c #000000",

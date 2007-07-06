@@ -1,5 +1,5 @@
 /* XPM */
-static char * print_options_xpm[] = {
+static char const* print_options_xpm[] = {
 "24 24 147 2",
 "  	c None",
 ". 	c #000000",
