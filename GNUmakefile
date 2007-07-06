@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.95 2007-07-05 01:08:21 chicares Exp $
+# $Id: GNUmakefile,v 1.96 2007-07-06 21:07:49 etarassov Exp $
 
 ################################################################################
 
@@ -578,6 +578,8 @@ check_concinnity: source_clean custom_tools
 	@$(ECHO) "  Excessively-long lines in logs:"
 	@for z in ChangeLog DefectLog; \
 	  do $(SED) -e '0,/savannah/d;{/.\{71,\}/!d}' -e "s/^/$$z: /" $$z ; done;
+	@$(ECHO) "  XPM files lacking 'const' modifier:"
+	@grep --files-without-match '^static char const\*' $(xpm_files)
 	@$(ECHO) "  Miscellaneous problems:"
 	@-test_coding_rules $(licensed_files) $(xpm_files)
 	@$(ECHO) " "
