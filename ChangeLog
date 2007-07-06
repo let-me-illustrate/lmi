@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.866 2007-07-06 01:32:21 chicares Exp $
+// $Id: ChangeLog,v 1.867 2007-07-06 10:29:27 etarassov Exp $
 
 MAINTENANCE
 
@@ -13132,4 +13132,43 @@ Update a gcc-version conditional.
 
   config.hpp
 Accommodate amd64.
+
+20070706T1029Z <etarassov@tt-solutions.com> [1226]
+
+  about.xpm
+  census_view.xpm
+  close.xpm
+  database_view.xpm
+  default_cell.xpm
+  delete-row.xpm
+  edit-case.xpm
+  edit-cell.xpm
+  edit-class.xpm
+  exit.xpm
+  fixed-width.xpm
+  help.xpm
+  illustration_view.xpm
+  insert-rows.xpm
+  lmi.xpm
+  new.xpm
+  open.xpm
+  paste-case.xpm
+  paste-case.xpm
+  policy_view.xpm
+  preferences.xpm
+  print.xpm
+  print-case.xpm
+  print-cell.xpm
+  print-options.xpm
+  print-preview.xpm
+  rounding_view.xpm
+  run-case.xpm
+  run-cell.xpm
+  save.xpm
+  saveas.xpm
+  text_view.xpm
+  tier_view.xpm
+  varying-width.xpm
+  write_spreadsheet.xpm
+Fix inner static variable declaration by adding a const modifier.
 

@@ -1,5 +1,5 @@
 /* XPM */
-static char * fixed_width_xpm[] = {
+static char const* fixed_width_xpm[] = {
 "24 24 44 1",
 " 	c None",
 ".	c #000000",

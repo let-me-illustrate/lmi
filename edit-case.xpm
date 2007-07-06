@@ -1,5 +1,5 @@
 /* XPM */
-static char * edit_case_xpm[] = {
+static char const* edit_case_xpm[] = {
 "24 24 128 2",
 "  	c None",
 ". 	c #343434",

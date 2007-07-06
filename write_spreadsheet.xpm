@@ -1,5 +1,5 @@
 /* XPM */
-static char * write_spreadsheet_xpm[] = {
+static char const* write_spreadsheet_xpm[] = {
 "24 24 50 1",
 " 	c None",
 ".	c #000000",

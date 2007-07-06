@@ -1,5 +1,5 @@
 /* XPM */
-static char * preferences_xpm[] = {
+static char const* preferences_xpm[] = {
 "24 24 87 1",
 " 	c None",
 ".	c #000000",
