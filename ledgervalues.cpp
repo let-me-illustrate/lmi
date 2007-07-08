@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.cpp,v 1.29 2007-07-08 01:42:23 chicares Exp $
+// $Id: ledgervalues.cpp,v 1.30 2007-07-08 02:22:35 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -58,10 +58,8 @@ double IllusVal::Run(InputParms const* IP)
     av.SetDebugFilename(debug_filename.string());
 
     double z = av.RunAV();
-    // TODO ?? This seems nasty, but probably this whole class should
-    // be eradicated.
-    LMI_ASSERT(av.ledger_from_av().get());
-    ledger_ = boost::shared_ptr<Ledger>(new Ledger(*av.ledger_from_av()));
+    ledger_ = av.ledger_from_av();
+    LMI_ASSERT(ledger_.get());
 
     return z;
 }
