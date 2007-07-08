@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.50 2007-06-30 13:04:46 chicares Exp $
+// $Id: main_cli.cpp,v 1.51 2007-07-08 03:18:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -135,7 +135,7 @@ void SelfTest()
     IP["SolveType"] = "SolveNone";
 
     expected_value = 6305652.52;
-    IV.Run(&IP);
+    IV.run(IP);
     observed_value = IV.ledger().GetCurrFull().AcctVal.back();
     if(!antediluvian && .005 < std::fabs(expected_value - observed_value))
         {
@@ -151,7 +151,7 @@ void SelfTest()
 
     IP["SolveType"] = "SolveSpecAmt";
     expected_value = 1884064;
-    observed_value = IV.Run(&IP);
+    observed_value = IV.run(IP);
     if(!antediluvian && .005 < std::fabs(expected_value - observed_value))
         {
         warning()
@@ -166,7 +166,7 @@ void SelfTest()
 
     IP["SolveType"] = "SolveEePrem";
     expected_value = 10673.51;
-    observed_value = IV.Run(&IP);
+    observed_value = IV.run(IP);
     if(!antediluvian && .005 < std::fabs(expected_value - observed_value))
         {
         warning()
@@ -181,7 +181,7 @@ void SelfTest()
 
     std::cout
         << "Test solve speed: "
-        << TimeAnAliquot(boost::bind(&IllusVal::Run, &IV, &IP), 0.1)
+        << TimeAnAliquot(boost::bind(&IllusVal::run, &IV, IP), 0.1)
         << '\n'
         ;
 }

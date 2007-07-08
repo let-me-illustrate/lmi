@@ -1,4 +1,4 @@
-// Ledger data.
+// Run an individual illustration, producing a ledger.
 //
 // Copyright (C) 1998, 2001, 2005, 2006, 2007 Gregory W. Chicares.
 //
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.hpp,v 1.19 2007-07-08 01:42:23 chicares Exp $
+// $Id: ledgervalues.hpp,v 1.20 2007-07-08 03:18:31 chicares Exp $
 
 #ifndef ledgervalues_hpp
 #define ledgervalues_hpp
@@ -39,14 +39,9 @@ class Ledger;
 class LedgerInvariant;
 class LedgerVariant;
 
-// Implementation note.
-//
-// Member function Run() ought to take a const& argument. Passing the
-// argument by pointer avoids a problem encountered on the msw
-// platform with the gnu linker: the (implicit) copy ctor for class
-// Inputs "can't be auto-imported". It would be better to fix class
-// Inputs, but that class and class IllusVal itself are both targeted
-// for expunction, so a workaround here seems acceptable for now.
+/// Run an individual illustration, producing a ledger.
+///
+/// This class encapsulates a frequently-used series of operations.
 
 class LMI_SO IllusVal
     :private boost::noncopyable
@@ -56,7 +51,7 @@ class LMI_SO IllusVal
     explicit IllusVal(std::string const& filename = "anonymous");
     ~IllusVal();
 
-    double Run(InputParms const* ip);
+    double run(InputParms const&);
 
     Ledger const& ledger() const;
 
