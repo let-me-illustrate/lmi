@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.76 2007-07-08 12:25:23 chicares Exp $
+// $Id: group_values.cpp,v 1.77 2007-07-08 14:13:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -123,19 +123,18 @@ census_run_result run_census_in_series::operator()
         {
         try
             {
-            if(cell_should_be_ignored(cells[j]))
+            if(!cell_should_be_ignored(cells[j]))
                 {
-                continue;
+                IllusVal IV(serialized_file_path(file, j, "debug").string());
+                IV.run(cells[j]);
+                composite.PlusEq(IV.ledger());
+                result.usec_for_output_ += emit_ledger
+                    (file
+                    ,j
+                    ,IV.ledger()
+                    ,emission
+                    );
                 }
-            IllusVal IV(serialized_file_path(file, j, "debug").string());
-            IV.run(cells[j]);
-            composite.PlusEq(IV.ledger());
-            result.usec_for_output_ += emit_ledger
-                (file
-                ,j
-                ,IV.ledger()
-                ,emission
-                );
             }
         catch(...)
             {
@@ -258,45 +257,43 @@ census_run_result run_census_in_parallel::operator()
         cell_values.reserve(cells.size());
         for(ip = cells.begin(); ip != cells.end(); ++ip, ++j)
             {
-            if(cell_should_be_ignored(cells[j]))
+            if(!cell_should_be_ignored(cells[j]))
                 {
-                continue;
-                }
+                { // Begin fenv_guard scope.
+                fenv_guard fg;
+                boost::shared_ptr<AccountValue> av(new AccountValue(*ip));
+                av->SetDebugFilename
+                    (serialized_file_path(file, j, "debug").string()
+                    );
 
-            { // Begin fenv_guard scope.
-            fenv_guard fg;
-            boost::shared_ptr<AccountValue> av(new AccountValue(*ip));
-            av->SetDebugFilename
-                (serialized_file_path(file, j, "debug").string()
-                );
+                cell_values.push_back(av);
 
-            cell_values.push_back(av);
+                if(std::string::npos != av->Input_->Comments.find("idiosyncrasyZ"))
+                    {
+                    av->Debugging = true;
+                    av->DebugPrintInit();
+                    }
+                } // End fenv_guard scope.
 
-            if(std::string::npos != av->Input_->Comments.find("idiosyncrasyZ"))
-                {
-                av->Debugging = true;
-                av->DebugPrintInit();
-                }
-            } // End fenv_guard scope.
+                if
+                    (   first_cell_inforce_year  != value_cast<int>((*ip)["InforceYear"].str())
+                    ||  first_cell_inforce_month != value_cast<int>((*ip)["InforceMonth"].str())
+                    )
+                    {
+                    fatal_error()
+                        << "Running census by month untested for inforce"
+                        << " with inforce duration varying across cells."
+                        << LMI_FLUSH
+                        ;
+                    }
 
-            if
-                (   first_cell_inforce_year  != value_cast<int>((*ip)["InforceYear"].str())
-                ||  first_cell_inforce_month != value_cast<int>((*ip)["InforceMonth"].str())
-                )
-                {
-                fatal_error()
-                    << "Running census by month untested for inforce"
-                    << " with inforce duration varying across cells."
-                    << LMI_FLUSH
-                    ;
-                }
-
-            if("SolveNone" != (*ip)["SolveType"].str())
-                {
-                fatal_error()
-                    << "Running census by month: solves not permitted."
-                    << LMI_FLUSH
-                    ;
+                if("SolveNone" != (*ip)["SolveType"].str())
+                    {
+                    fatal_error()
+                        << "Running census by month: solves not permitted."
+                        << LMI_FLUSH
+                        ;
+                    }
                 }
 
             if(!meter->reflect_progress())
