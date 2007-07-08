@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.77 2007-07-08 14:13:29 chicares Exp $
+// $Id: group_values.cpp,v 1.78 2007-07-08 19:48:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,7 +33,6 @@
 #include "assert_lmi.hpp"
 #include "emit_ledger.hpp"
 #include "fenv_guard.hpp"
-#include "handle_exceptions.hpp"
 #include "input.hpp"
 #include "inputillus.hpp"
 #include "ledger.hpp"
@@ -95,13 +94,6 @@ class run_census_in_parallel
         );
 };
 
-// TODO ?? Rethink placement of try blocks. Why have them at all?
-// How did they behave in the old production system? (It just rethrew.)
-//
-// But leave them alone for now. They turn exceptions into fatal_errors,
-// which, for now at least, are handled much more gracefully. Yet perhaps
-// they should be moved into run_census.
-
 census_run_result run_census_in_series::operator()
     (fs::path const&                     file
     ,mcenum_emission                     emission
@@ -121,26 +113,18 @@ census_run_result run_census_in_series::operator()
 
     for(unsigned int j = 0; j < cells.size(); ++j)
         {
-        try
+        if(!cell_should_be_ignored(cells[j]))
             {
-            if(!cell_should_be_ignored(cells[j]))
-                {
-                IllusVal IV(serialized_file_path(file, j, "debug").string());
-                IV.run(cells[j]);
-                composite.PlusEq(IV.ledger());
-                result.usec_for_output_ += emit_ledger
-                    (file
-                    ,j
-                    ,IV.ledger()
-                    ,emission
-                    );
-                }
+            IllusVal IV(serialized_file_path(file, j, "debug").string());
+            IV.run(cells[j]);
+            composite.PlusEq(IV.ledger());
+            result.usec_for_output_ += emit_ledger
+                (file
+                ,j
+                ,IV.ledger()
+                ,emission
+                );
             }
-        catch(...)
-            {
-            report_exception();
-            }
-
         if(!meter->reflect_progress())
             {
             result.completed_normally_ = false;
@@ -242,78 +226,81 @@ census_run_result run_census_in_parallel::operator()
     std::vector<boost::shared_ptr<AccountValue> > cell_values;
     std::vector<boost::shared_ptr<AccountValue> >::iterator i;
     std::vector<e_run_basis> const& RunBases = composite.GetRunBases();
-    try
+
+    boost::shared_ptr<progress_meter> meter
+        (create_progress_meter
+            (cells.size()
+            ,"Initializing all cells"
+            ,progress_meter_mode(emission)
+            )
+        );
+    int j = 0;
+    int first_cell_inforce_year  = value_cast<int>((*cells.begin())["InforceYear"].str());
+    int first_cell_inforce_month = value_cast<int>((*cells.begin())["InforceMonth"].str());
+    cell_values.reserve(cells.size());
+    for(ip = cells.begin(); ip != cells.end(); ++ip, ++j)
         {
-        boost::shared_ptr<progress_meter> meter
-            (create_progress_meter
-                (cells.size()
-                ,"Initializing all cells"
-                ,progress_meter_mode(emission)
+        if(!cell_should_be_ignored(cells[j]))
+            {
+            { // Begin fenv_guard scope.
+            fenv_guard fg;
+            boost::shared_ptr<AccountValue> av(new AccountValue(*ip));
+            av->SetDebugFilename
+                (serialized_file_path(file, j, "debug").string()
+                );
+
+            cell_values.push_back(av);
+
+            if(std::string::npos != av->Input_->Comments.find("idiosyncrasyZ"))
+                {
+                av->Debugging = true;
+                av->DebugPrintInit();
+                }
+            } // End fenv_guard scope.
+
+            if
+                (   first_cell_inforce_year  != value_cast<int>((*ip)["InforceYear"].str())
+                ||  first_cell_inforce_month != value_cast<int>((*ip)["InforceMonth"].str())
                 )
-            );
-        int j = 0;
-        int first_cell_inforce_year  = value_cast<int>((*cells.begin())["InforceYear"].str());
-        int first_cell_inforce_month = value_cast<int>((*cells.begin())["InforceMonth"].str());
-        cell_values.reserve(cells.size());
-        for(ip = cells.begin(); ip != cells.end(); ++ip, ++j)
-            {
-            if(!cell_should_be_ignored(cells[j]))
                 {
-                { // Begin fenv_guard scope.
-                fenv_guard fg;
-                boost::shared_ptr<AccountValue> av(new AccountValue(*ip));
-                av->SetDebugFilename
-                    (serialized_file_path(file, j, "debug").string()
-                    );
-
-                cell_values.push_back(av);
-
-                if(std::string::npos != av->Input_->Comments.find("idiosyncrasyZ"))
-                    {
-                    av->Debugging = true;
-                    av->DebugPrintInit();
-                    }
-                } // End fenv_guard scope.
-
-                if
-                    (   first_cell_inforce_year  != value_cast<int>((*ip)["InforceYear"].str())
-                    ||  first_cell_inforce_month != value_cast<int>((*ip)["InforceMonth"].str())
-                    )
-                    {
-                    fatal_error()
-                        << "Running census by month untested for inforce"
-                        << " with inforce duration varying across cells."
-                        << LMI_FLUSH
-                        ;
-                    }
-
-                if("SolveNone" != (*ip)["SolveType"].str())
-                    {
-                    fatal_error()
-                        << "Running census by month: solves not permitted."
-                        << LMI_FLUSH
-                        ;
-                    }
+                fatal_error()
+                    << "Running census by month untested for inforce"
+                    << " with inforce duration varying across cells."
+                    << LMI_FLUSH
+                    ;
                 }
 
-            if(!meter->reflect_progress())
+            if("SolveNone" != (*ip)["SolveType"].str())
                 {
-                result.completed_normally_ = false;
-                goto done;
+                fatal_error()
+                    << "Running census by month: solves not permitted."
+                    << LMI_FLUSH
+                    ;
                 }
             }
-        if(0 == cell_values.size())
+
+        if(!meter->reflect_progress())
             {
-            // Make sure it's safe to dereference cell_values[0] later.
-            fatal_error()
-                << "No cell with any lives was included in the composite."
-                << LMI_FLUSH
-                ;
+            result.completed_normally_ = false;
+            goto done;
             }
-        }
-    catch(...)
+        } // End for.
+    // Trigger the dtor explicitly. This must be reworked. For now,
+    // if this weren't done, then 'make system_test' output wouldn't
+    // look right, because this progress_meter doesn't go out of
+    // scope until later than it did before. The underlying problem
+    // is that the newline that terminates the series of dots in
+    // 'progress_meter_cli.cpp' is written by a dtor; an explicit
+    // function is wanted instead. Destruction can be asynchronous,
+    // but the terminating newline must be written synchronously.
+    meter.reset();
+    if(0 == cell_values.size())
         {
-        report_exception();
+        // Make sure it's safe to dereference cell_values[0] later.
+        fatal_error()
+            << "No cell with any lives was included in the composite."
+            << LMI_FLUSH
+            ;
         }
 
     for
@@ -321,7 +308,6 @@ census_run_result run_census_in_parallel::operator()
         ;run_basis != RunBases.end()
         ;++run_basis
         )
-    try
         {
         // It seems somewhat anomalous to create and update a GUI
         // progress meter inside this critical calculation section,
@@ -604,11 +590,7 @@ census_run_result run_census_in_parallel::operator()
             }
 
         } // End fenv_guard scope.
-        } // End for...try.
-    catch(...)
-        {
-        report_exception();
-        }
+        } // End for.
 
     for(i = cell_values.begin(); i != cell_values.end(); ++i)
         {
