@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.75 2007-07-03 00:21:55 chicares Exp $
+// $Id: group_values.cpp,v 1.76 2007-07-08 12:25:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -37,6 +37,7 @@
 #include "input.hpp"
 #include "inputillus.hpp"
 #include "ledger.hpp"
+#include "ledgervalues.hpp"
 #include "materially_equal.hpp"
 #include "path_utility.hpp"
 #include "progress_meter.hpp"
@@ -126,30 +127,13 @@ census_run_result run_census_in_series::operator()
                 {
                 continue;
                 }
-/*
-// TODO ?? Why use class IllusVal at all? What's the advantage over
-// the account-value class?
-            IllusVal IV(serialized_file_path(file, j, "MISTAKE").string());
-            IV.Run(cells[j]);
+            IllusVal IV(serialized_file_path(file, j, "debug").string());
+            IV.run(cells[j]);
             composite.PlusEq(IV.ledger());
-*/
-            boost::shared_ptr<Ledger const> resulting_ledger;
-            { // Begin fenv_guard scope.
-            fenv_guard fg;
-            AccountValue av(cells[j]);
-            av.SetDebugFilename
-                (serialized_file_path(file, j, "debug").string()
-                );
-            av.RunAV();
-            resulting_ledger = av.ledger_from_av();
-            composite.PlusEq(*resulting_ledger);
-            } // End fenv_guard scope.
-            LMI_ASSERT(resulting_ledger.get());
-
             result.usec_for_output_ += emit_ledger
                 (file
                 ,j
-                ,*resulting_ledger
+                ,IV.ledger()
                 ,emission
                 );
             }
