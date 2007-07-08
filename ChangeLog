@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.869 2007-07-06 21:07:49 etarassov Exp $
+// $Id: ChangeLog,v 1.870 2007-07-08 03:18:31 chicares Exp $
 
 MAINTENANCE
 
@@ -13181,4 +13181,24 @@ Add a note about editing '.xpm' files.
 
   GNUmakefile
 Add test for valid C++ variable declaration in *.xpm files.
+
+20070708T0142Z <chicares@cox.net> [1226]
+
+  ledgervalues.cpp
+  ledgervalues.hpp
+Guard pointer dereferencing.
+
+20070708T0222Z <chicares@cox.net> [1225]
+
+  ledgervalues.cpp
+Copy a shared pointer, not its contents.
+
+ <chicares@cox.net> [1225]
+
+  illustrator.cpp
+  ledgervalues.cpp
+  ledgervalues.hpp
+  main_cli.cpp
+Refactor. Presumably the problem formerly mentioned in the header was
+due to 'calculate.hpp', which was expunged 20070628T1755Z.
 

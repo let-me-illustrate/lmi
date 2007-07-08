@@ -1,4 +1,4 @@
-// Ledger data.
+// Run an individual illustration, producing a ledger.
 //
 // Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Gregory W. Chicares.
 //
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.cpp,v 1.30 2007-07-08 02:22:35 chicares Exp $
+// $Id: ledgervalues.cpp,v 1.31 2007-07-08 03:18:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -46,10 +46,10 @@ IllusVal::~IllusVal()
 {
 }
 
-double IllusVal::Run(InputParms const* IP)
+double IllusVal::run(InputParms const& input)
 {
     fenv_guard fg;
-    AccountValue av(*IP);
+    AccountValue av(input);
 
     fs::path debug_filename = fs::change_extension
         (fs::path(filename_)
