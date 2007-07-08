@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.cpp,v 1.22 2007-06-30 13:03:24 chicares Exp $
+// $Id: illustrator.cpp,v 1.23 2007-07-08 03:18:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -78,7 +78,7 @@ bool illustrator::operator()(fs::path const& file_path)
         usec_for_input_        = timer.stop().elapsed_usec();
         timer.restart();
         IllusVal IV;
-        IV.Run(&doc.input_data());
+        IV.run(doc.input_data());
         usec_for_calculations_ = timer.stop().elapsed_usec();
         usec_for_output_ = emit_ledger(file_path, 0, IV.ledger(), emission_);
         }
@@ -90,7 +90,7 @@ bool illustrator::operator()(fs::path const& file_path)
         usec_for_input_ = timer.stop().elapsed_usec();
         timer.restart();
         IllusVal z;
-        z.Run(&input);
+        z.run(input);
         usec_for_calculations_ = timer.stop().elapsed_usec();
         fs::path out_file = file_path;
         if(!file_path.string().empty())
