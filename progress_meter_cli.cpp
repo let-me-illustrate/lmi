@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter_cli.cpp,v 1.12 2007-05-21 16:28:45 chicares Exp $
+// $Id: progress_meter_cli.cpp,v 1.13 2007-07-09 12:19:53 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -90,7 +90,7 @@ class concrete_progress_meter
     virtual ~concrete_progress_meter();
 
   private:
-    // progress_meter overrides.
+    // progress_meter required implementation.
     virtual std::string progress_message() const;
     virtual bool show_progress_message() const;
 
