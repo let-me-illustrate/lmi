@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter_test.cpp,v 1.12 2007-07-09 10:35:36 chicares Exp $
+// $Id: progress_meter_test.cpp,v 1.13 2007-07-09 16:57:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -65,11 +65,17 @@ void progress_meter_test::test_normal_usage()
         );
     for(int i = 0; i < max_count; ++i)
         {
-        // Intended use: do some work, then update meter at end of block.
+        // Intended use: do some work, then call reflect_progress() at
+        // end of block, then call culminate() right after block ends.
         BOOST_TEST(meter->reflect_progress());
-        // Of course, you could do more work here, too, if you like.
+        // Of course, you could do more work here, too, if you like,
+        // but that's generally not the best idea.
         }
-    BOOST_TEST_EQUAL("Some title...", progress_meter_unit_test_stream().str());
+    meter->culminate();
+    BOOST_TEST_EQUAL
+        ("Some title...\n"
+        ,progress_meter_unit_test_stream().str()
+        );
     BOOST_TEST_THROW
         (meter->reflect_progress()
         ,std::logic_error
@@ -91,6 +97,7 @@ void progress_meter_test::test_quiet_display_mode()
         {
         BOOST_TEST(meter->reflect_progress());
         }
+    meter->culminate();
 }
 
 void progress_meter_test::test_distinct_metered_operations()
@@ -109,6 +116,7 @@ void progress_meter_test::test_distinct_metered_operations()
         {
         BOOST_TEST(meter0->reflect_progress());
         }
+    meter0->culminate();
 
     boost::shared_ptr<progress_meter> meter1
         (create_progress_meter
@@ -121,6 +129,7 @@ void progress_meter_test::test_distinct_metered_operations()
         {
         BOOST_TEST(meter1->reflect_progress());
         }
+    meter1->culminate();
 
     BOOST_TEST_EQUAL
         ("Operation 0...\nOperation 1...\n"
@@ -143,7 +152,11 @@ void progress_meter_test::test_empty_title_and_zero_max_count()
         {
         BOOST_TEST(meter->reflect_progress());
         }
-    BOOST_TEST(progress_meter_unit_test_stream().str().empty());
+    meter->culminate();
+    BOOST_TEST_EQUAL
+        ("\n"
+        ,progress_meter_unit_test_stream().str()
+        );
     BOOST_TEST_THROW
         (meter->reflect_progress()
         ,std::logic_error
