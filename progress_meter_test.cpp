@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter_test.cpp,v 1.10 2007-07-09 09:55:30 chicares Exp $
+// $Id: progress_meter_test.cpp,v 1.11 2007-07-09 10:03:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -89,11 +89,6 @@ void progress_meter_test::test_quiet_display_mode()
         {
         BOOST_TEST(meter->reflect_progress());
         }
-    BOOST_TEST_THROW
-        (meter->reflect_progress()
-        ,std::logic_error
-        ,"progress_meter: max_count_ exceeded."
-        );
 }
 
 void progress_meter_test::test_empty_title_and_zero_max_count()
