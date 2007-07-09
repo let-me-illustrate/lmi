@@ -19,20 +19,27 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter.hpp,v 1.17 2007-07-09 14:05:14 chicares Exp $
+// $Id: progress_meter.hpp,v 1.18 2007-07-09 23:48:25 chicares Exp $
 
 /// Design notes for class progress_meter.
 ///
 /// This abstract base class displays progress on operations expected
 /// to take a long time, so that users know the application is doing
-/// something and can see how much longer it will take. Intended use:
-/// a concrete derived class is instantiated at the beginning of the
-/// operation, and the resulting object's reflect_progress() function
-/// is called on each of a number of iterations known in advance; each
-/// time it's called, it may provide the user an opportunity to cancel
-/// the operation. A concrete implementation should be provided for
-/// each user interface; the default implementation does almost nothing
-/// and is probably appropriate for cgi-bin.
+/// something; a particular implementation might provide other useful
+/// information such as an estimate of how much longer it will take.
+///
+/// A concrete implementation is required for each user interface.
+///
+/// Intended use.
+///
+/// Create an instance of a concrete derived class before the first
+/// iteration, specifying the total number of iterations, which is
+/// presumed to be ascertainable in advance.
+///
+/// Call reflect_progress() at the end of each iteration. If it
+/// returns false, then stop iterating.
+///
+/// After the last iteration, call culminate().
 ///
 /// Public interface.
 ///
