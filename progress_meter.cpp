@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter.cpp,v 1.7 2007-05-12 19:05:33 chicares Exp $
+// $Id: progress_meter.cpp,v 1.8 2007-07-09 14:05:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -94,6 +94,11 @@ bool progress_meter::reflect_progress()
         }
     ++count_;
     return show_progress_message();
+}
+
+void progress_meter::culminate()
+{
+    culminate_ui();
 }
 
 int progress_meter::count() const
