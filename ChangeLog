@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.873 2007-07-09 16:57:22 chicares Exp $
+// $Id: ChangeLog,v 1.874 2007-07-09 23:48:25 chicares Exp $
 
 MAINTENANCE
 
@@ -13286,4 +13286,10 @@ Add new members that don't yet actually do anything.
   progress_meter_cli.cpp
   progress_meter_test.cpp
 Remove the defect noted 20070708T1948Z and 20070709T1035Z.
+
+20070709T2348Z <chicares@cox.net> [1223]
+
+  progress_meter.hpp
+Improve and correct documentation. For example, reflect_progress() per
+se doesn't offer an opportunity to cancel.
 
