@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter_test.cpp,v 1.8 2007-05-12 23:48:27 chicares Exp $
+// $Id: progress_meter_test.cpp,v 1.9 2007-07-09 09:47:46 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,8 +32,17 @@
 
 #include <sstream>
 
-struct progress_meter_test
+class progress_meter_test
 {
+  public:
+    static void test()
+        {
+        progress_meter_test::test_normal_usage();
+        progress_meter_test::test_empty_title_and_zero_max_count();
+        progress_meter_test::test_invalid_display_mode();
+        }
+
+  private:
     static void test_normal_usage();
     static void test_quiet_display_mode();
     static void test_empty_title_and_zero_max_count();
@@ -128,9 +137,7 @@ void progress_meter_test::test_invalid_display_mode()
 
 int test_main(int, char*[])
 {
-    progress_meter_test::test_normal_usage();
-    progress_meter_test::test_empty_title_and_zero_max_count();
-    progress_meter_test::test_invalid_display_mode();
+    progress_meter_test::test();
     return EXIT_SUCCESS;
 }
 
