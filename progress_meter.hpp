@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter.hpp,v 1.16 2007-07-09 12:41:31 chicares Exp $
+// $Id: progress_meter.hpp,v 1.17 2007-07-09 14:05:14 chicares Exp $
 
 /// Design notes for class progress_meter.
 ///
@@ -49,10 +49,13 @@
 ///     specified by progress_meter_unit_test_stream(), to facilitate
 ///     unit testing. Used only with the command-line interface.
 ///
-/// reflect_progress(): Throw an exception if the iteration counter
-/// equals or exceeds its maximum; then increment the counter; then
-/// call show_progress_message() and return its return value, which is
-/// false if the operation is to be cancelled.
+/// reflect_progress(): Perform periodic processing: throw an
+/// exception if the iteration counter equals or exceeds its maximum;
+/// then increment the counter; then call show_progress_message() and
+/// return its return value, which is false if the operation is to be
+/// cancelled and true otherwise.
+///
+/// culminate(): Perform postprocessing: call culminate_ui().
 ///
 /// Protected interface--nonvirtual.
 ///
@@ -69,6 +72,10 @@
 ///
 /// show_progress_message(): Display a message indicating progress as
 /// appropriate; optionally return false to cancel the operation.
+///
+/// culminate_ui(): Apply finishing touches to the user interface. For
+/// example, the command-line implementation writes a newline and
+/// flushes its stream.
 ///
 /// Data members.
 ///
@@ -162,6 +169,7 @@ class LMI_SO progress_meter
         };
 
     bool reflect_progress();
+    void culminate();
 
   protected:
     progress_meter
@@ -177,6 +185,7 @@ class LMI_SO progress_meter
 
     virtual std::string progress_message() const = 0;
     virtual bool show_progress_message() = 0;
+    virtual void culminate_ui() = 0;
 
   private:
     int               count_;
