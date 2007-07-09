@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.870 2007-07-08 03:18:31 chicares Exp $
+// $Id: ChangeLog,v 1.871 2007-07-09 10:35:36 chicares Exp $
 
 MAINTENANCE
 
@@ -13201,4 +13201,41 @@ Copy a shared pointer, not its contents.
   main_cli.cpp
 Refactor. Presumably the problem formerly mentioned in the header was
 due to 'calculate.hpp', which was expunged 20070628T1755Z.
+
+20070708T1225Z <chicares@cox.net> [1224]
+
+  group_values.cpp
+Refactor.
+
+20070708T1413Z <chicares@cox.net> [1224]
+
+  group_values.cpp
+Invert logic of cell_should_be_ignored() conditionals. This affects
+only the progress meter, which now should count all the way up to its
+maximum.
+
+20070708T1948Z <chicares@cox.net> [1223]
+
+  group_values.cpp
+Eliminate try...catch, revealing a design problem.
+
+20070709T0947Z <chicares@cox.net> [1223]
+
+  progress_meter_test.cpp
+Refactor to make a defect easier to notice.
+
+20070709T0955Z <chicares@cox.net> [1223]
+
+  progress_meter_test.cpp
+Fix the defect noted 20070709T0947Z.
+
+20070709T1003Z <chicares@cox.net> [1223]
+
+  progress_meter_test.cpp
+Eliminate a useless test.
+
+20070709T1035Z <chicares@cox.net> [1223]
+
+  progress_meter_test.cpp
+Demonstrate the design problem identified 20070708T1948Z.
 
