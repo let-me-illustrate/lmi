@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter.hpp,v 1.15 2007-07-09 11:02:43 chicares Exp $
+// $Id: progress_meter.hpp,v 1.16 2007-07-09 12:41:31 chicares Exp $
 
 /// Design notes for class progress_meter.
 ///
@@ -176,7 +176,7 @@ class LMI_SO progress_meter
     int max_count() const;
 
     virtual std::string progress_message() const = 0;
-    virtual bool show_progress_message() const = 0;
+    virtual bool show_progress_message() = 0;
 
   private:
     int               count_;
