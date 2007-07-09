@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.871 2007-07-09 10:35:36 chicares Exp $
+// $Id: ChangeLog,v 1.872 2007-07-09 11:02:43 chicares Exp $
 
 MAINTENANCE
 
@@ -13238,4 +13238,20 @@ Eliminate a useless test.
 
   progress_meter_test.cpp
 Demonstrate the design problem identified 20070708T1948Z.
+
+20070709T1043Z <chicares@cox.net> [1223]
+
+  progress_meter.hpp
+Remove an untrue comment. No special member function is implicitly
+declared.
+
+20070709T1054Z <chicares@cox.net> [1223]
+
+  progress_meter.hpp
+Rearrange member documentation in declaration order.
+
+20070709T1102Z <chicares@cox.net> [1223]
+
+  progress_meter.hpp
+Correct a comment that doesn't parse.
 

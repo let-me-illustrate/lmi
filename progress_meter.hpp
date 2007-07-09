@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter.hpp,v 1.14 2007-07-09 10:54:20 chicares Exp $
+// $Id: progress_meter.hpp,v 1.15 2007-07-09 11:02:43 chicares Exp $
 
 /// Design notes for class progress_meter.
 ///
@@ -52,7 +52,7 @@
 /// reflect_progress(): Throw an exception if the iteration counter
 /// equals or exceeds its maximum; then increment the counter; then
 /// call show_progress_message() and return its return value, which is
-/// optionally return false to cancel the operation.
+/// false if the operation is to be cancelled.
 ///
 /// Protected interface--nonvirtual.
 ///
