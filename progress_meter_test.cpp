@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter_test.cpp,v 1.11 2007-07-09 10:03:19 chicares Exp $
+// $Id: progress_meter_test.cpp,v 1.12 2007-07-09 10:35:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -39,6 +39,7 @@ class progress_meter_test
         {
         progress_meter_test::test_normal_usage();
         progress_meter_test::test_quiet_display_mode();
+        progress_meter_test::test_distinct_metered_operations();
         progress_meter_test::test_empty_title_and_zero_max_count();
         progress_meter_test::test_invalid_display_mode();
         }
@@ -46,6 +47,7 @@ class progress_meter_test
   private:
     static void test_normal_usage();
     static void test_quiet_display_mode();
+    static void test_distinct_metered_operations();
     static void test_empty_title_and_zero_max_count();
     static void test_invalid_display_mode();
 };
@@ -89,6 +91,41 @@ void progress_meter_test::test_quiet_display_mode()
         {
         BOOST_TEST(meter->reflect_progress());
         }
+}
+
+void progress_meter_test::test_distinct_metered_operations()
+{
+    progress_meter_unit_test_stream().str("");
+    int const max_count = 3;
+
+    boost::shared_ptr<progress_meter> meter0
+        (create_progress_meter
+            (max_count
+            ,"Operation 0"
+            ,progress_meter::e_unit_test_mode
+            )
+        );
+    for(int i = 0; i < max_count; ++i)
+        {
+        BOOST_TEST(meter0->reflect_progress());
+        }
+
+    boost::shared_ptr<progress_meter> meter1
+        (create_progress_meter
+            (max_count
+            ,"Operation 1"
+            ,progress_meter::e_unit_test_mode
+            )
+        );
+    for(int i = 0; i < max_count; ++i)
+        {
+        BOOST_TEST(meter1->reflect_progress());
+        }
+
+    BOOST_TEST_EQUAL
+        ("Operation 0...\nOperation 1...\n"
+        ,progress_meter_unit_test_stream().str()
+        );
 }
 
 void progress_meter_test::test_empty_title_and_zero_max_count()
