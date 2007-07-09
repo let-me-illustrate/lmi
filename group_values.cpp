@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.78 2007-07-08 19:48:43 chicares Exp $
+// $Id: group_values.cpp,v 1.79 2007-07-09 16:57:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -131,6 +131,7 @@ census_run_result run_census_in_series::operator()
             goto done;
             }
         }
+    meter->culminate();
 
     result.usec_for_output_ += emit_ledger
         (file
@@ -285,15 +286,7 @@ census_run_result run_census_in_parallel::operator()
             goto done;
             }
         } // End for.
-    // Trigger the dtor explicitly. This must be reworked. For now,
-    // if this weren't done, then 'make system_test' output wouldn't
-    // look right, because this progress_meter doesn't go out of
-    // scope until later than it did before. The underlying problem
-    // is that the newline that terminates the series of dots in
-    // 'progress_meter_cli.cpp' is written by a dtor; an explicit
-    // function is wanted instead. Destruction can be asynchronous,
-    // but the terminating newline must be written synchronously.
-    meter.reset();
+    meter->culminate();
     if(0 == cell_values.size())
         {
         // Make sure it's safe to dereference cell_values[0] later.
@@ -583,6 +576,7 @@ census_run_result run_census_in_parallel::operator()
                 goto done;
                 }
             } // End for year.
+        meter->culminate();
 
         for(i = cell_values.begin(); i != cell_values.end(); ++i)
             {
