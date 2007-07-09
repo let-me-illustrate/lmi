@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter_wx.cpp,v 1.10 2007-07-09 12:41:31 chicares Exp $
+// $Id: progress_meter_wx.cpp,v 1.11 2007-07-09 14:05:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -68,6 +68,7 @@ class concrete_progress_meter
     // progress_meter required implementation.
     virtual std::string progress_message() const;
     virtual bool show_progress_message();
+    virtual void culminate_ui();
 
     wxProgressDialog progress_dialog_;
 };
@@ -112,6 +113,10 @@ std::string concrete_progress_meter::progress_message() const
 bool concrete_progress_meter::show_progress_message()
 {
     return progress_dialog_.Update(count(), progress_message().c_str());
+}
+
+void concrete_progress_meter::culminate_ui()
+{
 }
 
 boost::shared_ptr<progress_meter> concrete_progress_meter_creator

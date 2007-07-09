@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter_cli.cpp,v 1.14 2007-07-09 12:41:31 chicares Exp $
+// $Id: progress_meter_cli.cpp,v 1.15 2007-07-09 14:05:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -93,6 +93,7 @@ class concrete_progress_meter
     // progress_meter required implementation.
     virtual std::string progress_message() const;
     virtual bool show_progress_message();
+    virtual void culminate_ui();
 
     std::ostream os_;
 };
@@ -126,6 +127,11 @@ bool concrete_progress_meter::show_progress_message()
 {
     os_ << progress_message() << std::flush;
     return true;
+}
+
+void concrete_progress_meter::culminate_ui()
+{
+// Move contents of dtor's try-block here.
 }
 
 boost::shared_ptr<progress_meter> concrete_progress_meter_creator
