@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter.hpp,v 1.12 2007-05-12 18:44:17 chicares Exp $
+// $Id: progress_meter.hpp,v 1.13 2007-07-09 10:43:29 chicares Exp $
 
 /// Design notes for class progress_meter.
 ///
@@ -43,8 +43,6 @@
 /// title_: A string suitable (e.g.) as a message-box title.
 ///
 /// Public interface.
-///
-/// Implicitly-declared special member functions do the right thing.
 ///
 /// reflect_progress(): Throw an exception if the iteration counter
 /// equals or exceeds its maximum; then increment the counter; then
