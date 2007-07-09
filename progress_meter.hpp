@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter.hpp,v 1.13 2007-07-09 10:43:29 chicares Exp $
+// $Id: progress_meter.hpp,v 1.14 2007-07-09 10:54:20 chicares Exp $
 
 /// Design notes for class progress_meter.
 ///
@@ -34,20 +34,7 @@
 /// each user interface; the default implementation does almost nothing
 /// and is probably appropriate for cgi-bin.
 ///
-/// Data members.
-///
-/// count_: Number of iterations completed so far.
-///
-/// max_count_: Total number of iterations anticipated.
-///
-/// title_: A string suitable (e.g.) as a message-box title.
-///
 /// Public interface.
-///
-/// reflect_progress(): Throw an exception if the iteration counter
-/// equals or exceeds its maximum; then increment the counter; then
-/// call show_progress_message() and return its return value, which is
-/// optionally return false to cancel the operation.
 ///
 /// enum enum_display_mode: Specifies display mode. Any concrete
 /// implementation is free to disregard it and behave as though
@@ -62,6 +49,11 @@
 ///     specified by progress_meter_unit_test_stream(), to facilitate
 ///     unit testing. Used only with the command-line interface.
 ///
+/// reflect_progress(): Throw an exception if the iteration counter
+/// equals or exceeds its maximum; then increment the counter; then
+/// call show_progress_message() and return its return value, which is
+/// optionally return false to cancel the operation.
+///
 /// Protected interface--nonvirtual.
 ///
 /// ctor: Initialize data members from ctor arguments.
@@ -72,11 +64,19 @@
 ///
 /// Protected interface--virtual.
 ///
+/// progress_message(): Return a string to be displayed when progress
+/// is reported.
+///
 /// show_progress_message(): Display a message indicating progress as
 /// appropriate; optionally return false to cancel the operation.
 ///
-/// progress_message(): Return a string to be displayed when progress
-/// is reported.
+/// Data members.
+///
+/// count_: Number of iterations completed so far.
+///
+/// max_count_: Total number of iterations anticipated.
+///
+/// title_: A string suitable (e.g.) as a message-box title.
 ///
 /// Nonmember functions.
 ///
