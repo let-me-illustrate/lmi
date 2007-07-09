@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.872 2007-07-09 11:02:43 chicares Exp $
+// $Id: ChangeLog,v 1.873 2007-07-09 16:57:22 chicares Exp $
 
 MAINTENANCE
 
@@ -13254,4 +13254,36 @@ Rearrange member documentation in declaration order.
 
   progress_meter.hpp
 Correct a comment that doesn't parse.
+
+20070709T1219Z <chicares@cox.net> [1223]
+
+  progress_meter_cgi.cpp
+  progress_meter_cli.cpp
+  progress_meter_wx.cpp
+Distinguish required implementation from optional overrides.
+
+20070709T1241Z <chicares@cox.net> [1223]
+
+  progress_meter.hpp
+  progress_meter_cgi.cpp
+  progress_meter_cli.cpp
+  progress_meter_wx.cpp
+Implement const-correctness less strangely.
+
+20070709T1405Z <chicares@cox.net> [1223]
+
+  progress_meter.cpp
+  progress_meter.hpp
+  progress_meter_cgi.cpp
+  progress_meter_cli.cpp
+  progress_meter_wx.cpp
+Add new members that don't yet actually do anything.
+
+20070709T1657Z <chicares@cox.net> [1223]
+
+  group_values.cpp
+  main_wx.cpp
+  progress_meter_cli.cpp
+  progress_meter_test.cpp
+Remove the defect noted 20070708T1948Z and 20070709T1035Z.
 
