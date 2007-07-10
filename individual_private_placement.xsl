@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.60 2007-07-04 12:50:16 etarassov Exp $
+    $Id: individual_private_placement.xsl,v 1.61 2007-07-10 18:53:25 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -102,7 +102,7 @@
       <!-- Disabled for now
         <fo:page-sequence master-reference="cover" initial-page-number="200">
           <fo:flow flow-name="xsl-region-body">
-            <fo:block text-align="left" font="9pt sans-serif">
+            <fo:block text-align="left" font-size="9pt" font-family="sans-serif">
               <fo:block>
                 <xsl:value-of select="$scalars/PolicyMktgName"/>
               </fo:block>
@@ -267,7 +267,7 @@
             <xsl:with-param name="displaycontractlanguage" select="1"/>
             <xsl:with-param name="displaydisclaimer" select="1"/>
           </xsl:call-template>
-          <fo:block text-align="center" font="9pt serif" padding-top="1em">
+          <fo:block text-align="center" font-size="9pt" font-family="serif" padding-top="1em">
             End of Year Contract Values using Guaranteed Charges
             <xsl:call-template name="dollar-units"/>
           </fo:block>
@@ -290,7 +290,7 @@
             <xsl:with-param name="displaycontractlanguage" select="1"/>
             <xsl:with-param name="displaydisclaimer" select="1"/>
           </xsl:call-template>
-          <fo:block text-align="center" font="9pt serif" padding-top="1em">
+          <fo:block text-align="center" font-size="9pt" font-family="serif" padding-top="1em">
             End of Year Contract Values using Current Charges
             <xsl:call-template name="dollar-units"/>
           </fo:block>
@@ -313,7 +313,7 @@
             <xsl:with-param name="displaycontractlanguage" select="1"/>
             <xsl:with-param name="displaydisclaimer" select="1"/>
           </xsl:call-template>
-          <fo:block text-align="center" font="9pt serif" padding-top="1em">
+          <fo:block text-align="center" font-size="9pt" font-family="serif" padding-top="1em">
             End of Year Contract Values using Current Charges
             <xsl:call-template name="dollar-units"/>
           </fo:block>
@@ -335,7 +335,7 @@
             <xsl:with-param name="displaycontractlanguage" select="0"/>
             <xsl:with-param name="displaydisclaimer" select="0"/>
           </xsl:call-template>
-          <fo:block text-align="center" font="10.0pt serif" padding="2em 0 1em">
+          <fo:block text-align="center" font-size="10pt" font-family="serif" padding="2em 0 1em">
             Footnotes
           </fo:block>
         </fo:static-content>
@@ -347,7 +347,7 @@
 
         <!-- FOOTNOTES Body  -->
         <fo:flow flow-name="xsl-region-body">
-          <fo:block text-align="left" font="9pt sans-serif">
+          <fo:block text-align="left" font-size="9pt" font-family="sans-serif">
             <fo:block>
               This Contract is only available to persons who are deemed
               accredited investors or qualified purchasers under applicable
@@ -468,7 +468,7 @@
 
           <!-- Forced New Page -->
           <fo:block break-after="page"/>
-          <fo:block text-align="left" font="9pt sans-serif">
+          <fo:block text-align="left" font-size="9pt" font-family="sans-serif">
             <fo:block>
               In the states of Alaska or South Dakota, there may be a surrender
               charge in connection with premium tax liability that would
@@ -642,7 +642,7 @@
               <xsl:with-param name="displaycontractlanguage" select="1"/>
               <xsl:with-param name="displaydisclaimer" select="1"/>
             </xsl:call-template>
-            <fo:block text-align="center" font="9pt serif" padding-top="1em">
+            <fo:block text-align="center" font-size="9pt" font-family="serif" padding-top="1em">
               <xsl:value-of select="illustration/supplementalreport/title"/>
               <xsl:call-template name="dollar-units"/>
             </fo:block>
@@ -780,7 +780,7 @@
       </fo:table-body>
     </fo:table>
 
-    <fo:block text-align="left" font="9pt sans-serif">
+    <fo:block text-align="left" font-size="9pt" font-family="sans-serif">
       <xsl:call-template name="print-franchise-and-policynumber"/>
     </fo:block>
   </xsl:template>
@@ -806,7 +806,7 @@
 
     <!-- The main contents of the body page -->
     <fo:flow flow-name="xsl-region-body">
-      <fo:block font="9pt serif">
+      <fo:block font-size="9pt" font-family="serif">
         <fo:table table-layout="fixed" width="100%">
           <xsl:call-template name="generate-table-columns">
             <xsl:with-param name="columns" select="$columns"/>
@@ -877,7 +877,7 @@
 
     <!-- The main contents of the body page -->
     <fo:flow flow-name="xsl-region-body">
-      <fo:block font="9pt serif">
+      <fo:block font-size="9pt" font-family="serif">
         <fo:table table-layout="fixed" width="100%">
           <xsl:call-template name="generate-table-columns">
             <xsl:with-param name="columns" select="$columns"/>
@@ -947,7 +947,7 @@
 
     <!-- The main contents of the body page -->
     <fo:flow flow-name="xsl-region-body">
-      <fo:block font="9pt serif">
+      <fo:block font-size="9pt" font-family="serif">
         <fo:table table-layout="fixed" width="100%">
           <xsl:call-template name="generate-table-columns">
             <xsl:with-param name="columns" select="$columns"/>

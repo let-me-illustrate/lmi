@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.59 2007-07-04 12:50:16 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.60 2007-07-10 18:53:25 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -153,7 +153,7 @@
           <fo:block text-align="center" font-size="10pt" padding-top="1em">
             NARRATIVE SUMMARY
           </fo:block>
-          <fo:block text-align="left" font="9pt sans-serif">
+          <fo:block text-align="left" font-size="9pt" font-family="sans-serif">
             <fo:block padding-top="1em">
               <!-- Single Premium Logic -->
               <xsl:choose>
@@ -342,7 +342,7 @@
           <fo:block text-align="center" font-size="10pt">
             NARRATIVE SUMMARY (Continued)
           </fo:block>
-          <fo:block text-align="left" font="9pt sans-serif">
+          <fo:block text-align="left" font-size="9pt" font-family="sans-serif">
             <xsl:if test="$scalars/SalesLoadRefund!='0%'">
               <fo:block padding-top="2em">
                 Sales Load Refund: We will refund a portion of the sales load
@@ -585,7 +585,7 @@
           <fo:block text-align="center" font-size="10pt" padding-top="1em">
             Column Headings and Key Terms Used in This Illustration
           </fo:block>
-          <fo:block text-align="left" font="9pt sans-serif" padding-top="1em">
+          <fo:block text-align="left" font-size="9pt" font-family="sans-serif" padding-top="1em">
             <fo:block>
               <fo:inline font-weight="bold">
                 <xsl:value-of select="$scalars/AvName"/> Value:
@@ -868,7 +868,7 @@
           <xsl:variable name="tabular-detail-report-columns-raw" select="document('')//xsl:variable[@name='tabular-detail-report-columns']/column"/>
           <xsl:variable name="columns" select="$tabular-detail-report-columns-raw[not(@composite) or boolean(boolean(@composite='1')=$is_composite)]"/>
 
-          <fo:block font="9pt serif">
+          <fo:block font-size="9pt" font-family="serif">
             <fo:table table-layout="fixed" width="100%">
               <xsl:call-template name="generate-table-columns">
                 <xsl:with-param name="columns" select="$columns"/>
@@ -936,7 +936,7 @@
           <xsl:variable name="tabular-detail-report2-columns-raw" select="document('')//xsl:variable[@name='tabular-detail-report2-columns']/column"/>
           <xsl:variable name="columns" select="$tabular-detail-report2-columns-raw[not(@composite) or boolean(boolean(@composite='1')=$is_composite)]"/>
 
-          <fo:block font="9pt serif">
+          <fo:block font-size="9pt" font-family="serif">
             <fo:table table-layout="fixed" width="{8*count($columns)}em">
               <xsl:call-template name="generate-table-columns">
                 <xsl:with-param name="columns" select="$columns"/>
@@ -1066,7 +1066,7 @@
       </xsl:if>
     </fo:block>
 
-    <fo:block padding-before="5pt" font="9pt sans-serif">
+    <fo:block padding-before="5pt" font-size="9pt" font-family="sans-serif">
       <fo:table table-layout="fixed" width="100%">
         <fo:table-column column-width="125mm"/>
         <fo:table-column column-width="proportional-column-width(1)"/>
@@ -1417,7 +1417,7 @@
 
     <!-- The main contents of the body page -->
     <fo:flow flow-name="xsl-region-body">
-      <fo:block font="9pt serif">
+      <fo:block font-size="9pt" font-family="serif">
         <fo:table table-layout="fixed" width="100%">
           <xsl:call-template name="generate-table-columns">
             <xsl:with-param name="columns" select="$columns"/>

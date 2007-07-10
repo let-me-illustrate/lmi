@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: offshore_private_placement.xsl,v 1.54 2007-07-04 12:50:16 etarassov Exp $
+    $Id: offshore_private_placement.xsl,v 1.55 2007-07-10 18:53:25 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -170,7 +170,7 @@
           <xsl:call-template name="standardheader">
             <xsl:with-param name="reporttitle" select="'Supplemental Illustration'"/>
           </xsl:call-template>
-          <fo:block text-align="center" font="9pt sans-serif" margin-top="1.6em">
+          <fo:block text-align="center" font-size="9pt" font-family="sans-serif" margin-top="1.6em">
             Using Current charges
           </fo:block>
           <xsl:call-template name="dollar-units"/>
@@ -199,7 +199,7 @@
 
         <!-- Column Definitions Summary Body  -->
         <fo:flow flow-name="xsl-region-body">
-          <fo:block text-align="left" font="10pt sans-serif">
+          <fo:block text-align="left" font-size="10pt" font-family="sans-serif">
             <fo:block font-weight="bold" text-align="center" padding="1em 0 2em">
               Column Definitions
             </fo:block>
@@ -277,7 +277,7 @@
 
         <!-- Explanatory Notes Summary Body  -->
         <fo:flow flow-name="xsl-region-body">
-          <fo:block text-align="left" font="9.75pt sans-serif">
+          <fo:block text-align="left" font-size="9.75pt" font-family="sans-serif">
             <fo:block font-weight="bold" text-align="center">
               IMPORTANT TAX DISCLOSURE
             </fo:block>
@@ -418,7 +418,7 @@
 
         <!-- Explanatory Notes Summary Body  -->
         <fo:flow flow-name="xsl-region-body">
-          <fo:block text-align="left" font="9.75pt sans-serif">
+          <fo:block text-align="left" font-size="9.75pt" font-family="sans-serif">
             <fo:block font-weight="bold" text-align="center">
               EXPLANATORY NOTES
             </fo:block>
@@ -675,7 +675,7 @@
         <xsl:value-of select="$reporttitle"/>
       </fo:block>
     </fo:block>
-    <fo:block padding-before="0pt" font="10pt sans-serif">
+    <fo:block font-size="10pt" font-family="sans-serif">
       <fo:table table-layout="fixed" width="100%">
         <fo:table-column column-width="125mm"/>
         <fo:table-column column-width="proportional-column-width(1)"/>
@@ -818,7 +818,7 @@
 
     <!-- The main contents of the body page -->
     <fo:flow flow-name="xsl-region-body">
-      <fo:block font="9pt serif">
+      <fo:block font-size="9pt" font-family="serif">
         <fo:table table-layout="fixed" width="100%">
           <xsl:call-template name="generate-table-columns">
             <xsl:with-param name="columns" select="$columns"/>
@@ -951,7 +951,7 @@
 
     <!-- The main contents of the body page -->
     <fo:flow flow-name="xsl-region-body">
-      <fo:block font="9pt serif">
+      <fo:block font-size="9pt" font-family="serif">
         <fo:table table-layout="fixed" width="100%">
           <xsl:call-template name="generate-table-columns">
             <xsl:with-param name="columns" select="$columns"/>
@@ -1004,7 +1004,7 @@
 
     <!-- The main contents of the body page -->
     <fo:flow flow-name="xsl-region-body">
-      <fo:block font="9pt serif">
+      <fo:block font-size="9pt" font-family="serif">
         <fo:table table-layout="fixed" width="100%">
           <xsl:call-template name="generate-table-columns">
             <xsl:with-param name="columns" select="$columns"/>
