@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter.cpp,v 1.9 2007-07-10 00:33:48 chicares Exp $
+// $Id: progress_meter.cpp,v 1.10 2007-07-10 12:53:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -49,7 +49,7 @@ boost::shared_ptr<progress_meter> create_progress_meter
         {
         throw std::logic_error
             ("create_progress_meter: "
-            "function pointer not yet uninitialized."
+            "function pointer not yet initialized."
             );
         }
 
