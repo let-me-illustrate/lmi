@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.875 2007-07-10 00:33:48 chicares Exp $
+// $Id: ChangeLog,v 1.876 2007-07-10 11:20:40 etarassov Exp $
 
 MAINTENANCE
 
@@ -13299,4 +13299,10 @@ se doesn't offer an opportunity to cancel.
   progress_meter.hpp
 Add a data member to support eventual postcondition testing. Ensure
 that all data members are documented, for uniformity.
+
+20070710T1120Z <etarassov@tt-solutions.com> [1223]
+
+  configure.ac
+  Makefile.am
+Update autotools files to reflect recent changes.
 
