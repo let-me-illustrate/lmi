@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.29 2007-04-19 11:34:40 etarassov Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.30 2007-07-10 11:20:40 etarassov Exp $)dnl
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -90,6 +90,11 @@ AC_ARG_WITH(wx-setup,
                             [wx/setup.h directory])],
             lmi_wx_setup_dir=$withval)
 
+AC_ARG_WITH(xmlwrapp-config,
+            [AC_HELP_STRING([--with-xmlwrapp-config=file],
+                            [How to invoke xmlwrapp configuration utility xmlwrapp-config])],
+            lmi_xmlwrapp_config=$withval)
+
 AC_ARG_ENABLE(debug,
              [AC_HELP_STRING([--enable-debug],
                              [compile with debug information])],
@@ -153,6 +158,13 @@ CXXFLAGS=${CXXFLAGS:=}
 AC_PROG_CXX
 
 AC_PROG_LD
+
+dnl Until the ihs_pios.*pp facilities are made portable use explicit flag to GCC
+dnl to ensure that sizeof(long double) is 12 bytes for binary compatibility.
+case "$CC" in
+    cl) ;;
+    *)  CPPFLAGS="$CPPFLAGS -m96bit-long-double";;
+esac
 
 dnl enable all possible warnings for gcc/g++
 CFLAGS_gcc_common="\
@@ -337,7 +349,7 @@ if test "x$wx" != "xyes"; then
 if test "x$lmi_wx_version" != "x"; then
     lmi_wx_version_guess="$lmi_wx_version"
 else
-    lmi_wx_version_guess="2.8 2.7 2.6 2.5"
+    lmi_wx_version_guess="2.9 2.8 2.7 2.6 2.5"
 fi
 
 lmi_wx_basename="msw-ansi"
@@ -560,10 +572,12 @@ if test "x$LMI_BOOSTFS_SRC" == "x"; then
     LMI_BOOSTFS_SRC="."
 fi
 
-AC_CHECK_FILE([$LMI_BOOSTFS_SRC/convenience.cpp], [], [no_boost_fs=1])
-AC_CHECK_FILE([$LMI_BOOSTFS_SRC/exception.cpp], [], [no_boost_fs=1])
-AC_CHECK_FILE([$LMI_BOOSTFS_SRC/operations_posix_windows.cpp], [], [no_boost_fs=1])
-AC_CHECK_FILE([$LMI_BOOSTFS_SRC/path_posix_windows.cpp], [], [no_boost_fs=1])
+for f in convenience.cpp exception.cpp operations_posix_windows.cpp path_posix_windows.cpp; do
+  if ! test -r $LMI_BOOSTFS_SRC/$f; then
+    no_boost_fs=1
+  fi
+done
+
 if test "x$no_boost_fs" == "x1"; then
     AC_MSG_ERROR([no boost::filesystem source files found in ($LMI_BOOSTFS_SRC)])
 fi
@@ -587,14 +601,26 @@ dnl --- libxslt (required) -------------------
 PKG_CHECK_MODULES(LIBXSLT, libxslt >= 1.1.0)
 
 dnl --- XMLWRAPP (required) -------------------
-AC_CHECK_PROG(lmi_xmlwrapp_config, xmlwrapp-config, yes, no)
-if test "x$lmi_xmlwrapp_config" != "xyes"; then
-    AC_MSG_ERROR([Unable to find libxmlwrapp configuration program xmlwrapp-config in the path.])
+if test "x$lmi_xmlwrapp_config" = "x"; then
+  lmi_xmlwrapp_config=xmlwrapp-config
 fi
+
 dnl TODO: Pass --debug option and so on (depends on the actual build)
 
-XMLWRAPP_FLAGS=`xmlwrapp-config --cxxflags`
-XMLWRAPP_LIBS=`xmlwrapp-config --libs`
+XMLWRAPP_FLAGS=`$lmi_xmlwrapp_config --cxxflags`
+XMLWRAPP_LIBS=`$lmi_xmlwrapp_config --libs`
+
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $WX_CXXFLAGS"
+
+dnl check that the library options allow to build lmi
+AC_TRY_COMPILE([#include <xmlwrapp/xmlwrapp.h>],
+    [xml::document doc("dummy");],
+    [],
+    AC_MSG_ERROR([Unable to find appropriate xmlwrapp configuration. Use --with-xmlwrapp-config to specify the location of xmlwrapp-config.])
+)
+
+CXXFLAGS=$save_CXXFLAGS
 
 AC_SUBST(XMLWRAPP_FLAGS)
 AC_SUBST(XMLWRAPP_LIBS)
