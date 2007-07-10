@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.56 2007-07-04 12:50:15 etarassov Exp $
+    $Id: fo_common.xsl,v 1.57 2007-07-10 18:53:25 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -260,7 +260,7 @@
   <xsl:template name="supplemental-report-body">
     <xsl:if test="count($supplemental_report_columns) &gt; 0">
       <fo:flow flow-name="xsl-region-body">
-        <fo:block font="9pt serif">
+        <fo:block font-size="9pt" font-family="serif">
           <fo:table table-layout="fixed" width="100%">
             <xsl:call-template name="generate-table-columns">
               <xsl:with-param name="columns" select="$supplemental_report_columns"/>
@@ -735,7 +735,7 @@
   <xsl:template name="generic-cover">
     <fo:page-sequence master-reference="cover" force-page-count="no-force">
       <fo:flow flow-name="xsl-region-body">
-        <fo:block border="2pt solid blue" font="14pt sans-serif" text-align="center">
+        <fo:block border="2pt solid blue" font-size="14pt" font-family="sans-serif" text-align="center">
 
           <fo:block font-size="20pt" font-weight="bold" padding-top="5em">
             <xsl:value-of select="$scalars/PolicyMktgName"/>
@@ -828,7 +828,7 @@
     <xsl:param name="center-block" select="''"/>
     <xsl:param name="right-block" select="''"/>
     <fo:static-content flow-name="xsl-region-after">
-      <fo:block font="8pt sans-serif" text-align="left">
+      <fo:block font-size="8pt" font-family="sans-serif" text-align="left">
         <xsl:if test="$top-block">
           <fo:block padding=".5em 0">
             <xsl:copy-of select="$top-block"/>

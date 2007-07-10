@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.49 2007-07-04 12:50:16 etarassov Exp $
+    $Id: variable_annuity.xsl,v 1.50 2007-07-10 18:53:25 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -154,7 +154,7 @@
         </fo:static-content>
 
         <fo:flow flow-name="xsl-region-body">
-          <fo:block font="bold 11pt sans-serif" text-align="center">
+          <fo:block font-weight="bold" font-size="11pt" font-family="sans-serif" text-align="center">
             <fo:block font-size="18pt" padding-top="1em 0 25pt">
               <xsl:value-of select="$scalars/PolicyMktgName"/>
               <fo:inline vertical-align="super" font-size="7pt">SM</fo:inline>
@@ -189,7 +189,7 @@
               Date Prepared: <xsl:call-template name="date-prepared"/>
             </fo:block>
           </fo:block>
-          <fo:block font="normal 9pt sans-serif" text-align="left">
+          <fo:block font-weight="normal" font-size="9pt" font-family="sans-serif" text-align="left">
             <fo:block padding-after="10.0pt">
               The purpose of this illustration is to show how hypothetical rates
               of return will affect Contract Value. These hypothetical returns
@@ -409,7 +409,7 @@
           <xsl:call-template name="standard-header">
             <xsl:with-param name="logo_only" select="0"/>
           </xsl:call-template>
-          <fo:block font="bold 11pt sans-serif" text-align="center" padding-top=".8em">
+          <fo:block font-weight="bold" font-size="11pt" font-family="sans-serif" text-align="center" padding-top=".8em">
             Explanation and Footnotes
           </fo:block>
         </fo:static-content>
@@ -421,7 +421,7 @@
         </fo:static-content>
 
         <fo:flow flow-name="xsl-region-body">
-          <fo:block font="normal 9pt sans-serif" text-align="left">
+          <fo:block font-weight="normal" font-size="9pt" font-family="sans-serif" text-align="left">
             <fo:block font-size="10pt" font-weight="bold" text-decoration="underline">
               The Illustration
             </fo:block>
@@ -430,7 +430,7 @@
               of investment management, custody and other expenses charged
               by the investment manager of the underlying fund(s).
             </fo:block>
-            <fo:block font="10pt Times" padding-top="1em">
+            <fo:block font-size="10pt" font-family="Times" padding-top="1em">
               The information provided in this illustration is not written
               or intended as tax or legal advice and may not be relied on
               for purposes of avoiding any Federal tax penalties.
@@ -461,7 +461,7 @@
             </fo:block>
           </fo:block>
 
-          <fo:block font="normal 9pt sans-serif" text-align="left">
+          <fo:block font-weight="normal" font-size="9pt" font-family="sans-serif" text-align="left">
             <fo:block font-size="10pt" font-weight="bold" padding-top="2em" text-decoration="underline">
               The Contract
             </fo:block>
@@ -537,7 +537,7 @@
           <xsl:call-template name="standard-header">
             <xsl:with-param name="logo_only" select="0"/>
           </xsl:call-template>
-          <fo:block font="bold 11pt sans-serif" text-align="center" padding-top=".8em">
+          <fo:block font-weight="bold" font-size="11pt" font-family="sans-serif" text-align="center" padding-top=".8em">
             Explanation and Footnotes
           </fo:block>
         </fo:static-content>
@@ -549,7 +549,7 @@
         </fo:static-content>
 
         <fo:flow flow-name="xsl-region-body">
-          <fo:block font="normal 9pt sans-serif" text-align="left">
+          <fo:block font-weight="normal" font-size="9pt" font-family="sans-serif" text-align="left">
             <fo:block font-size="10.0pt" font-weight="bold" padding-top="2em" text-decoration="underline">
               The Contract continued
             </fo:block>
@@ -576,7 +576,7 @@
               of the Contract will control.
             </fo:block>
           </fo:block>
-          <fo:block font="normal 9pt sans-serif" text-align="left">
+          <fo:block font-weight="normal" font-size="9pt" font-family="sans-serif" text-align="left">
             <fo:block font-size="10.0pt" font-weight="bold" padding-top="2em" text-decoration="underline">
               Column Definitions
             </fo:block>
@@ -650,10 +650,10 @@
         </fo:static-content>
 
         <fo:flow flow-name="xsl-region-body">
-          <fo:block padding-after="25pt" font="bold 11pt sans-serif" text-align="center">
+          <fo:block padding-after="25pt" font-weight="bold" font-size="11pt" font-family="sans-serif" text-align="center">
             Certification Statements
           </fo:block>
-          <fo:block font="10pt Times" text-align="left">
+          <fo:block font-size="10pt" font-family="Times" text-align="left">
             <fo:block padding-after="20pt">
               I have received a copy of this illustration, and I understand
               that any non-guaranteed charges illustrated are subject
@@ -724,7 +724,7 @@
               <xsl:with-param name="basis" select="NoBasis"/>
             </xsl:call-template>
             <fo:block text-align="center" border-bottom="1pt solid black">
-              <fo:block padding="2.5pt 0" font="bold 13pt sans-serif">
+              <fo:block padding="2.5pt 0" font-weight="bold" font-size="13pt" font-family="sans-serif">
                 SUPPLEMENTAL REPORT
               </fo:block>
             </fo:block>
@@ -748,7 +748,7 @@
 
   <xsl:template name="standard-header">
     <xsl:param name="logo_only"/>
-    <fo:table table-layout="fixed" padding-after="2.5pt" font="bold 13.0pt sans-serif">
+    <fo:table table-layout="fixed" padding-after="2.5pt" font-weight="bold" font-size="13.0pt" font-family="sans-serif">
       <fo:table-column column-width="50mm"/>
       <fo:table-column column-width="90mm"/>
       <fo:table-column column-width="50mm"/>
@@ -769,11 +769,11 @@
       </fo:table-body>
     </fo:table>
     <xsl:if test="not($logo_only)">
-      <fo:block font="bold 14pt sans-serif" text-align="center" padding-top="1em">
+      <fo:block font-weight="bold" font-size="14pt" font-family="sans-serif" text-align="center" padding-top="1em">
         <xsl:value-of select="$scalars/PolicyMktgName"/>
         <fo:inline vertical-align="super" font-size="7pt">SM</fo:inline>
       </fo:block>
-      <fo:block font="normal 11pt sans-serif" text-align="center" border-bottom="1pt solid black" padding-bottom="8.0pt">
+      <fo:block font-weight="normal" font-size="11pt" font-family="sans-serif" text-align="center" border-bottom="1pt solid black" padding-bottom="8.0pt">
         <xsl:value-of select="$scalars/PolicyLegalName"/>
       </fo:block>
     </xsl:if>
@@ -781,7 +781,7 @@
 
   <xsl:template name="scalar-header">
     <xsl:param name="basis"/>
-    <fo:table table-layout="fixed" width="100%" padding="2.5pt 0" font="normal 9.5pt sans-serif" border-bottom="1pt solid black">
+    <fo:table table-layout="fixed" width="100%" padding="2.5pt 0" font-weight="normal" font-size="9.5pt" font-family="sans-serif" border-bottom="1pt solid black">
       <fo:table-column column-width="135mm"/>
       <fo:table-column column-width="55mm"/>
       <fo:table-body>
@@ -835,10 +835,10 @@
 
   <xsl:template name="titles">
     <xsl:param name="basis"/>
-    <fo:block font="bold 13pt sans-serif" text-align="center" padding-top=".5em">
+    <fo:block font-weight="bold" font-size="13pt" font-family="sans-serif" text-align="center" padding-top=".5em">
       HYPOTHETICAL ILLUSTRATION
     </fo:block>
-    <fo:block font="bold 11.0pt sans-serif" text-align="center" border-bottom="1pt solid black" padding-after="2.5pt">
+    <fo:block font-weight="bold" font-size="11.0pt" font-family="sans-serif" text-align="center" border-bottom="1pt solid black" padding-after="2.5pt">
       Accumulation Phase -
       <xsl:choose>
         <xsl:when test="($basis='Current') or ($basis='CurrentZero')">
@@ -855,7 +855,7 @@
   <xsl:template name="illustration-table">
     <xsl:param name="basis"/>
     <xsl:param name="basis-lapse-year"/>
-    <fo:table table-layout="fixed" width="100%" font="normal 9pt serif">
+    <fo:table table-layout="fixed" width="100%" font-weight="normal" font-size="9pt" font-family="serif">
       <xsl:variable name="column-values-columns">
         <column name="PolicyYear">Year</column>
         <column name="GrossPmt">Purchase _Payment</column>
@@ -926,7 +926,7 @@
 
   <xsl:template name="preliminary-footer">
     <xsl:param name="basis"/>
-    <fo:block font="normal 8.5pt sans-serif" text-align="left" padding-after="15pt">
+    <fo:block font-weight="normal" font-size="8.5pt" font-family="sans-serif" text-align="left" padding-after="15pt">
       <xsl:choose>
         <xsl:when test="($basis='Current') or ($basis='CurrentZero')">
           Contract values are net of CURRENT monthly charges which
@@ -943,11 +943,11 @@
 
   <xsl:template name="standard-footer">
     <xsl:param name="displaypagenumber"/>
-    <fo:block font="normal 8.5pt sans-serif" text-align="left" padding-top="2em 0 5pt" border-top="1pt solid blue">
+    <fo:block font-weight="normal" font-size="8.5pt" font-family="sans-serif" text-align="left" padding-top="2em 0 5pt" border-top="1pt solid blue">
       This illustration is not complete unless all pages as noted below
       are included.
     </fo:block>
-    <fo:table table-layout="fixed" width="100%" font="9pt sans-serif" padding-top="1em">
+    <fo:table table-layout="fixed" width="100%" font-size="9pt" font-family="sans-serif" padding-top="1em">
       <fo:table-column column-width="proportional-column-width(1)"/>
       <fo:table-column column-width="proportional-column-width(1)"/>
       <fo:table-column column-width="proportional-column-width(1)"/>

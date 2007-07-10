@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.876 2007-07-10 11:20:40 etarassov Exp $
+// $Id: ChangeLog,v 1.877 2007-07-10 18:53:24 etarassov Exp $
 
 MAINTENANCE
 
@@ -13305,4 +13305,15 @@ that all data members are documented, for uniformity.
   configure.ac
   Makefile.am
 Update autotools files to reflect recent changes.
+
+20070710T1853Z <etarassov@tt-solutions.com> [1223]
+
+  fo_common.xsl
+  group_private_placement.xsl
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+  offshore_private_placement.xsl
+  variable_annuity.xsl
+Partially unroll 20070704T1250Z change. Do not use 'font' shortcut.
 
