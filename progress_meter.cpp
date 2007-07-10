@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter.cpp,v 1.8 2007-07-09 14:05:14 chicares Exp $
+// $Id: progress_meter.cpp,v 1.9 2007-07-10 00:33:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -75,10 +75,11 @@ progress_meter::progress_meter
     ,std::string const& title
     ,enum_display_mode  display_mode
     )
-    :count_        (0)
-    ,max_count_    (max_count)
-    ,title_        (title)
-    ,display_mode_ (display_mode)
+    :count_         (0)
+    ,max_count_     (max_count)
+    ,title_         (title)
+    ,display_mode_  (display_mode)
+    ,was_cancelled_ (false)
 {
 }
 
@@ -92,8 +93,13 @@ bool progress_meter::reflect_progress()
         {
         throw std::logic_error("progress_meter: max_count_ exceeded.");
         }
+    if(was_cancelled_)
+        {
+        throw std::logic_error("progress_meter: previously cancelled.");
+        }
     ++count_;
-    return show_progress_message();
+    was_cancelled_ = !show_progress_message();
+    return !was_cancelled_;
 }
 
 void progress_meter::culminate()

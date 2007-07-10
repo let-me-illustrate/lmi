@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter.hpp,v 1.18 2007-07-09 23:48:25 chicares Exp $
+// $Id: progress_meter.hpp,v 1.19 2007-07-10 00:33:48 chicares Exp $
 
 /// Design notes for class progress_meter.
 ///
@@ -91,6 +91,10 @@
 /// max_count_: Total number of iterations anticipated.
 ///
 /// title_: A string suitable (e.g.) as a message-box title.
+///
+/// display_mode_: enum_display_mode value.
+///
+/// was_cancelled_: True iff the operation was cancelled.
 ///
 /// Nonmember functions.
 ///
@@ -199,6 +203,7 @@ class LMI_SO progress_meter
     int               max_count_;
     std::string       title_;
     enum_display_mode display_mode_;
+    bool              was_cancelled_;
 };
 
 boost::shared_ptr<progress_meter> LMI_SO create_progress_meter
