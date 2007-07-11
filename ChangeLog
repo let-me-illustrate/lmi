@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.879 2007-07-11 12:33:21 chicares Exp $
+// $Id: ChangeLog,v 1.880 2007-07-11 17:39:15 wboutin Exp $
 
 MAINTENANCE
 
@@ -13336,4 +13336,9 @@ Mark as a defect another violation of concinnity.
   progress_meter.hpp
   progress_meter_test.cpp
 Test a postcondition.
+
+20070711T1739Z <wboutin@massmutual.com> [1224]
+
+  variable_annuity.xsl
+Reformat.
 
