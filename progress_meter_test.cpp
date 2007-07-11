@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter_test.cpp,v 1.14 2007-07-11 01:05:34 chicares Exp $
+// $Id: progress_meter_test.cpp,v 1.15 2007-07-11 12:33:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -42,6 +42,7 @@ class progress_meter_test
         progress_meter_test::test_distinct_metered_operations();
         progress_meter_test::test_empty_title_and_zero_max_count();
         progress_meter_test::test_invalid_display_mode();
+        progress_meter_test::test_postcondition_failure();
         }
 
   private:
@@ -50,6 +51,7 @@ class progress_meter_test
     static void test_distinct_metered_operations();
     static void test_empty_title_and_zero_max_count();
     static void test_invalid_display_mode();
+    static void test_postcondition_failure();
 };
 
 void progress_meter_test::test_normal_usage()
@@ -179,6 +181,44 @@ void progress_meter_test::test_invalid_display_mode()
         ,std::runtime_error
         ,"Case 99 not found."
         );
+}
+
+void progress_meter_test::test_postcondition_failure()
+{
+    progress_meter_unit_test_stream().str("");
+    int const max_count = 3;
+    boost::shared_ptr<progress_meter> meter
+        (create_progress_meter
+            (max_count
+            ,"Some title"
+            ,progress_meter::e_unit_test_mode
+            )
+        );
+    std::cout
+        << "Expect '3 iterations expected, but only 0 completed.':"
+        << std::endl
+        ;
+    meter->culminate();
+
+    for(int i = 0; i < max_count; ++i)
+        {
+        try
+            {
+            if(1 == i)
+                {
+                throw "Thrown and caught before meter incremented.";
+                }
+            BOOST_TEST(meter->reflect_progress());
+            }
+        catch(...)
+            {
+            }
+        }
+    std::cout
+        << "Expect '3 iterations expected, but only 2 completed.':"
+        << std::endl
+        ;
+    meter->culminate();
 }
 
 int test_main(int, char*[])

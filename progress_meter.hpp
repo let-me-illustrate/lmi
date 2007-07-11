@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter.hpp,v 1.19 2007-07-10 00:33:48 chicares Exp $
+// $Id: progress_meter.hpp,v 1.20 2007-07-11 12:33:21 chicares Exp $
 
 /// Design notes for class progress_meter.
 ///
@@ -62,7 +62,9 @@
 /// return its return value, which is false if the operation is to be
 /// cancelled and true otherwise.
 ///
-/// culminate(): Perform postprocessing: call culminate_ui().
+/// culminate(): Perform postprocessing: call culminate_ui(); then
+/// display a warning if the iteration counter doesn't equal its
+/// maximum, unless the operation was cancelled.
 ///
 /// Protected interface--nonvirtual.
 ///
@@ -106,16 +108,27 @@
 ///
 /// Design alternatives considered; rationale for design choices.
 ///
-/// Function reflect_progress() throws an exception if the iteration
-/// counter equals or exceeds its maximum. This condition is tested
-/// before incrementing the counter. Thus, it enforces the invariant
-/// expected in the canonical 'for' statement
+/// reflect_progress() throws an exception if the iteration counter
+/// equals or exceeds its maximum. This condition is tested before
+/// incrementing the counter. Thus, it enforces the invariant expected
+/// in the canonical 'for' statement
 ///   for(int i = 0; i < maximum; ++i) {assert(i < maximum);}
 /// Arguably this is useless, but it's quite inexpensive, and it's
-/// worth the cost if it ever finds a problem. One might also consider
-/// trying to ensure that the counter reaches its maximum, but often
-/// loops are exited early; and the most direct way to enforce that
-/// invariant would be to detect it in the dtor, which shouldn't throw.
+/// worth the cost if it ever finds a problem.
+///
+/// culminate() warns if the iteration counter hasn't been incremented
+/// exactly to its maximum, unless the operation was cancelled. This
+/// is taken as a postcondition of code that uses the progress meter,
+/// so it might seem natural to test it in this class's dtor; however,
+/// the postcondition won't be established if the metered loop is
+/// exited by throwing an exception. Perhaps std::uncaught_exception
+/// could distinguish that special case, but as this is written in
+/// 2007-06 some compilers don't implement that standard facility
+/// reliably. Postcondition failure engenders only a warning because
+/// of other possibilities--e.g., a loop might throw an exception
+/// inside a try-block whose catch-clause doesn't rethrow; perhaps it
+/// would be better to throw an exception instead, depending on the
+/// value of a boolean argument.
 ///
 /// An argument could be made for making count() public. That's easy
 /// enough to change if wanted, but would promote a usage for which
