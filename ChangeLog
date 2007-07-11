@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.877 2007-07-10 18:53:24 etarassov Exp $
+// $Id: ChangeLog,v 1.878 2007-07-11 01:05:34 chicares Exp $
 
 MAINTENANCE
 
@@ -13306,6 +13306,11 @@ that all data members are documented, for uniformity.
   Makefile.am
 Update autotools files to reflect recent changes.
 
+20070710T1253Z <chicares@cox.net> [1223]
+
+  progress_meter.cpp
+Correct a mistake in an error message.
+
 20070710T1853Z <etarassov@tt-solutions.com> [1223]
 
   fo_common.xsl
@@ -13316,4 +13321,12 @@ Update autotools files to reflect recent changes.
   offshore_private_placement.xsl
   variable_annuity.xsl
 Partially unroll 20070704T1250Z change. Do not use 'font' shortcut.
+
+20070711T0105Z <chicares@cox.net> [1224]
+
+  progress_meter.cpp
+  progress_meter_test.cpp
+Replace standard exceptions with 'alert' facility. Soon another type
+of 'alert' will be used, and mixing the two would violate concinnity.
+Mark as a defect another violation of concinnity.
 

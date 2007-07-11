@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter.cpp,v 1.10 2007-07-10 12:53:16 chicares Exp $
+// $Id: progress_meter.cpp,v 1.11 2007-07-11 01:05:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,8 +28,9 @@
 
 #include "progress_meter.hpp"
 
+#include "alert.hpp"
+
 #include <sstream>
-#include <stdexcept>
 
 std::ostringstream& progress_meter_unit_test_stream()
 {
@@ -47,10 +48,7 @@ boost::shared_ptr<progress_meter> create_progress_meter
 {
     if(0 == progress_meter_creator)
         {
-        throw std::logic_error
-            ("create_progress_meter: "
-            "function pointer not yet initialized."
-            );
+        fatal_error() << "Function pointer not yet initialized." << LMI_FLUSH;
         }
 
     return progress_meter_creator(max_count, title, display_mode);
@@ -60,10 +58,10 @@ bool set_progress_meter_creator(progress_meter_creator_type f)
 {
     if(0 != progress_meter_creator)
         {
-        throw std::logic_error
-            ("set_progress_meter_creator: "
-            "function pointer already initialized--must not be reset."
-            );
+        // TODO ?? Use 'callback.hpp' instead, and consider whether
+        // this message can ever actually be displayed--either in its
+        // present form, or in the 'callback.hpp' equivalent.
+        fatal_error() << "Function pointer already initialized." << LMI_FLUSH;
         }
 
     progress_meter_creator = f;
@@ -91,11 +89,11 @@ bool progress_meter::reflect_progress()
 {
     if(max_count_ <= count_)
         {
-        throw std::logic_error("progress_meter: max_count_ exceeded.");
+        fatal_error() << "Progress meter maximum count exceeded." << LMI_FLUSH;
         }
     if(was_cancelled_)
         {
-        throw std::logic_error("progress_meter: previously cancelled.");
+        fatal_error() << "Progress meter previously cancelled." << LMI_FLUSH;
         }
     ++count_;
     was_cancelled_ = !show_progress_message();
