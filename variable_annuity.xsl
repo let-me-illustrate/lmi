@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.50 2007-07-10 18:53:25 etarassov Exp $
+    $Id: variable_annuity.xsl,v 1.51 2007-07-11 17:39:15 wboutin Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -155,7 +155,7 @@
 
         <fo:flow flow-name="xsl-region-body">
           <fo:block font-weight="bold" font-size="11pt" font-family="sans-serif" text-align="center">
-            <fo:block font-size="18pt" padding-top="1em 0 25pt">
+            <fo:block font-size="18pt" padding-after="25pt" padding-top="1em 0 25pt">
               <xsl:value-of select="$scalars/PolicyMktgName"/>
               <fo:inline vertical-align="super" font-size="7pt">SM</fo:inline>
             </fo:block>
@@ -185,7 +185,7 @@
                 </xsl:with-param>
               </xsl:call-template>
             </fo:block>
-            <fo:block padding-after="225.0pt">
+            <fo:block padding-after="200.0pt">
               Date Prepared: <xsl:call-template name="date-prepared"/>
             </fo:block>
           </fo:block>
@@ -197,6 +197,19 @@
               of future results. Actual results could be less than or greater
               than the hypothetical rates and in all likelihood will vary
               from year to year.
+            </fo:block>
+            <fo:block font-weight="bold" padding-after="10.0pt">
+              This material must be preceded or accompanied by the current
+              Confidential Private Placement Memorandum for
+              <xsl:value-of select="$scalars/PolicyMktgName"/>
+              <fo:inline vertical-align="super" font-size="7pt">SM</fo:inline>
+              and the current prospectuses and private placement memoranda
+              for its underlying investment choices. Investors should
+              carefully consider the investment objectives, risks,
+              charges and expenses of the variable annuity Contract and its
+              underlying investment choices. Please read the prospectuses
+              and private placement memoranda carefully before investing
+              or sending money.
             </fo:block>
             <fo:block padding-after="10.0pt">
               <xsl:value-of select="$scalars/PolicyMktgName"/>
@@ -213,7 +226,7 @@
               <xsl:value-of select="$scalars/MainUnderwriter"/> is a wholly
               owned subsidiary of <xsl:value-of select="$scalars/InsCoName"/>.
             </fo:block>
-            <fo:block padding-after="10.0pt">
+            <fo:block>
               <xsl:value-of select="$scalars/InsCoShortName"/> Financial Group
               is a marketing designation
               for <xsl:value-of select="$scalars/InsCoName"/>
@@ -430,7 +443,7 @@
               of investment management, custody and other expenses charged
               by the investment manager of the underlying fund(s).
             </fo:block>
-            <fo:block font-size="10pt" font-family="Times" padding-top="1em">
+            <fo:block font-weight="bold" padding-top="1em">
               The information provided in this illustration is not written
               or intended as tax or legal advice and may not be relied on
               for purposes of avoiding any Federal tax penalties.
@@ -445,19 +458,6 @@
               the Confidential Private Placement Memorandum for
               <xsl:value-of select="$scalars/PolicyMktgName"/>
               <fo:inline vertical-align="super" font-size="7pt">SM</fo:inline>.
-            </fo:block>
-            <fo:block padding-top="1em">
-              This material must be preceded or accompanied by the current
-              Confidential Private Placement Memorandum for
-              <xsl:value-of select="$scalars/PolicyMktgName"/>
-              <fo:inline vertical-align="super" font-size="7pt">SM</fo:inline>
-              and the current prospectuses and private placement memoranda
-              for its underlying underlying investment choices. Investors
-              should carefully consider the investment objectives, risks,
-              charges and expenses of the variable annuity Contract and its
-              underlying investment choices. Please read the prospectuses
-              and private placement memoranda carefully before investing
-              or sending money.
             </fo:block>
           </fo:block>
 
@@ -653,7 +653,7 @@
           <fo:block padding-after="25pt" font-weight="bold" font-size="11pt" font-family="sans-serif" text-align="center">
             Certification Statements
           </fo:block>
-          <fo:block font-size="10pt" font-family="Times" text-align="left">
+          <fo:block font-size="10pt" font-family="sans-serif" text-align="left">
             <fo:block padding-after="20pt">
               I have received a copy of this illustration, and I understand
               that any non-guaranteed charges illustrated are subject
@@ -667,8 +667,8 @@
               <fo:table-body>
                 <fo:table-row>
                   <fo:table-cell padding-right="10mm">
-                    <fo:block>________________________________________________________________</fo:block>
-                    <fo:block>Contract Owner/Applicant Signature                              </fo:block>
+                    <fo:block>__________________________________________________</fo:block>
+                    <fo:block>Contract Owner/Applicant Signature                </fo:block>
                   </fo:table-cell>
                   <fo:table-cell>
                     <fo:block>______________</fo:block>
@@ -692,8 +692,8 @@
               <fo:table-body>
                 <fo:table-row>
                   <fo:table-cell padding-right="10mm">
-                    <fo:block>________________________________________________________________</fo:block>
-                    <fo:block>Agent/Registered Representative                                 </fo:block>
+                    <fo:block>__________________________________________________</fo:block>
+                    <fo:block>Agent/Registered Representative                   </fo:block>
                   </fo:table-cell>
                   <fo:table-cell>
                     <fo:block>______________</fo:block>
