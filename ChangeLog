@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.878 2007-07-11 01:05:34 chicares Exp $
+// $Id: ChangeLog,v 1.879 2007-07-11 12:33:21 chicares Exp $
 
 MAINTENANCE
 
@@ -13329,4 +13329,11 @@ Partially unroll 20070704T1250Z change. Do not use 'font' shortcut.
 Replace standard exceptions with 'alert' facility. Soon another type
 of 'alert' will be used, and mixing the two would violate concinnity.
 Mark as a defect another violation of concinnity.
+
+20070711T1233Z <chicares@cox.net> [1224]
+
+  progress_meter.cpp
+  progress_meter.hpp
+  progress_meter_test.cpp
+Test a postcondition.
 

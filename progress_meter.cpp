@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter.cpp,v 1.11 2007-07-11 01:05:34 chicares Exp $
+// $Id: progress_meter.cpp,v 1.12 2007-07-11 12:33:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -103,6 +103,16 @@ bool progress_meter::reflect_progress()
 void progress_meter::culminate()
 {
     culminate_ui();
+    if(!was_cancelled_ && max_count_ != count_)
+        {
+        warning()
+            << max_count_
+            << " iterations expected, but only "
+            << count_
+            << " completed."
+            << LMI_FLUSH
+            ;
+        }
 }
 
 int progress_meter::count() const
