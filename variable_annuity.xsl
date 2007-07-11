@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.51 2007-07-11 17:39:15 wboutin Exp $
+    $Id: variable_annuity.xsl,v 1.52 2007-07-11 20:05:49 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -155,7 +155,7 @@
 
         <fo:flow flow-name="xsl-region-body">
           <fo:block font-weight="bold" font-size="11pt" font-family="sans-serif" text-align="center">
-            <fo:block font-size="18pt" padding-after="25pt" padding-top="1em 0 25pt">
+            <fo:block font-size="18pt" padding="1em 0 25pt">
               <xsl:value-of select="$scalars/PolicyMktgName"/>
               <fo:inline vertical-align="super" font-size="7pt">SM</fo:inline>
             </fo:block>
@@ -943,7 +943,7 @@
 
   <xsl:template name="standard-footer">
     <xsl:param name="displaypagenumber"/>
-    <fo:block font-weight="normal" font-size="8.5pt" font-family="sans-serif" text-align="left" padding-top="2em 0 5pt" border-top="1pt solid blue">
+    <fo:block font-weight="normal" font-size="8.5pt" font-family="sans-serif" text-align="left" padding="2em 0 5pt" border-top="1pt solid blue">
       This illustration is not complete unless all pages as noted below
       are included.
     </fo:block>

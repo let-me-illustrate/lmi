@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.880 2007-07-11 17:39:15 wboutin Exp $
+// $Id: ChangeLog,v 1.881 2007-07-11 20:05:49 etarassov Exp $
 
 MAINTENANCE
 
@@ -13341,4 +13341,9 @@ Test a postcondition.
 
   variable_annuity.xsl
 Reformat.
+
+20070711T2005Z <etarassov@tt-solutions.com> [1224]
+
+  variable_annuity.xsl
+Fix invalid usage of padding-top instead of padding.
 
