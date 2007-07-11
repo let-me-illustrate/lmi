@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter_test.cpp,v 1.13 2007-07-09 16:57:22 chicares Exp $
+// $Id: progress_meter_test.cpp,v 1.14 2007-07-11 01:05:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -78,8 +78,8 @@ void progress_meter_test::test_normal_usage()
         );
     BOOST_TEST_THROW
         (meter->reflect_progress()
-        ,std::logic_error
-        ,"progress_meter: max_count_ exceeded."
+        ,std::runtime_error
+        ,"Progress meter maximum count exceeded."
         );
 }
 
@@ -159,8 +159,8 @@ void progress_meter_test::test_empty_title_and_zero_max_count()
         );
     BOOST_TEST_THROW
         (meter->reflect_progress()
-        ,std::logic_error
-        ,"progress_meter: max_count_ exceeded."
+        ,std::runtime_error
+        ,"Progress meter maximum count exceeded."
         );
 }
 
