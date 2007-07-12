@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.31 2007-07-10 11:20:40 etarassov Exp $
+# $Id: Makefile.am,v 1.32 2007-07-12 09:01:32 etarassov Exp $
 
 SUBDIRS = third_party
 
@@ -65,8 +65,9 @@ dist_xrc_DATA = \
     about.xpm \
     census_view.xpm \
     close.xpm \
-    delete-row.xpm \
+    database_view.xpm \
     default_cell.xpm \
+    delete-row.xpm \
     edit-case.xpm \
     edit-cell.xpm \
     edit-class.xpm \
@@ -80,23 +81,48 @@ dist_xrc_DATA = \
     new.xpm \
     open.xpm \
     paste-case.xpm \
+    policy_view.xpm \
+    policy_view.xrc \
+    preferences_view.xrc \
+    preferences.xpm \
+    print.xpm \
     print-case.xpm \
     print-cell.xpm \
     print-options.xpm \
     print-preview.xpm \
-    print.xpm \
+    rounding_view.xpm \
+    rounding_view.xrc \
     run-case.xpm \
     run-cell.xpm \
     save.xpm \
     saveas.xpm \
     text_view.xpm \
+    tier_view.xpm \
     toolbar.xrc \
     varying-width.xpm \
     write_spreadsheet.xpm \
     xml_notebook.xrc \
     xml_notebook_coli_boli.xrc \
     xml_notebook_private_placement.xrc \
-    xml_notebook_single_premium.xrc
+    xml_notebook_single_premium.xrc \
+    xml_notebook_variable_annuity.xrc
+
+xsldir = $(bindir)
+dist_xsl_DATA = \
+    calculation_summary_html.xsl \
+    calculation_summary_tsv.xsl \
+    fo_common.xsl \
+    group_private_placement.xsl \
+    illustration_reg.xsl \
+    individual_private_placement.xsl \
+    ledger_common_tsv.xsl \
+    ledger_common.xsl \
+    ledger_formats.xml \
+    microcosm_tsv.xsl \
+    nasd.xsl \
+    offshore_private_placement.xsl \
+    variable_annuity.xsl \
+    xml2to1.xsl
 
 # CGI stuff
 if LMI_WITH_CGI
