@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.30 2007-07-10 11:20:40 etarassov Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.31 2007-07-12 09:05:25 etarassov Exp $)dnl
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -69,26 +69,8 @@ AC_ARG_WITH(boost-filesystem-src,
             [AC_HELP_STRING([--with-boost-filesystem-src=dir], [Boost filesystem library sources directory (./libs/filesystem/src directory in the boost default package). That option is only usefull for the in-project boost::filesystem library compilation])],
             lmi_boost_filesystem_src=$withval)
 
-AC_ARG_WITH(wx,
-            [AC_HELP_STRING([--with-wx=dir],
-                            [wxWidgets directory (defaults to WXWIN env var)])],
-            lmi_wx_dir=$withval)
-AC_ARG_WITH(wx-version,
-            [AC_HELP_STRING([--with-wx-ver=version],
-                            [wxWidgets version to search for (default 2.6, 2.7, 2.8)])],
-            lmi_wx_version=$withval)
-AC_ARG_WITH(wx-headers,
-            [AC_HELP_STRING([--with-wx-headers=dir],
-                            [wxWidgets header files directory])],
-            lmi_wx_headers_dir=$withval)
-AC_ARG_WITH(wx-libs,
-            [AC_HELP_STRING([--with-wx-libs=dir],
-                            [wxWidgets libraries directory])],
-            lmi_wx_libs_dir=$withval)
-AC_ARG_WITH(wx-setup,
-            [AC_HELP_STRING([--with-wx-setup=dir],
-                            [wx/setup.h directory])],
-            lmi_wx_setup_dir=$withval)
+dnl add support for --wxdir, --wx-config, --wx-prefix, ----wx-exec-prefix
+WX_CONFIG_OPTIONS
 
 AC_ARG_WITH(xmlwrapp-config,
             [AC_HELP_STRING([--with-xmlwrapp-config=file],
@@ -145,6 +127,9 @@ AC_ARG_ENABLE(cgicc,
                    *) AC_MSG_ERROR(bad value ${enableval} for --enable-cgicc[=yes|no]) ;;
              esac],
              lmi_cgicc_option=no)
+
+dnl Pass standard options to wx.
+WX_STANDARD_OPTIONS([debug,shared,toolkit,wxshared])
 
 dnl === Program checks ===
 
@@ -326,145 +311,12 @@ AC_LANG(C++)
 
 dnl --- wxWidgets ---
 
-AM_OPTIONS_WXCONFIG
+WX_UNICODE=no
 
-dnl normally we should get all we need from wx-config
-wx_config_params="--unicode=no --debug=$debug_option"
-dnl disable use of static libraries with --static=no
-if test "x$enable_static" == "xno"; then
-wx_config_params="$wx_config_params --static=no"
-fi
-dnl disable use of shared libraries with --static=yes
-if test "x$enable_shared" == "xno"; then
-wx_config_params="$wx_config_params --static=yes"
-fi
-dnl otherwise use any library type we have for wx
-
-AM_PATH_WXCONFIG([2.6.0], [wx="yes"],[],[],[$wx_config_params])
-
-dnl if we didn't (may happen under Windows), try to find wx headers and
-dnl libraries ourselves
-if test "x$wx" != "xyes"; then
-
-if test "x$lmi_wx_version" != "x"; then
-    lmi_wx_version_guess="$lmi_wx_version"
-else
-    lmi_wx_version_guess="2.9 2.8 2.7 2.6 2.5"
-fi
-
-lmi_wx_basename="msw-ansi"
-if test "$debug_option" == "yes"; then
-    lmi_wx_basename="$lmi_wx_basename-debug"
-fi
-for lmi_wx_version in $lmi_wx_version_guess; do
-    echo "checking for wxWidgets version $lmi_wx_version:"
-    dnl the order of checks by priority
-    dnl   1. check --with-wx
-    dnl        use --with-wx-headers if specified
-    dnl        use --with-wx-libs if specified'
-    dnl        if not found => throw an error
-    dnl   2. if still no libs found, then guess
-    dnl        using $wxwin and some common install paths
-    dnl   3. if not found report an error and description of what was done
-    lmi_wx_root=$lmi_wx_dir
-
-    if test "x$lmi_wx_root" == "x"; then
-        lmi_wx_root="$WXWIN"
-    fi
-
-    dnl take values provided by user
-    lmi_wx_headers_guess="$lmi_wx_headers_dir"
-    lmi_wx_libs_guess="$lmi_wx_libs_dir"
-    lmi_wx_setup_guess="$lmi_wx_setup_dir"
-
-    dnl now look for the root directory hint
-    if test "x$lmi_wx_root" != "x"; then
-        dnl we are given a hint on the wxWidgets root directory
-        if test "x$lmi_wx_headers_guess" == "x"; then
-            lmi_wx_headers_guess="$lmi_wx_root/include"
-        fi
-        if test "x$lmi_wx_libs_guess" == "x"; then
-            lmi_wx_libs_guess="$lmi_wx_root/lib"
-        fi
-    else
-        dnl no wxWidgets root directory is given - search common install paths
-        if test "x$lmi_wx_headers_guess" == "x"; then
-            lmi_wx_headers_guess="/usr/local/include/wx-$lmi_wx_version"
-        fi
-        if test "x$lmi_wx_libs_guess" == "x"; then
-            lmi_wx_libs_guess="/usr/lib /usr/local/lib"
-        fi
-    fi
-    if test "x$lmi_wx_setup_guess" == "x"; then
-        dnl try every lib directory
-        for tmp_wx_libs in $lmi_wx_libs_guess
-        do
-            lmi_wx_setup_guess="$lmi_wx_setup_guess $tmp_wx_libs/wx/include/$lmi_wx_basename-$lmi_wx_version"
-        done
-        dnl and also try the headers diectories
-        lmi_wx_setup_guess="$lmi_wx_setup_guess $lmi_wx_headers_guess"
-    fi
-
-    dnl now do try to find the files
-
-    dnl wx/setup.h in lmi_wx_setup_guess
-    for lmi_wx_setup in $lmi_wx_setup_guess
-    do
-        AC_CHECK_FILE([$lmi_wx_setup/wx/setup.h], [ok_wx_setup=$lmi_wx_setup])
-        if test "x$ok_wx_setup" != "x"; then
-            for lmi_wx_headers in $lmi_wx_headers_guess
-            do
-                AC_CHECK_FILE([$lmi_wx_headers/wx/chkconf.h], [ok_wx_headers=$lmi_wx_headers])
-                if test "x$ok_wx_headers" != "x"; then
-                    for lmi_wx_libs in $lmi_wx_libs_guess
-                    do
-                        echo "guessing libs in $lmi_wx_libs ..."
-                        lmi_wx_libs_needed="base core adv xml xrc"
-                        lmi_wx_lib_prefix=wx_msw
-                        if test "$debug_option" == "yes"; then
-                            lmi_wx_lib_prefix="$lmi_wx_lib_prefix""d"
-                        fi
-                        lmi_wx_lib_prefix="$lmi_wx_lib_prefix""_"
-                        lmi_wx_lib_suffix="-$lmi_wx_version"
-                        ok_wx_libs=$lmi_wx_libs
-                        for lmi_wx_lib_needed in $lmi_wx_libs_needed
-                        do
-                            AC_CHECK_FILE("$lmi_wx_libs/$lmi_wx_lib_prefix$lmi_wx_lib_needed$lmi_wx_lib_suffix", [],
-                            [ok_wx_libs=""])
-                            if test "x$ok_wx_libs" == "x"; then
-                                break
-                            fi
-                        done
-                        if test "x$ok_wx_libs" != "x"; then
-                            WX_CXXFLAGS="-I$ok_wx_setup -I$ok_wx_headers"
-                            WX_LIBS="-L$ok_wx_libs -lwx_$lmi_wx_basename""_xrc-$lmi_wx_version"
-                            echo "using the following wxWidgets configuration:"
-                            echo "  - version         $lmi_wx_version"
-                            echo "  - setup.h         $ok_wx_setup/wx/setup.h"
-                            echo "  - headers         $ok_wx_headers"
-                            echo "  - libraries       $ok_wx_libs"
-                            break
-                        fi
-                    done
-                fi
-            done
-        fi
-    done
-done dnl lmi_wx_version_guess
-
-if test "x$WX_CXXFLAGS" == "x"; then
-    AC_MSG_ERROR([No wxWidgets headers or setup.h were found!])
-fi
-if test "x$WX_LIBS" == "x"; then
-    AC_MSG_ERROR([No wxWidgets libs were found!])
-fi
-
-WX_CPPFLAGS=$WX_CXXFLAGS
-AC_SUBST(WX_CPPFLAGS)
-AC_SUBST(WX_CXXFLAGS)
-AC_SUBST(WX_LIBS)
-
-fi dnl AM_PATH_WXCONFIG failed
+WX_CONVERT_STANDARD_OPTIONS_TO_WXCONFIG_FLAGS
+WX_CONFIG_CHECK([2.8.0], [wx="yes"],
+                         [AC_MSG_ERROR([No wxWidgets headers libs were found!])],
+                         [],[$WXCONFIG_FLAGS])
 
 save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="$CXXFLAGS $WX_CXXFLAGS"
@@ -500,6 +352,8 @@ AC_TRY_COMPILE([#include <wx/setup.h>],
 )
 
 CXXFLAGS=$save_CXXFLAGS
+
+WX_STANDARD_OPTIONS_SUMMARY_MSG
 
 dnl --- Boost (required) ---
 if test "x$lmi_boost_headers" != "x"; then
@@ -611,7 +465,9 @@ XMLWRAPP_FLAGS=`$lmi_xmlwrapp_config --cxxflags`
 XMLWRAPP_LIBS=`$lmi_xmlwrapp_config --libs`
 
 save_CXXFLAGS=$CXXFLAGS
-CXXFLAGS="$CXXFLAGS $WX_CXXFLAGS"
+save_LIBS=$LIBS
+CXXFLAGS="$CXXFLAGS $XMLWRAPP_FLAGS"
+LIBS="$LIBS $XMLWRAPP_LIBS"
 
 dnl check that the library options allow to build lmi
 AC_TRY_COMPILE([#include <xmlwrapp/xmlwrapp.h>],
@@ -621,6 +477,7 @@ AC_TRY_COMPILE([#include <xmlwrapp/xmlwrapp.h>],
 )
 
 CXXFLAGS=$save_CXXFLAGS
+LIBS=$save_LIBS
 
 AC_SUBST(XMLWRAPP_FLAGS)
 AC_SUBST(XMLWRAPP_LIBS)
