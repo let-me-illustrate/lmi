@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.882 2007-07-12 09:01:32 etarassov Exp $
+// $Id: ChangeLog,v 1.883 2007-07-12 09:05:25 etarassov Exp $
 
 MAINTENANCE
 
@@ -13351,4 +13351,9 @@ Fix invalid usage of padding-top instead of padding.
 
   Makefile.am
 Add xml resources to install target.
+
+20070712T0905Z <etarassov@tt-solutions.com> [1224]
+
+  configure.ac
+Use wx macros to detect and configure wxWidgets.
 
