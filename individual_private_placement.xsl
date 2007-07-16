@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.61 2007-07-10 18:53:25 etarassov Exp $
+    $Id: individual_private_placement.xsl,v 1.62 2007-07-16 11:32:40 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -684,7 +684,7 @@
           is hypothetical and may not be used to project
           or predict investment results.
         </fo:block>
-        <fo:block padding-top=".5em" padding-bottom="1em">
+        <fo:block padding-top=".5em">
           This Illustration must be accompanied or preceded
           by a Confidential Private Placement Memorandum
           offering the Contract.
@@ -692,7 +692,7 @@
       </xsl:if>
     </fo:block>
 
-    <fo:table table-layout="fixed" width="100%">
+    <fo:table table-layout="fixed" width="100%" padding-top="1em">
       <fo:table-column column-width="125mm"/>
       <fo:table-column column-width="proportional-column-width(1)"/>
       <fo:table-body>

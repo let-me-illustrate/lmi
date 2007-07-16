@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.57 2007-07-10 18:53:25 etarassov Exp $
+    $Id: fo_common.xsl,v 1.58 2007-07-16 11:32:40 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -315,11 +315,11 @@
   <xsl:template name="generate-table-columns">
     <xsl:param name="columns"/>
     <xsl:for-each select="$columns">
-      <xsl:variable name="empty_column" select="boolean(not(@name) and not(@scalar) and not(@special))"/>
-      <xsl:variable name="spacer" select="name() != 'spacer'"/>
+      <xsl:variable name="empty_column" select="boolean(not(./name) and not(@name) and not(@scalar) and not(@special))"/>
+      <xsl:variable name="is_spacer" select="name() = 'spacer'"/>
       <fo:table-column>
         <xsl:choose>
-          <xsl:when test="$empty_column and not($spacer)">
+          <xsl:when test="$empty_column and not($is_spacer)">
             <xsl:attribute name="column-width">proportional-column-width(33)</xsl:attribute>
           </xsl:when>
           <xsl:otherwise>
@@ -482,9 +482,7 @@
       <fo:table-cell number-columns-spanned="{$spans}">
         <xsl:call-template name="header-cell"/>
         <xsl:if test="$spans != 1">
-          <xsl:attribute name="text-align">
-            center
-          </xsl:attribute>
+          <xsl:attribute name="text-align">center</xsl:attribute>
         </xsl:if>
         <xsl:choose>
           <xsl:when test="$last_row or (($spans &gt; 1) and ($cell_text != ''))">
@@ -643,10 +641,13 @@
     <xsl:if test="$counter &lt;= $max-counter">
       <fo:table-row>
         <xsl:for-each select="$columns">
-          <fo:table-cell padding=".6pt">
+          <fo:table-cell padding="1pt .5pt 0">
             <!-- Add some space after each 5th year -->
             <xsl:if test="($counter + $inforceyear) mod 5 = 0">
-              <xsl:attribute name="padding-bottom">8pt</xsl:attribute>
+              <!-- but only if it's not the last row of the table -->
+              <xsl:if test="$counter &lt; $max-counter">
+                <xsl:attribute name="padding-bottom">8pt</xsl:attribute>
+              </xsl:if>
             </xsl:if>
             <fo:block text-align="right">
               <xsl:choose>
