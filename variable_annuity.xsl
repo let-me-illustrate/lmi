@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.52 2007-07-11 20:05:49 etarassov Exp $
+    $Id: variable_annuity.xsl,v 1.53 2007-07-16 12:32:33 wboutin Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -185,7 +185,7 @@
                 </xsl:with-param>
               </xsl:call-template>
             </fo:block>
-            <fo:block padding-after="200.0pt">
+            <fo:block padding-after="175.0pt">
               Date Prepared: <xsl:call-template name="date-prepared"/>
             </fo:block>
           </fo:block>
@@ -524,6 +524,28 @@
               This illustration does not reflect the tax consequences
               of withdrawals.
             </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">Illiquid Sub-Accounts:</fo:inline>
+              We have also made available under the Contract the ability
+              to allocate purchase payments and Contract Value to sub-accounts
+              that will provide for investment in certain alternative
+              investments including hedge funds. Because of the liquidity
+              restrictions imposed by these alternative investment funds,
+              these sub-accounts are referred to in the Contract
+              and in the private placement memorandum as illiquid sub-accounts.
+              Contract owners must understand, and be willing to bear, the risks
+              associated with such investments. If Contract Value is allocated
+              to illiquid sub-accounts, the Owner will not be able to transfer
+              Contract Value or effect a withdrawal or surrender
+              of the Contract until specified dates. Refer to the Confidential
+              Private Placement Memorandum for details.
+            </fo:block>
+            <fo:block font-weight="bold" padding-top="1em">
+              Note: Please refer to the Contract for complete explanation
+              of benefits, rights and obligations. In the event of a conflict
+              between the illustration and the Contract, the terms
+              of the Contract will control.
+            </fo:block>
           </fo:block>
         </fo:flow>
 
@@ -549,33 +571,6 @@
         </fo:static-content>
 
         <fo:flow flow-name="xsl-region-body">
-          <fo:block font-weight="normal" font-size="9pt" font-family="sans-serif" text-align="left">
-            <fo:block font-size="10.0pt" font-weight="bold" padding-top="2em" text-decoration="underline">
-              The Contract continued
-            </fo:block>
-            <fo:block padding-top="1em">
-              <fo:inline font-weight="bold">Illiquid Sub-Accounts:</fo:inline>
-              We have also made available under the Contract the ability
-              to allocate purchase payments and Contract Value to sub-accounts
-              that will provide for investment in certain alternative
-              investments including hedge funds. Because of the liquidity
-              restrictions imposed by these alternative investment funds,
-              these sub-accounts are referred to in the Contract
-              and in the private placement memorandum as illiquid sub-accounts.
-              Contract owners must understand, and be willing to bear, the risks
-              associated with such investments. If Contract Value is allocated
-              to illiquid sub-accounts, the Owner will not be able to transfer
-              Contract Value or effect a withdrawal or surrender
-              of the Contract until specified dates. Refer to the Confidential
-              Private Placement Memorandum for details.
-            </fo:block>
-            <fo:block font-weight="bold" padding-top="1em">
-              Note: Please refer to the Contract for complete explanation
-              of benefits, rights and obligations. In the event of a conflict
-              between the illustration and the Contract, the terms
-              of the Contract will control.
-            </fo:block>
-          </fo:block>
           <fo:block font-weight="normal" font-size="9pt" font-family="sans-serif" text-align="left">
             <fo:block font-size="10.0pt" font-weight="bold" padding-top="2em" text-decoration="underline">
               Column Definitions
@@ -629,79 +624,43 @@
               not predict future results.
             </fo:block>
           </fo:block>
-        </fo:flow>
 
-      </fo:page-sequence>
+          <!-- Certification Statements -->
 
-      <!-- Certification Statements -->
-
-      <fo:page-sequence master-reference="certification-statements">
-
-        <fo:static-content flow-name="xsl-region-before">
-          <xsl:call-template name="standard-header">
-            <xsl:with-param name="logo_only" select="0"/>
-          </xsl:call-template>
-        </fo:static-content>
-
-        <fo:static-content flow-name="xsl-region-after">
-          <xsl:call-template name="standard-footer">
-            <xsl:with-param name="displaypagenumber" select="1"/>
-          </xsl:call-template>
-        </fo:static-content>
-
-        <fo:flow flow-name="xsl-region-body">
-          <fo:block padding-after="25pt" font-weight="bold" font-size="11pt" font-family="sans-serif" text-align="center">
+          <fo:block font-weight="bold" font-size="11pt" font-family="sans-serif" text-align="center" padding-top="2em">
             Certification Statements
           </fo:block>
-          <fo:block font-size="10pt" font-family="sans-serif" text-align="left">
-            <fo:block padding-after="20pt">
+          <fo:block font-weight="normal" font-size="9pt" font-family="sans-serif" text-align="left" padding-top="1em">
+            <fo:block padding-top="1em">
+              CONTRACT OWNER / APPLICANT
+            </fo:block>
+            <fo:block padding-bottom="1em">
               I have received a copy of this illustration, and I understand
               that any non-guaranteed charges illustrated are subject
               to change and could be either higher or lower. Additionally,
               I have been informed by my agent that these values
               are not guaranteed.
             </fo:block>
-            <fo:table table-layout="fixed" width="100%" padding="2.5pt 0 50pt">
-              <fo:table-column column-width="120mm"/>
-              <fo:table-column column-width="60mm"/>
-              <fo:table-body>
-                <fo:table-row>
-                  <fo:table-cell padding-right="10mm">
-                    <fo:block>__________________________________________________</fo:block>
-                    <fo:block>Contract Owner/Applicant Signature                </fo:block>
-                  </fo:table-cell>
-                  <fo:table-cell>
-                    <fo:block>______________</fo:block>
-                    <fo:block>Date          </fo:block>
-                  </fo:table-cell>
-                </fo:table-row>
-              </fo:table-body>
-            </fo:table>
-            <fo:block padding-after="20pt" text-decoration="underline">
-              AGENT/REGISTERED REPRESENTATIVE
+            <fo:block text-decoration="overline" padding="2em">
+              CONTRACT OWNER OR APPLICANT SIGNATURE &nbsp;&nbsp;&nbsp;
+              <fo:inline text-decoration="no-overline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</fo:inline>DATE
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             </fo:block>
-            <fo:block padding-after="20pt">
+            <fo:block padding-top="2em">
+              AGENT / AUTHORIZED REPRESENTATIVE
+            </fo:block>
+            <fo:block padding-bottom="1em">
               I certify that this illustration has been presented
               to the applicant, and that I have explained that any
               non-guaranteed charges illustrated are subject to change. I have
               made no statements that are inconsistent with the illustration.
             </fo:block>
-            <fo:table table-layout="fixed" width="100%" padding="2.5pt 0 25pt">
-              <fo:table-column column-width="120mm"/>
-              <fo:table-column column-width="60mm"/>
-              <fo:table-body>
-                <fo:table-row>
-                  <fo:table-cell padding-right="10mm">
-                    <fo:block>__________________________________________________</fo:block>
-                    <fo:block>Agent/Registered Representative                   </fo:block>
-                  </fo:table-cell>
-                  <fo:table-cell>
-                    <fo:block>______________</fo:block>
-                    <fo:block>Date          </fo:block>
-                  </fo:table-cell>
-                </fo:table-row>
-              </fo:table-body>
-            </fo:table>
+            <fo:block text-decoration="overline" padding="2em">
+              AGENT OR AUTHORIZED REPRESENTATIVE
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <fo:inline text-decoration="no-overline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</fo:inline>DATE
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </fo:block>
           </fo:block>
           <xsl:if test="not($has_supplemental_report)">
             <fo:block id="endofdoc"/>
