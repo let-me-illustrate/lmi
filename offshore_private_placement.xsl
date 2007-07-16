@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: offshore_private_placement.xsl,v 1.55 2007-07-10 18:53:25 etarassov Exp $
+    $Id: offshore_private_placement.xsl,v 1.56 2007-07-16 11:32:40 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -579,7 +579,7 @@
               vary by fund.
               SEE PROSPECTUS.
             </fo:block>
-            <fo:block padding-top="1em" padding-bottom="1em">
+            <fo:block padding-top="1em">
               <xsl:if test="not($is_composite)">
                 <fo:block padding-top="1em">
                   This illustration is based on total Separate Account
@@ -659,8 +659,8 @@
 
   <xsl:template name="standardheader">
     <xsl:param name="reporttitle"/>
-    <fo:block text-align="center" font-size="9.75pt">
-      <fo:block padding-top="1em">
+    <fo:block text-align="center" font-size="9.75pt" padding="1em 0">
+      <fo:block>
         The purpose of this illustration is to show how the performance
         of the underlying investment account could affect the contract
         account value and death benefit.
@@ -671,7 +671,7 @@
           will vary from year to year.
         </fo:inline>
       </fo:block>
-      <fo:block padding-top="1em" padding-bottom="1em">
+      <fo:block padding-top="1em">
         <xsl:value-of select="$reporttitle"/>
       </fo:block>
     </fo:block>
