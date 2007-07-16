@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.883 2007-07-12 09:05:25 etarassov Exp $
+// $Id: ChangeLog,v 1.884 2007-07-16 11:32:39 etarassov Exp $
 
 MAINTENANCE
 
@@ -13356,4 +13356,14 @@ Add xml resources to install target.
 
   configure.ac
 Use wx macros to detect and configure wxWidgets.
+
+20070716T1132Z <etarassov@tt-solutions.com> [1224]
+
+  fo_common.xsl
+  group_private_placement.xsl
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+  offshore_private_placement.xsl
+Fix spacing and text alignment issues.
 

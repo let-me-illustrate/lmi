@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.70 2007-07-10 18:53:25 etarassov Exp $
+    $Id: nasd.xsl,v 1.71 2007-07-16 11:32:40 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -78,7 +78,7 @@
         <fo:simple-page-master master-name="basic-illustration" margin=".25in">
           <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
-          <fo:region-body margin="3in 0 1.25in"/>
+          <fo:region-body margin="3in 0 1in"/>
           <!-- Header -->
           <fo:region-before extent="3in"/>
           <!-- Footer -->
@@ -199,7 +199,7 @@
         <!-- Column Definitions Summary Body  -->
         <fo:flow flow-name="xsl-region-body">
           <fo:block padding="1em 0 5em" text-align="left" font-size="10pt" font-family="sans-serif">
-            <fo:block font-weight="bold" text-align="center" padding-bottom="2em">
+            <fo:block font-weight="bold" text-align="center">
               Column Definitions
             </fo:block>
 

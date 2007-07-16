@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: group_private_placement.xsl,v 1.52 2007-07-10 18:53:25 etarassov Exp $
+    $Id: group_private_placement.xsl,v 1.53 2007-07-16 11:32:40 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -216,7 +216,7 @@
             <fo:block font-weight="bold" padding-top="2em">
               Death Benefit
             </fo:block>
-            <fo:block padding-bottom="4em">
+            <fo:block>
               The Death Benefit is the net amount paid to a beneficiary
               following receipt of due proof of death. The Death Benefit
               is equal to the benefit provided by the death benefit option
@@ -369,7 +369,7 @@
               The loan interest rate may be fixed or adjustable as elected
               by the policy owner.
             </fo:block>
-            <fo:block padding-top="1em" padding-bottom="1em">
+            <fo:block padding-top="1em">
               <xsl:choose>
                 <xsl:when test="$scalars/UseExperienceRating='1'">
                   The illustration assumes mortality experience rating.

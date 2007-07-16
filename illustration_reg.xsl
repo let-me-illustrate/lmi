@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.60 2007-07-10 18:53:25 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.61 2007-07-16 11:32:40 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -1524,20 +1524,20 @@
             Please refer to the Narrative Summary for additional information.
           </fo:block>
         </xsl:if>
-        <fo:block padding-top="2em">
+        <fo:block padding-top="2em" text-align="center">
           Certification Statements
         </fo:block>
         <fo:block padding-top="1em">
           CONTRACT OWNER / APPLICANT
         </fo:block>
         <xsl:if test="$scalars/InterestDisclaimer!=''">
-          <fo:block padding-bottom="1em">
+          <fo:block padding-top="1em">
             I understand that at the present time higher current interest rates
             are credited for policies with case premiums in the amount
             of <xsl:value-of select="$scalars/InterestDisclaimer"/>
           </fo:block>
         </xsl:if>
-        <fo:block padding-bottom="1em">
+        <fo:block padding-top="1em">
           <xsl:choose>
             <xsl:when test="$scalars/StatePostalAbbrev='IL'">
               I have received a copy of this illustration and understand
@@ -1559,15 +1559,15 @@
             </xsl:otherwise>
           </xsl:choose>
         </fo:block>
-        <fo:block text-decoration="overline" padding-top="2em">
+        <fo:block text-decoration="overline" padding-top="3em">
           CONTRACT OWNER OR APPLICANT SIGNATURE &nbsp;&nbsp;&nbsp;
-          <fo:inline text-decoration="no-overline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</fo:inline>DATE
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <fo:inline text-decoration="no-overline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</fo:inline>
+          DATE &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         </fo:block>
         <fo:block padding-top="2em">
           AGENT / AUTHORIZED REPRESENTATIVE
         </fo:block>
-        <fo:block padding-bottom="1em">
+        <fo:block padding-top="1em">
           <xsl:choose>
             <xsl:when test="$scalars/StatePostalAbbrev='IL'">
               I have informed the applicant or policyowner
@@ -1589,7 +1589,7 @@
             </xsl:otherwise>
           </xsl:choose>
         </fo:block>
-        <fo:block text-decoration="overline" padding-top="2em">
+        <fo:block text-decoration="overline" padding-top="3em">
           AGENT OR AUTHORIZED REPRESENTATIVE
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <fo:inline text-decoration="no-overline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</fo:inline>DATE
