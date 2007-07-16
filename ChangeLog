@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.885 2007-07-16 12:20:46 etarassov Exp $
+// $Id: ChangeLog,v 1.886 2007-07-16 12:32:33 wboutin Exp $
 
 MAINTENANCE
 
@@ -13371,4 +13371,9 @@ Fix spacing and text alignment issues.
 
   microcosm_tsv.xsl
 Remove unnecessary referencing by name in a document('') construct.
+
+20070716T1232Z <wboutin@massmutual.com> [1223]
+
+  variable_annuity.xsl
+Remormat and improve consistency.
 
