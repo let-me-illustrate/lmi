@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: microcosm_tsv.xsl,v 1.4 2007-01-27 00:00:51 wboutin Exp $
+    $Id: microcosm_tsv.xsl,v 1.5 2007-07-16 12:20:47 etarassov Exp $
 -->
 
 <!DOCTYPE xsl:stylesheet [
@@ -91,14 +91,7 @@
     XPath construct "document('')" references the stylesheet itself taken as XML file.
 -->
 
-<!--
-    TODO ?? CALCULATION_SUMMARY EVGENIY: This document references
-    itself by name; is that intentional? See:
-http://cvs.savannah.gnu.org/viewcvs/lmi/lmi/Attic/tab_delimited.xsl?annotate=1.1.2.13&sortby=date&only_with_tag=gnome-xml-branch
-    for the original document, which does likewise.
--->
-
-<xsl:variable name="basic_columns" select="document('microcosm_tsv.xsl')/xsl:stylesheet/xsl:variable[@name='basic_columns_xml']/column"/>
+<xsl:variable name="basic_columns" select="document('')//xsl:variable[@name='basic_columns_xml']/column"/>
 
 <xsl:variable name="all_columns" select="$basic_columns | $calculation_summary_columns"/>
 
