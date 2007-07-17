@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.53 2007-07-16 12:32:33 wboutin Exp $
+    $Id: variable_annuity.xsl,v 1.54 2007-07-17 10:04:33 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -256,10 +256,8 @@
         </fo:static-content>
 
         <fo:static-content flow-name="xsl-region-after">
-          <xsl:call-template name="preliminary-footer">
-            <xsl:with-param name="basis" select="'Current'"/>
-          </xsl:call-template>
           <xsl:call-template name="standard-footer">
+            <xsl:with-param name="basis" select="'Current'"/>
             <xsl:with-param name="displaypagenumber" select="1"/>
           </xsl:call-template>
         </fo:static-content>
@@ -300,10 +298,8 @@
         </fo:static-content>
 
         <fo:static-content flow-name="xsl-region-after">
-          <xsl:call-template name="preliminary-footer">
-            <xsl:with-param name="basis" select="'CurrentZero'"/>
-          </xsl:call-template>
           <xsl:call-template name="standard-footer">
+            <xsl:with-param name="basis" select="'CurrentZero'"/>
             <xsl:with-param name="displaypagenumber" select="1"/>
           </xsl:call-template>
         </fo:static-content>
@@ -344,10 +340,8 @@
         </fo:static-content>
 
         <fo:static-content flow-name="xsl-region-after">
-          <xsl:call-template name="preliminary-footer">
-            <xsl:with-param name="basis" select="'Guaranteed'"/>
-          </xsl:call-template>
           <xsl:call-template name="standard-footer">
+            <xsl:with-param name="basis" select="'Guaranteed'"/>
             <xsl:with-param name="displaypagenumber" select="1"/>
           </xsl:call-template>
         </fo:static-content>
@@ -388,10 +382,8 @@
         </fo:static-content>
 
         <fo:static-content flow-name="xsl-region-after">
-          <xsl:call-template name="preliminary-footer">
-            <xsl:with-param name="basis" select="'GuaranteedZero'"/>
-          </xsl:call-template>
           <xsl:call-template name="standard-footer">
+            <xsl:with-param name="basis" select="'GuaranteedZero'"/>
             <xsl:with-param name="displaypagenumber" select="1"/>
           </xsl:call-template>
         </fo:static-content>
@@ -883,9 +875,11 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template name="preliminary-footer">
+  <xsl:template name="standard-footer">
     <xsl:param name="basis"/>
-    <fo:block font-weight="normal" font-size="8.5pt" font-family="sans-serif" text-align="left" padding-after="15pt">
+    <xsl:param name="displaypagenumber"/>
+    <fo:block font-size="8.5pt" font-family="sans-serif" text-align="left">
+    <fo:block padding-after="1em">
       <xsl:choose>
         <xsl:when test="($basis='Current') or ($basis='CurrentZero')">
           Contract values are net of CURRENT monthly charges which
@@ -896,37 +890,35 @@
           Contract values are net of GUARANTEED monthly charges.
           See the Explanation and Footnotes for important Contract information.
         </xsl:when>
+        <xsl:otherwise>
+          <fo:block padding=".5em"/>
+        </xsl:otherwise>
       </xsl:choose>
     </fo:block>
-  </xsl:template>
-
-  <xsl:template name="standard-footer">
-    <xsl:param name="displaypagenumber"/>
-    <fo:block font-weight="normal" font-size="8.5pt" font-family="sans-serif" text-align="left" padding="2em 0 5pt" border-top="1pt solid blue">
+    <fo:block padding="1em 0 .5em" border-top="1pt solid blue">
       This illustration is not complete unless all pages as noted below
       are included.
     </fo:block>
-    <fo:table table-layout="fixed" width="100%" font-size="9pt" font-family="sans-serif" padding-top="1em">
+    <fo:table table-layout="fixed" width="100%" font-size="9pt">
       <fo:table-column column-width="proportional-column-width(1)"/>
       <fo:table-column column-width="proportional-column-width(1)"/>
       <fo:table-column column-width="proportional-column-width(1)"/>
       <fo:table-body>
         <fo:table-row>
-          <fo:table-cell>
-            <fo:block text-align="left">
-              Date Prepared:
-              <xsl:call-template name="date-prepared"/>
+          <fo:table-cell text-align="left">
+            <fo:block>
+              Date Prepared: <xsl:call-template name="date-prepared"/>
             </fo:block>
           </fo:table-cell>
-          <fo:table-cell>
-            <fo:block text-align="center">
+          <fo:table-cell text-align="center">
+            <fo:block>
               <xsl:if test="$displaypagenumber=1">
                 <xsl:call-template name="page-of"/>
               </xsl:if>
             </fo:block>
           </fo:table-cell>
-          <fo:table-cell>
-            <fo:block text-align="right">
+          <fo:table-cell text-align="right">
+            <fo:block>
               <xsl:if test="$scalars/LmiVersion!=''">
                 System Version:
                 <xsl:value-of select="$scalars/LmiVersion"/>
@@ -936,6 +928,7 @@
         </fo:table-row>
       </fo:table-body>
     </fo:table>
+    </fo:block>
   </xsl:template>
 
   <xsl:template name="get-basis-lapse-year">
