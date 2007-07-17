@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.887 2007-07-16 12:35:51 wboutin Exp $
+// $Id: ChangeLog,v 1.888 2007-07-17 10:04:33 etarassov Exp $
 
 MAINTENANCE
 
@@ -13376,4 +13376,9 @@ Remove unnecessary referencing by name in a document('') construct.
 
   variable_annuity.xsl
 Reformat and improve consistency.
+
+20070717T1004Z <etarassov@tt-solutions.com> [1223]
+
+  variable_annuity.xsl
+Refactor standard footer code.
 
