@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.888 2007-07-17 10:04:33 etarassov Exp $
+// $Id: ChangeLog,v 1.889 2007-07-17 10:14:43 etarassov Exp $
 
 MAINTENANCE
 
@@ -13381,4 +13381,9 @@ Reformat and improve consistency.
 
   variable_annuity.xsl
 Refactor standard footer code.
+
+20070717T1014Z <etarassov@tt-solutions.com> [1223]
+
+  variable_annuity.xsl
+Adjust footer height.
 
