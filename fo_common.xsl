@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.59 2007-07-17 10:48:10 etarassov Exp $
+    $Id: fo_common.xsl,v 1.60 2007-07-17 11:28:49 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -156,6 +156,28 @@
     <xsl:attribute name="page-height"><xsl:value-of select="$height"/></xsl:attribute>
     <xsl:attribute name="margin">.25in .25in .1in</xsl:attribute>
   </xsl:template>
+
+  <!--
+  The field 'InsCoPhone' contains two compliance tracking numbers.
+  The first one is for new business, which could start at 1st position.
+  The second one is for inforce, which always starts at the 15-th.
+  -->
+  <xsl:variable name="compliance_tracking_string">
+    <xsl:choose>
+      <xsl:when test="$scalars/IsInforce!='1'">
+        <xsl:if test="string-length($scalars/InsCoPhone) &gt; 14">
+          <xsl:value-of select="substring($scalars/InsCoPhone, 1, 15)"/>
+        </xsl:if>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:if test="string-length($scalars/InsCoPhone) &gt; 16">
+          <xsl:value-of select="substring($scalars/InsCoPhone, 16)"/>
+        </xsl:if>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <!-- Suppose that the number does not contain leading/trailing spaces -->
+  <xsl:variable name="compliance_tracking_number" select="normalize-space($compliance_tracking_string)"/>
 
   <!--
   This may appear to be a clumsy way to get the max value but there is no clean way

@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.72 2007-07-17 10:48:10 etarassov Exp $
+    $Id: nasd.xsl,v 1.73 2007-07-17 11:28:49 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -547,24 +547,12 @@
               The state of issue is
               <xsl:value-of select="$scalars/StatePostalAbbrev"/>.
             </fo:block>
-            <xsl:choose>
-              <xsl:when test="$scalars/IsInforce!='1'">
-                <xsl:if test="string-length($scalars/InsCoPhone) &gt; 14">
-                  <fo:block padding-top="1em">
-                    Compliance tracking number:
-                    <xsl:value-of select="substring($scalars/InsCoPhone, 1, 15)"/>
-                  </fo:block>
-                </xsl:if>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:if test="string-length($scalars/InsCoPhone) &gt; 16">
-                  <fo:block padding-top="1em">
-                    Compliance tracking number:
-                    <xsl:value-of select="substring($scalars/InsCoPhone, 16)"/>
-                  </fo:block>
-                </xsl:if>
-              </xsl:otherwise>
-            </xsl:choose>
+            <xsl:if test="$compliance_tracking_number">
+              <fo:block padding-top="1em">
+                Compliance Tracking Number:
+                <xsl:value-of select="$compliance_tracking_number"/>
+              </fo:block>
+            </xsl:if>
             <fo:block font-weight="bold" text-align="center" padding-top="1em">
               SEPARATE ACCOUNT
             </fo:block>
