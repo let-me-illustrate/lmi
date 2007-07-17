@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.55 2007-07-17 10:14:43 etarassov Exp $
+    $Id: variable_annuity.xsl,v 1.56 2007-07-17 10:48:11 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -35,7 +35,7 @@
       <fo:layout-master-set>
 
         <!-- Define the Cover page. -->
-        <fo:simple-page-master master-name="cover-page" margin=".25in">
+        <fo:simple-page-master master-name="cover-page">
           <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
           <fo:region-body margin="1.4in 0 1.2in"/>
@@ -44,7 +44,7 @@
         </fo:simple-page-master>
 
         <!-- Define the Hypothetical Illustration Current page. -->
-        <fo:simple-page-master master-name="hypothetical-illustration-current" margin=".25in">
+        <fo:simple-page-master master-name="hypothetical-illustration-current">
           <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
           <fo:region-body margin="2.7in 0 1.2in"/>
@@ -55,7 +55,7 @@
         </fo:simple-page-master>
 
         <!-- Define the Hypothetical Illustration CurrentZero page. -->
-        <fo:simple-page-master master-name="hypothetical-illustration-current-zero" margin=".25in">
+        <fo:simple-page-master master-name="hypothetical-illustration-current-zero">
           <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
           <fo:region-body margin="2.7in 0 1.2in"/>
@@ -66,7 +66,7 @@
         </fo:simple-page-master>
 
         <!-- Define the Hypothetical Illustration Guaranteed page. -->
-        <fo:simple-page-master master-name="hypothetical-illustration-guaranteed" margin=".25in">
+        <fo:simple-page-master master-name="hypothetical-illustration-guaranteed">
           <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
           <fo:region-body margin="2.7in 0 1.2in"/>
@@ -77,7 +77,7 @@
         </fo:simple-page-master>
 
         <!-- Define the Hypothetical Illustration GuaranteedZero page. -->
-        <fo:simple-page-master master-name="hypothetical-illustration-guaranteed-zero" margin=".25in">
+        <fo:simple-page-master master-name="hypothetical-illustration-guaranteed-zero">
           <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
           <fo:region-body margin="2.7in 0 1.2in"/>
@@ -88,7 +88,7 @@
         </fo:simple-page-master>
 
         <!-- Define the Explanation and Footnotes page 1. -->
-        <fo:simple-page-master master-name="explanation-and-footnotes-1" margin=".25in">
+        <fo:simple-page-master master-name="explanation-and-footnotes-1">
           <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
           <fo:region-body margin="1.5in 0 1.2in"/>
@@ -99,7 +99,7 @@
         </fo:simple-page-master>
 
         <!-- Define the Explanation and Footnotes page 2. -->
-        <fo:simple-page-master master-name="explanation-and-footnotes-2" margin=".25in">
+        <fo:simple-page-master master-name="explanation-and-footnotes-2">
           <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
           <fo:region-body margin="1.5in 0 1.2in"/>
@@ -110,7 +110,7 @@
         </fo:simple-page-master>
 
         <!-- Define the Certification Statements page. -->
-        <fo:simple-page-master master-name="certification-statements" margin=".25in">
+        <fo:simple-page-master master-name="certification-statements">
           <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
           <fo:region-body margin="2.0in 0 1.2in"/>
@@ -122,7 +122,7 @@
 
         <!-- Define the Supplemental Report page. -->
         <xsl:if test="$has_supplemental_report">
-          <fo:simple-page-master master-name="supplemental-report" margin=".25in">
+          <fo:simple-page-master master-name="supplemental-report">
             <xsl:call-template name="set-page-size"/>
             <!-- Central part of page -->
             <fo:region-body margin="2.7in 0 1.2in"/>
