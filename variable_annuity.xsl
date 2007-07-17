@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.54 2007-07-17 10:04:33 etarassov Exp $
+    $Id: variable_annuity.xsl,v 1.55 2007-07-17 10:14:43 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -38,11 +38,9 @@
         <fo:simple-page-master master-name="cover-page" margin=".25in">
           <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
-          <fo:region-body margin="1.5in 0 1in"/>
-          <!-- Header -->
-          <fo:region-before extent="3.0in"/>
+          <fo:region-body margin="1.4in 0 1.2in"/>
           <!-- Footer -->
-          <fo:region-after extent="1.0in"/>
+          <fo:region-after extent="1.1in"/>
         </fo:simple-page-master>
 
         <!-- Define the Hypothetical Illustration Current page. -->
@@ -51,9 +49,9 @@
           <!-- Central part of page -->
           <fo:region-body margin="2.7in 0 1.2in"/>
           <!-- Header -->
-          <fo:region-before extent="3.0in"/>
+          <fo:region-before extent="2.7in"/>
           <!-- Footer -->
-          <fo:region-after extent="1.0in"/>
+          <fo:region-after extent="1.1in"/>
         </fo:simple-page-master>
 
         <!-- Define the Hypothetical Illustration CurrentZero page. -->
@@ -62,9 +60,9 @@
           <!-- Central part of page -->
           <fo:region-body margin="2.7in 0 1.2in"/>
           <!-- Header -->
-          <fo:region-before extent="3.0in"/>
+          <fo:region-before extent="2.7in"/>
           <!-- Footer -->
-          <fo:region-after extent="1.0in"/>
+          <fo:region-after extent="1.1in"/>
         </fo:simple-page-master>
 
         <!-- Define the Hypothetical Illustration Guaranteed page. -->
@@ -73,9 +71,9 @@
           <!-- Central part of page -->
           <fo:region-body margin="2.7in 0 1.2in"/>
           <!-- Header -->
-          <fo:region-before extent="3.0in"/>
+          <fo:region-before extent="2.7in"/>
           <!-- Footer -->
-          <fo:region-after extent="1.0in"/>
+          <fo:region-after extent="1.1in"/>
         </fo:simple-page-master>
 
         <!-- Define the Hypothetical Illustration GuaranteedZero page. -->
@@ -84,42 +82,42 @@
           <!-- Central part of page -->
           <fo:region-body margin="2.7in 0 1.2in"/>
           <!-- Header -->
-          <fo:region-before extent="3.0in"/>
+          <fo:region-before extent="2.7in"/>
           <!-- Footer -->
-          <fo:region-after extent="1.0in"/>
+          <fo:region-after extent="1.1in"/>
         </fo:simple-page-master>
 
         <!-- Define the Explanation and Footnotes page 1. -->
         <fo:simple-page-master master-name="explanation-and-footnotes-1" margin=".25in">
           <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
-          <fo:region-body margin="1.5in 0 1in"/>
+          <fo:region-body margin="1.5in 0 1.2in"/>
           <!-- Header -->
-          <fo:region-before extent="3.0in"/>
+          <fo:region-before extent="1.4in"/>
           <!-- Footer -->
-          <fo:region-after extent="1.0in"/>
+          <fo:region-after extent="1.1in"/>
         </fo:simple-page-master>
 
         <!-- Define the Explanation and Footnotes page 2. -->
         <fo:simple-page-master master-name="explanation-and-footnotes-2" margin=".25in">
           <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
-          <fo:region-body margin="1.5in 0 1in"/>
+          <fo:region-body margin="1.5in 0 1.2in"/>
           <!-- Header -->
-          <fo:region-before extent="3.0in"/>
+          <fo:region-before extent="1.4in"/>
           <!-- Footer -->
-          <fo:region-after extent="1.0in"/>
+          <fo:region-after extent="1.1in"/>
         </fo:simple-page-master>
 
         <!-- Define the Certification Statements page. -->
         <fo:simple-page-master master-name="certification-statements" margin=".25in">
           <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
-          <fo:region-body margin="2in 0 1in"/>
+          <fo:region-body margin="2.0in 0 1.2in"/>
           <!-- Header -->
-          <fo:region-before extent="3.0in"/>
+          <fo:region-before extent="2.0in"/>
           <!-- Footer -->
-          <fo:region-after extent="1.0in"/>
+          <fo:region-after extent="1.1in"/>
         </fo:simple-page-master>
 
         <!-- Define the Supplemental Report page. -->
@@ -129,9 +127,9 @@
             <!-- Central part of page -->
             <fo:region-body margin="2.7in 0 1.2in"/>
             <!-- Header -->
-            <fo:region-before extent="3.0in"/>
+            <fo:region-before extent="2.7in"/>
             <!-- Footer -->
-            <fo:region-after extent="1.0in"/>
+            <fo:region-after extent="1.1in"/>
           </fo:simple-page-master>
         </xsl:if>
 
