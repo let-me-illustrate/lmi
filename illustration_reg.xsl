@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.61 2007-07-16 11:32:40 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.62 2007-07-17 10:48:10 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -45,13 +45,13 @@
       <fo:layout-master-set>
 
         <!-- Define the cover page. -->
-        <fo:simple-page-master master-name="cover" margin=".1in .35in 0">
+        <fo:simple-page-master master-name="cover">
           <xsl:call-template name="set-page-size"/>
-          <fo:region-body margin=".25in 0 .1in"/>
+          <fo:region-body margin=".1in .1in 0"/>
         </fo:simple-page-master>
 
         <!-- Define the narrative summary page. -->
-        <fo:simple-page-master master-name="narrative-summary" margin=".25in">
+        <fo:simple-page-master master-name="narrative-summary">
           <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
           <fo:region-body margin=".5in 0 1in"/>
@@ -62,7 +62,7 @@
         </fo:simple-page-master>
 
         <!-- Define the column headings and key terms page. -->
-        <fo:simple-page-master master-name="column-headings-and-key-terms" margin=".25in">
+        <fo:simple-page-master master-name="column-headings-and-key-terms">
           <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
           <fo:region-body margin=".15in 0 .45in"/>
@@ -73,7 +73,7 @@
         </fo:simple-page-master>
 
         <!-- Define the Numeric Summary page. -->
-        <fo:simple-page-master master-name="numeric-summary" margin=".25in">
+        <fo:simple-page-master master-name="numeric-summary">
           <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
           <fo:region-body margin="3.1in 0 .52in"/>
@@ -84,7 +84,7 @@
         </fo:simple-page-master>
 
         <!-- Define the Tabular Detail page. -->
-        <fo:simple-page-master master-name="tabular-detail" margin=".25in">
+        <fo:simple-page-master master-name="tabular-detail">
           <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
           <fo:region-body margin="3.1in 0 1.3in"/>
@@ -95,7 +95,7 @@
         </fo:simple-page-master>
 
         <!-- Define the Tabular Detail (Report 2) page. -->
-        <fo:simple-page-master master-name="tabular-detail-report2" margin=".25in">
+        <fo:simple-page-master master-name="tabular-detail-report2">
           <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
           <fo:region-body margin="3.2in 0 1.35in"/>
@@ -107,7 +107,7 @@
 
         <!-- Define the Supplemental Report page. -->
         <xsl:if test="$has_supplemental_report">
-          <fo:simple-page-master master-name="supplemental-report" margin=".25in">
+          <fo:simple-page-master master-name="supplemental-report">
             <xsl:call-template name="set-page-size"/>
             <!-- Central part of page -->
             <fo:region-body margin="3in 0 1.25in"/>
@@ -119,7 +119,7 @@
         </xsl:if>
 
         <!-- Define the Numeric Summary Attachment page. -->
-        <fo:simple-page-master master-name="numeric-summary-attachment" margin=".25in">
+        <fo:simple-page-master master-name="numeric-summary-attachment">
           <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
           <fo:region-body margin="3.1in 0 .52in"/>
