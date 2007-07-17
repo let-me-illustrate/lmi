@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.892 2007-07-17 11:28:49 etarassov Exp $
+// $Id: ChangeLog,v 1.893 2007-07-17 11:38:57 etarassov Exp $
 
 MAINTENANCE
 
@@ -13408,4 +13408,9 @@ Refactor page margins.
   offshore_private_placement.xsl
   variable_annuity.xsl
 Extract 'Complaince Tracking Number' into a variable.
+
+20070717T1138Z <etarassov@tt-solutions.com> [1223]
+
+  variable_annuity.xsl
+Add 'Complaince Tracking Number' to the footer.
 

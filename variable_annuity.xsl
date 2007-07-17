@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.56 2007-07-17 10:48:11 etarassov Exp $
+    $Id: variable_annuity.xsl,v 1.57 2007-07-17 11:38:57 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -903,23 +903,29 @@
       <fo:table-column column-width="proportional-column-width(1)"/>
       <fo:table-body>
         <fo:table-row>
-          <fo:table-cell text-align="left">
+          <fo:table-cell text-align="left" display-align="after">
             <fo:block>
               Date Prepared: <xsl:call-template name="date-prepared"/>
             </fo:block>
           </fo:table-cell>
-          <fo:table-cell text-align="center">
+          <fo:table-cell text-align="center" display-align="after">
             <fo:block>
               <xsl:if test="$displaypagenumber=1">
                 <xsl:call-template name="page-of"/>
               </xsl:if>
             </fo:block>
           </fo:table-cell>
-          <fo:table-cell text-align="right">
+          <fo:table-cell text-align="right" display-align="after">
             <fo:block>
+              <xsl:if test="$compliance_tracking_number">
+                <fo:block>
+                  <xsl:value-of select="$compliance_tracking_number"/>
+                </fo:block>
+              </xsl:if>
               <xsl:if test="$scalars/LmiVersion!=''">
-                System Version:
-                <xsl:value-of select="$scalars/LmiVersion"/>
+                <fo:block>
+                  System Version: <xsl:value-of select="$scalars/LmiVersion"/>
+                </fo:block>
               </xsl:if>
             </fo:block>
           </fo:table-cell>
