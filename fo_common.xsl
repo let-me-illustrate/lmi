@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.58 2007-07-16 11:32:40 etarassov Exp $
+    $Id: fo_common.xsl,v 1.59 2007-07-17 10:48:10 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -154,6 +154,7 @@
     <xsl:param name="height" select="$page-height"/>
     <xsl:attribute name="page-width"><xsl:value-of select="$width"/></xsl:attribute>
     <xsl:attribute name="page-height"><xsl:value-of select="$height"/></xsl:attribute>
+    <xsl:attribute name="margin">.25in .25in .1in</xsl:attribute>
   </xsl:template>
 
   <!--

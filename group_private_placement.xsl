@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: group_private_placement.xsl,v 1.53 2007-07-16 11:32:40 etarassov Exp $
+    $Id: group_private_placement.xsl,v 1.54 2007-07-17 10:48:10 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -35,13 +35,13 @@
       <fo:layout-master-set>
 
         <!-- Define the cover page. -->
-        <fo:simple-page-master master-name="cover" margin=".1in .35in 0in">
+        <fo:simple-page-master master-name="cover">
           <xsl:call-template name="set-page-size"/>
-          <fo:region-body margin=".25in 0 .1in"/>
+          <fo:region-body margin=".1in .1in 0in"/>
         </fo:simple-page-master>
 
         <!-- Define the Column Definitions page. -->
-        <fo:simple-page-master master-name="column-definitions" margin=".25in">
+        <fo:simple-page-master master-name="column-definitions">
           <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
           <fo:region-body margin="2.25in 0 1in"/>
@@ -52,7 +52,7 @@
         </fo:simple-page-master>
 
         <!-- Define the narrative summary page. -->
-        <fo:simple-page-master master-name="narrative-summary" margin=".25in">
+        <fo:simple-page-master master-name="narrative-summary">
           <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
           <fo:region-body margin="2.5in 0 1.25in"/>
@@ -63,7 +63,7 @@
         </fo:simple-page-master>
 
         <!-- Define the narrative summary page. -->
-        <fo:simple-page-master master-name="narrative-summary-separate-account" margin=".25in">
+        <fo:simple-page-master master-name="narrative-summary-separate-account">
           <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
           <fo:region-body margin="2.25in 0 3in"/>
@@ -74,7 +74,7 @@
         </fo:simple-page-master>
 
         <!-- Define the Basic Illustration page. -->
-        <fo:simple-page-master master-name="basic-illustration" margin=".25in">
+        <fo:simple-page-master master-name="basic-illustration">
           <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
           <fo:region-body margin="3in 0 1.25in"/>
@@ -85,7 +85,7 @@
         </fo:simple-page-master>
 
         <!-- Define the Supplemental Illustration page. -->
-        <fo:simple-page-master master-name="supplemental-illustration" margin=".25in">
+        <fo:simple-page-master master-name="supplemental-illustration">
           <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
           <fo:region-body margin="3in 0 1in"/>
@@ -96,7 +96,7 @@
         </fo:simple-page-master>
 
         <!-- Define the Illustration Assumption Detail page. -->
-        <fo:simple-page-master master-name="illustration-assumption" margin=".25in">
+        <fo:simple-page-master master-name="illustration-assumption">
           <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
           <fo:region-body margin="2.8in 0 1in"/>
@@ -108,7 +108,7 @@
 
         <!-- Define the Supplemental Report page. -->
         <xsl:if test="$has_supplemental_report">
-          <fo:simple-page-master master-name="supplemental-report" margin=".25in">
+          <fo:simple-page-master master-name="supplemental-report">
             <xsl:call-template name="set-page-size"/>
             <!-- Central part of page -->
             <fo:region-body margin="2.8in 0 1.1in"/>
