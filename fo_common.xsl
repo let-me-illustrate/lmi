@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.60 2007-07-17 11:28:49 etarassov Exp $
+    $Id: fo_common.xsl,v 1.61 2007-07-20 19:50:06 wboutin Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -165,13 +165,13 @@
   <xsl:variable name="compliance_tracking_string">
     <xsl:choose>
       <xsl:when test="$scalars/IsInforce!='1'">
-        <xsl:if test="string-length($scalars/InsCoPhone) &gt; 14">
-          <xsl:value-of select="substring($scalars/InsCoPhone, 1, 15)"/>
+        <xsl:if test="string-length($scalars/InsCoPhone) &gt; 19">
+          <xsl:value-of select="substring($scalars/InsCoPhone, 1, 20)"/>
         </xsl:if>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:if test="string-length($scalars/InsCoPhone) &gt; 16">
-          <xsl:value-of select="substring($scalars/InsCoPhone, 16)"/>
+        <xsl:if test="string-length($scalars/InsCoPhone) &gt; 21">
+          <xsl:value-of select="substring($scalars/InsCoPhone, 21)"/>
         </xsl:if>
       </xsl:otherwise>
     </xsl:choose>
