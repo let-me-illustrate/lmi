@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.893 2007-07-17 11:38:57 etarassov Exp $
+// $Id: ChangeLog,v 1.894 2007-07-20 19:50:06 wboutin Exp $
 
 MAINTENANCE
 
@@ -13413,4 +13413,9 @@ Extract 'Complaince Tracking Number' into a variable.
 
   variable_annuity.xsl
 Add 'Complaince Tracking Number' to the footer.
+
+20070720T1950Z <wboutin@massmutual.com> [1223]
+
+  fo_common.xsl
+Expand a data field's character length.
 
