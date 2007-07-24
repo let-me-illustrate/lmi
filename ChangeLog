@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.894 2007-07-20 19:50:06 wboutin Exp $
+// $Id: ChangeLog,v 1.895 2007-07-24 19:22:46 wboutin Exp $
 
 MAINTENANCE
 
@@ -13418,4 +13418,10 @@ Add 'Complaince Tracking Number' to the footer.
 
   fo_common.xsl
 Expand a data field's character length.
+
+20070724T1922Z <wboutin@massmutual.com> [1223]
+
+  xml_notebook_private_placement.xrc
+  xml_notebook_variable_annuity.xrc
+Reformat.
 
