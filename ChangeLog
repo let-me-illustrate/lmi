@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.897 2007-07-25 19:30:43 wboutin Exp $
+// $Id: ChangeLog,v 1.898 2007-07-25 21:27:44 etarassov Exp $
 
 MAINTENANCE
 
@@ -13448,4 +13448,9 @@ Reformat a footnote.
 
   xml_notebook_variable_annuity.xrc
 Improve concinnity.
+
+20070725T2127Z <etarassov@tt-solutions.com> [1223]
+
+  ledger_common.xsl
+Remove underscore characters from calculation summary column titles.
 
