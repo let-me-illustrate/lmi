@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: ledger_common.xsl,v 1.5 2007-06-27 13:35:22 etarassov Exp $
+    $Id: ledger_common.xsl,v 1.6 2007-07-25 21:27:44 etarassov Exp $
 -->
 
 <xsl:stylesheet xmlns:lmi="http://savannah.nongnu.org/projects/lmi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" xsi:schemaLocation="http://savannah.nongnu.org/projects/lmi ledger.xsd">
@@ -94,7 +94,11 @@
         <xsl:param name="column"/>
         <xsl:choose>
             <xsl:when test="$column/text()">
-                <xsl:value-of select="$column/text()"/>
+                <xsl:call-template name="do_title">
+                    <xsl:with-param name="name" select="$name"/>
+                    <xsl:with-param name="basis" select="$basis"/>
+                    <xsl:with-param name="title" select="$column/text()"/>
+                </xsl:call-template>
             </xsl:when>
             <xsl:when test="not($name)">
                 <!-- An empty column. Put nothing for a spacer. -->
@@ -125,7 +129,7 @@
         <xsl:param name="basis"/>
         <xsl:param name="title"/>
         <xsl:if test="$title and $title!=''">
-            <xsl:value-of select="$title"/>
+            <xsl:value-of select="translate($title,'_','')"/>
         </xsl:if>
         <xsl:if test="(not($title) or $title='') and $debug">
             <!-- no title, show error -->
