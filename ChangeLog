@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.895 2007-07-24 19:22:46 wboutin Exp $
+// $Id: ChangeLog,v 1.896 2007-07-25 14:18:05 wboutin Exp $
 
 MAINTENANCE
 
@@ -13424,4 +13424,23 @@ Expand a data field's character length.
   xml_notebook_private_placement.xrc
   xml_notebook_variable_annuity.xrc
 Reformat.
+
+20070725T1416Z <wboutin@massmutual.com> [1223]
+
+  xml_notebook_variable_annuity.xrc
+Improve concinnity.
+
+20070725T1417Z <wboutin@massmutual.com> [1223]
+
+  fo_common.xsl
+Correct a comment.
+
+20070725T1418Z<wboutin@massmutual.com> [1223]
+
+  group_private_placement.xsl
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+  offshore_private_placement.xsl
+Reformat a footnote.
 

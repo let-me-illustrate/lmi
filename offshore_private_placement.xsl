@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: offshore_private_placement.xsl,v 1.58 2007-07-17 11:28:49 etarassov Exp $
+    $Id: offshore_private_placement.xsl,v 1.59 2007-07-25 14:18:05 wboutin Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -544,7 +544,7 @@
             </fo:block>
             <xsl:if test="$compliance_tracking_number">
               <fo:block padding-top="1em">
-                Compliance Tracking Number:
+                Compliance tracking number:
                 <xsl:value-of select="$compliance_tracking_number"/>
               </fo:block>
             </xsl:if>

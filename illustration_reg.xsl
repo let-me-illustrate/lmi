@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.63 2007-07-17 11:28:49 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.64 2007-07-25 14:18:04 wboutin Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -547,7 +547,7 @@
             </fo:block>
             <xsl:if test="$compliance_tracking_number">
               <fo:block padding-top="1em">
-                Compliance Tracking Number:
+                Compliance tracking number:
                 <xsl:value-of select="$compliance_tracking_number"/>
               </fo:block>
             </xsl:if>
@@ -1489,7 +1489,7 @@
               and interest rate.
             </fo:block>
             <xsl:if test="$scalars/LapseYear_Midpoint &lt; $scalars/MaxDuration">
-              <fo:block padding-top="2em">
+              <fo:block>
                 Additional premium will be required
                 in year <xsl:value-of select="$scalars/LapseYear_Midpoint+1"/>
                 or contract will lapse based on midpoint monthly charges
