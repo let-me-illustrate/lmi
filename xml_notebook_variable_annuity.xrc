@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook_variable_annuity.xrc,v 1.4 2007-07-24 19:22:46 wboutin Exp $
+    $Id: xml_notebook_variable_annuity.xrc,v 1.5 2007-07-25 14:16:39 wboutin Exp $
 
     This version is designed for private placement users; it omits input
     fields that seem irrelevant in that context, and reflects the
@@ -407,7 +407,6 @@ useful in the future.
             <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
             <object class="wxStaticBoxSizer">
                 <orient>wxVERTICAL</orient>
-                <label></label>
                 <object class="sizeritem">
                     <flag>wxGROW|wxALIGN_RIGHT|wxALL</flag>
                     <border>4</border>
