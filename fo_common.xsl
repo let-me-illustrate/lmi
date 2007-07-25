@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.61 2007-07-20 19:50:06 wboutin Exp $
+    $Id: fo_common.xsl,v 1.62 2007-07-25 14:17:10 wboutin Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -160,7 +160,7 @@
   <!--
   The field 'InsCoPhone' contains two compliance tracking numbers.
   The first one is for new business, which could start at 1st position.
-  The second one is for inforce, which always starts at the 15-th.
+  The second one is for inforce, which always starts at the 20-th.
   -->
   <xsl:variable name="compliance_tracking_string">
     <xsl:choose>
