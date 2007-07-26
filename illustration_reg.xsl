@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.64 2007-07-25 14:18:04 wboutin Exp $
+    $Id: illustration_reg.xsl,v 1.65 2007-07-26 19:27:20 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -511,7 +511,7 @@
                     </xsl:otherwise>
                   </xsl:choose>
                   a Modified Endowment Contract (MEC)
-                  under the Internal Revenue Code
+                  under the Internal Revenue Code<!-- prevent trailing space -->
                   <xsl:if test="$scalars/IsMec='1'">
                       in year <xsl:value-of select="$scalars/MecYear+1"/>
                   </xsl:if>.
