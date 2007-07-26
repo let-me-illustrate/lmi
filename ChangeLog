@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.899 2007-07-26 19:27:19 etarassov Exp $
+// $Id: ChangeLog,v 1.900 2007-07-26 19:46:23 wboutin Exp $
 
 MAINTENANCE
 
@@ -7247,7 +7247,7 @@ Correct several control-enablement defects.
   menus.xrc
 Improve menu item shortcut.
 
-20060825T2052 <wboutin@massmutual.com> [1200]
+20060825T2052Z <wboutin@massmutual.com> [1200]
 
   xml_notebook_coli_boli.xrc
 Populate 'PartialMortalityTable' value and improve consistency.
@@ -13193,7 +13193,7 @@ Guard pointer dereferencing.
   ledgervalues.cpp
 Copy a shared pointer, not its contents.
 
- <chicares@cox.net> [1225]
+20070708T0318Z <chicares@cox.net> [1225]
 
   illustrator.cpp
   ledgervalues.cpp
@@ -13435,7 +13435,7 @@ Improve concinnity.
   fo_common.xsl
 Correct a comment.
 
-20070725T1418Z<wboutin@massmutual.com> [1223]
+20070725T1418Z <wboutin@massmutual.com> [1223]
 
   group_private_placement.xsl
   illustration_reg.xsl
@@ -13461,4 +13461,9 @@ Remove underscore characters from calculation summary column titles.
   nasd.xsl
   offshore_private_placement.xsl
 Fix various things in table header, header and footer.
+
+20070726T1946Z <wboutin@massmutual.com> [1223]
+
+  version.hpp
+Mark release candidate.
 
