@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.898 2007-07-25 21:27:44 etarassov Exp $
+// $Id: ChangeLog,v 1.899 2007-07-26 19:27:19 etarassov Exp $
 
 MAINTENANCE
 
@@ -13453,4 +13453,12 @@ Improve concinnity.
 
   ledger_common.xsl
 Remove underscore characters from calculation summary column titles.
+
+20070726T1927Z <etarassov@tt-solutions.com> [1223]
+
+  fo_common.xsl
+  illustration_reg.xsl
+  nasd.xsl
+  offshore_private_placement.xsl
+Fix various things in table header, header and footer.
 

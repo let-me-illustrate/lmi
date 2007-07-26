@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.74 2007-07-25 14:18:05 wboutin Exp $
+    $Id: nasd.xsl,v 1.75 2007-07-26 19:27:20 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -292,7 +292,7 @@
                 </xsl:otherwise>
               </xsl:choose>
               a Modified Endowment Contract (MEC) under
-              the Internal Revenue Code
+              the Internal Revenue Code<!-- prevent trailing space -->
               <xsl:if test="$scalars/IsMec='1'">
                 in year <xsl:value-of select="$scalars/MecYear + 1"/>
               </xsl:if>.
@@ -686,6 +686,8 @@
                       <xsl:with-param name="length" select="30"/>
                     </xsl:call-template>,
                     <xsl:value-of select="$scalars/Gender"/>
+                    <!-- xsl:text prevents space from being stripped -->
+                    <xsl:text> </xsl:text>
                     <xsl:value-of select="$scalars/Smoker"/> rates,
                     Age <xsl:value-of select="$scalars/Age"/>
                   </xsl:when>
@@ -959,6 +961,7 @@
       <column composite="1"/>
 
       <column composite="0" name="AttainedAge">|End of _Year Age</column>
+      <column composite="0"/>
       <column composite="0" name="AnnSAIntRate_Current">Net Crediting Rate|Sep Acct</column>
       <column composite="0" name="AnnGAIntRate_Current">Net Crediting Rate|Gen Acct</column>
       <column composite="0" name="CurrMandE">|M&amp;E</column>
@@ -989,69 +992,14 @@
               </xsl:when>
               <xsl:otherwise><!-- not($is_composite) -->
                 <!--
-                Do not use 'generic-table-header' template.
-                Instead customize table headers.
                 The special feature requested: the cell 'Net Crediting Rate'
                 to be nicely centered over two cells.
+                Thus use 'illustration-assumption-custom-headers',
+                not the generic 'generate-table-header'.
                 -->
-                <fo:table-row>
-                  <fo:table-cell number-rows-spanned="2">
-                    <xsl:call-template name="header-cell-with-border"/>
-                    <fo:block>Policy</fo:block>
-                    <fo:block>Year</fo:block>
-                  </fo:table-cell>
-                  <fo:table-cell number-rows-spanned="2">
-                    <xsl:call-template name="header-cell-with-border"/>
-                    <fo:block>End of</fo:block>
-                    <fo:block>Year Age</fo:block>
-                  </fo:table-cell>
-                  <!-- The 'padding-right' is to center the cell content -->
-                  <fo:table-cell number-columns-spanned="2" padding-right="1.4em">
-                    <xsl:call-template name="header-cell-with-border"/>
-                    <fo:block>Net Crediting Rate</fo:block>
-                  </fo:table-cell>
-                  <fo:table-cell number-rows-spanned="2">
-                    <xsl:call-template name="header-cell-with-border"/>
-                    <fo:block>M&amp;E</fo:block>
-                  </fo:table-cell>
-                  <fo:table-cell number-rows-spanned="2">
-                    <xsl:call-template name="header-cell-with-border"/>
-                    <fo:block>Indiv</fo:block>
-                    <fo:block>Pmt Mode</fo:block>
-                  </fo:table-cell>
-                  <fo:table-cell number-rows-spanned="2">
-                    <xsl:call-template name="header-cell-with-border"/>
-                    <fo:block>Corp</fo:block>
-                    <fo:block>Pmt Mode</fo:block>
-                  </fo:table-cell>
-                  <fo:table-cell number-rows-spanned="2">
-                    <xsl:call-template name="header-cell-with-border"/>
-                    <fo:block>Assumed</fo:block>
-                    <fo:block>Loan Interest</fo:block>
-                  </fo:table-cell>
-                  <fo:table-cell number-rows-spanned="2">
-                    <xsl:call-template name="header-cell-with-border"/>
-                    <fo:block>Flat Extra</fo:block>
-                    <fo:block>Per 1,000</fo:block>
-                  </fo:table-cell>
-                </fo:table-row>
-                <fo:table-row>
-                  <fo:table-cell>
-                    <xsl:call-template name="header-cell-with-border"/>
-                    <fo:block>Sep Acct</fo:block>
-                  </fo:table-cell>
-                  <fo:table-cell number-rows-spanned="2">
-                    <xsl:call-template name="header-cell-with-border"/>
-                    <fo:block>Gen Acct</fo:block>
-                  </fo:table-cell>
-                </fo:table-row>
+                <xsl:call-template name="illustration-assumption-custom-headers"/>
               </xsl:otherwise>
             </xsl:choose>
-            <fo:table-row>
-              <fo:table-cell padding="2pt">
-                <fo:block/>
-              </fo:table-cell>
-            </fo:table-row>
           </fo:table-header>
 
           <fo:table-body>
