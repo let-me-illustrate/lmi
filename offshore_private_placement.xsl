@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: offshore_private_placement.xsl,v 1.59 2007-07-25 14:18:05 wboutin Exp $
+    $Id: offshore_private_placement.xsl,v 1.60 2007-07-26 19:27:20 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -292,7 +292,7 @@
                 </xsl:otherwise>
               </xsl:choose>
               a Modified Endowment Contract (MEC) under the Internal
-              Revenue Code
+              Revenue Code<!-- prevent trailing space -->
               <xsl:if test="$scalars/IsMec='1'">
                 in year <xsl:value-of select="$scalars/MecYear+1"/>
               </xsl:if>.
@@ -689,6 +689,8 @@
                       </xsl:call-template>,
                       <fo:inline white-space="nowrap">
                         <xsl:value-of select="$scalars/Gender"/>
+                        <!-- xsl:text prevents space from being stripped -->
+                        <xsl:text> </xsl:text>
                         <xsl:value-of select="$scalars/Smoker"/>
                       </fo:inline>
                       rates, Age <xsl:value-of select="$scalars/Age"/>
@@ -979,6 +981,7 @@
       <column composite="1"/>
 
       <column composite="0" name="AttainedAge">|End of _Year Age</column>
+      <column composite="0"/>
       <column composite="0" name="AnnSAIntRate_Current">Net Crediting Rate|Sep Acct</column>
       <column composite="0" name="AnnGAIntRate_Current">Net Crediting Rate|Gen Acct</column>
       <column composite="0" name="CurrMandE">|M&amp;E</column>
@@ -999,9 +1002,24 @@
           </xsl:call-template>
 
           <fo:table-header>
-            <xsl:call-template name="generate-table-headers">
-              <xsl:with-param name="columns" select="$columns"/>
-            </xsl:call-template>
+            <xsl:choose>
+              <xsl:when test="$is_composite">
+                <fo:table-header>
+                  <xsl:call-template name="generate-table-headers">
+                    <xsl:with-param name="columns" select="$columns"/>
+                  </xsl:call-template>
+                </fo:table-header>
+              </xsl:when>
+              <xsl:otherwise><!-- not($is_composite) -->
+                <!--
+                The special feature requested: the cell 'Net Crediting Rate'
+                to be nicely centered over two cells.
+                Thus use 'illustration-assumption-custom-headers',
+                not the generic 'generate-table-header'.
+                -->
+                <xsl:call-template name="illustration-assumption-custom-headers"/>
+              </xsl:otherwise>
+            </xsl:choose>
           </fo:table-header>
 
           <fo:table-body>

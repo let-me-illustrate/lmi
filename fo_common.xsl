@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.62 2007-07-25 14:17:10 wboutin Exp $
+    $Id: fo_common.xsl,v 1.63 2007-07-26 19:27:20 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -931,5 +931,73 @@
 
   <!-- Empty stub for special table column values retrieval hook template -->
   <xsl:template name="get-special-column-value"/>
+
+  <!--
+  Custom table headers for 'illustration-assumption-report'.
+  The special feature requested: the cell 'Net Crediting Rate'
+  to be nicely centered over two cells.
+  -->
+  <xsl:template name="illustration-assumption-custom-headers">
+    <fo:table-row>
+      <fo:table-cell number-rows-spanned="2">
+        <xsl:call-template name="header-cell-with-border"/>
+        <fo:block>Policy</fo:block>
+        <fo:block>Year</fo:block>
+      </fo:table-cell>
+      <fo:table-cell number-rows-spanned="2">
+        <xsl:call-template name="header-cell-with-border"/>
+        <fo:block>End of</fo:block>
+        <fo:block>Year Age</fo:block>
+      </fo:table-cell>
+      <fo:table-cell number-rows-spanned="2">
+        <xsl:call-template name="header-cell-with-border"/>
+        <fo:block/>
+      </fo:table-cell>
+      <fo:table-cell number-columns-spanned="2">
+        <xsl:call-template name="header-cell-with-border"/>
+        <xsl:attribute name="text-align">center</xsl:attribute>
+        <fo:block>Net Crediting Rate</fo:block>
+      </fo:table-cell>
+      <fo:table-cell number-rows-spanned="2">
+        <xsl:call-template name="header-cell-with-border"/>
+        <fo:block>M&amp;E</fo:block>
+      </fo:table-cell>
+      <fo:table-cell number-rows-spanned="2">
+        <xsl:call-template name="header-cell-with-border"/>
+        <fo:block>Indiv</fo:block>
+        <fo:block>Pmt Mode</fo:block>
+      </fo:table-cell>
+      <fo:table-cell number-rows-spanned="2">
+        <xsl:call-template name="header-cell-with-border"/>
+        <fo:block>Corp</fo:block>
+        <fo:block>Pmt Mode</fo:block>
+      </fo:table-cell>
+      <fo:table-cell number-rows-spanned="2">
+        <xsl:call-template name="header-cell-with-border"/>
+        <fo:block>Assumed</fo:block>
+        <fo:block>Loan Interest</fo:block>
+      </fo:table-cell>
+      <fo:table-cell number-rows-spanned="2">
+        <xsl:call-template name="header-cell-with-border"/>
+        <fo:block>Flat Extra</fo:block>
+        <fo:block>Per 1,000</fo:block>
+      </fo:table-cell>
+    </fo:table-row>
+    <fo:table-row>
+      <fo:table-cell>
+        <xsl:call-template name="header-cell-with-border"/>
+        <fo:block>Sep Acct</fo:block>
+      </fo:table-cell>
+      <fo:table-cell>
+        <xsl:call-template name="header-cell-with-border"/>
+        <fo:block>Gen Acct</fo:block>
+      </fo:table-cell>
+    </fo:table-row>
+    <fo:table-row>
+      <fo:table-cell padding="2pt">
+        <fo:block/>
+      </fo:table-cell>
+    </fo:table-row>
+  </xsl:template>
 
 </xsl:stylesheet>
