@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.900 2007-07-26 19:46:23 wboutin Exp $
+// $Id: ChangeLog,v 1.901 2007-07-30 14:14:27 chicares Exp $
 
 MAINTENANCE
 
@@ -13466,4 +13466,18 @@ Fix various things in table header, header and footer.
 
   version.hpp
 Mark release candidate.
+
+20070730T1414Z <chicares@cox.net> [1223]
+
+  alert_wx.cpp
+  census_view.cpp
+  file_command_wx.cpp
+  group_values.cpp
+  illustration_view.cpp
+  input_harmonization.cpp
+  input_sequence.cpp
+  ledger_xml_io.cpp
+  main_wx.cpp
+  progress_meter_wx.cpp
+Remove needless c_str() calls.
 

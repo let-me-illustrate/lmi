@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: file_command_wx.cpp,v 1.5 2007-03-10 02:47:09 chicares Exp $
+// $Id: file_command_wx.cpp,v 1.6 2007-07-30 14:14:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -50,11 +50,11 @@ void concrete_file_command
     ,std::string const& action
     )
 {
-    fs::path path(file.c_str());
+    fs::path path(file);
     std::string extension = fs::extension(path);
 
     boost::scoped_ptr<wxFileType> ft
-        (wxTheMimeTypesManager->GetFileTypeFromExtension(extension.c_str())
+        (wxTheMimeTypesManager->GetFileTypeFromExtension(extension)
         );
 
     if(!ft)
@@ -74,7 +74,7 @@ void concrete_file_command
         okay = ft->GetOpenCommand
             (&cmd
             ,wxFileType::MessageParameters
-                (path.native_file_string().c_str()
+                (path.native_file_string()
                 ,""
                 )
             );
@@ -84,7 +84,7 @@ void concrete_file_command
         okay = ft->GetPrintCommand
             (&cmd
             ,wxFileType::MessageParameters
-                (path.native_file_string().c_str()
+                (path.native_file_string()
                 ,""
                 )
             );
@@ -106,7 +106,7 @@ void concrete_file_command
             << "Unable to determine command to '"
             << action
             << "' file '"
-            << path.native_file_string().c_str()
+            << path.native_file_string()
             << "'."
             << LMI_FLUSH
             ;
@@ -118,7 +118,7 @@ void concrete_file_command
             << "Unable to '"
             << action
             << "' file '"
-            << path.native_file_string().c_str()
+            << path.native_file_string()
             << "'. Return code: '"
             << okay
             << "'."

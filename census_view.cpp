@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.63 2007-06-27 18:21:29 chicares Exp $
+// $Id: census_view.cpp,v 1.64 2007-07-30 14:14:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -546,7 +546,7 @@ void CensusView::DisplayAllVaryingData()
         {
         list_window_->InsertColumn
             (1 + column
-            ,insert_spaces_between_words(headers_of_varying_parameters_[column]).c_str()
+            ,insert_spaces_between_words(headers_of_varying_parameters_[column])
             );
         }
     for(unsigned int row = 0; row < cell_parms().size(); ++row)
@@ -982,7 +982,7 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
         << " cells?"
         ;
     int z = wxMessageBox
-        (oss.str().c_str()
+        (oss.str()
         ,"Confirm deletion"
         ,wxYES_NO | wxICON_QUESTION
         );
@@ -1079,7 +1079,7 @@ std::string GetClipboardText()
         {
         wxTextDataObject z;
         wxTheClipboard->GetData(z);
-        s = z.GetText().c_str();
+        s = z.GetText();
         }
 
     return s;
@@ -1224,7 +1224,7 @@ convert_to_ihs(ihs_input, case_parms()[0]);
 // warning() << "'" << headers[j] << "'" << " setting variable..." << LMI_FLUSH;
 // warning() << "'" << values[j] << "'" << " to value..." << LMI_FLUSH;
 //            input[headers[j]] = values[j];
-            ihs_input[std::string(headers[j].c_str())] = values[j];
+            ihs_input[std::string(headers[j])] = values[j];
 // warning() << "OK...next value..." << LMI_FLUSH;
             }
 // warning() << "diagnosing sequence string problems..." << LMI_FLUSH;
