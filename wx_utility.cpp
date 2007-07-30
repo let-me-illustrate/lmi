@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_utility.cpp,v 1.8 2007-03-09 16:27:23 chicares Exp $
+// $Id: wx_utility.cpp,v 1.9 2007-07-30 23:44:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -51,11 +51,11 @@ namespace
 
 void AssertWxTimeIsMidnight(wxDateTime const& wx_date)
 {
-    wxDateTime::Tm tm = wx_date.GetTm();
-    LMI_ASSERT(0 == tm.hour);
-    LMI_ASSERT(0 == tm.min);
-    LMI_ASSERT(0 == tm.sec);
-    LMI_ASSERT(0 == tm.msec);
+    wxDateTime::Tm z = wx_date.GetTm();
+    LMI_ASSERT(0 == z.hour);
+    LMI_ASSERT(0 == z.min);
+    LMI_ASSERT(0 == z.sec);
+    LMI_ASSERT(0 == z.msec);
 }
 } // Unnamed namespace.
 
