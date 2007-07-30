@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.79 2007-07-09 16:57:22 chicares Exp $
+// $Id: group_values.cpp,v 1.80 2007-07-30 14:14:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -336,7 +336,7 @@ census_run_result run_census_in_parallel::operator()
         boost::shared_ptr<progress_meter> meter
             (create_progress_meter
                 (MaxYr
-                ,run_basis->str().c_str()
+                ,run_basis->str()
                 ,progress_meter_mode(emission)
                 )
             );

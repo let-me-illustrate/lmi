@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.46 2007-03-09 16:27:23 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.47 2007-07-30 14:14:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1089,7 +1089,7 @@ void Input::WithdrawalChanged()
 ////            {
 ////            return;
 ////            }
-////        DIAGNOSTICS->SetText(s.c_str());
+////        DIAGNOSTICS->SetText(s);
 ////        set_validity(*WITHDRAWAL, false);
 ////        return;
 ////        }
@@ -1227,7 +1227,7 @@ void Input::TransferWithdrawalSimpleControlsToInputSequence()
         s = "0";
         }
 
-    WITHDRAWAL->SetText(s.c_str());
+    WITHDRAWAL->SetText(s);
 ////    wxSafeYield();
 ////    SetFlag(wfFullyCreated);
 }

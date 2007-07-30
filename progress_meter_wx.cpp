@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter_wx.cpp,v 1.11 2007-07-09 14:05:14 chicares Exp $
+// $Id: progress_meter_wx.cpp,v 1.12 2007-07-30 14:14:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -87,7 +87,7 @@ concrete_progress_meter::concrete_progress_meter
     :progress_meter(max_count, title, display_mode)
     ,progress_dialog_
         (title
-        ,progress_message().c_str()
+        ,progress_message()
         ,max_count
         ,wxTheApp->GetTopWindow()
         ,progress_dialog_style
@@ -112,7 +112,7 @@ std::string concrete_progress_meter::progress_message() const
 
 bool concrete_progress_meter::show_progress_message()
 {
-    return progress_dialog_.Update(count(), progress_message().c_str());
+    return progress_dialog_.Update(count(), progress_message());
 }
 
 void concrete_progress_meter::culminate_ui()

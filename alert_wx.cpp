@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_wx.cpp,v 1.11 2007-01-27 00:00:51 wboutin Exp $
+// $Id: alert_wx.cpp,v 1.12 2007-07-30 14:14:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -57,7 +57,7 @@ namespace
         {
         if(0 == wxLog::GetActiveTarget())
             {
-            wxSafeShowMessage("Error before GUI initialized", s.c_str());
+            wxSafeShowMessage("Error before GUI initialized", s);
             }
         }
 #endif // 0
@@ -88,7 +88,7 @@ void hobsons_choice_alert(std::string const& s)
     if(configurable_settings::instance().offer_hobsons_choice())
         {
         int rc = wxMessageBox
-            (s.c_str()
+            (s
             ,hobsons_prompt()
             ,wxYES_NO | wxICON_QUESTION
             ,wxTheApp->GetTopWindow()
@@ -103,7 +103,7 @@ void hobsons_choice_alert(std::string const& s)
             // that it's probably foolish to decline, then rebuke
             // the user for choosing it?
             wxMessageBox
-                (s.c_str()
+                (s
                 ,"Warning: the result may be invalid."
                 ,wxOK | wxICON_EXCLAMATION
                 ,wxTheApp->GetTopWindow()
