@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.901 2007-07-30 14:14:27 chicares Exp $
+// $Id: ChangeLog,v 1.902 2007-07-30 23:44:18 chicares Exp $
 
 MAINTENANCE
 
@@ -13480,4 +13480,14 @@ Mark release candidate.
   main_wx.cpp
   progress_meter_wx.cpp
 Remove needless c_str() calls.
+
+20070730T2342Z <chicares@cox.net> [1223]
+
+  round_to_test.cpp
+Mark a typo in a quoted comment.
+
+20070730T2344Z <chicares@cox.net> [1223]
+
+  wx_utility.cpp
+For local variables, prefer names not defined in the standard.
 
