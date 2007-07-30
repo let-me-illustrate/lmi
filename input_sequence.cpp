@@ -20,7 +20,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_sequence.cpp,v 1.8 2007-01-27 00:00:51 wboutin Exp $
+// $Id: input_sequence.cpp,v 1.9 2007-07-30 14:14:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1018,7 +1018,7 @@ std::string InputSequence::formatted_diagnostics
             z = s.find('\n', 2 + z);
             }
         }
-    return s.c_str();
+    return s;
 }
 
 std::vector<double> InputSequence::linear_number_representation() const

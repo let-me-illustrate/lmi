@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.69 2007-06-07 19:05:47 chicares Exp $
+// $Id: illustration_view.cpp,v 1.70 2007-07-30 14:14:26 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -177,7 +177,7 @@ void IllustrationView::DisplaySelectedValuesAsHtml()
     ledger_formatter_.FormatAsHtml(oss);
     selected_values_as_html_ = oss.str();
 
-    html_window_->SetPage(selected_values_as_html_.c_str());
+    html_window_->SetPage(selected_values_as_html_);
 }
 
 wxIcon IllustrationView::Icon() const
@@ -408,13 +408,13 @@ void IllustrationView::PrintOrPreviewHtmlSummary(enum_print_option option) const
 
     if(e_print_printer == option)
         {
-        printer->PrintText(selected_values_as_html_.c_str());
+        printer->PrintText(selected_values_as_html_);
         }
     // TODO ?? CALCULATION_SUMMARY This assumes, without asserting,
     // that the enumeration has exactly two enumerators.
     else
         {
-        printer->PreviewText(selected_values_as_html_.c_str());
+        printer->PreviewText(selected_values_as_html_);
         }
 }
 

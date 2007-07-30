@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.69 2007-06-25 21:13:30 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.70 2007-07-30 14:14:27 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -1018,7 +1018,7 @@ void Ledger::write(xml::element& x) const
             ;++j
             )
             {
-            ofs << j->first.c_str() << '\t';
+            ofs << j->first << '\t';
             }
         ofs << '\n';
 
@@ -1035,7 +1035,7 @@ void Ledger::write(xml::element& x) const
 // be truncated here?
                 if(i < v.size())
                     {
-                    ofs << v[i].c_str() << '\t';
+                    ofs << v[i] << '\t';
                     }
                 else
                     {
