@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.904 2007-07-31 01:04:33 chicares Exp $
+// $Id: ChangeLog,v 1.905 2007-07-31 01:42:25 chicares Exp $
 
 MAINTENANCE
 
@@ -13513,4 +13513,14 @@ needs no comment.
 Separate msw from posix implementation of safe_message_alert(). In
 this case the posix implementation of wxSafeShowMessage() offers no
 advantage over standard-library functions.
+
+20070731T0142Z <chicares@cox.net> [1223]
+
+  alert_wx.cpp
+Improve safe_message_alert(). Formerly, these steps
+  alt-T A E
+  [click anywhere on application except the messagebox]
+  alt-T A E
+caused an abrupt termination. That easily-reproduced testcase betokens
+real-world problems that could affect users.
 
