@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.902 2007-07-30 23:44:18 chicares Exp $
+// $Id: ChangeLog,v 1.903 2007-07-31 00:43:35 chicares Exp $
 
 MAINTENANCE
 
@@ -13490,4 +13490,20 @@ Mark a typo in a quoted comment.
 
   wx_utility.cpp
 For local variables, prefer names not defined in the standard.
+
+20070731T0037Z <chicares@cox.net> [1223]
+
+  GNUmakefile
+  workhorse.make
+Specify $(EXEEXT) more uniformly.
+
+20070731T0043Z <chicares@cox.net> [1223]
+
+  alert_wx.cpp
+Indent comments for #include directives uniformly, starting them in
+the fiftieth column if that doesn't make the line longer than eighty
+characters, to increase readability and maintainability. Generally, if
+searching forward for the basename of a header finds any name that
+obviously requires including it, then that header's #include directive
+needs no comment.
 

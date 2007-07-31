@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_wx.cpp,v 1.12 2007-07-30 14:14:26 chicares Exp $
+// $Id: alert_wx.cpp,v 1.13 2007-07-31 00:43:35 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,9 +30,9 @@
 
 #include "configurable_settings.hpp"
 
-#include <wx/app.h> // wxTheApp
+#include <wx/app.h>                              // wxTheApp
 #include <wx/frame.h>
-#include <wx/log.h> // wxSafeShowMessage()
+#include <wx/log.h>
 #include <wx/msgdlg.h>
 
 #include <stdexcept>
