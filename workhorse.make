@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.97 2007-06-30 13:28:18 chicares Exp $
+# $Id: workhorse.make,v 1.98 2007-07-31 00:37:26 chicares Exp $
 
 ################################################################################
 
@@ -810,7 +810,7 @@ install: $(default_targets)
 	@$(CP) --preserve --update $^ $(bin_dir)
 	@$(CP) --preserve --update $(data_files) $(data_dir)
 ifeq (,$(USE_SO_ATTRIBUTES))
-	@cd $(data_dir); $(bin_dir)/product_files
+	@cd $(data_dir); $(bin_dir)/product_files$(EXEEXT)
 else
 	@$(ECHO) "Can't build product_files$(EXEEXT) with USE_SO_ATTRIBUTES."
 endif
@@ -1007,7 +1007,7 @@ system_test: install
 	@-cd $(test_dir); \
 	  $(foreach z, $(addprefix *., $(test_result_suffixes)), $(RM) --force $z;)
 	@cd $(test_dir); \
-	  $(bin_dir)/lmi_cli_shared \
+	  $(bin_dir)/lmi_cli_shared$(EXEEXT) \
 	    --ash_nazg --accept --regress \
 	    --data_path=$(data_dir) \
 	    --test_path=$(test_dir); \
@@ -1016,7 +1016,7 @@ system_test: install
 	    >$(system_test_md5sums); \
 	  for z in *.test; \
 	    do \
-	      $(bin_dir)/ihs_crc_comp $$z $(touchstone_dir)/$$z \
+	      $(bin_dir)/ihs_crc_comp$(EXEEXT) $$z $(touchstone_dir)/$$z \
 	      | $(SED) -e ';/Summary/!d' -e "s/^ /$$z/"; \
 	    done > $(system_test_analysis);
 	@-< $(system_test_analysis) $(SED) \

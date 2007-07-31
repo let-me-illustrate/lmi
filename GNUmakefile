@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.96 2007-07-06 21:07:49 etarassov Exp $
+# $Id: GNUmakefile,v 1.97 2007-07-31 00:37:26 chicares Exp $
 
 ################################################################################
 
@@ -581,7 +581,7 @@ check_concinnity: source_clean custom_tools
 	@$(ECHO) "  XPM files lacking 'const' modifier:"
 	@grep --files-without-match '^static char const\*' $(xpm_files)
 	@$(ECHO) "  Miscellaneous problems:"
-	@-test_coding_rules $(licensed_files) $(xpm_files)
+	@-test_coding_rules$(EXEEXT) $(licensed_files) $(xpm_files)
 	@$(ECHO) " "
 	@$(ECHO) "Total lines of code:"
 	@$(WC) -l $(prerequisite_files) | $(SED) -e ';/[Tt]otal/!d' -e 's/[^0-9]//'
