@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_wx.cpp,v 1.13 2007-07-31 00:43:35 chicares Exp $
+// $Id: alert_wx.cpp,v 1.14 2007-07-31 01:04:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,6 +35,7 @@
 #include <wx/log.h>
 #include <wx/msgdlg.h>
 
+#include <cstdio>
 #include <stdexcept>
 
 namespace
@@ -123,6 +124,16 @@ void fatal_error_alert(std::string const& s)
 
 void safe_message_alert(char const* message)
 {
+#if !defined LMI_MSW
+    std::fputs(message, stderr);
+    std::fputc('\n'   , stderr);
+    // Flush explicitly. C99 7.19.3/7 says only that stderr is
+    // "not fully buffered", not that it is 'unbuffered'. See:
+    //   http://sourceforge.net/mailarchive/message.php?msg_id=10388832
+    //   http://sourceforge.net/mailarchive/message.php?msg_id=10826040
+    std::fflush(stderr);
+#else  // defined LMI_MSW
     wxSafeShowMessage("Error", message);
+#endif // defined LMI_MSW
 }
 

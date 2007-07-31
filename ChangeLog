@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.903 2007-07-31 00:43:35 chicares Exp $
+// $Id: ChangeLog,v 1.904 2007-07-31 01:04:33 chicares Exp $
 
 MAINTENANCE
 
@@ -13506,4 +13506,11 @@ characters, to increase readability and maintainability. Generally, if
 searching forward for the basename of a header finds any name that
 obviously requires including it, then that header's #include directive
 needs no comment.
+
+20070731T0104Z <chicares@cox.net> [1223]
+
+  alert_wx.cpp
+Separate msw from posix implementation of safe_message_alert(). In
+this case the posix implementation of wxSafeShowMessage() offers no
+advantage over standard-library functions.
 
