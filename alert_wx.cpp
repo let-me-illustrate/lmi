@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_wx.cpp,v 1.14 2007-07-31 01:04:33 chicares Exp $
+// $Id: alert_wx.cpp,v 1.15 2007-07-31 01:42:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -58,7 +58,7 @@ namespace
         {
         if(0 == wxLog::GetActiveTarget())
             {
-            wxSafeShowMessage("Error before GUI initialized", s);
+            safe_message_alert(s.c_str());
             }
         }
 #endif // 0
@@ -122,6 +122,28 @@ void fatal_error_alert(std::string const& s)
     throw std::runtime_error(s);
 }
 
+/// Show a message reliably, even before initialization has finished
+/// or after termination has begun.
+///
+/// The msw implementation of wxSafeShowMessage() uses ::MessageBox()
+/// with a null parent, which adds an undesirable extra "task" to the
+/// alt-Tab order, yet doesn't disable the application's top window.
+///
+/// If MB_TASKMODAL is specified, then the extra "task" is still
+/// added, but all of the application's top windows are disabled.
+/// Unfortunately, MB_TASKMODAL is in effect ignored unless the parent
+/// is null.
+///
+/// If the main top window (the one returned by wxApp::GetTopWindow())
+/// is used as the messagebox's parent, then the extra "task" is not
+/// added, but only the parent is disabled. Any other top windows the
+/// application may have are not disabled.
+///
+/// The extra "task" seeming to be the worse evil, this implementation
+/// specifies a non-null parent wherever possible. MB_TASKMODAL is
+/// nevertheless specified as well, though its beneficial effect is
+/// realized only if no parent can be found.
+
 void safe_message_alert(char const* message)
 {
 #if !defined LMI_MSW
@@ -133,7 +155,16 @@ void safe_message_alert(char const* message)
     //   http://sourceforge.net/mailarchive/message.php?msg_id=10826040
     std::fflush(stderr);
 #else  // defined LMI_MSW
-    wxSafeShowMessage("Error", message);
+    HWND handle = 0;
+    if(wxTheApp)
+        {
+        wxWindow* top_window = wxTheApp->GetTopWindow();
+        if(top_window)
+            {
+            handle = reinterpret_cast<HWND>(top_window->GetHandle());
+            }
+        }
+    ::MessageBox(handle, message, "Error", MB_OK | MB_ICONSTOP | MB_TASKMODAL);
 #endif // defined LMI_MSW
 }
 
