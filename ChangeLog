@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.905 2007-07-31 01:42:25 chicares Exp $
+// $Id: ChangeLog,v 1.906 2007-08-01 01:58:28 chicares Exp $
 
 MAINTENANCE
 
@@ -13523,4 +13523,20 @@ Improve safe_message_alert(). Formerly, these steps
   alt-T A E
 caused an abrupt termination. That easily-reproduced testcase betokens
 real-world problems that could affect users.
+
+20070801T0156Z <chicares@cox.net> [1223]
+
+  max_stream_precision.hpp
+Improve documentation.
+
+20070801T0157Z <chicares@cox.net> [1223]
+
+  main_cgi.cpp
+Correct a defect.
+
+20070801T0158Z <chicares@cox.net> [1223]
+
+  ihs_dbvalue.cpp
+Add another sanity check. Perhaps this will make debugging the product
+editor easier.
 
