@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: max_stream_precision.hpp,v 1.4 2007-01-27 00:00:51 wboutin Exp $
+// $Id: max_stream_precision.hpp,v 1.5 2007-08-01 01:56:20 chicares Exp $
 
 #ifndef max_stream_precision_hpp
 #define max_stream_precision_hpp
@@ -41,8 +41,8 @@
 /// and its value can't plausibly exceed the range of an int, so it is
 /// preferable to avoid a narrowing conversion in the first use case.
 ///
-/// Reference: c99 5.2.4.2.2/8 (DECIMAL_DIG)
-/// ...but that's used here because it's not in c++98 .
+/// Reference: c99 5.2.4.2.2/8 (DECIMAL_DIG), which isn't used here
+/// because it's not in c++98 .
 ///
 /// INELEGANT !! Would it be better to make the type a template
 /// argument, and pass the stream as an argument so that
