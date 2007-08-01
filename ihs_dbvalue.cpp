@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbvalue.cpp,v 1.20 2007-04-17 12:58:24 chicares Exp $
+// $Id: ihs_dbvalue.cpp,v 1.21 2007-08-01 01:58:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -235,6 +235,8 @@ void TDBValue::ParanoidCheck() const
         }
 
     LMI_ASSERT(getndata() == static_cast<int>(data_values.size()));
+    LMI_ASSERT(DB_FIRST <= key && key < DB_LAST);
+    LMI_ASSERT(e_number_of_axes == axis_lengths.size());
 }
 
 //============================================================================
