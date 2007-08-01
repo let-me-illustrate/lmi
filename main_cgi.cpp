@@ -31,7 +31,7 @@
 // other reasons evident in cvs or explained in 'ChangeLog'. Any
 // defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.26 2007-06-29 05:13:13 chicares Exp $
+// $Id: main_cgi.cpp,v 1.27 2007-08-01 01:57:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -40,6 +40,7 @@
 
 #include "alert.hpp"
 #include "argv0.hpp"
+#include "configurable_settings.hpp"
 #include "illustrator.hpp"
 #include "inputillus.hpp"
 #include "inputs.hpp"
@@ -78,7 +79,10 @@
 // To use logging, the variable gLogFile MUST be defined, and it _must_
 // be an ofstream
 #if defined DEBUG && DEBUG
-  std::ofstream gLogFile(cgi_bin_log_filename().c_str(), ios_out_app_binary());
+  std::ofstream gLogFile
+      (configurable_settings::instance().cgi_bin_log_filename().c_str()
+      ,ios_out_app_binary()
+      );
 #endif
 
 // Function prototypes
