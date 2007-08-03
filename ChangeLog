@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.908 2007-08-03 22:11:25 chicares Exp $
+// $Id: ChangeLog,v 1.909 2007-08-03 23:33:51 chicares Exp $
 
 MAINTENANCE
 
@@ -33,7 +33,10 @@ Please write entries this way:
     letter and ending with a period. Prefer bare infinitives:
     "Improve ISO 8601 conformance." instead of "Improved...." or
     "The purpose of this change was to improve....". Single-word
-    sentences may be appropriate: "Refactor.".
+    sentences may be appropriate: "Refactor.". Whenever a defect is
+    corrected, write "Fix defect introduced YYYYMMDDTHHMM." as the
+    first sentence, and ponder the questions in 'DefectLog'; write up
+    any serious defect in that file.
 
 Limit lines to seventy characters so that they can be quoted and
 requoted in email without wrapping.
@@ -61,8 +64,10 @@ a lot of sense:
 If, as is often the case, the cvs commit message alone is sufficient,
 then just copy it here.
 
-We started following this convention only on 20050710T0414Z, so don't
-take earlier entries as exemplary.
+We started following certain conventions only at certain times, e.g.:
+  20050710T0414Z: [defect-count]
+  20070803T2333Z: "Fix defect introduced YYYYMMDDTHHMM."
+so don't take earlier entries as exemplary.
 
 //
 
@@ -13554,4 +13559,10 @@ easily be one line shorter, and compiled code runs quite a bit faster.
 Replace a poorer makefile with a better. The new file is an exact copy
 of 'mingw_install.make' in the 'gwc/' subdirectory; its new name will
 make grouping clearer if we add other 'install_*.make' files.
+
+20070803T2333Z <chicares@cox.net> [1219]
+
+  [ChangeLog only]
+Require defects to be marked distinctively. We have been committing
+far too many defects to HEAD.
 
