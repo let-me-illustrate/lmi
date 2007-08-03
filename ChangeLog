@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.906 2007-08-01 01:58:28 chicares Exp $
+// $Id: ChangeLog,v 1.907 2007-08-03 21:32:37 chicares Exp $
 
 MAINTENANCE
 
@@ -13539,4 +13539,11 @@ Correct a defect.
   ihs_dbvalue.cpp
 Add another sanity check. Perhaps this will make debugging the product
 editor easier.
+
+20070803T2132Z <chicares@cox.net> [1223]
+
+  GNUmakefile
+  test_coding_rules.cpp
+Move the test added 20070706T2107Z from a script into C++: output can
+easily be one line shorter, and compiled code runs quite a bit faster.
 
