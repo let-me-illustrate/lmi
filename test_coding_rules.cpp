@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.8 2007-03-04 16:39:15 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.9 2007-08-03 21:32:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -42,9 +42,6 @@
 
 void check_include_guards(std::string const& filename, std::string const& s)
 {
-    if(".hpp" != fs::extension(filename))
-        {return;}
-
     std::string guard = filename;
     std::string::size_type position = guard.find('.');
     while(position != std::string::npos)
@@ -60,6 +57,18 @@ void check_include_guards(std::string const& filename, std::string const& s)
         )
         {
         std::cout << "Noncanonical header guards in '" << filename << "'.\n";
+        }
+}
+
+void check_xpm(std::string const& filename, std::string const& s)
+{
+    if(std::string::npos == s.find("\nstatic char const*"))
+        {
+        std::cout
+            << "Lacking /^static char const\\*/ in '"
+            << filename
+            << "'.\n"
+            ;
         }
 }
 
@@ -97,7 +106,15 @@ int process_file(std::string const& filename)
         std::cout << "File '" << filename << "' contains ' \\n'.\n";
         }
 
-    check_include_guards(filename, s);
+    if(".hpp" == fs::extension(filename))
+        {
+        check_include_guards(filename, s);
+        }
+
+    if(".xpm" == fs::extension(filename))
+        {
+        check_xpm(filename, s);
+        }
 
     if(!ifs)
         {
