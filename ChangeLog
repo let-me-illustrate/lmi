@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.907 2007-08-03 21:32:37 chicares Exp $
+// $Id: ChangeLog,v 1.908 2007-08-03 22:11:25 chicares Exp $
 
 MAINTENANCE
 
@@ -13546,4 +13546,12 @@ editor easier.
   test_coding_rules.cpp
 Move the test added 20070706T2107Z from a script into C++: output can
 easily be one line shorter, and compiled code runs quite a bit faster.
+
+20070803T2211Z <chicares@cox.net> [1219]
+
+  install_mingw.make [new file]
+  mingw_setup.make   [expunged]
+Replace a poorer makefile with a better. The new file is an exact copy
+of 'mingw_install.make' in the 'gwc/' subdirectory; its new name will
+make grouping clearer if we add other 'install_*.make' files.
 
