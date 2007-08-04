@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: setup.make,v 1.32 2007-01-27 00:00:52 wboutin Exp $
+# $Id: setup.make,v 1.33 2007-08-04 21:04:20 chicares Exp $
 
 .PHONY: all
 all: setup
@@ -88,7 +88,6 @@ setup: \
   frozen_make \
   frozen_sed \
   frozen_xmlwrapp \
-  mingw_20050827 \
   msys_make \
   test_setup \
 
@@ -414,107 +413,6 @@ install_frozen_xmlwrapp_from_tmp_dir:
 
 ###############################################################################
 
-# Install MinGW.
-
-# The required packages contain some duplicate files, so the order of
-# extraction is important. It follows these instructions:
-#   http://groups.yahoo.com/group/mingw32/message/1145
-# It is apparently fortuitous that the order is alphabetical.
-
-mingw_requirements = \
-  binutils-2.16.91-20050827-1.tar.gz \
-  gcc-core-3.4.4-20050522-1.tar.gz \
-  gcc-g++-3.4.4-20050522-1.tar.gz \
-  mingw-runtime-3.8.tar.gz \
-  w32api-3.3.tar.gz \
-
-# These aren't necessary for compiling a C++ program with <windows.h>.
-# Although, they're included here in an attempt to reproduce a C++-only
-# version of MinGW-5.0.0 .
-
-mingw_extras = \
-  mingw32-make-3.80.0-3.tar.gz \
-  mingw-utils-0.3.tar.gz \
-
-# Download archives if they're out of date, then extract them.
-
-# REVIEW: The $(CP) commands below place all original archives
-# in $(mingw_dir). Aren't there some that belong elsewhere, at
-# least if these targets are reused for other archives? And are
-# the $(CP) flags optimal, or would it be better to use
-# '--update'?
-
-# TODO ?? Downloaded files should be validated before extracting.
-%.tar.bz2:
-	[ -e $@ ] || $(WGET) --non-verbose $(sf_mirror)/mingw/$@
-	$(MD5SUM) --check $@.md5
-	$(CP) --force --preserve $@ $(mingw_dir)
-	$(BZIP2) --decompress --keep --force $@
-	$(TAR) --extract --file=$*.tar
-
-%.tar.gz:
-	[ -e $@ ] || $(WGET) --non-verbose $(sf_mirror)/mingw/$@
-	$(MD5SUM) --check $@.md5
-	$(CP) --force --preserve $@ $(mingw_dir)
-	$(GZIP) --decompress --force $@
-	$(TAR) --extract --file=$*.tar
-
-# This target must be kept synchronized with the latest packages
-# available from http://www.mingw.org/download.shtml .
-# REVIEW: "latest": does that mean "current" or "candidate"?
-
-# REVIEW: It's nice to echo the advice to preserve a prior MinGW
-# installation, but doesn't this print that message even if there is
-# no prior installation? Did you intend the test on the immediately
-# preceding line to control the echo command? If not, what does that
-# test accomplish? And wouldn't it be better to detect a prior
-# installation and either halt with an error message, or move the
-# prior installation and echo its new location?
-
-.PHONY: mingw_current
-mingw_current:
-	$(MKDIR) --parents /tmp/$@
-	-@[ -e $(mingw_dir) ]
-	@$(ECHO) "Preserving your existing MinGW installation is\
-	  strongly recommended."
-	$(MKDIR) $(mingw_dir)
-	$(MAKE) \
-	  --directory=/tmp/$@ \
-	  --file=$(src_dir)/setup.make \
-	    mingw_dir='$(mingw_dir)' \
-	      src_dir='$(src_dir)' \
-	  install_mingw_current_from_tmp_dir
-
-.PHONY: install_mingw_current_from_tmp_dir
-install_mingw_current_from_tmp_dir: $(mingw_requirements) $(mingw_extras)
-	-$(RM) --recursive *.tar
-	$(MV) --force * $(mingw_dir)
-
-# REVIEW: Doesn't the following comment belong at the top of this section?
-
-# Minimal installation for building lmi with MinGW.
-
-.PHONY: mingw_20050827
-mingw_20050827:
-	$(MKDIR) --parents /tmp/$@
-	$(MAKE) \
-	  --directory=/tmp/$@ \
-	  --file=$(src_dir)/setup.make \
-	    mingw_dir='$(mingw_dir)' \
-	      src_dir='$(src_dir)' \
-	  install_mingw_20050827_from_tmp_dir
-
-.PHONY: install_mingw_20050827_from_tmp_dir
-install_mingw_20050827_from_tmp_dir: $(mingw_requirements)
-	$(RM) --recursive *.tar
-	$(MKDIR) --parents $(mingw_dir)
-	-$(CP) --force --parents --preserve --recursive * $(mingw_dir)
-# TODO ?? Keep this command blocked during testing to allow comparison
-# with sibling target.
-#	$(RM) --recursive *
-
-###############################################################################
-
 # Upgrade wget-1.9.1.tar.bz2 .
 
 # This target uses wget to install wget. That may seem silly on the
@@ -528,7 +426,6 @@ wget_mingwport:
 	$(MAKE) \
 	  --directory=/tmp \
 	  --file=$(src_dir)/setup.make \
-	    mingw_dir='$(mingw_dir)' \
 	      src_dir='$(src_dir)' \
 	  install_wget_mingwport_from_tmp_dir
 
