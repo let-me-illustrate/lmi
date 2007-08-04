@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_mingw.make,v 1.7 2007-08-04 20:44:27 chicares Exp $
+# $Id: install_mingw.make,v 1.8 2007-08-04 20:46:41 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -144,6 +144,11 @@ initial_setup:
 	@$(RM) --force --recursive $(prefix)
 	@$(MKDIR) --parents scratch
 
+# Some files are duplicated in MinGW archives, so the order of
+# extraction is important. It follows these instructions:
+#   http://groups.yahoo.com/group/mingw32/message/1145
+# It is apparently fortuitous that the order is alphabetical.
+#
 # Some gcc archives distributed by MinGW contain a version of
 # 'libiberty.a' that's incompatible with the version provided with
 # binutils, so gcc's 'libiberty.a' is explicitly excluded: it seems
