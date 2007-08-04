@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_mingw.make,v 1.6 2007-08-04 20:13:30 chicares Exp $
+# $Id: install_mingw.make,v 1.7 2007-08-04 20:44:27 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -146,27 +146,27 @@ initial_setup:
 
 # Some gcc archives distributed by MinGW contain a version of
 # 'libiberty.a' that's incompatible with the version provided with
-# binutils. See:
+# binutils, so gcc's 'libiberty.a' is explicitly excluded: it seems
+# reasonable to expect binutils to provide a 'libiberty.a' that works
+# with the 'libbfd.a' it also provides. See:
 #   http://sourceforge.net/mailarchive/message.php?msg_id=4456861
 # to learn why this may matter a great deal.
 #
-# Other conflicts like that have been known to occur. For instance,
-# these archives
+# These archives
 #   binutils-2.16.91-20050827-1.tar.gz
 #   gcc-core-3.4.4-20050522-1.tar.gz
-# contain 'info/dir' files that differ.
+# contain 'info/dir' files that differ. They aren't necessary because
+# documentation is available online, and it is not our goal to correct
+# MinGW packaging anomalies, so that directory is simply excluded.
 #
-# For the moment, gcc's 'libiberty.a' is explicitly excluded because
-# it has sometimes been significantly wrong, and it seems reasonable
-# to expect binutils to provide a 'libiberty.a' that works with the
-# 'libbfd.a' it also provides. However, other conflicts are managed by
-# specifying '--keep-old-files' and permitting 'tar' to fail with an
-# error message identifying any conflict.
+# Other conflicts are managed by specifying '--keep-old-files' and
+# permitting 'tar' to fail with an error message without stopping this
+# makefile.
 
 TARFLAGS := --keep-old-files
 %.tar.bz2: TARFLAGS += --bzip2
 %.tar.gz:  TARFLAGS += --gzip
-gcc%:      TARFLAGS += --exclude 'libiberty.a'
+gcc%:      TARFLAGS += --exclude 'libiberty.a' --exclude 'info/dir'
 
 # New spelling '--no-verbose' has replaced original '--non-verbose':
 #   http://sourceware.org/ml/cygwin-apps/2005-10/msg00140.html
