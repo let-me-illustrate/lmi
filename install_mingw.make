@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_mingw.make,v 1.2 2007-08-04 14:15:20 chicares Exp $
+# $Id: install_mingw.make,v 1.3 2007-08-04 15:23:44 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -34,8 +34,12 @@ file_list = $($(version))
 #   http://sourceforge.net/mailarchive/message.php?msg_id=10579421
 #   http://sourceforge.net/mailarchive/message.php?msg_id=10581810
 # when multiple versions of MinGW gcc are installed.
+#
+# If $(system_root) is empty, then '$(system_root)/foo' means simply
+# '/foo', which is reasonable enough for msw; for a posix-emulation
+# system like Cygwin, of course, that's not in the msw root directory.
 
-prefix   := /c/$(version)
+prefix   := $(system_root)/$(version)
 
 # In the past, it seemed necessary to specify a mirror, e.g.:
 #  mirror := http://easynews.dl.sourceforge.net/sourceforge/mingw
