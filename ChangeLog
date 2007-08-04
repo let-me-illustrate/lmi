@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.909 2007-08-03 23:33:51 chicares Exp $
+// $Id: ChangeLog,v 1.910 2007-08-04 21:04:20 chicares Exp $
 
 MAINTENANCE
 
@@ -13565,4 +13565,48 @@ make grouping clearer if we add other 'install_*.make' files.
   [ChangeLog only]
 Require defects to be marked distinctively. We have been committing
 far too many defects to HEAD.
+
+20070804T1415Z <chicares@cox.net> [1219]
+
+  install_mingw.make
+Fix defect introduced 20061206T1724 (in the 'gwc/' subdirectory).
+It does no good to install source where binaries are needed; the
+resulting installation has no standard headers.
+
+20070804T1523Z <chicares@cox.net> [1219]
+
+  install_mingw.make
+Abstract the system-root notion instead of hard-coding an MSYS value.
+
+20070804T1946Z <chicares@cox.net> [1219]
+
+  install_mingw.make
+Abstract options for 'wget', changing one and documenting why.
+
+20070804T1956Z <chicares@cox.net> [1219]
+
+  install_mingw.make
+Deduce makefile name instead of hard-coding it.
+
+20070804T2013Z <chicares@cox.net> [1219]
+
+  install_mingw.make
+Test md5sums of all downloaded archives.
+
+20070804T2044Z <chicares@cox.net> [1219]
+
+  install_mingw.make
+Work around an oddity of MinGW packaging.
+
+20070804T2046Z <chicares@cox.net> [1219]
+
+  install_mingw.make
+Improve documentation, capturing a tidbit from 'setup.make'.
+
+20070804T2104Z <chicares@cox.net> [1217]
+
+  setup.make
+Remove MinGW section: 'install_mingw.make' is preferable. It is
+presumed that the removed section stood alone, and in particular that
+its '%.tar.bz2' and '%.tar.gz' rules were used nowhere else.
 
