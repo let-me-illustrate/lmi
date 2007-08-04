@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_mingw.make,v 1.3 2007-08-04 15:23:44 chicares Exp $
+# $Id: install_mingw.make,v 1.4 2007-08-04 19:46:17 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -153,10 +153,19 @@ TARFLAGS := --keep-old-files
 %.tar.gz:  TARFLAGS += --gzip
 gcc%:      TARFLAGS += --exclude 'libiberty.a'
 
+# New spelling '--no-verbose' has replaced original '--non-verbose':
+#   http://sourceware.org/ml/cygwin-apps/2005-10/msg00140.html
+# However, don't use
+#   WGETFLAGS := '--no-verbose --timestamping'
+# because, as this is written in 2007-08, sourceforge's mirror system
+# is behaving in anomalous ways that '--no-verbose' would mask.
+
+WGETFLAGS := '--timestamping'
+
 .PHONY: %.tar.bz2 %.tar.gz
 %.tar.bz2 %.tar.gz:
-	@[ -e $@ ] || $(WGET) --non-verbose --timestamping $(mirror)/$@
-	-@$(TAR) --extract $(TARFLAGS) --directory=scratch --file=$@
+	[ -e $@ ] || $(WGET) $(WGETFLAGS) $(mirror)/$@
+	-$(TAR) --extract $(TARFLAGS) --directory=scratch --file=$@
 
 # Test #########################################################################
 
