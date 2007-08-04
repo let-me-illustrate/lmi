@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_mingw.make,v 1.1 2007-08-03 22:11:24 chicares Exp $
+# $Id: install_mingw.make,v 1.2 2007-08-04 14:15:20 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -45,16 +45,16 @@ mirror   := http://downloads.sourceforge.net/mingw
 
 # File lists ###################################################################
 
-# 'Candidate' versions from
+# $(MinGW-20061119): 'Candidate' versions from
 #   Chris Sutcliffe's 2006-11-19T02:27Z email to MinGW-dvlpr,
-# revised according to
-#   Keith MARSHALL's 2006-12-02T20:30Z email to Mingw-users:
+# but see
+#   Keith MARSHALL's 2006-12-02T20:30Z email to Mingw-users.
 
 MinGW-20061119 = \
   binutils-2.16.91-20060119-1.tar.gz \
   gcc-core-3.4.5-20060117-1.tar.gz \
   gcc-g++-3.4.5-20060117-1.tar.gz \
-  mingw-runtime-3.11-20061202-1-src.tar.gz \
+  mingw-runtime-3.11.tar.gz \
   w32api-3.8.tar.gz \
 
 MinGW-20060119 = \
