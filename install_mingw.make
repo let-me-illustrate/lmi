@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_mingw.make,v 1.5 2007-08-04 19:56:21 chicares Exp $
+# $Id: install_mingw.make,v 1.6 2007-08-04 20:13:30 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -78,6 +78,21 @@ MinGW-20050827 = \
   w32api-3.3.tar.gz \
 
 # TODO ?? Add file lists for earlier releases.
+
+# Archive md5sums ##############################################################
+
+binutils-2.16.91-20050827-1.tar.gz-md5 := 9d2de9e3cd5fede3d12150b8a7d0bbf7
+binutils-2.16.91-20060119-1.tar.gz-md5 := a54f33ca9d6cf56dc99c0c5367f58ea3
+gcc-core-3.4.4-20050522-1.tar.gz-md5   := 46f17998ab61be9dbede233b44c7b0e6
+gcc-core-3.4.5-20060117-1.tar.gz-md5   := 1a4afae471ea93b975e3f8b3ac529eac
+gcc-g++-3.4.4-20050522-1.tar.gz-md5    := db44ac5b06d7f262c59422ae21511659
+gcc-g++-3.4.5-20060117-1.tar.gz-md5    := d11a9d63a0f862650f755fdb4e947dc4
+mingw-runtime-3.8.tar.gz-md5           := 5852e9b2c369aff1d4ba47d3dd20728f
+mingw-runtime-3.9.tar.gz-md5           := 0cb66b1071da224ea2174f960c593e2e
+mingw-runtime-3.11.tar.gz-md5          := e1c21f8c4ece49d8bd9fef9e1b0e44a7
+w32api-3.3.tar.gz-md5                  := 2da21c26013711ae90d3b2416c20856e
+w32api-3.6.tar.gz-md5                  := 2f86ec42cafd774ec82162fbc6e6808d
+w32api-3.8.tar.gz-md5                  := b53fdf670f33d2e901749f4792e659f2
 
 # Utilities ####################################################################
 
@@ -165,6 +180,7 @@ WGETFLAGS := '--timestamping'
 .PHONY: %.tar.bz2 %.tar.gz
 %.tar.bz2 %.tar.gz:
 	[ -e $@ ] || $(WGET) $(WGETFLAGS) $(mirror)/$@
+	$(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
 	-$(TAR) --extract $(TARFLAGS) --directory=scratch --file=$@
 
 # Test #########################################################################
@@ -180,6 +196,10 @@ test_prefix = /eraseme
 test_file_list = \
   gcc-response-file-2.tar.gz \
   zlib-1.2.3-mingwPORT.tar.bz2 \
+
+# Archive md5sums for $(test_file_list).
+gcc-response-file-2.tar.gz-md5         := aa9825791000af0e4d4d0345bd4325ce
+zlib-1.2.3-mingwPORT.tar.bz2-md5       := e131ea48214af34bd6adee6b7bdadfd5
 
 test_overrides = \
   --no-print-directory \
