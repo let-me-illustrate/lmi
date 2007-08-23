@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.910 2007-08-04 21:04:20 chicares Exp $
+// $Id: ChangeLog,v 1.911 2007-08-23 21:09:22 wboutin Exp $
 
 MAINTENANCE
 
@@ -13609,4 +13609,9 @@ Improve documentation, capturing a tidbit from 'setup.make'.
 Remove MinGW section: 'install_mingw.make' is preferable. It is
 presumed that the removed section stood alone, and in particular that
 its '%.tar.bz2' and '%.tar.gz' rules were used nowhere else.
+
+20070823T2109Z <wboutin@massmutual.com> [1217]
+
+  version.hpp
+Mark release candidate.
 
