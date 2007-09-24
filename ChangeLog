@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.911 2007-08-23 21:09:22 wboutin Exp $
+// $Id: ChangeLog,v 1.912 2007-09-24 11:52:49 wboutin Exp $
 
 MAINTENANCE
 
@@ -13611,6 +13611,11 @@ presumed that the removed section stood alone, and in particular that
 its '%.tar.bz2' and '%.tar.gz' rules were used nowhere else.
 
 20070823T2109Z <wboutin@massmutual.com> [1217]
+
+  version.hpp
+Mark release candidate.
+
+20070924T1152Z <wboutin@massmutual.com> [1217]
 
   version.hpp
 Mark release candidate.
