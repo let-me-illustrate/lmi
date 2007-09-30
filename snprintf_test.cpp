@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: snprintf_test.cpp,v 1.8 2007-01-27 00:00:52 wboutin Exp $
+// $Id: snprintf_test.cpp,v 1.9 2007-09-30 18:17:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -37,7 +37,7 @@ int test_main(int, char*[])
     //   http://www.gotw.ca/publications/mill19.htm
     // In 2003-03, mingw added a sprintf() function that calls
     // msvc's _vsnprintf(), which has the same defect.
-    char buf[100] = "zzzzzzzzz";
+    char buf[1000] = "zzzzzzzzz";
     int len;
 
     len = snprintf(0, 0, "%4d", 1234);
@@ -62,7 +62,35 @@ int test_main(int, char*[])
     len = snprintf(buf, 5, "%4d", 1234);
     BOOST_TEST_EQUAL(4, len);
     BOOST_TEST_EQUAL(std::string(buf, 9), std::string("1234\0zzzz\0", 9));
-    std::cout << "'buf' is '" << buf << "'." << std::endl;
+
+    long double z = 2.718281828459045L;
+    len = snprintf(buf, 5, "%.5Lf", z);
+    BOOST_TEST_EQUAL(7, len);
+    // This should truncate to 2.71, not round to 2.72 .
+    BOOST_TEST_EQUAL(std::string(buf, 9), std::string("2.71\0zzzz\0", 9));
+    len = snprintf(buf, 7, "%.5Lf", z);
+    BOOST_TEST_EQUAL(7, len);
+    BOOST_TEST_EQUAL(std::string(buf, 9), std::string("2.7182\0zz\0", 9));
+    len = snprintf(buf,       0, "%1.12Lf", z);
+    BOOST_TEST_EQUAL(14, len);
+    len = snprintf(buf, 1 + len, "%1.12Lf", z);
+    BOOST_TEST_EQUAL(14, len);
+    BOOST_TEST_EQUAL(std::string(buf, 15), std::string("2.718281828459\0", 15));
+
+    double d = 1e+161;
+    len = snprintf(buf,       0, "%#.*f", 16, d);
+    BOOST_TEST_EQUAL(179, len);
+    len = snprintf(buf, 1 + len, "%#.*f", 16, d);
+    BOOST_TEST_EQUAL(179, len);
+    std::string e
+        ("1"
+        "00000000000000000000000000000000000000000000000000"
+        "00000000000000000000000000000000000000000000000000"
+        "00000000000000000000000000000000000000000000000000"
+        "00000000000"
+        ".0000000000000000"
+        );
+    BOOST_TEST_EQUAL(e, buf);
 
     return 0;
 }
