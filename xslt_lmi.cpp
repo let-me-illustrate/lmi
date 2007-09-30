@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xslt_lmi.cpp,v 1.5 2007-06-14 16:15:08 etarassov Exp $
+// $Id: xslt_lmi.cpp,v 1.6 2007-09-30 18:14:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -204,6 +204,10 @@ void xslt_lmi::Stylesheet::transform
         int buffer_size = 0;
 
         // a pointer suitable for passing it to libxslt functions
+// EVGENIY !! MinGW gcc-4.2.1 issues this warning:
+//   dereferencing type-punned pointer will break strict-aliasing rules
+// See the discussion here:
+//   http://mail-index.netbsd.org/tech-kern/2003/08/11/0001.html
         xmlChar** buffer_ptr = reinterpret_cast<xmlChar**>(&buffer);
 
         if(e_output_xml == output_type)
