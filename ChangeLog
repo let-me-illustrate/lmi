@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.912 2007-09-24 11:52:49 wboutin Exp $
+// $Id: ChangeLog,v 1.913 2007-09-30 19:40:32 chicares Exp $
 
 MAINTENANCE
 
@@ -13619,4 +13619,36 @@ Mark release candidate.
 
   version.hpp
 Mark release candidate.
+
+20070930T1814Z <chicares@cox.net> [1217]
+
+  xslt_lmi.cpp
+Mark a gcc-4.2.1 issue.
+
+20070930T1816Z <chicares@cox.net> [1217]
+
+  fenv_lmi_test.cpp
+  numeric_io_test.cpp
+Resolve gcc-4.2.1 issues.
+
+20070930T1817Z <chicares@cox.net> [1217]
+
+  snprintf_test.cpp
+Strengthen unit test.
+
+20070930T1818Z <chicares@cox.net> [1217]
+
+  objects.make
+Forestall a latent problem in presently-unmaintained code.
+
+20070930T1819Z <chicares@cox.net> [1217]
+
+  ihs_basicval.cpp
+Improve documentation.
+
+20070930T1940Z <chicares@cox.net> [1217]
+
+  ihs_avmly.cpp
+Fix defect introduced 20070421T0830Z. The now-removed assertion failed
+when InputParms::NumIdenticalLives differed from unity.
 
