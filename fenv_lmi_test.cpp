@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi_test.cpp,v 1.14 2007-05-28 02:00:33 chicares Exp $
+// $Id: fenv_lmi_test.cpp,v 1.15 2007-09-30 18:16:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -92,7 +92,12 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL_BITS(0x0040, x87_control_word());
 
     // ...but bit 12, the deprecated IC, remains settable.
-    x87_control_word(~intel_control_word_parameters::settable);
+    x87_control_word
+        (static_cast<unsigned short int>
+            (~intel_control_word_parameters::settable
+            )
+        );
+
     BOOST_TEST_EQUAL_BITS
         (intel_control_word_parameters::reserved_values
         ,~0x01000 & x87_control_word()

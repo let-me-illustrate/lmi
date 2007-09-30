@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_test.cpp,v 1.14 2007-01-13 16:40:15 chicares Exp $
+// $Id: numeric_io_test.cpp,v 1.15 2007-09-30 18:16:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -198,9 +198,9 @@ int test_main(int, char*[])
     // Furthermore, these expressions should throw because strtol
     // doesn't consider "A" valid.
     //
-    BOOST_TEST_THROW('A' == numeric_io_cast<char  >("A"), std::invalid_argument, "");
-    BOOST_TEST_THROW(       numeric_io_cast<int   >("A"), std::invalid_argument, "");
-    BOOST_TEST_THROW(       numeric_io_cast<double>("A"), std::invalid_argument, "");
+    BOOST_TEST_THROW(numeric_io_cast<char  >("A"), std::invalid_argument, "");
+    BOOST_TEST_THROW(numeric_io_cast<int   >("A"), std::invalid_argument, "");
+    BOOST_TEST_THROW(numeric_io_cast<double>("A"), std::invalid_argument, "");
 
     test_interconvertibility(bool(1), "1", __FILE__, __LINE__);
     test_interconvertibility(bool(0), "0", __FILE__, __LINE__);
