@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.64 2007-04-24 19:23:29 wboutin Exp $
+// $Id: ihs_avmly.cpp,v 1.65 2007-09-30 19:40:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2476,10 +2476,6 @@ void AccountValue::TxTestHoneymoonForExpiration()
 
 void AccountValue::TxTakeSepAcctLoad()
 {
-    if(!Input_->UsePartialMort && e_month_by_month != Input_->RunOrder)
-        {
-        LMI_ASSERT(materially_equal(AssetsPostBom, std::max(0.0, AVSepAcct)));
-        }
     if(SepAcctLoadIsDynamic)
         {
 // TODO ?? DATABASE !! Here, the hardcoded number is of course a
