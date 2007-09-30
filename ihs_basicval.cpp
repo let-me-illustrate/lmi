@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.34 2007-03-09 16:27:23 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.35 2007-09-30 18:19:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -69,7 +69,7 @@ namespace
     //
     // Floating-point numbers that represent integers scaled by
     // negative powers of ten are inexact. For example, a premium
-    // rate of $2.40 per $1000 is be stored as 0.0024, but to the
+    // rate of $2.40 per $1000 is notionally 0.0024, but to the
     // hardware it may look like
     //   0.0023999999999999998 [0x3ff69d495182a9930800]
     // Multiplying that number by a million dollars and rounding
