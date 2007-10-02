@@ -31,7 +31,7 @@
 // other reasons evident in cvs or explained in 'ChangeLog'. Any
 // defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.27 2007-08-01 01:57:18 chicares Exp $
+// $Id: main_cgi.cpp,v 1.28 2007-10-02 13:32:47 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -77,13 +77,8 @@
 #endif
 
 // To use logging, the variable gLogFile MUST be defined, and it _must_
-// be an ofstream
-#if defined DEBUG && DEBUG
-  std::ofstream gLogFile
-      (configurable_settings::instance().cgi_bin_log_filename().c_str()
-      ,ios_out_app_binary()
-      );
-#endif
+// be an ofstream.
+std::ofstream gLogFile;
 
 // Function prototypes
 void ShowEnvironment(cgicc::CgiEnvironment const& env);
@@ -97,6 +92,11 @@ int try_main(int argc, char* argv[])
 {
   try {
     initialize_filesystem();
+
+    gLogFile.rdbuf()->open
+        (configurable_settings::instance().cgi_bin_log_filename().c_str()
+        ,ios_out_trunc_binary()
+        );
 
     if(argc == 2 && argv[1] == std::string("--capture"))
         {
