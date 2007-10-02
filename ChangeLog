@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.913 2007-09-30 19:40:32 chicares Exp $
+// $Id: ChangeLog,v 1.914 2007-10-02 13:34:43 chicares Exp $
 
 MAINTENANCE
 
@@ -13651,4 +13651,21 @@ Improve documentation.
   ihs_avmly.cpp
 Fix defect introduced 20070421T0830Z. The now-removed assertion failed
 when InputParms::NumIdenticalLives differed from unity.
+
+20071002T1331Z <chicares@cox.net> [1217]
+
+  input_test.cpp
+Improve documentation.
+
+20071002T1332Z <chicares@cox.net> [1217]
+
+  main_cgi.cpp
+Forestall a latent static-initialization problem. It costs little to
+create a log file unconditionally even if nothing is written to it.
+
+20071002T1334Z <chicares@cox.net> [1217]
+
+  actuarial_table.cpp
+Replace old with new assertion macro. There is no known reason for a
+user to override the assertions in this file.
 
