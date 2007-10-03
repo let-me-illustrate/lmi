@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.18 2007-10-02 13:34:43 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.19 2007-10-03 22:50:35 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -36,6 +36,7 @@
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/path.hpp>
+#include <boost/static_assert.hpp>
 
 #include <cctype>    // std::toupper()
 #include <climits>   // CHAR_BIT
@@ -261,9 +262,9 @@ std::vector<double> actuarial_table
     // TODO ?? Assert endianness too? SOA tables are not portable;
     // probably they can easily be read only on x86 hardware.
 
-    LMI_ASSERT(8 == CHAR_BIT);
-    LMI_ASSERT(4 == sizeof(int));
-    LMI_ASSERT(2 == sizeof(short int));
+    BOOST_STATIC_ASSERT(8 == CHAR_BIT);
+    BOOST_STATIC_ASSERT(4 == sizeof(int));
+    BOOST_STATIC_ASSERT(2 == sizeof(short int));
 
     // 27.4.3.2/2 requires that this be interpreted as invalid. The
     // variable 'invalid' is not used here, because its value might
@@ -273,7 +274,7 @@ std::vector<double> actuarial_table
     int const index_record_length(58);
     char index_record[index_record_length] = {0};
 
-    LMI_ASSERT(sizeof (boost::int32_t) <= sizeof(int));
+    BOOST_STATIC_ASSERT(sizeof(boost::int32_t) <= sizeof(int));
     while(index_ifs)
         {
         int index_table_number = *reinterpret_cast<boost::int32_t*>(index_record);

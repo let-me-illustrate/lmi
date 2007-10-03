@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.914 2007-10-02 13:34:43 chicares Exp $
+// $Id: ChangeLog,v 1.915 2007-10-03 22:50:35 chicares Exp $
 
 MAINTENANCE
 
@@ -13668,4 +13668,9 @@ create a log file unconditionally even if nothing is written to it.
   actuarial_table.cpp
 Replace old with new assertion macro. There is no known reason for a
 user to override the assertions in this file.
+
+20071003T2250Z <chicares@cox.net> [1217]
+
+  actuarial_table.cpp
+Replace dynamic with static assertions.
 
