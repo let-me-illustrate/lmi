@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.35 2007-09-30 18:19:31 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.36 2007-10-05 00:32:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1544,17 +1544,22 @@ std::vector<double> BasicValues::GetInforceAdjustedTable
     ,long int           TableNumber
     ) const
 {
-    if(DB_CurrCOITable == TableID && Database_->Query(DB_CoiInforceReentry))
+    e_actuarial_table_method const method =
+        static_cast<e_actuarial_table_method>
+            (static_cast<int>(Database_->Query(DB_CoiInforceReentry))
+            );
+
+    if(DB_CurrCOITable == TableID && e_reenter_never != method)
         {
-        int inforce_year = Input_->InforceYear;
-        std::vector<double> v = actuarial_table
+        return actuarial_table_elaborated
             (TableFile
             ,TableNumber
-            ,GetIssueAge() + inforce_year
-            ,GetLength()   - inforce_year
+            ,GetIssueAge()
+            ,GetLength()
+            ,method
+            ,Input_->InforceYear
+            ,0 // Placeholder for group reset duration.
             );
-        v.insert(v.begin(), inforce_year, 0.0);
-        return v;
         }
     else
         {

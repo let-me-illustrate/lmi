@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.19 2007-10-03 22:50:35 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.20 2007-10-05 00:32:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -38,10 +38,13 @@
 #include <boost/filesystem/path.hpp>
 #include <boost/static_assert.hpp>
 
+#include <algorithm> // std::max(), std::min()
 #include <cctype>    // std::toupper()
 #include <climits>   // CHAR_BIT
 #include <ios>
+#include <istream>
 #include <limits>
+#include <stdexcept>
 
 // Read a table from a database in the binary format designed by the
 // Society of Actuaries (SOA) and used for the tables SOA publishes.
@@ -468,5 +471,49 @@ std::vector<double> actuarial_table
         ,a_age
         ,a_len
         );
+}
+
+std::vector<double> actuarial_table_elaborated
+    (std::string const&       table_filename
+    ,int                      table_number
+    ,int                      issue_age
+    ,int                      length
+    ,e_actuarial_table_method method
+    ,int                      full_years_since_issue
+    ,int                      // full_years_since_last_rate_reset
+    )
+{
+    switch(method)
+      {
+      case e_reenter_at_inforce_duration:
+        {
+        std::vector<double> v = actuarial_table
+            (table_filename
+            ,table_number
+            ,issue_age + full_years_since_issue
+            ,length    - full_years_since_issue
+            );
+        v.insert(v.begin(), full_years_since_issue, 0.0);
+        return v;
+        }
+        break;
+      case e_reenter_upon_rate_reset:
+        {
+        fatal_error() << "Group reset not yet implemented." << LMI_FLUSH;
+        throw std::logic_error("Unreachable"); // Silence compiler warning.
+        }
+        break;
+      case e_reenter_never: // Fall through.
+      default:
+        {
+        fatal_error()
+            << "Table-lookup method "
+            << method
+            << " is not valid in this context."
+            << LMI_FLUSH
+            ;
+        throw std::logic_error("Unreachable"); // Silence compiler warning.
+        }
+      }
 }
 
