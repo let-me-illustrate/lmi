@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.11 2007-10-06 22:55:20 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.12 2007-10-06 23:17:47 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -69,6 +69,33 @@ std::vector<double> table_47_age_89()
     return std::vector<double>(q, q + n);
     }
 
+// SOA database 'qx_ins' table 308
+// "1956 Texas Chamberlain, Male & Female, Age next"
+// Parameters: min age 1; max age 105; select period 5; max select age 100.
+// Return q as though max age were 10: that's enough for testing.
+std::vector<double> table_308(int age)
+    {
+    // Select: issue age by duration.
+    static int const nsel = 25;
+    static double const qsel[nsel] =
+        //      0         1         2         3         4
+        {0.003341, 0.002463, 0.002225, 0.001852, 0.001483 // 1
+        ,0.000688, 0.001970, 0.001842, 0.001574, 0.001274 // 2
+        ,0.000596, 0.001722, 0.001636, 0.001395, 0.001124 // 3
+        ,0.000513, 0.001520, 0.001455, 0.001239, 0.000999 // 4
+        ,0.000438, 0.001339, 0.001294, 0.001116, 0.000917 // 5
+        };
+    // Ultimate: attained age.
+    static int const nult = 5;
+    static double const qult[nult] =
+        //      6         7         8         9        10
+        {0.001099, 0.000958, 0.000843, 0.000750, 0.000712
+        };
+    int isel = 5 * (age - 1);
+    std::vector<double> v(qsel + isel, qsel + isel + 5);
+    v.insert(v.end(), qult + age - 1, qult + nult);
+    return v;
+    }
 } // Unnamed namespace.
 
 void mete()
@@ -108,8 +135,87 @@ void test_e_reenter_at_inforce_duration()
 {
 }
 
+/// Test with SOA table 308 in 'qx_ins', chosen because it's a select
+/// and ultimate table with a minimum age distinct from zero.
+
 void test_e_reenter_upon_rate_reset()
 {
+    std::string const qx_ins("/opt/lmi/data/qx_ins");
+    std::vector<double> rates;
+    std::vector<double> gauge0;
+    std::vector<double> gauge1;
+
+    rates = actuarial_table_elaborated
+        (qx_ins // table_filename
+        ,308    // table_number
+        ,3      // issue_age
+        ,8      // length
+        ,e_reenter_upon_rate_reset
+        ,0      // full_years_since_issue
+        ,0      // full_years_since_last_rate_reset
+        );
+    gauge0 = table_308(3);
+    gauge0.erase(gauge0.begin(), 0 + gauge0.begin());
+    BOOST_TEST(rates == gauge0);
+    gauge1 = actuarial_table(qx_ins, 308, 3, 8);
+    gauge1.erase(gauge1.begin(), 0 + gauge1.begin());
+    BOOST_TEST(rates == gauge1);
+
+    rates = actuarial_table_elaborated
+        (qx_ins // table_filename
+        ,308    // table_number
+        ,3      // issue_age
+        ,8      // length
+        ,e_reenter_upon_rate_reset
+        ,0      // full_years_since_issue
+        ,1      // full_years_since_last_rate_reset
+        );
+    gauge0 = table_308(2);
+    gauge0.erase(gauge0.begin(), 1 + gauge0.begin());
+    BOOST_TEST(rates == gauge0);
+    gauge1 = actuarial_table(qx_ins, 308, 2, 9);
+    gauge1.erase(gauge1.begin(), 1 + gauge1.begin());
+    BOOST_TEST(rates == gauge1);
+
+    rates = actuarial_table_elaborated
+        (qx_ins // table_filename
+        ,308    // table_number
+        ,3      // issue_age
+        ,8      // length
+        ,e_reenter_upon_rate_reset
+        ,0      // full_years_since_issue
+        ,2      // full_years_since_last_rate_reset
+        );
+    gauge0 = table_308(1);
+    gauge0.erase(gauge0.begin(), 2 + gauge0.begin());
+    BOOST_TEST(rates == gauge0);
+    gauge1 = actuarial_table(qx_ins, 308, 1, 10);
+    gauge1.erase(gauge1.begin(), 2 + gauge1.begin());
+    BOOST_TEST(rates == gauge1);
+
+    rates = actuarial_table_elaborated
+        (qx_ins // table_filename
+        ,308    // table_number
+        ,3      // issue_age
+        ,8      // length
+        ,e_reenter_upon_rate_reset
+        ,0      // full_years_since_issue
+        ,3      // full_years_since_last_rate_reset
+        );
+    BOOST_TEST(rates == gauge0);
+    BOOST_TEST(rates == gauge1);
+
+    rates = actuarial_table_elaborated
+        (qx_ins // table_filename
+        ,308    // table_number
+        ,3      // issue_age
+        ,8      // length
+        ,e_reenter_upon_rate_reset
+        ,0      // full_years_since_issue
+        ,999    // full_years_since_last_rate_reset
+        );
+    BOOST_TEST(rates == gauge0);
+    BOOST_TEST(rates == gauge1);
 }
 
 int test_main(int, char*[])
