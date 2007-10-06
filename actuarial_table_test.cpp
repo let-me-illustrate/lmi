@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.10 2007-01-27 00:00:51 wboutin Exp $
+// $Id: actuarial_table_test.cpp,v 1.11 2007-10-06 22:55:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,7 +33,8 @@
 
 namespace
 {
-// SOA database 'qx_cso' table 42: "1980 US CSO Male Age nearest"
+// SOA database 'qx_cso' table 42
+// "1980 US CSO Male Age nearest"
 std::vector<double> table_42(int age)
     {
     static int const n = 100;
@@ -53,7 +54,8 @@ std::vector<double> table_42(int age)
     return std::vector<double>(q + age, q + n);
     }
 
-// SOA database 'qx_cso' table 47: "1980 US CSO Selection Factors, Female"
+// SOA database 'qx_cso' table 47
+// "1980 US CSO Selection Factors, Female"
 // Parameters: min age 0; max age 105; select period 10; max select age 89.
 std::vector<double> table_47_age_89()
     {
@@ -71,14 +73,14 @@ std::vector<double> table_47_age_89()
 
 void mete()
 {
-    std::string const table_name("/opt/lmi/data/qx_cso");
+    std::string const qx_cso("/opt/lmi/data/qx_cso");
 
-    std::vector<double> rates00 = actuarial_table(table_name, 42,  0, 100);
-    std::vector<double> rates01 = actuarial_table(table_name, 42, 35,  65);
-    std::vector<double> rates02 = actuarial_table(table_name, 47, 89,  17);
-    std::vector<double> rates03 = actuarial_table(table_name, 47, 80,  26);
-    std::vector<double> rates04 = actuarial_table(table_name, 47, 80,  20);
-    std::vector<double> rates05 = actuarial_table(table_name, 47, 20,  20);
+    std::vector<double> rates00 = actuarial_table(qx_cso, 42,  0, 100);
+    std::vector<double> rates01 = actuarial_table(qx_cso, 42, 35,  65);
+    std::vector<double> rates02 = actuarial_table(qx_cso, 47, 89,  17);
+    std::vector<double> rates03 = actuarial_table(qx_cso, 47, 80,  26);
+    std::vector<double> rates04 = actuarial_table(qx_cso, 47, 80,  20);
+    std::vector<double> rates05 = actuarial_table(qx_cso, 47, 20,  20);
 }
 
 void assay_speed()
@@ -86,20 +88,35 @@ void assay_speed()
     std::cout << "  Speed test: " << TimeAnAliquot(mete) << '\n';
 }
 
-int test_main(int, char*[])
+void test_e_reenter_never()
 {
-    std::string const table_name("/opt/lmi/data/qx_cso");
+    std::string const qx_cso("/opt/lmi/data/qx_cso");
 
 // TODO ?? Also test a 'duration' table--has SOA published any?
 
-    std::vector<double> rates0 = actuarial_table(table_name, 42,  0, 100);
+    std::vector<double> rates0 = actuarial_table(qx_cso, 42,  0, 100);
     BOOST_TEST(rates0 == table_42(0));
 
-    std::vector<double> rates1 = actuarial_table(table_name, 42, 35,  65);
+    std::vector<double> rates1 = actuarial_table(qx_cso, 42, 35,  65);
     BOOST_TEST(rates1 == table_42(35));
 
-    std::vector<double> rates2 = actuarial_table(table_name, 47, 89,  17);
+    std::vector<double> rates2 = actuarial_table(qx_cso, 47, 89,  17);
     BOOST_TEST(rates2 == table_47_age_89());
+}
+
+void test_e_reenter_at_inforce_duration()
+{
+}
+
+void test_e_reenter_upon_rate_reset()
+{
+}
+
+int test_main(int, char*[])
+{
+    test_e_reenter_never();
+    test_e_reenter_at_inforce_duration();
+    test_e_reenter_upon_rate_reset();
 
     assay_speed();
 
