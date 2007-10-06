@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.916 2007-10-05 00:32:28 chicares Exp $
+// $Id: ChangeLog,v 1.917 2007-10-06 23:17:47 chicares Exp $
 
 MAINTENANCE
 
@@ -13680,4 +13680,19 @@ Replace dynamic with static assertions.
   actuarial_table.hpp
   ihs_basicval.cpp
 Refactor.
+
+20071006T2255Z <chicares@cox.net> [1217]
+
+  actuarial_table_test.cpp
+Refactor.
+
+20071006T2256Z <chicares@cox.net> [1217]
+
+  actuarial_table.cpp
+Implement the e_reenter_upon_rate_reset case.
+
+20071006T2317Z <chicares@cox.net> [1217]
+
+  actuarial_table_test.cpp
+Test the e_reenter_upon_rate_reset case.
 
