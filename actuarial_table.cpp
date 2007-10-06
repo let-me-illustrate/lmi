@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.20 2007-10-05 00:32:28 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.21 2007-10-06 22:56:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -480,7 +480,7 @@ std::vector<double> actuarial_table_elaborated
     ,int                      length
     ,e_actuarial_table_method method
     ,int                      full_years_since_issue
-    ,int                      // full_years_since_last_rate_reset
+    ,int                      full_years_since_last_rate_reset
     )
 {
     switch(method)
@@ -499,8 +499,24 @@ std::vector<double> actuarial_table_elaborated
         break;
       case e_reenter_upon_rate_reset:
         {
-        fatal_error() << "Group reset not yet implemented." << LMI_FLUSH;
-        throw std::logic_error("Unreachable"); // Silence compiler warning.
+// Minimum age is temporarily hardcoded here. It really needs to be
+// ascertained from the SOA database file, but that will require an
+// extensive refactoring. This value is correct for the
+//   "1956 Texas Chamberlain, Male & Female, Age next"
+// table used in the unit test.
+        int const minimum_age = 1; // Temporary--for testing only.
+        int r = std::min
+            (issue_age - minimum_age
+            ,full_years_since_last_rate_reset
+            );
+        std::vector<double> v = actuarial_table
+            (table_filename
+            ,table_number
+            ,issue_age - r
+            ,length    + r
+            );
+        v.erase(v.begin(), v.begin() + r);
+        return v;
         }
         break;
       case e_reenter_never: // Fall through.
