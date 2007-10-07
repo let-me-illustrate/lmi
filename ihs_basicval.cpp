@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.36 2007-10-05 00:32:28 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.37 2007-10-07 14:16:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1538,7 +1538,7 @@ double BasicValues::GetAnnuityValueMlyDed
 }
 
 //============================================================================
-std::vector<double> BasicValues::GetInforceAdjustedTable
+std::vector<double> BasicValues::GetActuarialTable
     (std::string const& TableFile
     ,long int           TableID
     ,long int           TableNumber
@@ -1551,7 +1551,7 @@ std::vector<double> BasicValues::GetInforceAdjustedTable
 
     if(DB_CurrCOITable == TableID && e_reenter_never != method)
         {
-        return actuarial_table_elaborated
+        return actuarial_table_rates_elaborated
             (TableFile
             ,TableNumber
             ,GetIssueAge()
@@ -1563,7 +1563,7 @@ std::vector<double> BasicValues::GetInforceAdjustedTable
         }
     else
         {
-        return actuarial_table
+        return actuarial_table_rates
             (TableFile
             ,TableNumber
             ,GetIssueAge()
@@ -1578,7 +1578,7 @@ std::vector<double> BasicValues::GetUnblendedTable
     ,long int           TableID
     ) const
 {
-    return GetInforceAdjustedTable
+    return GetActuarialTable
         (TableFile
         ,TableID
         ,static_cast<long int>(Database_->Query(TableID))
@@ -1599,7 +1599,7 @@ std::vector<double> BasicValues::GetUnblendedTable
 
     TDatabase TempDatabase(IP);
 
-    return GetInforceAdjustedTable
+    return GetActuarialTable
         (TableFile
         ,TableID
         ,static_cast<long int>(TempDatabase.Query(TableID))
@@ -2140,7 +2140,7 @@ std::vector<double> BasicValues::GetCurrentSpouseRiderRates() const
         return std::vector<double>(GetLength());
         }
 
-    std::vector<double> z = actuarial_table
+    std::vector<double> z = actuarial_table_rates
         (AddDataDir(ProductData_->GetCurrSpouseRiderFilename())
         ,static_cast<long int>(Database_->Query(DB_SpouseRiderTable))
         ,Input_->SpouseIssueAge
@@ -2156,7 +2156,7 @@ std::vector<double> BasicValues::GetGuaranteedSpouseRiderRates() const
         return std::vector<double>(GetLength());
         }
 
-    std::vector<double> z = actuarial_table
+    std::vector<double> z = actuarial_table_rates
         (AddDataDir(ProductData_->GetGuarSpouseRiderFilename())
         ,static_cast<long int>(Database_->Query(DB_SpousRiderGuarTable))
         ,Input_->SpouseIssueAge
