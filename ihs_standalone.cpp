@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_standalone.cpp,v 1.10 2007-03-09 16:27:23 chicares Exp $
+// $Id: ihs_standalone.cpp,v 1.11 2007-10-07 14:16:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -137,7 +137,7 @@ void GPT_BasicValues::Init()
 //      (AddDataDir(ProductData->GetTierFilename())
 //      );
 
-    std::vector<double> q_irc_7702 = actuarial_table
+    std::vector<double> q_irc_7702 = actuarial_table_rates
 //      ("data/qx_cso"
         (AddDataDir("qx_cso")
         ,local_database.Query(DB_IRC7702QTable)
@@ -145,7 +145,7 @@ void GPT_BasicValues::Init()
         ,Length
         );
 
-    a7pp7702A = actuarial_table
+    a7pp7702A = actuarial_table_rates
 //      ("data/mm_lcm"
         (AddDataDir("mm_lcm")
         ,local_database.Query(DB_TAMRA7PayTable)
@@ -193,7 +193,7 @@ void GPT_BasicValues::Init()
         );
     if(ADDInForce)
         {
-        mAddRates = actuarial_table
+        mAddRates = actuarial_table_rates
             (AddDataDir("mm_lcm")
             ,local_database.Query(DB_ADDTable)
             ,IssueAge
