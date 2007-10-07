@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.hpp,v 1.5 2007-10-07 14:16:26 chicares Exp $
+// $Id: actuarial_table.hpp,v 1.6 2007-10-07 15:22:17 chicares Exp $
 
 #ifndef actuarial_table_hpp
 #define actuarial_table_hpp
@@ -74,14 +74,14 @@ class actuarial_table
     actuarial_table(std::string const& filename, int table_number);
     ~actuarial_table();
 
-    std::vector<double> values(int issue_age, int length);
+    std::vector<double> values(int issue_age, int length) const;
     std::vector<double> values_elaborated
         (int                      issue_age
         ,int                      length
         ,e_actuarial_table_method method
         ,int                      full_years_since_issue
         ,int                      full_years_since_last_rate_reset
-        );
+        ) const;
 
     std::string const& filename       () const {return filename_       ;}
     int                table_number   () const {return table_number_   ;}
@@ -95,7 +95,7 @@ class actuarial_table
     void find_table();
     void parse_table();
     void read_values(std::istream& is, int nominal_length);
-    std::vector<double> specific_values(int issue_age, int length);
+    std::vector<double> specific_values(int issue_age, int length) const;
 
     // Ctor arguments.
     std::string filename_     ;
