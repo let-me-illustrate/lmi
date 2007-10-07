@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.25 2007-10-07 23:01:18 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.26 2007-10-07 23:45:39 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -125,18 +125,19 @@ actuarial_table::~actuarial_table()
 {
 }
 
-/// Read a given number of values for a given age.
+/// Read a given number of values for a given issue age.
 
 std::vector<double> actuarial_table::values(int issue_age, int length) const
 {
     LMI_ASSERT(min_age_ <= issue_age && issue_age <= max_age_);
+    LMI_ASSERT(0 <= length);
     LMI_ASSERT(issue_age + length <= max_age_ + 1);
 
     return specific_values(issue_age, length);
 }
 
-/// Read a given number of values for a given age, using a nondefault
-/// lookup method.
+/// Read a given number of values for a given issue age, using a
+/// nondefault lookup method.
 
 std::vector<double> actuarial_table::values_elaborated
     (int                      issue_age
@@ -146,6 +147,9 @@ std::vector<double> actuarial_table::values_elaborated
     ,int                      full_years_since_last_rate_reset
     ) const
 {
+    LMI_ASSERT(0 <= full_years_since_issue);
+    LMI_ASSERT(0 <= full_years_since_last_rate_reset);
+
     switch(method)
         {
         case e_reenter_at_inforce_duration:
