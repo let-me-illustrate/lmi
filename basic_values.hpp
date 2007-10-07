@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.18 2007-03-10 18:56:08 chicares Exp $
+// $Id: basic_values.hpp,v 1.19 2007-10-07 14:16:26 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -405,7 +405,7 @@ class LMI_SO BasicValues
         ,e_mode const& Mode
         ) const;
 
-    std::vector<double> GetInforceAdjustedTable
+    std::vector<double> GetActuarialTable
         (std::string const& TableFile
         ,long int           TableID
         ,long int           TableNumber

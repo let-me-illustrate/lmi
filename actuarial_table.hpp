@@ -19,13 +19,18 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.hpp,v 1.4 2007-10-05 00:32:28 chicares Exp $
+// $Id: actuarial_table.hpp,v 1.5 2007-10-07 14:16:26 chicares Exp $
 
 #ifndef actuarial_table_hpp
 #define actuarial_table_hpp
 
 #include "config.hpp"
 
+#include "obstruct_slicing.hpp"
+
+#include <boost/utility.hpp>
+
+#include <iosfwd>
 #include <string>
 #include <vector>
 
@@ -61,19 +66,67 @@ enum e_actuarial_table_method
     ,e_reenter_upon_rate_reset     = 2
     };
 
-/// Read values for a given age from an SOA table-manager database.
+class actuarial_table
+    :private boost::noncopyable
+    ,virtual private obstruct_slicing<actuarial_table>
+{
+  public:
+    actuarial_table(std::string const& filename, int table_number);
+    ~actuarial_table();
 
-std::vector<double> actuarial_table
+    std::vector<double> values(int issue_age, int length);
+    std::vector<double> values_elaborated
+        (int                      issue_age
+        ,int                      length
+        ,e_actuarial_table_method method
+        ,int                      full_years_since_issue
+        ,int                      full_years_since_last_rate_reset
+        );
+
+    std::string const& filename       () const {return filename_       ;}
+    int                table_number   () const {return table_number_   ;}
+    char               table_type     () const {return table_type_     ;}
+    int                min_age        () const {return min_age_        ;}
+    int                max_age        () const {return max_age_        ;}
+    int                select_period  () const {return select_period_  ;}
+    int                max_select_age () const {return max_select_age_ ;}
+
+  private:
+    void find_table();
+    void parse_table();
+    void read_values(std::istream& is, int nominal_length);
+    std::vector<double> specific_values(int issue_age, int length);
+
+    // Ctor arguments.
+    std::string filename_     ;
+    int         table_number_ ;
+
+    // Table parameters, in order read from header.
+    char table_type_     ;
+    int  min_age_        ;
+    int  max_age_        ;
+    int  select_period_  ;
+    int  max_select_age_ ;
+
+    std::vector<double> data_;
+
+    std::streampos table_offset_;
+};
+
+/// Convenience function: read particular values from a table stored
+/// in the SOA table-manager format.
+
+std::vector<double> actuarial_table_rates
     (std::string const& table_filename
     ,int                table_number
     ,int                issue_age
     ,int                length
     );
 
-/// Read values for a given age from an SOA table-manager database,
-/// using a nondefault lookup method.
+/// Convenience function: read particular values from a table stored
+/// in the SOA table-manager format, using a nondefault lookup method.
 
-std::vector<double> actuarial_table_elaborated
+std::vector<double> actuarial_table_rates_elaborated
     (std::string const&       table_filename
     ,int                      table_number
     ,int                      issue_age

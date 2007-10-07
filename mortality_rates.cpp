@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mortality_rates.cpp,v 1.9 2007-01-27 00:00:51 wboutin Exp $
+// $Id: mortality_rates.cpp,v 1.10 2007-10-07 14:16:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -54,14 +54,14 @@ void MortalityRates::Init(BasicValues const& basic_values)
     int const issue_age = basic_values.GetIssueAge();
     int const length = basic_values.GetLength();
 
-    MonthlyCurrentCoiRatesBand0_ = actuarial_table
+    MonthlyCurrentCoiRatesBand0_ = actuarial_table_rates
         (CurrentTableFile()
         ,static_cast<long int>(basic_values.Database_->Query(DB_CurrCOITable))
         ,issue_age
         ,length
         );
 
-    MonthlyGuaranteedCoiRates_ = actuarial_table
+    MonthlyGuaranteedCoiRates_ = actuarial_table_rates
         (GuaranteedTableFile()
         ,static_cast<long int>(basic_values.Database_->Query(DB_GuarCOITable))
         ,issue_age
@@ -90,21 +90,21 @@ void MortalityRates::Init(BasicValues const& basic_values)
         ,mean<double>()
         );
 
-    CvatCorridorFactors_ = actuarial_table
+    CvatCorridorFactors_ = actuarial_table_rates
         (CurrentTableFile()
         ,static_cast<long int>(basic_values.Database_->Query(DB_CorridorTable))
         ,issue_age
         ,length
         );
 
-    AdbRates_ = actuarial_table
+    AdbRates_ = actuarial_table_rates
         (CurrentTableFile()
         ,static_cast<long int>(basic_values.Database_->Query(DB_ADDTable))
         ,issue_age
         ,length
         );
 
-    WpRates_ = actuarial_table
+    WpRates_ = actuarial_table_rates
         (CurrentTableFile()
         ,static_cast<long int>(basic_values.Database_->Query(DB_WPTable))
         ,issue_age

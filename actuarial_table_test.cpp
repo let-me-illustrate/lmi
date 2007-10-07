@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.12 2007-10-06 23:17:47 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.13 2007-10-07 14:16:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -101,13 +101,14 @@ std::vector<double> table_308(int age)
 void mete()
 {
     std::string const qx_cso("/opt/lmi/data/qx_cso");
+    std::vector<double> rates;
 
-    std::vector<double> rates00 = actuarial_table(qx_cso, 42,  0, 100);
-    std::vector<double> rates01 = actuarial_table(qx_cso, 42, 35,  65);
-    std::vector<double> rates02 = actuarial_table(qx_cso, 47, 89,  17);
-    std::vector<double> rates03 = actuarial_table(qx_cso, 47, 80,  26);
-    std::vector<double> rates04 = actuarial_table(qx_cso, 47, 80,  20);
-    std::vector<double> rates05 = actuarial_table(qx_cso, 47, 20,  20);
+    rates = actuarial_table(qx_cso, 42).values( 0, 100);
+    rates = actuarial_table(qx_cso, 42).values(35,  65);
+    rates = actuarial_table(qx_cso, 47).values(89,  17);
+    rates = actuarial_table(qx_cso, 47).values(80,  26);
+    rates = actuarial_table(qx_cso, 47).values(80,  20);
+    rates = actuarial_table(qx_cso, 47).values(20,  20);
 }
 
 void assay_speed()
@@ -118,17 +119,18 @@ void assay_speed()
 void test_e_reenter_never()
 {
     std::string const qx_cso("/opt/lmi/data/qx_cso");
+    std::vector<double> rates;
 
 // TODO ?? Also test a 'duration' table--has SOA published any?
 
-    std::vector<double> rates0 = actuarial_table(qx_cso, 42,  0, 100);
-    BOOST_TEST(rates0 == table_42(0));
+    rates = actuarial_table(qx_cso, 42).values( 0, 100);
+    BOOST_TEST(rates == table_42(0));
 
-    std::vector<double> rates1 = actuarial_table(qx_cso, 42, 35,  65);
-    BOOST_TEST(rates1 == table_42(35));
+    rates = actuarial_table(qx_cso, 42).values(35,  65);
+    BOOST_TEST(rates == table_42(35));
 
-    std::vector<double> rates2 = actuarial_table(qx_cso, 47, 89,  17);
-    BOOST_TEST(rates2 == table_47_age_89());
+    rates = actuarial_table(qx_cso, 47).values(89,  17);
+    BOOST_TEST(rates == table_47_age_89());
 }
 
 void test_e_reenter_at_inforce_duration()
@@ -145,10 +147,8 @@ void test_e_reenter_upon_rate_reset()
     std::vector<double> gauge0;
     std::vector<double> gauge1;
 
-    rates = actuarial_table_elaborated
-        (qx_ins // table_filename
-        ,308    // table_number
-        ,3      // issue_age
+    rates = actuarial_table(qx_ins, 308).values_elaborated
+        (3      // issue_age
         ,8      // length
         ,e_reenter_upon_rate_reset
         ,0      // full_years_since_issue
@@ -157,14 +157,12 @@ void test_e_reenter_upon_rate_reset()
     gauge0 = table_308(3);
     gauge0.erase(gauge0.begin(), 0 + gauge0.begin());
     BOOST_TEST(rates == gauge0);
-    gauge1 = actuarial_table(qx_ins, 308, 3, 8);
+    gauge1 = actuarial_table(qx_ins, 308).values(3, 8);
     gauge1.erase(gauge1.begin(), 0 + gauge1.begin());
     BOOST_TEST(rates == gauge1);
 
-    rates = actuarial_table_elaborated
-        (qx_ins // table_filename
-        ,308    // table_number
-        ,3      // issue_age
+    rates = actuarial_table(qx_ins, 308).values_elaborated
+        (3      // issue_age
         ,8      // length
         ,e_reenter_upon_rate_reset
         ,0      // full_years_since_issue
@@ -173,14 +171,12 @@ void test_e_reenter_upon_rate_reset()
     gauge0 = table_308(2);
     gauge0.erase(gauge0.begin(), 1 + gauge0.begin());
     BOOST_TEST(rates == gauge0);
-    gauge1 = actuarial_table(qx_ins, 308, 2, 9);
+    gauge1 = actuarial_table(qx_ins, 308).values(2, 9);
     gauge1.erase(gauge1.begin(), 1 + gauge1.begin());
     BOOST_TEST(rates == gauge1);
 
-    rates = actuarial_table_elaborated
-        (qx_ins // table_filename
-        ,308    // table_number
-        ,3      // issue_age
+    rates = actuarial_table(qx_ins, 308).values_elaborated
+        (3      // issue_age
         ,8      // length
         ,e_reenter_upon_rate_reset
         ,0      // full_years_since_issue
@@ -189,14 +185,12 @@ void test_e_reenter_upon_rate_reset()
     gauge0 = table_308(1);
     gauge0.erase(gauge0.begin(), 2 + gauge0.begin());
     BOOST_TEST(rates == gauge0);
-    gauge1 = actuarial_table(qx_ins, 308, 1, 10);
+    gauge1 = actuarial_table(qx_ins, 308).values(1, 10);
     gauge1.erase(gauge1.begin(), 2 + gauge1.begin());
     BOOST_TEST(rates == gauge1);
 
-    rates = actuarial_table_elaborated
-        (qx_ins // table_filename
-        ,308    // table_number
-        ,3      // issue_age
+    rates = actuarial_table(qx_ins, 308).values_elaborated
+        (3      // issue_age
         ,8      // length
         ,e_reenter_upon_rate_reset
         ,0      // full_years_since_issue
@@ -205,10 +199,8 @@ void test_e_reenter_upon_rate_reset()
     BOOST_TEST(rates == gauge0);
     BOOST_TEST(rates == gauge1);
 
-    rates = actuarial_table_elaborated
-        (qx_ins // table_filename
-        ,308    // table_number
-        ,3      // issue_age
+    rates = actuarial_table(qx_ins, 308).values_elaborated
+        (3      // issue_age
         ,8      // length
         ,e_reenter_upon_rate_reset
         ,0      // full_years_since_issue
