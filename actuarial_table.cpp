@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.24 2007-10-07 21:35:24 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.25 2007-10-07 23:01:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -204,10 +204,6 @@ std::vector<double> actuarial_table::values_elaborated
 ///
 /// Asserting that the table number is nonzero makes it safe to use
 /// zero as a sentry.
-///
-/// TODO ?? Consider requiring an extra argument--a string that
-/// gives context, e.g., "Current COI rates"--so that diagnostics
-/// can be made more helpful.
 
 void actuarial_table::find_table()
 {
