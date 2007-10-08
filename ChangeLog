@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.918 2007-10-07 14:16:27 chicares Exp $
+// $Id: ChangeLog,v 1.919 2007-10-08 00:27:49 chicares Exp $
 
 MAINTENANCE
 
@@ -13706,4 +13706,33 @@ Test the e_reenter_upon_rate_reset case.
   ihs_standalone.cpp
   mortality_rates.cpp
 Refactor.
+
+20071007T1522Z <chicares@cox.net> [1217]
+
+  actuarial_table.cpp
+  actuarial_table.hpp
+Increase const correctness.
+
+20071007T2135Z <chicares@cox.net> [1216]
+
+  actuarial_table.cpp
+Remove an obsolete defect marker, which had been resolved by adding an
+assertion on 20050830T0354Z.
+
+20071007T2301Z <chicares@cox.net> [1215]
+
+  actuarial_table.cpp
+Remove a defect marker now regarded as invalid. The extra diagnostic
+information that had been contemplated is not valuable enough to
+justify violating the separation of concerns between modules.
+
+20071007T2345Z <chicares@cox.net> [1215]
+
+  actuarial_table.cpp
+Assert more preconditions.
+
+20071008T0027Z <chicares@cox.net> [1215]
+
+  actuarial_table.cpp
+Remove a workaround temporarily added on 20071006T2256Z.
 
