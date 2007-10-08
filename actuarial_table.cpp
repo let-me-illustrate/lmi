@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.27 2007-10-08 00:27:49 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.28 2007-10-08 16:09:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -76,16 +76,15 @@ namespace
         std::numeric_limits<soa_table_length_type>::max()
         ;
 
-    // The value -1 is invalid for all data fields except table name
-    // and values.
-    int invalid = -1;
-
     int methuselah = 969; // Genesis 5:27.
 
     template<typename T>
-    T read(std::istream& is, T& t, boost::int16_t nominal_length)
+    T read_datum(std::istream& is, T& t, boost::int16_t nominal_length)
     {
         LMI_ASSERT(sizeof(T) == nominal_length);
+        // The value -1 is invalid for all integral data fields.
+        T const invalid(-1);
+        t = invalid;
         char z[sizeof(T)];
         is.read(z, sizeof(T));
         t = *reinterpret_cast<T*>(z);
@@ -97,7 +96,7 @@ namespace
 actuarial_table::actuarial_table(std::string const& filename, int table_number)
     :filename_       (filename)
     ,table_number_   (table_number)
-    ,table_type_     ('\0')
+    ,table_type_     (-1)
     ,min_age_        (-1)
     ,max_age_        (-1)
     ,select_period_  (-1)
@@ -218,9 +217,7 @@ void actuarial_table::find_table()
     BOOST_STATIC_ASSERT(4 == sizeof(int));
     BOOST_STATIC_ASSERT(2 == sizeof(short int));
 
-    // 27.4.3.2/2 requires that this be interpreted as invalid. The
-    // variable 'invalid' is not used here, because its value might
-    // change someday, but only '-1' is mentioned in the standard.
+    // 27.4.3.2/2 requires that this be interpreted as invalid.
     // Reinitialize it here for robustness, even though the ctor
     // already initializes it in the same way.
     table_offset_ = std::streampos(-1);
@@ -310,6 +307,12 @@ void actuarial_table::find_table()
 
 void actuarial_table::parse_table()
 {
+    LMI_ASSERT(-1 == table_type_    );
+    LMI_ASSERT(-1 == min_age_       );
+    LMI_ASSERT(-1 == max_age_       );
+    LMI_ASSERT(-1 == select_period_ );
+    LMI_ASSERT(-1 == max_select_age_);
+
     fs::path data_path(filename_);
     data_path = fs::change_extension(data_path, ".dat");
     fs::ifstream data_ifs(data_path, ios_in_binary());
@@ -317,23 +320,20 @@ void actuarial_table::parse_table()
     data_ifs.seekg(table_offset_, std::ios::beg);
     LMI_ASSERT(table_offset_ == data_ifs.tellg());
 
-// TODO ?? It would be an error to find more than one of each record, no?
-// And what if we fail to find one of each required type?
-
     while(data_ifs)
         {
-        boost::int16_t record_type = invalid;
-        read(data_ifs, record_type, sizeof(boost::int16_t));
+        boost::int16_t record_type;
+        read_datum(data_ifs, record_type, sizeof(boost::int16_t));
 
-        soa_table_length_type nominal_length = invalid;
-        read(data_ifs, nominal_length, sizeof(boost::int16_t));
+        soa_table_length_type nominal_length;
+        read_datum(data_ifs, nominal_length, sizeof(boost::int16_t));
 
         switch(record_type)
             {
             case 2: // 4-byte integer: Table number.
                 {
-                boost::int32_t z = invalid;
-                read(data_ifs, z, nominal_length);
+                boost::int32_t z;
+                read_datum(data_ifs, z, nominal_length);
                 LMI_ASSERT(z == table_number_);
                 }
                 break;
@@ -341,8 +341,9 @@ void actuarial_table::parse_table()
                 {
                 // Meaning: {A, D, S} --> {age, duration, select}.
                 // SOA apparently permits upper or lower case.
-                unsigned char z = '\0';
-                read(data_ifs, z, nominal_length);
+                LMI_ASSERT(-1 == table_type_);
+                unsigned char z;
+                read_datum(data_ifs, z, nominal_length);
                 z = std::toupper(z);
                 LMI_ASSERT('A' == z || 'D' == z || 'S' == z);
                 table_type_ = z;
@@ -350,32 +351,36 @@ void actuarial_table::parse_table()
                 break;
             case 12: // 2-byte integer: Minimum age.
                 {
-                boost::int16_t z = invalid;
-                read(data_ifs, z, nominal_length);
+                LMI_ASSERT(-1 == min_age_);
+                boost::int16_t z;
+                read_datum(data_ifs, z, nominal_length);
                 LMI_ASSERT(0 <= z && z <= methuselah);
                 min_age_ = z;
                 }
                 break;
             case 13: // 2-byte integer: Maximum age.
                 {
-                boost::int16_t z = invalid;
-                read(data_ifs, z, nominal_length);
+                LMI_ASSERT(-1 == max_age_);
+                boost::int16_t z;
+                read_datum(data_ifs, z, nominal_length);
                 LMI_ASSERT(0 <= z && z <= methuselah);
                 max_age_ = z;
                 }
                 break;
             case 14: // 2-byte integer: Select period.
                 {
-                boost::int16_t z = invalid;
-                read(data_ifs, z, nominal_length);
+                LMI_ASSERT(-1 == select_period_);
+                boost::int16_t z;
+                read_datum(data_ifs, z, nominal_length);
                 LMI_ASSERT(0 <= z && z <= methuselah);
                 select_period_ = z;
                 }
                 break;
             case 15: // 2-byte integer: Maximum select age.
                 {
-                boost::int16_t z = invalid;
-                read(data_ifs, z, nominal_length);
+                LMI_ASSERT(-1 == max_select_age_);
+                boost::int16_t z;
+                read_datum(data_ifs, z, nominal_length);
                 LMI_ASSERT(0 <= z && z <= methuselah);
                 max_select_age_ = z;
                 }
@@ -398,8 +403,11 @@ void actuarial_table::parse_table()
         }
 
   done:
-    ;
-// TODO ?? Postconditions?
+    LMI_ASSERT(-1 != table_type_    );
+    LMI_ASSERT(-1 != min_age_       );
+    LMI_ASSERT(-1 != max_age_       );
+    LMI_ASSERT(-1 != select_period_ );
+    LMI_ASSERT(-1 != max_select_age_);
 }
 
 void actuarial_table::read_values(std::istream& is, int nominal_length)
