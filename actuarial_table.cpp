@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.28 2007-10-08 16:09:22 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.29 2007-10-08 23:03:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -111,7 +111,7 @@ actuarial_table::actuarial_table(std::string const& filename, int table_number)
             << table_number_
             << " in file '"
             << filename_
-            << "."
+            << "'."
             << LMI_FLUSH
             ;
         }
@@ -254,7 +254,7 @@ void actuarial_table::find_table()
             }
         }
 
-    if(table_offset_ == std::streampos(-1))
+    if(std::streampos(-1) == table_offset_)
         {
         fatal_error()
             << "Table "
