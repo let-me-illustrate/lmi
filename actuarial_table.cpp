@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.26 2007-10-07 23:45:39 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.27 2007-10-08 00:27:49 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -164,14 +164,8 @@ std::vector<double> actuarial_table::values_elaborated
             break;
         case e_reenter_upon_rate_reset:
             {
-// Minimum age is temporarily hardcoded here. It really needs to be
-// ascertained from the SOA database file, but that will require an
-// extensive refactoring. This value is correct for the
-//   "1956 Texas Chamberlain, Male & Female, Age next"
-// table used in the unit test.
-            int const minimum_age = 1; // Temporary--for testing only.
-            int r = std::min
-                (issue_age - minimum_age
+            int const r = std::min
+                (issue_age - min_age_
                 ,full_years_since_last_rate_reset
                 );
             std::vector<double> v = values
