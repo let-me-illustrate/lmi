@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.13 2007-10-07 14:16:26 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.14 2007-10-08 23:02:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -114,6 +114,17 @@ void mete()
 void assay_speed()
 {
     std::cout << "  Speed test: " << TimeAnAliquot(mete) << '\n';
+}
+
+void test_precondition_failures()
+{
+    std::string const qx_cso("/opt/lmi/data/qx_cso");
+
+    BOOST_TEST_THROW
+        (actuarial_table("nonexistent", 0)
+        ,std::runtime_error
+        ,"There is no table number 0 in file 'nonexistent'."
+        );
 }
 
 void test_e_reenter_never()
@@ -212,6 +223,7 @@ void test_e_reenter_upon_rate_reset()
 
 int test_main(int, char*[])
 {
+    test_precondition_failures();
     test_e_reenter_never();
     test_e_reenter_at_inforce_duration();
     test_e_reenter_upon_rate_reset();
