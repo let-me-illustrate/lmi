@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.29 2007-10-08 23:03:28 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.30 2007-10-09 00:20:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -128,10 +128,6 @@ actuarial_table::~actuarial_table()
 
 std::vector<double> actuarial_table::values(int issue_age, int length) const
 {
-    LMI_ASSERT(min_age_ <= issue_age && issue_age <= max_age_);
-    LMI_ASSERT(0 <= length);
-    LMI_ASSERT(issue_age + length <= max_age_ + 1);
-
     return specific_values(issue_age, length);
 }
 
@@ -153,7 +149,7 @@ std::vector<double> actuarial_table::values_elaborated
         {
         case e_reenter_at_inforce_duration:
             {
-            std::vector<double> v = values
+            std::vector<double> v = specific_values
                 (issue_age + full_years_since_issue
                 ,length    - full_years_since_issue
                 );
@@ -167,7 +163,7 @@ std::vector<double> actuarial_table::values_elaborated
                 (issue_age - min_age_
                 ,full_years_since_last_rate_reset
                 );
-            std::vector<double> v = values
+            std::vector<double> v = specific_values
                 (issue_age - r
                 ,length    + r
                 );
@@ -457,6 +453,10 @@ std::vector<double> actuarial_table::specific_values
     ,int length
     ) const
 {
+    LMI_ASSERT(min_age_ <= issue_age && issue_age <= max_age_);
+    LMI_ASSERT(0 <= length);
+    LMI_ASSERT(issue_age + length <= max_age_ + 1);
+
     std::vector<double> v;
     switch(table_type_)
         {
