@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.919 2007-10-08 00:27:49 chicares Exp $
+// $Id: ChangeLog,v 1.920 2007-10-09 01:25:37 chicares Exp $
 
 MAINTENANCE
 
@@ -13735,4 +13735,34 @@ Assert more preconditions.
 
   actuarial_table.cpp
 Remove a workaround temporarily added on 20071006T2256Z.
+
+20071008T1609Z <chicares@cox.net> [1213]
+
+  actuarial_table.cpp
+Refactor for clarity; assert invariants for safety.
+
+20071008T2302Z <chicares@cox.net> [1213]
+
+  actuarial_table_test.cpp
+Add a unit test, revealing a defect introduced 20050828T2137.
+
+20071008T2303Z <chicares@cox.net> [1213]
+
+  actuarial_table.cpp
+Fix defect introduced 20050828T2137Z and noted 20071008T2302Z.
+
+20071009T0019Z <chicares@cox.net> [1213]
+
+  actuarial_table_test.cpp
+Add a unit test.
+
+20071009T0020Z <chicares@cox.net> [1213]
+
+  actuarial_table.cpp
+Refactor.
+
+20071009T0125Z <chicares@cox.net> [1213]
+
+  actuarial_table_test.cpp
+Add a unit test.
 

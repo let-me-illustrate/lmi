@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.15 2007-10-09 00:19:20 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.16 2007-10-09 01:25:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -152,6 +152,19 @@ void test_e_reenter_never()
 
 void test_e_reenter_at_inforce_duration()
 {
+    std::string const qx_cso("/opt/lmi/data/qx_cso");
+    std::vector<double> rates;
+
+    rates = actuarial_table(qx_cso, 47).values_elaborated
+        (80      // issue_age
+        ,26      // length
+        ,e_reenter_at_inforce_duration
+        ,9      // full_years_since_issue
+        ,0      // full_years_since_last_rate_reset
+        );
+    std::vector<double> v = table_47_age_89();
+    v.insert(v.begin(), 9, 0.0);
+    BOOST_TEST(rates == v);
 }
 
 /// Test with SOA table 308 in 'qx_ins', chosen because it's a select
