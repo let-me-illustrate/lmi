@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.14 2007-10-08 23:02:37 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.15 2007-10-09 00:19:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -118,12 +118,18 @@ void assay_speed()
 
 void test_precondition_failures()
 {
-    std::string const qx_cso("/opt/lmi/data/qx_cso");
-
     BOOST_TEST_THROW
         (actuarial_table("nonexistent", 0)
         ,std::runtime_error
         ,"There is no table number 0 in file 'nonexistent'."
+        );
+
+    std::string const qx_cso("/opt/lmi/data/qx_cso");
+    actuarial_table z(qx_cso, 47);
+    BOOST_TEST_THROW
+        (z.values_elaborated(3, 8, e_reenter_never, 0, 0)
+        ,std::runtime_error
+        ,"Table-lookup method 0 is not valid in this context."
         );
 }
 
