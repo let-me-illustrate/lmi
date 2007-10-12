@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.920 2007-10-09 01:25:37 chicares Exp $
+// $Id: ChangeLog,v 1.921 2007-10-12 16:07:24 chicares Exp $
 
 MAINTENANCE
 
@@ -13765,4 +13765,19 @@ Refactor.
 
   actuarial_table_test.cpp
 Add a unit test.
+
+20071012T1011Z <chicares@cox.net> [1213]
+
+  actuarial_table_test.cpp
+Refactor for extensibility.
+
+20071012T1258Z <chicares@cox.net> [1213]
+
+  actuarial_table_test.cpp
+Add more tests for the e_reenter_at_inforce_duration case.
+
+20071012T1607Z <chicares@cox.net> [1213]
+
+  actuarial_table_test.cpp
+Add a test for entering a select table beyond its maximum select age.
 
