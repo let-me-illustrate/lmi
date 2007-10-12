@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.18 2007-10-12 12:58:18 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.19 2007-10-12 16:07:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -148,6 +148,14 @@ void test_e_reenter_never()
 
     rates = actuarial_table(qx_cso, 47).values(89,  17);
     BOOST_TEST(rates == table_47_age_89());
+
+    // Arguably, this ought to signal an error, because 90 exceeds the
+    // maximum select age. However, this behavior is reasonable, and
+    // the e_reenter_at_inforce_duration implementation relies on it.
+    rates = actuarial_table(qx_cso, 47).values(90,  16);
+    std::vector<double> gauge = table_47_age_89();
+    gauge.erase(gauge.begin());
+    BOOST_TEST(rates == gauge);
 }
 
 void test_e_reenter_at_inforce_duration()
