@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.922 2007-10-14 15:19:29 chicares Exp $
+// $Id: ChangeLog,v 1.923 2007-10-14 23:50:52 chicares Exp $
 
 MAINTENANCE
 
@@ -13804,4 +13804,9 @@ Demonstrate an arguable anomaly.
   actuarial_table.hpp
 Remove the arguable anomaly identified 20071014T1518Z. The updated
 documentation nonetheless permits it, explaining why it is no defect.
+
+20071014T2350Z <chicares@cox.net> [1212]
+
+  actuarial_table.cpp
+Remove a comment resolved by the 20071008T2302Z change.
 
