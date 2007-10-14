@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.19 2007-10-12 16:07:24 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.20 2007-10-14 15:18:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -279,12 +279,45 @@ void test_e_reenter_upon_rate_reset()
     BOOST_TEST(rates == gauge1);
 }
 
+/// The e_actuarial_table_method variants are designed for use with
+/// select-and-ultimate tables. However, they must work with attained-
+/// age tables as well (for which they should be irrelevant).
+
+void test_exotic_lookup_methods_with_attained_age_table()
+{
+    std::string const qx_cso("/opt/lmi/data/qx_cso");
+    actuarial_table const table42(qx_cso, 42);
+    std::vector<double> rates;
+
+    rates = table42.values(0, 100);
+    BOOST_TEST(rates == table_42(0));
+
+    rates = table42.values_elaborated
+        (0
+        ,100
+        ,e_reenter_at_inforce_duration
+        ,99 // full_years_since_issue
+        ,0  // full_years_since_last_rate_reset
+        );
+    BOOST_TEST(rates == table_42(0));
+
+    rates = table42.values_elaborated
+        (0
+        ,100
+        ,e_reenter_upon_rate_reset
+        ,0  // full_years_since_issue
+        ,99 // full_years_since_last_rate_reset
+        );
+    BOOST_TEST(rates == table_42(0));
+}
+
 int test_main(int, char*[])
 {
     test_precondition_failures();
     test_e_reenter_never();
     test_e_reenter_at_inforce_duration();
     test_e_reenter_upon_rate_reset();
+    test_exotic_lookup_methods_with_attained_age_table();
 
     assay_speed();
 
