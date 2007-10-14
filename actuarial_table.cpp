@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.30 2007-10-09 00:20:21 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.31 2007-10-14 09:48:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -45,20 +45,6 @@
 #include <istream>
 #include <limits>
 #include <stdexcept>
-
-// Read a table from a database in the binary format designed by the
-// Society of Actuaries (SOA) and used for the tables SOA publishes.
-
-// Do not check CRCs of these tables as SOA's software does. Tests
-// show that CRC checking makes the illustration system considerably
-// slower. Data should generally be validated against published
-// checksums when acquired (e.g., downloaded), not before each use.
-// Local hardware that stores SOA tables probably performs a CRC
-// already, as do networks and communications links. Repeating such
-// tests in software is costly and redundant except for authentication
-// of downloads, particularly against tampering; but for that purpose,
-// a more secure algorithm should be used. Besides, SOA's software
-// calculates CRCs incorrectly.
 
 namespace
 {
