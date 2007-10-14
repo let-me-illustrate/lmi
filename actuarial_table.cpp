@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.31 2007-10-14 09:48:22 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.32 2007-10-14 12:37:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -53,16 +53,18 @@ namespace
     //   - exactly 2^16
     //   - more than 2^16
 
-    // The binary format that the SOA uses for its published tables
-    // has only a sixteen-bit integer to represent a table's length
-    // in bytes. This length must be read as unsigned because it may
-    // be 2^15 or greater, but less than 2^16.
+    /// The binary format that the SOA uses for its published tables
+    /// has only a sixteen-bit integer to represent a table's length
+    /// in bytes. This length must be read as unsigned because it may
+    /// be 2^15 or greater, but less than 2^16.
+
     typedef boost::uint16_t soa_table_length_type;
-    int soa_table_length_max =
+    int const soa_table_length_max =
         std::numeric_limits<soa_table_length_type>::max()
         ;
 
-    int methuselah = 969; // Genesis 5:27.
+    /// Genesis 5:27.
+    int const methuselah = 969;
 
     template<typename T>
     T read_datum(std::istream& is, T& t, boost::int16_t nominal_length)
@@ -171,6 +173,8 @@ std::vector<double> actuarial_table::values_elaborated
         }
 }
 
+/// Find the table specified by table_number_.
+///
 /// SOA documentation does not specify the domain of table numbers,
 /// but their tables seem to use only positive integers representable
 /// as 32-bit signed int, so take that as the range.
@@ -251,6 +255,8 @@ void actuarial_table::find_table()
         }
 }
 
+/// Read a table, parsing its header and values.
+///
 /// Data records have variable length:
 ///   2-byte integer: record type
 ///   2-byte integer: nominal length
@@ -265,27 +271,6 @@ void actuarial_table::find_table()
 ///   14   2-byte integer:  Select period
 ///   15   2-byte integer:  Maximum select age (if zero, then it's max age)
 ///   17   8-byte doubles:  Table values
-///
-/// Record type 17, which stores values, is of special interest.
-/// The number of values equals the nominal length, in the SOA
-/// implementation. That means that no table can have more than
-/// 4096 values, which is a draconian restriction: 100 x 100
-/// tables are common enough in real-world practice.
-///
-/// However, the actual number of values can always be deduced
-/// correctly from context. And the context is always known when
-/// the values are read, because the SOA implementation always
-/// writes the values after all records that identify the context.
-/// Therefore, the nominal length can be disregarded for record
-/// type 17, and any desired number of values written. If the
-/// actual number of values exceeds 4096, then this implementation
-/// handles them correctly, but the SOA implementation does not.
-///
-/// GWC's email of Wednesday, December 16, 1998 5:56 PM to the
-/// author of the SOA implementation proposed a patch to overcome
-/// this limitation, but it was not accepted, and the limitation
-/// persists in later 32-bit versions of the software distributed
-/// by the SOA even as this is written on 2005-01-13.
 
 void actuarial_table::parse_table()
 {
@@ -392,21 +377,46 @@ void actuarial_table::parse_table()
     LMI_ASSERT(-1 != max_select_age_);
 }
 
+/// Read values (record type 17) from a table.
+///
+/// The number of values equals the nominal length, in the SOA
+/// implementation. That means that no table can have more than 4096
+/// values, which is a draconian restriction: 100 x 100 tables are
+/// common enough in real-world practice.
+///
+/// However, the actual number of values can always be deduced
+/// correctly from context. And the context is always known when the
+/// values are read, because the SOA implementation always writes the
+/// values after all records that identify the context. Therefore, the
+/// nominal length can be disregarded for record type 17, and any
+/// desired number of values written. If the actual number of values
+/// exceeds 4096, then this implementation handles them correctly, but
+/// the SOA implementation does not.
+///
+/// GWC's email of Wednesday, December 16, 1998 5:56 PM to the author
+/// of the SOA implementation proposed a patch to overcome this
+/// limitation, but it was not accepted, and the limitation persists
+/// in later 32-bit versions of the software distributed by the SOA
+/// even as this is written on 2005-01-13.
+///
+/// One might suppose that the select period for tables that are not
+/// select couldn't be nonzero, but the SOA publishes tables that
+/// don't honor that invariant; this implementation imposes it after
+/// the fact.
+///
+/// If max_select_age_ is given as zero, then it's apparently to be
+/// taken as unlimited, so its value should be max_age_; this
+/// implementation makes it so after the fact.
+
 void actuarial_table::read_values(std::istream& is, int nominal_length)
 {
     if('S' != table_type_)
         {
-        // One might suppose that the select period for tables
-        // that are not select couldn't be nonzero, but the SOA
-        // publishes tables that don't honor that invariant.
-        //   LMI_ASSERT(0 == select_period_); // Could fail.
         select_period_ = 0;
         }
 
     LMI_ASSERT(min_age_ <= max_age_);
 
-    // If max_select_age_ is given as zero, then it's to be taken as
-    // unlimited, so its value should be max_age_.
     if(0 == max_select_age_)
         {
         max_select_age_ = max_age_;
@@ -433,6 +443,8 @@ void actuarial_table::read_values(std::istream& is, int nominal_length)
         data_[j] = *reinterpret_cast<double*>(z);
         }
 }
+
+/// Read a given number of values for a given issue age.
 
 std::vector<double> actuarial_table::specific_values
     (int issue_age
