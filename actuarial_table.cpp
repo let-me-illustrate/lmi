@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.33 2007-10-14 15:19:29 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.34 2007-10-14 23:50:52 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -91,7 +91,6 @@ actuarial_table::actuarial_table(std::string const& filename, int table_number)
     ,max_select_age_ (-1)
     ,table_offset_   (-1)
 {
-    // TODO ?? Add a unit test for this.
     if(table_number_ <= 0)
         {
         fatal_error()
