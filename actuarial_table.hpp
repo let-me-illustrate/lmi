@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.hpp,v 1.7 2007-10-14 09:48:22 chicares Exp $
+// $Id: actuarial_table.hpp,v 1.8 2007-10-14 12:37:23 chicares Exp $
 
 #ifndef actuarial_table_hpp
 #define actuarial_table_hpp
@@ -34,7 +34,25 @@
 #include <string>
 #include <vector>
 
-/// Table-reentry methods. Let
+/// Reentry methods for select tables.
+///
+/// Reentry occurs only on anniversary.
+///
+/// At least in the present implementation, illustrations reflect
+/// reentry only retrospectively, because future reentry is subject to
+/// qualification. Furthermore, it is assumed in general that only the
+/// latest reentry is known and prior history is unavailable.
+/// Therefore, reentry occurs at most once, and it is handled by
+/// transforming the arguments of the raw table-lookup functions.
+/// These transformations take the general form
+///   map [A]+B to [C]+D
+/// it being understood that a table's age limits must be respected:
+/// if C would violate that constraint, then
+///   [C+Z]+D-Z
+/// is used instead, where Z (unconstrained as to sign) is chosen so
+/// that [C+Z] is the closest permissible select age.
+///
+/// Let
 ///   j = projected duration from date of [re]illustration
 ///   r = number of full years since last rate reset
 ///   s = number of full years since issue
@@ -48,7 +66,12 @@
 ///   map [x]+s+j to [x+s]+j
 /// Use this when rates are deemed to reset each year, but
 /// illustrations are to reflect reentry only retrospectively, e.g.,
-/// because no future reset is guaranteed.
+/// because no future reset is guaranteed. Rates for attained ages in
+/// the half-open interval [x, x+s) would not be used because they
+/// correspond to policy years preceding the illustration date, and
+/// are indeterminate anyway because reentry history is unknown;
+/// therefore, they may be set to zero, though that behavior is not
+/// guaranteed.
 ///
 /// e_reenter_upon_rate_reset
 ///   map [x]+s+j to [x-r]+s+r+j
@@ -57,8 +80,6 @@
 /// because no future reset is guaranteed. This reset date can precede
 /// the issue date, in order to accommodate certificates issued to a
 /// group with a common reset date.
-///
-/// Reentry occurs only on anniversary.
 
 enum e_actuarial_table_method
     {e_reenter_never               = 0
@@ -66,19 +87,20 @@ enum e_actuarial_table_method
     ,e_reenter_upon_rate_reset     = 2
     };
 
-// Read a table from a database in the binary format designed by the
-// Society of Actuaries (SOA) and used for the tables SOA publishes.
-
-// Do not check CRCs of these tables as SOA's software does. Tests
-// show that CRC checking makes the illustration system considerably
-// slower. Data should generally be validated against published
-// checksums when acquired (e.g., downloaded), not before each use.
-// Local hardware that stores SOA tables probably performs a CRC
-// already, as do networks and communications links. Repeating such
-// tests in software is costly and redundant except for authentication
-// of downloads, particularly against tampering; but for that purpose,
-// a more secure algorithm should be used. Besides, SOA's software
-// calculates CRCs incorrectly.
+/// Read a table from a database in the binary format designed by the
+/// Society of Actuaries (SOA) and used for the tables SOA publishes.
+///
+/// Do not check CRCs of these tables as the SOA software does. Tests
+/// show that CRC checking makes the illustration system considerably
+/// slower. Data should generally be validated against published
+/// checksums when acquired (e.g., downloaded), not before each use.
+/// CRC checking was useful for guarding against transmission errors
+/// when the first SOA tables were published, prior to the internet
+/// revolution, but today it's a relic of a bygone era, and lmi uses a
+/// stronger algorithm for data authentication already. Besides, the
+/// CRCs in the SOA's tables have always been incorrect, and the SOA
+/// has apparently chosen to leave them that way for backward
+/// compatibility.
 
 class actuarial_table
     :private boost::noncopyable
@@ -115,7 +137,7 @@ class actuarial_table
     std::string filename_     ;
     int         table_number_ ;
 
-    // Table parameters, in order read from header.
+    // Table parameters, in order read from table header.
     char table_type_     ;
     int  min_age_        ;
     int  max_age_        ;
