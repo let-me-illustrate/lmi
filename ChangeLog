@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.921 2007-10-12 16:07:24 chicares Exp $
+// $Id: ChangeLog,v 1.922 2007-10-14 15:19:29 chicares Exp $
 
 MAINTENANCE
 
@@ -13780,4 +13780,28 @@ Add more tests for the e_reenter_at_inforce_duration case.
 
   actuarial_table_test.cpp
 Add a test for entering a select table beyond its maximum select age.
+
+20071014T0948Z <chicares@cox.net> [1213]
+
+  actuarial_table.cpp
+  actuarial_table.hpp
+Move one block of text from one file to another.
+
+20071014T1237Z <chicares@cox.net> [1213]
+
+  actuarial_table.cpp
+  actuarial_table.hpp
+Improve documentation.
+
+20071014T1518Z <chicares@cox.net> [1213]
+
+  actuarial_table_test.cpp
+Demonstrate an arguable anomaly.
+
+20071014T1519Z <chicares@cox.net> [1213]
+
+  actuarial_table.cpp
+  actuarial_table.hpp
+Remove the arguable anomaly identified 20071014T1518Z. The updated
+documentation nonetheless permits it, explaining why it is no defect.
 

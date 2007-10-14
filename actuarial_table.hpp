@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.hpp,v 1.8 2007-10-14 12:37:23 chicares Exp $
+// $Id: actuarial_table.hpp,v 1.9 2007-10-14 15:19:29 chicares Exp $
 
 #ifndef actuarial_table_hpp
 #define actuarial_table_hpp
@@ -80,6 +80,10 @@
 /// because no future reset is guaranteed. This reset date can precede
 /// the issue date, in order to accommodate certificates issued to a
 /// group with a common reset date.
+///
+/// These methods are designed for select-and-ultimate tables. For
+/// attained-age tables, they are all equivalent wrt all values that
+/// are not documented above as indeterminate.
 
 enum e_actuarial_table_method
     {e_reenter_never               = 0
