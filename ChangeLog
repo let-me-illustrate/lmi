@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.923 2007-10-14 23:50:52 chicares Exp $
+// $Id: ChangeLog,v 1.924 2007-10-17 11:50:45 chicares Exp $
 
 MAINTENANCE
 
@@ -13809,4 +13809,9 @@ documentation nonetheless permits it, explaining why it is no defect.
 
   actuarial_table.cpp
 Remove a comment resolved by the 20071008T2302Z change.
+
+20071017T1150Z <chicares@cox.net> [1212]
+
+  version.hpp
+Mark release candidate.
 
