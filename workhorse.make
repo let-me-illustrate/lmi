@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.98 2007-07-31 00:37:26 chicares Exp $
+# $Id: workhorse.make,v 1.99 2007-10-17 12:12:17 chicares Exp $
 
 ################################################################################
 
@@ -643,7 +643,7 @@ all_library_directories := \
 
 EXTRA_LDFLAGS :=
 
-# Keep mpatrol at the end of the list.
+# Keep mpatrol at the end of the library list.
 REQUIRED_LDFLAGS = \
   $(addprefix -L , $(all_library_directories)) \
   $(EXTRA_LDFLAGS) \
@@ -864,6 +864,9 @@ eraseme.pol:
 ################################################################################
 
 # Test data.
+
+sample.cns: $(addprefix $(src_dir)/,sample.cns)
+sample.ill: $(addprefix $(src_dir)/,sample.ill)
 
 test_data := \
   sample.cns \
