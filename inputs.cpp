@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputs.cpp,v 1.17 2007-03-04 15:28:30 chicares Exp $
+// $Id: inputs.cpp,v 1.18 2007-10-17 14:54:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -84,6 +84,7 @@ InputParms::InputParms()
     ,PostRetType                   (e_obsolete_same_as_initial)
     ,PostRetAmt                    (0.0)
     ,PostRetPct                    (1.0)
+    ,UseCurrentDeclaredRate        ("No")
     ,IntRateTypeGA                 (e_netrate)
     ,IntRateTypeSA                 (e_grossrate)
     ,LoanIntRate                   (0.06)
@@ -450,6 +451,7 @@ bool InputParms::operator==(InputParms const& z) const
     if(PostRetType                      != z.PostRetType                     ) return false;
     if(PostRetAmt                       != z.PostRetAmt                      ) return false;
     if(PostRetPct                       != z.PostRetPct                      ) return false;
+    if(UseCurrentDeclaredRate           != z.UseCurrentDeclaredRate          ) return false;
     if(IntRateTypeGA                    != z.IntRateTypeGA                   ) return false;
     if(IntRateTypeSA                    != z.IntRateTypeSA                   ) return false;
     if(LoanIntRate                      != z.LoanIntRate                     ) return false;
@@ -507,6 +509,7 @@ bool InputParms::operator==(InputParms const& z) const
     if(AvoidMec                         != z.AvoidMec                        ) return false;
     if(RetireesCanEnroll                != z.RetireesCanEnroll               ) return false;
     if(GroupUWType                      != z.GroupUWType                     ) return false;
+    if(LastCoiReentryDate               != z.LastCoiReentryDate              ) return false;
     if(BlendMortGender                  != z.BlendMortGender                 ) return false;
     if(BlendMortSmoking                 != z.BlendMortSmoking                ) return false;
     if(MaleProportion                   != z.MaleProportion                  ) return false;

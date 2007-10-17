@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputs.hpp,v 1.11 2007-01-27 00:00:51 wboutin Exp $
+// $Id: inputs.hpp,v 1.12 2007-10-17 14:54:22 chicares Exp $
 
 #ifndef inputs_hpp
 #define inputs_hpp
@@ -140,6 +140,7 @@ class LMI_SO InputParms
     r_nonnegative_double PostRetAmt           ; // obsolescent
     r_nonnegative_double PostRetPct           ; // obsolescent
 
+    e_yes_or_no          UseCurrentDeclaredRate;
     e_int_rate_type      IntRateTypeGA        ;
     e_int_rate_type      IntRateTypeSA        ;
     r_loan_int_rate      LoanIntRate          ;
@@ -229,6 +230,7 @@ class LMI_SO InputParms
 
     e_yes_or_no          RetireesCanEnroll    ;
     e_uw_basis           GroupUWType          ;
+    r_date               LastCoiReentryDate   ;
     e_yes_or_no          BlendMortGender      ;
     e_yes_or_no          BlendMortSmoking     ;
     r_proportion         MaleProportion       ;
