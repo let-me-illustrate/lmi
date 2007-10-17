@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.cpp,v 1.24 2007-01-27 00:00:51 wboutin Exp $
+// $Id: inputillus.cpp,v 1.25 2007-10-17 14:54:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -702,6 +702,7 @@ void IllusInputParms::ascribe_members()
     ascribe("SolveTargetYear"              , &IllusInputParms::SolveTgtYear               );
     ascribe("SolveBasis"                   , &IllusInputParms::SolveBasis                 ); // !
     ascribe("SolveSeparateAccountBasis"    , &IllusInputParms::SolveSABasis               );
+    ascribe("UseCurrentDeclaredRate"       , &IllusInputParms::UseCurrentDeclaredRate     );
     ascribe("GeneralAccountRateType"       , &IllusInputParms::IntRateTypeGA              );
     ascribe("SeparateAccountRateType"      , &IllusInputParms::IntRateTypeSA              );
     ascribe("LoanRate"                     , &IllusInputParms::LoanIntRate                ); // !
@@ -754,6 +755,7 @@ void IllusInputParms::ascribe_members()
     ascribe("AvoidMecMethod"               , &IllusInputParms::AvoidMec                   );
     ascribe("RetireesCanEnroll"            , &IllusInputParms::RetireesCanEnroll          );
     ascribe("GroupUnderwritingType"        , &IllusInputParms::GroupUWType                );
+    ascribe("LastCoiReentryDate"           , &IllusInputParms::LastCoiReentryDate         );
     ascribe("BlendGender"                  , &IllusInputParms::BlendMortGender            );
     ascribe("BlendSmoking"                 , &IllusInputParms::BlendMortSmoking           );
     ascribe("MaleProportion"               , &IllusInputParms::MaleProportion             );

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.21 2007-01-27 00:00:51 wboutin Exp $
+// $Id: input.hpp,v 1.22 2007-10-17 14:54:22 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -202,6 +202,7 @@ class LMI_SO Input
     tnr_duration             SolveTargetYear                 ;
     mce_basis                SolveBasis                      ; // TODO ?? Poor name, but enumerators are correct.
     mce_sep_acct_basis       SolveSeparateAccountBasis       ;
+    mce_yes_or_no            UseCurrentDeclaredRate          ;
     mce_interest_rate_type   GeneralAccountRateType          ;
     mce_interest_rate_type   SeparateAccountRateType         ;
     tnr_proportion           LoanRate                        ;
@@ -248,6 +249,7 @@ class LMI_SO Input
     mce_mec_avoid_method     AvoidMecMethod                  ;
     mce_yes_or_no            RetireesCanEnroll               ;
     mce_uw_basis             GroupUnderwritingType           ;
+    tnr_date                 LastCoiReentryDate              ;
     mce_yes_or_no            BlendGender                     ;
     mce_yes_or_no            BlendSmoking                    ;
     tnr_proportion           MaleProportion                  ;

@@ -108,6 +108,7 @@
     <Internal1035ExchangeBasis>0</Internal1035ExchangeBasis>
     <Internal1035ExchangeFromMec>No</Internal1035ExchangeFromMec>
     <IssueAge>45</IssueAge>
+    <LastCoiReentryDate>2454040</LastCoiReentryDate>
     <LastMaterialChangeDate>2454040</LastMaterialChangeDate>
     <LoanAmount>0</LoanAmount>
     <LoanFromAge>45</LoanFromAge>
@@ -196,6 +197,7 @@
     <TotalSpecifiedAmount>1e+006</TotalSpecifiedAmount>
     <UnderwritingClass>Standard</UnderwritingClass>
     <UseAverageOfAllFunds>No</UseAverageOfAllFunds>
+    <UseCurrentDeclaredRate>No</UseCurrentDeclaredRate>
     <UseExperienceRating>No</UseExperienceRating>
     <UseOffshoreCorridorFactor>1</UseOffshoreCorridorFactor>
     <UsePartialMortality>No</UsePartialMortality>
