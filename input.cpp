@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.17 2007-01-27 00:00:51 wboutin Exp $
+// $Id: input.cpp,v 1.18 2007-10-17 14:54:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -163,6 +163,7 @@ void Input::AscribeMembers()
     ascribe("SolveTargetYear"                       , &Input::SolveTargetYear                       );
     ascribe("SolveBasis"                            , &Input::SolveBasis                            );
     ascribe("SolveSeparateAccountBasis"             , &Input::SolveSeparateAccountBasis             );
+    ascribe("UseCurrentDeclaredRate"                , &Input::UseCurrentDeclaredRate                );
     ascribe("GeneralAccountRateType"                , &Input::GeneralAccountRateType                );
     ascribe("SeparateAccountRateType"               , &Input::SeparateAccountRateType               );
     ascribe("LoanRate"                              , &Input::LoanRate                              );
@@ -209,6 +210,7 @@ void Input::AscribeMembers()
     ascribe("AvoidMecMethod"                        , &Input::AvoidMecMethod                        );
     ascribe("RetireesCanEnroll"                     , &Input::RetireesCanEnroll                     );
     ascribe("GroupUnderwritingType"                 , &Input::GroupUnderwritingType                 );
+    ascribe("LastCoiReentryDate"                    , &Input::LastCoiReentryDate                    );
     ascribe("BlendGender"                           , &Input::BlendGender                           );
     ascribe("BlendSmoking"                          , &Input::BlendSmoking                          );
     ascribe("MaleProportion"                        , &Input::MaleProportion                        );
