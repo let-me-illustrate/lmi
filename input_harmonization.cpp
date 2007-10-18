@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.48 2007-10-18 15:00:24 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.49 2007-10-18 16:11:39 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -413,6 +413,10 @@ void Input::DoHarmonize()
         );
     FlatExtra.enable(database_->Query(DB_AllowFlatExtras));
 
+    LastCoiReentryDate.maximum(EffectiveDate.value());
+    // INPUT !! Make an appropriate header available for this enumerator:
+//    LastCoiReentryDate.enable(e_reenter_upon_rate_reset == database_->Query(DB_CoiInforceReentry));
+
     BlendGender.enable(database_->Query(DB_AllowMortBlendSex));
     bool blend_mortality_by_gender = "Yes" == BlendGender;
 
@@ -673,6 +677,7 @@ false // Silly workaround for now.
     SeparateAccountRateType.allow(mce_net_rate  , anything_goes);
 
     bool curr_int_rate_solve = false; // May be useful someday.
+    UseCurrentDeclaredRate .enable(!curr_int_rate_solve && allow_gen_acct);
     GeneralAccountRate     .enable(!curr_int_rate_solve && allow_gen_acct && "No" == UseCurrentDeclaredRate);
     GeneralAccountRateType .enable(!curr_int_rate_solve && allow_gen_acct && "No" == UseCurrentDeclaredRate);
     SeparateAccountRate    .enable(!curr_int_rate_solve && allow_sep_acct);
@@ -1001,6 +1006,15 @@ void Input::DoTransmogrify()
         EffectiveDate = calendar_date();
         // TODO ?? Consider factoring out date calculations and making
         // them conditional, if justified by measurement of their cost.
+        DoHarmonize();
+        }
+
+    // INPUT !! This won't be ready for release or testing (and must
+    // not be added to production '.xrc' files) until the rococo
+    // 'cached_credited_rate' approach is expunged.
+    if("Yes" == UseCurrentDeclaredRate)
+        {
+        GeneralAccountRate = datum_string(current_credited_rate(*database_));
         DoHarmonize();
         }
 
