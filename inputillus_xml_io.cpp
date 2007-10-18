@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.27 2007-01-27 00:00:51 wboutin Exp $
+// $Id: inputillus_xml_io.cpp,v 1.28 2007-10-18 13:05:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -208,6 +208,11 @@ using namespace xml;
     if(EffectiveDateToday && !global_settings::instance().regression_testing())
         {
         EffDate = calendar_date();
+        }
+
+    if(EffDate < LastCoiReentryDate)
+        {
+        LastCoiReentryDate = EffDate;
         }
 
 // If you want to see the ones that didn't get assigned:

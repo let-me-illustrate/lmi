@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.18 2007-10-17 14:54:22 chicares Exp $
+// $Id: input.cpp,v 1.19 2007-10-18 13:05:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -372,6 +372,11 @@ MvcModel::StateType Input::DoState() const
 
 void Input::DoCustomizeInitialValues()
 {
+// INPUT !! Migration note: write something like this:
+//    LastCoiReentryDate.maximum(EffectiveDate.value());
+//    DoEnforceCircumscription("LastCoiReentryDate");
+// in lieu of the corresponding code in IllusInputParms::read()
+// when old input classes are eliminated.
 }
 
 void Input::DoEnforceCircumscription(std::string const& name)
