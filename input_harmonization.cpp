@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.47 2007-07-30 14:14:26 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.48 2007-10-18 15:00:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -664,7 +664,7 @@ false // Silly workaround for now.
 // The compliance reasons don't seem sensible, but that's another
 // matter; at any rate, they belong in the product database.
 
-    GeneralAccountRateType .allow(mce_gross_rate, anything_goes);
+    GeneralAccountRateType .allow(mce_gross_rate, anything_goes && "No" == UseCurrentDeclaredRate);
     GeneralAccountRateType .allow(mce_cred_rate , true);
     GeneralAccountRateType .allow(mce_net_rate  , false);
 
@@ -673,8 +673,10 @@ false // Silly workaround for now.
     SeparateAccountRateType.allow(mce_net_rate  , anything_goes);
 
     bool curr_int_rate_solve = false; // May be useful someday.
-    GeneralAccountRate .enable(!curr_int_rate_solve);
-    SeparateAccountRate.enable(!curr_int_rate_solve);
+    GeneralAccountRate     .enable(!curr_int_rate_solve && allow_gen_acct && "No" == UseCurrentDeclaredRate);
+    GeneralAccountRateType .enable(!curr_int_rate_solve && allow_gen_acct && "No" == UseCurrentDeclaredRate);
+    SeparateAccountRate    .enable(!curr_int_rate_solve && allow_sep_acct);
+    SeparateAccountRateType.enable(!curr_int_rate_solve && allow_sep_acct);
 
     // TODO ?? VLR not yet implemented.
     bool allow_vlr =
