@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.924 2007-10-17 11:50:45 chicares Exp $
+// $Id: ChangeLog,v 1.925 2007-10-18 16:11:39 chicares Exp $
 
 MAINTENANCE
 
@@ -13814,4 +13814,41 @@ Remove a comment resolved by the 20071008T2302Z change.
 
   version.hpp
 Mark release candidate.
+
+20071017T1212Z <chicares@cox.net> [1212]
+
+  workhorse.make
+Make sure test data is updated before use.
+
+20071017T1454Z <chicares@cox.net> [1212]
+
+  input.cpp
+  input.hpp
+  inputillus.cpp
+  inputs.cpp
+  inputs.hpp
+  sample.cns
+  sample.ill
+Add two new input fields.
+
+20071018T1302Z <chicares@cox.net> [1212]
+
+  xml_notebook.xrc
+Add two new input fields.
+
+20071018T1305Z <chicares@cox.net> [1212]
+
+  input.cpp
+  inputillus_xml_io.cpp
+Enforce initial consistency for 'LastCoiReentryDate'.
+
+20071018T1500Z <chicares@cox.net> [1212]
+
+  input_harmonization.cpp
+Tighten rules for certain interest-rate entities.
+
+20071018T1611Z <chicares@cox.net> [1212]
+
+  input_harmonization.cpp
+Add rules for new entities.
 
