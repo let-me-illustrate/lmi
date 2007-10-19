@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.927 2007-10-19 15:29:41 chicares Exp $
+// $Id: ChangeLog,v 1.928 2007-10-19 15:32:33 chicares Exp $
 
 MAINTENANCE
 
@@ -13876,4 +13876,9 @@ Enable the 'LastCoiReentryDate' control only when it's relevant.
 
   ihs_avmly.cpp
 Improve documentation.
+
+20071019T1532Z <chicares@cox.net> [1211]
+
+  version.hpp
+Mark release candidate.
 
