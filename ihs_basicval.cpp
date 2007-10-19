@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.37 2007-10-07 14:16:27 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.38 2007-10-19 02:50:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,6 +33,7 @@
 #include "actuarial_table.hpp"
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "calendar_date.hpp"
 #include "data_directory.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
@@ -1558,7 +1559,7 @@ std::vector<double> BasicValues::GetActuarialTable
             ,GetLength()
             ,method
             ,Input_->InforceYear
-            ,0 // Placeholder for group reset duration.
+            ,attained_age(Input_->LastCoiReentryDate, Input_->EffDate, false)
             );
         }
     else
