@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.xpp,v 1.18 2007-04-01 22:38:19 chicares Exp $
+// $Id: dbnames.xpp,v 1.19 2007-10-19 02:51:23 chicares Exp $
 
 #define DB_NAMES \
 {DB_FIRST,DB_FIRST,"dummy","dummy",}, \
@@ -326,7 +326,7 @@
 {DB_NominallyPar,DB_Topic_Misc,"NominallyPar","Nominally participating, but dividends expected to be zero",}, \
 {DB_Has1035ExchCharge,DB_Topic_SurrChgs,"Has1035ExchCharge","Has charge or market-value adjustment on 1035 exchange",}, \
 {DB_LapseIgnoresSurrChg,DB_Topic_Misc,"LapseIgnoresSurrChg","Ignore tabular surrender charge for lapse processing",}, \
-{DB_CoiInforceReentry,DB_Topic_Mortality,"CoiInforceReentry","Reenter COI table at beginning of inforce year: 0=no, 1=yes",}, \
+{DB_CoiInforceReentry,DB_Topic_Mortality,"CoiInforceReentry","Reenter COI table: 0=never, 1=at beginning of inforce year, 2=on anniversary >= input reset date",}, \
 {DB_AssetComp,DB_Topic_Comp,"AssetComp","Producer-only compensation on separate-account assets--not tiered by assets",}, \
 {DB_ExpRatAmortPeriod,DB_Topic_ExpRating,"ExpRatAmortPeriod","Experience rating amortization period",}, \
 
