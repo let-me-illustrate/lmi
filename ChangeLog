@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.926 2007-10-19 02:51:24 chicares Exp $
+// $Id: ChangeLog,v 1.927 2007-10-19 15:29:41 chicares Exp $
 
 MAINTENANCE
 
@@ -13866,4 +13866,14 @@ Calculate reentry duration from 'LastCoiReentryDate'.
 
   dbnames.xpp
 Document expanded 'DB_CoiInforceReentry' semantics.
+
+20071019T1528Z <chicares@cox.net> [1212]
+
+  input_harmonization.cpp
+Enable the 'LastCoiReentryDate' control only when it's relevant.
+
+20071019T1529Z <chicares@cox.net> [1211]
+
+  ihs_avmly.cpp
+Improve documentation.
 

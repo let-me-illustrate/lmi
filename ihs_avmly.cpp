@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.65 2007-09-30 19:40:32 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.66 2007-10-19 15:29:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2044,7 +2044,13 @@ void AccountValue::TxSetBOMAV()
             }
         else
             {
-            // TODO ?? INPUT !! For inforce, need term rider amount as of issue date.
+            // USER !! User documentation should explain that this is
+            // the total specified amount, including term rider. This
+            // assumes that term riders are generally designed to
+            // qualify for death-benefit tax treatment. Some products
+            // have loads that depend on the initial specified amount,
+            // which probably includes term; if it doesn't, then a new
+            // input field would need to be added.
             z = Input_->VectorSpecamtHistory.front().operator double const&();
             }
         SpecAmtLoadBase = std::max(z, NetPmts[Month] * YearsCorridorFactor);
