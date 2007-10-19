@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.925 2007-10-18 16:11:39 chicares Exp $
+// $Id: ChangeLog,v 1.926 2007-10-19 02:51:24 chicares Exp $
 
 MAINTENANCE
 
@@ -13851,4 +13851,19 @@ Tighten rules for certain interest-rate entities.
 
   input_harmonization.cpp
 Add rules for new entities.
+
+20071018T1611Z <chicares@cox.net> [1212]
+
+  input_harmonization.cpp
+Add rules for new entities.
+
+20071019T0250Z <chicares@cox.net> [1212]
+
+  ihs_basicval.cpp
+Calculate reentry duration from 'LastCoiReentryDate'.
+
+20071019T0251Z <chicares@cox.net> [1212]
+
+  dbnames.xpp
+Document expanded 'DB_CoiInforceReentry' semantics.
 
