@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.49 2007-10-18 16:11:39 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.50 2007-10-19 15:28:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -414,8 +414,13 @@ void Input::DoHarmonize()
     FlatExtra.enable(database_->Query(DB_AllowFlatExtras));
 
     LastCoiReentryDate.maximum(EffectiveDate.value());
-    // INPUT !! Make an appropriate header available for this enumerator:
-//    LastCoiReentryDate.enable(e_reenter_upon_rate_reset == database_->Query(DB_CoiInforceReentry));
+    // DATABASE !! Here, 'e_reenter_upon_rate_reset' would be better
+    // than the hardcoded '2'. However, '2' is already hardcoded in
+    // the 'dbnames.xpp' explanation of 'LastCoiReentryDate', so
+    // hardcoding it here doesn't introduce a new kind of defect.
+    // Ultimately, the product database should probably use mc_enum
+    // types instead; until then, this will do.
+    LastCoiReentryDate.enable(2 == database_->Query(DB_CoiInforceReentry));
 
     BlendGender.enable(database_->Query(DB_AllowMortBlendSex));
     bool blend_mortality_by_gender = "Yes" == BlendGender;
