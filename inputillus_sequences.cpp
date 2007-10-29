@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_sequences.cpp,v 1.14 2007-03-09 16:27:23 chicares Exp $
+// $Id: inputillus_sequences.cpp,v 1.15 2007-10-29 02:59:35 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -210,10 +210,7 @@ IllusInputParms::permissible_payment_strategy_keywords()
 
     bool payment_indeterminate =
         (
-           e_solve_ee_prem     == SolveType
-        || e_solve_er_prem     == SolveType
-        || e_solve_ee_prem_dur == SolveType
-        || e_solve_er_prem_dur == SolveType
+        false
     // TODO ?? Further conditions to disallow improper input:
     // need to compare corresponding years.
     //  || specamt strategy is neither 'none' nor 'salary-based'
@@ -662,12 +659,22 @@ std::string IllusInputParms::realize_sequence_string_for_death_benefit_option()
 //============================================================================
 std::string IllusInputParms::realize_sequence_string_for_indv_payment()
 {
+    string_map z = permissible_payment_strategy_keywords();
+    if
+        (
+           e_solve_ee_prem     == SolveType
+        || e_solve_ee_prem_dur == SolveType
+        )
+        {
+        z.clear();
+        }
+
     return realize_sequence_string
         (*this
         ,EePremium
         ,VectorIndvPaymentStrategy
         ,IndvPayment
-        ,permissible_payment_strategy_keywords()
+        ,z
         ,std::string("none")
         );
 }
@@ -691,12 +698,22 @@ std::string IllusInputParms::realize_sequence_string_for_indv_payment_mode()
 //============================================================================
 std::string IllusInputParms::realize_sequence_string_for_corp_payment()
 {
+    string_map z = permissible_payment_strategy_keywords();
+    if
+        (
+           e_solve_er_prem     == SolveType
+        || e_solve_er_prem_dur == SolveType
+        )
+        {
+        z.clear();
+        }
+
     return realize_sequence_string
         (*this
         ,ErPremium
         ,VectorCorpPaymentStrategy
         ,CorpPayment
-        ,permissible_payment_strategy_keywords()
+        ,z
         ,std::string("none")
         );
 }
