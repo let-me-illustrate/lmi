@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.928 2007-10-19 15:32:33 chicares Exp $
+// $Id: ChangeLog,v 1.929 2007-10-29 02:59:35 chicares Exp $
 
 MAINTENANCE
 
@@ -13881,4 +13881,14 @@ Improve documentation.
 
   version.hpp
 Mark release candidate.
+
+20071029T0257Z <chicares@cox.net> [1211]
+
+  ihs_dbdict.cpp
+Improve documentation.
+
+20071029T0259Z <chicares@cox.net> [1211]
+
+  inputillus_sequences.cpp
+Don't let a solve on one payment stream forbid a strategy on another.
 
