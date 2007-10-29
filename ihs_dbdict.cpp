@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbdict.cpp,v 1.17 2007-06-25 21:13:29 chicares Exp $
+// $Id: ihs_dbdict.cpp,v 1.18 2007-10-29 02:58:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -537,8 +537,20 @@ void DBDictionary::WriteSampleDBFile()
     Add(TDBValue(DB_SecondaryHurdle     , 0.0));
     Add(TDBValue(DB_LedgerType          , e_ill_reg));
     Add(TDBValue(DB_AllowExpRating      , false));
+
     // These aren't really NY Table Y group rates--in fact, they're
-    // US 65-70 male ALB. But Table Y is not commonly used anyway.
+    // US 65-70 male ALB. Though NY Table Y is occasionally
+    // encountered in the group-carveout market, it's not included
+    // in the SOA's databases; for default initialization, a widely-
+    // available table is preferred.
+    //
+    // DATABASE !! Hence, the entity is misnamed; it really means
+    // something like "group proxy rate". However, what's really
+    // wanted is a choice among tables. The same can be said of
+    // 'DB_83GamTable', which really means "partial-mortality table";
+    // this support request:
+    //   http://savannah.nongnu.org/support/?105593
+    // would offer a choice and make that database entity unnecessary.
     Add(TDBValue(DB_TableYTable         , 358));
 
     // Use male rates for unisex--1983 GAM seems to have no unisex version.
