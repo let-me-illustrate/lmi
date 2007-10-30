@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.929 2007-10-29 02:59:35 chicares Exp $
+// $Id: ChangeLog,v 1.930 2007-10-30 22:49:43 chicares Exp $
 
 MAINTENANCE
 
@@ -13891,4 +13891,12 @@ Improve documentation.
 
   inputillus_sequences.cpp
 Don't let a solve on one payment stream forbid a strategy on another.
+
+20071030T2249Z <chicares@cox.net> [1211]
+
+  input_harmonization.cpp
+  inputillus_xml_io.cpp
+  inputs.cpp
+Implement 'UseCurrentDeclaredRate' for careful testing later. This
+trial implementation is blocked by conditional directives.
 

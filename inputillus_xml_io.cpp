@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.28 2007-10-18 13:05:28 chicares Exp $
+// $Id: inputillus_xml_io.cpp,v 1.29 2007-10-30 22:49:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -201,6 +201,19 @@ using namespace xml;
         InputParms::AgentMiddleName = "";
         InputParms::InsdLastName    = "";
         InputParms::InsdMiddleName  = "";
+        }
+
+    // Older versions lacked 'UseCurrentDeclaredRate', whose
+    // default value of "Yes" would break backward compatibility.
+    if
+        (member_names.end() != std::find
+            (member_names.begin()
+            ,member_names.end()
+            ,std::string("UseCurrentDeclaredRate")
+            )
+        )
+        {
+        UseCurrentDeclaredRate = "No";
         }
 
     propagate_changes_to_base_and_finalize();
