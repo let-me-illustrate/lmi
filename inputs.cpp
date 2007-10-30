@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputs.cpp,v 1.18 2007-10-17 14:54:22 chicares Exp $
+// $Id: inputs.cpp,v 1.19 2007-10-30 22:49:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -84,7 +84,11 @@ InputParms::InputParms()
     ,PostRetType                   (e_obsolete_same_as_initial)
     ,PostRetAmt                    (0.0)
     ,PostRetPct                    (1.0)
+#if !defined SUPPORT_105822
     ,UseCurrentDeclaredRate        ("No")
+#else  // defined SUPPORT_105822
+    ,UseCurrentDeclaredRate        ("Yes")
+#endif // defined SUPPORT_105822
     ,IntRateTypeGA                 (e_netrate)
     ,IntRateTypeSA                 (e_grossrate)
     ,LoanIntRate                   (0.06)
