@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.50 2007-10-19 15:28:28 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.51 2007-10-30 22:49:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -54,7 +54,9 @@ namespace
 /// Implementation notes: DoAdaptExternalities().
 ///
 /// Reset database_ if necessary, i.e., if the product or any database
-/// axis changed. Conditionally update general-account rate.
+/// axis changed. Update the general-account rate if it depends on the
+/// database.
+#if !defined SUPPORT_105822 // Expunge:
 ///
 /// If the general-account interest-rate field holds the default value
 /// for the former product before the product changed, then change its
@@ -79,7 +81,11 @@ namespace
 /// is desired. An alternative for future consideration is to add a
 /// "use current rate" checkbox. Until lmi has a historical database,
 /// that would only frustrate users running inforce or backdated
-/// illustrations.
+/// illustrations. [That last sentence is not correct: when a
+/// historical database seemed imminent, it made sense to defer the
+/// checkbox; but now the former is not imminent and the latter makes
+/// perfect sense.]
+#endif // !defined SUPPORT_105822
 
 void Input::DoAdaptExternalities()
 {
@@ -100,12 +106,14 @@ void Input::DoAdaptExternalities()
         return;
         }
 
+#if !defined SUPPORT_105822
     std::string cached_credited_rate;
 
     if(database_.get())
         {
         cached_credited_rate = current_credited_rate(*database_);
         }
+#endif // !defined SUPPORT_105822
 
     CachedProductName_           = ProductName          ;
     CachedGender_                = Gender               ;
@@ -135,10 +143,14 @@ void Input::DoAdaptExternalities()
             )
         );
 
+#if !defined SUPPORT_105822
     if
         (   GeneralAccountRate.value().empty()
         ||  cached_credited_rate == GeneralAccountRate.value()
         )
+#else  // defined SUPPORT_105822
+    if("Yes" == UseCurrentDeclaredRate)
+#endif // defined SUPPORT_105822
         {
         GeneralAccountRate = datum_string(current_credited_rate(*database_));
         }
@@ -1014,9 +1026,14 @@ void Input::DoTransmogrify()
         DoHarmonize();
         }
 
+#if !defined SUPPORT_105822 // Expunge:
     // INPUT !! This won't be ready for release or testing (and must
     // not be added to production '.xrc' files) until the rococo
     // 'cached_credited_rate' approach is expunged.
+#endif // !defined SUPPORT_105822
+    // USER !! This is the credited rate as of the database date,
+    // regardless of the date of illustration, because the database
+    // does not yet store historical rates.
     if("Yes" == UseCurrentDeclaredRate)
         {
         GeneralAccountRate = datum_string(current_credited_rate(*database_));
