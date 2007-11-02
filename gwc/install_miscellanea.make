@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_miscellanea.make,v 1.1 2007-08-09 15:13:39 chicares Exp $
+# $Id: install_miscellanea.make,v 1.2 2007-11-02 22:59:05 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -38,14 +38,6 @@ prefix := $(system_root)/trial/third_party
 sf_mirror   := http://downloads.sourceforge.net
 
 # Nonconfigurable settings #####################################################
-
-ifeq (3.81,$(firstword $(sort $(MAKE_VERSION) 3.81)))
-  this_makefile := $(lastword $(MAKEFILE_LIST))
-else
-  $(error Upgrade to make-3.81)
-endif
-
-tools_dir := $(dir $(this_makefile))/tools
 
 third_party_bin_dir     := $(prefix)/bin
 third_party_include_dir := $(prefix)/include
@@ -113,24 +105,21 @@ scratch_exists = \
 # Targets ######################################################################
 
 # TODO ?? Don't repeat e.g. 'cgicc-3.1.4'.
-# TODO ?? And rename the md5 files.
 
 .PHONY: all
 all: $(file_list)
-#	@$(MV) scratch $(prefix)
-# TODO ?? for cgicc:
-	$(PATCH) --directory=scratch --strip=0 < $(tools_dir)/cgicc/cgicc_3_1_4_patch
+	$(PATCH) --directory=scratch --strip=1 < cgicc-3.1.4.patch
 	@$(MKDIR) $(third_party_include_dir)/cgicc
 	$(MV) scratch/cgicc-3.1.4/cgicc/*.h   $(third_party_include_dir)/cgicc/
 	@$(MKDIR) $(third_party_source_dir)/cgicc
 	$(MV) scratch/cgicc-3.1.4/cgicc/*.cpp $(third_party_source_dir)/cgicc/
-	cd $(prefix) && $(MD5SUM) --check $(abspath $(tools_dir)/cgicc/cgicc_md5sums)
+	cd $(prefix) && $(MD5SUM) --check $(CURDIR)/cgicc-3.1.4.md5sums
 # TODO ?? for boost:
 #	@$(MKDIR) $(third_party_include_dir)/boost/
 #	-$(CP) --force --preserve --recursive scratch/$(boost_dir)/boost/* $(third_party_include_dir)/boost/
 #	@$(MKDIR) $(third_party_source_dir)/boost/
 #	-$(CP) --force --preserve --recursive scratch/$(boost_dir)/*       $(third_party_source_dir)/boost/
-# TODO ?? for xmlwrapp:
+	$(PATCH) --directory=scratch --strip=1 < xmlwrapp-0.5.0.patch
 	$(MKDIR) $(third_party_include_dir)/xmlwrapp/
 	$(MV) scratch/xmlwrapp-0.5.0/include/xmlwrapp/*.h $(third_party_include_dir)/xmlwrapp/
 	$(MKDIR) $(third_party_include_dir)/xsltwrapp/
@@ -139,9 +128,7 @@ all: $(file_list)
 	$(MV) scratch/xmlwrapp-0.5.0/src/libxml/* $(third_party_source_dir)/libxml/
 	$(MKDIR) $(third_party_source_dir)/libxslt/
 	$(MV) scratch/xmlwrapp-0.5.0/src/libxslt/* $(third_party_source_dir)/libxslt/
-# TODO ?? Add new file:
-#	cd $(prefix) && $(MD5SUM) --check $(abspath $(tools_dir)/xmlwrapp/xmlwrapp_md5sums)
-	cd $(prefix) && $(MD5SUM) --check $(abspath $(tools_dir)/xmlwrapp-0_5_0_md5)
+	cd $(prefix) && $(MD5SUM) --check $(CURDIR)/xmlwrapp-0.5.0.md5sums
 # TODO ?? cd /opt/lmi/third_party/src/ ; touch xmlwrapp_config.h
 
 $(file_list): initial_setup
@@ -184,19 +171,23 @@ WGETFLAGS := '--timestamping'
 # installed to the same directory.
 #	$(RM) --force --recursive $(third_party_include_dir)/boost/
 
-# Test #########################################################################
+# Maintenance ##################################################################
 
-# TODO ?? Add a test for patching? Not really needed if every
-# installed file is validated.
+# To test, make the 'clean' and 'all' targets in that order.
 
-# TODO ?? I hesitate to write rm $(prefix)....
+# The 'clean' target establishes required preconditions.
+#
+# It specifies the install directory explicitly because it seems
+# dangerous to write 'rm $(prefix)': someone might assign an
+# infelicitous value to that variable.
 
 .PHONY: clean
 clean:
 	$(RM) --force --recursive scratch
 	$(RM) --force --recursive $(system_root)/trial/third_party
 
-# TODO ?? This isn't in cvs yet--inline it here?
+# To regenerate the '.md5sums' files:
 
-# /cygdrive/c/opt/lmi/third_party[0]$md5sum include/xmlwrapp/* include/xsltwrapp/* src/libxml/* src/libxslt/* >xmlwrapp-0.5.0_md5
+# /opt/lmi/third_party[0]$md5sum include/xmlwrapp/* include/xsltwrapp/* src/libxml/* src/libxslt/* >xmlwrapp-0.5.0.md5sums
+# /opt/lmi/third_party[0]$md5sum include/cgicc/* src/cgicc/* >cgicc-3.1.4.md5sums
 
