@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.930 2007-10-30 22:49:43 chicares Exp $
+// $Id: ChangeLog,v 1.931 2007-11-02 22:46:28 chicares Exp $
 
 MAINTENANCE
 
@@ -13899,4 +13899,12 @@ Don't let a solve on one payment stream forbid a strategy on another.
   inputs.cpp
 Implement 'UseCurrentDeclaredRate' for careful testing later. This
 trial implementation is blocked by conditional directives.
+
+20071102T2246Z <chicares@cox.net> [1211]
+
+  cgicc-3.1.4.md5sums    [new file]
+  cgicc-3.1.4.patch      [new file]
+  xmlwrapp-0.5.0.md5sums [new file]
+  xmlwrapp-0.5.0.patch   [new file]
+Patch third-party libraries.
 
