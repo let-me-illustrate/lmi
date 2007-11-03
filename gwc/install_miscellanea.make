@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_miscellanea.make,v 1.3 2007-11-03 12:52:10 chicares Exp $
+# $Id: install_miscellanea.make,v 1.4 2007-11-03 13:24:18 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -107,18 +107,27 @@ scratch_exists = \
 # TODO ?? Don't repeat e.g. 'cgicc-3.1.4'.
 
 .PHONY: all
-all: $(file_list)
+all: boost cgicc xmlwrapp
+
+.PHONY: boost
+boost: $(file_list)
 # TODO ?? for boost:
 #	@$(MKDIR) $(third_party_include_dir)/boost/
 #	-$(CP) --force --preserve --recursive scratch/$(boost_dir)/boost/* $(third_party_include_dir)/boost/
 #	@$(MKDIR) $(third_party_source_dir)/boost/
 #	-$(CP) --force --preserve --recursive scratch/$(boost_dir)/*       $(third_party_source_dir)/boost/
+
+.PHONY: cgicc
+cgicc: $(file_list)
 	$(PATCH) --directory=scratch --strip=1 < cgicc-3.1.4.patch
 	@$(MKDIR) $(third_party_include_dir)/cgicc
 	$(MV) scratch/cgicc-3.1.4/cgicc/*.h   $(third_party_include_dir)/cgicc/
 	@$(MKDIR) $(third_party_source_dir)/cgicc
 	$(MV) scratch/cgicc-3.1.4/cgicc/*.cpp $(third_party_source_dir)/cgicc/
 	cd $(prefix) && $(MD5SUM) --check $(CURDIR)/cgicc-3.1.4.md5sums
+
+.PHONY: xmlwrapp
+xmlwrapp: $(file_list)
 	$(PATCH) --directory=scratch --strip=1 < xmlwrapp-0.5.0.patch
 	$(MKDIR) $(third_party_include_dir)/xmlwrapp/
 	$(MV) scratch/xmlwrapp-0.5.0/include/xmlwrapp/*.h $(third_party_include_dir)/xmlwrapp/
