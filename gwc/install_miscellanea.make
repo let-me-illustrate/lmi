@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_miscellanea.make,v 1.2 2007-11-02 22:59:05 chicares Exp $
+# $Id: install_miscellanea.make,v 1.3 2007-11-03 12:52:10 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -108,17 +108,17 @@ scratch_exists = \
 
 .PHONY: all
 all: $(file_list)
+# TODO ?? for boost:
+#	@$(MKDIR) $(third_party_include_dir)/boost/
+#	-$(CP) --force --preserve --recursive scratch/$(boost_dir)/boost/* $(third_party_include_dir)/boost/
+#	@$(MKDIR) $(third_party_source_dir)/boost/
+#	-$(CP) --force --preserve --recursive scratch/$(boost_dir)/*       $(third_party_source_dir)/boost/
 	$(PATCH) --directory=scratch --strip=1 < cgicc-3.1.4.patch
 	@$(MKDIR) $(third_party_include_dir)/cgicc
 	$(MV) scratch/cgicc-3.1.4/cgicc/*.h   $(third_party_include_dir)/cgicc/
 	@$(MKDIR) $(third_party_source_dir)/cgicc
 	$(MV) scratch/cgicc-3.1.4/cgicc/*.cpp $(third_party_source_dir)/cgicc/
 	cd $(prefix) && $(MD5SUM) --check $(CURDIR)/cgicc-3.1.4.md5sums
-# TODO ?? for boost:
-#	@$(MKDIR) $(third_party_include_dir)/boost/
-#	-$(CP) --force --preserve --recursive scratch/$(boost_dir)/boost/* $(third_party_include_dir)/boost/
-#	@$(MKDIR) $(third_party_source_dir)/boost/
-#	-$(CP) --force --preserve --recursive scratch/$(boost_dir)/*       $(third_party_source_dir)/boost/
 	$(PATCH) --directory=scratch --strip=1 < xmlwrapp-0.5.0.patch
 	$(MKDIR) $(third_party_include_dir)/xmlwrapp/
 	$(MV) scratch/xmlwrapp-0.5.0/include/xmlwrapp/*.h $(third_party_include_dir)/xmlwrapp/
@@ -129,7 +129,7 @@ all: $(file_list)
 	$(MKDIR) $(third_party_source_dir)/libxslt/
 	$(MV) scratch/xmlwrapp-0.5.0/src/libxslt/* $(third_party_source_dir)/libxslt/
 	cd $(prefix) && $(MD5SUM) --check $(CURDIR)/xmlwrapp-0.5.0.md5sums
-# TODO ?? cd /opt/lmi/third_party/src/ ; touch xmlwrapp_config.h
+	touch $(prefix)/src/xmlwrapp_config.h
 
 $(file_list): initial_setup
 
@@ -180,6 +180,9 @@ WGETFLAGS := '--timestamping'
 # It specifies the install directory explicitly because it seems
 # dangerous to write 'rm $(prefix)': someone might assign an
 # infelicitous value to that variable.
+# TODO ?? Yet
+#	@$(RM) --force --recursive $(prefix)
+# is written above.
 
 .PHONY: clean
 clean:
