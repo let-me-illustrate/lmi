@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_miscellanea.make,v 1.5 2007-11-04 14:27:03 chicares Exp $
+# $Id: install_miscellanea.make,v 1.6 2007-11-04 17:58:03 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -110,12 +110,22 @@ scratch_exists = \
 .PHONY: all
 all: boost cgicc xmlwrapp
 
+# For some targets,
+#  - saved md5sums are checked, then
+#  - fresh md5sums are generated and compared against the saved ones.
+# This may seem redundant. The second step is not removed because it
+# makes both sets of md5sums available for comparison in case they
+# differ, and also because it guides regeneration of the saved md5sums
+# in case a library is updated. The first step is not removed because
+# it is idiomatic, and its absence would be remarkable.
+
 .PHONY: boost
 boost: $(file_list)
 # TODO ?? for boost:
 #	@$(MKDIR) $(third_party_include_dir)/boost/
 #	-$(CP) --force --preserve --recursive scratch/$(stem)/boost/* $(third_party_include_dir)/boost/
 #	@$(MKDIR) $(third_party_source_dir)/boost/
+# TODO ?? MV instead?
 #	-$(CP) --force --preserve --recursive scratch/$(stem)/*       $(third_party_source_dir)/boost/
 
 .PHONY: cgicc
@@ -140,9 +150,9 @@ xmlwrapp: $(file_list)
 	$(MV) scratch/$(stem)/src/libxml/* $(third_party_source_dir)/libxml/
 	$(MKDIR) $(third_party_source_dir)/libxslt/
 	$(MV) scratch/$(stem)/src/libxslt/* $(third_party_source_dir)/libxslt/
-	cd $(prefix) && $(MD5SUM) --check $(CURDIR)/$(stem).md5sums
 	touch $(prefix)/src/xmlwrapp_config.h
-	cd $(prefix) && $(MD5SUM) include/xmlwrapp/* include/xsltwrapp/* src/libxml/* src/libxslt/* >$(stem).md5sums
+	cd $(prefix) && $(MD5SUM) --check $(CURDIR)/$(stem).md5sums
+	cd $(prefix) && $(MD5SUM) src/xmlwrapp_config.h include/xmlwrapp/* include/xsltwrapp/* src/libxml/* src/libxslt/* >$(stem).md5sums
 	$(DIFF) $(stem).md5sums $(prefix)/$(stem).md5sums && $(RM) $(prefix)/$(stem).md5sums
 
 $(file_list): initial_setup
@@ -181,6 +191,9 @@ WGETFLAGS := '--timestamping'
 
 # TODO ?? Can we designate a cache directory to hold downloads?
 
+# TODO ?? expunge: the condition this line protects against already
+# engenders a fatal error.
+#
 # TODO ?? This safeguards against any older files interfering with new ones
 # installed to the same directory.
 #	$(RM) --force --recursive $(third_party_include_dir)/boost/
