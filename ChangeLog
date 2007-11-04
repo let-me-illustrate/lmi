@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.931 2007-11-02 22:46:28 chicares Exp $
+// $Id: ChangeLog,v 1.932 2007-11-04 17:50:21 chicares Exp $
 
 MAINTENANCE
 
@@ -13907,4 +13907,13 @@ trial implementation is blocked by conditional directives.
   xmlwrapp-0.5.0.md5sums [new file]
   xmlwrapp-0.5.0.patch   [new file]
 Patch third-party libraries.
+
+20071104T1750Z <chicares@cox.net> [1211]
+
+  xmlwrapp-0.5.0.md5sums
+Also validate library configuration file. This isn't normal procedure,
+but then again 'xmlwrapp_config.h' isn't a normal configuration file:
+its name and location, and the manner in which it's generated, are
+quirky, and the manner in which it's included suggests that it might
+actually serve no purpose.
 
