@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_miscellanea.make,v 1.4 2007-11-03 13:24:18 chicares Exp $
+# $Id: install_miscellanea.make,v 1.5 2007-11-04 14:27:03 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -58,6 +58,8 @@ file_list := \
   $(cgicc_archive) \
   $(xmlwrapp_archive) \
 
+boost cgicc xmlwrapp: stem = $(basename $(basename $($@_archive)))
+
 # URLs and archive md5sums #####################################################
 
 $(boost_archive)-url    := $(sf_mirror)/boost/$(boost_archive)
@@ -71,6 +73,7 @@ $(xmlwrapp_archive)-md5 := b8a07e77f8f8af9ca96bccab7d9dd310
 # Utilities ####################################################################
 
 CP     := cp
+DIFF   := diff
 ECHO   := echo
 GREP   := grep
 MD5SUM := md5sum
@@ -104,8 +107,6 @@ scratch_exists = \
 
 # Targets ######################################################################
 
-# TODO ?? Don't repeat e.g. 'cgicc-3.1.4'.
-
 .PHONY: all
 all: boost cgicc xmlwrapp
 
@@ -113,32 +114,36 @@ all: boost cgicc xmlwrapp
 boost: $(file_list)
 # TODO ?? for boost:
 #	@$(MKDIR) $(third_party_include_dir)/boost/
-#	-$(CP) --force --preserve --recursive scratch/$(boost_dir)/boost/* $(third_party_include_dir)/boost/
+#	-$(CP) --force --preserve --recursive scratch/$(stem)/boost/* $(third_party_include_dir)/boost/
 #	@$(MKDIR) $(third_party_source_dir)/boost/
-#	-$(CP) --force --preserve --recursive scratch/$(boost_dir)/*       $(third_party_source_dir)/boost/
+#	-$(CP) --force --preserve --recursive scratch/$(stem)/*       $(third_party_source_dir)/boost/
 
 .PHONY: cgicc
 cgicc: $(file_list)
-	$(PATCH) --directory=scratch --strip=1 < cgicc-3.1.4.patch
+	$(PATCH) --directory=scratch --strip=1 < $(stem).patch
 	@$(MKDIR) $(third_party_include_dir)/cgicc
-	$(MV) scratch/cgicc-3.1.4/cgicc/*.h   $(third_party_include_dir)/cgicc/
+	$(MV) scratch/$(stem)/cgicc/*.h   $(third_party_include_dir)/cgicc/
 	@$(MKDIR) $(third_party_source_dir)/cgicc
-	$(MV) scratch/cgicc-3.1.4/cgicc/*.cpp $(third_party_source_dir)/cgicc/
-	cd $(prefix) && $(MD5SUM) --check $(CURDIR)/cgicc-3.1.4.md5sums
+	$(MV) scratch/$(stem)/cgicc/*.cpp $(third_party_source_dir)/cgicc/
+	cd $(prefix) && $(MD5SUM) --check $(CURDIR)/$(stem).md5sums
+	cd $(prefix) && $(MD5SUM) include/cgicc/* src/cgicc/* >$(stem).md5sums
+	$(DIFF) $(stem).md5sums $(prefix)/$(stem).md5sums && $(RM) $(prefix)/$(stem).md5sums
 
 .PHONY: xmlwrapp
 xmlwrapp: $(file_list)
-	$(PATCH) --directory=scratch --strip=1 < xmlwrapp-0.5.0.patch
+	$(PATCH) --directory=scratch --strip=1 < $(stem).patch
 	$(MKDIR) $(third_party_include_dir)/xmlwrapp/
-	$(MV) scratch/xmlwrapp-0.5.0/include/xmlwrapp/*.h $(third_party_include_dir)/xmlwrapp/
+	$(MV) scratch/$(stem)/include/xmlwrapp/*.h $(third_party_include_dir)/xmlwrapp/
 	$(MKDIR) $(third_party_include_dir)/xsltwrapp/
-	$(MV) scratch/xmlwrapp-0.5.0/include/xsltwrapp/*.h $(third_party_include_dir)/xsltwrapp/
+	$(MV) scratch/$(stem)/include/xsltwrapp/*.h $(third_party_include_dir)/xsltwrapp/
 	$(MKDIR) $(third_party_source_dir)/libxml/
-	$(MV) scratch/xmlwrapp-0.5.0/src/libxml/* $(third_party_source_dir)/libxml/
+	$(MV) scratch/$(stem)/src/libxml/* $(third_party_source_dir)/libxml/
 	$(MKDIR) $(third_party_source_dir)/libxslt/
-	$(MV) scratch/xmlwrapp-0.5.0/src/libxslt/* $(third_party_source_dir)/libxslt/
-	cd $(prefix) && $(MD5SUM) --check $(CURDIR)/xmlwrapp-0.5.0.md5sums
+	$(MV) scratch/$(stem)/src/libxslt/* $(third_party_source_dir)/libxslt/
+	cd $(prefix) && $(MD5SUM) --check $(CURDIR)/$(stem).md5sums
 	touch $(prefix)/src/xmlwrapp_config.h
+	cd $(prefix) && $(MD5SUM) include/xmlwrapp/* include/xsltwrapp/* src/libxml/* src/libxslt/* >$(stem).md5sums
+	$(DIFF) $(stem).md5sums $(prefix)/$(stem).md5sums && $(RM) $(prefix)/$(stem).md5sums
 
 $(file_list): initial_setup
 
@@ -197,9 +202,4 @@ WGETFLAGS := '--timestamping'
 clean:
 	$(RM) --force --recursive scratch
 	$(RM) --force --recursive $(system_root)/trial/third_party
-
-# To regenerate the '.md5sums' files:
-
-# /opt/lmi/third_party[0]$md5sum include/xmlwrapp/* include/xsltwrapp/* src/libxml/* src/libxslt/* >xmlwrapp-0.5.0.md5sums
-# /opt/lmi/third_party[0]$md5sum include/cgicc/* src/cgicc/* >cgicc-3.1.4.md5sums
 
