@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: posix_fhs.make,v 1.16 2007-03-10 18:23:55 chicares Exp $
+# $Id: posix_fhs.make,v 1.17 2007-11-05 17:50:20 chicares Exp $
 
 ################################################################################
 
@@ -34,6 +34,9 @@ platform_boost_libraries := \
 platform_gnome_xml_libraries := \
   $(shell xml2-config --libs) \
   $(shell xslt-config --libs) \
+
+platform_xmlwrapp_libraries := \
+  -lxmlwrapp \
 
 # Let the user override this on the make command line to use a
 # non-default wx configuration.

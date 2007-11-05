@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.99 2007-10-17 12:12:17 chicares Exp $
+# $Id: workhorse.make,v 1.100 2007-11-05 17:50:20 chicares Exp $
 
 ################################################################################
 
@@ -521,7 +521,7 @@ endif
 
 ################################################################################
 
-# Libraries.
+# Libraries and associated options.
 #
 # The link command promiscuously mentions libxml2 for all targets.
 # Measurements show that this costs one-tenth of a second on
@@ -532,9 +532,9 @@ endif
 # isn't actually required for all targets.
 
 REQUIRED_LIBS := \
-  -lxmlwrapp \
   $(platform_boost_libraries) \
   $(platform_gnome_xml_libraries) \
+  $(platform_xmlwrapp_libraries) \
 
 wx_ldflags = \
   $(platform_wx_libraries) \
