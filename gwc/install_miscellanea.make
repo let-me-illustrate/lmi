@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_miscellanea.make,v 1.6 2007-11-04 17:58:03 chicares Exp $
+# $Id: install_miscellanea.make,v 1.7 2007-11-05 02:35:04 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -27,9 +27,10 @@
 # '/foo', which is reasonable enough for msw; for a posix-emulation
 # system like Cygwin, of course, that's not in the msw root directory.
 
-#prefix := $(system_root)/opt/lmi/third_party
+#prefix     := $(system_root)/opt/lmi
 # TODO ?? testing
-prefix := $(system_root)/trial/third_party
+prefix      := $(system_root)/trial
+destination := $(prefix)/third_party
 
 # In the past, it seemed necessary to specify a mirror, e.g.:
 #  mirror := http://easynews.dl.sourceforge.net/sourceforge
@@ -39,10 +40,10 @@ sf_mirror   := http://downloads.sourceforge.net
 
 # Nonconfigurable settings #####################################################
 
-third_party_bin_dir     := $(prefix)/bin
-third_party_include_dir := $(prefix)/include
-third_party_lib_dir     := $(prefix)/lib
-third_party_source_dir  := $(prefix)/src
+third_party_bin_dir     := $(destination)/bin
+third_party_include_dir := $(destination)/include
+third_party_lib_dir     := $(destination)/lib
+third_party_source_dir  := $(destination)/src
 
 # File lists ###################################################################
 
@@ -91,8 +92,8 @@ wget_missing = \
   "\nautomated downloads. Install it on your PATH." \
   "\n"
 
-prefix_exists = \
-  "\nError: Prefix directory '$(prefix)' already exists." \
+destination_exists = \
+  "\nError: Destination directory '$(destination)' already exists." \
   "\nIt is generally unsafe to install one version of a program" \
   "\non top of another. Probably you ought to rename the old" \
   "\nversion in order to preserve it; if not, then remove it." \
@@ -135,9 +136,9 @@ cgicc: $(file_list)
 	$(MV) scratch/$(stem)/cgicc/*.h   $(third_party_include_dir)/cgicc/
 	@$(MKDIR) $(third_party_source_dir)/cgicc
 	$(MV) scratch/$(stem)/cgicc/*.cpp $(third_party_source_dir)/cgicc/
-	cd $(prefix) && $(MD5SUM) --check $(CURDIR)/$(stem).md5sums
-	cd $(prefix) && $(MD5SUM) include/cgicc/* src/cgicc/* >$(stem).md5sums
-	$(DIFF) $(stem).md5sums $(prefix)/$(stem).md5sums && $(RM) $(prefix)/$(stem).md5sums
+	cd $(destination) && $(MD5SUM) --check $(CURDIR)/$(stem).md5sums
+	cd $(destination) && $(MD5SUM) include/cgicc/* src/cgicc/* >$(stem).md5sums
+	$(DIFF) $(stem).md5sums $(destination)/$(stem).md5sums && $(RM) $(destination)/$(stem).md5sums
 
 .PHONY: xmlwrapp
 xmlwrapp: $(file_list)
@@ -150,20 +151,20 @@ xmlwrapp: $(file_list)
 	$(MV) scratch/$(stem)/src/libxml/* $(third_party_source_dir)/libxml/
 	$(MKDIR) $(third_party_source_dir)/libxslt/
 	$(MV) scratch/$(stem)/src/libxslt/* $(third_party_source_dir)/libxslt/
-	touch $(prefix)/src/xmlwrapp_config.h
-	cd $(prefix) && $(MD5SUM) --check $(CURDIR)/$(stem).md5sums
-	cd $(prefix) && $(MD5SUM) src/xmlwrapp_config.h include/xmlwrapp/* include/xsltwrapp/* src/libxml/* src/libxslt/* >$(stem).md5sums
-	$(DIFF) $(stem).md5sums $(prefix)/$(stem).md5sums && $(RM) $(prefix)/$(stem).md5sums
+	touch $(destination)/src/xmlwrapp_config.h
+	cd $(destination) && $(MD5SUM) --check $(CURDIR)/$(stem).md5sums
+	cd $(destination) && $(MD5SUM) src/xmlwrapp_config.h include/xmlwrapp/* include/xsltwrapp/* src/libxml/* src/libxslt/* >$(stem).md5sums
+	$(DIFF) $(stem).md5sums $(destination)/$(stem).md5sums && $(RM) $(destination)/$(stem).md5sums
 
 $(file_list): initial_setup
 
 .PHONY: initial_setup
 initial_setup:
-	@type "$(WGET)" >/dev/null || { $(ECHO) -e $(wget_missing)   && false; }
-	@[ ! -e $(prefix) ]        || { $(ECHO) -e $(prefix_exists)  && false; }
-	@[ ! -e scratch   ]        || { $(ECHO) -e $(scratch_exists) && false; }
-	@$(MKDIR) --parents $(prefix)
-	@$(RM) --force --recursive $(prefix)
+	@type "$(WGET)" >/dev/null || { $(ECHO) -e $(wget_missing)       && false; }
+	@[ ! -e $(destination) ]   || { $(ECHO) -e $(destination_exists) && false; }
+	@[ ! -e scratch   ]        || { $(ECHO) -e $(scratch_exists)     && false; }
+	@$(MKDIR) --parents $(destination)
+	@$(RM) --force --recursive $(destination)
 	@$(MKDIR) --parents $(third_party_bin_dir)
 	@$(MKDIR) --parents $(third_party_include_dir)
 	@$(MKDIR) --parents $(third_party_lib_dir)
@@ -191,28 +192,12 @@ WGETFLAGS := '--timestamping'
 
 # TODO ?? Can we designate a cache directory to hold downloads?
 
-# TODO ?? expunge: the condition this line protects against already
-# engenders a fatal error.
-#
-# TODO ?? This safeguards against any older files interfering with new ones
-# installed to the same directory.
-#	$(RM) --force --recursive $(third_party_include_dir)/boost/
-
 # Maintenance ##################################################################
 
 # To test, make the 'clean' and 'all' targets in that order.
 
-# The 'clean' target establishes required preconditions.
-#
-# It specifies the install directory explicitly because it seems
-# dangerous to write 'rm $(prefix)': someone might assign an
-# infelicitous value to that variable.
-# TODO ?? Yet
-#	@$(RM) --force --recursive $(prefix)
-# is written above.
-
 .PHONY: clean
 clean:
-	$(RM) --force --recursive scratch
-	$(RM) --force --recursive $(system_root)/trial/third_party
+	@$(RM) --force --recursive scratch
+	@$(RM) --force --recursive $(destination)
 
