@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: setup.make,v 1.33 2007-08-04 21:04:20 chicares Exp $
+# $Id: setup.make,v 1.34 2007-11-05 17:50:20 chicares Exp $
 
 .PHONY: all
 all: setup
@@ -128,11 +128,6 @@ $(third_party_source_dir):
 # At least with gnu tools, a zero-byte file may be linked with no
 # diagnostic (and no effect, which is the intention).
 
-# Create dummy libraries for boost and xmlwrapp: see discussion of
-# 'third-party' libraries in other makefiles. For boost, derive
-# library names from the platform-dependent linker option, because
-# the names of boost libraries incorporate a platform suffix.
-
 # Prevent license issues by providing dummy versions of problematic
 # libraries that wx builds by default.
 #
@@ -142,12 +137,10 @@ $(third_party_source_dir):
 # licenses of all libraries wx uses.
 
 dummy_library_names := \
-  $(patsubst -l%,lib%.a,$(platform_boost_libraries)) \
   libjpeg.a \
   libpng.a \
   libregex.a \
   libtiff.a \
-  libxmlwrapp.a \
   libzlib.a \
 
 .PHONY: dummy_libraries
