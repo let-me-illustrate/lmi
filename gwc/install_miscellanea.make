@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_miscellanea.make,v 1.7 2007-11-05 02:35:04 chicares Exp $
+# $Id: install_miscellanea.make,v 1.8 2007-11-05 02:37:02 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -83,6 +83,7 @@ MV     := mv
 PATCH  := patch
 RM     := rm
 TAR    := tar
+TOUCH  := touch
 WGET   := wget
 
 # Error messages ###############################################################
@@ -151,7 +152,7 @@ xmlwrapp: $(file_list)
 	$(MV) scratch/$(stem)/src/libxml/* $(third_party_source_dir)/libxml/
 	$(MKDIR) $(third_party_source_dir)/libxslt/
 	$(MV) scratch/$(stem)/src/libxslt/* $(third_party_source_dir)/libxslt/
-	touch $(destination)/src/xmlwrapp_config.h
+	$(TOUCH) $(destination)/src/xmlwrapp_config.h
 	cd $(destination) && $(MD5SUM) --check $(CURDIR)/$(stem).md5sums
 	cd $(destination) && $(MD5SUM) src/xmlwrapp_config.h include/xmlwrapp/* include/xsltwrapp/* src/libxml/* src/libxslt/* >$(stem).md5sums
 	$(DIFF) $(stem).md5sums $(destination)/$(stem).md5sums && $(RM) $(destination)/$(stem).md5sums
@@ -162,14 +163,15 @@ $(file_list): initial_setup
 initial_setup:
 	@type "$(WGET)" >/dev/null || { $(ECHO) -e $(wget_missing)       && false; }
 	@[ ! -e $(destination) ]   || { $(ECHO) -e $(destination_exists) && false; }
-	@[ ! -e scratch   ]        || { $(ECHO) -e $(scratch_exists)     && false; }
+	@[ ! -e scratch        ]   || { $(ECHO) -e $(scratch_exists)     && false; }
 	@$(MKDIR) --parents $(destination)
-	@$(RM) --force --recursive $(destination)
-	@$(MKDIR) --parents $(third_party_bin_dir)
-	@$(MKDIR) --parents $(third_party_include_dir)
-	@$(MKDIR) --parents $(third_party_lib_dir)
-	@$(MKDIR) --parents $(third_party_source_dir)
-	@$(MKDIR) --parents scratch
+# TODO ?? expunge: can't possibly be nonempty
+#	@$(RM) --force --recursive $(destination)
+	@$(MKDIR) $(third_party_bin_dir)
+	@$(MKDIR) $(third_party_include_dir)
+	@$(MKDIR) $(third_party_lib_dir)
+	@$(MKDIR) $(third_party_source_dir)
+	@$(MKDIR) scratch
 
 TARFLAGS := --keep-old-files
 %.tar.bz2: TARFLAGS += --bzip2
