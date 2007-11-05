@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.932 2007-11-04 17:50:21 chicares Exp $
+// $Id: ChangeLog,v 1.933 2007-11-05 17:50:21 chicares Exp $
 
 MAINTENANCE
 
@@ -13916,4 +13916,13 @@ but then again 'xmlwrapp_config.h' isn't a normal configuration file:
 its name and location, and the manner in which it's generated, are
 quirky, and the manner in which it's included suggests that it might
 actually serve no purpose.
+
+20071105T1750Z <chicares@cox.net> [1211]
+
+  bcc_5_5_1.make
+  msw_common.make
+  posix_fhs.make
+  setup.make
+  workhorse.make
+Stop requiring dummy libraries.
 
