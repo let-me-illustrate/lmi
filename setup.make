@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: setup.make,v 1.36 2007-11-06 02:20:16 chicares Exp $
+# $Id: setup.make,v 1.37 2007-11-06 02:31:22 chicares Exp $
 
 .PHONY: all
 all: setup
@@ -73,7 +73,6 @@ sf_mirror := http://downloads.sourceforge.net
 # make     := make-3.81
 # msys     := MSYS-1.0.10
 # sed      := sed-4.0.7
-# xmlwrapp := xmlwrapp-0.5.0
 # wget     := wget-1.9.1
 
 .PHONY: setup
@@ -82,9 +81,7 @@ setup: \
   frozen_libxml2 \
   frozen_make \
   frozen_sed \
-  frozen_xmlwrapp \
   msys_make \
-  test_setup \
 
 # REVIEW: Could these be combined? Untested idea:
 # third_party_directories := \
@@ -274,40 +271,6 @@ install_sed_from_tmp_dir:
 	/msys/1.0/bin/sh.exe ./configure && /msys/1.0/bin/make
 	-$(CP) --force --preserve sed-4.0.7/sed/sed.exe /usr/bin/
 	$(RM) --recursive sed-4.0.7.tar
-
-###############################################################################
-
-# Install xmlwrapp-0.5.0 .
-
-.PHONY: frozen_xmlwrapp
-frozen_xmlwrapp:
-	$(MAKE) \
-	  --directory=/tmp \
-	  --file=$(src_dir)/setup.make \
-	                    src_dir='$(src_dir)' \
-	    third_party_include_dir='$(third_party_include_dir)' \
-	     third_party_source_dir='$(third_party_source_dir)' \
-                          tools_dir='$(tools_dir)' \
-	  install_frozen_xmlwrapp_from_tmp_dir
-
-.PHONY: install_frozen_xmlwrapp_from_tmp_dir
-install_frozen_xmlwrapp_from_tmp_dir:
-	[ -e xmlwrapp-0.5.0.tar.gz ] \
-	  || $(WGET) --non-verbose \
-          http://www.mirrorservice.org/sites/ftp.freebsd.org/pub/FreeBSD/distfiles/xmlwrapp-0.5.0.tar.gz
-	$(ECHO) "b8a07e77f8f8af9ca96bccab7d9dd310  xmlwrapp-0.5.0.tar.gz" \
-	  |$(MD5SUM) --check
-	$(GZIP) --decompress xmlwrapp-0.5.0.tar.gz
-	$(TAR) --extract --verbose --file=xmlwrapp-0.5.0.tar
-	$(RM) --force --recursive $(third_party_include_dir)/xmlwrapp/
-	$(RM) --force --recursive $(third_party_source_dir)/libxml/
-	$(MKDIR) --parents $(third_party_include_dir)/xmlwrapp/
-	$(MKDIR) --parents $(third_party_source_dir)/libxml/
-	$(CP) --preserve xmlwrapp-0.5.0/include/xmlwrapp/*.h \
-	  $(third_party_include_dir)/xmlwrapp/
-	$(CP) --preserve xmlwrapp-0.5.0/src/libxml/* \
-	  $(third_party_source_dir)/libxml/
-	$(RM) --force xmlwrapp-0.5.0.tar xmlwrapp-0.5.0.tar.gz
 
 ###############################################################################
 
