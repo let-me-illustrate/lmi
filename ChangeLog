@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.933 2007-11-05 17:50:21 chicares Exp $
+// $Id: ChangeLog,v 1.934 2007-11-06 03:51:30 chicares Exp $
 
 MAINTENANCE
 
@@ -13925,4 +13925,34 @@ actually serve no purpose.
   setup.make
   workhorse.make
 Stop requiring dummy libraries.
+
+20071106T0038Z <chicares@cox.net> [1211]
+
+  install_miscellanea.make [new file]
+Import from 'gwc/' subdirectory.
+
+20071106T0159Z <chicares@cox.net> [1211]
+
+  setup.make
+Remove boost section: 'install_miscellanea.make' is preferable.
+
+20071106T0220Z <chicares@cox.net> [1209]
+
+  setup.make
+Remove cgicc section: 'install_miscellanea.make' is preferable.
+
+20071106T0231Z <chicares@cox.net> [1209]
+
+  setup.make
+Remove xmlwrapp section: 'install_miscellanea.make' is preferable.
+
+20071106T0300Z <chicares@cox.net> [1207]
+
+  setup.make
+Remove sections for tools provided by cygwin.
+
+20071106T0351Z <chicares@cox.net> [1207]
+
+  workhorse.make
+Suppress a harmless gcc-4.2.1 warning.
 
