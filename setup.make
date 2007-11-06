@@ -19,13 +19,12 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: setup.make,v 1.37 2007-11-06 02:31:22 chicares Exp $
+# $Id: setup.make,v 1.38 2007-11-06 03:00:22 chicares Exp $
 
 .PHONY: all
 all: setup
 
 src_dir   := $(CURDIR)
-tools_dir := $(src_dir)/tools
 
 ################################################################################
 
@@ -62,26 +61,10 @@ third_party_include_dir := $(third_party_dir)/include
 third_party_lib_dir     := $(third_party_dir)/lib
 third_party_source_dir  := $(third_party_dir)/src
 
-sf_mirror := http://downloads.sourceforge.net
-
-# Current versions used in production.
-# TODO ?? Test these thoroughly before moving above. For now, they
-# show tools' versions at a glance.
-#
-# gdb      := gdb-5.2.1-1
-# libxml2  := libxml2-2.6.19
-# make     := make-3.81
-# msys     := MSYS-1.0.10
-# sed      := sed-4.0.7
-# wget     := wget-1.9.1
-
 .PHONY: setup
 setup: \
   dummy_libraries \
   frozen_libxml2 \
-  frozen_make \
-  frozen_sed \
-  msys_make \
 
 # REVIEW: Could these be combined? Untested idea:
 # third_party_directories := \
@@ -183,147 +166,4 @@ install_frozen_libxml2_from_tmp_dir:
 # REVIEW: Should we document the reason for using '.libs' in three of
 # the last four commands? I think we had concluded that it was an odd
 # usage, but that less odd ways (like 'make install'?) didn't work.
-
-###############################################################################
-
-# Install make-3.81 .
-
-.PHONY: frozen_make
-frozen_make:
-	$(MAKE) \
-	  --directory=/tmp \
-	  --file=$(src_dir)/setup.make \
-            src_dir='$(src_dir)' \
-	  install_frozen_make_from_tmp_dir
-
-.PHONY: install_frozen_make_from_tmp_dir
-install_frozen_make_from_tmp_dir:
-	[ -e make-3.81.tar.bz2 ] \
-	  || $(WGET) --non-verbose \
-	  http://ftp.gnu.org/gnu/make/make-3.81.tar.bz2
-	$(ECHO) "354853e0b2da90c527e35aabb8d6f1e6  make-3.81.tar.bz2" \
-	  |$(MD5SUM) --check
-	$(BZIP2) --decompress --keep make-3.81.tar.bz2
-	$(TAR) --extract --file=make-3.81.tar
-	cd make-3.81; \
-	/msys/1.0/bin/sh.exe ./configure && /msys/1.0/bin/make
-# TODO ?? Apparently, because make is being used for this, it cannot
-# be overwritten, so an alternative should be considered.
-	$(CP) --force --preserve $(CURDIR)/make-3.81/make.exe /usr/bin/
-	$(RM) --force make-3.81.tar make-3.81.tar.bz2
-
-# This updates make in MSYS.
-.PHONY: msys_make
-msys_make:
-	$(MAKE) \
-	  --directory=/tmp \
-	  --file=$(src_dir)/setup.make \
-            src_dir='$(src_dir)' \
-	  install_msys_make_from_tmp_dir
-
-.PHONY: install_msys_make_from_tmp_dir
-install_msys_make_from_tmp_dir:
-	[ -e make-3.81-MSYS-1.0.11-snapshot.tar.bz2 ] \
-	  || $(WGET) --non-verbose \
-	  $(sf_mirror)/mingw/make-3.81-MSYS-1.0.11-snapshot.tar.bz2
-	$(ECHO) "d2540add01b0b232722b0d358c6ee1ef  make-3.81-MSYS-1.0.11-snapshot.tar.bz2" \
-	  |$(MD5SUM) --check
-	$(BZIP2) --decompress --keep make-3.81-MSYS-1.0.11-snapshot.tar.bz2
-	$(TAR) --extract --file=make-3.81-MSYS-1.0.11-snapshot.tar
-	$(CP) --force --preserve $(CURDIR)/make-3.81/bin/make.exe /msys/1.0/bin/
-	$(RM) --force make-3.81-MSYS-1.0.11-snapshot.tar \
-	  make-3.81-MSYS-1.0.11-snapshot.tar.bz2
-
-###############################################################################
-
-# Install sed-4.0.7 .
-
-# There are several later versions. Building sed-4.1.4 in MSYS fails
-# for several reasons:
-#  - it expects some natural-language support that's not present
-#      workaround: "./configure --disable-nls"
-#  - it expects to find 'bcopy'
-#      workaround: "make CPPFLAGS='-DHAVE_STRING_H'"
-#  - it can't resolve multibyte-character functions
-#      workaround: suppress "#define HAVE_MBRTOWC 1" in config.h
-# Those seem to be problems with MSYS or autotools, except that
-# the second one looks like a defect in the sed sources (a file
-# that uses 'bcopy' doesn't seem to include config.h).
-
-.PHONY: frozen_sed
-frozen_sed:
-	$(MAKE) \
-	  --directory=/tmp/ \
-	  --file=$(src_dir)/setup.make \
-	  src_dir='$(src_dir)' \
-          install_sed_from_tmp_dir
-
-.PHONY: install_sed_from_tmp_dir
-install_sed_from_tmp_dir:
-	[ -e sed-4.0.7.tar.gz ] \
-	  || $(WGET) --non-verbose \
-	  http://ftp.gnu.org/gnu/sed/sed-4.0.7.tar.gz
-	$(ECHO) " 005738e7f97bd77d95b6907156c8202a  sed-4.0.7.tar.gz " \
-	  |$(MD5SUM) --check
-	$(GZIP) --decompress --force sed-4.0.7.tar.gz
-	$(TAR) --extract --file sed-4.0.7.tar
-	cd /tmp/sed-4.0.7/ ; \
-	/msys/1.0/bin/sh.exe ./configure && /msys/1.0/bin/make
-	-$(CP) --force --preserve sed-4.0.7/sed/sed.exe /usr/bin/
-	$(RM) --recursive sed-4.0.7.tar
-
-###############################################################################
-
-# Upgrade wget-1.9.1.tar.bz2 .
-
-# This target uses wget to install wget. That may seem silly on the
-# face of it, but it's actually useful for upgrading to a later
-# version of wget.
-
-wget_mingwport = wget-1.9.1
-
-.PHONY: wget_mingwport
-wget_mingwport:
-	$(MAKE) \
-	  --directory=/tmp \
-	  --file=$(src_dir)/setup.make \
-	      src_dir='$(src_dir)' \
-	  install_wget_mingwport_from_tmp_dir
-
-.PHONY: install_wget_mingwport_from_tmp_dir
-install_wget_mingwport_from_tmp_dir:
-	$(WGET) --non-verbose $(sf_mirror)/mingw/$(wget_mingwport)-mingwPORT.tar.bz2
-	$(BZIP2) --decompress --force --keep $(wget_mingwport)-mingwPORT.tar.bz2
-	$(TAR) --extract --file $(wget_mingwport)-mingwPORT.tar
-	$(CP) --preserve $(wget_mingwport)/mingwPORT/wget.exe /usr/bin/
-	$(CP) --preserve $(wget_mingwport)/mingwPORT/wget.exe /msys/1.0/local/bin/
-
-# REVIEW: Can't the last command above fail if no local/bin/
-# subdirectory already exists in /msys/1.0/ ? I think that can easily
-# happen even though MSYS puts /usr/local/bin/ in $PATH. Is this the
-# exact place where Earnie recommends installing it? It might help to
-# explain why we're installing it in two places.
-
-###############################################################################
-
-# Installation tools requiring human interaction.
-
-human_interactive_tools = \
-  gdb-5.2.1-1.exe \
-  MSYS-1.0.10.exe
-
-%.exe:
-	$(WGET) --non-verbose $(sf_mirror)/mingw/$@
-	./$@
-
-.PHONY: human_interactive_setup
-human_interactive_setup:
-	$(MAKE) \
-	  --directory=/tmp \
-	  --file=$(src_dir)/setup.make \
-	    src_dir='$(src_dir)' \
-	  install_human_interactive_tools_from_tmp_dir
-
-.PHONY: install_human_interactive_tools_from_tmp_dir
-install_human_interactive_tools_from_tmp_dir: $(human_interactive_tools)
 
