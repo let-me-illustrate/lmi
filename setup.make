@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: setup.make,v 1.34 2007-11-05 17:50:20 chicares Exp $
+# $Id: setup.make,v 1.35 2007-11-06 01:59:13 chicares Exp $
 
 .PHONY: all
 all: setup
@@ -65,8 +65,6 @@ third_party_source_dir  := $(third_party_dir)/src
 sf_mirror := http://downloads.sourceforge.net
 
 # Current versions used in production.
-boost    := boost_1_33_0
-
 # TODO ?? Test these thoroughly before moving above. For now, they
 # show tools' versions at a glance.
 #
@@ -82,7 +80,6 @@ boost    := boost_1_33_0
 .PHONY: setup
 setup: \
   dummy_libraries \
-  frozen_boost \
   frozen_cgicc \
   frozen_libxml2 \
   frozen_make \
@@ -148,42 +145,6 @@ dummy_libraries: $(third_party_bin_dir) $(third_party_lib_dir)
 	@$(foreach z, $(dummy_library_names), \
 	  $(TOUCH) --date=20000101 $(third_party_lib_dir)/$(z); \
 	  )
-
-###############################################################################
-
-# Install boost.
-
-.PHONY: frozen_boost
-frozen_boost:
-	$(MAKE) \
-	  --directory=/tmp \
-	  --file=$(src_dir)/setup.make \
-	                    src_dir='$(src_dir)' \
-	    third_party_include_dir='$(third_party_include_dir)' \
-	     third_party_source_dir='$(third_party_source_dir)' \
-	  install_frozen_boost_from_tmp_dir
-
-.PHONY: install_frozen_boost_from_tmp_dir
-install_frozen_boost_from_tmp_dir:
-	[ -e $(boost).tar.bz2 ] \
-	  || $(WGET) --non-verbose \
-	  $(sf_mirror)/boost/$(boost).tar.bz2
-	$(ECHO) "43d87bbd827a8299f408df5efe5f0fd8  $(boost).tar.bz2" \
-	  |$(MD5SUM) --check
-	$(RM) --force --recursive ./$(boost)
-	$(BZIP2) --decompress --keep $(boost).tar.bz2
-	$(TAR) --extract --file=$(boost).tar
-# This safeguards against any older files interfering with new ones
-# installed to the same directory.
-	$(RM) --force --recursive $(third_party_include_dir)/boost/
-	$(MKDIR) --parents $(third_party_include_dir)/boost/
-	$(RM) --force --recursive $(third_party_source_dir)/boost/
-	$(MKDIR) --parents $(third_party_source_dir)/boost/
-	-$(CP) --force --preserve --recursive $(boost)/boost/* \
-	  $(third_party_include_dir)/boost/
-	-$(CP) --force --preserve --recursive $(boost)/* \
-	  $(third_party_source_dir)/boost/
-	$(RM) --force $(boost).tar $(boost).tar.bz2
 
 ###############################################################################
 
