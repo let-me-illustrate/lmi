@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_miscellanea.make,v 1.8 2007-11-05 02:37:02 chicares Exp $
+# $Id: install_miscellanea.make,v 1.9 2007-11-06 00:34:20 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -27,18 +27,19 @@
 # '/foo', which is reasonable enough for msw; for a posix-emulation
 # system like Cygwin, of course, that's not in the msw root directory.
 
-#prefix     := $(system_root)/opt/lmi
-# TODO ?? testing
-prefix      := $(system_root)/trial
-destination := $(prefix)/third_party
+prefix    := $(system_root)/opt/lmi
+
+cache_dir := $(prefix)/cache
 
 # In the past, it seemed necessary to specify a mirror, e.g.:
 #  mirror := http://easynews.dl.sourceforge.net/sourceforge
 # but as of about 2006-12 sf.net seems to select one automatically
 # when this is passed to wget:
-sf_mirror   := http://downloads.sourceforge.net
+sf_mirror := http://downloads.sourceforge.net
 
 # Nonconfigurable settings #####################################################
+
+destination := $(prefix)/third_party
 
 third_party_bin_dir     := $(destination)/bin
 third_party_include_dir := $(destination)/include
@@ -47,10 +48,7 @@ third_party_source_dir  := $(destination)/src
 
 # File lists ###################################################################
 
-# TODO ?? Testing...
-# boost_archive := boost_1_33_1.tar.bz2
-
-boost_archive    :=
+boost_archive    := boost_1_33_1.tar.bz2
 cgicc_archive    := cgicc-3.1.4.tar.bz2
 xmlwrapp_archive := xmlwrapp-0.5.0.tar.gz
 
@@ -123,12 +121,10 @@ all: boost cgicc xmlwrapp
 
 .PHONY: boost
 boost: $(file_list)
-# TODO ?? for boost:
-#	@$(MKDIR) $(third_party_include_dir)/boost/
-#	-$(CP) --force --preserve --recursive scratch/$(stem)/boost/* $(third_party_include_dir)/boost/
-#	@$(MKDIR) $(third_party_source_dir)/boost/
-# TODO ?? MV instead?
-#	-$(CP) --force --preserve --recursive scratch/$(stem)/*       $(third_party_source_dir)/boost/
+	@$(MKDIR) $(third_party_include_dir)/boost/
+	$(CP) --force --preserve --recursive scratch/$(stem)/boost/* $(third_party_include_dir)/boost/
+	@$(MKDIR) $(third_party_source_dir)/boost/
+	$(MV)                                scratch/$(stem)/*       $(third_party_source_dir)/boost/
 
 .PHONY: cgicc
 cgicc: $(file_list)
@@ -164,9 +160,8 @@ initial_setup:
 	@type "$(WGET)" >/dev/null || { $(ECHO) -e $(wget_missing)       && false; }
 	@[ ! -e $(destination) ]   || { $(ECHO) -e $(destination_exists) && false; }
 	@[ ! -e scratch        ]   || { $(ECHO) -e $(scratch_exists)     && false; }
+	@$(MKDIR) --parents $(cache_dir)
 	@$(MKDIR) --parents $(destination)
-# TODO ?? expunge: can't possibly be nonempty
-#	@$(RM) --force --recursive $(destination)
 	@$(MKDIR) $(third_party_bin_dir)
 	@$(MKDIR) $(third_party_include_dir)
 	@$(MKDIR) $(third_party_lib_dir)
@@ -188,11 +183,9 @@ WGETFLAGS := '--timestamping'
 
 .PHONY: %.tar.bz2 %.tar.gz
 %.tar.bz2 %.tar.gz:
-	[ -e $@ ] || $(WGET) $(WGETFLAGS) $($@-url)
-	$(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
-	-$(TAR) --extract $(TARFLAGS) --directory=scratch --file=$@
-
-# TODO ?? Can we designate a cache directory to hold downloads?
+	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $($@-url)
+	cd $(cache_dir) && $(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
+	-$(TAR) --extract $(TARFLAGS) --directory=scratch --file=$(cache_dir)/$@
 
 # Maintenance ##################################################################
 
