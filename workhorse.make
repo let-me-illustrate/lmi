@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.100 2007-11-05 17:50:20 chicares Exp $
+# $Id: workhorse.make,v 1.101 2007-11-06 03:51:30 chicares Exp $
 
 ################################################################################
 
@@ -222,6 +222,9 @@ wx_libs_check    := $(subst -l ,-l,$(wx_libs_check))
 
 .PHONY: wx_config_check
 wx_config_check:
+	@$(ECHO) wx_dir is $(wx_dir)
+	@$(ECHO) wx_build_dir is $(wx_build_dir)
+	@$(ECHO) wx_config_script is $(wx_config_script)
 	@$(ECHO) Omitted from 'wx-config --cxxflags':
 	@$(ECHO) $(filter-out $(wx_cxxflag_check),$(wx_config_cxxflags))
 	@$(ECHO) Omitted from 'wx-config --libs':
@@ -441,6 +444,14 @@ gcc_common_extra_warnings := \
 
 $(wx_dependent_objects):                gcc_common_extra_warnings :=
 $(wx_dependent_physical_closure_files): gcc_common_extra_warnings :=
+
+# MinGW gcc-4.2.1 has stricter warnings than 3.4.5, but also offers a
+# new option to suppress one that arises often with wx.
+#
+ifeq (4.2.1,$(gcc_version))
+  $(wx_dependent_objects):                gcc_common_extra_warnings := -Wno-attributes
+  $(wx_dependent_physical_closure_files): gcc_common_extra_warnings := -Wno-attributes
+endif
 
 # Boost didn't remove an unused parameter in this file:
 
