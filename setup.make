@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: setup.make,v 1.35 2007-11-06 01:59:13 chicares Exp $
+# $Id: setup.make,v 1.36 2007-11-06 02:20:16 chicares Exp $
 
 .PHONY: all
 all: setup
@@ -68,7 +68,6 @@ sf_mirror := http://downloads.sourceforge.net
 # TODO ?? Test these thoroughly before moving above. For now, they
 # show tools' versions at a glance.
 #
-# cgicc    := cgicc-3.1.4
 # gdb      := gdb-5.2.1-1
 # libxml2  := libxml2-2.6.19
 # make     := make-3.81
@@ -80,7 +79,6 @@ sf_mirror := http://downloads.sourceforge.net
 .PHONY: setup
 setup: \
   dummy_libraries \
-  frozen_cgicc \
   frozen_libxml2 \
   frozen_make \
   frozen_sed \
@@ -145,60 +143,6 @@ dummy_libraries: $(third_party_bin_dir) $(third_party_lib_dir)
 	@$(foreach z, $(dummy_library_names), \
 	  $(TOUCH) --date=20000101 $(third_party_lib_dir)/$(z); \
 	  )
-
-###############################################################################
-
-# Install and patch cgicc-3.1.4 .
-
-# TODO ?? Prefer to define $(TMPDIR) elsewhere and use the definition here.
-# Can the definition in 'GNUmakefile' be shared?
-
-# REVIEW: Can 'frozen_.*' rules be combined? Untested idea:
-# frozen%: $(third_party_directories)
-# 	$(MAKE) \
-# 	  --directory=/tmp \
-# 	  --file=$(src_dir)/setup.make \
-# 	                    src_dir='$(src_dir)' \
-# 	    third_party_include_dir='$(third_party_include_dir)' \
-# 	     third_party_source_dir='$(third_party_source_dir)' \
-# [similarly pass other '.*_dir' variables?]
-# 	  install_$@_from_tmp_dir
-
-.PHONY: frozen_cgicc
-frozen_cgicc:
-	$(MAKE) \
-	  --directory=/tmp \
-	  --file=$(src_dir)/setup.make \
-	                    src_dir='$(src_dir)' \
-	    third_party_include_dir='$(third_party_include_dir)' \
-	     third_party_source_dir='$(third_party_source_dir)' \
-                          tools_dir='$(tools_dir)' \
-	  install_frozen_cgicc_from_tmp_dir check_cgicc_md5sums
-
-# TODO ?? Make this target abend if it's not run in /tmp/ ?
-
-.PHONY: install_frozen_cgicc_from_tmp_dir
-install_frozen_cgicc_from_tmp_dir:
-	[ -e cgicc-3.1.4.tar.bz2 ] \
-          || $(WGET) --non-verbose \
-          ftp://ftp.gnu.org/pub/gnu/cgicc/cgicc-3.1.4.tar.bz2
-	$(ECHO) "6cb5153fc9fa64b4e50c7962aa557bbe  cgicc-3.1.4.tar.bz2" \
-	  |$(MD5SUM) --check
-	$(BZIP2) --decompress --keep cgicc-3.1.4.tar.bz2
-	$(TAR) --extract --file=cgicc-3.1.4.tar
-	$(PATCH) --strip=0 < $(tools_dir)/cgicc/cgicc_3_1_4_patch
-	$(MKDIR) --parents $(third_party_include_dir)/cgicc/
-	$(MKDIR) --parents $(third_party_source_dir)/cgicc/
-	$(CP) --preserve cgicc-3.1.4/cgicc/*.h \
-	  $(third_party_include_dir)/cgicc/
-	$(CP) --preserve cgicc-3.1.4/cgicc/*.cpp \
-	  $(third_party_source_dir)/cgicc/
-	$(RM) --force cgicc-3.1.4.tar cgicc-3.1.4.tar.bz2
-
-.PHONY: check_cgicc_md5sums
-check_cgicc_md5sums: $(third_party_dir)
-	cd $(third_party_dir); \
-	$(MD5SUM) --check $(tools_dir)/cgicc/cgicc_md5sums
 
 ###############################################################################
 # This version has not been formally tested and released for production with
@@ -419,11 +363,4 @@ human_interactive_setup:
 
 .PHONY: install_human_interactive_tools_from_tmp_dir
 install_human_interactive_tools_from_tmp_dir: $(human_interactive_tools)
-
-###############################################################################
-
-# Validate setup files.
-
-.PHONY: test_setup
-test_setup: check_cgicc_md5sums
 
