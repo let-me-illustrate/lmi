@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_libxml2_libxslt.make,v 1.1 2007-08-09 15:13:39 chicares Exp $
+# $Id: install_libxml2_libxslt.make,v 1.2 2007-11-11 16:46:38 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -47,6 +47,8 @@ endif
 
 tools_dir := $(dir $(this_makefile))/tools
 
+# TODO ?? Use MinGW instead of Cygwin gcc.
+
 common_options := \
   --disable-static \
   --enable-shared \
@@ -69,8 +71,6 @@ libxslt-1.1.17_options := \
 
 # Utilities ####################################################################
 
-CP     := cp
-DATE   := date
 ECHO   := echo
 GREP   := grep
 MD5SUM := md5sum
@@ -120,16 +120,18 @@ wget_whence := $(host)/$(host_path)
 %.tar.bz2 %.tar.gz:
 	@[ -e $*.md5sum ] || $(WGET) $(WGETFLAGS) $(wget_whence)/$*.md5sum
 	@[ -e $@        ] || $(WGET) $(WGETFLAGS) $(wget_whence)/$@
-	cd $(dir $@); \
+	cd $(dir $@) && \
 	  $(GREP) $(notdir $@) $(notdir $*).md5sum | $(MD5SUM) --check --status -
 	$(TAR) --extract $(decompress) --directory=$(xml_dir) --file=$@
+
+# TODO ?? Get rid of the 'LOG' stuff once this makefile is stabilized.
 
 .PHONY: $(libraries)
 $(libraries):
 	export LOG=log-$(date); \
 	$($(notdir $@)_exports) \
 	$(RM) --force $$LOG; \
-	cd $(xml_dir)/$(notdir $@); \
+	cd $(xml_dir)/$(notdir $@) && \
 	  ./configure --prefix=$(prefix) $($(notdir $@)_options) >>$$LOG 2>&1; \
 	  $(MAKE)                                                >>$$LOG 2>&1; \
 	  $(MAKE) install                                        >>$$LOG 2>&1; \
@@ -146,6 +148,10 @@ libxslt/1.1/libxslt-1.1.17: libxml2/2.6/libxml2-2.6.26
 patch_libxslt: libxslt/1.1/libxslt-1.1.17.tar.bz2
 	cd $(xml_dir)/libxslt-1.1.17; \
 	  $(PATCH) --batch --forward --strip=1 < $(tools_dir)/libxslt/1_1_17_patch; \
+
+# TODO ?? This seems too elaborate and expensive for what it really
+# does. As for the install directory, it removes libxml2 fairly well,
+# but not libxslt or libexslt.
 
 .PHONY: clobber
 clobber:
