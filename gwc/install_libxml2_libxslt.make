@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_libxml2_libxslt.make,v 1.3 2007-11-11 16:50:02 chicares Exp $
+# $Id: install_libxml2_libxslt.make,v 1.4 2007-11-11 16:55:23 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -31,7 +31,7 @@ source_archives := \
 host          := ftp://ftp.gnome.org
 host_path     := pub/GNOME/sources
 
-prefix        := /usr/local
+prefix        := /opt/lmi/local
 
 xml_dir       := xml-scratch
 
