@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.934 2007-11-06 03:51:30 chicares Exp $
+// $Id: ChangeLog,v 1.935 2007-11-11 16:33:21 chicares Exp $
 
 MAINTENANCE
 
@@ -13955,4 +13955,9 @@ Remove sections for tools provided by cygwin.
 
   workhorse.make
 Suppress a harmless gcc-4.2.1 warning.
+
+20071111T1633Z <chicares@cox.net> [1207]
+
+  libxslt-1.1.17-lmi.patch [new file]
+Patch a third-party library.
 
