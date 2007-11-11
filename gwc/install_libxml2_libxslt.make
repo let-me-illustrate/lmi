@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_libxml2_libxslt.make,v 1.2 2007-11-11 16:46:38 chicares Exp $
+# $Id: install_libxml2_libxslt.make,v 1.3 2007-11-11 16:50:02 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -44,8 +44,6 @@ ifeq (3.81,$(firstword $(sort $(MAKE_VERSION) 3.81)))
 else
   $(error Upgrade to make-3.81 .)
 endif
-
-tools_dir := $(dir $(this_makefile))/tools
 
 # TODO ?? Use MinGW instead of Cygwin gcc.
 
@@ -146,8 +144,7 @@ libxslt/1.1/libxslt-1.1.17: libxml2/2.6/libxml2-2.6.26
 
 .PHONY: patch_libxslt
 patch_libxslt: libxslt/1.1/libxslt-1.1.17.tar.bz2
-	cd $(xml_dir)/libxslt-1.1.17; \
-	  $(PATCH) --batch --forward --strip=1 < $(tools_dir)/libxslt/1_1_17_patch; \
+	$(PATCH) --directory=$(xml_dir) --strip=1 < libxslt-1.1.17-lmi.patch
 
 # TODO ?? This seems too elaborate and expensive for what it really
 # does. As for the install directory, it removes libxml2 fairly well,
