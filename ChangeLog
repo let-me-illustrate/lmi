@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.935 2007-11-11 16:33:21 chicares Exp $
+// $Id: ChangeLog,v 1.936 2007-11-12 15:38:34 chicares Exp $
 
 MAINTENANCE
 
@@ -13960,4 +13960,9 @@ Suppress a harmless gcc-4.2.1 warning.
 
   libxslt-1.1.17-lmi.patch [new file]
 Patch a third-party library.
+
+20071112T1538Z <chicares@cox.net> [1207]
+
+  install_libxml2_libxslt.make [new file]
+Import from 'gwc/' subdirectory.
 
