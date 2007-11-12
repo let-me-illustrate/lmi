@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_libxml2_libxslt.make,v 1.4 2007-11-11 16:55:23 chicares Exp $
+# $Id: install_libxml2_libxslt.make,v 1.5 2007-11-12 03:30:32 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -33,7 +33,7 @@ host_path     := pub/GNOME/sources
 
 prefix        := /opt/lmi/local
 
-xml_dir       := xml-scratch
+xml_dir       := /opt/lmi/xml-scratch
 
 # Variables that normally should be left alone #################################
 
@@ -148,7 +148,11 @@ patch_libxslt: libxslt/1.1/libxslt-1.1.17.tar.bz2
 
 # TODO ?? This seems too elaborate and expensive for what it really
 # does. As for the install directory, it removes libxml2 fairly well,
-# but not libxslt or libexslt.
+# but not libxslt or libexslt...but see update below...
+#
+# Update: placing $(xml_dir) on a specially-mounted directory
+#   C:\opt\lmi on /opt/lmi type system (binmode)
+# "fixes" that problem.
 
 .PHONY: clobber
 clobber:
