@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_libxml2_libxslt.make,v 1.5 2007-11-12 03:30:32 chicares Exp $
+# $Id: install_libxml2_libxslt.make,v 1.6 2007-11-12 04:44:49 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -31,6 +31,9 @@ source_archives := \
 host          := ftp://ftp.gnome.org
 host_path     := pub/GNOME/sources
 
+mingw_root    := /cygdrive/c
+mingw_dir     := MinGW-20050827
+
 prefix        := /opt/lmi/local
 
 xml_dir       := /opt/lmi/xml-scratch
@@ -39,21 +42,30 @@ xml_dir       := /opt/lmi/xml-scratch
 
 date           = $(shell date -u +'%Y%m%dT%H%MZ')
 
+mingw_bin_dir := $(mingw_root)/$(mingw_dir)/bin
+
 ifeq (3.81,$(firstword $(sort $(MAKE_VERSION) 3.81)))
   this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 else
   $(error Upgrade to make-3.81 .)
 endif
 
-# TODO ?? Use MinGW instead of Cygwin gcc.
+# '--disable-dependency-tracking' is required with the MinGW toolchain
+# in a Cygwin shell, to prevent a catastrophic dependency-tracking
+# failure. Apparently the problem is colons in header paths, e.g.:
+#   c:/MinGW-20050827/bin/../lib/gcc/mingw32/3.4.4/include/stddef.h:
+# which elicit fatal errors such as this:
+#   .deps/DOCBparser.Plo:1: *** multiple target patterns.  Stop.
 
 common_options := \
+  --disable-dependency-tracking \
   --disable-static \
   --enable-shared \
   --with-debug \
   --without-python \
-  CC='gcc -mno-cygwin' \
-  LDFLAGS='-mno-cygwin -lws2_32' \
+  CC='$(mingw_bin_dir)/gcc' \
+  LD='$(mingw_bin_dir)/ld' \
+  LDFLAGS='-lws2_32' \
 
 libxml2-2.6.26_options := \
   $(common_options) \
