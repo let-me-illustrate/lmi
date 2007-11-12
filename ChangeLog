@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.937 2007-11-12 20:13:38 wboutin Exp $
+// $Id: ChangeLog,v 1.938 2007-11-12 20:23:10 wboutin Exp $
 
 MAINTENANCE
 
@@ -13970,4 +13970,9 @@ Import from 'gwc/' subdirectory.
 
   xml_notebook_group_carveout.xrc [new file]
 Add new input skin.
+
+20071112T2023Z <wboutin@massmutual.com> [1207]
+
+  xml_notebook_group_carveout.xrc
+Improve documentation.
 
