@@ -24,9 +24,9 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook_group_carveout.xrc,v 1.1 2007-11-12 20:13:37 wboutin Exp $
+    $Id: xml_notebook_group_carveout.xrc,v 1.2 2007-11-12 20:23:10 wboutin Exp $
 
-    This version is designed for COLI and BOLI users; it omits input
+    This version is designed for group-carveout users; it omits input
     fields that seem irrelevant in that context, and reflects the
     aesthetic preferences of an actual customer group.
 -->
