@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_libxml2_libxslt.make,v 1.6 2007-11-12 04:44:49 chicares Exp $
+# $Id: install_libxml2_libxslt.make,v 1.7 2007-11-12 12:39:02 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -43,12 +43,6 @@ xml_dir       := /opt/lmi/xml-scratch
 date           = $(shell date -u +'%Y%m%dT%H%MZ')
 
 mingw_bin_dir := $(mingw_root)/$(mingw_dir)/bin
-
-ifeq (3.81,$(firstword $(sort $(MAKE_VERSION) 3.81)))
-  this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
-else
-  $(error Upgrade to make-3.81 .)
-endif
 
 # '--disable-dependency-tracking' is required with the MinGW toolchain
 # in a Cygwin shell, to prevent a catastrophic dependency-tracking
@@ -158,27 +152,11 @@ libxslt/1.1/libxslt-1.1.17: libxml2/2.6/libxml2-2.6.26
 patch_libxslt: libxslt/1.1/libxslt-1.1.17.tar.bz2
 	$(PATCH) --directory=$(xml_dir) --strip=1 < libxslt-1.1.17-lmi.patch
 
-# TODO ?? This seems too elaborate and expensive for what it really
-# does. As for the install directory, it removes libxml2 fairly well,
-# but not libxslt or libexslt...but see update below...
-#
-# Update: placing $(xml_dir) on a specially-mounted directory
-#   C:\opt\lmi on /opt/lmi type system (binmode)
-# "fixes" that problem.
-
 .PHONY: clobber
 clobber:
 	-for z in $(notdir $(libraries)); \
-	  do cd $(xml_dir)/$$z && make uninstall maintainer-clean; \
-	  done;
-	-for z in $(notdir $(libraries)); \
 	  do \
-	    shopt -s extglob; \
-	    echo "Removing non-log files in $$z"; \
-	    { for f in $(xml_dir)/$$z/'!(log-*)'; \
-	      do \
-	        rm --recursive $$f; \
-	      done; \
-	    }; \
+	    cd $(xml_dir)/$$z && make uninstall maintainer-clean; \
+	    rm --recursive $(xml_dir)/$$z; \
 	  done;
 
