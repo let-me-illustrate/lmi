@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_libxml2_libxslt.make,v 1.7 2007-11-12 12:39:02 chicares Exp $
+# $Id: install_libxml2_libxslt.make,v 1.8 2007-11-12 15:04:02 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -39,8 +39,6 @@ prefix        := /opt/lmi/local
 xml_dir       := /opt/lmi/xml-scratch
 
 # Variables that normally should be left alone #################################
-
-date           = $(shell date -u +'%Y%m%dT%H%MZ')
 
 mingw_bin_dir := $(mingw_root)/$(mingw_dir)/bin
 
@@ -128,17 +126,12 @@ wget_whence := $(host)/$(host_path)
 	  $(GREP) $(notdir $@) $(notdir $*).md5sum | $(MD5SUM) --check --status -
 	$(TAR) --extract $(decompress) --directory=$(xml_dir) --file=$@
 
-# TODO ?? Get rid of the 'LOG' stuff once this makefile is stabilized.
-
 .PHONY: $(libraries)
 $(libraries):
-	export LOG=log-$(date); \
-	$($(notdir $@)_exports) \
-	$(RM) --force $$LOG; \
-	cd $(xml_dir)/$(notdir $@) && \
-	  ./configure --prefix=$(prefix) $($(notdir $@)_options) >>$$LOG 2>&1; \
-	  $(MAKE)                                                >>$$LOG 2>&1; \
-	  $(MAKE) install                                        >>$$LOG 2>&1; \
+	cd $(xml_dir)/$(notdir $@) \
+	  && ./configure --prefix=$(prefix) $($(notdir $@)_options) \
+	  && $(MAKE) \
+	  && $(MAKE) install \
 
 .PHONY: libxslt/1.1/libxslt-1.1.17
 libxslt/1.1/libxslt-1.1.17: patch_libxslt
