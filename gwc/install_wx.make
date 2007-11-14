@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_wx.make,v 1.1 2007-08-09 15:13:40 chicares Exp $
+# $Id: install_wx.make,v 1.2 2007-11-14 13:36:12 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -34,6 +34,9 @@ wx_dir        := wx-scratch/wxWidgets-2006-12-04
 ##mingw_root    := /c
 ##mingw_dir     := /MinGW-20050827
 
+# Configuration reference:
+#   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00001.html
+
 config_options = \
   --disable-gif \
   --disable-apple_ieee \
@@ -45,11 +48,12 @@ config_options = \
   --disable-threads \
   --enable-stl \
   --enable-std_iostreams \
-  --enable-debug_info \
+  --enable-debug \
   --enable-commondlg \
   --disable-compat24 \
   --disable-vararg_macros \
   VENDOR='$(vendor)' \
+  CPPFLAGS='-DNO_GCC_PRAGMA' \
   CC='gcc -mno-cygwin' \
   CXX='g++ -mno-cygwin' \
   LDFLAGS='-mno-cygwin' \
