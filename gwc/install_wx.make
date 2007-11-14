@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_wx.make,v 1.3 2007-11-14 14:02:09 chicares Exp $
+# $Id: install_wx.make,v 1.4 2007-11-14 14:11:13 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -52,9 +52,8 @@ config_options = \
   --disable-vararg_macros \
   VENDOR='$(vendor)' \
   CPPFLAGS='-DNO_GCC_PRAGMA' \
-  CC='gcc -mno-cygwin' \
-  CXX='g++ -mno-cygwin' \
-  LDFLAGS='-mno-cygwin' \
+  CC='$(mingw_bin_dir)/gcc' \
+  CXX='$(mingw_bin_dir)/g++' \
 
 # Utilities ####################################################################
 
@@ -148,9 +147,9 @@ wx:
 ##	$(call wx_config_fix,wx-config,wx-config-msys)
 	$(ECHO) '#!/bin/sh'                          >wx-config-portable
 	$(ECHO) 'if   [ "--cxxflags" = $$1 ]; then' >>wx-config-portable
-	$(ECHO) "echo `wx-config-msys --cxxflags`"  >>wx-config-portable
+	$(ECHO) "echo `wx-config --cxxflags`"       >>wx-config-portable
 	$(ECHO) 'elif [ "--libs"     = $$1 ]; then' >>wx-config-portable
-	$(ECHO) "echo `wx-config-msys --libs`"      >>wx-config-portable
+	$(ECHO) "echo `wx-config --libs`"           >>wx-config-portable
 	$(ECHO) 'else'                              >>wx-config-portable
 	$(ECHO) 'echo Bad argument $$1'             >>wx-config-portable
 	$(ECHO) 'fi'                                >>wx-config-portable
