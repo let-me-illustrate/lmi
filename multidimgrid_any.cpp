@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.16 2007-06-25 21:13:30 chicares Exp $
+// $Id: multidimgrid_any.cpp,v 1.17 2007-11-14 03:13:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -798,7 +798,10 @@ int MultiDimGrid::GetGridAxisSelection(int id)
     if(oldSel == wxNOT_FOUND || oldSel == 0)
         {return wxNOT_FOUND;}
 
-    return reinterpret_cast<int>(choice->GetClientData(oldSel));
+// TODO ?? Isn't this cast suspicious? Should boost::numeric_cast be
+// used to convert the wxUIntPtr to an int? Is the return value really
+// a pointer, or is it really an integer?
+    return reinterpret_cast<wxUIntPtr>(choice->GetClientData(oldSel));
 }
 
 void MultiDimGrid::DoSetGridAxisSelection(int axis_id, int selection)
