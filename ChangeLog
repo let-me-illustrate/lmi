@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.938 2007-11-12 20:23:10 wboutin Exp $
+// $Id: ChangeLog,v 1.939 2007-11-14 03:15:29 chicares Exp $
 
 MAINTENANCE
 
@@ -13975,4 +13975,15 @@ Add new input skin.
 
   xml_notebook_group_carveout.xrc
 Improve documentation.
+
+20071114T0313Z <gchicares@sbcglobal.net> [1208]
+
+  multidimgrid_any.cpp
+Fix defect introduced 20070401T1429Z. It now appears that two casts
+needed to be changed, but only one was actually changed then.
+
+20071114T0315Z <gchicares@sbcglobal.net> [1208]
+
+  main_wx.cpp
+Don't require wxUSE_STL (VZ).
 
