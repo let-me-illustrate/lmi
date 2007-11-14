@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.84 2007-07-30 14:14:27 chicares Exp $
+// $Id: main_wx.cpp,v 1.85 2007-11-14 03:15:29 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -946,9 +946,18 @@ void Skeleton::UponTestSafeMessage(wxCommandEvent&)
     wxSafeYield();
 }
 
+/// SOMEDAY !! Cancelling the wxGetTextFromUser() dialog causes it to
+/// return an empty string. It might be nicer to use a more elaborate
+/// facility that exits immediately in that case, because wxExecute()
+/// asserts that its first argument is nonempty in wx's debug mode.
+/// However, in the present implementation, it would be wrong to exit
+/// immediately: that would mask any such side effects and make it
+/// impossible to use this function to test the consequences of
+/// attempting to execute an empty command.
+
 void Skeleton::UponTestSystemCommand(wxCommandEvent&)
 {
-    system_command
+    std::string const z
         (
         wxGetTextFromUser
             ("Type a command."
@@ -957,6 +966,7 @@ void Skeleton::UponTestSystemCommand(wxCommandEvent&)
             ,wxTheApp->GetTopWindow()
             )
         );
+    system_command(z);
 }
 
 /// Periodically test the floating-point control word when no critical
