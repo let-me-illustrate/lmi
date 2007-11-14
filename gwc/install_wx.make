@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_wx.make,v 1.5 2007-11-14 14:25:30 chicares Exp $
+# $Id: install_wx.make,v 1.6 2007-11-14 14:35:26 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -84,6 +84,8 @@ endif
 
 # Portability workaround #######################################################
 
+# TODO ?? Either expunge this, or provide a rationale for keeping it.
+
 # 'wx-config' is not portable. For example, it uses 'printf(1)', which
 # zsh supports only in versions after 4.0.1 . Far worse, it underlies
 # a problem discussed in these messages
@@ -143,7 +145,8 @@ WGETFLAGS := '--timestamping'
 wx:
 	../configure $(config_options) >config_log_$(date) 2>config_err_$(date)
 	$(MAKE) >build_log_$(date) 2>build_err_$(date)
-	$(CP) --interactive --preserve lib/*.dll $(prefix)
+# TODO ?? Avoid '--interactive' so that this can run unattended. Use '--force'?
+	$(CP) --interactive --preserve lib/*.dll $(prefix)/bin
 ##	$(call wx_config_fix,wx-config,wx-config-msys)
 	$(ECHO) '#!/bin/sh'                          >wx-config-portable
 	$(ECHO) 'if   [ "--cxxflags" = $$1 ]; then' >>wx-config-portable
