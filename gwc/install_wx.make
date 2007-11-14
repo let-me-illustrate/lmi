@@ -19,20 +19,18 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_wx.make,v 1.2 2007-11-14 13:36:12 chicares Exp $
+# $Id: install_wx.make,v 1.3 2007-11-14 14:02:09 chicares Exp $
 
 # Configurable settings ########################################################
 
-prefix        := /usr/local/bin
+mingw_root      := /cygdrive/c
+mingw_dir       := MinGW-20050827
+
+prefix          := /opt/lmi/local
 
 # TODO ?? wget...
 
-# 20061204 cvs snapshot for now.
-##wx_dir        := /c/wx20061204/wxWidgets-2006-12-04
-wx_dir        := wx-scratch/wxWidgets-2006-12-04
-
-##mingw_root    := /c
-##mingw_dir     := /MinGW-20050827
+wx_dir          := /opt/lmi/wx-scratch/wxWidgets-2006-12-04
 
 # Configuration reference:
 #   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00001.html
@@ -72,16 +70,15 @@ WGET   := wget
 
 date           = $(shell date -u +'%Y%m%dT%H%MZ')
 
-##mingw_bin_dir := $(mingw_root)/$(mingw_dir)/bin
+mingw_bin_dir := $(mingw_root)/$(mingw_dir)/bin
 
-##vendor        := $(shell $(mingw_bin_dir)/g++ -dumpversion)
-vendor        := $(shell g++ -dumpversion)
-vendor        := X$(subst .,,$(vendor))
+vendor        := $(shell $(mingw_bin_dir)/gcc -dumpversion)
+vendor        := $(subst .,,$(vendor))
 
 build_dir     := $(wx_dir)/gcc$(vendor)
 
 ifeq (3.81,$(firstword $(sort $(MAKE_VERSION) 3.81)))
-  self        := $(abspath $(lastword $(MAKEFILE_LIST)))
+  this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 else
   $(error Upgrade to make-3.81 .)
 endif
@@ -124,7 +121,7 @@ all:
 	$(MKDIR) --parents $(build_dir)
 # TODO ?? wget...
 #	$(CP) /cygdrive/c/wx20061204/wxWidgets-2006-12-04
-	$(MAKE) --file=$(self) --directory=$(build_dir) wx
+	$(MAKE) --file=$(this_makefile) --directory=$(build_dir) wx
 
 ##	export PATH=$(mingw_bin_dir):$$PATH ; \
 
