@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_wx.make,v 1.8 2007-11-16 02:04:13 chicares Exp $
+# $Id: install_wx.make,v 1.9 2007-11-16 13:26:26 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -79,6 +79,7 @@ config_options = \
 
 CP     := cp
 ECHO   := echo
+MD5SUM := md5sum
 MKDIR  := mkdir
 SED    := sed
 TAR    := tar
@@ -147,9 +148,9 @@ WGETFLAGS := '--timestamping'
 .PHONY: wx
 wx:
 	../configure $(config_options) >config_log_$(date) 2>config_err_$(date)
-	$(MAKE) >build_log_$(date) 2>build_err_$(date)
-# TODO ?? Avoid '--interactive' so that this can run unattended. Use '--force'?
-	$(CP) --interactive --preserve lib/*.dll $(prefix)/bin
+	$(MAKE)                        > build_log_$(date) 2> build_err_$(date)
+# TODO ?? Add $(prefix) to configury, then make install?
+	$(CP) --force --preserve lib/*.dll $(prefix)/bin
 ##	$(call wx_config_fix,wx-config,wx-config-msys)
 	$(ECHO) '#!/bin/sh'                          >wx-config-portable
 	$(ECHO) 'if   [ "--cxxflags" = $$1 ]; then' >>wx-config-portable
