@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_wx.make,v 1.6 2007-11-14 14:35:26 chicares Exp $
+# $Id: install_wx.make,v 1.7 2007-11-16 01:52:30 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -31,6 +31,23 @@ prefix          := /opt/lmi/local
 # TODO ?? wget...
 
 wx_dir          := /opt/lmi/wx-scratch/wxWidgets-2006-12-04
+
+# Variables that normally should be left alone #################################
+
+date           = $(shell date -u +'%Y%m%dT%H%MZ')
+
+mingw_bin_dir := $(mingw_root)/$(mingw_dir)/bin
+
+vendor        := $(shell $(mingw_bin_dir)/gcc -dumpversion)
+vendor        := $(subst .,,$(vendor))
+
+build_dir     := $(wx_dir)/gcc$(vendor)
+
+ifeq (3.81,$(firstword $(sort $(MAKE_VERSION) 3.81)))
+  this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
+else
+  $(error Upgrade to make-3.81 .)
+endif
 
 # Configuration reference:
 #   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00001.html
@@ -64,23 +81,6 @@ SED    := sed
 TAR    := tar
 TR     := tr
 WGET   := wget
-
-# Dependent variables ##########################################################
-
-date           = $(shell date -u +'%Y%m%dT%H%MZ')
-
-mingw_bin_dir := $(mingw_root)/$(mingw_dir)/bin
-
-vendor        := $(shell $(mingw_bin_dir)/gcc -dumpversion)
-vendor        := $(subst .,,$(vendor))
-
-build_dir     := $(wx_dir)/gcc$(vendor)
-
-ifeq (3.81,$(firstword $(sort $(MAKE_VERSION) 3.81)))
-  this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
-else
-  $(error Upgrade to make-3.81 .)
-endif
 
 # Portability workaround #######################################################
 
