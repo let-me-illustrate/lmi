@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_wx.make,v 1.9 2007-11-16 13:26:26 chicares Exp $
+# $Id: install_wx.make,v 1.10 2007-11-16 16:44:28 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -70,6 +70,7 @@ config_options = \
   --enable-commondlg \
   --disable-compat24 \
   --disable-vararg_macros \
+  --prefix=$(prefix) \
   VENDOR='$(vendor)' \
   CPPFLAGS='-DNO_GCC_PRAGMA' \
   CC='$(mingw_bin_dir)/gcc' \
@@ -81,6 +82,7 @@ CP     := cp
 ECHO   := echo
 MD5SUM := md5sum
 MKDIR  := mkdir
+RM     := rm
 SED    := sed
 TAR    := tar
 TR     := tr
@@ -128,8 +130,6 @@ all:
 #	$(CP) /cygdrive/c/wx20061204/wxWidgets-2006-12-04
 	$(MAKE) --file=$(this_makefile) --directory=$(build_dir) wx
 
-##	export PATH=$(mingw_bin_dir):$$PATH ; \
-
 # TODO ?? wget...needs work
 # ftp://ftp.wxwidgets.org/pub/2.8.4/wxWidgets-2.8.4.tar.bz2
 
@@ -147,10 +147,9 @@ WGETFLAGS := '--timestamping'
 
 .PHONY: wx
 wx:
-	../configure $(config_options) >config_log_$(date) 2>config_err_$(date)
-	$(MAKE)                        > build_log_$(date) 2> build_err_$(date)
-# TODO ?? Add $(prefix) to configury, then make install?
-	$(CP) --force --preserve lib/*.dll $(prefix)/bin
+	../configure $(config_options) >  config_log_$(date) 2>  config_err_$(date)
+	$(MAKE)                        >   build_log_$(date) 2>   build_err_$(date)
+	$(MAKE) install                > install_log_$(date) 2> install_err_$(date)
 ##	$(call wx_config_fix,wx-config,wx-config-msys)
 	$(ECHO) '#!/bin/sh'                          >wx-config-portable
 	$(ECHO) 'if   [ "--cxxflags" = $$1 ]; then' >>wx-config-portable
@@ -160,4 +159,11 @@ wx:
 	$(ECHO) 'else'                              >>wx-config-portable
 	$(ECHO) 'echo Bad argument $$1'             >>wx-config-portable
 	$(ECHO) 'fi'                                >>wx-config-portable
+	$(CP) --force --preserve wx-config-portable $(prefix)/bin
+
+.PHONY: clobber
+clobber:
+# TODO ?? The 'uninstall' target doesn't remove quite everything.
+	-cd $(build_dir) && $(MAKE) uninstall distclean
+	$(RM) --force --recursive $(wx_dir)
 
