@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_wx.make,v 1.7 2007-11-16 01:52:30 chicares Exp $
+# $Id: install_wx.make,v 1.8 2007-11-16 02:04:13 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -51,6 +51,10 @@ endif
 
 # Configuration reference:
 #   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00001.html
+# TODO ?? But see the last paragraph of
+#   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00004.html
+# and override wxApp::OnAssertFailure() before experimenting with
+# '--enable-debug_flag'.
 
 config_options = \
   --disable-gif \
@@ -63,7 +67,6 @@ config_options = \
   --disable-threads \
   --enable-stl \
   --enable-std_iostreams \
-  --enable-debug \
   --enable-commondlg \
   --disable-compat24 \
   --disable-vararg_macros \
