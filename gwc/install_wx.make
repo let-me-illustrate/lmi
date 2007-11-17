@@ -19,18 +19,20 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_wx.make,v 1.10 2007-11-16 16:44:28 chicares Exp $
+# $Id: install_wx.make,v 1.11 2007-11-17 17:36:02 chicares Exp $
 
 # Configurable settings ########################################################
+
+wx_version      := 2.8.6
 
 mingw_root      := /cygdrive/c
 mingw_dir       := MinGW-20050827
 
 prefix          := /opt/lmi/local
 
-# TODO ?? wget...
+cache_dir       := $(prefix)/cache
 
-wx_dir          := /opt/lmi/wx-scratch/wxWidgets-2006-12-04
+wx_dir          := /opt/lmi/wx-scratch
 
 # Variables that normally should be left alone #################################
 
@@ -41,7 +43,7 @@ mingw_bin_dir := $(mingw_root)/$(mingw_dir)/bin
 vendor        := $(shell $(mingw_bin_dir)/gcc -dumpversion)
 vendor        := $(subst .,,$(vendor))
 
-build_dir     := $(wx_dir)/gcc$(vendor)
+build_dir     := $(wx_dir)/wxWidgets-$(wx_version)/gcc$(vendor)
 
 ifeq (3.81,$(firstword $(sort $(MAKE_VERSION) 3.81)))
   this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
@@ -75,6 +77,16 @@ config_options = \
   CPPFLAGS='-DNO_GCC_PRAGMA' \
   CC='$(mingw_bin_dir)/gcc' \
   CXX='$(mingw_bin_dir)/g++' \
+
+# URLs and archive md5sums #####################################################
+
+wx-2.8.6-md5 := 8a130e5b25448a17454a6b957a5e075c
+
+wx_archive        := wxWidgets-$(wx_version).tar.bz2
+
+$(wx_archive)-url := ftp://ftp.wxwidgets.org/pub/$(wx_version)/$(wx_archive)
+
+$(wx_archive)-md5 := $(wx-$(wx_version)-md5)
 
 # Utilities ####################################################################
 
@@ -121,17 +133,33 @@ WGET   := wget
 ##wx_config_fix = \
 ##  <$(1) $(SED) -e 's|pwd|pwd -W|' | $(TR) --delete '\r' >$(2)
 
+# Error messages ###############################################################
+
+wget_missing = \
+  "\nError: Unable to find '$(WGET)', which is required for" \
+  "\nautomated downloads. Install it on your PATH." \
+  "\n"
+
 # Targets ######################################################################
 
+source_archives := $(wx_archive)
+libraries       := $(source_archives:.tar.bz2=)
+
 .PHONY: all
-all:
-	$(MKDIR) --parents $(build_dir)
-# TODO ?? wget...
-#	$(CP) /cygdrive/c/wx20061204/wxWidgets-2006-12-04
+all: clobber $(source_archives) $(libraries)
 	$(MAKE) --file=$(this_makefile) --directory=$(build_dir) wx
 
-# TODO ?? wget...needs work
-# ftp://ftp.wxwidgets.org/pub/2.8.4/wxWidgets-2.8.4.tar.bz2
+# Simulated order-only prerequisites.
+$(libraries): $(source_archives)
+$(source_archives): initial_setup
+initial_setup: clobber
+
+.PHONY: initial_setup
+initial_setup:
+	@type "$(WGET)" >/dev/null || { $(ECHO) -e $(wget_missing) && false; }
+	@$(MKDIR) --parents $(prefix)
+	@$(MKDIR) --parents $(cache_dir)
+	@$(MKDIR) --parents $(build_dir)
 
 TARFLAGS := --keep-old-files
 %.tar.bz2: TARFLAGS += --bzip2
@@ -141,9 +169,9 @@ WGETFLAGS := '--timestamping'
 
 .PHONY: %.tar.bz2 %.tar.gz
 %.tar.bz2 %.tar.gz:
-	[ -e $@ ] || $(WGET) $(WGETFLAGS) $($@-url)
-	$(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
-	-$(TAR) --extract $(TARFLAGS) --directory=$(wx_dir) --file=$@
+	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $($@-url)
+	cd $(cache_dir) && $(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
+	-$(TAR) --extract $(TARFLAGS) --directory=$(wx_dir) --file=$(cache_dir)/$@
 
 .PHONY: wx
 wx:
@@ -165,5 +193,7 @@ wx:
 clobber:
 # TODO ?? The 'uninstall' target doesn't remove quite everything.
 	-cd $(build_dir) && $(MAKE) uninstall distclean
-	$(RM) --force --recursive $(wx_dir)
+	-$(RM) --force --recursive $(prefix)/include/wx-$(basename $(wx_version))
+	-$(RM) --force --recursive $(prefix)/lib/wx
+	-$(RM) --force --recursive $(wx_dir)
 
