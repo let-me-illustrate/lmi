@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.939 2007-11-14 03:15:29 chicares Exp $
+// $Id: ChangeLog,v 1.940 2007-11-18 16:00:45 chicares Exp $
 
 MAINTENANCE
 
@@ -13986,4 +13986,9 @@ needed to be changed, but only one was actually changed then.
 
   main_wx.cpp
 Don't require wxUSE_STL (VZ).
+
+20071118T1600Z <gchicares@sbcglobal.net> [1210]
+
+  workhorse.make
+Adapt to new msw build environment.
 

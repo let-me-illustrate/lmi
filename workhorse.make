@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.101 2007-11-06 03:51:30 chicares Exp $
+# $Id: workhorse.make,v 1.102 2007-11-18 16:00:45 chicares Exp $
 
 ################################################################################
 
@@ -105,8 +105,9 @@ default_targets := \
 #
 # TODO ?? The gpt server, however, is important; it needs work anyway.
 # The other binaries should be reconsidered. The antediluvian $(EXEEXT)
-# targets won't build with $(USE_SO_ATTRIBUTES) because of known
-# problems with 'calculate.hpp', which is slated for replacement.
+# targets wouldn't build with $(USE_SO_ATTRIBUTES) because of known
+# problems with 'calculate.hpp', which however has been expunged, so
+# perhaps they can now be removed from this list.
 
 ifeq (,$(USE_SO_ATTRIBUTES))
   default_targets += \
@@ -177,7 +178,7 @@ else
       | $(SED) \
         -e 's/^/ /' \
         -e 's/ -[^I][^ ]*//g' \
-        -e 's/ -I/ -I /g' \
+        -e 's/ -I/ /g' \
         -e 's| c:/| $(system_root)/|g' \
     )
 
@@ -280,6 +281,8 @@ wx_config_check:
 # make it easier to test or use later library versions that have
 # already been installed in the former directory.
 
+# TODO ?? Eventually remove paths on $(system_root).
+
 all_include_directories := \
   $(src_dir) \
   $(overriding_include_directories) \
@@ -288,12 +291,18 @@ all_include_directories := \
   $(system_root)/opt/lmi/third_party/include \
   $(system_root)/usr/local/include \
   $(system_root)/usr/local/include/libxml2 \
+  /opt/lmi/third_party/include \
+  /opt/lmi/local/include \
+  /opt/lmi/local/include/libxml2 \
 
 all_source_directories := \
   $(src_dir) \
   $(system_root)/opt/lmi/third_party/src/boost/libs/filesystem/src \
   $(system_root)/opt/lmi/third_party/src/cgicc \
   $(system_root)/opt/lmi/third_party/src/libxml \
+  /opt/lmi/third_party/src/boost/libs/filesystem/src \
+  /opt/lmi/third_party/src/cgicc \
+  /opt/lmi/third_party/src/libxml \
 
 vpath lib%.a          $(CURDIR)
 vpath %.o             $(CURDIR)
@@ -644,6 +653,8 @@ REQUIRED_ARFLAGS = \
 # won't work, gnu 'ld' finds its dll first and then doesn't look for
 # its import library.
 
+# TODO ?? Eventually remove paths on $(system_root).
+
 all_library_directories := \
   . \
   $(overriding_library_directories) \
@@ -651,6 +662,8 @@ all_library_directories := \
   $(system_root)/opt/lmi/third_party/bin \
   $(system_root)/usr/local/lib \
   $(system_root)/usr/local/bin \
+  /opt/lmi/local/lib \
+  /opt/lmi/local/bin \
 
 EXTRA_LDFLAGS :=
 
