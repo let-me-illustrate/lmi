@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_wx.make,v 1.11 2007-11-17 17:36:02 chicares Exp $
+# $Id: install_wx.make,v 1.12 2007-11-18 14:52:14 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -30,7 +30,7 @@ mingw_dir       := MinGW-20050827
 
 prefix          := /opt/lmi/local
 
-cache_dir       := $(prefix)/cache
+cache_dir       := /opt/lmi/cache
 
 wx_dir          := /opt/lmi/wx-scratch
 
@@ -53,7 +53,7 @@ endif
 
 # Configuration reference:
 #   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00001.html
-# TODO ?? But see the last paragraph of
+# SOMEDAY !! But see the last paragraph of
 #   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00004.html
 # and override wxApp::OnAssertFailure() before experimenting with
 # '--enable-debug_flag'.
@@ -95,14 +95,10 @@ ECHO   := echo
 MD5SUM := md5sum
 MKDIR  := mkdir
 RM     := rm
-SED    := sed
 TAR    := tar
-TR     := tr
 WGET   := wget
 
 # Portability workaround #######################################################
-
-# TODO ?? Either expunge this, or provide a rationale for keeping it.
 
 # 'wx-config' is not portable. For example, it uses 'printf(1)', which
 # zsh supports only in versions after 4.0.1 . Far worse, it underlies
@@ -120,18 +116,7 @@ WGET   := wget
 #   wx-config --libs
 # into a portable script.
 #
-# When wx is built with MSYS, 'wx-config' hardcodes MSYS-specific
-# paths like "/c/wxWidgets/...", which are not usable outside of MSYS.
-# Apparently the tidiest way to address that problem is to modify
-# 'wx-config' to use the MSYS `cd some/directory && pwd -W` idiom,
-# and run only that modified script. WX !! Propose this change for
-# inclusion in the wx sources.
-#
-# The 'tr' call wouldn't be necessary if the MSYS 'sed' port could be
-# relied upon never to use carriage returns in line endings.
-
-##wx_config_fix = \
-##  <$(1) $(SED) -e 's|pwd|pwd -W|' | $(TR) --delete '\r' >$(2)
+# TODO ?? Refactor; point out that the "portable" script is faster.
 
 # Error messages ###############################################################
 
@@ -178,7 +163,7 @@ wx:
 	../configure $(config_options) >  config_log_$(date) 2>  config_err_$(date)
 	$(MAKE)                        >   build_log_$(date) 2>   build_err_$(date)
 	$(MAKE) install                > install_log_$(date) 2> install_err_$(date)
-##	$(call wx_config_fix,wx-config,wx-config-msys)
+# TODO ?? Call script from $(prefix)/bin instead.
 	$(ECHO) '#!/bin/sh'                          >wx-config-portable
 	$(ECHO) 'if   [ "--cxxflags" = $$1 ]; then' >>wx-config-portable
 	$(ECHO) "echo `./wx-config --cxxflags`"     >>wx-config-portable
@@ -191,7 +176,7 @@ wx:
 
 .PHONY: clobber
 clobber:
-# TODO ?? The 'uninstall' target doesn't remove quite everything.
+# WX !! The 'uninstall' target doesn't remove quite everything.
 	-cd $(build_dir) && $(MAKE) uninstall distclean
 	-$(RM) --force --recursive $(prefix)/include/wx-$(basename $(wx_version))
 	-$(RM) --force --recursive $(prefix)/lib/wx
