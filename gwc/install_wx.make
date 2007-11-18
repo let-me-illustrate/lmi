@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_wx.make,v 1.12 2007-11-18 14:52:14 chicares Exp $
+# $Id: install_wx.make,v 1.13 2007-11-18 23:57:02 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -98,26 +98,6 @@ RM     := rm
 TAR    := tar
 WGET   := wget
 
-# Portability workaround #######################################################
-
-# 'wx-config' is not portable. For example, it uses 'printf(1)', which
-# zsh supports only in versions after 4.0.1 . Far worse, it underlies
-# a problem discussed in these messages
-#   http://lists.gnu.org/archive/html/lmi/2006-04/msg00010.html
-#   http://lists.gnu.org/archive/html/lmi/2006-05/msg00001.html
-#   http://lists.gnu.org/archive/html/lmi/2006-05/msg00019.html
-#   http://lists.gnu.org/archive/html/lmi/2006-05/msg00021.html
-# and extensive offline discussions, which has consumed person-weeks
-# of our time; though we can't pinpoint the exact cause, we have never
-# encountered any such problem except with 'wx-config'. Therefore, we
-# run 'wx-config' only here (in bash, in the present makefile) and
-# write the results of the only two commands we actually need:
-#   wx-config --cxxflags
-#   wx-config --libs
-# into a portable script.
-#
-# TODO ?? Refactor; point out that the "portable" script is faster.
-
 # Error messages ###############################################################
 
 wget_missing = \
@@ -133,6 +113,7 @@ libraries       := $(source_archives:.tar.bz2=)
 .PHONY: all
 all: clobber $(source_archives) $(libraries)
 	$(MAKE) --file=$(this_makefile) --directory=$(build_dir) wx
+	$(MAKE) --file=$(this_makefile) --directory=$(prefix)/bin portable_script
 
 # Simulated order-only prerequisites.
 $(libraries): $(source_archives)
@@ -163,7 +144,29 @@ wx:
 	../configure $(config_options) >  config_log_$(date) 2>  config_err_$(date)
 	$(MAKE)                        >   build_log_$(date) 2>   build_err_$(date)
 	$(MAKE) install                > install_log_$(date) 2> install_err_$(date)
-# TODO ?? Call script from $(prefix)/bin instead.
+
+# 'wx-config' is not portable. For example, it uses 'printf(1)', which
+# zsh supports only in versions after 4.0.1 . Far worse, it underlies
+# a problem discussed in these messages
+#   http://lists.gnu.org/archive/html/lmi/2006-04/msg00010.html
+#   http://lists.gnu.org/archive/html/lmi/2006-05/msg00001.html
+#   http://lists.gnu.org/archive/html/lmi/2006-05/msg00019.html
+#   http://lists.gnu.org/archive/html/lmi/2006-05/msg00021.html
+# and extensive offline discussions, which has consumed person-weeks
+# of our time; though we can't pinpoint the exact cause, we have never
+# encountered any such problem except with 'wx-config'. Therefore, we
+# run 'wx-config' only here (in bash, in the present makefile) and
+# write the results of the only two commands we actually need:
+#   wx-config --cxxflags
+#   wx-config --libs
+# into a portable script.
+#
+# Even if a forgiving shell is used, this portable script runs an
+# order of magnitude faster than the one wx creates.
+# WX !! Is any useful advantage lost?
+
+.PHONY: portable_script
+portable_script:
 	$(ECHO) '#!/bin/sh'                          >wx-config-portable
 	$(ECHO) 'if   [ "--cxxflags" = $$1 ]; then' >>wx-config-portable
 	$(ECHO) "echo `./wx-config --cxxflags`"     >>wx-config-portable
@@ -172,7 +175,6 @@ wx:
 	$(ECHO) 'else'                              >>wx-config-portable
 	$(ECHO) 'echo Bad argument $$1'             >>wx-config-portable
 	$(ECHO) 'fi'                                >>wx-config-portable
-	$(CP) --force --preserve wx-config-portable $(prefix)/bin
 
 .PHONY: clobber
 clobber:
