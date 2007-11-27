@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.98 2007-08-03 21:32:37 chicares Exp $
+# $Id: GNUmakefile,v 1.99 2007-11-27 15:35:28 chicares Exp $
 
 ################################################################################
 
@@ -403,7 +403,8 @@ clobber: source_clean
 .PHONY: custom_tools
 custom_tools:
 	@$(MAKE) test_coding_rules$(EXEEXT)
-	@$(CP) --update $(build_directory)/test_coding_rules$(EXEEXT) /usr/local/bin
+
+TEST_CODING_RULES := $(build_directory)/test_coding_rules$(EXEEXT)
 
 ################################################################################
 
@@ -579,7 +580,7 @@ check_concinnity: source_clean custom_tools
 	@for z in ChangeLog DefectLog; \
 	  do $(SED) -e '0,/savannah/d;{/.\{71,\}/!d}' -e "s/^/$$z: /" $$z ; done;
 	@$(ECHO) "  Miscellaneous problems:"
-	@-test_coding_rules$(EXEEXT) $(licensed_files) $(xpm_files)
+	@-$(TEST_CODING_RULES) $(licensed_files) $(xpm_files)
 	@$(ECHO) " "
 	@$(ECHO) "Total lines of code:"
 	@$(WC) -l $(prerequisite_files) | $(SED) -e ';/[Tt]otal/!d' -e 's/[^0-9]//'
