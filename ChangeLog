@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.942 2007-11-23 14:31:39 wboutin Exp $
+// $Id: ChangeLog,v 1.943 2007-11-27 15:35:28 chicares Exp $
 
 MAINTENANCE
 
@@ -14001,4 +14001,9 @@ Import from 'gwc/' subdirectory.
 
   version.hpp
 Mark release candidate.
+
+20071127T1535Z <gchicares@sbcglobal.net> [1210]
+
+  GNUmakefile
+Remove a $PATH dependency.
 
