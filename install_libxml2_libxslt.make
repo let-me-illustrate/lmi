@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_libxml2_libxslt.make,v 1.1 2007-11-12 15:38:34 chicares Exp $
+# $Id: install_libxml2_libxslt.make,v 1.2 2007-11-28 16:23:32 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -115,8 +115,9 @@ WGETFLAGS := \
 
 wget_whence := $(host)/$(host_path)
 
-%.tar.bz2: decompress = --bzip2
-%.tar.gz:  decompress = --gzip
+TARFLAGS := --keep-old-files
+%.tar.bz2: TARFLAGS += --bzip2
+%.tar.gz:  TARFLAGS += --gzip
 
 .PHONY: %.tar.bz2 %.tar.gz
 %.tar.bz2 %.tar.gz:
@@ -124,7 +125,7 @@ wget_whence := $(host)/$(host_path)
 	@[ -e $@        ] || $(WGET) $(WGETFLAGS) $(wget_whence)/$@
 	cd $(dir $@) && \
 	  $(GREP) $(notdir $@) $(notdir $*).md5sum | $(MD5SUM) --check --status -
-	$(TAR) --extract $(decompress) --directory=$(xml_dir) --file=$@
+	$(TAR) --extract $(TARFLAGS) --directory=$(xml_dir) --file=$@
 
 .PHONY: $(libraries)
 $(libraries):
@@ -149,7 +150,7 @@ patch_libxslt: libxslt/1.1/libxslt-1.1.17.tar.bz2
 clobber:
 	-for z in $(notdir $(libraries)); \
 	  do \
-	    cd $(xml_dir)/$$z && make uninstall maintainer-clean; \
-	    rm --recursive $(xml_dir)/$$z; \
+	    cd $(xml_dir)/$$z && $(MAKE) uninstall maintainer-clean; \
+	    $(RM) --recursive $(xml_dir)/$$z; \
 	  done;
 
