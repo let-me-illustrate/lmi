@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_miscellanea.make,v 1.1 2007-11-06 00:38:32 chicares Exp $
+# $Id: install_miscellanea.make,v 1.2 2007-11-28 16:20:37 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -189,10 +189,10 @@ WGETFLAGS := '--timestamping'
 
 # Maintenance ##################################################################
 
-# To test, make the 'clean' and 'all' targets in that order.
+# To test, make the 'clobber' and 'all' targets in that order.
 
-.PHONY: clean
-clean:
+.PHONY: clobber
+clobber:
 	@$(RM) --force --recursive scratch
 	@$(RM) --force --recursive $(destination)
 
