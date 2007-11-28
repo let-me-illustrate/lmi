@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.943 2007-11-27 15:35:28 chicares Exp $
+// $Id: ChangeLog,v 1.944 2007-11-28 16:32:41 chicares Exp $
 
 MAINTENANCE
 
@@ -14006,4 +14006,24 @@ Mark release candidate.
 
   GNUmakefile
 Remove a $PATH dependency.
+
+20071128T1619Z <gchicares@sbcglobal.net> [1210]
+
+  install_mingw.make
+Adopt a more general idiom already used elsewhere.
+
+20071128T1620Z <gchicares@sbcglobal.net> [1210]
+
+  install_miscellanea.make
+For concinnity, rename an aggressive 'clean' target to 'clobber'.
+
+20071128T1623Z <gchicares@sbcglobal.net> [1210]
+
+  install_libxml2_libxslt.make
+Improve concinnity.
+
+20071128T1632Z <gchicares@sbcglobal.net> [1210]
+
+  install_libxml2_libxslt.make
+Configure for 'i686-pc-mingw32'.
 
