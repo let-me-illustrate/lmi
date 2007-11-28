@@ -21,10 +21,29 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_msw.sh,v 1.3 2007-11-28 17:21:06 chicares Exp $
+# $Id: install_msw.sh,v 1.4 2007-11-28 17:30:20 chicares Exp $
 
-mkdir --parents /cygdrive/c/opt/lmi/src/lmi
-mount "C:/opt/lmi" "/opt/lmi"
+# Establish mounts carefully.
+#
+# A command such as
+#   mkdir --parents /cygdrive/c/opt/lmi/src/lmi
+# has the perverse effect of creating 'C:\cygwin\cygdrive'. To avoid
+# that problem, '/opt' is first mounted, then unmounted.
+#
+# Don't remove the '/opt' directory from Cygwin's filesystem. Other
+# programs may want to use it. Furthermore, if it were removed, then
+# shell completion, e.g., '/op' [tab], wouldn't work.
+
+# TODO ?? Restore any previous '/opt' mount.
+mount --mount-commands |grep '"/opt"'
+
+umount "/opt"
+umount "/opt/lmi"
+mkdir /opt
+mount --force "C:/opt" "/opt"
+mkdir --parents /opt/lmi/src/lmi
+umount "/opt"
+mount --force "C:/opt/lmi" "/opt/lmi"
 
 cd /opt/lmi/src
 
