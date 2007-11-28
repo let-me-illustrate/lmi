@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_libxml2_libxslt.make,v 1.2 2007-11-28 16:23:32 chicares Exp $
+# $Id: install_libxml2_libxslt.make,v 1.3 2007-11-28 16:32:41 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -42,6 +42,9 @@ xml_dir       := /opt/lmi/xml-scratch
 
 mingw_bin_dir := $(mingw_root)/$(mingw_dir)/bin
 
+# For 'host' and 'build' configure options, see:
+#   http://cygwin.com/ml/cygwin/2002-01/msg00837.html
+
 # '--disable-dependency-tracking' is required with the MinGW toolchain
 # in a Cygwin shell, to prevent a catastrophic dependency-tracking
 # failure. Apparently the problem is colons in header paths, e.g.:
@@ -50,6 +53,8 @@ mingw_bin_dir := $(mingw_root)/$(mingw_dir)/bin
 #   .deps/DOCBparser.Plo:1: *** multiple target patterns.  Stop.
 
 common_options := \
+  --build=i686-pc-mingw32 \
+  --host=i686-pc-mingw32 \
   --disable-dependency-tracking \
   --disable-static \
   --enable-shared \
