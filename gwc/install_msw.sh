@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_msw.sh,v 1.1 2007-11-20 17:44:43 chicares Exp $
+# $Id: install_msw.sh,v 1.2 2007-11-28 16:55:28 chicares Exp $
 
 mkdir --parents /cygdrive/c/opt/lmi/src/lmi
 mount "C:/opt/lmi" "/opt/lmi"
@@ -38,7 +38,7 @@ rm --force --recursive scratch
 rm --force --recursive /cygdrive/c/MinGW-20050827
 make prefix=/cygdrive/c/MinGW-20050827 -f install_mingw.make
 
-make -f install_miscellanea.make clean
+make -f install_miscellanea.make clobber
 make -f install_miscellanea.make
 
 make -f install_libxml2_libxslt.make
