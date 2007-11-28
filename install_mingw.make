@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_mingw.make,v 1.8 2007-08-04 20:46:41 chicares Exp $
+# $Id: install_mingw.make,v 1.9 2007-11-28 16:19:32 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -191,7 +191,7 @@ WGETFLAGS := '--timestamping'
 # Test #########################################################################
 
 ifeq (3.81,$(firstword $(sort $(MAKE_VERSION) 3.81)))
-  this_makefile := $(lastword $(MAKEFILE_LIST))
+  this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 else
   $(error Upgrade to make-3.81)
 endif
