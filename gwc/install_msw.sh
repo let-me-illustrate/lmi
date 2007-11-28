@@ -21,7 +21,11 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_msw.sh,v 1.4 2007-11-28 17:30:20 chicares Exp $
+# $Id: install_msw.sh,v 1.5 2007-11-28 17:40:30 chicares Exp $
+
+set -v
+
+date -u +'%Y%m%dT%H%MZ'
 
 # Establish mounts carefully.
 #
@@ -44,6 +48,8 @@ mount --force "C:/opt" "/opt"
 mkdir --parents /opt/lmi/src/lmi
 umount "/opt"
 mount --force "C:/opt/lmi" "/opt/lmi"
+
+cygcheck -s -v -r
 
 cd /opt/lmi/src
 
@@ -68,6 +74,8 @@ export PATH=/opt/lmi/local/bin:/opt/lmi/local/lib:$PATH
 
 make wx_dir=/opt/lmi/wx-scratch/wxWidgets-2.8.6/gcc344/ wx_build_dir=/opt/lmi/local/bin wx_config_check
 make wx_dir=/opt/lmi/wx-scratch/wxWidgets-2.8.6/gcc344/ wx_build_dir=/opt/lmi/local/bin install
+
+date -u +'%Y%m%dT%H%MZ'
 
 echo Done.
 
