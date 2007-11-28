@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_msw.sh,v 1.2 2007-11-28 16:55:28 chicares Exp $
+# $Id: install_msw.sh,v 1.3 2007-11-28 17:21:06 chicares Exp $
 
 mkdir --parents /cygdrive/c/opt/lmi/src/lmi
 mount "C:/opt/lmi" "/opt/lmi"
@@ -44,6 +44,8 @@ make -f install_miscellanea.make
 make -f install_libxml2_libxslt.make
 
 make -f install_wx.make
+
+export PATH=/opt/lmi/local/bin:/opt/lmi/local/lib:$PATH
 
 make wx_dir=/opt/lmi/wx-scratch/wxWidgets-2.8.6/gcc344/ wx_build_dir=/opt/lmi/local/bin wx_config_check
 make wx_dir=/opt/lmi/wx-scratch/wxWidgets-2.8.6/gcc344/ wx_build_dir=/opt/lmi/local/bin install
