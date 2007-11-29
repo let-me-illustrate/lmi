@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.944 2007-11-28 16:32:41 chicares Exp $
+// $Id: ChangeLog,v 1.945 2007-11-29 23:26:27 chicares Exp $
 
 MAINTENANCE
 
@@ -14026,4 +14026,23 @@ Improve concinnity.
 
   install_libxml2_libxslt.make
 Configure for 'i686-pc-mingw32'.
+
+20071129T1547Z <gchicares@sbcglobal.net> [1210]
+
+  install_libxml2_libxslt.make
+  install_miscellanea.make
+  install_wx.make
+Remove repeated tests for 'wget' availability. The test is left in
+place in 'install_mingw.make' because that file is intended to be
+usable in other environments than Cygwin.
+
+20071129T2321Z <gchicares@sbcglobal.net> [1210]
+
+  install_wx.make
+Avoid redirecting normal output inside makefile.
+
+20071129T2326Z <gchicares@sbcglobal.net> [1210]
+
+  install_miscellanea.make
+Remove a disused artifact.
 

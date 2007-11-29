@@ -19,15 +19,11 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_miscellanea.make,v 1.3 2007-11-29 15:47:19 chicares Exp $
+# $Id: install_miscellanea.make,v 1.4 2007-11-29 23:26:27 chicares Exp $
 
 # Configurable settings ########################################################
 
-# If $(system_root) is empty, then '$(system_root)/foo' means simply
-# '/foo', which is reasonable enough for msw; for a posix-emulation
-# system like Cygwin, of course, that's not in the msw root directory.
-
-prefix    := $(system_root)/opt/lmi
+prefix    := /opt/lmi
 
 cache_dir := $(prefix)/cache
 
