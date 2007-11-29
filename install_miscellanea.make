@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_miscellanea.make,v 1.2 2007-11-28 16:20:37 chicares Exp $
+# $Id: install_miscellanea.make,v 1.3 2007-11-29 15:47:19 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -85,11 +85,6 @@ TOUCH  := touch
 WGET   := wget
 
 # Error messages ###############################################################
-
-wget_missing = \
-  "\nError: Unable to find '$(WGET)', which is required for" \
-  "\nautomated downloads. Install it on your PATH." \
-  "\n"
 
 destination_exists = \
   "\nError: Destination directory '$(destination)' already exists." \
@@ -157,7 +152,6 @@ $(file_list): initial_setup
 
 .PHONY: initial_setup
 initial_setup:
-	@type "$(WGET)" >/dev/null || { $(ECHO) -e $(wget_missing)       && false; }
 	@[ ! -e $(destination) ]   || { $(ECHO) -e $(destination_exists) && false; }
 	@[ ! -e scratch        ]   || { $(ECHO) -e $(scratch_exists)     && false; }
 	@$(MKDIR) --parents $(cache_dir)

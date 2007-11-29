@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_libxml2_libxslt.make,v 1.3 2007-11-28 16:32:41 chicares Exp $
+# $Id: install_libxml2_libxslt.make,v 1.4 2007-11-29 15:47:19 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -87,13 +87,6 @@ RM     := rm
 TAR    := tar
 WGET   := wget
 
-# Error messages ###############################################################
-
-wget_missing = \
-  "\nError: Unable to find '$(WGET)', which is required for" \
-  "\nautomated downloads. Install it on your PATH." \
-  "\n"
-
 # Targets ######################################################################
 
 libraries := $(source_archives:.tar.bz2=)
@@ -108,7 +101,6 @@ initial_setup: clobber
 
 .PHONY: initial_setup
 initial_setup:
-	@type "$(WGET)" >/dev/null || { $(ECHO) -e $(wget_missing) && false; }
 	@$(MKDIR) --parents $(prefix)
 	@$(MKDIR) --parents $(xml_dir)
 
