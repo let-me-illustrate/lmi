@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_wx.make,v 1.2 2007-11-29 15:47:19 chicares Exp $
+# $Id: install_wx.make,v 1.3 2007-11-29 23:21:19 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -133,9 +133,7 @@ WGETFLAGS := '--timestamping'
 
 .PHONY: wx
 wx:
-	../configure $(config_options) >  config_log_$(date) 2>  config_err_$(date)
-	$(MAKE)                        >   build_log_$(date) 2>   build_err_$(date)
-	$(MAKE) install                > install_log_$(date) 2> install_err_$(date)
+	../configure $(config_options) && $(MAKE) && $(MAKE) install
 
 # 'wx-config' is not portable. For example, it uses 'printf(1)', which
 # zsh supports only in versions after 4.0.1 . Far worse, it underlies
