@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_wx.make,v 1.1 2007-11-19 00:20:35 chicares Exp $
+# $Id: install_wx.make,v 1.2 2007-11-29 15:47:19 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -98,13 +98,6 @@ RM     := rm
 TAR    := tar
 WGET   := wget
 
-# Error messages ###############################################################
-
-wget_missing = \
-  "\nError: Unable to find '$(WGET)', which is required for" \
-  "\nautomated downloads. Install it on your PATH." \
-  "\n"
-
 # Targets ######################################################################
 
 source_archives := $(wx_archive)
@@ -122,7 +115,6 @@ initial_setup: clobber
 
 .PHONY: initial_setup
 initial_setup:
-	@type "$(WGET)" >/dev/null || { $(ECHO) -e $(wget_missing) && false; }
 	@$(MKDIR) --parents $(prefix)
 	@$(MKDIR) --parents $(cache_dir)
 	@$(MKDIR) --parents $(build_dir)
