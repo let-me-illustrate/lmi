@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_msw.sh,v 1.6 2007-12-02 01:18:10 chicares Exp $
+# $Id: install_msw.sh,v 1.7 2007-12-02 01:21:19 chicares Exp $
 
 set -v
 
@@ -61,7 +61,7 @@ cd /opt/lmi/src/lmi
 
 rm --force --recursive scratch
 rm --force --recursive /cygdrive/c/MinGW-20050827
-make prefix=/cygdrive/c/MinGW-20050827 -f install_mingw.make
+make prefix=/cygdrive/c/MinGW-20050827 cache_dir=/tmp/lmi_cache -f install_mingw.make
 
 make -f install_miscellanea.make clobber
 make -f install_miscellanea.make
