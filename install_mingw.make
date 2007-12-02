@@ -19,33 +19,38 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_mingw.make,v 1.9 2007-11-28 16:19:32 chicares Exp $
+# $Id: install_mingw.make,v 1.10 2007-12-02 00:13:21 chicares Exp $
 
 # Configurable settings ########################################################
 
 # Use the 2005-08-27 version by default.
 
-version  := MinGW-20050827
+version   := MinGW-20050827
 
-file_list = $($(version))
+file_list  = $($(version))
 
 # Prefer to set $(prefix) to anything but '/mingw', in order to avoid
 # the problem described here:
-#   http://sourceforge.net/mailarchive/message.php?msg_id=10579421
-#   http://sourceforge.net/mailarchive/message.php?msg_id=10581810
-# when multiple versions of MinGW gcc are installed.
+#   http://gcc.gnu.org/ml/gcc-patches/2004-06/msg00703.html
+# when multiple versions of MinGW gcc are installed, as discussed on
+# the mingw-users mailing list in these messages
+#   2005-01-17T16:30Z from Greg Chicares
+#   2005-01-17T18:15Z from Aaron W. LaFramboise
+# which seem to be unavailable online.
 #
 # If $(system_root) is empty, then '$(system_root)/foo' means simply
 # '/foo', which is reasonable enough for msw; for a posix-emulation
 # system like Cygwin, of course, that's not in the msw root directory.
 
-prefix   := $(system_root)/$(version)
+prefix    := $(system_root)/$(version)
+
+cache_dir := .
 
 # In the past, it seemed necessary to specify a mirror, e.g.:
 #  mirror := http://easynews.dl.sourceforge.net/sourceforge/mingw
 # but as of about 2006-12 sf.net seems to select one automatically
 # when this is passed to wget:
-mirror   := http://downloads.sourceforge.net/mingw
+mirror    := http://downloads.sourceforge.net/mingw
 
 # File lists ###################################################################
 
@@ -184,9 +189,9 @@ WGETFLAGS := '--timestamping'
 
 .PHONY: %.tar.bz2 %.tar.gz
 %.tar.bz2 %.tar.gz:
-	[ -e $@ ] || $(WGET) $(WGETFLAGS) $(mirror)/$@
-	$(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
-	-$(TAR) --extract $(TARFLAGS) --directory=scratch --file=$@
+	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $(mirror)/$@
+	cd $(cache_dir) && $(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
+	-$(TAR) --extract $(TARFLAGS) --directory=scratch --file=$(cache_dir)/$@
 
 # Test #########################################################################
 
