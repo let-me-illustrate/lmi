@@ -1,4 +1,4 @@
-# Installer for miscellaneous libraries.
+# Installer for sample databases and miscellaneous libraries.
 #
 # Copyright (C) 2007 Gregory W. Chicares.
 #
@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_miscellanea.make,v 1.5 2007-12-02 00:14:28 chicares Exp $
+# $Id: install_miscellanea.make,v 1.6 2007-12-02 00:59:27 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -46,23 +46,33 @@ third_party_source_dir  := $(destination)/src
 
 boost_archive    := boost_1_33_1.tar.bz2
 cgicc_archive    := cgicc-3.1.4.tar.bz2
+fop_archive      := fop-0.20.5-bin.tar.gz
+sample_archive   := lmi-data-20050618T1440Z.tar.bz2
 xmlwrapp_archive := xmlwrapp-0.5.0.tar.gz
 
 file_list := \
   $(boost_archive) \
   $(cgicc_archive) \
+  $(fop_archive) \
+  $(sample_archive) \
   $(xmlwrapp_archive) \
 
-boost cgicc xmlwrapp: stem = $(basename $(basename $($@_archive)))
+boost cgicc xmlwrapp: stem =               $(basename $(basename $($@_archive)))
+fop:                  stem = $(subst -bin,,$(basename $(basename $($@_archive))))
+sample:               stem = data
 
 # URLs and archive md5sums #####################################################
 
 $(boost_archive)-url    := $(sf_mirror)/boost/$(boost_archive)
 $(cgicc_archive)-url    := ftp://ftp.gnu.org/pub/gnu/cgicc/$(cgicc_archive)
+$(fop_archive)-url      := http://archive.apache.org/dist/xmlgraphics/fop/binaries/$(fop_archive)
+$(sample_archive)-url   := http://download.savannah.gnu.org/releases/lmi/$(sample_archive)
 $(xmlwrapp_archive)-url := ftp://ftp.freebsd.org/pub/FreeBSD/distfiles/$(xmlwrapp_archive)
 
 $(boost_archive)-md5    := 2b999b2fb7798e1737d1fff8fac602ef
 $(cgicc_archive)-md5    := 6cb5153fc9fa64b4e50c7962aa557bbe
+$(fop_archive)-md5      := d6b43e3eddf9378536ad8127bc057d41
+$(sample_archive)-md5   := e7f07133abfc3b9c2252dfa3b61191bc
 $(xmlwrapp_archive)-md5 := b8a07e77f8f8af9ca96bccab7d9dd310
 
 # Utilities ####################################################################
@@ -99,7 +109,7 @@ scratch_exists = \
 # Targets ######################################################################
 
 .PHONY: all
-all: boost cgicc xmlwrapp
+all: boost cgicc fop sample xmlwrapp
 
 # For some targets,
 #  - saved md5sums are checked, then
@@ -128,16 +138,31 @@ cgicc: $(file_list)
 	cd $(destination) && $(MD5SUM) include/cgicc/* src/cgicc/* >$(stem).md5sums
 	$(DIFF) $(stem).md5sums $(destination)/$(stem).md5sums && $(RM) $(destination)/$(stem).md5sums
 
+# When the 'fop' tarball is extracted, this message:
+#   tar: A lone zero block at 20398
+# is expected, and harmless--see:
+#   http://issues.apache.org/bugzilla/show_bug.cgi?id=28776
+
+.PHONY: fop
+fop: $(file_list)
+	@$(MKDIR) $(destination)/$(stem)
+	$(MV) scratch/$(stem)/* $(destination)/$(stem)
+
+.PHONY: sample
+sample: $(file_list)
+	@$(MKDIR) $(prefix)/data
+	$(MV) scratch/$(stem)/* $(prefix)/data
+
 .PHONY: xmlwrapp
 xmlwrapp: $(file_list)
 	$(PATCH) --directory=scratch --strip=1 < $(stem).patch
-	$(MKDIR) $(third_party_include_dir)/xmlwrapp/
+	@$(MKDIR) $(third_party_include_dir)/xmlwrapp/
 	$(MV) scratch/$(stem)/include/xmlwrapp/*.h $(third_party_include_dir)/xmlwrapp/
-	$(MKDIR) $(third_party_include_dir)/xsltwrapp/
+	@$(MKDIR) $(third_party_include_dir)/xsltwrapp/
 	$(MV) scratch/$(stem)/include/xsltwrapp/*.h $(third_party_include_dir)/xsltwrapp/
-	$(MKDIR) $(third_party_source_dir)/libxml/
+	@$(MKDIR) $(third_party_source_dir)/libxml/
 	$(MV) scratch/$(stem)/src/libxml/* $(third_party_source_dir)/libxml/
-	$(MKDIR) $(third_party_source_dir)/libxslt/
+	@$(MKDIR) $(third_party_source_dir)/libxslt/
 	$(MV) scratch/$(stem)/src/libxslt/* $(third_party_source_dir)/libxslt/
 	$(TOUCH) $(destination)/src/xmlwrapp_config.h
 	cd $(destination) && $(MD5SUM) --check $(CURDIR)/$(stem).md5sums
