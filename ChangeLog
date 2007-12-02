@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.945 2007-11-29 23:26:27 chicares Exp $
+// $Id: ChangeLog,v 1.946 2007-12-02 00:14:29 chicares Exp $
 
 MAINTENANCE
 
@@ -14045,4 +14045,18 @@ Avoid redirecting normal output inside makefile.
 
   install_miscellanea.make
 Remove a disused artifact.
+
+20071202T0013Z <gchicares@sbcglobal.net> [1210]
+
+  install_mingw.make
+Optionally use a named cache directory.
+
+20071202T0014Z <gchicares@sbcglobal.net> [1210]
+
+  install_miscellanea.make
+  install_wx.make
+Change cache directory. Moving it outside the '/opt/lmi' hierarchy
+makes it possible to reinstall from scratch by removing the entire
+'/opt/lmi' tree without losing archives that are costly to download,
+and makes reinstallation more robust because downloads can fail.
 

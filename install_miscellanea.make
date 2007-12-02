@@ -19,13 +19,13 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_miscellanea.make,v 1.4 2007-11-29 23:26:27 chicares Exp $
+# $Id: install_miscellanea.make,v 1.5 2007-12-02 00:14:28 chicares Exp $
 
 # Configurable settings ########################################################
 
 prefix    := /opt/lmi
 
-cache_dir := $(prefix)/cache
+cache_dir := /tmp/lmi_cache
 
 # In the past, it seemed necessary to specify a mirror, e.g.:
 #  mirror := http://easynews.dl.sourceforge.net/sourceforge

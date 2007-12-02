@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_wx.make,v 1.3 2007-11-29 23:21:19 chicares Exp $
+# $Id: install_wx.make,v 1.4 2007-12-02 00:14:28 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -30,7 +30,7 @@ mingw_dir       := MinGW-20050827
 
 prefix          := /opt/lmi/local
 
-cache_dir       := /opt/lmi/cache
+cache_dir       := /tmp/lmi_cache
 
 wx_dir          := /opt/lmi/wx-scratch
 
