@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_msw.sh,v 1.7 2007-12-02 01:21:19 chicares Exp $
+# $Id: install_msw.sh,v 1.8 2007-12-02 01:25:15 chicares Exp $
 
 set -v
 
@@ -74,6 +74,27 @@ export PATH=/opt/lmi/local/bin:/opt/lmi/local/lib:$PATH
 
 make wx_dir=/opt/lmi/wx-scratch/wxWidgets-2.8.6/gcc344/ wx_build_dir=/opt/lmi/local/bin wx_config_check
 make wx_dir=/opt/lmi/wx-scratch/wxWidgets-2.8.6/gcc344/ wx_build_dir=/opt/lmi/local/bin install
+
+cat >/opt/lmi/bin/configurable_settings.xml <<EOF
+<?xml version="1.0"?>
+<configurable_settings>
+  <calculation_summary_columns/>
+  <cgi_bin_log_filename>cgi_bin.log</cgi_bin_log_filename>
+  <custom_input_filename>sample.ini</custom_input_filename>
+  <custom_output_filename>sample.out</custom_output_filename>
+  <default_input_filename>/etc/opt/lmi/default.ill</default_input_filename>
+  <libraries_to_preload/>
+  <offer_hobsons_choice>0</offer_hobsons_choice>
+  <print_directory>/var/opt/lmi/spool</print_directory>
+  <skin_filename>xml_notebook.xrc</skin_filename>
+  <spreadsheet_file_extension>.dif</spreadsheet_file_extension>
+  <use_builtin_calculation_summary>1</use_builtin_calculation_summary>
+  <xsl_fo_command>CMD /c /opt/lmi/third_party/fop-0.20.5/fop</xsl_fo_command>
+</configurable_settings>
+EOF
+
+# TODO ?? The program shouldn't require this directory to exist.
+pushd /cygdrive/c; mkdir --parents var/opt/lmi/spool; popd
 
 date -u +'%Y%m%dT%H%MZ'
 
