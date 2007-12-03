@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.947 2007-12-02 00:59:27 chicares Exp $
+// $Id: ChangeLog,v 1.948 2007-12-03 11:11:40 chicares Exp $
 
 MAINTENANCE
 
@@ -14064,4 +14064,21 @@ and makes reinstallation more robust because downloads can fail.
 
   install_miscellanea.make
 Install sample databases.
+
+20071203T1107Z <gchicares@sbcglobal.net> [1210]
+
+  install_libxml2_libxslt.make
+Download archives to cache directory.
+
+20071203T1108Z <gchicares@sbcglobal.net> [1210]
+
+  install_miscellanea.make
+Fix defect introduced 20071202T0059Z. Idempotence had been broken by
+a 'mkdir' command that should have been permitted to fail because the
+'clobber' target doesn't undo its effect.
+
+20071203T1111Z <gchicares@sbcglobal.net> [1212]
+
+  install_msw.sh [new file]
+Import from 'gwc/' subdirectory.
 
