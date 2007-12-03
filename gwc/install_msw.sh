@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_msw.sh,v 1.8 2007-12-02 01:25:15 chicares Exp $
+# $Id: install_msw.sh,v 1.9 2007-12-03 10:59:17 chicares Exp $
 
 set -v
 
@@ -52,6 +52,10 @@ mount --force "C:/opt/lmi" "/opt/lmi"
 cygcheck -s -v -r
 
 cd /opt/lmi/src
+
+# Avoid bogus "failed to open /home/wherever/.cvspass for reading".
+
+touch ~/.cvspass
 
 export CVS_RSH="ssh"
 export CVSROOT=":pserver:anonymous@cvs.savannah.nongnu.org:/sources/lmi"
