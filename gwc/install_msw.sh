@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_msw.sh,v 1.9 2007-12-03 10:59:17 chicares Exp $
+# $Id: install_msw.sh,v 1.10 2007-12-03 11:02:29 chicares Exp $
 
 set -v
 
@@ -48,6 +48,8 @@ mount --force "C:/opt" "/opt"
 mkdir --parents /opt/lmi/src/lmi
 umount "/opt"
 mount --force "C:/opt/lmi" "/opt/lmi"
+
+mkdir --parents /tmp/lmi_cache
 
 cygcheck -s -v -r
 
