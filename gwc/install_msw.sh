@@ -21,9 +21,16 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_msw.sh,v 1.10 2007-12-03 11:02:29 chicares Exp $
+# $Id: install_msw.sh,v 1.11 2007-12-03 11:03:49 chicares Exp $
 
 set -v
+
+# To remove lmi prior to reinstalling with this script:
+#
+# rm --force --recursive /opt/lmi /cygdrive/c/var/opt/lmi /cygdrive/c/MinGW-20050827
+#
+# Downloaded archives are left in /tmp/lmi_cache because they are
+# costly to download and some host might be temporarily unavailable.
 
 date -u +'%Y%m%dT%H%MZ'
 
