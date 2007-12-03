@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_libxml2_libxslt.make,v 1.4 2007-11-29 15:47:19 chicares Exp $
+# $Id: install_libxml2_libxslt.make,v 1.5 2007-12-03 11:07:23 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -35,6 +35,8 @@ mingw_root    := /cygdrive/c
 mingw_dir     := MinGW-20050827
 
 prefix        := /opt/lmi/local
+
+cache_dir     := /tmp/lmi_cache
 
 xml_dir       := /opt/lmi/xml-scratch
 
@@ -102,6 +104,7 @@ initial_setup: clobber
 .PHONY: initial_setup
 initial_setup:
 	@$(MKDIR) --parents $(prefix)
+	@$(MKDIR) --parents $(cache_dir)
 	@$(MKDIR) --parents $(xml_dir)
 
 WGETFLAGS := \
@@ -118,11 +121,11 @@ TARFLAGS := --keep-old-files
 
 .PHONY: %.tar.bz2 %.tar.gz
 %.tar.bz2 %.tar.gz:
-	@[ -e $*.md5sum ] || $(WGET) $(WGETFLAGS) $(wget_whence)/$*.md5sum
-	@[ -e $@        ] || $(WGET) $(WGETFLAGS) $(wget_whence)/$@
-	cd $(dir $@) && \
+	cd $(cache_dir) && [ -e $*.md5sum ] || $(WGET) $(WGETFLAGS) $(wget_whence)/$*.md5sum
+	cd $(cache_dir) && [ -e $@        ] || $(WGET) $(WGETFLAGS) $(wget_whence)/$@
+	cd $(cache_dir)/$(dir $@) && \
 	  $(GREP) $(notdir $@) $(notdir $*).md5sum | $(MD5SUM) --check --status -
-	$(TAR) --extract $(TARFLAGS) --directory=$(xml_dir) --file=$@
+	$(TAR) --extract $(TARFLAGS) --directory=$(xml_dir) --file=$(cache_dir)/$@
 
 .PHONY: $(libraries)
 $(libraries):
