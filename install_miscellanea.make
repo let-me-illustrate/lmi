@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_miscellanea.make,v 1.6 2007-12-02 00:59:27 chicares Exp $
+# $Id: install_miscellanea.make,v 1.7 2007-12-03 11:08:30 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -148,9 +148,13 @@ fop: $(file_list)
 	@$(MKDIR) $(destination)/$(stem)
 	$(MV) scratch/$(stem)/* $(destination)/$(stem)
 
+# The 'clobber' target doesn't remove $(prefix)/data because that
+# directory might contain valuable user-customized files; hence, in
+# this case, $(MKDIR) must be allowed to fail.
+
 .PHONY: sample
 sample: $(file_list)
-	@$(MKDIR) $(prefix)/data
+	@-$(MKDIR) --parents $(prefix)/data
 	$(MV) scratch/$(stem)/* $(prefix)/data
 
 .PHONY: xmlwrapp
