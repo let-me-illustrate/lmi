@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_msw.sh,v 1.1 2007-12-03 11:11:40 chicares Exp $
+# $Id: install_msw.sh,v 1.2 2007-12-03 16:05:26 chicares Exp $
 
 set -v
 
@@ -45,8 +45,7 @@ date -u +'%Y%m%dT%H%MZ'
 # programs may want to use it. Furthermore, if it were removed, then
 # shell completion, e.g., '/op' [tab], wouldn't work.
 
-# TODO ?? Restore any previous '/opt' mount.
-mount --mount-commands |grep '"/opt"'
+restore_opt_mount=`mount --mount-commands |grep '"/opt"'`
 
 umount "/opt"
 umount "/opt/lmi"
@@ -55,6 +54,8 @@ mount --force "C:/opt" "/opt"
 mkdir --parents /opt/lmi/src/lmi
 umount "/opt"
 mount --force "C:/opt/lmi" "/opt/lmi"
+
+[ -z $restore_opt_mount ] || sh -c $restore_opt_mount
 
 mkdir --parents /tmp/lmi_cache
 

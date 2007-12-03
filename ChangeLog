@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.948 2007-12-03 11:11:40 chicares Exp $
+// $Id: ChangeLog,v 1.949 2007-12-03 16:05:26 chicares Exp $
 
 MAINTENANCE
 
@@ -14081,4 +14081,9 @@ a 'mkdir' command that should have been permitted to fail because the
 
   install_msw.sh [new file]
 Import from 'gwc/' subdirectory.
+
+20071203T1605Z <gchicares@sbcglobal.net> [1211]
+
+  install_msw.sh
+Resolve a marked defect.
 
