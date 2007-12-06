@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.949 2007-12-03 16:05:26 chicares Exp $
+// $Id: ChangeLog,v 1.950 2007-12-06 04:37:42 chicares Exp $
 
 MAINTENANCE
 
@@ -14086,4 +14086,19 @@ Import from 'gwc/' subdirectory.
 
   install_msw.sh
 Resolve a marked defect.
+
+20071206T0423Z <gchicares@sbcglobal.net> [1211]
+
+  install_miscellanea.make
+Improve documentation.
+
+20071206T0428Z <gchicares@sbcglobal.net> [1211]
+
+  install_msw.sh
+Capture md5sums of archives, before and after any new download.
+
+20071206T0437Z <gchicares@sbcglobal.net> [1211]
+
+  install_msw.sh
+Test for unwanted dependency on Cygwin dll.
 
