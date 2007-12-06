@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.950 2007-12-06 04:37:42 chicares Exp $
+// $Id: ChangeLog,v 1.951 2007-12-06 05:47:50 chicares Exp $
 
 MAINTENANCE
 
@@ -14101,4 +14101,21 @@ Capture md5sums of archives, before and after any new download.
 
   install_msw.sh
 Test for unwanted dependency on Cygwin dll.
+
+20071206T0528Z <gchicares@sbcglobal.net> [1210]
+
+  setup.make
+No longer create dummy libraries. The custom-configured wx build
+required for lmi already disables all dependencies on libraries with
+deviant licenses.
+
+20071206T0536Z <gchicares@sbcglobal.net> [1210]
+
+  setup.make
+No longer build a vintage 'libxml2'.
+
+20071206T0547Z <gchicares@sbcglobal.net> [1208]
+
+  setup.make [expunged]
+Remove an obsolete file.
 
