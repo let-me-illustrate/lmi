@@ -21,9 +21,13 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_msw.sh,v 1.2 2007-12-03 16:05:26 chicares Exp $
+# $Id: install_msw.sh,v 1.3 2007-12-06 04:28:22 chicares Exp $
 
 set -v
+
+# To get the latest version of this script:
+#
+# wget -N 'http://cvs.savannah.gnu.org/viewvc/*checkout*/lmi/lmi/install_msw.sh'
 
 # To remove lmi prior to reinstalling with this script:
 #
@@ -33,6 +37,9 @@ set -v
 # costly to download and some host might be temporarily unavailable.
 
 date -u +'%Y%m%dT%H%MZ'
+
+md5sum $0
+find /tmp/lmi_cache -type f |xargs md5sum
 
 # Establish mounts carefully.
 #
@@ -83,6 +90,8 @@ make -f install_miscellanea.make
 make -f install_libxml2_libxslt.make
 
 make -f install_wx.make
+
+find /tmp/lmi_cache -type f |xargs md5sum
 
 export PATH=/opt/lmi/local/bin:/opt/lmi/local/lib:$PATH
 
