@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_miscellanea.make,v 1.7 2007-12-03 11:08:30 chicares Exp $
+# $Id: install_miscellanea.make,v 1.8 2007-12-06 04:23:44 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -110,6 +110,20 @@ scratch_exists = \
 
 .PHONY: all
 all: boost cgicc fop sample xmlwrapp
+
+# Patches were generated according to this advice:
+#
+# http://www.linuxfromscratch.org/patches/submit.html
+# "When creating the patch, you should be in a directory just above
+# the package directory so that the resulting patch can be applied
+# with patch -p1"
+#
+# because they generally span multiple subdirectories. Use commands
+# like these if they ever need to be regenerated:
+#
+#   cd /tmp
+#   diff --recursive --unified=3 original modified >foo.patch
+#   patch --strip=1 --dry-run --directory=/wherever/scratch </tmp/foo.patch
 
 # For some targets,
 #  - saved md5sums are checked, then
