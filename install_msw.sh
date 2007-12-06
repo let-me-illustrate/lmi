@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_msw.sh,v 1.3 2007-12-06 04:28:22 chicares Exp $
+# $Id: install_msw.sh,v 1.4 2007-12-06 04:37:42 chicares Exp $
 
 set -v
 
@@ -97,6 +97,10 @@ export PATH=/opt/lmi/local/bin:/opt/lmi/local/lib:$PATH
 
 make wx_dir=/opt/lmi/wx-scratch/wxWidgets-2.8.6/gcc344/ wx_build_dir=/opt/lmi/local/bin wx_config_check
 make wx_dir=/opt/lmi/wx-scratch/wxWidgets-2.8.6/gcc344/ wx_build_dir=/opt/lmi/local/bin install
+
+# No lmi binary should depend on any Cygwin library.
+
+for z in /opt/lmi/bin/*; do cygcheck $z 2>&1 |grep --silent cygwin && echo "\ncygcheck $z" && cygcheck $z; done
 
 cat >/opt/lmi/bin/configurable_settings.xml <<EOF
 <?xml version="1.0"?>
