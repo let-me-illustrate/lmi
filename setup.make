@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: setup.make,v 1.38 2007-11-06 03:00:22 chicares Exp $
+# $Id: setup.make,v 1.39 2007-12-06 05:28:26 chicares Exp $
 
 .PHONY: all
 all: setup
@@ -95,34 +95,6 @@ $(third_party_lib_dir):
 .PHONY: $(third_party_source_dir)
 $(third_party_source_dir):
 	+@[ -d $@ ] || $(MKDIR) --parents $@
-
-###############################################################################
-
-# Create dummy libraries.
-
-# At least with gnu tools, a zero-byte file may be linked with no
-# diagnostic (and no effect, which is the intention).
-
-# Prevent license issues by providing dummy versions of problematic
-# libraries that wx builds by default.
-#
-# TODO ?? Apparently libregex.a is no longer a problem since wx-2.5.0,
-# and it's not clear why zlib was ever on this list. Consider removing
-# those libraries from this list after carefully reauditing the
-# licenses of all libraries wx uses.
-
-dummy_library_names := \
-  libjpeg.a \
-  libpng.a \
-  libregex.a \
-  libtiff.a \
-  libzlib.a \
-
-.PHONY: dummy_libraries
-dummy_libraries: $(third_party_bin_dir) $(third_party_lib_dir)
-	@$(foreach z, $(dummy_library_names), \
-	  $(TOUCH) --date=20000101 $(third_party_lib_dir)/$(z); \
-	  )
 
 ###############################################################################
 # This version has not been formally tested and released for production with
