@@ -19,26 +19,25 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_wx.make,v 1.4 2007-12-02 00:14:28 chicares Exp $
+# $Id: install_wx.make,v 1.5 2007-12-08 03:13:25 chicares Exp $
 
 # Configurable settings ########################################################
 
-wx_version      := 2.8.6
+wx_version    := 2.8.6
 
-mingw_root      := /cygdrive/c
-mingw_dir       := MinGW-20050827
+mingw_dir     := /MinGW_
 
-prefix          := /opt/lmi/local
+prefix        := /opt/lmi/local
 
-cache_dir       := /tmp/lmi_cache
+cache_dir     := /tmp/lmi_cache
 
-wx_dir          := /opt/lmi/wx-scratch
+wx_dir        := /opt/lmi/wx-scratch
 
 # Variables that normally should be left alone #################################
 
 date           = $(shell date -u +'%Y%m%dT%H%MZ')
 
-mingw_bin_dir := $(mingw_root)/$(mingw_dir)/bin
+mingw_bin_dir := $(mingw_dir)/bin
 
 vendor        := $(shell $(mingw_bin_dir)/gcc -dumpversion)
 vendor        := $(subst .,,$(vendor))

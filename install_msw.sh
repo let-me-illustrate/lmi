@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_msw.sh,v 1.4 2007-12-06 04:37:42 chicares Exp $
+# $Id: install_msw.sh,v 1.5 2007-12-08 03:13:25 chicares Exp $
 
 set -v
 
@@ -31,7 +31,7 @@ set -v
 
 # To remove lmi prior to reinstalling with this script:
 #
-# rm --force --recursive /opt/lmi /cygdrive/c/var/opt/lmi /cygdrive/c/MinGW-20050827
+# rm --force --recursive /opt/lmi /cygdrive/c/var/opt/lmi
 #
 # Downloaded archives are left in /tmp/lmi_cache because they are
 # costly to download and some host might be temporarily unavailable.
@@ -62,11 +62,13 @@ mkdir --parents /opt/lmi/src/lmi
 umount "/opt"
 mount --force "C:/opt/lmi" "/opt/lmi"
 
-[ -z $restore_opt_mount ] || sh -c $restore_opt_mount
+[ -z "$restore_opt_mount" ] || sh -c $restore_opt_mount
 
 mkdir --parents /tmp/lmi_cache
 
 cygcheck -s -v -r
+
+java -version
 
 cd /opt/lmi/src
 
@@ -80,9 +82,19 @@ cvs -z3 checkout -P lmi
 
 cd /opt/lmi/src/lmi
 
+# A "Replacing former MinGW_ mount:" message probably means that this
+# mount was set by an earlier lmi installation; that can be ignored.
+# It seems quite unlikely that anyone who's building lmi would have
+# any other need for a mount with that name.
+
+restore_MinGW_mount=`mount --mount-commands |grep '"/MinGW_"'`
+[ -z "$restore_MinGW_mount" ] \
+  || echo $restore_MinGW_mount |grep --silent '"C:/opt/lmi/MinGW-20050827"' \
+  || echo -e "Replacing former MinGW_ mount:\n  $restore_MinGW_mount" >/dev/tty
+mount --force "C:/opt/lmi/MinGW-20050827" "/MinGW_"
 rm --force --recursive scratch
-rm --force --recursive /cygdrive/c/MinGW-20050827
-make prefix=/cygdrive/c/MinGW-20050827 cache_dir=/tmp/lmi_cache -f install_mingw.make
+rm --force --recursive /MinGW_
+make prefix=/MinGW_ cache_dir=/tmp/lmi_cache -f install_mingw.make
 
 make -f install_miscellanea.make clobber
 make -f install_miscellanea.make
@@ -95,12 +107,16 @@ find /tmp/lmi_cache -type f |xargs md5sum
 
 export PATH=/opt/lmi/local/bin:/opt/lmi/local/lib:$PATH
 
-make wx_dir=/opt/lmi/wx-scratch/wxWidgets-2.8.6/gcc344/ wx_build_dir=/opt/lmi/local/bin wx_config_check
-make wx_dir=/opt/lmi/wx-scratch/wxWidgets-2.8.6/gcc344/ wx_build_dir=/opt/lmi/local/bin install
+make system_root= PATH_GCC=/MinGW_/bin/ mingw_dir=/MinGW_ wx_dir=/opt/lmi/wx-scratch/wxWidgets-2.8.6/gcc344/ wx_build_dir=/opt/lmi/local/bin wx_config_check
+make system_root= PATH_GCC=/MinGW_/bin/ mingw_dir=/MinGW_ wx_dir=/opt/lmi/wx-scratch/wxWidgets-2.8.6/gcc344/ wx_build_dir=/opt/lmi/local/bin show_flags
+make system_root= PATH_GCC=/MinGW_/bin/ mingw_dir=/MinGW_ wx_dir=/opt/lmi/wx-scratch/wxWidgets-2.8.6/gcc344/ wx_build_dir=/opt/lmi/local/bin install
 
 # No lmi binary should depend on any Cygwin library.
 
-for z in /opt/lmi/bin/*; do cygcheck $z 2>&1 |grep --silent cygwin && echo "\ncygcheck $z" && cygcheck $z; done
+for z in /opt/lmi/bin/*; \
+  do cygcheck $z 2>&1 |grep --silent cygwin \
+    && echo "\ncygcheck $z" && cygcheck $z; \
+  done
 
 cat >/opt/lmi/bin/configurable_settings.xml <<EOF
 <?xml version="1.0"?>
@@ -125,5 +141,5 @@ pushd /cygdrive/c; mkdir --parents var/opt/lmi/spool; popd
 
 date -u +'%Y%m%dT%H%MZ'
 
-echo Done.
+echo Finished building lmi. >/dev/tty
 

@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_libxml2_libxslt.make,v 1.5 2007-12-03 11:07:23 chicares Exp $
+# $Id: install_libxml2_libxslt.make,v 1.6 2007-12-08 03:13:25 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -31,8 +31,7 @@ source_archives := \
 host          := ftp://ftp.gnome.org
 host_path     := pub/GNOME/sources
 
-mingw_root    := /cygdrive/c
-mingw_dir     := MinGW-20050827
+mingw_dir     := /MinGW_
 
 prefix        := /opt/lmi/local
 
@@ -42,7 +41,7 @@ xml_dir       := /opt/lmi/xml-scratch
 
 # Variables that normally should be left alone #################################
 
-mingw_bin_dir := $(mingw_root)/$(mingw_dir)/bin
+mingw_bin_dir := $(mingw_dir)/bin
 
 # For 'host' and 'build' configure options, see:
 #   http://cygwin.com/ml/cygwin/2002-01/msg00837.html
