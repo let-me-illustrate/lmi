@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.951 2007-12-06 05:47:50 chicares Exp $
+// $Id: ChangeLog,v 1.952 2007-12-08 03:13:25 chicares Exp $
 
 MAINTENANCE
 
@@ -14118,4 +14118,14 @@ No longer build a vintage 'libxml2'.
 
   setup.make [expunged]
 Remove an obsolete file.
+
+20071208T0313Z <gchicares@sbcglobal.net> [1208]
+
+  install_libxml2_libxslt.make
+  install_msw.sh
+  install_wx.make
+Mount MinGW gcc; use it wherever Cygwin gcc had been used. Previously,
+Cygwin gcc had been used for lmi itself (but not for libraries) in
+order to mimic an anomaly in our current production environment, which
+is benign today, but fragile.
 
