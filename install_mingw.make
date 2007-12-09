@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_mingw.make,v 1.10 2007-12-02 00:13:21 chicares Exp $
+# $Id: install_mingw.make,v 1.11 2007-12-09 22:10:24 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -33,10 +33,11 @@ file_list  = $($(version))
 # the problem described here:
 #   http://gcc.gnu.org/ml/gcc-patches/2004-06/msg00703.html
 # when multiple versions of MinGW gcc are installed, as discussed on
-# the mingw-users mailing list in these messages
-#   2005-01-17T16:30Z from Greg Chicares
-#   2005-01-17T18:15Z from Aaron W. LaFramboise
-# which seem to be unavailable online.
+# the mingw-users mailing list in these messages:
+#   http://article.gmane.org/gmane.comp.gnu.mingw.user/14747
+#     [2005-01-17T16:30:44Z from Greg Chicares]
+#   http://article.gmane.org/gmane.comp.gnu.mingw.user/14748
+#     [2005-01-17T18:15:26Z from Aaron W. LaFramboise]
 #
 # If $(system_root) is empty, then '$(system_root)/foo' means simply
 # '/foo', which is reasonable enough for msw; for a posix-emulation
@@ -159,7 +160,8 @@ initial_setup:
 # binutils, so gcc's 'libiberty.a' is explicitly excluded: it seems
 # reasonable to expect binutils to provide a 'libiberty.a' that works
 # with the 'libbfd.a' it also provides. See:
-#   http://sourceforge.net/mailarchive/message.php?msg_id=4456861
+#   http://article.gmane.org/gmane.comp.gnu.mingw.user/6932/
+#     [2003-04-29T21:32:35Z from Danny Smith]
 # to learn why this may matter a great deal.
 #
 # These archives
