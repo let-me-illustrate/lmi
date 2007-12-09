@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_msw.sh,v 1.5 2007-12-08 03:13:25 chicares Exp $
+# $Id: install_msw.sh,v 1.6 2007-12-09 22:08:16 chicares Exp $
 
 set -v
 
@@ -115,8 +115,12 @@ make system_root= PATH_GCC=/MinGW_/bin/ mingw_dir=/MinGW_ wx_dir=/opt/lmi/wx-scr
 
 for z in /opt/lmi/bin/*; \
   do cygcheck $z 2>&1 |grep --silent cygwin \
-    && echo "\ncygcheck $z" && cygcheck $z; \
+    && echo -e "\ncygcheck $z" && cygcheck $z; \
   done
+
+echo -n "2450449 2458849"                          >/opt/lmi/data/expiry
+echo    "0efd124fac6b15e6a9cd0b3dd718eea5  expiry" >/opt/lmi/data/validated.md5
+echo -n "8fa614e38dde6f7ab0f9fade87dfa2e3"         >/opt/lmi/data/passkey
 
 cat >/opt/lmi/bin/configurable_settings.xml <<EOF
 <?xml version="1.0"?>
