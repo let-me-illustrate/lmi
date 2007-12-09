@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.952 2007-12-08 03:13:25 chicares Exp $
+// $Id: ChangeLog,v 1.953 2007-12-09 22:10:25 chicares Exp $
 
 MAINTENANCE
 
@@ -14128,4 +14128,14 @@ Mount MinGW gcc; use it wherever Cygwin gcc had been used. Previously,
 Cygwin gcc had been used for lmi itself (but not for libraries) in
 order to mimic an anomaly in our current production environment, which
 is benign today, but fragile.
+
+20071209T2208Z <gchicares@sbcglobal.net> [1208]
+
+  install_msw.sh
+Create authentication files.
+
+20071209T2210Z <gchicares@sbcglobal.net> [1208]
+
+  install_mingw.make
+Update mailing-list links.
 
