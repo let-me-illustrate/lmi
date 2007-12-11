@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: miscellany.cpp,v 1.5 2007-01-27 00:00:51 wboutin Exp $
+// $Id: miscellany.cpp,v 1.6 2007-12-11 13:49:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -70,29 +70,29 @@ bool files_are_identical(std::string const& file0, std::string const& file1)
 // 18 Jul 2001 18:25:15 -0400
 std::string iso_8601_datestamp_verbose()
 {
-   std::size_t const len = sizeof "CCYY-MM-DDTHH:MM:SSZ";
-   std::time_t t = std::time(0);
-   std::tm* gmt = std::gmtime(&t);
-   char s[len];
-   std::size_t rc = std::strftime(s, len, "%Y-%m-%dT%H:%M:%SZ", gmt);
-   if(0 == rc)
-       {
-       throw std::logic_error("std::strftime() failed.");
-       }
-   return s;
+    std::size_t const len = sizeof "CCYY-MM-DDTHH:MM:SSZ";
+    std::time_t t = std::time(0);
+    std::tm* gmt = std::gmtime(&t);
+    char s[len];
+    std::size_t rc = std::strftime(s, len, "%Y-%m-%dT%H:%M:%SZ", gmt);
+    if(0 == rc)
+        {
+        throw std::logic_error("std::strftime() failed.");
+        }
+    return s;
 }
 
 std::string iso_8601_datestamp_terse()
 {
-   std::size_t const len = sizeof "CCYYMMDDTHHMMSSZ";
-   std::time_t t = std::time(0);
-   std::tm* gmt = std::gmtime(&t);
-   char s[len];
-   std::size_t rc = std::strftime(s, len, "%Y%m%dT%H%M%SZ", gmt);
-   if(0 == rc)
-       {
-       throw std::logic_error("std::strftime() failed.");
-       }
-   return s;
+    std::size_t const len = sizeof "CCYYMMDDTHHMMSSZ";
+    std::time_t t = std::time(0);
+    std::tm* gmt = std::gmtime(&t);
+    char s[len];
+    std::size_t rc = std::strftime(s, len, "%Y%m%dT%H%M%SZ", gmt);
+    if(0 == rc)
+        {
+        throw std::logic_error("std::strftime() failed.");
+        }
+    return s;
 }
 
