@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: miscellany.cpp,v 1.7 2007-12-11 14:39:18 chicares Exp $
+// $Id: miscellany.cpp,v 1.8 2007-12-11 15:29:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -27,6 +27,8 @@
 #endif // __BORLANDC__
 
 #include "miscellany.hpp"
+
+#include "assert_lmi.hpp"
 
 #include <ctime>
 #include <fstream>
@@ -71,8 +73,9 @@ bool files_are_identical(std::string const& file0, std::string const& file1)
 std::string iso_8601_datestamp_verbose()
 {
     std::size_t const len = sizeof "CCYY-MM-DDTHH:MM:SSZ";
-    std::time_t t0 = std::time(0);
-    std::tm* t1 = std::gmtime(&t0);
+    std::time_t const t0 = std::time(0);
+    std::tm const*const t1 = std::gmtime(&t0);
+    LMI_ASSERT(NULL != t1);
     char s[len];
     std::size_t rc = std::strftime(s, len, "%Y-%m-%dT%H:%M:%SZ", t1);
     if(0 == rc)
@@ -85,8 +88,9 @@ std::string iso_8601_datestamp_verbose()
 std::string iso_8601_datestamp_terse()
 {
     std::size_t const len = sizeof "CCYYMMDDTHHMMSSZ";
-    std::time_t t0 = std::time(0);
-    std::tm* t1 = std::gmtime(&t0);
+    std::time_t const t0 = std::time(0);
+    std::tm const*const t1 = std::gmtime(&t0);
+    LMI_ASSERT(NULL != t1);
     char s[len];
     std::size_t rc = std::strftime(s, len, "%Y%m%dT%H%M%SZ", t1);
     if(0 == rc)
