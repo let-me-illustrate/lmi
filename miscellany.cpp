@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: miscellany.cpp,v 1.8 2007-12-11 15:29:15 chicares Exp $
+// $Id: miscellany.cpp,v 1.9 2007-12-11 16:26:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,7 +34,6 @@
 #include <fstream>
 #include <istream>
 #include <iterator>
-#include <stdexcept>
 
 namespace
 {
@@ -78,10 +77,7 @@ std::string iso_8601_datestamp_verbose()
     LMI_ASSERT(NULL != t1);
     char s[len];
     std::size_t rc = std::strftime(s, len, "%Y-%m-%dT%H:%M:%SZ", t1);
-    if(0 == rc)
-        {
-        throw std::logic_error("std::strftime() failed.");
-        }
+    LMI_ASSERT(0 != rc);
     return s;
 }
 
@@ -93,10 +89,7 @@ std::string iso_8601_datestamp_terse()
     LMI_ASSERT(NULL != t1);
     char s[len];
     std::size_t rc = std::strftime(s, len, "%Y%m%dT%H%M%SZ", t1);
-    if(0 == rc)
-        {
-        throw std::logic_error("std::strftime() failed.");
-        }
+    LMI_ASSERT(0 != rc);
     return s;
 }
 
