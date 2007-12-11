@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date.cpp,v 1.18 2007-07-03 20:33:46 chicares Exp $
+// $Id: calendar_date.cpp,v 1.19 2007-12-11 15:04:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -695,7 +695,7 @@ calendar_date const& last_yyyy_date()
 
 calendar_date today()
 {
-    std::time_t const t0 = time(0);
+    std::time_t const t0 = std::time(0);
     std::tm* const t1 = std::localtime(&t0);
     return calendar_date
         (1900 + t1->tm_year
