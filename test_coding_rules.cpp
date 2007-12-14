@@ -19,13 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.9 2007-08-03 21:32:37 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.10 2007-12-14 15:03:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
+#include "assert_lmi.hpp"
 #include "handle_exceptions.hpp"
 #include "istream_to_string.hpp"
 #include "main_common.hpp"
@@ -34,11 +35,34 @@
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
+#include <boost/regex.hpp>
 
+#include <ctime>
 #include <ios>
 #include <iostream>
 #include <ostream>
+#include <sstream>
 #include <string>
+
+void check_copyright(std::string const& filename, std::string const& s)
+{
+    std::time_t const t0 = fs::last_write_time(filename);
+    std::tm const*const t1 = std::gmtime(&t0);
+    LMI_ASSERT(NULL != t1);
+    std::ostringstream oss;
+    oss << "Copyright.*" << 1900 + t1->tm_year;
+    boost::regex const re(oss.str(), boost::regex::sed);
+    std::istringstream iss(s);
+    std::string line;
+    while(std::getline(iss, line))
+        {
+        if(boost::regex_search(line, re))
+            {
+            return;
+            }
+        }
+    std::cout << "File '" << filename << "' lacks current copyright.\n";
+}
 
 void check_include_guards(std::string const& filename, std::string const& s)
 {
@@ -114,6 +138,10 @@ int process_file(std::string const& filename)
     if(".xpm" == fs::extension(filename))
         {
         check_xpm(filename, s);
+        }
+    else
+        {
+        check_copyright(filename, s);
         }
 
     if(!ifs)
