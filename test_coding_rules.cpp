@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.12 2007-12-15 12:27:19 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.13 2007-12-15 13:58:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -43,6 +43,30 @@
 #include <ostream>
 #include <sstream>
 #include <string>
+
+// Open predefined standard streams in binary mode.
+//
+// There is no portable way to do this. Of course, it doesn't matter
+// on *nix anyway.
+//
+// SOMEDAY !! Consider moving this to 'main_common.cpp'. The issue is
+// that there are two behaviors:
+//   (1) open all files in binary mode
+//   (2) open predefined streams in binary mode before main()
+// and we want only (2) and not (1), but MinGW doesn't permit that.
+// For portable correctness, we should take care to open all streams
+// in binary mode; but if we fail to do so, then (1) masks the defect.
+// Yet MinGW offers only
+//   (a) '_fmode'     --> (1) only
+//   (b) '_CRT_fmode' --> both (1) and (2)
+// and not [(2) and not (1)]. It is not sufficient to override
+// '_fmode' on the first line of main() because non-local objects can
+// be constructed before main() is called.
+
+#if defined __MINGW32__
+#   include <fcntl.h> // _O_BINARY
+    int _CRT_fmode = _O_BINARY;
+#endif // defined __MINGW32__
 
 void check_copyright(std::string const& filename, std::string const& s)
 {
