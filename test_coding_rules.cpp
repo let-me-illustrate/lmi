@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.11 2007-12-15 03:22:15 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.12 2007-12-15 12:27:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -160,7 +160,7 @@ int try_main(int argc, char* argv[])
         {
         try
             {
-            result = result || process_file(argv[j]);
+            result = process_file(argv[j]) || result;
             }
         catch(...)
             {
