@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.13 2007-12-15 13:58:19 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.14 2007-12-15 19:25:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -42,6 +42,7 @@
 #include <iostream>
 #include <ostream>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 
 // Open predefined standard streams in binary mode.
@@ -120,19 +121,18 @@ void check_xpm(std::string const& filename, std::string const& s)
         }
 }
 
-int process_file(std::string const& filename)
+void process_file(std::string const& filename)
 {
     fs::path filepath(filename);
 
     if(!fs::exists(filepath))
         {
-        std::cerr << "File '" << filename << "' not found.\n";
-        return 1;
+        throw std::runtime_error("File not found.");
         }
 
     if(fs::is_directory(filepath))
         {
-        return 0;
+        throw std::runtime_error("Argument is a directory.");
         }
 
     fs::ifstream ifs(filepath, std::ios_base::binary);
@@ -170,28 +170,26 @@ int process_file(std::string const& filename)
 
     if(!ifs)
         {
-        std::cerr << "Error processing file '" << filename << "'.\n";
-        return 1;
+        throw std::runtime_error("Failure in file input stream.");
         }
-
-    return 0;
 }
 
 int try_main(int argc, char* argv[])
 {
-    int result = 0;
+    bool error_flag = false;
     for(int j = 1; j < argc; ++j)
         {
         try
             {
-            result = process_file(argv[j]) || result;
+            process_file(argv[j]);
             }
         catch(...)
             {
-            result = 1;
+            error_flag = true;
+            std::cerr << "Exception--file '" << argv[j] << "': " << std::flush;
             report_exception();
             }
         }
-    return result ? EXIT_FAILURE : EXIT_SUCCESS;
+    return error_flag ? EXIT_FAILURE : EXIT_SUCCESS;
 }
 
