@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.1 2007-12-15 17:56:23 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.2 2007-12-15 18:57:24 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -29,15 +29,16 @@ rm --force eraseme*
 
 cat >eraseme0 <<EOF
 Copyright
+  is expected to be on the same line as
 `date -u +'%Y'`
 EOF
 
 cat >eraseme1 <<EOF
-Copyright `date -u +'%Y'`
+// Copyright 1900, `date -u +'%Y'`, 2100
 EOF
 touch --date=19700101 eraseme1
 
-./test_coding_rules a_nonexistent_file eraseme* >eraseme_observed 2>&1
+./test_coding_rules . a_nonexistent_file eraseme* >eraseme_observed 2>&1
 
 cat >eraseme_expected <<'EOF'
 File 'a_nonexistent_file' not found.
@@ -45,5 +46,5 @@ File 'eraseme0' lacks current copyright.
 File 'eraseme1' lacks current copyright.
 EOF
 
-diff -u0 eraseme_observed eraseme_expected && rm --force eraseme*
+diff --unified=0 eraseme_observed eraseme_expected && rm --force eraseme*
 
