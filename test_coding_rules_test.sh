@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.2 2007-12-15 18:57:24 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.3 2007-12-15 19:25:17 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -41,7 +41,8 @@ touch --date=19700101 eraseme1
 ./test_coding_rules . a_nonexistent_file eraseme* >eraseme_observed 2>&1
 
 cat >eraseme_expected <<'EOF'
-File 'a_nonexistent_file' not found.
+Exception--file '.': Argument is a directory.
+Exception--file 'a_nonexistent_file': File not found.
 File 'eraseme0' lacks current copyright.
 File 'eraseme1' lacks current copyright.
 EOF
