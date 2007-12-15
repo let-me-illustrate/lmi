@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.102 2007-11-18 16:00:45 chicares Exp $
+# $Id: workhorse.make,v 1.103 2007-12-15 17:56:23 chicares Exp $
 
 ################################################################################
 
@@ -724,6 +724,7 @@ ALL_RCFLAGS  = $(REQUIRED_RCFLAGS)  $(RCFLAGS)
 
 %$(EXEEXT):
 	$(LD) -o $@ $^ $(ALL_LDFLAGS)
+	$(POST_LINK_COMMAND)
 
 %$(SHREXT):
 	$(LD) -o $@ -shared $^ $(ALL_LDFLAGS)

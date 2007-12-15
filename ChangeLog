@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.954 2007-12-11 16:26:22 chicares Exp $
+// $Id: ChangeLog,v 1.955 2007-12-15 17:56:23 chicares Exp $
 
 MAINTENANCE
 
@@ -14171,4 +14171,37 @@ Regularize constness; guard against failure in C RTL.
 
   miscellany.cpp
 Simplify.
+
+20071214T1503Z <gchicares@sbcglobal.net> [1208]
+
+  objects.make
+  test_coding_rules.cpp
+Test copyright. This change introduces a dependency on boost::regex.
+Measurement shows that this test runs two decimal orders of magnitude
+faster than the slightly less powerful shell loop in 'GNUmakefile'.
+This is important because the sluggishness of 'make check_concinnity'
+impedes productivity.
+
+20071215T0322Z <gchicares@sbcglobal.net> [1208]
+
+  test_coding_rules.cpp
+Return EXIT_FAILURE on exception.
+
+20071215T1227Z <gchicares@sbcglobal.net> [1208]
+
+  test_coding_rules.cpp
+Fix defect introduced 20060118T1216Z: an error processing one file
+shouldn't prevent processing of other files.
+
+20071215T1358Z <gchicares@sbcglobal.net> [1208]
+
+  test_coding_rules.cpp
+Open predefined standard streams in binary mode.
+
+20071215T1756Z <gchicares@sbcglobal.net> [1208]
+
+  objects.make
+  test_coding_rules_test.sh [new file]
+  workhorse.make
+Add an automated test.
 
