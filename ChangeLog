@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.955 2007-12-15 17:56:23 chicares Exp $
+// $Id: ChangeLog,v 1.956 2007-12-16 01:25:32 chicares Exp $
 
 MAINTENANCE
 
@@ -14204,4 +14204,30 @@ Open predefined standard streams in binary mode.
   test_coding_rules_test.sh [new file]
   workhorse.make
 Add an automated test.
+
+20071215T1857Z <gchicares@sbcglobal.net> [1208]
+
+  test_coding_rules_test.sh
+Add a test for '.'.
+
+20071215T1925Z <gchicares@sbcglobal.net> [1208]
+
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+Eschew return codes; prefer exceptions; don't mix the twain.
+
+20071216T0104Z <gchicares@sbcglobal.net> [1208]
+
+  test_coding_rules.cpp
+Refactor.
+
+20071216T0124Z <gchicares@sbcglobal.net> [1208]
+
+  test_coding_rules_test.sh
+Add a test designed to succeed.
+
+20071216T0125Z <gchicares@sbcglobal.net> [1208]
+
+  GNUmakefile
+Remove a test now performed by 'test_coding_rules.cpp'.
 
