@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.15 2007-12-16 01:04:19 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.16 2007-12-16 13:32:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -114,6 +114,11 @@ file::file(std::string const& name)
         }
 }
 
+void complain(file const& f, std::string const& complaint)
+{
+    std::cout << "File '" << f.name() << "' " << complaint << '\n';
+}
+
 void check_copyright(file const& f)
 {
     std::time_t const t0 = fs::last_write_time(f.path());
@@ -131,7 +136,7 @@ void check_copyright(file const& f)
             return;
             }
         }
-    std::cout << "File '" << f.name() << "' lacks current copyright.\n";
+    complain(f, "lacks current copyright.");
 }
 
 void check_include_guards(file const& f)
@@ -150,7 +155,7 @@ void check_include_guards(file const& f)
         ||  std::string::npos == f.data().find("\n#endif // " + guard + "\n")
         )
         {
-        std::cout << "Noncanonical header guards in '" << f.name() << "'.\n";
+        complain(f, "has noncanonical header guards.");
         }
 }
 
@@ -158,11 +163,7 @@ void check_xpm(file const& f)
 {
     if(std::string::npos == f.data().find("\nstatic char const*"))
         {
-        std::cout
-            << "Lacking /^static char const\\*/ in '"
-            << f.name()
-            << "'.\n"
-            ;
+        complain(f, "lacks /^static char const\\*/.");
         }
 }
 
@@ -172,17 +173,17 @@ void process_file(std::string const& filename)
 
     if(std::string::npos != f.data().find('\r'))
         {
-        std::cout << "File '" << f.name() << "' contains '\\r'.\n";
+        complain(f, "contains '\\r'.");
         }
 
     if(std::string::npos != f.data().find("\n\n\n"))
         {
-        std::cout << "File '" << f.name() << "' contains '\\n\\n\\n'.\n";
+        complain(f, "contains '\\n\\n\\n'.");
         }
 
     if(std::string::npos != f.data().find(" \n"))
         {
-        std::cout << "File '" << f.name() << "' contains ' \\n'.\n";
+        complain(f, "contains ' \\n'.");
         }
 
     if(".hpp" == f.ext())
