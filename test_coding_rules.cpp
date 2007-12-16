@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.14 2007-12-15 19:25:17 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.15 2007-12-16 01:04:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,12 +30,14 @@
 #include "handle_exceptions.hpp"
 #include "istream_to_string.hpp"
 #include "main_common.hpp"
+#include "obstruct_slicing.hpp"
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/regex.hpp>
+#include <boost/utility.hpp>
 
 #include <ctime>
 #include <ios>
@@ -69,15 +71,58 @@
     int _CRT_fmode = _O_BINARY;
 #endif // defined __MINGW32__
 
-void check_copyright(std::string const& filename, std::string const& s)
+class file
+    :private boost::noncopyable
+    ,virtual private obstruct_slicing<file>
 {
-    std::time_t const t0 = fs::last_write_time(filename);
+  public:
+    explicit file(std::string const& name);
+    ~file() {}
+
+    std::string const& name() const {return name_;}
+    fs::path    const& path() const {return path_;}
+    std::string const& ext () const {return ext_ ;}
+    std::string const& data() const {return data_;}
+
+  private:
+    std::string name_;
+    fs::path    path_;
+    std::string ext_ ;
+    std::string data_;
+};
+
+file::file(std::string const& name)
+    :name_(name)
+    ,path_(name)
+    ,ext_ (fs::extension(path_))
+{
+    if(!fs::exists(path_))
+        {
+        throw std::runtime_error("File not found.");
+        }
+
+    if(fs::is_directory(path_))
+        {
+        throw std::runtime_error("Argument is a directory.");
+        }
+
+    fs::ifstream ifs(path_, std::ios_base::binary);
+    istream_to_string(ifs, data_);
+    if(!ifs)
+        {
+        throw std::runtime_error("Failure in file input stream.");
+        }
+}
+
+void check_copyright(file const& f)
+{
+    std::time_t const t0 = fs::last_write_time(f.path());
     std::tm const*const t1 = std::gmtime(&t0);
     LMI_ASSERT(NULL != t1);
     std::ostringstream oss;
     oss << "Copyright.*" << 1900 + t1->tm_year;
     boost::regex const re(oss.str(), boost::regex::sed);
-    std::istringstream iss(s);
+    std::istringstream iss(f.data());
     std::string line;
     while(std::getline(iss, line))
         {
@@ -86,12 +131,12 @@ void check_copyright(std::string const& filename, std::string const& s)
             return;
             }
         }
-    std::cout << "File '" << filename << "' lacks current copyright.\n";
+    std::cout << "File '" << f.name() << "' lacks current copyright.\n";
 }
 
-void check_include_guards(std::string const& filename, std::string const& s)
+void check_include_guards(file const& f)
 {
-    std::string guard = filename;
+    std::string guard = f.name();
     std::string::size_type position = guard.find('.');
     while(position != std::string::npos)
         {
@@ -100,22 +145,22 @@ void check_include_guards(std::string const& filename, std::string const& s)
         }
 
     if
-        (   std::string::npos == s.find("\n#ifndef "   + guard + "\n")
-        ||  std::string::npos == s.find("\n#define "   + guard + "\n")
-        ||  std::string::npos == s.find("\n#endif // " + guard + "\n")
+        (   std::string::npos == f.data().find("\n#ifndef "   + guard + "\n")
+        ||  std::string::npos == f.data().find("\n#define "   + guard + "\n")
+        ||  std::string::npos == f.data().find("\n#endif // " + guard + "\n")
         )
         {
-        std::cout << "Noncanonical header guards in '" << filename << "'.\n";
+        std::cout << "Noncanonical header guards in '" << f.name() << "'.\n";
         }
 }
 
-void check_xpm(std::string const& filename, std::string const& s)
+void check_xpm(file const& f)
 {
-    if(std::string::npos == s.find("\nstatic char const*"))
+    if(std::string::npos == f.data().find("\nstatic char const*"))
         {
         std::cout
             << "Lacking /^static char const\\*/ in '"
-            << filename
+            << f.name()
             << "'.\n"
             ;
         }
@@ -123,54 +168,35 @@ void check_xpm(std::string const& filename, std::string const& s)
 
 void process_file(std::string const& filename)
 {
-    fs::path filepath(filename);
+    file f(filename);
 
-    if(!fs::exists(filepath))
+    if(std::string::npos != f.data().find('\r'))
         {
-        throw std::runtime_error("File not found.");
+        std::cout << "File '" << f.name() << "' contains '\\r'.\n";
         }
 
-    if(fs::is_directory(filepath))
+    if(std::string::npos != f.data().find("\n\n\n"))
         {
-        throw std::runtime_error("Argument is a directory.");
+        std::cout << "File '" << f.name() << "' contains '\\n\\n\\n'.\n";
         }
 
-    fs::ifstream ifs(filepath, std::ios_base::binary);
-    std::string s;
-    istream_to_string(ifs, s);
-
-    if(std::string::npos != s.find('\r'))
+    if(std::string::npos != f.data().find(" \n"))
         {
-        std::cout << "File '" << filename << "' contains '\\r'.\n";
+        std::cout << "File '" << f.name() << "' contains ' \\n'.\n";
         }
 
-    if(std::string::npos != s.find("\n\n\n"))
+    if(".hpp" == f.ext())
         {
-        std::cout << "File '" << filename << "' contains '\\n\\n\\n'.\n";
+        check_include_guards(f);
         }
 
-    if(std::string::npos != s.find(" \n"))
+    if(".xpm" == f.ext())
         {
-        std::cout << "File '" << filename << "' contains ' \\n'.\n";
-        }
-
-    if(".hpp" == fs::extension(filename))
-        {
-        check_include_guards(filename, s);
-        }
-
-    if(".xpm" == fs::extension(filename))
-        {
-        check_xpm(filename, s);
+        check_xpm(f);
         }
     else
         {
-        check_copyright(filename, s);
-        }
-
-    if(!ifs)
-        {
-        throw std::runtime_error("Failure in file input stream.");
+        check_copyright(f);
         }
 }
 
