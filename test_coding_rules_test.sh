@@ -21,30 +21,34 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.3 2007-12-15 19:25:17 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.4 2007-12-16 01:24:29 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
 rm --force eraseme*
 
-cat >eraseme0 <<EOF
+cat >eraseme000 <<EOF
+_Copyright_`date -u +'%Y'`_
+EOF
+
+cat >eraseme001 <<EOF
 Copyright
   is expected to be on the same line as
 `date -u +'%Y'`
 EOF
 
-cat >eraseme1 <<EOF
+cat >eraseme002 <<EOF
 // Copyright 1900, `date -u +'%Y'`, 2100
 EOF
-touch --date=19700101 eraseme1
+touch --date=19700101 eraseme002
 
 ./test_coding_rules . a_nonexistent_file eraseme* >eraseme_observed 2>&1
 
 cat >eraseme_expected <<'EOF'
 Exception--file '.': Argument is a directory.
 Exception--file 'a_nonexistent_file': File not found.
-File 'eraseme0' lacks current copyright.
-File 'eraseme1' lacks current copyright.
+File 'eraseme001' lacks current copyright.
+File 'eraseme002' lacks current copyright.
 EOF
 
 diff --unified=0 eraseme_observed eraseme_expected && rm --force eraseme*
