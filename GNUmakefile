@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.99 2007-11-27 15:35:28 chicares Exp $
+# $Id: GNUmakefile,v 1.100 2007-12-16 01:25:32 chicares Exp $
 
 ################################################################################
 
@@ -465,13 +465,6 @@ check_concinnity: source_clean custom_tools
 	@$(GREP) --line-number '?\{3,\}' $(licensed_files)                   || true
 	@$(ECHO) "  Files with lowercase 'c' in copyright symbol:"
 	@$(GREP) --files-with-match '(c) *[12]' $(licensed_files)            || true
-	@$(ECHO) "  Files lacking current copyright year:"
-	@for z in $(licensed_files); \
-	  do \
-	    [ $$z -nt BOY ] \
-	      && $(GREP) --files-without-match "Copyright.*$(yyyy)" $$z \
-	         || true; \
-	  done;
 	@$(ECHO) "  Files that don't point to savannah:"
 	@$(GREP) --files-without-match savannah $(licensed_files)            || true
 	@$(ECHO) "  Files that lack a well-formed RCS Id:"
