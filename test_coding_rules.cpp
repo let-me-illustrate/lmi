@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.16 2007-12-16 13:32:14 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.17 2007-12-16 14:37:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -119,6 +119,45 @@ void complain(file const& f, std::string const& complaint)
     std::cout << "File '" << f.name() << "' " << complaint << '\n';
 }
 
+bool contains_regex(file const& f, std::string const& regex)
+{
+    boost::regex const r(regex, boost::regex::sed);
+    std::istringstream iss(f.data());
+    std::string line;
+    while(std::getline(iss, line))
+        {
+        if(boost::regex_search(line, r))
+            {
+            return true;
+            }
+        }
+    return false;
+}
+
+void require
+    (file const&        f
+    ,std::string const& regex
+    ,std::string const& complaint
+    )
+{
+    if(!contains_regex(f, regex))
+        {
+        complain(f, complaint);
+        }
+}
+
+void forbid
+    (file const&        f
+    ,std::string const& regex
+    ,std::string const& complaint
+    )
+{
+    if(contains_regex(f, regex))
+        {
+        complain(f, complaint);
+        }
+}
+
 void check_copyright(file const& f)
 {
     std::time_t const t0 = fs::last_write_time(f.path());
@@ -126,17 +165,7 @@ void check_copyright(file const& f)
     LMI_ASSERT(NULL != t1);
     std::ostringstream oss;
     oss << "Copyright.*" << 1900 + t1->tm_year;
-    boost::regex const re(oss.str(), boost::regex::sed);
-    std::istringstream iss(f.data());
-    std::string line;
-    while(std::getline(iss, line))
-        {
-        if(boost::regex_search(line, re))
-            {
-            return;
-            }
-        }
-    complain(f, "lacks current copyright.");
+    require(f, oss.str(), "lacks current copyright.");
 }
 
 void check_include_guards(file const& f)
