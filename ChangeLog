@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.956 2007-12-16 01:25:32 chicares Exp $
+// $Id: ChangeLog,v 1.957 2007-12-17 13:21:27 chicares Exp $
 
 MAINTENANCE
 
@@ -14230,4 +14230,19 @@ Add a test designed to succeed.
 
   GNUmakefile
 Remove a test now performed by 'test_coding_rules.cpp'.
+
+20071216T1332Z <gchicares@sbcglobal.net> [1208]
+
+  test_coding_rules.cpp
+Refactor.
+
+20071216T1437Z <gchicares@sbcglobal.net> [1208]
+
+  test_coding_rules.cpp
+Refactor.
+
+20071217T1321Z <gchicares@sbcglobal.net> [1208]
+
+  test_coding_rules_test.sh
+Prevent an msw problem.
 
