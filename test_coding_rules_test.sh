@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.4 2007-12-16 01:24:29 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.5 2007-12-17 13:21:27 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -38,9 +38,12 @@ Copyright
 EOF
 
 cat >eraseme002 <<EOF
+This would seem to be all right:
 // Copyright 1900, `date -u +'%Y'`, 2100
+but the datestamp is changed to the beginning of the msw epoch.
+Don't use the unix epoch, because that causes mayhem on msw.
 EOF
-touch --date=19700101 eraseme002
+touch --date=19800102 eraseme002
 
 ./test_coding_rules . a_nonexistent_file eraseme* >eraseme_observed 2>&1
 
