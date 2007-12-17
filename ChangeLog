@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.957 2007-12-17 13:21:27 chicares Exp $
+// $Id: ChangeLog,v 1.958 2007-12-17 19:42:27 chicares Exp $
 
 MAINTENANCE
 
@@ -14245,4 +14245,10 @@ Refactor.
 
   test_coding_rules_test.sh
 Prevent an msw problem.
+
+20071217T1942Z <gchicares@sbcglobal.net> [1208]
+
+  objects.make
+  regex_test.cpp
+Present some regex research.
 
