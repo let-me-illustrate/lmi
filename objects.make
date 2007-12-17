@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.110 2007-12-15 17:56:23 chicares Exp $
+# $Id: objects.make,v 1.111 2007-12-17 19:42:27 chicares Exp $
 
 ################################################################################
 
@@ -451,6 +451,7 @@ unit_test_targets := \
   print_matrix_test$(EXEEXT) \
   progress_meter_test$(EXEEXT) \
   quiet_nan_test$(EXEEXT) \
+  regex_test$(EXEEXT) \
   round_to_test$(EXEEXT) \
   rtti_lmi_test$(EXEEXT) \
   safely_dereference_as_test$(EXEEXT) \
@@ -711,6 +712,12 @@ progress_meter_test$(EXEEXT): \
 quiet_nan_test$(EXEEXT): \
   $(common_test_objects) \
   quiet_nan_test.o \
+
+regex_test$(EXEEXT): EXTRA_LDFLAGS = -lboost_regex-gcc-1_33_1
+regex_test$(EXEEXT): \
+  $(common_test_objects) \
+  regex_test.o \
+  timer.o \
 
 round_to_test$(EXEEXT): \
   $(common_test_objects) \
