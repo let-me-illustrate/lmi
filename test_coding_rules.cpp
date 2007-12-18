@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.17 2007-12-16 14:37:32 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.18 2007-12-18 02:19:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -170,7 +170,7 @@ void check_copyright(file const& f)
 
 void check_include_guards(file const& f)
 {
-    std::string guard = f.name();
+    std::string guard = f.path().leaf();
     std::string::size_type position = guard.find('.');
     while(position != std::string::npos)
         {
