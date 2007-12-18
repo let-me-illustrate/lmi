@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: regex_test.cpp,v 1.1 2007-12-17 19:42:27 chicares Exp $
+// $Id: regex_test.cpp,v 1.2 2007-12-18 03:29:50 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -140,9 +140,10 @@ bool contains_regex0(std::string const& regex)
 /// [15.10.4.1] describes a "multiline property", but excludes 's'.
 ///
 /// Conclusion: where 's' behavior is required, boost's "(?-s)" can
-/// be used for now, but TR1 needs either a vectorized approach like
-/// this or a regex like /^.*PatternToFindOnOneSingleLine.*$/ whose
-/// '.*' can cause problems due to regex "greediness".
+/// be used for now, but TR1 needs either: a vectorized approach like
+/// this; a "(?m)" regex like "^.*PatternToFindOnOneSingleLine.*$",
+/// whose ".*" can cause problems due to regex "greediness"; or,
+/// perhaps least bad of all, a regex with "[^\\n]" instead of ".".
 
 bool contains_regex1(std::string const& regex)
 {
