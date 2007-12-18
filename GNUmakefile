@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.100 2007-12-16 01:25:32 chicares Exp $
+# $Id: GNUmakefile,v 1.101 2007-12-18 15:11:16 chicares Exp $
 
 ################################################################################
 
@@ -304,6 +304,7 @@ release_candidate:
 	  $(gpl_notices) \
 	  '#ifndef version_hpp\n' \
 	  '#define version_hpp\n\n' \
+	  '#include "config.hpp"\n\n' \
 	  '#define LMI_VERSION "$(yyyymmddhhmm)"\n\n' \
 	  '#endif // version_hpp\n' \
 	  | $(SED) -e 's/^ *//' \
