@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.19 2007-12-18 03:32:34 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.20 2007-12-18 03:59:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -119,18 +119,13 @@ void complain(file const& f, std::string const& complaint)
     std::cout << "File '" << f.name() << "' " << complaint << '\n';
 }
 
-bool contains_regex(file const& f, std::string const& regex)
-{
-    return boost::regex_search(f.data(), boost::regex(regex));
-}
-
 void require
     (file const&        f
     ,std::string const& regex
     ,std::string const& complaint
     )
 {
-    if(!contains_regex(f, regex))
+    if(!boost::regex_search(f.data(), boost::regex(regex)))
         {
         complain(f, complaint);
         }
@@ -142,7 +137,7 @@ void forbid
     ,std::string const& complaint
     )
 {
-    if(contains_regex(f, regex))
+    if(boost::regex_search(f.data(), boost::regex(regex)))
         {
         complain(f, complaint);
         }
