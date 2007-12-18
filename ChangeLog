@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.959 2007-12-18 03:32:34 chicares Exp $
+// $Id: ChangeLog,v 1.960 2007-12-18 15:12:19 chicares Exp $
 
 MAINTENANCE
 
@@ -14266,4 +14266,20 @@ Improve documentation.
 
   test_coding_rules.cpp
 Improve regex algorithm: see the 20071217T1942Z change.
+
+20071218T0359Z <gchicares@sbcglobal.net> [1208]
+
+  test_coding_rules.cpp
+Refactor.
+
+20071218T1511Z <gchicares@sbcglobal.net> [1208]
+
+  GNUmakefile
+Include 'config.hpp' in 'version.hpp' as in other headers.
+
+20071218T1512Z <gchicares@sbcglobal.net> [1208]
+
+  md5.hpp
+Reformat to match /^#include "config.hpp"$/ as other headers do,
+to make a style guideline simpler to enforce.
 
