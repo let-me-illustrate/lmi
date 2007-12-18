@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.958 2007-12-17 19:42:27 chicares Exp $
+// $Id: ChangeLog,v 1.959 2007-12-18 03:32:34 chicares Exp $
 
 MAINTENANCE
 
@@ -14249,6 +14249,21 @@ Prevent an msw problem.
 20071217T1942Z <gchicares@sbcglobal.net> [1208]
 
   objects.make
-  regex_test.cpp
+  regex_test.cpp [new file]
 Present some regex research.
+
+20071218T0219Z <gchicares@sbcglobal.net> [1208]
+
+  test_coding_rules.cpp
+Prevent spurious diagnostic when running from a remote directory.
+
+20071218T0329Z <gchicares@sbcglobal.net> [1208]
+
+  regex_test.cpp
+Improve documentation.
+
+20071218T0332Z <gchicares@sbcglobal.net> [1208]
+
+  test_coding_rules.cpp
+Improve regex algorithm: see the 20071217T1942Z change.
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.18 2007-12-18 02:19:38 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.19 2007-12-18 03:32:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -121,17 +121,7 @@ void complain(file const& f, std::string const& complaint)
 
 bool contains_regex(file const& f, std::string const& regex)
 {
-    boost::regex const r(regex, boost::regex::sed);
-    std::istringstream iss(f.data());
-    std::string line;
-    while(std::getline(iss, line))
-        {
-        if(boost::regex_search(line, r))
-            {
-            return true;
-            }
-        }
-    return false;
+    return boost::regex_search(f.data(), boost::regex(regex));
 }
 
 void require
@@ -158,13 +148,16 @@ void forbid
         }
 }
 
+// SOMEDAY !! This test could be liberalized to permit copyright
+// notices to span multiple lines.
+
 void check_copyright(file const& f)
 {
     std::time_t const t0 = fs::last_write_time(f.path());
     std::tm const*const t1 = std::gmtime(&t0);
     LMI_ASSERT(NULL != t1);
     std::ostringstream oss;
-    oss << "Copyright.*" << 1900 + t1->tm_year;
+    oss << "Copyright[^\\n]*" << 1900 + t1->tm_year;
     require(f, oss.str(), "lacks current copyright.");
 }
 
