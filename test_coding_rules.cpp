@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.20 2007-12-18 03:59:18 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.21 2007-12-18 16:41:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -76,25 +76,28 @@ class file
     ,virtual private obstruct_slicing<file>
 {
   public:
-    explicit file(std::string const& name);
+    explicit file(std::string const& file_path);
     ~file() {}
 
-    std::string const& name() const {return name_;}
-    fs::path    const& path() const {return path_;}
-    std::string const& ext () const {return ext_ ;}
-    std::string const& data() const {return data_;}
+    fs::path    const& path     () const {return path_;     }
+    std::string const& full_name() const {return full_name_;}
+    std::string const& leaf_name() const {return leaf_name_;}
+    std::string const& extension() const {return extension_;}
+    std::string const& data     () const {return data_;     }
 
   private:
-    std::string name_;
     fs::path    path_;
-    std::string ext_ ;
+    std::string full_name_;
+    std::string leaf_name_;
+    std::string extension_;
     std::string data_;
 };
 
-file::file(std::string const& name)
-    :name_(name)
-    ,path_(name)
-    ,ext_ (fs::extension(path_))
+file::file(std::string const& file_path)
+    :path_     (file_path)
+    ,full_name_(file_path)
+    ,leaf_name_(path_.leaf())
+    ,extension_(fs::extension(path_))
 {
     if(!fs::exists(path_))
         {
@@ -116,7 +119,7 @@ file::file(std::string const& name)
 
 void complain(file const& f, std::string const& complaint)
 {
-    std::cout << "File '" << f.name() << "' " << complaint << '\n';
+    std::cout << "File '" << f.full_name() << "' " << complaint << '\n';
 }
 
 void require
@@ -158,7 +161,7 @@ void check_copyright(file const& f)
 
 void check_include_guards(file const& f)
 {
-    std::string guard = f.path().leaf();
+    std::string guard = f.leaf_name();
     std::string::size_type position = guard.find('.');
     while(position != std::string::npos)
         {
@@ -184,9 +187,9 @@ void check_xpm(file const& f)
         }
 }
 
-void process_file(std::string const& filename)
+void process_file(std::string const& file_path)
 {
-    file f(filename);
+    file f(file_path);
 
     if(std::string::npos != f.data().find('\r'))
         {
@@ -203,12 +206,12 @@ void process_file(std::string const& filename)
         complain(f, "contains ' \\n'.");
         }
 
-    if(".hpp" == f.ext())
+    if(".hpp" == f.extension())
         {
         check_include_guards(f);
         }
 
-    if(".xpm" == f.ext())
+    if(".xpm" == f.extension())
         {
         check_xpm(f);
         }
