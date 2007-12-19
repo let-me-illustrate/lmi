@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: regex_test.cpp,v 1.2 2007-12-18 03:29:50 chicares Exp $
+// $Id: regex_test.cpp,v 1.3 2007-12-19 15:21:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -119,7 +119,7 @@ bool contains_regex0(std::string const& regex)
 ///       m       logical lines delimited by '\n'          no
 ///      ms       logical lines delimited by '\n'         yes
 ///
-/// Perl's 's' is the default for TR1 and boost regex; boost offers
+/// Perl's 's' is the default for boost regex; boost offers
 ///   http://boost.org/libs/regex/doc/syntax_option_type.html
 /// "no_mod_s" and
 ///   http://boost.org/libs/regex/doc/match_flag_type.html
@@ -138,12 +138,31 @@ bool contains_regex0(std::string const& regex)
 /// TR1 implements only POSIX and ECMAScript behavior; the latter
 ///   http://www.ecma-international.org/publications/files/ecma-st/ECMA-262.pdf
 /// [15.10.4.1] describes a "multiline property", but excludes 's'.
+/// However, TR1 offers no way to manipulate even that "property",
+/// much less to set or unset the Perl 's' modifier.
 ///
-/// Conclusion: where 's' behavior is required, boost's "(?-s)" can
-/// be used for now, but TR1 needs either: a vectorized approach like
-/// this; a "(?m)" regex like "^.*PatternToFindOnOneSingleLine.*$",
-/// whose ".*" can cause problems due to regex "greediness"; or,
-/// perhaps least bad of all, a regex with "[^\\n]" instead of ".".
+/// Furthermore, in dinkumware's TR1 implementation, a '.' wildcard
+/// matches anything except '\n':
+///   http://www.dinkumware.com/manuals/?manual=compleat&page=lib_regex.html#wildcard%20character
+///   "A wildcard character matches any character in the target
+///   expression except a newline"
+/// whereas ECMA-262 section 15.10.2.8 says '.' matches
+///   the set of all characters except the four line terminator
+///   characters <LF>, <CR>, <LS>, or <PS>
+/// yet '.' matches anything in the boost implementation.
+///
+/// Conclusion: TR1 offers no control over 's' or 'm' behavior, and
+/// implementors seem not to agree even on what '.' matches. Where
+/// such questions matter in code that's desired to be compatible with
+/// TR1, there seem to be only two viable options:
+///  - use a vectorized approach such as this; or
+///  - write regexen with
+///    - "[^\\n]" instead of '.', and
+///    - "\n" instead of '^' and '$' anchors
+///    and prepend a '\n' sentry to the string to be searched (and
+///    assert that all files end in '\n').
+/// The second option is far more attractive for performance reasons,
+/// as this unit test shows.
 
 bool contains_regex1(std::string const& regex)
 {
