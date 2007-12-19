@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.21 2007-12-18 16:41:17 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.22 2007-12-19 15:22:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -149,8 +149,16 @@ void forbid
 // SOMEDAY !! This test could be liberalized to permit copyright
 // notices to span multiple lines.
 
+// SOMEDAY !! Move the 'GNUmakefile' logic to exclude certain other
+// files hither.
+
 void check_copyright(file const& f)
 {
+    if(".xpm" == f.extension())
+        {
+        return;
+        }
+
     std::time_t const t0 = fs::last_write_time(f.path());
     std::tm const*const t1 = std::gmtime(&t0);
     LMI_ASSERT(NULL != t1);
@@ -161,6 +169,11 @@ void check_copyright(file const& f)
 
 void check_include_guards(file const& f)
 {
+    if(".hpp" != f.extension())
+        {
+        return;
+        }
+
     std::string guard = f.leaf_name();
     std::string::size_type position = guard.find('.');
     while(position != std::string::npos)
@@ -181,6 +194,11 @@ void check_include_guards(file const& f)
 
 void check_xpm(file const& f)
 {
+    if(".xpm" != f.extension())
+        {
+        return;
+        }
+
     if(std::string::npos == f.data().find("\nstatic char const*"))
         {
         complain(f, "lacks /^static char const\\*/.");
@@ -206,19 +224,9 @@ void process_file(std::string const& file_path)
         complain(f, "contains ' \\n'.");
         }
 
-    if(".hpp" == f.extension())
-        {
-        check_include_guards(f);
-        }
-
-    if(".xpm" == f.extension())
-        {
-        check_xpm(f);
-        }
-    else
-        {
-        check_copyright(f);
-        }
+    check_copyright      (f);
+    check_include_guards (f);
+    check_xpm            (f);
 }
 
 int try_main(int argc, char* argv[])
