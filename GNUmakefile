@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.101 2007-12-18 15:11:16 chicares Exp $
+# $Id: GNUmakefile,v 1.102 2007-12-20 18:56:19 chicares Exp $
 
 ################################################################################
 
@@ -474,23 +474,6 @@ check_concinnity: source_clean custom_tools
 	@$(GREP) --files-with-match '$$Id[^$$]*$$' $(licensed_files)         || true
 	@$(ECHO) "  Files that improperly contain physical tabs:"
 	@$(GREP) -l '	' $(filter-out $(makefiles),$(licensed_files))       || true
-	@$(ECHO) "  Headers that should include \"config.hpp\" first but don't:"
-	@for z in \
-	  $(filter-out config.hpp $(wildcard config_*.hpp),$(wildcard *.hpp)); \
-	  do \
-	    < $$z $(SED) \
-	      -e ';/#.*include/!d' \
-	    | $(SED) \
-	      -e '1!d' \
-	      -e ';/^#include "config.hpp"/d' \
-	      -e "s/^.*$$/$$z/" \
-	    ; \
-	  done;
-	@$(ECHO) "  Files that include \"config.hpp\" but shouldn't:"
-	@$(GREP) \
-	    '#include "config.hpp"' \
-	    $(c_source_files) $(cxx_source_files) \
-	  || true
 	@$(ECHO) "  C++ files with irregularly-indented access-specifiers:"
 	@# The lmi coding standard prescribes a two-space indent.
 	@# At least for now, one additional four-space indentation is
