@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.7 2007-12-20 12:31:22 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.8 2007-12-20 18:56:19 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -46,6 +46,18 @@ but the datestamp is changed to the beginning of the msw epoch.
 Don't use the unix epoch, because that causes mayhem on msw.
 EOF
 touch --date=19800102 eraseme002
+
+# C++ source files.
+
+cat >eraseme000.cpp <<EOF
+_Copyright_`date -u +'%Y'`_
+EOF
+
+cat >eraseme001.cpp <<EOF
+_Copyright_`date -u +'%Y'`_
+This header must be included only by other headers:
+#include "config.hpp"
+EOF
 
 # Headers.
 
@@ -75,6 +87,26 @@ Stray comments on include guards are forbidden as meaningless.
 #endif // eraseme002_hpp
 EOF
 
+cat >eraseme003.hpp <<EOF
+_Copyright_`date -u +'%Y'`_
+#ifndef eraseme003_hpp
+#define eraseme003_hpp
+This compulsory include directive must occur, in canonical form (with
+only one space, preceding '"'), before any other include directive.
+#   include "config.hpp"
+#include "config.hpp" // Stray comments forbidden.
+#include "config.hpp"
+#endif // eraseme003_hpp
+EOF
+
+cat >eraseme004.hpp <<EOF
+_Copyright_`date -u +'%Y'`_
+#ifndef eraseme004_hpp
+#define eraseme004_hpp
+Missing compulsory include directive.
+#endif // eraseme004_hpp
+EOF
+
 # X pixmaps require no copyright, but do require 'const'.
 # SOMEDAY !! Require internal name to match file name?
 
@@ -94,11 +126,16 @@ cat >eraseme_expected <<'EOF'
 Exception--file '.': Argument is a directory.
 Exception--file 'a_nonexistent_file': File not found.
 File 'eraseme001' lacks current copyright.
+File 'eraseme001.cpp' must not include 'config.hpp'.
 File 'eraseme001.hpp' has noncanonical header guards.
 File 'eraseme001.xpm' lacks /^static char const\*/.
 File 'eraseme002' lacks current copyright.
 File 'eraseme002.hpp' has noncanonical header guards.
+File 'eraseme003.hpp' must include 'config.hpp' first.
+File 'eraseme004.hpp' must include 'config.hpp'.
+File 'eraseme004.hpp' lacks line '#include "config.hpp"'.
+File 'eraseme004.hpp' must include 'config.hpp' first.
 EOF
 
-diff --unified=0 eraseme_observed eraseme_expected && rm --force eraseme*
+diff --unified=0 eraseme_expected eraseme_observed && rm --force eraseme*
 

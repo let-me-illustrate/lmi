@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.961 2007-12-20 12:31:22 chicares Exp $
+// $Id: ChangeLog,v 1.962 2007-12-20 18:56:19 chicares Exp $
 
 MAINTENANCE
 
@@ -14310,4 +14310,16 @@ Augment tests, revealing an issue.
   test_coding_rules.cpp
   test_coding_rules_test.sh
 Address issue identified 20071219T1526Z as explained 20071219T1521Z.
+
+20071220T1615Z <gchicares@sbcglobal.net> [1208]
+
+  rtti_lmi.hpp
+Update mailing-list link.
+
+20071220T1856Z <gchicares@sbcglobal.net> [1208]
+
+  GNUmakefile
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+Strengthen and relocate some style rules.
 
