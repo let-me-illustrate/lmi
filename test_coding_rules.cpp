@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.22 2007-12-19 15:22:18 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.23 2007-12-20 12:31:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -93,6 +93,16 @@ class file
     std::string data_;
 };
 
+/// Read file contents into a string.
+///
+/// Require a '\n' at the end of every file, extending the C++98
+/// [2.1/1/2] requirement to all files as an lmi standard. C++98 makes
+/// an exception for empty files, but there's no reason for lmi to
+/// have any.
+///
+/// Add a '\n' sentry at the beginning of the string for the reason
+/// explained in 'regex_test.cpp'.
+
 file::file(std::string const& file_path)
     :path_     (file_path)
     ,full_name_(file_path)
@@ -114,6 +124,12 @@ file::file(std::string const& file_path)
     if(!ifs)
         {
         throw std::runtime_error("Failure in file input stream.");
+        }
+
+    data_ = '\n' + data_;
+    if(0 == data_.size() || '\n' != data_.at(data_.size() - 1))
+        {
+        throw std::runtime_error("File does not end in '\\n'.");
         }
 }
 
