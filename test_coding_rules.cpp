@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.23 2007-12-20 12:31:21 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.24 2007-12-20 18:56:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -162,6 +162,57 @@ void forbid
         }
 }
 
+/// 'config.hpp' must be included exactly when and as required.
+///
+/// Except as noted below, it must be included in every header, but in
+/// no other file. Where required, the include directive must take the
+/// canonical form '#include "unutterable"' (its name can't be uttered
+/// here because this file is not a header) on a line by itself, and
+/// must precede all other include directives.
+///
+/// Exceptions are necessarily made for
+///  - 'config*.hpp' headers;
+///  - this facility's test script; and
+///  - 'ChangeLog' and its kin, whose names conveniently enough
+///    contain capitals by convention.
+
+void check_config_hpp(file const& f)
+{
+    static std::string const loose ("# *include *[<\"]config.hpp[>\"]");
+    static std::string const strict("\\n(#include \"config.hpp\")\\n");
+
+    if(".hpp" == f.extension() || ".h" == f.extension())
+        {
+        if("config" == f.leaf_name().substr(0, 6))
+            {
+            return;
+            }
+
+        require(f, loose , "must include 'config.hpp'.");
+        require(f, strict, "lacks line '#include \"config.hpp\"'.");
+        boost::smatch match;
+        boost::regex first_include("(# *include[^\\n]*)");
+        boost::regex_search(f.data(), match, first_include);
+        if("#include \"config.hpp\"" != match[1])
+            {
+            complain(f, "must include 'config.hpp' first.");
+            }
+        }
+    else
+        {
+        static std::string const AtoZ("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+        if
+            (   std::string::npos != f.leaf_name().find_first_of(AtoZ)
+            ||  "test_coding_rules_test.sh" == f.leaf_name()
+            )
+            {
+            return;
+            }
+
+        forbid(f, loose, "must not include 'config.hpp'.");
+        }
+}
+
 // SOMEDAY !! This test could be liberalized to permit copyright
 // notices to span multiple lines.
 
@@ -240,6 +291,7 @@ void process_file(std::string const& file_path)
         complain(f, "contains ' \\n'.");
         }
 
+    check_config_hpp     (f);
     check_copyright      (f);
     check_include_guards (f);
     check_xpm            (f);
