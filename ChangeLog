@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.960 2007-12-18 15:12:19 chicares Exp $
+// $Id: ChangeLog,v 1.961 2007-12-20 12:31:22 chicares Exp $
 
 MAINTENANCE
 
@@ -14282,4 +14282,32 @@ Include 'config.hpp' in 'version.hpp' as in other headers.
   md5.hpp
 Reformat to match /^#include "config.hpp"$/ as other headers do,
 to make a style guideline simpler to enforce.
+
+20071218T1641Z <gchicares@sbcglobal.net> [1208]
+
+  test_coding_rules.cpp
+Refactor. Distinguishing full_name() from leaf_name() makes it harder
+to misuse either accidentally. Such misuse could resurrect the issue
+addressed 20071218T0219Z.
+
+20071219T1521Z <gchicares@sbcglobal.net> [1208]
+
+  regex_test.cpp
+Augment documentation.
+
+20071219T1522Z <gchicares@sbcglobal.net> [1208]
+
+  test_coding_rules.cpp
+Refactor.
+
+20071219T1526Z <gchicares@sbcglobal.net> [1208]
+
+  test_coding_rules_test.sh
+Augment tests, revealing an issue.
+
+20071220T1231Z <gchicares@sbcglobal.net> [1208]
+
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+Address issue identified 20071219T1526Z as explained 20071219T1521Z.
 
