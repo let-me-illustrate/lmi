@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.6 2007-12-19 15:26:11 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.7 2007-12-20 12:31:22 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -90,14 +90,9 @@ EOF
 
 ./test_coding_rules . a_nonexistent_file eraseme* >eraseme_observed 2>&1
 
-# This line
-#   File 'eraseme000.xpm' lacks /^static char const\*/.
-# works around a temporary defect.
-
 cat >eraseme_expected <<'EOF'
 Exception--file '.': Argument is a directory.
 Exception--file 'a_nonexistent_file': File not found.
-File 'eraseme000.xpm' lacks /^static char const\*/.
 File 'eraseme001' lacks current copyright.
 File 'eraseme001.hpp' has noncanonical header guards.
 File 'eraseme001.xpm' lacks /^static char const\*/.
