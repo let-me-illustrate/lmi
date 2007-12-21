@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.962 2007-12-20 18:56:19 chicares Exp $
+// $Id: ChangeLog,v 1.963 2007-12-21 06:25:24 chicares Exp $
 
 MAINTENANCE
 
@@ -14322,4 +14322,13 @@ Update mailing-list link.
   test_coding_rules.cpp
   test_coding_rules_test.sh
 Strengthen and relocate some style rules.
+
+20071221T0625Z <gchicares@sbcglobal.net> [1207]
+
+  input.cpp
+  input_harmonization.cpp
+  inputillus_xml_io.cpp
+Enable 'CorporationPremiumTableFactor', as 'InsuredPremiumTableFactor'
+has already been enabled. This is an experimental change; subject to
+testing, it may need to be reverted.
 
