@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.51 2007-10-30 22:49:42 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.52 2007-12-21 06:25:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -639,7 +639,11 @@ false // Silly workaround for now.
     IndividualPaymentToDuration.enable(mce_to_year == IndividualPaymentToAlternative);
 
 //    InsuredPremiumTableNumber.enable(mce_pmt_table == IndividualPaymentStrategy); // TODO ?? Not yet implemented.
-    InsuredPremiumTableFactor.enable(mce_pmt_table == IndividualPaymentStrategy);
+// In the legacy system, that control, 'InsuredPremiumTableFactor',
+// and their 'Corporation'- congeners were enabled iff a
+// 'mce_pmt_table' strategy was selected in a scalar control--but
+// no such scalar control was ported. For payment strategy, lmi offers
+// only input sequences that are enabled by default.
 
     Payment           .enable(mce_solve_ee_prem != SolveType);
     CorporationPayment.enable(mce_solve_er_prem != SolveType);

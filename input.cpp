@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.19 2007-10-18 13:05:28 chicares Exp $
+// $Id: input.cpp,v 1.20 2007-12-21 06:25:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -203,7 +203,7 @@ void Input::AscribeMembers()
 //    ascribe("InsuredPremiumTableNumber"             , &Input::InsuredPremiumTableNumber             ); // TODO ?? Not implemented.
     ascribe("InsuredPremiumTableFactor"             , &Input::InsuredPremiumTableFactor             );
 //    ascribe("CorporationPremiumTableNumber"         , &Input::CorporationPremiumTableNumber         ); // TODO ?? Not implemented.
-//    ascribe("CorporationPremiumTableFactor"         , &Input::CorporationPremiumTableFactor         ); // TODO ?? Not implemented.
+    ascribe("CorporationPremiumTableFactor"         , &Input::CorporationPremiumTableFactor         );
     ascribe("EffectiveDate"                         , &Input::EffectiveDate                         );
     ascribe("DefinitionOfLifeInsurance"             , &Input::DefinitionOfLifeInsurance             );
     ascribe("DefinitionOfMaterialChange"            , &Input::DefinitionOfMaterialChange            );
