@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xrange.hpp,v 1.11 2007-02-25 15:02:48 chicares Exp $
+// $Id: xrange.hpp,v 1.12 2007-12-22 02:10:16 chicares Exp $
 
 #ifndef xrange_hpp
 #define xrange_hpp
@@ -94,10 +94,8 @@
 // operations. Each particular type needs to implement the following:
 //   range_limits()
 
-/*
-Do we want xrange to unify semantic and underlying type?
-Or should the semantic type do that?
-*/
+// Do we want xrange to unify semantic and underlying type?
+// Or should the semantic type do that?
 
 #include "config.hpp"
 
@@ -124,60 +122,56 @@ Or should the semantic type do that?
 #include <typeinfo>
 #include <utility>
 
-/*
-
-Purpose of generic xrange
-  range-safe construction and assignment
-  access limits
-  test candidate value against limits
-  hold and access representation as underlying POD type
-    later changed to permit UDTs
-
-Requirements for specialized Essence type
-  ascertain limits
-  access default value
-
-TODO ?? Open questions
-  would pure inheritance be a better design?
-  where should underlying type be specified?
-  should underlying type be a template-parameter of xrange?
-  where should *this be held?
-  where should *Inputs be held?
-
-If *Inputs is held in the Essence class, then its static member functions
-will need to be changed to nonstatic const functions, and the xrange
-template will need an object to call them.
-
-A design that puts all responsibility for validation into a GUI doesn't need
-to embed *Inputs into each xrange instance. Input items can be changed
-only through the GUI, which has *Inputs available. The GUI prevents any
-invalid input from reaching the data. The UDTs for data items hold some but
-not all of the information necessary for validation. This is true not only
-of range types, but also of enum types, some of whose values are not allowed
-in every context, e.g. no DBO3 for some products.
-
-callback function?
-separate validation in context vs. out of context?
-  validator factory for validation in context
-there's a census context too: e.g. DOBs not 101 years apart
-context also includes database and available product files
-
-parallel structure with lightweight underlying (Essence) types for use
-in calculations?
-
-difficulties:
-  interdependencies, e.g. issue and retirement age
-  forced changes, e.g. an enumerator unavailable in context
-    for ranges: force to closer of min and max
-    configurable option to throw instead of forcing
-    report the problem and the new value when forcing, e.g.
-      "Retirement age XX out of bounds--changed to YY."
-  different representations of the same datum, e.g. DOB and age
-    one data item, and multiple views?
-    problem for DOB vs. age when effective date changes:
-      age may change, but DOB cannot
-
-*/
+// Purpose of generic xrange
+//   range-safe construction and assignment
+//   access limits
+//   test candidate value against limits
+//   hold and access representation as underlying POD type
+//     later changed to permit UDTs
+//
+// Requirements for specialized Essence type
+//   ascertain limits
+//   access default value
+//
+// TODO ?? Open questions
+//   would pure inheritance be a better design?
+//   where should underlying type be specified?
+//   should underlying type be a template-parameter of xrange?
+//   where should *this be held?
+//   where should *Inputs be held?
+//
+// If *Inputs is held in the Essence class, then its static member functions
+// will need to be changed to nonstatic const functions, and the xrange
+// template will need an object to call them.
+//
+// A design that puts all responsibility for validation into a GUI doesn't need
+// to embed *Inputs into each xrange instance. Input items can be changed
+// only through the GUI, which has *Inputs available. The GUI prevents any
+// invalid input from reaching the data. The UDTs for data items hold some but
+// not all of the information necessary for validation. This is true not only
+// of range types, but also of enum types, some of whose values are not allowed
+// in every context, e.g. no DBO3 for some products.
+//
+// callback function?
+// separate validation in context vs. out of context?
+//   validator factory for validation in context
+// there's a census context too: e.g. DOBs not 101 years apart
+// context also includes database and available product files
+//
+// parallel structure with lightweight underlying (Essence) types for use
+// in calculations?
+//
+// difficulties:
+//   interdependencies, e.g. issue and retirement age
+//   forced changes, e.g. an enumerator unavailable in context
+//     for ranges: force to closer of min and max
+//     configurable option to throw instead of forcing
+//     report the problem and the new value when forcing, e.g.
+//       "Retirement age XX out of bounds--changed to YY."
+//   different representations of the same datum, e.g. DOB and age
+//     one data item, and multiple views?
+//     problem for DOB vs. age when effective date changes:
+//       age may change, but DOB cannot
 
 // We factor this out and define it in a .cpp file so that we can set a
 // breakpoint on it, with debuggers that can't set a breakpoint in a

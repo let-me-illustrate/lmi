@@ -2,9 +2,9 @@
  * quoted string keeps my style-conformity script from complaining.
  * Eventually this will become part of MinGW and cygwin, and will then
  * be removed from the lmi cvs. Find the original at:
-
-http://cygwin.com/cgi-bin/cvsweb.cgi/src/winsup/mingw/mingwex/math/expm1.c?cvsroot=src
-
+ *
+ * http://cygwin.com/cgi-bin/cvsweb.cgi/src/winsup/mingw/mingwex/math/expm1.c?cvsroot=src
+ *
  */
 
 /*
@@ -41,7 +41,7 @@ double expm1(double x);
  * email: <chicares@cox.net>
  * snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
  *
- * $Id: expm1.c,v 1.5 2007-03-06 16:20:27 wboutin Exp $
+ * $Id: expm1.c,v 1.6 2007-12-22 02:10:16 chicares Exp $
  *
  * End local GWC modifications. */
 
@@ -58,7 +58,7 @@ double expm1 (double x)
 }
 
 /* COMPILER !! Apparently como compiles this file as C++ despite its '.c'
-   extension: else 'extern "C"' wouldn't be required (or permitted).
+ * extension: else 'extern "C"' wouldn't be required (or permitted).
  */
 
 /* Begin local GWC modifications. */
