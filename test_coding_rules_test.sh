@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.8 2007-12-20 18:56:19 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.9 2007-12-22 05:23:22 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -57,6 +57,24 @@ cat >eraseme001.cpp <<EOF
 _Copyright_`date -u +'%Y'`_
 This header must be included only by other headers:
 #include "config.hpp"
+EOF
+
+cat >eraseme002.cpp <<EOF
+_Copyright_`date -u +'%Y'`_
+Labels must be indented either two spaces:
+  l0:
+  LABEL_1 :
+or six--an extra four to accommodate indented namespaces:
+      label:
+      L    :
+but no other indentation is allowed:
+ wrong   :
+   No2   :
+       x_:
+except for 'default', whose indentation is uncheck because it should
+be aligned with its corresponding case labels:
+     default   :
+       default :
 EOF
 
 # Headers.
@@ -130,6 +148,9 @@ File 'eraseme001.cpp' must not include 'config.hpp'.
 File 'eraseme001.hpp' has noncanonical header guards.
 File 'eraseme001.xpm' lacks /^static char const\*/.
 File 'eraseme002' lacks current copyright.
+File 'eraseme002.cpp' has misindented label ' wrong   :'.
+File 'eraseme002.cpp' has misindented label '   No2   :'.
+File 'eraseme002.cpp' has misindented label '       x_:'.
 File 'eraseme002.hpp' has noncanonical header guards.
 File 'eraseme003.hpp' must include 'config.hpp' first.
 File 'eraseme004.hpp' must include 'config.hpp'.

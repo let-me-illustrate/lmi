@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.102 2007-12-20 18:56:19 chicares Exp $
+# $Id: GNUmakefile,v 1.103 2007-12-22 05:23:22 chicares Exp $
 
 ################################################################################
 
@@ -474,24 +474,6 @@ check_concinnity: source_clean custom_tools
 	@$(GREP) --files-with-match '$$Id[^$$]*$$' $(licensed_files)         || true
 	@$(ECHO) "  Files that improperly contain physical tabs:"
 	@$(GREP) -l '	' $(filter-out $(makefiles),$(licensed_files))       || true
-	@$(ECHO) "  C++ files with irregularly-indented access-specifiers:"
-	@# The lmi coding standard prescribes a two-space indent.
-	@# At least for now, one additional four-space indentation is
-	@# allowed for namespaces.
-	@# Comments are ignored.
-	@# Obsolete files '*pios*' are exempted as hopeless.
-	@for z in \
-	  $(filter-out $(wildcard *pios*),$(cxx_header_files) $(cxx_source_files));\
-	  do \
-	    $(SED) \
-	    -e'/private:\|protected:\|public:/!d' \
-	    -e'/^  private:$$\|^  protected:$$\|^  public:$$/d' \
-	    -e'/^      private:$$\|^      protected:$$\|^      public:$$/d' \
-	    -e'/^ *\/\//d' \
-	    -e'/\\$$/d' \
-	    -e "s/^.*$$/$$z/" $$z \
-	    ; \
-	  done;
 	@$(ECHO) "  Files that use reserved identifiers:"
 	@# The sed commands are sorted alphabetically by group:
 	@#   {standard, platform-specific, compiler-specific, regrettable}
