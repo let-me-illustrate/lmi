@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.24 2007-12-20 18:56:19 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.25 2007-12-22 05:23:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -259,6 +259,43 @@ void check_include_guards(file const& f)
         }
 }
 
+void check_label_indentation(file const& f)
+{
+    // Remove this once these hopeless files have been expunged.
+    if("ihs_fpios.hpp" == f.leaf_name() || "ihs_pios.hpp" == f.leaf_name())
+        {
+        return;
+        }
+
+    bool const is_c_source = ".c" == f.extension() || ".h" == f.extension();
+    bool const is_cxx_source =
+            4 == f.extension().size()
+        &&  "pp" == f.extension().substr(2, 2)
+        ;
+    if(!(is_c_source || is_cxx_source))
+        {
+        return;
+        }
+
+    boost::regex r("\\n( *)([A-Za-z][A-Za-z0-9_]*)( *:)(?!:)");
+    boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
+    boost::sregex_iterator omega;
+    for(; i != omega; ++i)
+        {
+        boost::smatch const& z(*i);
+        if
+            (   "default" != z[2]
+            &&  "  "      != z[1]
+            &&  "      "  != z[1]
+            )
+            {
+            std::ostringstream oss;
+            oss << "has misindented label '" << z[1] << z[2] << z[3] << "'.";
+            complain(f, oss.str());
+            }
+        }
+}
+
 void check_xpm(file const& f)
 {
     if(".xpm" != f.extension())
@@ -291,10 +328,11 @@ void process_file(std::string const& file_path)
         complain(f, "contains ' \\n'.");
         }
 
-    check_config_hpp     (f);
-    check_copyright      (f);
-    check_include_guards (f);
-    check_xpm            (f);
+    check_config_hpp        (f);
+    check_copyright         (f);
+    check_include_guards    (f);
+    check_label_indentation (f);
+    check_xpm               (f);
 }
 
 int try_main(int argc, char* argv[])

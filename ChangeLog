@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.963 2007-12-21 06:25:24 chicares Exp $
+// $Id: ChangeLog,v 1.964 2007-12-22 05:23:22 chicares Exp $
 
 MAINTENANCE
 
@@ -14331,4 +14331,26 @@ Strengthen and relocate some style rules.
 Enable 'CorporationPremiumTableFactor', as 'InsuredPremiumTableFactor'
 has already been enabled. This is an experimental change; subject to
 testing, it may need to be reverted.
+
+20071222T0210Z <gchicares@sbcglobal.net> [1207]
+
+  expm1.c
+  md5.cpp
+  md5.hpp
+  xrange.hpp
+Regularize comment style somewhat, with the immediate goal of making
+it easier to find labels with a simple regex.
+
+20071222T0520Z <gchicares@sbcglobal.net> [1207]
+
+  ihs_irc7702a.cpp
+Regularize comment style somewhat, with the immediate goal of making
+it easier to find labels with a simple regex.
+
+20071222T0523Z <gchicares@sbcglobal.net> [1207]
+
+  GNUmakefile
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+Strengthen and relocate some style rules.
 
