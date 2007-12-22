@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702a.cpp,v 1.12 2007-03-06 18:13:37 wboutin Exp $
+// $Id: ihs_irc7702a.cpp,v 1.13 2007-12-22 05:20:26 chicares Exp $
 
 // TODO ?? Make this a server app. Consider where to store DB, SA history.
 
@@ -1220,41 +1220,39 @@ double Irc7702A::SAIncreaseToAvoidMec(bool a_TriggeredByUnnecPrem)
     return new_bft;
 }
 
-#ifdef NOT_DEFINED
-
-// Entry points
-
-Triggers:
-OK  whenever prem paid
-OK  elective Bfts increase
-OK  whenever Bfts decreases
-    whenever GP limit increases
-    upon any ROP increase (GPT only)
-    [internal] whenever unnec prem paid
-
-/////////////////
-
-(obsolete design)
-redress MatChg
-    triggers:
-        GPT:
-            whenever GP limit increases
-            upon any ROP increase
-                doesn`t that increase the GP limit?
-        CVAT:
-            whenever unnec prem paid
-            upon any elected Bfts increase
-
-// Variables: scalars
-MecYear, MecMonth
-    Consider months 0-1199 for:
-test period beginning year, month
-cum prem less deductible WDs
-DCV
-
-// life contingencies
-unit 7pp: rounding?
-NSP
-
-#endif
+/*
+ * // Entry points
+ *
+ * Triggers:
+ * OK  whenever prem paid
+ * OK  elective Bfts increase
+ * OK  whenever Bfts decreases
+ *     whenever GP limit increases
+ *     upon any ROP increase (GPT only)
+ *     [internal] whenever unnec prem paid
+ *
+ * /////////////////
+ *
+ * (obsolete design)
+ * redress MatChg
+ *     triggers:
+ *         GPT:
+ *             whenever GP limit increases
+ *             upon any ROP increase
+ *                 doesn`t that increase the GP limit?
+ *         CVAT:
+ *             whenever unnec prem paid
+ *             upon any elected Bfts increase
+ *
+ * // Variables: scalars
+ * MecYear, MecMonth
+ *     Consider months 0-1199 for:
+ * test period beginning year, month
+ * cum prem less deductible WDs
+ * DCV
+ *
+ * // life contingencies
+ * unit 7pp: rounding?
+ * NSP
+ */
 
