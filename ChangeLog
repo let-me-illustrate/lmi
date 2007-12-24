@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.964 2007-12-22 05:23:22 chicares Exp $
+// $Id: ChangeLog,v 1.965 2007-12-24 16:04:22 chicares Exp $
 
 MAINTENANCE
 
@@ -14353,4 +14353,9 @@ it easier to find labels with a simple regex.
   test_coding_rules.cpp
   test_coding_rules_test.sh
 Strengthen and relocate some style rules.
+
+20071224T1604Z <gchicares@sbcglobal.net> [1207]
+
+  version.hpp
+Mark release candidate.
 
