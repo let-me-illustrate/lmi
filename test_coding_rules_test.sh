@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.9 2007-12-22 05:23:22 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.10 2007-12-26 12:55:19 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -125,6 +125,18 @@ Missing compulsory include directive.
 #endif // eraseme004_hpp
 EOF
 
+# Various taboos.
+
+cat >eraseme000.taboo <<EOF
+_Copyright_`date -u +'%Y'`_
+EOF
+
+cat >eraseme001.taboo <<EOF
+_Copyright_`date -u +'%Y'`_
+675 Mass Ave, Cambridge, MA
+59 Temple Place, Suite 330
+EOF
+
 # X pixmaps require no copyright, but do require 'const'.
 # SOMEDAY !! Require internal name to match file name?
 
@@ -146,6 +158,8 @@ Exception--file 'a_nonexistent_file': File not found.
 File 'eraseme001' lacks current copyright.
 File 'eraseme001.cpp' must not include 'config.hpp'.
 File 'eraseme001.hpp' has noncanonical header guards.
+File 'eraseme001.taboo' breaks taboo 'Cambridge'.
+File 'eraseme001.taboo' breaks taboo 'Temple'.
 File 'eraseme001.xpm' lacks /^static char const\*/.
 File 'eraseme002' lacks current copyright.
 File 'eraseme002.cpp' has misindented label ' wrong   :'.

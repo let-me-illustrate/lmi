@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.25 2007-12-22 05:23:22 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.26 2007-12-26 12:55:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -159,6 +159,21 @@ void forbid
     if(boost::regex_search(f.data(), boost::regex(regex)))
         {
         complain(f, complaint);
+        }
+}
+
+void taboo
+    (file const&             f
+    ,std::string const&      regex
+    ,boost::regex::flag_type flags = boost::regex::ECMAScript
+    )
+{
+    boost::regex::flag_type syntax = flags | boost::regex::ECMAScript;
+    if(boost::regex_search(f.data(), boost::regex(regex, syntax)))
+        {
+        std::ostringstream oss;
+        oss << "breaks taboo '" << regex << "'.";
+        complain(f, oss.str());
         }
 }
 
@@ -309,6 +324,33 @@ void check_xpm(file const& f)
         }
 }
 
+void enforce_taboos(file const& f)
+{
+    if(std::string::npos != f.leaf_name().find("test_coding_rules"))
+        {
+        return;
+        }
+
+    // Former addresses of the Free Software Foundation.
+    taboo(f, "Cambridge");
+    taboo(f, "Temple");
+    // Obsolete email address.
+    taboo(f, "chicares@mindspring.com");
+    // Suspiciously specific to msw.
+    taboo(f, "Microsoft");
+    taboo(f, "Visual [A-Z]");
+    taboo(f, "\\bWIN\\b");
+    taboo(f, "\\bBAT\\b", boost::regex::icase);
+    taboo(f, "\\bExcel\\b");
+    taboo(f, "xls|xl4", boost::regex::icase);
+    // Insinuated by certain msw tools.
+    taboo(f, "Microsoft Word");
+    taboo(f, "Stylus Studio");
+    taboo(f, "Sonic Software");
+    taboo(f, "windows-1252");
+    taboo(f, "Arial");
+}
+
 void process_file(std::string const& file_path)
 {
     file f(file_path);
@@ -333,6 +375,8 @@ void process_file(std::string const& file_path)
     check_include_guards    (f);
     check_label_indentation (f);
     check_xpm               (f);
+
+    enforce_taboos          (f);
 }
 
 int try_main(int argc, char* argv[])
