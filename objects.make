@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.111 2007-12-17 19:42:27 chicares Exp $
+# $Id: objects.make,v 1.112 2007-12-26 18:20:31 chicares Exp $
 
 ################################################################################
 
@@ -834,6 +834,7 @@ test_coding_rules$(EXEEXT): EXTRA_LDFLAGS = -lboost_regex-gcc-1_33_1
 test_coding_rules$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(main_auxiliary_common_objects) \
+  my_test_coding_rules.o \
   test_coding_rules.o \
 
 ################################################################################

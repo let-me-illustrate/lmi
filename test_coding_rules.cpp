@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.26 2007-12-26 12:55:18 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.27 2007-12-26 18:20:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -42,10 +42,13 @@
 #include <ctime>
 #include <ios>
 #include <iostream>
+#include <map>
 #include <ostream>
 #include <sstream>
 #include <stdexcept>
 #include <string>
+
+std::map<std::string, bool> my_taboos();
 
 // Open predefined standard streams in binary mode.
 //
@@ -349,6 +352,18 @@ void enforce_taboos(file const& f)
     taboo(f, "Sonic Software");
     taboo(f, "windows-1252");
     taboo(f, "Arial");
+    // Unspeakable private taboos.
+    std::map<std::string, bool> const z = my_taboos();
+    typedef std::map<std::string, bool>::const_iterator mci;
+    for(mci i = z.begin(); i != z.end(); ++i)
+        {
+        boost::regex::flag_type syntax =
+            i->second
+            ? boost::regex::ECMAScript | boost::regex::icase
+            : boost::regex::ECMAScript
+            ;
+        taboo(f, i->first, syntax);
+        }
 }
 
 void process_file(std::string const& file_path)
