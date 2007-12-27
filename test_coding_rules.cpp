@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.28 2007-12-27 21:20:11 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.29 2007-12-27 22:22:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -248,7 +248,7 @@ void check_copyright(file const& f)
     std::tm const*const t1 = std::gmtime(&t0);
     LMI_ASSERT(NULL != t1);
     std::ostringstream oss;
-    oss << "Copyright[^\\n]*" << 1900 + t1->tm_year;
+    oss << "Copyright \\(C\\)[^\\n]*" << 1900 + t1->tm_year;
     require(f, oss.str(), "lacks current copyright.");
 }
 
@@ -334,6 +334,8 @@ void enforce_taboos(file const& f)
         return;
         }
 
+    // ASCII copyright symbol requires upper-case 'C'.
+    taboo(f, "\\(c\\) *[0-9]");
     // Former addresses of the Free Software Foundation.
     taboo(f, "Cambridge");
     taboo(f, "Temple");

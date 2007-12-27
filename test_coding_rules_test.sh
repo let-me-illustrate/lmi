@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.11 2007-12-26 18:20:31 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.12 2007-12-27 22:22:36 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -30,18 +30,20 @@ rm --force eraseme*
 # Files in general.
 
 cat >eraseme000 <<EOF
-_Copyright_`date -u +'%Y'`_
+_Copyright (C)_`date -u +'%Y'`_
+"(C) 1999": upper-case 'C' is correct in ASCII copyright symbol.
 EOF
 
 cat >eraseme001 <<EOF
-Copyright
+Copyright (C)
   is expected to be on the same line as
 `date -u +'%Y'`
+"(c) 1999": lower-case 'c' is incorrect in ASCII copyright symbol.
 EOF
 
 cat >eraseme002 <<EOF
 This would seem to be all right:
-// Copyright 1900, `date -u +'%Y'`, 2100
+// Copyright (C) 1900, `date -u +'%Y'`, 2100
 but the datestamp is changed to the beginning of the msw epoch.
 Don't use the unix epoch, because that causes mayhem on msw.
 EOF
@@ -50,17 +52,17 @@ touch --date=19800102 eraseme002
 # C++ source files.
 
 cat >eraseme000.cpp <<EOF
-_Copyright_`date -u +'%Y'`_
+_Copyright (C)_`date -u +'%Y'`_
 EOF
 
 cat >eraseme001.cpp <<EOF
-_Copyright_`date -u +'%Y'`_
+_Copyright (C)_`date -u +'%Y'`_
 This header must be included only by other headers:
 #include "config.hpp"
 EOF
 
 cat >eraseme002.cpp <<EOF
-_Copyright_`date -u +'%Y'`_
+_Copyright (C)_`date -u +'%Y'`_
 Labels must be indented either two spaces:
   l0:
   LABEL_1 :
@@ -80,7 +82,7 @@ EOF
 # Headers.
 
 cat >eraseme000.hpp <<EOF
-_Copyright_`date -u +'%Y'`_
+_Copyright (C)_`date -u +'%Y'`_
 #ifndef eraseme000_hpp
 #define eraseme000_hpp
 #include "config.hpp"
@@ -88,7 +90,7 @@ _Copyright_`date -u +'%Y'`_
 EOF
 
 cat >eraseme001.hpp <<EOF
-_Copyright_`date -u +'%Y'`_
+_Copyright (C)_`date -u +'%Y'`_
 #ifndef eraseme001_hpp
 #define eraseme001_hpp
 #include "config.hpp"
@@ -97,7 +99,7 @@ Name in comment is required to match:
 EOF
 
 cat >eraseme002.hpp <<EOF
-_Copyright_`date -u +'%Y'`_
+_Copyright (C)_`date -u +'%Y'`_
 Stray comments on include guards are forbidden as meaningless.
 #ifndef eraseme002_hpp // Here's a guard to make the header idempotent.
 #define eraseme002_hpp // But such a comment is only distracting.
@@ -106,7 +108,7 @@ Stray comments on include guards are forbidden as meaningless.
 EOF
 
 cat >eraseme003.hpp <<EOF
-_Copyright_`date -u +'%Y'`_
+_Copyright (C)_`date -u +'%Y'`_
 #ifndef eraseme003_hpp
 #define eraseme003_hpp
 This compulsory include directive must occur, in canonical form (with
@@ -118,7 +120,7 @@ only one space, preceding '"'), before any other include directive.
 EOF
 
 cat >eraseme004.hpp <<EOF
-_Copyright_`date -u +'%Y'`_
+_Copyright (C)_`date -u +'%Y'`_
 #ifndef eraseme004_hpp
 #define eraseme004_hpp
 Missing compulsory include directive.
@@ -128,11 +130,11 @@ EOF
 # Various taboos.
 
 cat >eraseme000.taboo <<EOF
-_Copyright_`date -u +'%Y'`_
+_Copyright (C)_`date -u +'%Y'`_
 EOF
 
 cat >eraseme001.taboo <<EOF
-_Copyright_`date -u +'%Y'`_
+_Copyright (C)_`date -u +'%Y'`_
 675 Mass Ave, Cambridge, MA
 59 Temple Place, Suite 330
 Then said they unto him, Say now Shibboleth: and he said Sibboleth
@@ -157,6 +159,7 @@ cat >eraseme_expected <<'EOF'
 Exception--file '.': Argument is a directory.
 Exception--file 'a_nonexistent_file': File not found.
 File 'eraseme001' lacks current copyright.
+File 'eraseme001' breaks taboo '\(c\) *[0-9]'.
 File 'eraseme001.cpp' must not include 'config.hpp'.
 File 'eraseme001.hpp' has noncanonical header guards.
 File 'eraseme001.taboo' breaks taboo 'Cambridge'.

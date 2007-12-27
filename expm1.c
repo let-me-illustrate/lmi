@@ -1,7 +1,8 @@
-/* This is public domain. It's not 'Copyright 2007', but including that
- * quoted string keeps my style-conformity script from complaining.
- * Eventually this will become part of MinGW and cygwin, and will then
- * be removed from the lmi cvs. Find the original at:
+/* This is public domain. It's not
+ *   "Copyright (C) 2007"
+ * but including that quoted string satisfies lmi's style-conformity
+ * tests. Eventually this will become part of MinGW and cygwin, and
+ * will then be removed from the lmi repository. Find the original at:
  *
  * http://cygwin.com/cgi-bin/cvsweb.cgi/src/winsup/mingw/mingwex/math/expm1.c?cvsroot=src
  *
@@ -41,7 +42,7 @@ double expm1(double x);
  * email: <chicares@cox.net>
  * snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
  *
- * $Id: expm1.c,v 1.6 2007-12-22 02:10:16 chicares Exp $
+ * $Id: expm1.c,v 1.7 2007-12-27 22:22:36 chicares Exp $
  *
  * End local GWC modifications. */
 
