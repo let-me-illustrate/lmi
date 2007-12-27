@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: regex_test.cpp,v 1.3 2007-12-19 15:21:19 chicares Exp $
+// $Id: regex_test.cpp,v 1.4 2007-12-27 21:18:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -36,7 +36,7 @@
 #include <vector>
 
 char const*const psalm37 = "\
-Fret not thyself because of evildoers, neither be thou envious against the workers of iniquity.\n\
+Fret not thyself because of evil doers, neither be thou envious against the workers of iniquity.\n\
 For they shall soon be cut down like the grass, and wither as the green herb.\n\
 Trust in the LORD, and do good; [so] shalt thou dwell in the land, and verily thou shalt be fed.\n\
 Delight thyself also in the LORD; and he shall give thee the desires of thine heart.\n\
@@ -44,11 +44,11 @@ Commit thy way unto the LORD; trust also in him; and he shall bring [it] to pass
 And he shall bring forth thy righteousness as the light, and thy judgment as the noonday.\n\
 Rest in the LORD, and wait patiently for him: fret not thyself because of him who prospereth in his way, because of the man who bringeth wicked devices to pass.\n\
 Cease from anger, and forsake wrath: fret not thyself in any wise to do evil.\n\
-For evildoers shall be cut off: but those that wait upon the LORD, they shall inherit the earth.\n\
+For evil doers shall be cut off: but those that wait upon the LORD, they shall inherit the earth.\n\
 For yet a little while, and the wicked [shall] not [be]: yea, thou shalt diligently consider his place, and it [shall] not [be].\n\
 But the meek shall inherit the earth; and shall delight themselves in the abundance of peace.\n\
 The wicked plotteth against the just, and gnasheth upon him with his teeth.\n\
-The LORD shall laugh at him: for he seeth that his day is coming.\n\
+The Lord shall laugh at him: for he seeth that his day is coming.\n\
 The wicked have drawn out the sword, and have bent their bow, to cast down the poor and needy, [and] to slay such as be of upright conversation.\n\
 Their sword shall enter into their own heart, and their bows shall be broken.\n\
 A little that a righteous man hath [is] better than the riches of many wicked.\n\
@@ -212,7 +212,7 @@ void mete()
 
 char early[] = "he shall give thee the desires of thine heart";
 char late [] = "he shall deliver them from the wicked";
-char never[] = "Lord";
+char never[] = "lord";
 
 /// Compare performance of various algorithms.
 ///
