@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.27 2007-12-26 18:20:31 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.28 2007-12-27 21:20:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -339,6 +339,9 @@ void enforce_taboos(file const& f)
     taboo(f, "Temple");
     // Obsolete email address.
     taboo(f, "chicares@mindspring.com");
+    // Certain proprietary libraries.
+    taboo(f, "\\bowl\\b", boost::regex::icase);
+    taboo(f, "vtss", boost::regex::icase);
     // Suspiciously specific to msw.
     taboo(f, "Microsoft");
     taboo(f, "Visual [A-Z]");
