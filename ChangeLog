@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.965 2007-12-24 16:04:22 chicares Exp $
+// $Id: ChangeLog,v 1.966 2007-12-27 22:22:37 chicares Exp $
 
 MAINTENANCE
 
@@ -14358,4 +14358,36 @@ Strengthen and relocate some style rules.
 
   version.hpp
 Mark release candidate.
+
+20071226T1255Z <gchicares@sbcglobal.net> [1207]
+
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+Enforce various taboos.
+
+20071226T1820Z <gchicares@sbcglobal.net> [1207]
+
+  my_test_coding_rules.cpp [new file]
+  objects.make
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+Provide for unutterable taboos.
+
+20071227T2118Z <gchicares@sbcglobal.net> [1207]
+
+  regex_test.cpp
+Use a text that doesn't confuse Strong's #136 with #3068.
+
+20071227T2120Z <gchicares@sbcglobal.net> [1207]
+
+  test_coding_rules.cpp
+Anathemize proprietary libraries.
+
+20071227T2222Z <gchicares@sbcglobal.net> [1207]
+
+  GNUmakefile
+  expm1.c
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+Strengthen and relocate some style rules.
 
