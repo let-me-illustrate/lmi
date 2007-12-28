@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.966 2007-12-27 22:22:37 chicares Exp $
+// $Id: ChangeLog,v 1.967 2007-12-28 15:17:43 chicares Exp $
 
 MAINTENANCE
 
@@ -14390,4 +14390,20 @@ Anathemize proprietary libraries.
   test_coding_rules.cpp
   test_coding_rules_test.sh
 Strengthen and relocate some style rules.
+
+20071228T1514Z <gchicares@sbcglobal.net> [1207]
+
+  accountvalue.cpp
+  dbvalue.hpp
+  expression_template_0_test.cpp
+Regularize defect markers.
+
+20071228T1517Z <gchicares@sbcglobal.net> [1207]
+
+  authenticity_test.cpp
+  input_test.cpp
+  name_value_pairs_test.cpp
+Avoid "!!" except in defect markers, to make them easier to parse. The
+idiom is not invalid C, but OTOH these changes strengthen the tests,
+because 'good()' is a stronger condition than '!fail()'.
 
