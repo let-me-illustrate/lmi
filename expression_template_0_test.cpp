@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: expression_template_0_test.cpp,v 1.16 2007-01-08 08:47:49 chicares Exp $
+// $Id: expression_template_0_test.cpp,v 1.17 2007-12-28 15:14:35 chicares Exp $
 
 #define USE_UBLAS
 // USE_PETE is not unconditionally defined here because PETE is not
@@ -283,7 +283,7 @@ void run_one_test(std::string const& s, void(*f)())
         ;
 }
 
-// Review of 'ET !!' markers shows that lmi's needs are fairly
+// Review of 'ET !! ' markers shows that lmi's needs are fairly
 // represented by these examples:
 //
 // new_v = v0 - v1;
