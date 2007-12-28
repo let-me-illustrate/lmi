@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: authenticity_test.cpp,v 1.7 2007-07-04 04:39:15 chicares Exp $
+// $Id: authenticity_test.cpp,v 1.8 2007-12-28 15:17:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -163,7 +163,7 @@ void PasskeyTest::InitializeDataFile() const
         ;
 
     std::ofstream os("coleridge", ios_out_trunc_binary());
-    BOOST_TEST(!!os);
+    BOOST_TEST(os.good());
     os << rime;
     os.close();
 
@@ -195,7 +195,7 @@ void PasskeyTest::InitializeMd5sumFile() const
     BOOST_TEST_EQUAL("bf039dbb0e8061971a2c322c8336199c", md5_str(sum));
 
     std::ofstream os(md5sum_file(), ios_out_trunc_binary());
-    BOOST_TEST(!!os);
+    BOOST_TEST(os.good());
     os << md5_hex_string(std::vector<unsigned char>(sum, sum + md5len));
     os << "  coleridge\n";
     os.close();
@@ -229,7 +229,7 @@ void PasskeyTest::InitializePasskeyFile() const
     BOOST_TEST_EQUAL("3ff4953dbddf009634922fa52a342bfe", md5_str(u_passkey));
 
     std::ofstream os("passkey", ios_out_trunc_binary());
-    BOOST_TEST(!!os);
+    BOOST_TEST(os.good());
     os << md5_hex_string
         (std::vector<unsigned char>(u_passkey, u_passkey + md5len)
         );
@@ -238,7 +238,7 @@ void PasskeyTest::InitializePasskeyFile() const
 void PasskeyTest::InitializeExpiryFile() const
 {
     std::ofstream os("expiry");
-    BOOST_TEST(!!os);
+    BOOST_TEST(os.good());
     os << BeginDate_ << ' ' << EndDate_;
     os.close();
 }
@@ -380,7 +380,7 @@ void PasskeyTest::TestPasskey() const
     BOOST_TEST_EQUAL("validated", Authenticity::Assay(last_date, Pwd_));
 
     std::ofstream os0("passkey", ios_out_trunc_binary());
-    BOOST_TEST(!!os0);
+    BOOST_TEST(os0.good());
     std::vector<unsigned char> const wrong(md5len);
     os0 << md5_hex_string(wrong);
     os0.close();
@@ -401,7 +401,7 @@ void PasskeyTest::TestPasskey() const
 
     std::ofstream os1("passkey", ios_out_trunc_binary());
     os1 << "wrong";
-    BOOST_TEST(!!os1);
+    BOOST_TEST(os1.good());
     os1.close();
     Authenticity::ResetCache();
     BOOST_TEST_EQUAL
@@ -418,7 +418,7 @@ void PasskeyTest::TestDataFile() const
     CheckNominal(__FILE__, __LINE__);
 
     std::ofstream os("coleridge", ios_out_trunc_binary());
-    BOOST_TEST(!!os);
+    BOOST_TEST(os.good());
     os << "This file has the wrong md5sum.";
     os.close();
 
@@ -447,7 +447,7 @@ void PasskeyTest::TestExpiry() const
 
     {
     std::ofstream os("expiry");
-    BOOST_TEST(!!os);
+    BOOST_TEST(os.good());
     os.close();
     Authenticity::ResetCache();
     BOOST_TEST_EQUAL
@@ -459,7 +459,7 @@ void PasskeyTest::TestExpiry() const
     {
     std::ofstream os("expiry");
     os << "2400000";
-    BOOST_TEST(!!os);
+    BOOST_TEST(os.good());
     os.close();
     Authenticity::ResetCache();
     BOOST_TEST_EQUAL
@@ -471,7 +471,7 @@ void PasskeyTest::TestExpiry() const
     {
     std::ofstream os("expiry");
     os << "bogus dates";
-    BOOST_TEST(!!os);
+    BOOST_TEST(os.good());
     os.close();
     Authenticity::ResetCache();
     BOOST_TEST_EQUAL

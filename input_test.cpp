@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.28 2007-10-02 13:31:40 chicares Exp $
+// $Id: input_test.cpp,v 1.29 2007-12-28 15:17:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -175,7 +175,7 @@ int test_main(int, char*[])
     IllusInputParms replica;
 
     std::ofstream os0("eraseme0.xml", ios_out_trunc_binary());
-    BOOST_TEST(!!os0);
+    BOOST_TEST(os0.good());
 
     // The obsolete first-, middle-, and last-name fields live on
     // in base class 'InputParms', but the full name now actually
@@ -217,7 +217,7 @@ int test_main(int, char*[])
 
     xml_node >> replica;
     std::ofstream os1("eraseme1.xml", ios_out_trunc_binary());
-    BOOST_TEST(!!os1);
+    BOOST_TEST(os1.good());
 
     xml_lmi::xml_document xml_document1("root");
     xml::element& xml_root1 = xml_document1.root_node();

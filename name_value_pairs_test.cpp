@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: name_value_pairs_test.cpp,v 1.7 2007-01-27 00:00:51 wboutin Exp $
+// $Id: name_value_pairs_test.cpp,v 1.8 2007-12-28 15:17:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -40,7 +40,7 @@ int test_main(int, char*[])
 
     {
     std::ofstream os(filename0.c_str(), ios_out_trunc_binary());
-    BOOST_TEST(!!os);
+    BOOST_TEST(os.good());
 
     os
         << "a=a\n"
