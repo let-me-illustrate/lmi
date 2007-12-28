@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.30 2007-05-22 00:59:24 chicares Exp $
+// $Id: accountvalue.cpp,v 1.31 2007-12-28 15:14:35 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -263,7 +263,7 @@ void AccountValue::DoYear
     Year = a_Year; // TODO ?? expunge?
     set_separate_bases_from_run_basis(a_TheBasis, ExpAndGABasis, SABasis);
 
-// TODO ?? Solve...() should reset not inputs but...??
+// TODO ?? Solve...() should reset not inputs but...?
 
     // TODO ?? These variables are set in current run and used in
     // guaranteed and midpoint runs.
