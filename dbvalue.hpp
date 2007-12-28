@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbvalue.hpp,v 1.5 2007-03-04 16:33:31 chicares Exp $
+// $Id: dbvalue.hpp,v 1.6 2007-12-28 15:14:35 chicares Exp $
 
 #ifndef dbvalue_hpp
 #define dbvalue_hpp
@@ -70,7 +70,7 @@ Database items should be allowed to vary across numerous axes, such as
     gender
     underwriting class (e.g. preferred, standard, and various substd tables)
     smoker
-    issue age (?? TODO or attained age as optional alternative?)
+    issue age (TODO ?? or attained age as optional alternative?)
     medical/paramedical/nonmedical
     rate bands (see below)
 and maybe
