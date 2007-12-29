@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.30 2007-12-29 14:16:18 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.31 2007-12-29 15:47:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -251,6 +251,13 @@ void check_copyright(file const& f)
     oss << "Copyright \\(C\\)[^\\n]*" << 1900 + t1->tm_year;
     require(f, oss.str(), "lacks current copyright.");
 }
+
+/// Check defect markers, which contain a doubled '!' or '?'.
+///
+/// SOMEDAY !! Replace doubled '!' with something else. In retrospect,
+/// doubled '!' was a poor choice, because '!!' is a legitimate idiom
+/// for conversion to bool. Perhaps tripling both '!' and '?' would be
+/// best.
 
 void check_defect_markers(file const& f)
 {
