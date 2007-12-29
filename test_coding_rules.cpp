@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.29 2007-12-27 22:22:36 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.30 2007-12-29 14:16:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -209,7 +209,7 @@ void check_config_hpp(file const& f)
         require(f, loose , "must include 'config.hpp'.");
         require(f, strict, "lacks line '#include \"config.hpp\"'.");
         boost::smatch match;
-        boost::regex first_include("(# *include[^\\n]*)");
+        static boost::regex const first_include("(# *include[^\\n]*)");
         boost::regex_search(f.data(), match, first_include);
         if("#include \"config.hpp\"" != match[1])
             {
@@ -250,6 +250,70 @@ void check_copyright(file const& f)
     std::ostringstream oss;
     oss << "Copyright \\(C\\)[^\\n]*" << 1900 + t1->tm_year;
     require(f, oss.str(), "lacks current copyright.");
+}
+
+void check_defect_markers(file const& f)
+{
+    if(".xpm" == f.extension() || "test_coding_rules_test.sh" == f.leaf_name())
+        {
+        return;
+        }
+
+    {
+    static boost::regex const r("(\\b\\w+\\b\\W*)\\?\\?(.)");
+    boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
+    boost::sregex_iterator omega;
+    for(; i != omega; ++i)
+        {
+        boost::smatch const& z(*i);
+        bool const error_preceding = "TODO " != z[1];
+        bool const error_following = " " != z[2] && "\n" != z[2];
+        if(error_preceding || error_following)
+            {
+            std::ostringstream oss;
+            oss << "has irregular defect marker '" << z[0] << "'.";
+            complain(f, oss.str());
+            }
+        }
+    }
+
+    {
+    static boost::regex const r("(\\b\\w+\\b\\W?)!!(.)");
+    boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
+    boost::sregex_iterator omega;
+    for(; i != omega; ++i)
+        {
+        boost::smatch const& z(*i);
+        bool const error_preceding =
+                true
+            &&  "APACHE "      != z[1]
+            &&  "BOOST "       != z[1]
+            &&  "COMPILER "    != z[1]
+            &&  "CYGWIN "      != z[1]
+            &&  "DATABASE "    != z[1]
+            &&  "ET "          != z[1]
+            &&  "EVGENIY "     != z[1]
+            &&  "INELEGANT "   != z[1]
+            &&  "INPUT "       != z[1]
+            &&  "MPATROL "     != z[1]
+            &&  "MSYS "        != z[1]
+            &&  "PORT "        != z[1]
+            &&  "SOMEDAY "     != z[1]
+            &&  "THIRD_PARTY " != z[1]
+            &&  "TRICKY "      != z[1]
+            &&  "USER "        != z[1]
+            &&  "WX "          != z[1]
+            &&  "XMLWRAPP "    != z[1]
+            ;
+        bool const error_following = " " != z[2] && "\n" != z[2];
+        if(error_preceding || error_following)
+            {
+            std::ostringstream oss;
+            oss << "has irregular defect marker '" << z[0] << "'.";
+            complain(f, oss.str());
+            }
+        }
+    }
 }
 
 void check_include_guards(file const& f)
@@ -295,7 +359,7 @@ void check_label_indentation(file const& f)
         return;
         }
 
-    boost::regex r("\\n( *)([A-Za-z][A-Za-z0-9_]*)( *:)(?!:)");
+    static boost::regex const r("\\n( *)([A-Za-z][A-Za-z0-9_]*)( *:)(?!:)");
     boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
     boost::sregex_iterator omega;
     for(; i != omega; ++i)
@@ -392,6 +456,7 @@ void process_file(std::string const& file_path)
 
     check_config_hpp        (f);
     check_copyright         (f);
+    check_defect_markers    (f);
     check_include_guards    (f);
     check_label_indentation (f);
     check_xpm               (f);

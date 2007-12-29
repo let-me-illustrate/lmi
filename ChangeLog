@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.967 2007-12-28 15:17:43 chicares Exp $
+// $Id: ChangeLog,v 1.968 2007-12-29 14:16:18 chicares Exp $
 
 MAINTENANCE
 
@@ -14406,4 +14406,16 @@ Regularize defect markers.
 Avoid "!!" except in defect markers, to make them easier to parse. The
 idiom is not invalid C, but OTOH these changes strengthen the tests,
 because 'good()' is a stronger condition than '!fail()'.
+
+20071229T1414Z <gchicares@sbcglobal.net> [1207]
+
+  md5.hpp
+Regularize a "!!" marker.
+
+20071229T1416Z <gchicares@sbcglobal.net> [1207]
+
+  GNUmakefile
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+Strengthen and relocate defect-marker checking.
 
