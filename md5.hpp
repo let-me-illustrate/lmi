@@ -31,7 +31,7 @@
  * email: <chicares@cox.net>
  * snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
  *
- * $Id: md5.hpp,v 1.10 2007-12-22 02:10:16 chicares Exp $
+ * $Id: md5.hpp,v 1.11 2007-12-29 14:14:28 chicares Exp $
  *
  * GWC: File renamed md5.h --> md5.hpp so that grep whatever *.?pp
  * can be used across the lmi project.
@@ -152,7 +152,7 @@ extern void md5_init_ctx LMI_P ((struct md5_ctx *ctx));
 /* Starting with the result of former calls of this function (or the
  * initialization function update the context for the next LEN bytes
  * starting at BUFFER.
- * It is necessary that LEN is a multiple of 64!!!
+ * TRICKY !! It is necessary that LEN is a multiple of 64.
  */
 extern void md5_process_block LMI_P ((const void *buffer, size_t len,
                     struct md5_ctx *ctx));
