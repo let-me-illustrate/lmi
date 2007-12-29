@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.12 2007-12-27 22:22:36 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.13 2007-12-29 14:16:18 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -48,6 +48,24 @@ but the datestamp is changed to the beginning of the msw epoch.
 Don't use the unix epoch, because that causes mayhem on msw.
 EOF
 touch --date=19800102 eraseme002
+
+Q='?'
+
+cat >eraseme003 <<EOF
+_Copyright (C)_`date -u +'%Y'`_
+ TODO ${Q}${Q} Okay.
+ TODO${Q}${Q} Bad spacing.
+ TODO ${Q}${Q}Bad spacing.
+ TODO ${Q}${Q}${Q} Tripled.
+ tODO ${Q}${Q} Wrong case.
+ ODO ${Q}${Q} Truncated.
+ INELEGANT !! Okay.
+ INELEGANT!! Bad spacing.
+ INELEGANT !!Bad spacing.
+ INELEGANT !!! Tripled.
+ ELEGANT !! No such marker.
+ number_of_valid_pointers += !!p; // This legitimate usage is allowed.
+EOF
 
 # C++ source files.
 
@@ -155,7 +173,7 @@ EOF
 
 ./test_coding_rules . a_nonexistent_file eraseme* >eraseme_observed 2>&1
 
-cat >eraseme_expected <<'EOF'
+cat >eraseme_expected <<EOF
 Exception--file '.': Argument is a directory.
 Exception--file 'a_nonexistent_file': File not found.
 File 'eraseme001' lacks current copyright.
@@ -172,6 +190,15 @@ File 'eraseme002.cpp' has misindented label ' wrong   :'.
 File 'eraseme002.cpp' has misindented label '   No2   :'.
 File 'eraseme002.cpp' has misindented label '       x_:'.
 File 'eraseme002.hpp' has noncanonical header guards.
+File 'eraseme003' has irregular defect marker 'TODO${Q}${Q} '.
+File 'eraseme003' has irregular defect marker 'TODO ${Q}${Q}B'.
+File 'eraseme003' has irregular defect marker 'TODO ${Q}${Q}${Q} '.
+File 'eraseme003' has irregular defect marker 'tODO ${Q}${Q} '.
+File 'eraseme003' has irregular defect marker 'ODO ${Q}${Q} '.
+File 'eraseme003' has irregular defect marker 'INELEGANT!! '.
+File 'eraseme003' has irregular defect marker 'INELEGANT !!B'.
+File 'eraseme003' has irregular defect marker 'INELEGANT !!!'.
+File 'eraseme003' has irregular defect marker 'ELEGANT !! '.
 File 'eraseme003.hpp' must include 'config.hpp' first.
 File 'eraseme004.hpp' must include 'config.hpp'.
 File 'eraseme004.hpp' lacks line '#include "config.hpp"'.

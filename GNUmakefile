@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.104 2007-12-27 22:22:36 chicares Exp $
+# $Id: GNUmakefile,v 1.105 2007-12-29 14:16:18 chicares Exp $
 
 ################################################################################
 
@@ -458,12 +458,6 @@ check_concinnity: source_clean custom_tools
 	@$(TOUCH) --date=$(yyyymm)22 CANDIDATE
 	@$(ECHO) "  Unexpected or oddly-named source files:"
 	@for z in $(unexpected_files); do $(ECHO) $$z; done;
-	@$(ECHO) "  Files with irregular defect markers:"
-	@$(GREP) --line-number '[A-Za-z]!!' $(licensed_files)                || true
-	@$(GREP) --line-number '[A-Za-z] !![A-Za-z]' $(licensed_files)       || true
-	@$(GREP) --line-number \?\? $(licensed_files) | $(SED) -e ';/TODO \?\?/d'
-	@$(GREP) --line-number \?\?'[A-Za-z]' $(licensed_files)              || true
-	@$(GREP) --line-number '?\{3,\}' $(licensed_files)                   || true
 	@$(ECHO) "  Files that don't point to savannah:"
 	@$(GREP) --files-without-match savannah $(licensed_files)            || true
 	@$(ECHO) "  Files that lack a well-formed RCS Id:"
