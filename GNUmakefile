@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.105 2007-12-29 14:16:18 chicares Exp $
+# $Id: GNUmakefile,v 1.106 2007-12-29 15:46:20 chicares Exp $
 
 ################################################################################
 
@@ -439,19 +439,13 @@ expected_source_files := \
 unexpected_files := \
   $(filter-out $(expected_source_files),$(prerequisite_files))
 
-# Invoke a supplemental makefile, if it exists, to test things that
-# don't belong in the standard sources. For example, it might report
-# occurrences of proprietary names.
-
-supplemental_test_makefile = ../forbidden.make
-
 # MSYS !! The initial ';' in some $(SED) commands below works around a
 # problem caused by MSYS.
 
+all_files := $(filter-out $(expungible_files),$(wildcard *))
+
 .PHONY: check_concinnity
 check_concinnity: source_clean custom_tools
-	@-[ ! -f $(supplemental_test_makefile) ] \
-	  || $(MAKE) --no-print-directory --file=$(supplemental_test_makefile)
 	@$(TOUCH) --date=$(yyyy)0101 BOY
 	@$(TOUCH) --date=$(yyyymm)01 BOM
 	@$(TOUCH) --date=$(yyyymmdd) TODAY
@@ -530,6 +524,13 @@ check_concinnity: source_clean custom_tools
 	@$(ECHO) "  Excessively-long lines in logs:"
 	@for z in ChangeLog DefectLog; \
 	  do $(SED) -e '0,/savannah/d;{/.\{71,\}/!d}' -e "s/^/$$z: /" $$z ; done;
+	@$(ECHO) "  Forbidden strings:"
+	@$(GREP) -i  '[g]if'             $(all_files) 2>/dev/null | $(SED) -e';/wxUSE_GIF\|--disable-gif/d'
+	@$(GREP) -i  '[x]mlpp'           $(filter-out ChangeLog,$(all_files)) || true
+	@$(GREP) -i  '[^a][^g][^e][h]lp' $(all_files) || true # 'imagehlp' is OK
+	@$(GREP) -iw '[e]xe'             $(filter-out INSTALL $(wildcard *make* *.md5) ChangeLog DefectLog,$(all_files)) || true
+	@$(GREP) -iw '\.[d]ef'           $(filter-out mpatrol-mingw-GNUmakefile $(wildcard *.xpm),$(all_files)) || true
+	@$(GREP)     '[W]IN32'           $(filter-out config.hpp $(wildcard *make* *.patch),$(all_files)) || true
 	@$(ECHO) "  Miscellaneous problems:"
 	@-$(TEST_CODING_RULES) $(licensed_files) $(xpm_files)
 	@$(ECHO) " "
