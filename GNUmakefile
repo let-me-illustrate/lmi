@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.108 2007-12-31 16:20:11 chicares Exp $
+# $Id: GNUmakefile,v 1.109 2007-12-31 16:52:12 chicares Exp $
 
 ################################################################################
 
@@ -452,8 +452,6 @@ check_concinnity: source_clean custom_tools
 	@$(TOUCH) --date=$(yyyymm)22 CANDIDATE
 	@$(ECHO) "  Unexpected or oddly-named source files:"
 	@for z in $(unexpected_files); do $(ECHO) $$z; done;
-	@$(ECHO) "  Files that lack a well-formed RCS Id:"
-	@$(GREP) --files-without-match '\$$Id[:].* \$$' $(licensed_files)    || true
 	@$(ECHO) "  Files that improperly contain physical tabs:"
 	@$(GREP) -l '	' $(filter-out $(makefiles),$(licensed_files))       || true
 	@$(ECHO) "  Files that use reserved identifiers:"

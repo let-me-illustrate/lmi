@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.33 2007-12-31 16:20:11 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.34 2007-12-31 16:52:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -399,6 +399,12 @@ void check_preamble(file const& f)
 
     static std::string const url("http://savannah.nongnu.org/projects/lmi");
     require(f, url, "lacks lmi URL.");
+
+    static std::string const good_rcs_id =
+        "\\$"
+        "Id(:[^\\n]*)*\\$"
+        ;
+    require(f, good_rcs_id, "lacks a well-formed RCS Id.");
 
     static std::string const bad_rcs_id =
         "\\$"
