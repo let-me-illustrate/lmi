@@ -21,20 +21,35 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.13 2007-12-29 14:16:18 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.14 2007-12-31 12:22:27 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
 rm --force eraseme*
 
+# Boilerplate required in most files.
+
+good_copyright="_Copyright (C)_`date -u +'%Y'`_"
+
+# Dollar signs must be escaped with '\' in here-documents; writing
+# them on different lines prevents RCS substitution on cvs checkin.
+
+good_rcsid="_\$\
+Id:_\$_"
+
+good_url="http://savannah.nongnu.org/projects/lmi"
+
+boilerplate="$good_copyright $good_rcsid $good_url"
+
 # Files in general.
 
 cat >eraseme000 <<EOF
-_Copyright (C)_`date -u +'%Y'`_
+$boilerplate
 "(C) 1999": upper-case 'C' is correct in ASCII copyright symbol.
 EOF
 
 cat >eraseme001 <<EOF
+$good_rcsid $good_url
 Copyright (C)
   is expected to be on the same line as
 `date -u +'%Y'`
@@ -42,6 +57,7 @@ Copyright (C)
 EOF
 
 cat >eraseme002 <<EOF
+$good_rcsid $good_url
 This would seem to be all right:
 // Copyright (C) 1900, `date -u +'%Y'`, 2100
 but the datestamp is changed to the beginning of the msw epoch.
@@ -52,7 +68,7 @@ touch --date=19800102 eraseme002
 Q='?'
 
 cat >eraseme003 <<EOF
-_Copyright (C)_`date -u +'%Y'`_
+$boilerplate
  TODO ${Q}${Q} Okay.
  TODO${Q}${Q} Bad spacing.
  TODO ${Q}${Q}Bad spacing.
@@ -70,17 +86,17 @@ EOF
 # C++ source files.
 
 cat >eraseme000.cpp <<EOF
-_Copyright (C)_`date -u +'%Y'`_
+$boilerplate
 EOF
 
 cat >eraseme001.cpp <<EOF
-_Copyright (C)_`date -u +'%Y'`_
+$boilerplate
 This header must be included only by other headers:
 #include "config.hpp"
 EOF
 
 cat >eraseme002.cpp <<EOF
-_Copyright (C)_`date -u +'%Y'`_
+$boilerplate
 Labels must be indented either two spaces:
   l0:
   LABEL_1 :
@@ -100,7 +116,7 @@ EOF
 # Headers.
 
 cat >eraseme000.hpp <<EOF
-_Copyright (C)_`date -u +'%Y'`_
+$boilerplate
 #ifndef eraseme000_hpp
 #define eraseme000_hpp
 #include "config.hpp"
@@ -108,7 +124,7 @@ _Copyright (C)_`date -u +'%Y'`_
 EOF
 
 cat >eraseme001.hpp <<EOF
-_Copyright (C)_`date -u +'%Y'`_
+$boilerplate
 #ifndef eraseme001_hpp
 #define eraseme001_hpp
 #include "config.hpp"
@@ -117,7 +133,7 @@ Name in comment is required to match:
 EOF
 
 cat >eraseme002.hpp <<EOF
-_Copyright (C)_`date -u +'%Y'`_
+$boilerplate
 Stray comments on include guards are forbidden as meaningless.
 #ifndef eraseme002_hpp // Here's a guard to make the header idempotent.
 #define eraseme002_hpp // But such a comment is only distracting.
@@ -126,7 +142,7 @@ Stray comments on include guards are forbidden as meaningless.
 EOF
 
 cat >eraseme003.hpp <<EOF
-_Copyright (C)_`date -u +'%Y'`_
+$boilerplate
 #ifndef eraseme003_hpp
 #define eraseme003_hpp
 This compulsory include directive must occur, in canonical form (with
@@ -138,7 +154,7 @@ only one space, preceding '"'), before any other include directive.
 EOF
 
 cat >eraseme004.hpp <<EOF
-_Copyright (C)_`date -u +'%Y'`_
+$boilerplate
 #ifndef eraseme004_hpp
 #define eraseme004_hpp
 Missing compulsory include directive.
@@ -148,11 +164,11 @@ EOF
 # Various taboos.
 
 cat >eraseme000.taboo <<EOF
-_Copyright (C)_`date -u +'%Y'`_
+$boilerplate
 EOF
 
 cat >eraseme001.taboo <<EOF
-_Copyright (C)_`date -u +'%Y'`_
+$boilerplate
 675 Mass Ave, Cambridge, MA
 59 Temple Place, Suite 330
 Then said they unto him, Say now Shibboleth: and he said Sibboleth
