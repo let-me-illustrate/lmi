@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.18 2007-12-31 15:36:23 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.19 2007-12-31 16:20:11 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -93,6 +93,27 @@ $boilerplate
  INELEGANT !!Bad spacing.
  INELEGANT !!! Tripled.
  ELEGANT !! No such marker.
+EOF
+
+# Files in general: RCS Ids.
+
+cat >eraseme_rcs_id000 <<EOF
+$good_copyright $good_url
+A real RCS Id must be accepted:
+\$\
+Id: test_coding_rules_test.sh,v 1.13 2007/12/29 14:16:18 chicares Exp \$
+EOF
+
+cat >eraseme_rcs_id001 <<EOF
+$good_copyright $good_url
+\$\
+Id\$ # Okay.
+EOF
+
+cat >eraseme_rcs_id002 <<EOF
+$good_copyright $good_url
+\$\
+Id # Lacks terminal dollar sign.
 EOF
 
 # Files in general: taboos.
@@ -238,6 +259,7 @@ File 'eraseme_marker001' has irregular defect marker 'INELEGANT!! '.
 File 'eraseme_marker001' has irregular defect marker 'INELEGANT !!B'.
 File 'eraseme_marker001' has irregular defect marker 'INELEGANT !!!'.
 File 'eraseme_marker001' has irregular defect marker 'ELEGANT !! '.
+File 'eraseme_rcs_id002' contains a malformed RCS Id.
 File 'eraseme_taboo001' breaks taboo 'Cambridge'.
 File 'eraseme_taboo001' breaks taboo 'Temple'.
 File 'eraseme_taboo001' breaks taboo 'Shibboleth'.
