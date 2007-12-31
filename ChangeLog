@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.968 2007-12-29 14:16:18 chicares Exp $
+// $Id: ChangeLog,v 1.969 2007-12-31 12:22:27 chicares Exp $
 
 MAINTENANCE
 
@@ -14418,4 +14418,21 @@ Regularize a "!!" marker.
   test_coding_rules.cpp
   test_coding_rules_test.sh
 Strengthen and relocate defect-marker checking.
+
+20071229T1546Z <gchicares@sbcglobal.net> [1207]
+
+  GNUmakefile
+Omit 'forbidden.make', merging leftover tests from an old copy. The
+rest of the tests that it originally contained had already been moved
+to a private 'my_test_coding_rules.cpp'.
+
+20071229T1547Z <gchicares@sbcglobal.net> [1207]
+
+  test_coding_rules.cpp
+Improve documentation.
+
+20071231T1222Z <gchicares@sbcglobal.net> [1207]
+
+  test_coding_rules_test.sh
+Refactor.
 
