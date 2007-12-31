@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.970 2007-12-31 15:36:23 chicares Exp $
+// $Id: ChangeLog,v 1.971 2007-12-31 19:32:25 chicares Exp $
 
 MAINTENANCE
 
@@ -14457,4 +14457,24 @@ Refactor.
   test_coding_rules.cpp
   test_coding_rules_test.sh
 Relocate test for lmi URL.
+
+20071231T1620Z <gchicares@sbcglobal.net> [1207]
+
+  GNUmakefile
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+Relocate test for malformed RCS Id.
+
+20071231T1652Z <gchicares@sbcglobal.net> [1207]
+
+  GNUmakefile
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+Strengthen and relocate test for well-formed RCS Id.
+
+20071231T1932Z <gchicares@sbcglobal.net> [1207]
+
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+Further strengthen RCS Id tests, revealing a latent defect.
 

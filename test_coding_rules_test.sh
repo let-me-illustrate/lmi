@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.20 2007-12-31 16:52:12 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.21 2007-12-31 19:32:25 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -132,6 +132,14 @@ cat >eraseme_rcs_id005 <<EOF
 $good_copyright $good_url
 \$\
 Id gibberish\$ # Lacks colon.
+EOF
+
+cat >eraseme_rcs_id006 <<EOF
+$good_copyright $good_url
+// \$\
+Id: README.auto,v 1.6 2007/02/23 12:43:25 chicares Exp \$
+Version: \$\
+Id: README.auto,v 1.6 2007/02/23 12:43:25 chicares Exp \$
 EOF
 
 # Files in general: taboos.
@@ -283,6 +291,7 @@ File 'eraseme_rcs_id003' lacks a well-formed RCS Id.
 File 'eraseme_rcs_id003' contains a malformed RCS Id.
 File 'eraseme_rcs_id004' lacks a well-formed RCS Id.
 File 'eraseme_rcs_id005' lacks a well-formed RCS Id.
+File 'eraseme_rcs_id006' contains more than one RCS Id.
 File 'eraseme_taboo001' breaks taboo 'Cambridge'.
 File 'eraseme_taboo001' breaks taboo 'Temple'.
 File 'eraseme_taboo001' breaks taboo 'Shibboleth'.
