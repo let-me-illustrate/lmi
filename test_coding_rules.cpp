@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.34 2007-12-31 16:52:12 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.35 2007-12-31 19:32:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -405,6 +405,15 @@ void check_preamble(file const& f)
         "Id(:[^\\n]*)*\\$"
         ;
     require(f, good_rcs_id, "lacks a well-formed RCS Id.");
+
+    static std::string const pleonastic_rcs_id =
+        "\\$"
+        "Id"
+        ".*"
+        "\\$"
+        "Id"
+        ;
+    forbid(f, pleonastic_rcs_id, "contains more than one RCS Id.");
 
     static std::string const bad_rcs_id =
         "\\$"
