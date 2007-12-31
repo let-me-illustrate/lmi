@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.16 2007-12-31 14:59:12 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.17 2007-12-31 15:09:08 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -45,6 +45,12 @@ boilerplate="$good_copyright $good_rcsid $good_url"
 
 cat >eraseme000 <<EOF
 $boilerplate
+EOF
+
+# Files in general: copyright.
+
+cat >eraseme_copyright000 <<EOF
+$boilerplate
 "(C) 1999": upper-case 'C' is correct in ASCII copyright symbol.
 EOF
 
@@ -65,25 +71,31 @@ Don't use the unix epoch, because that causes mayhem on msw.
 EOF
 touch --date=19800102 eraseme_copyright002
 
+# Files in general: defect markers.
+
 Q='?'
+
+cat >eraseme_marker000 <<EOF
+$boilerplate
+ TODO ${Q}${Q} Okay.
+ INELEGANT !! Okay.
+ number_of_valid_pointers += !!p; // This legitimate usage is allowed.
+EOF
 
 cat >eraseme_marker001 <<EOF
 $boilerplate
- TODO ${Q}${Q} Okay.
  TODO${Q}${Q} Bad spacing.
  TODO ${Q}${Q}Bad spacing.
  TODO ${Q}${Q}${Q} Tripled.
  tODO ${Q}${Q} Wrong case.
  ODO ${Q}${Q} Truncated.
- INELEGANT !! Okay.
  INELEGANT!! Bad spacing.
  INELEGANT !!Bad spacing.
  INELEGANT !!! Tripled.
  ELEGANT !! No such marker.
- number_of_valid_pointers += !!p; // This legitimate usage is allowed.
 EOF
 
-# Various taboos.
+# Files in general: taboos.
 
 cat >eraseme_taboo000 <<EOF
 $boilerplate
