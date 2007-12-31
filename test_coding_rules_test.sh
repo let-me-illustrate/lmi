@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.19 2007-12-31 16:20:11 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.20 2007-12-31 16:52:12 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -116,6 +116,24 @@ $good_copyright $good_url
 Id # Lacks terminal dollar sign.
 EOF
 
+cat >eraseme_rcs_id003 <<EOF
+$good_copyright $good_url
+\$\
+Id
+\$ # Terminal dollar sign must be on same line.
+EOF
+
+cat >eraseme_rcs_id004 <<EOF
+$good_copyright $good_url
+# No RCS Id at all.
+EOF
+
+cat >eraseme_rcs_id005 <<EOF
+$good_copyright $good_url
+\$\
+Id gibberish\$ # Lacks colon.
+EOF
+
 # Files in general: taboos.
 
 cat >eraseme_taboo000 <<EOF
@@ -164,7 +182,7 @@ but no other indentation is allowed:
  wrong   :
    No2   :
        x_:
-except for 'default', whose indentation is uncheck because it should
+except for 'default', whose indentation is unchecked because it should
 be aligned with its corresponding case labels:
      default   :
        default :
@@ -259,7 +277,12 @@ File 'eraseme_marker001' has irregular defect marker 'INELEGANT!! '.
 File 'eraseme_marker001' has irregular defect marker 'INELEGANT !!B'.
 File 'eraseme_marker001' has irregular defect marker 'INELEGANT !!!'.
 File 'eraseme_marker001' has irregular defect marker 'ELEGANT !! '.
+File 'eraseme_rcs_id002' lacks a well-formed RCS Id.
 File 'eraseme_rcs_id002' contains a malformed RCS Id.
+File 'eraseme_rcs_id003' lacks a well-formed RCS Id.
+File 'eraseme_rcs_id003' contains a malformed RCS Id.
+File 'eraseme_rcs_id004' lacks a well-formed RCS Id.
+File 'eraseme_rcs_id005' lacks a well-formed RCS Id.
 File 'eraseme_taboo001' breaks taboo 'Cambridge'.
 File 'eraseme_taboo001' breaks taboo 'Temple'.
 File 'eraseme_taboo001' breaks taboo 'Shibboleth'.
