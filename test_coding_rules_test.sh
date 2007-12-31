@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.14 2007-12-31 12:22:27 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.15 2007-12-31 14:55:10 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -48,7 +48,7 @@ $boilerplate
 "(C) 1999": upper-case 'C' is correct in ASCII copyright symbol.
 EOF
 
-cat >eraseme001 <<EOF
+cat >eraseme_copyright001 <<EOF
 $good_rcsid $good_url
 Copyright (C)
   is expected to be on the same line as
@@ -56,18 +56,18 @@ Copyright (C)
 "(c) 1999": lower-case 'c' is incorrect in ASCII copyright symbol.
 EOF
 
-cat >eraseme002 <<EOF
+cat >eraseme_copyright002 <<EOF
 $good_rcsid $good_url
 This would seem to be all right:
 // Copyright (C) 1900, `date -u +'%Y'`, 2100
 but the datestamp is changed to the beginning of the msw epoch.
 Don't use the unix epoch, because that causes mayhem on msw.
 EOF
-touch --date=19800102 eraseme002
+touch --date=19800102 eraseme_copyright002
 
 Q='?'
 
-cat >eraseme003 <<EOF
+cat >eraseme_marker001 <<EOF
 $boilerplate
  TODO ${Q}${Q} Okay.
  TODO${Q}${Q} Bad spacing.
@@ -163,11 +163,11 @@ EOF
 
 # Various taboos.
 
-cat >eraseme000.taboo <<EOF
+cat >eraseme_taboo000 <<EOF
 $boilerplate
 EOF
 
-cat >eraseme001.taboo <<EOF
+cat >eraseme_taboo001 <<EOF
 $boilerplate
 675 Mass Ave, Cambridge, MA
 59 Temple Place, Suite 330
@@ -192,33 +192,33 @@ EOF
 cat >eraseme_expected <<EOF
 Exception--file '.': Argument is a directory.
 Exception--file 'a_nonexistent_file': File not found.
-File 'eraseme001' lacks current copyright.
-File 'eraseme001' breaks taboo '\(c\) *[0-9]'.
 File 'eraseme001.cpp' must not include 'config.hpp'.
 File 'eraseme001.hpp' has noncanonical header guards.
-File 'eraseme001.taboo' breaks taboo 'Cambridge'.
-File 'eraseme001.taboo' breaks taboo 'Temple'.
-File 'eraseme001.taboo' breaks taboo 'Shibboleth'.
-File 'eraseme001.taboo' breaks taboo 'sibboleth'.
 File 'eraseme001.xpm' lacks /^static char const\*/.
-File 'eraseme002' lacks current copyright.
 File 'eraseme002.cpp' has misindented label ' wrong   :'.
 File 'eraseme002.cpp' has misindented label '   No2   :'.
 File 'eraseme002.cpp' has misindented label '       x_:'.
 File 'eraseme002.hpp' has noncanonical header guards.
-File 'eraseme003' has irregular defect marker 'TODO${Q}${Q} '.
-File 'eraseme003' has irregular defect marker 'TODO ${Q}${Q}B'.
-File 'eraseme003' has irregular defect marker 'TODO ${Q}${Q}${Q} '.
-File 'eraseme003' has irregular defect marker 'tODO ${Q}${Q} '.
-File 'eraseme003' has irregular defect marker 'ODO ${Q}${Q} '.
-File 'eraseme003' has irregular defect marker 'INELEGANT!! '.
-File 'eraseme003' has irregular defect marker 'INELEGANT !!B'.
-File 'eraseme003' has irregular defect marker 'INELEGANT !!!'.
-File 'eraseme003' has irregular defect marker 'ELEGANT !! '.
 File 'eraseme003.hpp' must include 'config.hpp' first.
 File 'eraseme004.hpp' must include 'config.hpp'.
 File 'eraseme004.hpp' lacks line '#include "config.hpp"'.
 File 'eraseme004.hpp' must include 'config.hpp' first.
+File 'eraseme_copyright001' lacks current copyright.
+File 'eraseme_copyright001' breaks taboo '\(c\) *[0-9]'.
+File 'eraseme_copyright002' lacks current copyright.
+File 'eraseme_marker001' has irregular defect marker 'TODO${Q}${Q} '.
+File 'eraseme_marker001' has irregular defect marker 'TODO ${Q}${Q}B'.
+File 'eraseme_marker001' has irregular defect marker 'TODO ${Q}${Q}${Q} '.
+File 'eraseme_marker001' has irregular defect marker 'tODO ${Q}${Q} '.
+File 'eraseme_marker001' has irregular defect marker 'ODO ${Q}${Q} '.
+File 'eraseme_marker001' has irregular defect marker 'INELEGANT!! '.
+File 'eraseme_marker001' has irregular defect marker 'INELEGANT !!B'.
+File 'eraseme_marker001' has irregular defect marker 'INELEGANT !!!'.
+File 'eraseme_marker001' has irregular defect marker 'ELEGANT !! '.
+File 'eraseme_taboo001' breaks taboo 'Cambridge'.
+File 'eraseme_taboo001' breaks taboo 'Temple'.
+File 'eraseme_taboo001' breaks taboo 'Shibboleth'.
+File 'eraseme_taboo001' breaks taboo 'sibboleth'.
 EOF
 
 diff --unified=0 eraseme_expected eraseme_observed && rm --force eraseme*
