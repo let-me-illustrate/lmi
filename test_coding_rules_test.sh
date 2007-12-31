@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.17 2007-12-31 15:09:08 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.18 2007-12-31 15:36:23 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -106,6 +106,17 @@ $boilerplate
 675 Mass Ave, Cambridge, MA
 59 Temple Place, Suite 330
 Then said they unto him, Say now Shibboleth: and he said Sibboleth
+EOF
+
+# Files in general: lmi url.
+
+cat >eraseme_url000 <<EOF
+$good_copyright $good_rcsid
+<http://savannah.nongnu.org/projects/lmi>
+EOF
+
+cat >eraseme_url001 <<EOF
+$good_copyright $good_rcsid
 EOF
 
 # C++ source files.
@@ -231,6 +242,7 @@ File 'eraseme_taboo001' breaks taboo 'Cambridge'.
 File 'eraseme_taboo001' breaks taboo 'Temple'.
 File 'eraseme_taboo001' breaks taboo 'Shibboleth'.
 File 'eraseme_taboo001' breaks taboo 'sibboleth'.
+File 'eraseme_url001' lacks lmi URL.
 EOF
 
 diff --unified=0 eraseme_expected eraseme_observed && rm --force eraseme*

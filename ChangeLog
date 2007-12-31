@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.969 2007-12-31 12:22:27 chicares Exp $
+// $Id: ChangeLog,v 1.970 2007-12-31 15:36:23 chicares Exp $
 
 MAINTENANCE
 
@@ -14435,4 +14435,26 @@ Improve documentation.
 
   test_coding_rules_test.sh
 Refactor.
+
+20071231T1455Z <gchicares@sbcglobal.net> [1207]
+
+  test_coding_rules_test.sh
+Rename test files.
+
+20071231T1459Z <gchicares@sbcglobal.net> [1207]
+
+  test_coding_rules_test.sh
+Rearrange.
+
+20071231T1509Z <gchicares@sbcglobal.net> [1207]
+
+  test_coding_rules_test.sh
+Refactor.
+
+20071231T1536Z <gchicares@sbcglobal.net> [1207]
+
+  GNUmakefile
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+Relocate test for lmi URL.
 
