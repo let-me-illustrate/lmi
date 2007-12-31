@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.32 2007-12-31 15:36:23 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.33 2007-12-31 16:20:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -386,6 +386,9 @@ void check_label_indentation(file const& f)
 }
 
 /// Check boilerplate at the beginning of each file.
+///
+/// Strings that would otherwise be subject to RCS keyword
+/// substitution are split across multiple lines.
 
 void check_preamble(file const& f)
 {
@@ -396,6 +399,12 @@ void check_preamble(file const& f)
 
     static std::string const url("http://savannah.nongnu.org/projects/lmi");
     require(f, url, "lacks lmi URL.");
+
+    static std::string const bad_rcs_id =
+        "\\$"
+        "Id[^\\$\\n]*\\n"
+        ;
+    forbid(f, bad_rcs_id, "contains a malformed RCS Id.");
 }
 
 void check_xpm(file const& f)
