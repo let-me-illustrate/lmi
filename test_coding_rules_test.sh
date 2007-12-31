@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.15 2007-12-31 14:55:10 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.16 2007-12-31 14:59:12 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -81,6 +81,19 @@ $boilerplate
  INELEGANT !!! Tripled.
  ELEGANT !! No such marker.
  number_of_valid_pointers += !!p; // This legitimate usage is allowed.
+EOF
+
+# Various taboos.
+
+cat >eraseme_taboo000 <<EOF
+$boilerplate
+EOF
+
+cat >eraseme_taboo001 <<EOF
+$boilerplate
+675 Mass Ave, Cambridge, MA
+59 Temple Place, Suite 330
+Then said they unto him, Say now Shibboleth: and he said Sibboleth
 EOF
 
 # C++ source files.
@@ -159,19 +172,6 @@ $boilerplate
 #define eraseme004_hpp
 Missing compulsory include directive.
 #endif // eraseme004_hpp
-EOF
-
-# Various taboos.
-
-cat >eraseme_taboo000 <<EOF
-$boilerplate
-EOF
-
-cat >eraseme_taboo001 <<EOF
-$boilerplate
-675 Mass Ave, Cambridge, MA
-59 Temple Place, Suite 330
-Then said they unto him, Say now Shibboleth: and he said Sibboleth
 EOF
 
 # X pixmaps require no copyright, but do require 'const'.
