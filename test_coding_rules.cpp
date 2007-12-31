@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.31 2007-12-29 15:47:11 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.32 2007-12-31 15:36:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -385,6 +385,19 @@ void check_label_indentation(file const& f)
         }
 }
 
+/// Check boilerplate at the beginning of each file.
+
+void check_preamble(file const& f)
+{
+    if(".xpm" == f.extension())
+        {
+        return;
+        }
+
+    static std::string const url("http://savannah.nongnu.org/projects/lmi");
+    require(f, url, "lacks lmi URL.");
+}
+
 void check_xpm(file const& f)
 {
     if(".xpm" != f.extension())
@@ -466,6 +479,7 @@ void process_file(std::string const& file_path)
     check_defect_markers    (f);
     check_include_guards    (f);
     check_label_indentation (f);
+    check_preamble          (f);
     check_xpm               (f);
 
     enforce_taboos          (f);
