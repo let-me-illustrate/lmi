@@ -1,6 +1,6 @@
 // Joshua Rowe's "Really cool persistent object stream library".
 //
-// Copyright (C) 2000, 2005, 2006, 2007 Gregory W. Chicares.
+// Copyright (C) 2000, 2005, 2006, 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_pios.hpp,v 1.10 2007-04-01 14:29:30 chicares Exp $
+// $Id: ihs_pios.hpp,v 1.11 2008-01-01 18:29:43 chicares Exp $
 
 // This is a derived work based on Joshua Rowe's
 //   "Really cool persistent object stream library"

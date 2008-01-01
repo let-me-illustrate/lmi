@@ -1,6 +1,6 @@
 // Expression templates for arithmetic.
 //
-// Copyright (C) 2002, 2004, 2005, 2006, 2007 Gregory W. Chicares.
+// Copyright (C) 2002, 2004, 2005, 2006, 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: vector_test.cpp,v 1.9 2007-03-06 18:13:38 wboutin Exp $
+// $Id: vector_test.cpp,v 1.10 2008-01-01 18:29:58 chicares Exp $
 
 // This file is of historical interest only. It shows various attempts
 // to reinvent work that others have done better.

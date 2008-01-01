@@ -1,6 +1,6 @@
 // Support classes for editing multidimensional data.
 //
-// Copyright (C) 2007 Gregory W. Chicares.
+// Copyright (C) 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_tools.cpp,v 1.5 2007-03-05 03:50:21 chicares Exp $
+// $Id: multidimgrid_tools.cpp,v 1.6 2008-01-01 18:29:50 chicares Exp $
 
 #include "multidimgrid_tools.hpp"
 

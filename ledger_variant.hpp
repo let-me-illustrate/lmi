@@ -1,6 +1,6 @@
 // Ledger data that vary by basis.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.hpp,v 1.15 2007-03-11 21:36:10 chicares Exp $
+// $Id: ledger_variant.hpp,v 1.16 2008-01-01 18:29:47 chicares Exp $
 
 #ifndef ledger_variant_hpp
 #define ledger_variant_hpp

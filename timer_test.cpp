@@ -1,6 +1,6 @@
 // Measure elapsed time to high resolution--unit test.
 //
-// Copyright (C) 2005, 2006, 2007 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer_test.cpp,v 1.23 2007-01-26 02:09:36 chicares Exp $
+// $Id: timer_test.cpp,v 1.24 2008-01-01 18:29:57 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"

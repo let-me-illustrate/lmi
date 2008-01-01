@@ -1,6 +1,6 @@
 // Run a command against a file, respecting its extension--unit test.
 //
-// Copyright (C) 2007 Gregory W. Chicares.
+// Copyright (C) 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: file_command_test.cpp,v 1.2 2007-06-12 16:09:37 chicares Exp $
+// $Id: file_command_test.cpp,v 1.3 2008-01-01 18:29:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"

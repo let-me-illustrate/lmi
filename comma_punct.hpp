@@ -1,6 +1,6 @@
 // Punctuate numbers with commas.
 //
-// Copyright (C) 2005, 2006, 2007 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: comma_punct.hpp,v 1.5 2007-02-25 19:28:18 chicares Exp $
+// $Id: comma_punct.hpp,v 1.6 2008-01-01 18:29:36 chicares Exp $
 
 #ifndef comma_punct_hpp
 #define comma_punct_hpp

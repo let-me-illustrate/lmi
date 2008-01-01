@@ -1,6 +1,6 @@
 // xml document for multiple-cell illustrations.
 //
-// Copyright (C) 2002, 2003, 2005, 2006, 2007 Gregory W. Chicares.
+// Copyright (C) 2002, 2003, 2005, 2006, 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.hpp,v 1.12 2007-01-27 00:00:51 wboutin Exp $
+// $Id: multiple_cell_document.hpp,v 1.13 2008-01-01 18:29:50 chicares Exp $
 
 #ifndef multiple_cell_document_hpp
 #define multiple_cell_document_hpp

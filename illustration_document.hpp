@@ -1,6 +1,6 @@
 // Document class for illustrations.
 //
-// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007 Gregory W. Chicares.
+// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_document.hpp,v 1.8 2007-03-10 18:56:08 chicares Exp $
+// $Id: illustration_document.hpp,v 1.9 2008-01-01 18:29:44 chicares Exp $
 
 // Because illustration windows have their own functions for loading
 // and saving files, override OnOpenDocument() and OnSaveDocument()

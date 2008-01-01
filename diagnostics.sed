@@ -1,6 +1,6 @@
 # Parse compiler output for diagnostics.
 #
-# Copyright (C) 2003, 2004, 2005, 2006, 2007 Gregory W. Chicares.
+# Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 #
-# $Id: diagnostics.sed,v 1.14 2007-04-24 09:28:16 chicares Exp $
+# $Id: diagnostics.sed,v 1.15 2008-01-01 18:29:39 chicares Exp $
 #
   # Delete expected output from make.
 /Circular.*dependency dropped/d

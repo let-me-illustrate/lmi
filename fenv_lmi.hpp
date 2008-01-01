@@ -1,6 +1,6 @@
 // Manage floating-point environment.
 //
-// Copyright (C) 2004, 2005, 2006, 2007 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi.hpp,v 1.15 2007-07-06 01:31:17 chicares Exp $
+// $Id: fenv_lmi.hpp,v 1.16 2008-01-01 18:29:40 chicares Exp $
 
 #ifndef fenv_lmi_hpp
 #define fenv_lmi_hpp

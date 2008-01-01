@@ -1,6 +1,6 @@
 # Installer for sample databases and miscellaneous libraries.
 #
-# Copyright (C) 2007 Gregory W. Chicares.
+# Copyright (C) 2007, 2008 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_miscellanea.make,v 1.9 2007-12-11 02:04:30 chicares Exp $
+# $Id: install_miscellanea.make,v 1.10 2008-01-01 18:29:46 chicares Exp $
 
 # Configurable settings ########################################################
 
