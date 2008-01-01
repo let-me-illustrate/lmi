@@ -1,6 +1,6 @@
 // Distinct and composite values for cells in a group.
 //
-// Copyright (C) 2005, 2006, 2007 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.hpp,v 1.24 2007-06-27 18:48:32 chicares Exp $
+// $Id: group_values.hpp,v 1.25 2008-01-01 18:29:41 chicares Exp $
 
 #ifndef group_values_hpp
 #define group_values_hpp

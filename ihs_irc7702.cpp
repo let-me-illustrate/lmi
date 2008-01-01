@@ -1,6 +1,6 @@
 // Internal Revenue Code section 7702 (definition of life insurance).
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702.cpp,v 1.17 2007-03-06 18:13:37 wboutin Exp $
+// $Id: ihs_irc7702.cpp,v 1.18 2008-01-01 18:29:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"

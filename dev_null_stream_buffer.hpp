@@ -1,6 +1,6 @@
 // Stream buffer that discards output like the null device.
 //
-// Copyright (C) 2007 Gregory W. Chicares.
+// Copyright (C) 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dev_null_stream_buffer.hpp,v 1.1 2007-05-21 16:28:45 chicares Exp $
+// $Id: dev_null_stream_buffer.hpp,v 1.2 2008-01-01 18:29:39 chicares Exp $
 
 #ifndef dev_null_stream_buffer_hpp
 #define dev_null_stream_buffer_hpp

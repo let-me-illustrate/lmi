@@ -19,7 +19,7 @@
 // the reputations of Douglas C. Schmidt or Vinicius J. Latorre.
 //
 // GWC modifications are
-//   Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007 Gregory W. Chicares
+//   Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Gregory W. Chicares
 // and released with the same licensing terms as the original, viz.:
 
 // This file is part of the GNU C++ Library.  This library is free
@@ -40,7 +40,7 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt.cpp,v 1.17 2007-06-02 18:03:48 chicares Exp $
+// $Id: getopt.cpp,v 1.18 2008-01-01 18:29:41 chicares Exp $
 
 // GWC removed obsolete '#pragma implementation'.
 

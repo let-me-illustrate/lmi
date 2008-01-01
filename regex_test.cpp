@@ -1,6 +1,6 @@
 // Regular expressions--unit test.
 //
-// Copyright (C) 2007 Gregory W. Chicares.
+// Copyright (C) 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: regex_test.cpp,v 1.4 2007-12-27 21:18:20 chicares Exp $
+// $Id: regex_test.cpp,v 1.5 2008-01-01 18:29:54 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"

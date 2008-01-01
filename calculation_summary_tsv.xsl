@@ -2,7 +2,7 @@
 <!--
     Xsl template used to render illustration data taken from data.xml into csv.
 
-    Copyright (C) 2006, 2007 Gregory W. Chicares.
+    Copyright (C) 2006, 2007, 2008 Gregory W. Chicares.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2 as
@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: calculation_summary_tsv.xsl,v 1.5 2007-01-27 00:00:51 wboutin Exp $
+    $Id: calculation_summary_tsv.xsl,v 1.6 2008-01-01 18:29:35 chicares Exp $
 -->
 
 <!DOCTYPE xsl:stylesheet [

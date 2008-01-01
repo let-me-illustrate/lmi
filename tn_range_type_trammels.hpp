@@ -1,6 +1,6 @@
 // Trammels for specific tn_range types.
 //
-// Copyright (C) 2004, 2005, 2006, 2007 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range_type_trammels.hpp,v 1.8 2007-01-27 00:00:52 wboutin Exp $
+// $Id: tn_range_type_trammels.hpp,v 1.9 2008-01-01 18:29:58 chicares Exp $
 
 #ifndef tn_range_type_trammels_hpp
 #define tn_range_type_trammels_hpp

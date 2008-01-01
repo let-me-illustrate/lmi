@@ -1,6 +1,6 @@
 // Stratified charges manager.
 //
-// Copyright (C) 2007 Gregory W. Chicares.
+// Copyright (C) 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view.hpp,v 1.7 2007-03-19 18:08:13 chicares Exp $
+// $Id: tier_view.hpp,v 1.8 2008-01-01 18:29:57 chicares Exp $
 
 #ifndef tier_view_hpp
 #define tier_view_hpp

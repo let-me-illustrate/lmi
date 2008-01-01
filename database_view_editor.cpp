@@ -1,6 +1,6 @@
 // Database dictionary manager editor classes.
 //
-// Copyright (C) 2007 Gregory W. Chicares.
+// Copyright (C) 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view_editor.cpp,v 1.10 2007-03-20 02:34:21 chicares Exp $
+// $Id: database_view_editor.cpp,v 1.11 2008-01-01 18:29:38 chicares Exp $
 
 #include "database_view_editor.hpp"
 

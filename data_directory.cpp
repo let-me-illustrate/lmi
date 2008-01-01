@@ -1,6 +1,6 @@
 // Data directory.
 //
-// Copyright (C) 2003, 2005, 2006, 2007 Gregory W. Chicares.
+// Copyright (C) 2003, 2005, 2006, 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: data_directory.cpp,v 1.7 2007-03-09 16:27:23 chicares Exp $
+// $Id: data_directory.cpp,v 1.8 2008-01-01 18:29:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"

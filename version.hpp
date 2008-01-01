@@ -1,4 +1,4 @@
-// Copyright (C) 2007 Gregory W. Chicares.
+// Copyright (C) 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -17,7 +17,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: version.hpp,v 1.57 2007-12-24 16:04:22 chicares Exp $
+// $Id: version.hpp,v 1.58 2008-01-01 18:29:58 chicares Exp $
 
 #ifndef version_hpp
 #define version_hpp

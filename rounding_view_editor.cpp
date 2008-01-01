@@ -1,6 +1,6 @@
 // Rounding rules manager helper widget.
 //
-// Copyright (C) 2007 Gregory W. Chicares.
+// Copyright (C) 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_view_editor.cpp,v 1.11 2007-04-01 15:58:27 chicares Exp $
+// $Id: rounding_view_editor.cpp,v 1.12 2008-01-01 18:29:54 chicares Exp $
 
 #include "rounding_view_editor.hpp"
 

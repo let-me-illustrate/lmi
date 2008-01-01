@@ -1,6 +1,6 @@
 # Limited support for a particular non-free compiler.
 
-# Copyright (C) 2004, 2005, 2006, 2007 Gregory W. Chicares.
+# Copyright (C) 2004, 2005, 2006, 2007, 2008 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: bcc_5_5_1.make,v 1.10 2007-11-05 17:50:20 chicares Exp $
+# $Id: bcc_5_5_1.make,v 1.11 2008-01-01 18:29:35 chicares Exp $
 
 toolset := bcc
 

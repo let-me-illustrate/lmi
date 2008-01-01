@@ -1,6 +1,6 @@
 // Guard floating-point environment.
 //
-// Copyright (C) 2007 Gregory W. Chicares.
+// Copyright (C) 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_guard.hpp,v 1.2 2007-05-25 02:32:40 chicares Exp $
+// $Id: fenv_guard.hpp,v 1.3 2008-01-01 18:29:40 chicares Exp $
 
 #ifndef fenv_guard_hpp
 #define fenv_guard_hpp

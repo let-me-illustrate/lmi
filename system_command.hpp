@@ -1,6 +1,6 @@
 // Instruct the operating system to execute a command.
 //
-// Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007 Gregory W. Chicares.
+// Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: system_command.hpp,v 1.11 2007-06-26 00:29:26 chicares Exp $
+// $Id: system_command.hpp,v 1.12 2008-01-01 18:29:56 chicares Exp $
 
 #ifndef system_command_hpp
 #define system_command_hpp
