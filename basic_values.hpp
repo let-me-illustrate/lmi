@@ -1,6 +1,6 @@
 // Rates and unprojected values.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.19 2007-10-07 14:16:26 chicares Exp $
+// $Id: basic_values.hpp,v 1.20 2008-01-01 18:29:35 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp

@@ -1,6 +1,6 @@
 // Input data for wx data-transfer demonstration: base class.
 //
-// Copyright (C) 2004, 2005, 2006, 2007 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: datum_base.hpp,v 1.9 2007-01-27 00:00:51 wboutin Exp $
+// $Id: datum_base.hpp,v 1.10 2008-01-01 18:29:38 chicares Exp $
 
 #ifndef datum_base_hpp
 #define datum_base_hpp

@@ -1,6 +1,6 @@
 // Show progress on lengthy operations--command-line interface.
 //
-// Copyright (C) 2005, 2006, 2007 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter_cli.cpp,v 1.16 2007-07-09 16:57:22 chicares Exp $
+// $Id: progress_meter_cli.cpp,v 1.17 2008-01-01 18:29:53 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"

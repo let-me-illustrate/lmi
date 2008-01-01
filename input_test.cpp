@@ -1,6 +1,6 @@
 // Inputs for life insurance illustrations--unit test.
 //
-// Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007 Gregory W. Chicares.
+// Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.29 2007-12-28 15:17:43 chicares Exp $
+// $Id: input_test.cpp,v 1.30 2008-01-01 18:29:45 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"

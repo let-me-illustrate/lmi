@@ -1,6 +1,6 @@
 // Time program execution.
 //
-// Copyright (C) 2001, 2005, 2006, 2007 Gregory W. Chicares.
+// Copyright (C) 2001, 2005, 2006, 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: elapsed_time.cpp,v 1.7 2007-06-26 00:29:25 chicares Exp $
+// $Id: elapsed_time.cpp,v 1.8 2008-01-01 18:29:39 chicares Exp $
 
 #include "handle_exceptions.hpp"
 #include "main_common.hpp"

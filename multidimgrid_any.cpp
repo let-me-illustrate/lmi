@@ -1,6 +1,6 @@
 // A control for editing multidimensional data and supporting classes.
 //
-// Copyright (C) 2007 Gregory W. Chicares.
+// Copyright (C) 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.17 2007-11-14 03:13:34 chicares Exp $
+// $Id: multidimgrid_any.cpp,v 1.18 2008-01-01 18:29:50 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"

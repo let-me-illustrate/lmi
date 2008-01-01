@@ -1,6 +1,6 @@
 // Census manager.
 //
-// Copyright (C) 2004, 2005, 2006, 2007 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.hpp,v 1.22 2007-06-01 01:24:17 chicares Exp $
+// $Id: census_view.hpp,v 1.23 2008-01-01 18:29:36 chicares Exp $
 
 #ifndef census_view_hpp
 #define census_view_hpp

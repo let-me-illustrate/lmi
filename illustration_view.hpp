@@ -1,6 +1,6 @@
 // Document view for illustrations.
 //
-// Copyright (C) 2003, 2004, 2005, 2006, 2007 Gregory W. Chicares.
+// Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.hpp,v 1.28 2007-06-06 00:39:23 chicares Exp $
+// $Id: illustration_view.hpp,v 1.29 2008-01-01 18:29:44 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem

@@ -1,6 +1,6 @@
 // Product database entity names.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2003, 2004, 2005, 2006, 2007 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2003, 2004, 2005, 2006, 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.hpp,v 1.8 2007-01-27 00:00:51 wboutin Exp $
+// $Id: dbnames.hpp,v 1.9 2008-01-01 18:29:38 chicares Exp $
 
 #ifndef dbnames_hpp
 #define dbnames_hpp

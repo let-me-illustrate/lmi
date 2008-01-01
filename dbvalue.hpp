@@ -1,6 +1,6 @@
 // Product database entity type.
 //
-// Copyright (C) 1998, 2001, 2005, 2006, 2007 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2005, 2006, 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbvalue.hpp,v 1.6 2007-12-28 15:14:35 chicares Exp $
+// $Id: dbvalue.hpp,v 1.7 2008-01-01 18:29:38 chicares Exp $
 
 #ifndef dbvalue_hpp
 #define dbvalue_hpp

@@ -2,7 +2,7 @@
 
 # For msw, download and build lmi and required libraries.
 
-# Copyright (C) 2007 Gregory W. Chicares.
+# Copyright (C) 2007, 2008 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_msw.sh,v 1.6 2007-12-09 22:08:16 chicares Exp $
+# $Id: install_msw.sh,v 1.7 2008-01-01 18:29:46 chicares Exp $
 
 set -v
 

@@ -1,6 +1,6 @@
 // Interface to xmlwrapp.
 //
-// Copyright (C) 2006, 2007 Gregory W. Chicares.
+// Copyright (C) 2006, 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.hpp,v 1.19 2007-03-04 16:33:31 chicares Exp $
+// $Id: xml_lmi.hpp,v 1.20 2008-01-01 18:30:00 chicares Exp $
 
 #ifndef xml_lmi_hpp
 #define xml_lmi_hpp

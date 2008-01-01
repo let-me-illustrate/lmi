@@ -1,6 +1,6 @@
 # Main lmi makefile, invoked by 'GNUmakefile'.
 #
-# Copyright (C) 2005, 2006, 2007 Gregory W. Chicares.
+# Copyright (C) 2005, 2006, 2007, 2008 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.103 2007-12-15 17:56:23 chicares Exp $
+# $Id: workhorse.make,v 1.104 2008-01-01 18:29:59 chicares Exp $
 
 ################################################################################
 

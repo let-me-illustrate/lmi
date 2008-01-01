@@ -1,6 +1,6 @@
 // Test files for consistency with various rules: private taboos.
 //
-// Copyright (C) 2007 Gregory W. Chicares.
+// Copyright (C) 2007, 2008 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: my_test_coding_rules.cpp,v 1.1 2007-12-26 18:20:31 chicares Exp $
+// $Id: my_test_coding_rules.cpp,v 1.2 2008-01-01 18:29:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"

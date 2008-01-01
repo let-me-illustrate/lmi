@@ -2,7 +2,7 @@
 <!--
     Convert ledger XML in the new format to the old format.
 
-    Copyright (C) 2007 Gregory W. Chicares.
+    Copyright (C) 2007, 2008 Gregory W. Chicares.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2 as
@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml2to1.xsl,v 1.2 2007-06-21 09:45:43 etarassov Exp $
+    $Id: xml2to1.xsl,v 1.3 2008-01-01 18:30:00 chicares Exp $
 -->
 <xsl:stylesheet xmlns:lmi="http://savannah.nongnu.org/projects/lmi" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
   <xsl:import href="fo_common.xsl"/>
