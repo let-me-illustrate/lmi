@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.110 2008-01-01 18:29:33 chicares Exp $
+# $Id: GNUmakefile,v 1.111 2008-01-01 19:45:24 chicares Exp $
 
 ################################################################################
 
@@ -537,7 +537,7 @@ check_concinnity: source_clean custom_tools
 	@[ TODAY -nt CANDIDATE ] && [ version.hpp -ot BOM ] \
 	  && $(ECHO) "Is it time to 'make release_candidate'?" || true
 	@[ license.cpp -ot BOY ] \
-	  && $(ECHO) "Update copyright notices in 'license.cpp'." || true
+	  && $(ECHO) "Make the 'happy_new_year' target." || true
 	@$(RM) --force CANDIDATE
 	@$(RM) --force TODAY
 	@$(RM) --force BOM
@@ -555,6 +555,71 @@ cvs_ready: source_clean
 	-$(MAKE) all test build_type=mpatrol
 	-$(MAKE) test build_type=safestdlib
 	-$(MAKE) lmi_wx_shared$(EXEEXT) build_type=so_test USE_SO_ATTRIBUTES=1
+
+################################################################################
+
+# Update copyright notices.
+
+old_year := 2007
+new_year := 2008
+
+backup_directory := saved_$(old_year)
+
+unutterable := Copyright
+
+.PHONY: happy_new_year
+happy_new_year: source_clean
+	$(TOUCH) --date=$(old_year)0101 BOY
+	$(MKDIR) --parents $(backup_directory)
+	for z in *; \
+	  do \
+	       [ $$z -nt BOY ] \
+	    && [ ! -d $$z ] \
+	    && $(GREP) --quiet --files-with-matches $(unutterable) $$z \
+	    && $(SED) \
+	      --in-place='$(backup_directory)/*' \
+	      -e'/$(unutterable)/s/$(old_year)/$(old_year), $(new_year)/' \
+	      $$z; \
+	  done;
+	$(RM) --force BOY
+	$(ECHO) "Check these potential issues:"
+	@$(GREP) '$(old_year)[, ]*$(old_year)' * || true
+	@$(GREP) '$(new_year)[, ]*$(old_year)' * || true
+	@$(GREP) '$(new_year)[, ]*$(new_year)' * || true
+	@$(GREP) $(unutterable) * \
+	  | $(SED) \
+	    -e '/$(unutterable).*$(new_year) Gregory W. Chicares/d' \
+	    -e '/$(unutterable).*$(new_year) Vadim Zeitlin/d' \
+	    -e '/unutterable := $(unutterable)/d' \
+	    -e '/$(unutterable) (C) .(yyyy) Gregory W. Chicares/d' \
+	    -e '/$(unutterable) (C) 1989, 1991 Free Software Foundation, Inc./d' \
+	    -e '/$(unutterable) (C) 1987, 1989 Free Software Foundation, Inc./d' \
+	    -e '/$(unutterable) (C) 1987, 1989, 1992 Free Software Foundation, Inc./d' \
+	    -e '/$(unutterable) (C) 1995, 1996 Free Software Foundation, Inc./d' \
+	    -e '/$(unutterable) 1995, 1996, 2000 Free Software Foundation, Inc./d' \
+	    -e '/$(unutterable) (C) <year>  <name of author>/d' \
+	    -e '/Gnomovision version 69, $(unutterable) (C) year name of author/d' \
+	    -e '/$(unutterable) (C) &lt;year&gt;  &lt;name of author&gt;/d' \
+	    -e '/GNU cgicc $(unutterable) (C) 1996, 1997, 1998, 1999, 2000 Stephen F. Booth/d' \
+	    -e '/$(unutterable) and license notices for graphics files/d' \
+	    -e '/$(unutterable) (C) 1997-2002 Graeme S. Roy <graeme.roy@analog.com>/d' \
+	    -e '/(C) $(unutterable) Beman Dawes 1995-2001. Permission to copy, use, modify, sell/d' \
+	    -e '/(C) $(unutterable) Beman Dawes 2001. Permission to copy, use, modify, sell/d' \
+	    -e '/(C) $(unutterable) Beman Dawes 2000. Permission to copy, use, modify, sell/d' \
+	    -e '/$(unutterable) Jens Maurer 2000/d' \
+	    -e '/$(unutterable) Kevlin Henney, 2000, 2001. All rights reserved./d' \
+	    -e '/$(unutterable) Kevlin Henney, 2000-2003. All rights reserved./d' \
+	    -e '/$(unutterable) Terje Sletteb.* and Kevlin Henney, 2005./d' \
+	    -e '/Portions marked.*$(unutterable).*Gregory W. Chicares/d' \
+	    -e '/oss << "$(unutterable).*" << 1900 + t1->tm_year;/d' \
+	    -e '/$(unutterable) (C) 1994$$/d' \
+	    -e '/$(unutterable) (C) 1996-1998$$/d' \
+	    -e '/"$(unutterable)". That may become too strict in the future/d' \
+	    -e '/:..$(unutterable).d$$/d' \
+	    -e '/:good_copyright=/d' \
+	    -e '/:$(unutterable) (C)$$/d' \
+	    -e '/$(unutterable) (C) 1900/d' \
+	  || true
 
 ################################################################################
 
