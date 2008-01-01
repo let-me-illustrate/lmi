@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: mingw_install.make,v 1.12 2008-01-01 18:30:08 chicares Exp $
+# $Id: mingw_install.make,v 1.13 2008-01-01 18:40:05 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -35,7 +35,7 @@ file_list = $($(version))
 #   http://sourceforge.net/mailarchive/message.php?msg_id=10581810
 # when multiple versions of MinGW gcc are installed.
 
-prefix   := /trial/$(version)
+prefix   := /c/$(version)
 
 # In the past, it seemed necessary to specify a mirror, e.g.:
 #  mirror := http://easynews.dl.sourceforge.net/sourceforge/mingw
@@ -45,16 +45,16 @@ mirror   := http://downloads.sourceforge.net/mingw
 
 # File lists ###################################################################
 
-# $(MinGW-20061119): 'Candidate' versions from
+# 'Candidate' versions from
 #   Chris Sutcliffe's 2006-11-19T02:27Z email to MinGW-dvlpr,
-# but see
-#   Keith MARSHALL's 2006-12-02T20:30Z email to Mingw-users.
+# revised according to
+#   Keith MARSHALL's 2006-12-02T20:30Z email to Mingw-users:
 
 MinGW-20061119 = \
   binutils-2.16.91-20060119-1.tar.gz \
   gcc-core-3.4.5-20060117-1.tar.gz \
   gcc-g++-3.4.5-20060117-1.tar.gz \
-  mingw-runtime-3.11.tar.gz \
+  mingw-runtime-3.11-20061202-1-src.tar.gz \
   w32api-3.8.tar.gz \
 
 MinGW-20060119 = \
@@ -74,21 +74,6 @@ MinGW-20050827 = \
   w32api-3.3.tar.gz \
 
 # TODO ?? Add file lists for earlier releases.
-
-# Archive md5sums ##############################################################
-
-binutils-2.16.91-20050827-1.tar.gz-md5 := 9d2de9e3cd5fede3d12150b8a7d0bbf7
-binutils-2.16.91-20060119-1.tar.gz-md5 := a54f33ca9d6cf56dc99c0c5367f58ea3
-gcc-core-3.4.4-20050522-1.tar.gz-md5   := 46f17998ab61be9dbede233b44c7b0e6
-gcc-core-3.4.5-20060117-1.tar.gz-md5   := 1a4afae471ea93b975e3f8b3ac529eac
-gcc-g++-3.4.4-20050522-1.tar.gz-md5    := db44ac5b06d7f262c59422ae21511659
-gcc-g++-3.4.5-20060117-1.tar.gz-md5    := d11a9d63a0f862650f755fdb4e947dc4
-mingw-runtime-3.8.tar.gz-md5           := 5852e9b2c369aff1d4ba47d3dd20728f
-mingw-runtime-3.9.tar.gz-md5           := 0cb66b1071da224ea2174f960c593e2e
-mingw-runtime-3.11.tar.gz-md5          := e1c21f8c4ece49d8bd9fef9e1b0e44a7
-w32api-3.3.tar.gz-md5                  := 2da21c26013711ae90d3b2416c20856e
-w32api-3.6.tar.gz-md5                  := 2f86ec42cafd774ec82162fbc6e6808d
-w32api-3.8.tar.gz-md5                  := b53fdf670f33d2e901749f4792e659f2
 
 # Utilities ####################################################################
 
@@ -140,11 +125,6 @@ initial_setup:
 	@$(RM) --force --recursive $(prefix)
 	@$(MKDIR) --parents scratch
 
-# Some files are duplicated in MinGW archives, so the order of
-# extraction is important. It follows these instructions:
-#   http://groups.yahoo.com/group/mingw32/message/1145
-# It is apparently fortuitous that the order is alphabetical.
-
 # Some gcc archives distributed by MinGW contain a version of
 # 'libiberty.a' that's incompatible with the version provided with
 # binutils. See:
@@ -167,27 +147,16 @@ initial_setup:
 TARFLAGS := --keep-old-files
 %.tar.bz2: TARFLAGS += --bzip2
 %.tar.gz:  TARFLAGS += --gzip
-gcc%:      TARFLAGS += --exclude 'libiberty.a' --exclude 'info/dir'
-
-# New spelling '--no-verbose' has replaced original '--non-verbose':
-#   http://sourceware.org/ml/cygwin-apps/2005-10/msg00140.html
-
-#WGETFLAGS := --no-verbose --timestamping
-WGETFLAGS := --timestamping
+gcc%:      TARFLAGS += --exclude 'libiberty.a'
 
 .PHONY: %.tar.bz2 %.tar.gz
 %.tar.bz2 %.tar.gz:
-	[ -e $@ ] || $(WGET) $(WGETFLAGS) $(mirror)/$@
-	$(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
-	-$(TAR) --extract $(TARFLAGS) --directory=scratch --file=$@
+	@[ -e $@ ] || $(WGET) --non-verbose --timestamping $(mirror)/$@
+	-@$(TAR) --extract $(TARFLAGS) --directory=scratch --file=$@
 
 # Test #########################################################################
 
-ifeq (3.81,$(firstword $(sort $(MAKE_VERSION) 3.81)))
-  this_makefile := $(lastword $(MAKEFILE_LIST))
-else
-  $(error Upgrade to make-3.81)
-endif
+this_makefile = mingw_install.make
 
 test_prefix = /eraseme
 
@@ -195,18 +164,11 @@ test_file_list = \
   gcc-response-file-2.tar.gz \
   zlib-1.2.3-mingwPORT.tar.bz2 \
 
-# Archive md5sums for $(test_file_list).
-gcc-response-file-2.tar.gz-md5         := aa9825791000af0e4d4d0345bd4325ce
-zlib-1.2.3-mingwPORT.tar.bz2-md5       := e131ea48214af34bd6adee6b7bdadfd5
-
 test_overrides = \
   --no-print-directory \
      --file=$(this_makefile) \
      prefix='$(test_prefix)' \
   file_list='$(test_file_list)' \
-  WGETFLAGS='--timestamping' \
-
-#  WGETFLAGS='--no-verbose --timestamping' \
 
 .PHONY: test
 test:
