@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.972 2008-01-01 18:29:33 chicares Exp $
+// $Id: ChangeLog,v 1.973 2008-01-01 19:45:24 chicares Exp $
 
 MAINTENANCE
 
@@ -14961,4 +14961,9 @@ Further strengthen RCS Id tests, revealing a latent defect.
   zero.hpp
   zero_test.cpp
 Update copyright notices.
+
+20080101T1945Z <gchicares@sbcglobal.net> [1207]
+
+  GNUmakefile
+Automate copyright-notice updating.
 
