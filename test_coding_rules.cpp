@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.36 2008-01-01 18:29:56 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.37 2008-01-02 13:28:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -129,8 +129,8 @@ file::file(std::string const& file_path)
         throw std::runtime_error("Failure in file input stream.");
         }
 
-    data_ = '\n' + data_;
-    if(0 == data_.size() || '\n' != data_.at(data_.size() - 1))
+    data_ = '\n' + data();
+    if('\n' != data().at(data().size() - 1))
         {
         throw std::runtime_error("File does not end in '\\n'.");
         }
