@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.22 2008-01-01 18:29:56 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.23 2008-01-03 03:16:13 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -166,6 +166,37 @@ cat >eraseme_url001 <<EOF
 $good_copyright $good_rcsid
 EOF
 
+# Files in general: whitespace.
+
+cat >eraseme_whitespace000 <<EOF
+$boilerplate
+Spaces are permitted; they  can   be    consecutive.
+EOF
+
+ascii_ff=$'\f'
+cat >eraseme_whitespace001 <<EOF
+$boilerplate
+$ascii_ff
+EOF
+
+ascii_cr=$'\r'
+cat >eraseme_whitespace002 <<EOF
+$boilerplate
+$ascii_cr
+EOF
+
+ascii_ht=$'\t'
+cat >eraseme_whitespace003 <<EOF
+$boilerplate
+$ascii_ht
+EOF
+
+ascii_vt=$'\v'
+cat >eraseme_whitespace004 <<EOF
+$boilerplate
+$ascii_vt
+EOF
+
 # C++ source files.
 
 cat >eraseme000.cpp <<EOF
@@ -244,6 +275,28 @@ Missing compulsory include directive.
 #endif // eraseme004_hpp
 EOF
 
+# Makefiles.
+
+cat >eraseme000.make <<EOF
+${ascii_ht}
+$boilerplate
+A line's initial tab can be followed by any other character.
+${ascii_ht}This is okay.
+${ascii_ht}
+EOF
+
+cat >eraseme001.make <<EOF
+$boilerplate
+Consecutive tabs are forbidden.
+${ascii_ht}${ascii_ht}
+EOF
+
+cat >eraseme002.make <<EOF
+$boilerplate
+Tab can occur only at the beginning of a line.
+ ${ascii_ht}
+EOF
+
 # X pixmaps require no copyright, but do require 'const'.
 # SOMEDAY !! Require internal name to match file name?
 
@@ -264,11 +317,13 @@ Exception--file '.': Argument is a directory.
 Exception--file 'a_nonexistent_file': File not found.
 File 'eraseme001.cpp' must not include 'config.hpp'.
 File 'eraseme001.hpp' has noncanonical header guards.
+Exception--file 'eraseme001.make': File contains postinitial '\t'.
 File 'eraseme001.xpm' lacks /^static char const\*/.
 File 'eraseme002.cpp' has misindented label ' wrong   :'.
 File 'eraseme002.cpp' has misindented label '   No2   :'.
 File 'eraseme002.cpp' has misindented label '       x_:'.
 File 'eraseme002.hpp' has noncanonical header guards.
+Exception--file 'eraseme002.make': File contains postinitial '\t'.
 File 'eraseme003.hpp' must include 'config.hpp' first.
 File 'eraseme004.hpp' must include 'config.hpp'.
 File 'eraseme004.hpp' lacks line '#include "config.hpp"'.
@@ -297,6 +352,10 @@ File 'eraseme_taboo001' breaks taboo 'Temple'.
 File 'eraseme_taboo001' breaks taboo 'Shibboleth'.
 File 'eraseme_taboo001' breaks taboo 'sibboleth'.
 File 'eraseme_url001' lacks lmi URL.
+Exception--file 'eraseme_whitespace001': File contains '\f'.
+Exception--file 'eraseme_whitespace002': File contains '\r' or '\v'.
+Exception--file 'eraseme_whitespace003': File contains '\t'.
+Exception--file 'eraseme_whitespace004': File contains '\r' or '\v'.
 EOF
 
 diff --unified=0 eraseme_expected eraseme_observed && rm --force eraseme*
