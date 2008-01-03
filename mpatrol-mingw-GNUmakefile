@@ -38,7 +38,7 @@
 
 # GNU Makefile to compile on msw with mingw gcc.
 
-# $Id: mpatrol-mingw-GNUmakefile,v 1.7 2008-01-01 18:29:50 chicares Exp $
+# $Id: mpatrol-mingw-GNUmakefile,v 1.8 2008-01-03 03:14:33 chicares Exp $
 
 # Definitions
 
@@ -58,53 +58,53 @@ OFLAGS = -O2
 # The gcc manual documents '-mthreads' as implemented for mingw only.
 TFLAGS = -DMP_THREADS_SUPPORT -mthreads
 
-MPATROL	= mpatrol
-MPALLOC	= mpalloc
-MPTOOLS	= mptools
+MPATROL = mpatrol
+MPALLOC = mpalloc
+MPTOOLS = mptools
 
-ARCHIVE_MPTOBJS	= list.o tree.o slots.o utils.o memory.o heap.o \
-		  alloc.o info.o stack.o addr.o strtab.o symbol.o \
-		  signals.o diag.o option.o leaktab.o profile.o \
-		  trace.o inter.o malloc.o cplus.o sbrk.o version.o
-SHARED_MPTOBJS	= list.o tree.o slots.o utils.o memory.o heap.o \
-		  alloc.o info.o stack.o addr.o strtab.o symbol.o \
-		  signals.o diag.o option.o leaktab.o profile.o \
-		  trace.o inter.o malloc.o cplus.o sbrk.o main.o \
-		  version.o
-ARCHTS_MPTOBJS	= list.ts.o tree.ts.o slots.ts.o utils.ts.o \
-		  memory.ts.o heap.ts.o alloc.ts.o info.ts.o \
-		  stack.ts.o addr.ts.o strtab.ts.o symbol.ts.o \
-		  signals.ts.o mutex.ts.o diag.ts.o option.ts.o \
-		  leaktab.ts.o profile.ts.o trace.ts.o inter.ts.o \
-		  malloc.ts.o cplus.ts.o sbrk.ts.o version.ts.o
-SHARTS_MPTOBJS	= list.ts.o tree.ts.o slots.ts.o utils.ts.o \
-		  memory.ts.o heap.ts.o alloc.ts.o info.ts.o \
-		  stack.ts.o addr.ts.o strtab.ts.o symbol.ts.o \
-		  signals.ts.o mutex.ts.o diag.ts.o option.ts.o \
-		  leaktab.ts.o profile.ts.o trace.ts.o inter.ts.o \
-		  malloc.ts.o cplus.ts.o sbrk.ts.o main.ts.o \
-		  version.ts.o
-ARCHIVE_MPAOBJS	= mpalloc.o mpfailure.o mpsetfail.o mpmalloc.o \
-		  mpcalloc.o mpstrdup.o mprealloc.o
-SHARED_MPAOBJS	= mpalloc.o mpfailure.o mpsetfail.o mpmalloc.o \
-		  mpcalloc.o mpstrdup.o mprealloc.o main2.o
-ARCHIVE_MPLOBJS	= dbmalloc.o dmalloc.o heapdiff.o mgauge.o mtrace.o
+ARCHIVE_MPTOBJS = list.o tree.o slots.o utils.o memory.o heap.o \
+                  alloc.o info.o stack.o addr.o strtab.o symbol.o \
+                  signals.o diag.o option.o leaktab.o profile.o \
+                  trace.o inter.o malloc.o cplus.o sbrk.o version.o
+SHARED_MPTOBJS  = list.o tree.o slots.o utils.o memory.o heap.o \
+                  alloc.o info.o stack.o addr.o strtab.o symbol.o \
+                  signals.o diag.o option.o leaktab.o profile.o \
+                  trace.o inter.o malloc.o cplus.o sbrk.o main.o \
+                  version.o
+ARCHTS_MPTOBJS  = list.ts.o tree.ts.o slots.ts.o utils.ts.o \
+                  memory.ts.o heap.ts.o alloc.ts.o info.ts.o \
+                  stack.ts.o addr.ts.o strtab.ts.o symbol.ts.o \
+                  signals.ts.o mutex.ts.o diag.ts.o option.ts.o \
+                  leaktab.ts.o profile.ts.o trace.ts.o inter.ts.o \
+                  malloc.ts.o cplus.ts.o sbrk.ts.o version.ts.o
+SHARTS_MPTOBJS  = list.ts.o tree.ts.o slots.ts.o utils.ts.o \
+                  memory.ts.o heap.ts.o alloc.ts.o info.ts.o \
+                  stack.ts.o addr.ts.o strtab.ts.o symbol.ts.o \
+                  signals.ts.o mutex.ts.o diag.ts.o option.ts.o \
+                  leaktab.ts.o profile.ts.o trace.ts.o inter.ts.o \
+                  malloc.ts.o cplus.ts.o sbrk.ts.o main.ts.o \
+                  version.ts.o
+ARCHIVE_MPAOBJS = mpalloc.o mpfailure.o mpsetfail.o mpmalloc.o \
+                  mpcalloc.o mpstrdup.o mprealloc.o
+SHARED_MPAOBJS  = mpalloc.o mpfailure.o mpsetfail.o mpmalloc.o \
+                  mpcalloc.o mpstrdup.o mprealloc.o main2.o
+ARCHIVE_MPLOBJS = dbmalloc.o dmalloc.o heapdiff.o mgauge.o mtrace.o
 
-ARCHIVE_MPATROL	= lib$(MPATROL).a
-SHARED_MPATROL	= $(MPATROL).dll
+ARCHIVE_MPATROL = lib$(MPATROL).a
+SHARED_MPATROL  = $(MPATROL).dll
 IMPLIB_MPATROL  = lib$(MPATROL)_dll.a
-OBJECT_MPATROL	= lib$(MPATROL).o
-ARCHTS_MPATROL	= lib$(MPATROL)mt.a
-SHARTS_MPATROL	= $(MPATROL)mt.dll
+OBJECT_MPATROL  = lib$(MPATROL).o
+ARCHTS_MPATROL  = lib$(MPATROL)mt.a
+SHARTS_MPATROL  = $(MPATROL)mt.dll
 IMPLTS_MPATROL  = lib$(MPATROL)mt_dll.a
-OBJTS_MPATROL	= lib$(MPATROL)mt.o
+OBJTS_MPATROL   = lib$(MPATROL)mt.o
 
-ARCHIVE_MPALLOC	= lib$(MPALLOC).a
-SHARED_MPALLOC	= $(MPALLOC).dll
+ARCHIVE_MPALLOC = lib$(MPALLOC).a
+SHARED_MPALLOC  = $(MPALLOC).dll
 IMPLIB_MPALLOC  = lib$(MPALLOC)_dll.dll
-OBJECT_MPALLOC	= lib$(MPALLOC).o
+OBJECT_MPALLOC  = lib$(MPALLOC).o
 
-ARCHIVE_MPTOOLS	= lib$(MPTOOLS).a
+ARCHIVE_MPTOOLS = lib$(MPTOOLS).a
 
 # Rules
 
@@ -131,9 +131,9 @@ $(ARCHIVE_MPATROL): $(ARCHIVE_MPTOBJS)
 
 $(SHARED_MPATROL): $(SHARED_MPTOBJS)
 	$(LD) -shared \
-      -Wl,--out-implib=$(IMPLIB_MPATROL) \
-      -o$@ $(SHARED_MPTOBJS) \
-      -lbfd -liberty -limagehlp
+	  -Wl,--out-implib=$(IMPLIB_MPATROL) \
+	  -o$@ $(SHARED_MPTOBJS) \
+	  -lbfd -liberty -limagehlp
 
 $(OBJECT_MPATROL): $(SOURCE)/library.c
 	$(CC) $(CFLAGS) $(OFLAGS) -c -o$@ $<
@@ -144,9 +144,9 @@ $(ARCHTS_MPATROL): $(ARCHTS_MPTOBJS)
 
 $(SHARTS_MPATROL): $(SHARTS_MPTOBJS) $(MPATROL)mt.def
 	$(LD) -shared \
-      -Wl,--out-implib=$(IMPLTS_MPATROL) \
-      -o$@ $(SHARTS_MPTOBJS) \
-      -lbfd -liberty -limagehlp
+	  -Wl,--out-implib=$(IMPLTS_MPATROL) \
+	  -o$@ $(SHARTS_MPTOBJS) \
+	  -lbfd -liberty -limagehlp
 
 $(OBJTS_MPATROL): $(SOURCE)/library.c
 	$(CC) $(CFLAGS) $(OFLAGS) $(TFLAGS) -c -o$@ $<
@@ -157,8 +157,8 @@ $(ARCHIVE_MPALLOC): $(ARCHIVE_MPAOBJS)
 
 $(SHARED_MPALLOC): $(SHARED_MPAOBJS) $(MPALLOC).def
 	$(LD) -shared \
-      -Wl,--out-implib=$(IMPLIB_MPALLOC) \
-      -o$@ $(SHARED_MPAOBJS) \
+	  -Wl,--out-implib=$(IMPLIB_MPALLOC) \
+	  -o$@ $(SHARED_MPAOBJS) \
 
 $(OBJECT_MPALLOC): $(SOURCE)/library2.c
 	$(CC) $(CFLAGS) $(OFLAGS) -c -o$@ $<
