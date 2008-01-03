@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.37 2008-01-02 13:28:17 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.38 2008-01-03 02:04:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -138,7 +138,7 @@ file::file(std::string const& file_path)
 
 void complain(file const& f, std::string const& complaint)
 {
-    std::cout << "File '" << f.full_name() << "' " << complaint << '\n';
+    std::cout << "File '" << f.full_name() << "' " << complaint << std::endl;
 }
 
 void require
