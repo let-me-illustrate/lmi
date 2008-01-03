@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.38 2008-01-03 02:04:19 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.39 2008-01-03 03:16:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -177,6 +177,65 @@ void taboo
         std::ostringstream oss;
         oss << "breaks taboo '" << regex << "'.";
         complain(f, oss.str());
+        }
+}
+
+/// Validate whitespace.
+///
+/// Throw if the file contains '\f', '\r', '\t', or '\v', except in
+/// certain narrow circumstances. Relying on this precondition,
+/// regexen downstream can more readably denote space by " " instead
+/// of by "\\s" or "[:space:]".
+///
+/// Diagnose various other whitespace defects without throwing.
+
+void assay_whitespace(file const& f)
+{
+    if
+        (   std::string::npos != f.data().find('\r')
+        ||  std::string::npos != f.data().find('\v')
+        )
+        {
+        throw std::runtime_error("File contains '\\r' or '\\v'.");
+        }
+
+    if
+        (   std::string::npos != f.data().find('\f')
+        &&  true // Other conditions to be added.
+        )
+        {
+        throw std::runtime_error("File contains '\\f'.");
+        }
+
+    bool const is_makefile =
+            ".make" == f.extension()
+        ||  std::string::npos != f.leaf_name().find("GNUmakefile")
+        ||  std::string::npos != f.leaf_name().find("Makefile")
+        ;
+    static boost::regex const postinitial_tab("[^\\n]\\t");
+
+    if
+        (   !is_makefile
+        &&  ".xpm" != f.extension()
+        &&  std::string::npos != f.data().find('\t')
+        )
+        {
+        throw std::runtime_error("File contains '\\t'.");
+        }
+
+    if(is_makefile && boost::regex_search(f.data(), postinitial_tab))
+        {
+        throw std::runtime_error("File contains postinitial '\\t'.");
+        }
+
+    if(std::string::npos != f.data().find("\n\n\n"))
+        {
+        complain(f, "contains '\\n\\n\\n'.");
+        }
+
+    if(std::string::npos != f.data().find(" \n"))
+        {
+        complain(f, "contains ' \\n'.");
         }
 }
 
@@ -483,20 +542,7 @@ void process_file(std::string const& file_path)
 {
     file f(file_path);
 
-    if(std::string::npos != f.data().find('\r'))
-        {
-        complain(f, "contains '\\r'.");
-        }
-
-    if(std::string::npos != f.data().find("\n\n\n"))
-        {
-        complain(f, "contains '\\n\\n\\n'.");
-        }
-
-    if(std::string::npos != f.data().find(" \n"))
-        {
-        complain(f, "contains ' \\n'.");
-        }
+    assay_whitespace        (f);
 
     check_config_hpp        (f);
     check_copyright         (f);
