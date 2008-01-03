@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.973 2008-01-01 19:45:24 chicares Exp $
+// $Id: ChangeLog,v 1.974 2008-01-03 04:46:23 chicares Exp $
 
 MAINTENANCE
 
@@ -14966,4 +14966,31 @@ Update copyright notices.
 
   GNUmakefile
 Automate copyright-notice updating.
+
+20080102T1328Z <gchicares@sbcglobal.net> [1207]
+
+  test_coding_rules.cpp
+Remove a superfluous condition; strengthen constness.
+
+20080103T0204Z <gchicares@sbcglobal.net> [1207]
+
+  test_coding_rules.cpp
+Explicitly flush stdout to ensure synchronization with stderr.
+
+20080103T0314Z <gchicares@sbcglobal.net> [1207]
+
+  mpatrol-mingw-GNUmakefile
+Regularize whitespace.
+
+20080103T0316Z <gchicares@sbcglobal.net> [1207]
+
+  GNUmakefile
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+Strengthen and relocate whitespace tests.
+
+20080103T0446Z <gchicares@sbcglobal.net> [1207]
+
+  test_coding_rules_test.sh
+Rename test files to increase clarity.
 
