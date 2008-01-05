@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.43 2008-01-05 12:47:17 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.44 2008-01-05 13:37:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -285,23 +285,29 @@ void assay_whitespace(file const& f)
 /// must precede all other include directives.
 ///
 /// Exceptions are necessarily made for
-///  - 'config*.hpp' headers;
-///  - this facility's test script; and
-///  - 'ChangeLog' and its kin, whose names conveniently enough
-///    contain capitals by convention.
+///  - this program's test script;
+///  - 'GNUmakefile' and -'Log' files; and
+///  - 'config.hpp' and its related 'config_*.hpp' headers.
 
 void check_config_hpp(file const& f)
 {
     static std::string const loose ("# *include *[<\"]config.hpp[>\"]");
     static std::string const strict("\\n(#include \"config.hpp\")\\n");
 
-    if(".hpp" == f.extension() || ".h" == f.extension())
+    if
+        (   f.phyloanalyze("^test_coding_rules_test.sh$")
+        ||  f.phyloanalyze("^GNUmakefile$")
+        ||  f.phyloanalyze("Log$")
+        )
         {
-        if("config" == f.leaf_name().substr(0, 6))
-            {
-            return;
-            }
-
+        return;
+        }
+    else if
+        (
+            (".hpp" == f.extension() || ".h" == f.extension())
+        &&  !f.phyloanalyze("^config(_.*)?\\.hpp$")
+        )
+        {
         require(f, loose , "must include 'config.hpp'.");
         require(f, strict, "lacks line '#include \"config.hpp\"'.");
         boost::smatch match;
@@ -314,15 +320,6 @@ void check_config_hpp(file const& f)
         }
     else
         {
-        static std::string const AtoZ("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-        if
-            (   std::string::npos != f.leaf_name().find_first_of(AtoZ)
-            ||  f.phyloanalyze("^test_coding_rules_test.sh$")
-            )
-            {
-            return;
-            }
-
         forbid(f, loose, "must not include 'config.hpp'.");
         }
 }
