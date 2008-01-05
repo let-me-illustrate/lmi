@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.974 2008-01-03 04:46:23 chicares Exp $
+// $Id: ChangeLog,v 1.975 2008-01-05 13:37:29 chicares Exp $
 
 MAINTENANCE
 
@@ -14993,4 +14993,35 @@ Strengthen and relocate whitespace tests.
 
   test_coding_rules_test.sh
 Rename test files to increase clarity.
+
+20080105T0354Z <gchicares@sbcglobal.net> [1207]
+
+  README.auto
+Fix defect introduced 20051104T0003Z: duplicate RCS Id.
+
+20080105T0409Z <gchicares@sbcglobal.net> [1207]
+
+  test_coding_rules.cpp
+Add a file taxonomy.
+
+20080105T0418Z <gchicares@sbcglobal.net> [1207]
+
+  test_coding_rules.cpp
+Refactor.
+
+20080105T0440Z <gchicares@sbcglobal.net> [1207]
+
+  test_coding_rules.cpp
+Add another taxonomic tool and refactor.
+
+20080105T1247Z <gchicares@sbcglobal.net> [1207]
+
+  test_coding_rules.cpp
+Refactor.
+
+20080105T1337Z <gchicares@sbcglobal.net> [1207]
+
+  test_coding_rules.cpp
+Fix defect introduced 20071220T1856Z. Contorted conditionals couldn't
+cover 'configurable_settings.*'.
 
