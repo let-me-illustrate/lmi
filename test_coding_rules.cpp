@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.39 2008-01-03 03:16:13 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.40 2008-01-05 04:09:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -74,6 +74,16 @@ std::map<std::string, bool> my_taboos();
     int _CRT_fmode = _O_BINARY;
 #endif // defined __MINGW32__
 
+enum enum_phylum
+    {e_no_phylum  = 0
+    ,e_c_header   = 1 <<  0
+    ,e_c_source   = 1 <<  1
+    ,e_cxx_header = 1 <<  2
+    ,e_cxx_source = 1 <<  3
+    ,e_make       = 1 <<  4
+    ,e_xpm        = 1 <<  5
+    };
+
 class file
     :private boost::noncopyable
     ,virtual private obstruct_slicing<file>
@@ -82,10 +92,13 @@ class file
     explicit file(std::string const& file_path);
     ~file() {}
 
+    bool is_of_phylum(enum_phylum) const;
+
     fs::path    const& path     () const {return path_;     }
     std::string const& full_name() const {return full_name_;}
     std::string const& leaf_name() const {return leaf_name_;}
     std::string const& extension() const {return extension_;}
+    enum_phylum        phylum   () const {return phylum_;   }
     std::string const& data     () const {return data_;     }
 
   private:
@@ -93,6 +106,7 @@ class file
     std::string full_name_;
     std::string leaf_name_;
     std::string extension_;
+    enum_phylum phylum_;
     std::string data_;
 };
 
@@ -134,6 +148,25 @@ file::file(std::string const& file_path)
         {
         throw std::runtime_error("File does not end in '\\n'.");
         }
+
+    phylum_ =
+          ".h"    == extension() ? e_c_header
+        : ".c"    == extension() ? e_c_source
+        : ".hpp"  == extension() ? e_cxx_header
+        : ".cpp"  == extension() ? e_cxx_source
+        : ".tpp"  == extension() ? e_cxx_source
+        : ".xpp"  == extension() ? e_cxx_source
+        : ".make" == extension() ? e_make
+        : ".xpm"  == extension() ? e_xpm
+        :                          e_no_phylum
+        ;
+}
+
+/// Ascertain whether a file appertains to the given phylum.
+
+bool file::is_of_phylum(enum_phylum z) const
+{
+    return z & phylum();
 }
 
 void complain(file const& f, std::string const& complaint)
