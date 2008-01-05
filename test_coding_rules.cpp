@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.45 2008-01-05 14:04:40 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.46 2008-01-05 15:10:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -423,19 +423,18 @@ void check_include_guards(file const& f)
         return;
         }
 
-    std::string guard = boost::regex_replace
+    std::string const guard = boost::regex_replace
         (f.leaf_name()
         ,boost::regex("\\.hpp$")
         ,"_hpp"
         );
-    if
-        (   std::string::npos == f.data().find("\n#ifndef "   + guard + "\n")
-        ||  std::string::npos == f.data().find("\n#define "   + guard + "\n")
-        ||  std::string::npos == f.data().find("\n#endif // " + guard + "\n")
-        )
-        {
-        complain(f, "has noncanonical header guards.");
-        }
+    std::string const guards =
+            "\\n#ifndef "   + guard
+        +   "\\n#define "   + guard + "\\n"
+        +   ".*"
+        +   "\\n#endif // " + guard + "\\n+$"
+        ;
+    require(f, guards, "lacks canonical header guards.");
 }
 
 void check_label_indentation(file const& f)
