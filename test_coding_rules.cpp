@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.42 2008-01-05 04:40:22 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.43 2008-01-05 12:47:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -317,7 +317,7 @@ void check_config_hpp(file const& f)
         static std::string const AtoZ("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
         if
             (   std::string::npos != f.leaf_name().find_first_of(AtoZ)
-            ||  "test_coding_rules_test.sh" == f.leaf_name()
+            ||  f.phyloanalyze("^test_coding_rules_test.sh$")
             )
             {
             return;
@@ -357,7 +357,7 @@ void check_copyright(file const& f)
 
 void check_defect_markers(file const& f)
 {
-    if(f.is_of_phylum(e_xpm) || "test_coding_rules_test.sh" == f.leaf_name())
+    if(f.is_of_phylum(e_xpm) || f.phyloanalyze("^test_coding_rules_test.sh$"))
         {
         return;
         }
@@ -447,7 +447,7 @@ void check_include_guards(file const& f)
 void check_label_indentation(file const& f)
 {
     // Remove this once these hopeless files have been expunged.
-    if("ihs_fpios.hpp" == f.leaf_name() || "ihs_pios.hpp" == f.leaf_name())
+    if(f.phyloanalyze("^ihs_f?pios.hpp$"))
         {
         return;
         }
@@ -533,7 +533,7 @@ void check_xpm(file const& f)
 
 void enforce_taboos(file const& f)
 {
-    if(std::string::npos != f.leaf_name().find("test_coding_rules"))
+    if(f.phyloanalyze("test_coding_rules"))
         {
         return;
         }
