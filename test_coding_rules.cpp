@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.47 2008-01-05 17:26:28 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.48 2008-01-05 19:19:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -84,6 +84,13 @@ enum enum_phylum
     ,e_xpm        = 1 <<  5
     };
 
+enum enum_kingdom
+    {e_c          = e_c_header   | e_c_source
+    ,e_cxx        = e_cxx_header | e_cxx_source
+    ,e_header     = e_c_header   | e_cxx_header
+    ,e_c_or_cxx   = e_c          | e_cxx
+    };
+
 class file
     :private boost::noncopyable
     ,virtual private obstruct_slicing<file>
@@ -92,7 +99,8 @@ class file
     explicit file(std::string const& file_path);
     ~file() {}
 
-    bool is_of_phylum(enum_phylum) const;
+    bool is_of_phylum(enum_phylum ) const;
+    bool is_of_phylum(enum_kingdom) const;
     bool phyloanalyze(std::string const&) const;
 
     fs::path    const& path     () const {return path_;     }
@@ -165,9 +173,19 @@ file::file(std::string const& file_path)
         ;
 }
 
-/// Ascertain whether a file appertains to the given phylum.
+/// Ascertain whether a file appertains to the given category.
 
 bool file::is_of_phylum(enum_phylum z) const
+{
+    return z & phylum();
+}
+
+/// Ascertain whether a file appertains to the given category.
+///
+/// This relation may be read as "has the X-nature". For example,
+/// 'foo.h' has the header-nature as well as the C-nature.
+
+bool file::is_of_phylum(enum_kingdom z) const
 {
     return z & phylum();
 }
@@ -302,11 +320,7 @@ void check_config_hpp(file const& f)
         {
         return;
         }
-    else if
-        (
-            (".hpp" == f.extension() || ".h" == f.extension())
-        &&  !f.phyloanalyze("^config(_.*)?\\.hpp$")
-        )
+    else if(f.is_of_phylum(e_header) && !f.phyloanalyze("^config(_.*)?\\.hpp$"))
         {
         require(f, loose , "must include 'config.hpp'.");
         require(f, strict, "lacks line '#include \"config.hpp\"'.");
@@ -445,12 +459,7 @@ void check_label_indentation(file const& f)
         return;
         }
 
-    bool const is_c_source = ".c" == f.extension() || ".h" == f.extension();
-    bool const is_cxx_source =
-            4 == f.extension().size()
-        &&  "pp" == f.extension().substr(2, 2)
-        ;
-    if(!(is_c_source || is_cxx_source))
+    if(!f.is_of_phylum(e_c_or_cxx))
         {
         return;
         }
