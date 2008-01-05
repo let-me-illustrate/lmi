@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.44 2008-01-05 13:37:29 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.45 2008-01-05 14:04:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -423,14 +423,11 @@ void check_include_guards(file const& f)
         return;
         }
 
-    std::string guard = f.leaf_name();
-    std::string::size_type position = guard.find('.');
-    while(position != std::string::npos)
-        {
-        guard.replace(position, 1, std::string("_"));
-        position = guard.find('.', 1 + position);
-        }
-
+    std::string guard = boost::regex_replace
+        (f.leaf_name()
+        ,boost::regex("\\.hpp$")
+        ,"_hpp"
+        );
     if
         (   std::string::npos == f.data().find("\n#ifndef "   + guard + "\n")
         ||  std::string::npos == f.data().find("\n#define "   + guard + "\n")
