@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.25 2008-01-05 15:10:16 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.26 2008-01-05 17:26:28 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -315,15 +315,26 @@ Tab can occur only at the beginning of a line.
  ${ascii_ht}
 EOF
 
-# X pixmaps require no copyright, but do require 'const'.
-# SOMEDAY !! Require internal name to match file name?
+# X pixmaps.
 
 cat >eraseme_xpm_000.xpm <<EOF
-static char const* eraseme_xpm_000_xpm[]
+No boilerplate is required.
+static char const* eraseme_xpm_000_xpm[] = {
 EOF
 
 cat >eraseme_xpm_001.xpm <<EOF
-static char* eraseme_xpm_001_xpm[]
+'const' is required.
+static char* eraseme_xpm_001_xpm[] = {
+EOF
+
+cat >eraseme_xpm_002.xpm <<EOF
+Variable name must be file name with '.xpm' changed to '_xpm'.
+static char const* wrong_file_002_xpm[] = {
+EOF
+
+cat >eraseme_xpm_003-dot.dash-dot.xpm <<EOF
+Hyphens in file name must be changed to underscores in variable name.
+static char const* eraseme_xpm_003_dot_dash_dot_xpm[] = {
 EOF
 
 # Compare observed to expected.
@@ -375,7 +386,8 @@ Exception--file 'eraseme_whitespace_001': File contains '\f'.
 Exception--file 'eraseme_whitespace_002': File contains '\r' or '\v'.
 Exception--file 'eraseme_whitespace_003': File contains '\t'.
 Exception--file 'eraseme_whitespace_004': File contains '\r' or '\v'.
-File 'eraseme_xpm_001.xpm' lacks /^static char const\*/.
+File 'eraseme_xpm_001.xpm' lacks proper variable assignment.
+File 'eraseme_xpm_002.xpm' lacks proper variable assignment.
 EOF
 
 diff --unified=0 eraseme_expected eraseme_observed && rm --force eraseme*
