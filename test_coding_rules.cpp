@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.46 2008-01-05 15:10:16 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.47 2008-01-05 17:26:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -518,10 +518,13 @@ void check_xpm(file const& f)
         return;
         }
 
-    if(std::string::npos == f.data().find("\nstatic char const*"))
-        {
-        complain(f, "lacks /^static char const\\*/.");
-        }
+    std::string const name = boost::regex_replace
+        (f.leaf_name()
+        ,boost::regex("[.-]")
+        ,"_"
+        );
+    std::string const z = "static char const\\* " + name + "\\[\\] = \\{";
+    require(f, z, "lacks proper variable assignment.");
 }
 
 void enforce_taboos(file const& f)
