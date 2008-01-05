@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.24 2008-01-03 04:46:23 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.25 2008-01-05 15:10:16 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -257,12 +257,9 @@ EOF
 
 cat >eraseme_hpp_003.hpp <<EOF
 $boilerplate
-#ifndef eraseme_hpp_003_hpp
+Include guards must occur in correct order.
 #define eraseme_hpp_003_hpp
-This compulsory include directive must occur, in canonical form (with
-only one space, preceding '"'), before any other include directive.
-#   include "config.hpp"
-#include "config.hpp" // Stray comments forbidden.
+#ifndef eraseme_hpp_003_hpp
 #include "config.hpp"
 #endif // eraseme_hpp_003_hpp
 EOF
@@ -271,8 +268,29 @@ cat >eraseme_hpp_004.hpp <<EOF
 $boilerplate
 #ifndef eraseme_hpp_004_hpp
 #define eraseme_hpp_004_hpp
-Missing compulsory include directive.
+#include "config.hpp"
 #endif // eraseme_hpp_004_hpp
+Nothing but newline is permitted after the closing include guard.
+EOF
+
+cat >eraseme_hpp_005.hpp <<EOF
+$boilerplate
+#ifndef eraseme_hpp_005_hpp
+#define eraseme_hpp_005_hpp
+This compulsory include directive must occur, in canonical form (with
+only one space, preceding '"'), before any other include directive.
+#   include "config.hpp"
+#include "config.hpp" // Stray comments forbidden.
+#include "config.hpp"
+#endif // eraseme_hpp_005_hpp
+EOF
+
+cat >eraseme_hpp_006.hpp <<EOF
+$boilerplate
+#ifndef eraseme_hpp_006_hpp
+#define eraseme_hpp_006_hpp
+Missing compulsory include directive.
+#endif // eraseme_hpp_006_hpp
 EOF
 
 # Makefiles.
@@ -322,12 +340,14 @@ File 'eraseme_cpp_001.cpp' must not include 'config.hpp'.
 File 'eraseme_cpp_002.cpp' has misindented label ' wrong   :'.
 File 'eraseme_cpp_002.cpp' has misindented label '   No2   :'.
 File 'eraseme_cpp_002.cpp' has misindented label '       x_:'.
-File 'eraseme_hpp_001.hpp' has noncanonical header guards.
-File 'eraseme_hpp_002.hpp' has noncanonical header guards.
-File 'eraseme_hpp_003.hpp' must include 'config.hpp' first.
-File 'eraseme_hpp_004.hpp' must include 'config.hpp'.
-File 'eraseme_hpp_004.hpp' lacks line '#include "config.hpp"'.
-File 'eraseme_hpp_004.hpp' must include 'config.hpp' first.
+File 'eraseme_hpp_001.hpp' lacks canonical header guards.
+File 'eraseme_hpp_002.hpp' lacks canonical header guards.
+File 'eraseme_hpp_003.hpp' lacks canonical header guards.
+File 'eraseme_hpp_004.hpp' lacks canonical header guards.
+File 'eraseme_hpp_005.hpp' must include 'config.hpp' first.
+File 'eraseme_hpp_006.hpp' must include 'config.hpp'.
+File 'eraseme_hpp_006.hpp' lacks line '#include "config.hpp"'.
+File 'eraseme_hpp_006.hpp' must include 'config.hpp' first.
 Exception--file 'eraseme_make_001.make': File contains postinitial '\t'.
 Exception--file 'eraseme_make_002.make': File contains postinitial '\t'.
 File 'eraseme_marker_001' has irregular defect marker 'TODO${Q}${Q} '.
