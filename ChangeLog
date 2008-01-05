@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.976 2008-01-05 18:14:30 chicares Exp $
+// $Id: ChangeLog,v 1.977 2008-01-05 19:19:21 chicares Exp $
 
 MAINTENANCE
 
@@ -15054,4 +15054,9 @@ Fix defects introduced 20050306T1029Z and revealed 20080105T1726Z.
   policy_view.xpm
   rounding_view.xpm
 Fix defects introduced 20070221T0307Z and revealed 20080105T1726Z.
+
+20080105T1919Z <gchicares@sbcglobal.net> [1207]
+
+  test_coding_rules.cpp
+Augment file taxonomy and refactor.
 
