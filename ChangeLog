@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.975 2008-01-05 13:37:29 chicares Exp $
+// $Id: ChangeLog,v 1.976 2008-01-05 18:14:30 chicares Exp $
 
 MAINTENANCE
 
@@ -15024,4 +15024,34 @@ Refactor.
   test_coding_rules.cpp
 Fix defect introduced 20071220T1856Z. Contorted conditionals couldn't
 cover 'configurable_settings.*'.
+
+20080105T1404Z <gchicares@sbcglobal.net> [1207]
+
+  test_coding_rules.cpp
+Refactor.
+
+20080105T1510Z <gchicares@sbcglobal.net> [1207]
+
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+Strengthen include-guard test; improve its diagnostic message.
+
+20080105T1726Z <gchicares@sbcglobal.net> [1207]
+
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+Strengthen xpm test, revealing several latent defects.
+
+20080105T1813Z <gchicares@sbcglobal.net> [1207]
+
+  about.xpm
+  print-cell.xpm
+Fix defects introduced 20050306T1029Z and revealed 20080105T1726Z.
+
+20080105T1814Z <gchicares@sbcglobal.net> [1207]
+
+  database_view.xpm
+  policy_view.xpm
+  rounding_view.xpm
+Fix defects introduced 20070221T0307Z and revealed 20080105T1726Z.
 
