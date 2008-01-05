@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.41 2008-01-05 04:18:12 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.42 2008-01-05 04:40:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -93,6 +93,7 @@ class file
     ~file() {}
 
     bool is_of_phylum(enum_phylum) const;
+    bool phyloanalyze(std::string const&) const;
 
     fs::path    const& path     () const {return path_;     }
     std::string const& full_name() const {return full_name_;}
@@ -150,15 +151,17 @@ file::file(std::string const& file_path)
         }
 
     phylum_ =
-          ".h"    == extension() ? e_c_header
-        : ".c"    == extension() ? e_c_source
-        : ".hpp"  == extension() ? e_cxx_header
-        : ".cpp"  == extension() ? e_cxx_source
-        : ".tpp"  == extension() ? e_cxx_source
-        : ".xpp"  == extension() ? e_cxx_source
-        : ".make" == extension() ? e_make
-        : ".xpm"  == extension() ? e_xpm
-        :                          e_no_phylum
+          ".h"    == extension()       ? e_c_header
+        : ".c"    == extension()       ? e_c_source
+        : ".hpp"  == extension()       ? e_cxx_header
+        : ".cpp"  == extension()       ? e_cxx_source
+        : ".tpp"  == extension()       ? e_cxx_source
+        : ".xpp"  == extension()       ? e_cxx_source
+        : ".make" == extension()       ? e_make
+        : ".xpm"  == extension()       ? e_xpm
+        : phyloanalyze("GNUmakefile$") ? e_make
+        : phyloanalyze("^Makefile")    ? e_make
+        :                                e_no_phylum
         ;
 }
 
@@ -167,6 +170,13 @@ file::file(std::string const& file_path)
 bool file::is_of_phylum(enum_phylum z) const
 {
     return z & phylum();
+}
+
+/// Analyze a file's name to determine its phylum.
+
+bool file::phyloanalyze(std::string const& s) const
+{
+    return boost::regex_search(leaf_name(), boost::regex(s));
 }
 
 void complain(file const& f, std::string const& complaint)
@@ -240,15 +250,8 @@ void assay_whitespace(file const& f)
         throw std::runtime_error("File contains '\\f'.");
         }
 
-    bool const is_makefile =
-            ".make" == f.extension()
-        ||  std::string::npos != f.leaf_name().find("GNUmakefile")
-        ||  std::string::npos != f.leaf_name().find("Makefile")
-        ;
-    static boost::regex const postinitial_tab("[^\\n]\\t");
-
     if
-        (   !is_makefile
+        (   !f.is_of_phylum(e_make)
         &&  !f.is_of_phylum(e_xpm)
         &&  std::string::npos != f.data().find('\t')
         )
@@ -256,7 +259,8 @@ void assay_whitespace(file const& f)
         throw std::runtime_error("File contains '\\t'.");
         }
 
-    if(is_makefile && boost::regex_search(f.data(), postinitial_tab))
+    static boost::regex const postinitial_tab("[^\\n]\\t");
+    if(f.is_of_phylum(e_make) && boost::regex_search(f.data(), postinitial_tab))
         {
         throw std::runtime_error("File contains postinitial '\\t'.");
         }
