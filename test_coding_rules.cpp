@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.40 2008-01-05 04:09:13 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.41 2008-01-05 04:18:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -249,7 +249,7 @@ void assay_whitespace(file const& f)
 
     if
         (   !is_makefile
-        &&  ".xpm" != f.extension()
+        &&  !f.is_of_phylum(e_xpm)
         &&  std::string::npos != f.data().find('\t')
         )
         {
@@ -331,7 +331,7 @@ void check_config_hpp(file const& f)
 
 void check_copyright(file const& f)
 {
-    if(".xpm" == f.extension())
+    if(f.is_of_phylum(e_xpm))
         {
         return;
         }
@@ -353,7 +353,7 @@ void check_copyright(file const& f)
 
 void check_defect_markers(file const& f)
 {
-    if(".xpm" == f.extension() || "test_coding_rules_test.sh" == f.leaf_name())
+    if(f.is_of_phylum(e_xpm) || "test_coding_rules_test.sh" == f.leaf_name())
         {
         return;
         }
@@ -417,7 +417,7 @@ void check_defect_markers(file const& f)
 
 void check_include_guards(file const& f)
 {
-    if(".hpp" != f.extension())
+    if(!f.is_of_phylum(e_cxx_header))
         {
         return;
         }
@@ -484,7 +484,7 @@ void check_label_indentation(file const& f)
 
 void check_preamble(file const& f)
 {
-    if(".xpm" == f.extension())
+    if(f.is_of_phylum(e_xpm))
         {
         return;
         }
@@ -516,7 +516,7 @@ void check_preamble(file const& f)
 
 void check_xpm(file const& f)
 {
-    if(".xpm" != f.extension())
+    if(!f.is_of_phylum(e_xpm))
         {
         return;
         }
