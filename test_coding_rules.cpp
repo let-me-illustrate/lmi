@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.48 2008-01-05 19:19:21 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.49 2008-01-05 23:17:10 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -76,12 +76,17 @@ std::map<std::string, bool> my_taboos();
 
 enum enum_phylum
     {e_no_phylum  = 0
-    ,e_c_header   = 1 <<  0
-    ,e_c_source   = 1 <<  1
-    ,e_cxx_header = 1 <<  2
-    ,e_cxx_source = 1 <<  3
-    ,e_make       = 1 <<  4
-    ,e_xpm        = 1 <<  5
+    ,e_binary     = 1 <<  0
+    ,e_c_header   = 1 <<  1
+    ,e_c_source   = 1 <<  2
+    ,e_cxx_header = 1 <<  3
+    ,e_cxx_source = 1 <<  4
+    ,e_gpl        = 1 <<  5
+    ,e_log        = 1 <<  6
+    ,e_make       = 1 <<  7
+    ,e_md5        = 1 <<  8
+    ,e_patch      = 1 <<  9
+    ,e_xpm        = 1 << 10
     };
 
 enum enum_kingdom
@@ -159,14 +164,20 @@ file::file(std::string const& file_path)
         }
 
     phylum_ =
-          ".h"    == extension()       ? e_c_header
-        : ".c"    == extension()       ? e_c_source
-        : ".hpp"  == extension()       ? e_cxx_header
-        : ".cpp"  == extension()       ? e_cxx_source
-        : ".tpp"  == extension()       ? e_cxx_source
-        : ".xpp"  == extension()       ? e_cxx_source
-        : ".make" == extension()       ? e_make
-        : ".xpm"  == extension()       ? e_xpm
+          ".ico"        == extension() ? e_binary
+        : ".h"          == extension() ? e_c_header
+        : ".c"          == extension() ? e_c_source
+        : ".hpp"        == extension() ? e_cxx_header
+        : ".cpp"        == extension() ? e_cxx_source
+        : ".tpp"        == extension() ? e_cxx_source
+        : ".xpp"        == extension() ? e_cxx_source
+        : ".make"       == extension() ? e_make
+        : ".md5sums"    == extension() ? e_md5
+        : ".patch"      == extension() ? e_patch
+        : ".xpm"        == extension() ? e_xpm
+        : phyloanalyze("^COPYING$")    ? e_gpl
+        : phyloanalyze("^quoted_gpl")  ? e_gpl
+        : phyloanalyze("Log$")         ? e_log
         : phyloanalyze("GNUmakefile$") ? e_make
         : phyloanalyze("^Makefile")    ? e_make
         :                                e_no_phylum
