@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.51 2008-01-06 00:23:13 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.52 2008-01-06 00:47:10 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -301,12 +301,18 @@ void assay_whitespace(file const& f)
         throw std::runtime_error("File contains postinitial '\\t'.");
         }
 
-    if(std::string::npos != f.data().find("\n\n\n"))
+    if
+        (   !f.is_of_phylum(e_gpl)
+        &&  std::string::npos != f.data().find("\n\n\n")
+        )
         {
         complain(f, "contains '\\n\\n\\n'.");
         }
 
-    if(std::string::npos != f.data().find(" \n"))
+    if
+        (   !f.is_of_phylum(e_patch)
+        &&  std::string::npos != f.data().find(" \n")
+        )
         {
         complain(f, "contains ' \\n'.");
         }
@@ -364,7 +370,12 @@ void check_config_hpp(file const& f)
 
 void check_copyright(file const& f)
 {
-    if(f.is_of_phylum(e_xpm))
+    if
+        (   f.is_of_phylum(e_gpl)
+        ||  f.is_of_phylum(e_md5)
+        ||  f.is_of_phylum(e_patch)
+        ||  f.is_of_phylum(e_xpm)
+        )
         {
         return;
         }
@@ -508,7 +519,12 @@ void check_label_indentation(file const& f)
 
 void check_preamble(file const& f)
 {
-    if(f.is_of_phylum(e_xpm))
+    if
+        (   f.is_of_phylum(e_gpl)
+        ||  f.is_of_phylum(e_md5)
+        ||  f.is_of_phylum(e_patch)
+        ||  f.is_of_phylum(e_xpm)
+        )
         {
         return;
         }
