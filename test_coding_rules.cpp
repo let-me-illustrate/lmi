@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.50 2008-01-05 23:32:41 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.51 2008-01-06 00:23:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -277,15 +277,17 @@ void assay_whitespace(file const& f)
         }
 
     if
-        (   std::string::npos != f.data().find('\f')
-        &&  true // Other conditions to be added.
+        (   !f.is_of_phylum(e_gpl)
+        &&  std::string::npos != f.data().find('\f')
         )
         {
         throw std::runtime_error("File contains '\\f'.");
         }
 
     if
-        (   !f.is_of_phylum(e_make)
+        (   !f.is_of_phylum(e_gpl)
+        &&  !f.is_of_phylum(e_make)
+        &&  !f.is_of_phylum(e_patch)
         &&  !f.is_of_phylum(e_xpm)
         &&  std::string::npos != f.data().find('\t')
         )
