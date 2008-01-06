@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.52 2008-01-06 00:47:10 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.53 2008-01-06 20:27:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -147,7 +147,7 @@ file::file(std::string const& file_path)
 
     if(fs::is_directory(path_))
         {
-        throw std::runtime_error("Argument is a directory.");
+        return;
         }
 
     fs::ifstream ifs(path_, std::ios_base::binary);
@@ -617,7 +617,7 @@ void enforce_taboos(file const& f)
 void process_file(std::string const& file_path)
 {
     file f(file_path);
-    if(f.is_of_phylum(e_binary))
+    if(f.is_of_phylum(e_binary) || fs::is_directory(f.path()))
         {
         return;
         }
