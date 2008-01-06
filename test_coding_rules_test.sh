@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.26 2008-01-05 17:26:28 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.27 2008-01-06 20:27:14 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -337,12 +337,11 @@ Hyphens in file name must be changed to underscores in variable name.
 static char const* eraseme_xpm_003_dot_dash_dot_xpm[] = {
 EOF
 
-# Compare observed to expected.
+# Compare observed to expected. Note that directory '.' is ignored.
 
 ./test_coding_rules . a_nonexistent_file eraseme* >eraseme_observed 2>&1
 
 cat >eraseme_expected <<EOF
-Exception--file '.': Argument is a directory.
 Exception--file 'a_nonexistent_file': File not found.
 File 'eraseme_copyright_001' lacks current copyright.
 File 'eraseme_copyright_001' breaks taboo '\(c\) *[0-9]'.
