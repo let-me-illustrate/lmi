@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.54 2008-01-06 21:08:27 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.55 2008-01-06 21:25:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -87,7 +87,8 @@ enum enum_phylum
     ,e_md5        = 1 <<  8
     ,e_patch      = 1 <<  9
     ,e_touchstone = 1 << 10
-    ,e_xpm        = 1 << 11
+    ,e_xml_input  = 1 << 11
+    ,e_xpm        = 1 << 12
     };
 
 enum enum_kingdom
@@ -170,6 +171,8 @@ file::file(std::string const& file_path)
         : ".md5sums"    == extension() ? e_md5
         : ".patch"      == extension() ? e_patch
         : ".touchstone" == extension() ? e_touchstone
+        : ".cns"        == extension() ? e_xml_input
+        : ".ill"        == extension() ? e_xml_input
         : ".xpm"        == extension() ? e_xpm
         : phyloanalyze("^COPYING$")    ? e_gpl
         : phyloanalyze("^quoted_gpl")  ? e_gpl
@@ -379,6 +382,7 @@ void check_copyright(file const& f)
         ||  f.is_of_phylum(e_md5)
         ||  f.is_of_phylum(e_patch)
         ||  f.is_of_phylum(e_touchstone)
+        ||  f.is_of_phylum(e_xml_input)
         ||  f.is_of_phylum(e_xpm)
         )
         {
@@ -529,6 +533,7 @@ void check_preamble(file const& f)
         ||  f.is_of_phylum(e_md5)
         ||  f.is_of_phylum(e_patch)
         ||  f.is_of_phylum(e_touchstone)
+        ||  f.is_of_phylum(e_xml_input)
         ||  f.is_of_phylum(e_xpm)
         )
         {
