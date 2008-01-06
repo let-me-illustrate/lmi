@@ -31,7 +31,7 @@
 // other reasons evident in cvs or explained in 'ChangeLog'. Any
 // defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.29 2008-01-01 18:29:48 chicares Exp $
+// $Id: main_cgi.cpp,v 1.30 2008-01-06 19:27:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -179,7 +179,7 @@ int try_main(int argc, char* argv[])
     std::cout << cgicc::head() << '\n';
 
     // Output the style sheet portion of the header
-    std::cout << cgicc::style() << cgicc::comment() << '\n';
+    std::cout << cgicc::style() << cgicc::comment() << "[suppressed]" << '\n';
     std::cout << "BODY { color: black; background-color: white; }\n";
     std::cout << "HR.half { width: 60%; align: center; }\n";
     std::cout << "SPAN.red, STRONG.red { color: red; }\n";
@@ -313,7 +313,7 @@ int try_main(int argc, char* argv[])
     std::cout << cgicc::head() << '\n';
 
     // Output the style sheet portion of the header
-    std::cout << cgicc::style() << cgicc::comment() << '\n';
+    std::cout << cgicc::style() << cgicc::comment() << "[suppressed]" << '\n';
     std::cout << "BODY { color: black; background-color: white; }\n";
     std::cout << "HR.half { width: 60%; align: center; }\n";
     std::cout << "SPAN.red, STRONG.red { color: red; }\n";
