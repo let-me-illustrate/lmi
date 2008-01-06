@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.34 2008-01-01 18:29:46 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.35 2008-01-06 18:58:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -547,16 +547,8 @@ void LedgerInvariant::Init(BasicValues* b)
 
     ProducerName            = Input_.AgentFullName();
 
-    ProducerStreet  =
-            Input_.AgentAddr1
-        ;
-    ProducerCity    =
-            Input_.AgentCity
-        +   ", "
-        +   Input_.AgentState.str()
-        +   " "
-        +   Input_.AgentZipCode
-        ;
+    ProducerStreet          = Input_.AgentAddr1;
+    ProducerCity            = Input_.AgentCityStateZip();
     CorpName                = Input_.SponsorFirstName;
 
     Franchise               = Input_.Franchise;
