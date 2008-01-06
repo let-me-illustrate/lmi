@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputs.hpp,v 1.13 2008-01-01 18:29:45 chicares Exp $
+// $Id: inputs.hpp,v 1.14 2008-01-06 18:58:18 chicares Exp $
 
 #ifndef inputs_hpp
 #define inputs_hpp
@@ -58,6 +58,7 @@ class LMI_SO InputParms
     bool CheckAllowDBO3() const;
 
     bool IsValid() const;
+    std::string AgentCityStateZip() const;
     std::string AgentFullName() const;
     std::string InsdFullName() const;
 

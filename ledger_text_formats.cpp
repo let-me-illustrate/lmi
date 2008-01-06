@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.38 2008-01-01 18:29:47 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.39 2008-01-06 18:58:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -626,7 +626,12 @@ void FlatTextLedgerPrinter::PrintHeader() const
         }
     else
         {
-        os_ << "Insured: " << invar().Insured1 << endrow;
+        os_
+            << "Insured:"
+            << (invar().Insured1.size() ? " " : "")
+            << invar().Insured1
+            << endrow
+            ;
         os_
             << invar().Gender
             << ' ' << invar().UWClass
