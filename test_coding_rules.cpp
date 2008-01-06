@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.53 2008-01-06 20:27:14 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.54 2008-01-06 21:08:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -86,7 +86,8 @@ enum enum_phylum
     ,e_make       = 1 <<  7
     ,e_md5        = 1 <<  8
     ,e_patch      = 1 <<  9
-    ,e_xpm        = 1 << 10
+    ,e_touchstone = 1 << 10
+    ,e_xpm        = 1 << 11
     };
 
 enum enum_kingdom
@@ -168,6 +169,7 @@ file::file(std::string const& file_path)
         : ".make"       == extension() ? e_make
         : ".md5sums"    == extension() ? e_md5
         : ".patch"      == extension() ? e_patch
+        : ".touchstone" == extension() ? e_touchstone
         : ".xpm"        == extension() ? e_xpm
         : phyloanalyze("^COPYING$")    ? e_gpl
         : phyloanalyze("^quoted_gpl")  ? e_gpl
@@ -278,6 +280,7 @@ void assay_whitespace(file const& f)
 
     if
         (   !f.is_of_phylum(e_gpl)
+        &&  !f.is_of_phylum(e_touchstone)
         &&  std::string::npos != f.data().find('\f')
         )
         {
@@ -303,6 +306,7 @@ void assay_whitespace(file const& f)
 
     if
         (   !f.is_of_phylum(e_gpl)
+        &&  !f.is_of_phylum(e_touchstone)
         &&  std::string::npos != f.data().find("\n\n\n")
         )
         {
@@ -374,6 +378,7 @@ void check_copyright(file const& f)
         (   f.is_of_phylum(e_gpl)
         ||  f.is_of_phylum(e_md5)
         ||  f.is_of_phylum(e_patch)
+        ||  f.is_of_phylum(e_touchstone)
         ||  f.is_of_phylum(e_xpm)
         )
         {
@@ -523,6 +528,7 @@ void check_preamble(file const& f)
         (   f.is_of_phylum(e_gpl)
         ||  f.is_of_phylum(e_md5)
         ||  f.is_of_phylum(e_patch)
+        ||  f.is_of_phylum(e_touchstone)
         ||  f.is_of_phylum(e_xpm)
         )
         {
