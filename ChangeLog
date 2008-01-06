@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.977 2008-01-05 19:19:21 chicares Exp $
+// $Id: ChangeLog,v 1.978 2008-01-06 19:58:15 chicares Exp $
 
 MAINTENANCE
 
@@ -15059,4 +15059,65 @@ Fix defects introduced 20070221T0307Z and revealed 20080105T1726Z.
 
   test_coding_rules.cpp
 Augment file taxonomy and refactor.
+
+20080105T2317Z <gchicares@sbcglobal.net> [1207]
+
+  test_coding_rules.cpp
+Extend file taxonomy.
+
+20080105T2332Z <gchicares@sbcglobal.net> [1207]
+
+  test_coding_rules.cpp
+Don't test contents of binary-graphics files.
+
+20080106T0023Z <gchicares@sbcglobal.net> [1207]
+
+  test_coding_rules.cpp
+Appropriately exempt certain phyla from certain tests.
+
+20080106T0047Z <gchicares@sbcglobal.net> [1207]
+
+  test_coding_rules.cpp
+Appropriately exempt certain phyla from certain tests.
+
+20080106T1438Z <gchicares@sbcglobal.net> [1207]
+
+  sample.cns.touchstone
+  sample.ill.touchstone
+Append a terminal '\n', in order to avoid problems with tools such as
+'patch'--even though normal output does not, because printing a file
+that ends in "\f\n" would write a blank line to a new page.
+
+20080106T1440Z <gchicares@sbcglobal.net> [1207]
+
+  cgi.touchstone   [new file]
+  expected.cgi.out [expunged]
+  workhorse.make
+Rename 'expected.cgi.out' to 'cgi.touchstone'.
+
+20080106T1858Z <gchicares@sbcglobal.net> [1207]
+
+  inputs.cpp
+  inputs.hpp
+  ledger_invariant.cpp
+  ledger_text_formats.cpp
+Avoid blank at end of line. Thus, treat agent address much as agent
+name is treated.
+
+20080106T1927Z <gchicares@sbcglobal.net> [1207]
+
+  cgi.touchstone
+  main_cgi.cpp
+  sample.cns.touchstone
+  sample.ill.touchstone
+Avoid blank at end of line. Reflect various earlier cgi-bin formatting
+changes; the test needs to be strengthened to detect such changes
+automatically in future and therefore encourage proper maintenance of
+the touchstone. BTW, cgi-bin output is not valid html 4.0 strict.
+
+20080106T1958Z <gchicares@sbcglobal.net> [1207]
+
+  workhorse.make
+Strengthen cgi regression test, resolving the maintenance issue
+identified 20080106T1927Z.
 
