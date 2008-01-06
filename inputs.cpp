@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputs.cpp,v 1.20 2008-01-01 18:29:45 chicares Exp $
+// $Id: inputs.cpp,v 1.21 2008-01-06 18:58:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -797,6 +797,18 @@ void InputParms::EnforceConsistency()
     Status[0].MakeAgesAndDatesConsistent(EffDate, use_anb);
 
     Length = YearsToMaturity();
+}
+
+//============================================================================
+std::string InputParms::AgentCityStateZip() const
+{
+    std::string s(AgentCity + ", " + AgentState.str());
+    if(!AgentZipCode.empty())
+        {
+        s += " ";
+        }
+    s += AgentZipCode;
+    return s;
 }
 
 // Obsolete, but not harmful if the unit tests are powerful enough.
