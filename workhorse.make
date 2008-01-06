@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.104 2008-01-01 18:29:59 chicares Exp $
+# $Id: workhorse.make,v 1.105 2008-01-06 14:40:34 chicares Exp $
 
 ################################################################################
 
@@ -999,7 +999,7 @@ cli_test-%: $(test_data) lmi_cli_shared$(EXEEXT)
 cgi_tests: $(test_data) antediluvian_cgi$(EXEEXT)
 	@$(ECHO) Test common gateway interface:
 	@./antediluvian_cgi$(EXEEXT) --write_content_string > /dev/null
-	@<$(src_dir)/expected.cgi.out \
+	@<$(src_dir)/cgi.touchstone \
 	  $(SED)    -e ';/^[0-9. ]*$$/!d' -e ';/[0-9]/!d' \
 	  > cgi_touchstone
 	@./antediluvian_cgi$(EXEEXT) --enable_test <cgi.test.in \
