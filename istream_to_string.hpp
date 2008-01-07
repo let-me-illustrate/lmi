@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: istream_to_string.hpp,v 1.4 2008-01-01 18:29:46 chicares Exp $
+// $Id: istream_to_string.hpp,v 1.5 2008-01-07 04:56:13 chicares Exp $
 
 #ifndef istream_to_string_hpp
 #define istream_to_string_hpp
@@ -34,6 +34,11 @@
 /// Read a stream into a string. Typical use: read an entire file. See:
 ///   http://groups.google.com/group/comp.lang.c++.moderated/msg/667bab411f51cf67
 /// for a discussion of both alternative implementations.
+///
+/// Don't call basic_ostream::operator<<() if the input stream buffer
+/// has no character to provide. Otherwise [27.6.2.5.3/8] it would set
+/// 'failbit', and a spurious exception would be thrown when an empty
+/// file is read.
 
 template<typename Char_t, typename Traits, typename Allocator>
 void istream_to_string
@@ -52,7 +57,10 @@ void istream_to_string
         }
 #else // !0
     std::basic_ostringstream<Char_t,Traits,Allocator> oss;
-    oss << is.rdbuf();
+    if(is.rdbuf()->in_avail())
+        {
+        oss << is.rdbuf();
+        }
     oss.str().swap(s);
 
     if(!is || !oss)
