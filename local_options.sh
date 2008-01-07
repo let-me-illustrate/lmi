@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: local_options.sh,v 1.3 2008-01-01 18:29:48 chicares Exp $
+# $Id: local_options.sh,v 1.4 2008-01-07 05:54:19 chicares Exp $
 
 # This sample usage:
 #   ./local_options mingw_dir=/MinGW-20050120/ CFLAGS='-g -O0'
@@ -52,7 +52,12 @@
 #   http://sourceforge.net/mailarchive/message.php?msg_id=10581810
 # when multiple versions of MinGW gcc are installed.
 
-echo "# Local options" > local_options.make
+echo "# Copyright (C) `date -u +'%Y'` [you]."     > local_options.make
+echo "# http://savannah.nongnu.org/projects/lmi" >> local_options.make
+echo "# \$\
+Id: \$"                                          >> local_options.make
+echo ""                                          >> local_options.make
+echo "# Local options"                           >> local_options.make
 for z in "$@"
   do
     echo "$z" \
