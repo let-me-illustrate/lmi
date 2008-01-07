@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.55 2008-01-06 21:25:32 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.56 2008-01-07 04:04:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -81,14 +81,15 @@ enum enum_phylum
     ,e_c_source   = 1 <<  2
     ,e_cxx_header = 1 <<  3
     ,e_cxx_source = 1 <<  4
-    ,e_gpl        = 1 <<  5
-    ,e_log        = 1 <<  6
-    ,e_make       = 1 <<  7
-    ,e_md5        = 1 <<  8
-    ,e_patch      = 1 <<  9
-    ,e_touchstone = 1 << 10
-    ,e_xml_input  = 1 << 11
-    ,e_xpm        = 1 << 12
+    ,e_expungible = 1 <<  5
+    ,e_gpl        = 1 <<  6
+    ,e_log        = 1 <<  7
+    ,e_make       = 1 <<  8
+    ,e_md5        = 1 <<  9
+    ,e_patch      = 1 << 10
+    ,e_touchstone = 1 << 11
+    ,e_xml_input  = 1 << 12
+    ,e_xpm        = 1 << 13
     };
 
 enum enum_kingdom
@@ -167,6 +168,7 @@ file::file(std::string const& file_path)
         : ".cpp"        == extension() ? e_cxx_source
         : ".tpp"        == extension() ? e_cxx_source
         : ".xpp"        == extension() ? e_cxx_source
+        : ".bak"        == extension() ? e_expungible
         : ".make"       == extension() ? e_make
         : ".md5sums"    == extension() ? e_md5
         : ".patch"      == extension() ? e_patch
@@ -182,7 +184,7 @@ file::file(std::string const& file_path)
         :                                e_no_phylum
         ;
 
-    if(is_of_phylum(e_binary))
+    if(is_of_phylum(e_binary) || is_of_phylum(e_expungible))
         {
         return;
         }
@@ -628,6 +630,11 @@ void enforce_taboos(file const& f)
 void process_file(std::string const& file_path)
 {
     file f(file_path);
+    if(f.is_of_phylum(e_expungible))
+        {
+        complain(f, "ignored as being expungible.");
+        return;
+        }
     if(f.is_of_phylum(e_binary) || fs::is_directory(f.path()))
         {
         return;
