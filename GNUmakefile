@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.112 2008-01-03 03:16:12 chicares Exp $
+# $Id: GNUmakefile,v 1.113 2008-01-07 05:15:43 chicares Exp $
 
 ################################################################################
 
@@ -217,7 +217,7 @@ patch_files      := $(wildcard *patch)
 
 subdirectories := $(shell $(LS) --classify | $(SED) -e ';/\//!d' -e 's/\/$$//')
 
-testing_files := expected.cgi.out $(wildcard *.cns *.ill *touchstone*)
+testing_files := $(wildcard *.cns *.ill *touchstone*)
 
 never_source_files := \
   $(binary_graphics) \
@@ -450,6 +450,14 @@ check_concinnity: source_clean custom_tools
 	@$(TOUCH) --date=$(yyyymm)01 BOM
 	@$(TOUCH) --date=$(yyyymmdd) TODAY
 	@$(TOUCH) --date=$(yyyymm)22 CANDIDATE
+	@[ TODAY -nt CANDIDATE ] && [ version.hpp -ot BOM ] \
+	  && $(ECHO) "Is it time to 'make release_candidate'?" || true
+	@[ license.cpp -ot BOY ] \
+	  && $(ECHO) "Make the 'happy_new_year' target." || true
+	@$(RM) --force CANDIDATE
+	@$(RM) --force TODAY
+	@$(RM) --force BOM
+	@$(RM) --force BOY
 	@$(ECHO) "  Unexpected or oddly-named source files:"
 	@for z in $(unexpected_files); do $(ECHO) $$z; done;
 	@$(ECHO) "  Files that use reserved identifiers:"
@@ -532,14 +540,6 @@ check_concinnity: source_clean custom_tools
 	@$(WC) -l $(prerequisite_files) | $(SED) -e ';/[Tt]otal/d' | $(WC) -l
 	@$(ECHO) "Number of marked defects:"
 	@$(GREP) \?\? $(filter-out DefectLog,$(licensed_files)) | $(WC) -l
-	@[ TODAY -nt CANDIDATE ] && [ version.hpp -ot BOM ] \
-	  && $(ECHO) "Is it time to 'make release_candidate'?" || true
-	@[ license.cpp -ot BOY ] \
-	  && $(ECHO) "Make the 'happy_new_year' target." || true
-	@$(RM) --force CANDIDATE
-	@$(RM) --force TODAY
-	@$(RM) --force BOM
-	@$(RM) --force BOY
 
 ################################################################################
 
