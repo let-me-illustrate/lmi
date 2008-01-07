@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.27 2008-01-06 20:27:14 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.28 2008-01-07 04:04:29 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -337,12 +337,21 @@ Hyphens in file name must be changed to underscores in variable name.
 static char const* eraseme_xpm_003_dot_dash_dot_xpm[] = {
 EOF
 
+# 'touch' should suffice, but empty files trigger an exception.
+echo " " > an_expungible_file.bak
+
 # Compare observed to expected. Note that directory '.' is ignored.
 
-./test_coding_rules . a_nonexistent_file eraseme* >eraseme_observed 2>&1
+./test_coding_rules \
+  . \
+  a_nonexistent_file \
+  an_expungible_file.bak \
+  eraseme* \
+  >eraseme_observed 2>&1
 
 cat >eraseme_expected <<EOF
 Exception--file 'a_nonexistent_file': File not found.
+File 'an_expungible_file.bak' ignored as being expungible.
 File 'eraseme_copyright_001' lacks current copyright.
 File 'eraseme_copyright_001' breaks taboo '\(c\) *[0-9]'.
 File 'eraseme_copyright_002' lacks current copyright.
@@ -389,5 +398,5 @@ File 'eraseme_xpm_001.xpm' lacks proper variable assignment.
 File 'eraseme_xpm_002.xpm' lacks proper variable assignment.
 EOF
 
-diff --unified=0 eraseme_expected eraseme_observed && rm --force eraseme*
+diff --unified=0 eraseme_expected eraseme_observed && rm --force eraseme* *.bak
 
