@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.114 2008-01-07 05:33:36 chicares Exp $
+# $Id: GNUmakefile,v 1.115 2008-01-07 05:56:43 chicares Exp $
 
 ################################################################################
 
@@ -519,7 +519,7 @@ check_concinnity: source_clean custom_tools
 	@$(GREP) -iw '\.[d]ef'           $(filter-out mpatrol-mingw-GNUmakefile $(wildcard *.xpm),$(all_files)) || true
 	@$(GREP)     '[W]IN32'           $(filter-out config.hpp $(wildcard *make* *.patch),$(all_files)) || true
 	@$(ECHO) "  Miscellaneous problems:"
-	@-$(TEST_CODING_RULES) $(licensed_files) $(xpm_files)
+	@-$(TEST_CODING_RULES) *
 	@$(ECHO) " "
 	@$(ECHO) "Total lines of code:"
 	@$(WC) -l $(prerequisite_files) | $(SED) -e ';/[Tt]otal/!d' -e 's/[^0-9]//'

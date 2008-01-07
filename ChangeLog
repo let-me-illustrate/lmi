@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.978 2008-01-06 19:58:15 chicares Exp $
+// $Id: ChangeLog,v 1.979 2008-01-07 05:56:43 chicares Exp $
 
 MAINTENANCE
 
@@ -15120,4 +15120,57 @@ the touchstone. BTW, cgi-bin output is not valid html 4.0 strict.
   workhorse.make
 Strengthen cgi regression test, resolving the maintenance issue
 identified 20080106T1927Z.
+
+20080106T2027Z <gchicares@sbcglobal.net> [1207]
+
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+Silently ignore directories, as normally does 'grep re *'.
+
+20080106T2108Z <gchicares@sbcglobal.net> [1207]
+
+  test_coding_rules.cpp
+Test touchstone files appropriately.
+
+20080106T2125Z <gchicares@sbcglobal.net> [1207]
+
+  test_coding_rules.cpp
+Test xml input files appropriately.
+
+20080107T0404Z <gchicares@sbcglobal.net> [1207]
+
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+Diagnose but otherwise ignore expungible files; note that empty files
+are not handled gracefully.
+
+20080107T0456Z <gchicares@sbcglobal.net> [1207]
+
+  istream_to_string.hpp
+  test_coding_rules_test.sh
+Handle empty files gracefully, resolving the issue identified
+20080107T0404Z.
+
+20080107T0515Z <gchicares@sbcglobal.net> [1207]
+
+  GNUmakefile
+Rearrange to increase locality of reference.
+
+20080107T0533Z <gchicares@sbcglobal.net> [1207]
+
+  GNUmakefile
+Do away with 'date_last_made': it's not worthwhile. It was reset
+whenever any target with even a single dependency was made, so it did
+not reliably indicate out-of-date dependencies for other targets
+made subsequently.
+
+20080107T0554Z <gchicares@sbcglobal.net> [1207]
+
+  local_options.sh
+Compel emitted makefile to conform to style rules.
+
+20080107T0556Z <gchicares@sbcglobal.net> [1207]
+
+  GNUmakefile
+Run 'test_coding_rules' against all files.
 
