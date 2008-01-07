@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.113 2008-01-07 05:15:43 chicares Exp $
+# $Id: GNUmakefile,v 1.114 2008-01-07 05:33:36 chicares Exp $
 
 ################################################################################
 
@@ -168,7 +168,7 @@ MAKETARGET = \
   $(MAKECMDGOALS)
 
 .PHONY: $(build_directory)
-$(build_directory): $(gpl_files) date_last_made
+$(build_directory): $(gpl_files)
 	+@[ -d $@ ] || $(MKDIR) --parents $@
 	+@$(MAKETARGET)
 
@@ -226,7 +226,6 @@ never_source_files := \
   $(patch_files) \
   $(subdirectories) \
   $(testing_files) \
-  date_last_made \
   local_options.make \
 
 # Files that are source in some restrictive sense only:
@@ -284,16 +283,7 @@ licensed_files := $(filter-out $(unlicensed_files),$(wildcard *))
 
 ################################################################################
 
-# Update datestamp files.
-
-# Update the build-datestamp file whenever any other source file has
-# changed. Don't use it in any other way: making any file depend on it
-# would force costly, unnecessary relinking.
-
-date_last_made: $(filter-out $@,$(prerequisite_files))
-	@$(ECHO) These files are more recent than '$@': $?
-	@$(TOUCH) $@
-	@$(ECHO) Built $(yyyymmddhhmm).
+# Mark release candidate.
 
 # Update the version-datestamp header before committing any release
 # candidate to cvs. Release candidates are named 'lmi-YYYYMMDDTHHMM'.
@@ -373,14 +363,11 @@ gpl_notices := \
 # directory, viz.
 #   quoted_gpl
 #   quoted_gpl_html
-# which should be updated only if lmi's owner changes the license;
+# which should be updated only if lmi's owner changes the license; and
 #   version.hpp
 # which should be updated by making target 'release_candidate' as
 # needed (these required files are all in cvs; no 'clean' rule deletes
-# them because they should never be deleted); and
-#   date_last_made
-# which is updated (or created if it didn't already exist) whenever
-# make is run after any source file has changed.
+# them because they should never be deleted).
 
 .PHONY: source_clean
 source_clean:
