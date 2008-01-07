@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.28 2008-01-07 04:04:29 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.29 2008-01-07 04:56:13 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -337,8 +337,7 @@ Hyphens in file name must be changed to underscores in variable name.
 static char const* eraseme_xpm_003_dot_dash_dot_xpm[] = {
 EOF
 
-# 'touch' should suffice, but empty files trigger an exception.
-echo " " > an_expungible_file.bak
+touch an_expungible_file.bak
 
 # Compare observed to expected. Note that directory '.' is ignored.
 
