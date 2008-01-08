@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: fancy.make,v 1.7 2008-01-01 18:29:40 chicares Exp $
+# $Id: fancy.make,v 1.8 2008-01-08 05:58:18 chicares Exp $
 
 # This experimental makefile runs unit tests, filters out most routine
 # output, and summarizes results. It's handy, but abstruse. Usually,
@@ -91,12 +91,12 @@ SLEEP = /usr/bin/sleep
 .PHONY: test_volatile_time
 test_volatile_time:
 	$(print_begin_time)
-	@$(ECHO) __Begun at $(volatile_time)
+	@$(ECHO) ?Begun at $(volatile_time)
 	# Do something that takes a while.
 	@$(SLEEP) 10
 	# This isn't the right answer, because $$(shell) is expanded when
 	# the makefile is read, not when the commands are executed.
-	@$(ECHO) __Ended at $(shell $(DATE) -u +'%Y%m%dT%H%M%SZ')
+	@$(ECHO) ?Ended at $(shell $(DATE) -u +'%Y%m%dT%H%M%SZ')
 	# This gives the right answer.
 	$(print_end_time)
 
