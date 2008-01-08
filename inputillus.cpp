@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.cpp,v 1.26 2008-01-01 18:29:45 chicares Exp $
+// $Id: inputillus.cpp,v 1.27 2008-01-08 05:58:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -586,10 +586,12 @@ void IllusInputParms::propagate_fund_allocations_from_string()
     // TODO ?? Here bc++5.5.1 warns:
     // template argument InputIterator passed to 'uninitialized_copy'
     // is a output iterator: input iterator required in function
-    // __init_aux<istream_iterator<r_fund,char,char_traits<char>,int> >
+    // [space follows leading underscores in reserved name]
+    // _ _ init_aux<istream_iterator<r_fund,char,char_traits<char>,int> >
     //  (istream_iterator<r_fund,char,char_traits<char>,int>
     //  ,istream_iterator<r_fund,char,char_traits<char>,int>
-    //  ,_RW_is_not_integer)
+    // [space follows leading underscore in reserved name]
+    //  ,_ RW_is_not_integer)
     // Is borland right--is an istringstream not an InputIterator?
 warning() << "FundAllocations: " << FundAllocations << LMI_FLUSH;
     FundAllocs = std::vector<r_fund>

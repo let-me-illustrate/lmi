@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.86 2008-01-01 18:29:48 chicares Exp $
+// $Id: main_wx.cpp,v 1.87 2008-01-08 05:58:18 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -205,8 +205,9 @@ int WINAPI WinMain
     // It's easier to trace them with:
     //   MPATROL_OPTIONS='LOGALL SHOWUNFREED USEDEBUG'
     // Two are apparently mpatrol artifacts traceable to symbols:
-    //   "___mp_findsource"
-    //   "___mp_init"
+    // [space follows leading underscores in reserved names]
+    //   "_ _ _ mp_findsource"
+    //   "_ _ _ mp_init"
     // The third is traceable in 'mpatrol.log' with 'USEDEBUG' to
     //   Skeleton::GetEventHashTable() const
     // (although stepping through the code in gdb suggests it's really
