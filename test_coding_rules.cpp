@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.56 2008-01-07 04:04:29 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.57 2008-01-08 05:59:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,6 +30,7 @@
 #include "handle_exceptions.hpp"
 #include "istream_to_string.hpp"
 #include "main_common.hpp"
+#include "miscellany.hpp" // lmi_array_size()
 #include "obstruct_slicing.hpp"
 
 #include <boost/filesystem/convenience.hpp>
@@ -44,6 +45,7 @@
 #include <iostream>
 #include <map>
 #include <ostream>
+#include <set>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -567,6 +569,153 @@ void check_preamble(file const& f)
     forbid(f, bad_rcs_id, "contains a malformed RCS Id.");
 }
 
+/// Deem a reserved name permissible or not.
+
+bool check_reserved_name_exception(std::string const& s)
+{
+    static char const*const y[] =
+    // Taboo, and therefore uglified here.
+        {"D""__""W""IN32""__"
+        ,"_""W""IN32"
+        ,"__""W""IN32""__"
+    // Standard.
+        ,"_IOFBF"
+        ,"_IOLBF"
+        ,"_IONBF"
+        ,"__FILE__"
+        ,"__LINE__"
+        ,"__STDC_IEC_559__"
+        ,"__STDC__"
+        ,"__cplusplus"
+    // Platform identification.
+        ,"_M_IX86"
+        ,"_M_X64"
+        ,"_X86_"
+        ,"__X__"
+        ,"__amd64"
+        ,"__amd64__"
+        ,"__i386"
+        ,"__unix"
+        ,"__unix__"
+        ,"__x86_64"
+        ,"__x86_64__"
+        ,"_mingw"
+    // Platform specific.
+        ,"__declspec"
+        ,"__int64"
+        ,"__stdcall"
+        ,"_control87"
+        ,"_snprintf"
+        ,"_vsnprintf"
+        ,"_wcsdup"
+    // Compiler specific: gcc.
+        ,"__GLIBCPP__"
+        ,"__GNUC_MINOR__"
+        ,"__GNUC_PATCHLEVEL__"
+        ,"__GNUC__"
+        ,"__STRICT_ANSI__"
+        ,"__asm__"
+        ,"__attribute__"
+    // Compiler specific: gcc, Cygwin.
+        ,"__CYGWIN__"
+    // Compiler specific: gcc, MinGW.
+        ,"_CRT_fmode"
+        ,"__MINGW32_MAJOR_VERSION"
+        ,"__MINGW32_MINOR_VERSION"
+        ,"__MINGW32_VERSION"
+        ,"__MINGW32__"
+        ,"__MINGW_H"
+        ,"_fmode"
+    // Compiler specific: glibc.
+        ,"_LIBC"
+        ,"__BIG_ENDIAN"
+        ,"__BYTE_ORDER"
+    // Compiler specific: como.
+        ,"__COMO__"
+    // Compiler specific: borland.
+        ,"_CatcherPTR"
+        ,"__BORLANDC__"
+        ,"__FLAT__"
+        ,"__emit__"
+        ,"_max_dble"
+        ,"_streams"
+    // Compiler specific: ms.
+        ,"_MCW_EM"
+        ,"_MCW_IC"
+        ,"_MCW_PC"
+        ,"_MCW_RC"
+        ,"_MSC_VER"
+        ,"_O_APPEND"
+        ,"_O_BINARY"
+        ,"_O_CREAT"
+        ,"_O_EXCL"
+        ,"_O_RDONLY"
+        ,"_O_TRUNC"
+        ,"_O_WRONLY"
+        ,"_PC_64"
+        ,"_RC_NEAR"
+        ,"_fileno"
+        ,"_setmode"
+    // Regrettable.
+        ,"_1"
+        ,"_2"
+        ,"__cxa_demangle"
+    // Library specific.
+        ,"D__WXDEBUG__" // Hapax legomenon.
+        };
+    static int const n = lmi_array_size(y);
+    static std::set<std::string> const z(y, y + n);
+    return z.end() != z.find(s);
+}
+
+/// Check names reserved by C++2003 [17.4.3.1.2].
+///
+/// A name that could be reserved in any namespace is preferably
+/// avoided in every namespace: simple style rules are better.
+///
+/// The regex iterated for is deliberately overbroad. Measurement
+/// shows that it is far more efficient to cast the net widely and
+/// then filter the matches: there's a lot more sea than fish.
+///
+/// TODO ?? Also test '_[A-Za-z0-9]', e.g. thus:
+///   "(\\b\\w*__\\w*\\b)|(\\b\\_\\w+\\b)"
+
+void check_reserved_names(file const& f)
+{
+    // Remove this once these hopeless files have been expunged.
+    if
+        (   f.phyloanalyze("^ledger_formats.xml$")
+        ||  f.phyloanalyze("^ledger_xml_io.cpp$")
+        )
+        {
+        return;
+        }
+
+    if(f.is_of_phylum(e_log))
+        {
+        return;
+        }
+
+    static boost::regex const r("(\\b\\w*__\\w*\\b)");
+    boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
+    boost::sregex_iterator omega;
+    for(; i != omega; ++i)
+        {
+        boost::smatch const& z(*i);
+        std::string const s = z[0];
+        static boost::regex const not_all_underscore("[A-Za-z0-9]");
+        if
+            (   !check_reserved_name_exception(s)
+            &&  boost::regex_search(s, not_all_underscore)
+            )
+            {
+            std::ostringstream oss;
+            oss << "contains reserved name '" << s << "'.";
+            complain(f, oss.str());
+            }
+        }
+}
+
 void check_xpm(file const& f)
 {
     if(!f.is_of_phylum(e_xpm))
@@ -648,6 +797,7 @@ void process_file(std::string const& file_path)
     check_include_guards    (f);
     check_label_indentation (f);
     check_preamble          (f);
+    check_reserved_names    (f);
     check_xpm               (f);
 
     enforce_taboos          (f);

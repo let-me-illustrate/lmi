@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.979 2008-01-07 05:56:43 chicares Exp $
+// $Id: ChangeLog,v 1.980 2008-01-08 05:59:37 chicares Exp $
 
 MAINTENANCE
 
@@ -15173,4 +15173,19 @@ Compel emitted makefile to conform to style rules.
 
   GNUmakefile
 Run 'test_coding_rules' against all files.
+
+20080108T0558Z <gchicares@sbcglobal.net> [1207]
+
+  fancy.make
+  inputillus.cpp
+  main_wx.cpp
+  md5.hpp
+Avoid names containing '__', even in files that aren't C or C++.
+
+ <gchicares@sbcglobal.net> [1207]
+
+  GNUmakefile
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+Relocate test for reserved names.
 

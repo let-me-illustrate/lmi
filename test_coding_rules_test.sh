@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.29 2008-01-07 04:56:13 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.30 2008-01-08 05:59:37 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -29,13 +29,13 @@ rm --force eraseme*
 
 # Boilerplate required in most files.
 
-good_copyright="_Copyright (C)_`date -u +'%Y'`_"
+good_copyright="...Copyright (C)...`date -u +'%Y'`..."
 
 # Dollar signs must be escaped with '\' in here-documents; writing
 # them on different lines prevents RCS substitution on cvs checkin.
 
-good_rcsid="_\$\
-Id:_\$_"
+good_rcsid="...\$\
+Id:...\$..."
 
 good_url="http://savannah.nongnu.org/projects/lmi"
 
@@ -328,7 +328,8 @@ static char* eraseme_xpm_001_xpm[] = {
 EOF
 
 cat >eraseme_xpm_002.xpm <<EOF
-Variable name must be file name with '.xpm' changed to '_xpm'.
+Variable name must match file name, with an underscore in place of any
+character that isn't allowed in a variable name.
 static char const* wrong_file_002_xpm[] = {
 EOF
 
