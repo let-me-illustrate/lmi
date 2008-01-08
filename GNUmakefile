@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.115 2008-01-07 05:56:43 chicares Exp $
+# $Id: GNUmakefile,v 1.116 2008-01-08 05:59:36 chicares Exp $
 
 ################################################################################
 
@@ -447,55 +447,6 @@ check_concinnity: source_clean custom_tools
 	@$(RM) --force BOY
 	@$(ECHO) "  Unexpected or oddly-named source files:"
 	@for z in $(unexpected_files); do $(ECHO) $$z; done;
-	@$(ECHO) "  Files that use reserved identifiers:"
-	@# The sed commands are sorted alphabetically by group:
-	@#   {standard, platform-specific, compiler-specific, regrettable}
-	@# TODO ?? Use '[^_A-Za-z0-9]_\|__' to find more reserved
-	@# identifiers--then filter them with care.
-	@$(GREP) \
-	    '__' \
-	    $(filter-out GNUmakefile,$(expected_source_files)) \
-	  | $(SED) \
-	    -e 's/"[^"]*"//g' \
-	    -e ';/__FILE__/d' \
-	    -e ';/__LINE__/d' \
-	    -e ';/__STDC__/d' \
-	    -e ';/__STDC_IEC_559__/d' \
-	    -e ';/__cplusplus/d' \
-	    -e ';/__WIN32__/d' \
-	    -e ';/__X__/d' \
-	    -e ';/__amd64/d' \
-	    -e ';/__amd64__/d' \
-	    -e ';/__arg[cv]/d' \
-	    -e ';/__i386/d' \
-	    -e ';/__unix__/d' \
-	    -e ';/__x86_64/d' \
-	    -e ';/__x86_64__/d' \
-	    -e ';/__BIG_ENDIAN/d' \
-	    -e ';/__BORLANDC__/d' \
-	    -e ';/__BYTE_ORDER/d' \
-	    -e ';/__COMO__/d' \
-	    -e ';/__CYGWIN__/d' \
-	    -e ';/__GLIBCPP__/d' \
-	    -e ';/__GNUC__/d' \
-	    -e ';/__MINGW_H/d' \
-	    -e ';/__MINGW32__/d' \
-	    -e ';/__MINGW32_MAJOR_VERSION/d' \
-	    -e ';/__MINGW32_MINOR_VERSION/d' \
-	    -e ';/__MINGW32_VERSION/d' \
-	    -e ';/__STRICT_ANSI__/d' \
-	    -e ';/__asm__/d' \
-	    -e ';/__attribute__/d' \
-	    -e ';/__declspec/d' \
-	    -e ';/__emit__/d' \
-	    -e ';/__int64/d' \
-	    -e ';/__stdcall/d' \
-	    -e ';/__volatile__/d' \
-	    -e ';/__cxa_demangle/d' \
-	    -e ';/__init_aux/d' \
-	    -e ';/__pow/d' \
-	    -e ';/____/d' \
-	    -e ';/__/!d'
 	@$(ECHO) "  Problems detected by xmllint:"
 	@for z in $(xml_files); \
 	  do \
