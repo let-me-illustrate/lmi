@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.57 2008-01-08 05:59:36 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.58 2008-01-09 14:04:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -578,7 +578,9 @@ bool check_reserved_name_exception(std::string const& s)
         {"D""__""W""IN32""__"
         ,"_""W""IN32"
         ,"__""W""IN32""__"
-    // Standard.
+    // Standard (including TR1).
+        ,"_1"
+        ,"_2"
         ,"_IOFBF"
         ,"_IOLBF"
         ,"_IONBF"
@@ -616,6 +618,7 @@ bool check_reserved_name_exception(std::string const& s)
         ,"__STRICT_ANSI__"
         ,"__asm__"
         ,"__attribute__"
+        ,"__cxa_demangle"
     // Compiler specific: gcc, Cygwin.
         ,"__CYGWIN__"
     // Compiler specific: gcc, MinGW.
@@ -656,10 +659,6 @@ bool check_reserved_name_exception(std::string const& s)
         ,"_RC_NEAR"
         ,"_fileno"
         ,"_setmode"
-    // Regrettable.
-        ,"_1"
-        ,"_2"
-        ,"__cxa_demangle"
     // Library specific.
         ,"D__WXDEBUG__" // Hapax legomenon.
         };
