@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.58 2008-01-09 14:04:17 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.59 2008-01-10 15:29:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -418,7 +418,7 @@ void check_defect_markers(file const& f)
     {
     static boost::regex const r("(\\b\\w+\\b\\W*)\\?\\?(.)");
     boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
-    boost::sregex_iterator omega;
+    boost::sregex_iterator const omega;
     for(; i != omega; ++i)
         {
         boost::smatch const& z(*i);
@@ -436,7 +436,7 @@ void check_defect_markers(file const& f)
     {
     static boost::regex const r("(\\b\\w+\\b\\W?)!!(.)");
     boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
-    boost::sregex_iterator omega;
+    boost::sregex_iterator const omega;
     for(; i != omega; ++i)
         {
         boost::smatch const& z(*i);
@@ -508,7 +508,7 @@ void check_label_indentation(file const& f)
 
     static boost::regex const r("\\n( *)([A-Za-z][A-Za-z0-9_]*)( *:)(?!:)");
     boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
-    boost::sregex_iterator omega;
+    boost::sregex_iterator const omega;
     for(; i != omega; ++i)
         {
         boost::smatch const& z(*i);
@@ -697,7 +697,7 @@ void check_reserved_names(file const& f)
 
     static boost::regex const r("(\\b\\w*__\\w*\\b)");
     boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
-    boost::sregex_iterator omega;
+    boost::sregex_iterator const omega;
     for(; i != omega; ++i)
         {
         boost::smatch const& z(*i);
