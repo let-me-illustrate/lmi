@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.30 2008-01-08 05:59:37 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.31 2008-01-10 15:35:47 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -37,9 +37,9 @@ good_copyright="...Copyright (C)...`date -u +'%Y'`..."
 good_rcsid="...\$\
 Id:...\$..."
 
-good_url="http://savannah.nongnu.org/projects/lmi"
+good_url="...http://savannah.nongnu.org/projects/lmi..."
 
-boilerplate="$good_copyright $good_rcsid $good_url"
+boilerplate="$good_copyright"$'\n'"$good_rcsid"$'\n'"$good_url"
 
 # Files in general.
 
