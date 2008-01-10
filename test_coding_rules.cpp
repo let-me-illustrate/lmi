@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.59 2008-01-10 15:29:19 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.60 2008-01-10 15:32:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -339,7 +339,7 @@ void assay_whitespace(file const& f)
 ///
 /// Exceptions are necessarily made for
 ///  - this program's test script;
-///  - 'GNUmakefile' and -'Log' files; and
+///  - 'GNUmakefile' and log files; and
 ///  - 'config.hpp' and its related 'config_*.hpp' headers.
 
 void check_config_hpp(file const& f)
@@ -348,9 +348,9 @@ void check_config_hpp(file const& f)
     static std::string const strict("\\n(#include \"config.hpp\")\\n");
 
     if
-        (   f.phyloanalyze("^test_coding_rules_test.sh$")
+        (   f.is_of_phylum(e_log)
+        ||  f.phyloanalyze("^test_coding_rules_test.sh$")
         ||  f.phyloanalyze("^GNUmakefile$")
-        ||  f.phyloanalyze("Log$")
         )
         {
         return;
