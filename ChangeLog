@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.981 2008-01-09 14:04:17 chicares Exp $
+// $Id: ChangeLog,v 1.982 2008-01-10 21:44:19 chicares Exp $
 
 MAINTENANCE
 
@@ -15193,4 +15193,26 @@ Relocate test for reserved names.
 
   test_coding_rules.cpp
 Recategorize several reserved names.
+
+20080110T1529Z <gchicares@sbcglobal.net> [1207]
+
+  test_coding_rules.cpp
+Increase const correctness.
+
+20080110T1532Z <gchicares@sbcglobal.net> [1207]
+
+  test_coding_rules.cpp
+Refactor.
+
+20080110T1535Z <gchicares@sbcglobal.net> [1207]
+
+  test_coding_rules_test.sh
+Refactor, in particular to avoid excessively-long lines.
+
+20080110T2144Z <gchicares@sbcglobal.net> [1207]
+
+  GNUmakefile
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+Relocate test for excesssively-long lines in logs.
 

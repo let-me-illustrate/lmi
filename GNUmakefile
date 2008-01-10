@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.116 2008-01-08 05:59:36 chicares Exp $
+# $Id: GNUmakefile,v 1.117 2008-01-10 21:44:18 chicares Exp $
 
 ################################################################################
 
@@ -459,9 +459,6 @@ check_concinnity: source_clean custom_tools
 	      $$z - \
 	      || $(ECHO) "... in file $$z"; \
 	  done;
-	@$(ECHO) "  Excessively-long lines in logs:"
-	@for z in ChangeLog DefectLog; \
-	  do $(SED) -e '0,/savannah/d;{/.\{71,\}/!d}' -e "s/^/$$z: /" $$z ; done;
 	@$(ECHO) "  Forbidden strings:"
 	@$(GREP) -i  '[g]if'             $(all_files) 2>/dev/null | $(SED) -e';/wxUSE_GIF\|--disable-gif/d'
 	@$(GREP) -i  '[x]mlpp'           $(filter-out ChangeLog,$(all_files)) || true
