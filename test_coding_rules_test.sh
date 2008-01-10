@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.31 2008-01-10 15:35:47 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.32 2008-01-10 21:44:19 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -293,6 +293,36 @@ Missing compulsory include directive.
 #endif // eraseme_hpp_006_hpp
 EOF
 
+# Log files.
+
+cat >eraseme_log_000.Log <<EOF
+$boilerplate
+'Log' is just a suffix, distinct from the extension '.Log'; the dot in
+this file's name merely avoids "camel case", which the author dislikes.
+This line's length is over the limit, but...acceptable in the preamble.
+MAINTENANCE
+After the "MAINTENANCE" line, a strict limit applies, but this line is
+just short enough.
+EOF
+
+cat >eraseme_log_001.Log <<EOF
+$boilerplate
+The word "MAINTENANCE" is expected on a line by itself, but this file has
+no such line. The 'grep' regex is "^MAINTENANCE$", so these don't suffice:
+Maintenance
+'MAINTENANCE'
+ MAINTENANCE
+and each long line preceding them elicits a diagnostic.
+EOF
+
+cat >eraseme_log_002.Log <<EOF
+$boilerplate
+MAINTENANCE
+This line's length is at the limit, so it should elicit no diagnostic.
+This line's length is slightly over the limit, so it must be diagnosed.
+It is helpful to diagnose all excessively-long lines--including this one.
+EOF
+
 # Makefiles.
 
 cat >eraseme_make_000.make <<EOF
@@ -367,6 +397,17 @@ File 'eraseme_hpp_005.hpp' must include 'config.hpp' first.
 File 'eraseme_hpp_006.hpp' must include 'config.hpp'.
 File 'eraseme_hpp_006.hpp' lacks line '#include "config.hpp"'.
 File 'eraseme_hpp_006.hpp' must include 'config.hpp' first.
+File 'eraseme_log_001.Log' lacks expected 'MAINTENANCE' line.
+File 'eraseme_log_001.Log' violates seventy-character limit:
+0000000001111111111222222222233333333334444444444555555555566666666667
+1234567890123456789012345678901234567890123456789012345678901234567890
+The word "MAINTENANCE" is expected on a line by itself, but this file has
+no such line. The 'grep' regex is "^MAINTENANCE$", so these don't suffice:
+File 'eraseme_log_002.Log' violates seventy-character limit:
+0000000001111111111222222222233333333334444444444555555555566666666667
+1234567890123456789012345678901234567890123456789012345678901234567890
+This line's length is slightly over the limit, so it must be diagnosed.
+It is helpful to diagnose all excessively-long lines--including this one.
 Exception--file 'eraseme_make_001.make': File contains postinitial '\t'.
 Exception--file 'eraseme_make_002.make': File contains postinitial '\t'.
 File 'eraseme_marker_001' has irregular defect marker 'TODO${Q}${Q} '.

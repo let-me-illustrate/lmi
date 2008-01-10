@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.60 2008-01-10 15:32:37 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.61 2008-01-10 21:44:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -525,6 +525,49 @@ void check_label_indentation(file const& f)
         }
 }
 
+/// Forbid long lines in logs, which are often quoted in email.
+///
+/// Tolerate certain lines that are historically slightly over the
+/// limit in the preamble, which in lmi logs is separated from actual
+/// log entries by the word "MAINTENANCE" on a line by itself.
+
+void check_logs(file const& f)
+{
+    if(!f.is_of_phylum(e_log))
+        {
+        return;
+        }
+
+    std::string entries = f.data();
+    entries.erase(0, entries.find("\nMAINTENANCE\n"));
+    if(entries.empty())
+        {
+        complain(f, "lacks expected 'MAINTENANCE' line.");
+        entries = f.data();
+        }
+
+    static boost::regex const r("\\n([^\\n]{71,})(?=\\n)");
+    boost::sregex_iterator i(entries.begin(), entries.end(), r);
+    boost::sregex_iterator const omega;
+    if(omega == i)
+        {
+        return;
+        }
+
+    std::ostringstream oss;
+    oss
+        << "violates seventy-character limit:\n"
+        << "0000000001111111111222222222233333333334444444444555555555566666666667\n"
+        << "1234567890123456789012345678901234567890123456789012345678901234567890"
+        ;
+    for(; i != omega; ++i)
+        {
+        boost::smatch const& z(*i);
+        oss << '\n' << z[1];
+        }
+    complain(f, oss.str());
+}
+
 /// Check boilerplate at the beginning of each file.
 ///
 /// Strings that would otherwise be subject to RCS keyword
@@ -795,6 +838,7 @@ void process_file(std::string const& file_path)
     check_defect_markers    (f);
     check_include_guards    (f);
     check_label_indentation (f);
+    check_logs              (f);
     check_preamble          (f);
     check_reserved_names    (f);
     check_xpm               (f);
