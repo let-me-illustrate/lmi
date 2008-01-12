@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.982 2008-01-10 21:44:19 chicares Exp $
+// $Id: ChangeLog,v 1.983 2008-01-12 04:14:34 chicares Exp $
 
 MAINTENANCE
 
@@ -15214,5 +15214,31 @@ Refactor, in particular to avoid excessively-long lines.
   GNUmakefile
   test_coding_rules.cpp
   test_coding_rules_test.sh
-Relocate test for excesssively-long lines in logs.
+Relocate test for excessively-long lines in logs.
+
+20080112T0337Z <gchicares@sbcglobal.net> [1207]
+
+  GNUmakefile
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+Relocate test for excessively-long lines in logs. The original test is
+temporarily left in place to demonstrate that its results are
+reproduced.
+
+20080112T0400Z <gchicares@sbcglobal.net> [1207]
+
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+Use a uniform set of files for all statistics; clarify output.
+
+20080112T0401Z <gchicares@sbcglobal.net> [1207]
+
+  GNUmakefile
+Remove the original test mentioned 20080112T0337Z.
+
+20080112T0414Z <gchicares@sbcglobal.net> [1207]
+
+  GNUmakefile
+  test_coding_rules.cpp
+Relocate and simplify documentation.
 

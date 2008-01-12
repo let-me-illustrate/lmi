@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.63 2008-01-12 04:00:49 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.64 2008-01-12 04:14:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -376,7 +376,8 @@ void check_config_hpp(file const& f)
 }
 
 // SOMEDAY !! This test could be liberalized to permit copyright
-// notices to span multiple lines.
+// notices to span multiple lines. For now, it is assumed that the
+// year appears on the same line as the word "Copyright".
 
 // SOMEDAY !! Move the 'GNUmakefile' logic to exclude certain other
 // files hither.
