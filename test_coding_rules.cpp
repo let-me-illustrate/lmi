@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.61 2008-01-10 21:44:19 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.62 2008-01-12 03:37:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -40,7 +40,9 @@
 #include <boost/regex.hpp>
 #include <boost/utility.hpp>
 
+#include <cstddef>        // std::size_t
 #include <ctime>
+#include <iomanip>
 #include <ios>
 #include <iostream>
 #include <map>
@@ -818,17 +820,113 @@ void enforce_taboos(file const& f)
         }
 }
 
-void process_file(std::string const& file_path)
+/// Implicitly-declared special member functions do the right thing.
+
+class statistics
+{
+  public:
+    statistics() : files_(0), lines_(0), defects_(0) {}
+    ~statistics() {}
+
+    statistics& operator+=(statistics const&);
+
+    static statistics analyze_file(file const&);
+
+    void print_summary() const;
+
+  private:
+    std::size_t files_;
+    std::size_t lines_;
+    std::size_t defects_;
+};
+
+statistics& statistics::operator+=(statistics const& z)
+{
+    files_   += z.files_  ;
+    lines_   += z.lines_  ;
+    defects_ += z.defects_;
+
+    return *this;
+}
+
+/// Calculate summary statistics.
+///
+/// The loop counter starts at one, not zero, to disregard the leading
+/// '\n' sentry.
+///
+/// [This ported comment seems more arbitrary than reasonable:]
+/// Arbitrarily but reasonably, files like scripts and makefiles aren't
+/// counted in SLOC, but marked defects in them are counted. This has
+/// some generally nugatory effect on a measure like defects per KLOC.
+
+statistics statistics::analyze_file(file const& f)
+{
+    statistics z;
+    if
+        (   f.is_of_phylum(e_binary)
+        ||  f.is_of_phylum(e_expungible)
+        ||  f.is_of_phylum(e_gpl)
+        ||  f.is_of_phylum(e_log)
+        ||  f.is_of_phylum(e_md5)
+        ||  f.is_of_phylum(e_patch)
+        ||  f.is_of_phylum(e_touchstone)
+        ||  f.is_of_phylum(e_xml_input)
+        ||  f.is_of_phylum(e_xpm)
+        ||  f.phyloanalyze("^INSTALL")
+        ||  f.phyloanalyze("^README")
+        )
+        {
+        return z;
+        }
+
+    bool const count_only_defects =
+            f.is_of_phylum(e_make)
+        ||  f.phyloanalyze(".sed$")
+        ||  f.phyloanalyze(".sh$")
+        ;
+
+    if(!count_only_defects)
+        {
+        ++z.files_;
+        }
+
+    std::string const& s = f.data();
+    for(std::string::size_type i = 1; i < s.size(); ++i)
+        {
+        if(!count_only_defects && '\n' == s[i])
+            {
+            ++z.lines_;
+            }
+        if('?' == s[i - 1] && '?' == s[i])
+            {
+            ++z.defects_;
+            }
+        }
+
+    return z;
+}
+
+void statistics::print_summary() const
+{
+    std::cout
+        << std::setw(9) << files_   << " files\n"
+        << std::setw(9) << lines_   << " lines\n"
+        << std::setw(9) << defects_ << " defects\n"
+        << std::flush
+        ;
+}
+
+statistics process_file(std::string const& file_path)
 {
     file f(file_path);
     if(f.is_of_phylum(e_expungible))
         {
         complain(f, "ignored as being expungible.");
-        return;
+        return statistics();
         }
     if(f.is_of_phylum(e_binary) || fs::is_directory(f.path()))
         {
-        return;
+        return statistics();
         }
 
     assay_whitespace        (f);
@@ -844,16 +942,19 @@ void process_file(std::string const& file_path)
     check_xpm               (f);
 
     enforce_taboos          (f);
+
+    return statistics::analyze_file(f);
 }
 
 int try_main(int argc, char* argv[])
 {
     bool error_flag = false;
+    statistics z;
     for(int j = 1; j < argc; ++j)
         {
         try
             {
-            process_file(argv[j]);
+            z += process_file(argv[j]);
             }
         catch(...)
             {
@@ -862,6 +963,7 @@ int try_main(int argc, char* argv[])
             report_exception();
             }
         }
+    z.print_summary();
     return error_flag ? EXIT_FAILURE : EXIT_SUCCESS;
 }
 
