@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.120 2008-01-12 04:14:34 chicares Exp $
+# $Id: GNUmakefile,v 1.121 2008-01-12 06:19:29 chicares Exp $
 
 ################################################################################
 
@@ -448,13 +448,6 @@ check_concinnity: source_clean custom_tools
 	      $$z - \
 	      || $(ECHO) "... in file $$z"; \
 	  done;
-	@$(ECHO) "  Forbidden strings:"
-	@$(GREP) -i  '[g]if'             $(all_files) 2>/dev/null | $(SED) -e';/wxUSE_GIF\|--disable-gif/d'
-	@$(GREP) -i  '[x]mlpp'           $(filter-out ChangeLog,$(all_files)) || true
-	@$(GREP) -i  '[^a][^g][^e][h]lp' $(all_files) || true # 'imagehlp' is OK
-	@$(GREP) -iw '[e]xe'             $(filter-out INSTALL $(wildcard *make* *.md5) ChangeLog DefectLog,$(all_files)) || true
-	@$(GREP) -iw '\.[d]ef'           $(filter-out mpatrol-mingw-GNUmakefile $(wildcard *.xpm),$(all_files)) || true
-	@$(GREP)     '[W]IN32'           $(filter-out config.hpp $(wildcard *make* *.patch),$(all_files)) || true
 	@$(ECHO) "  Miscellaneous problems:"
 	@-$(TEST_CODING_RULES) *
 
