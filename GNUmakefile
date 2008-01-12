@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.119 2008-01-12 04:01:34 chicares Exp $
+# $Id: GNUmakefile,v 1.120 2008-01-12 04:14:34 chicares Exp $
 
 ################################################################################
 
@@ -397,13 +397,6 @@ TEST_CODING_RULES := $(build_directory)/test_coding_rules$(EXEEXT)
 ################################################################################
 
 # Check conformity to certain formatting rules; count lines and defects.
-
-# In testing files modified this year for a current copyright notice,
-# it is assumed that the year appears on the same line as the word
-# "Copyright". That may become too strict in the future if more than
-# one line is required to show all the years, but it is useful to
-# avoid false positives that would arise when the current year appears
-# in an RCS Id but not in the copyright notice.
 
 c_header_files   := $(wildcard *.h)
 c_source_files   := $(wildcard *.c)
