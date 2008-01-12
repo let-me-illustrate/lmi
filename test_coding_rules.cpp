@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.64 2008-01-12 04:14:34 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.65 2008-01-12 06:19:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -789,6 +789,8 @@ void enforce_taboos(file const& f)
     // Former addresses of the Free Software Foundation.
     taboo(f, "Cambridge");
     taboo(f, "Temple");
+    // Patented.
+    taboo(f, "\\.gif", boost::regex::icase);
     // Obsolete email address.
     taboo(f, "chicares@mindspring.com");
     // Certain proprietary libraries.
@@ -807,6 +809,24 @@ void enforce_taboos(file const& f)
     taboo(f, "Sonic Software");
     taboo(f, "windows-1252");
     taboo(f, "Arial");
+
+    if
+        (   !f.is_of_phylum(e_log)
+        &&  !f.is_of_phylum(e_make)
+        )
+        {
+        taboo(f, "\\bexe\\b", boost::regex::icase);
+        }
+
+    if
+        (   !f.is_of_phylum(e_make)
+        &&  !f.is_of_phylum(e_patch)
+        &&  !f.phyloanalyze("config.hpp")
+        )
+        {
+        taboo(f, "WIN32", boost::regex::icase);
+        }
+
     // Unspeakable private taboos.
     std::map<std::string, bool> const z = my_taboos();
     typedef std::map<std::string, bool>::const_iterator mci;
