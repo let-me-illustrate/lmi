@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.117 2008-01-10 21:44:18 chicares Exp $
+# $Id: GNUmakefile,v 1.118 2008-01-12 03:37:16 chicares Exp $
 
 ################################################################################
 
@@ -397,10 +397,6 @@ TEST_CODING_RULES := $(build_directory)/test_coding_rules$(EXEEXT)
 ################################################################################
 
 # Check conformity to certain formatting rules; count lines and defects.
-
-# Arbitrarily but reasonably, files like scripts and makefiles aren't
-# counted in SLOC, but marked defects in them are counted. This has
-# some generally nugatory effect on a measure like defects per KLOC.
 
 # In testing files modified this year for a current copyright notice,
 # it is assumed that the year appears on the same line as the word
