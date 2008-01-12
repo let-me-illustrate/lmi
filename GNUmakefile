@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.118 2008-01-12 03:37:16 chicares Exp $
+# $Id: GNUmakefile,v 1.119 2008-01-12 04:01:34 chicares Exp $
 
 ################################################################################
 
@@ -464,13 +464,6 @@ check_concinnity: source_clean custom_tools
 	@$(GREP)     '[W]IN32'           $(filter-out config.hpp $(wildcard *make* *.patch),$(all_files)) || true
 	@$(ECHO) "  Miscellaneous problems:"
 	@-$(TEST_CODING_RULES) *
-	@$(ECHO) " "
-	@$(ECHO) "Total lines of code:"
-	@$(WC) -l $(prerequisite_files) | $(SED) -e ';/[Tt]otal/!d' -e 's/[^0-9]//'
-	@$(ECHO) "Number of source files:"
-	@$(WC) -l $(prerequisite_files) | $(SED) -e ';/[Tt]otal/d' | $(WC) -l
-	@$(ECHO) "Number of marked defects:"
-	@$(GREP) \?\? $(filter-out DefectLog,$(licensed_files)) | $(WC) -l
 
 ################################################################################
 
