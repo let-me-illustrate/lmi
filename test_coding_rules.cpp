@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.62 2008-01-12 03:37:16 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.63 2008-01-12 04:00:49 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -853,11 +853,6 @@ statistics& statistics::operator+=(statistics const& z)
 ///
 /// The loop counter starts at one, not zero, to disregard the leading
 /// '\n' sentry.
-///
-/// [This ported comment seems more arbitrary than reasonable:]
-/// Arbitrarily but reasonably, files like scripts and makefiles aren't
-/// counted in SLOC, but marked defects in them are counted. This has
-/// some generally nugatory effect on a measure like defects per KLOC.
 
 statistics statistics::analyze_file(file const& f)
 {
@@ -879,21 +874,12 @@ statistics statistics::analyze_file(file const& f)
         return z;
         }
 
-    bool const count_only_defects =
-            f.is_of_phylum(e_make)
-        ||  f.phyloanalyze(".sed$")
-        ||  f.phyloanalyze(".sh$")
-        ;
-
-    if(!count_only_defects)
-        {
-        ++z.files_;
-        }
+    ++z.files_;
 
     std::string const& s = f.data();
     for(std::string::size_type i = 1; i < s.size(); ++i)
         {
-        if(!count_only_defects && '\n' == s[i])
+        if('\n' == s[i])
             {
             ++z.lines_;
             }
@@ -909,9 +895,9 @@ statistics statistics::analyze_file(file const& f)
 void statistics::print_summary() const
 {
     std::cout
-        << std::setw(9) << files_   << " files\n"
-        << std::setw(9) << lines_   << " lines\n"
-        << std::setw(9) << defects_ << " defects\n"
+        << std::setw(9) << files_   << " source files\n"
+        << std::setw(9) << lines_   << " source lines\n"
+        << std::setw(9) << defects_ << " marked defects\n"
         << std::flush
         ;
 }

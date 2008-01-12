@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.33 2008-01-12 03:37:16 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.34 2008-01-12 04:00:49 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -377,7 +377,7 @@ touch an_expungible_file.bak
   a_nonexistent_file \
   an_expungible_file.bak \
   eraseme* \
-  | sed -e '/^[ 0-9]\{9\} \(files\|lines\|defects\)/d' \
+  | sed -e '/^[ 0-9]\{9\} \(source files\|source lines\|marked defects\)/d' \
   >eraseme_observed
 
 cat >eraseme_expected <<EOF
