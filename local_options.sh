@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: local_options.sh,v 1.4 2008-01-07 05:54:19 chicares Exp $
+# $Id: local_options.sh,v 1.5 2008-01-13 17:16:43 chicares Exp $
 
 # This sample usage:
 #   ./local_options mingw_dir=/MinGW-20050120/ CFLAGS='-g -O0'
@@ -48,8 +48,10 @@
 #
 # One reasonable use is to supply a persistent local definition of
 # $(mingw_dir), in order to avoid the problem described here:
-#   http://sourceforge.net/mailarchive/message.php?msg_id=10579421
-#   http://sourceforge.net/mailarchive/message.php?msg_id=10581810
+#   http://article.gmane.org/gmane.comp.gnu.mingw.user/14747
+#     [2005-01-17T16:30:44Z from Greg Chicares]
+#   http://article.gmane.org/gmane.comp.gnu.mingw.user/14748
+#     [2005-01-17T18:15:26Z from Aaron W. LaFramboise]
 # when multiple versions of MinGW gcc are installed.
 
 echo "# Copyright (C) `date -u +'%Y'` [you]."     > local_options.make
