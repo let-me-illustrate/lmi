@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: handle_exceptions.hpp,v 1.5 2008-01-01 18:29:41 chicares Exp $
+// $Id: handle_exceptions.hpp,v 1.6 2008-01-13 20:03:19 chicares Exp $
 
 #ifndef handle_exceptions_hpp
 #define handle_exceptions_hpp
@@ -68,9 +68,11 @@ inline void lmi_terminate_handler()
 /// in which case it's pointless to repeat the same message.
 ///
 /// See
-///   http://sourceforge.net/mailarchive/message.php?msg_id=14203568
+//   http://article.gmane.org/gmane.comp.gnu.mingw.user/18355
+//     [2005-12-16T09:20:33Z from Greg Chicares]
 /// for a grave gcc problem with msw dlls, which is fixed
-///   http://sourceforge.net/mailarchive/message.php?msg_id=14436989
+//   http://article.gmane.org/gmane.comp.gnu.mingw.user/18594
+//     [2006-01-10T22:00:24Z from Danny Smith]
 /// in MinGW gcc-3.4.5; it is avoided altogether by writing this
 /// function inline, so this code works with earlier versions, too.
 

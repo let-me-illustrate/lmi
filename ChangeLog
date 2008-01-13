@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.985 2008-01-13 15:46:34 chicares Exp $
+// $Id: ChangeLog,v 1.986 2008-01-13 20:03:19 chicares Exp $
 
 MAINTENANCE
 
@@ -5494,7 +5494,8 @@ Make it easier to override the system root.
 Merge boost::filesystem utilities. This would seem to be a mere
 refactoring, but it actually fixes a problem incidentally observed
 running 'make regression_test' with MSYS. See
-  http://sourceforge.net/mailarchive/message.php?msg_id=14476898
+  http://article.gmane.org/gmane.comp.gnu.mingw.user/18633
+    [2006-01-14T11:55:49Z from Greg Chicares]
 and
   http://lists.gnu.org/archive/html/lmi/2006-01/msg00031.html
 for details.
@@ -6569,7 +6570,8 @@ Fix a defective comment.
   msw_msys.make
 Don't encourage makefile dependency on the environment. See the
 20060314T0120Z change and this message
-  http://sourceforge.net/mailarchive/message.php?msg_id=15102683
+  http://article.gmane.org/gmane.comp.gnu.mingw.msys/3493
+    [2006-03-16T10:34:16Z from Greg Chicares]
 for the rationale, and 'local_options.sh' for an alternative.
 
   ihs_basicval.cpp
@@ -9370,8 +9372,7 @@ Make an identified problem readily reproducible.
 20070114T1944Z <chicares@cox.net> [1247]
 
   timer.hpp
-Commit spike solutions as comments: see
-  [insert mailing-list reference when URL becomes available]
+Commit spike solutions as comments.
 
 20070114T2008Z <chicares@cox.net> [1247]
 
@@ -9403,7 +9404,7 @@ Improve documentation.
 
   timer.hpp
 Ratify spike solutions committed 20070114T1944Z: see
-  [insert mailing-list reference when URL becomes available]
+  http://lists.nongnu.org/archive/html/lmi/2007-01/msg00011.html
 
 20070118T1118Z <chicares@cox.net> [1243]
 
@@ -15262,4 +15263,32 @@ Update mailing-list link.
   test_coding_rules.cpp
   test_coding_rules_test.sh
 Relocate test for unexpected files.
+
+20080113T1620Z <gchicares@sbcglobal.net> [1207]
+
+  test_coding_rules.cpp
+Refactor.
+
+20080113T1716Z <gchicares@sbcglobal.net> [1207]
+
+  alert_cgi.cpp
+  alert_cli.cpp
+  alert_wx.cpp
+  local_options.sh
+Update mailing-list links.
+
+20080113T2003Z <gchicares@sbcglobal.net> [1207]
+
+  ChangeLog
+  autodependency.make
+  comma_punct.hpp
+  handle_exceptions.hpp
+  main_wx.cpp
+  numeric_io_test.cpp
+  path_utility.hpp
+  progress_meter.hpp
+  so_attributes.hpp
+  system_command.hpp
+  workhorse.make
+Update mailing-list links.
 

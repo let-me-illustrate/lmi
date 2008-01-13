@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: so_attributes.hpp,v 1.4 2008-01-01 18:29:55 chicares Exp $
+// $Id: so_attributes.hpp,v 1.5 2008-01-13 20:03:20 chicares Exp $
 
 // On applicable platforms, optionally use shared-object attributes
 // for symbols decorated with macro LMI_SO .
@@ -49,7 +49,8 @@
 // is written in early 2005, gcc imports symbols from dlls quite
 // robustly without them. Omitting them makes building slightly more
 // efficient--see
-//   http://sourceforge.net/mailarchive/message.php?msg_id=10584510
+//   http://article.gmane.org/gmane.comp.gnu.mingw.user/14751
+//     [2005-01-18T01:09:29Z from Greg Chicares]
 // An important benefit of omitting them is that static and shared
 // libraries can then be built from the same object files.
 //

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: comma_punct.hpp,v 1.6 2008-01-01 18:29:36 chicares Exp $
+// $Id: comma_punct.hpp,v 1.7 2008-01-13 20:03:19 chicares Exp $
 
 #ifndef comma_punct_hpp
 #define comma_punct_hpp
@@ -35,7 +35,8 @@
 // as a basis for customization, though perhaps any national locale
 // would require further customization. However, this would appear not
 // to work as of 2005-05-09 with gcc on the msw platform:
-//   http://sf.net/mailarchive/message.php?msg_id=11704377
+//   http://article.gmane.org/gmane.comp.gnu.mingw.user/16048
+//     [2005-05-10T03:14:53Z from Tor Lillqvist]
 
 class comma_punct
     :public std::numpunct<char>
