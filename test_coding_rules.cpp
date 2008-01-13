@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.66 2008-01-13 15:46:33 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.67 2008-01-13 16:20:44 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -79,8 +79,7 @@ std::map<std::string, bool> my_taboos();
 #endif // defined __MINGW32__
 
 enum enum_phylum
-    {e_no_phylum  = 0
-    ,e_binary     = 1 <<  0
+    {e_binary     = 1 <<  0
     ,e_c_header   = 1 <<  1
     ,e_c_source   = 1 <<  2
     ,e_cxx_header = 1 <<  3
@@ -203,13 +202,8 @@ file::file(std::string const& file_path)
         : phyloanalyze("^INSTALL$")    ? e_synopsis
         : phyloanalyze("^README")      ? e_synopsis
         : phyloanalyze("^eraseme")     ? e_ephemeral
-        :                                e_no_phylum
+        : throw std::runtime_error("File is unexpectedly uncategorizable.")
         ;
-
-    if(e_no_phylum == phylum_)
-        {
-        throw std::runtime_error("File is unexpectedly uncategorizable.");
-        }
 
     if(is_of_phylum(e_binary) || is_of_phylum(e_expungible))
         {
