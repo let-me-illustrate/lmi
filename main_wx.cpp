@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.87 2008-01-08 05:58:18 chicares Exp $
+// $Id: main_wx.cpp,v 1.88 2008-01-13 20:03:19 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -512,7 +512,8 @@ void Skeleton::UponEditDefaultCell(wxCommandEvent&)
 /// base-class implementation would be pointless.
 ///
 /// For MinGW gcc-3.4.4 and earlier
-///   http://sourceforge.net/mailarchive/message.php?msg_id=14436989
+///   http://article.gmane.org/gmane.comp.gnu.mingw.user/18594
+///     [2006-01-10T22:00:24Z from Danny Smith]
 /// it is crucial that the exception be thrown from the same shared
 /// library that caught it. This workaround requires a 'monolithic'
 /// wx shared library.

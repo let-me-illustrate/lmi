@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.106 2008-01-06 19:58:15 chicares Exp $
+# $Id: workhorse.make,v 1.107 2008-01-13 20:03:20 chicares Exp $
 
 ################################################################################
 
@@ -585,7 +585,8 @@ CXXFLAGS = \
   $(debug_flag) $(optimization_flag) $(gprof_flag) \
 
 # Explicitly disable the infelicitous auto-import default. See:
-#   http://sourceforge.net/mailarchive/message.php?msg_id=15705075
+#   http://article.gmane.org/gmane.comp.gnu.mingw.user/19758
+#     [2006-05-18T11:38:01Z from Earnie Boyd]
 
 LDFLAGS = \
   $(gprof_flag) \
@@ -739,7 +740,8 @@ ALL_RCFLAGS  = $(REQUIRED_RCFLAGS)  $(RCFLAGS)
 #
 # Such attributes are no longer needed for gcc-3.something. Omitting
 # them makes building slightly more efficient--see
-#   http://sourceforge.net/mailarchive/message.php?msg_id=10584510
+#   http://article.gmane.org/gmane.comp.gnu.mingw.user/14751
+#     [2005-01-18T01:09:29Z from Greg Chicares]
 # The most important benefit of omitting them is that static and
 # shared libraries can then be built from the same object files.
 #
@@ -1102,7 +1104,8 @@ system_test: install
 # this project's do not. By default, g++ reports closure defects with
 # this simple technique, but gcc does not, probably because it strives
 # for compatibility with pre-standard C. See
-#   http://sourceforge.net/mailarchive/message.php?msg_id=36344864
+#   http://article.gmane.org/gmane.comp.gnu.mingw.user/20528
+#     [2006-08-12T15:14:21Z from Greg Chicares]
 # though, and
 #   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=28528
 # which explains why that technique doesn't work for '.h' files with

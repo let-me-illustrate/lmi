@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_test.cpp,v 1.16 2008-01-01 18:29:52 chicares Exp $
+// $Id: numeric_io_test.cpp,v 1.17 2008-01-13 20:03:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -264,7 +264,8 @@ int test_main(int, char*[])
 #if defined __MINGW32__ && defined __GNUC__ && LMI_GCC_VERSION < 30404
     std::cerr
         << "The following test fails with MinGW prior to gcc-3.4.4: see\n"
-        << "  http://sf.net/mailarchive/message.php?msg_id=10706179\n"
+        << "  http://article.gmane.org/gmane.comp.gnu.mingw.user/14935\n"
+        << "    [2005-01-31T20:58:12Z from Greg Chicares]\n"
         ;
 #endif // MinGW gcc version prior to 3.4.4 .
 
