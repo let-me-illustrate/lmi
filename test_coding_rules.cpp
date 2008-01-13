@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.65 2008-01-12 06:19:29 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.66 2008-01-13 15:46:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -85,15 +85,19 @@ enum enum_phylum
     ,e_c_source   = 1 <<  2
     ,e_cxx_header = 1 <<  3
     ,e_cxx_source = 1 <<  4
-    ,e_expungible = 1 <<  5
-    ,e_gpl        = 1 <<  6
-    ,e_log        = 1 <<  7
-    ,e_make       = 1 <<  8
-    ,e_md5        = 1 <<  9
-    ,e_patch      = 1 << 10
-    ,e_touchstone = 1 << 11
-    ,e_xml_input  = 1 << 12
-    ,e_xpm        = 1 << 13
+    ,e_ephemeral  = 1 <<  5
+    ,e_expungible = 1 <<  6
+    ,e_gpl        = 1 <<  7
+    ,e_log        = 1 <<  8
+    ,e_make       = 1 <<  9
+    ,e_md5        = 1 << 10
+    ,e_patch      = 1 << 11
+    ,e_script     = 1 << 12
+    ,e_synopsis   = 1 << 13
+    ,e_touchstone = 1 << 14
+    ,e_xml_input  = 1 << 15
+    ,e_xml_other  = 1 << 16
+    ,e_xpm        = 1 << 17
     };
 
 enum enum_kingdom
@@ -140,6 +144,9 @@ class file
 ///
 /// Add a '\n' sentry at the beginning of the string for the reason
 /// explained in 'regex_test.cpp'.
+///
+/// Phylum 'e_ephemeral' is used for this program's unit test, so
+/// assign files to that phylum last, and only if they fit no other.
 
 file::file(std::string const& file_path)
     :path_     (file_path)
@@ -176,17 +183,33 @@ file::file(std::string const& file_path)
         : ".make"       == extension() ? e_make
         : ".md5sums"    == extension() ? e_md5
         : ".patch"      == extension() ? e_patch
+        : ".ac"         == extension() ? e_script
+        : ".rc"         == extension() ? e_script
+        : ".sed"        == extension() ? e_script
+        : ".sh"         == extension() ? e_script
         : ".touchstone" == extension() ? e_touchstone
         : ".cns"        == extension() ? e_xml_input
         : ".ill"        == extension() ? e_xml_input
+        : ".xml"        == extension() ? e_xml_other
+        : ".xrc"        == extension() ? e_xml_other
+        : ".xsd"        == extension() ? e_xml_other
+        : ".xsl"        == extension() ? e_xml_other
         : ".xpm"        == extension() ? e_xpm
         : phyloanalyze("^COPYING$")    ? e_gpl
         : phyloanalyze("^quoted_gpl")  ? e_gpl
         : phyloanalyze("Log$")         ? e_log
         : phyloanalyze("GNUmakefile$") ? e_make
         : phyloanalyze("^Makefile")    ? e_make
+        : phyloanalyze("^INSTALL$")    ? e_synopsis
+        : phyloanalyze("^README")      ? e_synopsis
+        : phyloanalyze("^eraseme")     ? e_ephemeral
         :                                e_no_phylum
         ;
+
+    if(e_no_phylum == phylum_)
+        {
+        throw std::runtime_error("File is unexpectedly uncategorizable.");
+        }
 
     if(is_of_phylum(e_binary) || is_of_phylum(e_expungible))
         {

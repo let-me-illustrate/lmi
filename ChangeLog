@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.984 2008-01-12 06:19:29 chicares Exp $
+// $Id: ChangeLog,v 1.985 2008-01-13 15:46:34 chicares Exp $
 
 MAINTENANCE
 
@@ -15250,4 +15250,16 @@ Relocate or repeal certain taboos. Several didn't need automation:
 e.g., no introduced dependency on libxml++ will easily escape notice,
 and msw 'hlp' files have long been obsolete. It is correct no longer
 to suppress the issue flagged in 'INSTALL'.
+
+20080113T1427Z <gchicares@sbcglobal.net> [1207]
+
+  msw_msys.make
+Update mailing-list link.
+
+20080113T1546Z <gchicares@sbcglobal.net> [1207]
+
+  GNUmakefile
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+Relocate test for unexpected files.
 
