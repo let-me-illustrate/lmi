@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_cgi.cpp,v 1.9 2008-01-01 18:29:34 chicares Exp $
+// $Id: alert_cgi.cpp,v 1.10 2008-01-13 17:16:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -74,8 +74,10 @@ void safe_message_alert(char const* message)
     std::fputc('\n', stderr);
     // Flush explicitly. C99 7.19.3/7 says only that stderr is
     // "not fully buffered", not that it is 'unbuffered'. See:
-    //   http://sourceforge.net/mailarchive/message.php?msg_id=10388832
-    //   http://sourceforge.net/mailarchive/message.php?msg_id=10826040
+    //   http://article.gmane.org/gmane.comp.gnu.mingw.user/14358
+    //     [2004-12-20T09:07:24Z from Danny Smith]
+    //   http://article.gmane.org/gmane.comp.gnu.mingw.user/15063
+    //     [2005-02-10T17:23:09Z from Greg Chicares]
     std::fflush(stderr);
 }
 
