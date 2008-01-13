@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.34 2008-01-12 04:00:49 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.35 2008-01-13 15:46:34 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -369,6 +369,8 @@ static char const* eraseme_xpm_003_dot_dash_dot_xpm[] = {
 EOF
 
 touch an_expungible_file.bak
+touch an_unexpected_file
+touch another.unexpected.file
 
 # Compare observed to expected. Note that directory '.' is ignored.
 
@@ -376,6 +378,8 @@ touch an_expungible_file.bak
   . \
   a_nonexistent_file \
   an_expungible_file.bak \
+  an_unexpected_file \
+  another.unexpected.file \
   eraseme* \
   | sed -e '/^[ 0-9]\{9\} \(source files\|source lines\|marked defects\)/d' \
   >eraseme_observed
@@ -383,6 +387,8 @@ touch an_expungible_file.bak
 cat >eraseme_expected <<EOF
 Exception--file 'a_nonexistent_file': File not found.
 File 'an_expungible_file.bak' ignored as being expungible.
+Exception--file 'an_unexpected_file': File is unexpectedly uncategorizable.
+Exception--file 'another.unexpected.file': File is unexpectedly uncategorizable.
 File 'eraseme_copyright_001' lacks current copyright.
 File 'eraseme_copyright_001' breaks taboo '\(c\) *[0-9]'.
 File 'eraseme_copyright_002' lacks current copyright.
@@ -440,5 +446,9 @@ File 'eraseme_xpm_001.xpm' lacks proper variable assignment.
 File 'eraseme_xpm_002.xpm' lacks proper variable assignment.
 EOF
 
-diff --unified=0 eraseme_expected eraseme_observed && rm --force eraseme* *.bak
+diff --unified=0 eraseme_expected eraseme_observed && rm --force \
+  eraseme* \
+  an_expungible_file.bak \
+  an_unexpected_file \
+  another.unexpected.file \
 
