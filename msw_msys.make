@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_msys.make,v 1.16 2008-01-01 18:29:50 chicares Exp $
+# $Id: msw_msys.make,v 1.17 2008-01-13 14:27:49 chicares Exp $
 
 ################################################################################
 
@@ -49,11 +49,9 @@
 #
 # Replacing sed exposes a nasty problem in MSYS's bash port, which
 # "translates" any program argument it deems to be a path; details:
-#   http://sf.net/mailarchive/message.php?msg_id=10668423
-# Here's another example:
-#   http://sf.net/mailarchive/message.php?msg_id=9879502
-# Follow those links to learn how to recognize this problem. AFAIK,
-# the problems have been worked around by changing sed commands
+#   http://article.gmane.org/gmane.comp.gnu.mingw.msys/2183
+#     [2005-01-27T01:42:19Z from Greg Chicares]
+# That problem has been worked around by changing sed commands
 # throughout the lmi makefiles in benign but ridiculous ways.
 #
 # If you modify MSYS's '/etc/fstab', end each line with '\n', and
