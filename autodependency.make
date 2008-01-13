@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: autodependency.make,v 1.9 2008-01-01 18:29:35 chicares Exp $
+# $Id: autodependency.make,v 1.10 2008-01-13 20:03:19 chicares Exp $
 
 ################################################################################
 
@@ -39,9 +39,8 @@ $(src_dir)/configuration.make:: ;
 # In 2000, with refinements in later years, Gregory W. Chicares
 # adapted it to work on the msw platform as well as with free
 # operating systems, and with compilers other than gcc. See my
-# 2000-11-15T19:11:59-0500 post to the mingw mailing list
-#   http://sourceforge.net/mailarchive/message.php?msg_id=600022
-# and the further discussion here:
+# 2000-11-15T19:11:59-0500 post to the mingw mailing list and the
+# further discussion here:
 #   http://mail.gnu.org/archive/html/make-w32/2002-07/msg00008.html
 # Any defect should not reflect on Paul D. Smith or Tom Tromey's
 # reputations.

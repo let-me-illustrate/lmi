@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: system_command.hpp,v 1.12 2008-01-01 18:29:56 chicares Exp $
+// $Id: system_command.hpp,v 1.13 2008-01-13 20:03:20 chicares Exp $
 
 #ifndef system_command_hpp
 #define system_command_hpp
@@ -59,7 +59,8 @@ bool LMI_SO system_command_initialize(system_command_fp_type);
 /// eliciting a diagnostic like
 ///   /c: can't open input file: /c
 /// as described here:
-///   http://sourceforge.net/mailarchive/message.php?msg_id=13234342
+///   http://article.gmane.org/gmane.comp.gnu.mingw.user/7396
+///     [2003-05-26T19:06:41Z from Greg Chicares]
 /// The only reliable alternative is to use a platform-specific system
 /// call instead of std::system().
 ///

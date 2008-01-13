@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: path_utility.hpp,v 1.9 2008-01-01 18:29:52 chicares Exp $
+// $Id: path_utility.hpp,v 1.10 2008-01-13 20:03:19 chicares Exp $
 
 #ifndef path_utility_hpp
 #define path_utility_hpp
@@ -67,7 +67,8 @@
 ///
 /// Resist the urge to write its simple implementation inline because
 /// that may fail with gcc on msw--see:
-///   http://sourceforge.net/mailarchive/message.php?msg_id=14476898
+///   http://article.gmane.org/gmane.comp.gnu.mingw.user/18633
+///     [2006-01-14T11:55:49Z from Greg Chicares]
 ///
 /// The boost documentation says:
 ///   "The preferred implementation would be to call initial_path()

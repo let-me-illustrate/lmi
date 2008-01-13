@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter.hpp,v 1.21 2008-01-01 18:29:53 chicares Exp $
+// $Id: progress_meter.hpp,v 1.22 2008-01-13 20:03:20 chicares Exp $
 
 /// Design notes for class progress_meter.
 ///
@@ -156,7 +156,8 @@
 /// that is not done in the present implementation because it's not
 /// known whether all other toolsets provide an equivalent facility.
 /// This might be the best approach in any case: see
-///   http://sourceforge.net/mailarchive/message.php?msg_id=11527978
+///   http://article.gmane.org/gmane.comp.gnu.mingw.user/15847
+///     [2005-04-20T01:20:14Z from Greg Chicares]
 ///
 /// Not all data members are actually accessed in any concrete derived
 /// class: max_count_ and title_ are not, but are provided anyway in
