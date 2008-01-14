@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.81 2008-01-01 18:29:41 chicares Exp $
+// $Id: group_values.cpp,v 1.82 2008-01-14 18:31:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -379,7 +379,6 @@ census_run_result run_census_in_parallel::operator()
         // differ between cells and we have not coded support for that yet.
         for(int year = 0; year < MaxYr; ++year)
             {
-            double projected_net_mortchgs  = 0.0;
             double ytd_net_mortchgs        = 0.0;
 
             double experience_reserve_annual_u =
@@ -467,8 +466,9 @@ census_run_result run_census_in_parallel::operator()
             // year's claims, which is consistent with curtate
             // mortality.
 
-            double ytd_net_claims = 0.0;
-            double eoy_inforce_lives = 0.0;
+            double eoy_inforce_lives      = 0.0;
+            double ytd_net_claims         = 0.0;
+            double projected_net_mortchgs = 0.0;
             for(i = cell_values.begin(); i != cell_values.end(); ++i)
                 {
                 if((*i)->PrecedesInforceDuration(year, 11))
