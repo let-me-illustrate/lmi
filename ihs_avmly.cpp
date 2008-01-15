@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.68 2008-01-15 17:10:34 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.69 2008-01-15 17:35:53 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2430,7 +2430,7 @@ void AccountValue::TxDoMlyDed()
     // determined.
     MlyDed += MonthsPolicyFees + SpecAmtLoad;
 
-    YearsTotalNetCoiCharges += NetCoiCharge;
+    YearsTotalNetCoiCharge += NetCoiCharge;
 
     SepAcctValueAfterDeduction = AVSepAcct;
 }
