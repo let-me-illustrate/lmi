@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.67 2008-01-01 18:29:42 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.68 2008-01-15 17:10:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2284,6 +2284,9 @@ void AccountValue::TxSetCoiCharge()
 
     // TODO ?? Need to divide CoiRetentionRate by CoiMultiplier
     // depending on database entity 'UseRawTableForRetention'.
+    //
+    // DATABASE !! Add such an entity; for now, 'ExpRatCOIRetention'
+    // can be manipulated to achieve the same effect.
 
     if
         (   Input_->UseExperienceRating
