@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.986 2008-01-13 20:03:19 chicares Exp $
+// $Id: ChangeLog,v 1.987 2008-01-18 19:23:24 chicares Exp $
 
 MAINTENANCE
 
@@ -15291,4 +15291,41 @@ Update mailing-list links.
   system_command.hpp
   workhorse.make
 Update mailing-list links.
+
+20080114T1831Z <gchicares@sbcglobal.net> [1207]
+
+  group_values.cpp
+Refactor.
+
+20080115T1710Z <gchicares@sbcglobal.net> [1207]
+
+  ihs_avmly.cpp
+Improve documentation.
+
+20080115T1735Z <gchicares@sbcglobal.net> [1207]
+
+  account_value.hpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+Change name 'YearsTotalNetCoiCharges': it shouldn't be plural because
+'CoiCharge', 'NetCoiCharge', and 'YearsTotalCoiCharge' aren't.
+
+20080118T1417Z <gchicares@sbcglobal.net> [1207]
+
+  install_miscellanea.make
+Fix defect introduced 20071211T0204Z. The '/opt/lmi/local/lib'
+subdirectory might not yet exist, and hardcoding '/opt/lmi' instead of
+using $(prefix) is erroneous if $(prefix) is overridden.
+
+20080118T1923Z <gchicares@sbcglobal.net> [1207]
+
+  ihs_acctval.cpp
+Treat claims and COI charges consistently for experience rating.
+Formerly, net COI charges were recognized for every month, while
+claims occur only at year end; an anomaly arose upon lapse. Now, if
+claims are zero due to lapse, then so are the net COI charges used in
+experience rating. It would be more exact to count both for a partial
+year, but partial mortality is predicated upon "curtate" deaths that
+occur at year end only; and no such exquisite refinement is required
+because the experience-rating process is self correcting.
 
