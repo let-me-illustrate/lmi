@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_miscellanea.make,v 1.10 2008-01-01 18:29:46 chicares Exp $
+# $Id: install_miscellanea.make,v 1.11 2008-01-18 14:17:48 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -145,7 +145,8 @@ boost: $(file_list)
 	@$(MKDIR) $(third_party_source_dir)/boost/
 	$(MV)                                scratch/$(stem)/*       $(third_party_source_dir)/boost/
 	cd $(third_party_source_dir)/boost/libs/regex/build && PATH=$(mingw_bin_dir):$$PATH $(MAKE) -f gcc.mak
-	$(CP) --force --preserve $(third_party_source_dir)/boost/libs/regex/build/gcc/lib*.a /opt/lmi/local/lib
+	@$(MKDIR) --parents $(prefix)/local/lib
+	$(CP) --force --preserve $(third_party_source_dir)/boost/libs/regex/build/gcc/lib*.a $(prefix)/local/lib
 
 .PHONY: cgicc
 cgicc: $(file_list)
