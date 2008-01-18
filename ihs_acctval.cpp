@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.99 2008-01-18 19:48:13 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.100 2008-01-18 20:57:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1667,17 +1667,8 @@ double AccountValue::GetNetCoiChargeInforce() const
         return 0.0;
         }
 
-    // This is a temporary single-line change, from:
-//    return NetCoiCharge * InforceLivesBoy();
-    // to:
-    return 11 == Month ? YearsTotalNetCoiCharge * InforceLivesBoy() : 0.0;
-    // It's not the cleanest way to achieve the desired behavior,
-    // but it's the simplest, and a later refactoring will make it
-    // clean without further changing the behavior. The intention is
-    // to facilitate testing: this one-line change can readily be
-    // understood because it is simple, while the more complicated
-    // refactoring soon to follow can readily be seen to be correct
-    // because it has no observable effect.
+    LMI_ASSERT(11 == Month);
+    return YearsTotalNetCoiCharge * InforceLivesBoy();
 }
 
 //============================================================================
@@ -1688,6 +1679,7 @@ double AccountValue::GetCurtateNetClaimsInforce()
         return 0.0;
         }
 
+    LMI_ASSERT(11 == Month);
     return YearsNetClaims * InvariantValues().InforceLives[Year];
 }
 
