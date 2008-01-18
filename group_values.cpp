@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.82 2008-01-14 18:31:28 chicares Exp $
+// $Id: group_values.cpp,v 1.83 2008-01-18 20:57:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -163,8 +163,9 @@ census_run_result run_census_in_series::operator()
 /// accumulands are accumulated at annual interest. Treating mortality
 /// charges as though they were deducted at the end of the year is
 /// consistent with curtate partial mortality, though not with normal
-/// monthiversary processing. That's all right because this process is
-/// self correcting and therefore needs no exquisite refinements.
+/// monthiversary processing. Both accumulands are zero in a lapse
+/// year. These simplifying assumptions are okay because this process
+/// is self correcting and therefore needs no exquisite refinements.
 ///
 /// The current COI rate is the tabular current COI rate times the
 /// input current COI multiplier, with all other customary adjustments
@@ -379,8 +380,6 @@ census_run_result run_census_in_parallel::operator()
         // differ between cells and we have not coded support for that yet.
         for(int year = 0; year < MaxYr; ++year)
             {
-            double ytd_net_mortchgs        = 0.0;
-
             double experience_reserve_annual_u =
                     1.0
                 +   experience_reserve_rate[year]
@@ -415,9 +414,7 @@ census_run_result run_census_in_parallel::operator()
                     (*i)->Month = month;
                     (*i)->CoordinateCounters();
                     (*i)->IncrementBOM(year, month, case_k_factor);
-
                     assets += (*i)->GetSepAcctAssetsInforce();
-                    ytd_net_mortchgs += (*i)->GetNetCoiChargeInforce();
                     }
 
                 // Process transactions from int credit through end of month.
@@ -468,6 +465,7 @@ census_run_result run_census_in_parallel::operator()
 
             double eoy_inforce_lives      = 0.0;
             double ytd_net_claims         = 0.0;
+            double ytd_net_mortchgs       = 0.0;
             double projected_net_mortchgs = 0.0;
             for(i = cell_values.begin(); i != cell_values.end(); ++i)
                 {
@@ -477,9 +475,10 @@ census_run_result run_census_in_parallel::operator()
                     }
                 (*i)->SetClaims();
                 (*i)->SetProjectedCoiCharge();
-                eoy_inforce_lives += (*i)->InforceLivesEoy();
+                eoy_inforce_lives      += (*i)->InforceLivesEoy();
                 (*i)->IncrementEOY(year);
-                ytd_net_claims += (*i)->GetCurtateNetClaimsInforce();
+                ytd_net_claims         += (*i)->GetCurtateNetClaimsInforce();
+                ytd_net_mortchgs       += (*i)->GetNetCoiChargeInforce();
                 projected_net_mortchgs += (*i)->GetProjectedCoiChargeInforce();
                 }
 
