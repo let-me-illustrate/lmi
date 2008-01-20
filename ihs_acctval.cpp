@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.100 2008-01-18 20:57:26 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.101 2008-01-20 00:37:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -841,7 +841,8 @@ double AccountValue::IncrementBOM
         }
 
     if
-        (   Input_->UseExperienceRating
+        (   Input_->UsePartialMort
+        &&  Input_->UseExperienceRating
         &&  e_currbasis == ExpAndGABasis
         )
         {
@@ -1236,6 +1237,7 @@ void AccountValue::SetProjectedCoiCharge()
     if
         (   ItLapsed
         ||  BasicValues::GetLength() <= Year
+        ||  !Input_->UsePartialMort
         ||  !Input_->UseExperienceRating
         ||  !e_currbasis == ExpAndGABasis
         )
@@ -1662,7 +1664,13 @@ double AccountValue::GetSepAcctAssetsInforce() const
 //============================================================================
 double AccountValue::GetNetCoiChargeInforce() const
 {
-    if(ItLapsed || BasicValues::GetLength() <= Year)
+    if
+        (   ItLapsed
+        ||  BasicValues::GetLength() <= Year
+        ||  !Input_->UsePartialMort
+        ||  !Input_->UseExperienceRating
+        ||  !e_currbasis == ExpAndGABasis
+        )
         {
         return 0.0;
         }
@@ -1674,7 +1682,13 @@ double AccountValue::GetNetCoiChargeInforce() const
 //============================================================================
 double AccountValue::GetCurtateNetClaimsInforce()
 {
-    if(!Input_->UsePartialMort || ItLapsed || BasicValues::GetLength() <= Year)
+    if
+        (   ItLapsed
+        ||  BasicValues::GetLength() <= Year
+        ||  !Input_->UsePartialMort
+        ||  !Input_->UseExperienceRating
+        ||  !e_currbasis == ExpAndGABasis
+        )
         {
         return 0.0;
         }
@@ -1689,6 +1703,7 @@ double AccountValue::GetProjectedCoiChargeInforce()
     if
         (   ItLapsed
         ||  BasicValues::GetLength() <= Year
+        ||  !Input_->UsePartialMort
         ||  !Input_->UseExperienceRating
         ||  !e_currbasis == ExpAndGABasis
         )
@@ -1696,6 +1711,7 @@ double AccountValue::GetProjectedCoiChargeInforce()
         return 0.0;
         }
 
+    LMI_ASSERT(11 == Month);
     return NextYearsProjectedCoiCharge * InforceLivesEoy();
 }
 
@@ -1715,6 +1731,7 @@ double AccountValue::ApportionNetMortalityReserve
     if
         (   ItLapsed
         ||  BasicValues::GetLength() <= Year
+        ||  !Input_->UsePartialMort
         ||  !Input_->UseExperienceRating
         ||  !e_currbasis == ExpAndGABasis
         )
