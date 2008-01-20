@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.987 2008-01-18 19:23:24 chicares Exp $
+// $Id: ChangeLog,v 1.988 2008-01-20 01:13:48 chicares Exp $
 
 MAINTENANCE
 
@@ -15328,4 +15328,29 @@ experience rating. It would be more exact to count both for a partial
 year, but partial mortality is predicated upon "curtate" deaths that
 occur at year end only; and no such exquisite refinement is required
 because the experience-rating process is self correcting.
+
+20080118T1948Z <gchicares@sbcglobal.net> [1207]
+
+  ihs_acctval.cpp
+Reformat.
+
+20080118T2057Z <gchicares@sbcglobal.net> [1207]
+
+  group_values.cpp
+  ihs_acctval.cpp
+Refactor. More clearly recognize experience-rating net mortality
+charges at the end of each year, instead of each month.
+
+20080120T0037Z <gchicares@sbcglobal.net> [1207]
+
+  ihs_acctval.cpp
+Regularize experience-rating logic.
+
+20080120T0113Z <gchicares@sbcglobal.net> [1207]
+
+  account_value.hpp
+  accountvalue.cpp
+  group_values.cpp
+  ihs_acctval.cpp
+Regularize names and constness of certain experience-rating functions.
 

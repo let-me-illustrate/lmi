@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.83 2008-01-18 20:57:26 chicares Exp $
+// $Id: group_values.cpp,v 1.84 2008-01-20 01:13:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -478,7 +478,7 @@ census_run_result run_census_in_parallel::operator()
                 eoy_inforce_lives      += (*i)->InforceLivesEoy();
                 (*i)->IncrementEOY(year);
                 ytd_net_claims         += (*i)->GetCurtateNetClaimsInforce();
-                ytd_net_mortchgs       += (*i)->GetNetCoiChargeInforce();
+                ytd_net_mortchgs       += (*i)->GetCurtateNetCoiChargeInforce();
                 projected_net_mortchgs += (*i)->GetProjectedCoiChargeInforce();
                 }
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.49 2008-01-15 17:35:53 chicares Exp $
+// $Id: account_value.hpp,v 1.50 2008-01-20 01:13:48 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -105,7 +105,6 @@ class LMI_SO AccountValue
     double InforceLivesBoy         () const;
     double InforceLivesEoy         () const;
     double GetSepAcctAssetsInforce () const;
-    double GetNetCoiChargeInforce  () const;
 
     void process_payment          (double);
     void IncrementAVProportionally(double);
@@ -162,9 +161,10 @@ class LMI_SO AccountValue
     void   DebugRestart         (std::string const& reason);
 
     void   SetClaims();
-    double GetCurtateNetClaimsInforce();
-    void   SetProjectedCoiCharge();
-    double GetProjectedCoiChargeInforce();
+    double GetCurtateNetClaimsInforce    () const;
+    double GetCurtateNetCoiChargeInforce () const;
+    void   SetProjectedCoiCharge         ();
+    double GetProjectedCoiChargeInforce  () const;
     double ApportionNetMortalityReserve
         (double reserve_per_life_inforce
         );
