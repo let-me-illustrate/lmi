@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.69 2008-01-15 17:35:53 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.70 2008-01-20 14:15:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2299,11 +2299,12 @@ void AccountValue::TxSetCoiCharge()
                 ,coi_rate * (case_k_factor + CoiRetentionRate)
                 )
             );
-        retention_charge = NAAR * coi_rate * CoiRetentionRate;
+        double retention_rate = round_coi_rate(coi_rate * CoiRetentionRate);
+        retention_charge = round_coi_charge(NAAR * retention_rate);
         }
 
     CoiCharge    = round_coi_charge(NAAR * ActualCoiRate);
-    NetCoiCharge = round_coi_charge(CoiCharge - retention_charge);
+    NetCoiCharge = CoiCharge - retention_charge;
     YearsTotalCoiCharge += CoiCharge;
 
     // DCV need not be rounded.
