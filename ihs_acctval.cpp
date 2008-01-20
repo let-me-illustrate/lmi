@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.102 2008-01-20 01:13:48 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.103 2008-01-20 15:25:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1271,7 +1271,26 @@ void AccountValue::SetProjectedCoiCharge()
         ;
 }
 
-//============================================================================
+/// Post year-end results to ledger.
+///
+/// This function is called only if the contract is in force at the
+/// end of the year. One might alternatively post a partial year's
+/// results in the year of lapse; perhaps the greatest benefit would
+/// be a more comprehensive composite. Apparently, in 2008, the most
+/// common industry practice is:
+///  - for composites, truncate each cell as at the beginning of its
+///    lapse year;
+///  - for individual illustrations, either print nothing for the year
+///    of lapse, or print the whole annualized planned premium, with
+///    an asterisk pointing to a footnote.
+/// If composites were changed to bring lapsing contracts into an
+/// account-value rollforward, it would be necessary to show only
+/// payments made prior to lapse, and to limit each charge to the
+/// available account value; but that would introduce an inconsistency
+/// with prevailing practice. It is not unreasonable to follow common
+/// practice by defining a composite as the weighted sum of individual
+/// illustrations, which show completed years only.
+
 void AccountValue::FinalizeYear()
 {
     VariantValues().TotalLoanBalance[Year] = RegLnBal + PrfLnBal;
@@ -1345,10 +1364,7 @@ void AccountValue::FinalizeYear()
 */
 
     // Monthly deduction detail
-    //
-    // TODO ?? This is done only if the policy is in force at the end of the
-    // year; but if it lapses during the year, should things that happened
-    // during the year of lapse be included in a composite?
+
     VariantValues().COICharge         [Year] = YearsTotalCoiCharge        ;
     VariantValues().AVRelOnDeath      [Year] = YearsAVRelOnDeath          ;
     VariantValues().ClaimsPaid        [Year] = YearsGrossClaims           ;
