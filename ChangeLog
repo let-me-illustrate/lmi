@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.988 2008-01-20 01:13:48 chicares Exp $
+// $Id: ChangeLog,v 1.989 2008-01-20 15:25:20 chicares Exp $
 
 MAINTENANCE
 
@@ -15353,4 +15353,18 @@ Regularize experience-rating logic.
   group_values.cpp
   ihs_acctval.cpp
 Regularize names and constness of certain experience-rating functions.
+
+20080120T1415Z <gchicares@sbcglobal.net> [1207]
+
+  ihs_avmly.cpp
+Remove an anomaly by rounding differently. Formerly, 'NetCoiCharge'
+was calculated as the difference between two quantities, only one of
+which was rounded before subtraction; small negative values were
+occasionally observed, whereas this charge should be nonnegative. Now,
+it is calculated as the difference between two rounded quantities.
+
+20080120T1525Z <gchicares@sbcglobal.net> [1206]
+
+  ihs_acctval.cpp
+Improve documentation, resolving a marked defect.
 
