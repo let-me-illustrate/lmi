@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.53 2008-01-01 18:29:44 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.54 2008-01-21 16:07:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -314,10 +314,6 @@ void Input::DoHarmonize()
     // TODO ?? These shouldn't need to depend on 'enable_experience_rating';
     // instead, 'UseExperienceRating' should be transmogrified if it's not
     // enabled.
-    ExperienceRatingInitialKFactor.enable
-        (   enable_experience_rating
-        &&  "Yes" == UseExperienceRating
-        );
     OverrideExperienceReserveRate.enable
         (   enable_experience_rating
         &&  "Yes" == UseExperienceRating
@@ -326,6 +322,10 @@ void Input::DoHarmonize()
         (   enable_experience_rating
         &&  "Yes" == UseExperienceRating
         &&  "Yes" == OverrideExperienceReserveRate
+        );
+    ExperienceRatingInitialKFactor.enable
+        (   enable_experience_rating
+        &&  "Yes" == UseExperienceRating
         );
     InforceExperienceReserve.enable
         (   enable_experience_rating
