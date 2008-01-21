@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.31 2008-01-01 18:29:45 chicares Exp $
+// $Id: inputillus_xml_io.cpp,v 1.32 2008-01-21 19:00:58 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -55,11 +55,13 @@ std::vector<std::string> const& detritus()
         ,"CorporationTaxBracket"         // Never implemented.
         ,"CorporationTaxpayerId"         // Would violate privacy.
         ,"CurrentCoiGrading"             // Withdrawn.
-        ,"InforceDcvDeathBenefit"        // Misbegotten.
-        ,"InsuredPremiumTableNumber"     // Never implemented.
         ,"FirstName"                     // Single name instead.
+        ,"InforceDcvDeathBenefit"        // Misbegotten.
+        ,"InforceExperienceReserve"      // Renamed before implementation.
+        ,"InsuredPremiumTableNumber"     // Never implemented.
         ,"LastName"                      // Single name instead.
         ,"MiddleName"                    // Single name instead.
+        ,"NetMortalityChargeHistory"     // Renamed before implementation.
         ,"PartialMortalityTable"         // Never implemented.
         ,"PayLoanInterestInCash"         // Never implemented.
         ,"PolicyLevelFlatExtra"          // Never implemented; poor name.

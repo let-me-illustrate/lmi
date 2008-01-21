@@ -84,7 +84,6 @@
     <InforceCumulativePayments>0</InforceCumulativePayments>
     <InforceDcv>0</InforceDcv>
     <InforceDcvDeathBenefit>0</InforceDcvDeathBenefit>
-    <InforceExperienceReserve>0</InforceExperienceReserve>
     <InforceGeneralAccountValue>0</InforceGeneralAccountValue>
     <InforceGlp>0</InforceGlp>
     <InforceGsp>0</InforceGsp>
@@ -92,6 +91,7 @@
     <InforceIsMec>No</InforceIsMec>
     <InforceLeastDeathBenefit>0</InforceLeastDeathBenefit>
     <InforceMonth>0</InforceMonth>
+    <InforceNetExperienceReserve>0</InforceNetExperienceReserve>
     <InforcePreferredLoanBalance>0</InforcePreferredLoanBalance>
     <InforcePreferredLoanValue>0</InforcePreferredLoanValue>
     <InforceRegularLoanBalance>0</InforceRegularLoanBalance>
@@ -100,6 +100,7 @@
     <InforceSevenPayPremium>0</InforceSevenPayPremium>
     <InforceTaxBasis>0</InforceTaxBasis>
     <InforceYear>0</InforceYear>
+    <InforceYtdNetCoiCharge>0</InforceYtdNetCoiCharge>
     <InputFundManagementFee>0</InputFundManagementFee>
     <InsuredName/>
     <InsuredPremiumTableFactor>1</InsuredPremiumTableFactor>
@@ -121,7 +122,6 @@
     <LoanToDuration>50</LoanToDuration>
     <MaleProportion>1</MaleProportion>
     <MaximumNaar>1e+007</MaximumNaar>
-    <NetMortalityChargeHistory>0</NetMortalityChargeHistory>
     <NewLoan>0</NewLoan>
     <NonsmokerProportion>1</NonsmokerProportion>
     <NumberOfIdenticalLives>1</NumberOfIdenticalLives>
