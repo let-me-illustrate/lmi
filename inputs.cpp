@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputs.cpp,v 1.21 2008-01-06 18:58:18 chicares Exp $
+// $Id: inputs.cpp,v 1.22 2008-01-21 16:07:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -93,10 +93,10 @@ InputParms::InputParms()
     ,IntRateTypeSA                 (e_grossrate)
     ,LoanIntRate                   (0.06)
     ,LoanRateType                  (e_fixed_loan_rate)
-    ,ExperienceRatingInitialKFactor(1.0)
-    ,ExperienceReserveRate         (0.02)
-    ,InforceExperienceReserve      (0.0)
     ,OverrideExperienceReserveRate ("Yes")
+    ,ExperienceReserveRate         (0.02)
+    ,ExperienceRatingInitialKFactor(1.0)
+    ,InforceExperienceReserve      (0.0)
     ,PayLoanInt                    ("No")
     ,WDToBasisThenLoan             ("No")
     ,AvgFund                       ("No")
@@ -460,10 +460,10 @@ bool InputParms::operator==(InputParms const& z) const
     if(IntRateTypeSA                    != z.IntRateTypeSA                   ) return false;
     if(LoanIntRate                      != z.LoanIntRate                     ) return false;
     if(LoanRateType                     != z.LoanRateType                    ) return false;
-    if(ExperienceRatingInitialKFactor   != z.ExperienceRatingInitialKFactor  ) return false;
-    if(ExperienceReserveRate            != z.ExperienceReserveRate           ) return false;
-    if(InforceExperienceReserve         != z.InforceExperienceReserve        ) return false;
     if(OverrideExperienceReserveRate    != z.OverrideExperienceReserveRate   ) return false;
+    if(ExperienceReserveRate            != z.ExperienceReserveRate           ) return false;
+    if(ExperienceRatingInitialKFactor   != z.ExperienceRatingInitialKFactor  ) return false;
+    if(InforceExperienceReserve         != z.InforceExperienceReserve        ) return false;
     if(PayLoanInt                       != z.PayLoanInt                      ) return false;
     if(WDToBasisThenLoan                != z.WDToBasisThenLoan               ) return false;
     if(AvgFund                          != z.AvgFund                         ) return false;

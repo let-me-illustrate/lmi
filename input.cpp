@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.21 2008-01-01 18:29:44 chicares Exp $
+// $Id: input.cpp,v 1.22 2008-01-21 16:07:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -168,10 +168,11 @@ void Input::AscribeMembers()
     ascribe("SeparateAccountRateType"               , &Input::SeparateAccountRateType               );
     ascribe("LoanRate"                              , &Input::LoanRate                              );
     ascribe("LoanRateType"                          , &Input::LoanRateType                          );
-    ascribe("ExperienceRatingInitialKFactor"        , &Input::ExperienceRatingInitialKFactor        );
-    ascribe("ExperienceReserveRate"                 , &Input::ExperienceReserveRate                 );
-    ascribe("InforceExperienceReserve"              , &Input::InforceExperienceReserve              );
     ascribe("OverrideExperienceReserveRate"         , &Input::OverrideExperienceReserveRate         );
+    ascribe("ExperienceReserveRate"                 , &Input::ExperienceReserveRate                 );
+    ascribe("ExperienceRatingInitialKFactor"        , &Input::ExperienceRatingInitialKFactor        );
+    ascribe("InforceExperienceReserve"              , &Input::InforceExperienceReserve              );
+    ascribe("NetMortalityChargeHistory"             , &Input::NetMortalityChargeHistory             );
     ascribe("WithdrawToBasisThenLoan"               , &Input::WithdrawToBasisThenLoan               );
     ascribe("UseAverageOfAllFunds"                  , &Input::UseAverageOfAllFunds                  );
     ascribe("OverrideFundManagementFee"             , &Input::OverrideFundManagementFee             );
@@ -292,7 +293,6 @@ void Input::AscribeMembers()
     ascribe("SpecamtHistory"                        , &Input::SpecamtHistory                        );
     ascribe("FundAllocations"                       , &Input::FundAllocations                       );
     ascribe("CashValueEnhancementRate"              , &Input::CashValueEnhancementRate              );
-    ascribe("NetMortalityChargeHistory"             , &Input::NetMortalityChargeHistory             );
 
     ascribe("CreateSupplementalReport"              , &Input::CreateSupplementalReport              );
     ascribe("SupplementalReportColumn00"            , &Input::SupplementalReportColumn00            );
