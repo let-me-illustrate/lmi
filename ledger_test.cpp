@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_test.cpp,v 1.10 2008-01-01 18:29:47 chicares Exp $
+// $Id: ledger_test.cpp,v 1.11 2008-01-21 01:32:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -43,6 +43,7 @@
 #include <boost/filesystem/path.hpp>
 #include <boost/shared_ptr.hpp>
 
+#include <cstdio> // std::remove()
 #include <ios>
 
 class LedgerTest

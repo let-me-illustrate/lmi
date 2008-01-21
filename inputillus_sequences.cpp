@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_sequences.cpp,v 1.16 2008-01-01 18:29:45 chicares Exp $
+// $Id: inputillus_sequences.cpp,v 1.17 2008-01-21 01:32:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -39,6 +39,7 @@
 
 #include <algorithm>
 #include <sstream>
+#include <utility> // std::pair
 
 //============================================================================
 // Realize sequence strings with only numeric values.

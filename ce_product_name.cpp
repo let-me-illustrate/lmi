@@ -19,13 +19,15 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ce_product_name.cpp,v 1.10 2008-01-01 18:29:36 chicares Exp $
+// $Id: ce_product_name.cpp,v 1.11 2008-01-21 01:32:28 chicares Exp $
 
 #include "ce_product_name.hpp"
 
 #include "alert.hpp"
 #include "facets.hpp"
 #include "product_names.hpp"
+
+#include <algorithm>
 
 ce_product_name::ce_product_name()
     :mc_enum_base(product_names().size())
