@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.65 2008-01-01 18:29:36 chicares Exp $
+// $Id: census_view.cpp,v 1.66 2008-01-21 01:32:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -44,15 +44,20 @@
 #include "safely_dereference_as.hpp"
 #include "wx_new.hpp"
 
-#include <wx/app.h>     // wxTheApp
-#include <wx/clipbrd.h> // Used only by GetClipboardText().
-#include <wx/dataobj.h> // Used only by GetClipboardText().
+#include <wx/app.h>       // wxTheApp
+#include <wx/clipbrd.h>   // Used only by GetClipboardText().
+#include <wx/dataobj.h>   // Used only by GetClipboardText().
 #include <wx/icon.h>
 #include <wx/listctrl.h>
 #include <wx/menu.h>
 #include <wx/msgdlg.h>
 #include <wx/xrc/xmlres.h>
 
+#include <algorithm>
+#include <cctype>
+#include <cstdio>         // std::remove()
+#include <istream>        // std::ws
+#include <iterator>
 #include <sstream>
 
 // TODO ?? Can't this macro be dispensed with?

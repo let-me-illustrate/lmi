@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ncnnnpnn.hpp,v 1.10 2008-01-01 18:29:51 chicares Exp $
+// $Id: ncnnnpnn.hpp,v 1.11 2008-01-21 01:32:28 chicares Exp $
 
 // Ideally we would use imbue an appropriate locale and use some facet
 // like money_put, but most of our compilers's standard libraries don't
@@ -30,15 +30,11 @@
 
 #include "config.hpp"
 
-#include <algorithm>
-#include <cassert>
-#include <cmath>
 #include <iomanip>
 #include <ios>
 #include <istream>
-#include <limits>
-#include <ostream>
 #include <stdexcept>
+#include <string>
 #include <sstream>
 
 // Reference:

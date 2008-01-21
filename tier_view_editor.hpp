@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.hpp,v 1.13 2008-01-01 18:29:57 chicares Exp $
+// $Id: tier_view_editor.hpp,v 1.14 2008-01-21 01:32:28 chicares Exp $
 
 #ifndef tier_view_editor_hpp
 #define tier_view_editor_hpp
@@ -37,6 +37,7 @@
 #include <wx/treectrl.h>
 
 #include <string>
+#include <utility> // std::pair
 
 // EVGENIY !! Can we avoid writing typedefs at global scope, in order
 // to keep them out of the global namespace?

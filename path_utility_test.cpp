@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: path_utility_test.cpp,v 1.7 2008-01-01 18:29:52 chicares Exp $
+// $Id: path_utility_test.cpp,v 1.8 2008-01-21 01:32:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,6 +35,7 @@
 #include <boost/filesystem/exception.hpp>
 #include <boost/filesystem/fstream.hpp>
 
+#include <cstdio> // std::remove()
 #include <fstream>
 
 namespace
