@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.54 2008-01-21 16:07:27 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.55 2008-01-21 19:00:58 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -327,11 +327,11 @@ void Input::DoHarmonize()
         (   enable_experience_rating
         &&  "Yes" == UseExperienceRating
         );
-    InforceExperienceReserve.enable
+    InforceNetExperienceReserve.enable
         (   enable_experience_rating
         &&  "Yes" == UseExperienceRating
         );
-    NetMortalityChargeHistory.enable
+    InforceYtdNetCoiCharge.enable
         (   enable_experience_rating
         &&  "Yes" == UseExperienceRating
         );

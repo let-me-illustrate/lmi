@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputs.hpp,v 1.16 2008-01-21 17:52:24 chicares Exp $
+// $Id: inputs.hpp,v 1.17 2008-01-21 19:00:58 chicares Exp $
 
 #ifndef inputs_hpp
 #define inputs_hpp
@@ -153,8 +153,8 @@ class LMI_SO InputParms
     // rate.
     r_loan_int_rate      ExperienceReserveRate;
     r_nonnegative_double ExperienceRatingInitialKFactor;
-    r_unchecked_double   InforceExperienceReserve;
-    r_nonnegative_double NetMortalityChargeHistory;
+    r_unchecked_double   InforceNetExperienceReserve;
+    r_nonnegative_double InforceYtdNetCoiCharge;
 
     e_yes_or_no          PayLoanInt           ; // Pay loan interest in cash
     e_yes_or_no          WDToBasisThenLoan    ;

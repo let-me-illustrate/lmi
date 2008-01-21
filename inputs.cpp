@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputs.cpp,v 1.23 2008-01-21 17:52:24 chicares Exp $
+// $Id: inputs.cpp,v 1.24 2008-01-21 19:00:58 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -96,8 +96,8 @@ InputParms::InputParms()
     ,OverrideExperienceReserveRate ("Yes")
     ,ExperienceReserveRate         (0.02)
     ,ExperienceRatingInitialKFactor(1.0)
-    ,InforceExperienceReserve      (0.0)
-    ,NetMortalityChargeHistory     (0.0)
+    ,InforceNetExperienceReserve   (0.0)
+    ,InforceYtdNetCoiCharge        (0.0)
     ,PayLoanInt                    ("No")
     ,WDToBasisThenLoan             ("No")
     ,AvgFund                       ("No")
@@ -464,8 +464,8 @@ bool InputParms::operator==(InputParms const& z) const
     if(OverrideExperienceReserveRate    != z.OverrideExperienceReserveRate   ) return false;
     if(ExperienceReserveRate            != z.ExperienceReserveRate           ) return false;
     if(ExperienceRatingInitialKFactor   != z.ExperienceRatingInitialKFactor  ) return false;
-    if(InforceExperienceReserve         != z.InforceExperienceReserve        ) return false;
-    if(NetMortalityChargeHistory        != z.NetMortalityChargeHistory       ) return false;
+    if(InforceNetExperienceReserve      != z.InforceNetExperienceReserve     ) return false;
+    if(InforceYtdNetCoiCharge           != z.InforceYtdNetCoiCharge          ) return false;
     if(PayLoanInt                       != z.PayLoanInt                      ) return false;
     if(WDToBasisThenLoan                != z.WDToBasisThenLoan               ) return false;
     if(AvgFund                          != z.AvgFund                         ) return false;

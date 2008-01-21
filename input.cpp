@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.22 2008-01-21 16:07:27 chicares Exp $
+// $Id: input.cpp,v 1.23 2008-01-21 19:00:58 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -171,8 +171,8 @@ void Input::AscribeMembers()
     ascribe("OverrideExperienceReserveRate"         , &Input::OverrideExperienceReserveRate         );
     ascribe("ExperienceReserveRate"                 , &Input::ExperienceReserveRate                 );
     ascribe("ExperienceRatingInitialKFactor"        , &Input::ExperienceRatingInitialKFactor        );
-    ascribe("InforceExperienceReserve"              , &Input::InforceExperienceReserve              );
-    ascribe("NetMortalityChargeHistory"             , &Input::NetMortalityChargeHistory             );
+    ascribe("InforceNetExperienceReserve"           , &Input::InforceNetExperienceReserve           );
+    ascribe("InforceYtdNetCoiCharge"                , &Input::InforceYtdNetCoiCharge                );
     ascribe("WithdrawToBasisThenLoan"               , &Input::WithdrawToBasisThenLoan               );
     ascribe("UseAverageOfAllFunds"                  , &Input::UseAverageOfAllFunds                  );
     ascribe("OverrideFundManagementFee"             , &Input::OverrideFundManagementFee             );
