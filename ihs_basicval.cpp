@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.39 2008-01-01 18:29:42 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.40 2008-01-21 14:00:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1126,7 +1126,7 @@ double BasicValues::GetModalPremMaxNonMec
     double temp = MortalityRates_->SevenPayRates()[0];
     // always use initial spec amt and mode--fixed at issue
     // round down--mustn't violate 7702A
-    return round_max_premium(temp * epsilon_plus_one * SpecAmt / Mode);
+    return round_max_premium(temp * epsilon_plus_one * SpecAmt / Mode.value());
 }
 
 //============================================================================
@@ -1143,7 +1143,7 @@ double BasicValues::GetModalPremTgtFromTable
                 *   epsilon_plus_one
                 *   MortalityRates_->TargetPremiumRates()[0]
             )
-        /   Mode
+        /   Mode.value()
         );
 }
 
@@ -1157,7 +1157,7 @@ double BasicValues::GetModalPremCorridor
     double temp = MortalityRates_->CvatCorridorFactors()[0];
     // always use initial spec amt and mode--fixed at issue
     // round down--mustn't violate 7702A
-    return round_max_premium((epsilon_plus_one * SpecAmt / temp) / Mode);
+    return round_max_premium((epsilon_plus_one * SpecAmt / temp) / Mode.value());
 }
 
 //============================================================================
@@ -1180,7 +1180,7 @@ double BasicValues::GetModalPremGLP
 // what if Year != 0 ?
 // term rider, dumpin
 
-    z /= a_Mode;
+    z /= a_Mode.value();
     return round_max_premium(epsilon_plus_one * z);
 }
 
@@ -1203,7 +1203,7 @@ double BasicValues::GetModalPremGSP
 // what if Year != 0 ?
 // term rider, dumpin
 
-    z /= a_Mode;
+    z /= a_Mode.value();
     return round_max_premium(epsilon_plus_one * z);
 }
 
@@ -1520,7 +1520,7 @@ double BasicValues::GetAnnuityValueMlyDed
     double spread = 0.0;
     if(e_monthly != Mode)
         {
-        spread = MinPremIntSpread_[Year] * 1.0 / Mode;
+        spread = MinPremIntSpread_[Year] * 1.0 / Mode.value();
         }
     double z = i_upper_12_over_12_from_i<double>()
         (   Input_->GenAcctRate[Year]
@@ -1535,7 +1535,7 @@ double BasicValues::GetAnnuityValueMlyDed
             )[Year]
         );
     u = 1.0 / u;
-    return (1.0 - std::pow(u, 12.0 / Mode)) / (1.0 - u);
+    return (1.0 - std::pow(u, 12.0 / Mode.value())) / (1.0 - u);
 }
 
 //============================================================================
