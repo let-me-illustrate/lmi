@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.cpp,v 1.27 2008-01-08 05:58:18 chicares Exp $
+// $Id: inputillus.cpp,v 1.28 2008-01-21 16:07:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -709,10 +709,11 @@ void IllusInputParms::ascribe_members()
     ascribe("SeparateAccountRateType"      , &IllusInputParms::IntRateTypeSA              );
     ascribe("LoanRate"                     , &IllusInputParms::LoanIntRate                ); // !
     ascribe("LoanRateType"                 , &IllusInputParms::LoanRateType               ); // !
-    ascribe("ExperienceRatingInitialKFactor",&IllusInputParms::ExperienceRatingInitialKFactor);
-    ascribe("ExperienceReserveRate"        , &IllusInputParms::ExperienceReserveRate      );
-    ascribe("InforceExperienceReserve"     , &IllusInputParms::InforceExperienceReserve   );
     ascribe("OverrideExperienceReserveRate", &IllusInputParms::OverrideExperienceReserveRate);
+    ascribe("ExperienceReserveRate"        , &IllusInputParms::ExperienceReserveRate      );
+    ascribe("ExperienceRatingInitialKFactor",&IllusInputParms::ExperienceRatingInitialKFactor);
+    ascribe("InforceExperienceReserve"     , &IllusInputParms::InforceExperienceReserve   );
+    ascribe("NetMortalityChargeHistory"    , &IllusInputParms::NetMortalityChargeHistory  );
     ascribe("PayLoanInterestInCash"        , &IllusInputParms::PayLoanInt                 );
     ascribe("WithdrawToBasisThenLoan"      , &IllusInputParms::WDToBasisThenLoan          );
     ascribe("UseAverageOfAllFunds"         , &IllusInputParms::AvgFund                    );
@@ -821,7 +822,6 @@ void IllusInputParms::ascribe_members()
     ascribe("CurrentCoiMultiplier"         , &IllusInputParms::CurrentCoiMultiplier       );
     ascribe("CurrentCoiGrading"            , &IllusInputParms::CurrentCoiGrading          );
     ascribe("CashValueEnhancementRate"     , &IllusInputParms::CashValueEnhancementRate   );
-    ascribe("NetMortalityChargeHistory"    , &IllusInputParms::NetMortalityChargeHistory  );
     ascribe("CorporationTaxBracket"        , &IllusInputParms::CorpTaxBracket             );
     ascribe("TaxBracket"                   , &IllusInputParms::IndvTaxBracket             );
     ascribe("ProjectedSalary"              , &IllusInputParms::ProjectedSalary            );
