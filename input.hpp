@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.24 2008-01-21 16:07:27 chicares Exp $
+// $Id: input.hpp,v 1.25 2008-01-21 17:52:23 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -211,7 +211,7 @@ class LMI_SO Input
     tnr_proportion           ExperienceReserveRate           ;
     tnr_nonnegative_double   ExperienceRatingInitialKFactor  ;
     tnr_unrestricted_double  InforceExperienceReserve        ;
-    datum_sequence           NetMortalityChargeHistory       ;
+    tnr_nonnegative_double   NetMortalityChargeHistory       ;
     mce_yes_or_no            WithdrawToBasisThenLoan         ;
     mce_yes_or_no            UseAverageOfAllFunds            ;
     mce_yes_or_no            OverrideFundManagementFee       ;

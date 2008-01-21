@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.cpp,v 1.28 2008-01-21 16:07:27 chicares Exp $
+// $Id: inputillus.cpp,v 1.29 2008-01-21 17:52:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -62,7 +62,6 @@ IllusInputParms::IllusInputParms(bool use_defaults)
     ,CurrentCoiMultiplier             ("1")
     ,CurrentCoiGrading                ("0")
     ,CashValueEnhancementRate         ("0")
-    ,NetMortalityChargeHistory        ("0")
     ,CorpTaxBracket                   ("0")
     ,IndvTaxBracket                   ("0")
     ,ProjectedSalary                  ("100000")
@@ -172,7 +171,6 @@ IllusInputParms::IllusInputParms(IllusInputParms const& z)
     CurrentCoiMultiplier       = z.CurrentCoiMultiplier       ;
     CurrentCoiGrading          = z.CurrentCoiGrading          ;
     CashValueEnhancementRate   = z.CashValueEnhancementRate   ;
-    NetMortalityChargeHistory  = z.NetMortalityChargeHistory  ;
     CorpTaxBracket             = z.CorpTaxBracket             ;
     IndvTaxBracket             = z.IndvTaxBracket             ;
     ProjectedSalary            = z.ProjectedSalary            ;
@@ -278,7 +276,6 @@ IllusInputParms& IllusInputParms::operator=(IllusInputParms const& z)
     CurrentCoiMultiplier       = z.CurrentCoiMultiplier       ;
     CurrentCoiGrading          = z.CurrentCoiGrading          ;
     CashValueEnhancementRate   = z.CashValueEnhancementRate   ;
-    NetMortalityChargeHistory  = z.NetMortalityChargeHistory  ;
     CorpTaxBracket             = z.CorpTaxBracket             ;
     IndvTaxBracket             = z.IndvTaxBracket             ;
     ProjectedSalary            = z.ProjectedSalary            ;
@@ -390,7 +387,6 @@ if(z.Status_Smoking != z.Status[0].Smoking)
     if(CurrentCoiMultiplier       != z.CurrentCoiMultiplier      ) return false;
     if(CurrentCoiGrading          != z.CurrentCoiGrading         ) return false;
     if(CashValueEnhancementRate   != z.CashValueEnhancementRate  ) return false;
-    if(NetMortalityChargeHistory  != z.NetMortalityChargeHistory ) return false;
     if(CorpTaxBracket             != z.CorpTaxBracket            ) return false;
     if(IndvTaxBracket             != z.IndvTaxBracket            ) return false;
     if(ProjectedSalary            != z.ProjectedSalary           ) return false;
