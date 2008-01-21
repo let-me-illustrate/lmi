@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.18 2008-01-01 18:29:50 chicares Exp $
+// $Id: multidimgrid_any.cpp,v 1.19 2008-01-21 01:32:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -41,6 +41,7 @@
 #include <wx/window.h>
 #include <wx/wupdlock.h>
 
+#include <algorithm>
 #include <sstream>
 
 /// MultiDimAxisAny methods implementation

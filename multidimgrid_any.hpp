@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.19 2008-01-01 18:29:50 chicares Exp $
+// $Id: multidimgrid_any.hpp,v 1.20 2008-01-21 01:32:28 chicares Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -102,7 +102,9 @@
 #include <wx/grid.h>
 #include <wx/choice.h>
 
+#include <cstddef>   // std::size_t
 #include <string>
+#include <utility>   // std::pair
 #include <vector>
 
 class MultiDimAxisAny;

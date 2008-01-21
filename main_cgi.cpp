@@ -31,7 +31,7 @@
 // other reasons evident in cvs or explained in 'ChangeLog'. Any
 // defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.30 2008-01-06 19:27:22 chicares Exp $
+// $Id: main_cgi.cpp,v 1.31 2008-01-21 01:32:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -54,7 +54,7 @@
 
 #include <cgicc/Cgicc.h>
 #include <cgicc/CgiEnvironment.h>
-#include <cgicc/CgiUtils.h> // gLogFile
+#include <cgicc/CgiUtils.h>       // gLogFile
 #include <cgicc/HTMLClasses.h>
 #ifdef USING_CURRENT_CGICC
 #   include <cgicc/HTTPHTMLHeader.h> // cgicc-3.2.3
@@ -67,6 +67,7 @@
 #include <fstream>
 #include <ios>
 #include <iostream>
+#include <istream>                // std::ws
 #include <ostream>
 #include <sstream>
 #include <string>
