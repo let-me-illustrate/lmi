@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.cpp,v 1.29 2008-01-21 17:52:23 chicares Exp $
+// $Id: inputillus.cpp,v 1.30 2008-01-21 19:00:58 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -708,8 +708,8 @@ void IllusInputParms::ascribe_members()
     ascribe("OverrideExperienceReserveRate", &IllusInputParms::OverrideExperienceReserveRate);
     ascribe("ExperienceReserveRate"        , &IllusInputParms::ExperienceReserveRate      );
     ascribe("ExperienceRatingInitialKFactor",&IllusInputParms::ExperienceRatingInitialKFactor);
-    ascribe("InforceExperienceReserve"     , &IllusInputParms::InforceExperienceReserve   );
-    ascribe("NetMortalityChargeHistory"    , &IllusInputParms::NetMortalityChargeHistory  );
+    ascribe("InforceNetExperienceReserve"  , &IllusInputParms::InforceNetExperienceReserve);
+    ascribe("InforceYtdNetCoiCharge"       , &IllusInputParms::InforceYtdNetCoiCharge     );
     ascribe("PayLoanInterestInCash"        , &IllusInputParms::PayLoanInt                 );
     ascribe("WithdrawToBasisThenLoan"      , &IllusInputParms::WDToBasisThenLoan          );
     ascribe("UseAverageOfAllFunds"         , &IllusInputParms::AvgFund                    );

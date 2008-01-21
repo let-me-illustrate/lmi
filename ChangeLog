@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.989 2008-01-20 15:25:20 chicares Exp $
+// $Id: ChangeLog,v 1.990 2008-01-21 19:00:59 chicares Exp $
 
 MAINTENANCE
 
@@ -15367,4 +15367,56 @@ it is calculated as the difference between two rounded quantities.
 
   ihs_acctval.cpp
 Improve documentation, resolving a marked defect.
+
+20080121T0132Z <gchicares@sbcglobal.net> [1206]
+
+  ce_product_name.cpp
+  census_view.cpp
+  inputillus_sequences.cpp
+  ledger_test.cpp
+  main_cgi.cpp
+  multidimgrid_any.cpp
+  multidimgrid_any.hpp
+  ncnnnpnn.hpp
+  path_utility_test.cpp
+  stream_cast.hpp
+  tier_view_editor.hpp
+Include appropriate headers.
+
+20080121T1400Z <gchicares@sbcglobal.net> [1206]
+
+  ihs_basicval.cpp
+Improve portability (Vaclav). The original code was rejected by msvc.
+
+20080121T1607Z <gchicares@sbcglobal.net> [1206]
+
+  input.cpp
+  input.hpp
+  input_harmonization.cpp
+  inputillus.cpp
+  inputs.cpp
+  inputs.hpp
+Rearrange certain experience-rating inputs.
+
+20080121T1752Z <gchicares@sbcglobal.net> [1206]
+
+  input.hpp
+  inputillus.cpp
+  inputillus.hpp
+  inputs.cpp
+  inputs.hpp
+Change 'NetMortalityChargeHistory' from a sequence to a scalar.
+
+20080121T1900Z <gchicares@sbcglobal.net> [1206]
+
+  input.cpp
+  input.hpp
+  input_harmonization.cpp
+  inputillus.cpp
+  inputillus_xml_io.cpp
+  inputs.cpp
+  inputs.hpp
+  sample.cns
+  sample.ill
+Rename certain experience-rating inputs.
 
