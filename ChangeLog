@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.990 2008-01-21 19:00:59 chicares Exp $
+// $Id: ChangeLog,v 1.991 2008-01-22 18:46:47 chicares Exp $
 
 MAINTENANCE
 
@@ -15419,4 +15419,17 @@ Change 'NetMortalityChargeHistory' from a sequence to a scalar.
   sample.cns
   sample.ill
 Rename certain experience-rating inputs.
+
+20080122T1342Z <gchicares@sbcglobal.net> [1205]
+
+  group_values.cpp
+  ihs_acctval.cpp
+  ledger_base.cpp
+Consolidate and relocate duplicated instances of a defect marker.
+
+20080122T1846Z <gchicares@sbcglobal.net> [1205]
+
+  group_values.cpp
+  xml_notebook.xrc
+Implement inforce experience rating.
 

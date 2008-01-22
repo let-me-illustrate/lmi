@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.85 2008-01-22 13:42:39 chicares Exp $
+// $Id: group_values.cpp,v 1.86 2008-01-22 18:46:47 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -237,8 +237,8 @@ census_run_result run_census_in_parallel::operator()
             )
         );
     int j = 0;
-    int first_cell_inforce_year  = value_cast<int>((*cells.begin())["InforceYear"].str());
-    int first_cell_inforce_month = value_cast<int>((*cells.begin())["InforceMonth"].str());
+    int const first_cell_inforce_year  = value_cast<int>((*cells.begin())["InforceYear"].str());
+    int const first_cell_inforce_month = value_cast<int>((*cells.begin())["InforceMonth"].str());
     cell_values.reserve(cells.size());
     for(ip = cells.begin(); ip != cells.end(); ++ip, ++j)
         {
@@ -336,7 +336,7 @@ census_run_result run_census_in_parallel::operator()
 
         boost::shared_ptr<progress_meter> meter
             (create_progress_meter
-                (MaxYr
+                (MaxYr - first_cell_inforce_year
                 ,run_basis->str()
                 ,progress_meter_mode(emission)
                 )
@@ -376,7 +376,7 @@ census_run_result run_census_in_parallel::operator()
                 );
             }
 
-        for(int year = 0; year < MaxYr; ++year)
+        for(int year = first_cell_inforce_year; year < MaxYr; ++year)
             {
             double experience_reserve_annual_u =
                     1.0
@@ -395,7 +395,12 @@ census_run_result run_census_in_parallel::operator()
                 }
 
             // Process one month at a time for all cells.
-            for(int month = 0; month < 12; ++month)
+            int const inforce_month =
+                first_cell_inforce_year == year
+                    ? first_cell_inforce_month
+                    : 0
+                    ;
+            for(int month = inforce_month; month < 12; ++month)
                 {
                 double assets = 0.0;
 
@@ -485,11 +490,34 @@ census_run_result run_census_in_parallel::operator()
             // but rather because experience rating on other bases
             // is undefined.
 
-            case_accum_net_claims *= experience_reserve_annual_u;
-            case_accum_net_claims += ytd_net_claims;
+            case_accum_net_claims   *= experience_reserve_annual_u;
+            case_accum_net_claims   += ytd_net_claims;
 
             case_accum_net_mortchgs *= experience_reserve_annual_u;
             case_accum_net_mortchgs += ytd_net_mortchgs;
+
+            // Presumably an admin system would maintain a scalar
+            // reserve instead of tracking claims and mortality
+            // charges separately, and accumulate it at interest more
+            // frequently than once a year.
+            //
+            // Therefore, add inforce reserve here, to avoid crediting
+            // a year's interest to it. Because only a scalar reserve
+            // is captured, it must all be added to one side of the
+            // reserve equation: the distinction between claims and
+            // mortality charges is lost, but their difference is
+            // preserved, so the resulting reserve is correct.
+            //
+            // The inforce reserve would reflect net claims already
+            // paid as well as mortality charges already deducted for
+            // any partial year. Therefore, although inforce YTD COI
+            // charge is captured separately for adjusting IBNR, it
+            // would be incorrect to add it here.
+
+            if(first_cell_inforce_year == year)
+                {
+                case_accum_net_mortchgs += cells[0].InforceNetExperienceReserve;
+                }
 
             // Apportion experience-rating reserve uniformly across
             // inforce lives. Previously, it had been apportioned by
@@ -506,6 +534,10 @@ census_run_result run_census_in_parallel::operator()
                 &&  0.0 != eoy_inforce_lives
                 )
                 {
+                if(first_cell_inforce_year == year)
+                    {
+                    ytd_net_mortchgs += cells[0].InforceYtdNetCoiCharge;
+                    }
                 double case_ibnr =
                         ytd_net_mortchgs
                     *   case_ibnr_months
