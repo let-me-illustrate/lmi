@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_base.cpp,v 1.13 2008-01-01 18:29:46 chicares Exp $
+// $Id: ledger_base.cpp,v 1.14 2008-01-22 13:42:39 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -238,6 +238,9 @@ namespace
 } // Unnamed namespace.
 
 //============================================================================
+// TODO ?? Adds cells by policy duration, not calendar duration: when
+// cell issue dates differ, the result is valid only in that probably-
+// unexpected sense.
 LedgerBase& LedgerBase::PlusEq
     (LedgerBase const&         a_Addend
     ,std::vector<double> const& a_Inforce

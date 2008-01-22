@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.84 2008-01-20 01:13:48 chicares Exp $
+// $Id: group_values.cpp,v 1.85 2008-01-22 13:42:39 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -376,8 +376,6 @@ census_run_result run_census_in_parallel::operator()
                 );
             }
 
-        // TODO ?? We don't start at InforceYear, because issue years may
-        // differ between cells and we have not coded support for that yet.
         for(int year = 0; year < MaxYr; ++year)
             {
             double experience_reserve_annual_u =
