@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.103 2008-01-20 15:25:20 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.104 2008-01-22 13:42:39 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -801,8 +801,6 @@ double AccountValue::IncrementBOM
     ,double a_case_k_factor
     )
 {
-    // TODO ?? We don't start at InforceYear, because issue years may differ
-    // between lives and we have not coded support for that yet.
     if(ItLapsed || BasicValues::GetLength() <= year)
         {
         // Return value is total assets. After the policy has lapsed or
