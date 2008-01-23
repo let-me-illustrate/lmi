@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.991 2008-01-22 18:46:47 chicares Exp $
+// $Id: ChangeLog,v 1.992 2008-01-23 03:35:29 chicares Exp $
 
 MAINTENANCE
 
@@ -15432,4 +15432,11 @@ Consolidate and relocate duplicated instances of a defect marker.
   group_values.cpp
   xml_notebook.xrc
 Implement inforce experience rating.
+
+20080123T0335Z <gchicares@sbcglobal.net> [1205]
+
+  group_values.cpp
+Rename certain local variables. Originally, they were year-to-date
+accumulators, incremented each month. Now they're yearly summary
+values, so the old names had become misleading.
 
