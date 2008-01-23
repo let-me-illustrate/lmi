@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook_coli_boli.xrc,v 1.21 2008-01-01 18:30:00 chicares Exp $
+    $Id: xml_notebook_coli_boli.xrc,v 1.22 2008-01-23 19:59:35 wboutin Exp $
 
     This version is designed for COLI and BOLI users; it omits input
     fields that seem irrelevant in that context, and reflects the
@@ -1660,6 +1660,34 @@ useful in the future.
                             <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxBOTTOM</flag>
                             <border>2</border>
                             <object class="wxTextCtrl" name="InforceLeastDeathBenefit">
+                                <size>50,-1</size>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                            <border>4</border>
+                            <object class="wxStaticText">
+                                <label>Case net experience reserve</label>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxBOTTOM</flag>
+                            <border>2</border>
+                            <object class="wxTextCtrl" name="InforceNetExperienceReserve">
+                                <size>50,-1</size>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                            <border>4</border>
+                            <object class="wxStaticText">
+                                <label>Case year-to-date net COI charges</label>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxBOTTOM</flag>
+                            <border>2</border>
+                            <object class="wxTextCtrl" name="InforceYtdNetCoiCharge">
                                 <size>50,-1</size>
                             </object>
                         </object>
