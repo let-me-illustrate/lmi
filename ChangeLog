@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.992 2008-01-23 03:35:29 chicares Exp $
+// $Id: ChangeLog,v 1.993 2008-01-23 19:59:35 wboutin Exp $
 
 MAINTENANCE
 
@@ -15439,4 +15439,9 @@ Implement inforce experience rating.
 Rename certain local variables. Originally, they were year-to-date
 accumulators, incremented each month. Now they're yearly summary
 values, so the old names had become misleading.
+
+20080123T1959Z <wboutin@massmutual.com> [1205]
+
+  xml_notebook_coli_boli.xrc
+Add inforce experience rating inputs.
 
