@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.86 2008-01-22 18:46:47 chicares Exp $
+// $Id: group_values.cpp,v 1.87 2008-01-23 03:35:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -467,8 +467,8 @@ census_run_result run_census_in_parallel::operator()
             // mortality.
 
             double eoy_inforce_lives      = 0.0;
-            double ytd_net_claims         = 0.0;
-            double ytd_net_mortchgs       = 0.0;
+            double years_net_claims       = 0.0;
+            double years_net_mortchgs     = 0.0;
             double projected_net_mortchgs = 0.0;
             for(i = cell_values.begin(); i != cell_values.end(); ++i)
                 {
@@ -480,8 +480,8 @@ census_run_result run_census_in_parallel::operator()
                 (*i)->SetProjectedCoiCharge();
                 eoy_inforce_lives      += (*i)->InforceLivesEoy();
                 (*i)->IncrementEOY(year);
-                ytd_net_claims         += (*i)->GetCurtateNetClaimsInforce();
-                ytd_net_mortchgs       += (*i)->GetCurtateNetCoiChargeInforce();
+                years_net_claims       += (*i)->GetCurtateNetClaimsInforce();
+                years_net_mortchgs     += (*i)->GetCurtateNetCoiChargeInforce();
                 projected_net_mortchgs += (*i)->GetProjectedCoiChargeInforce();
                 }
 
@@ -491,10 +491,10 @@ census_run_result run_census_in_parallel::operator()
             // is undefined.
 
             case_accum_net_claims   *= experience_reserve_annual_u;
-            case_accum_net_claims   += ytd_net_claims;
+            case_accum_net_claims   += years_net_claims;
 
             case_accum_net_mortchgs *= experience_reserve_annual_u;
-            case_accum_net_mortchgs += ytd_net_mortchgs;
+            case_accum_net_mortchgs += years_net_mortchgs;
 
             // Presumably an admin system would maintain a scalar
             // reserve instead of tracking claims and mortality
@@ -536,10 +536,10 @@ census_run_result run_census_in_parallel::operator()
                 {
                 if(first_cell_inforce_year == year)
                     {
-                    ytd_net_mortchgs += cells[0].InforceYtdNetCoiCharge;
+                    years_net_mortchgs += cells[0].InforceYtdNetCoiCharge;
                     }
                 double case_ibnr =
-                        ytd_net_mortchgs
+                        years_net_mortchgs
                     *   case_ibnr_months
                     /   12.0
                     ;
