@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.994 2008-01-25 16:53:15 wboutin Exp $
+// $Id: ChangeLog,v 1.995 2008-01-25 19:21:46 wboutin Exp $
 
 MAINTENANCE
 
@@ -15450,4 +15450,9 @@ Add inforce experience rating inputs.
   fo_common.xsl
   illustration_reg.xsl
 Add group carveout support.
+
+20080125T1921Z <wboutin@massmutual.com> [1205]
+
+  version.hpp
+Mark release candidate.
 
