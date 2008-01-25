@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.64 2008-01-01 18:29:41 chicares Exp $
+    $Id: fo_common.xsl,v 1.65 2008-01-25 16:53:15 wboutin Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -767,7 +767,7 @@
           <fo:block font-size="20pt" font-weight="bold">
             <xsl:choose>
               <xsl:when test="$scalars/IsInforce!='1'">
-                Life Insurance Illustration
+                Basic Life Insurance Illustration
               </xsl:when>
               <xsl:otherwise>
                 In Force Life Insurance Illustration
@@ -827,8 +827,14 @@
           <fo:block padding-top="1em">
             <xsl:value-of select="$scalars/InsCoName"/>
           </fo:block>
-          <fo:block padding-bottom="3em">
+          <fo:block padding-bottom="1em">
             <xsl:value-of select="$scalars/InsCoAddr"/>
+          </fo:block>
+          <fo:block font-size="9pt">
+            <xsl:value-of select="$scalars/InsCoShortName"/> Financial Group is
+            a marketing name for <xsl:value-of select="$scalars/InsCoName"/> and
+            its affiliated companies and sales representatives,
+            <xsl:value-of select="$scalars/InsCoAddr"/>.
           </fo:block>
         </fo:block>
       </fo:flow>
@@ -953,10 +959,25 @@
         <xsl:call-template name="header-cell-with-border"/>
         <fo:block/>
       </fo:table-cell>
-      <fo:table-cell number-columns-spanned="2">
+      <fo:table-cell number-rows-spanned="2">
         <xsl:call-template name="header-cell-with-border"/>
-        <xsl:attribute name="text-align">center</xsl:attribute>
-        <fo:block>Net Crediting Rate</fo:block>
+        <fo:block>Corp</fo:block>
+        <fo:block>Premium</fo:block>
+      </fo:table-cell>
+      <fo:table-cell number-rows-spanned="2">
+        <xsl:call-template name="header-cell-with-border"/>
+        <fo:block>Indiv</fo:block>
+        <fo:block>Premium</fo:block>
+      </fo:table-cell>
+      <fo:table-cell number-rows-spanned="2">
+        <xsl:call-template name="header-cell-with-border"/>
+        <fo:block>Sep Acct Net</fo:block>
+        <fo:block>Inv Rate</fo:block>
+      </fo:table-cell>
+      <fo:table-cell number-rows-spanned="2">
+        <xsl:call-template name="header-cell-with-border"/>
+        <fo:block>Gen Acct</fo:block>
+        <fo:block>Current Rate</fo:block>
       </fo:table-cell>
       <fo:table-cell number-rows-spanned="2">
         <xsl:call-template name="header-cell-with-border"/>
@@ -976,21 +997,6 @@
         <xsl:call-template name="header-cell-with-border"/>
         <fo:block>Assumed</fo:block>
         <fo:block>Loan Interest</fo:block>
-      </fo:table-cell>
-      <fo:table-cell number-rows-spanned="2">
-        <xsl:call-template name="header-cell-with-border"/>
-        <fo:block>Flat Extra</fo:block>
-        <fo:block>Per 1,000</fo:block>
-      </fo:table-cell>
-    </fo:table-row>
-    <fo:table-row>
-      <fo:table-cell>
-        <xsl:call-template name="header-cell-with-border"/>
-        <fo:block>Sep Acct</fo:block>
-      </fo:table-cell>
-      <fo:table-cell>
-        <xsl:call-template name="header-cell-with-border"/>
-        <fo:block>Gen Acct</fo:block>
       </fo:table-cell>
     </fo:table-row>
     <fo:table-row>

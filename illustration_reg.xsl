@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.66 2008-01-01 18:29:44 chicares Exp $
+    $Id: illustration_reg.xsl,v 1.67 2008-01-25 16:53:15 wboutin Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -38,6 +38,9 @@
   </xsl:variable>
   <xsl:variable name="GroupExperienceRating">
     <xsl:call-template name="set_group_experience_rating"/>
+  </xsl:variable>
+  <xsl:variable name="GroupCarveout">
+    <xsl:call-template name="set_group_carveout"/>
   </xsl:variable>
 
   <xsl:template match="/">
@@ -163,6 +166,9 @@
                   <xsl:if test="$GroupExperienceRating='1'">
                     group
                   </xsl:if>
+                  <xsl:if test="$GroupCarveout='1'">
+                    group
+                  </xsl:if>
                   flexible premium adjustable life insurance contract.
                   <!-- Group Experience Rating Logic -->
                   <xsl:if test="$GroupExperienceRating='1'">
@@ -187,15 +193,17 @@
                 </xsl:otherwise>
               </xsl:choose>
             </fo:block>
-            <fo:block padding-top="1em">
-              Coverage may be available on a Guaranteed Standard Issue basis.
-              All proposals are based on case characteristics and must
-              be approved by the <xsl:value-of select="$scalars/InsCoShortName"/>
-              Home Office. For details regarding underwriting
-              and coverage limitations refer to your offer letter
-              or contact your <xsl:value-of select="$scalars/InsCoShortName"/>
-              representative.
-            </fo:block>
+            <xsl:if test="$scalars/IsInforce!='1'">
+              <fo:block padding-top="1em">
+                Coverage may be available on a Guaranteed Standard Issue basis.
+                All proposals are based on case characteristics and must
+                be approved by the <xsl:value-of select="$scalars/InsCoShortName"/>
+                Home Office. For details regarding underwriting
+                and coverage limitations refer to your offer letter
+                or contact your <xsl:value-of select="$scalars/InsCoShortName"/>
+                representative.
+              </fo:block>
+            </xsl:if>
             <fo:block padding-top="1em">
               This is an illustration only. An illustration is not intended
               to predict actual performance. Interest rates
@@ -283,7 +291,19 @@
             <fo:block padding-top="1em">
               Loaned amounts of the <xsl:value-of select="$scalars/AvName"/>
               Value will be credited a rate equal to the loan interest rate less
-              a spread, guaranteed not to exceed 3.00%.
+              a spread, guaranteed not to exceed
+              <xsl:choose>
+                <xsl:when test="$GroupCarveout='1'">
+<!-- This is what it should really be, but it needs to be made available
+to the xsl files first.
+              <xsl:value-of select="$scalars/GuarRegLoanSpread"/>.
+-->
+                  1.25%
+                </xsl:when>
+                <xsl:otherwise>
+                  3.00%.
+                </xsl:otherwise>
+              </xsl:choose>
             </fo:block>
             <xsl:if test="$scalars/HasTerm='1'">
               <fo:block padding-top="1em">
@@ -367,12 +387,11 @@
                 does not exceed <xsl:value-of select="$scalars/AvName"/> Value.
               </fo:block>
             </xsl:if>
-
             <fo:block padding-top="1em">
               This contract has a guaranteed maximum cost of insurance
               (based on 1980 CSO mortality tables) and maximum
               administrative charges. The actual current charges are lower
-              than these and are reflected in the values.
+              than these and are reflected in the non-guaranteed values.
               However, these current charges are subject to change.
             </fo:block>
             <fo:block padding-top="1em">
@@ -545,12 +564,6 @@
               to the tax consequences of purchasing or owning this policy,
               consult with your own independent tax or legal counsel.
             </fo:block>
-            <xsl:if test="$compliance_tracking_number">
-              <fo:block padding-top="1em">
-                Compliance tracking number:
-                <xsl:value-of select="$compliance_tracking_number"/>
-              </fo:block>
-            </xsl:if>
           </fo:block>
         </fo:flow>
       </fo:page-sequence>
@@ -589,12 +602,14 @@
                 <xsl:value-of select="$scalars/CsvName"/> Value:
               </fo:inline>
               <xsl:value-of select="$scalars/AvName"/> Value less policy debt.
-              The <xsl:value-of select="$scalars/CsvName"/> Value
-              does not reflect an Exchange Charge, which may be assessed
-              under the policy where surrender proceeds are intended
-              to be applied to an insurance policy or certificate issued
-              with an intent to qualify the exchange as a tax free exchange
-              under Section 1035 of the Internal Revenue Code.
+              <xsl:if test="$scalars/Has1035ExchCharge='1'">
+                The <xsl:value-of select="$scalars/CsvName"/> Value
+                does not reflect an Exchange Charge, which may be assessed
+                under the policy where surrender proceeds are intended
+                to be applied to an insurance policy or certificate issued
+                with an intent to qualify the exchange as a tax free exchange
+                under Section 1035 of the Internal Revenue Code.
+              </xsl:if>
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">
@@ -663,18 +678,20 @@
             </xsl:if>
             <!-- Group Experience Rating Logic -->
             <xsl:if test="$GroupExperienceRating!='1'">
-              <fo:block padding-top="1em">
-                <fo:inline font-weight="bold">
-                  Exchange Charge:
-                </fo:inline>
-                Where surrender proceeds are intended to be applied
-                to an insurance policy or certificate issued with an intent
-                to qualify the exchange as a tax free exchange
-                under Section 1035 of the Internal Revenue Code,
-                there is a potential reduction in surrender proceeds.
-                Please see the contract endorsement for a detailed description
-                of the Exchange Charge.
-              </fo:block>
+              <xsl:if test="$scalars/Has1035ExchCharge='1'">
+                <fo:block padding-top="1em">
+                  <fo:inline font-weight="bold">
+                    Exchange Charge:
+                  </fo:inline>
+                  Where surrender proceeds are intended to be applied
+                  to an insurance policy or certificate issued with an intent
+                  to qualify the exchange as a tax free exchange
+                  under Section 1035 of the Internal Revenue Code,
+                  there is a potential reduction in surrender proceeds.
+                  Please see the contract endorsement for a detailed description
+                  of the Exchange Charge.
+                </fo:block>
+              </xsl:if>
             </xsl:if>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">
@@ -694,9 +711,9 @@
             <xsl:if test="$scalars/IsInforce!='1'">
               <fo:block padding-top="1em">
                 <fo:inline font-weight="bold">
-                  Initial Illustrated Crediting Rate:
+                  Illustrated Crediting Rate:
                 </fo:inline>
-                The current interest rate illustrated for the first policy year.
+                The current interest rate illustrated.
                 This rate is not guaranteed and is subject
                 to change by <xsl:value-of select="$scalars/InsCoName"/>.
               </fo:block>
@@ -713,18 +730,20 @@
               distributions and withdrawals from a MEC are subject
               to income tax and may also trigger a tax penalty.
             </fo:block>
-            <fo:block padding-top="1em">
-              <fo:inline font-weight="bold">
-                Midpoint Values:
-              </fo:inline>
-              Values assuming interest rates that are the average
-              of the illustrated current crediting rates
-              and the guaranteed minimum interest rate, and monthly charges
-              that are the average of the current monthly charges
-              and the guaranteed monthly charges.
-              These values are not guaranteed and are based on the assumption
-              that premium is paid as illustrated.
-            </fo:block>
+            <xsl:if test="$scalars/IsInforce!='1'">
+              <fo:block padding-top="1em">
+                <fo:inline font-weight="bold">
+                  Midpoint Values:
+                </fo:inline>
+                Values assuming interest rates that are the average
+                of the illustrated current crediting rates
+                and the guaranteed minimum interest rate, and monthly charges
+                that are the average of the current monthly charges
+                and the guaranteed monthly charges.
+                These values are not guaranteed and are based on the assumption
+                that premium is paid as illustrated.
+              </fo:block>
+            </xsl:if>
             <!-- Single Premium Logic -->
             <xsl:if test="$ModifiedSinglePremium='1'">
               <fo:block padding-top="1em">
@@ -828,10 +847,8 @@
             The Non-Guaranteed Values depicted above reflect interest rates
             described in the Tabular Detail, and current monthly charges.
             These values are not guaranteed and depend upon company experience.
-            Column headings indicate whether benefits and values are guaranteed
-            or not guaranteed. This illustration assumes
-            that non-guaranteed elements will continue unchanged
-            for all years shown. This is not likely to occur
+            This illustration assumes that non-guaranteed elements will continue
+            unchanged for all years shown. This is not likely to occur
             and actual results may be more or less favorable than shown.
             Non-guaranteed elements are subject to change by the insurer.
             Factors that may affect future policy performance include
@@ -893,7 +910,9 @@
           <fo:block text-align="center" font-size="10pt" space-before="5.0pt">
             Tabular Detail, continued
           </fo:block>
+<!-- These units don't make sense for the ratios that are actually displayed.
           <xsl:call-template name="dollar-units"/>
+-->
         </fo:static-content>
 
         <!-- Define the contents of the footer. -->
@@ -902,10 +921,8 @@
             The Non-Guaranteed Values depicted above reflect interest rates
             described in the Tabular Detail, and current monthly charges.
             These values are not guaranteed and depend upon company experience.
-            Column headings indicate whether benefits and values
-            are guaranteed or not guaranteed. This illustration assumes
-            that non-guaranteed elements will continue unchanged
-            for all years shown. This is not likely to occur
+            This illustration assumes that non-guaranteed elements will continue
+            unchanged for all years shown. This is not likely to occur
             and actual results may be more or less favorable than shown.
             Non-guaranteed elements are subject to change by the insurer.
             Factors that may affect future policy performance include
@@ -919,7 +936,6 @@
             <column name="PolicyYear">Policy _Year</column>
             <column composite="0" name="AttainedAge">End of _Year Age</column>
             <column name="AnnGAIntRate_Current">Illustrated _Crediting Rate</column>
-            <column composite="0" name="MonthlyFlatExtra">Annual Flat Extra _per $1,000</column>
           </xsl:variable>
           <xsl:variable name="tabular-detail-report2-columns-raw" select="document('')//xsl:variable[@name='tabular-detail-report2-columns']/column"/>
           <xsl:variable name="columns" select="$tabular-detail-report2-columns-raw[not(@composite) or boolean(boolean(@composite='1')=$is_composite)]"/>
@@ -978,8 +994,7 @@
               The Non-Guaranteed Values depicted above reflect an interest rate
               scale described in the Tabular Detail,
               and current scale monthly charges. These values are not guaranteed
-              and depend upon company experience. Column headings indicate
-              whether benefits and values are guaranteed or not guaranteed.
+              and depend upon company experience.
               This illustration assumes that non-guaranteed elements
               will continue unchanged for all years shown. This is not likely
               to occur and actual results may be more or less favorable
@@ -1093,7 +1108,7 @@
               </xsl:if>
               <fo:block>
                 Product: <xsl:value-of select="$scalars/PolicyForm"/>
-                (<xsl:value-of select="$scalars/PolicyMktgName"/>)
+                &nbsp;<xsl:value-of select="$scalars/PolicyMktgName"/>
               </fo:block>
               <fo:block>
                 <!-- Single Premium Logic -->
@@ -1106,9 +1121,10 @@
                   </xsl:otherwise>
                 </xsl:choose>
               </fo:block>
+            <xsl:if test="$scalars/IsInforce!='1'">
               <fo:block>
                 <!-- Single Premium Logic -->
-                <xsl:choose>
+                 <xsl:choose>
                   <xsl:when test="$SinglePremium!='1'">
                     Initial Premium:
                   </xsl:when>
@@ -1116,8 +1132,9 @@
                     Single Premium:
                   </xsl:otherwise>
                 </xsl:choose>
-                <xsl:value-of select="$scalars/InitPrem"/>
+                &nbsp;$<xsl:value-of select="$scalars/InitPrem"/>
               </fo:block>
+            </xsl:if>
               <xsl:if test="not($is_composite)">
                 <fo:block>
                   Initial Death Benefit Option:
@@ -1126,7 +1143,6 @@
               </xsl:if>
               <xsl:call-template name="print-franchise-and-policynumber"/>
             </fo:table-cell>
-
             <fo:table-cell text-align="left">
               <fo:block>
                 Initial <xsl:if test="$scalars/HasTerm!='0'">Total</xsl:if>
@@ -1159,7 +1175,7 @@
                     </xsl:call-template>
                   </xsl:when>
                   <xsl:otherwise>
-                    Initial Illustrated Crediting Rate:
+                    Current Illustrated Crediting Rate:
                     <xsl:value-of select="$scalars/InitAnnGenAcctInt_Current"/>
                   </xsl:otherwise>
                 </xsl:choose>
@@ -1642,6 +1658,11 @@
         a string.
         -->
         <xsl:value-of select="$scalars/InsCoName/text()"/>
+        <xsl:if test="$compliance_tracking_number">
+          <fo:block>
+            <xsl:value-of select="$compliance_tracking_number"/>
+          </fo:block>
+        </xsl:if>
       </xsl:with-param>
     </xsl:call-template>
   </xsl:template>
@@ -1667,4 +1688,9 @@
   <xsl:template name="set_group_experience_rating">
     <xsl:value-of select="number($scalars/PolicyLegalName='Group Flexible Premium Adjustable Life Insurance Policy')"/>
   </xsl:template>
+
+  <xsl:template name="set_group_carveout">
+    <xsl:value-of select="number($scalars/PolicyLegalName='Group Flexible Premium Adjustable Life Insurance Certificate')"/>
+  </xsl:template>
+
 </xsl:stylesheet>
