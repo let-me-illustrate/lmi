@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_mingw.make,v 1.12 2008-01-01 18:29:46 chicares Exp $
+# $Id: install_mingw.make,v 1.13 2008-01-28 16:13:29 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -83,22 +83,44 @@ MinGW-20050827 = \
   mingw-runtime-3.8.tar.gz \
   w32api-3.3.tar.gz \
 
-# TODO ?? Add file lists for earlier releases.
+# This almost perfectly reproduces 'mingw-1.0.1-20010726.tar.gz',
+# which is no longer available at sf.net for reasons unknown. Only
+# one file differs: 'include/excpt.h', which in the vanished tarball
+# tries harder to implement "structured exception handling". That
+# tarball contained fourteen files in an 'info-html' subdirectory,
+# and a 'make' binary; those fifteen superfluous files aren't created
+# by this target. Aside from those differences, this target exactly
+# reproduces the vanished tarball's contents.
+#
+# One file, 'include/float.h', contains a nasty defect: its values
+# for DBL_EPSILON and LDBL_EPSILON are wrong. The correct values are:
+#   DBL_EPSILON  2.2204460492503131e-16
+#   LDBL_EPSILON 1.08420217248550443401e-19L
+
+MinGW-20010726 = \
+  binutils-2.11.90-20010705.tar.gz \
+  gcc-2.95.3-20010723.tar.gz \
+  mingw-runtime-1.0.1-20010726.tar.gz \
+  w32api-1.0.1-20010726.tar.gz \
 
 # Archive md5sums ##############################################################
 
-binutils-2.16.91-20050827-1.tar.gz-md5 := 9d2de9e3cd5fede3d12150b8a7d0bbf7
-binutils-2.16.91-20060119-1.tar.gz-md5 := a54f33ca9d6cf56dc99c0c5367f58ea3
-gcc-core-3.4.4-20050522-1.tar.gz-md5   := 46f17998ab61be9dbede233b44c7b0e6
-gcc-core-3.4.5-20060117-1.tar.gz-md5   := 1a4afae471ea93b975e3f8b3ac529eac
-gcc-g++-3.4.4-20050522-1.tar.gz-md5    := db44ac5b06d7f262c59422ae21511659
-gcc-g++-3.4.5-20060117-1.tar.gz-md5    := d11a9d63a0f862650f755fdb4e947dc4
-mingw-runtime-3.8.tar.gz-md5           := 5852e9b2c369aff1d4ba47d3dd20728f
-mingw-runtime-3.9.tar.gz-md5           := 0cb66b1071da224ea2174f960c593e2e
-mingw-runtime-3.11.tar.gz-md5          := e1c21f8c4ece49d8bd9fef9e1b0e44a7
-w32api-3.3.tar.gz-md5                  := 2da21c26013711ae90d3b2416c20856e
-w32api-3.6.tar.gz-md5                  := 2f86ec42cafd774ec82162fbc6e6808d
-w32api-3.8.tar.gz-md5                  := b53fdf670f33d2e901749f4792e659f2
+binutils-2.11.90-20010705.tar.gz-md5    := 0173ff92655b77fafe63fca4ef68e005
+binutils-2.16.91-20050827-1.tar.gz-md5  := 9d2de9e3cd5fede3d12150b8a7d0bbf7
+binutils-2.16.91-20060119-1.tar.gz-md5  := a54f33ca9d6cf56dc99c0c5367f58ea3
+gcc-2.95.3-20010723.tar.gz-md5          := caf08d8b16e79265c110c01a57c892f7
+gcc-core-3.4.4-20050522-1.tar.gz-md5    := 46f17998ab61be9dbede233b44c7b0e6
+gcc-core-3.4.5-20060117-1.tar.gz-md5    := 1a4afae471ea93b975e3f8b3ac529eac
+gcc-g++-3.4.4-20050522-1.tar.gz-md5     := db44ac5b06d7f262c59422ae21511659
+gcc-g++-3.4.5-20060117-1.tar.gz-md5     := d11a9d63a0f862650f755fdb4e947dc4
+mingw-runtime-1.0.1-20010726.tar.gz-md5 := 0641d545a9a23fbf3c028631c2303217
+mingw-runtime-3.8.tar.gz-md5            := 5852e9b2c369aff1d4ba47d3dd20728f
+mingw-runtime-3.9.tar.gz-md5            := 0cb66b1071da224ea2174f960c593e2e
+mingw-runtime-3.11.tar.gz-md5           := e1c21f8c4ece49d8bd9fef9e1b0e44a7
+w32api-1.0.1-20010726.tar.gz-md5        := d8d6d91d41f638e742be9d21ca046c42
+w32api-3.3.tar.gz-md5                   := 2da21c26013711ae90d3b2416c20856e
+w32api-3.6.tar.gz-md5                   := 2f86ec42cafd774ec82162fbc6e6808d
+w32api-3.8.tar.gz-md5                   := b53fdf670f33d2e901749f4792e659f2
 
 # Utilities ####################################################################
 
