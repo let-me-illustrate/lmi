@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.995 2008-01-25 19:21:46 wboutin Exp $
+// $Id: ChangeLog,v 1.996 2008-01-28 16:13:30 chicares Exp $
 
 MAINTENANCE
 
@@ -15455,4 +15455,9 @@ Add group carveout support.
 
   version.hpp
 Mark release candidate.
+
+20080128T1613Z <gchicares@sbcglobal.net> [1204]
+
+  install_mingw.make
+Add the only ancient version of MinGW that we really need.
 
