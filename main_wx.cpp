@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.88 2008-01-13 20:03:19 chicares Exp $
+// $Id: main_wx.cpp,v 1.89 2008-01-29 04:47:40 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -609,8 +609,8 @@ bool Skeleton::OnInit()
 
         frame_ = new(wx) wxDocMDIParentFrame
             (doc_manager_
-            ,0     // Parent: always null.
-            ,-1    // Window ID.
+            ,NULL
+            ,wxID_ANY
             ,"lmi"
             ,wxDefaultPosition
             ,wxDefaultSize

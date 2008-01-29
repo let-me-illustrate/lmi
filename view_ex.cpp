@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: view_ex.cpp,v 1.15 2008-01-01 18:29:58 chicares Exp $
+// $Id: view_ex.cpp,v 1.16 2008-01-29 04:47:40 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -158,7 +158,7 @@ bool ViewEx::OnCreate(wxDocument* doc, long int)
     // The X Window Toolkit seems to require a forced resize.
     int x, y;
     GetFrame()->GetSize(&x, &y);
-    GetFrame()->SetSize(-1, -1, x, y);
+    GetFrame()->SetSize(wxDefaultCoord, wxDefaultCoord, x, y);
 #endif
 
     GetFrame()->Show(true);

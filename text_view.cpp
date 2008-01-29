@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: text_view.cpp,v 1.11 2008-01-01 18:29:56 chicares Exp $
+// $Id: text_view.cpp,v 1.12 2008-01-29 04:47:40 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -60,7 +60,7 @@ wxWindow* TextEditView::CreateChildWindow()
 {
     return text_window_ = new(wx) wxTextCtrl
         (GetFrame()     // Parent.
-        ,-1             // Window ID.
+        ,wxID_ANY       // Window ID.
         ,""             // Default contents.
         ,wxDefaultPosition
         ,wxDefaultSize
