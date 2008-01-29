@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: about_dialog.cpp,v 1.10 2008-01-01 18:29:34 chicares Exp $
+// $Id: about_dialog.cpp,v 1.11 2008-01-29 04:47:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -45,7 +45,7 @@ END_EVENT_TABLE()
 AboutDialog::AboutDialog(wxWindow* parent)
     :wxDialog
         (parent
-        ,-1
+        ,wxID_ANY
         ,"About 'Let me illustrate...' version " + std::string(LMI_VERSION)
         )
 {
@@ -67,7 +67,7 @@ int AboutDialog::ShowModal()
 
     wxHtmlWindow* html_window = new wxHtmlWindow
         (this
-        ,-1
+        ,wxID_ANY
         ,wxDefaultPosition
         ,wxDefaultSize
         ,wxHW_SCROLLBAR_AUTO | wxHW_NO_SELECTION
@@ -113,10 +113,10 @@ int AboutDialog::ShowModal()
 
 void AboutDialog::UponReadLicense(wxCommandEvent&)
 {
-    wxDialog dialog(this, -1, std::string("GNU General Public License"));
+    wxDialog dialog(this, wxID_ANY, std::string("GNU General Public License"));
     wxHtmlWindow* html_window = new wxHtmlWindow
         (&dialog
-        ,-1
+        ,wxID_ANY
         ,wxDefaultPosition
         ,wxDefaultSize
         ,wxHW_SCROLLBAR_AUTO | wxHW_NO_SELECTION

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: transferor.cpp,v 1.13 2008-01-01 18:29:58 chicares Exp $
+// $Id: transferor.cpp,v 1.14 2008-01-29 04:47:40 chicares Exp $
 
 // Acknowledgment
 
@@ -277,7 +277,7 @@ namespace
     {
         if(td == from_string_to_control)
             {
-            if(-1 < control.FindString(data))
+            if(wxNOT_FOUND != control.FindString(data))
                 {
                 control.SetStringSelection(data);
                 }

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: single_choice_popup_menu.cpp,v 1.5 2008-01-01 18:29:55 chicares Exp $
+// $Id: single_choice_popup_menu.cpp,v 1.6 2008-01-29 04:47:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -36,7 +36,7 @@ SingleChoicePopupMenu::SingleChoicePopupMenu
     ,wxString const&      title
     ,wxWindow*            parent
     )
-    :wxWindow        (parent, -1, wxDefaultPosition, wxSize(0, 0))
+    :wxWindow        (parent, wxID_ANY, wxDefaultPosition, wxSize(0, 0))
     ,selection_index_(-1)
 {
     if(!title.IsEmpty())

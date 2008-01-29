@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: docmdichildframe_ex.hpp,v 1.7 2008-01-01 18:29:39 chicares Exp $
+// $Id: docmdichildframe_ex.hpp,v 1.8 2008-01-29 04:47:40 chicares Exp $
 
 // Enhance class wxDocMDIChildFrame to support MDI without requiring
 // the parent MDI frame window to display a 'Window' menu when it has
@@ -79,7 +79,7 @@ class DocMDIChildFrameEx
         (wxDocument*       doc
         ,wxView*           view
         ,wxMDIParentFrame* parent
-        ,wxWindowID        id     = -1
+        ,wxWindowID        id     = wxID_ANY
         ,wxString   const& title  = "Loading..."
         ,wxPoint    const& pos    = wxDefaultPosition
         ,wxSize     const& size   = wxDefaultSize
