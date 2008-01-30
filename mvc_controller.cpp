@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_controller.cpp,v 1.16 2008-01-01 18:29:50 chicares Exp $
+// $Id: mvc_controller.cpp,v 1.17 2008-01-30 14:33:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -126,7 +126,7 @@ MvcController::MvcController
     for(svci i = mn.begin(); i != mn.end(); ++i)
         {
         ModelReference<datum_base>(*i);
-        if(FindWindow(XRCID(i->c_str())))
+        if(FindWindow(wxXmlResource::GetXRCID(i->c_str())))
             {
             Bind(*i, transfer_data_[*i] = model_.Entity(*i).str());
             }
@@ -504,7 +504,7 @@ void MvcController::TestModelViewConsistency() const
     typedef std::vector<std::string>::const_iterator svci;
     for(svci i = mn.begin(); i != mn.end(); ++i)
         {
-        if(!FindWindow(XRCID(i->c_str())))
+        if(!FindWindow(wxXmlResource::GetXRCID(i->c_str())))
             {
             warning() << "No View entity matches '" << *i << "'.\n";
             }
@@ -677,13 +677,13 @@ void MvcController::UponInitDialog(wxInitDialogEvent& event)
         (this
         ,wxEVT_COMMAND_BOOKCTRL_PAGE_CHANGING
         ,&MvcController::UponPageChanging
-        ,XRCID(view_.BookControlName())
+        ,wxXmlResource::GetXRCID(view_.BookControlName())
         );
     ::Connect
         (this
         ,wxEVT_COMMAND_BOOKCTRL_PAGE_CHANGED
         ,&MvcController::UponPageChanged
-        ,XRCID(view_.BookControlName())
+        ,wxXmlResource::GetXRCID(view_.BookControlName())
         );
     ::Connect
         (this
@@ -694,7 +694,7 @@ void MvcController::UponInitDialog(wxInitDialogEvent& event)
         (this
         ,wxEVT_UPDATE_UI
         ,&MvcController::UponUpdateUI
-        ,XRCID(view_.MainDialogName())
+        ,wxXmlResource::GetXRCID(view_.MainDialogName())
         );
 }
 
