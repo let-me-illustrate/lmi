@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: policy_view.cpp,v 1.8 2008-01-01 18:29:52 chicares Exp $
+// $Id: policy_view.cpp,v 1.9 2008-01-30 14:33:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -69,7 +69,10 @@ wxWindow* PolicyView::CreateChildWindow()
         )
         {
         wxTextCtrl* text_ctrl = dynamic_cast<wxTextCtrl*>
-            (wxWindow::FindWindowById(XRCID(cit->first.c_str()), frame)
+            (wxWindow::FindWindowById
+                (wxXmlResource::GetXRCID(cit->first.c_str())
+                ,frame
+                )
             );
         if(!text_ctrl)
             {
