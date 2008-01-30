@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.998 2008-01-30 15:37:37 chicares Exp $
+// $Id: ChangeLog,v 1.999 2008-01-30 18:17:33 chicares Exp $
 
 MAINTENANCE
 
@@ -15506,4 +15506,11 @@ Use XRCID macro only with literal argument (Vaclav).
   Makefile.am
   configure.ac
 Update autofiles (Vaclav), mechanically removing "\n\n\n" and " \n".
+
+20080130T1817Z <gchicares@sbcglobal.net> [1204]
+
+  path_utility.cpp
+Treat an "impossible" condition more thoughtfully. Specifically avoid
+throwing a boost filesystem_error exception because its interface has
+changed between boost versions.
 
