@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.33 2008-01-01 18:29:33 chicares Exp $
+# $Id: Makefile.am,v 1.34 2008-01-30 15:37:37 chicares Exp $
 
 SUBDIRS = third_party
 
@@ -43,7 +43,7 @@ bin_PROGRAMS =   \
 EXTRA_PROGRAMS = \
     antediluvian_cgi \
     gpt_server
-#    gpt_server - does not contain no main() function, bug?..
+#    gpt_server - does not contain main() function, bug?..
 #    lmi_cgi - restore the target in the future
 
 # libtool libraries installed in lib
@@ -503,6 +503,7 @@ product_files_LDADD = \
     $(XMLWRAPP_LIBS)
 
 test_coding_rules_SOURCES = \
+  my_test_coding_rules.cpp \
   test_coding_rules.cpp
 test_coding_rules_CXXFLAGS = $(AM_CXXFLAGS) $(BOOST_INCLUDE_FLAGS)
 test_coding_rules_LDADD = \
