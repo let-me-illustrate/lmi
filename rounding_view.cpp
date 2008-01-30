@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_view.cpp,v 1.9 2008-01-01 18:29:54 chicares Exp $
+// $Id: rounding_view.cpp,v 1.10 2008-01-30 14:33:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -69,7 +69,10 @@ wxWindow* RoundingView::CreateChildWindow()
         )
         {
         RoundingButtons* control = dynamic_cast<RoundingButtons*>
-            (wxWindow::FindWindowById(XRCID(cit->first.c_str()), frame)
+            (wxWindow::FindWindowById
+                (wxXmlResource::GetXRCID(cit->first.c_str())
+                ,frame
+                )
             );
         if(!control)
             {

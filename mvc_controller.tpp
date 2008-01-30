@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_controller.tpp,v 1.4 2008-01-01 18:29:51 chicares Exp $
+// $Id: mvc_controller.tpp,v 1.5 2008-01-30 14:33:28 chicares Exp $
 
 #include "mvc_controller.hpp"
 
@@ -81,7 +81,7 @@ T& MvcController::WindowFromXrcName(char const* name) const
         ||  boost::is_base_and_derived<wxWindow,T>::value
         ));
 
-    wxWindow* w = FindWindow(XRCID(name));
+    wxWindow* w = FindWindow(wxXmlResource::GetXRCID(name));
     if(!w)
         {
         fatal_error()
