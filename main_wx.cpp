@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.90 2008-01-30 03:07:36 chicares Exp $
+// $Id: main_wx.cpp,v 1.91 2008-01-30 04:51:25 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -135,7 +135,6 @@ BEGIN_EVENT_TABLE(Skeleton, wxApp)
     EVT_MENU(XRCID("test_lib_standard_exception"     ),Skeleton::UponTestLibStandardException     )
     EVT_MENU(XRCID("test_lib_arbitrary_exception"    ),Skeleton::UponTestLibArbitraryException    )
     EVT_MENU(XRCID("test_floating_point_environment" ),Skeleton::UponTestFloatingPointEnvironment )
-    EVT_MENU(XRCID("test_safe_message"               ),Skeleton::UponTestSafeMessage              )
     EVT_MENU(XRCID("test_system_command"             ),Skeleton::UponTestSystemCommand            )
     EVT_MENU(XRCID("window_cascade"                  ),Skeleton::UponWindowCascade                )
     EVT_MENU(XRCID("window_next"                     ),Skeleton::UponWindowNext                   )
@@ -932,20 +931,6 @@ void Skeleton::UponTestFloatingPointEnvironment(wxCommandEvent&)
     LMI_ASSERT(fenv_is_valid());
 
     status() << "End test of floating-point environment." << std::flush;
-}
-
-/// TODO ?? This demonstrates a problem. Start the program from the
-/// command line with the strongest password, then run this function
-/// from the test menu. On my msw machine, as soon as the messagebox
-/// is dismissed, this program is deactivated, and the command-line
-/// session is activated. See:
-///   http://lists.nongnu.org/archive/html/lmi/2006-06/msg00018.html
-
-void Skeleton::UponTestSafeMessage(wxCommandEvent&)
-{
-    x87_control_word(0x007f);
-    wxMilliSleep(500);
-    wxSafeYield();
 }
 
 /// SOMEDAY !! Cancelling the wxGetTextFromUser() dialog causes it to
