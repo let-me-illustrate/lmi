@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.996 2008-01-28 16:13:30 chicares Exp $
+// $Id: ChangeLog,v 1.997 2008-01-30 04:51:26 chicares Exp $
 
 MAINTENANCE
 
@@ -15460,4 +15460,31 @@ Mark release candidate.
 
   install_mingw.make
 Add the only ancient version of MinGW that we really need.
+
+20080129T0447Z <gchicares@sbcglobal.net> [1204]
+
+  about_dialog.cpp
+  docmdichildframe_ex.hpp
+  main_wx.cpp
+  single_choice_popup_menu.cpp
+  text_view.cpp
+  transferor.cpp
+  view_ex.cpp
+Replace '-1' with wx constants.
+
+20080130T0307Z <gchicares@sbcglobal.net> [1204]
+
+  main_wx.cpp
+Avoid implicit conversion from wxString to std::string. Due to a
+change in wx HEAD, this will no longer work without wxUSE_STL, so not
+relying on it at all is more robust.
+
+20080130T0451Z <gchicares@sbcglobal.net> [1203]
+
+  main_wx.cpp
+  main_wx.hpp
+  menus.xrc
+Remove a demonstration of a problem that's no longer reproducible, by
+reverting the 20070528T2236Z change. It appears possible that the
+20070731T0142Z change is what resolved the issue.
 
