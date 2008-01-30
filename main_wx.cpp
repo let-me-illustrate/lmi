@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.89 2008-01-29 04:47:40 chicares Exp $
+// $Id: main_wx.cpp,v 1.90 2008-01-30 03:07:36 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -959,15 +959,13 @@ void Skeleton::UponTestSafeMessage(wxCommandEvent&)
 
 void Skeleton::UponTestSystemCommand(wxCommandEvent&)
 {
-    std::string const z
-        (
-        wxGetTextFromUser
-            ("Type a command."
-            ,"Test system_command()"
-            ,""
-            ,wxTheApp->GetTopWindow()
-            )
+    wxString const w = wxGetTextFromUser
+        ("Type a command."
+        ,"Test system_command()"
+        ,""
+        ,wxTheApp->GetTopWindow()
         );
+    std::string const z(w.c_str());
     system_command(z);
 }
 
