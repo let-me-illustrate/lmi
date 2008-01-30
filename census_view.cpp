@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.66 2008-01-21 01:32:28 chicares Exp $
+// $Id: census_view.cpp,v 1.67 2008-01-30 12:52:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -364,6 +364,8 @@ int CensusView::selected_column()
 
 int CensusView::selected_row()
 {
+// TODO ?? Lossy type conversion: GetFirstSelected() returns a long
+// int, here and elsewhere in this file.
     int row = list_window_->GetFirstSelected();
     if(row < 0)
         {
