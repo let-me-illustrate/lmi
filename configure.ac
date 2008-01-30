@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.32 2008-01-01 18:29:37 chicares Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.33 2008-01-30 15:37:37 chicares Exp $)dnl
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -151,35 +151,6 @@ case "$CC" in
     *)  CPPFLAGS="$CPPFLAGS -m96bit-long-double";;
 esac
 
-dnl enable all possible warnings for gcc/g++
-CFLAGS_gcc_common="\
-    -pedantic \
-    -Wall \
-    -Wcast-align \
-    -Wconversion \
-    -Wdeprecated-declarations \
-    -Wdisabled-optimization \
-    -Wimport \
-    -Wmultichar \
-    -Wno-long-long \
-    -Wpacked \
-    -Wpointer-arith \
-    -Wsign-compare \
-    -Wwrite-strings"
-
-if test "x$GCC" == "xyes"; then
-    CFLAGS="$CFLAGS $CFLAGS_gcc_common -std=c99 -Wmissing-prototypes"
-fi
-
-if test "x$GXX" == "xyes"; then
-    CXXFLAGS="$CXXFLAGS $CFLAGS_gcc_common -std=c++98 \
-        -Wdeprecated \
-        -Wnon-template-friend \
-        -Woverloaded-virtual \
-        -Wpmf-conversions \
-        -Wsynth"
-fi
-
 dnl add debug option if necessary
 if test "$debug_option" = "yes"; then
     case "$CC" in
@@ -265,7 +236,10 @@ AC_CACHE_CHECK([for snprintf],
                 #   undef __STRICT_ANSI__
                 #endif
                 #include <stdio.h>]],
-                [return snprintf("", 0, "");]
+                [[
+                char buf[1];
+                return snprintf(buf, 1, "%i", 0);
+                ]]
             )],
             lmi_cv_func_snprintf=yes,
             lmi_cv_func_snprintf=no
@@ -369,21 +343,26 @@ AC_CHECK_HEADER([boost/type_traits.hpp],
     [AC_MSG_ERROR([Boost headers not found, $errmsg])]
 )
 
-if test "x$lmi_boost_toolkit" == "x"; then
+dnl By default no particular toolkit suffix should be needed when linking
+dnl against boost libraries. Except for mingw where it seems to be
+dnl required. Because under mingw default installation does _not_ create
+dnl a symbolic link without the tollkit suffix (-mgw), at least
+dnl for the version 1.33.1. Therefore explicitly set it if no toolkit specified.
+if test "x$lmi_boost_toolkit" = "x"; then
     if test "x$USE_MINGW32" = "x1"; then
         lmi_boost_toolkit=mgw
-    else
-        lmi_boost_toolkit=gcc
     fi
 fi
 
-dnl Boost library name should be guessed in a more sophisticated manner
-if test "x$USE_MINGW32" = "x1"; then
-    boost_libfs="boost_filesystem-$lmi_boost_toolkit"
-elif test "x$USE_CYGWIN" = "x1"; then
-    boost_libfs="boost_filesystem-$lmi_boost_toolkit-mt-s"
-else
+dnl The default boost library name should be used unless otherwise specified
+dnl via --with-boost-tookit options, in which case we need to add
+dnl toolkit suffix to the library name (example -lboost_filesystem-gcc-mt).
+if test "x$lmi_boost_toolkit" = "x"; then
     boost_libfs="boost_filesystem"
+    boost_libregex="boost_regex"
+else
+    boost_libfs="boost_filesystem-$lmi_boost_toolkit"
+    boost_libregex="boost_regex-$lmi_boost_toolkit"
 fi
 
 save_LIBS=$LIBS
@@ -407,6 +386,13 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <boost/filesystem/operations.hpp>]],
     [],
     [LMI_BOOSTFS_BUILD=1
     AC_MSG_WARN([Boost filesystem library $boost_libfs not found, $errmsg])]
+)
+
+LIBS="$save_LIBS -l$boost_libregex"
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <boost/regex.hpp>]],
+    [[boost::regex *r]])],
+    [],
+    [AC_MSG_ERROR([Boost regex library $boost_libregex not found, $errmsg])]
 )
 
 LDFLAGS=$save_LDFLAGS
@@ -440,6 +426,9 @@ BOOST_LIBS=third_party/boostfs/libboost_filesystem.la
 else
 BOOST_LIBS="$BOOST_LDFLAGS -l$boost_libfs"
 fi
+
+BOOST_LIBS="$BOOST_LIBS -l$boost_libregex"
+
 dnl contains flags needed to link to externally or internally built boost::filesystem library
 AC_SUBST(BOOST_LIBS)
 
@@ -554,6 +543,42 @@ AC_SUBST(CGICC_INCLUDES)
 AC_SUBST(CGICC_INCLUDE_FLAGS)
 AC_SUBST(CGICC_LIBS)
 AC_SUBST(CGICC_LIB_LDADD)
+
+dnl --- enable all possible warnings for gcc/g++ ----
+CFLAGS_gcc_common="\
+    -pedantic-errors \
+    -Werror \
+    -Wall \
+    -Wcast-align \
+    -Wconversion \
+    -Wdeprecated-declarations \
+    -Wdisabled-optimization \
+    -Wimport \
+    -Wmultichar \
+    -Wno-long-long \
+    -Wpacked \
+    -Wpointer-arith \
+    -Wsign-compare \
+    -Wundef \
+    -Wwrite-strings"
+
+if test "x$GCC" == "xyes"; then
+    CFLAGS="$CFLAGS $CFLAGS_gcc_common -std=c99 -Wmissing-prototypes"
+fi
+
+if test "x$GXX" == "xyes"; then
+    CXXFLAGS="$CXXFLAGS $CFLAGS_gcc_common -std=c++98 \
+        -Wctor-dtor-privacy \
+        -Wdeprecated \
+        -Wnon-template-friend \
+        -Woverloaded-virtual \
+        -Wpmf-conversions \
+        -Wsynth"
+
+    dnl This makes Boost compile with -Wundef; see workhorse.make for
+    dnl more detailed explanation.
+    CXXFLAGS="$CXXFLAGS -DBOOST_STRICT_CONFIG"
+fi
 
 dnl === Generate output files ===
 AC_CONFIG_FILES([Makefile third_party/Makefile third_party/boostfs/Makefile])
