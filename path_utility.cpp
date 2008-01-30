@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: path_utility.cpp,v 1.12 2008-01-01 18:29:52 chicares Exp $
+// $Id: path_utility.cpp,v 1.13 2008-01-30 18:17:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,6 +35,7 @@
 #include <boost/filesystem/exception.hpp>
 #include <boost/filesystem/operations.hpp>
 
+#include <exception>
 #include <iomanip>
 #include <sstream>
 
@@ -192,12 +193,15 @@ fs::path unique_filepath
     try
         {
         fs::remove(filepath);
-        if(fs::exists(filepath))
-            {
-            throw fs::filesystem_error("", "Removal failed");
-            }
+        // Assert this postcondition explicitly because the conditions
+        // under which boost's remove() function throws have changed
+        // between versions. The boost documentation doesn't seem to
+        // allow it to fail unless it throws, yet it's not documented
+        // to throw on an impermissible operation like removing a file
+        // that's locked by another process.
+        LMI_ASSERT(!fs::exists(filepath));
         }
-    catch(fs::filesystem_error const& e)
+    catch(std::exception const&)
         {
         std::string basename = fs::basename(filepath);
         basename += '-' + iso_8601_datestamp_terse() + extension;
