@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_tools_test.cpp,v 1.8 2008-01-01 18:29:56 chicares Exp $
+// $Id: test_tools_test.cpp,v 1.9 2008-01-31 18:49:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -72,7 +72,7 @@ int test_main(int, char*[])
         BOOST_CRITICAL_TEST(always_true);
         BOOST_CRITICAL_TEST(always_false);
         }
-    catch(lmi_test::test::test_tools_exception&)
+    catch(lmi_test::test::test_tools_exception const&)
         {
         }
 

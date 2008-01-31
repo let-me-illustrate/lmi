@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: handle_exceptions.hpp,v 1.6 2008-01-13 20:03:19 chicares Exp $
+// $Id: handle_exceptions.hpp,v 1.7 2008-01-31 18:49:12 chicares Exp $
 
 #ifndef handle_exceptions_hpp
 #define handle_exceptions_hpp
@@ -82,10 +82,10 @@ inline void report_exception()
         {
         throw;
         }
-    catch(hobsons_choice_exception&)
+    catch(hobsons_choice_exception const&)
         {
         }
-    catch(std::exception& e)
+    catch(std::exception const& e)
         {
         safely_show_message(e.what());
         }
