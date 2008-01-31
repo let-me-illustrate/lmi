@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xrange_test.cpp,v 1.8 2008-01-01 18:30:01 chicares Exp $
+// $Id: xrange_test.cpp,v 1.9 2008-01-31 18:56:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -171,7 +171,7 @@ int test_main(int, char*[])
         // This shouldn't be reached:
         BOOST_TEST(false);
         }
-    catch(std::exception const& e)
+    catch(std::exception const&)
         {
         return_value = 0;
         }
@@ -183,7 +183,7 @@ int test_main(int, char*[])
         // This shouldn't be reached:
         BOOST_TEST(false);
         }
-    catch(std::exception const& e)
+    catch(std::exception const&)
         {
         return_value = 0;
         }

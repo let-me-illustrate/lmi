@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1000 2008-01-31 06:02:18 chicares Exp $
+// $Id: ChangeLog,v 1.1001 2008-01-31 18:56:27 chicares Exp $
 
 MAINTENANCE
 
@@ -15529,4 +15529,20 @@ Improve documentation.
 
   actuarial_table.cpp
 Prevent a warning pointed out by Vaclav.
+
+20080131T1849Z <gchicares@sbcglobal.net> [1204]
+
+  catch_exceptions.hpp
+  handle_exceptions.hpp
+  ihs_server7702.cpp
+  test_tools_test.cpp
+Improve concinnity.
+
+20080131T1856Z <gchicares@sbcglobal.net> [1204]
+
+  catch_exceptions.hpp
+  xenum_test.cpp
+  xrange.hpp
+  xrange_test.cpp
+Remove unused formal arguments in catch clauses.
 
