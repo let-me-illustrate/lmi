@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_server7702.cpp,v 1.14 2008-01-01 18:29:43 chicares Exp $
+// $Id: ihs_server7702.cpp,v 1.15 2008-01-31 18:49:12 chicares Exp $
 
 // Known defects:
 // grep for "NEED DECISION"
@@ -150,9 +150,9 @@ int RunServer7702()
             }
         }
     // Catch exceptions that are thrown during input
-    catch(std::exception& x)
+    catch(std::exception const& e)
         {
-        std::cerr << input.UniqueIdentifier << " error: " << x.what() << '\n';
+        std::cerr << input.UniqueIdentifier << " error: " << e.what() << '\n';
         }
     catch(...)
         {
@@ -190,9 +190,9 @@ void RunServer7702FromString(char* i, char* o)
         std::strcpy(o, os.str().c_str());
         }
     // Catch exceptions that are thrown during input
-    catch(std::exception& x)
+    catch(std::exception const& e)
         {
-        std::cerr << input.UniqueIdentifier << " error: " << x.what() << '\n';
+        std::cerr << input.UniqueIdentifier << " error: " << e.what() << '\n';
         }
     catch(...)
         {
@@ -237,54 +237,54 @@ void Server7702::Process()
         PerformProcessing();
         VerifyPrecision();
         }
-    catch(server7702_precision_changed& x)
+    catch(server7702_precision_changed const& e)
         {
         // TODO ?? Perhaps the control word should be changed and
         // processing restarted.
         Output.Status |= precision_changed;
-        std::cerr << Output.UniqueIdentifier << " error: " << x.what() << '\n';
+        std::cerr << Output.UniqueIdentifier << " error: " << e.what() << '\n';
         }
-    catch(server7702_implausible_input& x)
+    catch(server7702_implausible_input const& e)
         {
         Output.Status |= implausible_input;
-        std::cerr << Output.UniqueIdentifier << " error: " << x.what() << '\n';
+        std::cerr << Output.UniqueIdentifier << " error: " << e.what() << '\n';
         }
-    catch(server7702_inconsistent_input& x)
+    catch(server7702_inconsistent_input const& e)
         {
         Output.Status |= inconsistent_input;
-        std::cerr << Output.UniqueIdentifier << " error: " << x.what() << '\n';
+        std::cerr << Output.UniqueIdentifier << " error: " << e.what() << '\n';
         }
-    catch(x_product_rule_violated& x)
+    catch(x_product_rule_violated const& e)
         {
         Output.Status |= product_rule_violated;
-        std::cerr << Output.UniqueIdentifier << " error: " << x.what() << '\n';
+        std::cerr << Output.UniqueIdentifier << " error: " << e.what() << '\n';
         }
-    catch(server7702_adjustable_event_forbidden_at_issue& x)
+    catch(server7702_adjustable_event_forbidden_at_issue const& e)
         {
         Output.Status |= adjustable_event_forbidden_at_issue;
-        std::cerr << Output.UniqueIdentifier << " error: " << x.what() << '\n';
+        std::cerr << Output.UniqueIdentifier << " error: " << e.what() << '\n';
         }
-    catch(server7702_guideline_negative& x)
+    catch(server7702_guideline_negative const& e)
         {
         Output.Status |= guideline_negative;
-        std::cerr << Output.UniqueIdentifier << " error: " << x.what() << '\n';
+        std::cerr << Output.UniqueIdentifier << " error: " << e.what() << '\n';
         }
-    catch(server7702_misstatement_of_age_or_gender& x)
+    catch(server7702_misstatement_of_age_or_gender const& e)
         {
         Output.Status |= misstatement_of_age_or_gender;
-        std::cerr << Output.UniqueIdentifier << " error: " << x.what() << '\n';
+        std::cerr << Output.UniqueIdentifier << " error: " << e.what() << '\n';
         }
-    catch(std::range_error& x)
+    catch(std::range_error const& e)
         {
         Output.Status |= implausible_input; // TODO ?? can we be more specific?
-        std::cerr << Output.UniqueIdentifier << " error: " << x.what() << '\n';
+        std::cerr << Output.UniqueIdentifier << " error: " << e.what() << '\n';
         }
 
     // Unknown error
-    catch(std::exception& x)
+    catch(std::exception const& e)
         {
         Output.Status |= unknown_error;
-        std::cerr << Output.UniqueIdentifier << " error: " << x.what() << '\n';
+        std::cerr << Output.UniqueIdentifier << " error: " << e.what() << '\n';
         // Since we don't know what the error is, we propagate
         // it back to the caller; we put a message on standard error,
         // but don't try to emit anything to standard output.
