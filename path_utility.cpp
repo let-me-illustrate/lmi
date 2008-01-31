@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: path_utility.cpp,v 1.14 2008-01-31 05:07:42 chicares Exp $
+// $Id: path_utility.cpp,v 1.15 2008-01-31 06:00:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -96,11 +96,11 @@ void initialize_filesystem()
 // TODO ?? CALCULATION_SUMMARY Refactor duplication:
 //   validate_directory()
 //   validate_filepath()
+// and add unit tests for both.
 // Also rename 'validate_directory' --> 'validate_directory_path',
-// and add unit tests.
 
-/// validate_directory() throws an informative exception if its
-/// 'directory' argument does not name a valid directory.
+/// Throw an informative exception if the 'directory' argument does
+/// not name a valid directory.
 ///
 /// 'directory': directory-name to be validated.
 ///
@@ -266,23 +266,34 @@ fs::path serialized_file_path
 
 /// Create a unique file path, following input as closely as possible.
 ///
-/// Create a file path from 'original_filepath', changing its
-/// extension, if any, to 'extension'. If the file path already exists,
-/// then try to remove it. If that fails, then try to make the file
-/// path unique by inserting a "YYYYMMDDTHHMMSSZ" timestamp before the
-/// extension. If even that does not produce a unique name, then throw
-/// an exception.
+/// Motivating example. Suppose an illustration is created from input
+/// file 'foo.in', and output is to be saved in a pdf file. A natural
+/// name for the pdf file would be 'foo.pdf'. If a file with that
+/// exact name already exists, it should normally be erased, and its
+/// name reused: that's what an end user would expect. But that's not
+/// possible of 'foo.pdf' is already open in some viewer that locks it
+/// against modification; in that case, a distinct new name must be
+/// devised.
+///
+/// Postcondition: !exists(returned_filepath).
+///
+/// Algorithm. Copy the given file path, changing its extension, if
+/// any, to the given extension. If the resulting file path already
+/// exists, then try to remove it. If that fails, then try to make the
+/// file path unique by inserting a "YYYYMMDDTHHMMSSZ" timestamp right
+/// before the extension: that should suffice because an end user can
+/// hardly run illustrations faster than once a second. If even that
+/// fails to establish the postcondition, then throw an exception.
 ///
 /// Implementation note.
 ///
-/// A try-block is necessary because fs::remove() can throw. The boost
-/// documentation doesn't clearly say what happens if the file doesn't
-/// actually get removed, e.g. because it's write-protected, so this
-/// function checks the postcondition (file shouldn't exist) and, if
-/// it's not satisfied, explicitly throws an exception of the same
-/// type that the boost library function would throw if it enforced
-/// the postcondition, because both these exceptional conditions are
-/// handled the same way.
+/// A try-block is necessary because fs::remove() can throw. The
+/// postcondition is asserted explicitly at the end of the try-block
+/// because that boost function's semantics have changed between
+/// versions, and its documentation is still unclear in boost-1.34:
+/// apparently it mustn't fail without throwing, yet it doesn't throw
+/// on an operation that must fail, like removing a file that's locked
+/// by another process as in the motivating example above.
 
 fs::path unique_filepath
     (fs::path const&    original_filepath
@@ -299,12 +310,6 @@ fs::path unique_filepath
     try
         {
         fs::remove(filepath);
-        // Assert this postcondition explicitly because the conditions
-        // under which boost's remove() function throws have changed
-        // between versions. The boost documentation doesn't seem to
-        // allow it to fail unless it throws, yet it's not documented
-        // to throw on an impermissible operation like removing a file
-        // that's locked by another process.
         LMI_ASSERT(!fs::exists(filepath));
         }
     catch(std::exception const&)
