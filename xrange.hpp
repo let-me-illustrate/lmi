@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xrange.hpp,v 1.13 2008-01-01 18:30:01 chicares Exp $
+// $Id: xrange.hpp,v 1.14 2008-01-31 18:56:27 chicares Exp $
 
 #ifndef xrange_hpp
 #define xrange_hpp
@@ -219,7 +219,7 @@ bool value_cast_will_succeed(std::string const& s)
         {
         (void)value_cast<Substance>(s);
         }
-    catch(std::exception& x)
+    catch(std::exception const&)
         {
         return false;
         }

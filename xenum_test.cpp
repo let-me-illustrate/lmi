@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenum_test.cpp,v 1.7 2008-01-01 18:29:59 chicares Exp $
+// $Id: xenum_test.cpp,v 1.8 2008-01-31 18:56:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -130,7 +130,7 @@ int test_main(int, char*[])
         // This shouldn't be reached:
         BOOST_TEST(false);
         }
-    catch(std::exception const& e)
+    catch(std::exception const&)
         {
         return_value = 0;
         }
