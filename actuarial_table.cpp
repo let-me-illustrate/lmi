@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.35 2008-01-01 18:29:34 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.36 2008-01-31 06:02:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -66,12 +66,16 @@ namespace
     /// Genesis 5:27.
     int const methuselah = 969;
 
+    /// Use the value -1 as an initializer because it is invalid for
+    /// all integral data fields, then assert that it doesn't equal
+    /// the value ultimately returned. Cast it to the argument type
+    /// in order to avoid warnings for unsigned types.
+
     template<typename T>
     T read_datum(std::istream& is, T& t, boost::int16_t nominal_length)
     {
         LMI_ASSERT(sizeof(T) == nominal_length);
-        // The value -1 is invalid for all integral data fields.
-        T const invalid(-1);
+        T const invalid(static_cast<T>(-1));
         t = invalid;
         char z[sizeof(T)];
         is.read(z, sizeof(T));

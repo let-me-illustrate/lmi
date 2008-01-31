@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.999 2008-01-30 18:17:33 chicares Exp $
+// $Id: ChangeLog,v 1.1000 2008-01-31 06:02:18 chicares Exp $
 
 MAINTENANCE
 
@@ -15513,4 +15513,20 @@ Update autofiles (Vaclav), mechanically removing "\n\n\n" and " \n".
 Treat an "impossible" condition more thoughtfully. Specifically avoid
 throwing a boost filesystem_error exception because its interface has
 changed between boost versions.
+
+20080131T0507Z <gchicares@sbcglobal.net> [1204]
+
+  path_utility.cpp
+  path_utility.hpp
+Move documentation.
+
+20080131T0600Z <gchicares@sbcglobal.net> [1204]
+
+  path_utility.cpp
+Improve documentation.
+
+20080131T0602Z <gchicares@sbcglobal.net> [1204]
+
+  actuarial_table.cpp
+Prevent a warning pointed out by Vaclav.
 
