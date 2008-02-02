@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1001 2008-01-31 18:56:27 chicares Exp $
+// $Id: ChangeLog,v 1.1002 2008-02-02 20:22:32 chicares Exp $
 
 MAINTENANCE
 
@@ -15545,4 +15545,11 @@ Improve concinnity.
   xrange.hpp
   xrange_test.cpp
 Remove unused formal arguments in catch clauses.
+
+20080202T2022Z <gchicares@sbcglobal.net> [1204]
+
+  main_wx.cpp
+  main_wx.hpp
+  menus.xrc
+Add a unit test for pasting to a textcontrol.
 
