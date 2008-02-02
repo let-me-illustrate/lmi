@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.91 2008-01-30 04:51:25 chicares Exp $
+// $Id: main_wx.cpp,v 1.92 2008-02-02 20:22:32 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -135,6 +135,7 @@ BEGIN_EVENT_TABLE(Skeleton, wxApp)
     EVT_MENU(XRCID("test_lib_standard_exception"     ),Skeleton::UponTestLibStandardException     )
     EVT_MENU(XRCID("test_lib_arbitrary_exception"    ),Skeleton::UponTestLibArbitraryException    )
     EVT_MENU(XRCID("test_floating_point_environment" ),Skeleton::UponTestFloatingPointEnvironment )
+    EVT_MENU(XRCID("test_pasting"                    ),Skeleton::UponTestPasting                  )
     EVT_MENU(XRCID("test_system_command"             ),Skeleton::UponTestSystemCommand            )
     EVT_MENU(XRCID("window_cascade"                  ),Skeleton::UponWindowCascade                )
     EVT_MENU(XRCID("window_next"                     ),Skeleton::UponWindowNext                   )
@@ -931,6 +932,36 @@ void Skeleton::UponTestFloatingPointEnvironment(wxCommandEvent&)
     LMI_ASSERT(fenv_is_valid());
 
     status() << "End test of floating-point environment." << std::flush;
+}
+
+/// Test custom handler UponPaste().
+///
+/// This doesn't actually work yet.
+
+void Skeleton::UponTestPasting(wxCommandEvent&)
+{
+    // Put sample data onto the clipboard.
+    wxString s("Excel\0[Book1]Sheet1\0R1C2:R7C2\0\0");
+    wxDataFormat df("Link");
+    wxCustomDataObject* x = new wxCustomDataObject(df);
+    x->SetData(s.length(), s.c_str());
+    wxTheClipboard->AddData(x);
+
+    // Generate an event to pretend that text was pasted.
+    wxTextCtrl* t = new wxTextCtrl(frame_, wxID_ANY, "xyzzy");
+    wxClipboardTextEvent e(wxEVT_COMMAND_TEXT_PASTE, t->GetId());
+    e.SetEventObject(t);
+    wxPostEvent(t, e);
+    wxYield();
+
+    warning()
+        << "Contents after pasting (shouldn't be 'xyzzy'):\n'"
+        << t->GetValue()
+        << "'."
+        << LMI_FLUSH
+        ;
+
+    t->Destroy();
 }
 
 /// SOMEDAY !! Cancelling the wxGetTextFromUser() dialog causes it to
