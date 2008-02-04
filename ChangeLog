@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1002 2008-02-02 20:22:32 chicares Exp $
+// $Id: ChangeLog,v 1.1003 2008-02-04 14:53:27 chicares Exp $
 
 MAINTENANCE
 
@@ -15552,4 +15552,12 @@ Remove unused formal arguments in catch clauses.
   main_wx.hpp
   menus.xrc
 Add a unit test for pasting to a textcontrol.
+
+20080204T1453Z <gchicares@sbcglobal.net> [1204]
+
+  install_msw.sh
+  install_wx.make
+  wx-2.8.6.patch [new file]
+  wx-2.8.7.patch [new file]
+Add local patches and upgrade to wx-2.8.7 .
 
