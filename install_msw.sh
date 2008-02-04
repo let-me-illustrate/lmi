@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_msw.sh,v 1.7 2008-01-01 18:29:46 chicares Exp $
+# $Id: install_msw.sh,v 1.8 2008-02-04 14:53:27 chicares Exp $
 
 set -v
 
@@ -107,9 +107,9 @@ find /tmp/lmi_cache -type f |xargs md5sum
 
 export PATH=/opt/lmi/local/bin:/opt/lmi/local/lib:$PATH
 
-make system_root= PATH_GCC=/MinGW_/bin/ mingw_dir=/MinGW_ wx_dir=/opt/lmi/wx-scratch/wxWidgets-2.8.6/gcc344/ wx_build_dir=/opt/lmi/local/bin wx_config_check
-make system_root= PATH_GCC=/MinGW_/bin/ mingw_dir=/MinGW_ wx_dir=/opt/lmi/wx-scratch/wxWidgets-2.8.6/gcc344/ wx_build_dir=/opt/lmi/local/bin show_flags
-make system_root= PATH_GCC=/MinGW_/bin/ mingw_dir=/MinGW_ wx_dir=/opt/lmi/wx-scratch/wxWidgets-2.8.6/gcc344/ wx_build_dir=/opt/lmi/local/bin install
+make system_root= PATH_GCC=/MinGW_/bin/ mingw_dir=/MinGW_ wx_dir=/opt/lmi/wx-scratch/wxWidgets-2.8.7/gcc344/ wx_build_dir=/opt/lmi/local/bin wx_config_check
+make system_root= PATH_GCC=/MinGW_/bin/ mingw_dir=/MinGW_ wx_dir=/opt/lmi/wx-scratch/wxWidgets-2.8.7/gcc344/ wx_build_dir=/opt/lmi/local/bin show_flags
+make system_root= PATH_GCC=/MinGW_/bin/ mingw_dir=/MinGW_ wx_dir=/opt/lmi/wx-scratch/wxWidgets-2.8.7/gcc344/ wx_build_dir=/opt/lmi/local/bin install
 
 # No lmi binary should depend on any Cygwin library.
 

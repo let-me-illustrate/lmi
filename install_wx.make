@@ -19,11 +19,11 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_wx.make,v 1.6 2008-01-01 18:29:46 chicares Exp $
+# $Id: install_wx.make,v 1.7 2008-02-04 14:53:27 chicares Exp $
 
 # Configurable settings ########################################################
 
-wx_version    := 2.8.6
+wx_version    := 2.8.7
 
 mingw_dir     := /MinGW_
 
@@ -80,6 +80,7 @@ config_options = \
 # URLs and archive md5sums #####################################################
 
 wx-2.8.6-md5 := 8a130e5b25448a17454a6b957a5e075c
+wx-2.8.7-md5 := e3455083afdf6404a569a8bf0701cf13
 
 wx_archive        := wxWidgets-$(wx_version).tar.bz2
 
@@ -93,6 +94,7 @@ CP     := cp
 ECHO   := echo
 MD5SUM := md5sum
 MKDIR  := mkdir
+PATCH  := patch
 RM     := rm
 TAR    := tar
 WGET   := wget
@@ -101,9 +103,11 @@ WGET   := wget
 
 source_archives := $(wx_archive)
 libraries       := $(source_archives:.tar.bz2=)
+patchset        := wx-$(wx_version).patch
 
 .PHONY: all
 all: clobber $(source_archives) $(libraries)
+	[ -e $(patchset) ] && $(PATCH) --directory=$(wx_dir) --strip=1 <$(patchset)
 	$(MAKE) --file=$(this_makefile) --directory=$(build_dir) wx
 	$(MAKE) --file=$(this_makefile) --directory=$(prefix)/bin portable_script
 
