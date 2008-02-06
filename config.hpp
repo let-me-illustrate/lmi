@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config.hpp,v 1.22 2008-01-01 18:29:36 chicares Exp $
+// $Id: config.hpp,v 1.23 2008-02-06 03:50:22 chicares Exp $
 
 // Configuration header for compiler quirks. Include at the beginning of
 // every .hpp file (and nowhere else).
@@ -53,7 +53,7 @@ namespace fs = boost::filesystem;
 #elif defined __WIN32__ || defined _WIN32 || defined WIN32 // Detected msw.
 #   define LMI_MSW
 #else  // Unknown OS.
-#   error "Unknown operating system. Consider contributing support."
+#   error Unknown operating system. Consider contributing support.
 #endif // Unknown OS.
 
 #if defined __x86_64 || defined __x86_64__ || defined __amd64 || defined __amd64__ || defined _M_X64
@@ -64,7 +64,7 @@ namespace fs = boost::filesystem;
 #   define LMI_X86
 #   define LMI_X86_32
 #else  // Unknown hardware.
-#   error "Unknown hardware. Consider contributing support."
+#   error Unknown hardware. Consider contributing support.
 #endif // Unknown hardware.
 
 // 'platform_dependent.hpp' includes standard headers in an unusual
