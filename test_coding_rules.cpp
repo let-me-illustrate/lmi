@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.67 2008-01-13 16:20:44 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.68 2008-02-06 03:47:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -724,6 +724,8 @@ bool check_reserved_name_exception(std::string const& s)
         ,"_setmode"
     // Library specific.
         ,"D__WXDEBUG__" // Hapax legomenon.
+        ,"__WXGTK__"
+        ,"__WXMSW__"
         };
     static int const n = lmi_array_size(y);
     static std::set<std::string> const z(y, y + n);
