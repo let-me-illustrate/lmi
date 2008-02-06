@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_controller.cpp,v 1.17 2008-01-30 14:33:28 chicares Exp $
+// $Id: mvc_controller.cpp,v 1.18 2008-02-06 03:46:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -425,7 +425,14 @@ void MvcController::EnsureOptimalFocus()
     f = FindFocus();
     if(!(f && f->IsEnabled()))
         {
-        EndModal(wxID_CANCEL);
+#if defined __WXGTK__
+        // SOMEDAY !! Probably this condition should be used for all
+        // platforms, after adequate testing.
+        if(IsModal())
+#endif // defined __WXGTK__
+            {
+            EndModal(wxID_CANCEL);
+            }
         fatal_error()
             << "Dialog cancelled because a disabled or null window ("
             << NameLabelId(f)
