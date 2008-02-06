@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1003 2008-02-04 14:53:27 chicares Exp $
+// $Id: ChangeLog,v 1.1004 2008-02-06 03:50:22 chicares Exp $
 
 MAINTENANCE
 
@@ -15559,5 +15559,30 @@ Add a unit test for pasting to a textcontrol.
   install_wx.make
   wx-2.8.6.patch [new file]
   wx-2.8.7.patch [new file]
-Add local patches and upgrade to wx-2.8.7 .
+Add local patches and upgrade to wx-2.8.7 . See:
+  http://lists.gnu.org/archive/html/lmi/2008-02/msg00011.html
+
+20080206T0048Z <gchicares@sbcglobal.net> [1204]
+
+  main_wx.cpp
+Reconstruct the unit test for pasting to a textcontrol. Crucial idea:
+  http://lists.nongnu.org/archive/html/lmi/2008-02/msg00010.html
+
+20080206T0346Z <gchicares@sbcglobal.net> [1204]
+
+  mvc_controller.cpp
+Prevent gtk assertion failure observed when opening "Preferences"
+dialog: EndModal() was called on a non-modal dialog.
+
+20080206T0347Z <gchicares@sbcglobal.net> [1204]
+
+  test_coding_rules.cpp
+Permit additional wx macros.
+
+20080206T0350Z <gchicares@sbcglobal.net> [1204]
+
+  config.hpp
+  ihs_fpios.cpp
+  platform_dependent.hpp
+Write #error directives consistently without "quoting".
 

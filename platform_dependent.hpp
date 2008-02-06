@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: platform_dependent.hpp,v 1.11 2008-01-01 18:29:52 chicares Exp $
+// $Id: platform_dependent.hpp,v 1.12 2008-02-06 03:50:22 chicares Exp $
 
 #ifndef platform_dependent_hpp
 #define platform_dependent_hpp
@@ -87,7 +87,7 @@
     // and worse to define R_OK:
     //   #define R_OK some_unknowable_value
     // so just complain.
-#   error "Unknown platform. Consider contributing support."
+#   error Unknown platform. Consider contributing support.
 #endif // Unknown platform.
 
 // GNU/Linux (but not MinGW) requires including certain headers while

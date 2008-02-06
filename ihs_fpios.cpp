@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_fpios.cpp,v 1.7 2008-01-01 18:29:42 chicares Exp $
+// $Id: ihs_fpios.cpp,v 1.8 2008-02-06 03:50:22 chicares Exp $
 
 // This is a derived work based on Joshua Rowe's
 //   "Really cool persistent object stream library"
@@ -76,7 +76,7 @@
 #       define __STRICT_ANSI__ ""
 #   endif // !(defined(__GNUC__) && defined(__STRICT_ANSI__))
 #else  // Unknown OS.
-#   error "Unknown operating system. Consider contributing support."
+#   error Unknown operating system. Consider contributing support.
 #endif // Unknown OS.
 
 namespace JOSHUA_ROWE_PERSISTENT_STREAMS
