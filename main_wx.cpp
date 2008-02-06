@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.92 2008-02-02 20:22:32 chicares Exp $
+// $Id: main_wx.cpp,v 1.93 2008-02-06 00:48:24 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -936,32 +936,43 @@ void Skeleton::UponTestFloatingPointEnvironment(wxCommandEvent&)
 
 /// Test custom handler UponPaste().
 ///
-/// This doesn't actually work yet.
+/// Add more tests--see:
+///   http://savannah.nongnu.org/task/?5224
+/// and seek a gtk equivalent for msw-specific code.
 
 void Skeleton::UponTestPasting(wxCommandEvent&)
 {
-    // Put sample data onto the clipboard.
-    wxString s("Excel\0[Book1]Sheet1\0R1C2:R7C2\0\0");
-    wxDataFormat df("Link");
-    wxCustomDataObject* x = new wxCustomDataObject(df);
-    x->SetData(s.length(), s.c_str());
-    wxTheClipboard->AddData(x);
+    wxCustomDataObject* d0 = new wxCustomDataObject("Link");
+    std::string const s("Excel\0[Book1]Sheet1\0R1C1:R3C1\0\0");
+    d0->SetData(s.size(), s.c_str());
 
-    // Generate an event to pretend that text was pasted.
-    wxTextCtrl* t = new wxTextCtrl(frame_, wxID_ANY, "xyzzy");
-    wxClipboardTextEvent e(wxEVT_COMMAND_TEXT_PASTE, t->GetId());
-    e.SetEventObject(t);
-    wxPostEvent(t, e);
-    wxYield();
+    wxTextDataObject* d1 = new wxTextDataObject("1\r\n2\r\n3\r\n");
 
-    warning()
-        << "Contents after pasting (shouldn't be 'xyzzy'):\n'"
-        << t->GetValue()
-        << "'."
-        << LMI_FLUSH
-        ;
+    wxDataObjectComposite* c = new wxDataObjectComposite();
+    c->Add(d0);
+    c->Add(d1);
+    {
+    wxClipboardLocker z;
+    wxTheClipboard->SetData(c);
+    }
+
+    wxTextCtrl* t = new wxTextCtrl(frame_, wxID_ANY, "Testing...");
+    t->SetSelection(-1L, -1L);
+#if defined __WXGTK__
+    warning() << "Not yet implemented." << LMI_FLUSH;
+#elif defined __WXMSW__
+    HWND h = reinterpret_cast<HWND>(t->GetHandle());
+    ::SendMessage(h, WM_PASTE, 0, 0);
+#else  // Unsupported platform.
+#   error Platform not yet supported. Consider contributing support.
+#endif // Unsupported platform.
+    if("1;2;3" != t->GetValue())
+        {
+        warning() << "'1;2;3' != '" << t->GetValue() << "'" << LMI_FLUSH;
+        }
 
     t->Destroy();
+    status() << "Pasting test finished." << std::flush;
 }
 
 /// SOMEDAY !! Cancelling the wxGetTextFromUser() dialog causes it to
