@@ -40,7 +40,7 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt.cpp,v 1.18 2008-01-01 18:29:41 chicares Exp $
+// $Id: getopt.cpp,v 1.19 2008-02-07 13:40:30 chicares Exp $
 
 // GWC removed obsolete '#pragma implementation'.
 
@@ -819,7 +819,7 @@ GetOpt::operator () (void)
 }
 
 int
-GetOpt::next_arg (int &i)
+GetOpt::next_arg (int& i)
 {
   int tmp;
 
@@ -838,7 +838,7 @@ GetOpt::next_arg (int &i)
 }
 
 int
-GetOpt::next_arg (double &d)
+GetOpt::next_arg (double& d)
 {
   double tmp;
 
@@ -858,8 +858,7 @@ GetOpt::next_arg (double &d)
 
 int
 // GWC changed nonstandard to standard string class.
-//GetOpt::next_arg (String &s)
-GetOpt::next_arg (std::string &s)
+GetOpt::next_arg (std::string& s)
 {
   // Terminates LIST_ARG processing.
 

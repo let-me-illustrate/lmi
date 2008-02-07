@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.93 2008-02-06 00:48:24 chicares Exp $
+// $Id: main_wx.cpp,v 1.94 2008-02-07 13:40:30 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -1041,7 +1041,7 @@ void Skeleton::OnUnhandledException()
 //
 void Skeleton::UponUpdateFileSave(wxUpdateUIEvent& event)
 {
-    wxDocument *doc = doc_manager_->GetCurrentDocument();
+    wxDocument* doc = doc_manager_->GetCurrentDocument();
     event.Enable(doc && doc->IsModified());
 
     // Setting the event's Id to the xrc Id fails to handle menu

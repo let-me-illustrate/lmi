@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xrange.hpp,v 1.14 2008-01-31 18:56:27 chicares Exp $
+// $Id: xrange.hpp,v 1.15 2008-02-07 13:40:31 chicares Exp $
 
 #ifndef xrange_hpp
 #define xrange_hpp
@@ -137,16 +137,16 @@
 //   would pure inheritance be a better design?
 //   where should underlying type be specified?
 //   should underlying type be a template-parameter of xrange?
-//   where should *this be held?
-//   where should *Inputs be held?
+//   where should '*this' be held?
+//   where should Inputs be held?
 //
-// If *Inputs is held in the Essence class, then its static member functions
+// If Inputs is held in the Essence class, then its static member functions
 // will need to be changed to nonstatic const functions, and the xrange
 // template will need an object to call them.
 //
 // A design that puts all responsibility for validation into a GUI doesn't need
-// to embed *Inputs into each xrange instance. Input items can be changed
-// only through the GUI, which has *Inputs available. The GUI prevents any
+// to embed Inputs into each xrange instance. Input items can be changed
+// only through the GUI, which has Inputs available. The GUI prevents any
 // invalid input from reaching the data. The UDTs for data items hold some but
 // not all of the information necessary for validation. This is true not only
 // of range types, but also of enum types, some of whose values are not allowed
