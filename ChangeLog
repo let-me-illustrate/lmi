@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1005 2008-02-07 13:40:30 chicares Exp $
+// $Id: ChangeLog,v 1.1006 2008-02-07 14:51:17 chicares Exp $
 
 MAINTENANCE
 
@@ -15608,4 +15608,12 @@ Enforce another style rule.
   transferor.hpp
   xrange.hpp
 Conform to the style rule enforced 20080207T1337Z.
+
+20080207T1451Z <gchicares@sbcglobal.net> [1204]
+
+  illustration_view.cpp
+Simplify code; improve documentation. Remove a comment that stated
+what the code already said clearly; replace it with one that explains
+the local problem it works around, and the global problem it fails to
+grapple with.
 

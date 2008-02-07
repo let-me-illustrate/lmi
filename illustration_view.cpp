@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.72 2008-02-07 13:40:30 chicares Exp $
+// $Id: illustration_view.cpp,v 1.73 2008-02-07 14:51:17 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -399,12 +399,21 @@ void IllustrationView::PrintOrPreviewHtmlSummary(enum_print_option option) const
         ,wxPAGE_ALL
         );
 
-    // TODO ?? CALCULATION_SUMMARY The print dialog under wx
-    // defaults to A4, a European paper size. Override the default
-    // with a US 8-1/2 by 11 inch letter size.
-    // WX !! Printer settings should be set globally, OAOO.
-    wxPrintData* printer_settings = printer->GetPrintData();
-    printer_settings->SetPaperId(wxPAPER_LETTER);
+    // TODO ?? CALCULATION_SUMMARY Resolve this issue. This advice:
+    //   You should create an instance on app startup and use this
+    //   instance for all printing operations. The reason is that this
+    //   class stores various settings in it.
+    // from the wxHtmlEasyPrinting documentation has not been heeded.
+    // Furthermore, no corresponding change has been made anywhere
+    // else that lmi uses a wxPrintData object.
+    //
+    // WX !! Could printer settings should be set globally, OAOO,
+    // for all classes that ought to use them? It was reported that
+    // 'A4' was used here unless explicitly overridden, but it seems
+    // that the paper id was actually wxPAPER_NONE; if that causes
+    // 'A4' to be used, then should wx instead use wxPAPER_LETTER in
+    // a US locale, where 'A4' is a poor default?
+    printer->GetPrintData()->SetPaperId(wxPAPER_LETTER);
 
     if(e_print_printer == option)
         {
