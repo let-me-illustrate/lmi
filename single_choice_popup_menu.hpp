@@ -19,14 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: single_choice_popup_menu.hpp,v 1.4 2008-01-01 18:29:55 chicares Exp $
+// $Id: single_choice_popup_menu.hpp,v 1.5 2008-02-07 17:58:42 chicares Exp $
 
 #ifndef single_choice_popup_menu_hpp
 #define single_choice_popup_menu_hpp
 
 #include "config.hpp"
 
-#include <wx/app.h>    // wxTheApp, GetTopWindow()
+#include <wx/app.h>    // wxTheApp
 #include <wx/arrstr.h> // wxArrayString
 #include <wx/menu.h>
 #include <wx/string.h>

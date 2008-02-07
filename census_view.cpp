@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.67 2008-01-30 12:52:17 chicares Exp $
+// $Id: census_view.cpp,v 1.68 2008-02-07 17:58:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -44,7 +44,6 @@
 #include "safely_dereference_as.hpp"
 #include "wx_new.hpp"
 
-#include <wx/app.h>       // wxTheApp
 #include <wx/clipbrd.h>   // Used only by GetClipboardText().
 #include <wx/dataobj.h>   // Used only by GetClipboardText().
 #include <wx/icon.h>
