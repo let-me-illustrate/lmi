@@ -40,7 +40,7 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt.hpp,v 1.15 2008-01-01 18:29:41 chicares Exp $
+// $Id: getopt.hpp,v 1.16 2008-02-07 13:40:30 chicares Exp $
 
 // This version of 'getopt' appears to the caller like standard Unix 'getopt'
 // but it behaves differently for the user, since it allows the user
@@ -344,11 +344,10 @@ class LMI_SO GetOpt
     // and increment the index to the options.  Return 1 if an integer is
     // found, else return 0.
 
-    int next_arg (int &i);
-    int next_arg (double &d);
+    int next_arg (int& i);
+    int next_arg (double& d);
     // GWC changed nonstandard to standard string class.
-//    int next_arg (String &s);
-    int next_arg (std::string &s);
+    int next_arg (std::string& s);
 
     // Prints a message for an invalid argument.
 

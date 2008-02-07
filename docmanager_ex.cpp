@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: docmanager_ex.cpp,v 1.12 2008-01-01 18:29:39 chicares Exp $
+// $Id: docmanager_ex.cpp,v 1.13 2008-02-07 13:40:30 chicares Exp $
 
 // This implementation is a derived work based on wxWindows code, viz.
 //   samples/printing/printing.cpp (C) 1995 Julian Smart
@@ -130,7 +130,7 @@ void DocManagerEx::UponPreview(wxCommandEvent&)
         return;
         }
 
-    wxPrintout *printout = view->OnCreatePrintout();
+    wxPrintout* printout = view->OnCreatePrintout();
     if(!printout)
         {
         wxMessageBox
@@ -155,7 +155,7 @@ void DocManagerEx::UponPreview(wxCommandEvent&)
             );
         return;
         }
-    PreviewFrameEx *frame = new PreviewFrameEx(preview);
+    PreviewFrameEx* frame = new PreviewFrameEx(preview);
     frame->Centre(wxBOTH);
     frame->Initialize();
     frame->Show(true);
@@ -214,7 +214,7 @@ wxDocTemplate* DocManagerEx::SelectDocumentType
     )
 {
     wxArrayString strings;
-    wxDocTemplate **data = new wxDocTemplate *[noTemplates];
+    wxDocTemplate** data = new wxDocTemplate*[noTemplates];
     int i;
     int n = 0;
 
@@ -260,7 +260,7 @@ wxDocTemplate* DocManagerEx::SelectDocumentType
         }
     }
 
-    wxDocTemplate *theTemplate;
+    wxDocTemplate* theTemplate;
 
     switch ( n )
     {
@@ -278,12 +278,12 @@ wxDocTemplate* DocManagerEx::SelectDocumentType
             // propose the user to choose one of several
 // GWC changes begin
 /*
-            theTemplate = (wxDocTemplate *)wxGetSingleChoiceData
+            theTemplate = (wxDocTemplate*)wxGetSingleChoiceData
                           (
                             _("Select a document template"),
                             _("Templates"),
                             strings,
-                            (void **)data,
+                            (void**)data,
                             wxFindSuitableParent()
                           );
 */

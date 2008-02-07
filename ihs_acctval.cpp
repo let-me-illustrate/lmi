@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.104 2008-01-22 13:42:39 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.105 2008-02-07 13:40:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -478,7 +478,7 @@ void AccountValue::InitializeLife(e_run_basis const& a_Basis)
     // TODO ?? JOE--If you accept this modification, would you do the same sort
     // of thing for the initial seven-pay premium as well please?
 
-    // This is notionally called once per *current-basis* run
+    // This is notionally called once per *current*-basis run
     // and actually called once per run, with calculations suppressed
     // for all other bases. TODO ?? How should we handle MEC-avoid
     // solves on bases other than current?

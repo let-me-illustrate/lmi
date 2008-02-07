@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_view_editor.cpp,v 1.12 2008-01-01 18:29:54 chicares Exp $
+// $Id: rounding_view_editor.cpp,v 1.13 2008-02-07 13:40:30 chicares Exp $
 
 #include "rounding_view_editor.hpp"
 
@@ -260,7 +260,7 @@ wxObject* RoundingButtonsXmlHandler::DoCreateResource()
     return control;
 }
 
-bool RoundingButtonsXmlHandler::CanHandle(wxXmlNode *node)
+bool RoundingButtonsXmlHandler::CanHandle(wxXmlNode* node)
 {
     return IsOfClass(node, "RoundingButtons");
 }

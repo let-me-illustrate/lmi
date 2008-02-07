@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702a.hpp,v 1.9 2008-01-01 18:29:43 chicares Exp $
+// $Id: ihs_irc7702a.hpp,v 1.10 2008-02-07 13:40:30 chicares Exp $
 
 #ifndef ihs_irc7702a_hpp
 #define ihs_irc7702a_hpp
@@ -71,7 +71,7 @@ class Irc7702A
         );
     ~Irc7702A();
 
-    // This is notionally called once per *current-basis* run
+    // This is notionally called once per *current*-basis run
     // and actually called once per run, with calculations suppressed
     // for all other bases by setting Ignore (q.v.).
     void Initialize7702A                    // set initial values at issue

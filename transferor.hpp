@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: transferor.hpp,v 1.6 2008-01-01 18:29:58 chicares Exp $
+// $Id: transferor.hpp,v 1.7 2008-02-07 13:40:31 chicares Exp $
 
 // Acknowledgment
 
@@ -66,25 +66,25 @@ enum transfer_direction
 ///   wxControl::StringValue(std::string const&);
 ///   std::string wxControl::GetStringValue() const;
 /// but the library's interface is less simple, e.g.
-///   wxButton       *str = GetLabel()             SetLabel(*str)
-///   wxCheckBox     *bool = GetValue()            SetValue(*bool)
-///   wxCheckListBox *str = GetStringSelection()   SetStringSelection(*str)
-///   wxChoice       *str = GetStringSelection()   SetStringSelection(*str)
-///   wxComboBox     *int = GetSelection()         SetSelection(*int)
-///                  *str = GetValue()             SetStringSelection(*str)
+///   wxButton       * str = GetLabel()             SetLabel(*str)
+///   wxCheckBox     * bool = GetValue()            SetValue(*bool)
+///   wxCheckListBox * str = GetStringSelection()   SetStringSelection(*str)
+///   wxChoice       * str = GetStringSelection()   SetStringSelection(*str)
+///   wxComboBox     * int = GetSelection()         SetSelection(*int)
+///                  * str = GetValue()             SetStringSelection(*str)
 ///                                                SetValue(*str)
-///   wxGauge        *int = GetValue()             SetValue(*int)
-///   wxListBox      *str = GetStringSelection()   SetStringSelection(*str)
+///   wxGauge        * int = GetValue()             SetValue(*int)
+///   wxListBox      * str = GetStringSelection()   SetStringSelection(*str)
 ///                  if(Selected(i)) array->Add(i) SetSelection(array->Item(i))
-///   wxRadioBox     *int = GetSelection()         SetSelection(*int)
-///                  *str = GetStringSelection()   SetStringSelection(*str)
-///   wxRadioButton  *int = GetValue()             SetValue(*int)
-///   wxScrollBar    *int = GetThumbPosition       SetThumbPosition(*int)
-///   wxSlider       *int = GetValue()             SetValue(*int)
-///   wxSpinButton   *int = GetValue()             SetValue(*int)
-///   wxSpinCtrl     *int = GetValue()             SetValue(*int)
-///   wxStaticText   *str = GetLabel()             SetLabel(*str)
-///   wxTextCtrl     *str = GetValue()             SetValue(*str)
+///   wxRadioBox     * int = GetSelection()         SetSelection(*int)
+///                  * str = GetStringSelection()   SetStringSelection(*str)
+///   wxRadioButton  * int = GetValue()             SetValue(*int)
+///   wxScrollBar    * int = GetThumbPosition       SetThumbPosition(*int)
+///   wxSlider       * int = GetValue()             SetValue(*int)
+///   wxSpinButton   * int = GetValue()             SetValue(*int)
+///   wxSpinCtrl     * int = GetValue()             SetValue(*int)
+///   wxStaticText   * str = GetLabel()             SetLabel(*str)
+///   wxTextCtrl     * str = GetValue()             SetValue(*str)
 ///
 /// The base class's name is confusing: it only transfers data, and
 /// validates nothing. Its Validate() member function simply returns

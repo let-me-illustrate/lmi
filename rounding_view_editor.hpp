@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_view_editor.hpp,v 1.11 2008-01-01 18:29:54 chicares Exp $
+// $Id: rounding_view_editor.hpp,v 1.12 2008-02-07 13:40:30 chicares Exp $
 
 #ifndef rounding_view_editor_hpp
 #define rounding_view_editor_hpp
@@ -105,8 +105,8 @@ class RoundingButtonsXmlHandler
     RoundingButtonsXmlHandler();
 
   private:
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+    virtual wxObject* DoCreateResource();
+    virtual bool CanHandle(wxXmlNode* node);
 
     DECLARE_DYNAMIC_CLASS(RoundingButtonsXmlHandler)
 };
