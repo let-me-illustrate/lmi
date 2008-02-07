@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.35 2008-01-13 15:46:34 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.36 2008-02-07 13:37:23 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -227,6 +227,20 @@ be aligned with its corresponding case labels:
        default :
 EOF
 
+cat >eraseme_cpp_003.cpp <<EOF
+$boilerplate
+'*' and '&' are part of the type, not the name: write
+  foo& bar(); // bar() returns a 'reference to foo'
+  int* x;     // x is a 'pointer to int'
+not
+  foo &bar(); // bar() is a 'reference function returning foo'?
+  int *x;     // x is a 'pointer variable of type int'?
+An apparent violation like
+  some_type &uninitialized_reference; // Diagnosable error.
+wouldn't be rejected because the program allows '&html_entity;',
+but that's okay: the compiler would catch it.
+EOF
+
 # Headers.
 
 cat >eraseme_hpp_000.hpp <<EOF
@@ -396,6 +410,8 @@ File 'eraseme_cpp_001.cpp' must not include 'config.hpp'.
 File 'eraseme_cpp_002.cpp' has misindented label ' wrong   :'.
 File 'eraseme_cpp_002.cpp' has misindented label '   No2   :'.
 File 'eraseme_cpp_002.cpp' has misindented label '       x_:'.
+File 'eraseme_cpp_003.cpp' should fuse '&' with type: 'foo &bar(); // bar() is a 'reference function returning foo'?'.
+File 'eraseme_cpp_003.cpp' should fuse '*' with type: 'int *x;     // x is a 'pointer variable of type int'?'.
 File 'eraseme_hpp_001.hpp' lacks canonical header guards.
 File 'eraseme_hpp_002.hpp' lacks canonical header guards.
 File 'eraseme_hpp_003.hpp' lacks canonical header guards.

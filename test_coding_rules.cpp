@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.68 2008-02-06 03:47:27 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.69 2008-02-07 13:37:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -419,6 +419,46 @@ void check_copyright(file const& f)
     std::ostringstream oss;
     oss << "Copyright \\(C\\)[^\\n]*" << 1900 + t1->tm_year;
     require(f, oss.str(), "lacks current copyright.");
+}
+
+void check_cxx(file const& f)
+{
+    // Remove this once these hopeless files have been expunged.
+    if(f.phyloanalyze("^ihs_f?pios.[ch]pp$"))
+        {
+        return;
+        }
+
+    // Remove this once these files have been rewritten.
+    if(f.phyloanalyze("^md5.[ch]pp$"))
+        {
+        return;
+        }
+
+    if(!f.is_of_phylum(e_c_or_cxx))
+        {
+        return;
+        }
+
+    static boost::regex const r("(\\w+)( +)([*&])(\\w+\\b)([*;]?)([^\\n]*)");
+
+    boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
+    boost::sregex_iterator const omega;
+    for(; i != omega; ++i)
+        {
+        boost::smatch const& z(*i);
+        if
+            (   "return"    != z[1]           // 'return *p'
+            &&  "nix"       != z[4]           // '*nix'
+            &&  !('*' == z[3] && '*' == z[5]) // '*emphasis*' in comment
+            &&  !('&' == z[3] && ';' == z[5]) // '&nbsp;'
+            )
+            {
+            std::ostringstream oss;
+            oss << "should fuse '" << z[3] << "' with type: '" << z[0] << "'.";
+            complain(f, oss.str());
+            }
+        }
 }
 
 /// Check defect markers, which contain a doubled '!' or '?'.
@@ -959,6 +999,7 @@ statistics process_file(std::string const& file_path)
 
     check_config_hpp        (f);
     check_copyright         (f);
+    check_cxx               (f);
     check_defect_markers    (f);
     check_include_guards    (f);
     check_label_indentation (f);
