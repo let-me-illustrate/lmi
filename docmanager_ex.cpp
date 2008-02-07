@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: docmanager_ex.cpp,v 1.13 2008-02-07 13:40:30 chicares Exp $
+// $Id: docmanager_ex.cpp,v 1.14 2008-02-07 17:58:42 chicares Exp $
 
 // This implementation is a derived work based on wxWindows code, viz.
 //   samples/printing/printing.cpp (C) 1995 Julian Smart
@@ -45,7 +45,7 @@
 #include "single_choice_popup_menu.hpp"
 #include "wx_new.hpp"
 
-#include <wx/app.h>
+#include <wx/app.h> // wxTheApp
 #include <wx/cmndata.h>
 #include <wx/menu.h>
 #include <wx/msgdlg.h>
