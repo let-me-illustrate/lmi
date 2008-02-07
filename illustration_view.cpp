@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.71 2008-01-01 18:29:44 chicares Exp $
+// $Id: illustration_view.cpp,v 1.72 2008-02-07 13:40:30 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -403,7 +403,7 @@ void IllustrationView::PrintOrPreviewHtmlSummary(enum_print_option option) const
     // defaults to A4, a European paper size. Override the default
     // with a US 8-1/2 by 11 inch letter size.
     // WX !! Printer settings should be set globally, OAOO.
-    wxPrintData *printer_settings = printer->GetPrintData();
+    wxPrintData* printer_settings = printer->GetPrintData();
     printer_settings->SetPaperId(wxPAPER_LETTER);
 
     if(e_print_printer == option)

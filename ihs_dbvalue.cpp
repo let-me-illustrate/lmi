@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbvalue.cpp,v 1.22 2008-01-01 18:29:42 chicares Exp $
+// $Id: ihs_dbvalue.cpp,v 1.23 2008-02-07 13:40:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -442,7 +442,7 @@ void TDBValue::Reshape(std::vector<int> const& a_dims)
 
     // indexes new_object
     std::vector<int> dst_idx(e_number_of_axes);
-    // indexes *this
+    // indexes '*this'
     std::vector<int> src_idx(e_number_of_axes);
 
     std::vector<int> working_idx(e_number_of_axes);

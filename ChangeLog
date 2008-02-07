@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1004 2008-02-06 03:50:22 chicares Exp $
+// $Id: ChangeLog,v 1.1005 2008-02-07 13:40:30 chicares Exp $
 
 MAINTENANCE
 
@@ -15585,4 +15585,27 @@ Permit additional wx macros.
   ihs_fpios.cpp
   platform_dependent.hpp
 Write #error directives consistently without "quoting".
+
+20080207T1337Z <gchicares@sbcglobal.net> [1204]
+
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+Enforce another style rule.
+
+20080207T1340Z <gchicares@sbcglobal.net> [1204]
+
+  docmanager_ex.cpp
+  getopt.cpp
+  getopt.hpp
+  ihs_acctval.cpp
+  ihs_dbvalue.cpp
+  ihs_irc7702a.hpp
+  illustration_view.cpp
+  main_wx.cpp
+  rounding_view_editor.cpp
+  rounding_view_editor.hpp
+  rtti_lmi.hpp
+  transferor.hpp
+  xrange.hpp
+Conform to the style rule enforced 20080207T1337Z.
 
