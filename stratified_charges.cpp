@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.cpp,v 1.14 2008-01-01 18:29:55 chicares Exp $
+// $Id: stratified_charges.cpp,v 1.15 2008-02-11 04:33:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -535,6 +535,10 @@ void stratified_charges::write(std::string const& filename) const
 //============================================================================
 void stratified_charges::write_stratified_files()
 {
+    // Guard against recurrence of the problem described here:
+    //   http://lists.nongnu.org/archive/html/lmi/2008-02/msg00024.html
+    status() << "This line does nothing, but must not fail." << std::flush;
+
     stratified_charges foo;
 
     foo.raw_entity(e_curr_sepacct_load_banded_by_premium  ).values_.push_back(0.0);
