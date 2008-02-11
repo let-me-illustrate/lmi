@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.113 2008-01-01 18:29:52 chicares Exp $
+# $Id: objects.make,v 1.114 2008-02-11 04:34:37 chicares Exp $
 
 ################################################################################
 
@@ -846,8 +846,10 @@ test_coding_rules$(EXEEXT): \
 # elsewhere.
 
 product_files$(EXEEXT): \
-  $(main_auxiliary_common_objects) \
+  alert_cli.o \
   generate_product_files.o \
+  main_common.o \
+  main_common_non_wx.o \
   my_db.o \
   my_fund.o \
   my_prod.o \
