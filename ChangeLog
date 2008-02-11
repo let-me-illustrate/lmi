@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1006 2008-02-07 14:51:17 chicares Exp $
+// $Id: ChangeLog,v 1.1007 2008-02-11 04:34:37 chicares Exp $
 
 MAINTENANCE
 
@@ -15616,4 +15616,22 @@ Simplify code; improve documentation. Remove a comment that stated
 what the code already said clearly; replace it with one that explains
 the local problem it works around, and the global problem it fails to
 grapple with.
+
+20080207T1758Z <gchicares@sbcglobal.net> [1204]
+
+  census_view.cpp
+  docmanager_ex.cpp
+  single_choice_popup_menu.hpp
+Include <wx/app.h> only where needed, and succinctly say why.
+
+20080211T0433Z <gchicares@sbcglobal.net> [1204]
+
+  stratified_charges.cpp
+Expose a latent defect: program 'product_files' gives runtime message
+"Not all alert function pointers have been set.".
+
+20080211T0434Z <gchicares@sbcglobal.net> [1204]
+
+  objects.make
+Fix defect introduced 20050612T1658Z and noted 20080211T0433Z.
 
