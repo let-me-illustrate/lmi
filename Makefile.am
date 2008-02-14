@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.34 2008-01-30 15:37:37 chicares Exp $
+# $Id: Makefile.am,v 1.35 2008-02-14 15:06:10 chicares Exp $
 
 SUBDIRS = third_party
 
@@ -90,6 +90,18 @@ dist_xrc_DATA = \
     print-cell.xpm \
     print-options.xpm \
     print-preview.xpm \
+    round_downward.xpm \
+    round_downward_hover.xpm \
+    round_downward_selected.xpm \
+    round_not_at_all.xpm \
+    round_not_at_all_hover.xpm \
+    round_not_at_all_selected.xpm \
+    round_to_nearest.xpm \
+    round_to_nearest_hover.xpm \
+    round_to_nearest_selected.xpm \
+    round_upward.xpm \
+    round_upward_hover.xpm \
+    round_upward_selected.xpm \
     rounding_view.xpm \
     rounding_view.xrc \
     run-case.xpm \
