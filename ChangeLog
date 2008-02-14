@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1007 2008-02-11 04:34:37 chicares Exp $
+// $Id: ChangeLog,v 1.1008 2008-02-14 15:06:10 chicares Exp $
 
 MAINTENANCE
 
@@ -15634,4 +15634,21 @@ Expose a latent defect: program 'product_files' gives runtime message
 
   objects.make
 Fix defect introduced 20050612T1658Z and noted 20080211T0433Z.
+
+20080214T1506Z <gchicares@sbcglobal.net> [1204]
+
+  Makefile.am
+  round_downward.xpm
+  round_downward_hover.xpm
+  round_downward_selected.xpm
+  round_not_at_all.xpm
+  round_not_at_all_hover.xpm
+  round_not_at_all_selected.xpm
+  round_to_nearest.xpm
+  round_to_nearest_hover.xpm
+  round_to_nearest_selected.xpm
+  round_upward.xpm
+  round_upward_hover.xpm
+  round_upward_selected.xpm
+Add bitmaps for rounding selection.
 
