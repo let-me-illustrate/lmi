@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.70 2008-02-15 05:49:28 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.71 2008-02-15 15:13:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -995,6 +995,11 @@ statistics process_file(std::string const& file_path)
     if(f.is_of_phylum(e_binary) || fs::is_directory(f.path()))
         {
         return statistics();
+        }
+
+    if(31 < f.leaf_name().size())
+        {
+        complain(f, "exceeds 31-character file-name limit.");
         }
 
     assay_whitespace        (f);
