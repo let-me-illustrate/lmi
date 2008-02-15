@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.69 2008-02-07 13:37:23 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.70 2008-02-15 05:49:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -79,7 +79,8 @@ std::map<std::string, bool> my_taboos();
 #endif // defined __MINGW32__
 
 enum enum_phylum
-    {e_binary     = 1 <<  0
+    {e_no_phylum  = 0
+    ,e_binary     = 1 <<  0
     ,e_c_header   = 1 <<  1
     ,e_c_source   = 1 <<  2
     ,e_cxx_header = 1 <<  3
@@ -152,6 +153,7 @@ file::file(std::string const& file_path)
     ,full_name_(file_path)
     ,leaf_name_(path_.leaf())
     ,extension_(fs::extension(path_))
+    ,phylum_   (e_no_phylum)
 {
     if(!fs::exists(path_))
         {
