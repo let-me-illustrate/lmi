@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.36 2008-02-07 13:37:23 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.37 2008-02-15 15:13:28 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -380,6 +380,7 @@ EOF
 cat >eraseme_xpm_003-dot.dash-dot.xpm <<EOF
 Hyphens in file name must be changed to underscores in variable name.
 static char const* eraseme_xpm_003_dot_dash_dot_xpm[] = {
+Furthermore, this file's name is excessively long.
 EOF
 
 touch an_expungible_file.bak
@@ -460,6 +461,7 @@ Exception--file 'eraseme_whitespace_003': File contains '\t'.
 Exception--file 'eraseme_whitespace_004': File contains '\r' or '\v'.
 File 'eraseme_xpm_001.xpm' lacks proper variable assignment.
 File 'eraseme_xpm_002.xpm' lacks proper variable assignment.
+File 'eraseme_xpm_003-dot.dash-dot.xpm' exceeds 31-character file-name limit.
 EOF
 
 diff --unified=0 eraseme_expected eraseme_observed && rm --force \
