@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.cpp,v 1.18 2008-02-16 15:24:28 chicares Exp $
+// $Id: stratified_charges.cpp,v 1.19 2008-02-16 16:43:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,6 +32,7 @@
 #include "assert_lmi.hpp"
 #include "data_directory.hpp"
 #include "platform_dependent.hpp" // access()
+#include "stl_extensions.hpp"     // nonstd::is_sorted()
 #include "stratified_algorithms.hpp"
 
 #include <algorithm>
@@ -39,7 +40,6 @@
 #include <istream>
 #include <fstream>
 #include <ostream>
-#include <stdexcept>
 
 // TODO ?? Shortcomings:
 //
@@ -71,10 +71,7 @@ stratified_entity::stratified_entity
     :limits_(limits)
     ,values_(values)
 {
-    if(limits_.size() != values_.size())
-        {
-        throw std::logic_error("Tiered values and limits of unequal length.");
-        }
+    assert_validity();
 }
 
 //============================================================================
@@ -85,8 +82,11 @@ stratified_entity::~stratified_entity()
 //============================================================================
 void stratified_entity::assert_validity() const
 {
+    LMI_ASSERT(!values_.empty());
     LMI_ASSERT(values_.size() == limits_.size());
     LMI_ASSERT(is_highest_representable_double(limits_.back()));
+    LMI_ASSERT(nonstd::is_sorted(limits_.begin(), limits_.end()));
+    LMI_ASSERT(0.0 < *std::min_element(limits_.begin(), limits_.end()));
 }
 
 //============================================================================
