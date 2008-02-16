@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.cpp,v 1.15 2008-02-11 04:33:23 chicares Exp $
+// $Id: stratified_charges.cpp,v 1.16 2008-02-16 03:21:39 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -112,7 +112,7 @@ void stratified_entity::read(std::istream& is)
     values_.clear();
     is >> vector_size;
     values_.reserve(vector_size);
-    for(std::vector<double>::size_type j = 0; j < vector_size; j++)
+    for(std::vector<double>::size_type j = 0; j < vector_size; ++j)
         {
         is >> z;
         values_.push_back(z);
@@ -122,7 +122,7 @@ void stratified_entity::read(std::istream& is)
     limits_.clear();
     is >> vector_size;
     limits_.reserve(vector_size);
-    for(std::vector<double>::size_type j = 0; j < vector_size; j++)
+    for(std::vector<double>::size_type j = 0; j < vector_size; ++j)
         {
         is >> z;
         limits_.push_back(z);
@@ -139,17 +139,17 @@ void stratified_entity::write(std::ostream& os) const
     LMI_ASSERT(values_.size() == limits_.size());
     LMI_ASSERT((.999 * DBL_MAX) < limits_.back());
 
-    std::vector<double>::const_iterator i;
+    typedef std::vector<double>::const_iterator svdci;
 
     os << values_.size() << " ";
-    for(i = values_.begin(); i < values_.end(); i++)
+    for(svdci i = values_.begin(); i < values_.end(); ++i)
         {
         os << (*i) << " ";
         }
     os << '\n';
 
     os << limits_.size() << " ";
-    for(i = limits_.begin(); i < limits_.end(); i++)
+    for(svdci i = limits_.begin(); i < limits_.end(); ++i)
         {
         os << (*i) << " ";
         }
