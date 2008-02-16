@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.cpp,v 1.17 2008-02-16 14:21:47 chicares Exp $
+// $Id: stratified_charges.cpp,v 1.18 2008-02-16 15:24:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -83,6 +83,13 @@ stratified_entity::~stratified_entity()
 }
 
 //============================================================================
+void stratified_entity::assert_validity() const
+{
+    LMI_ASSERT(values_.size() == limits_.size());
+    LMI_ASSERT(is_highest_representable_double(limits_.back()));
+}
+
+//============================================================================
 std::vector<double> const& stratified_entity::limits() const
 {
     return limits_;
@@ -120,15 +127,13 @@ void stratified_entity::read(std::istream& is)
         }
     LMI_ASSERT(vector_size == limits_.size());
 
-    LMI_ASSERT(values_.size() == limits_.size());
-    LMI_ASSERT(is_highest_representable_double(limits_.back()));
+    assert_validity();
 }
 
 //============================================================================
 void stratified_entity::write(std::ostream& os) const
 {
-    LMI_ASSERT(values_.size() == limits_.size());
-    LMI_ASSERT(is_highest_representable_double(limits_.back()));
+    assert_validity();
 
     typedef std::vector<double>::const_iterator svdci;
 
