@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.hpp,v 1.14 2008-02-16 15:24:28 chicares Exp $
+// $Id: stratified_charges.hpp,v 1.15 2008-02-16 22:22:11 chicares Exp $
 
 #ifndef stratified_charges_hpp
 #define stratified_charges_hpp
@@ -142,7 +142,7 @@ class LMI_SO stratified_charges
     static void write_proprietary_stratified_files();
 
   private:
-    stratified_charges(); // Private, but implemented: needed by std::map.
+    stratified_charges(); // Private, but implemented for friends' use.
 
     stratified_entity&       raw_entity(e_stratified);
     stratified_entity const& raw_entity(e_stratified) const;
