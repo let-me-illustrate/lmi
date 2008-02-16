@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.cpp,v 1.16 2008-02-16 03:21:39 chicares Exp $
+// $Id: stratified_charges.cpp,v 1.17 2008-02-16 14:21:47 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -94,15 +94,6 @@ std::vector<double> const& stratified_entity::values() const
     return values_;
 }
 
-// INELEGANT !! Just omit the last band when the product editor is
-// replaced.
-//
-// When reading or writing the entities, assert that the last limit is
-// greater than (.999 * DBL_MAX): in effect, the highest representable
-// number. Don't assert equality with DBL_MAX because the default
-// precision of the stream >> and << operators for doubles hasn't been
-// changed, so exact equality will not obtain.
-
 //============================================================================
 void stratified_entity::read(std::istream& is)
 {
@@ -130,14 +121,14 @@ void stratified_entity::read(std::istream& is)
     LMI_ASSERT(vector_size == limits_.size());
 
     LMI_ASSERT(values_.size() == limits_.size());
-    LMI_ASSERT((.999 * DBL_MAX) < limits_.back());
+    LMI_ASSERT(is_highest_representable_double(limits_.back()));
 }
 
 //============================================================================
 void stratified_entity::write(std::ostream& os) const
 {
     LMI_ASSERT(values_.size() == limits_.size());
-    LMI_ASSERT((.999 * DBL_MAX) < limits_.back());
+    LMI_ASSERT(is_highest_representable_double(limits_.back()));
 
     typedef std::vector<double>::const_iterator svdci;
 
@@ -578,5 +569,22 @@ void stratified_charges::write_stratified_files()
     foo.raw_entity(e_tiered_sd_premium_tax                ).limits_.push_back(DBL_MAX);
 
     foo.write(AddDataDir("sample.tir"));
+}
+
+/// Determine whether a double is in effect the highest representable.
+///
+/// Don't assert exact equality with DBL_MAX, which is especially
+/// unlikely to obtain with values written to a file and then read
+/// back.
+///
+/// SOMEDAY !! Strive to obviate this function. It's used only to
+/// determine whether the top bracket's limit is effectively infinite.
+/// However, the top bracket's limit should never have any other
+/// value, so perhaps it should be treated as such implicitly, and not
+/// actually expressed.
+
+bool is_highest_representable_double(double z)
+{
+    return (.999 * DBL_MAX) < z;
 }
 
