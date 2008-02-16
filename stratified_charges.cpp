@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.cpp,v 1.19 2008-02-16 16:43:37 chicares Exp $
+// $Id: stratified_charges.cpp,v 1.20 2008-02-16 22:23:10 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -83,6 +83,7 @@ stratified_entity::~stratified_entity()
 void stratified_entity::assert_validity() const
 {
     LMI_ASSERT(!values_.empty());
+    LMI_ASSERT(!limits_.empty());
     LMI_ASSERT(values_.size() == limits_.size());
     LMI_ASSERT(is_highest_representable_double(limits_.back()));
     LMI_ASSERT(nonstd::is_sorted(limits_.begin(), limits_.end()));
@@ -375,6 +376,7 @@ double stratified_charges::tiered_guar_sepacct_load(double assets, double /* pre
 double stratified_charges::minimum_tiered_spread_for_7702() const
 {
     stratified_entity const& z = raw_entity(e_curr_sepacct_load_tiered_by_assets);
+    LMI_ASSERT(!z.values().empty());
     return *std::min_element(z.values().begin(), z.values().end());
 }
 
@@ -464,6 +466,7 @@ void stratified_charges::read(std::string const& filename)
             << LMI_FLUSH
             ;
         }
+
     std::ifstream is(filename.c_str());
 
     is >> raw_entity(e_curr_sepacct_load_banded_by_premium  );
@@ -487,6 +490,7 @@ void stratified_charges::read(std::string const& filename)
             << LMI_FLUSH
             ;
         }
+
     std::string dummy;
     is >> dummy;
     if(!is.eof())
