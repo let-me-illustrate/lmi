@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_document.hpp,v 1.8 2008-02-17 15:17:15 chicares Exp $
+// $Id: tier_document.hpp,v 1.9 2008-02-17 16:01:31 chicares Exp $
 
 #ifndef tier_document_hpp
 #define tier_document_hpp
@@ -27,6 +27,7 @@
 #include "config.hpp"
 
 #include "product_editor.hpp"
+
 #include "stratified_charges.hpp"
 
 class TierDocument
