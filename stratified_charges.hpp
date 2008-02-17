@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.hpp,v 1.15 2008-02-16 22:22:11 chicares Exp $
+// $Id: stratified_charges.hpp,v 1.16 2008-02-17 15:13:16 chicares Exp $
 
 #ifndef stratified_charges_hpp
 #define stratified_charges_hpp
@@ -74,8 +74,8 @@ class LMI_SO stratified_entity
         );
     ~stratified_entity();
 
-    void read(std::istream& is);
-    void write(std::ostream& os) const;
+    void read (std::istream&);
+    void write(std::ostream&) const;
 
   private:
     void assert_validity() const;
@@ -119,10 +119,10 @@ class LMI_SO stratified_charges
     //   tiered_guaranteed_m_and_e()
     // with a single tiered_m_and_e(e_basis const& basis, double assets).
 
-    double tiered_current_m_and_e                  (double assets) const;
-    double tiered_guaranteed_m_and_e               (double assets) const;
-    double tiered_asset_based_compensation         (double assets) const;
-    double tiered_investment_management_fee        (double assets) const;
+    double tiered_current_m_and_e           (double assets) const;
+    double tiered_guaranteed_m_and_e        (double assets) const;
+    double tiered_asset_based_compensation  (double assets) const;
+    double tiered_investment_management_fee (double assets) const;
 
     double minimum_tiered_spread_for_7702() const;
 
@@ -132,11 +132,11 @@ class LMI_SO stratified_charges
         ,double         payment
         ,double         aggregate_payment
         ) const;
-    bool premium_tax_is_tiered(e_state const& state) const;
+    bool premium_tax_is_tiered(e_state const&) const;
 
     // Lowest rate for conservatism in complicated formulas that
     // don't yet reflect tiering.
-    double minimum_tiered_premium_tax_rate(e_state const& state) const;
+    double minimum_tiered_premium_tax_rate(e_state const&) const;
 
     static void write_stratified_files();
     static void write_proprietary_stratified_files();

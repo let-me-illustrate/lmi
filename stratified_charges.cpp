@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.cpp,v 1.20 2008-02-16 22:23:10 chicares Exp $
+// $Id: stratified_charges.cpp,v 1.21 2008-02-17 15:13:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -154,20 +154,14 @@ void stratified_entity::write(std::ostream& os) const
 }
 
 //============================================================================
-std::istream& operator>>
-    (std::istream&      is
-    ,stratified_entity& z
-    )
+std::istream& operator>>(std::istream& is, stratified_entity& z)
 {
     z.read(is);
     return is;
 }
 
 //============================================================================
-std::ostream& operator<<
-    (std::ostream&            os
-    ,stratified_entity const& z
-    )
+std::ostream& operator<<(std::ostream& os, stratified_entity const& z)
 {
     z.write(os);
     return os;
