@@ -24,16 +24,38 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: rounding_view.xrc,v 1.3 2008-01-01 18:29:54 chicares Exp $
+    $Id: rounding_view.xrc,v 1.4 2008-02-17 15:17:14 chicares Exp $
 -->
 
 <object class="wxPanel" name="rounding_view_panel">
+
+<object class="wxBoxSizer">
+    <orient>wxHORIZONTAL</orient>
+    <object class="spacer">
+        <option>1</option>
+    </object>
+    <object class="sizeritem">
+        <flag>wxALIGN_CENTER|wxALIGN_CENTER_VERTICAL</flag>
+        <option>0</option>
+
+<object class="wxBoxSizer">
+    <orient>wxHORIZONTAL</orient>
+    <object class="sizeritem">
+        <flag>wxALIGN_LEFT|wxALIGN_TOP|wxBOTTOM|wxLEFT|wxRIGHT</flag>
+        <border>6</border>
+        <object class="wxStaticBoxSizer">
+            <orient>wxVERTICAL</orient>
+            <object class="sizeritem">
+                <flag>wxALL</flag>
+                <border>4</border>
     <object class="wxFlexGridSizer">
         <cols>2</cols>
-        <growablerows>1</growablerows>
+        <rows>0</rows>
+        <hgap>8</hgap>
+        <vgap>4</vgap>
 
         <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
+            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
             <object class="wxStaticText">
                 <label>specamt</label>
             </object>
@@ -41,14 +63,13 @@
         <object class="sizeritem">
             <flag>wxALIGN_LEFT</flag>
             <object class="RoundingButtons" name="specamt">
-                <size>-1,-1</size>
             </object>
         </object>
 
         <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
+            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
             <object class="wxStaticText">
-                <label>death_benefit</label>
+                <label>death benefit</label>
             </object>
         </object>
         <object class="sizeritem">
@@ -59,7 +80,7 @@
         </object>
 
         <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
+            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
             <object class="wxStaticText">
                 <label>naar</label>
             </object>
@@ -72,9 +93,9 @@
         </object>
 
         <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
+            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
             <object class="wxStaticText">
-                <label>coi_rate</label>
+                <label>coi rate</label>
             </object>
         </object>
         <object class="sizeritem">
@@ -85,9 +106,9 @@
         </object>
 
         <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
+            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
             <object class="wxStaticText">
-                <label>coi_charge</label>
+                <label>coi charge</label>
             </object>
         </object>
         <object class="sizeritem">
@@ -98,9 +119,9 @@
         </object>
 
         <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
+            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
             <object class="wxStaticText">
-                <label>gross_premium</label>
+                <label>gross premium</label>
             </object>
         </object>
         <object class="sizeritem">
@@ -111,9 +132,9 @@
         </object>
 
         <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
+            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
             <object class="wxStaticText">
-                <label>net_premium</label>
+                <label>net premium</label>
             </object>
         </object>
         <object class="sizeritem">
@@ -124,9 +145,9 @@
         </object>
 
         <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
+            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
             <object class="wxStaticText">
-                <label>interest_rate</label>
+                <label>interest rate</label>
             </object>
         </object>
         <object class="sizeritem">
@@ -137,9 +158,9 @@
         </object>
 
         <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
+            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
             <object class="wxStaticText">
-                <label>interest_credit</label>
+                <label>interest credit</label>
             </object>
         </object>
         <object class="sizeritem">
@@ -150,7 +171,7 @@
         </object>
 
         <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
+            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
             <object class="wxStaticText">
                 <label>withdrawal</label>
             </object>
@@ -162,8 +183,26 @@
             </object>
         </object>
 
+    </object><!-- wxFlexGridSizer -->
+            </object><!-- sizeritem -->
+        </object><!-- wxStaticBoxSizer -->
+    </object><!-- sizeritem -->
+
+    <object class="sizeritem">
+        <flag>wxALIGN_LEFT|wxALIGN_TOP|wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND</flag>
+        <border>6</border>
+        <object class="wxStaticBoxSizer">
+            <object class="sizeritem">
+                <flag>wxALL</flag>
+                <border>4</border>
+    <object class="wxFlexGridSizer">
+        <cols>2</cols>
+        <rows>0</rows>
+        <hgap>8</hgap>
+        <vgap>4</vgap>
+
         <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
+            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
             <object class="wxStaticText">
                 <label>loan</label>
             </object>
@@ -176,9 +215,9 @@
         </object>
 
         <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
+            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
             <object class="wxStaticText">
-                <label>corridor_factor</label>
+                <label>corridor factor</label>
             </object>
         </object>
         <object class="sizeritem">
@@ -189,9 +228,9 @@
         </object>
 
         <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
+            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
             <object class="wxStaticText">
-                <label>surrender_charge</label>
+                <label>surrender charge</label>
             </object>
         </object>
         <object class="sizeritem">
@@ -202,7 +241,7 @@
         </object>
 
         <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
+            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
             <object class="wxStaticText">
                 <label>irr</label>
             </object>
@@ -215,9 +254,9 @@
         </object>
 
         <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
+            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
             <object class="wxStaticText">
-                <label>min_specamt</label>
+                <label>min specamt</label>
             </object>
         </object>
         <object class="sizeritem">
@@ -228,9 +267,9 @@
         </object>
 
         <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
+            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
             <object class="wxStaticText">
-                <label>max_specamt</label>
+                <label>max specamt</label>
             </object>
         </object>
         <object class="sizeritem">
@@ -241,9 +280,9 @@
         </object>
 
         <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
+            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
             <object class="wxStaticText">
-                <label>min_premium</label>
+                <label>min premium</label>
             </object>
         </object>
         <object class="sizeritem">
@@ -254,9 +293,9 @@
         </object>
 
         <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
+            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
             <object class="wxStaticText">
-                <label>max_premium</label>
+                <label>max premium</label>
             </object>
         </object>
         <object class="sizeritem">
@@ -267,9 +306,9 @@
         </object>
 
         <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
+            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
             <object class="wxStaticText">
-                <label>interest_rate_7702</label>
+                <label>interest rate 7702</label>
             </object>
         </object>
         <object class="sizeritem">
@@ -279,8 +318,46 @@
             </object>
         </object>
 
-    </object>
+    </object><!-- wxFlexGridSizer -->
+            </object><!-- sizeritem -->
+        </object><!-- wxStaticBoxSizer -->
+    </object><!-- sizeritem -->
+
+</object><!-- wxBoxSizer -->
+
+</object><!-- sizeritem -->
+
+<object class="spacer">
+    <option>1</option>
 </object>
+
+</object><!-- wxBoxSizer -->
+
+</object><!-- wxPanel -->
+
+<object class="wxBitmap" name="round_not_at_all">round_not_at_all.xpm</object>
+
+<object class="wxBitmap" name="round_not_at_all_hover">round_not_at_all_hover.xpm</object>
+
+<object class="wxBitmap" name="round_not_at_all_selected">round_not_at_all_selected.xpm</object>
+
+<object class="wxBitmap" name="round_to_nearest">round_to_nearest.xpm</object>
+
+<object class="wxBitmap" name="round_to_nearest_hover">round_to_nearest_hover.xpm</object>
+
+<object class="wxBitmap" name="round_to_nearest_selected">round_to_nearest_selected.xpm</object>
+
+<object class="wxBitmap" name="round_upward">round_upward.xpm</object>
+
+<object class="wxBitmap" name="round_upward_hover">round_upward_hover.xpm</object>
+
+<object class="wxBitmap" name="round_upward_selected">round_upward_selected.xpm</object>
+
+<object class="wxBitmap" name="round_downward">round_downward.xpm</object>
+
+<object class="wxBitmap" name="round_downward_hover">round_downward_hover.xpm</object>
+
+<object class="wxBitmap" name="round_downward_selected">round_downward_selected.xpm</object>
 
 </resource>
 

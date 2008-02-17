@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_safe.hpp,v 1.8 2008-01-01 18:29:50 chicares Exp $
+// $Id: multidimgrid_safe.hpp,v 1.9 2008-02-17 15:17:13 chicares Exp $
 
 #ifndef multidimgrid_safe_hpp
 #define multidimgrid_safe_hpp
@@ -34,26 +34,8 @@
 #include "multidimgrid_any.hpp"
 
 #include <boost/any.hpp>
-#include <boost/preprocessor/repetition.hpp>
-#include <boost/preprocessor/arithmetic/sub.hpp>
-#include <boost/preprocessor/punctuation/comma_if.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits.hpp>
-
-/// This constant specifies the maximal number of arguments for the MakeArray
-/// method to accept.
-///
-/// Note that this doesn't affect at all the max number of elements in the
-/// array passed to MultiDimEnumAxis ctor which is unlimited.
-#define MAX_MULTIDIMGRID_MAKEARRAY 10
-
-/// This constant specifies the number of type safe MultiDimGridN classes
-/// declared in this header. It may be set in the compiler options to any
-/// values but the compilation may be slower if it is very large.
-///
-/// Note that this doesn't affect at all the number of axis in MultiDimGrid
-/// which is unlimited.
-#define MAX_MULTIDIMGRID_AXIS 10
 
 /// MultiDim* type-safe classes
 /// ---------------------------
@@ -67,8 +49,8 @@
 /// redirect the work to its Do* twin virtual method that takes correctly typed
 /// parameters.
 /// You should not use untyped method versions (such as MultiDimAxis::GetValue(),
-/// MultiDimTableN::SetValue()) - use typed versions instead
-/// (MultiDimAxis::DoGetValue(), MultiDimTableN::DoSetValue()).
+/// MultiDimTable::SetValue()) - use typed versions instead
+/// (MultiDimAxis::DoGetValue(), MultiDimTable::DoSetValue()).
 
 /// Design notes for MultiDimAxis<E>
 ///
@@ -111,16 +93,6 @@ class MultiDimAxis
 /// possible values.
 ///   - name the name of the axis, for GetName() implementation
 ///   - values all possible values for this axis
-///
-/// MakeArray(s1, ..., sN): Helper for passing the values to constructor
-/// argument.
-/// This function takes N strings and returns an array with N elements.
-/// Note that in reality there is not a single function but a family of
-/// overloaded functions taking up to MAX_MULTIDIMGRID_MAKEARRAY
-/// parameters.
-///   - s1 the label for the first value
-///   - ...
-///   - sN the label for the last value
 
 template <typename Enum>
 class MultiDimEnumAxis
@@ -134,17 +106,6 @@ class MultiDimEnumAxis
         (std::string const& name
         ,std::vector<std::string> const& values
         );
-
-    #define MAKE_ARRAY_n(z, n, unused)                  \
-    static std::vector<std::string> MakeArray           \
-        (BOOST_PP_ENUM_PARAMS(n, std::string const& s)  \
-        );
-
-    /// c++ standard does not allow empty static arrays therefore we should
-    /// exclude MakeArray_0 case, starting from 1
-    BOOST_PP_REPEAT_FROM_TO(1, MAX_MULTIDIMGRID_MAKEARRAY, MAKE_ARRAY_n, ~)
-
-    #undef MAKE_ARRAY_n
 
     /// Base class virtuals
     virtual unsigned int GetCardinality() const;
@@ -196,10 +157,7 @@ class MultiDimIntegralAxis
     /// Override MultiDimAxis::DoGetValue()
     virtual Integral DoGetValue(unsigned int n) const;
 
-// TODO ?? EVGENIY !! Section 8.2 of the boost coding standards says
-// "Protected data members are forbidden". Is there a really good
-// reason to violate that standard here?
-  protected:
+  private:
     Integral min_;
     Integral max_;
     Integral step_;
@@ -208,177 +166,77 @@ class MultiDimIntegralAxis
 typedef MultiDimIntegralAxis<int> MultiDimIntAxis;
 typedef MultiDimIntegralAxis<unsigned int> MultiDimUIntAxis;
 
-/// Design notes for MultiDimTableTypeTraits<ValueType>
+/// Default conversion policy for type-safe MultiDimGrid.
 ///
-/// Conversion helper for MultiDimTableN template classes.
-///
-/// Implements conversion between ValueType and std::string.
-/// To support a new data type in the MultiDimTable one should specialise
-/// this template for the desired type.
-/// See int template specialisation for an example.
+/// Internally it uses value_cast.
 
-/// One could use boost::lexical to implement a generic conversion
-/// using lexical casts (lexical cast - cast that uses standard iostream
-/// facilities as a conversion black box).
-
-template <typename ValueType>
-class MultiDimTableTypeTraits
+template<typename T>
+struct ValueCastConversion
 {
-  public:
-    /// Convert value respresented by a string into ValueType.
-    ValueType FromString(std::string const& str) const;
-    /// Create a string representation of a value
-    std::string ToString(ValueType const& value) const;
+    std::string ValueToString(T const&) const;
+    T StringToValue(std::string const&) const;
 };
 
-#if 0 // TODO ?? Expunge.
-/// Helper macro implementing MultiDimTableTypeTraits for a given integral type
-
-#define MDTABLE_TTRAITS_INTEGRAL(ValueType              \
-    ,FromMethod                                         \
-    ,FromType                                           \
-    ,ErrFromValue                                       \
-    )                                                   \
-template <>                                             \
-class MultiDimTableTypeTraits<ValueType>                \
-{                                                       \
-  public:                                               \
-    ValueType FromString(wxString const& str) const     \
-    {                                                   \
-        FromType value;                                 \
-        if(str.FromMethod(&value))                      \
-            {                                           \
-            return value;                               \
-            }                                           \
-        return ErrFromValue;                            \
-    }                                                   \
-    wxString ToString(ValueType value) const            \
-    {                                                   \
-        wxString res;                                   \
-        res << value;                                   \
-        return res;                                     \
-    }                                                   \
-}
-
-/// Specializations of MultiDimTableTypeTraits for some common types.
-MDTABLE_TTRAITS_INTEGRAL(int, ToLong, long, -1);
-MDTABLE_TTRAITS_INTEGRAL(unsigned int, ToULong, unsigned long, 0);
-MDTABLE_TTRAITS_INTEGRAL(long, ToLong, long, -1);
-MDTABLE_TTRAITS_INTEGRAL(unsigned long, ToULong, unsigned long, 0);
-MDTABLE_TTRAITS_INTEGRAL(double, ToDouble, double, -1);
-#endif // 0
-
-/// Design notes for MultiDimTableN<T, V1, ..., VN>
+/// Notes for MultiDimTable <Type, Derived, ConversionPolicy>
 ///
-/// Type-safe N-dimensional table.
-///
-/// There is no class MultiDimTableN in reality, only classes MultiDimTable0,
-/// MultiDimTable1, ... and so on up to MAX_MULTIDIMGRID_AXIS which is
-/// sufficiently large by default but may be predefined to be even larger if
-/// this is not enough.
+/// Provides type-safety for multi-dimensional table values.
 ///
 /// Template parameters are:
-///   - T the type of the grid values
-///   - VN the type of the values of the N-th axis
+///   - T                Type of the table values.
+///   - Derived          Type of the deriving class.
+///   - ConversionPolicy A class providing two const member (or static) methods
+///       ValueToString and StringToValue which will be used to convert between
+///       std::string and T. The default is to use ValueCastConversion.
 ///
-/// AxisNumber: Number of axis in the table
+/// DoGetValue and DoSetValue: These two methods has to be provided in
+/// the derived class. These methods are not virtual in MultiDimGridN.
 ///
-/// GetValue(a1, ..., an): This function which must be overridden to provide
-/// read access to the table values.
-///
-/// SetValue(a1, ..., an, value): This function which must be overridden
-/// to provide write access to the table values.
-///
-/// GetAxisM(): family of functions for every M in 0..(N-1)
-///
-/// DoGetValue(coords): Implement base class pure virtual in terms
-/// of public GetValue()
-///
-/// DoSetValue(coords, value): Implement base class pure virtual in terms
-/// of public SetValue()
-///
-/// converter_: internal instance of the converter object
-///
-/// ValueToString(value) and StringToValue(str):
-/// String vs ValueType convertion helpers.
-/// Delegates the conversion between type ValueType and std::string
-/// to template class MultiDimTableTypeTraits<ValueType>
-/// To support new type one should instantiate the MultiDimTableTypeTraits
-/// for the type and implement the converting methods.
+/// Example of usage:
+/// class MyTable
+///     : MultiDimTable<int, MyTable>
+/// {
+///   public:
+///     /// MultiDimTable contract:
+///     int GetTypedValue(Coords const&) const;
+///     void SetTypedValue(Coords const&, int const&);
+/// };
 
-#define MDTABLE_DECLARE_GETAXIS_(z, n, unused)                                \
-    virtual MultiDimAxis<V##n>* GetAxis##n() = 0;                             \
+template
+    <typename T
+    ,typename Derived
+    ,typename ConversionPolicy = ValueCastConversion<T>
+    >
+class MultiDimTable
+    :public MultiDimTableAny
+    ,private ConversionPolicy
+{
+  public:
+    typedef T ValueType;
 
-#define MDTABLE_AXISVALUETYPE_TYPEDEF_(z, n, unused)                          \
-    typedef V##n AxisValueType##n;                                            \
+    /// Statically casts '*this' to Derived and calls DoGet/SetValue.
+    T GetValue(Coords const&) const;
+    void SetValue(Coords const&, T const&);
 
-/// helper macro used to declare MultiDimTableN and MultiDimGridN classes for
-/// given N
-#define MDTABLE_DECLARE_FOR_(z, n, unused)                                    \
-                                                                              \
-template <typename T, BOOST_PP_ENUM_PARAMS(n, typename V)>                    \
-class MultiDimTable##n                                                        \
-    :public MultiDimTableAny                                                  \
-{                                                                             \
-  public:                                                                     \
-    typedef T ValueType;                                                      \
-    static unsigned int const AxisNumber = n;                                 \
-    BOOST_PP_REPEAT(n, MDTABLE_AXISVALUETYPE_TYPEDEF_, ~)                     \
-                                                                              \
-    virtual T GetValue(BOOST_PP_ENUM_BINARY_PARAMS(n, V, v)) const = 0;       \
-    virtual void SetValue                                                     \
-        (BOOST_PP_ENUM_BINARY_PARAMS(n, V, v)                                 \
-        ,T const& value                                                       \
-        ) = 0;                                                                \
-                                                                              \
-    virtual unsigned int GetDimension() const;                                \
-                                                                              \
-    BOOST_PP_REPEAT(n, MDTABLE_DECLARE_GETAXIS_, ~)                           \
-                                                                              \
-    virtual MultiDimAxisAny* DoGetAxisAny(unsigned int nn);                   \
-                                                                              \
-  protected:                                                                  \
-    virtual boost::any DoGetValue(Coords const& coords) const;                \
-                                                                              \
-    virtual void DoSetValue(Coords const& coords, boost::any const& value);   \
-                                                                              \
-  private:                                                                    \
-    MultiDimTableTypeTraits<T> converter_;                                    \
-    virtual std::string ValueToString(boost::any const& value) const;         \
-    virtual boost::any StringToValue(std::string const& str) const;           \
+  protected:
+    /// MultiDimTable contract:
+    /// The Derived class has to implement these two methods.
+    /// Note that these methods are not virtual.
+    T    DoGetValue(Coords const&) const;
+    void DoSetValue(Coords const&, T const&);
+
+    /// Helper methods for unwrapping/wrapping a value from/into boost::any.
+    template<typename A>
+    static A UnwrapAny(boost::any const&);
+    template<typename A>
+    static boost::any WrapAny(A const&);
+
+  private:
+    /// MultiDimTableAny overrides.
+    virtual boost::any DoGetValueAny(Coords const&) const;
+    virtual void       DoSetValueAny(Coords const&, boost::any const&);
+    virtual boost::any  StringToValue(std::string const&) const;
+    virtual std::string ValueToString(boost::any const&) const;
 };
-
-/// real code declaring MultiDimGridN classes
-BOOST_PP_REPEAT_FROM_TO(1, MAX_MULTIDIMGRID_AXIS, MDTABLE_DECLARE_FOR_, ~)
-
-/// Design notes for MultiDimTableAxisValueType<Table, M>
-///
-/// Helper class to easily retrieve type information
-/// from a MultiDimTableN class.
-///
-/// It retrieves the type of the Nth axis ot the table.
-///
-/// It is specialized for every N in 1..MAX_MULTIDIMGRID_AXIS.
-
-template<class Table, int M>
-struct MultiDimTableAxisValueType;
-
-#define MDTABLE_AXISVALUETYPE_FOR_(z, n, unused)                            \
-                                                                            \
-template<class Table>                                                       \
-struct MultiDimTableAxisValueType<Table, n>                                 \
-{                                                                           \
-    static unsigned int const N = n;                                        \
-    typedef typename Table::AxisValueType##n Type;                          \
-};
-
-BOOST_PP_REPEAT_FROM_TO(1, MAX_MULTIDIMGRID_AXIS, MDTABLE_AXISVALUETYPE_FOR_, ~)
-
-#undef MDTABLE_AXISVALUETYPE_FOR_
-#undef MDTABLE_DECLARE_GETAXIS_FOR_
-#undef MDTABLE_AXISVALUETYPE_TYPEDEF_
-#undef MDTABLE_DECLARE_FOR_
-#undef MDTABLE_TTRAITS_INTEGRAL
 
 /// Design notes for MultiDimAdjustableAxis<AdjustControl, BaseAxisType>
 ///
@@ -395,9 +253,9 @@ BOOST_PP_REPEAT_FROM_TO(1, MAX_MULTIDIMGRID_AXIS, MDTABLE_AXISVALUETYPE_FOR_, ~)
 ///   - AdjustControl type of the adjustment control you will use for the axis
 ///   - BaseAxisType base class to use for the axis
 ///
-/// GetAdjustControl(grid, table): Redirects to type-safe method
-/// DoGetAdjustControl().
-/// Do not override this method, override DoGetAdjustControl instead.
+/// CreateAdjustControl(grid, table): Redirects to type-safe method
+/// DoCreateAdjustControl().
+/// Do not override this method, override DoCreateAdjustControl instead.
 
 template<class AdjustControl, class BaseAxisType = MultiDimAxisAny>
 class MultiDimAdjustableAxis
@@ -408,44 +266,32 @@ class MultiDimAdjustableAxis
         || boost::is_same<MultiDimAxisAny, BaseAxisType>::value
         ));
 
-  public:
+  protected:
     typedef AdjustControl AxisAdjustControl;
 
-    virtual wxWindow* GetAdjustControl
-        (MultiDimGrid& grid
-        ,MultiDimTableAny& table
-        );
-    /// Redirects to the type-safe DoApplyAdjustment()
-    virtual bool ApplyAdjustment
-        (wxWindow* adjustWin
-        ,unsigned int n
-        );
-    /// Redirects to the type-safe DoRefreshAdjustment()
-    virtual bool RefreshAdjustment
-        (wxWindow* adjustWin
-        ,unsigned int n
-        );
-
-  protected:
     /// Default constructor.
     /// This ctor is protected because this class has to be derived from.
     MultiDimAdjustableAxis(std::string const& name);
 
-    /// Type-safe method to override in the derived user class.
-    virtual AxisAdjustControl* DoGetAdjustControl
+    /// Type-safe versions of the corresponding methods.
+    virtual AxisAdjustControl* DoCreateAdjustControl
         (MultiDimGrid& grid
         ,MultiDimTableAny& table
         ) = 0;
-    /// Type-safe method to override in the derived user class.
     virtual bool DoApplyAdjustment
-        (AxisAdjustControl* adjustWin
-        ,unsigned int n
+        (AxisAdjustControl&
+        ,unsigned int axis_id
         ) = 0;
-    /// Type-safe method to override in the derived user class.
     virtual bool DoRefreshAdjustment
-        (AxisAdjustControl* adjustWin
-        ,unsigned int n
+        (AxisAdjustControl&
+        ,unsigned int axis_id
         ) = 0;
+
+  private:
+    /// MultiDimAxisAny overrides.
+    virtual wxWindow* CreateAdjustControl(MultiDimGrid&, MultiDimTableAny&);
+    virtual bool ApplyAdjustment(wxWindow&, unsigned int axis_id);
+    virtual bool RefreshAdjustment(wxWindow&, unsigned int axis_id);
 };
 
 #endif // multidimgrid_safe_hpp

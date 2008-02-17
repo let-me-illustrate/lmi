@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1009 2008-02-15 15:13:28 chicares Exp $
+// $Id: ChangeLog,v 1.1010 2008-02-17 15:17:16 chicares Exp $
 
 MAINTENANCE
 
@@ -15665,4 +15665,69 @@ exit added later.
   test_coding_rules.cpp
   test_coding_rules_test.sh
 Test length of file names.
+
+20080216T0321Z <gchicares@sbcglobal.net> [1204]
+
+  stratified_charges.cpp
+Refactor.
+
+20080216T1421Z <gchicares@sbcglobal.net> [1204]
+
+  stratified_charges.cpp
+  stratified_charges.hpp
+Add a public function for product editor use.
+
+20080216T1524Z <gchicares@sbcglobal.net> [1204]
+
+  stratified_charges.cpp
+  stratified_charges.hpp
+Refactor.
+
+20080216T1643Z <gchicares@sbcglobal.net> [1204]
+
+  stratified_charges.cpp
+Strengthen assertions.
+
+20080216T2222Z <gchicares@sbcglobal.net> [1204]
+
+  stratified_charges.hpp
+Improve documentation.
+
+20080216T2223Z <gchicares@sbcglobal.net> [1204]
+
+  stratified_charges.cpp
+Strengthen assertions. Numerous uses of std::[max|min]_element()
+elsewhere remain unguarded.
+
+20080217T1513Z <gchicares@sbcglobal.net> [1204]
+
+  stratified_charges.cpp
+  stratified_charges.hpp
+Reformat.
+
+20080217T1517Z <gchicares@sbcglobal.net> [1197]
+
+  database_document.cpp
+  database_document.hpp
+  database_view.cpp
+  database_view.hpp
+  database_view_editor.cpp
+  database_view_editor.hpp
+  multidimgrid_any.cpp
+  multidimgrid_any.hpp
+  multidimgrid_safe.hpp
+  multidimgrid_safe.tpp
+  multidimgrid_tools.hpp
+  policy_view.xrc
+  product_editor.cpp
+  product_editor.hpp
+  rounding_view.xrc
+  rounding_view_editor.cpp
+  rounding_view_editor.hpp
+  tier_document.cpp
+  tier_document.hpp
+  tier_view.cpp
+  tier_view_editor.cpp
+  tier_view_editor.hpp
+Improve product editor (Vaclav).
 

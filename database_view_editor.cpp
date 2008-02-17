@@ -19,16 +19,13 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view_editor.cpp,v 1.11 2008-01-01 18:29:38 chicares Exp $
+// $Id: database_view_editor.cpp,v 1.12 2008-02-17 15:17:12 chicares Exp $
 
 #include "database_view_editor.hpp"
 
 #include "alert.hpp"
 #include "multidimgrid_safe.tpp"
 #include "value_cast.hpp"
-
-#include <boost/preprocessor/cat.hpp>
-#include <boost/preprocessor/repetition/repeat_from_to.hpp>
 
 #include <wx/msgdlg.h>
 #include <wx/utils.h> // wxBusyCursor
@@ -40,6 +37,7 @@ DatabaseTableAdapter::DatabaseTableAdapter(TDBValue* db_value)
     :db_value_(db_value)
     ,modified_(false)
 {
+    indexes_.resize(eda_max);
 }
 
 DatabaseTableAdapter::~DatabaseTableAdapter()
@@ -112,10 +110,12 @@ bool DatabaseTableAdapter::VariesByDimension(unsigned int n) const
 /// Require confirmation if reshaping an entity would cause it to have
 /// extraordinarily many elements.
 
-bool DatabaseTableAdapter::ConfirmOperation(unsigned int item_count) const
+bool DatabaseTableAdapter::ConfirmOperation(int item_count) const
 {
     if(item_count < 1000000)
-        {return true;}
+        {
+        return true;
+        }
 
     std::string const message =
         "The resulting entity will have more than one million elements."
@@ -159,9 +159,7 @@ void DatabaseTableAdapter::ReshapeTableData
     ,bool user_confirm
     )
 {
-// EVGENIY !! Why use 'std::size_t' here? It can't actually prevent
-// std::accumulate() from overflowing MAX_INT, can it?
-    std::size_t count = std::accumulate
+    int count = std::accumulate
         (axis_lengths.begin()
         ,axis_lengths.end()
         ,1
@@ -170,9 +168,7 @@ void DatabaseTableAdapter::ReshapeTableData
 
     if(!user_confirm || ConfirmOperation(count))
         {
-// EVGENIY !! I don't actually see an hourglass cursor. Is this an
-// object-lifetime problem?
-        wxBusyCursor();
+        wxBusyCursor busy;
 
         db_value_->Reshape(axis_lengths);
         SetModified();
@@ -195,45 +191,27 @@ bool DatabaseTableAdapter::CanChangeVariationWith(unsigned int n) const
     return n < db_value_->GetAxisLengths().size();
 }
 
-std::string DatabaseTableAdapter::ValueToString(boost::any const& value) const
-{
-    try
-        {
-        return value_cast<std::string>(boost::any_cast<double>(value));
-        }
-    catch(std::exception const&)
-        {
-        // TODO ?? Would a different behavior be better here?
-        return "#ERR";
-        }
-}
-
-boost::any DatabaseTableAdapter::StringToValue(std::string const& value) const
-{
-    double z = 0.0;
-    try
-        {
-        z = value_cast<double>(value);
-        }
-    catch(std::exception const&)
-        {
-        // TODO ?? What should we do here?
-        }
-    return boost::any(z);
-}
-
 void DatabaseTableAdapter::ConvertValue
     (Coords const& coords
     ,std::vector<int>& indexes
-    ) const
+    )
 {
-    #define CAST_BOOST_ANY_TO_INT_(z, n, unused) \
-    indexes[n] = boost::any_cast<BOOST_PP_CAT(AxisValueType,n)>(coords[n]);
+    indexes[eda_gender]    = UnwrapAny<enum_gender>  (coords[eda_gender]);
+    indexes[eda_class]     = UnwrapAny<enum_class>   (coords[eda_class]);
+    indexes[eda_smoking]   = UnwrapAny<enum_smoking> (coords[eda_smoking]);
+    indexes[eda_issue_age] = UnwrapAny<int>          (coords[eda_issue_age]);
+    indexes[eda_uw_basis]  = UnwrapAny<enum_uw_basis>(coords[eda_uw_basis]);
+    indexes[eda_state]     = UnwrapAny<enum_state>   (coords[eda_state]);
+    indexes[eda_duration]  = UnwrapAny<int>          (coords[eda_duration]);
+    // If the following assert fails, then it probably means that
+    // the number of axes has been changed and the change should
+    // be reflected in the code above.
+    BOOST_STATIC_ASSERT( eda_max == 7 );
+}
 
-    BOOST_STATIC_ASSERT(DatabaseTableAdapter::eda_max == 7);
-    BOOST_PP_REPEAT_FROM_TO(0, 7, CAST_BOOST_ANY_TO_INT_, ~)
-
-    #undef CAST_BOOST_ANY_TO_INT_
+unsigned int DatabaseTableAdapter::DoGetDimension() const
+{
+    return eda_max;
 }
 
 bool DatabaseTableAdapter::IsVoid() const
@@ -241,100 +219,45 @@ bool DatabaseTableAdapter::IsVoid() const
     return db_value_ == NULL;
 }
 
-boost::any DatabaseTableAdapter::DoGetValue(Coords const& coords) const
+double DatabaseTableAdapter::DoGetValue(Coords const& coords) const
 {
     if(IsVoid())
-        {return boost::any(static_cast<double>(0));}
+        {
+        return 0;
+        }
 
-    indexes_.clear();
-    indexes_.resize(coords.size());
     ConvertValue(coords, indexes_);
 
-    double val = db_value_->operator[](indexes_);
-    return boost::any(val);
+    return (*db_value_)[indexes_];
 }
 
 void DatabaseTableAdapter::DoSetValue
     (Coords const& coords
-    ,boost::any const& value
+    ,double const& value
     )
 {
     if(IsVoid())
         {return;}
 
-    indexes_.clear();
-    indexes_.resize(coords.size());
     ConvertValue(coords, indexes_);
 
-    double double_value = boost::any_cast<double>(value);
-    db_value_->operator[](indexes_) = double_value;
+    (*db_value_)[indexes_] = value;
     SetModified();
 }
 
-/// The two methods below are not used but still have to be implemented.
-/// The reason for that wierdness is the fact that we are showing
-/// pairs of doubles as two columns of doubles and not as a single column
-/// (which is the default implementation). Therefore we trick MDGrid and
-/// MDGridTable and interface them in such a way, that these two
-/// pure virtual methods are not used at all, hense an implementation still
-/// has to provided (in this case an empty one, since functions are not used).
-double DatabaseTableAdapter::GetValue
-    (enum_gender
-    ,enum_class
-    ,enum_smoking
-    ,int
-    ,enum_uw_basis
-    ,enum_state
-    ,int
-    ) const
+MultiDimTableAny::AxesAny DatabaseTableAdapter::DoGetAxesAny()
 {
-    return 0;
+    AxesAny axes(eda_max);
+    axes[eda_gender]    = AxisAnyPtr(new DatabaseGenderAxis());
+    axes[eda_class]     = AxisAnyPtr(new DatabaseClassAxis());
+    axes[eda_smoking]   = AxisAnyPtr(new DatabaseSmokingAxis());
+    axes[eda_issue_age] = AxisAnyPtr(new DatabaseIssueAgeAxis());
+    axes[eda_uw_basis]  = AxisAnyPtr(new DatabaseUwBasisAxis());
+    axes[eda_state]     = AxisAnyPtr(new DatabaseStateAxis());
+    axes[eda_duration]  = AxisAnyPtr(new DatabaseDurationAxis());
+    // If the following assert fails, then it probably means that
+    // the number of axes has been changed and the change should
+    // be reflected in the code above.
+    BOOST_STATIC_ASSERT( eda_max == 7 );
+    return axes;
 }
-void DatabaseTableAdapter::SetValue
-    (enum_gender
-    ,enum_class
-    ,enum_smoking
-    ,int
-    ,enum_uw_basis
-    ,enum_state
-    ,int
-    ,double const&
-    )
-{
-}
-
-MultiDimAxis<enum_gender>* DatabaseTableAdapter::GetAxis0()
-{
-    return new DatabaseGenderAxis();
-}
-
-MultiDimAxis<enum_class>* DatabaseTableAdapter::GetAxis1()
-{
-    return new DatabaseClassAxis();
-}
-
-MultiDimAxis<enum_smoking>* DatabaseTableAdapter::GetAxis2()
-{
-    return new DatabaseSmokingAxis();
-}
-
-MultiDimAxis<int>* DatabaseTableAdapter::GetAxis3()
-{
-    return new DatabaseIssueAgeAxis();
-}
-
-MultiDimAxis<enum_uw_basis>* DatabaseTableAdapter::GetAxis4()
-{
-    return new DatabaseUwBasisAxis();
-}
-
-MultiDimAxis<enum_state>* DatabaseTableAdapter::GetAxis5()
-{
-    return new DatabaseStateAxis();
-}
-
-MultiDimAxis<int>* DatabaseTableAdapter::GetAxis6()
-{
-    return new DatabaseDurationAxis();
-}
-

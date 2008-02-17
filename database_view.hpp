@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view.hpp,v 1.9 2008-01-01 18:29:38 chicares Exp $
+// $Id: database_view.hpp,v 1.10 2008-02-17 15:17:12 chicares Exp $
 
 #ifndef database_view_hpp
 #define database_view_hpp
@@ -58,9 +58,9 @@ class DatabaseView
     // TreeGridViewBase required implementation.
     virtual wxTreeCtrl*   CreateTreeCtrl(wxWindow* parent);
     virtual MultiDimGrid* CreateGridCtrl(wxWindow* parent);
-    virtual void SetupControls();
+    virtual void          SetupControls();
 
-    DatabaseDocument& document() const;
+    DatabaseDocument&           document() const;
     DatabaseTableAdapter      & table_adapter()      ;
     DatabaseTableAdapter const& table_adapter() const;
 

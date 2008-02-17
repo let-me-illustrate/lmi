@@ -19,22 +19,22 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_view_editor.hpp,v 1.12 2008-02-07 13:40:30 chicares Exp $
+// $Id: rounding_view_editor.hpp,v 1.13 2008-02-17 15:17:14 chicares Exp $
 
 #ifndef rounding_view_editor_hpp
 #define rounding_view_editor_hpp
 
 #include "config.hpp"
 
-#include "rounding_rules.hpp"
+#include "round_to.hpp"
 
 #include <wx/panel.h>
 #include <wx/xrc/xmlres.h>
 
 #include <string>
 
+class WXDLLEXPORT wxBitmapButton;
 class WXDLLEXPORT wxSpinCtrl;
-class WXDLLEXPORT wxToggleButton;
 class WXDLLEXPORT wxWindow;
 
 class RoundingButtons
@@ -75,6 +75,12 @@ class RoundingButtons
     rounding_style GetStyle() const;
     void           FixStyle(rounding_style style);
 
+    wxBitmapButton& button_not_at_all() const;
+    wxBitmapButton& button_to_nearest() const;
+    wxBitmapButton& button_upward() const;
+    wxBitmapButton& button_downward() const;
+    wxSpinCtrl& spin() const;
+
     void UponButtonClick(wxCommandEvent&);
 
     static wxSize CalculateMinimumTextControlSize
@@ -82,16 +88,15 @@ class RoundingButtons
         ,unsigned int n = 1
         );
 
-// EVGENIY !! Does this class need to be Copyable or Assignable?
-// If not, then could we make 'original_rule_' a reference member?
-// Then we could probably avoid including "round_to.hpp", and just
-// use a forward declaration instead. At any rate, I think we need
-// include only "round_to.hpp", not "rounding_rules.hpp".
-    round_to<double> original_rule_;
-    wxToggleButton* button_not_at_all_;
-    wxToggleButton* button_to_nearest_;
-    wxToggleButton* button_upward_;
-    wxToggleButton* button_downward_;
+    // initial or last saved value (IsModified() returns true iff current
+    // value is different from this)
+    round_to<double> previous_value_;
+
+    rounding_style style_;
+    wxBitmapButton* button_not_at_all_;
+    wxBitmapButton* button_to_nearest_;
+    wxBitmapButton* button_upward_;
+    wxBitmapButton* button_downward_;
 
     wxSpinCtrl* spin_;
 

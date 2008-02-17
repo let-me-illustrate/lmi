@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view.cpp,v 1.10 2008-01-01 18:29:57 chicares Exp $
+// $Id: tier_view.cpp,v 1.11 2008-02-17 15:17:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,9 +28,7 @@
 
 #include "tier_view.hpp"
 
-// EVGENIY !! Are all three 'multidimgrid*' headers required here?
 #include "multidimgrid_any.hpp"
-#include "multidimgrid_safe.tpp"
 #include "multidimgrid_tools.hpp"
 #include "safely_dereference_as.hpp"
 #include "stratified_charges.hpp"
@@ -40,6 +38,7 @@
 #include "wx_new.hpp"
 
 #include <wx/icon.h>
+#include <wx/sizer.h>
 #include <wx/treectrl.h>
 #include <wx/window.h>
 
@@ -69,6 +68,32 @@ std::vector<tier_entity_info> const& get_tier_entity_infos()
     return static_tier_entity_infos;
 }
 
+/// Stores additional information in a wxTree node
+
+class tier_tree_item_data
+  :public wxTreeItemData
+{
+  public:
+    tier_tree_item_data(tier_entity_info const&);
+    virtual ~tier_tree_item_data() {}
+
+    tier_entity_info const& entity_info() const;
+
+  private:
+    tier_entity_info const& entity_info_;
+};
+
+tier_tree_item_data::tier_tree_item_data(tier_entity_info const& entity_info)
+    :wxTreeItemData()
+    ,entity_info_(entity_info)
+{
+}
+
+tier_entity_info const& tier_tree_item_data::entity_info() const
+{
+    return entity_info_;
+}
+
 } // unnamed namespace
 
 IMPLEMENT_DYNAMIC_CLASS(TierView, TreeGridViewBase)
@@ -87,10 +112,10 @@ TierView::~TierView()
 {
 }
 
-wxTreeCtrl* TierView::CreateTreeCtrl(wxWindow* panel)
+wxTreeCtrl* TierView::CreateTreeCtrl(wxWindow* parent)
 {
     return new(wx) AutoResizingTreeCtrl
-        (panel
+        (parent
         ,wxID_ANY
         ,wxDefaultPosition
         ,wxDefaultSize
@@ -98,9 +123,9 @@ wxTreeCtrl* TierView::CreateTreeCtrl(wxWindow* panel)
         );
 }
 
-MultiDimGrid* TierView::CreateGridCtrl(wxWindow* panel)
+MultiDimGrid* TierView::CreateGridCtrl(wxWindow* parent)
 {
-    return new(wx) TierEditorGrid(panel, table_adapter_);
+    return new(wx) TierEditorGrid(parent, table_adapter_);
 }
 
 void TierView::SetupControls()
@@ -108,31 +133,31 @@ void TierView::SetupControls()
     std::vector<tier_entity_info> const& entities = get_tier_entity_infos();
     std::map<e_stratified, wxTreeItemId> index_to_id;
 
-    wxTreeCtrl& tree = GetTreeCtrl();
+    wxTreeCtrl& tree_ctrl = tree();
 
     for(std::size_t i = 0; i < entities.size(); ++i)
         {
         tier_entity_info const& entity = entities[i];
         if(entity.index == entity.parent_index)
             {
-            wxTreeItemId id = tree.AddRoot("");
+            wxTreeItemId id = tree_ctrl.AddRoot("");
             index_to_id[entity.index] = id;
             }
         else
             {
-            wxTreeItemId id = tree.AppendItem
+            wxTreeItemId id = tree_ctrl.AppendItem
                 (index_to_id[entity.parent_index]
                 ,entity.short_name
                 ,-1
                 ,-1
-                ,new(wx) TierTreeItemData(i, entity.long_name)
+                ,new(wx) tier_tree_item_data(entity)
                 );
             index_to_id[entity.index] = id;
             }
         }
 
     // Force BestSize to be recalculated, since we have added new items
-    GetTreeCtrl().InvalidateBestSize();
+    tree_ctrl.InvalidateBestSize();
 }
 
 wxIcon TierView::Icon() const
@@ -162,20 +187,16 @@ TierDocument& TierView::document() const
 
 void TierView::UponTreeSelectionChange(wxTreeEvent& event)
 {
-    wxTreeCtrl& tree = GetTreeCtrl();
-    TierTreeItemData* item_data = dynamic_cast<TierTreeItemData*>
-        (tree.GetItemData(event.GetItem())
+    wxTreeCtrl& tree_ctrl = tree();
+    tier_tree_item_data* item_data = dynamic_cast<tier_tree_item_data*>
+        (tree_ctrl.GetItemData(event.GetItem())
         );
 
     if(item_data)
         {
-        std::size_t index = item_data->get_id();
+        bool is_topic = tree_ctrl.GetChildrenCount(event.GetItem());
 
-        bool is_topic = tree.GetChildrenCount(event.GetItem());
-
-        SetLabel(item_data->get_description());
-
-        std::vector<tier_entity_info> const& entities = get_tier_entity_infos();
+        set_grid_label_text(item_data->entity_info().long_name);
 
         if(is_topic)
             {
@@ -183,17 +204,22 @@ void TierView::UponTreeSelectionChange(wxTreeEvent& event)
             }
         else
             {
-            stratified_entity& entity =
-                *document().get_stratified_entity(entities[index].index);
+            stratified_entity& entity = document().get_stratified_entity
+                (item_data->entity_info().index
+                );
             table_adapter_->SetTierEntity
                 (tier_entity_adapter(entity.limits_, entity.values_)
                 );
             }
 
-        MultiDimGrid& grid = GetGridCtrl();
+        MultiDimGrid& grid_ctrl = grid();
 
-        grid.Enable(!is_topic);
-        grid.RefreshTableFull();
+        wxSizer* sizer = grid_ctrl.GetContainingSizer();
+        LMI_ASSERT(sizer);
+        sizer->Show(&grid_ctrl, !is_topic);
+        sizer->Layout();
+
+        grid_ctrl.RefreshTableFull();
         }
 }
 

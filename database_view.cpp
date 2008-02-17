@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view.cpp,v 1.14 2008-01-01 18:29:38 chicares Exp $
+// $Id: database_view.cpp,v 1.15 2008-02-17 15:17:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -38,6 +38,7 @@
 #include "wx_new.hpp"
 
 #include <wx/icon.h>
+#include <wx/sizer.h>
 #include <wx/treectrl.h>
 #include <wx/window.h>
 
@@ -111,34 +112,35 @@ class database_tree_item_data
   :public wxTreeItemData
 {
   public:
-    database_tree_item_data(std::size_t id, std::string const& description);
+    database_tree_item_data(db_names const&);
+    virtual ~database_tree_item_data() {}
 
-    std::size_t id() const;
-    std::string const& description() const;
+    db_names const& db_name() const {return db_names_;}
+
+    std::pair<int,int> get_axes_selected() const;
+    void set_axes_selected(std::pair<int,int> const&);
 
   private:
-    std::size_t id_;
-    std::string description_;
+    db_names const& db_names_;
+    std::pair<int,int> axes_selected_;
 };
 
-database_tree_item_data::database_tree_item_data
-    (std::size_t id
-    ,std::string const& description
+database_tree_item_data::database_tree_item_data(db_names const& names)
+    :db_names_(names)
+    ,axes_selected_(wxNOT_FOUND, wxNOT_FOUND)
+{
+}
+
+std::pair<int,int> database_tree_item_data::get_axes_selected() const
+{
+    return axes_selected_;
+}
+
+void database_tree_item_data::set_axes_selected
+    (std::pair<int,int> const& axes_selected
     )
-    :wxTreeItemData()
-    ,id_(id)
-    ,description_(description)
 {
-}
-
-std::size_t database_tree_item_data::id() const
-{
-    return id_;
-}
-
-std::string const& database_tree_item_data::description() const
-{
-    return description_;
+    axes_selected_ = axes_selected;
 }
 
 } // Unnamed namespace.
@@ -159,13 +161,10 @@ DatabaseView::~DatabaseView()
 {
 }
 
-// EVGENIY !! Here and anywhere else 'wxWindow* panel' occurs,
-// does the name 'panel' suggest that the type should be wxPanel?
-
-wxTreeCtrl* DatabaseView::CreateTreeCtrl(wxWindow* panel)
+wxTreeCtrl* DatabaseView::CreateTreeCtrl(wxWindow* parent)
 {
     return new(wx) AutoResizingTreeCtrl
-        (panel
+        (parent
         ,wxID_ANY
         ,wxDefaultPosition
         ,wxDefaultSize
@@ -173,10 +172,10 @@ wxTreeCtrl* DatabaseView::CreateTreeCtrl(wxWindow* panel)
         );
 }
 
-MultiDimGrid* DatabaseView::CreateGridCtrl(wxWindow* panel)
+MultiDimGrid* DatabaseView::CreateGridCtrl(wxWindow* parent)
 {
     LMI_ASSERT(table_adapter_);
-    return new(wx) DatabaseEditorGrid(panel, table_adapter_);
+    return new(wx) DatabaseEditorGrid(parent, table_adapter_);
 }
 
 void DatabaseView::SetupControls()
@@ -184,7 +183,7 @@ void DatabaseView::SetupControls()
     std::vector<db_names> const& names = GetDBNames();
     std::map<DatabaseNames, wxTreeItemId> name_to_id;
 
-    wxTreeCtrl& tree = GetTreeCtrl();
+    wxTreeCtrl& tree_ctrl = tree();
 
     for(std::size_t i = 0; i < names.size(); ++i)
         {
@@ -192,11 +191,11 @@ void DatabaseView::SetupControls()
         if(0 == i)
             {
             LMI_ASSERT(name.Idx == name.ParentIdx);
-            wxTreeItemId id = tree.AddRoot
+            wxTreeItemId id = tree_ctrl.AddRoot
                 (""
                 ,-1
                 ,-1
-                ,new(wx) database_tree_item_data(i, name.LongName)
+                ,new(wx) database_tree_item_data(name)
                 );
             name_to_id[name.Idx] = id;
             }
@@ -204,19 +203,19 @@ void DatabaseView::SetupControls()
             {
             LMI_ASSERT(name.Idx != name.ParentIdx);
             wxTreeItemId parent = name_to_id[name.ParentIdx];
-            wxTreeItemId id = tree.AppendItem
+            wxTreeItemId id = tree_ctrl.AppendItem
                 (parent
                 ,name.ShortName
                 ,-1
                 ,-1
-                ,new(wx) database_tree_item_data(i, name.LongName)
+                ,new(wx) database_tree_item_data(name)
                 );
             name_to_id[name.Idx] = id;
             }
         }
 
     // Force BestSize to be recalculated, since we have added new items
-    tree.InvalidateBestSize();
+    tree_ctrl.InvalidateBestSize();
 }
 
 wxIcon DatabaseView::Icon() const
@@ -259,23 +258,44 @@ void DatabaseView::DiscardEdits()
 
 void DatabaseView::UponTreeSelectionChange(wxTreeEvent& event)
 {
-    wxTreeCtrl& tree = GetTreeCtrl();
-    database_tree_item_data* item_data = dynamic_cast<database_tree_item_data*>
-        (tree.GetItemData(event.GetItem())
-        );
+    wxTreeCtrl& tree_ctrl = tree();
+    MultiDimGrid& grid_ctrl = grid();
+
+    // save the current selection
+    wxTreeItemId const old_item = event.GetOldItem();
+    if(old_item.IsOk())
+        {
+        database_tree_item_data* old_item_data =
+            dynamic_cast<database_tree_item_data*>
+                (tree_ctrl.GetItemData(old_item)
+                );
+        if(old_item_data)
+            {
+            old_item_data->set_axes_selected(grid_ctrl.GetGridAxisSelection());
+            }
+        }
+
+    database_tree_item_data* item_data =
+        dynamic_cast<database_tree_item_data*>
+            (tree_ctrl.GetItemData(event.GetItem())
+            );
     if(!item_data)
         {return;}
 
-    std::size_t index = item_data->id();
+    table_adapter().SetTDBValue
+        (&document().GetTDBValue(item_data->db_name().Idx)
+        );
 
-    table_adapter().SetTDBValue(document().GetTDBValue(index));
+    bool is_topic = tree_ctrl.GetChildrenCount(event.GetItem());
 
-    bool is_topic = tree.GetChildrenCount(event.GetItem());
+    set_grid_label_text(item_data->db_name().LongName);
 
-    SetLabel(item_data->description());
+    wxSizer* sizer = grid_ctrl.GetContainingSizer();
+    LMI_ASSERT(sizer);
+    sizer->Show(&grid_ctrl, !is_topic);
+    sizer->Layout();
 
-    MultiDimGrid& grid = GetGridCtrl();
-
-    grid.Enable(!is_topic);
-    grid.RefreshTableFull();
+    // restore axis selection if any
+    grid_ctrl.SetGridAxisSelection(item_data->get_axes_selected());
+    grid_ctrl.RefreshTableFull();
 }

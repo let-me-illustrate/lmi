@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: product_editor.cpp,v 1.6 2008-01-01 18:29:53 chicares Exp $
+// $Id: product_editor.cpp,v 1.7 2008-02-17 15:17:13 chicares Exp $
 
 #include "product_editor.hpp"
 
@@ -50,10 +50,14 @@ ProductEditorView& ProductEditorDocument::PredominantView() const
 bool ProductEditorDocument::IsModified() const
 {
     if(wxDocument::IsModified())
-        {return true;}
+        {
+        return true;
+        }
 
     if(GetViews().empty())
-        {return false;}
+        {
+        return false;
+        }
 
     return PredominantView().IsModified();
 }
@@ -62,25 +66,53 @@ void ProductEditorDocument::Modify(bool modified)
 {
     wxDocument::Modify(modified);
     if(!modified && !GetViews().empty())
-        {PredominantView().DiscardEdits();}
+        {
+        PredominantView().DiscardEdits();
+        }
 }
 
-bool ProductEditorDocument::OnOpenDocument(wxString const& filename)
+bool ProductEditorDocument::DoOpenDocument(wxString const& filename)
 {
-    ReadDocument(std::string(filename));
-
-    SetFilename(filename, true);
-    Modify(false);
-    UpdateAllViews();
-    return true;
+    try
+        {
+        ReadDocument(std::string(filename));
+        return true;
+        }
+    catch(std::exception const& e)
+        {
+        warning()
+            << "Error while loading document.\n"
+            << "Filename: "
+            << filename
+            << "\n"
+            << "Message: "
+            << e.what()
+            << LMI_FLUSH
+            ;
+        return false;
+        }
 }
 
-bool ProductEditorDocument::OnSaveDocument(wxString const& filename)
+bool ProductEditorDocument::DoSaveDocument(wxString const& filename)
 {
-    WriteDocument(std::string(filename));
-
-    Modify(false);
-    return true;
+    try
+        {
+        WriteDocument(std::string(filename));
+        return true;
+        }
+    catch(std::exception const& e)
+        {
+        warning()
+            << "Error while saving document.\n"
+            << "Filename: "
+            << filename
+            << "\n"
+            << "Message: "
+            << e.what()
+            << LMI_FLUSH
+            ;
+        return false;
+        }
 }
 
 ProductEditorView::ProductEditorView()
@@ -94,11 +126,50 @@ ProductEditorView::~ProductEditorView()
 
 TreeGridViewBase::TreeGridViewBase()
     :ProductEditorView()
+    ,grid_(NULL)
+    ,grid_label_(NULL)
+    ,tree_(NULL)
 {
 }
 
 TreeGridViewBase::~TreeGridViewBase()
 {
+}
+
+wxTreeCtrl& TreeGridViewBase::tree() const
+{
+    if(!tree_)
+        {
+        fatal_error()
+            << "Tree control can't be null"
+            << LMI_FLUSH
+            ;
+        }
+    return *tree_;
+}
+
+MultiDimGrid& TreeGridViewBase::grid() const
+{
+    if(!grid_)
+        {
+        fatal_error()
+            << "Grid control can't be null"
+            << LMI_FLUSH
+            ;
+        }
+    return *grid_;
+}
+
+void TreeGridViewBase::set_grid_label_text(std::string const& label)
+{
+    if(!grid_label_)
+        {
+        fatal_error()
+            << "Grid control can't be null"
+            << LMI_FLUSH
+            ;
+        }
+    grid_label_->SetLabel(label);
 }
 
 wxWindow* TreeGridViewBase::CreateChildWindow()
@@ -110,19 +181,30 @@ wxWindow* TreeGridViewBase::CreateChildWindow()
 
     grid_label_ = new(wx) wxStaticText(main_panel, wxID_ANY, "");
 
-    // Title text bold and 1.5 bigger
+    // Make label text is bold.
     wxFont font = main_panel->GetFont();
     font.SetWeight(wxFONTWEIGHT_BOLD);
-    font.SetPointSize(font.GetPointSize() * 3 / 2);
     grid_label_->SetFont(font);
 
-    wxBoxSizer* sizer = new(wx) wxBoxSizer(wxHORIZONTAL);
-    wxBoxSizer* grid_sizer = new(wx) wxBoxSizer(wxVERTICAL);
+    wxBoxSizer* const sizer = new(wx) wxBoxSizer(wxHORIZONTAL);
+    wxBoxSizer* const grid_sizer = new(wx) wxBoxSizer(wxVERTICAL);
 
-    sizer->Add(tree_, wxSizerFlags().Proportion(0).Expand());
-    sizer->Add(grid_sizer, wxSizerFlags().Proportion(1).Expand());
-    grid_sizer->Add(grid_label_, wxSizerFlags().Proportion(0).Expand().Border(wxALL, 8));
-    grid_sizer->Add(grid_, wxSizerFlags().Proportion(1).Expand());
+    sizer->Add
+        (tree_
+        ,wxSizerFlags().Proportion(0).Expand()
+        );
+    sizer->Add
+        (grid_sizer
+        ,wxSizerFlags().Proportion(1).Expand()
+        );
+    grid_sizer->Add
+        (grid_label_
+        ,wxSizerFlags().Proportion(0).Expand().Border(wxALL, 8)
+        );
+    grid_sizer->Add
+        (grid_
+        ,wxSizerFlags().Proportion(1).Expand()
+        );
 
     main_panel->SetSizer(sizer);
 
@@ -130,11 +212,9 @@ wxWindow* TreeGridViewBase::CreateChildWindow()
 
     main_panel->SetSize(GetFrame()->GetClientSize());
 
-    return main_panel;
-}
+    // Hide the grid until a node in the tree is selected
+    grid_sizer->Hide(grid_);
 
-void TreeGridViewBase::SetLabel(std::string const& label)
-{
-    grid_label_->SetLabel(label);
+    return main_panel;
 }
 
