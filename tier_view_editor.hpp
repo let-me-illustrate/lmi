@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.hpp,v 1.15 2008-02-17 15:17:15 chicares Exp $
+// $Id: tier_view_editor.hpp,v 1.16 2008-02-17 16:02:25 chicares Exp $
 
 #ifndef tier_view_editor_hpp
 #define tier_view_editor_hpp
@@ -38,6 +38,7 @@
 
 #include <string>
 #include <utility> // std::pair
+#include <vector>
 
 /// Notes on TierEditorGrid and TierTableAdapter.
 ///
