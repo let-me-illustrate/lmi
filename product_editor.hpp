@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: product_editor.hpp,v 1.8 2008-01-01 18:29:53 chicares Exp $
+// $Id: product_editor.hpp,v 1.9 2008-02-17 15:17:13 chicares Exp $
 
 #ifndef product_editor_hpp
 #define product_editor_hpp
@@ -63,8 +63,8 @@ class ProductEditorDocument
     // wxDocument overrides.
     virtual bool IsModified() const;
     virtual void Modify(bool modified);
-    virtual bool OnOpenDocument(wxString const& filename);
-    virtual bool OnSaveDocument(wxString const& filename);
+    virtual bool DoOpenDocument(wxString const& filename);
+    virtual bool DoSaveDocument(wxString const& filename);
 };
 
 /// Common base for all product editor view classes.
@@ -96,32 +96,28 @@ class TreeGridViewBase
     virtual ~TreeGridViewBase();
 
   protected:
-    wxTreeCtrl&   GetTreeCtrl() const;
-    MultiDimGrid& GetGridCtrl() const;
-    void SetLabel(std::string const&);
+    MultiDimGrid& grid() const;
+    wxTreeCtrl&   tree() const;
 
-    virtual wxTreeCtrl*   CreateTreeCtrl(wxWindow* parent) = 0;
+    void set_grid_label_text(std::string const&);
+
+    // Returned objects must be constructed as children of 'parent', so that
+    // the returned objects ownership is managed by wx.
     virtual MultiDimGrid* CreateGridCtrl(wxWindow* parent) = 0;
+    virtual wxTreeCtrl*   CreateTreeCtrl(wxWindow* parent) = 0;
+
     virtual void SetupControls() = 0;
 
   private:
     // ViewEx required implementation.
     virtual wxWindow* CreateChildWindow();
 
-    wxTreeCtrl*   tree_;
+    // These objects are held by pointer since the destruction is taken care
+    // of by wx.
     MultiDimGrid* grid_;
     wxStaticText* grid_label_;
+    wxTreeCtrl*   tree_;
 };
-
-inline wxTreeCtrl& TreeGridViewBase::GetTreeCtrl() const
-{
-    return *tree_;
-}
-
-inline MultiDimGrid& TreeGridViewBase::GetGridCtrl() const
-{
-    return *grid_;
-}
 
 #endif // product_editor_hpp
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_document.cpp,v 1.6 2008-01-01 18:29:56 chicares Exp $
+// $Id: tier_document.cpp,v 1.7 2008-02-17 15:17:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,15 +35,42 @@
 
 #include <wx/defs.h>
 
+#include <cfloat> // DBL_MAX
+#include <vector>
+
 IMPLEMENT_DYNAMIC_CLASS(TierDocument, ProductEditorDocument)
 
 TierDocument::TierDocument()
     :ProductEditorDocument()
     ,charges_()
-{}
+{
+    initialize_charges();
+}
 
 TierDocument::~TierDocument()
 {
+}
+
+void TierDocument::initialize_charges()
+{
+    typedef std::map<e_stratified, stratified_entity> dictionary_t;
+
+    charges_.initialize_dictionary();
+
+    stratified_entity dummy_entity
+        (std::vector<double>(1, DBL_MAX) // limits
+        ,std::vector<double>(1, 0)       // values
+        );
+
+    for
+        (dictionary_t::iterator it = charges_.dictionary.begin()
+        ,                       end = charges_.dictionary.end()
+        ;it != end
+        ;++it
+        )
+        {
+        it->second = dummy_entity;
+        }
 }
 
 void TierDocument::ReadDocument(std::string const& filename)
@@ -56,8 +83,8 @@ void TierDocument::WriteDocument(std::string const& filename)
     charges_.write(filename);
 }
 
-stratified_entity* TierDocument::get_stratified_entity(e_stratified index)
+stratified_entity& TierDocument::get_stratified_entity(e_stratified index)
 {
-    return &charges_.raw_entity(index);
+    return charges_.raw_entity(index);
 }
 

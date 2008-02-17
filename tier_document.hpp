@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_document.hpp,v 1.7 2008-01-01 18:29:57 chicares Exp $
+// $Id: tier_document.hpp,v 1.8 2008-02-17 15:17:15 chicares Exp $
 
 #ifndef tier_document_hpp
 #define tier_document_hpp
@@ -27,7 +27,6 @@
 #include "config.hpp"
 
 #include "product_editor.hpp"
-
 #include "stratified_charges.hpp"
 
 class TierDocument
@@ -37,12 +36,14 @@ class TierDocument
     TierDocument();
     virtual ~TierDocument();
 
-    stratified_entity* get_stratified_entity(e_stratified index);
+    stratified_entity& get_stratified_entity(e_stratified index);
 
   private:
     // wxDocument overrides.
     virtual void ReadDocument (std::string const& filename);
     virtual void WriteDocument(std::string const& filename);
+
+    void initialize_charges();
 
     stratified_charges charges_;
 

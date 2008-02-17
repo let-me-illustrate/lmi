@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view_editor.hpp,v 1.13 2008-01-01 18:29:38 chicares Exp $
+// $Id: database_view_editor.hpp,v 1.14 2008-02-17 15:17:12 chicares Exp $
 
 #ifndef database_view_editor_hpp
 #define database_view_editor_hpp
@@ -114,19 +114,6 @@ class DatabaseDurationAxis
     {}
 };
 
-/// Base type for the Database files editing control underlying data table
-typedef MultiDimTable7
-    <double
-    ,enum_gender
-    ,enum_class
-    ,enum_smoking
-    ,int
-    ,enum_uw_basis
-    ,enum_state
-    ,int
-    >
-DatabaseTableAdapterBase;
-
 /// Database dictionary adapter for TDBValue class
 ///
 /// One could mention Adaptor pattern.
@@ -137,7 +124,7 @@ DatabaseTableAdapterBase;
 /// boost::shared_ptr constructed with deallocator object that does nothing.
 
 class DatabaseTableAdapter
-  :public DatabaseTableAdapterBase
+  :public MultiDimTable<double, DatabaseTableAdapter>
 {
     enum enum_database_axis
         {eda_gender = 0
@@ -149,7 +136,11 @@ class DatabaseTableAdapter
         ,eda_duration
         ,eda_max
         };
-
+    BOOST_STATIC_ASSERT
+        (
+           static_cast<int>(DatabaseTableAdapter::eda_max)
+        == static_cast<int>(TDBValue::e_number_of_axes)
+        );
   public:
     DatabaseTableAdapter(TDBValue* db_value = NULL);
 
@@ -166,62 +157,27 @@ class DatabaseTableAdapter
     void SetDurationMaxBound(unsigned int n);
     unsigned int GetDurationMaxBound() const;
 
-  private:
-// EVGENIY !! Does pure virtual MultiDimTableAny::DoGetAxisAny() need
-// to be implemented here?
-    /// MultiDimTableAny required implementation.
-    virtual boost::any DoGetValue(Coords const&) const;
-    virtual void DoSetValue(Coords const&, boost::any const&);
-    virtual bool DoApplyAxisAdjustment(MultiDimAxisAny&, unsigned int);
-    virtual bool DoRefreshAxisAdjustment(MultiDimAxisAny&, unsigned int);
+    // MultiDimGridN contract.
+    double DoGetValue(Coords const&) const;
+    void DoSetValue(Coords const&, double const&);
 
-// EVGENIY !! Should this say 'MultiDimTableAny' instead of 'MultiDimTable'?
-    /// MultiDimTable overrides.
+  private:
+    /// MultiDimTableAny required implementation.
     virtual bool VariesByDimension(unsigned int) const;
     virtual void MakeVaryByDimension(unsigned int, bool);
     virtual bool CanChangeVariationWith(unsigned int) const;
-    virtual std::string ValueToString(boost::any const&) const;
-    virtual boost::any StringToValue(std::string const&) const;
+    AxesAny DoGetAxesAny();
+    virtual unsigned int DoGetDimension() const;
 
-// EVGENIY !! I think these functions override a macro class; how
-// we document that depends on the patch you're working on.
-    virtual MultiDimAxis<enum_gender>*   GetAxis0();
-    virtual MultiDimAxis<enum_class>*    GetAxis1();
-    virtual MultiDimAxis<enum_smoking>*  GetAxis2();
-    virtual MultiDimAxis<int>*           GetAxis3();
-    virtual MultiDimAxis<enum_uw_basis>* GetAxis4();
-    virtual MultiDimAxis<enum_state>*    GetAxis5();
-    virtual MultiDimAxis<int>*           GetAxis6();
-
-    // not used but has to be implemented
-    virtual double GetValue
-        (enum_gender
-        ,enum_class
-        ,enum_smoking
-        ,int
-        ,enum_uw_basis
-        ,enum_state
-        ,int
-        ) const;
-    virtual void SetValue
-        (enum_gender
-        ,enum_class
-        ,enum_smoking
-        ,int
-        ,enum_uw_basis
-        ,enum_state
-        ,int
-        ,double const&
-        );
+    /// MultiDimTableAny overrides.
+    virtual bool DoApplyAxisAdjustment(MultiDimAxisAny&, unsigned int);
+    virtual bool DoRefreshAxisAdjustment(MultiDimAxisAny&, unsigned int);
 
     /// Helper, converts array of boost::any into array of ints
-    void ConvertValue
-        (Coords const&
-        ,std::vector<int>&
-        ) const;
+    static void ConvertValue(Coords const&, std::vector<int>&);
 
     bool IsVoid() const;
-    bool ConfirmOperation(unsigned int itemCount) const;
+    bool ConfirmOperation(int itemCount) const;
     void ReshapeTableData
         (std::vector<int>& axis_lengths
         ,bool user_confirm = false
@@ -266,16 +222,6 @@ inline void DatabaseTableAdapter::SetModified(bool modified)
 class DatabaseEditorGrid
   :public MultiDimGrid
 {
-#if 0
-// EVGENIY--This fails with gcc-4.x because 'eda_max' is private.
-// Perhaps we should move it to some other place where it's valid.
-    BOOST_STATIC_ASSERT
-        (
-           static_cast<int>(TDBValue::e_number_of_axes)
-        == static_cast<int>(DatabaseTableAdapter::eda_max)
-        );
-#endif // 0
-
   public:
     DatabaseEditorGrid
         (wxWindow*

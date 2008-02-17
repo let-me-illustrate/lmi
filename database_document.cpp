@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_document.cpp,v 1.9 2008-01-01 18:29:38 chicares Exp $
+// $Id: database_document.cpp,v 1.10 2008-02-17 15:17:11 chicares Exp $
 
 #include "database_document.hpp"
 
@@ -90,12 +90,14 @@ DatabaseDocument::~DatabaseDocument()
 {
 }
 
-TDBValue* DatabaseDocument::GetTDBValue(std::size_t index)
+TDBValue& DatabaseDocument::GetTDBValue(DatabaseNames index)
 {
     if(dict_.find(index) == dict_.end())
-        {fatal_error() << "Index out of bounds." << LMI_FLUSH;}
+        {
+        fatal_error() << "Index out of bounds." << LMI_FLUSH;
+        }
 
-    return &dict_[index];
+    return dict_[index];
 }
 
 void DatabaseDocument::ReadDocument(std::string const& filename)

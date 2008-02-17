@@ -19,13 +19,16 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.cpp,v 1.11 2008-01-01 18:29:57 chicares Exp $
+// $Id: tier_view_editor.cpp,v 1.12 2008-02-17 15:17:15 chicares Exp $
 
 #include "tier_view_editor.hpp"
 
 #include "assert_lmi.hpp"
 #include "multidimgrid_safe.tpp"
+#include "stratified_charges.hpp"
 #include "value_cast.hpp"
+
+#include <cfloat> // DBL_MAX
 
 void tier_entity_adapter::ensure_not_void() const
 {
@@ -37,7 +40,8 @@ void tier_entity_adapter::ensure_valid_band_number(unsigned int band) const
     LMI_ASSERT(band < limits().size());
 }
 
-double_pair tier_entity_adapter::get_value(unsigned int band) const
+tier_entity_adapter::double_pair
+tier_entity_adapter::get_value(unsigned int band) const
 {
     ensure_not_void();
     ensure_valid_band_number(band);
@@ -99,19 +103,22 @@ void tier_entity_adapter::set_bands_count(unsigned int n)
         }
 }
 
-double_pair TierTableAdapter::GetValue(unsigned int band) const
+TierTableAdapter::double_pair
+TierTableAdapter::DoGetValue(Coords const& coords) const
 {
     if(entity_.is_void())
         {return double_pair(0,0);}
 
+    unsigned int const band = UnwrapAny<unsigned int>(coords[0]);
     return entity_.get_value(band);
 }
 
-void TierTableAdapter::SetValue(unsigned int band, double_pair const& value)
+void TierTableAdapter::DoSetValue(Coords const& coords, double_pair const& value)
 {
     if(entity_.is_void())
         {return;}
 
+    unsigned int const band = UnwrapAny<unsigned int>(coords[0]);
     entity_.set_value(band, value);
     SetModified();
 }
@@ -165,19 +172,26 @@ bool TierTableAdapter::DoRefreshAxisAdjustment
     return updated;
 }
 
-MultiDimAxis<unsigned int>* TierTableAdapter::GetAxis0()
+MultiDimTableAny::AxesAny TierTableAdapter::DoGetAxesAny()
 {
-    return new TierBandAxis();
+    AxesAny axes(1);
+    axes[0] = AxisAnyPtr(new TierBandAxis());
+    return axes;
 }
 
 // ---------------------------
 // TierEditorGrid implementation
 // ---------------------------
-enum e_tier_grid_columns
-    {tgc_limit = 0
-    ,tgc_value
-    ,tgc_max
-    };
+
+std::string TierEditorGrid::highest_representable_label_("MAXIMUM");
+
+TierEditorGrid::TierEditorGrid()
+{
+}
+
+TierEditorGrid::~TierEditorGrid()
+{
+}
 
 TierEditorGrid::TierEditorGrid
     (wxWindow* parent
@@ -186,79 +200,73 @@ TierEditorGrid::TierEditorGrid
     ,wxPoint const& pos
     ,wxSize const& size
     )
-    :MultiDimGrid(parent, table, id, pos, size)
 {
+    // We use default MultiDimGrid constructor and Create() call here, because
+    // MultiDimGrid constructor/Create calls some of the methods TierEditorGrid
+    // overrides, so the object has to be fully constructed by the time
+    // MultiDimGrid::Create() is called.
+    Create(parent, table, id, pos, size);
 }
 
-TierEditorGrid::~TierEditorGrid()
+bool TierEditorGrid::Create
+    (wxWindow* parent
+    ,boost::shared_ptr<TierTableAdapter> const& table
+    ,wxWindowID id
+    ,wxPoint const& pos
+    ,wxSize const& size
+    )
 {
+    return MultiDimGrid::Create(parent, table, id, pos, size);
 }
 
-int TierEditorGrid::GetNumberRows()
+unsigned int TierEditorGrid::DoGetNumberRows() const
 {
-    return MultiDimGrid::GetNumberCols();
+    return MultiDimGrid::DoGetNumberCols();
 }
 
-int TierEditorGrid::GetNumberCols()
+unsigned int TierEditorGrid::DoGetNumberCols() const
 {
-    return tgc_max;
+    return e_column_max;
 }
 
-// EVGENIY !! Isn't the 'row' parameter unused? It appears that
-// this function checks only the 'col', not 'row'. Is there any
-// constraint on 'row' that should be enforced here? It looks like
-// this function is called as a precondition test for most member
-// functions, but not for GetDoublePairValue(), which takes only a
-// 'row' argument; but if we add a test for 'row' here, then that
-// function should probably call this one, too. Wouldn't it be
-// better to find some other way to write this, as suggested under
-// GetValue() below?
-
-void TierEditorGrid::CheckRowAndCol(int row, int col) const
+TierEditorGrid::enum_tier_grid_column TierEditorGrid::EnsureValidColumn
+    (int col
+    ) const
 {
-    if(col != tgc_limit && col != tgc_value)
+    if(col != e_column_limit && col != e_column_value)
         {
         fatal_error()
             << "Grid has only two columns: Limit and Value."
             << LMI_FLUSH
             ;
         }
+    return static_cast<enum_tier_grid_column>(col);
 }
 
-// EVGENIY !! Consider the conditional operator in this function.
-// Here's how I read it:
-//
-//   switch(col)
-//     case tgc_limit: /* use value.first  */ ; break;
-//     case tgc_value: /* use value.second */ ; break;
-//     case tgc_max:   /* assume that this is impossible */ goto tgc_value;
-//     default:        /* assume that this is impossible */ goto tgc_value;
-//
-// And there are other places where the code assumes that only the
-// first two enumerator values are possible. That's in effect
-// asserted by CheckRowAndCol(), but I didn't perceive that at first.
-// Is there a way to write this more clearly? Should a UDT be used
-// instead of int? Should the base class test these arguments against
-// the maximum? Do any other ideas occur to you?
-
-wxString TierEditorGrid::GetValue(int row, int col)
+std::string TierEditorGrid::DoGetValue
+    (unsigned int row
+    ,unsigned int col
+    ) const
 {
-    CheckRowAndCol(row, col);
-    double_pair value = GetDoublePairValue(static_cast<unsigned int>(row));
-    return value_cast<std::string>(col == tgc_limit ? value.first : value.second);
+    double_pair const value = GetDoublePairValue(row);
+    double const dbl_value =
+          EnsureValidColumn(col) == e_column_limit
+        ? value.first
+        : value.second
+        ;
+    return DoubleToString(dbl_value);
 }
 
-void TierEditorGrid::SetValue(int row, int col, wxString const& str)
+void TierEditorGrid::DoSetValue
+    (unsigned int row
+    ,unsigned int col
+    ,std::string const& text
+    )
 {
-    CheckRowAndCol(row, col);
     double_pair value = GetDoublePairValue(row);
 
-    double as_double;
-    if(!str.ToDouble(&as_double))
-        {
-        as_double = 0;
-        }
-    if(col == tgc_limit)
+    double const as_double = StringToDouble(text);
+    if(EnsureValidColumn(col) == e_column_limit)
         {
         value.first = as_double;
         }
@@ -267,30 +275,46 @@ void TierEditorGrid::SetValue(int row, int col, wxString const& str)
         value.second = as_double;
         }
 
-    table_->SetAnyValue(axis_fixed_coords_, boost::any(value));
+    dynamic_cast<TierTableAdapter&>(table()).SetValue
+        (PrepareFixedCoords(0, row)
+        ,value);
 }
 
-wxString TierEditorGrid::GetRowLabelValue(int row)
+std::string TierEditorGrid::DoGetRowLabelValue(unsigned int row) const
 {
-    CheckRowAndCol(row, 1);
-    return MultiDimGrid::GetColLabelValue(row);
+    return MultiDimGrid::DoGetColLabelValue(row);
 }
 
-wxString TierEditorGrid::GetColLabelValue(int col)
+std::string TierEditorGrid::DoGetColLabelValue(unsigned int col) const
 {
-    CheckRowAndCol(1, col);
-    if(col == tgc_limit)
+    if(EnsureValidColumn(col) == e_column_limit)
         {return "Limit";}
     return "Value";
 }
 
-double_pair TierEditorGrid::GetDoublePairValue(int row)
+TierEditorGrid::double_pair
+TierEditorGrid::GetDoublePairValue(int band) const
 {
-    // hide first axis from the table
-    PrepareFixedCoords(0, row);
+    return dynamic_cast<TierTableAdapter const&>(table()).GetValue
+        (PrepareFixedCoords(0, band)
+        );
+}
 
-    boost::any value = table_->GetAnyValue(axis_fixed_coords_);
+std::string TierEditorGrid::DoubleToString(double value)
+{
+    if(is_highest_representable_double(value))
+        {
+        return highest_representable_label_;
+        }
+    return value_cast<std::string>(value);
+}
 
-    return boost::any_cast<double_pair>(value);
+double TierEditorGrid::StringToDouble(std::string const& text)
+{
+    if(text == highest_representable_label_)
+        {
+        return DBL_MAX;
+        }
+    return value_cast<double>(text);
 }
 
