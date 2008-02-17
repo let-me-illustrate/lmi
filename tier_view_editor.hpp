@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.hpp,v 1.14 2008-01-21 01:32:28 chicares Exp $
+// $Id: tier_view_editor.hpp,v 1.15 2008-02-17 15:17:15 chicares Exp $
 
 #ifndef tier_view_editor_hpp
 #define tier_view_editor_hpp
@@ -34,54 +34,35 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include <wx/treectrl.h>
+#include <wx/version.h> // Mark this file as wx dependent.
 
 #include <string>
 #include <utility> // std::pair
 
-// EVGENIY !! Can we avoid writing typedefs at global scope, in order
-// to keep them out of the global namespace?
-typedef std::pair<double, double> double_pair;
-
-/// Stores additional information in a wxTree node
-
-class TierTreeItemData
-  :public wxTreeItemData
-{
-  public:
-    TierTreeItemData(std::size_t, std::string const&);
-
-    std::size_t get_id() const;
-    std::string const& get_description() const;
-
-  private:
-    std::size_t id_;
-    std::string description_;
-};
-
-inline TierTreeItemData::TierTreeItemData
-    (std::size_t id
-    ,std::string const& description
-    )
-    :wxTreeItemData()
-    ,id_(id)
-    ,description_(description)
-{
-}
-inline std::size_t TierTreeItemData::get_id() const
-{
-    return id_;
-}
-inline std::string const& TierTreeItemData::get_description() const
-{
-    return description_;
-}
+/// Notes on TierEditorGrid and TierTableAdapter.
+///
+/// The data being manipulated is a set of pairs of doubles. Because of that
+/// from the point of view of TierTableAdapter the problem is one dimensional.
+/// But from the user's point of view it is two dimensional problem with the
+/// second dimension being restrained to the set [0, 1] - first and second
+/// component of every pair of doubles.
+///
+/// That's why TierTableAdapter manipulates a one dimensional set of values
+/// while TierEditorGrid presents it to the user as a two dimensional set
+/// of doubles. For that to work TierEditorGrid overrides default MultiDimGrid
+/// behaviour and translates two dimensions into one dimension x [0,1].
+/// As a consequence the default implementation of
+/// TierEditorGrid::ValueToString and TierEditorGrid::String2Value
+/// forces us to define conversions between double_pair and std::string.
+/// See below.
 
 /// tier_entity_adapter
 
 class tier_entity_adapter
 {
   public:
+    typedef std::pair<double, double> double_pair;
+
     /// We can't store a pointer/reference to stratified_entity because
     /// stratified_entity has private interface for accessing
     /// its limits_ and values_ data members. Therefore we are storing
@@ -93,17 +74,15 @@ class tier_entity_adapter
         ,std::vector<double>& values
         );
 
-    /// get data in pairs (corresponding to a band)
+    /// Access data in pairs (corresponding to a band).
     double_pair get_value(unsigned int band) const;
-    /// set data in a pair (corresponding to a band)
     void set_value(unsigned int band, double_pair const& value);
 
-    /// Change number of bands in the underlying stratified_entity object
-    void set_bands_count(unsigned int n);
-    /// Read the number of bands in the underlying stratified_entity object
+    /// Access the underlying stratified_entity object number of bands.
     unsigned int get_bands_count() const;
+    void set_bands_count(unsigned int n);
 
-    /// return true if we have no underlying object to manipulate
+    /// Return true if there is no underlying object to manipulate.
     bool is_void() const;
 
     std::vector<double>&       limits();
@@ -190,35 +169,29 @@ inline TierBandAxis::TierBandAxis()
 {
 }
 
-/// Note.
-///
-/// MultiDimTable1<double_pair, unsigned int> requires a specification of
-/// MultiDimTableTypeTraits to be provided. In case of TierTableAdapter
-/// it will never going to be used, therefore specify a dummy implementation
-/// with assertion that its never get called.
+/// Note: MultiDimTable<double_pair, unsigned int> requires a conversion
+/// between double_pair and std::string (via value_cast). Because of a twist
+/// in TierTableAdapter (see the general note above) it will never be used.
+/// Therefore specify a dummy conversion and add an extra-assertion to make
+/// sure it never gets called.
 
-template <>
-class MultiDimTableTypeTraits<double_pair>
+struct FakeConversion
 {
 // TODO ?? EVGENIY !! Is an actual implementation needed?
     void fail() const
     {
         fatal_error() << "Dummy implementation called." << LMI_FLUSH;
     }
-
   public:
-    /// Convert value respresented by a string into ValueType.
-    double_pair FromString(std::string const&) const
+    tier_entity_adapter::double_pair StringToValue(std::string const&) const
     {
         fail();
-        return double_pair(0, 0);
+        throw "Unreachable--silences a compiler diagnostic.";
     }
-
-    /// Create a string representation of a value
-    std::string ToString(double_pair const&) const
+    std::string ValueToString(tier_entity_adapter::double_pair const&) const
     {
         fail();
-        return "";
+        throw "Unreachable--silences a compiler diagnostic.";
     }
 };
 
@@ -228,13 +201,13 @@ class MultiDimTableTypeTraits<double_pair>
 /// bands.
 
 class TierTableAdapter
-  :public MultiDimTable1<double_pair, unsigned int>
+  :public MultiDimTable<tier_entity_adapter::double_pair, TierTableAdapter, FakeConversion>
 {
     friend class TierEditorGrid;
 
-    typedef MultiDimTable1<double_pair, unsigned int> Base;
-
   public:
+    typedef tier_entity_adapter::double_pair double_pair;
+
     TierTableAdapter(tier_entity_adapter entity = tier_entity_adapter());
     virtual ~TierTableAdapter();
 
@@ -249,17 +222,20 @@ class TierTableAdapter
     void SetBandsCount(unsigned int n);
     unsigned int GetBandsCount() const;
 
+    double_pair DoGetValue(Coords const&) const;
+    void        DoSetValue(Coords const&, double_pair const&);
+
   private:
-    // MultiDimTableAny method overrides
-    virtual bool VariesByDimension(unsigned int n) const;
+    // MultiDimTableAny required implementation.
     virtual bool CanChangeVariationWith(unsigned int n) const;
+    virtual unsigned int DoGetDimension() const {return 1;}
     virtual void MakeVaryByDimension(unsigned int n, bool varies);
-    virtual MultiDimAxis<unsigned int>* GetAxis0();
+    virtual AxesAny DoGetAxesAny();
+    virtual bool VariesByDimension(unsigned int n) const;
+
+    // MultiDimTableAny overrides.
     virtual bool DoApplyAxisAdjustment(MultiDimAxisAny&, unsigned int n);
     virtual bool DoRefreshAxisAdjustment(MultiDimAxisAny&, unsigned int n);
-
-    virtual double_pair GetValue(unsigned int band) const;
-    virtual void        SetValue(unsigned int band, double_pair const& value);
 
     void EnsureIndexIsZero(unsigned int) const;
 
@@ -348,6 +324,12 @@ class TierEditorGrid
     :public MultiDimGrid
 {
   public:
+    typedef tier_entity_adapter::double_pair double_pair;
+
+    /// Default constructor, use Create() to really create the control.
+    TierEditorGrid();
+    virtual ~TierEditorGrid();
+
     TierEditorGrid
         (wxWindow* parent
         ,boost::shared_ptr<TierTableAdapter> const& table
@@ -355,23 +337,46 @@ class TierEditorGrid
         ,wxPoint const& pos = wxDefaultPosition
         ,wxSize const& size = wxDefaultSize
         );
-    virtual ~TierEditorGrid();
 
-  private:
-    double_pair GetDoublePairValue(int row);
+    bool Create
+        (wxWindow* parent
+        ,boost::shared_ptr<TierTableAdapter> const& table
+        ,wxWindowID id = wxID_ANY
+        ,wxPoint const& pos = wxDefaultPosition
+        ,wxSize const& size = wxDefaultSize
+        );
 
+  protected:
     /// Override class MultiDimGrid to show pairs of doubles as two
     /// columns in the grid.
 
     // MultiDimGrid overrides.
-    virtual int      GetNumberCols();
-    virtual int      GetNumberRows();
-    virtual wxString GetValue(int row, int col);
-    virtual void     SetValue(int row, int col, wxString const& str);
-    virtual wxString GetColLabelValue(int col);
-    virtual wxString GetRowLabelValue(int row);
+    virtual unsigned int DoGetNumberCols() const;
+    virtual unsigned int DoGetNumberRows() const;
+    virtual std::string DoGetValue(unsigned int row, unsigned int col) const;
+    virtual void        DoSetValue
+        (unsigned int row
+        ,unsigned int col
+        ,std::string const&
+        );
+    virtual std::string DoGetColLabelValue(unsigned int col) const;
+    virtual std::string DoGetRowLabelValue(unsigned int row) const;
 
-    void CheckRowAndCol(int row, int col) const;
+  private:
+    enum enum_tier_grid_column
+        {e_column_limit = 0
+        ,e_column_value
+        ,e_column_max
+        };
+    double_pair GetDoublePairValue(int row) const;
+
+    enum_tier_grid_column EnsureValidColumn(int col) const;
+
+    static std::string DoubleToString(double);
+    static double      StringToDouble(std::string const&);
+
+    // Label used in the editor for the highest representable number - DBL_MAX.
+    static std::string highest_representable_label_;
 };
 
 #endif // tier_view_editor_hpp

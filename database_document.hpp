@@ -19,17 +19,18 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_document.hpp,v 1.6 2008-01-01 18:29:38 chicares Exp $
+// $Id: database_document.hpp,v 1.7 2008-02-17 15:17:11 chicares Exp $
 
 #ifndef database_document_hpp
 #define database_document_hpp
 
 #include "config.hpp"
 
+#include "dbnames.hpp"
+#include "ihs_dbdict.hpp"
 #include "product_editor.hpp"
 
-#include "ihs_dbvalue.hpp"
-#include "ihs_dbdict.hpp"
+class LMI_SO TDBValue;
 
 class DatabaseDocument
     :public ProductEditorDocument
@@ -38,7 +39,7 @@ class DatabaseDocument
     DatabaseDocument();
     virtual ~DatabaseDocument();
 
-    TDBValue* GetTDBValue(std::size_t index);
+    TDBValue& GetTDBValue(DatabaseNames index);
 
   private:
     // ProductEditorDocument overrides.

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_tools.hpp,v 1.13 2008-01-01 18:29:50 chicares Exp $
+// $Id: multidimgrid_tools.hpp,v 1.14 2008-02-17 15:17:13 chicares Exp $
 
 #ifndef multidimgrid_tools_hpp
 #define multidimgrid_tools_hpp
@@ -68,17 +68,23 @@ class AxisMaxBoundAdjusterBase
     DECLARE_EVENT_TABLE()
 };
 
-/// Design notes for AxisMaxBoundAdjuster<Integral>
+/// Design notes for AxisMaxBoundAdjuster
 ///
-/// Drop down value list for an axis adjustment.
+/// The class is an adjustment window. It allows user to change a maximum value
+/// for axis, where the axis is a range based integral axis.
 ///
-/// This control lets adjust the upper bound for a range based integral axis.
-/// Taking lower and upper bounds for the right bound of the axis values range
-/// it allows user to change it.
+/// It presents a drop down choice list with possible maximum value.
+/// The allowed maximum axis values are specified with two parameters:
+/// maximum_lower_bound and maximum_upper_bound.
+///
+/// Consider an int axis with values from [-10, N], where N is from [100, 200].
+/// AxisMaxBoundAdjuster then presents a choice list 100..200 to the user.
+/// Once user selects a number (115 for example), this number becomes maximum
+/// for the axis values (the axis value domain becomes [-10, 115]).
 ///
 /// Two parameters used throughout the class methods:
-///   - upper_bound - maximal possible value for the highest axis value
-///   - lower_bound - minimal possible value for the highest axis value
+///   - maximum_upper_bound - upper bound for the maximum axis value
+///   - maximum_lower_bound - lower bound for the maximum axis value
 
 template<typename Integral>
 class AxisMaxBoundAdjuster
@@ -88,25 +94,20 @@ class AxisMaxBoundAdjuster
     AxisMaxBoundAdjuster
         (MultiDimAxisAny&
         ,MultiDimGrid&
-        ,Integral lower_bound
-        ,Integral upper_bound
+        ,Integral maximum_lower_bound
+        ,Integral maximum_upper_bound
         );
 
-// EVGENIY !! Consider the comments for these two functions. Are the
-// functions' purposes obvious from their names? If not, then should
-// we choose more descriptive names? Either way, we could then remove
-// the comments.
-    /// Currently chosen maximum axis value
-    Integral GetMaxValue() const;
-    /// Set the maximum axis value
-    void SetMaxValue(Integral max_value);
+    Integral GetMaximumAxisValue() const;
+    void     SetMaximumAxisValue(Integral max_value);
 
   private:
     virtual void DoUponChange();
+    void EnsureValidMaximumAxisValue(Integral const&) const;
 
     MultiDimAxisAny& axis_;
-    Integral lower_bound_;
-    Integral upper_bound_;
+    Integral maximum_lower_bound_;
+    Integral maximum_upper_bound_;
 };
 
 /// AxisMaxBoundAdjuster implementation
@@ -115,36 +116,33 @@ template<typename Integral>
 AxisMaxBoundAdjuster<Integral>::AxisMaxBoundAdjuster
     (MultiDimAxisAny& axis
     ,MultiDimGrid& grid
-    ,Integral lower_bound
-    ,Integral upper_bound
+    ,Integral maximum_lower_bound
+    ,Integral maximum_upper_bound
     )
     :AxisMaxBoundAdjusterBase(grid)
     ,axis_(axis)
-    ,lower_bound_(lower_bound)
-    ,upper_bound_(upper_bound)
+    ,maximum_lower_bound_(maximum_lower_bound)
+    ,maximum_upper_bound_(maximum_upper_bound)
 {
-    if(upper_bound < lower_bound)
+    if(maximum_upper_bound < maximum_lower_bound)
         {
         fatal_error()
             << "Invalid bounds ["
-            << lower_bound
+            << maximum_lower_bound
             << ","
-            << upper_bound
+            << maximum_upper_bound
             << "]."
-            << LMI_FLUSH;
+            << LMI_FLUSH
+            ;
         }
     std::ostringstream oss;
-// EVGENIY !! Why use 'LMI_FLUSH' here? A std::stringstream doesn't
-// normally need to be flushed, and I don't think you want to report
-// the file name and line number.
     oss
         << "Upper bound for '"
         << axis.GetName()
         << "' axis"
-        << LMI_FLUSH
         ;
     SetToolTip(oss.str());
-    for(Integral i = lower_bound_; i <= upper_bound_; ++i)
+    for(Integral i = maximum_lower_bound_; i <= maximum_upper_bound_; ++i)
         {
         wxChoice::Append(value_cast<std::string>(i + 1));
         }
@@ -157,45 +155,44 @@ void AxisMaxBoundAdjuster<Integral>::DoUponChange()
 }
 
 template<typename Integral>
-void AxisMaxBoundAdjuster<Integral>::SetMaxValue(Integral max_value)
+void AxisMaxBoundAdjuster<Integral>::SetMaximumAxisValue(Integral max_value)
 {
-    if(max_value < lower_bound_ || upper_bound_ < max_value)
-        {
-        fatal_error()
-            << "Maximum value ("
-            << max_value
-            << ") is outside allowed range ["
-            << lower_bound_
-            << ", "
-            << upper_bound_
-            << "]."
-            << LMI_FLUSH
-            ;
-        }
-    wxChoice::SetSelection(max_value - lower_bound_);
+    EnsureValidMaximumAxisValue(max_value);
+    wxChoice::SetSelection(max_value - maximum_lower_bound_);
 }
 
 template<typename Integral>
-Integral AxisMaxBoundAdjuster<Integral>::GetMaxValue() const
+Integral AxisMaxBoundAdjuster<Integral>::GetMaximumAxisValue() const
 {
     int value = wxChoice::GetSelection();
     if(value == wxNOT_FOUND)
         {value = 0;}
-    Integral max_value = lower_bound_ + static_cast<unsigned int>(value);
-    if(max_value < lower_bound_ || upper_bound_ < max_value)
+
+    Integral const max_value =
+        maximum_lower_bound_ + static_cast<unsigned int>(value);
+
+    EnsureValidMaximumAxisValue(max_value);
+
+    return max_value;
+}
+
+template<typename Integral>
+void AxisMaxBoundAdjuster<Integral>::EnsureValidMaximumAxisValue
+    (Integral const& max_value) const
+{
+    if(max_value < maximum_lower_bound_ || maximum_upper_bound_ < max_value)
         {
         fatal_error()
             << "Maximum value ("
             << max_value
             << ") is outside allowed range ["
-            << lower_bound_
+            << maximum_lower_bound_
             << ", "
-            << upper_bound_
+            << maximum_upper_bound_
             << "]."
             << LMI_FLUSH
             ;
         }
-    return max_value;
 }
 
 /// Design notes for AdjustableMaxBoundAxis<Integral>
@@ -254,16 +251,16 @@ class AdjustableMaxBoundAxis
 
     Integral GetUpperBound() const;
 
-    /// If the axis has been adjusted, then refresh value choice control of the axis
-    void UpdateChoiceControl(wxWindow& choice_control) const;
+    /// If the axis has been adjusted, then refresh value choice control
+    void UpdateChoiceControl(MultiDimAxisAnyChoice& choice) const;
 
   private:
     /// Create the adjustment control
-    virtual Adjuster* DoGetAdjustControl(MultiDimGrid&, MultiDimTableAny&);
+    virtual Adjuster* DoCreateAdjustControl(MultiDimGrid&, MultiDimTableAny&);
     /// Applies user changes to this axis, reads adjustment window
-    virtual bool DoApplyAdjustment(Adjuster*, unsigned int n);
+    virtual bool DoApplyAdjustment(Adjuster&, unsigned int axis_id);
     /// Sync the corresponding adjustment control with itself
-    virtual bool DoRefreshAdjustment(Adjuster*, unsigned int n);
+    virtual bool DoRefreshAdjustment(Adjuster&, unsigned int axis_id);
 
     Integral lower_bound_;
     Integral upper_bound_;
@@ -287,7 +284,9 @@ AdjustableMaxBoundAxis<Integral>::AdjustableMaxBoundAxis
 }
 
 template<typename Integral>
-AdjustableMaxBoundAxis<Integral>::AdjustableMaxBoundAxis(std::string const& name)
+AdjustableMaxBoundAxis<Integral>::AdjustableMaxBoundAxis
+    (std::string const& name
+    )
     :BaseClass(name)
 {
     SetBounds(0, 0);
@@ -323,7 +322,7 @@ void AdjustableMaxBoundAxis<Integral>::SetBounds(Integral lower_bound, Integral 
         {
         fatal_error()
             << "Bounds are invalid."
-            << LMI_FLUSH;
+            << LMI_FLUSH
             ;
         }
     lower_bound_ = lower_bound;
@@ -331,18 +330,20 @@ void AdjustableMaxBoundAxis<Integral>::SetBounds(Integral lower_bound, Integral 
 }
 
 template<typename Integral>
-void AdjustableMaxBoundAxis<Integral>::UpdateChoiceControl(wxWindow& choice_control) const
+void AdjustableMaxBoundAxis<Integral>::UpdateChoiceControl
+    (MultiDimAxisAnyChoice& choice_window
+    ) const
 {
-    // EVGENIY !! See comment on MultiDimAxisAny::UpdateChoiceControl().
     MultiDimAxisAnyChoice& choice =
-        safely_dereference_as<MultiDimAxisAnyChoice>(&choice_control)
-        ;
+        dynamic_cast<MultiDimAxisAnyChoice&>(choice_window);
 
-    Integral min_value = GrandBaseClass::GetMinValue();
-    Integral max_value = GrandBaseClass::GetMaxValue();
+    Integral const min_value = GrandBaseClass::GetMinValue();
+    Integral const max_value = GrandBaseClass::GetMaxValue();
 
-    unsigned int new_count = static_cast<unsigned int>(max_value - min_value + 1);
-    unsigned int common_count = std::min(choice.GetCount(), new_count);
+    unsigned int const new_count =
+        static_cast<unsigned int>(max_value - min_value + 1);
+    unsigned int const common_count =
+        std::min(choice.GetCount(), new_count);
 
     int selection = choice.GetSelection();
     if(selection != wxNOT_FOUND && static_cast<int>(common_count) <= selection)
@@ -372,7 +373,7 @@ void AdjustableMaxBoundAxis<Integral>::UpdateChoiceControl(wxWindow& choice_cont
 
 template<typename Integral>
 typename AdjustableMaxBoundAxis<Integral>::Adjuster*
-AdjustableMaxBoundAxis<Integral>::DoGetAdjustControl
+AdjustableMaxBoundAxis<Integral>::DoCreateAdjustControl
     (MultiDimGrid& grid
     ,MultiDimTableAny& table
     )
@@ -385,14 +386,11 @@ AdjustableMaxBoundAxis<Integral>::DoGetAdjustControl
 
 template<typename Integral>
 bool AdjustableMaxBoundAxis<Integral>::DoApplyAdjustment
-    (Adjuster* adjuster_window
-    ,unsigned int n
+    (Adjuster& adjust_window
+    ,unsigned int axis_id
     )
 {
-    if(!adjuster_window)
-        {return false;}
-
-    Integral new_max_value = adjuster_window->GetMaxValue();
+    Integral const new_max_value = adjust_window.GetMaximumAxisValue();
     if(!(lower_bound_ <= new_max_value && new_max_value <= upper_bound_))
         {
         fatal_error()
@@ -400,24 +398,21 @@ bool AdjustableMaxBoundAxis<Integral>::DoApplyAdjustment
             << LMI_FLUSH
             ;
         }
-    bool updated = (GrandBaseClass::GetMaxValue() != new_max_value);
+    bool const updated = (GrandBaseClass::GetMaxValue() != new_max_value);
     SetMaxValue(new_max_value);
     return updated;
 }
 
 template<typename Integral>
 bool AdjustableMaxBoundAxis<Integral>::DoRefreshAdjustment
-    (Adjuster* adjuster_window
-    ,unsigned int n
+    (Adjuster& adjust_window
+    ,unsigned int axis_id
     )
 {
-    if(!adjuster_window)
-        {return false;}
+    Integral const max_value = adjust_window.GetMaximumAxisValue();
+    bool const updated = (GrandBaseClass::GetMaxValue() != max_value);
 
-    Integral max_value = adjuster_window->GetMaxValue();
-    bool updated = (GrandBaseClass::GetMaxValue() != max_value);
-
-    adjuster_window->SetMaxValue(GrandBaseClass::GetMaxValue());
+    adjust_window.SetMaximumAxisValue(GrandBaseClass::GetMaxValue());
     return updated;
 }
 

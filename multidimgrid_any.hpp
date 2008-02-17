@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.20 2008-01-21 01:32:28 chicares Exp $
+// $Id: multidimgrid_any.hpp,v 1.21 2008-02-17 15:17:12 chicares Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -44,8 +44,7 @@
 ///        these classes are called FooAny below
 ///      - type-safe version requiring to specify the value and axis types
 ///        during compile-time: this is more restrictive but is much safer so,
-///        whenever possible, these FooN (where N = 0, 1, ...) classes should
-///        be used.
+///        whenever possible, these Foo classes should be used.
 
 /// Adjustment windows in MultiDimGrid
 ///
@@ -56,7 +55,7 @@
 ///
 /// Adjustment window is created by a MultiDimAxis and is owned by MultiDimGrid
 ///
-/// There are two processes invlving adjustment windows:
+/// There are two processes involving adjustment windows:
 ///   - refreshing of axis value range and its adjustment window
 ///     to stay syncronised with MultiDimGrid actual value-domain. It is
 ///     triggered by MultiDimGrid::ApplyAxisAdjustment().
@@ -64,7 +63,7 @@
 ///     the  MultiDimTable. Triggered by MultiDimGrid::RefreshAxisAdjustment().
 /// Both MultiDimGrid::ApplyAxisAdjustment() and
 /// MultiDimGrid::RefreshAxisAdjustment() are two step methods.
-/// MultiDimGrid::ApplyAxisAdjustment() :
+/// MultiDimGrid::ApplyAxisAdjustment():
 ///   - apply adjustment from adjustment window to its axis
 ///     MultiDimAxisAny::ApplyAdjustment()
 ///   - apply adjustment from the axis to the data-table
@@ -128,104 +127,69 @@ class WXDLLEXPORT wxGridBagSizer;
 /// Other classes (e.g. a date axis) may be derived by the user code if
 /// necessary.
 ///
-/// MultiDimAxisAny(name): the name of this axis, returned by GetName()
-///
-/// GetName(): This is the axis name shown in the UI for axis choice
+/// MultiDimAxisAny(name). Parameter name is the name of this axis
+/// (also returned by GetName()). It is shown in the UI for axis choice
 /// and so it should be user-readable (in particular translated if needed).
 ///
-/// GetCardinality(): Return the number of values of this axis. This is
+/// GetCardinality() returns the number of values of this axis. This is
 /// used to show the appropriate number of columns/rows for this axis.
 /// The number of values should be strictly greater than 1.
 ///
-/// GetLabel(n): Return the user-readable string representation of the N-th
-/// axis value.
-/// This is used for the column or row labels in the UI and so should be
-/// translated if appropriate.
-///   - n is the value between 0 and GetCardinality()-1
-///   - returns label for this value
+/// GetLabel() returns the user-readable string representation of the N-th
+/// axis value. It is used for the column or row labels in the UI and
+/// so should be translated if appropriate.
 ///
-/// GetValue(n): Return the underlying value for the given axis label.
-/// The label shown in the UI corresponds to a value of the underlying data
-/// type which is used internally and this function is used to establish
-/// this correspondence.
-///   - n the value between 0 and GetCardinality()-1
-///   - returns the value corresponding to this index
+/// GetValue() returns the underlying N-th axis value. The label shown in
+/// the UI corresponds to a value of the underlying data type which is used
+/// internally and this function is used to establish this correspondence.
 ///
-/// GetChoiceControl(grid, table): Create the control for choosing the value
-/// for this axis.
-/// This method is used to create the GUI control allowing to choose fixed
-/// value of this axis (when it is not selected as one of the grid axis).
-/// The base class version return a wxChoice control and fills it with the
-/// results of calls to GetLabel() but this may be overridden to create any
-/// other kind of control.
-/// When the selection in this control changes, FixAxisValue() method of
-/// the grid object should be called to refresh the display (this is done
-/// automatically by the combobox created by the default implementation but
-/// has to be done manually otherwise).
-///   - grid the grid control this axis is used with
-///   - table data-table object, the creator of this axis, optional parameter
-///     to help non-trivial implementations to keep track of table-axis links.
-///     It is not used in default implementation
-///   - returns the control to select value of this axis, must not be NULL
+/// CreateChoiceControl() creates a new GUI control which will be used to let
+/// user to select a value of this axis. The control will be disabled when
+/// this axis is selected as one of the grid axes. The base class version
+/// returns a wxChoice-based control and fills it using value labels, but
+/// this behaviour could be overriden to implement any other kind of logic.
+/// When the selection in this control changes, MultiDimGrid::FixAxisValue()
+/// should be called to refresh the display (this is done automatically by
+/// the choice control created by the default implementation but has to be done
+/// manually otherwise).
 ///
-/// UpdateChoiceControl(choice_control): Update the content of the value
-/// choice control of the axis.
-/// This method is used to update the axis choice control when there are
-/// any changes made to the axis itself. When adjustable axis is changed
-/// the MultiDimGrid will cal this method asking the axis to reflect
-/// the changes in the choice control widget.
-/// The default wxChoice control implementation does the refresh by simply
-/// repopulating the choice control. If GetChoiceControl() method returns
-/// any other custoim widget and the axis is adjustable then this method
+/// UpdateChoiceControl() updates the values in the choice control
+/// of this axis. This method is called when there are changes made to the axis
+/// itself. When adjustable axis is changed the MultiDimGrid will call
+/// this method asking the axis to reflect the changes in the choice control.
+/// The default implementation does the refresh by simply clearing and
+/// repopulating the choice control. If CreateChoiceControl() method returns
+/// any other custom widget and the axis is adjustable then this method
 /// should be manually overriden.
-///   - choice_control the axis choice control previously created
-//      by GetChoiceControl()
 ///
-/// GetAdjustControl(grid, table): Create the control to adjust the axis
-/// value range.
-/// This control is used by an axis when it allows the user to change its
-/// value range in some way during the runtime (imagine an integer axis
-/// with values in a range with variable upper bound).
-/// The default version of the method returns NULL indicating
-/// that the axis (and its value range) is immutable.
-/// See also ApplyAdjustment, RefreshAdjustment
-///   - grid the grid control this axis is used with
-///   - table the underlying data table object
-///   - returns the adjustment control for the axis or NULL if none
+/// CreateAdjustControl() creates a GUI element used to let user to restrain
+/// axis values shown in the grid (when the axis is selected as a grid axis).
+/// This is usefull when axis value set is too large to be shown on the screen.
+/// A simple example: an integer axis with values in some range, the adjustment
+/// control then should be used to restrain shown upper and lower bounds, or
+/// maybe to change step size for the axis values shown to the user).
+/// The default version of the method returns NULL indicating that this axis
+/// (and its value range) is immutable.
 ///
-/// ApplyAdjustment(axis_window, n): Read and apply adjustment from
-/// its adjustment control.
-/// Method is called from the adjustment control (see also GetAdjustControl())
-/// when the user wants to alter the axis value range. The MultiDimGrid triggers
-/// a chain of updates:
+/// ApplyAdjustment() reads and applies an adjustment from adjustment window
+/// of this axis. This method is called when user changes axis value range
+/// (via this axis adjustment window). It is a part of action-chain performed
+/// by MultiDimGrid upon a user action:
 ///   - from adjustment control to axis object (this method)
 ///   - from axis object to the data table object
 ///     (MultiDimTableAny::ApplyAxisAdjustment)
-///   - some updates on its internal widgets to refresh the shown data
+///   - some updates on grid internal widgets to refresh the shown data
 /// The method is responsible for updating the internal axis value range
-/// from the adjustment control.
-///   - axis_window axis adjustment window previously constructed
-///     by GetAdjustControl()
-///   - n axis index in the data-table
-///   - returns true if the update has taken place, false if everything
-///     is up-to-date
-/// See also GetAdjustControl, RefreshAdjustment,
-/// MultiDimTableAny::ApplyAxisAdjustment, MultiDimGrid::ApplyAxisAdjustment
+/// from the adjustment control. The method returns true if the update
+/// has taken place, false if no changes detected.
 ///
-/// RefreshAdjustment(adjust_window, n): Refresh the adjustment control
-/// synchronising it with the axis.
-/// Method is called when the axis object is updated from inside the code
-/// and the adjustment control needs to reread the axis current state and
-/// reflect it in its widgets.
-/// It is a part of chain of refreshes made by MultiDimGrid
-/// when the underlying data table is changed in a way that needs
-/// to update its axis.
-///   - adjust_window axis adjustment control constructed with GetAdjustControl
-///   - n the axis index in the data table
-///   - returns true if the update has taken place, false if everything
-///     was up-to-date
-/// See also GetAdjustControl, ApplyAdjustment,
-/// MultiDimTableAny::RefreshAxisAdjustment,MultiDimGrid::RefreshAxisAdjustment
+/// RefreshAdjustment() refreshes the adjustment window of the axis. This
+/// method is called when the axis object is updated from inside the code and
+/// the adjustment window needs to be synchronized with its axis current state.
+/// It is a part of chain of refreshes made by MultiDimGrid when
+/// the underlying data table is changed and axes need to be updated.
+/// This method returns true if the update has taken place, false if everything
+/// was up-to-date.
 
 class MultiDimAxisAny
   :private boost::noncopyable
@@ -235,29 +199,20 @@ class MultiDimAxisAny
     virtual ~MultiDimAxisAny() {}
 
     std::string const&   GetName() const;
+
     virtual unsigned int GetCardinality() const = 0;
     virtual std::string  GetLabel(unsigned int n) const = 0;
     virtual boost::any   GetValue(unsigned int n) const = 0;
 
-    virtual wxWindow* GetChoiceControl
-        (MultiDimGrid& grid
-        ,MultiDimTableAny& table
+    virtual MultiDimAxisAnyChoice* CreateChoiceControl
+        (MultiDimGrid&
+        ,MultiDimTableAny&
         );
+    virtual void UpdateChoiceControl(MultiDimAxisAnyChoice& choice) const;
 
-    virtual void UpdateChoiceControl(wxWindow& choice_control) const;
-
-    virtual wxWindow* GetAdjustControl
-        (MultiDimGrid& grid
-        ,MultiDimTableAny& table
-        );
-    virtual bool ApplyAdjustment
-        (wxWindow* adjust_window
-        ,unsigned int n
-        );
-    virtual bool RefreshAdjustment
-        (wxWindow* adjust_window
-        ,unsigned int n
-        );
+    virtual wxWindow* CreateAdjustControl(MultiDimGrid&, MultiDimTableAny&);
+    virtual bool ApplyAdjustment(wxWindow&, unsigned int axis_id);
+    virtual bool RefreshAdjustment(wxWindow&, unsigned int axis_id);
 
   private:
     /// Name of the axis used throughout the MultiDimGrid methods
@@ -268,6 +223,7 @@ inline MultiDimAxisAny::MultiDimAxisAny(std::string const& name)
     :name_(name)
 {
 }
+
 inline std::string const& MultiDimAxisAny::GetName() const
 {
     return name_;
@@ -276,124 +232,95 @@ inline std::string const& MultiDimAxisAny::GetName() const
 /// Design notes for MultiDimTableAny
 ///
 /// The table abstracts the data shown in and edited by the grid.
-///
 /// It is a bridge between the internal data representation in the application
 /// and the GUI control, allowing to clearly separate them.
-///
 /// It is an ABC which must be implemented to provide access to real data.
-///
 /// It also contains the information about the axis used to form its data
 /// domain range.
 ///
-/// If the structure of the table (i.e. the number and type of the axis) is
-/// known at compile-time you should use one of type-safe MultiDimTableN
-/// classes instead of this one.
+/// If type of the table values is known at compile-time you should use
+/// MultiDimTable class instead.
 ///
-/// GetAxisAny(n): Return the n-th axis object for that table.
-/// Method is called only once by the MDGrid to retrieve the axis object
-/// representing nth dimension and holding value range for that dimension.
-/// This method simply redirects to polymorphic method DoGetAxisAny()
-///   - n index of the dimension represented by the axis
-///   - returns pointer to the axis
-/// See also MultiDimAxisAny, MultiDimAxis, MultiDimGrid, DoGetAxisAny
+/// See also MultiDimAxisAny, MultiDimGrid classes.
 ///
-/// ApplyAxisAdjustment(axis, n): Read from the axis object and apply
-/// any adjustment to the data table.
-/// Method is a part of the update chain that happen when user changes axis
-/// value range at runtime. This method is responsible for reading new value
-/// range from the axis object and applying it to the data table value domain.
+/// GetAxesAny() returns the axes objects for that table. It could be called
+/// multiple times - once for every MultiDimGrid using this table as its data
+/// source. N-th axis returned represents nth dimension and holds value range
+/// for that dimension. This method redirects to pure virtual DoGetAxesAny().
+///
+/// ApplyAxisAdjustment() reads from the axis object and apply
+/// any adjustment to the data table. Method is a part of the update chain
+/// that happen when user changes axis value range at runtime. This method
+/// is responsible for reading new value range from the axis object and
+/// applying it to the data table value domain. Parameters:
 ///   - axis the axis object containing axis value range adjustments
 ///   - n the index of the axis
 ///   - returns true if the update has taken place, false if everything
 ///     was up-to-date
-/// See also GetAxisAny, RefreshAxisAdjustment,
-/// MultiDimAxisAny::ApplyAdjustment, MultiDimGrid::ApplyAxisAdjustment
 ///
-/// RefreshAxisAdjustment(axis, n): Refresh the axis object to reflect
-/// the data table domain value range
-/// Method is a part of the adjustment refresh chain called by MultiDimGrid
-/// to synchronize the structures with the underlying data table updated
-/// in some way.
+/// RefreshAxisAdjustment() refreshes the axis object to reflect
+/// the data table domain value range. Method is a part of the adjustment
+/// refresh chain called by MultiDimGrid to synchronize the structures
+/// with the underlying data table updated in some way. Parameters:
 ///   - axis   the axis object that should be synced with the table
 ///   - n      the index of the axis
-///   - return true if the update has taken place, false if everything was up-to-date
-/// See also GetAxisAny, ApplyAxisAdjustment,
-/// MultiDimAxisAny::RefreshAdjustment, MultiDimGrid::RefreshAxisAdjustment
+///   - return true if the update has taken place, false if everything was
+///     up-to-date
 ///
-/// GetAnyValue(coords): General accessor for table value.
-/// Calls fatal_error() if the array cardinality is different from
-/// GetDimension() or boost::bad_any_cast exception if the array arguments
-/// have wrong types.
-/// Note that the coordinates vector contains all the dimensions values whether
-/// the table depends on them or not, but those values should be empty
-/// if the table does not depend on the dimension (they will be simply ignored
-/// by the function).
+/// GetValueAny() and SetValueAny() provide general access for table values.
+/// The coordinates vector contains all the dimension values whether the table
+/// depends (varies) on them or not. If the table does not depend
+/// on a dimension, then the corresponding coordinate value should be empty.
+/// Parameters:
 ///   - coords the vector of coordinates
-///   - return the value for these coordinates
+///   - value  the value to set (only for SetValueAny)
+///   - return the value for these coordinates (only for GetValueAny)
 ///
-/// SetAnyValue(coords, value): Modifier for the table values.
-/// See GetAnyValue for function description and additional notes.
-///   - coords the vector of coordinates
-///   - value  the value to set
-///   - return the value for these coordinates
+/// CanChangeVariationWith() returns true if the table variation on a dimension
+/// could be changed.
 ///
-/// DoGetValue(coords): Return the value for the given set of coordinates.
-///   - coords the vector of coordinates of size GetDimension()
-///   - return the value for these coordinates
+/// MakeVaryByDimension() make table data depend on the dimension. Be sure
+/// to call it only for a dimension for which CanChangeVariationWith() is true.
 ///
-/// DoSetValue(coords, value): Sets the value for the given coordinates.
-///   - coords the vector of coordinates of size GetDimension()
-///   - value  the value to be stored for these coordinates
-///
-/// DoGetAxisAny(n): Returns the n-th axis for the table
-/// Abstract method to implement in the deriving classes.
-///   - n      the axis number (0 <= n < GetDimension())
-///   - return MultiDimAxisAny object that represents nth axis
+/// VariesByDimension() returns true if the table depends on the specified
+/// dimension.
 
 class MultiDimTableAny
 {
   public:
     /// Coordinates for an element of the table
     typedef std::vector<boost::any> Coords;
+    typedef boost::shared_ptr<MultiDimAxisAny> AxisAnyPtr;
+    typedef std::vector<AxisAnyPtr> AxesAny;
 
     MultiDimTableAny() {}
     virtual ~MultiDimTableAny() {}
 
-    // EVGENIY !! Would it make sense to group virtuals (other than
-    // the dtor) together here, and separate from nonvirtuals?
-
     /// Return the number of dimensions in this table.
-    virtual unsigned int GetDimension() const = 0;
-
-    MultiDimAxisAny* GetAxisAny(unsigned int n);
+    unsigned int GetDimension() const;
+    /// Create new set of table axes.
+    AxesAny GetAxesAny();
 
     bool ApplyAxisAdjustment(MultiDimAxisAny& axis, unsigned int n);
     bool RefreshAxisAdjustment(MultiDimAxisAny& axis, unsigned int n);
 
-    /// Return true if the data varies with that dimension
+    /// Get/set if the data varies with (depend on) n-th axis.
+    virtual bool CanChangeVariationWith(unsigned int n) const = 0;
+    virtual void MakeVaryByDimension(unsigned int n, bool varies) = 0;
     virtual bool VariesByDimension(unsigned int n) const = 0;
 
-    /// Enable/disable data variation with n-th dimension
-    virtual void MakeVaryByDimension(unsigned int n, bool varies) = 0;
+    boost::any GetValueAny(Coords const& coords) const;
+    void       SetValueAny(Coords const& coords, boost::any const& value);
 
-    /// Return true if variation with n-th axis could be changed
-    virtual bool CanChangeVariationWith(unsigned int n) const = 0;
-
-    boost::any GetAnyValue(Coords const& coords) const;
-    void SetAnyValue(Coords const& coords, boost::any const& value);
-
-    /// The method to be provided by the table to allow the conversion from
-    /// the table values to the strings.
+    /// Value conversion methods to be overriden in derived classes.
+    virtual boost::any StringToValue(std::string const& value) const = 0;
     virtual std::string ValueToString(boost::any const& value) const = 0;
 
-    /// The method to be provided by the table to allow the conversion from
-    /// strings to the the table values.
-    virtual boost::any StringToValue(std::string const& value) const = 0;
-
   protected:
-    virtual boost::any DoGetValue(Coords const& coords) const = 0;
-    virtual void DoSetValue(Coords const& coords, boost::any const& value) = 0;
-    virtual MultiDimAxisAny* DoGetAxisAny(unsigned int n) = 0;
+    virtual AxesAny DoGetAxesAny() = 0;
+    virtual unsigned int DoGetDimension() const = 0;
+    virtual boost::any DoGetValueAny(Coords const&) const = 0;
+    virtual void       DoSetValueAny(Coords const&, boost::any const&) = 0;
 
     virtual bool DoApplyAxisAdjustment(MultiDimAxisAny& axis, unsigned int n);
     virtual bool DoRefreshAxisAdjustment(MultiDimAxisAny& axis, unsigned int n);
@@ -406,11 +333,16 @@ inline void MultiDimTableAny::EnsureValidDimensionIndex(unsigned int n) const
     LMI_ASSERT(n < GetDimension());
 }
 
-inline MultiDimAxisAny* MultiDimTableAny::GetAxisAny(unsigned int n)
+inline MultiDimTableAny::AxesAny MultiDimTableAny::GetAxesAny()
 {
-    EnsureValidDimensionIndex(n);
-    return DoGetAxisAny(n);
+    return DoGetAxesAny();
 }
+
+inline unsigned int MultiDimTableAny::GetDimension() const
+{
+    return DoGetDimension();
+}
+
 inline bool MultiDimTableAny::ApplyAxisAdjustment
     (MultiDimAxisAny& axis
     ,unsigned int n
@@ -427,20 +359,20 @@ inline bool MultiDimTableAny::RefreshAxisAdjustment
     EnsureValidDimensionIndex(n);
     return DoRefreshAxisAdjustment(axis, n);
 }
-inline boost::any MultiDimTableAny::GetAnyValue(Coords const& coords) const
+inline boost::any MultiDimTableAny::GetValueAny(Coords const& coords) const
 {
     if(coords.size() != GetDimension())
         {fatal_error() << "Incorrect dimension." << LMI_FLUSH;}
-    return DoGetValue(coords);
+    return DoGetValueAny(coords);
 }
-inline void MultiDimTableAny::SetAnyValue
+inline void MultiDimTableAny::SetValueAny
     (Coords const& coords
     ,boost::any const& value
     )
 {
     if(coords.size() != GetDimension())
         {fatal_error() << "Incorrect dimension." << LMI_FLUSH;}
-    DoSetValue(coords, value);
+    DoSetValueAny(coords, value);
 }
 
 /// Design notes for MultiDimGrid
@@ -468,7 +400,7 @@ inline void MultiDimTableAny::SetAnyValue
 /// to be called from MultiDimAxisAny axis value selection control.
 ///   - axis the name of the axis whose value has changed
 ///   - sel  index of the new axis value
-/// See also MultiDimAxisAny::GetChoiceControl()
+/// See also MultiDimAxisAny::CreateChoiceControl()
 ///
 /// RefreshTableData(): Refresh the data shown in the wxGrid control
 /// of the widget.
@@ -535,12 +467,8 @@ inline void MultiDimTableAny::SetAnyValue
 ///   - return   axis index
 
 class MultiDimGrid
-  :public wxScrolledWindow
-// TODO ?? EVGENIY !! Protected inheritance seems unusual. See, e.g.:
-//   http://cpptips.hyperformix.com/cpptips/prot_inher2.txt
-// Is there a strong reason for using it here, that overcomes the
-// objections raised by Meyers and Sutter?
-  ,protected wxGridTableBase
+  :public wxPanel
+  ,private wxGridTableBase
   ,private boost::noncopyable
 {
     friend class GridRefreshTableDataGuard;
@@ -548,7 +476,7 @@ class MultiDimGrid
   public:
     /// Default constructor, use Create() to really create the control.
     MultiDimGrid();
-    virtual ~MultiDimGrid() {}
+    virtual ~MultiDimGrid();
 
     MultiDimGrid
         (wxWindow* parent
@@ -577,10 +505,59 @@ class MultiDimGrid
     void SetXAxisColour(wxColour const& colour);
     void SetYAxisColour(wxColour const& colour);
 
+    bool SetGridAxisSelection(std::pair<int,int> const&);
+    std::pair<int,int> GetGridAxisSelection() const;
+
   protected:
-// TODO ?? EVGENIY !! Section 8.2 of the boost coding standards says
-// "Protected data members are forbidden". Is there a really good
-// reason to violate that standard here?
+    // Distinguish between X axis and Y axis.
+    enum enum_axis_x_or_y
+        {e_axis_x = wxID_HIGHEST + 1
+        ,e_axis_y
+        };
+
+    // Use these methods to access table_ and grid_ pointers. Note that these
+    // getters will throw if the underlying pointer is NULL.
+    MultiDimTableAny& table() const;
+    wxGrid& grid() const;
+
+  private:
+    /// Implementation of wxGridTableBase interface. The widget serves as a data
+    /// source for the wxGrid component.
+    ///
+    /// Note: once the wxGrid class support LabelAttributeProvider() we
+    /// should add color highlighting of selected axis in here.
+
+    // wxGridTableBase overrides.
+    virtual int GetNumberCols();
+    virtual int GetNumberRows();
+    virtual bool IsEmptyCell(int row, int col);
+    virtual wxString GetValue(int row, int col);
+    virtual void SetValue(int row, int col, wxString const& value);
+    virtual wxString GetColLabelValue(int col);
+    virtual wxString GetRowLabelValue(int row);
+
+    unsigned int EnsureIndexIsPositive(int) const;
+
+  protected:
+    virtual std::string DoGetColLabelValue(unsigned int col) const;
+    virtual std::string DoGetRowLabelValue(unsigned int row) const;
+    virtual unsigned int DoGetNumberCols() const;
+    virtual unsigned int DoGetNumberRows() const;
+    virtual std::string DoGetValue(unsigned int row, unsigned int col) const;
+    virtual void DoSetValue
+        (unsigned int row
+        ,unsigned int col
+        ,std::string const&
+        );
+
+    /// Array of boost::any values
+    typedef MultiDimTableAny::Coords Coords;
+
+    /// Helper function used by SetValue() and GetValue() functions
+    /// to fill the private coordinates vector with correct values.
+    Coords const& PrepareFixedCoords(int row, int col) const;
+
+  private:
     /// Shared pointer to an axis object
     typedef boost::shared_ptr<MultiDimAxisAny> AxisPtr;
     /// Container of (pointers to) axis objects.
@@ -593,12 +570,8 @@ class MultiDimGrid
     Axis axis_;
     /// Cache variable - number of dimensions
     unsigned int dimension_;
-    /// Top-level sizer of the widget
-    wxBoxSizer* grid_sizer_;
     /// Sizer containing axis selection controls (X and Y) and axis controls
     wxGridBagSizer* axis_sizer_;
-    /// Array of boost::any values
-    typedef MultiDimTableAny::Coords Coords;
     /// Index of the selected axis to be displayed as the X axis in the grid
     int first_grid_axis_;
     /// Index of the selected axis to be displayed as the Y axis in the grid
@@ -610,42 +583,39 @@ class MultiDimGrid
     /// to the underlying data table. Note that when displaying table the
     /// values for selected axis change as we walk through the grid cells
     /// to retrieve its values.
-    Coords axis_fixed_coords_;
+    mutable Coords axis_fixed_coords_;
 
-    /// Helper function used by SetValue() and GetValue() functions
-    /// to fill the private coordinates vector with correct values.
-    void PrepareFixedCoords(int row, int col);
     /// Creates axis selection controls for axis X and Y
     wxChoice* CreateGridAxisSelection
-        (int id
+        (enum_axis_x_or_y
         ,std::string const& label
         ,wxColour const& selectedColour
         );
     /// Places the axis label control into the widget
-    void SetAxisLabel(int axisId, wxWindow* newWin);
+    void SetAxisLabel(int axis_id, wxWindow&);
     /// Places the axis fixed value choice control into the widget
-    void SetAxisChoiceControl(int axisId, wxWindow* newWinm);
+    void SetAxisChoiceControl(int axis_id, MultiDimAxisAnyChoice&);
     /// Places the axis value range selection control into the widget
-    void SetAxisAdjustControl(int axisId, wxWindow* newWin);
+    void SetAxisAdjustControl(int axis_id, wxWindow*);
     /// Places the data variation checkbox into the widget
     void SetAxisVariesControl(unsigned int axisId);
 
     bool SetGridAxisSelection(int firstAxis, int secondAxis);
     /// Return the axis selected for the axisId selection (X or Y)
-    int GetGridAxisSelection(int axisId);
+    int GetGridAxisSelection(enum_axis_x_or_y);
     /// Selects axis changing corresponding wxChoice selections
     /// and refreshing the data grid, etc.
     void DoSetGridAxisSelection();
 
     /// Used by DoSetGridAxisSelection() to refresh the axis selection
     /// and to reposition various elements inside the widget if needed.
-    void DoSetGridAxisSelection(int axisId, int selection);
+    void DoSetGridAxisSelection(enum_axis_x_or_y, int selection);
 
     /// Populates the axis selection controls for axis X and Y
     void PopulateGridAxisSelection();
 
     /// Populates one axis selection controls for axis X or Y
-    void PopulateGridAxisSelection(unsigned int id);
+    void PopulateGridAxisSelection(enum_axis_x_or_y);
 
     int GetAxisIndexByName(std::string const& axisName);
     inline unsigned int DoGetAxisIndexByName(std::string const& axisName);
@@ -672,45 +642,41 @@ class MultiDimGrid
     bool DoApplyAxisAdjustment(unsigned int n);
     bool DoRefreshAxisAdjustment(unsigned int n);
 
-    /// Implementation of wxGridTableBase interface. The widget serves as a data
-    /// source for the wxGrid component.
-    ///
-    /// Note: once the wxGrid class support LabelAttributeProvider() we
-    /// should add color highlighting of selected axis in here.
+    /// Event handlers.
+    void UponSwitchSelectedAxis(wxCommandEvent& event);
+    void UponAxisVariesToggle(wxCommandEvent& event);
 
-    // wxGridTableBase overrides.
-    virtual int GetNumberCols();
-    virtual int GetNumberRows();
-    virtual bool IsEmptyCell(int row, int col);
-    virtual wxString GetValue(int row, int col);
-    virtual void SetValue(int row, int col, wxString const& value);
-    virtual wxString GetColLabelValue(int col);
-    virtual wxString GetRowLabelValue(int row);
+    /// Actually handle the axis selection switch
+    void DoOnSwitchSelectedAxis(enum_axis_x_or_y);
 
-  private:
+    /// accessor for first_axis_choice_ and second_axis_choice_
+    wxChoice& GetAxisChoiceControl(enum_axis_x_or_y);
+
+    bool IsFullyConstructed() const;
+
     /// Various GUI components of the widget
 
     /// Data grid
     wxGrid* grid_;
 
-    /// Drop down menu for the X axis selection
+    /// Drop down menu for the X and Y axes selection.
     wxChoice* first_axis_choice_;
-    /// Drop down menu for the Y axis selection
     wxChoice* second_axis_choice_;
 
-    typedef std::vector<wxWindow*> Windows;
+    /// We do not have to care about these window destruction, since it is
+    /// being taken care of by WX.
+    typedef std::vector<wxWindow*>   Windows;
+    typedef std::vector<MultiDimAxisAnyChoice*> AxisChoiceWindows;
+    typedef std::vector<wxCheckBox*> CheckBoxes;
 
     /// Array of axis labels
     Windows axis_labels_;
 
     /// Array of axis choice controls, could be null if an axis is empty
-    Windows axis_choice_wins_;
+    AxisChoiceWindows axis_choice_wins_;
 
     /// Array of axis adjust windows, could be null if an axis is "read-only"
     Windows axis_adjust_wins_;
-
-    /// See axis_varies_checkboxes_
-    typedef std::vector<wxCheckBox*> CheckBoxes;
 
     /// Array of data variation checkboxes
     /// controlling whether or not the data varies along the axis
@@ -724,16 +690,6 @@ class MultiDimGrid
 
     /// Refresh counter
     unsigned int table_data_refresh_counter_;
-
-// EVGENIY !! These three function declarations seem to have been
-// removed in the branch. Aren't they required?
-    /// Monitor axis selection changes
-    void UponSwitchSelectedAxis(wxCommandEvent& event);
-    /// Actually handle the axis selection switch
-    void DoOnSwitchSelectedAxis(unsigned int axisId);
-
-    /// Monitor axis variation checkboxes
-    void UponAxisVariesToggle(wxCommandEvent& event);
 
     DECLARE_EVENT_TABLE()
 };
@@ -782,7 +738,7 @@ inline bool MultiDimGrid::RefreshAxisAdjustment(std::string const& name)
 /// Axis choice control, to allow user to select value
 /// for the (not-selected) axis.
 ///
-/// See also MultiDimAxisAny::GetChoiceControl()
+/// See also MultiDimAxisAny::CreateChoiceControl()
 ///
 /// SelectionChanged(): Trigger selection update. It calls
 /// MultiDimGrid::FixAxisValue()
