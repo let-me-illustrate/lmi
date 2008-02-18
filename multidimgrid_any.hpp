@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.21 2008-02-17 15:17:12 chicares Exp $
+// $Id: multidimgrid_any.hpp,v 1.22 2008-02-18 17:41:27 chicares Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -164,7 +164,7 @@ class WXDLLEXPORT wxGridBagSizer;
 ///
 /// CreateAdjustControl() creates a GUI element used to let user to restrain
 /// axis values shown in the grid (when the axis is selected as a grid axis).
-/// This is usefull when axis value set is too large to be shown on the screen.
+/// This is useful when axis value set is too large to be shown on the screen.
 /// A simple example: an integer axis with values in some range, the adjustment
 /// control then should be used to restrain shown upper and lower bounds, or
 /// maybe to change step size for the axis values shown to the user).

@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.33 2008-01-30 15:37:37 chicares Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.34 2008-02-18 17:41:27 chicares Exp $)dnl
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -66,7 +66,7 @@ AC_ARG_WITH(boost-toolkit,
             [AC_HELP_STRING([--with-boost-toolkit=dir], [Boost installation toolkit (gcc, mgw, etc.)])],
             lmi_boost_toolkit=$withval)
 AC_ARG_WITH(boost-filesystem-src,
-            [AC_HELP_STRING([--with-boost-filesystem-src=dir], [Boost filesystem library sources directory (./libs/filesystem/src directory in the boost default package). That option is only usefull for the in-project boost::filesystem library compilation])],
+            [AC_HELP_STRING([--with-boost-filesystem-src=dir], [Boost filesystem library sources directory (./libs/filesystem/src directory in the boost default package). That option is only useful for the in-project boost::filesystem library compilation])],
             lmi_boost_filesystem_src=$withval)
 
 dnl add support for --wxdir, --wx-config, --wx-prefix, ----wx-exec-prefix

@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: ledger.xsd,v 1.4 2008-01-01 18:29:46 chicares Exp $
+    $Id: ledger.xsd,v 1.5 2008-02-18 17:41:27 chicares Exp $
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:lmi="http://savannah.nongnu.org/projects/lmi" targetNamespace="http://savannah.nongnu.org/projects/lmi" elementFormDefault="qualified" attributeFormDefault="unqualified">
     <xs:annotation>
@@ -175,7 +175,7 @@
         <xs:annotation>
             <xs:documentation>
                 Node representing vector of doubles.
-                A node can not have a text value, it can only have "duration"
+                A node cannot have a text value, it can only have "duration"
                 children nodes.
                 Sub-nodes:
                 - ordered set of "duration" nodes of type double_data_type
@@ -204,7 +204,7 @@
         <xs:annotation>
             <xs:documentation>
                 Node representing vector of strings
-                A node can not have a text value, it can only have "duration"
+                A node cannot have a text value, it can only have "duration"
                 children nodes.
                 Sub-nodes:
                 - ordered set of "duration" nodes of type string_data_type

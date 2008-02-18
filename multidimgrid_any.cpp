@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.20 2008-02-17 15:17:12 chicares Exp $
+// $Id: multidimgrid_any.cpp,v 1.21 2008-02-18 17:41:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -334,7 +334,7 @@ bool MultiDimGrid::Create
     table_ = atable;
     if(!table_)
         {
-        fatal_error() << "Table can not be null" << LMI_FLUSH;
+        fatal_error() << "Table cannot be null." << LMI_FLUSH;
         }
     dimension_ = table().GetDimension();
 
@@ -1305,8 +1305,9 @@ unsigned int MultiDimGrid::EnsureIndexIsPositive(int row_or_col) const
     if(row_or_col < 0)
         {
         fatal_error()
-            << "Negative row or column index "
+            << "Row or column index "
             << row_or_col
+            << " is negative."
             << LMI_FLUSH
             ;
         }
