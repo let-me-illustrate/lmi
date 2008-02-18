@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1010 2008-02-17 15:17:16 chicares Exp $
+// $Id: ChangeLog,v 1.1011 2008-02-18 17:44:01 chicares Exp $
 
 MAINTENANCE
 
@@ -15730,4 +15730,56 @@ Reformat.
   tier_view_editor.cpp
   tier_view_editor.hpp
 Improve product editor (Vaclav).
+
+20080217T1601Z <gchicares@sbcglobal.net> [1197]
+
+  database_document.hpp
+  tier_document.hpp
+Include public-base-class headers before others of less importance,
+separating them from others with an empty line. This practice can
+unmask latent portability issues due to implicit dependencies.
+
+20080217T1602Z <gchicares@sbcglobal.net> [1197]
+
+  tier_view_editor.hpp
+Include a header that's not obviously unnecessary.
+
+20080218T1741Z <gchicares@sbcglobal.net> [1197]
+
+  configure.ac
+  ledger.xsd
+  multidimgrid_any.cpp
+  multidimgrid_any.hpp
+Correct typos.
+
+20080218T1743Z <gchicares@sbcglobal.net> [1197]
+
+  group_private_placement.xsl        [expunged]
+  individual_private_placement.xsl   [expunged]
+  offshore_private_placement.xsl     [expunged]
+  reg_d_group.xsl                    [new file]
+  reg_d_individual.xsl               [new file]
+  reg_d_offshore.xsl                 [new file]
+  skin.xrc                           [new file]
+  skin_coli_boli.xrc                 [new file]
+  skin_group_carveout.xrc            [new file]
+  skin_reg_d.xrc                     [new file]
+  skin_single_premium.xrc            [new file]
+  skin_variable_annuity.xrc          [new file]
+  xml_notebook.xrc                   [expunged]
+  xml_notebook_coli_boli.xrc         [expunged]
+  xml_notebook_group_carveout.xrc    [expunged]
+  xml_notebook_private_placement.xrc [expunged]
+  xml_notebook_single_premium.xrc    [expunged]
+  xml_notebook_variable_annuity.xrc  [expunged]
+Rename files as follows:
+  mv group_private_placement.xsl        reg_d_group.xsl
+  mv individual_private_placement.xsl   reg_d_individual.xsl
+  mv offshore_private_placement.xsl     reg_d_offshore.xsl
+  mv xml_notebook.xrc                   skin.xrc
+  mv xml_notebook_coli_boli.xrc         skin_coli_boli.xrc
+  mv xml_notebook_group_carveout.xrc    skin_group_carveout.xrc
+  mv xml_notebook_private_placement.xrc skin_reg_d.xrc
+  mv xml_notebook_single_premium.xrc    skin_single_premium.xrc
+  mv xml_notebook_variable_annuity.xrc  skin_variable_annuity.xrc
 

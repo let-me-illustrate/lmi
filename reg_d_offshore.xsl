@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: offshore_private_placement.xsl,v 1.61 2008-01-01 18:29:52 chicares Exp $
+    $Id: reg_d_offshore.xsl,v 1.1 2008-02-18 17:44:00 chicares Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
