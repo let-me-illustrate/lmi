@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.17 2008-01-01 18:30:00 chicares Exp $
+// $Id: xml_lmi.cpp,v 1.18 2008-02-19 16:22:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -151,7 +151,7 @@ xml_lmi::Document const& xml_lmi::dom_parser::document() const
     catch(std::exception const& e)
         {
         fatal_error() << error_context_ << e.what() << LMI_FLUSH;
-        throw std::logic_error("Unreachable"); // Silence compiler warning.
+        throw "Unreachable--silences a compiler diagnostic.";
         }
 }
 
@@ -192,7 +192,7 @@ xml::element const& xml_lmi::dom_parser::root_node
     catch(std::exception const& e)
         {
         fatal_error() << error_context_ << e.what() << LMI_FLUSH;
-        throw std::logic_error("Unreachable"); // Silence compiler warning.
+        throw "Unreachable--silences a compiler diagnostic.";
         }
 }
 
@@ -248,7 +248,7 @@ xml_lmi::ElementContainer child_elements
     catch(std::exception const& e)
         {
         fatal_error() << e.what() << LMI_FLUSH;
-        throw std::logic_error("Unreachable"); // Silence compiler warning.
+        throw "Unreachable--silences a compiler diagnostic.";
         }
 }
 
@@ -274,7 +274,7 @@ std::string get_content(xml::element const& element)
     catch(std::exception const& e)
         {
         fatal_error() << e.what() << LMI_FLUSH;
-        throw std::logic_error("Unreachable"); // Silence compiler warning.
+        throw "Unreachable--silences a compiler diagnostic.";
         }
 }
 
@@ -288,7 +288,7 @@ std::string get_name(xml::element const& element)
     catch(std::exception const& e)
         {
         fatal_error() << e.what() << LMI_FLUSH;
-        throw std::logic_error("Unreachable"); // Silence compiler warning.
+        throw "Unreachable--silences a compiler diagnostic.";
         }
 }
 
@@ -315,7 +315,7 @@ bool get_attr
     catch(std::exception const& e)
         {
         fatal_error() << e.what() << LMI_FLUSH;
-        throw std::logic_error("Unreachable"); // Silence compiler warning.
+        throw "Unreachable--silences a compiler diagnostic.";
         }
 }
 
@@ -332,7 +332,7 @@ void set_attr
     catch(std::exception const& e)
         {
         fatal_error() << e.what() << LMI_FLUSH;
-        throw std::logic_error("Unreachable"); // Silence compiler warning.
+        throw "Unreachable--silences a compiler diagnostic.";
         }
 }
 } // namespace xml_lmi

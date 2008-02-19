@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: transferor.cpp,v 1.14 2008-01-29 04:47:40 chicares Exp $
+// $Id: transferor.cpp,v 1.15 2008-02-19 16:22:16 chicares Exp $
 
 // Acknowledgment
 
@@ -198,8 +198,8 @@ bool Transferor::PerformTransfer(transfer_direction td)
             << "'."
             << LMI_FLUSH
             ;
+        throw "Unreachable--silences a compiler diagnostic.";
         }
-    return false; // Actually unreachable, but gcc doesn't discern that.
 }
 
 // TODO ?? Use TransferString() with class wxControlWithItems instead

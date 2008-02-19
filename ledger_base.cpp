@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_base.cpp,v 1.14 2008-01-22 13:42:39 chicares Exp $
+// $Id: ledger_base.cpp,v 1.15 2008-02-19 16:22:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -432,7 +432,7 @@ namespace
                     << "' not found."
                     << LMI_FLUSH
                     ;
-                return 0; // Bogus return--actually unreachable.
+                throw "Unreachable--silences a compiler diagnostic.";
                 }
             }
         }

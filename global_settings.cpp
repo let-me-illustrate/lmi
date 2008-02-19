@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: global_settings.cpp,v 1.16 2008-01-01 18:29:41 chicares Exp $
+// $Id: global_settings.cpp,v 1.17 2008-02-19 16:22:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,8 +31,6 @@
 #include "alert.hpp"
 #include "handle_exceptions.hpp"
 #include "path_utility.hpp"
-
-#include <stdexcept>
 
 /// Initialize directory paths to ".", not an empty string. Reason:
 /// objects of the boost filesystem library's path class are created
@@ -71,7 +69,7 @@ global_settings& global_settings::instance()
         {
         report_exception();
         fatal_error() << "Instantiation failed." << LMI_FLUSH;
-        throw std::logic_error("Unreachable"); // Silence compiler warning.
+        throw "Unreachable--silences a compiler diagnostic.";
         }
 }
 

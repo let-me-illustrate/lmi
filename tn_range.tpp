@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range.tpp,v 1.13 2008-01-01 18:29:57 chicares Exp $
+// $Id: tn_range.tpp,v 1.14 2008-02-19 16:22:16 chicares Exp $
 
 #include "tn_range.hpp"
 
@@ -28,9 +28,10 @@
 
 #include <cmath> // std::pow()
 #include <exception>
+#include <istream>
 #include <limits>
+#include <ostream>
 #include <sstream>
-#include <stdexcept>
 
 namespace
 {
@@ -710,7 +711,7 @@ std::string tn_range<Number,Trammel>::diagnose_invalidity
     else
         {
         fatal_error() << "Unanticipated case." << LMI_FLUSH;
-        throw std::logic_error("Unreachable"); // Silence compiler warning.
+        throw "Unreachable--silences a compiler diagnostic.";
         }
 }
 

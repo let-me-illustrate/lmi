@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1012 2008-02-19 00:46:28 chicares Exp $
+// $Id: ChangeLog,v 1.1013 2008-02-19 16:22:16 chicares Exp $
 
 MAINTENANCE
 
@@ -15790,4 +15790,24 @@ Rename files as follows:
   ledger_xsl.cpp
   ledger_xsl.hpp
 Look up xsl filenames as changed 20080218T1743Z.
+
+20080219T1622Z <gchicares@sbcglobal.net> [1197]
+
+  actuarial_table.cpp
+  alert.hpp
+  authenticity.cpp
+  configurable_settings.cpp
+  global_settings.cpp
+  ihs_avmly.cpp
+  ihs_avstrtgy.cpp
+  ihs_irc7702.cpp
+  ledger_base.cpp
+  msw_workarounds.cpp
+  ncnnnpnn.hpp
+  stratified_charges.cpp
+  tn_range.tpp
+  transferor.cpp
+  xml_lmi.cpp
+Suppress "unreachable" diagnostics uniformly. See:
+  http://lists.nongnu.org/archive/html/lmi/2007-03/msg00008.html
 
