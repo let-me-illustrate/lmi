@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702.cpp,v 1.18 2008-01-01 18:29:43 chicares Exp $
+// $Id: ihs_irc7702.cpp,v 1.19 2008-02-19 16:22:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -792,13 +792,8 @@ std::vector<double> const& Irc7702::Corridor() const
     else
         {
         fatal_error() << "7702 test is neither GPT nor CVAT." << LMI_FLUSH;
+        throw "Unreachable--silences a compiler diagnostic.";
         }
-
-    // This line is obviously unreachable because all paths through the
-    // if-else chain either return or throw.
-    // But some compilers do not realize that, and complain that no
-    // value is returned--so we pretend to return one here.
-    return GptCorridor;
 }
 
 //============================================================================
@@ -812,19 +807,16 @@ Irc7702::EIOBasis Irc7702::Get4PctBasis
             {
             return Opt1Int4Pct;
             }
-            //  break;
         case e_option2:
             {
             return Opt2Int4Pct;
             }
-            //  break;
         case e_rop:
             {
             // TODO ?? Wait...shouldn't this be the 7702 equivalent
             // for ROP?
             return Opt1Int4Pct;
             }
-            //  break;
         default:
             {
             fatal_error()
@@ -833,15 +825,9 @@ Irc7702::EIOBasis Irc7702::Get4PctBasis
                 << "' not found."
                 << LMI_FLUSH
                 ;
+            throw "Unreachable--silences a compiler diagnostic.";
             }
-            //  break;
         }
-
-    // This line is obviously unreachable because the switch statement
-    // has a default case and all cases either return or throw.
-    // But some compilers do not realize that, and complain that no
-    // value is returned--so we pretend to return one here.
-    return Opt1Int4Pct;
 }
 
 //============================================================================

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert.hpp,v 1.21 2008-01-01 18:29:34 chicares Exp $
+// $Id: alert.hpp,v 1.22 2008-02-19 16:22:15 chicares Exp $
 
 #ifndef alert_hpp
 #define alert_hpp
@@ -100,14 +100,15 @@
 /// returned by fatal_error() is flushed: an exception is obligatorily
 /// thrown, but it is difficult for a compiler to discern that. When
 /// (and only when) gcc issues such a warning, add exactly this line:
-///   throw "Unreachable--silences a compiler diagnostic.");
+///   throw "Unreachable--silences a compiler diagnostic.";
 /// to silence it. Rationale: a return statement would suffice, but
 /// would be misleading (the function cannot return after throwing),
 /// might be difficult to write (the function may return a reference),
 /// and could not be everywhere identical. The throw-expression above
 /// always works, is self documenting, and adds no header dependency.
 /// Writing it the same way everywhere requires no invention and
-/// increases global comprehensibility.
+/// increases global comprehensibility; see:
+///   http://lists.nongnu.org/archive/html/lmi/2007-03/msg00008.html
 ///
 /// Design decisions, and paths not taken.
 ///

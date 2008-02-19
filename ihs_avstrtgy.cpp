@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avstrtgy.cpp,v 1.9 2008-01-01 18:29:42 chicares Exp $
+// $Id: ihs_avstrtgy.cpp,v 1.10 2008-02-19 16:22:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -367,7 +367,7 @@ double AccountValue::DoPerformPmtStrategy
                 << "' not found."
                 << LMI_FLUSH
                 ;
-            return 0; // Bogus return--actually unreachable.
+            throw "Unreachable--silences a compiler diagnostic.";
             }
         }
 }

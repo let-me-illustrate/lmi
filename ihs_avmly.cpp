@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.70 2008-01-20 14:15:40 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.71 2008-02-19 16:22:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -55,6 +55,7 @@
 
 #include <cmath>   // std::pow()
 #include <limits>
+#include <stdexcept>
 #include <utility>
 
 // Each month, process all transactions in order.
@@ -2802,7 +2803,7 @@ double AccountValue::anticipated_deduction
                 << "' not found."
                 << LMI_FLUSH
                 ;
-            return 0; // Bogus return--actually unreachable.
+            throw "Unreachable--silences a compiler diagnostic.";
             }
         }
 }
