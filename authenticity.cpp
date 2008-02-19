@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: authenticity.cpp,v 1.10 2008-01-01 18:29:35 chicares Exp $
+// $Id: authenticity.cpp,v 1.11 2008-02-19 16:22:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -46,7 +46,6 @@
 #include <cstring> // std::memcpy()
 #include <iomanip>
 #include <sstream>
-#include <stdexcept>
 
 // TODO ?? Known security hole: data files can be modified after they
 // have been validated with 'md5sum'. This problem will grow worse
@@ -78,7 +77,7 @@ Authenticity& Authenticity::Instance()
         {
         report_exception();
         fatal_error() << "Instantiation failed." << LMI_FLUSH;
-        throw std::logic_error("Unreachable"); // Silence compiler warning.
+        throw "Unreachable--silences a compiler diagnostic.";
         }
 }
 

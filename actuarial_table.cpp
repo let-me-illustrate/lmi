@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.36 2008-01-31 06:02:18 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.37 2008-02-19 16:22:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -44,7 +44,6 @@
 #include <ios>
 #include <istream>
 #include <limits>
-#include <stdexcept>
 
 namespace
 {
@@ -176,7 +175,7 @@ std::vector<double> actuarial_table::values_elaborated
                 << " is not valid in this context."
                 << LMI_FLUSH
                 ;
-            throw std::logic_error("Unreachable"); // Silence compiler warning.
+            throw "Unreachable--silences a compiler diagnostic.";
             }
         }
 }

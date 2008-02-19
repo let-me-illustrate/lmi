@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ncnnnpnn.hpp,v 1.11 2008-01-21 01:32:28 chicares Exp $
+// $Id: ncnnnpnn.hpp,v 1.12 2008-02-19 16:22:15 chicares Exp $
 
 // Ideally we would use imbue an appropriate locale and use some facet
 // like money_put, but most of our compilers's standard libraries don't
@@ -33,9 +33,9 @@
 #include <iomanip>
 #include <ios>
 #include <istream>
+#include <sstream>
 #include <stdexcept>
 #include <string>
-#include <sstream>
 
 // Reference:
 // http://groups.google.com/groups?selm=38C9B681.B8A036DF%40flash.net
@@ -71,12 +71,7 @@ inline std::string ncnnnpnn(long double value)
 
     switch(z % 3)
         {
-#if defined __BORLANDC__ || defined __COMO__
-        // COMPILER !! This 'case' is unreachable; its sole purpose is
-        // to shut up compiler diagnostics that otherwise complain
-        // that the code that immediately follows is unreachable.
-        case 3:
-#endif // borland compiler
+        throw "Unreachable--silences a compiler diagnostic.";
                 do
                     {
                     if('.' == *sin_it) break;

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.38 2008-01-01 18:29:37 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.39 2008-02-19 16:22:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -42,7 +42,6 @@
 
 #include <algorithm> // std::find()
 #include <sstream>
-#include <stdexcept>
 
 // TODO ?? Need unit tests.
 
@@ -151,7 +150,7 @@ configurable_settings& configurable_settings::instance()
         {
         report_exception();
         fatal_error() << "Instantiation failed." << LMI_FLUSH;
-        throw std::logic_error("Unreachable"); // Silence compiler warning.
+        throw "Unreachable--silences a compiler diagnostic.";
         }
 }
 

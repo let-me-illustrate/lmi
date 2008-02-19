@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: msw_workarounds.cpp,v 1.7 2008-01-01 18:29:50 chicares Exp $
+// $Id: msw_workarounds.cpp,v 1.8 2008-02-19 16:22:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -40,9 +40,9 @@
 #endif // LMI_MSW defined.
 
 #include <algorithm>
+#include <functional>
 #include <iterator>
 #include <sstream>
-#include <stdexcept>
 
 MswDllPreloader::MswDllPreloader()
 {
@@ -68,7 +68,7 @@ MswDllPreloader& MswDllPreloader::instance()
         {
         report_exception();
         fatal_error() << "Instantiation failed." << LMI_FLUSH;
-        throw std::logic_error("Unreachable"); // Silence compiler warning.
+        throw "Unreachable--silences a compiler diagnostic.";
         }
 }
 

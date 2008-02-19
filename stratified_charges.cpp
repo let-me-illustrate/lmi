@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.cpp,v 1.21 2008-02-17 15:13:16 chicares Exp $
+// $Id: stratified_charges.cpp,v 1.22 2008-02-19 16:22:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -265,7 +265,7 @@ double stratified_charges::stratified_sepacct_load
             fatal_error() << "Case '" << basis << "' not found." << LMI_FLUSH;
             }
         }
-    return 0.0; // Actually unreachable, but some compilers don't know that.
+    throw "Unreachable--silences a compiler diagnostic.";
 }
 
 //============================================================================
