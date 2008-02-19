@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.26 2008-01-01 18:29:47 chicares Exp $
+// $Id: ledger_xsl.cpp,v 1.27 2008-02-19 00:46:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -53,11 +53,31 @@
 
 namespace
 {
+std::string xsl_filename(Ledger const& ledger)
+{
+    e_ledger_type const z = ledger.GetLedgerType();
+    switch(z)
+        {
+        case e_ill_reg:                      return "illustration_reg.xsl";
+        case e_nasd:                         return "nasd.xsl";
+        case e_group_private_placement:      return "reg_d_group.xsl";
+        case e_offshore_private_placement:   return "reg_d_offshore.xsl";
+        case e_individual_private_placement: return "reg_d_individual.xsl";
+        case e_variable_annuity:             return "variable_annuity.xsl";
+        default:
+            {
+            fatal_error() << "Case '" << z << "' not found." << LMI_FLUSH;
+            }
+        }
+    throw "Unreachable--silences a compiler diagnostic.";
+}
+} // Unnamed namespace.
+
 /// File path for xsl-fo file appropriate for the given ledger.
 
 fs::path xsl_filepath(Ledger const& ledger)
 {
-    std::string xsl_name = ledger.GetLedgerType().str() + ".xsl";
+    std::string xsl_name = xsl_filename(ledger);
     fs::path xsl_file(global_settings::instance().data_directory() / xsl_name);
     if(!fs::exists(xsl_file))
         {
@@ -72,7 +92,6 @@ fs::path xsl_filepath(Ledger const& ledger)
         }
     return xsl_file;
 }
-} // Unnamed namespace.
 
 void experiment0(fs::path const&, fs::path const&, fs::path const&, fs::path const&); // EVGENIY !! EXPERIMENTAL
 

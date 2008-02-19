@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.hpp,v 1.10 2008-01-01 18:29:47 chicares Exp $
+// $Id: ledger_xsl.hpp,v 1.11 2008-02-19 00:46:28 chicares Exp $
 
 #ifndef ledger_xsl_hpp
 #define ledger_xsl_hpp
@@ -35,6 +35,8 @@
 class Ledger;
 
 std::string LMI_SO write_ledger_as_pdf(Ledger const&, fs::path const&, bool experimental = false);
+
+fs::path xsl_filepath(Ledger const&);
 
 // EVGENIY !! EXPERIMENTAL section begins.
 //
