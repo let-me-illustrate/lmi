@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: emit_ledger.cpp,v 1.10 2008-01-01 18:29:39 chicares Exp $
+// $Id: emit_ledger.cpp,v 1.11 2008-02-19 00:46:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -124,9 +124,10 @@ double emit_ledger
 // For now, "emit_pdf_file" writes some intermediate files, but no pdf.
 // As experimentally implemented here, it needs these extra headers:
 
-#include "global_settings.hpp"
 #include "system_command.hpp"
+
 #include <boost/filesystem/convenience.hpp>
+
 #include <sstream>
 
 void experiment
@@ -165,13 +166,11 @@ std::cout
     << std::endl
     ;
 timer0.restart();
-    std::string xsl_name = ledger.GetLedgerType().str() + ".xsl";
-    fs::path xsl_file(global_settings::instance().data_directory() / xsl_name);
     std::ostringstream oss;
     oss
         << "xsltproc"
         << " -o " << fs::change_extension(exemplar, ".xsltproc.xml").string()
-        << " "    << xsl_file.string()
+        << " "    << xsl_filepath(ledger).string()
         << " "    << fs::change_extension(exemplar, ".xml").string()
         ;
 std::cout << "...executing command:\n    " << oss.str() << '\n';

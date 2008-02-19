@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_formatter.cpp,v 1.12 2008-01-01 18:29:46 chicares Exp $
+// $Id: ledger_formatter.cpp,v 1.13 2008-02-19 00:46:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,9 +29,11 @@
 #include "ledger_formatter.hpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "configurable_settings.hpp"
 #include "data_directory.hpp"
 #include "ledger.hpp"
+#include "ledger_xsl.hpp"
 #include "miscellany.hpp" // ios_out_trunc_binary()
 #include "xml_lmi.hpp"
 
@@ -266,8 +268,16 @@ void LedgerFormatter::FormatAsXslFo(std::ostream& os) const
             );
 
         // Second transformation produces xsl-fo output from the old format XML.
+        //
+        // INELEGANT !! It's goofy to get a complete filepath, then
+        // discard parts of it, when they'll presumably need to be
+        // added back later. Apparently there's some sort of caching
+        // going on; whether it has any benefit that could justify
+        // the attendant complexity is not evident.
+
+        LMI_ASSERT(ledger_values_);
         xslt_lmi::Stylesheet const& stylesheet = GetStylesheet
-            (ledger_values_->GetLedgerType().str() + ".xsl"
+            (xsl_filepath(*ledger_values_).leaf()
             );
 
         stylesheet.transform

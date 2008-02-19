@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1011 2008-02-18 17:44:01 chicares Exp $
+// $Id: ChangeLog,v 1.1012 2008-02-19 00:46:28 chicares Exp $
 
 MAINTENANCE
 
@@ -15782,4 +15782,12 @@ Rename files as follows:
   mv xml_notebook_private_placement.xrc skin_reg_d.xrc
   mv xml_notebook_single_premium.xrc    skin_single_premium.xrc
   mv xml_notebook_variable_annuity.xrc  skin_variable_annuity.xrc
+
+20080219T0046Z <gchicares@sbcglobal.net> [1197]
+
+  emit_ledger.cpp
+  ledger_formatter.cpp
+  ledger_xsl.cpp
+  ledger_xsl.hpp
+Look up xsl filenames as changed 20080218T1743Z.
 
