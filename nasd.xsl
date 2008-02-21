@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.76 2008-01-01 18:29:51 chicares Exp $
+    $Id: nasd.xsl,v 1.77 2008-02-21 19:36:18 wboutin Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -968,7 +968,6 @@
       <column composite="0" name="EeMode">|Indiv _Pmt Mode</column>
       <column composite="0" name="ErMode">|Corp _Pmt Mode</column>
       <column composite="0" scalar="InitAnnLoanDueRate">|Assumed _Loan Interest</column>
-      <column composite="0" name="MonthlyFlatExtra">|Flat Extra _Per 1,000</column>
     </xsl:variable>
     <xsl:variable name="illustration_assumption_columns" select="document('')//xsl:variable[@name='illustration_assumption_columns_raw']/column"/>
     <xsl:variable name="columns" select="$illustration_assumption_columns[not(@composite) or (boolean(@composite='1')=$is_composite)]"/>
