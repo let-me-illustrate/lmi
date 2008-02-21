@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.65 2008-01-25 16:53:15 wboutin Exp $
+    $Id: fo_common.xsl,v 1.66 2008-02-21 19:36:18 wboutin Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -958,16 +958,6 @@
       <fo:table-cell number-rows-spanned="2">
         <xsl:call-template name="header-cell-with-border"/>
         <fo:block/>
-      </fo:table-cell>
-      <fo:table-cell number-rows-spanned="2">
-        <xsl:call-template name="header-cell-with-border"/>
-        <fo:block>Corp</fo:block>
-        <fo:block>Premium</fo:block>
-      </fo:table-cell>
-      <fo:table-cell number-rows-spanned="2">
-        <xsl:call-template name="header-cell-with-border"/>
-        <fo:block>Indiv</fo:block>
-        <fo:block>Premium</fo:block>
       </fo:table-cell>
       <fo:table-cell number-rows-spanned="2">
         <xsl:call-template name="header-cell-with-border"/>
