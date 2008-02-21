@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1013 2008-02-19 16:22:16 chicares Exp $
+// $Id: ChangeLog,v 1.1014 2008-02-21 19:36:18 wboutin Exp $
 
 MAINTENANCE
 
@@ -15810,4 +15810,10 @@ Look up xsl filenames as changed 20080218T1743Z.
   xml_lmi.cpp
 Suppress "unreachable" diagnostics uniformly. See:
   http://lists.nongnu.org/archive/html/lmi/2007-03/msg00008.html
+
+20080221T1936Z <wboutin@massmutual.com> [1197]
+
+  fo_common.xsl
+  nasd.xsl
+Fix defect introduced 20080125T1653Z.
 
