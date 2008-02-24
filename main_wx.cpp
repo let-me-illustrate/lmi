@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.95 2008-02-24 12:27:33 chicares Exp $
+// $Id: main_wx.cpp,v 1.96 2008-02-24 17:11:24 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -80,10 +80,9 @@
 #include "tier_document.hpp"
 #include "tier_view.hpp"
 #include "wx_new.hpp"
+#include "wx_utility.hpp"           // class ClipboardEx
 
-#include <wx/clipbrd.h>
 #include <wx/config.h>
-#include <wx/dataobj.h>
 #include <wx/docmdi.h>
 #include <wx/image.h>
 #include <wx/log.h>                 // wxSafeShowMessage()
@@ -764,37 +763,19 @@ void Skeleton::UponPaste(wxClipboardTextEvent& event)
 {
     event.Skip();
 
-    wxTextCtrl* target = dynamic_cast<wxTextCtrl*>(event.GetEventObject());
-    if(!target)
+    wxTextCtrl* t = dynamic_cast<wxTextCtrl*>(event.GetEventObject());
+    if(!t)
         {
         return;
         }
 
-    wxDataFormat link_data_format("Link");
-    if(!wxTheClipboard->IsSupported(link_data_format))
+    std::string const s(ClipboardEx::GetText());
+    if(s.empty())
         {
         return;
         }
 
-    wxClipboardLocker clipboard_locker;
-
-    wxCustomDataObject data_object(link_data_format);
-    wxTheClipboard->GetData(data_object);
-    wxCharBuffer buffer(data_object.GetDataSize(link_data_format));
-    if(!data_object.GetDataHere(link_data_format, buffer.data()))
-        {
-        return;
-        }
-
-    wxTextDataObject test_data;
-    if(!wxTheClipboard->GetData(test_data))
-        {
-        return;
-        }
-
-    std::string const original_string(test_data.GetText());
-    target->WriteText(redelimit_with_semicolons(original_string));
-
+    t->WriteText(redelimit_with_semicolons(s));
     event.Skip(false);
 }
 
@@ -937,20 +918,7 @@ void Skeleton::UponTestFloatingPointEnvironment(wxCommandEvent&)
 
 void Skeleton::UponTestPasting(wxCommandEvent&)
 {
-    wxCustomDataObject* d0 = new wxCustomDataObject("Link");
-    std::string const s("Excel\0[Book1]Sheet1\0R1C1:R3C1\0\0");
-    d0->SetData(s.size(), s.c_str());
-
-    wxTextDataObject* d1 = new wxTextDataObject("1\r\n2\r\n3\r\n");
-
-    wxDataObjectComposite* c = new wxDataObjectComposite();
-    c->Add(d0);
-    c->Add(d1);
-    {
-    wxClipboardLocker z;
-    wxTheClipboard->SetData(c);
-    }
-
+    ClipboardEx::SetText("1\r\n2\r\n3\r\n");
     wxTextCtrl* t = new wxTextCtrl(frame_, wxID_ANY, "Testing...");
     t->SetSelection(-1L, -1L);
 #if defined __WXGTK__
