@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_utility.cpp,v 1.10 2008-01-01 18:29:59 chicares Exp $
+// $Id: wx_utility.cpp,v 1.11 2008-02-24 12:42:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,12 +33,54 @@
 #include "calendar_date.hpp"
 
 #include <wx/bookctrl.h>
+#include <wx/clipbrd.h>
+#include <wx/dataobj.h>
 #include <wx/datetime.h>
 #include <wx/window.h>
 
 #include <algorithm> // std::find()
 #include <cstddef>   // std::size_t
 #include <sstream>
+
+std::string ClipboardEx::GetText()
+{
+    std::string s;
+    // Lock opens clipboard in ctor, and closes it in dtor.
+    wxClipboardLocker lock;
+    if(!lock)
+        {
+        fatal_error() << "Unable to acquire lock for clipboard." << LMI_FLUSH;
+        }
+    else if(!wxTheClipboard->IsSupported(wxDF_TEXT))
+        {
+        fatal_error() << "Clipboard does not support text format." << LMI_FLUSH;
+        }
+    else
+        {
+        wxTextDataObject z;
+        wxTheClipboard->GetData(z);
+        s = z.GetText();
+        }
+
+    return s;
+}
+
+void ClipboardEx::SetText(std::string const& s)
+{
+    wxClipboardLocker clipboard_locker;
+    if(!clipboard_locker)
+        {
+        // TODO ?? CALCULATION_SUMMARY Should there be a diagnostic?
+        return;
+        }
+
+    // TODO ?? MPATROL !! Probably operator new(std::size_t, wx_allocator)
+    // should be used here.
+    wxTextDataObject* TextDataObject = new wxTextDataObject(s);
+
+    // The clipboard owns the data.
+    wxTheClipboard->SetData(TextDataObject);
+}
 
 namespace
 {

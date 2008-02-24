@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.73 2008-02-07 14:51:17 chicares Exp $
+// $Id: illustration_view.cpp,v 1.74 2008-02-24 12:42:12 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -56,11 +56,10 @@
 #include "safely_dereference_as.hpp"
 #include "timer.hpp"
 #include "wx_new.hpp"
+#include "wx_utility.hpp" // class ClipboardEx
 
 #include <boost/scoped_ptr.hpp>
 
-#include <wx/clipbrd.h>
-#include <wx/dataobj.h>
 #include <wx/html/htmlwin.h>
 #include <wx/html/htmprint.h>
 #include <wx/icon.h>
@@ -325,13 +324,6 @@ void IllustrationView::UponUpdateProperties(wxUpdateUIEvent& e)
 
 void IllustrationView::CopyLedgerToClipboard(enum_copy_option option)
 {
-    wxClipboardLocker clipboard_locker;
-    if(!clipboard_locker)
-        {
-        // TODO ?? CALCULATION_SUMMARY Should there be a diagnostic?
-        return;
-        }
-
     Timer timer;
 
     std::ostringstream oss;
@@ -346,14 +338,9 @@ void IllustrationView::CopyLedgerToClipboard(enum_copy_option option)
         ledger_formatter_.FormatAsLightTSV(oss);
         }
 
+    ClipboardEx::SetText(oss.str());
+
     status() << "Format: " << timer.stop().elapsed_msec_str() << std::flush;
-
-    // TODO ?? MPATROL !! Probably operator new(std::size_t, wx_allocator)
-    // should be used here.
-    wxTextDataObject* TextDataObject = new wxTextDataObject(oss.str());
-
-    // The clipboard owns the data.
-    wxTheClipboard->SetData(TextDataObject);
 }
 
 void IllustrationView::Pdf(std::string const& action) const

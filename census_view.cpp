@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.68 2008-02-07 17:58:41 chicares Exp $
+// $Id: census_view.cpp,v 1.69 2008-02-24 12:42:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -43,9 +43,8 @@
 #include "mvc_controller.hpp"
 #include "safely_dereference_as.hpp"
 #include "wx_new.hpp"
+#include "wx_utility.hpp" // class ClipboardEx
 
-#include <wx/clipbrd.h>   // Used only by GetClipboardText().
-#include <wx/dataobj.h>   // Used only by GetClipboardText().
 #include <wx/icon.h>
 #include <wx/listctrl.h>
 #include <wx/menu.h>
@@ -1063,35 +1062,6 @@ void diagnose_sequence_string_problems(IllusInputParms& input)
 }
 } // Unnamed namespace.
 
-// INELEGANT !! Shouldn't this be in a different translation unit?
-
-namespace
-{
-// Based on 2005-03-14T13:12:15 +0100 email from <vadim@tt-solutions.com>.
-std::string GetClipboardText()
-{
-    std::string s;
-    // Lock opens clipboard in ctor, and closes it in dtor.
-    wxClipboardLocker lock;
-    if(!lock)
-        {
-        fatal_error() << "Unable to acquire lock for clipboard." << LMI_FLUSH;
-        }
-    else if(!wxTheClipboard->IsSupported(wxDF_TEXT))
-        {
-        fatal_error() << "Clipboard does not support text format." << LMI_FLUSH;
-        }
-    else
-        {
-        wxTextDataObject z;
-        wxTheClipboard->GetData(z);
-        s = z.GetText();
-        }
-
-    return s;
-}
-} // Unnamed namespace.
-
 // Print tab-delimited output to file loadable in spreadsheet programs.
 void CensusView::UponRunCaseToSpreadsheet(wxCommandEvent&)
 {
@@ -1140,7 +1110,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
         class_parms().push_back(case_parms()[0]);
         }
 
-    std::string census_data = GetClipboardText();
+    std::string const census_data = ClipboardEx::GetText();
 
     std::vector<std::string> headers;
     std::vector<Input> cells;
