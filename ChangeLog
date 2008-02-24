@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1014 2008-02-21 19:36:18 wboutin Exp $
+// $Id: ChangeLog,v 1.1015 2008-02-24 12:30:30 chicares Exp $
 
 MAINTENANCE
 
@@ -15816,4 +15816,14 @@ Suppress "unreachable" diagnostics uniformly. See:
   fo_common.xsl
   nasd.xsl
 Fix defect introduced 20080125T1653Z.
+
+20080224T1227Z <gchicares@sbcglobal.net> [1197]
+
+  main_wx.cpp
+Expose new product editor to privileged users.
+
+20080224T1230Z <gchicares@sbcglobal.net> [1197]
+
+  version.hpp
+Mark release candidate.
 
