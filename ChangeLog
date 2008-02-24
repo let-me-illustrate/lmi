@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1015 2008-02-24 12:30:30 chicares Exp $
+// $Id: ChangeLog,v 1.1016 2008-02-24 17:11:24 chicares Exp $
 
 MAINTENANCE
 
@@ -15826,4 +15826,28 @@ Expose new product editor to privileged users.
 
   version.hpp
 Mark release candidate.
+
+20080224T1242Z <gchicares@sbcglobal.net> [1197]
+
+  census_view.cpp
+  illustration_view.cpp
+  wx_utility.cpp
+  wx_utility.hpp
+Refactor.
+
+20080224T1405Z <gchicares@sbcglobal.net> [1195]
+
+  wx_utility.cpp
+Rewrite clipboard functions.
+
+20080224T1709Z <gchicares@sbcglobal.net> [1195]
+
+  wx_utility.cpp
+Return empty text from clipboard without complaint.
+
+20080224T1711Z <gchicares@sbcglobal.net> [1195]
+
+  main_wx.cpp
+Rewrite paste handler and its unit test. See:
+  http://lists.nongnu.org/archive/html/lmi/2008-02/msg00033.html
 
