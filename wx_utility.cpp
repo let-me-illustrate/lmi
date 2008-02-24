@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_utility.cpp,v 1.12 2008-02-24 14:05:17 chicares Exp $
+// $Id: wx_utility.cpp,v 1.13 2008-02-24 17:09:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -43,10 +43,10 @@
 #include <cstddef>   // std::size_t
 #include <sstream>
 
-/// Return whatever plain text the clipboard might contain.
+/// Return whatever plain text the clipboard contains, or an empty
+/// string if it contains none.
 ///
-/// Throw an exception if the clipboard cannot be locked, or if it
-/// contains no plain text.
+/// Throw an exception if the clipboard cannot be locked.
 
 std::string ClipboardEx::GetText()
 {
@@ -58,7 +58,7 @@ std::string ClipboardEx::GetText()
 
     if(!wxTheClipboard->IsSupported(wxDF_TEXT))
         {
-        fatal_error() << "Clipboard contains no plain text." << LMI_FLUSH;
+        return std::string();
         }
 
     wxTextDataObject z;
