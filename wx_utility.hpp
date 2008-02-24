@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_utility.hpp,v 1.8 2008-01-01 18:29:59 chicares Exp $
+// $Id: wx_utility.hpp,v 1.9 2008-02-24 12:42:12 chicares Exp $
 
 #ifndef wx_utility_hpp
 #define wx_utility_hpp
@@ -52,6 +52,19 @@ To c_cast(From z)
 {
     return (To)(z);
 }
+
+/// Encapsulate wx clipboard.
+///
+/// It has proven all too easy when using wxTheClipboard directly to
+/// overlook locking the clipboard or checking return codes, or to be
+/// misled by the misnomer IsSupported().
+
+class ClipboardEx
+{
+  public:
+    static std::string GetText();
+    static void        SetText(std::string const&);
+};
 
 /// Function template Connect() forwards to wxEvtHandler::Connect().
 /// It is simpler to write, because it casts its 'handler' argument
