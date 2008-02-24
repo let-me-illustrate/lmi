@@ -17,14 +17,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: version.hpp,v 1.59 2008-01-25 19:21:46 wboutin Exp $
+// $Id: version.hpp,v 1.60 2008-02-24 12:30:30 chicares Exp $
 
 #ifndef version_hpp
 #define version_hpp
 
 #include "config.hpp"
 
-#define LMI_VERSION "20080125T1921Z"
+#define LMI_VERSION "20080224T1230Z"
 
 #endif // version_hpp
 
