@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_utility.cpp,v 1.11 2008-02-24 12:42:12 chicares Exp $
+// $Id: wx_utility.cpp,v 1.12 2008-02-24 14:05:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,6 +31,7 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "calendar_date.hpp"
+#include "wx_new.hpp"
 
 #include <wx/bookctrl.h>
 #include <wx/clipbrd.h>
@@ -42,43 +43,42 @@
 #include <cstddef>   // std::size_t
 #include <sstream>
 
+/// Return whatever plain text the clipboard might contain.
+///
+/// Throw an exception if the clipboard cannot be locked, or if it
+/// contains no plain text.
+
 std::string ClipboardEx::GetText()
 {
-    std::string s;
-    // Lock opens clipboard in ctor, and closes it in dtor.
     wxClipboardLocker lock;
     if(!lock)
         {
-        fatal_error() << "Unable to acquire lock for clipboard." << LMI_FLUSH;
-        }
-    else if(!wxTheClipboard->IsSupported(wxDF_TEXT))
-        {
-        fatal_error() << "Clipboard does not support text format." << LMI_FLUSH;
-        }
-    else
-        {
-        wxTextDataObject z;
-        wxTheClipboard->GetData(z);
-        s = z.GetText();
+        fatal_error() << "Unable to lock clipboard." << LMI_FLUSH;
         }
 
-    return s;
+    if(!wxTheClipboard->IsSupported(wxDF_TEXT))
+        {
+        fatal_error() << "Clipboard contains no plain text." << LMI_FLUSH;
+        }
+
+    wxTextDataObject z;
+    wxTheClipboard->GetData(z);
+    return std::string(z.GetText());
 }
+
+/// Place plain text on the clipboard.
+///
+/// Throw an exception if the clipboard cannot be locked.
 
 void ClipboardEx::SetText(std::string const& s)
 {
-    wxClipboardLocker clipboard_locker;
-    if(!clipboard_locker)
+    wxClipboardLocker lock;
+    if(!lock)
         {
-        // TODO ?? CALCULATION_SUMMARY Should there be a diagnostic?
-        return;
+        fatal_error() << "Unable to lock clipboard." << LMI_FLUSH;
         }
 
-    // TODO ?? MPATROL !! Probably operator new(std::size_t, wx_allocator)
-    // should be used here.
-    wxTextDataObject* TextDataObject = new wxTextDataObject(s);
-
-    // The clipboard owns the data.
+    wxTextDataObject* TextDataObject = new(wx) wxTextDataObject(s);
     wxTheClipboard->SetData(TextDataObject);
 }
 
