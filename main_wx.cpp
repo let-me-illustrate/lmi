@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.96 2008-02-24 17:11:24 chicares Exp $
+// $Id: main_wx.cpp,v 1.97 2008-02-25 23:12:11 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -910,25 +910,38 @@ void Skeleton::UponTestFloatingPointEnvironment(wxCommandEvent&)
     status() << "End test of floating-point environment." << std::flush;
 }
 
+namespace
+{
+/// Send a paste message to a window.
+///
+/// Design rationale--see:
+///   http://lists.nongnu.org/archive/html/lmi/2008-02/msg00005.html
+///
+/// SOMEDAY !! Seek a gtk equivalent for msw-specific code.
+
+void send_paste_message_to(wxWindow const& w)
+{
+#if defined __WXGTK__
+    warning() << "Not yet implemented." << LMI_FLUSH;
+#elif defined __WXMSW__
+    ::SendMessage(reinterpret_cast<HWND>(w.GetHandle()), WM_PASTE, 0, 0);
+#else  // Unsupported platform.
+#   error Platform not yet supported. Consider contributing support.
+#endif // Unsupported platform.
+}
+} // Unnamed namespace.
+
 /// Test custom handler UponPaste().
 ///
 /// Add more tests--see:
 ///   http://savannah.nongnu.org/task/?5224
-/// and seek a gtk equivalent for msw-specific code.
 
 void Skeleton::UponTestPasting(wxCommandEvent&)
 {
     ClipboardEx::SetText("1\r\n2\r\n3\r\n");
     wxTextCtrl* t = new wxTextCtrl(frame_, wxID_ANY, "Testing...");
     t->SetSelection(-1L, -1L);
-#if defined __WXGTK__
-    warning() << "Not yet implemented." << LMI_FLUSH;
-#elif defined __WXMSW__
-    HWND h = reinterpret_cast<HWND>(t->GetHandle());
-    ::SendMessage(h, WM_PASTE, 0, 0);
-#else  // Unsupported platform.
-#   error Platform not yet supported. Consider contributing support.
-#endif // Unsupported platform.
+    send_paste_message_to(*t);
     if("1;2;3" != t->GetValue())
         {
         warning() << "'1;2;3' != '" << t->GetValue() << "'" << LMI_FLUSH;
