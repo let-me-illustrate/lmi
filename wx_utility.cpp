@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_utility.cpp,v 1.13 2008-02-24 17:09:38 chicares Exp $
+// $Id: wx_utility.cpp,v 1.14 2008-02-26 03:01:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -54,11 +54,6 @@ std::string ClipboardEx::GetText()
     if(!lock)
         {
         fatal_error() << "Unable to lock clipboard." << LMI_FLUSH;
-        }
-
-    if(!wxTheClipboard->IsSupported(wxDF_TEXT))
-        {
-        return std::string();
         }
 
     wxTextDataObject z;

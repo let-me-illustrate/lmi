@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1016 2008-02-24 17:11:24 chicares Exp $
+// $Id: ChangeLog,v 1.1017 2008-02-26 03:01:17 chicares Exp $
 
 MAINTENANCE
 
@@ -15850,4 +15850,27 @@ Return empty text from clipboard without complaint.
   main_wx.cpp
 Rewrite paste handler and its unit test. See:
   http://lists.nongnu.org/archive/html/lmi/2008-02/msg00033.html
+
+20080225T2312Z <gchicares@sbcglobal.net> [1195]
+
+  main_wx.cpp
+Refactor.
+
+20080226T0127Z <gchicares@sbcglobal.net> [1195]
+
+  main_wx.cpp
+Add more tests, revealing a shortcoming: spreadsheet row vectors have
+not yet been addressed. See:
+  http://savannah.nongnu.org/task/?5224
+
+20080226T0259Z <gchicares@sbcglobal.net> [1195]
+
+  main_wx.cpp
+Address the shortcoming revealed 20080226T0127Z.
+
+20080226T0301Z <gchicares@sbcglobal.net> [1195]
+
+  wx_utility.cpp
+Simplify--see:
+  http://lists.nongnu.org/archive/html/lmi/2008-02/msg00038.html
 
