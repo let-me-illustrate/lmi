@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1017 2008-02-26 03:01:17 chicares Exp $
+// $Id: ChangeLog,v 1.1018 2008-02-28 06:06:23 chicares Exp $
 
 MAINTENANCE
 
@@ -15873,4 +15873,22 @@ Address the shortcoming revealed 20080226T0127Z.
   wx_utility.cpp
 Simplify--see:
   http://lists.nongnu.org/archive/html/lmi/2008-02/msg00038.html
+
+20080228T0339Z <gchicares@sbcglobal.net> [1195]
+
+  mvc_controller.cpp
+  preferences_view.xrc
+  skin.xrc
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_reg_d.xrc
+  skin_single_premium.xrc
+  skin_variable_annuity.xrc
+Remove obsolete wxDIALOG_EX_CONTEXTHELP workaround. See:
+  http://lists.nongnu.org/archive/html/lmi/2008-02/msg00052.html
+
+20080228T0606Z <gchicares@sbcglobal.net> [1195]
+
+  skin.xrc
+Add help text.
 

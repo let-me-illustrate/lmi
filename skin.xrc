@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin.xrc,v 1.2 2008-02-28 03:39:27 chicares Exp $
+    $Id: skin.xrc,v 1.3 2008-02-28 06:06:23 chicares Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -58,6 +58,7 @@
                     <flag>wxGROW|wxALL</flag>
                     <border>4</border>
                     <object class="wxListBox" name="ProductName">
+                        <help>Product</help>
 <!-- WX !! If this "size" line... -->
                         <size>-1,0</size>
 <!--
@@ -88,14 +89,15 @@ demonstrate a defect in the wx library. See
                             <flag>wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
                             <border>2</border>
                             <object class="wxRadioBox" name="AvoidMecMethod">
+                                <help>MEC avoidance</help>
                                 <style>wxRA_SPECIFY_COLS</style>
                                 <label>MEC avoidance</label>
                                 <dimension>1</dimension>
                                 <selection>0</selection>
                                 <content>
-                                    <item>Allow MEC</item>
-                                    <item>Reduce premium</item>
-                                    <item>Increase specified amount</item>
+                                    <item helptext="Do not try to avoid a MEC">Allow MEC</item>
+                                    <item helptext="Avoid a MEC by decreasing premium">Reduce premium</item>
+                                    <item helptext="Avoid a MEC by increasing specified amount">Increase specified amount</item>
                                 </content>
                             </object>
                         </object>
@@ -103,14 +105,15 @@ demonstrate a defect in the wx library. See
                             <flag>wxALIGN_RIGHT|wxALIGN_TOP|wxALL</flag>
                             <border>2</border>
                             <object class="wxRadioBox" name="DefinitionOfLifeInsurance">
+                                <help>Definition of life insurance</help>
                                 <style>wxRA_SPECIFY_COLS</style>
                                 <label>Definition of life insurance</label>
                                 <dimension>1</dimension>
                                 <selection>0</selection>
                                 <content>
-                                    <item>CVAT</item>
-                                    <item>GPT</item>
-                                    <item>Not 7702 compliant</item>
+                                    <item helptext="Definition of life insurance is cash value accumulation test">CVAT</item>
+                                    <item helptext="Definition of life insurance is guideline premium test">GPT</item>
+                                    <item helptext="Do not comply with US definition of life insurance">Not 7702 compliant</item>
                                 </content>
                             </object>
                         </object>
@@ -126,16 +129,17 @@ demonstrate a defect in the wx library. See
                             <flag>wxALIGN_LEFT|wxALIGN_BOTTOM|wxALL</flag>
                             <border>2</border>
                             <object class="wxRadioBox" name="DefinitionOfMaterialChange">
+                                <help>Definition of material change</help>
                                 <style>wxRA_SPECIFY_COLS</style>
                                 <label>Material change definition</label>
                                 <dimension>1</dimension>
                                 <selection>0</selection>
                                 <content>
-                                    <item>Unnecessary premium</item>
-                                    <item>Benefit increase</item>
-                                    <item>Later of increase or unnecessary premium</item>
-                                    <item>Earlier of increase or unnecessary premium</item>
-                                    <item>GPT adjustment event</item>
+                                    <item helptext="Recognize material change whenever unnecessary premium is paid">Unnecessary premium</item>
+                                    <item helptext="Recognize material change whenever benefit increases">Benefit increase</item>
+                                    <item helptext="Recognize material change upon the later of unnecessary premium or benefit increase">Later of increase or unnecessary premium</item>
+                                    <item helptext="Recognize material change upon the earlier of unnecessary premium or benefit increase">Earlier of increase or unnecessary premium</item>
+                                    <item helptext="Recognize material change at each guideline premium adjustment event">GPT adjustment event</item>
                                 </content>
                             </object>
                         </object>
@@ -160,6 +164,7 @@ demonstrate a defect in the wx library. See
                                         <object class="sizeritem">
                                             <flag>wxGROW</flag>
                                             <object class="wxTextCtrl" name="OffshoreCorridorFactor">
+                                                <help>Corridor factor for contracts that do not comply with US definition of life insurance</help>
                                                 <size>10,-1</size>
                                             </object>
                                         </object>
@@ -180,6 +185,7 @@ demonstrate a defect in the wx library. See
                                         <object class="sizeritem">
                                             <flag>wxGROW</flag>
                                             <object class="wxTextCtrl" name="MaximumNaar">
+                                                <help>Maximum net amount at risk, typically imposed by reinsurer; sufficient account value is paid out each month to honor this limit</help>
                                                 <size>10,-1</size>
                                             </object>
                                         </object>
@@ -189,6 +195,7 @@ demonstrate a defect in the wx library. See
                                     <flag>wxALIGN_LEFT|wxALL</flag>
                                     <border>4</border>
                                     <object class="wxCheckBox" name="AmortizePremiumLoad">
+                                        <help>Amortize all premium load components; charge an extra interest spread instead</help>
                                         <label>Amortize premium load</label>
                                     </object>
                                 </object>
@@ -207,6 +214,7 @@ demonstrate a defect in the wx library. See
                                         <object class="sizeritem">
                                             <flag>wxGROW</flag>
                                             <object class="wxDatePickerCtrl" name="EffectiveDate">
+                                                <help>Case effective date</help>
                                                 <size>80,-1</size>
                                             </object>
                                         </object>
@@ -216,6 +224,7 @@ demonstrate a defect in the wx library. See
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
                                     <border>4</border>
                                     <object class="wxCheckBox" name="EffectiveDateToday">
+                                        <help>Set effective date to current date</help>
                                         <label>Case effective today</label>
                                     </object>
                                 </object>
@@ -235,6 +244,7 @@ demonstrate a defect in the wx library. See
         <object class="sizeritem">
             <flag>wxGROW</flag>
             <object class="wxTextCtrl" name="Comments">
+                <help>Freeform comments</help>
                 <size>180,-1</size>
             </object>
         </object>
@@ -248,6 +258,7 @@ demonstrate a defect in the wx library. See
         <object class="sizeritem">
             <flag>wxGROW</flag>
             <object class="wxTextCtrl" name="ExtraMonthlyCustodialFee">
+                <help>Additional monthly policy fee (e.g., for fund custodian charges)</help>
                 <size>180,-1</size>
                 <value>0</value>
             </object>
@@ -262,6 +273,7 @@ demonstrate a defect in the wx library. See
         <object class="sizeritem">
             <flag>wxGROW</flag>
             <object class="wxTextCtrl" name="ExtraCompensationOnAssets">
+                <help>Additional separate-account asset charge (e.g., for negotiated asset-based compensation)</help>
                 <size>180,-1</size>
                 <value>0</value>
             </object>
@@ -276,6 +288,7 @@ demonstrate a defect in the wx library. See
         <object class="sizeritem">
             <flag>wxGROW</flag>
             <object class="wxTextCtrl" name="ExtraCompensationOnPremium">
+                <help>Additional premium load (e.g., for negotiated premium-based compensation)</help>
                 <size>180,-1</size>
                 <value>0</value>
             </object>
@@ -304,6 +317,7 @@ demonstrate a defect in the wx library. See
                             <flag>wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
                             <border>2</border>
                             <object class="wxRadioBox" name="GroupUnderwritingType">
+                                <help>Group underwriting</help>
                                 <style>wxRA_SPECIFY_COLS</style>
                                 <label>Group underwriting</label>
                                 <dimension>1</dimension>
@@ -334,6 +348,7 @@ demonstrate a defect in the wx library. See
                                             <flag>wxGROW|wxALL</flag>
                                             <border>4</border>
                                             <object class="wxCheckBox" name="BlendGender">
+                                                <help>Blend mortality by gender</help>
                                                 <label>Male</label>
                                             </object>
                                         </object>
@@ -341,6 +356,7 @@ demonstrate a defect in the wx library. See
                                             <flag>wxGROW|wxALL</flag>
                                             <border>4</border>
                                             <object class="wxTextCtrl" name="MaleProportion">
+                                                <help>Male percentage for mortality blending</help>
                                                 <size>40,-1</size>
                                                 <value>1</value>
                                             </object>
@@ -349,6 +365,7 @@ demonstrate a defect in the wx library. See
                                             <flag>wxGROW|wxALL</flag>
                                             <border>4</border>
                                             <object class="wxCheckBox" name="BlendSmoking">
+                                                <help>Blend mortality by smoking</help>
                                                 <label>Tobacco</label>
                                             </object>
                                         </object>
@@ -356,6 +373,7 @@ demonstrate a defect in the wx library. See
                                             <flag>wxGROW|wxALL</flag>
                                             <border>4</border>
                                             <object class="wxTextCtrl" name="NonsmokerProportion">
+                                                <help>Nonsmoker percentage for mortality blending</help>
                                                 <size>40,-1</size>
                                                 <value>1</value>
                                             </object>
@@ -390,6 +408,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxGROW</flag>
                                     <object class="wxTextCtrl" name="NumberOfIdenticalLives">
+                                        <help>Number of identical lives represented by this cell</help>
                                         <size>10,-1</size>
                                     </object>
                                 </object>
@@ -409,6 +428,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxGROW</flag>
                                     <object class="wxDatePickerCtrl" name="LastCoiReentryDate">
+                                        <help>Last COI reentry date</help>
                                         <size>80,-1</size>
                                     </object>
                                 </object>
@@ -417,18 +437,21 @@ demonstrate a defect in the wx library. See
                         <object class="sizeritem">
                             <flag>wxGROW|wxALL</flag>
                             <object class="wxCheckBox" name="IncludeInComposite">
+                                <help>Include this individual in any group composite</help>
                                 <label>Include in composite</label>
                             </object>
                         </object>
                         <object class="sizeritem">
                             <flag>wxGROW|wxALL</flag>
                             <object class="wxCheckBox" name="RetireesCanEnroll">
+                                <help>Let individuals enroll after their retirement</help>
                                 <label>Retirees eligible to enroll</label>
                             </object>
                         </object>
                         <object class="sizeritem">
                             <flag>wxGROW|wxALL</flag>
                             <object class="wxCheckBox" name="UsePartialMortality">
+                                <help>Use partial mortality (for group composite only)</help>
                                 <label>Partial mortality</label>
                             </object>
                         </object>
@@ -446,6 +469,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxGROW</flag>
                                     <object class="wxComboBox" name="PartialMortalityTable">
+                                        <help>Partial mortality table</help>
                                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                                         <selection>0</selection>
                                         <content>
@@ -458,6 +482,7 @@ demonstrate a defect in the wx library. See
                         <object class="sizeritem">
                             <flag>wxGROW|wxALL</flag>
                             <object class="wxCheckBox" name="UseExperienceRating">
+                                <help>Use experience rating (composite only)--available only with both partial mortality and month-by-month</help>
                                 <label>Experience rating</label>
                             </object>
                         </object>
@@ -475,6 +500,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxGROW</flag>
                                     <object class="wxTextCtrl" name="ExperienceRatingInitialKFactor">
+                                        <help>Initial k factor for experience rating</help>
                                         <size>10,-1</size>
                                     </object>
                                 </object>
@@ -486,6 +512,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxGROW|wxALL</flag>
                                     <object class="wxCheckBox" name="OverrideExperienceReserveRate">
+                                        <help>Override experience-rating reserve rate</help>
                                         <label>Override experience-rating reserve rate</label>
                                     </object>
                                 </object>
@@ -505,6 +532,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxGROW|wxALL</flag>
                                     <object class="wxTextCtrl" name="ExperienceReserveRate">
+                                        <help>Experience-rating reserve rate</help>
                                         <size>10,-1</size>
                                     </object>
                                 </object>
@@ -520,24 +548,26 @@ demonstrate a defect in the wx library. See
                         <growablerows>0,1</growablerows>
                         <object class="sizeritem">
                             <object class="wxRadioBox" name="RunOrder">
+                                <help>Group processing order</help>
                                 <style>wxRA_SPECIFY_COLS</style>
                                 <label>Processing order</label>
                                 <content>
-                                    <item>Life by life</item>
-                                    <item>Month by month</item>
+                                    <item helptext="Run a group of cells in series">Life by life</item>
+                                    <item helptext="Run a group of cells in parallel">Month by month</item>
                                 </content>
                             </object>
                         </object>
                         <object class="sizeritem">
                             <flag>wxGROW|wxALL</flag>
                             <object class="wxRadioBox" name="SurviveToType">
+                                <help>Survival limit for partial mortality</help>
                                 <style>wxRA_SPECIFY_COLS</style>
                                 <label>Survival limit</label>
                                 <content>
-                                    <item>No survival limit</item>
-                                    <item>Survive to age limit</item>
-                                    <item>Survive to duration limit</item>
-                                    <item>Survive to life expectancy</item>
+                                    <item helptext="Partial mortality: no particular limit on survival">No survival limit</item>
+                                    <item helptext="Partial mortality: survival limited to input age">Survive to age limit</item>
+                                    <item helptext="Partial mortality: survival limited to input duration">Survive to duration limit</item>
+                                    <item helptext="Partial mortality: survival limited to life expectancy">Survive to life expectancy</item>
                                 </content>
                             </object>
                         </object>
@@ -555,6 +585,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxGROW</flag>
                                     <object class="wxSpinCtrl" name="SurviveToAge">
+                                        <help>Partial mortality survival age limit</help>
                                         <size>10,-1</size>
                                         <max>100</max>
                                     </object>
@@ -568,6 +599,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxGROW</flag>
                                     <object class="wxSpinCtrl" name="SurviveToYear">
+                                        <help>Partial mortality survival year limit</help>
                                         <size>10,-1</size>
                                         <max>100</max>
                                         <value>99</value>
@@ -595,6 +627,7 @@ demonstrate a defect in the wx library. See
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxTextCtrl" name="CurrentCoiMultiplier">
+                        <help>Multiplier for current COI rates</help>
                         <size>180,-1</size>
                     </object>
                 </object>
@@ -608,6 +641,7 @@ demonstrate a defect in the wx library. See
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxTextCtrl" name="PartialMortalityMultiplier">
+                        <help>Multiplier for partial mortality table</help>
                         <size>180,-1</size>
                     </object>
                 </object>
@@ -643,6 +677,7 @@ demonstrate a defect in the wx library. See
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
                             <object class="wxTextCtrl" name="InsuredName">
+                                <help>Insured full name</help>
                             </object>
                         </object>
                     </object>
@@ -662,6 +697,7 @@ demonstrate a defect in the wx library. See
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
                             <object class="wxTextCtrl" name="Address">
+                                <help>Insured street address</help>
                             </object>
                         </object>
                         <object class="sizeritem">
@@ -673,6 +709,7 @@ demonstrate a defect in the wx library. See
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
                             <object class="wxTextCtrl" name="City">
+                                <help>Insured city</help>
                             </object>
                         </object>
                     </object>
@@ -690,6 +727,7 @@ demonstrate a defect in the wx library. See
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
                             <object class="wxComboBox" name="State">
+                                <help>Insured state</help>
                                 <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                             </object>
                         </object>
@@ -702,6 +740,7 @@ demonstrate a defect in the wx library. See
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
                             <object class="wxTextCtrl" name="ZipCode">
+                                <help>Insured ZIP code</help>
                             </object>
                         </object>
                         <object class="sizeritem">
@@ -713,6 +752,7 @@ demonstrate a defect in the wx library. See
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
                             <object class="wxComboBox" name="Country">
+                                <help>Country (ISO 3166-1-Alpha-2 code)</help>
                                 <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                             </object>
                         </object>
@@ -725,6 +765,7 @@ demonstrate a defect in the wx library. See
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
                             <object class="wxTextCtrl" name="EmployeeClass">
+                                <help>Employee class</help>
                             </object>
                         </object>
                     </object>
@@ -753,6 +794,7 @@ demonstrate a defect in the wx library. See
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
                             <object class="wxTextCtrl" name="CorporationName">
+                                <help>Corporation name</help>
                             </object>
                         </object>
                     </object>
@@ -772,6 +814,7 @@ demonstrate a defect in the wx library. See
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
                             <object class="wxTextCtrl" name="CorporationAddress">
+                                <help>Corporation street address</help>
                             </object>
                         </object>
                         <object class="sizeritem">
@@ -783,6 +826,7 @@ demonstrate a defect in the wx library. See
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
                             <object class="wxTextCtrl" name="CorporationCity">
+                                <help>Corporation city</help>
                             </object>
                         </object>
                     </object>
@@ -800,6 +844,7 @@ demonstrate a defect in the wx library. See
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
                             <object class="wxComboBox" name="CorporationState">
+                                <help>Corporation state</help>
                                 <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                             </object>
                         </object>
@@ -812,6 +857,7 @@ demonstrate a defect in the wx library. See
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
                             <object class="wxTextCtrl" name="CorporationZipCode">
+                                <help>Corporation ZIP code</help>
                             </object>
                         </object>
                         <object class="sizeritem">
@@ -823,6 +869,7 @@ demonstrate a defect in the wx library. See
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
                             <object class="wxComboBox" name="corporation_country">
+                                <help>Corporation country (ISO 3166-1-Alpha-2 code)</help>
                                 <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                             </object>
                         </object>
@@ -852,6 +899,7 @@ demonstrate a defect in the wx library. See
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
                             <object class="wxTextCtrl" name="AgentName">
+                                <help>Agent full name</help>
                             </object>
                         </object>
                     </object>
@@ -871,6 +919,7 @@ demonstrate a defect in the wx library. See
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
                             <object class="wxTextCtrl" name="AgentAddress">
+                                <help>Agent street address</help>
                             </object>
                         </object>
                         <object class="sizeritem">
@@ -882,6 +931,7 @@ demonstrate a defect in the wx library. See
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
                             <object class="wxTextCtrl" name="AgentCity">
+                                <help>Agent city</help>
                             </object>
                         </object>
                     </object>
@@ -899,6 +949,7 @@ demonstrate a defect in the wx library. See
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
                             <object class="wxComboBox" name="AgentState">
+                                <help>Agent state</help>
                                 <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                             </object>
                         </object>
@@ -911,6 +962,7 @@ demonstrate a defect in the wx library. See
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
                             <object class="wxTextCtrl" name="AgentZipCode">
+                                <help>Agent ZIP code</help>
                             </object>
                         </object>
                         <object class="sizeritem">
@@ -922,6 +974,7 @@ demonstrate a defect in the wx library. See
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
                             <object class="wxComboBox" name="agent_country">
+                                <help>Agent country (ISO 3166-1-Alpha-2 code)</help>
                                 <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                             </object>
                         </object>
@@ -947,14 +1000,15 @@ demonstrate a defect in the wx library. See
                     <flag>wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
                     <border>2</border>
                     <object class="wxRadioBox" name="Gender">
+                        <help>Gender</help>
                         <style>wxRA_SPECIFY_COLS</style>
                         <label>Gender</label>
                         <dimension>1</dimension>
                         <selection>0</selection>
                         <content>
-                            <item>Female</item>
-                            <item>Male</item>
-                            <item>Unisex</item>
+                            <item helptext="Female rates">Female</item>
+                            <item helptext="Male rates">Male</item>
+                            <item helptext="Rates not differentiated by gender">Unisex</item>
                         </content>
                     </object>
                 </object>
@@ -962,15 +1016,16 @@ demonstrate a defect in the wx library. See
                     <flag>wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
                     <border>2</border>
                     <object class="wxRadioBox" name="UnderwritingClass">
+                        <help>Underwriting class</help>
                         <style>wxRA_SPECIFY_COLS</style>
                         <label>Class</label>
                         <dimension>1</dimension>
                         <selection>0</selection>
                         <content>
-                            <item>Preferred</item>
-                            <item>Standard</item>
-                            <item>Rated</item>
-                            <item>Ultra</item>
+                            <item helptext="Preferred class">Preferred</item>
+                            <item helptext="Standard class">Standard</item>
+                            <item helptext="Table rated">Rated</item>
+                            <item helptext="Ultra-preferred class">Ultra</item>
                         </content>
                     </object>
                 </object>
@@ -978,14 +1033,15 @@ demonstrate a defect in the wx library. See
                     <flag>wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
                     <border>2</border>
                     <object class="wxRadioBox" name="Smoking">
+                        <help>Smoking</help>
                         <style>wxRA_SPECIFY_COLS</style>
                         <label>Smoker</label>
                         <dimension>1</dimension>
                         <selection>0</selection>
                         <content>
-                            <item>Smoker</item>
-                            <item>Nonsmoker</item>
-                            <item>Unismoke</item>
+                            <item helptext="Smoker or tobacco user, as applicable">Smoker</item>
+                            <item helptext="Nonsmoker or non-tobacco-user, as applicable">Nonsmoker</item>
+                            <item helptext="Rates not differentiated by smoking">Unismoke</item>
                         </content>
                     </object>
                 </object>
@@ -999,6 +1055,7 @@ demonstrate a defect in the wx library. See
                         <object class="sizeritem">
                             <flag>wxGROW|wxALL</flag>
                             <object class="wxCheckBox" name="DeprecatedUseDOB">
+                                <help>Calculate issue age based on date of birth and effective date, automatically reflecting changes in effective date</help>
                                 <label>Birthdate overrides issue age </label>
                             </object>
                         </object>
@@ -1016,6 +1073,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxGROW</flag>
                                     <object class="wxSpinCtrl" name="IssueAge">
+                                        <help>Insurance age on date of issue</help>
                                         <size>10,-1</size>
                                     </object>
                                 </object>
@@ -1035,6 +1093,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxGROW</flag>
                                     <object class="wxDatePickerCtrl" name="DateOfBirth">
+                                        <help>Date of birth</help>
                                         <size>80,-1</size>
                                     </object>
                                 </object>
@@ -1054,6 +1113,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxGROW</flag>
                                     <object class="wxSpinCtrl" name="RetirementAge">
+                                        <help>Insurance age on date of retirement</help>
                                         <size>10,-1</size>
                                     </object>
                                 </object>
@@ -1083,6 +1143,7 @@ demonstrate a defect in the wx library. See
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
                             <object class="wxComboBox" name="SubstandardTable">
+                                <help>Substandard table rating</help>
                                 <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                             </object>
                         </object>
@@ -1096,12 +1157,14 @@ demonstrate a defect in the wx library. See
                         <object class="sizeritem">
                             <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <object class="wxCheckBox" name="OverrideCoiMultiplier">
+                                <help>Override default country COI multiplier for current COI rates</help>
                                 <label>Override country COI multiplier </label>
                             </object>
                         </object>
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
                             <object class="wxTextCtrl" name="CountryCoiMultiplier">
+                                <help>Country multiplier for current COI rates</help>
                                 <size>10,-1</size>
                             </object>
                         </object>
@@ -1121,6 +1184,7 @@ demonstrate a defect in the wx library. See
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
                             <object class="wxTextCtrl" name="FlatExtra">
+                                <help>Flat extra: annual amount per thousand</help>
                                 <size>10,-1</size>
                             </object>
                         </object>
@@ -1140,6 +1204,7 @@ demonstrate a defect in the wx library. See
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
                             <object class="wxTextCtrl" name="ProjectedSalary">
+                                <help>Projected annual salary</help>
                                 <size>10,-1</size>
                             </object>
                         </object>
@@ -1183,6 +1248,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxTextCtrl" name="PolicyNumber">
+                                        <help>Contract number</help>
                                         <size>80,-1</size>
                                         <value>0</value>
                                     </object>
@@ -1197,6 +1263,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxTextCtrl" name="Franchise">
+                                        <help>Producer franchise identifier</help>
                                         <size>80,-1</size>
                                         <value>0</value>
                                     </object>
@@ -1211,6 +1278,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxDatePickerCtrl" name="PolicyDate">
+                                        <help>Contract date</help>
                                         <size>80,-1</size>
                                     </object>
                                 </object>
@@ -1224,6 +1292,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxSpinCtrl" name="InforceYear">
+                                        <help>Years elapsed since issue</help>
                                         <size>80,-1</size>
                                     </object>
                                 </object>
@@ -1237,6 +1306,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxSpinCtrl" name="InforceMonth">
+                                        <help>Months elapsed since issue</help>
                                         <size>80,-1</size>
                                         <min>0</min>
                                         <max>11</max>
@@ -1267,6 +1337,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxTextCtrl" name="InforceGeneralAccountValue">
+                                        <help>Inforce account value--general account</help>
                                         <size>80,-1</size>
                                         <value>0</value>
                                     </object>
@@ -1281,6 +1352,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxTextCtrl" name="InforceSeparateAccountValue">
+                                        <help>Inforce account value--separate account</help>
                                         <size>80,-1</size>
                                         <value>0</value>
                                     </object>
@@ -1295,6 +1367,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxTextCtrl" name="InforceRegularLoanValue">
+                                        <help>Inforce account value--regular loan</help>
                                         <size>80,-1</size>
                                         <value>0</value>
                                     </object>
@@ -1309,6 +1382,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxTextCtrl" name="InforceRegularLoanBalance">
+                                        <help>Inforce balance--regular loan</help>
                                         <size>80,-1</size>
                                         <value>0</value>
                                     </object>
@@ -1323,6 +1397,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxTextCtrl" name="InforcePreferredLoanValue">
+                                        <help>Inforce account value--preferred loan</help>
                                         <size>80,-1</size>
                                         <value>0</value>
                                     </object>
@@ -1337,6 +1412,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxTextCtrl" name="InforcePreferredLoanBalance">
+                                        <help>Inforce balance--preferred loan</help>
                                         <size>80,-1</size>
                                         <value>0</value>
                                     </object>
@@ -1351,6 +1427,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxTextCtrl" name="InforceCumulativeNoLapsePremium">
+                                        <help>Cumulative no-lapse premium since issue</help>
                                         <size>80,-1</size>
                                         <value>0</value>
                                     </object>
@@ -1365,6 +1442,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxTextCtrl" name="InforceCumulativePayments">
+                                        <help>Cumulative payments since issue for no-lapse test</help>
                                         <size>80,-1</size>
                                         <value>0</value>
                                     </object>
@@ -1379,6 +1457,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxTextCtrl" name="InforceHoneymoonValue">
+                                        <help>Inforce honeymoon value</help>
                                         <size>80,-1</size>
                                         <value>0</value>
                                     </object>
@@ -1393,6 +1472,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxTextCtrl" name="InforceNetExperienceReserve">
+                                        <help>Inforce case net experience reserve</help>
                                         <size>80,-1</size>
                                         <value>0</value>
                                     </object>
@@ -1407,6 +1487,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxTextCtrl" name="InforceYtdNetCoiCharge">
+                                        <help>Inforce case year-to-date net COI charges</help>
                                         <size>80,-1</size>
                                         <value>0</value>
                                     </object>
@@ -1436,6 +1517,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxTextCtrl" name="InforceTaxBasis">
+                                        <help>Inforce tax basis</help>
                                         <size>80,-1</size>
                                         <value>0</value>
                                     </object>
@@ -1450,6 +1532,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxTextCtrl" name="InforceCumulativeGlp">
+                                        <help>Cumulative guideline level premium since issue (not yet implemented)</help>
                                         <size>80,-1</size>
                                         <value>0</value>
                                     </object>
@@ -1464,6 +1547,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxTextCtrl" name="InforceGlp">
+                                        <help>Inforce guideline level premium (not yet implemented)</help>
                                         <size>80,-1</size>
                                         <value>0</value>
                                     </object>
@@ -1478,6 +1562,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxTextCtrl" name="InforceGsp">
+                                        <help>Inforce guideline single premium (not yet implemented)</help>
                                         <size>80,-1</size>
                                         <value>0</value>
                                     </object>
@@ -1492,6 +1577,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxTextCtrl" name="InforceSevenPayPremium">
+                                        <help>Inforce seven pay premium</help>
                                         <size>80,-1</size>
                                         <value>0</value>
                                     </object>
@@ -1506,6 +1592,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxCheckBox" name="InforceIsMec">
+                                        <help>Inforce contract is a MEC</help>
 <!--
 It's unusual to place a checkbox's "label" on the left, as is simulated
 here, but it looks weird if we don't make this look like its siblings.
@@ -1524,6 +1611,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxDatePickerCtrl" name="LastMaterialChangeDate">
+                                        <help>Beginning of most recent seven-pay period</help>
                                         <size>80,-1</size>
                                     </object>
                                 </object>
@@ -1537,6 +1625,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxSpinCtrl" name="InforceContractYear">
+                                        <help>Years elapsed since beginning of most recent seven-pay period</help>
                                         <size>80,-1</size>
                                     </object>
                                 </object>
@@ -1550,6 +1639,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxSpinCtrl" name="InforceContractMonth">
+                                        <help>Months elapsed since beginning of most recent seven-pay period</help>
                                         <size>80,-1</size>
                                         <min>0</min>
                                         <max>11</max>
@@ -1565,6 +1655,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxTextCtrl" name="InforceDcv">
+                                        <help>Inforce deemed cash value</help>
                                         <size>80,-1</size>
                                         <value>0</value>
                                     </object>
@@ -1579,6 +1670,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxTextCtrl" name="InforceLeastDeathBenefit">
+                                        <help>Inforce least death benefit since beginning of last seven-pay period</help>
                                         <size>80,-1</size>
                                         <value>0</value>
                                     </object>
@@ -1606,13 +1698,13 @@ here, but it looks weird if we don't make this look like its siblings.
                             <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                             <border>4</border>
                             <object class="wxStaticText">
-<!-- USER !! Enter zero if not in a 7-pay period. -->
                                 <label>Amounts-paid history for current 7-pay period</label>
                             </object>
                         </object>
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
                             <object class="wxTextCtrl" name="PremiumHistory">
+                                <help>"Amounts paid" for each year since beginning of last seven-pay period--zero if not in a seven-pay period</help>
                                 <size>180,-1</size>
                             </object>
                         </object>
@@ -1626,6 +1718,7 @@ here, but it looks weird if we don't make this look like its siblings.
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
                             <object class="wxTextCtrl" name="SpecamtHistory">
+                                <help>Specified amount for each year since issue (needed for certain surrender charges)</help>
                                 <size>180,-1</size>
                             </object>
                         </object>
@@ -1651,6 +1744,7 @@ here, but it looks weird if we don't make this look like its siblings.
                 <object class="sizeritem">
                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                     <object class="wxRadioBox" name="SolveType">
+                        <help>What to solve for</help>
                         <style>wxRA_SPECIFY_COLS</style>
                         <label>Solve for</label>
                         <dimension>1</dimension>
@@ -1680,6 +1774,7 @@ here, but it looks weird if we don't make this look like its siblings.
                 <object class="sizeritem">
                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                     <object class="wxRadioBox" name="SolveBasis">
+                        <help>Expense and mortality basis for solve</help>
                         <style>wxRA_SPECIFY_COLS</style>
                         <label>Deductions</label>
                         <dimension>1</dimension>
@@ -1694,8 +1789,9 @@ here, but it looks weird if we don't make this look like its siblings.
                 <object class="sizeritem">
                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                     <object class="wxRadioBox" name="SolveSeparateAccountBasis">
+                        <help>Separate-account basis for solve</help>
                         <style>wxRA_SPECIFY_COLS</style>
-                        <label>Separate account rate</label>
+                        <label>Separate-account rate</label>
                         <dimension>1</dimension>
                         <selection>0</selection>
                         <content>
@@ -1722,6 +1818,7 @@ here, but it looks weird if we don't make this look like its siblings.
                         <object class="sizeritem">
                             <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <object class="wxRadioBox" name="SolveTarget">
+                                <help>Target to solve for</help>
                                 <style>wxRA_SPECIFY_COLS</style>
                                 <content>
                                     <item>SolveForEndt</item>
@@ -1734,6 +1831,7 @@ here, but it looks weird if we don't make this look like its siblings.
                             <flag>wxALIGN_LEFT|wxALL</flag>
                             <border>4</border>
                             <object class="wxCheckBox" name="solve_for_endowment">
+                                <help>Solve for endowment</help>
                                 <label>Solve for endowment</label>
                             </object>
                         </object>
@@ -1752,6 +1850,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                 <object class="sizeritem">
                                     <flag>wxGROW</flag>
                                     <object class="wxTextCtrl" name="SolveTargetCashSurrenderValue">
+                                        <help>Target account value</help>
                                         <size>10,-1</size>
                                     </object>
                                 </object>
@@ -1770,6 +1869,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                         <object class="sizeritem">
                                             <flag>wxALIGN_CENTER|wxALL</flag>
                                             <object class="wxRadioBox" name="DeprecatedSolveFromWhich">
+                                                <help>Beginning of solve period (inclusive)</help>
                                                 <style>wxRA_SPECIFY_COLS</style>
                                                 <label>From</label>
                                                 <dimension>1</dimension>
@@ -1796,6 +1896,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                                 <object class="sizeritem">
                                                     <flag>wxGROW</flag>
                                                     <object class="wxSpinCtrl" name="SolveBeginTime">
+                                                        <help>Solve beginning duration</help>
                                                         <size>10,-1</size>
                                                         <max>100</max>
                                                         <value>99</value>
@@ -1811,6 +1912,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                                     <flag>wxGROW</flag>
 <!-- Really want something like "SolveFromAge"; this is a temporary kludge. -->
                                                     <object class="wxSpinCtrl" name="SolveBeginYear">
+                                                        <help>Solve beginning age</help>
                                                         <size>10,-1</size>
                                                         <max>100</max>
                                                         <value>99</value>
@@ -1827,6 +1929,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                         <object class="sizeritem">
                                             <flag>wxALIGN_CENTER|wxALL</flag>
                                             <object class="wxRadioBox" name="DeprecatedSolveToWhich">
+                                                <help>End of solve period (exclusive)</help>
                                                 <style>wxRA_SPECIFY_COLS</style>
                                                 <label>To</label>
                                                 <dimension>1</dimension>
@@ -1853,6 +1956,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                                 <object class="sizeritem">
                                                     <flag>wxGROW</flag>
                                                     <object class="wxSpinCtrl" name="SolveEndTime">
+                                                        <help>Solve ending duration</help>
                                                         <size>10,-1</size>
                                                         <max>100</max>
                                                         <value>99</value>
@@ -1868,6 +1972,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                                     <flag>wxGROW</flag>
 <!-- Really want something like "SolveToAge"; this is a temporary kludge. -->
                                                     <object class="wxSpinCtrl" name="SolveEndYear">
+                                                        <help>Solve ending age</help>
                                                         <size>10,-1</size>
                                                         <max>100</max>
                                                         <value>99</value>
@@ -1884,6 +1989,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                         <object class="sizeritem">
                                             <flag>wxALIGN_CENTER|wxALL</flag>
                                             <object class="wxRadioBox" name="DeprecatedSolveTgtAtWhich">
+                                                <help>When solve target is to be achieved</help>
                                                 <style>wxRA_SPECIFY_COLS</style>
                                                 <label>At</label>
                                                 <dimension>1</dimension>
@@ -1910,6 +2016,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                                 <object class="sizeritem">
                                                     <flag>wxGROW</flag>
                                                     <object class="wxSpinCtrl" name="SolveTargetTime">
+                                                        <help>Duration to achieve target account value</help>
                                                         <size>10,-1</size>
                                                         <max>100</max>
                                                         <value>99</value>
@@ -1925,6 +2032,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                                     <flag>wxGROW</flag>
 <!-- Really want something like "SolveAtAge"; this is a temporary kludge. -->
                                                     <object class="wxSpinCtrl" name="SolveTargetYear">
+                                                        <help>Attained age to achieve target account value</help>
                                                         <size>10,-1</size>
                                                         <max>100</max>
                                                         <value>99</value>
@@ -1947,6 +2055,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                 <object class="sizeritem">
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                     <object class="wxCheckBox" name="WithdrawToBasisThenLoan">
+                                        <help>Switch withdrawals to loans after tax basis has been recovered</help>
                                         <label>Change withdrawals to loans after basis</label>
                                     </object>
                                 </object>
@@ -2001,6 +2110,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                         <object class="sizeritem">
                                             <flag>wxGROW</flag>
                                             <object class="wxTextCtrl" name="SalarySpecifiedAmountFactor">
+                                                <help>Multiple of salary for specified amount calculation</help>
                                                 <size>40,-1</size>
                                             </object>
                                         </object>
@@ -2014,6 +2124,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                         <object class="sizeritem">
                                             <flag>wxGROW</flag>
                                             <object class="wxTextCtrl" name="SalarySpecifiedAmountCap">
+                                                <help>Limit on salary-based specified amount</help>
                                                 <size>40,-1</size>
                                             </object>
                                         </object>
@@ -2027,6 +2138,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                         <object class="sizeritem">
                                             <flag>wxGROW</flag>
                                             <object class="wxTextCtrl" name="SalarySpecifiedAmountOffset">
+                                                <help>Amount subtracted from salary-based specified amount for group insurance offset</help>
                                                 <size>40,-1</size>
                                             </object>
                                         </object>
@@ -2054,6 +2166,7 @@ here, but it looks weird if we don't make this look like its siblings.
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxTextCtrl" name="SpecifiedAmount">
+                        <help>Specified amount, or corridor, glp, gsp, maximum, salary, sevenpay, target</help>
                         <size>180,-1</size>
                     </object>
                 </object>
@@ -2067,6 +2180,7 @@ here, but it looks weird if we don't make this look like its siblings.
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxTextCtrl" name="DeathBenefitOption">
+                        <help>Death benefit option: a (level), b (increasing), or rop (return of premium)</help>
                         <size>180,-1</size>
                     </object>
                 </object>
@@ -2117,6 +2231,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                         <object class="sizeritem">
                                             <flag>wxGROW</flag>
                                             <object class="wxComboBox" name="InsuredPremiumTableNumber">
+                                                <help>Table used as basis for premium calculation</help>
                                                 <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                                                 <selection>0</selection>
                                                 <content>
@@ -2134,6 +2249,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                         <object class="sizeritem">
                                             <flag>wxGROW</flag>
                                             <object class="wxTextCtrl" name="InsuredPremiumTableFactor">
+                                                <help>Multiple of table used as basis for premium calculation</help>
                                                 <size>40,-1</size>
                                             </object>
                                         </object>
@@ -2182,6 +2298,7 @@ the other is perforce ignored.
                                     <flag>wxGROW|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                                     <border>4</border>
                                     <object class="wxTextCtrl" name="Dumpin">
+                                        <help>First-year lump-sum payment other than 1035 exchange</help>
                                         <size>10,-1</size>
                                     </object>
                                 </object>
@@ -2217,6 +2334,7 @@ the other is perforce ignored.
                                     <flag>wxGROW|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                                     <border>4</border>
                                     <object class="wxTextCtrl" name="External1035ExchangeAmount">
+                                        <help>External 1035 exchange amount</help>
                                         <size>10,-1</size>
                                     </object>
                                 </object>
@@ -2224,6 +2342,7 @@ the other is perforce ignored.
                                     <flag>wxGROW|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                                     <border>4</border>
                                     <object class="wxTextCtrl" name="Internal1035ExchangeAmount">
+                                        <help>Internal 1035 exchange amount</help>
                                         <size>10,-1</size>
                                     </object>
                                 </object>
@@ -2238,6 +2357,7 @@ the other is perforce ignored.
                                     <flag>wxGROW|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                                     <border>4</border>
                                     <object class="wxTextCtrl" name="External1035ExchangeBasis">
+                                        <help>Tax basis for external 1035 exchange</help>
                                         <size>10,-1</size>
                                     </object>
                                 </object>
@@ -2245,6 +2365,7 @@ the other is perforce ignored.
                                     <flag>wxGROW|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                                     <border>4</border>
                                     <object class="wxTextCtrl" name="Internal1035ExchangeBasis">
+                                        <help>Tax basis for internal 1035 exchange</help>
                                         <size>10,-1</size>
                                     </object>
                                 </object>
@@ -2259,6 +2380,7 @@ the other is perforce ignored.
                                     <flag>wxALIGN_LEFT|wxALL</flag>
                                     <border>4</border>
                                     <object class="wxCheckBox" name="External1035ExchangeFromMec">
+                                        <help>External 1035 exchange is from a MEC</help>
                                         <label>from MEC</label>
                                     </object>
                                 </object>
@@ -2266,6 +2388,7 @@ the other is perforce ignored.
                                     <flag>wxALIGN_LEFT|wxALL</flag>
                                     <border>4</border>
                                     <object class="wxCheckBox" name="Internal1035ExchangeFromMec">
+                                        <help>Internal 1035 exchange is from a MEC</help>
                                         <label>from MEC</label>
                                     </object>
                                 </object>
@@ -2291,6 +2414,7 @@ the other is perforce ignored.
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxTextCtrl" name="Payment">
+                        <help>Individual payment amount, or corridor, glp, gsp, minimum, sevenpay, table, target</help>
                         <size>180,-1</size>
                     </object>
                 </object>
@@ -2304,6 +2428,7 @@ the other is perforce ignored.
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxTextCtrl" name="PaymentMode">
+                        <help>Individual payment mode: annual, semiannual, quarterly, or monthly</help>
                         <size>180,-1</size>
                     </object>
                 </object>
@@ -2317,6 +2442,7 @@ the other is perforce ignored.
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxTextCtrl" name="CorporationPayment">
+                        <help>Corporation payment amount, or corridor, glp, gsp, minimum, sevenpay, table, target</help>
                         <size>180,-1</size>
                     </object>
                 </object>
@@ -2330,6 +2456,7 @@ the other is perforce ignored.
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxTextCtrl" name="CorporationPaymentMode">
+                        <help>Corporation payment mode: annual, semiannual, quarterly, or monthly</help>
                         <size>180,-1</size>
                     </object>
                 </object>
@@ -2352,6 +2479,7 @@ the other is perforce ignored.
                 <object class="sizeritem">
                     <flag>wxALIGN_CENTER_VERTICAL</flag>
                     <object class="wxRadioBox" name="FundChoiceType">
+                        <help>Fund allocation</help>
                         <style>wxRA_SPECIFY_COLS</style>
                         <content>
                             <item>Average fund</item>
@@ -2375,6 +2503,7 @@ the other is perforce ignored.
                         <object class="sizeritem">
                             <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
                             <object class="wxTextCtrl" name="InputFundManagementFee">
+                                <help>Investment management fee for custom fund</help>
                             </object>
                         </object>
                         <object class="sizeritem">
@@ -2398,7 +2527,8 @@ the other is perforce ignored.
             <flag>wxGROW|wxALIGN_LEFT</flag>
             <border>8</border>
             <object class="wxCheckBox" name="UseCurrentDeclaredRate">
-                <label>Use current declared rate [to be implemented 2008-04]</label>
+                <help>Use current declared rate [not yet implemented]</help>
+                <label>Use current declared rate [not yet implemented]</label>
             </object>
         </object>
         <object class="sizeritem">
@@ -2406,7 +2536,7 @@ the other is perforce ignored.
             <object class="wxFlexGridSizer">
                 <cols>3</cols>
                 <growablecols>1</growablecols>
-                <!-- General account rate. -->
+                <!-- General-account rate. -->
                 <object class="sizeritem">
                     <flag>wxALIGN_CENTER_VERTICAL</flag>
                     <object class="wxStaticText">
@@ -2422,6 +2552,7 @@ the other is perforce ignored.
                             <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>8</border>
                             <object class="wxTextCtrl" name="GeneralAccountRate">
+                                <help>General-account (non-loaned) interest rate</help>
                             </object>
                         </object>
                     </object>
@@ -2429,11 +2560,12 @@ the other is perforce ignored.
                 <object class="sizeritem">
                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
                     <object class="wxRadioBox" name="GeneralAccountRateType">
+                        <help>General-account rate type</help>
                         <style>wxRA_SPECIFY_ROWS</style>
                         <content>
-                            <item>CredRate</item>
-                            <item>GrossRate</item>
-                            <item>NetRate</item>
+                            <item helptext="General-account rate is credited (net)">CredRate</item>
+                            <item helptext="General-account rate is earned (gross)">GrossRate</item>
+                            <item helptext="General-account rate is credited (net)">NetRate</item>
                         </content>
                     </object>
                 </object>
@@ -2453,6 +2585,7 @@ the other is perforce ignored.
                             <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>8</border>
                             <object class="wxTextCtrl" name="SeparateAccountRate">
+                                <help>Separate-account interest rate</help>
                             </object>
                         </object>
                     </object>
@@ -2460,11 +2593,12 @@ the other is perforce ignored.
                 <object class="sizeritem">
                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
                     <object class="wxRadioBox" name="SeparateAccountRateType">
+                        <help>Separate-account rate type</help>
                         <style>wxRA_SPECIFY_ROWS</style>
                         <content>
-                            <item>CredRate</item>
-                            <item>GrossRate</item>
-                            <item>NetRate</item>
+                            <item helptext="Separate-account rate is net of investment management fee">CredRate</item>
+                            <item helptext="Separate-account rate is gross before investment management fee deduction">GrossRate</item>
+                            <item helptext="Separate-account rate is net of investment management fee">NetRate</item>
                         </content>
                     </object>
                 </object>
@@ -2484,6 +2618,7 @@ the other is perforce ignored.
                             <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>8</border>
                             <object class="wxTextCtrl" name="LoanRate">
+                                <help>Loan interest rate</help>
                             </object>
                         </object>
                     </object>
@@ -2491,10 +2626,11 @@ the other is perforce ignored.
                 <object class="sizeritem">
                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
                     <object class="wxRadioBox" name="LoanRateType">
+                        <help>Loan rate type</help>
                         <style>wxRA_SPECIFY_ROWS</style>
                         <content>
-                            <item>Fixed</item>
-                            <item>VLR</item>
+                            <item helptext="Loan rate is fixed">Fixed</item>
+                            <item helptext="Loan rate is variable">VLR</item>
                         </content>
                     </object>
                 </object>
@@ -2511,6 +2647,7 @@ the other is perforce ignored.
         <object class="sizeritem">
             <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
             <object class="wxCheckBox" name="WithdrawToBasisThenLoan">
+                <help>Switch withdrawals to loans after tax basis has been recovered</help>
                 <label>Change withdrawals to loans after basis</label>
             </object>
         </object>
@@ -2530,6 +2667,7 @@ the other is perforce ignored.
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxTextCtrl" name="Withdrawal">
+                        <help>Withdrawal amount</help>
                         <size>180,-1</size>
                     </object>
                 </object>
@@ -2543,6 +2681,7 @@ the other is perforce ignored.
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxTextCtrl" name="NewLoan">
+                        <help>Loan amount</help>
                         <size>180,-1</size>
                     </object>
                 </object>
@@ -2566,6 +2705,7 @@ the other is perforce ignored.
                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                     <border>4</border>
                     <object class="wxCheckBox" name="WaiverOfPremiumBenefit">
+                        <help>Waiver</help>
                         <label>Waiver</label>
                     </object>
                 </object>
@@ -2579,6 +2719,7 @@ the other is perforce ignored.
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxComboBox" name="waiver_rating">
+                        <help>Waiver rating</help>
                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                         <selection>0</selection>
                         <content>
@@ -2605,6 +2746,7 @@ the other is perforce ignored.
         <object class="sizeritem">
             <flag>wxALIGN_LEFT</flag>
             <object class="wxCheckBox" name="CreateSupplementalReport">
+                <help>Create supplemental report</help>
                 <label>Create supplemental report</label>
             </object>
         </object>
@@ -2624,6 +2766,7 @@ the other is perforce ignored.
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxComboBox" name="SupplementalReportColumn00">
+                        <help>First supplemental-report column</help>
                         <size>200,20</size>
                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                     </object>
@@ -2638,6 +2781,7 @@ the other is perforce ignored.
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxComboBox" name="SupplementalReportColumn01">
+                        <help>Second supplemental-report column</help>
                         <size>200,20</size>
                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                     </object>
@@ -2652,6 +2796,7 @@ the other is perforce ignored.
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxComboBox" name="SupplementalReportColumn02">
+                        <help>Third supplemental-report column</help>
                         <size>200,20</size>
                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                     </object>
@@ -2666,6 +2811,7 @@ the other is perforce ignored.
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxComboBox" name="SupplementalReportColumn03">
+                        <help>Fourth supplemental-report column</help>
                         <size>200,20</size>
                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                     </object>
@@ -2680,6 +2826,7 @@ the other is perforce ignored.
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxComboBox" name="SupplementalReportColumn04">
+                        <help>Fifth supplemental-report column</help>
                         <size>200,20</size>
                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                     </object>
@@ -2694,6 +2841,7 @@ the other is perforce ignored.
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxComboBox" name="SupplementalReportColumn05">
+                        <help>Sixth supplemental-report column</help>
                         <size>200,20</size>
                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                     </object>
@@ -2708,6 +2856,7 @@ the other is perforce ignored.
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxComboBox" name="SupplementalReportColumn06">
+                        <help>Seventh supplemental-report column</help>
                         <size>200,20</size>
                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                     </object>
@@ -2722,6 +2871,7 @@ the other is perforce ignored.
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxComboBox" name="SupplementalReportColumn07">
+                        <help>Eighth supplemental-report column</help>
                         <size>200,20</size>
                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                     </object>
@@ -2736,6 +2886,7 @@ the other is perforce ignored.
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxComboBox" name="SupplementalReportColumn08">
+                        <help>Ninth supplemental-report column</help>
                         <size>200,20</size>
                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                     </object>
@@ -2750,6 +2901,7 @@ the other is perforce ignored.
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxComboBox" name="SupplementalReportColumn09">
+                        <help>Tenth supplemental-report column</help>
                         <size>200,20</size>
                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                     </object>
@@ -2764,6 +2916,7 @@ the other is perforce ignored.
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxComboBox" name="SupplementalReportColumn10">
+                        <help>Eleventh supplemental-report column</help>
                         <size>200,20</size>
                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                     </object>
@@ -2778,6 +2931,7 @@ the other is perforce ignored.
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxComboBox" name="SupplementalReportColumn11">
+                        <help>Twelfth supplemental-report column</help>
                         <size>200,20</size>
                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                     </object>
