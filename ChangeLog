@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1018 2008-02-28 06:06:23 chicares Exp $
+// $Id: ChangeLog,v 1.1019 2008-02-28 17:31:30 chicares Exp $
 
 MAINTENANCE
 
@@ -15891,4 +15891,9 @@ Remove obsolete wxDIALOG_EX_CONTEXTHELP workaround. See:
 
   skin.xrc
 Add help text.
+
+20080228T1731Z <gchicares@sbcglobal.net> [1195]
+
+  main_wx.cpp
+Set help provider--for now, just wxSimpleHelpProvider.
 

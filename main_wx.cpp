@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.99 2008-02-26 02:59:25 chicares Exp $
+// $Id: main_wx.cpp,v 1.100 2008-02-28 17:31:30 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -83,6 +83,7 @@
 #include "wx_utility.hpp"           // class ClipboardEx
 
 #include <wx/config.h>
+#include <wx/cshelp.h>
 #include <wx/docmdi.h>
 #include <wx/image.h>
 #include <wx/log.h>                 // wxSafeShowMessage()
@@ -557,6 +558,8 @@ bool Skeleton::OnInit()
             }
 
         authenticate_system();
+
+        wxHelpProvider::Set(new(wx) wxSimpleHelpProvider);
 
         wxXmlResource& xml_resources = *wxXmlResource::Get();
 
