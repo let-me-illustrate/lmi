@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin_reg_d.xrc,v 1.1 2008-02-18 17:44:01 chicares Exp $
+    $Id: skin_reg_d.xrc,v 1.2 2008-02-28 03:39:27 chicares Exp $
 
     This version is designed for private placement users; it omits input
     fields that seem irrelevant in that context, and reflects the
@@ -2083,10 +2083,7 @@ the real 'StateOfJurisdiction' is implemented.
 <object class="wxDialog" name="dialog_containing_notebook">
     <title>Let me illustrate...</title>
     <style>wxCAPTION | wxRESIZE_BORDER | wxSYSTEM_MENU</style>
-    <exstyle>wxWS_EX_VALIDATE_RECURSIVELY</exstyle>
-<!-- WX !! This style flag is unknown to wxxrc:
-    <exstyle>wxDIALOG_EX_CONTEXTHELP</exstyle>
--->
+    <exstyle>wxDIALOG_EX_CONTEXTHELP|wxWS_EX_VALIDATE_RECURSIVELY</exstyle>
     <centered>1</centered>
     <object class="wxFlexGridSizer">
         <cols>1</cols>
