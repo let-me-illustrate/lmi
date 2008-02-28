@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_controller.cpp,v 1.18 2008-02-06 03:46:36 chicares Exp $
+// $Id: mvc_controller.cpp,v 1.19 2008-02-28 03:39:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -72,15 +72,6 @@ namespace
 wxEventType const wxEVT_REFOCUS_INVALID_CONTROL = wxNewEventType();
 } // Unnamed namespace.
 
-// WX !! wxDIALOG_EX_CONTEXTHELP is unknown to wxxrc.
-// 'Extra' styles (such as wxWS_EX_VALIDATE_RECURSIVELY) that wxxrc
-// recognizes can be specified as an <exstyle> attribute, which is
-// tidier than setting them dynamically as in this message:
-//   http://lists.wxwindows.org/archive/wxPython-users/msg15676.html
-// But that technique is needed for wxDIALOG_EX_CONTEXTHELP, which
-// wxxrc does not recognize; it must be specified here, before
-// LoadDialog() is called.
-
 MvcController::MvcController
     (wxWindow*      parent
     ,MvcModel&      model
@@ -95,7 +86,6 @@ MvcController::MvcController
 {
     model_.TestInitialConsistency();
 
-    SetExtraStyle(GetExtraStyle() | wxDIALOG_EX_CONTEXTHELP);
     if(!wxXmlResource::Get()->LoadDialog(this, parent, view_.MainDialogName()))
         {
         fatal_error() << "Unable to load dialog." << LMI_FLUSH;
