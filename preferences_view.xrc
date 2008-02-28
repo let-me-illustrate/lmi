@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: preferences_view.xrc,v 1.5 2008-01-01 18:29:53 chicares Exp $
+    $Id: preferences_view.xrc,v 1.6 2008-02-28 03:39:26 chicares Exp $
 -->
 
 <object class="wxPanel" name="calculation_summary_panel">
@@ -219,10 +219,7 @@
 <object class="wxDialog" name="dialog_containing_preferences_notebook">
     <title>Preferences</title>
     <style>wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU</style>
-    <exstyle>wxWS_EX_VALIDATE_RECURSIVELY</exstyle>
-<!-- WX !! This style flag is unknown to wxxrc:
-    <exstyle>wxDIALOG_EX_CONTEXTHELP</exstyle>
--->
+    <exstyle>wxDIALOG_EX_CONTEXTHELP|wxWS_EX_VALIDATE_RECURSIVELY</exstyle>
     <centered>1</centered>
     <object class="wxFlexGridSizer">
         <cols>1</cols>
