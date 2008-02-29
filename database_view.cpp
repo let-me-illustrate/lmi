@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view.cpp,v 1.15 2008-02-17 15:17:11 chicares Exp $
+// $Id: database_view.cpp,v 1.16 2008-02-29 05:02:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -280,7 +280,9 @@ void DatabaseView::UponTreeSelectionChange(wxTreeEvent& event)
             (tree_ctrl.GetItemData(event.GetItem())
             );
     if(!item_data)
-        {return;}
+        {
+        return;
+        }
 
     table_adapter().SetTDBValue
         (&document().GetTDBValue(item_data->db_name().Idx)

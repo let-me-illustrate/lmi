@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.33 2008-01-20 01:13:48 chicares Exp $
+// $Id: accountvalue.cpp,v 1.34 2008-02-29 05:02:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -609,7 +609,9 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
                 ,BasicValues::GetLength()
                 )
         )
-        {return;}
+        {
+        return;
+        }
 
     switch(Input_->EePmtStrategy.value())
         {

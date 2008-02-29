@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view_editor.cpp,v 1.12 2008-02-17 15:17:12 chicares Exp $
+// $Id: database_view_editor.cpp,v 1.13 2008-02-29 05:02:30 chicares Exp $
 
 #include "database_view_editor.hpp"
 
@@ -101,7 +101,9 @@ bool DatabaseTableAdapter::VariesByDimension(unsigned int n) const
     EnsureValidDimensionIndex(n);
 
     if(IsVoid())
-        {return false;}
+        {
+        return false;
+        }
 
     std::vector<int> const& axis_lengths = db_value_->GetAxisLengths();
     return n < axis_lengths.size() && 1 < axis_lengths[n];
@@ -133,7 +135,9 @@ void DatabaseTableAdapter::MakeVaryByDimension(unsigned int n, bool varies)
     EnsureValidDimensionIndex(n);
 
     if(IsVoid())
-        {return;}
+        {
+        return;
+        }
 
     std::vector<int> axis_lengths = db_value_->GetAxisLengths();
 
@@ -145,7 +149,9 @@ void DatabaseTableAdapter::MakeVaryByDimension(unsigned int n, bool varies)
 void DatabaseTableAdapter::SetDurationMaxBound(unsigned int n)
 {
     if(IsVoid())
-        {return;}
+        {
+        return;
+        }
 
     std::vector<int> axis_lengths = db_value_->GetAxisLengths();
 
@@ -178,7 +184,9 @@ void DatabaseTableAdapter::ReshapeTableData
 unsigned int DatabaseTableAdapter::GetDurationMaxBound() const
 {
     if(IsVoid())
-        {return 1;}
+        {
+        return 1U;
+        }
 
     return db_value_->GetAxisLengths()[eda_duration];
 }
@@ -186,7 +194,9 @@ unsigned int DatabaseTableAdapter::GetDurationMaxBound() const
 bool DatabaseTableAdapter::CanChangeVariationWith(unsigned int n) const
 {
     if(IsVoid())
-        {return false;}
+        {
+        return false;
+        }
 
     return n < db_value_->GetAxisLengths().size();
 }
@@ -237,7 +247,9 @@ void DatabaseTableAdapter::DoSetValue
     )
 {
     if(IsVoid())
-        {return;}
+        {
+        return;
+        }
 
     ConvertValue(coords, indexes_);
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.cpp,v 1.12 2008-02-17 15:17:15 chicares Exp $
+// $Id: tier_view_editor.cpp,v 1.13 2008-02-29 05:02:31 chicares Exp $
 
 #include "tier_view_editor.hpp"
 
@@ -66,10 +66,14 @@ void tier_entity_adapter::set_bands_count(unsigned int n)
     ensure_not_void();
 
     if(n == 0)
-        {fatal_error() << "There must be at least one band." << LMI_FLUSH;}
+        {
+        fatal_error() << "There must be at least one band." << LMI_FLUSH;
+        }
 
     if(n == limits().size())
-        {return;}
+        {
+        return;
+        }
 
     static double const max_double = std::numeric_limits<double>::max();
 
@@ -107,7 +111,9 @@ TierTableAdapter::double_pair
 TierTableAdapter::DoGetValue(Coords const& coords) const
 {
     if(entity_.is_void())
-        {return double_pair(0,0);}
+        {
+        return double_pair(0,0);
+        }
 
     unsigned int const band = UnwrapAny<unsigned int>(coords[0]);
     return entity_.get_value(band);
@@ -116,7 +122,9 @@ TierTableAdapter::DoGetValue(Coords const& coords) const
 void TierTableAdapter::DoSetValue(Coords const& coords, double_pair const& value)
 {
     if(entity_.is_void())
-        {return;}
+        {
+        return;
+        }
 
     unsigned int const band = UnwrapAny<unsigned int>(coords[0]);
     entity_.set_value(band, value);
@@ -154,7 +162,9 @@ bool TierTableAdapter::DoApplyAxisAdjustment
     unsigned int max_bound = GetBandsCount();
     updated = max_bound != (ba.GetMaxValue() + 1);
     if(updated)
-        {SetBandsCount(ba.GetMaxValue() + 1);}
+        {
+        SetBandsCount(ba.GetMaxValue() + 1);
+        }
     return updated;
 }
 
@@ -288,7 +298,9 @@ std::string TierEditorGrid::DoGetRowLabelValue(unsigned int row) const
 std::string TierEditorGrid::DoGetColLabelValue(unsigned int col) const
 {
     if(EnsureValidColumn(col) == e_column_limit)
-        {return "Limit";}
+        {
+        return "Limit";
+        }
     return "Value";
 }
 
