@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_tools.cpp,v 1.6 2008-01-01 18:29:50 chicares Exp $
+// $Id: multidimgrid_tools.cpp,v 1.7 2008-02-29 03:47:20 chicares Exp $
 
 #include "multidimgrid_tools.hpp"
 
@@ -84,7 +84,10 @@ wxSize AutoResizingTreeCtrl::DoGetBestSize() const
 
     wxSize best_size(0, 0);
 
-    wxTreeItemId root = GetRootItem();
+    wxTreeItemId const selection = GetSelection();
+    wxTreeItemId const first_visible = GetFirstVisibleItem();
+
+    wxTreeItemId const root = GetRootItem();
     myself.DoGetBestSizePrivate(best_size, root, true);
 
     // need some minimal size even for an empty tree
@@ -93,11 +96,24 @@ wxSize AutoResizingTreeCtrl::DoGetBestSize() const
         wxSize min_size = wxTreeCtrl::DoGetBestSize();
 
         if(best_size.x == 0)
-            {best_size.x = min_size.x;}
+            {
+            best_size.x = min_size.x;
+            }
         if(best_size.y == 0)
-            {best_size.y = min_size.y;}
+            {
+            best_size.y = min_size.y;
+            }
         }
     best_size += GetSize() - GetClientSize();
+
+    if(selection.IsOk())
+        {
+        myself.SelectItem(selection);
+        }
+    if(first_visible.IsOk())
+        {
+        myself.ScrollTo(first_visible);
+        }
 
     CacheBestSize(best_size);
 
@@ -127,7 +143,9 @@ void AutoResizingTreeCtrl::DoGetBestSizePrivate
         {
         bool originally_expanded = is_root || IsExpanded(node);
         if(!originally_expanded)
-            {Expand(node);}
+            {
+            Expand(node);
+            }
 
         wxTreeItemIdValue cookie;
         for
@@ -140,7 +158,9 @@ void AutoResizingTreeCtrl::DoGetBestSizePrivate
             }
 
         if(!originally_expanded)
-            {Collapse(node);}
+            {
+            Collapse(node);
+            }
         }
 }
 
