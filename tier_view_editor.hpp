@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.hpp,v 1.16 2008-02-17 16:02:25 chicares Exp $
+// $Id: tier_view_editor.hpp,v 1.17 2008-02-29 05:02:31 chicares Exp $
 
 #ifndef tier_view_editor_hpp
 #define tier_view_editor_hpp
@@ -121,7 +121,9 @@ inline tier_entity_adapter::tier_entity_adapter
     ,values_(&values)
 {
     if(limits.size() != values.size())
-        {fatal_error() << "Inconsistent vector lengths." << LMI_FLUSH;}
+        {
+        fatal_error() << "Inconsistent vector lengths." << LMI_FLUSH;
+        }
 }
 
 inline std::vector<double>&       tier_entity_adapter::limits()
