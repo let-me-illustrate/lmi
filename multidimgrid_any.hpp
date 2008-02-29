@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.22 2008-02-18 17:41:27 chicares Exp $
+// $Id: multidimgrid_any.hpp,v 1.23 2008-02-29 05:02:30 chicares Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -362,7 +362,9 @@ inline bool MultiDimTableAny::RefreshAxisAdjustment
 inline boost::any MultiDimTableAny::GetValueAny(Coords const& coords) const
 {
     if(coords.size() != GetDimension())
-        {fatal_error() << "Incorrect dimension." << LMI_FLUSH;}
+        {
+        fatal_error() << "Incorrect dimension." << LMI_FLUSH;
+        }
     return DoGetValueAny(coords);
 }
 inline void MultiDimTableAny::SetValueAny
@@ -371,7 +373,9 @@ inline void MultiDimTableAny::SetValueAny
     )
 {
     if(coords.size() != GetDimension())
-        {fatal_error() << "Incorrect dimension." << LMI_FLUSH;}
+        {
+        fatal_error() << "Incorrect dimension." << LMI_FLUSH;
+        }
     DoSetValueAny(coords, value);
 }
 
@@ -713,7 +717,9 @@ inline unsigned int MultiDimGrid::DoGetAxisIndexByName(std::string const& name)
 {
     int n = GetAxisIndexByName(name);
     if(n == wxNOT_FOUND || static_cast<int>(dimension_) <= n)
-        {fatal_error() << "Unknown axis '" << name << "'." << LMI_FLUSH;}
+        {
+        fatal_error() << "Unknown axis '" << name << "'." << LMI_FLUSH;
+        }
     return static_cast<unsigned int>(n);
 }
 inline bool MultiDimGrid::RefreshTableAxis(std::string const& name)

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_view.cpp,v 1.10 2008-01-30 14:33:29 chicares Exp $
+// $Id: rounding_view.cpp,v 1.11 2008-02-29 05:02:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -58,7 +58,9 @@ wxWindow* RoundingView::CreateChildWindow()
         ,"rounding_view_panel"
         );
     if(!main_panel)
-        {fatal_error() << "Unable to load xml resource." << LMI_FLUSH;}
+        {
+        fatal_error() << "Unable to load xml resource." << LMI_FLUSH;
+        }
 
     typedef RoundingDocument::values_type::const_iterator value_const_iterator;
     for
@@ -113,7 +115,9 @@ bool RoundingView::IsModified() const
         )
         {
         if(it->second->IsModified())
-            {return true;}
+            {
+            return true;
+            }
         }
     return false;
 }

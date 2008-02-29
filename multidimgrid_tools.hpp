@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_tools.hpp,v 1.14 2008-02-17 15:17:13 chicares Exp $
+// $Id: multidimgrid_tools.hpp,v 1.15 2008-02-29 05:02:30 chicares Exp $
 
 #ifndef multidimgrid_tools_hpp
 #define multidimgrid_tools_hpp
@@ -166,7 +166,9 @@ Integral AxisMaxBoundAdjuster<Integral>::GetMaximumAxisValue() const
 {
     int value = wxChoice::GetSelection();
     if(value == wxNOT_FOUND)
-        {value = 0;}
+        {
+        value = 0;
+        }
 
     Integral const max_value =
         maximum_lower_bound_ + static_cast<unsigned int>(value);
@@ -380,7 +382,9 @@ AdjustableMaxBoundAxis<Integral>::DoCreateAdjustControl
 {
     // called only once
     if(lower_bound_ == upper_bound_)
-        {return NULL;}
+        {
+        return NULL;
+        }
     return new Adjuster(*this, grid, lower_bound_, upper_bound_);
 }
 
