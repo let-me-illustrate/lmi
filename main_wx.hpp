@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.hpp,v 1.23 2008-02-02 20:22:32 chicares Exp $
+// $Id: main_wx.hpp,v 1.24 2008-03-02 03:07:23 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.h (C) 1998 Julian Smart and Markus Holzem
@@ -52,6 +52,7 @@ class WXDLLEXPORT wxDocMDIParentFrame;
 class WXDLLEXPORT wxDocument;
 class WXDLLEXPORT wxMDIChildFrame;
 class WXDLLEXPORT wxMenuBar;
+class WXDLLIMPEXP_HTML wxHtmlHelpController;
 
 class Skeleton
     :public wxApp
@@ -69,6 +70,7 @@ class Skeleton
     wxMenuBar* AdjustMenus(wxMenuBar*);
 
     void InitDocManager ();
+    void InitHelp       ();
     void InitIcon       ();
     void InitMenuBar    ();
     void InitToolBar    ();
@@ -76,6 +78,7 @@ class Skeleton
     void UponAbout                        (wxCommandEvent&);
     void UponDropFiles                    (wxDropFilesEvent&);
     void UponEditDefaultCell              (wxCommandEvent&);
+    void UponHelp                         (wxCommandEvent&);
     void UponMenuOpen                     (wxMenuEvent&);
     void UponPaste                        (wxClipboardTextEvent&);
     void UponPreferences                  (wxCommandEvent&);
@@ -105,7 +108,6 @@ class Skeleton
     void UponUpdateInapplicable           (wxUpdateUIEvent&);
     void UponUpdateFileSave               (wxUpdateUIEvent&);
     void UponUpdateUI                     (wxUpdateUIEvent&);
-    void UponUpdateHelp                   (wxUpdateUIEvent&);
     void UponWindowCascade                (wxCommandEvent&);
     void UponWindowNext                   (wxCommandEvent&);
     void UponWindowPrevious               (wxCommandEvent&);
@@ -121,10 +123,11 @@ class Skeleton
     bool ProcessCommandLine(int argc, char* argv[]);
     void UpdateViews();
 
-    wxConfigBase* config_;
-    DocManagerEx* doc_manager_;
-    wxDocMDIParentFrame* frame_;
-    wxTimer timer_;
+    wxConfigBase*         config_;
+    DocManagerEx*         doc_manager_;
+    wxDocMDIParentFrame*  frame_;
+    wxHtmlHelpController* help_controller_;
+    wxTimer               timer_;
 
     DECLARE_EVENT_TABLE()
 };
