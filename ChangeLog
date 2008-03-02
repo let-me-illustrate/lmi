@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1019 2008-02-28 17:31:30 chicares Exp $
+// $Id: ChangeLog,v 1.1020 2008-03-02 03:07:23 chicares Exp $
 
 MAINTENANCE
 
@@ -15896,4 +15896,31 @@ Add help text.
 
   main_wx.cpp
 Set help provider--for now, just wxSimpleHelpProvider.
+
+20080229T0347Z <gchicares@sbcglobal.net> [1195]
+
+  multidimgrid_tools.cpp
+Fix tree-control size (Vaclav). See:
+  http://lists.nongnu.org/archive/html/lmi/2008-02/msg00064.html
+
+20080229T0502Z <gchicares@sbcglobal.net> [1195]
+
+  accountvalue.cpp
+  database_view.cpp
+  database_view_editor.cpp
+  multidimgrid_any.cpp
+  multidimgrid_any.hpp
+  multidimgrid_tools.hpp
+  policy_view.cpp
+  rounding_view.cpp
+  tier_view_editor.cpp
+  tier_view_editor.hpp
+Write braces less oddly.
+
+20080302T0307Z <gchicares@sbcglobal.net> [1195]
+
+  main_wx.cpp
+  main_wx.hpp
+  menus.xrc
+Support yet-to-be-written html help.
 

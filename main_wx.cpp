@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.100 2008-02-28 17:31:30 chicares Exp $
+// $Id: main_wx.cpp,v 1.101 2008-03-02 03:07:23 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -85,6 +85,8 @@
 #include <wx/config.h>
 #include <wx/cshelp.h>
 #include <wx/docmdi.h>
+#include <wx/filename.h>
+#include <wx/html/helpctrl.h>
 #include <wx/image.h>
 #include <wx/log.h>                 // wxSafeShowMessage()
 #include <wx/menu.h>
@@ -120,6 +122,7 @@ IMPLEMENT_WX_THEME_SUPPORT
 BEGIN_EVENT_TABLE(Skeleton, wxApp)
     EVT_DROP_FILES(                                    Skeleton::UponDropFiles                    )
     EVT_MENU(wxID_ABOUT                               ,Skeleton::UponAbout                        )
+    EVT_MENU(wxID_HELP                                ,Skeleton::UponHelp                         )
     EVT_MENU(XRCID("edit_default_cell"               ),Skeleton::UponEditDefaultCell              )
     EVT_MENU(XRCID("preferences"                     ),Skeleton::UponPreferences                  )
     EVT_MENU(XRCID("test_app_status_alert"           ),Skeleton::UponTestAppStatus                )
@@ -147,7 +150,6 @@ BEGIN_EVENT_TABLE(Skeleton, wxApp)
 // TODO ?? expunge
 //  EVT_UPDATE_UI(wxID_ANY                            ,Skeleton::UponUpdateUI                     )
     EVT_UPDATE_UI(wxID_SAVE                           ,Skeleton::UponUpdateFileSave               )
-    EVT_UPDATE_UI(wxID_HELP                           ,Skeleton::UponUpdateHelp                   )
 // TODO ?? expunge
 // Enabling this line prevents the menuitem from performing its required
 // action, whether or not the EVT_UPDATE_UI(wxID_SAVE...) handler is also
@@ -252,9 +254,10 @@ int WINAPI WinMain
 // similar manner for other lmi user interfaces.
 
 Skeleton::Skeleton()
-    :doc_manager_ (0)
-    ,frame_       (0)
-    ,timer_       (this)
+    :doc_manager_     (0)
+    ,frame_           (0)
+    ,help_controller_ (0)
+    ,timer_           (this)
 {
     SetAppName("lmi_wx");
     SetVendorName("lmi");
@@ -434,6 +437,29 @@ void Skeleton::InitDocManager()
         );
 }
 
+/// Initialize help subsystem.
+///
+/// Contextual <help> elements in wxxrc files are made available by
+/// wxSimpleHelpProvider. No fancier version of that class is needed.
+///
+/// html help files are made available by wxHtmlHelpController.
+/// Failure to load help files is not treated as a fatal error because
+/// the application behaves properly without them.
+///
+/// WX !! wxHtmlHelpController::AddBook() on msw does not accept a
+/// posix-style path, but wxFileName::wxFileName() does.
+
+void Skeleton::InitHelp()
+{
+    wxHelpProvider::Set(new(wx) wxSimpleHelpProvider);
+    LMI_ASSERT(wxHelpProvider::Get());
+
+    help_controller_ = new(wx) wxHtmlHelpController(wxHF_DEFAULT_STYLE, frame_);
+    LMI_ASSERT(help_controller_);
+
+    help_controller_->AddBook(wxFileName(AddDataDir("user_manual.hhp")));
+}
+
 void Skeleton::InitIcon()
 {
 #ifdef LMI_MSW
@@ -501,6 +527,11 @@ void Skeleton::UponEditDefaultCell(wxCommandEvent&)
         );
 }
 
+void Skeleton::UponHelp(wxCommandEvent&)
+{
+    help_controller_->DisplayContents();
+}
+
 /// Rethrow an exception caught by wx into a local catch clause.
 ///
 /// This virtual function exists only to be overridden. Calling the
@@ -537,6 +568,7 @@ bool Skeleton::OnExceptionInMainLoop()
 int Skeleton::OnExit()
 {
     doc_manager_->FileHistorySave(*config_);
+    delete help_controller_;
     delete doc_manager_;
     delete config_;
     return 0;
@@ -558,8 +590,6 @@ bool Skeleton::OnInit()
             }
 
         authenticate_system();
-
-        wxHelpProvider::Set(new(wx) wxSimpleHelpProvider);
 
         wxXmlResource& xml_resources = *wxXmlResource::Get();
 
@@ -624,6 +654,7 @@ bool Skeleton::OnInit()
             ,wxClipboardTextEventHandler(Skeleton::UponPaste)
             );
 
+        InitHelp();
         InitIcon();
         InitMenuBar();
         InitToolBar();
@@ -1037,11 +1068,6 @@ void Skeleton::UponUpdateFileSave(wxUpdateUIEvent& event)
     // enablement--that is, this does not work:
 //    event.SetId(XRCID("wxID_SAVE"));
 //    event.Enable(doc && doc->IsModified());
-}
-
-void Skeleton::UponUpdateHelp(wxUpdateUIEvent& e)
-{
-    e.Enable(false);
 }
 
 // TODO ?? An unsuccessful experiment.
