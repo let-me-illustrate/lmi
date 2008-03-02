@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: menus.xrc,v 1.35 2008-02-02 20:22:32 chicares Exp $
+    $Id: menus.xrc,v 1.36 2008-03-02 03:07:23 chicares Exp $
 -->
 
 <!-- reusable menus -->
@@ -229,10 +229,16 @@
 <object class="wxMenu" name="help_menu_ref">
     <label>_Help</label>
     <help>Help</help>
+    <object class="wxMenuItem" name="wxID_HELP">
+        <label>_Contents\tF1</label>
+        <bitmap>help.xpm</bitmap>
+        <help>Read documentation</help>
+    </object>
+    <object class="separator"/>
     <object class="wxMenuItem" name="wxID_ABOUT">
         <label>_About...</label>
         <bitmap>about.xpm</bitmap>
-        <help>About this program</help>
+        <help>Read copyright and license</help>
     </object>
 </object>
 
