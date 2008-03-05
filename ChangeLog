@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1021 2008-03-05 19:45:37 wboutin Exp $
+// $Id: ChangeLog,v 1.1022 2008-03-05 19:52:11 wboutin Exp $
 
 MAINTENANCE
 
@@ -15928,4 +15928,9 @@ Support yet-to-be-written html help.
 
   skin_coli_boli.xrc
 Fix a defect.
+
+20080305T1950Z <wboutin@massmutual.com> [1195]
+
+  skin_coli_boli.xrc
+Remove obsolete comment.
 
