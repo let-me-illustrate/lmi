@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1022 2008-03-05 19:52:11 wboutin Exp $
+// $Id: ChangeLog,v 1.1023 2008-03-06 03:19:24 chicares Exp $
 
 MAINTENANCE
 
@@ -15933,4 +15933,13 @@ Fix a defect.
 
   skin_coli_boli.xrc
 Remove obsolete comment.
+
+20080306T0319Z <gchicares@sbcglobal.net> [1195]
+
+  wx-2.8.7.patch
+Add contextual-help patches--see:
+  http://lists.nongnu.org/archive/html/lmi/2008-02/msg00059.html
+  http://lists.nongnu.org/archive/html/lmi/2008-02/msg00070.html
+  http://lists.nongnu.org/archive/html/lmi/2008-03/msg00000.html
+  http://lists.nongnu.org/archive/html/lmi/2008-03/msg00004.html
 
