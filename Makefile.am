@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.35 2008-02-14 15:06:10 chicares Exp $
+# $Id: Makefile.am,v 1.36 2008-03-09 00:04:34 chicares Exp $
 
 SUBDIRS = third_party
 
@@ -83,13 +83,13 @@ dist_xrc_DATA = \
     paste-case.xpm \
     policy_view.xpm \
     policy_view.xrc \
-    preferences_view.xrc \
     preferences.xpm \
-    print.xpm \
+    preferences_view.xrc \
     print-case.xpm \
     print-cell.xpm \
     print-options.xpm \
     print-preview.xpm \
+    print.xpm \
     round_downward.xpm \
     round_downward_hover.xpm \
     round_downward_selected.xpm \
@@ -108,16 +108,17 @@ dist_xrc_DATA = \
     run-cell.xpm \
     save.xpm \
     saveas.xpm \
+    skin.xrc \
+    skin_coli_boli.xrc \
+    skin_group_carveout.xrc \
+    skin_reg_d.xrc \
+    skin_single_premium.xrc \
+    skin_variable_annuity.xrc \
     text_view.xpm \
     tier_view.xpm \
     toolbar.xrc \
     varying-width.xpm \
     write_spreadsheet.xpm \
-    xml_notebook.xrc \
-    xml_notebook_coli_boli.xrc \
-    xml_notebook_private_placement.xrc \
-    xml_notebook_single_premium.xrc \
-    xml_notebook_variable_annuity.xrc
 
 xsldir = $(bindir)
 dist_xsl_DATA = \
