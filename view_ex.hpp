@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: view_ex.hpp,v 1.10 2008-01-01 18:29:58 chicares Exp $
+// $Id: view_ex.hpp,v 1.11 2008-03-09 12:13:26 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -94,9 +94,9 @@ class DocManagerEx;
 // forward declarations, depending on the disposition of
 //   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=20345
 //
-class WXDLLEXPORT wxDC;
-class WXDLLEXPORT wxIcon;
-class WXDLLEXPORT wxMenuBar;
+class WXDLLIMPEXP_FWD_CORE wxDC;
+class WXDLLIMPEXP_FWD_CORE wxIcon;
+class WXDLLIMPEXP_FWD_CORE wxMenuBar;
 
 // INELEGANT !! If both a base and a derived class derive nonvirtually
 // from boost::noncopyable

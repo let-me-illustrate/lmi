@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.hpp,v 1.29 2008-01-01 18:29:44 chicares Exp $
+// $Id: illustration_view.hpp,v 1.30 2008-03-09 12:13:26 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -49,7 +49,7 @@
 class IllustrationDocument;
 class Input;
 class Ledger;
-class WXDLLEXPORT wxHtmlWindow;
+class WXDLLIMPEXP_FWD_CORE wxHtmlWindow;
 
 // TODO ?? Consider adding an input reference member. Here, it's used
 // only for edit and run; in the census view class, it's used widely.

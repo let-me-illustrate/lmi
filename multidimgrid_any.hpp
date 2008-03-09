@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.23 2008-02-29 05:02:30 chicares Exp $
+// $Id: multidimgrid_any.hpp,v 1.24 2008-03-09 12:13:26 chicares Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -110,8 +110,8 @@ class MultiDimAxisAny;
 class MultiDimAxisAnyChoice;
 class MultiDimGrid;
 class MultiDimTableAny;
-class WXDLLEXPORT wxBoxSizer;
-class WXDLLEXPORT wxGridBagSizer;
+class WXDLLIMPEXP_FWD_CORE wxBoxSizer;
+class WXDLLIMPEXP_FWD_CORE wxGridBagSizer;
 
 /// Type-unsafe classes using boost::any as value type
 /// --------------------------------------------------

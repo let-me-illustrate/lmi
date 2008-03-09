@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: text_doc.hpp,v 1.7 2008-01-01 18:29:56 chicares Exp $
+// $Id: text_doc.hpp,v 1.8 2008-03-09 12:13:26 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/doc.h (C) 1998 Julian Smart and Markus Holzem
@@ -40,7 +40,7 @@
 
 #include <wx/docview.h>
 
-class WXDLLEXPORT wxTextCtrl;
+class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 
 class TextEditDocument
     :public wxDocument
