@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.hpp,v 1.23 2008-01-01 18:29:36 chicares Exp $
+// $Id: census_view.hpp,v 1.24 2008-03-09 12:13:25 chicares Exp $
 
 #ifndef census_view_hpp
 #define census_view_hpp
@@ -43,8 +43,8 @@
 
 class CensusDocument;
 class IllustrationView;
-class WXDLLEXPORT wxListEvent;
-class WXDLLEXPORT wxListView;
+class WXDLLIMPEXP_FWD_CORE wxListEvent;
+class WXDLLIMPEXP_FWD_CORE wxListView;
 
 class CensusView
     :public ViewEx

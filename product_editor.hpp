@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: product_editor.hpp,v 1.9 2008-02-17 15:17:13 chicares Exp $
+// $Id: product_editor.hpp,v 1.10 2008-03-09 12:13:26 chicares Exp $
 
 #ifndef product_editor_hpp
 #define product_editor_hpp
@@ -36,9 +36,9 @@
 
 class MultiDimGrid;
 class ProductEditorView;
-class WXDLLEXPORT wxStaticText;
-class WXDLLEXPORT wxTreeCtrl;
-class WXDLLEXPORT wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxStaticText;
+class WXDLLIMPEXP_FWD_CORE wxTreeCtrl;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
 
 /// Common base for all product editor document classes.
 /// It transfers some responsabilities of a document to the corresponding view

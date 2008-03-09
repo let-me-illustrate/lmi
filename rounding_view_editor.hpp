@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_view_editor.hpp,v 1.13 2008-02-17 15:17:14 chicares Exp $
+// $Id: rounding_view_editor.hpp,v 1.14 2008-03-09 12:13:26 chicares Exp $
 
 #ifndef rounding_view_editor_hpp
 #define rounding_view_editor_hpp
@@ -33,9 +33,9 @@
 
 #include <string>
 
-class WXDLLEXPORT wxBitmapButton;
-class WXDLLEXPORT wxSpinCtrl;
-class WXDLLEXPORT wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxBitmapButton;
+class WXDLLIMPEXP_FWD_CORE wxSpinCtrl;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
 
 class RoundingButtons
   :public wxPanel

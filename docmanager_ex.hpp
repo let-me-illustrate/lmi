@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: docmanager_ex.hpp,v 1.9 2008-01-01 18:29:39 chicares Exp $
+// $Id: docmanager_ex.hpp,v 1.10 2008-03-09 12:13:26 chicares Exp $
 
 #ifndef docmanager_ex_hpp
 #define docmanager_ex_hpp
@@ -32,9 +32,9 @@
 #include <wx/defs.h> // WXDLLEXPORT
 #include <wx/docview.h>
 
-class WXDLLEXPORT wxMenuBar;
-class WXDLLEXPORT wxPageSetupDialogData;
-class WXDLLEXPORT wxPrintData;
+class WXDLLIMPEXP_FWD_CORE wxMenuBar;
+class WXDLLIMPEXP_FWD_CORE wxPageSetupDialogData;
+class WXDLLIMPEXP_FWD_CORE wxPrintData;
 
 class DocManagerEx
     :public wxDocManager

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_utility.hpp,v 1.9 2008-02-24 12:42:12 chicares Exp $
+// $Id: wx_utility.hpp,v 1.10 2008-03-09 12:13:27 chicares Exp $
 
 #ifndef wx_utility_hpp
 #define wx_utility_hpp
@@ -38,9 +38,9 @@
 #include <vector>
 
 class LMI_SO calendar_date;
-class WXDLLEXPORT wxBookCtrlBase;
-class WXDLLEXPORT wxDateTime;
-class WXDLLEXPORT wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxBookCtrlBase;
+class WXDLLIMPEXP_FWD_CORE wxDateTime;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
 class jdn_t;
 
 /// Function template c_cast() performs an explicit type conversion
