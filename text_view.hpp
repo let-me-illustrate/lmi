@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: text_view.hpp,v 1.12 2008-01-01 18:29:56 chicares Exp $
+// $Id: text_view.hpp,v 1.13 2008-03-09 12:13:26 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.h (C) 1998 Julian Smart and Markus Holzem
@@ -42,7 +42,7 @@
 
 #include <wx/defs.h> // WXDLLEXPORT
 
-class WXDLLEXPORT wxTextCtrl;
+class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 
 /// This class isn't actually used in production: it's exposed for use
 /// only with a special command-line option that enables "experimental

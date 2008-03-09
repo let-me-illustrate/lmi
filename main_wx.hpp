@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.hpp,v 1.24 2008-03-02 03:07:23 chicares Exp $
+// $Id: main_wx.hpp,v 1.25 2008-03-09 12:13:26 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.h (C) 1998 Julian Smart and Markus Holzem
@@ -47,12 +47,12 @@
 class DocManagerEx;
 class ViewEx;
 
-class WXDLLEXPORT wxConfigBase;
-class WXDLLEXPORT wxDocMDIParentFrame;
-class WXDLLEXPORT wxDocument;
-class WXDLLEXPORT wxMDIChildFrame;
-class WXDLLEXPORT wxMenuBar;
-class WXDLLIMPEXP_HTML wxHtmlHelpController;
+class WXDLLIMPEXP_FWD_CORE wxConfigBase;
+class WXDLLIMPEXP_FWD_CORE wxDocMDIParentFrame;
+class WXDLLIMPEXP_FWD_CORE wxDocument;
+class WXDLLIMPEXP_FWD_CORE wxMDIChildFrame;
+class WXDLLIMPEXP_FWD_CORE wxMenuBar;
+class WXDLLIMPEXP_FWD_HTML wxHtmlHelpController;
 
 class Skeleton
     :public wxApp

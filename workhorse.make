@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.107 2008-01-13 20:03:20 chicares Exp $
+# $Id: workhorse.make,v 1.108 2008-03-09 12:13:26 chicares Exp $
 
 ################################################################################
 
@@ -453,14 +453,6 @@ gcc_common_extra_warnings := \
 
 $(wx_dependent_objects):                gcc_common_extra_warnings :=
 $(wx_dependent_physical_closure_files): gcc_common_extra_warnings :=
-
-# MinGW gcc-4.2.1 has stricter warnings than 3.4.5, but also offers a
-# new option to suppress one that arises often with wx.
-#
-ifeq (4.2.1,$(gcc_version))
-  $(wx_dependent_objects):                gcc_common_extra_warnings := -Wno-attributes
-  $(wx_dependent_physical_closure_files): gcc_common_extra_warnings := -Wno-attributes
-endif
 
 # Boost didn't remove an unused parameter in this file:
 
