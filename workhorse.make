@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.108 2008-03-09 12:13:26 chicares Exp $
+# $Id: workhorse.make,v 1.109 2008-03-12 02:57:17 chicares Exp $
 
 ################################################################################
 
@@ -357,7 +357,7 @@ physical_closure_files := \
 
 # Files that depend on wx, which can't use the strictest gcc warnings.
 
-# Files are deemed to depend on wx iff they contain 'include.*<wx/'.
+# Files are deemed to depend on wx iff they contain 'include *<wx/'.
 # This heuristic isn't foolproof because wx headers might be included
 # indirectly. Include an innocuous header like <wx/version.h> in files
 # for which it fails.
@@ -368,7 +368,7 @@ wx_dependent_objects := \
       $(notdir \
         $(shell $(GREP) \
           --files-with-matches \
-          'include.*<wx/' \
+          'include *<wx/' \
           $(src_dir)/*.?pp \
         ) \
       ) \
@@ -380,7 +380,7 @@ wx_dependent_physical_closure_files := \
     $(notdir \
       $(shell $(GREP) \
         --files-with-matches \
-        'include.*<wx/' \
+        'include *<wx/' \
         $(wildcard \
           $(addprefix $(src_dir)/,*.h *.hpp *.tpp *.xpp \
           ) \
