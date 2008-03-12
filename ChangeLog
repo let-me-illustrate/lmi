@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1023 2008-03-06 03:19:24 chicares Exp $
+// $Id: ChangeLog,v 1.1024 2008-03-12 03:01:35 chicares Exp $
 
 MAINTENANCE
 
@@ -15942,4 +15942,50 @@ Add contextual-help patches--see:
   http://lists.nongnu.org/archive/html/lmi/2008-02/msg00070.html
   http://lists.nongnu.org/archive/html/lmi/2008-03/msg00000.html
   http://lists.nongnu.org/archive/html/lmi/2008-03/msg00004.html
+
+20080308T1711Z <gchicares@sbcglobal.net> [1195]
+
+  skin_coli_boli.xrc
+Fix defect introduced 20080305T1945Z: restore contextual-help button.
+
+20080309T0004Z <gchicares@sbcglobal.net> [1195]
+
+  Makefile.am
+Update automake file to reflect 20080218T1743Z '*.xrc' renaming (VS).
+
+20080309T1213Z <gchicares@sbcglobal.net> [1195]
+
+  census_document.hpp
+  census_view.hpp
+  database_view.hpp
+  docmanager_ex.hpp
+  illustration_document.hpp
+  illustration_view.hpp
+  main_wx.hpp
+  multidimgrid_any.hpp
+  policy_view.hpp
+  product_editor.hpp
+  rounding_view_editor.hpp
+  text_doc.hpp
+  text_view.hpp
+  tier_view.hpp
+  view_ex.hpp
+  workhorse.make
+  wx_utility.hpp
+Fix gcc "type attributes" warning (Vaclav).
+
+20080312T0257Z <gchicares@sbcglobal.net> [1195]
+
+  workhorse.make
+Slightly improve wx dependency detection.
+
+20080312T0259Z <gchicares@sbcglobal.net> [1195]
+
+  menus.xrc
+Clarify meaning of "Page setup" command; punctuate more consistently.
+
+20080312T0301Z <gchicares@sbcglobal.net> [1195]
+
+  test_coding_rules.cpp
+Support file types required for html help.
 
