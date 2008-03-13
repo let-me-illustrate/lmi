@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.hpp,v 1.30 2008-03-09 12:13:26 chicares Exp $
+// $Id: illustration_view.hpp,v 1.31 2008-03-13 14:09:20 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -94,9 +94,9 @@ class IllustrationView
     void PrintOrPreviewHtmlSummary(enum_print_option) const;
 
     // ViewEx required implementation.
-    wxWindow* CreateChildWindow();
-    wxIcon Icon() const;
-    wxMenuBar* MenuBar() const;
+    virtual wxWindow* CreateChildWindow();
+    virtual wxIcon Icon() const;
+    virtual wxMenuBar* MenuBar() const;
 
     // ViewEx overrides.
     virtual bool OnCreate(wxDocument*, long int);
