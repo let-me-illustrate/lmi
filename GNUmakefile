@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.122 2008-01-13 15:46:33 chicares Exp $
+# $Id: GNUmakefile,v 1.123 2008-03-13 14:08:20 chicares Exp $
 
 ################################################################################
 
@@ -297,11 +297,12 @@ clobber: source_clean
 
 # Custom tools built from source.
 
+TEST_CODING_RULES := $(build_directory)/test_coding_rules$(EXEEXT)
+
 .PHONY: custom_tools
 custom_tools:
 	@$(MAKE) test_coding_rules$(EXEEXT)
-
-TEST_CODING_RULES := $(build_directory)/test_coding_rules$(EXEEXT)
+	@$(CP) --preserve --update $(TEST_CODING_RULES) /opt/lmi/local/bin
 
 ################################################################################
 
