@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.72 2008-03-12 03:01:35 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.73 2008-03-13 14:07:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -174,6 +174,7 @@ file::file(std::string const& file_path)
 
     phylum_ =
           ".ico"        == extension() ? e_binary
+        : ".png"        == extension() ? e_binary
         : ".h"          == extension() ? e_c_header
         : ".c"          == extension() ? e_c_source
         : ".hpp"        == extension() ? e_cxx_header
