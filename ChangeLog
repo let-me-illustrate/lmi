@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1024 2008-03-12 03:01:35 chicares Exp $
+// $Id: ChangeLog,v 1.1025 2008-03-15 14:57:20 chicares Exp $
 
 MAINTENANCE
 
@@ -15988,4 +15988,24 @@ Clarify meaning of "Page setup" command; punctuate more consistently.
 
   test_coding_rules.cpp
 Support file types required for html help.
+
+20080313T1407Z <gchicares@sbcglobal.net> [1195]
+
+  test_coding_rules.cpp
+Support '.png' files.
+
+20080313T1408Z <gchicares@sbcglobal.net> [1195]
+
+  GNUmakefile
+Install program that checks coding rules, for use with webpages.
+
+20080313T1409Z <gchicares@sbcglobal.net> [1195]
+
+  illustration_view.hpp
+Mark virtuals explicitly.
+
+20080315T1457Z <gchicares@sbcglobal.net> [1195]
+
+  Makefile.am
+Simplify.
 
