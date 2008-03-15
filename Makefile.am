@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.36 2008-03-09 00:04:34 chicares Exp $
+# $Id: Makefile.am,v 1.37 2008-03-15 14:57:20 chicares Exp $
 
 SUBDIRS = third_party
 
@@ -57,85 +57,11 @@ noinst_LTLIBRARIES = \
     libmain_auxiliary_common.la
 
 # data files
-#
-# TODO: we should install them in $(pkgdatadir)/resources or something similar
-#       (but for this the code in main_wx.cpp must be modified to allow it)
-xrcdir = $(bindir)
-dist_xrc_DATA = \
-    about.xpm \
-    census_view.xpm \
-    close.xpm \
-    database_view.xpm \
-    default_cell.xpm \
-    delete-row.xpm \
-    edit-case.xpm \
-    edit-cell.xpm \
-    edit-class.xpm \
-    exit.xpm \
-    fixed-width.xpm \
-    help.xpm \
-    illustration_view.xpm \
-    insert-rows.xpm \
-    lmi.xpm \
-    menus.xrc \
-    new.xpm \
-    open.xpm \
-    paste-case.xpm \
-    policy_view.xpm \
-    policy_view.xrc \
-    preferences.xpm \
-    preferences_view.xrc \
-    print-case.xpm \
-    print-cell.xpm \
-    print-options.xpm \
-    print-preview.xpm \
-    print.xpm \
-    round_downward.xpm \
-    round_downward_hover.xpm \
-    round_downward_selected.xpm \
-    round_not_at_all.xpm \
-    round_not_at_all_hover.xpm \
-    round_not_at_all_selected.xpm \
-    round_to_nearest.xpm \
-    round_to_nearest_hover.xpm \
-    round_to_nearest_selected.xpm \
-    round_upward.xpm \
-    round_upward_hover.xpm \
-    round_upward_selected.xpm \
-    rounding_view.xpm \
-    rounding_view.xrc \
-    run-case.xpm \
-    run-cell.xpm \
-    save.xpm \
-    saveas.xpm \
-    skin.xrc \
-    skin_coli_boli.xrc \
-    skin_group_carveout.xrc \
-    skin_reg_d.xrc \
-    skin_single_premium.xrc \
-    skin_variable_annuity.xrc \
-    text_view.xpm \
-    tier_view.xpm \
-    toolbar.xrc \
-    varying-width.xpm \
-    write_spreadsheet.xpm \
+xrcdir = $(pkgdatadir)
+dist_xrc_DATA = $(shell ls -1 $(srcdir)/*.xrc $(srcdir)/*.xpm)
 
-xsldir = $(bindir)
-dist_xsl_DATA = \
-    calculation_summary_html.xsl \
-    calculation_summary_tsv.xsl \
-    fo_common.xsl \
-    group_private_placement.xsl \
-    illustration_reg.xsl \
-    individual_private_placement.xsl \
-    ledger_common_tsv.xsl \
-    ledger_common.xsl \
-    ledger_formats.xml \
-    microcosm_tsv.xsl \
-    nasd.xsl \
-    offshore_private_placement.xsl \
-    variable_annuity.xsl \
-    xml2to1.xsl
+xsldir = $(pkgdatadir)
+dist_xsl_DATA = $(shell ls -1 $(srcdir)/*.xsl)
 
 # CGI stuff
 if LMI_WITH_CGI
