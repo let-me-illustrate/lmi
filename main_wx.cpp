@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.101 2008-03-02 03:07:23 chicares Exp $
+// $Id: main_wx.cpp,v 1.102 2008-03-19 13:00:22 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -123,8 +123,8 @@ BEGIN_EVENT_TABLE(Skeleton, wxApp)
     EVT_DROP_FILES(                                    Skeleton::UponDropFiles                    )
     EVT_MENU(wxID_ABOUT                               ,Skeleton::UponAbout                        )
     EVT_MENU(wxID_HELP                                ,Skeleton::UponHelp                         )
+    EVT_MENU(wxID_PREFERENCES                         ,Skeleton::UponPreferences                  )
     EVT_MENU(XRCID("edit_default_cell"               ),Skeleton::UponEditDefaultCell              )
-    EVT_MENU(XRCID("preferences"                     ),Skeleton::UponPreferences                  )
     EVT_MENU(XRCID("test_app_status_alert"           ),Skeleton::UponTestAppStatus                )
     EVT_MENU(XRCID("test_app_warning_alert"          ),Skeleton::UponTestAppWarning               )
     EVT_MENU(XRCID("test_app_hobsons_choice_alert"   ),Skeleton::UponTestAppHobsons               )
