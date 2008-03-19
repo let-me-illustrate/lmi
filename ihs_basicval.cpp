@@ -1,8 +1,6 @@
 // Basic values.
 //
 // Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Gregory W. Chicares.
-// Portions marked JLM Copyright (C) 2001 (modal target), 2002 (non-7702 corridor) Gregory W. Chicares and Joseph L. Murdzek.
-// Author is GWC except where specifically noted otherwise.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -21,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.40 2008-01-21 14:00:15 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.41 2008-03-19 16:43:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1021,64 +1019,10 @@ double BasicValues::GetModalTgtPrem
         static_cast<e_modal_prem_type>(static_cast<int>(Database_->Query(DB_TgtPremType)));
     double modal_prem = GetModalPrem(Year, Mode, SpecAmt, PremType);
 
-#if 0
-// Authors of this ifdefed-out block: GWC and JLM.
-// TODO ?? JOE--Please see comments
-        // Some products define only an annual target premium, with
-        // no directions for calculating a non-annual policy fee.
-// JOE--do we need to define a modal target premium?
-        // The program shall complain
-        // if a non-annual taget premium is requested.
-// JOE--
-// I had asked:
-// why compare an enum to an int, and also to a value it cannot assume?
-// IOW, given:
-//enum EMode
-//  {e_annual       = 1
-//  ,e_semiannual   = 2
-//  ,e_quarterly    = 4
-//  ,e_monthly      = 12
-//  };
-// how can a variable of type Mode have the value zero?
-//
-// And if you mean to assert that it's annual, why not compare to e_annual?
-// Even if you compared it to one rather than zero, how maintainable is that,
-// and what happens if we ever change the value of the enumerator e_annual?
-// Changing
-//      if(0 == Mode)
-// to
-//      LMI_ASSERT(0 == Mode);
-// does not address this, and actually makes correct code incorrect (why?),
-// so the proposed replacement of if...else below with
-//      LMI_ASSERT(0 == Mode);
-//      modal_prem += POLICYFEE;
-// seems like something we shouldn't do.
-//
-// That is not to say that
-//      LMI_ASSERT(0 == Mode);
-// or even
-//      LMI_ASSERT(e_annual == Mode);
-// would be good: that would allow a non-annual mode to be entered, but
-// give a runtime error. Either non-annual modes are OK and should be
-// supported, or they are not OK. What harm is done by the change below?
-
-/* Changed from:
-        if(0 == Mode)
-            {
-            modal_prem += POLICYFEE;
-            }
-        else
-            {
-            // Not a precise method for modalizing the tgt prem's policy fee?
-            // What should we do if a product defines only an annual target
-            // premium, but a modal one is wanted?
-            modal_prem += POLICYFEE / Mode;
-            }
-*/
-// Changed to:
+    // TODO ?? Probably this should reflect policy fee. Some products
+    // define only an annual target premium, and don't specify how to
+    // modalize it.
 //      modal_prem += POLICYFEE / Mode;
-// TODO ?? WE MUST DEFINE POLICYFEE HERE
-#endif // 0
 
     return modal_prem;
 }
@@ -1874,8 +1818,7 @@ std::vector<double> const& BasicValues::GetCorridorFactor() const
             // break;
         case e_noncompliant:
             {
-            // TODO ?? Why not have this function return the vector it creates?
-            CalculateNon7702CompliantCorridor();
+            Non7702CompliantCorridor = std::vector<double>(Length, 1.0);
             return Non7702CompliantCorridor;
             }
             // break;
@@ -1893,56 +1836,6 @@ std::vector<double> const& BasicValues::GetCorridorFactor() const
 
     static std::vector<double> z;
     return z;
-}
-
-//============================================================================
-// Authors: GWC and JLM.
-// TODO ?? Why not have this function return the vector it creates?
-void BasicValues::CalculateNon7702CompliantCorridor() const
-// TODO ?? JOE--What does a comment such as this add?
-// non 7702 compliant corridor
-{
-    // TODO ?? JOE--Please do clean this up. How many style rules
-    // are violated here? Do you understand the rationale for
-    // those rules?
-
-    // Interpolate the input coridor factor from the pivot age to 1.0 by
-    // age 95. This notion is based on GPT corridor factors.
-    Non7702CompliantCorridor.resize(Length);
-
-    double pivot_age = Database_->Query(DB_NonUSCorridorPivot);
-
-    LMI_ASSERT( (pivot_age >= 0.0)
-            &&(pivot_age < 95.0)
-            );
-
-    double non_us_corr = Input_->NonUSCorridor;
-    double increment = (non_us_corr - 1.0)
-                     / (95.0 - pivot_age)
-                     ;
-
-    for(int index=0; index < Length; index++)
-        {
-        if(index + IssueAge <= pivot_age)
-            {
-            Non7702CompliantCorridor[index]=non_us_corr;
-            }
-        else if(index + IssueAge > 95)
-            {
-            Non7702CompliantCorridor[index]=1.0;
-            }
-        else
-            {
-            double interp_corr = non_us_corr
-                               - (index + IssueAge - pivot_age)
-                               * increment
-                               ;
-            Non7702CompliantCorridor[index]=interp_corr;
-            }
-        Non7702CompliantCorridor[index] = round_corridor_factor
-            (Non7702CompliantCorridor[index]
-            );
-        }
 }
 
 // 7702 recognizes death benefit options 1 and 2 only. A contract
