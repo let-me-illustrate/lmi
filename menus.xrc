@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: menus.xrc,v 1.38 2008-03-19 13:00:22 chicares Exp $
+    $Id: menus.xrc,v 1.39 2008-03-19 13:53:20 chicares Exp $
 -->
 
 <!-- reusable menus -->
@@ -63,14 +63,7 @@
         <bitmap>print.xpm</bitmap>
         <help>Print this document</help>
     </object>
-    <!-- WX !! Propose adding wxID_PAGE_SETUP to the library.
-         In msw, 'Page setup' has superseded 'Print setup'. But wx
-         provides a builtin ID only for the former and not for the
-         latter. Yet wxxrc knows only builtin IDs. Therefore, to
-         make the modern 'Page setup' available with wxxrc,
-         wxID_PRINT_SETUP is hijacked and used for 'page setup'.
-    -->
-    <object class="wxMenuItem" name="wxID_PRINT_SETUP">
+    <object class="wxMenuItem" name="wxID_PAGE_SETUP">
         <label>Page set_up</label>
         <bitmap>print-options.xpm</bitmap>
         <help>Choose printing options for this session</help>
