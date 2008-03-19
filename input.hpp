@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.26 2008-01-21 19:00:58 chicares Exp $
+// $Id: input.hpp,v 1.27 2008-03-19 16:43:29 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -277,7 +277,7 @@ class LMI_SO Input
     tnr_duration             SurviveToYear                   ;
     tnr_attained_age         SurviveToAge                    ;
     tnr_nonnegative_double   MaximumNaar                     ;
-    tnr_corridor_factor      UseOffshoreCorridorFactor       ; // TODO ?? Awful name: suggests bool.
+    tnr_corridor_factor      UseOffshoreCorridorFactor       ; // INPUT !! Obsolete.
     mce_yes_or_no            ChildRider                      ;
     tnr_nonnegative_double   ChildRiderAmount                ; // TODO ?? Specialize?
     mce_yes_or_no            SpouseRider                     ;
@@ -308,7 +308,7 @@ class LMI_SO Input
     datum_sequence           ExtraMonthlyCustodialFee        ;
     datum_sequence           ExtraCompensationOnAssets       ;
     datum_sequence           ExtraCompensationOnPremium      ;
-    datum_sequence           OffshoreCorridorFactor          ;
+    datum_sequence           OffshoreCorridorFactor          ; // INPUT !! Obsolete.
     datum_sequence           PartialMortalityMultiplier      ;
     datum_sequence           CurrentCoiMultiplier            ;
     datum_sequence           CurrentCoiGrading               ; // TODO ?? Obsolete: expunge.

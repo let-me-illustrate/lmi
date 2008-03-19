@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbdict.cpp,v 1.19 2008-01-01 18:29:42 chicares Exp $
+// $Id: ihs_dbdict.cpp,v 1.20 2008-03-19 16:43:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -602,7 +602,7 @@ void DBDictionary::WriteSampleDBFile()
     Add(TDBValue(DB_DynamicSepAcctLoad  , false));
     Add(TDBValue(DB_SpecAmtLoadLimit    , 10000000.0));
     Add(TDBValue(DB_Equiv7702DBO3       , 0));
-    Add(TDBValue(DB_NonUSCorridorPivot  , 0));
+    Add(TDBValue(DB_NonUSCorridorPivot  , 0)); // DATABASE !! Obsolete.
     Add(TDBValue(DB_ExpRatRiskCOIMult   , 0));
     Add(TDBValue(DB_SurrChgSAMult       , 0.0));
     Add(TDBValue(DB_AllowSpouse         , false));

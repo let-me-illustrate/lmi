@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1025 2008-03-15 14:57:20 chicares Exp $
+// $Id: ChangeLog,v 1.1026 2008-03-19 16:43:30 chicares Exp $
 
 MAINTENANCE
 
@@ -16008,4 +16008,30 @@ Mark virtuals explicitly.
 
   Makefile.am
 Simplify.
+
+20080319T1300Z <gchicares@sbcglobal.net> [1195]
+
+  main_wx.cpp
+  menus.xrc
+  toolbar.xrc
+Use stock wxID_PREFERENCES instead of XRCID("preferences").
+
+20080319T1353Z <gchicares@sbcglobal.net> [1195]
+
+  docmanager_ex.cpp
+  menus.xrc
+Replace wxID_PRINT_SETUP with wxID_PAGE_SETUP.
+
+20080319T1643Z <gchicares@sbcglobal.net> [1189]
+
+  basic_values.hpp
+  dbnames.hpp
+  dbnames.xpp
+  ihs_basicval.cpp
+  ihs_dbdict.cpp
+  input.hpp
+  inputillus.cpp
+  inputs.hpp
+  skin.xrc
+Deprecate or remove obsolete code for non-7702 corridor.
 

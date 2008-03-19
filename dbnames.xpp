@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.xpp,v 1.20 2008-01-01 18:29:38 chicares Exp $
+// $Id: dbnames.xpp,v 1.21 2008-03-19 16:43:29 chicares Exp $
 
 #define DB_NAMES \
 {DB_FIRST,DB_FIRST,"dummy","dummy",}, \
@@ -282,7 +282,7 @@
 {DB_DynamicSepAcctLoad,DB_Topic_Loads,"DynamicSepAcctLoad","Separate account AV load dynamically determined based on total case assets: 0=no, 1=yes",}, \
 {DB_SpecAmtLoadLimit,DB_Topic_Loads,"SpecAmtLoadLimit","Limit up to which charge per $1 of specified amount applies",}, \
 {DB_Equiv7702DBO3,DB_Topic_7702,"Equiv7702DBO3","For 7702, treat return of premium death benefit option same as: 0=level 1=increasing",}, \
-{DB_NonUSCorridorPivot,DB_Topic_7702,"NonUSCorridorPivot","Age at which non-US corridor factor begins to grade to unity",}, \
+{DB_NonUSCorridorPivot,DB_Topic_7702,"NonUSCorridorPivot","[no longer supported]",}, \
 {DB_ExpRatRiskCOIMult,DB_Topic_ExpRating,"ExpRatRiskCOIMult","Maximum risk charge as a multiple of annual cost of insurance charges",}, \
 {DB_SurrChgSAMult,DB_Topic_SurrChgs,"SurrChgSAMult","Multiple of initial spec amt for formulaic surrender charges",}, \
 {DB_AllowSpouse,DB_Topic_Riders,"AllowSpouse","Allow spouse rider: 0=no, 1=yes",}, \
