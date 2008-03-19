@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.cpp,v 1.30 2008-01-21 19:00:58 chicares Exp $
+// $Id: inputillus.cpp,v 1.31 2008-03-19 16:43:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -781,7 +781,7 @@ void IllusInputParms::ascribe_members()
     ascribe("SurviveToYear"                , &IllusInputParms::SurviveToYear              );
     ascribe("SurviveToAge"                 , &IllusInputParms::SurviveToAge               );
     ascribe("MaximumNaar"                  , &IllusInputParms::MaxNAAR                    );
-    ascribe("UseOffshoreCorridorFactor"    , &IllusInputParms::NonUSCorridor              );
+    ascribe("UseOffshoreCorridorFactor"    , &IllusInputParms::NonUSCorridor              ); // INPUT !! Obsolete.
     ascribe("ChildRider"                   , &IllusInputParms::HasChildRider              );
     ascribe("ChildRiderAmount"             , &IllusInputParms::ChildRiderAmount           );
     ascribe("SpouseRider"                  , &IllusInputParms::HasSpouseRider             );
@@ -813,7 +813,7 @@ void IllusInputParms::ascribe_members()
     ascribe("ExtraMonthlyCustodialFee"     , &IllusInputParms::AddonMonthlyCustodialFee   );
     ascribe("ExtraCompensationOnAssets"    , &IllusInputParms::AddonCompOnAssets          );
     ascribe("ExtraCompensationOnPremium"   , &IllusInputParms::AddonCompOnPremium         );
-    ascribe("OffshoreCorridorFactor"       , &IllusInputParms::NonUsCorridorFactor        );
+    ascribe("OffshoreCorridorFactor"       , &IllusInputParms::NonUsCorridorFactor        ); // INPUT !! Obsolete.
     ascribe("PartialMortalityMultiplier"   , &IllusInputParms::PartialMortalityMultiplier );
     ascribe("CurrentCoiMultiplier"         , &IllusInputParms::CurrentCoiMultiplier       );
     ascribe("CurrentCoiGrading"            , &IllusInputParms::CurrentCoiGrading          );

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputs.hpp,v 1.17 2008-01-21 19:00:58 chicares Exp $
+// $Id: inputs.hpp,v 1.18 2008-03-19 16:43:29 chicares Exp $
 
 #ifndef inputs_hpp
 #define inputs_hpp
@@ -275,7 +275,7 @@ class LMI_SO InputParms
     r_attained_age       SurviveToAge         ;
 
     r_nonnegative_double MaxNAAR              ;
-    r_double_ge_one      NonUSCorridor        ;
+    r_double_ge_one      NonUSCorridor        ; // INPUT !! Obsolete.
 
     e_yes_or_no          HasChildRider        ;
     r_unchecked_double   ChildRiderAmount     ;
