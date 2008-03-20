@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1026 2008-03-19 16:43:30 chicares Exp $
+// $Id: ChangeLog,v 1.1027 2008-03-20 02:47:26 chicares Exp $
 
 MAINTENANCE
 
@@ -16034,4 +16034,11 @@ Replace wxID_PRINT_SETUP with wxID_PAGE_SETUP.
   inputs.hpp
   skin.xrc
 Deprecate or remove obsolete code for non-7702 corridor.
+
+20080320T0247Z <gchicares@sbcglobal.net> [1189]
+
+  main_wx.cpp
+Make html help accessible from XRC dialogs (Vaclav). See:
+  http://lists.nongnu.org/archive/html/lmi/2008-03/msg00033.html
+  http://lists.nongnu.org/archive/html/lmi/2008-03/msg00036.html
 
