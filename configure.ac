@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.34 2008-02-18 17:41:27 chicares Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.35 2008-03-21 12:13:17 chicares Exp $)dnl
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -436,6 +436,11 @@ dnl indicates weither do we need to build internally boost::filesystem library
 AM_CONDITIONAL([LMI_BOOSTFS_BUILD], [test "x$LMI_BOOSTFS_BUILD" == "x1"])
 dnl indicates the directory path where sources could be found
 AC_SUBST(LMI_BOOSTFS_SRC)
+
+dnl --- GTK+ (required) -------------------
+if test "$USE_LINUX" = "1"; then
+  PKG_CHECK_MODULES(GTK, gtk+-2.0)
+fi
 
 dnl --- libxml (required) -------------------
 PKG_CHECK_MODULES(LIBXML, libxml-2.0 >= 2.6.0)
