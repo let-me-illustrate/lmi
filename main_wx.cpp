@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.103 2008-03-20 02:47:26 chicares Exp $
+// $Id: main_wx.cpp,v 1.104 2008-03-21 12:13:17 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -100,6 +100,10 @@
 #include <iterator>
 #include <stdexcept>
 #include <string>
+
+#if defined __WXGTK__
+#   include <gtk/gtk.h>
+#endif
 
 #if !defined LMI_MSW
 #   include "lmi.xpm"
@@ -957,7 +961,7 @@ namespace
 void send_paste_message_to(wxWindow const& w)
 {
 #if defined __WXGTK__
-    warning() << "Not yet implemented." << LMI_FLUSH;
+    g_signal_emit_by_name(w.m_focusWidget, "paste_clipboard");
 #elif defined __WXMSW__
     ::SendMessage(reinterpret_cast<HWND>(w.GetHandle()), WM_PASTE, 0, 0);
 #else  // Unsupported platform.

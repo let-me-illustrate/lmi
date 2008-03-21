@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.37 2008-03-15 14:57:20 chicares Exp $
+# $Id: Makefile.am,v 1.38 2008-03-21 12:13:16 chicares Exp $
 
 SUBDIRS = third_party
 
@@ -184,7 +184,7 @@ lmi_wx_SOURCES = \
     wx_checks.cpp \
     wx_utility.cpp
 
-lmi_wx_CXXFLAGS = $(AM_CXXFLAGS) $(WX_CXXFLAGS) $(XMLWRAPP_FLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
+lmi_wx_CXXFLAGS = $(AM_CXXFLAGS) $(WX_CXXFLAGS) $(XMLWRAPP_FLAGS) $(GTK_CFLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
 # $(CGICC_INCLUDE_FLAGS)
 
 if LMI_MSW
@@ -200,6 +200,7 @@ lmi_wx_LDADD =  \
     liblmi.la \
     libwx_new.la \
     $(XMLWRAPP_LIBS) \
+    $(GTK_LIBS) \
     $(LIBXSLT_LIBS) \
     $(LIBXML_LIBS) \
     $(BOOST_LIBS) \
