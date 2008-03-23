@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: text_doc.cpp,v 1.8 2008-01-01 18:29:56 chicares Exp $
+// $Id: text_doc.cpp,v 1.9 2008-03-23 01:17:21 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/doc.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -89,26 +89,18 @@ void TextEditDocument::Modify(bool mod)
         }
 }
 
-bool TextEditDocument::OnOpenDocument(wxString const& filename)
+bool TextEditDocument::DoOpenDocument(wxString const& filename)
 {
-    if(!PredominantViewWindow().LoadFile(filename))
-        {
-        return false;
-        }
-
-    SetFilename(filename, true);
-    Modify(false);
-    UpdateAllViews();
-    return true;
+    return PredominantViewWindow().LoadFile(filename);
 }
 
-bool TextEditDocument::OnSaveDocument(wxString const& filename)
+bool TextEditDocument::DoSaveDocument(wxString const& filename)
 {
     if(!PredominantViewWindow().SaveFile(filename))
         {
         return false;
         }
-    Modify(false);
+
     return true;
 }
 
