@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1027 2008-03-20 02:47:26 chicares Exp $
+// $Id: ChangeLog,v 1.1028 2008-03-23 02:53:24 chicares Exp $
 
 MAINTENANCE
 
@@ -16041,4 +16041,51 @@ Deprecate or remove obsolete code for non-7702 corridor.
 Make html help accessible from XRC dialogs (Vaclav). See:
   http://lists.nongnu.org/archive/html/lmi/2008-03/msg00033.html
   http://lists.nongnu.org/archive/html/lmi/2008-03/msg00036.html
+
+20080321T1213Z <gchicares@sbcglobal.net> [1189]
+
+  Makefile.am
+  configure.ac
+  main_wx.cpp
+Test pasting with wxGTK (Vaclav). See:
+  http://lists.nongnu.org/archive/html/lmi/2008-03/msg00001.html
+
+20080323T0053Z <gchicares@sbcglobal.net> [1189]
+
+  main_wx.cpp
+Improve documentation.
+
+20080323T0117Z <gchicares@sbcglobal.net> [1188]
+
+  census_document.cpp
+  census_document.hpp
+  illustration_document.cpp
+  illustration_document.hpp
+  text_doc.cpp
+  text_doc.hpp
+Override Do[Open|Save]Document, not On[Open|Save]Document (Vaclav).
+
+20080323T0156Z <gchicares@sbcglobal.net> [1188]
+
+  census_document.cpp
+  illustration_document.cpp
+  text_doc.cpp
+Improve user notifications for opening and saving files. Failed saves
+in particular now elicit diagnostics.
+
+20080323T0209Z <gchicares@sbcglobal.net> [1188]
+
+  census_document.cpp
+  illustration_document.cpp
+Make input files platform independent by saving them in 'binary' mode.
+
+20080323T0253Z <gchicares@sbcglobal.net> [1186]
+
+  census_document.cpp
+  census_document.hpp
+  illustration_document.cpp
+  illustration_document.hpp
+  text_doc.cpp
+  text_doc.hpp
+Improve documentation.
 

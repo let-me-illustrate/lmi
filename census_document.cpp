@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_document.cpp,v 1.12 2008-03-23 02:09:39 chicares Exp $
+// $Id: census_document.cpp,v 1.13 2008-03-23 02:53:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -56,8 +56,7 @@ wxListView& CensusDocument::PredominantViewWindow() const
 
 bool CensusDocument::OnCreate(wxString const& filename, long int flags)
 {
-// TODO ?? Why not offer doc_.read(filename)?
-
+    // TODO ?? Why not offer doc_.read(filename)?
     if(!(wxDOC_NEW & flags))
         {
         std::ifstream ifs(filename.c_str());
@@ -94,10 +93,14 @@ bool CensusDocument::OnNewDocument()
     return true;
 }
 
+/// See documentation for IllustrationDocument::DoOpenDocument().
+
 bool CensusDocument::DoOpenDocument(wxString const& filename)
 {
     return true;
 }
+
+/// See documentation for IllustrationDocument::DoSaveDocument().
 
 bool CensusDocument::DoSaveDocument(wxString const& filename)
 {

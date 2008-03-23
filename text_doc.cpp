@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: text_doc.cpp,v 1.10 2008-03-23 01:56:28 chicares Exp $
+// $Id: text_doc.cpp,v 1.11 2008-03-23 02:53:24 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/doc.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -61,15 +61,16 @@ wxTextCtrl& TextEditDocument::PredominantViewWindow() const
         );
 }
 
-// When this function is called, a view may or may not exist.
-// The framework behaves this way:
-//   if the view contains no modified data
-//     destroy the view
-// then call the present function:
-//   if the document contains no modified data
-//     destroy the document
-//   else
-//     prompt to save the document
+/// When this function is called, a view may or may not exist.
+/// The framework behaves this way:
+///   if the view contains no modified data
+///     destroy the view
+/// then call the present function:
+///   if the document contains no modified data
+///     destroy the document
+///   else
+///     prompt to save the document
+
 bool TextEditDocument::IsModified() const
 {
     bool is_modified = wxDocument::IsModified();
@@ -89,10 +90,20 @@ void TextEditDocument::Modify(bool mod)
         }
 }
 
+/// Override wx's built-in file management: the view handles that.
+///
+/// Override DoOpenDocument() instead of OnOpenDocument(): the latter
+/// doesn't permit customizing its diagnostic messages.
+
 bool TextEditDocument::DoOpenDocument(wxString const& filename)
 {
     return PredominantViewWindow().LoadFile(filename);
 }
+
+/// Override wx's built-in file management: the view handles that.
+///
+/// Override DoSaveDocument() instead of OnSaveDocument(): the latter
+/// doesn't permit customizing its diagnostic messages.
 
 bool TextEditDocument::DoSaveDocument(wxString const& filename)
 {
