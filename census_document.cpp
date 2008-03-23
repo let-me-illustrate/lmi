@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_document.cpp,v 1.11 2008-03-23 01:56:28 chicares Exp $
+// $Id: census_document.cpp,v 1.12 2008-03-23 02:09:39 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -27,11 +27,11 @@
 #endif
 
 #include "census_document.hpp"
-
 #include "view_ex.tpp"
 
 #include "alert.hpp"
 #include "census_view.hpp"
+#include "miscellany.hpp"
 
 #include <fstream>
 
@@ -105,7 +105,7 @@ bool CensusDocument::DoSaveDocument(wxString const& filename)
     convert_to_ihs(doc_.cell_parms_ , cell_parms_ );
     convert_to_ihs(doc_.class_parms_, class_parms_);
 
-    std::ofstream ofs(filename.c_str());
+    std::ofstream ofs(filename.c_str(), ios_out_trunc_binary());
     doc_.write(ofs);
     if(!ofs)
         {
