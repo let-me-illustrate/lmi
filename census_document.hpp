@@ -19,11 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_document.hpp,v 1.9 2008-03-23 01:17:21 chicares Exp $
-
-// WX !! Override DoOpenDocument() and DoSaveDocument() instead of
-// LoadObject() and SaveObject(): the latter would probably work, but
-// their diagnostic messages aren't customizable.
+// $Id: census_document.hpp,v 1.10 2008-03-23 02:53:24 chicares Exp $
 
 #ifndef census_document_hpp
 #define census_document_hpp
