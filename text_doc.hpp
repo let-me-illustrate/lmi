@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: text_doc.hpp,v 1.9 2008-03-23 01:17:21 chicares Exp $
+// $Id: text_doc.hpp,v 1.10 2008-03-23 02:53:24 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/doc.h (C) 1998 Julian Smart and Markus Holzem
@@ -28,10 +28,6 @@
 // The original was modified by GWC in 2002 to factor the text-document
 // class out of a larger file, and in the later years given in the
 // copyright notice above.
-
-// Because text windows have their own functions for loading and saving
-// files, override DoOpenDocument() and DoSaveDocument() instead of
-// LoadObject and SaveObject.
 
 #ifndef text_doc_hpp
 #define text_doc_hpp

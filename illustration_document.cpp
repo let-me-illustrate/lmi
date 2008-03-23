@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_document.cpp,v 1.15 2008-03-23 02:09:39 chicares Exp $
+// $Id: illustration_document.cpp,v 1.16 2008-03-23 02:53:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -60,45 +60,40 @@ wxHtmlWindow& IllustrationDocument::PredominantViewWindow() const
         );
 }
 
-// TODO ?? Revise:
-// IllustrationDocument::OnOpenDocument() has not yet been called,
-// Defer calling base-class virtual.
+/// Class IllustrationView overloads wxView::OnCreate() to display a
+/// dialog that allow input parameters to be edited before the view is
+/// shown. Cancelling that dialog deliberately prevents that view from
+/// being created: it is not tasteful to show a blank view window
+/// underneath the dialog and destroy it on wxID_CANCEL.
+///
+/// But wxDocManager::CreateDocument() calls wxDocument::OnCreate()
+/// (which calls wxView::OnCreate() to create a view) before it calls
+/// wxDocument::DoOpenDocument() (where, by default, wx would read the
+/// document's data). Yet here it is required to read the document's
+/// data before the view is created.
+///
+/// Resolution: Read document data in IllustrationDocument::OnCreate()
+/// instead of in IllustrationDocument::DoOpenDocument(). Invoke
+/// wxView::OnCreate() from IllustrationView::OnCreate() only when the
+/// initial dialog is not cancelled.
+///
+/// Alternative not used: Because wxDocument::OnCreate() only creates
+/// a view and does nothing else, another resolution is to call that
+/// base-class function not from IllustrationDocument::OnCreate() but
+/// rather from IllustrationDocument::DoOpenDocument(). That is
+/// rejected for two reasons: it seems unnatural; and, far worse, it
+/// wreaks havoc on wx's object management--for instance, the document
+/// destroys itself when its last view ceases to exist, and much labor
+/// is required to prevent memory leaks or segfaults in that case.
 
-// Class IllustrationView overloads wxView::OnCreate() to display a
-// dialog that allow input parameters to be edited before the view is
-// shown. Cancelling that dialog deliberately prevents that view from
-// being created: it is not tasteful to show a blank view window
-// underneath the dialog and destroy it on wxID_CANCEL.
-//
-// But wxDocManager::CreateDocument() calls wxDocument::OnCreate()
-// (which calls wxView::OnCreate() to create a view) before it calls
-// wxDocument::OnOpenDocument() (which, notionally at least, reads the
-// document's data). Yet here it is required to read the document's
-// data before the view is created.
-//
-// Resolution: Read document data in IllustrationDocument::OnCreate()
-// instead of in IllustrationDocument::OnOpenDocument(). Invoke
-// wxView::OnCreate() from IllustrationView::OnCreate() only when the
-// initial dialog is not cancelled.
-//
-// Alternative not used: Because wxDocument::OnCreate() simply creates
-// a view and does nothing else, another resolution is to call that
-// base-class function not from IllustrationDocument::OnCreate() but
-// rather from IllustrationDocument::OnOpenDocument(). That is
-// rejected for two reasons: it seems unnatural; and, far worse, it
-// wreaks havoc on wx's object management--for instance, the document
-// destroys itself when its last view ceases to exist, and much labor
-// is required to prevent memory leaks or segfaults in that case.
-//
 bool IllustrationDocument::OnCreate(wxString const& filename, long int flags)
 {
-// TODO ?? Why not offer doc_.read(filename)?
-
     if(LMI_WX_CHILD_DOCUMENT & flags)
         {
         is_phony_ = true;
         }
 
+    // TODO ?? Why not offer doc_.read(filename)?
     if(!(wxDOC_NEW & flags) && !(is_phony_))
         {
         std::ifstream ifs(filename.c_str());
@@ -119,15 +114,14 @@ bool IllustrationDocument::OnCreate(wxString const& filename, long int flags)
     return wxDocument::OnCreate(filename, flags);
 }
 
-// WX !! Oddly, wxDocument::OnNewDocument() calls OnSaveModified().
-// That would seem appropriate if an existing document were being
-// overlaid, but the function is designed to create an entirely new
-// document. The apparent design flaw manifests itself here because
-// this class sets the dirty flag earlier. wxDocument::OnNewDocument()
-// also clears the dirty flag, but it seems more sensible to set it.
-// For these and perhaps other reasons, the base-class function must
-// not be called here.
-//
+/// WX !! Oddly, wxDocument::OnNewDocument() calls OnSaveModified().
+/// That would seem appropriate if an existing document were being
+/// overlaid, but the function is designed to create an entirely new
+/// document. It's a problem here because this class sets the dirty
+/// flag earlier. wxDocument::OnNewDocument() also clears the dirty
+/// flag, but it seems more sensible to set it. For these and perhaps
+/// other reasons, the base-class function must not be called here.
+
 bool IllustrationDocument::OnNewDocument()
 {
     Modify(true);
@@ -141,15 +135,20 @@ bool IllustrationDocument::OnNewDocument()
     return true;
 }
 
-// Do not call the base-class function--storage is managed in this
-// derived class, but in a different function; and the base-class
-// function would clear the 'modified' flag, which would be incorrect
-// here.
-//
+/// Override wx's built-in file management: doc_ handles that.
+///
+/// Override DoOpenDocument() instead of OnOpenDocument(): the latter
+/// doesn't permit customizing its diagnostic messages.
+
 bool IllustrationDocument::DoOpenDocument(wxString const& filename)
 {
     return true;
 }
+
+/// Override wx's built-in file management: doc_ handles that.
+///
+/// Override DoSaveDocument() instead of OnSaveDocument(): the latter
+/// doesn't permit customizing its diagnostic messages.
 
 bool IllustrationDocument::DoSaveDocument(wxString const& filename)
 {
