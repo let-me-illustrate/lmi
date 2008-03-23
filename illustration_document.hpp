@@ -19,10 +19,10 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_document.hpp,v 1.10 2008-03-09 12:13:26 chicares Exp $
+// $Id: illustration_document.hpp,v 1.11 2008-03-23 01:17:21 chicares Exp $
 
 // Because illustration windows have their own functions for loading
-// and saving files, override OnOpenDocument() and OnSaveDocument()
+// and saving files, override DoOpenDocument() and DoSaveDocument()
 // instead of LoadObject() and SaveObject().
 
 #ifndef illustration_document_hpp
@@ -72,8 +72,8 @@ class IllustrationDocument
     // wxDocument overrides.
     virtual bool OnCreate(wxString const& filename, long int flags);
     virtual bool OnNewDocument();
-    virtual bool OnOpenDocument(wxString const& filename);
-    virtual bool OnSaveDocument(wxString const& filename);
+    virtual bool DoOpenDocument(wxString const& filename);
+    virtual bool DoSaveDocument(wxString const& filename);
 
     // TODO ?? Consider using smart pointers, and forward-declaring
     // classes single_cell_document and Input.
