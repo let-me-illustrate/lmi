@@ -19,9 +19,9 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_document.hpp,v 1.8 2008-03-09 12:13:25 chicares Exp $
+// $Id: census_document.hpp,v 1.9 2008-03-23 01:17:21 chicares Exp $
 
-// WX !! Override OnOpenDocument() and OnSaveDocument() instead of
+// WX !! Override DoOpenDocument() and DoSaveDocument() instead of
 // LoadObject() and SaveObject(): the latter would probably work, but
 // their diagnostic messages aren't customizable.
 
@@ -59,8 +59,8 @@ class CensusDocument
     // wxDocument overrides.
     virtual bool OnCreate(wxString const& filename, long int flags);
     virtual bool OnNewDocument();
-    virtual bool OnOpenDocument(wxString const& filename);
-    virtual bool OnSaveDocument(wxString const& filename);
+    virtual bool DoOpenDocument(wxString const& filename);
+    virtual bool DoSaveDocument(wxString const& filename);
 
     multiple_cell_document doc_;
 
