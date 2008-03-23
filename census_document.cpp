@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_document.cpp,v 1.10 2008-03-23 01:17:21 chicares Exp $
+// $Id: census_document.cpp,v 1.11 2008-03-23 01:56:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -107,8 +107,13 @@ bool CensusDocument::DoSaveDocument(wxString const& filename)
 
     std::ofstream ofs(filename.c_str());
     doc_.write(ofs);
+    if(!ofs)
+        {
+        warning() << "Unable to save '" << filename << "'." << LMI_FLUSH;
+        return false;
+        }
 
-    status() << "Document saved." << std::flush;
+    status() << "Saved '" << filename << "'." << std::flush;
     return true;
 }
 
