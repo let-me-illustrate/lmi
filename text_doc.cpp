@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: text_doc.cpp,v 1.9 2008-03-23 01:17:21 chicares Exp $
+// $Id: text_doc.cpp,v 1.10 2008-03-23 01:56:28 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/doc.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -35,9 +35,9 @@
 #endif
 
 #include "text_doc.hpp"
-
 #include "view_ex.tpp"
 
+#include "alert.hpp"
 #include "text_view.hpp"
 
 #include <wx/textctrl.h>
@@ -98,9 +98,11 @@ bool TextEditDocument::DoSaveDocument(wxString const& filename)
 {
     if(!PredominantViewWindow().SaveFile(filename))
         {
+        warning() << "Unable to save '" << filename << "'." << LMI_FLUSH;
         return false;
         }
 
+    status() << "Saved '" << filename << "'." << std::flush;
     return true;
 }
 

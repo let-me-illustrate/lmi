@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_document.cpp,v 1.13 2008-03-23 01:17:21 chicares Exp $
+// $Id: illustration_document.cpp,v 1.14 2008-03-23 01:56:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -155,14 +155,20 @@ bool IllustrationDocument::DoSaveDocument(wxString const& filename)
 {
     if(is_phony_)
         {
-        warning() << "This document cannot be saved." << LMI_FLUSH;
+        warning() << "Impossible to save '" << filename << "'." << LMI_FLUSH;
         return false;
         }
 
     convert_to_ihs(*doc_.input_data_, input_);
     std::ofstream ofs(filename.c_str());
     doc_.write(ofs);
-    status() << "Document saved." << std::flush;
+    if(!ofs)
+        {
+        warning() << "Unable to save '" << filename << "'." << LMI_FLUSH;
+        return false;
+        }
+
+    status() << "Saved '" << filename << "'." << std::flush;
     return true;
 }
 
