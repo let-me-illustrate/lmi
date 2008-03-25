@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.hpp,v 1.25 2008-03-09 12:13:26 chicares Exp $
+// $Id: main_wx.hpp,v 1.26 2008-03-25 16:46:18 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.h (C) 1998 Julian Smart and Markus Holzem
@@ -41,7 +41,6 @@
 #include <boost/utility.hpp>
 
 #include <wx/app.h>
-#include <wx/defs.h> // WXDLLEXPORT
 #include <wx/timer.h>
 
 class DocManagerEx;

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_document.hpp,v 1.12 2008-03-23 02:53:24 chicares Exp $
+// $Id: illustration_document.hpp,v 1.13 2008-03-25 16:46:18 chicares Exp $
 
 #ifndef illustration_document_hpp
 #define illustration_document_hpp
@@ -31,7 +31,6 @@
 
 #include <boost/utility.hpp>
 
-#include <wx/defs.h> // WXDLLEXPORT
 #include <wx/docview.h>
 
 /// WX !! The wx document-view implementation has no notion of 'child'
