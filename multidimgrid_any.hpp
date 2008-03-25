@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.24 2008-03-09 12:13:26 chicares Exp $
+// $Id: multidimgrid_any.hpp,v 1.25 2008-03-25 16:46:18 chicares Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -97,7 +97,6 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/utility.hpp>
 
-#include <wx/defs.h> // WXDLLEXPORT
 #include <wx/grid.h>
 #include <wx/choice.h>
 

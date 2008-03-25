@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: text_view.hpp,v 1.13 2008-03-09 12:13:26 chicares Exp $
+// $Id: text_view.hpp,v 1.14 2008-03-25 16:46:18 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.h (C) 1998 Julian Smart and Markus Holzem
@@ -40,7 +40,7 @@
 
 #include <boost/utility.hpp>
 
-#include <wx/defs.h> // WXDLLEXPORT
+#include <wx/defs.h> // wx shared-library 'attributes'
 
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 
