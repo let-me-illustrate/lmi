@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: view_ex.hpp,v 1.12 2008-03-25 12:56:15 chicares Exp $
+// $Id: view_ex.hpp,v 1.13 2008-03-25 16:46:18 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -81,17 +81,12 @@
 
 #include <boost/utility.hpp>
 
-#include <wx/defs.h> // WXDLLEXPORT
 #include <wx/docview.h>
 
 #include <string>
 
 class DocManagerEx;
 
-// TODO ?? Here and elsewhere, consider losing 'WXDLLEXPORT' on
-// forward declarations, depending on the disposition of
-//   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=20345
-//
 class WXDLLIMPEXP_FWD_CORE wxDC;
 class WXDLLIMPEXP_FWD_CORE wxIcon;
 class WXDLLIMPEXP_FWD_CORE wxMenuBar;

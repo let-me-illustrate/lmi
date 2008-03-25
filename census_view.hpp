@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.hpp,v 1.24 2008-03-09 12:13:25 chicares Exp $
+// $Id: census_view.hpp,v 1.25 2008-03-25 16:46:18 chicares Exp $
 
 #ifndef census_view_hpp
 #define census_view_hpp
@@ -36,7 +36,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/utility.hpp>
 
-#include <wx/defs.h> // WXDLLEXPORT
+#include <wx/defs.h> // wx shared-library 'attributes'
 
 #include <string>
 #include <vector>
