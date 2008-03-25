@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: view_ex.hpp,v 1.11 2008-03-09 12:13:26 chicares Exp $
+// $Id: view_ex.hpp,v 1.12 2008-03-25 12:56:15 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -67,11 +67,9 @@
 // designed for actually needs to implement it.
 
 // FrameWindow() is a convenience function that returns a reference to
-// a wxFrame. The library provides a similar function, GetFrame(),
-// which is less useful because it returns a wxWindow*, even though
-// the wx documentation says it returns a wxFrame*. This function is
-// used only in the implementation of this class and does not require
-// a corresponding const version.
+// a wxFrame. Member functions specific to wxFrame cannot be called
+// through wxView::GetFrame() without casting because it returns a
+// wxWindow*.
 
 // TODO ?? No provision is yet made here for updating views when
 // document data changes; wx provides some functions for that.
@@ -122,8 +120,6 @@ class ViewEx
   public:
     ViewEx();
 
-    virtual wxWindow* CreateChildWindow() = 0;
-
     // TODO ?? Consider making virtuals nonpublic and public functions
     // nonvirtual.
     virtual wxIcon Icon() const = 0;
@@ -153,6 +149,8 @@ class ViewEx
     virtual void OnDraw(wxDC*);
 
   private:
+    virtual wxWindow* CreateChildWindow() = 0;
+
     DocManagerEx& DocManager() const;
 
     DECLARE_ABSTRACT_CLASS(ViewEx)
