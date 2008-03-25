@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.105 2008-02-07 13:40:30 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.106 2008-03-25 12:59:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1237,7 +1237,7 @@ void AccountValue::SetProjectedCoiCharge()
         ||  BasicValues::GetLength() <= Year
         ||  !Input_->UsePartialMort
         ||  !Input_->UseExperienceRating
-        ||  !e_currbasis == ExpAndGABasis
+        ||  e_currbasis != ExpAndGABasis
         )
         {
         return;
@@ -1683,7 +1683,7 @@ double AccountValue::GetCurtateNetCoiChargeInforce() const
         ||  BasicValues::GetLength() <= Year
         ||  !Input_->UsePartialMort
         ||  !Input_->UseExperienceRating
-        ||  !e_currbasis == ExpAndGABasis
+        ||  e_currbasis != ExpAndGABasis
         )
         {
         return 0.0;
@@ -1701,7 +1701,7 @@ double AccountValue::GetCurtateNetClaimsInforce() const
         ||  BasicValues::GetLength() <= Year
         ||  !Input_->UsePartialMort
         ||  !Input_->UseExperienceRating
-        ||  !e_currbasis == ExpAndGABasis
+        ||  e_currbasis != ExpAndGABasis
         )
         {
         return 0.0;
@@ -1719,7 +1719,7 @@ double AccountValue::GetProjectedCoiChargeInforce() const
         ||  BasicValues::GetLength() <= Year
         ||  !Input_->UsePartialMort
         ||  !Input_->UseExperienceRating
-        ||  !e_currbasis == ExpAndGABasis
+        ||  e_currbasis != ExpAndGABasis
         )
         {
         return 0.0;
@@ -1747,7 +1747,7 @@ double AccountValue::ApportionNetMortalityReserve
         ||  BasicValues::GetLength() <= Year
         ||  !Input_->UsePartialMort
         ||  !Input_->UseExperienceRating
-        ||  !e_currbasis == ExpAndGABasis
+        ||  e_currbasis != ExpAndGABasis
         )
         {
         return 0.0;
