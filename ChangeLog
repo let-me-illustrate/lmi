@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1028 2008-03-23 02:53:24 chicares Exp $
+// $Id: ChangeLog,v 1.1029 2008-03-25 12:59:18 chicares Exp $
 
 MAINTENANCE
 
@@ -16088,4 +16088,21 @@ Make input files platform independent by saving them in 'binary' mode.
   text_doc.cpp
   text_doc.hpp
 Improve documentation.
+
+20080325T1254Z <gchicares@sbcglobal.net> [1186]
+
+  view_ex.cpp
+Assert postconditions for CreateChildWindow() (Vaclav).
+
+20080325T1256Z <gchicares@sbcglobal.net> [1186]
+
+  view_ex.hpp
+Make one virtual function nonpublic, so that the postconditions
+asserted YYYYMMDDTHHMM can't be violated elsewhere.
+
+20080325T1259Z <gchicares@sbcglobal.net> [1186]
+
+  ihs_acctval.cpp
+Fix defect introduced 20050415T2255Z (Vadim's fix). See:
+  http://lists.nongnu.org/archive/html/lmi/2008-03/msg00051.html
 
