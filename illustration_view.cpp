@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.75 2008-03-27 15:06:27 chicares Exp $
+// $Id: illustration_view.cpp,v 1.76 2008-03-27 15:42:10 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -352,18 +352,6 @@ void IllustrationView::Pdf(std::string const& action) const
 // TODO ?? CALCULATION_SUMMARY This should use either the code or the
 // ideas in DocManagerEx::UponPreview().
 
-// TODO ?? CALCULATION_SUMMARY Resolve this issue.
-// EVGENIY Is it necessary to use scoped_ptr here? The wx
-// documentation says
-//   "Do not create this class on the stack only. You should create an
-//   instance on app startup and use this instance for all printing
-//   operations. The reason is that this class stores various settings
-//   in it."
-// But that reason doesn't hold here: settings don't persist anyway,
-// because the printing object is deleted as soon as this function
-// returns. Is there a different, unstated reason why we shouldn't
-// create it on the stack?
-
 void IllustrationView::PrintOrPreviewHtmlSummary(enum_print_option option) const
 {
     std::string disclaimer
@@ -371,11 +359,9 @@ void IllustrationView::PrintOrPreviewHtmlSummary(enum_print_option option) const
         );
     // TODO ?? MPATROL !! Probably operator new(std::size_t, wx_allocator)
     // should be used here.
-    boost::scoped_ptr<wxHtmlEasyPrinting> printer
-        (new wxHtmlEasyPrinting("Calculation Summary", html_window_)
-        );
+    wxHtmlEasyPrinting printer("Calculation Summary", html_window_);
 
-    printer->SetHeader
+    printer.SetHeader
         (disclaimer + " (@PAGENUM@/@PAGESCNT@)<hr />"
         ,wxPAGE_ALL
         );
@@ -394,17 +380,17 @@ void IllustrationView::PrintOrPreviewHtmlSummary(enum_print_option option) const
     // that the paper id was actually wxPAPER_NONE; if that causes
     // 'A4' to be used, then should wx instead use wxPAPER_LETTER in
     // a US locale, where 'A4' is a poor default?
-    printer->GetPrintData()->SetPaperId(wxPAPER_LETTER);
+    printer.GetPrintData()->SetPaperId(wxPAPER_LETTER);
 
     if(e_print_printer == option)
         {
-        printer->PrintText(selected_values_as_html_);
+        printer.PrintText(selected_values_as_html_);
         }
     // TODO ?? CALCULATION_SUMMARY This assumes, without asserting,
     // that the enumeration has exactly two enumerators.
     else
         {
-        printer->PreviewText(selected_values_as_html_);
+        printer.PreviewText(selected_values_as_html_);
         }
 }
 
