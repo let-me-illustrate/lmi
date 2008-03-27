@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1030 2008-03-27 01:53:21 chicares Exp $
+// $Id: ChangeLog,v 1.1031 2008-03-27 12:54:20 chicares Exp $
 
 MAINTENANCE
 
@@ -16130,4 +16130,22 @@ Fix defect introduced 20050114T1947Z: enum type mismatch (Vadim). See:
   stream_cast.hpp
 Suppress a spurious compiler diagnostic. See:
   http://lists.nongnu.org/archive/html/lmi/2008-03/msg00049.html
+
+20080327T0257Z <gchicares@sbcglobal.net> [1183]
+
+  census_view.cpp
+  census_view.hpp
+Remove a marked defect.
+
+20080327T1252Z <gchicares@sbcglobal.net> [1182]
+
+  census_view.cpp
+  census_view.hpp
+Use wxWindowUpdateLocker where appropriate. It never was appropriate
+in CensusView::UponPrintCell().
+
+20080327T1254Z <gchicares@sbcglobal.net> [1182]
+
+  mvc_controller.cpp
+Use wxWindowUpdateLocker (Vaclav).
 
