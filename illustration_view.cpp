@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.74 2008-02-24 12:42:12 chicares Exp $
+// $Id: illustration_view.cpp,v 1.75 2008-03-27 15:06:27 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -160,12 +160,6 @@ warning() << "That command should have been disabled." << LMI_FLUSH;
 
 void IllustrationView::DisplaySelectedValuesAsHtml()
 {
-    // TODO ?? CALCULATION_SUMMARY Resolve this issue.
-    // EVGENIY This assertion seems no longer to serve any purpose:
-    // the object is no longer used here. Instead, shouldn't the
-    // validity of ledger_formatter_ be asserted?
-    LMI_ASSERT(ledger_values_.get());
-
     // TODO ?? CALCULATION_SUMMARY Resolve this issue.
     // EVGENIY Is a stream the best abstraction for LedgerFormatter?
     // Apparently std::ostream.write() is the only stream function
