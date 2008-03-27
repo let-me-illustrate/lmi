@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.78 2008-03-27 15:59:34 chicares Exp $
+// $Id: illustration_view.cpp,v 1.79 2008-03-27 16:08:16 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -356,7 +356,7 @@ void IllustrationView::PrintOrPreviewHtmlSummary(enum_print_option option) const
 {
     std::string disclaimer
         ("FOR BROKER-DEALER USE ONLY. NOT TO BE SHARED WITH CLIENTS."
-        " (@PAGENUM@/@PAGESCNT@)<hr />"
+        " (Page @PAGENUM@ of @PAGESCNT@)<hr/>"
         );
     wxHtmlEasyPrinting printer("Calculation Summary", html_window_);
 
