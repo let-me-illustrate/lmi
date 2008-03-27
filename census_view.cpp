@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.71 2008-03-27 12:52:39 chicares Exp $
+// $Id: census_view.cpp,v 1.72 2008-03-27 17:13:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -175,8 +175,6 @@ inline std::vector<Input> const& CensusView::class_parms() const
 // TODO ?? Is this abstraction actually useful?
 std::string CensusView::cell_title(int index)
 {
-// TODO ?? Another reason to use just one name.
-//    std::string full_name(cell_parms()[index].InsdFullName());
     std::string full_name(cell_parms()[index]["InsuredName"].str());
     std::ostringstream title;
     title << "Parameters for cell " << (1 + index);

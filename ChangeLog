@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1031 2008-03-27 12:54:20 chicares Exp $
+// $Id: ChangeLog,v 1.1032 2008-03-27 17:13:12 chicares Exp $
 
 MAINTENANCE
 
@@ -16148,4 +16148,34 @@ in CensusView::UponPrintCell().
 
   mvc_controller.cpp
 Use wxWindowUpdateLocker (Vaclav).
+
+20080327T1506Z <gchicares@sbcglobal.net> [1181]
+
+  illustration_view.cpp
+Remove a marked defect (Vaclav).
+
+20080327T1542Z <gchicares@sbcglobal.net> [1180]
+
+  illustration_view.cpp
+Remove a marked defect (Vaclav).
+
+20080327T1544Z <gchicares@sbcglobal.net> [1179]
+
+  illustration_view.cpp
+Remove a defect marker that became irrelevant 20080327T1542Z.
+
+20080327T1559Z <gchicares@sbcglobal.net> [1179]
+
+  illustration_view.cpp
+Refactor.
+
+20080327T1608Z <gchicares@sbcglobal.net> [1179]
+
+  illustration_view.cpp
+Label html pages more clearly.
+
+20080327T1713Z <gchicares@sbcglobal.net> [1178]
+
+  census_view.cpp
+Remove an obsolete defect marker.
 
