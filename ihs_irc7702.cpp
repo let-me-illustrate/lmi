@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702.cpp,v 1.19 2008-02-19 16:22:15 chicares Exp $
+// $Id: ihs_irc7702.cpp,v 1.20 2008-03-27 01:52:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -803,19 +803,13 @@ Irc7702::EIOBasis Irc7702::Get4PctBasis
 {
     switch(a_DBOpt)
         {
-        case e_option1:
+        case e_option1_for_7702:
             {
             return Opt1Int4Pct;
             }
-        case e_option2:
+        case e_option2_for_7702:
             {
             return Opt2Int4Pct;
-            }
-        case e_rop:
-            {
-            // TODO ?? Wait...shouldn't this be the 7702 equivalent
-            // for ROP?
-            return Opt1Int4Pct;
             }
         default:
             {
