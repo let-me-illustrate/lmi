@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.77 2008-03-27 15:44:22 chicares Exp $
+// $Id: illustration_view.cpp,v 1.78 2008-03-27 15:59:34 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -356,13 +356,11 @@ void IllustrationView::PrintOrPreviewHtmlSummary(enum_print_option option) const
 {
     std::string disclaimer
         ("FOR BROKER-DEALER USE ONLY. NOT TO BE SHARED WITH CLIENTS."
+        " (@PAGENUM@/@PAGESCNT@)<hr />"
         );
     wxHtmlEasyPrinting printer("Calculation Summary", html_window_);
 
-    printer.SetHeader
-        (disclaimer + " (@PAGENUM@/@PAGESCNT@)<hr />"
-        ,wxPAGE_ALL
-        );
+    printer.SetHeader(disclaimer, wxPAGE_ALL);
 
     // TODO ?? CALCULATION_SUMMARY Resolve this issue. This advice:
     //   You should create an instance on app startup and use this
