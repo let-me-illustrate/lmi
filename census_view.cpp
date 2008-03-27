@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.69 2008-02-24 12:42:12 chicares Exp $
+// $Id: census_view.cpp,v 1.70 2008-03-27 02:57:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -463,15 +463,18 @@ void CensusView::update_class_names()
     std::copy(rebuilt_class_parms.begin(), rebuilt_class_parms.end(), iip);
 }
 
-// TODO ?? Lowercase this. Why does it freeze() a GUI that it doesn't touch?
-void CensusView::ApplyChanges
+/// Ascertain differences between old and new parameters and apply
+/// each such difference to other cells:
+///   if 'for_this_class_only' is specified, to all cells in the
+///     employee class of the old parameters;
+///   otherwise, to all cells in the entire census.
+
+void CensusView::apply_changes
     (Input const& new_parms
     ,Input const& old_parms
     ,bool         for_this_class_only
     )
 {
-    freeze(true);
-
     // Case or class default parameters were edited and changed.
     // Compare the default parameters before and after editing;
     // for every parameter that was changed, assign the new value
@@ -540,7 +543,6 @@ void CensusView::ApplyChanges
         }
 
     composite_is_available_ = false;
-    freeze(false);
 }
 
 void CensusView::DisplayAllVaryingData()
@@ -652,7 +654,7 @@ void CensusView::UponEditClass(wxCommandEvent&)
             );
         if(wxYES == z)
             {
-            ApplyChanges(temp_parms, original_parms, true);
+            apply_changes(temp_parms, original_parms, true);
             }
         original_parms = temp_parms;
         UpdatePreservingSelection();
@@ -678,7 +680,7 @@ void CensusView::UponEditCase(wxCommandEvent&)
             );
         if(wxYES == z)
             {
-            ApplyChanges(temp_parms, original_parms, false);
+            apply_changes(temp_parms, original_parms, false);
             }
         original_parms = temp_parms;
         UpdatePreservingSelection();
