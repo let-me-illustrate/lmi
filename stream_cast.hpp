@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stream_cast.hpp,v 1.17 2008-01-21 01:32:28 chicares Exp $
+// $Id: stream_cast.hpp,v 1.18 2008-03-27 01:53:21 chicares Exp $
 
 // This is a derived work based on boost::lexical_cast, which bears
 // the following copyright and permissions notice:
@@ -114,7 +114,7 @@ To stream_cast(From from, To = To())
 #endif // !defined __BORLANDC__
     std::stringstream interpreter;
     std::ostringstream err;
-    To result;
+    To result = To();
 
     interpreter.imbue(blank_is_not_whitespace_locale());
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1029 2008-03-25 12:59:18 chicares Exp $
+// $Id: ChangeLog,v 1.1030 2008-03-27 01:53:21 chicares Exp $
 
 MAINTENANCE
 
@@ -16105,4 +16105,29 @@ asserted YYYYMMDDTHHMM can't be violated elsewhere.
   ihs_acctval.cpp
 Fix defect introduced 20050415T2255Z (Vadim's fix). See:
   http://lists.nongnu.org/archive/html/lmi/2008-03/msg00051.html
+
+20080325T1646Z <gchicares@sbcglobal.net> [1185]
+
+  census_document.hpp
+  census_view.hpp
+  docmanager_ex.hpp
+  illustration_document.hpp
+  main_wx.hpp
+  multidimgrid_any.hpp
+  text_view.hpp
+  view_ex.hpp
+Update documentation in light of the 20080309T1213Z change. See:
+  http://lists.nongnu.org/archive/html/lmi/2008-03/msg00054.html
+
+20080327T0152Z <gchicares@sbcglobal.net> [1184]
+
+  ihs_irc7702.cpp
+Fix defect introduced 20050114T1947Z: enum type mismatch (Vadim). See:
+  http://lists.nongnu.org/archive/html/lmi/2008-03/msg00048.html
+
+20080327T0153Z <gchicares@sbcglobal.net> [1184]
+
+  stream_cast.hpp
+Suppress a spurious compiler diagnostic. See:
+  http://lists.nongnu.org/archive/html/lmi/2008-03/msg00049.html
 
