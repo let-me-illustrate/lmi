@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.hpp,v 1.25 2008-03-25 16:46:18 chicares Exp $
+// $Id: census_view.hpp,v 1.26 2008-03-27 02:57:19 chicares Exp $
 
 #ifndef census_view_hpp
 #define census_view_hpp
@@ -88,21 +88,16 @@ class CensusView
 
     bool DoAllCells(mcenum_emission);
 
-    // Ascertain differences between old and new parameters and apply
-    // each such difference to other cells...
-    //   if 'for_this_class_only' is specified, to all cells in the
-    //     employee class of the old parameters;
-    //   otherwise, to all cells in the entire census.
-    void ApplyChanges
-        (Input const& new_parms
-        ,Input const& old_parms
-        ,bool         for_this_class_only
-        );
-
     void Update();
     void UpdatePreservingSelection();
     IllustrationView& ViewOneCell(int);
     void ViewComposite();
+
+    void apply_changes
+        (Input const& new_parms
+        ,Input const& old_parms
+        ,bool         for_this_class_only
+        );
 
     std::vector<Input>&       case_parms();
     std::vector<Input> const& case_parms() const;
