@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_controller.cpp,v 1.19 2008-02-28 03:39:26 chicares Exp $
+// $Id: mvc_controller.cpp,v 1.20 2008-03-27 12:54:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -51,6 +51,7 @@
 #include <wx/spinctrl.h>
 #include <wx/textctrl.h>
 #include <wx/xrc/xmlres.h>
+#include <wx/wupdlock.h>
 
 /// Custom event to trigger a call to SetFocus(). This action requires
 /// a custom event because wxFocusEvent does not change focus--it only
@@ -314,8 +315,8 @@ void MvcController::ConditionallyEnableItems
         }
     else if(itembox)
         {
-        // WX !! Freeze() doesn't seem to help much.
-        itembox->Freeze();
+        // WX !! wxWindowUpdateLocker doesn't seem to help much.
+        wxWindowUpdateLocker u(itembox);
         itembox->Clear();
         // WX !! Append(wxArrayString const&) "may be much faster"
         // according to wx online help, but that seems untrue: its
@@ -328,7 +329,6 @@ void MvcController::ConditionallyEnableItems
                 }
             }
         itembox->SetStringSelection(datum->str(datum->ordinal()));
-        itembox->Thaw();
         }
     else
         {
