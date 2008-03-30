@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: value_cast_test.cpp,v 1.16 2008-01-01 18:29:58 chicares Exp $
+// $Id: value_cast_test.cpp,v 1.17 2008-03-30 13:13:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,6 +28,7 @@
 
 #include "value_cast.hpp"
 
+#include "miscellany.hpp"
 #include "test_tools.hpp"
 
 #if !defined __BORLANDC__
@@ -136,8 +137,7 @@ int test_main(int, char*[])
     n_d_c = value_cast<NotDefaultConstructible>(n_d_c);
     n_d_c = value_cast(n_d_c, n_d_c);
 #else  // defined __BORLANDC__
-    // Stifle compiler warning for unused variable.
-    &cp;
+    stifle_warning_for_unused_variable(cp);
 #endif // defined __BORLANDC__
 
     // Forbidden conversions to pointer, detected at compile time.
