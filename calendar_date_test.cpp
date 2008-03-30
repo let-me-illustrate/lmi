@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date_test.cpp,v 1.19 2008-01-01 18:29:35 chicares Exp $
+// $Id: calendar_date_test.cpp,v 1.20 2008-03-30 02:29:47 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -127,10 +127,8 @@ void CalendarDateTest::TestFundamentals()
 
 /// Verify an upper and a lower bound for ACM Algorithm 199. The upper
 /// bound tested here is arbitrary but seems ample. The lower bound of
-/// 0000-03-01 is strict: see, e.g., news:331C2530.5944@primenet.com
-///   http://groups.google.com/group/alt.comp.lang.borland-delphi/msg/037f08a18f157636
-/// but ignore that article's suggestion that 4000 is not a leap year,
-/// which does not conform to ISO 8601:2004 3.2.1, second sentence.
+/// 0000-03-01 is strict--see Appendix B of RFC 3339:
+///   http://www.ietf.org/rfc/rfc3339.txt
 
 void CalendarDateTest::TestAlgorithm199Bounds()
 {
