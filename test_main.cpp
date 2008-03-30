@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_main.cpp,v 1.5 2008-01-01 18:29:56 chicares Exp $
+// $Id: test_main.cpp,v 1.6 2008-03-30 13:13:15 chicares Exp $
 
 // This is a derived work based on Beman Dawes's boost test library
 // that bears the following copyright and license statement:
@@ -65,6 +65,7 @@
 
 #include "exit_codes.hpp"
 #include "fenv_lmi.hpp"
+#include "miscellany.hpp"
 #include "test_tools.hpp"
 
 #include <iostream>
@@ -112,10 +113,8 @@ int cpp_main(int argc, char* argv[])
 {
     fenv_initialize();
 
-    int result;
-// GWC suppressed this because the borland compiler correcly warns
-// that the initializing value is unused.
-//    int result = 0;               // quiet compiler warnings
+    int result = 0;
+    stifle_warning_for_unused_value(result);
 
     try
         {
