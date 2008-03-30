@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: miscellany.hpp,v 1.12 2008-01-01 18:29:49 chicares Exp $
+// $Id: miscellany.hpp,v 1.13 2008-03-30 13:13:14 chicares Exp $
 
 #ifndef miscellany_hpp
 #define miscellany_hpp
@@ -122,6 +122,16 @@ inline unsigned char lmi_tolower(unsigned char c)
 inline unsigned char lmi_toupper(unsigned char c)
 {
     return static_cast<unsigned char>(std::toupper(c));
+}
+
+template<typename T>
+inline void stifle_warning_for_unused_variable(T const&)
+{}
+
+template<typename T>
+inline void stifle_warning_for_unused_value(T const& t)
+{
+    (void)t; // C99 6.3.2.2
 }
 
 #endif // miscellany_hpp
