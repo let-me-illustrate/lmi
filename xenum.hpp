@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenum.hpp,v 1.7 2008-01-01 18:29:59 chicares Exp $
+// $Id: xenum.hpp,v 1.8 2008-03-31 02:22:24 chicares Exp $
 
 #ifndef xenum_hpp
 #define xenum_hpp
@@ -100,7 +100,7 @@ class xenum
 };
 
 // Prohibit declaration of a xenum based on an empty enumeration.
-template <typename EnumType>
+template<typename EnumType>
 class xenum<EnumType, 0>
 {
   public:

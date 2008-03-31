@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: crc32.hpp,v 1.8 2008-01-01 18:29:37 chicares Exp $
+// $Id: crc32.hpp,v 1.9 2008-03-31 02:22:23 chicares Exp $
 
 #ifndef crc32_hpp
 #define crc32_hpp
@@ -114,7 +114,7 @@ inline CRC& CRC::operator+=(unsigned            char const* z)
     return update(z, std::strlen(reinterpret_cast<char const*>(z)));
     }
 
-template <typename T>
+template<typename T>
 CRC& operator+=
     (CRC&                   crc
     ,std::vector<T> const&  v

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_safe.hpp,v 1.9 2008-02-17 15:17:13 chicares Exp $
+// $Id: multidimgrid_safe.hpp,v 1.10 2008-03-31 02:22:23 chicares Exp $
 
 #ifndef multidimgrid_safe_hpp
 #define multidimgrid_safe_hpp
@@ -94,7 +94,7 @@ class MultiDimAxis
 ///   - name the name of the axis, for GetName() implementation
 ///   - values all possible values for this axis
 
-template <typename Enum>
+template<typename Enum>
 class MultiDimEnumAxis
     :public MultiDimAxis<Enum>
 {

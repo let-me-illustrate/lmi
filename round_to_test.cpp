@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: round_to_test.cpp,v 1.16 2008-01-01 18:29:54 chicares Exp $
+// $Id: round_to_test.cpp,v 1.17 2008-03-31 02:22:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -157,7 +157,7 @@ void set_hardware_rounding_mode(e_ieee754_rounding mode, bool synchronize)
  */
 // GWC modified the code as noted below, e.g. to print in byte-reversed
 // order as well, and made some trivial formatting changes.
-template <class T>
+template<class T>
 void print_hex_val(T t, char const* name)
 {
   // GWC changed C cast to reinterpret_cast:
