@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_safe.tpp,v 1.9 2008-02-17 15:17:13 chicares Exp $
+// $Id: multidimgrid_safe.tpp,v 1.10 2008-03-31 02:22:24 chicares Exp $
 
 #include "multidimgrid_safe.hpp"
 
@@ -44,7 +44,7 @@ boost::any MultiDimAxis<E>::GetValue(unsigned int n) const
 /// MultiDimEnumAxis<E>
 /// -------------------
 
-template <typename E>
+template<typename E>
 MultiDimEnumAxis<E>::MultiDimEnumAxis
     (std::string const& name
     ,std::vector<std::string> const& values
@@ -54,19 +54,19 @@ MultiDimEnumAxis<E>::MultiDimEnumAxis
 {
 }
 
-template <typename E>
+template<typename E>
 unsigned int MultiDimEnumAxis<E>::GetCardinality() const
 {
     return values_.size();
 }
 
-template <typename E>
+template<typename E>
 std::string MultiDimEnumAxis<E>::GetLabel(unsigned int n) const
 {
     return values_[n];
 }
 
-template <typename Enum>
+template<typename Enum>
 Enum MultiDimEnumAxis<Enum>::DoGetValue
     (unsigned int n
     ) const
@@ -218,19 +218,19 @@ MultiDimAdjustableAxis<AdjustControl, BaseAxisType>::MultiDimAdjustableAxis
 
 // MultiDimTable
 
-template <typename T, typename D, typename C>
+template<typename T, typename D, typename C>
 inline T MultiDimTable<T, D, C>::GetValue(Coords const& coords) const
 {
     return static_cast<D const&>(*this).DoGetValue(coords);
 }
 
-template <typename T, typename D, typename C>
+template<typename T, typename D, typename C>
 inline void MultiDimTable<T, D, C>::SetValue(Coords const& coords, T const& t)
 {
     return static_cast<D&>(*this).DoSetValue(coords, t);
 }
 
-template <typename T, typename D, typename C>
+template<typename T, typename D, typename C>
 boost::any MultiDimTable<T, D, C>::DoGetValueAny
     (Coords const& coords
     ) const
@@ -238,7 +238,7 @@ boost::any MultiDimTable<T, D, C>::DoGetValueAny
     return WrapAny<T>(GetValue(coords));
 }
 
-template <typename T, typename D, typename C>
+template<typename T, typename D, typename C>
 void MultiDimTable<T, D, C>::DoSetValueAny
     (Coords const& coords
     ,boost::any const& value
@@ -247,7 +247,7 @@ void MultiDimTable<T, D, C>::DoSetValueAny
     return SetValue(coords, UnwrapAny<T>(value));
 }
 
-template <typename T, typename D, typename C>
+template<typename T, typename D, typename C>
 boost::any MultiDimTable<T, D, C>::StringToValue
     (std::string const& text
     ) const
@@ -255,7 +255,7 @@ boost::any MultiDimTable<T, D, C>::StringToValue
     return WrapAny<T>(static_cast<C const&>(*this).StringToValue(text));
 }
 
-template <typename T, typename D, typename C>
+template<typename T, typename D, typename C>
 std::string MultiDimTable<T, D, C>::ValueToString
     (boost::any const& value
     ) const
