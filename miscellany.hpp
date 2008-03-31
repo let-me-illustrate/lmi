@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: miscellany.hpp,v 1.13 2008-03-30 13:13:14 chicares Exp $
+// $Id: miscellany.hpp,v 1.14 2008-03-31 02:22:23 chicares Exp $
 
 #ifndef miscellany_hpp
 #define miscellany_hpp
@@ -99,7 +99,7 @@ std::string iso_8601_datestamp_terse();
 // Colons separate HH:MM:SS, so result is not a valid posix path.
 std::string iso_8601_datestamp_verbose();
 
-template <typename T, std::size_t n>
+template<typename T, std::size_t n>
 inline std::size_t lmi_array_size(T(&)[n])
 {
     return n;

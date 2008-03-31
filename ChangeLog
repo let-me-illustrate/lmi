@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1032 2008-03-27 17:13:12 chicares Exp $
+// $Id: ChangeLog,v 1.1033 2008-03-31 02:22:24 chicares Exp $
 
 MAINTENANCE
 
@@ -16178,4 +16178,28 @@ Label html pages more clearly.
 
   census_view.cpp
 Remove an obsolete defect marker.
+
+20080330T0229Z <gchicares@sbcglobal.net> [1178]
+
+  calendar_date_test.cpp
+Cite more-authoritative documentation.
+
+20080330T1313Z <gchicares@sbcglobal.net> [1178]
+
+  miscellany.hpp
+  test_main.cpp
+  value_cast_test.cpp
+Stifle warnings better.
+
+20080331T0222Z <gchicares@sbcglobal.net> [1178]
+
+  crc32.hpp
+  miscellany.hpp
+  multidimgrid_safe.hpp
+  multidimgrid_safe.tpp
+  round_to_test.cpp
+  test_tools_test.cpp
+  xenum.cpp
+  xenum.hpp
+Write no space between 'template' and '<'.
 

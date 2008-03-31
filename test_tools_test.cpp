@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_tools_test.cpp,v 1.9 2008-01-31 18:49:12 chicares Exp $
+// $Id: test_tools_test.cpp,v 1.10 2008-03-31 02:22:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -44,7 +44,7 @@ void test_function(bool a, bool b, char const* file, int line)
 // Throw an exception unconditionally, while preventing compilers from
 // complaining that any following code is unreachable.
 //
-template <typename ExceptionType>
+template<typename ExceptionType>
 void throw_exception(ExceptionType const& e)
 {
     if(always_true)

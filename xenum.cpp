@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenum.cpp,v 1.7 2008-01-01 18:29:59 chicares Exp $
+// $Id: xenum.cpp,v 1.8 2008-03-31 02:22:24 chicares Exp $
 
 // Definitions for template class xenum.
 
@@ -34,76 +34,76 @@
 #include <istream>
 #include <ostream>
 
-template <typename EnumType, int N>
+template<typename EnumType, int N>
 xenum<EnumType, N>::xenum()
     :representation(enumerators[0])
 {
 }
 
-template <typename EnumType, int N>
+template<typename EnumType, int N>
 xenum<EnumType, N>::xenum(xenum const& x)
     :representation(x.representation)
 {
 }
 
-template <typename EnumType, int N>
+template<typename EnumType, int N>
 xenum<EnumType, N>::xenum(EnumType e)
     :representation(e)
 {
 }
 
-template <typename EnumType, int N>
+template<typename EnumType, int N>
 xenum<EnumType, N>::xenum(std::string const& s)
 {
     set_value(s);
 }
 
-template <typename EnumType, int N>
+template<typename EnumType, int N>
 xenum<EnumType, N>& xenum<EnumType, N>::operator=(xenum<EnumType, N> const& x)
 {
     representation = x.representation;
     return *this;
 }
 
-template <typename EnumType, int N>
+template<typename EnumType, int N>
 xenum<EnumType, N>& xenum<EnumType, N>::operator=(EnumType e)
 {
     representation = e;
     return *this;
 }
 
-template <typename EnumType, int N>
+template<typename EnumType, int N>
 xenum<EnumType, N>& xenum<EnumType, N>::operator=(std::string const& s)
 {
     set_value(s);
     return *this;
 }
 
-template <typename EnumType, int N>
+template<typename EnumType, int N>
 bool xenum<EnumType, N>::operator==(xenum<EnumType, N> const& x) const
 {
     return representation == x.representation;
 }
 
-template <typename EnumType, int N>
+template<typename EnumType, int N>
 bool xenum<EnumType, N>::operator==(EnumType e) const
 {
     return representation == e;
 }
 
-template <typename EnumType, int N>
+template<typename EnumType, int N>
 bool xenum<EnumType, N>::operator==(std::string const& s) const
 {
     return str() == s;
 }
 
-template <typename EnumType, int N>
+template<typename EnumType, int N>
 EnumType xenum<EnumType, N>::value() const
 {
     return representation;
 }
 
-template <typename EnumType, int N>
+template<typename EnumType, int N>
 std::string const& xenum<EnumType, N>::str() const
 {
     std::ptrdiff_t index =
@@ -156,14 +156,14 @@ std::string const& xenum<EnumType, N>::str() const
 */
 }
 
-template <typename EnumType, int N>
+template<typename EnumType, int N>
 std::vector<std::string> const& xenum<EnumType, N>::all_strings()
 {
     static std::vector<std::string> const v(names, names + N);
     return v;
 }
 
-template <typename EnumType, int N>
+template<typename EnumType, int N>
 void xenum<EnumType, N>::set_value(std::string const& s)
 {
     std::ptrdiff_t index =
