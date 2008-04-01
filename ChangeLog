@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1033 2008-03-31 02:22:24 chicares Exp $
+// $Id: ChangeLog,v 1.1034 2008-04-01 15:57:32 chicares Exp $
 
 MAINTENANCE
 
@@ -16202,4 +16202,37 @@ Stifle warnings better.
   xenum.cpp
   xenum.hpp
 Write no space between 'template' and '<'.
+
+20080401T1057Z <gchicares@sbcglobal.net> [1178]
+
+  cpp_main.cpp
+  main_cli.cpp
+  main_wx.cpp
+Remove pleonastic class-key.
+
+20080401T1211Z <gchicares@sbcglobal.net> [1178]
+
+  bcc_ar.cpp [new file]
+  bcc_cc.cpp [new file]
+  bcc_ld.cpp [new file]
+  bcc_rc.cpp [new file]
+Add wrappers for another toolchain.
+
+20080401T1357Z <gchicares@sbcglobal.net> [1178]
+
+  msw_cygwin.make
+  workhorse.make
+Restrict 'cross_compile_flags' to gcc.
+
+20080401T1358Z <gchicares@sbcglobal.net> [1178]
+
+  msw_cygwin.make
+Suppress disused '-mno-cygwin' flag.
+
+20080401T1557Z <gchicares@sbcglobal.net> [1177]
+
+  bcc_5_5_1.make
+  objects.make
+  workhorse.make
+Partially support a borland toolchain.
 
