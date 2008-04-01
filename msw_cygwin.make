@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_cygwin.make,v 1.12 2008-04-01 13:57:35 chicares Exp $
+# $Id: msw_cygwin.make,v 1.13 2008-04-01 13:58:54 chicares Exp $
 
 ################################################################################
 
@@ -29,7 +29,7 @@ system_root := /cygdrive/c
 
 # Use cygwin as a quasi-cross-compiler for an i686-pc-mingw32 target.
 
-cross_compile_flags := -mno-cygwin
+# cross_compile_flags := -mno-cygwin
 
 ################################################################################
 
