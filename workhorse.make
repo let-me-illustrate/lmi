@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.110 2008-04-01 13:57:35 chicares Exp $
+# $Id: workhorse.make,v 1.111 2008-04-01 15:57:32 chicares Exp $
 
 ################################################################################
 
@@ -111,6 +111,10 @@ default_targets := \
 
 ifeq (,$(USE_SO_ATTRIBUTES))
   default_targets += \
+    bcc_ar$(EXEEXT) \
+    bcc_cc$(EXEEXT) \
+    bcc_ld$(EXEEXT) \
+    bcc_rc$(EXEEXT) \
     elapsed_time$(EXEEXT) \
     generate_passkey$(EXEEXT) \
     gpt_server$(EXEEXT) \
@@ -919,6 +923,8 @@ mpatrol.log:
 
 .PHONY: %$(EXEEXT)-run
 %$(EXEEXT)-run: mpatrol.log
+	@[ -z $(compiler_runtime_files) ] \
+	  || $(CP) --preserve --update $(compiler_runtime_files) .
 	@$(ECHO) -e "\nRunning $*:"
 	@-./$* --accept
 	@[ -f mpatrol.log ] \

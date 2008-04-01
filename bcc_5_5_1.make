@@ -19,13 +19,25 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: bcc_5_5_1.make,v 1.11 2008-01-01 18:29:35 chicares Exp $
+# $Id: bcc_5_5_1.make,v 1.12 2008-04-01 15:57:32 chicares Exp $
 
-toolset := bcc
+toolset     := bcc
 
-src_dir := $(CURDIR)
+src_dir     := $(CURDIR)
 
 gcc_version :=
+
+prefix      ?= /opt/lmi
+exec_prefix ?= $(prefix)
+lmi_bin_dir := $(exec_prefix)/bin
+
+bcc_dir     := C:/Borland/BCC55
+bcc_bin_dir := $(bcc_dir)/Bin
+bcc_inc_dir := $(bcc_dir)/Include
+bcc_lib_dir := $(bcc_dir)/Lib
+
+compiler_include_directory := -I $(bcc_inc_dir)
+compiler_runtime_files     := $(bcc_bin_dir)/cc3250.dll
 
 # Casual workarounds for borland C++ version 5.5.1 . The vendor calls
 # this compiler "free", but it is not: it is merely gratis. It may
@@ -35,13 +47,8 @@ gcc_version :=
 # using it at least for unit tests may reveal portability defects.
 
 # This makefile requires wrappers for the vendor's command-line tools,
-# because their syntax is convoluted. TODO ?? Either upload those
-# wrappers, or expunge this makefile because the compiler is too
-# outdated to support.
-
-compiler_include_directory := \
-  -I /borland/bcc55/include
-
+# because their syntax is convoluted.
+#
 # Options for borland compilers:
 # -a   alignment (-a1 is byte [5.02 default]; -a4 is 4-byte [5.5.1 default])
 # -g0  max warnings (0 means infinity)
@@ -78,8 +85,8 @@ C_EXTRA_WARNINGS   :=
 CXX_EXTRA_WARNINGS :=
 
 CXX := \
-  /unified/bin/tools/borland_compile \
-  --accept --program /Borland/BCC55/Bin/bcc32 \
+  $(lmi_bin_dir)/bcc_cc \
+  --accept --program $(bcc_bin_dir)/bcc32 \
 
 CXXFLAGS := \
   -D_RTLDLL \
@@ -88,12 +95,12 @@ CXXFLAGS := \
   -Ob -Oe -Og -Ol -Om -Op -OS -Ov -v- \
 
 LD := \
-  /unified/bin/tools/borland_link \
-  --accept --program C:/borland/bcc55/bin/ilink32 \
+  $(lmi_bin_dir)/bcc_ld \
+  --accept --program $(bcc_bin_dir)/ilink32 \
 
 LDFLAGS := \
-  -LC:/borland/bcc55/LIB /ap /c /E0 /m /Tpe /V4.0 /w /w-dup /w-dpl \
-  --startup-file C:/borland/bcc55/lib/c0x32.obj import32.lib cw32i.lib \
+  -L$(bcc_lib_dir) /ap /c /E0 /m /Tpe /V4.0 /w /w-dup /w-dpl \
+  --startup-file $(bcc_lib_dir)/c0x32.obj import32.lib cw32i.lib \
 
 MAKEDEPEND_0 :=
 
@@ -130,6 +137,7 @@ bcc_5_5_1.make:: ;
 	            CXX_EXTRA_WARNINGS='$(CXX_EXTRA_WARNINGS)' \
 	                      CPPFLAGS='$(CPPFLAGS)' \
 	    compiler_include_directory='$(compiler_include_directory)' \
+	        compiler_runtime_files='$(compiler_runtime_files)' \
 	                           CXX='$(CXX)' \
 	                      CXXFLAGS='$(CXXFLAGS)' \
 	                            LD='$(LD)' \

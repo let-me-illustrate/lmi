@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.114 2008-02-11 04:34:37 chicares Exp $
+# $Id: objects.make,v 1.115 2008-04-01 15:57:32 chicares Exp $
 
 ################################################################################
 
@@ -836,6 +836,40 @@ test_coding_rules$(EXEEXT): \
   $(main_auxiliary_common_objects) \
   my_test_coding_rules.o \
   test_coding_rules.o \
+
+# Wrappers for borland tools.
+
+bcc_ar$(EXEEXT): \
+  $(main_auxiliary_common_objects) \
+  bcc_ar.o \
+  getopt.o \
+  license.o \
+  system_command.o \
+  system_command_non_wx.o \
+
+bcc_cc$(EXEEXT): \
+  $(main_auxiliary_common_objects) \
+  bcc_cc.o \
+  getopt.o \
+  license.o \
+  system_command.o \
+  system_command_non_wx.o \
+
+bcc_ld$(EXEEXT): \
+  $(main_auxiliary_common_objects) \
+  bcc_ld.o \
+  getopt.o \
+  license.o \
+  system_command.o \
+  system_command_non_wx.o \
+
+bcc_rc$(EXEEXT): \
+  $(main_auxiliary_common_objects) \
+  bcc_rc.o \
+  getopt.o \
+  license.o \
+  system_command.o \
+  system_command_non_wx.o \
 
 ################################################################################
 
