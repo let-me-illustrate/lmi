@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.109 2008-03-12 02:57:17 chicares Exp $
+# $Id: workhorse.make,v 1.110 2008-04-01 13:57:35 chicares Exp $
 
 ################################################################################
 
@@ -596,7 +596,6 @@ REQUIRED_CPPFLAGS = \
   $(platform_defines) \
   $(libstdcxx_warning_macros) \
   $(wx_predefinitions) \
-  $(cross_compile_flags) \
   -DBOOST_STRICT_CONFIG \
 
 REQUIRED_CFLAGS = \
@@ -667,7 +666,6 @@ REQUIRED_LDFLAGS = \
   $(REQUIRED_LIBS) \
   $(MPATROL_LDFLAGS) \
   $(MPATROL_LIBS) \
-  $(cross_compile_flags) \
 
 # The '--use-temp-file' windres option seems to be often helpful and
 # never harmful. The $(subst) workaround for '-I' isn't needed with
