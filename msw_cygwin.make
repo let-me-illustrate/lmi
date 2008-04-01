@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_cygwin.make,v 1.11 2008-01-01 18:29:50 chicares Exp $
+# $Id: msw_cygwin.make,v 1.12 2008-04-01 13:57:35 chicares Exp $
 
 ################################################################################
 
@@ -56,10 +56,10 @@ endif
 # Compiler, linker, and so on.
 
 AR      := $(PATH_GCC)ar
-CC      := $(PATH_GCC)gcc
-CPP     := $(PATH_GCC)cpp
-CXX     := $(PATH_GCC)g++
-LD      := $(PATH_GCC)g++
+CC      := $(PATH_GCC)gcc $(cross_compile_flags)
+CPP     := $(PATH_GCC)cpp $(cross_compile_flags)
+CXX     := $(PATH_GCC)g++ $(cross_compile_flags)
+LD      := $(PATH_GCC)g++ $(cross_compile_flags)
 RC      := $(PATH_GCC)windres
 
 ################################################################################
