@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: cpp_main.cpp,v 1.8 2008-01-01 18:29:37 chicares Exp $
+// $Id: cpp_main.cpp,v 1.9 2008-04-01 10:57:43 chicares Exp $
 
 // This is a derived work based on Beman Dawes's boost test library
 // that bears the following copyright and license statement:
@@ -135,7 +135,7 @@ int main(int argc, char* argv[])
     std::free(0);
 
     // TRICKY !! Some long options are aliased to unlikely octal values.
-    static struct Option long_options[] =
+    static Option long_options[] =
       {
         {"help",         NO_ARG,   0, 001, 0, "display this help and exit"},
         {"license",      NO_ARG,   0, 002, 0, "display license and exit"},
