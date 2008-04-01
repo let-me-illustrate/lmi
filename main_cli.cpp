@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.52 2008-01-01 18:29:48 chicares Exp $
+// $Id: main_cli.cpp,v 1.53 2008-04-01 10:57:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -202,7 +202,7 @@ void process_command_line(int argc, char* argv[])
 //    static char const* vfile[] = {"file", "archive", 0};
 //    static char const* vlist[] = {"one", "two", "three", 0};
 //    static char const* vopt[] = {"optional", "alternative", 0};
-    static struct Option long_options[] =
+    static Option long_options[] =
       {
         {"ash_nazg"  ,NO_ARG   ,0 ,001 ,0 ,"ash nazg durbatulûk"},
         {"ash_naz"   ,NO_ARG   ,0 ,003 ,0 ,"fraud"},

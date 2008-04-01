@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.105 2008-03-23 00:53:32 chicares Exp $
+// $Id: main_wx.cpp,v 1.106 2008-04-01 10:57:43 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -1136,7 +1136,7 @@ void Skeleton::UponWindowTileVertically(wxCommandEvent&)
 bool Skeleton::ProcessCommandLine(int argc, char* argv[])
 {
     // TRICKY !! Some long options are aliased to unlikely octal values.
-    static struct Option long_options[] =
+    static Option long_options[] =
       {
         {"ash_nazg"  ,NO_ARG   ,0 ,001 ,0 ,"ash nazg durbatulûk"},
         {"ash_naz"   ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
