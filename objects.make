@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.115 2008-04-01 15:57:32 chicares Exp $
+# $Id: objects.make,v 1.116 2008-04-02 14:33:17 chicares Exp $
 
 ################################################################################
 
@@ -701,6 +701,7 @@ path_utility_test$(EXEEXT): \
 
 print_matrix_test$(EXEEXT): \
   $(common_test_objects) \
+  facets.o \
   print_matrix_test.o \
 
 progress_meter_test$(EXEEXT): \
