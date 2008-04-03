@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: como_4_3_3.make,v 1.15 2008-04-03 14:14:41 chicares Exp $
+# $Id: como_4_3_3.make,v 1.16 2008-04-03 14:45:13 chicares Exp $
 
 toolset := como
 
@@ -106,8 +106,8 @@ LD := $(CXX)
 # letter.
 
 REQUIRED_LIBS := \
-  c:/usr/local/lib/libxslt.dll.a \
-  c:/usr/local/lib/libxml2.dll.a \
+  c:/opt/lmi/local/lib/libxslt.dll.a \
+  c:/opt/lmi/local/lib/libxml2.dll.a \
   c:$(underlying_cc)/lib/libwsock32.a \
 
 MAKEDEPEND_0 :=
