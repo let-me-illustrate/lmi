@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: como_4_3_3.make,v 1.14 2008-01-01 18:29:36 chicares Exp $
+# $Id: como_4_3_3.make,v 1.15 2008-04-03 14:14:41 chicares Exp $
 
 toolset := como
 
@@ -121,6 +121,9 @@ MPATROL_LIBS :=
 # CPPFLAGS :=
 # CXXFLAGS := --a
 
+excluded_unit_test_targets := \
+  ledger_test \
+
 all:
 
 como_4_3_3.make:: ;
@@ -170,24 +173,25 @@ MAKECMDGOALS ?= lmi_cli_monolithic.exe
 	  ComSpec=C:\\\\WINDOWS\\\\SYSTEM32\\\\CMD.EXE; \
 	  $(MAKE) \
 	    -f $(src_dir)/GNUmakefile \
-	            gcc_version='$(gcc_version)' \
-	                src_dir='$(src_dir)' \
-	                toolset='$(toolset)' \
-	             C_WARNINGS='$(C_WARNINGS)' \
-	           CXX_WARNINGS='$(CXX_WARNINGS)' \
-	       C_EXTRA_WARNINGS='$(C_EXTRA_WARNINGS)' \
-	     CXX_EXTRA_WARNINGS='$(CXX_EXTRA_WARNINGS)' \
-	               CPPFLAGS='$(CPPFLAGS)' \
-	                     CC='$(CC)' \
-	                    CXX='$(CXX)' \
-	               CXXFLAGS='$(CXXFLAGS)' \
-	                     LD='$(LD)' \
-                    LDFLAGS='$(LDFLAGS)' \
-              REQUIRED_LIBS='$(REQUIRED_LIBS)' \
-	           MAKEDEPEND_0='$(MAKEDEPEND_0)' \
-	           MAKEDEPEND_1='$(MAKEDEPEND_1)' \
-	           MPATROL_LIBS='$(MPATROL_LIBS)' \
-           platform_defines='' \
+	                     gcc_version='$(gcc_version)' \
+	                         src_dir='$(src_dir)' \
+	                         toolset='$(toolset)' \
+	                      C_WARNINGS='$(C_WARNINGS)' \
+	                    CXX_WARNINGS='$(CXX_WARNINGS)' \
+	                C_EXTRA_WARNINGS='$(C_EXTRA_WARNINGS)' \
+	              CXX_EXTRA_WARNINGS='$(CXX_EXTRA_WARNINGS)' \
+	                        CPPFLAGS='$(CPPFLAGS)' \
+	                              CC='$(CC)' \
+	                             CXX='$(CXX)' \
+	                        CXXFLAGS='$(CXXFLAGS)' \
+	                              LD='$(LD)' \
+	                         LDFLAGS='$(LDFLAGS)' \
+	                   REQUIRED_LIBS='$(REQUIRED_LIBS)' \
+	                    MAKEDEPEND_0='$(MAKEDEPEND_0)' \
+	                    MAKEDEPEND_1='$(MAKEDEPEND_1)' \
+	                    MPATROL_LIBS='$(MPATROL_LIBS)' \
+	                platform_defines='' \
+	      excluded_unit_test_targets='$(excluded_unit_test_targets)' \
 	    $(MAKECMDGOALS); \
 	"
 
