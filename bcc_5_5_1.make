@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: bcc_5_5_1.make,v 1.12 2008-04-01 15:57:32 chicares Exp $
+# $Id: bcc_5_5_1.make,v 1.13 2008-04-03 14:14:40 chicares Exp $
 
 toolset     := bcc
 
@@ -116,10 +116,18 @@ MPATROL_LIBS :=
 platform_wx_libraries :=
 
 # The borland compiler rejects some conforming code, generating many
-# spurious and distracting diagnostics. It fails to compile these
-# tests as of 2005-02-21:
-#   mc_enum_test$(EXEEXT)
-#   value_cast_test$(EXEEXT)
+# spurious and distracting diagnostics; it fails utterly to build
+# these tests:
+
+excluded_unit_test_targets := \
+  commutation_functions_test \
+  input_test \
+  ledger_test \
+  loads_test \
+  math_functors_test \
+  mc_enum_test \
+  regex_test \
+  tn_range_test \
 
 all:
 
@@ -146,6 +154,7 @@ bcc_5_5_1.make:: ;
 	                  MAKEDEPEND_1='$(MAKEDEPEND_1)' \
 	                  MPATROL_LIBS='$(MPATROL_LIBS)' \
 	         platform_wx_libraries='$(platform_wx_libraries)' \
+	    excluded_unit_test_targets='$(excluded_unit_test_targets)' \
 	  unit_tests \
 
 force: ;
