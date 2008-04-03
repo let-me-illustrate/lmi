@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: miscellany.hpp,v 1.14 2008-03-31 02:22:23 chicares Exp $
+// $Id: miscellany.hpp,v 1.15 2008-04-03 14:02:21 chicares Exp $
 
 #ifndef miscellany_hpp
 #define miscellany_hpp
@@ -124,14 +124,28 @@ inline unsigned char lmi_toupper(unsigned char c)
     return static_cast<unsigned char>(std::toupper(c));
 }
 
+/// DWISOTT
+///
+/// Perhaps this function template's only legitimate use is within a
+/// conditional-inclusion [16.1] block.
+
 template<typename T>
 inline void stifle_warning_for_unused_variable(T const&)
 {}
 
+/// DWISOTT
+///
+/// Casting to void is always permitted by 5.2.9/4 via 5.4/5 (cf. C99
+/// 6.3.2.2).
+///
+/// Taking the argument's address prevents this gcc warning:
+///   "object of type [X] will not be accessed in void context"
+/// for volatile types.
+
 template<typename T>
 inline void stifle_warning_for_unused_value(T const& t)
 {
-    (void)t; // C99 6.3.2.2
+    (void)&t;
 }
 
 #endif // miscellany_hpp

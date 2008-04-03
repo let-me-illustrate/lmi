@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.30 2008-01-01 18:29:45 chicares Exp $
+// $Id: input_test.cpp,v 1.31 2008-04-03 14:02:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,7 +32,7 @@
 #include "single_cell_document.hpp"
 
 #include "assert_lmi.hpp"
-#include "miscellany.hpp" // files_are_identical()
+#include "miscellany.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
 #include "xml_lmi.hpp"
@@ -124,7 +124,7 @@ void mete_overhead()
     static IllusInputParms raw_data;
     xml_lmi::xml_document document("root");
     xml::element& root = document.root_node();
-    (void)root;
+    stifle_warning_for_unused_value(root);
 }
 
 void mete_vector(xml::element& xml_data)
