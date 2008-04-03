@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1034 2008-04-01 15:57:32 chicares Exp $
+// $Id: ChangeLog,v 1.1035 2008-04-03 16:07:18 chicares Exp $
 
 MAINTENANCE
 
@@ -16235,4 +16235,40 @@ Suppress disused '-mno-cygwin' flag.
   objects.make
   workhorse.make
 Partially support a borland toolchain.
+
+20080402T1433Z <gchicares@sbcglobal.net> [1177]
+
+  objects.make
+Add a borland-only dependency.
+
+20080403T1201Z <gchicares@sbcglobal.net> [1177]
+
+  getopt.cpp
+  getopt.hpp
+Remove pleonastic 'void'.
+
+20080403T1402Z <gchicares@sbcglobal.net> [1177]
+
+  input_test.cpp
+  ledger_xml_io.cpp
+  miscellany.hpp
+  numeric_io_test.cpp
+Stifle warnings better.
+
+20080403T1414Z <gchicares@sbcglobal.net> [1177]
+
+  bcc_5_5_1.make
+  como_4_3_3.make
+  objects.make
+Exclude certain unit tests.
+
+20080403T1445Z <gchicares@sbcglobal.net> [1177]
+
+  como_4_3_3.make
+Update library paths.
+
+20080403T1607Z <gchicares@sbcglobal.net> [1177]
+
+  como_4_3_3.make
+Help como find source files in other directories; exclude a unit test.
 
