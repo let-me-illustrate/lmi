@@ -40,7 +40,7 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt.hpp,v 1.16 2008-02-07 13:40:30 chicares Exp $
+// $Id: getopt.hpp,v 1.17 2008-04-03 12:01:42 chicares Exp $
 
 // This version of 'getopt' appears to the caller like standard Unix 'getopt'
 // but it behaves differently for the user, since it allows the user
@@ -325,7 +325,7 @@ class LMI_SO GetOpt
     // problem detected by a malloc debugger when memory allocated on
     // one side of a shared-library boundary is freed on the other.
     ~GetOpt(); // Added by GWC.
-    int operator () (void);
+    int operator()();
 
     // first_char returns the first character of the argument.
 
