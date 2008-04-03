@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: como_4_3_3.make,v 1.16 2008-04-03 14:45:13 chicares Exp $
+# $Id: como_4_3_3.make,v 1.17 2008-04-03 16:07:17 chicares Exp $
 
 toolset := como
 
@@ -123,6 +123,7 @@ MPATROL_LIBS :=
 
 excluded_unit_test_targets := \
   ledger_test \
+  regex_test \
 
 all:
 
@@ -191,6 +192,7 @@ MAKECMDGOALS ?= lmi_cli_monolithic.exe
 	                    MAKEDEPEND_1='$(MAKEDEPEND_1)' \
 	                    MPATROL_LIBS='$(MPATROL_LIBS)' \
 	                platform_defines='' \
+	                     system_root='C:' \
 	      excluded_unit_test_targets='$(excluded_unit_test_targets)' \
 	    $(MAKECMDGOALS); \
 	"
