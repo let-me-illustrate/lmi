@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.116 2008-04-02 14:33:17 chicares Exp $
+# $Id: objects.make,v 1.117 2008-04-03 14:14:41 chicares Exp $
 
 ################################################################################
 
@@ -407,68 +407,74 @@ libgpt_so_test$(EXEEXT): server7702dlltest.c libgpt$(SHREXT)
 
 # Unit tests.
 
-# List required object files explicitly for each test unless several
-# dozen are required. List only object files, not libraries, to avoid
-# the overhead of creating libraries: a particular unit test may be
-# built and run many times in succession during iterative development,
-# and any unnecessary overhead is unwelcome.
+# 'ledger_test' was arguably a mistake. Override this variable to
+# exclude other tests for a particular toolchain.
+
+excluded_unit_test_targets := \
+  ledger_test \
 
 unit_test_targets := \
-  account_value_test$(EXEEXT) \
-  actuarial_table_test$(EXEEXT) \
-  alert_test$(EXEEXT) \
-  any_member_test$(EXEEXT) \
-  argv0_test$(EXEEXT) \
-  assert_lmi_test$(EXEEXT) \
-  authenticity_test$(EXEEXT) \
-  calendar_date_test$(EXEEXT) \
-  callback_test$(EXEEXT) \
-  commutation_functions_test$(EXEEXT) \
-  comma_punct_test$(EXEEXT) \
-  crc32_test$(EXEEXT) \
-  expression_template_0_test$(EXEEXT) \
-  fenv_lmi_test$(EXEEXT) \
-  file_command_test$(EXEEXT) \
-  financial_test$(EXEEXT) \
-  getopt_test$(EXEEXT) \
-  global_settings_test$(EXEEXT) \
-  handle_exceptions_test$(EXEEXT) \
-  input_seq_test$(EXEEXT) \
-  input_test$(EXEEXT) \
-  irc7702a_test$(EXEEXT) \
-  ledger_test$(EXEEXT) \
-  loads_test$(EXEEXT) \
-  map_lookup_test$(EXEEXT) \
-  materially_equal_test$(EXEEXT) \
-  math_functors_test$(EXEEXT) \
-  mc_enum_test$(EXEEXT) \
-  mpatrol_patch_test$(EXEEXT) \
-  name_value_pairs_test$(EXEEXT) \
-  ncnnnpnn_test$(EXEEXT) \
-  numeric_io_test$(EXEEXT) \
-  obstruct_slicing_test$(EXEEXT) \
-  path_utility_test$(EXEEXT) \
-  print_matrix_test$(EXEEXT) \
-  progress_meter_test$(EXEEXT) \
-  quiet_nan_test$(EXEEXT) \
-  regex_test$(EXEEXT) \
-  round_to_test$(EXEEXT) \
-  rtti_lmi_test$(EXEEXT) \
-  safely_dereference_as_test$(EXEEXT) \
-  sandbox_test$(EXEEXT) \
-  snprintf_test$(EXEEXT) \
-  stratified_algorithms_test$(EXEEXT) \
-  stream_cast_test$(EXEEXT) \
-  system_command_test$(EXEEXT) \
-  test_tools_test$(EXEEXT) \
-  timer_test$(EXEEXT) \
-  tn_range_test$(EXEEXT) \
-  value_cast_test$(EXEEXT) \
-  vector_test$(EXEEXT) \
-  wx_new_test$(EXEEXT) \
-  xenum_test$(EXEEXT) \
-  xrange_test$(EXEEXT) \
-  zero_test$(EXEEXT) \
+  account_value_test \
+  actuarial_table_test \
+  alert_test \
+  any_member_test \
+  argv0_test \
+  assert_lmi_test \
+  authenticity_test \
+  calendar_date_test \
+  callback_test \
+  commutation_functions_test \
+  comma_punct_test \
+  crc32_test \
+  expression_template_0_test \
+  fenv_lmi_test \
+  file_command_test \
+  financial_test \
+  getopt_test \
+  global_settings_test \
+  handle_exceptions_test \
+  input_seq_test \
+  input_test \
+  irc7702a_test \
+  ledger_test \
+  loads_test \
+  map_lookup_test \
+  materially_equal_test \
+  math_functors_test \
+  mc_enum_test \
+  mpatrol_patch_test \
+  name_value_pairs_test \
+  ncnnnpnn_test \
+  numeric_io_test \
+  obstruct_slicing_test \
+  path_utility_test \
+  print_matrix_test \
+  progress_meter_test \
+  quiet_nan_test \
+  regex_test \
+  round_to_test \
+  rtti_lmi_test \
+  safely_dereference_as_test \
+  sandbox_test \
+  snprintf_test \
+  stratified_algorithms_test \
+  stream_cast_test \
+  system_command_test \
+  test_tools_test \
+  timer_test \
+  tn_range_test \
+  value_cast_test \
+  vector_test \
+  wx_new_test \
+  xenum_test \
+  xrange_test \
+  zero_test \
+
+unit_test_targets := \
+  $(addsuffix $(EXEEXT), \
+    $(filter-out $(excluded_unit_test_targets), $(unit_test_targets) \
+    ) \
+  )
 
 # Link these objects for all tests:
 common_test_objects := \
@@ -477,6 +483,12 @@ common_test_objects := \
   fenv_lmi.o \
   getopt.o \
   license.o \
+
+# List required object files explicitly for each test unless several
+# dozen are required. List only object files, not libraries, to avoid
+# the overhead of creating libraries: a particular unit test may be
+# built and run many times in succession during iterative development,
+# and any unnecessary overhead is unwelcome.
 
 account_value_test$(EXEEXT): \
   $(common_test_objects) \
