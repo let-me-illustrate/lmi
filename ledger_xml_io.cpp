@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.71 2008-01-01 18:29:47 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.72 2008-04-03 14:02:21 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -221,11 +221,12 @@ bool format_exists(std::string const& s, std::string const& suffix, format_map_t
         }
     else
         {
-(void)suffix;
 #if defined SHOW_MISSING_FORMATS
         std::ofstream ofs("missing_formats", ios_out_app_binary());
         ofs << s << suffix << "\n";
-#endif // defined SHOW_MISSING_FORMATS
+#else  // !defined SHOW_MISSING_FORMATS
+        stifle_warning_for_unused_variable(suffix);
+#endif // !defined SHOW_MISSING_FORMATS
         return false;
         }
 }

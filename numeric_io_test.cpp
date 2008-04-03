@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_test.cpp,v 1.17 2008-01-13 20:03:19 chicares Exp $
+// $Id: numeric_io_test.cpp,v 1.18 2008-04-03 14:02:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,6 +28,7 @@
 
 #include "numeric_io_cast.hpp"
 
+#include "miscellany.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
 
@@ -161,7 +162,7 @@ int test_main(int, char*[])
 #endif // ! defined __BORLANDC__
 
     std::cout << std::endl;
-    (void) d;
+    stifle_warning_for_unused_value(d);
 
     // Interpreted as decimal, not as octal.
     BOOST_TEST_EQUAL(77, numeric_io_cast<int>( "077"));
