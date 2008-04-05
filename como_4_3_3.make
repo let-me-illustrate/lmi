@@ -19,12 +19,29 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: como_4_3_3.make,v 1.18 2008-04-05 19:33:17 chicares Exp $
+# $Id: como_4_3_3.make,v 1.19 2008-04-05 21:11:10 chicares Exp $
 
-# Casual workarounds for como C++ version 4.3.3, using gcc as the
-# underlying C compiler. It is casually supported through this
-# makefile because it conforms to the standard in some ways that gcc
-# does not, so using it at least for unit tests may reveal defects.
+# Limited workarounds for Comeau C++ version 4.3.3, using gcc as the
+# underlying C compiler, with a *nixy shell. Comeau C++ is useful
+# because it conforms to the standard in some ways that gcc does not,
+# so using it at least for unit tests may reveal defects not found
+# with gcc alone.
+
+# SOMEDAY !! Address these shortcomings:
+#
+# Comeau C++ builds are not idempotent. This command
+#   make -f como_4_3_3.make unit_tests
+# succeeds when the build directory is empty, but reissuing exactly
+# the same command produces linker errors.
+#
+# Apparently those errors are due to template-instantiation conflicts.
+# Untested ideas:
+#  - use '-T'
+#  - routinely delete '.ii' files
+#  - use a monolithic library for all code shared by unit tests
+#  - use a distinct subdirectory for each target
+# Cf.:
+# http://www-d0.fnal.gov/KAI/doc/UserGuide/faq.html#multiple_template_instance
 
 toolset      := como
 
@@ -32,13 +49,14 @@ src_dir      := $(CURDIR)
 
 gcc_version  :=
 
-# This C++ compiler requires an underlying C compiler. To use gcc as
-# that underlying compiler, it needs MinGW gcc-2.95.3-5; other
-# versions or other msw ports of gcc won't do.
-#
+# Comeau C++ requires an underlying C compiler. On msw, with gcc as
+# the underlying compiler, it needs MinGW gcc-2.95.3-5; other versions
+# or other msw ports of gcc won't do. Comeau's website mentions both
+# gcc-2.95.3-5 and gcc-2.95.3-6, but the latter doesn't exist.
+
 underlying_cc := /mingw-2.95.3-5
 
-# This compiler does not automatically define the customary macros for
+# Comeau C++ does not automatically define the customary macros for
 # identifying the msw-intel platform.
 
 CPPFLAGS := \
@@ -54,7 +72,7 @@ CXX_WARNINGS       :=
 C_EXTRA_WARNINGS   :=
 CXX_EXTRA_WARNINGS :=
 
-# This compiler's '--strict' option is incompatible with MinGW system
+# Comeau C++'s '--strict' option is incompatible with MinGW system
 # headers, and even its relaxed '--a' counterpart is incompatible with
 # '__declspec'.
 #
@@ -70,7 +88,7 @@ CXX_EXTRA_WARNINGS :=
 #   void* operator new(std::size_t bytes, wx_allocator) {...}
 # Como requires that the decoration precede the return type in the
 # declaration, but doesn't allow it anywhere in the definition. With
-# '--a', this doesn't need to be suppressed, but it doesn't hurt either
+# '--a', this doesn't need to be suppressed, but neither does it hurt
 # because '--a' treats any '__declspec' as an error.
 #
 # Diagnostics 1195 and 1200: emulated ms defective loop variable
@@ -91,7 +109,7 @@ strict_cxxflags := \
   --long_long \
   --no_microsoft_bugs \
 
-# This compiler's strict mode is incompatible with many useful tools
+# Comeau C++'s strict mode is incompatible with many useful libraries
 # such as boost::filesystem (if built from source).
 
 # To get rid of the ms nonsense and use the strictest mode available
@@ -107,25 +125,32 @@ CXXFLAGS := $(nonstrict_cxxflags) --no_prelink_verbose
 
 LD := $(CXX)
 
-# Library order is crucial. This compiler treats leading slashes
-# as option delimiters, so library names are prefixed with a drive
-# letter.
+# Library order is crucial.
+#
+# Comeau C++ doesn't accept '-lxslt.dll -lxml2.dll', so required
+# libraries are specified here as full filepaths. It treats leading
+# slashes as option delimiters, so leading slashes in library names
+# are prefixed with a drive letter. SOMEDAY !! A 'como_ld'
+# program could accept gcc syntax.
 
 REQUIRED_LIBS := \
   c:/opt/lmi/local/lib/libxslt.dll.a \
   c:/opt/lmi/local/lib/libxml2.dll.a \
   c:$(underlying_cc)/lib/libwsock32.a \
 
+# SOMEDAY !! Use autodependencies.
 MAKEDEPEND_0 :=
-
 MAKEDEPEND_1 :=
 
+# SOMEDAY !! Use mpatrol.
 MPATROL_LIBS :=
 
 excluded_unit_test_targets := \
   ledger_test \
   regex_test \
 
+# This dummy target prevents this makefile from being the default
+# target. It mustn't be PHONY.
 all:
 
 como_4_3_3.make:: ;
