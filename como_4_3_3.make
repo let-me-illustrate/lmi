@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: como_4_3_3.make,v 1.19 2008-04-05 21:11:10 chicares Exp $
+# $Id: como_4_3_3.make,v 1.20 2008-04-05 22:20:25 chicares Exp $
 
 # Limited workarounds for Comeau C++ version 4.3.3, using gcc as the
 # underlying C compiler, with a *nixy shell. Comeau C++ is useful
@@ -195,7 +195,7 @@ MAKECMDGOALS ?= lmi_cli_monolithic.exe
 
 %: force
 	@sh -c " \
-	  path=(/usr/bin /como433/bin/ $(underlying_cc)/bin/ /usr/local/bin/); \
+	  export PATH=/usr/bin:/como433/bin/:$(underlying_cc)/bin/:$$PATH; \
 	  export COMO_MIN_INCLUDE=$(underlying_cc)/include; \
 	  ComSpec=C:\\\\WINDOWS\\\\SYSTEM32\\\\CMD.EXE; \
 	  $(MAKE) \
