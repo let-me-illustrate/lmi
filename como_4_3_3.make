@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: como_4_3_3.make,v 1.22 2008-04-05 23:25:13 chicares Exp $
+# $Id: como_4_3_3.make,v 1.23 2008-04-05 23:53:30 chicares Exp $
 
 # Limited workarounds for Comeau C++ version 4.3.3, using gcc as the
 # underlying C compiler, with a *nixy shell. Comeau C++ is useful
@@ -49,12 +49,30 @@ src_dir      := $(CURDIR)
 
 gcc_version  :=
 
+prefix       := /opt/lmi
+exec_prefix  := $(prefix)
+lmi_bin_dir  := $(exec_prefix)/bin
+
+system_root  := C:
+msw_root     := C:
+
+como_dir     := $(system_root)/como433
+como_bin_dir := $(como_dir)/bin
+
 # Comeau C++ requires an underlying C compiler. On msw, with gcc as
 # the underlying compiler, it needs MinGW gcc-2.95.3-5; other versions
 # or other msw ports of gcc won't do. Comeau's website mentions both
 # gcc-2.95.3-5 and gcc-2.95.3-6, but the latter doesn't exist.
 
-underlying_cc := /mingw-2.95.3-5
+mingw_gcc2   := mingw-2.95.3-5
+
+gcc2_dir     := $(system_root)/$(mingw_gcc2)
+gcc2_bin_dir := $(gcc2_dir)/bin
+
+# Comeau C++ for msw requires $COMO_MIN_INCLUDE to contain an msw path
+# to the underlying C compiler's include directory.
+
+gcc2_inc_dir := $(msw_root)/$(mingw_gcc2)/include
 
 # Comeau C++ for msw requires both its own bin/ directory and the
 # underlying C compiler's bin/ directory to be on the path. They must
@@ -63,7 +81,7 @@ underlying_cc := /mingw-2.95.3-5
 # unfortunately comes bundled with its own obsolete 'make', which must
 # be removed or renamed to keep it from clashing with Cygwin's 'make'.
 
-insidious_make := $(underlying_cc)/bin/make.exe
+insidious_make := $(gcc2_bin_dir)/make.exe
 
 ifneq (,$(wildcard $(insidious_make)))
   $(error Remove or rename '$(insidious_make)')
@@ -207,8 +225,8 @@ MAKECMDGOALS ?= lmi_cli_monolithic.exe
 
 %: force
 	@sh -c " \
-	  export PATH=/usr/bin:/como433/bin/:$(underlying_cc)/bin/:$$PATH; \
-	  export COMO_MIN_INCLUDE=$(underlying_cc)/include; \
+	  export PATH=/usr/bin:$(como_bin_dir):$(gcc2_bin_dir):$$PATH; \
+	  export COMO_MIN_INCLUDE=$(gcc2_inc_dir); \
 	  ComSpec=C:\\\\WINDOWS\\\\SYSTEM32\\\\CMD.EXE; \
 	  $(MAKE) \
 	    -f $(src_dir)/GNUmakefile \
