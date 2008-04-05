@@ -19,30 +19,24 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: como_4_3_3.make,v 1.17 2008-04-03 16:07:17 chicares Exp $
-
-toolset := como
-
-src_dir := $(CURDIR)
-
-gcc_version :=
+# $Id: como_4_3_3.make,v 1.18 2008-04-05 19:33:17 chicares Exp $
 
 # Casual workarounds for como C++ version 4.3.3, using gcc as the
 # underlying C compiler. It is casually supported through this
 # makefile because it conforms to the standard in some ways that gcc
 # does not, so using it at least for unit tests may reveal defects.
 
+toolset      := como
+
+src_dir      := $(CURDIR)
+
+gcc_version  :=
+
 # This C++ compiler requires an underlying C compiler. To use gcc as
 # that underlying compiler, it needs MinGW gcc-2.95.3-5; other
 # versions or other msw ports of gcc won't do.
 #
 underlying_cc := /mingw-2.95.3-5
-
-C_WARNINGS         :=
-CXX_WARNINGS       :=
-
-C_EXTRA_WARNINGS   :=
-CXX_EXTRA_WARNINGS :=
 
 # This compiler does not automatically define the customary macros for
 # identifying the msw-intel platform.
@@ -51,8 +45,14 @@ CPPFLAGS := \
   -D__WIN32__ \
   -D_X86_ \
 
-CC  := gcc
-CXX := como
+CC                 := gcc
+CXX                := como
+
+C_WARNINGS         :=
+CXX_WARNINGS       :=
+
+C_EXTRA_WARNINGS   :=
+CXX_EXTRA_WARNINGS :=
 
 # This compiler's '--strict' option is incompatible with MinGW system
 # headers, and even its relaxed '--a' counterpart is incompatible with
@@ -73,7 +73,8 @@ CXX := como
 # '--a', this doesn't need to be suppressed, but it doesn't hurt either
 # because '--a' treats any '__declspec' as an error.
 #
-# Diagnostics 1195 and 1200: emulated ms defective loop variable scoping.
+# Diagnostics 1195 and 1200: emulated ms defective loop variable
+# scoping.
 
 nonstrict_cxxflags := \
   --diag_suppress=161 \
@@ -92,6 +93,11 @@ strict_cxxflags := \
 
 # This compiler's strict mode is incompatible with many useful tools
 # such as boost::filesystem (if built from source).
+
+# To get rid of the ms nonsense and use the strictest mode available
+# on msw, uncomment the next two lines.
+# CPPFLAGS :=
+# CXXFLAGS := --a
 
 CXXFLAGS := $(nonstrict_cxxflags) --no_prelink_verbose
 
@@ -115,11 +121,6 @@ MAKEDEPEND_0 :=
 MAKEDEPEND_1 :=
 
 MPATROL_LIBS :=
-
-# To get rid of the ms nonsense and use the strictest mode available
-# on msw, uncomment the next two lines.
-# CPPFLAGS :=
-# CXXFLAGS := --a
 
 excluded_unit_test_targets := \
   ledger_test \
