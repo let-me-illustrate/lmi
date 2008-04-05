@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: como_4_3_3.make,v 1.21 2008-04-05 22:50:33 chicares Exp $
+# $Id: como_4_3_3.make,v 1.22 2008-04-05 23:25:13 chicares Exp $
 
 # Limited workarounds for Comeau C++ version 4.3.3, using gcc as the
 # underlying C compiler, with a *nixy shell. Comeau C++ is useful
@@ -149,7 +149,6 @@ LD := $(CXX)
 REQUIRED_LIBS := \
   c:/opt/lmi/local/lib/libxslt.dll.a \
   c:/opt/lmi/local/lib/libxml2.dll.a \
-  c:$(underlying_cc)/lib/libwsock32.a \
 
 # SOMEDAY !! Use autodependencies.
 MAKEDEPEND_0 :=
