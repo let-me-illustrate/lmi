@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: como_4_3_3.make,v 1.20 2008-04-05 22:20:25 chicares Exp $
+# $Id: como_4_3_3.make,v 1.21 2008-04-05 22:50:33 chicares Exp $
 
 # Limited workarounds for Comeau C++ version 4.3.3, using gcc as the
 # underlying C compiler, with a *nixy shell. Comeau C++ is useful
@@ -55,6 +55,19 @@ gcc_version  :=
 # gcc-2.95.3-5 and gcc-2.95.3-6, but the latter doesn't exist.
 
 underlying_cc := /mingw-2.95.3-5
+
+# Comeau C++ for msw requires both its own bin/ directory and the
+# underlying C compiler's bin/ directory to be on the path. They must
+# precede Cygwin's system directories because Cygwin puts its own gcc
+# in /usr/bin/ . Comeau C++ requires an msw build of gcc-2.x that
+# unfortunately comes bundled with its own obsolete 'make', which must
+# be removed or renamed to keep it from clashing with Cygwin's 'make'.
+
+insidious_make := $(underlying_cc)/bin/make.exe
+
+ifneq (,$(wildcard $(insidious_make)))
+  $(error Remove or rename '$(insidious_make)')
+endif
 
 # Comeau C++ does not automatically define the customary macros for
 # identifying the msw-intel platform.
