@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1035 2008-04-03 16:07:18 chicares Exp $
+// $Id: ChangeLog,v 1.1036 2008-04-06 01:40:24 chicares Exp $
 
 MAINTENANCE
 
@@ -16271,4 +16271,52 @@ Update library paths.
 
   como_4_3_3.make
 Help como find source files in other directories; exclude a unit test.
+
+20080405T1932Z <gchicares@sbcglobal.net> [1177]
+
+  diagnostics.sed
+Filter out names of wrappers added 20080401T1211Z.
+
+20080405T1933Z <gchicares@sbcglobal.net> [1177]
+
+  como_4_3_3.make
+Reformat.
+
+20080405T2111Z <gchicares@sbcglobal.net> [1177]
+
+  como_4_3_3.make
+Improve documentation.
+
+20080405T2220Z <gchicares@sbcglobal.net> [1177]
+
+  como_4_3_3.make
+Remove a zshism: $path with array syntax. Also remove one disused path
+element.
+
+20080405T2250Z <gchicares@sbcglobal.net> [1177]
+
+  como_4_3_3.make
+Detect a path clash. It hasn't been an actual problem yet because an
+antique toolset had a custom-built 'make' (and little else) in
+'/usr/bin/', but it does pose a problem with Cygwin.
+
+20080405T2325Z <gchicares@sbcglobal.net> [1177]
+
+  como_4_3_3.make
+Remove an unneeded library.
+
+20080405T2353Z <gchicares@sbcglobal.net> [1177]
+
+  como_4_3_3.make
+Refactor.
+
+20080406T0136Z <gchicares@sbcglobal.net> [1177]
+
+  como_4_3_3.make
+Use a compiler wrapper instead of a rancid kludge.
+
+20080406T0140Z <gchicares@sbcglobal.net> [1177]
+
+  como_4_3_3.make
+Support Comeau C++ in a Cygwin environment.
 
