@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: como_4_3_3.make,v 1.23 2008-04-05 23:53:30 chicares Exp $
+# $Id: como_4_3_3.make,v 1.24 2008-04-06 01:36:17 chicares Exp $
 
 # Limited workarounds for Comeau C++ version 4.3.3, using gcc as the
 # underlying C compiler, with a *nixy shell. Comeau C++ is useful
@@ -152,7 +152,9 @@ CXXFLAGS := $(nonstrict_cxxflags) --no_prelink_verbose
 
 # For debugging on msw with gcc as the underlying C compiler, add
 #  /g
-# to $(CXXFLAGS): the slash is required, and '-g' won't work.
+# to $(CXXFLAGS): the slash is required, and '-g' doesn't work.
+# SOMEDAY !! Test this; modify the CXX wrapper to handle it as a
+# special case if necessary.
 
 LD := $(CXX)
 
@@ -161,12 +163,12 @@ LD := $(CXX)
 # Comeau C++ doesn't accept '-lxslt.dll -lxml2.dll', so required
 # libraries are specified here as full filepaths. It treats leading
 # slashes as option delimiters, so leading slashes in library names
-# are prefixed with a drive letter. SOMEDAY !! A 'como_ld'
+# are changed here to doubled backslashes. SOMEDAY !! A 'como_ld'
 # program could accept gcc syntax.
 
 REQUIRED_LIBS := \
-  c:/opt/lmi/local/lib/libxslt.dll.a \
-  c:/opt/lmi/local/lib/libxml2.dll.a \
+  \\opt/lmi/local/lib/libxslt.dll.a \
+  \\opt/lmi/local/lib/libxml2.dll.a \
 
 # SOMEDAY !! Use autodependencies.
 MAKEDEPEND_0 :=
@@ -185,73 +187,47 @@ all:
 
 como_4_3_3.make:: ;
 
-# Comeau C++ for msw expects its bin/ directory to be on the path and
-# the environment to contain a path to gcc. Furthermore, it expects
-# to invoke msw subshells. However, we prefer *nix shells and want to
-# put nothing compiler specific in the environment.
-#
-# Accommodating these como idiosyncrasies by setting $(CXX) to the
-# following shell script...
-#
-## #!/usr/bin/sh
-## echo "Starting...\n"
-## cmd="
-##   ComSpec=$WindowsComSpec;
-##   COMSPEC=$WindowsComSpec;
-##   path=(/como433/bin /mingw-2.95.3-5/bin /usr/bin C:/WINNT/system32 C:/WINNT);
-##   export COMO_MIN_INCLUDE=/mingw-2.95.3-5/include;
-##   como $*;
-##   exit;"
-## /usr/bin/sh -c "echo cmd is $cmd; $cmd; echo done" || print Error executing command: $cmd
-#
-# ...gobbles compiler diagnostics. And enclosing the commands in
-#
-##   $(shell
-##     [commands]
-##   )
-#
-# gobbles newlines in the output. Therefore, we resort to the odd
-# workaround of enclosing the commands in
-#
-##   sh -c "
-##     [commands]
-##   "
-#
-# instead.
-#
-# The result is an ugly workaround that's probably quite fragile.
-
 MAKECMDGOALS ?= lmi_cli_monolithic.exe
 
+# SOMEDAY !! Comeau C++ should have its own wrapper. For now, the
+# borland wrapper works.
+
+CXX := \
+  $(lmi_bin_dir)/bcc_cc \
+  --accept --program como \
+
+# Comeau C++ for msw requires both its own bin/ directory and the
+# underlying C compiler's bin/ directory to be on the path, and an
+# msw path to the underlying C compiler's include directory to be
+# given in another environment variable. Specify environment changes
+# explicitly here, before invoking $(MAKE).
+
 %: force
-	@sh -c " \
-	  export PATH=/usr/bin:$(como_bin_dir):$(gcc2_bin_dir):$$PATH; \
-	  export COMO_MIN_INCLUDE=$(gcc2_inc_dir); \
-	  ComSpec=C:\\\\WINDOWS\\\\SYSTEM32\\\\CMD.EXE; \
-	  $(MAKE) \
-	    -f $(src_dir)/GNUmakefile \
-	                     gcc_version='$(gcc_version)' \
-	                         src_dir='$(src_dir)' \
-	                         toolset='$(toolset)' \
-	                      C_WARNINGS='$(C_WARNINGS)' \
-	                    CXX_WARNINGS='$(CXX_WARNINGS)' \
-	                C_EXTRA_WARNINGS='$(C_EXTRA_WARNINGS)' \
-	              CXX_EXTRA_WARNINGS='$(CXX_EXTRA_WARNINGS)' \
-	                        CPPFLAGS='$(CPPFLAGS)' \
-	                              CC='$(CC)' \
-	                             CXX='$(CXX)' \
-	                        CXXFLAGS='$(CXXFLAGS)' \
-	                              LD='$(LD)' \
-	                         LDFLAGS='$(LDFLAGS)' \
-	                   REQUIRED_LIBS='$(REQUIRED_LIBS)' \
-	                    MAKEDEPEND_0='$(MAKEDEPEND_0)' \
-	                    MAKEDEPEND_1='$(MAKEDEPEND_1)' \
-	                    MPATROL_LIBS='$(MPATROL_LIBS)' \
-	                platform_defines='' \
-	                     system_root='C:' \
-	      excluded_unit_test_targets='$(excluded_unit_test_targets)' \
-	    $(MAKECMDGOALS); \
-	"
+	export PATH=$(como_bin_dir):$(gcc2_bin_dir):$$PATH; \
+	export COMO_MIN_INCLUDE=$(gcc2_inc_dir); \
+	ComSpec=C:\\\\WINDOWS\\\\SYSTEM32\\\\CMD.EXE; \
+	$(MAKE) \
+	  -f $(src_dir)/GNUmakefile \
+	                   gcc_version='$(gcc_version)' \
+	                       src_dir='$(src_dir)' \
+	                       toolset='$(toolset)' \
+	                    C_WARNINGS='$(C_WARNINGS)' \
+	                  CXX_WARNINGS='$(CXX_WARNINGS)' \
+	              C_EXTRA_WARNINGS='$(C_EXTRA_WARNINGS)' \
+	            CXX_EXTRA_WARNINGS='$(CXX_EXTRA_WARNINGS)' \
+	                      CPPFLAGS='$(CPPFLAGS)' \
+	                            CC='$(CC)' \
+	                           CXX='$(CXX)' \
+	                      CXXFLAGS='$(CXXFLAGS)' \
+	                            LD='$(LD)' \
+	                       LDFLAGS='$(LDFLAGS)' \
+	                 REQUIRED_LIBS='$(REQUIRED_LIBS)' \
+	                  MAKEDEPEND_0='$(MAKEDEPEND_0)' \
+	                  MAKEDEPEND_1='$(MAKEDEPEND_1)' \
+	                  MPATROL_LIBS='$(MPATROL_LIBS)' \
+	              platform_defines='' \
+	    excluded_unit_test_targets='$(excluded_unit_test_targets)' \
+	  $(MAKECMDGOALS); \
 
 force: ;
 
