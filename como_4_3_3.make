@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: como_4_3_3.make,v 1.25 2008-04-06 01:40:24 chicares Exp $
+# $Id: como_4_3_3.make,v 1.26 2008-04-06 18:48:14 chicares Exp $
 
 # Limited workarounds for Comeau C++ version 4.3.3, using gcc as the
 # underlying C compiler, with a Cygwin shell. Comeau C++ is useful
@@ -203,7 +203,7 @@ CXX := \
 # explicitly here, before invoking $(MAKE).
 
 %: force
-	export PATH=$(como_bin_dir):$(gcc2_bin_dir):$$PATH; \
+	@export PATH=$(como_bin_dir):$(gcc2_bin_dir):$$PATH; \
 	export COMO_MIN_INCLUDE=$(gcc2_inc_dir); \
 	$(MAKE) \
 	  -f $(src_dir)/GNUmakefile \
