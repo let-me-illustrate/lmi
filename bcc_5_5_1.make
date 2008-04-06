@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: bcc_5_5_1.make,v 1.13 2008-04-03 14:14:40 chicares Exp $
+# $Id: bcc_5_5_1.make,v 1.14 2008-04-06 18:49:11 chicares Exp $
 
 toolset     := bcc
 
@@ -27,8 +27,8 @@ src_dir     := $(CURDIR)
 
 gcc_version :=
 
-prefix      ?= /opt/lmi
-exec_prefix ?= $(prefix)
+prefix      := /opt/lmi
+exec_prefix := $(prefix)
 lmi_bin_dir := $(exec_prefix)/bin
 
 bcc_dir     := C:/Borland/BCC55
