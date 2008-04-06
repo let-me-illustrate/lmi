@@ -19,10 +19,10 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: como_4_3_3.make,v 1.24 2008-04-06 01:36:17 chicares Exp $
+# $Id: como_4_3_3.make,v 1.25 2008-04-06 01:40:24 chicares Exp $
 
 # Limited workarounds for Comeau C++ version 4.3.3, using gcc as the
-# underlying C compiler, with a *nixy shell. Comeau C++ is useful
+# underlying C compiler, with a Cygwin shell. Comeau C++ is useful
 # because it conforms to the standard in some ways that gcc does not,
 # so using it at least for unit tests may reveal defects not found
 # with gcc alone.
@@ -53,8 +53,8 @@ prefix       := /opt/lmi
 exec_prefix  := $(prefix)
 lmi_bin_dir  := $(exec_prefix)/bin
 
-system_root  := C:
-msw_root     := C:
+system_root  := /cygdrive/c
+msw_root     := c:
 
 como_dir     := $(system_root)/como433
 como_bin_dir := $(como_dir)/bin
@@ -205,7 +205,6 @@ CXX := \
 %: force
 	export PATH=$(como_bin_dir):$(gcc2_bin_dir):$$PATH; \
 	export COMO_MIN_INCLUDE=$(gcc2_inc_dir); \
-	ComSpec=C:\\\\WINDOWS\\\\SYSTEM32\\\\CMD.EXE; \
 	$(MAKE) \
 	  -f $(src_dir)/GNUmakefile \
 	                   gcc_version='$(gcc_version)' \
