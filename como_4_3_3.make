@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: como_4_3_3.make,v 1.26 2008-04-06 18:48:14 chicares Exp $
+# $Id: como_4_3_3.make,v 1.27 2008-04-07 01:02:29 chicares Exp $
 
 # Limited workarounds for Comeau C++ version 4.3.3, using gcc as the
 # underlying C compiler, with a Cygwin shell. Comeau C++ is useful
@@ -73,6 +73,11 @@ gcc2_bin_dir := $(gcc2_dir)/bin
 # to the underlying C compiler's include directory.
 
 gcc2_inc_dir := $(msw_root)/$(mingw_gcc2)/include
+
+# Use gcc-3.x for autodependencies and physical-closure testing.
+
+gcc3_dir     := /MinGW_
+gcc3_bin_dir := $(gcc3_dir)/bin
 
 # Comeau C++ for msw requires both its own bin/ directory and the
 # underlying C compiler's bin/ directory to be on the path. They must
@@ -170,16 +175,19 @@ REQUIRED_LIBS := \
   \\opt/lmi/local/lib/libxslt.dll.a \
   \\opt/lmi/local/lib/libxml2.dll.a \
 
-# SOMEDAY !! Use autodependencies.
-MAKEDEPEND_0 :=
-MAKEDEPEND_1 :=
-
 # SOMEDAY !! Use mpatrol.
 MPATROL_LIBS :=
 
 excluded_unit_test_targets := \
   ledger_test \
   regex_test \
+
+GNU_CPP := $(gcc3_bin_dir)/cpp
+GNU_CXX := $(gcc3_bin_dir)/g++
+
+# SOMEDAY !! Use autodependencies.
+MAKEDEPEND_0 :=
+MAKEDEPEND_1 :=
 
 # This dummy target prevents this makefile from being the default
 # target. It mustn't be PHONY.
@@ -221,11 +229,13 @@ CXX := \
 	                            LD='$(LD)' \
 	                       LDFLAGS='$(LDFLAGS)' \
 	                 REQUIRED_LIBS='$(REQUIRED_LIBS)' \
-	                  MAKEDEPEND_0='$(MAKEDEPEND_0)' \
-	                  MAKEDEPEND_1='$(MAKEDEPEND_1)' \
 	                  MPATROL_LIBS='$(MPATROL_LIBS)' \
 	              platform_defines='' \
 	    excluded_unit_test_targets='$(excluded_unit_test_targets)' \
+	                       GNU_CPP='$(GNU_CPP)' \
+	                       GNU_CXX='$(GNU_CXX)' \
+	                  MAKEDEPEND_0='$(MAKEDEPEND_0)' \
+	                  MAKEDEPEND_1='$(MAKEDEPEND_1)' \
 	  $(MAKECMDGOALS); \
 
 force: ;

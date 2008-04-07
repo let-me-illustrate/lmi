@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: autodependency.make,v 1.10 2008-01-13 20:03:19 chicares Exp $
+# $Id: autodependency.make,v 1.11 2008-04-07 01:02:29 chicares Exp $
 
 ################################################################################
 
@@ -209,7 +209,7 @@ autodependency_sed_commands = \
   $(comp_autodependency_kludge) \
 
 MAKEDEPEND = \
-  $(GNU_PREPROCESSOR) \
+  $(GNU_CPP) \
     -x c++ \
     $(ALL_CPPFLAGS) \
     $(comp_cpp_pretend_flags) \

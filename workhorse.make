@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.111 2008-04-01 15:57:32 chicares Exp $
+# $Id: workhorse.make,v 1.112 2008-04-07 01:02:29 chicares Exp $
 
 ################################################################################
 
@@ -1120,7 +1120,7 @@ physical_closure_files := \
 check_physical_closure: $(physical_closure_files)
 
 %.physical_closure: %
-	@$(CXX) \
+	@$(GNU_CXX) \
 	  -DLMI_IGNORE_PCH \
 	  $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) \
 	  -x c++ -w -O0 -fsyntax-only $<
