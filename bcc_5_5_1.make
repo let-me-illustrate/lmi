@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: bcc_5_5_1.make,v 1.14 2008-04-06 18:49:11 chicares Exp $
+# $Id: bcc_5_5_1.make,v 1.15 2008-04-07 01:02:29 chicares Exp $
 
 toolset     := bcc
 
@@ -38,6 +38,11 @@ bcc_lib_dir := $(bcc_dir)/Lib
 
 compiler_include_directory := -I $(bcc_inc_dir)
 compiler_runtime_files     := $(bcc_bin_dir)/cc3250.dll
+
+# Use gcc-3.x for autodependencies and physical-closure testing.
+
+gcc3_dir     := /MinGW_
+gcc3_bin_dir := $(gcc3_dir)/bin
 
 # Casual workarounds for borland C++ version 5.5.1 . The vendor calls
 # this compiler "free", but it is not: it is merely gratis. It may
@@ -102,10 +107,6 @@ LDFLAGS := \
   -L$(bcc_lib_dir) /ap /c /E0 /m /Tpe /V4.0 /w /w-dup /w-dpl \
   --startup-file $(bcc_lib_dir)/c0x32.obj import32.lib cw32i.lib \
 
-MAKEDEPEND_0 :=
-
-MAKEDEPEND_1 :=
-
 MPATROL_LIBS :=
 
 # The borland linker fails with this library search path:
@@ -129,6 +130,14 @@ excluded_unit_test_targets := \
   regex_test \
   tn_range_test \
 
+GNU_CPP := $(gcc3_bin_dir)/cpp
+GNU_CXX := $(gcc3_bin_dir)/g++
+
+MAKEDEPEND_0 :=
+MAKEDEPEND_1 :=
+
+# This dummy target prevents this makefile from being the default
+# target. It mustn't be PHONY.
 all:
 
 bcc_5_5_1.make:: ;
@@ -150,11 +159,13 @@ bcc_5_5_1.make:: ;
 	                      CXXFLAGS='$(CXXFLAGS)' \
 	                            LD='$(LD)' \
 	                       LDFLAGS='$(LDFLAGS)' \
-	                  MAKEDEPEND_0='$(MAKEDEPEND_0)' \
-	                  MAKEDEPEND_1='$(MAKEDEPEND_1)' \
 	                  MPATROL_LIBS='$(MPATROL_LIBS)' \
 	         platform_wx_libraries='$(platform_wx_libraries)' \
 	    excluded_unit_test_targets='$(excluded_unit_test_targets)' \
+	                       GNU_CPP='$(GNU_CPP)' \
+	                       GNU_CXX='$(GNU_CXX)' \
+	                  MAKEDEPEND_0='$(MAKEDEPEND_0)' \
+	                  MAKEDEPEND_1='$(MAKEDEPEND_1)' \
 	  unit_tests \
 
 force: ;

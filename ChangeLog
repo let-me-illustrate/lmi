@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1036 2008-04-06 01:40:24 chicares Exp $
+// $Id: ChangeLog,v 1.1037 2008-04-07 01:02:29 chicares Exp $
 
 MAINTENANCE
 
@@ -16319,4 +16319,24 @@ Use a compiler wrapper instead of a rancid kludge.
 
   como_4_3_3.make
 Support Comeau C++ in a Cygwin environment.
+
+20080406T1848Z <gchicares@sbcglobal.net> [1177]
+
+  como_4_3_3.make
+Don't echo the 'make' command.
+
+20080406T1849Z <gchicares@sbcglobal.net> [1177]
+
+  bcc_5_5_1.make
+Make certain assignments unconditional, as in other makefiles.
+
+20080407T0102Z <gchicares@sbcglobal.net> [1177]
+
+  autodependency.make
+  bcc_5_5_1.make
+  como_4_3_3.make
+  configuration.make
+  workhorse.make
+Use only GNU tools for certain special purposes: testing physical
+closure and generating autodependencies.
 
