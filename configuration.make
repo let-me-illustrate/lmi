@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: configuration.make,v 1.5 2008-01-01 18:29:37 chicares Exp $
+# $Id: configuration.make,v 1.6 2008-04-07 01:02:29 chicares Exp $
 
 ################################################################################
 
@@ -47,13 +47,15 @@ $(src_dir)/$(platform-makefile):: ;
 
 ################################################################################
 
-# Path to preprocessor used to generate dependencies.
+# GNU tools for special purposes.
 
-# If the GNU preprocessor and C compiler aren't what you get when you type
-#   cpp --version
-#   gcc --version
-# then give their full path here.
+# Always use the GNU C++ compiler and preprocessor, version 3.x or
+# later, for testing physical closure and generating autodependencies.
+# This obviates figuring out how other toolchains support these needs.
+#
+# Override these definitions to specify GNU tools when using a
+# toolchain other than gcc-3.x or later.
 
-GENERIC_GNU_PREPROCESSOR := $(CPP)
-GENERIC_GCC              := $(CXX)
+GNU_CPP := $(CPP)
+GNU_CXX := $(CXX)
 
