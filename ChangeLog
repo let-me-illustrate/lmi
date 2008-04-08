@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1037 2008-04-07 01:02:29 chicares Exp $
+// $Id: ChangeLog,v 1.1038 2008-04-08 18:21:21 chicares Exp $
 
 MAINTENANCE
 
@@ -16339,4 +16339,18 @@ Make certain assignments unconditional, as in other makefiles.
   workhorse.make
 Use only GNU tools for certain special purposes: testing physical
 closure and generating autodependencies.
+
+20080408T1815Z <gchicares@sbcglobal.net> [1177]
+
+  test_coding_rules.cpp
+Permit an additional gcc macro.
+
+20080408T1821Z <gchicares@sbcglobal.net> [1177]
+
+  autodependency.make
+  bcc_5_5_1.make
+  como_4_3_3.make
+  workhorse.make
+Implement autodepencies for secondary compilers. Additional work is
+needed to make gcc impersonate them better.
 
