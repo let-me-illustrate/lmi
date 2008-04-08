@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: como_4_3_3.make,v 1.27 2008-04-07 01:02:29 chicares Exp $
+# $Id: como_4_3_3.make,v 1.28 2008-04-08 18:21:21 chicares Exp $
 
 # Limited workarounds for Comeau C++ version 4.3.3, using gcc as the
 # underlying C compiler, with a Cygwin shell. Comeau C++ is useful
@@ -185,9 +185,8 @@ excluded_unit_test_targets := \
 GNU_CPP := $(gcc3_bin_dir)/cpp
 GNU_CXX := $(gcc3_bin_dir)/g++
 
-# SOMEDAY !! Use autodependencies.
-MAKEDEPEND_0 :=
-MAKEDEPEND_1 :=
+MAKEDEPEND_FLAGS   :=
+MAKEDEPEND_COMMAND := MAKEDEPEND_NON_GCC_COMMAND
 
 # This dummy target prevents this makefile from being the default
 # target. It mustn't be PHONY.
@@ -234,8 +233,8 @@ CXX := \
 	    excluded_unit_test_targets='$(excluded_unit_test_targets)' \
 	                       GNU_CPP='$(GNU_CPP)' \
 	                       GNU_CXX='$(GNU_CXX)' \
-	                  MAKEDEPEND_0='$(MAKEDEPEND_0)' \
-	                  MAKEDEPEND_1='$(MAKEDEPEND_1)' \
+	              MAKEDEPEND_FLAGS='$(MAKEDEPEND_FLAGS)' \
+	            MAKEDEPEND_COMMAND='$(MAKEDEPEND_COMMAND)' \
 	  $(MAKECMDGOALS); \
 
 force: ;
