@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.112 2008-04-07 01:02:29 chicares Exp $
+# $Id: workhorse.make,v 1.113 2008-04-08 18:21:21 chicares Exp $
 
 ################################################################################
 
@@ -703,16 +703,16 @@ ALL_RCFLAGS  = $(REQUIRED_RCFLAGS)  $(RCFLAGS)
 # Pattern rules.
 
 %.o: %.c
-	$(CC) $(MAKEDEPEND_0) -c $(ALL_CPPFLAGS) $(ALL_CFLAGS) $< -o$@
-	$(MAKEDEPEND_1)
+	$(CC)  $(MAKEDEPEND_FLAGS) -c $(ALL_CPPFLAGS) $(ALL_CFLAGS)   $< -o$@
+	$($(MAKEDEPEND_COMMAND))
 
 %.o: %.cpp
-	$(CXX) $(MAKEDEPEND_0) -c $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) $< -o$@
-	$(MAKEDEPEND_1)
+	$(CXX) $(MAKEDEPEND_FLAGS) -c $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) $< -o$@
+	$($(MAKEDEPEND_COMMAND))
 
 %.o: %.cxx
-	$(CXX) $(MAKEDEPEND_0) -c $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) $< -o$@
-	$(MAKEDEPEND_1)
+	$(CXX) $(MAKEDEPEND_FLAGS) -c $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) $< -o$@
+	$($(MAKEDEPEND_COMMAND))
 
 %.rc.o: %.rc
 	$(RC) -o $@ $(ALL_RCFLAGS) -i $<
