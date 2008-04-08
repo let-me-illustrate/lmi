@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.73 2008-03-13 14:07:22 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.74 2008-04-08 18:15:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -724,6 +724,7 @@ bool check_reserved_name_exception(std::string const& s)
         ,"__GNUC_MINOR__"
         ,"__GNUC_PATCHLEVEL__"
         ,"__GNUC__"
+        ,"__GNUG__"
         ,"__STRICT_ANSI__"
         ,"__asm__"
         ,"__attribute__"
