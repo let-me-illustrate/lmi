@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: autodependency.make,v 1.12 2008-04-08 18:21:20 chicares Exp $
+# $Id: autodependency.make,v 1.13 2008-04-08 19:03:44 chicares Exp $
 
 ################################################################################
 
@@ -66,8 +66,7 @@ $(src_dir)/configuration.make:: ;
 # says it treats
 #   #include <my_own_header_included_with_angle_brackets.hpp>
 # as a system file, which would be most undesirable because lmi uses
-# that syntax for third-party headers (as does boost). TODO ?? This
-# makefile should ensure that it's not using an older preprocessor.
+# that syntax for third-party headers (as does boost).
 
 # TODO ?? Investigate and resolve this issue:
 # 2003-05-04 GWC changed command option
@@ -108,10 +107,15 @@ $(src_dir)/configuration.make:: ;
 # filename that follows may cause grief--so use '-MT' only with the
 # gcc-3.x preprocessor.
 
-# Document this...
+# For gcc, simply add these flags when invoking the preprocessor
+# routinely via the compiler driver; then autodependency files are
+# produced as a side effect, saving a costly extra invocation.
 
 MAKEDEPEND_FLAGS = \
   -MMD -MP -MF $*.d \
+
+# For toolchains other than gcc, invoke this command as an extra step
+# after compiling.
 
 MAKEDEPEND_NON_GCC_COMMAND = \
   $(GNU_CPP) \
