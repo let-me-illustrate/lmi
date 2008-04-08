@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.113 2008-04-08 18:21:21 chicares Exp $
+# $Id: workhorse.make,v 1.114 2008-04-08 19:03:45 chicares Exp $
 
 ################################################################################
 
@@ -130,6 +130,14 @@ effective_default_target: $(default_targets)
 
 ifeq (gcc,$(toolset))
   gcc_version := $(shell $(CXX) -dumpversion)
+endif
+
+ifneq (3.4.4,$(shell $(GNU_CPP) -dumpversion))
+  $(error Untested $(GNU_CPP) version)
+endif
+
+ifneq (3.4.4,$(shell $(GNU_CXX) -dumpversion))
+  $(error Untested $(GNU_CXX) version)
 endif
 
 ################################################################################
