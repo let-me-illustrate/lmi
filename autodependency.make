@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: autodependency.make,v 1.13 2008-04-08 19:03:44 chicares Exp $
+# $Id: autodependency.make,v 1.14 2008-04-10 02:55:13 chicares Exp $
 
 ################################################################################
 
@@ -68,61 +68,53 @@ $(src_dir)/configuration.make:: ;
 # as a system file, which would be most undesirable because lmi uses
 # that syntax for third-party headers (as does boost).
 
-# TODO ?? Investigate and resolve this issue:
-# 2003-05-04 GWC changed command option
-#    -M
-# to
-#    -M -MT $@ \
-# for the gcc-3.x+ preprocessor. Tested with gcc-3.2.3, but not with
-# any earlier 3.x version.
+# Common gcc flags for autodependencies, to which an option in
+#   {-M, -MD, -MM, -MMD}
+# is to be added.
 #
-# Purpose: to overcome a change in preprocessor behavior between
-# gcc-2.95x and gcc-3.x that had caused a problem in situations like:
+# Specify both '-MT $@' and '-MF $(@:.o=.d)' to make a target like
+#   %.rc.o : %.rc
+# produce 'FOO.rc.d' containing prerequisites of 'FOO.rc.o', with
+# both files containing '.rc.'.
 #
-# .SUFFIXES:
-# %.rc.o : %.rc
-#         $(MAKEDEPEND)
-#         $(RC) $(ALL_RCFLAGS) $< -o $@
-#
-# 2.95
-#   $/gcc-2.95.2-1/bin/cpp --version
-#   2.95.2
-#   $/gcc-2.95.2-1/bin/cpp -M resource.rc
-#   resource.rc.o: resource.rc header.hpp
-# Note the 'rc' in target name 'resource.rc.o'...
-#
-# 3.2.3
-#   $/MinGW/bin/cpp --version
-#   cpp.EXE (GCC) 3.2.3 (mingw special 20030425-1) [...]
-#   $/MinGW/bin/cpp -M resource.rc
-#   resource.o: resource.rc header.hpp
-# Oops, no more 'rc' in target name
-#
-#   $/MinGW/bin/cpp -MT resource.rc.o -M resource.rc
-#   resource.rc.o: resource.rc header.hpp
-# 3.x specific, but it works.
-#
-# With this modification, the gcc-2.95.2-1 preprocessor reports
-# 'unrecognized option' for '-MT', which seems benign, but the
-# filename that follows may cause grief--so use '-MT' only with the
-# gcc-3.x preprocessor.
+# Using '-MT $@' with '-MD' or '-MMD' causes duplication of the object
+# file name in the '.d' file, e.g., giving
+#   FOO.o FOO.o: /src/FOO.cpp
+# where
+#   FOO.o: /src/FOO.cpp
+# would be expected. That's been known for many years:
+#   http://gcc.gnu.org/ml/gcc-patches/2001-02/msg00481.html
+# | Note the way cpp gives double -o test.o below
+# Apparently the real reason why that odd behavior is still present
+# after all this time is that it's harmless.
+
+common_autodependency_flags = -MP -MT $@ -MF $(@:.o=.d)
 
 # For gcc, simply add these flags when invoking the preprocessor
 # routinely via the compiler driver; then autodependency files are
 # produced as a side effect, saving a costly extra invocation.
 
 MAKEDEPEND_FLAGS = \
-  -MMD -MP -MF $*.d \
+  -MMD $(common_autodependency_flags) \
 
 # For toolchains other than gcc, invoke this command as an extra step
 # after compiling.
+#
+# Always use this command for gnu 'windres'. Although it's part of the
+# gcc toolchain, it offers no way to specify incremental preprocessor
+# flags. It's possible to override all preprocessor flags:
+#   --preprocessor='gcc -E -xc-header -DRC_INVOKED -MMD -MP...'
+# but that fragile enormity isn't worth the minuscule savings that
+# '-MMD' offers, because msw resource files are typically small,
+# simple, and few.
 
 MAKEDEPEND_NON_GCC_COMMAND = \
   $(GNU_CPP) \
     -x c++ \
     $(ALL_CPPFLAGS) \
     $(comp_cpp_pretend_flags) \
-    $< -MM -MP -MF $*.d \
+    -MM $(common_autodependency_flags) \
+    $< \
 
 -include *.d
 *.d:: ;
