@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.114 2008-04-08 19:03:45 chicares Exp $
+# $Id: workhorse.make,v 1.115 2008-04-10 02:56:24 chicares Exp $
 
 ################################################################################
 
@@ -724,6 +724,7 @@ ALL_RCFLAGS  = $(REQUIRED_RCFLAGS)  $(RCFLAGS)
 
 %.rc.o: %.rc
 	$(RC) -o $@ $(ALL_RCFLAGS) -i $<
+	$(MAKEDEPEND_NON_GCC_COMMAND)
 
 %$(EXEEXT):
 	$(LD) -o $@ $^ $(ALL_LDFLAGS)
