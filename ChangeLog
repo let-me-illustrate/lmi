@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1039 2008-04-08 19:03:45 chicares Exp $
+// $Id: ChangeLog,v 1.1040 2008-04-10 02:56:24 chicares Exp $
 
 MAINTENANCE
 
@@ -16362,4 +16362,15 @@ Require validated versions of gnu tools used for special purposes.
 Later versions may work just as well, but there were significant
 preprocessor changes between gcc-2.95 and gcc-3, so it's best to
 assume nothing.
+
+20080410T0255Z <gchicares@sbcglobal.net> [1175]
+
+  autodependency.make
+  diagnostics.sed
+Resolve a marked defect.
+
+20080410T0256Z <gchicares@sbcglobal.net> [1175]
+
+  workhorse.make
+Implement autodepencies for msw "resource" files.
 
