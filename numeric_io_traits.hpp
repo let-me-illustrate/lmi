@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_traits.hpp,v 1.19 2008-01-01 18:29:52 chicares Exp $
+// $Id: numeric_io_traits.hpp,v 1.20 2008-04-11 14:33:28 chicares Exp $
 
 #ifndef numeric_io_traits_hpp
 #define numeric_io_traits_hpp
@@ -39,7 +39,7 @@
 #   include <boost/type_traits.hpp>
 #else  // defined __BORLANDC__
 // COMPILER !! Workarounds for defective borland compiler.
-#   define BOOST_STATIC_ASSERT(deliberately_ignored) /##/
+#   define BOOST_STATIC_ASSERT(deliberately_ignored) class IgNoRe
 namespace boost
 {
     template<typename T, typename U>

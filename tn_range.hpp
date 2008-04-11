@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range.hpp,v 1.13 2008-01-01 18:29:57 chicares Exp $
+// $Id: tn_range.hpp,v 1.14 2008-04-11 14:33:29 chicares Exp $
 
 #ifndef tn_range_hpp
 #define tn_range_hpp
@@ -34,7 +34,7 @@
 #   include <boost/static_assert.hpp>
 #   include <boost/type_traits.hpp>
 #else  // Defined __BORLANDC__ .
-#   define BOOST_STATIC_ASSERT(deliberately_ignored) /##/
+#   define BOOST_STATIC_ASSERT(deliberately_ignored) class IgNoRe
 #endif // Defined __BORLANDC__ .
 
 #include <string>

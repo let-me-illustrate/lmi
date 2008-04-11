@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stream_cast.hpp,v 1.18 2008-03-27 01:53:21 chicares Exp $
+// $Id: stream_cast.hpp,v 1.19 2008-04-11 14:33:29 chicares Exp $
 
 // This is a derived work based on boost::lexical_cast, which bears
 // the following copyright and permissions notice:
@@ -55,7 +55,7 @@
 #   include <boost/static_assert.hpp>
 #   include <boost/type_traits.hpp>
 #else  // defined __BORLANDC__
-#   define BOOST_STATIC_ASSERT(deliberately_ignored) /##/
+#   define BOOST_STATIC_ASSERT(deliberately_ignored) class IgNoRe
 #endif // defined __BORLANDC__
 
 #include <istream> // std::ws
