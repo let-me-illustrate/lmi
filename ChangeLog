@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1040 2008-04-10 02:56:24 chicares Exp $
+// $Id: ChangeLog,v 1.1041 2008-04-11 14:42:26 chicares Exp $
 
 MAINTENANCE
 
@@ -16373,4 +16373,29 @@ Resolve a marked defect.
 
   workhorse.make
 Implement autodepencies for msw "resource" files.
+
+20080411T1433Z <gchicares@sbcglobal.net> [1175]
+
+  alert.cpp
+  any_member.hpp
+  callback.hpp
+  math_functors.hpp
+  numeric_io_cast.hpp
+  numeric_io_traits.hpp
+  quiet_nan.hpp
+  round_to.hpp
+  safely_dereference_as.hpp
+  stream_cast.hpp
+  tn_range.hpp
+  tn_range_type_trammels.hpp
+  xrange.hpp
+Avoid improper token pasting. Although '/##/' is used in a borland
+system header, the GNU preprocessor now used for autodependencies
+rejects it [C++2003 16.3.3/3].
+
+20080411T1442Z <gchicares@sbcglobal.net> [1175]
+
+  autodependency.make
+  bcc_5_5_1.make
+Improve impersonation of borland compiler.
 

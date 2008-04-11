@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: bcc_5_5_1.make,v 1.16 2008-04-08 18:21:21 chicares Exp $
+# $Id: bcc_5_5_1.make,v 1.17 2008-04-11 14:42:26 chicares Exp $
 
 toolset      := bcc
 
@@ -40,7 +40,16 @@ bcc_lib_dir  := $(bcc_dir)/Lib
 compiler_include_directory := -I $(bcc_inc_dir)
 compiler_runtime_files     := $(bcc_bin_dir)/cc3250.dll
 
+shadow_header_directory    := $(bcc_inc_dir)/shadow
+
 # Use gcc-3.x for autodependencies and physical-closure testing.
+
+compiler_impersonation_cppflags := \
+  -undef -nostdinc \
+  -U __GNUC__ -U __GNUG__ -U __GNUC_MINOR__ -U __GNUC_PATCHLEVEL__ \
+  -D LMI_IGNORE_PCH \
+  -D _M_IX86=300 -D __BORLANDC__=0x550 -D _WIN32 \
+  -I $(shadow_header_directory) \
 
 gcc3_dir     := /MinGW_
 gcc3_bin_dir := $(gcc3_dir)/bin
@@ -137,6 +146,69 @@ GNU_CXX := $(gcc3_bin_dir)/g++
 MAKEDEPEND_FLAGS   :=
 MAKEDEPEND_COMMAND := MAKEDEPEND_NON_GCC_COMMAND
 
+# Shadow all standard headers for autodependencies, because borland
+# provides only '.h'-suffixed files. These header lists are specified
+# in C++2003 17.4.1.2 .
+#
+# Copying the borland headers wouldn't work because they contain some
+# nonstandard code that the GNU preprocessor rejects, so just create
+# them as empty files.
+
+cxx_library_headers := \
+  algorithm  \
+  bitset     \
+  complex    \
+  deque      \
+  exception  \
+  fstream    \
+  functional \
+  iomanip    \
+  ios        \
+  iosfwd     \
+  iostream   \
+  istream    \
+  iterator   \
+  limits     \
+  list       \
+  locale     \
+  map        \
+  memory     \
+  new        \
+  numeric    \
+  ostream    \
+  queue      \
+  set        \
+  sstream    \
+  stack      \
+  stdexcept  \
+  strstream  \
+  streambuf  \
+  string     \
+  typeinfo   \
+  utility    \
+  valarray   \
+  vector     \
+
+cxx_c_library_headers := \
+  cassert    \
+  cctype     \
+  cerrno     \
+  cfloat     \
+  ciso646    \
+  climits    \
+  clocale    \
+  cmath      \
+  csetjmp    \
+  csignal    \
+  cstdarg    \
+  cstddef    \
+  cstdio     \
+  cstdlib    \
+  cstring    \
+  ctime      \
+  cwchar     \
+  cwctype    \
+
 # This dummy target prevents this makefile from being the default
 # target. It mustn't be PHONY.
 all:
@@ -144,29 +216,36 @@ all:
 bcc_5_5_1.make:: ;
 
 %: force
+	+@[ -d $(shadow_header_directory) ] || mkdir $(shadow_header_directory)
+	@touch \
+	  $(addprefix \
+	    $(shadow_header_directory)/, \
+	    $(cxx_library_headers) $(cxx_c_library_headers) \
+	    )
 	@-$(MAKE) \
 	  -f $(src_dir)/GNUmakefile \
-	                       src_dir='$(src_dir)' \
-	                       toolset='$(toolset)' \
-	                   gcc_version='$(gcc_version)' \
-	                    C_WARNINGS='$(C_WARNINGS)' \
-	                  CXX_WARNINGS='$(CXX_WARNINGS)' \
-	              C_EXTRA_WARNINGS='$(C_EXTRA_WARNINGS)' \
-	            CXX_EXTRA_WARNINGS='$(CXX_EXTRA_WARNINGS)' \
-	                      CPPFLAGS='$(CPPFLAGS)' \
-	    compiler_include_directory='$(compiler_include_directory)' \
-	        compiler_runtime_files='$(compiler_runtime_files)' \
-	                           CXX='$(CXX)' \
-	                      CXXFLAGS='$(CXXFLAGS)' \
-	                            LD='$(LD)' \
-	                       LDFLAGS='$(LDFLAGS)' \
-	                  MPATROL_LIBS='$(MPATROL_LIBS)' \
-	         platform_wx_libraries='$(platform_wx_libraries)' \
-	    excluded_unit_test_targets='$(excluded_unit_test_targets)' \
-	                       GNU_CPP='$(GNU_CPP)' \
-	                       GNU_CXX='$(GNU_CXX)' \
-	              MAKEDEPEND_FLAGS='$(MAKEDEPEND_FLAGS)' \
-	            MAKEDEPEND_COMMAND='$(MAKEDEPEND_COMMAND)' \
+	                            src_dir='$(src_dir)' \
+	                            toolset='$(toolset)' \
+	                        gcc_version='$(gcc_version)' \
+	                         C_WARNINGS='$(C_WARNINGS)' \
+	                       CXX_WARNINGS='$(CXX_WARNINGS)' \
+	                   C_EXTRA_WARNINGS='$(C_EXTRA_WARNINGS)' \
+	                 CXX_EXTRA_WARNINGS='$(CXX_EXTRA_WARNINGS)' \
+	                           CPPFLAGS='$(CPPFLAGS)' \
+	         compiler_include_directory='$(compiler_include_directory)' \
+	             compiler_runtime_files='$(compiler_runtime_files)' \
+	    compiler_impersonation_cppflags='$(compiler_impersonation_cppflags)' \
+	                                CXX='$(CXX)' \
+	                           CXXFLAGS='$(CXXFLAGS)' \
+	                                 LD='$(LD)' \
+	                            LDFLAGS='$(LDFLAGS)' \
+	                       MPATROL_LIBS='$(MPATROL_LIBS)' \
+	              platform_wx_libraries='$(platform_wx_libraries)' \
+	         excluded_unit_test_targets='$(excluded_unit_test_targets)' \
+	                            GNU_CPP='$(GNU_CPP)' \
+	                            GNU_CXX='$(GNU_CXX)' \
+	                   MAKEDEPEND_FLAGS='$(MAKEDEPEND_FLAGS)' \
+	                 MAKEDEPEND_COMMAND='$(MAKEDEPEND_COMMAND)' \
 	  unit_tests \
 
 force: ;
