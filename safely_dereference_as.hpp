@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: safely_dereference_as.hpp,v 1.3 2008-01-01 18:29:54 chicares Exp $
+// $Id: safely_dereference_as.hpp,v 1.4 2008-04-11 14:33:29 chicares Exp $
 
 #ifndef safely_dereference_as_hpp
 #define safely_dereference_as_hpp
@@ -32,7 +32,7 @@
 #   include <boost/static_assert.hpp>
 #   include <boost/type_traits.hpp>
 #else  // Defined __BORLANDC__ .
-#   define BOOST_STATIC_ASSERT(deliberately_ignored) /##/
+#   define BOOST_STATIC_ASSERT(deliberately_ignored) class IgNoRe
 #endif // Defined __BORLANDC__ .
 
 #include <sstream>

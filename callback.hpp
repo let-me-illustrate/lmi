@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: callback.hpp,v 1.9 2008-01-01 18:29:36 chicares Exp $
+// $Id: callback.hpp,v 1.10 2008-04-11 14:33:27 chicares Exp $
 
 #ifndef callback_hpp
 #define callback_hpp
@@ -33,7 +33,7 @@
 #   include <boost/static_assert.hpp>
 #   include <boost/type_traits.hpp>
 #else  // Defined __BORLANDC__ .
-#   define BOOST_STATIC_ASSERT(deliberately_ignored) /##/
+#   define BOOST_STATIC_ASSERT(deliberately_ignored) class IgNoRe
 #endif // Defined __BORLANDC__ .
 
 #include <boost/utility.hpp>
