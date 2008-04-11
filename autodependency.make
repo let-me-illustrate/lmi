@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: autodependency.make,v 1.14 2008-04-10 02:55:13 chicares Exp $
+# $Id: autodependency.make,v 1.15 2008-04-11 14:42:26 chicares Exp $
 
 ################################################################################
 
@@ -51,8 +51,8 @@ $(src_dir)/configuration.make:: ;
 #   http://gcc.gnu.org/ml/gcc-patches/2003-03/msg00919.html
 # so gcc macros must be explicitly undefined); and another set to
 # mimic the other toolchain, such as
-#   -D _M_IX86=300 -D __BORLANDC__=0x500 -D _WIN32 -D __FLAT__
-# for borland C++ 5.02 . Specifying the language explicitly
+#   -D _M_IX86=300 -D __BORLANDC__=0x550 -D _WIN32
+# for borland C++ 5.5 . Specifying the language explicitly
 #   -x c++
 # may be necessary in exotic cases like msw "resource" files.
 # TODO ?? But it's done promiscuously below.]
@@ -112,7 +112,7 @@ MAKEDEPEND_NON_GCC_COMMAND = \
   $(GNU_CPP) \
     -x c++ \
     $(ALL_CPPFLAGS) \
-    $(comp_cpp_pretend_flags) \
+    $(compiler_impersonation_cppflags) \
     -MM $(common_autodependency_flags) \
     $< \
 
