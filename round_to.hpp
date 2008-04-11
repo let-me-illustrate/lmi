@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: round_to.hpp,v 1.11 2008-01-01 18:29:54 chicares Exp $
+// $Id: round_to.hpp,v 1.12 2008-04-11 14:33:28 chicares Exp $
 
 #ifndef round_to_hpp
 #define round_to_hpp
@@ -30,7 +30,7 @@
 #   include <boost/static_assert.hpp>
 #   include <boost/type_traits/arithmetic_traits.hpp>
 #else  // Defined __BORLANDC__ .
-#   define BOOST_STATIC_ASSERT(deliberately_ignored) /##/
+#   define BOOST_STATIC_ASSERT(deliberately_ignored) class IgNoRe
 #endif // Defined __BORLANDC__ .
 
 #include <cmath>

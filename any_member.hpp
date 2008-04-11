@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member.hpp,v 1.18 2008-01-01 18:29:35 chicares Exp $
+// $Id: any_member.hpp,v 1.19 2008-04-11 14:33:27 chicares Exp $
 
 // This is a derived work based on boost::any, which bears the following
 // copyright and permissions notice:
@@ -68,7 +68,7 @@
 #   include <boost/static_assert.hpp>
 #   include <boost/type_traits.hpp>
 #else  // defined __BORLANDC__
-#   define BOOST_STATIC_ASSERT(deliberately_ignored) /##/
+#   define BOOST_STATIC_ASSERT(deliberately_ignored) class IgNoRe
 #endif // defined __BORLANDC__
 
 #include <boost/utility.hpp>

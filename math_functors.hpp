@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: math_functors.hpp,v 1.13 2008-01-01 18:29:48 chicares Exp $
+// $Id: math_functors.hpp,v 1.14 2008-04-11 14:33:28 chicares Exp $
 
 #ifndef math_functors_hpp
 #define math_functors_hpp
@@ -30,7 +30,7 @@
 #   include <boost/static_assert.hpp>
 #   include <boost/type_traits.hpp>
 #else  // Defined __BORLANDC__ .
-#   define BOOST_STATIC_ASSERT(deliberately_ignored) /##/
+#   define BOOST_STATIC_ASSERT(deliberately_ignored) class IgNoRe
 #endif // Defined __BORLANDC__ .
 
 #include <algorithm>
