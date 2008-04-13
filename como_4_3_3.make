@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: como_4_3_3.make,v 1.28 2008-04-08 18:21:21 chicares Exp $
+# $Id: como_4_3_3.make,v 1.29 2008-04-13 23:36:20 chicares Exp $
 
 # Limited workarounds for Comeau C++ version 4.3.3, using gcc as the
 # underlying C compiler, with a Cygwin shell. Comeau C++ is useful
@@ -75,6 +75,21 @@ gcc2_bin_dir := $(gcc2_dir)/bin
 gcc2_inc_dir := $(msw_root)/$(mingw_gcc2)/include
 
 # Use gcc-3.x for autodependencies and physical-closure testing.
+
+# SOMEDAY !! Ideally, the preprocessor used for autodependencies would
+# impersonate Comeau C++. The "UNUSED_" variable below is probably not
+# complete, and special include paths probably would need to be set.
+# This is not easy because the Comeau preprocessor is not free and has
+# no option like GNU cpp's '-dM' to list the macros it predefines. Yet
+# it is not very important either, because Comeau C++ isn't remarkably
+# different from gcc wrt conformance, so there are few conditionals to
+# differentiate them and gcc dependencies work well enough for now.
+
+UNUSED_compiler_impersonation_cppflags := \
+  -undef -nostdinc \
+  -U __GNUC__ -U __GNUG__ -U __GNUC_MINOR__ -U __GNUC_PATCHLEVEL__ \
+  -D LMI_IGNORE_PCH \
+  -D __COMO__ \
 
 gcc3_dir     := /MinGW_
 gcc3_bin_dir := $(gcc3_dir)/bin
@@ -214,27 +229,28 @@ CXX := \
 	export COMO_MIN_INCLUDE=$(gcc2_inc_dir); \
 	$(MAKE) \
 	  -f $(src_dir)/GNUmakefile \
-	                   gcc_version='$(gcc_version)' \
-	                       src_dir='$(src_dir)' \
-	                       toolset='$(toolset)' \
-	                    C_WARNINGS='$(C_WARNINGS)' \
-	                  CXX_WARNINGS='$(CXX_WARNINGS)' \
-	              C_EXTRA_WARNINGS='$(C_EXTRA_WARNINGS)' \
-	            CXX_EXTRA_WARNINGS='$(CXX_EXTRA_WARNINGS)' \
-	                      CPPFLAGS='$(CPPFLAGS)' \
-	                            CC='$(CC)' \
-	                           CXX='$(CXX)' \
-	                      CXXFLAGS='$(CXXFLAGS)' \
-	                            LD='$(LD)' \
-	                       LDFLAGS='$(LDFLAGS)' \
-	                 REQUIRED_LIBS='$(REQUIRED_LIBS)' \
-	                  MPATROL_LIBS='$(MPATROL_LIBS)' \
-	              platform_defines='' \
-	    excluded_unit_test_targets='$(excluded_unit_test_targets)' \
-	                       GNU_CPP='$(GNU_CPP)' \
-	                       GNU_CXX='$(GNU_CXX)' \
-	              MAKEDEPEND_FLAGS='$(MAKEDEPEND_FLAGS)' \
-	            MAKEDEPEND_COMMAND='$(MAKEDEPEND_COMMAND)' \
+	                        gcc_version='$(gcc_version)' \
+	                            src_dir='$(src_dir)' \
+	                            toolset='$(toolset)' \
+	                         C_WARNINGS='$(C_WARNINGS)' \
+	                       CXX_WARNINGS='$(CXX_WARNINGS)' \
+	                   C_EXTRA_WARNINGS='$(C_EXTRA_WARNINGS)' \
+	                 CXX_EXTRA_WARNINGS='$(CXX_EXTRA_WARNINGS)' \
+	                           CPPFLAGS='$(CPPFLAGS)' \
+	    compiler_impersonation_cppflags='$(compiler_impersonation_cppflags)' \
+	                                 CC='$(CC)' \
+	                                CXX='$(CXX)' \
+	                           CXXFLAGS='$(CXXFLAGS)' \
+	                                 LD='$(LD)' \
+	                            LDFLAGS='$(LDFLAGS)' \
+	                      REQUIRED_LIBS='$(REQUIRED_LIBS)' \
+	                       MPATROL_LIBS='$(MPATROL_LIBS)' \
+	                   platform_defines='' \
+	         excluded_unit_test_targets='$(excluded_unit_test_targets)' \
+	                            GNU_CPP='$(GNU_CPP)' \
+	                            GNU_CXX='$(GNU_CXX)' \
+	                   MAKEDEPEND_FLAGS='$(MAKEDEPEND_FLAGS)' \
+	                 MAKEDEPEND_COMMAND='$(MAKEDEPEND_COMMAND)' \
 	  $(MAKECMDGOALS); \
 
 force: ;
