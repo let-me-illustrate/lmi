@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1041 2008-04-11 14:42:26 chicares Exp $
+// $Id: ChangeLog,v 1.1042 2008-04-14 00:51:24 chicares Exp $
 
 MAINTENANCE
 
@@ -16398,4 +16398,23 @@ rejects it [C++2003 16.3.3/3].
   autodependency.make
   bcc_5_5_1.make
 Improve impersonation of borland compiler.
+
+20080413T2336Z <gchicares@sbcglobal.net> [1175]
+
+  como_4_3_3.make
+Explain why comeau compiler is not impersonated for autodependencies.
+
+20080414T0046Z <gchicares@sbcglobal.net> [1175]
+
+  getopt.cpp
+Fix defect introduced 20051207T0413: inappropriate header pasted.
+
+20080414T0051Z <gchicares@sbcglobal.net> [1175]
+
+  miscellany.hpp
+  ncnnnpnn_test.cpp
+  stratified_algorithms.cpp
+  stratified_algorithms.hpp
+Include appropriate headers, fixing some latent defects revealed by
+gcc-4.3.0 .
 
