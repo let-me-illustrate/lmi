@@ -40,7 +40,7 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt.cpp,v 1.20 2008-04-03 12:01:42 chicares Exp $
+// $Id: getopt.cpp,v 1.21 2008-04-14 00:46:11 chicares Exp $
 
 // GWC removed obsolete '#pragma implementation'.
 
@@ -101,8 +101,8 @@
 #include <algorithm>     // std::max()
 // GWC added this for prototype of std::isalpha().
 #include <cctype>
-// GWC added this for definition of UCHAR_MAX.
-#include <cctype>
+// GWC added this.
+#include <climits> // UCHAR_MAX
 // GWC added this.
 #include <cstdio>
 // GWC added this.
