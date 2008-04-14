@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: miscellany.hpp,v 1.15 2008-04-03 14:02:21 chicares Exp $
+// $Id: miscellany.hpp,v 1.16 2008-04-14 00:51:24 chicares Exp $
 
 #ifndef miscellany_hpp
 #define miscellany_hpp
@@ -28,6 +28,7 @@
 
 #include <algorithm>
 #include <cctype>
+#include <climits> // UCHAR_MAX
 #include <cstddef>
 #include <ios>
 #include <iterator>
@@ -107,7 +108,7 @@ inline std::size_t lmi_array_size(T(&)[n])
 
 inline bool is_ok_for_cctype(int c)
 {
-    return EOF == c || 0 <= c && c <= UCHAR_MAX;
+    return (EOF == c) || (0 <= c && c <= UCHAR_MAX);
 }
 
 // Functions lmi_tolower() and lmi_toupper() are derived works adapted

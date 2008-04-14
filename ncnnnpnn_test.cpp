@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ncnnnpnn_test.cpp,v 1.6 2008-01-01 18:29:51 chicares Exp $
+// $Id: ncnnnpnn_test.cpp,v 1.7 2008-04-14 00:51:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,6 +29,8 @@
 #include "ncnnnpnn.hpp"
 
 #include "test_tools.hpp"
+
+#include <limits>
 
 #if defined __BORLANDC__
 #   include <float.h> // nonstandard _control87

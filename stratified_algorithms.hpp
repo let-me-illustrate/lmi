@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_algorithms.hpp,v 1.11 2008-01-01 18:29:55 chicares Exp $
+// $Id: stratified_algorithms.hpp,v 1.12 2008-04-14 00:51:24 chicares Exp $
 
 #ifndef stratified_algorithms_hpp
 #define stratified_algorithms_hpp
@@ -29,6 +29,7 @@
 #include "assert_lmi.hpp"
 #include "stl_extensions.hpp"
 
+#include <algorithm> // std::upper_bound()
 #include <functional>
 #include <vector>
 
