@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.116 2008-04-21 13:01:38 chicares Exp $
+# $Id: workhorse.make,v 1.117 2008-04-21 13:09:13 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -851,7 +851,7 @@ endif
 
 # Archive data files. Designed for maintainer use only.
 
-data_archname := lmi-data-$(yyyymmddhhmm).tar
+data_archive_name := lmi-data-$(yyyymmddhhmm).tar
 
 shared_data_files = \
   qx_ann.dat \
@@ -873,10 +873,10 @@ archive_shared_data_files:
 	cd $(data_dir)/..; \
 	$(TAR) \
 	  --create \
-	  --file=$(data_archname) \
+	  --file=$(data_archive_name) \
 	  --verbose \
 	  $(addprefix data/,$(shared_data_files)); \
-	$(BZIP2) $(data_archname); \
+	$(BZIP2) $(data_archive_name); \
 
 ################################################################################
 
