@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1042 2008-04-14 00:51:24 chicares Exp $
+// $Id: ChangeLog,v 1.1043 2008-04-21 14:59:19 chicares Exp $
 
 MAINTENANCE
 
@@ -16417,4 +16417,30 @@ Fix defect introduced 20051207T0413: inappropriate header pasted.
   stratified_algorithms.hpp
 Include appropriate headers, fixing some latent defects revealed by
 gcc-4.3.0 .
+
+20080421T1301Z <gchicares@sbcglobal.net> [1175]
+
+  GNUmakefile
+  install_mingw.make
+  install_wx.make
+  workhorse.make
+Store name of current makefile; assume make-3.81 or later.
+
+20080421T1309Z <gchicares@sbcglobal.net> [1175]
+
+  GNUmakefile
+  workhorse.make
+Make a variable's name more descriptive.
+
+20080421T1314Z <gchicares@sbcglobal.net> [1175]
+
+  GNUmakefile
+Rename source archive; make its target depend only on 'source_clean'.
+It needn't depend on 'distclean' because makefiles create no files in
+the source directory.
+
+20080421T1459Z <gchicares@sbcglobal.net> [1176]
+
+  workhorse.make
+Create end-user packages for msw.
 

@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.117 2008-04-21 13:09:13 chicares Exp $
+# $Id: workhorse.make,v 1.118 2008-04-21 14:59:18 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -877,6 +877,112 @@ archive_shared_data_files:
 	  --verbose \
 	  $(addprefix data/,$(shared_data_files)); \
 	$(BZIP2) $(data_archive_name); \
+
+################################################################################
+
+# End-user package for msw. No such thing is needed for posix.
+#
+# Eventually a source archive will be included automatically.
+
+# To create a customized package, override:
+#  - fardel_name
+#  - fardel_dir
+#  - fardel_date_script
+#  - extra_fardel_binaries
+#  - extra_fardel_files
+
+fardel_name := lmi-$(yyyymmddhhmm)
+fardel_dir  := $(prefix)/$(fardel_name)
+
+# The first value assigned to 'd1' shows one possibility for the
+# beginning date. It's deliberately overridden with another that sets
+# the beginning date to the current date. The obvious y2038 problem is
+# ignored because any breakage it causes will be obvious.
+
+fardel_date_script := \
+  d0=`$(DATE) +%Y-%m-01`; \
+  d1=`$(DATE) --utc --date="$$d0 + 1 month         " +%s`; \
+  d1=`$(DATE) --utc +%s`; \
+  d2=`$(DATE) --utc --date="$$d0 + 2 months - 1 day" +%s`; \
+  j1=`expr 2440587 + $$d1 / 86400`; \
+  j2=`expr 2440587 + $$d2 / 86400`; \
+  echo -n "$$j1 $$j2" >expiry; \
+
+# Several shared libraries are required by lmi, but there seems to be
+# no straightforward way to discover their individual names because
+# libtool virtualizes them. However, this is an issue only on msw,
+# where, if lmi was installed by the script provided, lmi's own
+# 'local/' directory should contain all required shared libraries and
+# no others.
+
+fardel_binaries := \
+  $(bin_dir)/liblmi$(SHREXT) \
+  $(bin_dir)/lmi_cli_shared$(EXEEXT) \
+  $(bin_dir)/lmi_wx_shared$(EXEEXT) \
+  $(bin_dir)/wx_new$(SHREXT) \
+  $(wildcard $(prefix)/local/bin/*$(SHREXT)) \
+  $(wildcard $(prefix)/local/lib/*$(SHREXT)) \
+  $(extra_fardel_binaries) \
+
+fardel_files := \
+  $(addprefix $(data_dir)/,$(shared_data_files)) \
+  $(data_files) \
+  $(extra_fardel_files) \
+
+# Sensitive files are authenticated at run time.
+#
+# Binary files other than 'md5sum$(EXEEXT)' are not authenticated
+# because they aren't easily forged but are sizable enough to make
+# authentication too slow. An incorrect version of any such file might
+# be distributed by accident, but that problem would not be caught by
+# generating an md5sum for the incorrect file. 'md5sum$(EXEEXT)' is
+# however authenticated because replacing it with a program that
+# always reports success would circumvent authentication.
+#
+# 'passkey' is derived from the md5sums of other files; computing its
+# md5sum would therefore be pointless.
+#
+# Write wildcards verbatim here. The $(wildcard) function doesn't find
+# files created by a target's own rules. Each of these wildcards must
+# expand to something, because $(shared_data_files) contains at least
+# one file of each given type.
+
+fardel_checksummed_files = \
+  *.dat *.db4 *.fnd *.ndx *.pol *.rnd *.tir \
+  configurable_settings.xml \
+  expiry \
+  md5sum$(EXEEXT) \
+
+.PHONY: fardel
+fardel: install
+	+@[ -d $(fardel_dir) ] || $(MKDIR) --parents $(fardel_dir)
+	@$(MAKE) --file=$(this_makefile) --directory=$(fardel_dir) wrap_fardel
+	@$(ECHO) "Created '$(fardel_name)' archive in '$(prefix)'."
+
+# A native 'md5sum$(EXEEXT)' must be provided because lmi uses it for
+# run-time authentication.
+#
+# TODO ?? It should be downloaded from some specific URL--see:
+#   http://www.openoffice.org/dev_docs/using_md5sums.html#links
+# For now, it is assumed to exist in lmi's own 'local/bin/' directory.
+#
+# $(CP) is used without '--update' so that custom extra files can
+# replace defaults regardless of their datestamps.
+
+.PHONY: wrap_fardel
+wrap_fardel:
+	@$(CP) $(prefix)/local/bin/md5sum$(EXEEXT) .
+	@$(CP) $(bin_dir)/configurable_settings.xml .
+	@$(CP) --preserve $(fardel_binaries) $(fardel_files) .
+	@$(fardel_date_script)
+	@$(MD5SUM) $(fardel_checksummed_files) >validated.md5
+	@$(bin_dir)/generate_passkey > passkey
+	@$(TAR) \
+	  --bzip2 \
+	  --create \
+	  --directory=$(prefix) \
+	  --file=$(prefix)/$(fardel_name).tar.bz2 \
+	  $(fardel_name)
 
 ################################################################################
 
