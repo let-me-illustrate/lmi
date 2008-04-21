@@ -19,7 +19,9 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.115 2008-04-10 02:56:24 chicares Exp $
+# $Id: workhorse.make,v 1.116 2008-04-21 13:01:38 chicares Exp $
+
+this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
 ################################################################################
 

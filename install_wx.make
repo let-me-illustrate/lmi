@@ -19,7 +19,9 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_wx.make,v 1.7 2008-02-04 14:53:27 chicares Exp $
+# $Id: install_wx.make,v 1.8 2008-04-21 13:01:38 chicares Exp $
+
+this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
 # Configurable settings ########################################################
 
@@ -43,12 +45,6 @@ vendor        := $(shell $(mingw_bin_dir)/gcc -dumpversion)
 vendor        := $(subst .,,$(vendor))
 
 build_dir     := $(wx_dir)/wxWidgets-$(wx_version)/gcc$(vendor)
-
-ifeq (3.81,$(firstword $(sort $(MAKE_VERSION) 3.81)))
-  this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
-else
-  $(error Upgrade to make-3.81 .)
-endif
 
 # Configuration reference:
 #   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00001.html
