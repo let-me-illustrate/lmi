@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.124 2008-04-21 13:01:37 chicares Exp $
+# $Id: GNUmakefile,v 1.125 2008-04-21 13:09:12 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -462,13 +462,13 @@ nychthemeral_test: checkout
 
 # Archive a snapshot.
 
-archname := lmi-$(yyyymmddhhmm)
+archive_name := lmi-$(yyyymmddhhmm)
 
 .PHONY: archive
 archive: distclean
-	$(MKDIR) ../$(archname)
-	-$(CP) --force --preserve --recursive * ../$(archname)
-	$(TAR) --create --directory=.. --file=$(archname).tar $(archname)
-	$(RM) --force --recursive ../$(archname)
-	$(BZIP2) --verbose --verbose $(archname).tar
+	$(MKDIR) ../$(archive_name)
+	-$(CP) --force --preserve --recursive * ../$(archive_name)
+	$(TAR) --create --directory=.. --file=$(archive_name).tar $(archive_name)
+	$(RM) --force --recursive ../$(archive_name)
+	$(BZIP2) --verbose --verbose $(archive_name).tar
 
