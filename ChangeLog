@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1043 2008-04-21 14:59:19 chicares Exp $
+// $Id: ChangeLog,v 1.1044 2008-04-23 13:31:32 chicares Exp $
 
 MAINTENANCE
 
@@ -16443,4 +16443,12 @@ the source directory.
 
   workhorse.make
 Create end-user packages for msw.
+
+20080423T1331Z <gchicares@sbcglobal.net> [1176]
+
+  main_wx.cpp
+Suppress html help until it's been signed off by testers. The heart of
+the 20080302T0307Z change is suppressed with a conditional that's easy
+to override for testing (CPPFLAGS=-DDO_NOT_SUPPRESS_HELP), though the
+html help contents can simply be reviewed in a web browser.
 
