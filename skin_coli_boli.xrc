@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin_coli_boli.xrc,v 1.5 2008-03-08 17:11:24 chicares Exp $
+    $Id: skin_coli_boli.xrc,v 1.6 2008-04-23 18:34:24 wboutin Exp $
 
     This version is designed for COLI and BOLI users; it omits input
     fields that seem irrelevant in that context, and reflects the
@@ -129,47 +129,18 @@
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP|wxBOTTOM</flag>
-                            <border>4</border>
-                            <object class="wxFlexGridSizer">
-                                <cols>2</cols>
-                                <rows>2</rows>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP|wxBOTTOM</flag>
-                                    <border>2</border>
-                                    <object class="wxStaticText">
-                                        <label>Non-7702 corridor factor</label>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                    <border>2</border>
-                                    <object class="wxTextCtrl" name="UseOffshoreCorridorFactor">
-                                    </object>
-                                </object>
-                            </object>
-                        </object>
-                        <object class="sizeritem">
                             <flag>wxGROW|wxBOTTOM</flag>
                             <border>2</border>
                             <object class="wxFlexGridSizer">
-                                <cols>2</cols>
-                                <rows>1</rows>
-                                <growablecols>1</growablecols>
+                                <cols>1</cols>
+                                <growablecols>0</growablecols>
+                                <growablerows>0,1</growablerows>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxRIGHT|wxBOTTOM</flag>
-                                    <border>2</border>
-                                    <object class="wxStaticBoxSizer">
-                                        <orient>wxHORIZONTAL</orient>
-                                        <label>Premium loads</label>
-                                        <object class="sizeritem">
-                                            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                            <border>4</border>
-                                            <object class="wxCheckBox" name="AmortizePremiumLoad">
-                                                <label>Amortize</label>
-                                                <checked>0</checked>
-                                            </object>
-                                        </object>
+                                    <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                    <border>4</border>
+                                    <object class="wxCheckBox" name="AmortizePremiumLoad">
+                                        <label>Amortize premium loads</label>
+                                        <checked>0</checked>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
