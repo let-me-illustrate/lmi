@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1044 2008-04-23 13:31:32 chicares Exp $
+// $Id: ChangeLog,v 1.1045 2008-04-23 18:34:24 wboutin Exp $
 
 MAINTENANCE
 
@@ -16451,4 +16451,9 @@ Suppress html help until it's been signed off by testers. The heart of
 the 20080302T0307Z change is suppressed with a conditional that's easy
 to override for testing (CPPFLAGS=-DDO_NOT_SUPPRESS_HELP), though the
 html help contents can simply be reviewed in a web browser.
+
+20080423T1834Z <wboutin@massmutual.com> [1176]
+
+  skin_coli_boli.xrc
+Remove obsolete non-7702 corridor control.
 
