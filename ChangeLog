@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1046 2008-04-23 18:55:54 wboutin Exp $
+// $Id: ChangeLog,v 1.1047 2008-04-27 01:04:38 chicares Exp $
 
 MAINTENANCE
 
@@ -16457,8 +16457,13 @@ html help contents can simply be reviewed in a web browser.
   skin_coli_boli.xrc
 Remove obsolete non-7702 corridor control.
 
-20080423T1656Z <wboutin@massmutual.com> [1176]
+20080423T1855Z <wboutin@massmutual.com> [1176]
 
   version.hpp
 Mark release candidate.
+
+20080427T0104Z <gchicares@sbcglobal.net> [1176]
+
+  [ChangeLog only]
+Fix defect introduced 20080423T1855Z. Timestamp was incorrect.
 
