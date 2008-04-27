@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.122 2008-04-27 13:56:17 chicares Exp $
+# $Id: workhorse.make,v 1.123 2008-04-27 16:44:22 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -929,16 +929,12 @@ fardel: install
 # A native 'md5sum$(EXEEXT)' must be provided because lmi uses it for
 # run-time authentication.
 #
-# TODO ?? It should be downloaded from some specific URL--see:
-#   http://www.openoffice.org/dev_docs/using_md5sums.html#links
-# For now, it is assumed to exist in lmi's own 'local/bin/' directory.
-#
 # $(CP) is used without '--update' so that custom extra files can
 # replace defaults regardless of their datestamps.
 
 .PHONY: wrap_fardel
 wrap_fardel:
-	@$(CP) $(prefix)/local/bin/md5sum$(EXEEXT) .
+	@$(CP) $(prefix)/third_party/bin/md5sum$(EXEEXT) .
 	@$(CP) $(bin_dir)/configurable_settings.xml .
 	@$(CP) --preserve $(fardel_binaries) $(fardel_files) .
 	@$(fardel_date_script)

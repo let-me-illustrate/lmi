@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_miscellanea.make,v 1.12 2008-04-27 16:25:13 chicares Exp $
+# $Id: install_miscellanea.make,v 1.13 2008-04-27 16:44:22 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -51,6 +51,7 @@ mingw_bin_dir := $(mingw_dir)/bin
 boost_archive    := boost_1_33_1.tar.bz2
 cgicc_archive    := cgicc-3.1.4.tar.bz2
 fop_archive      := fop-0.20.5-bin.tar.gz
+md5sum_msw_exe   := md5sum.exe
 sample_archive   := lmi-data-20050618T1440Z.tar.bz2
 xmlwrapp_archive := xmlwrapp-0.5.0.tar.gz
 
@@ -58,11 +59,13 @@ file_list := \
   $(boost_archive) \
   $(cgicc_archive) \
   $(fop_archive) \
+  $(md5sum_msw_exe) \
   $(sample_archive) \
   $(xmlwrapp_archive) \
 
 boost cgicc xmlwrapp: stem =               $(basename $(basename $($@_archive)))
 fop:                  stem = $(subst -bin,,$(basename $(basename $($@_archive))))
+md5sum_msw:           stem = $(md5sum_msw_exe)
 sample:               stem = data
 
 # URLs and archive md5sums #####################################################
@@ -70,17 +73,20 @@ sample:               stem = data
 $(boost_archive)-url    := $(sf_mirror)/boost/$(boost_archive)
 $(cgicc_archive)-url    := ftp://ftp.gnu.org/pub/gnu/cgicc/$(cgicc_archive)
 $(fop_archive)-url      := http://archive.apache.org/dist/xmlgraphics/fop/binaries/$(fop_archive)
+$(md5sum_msw_exe)-url   := http://downloads.activestate.com/contrib/md5sum/Windows/md5sum.exe#!md5!eb574b236133e60c989c6f472f07827b
 $(sample_archive)-url   := http://download.savannah.gnu.org/releases/lmi/$(sample_archive)
 $(xmlwrapp_archive)-url := ftp://ftp.freebsd.org/pub/FreeBSD/distfiles/$(xmlwrapp_archive)
 
 $(boost_archive)-md5    := 2b999b2fb7798e1737d1fff8fac602ef
 $(cgicc_archive)-md5    := 6cb5153fc9fa64b4e50c7962aa557bbe
 $(fop_archive)-md5      := d6b43e3eddf9378536ad8127bc057d41
+$(md5sum_msw_exe)-md5   := eb574b236133e60c989c6f472f07827b
 $(sample_archive)-md5   := e7f07133abfc3b9c2252dfa3b61191bc
 $(xmlwrapp_archive)-md5 := b8a07e77f8f8af9ca96bccab7d9dd310
 
 # Utilities ####################################################################
 
+CHMOD  := chmod
 CP     := cp
 DIFF   := diff
 ECHO   := echo
@@ -113,7 +119,7 @@ scratch_exists = \
 # Targets ######################################################################
 
 .PHONY: all
-all: boost cgicc fop sample xmlwrapp
+all: boost cgicc fop md5sum_msw sample xmlwrapp
 
 # Patches were generated according to this advice:
 #
@@ -168,6 +174,21 @@ cgicc: $(file_list)
 fop: $(file_list)
 	@$(MKDIR) $(destination)/$(stem)
 	$(MV) scratch/$(stem)/* $(destination)/$(stem)
+
+# The 'md5sum_msw' binary is required only by the msw-specific
+# 'fardel' target. On other platforms, it can't be executed, but it
+# could be used to create a cross 'fardel'.
+#
+# It is placed in lmi's 'third_party/bin/' subdirectory--imperatively
+# not in lmi's 'local/bin/' subdirectory, which is added to $PATH.
+#
+# Should the given URL ever become invalid, see:
+#   http://www.openoffice.org/dev_docs/using_md5sums.html#links
+# to find another.
+
+.PHONY: md5sum_msw
+md5sum_msw: $(file_list)
+	$(CP) --preserve $(cache_dir)/$(stem) $(third_party_bin_dir)
 
 # The 'clobber' target doesn't remove $(prefix)/data because that
 # directory might contain valuable user-customized files; hence, in
@@ -226,6 +247,12 @@ WGETFLAGS := '--timestamping'
 	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $($@-url)
 	$(ECHO) "$($@-md5) *$(cache_dir)/$@" | $(MD5SUM) --check
 	-$(TAR) --extract $(TARFLAGS) --directory=scratch --file=$(cache_dir)/$@
+
+.PHONY: %.exe
+%.exe:
+	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $($@-url)
+	$(ECHO) "$($@-md5) *$(cache_dir)/$@" | $(MD5SUM) --check
+	$(CHMOD) 750 $(cache_dir)/$@
 
 # Maintenance ##################################################################
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1047 2008-04-27 01:04:38 chicares Exp $
+// $Id: ChangeLog,v 1.1048 2008-04-27 16:44:22 chicares Exp $
 
 MAINTENANCE
 
@@ -16466,4 +16466,54 @@ Mark release candidate.
 
   [ChangeLog only]
 Fix defect introduced 20080423T1855Z. Timestamp was incorrect.
+
+20080427T0108Z <gchicares@sbcglobal.net> [1174]
+
+  workhorse.make
+Remove paths on $(system_root), which existed only to support a 1990s
+shell environment.
+
+20080427T1341Z <gchicares@sbcglobal.net> [1174]
+
+  workhorse.make
+Augment wx configuration check.
+
+20080427T1345Z <gchicares@sbcglobal.net> [1173]
+
+  workhorse.make
+Remove an obsolete msw workaround.
+
+20080427T1356Z <gchicares@sbcglobal.net> [1173]
+
+  workhorse.make
+Support wx only via wx-config.
+
+20080427T1400Z <gchicares@sbcglobal.net> [1173]
+
+  install_msw.sh
+Reflect 20080218T1743Z '*.xrc' renaming.
+
+20080427T1425Z <gchicares@sbcglobal.net> [1173]
+
+  install_msw.sh
+Support a pserver alternative for developers behind a goofy firewall.
+
+20080427T1438Z <gchicares@sbcglobal.net> [1173]
+
+  install_msw.sh
+Check out $docdir as well as $srcdir.
+
+20080427T1625Z <gchicares@sbcglobal.net> [1173]
+
+  install_miscellanea.make
+Forestall a security issue. Soon, an msw md5sum binary will be
+downloaded to the cache directory. It must not be used to validate
+md5sums of downloaded files, because it might be malware that falsely
+"validates" itself. The system md5sum program must be used instead.
+
+20080427T1644Z <gchicares@sbcglobal.net> [1172]
+
+  install_miscellanea.make
+  workhorse.make
+Download a native 'md5sum.exe' for msw fardels.
 
