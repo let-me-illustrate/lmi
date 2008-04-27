@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.120 2008-04-27 13:41:34 chicares Exp $
+# $Id: workhorse.make,v 1.121 2008-04-27 13:45:19 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -182,10 +182,6 @@ else
   endif
   # ...combines options that we prefer to keep separate.
 
-  # TODO ?? The sed command 's| c:/| $(system_root)/|g' is only a
-  # temporary workaround that permits using an old MinGW build of
-  # wx with cygwin.
-
   wx_include_paths := \
     $(shell \
       $(ECHO) $(wx_config_cxxflags) \
@@ -193,7 +189,6 @@ else
         -e 's/^/ /' \
         -e 's/ -[^I][^ ]*//g' \
         -e 's/ -I/ /g' \
-        -e 's| c:/| $(system_root)/|g' \
     )
 
   wx_predefinitions := \
