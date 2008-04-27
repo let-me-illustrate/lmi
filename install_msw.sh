@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_msw.sh,v 1.10 2008-04-27 14:25:13 chicares Exp $
+# $Id: install_msw.sh,v 1.11 2008-04-27 14:38:20 chicares Exp $
 
 set -v
 
@@ -59,6 +59,7 @@ umount "/opt/lmi"
 mkdir /opt
 mount --force "C:/opt" "/opt"
 mkdir --parents /opt/lmi/src/lmi
+mkdir --parents /opt/lmi/share/doc/lmi
 umount "/opt"
 mount --force "C:/opt/lmi" "/opt/lmi"
 
@@ -86,8 +87,13 @@ echo $CVSROOT
 ps -ef | grep --quiet ssh-agent \
   || export CVSROOT=":pserver:anonymous@cvs.savannah.nongnu.org:/sources/lmi"
 
-cd /opt/lmi/src
 echo $CVSROOT
+cd /opt/lmi/src
+cvs -z3 checkout -P lmi
+
+export CVSROOT=${CVSROOT%%/sources/lmi}/web/lmi
+echo $CVSROOT
+cd /opt/lmi/share/doc
 cvs -z3 checkout -P lmi
 
 cd /opt/lmi/src/lmi
