@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_msw.sh,v 1.8 2008-02-04 14:53:27 chicares Exp $
+# $Id: install_msw.sh,v 1.9 2008-04-27 14:00:20 chicares Exp $
 
 set -v
 
@@ -133,7 +133,7 @@ cat >/opt/lmi/bin/configurable_settings.xml <<EOF
   <libraries_to_preload/>
   <offer_hobsons_choice>0</offer_hobsons_choice>
   <print_directory>/var/opt/lmi/spool</print_directory>
-  <skin_filename>xml_notebook.xrc</skin_filename>
+  <skin_filename>skin.xrc</skin_filename>
   <spreadsheet_file_extension>.dif</spreadsheet_file_extension>
   <use_builtin_calculation_summary>1</use_builtin_calculation_summary>
   <xsl_fo_command>CMD /c /opt/lmi/third_party/fop-0.20.5/fop</xsl_fo_command>
