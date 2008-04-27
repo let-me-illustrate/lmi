@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.119 2008-04-27 01:08:20 chicares Exp $
+# $Id: workhorse.make,v 1.120 2008-04-27 13:41:34 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -248,6 +248,10 @@ wx_config_check:
 	@$(ECHO) "  " $(wx_config_cxxflags)
 	@$(ECHO) Result of 'wx-config --libs':
 	@$(ECHO) "  " $(wx_config_libs)
+	@$(ECHO) wx_include_paths is $(wx_include_paths)
+	@$(ECHO) wx_predefinitions is $(wx_predefinitions)
+	@$(ECHO) wx_library_paths is $(wx_library_paths)
+	@$(ECHO) wx_libraries is $(wx_libraries)
 
 ################################################################################
 
