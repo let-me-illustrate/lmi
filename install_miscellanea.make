@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_miscellanea.make,v 1.11 2008-01-18 14:17:48 chicares Exp $
+# $Id: install_miscellanea.make,v 1.12 2008-04-27 16:25:13 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -224,7 +224,7 @@ WGETFLAGS := '--timestamping'
 .PHONY: %.tar.bz2 %.tar.gz
 %.tar.bz2 %.tar.gz:
 	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $($@-url)
-	cd $(cache_dir) && $(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
+	$(ECHO) "$($@-md5) *$(cache_dir)/$@" | $(MD5SUM) --check
 	-$(TAR) --extract $(TARFLAGS) --directory=scratch --file=$(cache_dir)/$@
 
 # Maintenance ##################################################################
