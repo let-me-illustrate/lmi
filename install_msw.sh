@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_msw.sh,v 1.9 2008-04-27 14:00:20 chicares Exp $
+# $Id: install_msw.sh,v 1.10 2008-04-27 14:25:13 chicares Exp $
 
 set -v
 
@@ -70,14 +70,24 @@ cygcheck -s -v -r
 
 java -version
 
-cd /opt/lmi/src
-
 # Avoid bogus "failed to open /home/wherever/.cvspass for reading".
 
 touch ~/.cvspass
 
+# Use 'pserver' unless 'ssh-agent' is active. This helps developers
+# who are behind a firewall that blocks port 2401 but allows 'ssh'
+# access. It is assumed that they have pointed $CVSROOT to
+#   cvs.sv.gnu.org:/sources/lmi
+# as is usual, and that they will switch back there manually after
+# running this script.
+
 export CVS_RSH="ssh"
-export CVSROOT=":pserver:anonymous@cvs.savannah.nongnu.org:/sources/lmi"
+echo $CVSROOT
+ps -ef | grep --quiet ssh-agent \
+  || export CVSROOT=":pserver:anonymous@cvs.savannah.nongnu.org:/sources/lmi"
+
+cd /opt/lmi/src
+echo $CVSROOT
 cvs -z3 checkout -P lmi
 
 cd /opt/lmi/src/lmi
