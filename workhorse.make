@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.121 2008-04-27 13:45:19 chicares Exp $
+# $Id: workhorse.make,v 1.122 2008-04-27 13:56:17 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -146,78 +146,63 @@ endif
 
 # wx settings.
 
-# Set $(wx_dir) on the command line to use 'wx-config'.
+wx_dir := /opt/lmi/wx-scratch/wxWidgets-2.8.7
 
-ifeq (,$(wx_dir))
-  # This section is deprecated and will be removed ere long.
+wx_build_dir := $(wx_dir)/gcc$(subst .,,$(gcc_version))
 
-  # Always specify '-D__WXDEBUG__':
-  #   http://lists.nongnu.org/archive/html/lmi/2005-11/msg00026.html
+# Use our '-portable' script if it exists; else fall back on the
+# script wx provides.
 
-  # '-DNO_GCC_PRAGMA' is required for wx-2.5.1, but not for 2.5.4 or later.
-
-  wx_predefinitions := \
-    -D__WXDEBUG__ \
-    -DNO_GCC_PRAGMA \
-    -DWXUSINGDLL \
-
-else
-  wx_build_dir := $(wx_dir)/gcc$(subst .,,$(gcc_version))
-
-  # Use our '-portable' script if it exists; else fall back on the
-  # script wx provides.
-
-  wx_config_script := \
-    $(firstword \
-      $(wildcard \
-        $(addprefix $(wx_build_dir)/,wx-config-portable wx-config \
-        ) \
+wx_config_script := \
+  $(firstword \
+    $(wildcard \
+      $(addprefix $(wx_build_dir)/,wx-config-portable wx-config \
       ) \
-    )
+    ) \
+  )
 
-  # The conventional autotools usage...
-  ifeq (gcc,$(toolset))
-    wx_config_cxxflags := $(shell $(wx_config_script) --cxxflags)
-    wx_config_libs     := $(shell $(wx_config_script) --libs)
-  endif
-  # ...combines options that we prefer to keep separate.
-
-  wx_include_paths := \
-    $(shell \
-      $(ECHO) $(wx_config_cxxflags) \
-      | $(SED) \
-        -e 's/^/ /' \
-        -e 's/ -[^I][^ ]*//g' \
-        -e 's/ -I/ /g' \
-    )
-
-  wx_predefinitions := \
-    $(shell \
-      $(ECHO) $(wx_config_cxxflags) \
-      | $(SED) \
-        -e 's/^/ /' \
-        -e 's/ -[^DU][^ ]*//g' \
-    )
-
-  wx_library_paths := \
-    $(shell \
-      $(ECHO) $(wx_config_libs) \
-      | $(SED) \
-        -e 's/^/ /' \
-        -e 's/ -[^L][^ ]*//g' \
-        -e 's/ -L/ -L /g' \
-    )
-
-  wx_libraries := \
-    $(shell \
-      $(ECHO) $(wx_config_libs) \
-      | $(SED) \
-        -e 's/^/ /' \
-        -e 's/ -[^l][^ ]*//g' \
-    )
-
-  platform_wx_libraries := $(wx_library_paths) $(wx_libraries)
+# The conventional autotools usage...
+ifeq (gcc,$(toolset))
+  wx_config_cxxflags := $(shell $(wx_config_script) --cxxflags)
+  wx_config_libs     := $(shell $(wx_config_script) --libs)
 endif
+# ...combines options that we prefer to keep separate.
+
+wx_include_paths := \
+  $(shell \
+    $(ECHO) $(wx_config_cxxflags) \
+    | $(SED) \
+      -e 's/^/ /' \
+      -e 's/ -[^I][^ ]*//g' \
+      -e 's/ -I/ /g' \
+  )
+
+wx_predefinitions := \
+  $(shell \
+    $(ECHO) $(wx_config_cxxflags) \
+    | $(SED) \
+      -e 's/^/ /' \
+      -e 's/ -[^DU][^ ]*//g' \
+  )
+
+wx_library_paths := \
+  $(shell \
+    $(ECHO) $(wx_config_libs) \
+    | $(SED) \
+      -e 's/^/ /' \
+      -e 's/ -[^L][^ ]*//g' \
+      -e 's/ -L/ -L /g' \
+  )
+
+wx_libraries := \
+  $(shell \
+    $(ECHO) $(wx_config_libs) \
+    | $(SED) \
+      -e 's/^/ /' \
+      -e 's/ -[^l][^ ]*//g' \
+  )
+
+platform_wx_libraries := $(wx_library_paths) $(wx_libraries)
 
 # Target 'wx_config_check', and the variables that it alone uses,
 # are experimental and may disappear in a future release.
