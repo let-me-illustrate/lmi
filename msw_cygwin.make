@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_cygwin.make,v 1.13 2008-04-01 13:58:54 chicares Exp $
+# $Id: msw_cygwin.make,v 1.14 2008-04-28 03:02:21 chicares Exp $
 
 ################################################################################
 
@@ -47,7 +47,7 @@ system_root := /cygdrive/c
 
 ifeq (,$(USE_STD_PATHS))
   PATH_BIN     := /bin/
-  PATH_GCC     := /usr/bin/
+  PATH_GCC     := /MinGW_/bin/
   PATH_USR_BIN := /usr/bin/
 endif
 
