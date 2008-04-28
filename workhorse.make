@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.123 2008-04-27 16:44:22 chicares Exp $
+# $Id: workhorse.make,v 1.124 2008-04-28 16:33:22 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -146,9 +146,7 @@ endif
 
 # wx settings.
 
-wx_dir := /opt/lmi/wx-scratch/wxWidgets-2.8.7
-
-wx_build_dir := $(wx_dir)/gcc$(subst .,,$(gcc_version))
+wx_dir := /opt/lmi/local/bin
 
 # Use our '-portable' script if it exists; else fall back on the
 # script wx provides.
@@ -156,7 +154,7 @@ wx_build_dir := $(wx_dir)/gcc$(subst .,,$(gcc_version))
 wx_config_script := \
   $(firstword \
     $(wildcard \
-      $(addprefix $(wx_build_dir)/,wx-config-portable wx-config \
+      $(addprefix $(wx_dir)/,wx-config-portable wx-config \
       ) \
     ) \
   )
@@ -218,7 +216,6 @@ wx_libs_check    := $(subst -l ,-l,$(wx_libs_check))
 .PHONY: wx_config_check
 wx_config_check:
 	@$(ECHO) wx_dir is $(wx_dir)
-	@$(ECHO) wx_build_dir is $(wx_build_dir)
 	@$(ECHO) wx_config_script is $(wx_config_script)
 	@$(ECHO) Omitted from 'wx-config --cxxflags':
 	@$(ECHO) $(filter-out $(wx_cxxflag_check),$(wx_config_cxxflags))
