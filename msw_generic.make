@@ -19,15 +19,17 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_generic.make,v 1.11 2008-01-01 18:29:50 chicares Exp $
+# $Id: msw_generic.make,v 1.12 2008-04-28 03:01:27 chicares Exp $
 
 ################################################################################
 
-# TODO ?? Much of this file is obsolete. It supports an archaic
-# installation of GNU tools ported to msw here:
+$(error Generic msw environment no longer supported--use Cygwin instead)
+
+# This file is obsolete. It supported a 1990s development environment
+# ported to msw here:
 #   ftp://ftp.franken.de/pub/win32/develop/gnuwin32/mingw32/porters/Mikey/
-# and is provided only as a transitional aid for developers who still
-# use those ancient ports.
+# and served only as a transitional aid for developers who once used
+# those ancient ports.
 
 ################################################################################
 
@@ -67,8 +69,6 @@ gnu_utils_dir  := $(system_root)/gnu
 # Required in /bin (if anywhere) by FHS-2.2 .
 
 CP      := $(gnu_utils_dir)/cp
-# TODO ?? Build this from gnu.org sources and put it in the same
-# directory as everything else.
 DATE    := $(gnu_utils_dir)/date
 ECHO    := $(gnu_utils_dir)/echo
 GZIP    := $(gnu_utils_dir)/gzip
