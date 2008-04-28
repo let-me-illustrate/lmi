@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1048 2008-04-27 16:44:22 chicares Exp $
+// $Id: ChangeLog,v 1.1049 2008-04-28 03:00:19 chicares Exp $
 
 MAINTENANCE
 
@@ -12602,7 +12602,7 @@ Correct a defect.
   individual_private_placement.xsl
 Improve formatting.
 
-20070625T1908Z <wboutin@massmutual.com> [1249]
+20070625T1908Z <wboutin@massmutual.com> [1231]
 
   version.hpp
 Mark release candidate.
@@ -16516,4 +16516,9 @@ md5sums of downloaded files, because it might be malware that falsely
   install_miscellanea.make
   workhorse.make
 Download a native 'md5sum.exe' for msw fardels.
+
+20080428T0300Z <gchicares@sbcglobal.net> [1172]
+
+  [ChangeLog only]
+Fix defect introduced 20070625T1908Z. Defect count was defective.
 
