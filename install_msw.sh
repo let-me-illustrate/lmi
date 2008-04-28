@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_msw.sh,v 1.11 2008-04-27 14:38:20 chicares Exp $
+# $Id: install_msw.sh,v 1.12 2008-04-28 16:34:19 chicares Exp $
 
 set -v
 
@@ -81,6 +81,16 @@ touch ~/.cvspass
 #   cvs.sv.gnu.org:/sources/lmi
 # as is usual, and that they will switch back there manually after
 # running this script.
+#
+# As a last resort, a screen scraper could be used, e.g.
+#   http://downloads.sourceforge.net/cvsgrab/cvsgrab-2.3.tar.gz
+# with a command line such as this:
+#   /cvsgrab-2.3/cvsgrab.sh \
+#     -url http://cvs.sv.gnu.org/viewvc/lmi/lmi/ \
+#     -destDir cvsgrab \
+#     -webInterface ViewVC1_0
+# Unfortunately, that 'cvsgrab' command adds '-kb' to every file, so
+# developers should take care not to use it.
 
 export CVS_RSH="ssh"
 echo $CVSROOT
@@ -121,11 +131,12 @@ make -f install_wx.make
 
 find /tmp/lmi_cache -type f |xargs md5sum
 
-export PATH=/opt/lmi/local/bin:/opt/lmi/local/lib:$PATH
+export         PATH=/opt/lmi/local/bin:/opt/lmi/local/lib:$PATH
+export minimal_path=/opt/lmi/local/bin:/opt/lmi/local/lib:/usr/bin:/bin:/usr/sbin:/sbin
 
-make system_root= PATH_GCC=/MinGW_/bin/ mingw_dir=/MinGW_ wx_dir=/opt/lmi/wx-scratch/wxWidgets-2.8.7/gcc344/ wx_build_dir=/opt/lmi/local/bin wx_config_check
-make system_root= PATH_GCC=/MinGW_/bin/ mingw_dir=/MinGW_ wx_dir=/opt/lmi/wx-scratch/wxWidgets-2.8.7/gcc344/ wx_build_dir=/opt/lmi/local/bin show_flags
-make system_root= PATH_GCC=/MinGW_/bin/ mingw_dir=/MinGW_ wx_dir=/opt/lmi/wx-scratch/wxWidgets-2.8.7/gcc344/ wx_build_dir=/opt/lmi/local/bin install
+make PATH=$minimal_path wx_config_check
+make PATH=$minimal_path show_flags
+make PATH=$minimal_path install
 
 # No lmi binary should depend on any Cygwin library.
 

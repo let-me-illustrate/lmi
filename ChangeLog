@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1049 2008-04-28 03:00:19 chicares Exp $
+// $Id: ChangeLog,v 1.1050 2008-04-28 16:34:19 chicares Exp $
 
 MAINTENANCE
 
@@ -16521,4 +16521,25 @@ Download a native 'md5sum.exe' for msw fardels.
 
   [ChangeLog only]
 Fix defect introduced 20070625T1908Z. Defect count was defective.
+
+20080428T0301Z <gchicares@sbcglobal.net> [1170]
+
+  msw_generic.make
+  msw_msys.make
+Deprecate disused msw development environments.
+
+20080428T0302Z <gchicares@sbcglobal.net> [1170]
+
+  msw_cygwin.make
+Default to the compiler currently used in production.
+
+20080428T1633Z <gchicares@sbcglobal.net> [1170]
+
+  workhorse.make
+Specify wx location more simply and robustly.
+
+20080428T1634Z <gchicares@sbcglobal.net> [1170]
+
+  install_msw.sh
+Prove that lmi builds with a minimal $PATH.
 
