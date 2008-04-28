@@ -19,9 +19,11 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_msys.make,v 1.17 2008-01-13 14:27:49 chicares Exp $
+# $Id: msw_msys.make,v 1.18 2008-04-28 03:01:27 chicares Exp $
 
 ################################################################################
+
+$(error MSYS environment no longer supported--use Cygwin instead)
 
 # MSYS !! IMPORTANT NOTES.
 #
