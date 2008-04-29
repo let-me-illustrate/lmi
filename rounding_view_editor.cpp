@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_view_editor.cpp,v 1.14 2008-02-17 15:17:14 chicares Exp $
+// $Id: rounding_view_editor.cpp,v 1.15 2008-04-29 23:08:29 chicares Exp $
 
 #include "rounding_view_editor.hpp"
 
@@ -158,12 +158,12 @@ RoundingButtons::RoundingButtons()
 }
 
 RoundingButtons::RoundingButtons
-    (wxWindow* parent
-    ,wxWindowID id
-    ,const wxPoint& pos
-    ,const wxSize& size
-    ,long style
-    ,const std::string& name
+    (wxWindow*          parent
+    ,wxWindowID         id
+    ,wxPoint const&     pos
+    ,wxSize const&      size
+    ,long               style
+    ,std::string const& name
     )
     :wxPanel()
     ,previous_value_(0, r_not_at_all)
@@ -172,12 +172,12 @@ RoundingButtons::RoundingButtons
 }
 
 void RoundingButtons::Create
-    (wxWindow* parent
-    ,wxWindowID id
-    ,const wxPoint& pos
-    ,const wxSize& size
-    ,long style
-    ,const std::string& name
+    (wxWindow*          parent
+    ,wxWindowID         id
+    ,wxPoint const&     pos
+    ,wxSize const&      size
+    ,long               style
+    ,std::string const& name
     )
 {
     wxPanel::Create(parent, id, pos, size, style, name);

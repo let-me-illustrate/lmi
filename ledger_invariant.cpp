@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.35 2008-01-06 18:58:18 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.36 2008-04-29 23:08:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -441,13 +441,13 @@ void LedgerInvariant::Init(BasicValues* b)
 
         FundAllocs.push_back
             ((j < Input_.NumberOfFunds)
-            ? (Input_.FundAllocs[j].operator const int&())
+            ? (Input_.FundAllocs[j].operator int const&())
             : 0
             );
 
         FundAllocations.push_back
             ((j < Input_.NumberOfFunds)
-            ? .01 * (Input_.FundAllocs[j].operator const int&())
+            ? .01 * (Input_.FundAllocs[j].operator int const&())
             : 0.0
             );
         }

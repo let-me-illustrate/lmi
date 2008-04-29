@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rtti_lmi.hpp,v 1.8 2008-02-07 13:40:31 chicares Exp $
+// $Id: rtti_lmi.hpp,v 1.9 2008-04-29 23:08:30 chicares Exp $
 
 #ifndef rtti_lmi_hpp
 #define rtti_lmi_hpp
@@ -98,7 +98,7 @@ namespace lmi
 /// "This is one of the few cases in C++ programming where it is
 /// reasonable for a programmer to take the address associated with a
 /// reference and hold onto it for later use:
-///   const type_info* info = &typeid(*ptr);
+///   type_info [const]* info = &typeid(*ptr);
 /// ", as long as the pointer is dereferenced before use in equality
 /// comparisons.
 ///
