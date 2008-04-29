@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.74 2008-04-08 18:15:20 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.75 2008-04-29 23:06:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -446,8 +446,8 @@ void check_cxx(file const& f)
         return;
         }
 
+    {
     static boost::regex const r("(\\w+)( +)([*&])(\\w+\\b)([*;]?)([^\\n]*)");
-
     boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
     boost::sregex_iterator const omega;
     for(; i != omega; ++i)
@@ -465,6 +465,29 @@ void check_cxx(file const& f)
             complain(f, oss.str());
             }
         }
+    }
+
+    {
+    static boost::regex const r("\\bconst +([A-Za-z][A-Za-z0-9_]*) *[*&]");
+    boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
+    boost::sregex_iterator const omega;
+    for(; i != omega; ++i)
+        {
+        boost::smatch const& z(*i);
+        if
+            (   "volatile"  != z[1]           // 'const volatile'
+            )
+            {
+            std::ostringstream oss;
+            oss
+                << "should write 'const' after the type it modifies: '"
+                << z[0]
+                << "'."
+                ;
+            complain(f, oss.str());
+            }
+        }
+    }
 }
 
 /// Check defect markers, which contain a doubled '!' or '?'.
