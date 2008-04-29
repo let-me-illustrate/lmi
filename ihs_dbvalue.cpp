@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbvalue.cpp,v 1.23 2008-02-07 13:40:30 chicares Exp $
+// $Id: ihs_dbvalue.cpp,v 1.24 2008-04-29 23:08:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -712,7 +712,7 @@ JRPS::JrPs_pstreamreg RegTDBValue
     );
 
 // TODO ?? Couldn't templates handle this?
-JRPS::JrPs_opstream& operator<< (JRPS::JrPs_opstream& os, const TDBValue* p)
+JRPS::JrPs_opstream& operator<< (JRPS::JrPs_opstream& os, TDBValue const* p)
 {
     return os << (JRPS::JrPs_pstreamable const*)p;
 }
