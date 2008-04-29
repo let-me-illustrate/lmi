@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_tools.hpp,v 1.12 2008-01-01 18:29:56 chicares Exp $
+// $Id: test_tools.hpp,v 1.13 2008-04-29 23:08:30 chicares Exp $
 
 // This is a derived work based on Beman Dawes's boost test library
 // that bears the following copyright and license statement:
@@ -128,7 +128,7 @@
 ///
 /// COMPILER !! The borland compiler complains:
 ///   std::out_of_range: position beyond end of string in function:
-///   basic_string::compare(size_t,size_t,const basic_string&) const
+///   basic_string::compare(size_t,size_t,basic_string [const]&) const
 ///   index: -1 is greater than max_index: [size of string]
 /// but that complaint seems incorrect: the second argument is allowed
 /// to be npos, and only an invalid first argument can cause this

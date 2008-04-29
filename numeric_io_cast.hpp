@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_cast.hpp,v 1.15 2008-04-11 14:33:28 chicares Exp $
+// $Id: numeric_io_cast.hpp,v 1.16 2008-04-29 23:08:29 chicares Exp $
 
 #ifndef numeric_io_cast_hpp
 #define numeric_io_cast_hpp
@@ -228,8 +228,8 @@ struct numeric_converter<To, std::string const>
 };
 
 // COMPILER !! The borland compiler needs this to convert from a
-// string literal. It seems to type such constants as non-const char*,
-// ignoring 4.2/2 .
+// string literal. It seems to type such constants as [non-const]
+// char*, ignoring 4.2/2 .
 //
 template<typename To>
 struct numeric_converter<To, char*>
@@ -319,8 +319,8 @@ struct numeric_converter<std::string, std::string>
 
 #ifdef __BORLANDC__
 // COMPILER !! The borland compiler needs this to convert from a
-// string literal. It seems to type such constants as non-const char*,
-// ignoring 4.2/2 .
+// string literal. It seems to type such constants as [non-const]
+// char*, ignoring 4.2/2 .
 //
 template<>
 struct numeric_converter<std::string, char*>

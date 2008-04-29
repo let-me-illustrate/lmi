@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1050 2008-04-28 16:34:19 chicares Exp $
+// $Id: ChangeLog,v 1.1051 2008-04-29 23:08:30 chicares Exp $
 
 MAINTENANCE
 
@@ -16542,4 +16542,21 @@ Specify wx location more simply and robustly.
 
   install_msw.sh
 Prove that lmi builds with a minimal $PATH.
+
+20080429T2306Z <gchicares@sbcglobal.net> [1170]
+
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+Enforce placement of 'const'.
+
+20080429T2308Z <gchicares@sbcglobal.net> [1170]
+
+  ihs_dbvalue.cpp
+  ledger_invariant.cpp
+  numeric_io_cast.hpp
+  rounding_view_editor.cpp
+  rounding_view_editor.hpp
+  rtti_lmi.hpp
+  test_tools.hpp
+Conform to the style rule enforced 20080429T2306Z.
 

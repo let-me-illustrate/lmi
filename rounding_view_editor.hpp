@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_view_editor.hpp,v 1.14 2008-03-09 12:13:26 chicares Exp $
+// $Id: rounding_view_editor.hpp,v 1.15 2008-04-29 23:08:30 chicares Exp $
 
 #ifndef rounding_view_editor_hpp
 #define rounding_view_editor_hpp
@@ -43,22 +43,22 @@ class RoundingButtons
   public:
     RoundingButtons();
     RoundingButtons
-        (wxWindow* parent
-        ,wxWindowID id
-        ,const wxPoint& pos = wxDefaultPosition
-        ,const wxSize& size = wxDefaultSize
-        ,long style = 0
-        ,const std::string& name = wxPanelNameStr
+        (wxWindow*          parent
+        ,wxWindowID         id
+        ,wxPoint const&     pos   = wxDefaultPosition
+        ,wxSize const&      size  = wxDefaultSize
+        ,long               style = 0
+        ,std::string const& name  = wxPanelNameStr
         );
     virtual ~RoundingButtons();
 
     void Create
-        (wxWindow* parent
-        ,wxWindowID id
-        ,const wxPoint& pos = wxDefaultPosition
-        ,const wxSize& size = wxDefaultSize
-        ,long style = 0
-        ,const std::string& name = wxPanelNameStr
+        (wxWindow*          parent
+        ,wxWindowID         id
+        ,wxPoint const&     pos   = wxDefaultPosition
+        ,wxSize const&      size  = wxDefaultSize
+        ,long               style = 0
+        ,std::string const& name  = wxPanelNameStr
         );
 
     bool IsModified() const;
