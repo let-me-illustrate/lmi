@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.37 2008-02-15 15:13:28 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.38 2008-04-29 23:06:25 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -241,6 +241,14 @@ wouldn't be rejected because the program allows '&html_entity;',
 but that's okay: the compiler would catch it.
 EOF
 
+cat >eraseme_cpp_004.cpp <<EOF
+$boilerplate
+Write a cv-qualifier after the type it modifies:
+  void foo(const T&); // No.
+not
+  void foo(T const&); // Yes.
+EOF
+
 # Headers.
 
 cat >eraseme_hpp_000.hpp <<EOF
@@ -413,6 +421,7 @@ File 'eraseme_cpp_002.cpp' has misindented label '   No2   :'.
 File 'eraseme_cpp_002.cpp' has misindented label '       x_:'.
 File 'eraseme_cpp_003.cpp' should fuse '&' with type: 'foo &bar(); // bar() is a 'reference function returning foo'?'.
 File 'eraseme_cpp_003.cpp' should fuse '*' with type: 'int *x;     // x is a 'pointer variable of type int'?'.
+File 'eraseme_cpp_004.cpp' should write 'const' after the type it modifies: 'const T&'.
 File 'eraseme_hpp_001.hpp' lacks canonical header guards.
 File 'eraseme_hpp_002.hpp' lacks canonical header guards.
 File 'eraseme_hpp_003.hpp' lacks canonical header guards.
