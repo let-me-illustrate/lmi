@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_utility.cpp,v 1.14 2008-02-26 03:01:17 chicares Exp $
+// $Id: wx_utility.cpp,v 1.15 2008-04-30 18:44:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -37,10 +37,11 @@
 #include <wx/clipbrd.h>
 #include <wx/dataobj.h>
 #include <wx/datetime.h>
+#include <wx/utils.h>                   // wxSafeYield()
 #include <wx/window.h>
 
-#include <algorithm> // std::find()
-#include <cstddef>   // std::size_t
+#include <algorithm>                    // std::find()
+#include <cstddef>                      // std::size_t
 #include <sstream>
 
 /// Return whatever plain text the clipboard contains, or an empty
@@ -134,8 +135,9 @@ bool operator==(wxDateTime const& wx_date, calendar_date const& lmi_date)
 
 void TestDateConversions()
 {
-    const int low  = gregorian_epoch().julian_day_number();
-    const int high = last_yyyy_date ().julian_day_number();
+    calendar_date const z((jdn_t(calendar_date::min_verified_jdn)));
+    int const low  = z               .julian_day_number();
+    int const high = last_yyyy_date().julian_day_number();
     status()
         << "Testing conversion of all dates in the range ["
         << low
@@ -162,10 +164,26 @@ void TestDateConversions()
             {
             fatal_error()
                 << "Date conversion failed:\n"
-                << "  original  date: " << lmi_date0.str() << '\n'
-                << "  converted date: " << lmi_date1.str() << '\n'
+                << lmi_date0.str() << " original\n"
+                << lmi_date1.str() << " converted\n"
                 << LMI_FLUSH
                 ;
+            }
+        std::string const lmi_str = lmi_date0.str();
+        std::string const wx_str  = ConvertDateToWx(lmi_date0).FormatISODate();
+        if(lmi_str != wx_str)
+            {
+            fatal_error()
+                << "ISO8601 representations differ:\n"
+                << lmi_str << " lmi\n"
+                << wx_str  << " wx\n"
+                << LMI_FLUSH
+                ;
+            }
+        if(0 == j % 100000)
+            {
+            status() << j << std::flush;
+            wxSafeYield();
             }
         }
     status() << "Date-conversion test succeeded." << std::flush;
