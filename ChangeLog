@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1051 2008-04-29 23:08:30 chicares Exp $
+// $Id: ChangeLog,v 1.1052 2008-04-30 02:56:21 chicares Exp $
 
 MAINTENANCE
 
@@ -16559,4 +16559,19 @@ Enforce placement of 'const'.
   rtti_lmi.hpp
   test_tools.hpp
 Conform to the style rule enforced 20080429T2306Z.
+
+20080430T0254Z <gchicares@sbcglobal.net> [1170]
+
+  workhorse.make
+Improve a diagnostic message.
+
+20080430T0255Z <gchicares@sbcglobal.net> [1170]
+
+  mc_enum_test.cpp
+Note an ostensible libcomo defect.
+
+20080430T0256Z <gchicares@sbcglobal.net> [1170]
+
+  assert_lmi_test.cpp
+Prevent a como warning.
 
