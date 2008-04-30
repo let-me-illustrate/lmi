@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_test.cpp,v 1.15 2008-01-01 18:29:49 chicares Exp $
+// $Id: mc_enum_test.cpp,v 1.16 2008-04-30 02:55:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -165,6 +165,8 @@ void mc_enum_test::test()
     BOOST_TEST_EQUAL(holiday3, "Easter");
 
     // That which is inconceivable is not to be allowed.
+    // COMPILER !! Here, como catches std::range_error instead of
+    // std::out_of_range when at() throws; that seems incorrect.
     BOOST_TEST_THROW(holiday3.allow( 3, false), std::out_of_range, "");
     BOOST_TEST_THROW(holiday3.allow(17, false), std::out_of_range, "");
     BOOST_TEST_THROW(holiday3.allow(-1, false), std::out_of_range, "");
