@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.124 2008-04-28 16:33:22 chicares Exp $
+# $Id: workhorse.make,v 1.125 2008-04-30 02:54:29 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -983,7 +983,7 @@ unit_tests: $(test_data) $(unit_test_targets) run_unit_tests
 .PHONY: unit_tests_not_built
 unit_tests_not_built:
 	@$(ECHO) "List of unit-test targets that did not build successfully:"
-	@$(ECHO) $(filter-out $(wildcard *$(EXEEXT)),$(unit_test_targets))
+	@$(ECHO) $(filter-out $(shell $(LS) -1 *$(EXEEXT)),$(unit_test_targets))
 	@$(ECHO) "List ends."
 
 .PHONY: run_unit_tests
