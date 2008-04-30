@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1052 2008-04-30 02:56:21 chicares Exp $
+// $Id: ChangeLog,v 1.1053 2008-04-30 18:44:23 chicares Exp $
 
 MAINTENANCE
 
@@ -16574,4 +16574,16 @@ Note an ostensible libcomo defect.
 
   assert_lmi_test.cpp
 Prevent a como warning.
+
+20080430T1843Z <gchicares@sbcglobal.net> [1170]
+
+  main_wx.cpp
+  main_wx.hpp
+  menus.xrc
+Add date-conversion test to menu.
+
+20080430T1844Z <gchicares@sbcglobal.net> [1170]
+
+  wx_utility.cpp
+Expand date-conversion test.
 
