@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.125 2008-04-30 02:54:29 chicares Exp $
+# $Id: workhorse.make,v 1.126 2008-05-01 14:24:16 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -786,15 +786,28 @@ lmi_cgi$(EXEEXT): $(cgi_objects) $(lmi_common_objects)
 # different build_types and picking the latest version of each
 # component can produce a mismatched set.
 
+# SOMEDAY !! Follow the GNU Coding Standards more closely, writing
+#   bindir datadir docdir srcdir
+# all with no '_', and changing the value of $(data_dir). These are
+# intended by the GCS to represent destinations, but here $(htmldir)
+# is actually a source at present: it's the directory to which the
+# savannah 'web' cvs has been downloaded.
+
 prefix         := /opt/lmi
 exec_prefix    := $(prefix)
 bin_dir        := $(exec_prefix)/bin
 data_dir       := $(exec_prefix)/data
+datarootdir    := $(prefix)/share
+docdir         := $(datarootdir)/doc/lmi
+htmldir        := $(docdir)
 test_dir       := $(exec_prefix)/test
 touchstone_dir := $(exec_prefix)/touchstone
 
 data_files := \
   $(wildcard $(addprefix $(src_dir)/,*.xml *.xpm *.xrc *.xsd *.xsl)) \
+
+help_files := \
+  $(wildcard $(addprefix $(htmldir)/,*.html *.hhc *.hhp)) \
 
 .PHONY: install
 install: $(default_targets)
@@ -805,6 +818,7 @@ install: $(default_targets)
 	+@[ -d $(touchstone_dir) ] || $(MKDIR) --parents $(touchstone_dir)
 	@$(CP) --preserve --update $^ $(bin_dir)
 	@$(CP) --preserve --update $(data_files) $(data_dir)
+	@$(CP) --preserve --update $(help_files) $(data_dir)
 ifeq (,$(USE_SO_ATTRIBUTES))
 	@cd $(data_dir); $(bin_dir)/product_files$(EXEEXT)
 else
