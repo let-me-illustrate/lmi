@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.39 2008-02-19 16:22:15 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.40 2008-05-01 14:23:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -118,7 +118,7 @@ configurable_settings::configurable_settings()
     ,libraries_to_preload_             (""                            )
     ,offer_hobsons_choice_             (false                         )
     ,print_directory_                  ("/var/opt/lmi/spool"          )
-    ,skin_filename_                    ("xml_notebook.xrc"            )
+    ,skin_filename_                    ("skin.xrc"                    )
     ,spreadsheet_file_extension_       (".gnumeric"                   )
     ,use_builtin_calculation_summary_  (false                         )
     ,xml_schema_filename_              ("ledger.xsd"                  )
