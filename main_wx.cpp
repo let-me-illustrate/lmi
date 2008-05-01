@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.108 2008-04-30 18:43:37 chicares Exp $
+// $Id: main_wx.cpp,v 1.109 2008-05-01 14:25:17 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -463,9 +463,7 @@ void Skeleton::InitHelp()
     help_controller_ = new(wx) wxHtmlHelpController(wxHF_DEFAULT_STYLE, frame_);
     LMI_ASSERT(help_controller_);
 
-#if defined DO_NOT_SUPPRESS_HELP
     help_controller_->AddBook(wxFileName(AddDataDir("user_manual.hhp")));
-#endif // defined DO_NOT_SUPPRESS_HELP
 }
 
 void Skeleton::InitIcon()
@@ -537,9 +535,7 @@ void Skeleton::UponEditDefaultCell(wxCommandEvent&)
 
 void Skeleton::UponHelp(wxCommandEvent&)
 {
-#if defined DO_NOT_SUPPRESS_HELP
     help_controller_->DisplayContents();
-#endif // defined DO_NOT_SUPPRESS_HELP
 }
 
 /// Rethrow an exception caught by wx into a local catch clause.
