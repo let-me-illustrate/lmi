@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1053 2008-04-30 18:44:23 chicares Exp $
+// $Id: ChangeLog,v 1.1054 2008-05-01 14:31:15 chicares Exp $
 
 MAINTENANCE
 
@@ -16586,4 +16586,26 @@ Add date-conversion test to menu.
 
   wx_utility.cpp
 Expand date-conversion test.
+
+20080501T1423Z <gchicares@sbcglobal.net> [1170]
+
+  configurable_settings.cpp
+Fix defect introduced 20080218T1743Z. As Vadim points out, the present
+change is needed if 'configurable_settings.xml' has no 'skin_filename'
+element.
+
+20080501T1424Z <gchicares@sbcglobal.net> [1170]
+
+  workhorse.make
+Install help files.
+
+20080501T1425Z <gchicares@sbcglobal.net> [1170]
+
+  main_wx.cpp
+Reenable html help, reverting the 20080423T1331Z suppression.
+
+20080501T1430Z <gchicares@sbcglobal.net> [1170]
+
+  version.hpp
+Mark release candidate.
 
