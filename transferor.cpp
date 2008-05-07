@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: transferor.cpp,v 1.15 2008-02-19 16:22:16 chicares Exp $
+// $Id: transferor.cpp,v 1.16 2008-05-07 13:01:48 chicares Exp $
 
 // Acknowledgment
 
@@ -204,7 +204,9 @@ bool Transferor::PerformTransfer(transfer_direction td)
 
 // TODO ?? Use TransferString() with class wxControlWithItems instead
 // of its derived classes, now that wx has been changed to implement
-// wxControlWithItems::SetSelection().
+// wxControlWithItems::SetSelection(). But consider whether class
+// wxItemContainerImmutable can be used for all those classes and
+// wxRadioBox as well.
 
 namespace
 {
