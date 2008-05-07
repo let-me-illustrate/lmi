@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_controller.hpp,v 1.7 2008-01-01 18:29:50 chicares Exp $
+// $Id: mvc_controller.hpp,v 1.8 2008-05-07 13:01:48 chicares Exp $
 
 #ifndef mvc_controller_hpp
 #define mvc_controller_hpp
@@ -168,7 +168,7 @@ class MvcView;
 /// Control types must be compatible with data types. Some data types
 /// are compatible with more than one control type:
 ///  - numeric     UDTs: wxTextCtrl or perhaps wxSpinCtrl
-///  - enumerative UDTs: wxRadioBox or a wxControlWithItems derivative
+///  - enumerative UDTs: wxRadioBox or a wxItemContainer derivative
 /// while others naturally map to a single control type:
 ///  - string      UDTs: wxTextCtrl
 ///  - date        UDTs: wxDatePickerCtrl
@@ -288,8 +288,8 @@ namespace model_view_controller{} // doxygen workaround.
 /// rules.
 ///
 /// ConditionallyEnableItems(): Enforce Model item-enablement rules
-/// for controls with subitems--wxRadioBox, and wxControlWithItems
-/// derivatives.
+/// for controls with subitems--wxItemContainerImmutable derivatives
+/// (i.e., wxRadioBox, and wxItemContainer derivatives).
 ///
 /// CurrentPage(): Return the current notebook page. Throws an
 /// exception if none is selected, or if the selected page is

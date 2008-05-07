@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.27 2008-03-19 16:43:29 chicares Exp $
+// $Id: input.hpp,v 1.28 2008-05-07 13:01:47 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -96,7 +96,8 @@ class TDatabase;
 ///
 /// Data members are UDTs that help express certain relationships
 /// among the controls that represent them. For example:
-///  - discrete-valued controls like wxControlWithItems and wxRadioBox
+///  - discrete-valued controls like wxItemContainer and wxRadioBox
+///    (all of which share wxItemContainerImmutable as a base class)
 ///    are mapped to an enumerative type that constrains assignment to
 ///    values that are permissible within the overall context of the
 ///    input object;
