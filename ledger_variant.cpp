@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.cpp,v 1.21 2008-01-01 18:29:47 chicares Exp $
+// $Id: ledger_variant.cpp,v 1.22 2008-05-08 04:09:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -119,6 +119,8 @@ void LedgerVariant::Alloc(int len)
     EndYearVectors  ["AcctVal"              ] = &AcctVal                ;
     EndYearVectors  ["DacTaxRsv"            ] = &DacTaxRsv              ;
     EndYearVectors  ["CSVNet"               ] = &CSVNet                 ;
+    EndYearVectors  ["CSVGenAcct"           ] = &CSVGenAcct             ;
+    EndYearVectors  ["CSVSepAcct"           ] = &CSVSepAcct             ;
     EndYearVectors  ["CV7702"               ] = &CV7702                 ;
     EndYearVectors  ["EOYDeathBft"          ] = &EOYDeathBft            ;
     EndYearVectors  ["PrefLoanBalance"      ] = &PrefLoanBalance        ;
