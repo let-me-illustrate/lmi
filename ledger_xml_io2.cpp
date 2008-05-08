@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io2.cpp,v 1.24 2008-01-01 18:29:47 chicares Exp $
+// $Id: ledger_xml_io2.cpp,v 1.25 2008-05-08 04:11:37 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -60,7 +60,6 @@ void Ledger::read(xml::element const&)
 
 namespace
 {
-
 typedef std::vector< double      > double_vector_t;
 typedef std::vector< std::string > string_vector_t;
 
@@ -876,9 +875,9 @@ void Ledger::write_excerpt
     //
     // First we make a copy of the invariant ledger:
 
-    double_vector_map vectors = ledger_invariant_->AllVectors;
-    scalar_map        scalars = ledger_invariant_->AllScalars;
-    string_map        strings = ledger_invariant_->Strings;
+    double_vector_map   vectors = ledger_invariant_->AllVectors;
+    scalar_map          scalars = ledger_invariant_->AllScalars;
+    string_map          strings = ledger_invariant_->Strings;
 
     // Now we add the stuff that wasn't in the invariant
     // ledger's class's maps (indexable by name). Because we're
@@ -943,7 +942,9 @@ void Ledger::write_excerpt
     // define and store their own derived-column definitions. For now,
     // however, code changes are required, and this is as appropriate
     // a place as any to make them.
+
     LedgerVariant const& Curr_ = GetCurrFull();
+
     // ET !! Easier to write as
     //   std::vector<double> NetDeathBenefit =
     //     Curr_.EOYDeathBft - Curr_.TotalLoanBalance;
@@ -955,8 +956,11 @@ void Ledger::write_excerpt
         ,NetDeathBenefit.begin()
         ,std::minus<double>()
         );
+
     vectors["NetDeathBenefit"] = &NetDeathBenefit ;
+
     // [End of derived columns.]
+
     double Composite = GetIsComposite();
     scalars["Composite"] = &Composite;
 
@@ -1122,6 +1126,7 @@ void Ledger::write_excerpt
 // TODO ?? Here I copied some stuff from the ledger class files: the
 // parts that speak of odd members that aren't in those class's
 // maps. This may reveal incomplete or incorrect systems analysis.
+
 // Invariant
 //
 //    // Special-case vectors (not <double>, or different length than others).
@@ -1304,6 +1309,7 @@ void Ledger::writeXXX(std::ostream& os) const
 {
     xml_lmi::xml_document document(xml_root_name());
     xml::element& root = document.root_node();
+
     root << *this;
 
     std::string const lmi_xml_ns("http://savannah.nongnu.org/projects/lmi");

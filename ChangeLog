@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1054 2008-05-01 14:31:15 chicares Exp $
+// $Id: ChangeLog,v 1.1055 2008-05-08 04:11:37 chicares Exp $
 
 MAINTENANCE
 
@@ -16604,8 +16604,35 @@ Install help files.
   main_wx.cpp
 Reenable html help, reverting the 20080423T1331Z suppression.
 
-20080501T1430Z <gchicares@sbcglobal.net> [1170]
+20080501T1431Z <gchicares@sbcglobal.net> [1170]
 
   version.hpp
 Mark release candidate.
+
+20080507T1301Z <gchicares@sbcglobal.net> [1170]
+
+  input.hpp
+  mvc_controller.cpp
+  mvc_controller.hpp
+  transferor.cpp
+Replace wxControlWithItems with wxItemContainer (Vaclav). This is
+required for wxGTK builds. See:
+  http://lists.nongnu.org/archive/html/lmi/2008-04/msg00001.html
+
+20080508T0409Z <gchicares@sbcglobal.net> [1170]
+
+  ihs_acctval.cpp
+  ledger_formats.xml
+  ledger_variant.cpp
+  ledger_variant.hpp
+  ledger_xml_io.cpp
+Add new output columns, splitting CSV by account. It would have been
+ideal to calculate these as "derived" columns like "NetDeathBenefit",
+and to split AV in the Ledger object, except that the schizophrenia
+inherent in 'ledger_xml_io*.cpp' must be resolved first.
+
+20080508T0411Z <gchicares@sbcglobal.net> [1170]
+
+  ledger_xml_io2.cpp
+Remove gratuitous whitespace differences versus 'ledger_xml_io.cpp'.
 
