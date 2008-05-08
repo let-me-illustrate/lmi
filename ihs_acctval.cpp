@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.106 2008-03-25 12:59:18 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.107 2008-05-08 04:09:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1305,6 +1305,13 @@ void AccountValue::FinalizeYear()
     csv_net = std::max(csv_net, HoneymoonValue);
     csv_net = std::max(csv_net, 0.0);
 
+    double csv_sep_acct = 0.0;
+    if(0.0 != AVGenAcct + AVSepAcct)
+        {
+        csv_sep_acct = csv_net * AVSepAcct / (AVGenAcct + AVSepAcct);
+        }
+    double csv_gen_acct = csv_net - csv_sep_acct;
+
     // 7702(f)(2)(A)
     double cv_7702 =
           total_av
@@ -1324,6 +1331,8 @@ void AccountValue::FinalizeYear()
     VariantValues().AcctVal     [Year] = total_av;
     VariantValues().DacTaxRsv   [Year] = DacTaxRsv;
     VariantValues().CSVNet      [Year] = csv_net;
+    VariantValues().CSVGenAcct  [Year] = csv_gen_acct;
+    VariantValues().CSVSepAcct  [Year] = csv_sep_acct;
     VariantValues().CV7702      [Year] = cv_7702;
 
     // Update death benefit. 'DBReflectingCorr' currently equals the

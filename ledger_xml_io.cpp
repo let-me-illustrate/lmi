@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.72 2008-04-03 14:02:21 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.73 2008-05-08 04:09:14 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -585,6 +585,8 @@ void Ledger::write(xml::element& x) const
     format_map["COICharge"                         ] = f1;
     format_map["Composite"                         ] = f1;
     format_map["CSVNet"                            ] = f1;
+    format_map["CSVGenAcct"                        ] = f1;
+    format_map["CSVSepAcct"                        ] = f1;
     format_map["CV7702"                            ] = f1;
     format_map["DacTaxLoad"                        ] = f1;
     format_map["DacTaxRsv"                         ] = f1;
