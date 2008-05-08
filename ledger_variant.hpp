@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.hpp,v 1.16 2008-01-01 18:29:47 chicares Exp $
+// $Id: ledger_variant.hpp,v 1.17 2008-05-08 04:09:14 chicares Exp $
 
 #ifndef ledger_variant_hpp
 #define ledger_variant_hpp
@@ -118,6 +118,8 @@ class LMI_SO LedgerVariant
     std::vector<double> DacTaxRsv;
     // See account value class for CSV definitions.
     std::vector<double> CSVNet;
+    std::vector<double> CSVGenAcct;
+    std::vector<double> CSVSepAcct;
     std::vector<double> CV7702;
     std::vector<double> EOYDeathBft;
     std::vector<double> PrefLoanBalance; // Not used yet.
