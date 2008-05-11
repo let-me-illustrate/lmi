@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.107 2008-05-08 04:09:13 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.108 2008-05-11 01:53:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1310,7 +1310,7 @@ void AccountValue::FinalizeYear()
         {
         csv_sep_acct = csv_net * AVSepAcct / (AVGenAcct + AVSepAcct);
         }
-    double csv_gen_acct = csv_net - csv_sep_acct;
+    double csv_gen_acct = material_difference(csv_net, csv_sep_acct);
 
     // 7702(f)(2)(A)
     double cv_7702 =
