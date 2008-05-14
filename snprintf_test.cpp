@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: snprintf_test.cpp,v 1.10 2008-01-01 18:29:55 chicares Exp $
+// $Id: snprintf_test.cpp,v 1.11 2008-05-14 00:09:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -76,6 +76,16 @@ int test_main(int, char*[])
     len = snprintf(buf, 1 + len, "%1.12Lf", z);
     BOOST_TEST_EQUAL(14, len);
     BOOST_TEST_EQUAL(std::string(buf, 15), std::string("2.718281828459\0", 15));
+
+    // See:
+    //   http://www.nabble.com/forum/PrintPost.jtp?post=17172711
+    //     [2008-05-11T11:46Z from François-Xavier Coudert]
+    double g = 39.0;
+    len = snprintf(buf,       0, "%9.0e", g);
+    BOOST_TEST_EQUAL(9, len);
+    len = snprintf(buf, 1 + len, "%9.0e", g);
+    BOOST_TEST_EQUAL(9, len);
+    BOOST_TEST_EQUAL(std::string(buf, 9), std::string("    4e+01\0", 9));
 
     double d = 1e+161;
     len = snprintf(buf,       0, "%#.*f", 16, d);
