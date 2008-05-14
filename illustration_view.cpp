@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.79 2008-03-27 16:08:16 chicares Exp $
+// $Id: illustration_view.cpp,v 1.80 2008-05-14 11:35:35 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -341,9 +341,7 @@ void IllustrationView::Pdf(std::string const& action) const
 {
     LMI_ASSERT(ledger_values_.get());
 
-    wxString z;
-    document().GetPrintableName(z);
-    std::string filename(z.c_str());
+    std::string filename(document().GetUserReadableName());
 
     std::string pdf_out_file = write_ledger_as_pdf(*ledger_values_, filename);
     file_command()(pdf_out_file, action);

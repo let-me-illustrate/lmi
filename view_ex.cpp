@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: view_ex.cpp,v 1.17 2008-03-25 12:54:28 chicares Exp $
+// $Id: view_ex.cpp,v 1.18 2008-05-14 11:35:35 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -178,13 +178,7 @@ void ViewEx::OnDraw(wxDC*)
 
 std::string ViewEx::base_filename() const
 {
-    wxString z;
-    GetDocument()->GetPrintableName(z);
-    std::string t(z);
-    if(0 == t.size())
-        {
-        t = "Anonymous";
-        }
+    std::string t(GetDocument()->GetUserReadableName());
     fs::path path(t);
     return path.leaf();
 }
