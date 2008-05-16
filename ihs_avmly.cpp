@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.71 2008-02-19 16:22:15 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.72 2008-05-16 13:56:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -387,8 +387,9 @@ void AccountValue::IncrementAVPreferentially
         }
 }
 
-//============================================================================
-// Apportion all charges to be deducted from account value among accounts.
+/// Apportion all charges to be deducted from account value among
+/// accounts.
+
 void AccountValue::process_deduction(double decrement)
 {
     switch(deduction_method)
@@ -415,8 +416,8 @@ void AccountValue::process_deduction(double decrement)
         }
 }
 
-//============================================================================
-// Apportion all distributions from account value among accounts.
+/// Apportion all distributions from account value among accounts.
+
 void AccountValue::process_distribution(double decrement)
 {
     switch(distribution_method)
@@ -443,18 +444,19 @@ void AccountValue::process_distribution(double decrement)
         }
 }
 
-//============================================================================
-// Prorate decrements to account value between separate- and general-account
-// portions of unloaned account value according to their balances.
+/// Prorate decrements to account value between separate- and general-
+/// account portions of unloaned account value according to their
+/// balances. Treat a negative balance in either account as zero for
+/// proration, because its absolute value is irrelevant. If neither
+/// balance is positive, then prorate decrement by input fund
+/// allocations.
+
 void AccountValue::DecrementAVProportionally(double decrement)
 {
-    double general_account_proportion;
-    double separate_account_proportion;
-    // Prorate decrement by proportion of assets in general versus
-    // separate account if both are positive. Treat negative asset
-    // amounts as zero, because their absolute value is irrelevant.
-    // If neither asset amount is positive, then prorate decrement
-    // by input fund allocations.
+    double general_account_proportion  = 0.0;
+    double separate_account_proportion = 0.0;
+    stifle_warning_for_unused_value(general_account_proportion );
+    stifle_warning_for_unused_value(separate_account_proportion);
     double general_account_nonnegative_assets  = std::max(0.0, AVGenAcct);
     double separate_account_nonnegative_assets = std::max(0.0, AVSepAcct);
     if
@@ -489,10 +491,11 @@ void AccountValue::DecrementAVProportionally(double decrement)
     AVSepAcct -= decrement * separate_account_proportion;
 }
 
-//============================================================================
-// Apportion decrements to account value between separate- and general-account
-// portions of unloaned account value, applying them to the preferred account
-// to the extent possible without making that account negative.
+/// Apportion decrements to account value between separate- and
+/// general-account portions of unloaned account value, applying them
+/// to the preferred account to the extent possible without making
+/// that account negative.
+
 void AccountValue::DecrementAVProgressively
     (double decrement
     ,e_increment_account_preference preferred_account
