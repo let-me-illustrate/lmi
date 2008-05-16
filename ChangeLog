@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1055 2008-05-08 04:11:37 chicares Exp $
+// $Id: ChangeLog,v 1.1056 2008-05-16 13:59:25 chicares Exp $
 
 MAINTENANCE
 
@@ -16635,4 +16635,41 @@ inherent in 'ledger_xml_io*.cpp' must be resolved first.
 
   ledger_xml_io2.cpp
 Remove gratuitous whitespace differences versus 'ledger_xml_io.cpp'.
+
+20080509T1457Z <gchicares@sbcglobal.net> [1170]
+
+  install_mingw.make
+Optionally support an alpha gcc-4.3.0 msw port.
+
+20080511T0153Z <gchicares@sbcglobal.net> [1170]
+
+  ihs_acctval.cpp
+Avoid low-level noise from catastrophic cancellation.
+
+20080514T0009Z <gchicares@sbcglobal.net> [1170]
+
+  snprintf_test.cpp
+Augment unit test.
+
+20080514T1135Z <gchicares@sbcglobal.net> [1170]
+
+  illustration_view.cpp
+  view_ex.cpp
+Replace obsolescent wxDocument::GetPrintableName() (Vadim).
+
+20080516T1354Z <gchicares@sbcglobal.net> [1170]
+
+  census_document.cpp
+  illustration_document.cpp
+Replace obsolescent wxDocManager::MakeDefaultName() (Vadim).
+
+20080516T1356Z <gchicares@sbcglobal.net> [1170]
+
+  ihs_avmly.cpp
+Explicitly initialize locals; reformat documentation.
+
+20080516T1359Z <gchicares@sbcglobal.net> [1170]
+
+  ihs_avmly.cpp
+Avoid lapse due to catastrophic cancellation.
 

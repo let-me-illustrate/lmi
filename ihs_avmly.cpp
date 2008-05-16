@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.72 2008-05-16 13:56:17 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.73 2008-05-16 13:59:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -450,9 +450,21 @@ void AccountValue::process_distribution(double decrement)
 /// proration, because its absolute value is irrelevant. If neither
 /// balance is positive, then prorate decrement by input fund
 /// allocations.
+///
+/// If a decrement is materially equal to unloaned account value, then
+/// force both separate- and general-account values to exactly zero.
+/// Otherwise, unloaned account value might have a minuscule negative
+/// value due to catastrophic cancellation, improperly causing lapse.
 
 void AccountValue::DecrementAVProportionally(double decrement)
 {
+    if(materially_equal(decrement, AVGenAcct + AVSepAcct))
+        {
+        AVGenAcct = 0.0;
+        AVSepAcct = 0.0;
+        return;
+        }
+
     double general_account_proportion  = 0.0;
     double separate_account_proportion = 0.0;
     stifle_warning_for_unused_value(general_account_proportion );
@@ -495,12 +507,24 @@ void AccountValue::DecrementAVProportionally(double decrement)
 /// general-account portions of unloaned account value, applying them
 /// to the preferred account to the extent possible without making
 /// that account negative.
+///
+/// If a decrement is materially equal to unloaned account value, then
+/// force both separate- and general-account values to exactly zero.
+/// Otherwise, unloaned account value might have a minuscule negative
+/// value due to catastrophic cancellation, improperly causing lapse.
 
 void AccountValue::DecrementAVProgressively
     (double decrement
     ,e_increment_account_preference preferred_account
     )
 {
+    if(materially_equal(decrement, AVGenAcct + AVSepAcct))
+        {
+        AVGenAcct = 0.0;
+        AVSepAcct = 0.0;
+        return;
+        }
+
     switch(preferred_account)
         {
         case e_prefer_general_account:
