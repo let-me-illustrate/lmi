@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_document.cpp,v 1.16 2008-03-23 02:53:24 chicares Exp $
+// $Id: illustration_document.cpp,v 1.17 2008-05-16 13:54:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -127,8 +127,12 @@ bool IllustrationDocument::OnNewDocument()
     Modify(true);
     SetDocumentSaved(false);
 
+#if wxCHECK_VERSION(2,8,8)
+    wxString const name = GetDocumentManager()->MakeNewDocumentName();
+#else  // !wxCHECK_VERSION(2,8,8)
     wxString name;
     GetDocumentManager()->MakeDefaultName(name);
+#endif // !wxCHECK_VERSION(2,8,8)
     SetTitle(name);
     SetFilename(name, true);
 
