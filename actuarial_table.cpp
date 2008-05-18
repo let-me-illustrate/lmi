@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.37 2008-02-19 16:22:15 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.38 2008-05-18 15:44:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -501,7 +501,7 @@ std::vector<double> actuarial_table::specific_values
             v.resize(length);
             for(int j = 0; j < length; ++j, ++k)
                 {
-                v[j] = data_[k];
+                v[j] = data_.at(k);
                 if(j + issue_age < max_select_age_ + select_period_ && select_period_ <= j)
                     {
                     k += select_period_;
