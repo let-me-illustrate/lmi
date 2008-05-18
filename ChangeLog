@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1057 2008-05-18 15:59:19 chicares Exp $
+// $Id: ChangeLog,v 1.1058 2008-05-18 16:38:09 chicares Exp $
 
 MAINTENANCE
 
@@ -16693,4 +16693,14 @@ violation.
 
   actuarial_table.cpp
 Fix the defect exposed 20080518T1531Z.
+
+20080518T1637Z <gchicares@sbcglobal.net> [1170]
+
+  actuarial_table.cpp
+Refactor.
+
+20080518T1638Z <gchicares@sbcglobal.net> [1170]
+
+  actuarial_table_test.cpp
+Strengthen unit tests.
 
