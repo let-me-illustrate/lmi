@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.23 2008-05-18 15:31:35 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.24 2008-05-18 16:38:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,6 +28,7 @@
 
 #include "actuarial_table.hpp"
 
+#include "assert_lmi.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
 
@@ -74,6 +75,7 @@ std::vector<double> table_47_age_89()
 // Parameters: min age 10; max age 121; select period 3; max select age 80.
 std::vector<double> table_256(int age, int duration)
     {
+    LMI_ASSERT(0 <= duration && duration <= 3);
     // Select: issue age by duration.
     static int const nsel = 71 * 3;
     static double const qsel[nsel] =
@@ -237,6 +239,11 @@ void test_precondition_failures()
         );
 }
 
+/// Test preconditions for actuarial_table::specific_values().
+///
+/// It is sufficient to test only one table type, because the same
+/// preconditions apply to all types.
+
 void test_lookup_errors()
 {
     std::string const qx_cso("/opt/lmi/data/qx_cso");
@@ -320,6 +327,24 @@ void test_e_reenter_never()
     BOOST_TEST(rates == gauge);
 
     gauge = table_256(80, 1);
+    BOOST_TEST(rates == gauge);
+
+    rates = actuarial_table(qx_ins, 256).values(82,  40);
+    BOOST_TEST_EQUAL(rates[0], 0.13557); // [82]+0 --> [80]+2
+    BOOST_TEST_EQUAL(rates[1], 0.16221); // [82]+1 --> 83 ultimate
+    gauge = table_256(80, 2);
+    BOOST_TEST(rates == gauge);
+
+    rates = actuarial_table(qx_ins, 256).values(83,  39);
+    BOOST_TEST_EQUAL(rates[0], 0.16221); // [83]+0 --> 83 ultimate
+    BOOST_TEST_EQUAL(rates[1], 0.17425); // [83]+1 --> 84 ultimate
+    gauge = table_256(80, 3);
+    BOOST_TEST(rates == gauge);
+
+    rates = actuarial_table(qx_ins, 256).values(84,  38);
+    BOOST_TEST_EQUAL(rates[0], 0.17425); // [84]+0 --> 84 ultimate
+    gauge = table_256(80, 0);
+    gauge.erase(gauge.begin(), 4 + gauge.begin());
     BOOST_TEST(rates == gauge);
 }
 
