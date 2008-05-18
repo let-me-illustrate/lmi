@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.39 2008-05-18 15:59:19 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.40 2008-05-18 16:37:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -221,7 +221,9 @@ void actuarial_table::find_table()
     BOOST_STATIC_ASSERT(sizeof(boost::int32_t) <= sizeof(int));
     while(index_ifs)
         {
-        int index_table_number = *reinterpret_cast<boost::int32_t*>(index_record);
+        int index_table_number =
+            *reinterpret_cast<boost::int32_t*>(index_record)
+            ;
         if(table_number_ == index_table_number)
             {
             char* p = 54 + index_record;
@@ -494,15 +496,19 @@ std::vector<double> actuarial_table::specific_values
             break;
         case 'S':
             {
+            int const stride = 1 + select_period_;
             int k =
                     std::max(0, issue_age - max_select_age_)
-                +   (std::min(max_select_age_, issue_age) - min_age_) * (1 + select_period_)
+                +   (std::min(max_select_age_, issue_age) - min_age_) * stride
                 ;
             v.resize(length);
             for(int j = 0; j < length; ++j, ++k)
                 {
                 v[j] = data_.at(k);
-                if(j + issue_age < max_select_age_ + select_period_ && select_period_ <= j)
+                if
+                    (   j + issue_age < max_select_age_ + select_period_
+                    &&  select_period_ <= j
+                    )
                     {
                     k += select_period_;
                     }
