@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1056 2008-05-16 13:59:25 chicares Exp $
+// $Id: ChangeLog,v 1.1057 2008-05-18 15:59:19 chicares Exp $
 
 MAINTENANCE
 
@@ -16672,4 +16672,25 @@ Explicitly initialize locals; reformat documentation.
 
   ihs_avmly.cpp
 Avoid lapse due to catastrophic cancellation.
+
+20080518T1345Z <gchicares@sbcglobal.net> [1170]
+
+  actuarial_table_test.cpp
+Strengthen unit tests.
+
+20080518T1531Z <gchicares@sbcglobal.net> [1170]
+
+  actuarial_table_test.cpp
+Strengthen unit tests, exposing a defect.
+
+20080518T1544Z <gchicares@sbcglobal.net> [1170]
+
+  actuarial_table.cpp
+Illuminate the defect exposed 20080518T1531Z: it's an array-bounds
+violation.
+
+20080518T1559Z <gchicares@sbcglobal.net> [1170]
+
+  actuarial_table.cpp
+Fix the defect exposed 20080518T1531Z.
 
