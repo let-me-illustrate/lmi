@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.21 2008-01-01 18:29:34 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.22 2008-05-18 13:45:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -130,6 +130,45 @@ void test_precondition_failures()
         (z.values_elaborated(3, 8, e_reenter_never, 0, 0)
         ,std::runtime_error
         ,"Table-lookup method 0 is not valid in this context."
+        );
+}
+
+void test_lookup_errors()
+{
+    std::string const qx_cso("/opt/lmi/data/qx_cso");
+
+    // Aggregate table:
+    //   0 minimum age
+    //  99 maximum age
+
+    BOOST_TEST_THROW
+        (actuarial_table(qx_cso, 42).values(  0,  -1)
+        ,std::runtime_error
+        ,"Assertion '0 <= length' failed."
+        );
+
+    BOOST_TEST_THROW
+        (actuarial_table(qx_cso, 42).values(  0, 101)
+        ,std::runtime_error
+        ,"Assertion 'issue_age + length <= max_age_ + 1' failed."
+        );
+
+    BOOST_TEST_THROW
+        (actuarial_table(qx_cso, 42).values(  1, 100)
+        ,std::runtime_error
+        ,"Assertion 'issue_age + length <= max_age_ + 1' failed."
+        );
+
+    BOOST_TEST_THROW
+        (actuarial_table(qx_cso, 42).values( -1,  10)
+        ,std::runtime_error
+        ,"Assertion 'min_age_ <= issue_age && issue_age <= max_age_' failed."
+        );
+
+    BOOST_TEST_THROW
+        (actuarial_table(qx_cso, 42).values(100,   1)
+        ,std::runtime_error
+        ,"Assertion 'min_age_ <= issue_age && issue_age <= max_age_' failed."
         );
 }
 
@@ -314,6 +353,7 @@ void test_exotic_lookup_methods_with_attained_age_table()
 int test_main(int, char*[])
 {
     test_precondition_failures();
+    test_lookup_errors();
     test_e_reenter_never();
     test_e_reenter_at_inforce_duration();
     test_e_reenter_upon_rate_reset();
