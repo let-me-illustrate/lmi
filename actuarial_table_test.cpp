@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.24 2008-05-18 16:38:09 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.25 2008-05-19 11:57:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -467,6 +467,18 @@ void test_e_reenter_upon_rate_reset()
         );
     BOOST_TEST(rates == gauge0);
     BOOST_TEST(rates == gauge1);
+
+    BOOST_TEST_THROW
+        (actuarial_table(qx_ins, 308).values_elaborated
+            (0      // issue_age
+            ,8      // length
+            ,e_reenter_upon_rate_reset
+            ,0      // full_years_since_issue
+            ,999    // full_years_since_last_rate_reset
+            )
+        ,std::runtime_error
+        ,"Assertion '0 <= r' failed."
+        );
 }
 
 /// The e_actuarial_table_method variants are designed for use with
