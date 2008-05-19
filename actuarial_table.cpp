@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.41 2008-05-19 01:11:28 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.42 2008-05-19 11:58:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -158,6 +158,7 @@ std::vector<double> actuarial_table::values_elaborated
                 (issue_age - min_age_
                 ,full_years_since_last_rate_reset
                 );
+            LMI_ASSERT(0 <= r);
             std::vector<double> v = specific_values
                 (issue_age - r
                 ,length    + r
@@ -460,7 +461,7 @@ void actuarial_table::read_values(std::istream& is, int nominal_length)
 /// age were reduced to the maximum select age, and the select
 /// duration correspondingly increased, i.e.:
 ///   map [x]+j to [max_select_age_]+(x-max_select_age_)+j
-/// This behavior is useful for the 'e_reenter_upon_rate_reset' lookup
+/// This behavior is useful for the 'e_reenter_at_inforce_duration'
 /// method. For other methods, it's the least unreasonable behavior
 /// that doesn't throw a runtime exception. Alternatively, it might be
 /// considered preferable to throw an exception, in case permitting
