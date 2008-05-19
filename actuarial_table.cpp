@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.40 2008-05-18 16:37:11 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.41 2008-05-19 01:11:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -454,6 +454,17 @@ void actuarial_table::read_values(std::istream& is, int nominal_length)
 }
 
 /// Read a given number of values for a given issue age.
+///
+/// If the issue-age argument exceeds max_select_age_ for a table of
+/// type 'S' ("Select"), then rates are looked up as though the issue
+/// age were reduced to the maximum select age, and the select
+/// duration correspondingly increased, i.e.:
+///   map [x]+j to [max_select_age_]+(x-max_select_age_)+j
+/// This behavior is useful for the 'e_reenter_upon_rate_reset' lookup
+/// method. For other methods, it's the least unreasonable behavior
+/// that doesn't throw a runtime exception. Alternatively, it might be
+/// considered preferable to throw an exception, in case permitting
+/// issue age to exceed max_select_age_ is an inadvertent mistake.
 
 std::vector<double> actuarial_table::specific_values
     (int issue_age
