@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.25 2008-05-19 11:57:33 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.26 2008-05-20 03:07:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,6 +34,9 @@
 
 namespace
 {
+std::string const qx_cso("/opt/lmi/data/qx_cso");
+std::string const qx_ins("/opt/lmi/data/qx_ins");
+
 // SOA database 'qx_cso' table 42
 // "1980 US CSO Male Age nearest"
 std::vector<double> table_42(int age)
@@ -206,7 +209,6 @@ std::vector<double> table_308(int age)
 
 void mete()
 {
-    std::string const qx_cso("/opt/lmi/data/qx_cso");
     std::vector<double> rates;
 
     rates = actuarial_table(qx_cso, 42).values( 0, 100);
@@ -230,7 +232,6 @@ void test_precondition_failures()
         ,"There is no table number 0 in file 'nonexistent'."
         );
 
-    std::string const qx_cso("/opt/lmi/data/qx_cso");
     actuarial_table z(qx_cso, 47);
     BOOST_TEST_THROW
         (z.values_elaborated(3, 8, e_reenter_never, 0, 0)
@@ -246,8 +247,6 @@ void test_precondition_failures()
 
 void test_lookup_errors()
 {
-    std::string const qx_cso("/opt/lmi/data/qx_cso");
-
     // Aggregate table:
     //   0 minimum age
     //  99 maximum age
@@ -283,14 +282,12 @@ void test_lookup_errors()
         );
 }
 
+/// TODO ?? Also test a 'duration' table--has SOA published any?
+
 void test_e_reenter_never()
 {
-    std::string const qx_cso("/opt/lmi/data/qx_cso");
-    std::string const qx_ins("/opt/lmi/data/qx_ins");
     std::vector<double> rates;
     std::vector<double> gauge;
-
-// TODO ?? Also test a 'duration' table--has SOA published any?
 
     rates = actuarial_table(qx_cso, 42).values( 0, 100);
     BOOST_TEST(rates == table_42(0));
@@ -350,7 +347,6 @@ void test_e_reenter_never()
 
 void test_e_reenter_at_inforce_duration()
 {
-    std::string const qx_cso("/opt/lmi/data/qx_cso");
     std::vector<double> rates;
     std::vector<double> gauge;
     int inforce_duration = 0;
@@ -401,7 +397,6 @@ void test_e_reenter_at_inforce_duration()
 
 void test_e_reenter_upon_rate_reset()
 {
-    std::string const qx_ins("/opt/lmi/data/qx_ins");
     std::vector<double> rates;
     std::vector<double> gauge0;
     std::vector<double> gauge1;
@@ -487,7 +482,6 @@ void test_e_reenter_upon_rate_reset()
 
 void test_exotic_lookup_methods_with_attained_age_table()
 {
-    std::string const qx_cso("/opt/lmi/data/qx_cso");
     actuarial_table const table42(qx_cso, 42);
     std::vector<double> rates;
 
