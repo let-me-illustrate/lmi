@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.hpp,v 1.10 2008-01-01 18:29:34 chicares Exp $
+// $Id: actuarial_table.hpp,v 1.11 2008-05-20 03:05:35 chicares Exp $
 
 #ifndef actuarial_table_hpp
 #define actuarial_table_hpp
@@ -44,7 +44,8 @@
 /// latest reentry is known and prior history is unavailable.
 /// Therefore, reentry occurs at most once, and it is handled by
 /// transforming the arguments of the raw table-lookup functions.
-/// These transformations take the general form
+///
+/// Important note: These transformations take the general form
 ///   map [A]+B to [C]+D
 /// it being understood that a table's age limits must be respected:
 /// if C would violate that constraint, then
@@ -80,6 +81,10 @@
 /// because no future reset is guaranteed. This reset date can precede
 /// the issue date, in order to accommodate certificates issued to a
 /// group with a common reset date.
+///
+/// All three methods are affected by the "Important note" above: even
+/// e_reenter_never, if [x] exceeds max_select_age_ (see documentation
+/// for specific_values()).
 ///
 /// These methods are designed for select-and-ultimate tables. For
 /// attained-age tables, they are all equivalent wrt all values that
