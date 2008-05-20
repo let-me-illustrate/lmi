@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.26 2008-05-20 03:07:15 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.27 2008-05-20 13:51:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -401,76 +401,63 @@ void test_e_reenter_upon_rate_reset()
     std::vector<double> gauge0;
     std::vector<double> gauge1;
 
-    rates = actuarial_table(qx_ins, 308).values_elaborated
-        (3      // issue_age
-        ,8      // length
-        ,e_reenter_upon_rate_reset
-        ,0      // full_years_since_issue
-        ,0      // full_years_since_last_rate_reset
-        );
-    gauge0 = table_308(3);
-    gauge0.erase(gauge0.begin(), 0 + gauge0.begin());
+    e_actuarial_table_method const m = e_reenter_upon_rate_reset;
+
+    actuarial_table const table(qx_ins, 308);
+
+    int const min_age = table.min_age();
+//    int const max_age   = table.max_age();
+    int const max_age = 10; // Limited local implementation.
+    int const iss_age = 2 + min_age;
+    int const length  = 1 + max_age - iss_age;
+
+    int pol_dur       = 0; // Ignored for 'e_reenter_upon_rate_reset'.
+    int reset_dur     = 0;
+    int effective_age = 0;
+
+    reset_dur     = 0;
+    effective_age = iss_age - reset_dur;
+    rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
+    gauge0 = table_308(effective_age);
+    gauge0.erase(gauge0.begin(), reset_dur + gauge0.begin());
     BOOST_TEST(rates == gauge0);
-    gauge1 = actuarial_table(qx_ins, 308).values(3, 8);
-    gauge1.erase(gauge1.begin(), 0 + gauge1.begin());
+    gauge1 = table.values(effective_age, 1 + max_age - effective_age);
+    gauge1.erase(gauge1.begin(), reset_dur + gauge1.begin());
     BOOST_TEST(rates == gauge1);
 
-    rates = actuarial_table(qx_ins, 308).values_elaborated
-        (3      // issue_age
-        ,8      // length
-        ,e_reenter_upon_rate_reset
-        ,0      // full_years_since_issue
-        ,1      // full_years_since_last_rate_reset
-        );
-    gauge0 = table_308(2);
-    gauge0.erase(gauge0.begin(), 1 + gauge0.begin());
+    reset_dur     = 1;
+    effective_age = iss_age - reset_dur;
+    rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
+    gauge0 = table_308(effective_age);
+    gauge0.erase(gauge0.begin(), reset_dur + gauge0.begin());
     BOOST_TEST(rates == gauge0);
-    gauge1 = actuarial_table(qx_ins, 308).values(2, 9);
-    gauge1.erase(gauge1.begin(), 1 + gauge1.begin());
+    gauge1 = table.values(effective_age, 1 + max_age - effective_age);
+    gauge1.erase(gauge1.begin(), reset_dur + gauge1.begin());
     BOOST_TEST(rates == gauge1);
 
-    rates = actuarial_table(qx_ins, 308).values_elaborated
-        (3      // issue_age
-        ,8      // length
-        ,e_reenter_upon_rate_reset
-        ,0      // full_years_since_issue
-        ,2      // full_years_since_last_rate_reset
-        );
-    gauge0 = table_308(1);
-    gauge0.erase(gauge0.begin(), 2 + gauge0.begin());
+    reset_dur     = 2;
+    effective_age = iss_age - reset_dur;
+    rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
+    gauge0 = table_308(effective_age);
+    gauge0.erase(gauge0.begin(), reset_dur + gauge0.begin());
     BOOST_TEST(rates == gauge0);
-    gauge1 = actuarial_table(qx_ins, 308).values(1, 10);
-    gauge1.erase(gauge1.begin(), 2 + gauge1.begin());
+    gauge1 = table.values(effective_age, 1 + max_age - effective_age);
+    gauge1.erase(gauge1.begin(), reset_dur + gauge1.begin());
     BOOST_TEST(rates == gauge1);
 
-    rates = actuarial_table(qx_ins, 308).values_elaborated
-        (3      // issue_age
-        ,8      // length
-        ,e_reenter_upon_rate_reset
-        ,0      // full_years_since_issue
-        ,3      // full_years_since_last_rate_reset
-        );
+    reset_dur     = 3;
+    effective_age = iss_age - reset_dur;
+    rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
     BOOST_TEST(rates == gauge0);
     BOOST_TEST(rates == gauge1);
 
-    rates = actuarial_table(qx_ins, 308).values_elaborated
-        (3      // issue_age
-        ,8      // length
-        ,e_reenter_upon_rate_reset
-        ,0      // full_years_since_issue
-        ,999    // full_years_since_last_rate_reset
-        );
+    reset_dur = 999;
+    rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
     BOOST_TEST(rates == gauge0);
     BOOST_TEST(rates == gauge1);
 
     BOOST_TEST_THROW
-        (actuarial_table(qx_ins, 308).values_elaborated
-            (0      // issue_age
-            ,8      // length
-            ,e_reenter_upon_rate_reset
-            ,0      // full_years_since_issue
-            ,999    // full_years_since_last_rate_reset
-            )
+        (table.values_elaborated(min_age - 1, 1, m, 0, 0)
         ,std::runtime_error
         ,"Assertion '0 <= r' failed."
         );
