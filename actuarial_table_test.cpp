@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.27 2008-05-20 13:51:20 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.28 2008-05-21 03:51:10 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -381,14 +381,13 @@ void test_e_reenter_at_inforce_duration()
     // [89+1]+j because the maximum select age is 89.
     rates = actuarial_table(qx_cso, 47).values_elaborated
         (89 // issue_age
-        ,16 // length
+        ,17 // length
         ,e_reenter_at_inforce_duration
         ,1  // full_years_since_issue
         ,0  // full_years_since_last_rate_reset
         );
     gauge = table_47_age_89();
     gauge[0] = 0.0;
-    gauge.resize(16);
     BOOST_TEST(rates == gauge);
 }
 
