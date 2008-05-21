@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1058 2008-05-18 16:38:09 chicares Exp $
+// $Id: ChangeLog,v 1.1059 2008-05-21 17:44:34 chicares Exp $
 
 MAINTENANCE
 
@@ -16703,4 +16703,57 @@ Refactor.
 
   actuarial_table_test.cpp
 Strengthen unit tests.
+
+20080519T0111Z <gchicares@sbcglobal.net> [1170]
+
+  actuarial_table.cpp
+Improve documentation.
+
+20080519T1157Z <gchicares@sbcglobal.net> [1170]
+
+  actuarial_table_test.cpp
+Strengthen unit tests, exposing a potential segfault.
+
+20080519T1158Z <gchicares@sbcglobal.net> [1170]
+
+  actuarial_table.cpp
+Fix the defect exposed 20080519T1157Z.
+
+20080520T0305Z <gchicares@sbcglobal.net> [1170]
+
+  actuarial_table.hpp
+Improve documentation.
+
+20080520T0307Z <gchicares@sbcglobal.net> [1170]
+
+  actuarial_table_test.cpp
+Refactor.
+
+20080520T1351Z <gchicares@sbcglobal.net> [1170]
+
+  actuarial_table_test.cpp
+Refactor to expose redundancy and to increase flexibility.
+
+20080520T1351Z <gchicares@sbcglobal.net> [1170]
+
+  actuarial_table_test.cpp
+Use a table that's likelier to fail unit tests.
+
+20080521T0351Z <gchicares@sbcglobal.net> [1170]
+
+  actuarial_table_test.cpp
+Fix defect introduced 20071012T1258Z. There was no reason to truncate
+two results for comparison in a unit test.
+
+20080521T1743Z <gchicares@sbcglobal.net> [1169]
+
+  census_document.hpp
+Remove a defective defect marker. See:
+  http://lists.nongnu.org/archive/html/lmi/2008-05/msg00008.html
+
+20080521T1744Z <gchicares@sbcglobal.net> [1169]
+
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+Permit what 'DefectLog' will soon require.
 
