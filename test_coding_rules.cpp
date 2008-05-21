@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.75 2008-04-29 23:06:25 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.76 2008-05-21 17:44:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -619,6 +619,10 @@ void check_label_indentation(file const& f)
 /// Tolerate certain lines that are historically slightly over the
 /// limit in the preamble, which in lmi logs is separated from actual
 /// log entries by the word "MAINTENANCE" on a line by itself.
+///
+/// Tolerate lines quoted with an initial '|' (so that 'DefectLog' can
+/// include code snippets), and http URLs optionally indented with
+/// blank spaces.
 
 void check_logs(file const& f)
 {
@@ -635,7 +639,7 @@ void check_logs(file const& f)
         entries = f.data();
         }
 
-    static boost::regex const r("\\n([^\\n]{71,})(?=\\n)");
+    static boost::regex const r("\\n(?!\\|)(?! *http:)([^\\n]{71,})(?=\\n)");
     boost::sregex_iterator i(entries.begin(), entries.end(), r);
     boost::sregex_iterator const omega;
     if(omega == i)

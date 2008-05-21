@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.38 2008-04-29 23:06:25 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.39 2008-05-21 17:44:34 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -324,7 +324,14 @@ this file's name merely avoids "camel case", which the author dislikes.
 This line's length is over the limit, but...acceptable in the preamble.
 MAINTENANCE
 After the "MAINTENANCE" line, a strict limit applies, but this line is
-just short enough.
+just short enough. However, certain literal quotations (e.g., snippets
+of code in 'DefectLog') shouldn't be wrapped artificially, so any line
+quoted with an initial '|', like this:
+| std::string s("I never loved a dear Gazelle--nor anything that cost me much");
+is permitted, as is any line that appears to be an optionally-indented
+http URL, like this:
+  http://www.gnu.org/server/standards/translations/priorities.html#Languages
+.
 EOF
 
 cat >eraseme_log_001.Log <<EOF
