@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_document.hpp,v 1.11 2008-03-25 16:46:18 chicares Exp $
+// $Id: census_document.hpp,v 1.12 2008-05-21 17:43:19 chicares Exp $
 
 #ifndef census_document_hpp
 #define census_document_hpp
@@ -34,9 +34,6 @@
 #include <wx/docview.h>
 
 class WXDLLIMPEXP_FWD_CORE wxListView;
-
-// TODO ?? This class and the illustration-document class have much in
-// common that should be factored into a base class.
 
 class CensusDocument
     :public wxDocument
