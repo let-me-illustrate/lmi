@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.29 2008-05-22 01:37:15 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.30 2008-05-22 13:53:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -73,9 +73,15 @@ std::vector<double> table_47_age_89()
     return std::vector<double>(q, q + n);
     }
 
-// SOA database 'qx_ins' table 256
-// "1934 UK A1924-29, Male+Female, Age nearest"
-// Parameters: min age 10; max age 121; select period 3; max select age 80.
+/// "1934 UK A1924-29, Male+Female, Age nearest"
+///
+/// SOA database 'qx_ins' table 256
+/// Parameters:
+///   min age 10; max age 121; select period 3; max select age 80
+/// This is a good table for testing because none of its parameters is
+/// degenerate: minimum age is not zero, and maximum age differs from
+/// maximum select age.
+
 std::vector<double> table_256(int age, int duration)
     {
     LMI_ASSERT(0 <= duration && duration <= 3);
@@ -175,34 +181,6 @@ std::vector<double> table_256(int age, int duration)
     int isel = 3 * (age - 10);
     std::vector<double> v(qsel + isel + duration, qsel + isel + 3);
     v.insert(v.end(), qult + age - 10, qult + nult);
-    return v;
-    }
-
-// SOA database 'qx_ins' table 308
-// "1956 Texas Chamberlain, Male & Female, Age next"
-// Parameters: min age 1; max age 105; select period 5; max select age 100.
-// Return q as though max age were 10: that's enough for testing.
-std::vector<double> table_308(int age)
-    {
-    // Select: issue age by duration.
-    static int const nsel = 25;
-    static double const qsel[nsel] =
-        //      0         1         2         3         4
-        {0.003341, 0.002463, 0.002225, 0.001852, 0.001483 // 1
-        ,0.000688, 0.001970, 0.001842, 0.001574, 0.001274 // 2
-        ,0.000596, 0.001722, 0.001636, 0.001395, 0.001124 // 3
-        ,0.000513, 0.001520, 0.001455, 0.001239, 0.000999 // 4
-        ,0.000438, 0.001339, 0.001294, 0.001116, 0.000917 // 5
-        };
-    // Ultimate: attained age.
-    static int const nult = 5;
-    static double const qult[nult] =
-        //      6         7         8         9        10
-        {0.001099, 0.000958, 0.000843, 0.000750, 0.000712
-        };
-    int isel = 5 * (age - 1);
-    std::vector<double> v(qsel + isel, qsel + isel + 5);
-    v.insert(v.end(), qult + age - 1, qult + nult);
     return v;
     }
 } // Unnamed namespace.
@@ -390,9 +368,6 @@ void test_e_reenter_at_inforce_duration()
     BOOST_TEST(rates == gauge);
 }
 
-/// Test with SOA table 308 in 'qx_ins', chosen because it's a select
-/// and ultimate table with a minimum age distinct from zero.
-
 void test_e_reenter_upon_rate_reset()
 {
     std::vector<double> rates;
@@ -401,11 +376,10 @@ void test_e_reenter_upon_rate_reset()
 
     e_actuarial_table_method const m = e_reenter_upon_rate_reset;
 
-    actuarial_table const table(qx_ins, 308);
+    actuarial_table const table(qx_ins, 256);
 
     int const min_age = table.min_age();
-//    int const max_age   = table.max_age();
-    int const max_age = 10; // Limited local implementation.
+    int const max_age = table.max_age();
     int const iss_age = 2 + min_age;
     int const length  = 1 + max_age - iss_age;
 
@@ -416,7 +390,7 @@ void test_e_reenter_upon_rate_reset()
     reset_dur     = 0;
     effective_age = iss_age - reset_dur;
     rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
-    gauge0 = table_308(effective_age);
+    gauge0 = table_256(effective_age, 0);
     gauge0.erase(gauge0.begin(), reset_dur + gauge0.begin());
     BOOST_TEST(rates == gauge0);
     gauge1 = table.values(effective_age, 1 + max_age - effective_age);
@@ -426,7 +400,7 @@ void test_e_reenter_upon_rate_reset()
     reset_dur     = 1;
     effective_age = iss_age - reset_dur;
     rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
-    gauge0 = table_308(effective_age);
+    gauge0 = table_256(effective_age, 0);
     gauge0.erase(gauge0.begin(), reset_dur + gauge0.begin());
     BOOST_TEST(rates == gauge0);
     gauge1 = table.values(effective_age, 1 + max_age - effective_age);
@@ -436,7 +410,7 @@ void test_e_reenter_upon_rate_reset()
     reset_dur     = 2;
     effective_age = iss_age - reset_dur;
     rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
-    gauge0 = table_308(effective_age);
+    gauge0 = table_256(effective_age, 0);
     gauge0.erase(gauge0.begin(), reset_dur + gauge0.begin());
     BOOST_TEST(rates == gauge0);
     gauge1 = table.values(effective_age, 1 + max_age - effective_age);
