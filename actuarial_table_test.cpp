@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.28 2008-05-21 03:51:10 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.29 2008-05-22 01:37:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -349,43 +349,42 @@ void test_e_reenter_at_inforce_duration()
 {
     std::vector<double> rates;
     std::vector<double> gauge;
-    int inforce_duration = 0;
 
-    // Map status [89]+0+j to rate for [89+0]+j .
-    inforce_duration = 0;
-    rates = actuarial_table(qx_cso, 47).values_elaborated
-        (89 - inforce_duration // issue_age
-        ,17 + inforce_duration // length
-        ,e_reenter_at_inforce_duration
-        ,     inforce_duration // full_years_since_issue
-        ,0                     // full_years_since_last_rate_reset
-        );
+    e_actuarial_table_method const m = e_reenter_at_inforce_duration;
+
+    actuarial_table const table(qx_cso, 47);
+
+    int const max_age     = table.max_age();
+    int const max_sel_age = table.max_select_age();
+
+    int pol_dur   = 0;
+    int reset_dur = 0; // Ignored for 'e_reenter_at_inforce_duration'.
+    int iss_age   = 0;
+    int length    = 0;
+
+    // Map status [max_sel_age]+0+j to rate for [max_sel_age+0]+j .
+    pol_dur = 0;
+    iss_age = max_sel_age - pol_dur;
+    length  = 1 + max_age - iss_age;
+    rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
     gauge = table_47_age_89();
-    gauge.insert(gauge.begin(), inforce_duration, 0.0);
+    gauge.insert(gauge.begin(), pol_dur, 0.0);
     BOOST_TEST(rates == gauge);
 
-    // Map status [78]+11+j to rate for [78+11]+j .
-    inforce_duration = 11;
-    rates = actuarial_table(qx_cso, 47).values_elaborated
-        (89 - inforce_duration // issue_age
-        ,17 + inforce_duration // length
-        ,e_reenter_at_inforce_duration
-        ,     inforce_duration // full_years_since_issue
-        ,0                     // full_years_since_last_rate_reset
-        );
+    pol_dur = 11;
+    iss_age = max_sel_age - pol_dur;
+    length  = 1 + max_age - iss_age;
+    rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
     gauge = table_47_age_89();
-    gauge.insert(gauge.begin(), inforce_duration, 0.0);
+    gauge.insert(gauge.begin(), pol_dur, 0.0);
     BOOST_TEST(rates == gauge);
 
-    // Map status [89]+1+j to rate for [89]+1+j . There is no rate for
-    // [89+1]+j because the maximum select age is 89.
-    rates = actuarial_table(qx_cso, 47).values_elaborated
-        (89 // issue_age
-        ,17 // length
-        ,e_reenter_at_inforce_duration
-        ,1  // full_years_since_issue
-        ,0  // full_years_since_last_rate_reset
-        );
+    // Map status [max_sel_age]+1+j to rate for [max_sel_age]+1+j .
+    // There is no select row for [max_sel_age+1]+j .
+    pol_dur = 1;
+    iss_age = max_sel_age;
+    length  = 1 + max_age - iss_age;
+    rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
     gauge = table_47_age_89();
     gauge[0] = 0.0;
     BOOST_TEST(rates == gauge);
