@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: DefectLog,v 1.3 2008-01-01 18:29:33 chicares Exp $
+// $Id: DefectLog,v 1.4 2008-05-23 04:07:26 chicares Exp $
 
 MAINTENANCE
 
@@ -46,7 +46,10 @@ Please write entries this way:
 [15] Repairs postponed: [cite tracker item]
 
 Limit lines to seventy characters so that they can be quoted and
-requoted in email without wrapping.
+requoted in email without wrapping, but don't wrap URLs or quoted code
+(mark quoted lines with an initial '|' so that 'make check_concinnity'
+doesn't complain about their length; it ignores lines consisting only
+of an http URL, optionally indented with spaces).
 
 //
 
@@ -143,4 +146,172 @@ Repairs completed:
 Repairs postponed: The defects critiqued above are ubiquitous. The
 premonitory defect marker cited above cannot yet be removed. See:
   https://savannah.nongnu.org/task/index.php?7061
+
+20080523T0407Z <gchicares@sbcglobal.net>
+
+Symptom: When a select table is indexed with an issue age greater than
+its maximum select age, returned rates are undefined, and a downstream
+assertion may fire, or a nonsensical illustration may be produced. To
+reproduce (before 20080518T1345Z):
+  Run an illustration with an issue age one greater than the maximum
+    select age for the current COI table, where the maximum select age
+    is less than the maximum (ultimate) age and product rules permit
+    such an issue age; and where a 'minimum' payment strategy is used,
+    for a product whose 'DB_MinPremType' is 'e_monthly_deduction'.
+  Save.
+  Reload the saved file.
+  Randomly navigate among controls.
+  Hit Enter.
+Error message:
+| Assertion 'materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month])' failed.
+| [file /opt/lmi/src/lmi/ihs_avmly.cpp, line 1659]
+Occurrence is random; moving focus among controls makes it likelier.
+
+Discovered: By local user, while running a production case.
+
+Location: Rate lookup for select and ultimate tables:
+  http://cvs.sv.gnu.org/viewvc/lmi/lmi/actuarial_table.cpp?annotate=1.37
+lines 497-500:
+
+|            int k =
+|                    std::max(0, issue_age - max_select_age_)
+|                +   std::min(max_select_age_, issue_age - min_age_) * (1 + select_period_)
+|                ;
+
+The number of select-period strides should be
+  (std::min(max_select_age_, issue_age) - min_age_)
+instead of
+  std::min(max_select_age_, issue_age - min_age_)
+; this defect is invisible when min_age_ equals zero, and the original
+unit test used a table with just such an infelicitous min_age_.
+
+The intermittent runtime error arises here:
+  http://cvs.sv.gnu.org/viewvc/lmi/lmi/ihs_avmly.cpp?annotate=1.71
+line 1659:
+
+|    HOPEFULLY(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
+
+Premonitory defect markers: None.
+
+Cause: The proximate cause of the intermittent error message is that
+felicitous QNaNs sometimes arose in the COI rates, and propagated
+through calculations until two quantities that were otherwise
+materially equal compared unequal--because a QNaN compares unequal to
+itself. The ultimate cause is that COI rates were looked up outside
+a vector's bounds, producing incorrect values. This defect evaded
+notice for years, presumably because products' maximum issue ages
+equalled their rate tables' maximum select ages, as one would normally
+expect; it was unmasked when an issue-age limit was lifted without
+adding more rates to the corresponding COI table, and without testing
+past the new age limit.
+
+Genesis: Introduced before the lmi epoch (see line 164 here:
+  actuarial_table.cpp,v 1.1 2005/01/14 19:47:44 chicares
+), most likely during a thoroughgoing redesign.
+
+Provident safeguards: Intermittent QNaNs were caught by haphazard
+assertions. Due to the distance between proximate and ultimate causes,
+however, the problem took many hours to localize.
+
+Similar defects elsewhere: This specific issue occurs nowhere else.
+That is not to say that array bounds are violated nowhere else; or
+that invalid parameters always elicit an error message instead of
+yielding invalid output.
+
+Note the inline documentation for actuarial_table::specific_values()
+as of 20080519T0111Z: the corrected behavior is consistent with prior
+intention, for backward compatibility. If a product permits issue at
+an age higher than a table's maximum select age due to a defect in its
+database, then no diagnostic is given, even though this behavior might
+not be desired. Thus, defects in proprietary product files (external
+to lmi proper) are possible; but they are easily avoided by setting
+the maximum issue age no higher than the maximum age for which select
+rates are provided.
+
+Critique of the past: The original unit tests lacked power to detect
+this defect because they used a table with minimum age zero, for which
+the original code happened to give the correct answer.
+
+An issue-age limit was lifted without testing. It is fortunate that
+this happened, because it unmasked a number of grave issues, both in
+lmi itself and in proprietary data files for the product series for
+which actuarial_table::values_elaborated() had been coded. Supposedly
+that implementation had been carefully tested, but no documentation
+tells how; it is said that sixty test cases were run, yet it is clear
+that the most obvious edge conditions cannot have been tested at all.
+
+The issue could have been localized with far less effort by using
+libstdc++'s debug mode, which became unusable in lmi a year ago:
+  http://lists.nongnu.org/archive/html/lmi/2007-04/msg00021.html
+It could almost certainly be made usable again by adding an extra
+build of wx, which would take less time to implement than it would
+have saved in this single instance--and of course it would be useful
+for other purposes, and could have revealed this problem earlier.
+
+Watchwords for the future: Inspect rate-table limits when liberalizing
+an issue limit. Include all edge conditions in unit tests. Elaborate
+unit tests can still have coverage gaps, which may well be invisible
+to their author, but apparent to others who look carefully at them or
+just test the system. The value of system testing is measured not by
+the number of test cases, but by the insight displayed in selecting
+and documenting them; and it cannot be measured at all if it is not
+documented. Penny-wise and pound-foolish strategies, like allowing
+libstdc++'s debug mode to become unusable, are not wise.
+
+Person-hours spent on diagnosis and repair: Sixty-three.
+
+Automated tests: Unit tests in 'actuarial_table_test.cpp' have been
+strengthened and redesigned as detailed in the next section.
+
+Repairs completed: See 'ChangeLog' (20080518T1345Z, 20080523T0153Z).
+
+The originally-noticed defect was undefined behavior due to indexing
+out of bounds when attempting to look up a rate for an age greater
+than the maximum select age. It was fixed by mapping
+  q[max_select_age+c]+t --> q[max_select_age]+c+t, 0 < c, 0 < t
+and testing and documenting that reasonable extension. As a further
+safeguard, bounds-checked standard-library function at() is used.
+
+20080518T1345Z add a failing unit test for past-the-end index
+20080518T1531Z reproduce defect within unit test: q[1+max_select_age]
+20080518T1544Z check bounds by using at() instead of operator[]
+20080518T1559Z prevent out-of-bounds indexing
+20080518T1637Z refactor for clarity
+20080518T1638Z add unit tests to prove the problem has been resolved
+20080519T0111Z document the corrected behavior
+20080520T0305Z make documentation difficult to misunderstand
+
+Analysis of nearby code finds a collateral defect: with an unexpected
+argument, code could attempt to access a rate for an age lower than a
+table's minimum. This causes a reproducible segfault, which is averted
+by asserting a precondition. It seems unlikely that this problem could
+have arisen along any path through production code, but the point is
+to make it clearly impossible.
+
+20080519T1157Z add a failing unit test for before-the-beginning index
+20080519T1158Z add an assertion, to throw instead of segfaulting
+
+Now the unit tests need to be refurbished. They've grown by accretion
+of independent parts with no overall design. One test was weakened by
+mistakenly truncating the results it compared; that was difficult even
+to discern, because a coding style that was pellucid for a single test
+became an obstacle to comprehension and maintenance as similar tests
+multiplied. Most of all, only small portions of certain tables were
+coded for testing (the end of one, and the beginning of another), and
+one table was dangerously degenerate in that its minimum age was zero:
+but for that unhappy choice, the defect that triggered this defect
+report would have been noticed long ago. Hard-coded numeric constants
+specific to particular tables must be abstracted first, so that these
+fragments of tables can be replaced by one complete table that has no
+such degeneracy. This work is arduous and distasteful, but it'll serve
+us well if any further problems are found.
+
+20080520T0307Z refactor for clarity
+20080520T1351Z abstract numeric constants for one table
+20080521T0351Z remove erroneous truncation of test results
+20080522T0137Z abstract numeric constants for another table
+20080522T1353Z use a table that's likelier to fail unit tests
+20080523T0153Z ditto
+
+Repairs postponed: None, except for libstc++ debug mode.
 
