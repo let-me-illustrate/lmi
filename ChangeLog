@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1059 2008-05-21 17:44:34 chicares Exp $
+// $Id: ChangeLog,v 1.1060 2008-05-23 04:07:27 chicares Exp $
 
 MAINTENANCE
 
@@ -16734,11 +16734,6 @@ Refactor.
   actuarial_table_test.cpp
 Refactor to expose redundancy and to increase flexibility.
 
-20080520T1351Z <gchicares@sbcglobal.net> [1170]
-
-  actuarial_table_test.cpp
-Use a table that's likelier to fail unit tests.
-
 20080521T0351Z <gchicares@sbcglobal.net> [1170]
 
   actuarial_table_test.cpp
@@ -16756,4 +16751,35 @@ Remove a defective defect marker. See:
   test_coding_rules.cpp
   test_coding_rules_test.sh
 Permit what 'DefectLog' will soon require.
+
+20080522T0137Z <gchicares@sbcglobal.net> [1169]
+
+  actuarial_table_test.cpp
+Refactor to increase clarity and flexibility.
+
+20080522T1353Z <gchicares@sbcglobal.net> [1169]
+
+  actuarial_table_test.cpp
+Replace a partial with a complete table. Using only the end of a table
+is expedient when potential defects are expected at the end, but using
+a complete table makes it easier to look for defects where unexpected.
+The original table is slightly degenerate in that its maximum age
+equals its maximum select age plus its select period; any degeneracy
+in a test table potentially permits defective code to pass.
+
+20080523T0153Z <gchicares@sbcglobal.net> [1169]
+
+  actuarial_table_test.cpp
+Use a table that's likelier to fail unit tests. The 20080522T1353Z
+rationale applies here as well. Furthermore, the table now replaced
+was dangerously degenerate. For instance, it had several runs of
+identical values in succession--most notably, its last six values were
+all zero. Worst of all, its minimum age was zero, which is why the
+defect fixed 20080518T1559Z was not detected earlier; experimentally
+reverting that correction now produces fourteen unit-test failures.
+
+20080523T0407Z <gchicares@sbcglobal.net> [1169]
+
+  DefectLog
+Draw lessons from recent experience.
 
