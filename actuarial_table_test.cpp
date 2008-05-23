@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.30 2008-05-22 13:53:30 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.31 2008-05-23 01:53:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -56,21 +56,6 @@ std::vector<double> table_42(int age)
         ,0.22177, 0.23698, 0.25345, 0.27211, 0.29590, 0.32996, 0.38455, 0.48020, 0.65798, 1.00000 // 90
         };
     return std::vector<double>(q + age, q + n);
-    }
-
-// SOA database 'qx_cso' table 47
-// "1980 US CSO Selection Factors, Female"
-// Parameters: min age 0; max age 105; select period 10; max select age 89.
-std::vector<double> table_47_age_89()
-    {
-    static int const n = 17;
-    static double const q[n] =
-        //  0     1     2     3     4     5     6     7     8     9
-        {                                                      0.60 //  80
-        ,0.60, 0.64, 0.68, 0.68, 0.72, 0.75, 0.75, 0.80, 0.80, 1.00 //  90
-        ,0.00, 0.00, 0.00, 0.00, 0.00, 0.00                         // 100
-        };
-    return std::vector<double>(q, q + n);
     }
 
 /// "1934 UK A1924-29, Male+Female, Age nearest"
@@ -189,12 +174,12 @@ void mete()
 {
     std::vector<double> rates;
 
-    rates = actuarial_table(qx_cso, 42).values( 0, 100);
-    rates = actuarial_table(qx_cso, 42).values(35,  65);
-    rates = actuarial_table(qx_cso, 47).values(89,  17);
-    rates = actuarial_table(qx_cso, 47).values(80,  26);
-    rates = actuarial_table(qx_cso, 47).values(80,  20);
-    rates = actuarial_table(qx_cso, 47).values(20,  20);
+    rates = actuarial_table(qx_cso,  42).values( 0, 100);
+    rates = actuarial_table(qx_cso,  42).values(35,  65);
+    rates = actuarial_table(qx_ins, 256).values(90,  32);
+    rates = actuarial_table(qx_ins, 256).values(80,  42);
+    rates = actuarial_table(qx_ins, 256).values(20, 102);
+    rates = actuarial_table(qx_ins, 256).values(10, 112);
 }
 
 void assay_speed()
@@ -210,9 +195,9 @@ void test_precondition_failures()
         ,"There is no table number 0 in file 'nonexistent'."
         );
 
-    actuarial_table z(qx_cso, 47);
+    actuarial_table z(qx_ins, 256);
     BOOST_TEST_THROW
-        (z.values_elaborated(3, 8, e_reenter_never, 0, 0)
+        (z.values_elaborated(80, 42, e_reenter_never, 0, 0)
         ,std::runtime_error
         ,"Table-lookup method 0 is not valid in this context."
         );
@@ -273,17 +258,6 @@ void test_e_reenter_never()
     rates = actuarial_table(qx_cso, 42).values(35,  65);
     BOOST_TEST(rates == table_42(35));
 
-    rates = actuarial_table(qx_cso, 47).values(89,  17);
-    BOOST_TEST(rates == table_47_age_89());
-
-    // Arguably, this ought to signal an error, because 90 exceeds the
-    // maximum select age. However, this behavior is reasonable, and
-    // the e_reenter_at_inforce_duration implementation relies on it.
-    rates = actuarial_table(qx_cso, 47).values(90,  16);
-    gauge = table_47_age_89();
-    gauge.erase(gauge.begin());
-    BOOST_TEST(rates == gauge);
-
     rates = actuarial_table(qx_ins, 256).values(10, 112);
     gauge = table_256(10, 0);
     BOOST_TEST(rates == gauge);
@@ -292,6 +266,9 @@ void test_e_reenter_never()
     gauge = table_256(80, 0);
     BOOST_TEST(rates == gauge);
 
+    // Issue age exceeds maximum select age. Arguably, this ought to
+    // signal an error; however, this behavior is reasonable, and the
+    // 'e_reenter_at_inforce_duration' implementation relies on it.
     rates = actuarial_table(qx_ins, 256).values(81,  41);
     BOOST_TEST_EQUAL(rates[0], 0.10486); // [81]+0 --> [80]+1
     BOOST_TEST_EQUAL(rates[1], 0.13557); // [81]+1 --> [80]+2
@@ -330,7 +307,7 @@ void test_e_reenter_at_inforce_duration()
 
     e_actuarial_table_method const m = e_reenter_at_inforce_duration;
 
-    actuarial_table const table(qx_cso, 47);
+    actuarial_table const table(qx_ins, 256);
 
     int const max_age     = table.max_age();
     int const max_sel_age = table.max_select_age();
@@ -345,7 +322,7 @@ void test_e_reenter_at_inforce_duration()
     iss_age = max_sel_age - pol_dur;
     length  = 1 + max_age - iss_age;
     rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
-    gauge = table_47_age_89();
+    gauge = table_256(iss_age, 0);
     gauge.insert(gauge.begin(), pol_dur, 0.0);
     BOOST_TEST(rates == gauge);
 
@@ -353,7 +330,7 @@ void test_e_reenter_at_inforce_duration()
     iss_age = max_sel_age - pol_dur;
     length  = 1 + max_age - iss_age;
     rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
-    gauge = table_47_age_89();
+    gauge = table_256(iss_age + pol_dur, 0);
     gauge.insert(gauge.begin(), pol_dur, 0.0);
     BOOST_TEST(rates == gauge);
 
@@ -363,7 +340,7 @@ void test_e_reenter_at_inforce_duration()
     iss_age = max_sel_age;
     length  = 1 + max_age - iss_age;
     rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
-    gauge = table_47_age_89();
+    gauge = table_256(iss_age, 0);
     gauge[0] = 0.0;
     BOOST_TEST(rates == gauge);
 }
