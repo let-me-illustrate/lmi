@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.33 2008-05-24 12:05:17 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.34 2008-05-24 12:53:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -217,19 +217,19 @@ void test_lookup_errors()
     BOOST_TEST_THROW
         (actuarial_table(qx_cso, 42).values(  0,  -1)
         ,std::runtime_error
-        ,"Assertion '0 <= length' failed."
+        ,"Assertion '0 <= length && length <= 1 + max_age_ - issue_age' failed."
         );
 
     BOOST_TEST_THROW
         (actuarial_table(qx_cso, 42).values(  0, 101)
         ,std::runtime_error
-        ,"Assertion 'issue_age + length <= max_age_ + 1' failed."
+        ,"Assertion '0 <= length && length <= 1 + max_age_ - issue_age' failed."
         );
 
     BOOST_TEST_THROW
         (actuarial_table(qx_cso, 42).values(  1, 100)
         ,std::runtime_error
-        ,"Assertion 'issue_age + length <= max_age_ + 1' failed."
+        ,"Assertion '0 <= length && length <= 1 + max_age_ - issue_age' failed."
         );
 
     BOOST_TEST_THROW
