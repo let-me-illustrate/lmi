@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.34 2008-05-24 12:53:33 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.35 2008-05-24 14:54:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -353,6 +353,12 @@ void test_e_reenter_at_inforce_duration()
 
     BOOST_TEST_THROW
         (table.values_elaborated(min_age, 1, m, 999, 0)
+        ,std::runtime_error
+        ,"Assertion 'min_age_ <= issue_age && issue_age <= max_age_' failed."
+        );
+
+    BOOST_TEST_THROW
+        (table.values_elaborated(min_age - 999, 1000, m, 999, 0)
         ,std::runtime_error
         ,"Assertion 'min_age_ <= issue_age && issue_age <= max_age_' failed."
         );
