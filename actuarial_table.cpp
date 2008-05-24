@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.42 2008-05-19 11:58:29 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.43 2008-05-24 12:53:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -473,8 +473,7 @@ std::vector<double> actuarial_table::specific_values
     ) const
 {
     LMI_ASSERT(min_age_ <= issue_age && issue_age <= max_age_);
-    LMI_ASSERT(0 <= length);
-    LMI_ASSERT(issue_age + length <= max_age_ + 1);
+    LMI_ASSERT(0 <= length && length <= 1 + max_age_ - issue_age);
 
     std::vector<double> v;
     switch(table_type_)
