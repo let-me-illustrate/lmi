@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.31 2008-05-23 01:53:33 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.32 2008-05-24 11:37:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -309,6 +309,7 @@ void test_e_reenter_at_inforce_duration()
 
     actuarial_table const table(qx_ins, 256);
 
+    int const min_age     = table.min_age();
     int const max_age     = table.max_age();
     int const max_sel_age = table.max_select_age();
 
@@ -343,6 +344,12 @@ void test_e_reenter_at_inforce_duration()
     gauge = table_256(iss_age, 0);
     gauge[0] = 0.0;
     BOOST_TEST(rates == gauge);
+
+    BOOST_TEST_THROW
+        (table.values_elaborated(min_age - 1, 1, m, 0, 0)
+        ,std::runtime_error
+        ,"Assertion 'min_age_ <= issue_age && issue_age <= max_age_' failed."
+        );
 }
 
 void test_e_reenter_upon_rate_reset()
