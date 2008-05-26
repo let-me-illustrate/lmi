@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.36 2008-05-24 15:11:37 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.37 2008-05-26 11:57:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -354,7 +354,7 @@ void test_e_reenter_at_inforce_duration()
     BOOST_TEST_THROW
         (table.values_elaborated(min_age, 1, m, 999, 0)
         ,std::runtime_error
-        ,"Assertion 'min_age_ <= issue_age && issue_age <= max_age_' failed."
+        ,"Assertion 'full_years_since_issue < 1 + max_age_ - issue_age' failed."
         );
 
     BOOST_TEST_THROW
@@ -420,9 +420,13 @@ void test_e_reenter_upon_rate_reset()
     BOOST_TEST(rates == gauge1);
 
     reset_dur = 999;
-    rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
-    BOOST_TEST(rates == gauge0);
-    BOOST_TEST(rates == gauge1);
+    BOOST_TEST_THROW
+        (table.values_elaborated(iss_age, length, m, pol_dur, reset_dur)
+        ,std::runtime_error
+        ,"Assertion"
+         " 'full_years_since_last_rate_reset < 1 + max_age_ - issue_age'"
+         " failed."
+        );
 
     BOOST_TEST_THROW
         (table.values_elaborated(min_age - 1, 1, m, 0, 0)
