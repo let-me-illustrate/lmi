@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1060 2008-05-23 04:07:27 chicares Exp $
+// $Id: ChangeLog,v 1.1061 2008-05-26 11:57:32 chicares Exp $
 
 MAINTENANCE
 
@@ -16782,4 +16782,39 @@ reverting that correction now produces fourteen unit-test failures.
 
   DefectLog
 Draw lessons from recent experience.
+
+20080524T1137Z <gchicares@sbcglobal.net> [1169]
+
+  actuarial_table_test.cpp
+Explicitly test another edge condition.
+
+20080524T1205Z <gchicares@sbcglobal.net> [1169]
+
+  actuarial_table_test.cpp
+Explicitly test another edge condition.
+
+20080524T1253Z <gchicares@sbcglobal.net> [1169]
+
+  actuarial_table.cpp
+  actuarial_table_test.cpp
+Refactor.
+
+20080524T1454Z <gchicares@sbcglobal.net> [1169]
+
+  actuarial_table_test.cpp
+Add a test to reveal a weakness.
+
+20080524T1511Z <gchicares@sbcglobal.net> [1169]
+
+  actuarial_table.cpp
+  actuarial_table_test.cpp
+Remove the weakness revealed 20080524T1454Z, incidentally refactoring
+to remove the direct restriction on algebraic sign of the adjustment
+for 'e_reenter_upon_rate_reset' as will soon become important.
+
+20080526T1157Z <gchicares@sbcglobal.net> [1169]
+
+  actuarial_table.cpp
+  actuarial_table_test.cpp
+Assert more preconditions.
 
