@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.37 2008-05-26 11:57:32 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.38 2008-05-26 12:49:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -414,14 +414,12 @@ void test_e_reenter_upon_rate_reset()
     BOOST_TEST(rates == gauge1);
 
     reset_dur     = 3;
-    effective_age = iss_age - reset_dur;
     rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
     BOOST_TEST(rates == gauge0);
     BOOST_TEST(rates == gauge1);
 
-    reset_dur = 999;
     BOOST_TEST_THROW
-        (table.values_elaborated(iss_age, length, m, pol_dur, reset_dur)
+        (table.values_elaborated(min_age, 1, m, 0, 999)
         ,std::runtime_error
         ,"Assertion"
          " 'full_years_since_last_rate_reset < 1 + max_age_ - issue_age'"
