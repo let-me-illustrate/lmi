@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date.hpp,v 1.13 2008-01-01 18:29:35 chicares Exp $
+// $Id: calendar_date.hpp,v 1.14 2008-05-28 02:53:18 chicares Exp $
 
 #ifndef calendar_date_hpp
 #define calendar_date_hpp
@@ -199,13 +199,24 @@ calendar_date add_years_and_months
     ,bool                 is_curtate
     );
 
-/// Age on 'as_of_date' if born on 'birthdate'. Throws an exception
-/// if 'as_of_date' precedes 'birthdate'.
+/// Age on 'as_of_date' if born on 'birthdate'.
+///
+/// Throws an exception if 'as_of_date' precedes 'birthdate'.
 
 int attained_age
     (calendar_date const& birthdate
     ,calendar_date const& as_of_date
     ,bool                 use_age_nearest_birthday
+    );
+
+/// Anniversary of 'base_date' on or after which 'other_date' occurs.
+///
+/// Result is not constrained as to sign. Any date is its own zeroth
+/// anniversary.
+
+int integral_duration
+    (calendar_date const& base_date
+    ,calendar_date const& other_date
     );
 
 /// Earliest as-of date consonant with a given maximum age and epoch.

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date_test.cpp,v 1.21 2008-05-28 01:11:28 chicares Exp $
+// $Id: calendar_date_test.cpp,v 1.22 2008-05-28 02:53:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -50,6 +50,7 @@ struct CalendarDateTest
         TestLeapYear();
         TestIncrementing();
         TestAgeCalculations();
+        TestIntegralDuration();
         TestBirthdateLimits();
         TestBirthdateLimitsExhaustively(false);
         TestBirthdateLimitsExhaustively(true);
@@ -64,6 +65,7 @@ struct CalendarDateTest
     static void TestLeapYear();
     static void TestIncrementing();
     static void TestAgeCalculations();
+    static void TestIntegralDuration();
     static void TestBirthdateLimits();
     static void TestBirthdateLimitsExhaustively(bool anb);
     static void TestIo();
@@ -558,6 +560,86 @@ void CalendarDateTest::TestAgeCalculations()
         ,std::runtime_error
         ,"As-of date (2003-01-01) precedes birthdate (2003-01-02)."
         );
+}
+
+void CalendarDateTest::TestIntegralDuration()
+{
+    calendar_date base_date;
+    calendar_date other_date;
+
+    base_date  = calendar_date(2000,  1,  1);
+
+    // Test whole-year intervals.
+
+    other_date = calendar_date(1999,  1,  1);
+    BOOST_TEST_EQUAL(-1, integral_duration(base_date, other_date));
+
+    other_date = calendar_date(2000,  1,  1);
+    BOOST_TEST_EQUAL( 0, integral_duration(base_date, other_date));
+
+    other_date = calendar_date(2001,  1,  1);
+    BOOST_TEST_EQUAL( 1, integral_duration(base_date, other_date));
+
+    // Test non-whole-year intervals.
+
+    other_date = calendar_date(1999,  2,  2);
+    BOOST_TEST_EQUAL(-1, integral_duration(base_date, other_date));
+
+    other_date = calendar_date(2000,  2,  2);
+    BOOST_TEST_EQUAL( 0, integral_duration(base_date, other_date));
+
+    other_date = calendar_date(2001,  2,  2);
+    BOOST_TEST_EQUAL( 1, integral_duration(base_date, other_date));
+
+    // Test leap-year-day base date.
+
+    base_date  = calendar_date(2000,  2, 29);
+
+    other_date = calendar_date(1999,  2, 28);
+    BOOST_TEST_EQUAL(-2, integral_duration(base_date, other_date));
+
+    other_date = calendar_date(1999,  3,  1);
+    BOOST_TEST_EQUAL(-1, integral_duration(base_date, other_date));
+
+    other_date = calendar_date(2000,  2, 28);
+    BOOST_TEST_EQUAL(-1, integral_duration(base_date, other_date));
+
+    other_date = calendar_date(2000,  2, 29);
+    BOOST_TEST_EQUAL( 0, integral_duration(base_date, other_date));
+
+    other_date = calendar_date(2000,  3,  1);
+    BOOST_TEST_EQUAL( 0, integral_duration(base_date, other_date));
+
+    other_date = calendar_date(2001,  2, 28);
+    BOOST_TEST_EQUAL( 0, integral_duration(base_date, other_date));
+
+    other_date = calendar_date(2001,  3,  1);
+    BOOST_TEST_EQUAL( 1, integral_duration(base_date, other_date));
+
+    // Test leap-year-day other date.
+
+    other_date = calendar_date(2000,  2, 29);
+
+    base_date  = calendar_date(1999,  2, 28);
+    BOOST_TEST_EQUAL( 1, integral_duration(base_date, other_date));
+
+    base_date  = calendar_date(1999,  3,  1);
+    BOOST_TEST_EQUAL( 0, integral_duration(base_date, other_date));
+
+    base_date  = calendar_date(2000,  2, 28);
+    BOOST_TEST_EQUAL( 0, integral_duration(base_date, other_date));
+
+    base_date  = calendar_date(2000,  2, 29);
+    BOOST_TEST_EQUAL( 0, integral_duration(base_date, other_date));
+
+    base_date  = calendar_date(2000,  3,  1);
+    BOOST_TEST_EQUAL(-1, integral_duration(base_date, other_date));
+
+    base_date  = calendar_date(2001,  2, 28);
+    BOOST_TEST_EQUAL(-1, integral_duration(base_date, other_date));
+
+    base_date  = calendar_date(2001,  3,  1);
+    BOOST_TEST_EQUAL(-2, integral_duration(base_date, other_date));
 }
 
 void CalendarDateTest::TestBirthdateLimits()
