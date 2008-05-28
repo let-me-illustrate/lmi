@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date.hpp,v 1.14 2008-05-28 02:53:18 chicares Exp $
+// $Id: calendar_date.hpp,v 1.15 2008-05-28 14:15:37 chicares Exp $
 
 #ifndef calendar_date_hpp
 #define calendar_date_hpp
@@ -213,6 +213,12 @@ int attained_age
 ///
 /// Result is not constrained as to sign. Any date is its own zeroth
 /// anniversary.
+///
+/// It is important to select 'base_date' carefully, because these
+/// values
+///    attained_age(X, Y)
+///   -attained_age(Y, X)
+/// need not be equal.
 
 int integral_duration
     (calendar_date const& base_date
