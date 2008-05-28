@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date_test.cpp,v 1.20 2008-03-30 02:29:47 chicares Exp $
+// $Id: calendar_date_test.cpp,v 1.21 2008-05-28 01:11:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -236,8 +236,8 @@ void CalendarDateTest::TestIncrementing()
     // anniversary falls on a nonexistent day of the month, then it's
     // moved to the last day of the month. This is just one arbitrary
     // rule, and others are possible. For instance, people born on
-    // leap-year day cannot vote on the 28th of February in the year
-    // they attain legal adulthood.
+    // leap-year day attain legal adulthood on the first of March in
+    // most US states.
 
     // Non-curtate tests.
 
@@ -527,6 +527,14 @@ void CalendarDateTest::TestAgeCalculations()
     effective_date = calendar_date(2004,  3,  1);
     BOOST_TEST_EQUAL(48, attained_age(birth_date, effective_date, anb));
     BOOST_TEST_EQUAL(48, attained_age(birth_date, effective_date, alb));
+
+    effective_date = calendar_date(2005,  2, 28);
+    BOOST_TEST_EQUAL(49, attained_age(birth_date, effective_date, anb));
+    BOOST_TEST_EQUAL(48, attained_age(birth_date, effective_date, alb));
+
+    effective_date = calendar_date(2005,  3,  1);
+    BOOST_TEST_EQUAL(49, attained_age(birth_date, effective_date, anb));
+    BOOST_TEST_EQUAL(49, attained_age(birth_date, effective_date, alb));
 
     // Test leap-year-day effective date, even though business custom
     // would probably forbid using it as the basis for a series of
