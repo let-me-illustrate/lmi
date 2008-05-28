@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1061 2008-05-26 11:57:32 chicares Exp $
+// $Id: ChangeLog,v 1.1062 2008-05-28 14:18:40 chicares Exp $
 
 MAINTENANCE
 
@@ -16817,4 +16817,42 @@ for 'e_reenter_upon_rate_reset' as will soon become important.
   actuarial_table.cpp
   actuarial_table_test.cpp
 Assert more preconditions.
+
+20080526T1249Z <gchicares@sbcglobal.net> [1169]
+
+  actuarial_table_test.cpp
+Refactor.
+
+20080528T0111Z <gchicares@sbcglobal.net> [1169]
+
+  calendar_date_test.cpp
+Strengthen unit tests; improve documentation.
+
+20080528T0253Z <gchicares@sbcglobal.net> [1169]
+
+  calendar_date.cpp
+  calendar_date.hpp
+  calendar_date_test.cpp
+Add a free function to measure duration between two dates.
+
+20080528T1410Z <gchicares@sbcglobal.net> [1169]
+
+  ihs_basicval.cpp
+For durations, prefer integral_duration() to attained_age(): the
+former has one fewer argument that might be incorrect, while the
+latter permits only one ordering of date arguments and otherwise gives
+a runtime diagnostic that's appropriate only for age calculations.
+
+20080528T1415Z <gchicares@sbcglobal.net> [1169]
+
+  calendar_date.hpp
+Document integral_duration()'s especially strong noncommutativity.
+Ordinary subtraction is commutative except for sign, but for this
+function |f(a,b)| may not equal |f(b,a)|.
+
+20080528T1418Z <gchicares@sbcglobal.net> [1169]
+
+  ihs_basicval.cpp
+Fix defect introduced 20071019T0250. Commutativity was incorrectly
+assumed: see the 20080528T1415Z change.
 

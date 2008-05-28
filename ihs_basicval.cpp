@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.42 2008-05-28 14:10:35 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.43 2008-05-28 14:18:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1503,7 +1503,7 @@ std::vector<double> BasicValues::GetActuarialTable
             ,GetLength()
             ,method
             ,Input_->InforceYear
-            ,integral_duration(Input_->LastCoiReentryDate, Input_->EffDate)
+            ,-integral_duration(Input_->EffDate, Input_->LastCoiReentryDate)
             );
         }
     else
