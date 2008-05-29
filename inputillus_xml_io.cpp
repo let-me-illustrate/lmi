@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.32 2008-01-21 19:00:58 chicares Exp $
+// $Id: inputillus_xml_io.cpp,v 1.33 2008-05-29 23:55:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -224,10 +224,12 @@ using namespace xml;
         EffDate = calendar_date();
         }
 
-    if(EffDate < LastCoiReentryDate)
-        {
-        LastCoiReentryDate = EffDate;
-        }
+    // 'LastCoiReentryDate' was introduced 20071017T1454Z. For files
+    // saved before then, its default value may be inappropriate.
+    LastCoiReentryDate = std::min
+        (LastCoiReentryDate.value()
+        ,add_years(EffDate, InforceYear, true)
+        );
 
 // If you want to see the ones that didn't get assigned:
 //std::ostringstream oss;
