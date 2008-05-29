@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.55 2008-01-21 19:00:58 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.56 2008-05-29 23:55:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,6 +30,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "calendar_date.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "global_settings.hpp"
@@ -425,7 +426,12 @@ void Input::DoHarmonize()
         );
     FlatExtra.enable(database_->Query(DB_AllowFlatExtras));
 
-    LastCoiReentryDate.maximum(EffectiveDate.value());
+    calendar_date const most_recent_anniversary = add_years
+        (EffectiveDate.value()
+        ,InforceYear  .value()
+        ,true
+        );
+    LastCoiReentryDate.maximum(most_recent_anniversary);
     // DATABASE !! Here, 'e_reenter_upon_rate_reset' would be better
     // than the hardcoded '2'. However, '2' is already hardcoded in
     // the 'dbnames.xpp' explanation of 'LastCoiReentryDate', so
