@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.56 2008-05-29 23:55:20 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.57 2008-05-30 16:57:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -373,6 +373,12 @@ void Input::DoHarmonize()
 
     RetirementAge   .enable("No"  == DeprecatedUseDOR);
     DateOfRetirement.enable("Yes" == DeprecatedUseDOR);
+
+    // DATABASE !! Maximum illustrated age should be distinguished
+    // from maturity age (which shouldn't be called 'EndtAge' because
+    // the contract needn't endow).
+    int max_age = static_cast<int>(database_->Query(DB_EndtAge));
+    InforceYear.maximum(-1 + max_age - IssueAge.value());
 
     UnderwritingClass.allow(mce_ultrapreferred, database_->Query(DB_AllowUltraPrefClass));
     UnderwritingClass.allow(mce_preferred     , database_->Query(DB_AllowPreferredClass));
