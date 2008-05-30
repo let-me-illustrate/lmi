@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.hpp,v 1.11 2008-05-20 03:05:35 chicares Exp $
+// $Id: actuarial_table.hpp,v 1.12 2008-05-30 01:20:38 chicares Exp $
 
 #ifndef actuarial_table_hpp
 #define actuarial_table_hpp
@@ -54,10 +54,21 @@
 /// that [C+Z] is the closest permissible select age.
 ///
 /// Let
-///   j = projected duration from date of [re]illustration
-///   r = number of full years since last rate reset
-///   s = number of full years since issue
-/// for 0 <= j, r, s.
+///   CD = contract date
+///   SD = [re]illustration date, CD <= SD
+///   RD = last reset date,       RD <= SD
+/// where RD may in general precede, follow, or coincide with CD. Let
+///   s = [years by which SD follows  CD], 0 <=  s
+///   r = [years by which RD precedes CD], r <= -s
+/// where '[]' is the greatest-integer function. Both durations are
+/// measured from CD because the absolute value of the number of full
+/// years between two dates depends on which is taken as the base for
+/// calculation. They're measured in opposite directions to conform to
+/// customary usage: speaking loosely, rates reset "r years ago", but
+/// a reillustration begins "s years hence". Let
+///   x = normal issue age
+///   j = projection duration, measured from from (CD+s), 0 <= j
+/// so the first rate actually used is for projection duration j=0.
 ///
 /// e_reenter_never
 ///   map [x]+s+j to [x]+s+j [the identity mapping]
@@ -75,12 +86,14 @@
 /// guaranteed.
 ///
 /// e_reenter_upon_rate_reset
-///   map [x]+s+j to [x-r]+s+r+j
+///   map [x]+s+j to [x-r]+r+s+j
 /// Use this when rates were reset on a specified date, but
 /// illustrations are to reflect reentry only retrospectively, e.g.,
-/// because no future reset is guaranteed. This reset date can precede
-/// the issue date, in order to accommodate certificates issued to a
-/// group with a common reset date.
+/// because no future reset is guaranteed. Certificates issued on
+/// divers dates may share a common group reset date that need not
+/// coincide with a certificate anniversary; in that case, rates reset
+/// on the last certificate anniversary preceding or coincident with
+/// the group reset date.
 ///
 /// All three methods are affected by the "Important note" above: even
 /// e_reenter_never, if [x] exceeds max_select_age_ (see documentation
