@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1062 2008-05-28 14:18:40 chicares Exp $
+// $Id: ChangeLog,v 1.1063 2008-05-30 16:58:28 chicares Exp $
 
 MAINTENANCE
 
@@ -16855,4 +16855,36 @@ function |f(a,b)| may not equal |f(b,a)|.
   ihs_basicval.cpp
 Fix defect introduced 20071019T0250. Commutativity was incorrectly
 assumed: see the 20080528T1415Z change.
+
+20080529T2355Z <gchicares@sbcglobal.net> [1169]
+
+  input.cpp
+  input_harmonization.cpp
+  inputillus_xml_io.cpp
+Increase upper limit of input 'LastCoiReentryDate' from effective date
+to most recent anniversary.
+
+20080530T0120Z <gchicares@sbcglobal.net> [1169]
+
+  actuarial_table.hpp
+Improve documentation.
+
+20080530T1656Z <gchicares@sbcglobal.net> [1169]
+
+  actuarial_table.hpp
+Fix defect introduced 20080530T0120Z. In a comment, the wrong term was
+negated when stating a precondition. Measuring durations in opposite
+directions creates confusion; this should be refactored soon.
+
+20080530T1657Z <gchicares@sbcglobal.net> [1169]
+
+  input_harmonization.cpp
+Limit 'InforceYear'.
+
+20080530T1658Z <gchicares@sbcglobal.net> [1169]
+
+  actuarial_table.cpp
+Fix defect introduced 20071006T2256Z. Inforce had not been considered
+appropriately. This change is committed before writing unit tests in
+order to get it into the hands of testers with celerity.
 
