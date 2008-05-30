@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.hpp,v 1.12 2008-05-30 01:20:38 chicares Exp $
+// $Id: actuarial_table.hpp,v 1.13 2008-05-30 16:56:10 chicares Exp $
 
 #ifndef actuarial_table_hpp
 #define actuarial_table_hpp
@@ -58,8 +58,8 @@
 ///   SD = [re]illustration date, CD <= SD
 ///   RD = last reset date,       RD <= SD
 /// where RD may in general precede, follow, or coincide with CD. Let
-///   s = [years by which SD follows  CD], 0 <=  s
-///   r = [years by which RD precedes CD], r <= -s
+///   s = [years by which SD follows  CD],  0 <= s
+///   r = [years by which RD precedes CD], -r <= s
 /// where '[]' is the greatest-integer function. Both durations are
 /// measured from CD because the absolute value of the number of full
 /// years between two dates depends on which is taken as the base for
