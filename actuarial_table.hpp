@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.hpp,v 1.13 2008-05-30 16:56:10 chicares Exp $
+// $Id: actuarial_table.hpp,v 1.14 2008-05-31 02:55:24 chicares Exp $
 
 #ifndef actuarial_table_hpp
 #define actuarial_table_hpp
@@ -93,7 +93,9 @@
 /// divers dates may share a common group reset date that need not
 /// coincide with a certificate anniversary; in that case, rates reset
 /// on the last certificate anniversary preceding or coincident with
-/// the group reset date.
+/// the group reset date. As the same case makes clear, there can be
+/// no lower limit on the reset date: it can even precede a group
+/// insured's date of birth.
 ///
 /// All three methods are affected by the "Important note" above: even
 /// e_reenter_never, if [x] exceeds max_select_age_ (see documentation
