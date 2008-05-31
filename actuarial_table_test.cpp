@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.43 2008-05-31 15:04:23 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.44 2008-05-31 15:51:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -313,10 +313,11 @@ void test_e_reenter_at_inforce_duration()
     int const max_age     = table.max_age();
     int const max_sel_age = table.max_select_age();
 
-    int pol_dur   = 0;
-    int reset_dur = 0; // Ignored for 'e_reenter_at_inforce_duration'.
-    int iss_age   = 0;
-    int length    = 0;
+    int const reset_dur = 0; // Ignored for 'e_reenter_at_inforce_duration'.
+
+    int pol_dur = 0;
+    int iss_age = 0;
+    int length  = 0;
 
     for(int i = max_sel_age - min_age; 0 <= i; --i)
         {
@@ -379,8 +380,9 @@ void test_e_reenter_upon_rate_reset()
     int const iss_age = 2 + min_age;
     int const length  = 1 + max_age - iss_age;
 
-    int pol_dur       = 0; // Ignored for 'e_reenter_upon_rate_reset'.
-    int reset_dur     = 0;
+    int const pol_dur = 0; // Ignored for 'e_reenter_upon_rate_reset'.
+
+    int reset_dur = 0;
 
     for(int i = 0; i < select_period; ++i)
         {
