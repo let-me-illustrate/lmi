@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.45 2008-05-31 16:59:45 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.46 2008-05-31 23:50:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -421,8 +421,13 @@ void test_e_reenter_upon_rate_reset()
         }
 
     // 'e_reenter_upon_rate_reset' and 'e_reenter_at_inforce_duration'
-    // become equivalent once age has been set back by a distance
-    // greater than the select period.
+    // become roughly equivalent once age has been set back by a
+    // distance greater than the select period. They aren't quite the
+    // same in two respects: rates for
+    //   issue age + t, t in [0, current (zero-based) policy duration]
+    // are indeterminate and need not compare equal; and, because the
+    // methods have different semantics, 'e_reenter_upon_rate_reset'
+    // does not limit the setback.
     pol_dur   = 1 + select_period;
     reset_dur = -pol_dur;
     std::vector<double> rates0 = table.values_elaborated
@@ -432,6 +437,7 @@ void test_e_reenter_upon_rate_reset()
         ,pol_dur
         ,reset_dur
         );
+    rates0.erase(rates0.begin(), rates0.begin() - reset_dur);
     std::vector<double> rates1 = table.values_elaborated
         (iss_age
         ,length
@@ -439,6 +445,7 @@ void test_e_reenter_upon_rate_reset()
         ,pol_dur
         ,reset_dur
         );
+    rates1.erase(rates1.begin(), rates1.begin() + pol_dur);
     BOOST_TEST(rates0 == rates1);
 
     BOOST_TEST_THROW
