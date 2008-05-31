@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.hpp,v 1.14 2008-05-31 02:55:24 chicares Exp $
+// $Id: actuarial_table.hpp,v 1.15 2008-05-31 23:50:13 chicares Exp $
 
 #ifndef actuarial_table_hpp
 #define actuarial_table_hpp
@@ -78,12 +78,7 @@
 ///   map [x]+s+j to [x+s]+j
 /// Use this when rates are deemed to reset each year, but
 /// illustrations are to reflect reentry only retrospectively, e.g.,
-/// because no future reset is guaranteed. Rates for attained ages in
-/// the half-open interval [x, x+s) would not be used because they
-/// correspond to policy years preceding the illustration date, and
-/// are indeterminate anyway because reentry history is unknown;
-/// therefore, they may be set to zero, though that behavior is not
-/// guaranteed.
+/// because no future reset is guaranteed.
 ///
 /// e_reenter_upon_rate_reset
 ///   map [x]+s+j to [x-r]+r+s+j
@@ -99,7 +94,14 @@
 ///
 /// All three methods are affected by the "Important note" above: even
 /// e_reenter_never, if [x] exceeds max_select_age_ (see documentation
-/// for specific_values()).
+/// for specific_values()). Furthermore, for all three methods, rates
+/// for attained ages in the half-open interval [x, x+s) would not be
+/// used because they correspond to policy years preceding the year of
+/// [re]illustration, and are indeterminate because reentry history is
+/// not plenary (only the most recent reentry is known). Indeterminate
+/// rates may come from a table (yet be of uncertain applicability for
+/// lack of history); or they may be set to zero, or to any other
+/// value such as QNaN.
 ///
 /// These methods are designed for select-and-ultimate tables. For
 /// attained-age tables, they are all equivalent wrt all values that
