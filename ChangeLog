@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1063 2008-05-30 16:58:28 chicares Exp $
+// $Id: ChangeLog,v 1.1064 2008-05-31 16:59:45 chicares Exp $
 
 MAINTENANCE
 
@@ -16887,4 +16887,47 @@ Limit 'InforceYear'.
 Fix defect introduced 20071006T2256Z. Inforce had not been considered
 appropriately. This change is committed before writing unit tests in
 order to get it into the hands of testers with celerity.
+
+20080531T0255Z <gchicares@sbcglobal.net> [1169]
+
+  actuarial_table.hpp
+Explain 20080530T1658Z removal of an unneeded precondition.
+
+20080531T0256Z <gchicares@sbcglobal.net> [1169]
+
+  actuarial_table_test.cpp
+Reflect 20080530T1658Z removal of an unneeded precondition.
+
+20080531T0304Z <gchicares@sbcglobal.net> [1169]
+
+  actuarial_table_test.cpp
+Test precondition added 20080530T1658Z.
+
+20080531T1219Z <gchicares@sbcglobal.net> [1169]
+
+  actuarial_table_test.cpp
+Test a precondition that hadn't been tested. The unit test removed
+20080531T0304Z had the palpable intention of covering this case, but
+the sign of the reset-duration argument didn't achieve that; see the
+last sentence of the 20080530T1656Z commit message.
+
+20080531T1351Z <gchicares@sbcglobal.net> [1169]
+
+  actuarial_table_test.cpp
+Refactor, shortening code while increasing clarity.
+
+20080531T1504Z <gchicares@sbcglobal.net> [1169]
+
+  actuarial_table_test.cpp
+Refactor.
+
+20080531T1551Z <gchicares@sbcglobal.net> [1169]
+
+  actuarial_table_test.cpp
+Refactor.
+
+20080531T1659Z <gchicares@sbcglobal.net> [1169]
+
+  actuarial_table_test.cpp
+Augment unit tests to encompass reset durations of any sign.
 

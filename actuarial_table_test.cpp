@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.44 2008-05-31 15:51:42 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.45 2008-05-31 16:59:45 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -313,7 +313,8 @@ void test_e_reenter_at_inforce_duration()
     int const max_age     = table.max_age();
     int const max_sel_age = table.max_select_age();
 
-    int const reset_dur = 0; // Ignored for 'e_reenter_at_inforce_duration'.
+    // Ignored for 'e_reenter_at_inforce_duration'.
+    int const reset_dur = 0;
 
     int pol_dur = 0;
     int iss_age = 0;
@@ -380,7 +381,9 @@ void test_e_reenter_upon_rate_reset()
     int const iss_age = 2 + min_age;
     int const length  = 1 + max_age - iss_age;
 
-    int const pol_dur = 0; // Ignored for 'e_reenter_upon_rate_reset'.
+    // Ignored for 'e_reenter_upon_rate_reset' except as it limits
+    // reset duration.
+    int pol_dur = max_age - iss_age;
 
     int reset_dur = 0;
 
@@ -403,6 +406,40 @@ void test_e_reenter_upon_rate_reset()
     rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
     BOOST_TEST(rates == gauge0);
     BOOST_TEST(rates == gauge1);
+
+    for(int i = 0; i <= 1 + select_period; ++i)
+        {
+        reset_dur = -i;
+        int effective_age = iss_age - reset_dur;
+        rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
+        gauge0 = table_256(effective_age, 0);
+        gauge0.insert(gauge0.begin(), -reset_dur, 0.0);
+        BOOST_TEST(rates == gauge0);
+        gauge1 = table.values(effective_age, 1 + max_age - effective_age);
+        gauge1.insert(gauge1.begin(), -reset_dur, 0.0);
+        BOOST_TEST(rates == gauge1);
+        }
+
+    // 'e_reenter_upon_rate_reset' and 'e_reenter_at_inforce_duration'
+    // become equivalent once age has been set back by a distance
+    // greater than the select period.
+    pol_dur   = 1 + select_period;
+    reset_dur = -pol_dur;
+    std::vector<double> rates0 = table.values_elaborated
+        (iss_age
+        ,length
+        ,e_reenter_upon_rate_reset
+        ,pol_dur
+        ,reset_dur
+        );
+    std::vector<double> rates1 = table.values_elaborated
+        (iss_age
+        ,length
+        ,e_reenter_at_inforce_duration
+        ,pol_dur
+        ,reset_dur
+        );
+    BOOST_TEST(rates0 == rates1);
 
     BOOST_TEST_THROW
         (table.values_elaborated(min_age, 1, m, 0, -999)
