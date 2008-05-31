@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.41 2008-05-31 12:19:15 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.42 2008-05-31 13:51:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -318,25 +318,18 @@ void test_e_reenter_at_inforce_duration()
     int iss_age   = 0;
     int length    = 0;
 
-    // Map status [max_sel_age]+0+j to rate for [max_sel_age+0]+j .
-    pol_dur = 0;
-    iss_age = max_sel_age - pol_dur;
-    length  = 1 + max_age - iss_age;
-    rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
-    gauge = table_256(iss_age, 0);
-    gauge.insert(gauge.begin(), pol_dur, 0.0);
-    BOOST_TEST(rates == gauge);
+    for(int i = max_sel_age - min_age; 0 <= i; --i)
+        {
+        pol_dur = i;
+        iss_age = max_sel_age - pol_dur;
+        length  = 1 + max_age - iss_age;
+        rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
+        gauge = table_256(iss_age + pol_dur, 0);
+        gauge.insert(gauge.begin(), pol_dur, 0.0);
+        BOOST_TEST(rates == gauge);
+        }
 
-    pol_dur = 11;
-    iss_age = max_sel_age - pol_dur;
-    length  = 1 + max_age - iss_age;
-    rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
-    gauge = table_256(iss_age + pol_dur, 0);
-    gauge.insert(gauge.begin(), pol_dur, 0.0);
-    BOOST_TEST(rates == gauge);
-
-    // Map status [max_sel_age]+1+j to rate for [max_sel_age]+1+j .
-    // There is no select row for [max_sel_age+1]+j .
+    // Once age has been set ahead to maximum, can't push it farther.
     pol_dur = 1;
     iss_age = max_sel_age;
     length  = 1 + max_age - iss_age;
@@ -389,37 +382,22 @@ void test_e_reenter_upon_rate_reset()
     int reset_dur     = 0;
     int effective_age = 0;
 
-    reset_dur     = 0;
-    effective_age = iss_age - reset_dur;
-    rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
-    gauge0 = table_256(effective_age, 0);
-    gauge0.erase(gauge0.begin(), reset_dur + gauge0.begin());
-    BOOST_TEST(rates == gauge0);
-    gauge1 = table.values(effective_age, 1 + max_age - effective_age);
-    gauge1.erase(gauge1.begin(), reset_dur + gauge1.begin());
-    BOOST_TEST(rates == gauge1);
+    for(int i = 0; i < table.select_period(); ++i)
+        {
+        reset_dur = i;
+        effective_age = iss_age - reset_dur;
+        rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
+        gauge0 = table_256(effective_age, 0);
+        gauge0.erase(gauge0.begin(), reset_dur + gauge0.begin());
+        BOOST_TEST(rates == gauge0);
+        gauge1 = table.values(effective_age, 1 + max_age - effective_age);
+        gauge1.erase(gauge1.begin(), reset_dur + gauge1.begin());
+        BOOST_TEST(rates == gauge1);
+        }
 
-    reset_dur     = 1;
-    effective_age = iss_age - reset_dur;
-    rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
-    gauge0 = table_256(effective_age, 0);
-    gauge0.erase(gauge0.begin(), reset_dur + gauge0.begin());
-    BOOST_TEST(rates == gauge0);
-    gauge1 = table.values(effective_age, 1 + max_age - effective_age);
-    gauge1.erase(gauge1.begin(), reset_dur + gauge1.begin());
-    BOOST_TEST(rates == gauge1);
-
-    reset_dur     = 2;
-    effective_age = iss_age - reset_dur;
-    rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
-    gauge0 = table_256(effective_age, 0);
-    gauge0.erase(gauge0.begin(), reset_dur + gauge0.begin());
-    BOOST_TEST(rates == gauge0);
-    gauge1 = table.values(effective_age, 1 + max_age - effective_age);
-    gauge1.erase(gauge1.begin(), reset_dur + gauge1.begin());
-    BOOST_TEST(rates == gauge1);
-
-    reset_dur     = 3;
+    // Once age has been set back to minimum, can't push it farther.
+    reset_dur = table.select_period();
+    BOOST_TEST(iss_age - reset_dur < min_age);
     rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
     BOOST_TEST(rates == gauge0);
     BOOST_TEST(rates == gauge1);
