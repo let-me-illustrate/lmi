@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.42 2008-05-31 13:51:19 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.43 2008-05-31 15:04:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -373,6 +373,7 @@ void test_e_reenter_upon_rate_reset()
 
     actuarial_table const table(qx_ins, 256);
 
+    int const select_period = table.select_period();
     int const min_age = table.min_age();
     int const max_age = table.max_age();
     int const iss_age = 2 + min_age;
@@ -380,12 +381,11 @@ void test_e_reenter_upon_rate_reset()
 
     int pol_dur       = 0; // Ignored for 'e_reenter_upon_rate_reset'.
     int reset_dur     = 0;
-    int effective_age = 0;
 
-    for(int i = 0; i < table.select_period(); ++i)
+    for(int i = 0; i < select_period; ++i)
         {
         reset_dur = i;
-        effective_age = iss_age - reset_dur;
+        int effective_age = iss_age - reset_dur;
         rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
         gauge0 = table_256(effective_age, 0);
         gauge0.erase(gauge0.begin(), reset_dur + gauge0.begin());
@@ -396,7 +396,7 @@ void test_e_reenter_upon_rate_reset()
         }
 
     // Once age has been set back to minimum, can't push it farther.
-    reset_dur = table.select_period();
+    reset_dur = select_period;
     BOOST_TEST(iss_age - reset_dur < min_age);
     rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
     BOOST_TEST(rates == gauge0);
