@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.48 2008-06-01 15:00:30 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.49 2008-06-01 16:49:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -387,71 +387,78 @@ void test_e_reenter_upon_rate_reset()
 
     int reset_dur = 0;
 
+    // Negative reset duration (reset date precedes contract date):
+    // age is in effect set back.
+
     for(int i = 0; i < select_period; ++i)
         {
-        reset_dur = i;
-        int effective_age = iss_age - reset_dur;
-        rates = table.values_elaborated(iss_age, length, m, pol_dur, -reset_dur);
+        reset_dur = -i;
+        int effective_age = iss_age + reset_dur;
+        rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
         gauge0 = table_256(effective_age, 0);
-        gauge0.erase(gauge0.begin(), reset_dur + gauge0.begin());
+        gauge0.erase(gauge0.begin(), gauge0.begin() - reset_dur);
         BOOST_TEST(rates == gauge0);
         gauge1 = table.values(effective_age, 1 + max_age - effective_age);
-        gauge1.erase(gauge1.begin(), reset_dur + gauge1.begin());
+        gauge1.erase(gauge1.begin(), gauge1.begin() - reset_dur);
         BOOST_TEST(rates == gauge1);
         }
 
     // Once age has been set back to minimum, can't push it farther.
-    reset_dur = select_period;
-    BOOST_TEST(iss_age - reset_dur < min_age);
-    rates = table.values_elaborated(iss_age, length, m, pol_dur, -reset_dur);
+    BOOST_TEST(iss_age - select_period < min_age);
+    reset_dur = -select_period;
+    rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
     BOOST_TEST(rates == gauge0);
     BOOST_TEST(rates == gauge1);
 
+    // A group's reset date can precede a new entrant's birthdate, so
+    // the age-setback argument as such isn't limited. The algorithm
+    // limits it internally, constraining the effective age to the
+    // table's minimum age.
+    reset_dur = -999;
+    rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
+    BOOST_TEST(rates == gauge0);
+    BOOST_TEST(rates == gauge1);
+
+    // Positive reset duration (reset date follows contract date):
+    // age is in effect set forward.
+
     for(int i = 0; i <= 1 + select_period; ++i)
         {
-        reset_dur = -i;
-        int effective_age = iss_age - reset_dur;
-        rates = table.values_elaborated(iss_age, length, m, pol_dur, -reset_dur);
+        reset_dur = i;
+        int effective_age = iss_age + reset_dur;
+        rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
         gauge0 = table_256(effective_age, 0);
-        gauge0.insert(gauge0.begin(), -reset_dur, 0.0);
+        gauge0.insert(gauge0.begin(), reset_dur, 0.0);
         BOOST_TEST(rates == gauge0);
         gauge1 = table.values(effective_age, 1 + max_age - effective_age);
-        gauge1.insert(gauge1.begin(), -reset_dur, 0.0);
+        gauge1.insert(gauge1.begin(), reset_dur, 0.0);
         BOOST_TEST(rates == gauge1);
         }
 
     // 'e_reenter_upon_rate_reset' and 'e_reenter_at_inforce_duration'
-    // become roughly equivalent once age has been set back by a
-    // distance greater than the select period. They aren't quite the
-    // same in two respects: rates for
-    //   issue age + t, t in [0, current (zero-based) policy duration]
-    // are indeterminate and need not compare equal; and, because the
-    // methods have different semantics, 'e_reenter_upon_rate_reset'
-    // does not limit the setback.
-    pol_dur   = 1 + select_period;
-    reset_dur = -pol_dur;
+    // become roughly equivalent when both set age forward by the same
+    // distance. They aren't quite the same in that rates for
+    //   issue age + t, t < current (zero-based) policy duration
+    // are indeterminate and need not compare equal.
+    pol_dur   = 1;
+    reset_dur = pol_dur;
     std::vector<double> rates0 = table.values_elaborated
         (iss_age
         ,length
         ,e_reenter_upon_rate_reset
         ,pol_dur
-        ,-reset_dur
+        ,reset_dur
         );
-    rates0.erase(rates0.begin(), rates0.begin() - reset_dur);
+    rates0.erase(rates0.begin(), rates0.begin() + reset_dur);
     std::vector<double> rates1 = table.values_elaborated
         (iss_age
         ,length
         ,e_reenter_at_inforce_duration
         ,pol_dur
-        ,-reset_dur
+        ,reset_dur
         );
     rates1.erase(rates1.begin(), rates1.begin() + pol_dur);
     BOOST_TEST(rates0 == rates1);
-
-    // A group's reset date can precede a new entrant's birthdate.
-    rates = table.values_elaborated(min_age, 1 + max_age - min_age, m, 0, -999);
-    gauge0 = table_256(min_age, 0);
-    BOOST_TEST(rates == gauge0);
 
     BOOST_TEST_THROW
         (table.values_elaborated(min_age, 1, m, 0, 999)
@@ -464,6 +471,13 @@ void test_e_reenter_upon_rate_reset()
         ,std::runtime_error
         ,"Assertion 'min_age_ <= issue_age && issue_age <= max_age_' failed."
         );
+
+    // A group's reset date can precede a new entrant's birthdate,
+    // so an apparently-excessive negative reset-duration argument
+    // must be accepted.
+    rates = table.values_elaborated(min_age, 1 + max_age - min_age, m, 0, -999);
+    gauge0 = table_256(min_age, 0);
+    BOOST_TEST(rates == gauge0);
 }
 
 /// The e_actuarial_table_method variants are designed for use with
