@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.50 2008-06-01 17:45:22 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.51 2008-06-01 22:27:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -168,6 +168,22 @@ std::vector<double> table_256(int age, int duration)
     v.insert(v.end(), qult + age - 10, qult + nult);
     return v;
     }
+
+/// See 'ChangeLog' for 20080522T1353Z and 20080523T0153Z, as well as
+/// 'DefectLog' for 20080523T0407Z.
+
+void assert_table_nondegeneracy(actuarial_table const& t)
+{
+    LMI_ASSERT(0 < t.min_age());
+    LMI_ASSERT(t.max_age() != t.max_select_age() + t.select_period());
+
+    int const min_age = t.min_age();
+    int const max_age = t.max_age();
+    int const length  = 1 + max_age - min_age;
+    std::vector<double> rates = t.values(min_age, length);
+    LMI_ASSERT(rates.at(       0) != rates.at(       1));
+    LMI_ASSERT(rates.at(length-2) != rates.at(length-1));
+}
 } // Unnamed namespace.
 
 void mete()
@@ -306,6 +322,7 @@ void test_e_reenter_at_inforce_duration()
     e_actuarial_table_method const m = e_reenter_at_inforce_duration;
 
     actuarial_table const table(qx_ins, 256);
+    assert_table_nondegeneracy(table);
 
     int const min_age     = table.min_age();
     int const max_age     = table.max_age();
@@ -372,6 +389,7 @@ void test_e_reenter_upon_rate_reset()
     e_actuarial_table_method const m = e_reenter_upon_rate_reset;
 
     actuarial_table const table(qx_ins, 256);
+    assert_table_nondegeneracy(table);
 
     int const select_period = table.select_period();
     int const min_age = table.min_age();
