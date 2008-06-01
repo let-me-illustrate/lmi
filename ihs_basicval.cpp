@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.43 2008-05-28 14:18:40 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.44 2008-06-01 15:00:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1482,7 +1482,9 @@ double BasicValues::GetAnnuityValueMlyDed
     return (1.0 - std::pow(u, 12.0 / Mode.value())) / (1.0 - u);
 }
 
-//============================================================================
+/// This forwarding function prevents the 'actuarial_table' module
+/// from needing to know about calendar dates and the database.
+
 std::vector<double> BasicValues::GetActuarialTable
     (std::string const& TableFile
     ,long int           TableID
@@ -1503,7 +1505,7 @@ std::vector<double> BasicValues::GetActuarialTable
             ,GetLength()
             ,method
             ,Input_->InforceYear
-            ,-integral_duration(Input_->EffDate, Input_->LastCoiReentryDate)
+            ,integral_duration(Input_->EffDate, Input_->LastCoiReentryDate)
             );
         }
     else
