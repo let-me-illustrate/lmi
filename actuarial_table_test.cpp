@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.47 2008-06-01 13:00:31 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.48 2008-06-01 15:00:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -349,13 +349,13 @@ void test_e_reenter_at_inforce_duration()
     BOOST_TEST_THROW
         (table.values_elaborated(min_age, 1, m, -1, 0)
         ,std::runtime_error
-        ,"Assertion '0 <= full_years_since_issue' failed."
+        ,"Assertion '0 <= inforce_duration' failed."
         );
 
     BOOST_TEST_THROW
         (table.values_elaborated(min_age, 1, m, 999, 0)
         ,std::runtime_error
-        ,"Assertion 'full_years_since_issue < 1 + max_age_ - issue_age' failed."
+        ,"Assertion 'inforce_duration < 1 + max_age_ - issue_age' failed."
         );
 
     BOOST_TEST_THROW
@@ -391,7 +391,7 @@ void test_e_reenter_upon_rate_reset()
         {
         reset_dur = i;
         int effective_age = iss_age - reset_dur;
-        rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
+        rates = table.values_elaborated(iss_age, length, m, pol_dur, -reset_dur);
         gauge0 = table_256(effective_age, 0);
         gauge0.erase(gauge0.begin(), reset_dur + gauge0.begin());
         BOOST_TEST(rates == gauge0);
@@ -403,7 +403,7 @@ void test_e_reenter_upon_rate_reset()
     // Once age has been set back to minimum, can't push it farther.
     reset_dur = select_period;
     BOOST_TEST(iss_age - reset_dur < min_age);
-    rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
+    rates = table.values_elaborated(iss_age, length, m, pol_dur, -reset_dur);
     BOOST_TEST(rates == gauge0);
     BOOST_TEST(rates == gauge1);
 
@@ -411,7 +411,7 @@ void test_e_reenter_upon_rate_reset()
         {
         reset_dur = -i;
         int effective_age = iss_age - reset_dur;
-        rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
+        rates = table.values_elaborated(iss_age, length, m, pol_dur, -reset_dur);
         gauge0 = table_256(effective_age, 0);
         gauge0.insert(gauge0.begin(), -reset_dur, 0.0);
         BOOST_TEST(rates == gauge0);
@@ -435,7 +435,7 @@ void test_e_reenter_upon_rate_reset()
         ,length
         ,e_reenter_upon_rate_reset
         ,pol_dur
-        ,reset_dur
+        ,-reset_dur
         );
     rates0.erase(rates0.begin(), rates0.begin() - reset_dur);
     std::vector<double> rates1 = table.values_elaborated
@@ -443,22 +443,20 @@ void test_e_reenter_upon_rate_reset()
         ,length
         ,e_reenter_at_inforce_duration
         ,pol_dur
-        ,reset_dur
+        ,-reset_dur
         );
     rates1.erase(rates1.begin(), rates1.begin() + pol_dur);
     BOOST_TEST(rates0 == rates1);
 
     // A group's reset date can precede a new entrant's birthdate.
-    rates = table.values_elaborated(min_age, 1 + max_age - min_age, m, 0, 999);
+    rates = table.values_elaborated(min_age, 1 + max_age - min_age, m, 0, -999);
     gauge0 = table_256(min_age, 0);
     BOOST_TEST(rates == gauge0);
 
     BOOST_TEST_THROW
-        (table.values_elaborated(min_age, 1, m, 0, -999)
+        (table.values_elaborated(min_age, 1, m, 0, 999)
         ,std::runtime_error
-        ,"Assertion"
-         " '-full_years_since_last_rate_reset <= full_years_since_issue'"
-         " failed."
+        ,"Assertion 'reset_duration <= inforce_duration' failed."
         );
 
     BOOST_TEST_THROW
@@ -484,8 +482,8 @@ void test_exotic_lookup_methods_with_attained_age_table()
         (0
         ,100
         ,e_reenter_at_inforce_duration
-        ,99  // full_years_since_issue
-        ,0   // full_years_since_last_rate_reset
+        ,99   // inforce_duration
+        ,0    // reset_duration
         );
     BOOST_TEST(rates == table_42(0));
 
@@ -493,8 +491,8 @@ void test_exotic_lookup_methods_with_attained_age_table()
         (0
         ,100
         ,e_reenter_upon_rate_reset
-        ,0   // full_years_since_issue
-        ,999 // full_years_since_last_rate_reset
+        ,0    // inforce_duration
+        ,-999 // reset_duration
         );
     BOOST_TEST(rates == table_42(0));
 
@@ -502,8 +500,8 @@ void test_exotic_lookup_methods_with_attained_age_table()
         (0
         ,100
         ,e_reenter_upon_rate_reset
-        , 99 // full_years_since_issue
-        ,-99 // full_years_since_last_rate_reset
+        ,99   // inforce_duration
+        ,99   // reset_duration
         );
     BOOST_TEST(rates == table_42(0));
 
@@ -512,13 +510,11 @@ void test_exotic_lookup_methods_with_attained_age_table()
             (0
             ,100
             ,e_reenter_upon_rate_reset
-            ,0   // full_years_since_issue
-            ,-99 // full_years_since_last_rate_reset
+            ,0    // inforce_duration
+            ,99   // reset_duration
             )
         ,std::runtime_error
-        ,"Assertion"
-         " '-full_years_since_last_rate_reset <= full_years_since_issue'"
-         " failed."
+        ,"Assertion 'reset_duration <= inforce_duration' failed."
         );
 }
 
