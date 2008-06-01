@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.49 2008-06-01 16:49:37 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.50 2008-06-01 17:45:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -177,8 +177,6 @@ void mete()
     rates = actuarial_table(qx_cso,  42).values( 0, 100);
     rates = actuarial_table(qx_cso,  42).values(35,  65);
     rates = actuarial_table(qx_ins, 256).values(90,  32);
-    rates = actuarial_table(qx_ins, 256).values(80,  42);
-    rates = actuarial_table(qx_ins, 256).values(20, 102);
     rates = actuarial_table(qx_ins, 256).values(10, 112);
 }
 
