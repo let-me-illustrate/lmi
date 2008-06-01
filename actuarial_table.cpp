@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.47 2008-06-01 15:00:30 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.48 2008-06-01 15:27:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -151,31 +151,30 @@ std::vector<double> actuarial_table::values_elaborated
         {
         case e_reenter_at_inforce_duration:
             {
+            int const delta = inforce_duration;
             std::vector<double> v = specific_values
-                (issue_age + inforce_duration
-                ,length    - inforce_duration
+                (issue_age + delta
+                ,length    - delta
                 );
-            v.insert(v.begin(), inforce_duration, 0.0);
+            v.insert(v.begin(), delta, 0.0);
             return v;
             }
             break;
         case e_reenter_upon_rate_reset:
             {
-            int const r = std::min
-                (issue_age - min_age_
-                ,-reset_duration
-                );
+            int const age_setback_limit = issue_age - min_age_;
+            int const delta = std::max(reset_duration, -age_setback_limit);
             std::vector<double> v = specific_values
-                (issue_age - r
-                ,length    + r
+                (issue_age + delta
+                ,length    - delta
                 );
-            if(0 < r)
+            if(delta < 0)
                 {
-                v.erase(v.begin(), v.begin() + r);
+                v.erase(v.begin(), v.begin() - delta);
                 }
             else
                 {
-                v.insert(v.begin(), -r, 0.0);
+                v.insert(v.begin(), delta, 0.0);
                 }
             return v;
             }
