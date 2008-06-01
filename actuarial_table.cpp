@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.46 2008-05-30 16:58:28 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.47 2008-06-01 15:00:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -132,15 +132,15 @@ std::vector<double> actuarial_table::values_elaborated
     (int                      issue_age
     ,int                      length
     ,e_actuarial_table_method method
-    ,int                      full_years_since_issue
-    ,int                      full_years_since_last_rate_reset
+    ,int                      inforce_duration
+    ,int                      reset_duration
     ) const
 {
     LMI_ASSERT(min_age_ <= issue_age && issue_age <= max_age_);
     LMI_ASSERT(0 <= length && length <= 1 + max_age_ - issue_age);
-    LMI_ASSERT(0 <= full_years_since_issue);
-    LMI_ASSERT(full_years_since_issue < 1 + max_age_ - issue_age);
-    LMI_ASSERT(-full_years_since_last_rate_reset <= full_years_since_issue);
+    LMI_ASSERT(0 <= inforce_duration);
+    LMI_ASSERT(inforce_duration < 1 + max_age_ - issue_age);
+    LMI_ASSERT(reset_duration <= inforce_duration);
 
     if('S' != table_type_)
         {
@@ -152,10 +152,10 @@ std::vector<double> actuarial_table::values_elaborated
         case e_reenter_at_inforce_duration:
             {
             std::vector<double> v = specific_values
-                (issue_age + full_years_since_issue
-                ,length    - full_years_since_issue
+                (issue_age + inforce_duration
+                ,length    - inforce_duration
                 );
-            v.insert(v.begin(), full_years_since_issue, 0.0);
+            v.insert(v.begin(), inforce_duration, 0.0);
             return v;
             }
             break;
@@ -163,7 +163,7 @@ std::vector<double> actuarial_table::values_elaborated
             {
             int const r = std::min
                 (issue_age - min_age_
-                ,full_years_since_last_rate_reset
+                ,-reset_duration
                 );
             std::vector<double> v = specific_values
                 (issue_age - r
@@ -570,8 +570,8 @@ std::vector<double> actuarial_table_rates_elaborated
     ,int                      issue_age
     ,int                      length
     ,e_actuarial_table_method method
-    ,int                      full_years_since_issue
-    ,int                      full_years_since_last_rate_reset
+    ,int                      inforce_duration
+    ,int                      reset_duration
     )
 {
     actuarial_table z(table_filename, table_number);
@@ -579,8 +579,8 @@ std::vector<double> actuarial_table_rates_elaborated
         (issue_age
         ,length
         ,method
-        ,full_years_since_issue
-        ,full_years_since_last_rate_reset
+        ,inforce_duration
+        ,reset_duration
         );
 }
 

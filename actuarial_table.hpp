@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.hpp,v 1.15 2008-05-31 23:50:13 chicares Exp $
+// $Id: actuarial_table.hpp,v 1.16 2008-06-01 15:00:30 chicares Exp $
 
 #ifndef actuarial_table_hpp
 #define actuarial_table_hpp
@@ -41,7 +41,7 @@
 /// At least in the present implementation, illustrations reflect
 /// reentry only retrospectively, because future reentry is subject to
 /// qualification. Furthermore, it is assumed in general that only the
-/// latest reentry is known and prior history is unavailable.
+/// most recent reentry is known and earlier history is unavailable.
 /// Therefore, reentry occurs at most once, and it is handled by
 /// transforming the arguments of the raw table-lookup functions.
 ///
@@ -58,14 +58,13 @@
 ///   SD = [re]illustration date, CD <= SD
 ///   RD = last reset date,       RD <= SD
 /// where RD may in general precede, follow, or coincide with CD. Let
-///   s = [years by which SD follows  CD],  0 <= s
-///   r = [years by which RD precedes CD], -r <= s
+///   s = [years by which SD follows CD], 0 <= s
+///   r = [years by which RD follows CD], r <= s
+///         (or years by which RD precedes CD, giving a negative r)
 /// where '[]' is the greatest-integer function. Both durations are
 /// measured from CD because the absolute value of the number of full
 /// years between two dates depends on which is taken as the base for
-/// calculation. They're measured in opposite directions to conform to
-/// customary usage: speaking loosely, rates reset "r years ago", but
-/// a reillustration begins "s years hence". Let
+/// calculation. Let
 ///   x = normal issue age
 ///   j = projection duration, measured from from (CD+s), 0 <= j
 /// so the first rate actually used is for projection duration j=0.
@@ -76,13 +75,13 @@
 ///
 /// e_reenter_at_inforce_duration
 ///   map [x]+s+j to [x+s]+j
-/// Use this when rates are deemed to reset each year, but
+/// Use this method when rates are deemed to reset each year, but
 /// illustrations are to reflect reentry only retrospectively, e.g.,
 /// because no future reset is guaranteed.
 ///
 /// e_reenter_upon_rate_reset
-///   map [x]+s+j to [x-r]+r+s+j
-/// Use this when rates were reset on a specified date, but
+///   map [x]+s+j to [x+r]-r+s+j
+/// Use this method when rates were reset on a specified date, but
 /// illustrations are to reflect reentry only retrospectively, e.g.,
 /// because no future reset is guaranteed. Certificates issued on
 /// divers dates may share a common group reset date that need not
@@ -141,8 +140,8 @@ class actuarial_table
         (int                      issue_age
         ,int                      length
         ,e_actuarial_table_method method
-        ,int                      full_years_since_issue
-        ,int                      full_years_since_last_rate_reset
+        ,int                      inforce_duration
+        ,int                      reset_duration
         ) const;
 
     std::string const& filename       () const {return filename_       ;}
@@ -194,8 +193,8 @@ std::vector<double> actuarial_table_rates_elaborated
     ,int                      issue_age
     ,int                      length
     ,e_actuarial_table_method method
-    ,int                      full_years_since_issue
-    ,int                      full_years_since_last_rate_reset
+    ,int                      inforce_duration
+    ,int                      reset_duration
     );
 
 #endif // actuarial_table_hpp
