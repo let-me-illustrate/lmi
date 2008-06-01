@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1064 2008-05-31 16:59:45 chicares Exp $
+// $Id: ChangeLog,v 1.1065 2008-06-01 16:49:37 chicares Exp $
 
 MAINTENANCE
 
@@ -16930,4 +16930,37 @@ Refactor.
 
   actuarial_table_test.cpp
 Augment unit tests to encompass reset durations of any sign.
+
+20080531T2350Z <gchicares@sbcglobal.net> [1169]
+
+  actuarial_table.hpp
+  actuarial_table_test.cpp
+Increase rigor.
+
+20080601T1300Z <gchicares@sbcglobal.net> [1169]
+
+  actuarial_table_test.cpp
+Add more limit tests suggested by symmetry.
+
+20080601T1500Z <gchicares@sbcglobal.net> [1169]
+
+  actuarial_table.cpp
+  actuarial_table.hpp
+  actuarial_table_test.cpp
+  ihs_basicval.cpp
+Refactor, reversing a confusing algebraic sign; see the last sentence
+of the 20080530T1656Z commit message. This refactoring is largely a
+symbolic transformation; another refactoring will clarify semantics
+by cancelling more double negations.
+
+20080601T1527Z <gchicares@sbcglobal.net> [1169]
+
+  actuarial_table.cpp
+Refactor to clarify semantics.
+
+20080601T1649Z <gchicares@sbcglobal.net> [1169]
+
+  actuarial_table_test.cpp
+Refactor to clarify semantics and correct misconceptions arising from
+the confusing algebraic sign reversed 20080601T1500Z.
 
