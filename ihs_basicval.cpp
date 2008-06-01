@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.44 2008-06-01 15:00:30 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.45 2008-06-01 17:46:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1484,6 +1484,10 @@ double BasicValues::GetAnnuityValueMlyDed
 
 /// This forwarding function prevents the 'actuarial_table' module
 /// from needing to know about calendar dates and the database.
+///
+/// At present, exotic lookup methods apply only to current COI rates.
+/// An argument could be made for applying them to term rider rates as
+/// well.
 
 std::vector<double> BasicValues::GetActuarialTable
     (std::string const& TableFile
