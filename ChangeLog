@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1065 2008-06-01 16:49:37 chicares Exp $
+// $Id: ChangeLog,v 1.1066 2008-06-01 22:27:25 chicares Exp $
 
 MAINTENANCE
 
@@ -16963,4 +16963,19 @@ Refactor to clarify semantics.
   actuarial_table_test.cpp
 Refactor to clarify semantics and correct misconceptions arising from
 the confusing algebraic sign reversed 20080601T1500Z.
+
+20080601T1745Z <gchicares@sbcglobal.net> [1169]
+
+  actuarial_table_test.cpp
+Remove some lines that had become needless from timing test.
+
+20080601T1746Z <gchicares@sbcglobal.net> [1169]
+
+  ihs_basicval.cpp
+Improve documentation.
+
+20080601T2227Z <gchicares@sbcglobal.net> [1169]
+
+  actuarial_table_test.cpp
+Assert nondegeneracy of tables used for certain tests.
 
