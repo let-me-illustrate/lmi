@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.46 2008-05-31 23:50:13 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.47 2008-06-01 13:00:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -448,6 +448,11 @@ void test_e_reenter_upon_rate_reset()
     rates1.erase(rates1.begin(), rates1.begin() + pol_dur);
     BOOST_TEST(rates0 == rates1);
 
+    // A group's reset date can precede a new entrant's birthdate.
+    rates = table.values_elaborated(min_age, 1 + max_age - min_age, m, 0, 999);
+    gauge0 = table_256(min_age, 0);
+    BOOST_TEST(rates == gauge0);
+
     BOOST_TEST_THROW
         (table.values_elaborated(min_age, 1, m, 0, -999)
         ,std::runtime_error
@@ -479,8 +484,8 @@ void test_exotic_lookup_methods_with_attained_age_table()
         (0
         ,100
         ,e_reenter_at_inforce_duration
-        ,99 // full_years_since_issue
-        ,0  // full_years_since_last_rate_reset
+        ,99  // full_years_since_issue
+        ,0   // full_years_since_last_rate_reset
         );
     BOOST_TEST(rates == table_42(0));
 
@@ -488,10 +493,33 @@ void test_exotic_lookup_methods_with_attained_age_table()
         (0
         ,100
         ,e_reenter_upon_rate_reset
-        ,0  // full_years_since_issue
-        ,99 // full_years_since_last_rate_reset
+        ,0   // full_years_since_issue
+        ,999 // full_years_since_last_rate_reset
         );
     BOOST_TEST(rates == table_42(0));
+
+    rates = table42.values_elaborated
+        (0
+        ,100
+        ,e_reenter_upon_rate_reset
+        , 99 // full_years_since_issue
+        ,-99 // full_years_since_last_rate_reset
+        );
+    BOOST_TEST(rates == table_42(0));
+
+    BOOST_TEST_THROW
+        (table42.values_elaborated
+            (0
+            ,100
+            ,e_reenter_upon_rate_reset
+            ,0   // full_years_since_issue
+            ,-99 // full_years_since_last_rate_reset
+            )
+        ,std::runtime_error
+        ,"Assertion"
+         " '-full_years_since_last_rate_reset <= full_years_since_issue'"
+         " failed."
+        );
 }
 
 int test_main(int, char*[])
