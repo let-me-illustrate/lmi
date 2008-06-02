@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1066 2008-06-01 22:27:25 chicares Exp $
+// $Id: ChangeLog,v 1.1067 2008-06-02 13:48:32 chicares Exp $
 
 MAINTENANCE
 
@@ -16978,4 +16978,22 @@ Improve documentation.
 
   actuarial_table_test.cpp
 Assert nondegeneracy of tables used for certain tests.
+
+20080602T0229Z <gchicares@sbcglobal.net> [1169]
+
+  authenticity_test.cpp
+Avert a (non-msw) warning (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00007.html
+
+20080602T0400Z <gchicares@sbcglobal.net> [1169]
+
+  wx_utility.cpp
+  wx_utility.hpp
+Don't require wxUSE_STL (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00003.html
+
+20080602T1348Z <gchicares@sbcglobal.net> [1169]
+
+  wx_utility.cpp
+Count down toward zero on statusbar during lengthy unit test.
 
