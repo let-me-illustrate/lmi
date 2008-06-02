@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: authenticity_test.cpp,v 1.9 2008-01-01 18:29:35 chicares Exp $
+// $Id: authenticity_test.cpp,v 1.10 2008-06-02 02:29:49 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -243,10 +243,18 @@ void PasskeyTest::InitializeExpiryFile() const
     os.close();
 }
 
+/// Verify that all conditions are "nominal" in the aeronautics sense.
+///
 /// This check succeeds as
 ///   - a postcondition of the ctor,
 ///   - a precondition of the dtor, and
 ///   - a precondition and postcondition of every 'Test*' function.
+///
+/// Authentication can fail due to any of several causes. Asserting
+/// that it succeeds, both at entry and at exit, for each 'Test*'
+/// function prevents breakage of an invariant in one place from
+/// causing a symptom to appear elsewhere: i.e., it ensures that
+/// tests remain orthogonal.
 
 void PasskeyTest::CheckNominal(char const* file, int line) const
 {
@@ -315,9 +323,10 @@ void PasskeyTest::TestFromAfar() const
     BOOST_TEST_EQUAL(remote_dir_1.string(), fs::current_path().string());
     BOOST_TEST_EQUAL(0, chdir(Pwd_.string().c_str()));
     BOOST_TEST_EQUAL(Pwd_.string(), fs::current_path().string());
-#endif // defined LMI_MSW
 
   done:
+#endif // defined LMI_MSW
+
     CheckNominal(__FILE__, __LINE__);
 }
 
