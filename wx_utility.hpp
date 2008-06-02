@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_utility.hpp,v 1.10 2008-03-09 12:13:27 chicares Exp $
+// $Id: wx_utility.hpp,v 1.11 2008-06-02 04:00:35 chicares Exp $
 
 #ifndef wx_utility_hpp
 #define wx_utility_hpp
@@ -103,8 +103,6 @@ wxDateTime ConvertDateToWx(jdn_t const&);
 
 bool operator==(calendar_date const& lmi_date, wxDateTime const& wx_date);
 bool operator==(wxDateTime const& wx_date, calendar_date const& lmi_date);
-
-/// Test ConvertDateFromWx() and ConvertDateToWx().
 
 void TestDateConversions();
 

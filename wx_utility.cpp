@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_utility.cpp,v 1.15 2008-04-30 18:44:23 chicares Exp $
+// $Id: wx_utility.cpp,v 1.16 2008-06-02 04:00:35 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -133,6 +133,12 @@ bool operator==(wxDateTime const& wx_date, calendar_date const& lmi_date)
     return lmi_date == ConvertDateFromWx(wx_date);
 }
 
+/// Test conversions between classes wxDateTime and calendar_date.
+///
+/// This function tests ConvertDateFromWx() and ConvertDateToWx().
+/// It is invoked via a menuitem: it's not a standalone command-line
+/// program like most other unit tests because it depends on wx.
+
 void TestDateConversions()
 {
     calendar_date const z((jdn_t(calendar_date::min_verified_jdn)));
@@ -169,8 +175,9 @@ void TestDateConversions()
                 << LMI_FLUSH
                 ;
             }
-        std::string const lmi_str = lmi_date0.str();
-        std::string const wx_str  = ConvertDateToWx(lmi_date0).FormatISODate();
+
+        std::string const lmi_str(lmi_date0.str());
+        std::string const wx_str(ConvertDateToWx(lmi_date0).FormatISODate());
         if(lmi_str != wx_str)
             {
             fatal_error()
@@ -180,6 +187,7 @@ void TestDateConversions()
                 << LMI_FLUSH
                 ;
             }
+
         if(0 == j % 100000)
             {
             status() << j << std::flush;
