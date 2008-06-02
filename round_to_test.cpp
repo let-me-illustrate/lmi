@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: round_to_test.cpp,v 1.17 2008-03-31 02:22:24 chicares Exp $
+// $Id: round_to_test.cpp,v 1.18 2008-06-02 18:04:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -37,7 +37,11 @@
 #include <iostream>
 #include <ostream>
 
-#ifdef __STDC_IEC_559__
+// See the thread beginning here:
+//   http://lists.nongnu.org/archive/html/lmi/2008-06/msg00004.html
+#if defined LMI_X86
+    // "fenv_lmi_x86.hpp" provides the necessary values.
+#elif defined __STDC_IEC_559__
     // In case the C++ compiler offers C99 fesetround(), assume that
     // it defines __STDC_IEC_559__, but doesn't support
     //   #pragma STDC FENV_ACCESS ON
@@ -49,8 +53,6 @@
         ,fe_upward     = FE_UPWARD
         ,fe_towardzero = FE_TOWARDZERO
         };
-#elif defined LMI_X86
-    // "fenv_lmi_x86.hpp" provides the necessary values.
 #else  // No known way to set rounding style.
 #   error No known way to set rounding style.
 #endif // No known way to set rounding style.
