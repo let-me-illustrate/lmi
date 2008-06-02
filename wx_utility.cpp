@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_utility.cpp,v 1.16 2008-06-02 04:00:35 chicares Exp $
+// $Id: wx_utility.cpp,v 1.17 2008-06-02 13:48:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -188,9 +188,10 @@ void TestDateConversions()
                 ;
             }
 
-        if(0 == j % 100000)
+        int const step = 10000;
+        if(0 == j % step)
             {
-            status() << j << std::flush;
+            status() << (high - j) / step << std::flush;
             wxSafeYield();
             }
         }
