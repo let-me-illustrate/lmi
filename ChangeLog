@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1067 2008-06-02 13:48:32 chicares Exp $
+// $Id: ChangeLog,v 1.1068 2008-06-03 04:17:53 chicares Exp $
 
 MAINTENANCE
 
@@ -16996,4 +16996,21 @@ Don't require wxUSE_STL (VZ). See:
 
   wx_utility.cpp
 Count down toward zero on statusbar during lengthy unit test.
+
+20080602T1804Z <gchicares@sbcglobal.net> [1169]
+
+  round_to_test.cpp
+Fix a GNU/Linux problem (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00004.html
+
+20080603T0416Z <gchicares@sbcglobal.net> [1167]
+
+  round_to_test.cpp
+Remove two defect markers that seem not to mark actual defects.
+
+20080603T0417Z <gchicares@sbcglobal.net> [1167]
+
+  objects.make
+  round_test.cpp [new file]
+Test proposed replacements for C99 round() and kin in libmingwex.
 
