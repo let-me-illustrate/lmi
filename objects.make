@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.117 2008-04-03 14:14:41 chicares Exp $
+# $Id: objects.make,v 1.118 2008-06-03 04:17:52 chicares Exp $
 
 ################################################################################
 
@@ -452,6 +452,7 @@ unit_test_targets := \
   progress_meter_test \
   quiet_nan_test \
   regex_test \
+  round_test \
   round_to_test \
   rtti_lmi_test \
   safely_dereference_as_test \
@@ -731,6 +732,10 @@ regex_test$(EXEEXT): \
   $(common_test_objects) \
   regex_test.o \
   timer.o \
+
+round_test$(EXEEXT): \
+  $(common_test_objects) \
+  round_test.o \
 
 round_to_test$(EXEEXT): \
   $(common_test_objects) \
