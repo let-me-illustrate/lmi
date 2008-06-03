@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: round_to_test.cpp,v 1.18 2008-06-02 18:04:37 chicares Exp $
+// $Id: round_to_test.cpp,v 1.19 2008-06-03 04:16:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,7 +32,7 @@
 #include "test_tools.hpp"
 
 #include <algorithm> // std::max()
-#include <cstddef> // std::size_t
+#include <cstddef>   // std::size_t
 #include <ios>
 #include <iostream>
 #include <ostream>
@@ -352,7 +352,6 @@ void test_various_float_types
     long double factor = detail::perform_pow(10.0L, -decimals);
     long double u = unrounded * factor;
     long double e = expected  * factor;
-    // TODO ?? static_cast?
     BOOST_TEST((test_one_case(static_cast<float      >(u), static_cast<float      >(e), decimals, style)));
     BOOST_TEST((test_one_case(static_cast<double     >(u), static_cast<double     >(e), decimals, style)));
     BOOST_TEST((test_one_case(static_cast<long double>(u), static_cast<long double>(e), decimals, style)));
@@ -399,6 +398,7 @@ void test_rounding()
 //  test_various_decimals(r_to_nearest, -0.500000L, -0.0L); // Deferred.
     test_various_decimals(r_to_nearest, -0.499999L, -0.0L);
     test_various_decimals(r_to_nearest, -0.000001L, -0.0L);
+    test_various_decimals(r_to_nearest, -0.000000L, -0.0L);
     test_various_decimals(r_to_nearest,  0.000000L,  0.0L);
     test_various_decimals(r_to_nearest,  0.000001L,  0.0L);
     test_various_decimals(r_to_nearest,  0.499999L,  0.0L);
@@ -416,6 +416,7 @@ void test_rounding()
     test_various_float_types(0, r_to_nearest, -3.5L, -4.0L);
     test_various_float_types(0, r_to_nearest, -2.5L, -2.0L);
     test_various_float_types(0, r_to_nearest, -1.5L, -2.0L);
+    test_various_float_types(0, r_to_nearest, -0.5L, -0.0L);
     test_various_float_types(0, r_to_nearest,  0.5L,  0.0L);
     test_various_float_types(0, r_to_nearest,  1.5L,  2.0L);
     test_various_float_types(0, r_to_nearest,  2.5L,  2.0L);
@@ -501,6 +502,7 @@ void test_rounding()
     test_various_styles(-100001.0L, -100001.0L);
     test_various_styles(-2.0L, -2.0L);
     test_various_styles(-1.0L, -1.0L);
+    test_various_styles(-0.0L, -0.0L);
     test_various_styles( 0.0L,  0.0L);
     test_various_styles( 1.0L,  1.0L);
     test_various_styles( 2.0L,  2.0L);
@@ -529,10 +531,10 @@ void test_rounding()
     // only when the rounding direction is upward, and rounding it to
     // nearest correctly maps it to the next higher integer.
     //
-    // TODO ?? Thus, the uncertainty due to [2.13.3/1] in the least
-    // significant decimal digit of a number that is not exactly
-    // representable can exceed four times epsilon. It remains to
-    // establish rigorous bounds, both overall and for each step.
+    // Thus, the uncertainty due to [2.13.3/1] in the least significant
+    // decimal digit of a number that is not exactly representable can
+    // exceed four times epsilon. SOMEDAY !! It remains to establish
+    // rigorous bounds, both overall and for each step.
 }
 
 int test_all_modes(bool synchronize)
