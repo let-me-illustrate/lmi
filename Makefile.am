@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.38 2008-03-21 12:13:16 chicares Exp $
+# $Id: Makefile.am,v 1.39 2008-06-03 14:36:23 chicares Exp $
 
 SUBDIRS = third_party
 
@@ -107,6 +107,7 @@ TESTS = \
     test_print_matrix \
     test_progress_meter \
     test_quiet_nan \
+    test_round \
     test_round_to \
     test_rtti_lmi \
     test_safely_dereference_as \
@@ -726,6 +727,11 @@ test_quiet_nan_SOURCES =    \
   $(common_test_objects) \
   quiet_nan_test.cpp
 test_quiet_nan_CXXFLAGS = $(AM_CXXFLAGS)
+
+test_round_SOURCES = \
+  $(common_test_objects) \
+  round_test.cpp
+test_round_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_round_to_SOURCES = \
   $(common_test_objects) \
