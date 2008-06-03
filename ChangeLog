@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1068 2008-06-03 04:17:53 chicares Exp $
+// $Id: ChangeLog,v 1.1069 2008-06-03 14:37:25 chicares Exp $
 
 MAINTENANCE
 
@@ -17013,4 +17013,19 @@ Remove two defect markers that seem not to mark actual defects.
   objects.make
   round_test.cpp [new file]
 Test proposed replacements for C99 round() and kin in libmingwex.
+
+20080603T1435Z <gchicares@sbcglobal.net> [1167]
+
+  round_test.cpp
+Propose a lower tolerance; explain why it's not implemented today.
+
+20080603T1436Z <gchicares@sbcglobal.net> [1167]
+
+  Makefile.am
+Add 'round_test'.
+
+20080603T1437Z <gchicares@sbcglobal.net> [1167]
+
+  objects.make
+Suppress 'round_test' for the nonce.
 

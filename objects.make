@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.118 2008-06-03 04:17:52 chicares Exp $
+# $Id: objects.make,v 1.119 2008-06-03 14:37:24 chicares Exp $
 
 ################################################################################
 
@@ -407,11 +407,18 @@ libgpt_so_test$(EXEEXT): server7702dlltest.c libgpt$(SHREXT)
 
 # Unit tests.
 
-# 'ledger_test' was arguably a mistake. Override this variable to
-# exclude other tests for a particular toolchain.
+# 'ledger_test' was arguably a mistake.
+#
+# 'round_test' fails spectacularly with MinGW gcc, and is therefore
+# suppressed until we upgrade to the new libmingwex version that it
+# was designed to test.
+#
+# Override this variable to exclude other tests where appropriate,
+# e.g., when a test doesn't even compile with a particular toolchain.
 
 excluded_unit_test_targets := \
   ledger_test \
+  round_test \
 
 unit_test_targets := \
   account_value_test \
