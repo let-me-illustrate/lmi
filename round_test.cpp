@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: round_test.cpp,v 1.2 2008-06-03 14:35:32 chicares Exp $
+// $Id: round_test.cpp,v 1.3 2008-06-04 12:25:17 chicares Exp $
 
 // Unit tests for libmingwex round() and its kin. See:
 //   http://sf.net/tracker/?func=detail&atid=302435&aid=1962656&group_id=2435
@@ -31,23 +31,6 @@
 //
 // Functions [ll,l]round[f,,l]() are not explicitly tested, though
 // they ideally ought to be.
-//
-// At least for testing the candidate libmingwex as this is written on
-// 20080603Z, all tests pass even with the following change:
-//
-//-    bool error_is_within_tolerance = rel_error <= tolerance;
-//+    bool error_is_within_tolerance = observed == expected;
-//
-// which ultimately should be applied. Using a 20050813 version of
-// libmingwex, however, as lmi does for production on 20080603Z, this
-// program crashes right after this line:
-//    std::cout.setf(std::ios_base::fixed, std::ios_base::floatfield);
-// apparently when attempting to print certain ill-starred long double
-// values. Suppressing the 'fixed' output lets the program finish, and
-// it reports eighty-six failing tests with the old implementation of
-// round[f,,l](), as opposed to zero failures with the new. With the
-// more permissive tolerance, there are only twelve failures with the
-// old implementation, and of course zero with the new.
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -279,7 +262,15 @@ bool test_one_case
     // constants as if at runtime [F.7.4/1].
     max_prec_real tolerance = std::numeric_limits<RealType>::epsilon();
 
-    bool error_is_within_tolerance = rel_error <= tolerance;
+    // All tests pass even with a tolerance of zero, for
+    //  - candidate libmingwex as 20080603Z, and
+    //  - glibc for amd64, as reported here:
+    //    http://lists.nongnu.org/archive/html/lmi/2008-06/msg00019.html
+    // Code to support a more liberal tolerance is retained in case
+    // it someday proves useful on some other platform.
+
+//    bool error_is_within_tolerance = rel_error <= tolerance;
+    bool error_is_within_tolerance = observed == expected;
 
     if(!error_is_within_tolerance)
         {
