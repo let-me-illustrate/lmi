@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: obstruct_slicing.hpp,v 1.5 2008-01-01 18:29:52 chicares Exp $
+// $Id: obstruct_slicing.hpp,v 1.6 2008-06-05 12:41:30 chicares Exp $
 
 #ifndef obstruct_slicing_hpp
 #define obstruct_slicing_hpp
@@ -29,9 +29,9 @@
 /// Is it desirable to "prevent derivation" from a class? Some say
 /// the lack of a virtual destructor is a warning that any competent
 /// C++ programmer would consider thoughtfully; others, that feasible
-/// safeguards ought to be used where slicing seems to be a danger.
+/// safeguards ought to be used where there might be any danger.
 ///
-/// The purpose of such a safeguard is only to prevent slicing. It may
+/// One purpose of such a safeguard is to prevent slicing. It may also
 /// be useful, for instance, for proving that it's safe to revise a
 /// legacy class that appears not to need a virtual dtor, but has one
 /// anyway, perhaps because of an obsolete "make all dtors virtual"
