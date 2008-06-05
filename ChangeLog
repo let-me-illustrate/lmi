@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1069 2008-06-03 14:37:25 chicares Exp $
+// $Id: ChangeLog,v 1.1070 2008-06-05 12:42:41 chicares Exp $
 
 MAINTENANCE
 
@@ -17028,4 +17028,22 @@ Add 'round_test'.
 
   objects.make
 Suppress 'round_test' for the nonce.
+
+20080604T1225Z <gchicares@sbcglobal.net> [1167]
+
+  round_test.cpp
+Use the stricter tolerance proposed 20080603T1435Z. See:
+  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00020.html
+
+20080605T1241Z <gchicares@sbcglobal.net> [1167]
+
+  obstruct_slicing.hpp
+Improve documentation. See:
+  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00024.html
+
+20080605T1242Z <gchicares@sbcglobal.net> [1167]
+
+  Makefile.am
+Remove 'ledger_test'. See:
+  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00022.html
 
