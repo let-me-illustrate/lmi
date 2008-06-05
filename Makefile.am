@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.39 2008-06-03 14:36:23 chicares Exp $
+# $Id: Makefile.am,v 1.40 2008-06-05 12:42:41 chicares Exp $
 
 SUBDIRS = third_party
 
@@ -92,7 +92,6 @@ TESTS = \
     test_input_seq \
     test_input \
     test_irc7702a \
-    test_ledger \
     test_loads \
     test_map_lookup \
     test_materially_equal \
@@ -629,13 +628,6 @@ test_irc7702a_SOURCES = \
   irc7702a_test.cpp \
   stratified_algorithms.cpp
 test_irc7702a_CXXFLAGS = $(AM_CXXFLAGS)
-
-test_ledger_SOURCES = \
-  $(common_test_objects) \
-  ledger_test.cpp
-test_ledger_CXXFLAGS = $(AM_CXXFLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
-test_ledger_LDADD = \
-  liblmi.la
 
 test_loads_SOURCES = \
   $(common_test_objects) \
