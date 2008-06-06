@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date_test.cpp,v 1.22 2008-05-28 02:53:18 chicares Exp $
+// $Id: calendar_date_test.cpp,v 1.23 2008-06-06 11:33:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -640,6 +640,25 @@ void CalendarDateTest::TestIntegralDuration()
 
     base_date  = calendar_date(2001,  3,  1);
     BOOST_TEST_EQUAL(-2, integral_duration(base_date, other_date));
+
+    // Demonstrate strong noncommutativity. To show that
+    //    integral_duration(X, Y)
+    //   -integral_duration(Y, X)
+    // may or may not be equal doesn't require "hard" testcases: the
+    // first days of thirty-one-day months in non-leap years suffice.
+
+    calendar_date date0(2001, 1, 1);
+    calendar_date date1(2001, 3, 1);
+    calendar_date date2(2003, 1, 1);
+
+    int d01 = integral_duration(date0, date1); BOOST_TEST_EQUAL( 0, d01);
+    int d10 = integral_duration(date1, date0); BOOST_TEST_EQUAL(-1, d10);
+
+    int d02 = integral_duration(date0, date2); BOOST_TEST_EQUAL( 2, d02);
+    int d20 = integral_duration(date2, date0); BOOST_TEST_EQUAL(-2, d20);
+
+    BOOST_TEST_UNEQUAL(d01, -d10);
+    BOOST_TEST_EQUAL  (d02, -d20);
 }
 
 void CalendarDateTest::TestBirthdateLimits()
