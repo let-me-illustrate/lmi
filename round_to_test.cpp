@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: round_to_test.cpp,v 1.19 2008-06-03 04:16:26 chicares Exp $
+// $Id: round_to_test.cpp,v 1.20 2008-06-06 20:49:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -107,10 +107,10 @@ template<> char const* get_name_of_float_type<long double>()
 
 void set_hardware_rounding_mode(e_ieee754_rounding mode, bool synchronize)
 {
-#ifdef __STDC_IEC_559__
-    fesetround(mode);
-#elif defined LMI_X86
+#if defined LMI_X86
     fenv_rounding(mode);
+#elif defined __STDC_IEC_559__
+    fesetround(mode);
 #else // No known way to set hardware rounding mode.
     std::cerr
         << "\nCannot set floating-point hardware rounding mode.\n"
