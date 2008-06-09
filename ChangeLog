@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1070 2008-06-05 12:42:41 chicares Exp $
+// $Id: ChangeLog,v 1.1071 2008-06-09 16:29:31 chicares Exp $
 
 MAINTENANCE
 
@@ -17046,4 +17046,25 @@ Improve documentation. See:
   Makefile.am
 Remove 'ledger_test'. See:
   http://lists.nongnu.org/archive/html/lmi/2008-06/msg00022.html
+
+20080606T1132Z <gchicares@sbcglobal.net> [1167]
+
+  calendar_date.hpp
+Clarify documentation.
+
+20080606T1133Z <gchicares@sbcglobal.net> [1167]
+
+  calendar_date_test.cpp
+Add example showing noncommutativity mentioned 20080528T1415Z.
+
+20080606T2049Z <gchicares@sbcglobal.net> [1167]
+
+  round_to_test.cpp
+Fix defect introduced 20080602T1804Z (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00032.html
+
+20080609T1629Z <gchicares@sbcglobal.net> [1167]
+
+  DefectLog
+Draw lessons from recent experience.
 
