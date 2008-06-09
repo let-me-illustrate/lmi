@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: DefectLog,v 1.4 2008-05-23 04:07:26 chicares Exp $
+// $Id: DefectLog,v 1.5 2008-06-09 16:29:31 chicares Exp $
 
 MAINTENANCE
 
@@ -28,7 +28,7 @@ Please write entries this way:
 [ 1] YYYYMMDDTHHMMZ <yourname@domain.net>
 [ 2] Symptom: [observable behavior, with steps to reproduce]
 [ 3] Discovered:
-       * by {author, reviewer, tester, local user, remote user}
+       * by {author, reviewer, tester, local user, remote user...}
        * during [activity]
 [ 4] Location: [brief code snippet, citing source file]
 [ 5] Premonitory defect markers: [if any]
@@ -314,4 +314,129 @@ us well if any further problems are found.
 20080523T0153Z ditto
 
 Repairs postponed: None, except for libstc++ debug mode.
+
+20080609T1629Z <gchicares@sbcglobal.net>
+
+Symptom: The last COI reentry date could not be entered appropriately
+for inforce cases. Depending on rate class, it was either unexpectedly
+grayed out, or, less often, not allowed to exceed the effective date.
+
+Discovered: By author, local user, and management, while investigating
+an agent complaint about an inforce illustration.
+
+Location: GUI restrictions in 'input_harmonization.cpp':
+
+|    LastCoiReentryDate.maximum(EffectiveDate.value());
+
+This is generally inappropriate for inforce.
+
+|    LastCoiReentryDate.enable(2 == database_->Query(DB_CoiInforceReentry));
+
+This is correct. However, one product's database had '0' for unismoke
+where '2' was intended; that prompted the agent complaint.
+
+Algorithm restrictions: 'full_years_since_last_rate_reset' was set
+thus in 'ihs_basicval.cpp':
+
+|    attained_age(Input_->LastCoiReentryDate, Input_->EffDate, false)
+
+which gives a necessary but poorly-phrased error message:
+  "As-of date...precedes birthdate"
+when reentry date follows effective date (and could be off by one
+because the interval should be measured between policy anniversaries,
+not anniversaries of the reentry date). Furthermore, it was guarded
+thus in 'actuarial_table.cpp':
+
+|    LMI_ASSERT(0 <= full_years_since_last_rate_reset);
+
+and that assertion was necessary to prevent a catastrophic error a few
+lines below, where the algorithm required issue age to be set back:
+
+|    std::vector<double> v = specific_values
+|        (issue_age - r
+|        ,length + r
+|        );
+|    v.erase(v.begin(), v.begin() + r);
+
+However, reentry after the issue date requires age to be set forward;
+code to handle that already existed about ten lines away:
+
+|    std::vector<double> v = specific_values
+|        (issue_age + full_years_since_issue
+|        ,length - full_years_since_issue
+|        );
+|    v.insert(v.begin(), full_years_since_issue, 0.0);
+
+but was used for a different rate-lookup method.
+
+Premonitory defect markers: None.
+
+Cause: The proximate cause is that GUI and table-lookup code were both
+limited in a way appropriate only for new business, and also that one
+product's database had an incorrect 'DB_CoiInforceReentry' value. The
+ultimate cause for a system with glaring superficial defects being put
+into production is lack of testing.
+
+Genesis: Introduced 20071006T2256Z in brand-new code.
+
+Provident safeguards: Although data was entered incorrectly and there
+was an error in a proprietary product file, lmi itself did not accept
+input that it could diagnose as invalid, or produce incorrect output
+for valid input. At first we guessed that the problem was merely an
+excessive limitation in the GUI, but persistent attempts to circumvent
+that limitation were defeated by enforcement of preconditions in the
+table-lookup code that made it clear why that hypothesis was wrong.
+
+The (20080520T0307Z, 20080523T0153Z) refactoring of unit tests made
+this repair easier (and a defective repair harder) than it otherwise
+would have been.
+
+Similar defects elsewhere: This specific issue occurs nowhere else in
+lmi. Proprietary product files that lmi uses have never been audited,
+but are believed to contain other errors.
+
+Critique of the past: Even superficial testing of inforce cannot have
+been performed. System specifications cannot have been reviewed. It
+was not disclosed that these requirements were not met.
+
+Watchwords for the future: It has been said [jfgi] that
+  "Given enough eyeballs, all bugs are shallow." --esr, CatB
+and, to our great cost, we have demonstrated the inverse. Testing that
+is undocumented may be perfunctory or worse.
+
+Person-hours spent on diagnosis and repair: One hundred fifty-five.
+
+Automated tests: Unit tests in 'actuarial_table_test.cpp' have been
+extended to encompass the widened range of reentry dates, strengthened
+to exercise edge conditions better, and rewritten for clarity and ease
+of maintenance.
+
+Repairs completed: See 'ChangeLog' (20080524T1137Z, 20080601T2227Z),
+(20080606T1132Z, 20080606T1133Z).
+
+Several days of analysis and refactoring laid a necessary foundation
+for the salient code changes:
+
+20080528T1410Z avoid misleading "birthdate" diagnostic
+20080528T1418Z fix date calculation--measure from effective date
+20080529T2355Z permit reentry after issue: GUI
+20080530T1658Z permit reentry after issue: table lookup
+
+Two further days were then spent refactoring for clarity, most notably
+in order to eliminate confusion due to using opposite algebraic signs
+on otherwise similar adjustments for two table-lookup methods.
+
+Repairs postponed: None. This curiosity--an apparent oversight in the
+original specifications--is noted, but there is no plan to address it:
+  2010-01-01 certificate effective date
+  2012-03-01 inforce reillustration date
+  2012-02-01 group reentry date
+One might suppose that the select table would be reentered on the next
+certificate anniversary, 2013-01-01. If so, then the rate to be used
+for the remainder of 2012 is ascertainable only if the penultimate
+reentry date (before 2012-02-01) is known--but that contradicts the
+business specification. The system doesn't permit this reentry date.
+Even if that extra reentry date is known, the table-lookup algorithm
+was designed to permit reentry only once; to reflect multiple reentry
+dates would require an essentially different algorithm.
 
