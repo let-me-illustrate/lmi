@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_algorithms_test.cpp,v 1.9 2008-06-14 14:34:15 chicares Exp $
+// $Id: stratified_algorithms_test.cpp,v 1.10 2008-06-14 15:24:12 chicares Exp $
 
 // TODO ?? Add tests for tiered_product<>() and tiered_rate<>().
 
@@ -50,6 +50,15 @@ void banded_test()
     BOOST_TEST_EQUAL(0.02, banded_rate<double>()( 1000.0, limits, rates));
     BOOST_TEST_EQUAL(0.01, banded_rate<double>()( 5000.0, limits, rates));
 
+    // Ascertain whether breakpoints are treated as incremental or cumulative.
+    // Here, they are treated as cumulative:
+    //   [   0, 1000) --> 0.05
+    //   [1000, 5000) --> 0.02
+    //   [5000,  inf) --> 0.01
+
+    BOOST_TEST_EQUAL(0.02, banded_rate<double>()( 4500.0, limits, rates));
+    BOOST_TEST_EQUAL(0.01, banded_rate<double>()( 5500.0, limits, rates));
+
     // Between breakpoints.
 
     BOOST_TEST_EQUAL(0.05, banded_rate<double>()(  900.0, limits, rates));
@@ -73,7 +82,7 @@ void banded_test()
     BOOST_TEST_THROW
         (banded_rate<double>()(-1.0, limits, rates)
         ,std::runtime_error
-        ,""
+        ,"Assertion '0 <= total_amount' failed."
         );
 }
 
