@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_algorithms_test.cpp,v 1.8 2008-01-01 18:29:55 chicares Exp $
+// $Id: stratified_algorithms_test.cpp,v 1.9 2008-06-14 14:34:15 chicares Exp $
 
 // TODO ?? Add tests for tiered_product<>() and tiered_rate<>().
 
@@ -43,21 +43,14 @@ void banded_test()
     double x[] = {1000.0 , 5000.0 , m   };
     double y[] = {   0.05,    0.02, 0.01};
     std::vector<double> const limits(x, x + lmi_array_size(x));
-    std::vector<double> const rates(y, y + lmi_array_size(y));
+    std::vector<double> const rates (y, y + lmi_array_size(y));
 
-    BOOST_TEST_EQUAL(0.05, banded_rate<double>()(      0.0, limits, rates));
-    BOOST_TEST_EQUAL(0.05, banded_rate<double>()(     -0.0, limits, rates));
-    BOOST_TEST_EQUAL(0.02, banded_rate<double>()(   1000.0, limits, rates));
-    BOOST_TEST_EQUAL(0.01, banded_rate<double>()(   5000.0, limits, rates));
-    BOOST_TEST_EQUAL(0.01, banded_rate<double>()(        m, limits, rates));
-    BOOST_TEST_EQUAL(0.01, banded_rate<double>()(0.999 * m, limits, rates));
-    BOOST_TEST_EQUAL(0.01, banded_rate<double>()(  0.1 * m, limits, rates));
+    // At breakpoints.
 
-    BOOST_TEST_THROW
-        (banded_rate<double>()(-1.0, limits, rates)
-        ,std::runtime_error
-        ,""
-        );
+    BOOST_TEST_EQUAL(0.02, banded_rate<double>()( 1000.0, limits, rates));
+    BOOST_TEST_EQUAL(0.01, banded_rate<double>()( 5000.0, limits, rates));
+
+    // Between breakpoints.
 
     BOOST_TEST_EQUAL(0.05, banded_rate<double>()(  900.0, limits, rates));
     BOOST_TEST_EQUAL(0.02, banded_rate<double>()( 1500.0, limits, rates));
@@ -66,6 +59,22 @@ void banded_test()
     BOOST_TEST(materially_equal( 45.0, banded_product<double>()(  900.0, limits, rates)));
     BOOST_TEST(materially_equal( 30.0, banded_product<double>()( 1500.0, limits, rates)));
     BOOST_TEST(materially_equal(100.0, banded_product<double>()(10000.0, limits, rates)));
+
+    // Extrema.
+
+    BOOST_TEST_EQUAL(0.05, banded_rate<double>()(      0.0, limits, rates));
+    BOOST_TEST_EQUAL(0.05, banded_rate<double>()(     -0.0, limits, rates));
+    BOOST_TEST_EQUAL(0.01, banded_rate<double>()(        m, limits, rates));
+    BOOST_TEST_EQUAL(0.01, banded_rate<double>()(0.999 * m, limits, rates));
+    BOOST_TEST_EQUAL(0.01, banded_rate<double>()(  0.1 * m, limits, rates));
+
+    // Precondition violations.
+
+    BOOST_TEST_THROW
+        (banded_rate<double>()(-1.0, limits, rates)
+        ,std::runtime_error
+        ,""
+        );
 }
 
 void progressively_limit_test()
