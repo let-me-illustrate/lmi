@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.hpp,v 1.16 2008-06-01 15:00:30 chicares Exp $
+// $Id: actuarial_table.hpp,v 1.17 2008-06-14 14:33:15 chicares Exp $
 
 #ifndef actuarial_table_hpp
 #define actuarial_table_hpp
@@ -65,7 +65,7 @@
 /// measured from CD because the absolute value of the number of full
 /// years between two dates depends on which is taken as the base for
 /// calculation. Let
-///   x = normal issue age
+///   x = insurance age
 ///   j = projection duration, measured from from (CD+s), 0 <= j
 /// so the first rate actually used is for projection duration j=0.
 ///
