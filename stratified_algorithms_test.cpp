@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_algorithms_test.cpp,v 1.10 2008-06-14 15:24:12 chicares Exp $
+// $Id: stratified_algorithms_test.cpp,v 1.11 2008-06-14 22:15:31 chicares Exp $
 
 // TODO ?? Add tests for tiered_product<>() and tiered_rate<>().
 
@@ -45,12 +45,12 @@ void banded_test()
     std::vector<double> const limits(x, x + lmi_array_size(x));
     std::vector<double> const rates (y, y + lmi_array_size(y));
 
-    // At breakpoints.
+    // At limits.
 
     BOOST_TEST_EQUAL(0.02, banded_rate<double>()( 1000.0, limits, rates));
     BOOST_TEST_EQUAL(0.01, banded_rate<double>()( 5000.0, limits, rates));
 
-    // Ascertain whether breakpoints are treated as incremental or cumulative.
+    // Ascertain whether limits are treated as incremental or cumulative.
     // Here, they are treated as cumulative:
     //   [   0, 1000) --> 0.05
     //   [1000, 5000) --> 0.02
@@ -59,7 +59,7 @@ void banded_test()
     BOOST_TEST_EQUAL(0.02, banded_rate<double>()( 4500.0, limits, rates));
     BOOST_TEST_EQUAL(0.01, banded_rate<double>()( 5500.0, limits, rates));
 
-    // Between breakpoints.
+    // In the interior of various brackets.
 
     BOOST_TEST_EQUAL(0.05, banded_rate<double>()(  900.0, limits, rates));
     BOOST_TEST_EQUAL(0.02, banded_rate<double>()( 1500.0, limits, rates));
@@ -69,7 +69,7 @@ void banded_test()
     BOOST_TEST(materially_equal( 30.0, banded_product<double>()( 1500.0, limits, rates)));
     BOOST_TEST(materially_equal(100.0, banded_product<double>()(10000.0, limits, rates)));
 
-    // Extrema.
+    // In the vicinity of extrema.
 
     BOOST_TEST_EQUAL(0.05, banded_rate<double>()(      0.0, limits, rates));
     BOOST_TEST_EQUAL(0.05, banded_rate<double>()(     -0.0, limits, rates));
@@ -84,6 +84,58 @@ void banded_test()
         ,std::runtime_error
         ,"Assertion '0 <= total_amount' failed."
         );
+}
+
+void tiered_test()
+{
+    double const m = std::numeric_limits<double>::max();
+    double x[] = {1000.0 , 4000.0 , m   };
+    double y[] = {   0.05,    0.02, 0.01};
+    std::vector<double> const limits(x, x + lmi_array_size(x));
+    std::vector<double> const rates (y, y + lmi_array_size(y));
+
+    // At limits.
+
+    BOOST_TEST(materially_equal(0.0500, tiered_rate<double>()( 1000.0, limits, rates)));
+    BOOST_TEST(materially_equal(0.0275, tiered_rate<double>()( 4000.0, limits, rates)));
+
+    // Ascertain whether limits are treated as incremental or cumulative.
+    // Here, they are treated as incremental:
+    //   [        0,      1000) --> 0.05
+    //   [     1000, 1000+4000) --> 0.02
+    //   [1000+4000,       inf) --> 0.01
+
+    BOOST_TEST(materially_equal(0.0260, tiered_rate<double>()( 5000.0, limits, rates)));
+
+    // In the interior of various brackets.
+
+    BOOST_TEST(materially_equal(0.0500, tiered_rate<double>()(  900.0, limits, rates)));
+    BOOST_TEST(materially_equal(0.0400, tiered_rate<double>()( 1500.0, limits, rates)));
+    BOOST_TEST(materially_equal(0.0180, tiered_rate<double>()(10000.0, limits, rates)));
+
+    BOOST_TEST(materially_equal( 45.0, tiered_product<double>()(  900.0, 0.0, limits, rates)));
+    BOOST_TEST(materially_equal( 60.0, tiered_product<double>()( 1500.0, 0.0, limits, rates)));
+    BOOST_TEST(materially_equal(180.0, tiered_product<double>()(10000.0, 0.0, limits, rates)));
+
+    // Also test nonzero second argument.
+
+    // In the vicinity of extrema.
+
+    BOOST_TEST(materially_equal(0.0500, tiered_rate<double>()(      0.0, limits, rates)));
+    BOOST_TEST(materially_equal(0.0500, tiered_rate<double>()(     -0.0, limits, rates)));
+    BOOST_TEST(materially_equal(0.0100, tiered_rate<double>()(        m, limits, rates)));
+    BOOST_TEST(materially_equal(0.0100, tiered_rate<double>()(0.999 * m, limits, rates)));
+    BOOST_TEST(materially_equal(0.0100, tiered_rate<double>()(  0.1 * m, limits, rates)));
+
+    // Precondition violations.
+
+#if 0 // Probably this should throw.
+    BOOST_TEST_THROW
+        (tiered_rate<double>()(-1.0, limits, rates)
+        ,std::runtime_error
+        ,"Assertion '0 <= total_amount' failed."
+        );
+#endif // 0
 }
 
 void progressively_limit_test()
@@ -420,6 +472,7 @@ void progressively_reduce_test()
 int test_main(int, char*[])
 {
     banded_test();
+    tiered_test();
     progressively_limit_test();
     progressively_reduce_test();
     return 0;
