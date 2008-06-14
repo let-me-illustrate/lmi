@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_algorithms.hpp,v 1.12 2008-04-14 00:51:24 chicares Exp $
+// $Id: stratified_algorithms.hpp,v 1.13 2008-06-14 23:13:41 chicares Exp $
 
 #ifndef stratified_algorithms_hpp
 #define stratified_algorithms_hpp
@@ -83,7 +83,6 @@ namespace tiered_and_banded_rates{} // doxygen workaround.
 
 // TODO ?? Shortcomings:
 //
-// Unit tests lacking for 'tiered_product' and 'tiered_rate'.
 // 'TieredGrossToNet' and 'TieredNetToGross' lack unit tests and
 // probably should be template functions.
 //
@@ -98,6 +97,11 @@ namespace tiered_and_banded_rates{} // doxygen workaround.
 // but they are not. The arguments could be grouped in std::pair
 // instances if binary functions are really needed, but probably it
 // would be better not to derive from std::binary_function at all.
+//
+// 'tiered' and 'banded' limits are expressed differently: as
+// incremental and cumulative limits, respectively. This may confuse
+// the careless reader, but presents limits to the product-editor user
+// in the least astonishing way.
 
 /// Determine net amount after subtracting a tiered proportion.
 /// Example use: convert gross premium to net premium.
@@ -227,7 +231,7 @@ struct banded_rate
 {
     T operator()
         (T const&              total_amount
-        ,std::vector<T> const& incremental_limits
+        ,std::vector<T> const& cumulative_limits
         ,std::vector<T> const& rates
         ) const;
 };
