@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_algorithms.hpp,v 1.13 2008-06-14 23:13:41 chicares Exp $
+// $Id: stratified_algorithms.hpp,v 1.14 2008-06-15 12:47:29 chicares Exp $
 
 #ifndef stratified_algorithms_hpp
 #define stratified_algorithms_hpp
@@ -162,13 +162,16 @@ T tiered_product<T>::operator()
 
     T result = zero;
     T remaining_amount = new_incremental_amount;
+    T unused_prior_amount = prior_total_amount;
     for
         (typename std::vector<T>::size_type j = 0
         ;j < incremental_limits.size()
         ;++j
         )
         {
-        T unfilled_band_increment = incremental_limits[j] - prior_total_amount;
+        T unfilled_band_increment = incremental_limits[j] - unused_prior_amount;
+        unused_prior_amount -= incremental_limits[j];
+        unused_prior_amount = std::max(0.0, unused_prior_amount);
         if(unfilled_band_increment <= zero)
             {
             continue;
