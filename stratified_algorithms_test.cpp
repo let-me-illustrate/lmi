@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_algorithms_test.cpp,v 1.12 2008-06-15 12:46:30 chicares Exp $
+// $Id: stratified_algorithms_test.cpp,v 1.13 2008-06-15 14:50:33 chicares Exp $
 
 // TODO ?? Add tests for tiered_product<>() and tiered_rate<>().
 
@@ -83,6 +83,39 @@ void banded_test()
         (banded_rate<double>()(-1.0, limits, rates)
         ,std::runtime_error
         ,"Assertion '0 <= total_amount' failed."
+        );
+
+    std::vector<double> const empty;
+
+    BOOST_TEST_THROW
+        (banded_rate<double>()(0.0, empty, rates)
+        ,std::runtime_error
+        ,"Assertion '!cumulative_limits.empty()' failed."
+        );
+
+    BOOST_TEST_THROW
+        (banded_rate<double>()(0.0, limits, empty)
+        ,std::runtime_error
+        ,"Assertion 'rates.size() == cumulative_limits.size()' failed."
+        );
+
+    std::vector<double> const zero(limits.size(), 0.0);
+    BOOST_TEST_THROW
+        (banded_rate<double>()(0.0, zero, rates)
+        ,std::runtime_error
+        ,"Assertion '0.0 < *std::min_element(z.begin(), z.end())' failed."
+        );
+
+    std::vector<double> nonincreasing(limits);
+    nonincreasing[0] = nonincreasing[1];
+    banded_rate<double>()(0.0, nonincreasing, rates);
+
+    std::vector<double> decreasing(limits);
+    decreasing[0] = 1.0 + decreasing[1];
+    BOOST_TEST_THROW
+        (banded_rate<double>()(0.0, decreasing, rates)
+        ,std::runtime_error
+        ,"Assertion 'nonstd::is_sorted(z.begin(), z.end())' failed."
         );
 }
 
