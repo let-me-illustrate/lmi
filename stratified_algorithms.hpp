@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_algorithms.hpp,v 1.15 2008-06-15 14:50:33 chicares Exp $
+// $Id: stratified_algorithms.hpp,v 1.16 2008-06-15 22:15:46 chicares Exp $
 
 #ifndef stratified_algorithms_hpp
 #define stratified_algorithms_hpp
@@ -247,12 +247,20 @@ struct banded_rate
 ///
 /// Throws on precondition violation.
 ///
-/// Preconditions: 'total_amount' is nonnegative. 'cumulative_limits'
-/// is nonempty, and its elements are positive and nondecreasing--but
-/// not necessarily increasing, because users may wish to suppress a
-/// band experimentally by making its bracket temporarily inapplicable
-/// without actually deleting it. 'rates' has the same size as
-/// 'cumulative_limits', but its elements are unconstrained.
+/// Preconditions:
+///
+/// 'total_amount' is nonnegative.
+///
+/// 'cumulative_limits' is nonempty.
+///
+/// 'rates' has the same size as 'cumulative_limits'; its elements
+/// are unconstrained.
+///
+/// Elements of 'cumulative_limits' are nonnegative and not all zero;
+/// they are nondecreasing, though not necessarily increasing.
+///
+/// Rationale: Users may wish to suppress a bracket experimentally by
+/// making its range temporarily empty without actually deleting it.
 
 template<typename T>
 T banded_rate<T>::operator()
@@ -265,7 +273,8 @@ T banded_rate<T>::operator()
     LMI_ASSERT(!cumulative_limits.empty());
     LMI_ASSERT(rates.size() == cumulative_limits.size());
     std::vector<T> const& z(cumulative_limits);
-    LMI_ASSERT(0.0 < *std::min_element(z.begin(), z.end()));
+    LMI_ASSERT(0.0 <= *std::min_element(z.begin(), z.end()));
+    LMI_ASSERT(0.0 <  *std::max_element(z.begin(), z.end()));
     LMI_ASSERT(nonstd::is_sorted(z.begin(), z.end()));
 
     // TODO ?? This is ghastly. As designed, the last limit must
