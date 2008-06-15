@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_algorithms_test.cpp,v 1.13 2008-06-15 14:50:33 chicares Exp $
+// $Id: stratified_algorithms_test.cpp,v 1.14 2008-06-15 22:15:47 chicares Exp $
 
 // TODO ?? Add tests for tiered_product<>() and tiered_rate<>().
 
@@ -69,6 +69,14 @@ void banded_test()
     BOOST_TEST(materially_equal( 30.0, banded_product<double>()( 1500.0, limits, rates)));
     BOOST_TEST(materially_equal(100.0, banded_product<double>()(10000.0, limits, rates)));
 
+    // With some brackets of measure zero.
+
+    double z_x[] = {0.0, 1000.0 , 1000.0, 1000.0, 5000.0 , m   };
+    double z_y[] = {9.9,    0.05,    8.8,    7.7,    0.02, 0.01};
+    std::vector<double> const z_limits(z_x, z_x + lmi_array_size(z_x));
+    std::vector<double> const z_rates (z_y, z_y + lmi_array_size(z_y));
+    BOOST_TEST(materially_equal( 30.0, banded_product<double>()( 1500.0, z_limits, z_rates)));
+
     // In the vicinity of extrema.
 
     BOOST_TEST_EQUAL(0.05, banded_rate<double>()(      0.0, limits, rates));
@@ -99,11 +107,18 @@ void banded_test()
         ,"Assertion 'rates.size() == cumulative_limits.size()' failed."
         );
 
+    std::vector<double> const negative(limits.size(), -1.0);
+    BOOST_TEST_THROW
+        (banded_rate<double>()(0.0, negative, rates)
+        ,std::runtime_error
+        ,"Assertion '0.0 <= *std::min_element(z.begin(), z.end())' failed."
+        );
+
     std::vector<double> const zero(limits.size(), 0.0);
     BOOST_TEST_THROW
         (banded_rate<double>()(0.0, zero, rates)
         ,std::runtime_error
-        ,"Assertion '0.0 < *std::min_element(z.begin(), z.end())' failed."
+        ,"Assertion '0.0 < *std::max_element(z.begin(), z.end())' failed."
         );
 
     std::vector<double> nonincreasing(limits);
