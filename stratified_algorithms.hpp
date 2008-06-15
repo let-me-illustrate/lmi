@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_algorithms.hpp,v 1.14 2008-06-15 12:47:29 chicares Exp $
+// $Id: stratified_algorithms.hpp,v 1.15 2008-06-15 14:50:33 chicares Exp $
 
 #ifndef stratified_algorithms_hpp
 #define stratified_algorithms_hpp
@@ -226,7 +226,11 @@ T tiered_rate<T>::operator()
     return result;
 }
 
+/// Banded rate for a given amount.
+///
 /// Like banded_product, but returns rate rather than product.
+///
+/// Brackets are specified by cumulative (not incremental) limits.
 
 template<typename T>
 struct banded_rate
@@ -239,6 +243,17 @@ struct banded_rate
         ) const;
 };
 
+/// Banded rate for a given amount.
+///
+/// Throws on precondition violation.
+///
+/// Preconditions: 'total_amount' is nonnegative. 'cumulative_limits'
+/// is nonempty, and its elements are positive and nondecreasing--but
+/// not necessarily increasing, because users may wish to suppress a
+/// band experimentally by making its bracket temporarily inapplicable
+/// without actually deleting it. 'rates' has the same size as
+/// 'cumulative_limits', but its elements are unconstrained.
+
 template<typename T>
 T banded_rate<T>::operator()
     (T const&              total_amount
@@ -246,17 +261,12 @@ T banded_rate<T>::operator()
     ,std::vector<T> const& rates
     ) const
 {
-    // TODO ?? It would be better to assert that limits are increasing.
-    LMI_ASSERT
-        (nonstd::is_sorted
-            (cumulative_limits.begin()
-            ,cumulative_limits.end()
-            )
-        );
     LMI_ASSERT(0 <= total_amount);
-
-    // Don't assert that 'rates' decrease: it might seem weird if
-    // they don't, but there's no reason to forbid it.
+    LMI_ASSERT(!cumulative_limits.empty());
+    LMI_ASSERT(rates.size() == cumulative_limits.size());
+    std::vector<T> const& z(cumulative_limits);
+    LMI_ASSERT(0.0 < *std::min_element(z.begin(), z.end()));
+    LMI_ASSERT(nonstd::is_sorted(z.begin(), z.end()));
 
     // TODO ?? This is ghastly. As designed, the last limit must
     // exist, and it must equal std::numeric_limits<T>::max(); but
