@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_algorithms_test.cpp,v 1.11 2008-06-14 22:15:31 chicares Exp $
+// $Id: stratified_algorithms_test.cpp,v 1.12 2008-06-15 12:46:30 chicares Exp $
 
 // TODO ?? Add tests for tiered_product<>() and tiered_rate<>().
 
@@ -117,7 +117,16 @@ void tiered_test()
     BOOST_TEST(materially_equal( 60.0, tiered_product<double>()( 1500.0, 0.0, limits, rates)));
     BOOST_TEST(materially_equal(180.0, tiered_product<double>()(10000.0, 0.0, limits, rates)));
 
-    // Also test nonzero second argument.
+    // With nonzero second argument to tiered_product().
+
+    BOOST_TEST(materially_equal(  0.0, tiered_product<double>()(    0.0, 10000.0, limits, rates)));
+    BOOST_TEST(materially_equal( 10.0, tiered_product<double>()( 1000.0,  9000.0, limits, rates)));
+    BOOST_TEST(materially_equal( 50.0, tiered_product<double>()( 5000.0,  5000.0, limits, rates)));
+
+    BOOST_TEST(materially_equal( 10.0, tiered_product<double>()(  500.0,  1000.0, limits, rates)));
+
+    BOOST_TEST(materially_equal(  5.0, tiered_product<double>()(  100.0,   100.0, limits, rates)));
+    BOOST_TEST(materially_equal(175.0, tiered_product<double>()( 9900.0,   100.0, limits, rates)));
 
     // In the vicinity of extrema.
 
