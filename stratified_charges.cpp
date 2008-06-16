@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.cpp,v 1.22 2008-02-19 16:22:15 chicares Exp $
+// $Id: stratified_charges.cpp,v 1.23 2008-06-16 12:53:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -79,15 +79,25 @@ stratified_entity::~stratified_entity()
 {
 }
 
-//============================================================================
+/// Throw if invalid.
+///
+/// Assert the intersection of constraints on 'tiered' (incremental)
+/// and 'banded' (cumulative) limits.
+///
+/// TODO ?? Banded limits are constrained to be nondecreasing, but
+/// that cannot be asserted for now because tiered and banded limits
+/// are not distinguished here. They could be distinguished by adding
+/// a flag to the class's state. Alternatively, all limits could be
+/// expressed in the same way.
+
 void stratified_entity::assert_validity() const
 {
     LMI_ASSERT(!values_.empty());
     LMI_ASSERT(!limits_.empty());
     LMI_ASSERT(values_.size() == limits_.size());
     LMI_ASSERT(is_highest_representable_double(limits_.back()));
-    LMI_ASSERT(nonstd::is_sorted(limits_.begin(), limits_.end()));
-    LMI_ASSERT(0.0 < *std::min_element(limits_.begin(), limits_.end()));
+    LMI_ASSERT(0.0 <= *std::min_element(limits_.begin(), limits_.end()));
+    LMI_ASSERT(0.0 <  *std::max_element(limits_.begin(), limits_.end()));
 }
 
 //============================================================================
