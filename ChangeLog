@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1071 2008-06-09 16:29:31 chicares Exp $
+// $Id: ChangeLog,v 1.1072 2008-06-16 12:53:23 chicares Exp $
 
 MAINTENANCE
 
@@ -17067,4 +17067,74 @@ Fix defect introduced 20080602T1804Z (VZ). See:
 
   DefectLog
 Draw lessons from recent experience.
+
+20080614T1433Z <gchicares@sbcglobal.net> [1167]
+
+  actuarial_table.hpp
+Clarify documentation.
+
+20080614T1434Z <gchicares@sbcglobal.net> [1167]
+
+  stratified_algorithms_test.cpp
+Refactor.
+
+20080614T1524Z <gchicares@sbcglobal.net> [1167]
+
+  stratified_algorithms_test.cpp
+Increase power of unit tests.
+
+20080614T2215Z <gchicares@sbcglobal.net> [1167]
+
+  stratified_algorithms_test.cpp
+Unit-test tiered as well as banded algorithms.
+
+20080614T2313Z <gchicares@sbcglobal.net> [1167]
+
+  stratified_algorithms.hpp
+Correct a misleadingly-named argument; improve documentation.
+
+20080615T1246Z <gchicares@sbcglobal.net> [1167]
+
+  stratified_algorithms_test.cpp
+Add tests, revealing a latent defect: tiered_product() with a nonzero
+second argument is not correct. Apparently the defect hasn't appeared
+in practice only because the second argument is nonzero only in a case
+that the defective implementation handled correctly: premium tax with
+exactly two tiers.
+
+20080615T1247Z <gchicares@sbcglobal.net> [1167]
+
+  stratified_algorithms.hpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch, and noted 20080615T1246Z.
+
+20080615T1450Z <gchicares@sbcglobal.net> [1166]
+
+  stratified_algorithms.hpp
+  stratified_algorithms_test.cpp
+Strengthen precondition tests for 'banded_rate'.
+
+20080615T2215Z <gchicares@sbcglobal.net> [1166]
+
+  stratified_algorithms.hpp
+  stratified_algorithms_test.cpp
+Remove an overly restrictive precondition for 'banded' algorithms. The
+first bracket can now be of measure zero as long as some other is not.
+
+20080616T1121Z <gchicares@sbcglobal.net> [1166]
+
+  stratified_algorithms.hpp
+  stratified_algorithms_test.cpp
+Refactor.
+
+20080616T1148Z <gchicares@sbcglobal.net> [1162]
+
+  stratified_algorithms.hpp
+  stratified_algorithms_test.cpp
+Strengthen precondition tests for 'tiered_product'.
+
+20080616T1253Z <gchicares@sbcglobal.net> [1163]
+
+  stratified_charges.cpp
+Liberalize overly restrictive assertions; note a defect.
 
