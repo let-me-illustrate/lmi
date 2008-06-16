@@ -19,9 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_algorithms_test.cpp,v 1.15 2008-06-16 11:21:39 chicares Exp $
-
-// TODO ?? Add tests for tiered_product<>() and tiered_rate<>().
+// $Id: stratified_algorithms_test.cpp,v 1.16 2008-06-16 11:48:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -176,6 +174,14 @@ void tiered_test()
     BOOST_TEST(materially_equal(  5.0, tiered_product<double>()(  100.0,   100.0, limits, rates)));
     BOOST_TEST(materially_equal(175.0, tiered_product<double>()( 9900.0,   100.0, limits, rates)));
 
+    // With some brackets of measure zero.
+
+    double z_x[] = {0.0, 1000.0 , 0.0, 0.0, 4000.0 , m   };
+    double z_y[] = {9.9,    0.05, 8.8, 7.7,    0.02, 0.01};
+    std::vector<double> const z_limits(z_x, z_x + lmi_array_size(z_x));
+    std::vector<double> const z_rates (z_y, z_y + lmi_array_size(z_y));
+    BOOST_TEST(materially_equal(175.0, tiered_product<double>()( 9900.0,   100.0, z_limits, z_rates)));
+
     // In the vicinity of extrema.
 
     BOOST_TEST(materially_equal(0.0500, tiered_rate<double>()(      0.0, limits, rates)));
@@ -186,13 +192,53 @@ void tiered_test()
 
     // Precondition violations.
 
-#if 0 // Probably this should throw.
     BOOST_TEST_THROW
-        (tiered_rate<double>()(-1.0, limits, rates)
+        (tiered_product<double>()(-1.0, 0.0, limits, rates)
         ,std::runtime_error
-        ,"Assertion '0 <= total_amount' failed."
+        ,"Assertion 'zero <= new_incremental_amount' failed."
         );
-#endif // 0
+
+    BOOST_TEST_THROW
+        (tiered_product<double>()(0.0, -1.0, limits, rates)
+        ,std::runtime_error
+        ,"Assertion 'zero <= prior_total_amount' failed."
+        );
+
+    std::vector<double> const empty;
+
+    BOOST_TEST_THROW
+        (tiered_product<double>()(0.0, 0.0, empty, rates)
+        ,std::runtime_error
+        ,"Assertion '!incremental_limits.empty()' failed."
+        );
+
+    BOOST_TEST_THROW
+        (tiered_product<double>()(0.0, 0.0, limits, empty)
+        ,std::runtime_error
+        ,"Assertion 'rates.size() == incremental_limits.size()' failed."
+        );
+
+    std::vector<double> const negative(limits.size(), -1.0);
+    BOOST_TEST_THROW
+        (tiered_product<double>()(0.0, 0.0, negative, rates)
+        ,std::runtime_error
+        ,"Assertion 'zero <= *std::min_element(z.begin(), z.end())' failed."
+        );
+
+    std::vector<double> const zero(limits.size(), 0.0);
+    BOOST_TEST_THROW
+        (tiered_product<double>()(0.0, 0.0, zero, rates)
+        ,std::runtime_error
+        ,"Assertion 'zero < *std::max_element(z.begin(), z.end())' failed."
+        );
+
+    std::vector<double> nonincreasing(limits);
+    nonincreasing[0] = nonincreasing[1];
+    tiered_product<double>()(0.0, 0.0, nonincreasing, rates);
+
+    std::vector<double> decreasing(limits);
+    decreasing[0] = 1.0 + decreasing[1];
+    tiered_product<double>()(0.0, 0.0, decreasing, rates);
 }
 
 void progressively_limit_test()
