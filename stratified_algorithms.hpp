@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_algorithms.hpp,v 1.16 2008-06-15 22:15:46 chicares Exp $
+// $Id: stratified_algorithms.hpp,v 1.17 2008-06-16 11:21:39 chicares Exp $
 
 #ifndef stratified_algorithms_hpp
 #define stratified_algorithms_hpp
@@ -171,7 +171,7 @@ T tiered_product<T>::operator()
         {
         T unfilled_band_increment = incremental_limits[j] - unused_prior_amount;
         unused_prior_amount -= incremental_limits[j];
-        unused_prior_amount = std::max(0.0, unused_prior_amount);
+        unused_prior_amount = std::max(zero, unused_prior_amount);
         if(unfilled_band_increment <= zero)
             {
             continue;
@@ -215,11 +215,13 @@ T tiered_rate<T>::operator()
     ,std::vector<T> const& rates
     ) const
 {
-    T zero = T(0);
+    // Cache T(0) in case it's expensive to construct.
+    T const zero = T(0);
+
     T product = tiered_product<T>()(amount, zero, incremental_limits, rates);
     // TODO ?? Mustn't we assert that size() is nonzero?
     T result = rates[0];
-    if(amount != T(0))
+    if(zero != amount)
         {
         result = product / amount;
         }
@@ -269,12 +271,15 @@ T banded_rate<T>::operator()
     ,std::vector<T> const& rates
     ) const
 {
-    LMI_ASSERT(0 <= total_amount);
+    // Cache T(0) in case it's expensive to construct.
+    T const zero = T(0);
+
+    LMI_ASSERT(zero <= total_amount);
     LMI_ASSERT(!cumulative_limits.empty());
     LMI_ASSERT(rates.size() == cumulative_limits.size());
     std::vector<T> const& z(cumulative_limits);
-    LMI_ASSERT(0.0 <= *std::min_element(z.begin(), z.end()));
-    LMI_ASSERT(0.0 <  *std::max_element(z.begin(), z.end()));
+    LMI_ASSERT(zero <= *std::min_element(z.begin(), z.end()));
+    LMI_ASSERT(zero <  *std::max_element(z.begin(), z.end()));
     LMI_ASSERT(nonstd::is_sorted(z.begin(), z.end()));
 
     // TODO ?? This is ghastly. As designed, the last limit must
@@ -334,6 +339,7 @@ void progressively_limit(T& a, T& b, T const& limit)
 {
     // Cache T(0) in case it's expensive to construct.
     T const zero = T(0);
+
     LMI_ASSERT(zero <= limit);
     if(a <= zero && b <= zero)
         {
@@ -442,7 +448,7 @@ template<typename T>
 T progressively_reduce(T& a, T& b, T const& delta)
 {
     // Cache T(0) in case it's expensive to construct.
-    T const zero(0);
+    T const zero = T(0);
 
     // Return value.
     T r(delta);
