@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_algorithms_test.cpp,v 1.14 2008-06-15 22:15:47 chicares Exp $
+// $Id: stratified_algorithms_test.cpp,v 1.15 2008-06-16 11:21:39 chicares Exp $
 
 // TODO ?? Add tests for tiered_product<>() and tiered_rate<>().
 
@@ -90,7 +90,7 @@ void banded_test()
     BOOST_TEST_THROW
         (banded_rate<double>()(-1.0, limits, rates)
         ,std::runtime_error
-        ,"Assertion '0 <= total_amount' failed."
+        ,"Assertion 'zero <= total_amount' failed."
         );
 
     std::vector<double> const empty;
@@ -111,14 +111,14 @@ void banded_test()
     BOOST_TEST_THROW
         (banded_rate<double>()(0.0, negative, rates)
         ,std::runtime_error
-        ,"Assertion '0.0 <= *std::min_element(z.begin(), z.end())' failed."
+        ,"Assertion 'zero <= *std::min_element(z.begin(), z.end())' failed."
         );
 
     std::vector<double> const zero(limits.size(), 0.0);
     BOOST_TEST_THROW
         (banded_rate<double>()(0.0, zero, rates)
         ,std::runtime_error
-        ,"Assertion '0.0 < *std::max_element(z.begin(), z.end())' failed."
+        ,"Assertion 'zero < *std::max_element(z.begin(), z.end())' failed."
         );
 
     std::vector<double> nonincreasing(limits);
