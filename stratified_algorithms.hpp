@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_algorithms.hpp,v 1.17 2008-06-16 11:21:39 chicares Exp $
+// $Id: stratified_algorithms.hpp,v 1.18 2008-06-16 11:48:32 chicares Exp $
 
 #ifndef stratified_algorithms_hpp
 #define stratified_algorithms_hpp
@@ -143,6 +143,24 @@ struct tiered_product
         ) const;
 };
 
+/// Amount times tiered rates.
+///
+/// Throws on precondition violation.
+///
+/// Preconditions:
+///
+/// Both scalar 'amount' arguments are nonnegative.
+///
+/// 'incremental_limits' is nonempty.
+///
+/// 'rates' has the same size as 'incremental_limits'; its elements
+/// are unconstrained.
+///
+/// Elements of 'incremental_limits' are nonnegative and not all zero.
+///
+/// Rationale: Users may wish to suppress a bracket experimentally by
+/// making its range temporarily empty without actually deleting it.
+
 template<typename T>
 T tiered_product<T>::operator()
     (T const&              new_incremental_amount
@@ -151,14 +169,16 @@ T tiered_product<T>::operator()
     ,std::vector<T> const& rates
     ) const
 {
-    LMI_ASSERT(incremental_limits.size() == rates.size());
-    // We don't assert that 'incremental_limits' increase or that
-    // 'rates' decrease.
-    // TODO ?? Is this correct if they don't?
-    // TODO ?? Must we assert that arguments are positive?
-
     // Cache T(0) in case it's expensive to construct.
     T const zero = T(0);
+
+    LMI_ASSERT(zero <= new_incremental_amount);
+    LMI_ASSERT(zero <= prior_total_amount);
+    LMI_ASSERT(!incremental_limits.empty());
+    LMI_ASSERT(rates.size() == incremental_limits.size());
+    std::vector<T> const& z(incremental_limits);
+    LMI_ASSERT(zero <= *std::min_element(z.begin(), z.end()));
+    LMI_ASSERT(zero <  *std::max_element(z.begin(), z.end()));
 
     T result = zero;
     T remaining_amount = new_incremental_amount;
@@ -219,8 +239,7 @@ T tiered_rate<T>::operator()
     T const zero = T(0);
 
     T product = tiered_product<T>()(amount, zero, incremental_limits, rates);
-    // TODO ?? Mustn't we assert that size() is nonzero?
-    T result = rates[0];
+    T result = rates.at(0);
     if(zero != amount)
         {
         result = product / amount;
