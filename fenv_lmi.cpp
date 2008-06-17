@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi.cpp,v 1.25 2008-01-01 18:29:40 chicares Exp $
+// $Id: fenv_lmi.cpp,v 1.26 2008-06-17 15:30:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -64,7 +64,7 @@ namespace floating_point_environment {} // doxygen workaround.
 
 void fenv_initialize()
 {
-#if 0 && defined __STDC_IEC_559__
+#if defined LMI_IEC_559
     fenv_t save_env;
     feholdexcept(&save_env);
     fesetround(FE_TONEAREST);
@@ -120,7 +120,7 @@ void fenv_precision(e_ieee754_precision precision_mode)
 
 e_ieee754_rounding fenv_rounding()
 {
-#if 0 && defined __STDC_IEC_559__
+#if defined LMI_IEC_559
     int z = fegetround();
     return
           (FE_TONEAREST  == z) ? fe_tonearest
@@ -147,7 +147,7 @@ e_ieee754_rounding fenv_rounding()
 
 void fenv_rounding(e_ieee754_rounding rounding_mode)
 {
-#if 0 && defined __STDC_IEC_559__
+#if defined LMI_IEC_559
     int z =
           (fe_tonearest  == rounding_mode) ? FE_TONEAREST
         : (fe_downward   == rounding_mode) ? FE_DOWNWARD
