@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.cpp,v 1.23 2008-06-16 12:53:23 chicares Exp $
+// $Id: stratified_charges.cpp,v 1.24 2008-06-17 13:04:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,7 +32,6 @@
 #include "assert_lmi.hpp"
 #include "data_directory.hpp"
 #include "platform_dependent.hpp" // access()
-#include "stl_extensions.hpp"     // nonstd::is_sorted()
 #include "stratified_algorithms.hpp"
 
 #include <algorithm>
