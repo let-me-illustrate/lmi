@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.73 2008-05-16 13:59:25 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.74 2008-06-17 09:03:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -213,11 +213,10 @@ void AccountValue::DoMonthDR()
         (GrossPmts[Month] - gross_1035
         ,max_necessary_premium
         );
-    double unnecessary_premium =
-          GrossPmts[Month]
-        - gross_1035
-        - necessary_premium
-        ;
+    double unnecessary_premium = material_difference
+        (GrossPmts[Month]
+        ,gross_1035 + necessary_premium
+        );
 
     // It is crucial to accept necessary premium before processing a
     // material change, so that the correct DCV is used.
