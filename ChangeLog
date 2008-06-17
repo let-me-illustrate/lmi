@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1072 2008-06-16 12:53:23 chicares Exp $
+// $Id: ChangeLog,v 1.1073 2008-06-17 09:03:31 chicares Exp $
 
 MAINTENANCE
 
@@ -17137,4 +17137,9 @@ Strengthen precondition tests for 'tiered_product'.
 
   stratified_charges.cpp
 Liberalize overly restrictive assertions; note a defect.
+
+20080617T0903Z <gchicares@sbcglobal.net> [1163]
+
+  ihs_avmly.cpp
+Avoid catastrophic cancellation.
 
