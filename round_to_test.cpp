@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: round_to_test.cpp,v 1.20 2008-06-06 20:49:26 chicares Exp $
+// $Id: round_to_test.cpp,v 1.21 2008-06-17 15:30:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -37,11 +37,7 @@
 #include <iostream>
 #include <ostream>
 
-// See the thread beginning here:
-//   http://lists.nongnu.org/archive/html/lmi/2008-06/msg00004.html
-#if defined LMI_X86
-    // "fenv_lmi_x86.hpp" provides the necessary values.
-#elif defined __STDC_IEC_559__
+#if defined LMI_IEC_559
     // In case the C++ compiler offers C99 fesetround(), assume that
     // it defines __STDC_IEC_559__, but doesn't support
     //   #pragma STDC FENV_ACCESS ON
@@ -53,6 +49,8 @@
         ,fe_upward     = FE_UPWARD
         ,fe_towardzero = FE_TOWARDZERO
         };
+#elif defined LMI_X86
+    // "fenv_lmi_x86.hpp" provides the necessary values.
 #else  // No known way to set rounding style.
 #   error No known way to set rounding style.
 #endif // No known way to set rounding style.
@@ -107,10 +105,10 @@ template<> char const* get_name_of_float_type<long double>()
 
 void set_hardware_rounding_mode(e_ieee754_rounding mode, bool synchronize)
 {
-#if defined LMI_X86
-    fenv_rounding(mode);
-#elif defined __STDC_IEC_559__
+#if defined LMI_IEC_559
     fesetround(mode);
+#elif defined LMI_X86
+    fenv_rounding(mode);
 #else // No known way to set hardware rounding mode.
     std::cerr
         << "\nCannot set floating-point hardware rounding mode.\n"

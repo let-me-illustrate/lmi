@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi.hpp,v 1.16 2008-01-01 18:29:40 chicares Exp $
+// $Id: fenv_lmi.hpp,v 1.17 2008-06-17 15:30:33 chicares Exp $
 
 #ifndef fenv_lmi_hpp
 #define fenv_lmi_hpp
@@ -34,7 +34,9 @@
 #   error Unknown compiler or platform.
 #endif // Unknown compiler or platform.
 
-#if defined __STDC_IEC_559__ || defined __MINGW32__
+// SOMEDAY !! Revisit suppressed __STDC_IEC_559__ support. See:
+//   http://lists.nongnu.org/archive/html/lmi/2008-06/msg00033.html
+#if defined LMI_IEC_559
 // In case the C++ compiler supports C99 7.6 facilities, assume that
 // it defines __STDC_IEC_559__ (except that MinGW supports some such
 // facilities but defines no such macro), and puts prototypes in
@@ -48,7 +50,7 @@
 #   else  // Pragma STDC FENV_ACCESS implemented.
 #       pragma STDC FENV_ACCESS ON
 #   endif // Pragma STDC FENV_ACCESS implemented.
-#endif // defined __STDC_IEC_559__ || defined __MINGW32__
+#endif // defined LMI_IEC_559
 
 /// These functions manage the floating-point environment.
 ///
