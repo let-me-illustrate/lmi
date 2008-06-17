@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1073 2008-06-17 09:03:31 chicares Exp $
+// $Id: ChangeLog,v 1.1074 2008-06-17 15:30:34 chicares Exp $
 
 MAINTENANCE
 
@@ -17142,4 +17142,24 @@ Liberalize overly restrictive assertions; note a defect.
 
   ihs_avmly.cpp
 Avoid catastrophic cancellation.
+
+20080617T1304Z <gchicares@sbcglobal.net> [1163]
+
+  stratified_charges.cpp
+No longer include a disused header.
+
+20080617T1530Z <gchicares@sbcglobal.net> [1163]
+
+  fenv_lmi.cpp
+  fenv_lmi.hpp
+  fenv_lmi_test.cpp
+  round_test.cpp
+  round_to_test.cpp
+Fix defect introduced 20080602T1804Z. Revert the 20080602T1804Z and
+20080606T2049Z changes, revising 'round_test.cpp' as though the former
+change had never been made, then proceed as recommended here:
+  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00033.html
+writing 'LMI_IEC_559' instead of '(0 && defined __STDC_IEC_559__)' for
+the reasons given here:
+  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00034.html
 

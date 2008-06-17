@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: round_test.cpp,v 1.3 2008-06-04 12:25:17 chicares Exp $
+// $Id: round_test.cpp,v 1.4 2008-06-17 15:30:34 chicares Exp $
 
 // Unit tests for libmingwex round() and its kin. See:
 //   http://sf.net/tracker/?func=detail&atid=302435&aid=1962656&group_id=2435
@@ -49,11 +49,7 @@
 #include <math.h>    // C99 round() and kin
 #include <ostream>
 
-// See the thread beginning here:
-//   http://lists.nongnu.org/archive/html/lmi/2008-06/msg00004.html
-#if defined LMI_X86
-    // "fenv_lmi_x86.hpp" provides the necessary values.
-#elif defined __STDC_IEC_559__
+#if defined LMI_IEC_559
     // In case the C++ compiler offers C99 fesetround(), assume that
     // it defines __STDC_IEC_559__, but doesn't support
     //   #pragma STDC FENV_ACCESS ON
@@ -65,6 +61,8 @@
         ,fe_upward     = FE_UPWARD
         ,fe_towardzero = FE_TOWARDZERO
         };
+#elif defined LMI_X86
+    // "fenv_lmi_x86.hpp" provides the necessary values.
 #else  // No known way to set rounding style.
 #   error No known way to set rounding style.
 #endif // No known way to set rounding style.
@@ -119,7 +117,7 @@ template<> char const* get_name_of_float_type<long double>()
 
 void set_hardware_rounding_mode(e_ieee754_rounding mode, bool synchronize)
 {
-#ifdef __STDC_IEC_559__
+#if defined LMI_IEC_559
     fesetround(mode);
 #elif defined LMI_X86
     fenv_rounding(mode);

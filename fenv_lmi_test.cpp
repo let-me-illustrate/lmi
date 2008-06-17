@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi_test.cpp,v 1.16 2008-01-01 18:29:40 chicares Exp $
+// $Id: fenv_lmi_test.cpp,v 1.17 2008-06-17 15:30:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -46,6 +46,7 @@
 
 #include <bitset>
 #include <climits> // CHAR_BIT
+#include <fenv.h>
 #include <stdexcept>
 
 std::bitset<CHAR_BIT * sizeof(unsigned long int)> bits(unsigned long int i)
