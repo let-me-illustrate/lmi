@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.57 2008-05-30 16:57:12 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.58 2008-06-18 01:46:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -170,6 +170,7 @@ void Input::DoHarmonize()
 
     bool wd_allowed = database_->Query(DB_AllowWD);
     bool loan_allowed = database_->Query(DB_AllowLoan);
+    bool pref_loan_allowed = loan_allowed && database_->Query(DB_AllowPrefLoan);
 
     DefinitionOfLifeInsurance.allow(mce_gpt, database_->Query(DB_AllowGPT));
     DefinitionOfLifeInsurance.allow(mce_cvat, database_->Query(DB_AllowCVAT));
@@ -379,6 +380,11 @@ void Input::DoHarmonize()
     // the contract needn't endow).
     int max_age = static_cast<int>(database_->Query(DB_EndtAge));
     InforceYear.maximum(-1 + max_age - IssueAge.value());
+
+    // These fields have no effect for now. They're suppressed to
+    // avoid confusion.
+    PolicyDate.enable(false);
+    LastMaterialChangeDate.enable(false);
 
     UnderwritingClass.allow(mce_ultrapreferred, database_->Query(DB_AllowUltraPrefClass));
     UnderwritingClass.allow(mce_preferred     , database_->Query(DB_AllowPreferredClass));
@@ -716,6 +722,9 @@ false // Silly workaround for now.
     SeparateAccountRate    .enable(!curr_int_rate_solve && allow_sep_acct);
     SeparateAccountRateType.enable(!curr_int_rate_solve && allow_sep_acct);
 
+    InforceGeneralAccountValue .enable(allow_gen_acct);
+    InforceSeparateAccountValue.enable(allow_sep_acct);
+
     // TODO ?? VLR not yet implemented.
     bool allow_vlr =
         (   loan_allowed
@@ -816,6 +825,11 @@ false // Silly workaround for now.
 
     NewLoan.enable(!loan_inhibit);
 
+    InforceRegularLoanValue    .enable(loan_allowed);
+    InforcePreferredLoanValue  .enable(pref_loan_allowed);
+    InforceRegularLoanBalance  .enable(loan_allowed);
+    InforcePreferredLoanBalance.enable(pref_loan_allowed);
+
     LoanFromAlternative.allow(mce_from_issue     , !loan_inhibit_simple);
     LoanFromAlternative.allow(mce_from_year      , !loan_inhibit_simple);
     LoanFromAlternative.allow(mce_from_age       , !loan_inhibit_simple);
@@ -893,9 +907,6 @@ false // Silly workaround for now.
     HoneymoonEndorsement .enable(database_->Query(DB_AllowHoneymoon));
     PostHoneymoonSpread  .enable("Yes" == HoneymoonEndorsement);
     HoneymoonValueSpread .enable("Yes" == HoneymoonEndorsement);
-
-    // TODO ?? Is this a useful innovation?
-    // If so, should it propagate to other inforce fields?
     InforceHoneymoonValue.enable("Yes" == HoneymoonEndorsement);
 
     bool loan_solve_allowed = loan_allowed && home_office_only;  // TODO ?? Until we fix loan calculations.
