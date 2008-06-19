@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1074 2008-06-17 15:30:34 chicares Exp $
+// $Id: ChangeLog,v 1.1075 2008-06-19 13:40:27 chicares Exp $
 
 MAINTENANCE
 
@@ -17162,4 +17162,32 @@ change had never been made, then proceed as recommended here:
 writing 'LMI_IEC_559' instead of '(0 && defined __STDC_IEC_559__)' for
 the reasons given here:
   http://lists.nongnu.org/archive/html/lmi/2008-06/msg00034.html
+
+20080618T0145Z <gchicares@sbcglobal.net> [1163]
+
+  main_wx.cpp
+Redisable html help, reverting the 20080501T1425Z reversion.
+
+20080618T0146Z <gchicares@sbcglobal.net> [1162]
+
+  input_harmonization.cpp
+Improve control enablement. See:
+  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00038.html
+
+20080619T1339Z <gchicares@sbcglobal.net> [1162]
+
+  actuarial_table.cpp
+  callback_test.cpp
+  round_to.hpp
+  timer.cpp
+  timer.hpp
+  timer_test.cpp
+  zero.hpp
+Prevent type issues diagnosed by gcc-4.
+
+20080619T1340Z <gchicares@sbcglobal.net> [1162]
+
+  numeric_io_traits.hpp
+For 'float', prefer strtof() to strtod(), now that our production
+toolchain supports it.
 

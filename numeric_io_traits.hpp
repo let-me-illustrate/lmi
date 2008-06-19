@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_traits.hpp,v 1.20 2008-04-11 14:33:28 chicares Exp $
+// $Id: numeric_io_traits.hpp,v 1.21 2008-06-19 13:40:27 chicares Exp $
 
 #ifndef numeric_io_traits_hpp
 #define numeric_io_traits_hpp
@@ -321,7 +321,7 @@ template<> struct numeric_conversion_traits<float>
     static int digits(T t) {return floating_point_decimals(t);}
     static char const* fmt() {return "%#.*f";}
     static T strtoT(char const* nptr, char** endptr)
-        {return std::strtod(nptr, endptr);}
+        {return std::strtof(nptr, endptr);}
 };
 
 template<> struct numeric_conversion_traits<double>
@@ -334,14 +334,14 @@ template<> struct numeric_conversion_traits<double>
         {return std::strtod(nptr, endptr);}
 };
 
-// COMPILER !! MinGW gcc-3.x doesn't support "%Lf" correctly because
-// it uses the defective ms C runtime library.
-
 #if !defined LMI_COMPILER_PROVIDES_STRTOLD
 // COMPILER !! This workaround is rather poor, of course.
 inline long double strtold(char const* nptr, char** endptr)
 {return std::strtod(nptr, endptr);}
 #endif // !defined LMI_COMPILER_PROVIDES_STRTOLD
+
+// COMPILER !! MinGW gcc-3.x doesn't support "%Lf" correctly because
+// it uses the defective ms C runtime library.
 
 template<> struct numeric_conversion_traits<long double>
     :public numeric_conversion_traits<Floating>
