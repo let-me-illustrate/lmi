@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.48 2008-06-01 15:27:24 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.49 2008-06-19 13:39:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -333,7 +333,7 @@ void actuarial_table::parse_table()
                 LMI_ASSERT(-1 == table_type_);
                 unsigned char z;
                 read_datum(data_ifs, z, nominal_length);
-                z = std::toupper(z);
+                z = static_cast<unsigned char>(std::toupper(z));
                 LMI_ASSERT('A' == z || 'D' == z || 'S' == z);
                 table_type_ = z;
                 }
