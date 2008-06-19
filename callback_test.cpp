@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: callback_test.cpp,v 1.6 2008-01-01 18:29:36 chicares Exp $
+// $Id: callback_test.cpp,v 1.7 2008-06-19 13:39:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -70,9 +70,12 @@ template<> FunctionPointer callback<FunctionPointer>::function_pointer_ = 0;
 namespace application
 {
     using namespace shared_library;
+
+    /// Arrange addends to avoid conversion issues.
+
     double concrete_adder(int x, float y, double z)
     {
-        return x + y + z;
+        return x + z + y;
     }
 
     void initialize_callback()

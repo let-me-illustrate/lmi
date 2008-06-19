@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: zero.hpp,v 1.7 2008-01-01 18:30:02 chicares Exp $
+// $Id: zero.hpp,v 1.8 2008-06-19 13:39:16 chicares Exp $
 
 // R. P. Brent, _Algorithms for Minization without Derivatives_
 // ISBN 0-13-022335-2
@@ -113,13 +113,13 @@ root_type decimal_root
     double a = round_(bound0);
     double b = round_(bound1);
 
-    double fa = f(a);
+    double fa = static_cast<double>(f(a));
     if(0.0 == fa)
         {
         return std::make_pair(a, root_is_valid);
         }
 
-    double fb = f(b);
+    double fb = static_cast<double>(f(b));
     double last_evaluated_iterand = b; // Note 1.
     if(0.0 == fb)
         {
@@ -246,7 +246,7 @@ root_type decimal_root
             }
         else
             {
-            fb = f(b);
+            fb = static_cast<double>(f(b));
             last_evaluated_iterand = b;
             status()
                 << "iteration " << number_of_iterations++

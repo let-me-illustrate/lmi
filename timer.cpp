@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.cpp,v 1.13 2008-01-01 18:29:57 chicares Exp $
+// $Id: timer.cpp,v 1.14 2008-06-19 13:39:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -120,9 +120,9 @@ double Timer::elapsed_usec() const
             );
         }
 
-    // The static_cast is necessary in case elapsed_t is integral.
+    // The static_casts are necessary in case elapsed_t is integral.
     // It is impossible for frequency_ to be zero.
-    return static_cast<double>(elapsed_time_) / frequency_;
+    return static_cast<double>(elapsed_time_) / static_cast<double>(frequency_);
 }
 
 //============================================================================

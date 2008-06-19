@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: round_to.hpp,v 1.12 2008-04-11 14:33:28 chicares Exp $
+// $Id: round_to.hpp,v 1.13 2008-06-19 13:39:16 chicares Exp $
 
 #ifndef round_to_hpp
 #define round_to_hpp
@@ -574,7 +574,9 @@ bool round_to<RealType>::operator==(round_to const& z) const
 template<typename RealType>
 inline RealType round_to<RealType>::operator()(RealType r) const
 {
-    return rounding_function(r * scale_fwd_) * scale_back_;
+    return static_cast<RealType>
+        (rounding_function(static_cast<RealType>(r * scale_fwd_)) * scale_back_
+        );
 }
 
 template<typename RealType>

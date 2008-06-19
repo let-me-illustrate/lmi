@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.hpp,v 1.30 2008-01-01 18:29:57 chicares Exp $
+// $Id: timer.hpp,v 1.31 2008-06-19 13:39:16 chicares Exp $
 
 #ifndef timer_hpp
 #define timer_hpp
@@ -171,7 +171,7 @@ AliquotTimer<F>::AliquotTimer(F f, double max_seconds)
     ,max_seconds_(max_seconds)
 {
     Timer timer;
-    if(max_seconds_ * timer.frequency_ < 1.0)
+    if(max_seconds_ * static_cast<double>(timer.frequency_) < 1.0)
         {
         std::ostringstream oss;
         oss
@@ -211,14 +211,15 @@ AliquotTimer<F>& AliquotTimer<F>::operator()()
         }
 
     Timer timer;
-    double const limit = max_seconds_ * timer.frequency_;
+    double const limit = max_seconds_ * static_cast<double>(timer.frequency_);
+    double const expiry = limit + static_cast<double>(timer.time_when_started_);
     int j = 0;
     do
         {
         f_();
         ++j;
         }
-    while(j < 100 && timer.inspect() < timer.time_when_started_ + limit);
+    while(j < 100 && timer.inspect() < expiry);
     timer.stop();
     unit_time_ = timer.elapsed_usec() / j;
     std::ostringstream oss;

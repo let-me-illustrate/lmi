@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer_test.cpp,v 1.24 2008-01-01 18:29:57 chicares Exp $
+// $Id: timer_test.cpp,v 1.25 2008-06-19 13:39:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -72,7 +72,7 @@ struct TimerTest
 void TimerTest::WaitTenMsec()
 {
     Timer timer;
-    double limit = 0.01 * timer.frequency_;
+    double limit = 0.01 * static_cast<double>(timer.frequency_);
     for(;timer.inspect() - timer.time_when_started_ <= limit;) {}
 }
 
