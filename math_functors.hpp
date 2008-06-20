@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: math_functors.hpp,v 1.14 2008-04-11 14:33:28 chicares Exp $
+// $Id: math_functors.hpp,v 1.15 2008-06-20 13:14:41 chicares Exp $
 
 #ifndef math_functors_hpp
 #define math_functors_hpp
@@ -38,13 +38,13 @@
 #include <functional>
 #include <stdexcept>
 
-#if !defined LMI_COMPILER_PROVIDES_EXPM1
-extern "C" double expm1(double);
-#endif // !defined LMI_COMPILER_PROVIDES_EXPM1
+#if !defined LMI_COMPILER_PROVIDES_EXPM1L
+extern "C" long double expm1l(long double);
+#endif // !defined LMI_COMPILER_PROVIDES_EXPM1L
 
-#if !defined LMI_COMPILER_PROVIDES_LOG1P
-extern "C" double log1p(double);
-#endif // !defined LMI_COMPILER_PROVIDES_LOG1P
+#if !defined LMI_COMPILER_PROVIDES_LOG1PL
+extern "C" long double log1pl(long double);
+#endif // !defined LMI_COMPILER_PROVIDES_LOG1PL
 
 // TODO ?? Write functors here for other refactorable uses of
 // std::pow() found throughout the program.
@@ -113,7 +113,7 @@ struct mean
 //
 // Implementation note: greater accuracy and speed are obtained by
 // applying the transformation
-//   (1+i)^n - 1 <-> expm1(log1p(i) * n)
+//   (1+i)^n - 1 <-> expm1l(log1pl(i) * n)
 // to naive power-based formulas.
 
 template<typename T, int n>
@@ -124,7 +124,8 @@ struct i_upper_n_over_n_from_i
     T operator()(T const& i) const
         {
         static long double const reciprocal_n = 1.0L / n;
-        return expm1(log1p(i) * reciprocal_n);
+        long double z = expm1l(log1pl(i) * reciprocal_n);
+        return static_cast<T>(z);
         }
 };
 
@@ -147,7 +148,8 @@ struct i_from_i_upper_n_over_n
     BOOST_STATIC_ASSERT(0 < n);
     T operator()(T const& i) const
         {
-        return expm1(log1p(i) * n);
+        long double z = expm1l(log1pl(i) * n);
+        return static_cast<T>(z);
         }
 };
 
@@ -171,7 +173,8 @@ struct d_upper_n_from_i
     T operator()(T const& i) const
         {
         static long double const reciprocal_n = 1.0L / n;
-        return -n * expm1(log1p(i) * -reciprocal_n);
+        long double z = -n * expm1l(log1pl(i) * -reciprocal_n);
+        return static_cast<T>(z);
         }
 };
 
@@ -200,14 +203,15 @@ struct net_i_from_gross
     T operator()(T const& i, T const& spread, T const& fee) const
         {
         static long double const reciprocal_n = 1.0L / n;
-        return expm1
+        long double z = expm1l
             (
-            n * log1p
-                (   expm1(reciprocal_n * log1p(i))
-                -   expm1(reciprocal_n * log1p(spread))
-                -         reciprocal_n * fee
+            n * log1pl
+                (   expm1l(reciprocal_n * log1pl(i))
+                -   expm1l(reciprocal_n * log1pl(spread))
+                -          reciprocal_n * fee
                 )
             );
+        return static_cast<T>(z);
         }
 };
 
@@ -260,7 +264,7 @@ struct coi_rate_from_q
         else
             {
             static long double const reciprocal_12 = 1.0L / 12;
-            long double monthly_q = -expm1(log1p(-q) * reciprocal_12);
+            long double monthly_q = -expm1l(log1pl(-q) * reciprocal_12);
             if(1.0L == monthly_q)
                 {
                 throw std::logic_error("Monthly q equals unity.");
