@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: math_functors_test.cpp,v 1.11 2008-01-01 18:29:48 chicares Exp $
+// $Id: math_functors_test.cpp,v 1.12 2008-06-20 13:14:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -65,7 +65,10 @@ struct i_upper_12_over_12_from_i_naive
 {
     BOOST_STATIC_ASSERT(boost::is_float<T>::value);
     T operator()(T const& i) const
-        {return -1.0L + std::pow((1.0L + i), 1.0L / 12.0L);}
+        {
+        long double z = -1.0L + std::pow((1.0L + i), 1.0L / 12.0L);
+        return static_cast<T>(z);
+        }
 };
 
 template<typename T>
@@ -74,7 +77,10 @@ struct i_from_i_upper_12_over_12_naive
 {
     BOOST_STATIC_ASSERT(boost::is_float<T>::value);
     T operator()(T const& i) const
-        {return -1.0L + std::pow((1.0L + i), 12.0L);}
+        {
+        long double z = -1.0L + std::pow((1.0L + i), 12.0L);
+        return static_cast<T>(z);
+        }
 };
 
 template<typename T>
@@ -83,7 +89,10 @@ struct d_upper_12_from_i_naive
 {
     BOOST_STATIC_ASSERT(boost::is_float<T>::value);
     T operator()(T const& i) const
-        {return 12.0L * (1.0L - std::pow(1.0L + i, -1.0L / 12.0L));}
+        {
+        long double z = 12.0L * (1.0L - std::pow(1.0L + i, -1.0L / 12.0L));
+        return static_cast<T>(z);
+        }
 };
 
 template<typename T, int n>
@@ -93,15 +102,15 @@ struct net_i_from_gross_naive
     T operator()(T const& i, T const& spread, T const& fee) const
         {
         static long double const reciprocal_n = 1.0L / n;
-        return
-            std::pow(
-                1.0L
-                +   std::pow(1.0L + i,      reciprocal_n)
-                -   std::pow(1.0L + spread, reciprocal_n)
-                -                   fee   * reciprocal_n
-                ,n
-                )
-            -   1.0L;
+        long double z = std::pow
+            (
+            1.0L
+            +   std::pow(1.0L + i,      reciprocal_n)
+            -   std::pow(1.0L + spread, reciprocal_n)
+            -                   fee   * reciprocal_n
+            ,n
+            );
+        return static_cast<T>(z - 1.0L);
         }
 };
 
@@ -144,7 +153,7 @@ void sample_results()
     std::cout
         << "\n  -0.004 upper 365 by various methods\n"
         << std::setprecision(20)
-        << "    long double precision, expm1 and log1p\n      "
+        << "    long double precision, expm1l and log1pl\n      "
         << net_i_from_gross<double,365>()(0.0, 0.004, 0.0) << '\n'
         << "    long double precision, pow\n      "
         << net_i_from_gross_naive<double,365>()(0.0, 0.004, 0.0) << '\n'
@@ -154,7 +163,7 @@ void sample_results()
     fenv_precision(fe_dblprec);
     std::cout
         << std::setprecision(20)
-        << "    double precision, expm1 and log1p\n      "
+        << "    double precision, expm1l and log1pl\n      "
         << net_i_from_gross<double,365>      ()(0.0, 0.004, 0.0) << '\n'
         << "    double precision, pow\n      "
         << net_i_from_gross_naive<double,365>()(0.0, 0.004, 0.0) << '\n'
@@ -167,7 +176,7 @@ void sample_results()
 // different implementations.
 
 // This implementation naively uses std::pow(); it is both slower and
-// less inaccurate than an alternative using expm1() and log1p().
+// less inaccurate than an alternative using expm1l() and log1pl().
 void mete0()
 {
     volatile double x;
@@ -189,8 +198,8 @@ void mete1()
 
 void assay_speed()
 {
-    std::cout << "  Speed test: pow  \n    " << TimeAnAliquot(mete0) << '\n';
-    std::cout << "  Speed test: expm1\n    " << TimeAnAliquot(mete1) << '\n';
+    std::cout << "  Speed test: pow   \n    " << TimeAnAliquot(mete0) << '\n';
+    std::cout << "  Speed test: expm1l\n    " << TimeAnAliquot(mete1) << '\n';
 }
 
 int test_main(int, char*[])

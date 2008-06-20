@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: platform_dependent.hpp,v 1.12 2008-02-06 03:50:22 chicares Exp $
+// $Id: platform_dependent.hpp,v 1.13 2008-06-20 13:14:41 chicares Exp $
 
 #ifndef platform_dependent_hpp
 #define platform_dependent_hpp
@@ -49,8 +49,8 @@
 // it is difficult to implement cgi-bin without putenv(). Some others:
 //   _wcsdup(), fileno(), strcasecmp(), strdup()
 // should be avoided in general, but are required by wx. Still others,
-// like expm1(), are in C99 but not C++98, and the way their prototypes
-// are guarded varies by platform.
+// like expm1l(), are in C99 but not C++98; the way their prototypes
+// are provided for gcc varies by platform.
 
 #if defined __GNUC__ && defined __STRICT_ANSI__
 #   define LMI_GNUC_STRICT_ANSI
@@ -93,7 +93,7 @@
 // GNU/Linux (but not MinGW) requires including certain headers while
 // __STRICT_ANSI__ is not defined in order to get prototypes for
 // certain functions, for C++ with '-std=c++98':
-//   math.h:  expm1() and log1p()
+//   math.h:  expm1l() and log1pl()
 // Use the C instead of the C++ system header so that the present file
 // can be included in C as well as C++ translation units, which is
 // temporarily useful until 'expm1.c' can be removed.

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: interest_rates.cpp,v 1.18 2008-01-01 18:29:46 chicares Exp $
+// $Id: interest_rates.cpp,v 1.19 2008-06-20 13:14:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -101,13 +101,10 @@ namespace
 // guaranteed rate.
 //
 // For the annual-effective method, transformation from annual to
-// daily and back again loses precision even if the spread and fee are
-// zero, because i is small relative to (1 + i). One way to understand
-// this is to consider why C99 requires expm1() and log1p(). Until
-// those functions are accepted into C++ (as proposed here:
-//   http://groups.google.com/groups?th=234df0e7b9db786b
-// ) or at least become widely available, this implementation suffers
-// from the imprecision of C++98's underlying C89 library.
+// daily and back again by naive methods would lose considerable
+// precision even when the spread and fee are zero, because i is
+// small relative to (1 + i). That is why expm1l() and log1pl() are
+// used instead of pow().
 //
 // If both spread and fee are zero, then the net rate should exactly
 // equal the gross rate. However, those two rates would differ

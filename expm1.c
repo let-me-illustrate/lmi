@@ -31,7 +31,7 @@
 /* Begin local GWC modifications:
  * #include "cephes_mconf.h"
  */
-#if !defined LMI_COMPILER_PROVIDES_EXPM1
+#if !defined LMI_COMPILER_PROVIDES_EXPM1L
 #   ifdef __GNUC__
 double expm1(double x);
 #define LOGE2L  6.9314718055994530941723E-1L
@@ -42,7 +42,7 @@ double expm1(double x);
  * email: <chicares@cox.net>
  * snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
  *
- * $Id: expm1.c,v 1.8 2008-01-01 18:29:39 chicares Exp $
+ * $Id: expm1.c,v 1.9 2008-06-20 13:14:40 chicares Exp $
  *
  * End local GWC modifications. */
 
@@ -70,15 +70,15 @@ double expm1 (double x)
 #       endif // __COMO__
             double expm1(double x) {return exp(x) - 1.0;}
 #   endif // Not gcc.
-#endif // !defined LMI_COMPILER_PROVIDES_EXPM1
+#endif // !defined LMI_COMPILER_PROVIDES_EXPM1L
 
-#if !defined LMI_COMPILER_PROVIDES_LOG1P
+#if !defined LMI_COMPILER_PROVIDES_LOG1PL
 // COMPILER !! This workaround loses some accuracy.
 #       ifdef __COMO__
             extern "C"
 #       endif // __COMO__
             double log1p(double x) {return log(1.0 + x);}
-#endif // !defined LMI_COMPILER_PROVIDES_LOG1P
+#endif // !defined LMI_COMPILER_PROVIDES_LOG1PL
 
 /* End local GWC modifications. */
 
