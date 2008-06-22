@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: DefectLog,v 1.5 2008-06-09 16:29:31 chicares Exp $
+// $Id: DefectLog,v 1.6 2008-06-22 01:47:47 chicares Exp $
 
 MAINTENANCE
 
@@ -426,17 +426,16 @@ Two further days were then spent refactoring for clarity, most notably
 in order to eliminate confusion due to using opposite algebraic signs
 on otherwise similar adjustments for two table-lookup methods.
 
-Repairs postponed: None. This curiosity--an apparent oversight in the
-original specifications--is noted, but there is no plan to address it:
+Repairs postponed: None. This case is treated correctly, though it may
+seem otherwise at first glance:
   2010-01-01 certificate effective date
   2012-03-01 inforce reillustration date
   2012-02-01 group reentry date
-One might suppose that the select table would be reentered on the next
-certificate anniversary, 2013-01-01. If so, then the rate to be used
-for the remainder of 2012 is ascertainable only if the penultimate
-reentry date (before 2012-02-01) is known--but that contradicts the
-business specification. The system doesn't permit this reentry date.
-Even if that extra reentry date is known, the table-lookup algorithm
-was designed to permit reentry only once; to reflect multiple reentry
-dates would require an essentially different algorithm.
+One might suppose that the select table must be reentered on the next
+certificate anniversary, 2013-01-01. However, no such reentry takes
+place if the certificate leaves the group before that anniversary, as
+well it might; and no conditional reentry is to be illustrated. The
+system, therefore, correctly refuses to accept this reentry date; the
+proper input is the last group reentry date preceding or coincident
+with a certificate's most recent anniversary.
 
