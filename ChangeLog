@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1075 2008-06-19 13:40:27 chicares Exp $
+// $Id: ChangeLog,v 1.1076 2008-06-22 00:59:17 chicares Exp $
 
 MAINTENANCE
 
@@ -17190,4 +17190,27 @@ Prevent type issues diagnosed by gcc-4.
   numeric_io_traits.hpp
 For 'float', prefer strtof() to strtod(), now that our production
 toolchain supports it.
+
+20080620T1314Z <gchicares@sbcglobal.net> [1162]
+
+  config_ming323.hpp
+  expm1.c
+  interest_rates.cpp
+  math_functors.hpp
+  math_functors_test.cpp
+  platform_dependent.hpp
+Prevent type issues diagnosed by gcc-4. Avoidance of undesirable type
+conversions incidentally makes the compound-interest functions run ten
+percent faster as measured by the unit test with gcc-3.4.4 .
+
+20080622T0046Z <gchicares@sbcglobal.net> [1162]
+
+  account_value.hpp
+  ihs_avsolve.cpp
+Prevent a type issue diagnosed by gcc-4.
+
+20080622T0059Z <gchicares@sbcglobal.net> [1162]
+
+  version.hpp
+Mark release candidate.
 
