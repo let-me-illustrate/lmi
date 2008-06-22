@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.15 2008-01-01 18:29:42 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.16 2008-06-22 00:46:18 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -303,7 +303,7 @@ double AccountValue::SolveGuarPremium()
         ,0
         ,static_cast<int>(InvariantValues().EndtAge - InvariantValues().Age)
         ,e_solve_target(e_solve_for_endt)
-        ,0
+        ,0.0
         ,static_cast<int>(InvariantValues().EndtAge - InvariantValues().Age)
         ,e_basis(e_guarbasis)
         ,e_sep_acct_basis(e_sep_acct_full)
@@ -327,7 +327,7 @@ double AccountValue::Solve
     ,int                     a_SolveBegYear
     ,int                     a_SolveEndYear
     ,e_solve_target const&   a_SolveTarget
-    ,int                     a_SolveTgtCSV
+    ,double                  a_SolveTgtCSV
     ,int                     a_SolveTgtYear
     ,e_basis const&          a_SolveBasis
     ,e_sep_acct_basis const& a_SolveSABasis
