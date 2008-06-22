@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: ledger_formats.xml,v 1.7 2008-05-08 04:09:14 chicares Exp $
+    $Id: ledger_formats.xml,v 1.8 2008-06-22 13:20:30 chicares Exp $
 
     TODO ?? This file contains only 'column' elements, but they don't
     all correspond to columns: e.g., 'LapseYear' is a scalar and
@@ -503,6 +503,7 @@
         <title basis="run_guar_basis">Guar Net Cash Surr Value</title>
         <format>f1</format>
     </column>
+#if !defined REMOVE_THIS_NEXT_TIME_COLUMNS_CHANGE
     <column name="CSVGenAcct">
         <title basis="run_curr_basis">Curr Gen Acct Cash Surr Value</title>
         <title basis="run_guar_basis">Guar Gen Acct Cash Surr Value</title>
@@ -513,6 +514,7 @@
         <title basis="run_guar_basis">Guar Sep Acct Cash Surr Value</title>
         <format>f1</format>
     </column>
+#endif // !defined REMOVE_THIS_NEXT_TIME_COLUMNS_CHANGE
     <column name="CV7702">
         <title basis="run_curr_basis">Curr 7702 Cash Value</title>
         <title basis="run_guar_basis">Guar 7702 Cash Value</title>
