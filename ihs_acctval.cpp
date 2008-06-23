@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.109 2008-06-22 13:20:30 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.110 2008-06-23 13:18:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1303,7 +1303,14 @@ void AccountValue::FinalizeYear()
 //        + ExpRatReserve // This would be added if it existed.
         ;
     csv_net = std::max(csv_net, HoneymoonValue);
-    csv_net = std::max(csv_net, 0.0);
+
+    // TODO ?? AccountValue::Solve() really should be redesigned.
+    // For now, this obscure workaround simulates circumstances
+    // that its present implementation originally assumed.
+    if(!(Solving && !LapseIgnoresSurrChg))
+        {
+        csv_net = std::max(csv_net, 0.0);
+        }
 
 #if !defined REMOVE_THIS_NEXT_TIME_COLUMNS_CHANGE
     double csv_sep_acct = 0.0;
