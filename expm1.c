@@ -33,7 +33,7 @@
  */
 #if !defined LMI_COMPILER_PROVIDES_EXPM1L
 #   ifdef __GNUC__
-double expm1(double x);
+long double expm1l(long double x);
 #define LOGE2L  6.9314718055994530941723E-1L
 #define LOG2EL  1.4426950408889634073599E0L
 
@@ -42,11 +42,11 @@ double expm1(double x);
  * email: <chicares@cox.net>
  * snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
  *
- * $Id: expm1.c,v 1.9 2008-06-20 13:14:40 chicares Exp $
+ * $Id: expm1.c,v 1.10 2008-06-23 18:27:27 chicares Exp $
  *
  * End local GWC modifications. */
 
-double expm1 (double x)
+long double expm1l(long double x) /* Local GWC modification: type changed. */
 {
   if (fabs(x) < LOGE2L)
     {
@@ -68,7 +68,7 @@ double expm1 (double x)
 #       ifdef __COMO__
             extern "C"
 #       endif // __COMO__
-            double expm1(double x) {return exp(x) - 1.0;}
+            long double expm1l(long double x) {return exp(x) - 1.0;}
 #   endif // Not gcc.
 #endif // !defined LMI_COMPILER_PROVIDES_EXPM1L
 
@@ -77,7 +77,7 @@ double expm1 (double x)
 #       ifdef __COMO__
             extern "C"
 #       endif // __COMO__
-            double log1p(double x) {return log(1.0 + x);}
+            long double log1pl(long double x) {return log(1.0 + x);}
 #endif // !defined LMI_COMPILER_PROVIDES_LOG1PL
 
 /* End local GWC modifications. */
