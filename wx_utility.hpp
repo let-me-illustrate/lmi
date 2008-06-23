@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_utility.hpp,v 1.11 2008-06-02 04:00:35 chicares Exp $
+// $Id: wx_utility.hpp,v 1.12 2008-06-23 18:25:15 chicares Exp $
 
 #ifndef wx_utility_hpp
 #define wx_utility_hpp
@@ -81,7 +81,7 @@ void Connect
 {
     // Double parentheses: don't parse comma as a macro parameter separator.
     BOOST_STATIC_ASSERT((boost::is_same<void,Return>::value));
-    BOOST_STATIC_ASSERT((boost::is_base_and_derived<wxObject,Class>::value));
+    BOOST_STATIC_ASSERT((boost::is_base_and_derived<wxEvtHandler,Class>::value));
     typedef typename boost::remove_reference<Argument>::type argument_type;
     BOOST_STATIC_ASSERT
         ((
@@ -94,7 +94,9 @@ void Connect
         throw std::runtime_error("Connect(): null pointer.");
         }
 
-    object->Connect(id, event, c_cast<wxObjectEventFunction>(handler));
+    typedef void (wxEvtHandler::*t0)(Argument);
+    typedef wxObjectEventFunction t1;
+    object->Connect(id, event, c_cast<t1>(static_cast<t0>(handler)));
 }
 
 calendar_date ConvertDateFromWx(wxDateTime const&);
