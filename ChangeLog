@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1076 2008-06-22 00:59:17 chicares Exp $
+// $Id: ChangeLog,v 1.1077 2008-06-23 18:27:27 chicares Exp $
 
 MAINTENANCE
 
@@ -17213,4 +17213,37 @@ Prevent a type issue diagnosed by gcc-4.
 
   version.hpp
 Mark release candidate.
+
+20080622T0147Z <gchicares@sbcglobal.net> [1162]
+
+  DefectLog
+Correct a misunderstanding.
+
+20080622T1320Z <gchicares@sbcglobal.net> [1162]
+
+  ihs_acctval.cpp
+  ledger_formats.xml
+  ledger_variant.cpp
+  ledger_variant.hpp
+  ledger_xml_io.cpp
+Mark 20080508T0409Z changes for later reversion. The supposed business
+requirement has been recanted.
+
+20080623T1318Z <gchicares@sbcglobal.net> [1163]
+
+  ihs_acctval.cpp
+Fix defect introduced 20050114T1947Z. Solve speed had accidentally
+been impaired by preventing the objective function from assuming
+negative values.
+
+20080623T1825Z <gchicares@sbcglobal.net> [1163]
+
+  wx_utility.hpp
+Improve portability (VZ). The original code was rejected by msvc.
+
+20080623T1827Z <gchicares@sbcglobal.net> [1163]
+
+  expm1.c
+Apply one last kludge before expunging this file (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00053.html
 
