@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member.hpp,v 1.19 2008-04-11 14:33:27 chicares Exp $
+// $Id: any_member.hpp,v 1.20 2008-06-24 09:37:32 chicares Exp $
 
 // This is a derived work based on boost::any, which bears the following
 // copyright and permissions notice:
@@ -101,6 +101,9 @@ class placeholder
     virtual bool equals(placeholder const&) const = 0;
     virtual std::string str() const = 0;
     virtual std::type_info const& type() const = 0;
+#if defined LMI_MSC
+    virtual void* defraud() const = 0;
+#endif // defined LMI_MSC
 };
 
 // Implementation of class placeholder.
@@ -130,6 +133,9 @@ class holder
     virtual bool equals(placeholder const&) const;
     virtual std::string str() const;
     virtual std::type_info const& type() const;
+#if defined LMI_MSC
+    virtual void* defraud() const;
+#endif // defined LMI_MSC
 
   private:
     ClassType* object_;
@@ -203,6 +209,15 @@ std::type_info const& holder<ClassType,ValueType>::type() const
 {
     return typeid(ValueType);
 }
+
+#if defined LMI_MSC
+template<typename ClassType, typename ValueType>
+void* holder<ClassType,ValueType>::defraud() const
+{
+    LMI_ASSERT(object_);
+    return &(object_->*held_);
+}
+#endif // defined LMI_MSC
 
 // Definition of class any_member.
 
@@ -369,9 +384,13 @@ ExactMemberType* any_member<ClassType>::exact_cast()
         }
     typedef holder<ClassType,pmd_type> holder_type;
     LMI_ASSERT(content_);
+#if !defined LMI_MSC
     pmd_type pmd = static_cast<holder_type*>(content_)->held_;
     LMI_ASSERT(object_);
     return &(object_->*pmd);
+#else  // defined LMI_MSC
+    return static_cast<ExactMemberType*>(content_->defraud());
+#endif // defined LMI_MSC
 }
 
 template<typename ClassType>
