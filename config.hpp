@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config.hpp,v 1.23 2008-02-06 03:50:22 chicares Exp $
+// $Id: config.hpp,v 1.24 2008-06-24 09:37:33 chicares Exp $
 
 // Configuration header for compiler quirks. Include at the beginning of
 // every .hpp file (and nowhere else).
@@ -116,6 +116,13 @@ namespace fs = boost::filesystem;
 #if defined __BORLANDC__ && __BORLANDC__ < 0x0550
 #    error Obsolete compiler not supported.
 #endif // Ancient borland compiler.
+
+// Give this toolchain its own lmi-specific macro. Rationale:
+//   http://boost.cvs.sf.net/boost/boost/boost/config.hpp?annotate=1.1
+//   Many other "compilers define _MSC_VER. Thus BOOST_MSVC."
+#if defined _MSC_VER
+#    define LMI_MSC
+#endif // defined _MSC_VER
 
 #if defined HAVE_CONFIG_H // Using autoconf.
 #   include "config.h"
