@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: platform_dependent.hpp,v 1.13 2008-06-20 13:14:41 chicares Exp $
+// $Id: platform_dependent.hpp,v 1.14 2008-06-24 13:31:43 chicares Exp $
 
 #ifndef platform_dependent_hpp
 #define platform_dependent_hpp
@@ -58,7 +58,6 @@
 #endif // defined __GNUC__ && defined __STRICT_ANSI__
 
 #if defined LMI_POSIX
-#   include <curses.h>  // getch()
 #   include <stdio.h>   // fileno()
 #   include <stdlib.h>  // putenv()
 #   include <string.h>  // strdup()
@@ -67,7 +66,6 @@
 #elif defined LMI_MSW
     // The MinGW port of gcc to msw prototypes what lmi needs in these
     // headers. Other compilers for the msw platform might not.
-#   include <conio.h>   // getch()
 #   include <direct.h>  // chdir()
 #   include <io.h>      // access(), R_OK
 #   include <stdio.h>   // fileno()
@@ -79,7 +77,6 @@
 #else // Unknown platform.
     // It seems too fragile to give the prototypes here:
     //   extern "C" int access(char const*, int);
-    //   extern "C" int getch();
     //   extern "C" int chdir(char const*);
     // especially when they may vary by platform:
     //   extern "C" int putenv(char*);       // [posix]
