@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_cli.cpp,v 1.14 2008-01-13 17:16:43 chicares Exp $
+// $Id: alert_cli.cpp,v 1.15 2008-06-24 13:31:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,11 +28,13 @@
 
 #include "alert.hpp"
 
-#include "platform_dependent.hpp" // getch()
-
 #include <cstdio> // std::fputs()
 #include <iostream>
 #include <stdexcept>
+
+// Avoid including any 'curses' header that defines rude macros:
+//   http://lists.nongnu.org/archive/html/lmi/2008-06/msg00045.html
+extern "C" int getch();
 
 namespace
 {
