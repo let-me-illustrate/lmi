@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.39 2008-05-21 17:44:34 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.40 2008-06-25 23:51:30 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -244,9 +244,10 @@ EOF
 cat >eraseme_cpp_004.cpp <<EOF
 $boilerplate
 Write a cv-qualifier after the type it modifies:
-  void foo(const T&); // No.
-not
   void foo(T const&); // Yes.
+  void foo(const T&); // No.
+  void goo(std::string const&); // Yes.
+  void goo(const std::string&); // No.
 EOF
 
 # Headers.
@@ -429,6 +430,7 @@ File 'eraseme_cpp_002.cpp' has misindented label '       x_:'.
 File 'eraseme_cpp_003.cpp' should fuse '&' with type: 'foo &bar(); // bar() is a 'reference function returning foo'?'.
 File 'eraseme_cpp_003.cpp' should fuse '*' with type: 'int *x;     // x is a 'pointer variable of type int'?'.
 File 'eraseme_cpp_004.cpp' should write 'const' after the type it modifies: 'const T&'.
+File 'eraseme_cpp_004.cpp' should write 'const' after the type it modifies: 'const std::string&'.
 File 'eraseme_hpp_001.hpp' lacks canonical header guards.
 File 'eraseme_hpp_002.hpp' lacks canonical header guards.
 File 'eraseme_hpp_003.hpp' lacks canonical header guards.
