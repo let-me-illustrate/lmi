@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config_ming323.hpp,v 1.9 2008-06-20 13:14:40 chicares Exp $
+// $Id: config_ming323.hpp,v 1.10 2008-06-25 23:54:34 chicares Exp $
 
 // Configuration header for compiler quirks--mingw gcc-3.2.3 .
 
@@ -53,6 +53,10 @@
 
 #if 200 <= LMI_MINGW_VERSION
 #   define LMI_COMPILER_PROVIDES_RINT
+#endif // 200 <= LMI_MINGW_VERSION
+
+#if 200 <= LMI_MINGW_VERSION
+#   define LMI_COMPILER_PROVIDES_STRTOF
 #endif // 200 <= LMI_MINGW_VERSION
 
 #if 204 <= LMI_MINGW_VERSION
