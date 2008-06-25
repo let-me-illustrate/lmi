@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.76 2008-05-21 17:44:34 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.77 2008-06-25 23:51:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -468,7 +468,7 @@ void check_cxx(file const& f)
     }
 
     {
-    static boost::regex const r("\\bconst +([A-Za-z][A-Za-z0-9_]*) *[*&]");
+    static boost::regex const r("\\bconst +([A-Za-z][A-Za-z0-9_:]*) *[*&]");
     boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
     boost::sregex_iterator const omega;
     for(; i != omega; ++i)
