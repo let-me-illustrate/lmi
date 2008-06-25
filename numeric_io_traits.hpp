@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_traits.hpp,v 1.21 2008-06-19 13:40:27 chicares Exp $
+// $Id: numeric_io_traits.hpp,v 1.22 2008-06-25 23:54:34 chicares Exp $
 
 #ifndef numeric_io_traits_hpp
 #define numeric_io_traits_hpp
@@ -314,6 +314,12 @@ template<> struct numeric_conversion_traits<Floating>
         {return simplify_floating_point(s);}
 };
 
+#if !defined LMI_COMPILER_PROVIDES_STRTOF
+// COMPILER !! This workaround is rather poor, of course.
+inline float strtof(char const* nptr, char** endptr)
+{return std::strtod(nptr, endptr);}
+#endif // !defined LMI_COMPILER_PROVIDES_STRTOF
+
 template<> struct numeric_conversion_traits<float>
     :public numeric_conversion_traits<Floating>
 {
@@ -321,7 +327,7 @@ template<> struct numeric_conversion_traits<float>
     static int digits(T t) {return floating_point_decimals(t);}
     static char const* fmt() {return "%#.*f";}
     static T strtoT(char const* nptr, char** endptr)
-        {return std::strtof(nptr, endptr);}
+        {return strtof(nptr, endptr);}
 };
 
 template<> struct numeric_conversion_traits<double>
