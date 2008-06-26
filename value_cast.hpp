@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: value_cast.hpp,v 1.14 2008-06-26 16:47:50 chicares Exp $
+// $Id: value_cast.hpp,v 1.15 2008-06-26 17:02:25 chicares Exp $
 
 #ifndef value_cast_hpp
 #define value_cast_hpp
@@ -180,16 +180,6 @@ To numeric_value_cast(From from)
 
 /// Class template value_cast_choice is an appurtenance of function
 /// template value_cast(); it selects the best conversion method.
-///
-/// Narrowing conversions are detected by boost::numeric_cast; in
-/// keeping with that function template's design, they are tested iff
-/// std::numeric_limits is specialized for both template parameters.
-/// Actually, numeric_value_cast (q.v.) is used for the conversion.
-///
-/// Numeric input and output conversions use the boost::is_arithmetic
-/// criterion to determine whether a parameter is of numeric type--a
-/// criterion that includes certain nonstandard integral types whether
-/// or not they have std::numeric_limits specializations.
 
 template<typename To, typename From>
 struct value_cast_choice
@@ -203,8 +193,8 @@ struct value_cast_choice
     enum
         {
         both_numeric =
-                std::numeric_limits<To  >::is_specialized
-            &&  std::numeric_limits<From>::is_specialized
+                boost::is_arithmetic<From>::value
+            &&  boost::is_arithmetic<To  >::value
         };
 
     enum
