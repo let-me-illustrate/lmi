@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1078 2008-06-26 11:23:26 chicares Exp $
+// $Id: ChangeLog,v 1.1079 2008-06-26 17:09:33 chicares Exp $
 
 MAINTENANCE
 
@@ -17272,10 +17272,29 @@ Disallow 'const std::T&' as well as 'const T&'.
   config_ming323.hpp
   numeric_io_traits.hpp
 Casually work around absence of C99 strtof(). See:
-  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00044.html
+  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00046.html
 
 20080626T1123Z <gchicares@sbcglobal.net> [1163]
 
   value_cast_test.cpp
 Avoid an apparent defect in gcc-4.2.1 only (VZ).
+
+20080626T1647Z <gchicares@sbcglobal.net> [1163]
+
+  value_cast.hpp
+  value_cast_test.cpp
+Clarify a boost::numeric_cast defect.
+
+20080626T1702Z <gchicares@sbcglobal.net> [1163]
+
+  value_cast.hpp
+Improve portability. See:
+  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00061.html
+
+20080626T1709Z <gchicares@sbcglobal.net> [1163]
+
+  datum_string.hpp
+  value_cast.hpp
+Pass argument by const reference to value_cast() (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00044.html
 
