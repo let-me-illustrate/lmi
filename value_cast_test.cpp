@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: value_cast_test.cpp,v 1.18 2008-06-26 11:23:26 chicares Exp $
+// $Id: value_cast_test.cpp,v 1.19 2008-06-26 16:47:50 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -156,17 +156,25 @@ int test_main(int, char*[])
     // A good compiler should warn about this conversion.
 //    value_cast<unsigned int>(-1);
 
+    // The boost-1.31.0 documentation says:
+    //   "An exception is thrown when a runtime value-preservation
+    //   check fails."
+    // yet this does not throw, even in boost-1.33.1, whose new
+    // numeric_cast delegates to boost::numeric::converter:
+    i = boost::numeric_cast<int>(2.71828);
+    // but these do:
 #if !defined __BORLANDC__
     BOOST_TEST_THROW
         (i = value_cast<int>(d)
         ,std::runtime_error
         ,"Value not preserved converting 2.71828 to 2 ."
         );
+    BOOST_TEST_THROW
+        (numeric_value_cast<int>(2.71828)
+        ,std::runtime_error
+        ,"Value not preserved converting 2.71828 to 2 ."
+        );
 #endif // !defined __BORLANDC__
-
-    // This should throw according to the boost documentation, but
-    // it does not.
-    i = boost::numeric_cast<int>(2.71828);
 
     // This conversion should work: value is exactly preserved.
 
