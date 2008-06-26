@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1077 2008-06-23 18:27:27 chicares Exp $
+// $Id: ChangeLog,v 1.1078 2008-06-26 11:23:26 chicares Exp $
 
 MAINTENANCE
 
@@ -17246,4 +17246,36 @@ Improve portability (VZ). The original code was rejected by msvc.
   expm1.c
 Apply one last kludge before expunging this file (VZ). See:
   http://lists.nongnu.org/archive/html/lmi/2008-06/msg00053.html
+
+20080624T0937Z <gchicares@sbcglobal.net> [1163]
+
+  any_member.hpp
+  config.hpp
+Work around an msvc defect (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00043.html
+
+20080624T1331Z <gchicares@sbcglobal.net> [1163]
+
+  alert_cli.cpp
+  platform_dependent.hpp
+Work around a 'curses' problem. See:
+  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00045.html
+
+20080625T2351Z <gchicares@sbcglobal.net> [1163]
+
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+Disallow 'const std::T&' as well as 'const T&'.
+
+20080625T2354Z <gchicares@sbcglobal.net> [1163]
+
+  config_ming323.hpp
+  numeric_io_traits.hpp
+Casually work around absence of C99 strtof(). See:
+  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00044.html
+
+20080626T1123Z <gchicares@sbcglobal.net> [1163]
+
+  value_cast_test.cpp
+Avoid an apparent defect in gcc-4.2.1 only (VZ).
 
