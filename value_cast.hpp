@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: value_cast.hpp,v 1.15 2008-06-26 17:02:25 chicares Exp $
+// $Id: value_cast.hpp,v 1.16 2008-06-26 17:09:33 chicares Exp $
 
 #ifndef value_cast_hpp
 #define value_cast_hpp
@@ -116,7 +116,7 @@
 ///   because casts go the other way."
 
 template<typename To, typename From>
-To value_cast(From from);
+To value_cast(From const& from);
 
 enum cast_method
     {e_both_numeric
@@ -157,7 +157,7 @@ void throw_if_null_pointer(T* t)
 /// value-preserving relation.
 
 template<typename To, typename From>
-To numeric_value_cast(From from)
+To numeric_value_cast(From const& from)
 {
     To result = boost::numeric_cast<To>(from);
     if(result == from)
@@ -224,40 +224,40 @@ struct value_cast_chooser
 template<typename To, typename From>
 struct value_cast_chooser<To,From,e_both_numeric>
 {
-    static cast_method method() {return e_both_numeric;}
-    To operator()(From from)    {return numeric_value_cast<To>(from);}
+    static cast_method method()     {return e_both_numeric;}
+    To operator()(From const& from) {return numeric_value_cast<To>(from);}
 };
 
 template<typename To, typename From>
 struct value_cast_chooser<To,From,e_direct>
 {
-    static cast_method method() {return e_direct;}
-    To operator()(From from)    {throw_if_null_pointer(from); return from;}
+    static cast_method method()     {return e_direct;}
+    To operator()(From const& from) {throw_if_null_pointer(from); return from;}
 };
 
 template<typename To, typename From>
 struct value_cast_chooser<To,From,e_numeric_io>
 {
-    static cast_method method() {return e_numeric_io;}
-    To operator()(From from)    {return numeric_io_cast<To>(from);}
+    static cast_method method()     {return e_numeric_io;}
+    To operator()(From const& from) {return numeric_io_cast<To>(from);}
 };
 
 template<typename To, typename From>
 struct value_cast_chooser<To,From,e_stream>
 {
-    static cast_method method() {return e_stream;}
-    To operator()(From from)    {return stream_cast<To>(from);}
+    static cast_method method()     {return e_stream;}
+    To operator()(From const& from) {return stream_cast<To>(from);}
 };
 
 template<typename To, typename From>
-To value_cast(From from)
+To value_cast(From const& from)
 {
     BOOST_STATIC_ASSERT(!boost::is_pointer<To>::value);
     return value_cast_chooser<To,From>()(from);
 }
 
 template<typename To, typename From>
-To value_cast(From from, To)
+To value_cast(From const& from, To)
 {
     return value_cast<To,From>(from);
 }
@@ -270,7 +270,7 @@ To value_cast(From from, To)
 // with borland tools.
 
 template<typename To, typename From>
-To value_cast(From from, To = To())
+To value_cast(From const& from, To = To())
 {
     return stream_cast<To>(from);
 }
