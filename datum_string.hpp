@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: datum_string.hpp,v 1.7 2008-01-01 18:29:38 chicares Exp $
+// $Id: datum_string.hpp,v 1.8 2008-06-26 17:09:33 chicares Exp $
 
 #ifndef datum_string_hpp
 #define datum_string_hpp
@@ -61,14 +61,14 @@ bool operator==(datum_string const&, datum_string const&);
 
 template<>
 inline datum_string value_cast<datum_string,std::string>
-    (std::string from)
+    (std::string const& from)
 {
     return datum_string(from);
 }
 
 template<>
 inline std::string value_cast<std::string,datum_string>
-    (datum_string from)
+    (datum_string const& from)
 {
     return from.value();
 }
