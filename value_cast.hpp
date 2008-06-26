@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: value_cast.hpp,v 1.13 2008-01-01 18:29:58 chicares Exp $
+// $Id: value_cast.hpp,v 1.14 2008-06-26 16:47:50 chicares Exp $
 
 #ifndef value_cast_hpp
 #define value_cast_hpp
@@ -84,10 +84,10 @@
 /// The order of template parameters is the same as for similar
 /// templates in boost (parameters and arguments altered here to
 /// emphasize similarity):
-///   template<typename To, typename From> To value_cast      (From );
-///   template<typename To, typename From> To lexical_cast    (From );
-///   template<typename To, typename From> To polymorphic_cast(From*);
-///   template<typename To, typename From> To numeric_cast    (From );
+///   template<typename To, typename From> To value_cast      (From ); // lmi
+///   template<typename To, typename From> To lexical_cast    (From ); // boost
+///   template<typename To, typename From> To polymorphic_cast(From*); // boost
+///   template<typename To, typename From> To numeric_cast    (From ); // boost
 ///
 /// The alternative form
 ///   template<typename To, typename From> To value_cast   (From, To);
@@ -147,9 +147,9 @@ void throw_if_null_pointer(T* t)
 }
 
 /// Function template numeric_value_cast() wraps boost::numeric_cast
-/// to make it DWISOTT:
-///   "An exception is thrown when a runtime value-preservation check
-///   fails."
+/// to make it DWISOTT according to the boost-1.31.0 documentation:
+///   "An exception is thrown when a runtime value-preservation
+///   check fails."
 /// The problem is that
 ///   boost::numeric_cast<int>(2.71828);
 /// returns the integer 2 without throwing, but 2.71828 and 2 are
