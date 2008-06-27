@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: value_cast.hpp,v 1.16 2008-06-26 17:09:33 chicares Exp $
+// $Id: value_cast.hpp,v 1.17 2008-06-27 03:39:20 chicares Exp $
 
 #ifndef value_cast_hpp
 #define value_cast_hpp
@@ -264,15 +264,19 @@ To value_cast(From const& from, To)
 
 #else // defined __BORLANDC__
 
-// COMPILER !! Precision of casts between string and arithmetic types
-// is poor because borland can't handle the default implementation.
-// It's not worth working around borland defects. Don't use value_cast
-// with borland tools.
+// COMPILER !! It's not worth working around borland defects: they are
+// legion. Don't rely on these casts to DTRT with borland tools.
 
 template<typename To, typename From>
 To value_cast(From const& from, To = To())
 {
     return stream_cast<To>(from);
+}
+
+template<typename To, typename From>
+To numeric_value_cast(From const& from)
+{
+    return static_cast<To>(from);
 }
 
 #endif // defined __BORLANDC__
