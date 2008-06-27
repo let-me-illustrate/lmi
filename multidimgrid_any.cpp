@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.22 2008-02-29 05:02:30 chicares Exp $
+// $Id: multidimgrid_any.cpp,v 1.23 2008-06-27 12:06:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -925,10 +925,7 @@ int MultiDimGrid::GetGridAxisSelection(enum_axis_x_or_y x_or_y)
         return wxNOT_FOUND;
         }
 
-// TODO ?? Isn't this cast suspicious? Should boost::numeric_cast be
-// used to convert the wxUIntPtr to an int? Is the return value really
-// a pointer, or is it really an integer?
-    return reinterpret_cast<wxUIntPtr>(choice.GetClientData(oldSel));
+    return wxPtrToUInt(choice.GetClientData(oldSel));
 }
 
 void MultiDimGrid::DoSetGridAxisSelection(enum_axis_x_or_y x_or_y, int axis)
@@ -946,9 +943,7 @@ void MultiDimGrid::DoSetGridAxisSelection(enum_axis_x_or_y x_or_y, int axis)
         {
         for(unsigned int i = 1; i < choice.GetCount(); ++i)
             {
-// TODO ?? Isn't this cast suspicious? Should boost::numeric_cast be
-// used to convert the wxUIntPtr to an int?
-            int cdata = reinterpret_cast<wxUIntPtr>(choice.GetClientData(i));
+            int cdata = wxPtrToUInt(choice.GetClientData(i));
             if(cdata == axis)
                 {
                 choice.SetSelection(i);
