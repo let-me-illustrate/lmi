@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date.cpp,v 1.22 2008-05-28 02:53:18 chicares Exp $
+// $Id: calendar_date.cpp,v 1.23 2008-06-27 03:39:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,21 +30,8 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "value_cast.hpp"
 #include "zero.hpp"
-
-#if !defined __BORLANDC__
-#   include <boost/cast.hpp>
-#else  // defined __BORLANDC__
-// COMPILER !! Workaround for defective borland compiler.
-namespace boost
-{
-    template<typename T, typename U>
-    T numeric_cast(U u)
-    {
-        return static_cast<T>(u);
-    }
-}
-#endif // defined __BORLANDC__
 
 #include <algorithm> // std::max(), std::min()
 #include <ctime>
@@ -613,7 +600,8 @@ class birthdate_limit
 
     double operator()(double candidate)
         {
-        calendar_date z((jdn_t(boost::numeric_cast<int>(candidate))));
+        // Double parentheses circumvent the most vexing parse.
+        calendar_date z((jdn_t(numeric_value_cast<int>(candidate))));
         return offset_ + notional_age(z, as_of_date_, use_anb_) - limit_age_;
         }
 
@@ -627,7 +615,7 @@ class birthdate_limit
             ,*this
             );
         LMI_ASSERT(root_not_bracketed != z.second);
-        int j = boost::numeric_cast<int>(z.first);
+        int j = numeric_value_cast<int>(z.first);
         j = std::min(j, as_of_date_.julian_day_number());
         j = std::max(j, a_priori_minimum_);
         j = std::min(j, a_priori_maximum_);
