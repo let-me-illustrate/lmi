@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.110 2008-06-18 01:45:29 chicares Exp $
+// $Id: main_wx.cpp,v 1.111 2008-06-28 02:00:42 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -142,6 +142,7 @@ BEGIN_EVENT_TABLE(Skeleton, wxApp)
     EVT_MENU(XRCID("test_lib_fatal_error_alert"      ),Skeleton::UponTestLibFatal                 )
     EVT_MENU(XRCID("test_lib_standard_exception"     ),Skeleton::UponTestLibStandardException     )
     EVT_MENU(XRCID("test_lib_arbitrary_exception"    ),Skeleton::UponTestLibArbitraryException    )
+    EVT_MENU(XRCID("test_lib_catastrophe_report"     ),Skeleton::UponTestLibCatastropheReport     )
     EVT_MENU(XRCID("test_date_conversions"           ),Skeleton::UponTestDateConversions          )
     EVT_MENU(XRCID("test_floating_point_environment" ),Skeleton::UponTestFloatingPointEnvironment )
     EVT_MENU(XRCID("test_pasting"                    ),Skeleton::UponTestPasting                  )
@@ -895,6 +896,11 @@ void Skeleton::UponTestLibStandardException(wxCommandEvent&)
 void Skeleton::UponTestLibArbitraryException(wxCommandEvent&)
 {
     test_arbitrary_exception();
+}
+
+void Skeleton::UponTestLibCatastropheReport(wxCommandEvent&)
+{
+    test_catastrophe_report();
 }
 
 void Skeleton::UponTestDateConversions(wxCommandEvent&)

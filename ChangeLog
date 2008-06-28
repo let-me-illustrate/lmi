@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1079 2008-06-26 17:09:33 chicares Exp $
+// $Id: ChangeLog,v 1.1080 2008-06-28 02:00:43 chicares Exp $
 
 MAINTENANCE
 
@@ -17297,4 +17297,31 @@ Improve portability. See:
   value_cast.hpp
 Pass argument by const reference to value_cast() (VZ). See:
   http://lists.nongnu.org/archive/html/lmi/2008-06/msg00044.html
+
+20080627T0338Z <gchicares@sbcglobal.net> [1163]
+
+  diagnostics.sed
+Suppress more borland noise.
+
+20080627T0339Z <gchicares@sbcglobal.net> [1163]
+
+  calendar_date.cpp
+  value_cast.hpp
+Use value-preserving numeric_value_cast(), not boost::numeric_cast().
+
+20080627T1206Z <gchicares@sbcglobal.net> [1161]
+
+  multidimgrid_any.cpp
+Resolve two marked issues. See:
+  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00066.html
+
+20080628T0200Z <gchicares@sbcglobal.net> [1161]
+
+  alert.cpp
+  alert.hpp
+  main_wx.cpp
+  main_wx.hpp
+  menus.xrc
+Safely report failure safely to report failure. See:
+  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00028.html
 

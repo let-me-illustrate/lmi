@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert.cpp,v 1.19 2008-04-11 14:33:27 chicares Exp $
+// $Id: alert.cpp,v 1.20 2008-06-28 02:00:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,6 +34,12 @@
 #else  // Defined __BORLANDC__ .
 #   define BOOST_STATIC_ASSERT(deliberately_ignored) class IgNoRe
 #endif // Defined __BORLANDC__ .
+
+#if !defined LMI_MSW
+#   include <cstdio>
+#else  // defined LMI_MSW
+#   include <windows.h>
+#endif // defined LMI_MSW
 
 #include <ios>
 #include <sstream>   // std::stringbuf
@@ -71,6 +77,22 @@ inline bool any_function_pointer_has_been_set()
         ||  0 != safe_message_alert_function
         ;
 }
+
+void report_catastrophe(char const* message)
+{
+#if !defined LMI_MSW
+    std::fputs(message, stderr);
+    std::fputc('\n'   , stderr);
+    std::fflush(stderr);
+#else  // defined LMI_MSW
+    ::MessageBox
+        (0
+        ,message
+        ,"Catastrophic error"
+        ,MB_OK | MB_SETFOREGROUND | MB_ICONHAND | MB_SYSTEMMODAL
+        );
+#endif // defined LMI_MSW
+}
 } // Unnamed namespace
 
 bool set_alert_functions
@@ -83,7 +105,7 @@ bool set_alert_functions
 {
     if(any_function_pointer_has_been_set())
         {
-        throw std::runtime_error
+        report_catastrophe
             ("At least one alert function pointer had already been set."
             );
         }
@@ -112,7 +134,7 @@ class alert_buf
         {
         if(!all_function_pointers_have_been_set())
             {
-            throw std::runtime_error
+            report_catastrophe
                 ("Not all alert function pointers have been set."
                 );
             }
@@ -215,7 +237,7 @@ void safely_show_message(char const* message)
 {
     if(0 == safe_message_alert_function)
         {
-        throw std::runtime_error
+        report_catastrophe
             ("No function defined for reporting a problem safely."
             );
         }
@@ -263,5 +285,10 @@ void test_standard_exception()
 void test_arbitrary_exception()
 {
     throw "Test an arbitrary exception.";
+}
+
+void test_catastrophe_report()
+{
+    report_catastrophe("Test catastrophe report.");
 }
 
