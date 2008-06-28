@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.21 2008-03-19 16:43:29 chicares Exp $
+// $Id: basic_values.hpp,v 1.22 2008-06-28 19:48:25 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -32,6 +32,7 @@
 #include "xrangetypes.hpp"
 
 #include <boost/shared_ptr.hpp>
+#include <boost/utility.hpp>
 
 #include <string>
 #include <vector>
@@ -77,6 +78,7 @@ enum EBlend
     };
 
 class LMI_SO BasicValues
+    :virtual private boost::noncopyable
 {
   public:
     BasicValues();
