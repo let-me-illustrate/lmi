@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert.hpp,v 1.22 2008-02-19 16:22:15 chicares Exp $
+// $Id: alert.hpp,v 1.23 2008-06-28 02:00:42 chicares Exp $
 
 #ifndef alert_hpp
 #define alert_hpp
@@ -180,7 +180,7 @@ void fatal_error_alert    (std::string const&);
 
 /// Implement this function for each platform, in a manner that should
 /// always work safely and immediately. For instance, for the wx GUI
-/// library, use wxSafeShowMessage() and not wxMessageBox().
+/// library, it might use wxSafeShowMessage() and not wxMessageBox().
 
 void safe_message_alert   (char const*);
 
@@ -245,6 +245,7 @@ void LMI_SO test_hobsons_choice();
 void LMI_SO test_fatal_error();
 void LMI_SO test_standard_exception();
 void LMI_SO test_arbitrary_exception();
+void LMI_SO test_catastrophe_report();
 
 /// Write file name and line number to diagnostic stream, and flush.
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.hpp,v 1.27 2008-04-30 18:43:38 chicares Exp $
+// $Id: main_wx.hpp,v 1.28 2008-06-28 02:00:42 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.h (C) 1998 Julian Smart and Markus Holzem
@@ -97,6 +97,7 @@ class Skeleton
     void UponTestLibFatal                 (wxCommandEvent&);
     void UponTestLibStandardException     (wxCommandEvent&);
     void UponTestLibArbitraryException    (wxCommandEvent&);
+    void UponTestLibCatastropheReport     (wxCommandEvent&);
 
     // Miscellaneous tests.
     void UponTestDateConversions          (wxCommandEvent&);
