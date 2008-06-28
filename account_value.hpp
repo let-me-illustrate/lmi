@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.51 2008-06-22 00:46:18 chicares Exp $
+// $Id: account_value.hpp,v 1.52 2008-06-28 19:48:25 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -51,7 +51,7 @@ class LedgerVariant;
 
 class LMI_SO AccountValue
     :protected BasicValues
-    ,private boost::noncopyable
+    ,virtual private boost::noncopyable
 {
     friend class SolveHelper;
     friend class run_census_in_parallel;
