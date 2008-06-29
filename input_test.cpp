@@ -19,17 +19,18 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.31 2008-04-03 14:02:21 chicares Exp $
+// $Id: input_test.cpp,v 1.32 2008-06-29 20:39:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-// Facilities offered by all three of these headers are tested here.
+// Facilities offered by all four of these headers are tested here.
 #include "inputillus.hpp"
 #include "multiple_cell_document.hpp"
 #include "single_cell_document.hpp"
+#include "yare_input.hpp"
 
 #include "assert_lmi.hpp"
 #include "miscellany.hpp"
@@ -306,6 +307,8 @@ std::cout << "replica.FundAllocs.size() is " << replica.FundAllocs.size() << '\n
     test_document_io<M>("sample.cns", "replica.cns", __FILE__, __LINE__, false);
     typedef single_cell_document S;
     test_document_io<S>("sample.ill", "replica.ill", __FILE__, __LINE__, false);
+
+    yare_input y(original);
 
     return EXIT_SUCCESS;
 }
