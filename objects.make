@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.119 2008-06-03 14:37:24 chicares Exp $
+# $Id: objects.make,v 1.120 2008-06-29 00:13:18 chicares Exp $
 
 ################################################################################
 
@@ -228,6 +228,7 @@ common_common_objects := \
   xml_lmi.o \
   xslt_lmi.o \
   xrange.o \
+  yare_input.o \
 
 ################################################################################
 
@@ -396,6 +397,7 @@ gpt_objects := \
   xenumtypes.o \
   xml_lmi.o \
   xrange.o \
+  yare_input.o \
 
 libgpt.a libgpt$(SHREXT): EXTRA_LDFLAGS =
 libgpt.a libgpt$(SHREXT): $(gpt_objects)
@@ -643,6 +645,7 @@ input_test$(EXEEXT): \
   xenumtypes.o \
   xml_lmi.o \
   xrange.o \
+  yare_input.o \
 
 irc7702a_test$(EXEEXT): \
   $(common_test_objects) \

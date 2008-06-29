@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.45 2008-06-01 17:46:11 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.46 2008-06-29 00:13:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -85,14 +85,16 @@ namespace
 
 //============================================================================
 BasicValues::BasicValues()
-    :Input_(new InputParms)
+    :Input_     (new InputParms)
+    ,yare_input_(*Input_)
 {
     Init();
 }
 
 //============================================================================
 BasicValues::BasicValues(InputParms const* input)
-    :Input_(new InputParms(*input))
+    :Input_     (new InputParms(*input))
+    ,yare_input_(*input)
 {
     Init();
 }
@@ -113,7 +115,9 @@ BasicValues::BasicValues
     ,double              a_TargetPremium
     // TODO ?? Need loan rate type here?
     )
-    :InitialTargetPremium(a_TargetPremium)
+    :Input_              (new InputParms)
+    ,yare_input_         (*Input_)
+    ,InitialTargetPremium(a_TargetPremium)
 {
     InputParms* kludge_input = new InputParms;
 

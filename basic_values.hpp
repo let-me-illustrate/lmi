@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.22 2008-06-28 19:48:25 chicares Exp $
+// $Id: basic_values.hpp,v 1.23 2008-06-29 00:13:17 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -30,6 +30,7 @@
 #include "so_attributes.hpp"
 #include "xenumtypes.hpp"
 #include "xrangetypes.hpp"
+#include "yare_input.hpp"
 
 #include <boost/shared_ptr.hpp>
 #include <boost/utility.hpp>
@@ -119,6 +120,7 @@ class LMI_SO BasicValues
     double                InvestmentManagementFee()    const;
 
     boost::shared_ptr<InputParms const>   Input_;
+    yare_input                            yare_input_;
     boost::shared_ptr<TProductData>       ProductData_;
     boost::shared_ptr<TDatabase>          Database_;
     boost::shared_ptr<FundData>           FundData_;
