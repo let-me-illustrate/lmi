@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.28 2008-05-07 13:01:47 chicares Exp $
+// $Id: input.hpp,v 1.29 2008-06-29 20:37:41 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -278,7 +278,7 @@ class LMI_SO Input
     tnr_duration             SurviveToYear                   ;
     tnr_attained_age         SurviveToAge                    ;
     tnr_nonnegative_double   MaximumNaar                     ;
-    tnr_corridor_factor      UseOffshoreCorridorFactor       ; // INPUT !! Obsolete.
+    tnr_corridor_factor      UseOffshoreCorridorFactor       ; // INPUT !! Obsolete, and apparently wrong type.
     mce_yes_or_no            ChildRider                      ;
     tnr_nonnegative_double   ChildRiderAmount                ; // TODO ?? Specialize?
     mce_yes_or_no            SpouseRider                     ;
