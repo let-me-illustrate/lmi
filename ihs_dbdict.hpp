@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbdict.hpp,v 1.10 2008-01-01 18:29:42 chicares Exp $
+// $Id: ihs_dbdict.hpp,v 1.11 2008-06-30 09:59:28 chicares Exp $
 
 #ifndef ihs_dbdict_hpp
 #define ihs_dbdict_hpp
@@ -72,6 +72,13 @@ class LMI_SO DBDictionary
 
 inline dict_map& DBDictionary::GetDictionary()
 {return dictionary;}
+
+/// Deprecated: state of jurisdiction should be an input field.
+
+enum e_premium_tax_state
+    {e_ee_state
+    ,e_er_state
+    };
 
 void LMI_SO print_databases();
 
