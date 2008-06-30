@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenumtypes.hpp,v 1.11 2008-01-01 18:30:00 chicares Exp $
+// $Id: xenumtypes.hpp,v 1.12 2008-06-30 09:59:28 chicares Exp $
 
 #ifndef xenumtypes_hpp
 #define xenumtypes_hpp
@@ -449,12 +449,6 @@ typedef xenum<enum_post_ret_sa_strategy, 4> e_post_ret_sa_strategy;
 
 // TODO ?? This stuff is a little funky....
 
-enum e_premium_tax_state
-    {e_ee_state
-    ,e_er_state
-    };
-
-// TODO ?? This one seems especially funky.
 enum e_modal_prem_type
     {e_monthly_deduction
     ,e_modal_nonmec
