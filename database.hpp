@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database.hpp,v 1.10 2008-06-30 23:11:22 chicares Exp $
+// $Id: database.hpp,v 1.11 2008-06-30 23:59:48 chicares Exp $
 
 #ifndef database_hpp
 #define database_hpp
@@ -27,9 +27,10 @@
 #include "config.hpp"
 
 #include "dbindex.hpp"
+#include "mc_enum_type_enums.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
-#include "xenumtypes.hpp"
+#include "xenumtypes.hpp" // DEPRECATED
 
 #include <boost/utility.hpp>
 
@@ -38,15 +39,16 @@
 
 // Database of product parameters
 
-class InputParms;
+class InputParms; // DEPRECATED
 class TDBValue;
+class yare_input;
 
 class LMI_SO TDatabase
     :private boost::noncopyable
     ,virtual private obstruct_slicing<TDatabase>
 {
   public:
-    TDatabase
+    TDatabase // DEPRECATED
         (std::string const& a_ProductName
         ,e_gender    const& a_Gender
         ,e_class     const& a_Class
@@ -55,7 +57,17 @@ class LMI_SO TDatabase
         ,e_uw_basis  const& a_UWBasis
         ,e_state     const& a_State
         );
-    explicit TDatabase(InputParms const&);
+    TDatabase
+        (std::string const& a_ProductName
+        ,mcenum_gender      a_Gender
+        ,mcenum_class       a_Class
+        ,mcenum_smoking     a_Smoker
+        ,int                a_IssueAge
+        ,mcenum_uw_basis    a_UWBasis
+        ,mcenum_state       a_State
+        );
+    explicit TDatabase(InputParms const&); // DEPRECATED
+    explicit TDatabase(yare_input const&);
     // Ctor for unit-testing support.
     explicit TDatabase(int length);
     ~TDatabase();
@@ -86,14 +98,14 @@ class LMI_SO TDatabase
     TDBIndex      Idx;
     std::string   Filename;
 
-    int        length_;
+    int           length_;
 
-    e_gender   Gender;     // gender
-    e_class    Class;      // underwriting class
-    e_smoking  Smoker;     // smoker class
-    int        IssueAge;   // issue age
-    e_uw_basis UWBasis;    // underwriting basis
-    e_state    State;      // state of jurisdiction
+    mcenum_gender   Gender;     // gender
+    mcenum_class    Class;      // underwriting class
+    mcenum_smoking  Smoker;     // smoker class
+    int             IssueAge;   // issue age
+    mcenum_uw_basis UWBasis;    // underwriting basis
+    mcenum_state    State;      // state of jurisdiction
 };
 
 #endif // database_hpp
