@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database.hpp,v 1.9 2008-01-01 18:29:37 chicares Exp $
+// $Id: database.hpp,v 1.10 2008-06-30 23:11:22 chicares Exp $
 
 #ifndef database_hpp
 #define database_hpp
@@ -60,7 +60,7 @@ class LMI_SO TDatabase
     explicit TDatabase(int length);
     ~TDatabase();
 
-    e_state const& GetStateOfJurisdiction() const;
+    e_state GetStateOfJurisdiction() const;
     int length() const;
 
     // Return scalar: use double because it's convertible to int, bool, etc.

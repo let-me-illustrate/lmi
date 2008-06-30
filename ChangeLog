@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1080 2008-06-28 02:00:43 chicares Exp $
+// $Id: ChangeLog,v 1.1081 2008-06-30 23:11:22 chicares Exp $
 
 MAINTENANCE
 
@@ -17324,4 +17324,56 @@ Resolve two marked issues. See:
   menus.xrc
 Safely report failure safely to report failure. See:
   http://lists.nongnu.org/archive/html/lmi/2008-06/msg00028.html
+
+20080628T1948Z <gchicares@sbcglobal.net> [1161]
+
+  account_value.hpp
+  basic_values.hpp
+Make class BasicValues palpably noncopyable.
+
+20080629T0013Z <gchicares@sbcglobal.net> [1161]
+
+  Makefile.am
+  basic_values.hpp
+  basicvalues.cpp
+  ihs_basicval.cpp
+  objects.make
+  yare_input.cpp [new file]
+  yare_input.hpp [new file]
+Begin a major refactoring of input classes.
+
+20080629T2037Z <gchicares@sbcglobal.net> [1161]
+
+  input.hpp
+Document an issue with a disused data member.
+
+20080629T2039Z <gchicares@sbcglobal.net> [1161]
+
+  input_test.cpp
+  yare_input.cpp
+  yare_input.hpp
+Implement and test a converting ctor.
+
+20080630T0959Z <gchicares@sbcglobal.net> [1160]
+
+  ihs_dbdict.hpp
+  xenumtypes.hpp
+Move an deprecated enumeration to a less-broadly-included header.
+
+20080630T1925Z <zeitlin> [1160]
+
+  Makefile.am
+Write continued lines consistently within this autofile.
+
+20080630T2021Z <zeitlin> [1160]
+
+  configure.ac
+Detect several more C99 functions.
+
+20080630T2311Z <gchicares@sbcglobal.net> [1160]
+
+  database.cpp
+  database.hpp
+  ihs_database.cpp
+Temporarily change a return type to facilitate local refactoring.
 
