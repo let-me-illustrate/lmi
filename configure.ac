@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.36 2008-06-30 19:25:25 zeitlin Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.37 2008-06-30 20:21:11 zeitlin Exp $)dnl
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -259,8 +259,8 @@ dnl existing code already uses these macros so continue to use them instead of
 dnl the usual HAVE_EXPM1/HAVE_LOG1P
 AC_CHECK_FUNC(strtof, AC_DEFINE(LMI_COMPILER_PROVIDES_STRTOF, [1], [Define this if you have strtof() function]))
 AC_CHECK_FUNC(strtold, AC_DEFINE(LMI_COMPILER_PROVIDES_STRTOLD, [1], [Define this if you have strtold() function]))
-AC_CHECK_FUNC(expm1, AC_DEFINE(LMI_COMPILER_PROVIDES_EXPM1, [1], [Define this if you have expm1() function]))
-AC_CHECK_FUNC(log1p, AC_DEFINE(LMI_COMPILER_PROVIDES_LOG1P, [1], [Define this if you have log1p() function]))
+AC_CHECK_FUNC(expm1l, AC_DEFINE(LMI_COMPILER_PROVIDES_EXPM1L, [1], [Define this if you have expm1l() function]))
+AC_CHECK_FUNC(log1pl, AC_DEFINE(LMI_COMPILER_PROVIDES_LOG1PL, [1], [Define this if you have log1pl() function]))
 AC_CHECK_FUNC(rint, AC_DEFINE(LMI_COMPILER_PROVIDES_RINT, [1], [Define this if you have rint() function]))
 
 dnl === Library checks ===
