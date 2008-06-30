@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_database.cpp,v 1.14 2008-06-30 23:11:22 chicares Exp $
+// $Id: ihs_database.cpp,v 1.15 2008-06-30 23:59:48 chicares Exp $
 
 // TODO ?? Should length_ be dynamically reset when IssueAge is?
 // TODO ?? Should State be dynamically reset?
@@ -42,8 +42,9 @@
 #ifdef STANDALONE
 // nothing
 #else
-#   include "inputs.hpp"
-#   include "inputstatus.hpp"
+#   include "inputs.hpp"      // DEPRECATED
+#   include "inputstatus.hpp" // DEPRECATED
+#   include "yare_input.hpp"
 #endif  // STANDALONE
 
 #include <algorithm>
@@ -53,10 +54,10 @@
 // Can we dispense with Index? It's just an alias for a set of other
 //   members that are used as input parameters to one ctor.
 //
-// Change other code to use the simpler ctor(InputParms& input)?
+// Change other code to use the simpler ctor(yare_input const&)?
 
 //============================================================================
-TDatabase::TDatabase
+TDatabase::TDatabase // DEPRECATED
     (std::string const& a_ProductName
     ,e_gender const&    a_Gender
     ,e_class const&     a_Class
@@ -69,31 +70,56 @@ TDatabase::TDatabase
                     (TProductData(a_ProductName).GetDatabaseFilename()
                     )
                 )
-    ,Gender     (a_Gender)
-    ,Class      (a_Class)
-    ,Smoker     (a_Smoker)
-    ,IssueAge   (a_IssueAge)
-    ,UWBasis    (a_UWBasis)
-    ,State      (a_State)
+    ,Gender   (static_cast<mcenum_gender  >(a_Gender  .value()))
+    ,Class    (static_cast<mcenum_class   >(a_Class   .value()))
+    ,Smoker   (static_cast<mcenum_smoking >(a_Smoker  .value()))
+    ,IssueAge                              (a_IssueAge)
+    ,UWBasis  (static_cast<mcenum_uw_basis>(a_UWBasis .value()))
+    ,State    (static_cast<mcenum_state   >(a_State   .value()))
 {
     DBDictionary::instance().Init(Filename);
     Init();
 }
 
 //============================================================================
-TDatabase::TDatabase(InputParms const& input)
+TDatabase::TDatabase
+    (std::string const& a_ProductName
+    ,mcenum_gender      a_Gender
+    ,mcenum_class       a_Class
+    ,mcenum_smoking     a_Smoker
+    ,int                a_IssueAge
+    ,mcenum_uw_basis    a_UWBasis
+    ,mcenum_state       a_State
+    )
+    :Filename   (AddDataDir
+                    (TProductData(a_ProductName).GetDatabaseFilename()
+                    )
+                )
+    ,Gender   (a_Gender)
+    ,Class    (a_Class)
+    ,Smoker   (a_Smoker)
+    ,IssueAge (a_IssueAge)
+    ,UWBasis  (a_UWBasis)
+    ,State    (a_State)
+{
+    DBDictionary::instance().Init(Filename);
+    Init();
+}
+
+//============================================================================
+TDatabase::TDatabase(yare_input const& input)
     :Filename
         (AddDataDir
             (TProductData(input.ProductName).GetDatabaseFilename())
         )
 {
 // GET RID OF Gender, Class, Smoker, etc.
-    Gender      = input.Status[0].Gender;
-    Class       = input.Status[0].Class;
-    Smoker      = input.Status[0].Smoking;
-    IssueAge    = input.Status[0].IssueAge;
-    UWBasis     = input.GroupUWType;
-    State       = e_s_CT; // dummy init
+    Gender      = input.Gender;
+    Class       = input.UnderwritingClass;
+    Smoker      = input.Smoking;
+    IssueAge    = input.IssueAge;
+    UWBasis     = input.GroupUnderwritingType;
+    State       = mce_s_CT; // Dummy initialization.
 
     DBDictionary::instance().Init(Filename);
     Init();
@@ -118,12 +144,70 @@ TDatabase::TDatabase(InputParms const& input)
         {
         case e_ee_state:
             {
-            State = input.InsdState;
+            State = input.State;
             }
             break;
         case e_er_state:
             {
-            State = input.SponsorState;
+            State = input.CorporationState;
+            }
+            break;
+        default:
+            {
+            fatal_error()
+                << "Cannot determine state of jurisdiction."
+                << LMI_FLUSH
+                ;
+            }
+            break;
+        }
+
+    Index[5] = State;
+    Idx.State() = State;
+}
+
+//============================================================================
+TDatabase::TDatabase(InputParms const& input) // DEPRECATED
+    :Filename
+        (AddDataDir
+            (TProductData(input.ProductName).GetDatabaseFilename())
+        )
+{
+// GET RID OF Gender, Class, Smoker, etc.
+    Gender   = static_cast<mcenum_gender  >(input.Status[0].Gender .value());
+    Class    = static_cast<mcenum_class   >(input.Status[0].Class  .value());
+    Smoker   = static_cast<mcenum_smoking >(input.Status[0].Smoking.value());
+    IssueAge =                              input.Status[0].IssueAge;
+    UWBasis  = static_cast<mcenum_uw_basis>(input.GroupUWType      .value());
+    State    = mce_s_CT; // Dummy initialization.
+
+    DBDictionary::instance().Init(Filename);
+    Init();
+
+    // State of jurisdiction is governed by database item DB_PremTaxState.
+    // This must be determined by a database lookup, during construction
+    // of the database object.
+
+    // State of jurisdiction must not depend on itself
+    TDBValue const& StateEntry = GetEntry(DB_PremTaxState);
+    if(1 != StateEntry.GetLength(5))
+        {
+        fatal_error()
+            << "Database invalid: circular dependency."
+            << " State of jurisdiction depends on itself."
+            << LMI_FLUSH
+            ;
+        }
+    switch(static_cast<int>(Query(DB_PremTaxState)))
+        {
+        case e_ee_state:
+            {
+            State = static_cast<mcenum_state>(input.InsdState.value());
+            }
+            break;
+        case e_er_state:
+            {
+            State = static_cast<mcenum_state>(input.SponsorState.value());
             }
             break;
         default:
@@ -148,7 +232,7 @@ TDatabase::~TDatabase()
 //============================================================================
 e_state TDatabase::GetStateOfJurisdiction() const
 {
-    return State;
+    return e_state(static_cast<enum_state>(State));
 }
 
 //============================================================================

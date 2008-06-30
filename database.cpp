@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database.cpp,v 1.10 2008-06-30 23:11:22 chicares Exp $
+// $Id: database.cpp,v 1.11 2008-06-30 23:59:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,15 +31,16 @@
 #include "alert.hpp"
 #include "dbdict.hpp"
 #include "dbnames.hpp"
-#include "inputs.hpp"
-#include "inputstatus.hpp"
+#include "inputs.hpp"      // DEPRECATED
+#include "inputstatus.hpp" // DEPRECATED
+#include "yare_input.hpp"
 
 #include <algorithm>    // std::min()
 #include <iterator>
 #include <ostream>
 
 //============================================================================
-TDatabase::TDatabase
+TDatabase::TDatabase // DEPRECATED
     (std::string const& a_ProductName
     ,e_gender    const& a_Gender
     ,e_class     const& a_Class
@@ -47,6 +48,31 @@ TDatabase::TDatabase
     ,int                a_IssueAge
     ,e_uw_basis  const& a_UWBasis
     ,e_state     const& a_State
+    )
+    :Filename (a_ProductName)
+    ,length_  (0)
+    ,Gender   (static_cast<mcenum_gender  >(a_Gender  .value()))
+    ,Class    (static_cast<mcenum_class   >(a_Class   .value()))
+    ,Smoker   (static_cast<mcenum_smoking >(a_Smoker  .value()))
+    ,IssueAge                              (a_IssueAge)
+    ,UWBasis  (static_cast<mcenum_uw_basis>(a_UWBasis .value()))
+    ,State    (static_cast<mcenum_state   >(a_State   .value()))
+{
+    DBDictionary::instance().Init(Filename);
+    Init();
+    length_ = 100 - IssueAge;
+//    length_ = static_cast<int>(Query(DB_EndtAge)) - IssueAge;
+}
+
+//============================================================================
+TDatabase::TDatabase
+    (std::string const& a_ProductName
+    ,mcenum_gender      a_Gender
+    ,mcenum_class       a_Class
+    ,mcenum_smoking     a_Smoker
+    ,int                a_IssueAge
+    ,mcenum_uw_basis    a_UWBasis
+    ,mcenum_state       a_State
     )
     :Filename   (a_ProductName)
     ,length_    (0)
@@ -71,15 +97,31 @@ TDatabase::TDatabase
 // eventually the two implementations must be completely merged--and
 // this expedient doesn't make that harder.
 //
-TDatabase::TDatabase(InputParms const& input)
+TDatabase::TDatabase(yare_input const& input)
     :Filename("Irrelevant in antediluvian branch for now")
 {
-    Gender      = input.Status[0].Gender;
-    Class       = input.Status[0].Class;
-    Smoker      = input.Status[0].Smoking;
-    IssueAge    = input.Status[0].IssueAge;
-    UWBasis     = input.GroupUWType;
-    State       = input.InsdState;
+    Gender      = input.Gender;
+    Class       = input.UnderwritingClass;
+    Smoker      = input.Smoking;
+    IssueAge    = input.IssueAge;
+    UWBasis     = input.GroupUnderwritingType;
+    State       = input.State;
+
+    DBDictionary::instance().Init(Filename);
+    Init();
+    length_ = 100 - IssueAge;
+}
+
+//============================================================================
+TDatabase::TDatabase(InputParms const& input) // DEPRECATED
+    :Filename("Irrelevant in antediluvian branch for now")
+{
+    Gender   = static_cast<mcenum_gender  >(input.Status[0].Gender .value());
+    Class    = static_cast<mcenum_class   >(input.Status[0].Class  .value());
+    Smoker   = static_cast<mcenum_smoking >(input.Status[0].Smoking.value());
+    IssueAge =                              input.Status[0].IssueAge;
+    UWBasis  = static_cast<mcenum_uw_basis>(input.GroupUWType      .value());
+    State    = static_cast<mcenum_state   >(input.InsdState        .value());
 
     DBDictionary::instance().Init(Filename);
     Init();
@@ -94,7 +136,7 @@ TDatabase::~TDatabase()
 //============================================================================
 e_state TDatabase::GetStateOfJurisdiction() const
 {
-    return State;
+    return e_state(static_cast<enum_state>(State));
 }
 
 //============================================================================
