@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.35 2008-03-21 12:13:17 chicares Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.36 2008-06-30 19:25:25 zeitlin Exp $)dnl
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -146,10 +146,9 @@ AC_PROG_LD
 
 dnl Until the ihs_pios.*pp facilities are made portable use explicit flag to GCC
 dnl to ensure that sizeof(long double) is 12 bytes for binary compatibility.
-case "$CC" in
-    cl) ;;
-    *)  CPPFLAGS="$CPPFLAGS -m96bit-long-double";;
-esac
+if test "x$GXX" == "xyes"; then
+    CPPFLAGS="$CPPFLAGS -m96bit-long-double"
+fi
 
 dnl add debug option if necessary
 if test "$debug_option" = "yes"; then
@@ -258,6 +257,7 @@ AM_CONDITIONAL(LMI_WITH_CGI, [test "x$lmi_cgicc_option" == "xyes"])
 
 dnl existing code already uses these macros so continue to use them instead of
 dnl the usual HAVE_EXPM1/HAVE_LOG1P
+AC_CHECK_FUNC(strtof, AC_DEFINE(LMI_COMPILER_PROVIDES_STRTOF, [1], [Define this if you have strtof() function]))
 AC_CHECK_FUNC(strtold, AC_DEFINE(LMI_COMPILER_PROVIDES_STRTOLD, [1], [Define this if you have strtold() function]))
 AC_CHECK_FUNC(expm1, AC_DEFINE(LMI_COMPILER_PROVIDES_EXPM1, [1], [Define this if you have expm1() function]))
 AC_CHECK_FUNC(log1p, AC_DEFINE(LMI_COMPILER_PROVIDES_LOG1P, [1], [Define this if you have log1p() function]))
