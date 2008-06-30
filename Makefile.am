@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.41 2008-06-29 00:13:17 chicares Exp $
+# $Id: Makefile.am,v 1.42 2008-06-30 19:25:09 zeitlin Exp $
 
 SUBDIRS = third_party
 
@@ -287,7 +287,7 @@ liblmi_common_sources = \
     xml_lmi.cpp \
     xslt_lmi.cpp \
     xrange.cpp \
-    yare_input.cpp \
+    yare_input.cpp
 
 libmain_auxiliary_common_la_SOURCES = \
     alert.cpp \
@@ -617,7 +617,7 @@ test_input_SOURCES =    \
   xenumtypes.cpp \
   xml_lmi.cpp \
   xrange.cpp \
-  yare_input.cpp \
+  yare_input.cpp
 
 test_input_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_FLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
 test_input_LDADD =    \
