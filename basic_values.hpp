@@ -19,13 +19,15 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.23 2008-06-29 00:13:17 chicares Exp $
+// $Id: basic_values.hpp,v 1.24 2008-07-01 14:41:49 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
 
 #include "config.hpp"
 
+#include "mc_enum.hpp"
+#include "mc_enum_types.hpp"
 #include "round_to.hpp"
 #include "so_attributes.hpp"
 #include "xenumtypes.hpp"
@@ -109,8 +111,8 @@ class LMI_SO BasicValues
     int                   GetIssueAge()                const;
     int                   GetRetAge()                  const;
     e_ledger_type  const& GetLedgerType()              const;
-    e_state        const& GetStateOfJurisdiction()     const;
-    e_state        const& GetStateOfDomicile()         const;
+    mce_state      const& GetStateOfJurisdiction()     const;
+    mce_state      const& GetStateOfDomicile()         const;
     double                PremiumTaxRate()             const;
     double                LowestPremiumTaxLoad()       const;
     double                DomiciliaryPremiumTaxLoad()  const;
@@ -427,8 +429,8 @@ class LMI_SO BasicValues
 
     e_ledger_type       LedgerType;
     bool                IsSubjectToIllustrationReg_;
-    e_state             StateOfJurisdiction;
-    e_state             StateOfDomicile;
+    mce_state           StateOfJurisdiction_;
+    mce_state           StateOfDomicile_;
     double              PremiumTaxRate_;
     double              LowestPremiumTaxLoad_;
     double              DomiciliaryPremiumTaxLoad_;
@@ -464,14 +466,14 @@ inline e_ledger_type const& BasicValues::GetLedgerType() const
     return LedgerType;
 }
 
-inline e_state const& BasicValues::GetStateOfJurisdiction() const
+inline mce_state const& BasicValues::GetStateOfJurisdiction() const
 {
-    return StateOfJurisdiction;
+    return StateOfJurisdiction_;
 }
 
-inline e_state const& BasicValues::GetStateOfDomicile() const
+inline mce_state const& BasicValues::GetStateOfDomicile() const
 {
-    return StateOfDomicile;
+    return StateOfDomicile_;
 }
 
 inline double BasicValues::PremiumTaxRate() const

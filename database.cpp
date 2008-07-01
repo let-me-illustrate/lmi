@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database.cpp,v 1.11 2008-06-30 23:59:48 chicares Exp $
+// $Id: database.cpp,v 1.12 2008-07-01 14:41:49 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -134,9 +134,9 @@ TDatabase::~TDatabase()
 }
 
 //============================================================================
-e_state TDatabase::GetStateOfJurisdiction() const
+mcenum_state TDatabase::GetStateOfJurisdiction() const
 {
-    return e_state(static_cast<enum_state>(State));
+    return State;
 }
 
 //============================================================================

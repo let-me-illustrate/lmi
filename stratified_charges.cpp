@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.cpp,v 1.24 2008-06-17 13:04:13 chicares Exp $
+// $Id: stratified_charges.cpp,v 1.25 2008-07-01 14:41:50 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -385,14 +385,13 @@ double stratified_charges::minimum_tiered_spread_for_7702() const
 
 namespace
 {
-    e_stratified premium_tax_table(e_state const& state)
+    e_stratified premium_tax_table(mcenum_state state)
         {
-        enum_state const z = state.value();
-        if(e_s_AK == z)
+        if(mce_s_AK == state)
             {
             return e_tiered_ak_premium_tax;
             }
-        else if(e_s_DE == z)
+        else if(mce_s_DE == state)
             {
             // TRICKY !! We'll eventually implement DE like this:
             //   return e_tiered_de_premium_tax;
@@ -400,7 +399,7 @@ namespace
             // so we treat it as any other state for now:
             return e_stratified_last;
             }
-        else if(e_s_SD == z)
+        else if(mce_s_SD == state)
             {
             return e_tiered_sd_premium_tax;
             }
@@ -413,9 +412,9 @@ namespace
 
 //============================================================================
 double stratified_charges::tiered_premium_tax
-    (e_state const& state
-    ,double         payment
-    ,double         aggregate_payment
+    (mcenum_state state
+    ,double       payment
+    ,double       aggregate_payment
     ) const
 {
     e_stratified table = premium_tax_table(state);
@@ -436,13 +435,13 @@ double stratified_charges::tiered_premium_tax
 }
 
 //============================================================================
-bool stratified_charges::premium_tax_is_tiered(e_state const& state) const
+bool stratified_charges::premium_tax_is_tiered(mcenum_state state) const
 {
     return e_stratified_last != premium_tax_table(state);
 }
 
 //============================================================================
-double stratified_charges::minimum_tiered_premium_tax_rate(e_state const& state) const
+double stratified_charges::minimum_tiered_premium_tax_rate(mcenum_state state) const
 {
     e_stratified table = premium_tax_table(state);
     if(e_stratified_last == table)
