@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.46 2008-06-29 00:13:17 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.47 2008-07-01 14:41:50 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -200,7 +200,7 @@ void BasicValues::Init()
     // Now that we have the right issue age, we need to reinitialize
     // the database with that age.
     Database_.reset(new TDatabase(*Input_));
-    StateOfJurisdiction = Database_->GetStateOfJurisdiction();
+    StateOfJurisdiction_ = Database_->GetStateOfJurisdiction();
 
     if
         (   !Database_->Query(DB_StateApproved)
@@ -299,7 +299,7 @@ void BasicValues::GPTServerInit()
     HOPEFULLY(Input_->RetireesCanEnroll || IssueAge <= RetAge);
 
     Database_.reset(new TDatabase(*Input_));
-    StateOfJurisdiction = Database_->GetStateOfJurisdiction();
+    StateOfJurisdiction_ = Database_->GetStateOfJurisdiction();
 
     int endt_age = static_cast<int>(Database_->Query(DB_EndtAge));
     Length = endt_age - IssueAge;
@@ -666,7 +666,7 @@ void BasicValues::SetPermanentInvariants()
 {
     // TODO ?? It would be better not to constrain so many things
     // not to vary by duration by using Query(enumerator).
-    StateOfDomicile     = e_state(ProductData_->GetInsCoDomicile());
+    StateOfDomicile_    = mce_state(ProductData_->GetInsCoDomicile());
     EndtAge             = static_cast<int>(Database_->Query(DB_EndtAge));
 
     // TODO ?? Perhaps we want the premium-tax load instead of the
@@ -676,8 +676,8 @@ void BasicValues::SetPermanentInvariants()
 
     {
     InputParms IP(*Input_);
-    IP.InsdState    = GetStateOfDomicile();
-    IP.SponsorState = GetStateOfDomicile();
+    IP.InsdState    = GetStateOfDomicile().str();
+    IP.SponsorState = GetStateOfDomicile().str();
     TDatabase TempDatabase(IP);
     DomiciliaryPremiumTaxLoad_ = 0.0;
     if(!Input_->AmortizePremLoad)
@@ -864,7 +864,7 @@ void BasicValues::SetLowestPremiumTaxLoad()
             ;
         }
 
-    if(StratifiedCharges_->premium_tax_is_tiered(StateOfJurisdiction))
+    if(StratifiedCharges_->premium_tax_is_tiered(StateOfJurisdiction_.value()))
         {
         // TODO ?? TestPremiumTaxLoadConsistency() repeats this test.
         // Probably all the consistency testing should be moved to
@@ -873,7 +873,7 @@ void BasicValues::SetLowestPremiumTaxLoad()
             {
             fatal_error()
                 << "Premium-tax rate is tiered in state "
-                << StateOfJurisdiction
+                << StateOfJurisdiction_
                 << ", but the product database specifies a scalar load of "
                 << LowestPremiumTaxLoad_
                 << " instead of zero as expected. Probably the database"
@@ -883,7 +883,7 @@ void BasicValues::SetLowestPremiumTaxLoad()
             }
         LowestPremiumTaxLoad_ =
             StratifiedCharges_->minimum_tiered_premium_tax_rate
-                (StateOfJurisdiction
+                (StateOfJurisdiction_.value()
                 );
         }
 }
@@ -906,7 +906,7 @@ void BasicValues::TestPremiumTaxLoadConsistency()
         return;
         }
 
-    if(StratifiedCharges_->premium_tax_is_tiered(GetStateOfJurisdiction()))
+    if(StratifiedCharges_->premium_tax_is_tiered(GetStateOfJurisdiction().value()))
         {
         PremiumTaxLoadIsTieredInStateOfJurisdiction = true;
         if(0.0 != Database_->Query(DB_PremTaxLoad))
@@ -923,7 +923,7 @@ void BasicValues::TestPremiumTaxLoadConsistency()
             }
         }
 
-    if(StratifiedCharges_->premium_tax_is_tiered(GetStateOfDomicile()))
+    if(StratifiedCharges_->premium_tax_is_tiered(GetStateOfDomicile().value()))
         {
         PremiumTaxLoadIsTieredInStateOfDomicile = true;
         if(0.0 != DomiciliaryPremiumTaxLoad())
