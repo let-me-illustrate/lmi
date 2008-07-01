@@ -19,13 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.hpp,v 1.16 2008-02-17 15:13:16 chicares Exp $
+// $Id: stratified_charges.hpp,v 1.17 2008-07-01 14:41:51 chicares Exp $
 
 #ifndef stratified_charges_hpp
 #define stratified_charges_hpp
 
 #include "config.hpp"
 
+#include "mc_enum_type_enums.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 #include "xenumtypes.hpp"
@@ -128,15 +129,15 @@ class LMI_SO stratified_charges
 
     // Tiered premium tax in certain states.
     double tiered_premium_tax
-        (e_state const& state
-        ,double         payment
-        ,double         aggregate_payment
+        (mcenum_state state
+        ,double       payment
+        ,double       aggregate_payment
         ) const;
-    bool premium_tax_is_tiered(e_state const&) const;
+    bool premium_tax_is_tiered(mcenum_state) const;
 
     // Lowest rate for conservatism in complicated formulas that
     // don't yet reflect tiering.
-    double minimum_tiered_premium_tax_rate(e_state const&) const;
+    double minimum_tiered_premium_tax_rate(mcenum_state) const;
 
     static void write_stratified_files();
     static void write_proprietary_stratified_files();
