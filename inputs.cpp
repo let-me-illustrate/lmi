@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputs.cpp,v 1.25 2008-07-02 12:44:22 chicares Exp $
+// $Id: inputs.cpp,v 1.26 2008-07-02 13:10:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -381,6 +381,8 @@ else warning() << "Solve end year out of range." << LMI_FLUSH;
             }
         }
 
+    AlignAgeAndBirthdate();
+
     if(EnforceConsistency())
         {
         warning() << "Ages and dates are inconsistent." << LMI_FLUSH;
@@ -390,6 +392,37 @@ else warning() << "Solve end year out of range." << LMI_FLUSH;
 //============================================================================
 InputParms::~InputParms()
 {
+}
+
+//============================================================================
+void InputParms::AlignAgeAndBirthdate()
+{
+    boost::scoped_ptr<TDatabase> temp_database
+        (new TDatabase
+            (ProductName
+            ,Status[0].Gender
+            ,Status[0].Class
+            ,Status[0].Smoking
+            ,Status[0].IssueAge
+            ,GroupUWType
+            ,InsdState
+            )
+        );
+    bool use_anb = temp_database->Query(DB_AgeLastOrNearest);
+    if(Status[0].UseDOB)
+        {
+        Status[0].IssueAge = attained_age(Status[0].DOB, EffDate, use_anb);
+        }
+    else
+        {
+        // If no DOB is supplied, a birthday is assumed to occur on the
+        // issue date--as good an assumption as any, and the simplest.
+        Status[0].DOB = add_years
+            (Status[0].DOB
+            ,attained_age(Status[0].DOB, EffDate, use_anb) - Status[0].IssueAge
+            ,true
+            );
+        }
 }
 
 //============================================================================
