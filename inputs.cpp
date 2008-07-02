@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputs.cpp,v 1.24 2008-01-21 19:00:58 chicares Exp $
+// $Id: inputs.cpp,v 1.25 2008-07-02 12:44:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -381,7 +381,10 @@ else warning() << "Solve end year out of range." << LMI_FLUSH;
             }
         }
 
-    EnforceConsistency();
+    if(EnforceConsistency())
+        {
+        warning() << "Ages and dates are inconsistent." << LMI_FLUSH;
+        }
 }
 
 //============================================================================
@@ -777,7 +780,7 @@ else warning() << "Solve end year out of range." << LMI_FLUSH;
 // really ought to), and also to find out whether the product is ALB or
 // ANB before we make age consistent with DOB.
 //============================================================================
-void InputParms::EnforceConsistency()
+bool InputParms::EnforceConsistency()
 {
     if(0 == ProductName.size())
         {
@@ -796,9 +799,11 @@ void InputParms::EnforceConsistency()
             )
         );
     bool use_anb = temp_database->Query(DB_AgeLastOrNearest);
-    Status[0].MakeAgesAndDatesConsistent(EffDate, use_anb);
+    bool problem = Status[0].MakeAgesAndDatesConsistent(EffDate, use_anb);
 
     Length = YearsToMaturity();
+
+    return problem;
 }
 
 //============================================================================

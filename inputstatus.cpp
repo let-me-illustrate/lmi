@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputstatus.cpp,v 1.7 2008-01-01 18:29:45 chicares Exp $
+// $Id: inputstatus.cpp,v 1.8 2008-07-02 12:44:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -27,6 +27,8 @@
 #endif // __BORLANDC__
 
 #include "inputstatus.hpp"
+
+#include "alert.hpp"
 
 #include <istream>
 #include <ostream>
@@ -109,28 +111,59 @@ int InputStatus::YearsToRetirement() const
 /// A person born on a leap-year day attains legal majority on the
 /// first of March, not the twenty-eighth of February.
 
-void InputStatus::MakeAgesAndDatesConsistent
+bool InputStatus::MakeAgesAndDatesConsistent
     (calendar_date const& EffDate
     ,bool                 UseANB
     ) const
 {
+    bool problem = false;
     if(UseDOB)
         {
-        r_iss_age& mutable_issue_age = const_cast<r_iss_age&>(IssueAge);
-        mutable_issue_age = attained_age(DOB, EffDate, UseANB);
+        int const z = attained_age(DOB, EffDate, UseANB);
+        if(z != IssueAge)
+            {
+            problem = true;
+            warning()
+                << "IssueAge is " << IssueAge
+                << " but " << z
+                << " was expected.\n"
+                << IssueAge << " = IssueAge \n"
+                << DOB.operator calendar_date const&().str() << " = DOB \n"
+                << EffDate.str() << " = EffDate \n"
+                << UseANB << " = UseANB \n"
+                << LMI_FLUSH
+                ;
+            r_iss_age& mutable_issue_age = const_cast<r_iss_age&>(IssueAge);
+            mutable_issue_age = z;
+            }
         }
     else
         {
-        calendar_date& mutable_dob = const_cast<calendar_date&>
+        calendar_date const z = add_years
             (DOB.operator calendar_date const&()
-            );
-        // If no DOB is supplied, a birthday is assumed to occur on the
-        // issue date--as good an assumption as any, and the simplest.
-        mutable_dob = add_years
-            (mutable_dob
             ,attained_age(DOB, EffDate, UseANB) - IssueAge
             ,true
             );
+        if(z != DOB)
+            {
+            problem = true;
+            warning()
+                << "DOB is " << DOB.operator calendar_date const&().str()
+                << " but " << z.str()
+                << " was expected.\n"
+                << IssueAge << " = IssueAge \n"
+                << DOB.operator calendar_date const&().str() << " = DOB \n"
+                << EffDate.str() << " = EffDate \n"
+                << UseANB << " = UseANB \n"
+                << LMI_FLUSH
+                ;
+            calendar_date& mutable_dob = const_cast<calendar_date&>
+                (DOB.operator calendar_date const&()
+                );
+            // If no DOB is supplied, a birthday is assumed to occur on the
+            // issue date--as good an assumption as any, and the simplest.
+            mutable_dob = z;
+            }
         }
 
 #if 0
@@ -162,6 +195,7 @@ void InputStatus::MakeAgesAndDatesConsistent
             );
         }
 #endif // 0
+    return problem;
 }
 
 //============================================================================

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.cpp,v 1.31 2008-03-19 16:43:29 chicares Exp $
+// $Id: inputillus.cpp,v 1.32 2008-07-02 12:44:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -484,7 +484,10 @@ void IllusInputParms::propagate_changes_from_base_and_finalize
     )
 {
     // TODO ?? For some unknown reason, doing this...
-    EnforceConsistency();
+    if(EnforceConsistency())
+        {
+        warning() << "Ages and dates are inconsistent." << LMI_FLUSH;
+        }
     // ...makes things appear to "work". This should be superfluous.
     // In fact, the function called shouldn't even exist: its mere
     // existence demonstrates some deep defect somewhere that'll
@@ -503,7 +506,10 @@ void IllusInputParms::propagate_changes_to_base_and_finalize
     )
 {
     propagate_status_from_alii();
-    EnforceConsistency();
+    if(EnforceConsistency())
+        {
+        warning() << "Ages and dates are inconsistent." << LMI_FLUSH;
+        }
     propagate_status_to_alii();
     propagate_fund_allocations_from_string();
     realize_all_sequence_strings(report_errors);
