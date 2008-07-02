@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database.hpp,v 1.12 2008-07-01 14:41:49 chicares Exp $
+// $Id: database.hpp,v 1.13 2008-07-02 22:39:16 chicares Exp $
 
 #ifndef database_hpp
 #define database_hpp
@@ -47,7 +47,9 @@ class LMI_SO TDatabase
     :private boost::noncopyable
     ,virtual private obstruct_slicing<TDatabase>
 {
-  public:
+    friend class InputParms;
+    friend class IllusInputParms;
+
     TDatabase // DEPRECATED
         (std::string const& a_ProductName
         ,e_gender    const& a_Gender
@@ -57,6 +59,9 @@ class LMI_SO TDatabase
         ,e_uw_basis  const& a_UWBasis
         ,e_state     const& a_State
         );
+    explicit TDatabase(InputParms const&); // DEPRECATED
+
+  public:
     TDatabase
         (std::string const& a_ProductName
         ,mcenum_gender      a_Gender
@@ -66,7 +71,6 @@ class LMI_SO TDatabase
         ,mcenum_uw_basis    a_UWBasis
         ,mcenum_state       a_State
         );
-    explicit TDatabase(InputParms const&); // DEPRECATED
     explicit TDatabase(yare_input const&);
     // Ctor for unit-testing support.
     explicit TDatabase(int length);

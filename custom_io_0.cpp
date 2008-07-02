@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: custom_io_0.cpp,v 1.20 2008-01-01 18:29:37 chicares Exp $
+// $Id: custom_io_0.cpp,v 1.21 2008-07-02 22:39:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -43,6 +43,7 @@
 #include "name_value_pairs.hpp"
 #include "platform_dependent.hpp" // access()
 #include "value_cast.hpp"
+#include "yare_input.hpp"
 
 #include <map>
 #include <fstream>
@@ -411,7 +412,8 @@ bool custom_io_0_read(IllusInputParms& ip, std::string const& filename)
         ip.Status[0].Class = e_rated;
         }
 
-    TDatabase database(ip);
+    yare_input const yip(ip);
+    TDatabase database(yip);
 
     double first_year_general_account_rate =
             0.01
