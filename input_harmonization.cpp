@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.59 2008-07-02 14:49:17 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.60 2008-07-02 22:39:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -124,23 +124,15 @@ void Input::DoAdaptExternalities()
     CachedGroupUnderwritingType_ = GroupUnderwritingType;
     CachedStateOfJurisdiction_   = StateOfJurisdiction  ;
 
-    std::string const IhsProductName(ProductName            .str());
-    e_gender const    IhsGender     (Gender                 .str());
-    e_class const     IhsClass      (UnderwritingClass      .str());
-    e_smoking const   IhsSmoker     (Smoking                .str());
-    int               IhsIssueAge   (IssueAge             .value());
-    e_uw_basis const  IhsUWBasis    (GroupUnderwritingType  .str());
-    e_state const     IhsState      (StateOfJurisdiction    .str());
-
     database_.reset
         (new TDatabase
-            (IhsProductName
-            ,IhsGender
-            ,IhsClass
-            ,IhsSmoker
-            ,IhsIssueAge
-            ,IhsUWBasis
-            ,IhsState
+            (ProductName          .value()
+            ,Gender               .value()
+            ,UnderwritingClass    .value()
+            ,Smoking              .value()
+            ,IssueAge             .value()
+            ,GroupUnderwritingType.value()
+            ,StateOfJurisdiction  .value()
             )
         );
 

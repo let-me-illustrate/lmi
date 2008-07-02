@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.51 2008-07-02 15:03:41 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.52 2008-07-02 22:39:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -195,13 +195,13 @@ void BasicValues::Init()
     // looked-up values to scalars that vary across no database axis.
 
     // TODO ?? This really belongs in the database class.
-    Database_.reset(new TDatabase(*Input_));
+    Database_.reset(new TDatabase(yare_input_));
     bool use_anb = Database_->Query(DB_AgeLastOrNearest);
     if(S.MakeAgesAndDatesConsistent(Input_->EffDate, use_anb))
         {
         warning() << "Ages and dates are inconsistent." << LMI_FLUSH;
         }
-    Database_.reset(new TDatabase(*Input_));
+    Database_.reset(new TDatabase(yare_input_));
     use_anb = Database_->Query(DB_AgeLastOrNearest);
     if(S.MakeAgesAndDatesConsistent(Input_->EffDate, use_anb))
         {
@@ -209,7 +209,7 @@ void BasicValues::Init()
         }
     // Now that we have the right issue age, we need to reinitialize
     // the database with that age.
-    Database_.reset(new TDatabase(*Input_));
+    Database_.reset(new TDatabase(yare_input_));
     StateOfJurisdiction_ = Database_->GetStateOfJurisdiction();
 
     if
@@ -308,7 +308,7 @@ void BasicValues::GPTServerInit()
     HOPEFULLY(RetAge <= 100);
     HOPEFULLY(Input_->RetireesCanEnroll || IssueAge <= RetAge);
 
-    Database_.reset(new TDatabase(*Input_));
+    Database_.reset(new TDatabase(yare_input_));
     StateOfJurisdiction_ = Database_->GetStateOfJurisdiction();
 
     int endt_age = static_cast<int>(Database_->Query(DB_EndtAge));
@@ -685,10 +685,10 @@ void BasicValues::SetPermanentInvariants()
     PremiumTaxRate_     = Database_->Query(DB_PremTaxRate);
 
     {
-    InputParms IP(*Input_);
-    IP.InsdState    = GetStateOfDomicile().str();
-    IP.SponsorState = GetStateOfDomicile().str();
-    TDatabase TempDatabase(IP);
+    yare_input YI(*Input_);
+    YI.State            = static_cast<mcenum_state>(GetStateOfDomicile().value());
+    YI.CorporationState = static_cast<mcenum_state>(GetStateOfDomicile().value());
+    TDatabase TempDatabase(YI);
     DomiciliaryPremiumTaxLoad_ = 0.0;
     if(!Input_->AmortizePremLoad)
         {
@@ -1558,11 +1558,11 @@ std::vector<double> BasicValues::GetUnblendedTable
     ,e_smoking   const& smoking
     ) const
 {
-    InputParms IP(*Input_);
-    IP.Status[0].Gender = e_gender(gender);
-    IP.Status[0].Smoking = e_smoking(smoking);
+    yare_input YI(*Input_);
+    YI.Gender  = static_cast<mcenum_gender >(gender .value());
+    YI.Smoking = static_cast<mcenum_smoking>(smoking.value());
 
-    TDatabase TempDatabase(IP);
+    TDatabase TempDatabase(YI);
 
     return GetActuarialTable
         (TableFile
