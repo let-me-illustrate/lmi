@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1082 2008-07-02 13:12:21 chicares Exp $
+// $Id: ChangeLog,v 1.1083 2008-07-02 13:59:28 chicares Exp $
 
 MAINTENANCE
 
@@ -17425,4 +17425,15 @@ Remove an identified cause of the defect discussed 20080702T1244Z.
 Database consistency can be tested without forcing an arbitrary
 condition that may need correction. It would be strange indeed for
 the age-calculation method to depend upon age.
+
+20080702T1359Z <gchicares@sbcglobal.net> [1160]
+
+  inputillus.cpp
+Remove an identified cause of the defect discussed 20080702T1244Z.
+Independent testing is needed exactly at this point to confirm that no
+  "Ages and dates are inconsistent."
+diagnostic can arise. That warning can be bypassed for now, but soon
+it will be made a fatal error, so that
+  InputStatus::MakeAgesAndDatesConsistent() const
+can be made truly const.
 

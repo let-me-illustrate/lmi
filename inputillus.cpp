@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.cpp,v 1.32 2008-07-02 12:44:22 chicares Exp $
+// $Id: inputillus.cpp,v 1.33 2008-07-02 13:59:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -484,6 +484,7 @@ void IllusInputParms::propagate_changes_from_base_and_finalize
     )
 {
     // TODO ?? For some unknown reason, doing this...
+    AlignAgeAndBirthdate();
     if(EnforceConsistency())
         {
         warning() << "Ages and dates are inconsistent." << LMI_FLUSH;
@@ -506,6 +507,7 @@ void IllusInputParms::propagate_changes_to_base_and_finalize
     )
 {
     propagate_status_from_alii();
+    AlignAgeAndBirthdate();
     if(EnforceConsistency())
         {
         warning() << "Ages and dates are inconsistent." << LMI_FLUSH;
