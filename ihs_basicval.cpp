@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.50 2008-07-02 14:49:16 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.51 2008-07-02 15:03:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -181,7 +181,7 @@ void BasicValues::Init()
     // controls as ctor arg?
     // validate input in context of this policy form
 
-    InputStatus const& S = Input_->Status[0]; // TODO ?? Database based on first life only.
+    InputStatus const& S = Input_->Status[0];
 
     // TRICKY !! We need the database to look up whether ALB or ANB should
     // be used, in case we need to determine issue age from DOB. But issue
@@ -298,7 +298,7 @@ void BasicValues::GPTServerInit()
 {
     ProductData_.reset(new TProductData(Input_->ProductName));
 
-    InputStatus const& S = Input_->Status[0]; // TODO ?? Database based on first life only.
+    InputStatus const& S = Input_->Status[0];
     bool use_anb = Database_->Query(DB_AgeLastOrNearest);
     // TODO ?? Does this even belong here?
     Input_->Status[0].MakeAgesAndDatesConsistent(Input_->EffDate, use_anb);
