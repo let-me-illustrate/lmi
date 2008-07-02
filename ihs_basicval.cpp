@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.48 2008-07-02 12:44:22 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.49 2008-07-02 13:12:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -186,19 +186,23 @@ void BasicValues::Init()
     // TRICKY !! We need the database to look up whether ALB or ANB should
     // be used, in case we need to determine issue age from DOB. But issue
     // age is a database lookup key, so it can change what we looked up in
-    // the database. To resolve this circularity, we first assume ALB, then
-    // create the database, then recalculate the age. If any circularity
+    // the database. To resolve this circularity, we first set the database
+    // assuming that the age is correct, then ascertain whether ALB or ANB
+    // is used, then reset the database, then recalculate the age. If any
+    // circularity
     // remains, it will be detected and an error message given when we look
     // up the ALB/ANB switch using TDatabase::Query(int), which restricts
     // looked-up values to scalars that vary across no database axis.
 
     // TODO ?? Does this even belong here?
-    if(S.MakeAgesAndDatesConsistent(Input_->EffDate, 0))
+    Database_.reset(new TDatabase(*Input_));
+    bool use_anb = Database_->Query(DB_AgeLastOrNearest);
+    if(S.MakeAgesAndDatesConsistent(Input_->EffDate, use_anb))
         {
         warning() << "Ages and dates are inconsistent." << LMI_FLUSH;
         }
     Database_.reset(new TDatabase(*Input_));
-    bool use_anb = Database_->Query(DB_AgeLastOrNearest);
+    use_anb = Database_->Query(DB_AgeLastOrNearest);
     if(S.MakeAgesAndDatesConsistent(Input_->EffDate, use_anb))
         {
         warning() << "Ages and dates are inconsistent." << LMI_FLUSH;
