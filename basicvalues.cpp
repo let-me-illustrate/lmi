@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basicvalues.cpp,v 1.18 2008-07-02 15:03:41 chicares Exp $
+// $Id: basicvalues.cpp,v 1.19 2008-07-02 22:39:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -81,21 +81,20 @@ void BasicValues::Init()
 
     // Bind to input and database representing policy form.
 
-    InputStatus const& S = Input_->Status[0];
-    Length = Input_->YearsToMaturity();
-    IssueAge = S.IssueAge.value();
-    RetAge = S.RetAge.value();
+    Length   = Input_->YearsToMaturity();
+    IssueAge = Input_->Status[0].IssueAge.value();
+    RetAge   = Input_->Status[0].RetAge.value();
     LMI_ASSERT(IssueAge <= RetAge);
 
     Database_.reset
         (new TDatabase
             ("empty for now" // filename
-            ,S.Gender
-            ,S.Class
-            ,S.Smoking
-            ,S.IssueAge
-            ,Input_->GroupUWType
-            ,Input_->InsdState
+            ,yare_input_.Gender
+            ,yare_input_.UnderwritingClass
+            ,yare_input_.Smoking
+            ,yare_input_.IssueAge
+            ,yare_input_.GroupUnderwritingType
+            ,yare_input_.State
             )
         );
 
