@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.58 2008-06-18 01:46:19 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.59 2008-07-02 14:49:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1079,13 +1079,14 @@ void Input::DoTransmogrify()
         DateOfBirth = add_years
             (DateOfBirth.value()
             ,apparent_age - IssueAge.value()
-            ,false // TODO ?? Is 'false' always right?
+            ,false // Is 'false' always right? See note below.
             );
 // TODO ?? Above, it appears that 'true' is always right. Inspect work
 // done in the 'skeleton' trunk around 2006-10 carefully to confirm
 // this; then correct the code above, and validate all other usage of
-// add_years(), paying special attention to the apparently-incorrect
-// comment on apparently-correct code in 'inputstatus.cpp'.
+// add_years(), paying special attention to the apparently-correct
+//   InputStatus::MakeAgesAndDatesConsistent()
+// code in 'inputstatus.cpp'.
         }
     else
         {

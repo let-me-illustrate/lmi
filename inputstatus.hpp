@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputstatus.hpp,v 1.8 2008-07-02 12:44:23 chicares Exp $
+// $Id: inputstatus.hpp,v 1.9 2008-07-02 14:49:17 chicares Exp $
 
 #ifndef inputstatus_hpp
 #define inputstatus_hpp
@@ -50,23 +50,6 @@ class LMI_SO InputStatus
     bool operator!=(InputStatus const&) const;
 
     int YearsToRetirement() const;
-    // TODO ?? This shouldn't be const. The
-    // Date of birth and issue age are two facets of what must be the same
-    // quantity. The same holds for date or age of retirement. When the
-    // underlying quantity is changed by manipulating either facet, the
-    // other facet must be changed automatically to maintain consistency.
-    //
-    // We need to do this in some cases where we have a const reference to
-    // the InputStatus object; using const_cast here seemed preferable to
-    // making several member variables mutable, which would let anyone
-    // modify them. The ugliness of the conversion to a non-const non-template
-    // type should give you pause before you consider using this technique.
-    //
-    // TODO ?? This damage should be undone. Only the ihs 'valtype' stuff
-    // 'needs' to call this through a const reference.
-    //
-    // Why not look up the ALB/ANB here in the database? Because we don't
-    // necessarily know all database initialization parameters yet--or do we?
     bool MakeAgesAndDatesConsistent
         (calendar_date const& EffDate
         ,bool                 UseALB

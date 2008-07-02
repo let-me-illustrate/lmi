@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.49 2008-07-02 13:12:21 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.50 2008-07-02 14:49:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -194,7 +194,7 @@ void BasicValues::Init()
     // up the ALB/ANB switch using TDatabase::Query(int), which restricts
     // looked-up values to scalars that vary across no database axis.
 
-    // TODO ?? Does this even belong here?
+    // TODO ?? This really belongs in the database class.
     Database_.reset(new TDatabase(*Input_));
     bool use_anb = Database_->Query(DB_AgeLastOrNearest);
     if(S.MakeAgesAndDatesConsistent(Input_->EffDate, use_anb))
