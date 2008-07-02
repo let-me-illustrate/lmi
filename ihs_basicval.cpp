@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.47 2008-07-01 14:41:50 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.48 2008-07-02 12:44:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -193,10 +193,16 @@ void BasicValues::Init()
     // looked-up values to scalars that vary across no database axis.
 
     // TODO ?? Does this even belong here?
-    S.MakeAgesAndDatesConsistent(Input_->EffDate, 0);
+    if(S.MakeAgesAndDatesConsistent(Input_->EffDate, 0))
+        {
+        warning() << "Ages and dates are inconsistent." << LMI_FLUSH;
+        }
     Database_.reset(new TDatabase(*Input_));
     bool use_anb = Database_->Query(DB_AgeLastOrNearest);
-    S.MakeAgesAndDatesConsistent(Input_->EffDate, use_anb);
+    if(S.MakeAgesAndDatesConsistent(Input_->EffDate, use_anb))
+        {
+        warning() << "Ages and dates are inconsistent." << LMI_FLUSH;
+        }
     // Now that we have the right issue age, we need to reinitialize
     // the database with that age.
     Database_.reset(new TDatabase(*Input_));

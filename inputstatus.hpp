@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputstatus.hpp,v 1.7 2008-01-01 18:29:45 chicares Exp $
+// $Id: inputstatus.hpp,v 1.8 2008-07-02 12:44:23 chicares Exp $
 
 #ifndef inputstatus_hpp
 #define inputstatus_hpp
@@ -67,7 +67,7 @@ class LMI_SO InputStatus
     //
     // Why not look up the ALB/ANB here in the database? Because we don't
     // necessarily know all database initialization parameters yet--or do we?
-    void MakeAgesAndDatesConsistent
+    bool MakeAgesAndDatesConsistent
         (calendar_date const& EffDate
         ,bool                 UseALB
         ) const;
