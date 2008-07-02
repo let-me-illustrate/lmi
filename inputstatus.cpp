@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputstatus.cpp,v 1.8 2008-07-02 12:44:23 chicares Exp $
+// $Id: inputstatus.cpp,v 1.9 2008-07-02 14:49:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -105,9 +105,6 @@ int InputStatus::YearsToRetirement() const
 
 //============================================================================
 
-/// TODO ?? Presumably the last argument to add_years() should be
-/// 'false' in both instances below.
-///
 /// A person born on a leap-year day attains legal majority on the
 /// first of March, not the twenty-eighth of February.
 
@@ -133,8 +130,6 @@ bool InputStatus::MakeAgesAndDatesConsistent
                 << UseANB << " = UseANB \n"
                 << LMI_FLUSH
                 ;
-            r_iss_age& mutable_issue_age = const_cast<r_iss_age&>(IssueAge);
-            mutable_issue_age = z;
             }
         }
     else
@@ -157,44 +152,9 @@ bool InputStatus::MakeAgesAndDatesConsistent
                 << UseANB << " = UseANB \n"
                 << LMI_FLUSH
                 ;
-            calendar_date& mutable_dob = const_cast<calendar_date&>
-                (DOB.operator calendar_date const&()
-                );
-            // If no DOB is supplied, a birthday is assumed to occur on the
-            // issue date--as good an assumption as any, and the simplest.
-            mutable_dob = z;
             }
         }
 
-#if 0
-// TODO ?? Either make this work correctly, or expunge it and remove
-// retirement date completely. Making it work requires fixing the
-// problem noted below, and modifying
-//   Input::DoTransmogrify()
-//   Input::DoHarmonize()
-// accordingly.
-    if(UseDOR)
-        {
-        r_ret_age& mutable_ret_age = const_cast<r_ret_age&>(RetAge);
-        // TODO ?? Is this right? It seems to say that if a retirement
-        // date is explicitly given, then attained age at retirement
-        // can be calculated from retirement and effective dates alone;
-        // but it would seem that birthdate should enter into that.
-        // Is it the case that we constrain retirement dates to birthdays?
-        mutable_ret_age = IssueAge + attained_age(EffDate, DOR, UseANB);
-        }
-    else
-        {
-        calendar_date& mutable_dor = const_cast<calendar_date&>
-            (DOR.operator calendar_date const&()
-            );
-        mutable_dor = add_years
-            (mutable_dor
-            ,RetAge - attained_age(DOB, DOR, UseANB)
-            ,true
-            );
-        }
-#endif // 0
     return problem;
 }
 
