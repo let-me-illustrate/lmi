@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.cpp,v 1.33 2008-07-02 13:59:28 chicares Exp $
+// $Id: inputillus.cpp,v 1.34 2008-07-02 14:49:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -483,18 +483,11 @@ void IllusInputParms::propagate_changes_from_base_and_finalize
     (bool report_errors
     )
 {
-    // TODO ?? For some unknown reason, doing this...
     AlignAgeAndBirthdate();
     if(EnforceConsistency())
         {
         warning() << "Ages and dates are inconsistent." << LMI_FLUSH;
         }
-    // ...makes things appear to "work". This should be superfluous.
-    // In fact, the function called shouldn't even exist: its mere
-    // existence demonstrates some deep defect somewhere that'll
-    // probably manifest itself in a new and alarming way someday.
-    // This class is too rotten to live; it can't be fixed, and must
-    // be completely replaced.
     propagate_status_to_alii();
     propagate_fund_allocations_to_string();
     realize_all_sequence_strings(report_errors);
