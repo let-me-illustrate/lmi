@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputs.hpp,v 1.19 2008-07-02 12:44:23 chicares Exp $
+// $Id: inputs.hpp,v 1.20 2008-07-02 13:10:16 chicares Exp $
 
 #ifndef inputs_hpp
 #define inputs_hpp
@@ -40,6 +40,8 @@ class LMI_SO InputParms
   public:
     InputParms();
     virtual ~InputParms();
+
+    void AlignAgeAndBirthdate();
 
     bool operator==(InputParms const&) const;
 

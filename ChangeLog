@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1081 2008-06-30 23:11:22 chicares Exp $
+// $Id: ChangeLog,v 1.1082 2008-07-02 13:12:21 chicares Exp $
 
 MAINTENANCE
 
@@ -17376,4 +17376,53 @@ Detect several more C99 functions.
   database.hpp
   ihs_database.cpp
 Temporarily change a return type to facilitate local refactoring.
+
+20080630T2359Z <gchicares@sbcglobal.net> [1160]
+
+  database.cpp
+  database.hpp
+  ihs_database.cpp
+Refactor to facilitate elimination of old input class.
+
+20080701T1441Z <gchicares@sbcglobal.net> [1160]
+
+  basic_values.hpp
+  database.cpp
+  database.hpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+  ihs_database.cpp
+  objects.make
+  stratified_charges.cpp
+  stratified_charges.hpp
+Refactor to facilitate elimination of old 'xenum' class.
+
+20080702T1244Z <gchicares@sbcglobal.net> [1160]
+
+  ihs_basicval.cpp
+  inputillus.cpp
+  inputs.cpp
+  inputs.hpp
+  inputstatus.cpp
+  inputstatus.hpp
+Localize an ancient defect. A const member function of an input class
+that changes input data via const_cast is called during calculations.
+The plan to use a better input class in calculations cannot proceed
+until this obstacle is removed. For the nonce, diagnostics appear
+wherever the underlying defect is "fixed" by the "const" mutator.
+
+20080702T1310Z <gchicares@sbcglobal.net> [1160]
+
+  inputs.cpp
+  inputs.hpp
+Remove an identified cause of the defect discussed 20080702T1244Z.
+The ctor needs to set data members consistently.
+
+20080702T1312Z <gchicares@sbcglobal.net> [1160]
+
+  ihs_basicval.cpp
+Remove an identified cause of the defect discussed 20080702T1244Z.
+Database consistency can be tested without forcing an arbitrary
+condition that may need correction. It would be strange indeed for
+the age-calculation method to depend upon age.
 
