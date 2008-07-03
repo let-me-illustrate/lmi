@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_server7702test.c,v 1.5 2008-01-01 18:29:43 chicares Exp $
+// $Id: ihs_server7702test.cpp,v 1.1 2008-07-03 23:34:15 chicares Exp $
 
 #include "so_attributes.hpp"
 
