@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1085 2008-07-03 11:43:20 chicares Exp $
+// $Id: ChangeLog,v 1.1086 2008-07-03 11:55:23 chicares Exp $
 
 MAINTENANCE
 
@@ -34,7 +34,7 @@ Please write entries this way:
     "Improve ISO 8601 conformance." instead of "Improved...." or
     "The purpose of this change was to improve....". Single-word
     sentences may be appropriate: "Refactor.". Whenever a defect is
-    corrected, write "Fix defect introduced YYYYMMDDTHHMM." as the
+    corrected, write "Fix defect introduced YYYYMMDDTHHMMZ." as the
     first sentence, and ponder the questions in 'DefectLog'; write up
     any serious defect in that file.
 
@@ -66,7 +66,7 @@ then just copy it here.
 
 We started following certain conventions only at certain times, e.g.:
   20050710T0414Z: [defect-count]
-  20070803T2333Z: "Fix defect introduced YYYYMMDDTHHMM."
+  20070803T2333Z: "Fix defect introduced YYYYMMDDTHHMMZ."
 so don't take earlier entries as exemplary.
 
 //
@@ -13570,7 +13570,7 @@ far too many defects to HEAD.
 20070804T1415Z <chicares@cox.net> [1219]
 
   install_mingw.make
-Fix defect introduced 20061206T1724 (in the 'gwc/' subdirectory).
+Fix defect introduced 20061206T1724Z (in the 'gwc/' subdirectory).
 It does no good to install source where binaries are needed; the
 resulting installation has no standard headers.
 
@@ -13745,7 +13745,7 @@ Refactor for clarity; assert invariants for safety.
 20071008T2302Z <chicares@cox.net> [1213]
 
   actuarial_table_test.cpp
-Add a unit test, revealing a defect introduced 20050828T2137.
+Add a unit test, revealing a defect introduced 20050828T2137Z.
 
 20071008T2303Z <chicares@cox.net> [1213]
 
@@ -16407,7 +16407,7 @@ Explain why comeau compiler is not impersonated for autodependencies.
 20080414T0046Z <gchicares@sbcglobal.net> [1175]
 
   getopt.cpp
-Fix defect introduced 20051207T0413: inappropriate header pasted.
+Fix defect introduced 20051207T0413Z: inappropriate header pasted.
 
 20080414T0051Z <gchicares@sbcglobal.net> [1175]
 
@@ -16853,7 +16853,7 @@ function |f(a,b)| may not equal |f(b,a)|.
 20080528T1418Z <gchicares@sbcglobal.net> [1169]
 
   ihs_basicval.cpp
-Fix defect introduced 20071019T0250. Commutativity was incorrectly
+Fix defect introduced 20071019T0250Z. Commutativity was incorrectly
 assumed: see the 20080528T1415Z change.
 
 20080529T2355Z <gchicares@sbcglobal.net> [1169]
@@ -17480,4 +17480,9 @@ Improve portability: don't hardcode rtti names in unit tests. See:
 Fix defect introduced 20080626T1123Z. The wrong version of gcc was
 cited in a comment. Caught by VZ in review:
   http://lists.nongnu.org/archive/html/lmi/2008-06/msg00069.html
+
+20080703T1155Z <gchicares@sbcglobal.net> [1150]
+
+  ChangeLog
+Write UTC dates unambiguously, always with a -'Z' suffix.
 
