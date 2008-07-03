@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_standalone.cpp,v 1.12 2008-01-01 18:29:43 chicares Exp $
+// $Id: ihs_standalone.cpp,v 1.13 2008-07-03 21:47:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -154,7 +154,7 @@ void GPT_BasicValues::Init()
         );
 
     TargetPremiumType =
-        static_cast<e_modal_prem_type>(local_database.Query(DB_TgtPremType));
+        static_cast<oenum_modal_prem_type>(local_database.Query(DB_TgtPremType));
 
     // ET !! std::vector<double> mly7702qc = q_irc_7702 (12.0 - q_irc_7702);
     std::vector<double> mly7702qc(q_irc_7702);
@@ -285,24 +285,24 @@ double GPT_BasicValues::GetModalTgtPrem
     ,double        SpecAmt
     ) const
 {
-    e_modal_prem_type const PremType =
-        static_cast<e_modal_prem_type>(TargetPremiumType);
+    oenum_modal_prem_type const PremType =
+        static_cast<oenum_modal_prem_type>(TargetPremiumType);
     return GetModalPrem(Year, Mode, SpecAmt, PremType);
 }
 
 //============================================================================
 double GPT_BasicValues::GetModalPrem
-    (int           Year
-    ,e_mode const& Mode
-    ,double        SpecAmt
-    ,e_modal_prem_type const& PremType
+    (int                   Year
+    ,e_mode const&         Mode
+    ,double                SpecAmt
+    ,oenum_modal_prem_type PremType
     ) const
 {
-    if(e_monthly_deduction == PremType)
+    if(oe_monthly_deduction == PremType)
         {
         return GetModalPrem_MlyDed(Year, Mode, SpecAmt);
         }
-    else if(e_modal_nonmec == PremType)
+    else if(oe_modal_nonmec == PremType)
         {
         return GetModalPrem_MaxNonMec(Year, Mode, SpecAmt);
         }

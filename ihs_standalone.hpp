@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_standalone.hpp,v 1.7 2008-01-01 18:29:43 chicares Exp $
+// $Id: ihs_standalone.hpp,v 1.8 2008-07-03 21:47:27 chicares Exp $
 
 #ifndef ihs_standalone_hpp
 #define ihs_standalone_hpp
@@ -78,10 +78,10 @@ class GPT_BasicValues
         ,double        SpecAmt
         ) const;
     double GPT_BasicValues::GetModalPrem
-        (int           Year
-        ,e_mode const& Mode
-        ,double SpecAmt
-        ,e_modal_prem_type const& PremType
+        (int                   Year
+        ,e_mode const&         Mode
+        ,double                SpecAmt
+        ,oenum_modal_prem_type PremType
         ) const;
     double GPT_BasicValues::GetModalPrem_MaxNonMec
         (int           Year
@@ -108,7 +108,7 @@ class GPT_BasicValues
     e_dbopt const&      DBOpt;
     bool                ADDInForce;
 
-    e_modal_prem_type const& TargetPremiumType;
+    oenum_modal_prem_type const TargetPremiumType;
 
     int                 Length;
     vector<double>      a7pp7702A;
