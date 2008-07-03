@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbdict.cpp,v 1.9 2008-01-01 18:29:38 chicares Exp $
+// $Id: dbdict.cpp,v 1.10 2008-07-03 02:11:47 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,6 +29,7 @@
 #include "dbdict.hpp"
 
 #include "dbnames.hpp"
+#include "mc_enum_type_enums.hpp"
 
 #include <cstring>
 
@@ -217,7 +218,7 @@ void DBDictionary::Init()
     double surrchg_sa_dur_factor[1] = {1.0};
     AddEntry(TDBEntry(DB_SurrChgSADurFactor, TDBValue(DB_SurrChgSADurFactor, n, dims, surrchg_sa_dur_factor)));
 
-    double ledger_type[1] = {e_ill_reg};
+    double ledger_type[1] = {mce_ill_reg};
     AddEntry(TDBEntry(DB_LedgerType, TDBValue(DB_LedgerType, n, dims, ledger_type)));
 
     double no_lapse_always_active[1] = {0.0};
