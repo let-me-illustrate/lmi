@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.25 2008-07-03 14:38:38 chicares Exp $
+// $Id: basic_values.hpp,v 1.26 2008-07-03 21:47:27 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -316,7 +316,7 @@ class LMI_SO BasicValues
     double                  MaxLoanAVMult;
     int                     NoLapseMinDur;
     int                     NoLapseMinAge;
-    e_waiver_charge_method  WaiverChargeMethod;
+    oenum_waiver_charge_method  WaiverChargeMethod;
     bool                    LapseIgnoresSurrChg;
     bool                    SurrChgOnIncr;
     bool                    SurrChgOnDecr;
@@ -382,10 +382,10 @@ class LMI_SO BasicValues
 
   private:
     double GetModalPrem
-        (int                      Year
-        ,e_mode            const& Mode
-        ,double                   SpecAmt
-        ,e_modal_prem_type const& PremType
+        (int                   Year
+        ,e_mode const&         Mode
+        ,double                SpecAmt
+        ,oenum_modal_prem_type PremType
         ) const;
     double GetModalPremMlyDed
         (int           Year
@@ -393,11 +393,11 @@ class LMI_SO BasicValues
         ,double        SpecAmt
         ) const;
     double GetModalSpecAmt
-        (e_mode const& a_EeMode
-        ,double        a_EePmt
-        ,e_mode const& a_ErMode
-        ,double        a_ErPmt
-        ,e_modal_prem_type a_PremType
+        (e_mode const&         a_EeMode
+        ,double                a_EePmt
+        ,e_mode const&         a_ErMode
+        ,double                a_ErPmt
+        ,oenum_modal_prem_type a_PremType
         ) const;
     double GetModalSpecAmtMlyDed
         (e_mode const& a_EeMode

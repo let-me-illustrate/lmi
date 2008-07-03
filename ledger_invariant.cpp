@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.36 2008-04-29 23:08:29 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.37 2008-07-03 21:47:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -558,11 +558,11 @@ void LedgerInvariant::Init(BasicValues* b)
     Gender                  = Status.Gender.str();
     UWType                  = Input_.GroupUWType.str();
 
-    e_smoking_or_tobacco smoke_or_tobacco =
-        static_cast<e_smoking_or_tobacco>
+    oenum_smoking_or_tobacco smoke_or_tobacco =
+        static_cast<oenum_smoking_or_tobacco>
             (static_cast<int>(b->Database_->Query(DB_SmokeOrTobacco))
             );
-    if(e_tobacco_nontobacco == smoke_or_tobacco)
+    if(oe_tobacco_nontobacco == smoke_or_tobacco)
         {
             switch(e_smoking(Status.Smoking))
             {
@@ -593,9 +593,9 @@ void LedgerInvariant::Init(BasicValues* b)
                 break;
             }
         }
-    else if(e_smoker_nonsmoker == smoke_or_tobacco)
+    else if(oe_smoker_nonsmoker == smoke_or_tobacco)
         {
-        Smoker                  = Status.Smoking.str();
+        Smoker = Status.Smoking.str();
         }
     // TODO ?? Use a switch-statement instead. The original version of
     // this code was just if...else, and silently deemed the convention
@@ -605,7 +605,7 @@ void LedgerInvariant::Init(BasicValues* b)
     // which some companies use, then we would have gotten smoker/nonsmoker!
     else
         {
-        throw std::logic_error("Unknown e_smoker_nonsmoker convention.");
+        throw std::logic_error("Unknown oe_smoker_nonsmoker convention.");
         }
 
     UWClass                 = Status.Class.str();

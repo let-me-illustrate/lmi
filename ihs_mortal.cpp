@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_mortal.cpp,v 1.25 2008-01-01 18:29:43 chicares Exp $
+// $Id: ihs_mortal.cpp,v 1.26 2008-07-03 21:47:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -98,7 +98,7 @@ void MortalityRates::fetch_parameters(BasicValues const& basic_values)
     CCoiIsAnnual_      = basic_values.Database_->Query(DB_CCoiIsAnnual     );
     GCoiIsAnnual_      = basic_values.Database_->Query(DB_GCoiIsAnnual     );
     IsTgtPremTabular_ =
-        e_modal_table == basic_values.Database_->Query(DB_TgtPremType)
+        oe_modal_table == basic_values.Database_->Query(DB_TgtPremType)
         ;
 
     MaxMonthlyCoiRate_ = basic_values.Database_->Query(DB_MaxMonthlyCoiRate);

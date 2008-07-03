@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.53 2008-07-03 14:38:38 chicares Exp $
+// $Id: account_value.hpp,v 1.54 2008-07-03 21:47:27 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -109,11 +109,11 @@ class LMI_SO AccountValue
 
     void process_payment          (double);
     void IncrementAVProportionally(double);
-    void IncrementAVPreferentially(double, e_increment_account_preference);
+    void IncrementAVPreferentially(double, oenum_increment_account_preference);
     void process_deduction        (double);
     void process_distribution     (double);
     void DecrementAVProportionally(double);
-    void DecrementAVProgressively (double, e_increment_account_preference);
+    void DecrementAVProgressively (double, oenum_increment_account_preference);
 
     double TotalAccountValue() const;
     double CashValueFor7702() const;
@@ -357,14 +357,14 @@ class LMI_SO AccountValue
     boost::shared_ptr<LedgerInvariant> ledger_invariant_;
     boost::shared_ptr<LedgerVariant  > ledger_variant_;
 
-    e_increment_method             deduction_method;
-    e_increment_account_preference deduction_preferred_account;
-    e_increment_method             distribution_method;
-    e_increment_account_preference distribution_preferred_account;
-    e_allocation_method            ee_premium_allocation_method;
-    e_increment_account_preference ee_premium_preferred_account;
-    e_allocation_method            er_premium_allocation_method;
-    e_increment_account_preference er_premium_preferred_account;
+    oenum_increment_method             deduction_method;
+    oenum_increment_account_preference deduction_preferred_account;
+    oenum_increment_method             distribution_method;
+    oenum_increment_account_preference distribution_preferred_account;
+    oenum_allocation_method            ee_premium_allocation_method;
+    oenum_increment_account_preference ee_premium_preferred_account;
+    oenum_allocation_method            er_premium_allocation_method;
+    oenum_increment_account_preference er_premium_preferred_account;
 
     double GuarPremium;
 

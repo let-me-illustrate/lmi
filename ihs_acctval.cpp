@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.110 2008-06-23 13:18:29 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.111 2008-07-03 21:47:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -744,38 +744,38 @@ void AccountValue::SetInitialValues()
     External1035Amount = Outlay_->external_1035_amount();
     Internal1035Amount = Outlay_->internal_1035_amount();
 
-    ee_premium_allocation_method   = static_cast<e_allocation_method>
+    ee_premium_allocation_method   = static_cast<oenum_allocation_method>
         (static_cast<int>(Database_->Query(DB_EePremMethod))
         );
-    ee_premium_preferred_account   = static_cast<e_increment_account_preference>
+    ee_premium_preferred_account   = static_cast<oenum_increment_account_preference>
         (static_cast<int>(Database_->Query(DB_EePremAcct))
         );
-    er_premium_allocation_method   = static_cast<e_allocation_method>
+    er_premium_allocation_method   = static_cast<oenum_allocation_method>
         (static_cast<int>(Database_->Query(DB_ErPremMethod))
         );
-    er_premium_preferred_account   = static_cast<e_increment_account_preference>
+    er_premium_preferred_account   = static_cast<oenum_increment_account_preference>
         (static_cast<int>(Database_->Query(DB_ErPremAcct))
         );
-    deduction_method               = static_cast<e_increment_method>
+    deduction_method               = static_cast<oenum_increment_method>
         (static_cast<int>(Database_->Query(DB_DeductionMethod))
         );
-    deduction_preferred_account    = static_cast<e_increment_account_preference>
+    deduction_preferred_account    = static_cast<oenum_increment_account_preference>
         (static_cast<int>(Database_->Query(DB_DeductionAcct))
         );
-    distribution_method            = static_cast<e_increment_method>
+    distribution_method            = static_cast<oenum_increment_method>
         (static_cast<int>(Database_->Query(DB_DistributionMethod))
         );
-    distribution_preferred_account = static_cast<e_increment_account_preference>
+    distribution_preferred_account = static_cast<oenum_increment_account_preference>
         (static_cast<int>(Database_->Query(DB_DistributionAcct))
         );
 
     // If any account preference is the separate account, then a
     // separate account must be available.
     if
-        (    e_prefer_separate_account == ee_premium_preferred_account
-        ||   e_prefer_separate_account == er_premium_preferred_account
-        ||   e_prefer_separate_account == deduction_preferred_account
-        ||   e_prefer_separate_account == distribution_preferred_account
+        (    oe_prefer_separate_account == ee_premium_preferred_account
+        ||   oe_prefer_separate_account == er_premium_preferred_account
+        ||   oe_prefer_separate_account == deduction_preferred_account
+        ||   oe_prefer_separate_account == distribution_preferred_account
         )
         {
         HOPEFULLY(Database_->Query(DB_AllowSepAcct));
@@ -785,8 +785,8 @@ void AccountValue::SetInitialValues()
     // even a product that doesn't permit that might have a general
     // account, e.g. for loans or deductions.
     if
-        (    e_prefer_separate_account == ee_premium_preferred_account
-        ||   e_prefer_separate_account == er_premium_preferred_account
+        (    oe_prefer_separate_account == ee_premium_preferred_account
+        ||   oe_prefer_separate_account == er_premium_preferred_account
         )
         {
         HOPEFULLY(Database_->Query(DB_AllowSepAcct));

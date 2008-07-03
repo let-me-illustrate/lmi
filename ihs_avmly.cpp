@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.75 2008-07-01 14:41:49 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.76 2008-07-03 21:47:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -299,12 +299,12 @@ void AccountValue::process_payment(double payment)
 
     switch(ee_premium_allocation_method)
         {
-        case e_input_allocation:
+        case oe_input_allocation:
             {
             IncrementAVProportionally(ee_net_pmt);
             }
             break;
-        case e_override_allocation:
+        case oe_override_allocation:
             {
             IncrementAVPreferentially(ee_net_pmt, ee_premium_preferred_account);
             }
@@ -321,12 +321,12 @@ void AccountValue::process_payment(double payment)
         }
     switch(er_premium_allocation_method)
         {
-        case e_input_allocation:
+        case oe_input_allocation:
             {
             IncrementAVProportionally(er_net_pmt);
             }
             break;
-        case e_override_allocation:
+        case oe_override_allocation:
             {
             IncrementAVPreferentially(er_net_pmt, er_premium_preferred_account);
             }
@@ -358,18 +358,18 @@ void AccountValue::IncrementAVProportionally(double increment)
 //============================================================================
 // Apply increments to account value to the preferred account.
 void AccountValue::IncrementAVPreferentially
-    (double increment
-    ,e_increment_account_preference preferred_account
+    (double                             increment
+    ,oenum_increment_account_preference preferred_account
     )
 {
     switch(preferred_account)
         {
-        case e_prefer_general_account:
+        case oe_prefer_general_account:
             {
             AVGenAcct += increment;
             }
             break;
-        case e_prefer_separate_account:
+        case oe_prefer_separate_account:
             {
             AVSepAcct += increment;
             }
@@ -393,12 +393,12 @@ void AccountValue::process_deduction(double decrement)
 {
     switch(deduction_method)
         {
-        case e_proportional:
+        case oe_proportional:
             {
             DecrementAVProportionally(decrement);
             }
             break;
-        case e_progressive:
+        case oe_progressive:
             {
             DecrementAVProgressively(decrement, deduction_preferred_account);
             }
@@ -421,12 +421,12 @@ void AccountValue::process_distribution(double decrement)
 {
     switch(distribution_method)
         {
-        case e_proportional:
+        case oe_proportional:
             {
             DecrementAVProportionally(decrement);
             }
             break;
-        case e_progressive:
+        case oe_progressive:
             {
             DecrementAVProgressively(decrement, distribution_preferred_account);
             }
@@ -513,8 +513,8 @@ void AccountValue::DecrementAVProportionally(double decrement)
 /// value due to catastrophic cancellation, improperly causing lapse.
 
 void AccountValue::DecrementAVProgressively
-    (double decrement
-    ,e_increment_account_preference preferred_account
+    (double                             decrement
+    ,oenum_increment_account_preference preferred_account
     )
 {
     if(materially_equal(decrement, AVGenAcct + AVSepAcct))
@@ -526,12 +526,12 @@ void AccountValue::DecrementAVProgressively
 
     switch(preferred_account)
         {
-        case e_prefer_general_account:
+        case oe_prefer_general_account:
             {
             AVGenAcct -= progressively_reduce(AVGenAcct, AVSepAcct, decrement);
             }
             break;
-        case e_prefer_separate_account:
+        case oe_prefer_separate_account:
             {
             AVGenAcct -= progressively_reduce(AVSepAcct, AVGenAcct, decrement);
             }
@@ -1274,7 +1274,7 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
             );
 
         double target_premium_rate = 0.0;
-        if(e_modal_nonmec == Database_->Query(DB_TgtPremType))
+        if(oe_modal_nonmec == Database_->Query(DB_TgtPremType))
             {
             target_premium_rate = MortalityRates_->SevenPayRates()[0];
             }
@@ -2373,13 +2373,13 @@ void AccountValue::TxSetRiderDed()
         {
         switch(WaiverChargeMethod)
             {
-            case e_waiver_times_naar:
+            case oe_waiver_times_naar:
                 {
                 WpCharge = YearsWpRate * std::min(ActualSpecAmt, WpLimit);
                 DcvWpCharge = WpCharge;
                 }
                 break;
-            case e_waiver_times_deductions:
+            case oe_waiver_times_deductions:
                 {
                 // TODO ?? Should the separate-account load be waived?
                 WpCharge =
