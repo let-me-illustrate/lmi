@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1084 2008-07-03 02:11:47 chicares Exp $
+// $Id: ChangeLog,v 1.1085 2008-07-03 11:43:20 chicares Exp $
 
 MAINTENANCE
 
@@ -17277,7 +17277,7 @@ Casually work around absence of C99 strtof(). See:
 20080626T1123Z <gchicares@sbcglobal.net> [1163]
 
   value_cast_test.cpp
-Avoid an apparent defect in gcc-4.2.1 only (VZ).
+Avoid an apparent defect in gcc-4.2.1 only (VZ). [Correction: 4.1.2]
 
 20080626T1647Z <gchicares@sbcglobal.net> [1163]
 
@@ -17466,4 +17466,18 @@ Refactor database initialization, making certain ctors private.
 
   dbdict.cpp
 Refactor to facilitate elimination of old 'xenum' class.
+
+20080703T1142Z <gchicares@sbcglobal.net> [1150]
+
+  any_member_test.cpp
+  safely_dereference_as_test.cpp
+Improve portability: don't hardcode rtti names in unit tests. See:
+  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00069.html
+
+20080703T1143Z <gchicares@sbcglobal.net> [1150]
+
+  value_cast_test.cpp
+Fix defect introduced 20080626T1123Z. The wrong version of gcc was
+cited in a comment. Caught by VZ in review:
+  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00069.html
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: value_cast_test.cpp,v 1.19 2008-06-26 16:47:50 chicares Exp $
+// $Id: value_cast_test.cpp,v 1.20 2008-07-03 11:43:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -726,7 +726,7 @@ int boost_tests()
     BOOST_TEST_EQUAL(true, value_cast<bool>(true));
     BOOST_TEST_EQUAL(false, value_cast<bool>(false));
 
-    // COMPILER !! Suppress this test for gcc-4.2.1, which refuses,
+    // COMPILER !! Suppress this test for gcc-4.1.2, which refuses,
     // defectively it would seem, to compile it. See:
     //   http://lists.nongnu.org/archive/html/lmi/2008-06/msg00010.html
 #if !(defined __GNUC__ && 40102 == LMI_GCC_VERSION)
