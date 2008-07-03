@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: safely_dereference_as_test.cpp,v 1.3 2008-01-01 18:29:54 chicares Exp $
+// $Id: safely_dereference_as_test.cpp,v 1.4 2008-07-03 11:42:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -56,13 +56,9 @@ int test_main(int, char*[])
 //    BOOST_TEST_EQUAL( p, &safely_dereference_as<B>(&d));
 
     std::string diagnostic0;
-#if defined __GNUC__
-#   if !(LMI_GCC_VERSION < 40000)
-    diagnostic0 = "Cannot dereference null pointer of type 'D*'.";
-#   else  // LMI_GCC_VERSION < 40000
-    diagnostic0 = "Cannot dereference null pointer of type 'P1D'.";
-#   endif // LMI_GCC_VERSION < 40000
-#endif // defined __GNUC__
+    diagnostic0 = "Cannot dereference null pointer of type '";
+    diagnostic0 += lmi::TypeInfo(typeid(D*)).Name();
+    diagnostic0 += "'.";
 
     D* null_pointer = 0;
     BOOST_TEST_THROW
@@ -72,13 +68,11 @@ int test_main(int, char*[])
         );
 
     std::string diagnostic1;
-#if defined __GNUC__
-#   if !(LMI_GCC_VERSION < 40000)
-    diagnostic1 = "Cannot cast pointer of type 'B*' to type 'D*'.";
-#   else  // LMI_GCC_VERSION < 40000
-    diagnostic1 = "Cannot cast pointer of type 'P1B' to type 'P1D'.";
-#   endif // LMI_GCC_VERSION < 40000
-#endif // defined __GNUC__
+    diagnostic1 = "Cannot cast pointer of type '";
+    diagnostic1 += lmi::TypeInfo(typeid(B*)).Name();
+    diagnostic1 += "' to type '";
+    diagnostic1 += lmi::TypeInfo(typeid(D*)).Name();
+    diagnostic1 += "'.";
 
     BOOST_TEST_THROW
         (safely_dereference_as<D>(&b)
