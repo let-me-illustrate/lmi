@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_database.cpp,v 1.17 2008-07-03 21:47:27 chicares Exp $
+// $Id: ihs_database.cpp,v 1.18 2008-07-03 23:21:31 chicares Exp $
 
 // TODO ?? Should length_ be dynamically reset when IssueAge is?
 // TODO ?? Should State be dynamically reset?
@@ -38,14 +38,9 @@
 #include "ihs_dbdict.hpp"
 #include "ihs_dbvalue.hpp"
 #include "ihs_proddata.hpp"
-
-#ifdef STANDALONE
-// nothing
-#else
-#   include "inputs.hpp"      // DEPRECATED
-#   include "inputstatus.hpp" // DEPRECATED
-#   include "yare_input.hpp"
-#endif  // STANDALONE
+#include "inputs.hpp"      // DEPRECATED
+#include "inputstatus.hpp" // DEPRECATED
+#include "yare_input.hpp"
 
 #include <algorithm>
 
