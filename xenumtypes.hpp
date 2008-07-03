@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenumtypes.hpp,v 1.12 2008-06-30 09:59:28 chicares Exp $
+// $Id: xenumtypes.hpp,v 1.13 2008-07-03 14:38:38 chicares Exp $
 
 #ifndef xenumtypes_hpp
 #define xenumtypes_hpp
@@ -421,49 +421,6 @@ enum enum_post_ret_sa_strategy
 //    ,e_obsolete_percent_of_initial = 11
     };
 typedef xenum<enum_post_ret_sa_strategy, 4> e_post_ret_sa_strategy;
-
-// Extended enumeration types aren't yet needed for these:
-
-    enum e_increment_method
-        {e_proportional
-        ,e_progressive
-        };
-    enum e_allocation_method
-        {e_input_allocation
-        ,e_override_allocation
-        };
-    enum e_increment_account_preference
-        {e_prefer_general_account
-        ,e_prefer_separate_account
-        };
-
-    enum e_premium_tax_tier_period
-        {e_premium_tax_tiering_by_policy_year
-        ,e_premium_tax_tiering_by_calendar_year
-        };
-
-    enum e_waiver_charge_method
-        {e_waiver_times_deductions
-        ,e_waiver_times_naar
-        };
-
-// TODO ?? This stuff is a little funky....
-
-enum e_modal_prem_type
-    {e_monthly_deduction
-    ,e_modal_nonmec
-    ,e_modal_table
-    };
-
-enum e_smoking_or_tobacco
-    {e_smoker_nonsmoker
-    ,e_tobacco_nontobacco
-    };
-
-enum e_preferred_class_name
-    {e_called_preferred
-    ,e_called_select
-    };
 
 // Illustration reg requires midpoint basis and guaranteed premium.
 bool is_subject_to_ill_reg(e_ledger_type const&);
