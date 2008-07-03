@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.52 2008-07-02 22:39:16 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.53 2008-07-03 21:47:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -726,7 +726,7 @@ void BasicValues::SetPermanentInvariants()
     AllowChangeToDBO2   = Database_->Query(DB_AllowChangeToDBO2    );
     AllowSAIncr         = Database_->Query(DB_AllowSAIncr          );
     NoLapseAlwaysActive = Database_->Query(DB_NoLapseAlwaysActive  );
-    WaiverChargeMethod  = static_cast<e_waiver_charge_method>(static_cast<int>(Database_->Query(DB_WPChargeMethod)));
+    WaiverChargeMethod  = static_cast<oenum_waiver_charge_method>(static_cast<int>(Database_->Query(DB_WPChargeMethod)));
     LapseIgnoresSurrChg = Database_->Query(DB_LapseIgnoresSurrChg  );
     SurrChgOnIncr       = Database_->Query(DB_SurrChgOnIncr        );
     SurrChgOnDecr       = Database_->Query(DB_SurrChgOnDecr        );
@@ -1017,8 +1017,8 @@ double BasicValues::GetModalMinPrem
     ,double        SpecAmt
     ) const
 {
-    e_modal_prem_type const PremType =
-        static_cast<e_modal_prem_type>(static_cast<int>(Database_->Query(DB_MinPremType)));
+    oenum_modal_prem_type const PremType =
+        static_cast<oenum_modal_prem_type>(static_cast<int>(Database_->Query(DB_MinPremType)));
     return GetModalPrem(Year, Mode, SpecAmt, PremType);
 }
 
@@ -1029,8 +1029,8 @@ double BasicValues::GetModalTgtPrem
     ,double        SpecAmt
     ) const
 {
-    e_modal_prem_type const PremType =
-        static_cast<e_modal_prem_type>(static_cast<int>(Database_->Query(DB_TgtPremType)));
+    oenum_modal_prem_type const PremType =
+        static_cast<oenum_modal_prem_type>(static_cast<int>(Database_->Query(DB_TgtPremType)));
     double modal_prem = GetModalPrem(Year, Mode, SpecAmt, PremType);
 
     // TODO ?? Probably this should reflect policy fee. Some products
@@ -1043,24 +1043,24 @@ double BasicValues::GetModalTgtPrem
 
 //============================================================================
 double BasicValues::GetModalPrem
-    (int                      Year
-    ,e_mode            const& Mode
-    ,double                   SpecAmt
-    ,e_modal_prem_type const& PremType
+    (int                   Year
+    ,e_mode const&         Mode
+    ,double                SpecAmt
+    ,oenum_modal_prem_type PremType
     ) const
 {
-    if(e_monthly_deduction == PremType)
+    if(oe_monthly_deduction == PremType)
         {
         return GetModalPremMlyDed(Year, Mode, SpecAmt);
         }
-    else if(e_modal_nonmec == PremType)
+    else if(oe_modal_nonmec == PremType)
         {
         return GetModalPremMaxNonMec(Year, Mode, SpecAmt);
         }
-    else if(e_modal_table == PremType)
+    else if(oe_modal_table == PremType)
         {
         // The fn s/b generalized to allow an input premium file and an input
-        // policy fee. If e_modal_table is ever used for other than tgt prem,
+        // policy fee. If oe_modal_table is ever used for other than tgt prem,
         // it will be wrong. TODO ?? Fix this.
         return GetModalPremTgtFromTable(Year, Mode, SpecAmt);
         }
@@ -1219,7 +1219,7 @@ double BasicValues::GetModalSpecAmtMax
     ,double        a_ErPmt
     ) const
 {
-    e_modal_prem_type const prem_type = static_cast<e_modal_prem_type>
+    oenum_modal_prem_type const prem_type = static_cast<oenum_modal_prem_type>
         (static_cast<int>(Database_->Query(DB_MinPremType))
         );
     return GetModalSpecAmt
@@ -1239,7 +1239,7 @@ double BasicValues::GetModalSpecAmtTgt
     ,double        a_ErPmt
     ) const
 {
-    e_modal_prem_type const prem_type = static_cast<e_modal_prem_type>
+    oenum_modal_prem_type const prem_type = static_cast<oenum_modal_prem_type>
         (static_cast<int>(Database_->Query(DB_TgtPremType))
         );
     return GetModalSpecAmt
@@ -1254,14 +1254,14 @@ double BasicValues::GetModalSpecAmtTgt
 //============================================================================
 // TODO ?? No 'Year' argument?
 double BasicValues::GetModalSpecAmt
-    (e_mode     const& a_EeMode
-    ,double            a_EePmt
-    ,e_mode     const& a_ErMode
-    ,double            a_ErPmt
-    ,e_modal_prem_type a_PremType
+    (e_mode const&         a_EeMode
+    ,double                a_EePmt
+    ,e_mode const&         a_ErMode
+    ,double                a_ErPmt
+    ,oenum_modal_prem_type a_PremType
     ) const
 {
-    if(e_monthly_deduction == a_PremType)
+    if(oe_monthly_deduction == a_PremType)
         {
         return GetModalSpecAmtMlyDed
             (a_EeMode
@@ -1270,7 +1270,7 @@ double BasicValues::GetModalSpecAmt
             ,a_ErPmt
             );
         }
-    else if(e_modal_nonmec == a_PremType)
+    else if(oe_modal_nonmec == a_PremType)
         {
         return GetModalSpecAmtMinNonMec
             (a_EeMode
@@ -1279,7 +1279,7 @@ double BasicValues::GetModalSpecAmt
             ,a_ErPmt
             );
         }
-    else if(e_modal_table == a_PremType)
+    else if(oe_modal_table == a_PremType)
         {
         // TODO ?? This is dubious. If the table specified is a
         // seven-pay table, then this seems not to give the same
@@ -2118,7 +2118,7 @@ std::vector<double> BasicValues::GetTgtPremRates() const
     return GetTable
         (ProductData_->GetTgtPremFilename()
         ,DB_TgtPremTable
-        ,e_modal_table == Database_->Query(DB_TgtPremType)
+        ,oe_modal_table == Database_->Query(DB_TgtPremType)
         );
 }
 std::vector<double> BasicValues::GetIRC7702Rates() const

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_database.cpp,v 1.16 2008-07-01 14:41:50 chicares Exp $
+// $Id: ihs_database.cpp,v 1.17 2008-07-03 21:47:27 chicares Exp $
 
 // TODO ?? Should length_ be dynamically reset when IssueAge is?
 // TODO ?? Should State be dynamically reset?
@@ -142,12 +142,12 @@ TDatabase::TDatabase(yare_input const& input)
         }
     switch(static_cast<int>(Query(DB_PremTaxState)))
         {
-        case e_ee_state:
+        case oe_ee_state:
             {
             State = input.State;
             }
             break;
-        case e_er_state:
+        case oe_er_state:
             {
             State = input.CorporationState;
             }
@@ -200,12 +200,12 @@ TDatabase::TDatabase(InputParms const& input) // DEPRECATED
         }
     switch(static_cast<int>(Query(DB_PremTaxState)))
         {
-        case e_ee_state:
+        case oe_ee_state:
             {
             State = static_cast<mcenum_state>(input.InsdState.value());
             }
             break;
-        case e_er_state:
+        case oe_er_state:
             {
             State = static_cast<mcenum_state>(input.SponsorState.value());
             }

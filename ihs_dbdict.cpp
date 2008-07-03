@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbdict.cpp,v 1.20 2008-03-19 16:43:29 chicares Exp $
+// $Id: ihs_dbdict.cpp,v 1.21 2008-07-03 21:47:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -368,7 +368,7 @@ void DBDictionary::WriteSampleDBFile()
     Add(TDBValue(DB_MinFaceIncr         , 0.0));
     Add(TDBValue(DB_MaxIncrAge          , 99));
     Add(TDBValue(DB_MinPmt              , 0.0));
-    Add(TDBValue(DB_SmokeOrTobacco      , e_tobacco_nontobacco));
+    Add(TDBValue(DB_SmokeOrTobacco      , oe_tobacco_nontobacco));
     Add(TDBValue(DB_AllowUnisex         , true));
     Add(TDBValue(DB_AllowSexDistinct    , true));
     Add(TDBValue(DB_AllowUnismoke       , true));
@@ -459,13 +459,13 @@ void DBDictionary::WriteSampleDBFile()
             )
         );
 
-    Add(TDBValue(DB_PremTaxState        , e_ee_state));
+    Add(TDBValue(DB_PremTaxState        , oe_ee_state));
     Add(TDBValue(DB_EndtAge             , 100));
     Add(TDBValue(DB_AllowExtEndt        , true));
     Add(TDBValue(DB_AllowGenAcct        , true));
     Add(TDBValue(DB_AllowSepAcct        , true));
-    Add(TDBValue(DB_MinPremType         , e_monthly_deduction));
-    Add(TDBValue(DB_TgtPremType         , e_modal_nonmec));
+    Add(TDBValue(DB_MinPremType         , oe_monthly_deduction));
+    Add(TDBValue(DB_TgtPremType         , oe_modal_nonmec));
     Add(TDBValue(DB_TgtPmFixedAtIssue   , false));
     Add(TDBValue(DB_TgtPmIgnoreSubstd   , true));
     Add(TDBValue(DB_NoLapseMinDur       , 0.0));
@@ -562,7 +562,7 @@ void DBDictionary::WriteSampleDBFile()
     Add(TDBValue(DB_AllowChangeToDBO2   , true));
     Add(TDBValue(DB_AllowSAIncr         , true));
     Add(TDBValue(DB_NoLapseAlwaysActive , false));
-    Add(TDBValue(DB_PrefOrSelect        , e_called_select));
+    Add(TDBValue(DB_PrefOrSelect        , oe_called_select));
     Add(TDBValue(DB_ExpRatStdDevMult    , 0.0));
     Add(TDBValue(DB_ExpRatIBNRMult      , 0.0));
     Add(TDBValue(DB_ExpRatCOIRetention  , 0.0));
