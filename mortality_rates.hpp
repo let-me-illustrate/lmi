@@ -19,13 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mortality_rates.hpp,v 1.14 2008-01-01 18:29:49 chicares Exp $
+// $Id: mortality_rates.hpp,v 1.15 2008-07-04 02:10:27 chicares Exp $
 
 #ifndef mortality_rates_hpp
 #define mortality_rates_hpp
 
 #include "config.hpp"
 
+#include "mc_enum_type_enums.hpp"
 #include "round_to.hpp"
 #include "xenumtypes.hpp"
 
@@ -118,7 +119,7 @@ class MortalityRates
 
     double CountryCoiMultiplier_;
     bool IsPolicyRated_;
-    e_table_rating SubstdTable_;
+    mcenum_table_rating SubstandardTable_;
 
     std::vector<double> CurrentCoiMultiplier_;
     std::vector<double> MonthlyFlatExtra_;
