@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.53 2008-07-03 21:47:27 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.54 2008-07-04 02:10:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -758,8 +758,8 @@ void BasicValues::SetPermanentInvariants()
     // However, flat extras can be used even with guaranteed issue,
     // e.g. for aviation, occupation, avocation, or foreign travel.
     if
-        (   e_table_none != Input_->Status[0].SubstdTable
-        &&  e_medical    != Input_->GroupUWType
+        (   mce_table_none != yare_input_.SubstandardTable
+        &&  e_medical      != Input_->GroupUWType
         )
         {
         fatal_error()
