@@ -19,7 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_server7702test.cpp,v 1.1 2008-07-03 23:34:15 chicares Exp $
+// $Id: ihs_server7702test.cpp,v 1.2 2008-07-04 00:04:35 chicares Exp $
+
+#ifdef __BORLANDC__
+#   include "pchfile.hpp"
+#   pragma hdrstop
+#endif // __BORLANDC__
+
+#include "ihs_server7702.hpp"
 
 #include "so_attributes.hpp"
 
@@ -33,7 +40,9 @@
 
 #include <stdio.h>
 
+#if !defined __cplusplus
 typedef int     bool        ;
+#endif // !defined __cplusplus
 typedef char*   V_PolForm   ;
 typedef int     E_UWBasis   ;
 typedef int     E_Gender    ;
@@ -116,9 +125,6 @@ struct output
     double      LeastFaceAmountEver;
     double      NewFaceAmount;
 };
-
-extern LMI_SO struct output RunServer7702FromStruct(struct input);
-extern LMI_SO void RunServer7702FromString(char*, char*);
 
 int main()
 {

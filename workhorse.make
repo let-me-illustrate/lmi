@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.126 2008-05-01 14:24:16 chicares Exp $
+# $Id: workhorse.make,v 1.127 2008-07-04 00:04:36 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -120,6 +120,7 @@ ifeq (,$(USE_SO_ATTRIBUTES))
     elapsed_time$(EXEEXT) \
     generate_passkey$(EXEEXT) \
     gpt_server$(EXEEXT) \
+    gpt_so_test$(EXEEXT) \
     ihs_crc_comp$(EXEEXT) \
     product_files$(EXEEXT) \
 
