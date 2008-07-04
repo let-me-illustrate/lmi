@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_mortal.cpp,v 1.26 2008-07-03 21:47:27 chicares Exp $
+// $Id: ihs_mortal.cpp,v 1.27 2008-07-04 02:10:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -38,6 +38,7 @@
 #include "math_functors.hpp"
 #include "miscellany.hpp" // each_equal
 #include "rounding_rules.hpp"
+#include "yare_input.hpp"
 
 #include <algorithm>
 #include <fstream>
@@ -109,7 +110,7 @@ void MortalityRates::fetch_parameters(BasicValues const& basic_values)
 
     CountryCoiMultiplier_ = basic_values.Input_->CountryCOIMultiplier;
     IsPolicyRated_        = basic_values.Input_->Status[0].IsPolicyRated();
-    SubstdTable_          = basic_values.Input_->Status[0].SubstdTable;
+    SubstandardTable_     = basic_values.yare_input_.SubstandardTable;
 
     CurrentCoiMultiplier_ = basic_values.Input_->VectorCurrentCoiMultiplier;
     MonthlyFlatExtra_     = basic_values.Input_->Status[0].VectorMonthlyFlatExtra;
@@ -461,7 +462,7 @@ void MortalityRates::MakeCoiRateSubstandard
 
     static double const factors[11] =
         {0.0, 0.25, 0.50, 0.75, 1.00, 1.25, 1.50, 2.00, 2.50, 3.00, 4.00,};
-    double table_multiple = factors[SubstdTable_];
+    double table_multiple = factors[SubstandardTable_];
     for(int j = 0; j < Length_; ++j)
         {
         // Flat extra: input as annual per K, want monthly per $.
