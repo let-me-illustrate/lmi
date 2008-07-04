@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.121 2008-07-01 14:41:50 chicares Exp $
+# $Id: objects.make,v 1.122 2008-07-04 00:04:36 chicares Exp $
 
 ################################################################################
 
@@ -406,7 +406,7 @@ libgpt.a libgpt$(SHREXT): EXTRA_LDFLAGS =
 libgpt.a libgpt$(SHREXT): $(gpt_objects)
 gpt_server$(EXEEXT)     : $(gpt_objects)
 
-libgpt_so_test$(EXEEXT): server7702dlltest.c libgpt$(SHREXT)
+gpt_so_test$(EXEEXT): ihs_server7702test.o libgpt$(SHREXT)
 
 ################################################################################
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1086 2008-07-03 11:55:23 chicares Exp $
+// $Id: ChangeLog,v 1.1087 2008-07-04 00:04:36 chicares Exp $
 
 MAINTENANCE
 
@@ -17485,4 +17485,51 @@ cited in a comment. Caught by VZ in review:
 
   ChangeLog
 Write UTC dates unambiguously, always with a -'Z' suffix.
+
+20080703T1438Z <gchicares@sbcglobal.net> [1149]
+
+  account_value.hpp
+  basic_values.hpp
+  ihs_dbdict.hpp
+  oecumenic_enumerations.hpp [new file]
+  xenumtypes.hpp
+Refactor to facilitate elimination of old 'xenum' class.
+
+20080703T2147Z <gchicares@sbcglobal.net> [1149]
+
+  account_value.hpp
+  basic_values.hpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+  ihs_database.cpp
+  ihs_dbdict.cpp
+  ihs_mortal.cpp
+  ihs_standalone.cpp
+  ihs_standalone.hpp
+  ledger_invariant.cpp
+  oecumenic_enumerations.hpp
+Rename oecumenic enumerations.
+
+20080703T2321Z <gchicares@sbcglobal.net> [1130]
+
+  ihs_database.cpp
+  ihs_standalone.cpp [expunged]
+  ihs_standalone.hpp [expunged]
+Expunge GPT-server kludges.
+
+20080703T2334Z <gchicares@sbcglobal.net> [1130]
+
+  ihs_server7702test.c   [expunged]
+  ihs_server7702test.cpp [new file]
+Rename 'ihs_server7702test.c' to 'ihs_server7702test.cpp'. There's no
+good reason for doing this; it just works around some msw bletchery.
+
+20080704T0004Z <gchicares@sbcglobal.net> [1130]
+
+  ihs_server7702test.cpp
+  objects.make
+  workhorse.make
+Revitalize the shared-library test for the GPT server. It compiles,
+links, and runs, even though it doesn't run correctly.
 
