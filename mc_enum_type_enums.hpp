@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_type_enums.hpp,v 1.12 2008-07-05 01:33:33 chicares Exp $
+// $Id: mc_enum_type_enums.hpp,v 1.13 2008-07-05 02:03:39 chicares Exp $
 
 #ifndef mc_enum_type_enums_hpp
 #define mc_enum_type_enums_hpp
@@ -55,12 +55,20 @@ enum mcenum_emission
 
 /// Not yet implemented--used only to initialize an unimplemented
 /// database entity.
+
 enum mcenum_spread_freq
-    {mce_spread_annual     = 1
-    ,mce_spread_semiannual = 2
-    ,mce_spread_quarterly  = 4
-    ,mce_spread_monthly    = 12
+    {mce_spread_annual     =   1
+    ,mce_spread_semiannual =   2
+    ,mce_spread_quarterly  =   4
+    ,mce_spread_monthly    =  12
     ,mce_spread_daily      = 365
+    };
+
+enum mcenum_mode
+    {mce_annual     =  1
+    ,mce_semiannual =  2
+    ,mce_quarterly  =  4
+    ,mce_monthly    = 12
     };
 
 #include "mc_enum_types.xpp"
@@ -75,7 +83,7 @@ MC_DEFINE_ENUMS(smoking)
 MC_DEFINE_ENUMS(class)
 MC_DEFINE_ENUMS(dbopt)
 MC_DEFINE_ENUMS(dbopt_7702)
-MC_DEFINE_ENUMS(mode)
+//MC_DEFINE_ENUMS(mode) // Defined above.
 MC_DEFINE_ENUMS(basis)
 MC_DEFINE_ENUMS(sep_acct_basis)
 MC_DEFINE_ENUMS(rate_period)

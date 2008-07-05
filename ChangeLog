@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1087 2008-07-04 00:04:36 chicares Exp $
+// $Id: ChangeLog,v 1.1088 2008-07-05 02:03:39 chicares Exp $
 
 MAINTENANCE
 
@@ -17532,4 +17532,37 @@ good reason for doing this; it just works around some msw bletchery.
   workhorse.make
 Revitalize the shared-library test for the GPT server. It compiles,
 links, and runs, even though it doesn't run correctly.
+
+20080704T0210Z <gchicares@sbcglobal.net> [1130]
+
+  ihs_basicval.cpp
+  ihs_mortal.cpp
+  mortality_rates.hpp
+Refactor to facilitate elimination of old input class.
+
+20080705T0035Z <gchicares@sbcglobal.net> [1130]
+
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+  mc_enum_types.xpp
+Force an 'mcenum' type to match its 'xenum' analog's cardinality.
+
+20080705T0133Z <gchicares@sbcglobal.net> [1129]
+
+  ihs_avmly.cpp
+  ihs_database.cpp
+  ihs_dbdict.cpp
+  ihs_dbdict.hpp
+  interest_rates.cpp
+  loads.cpp
+  loads_test.cpp
+  mc_enum_type_enums.hpp
+  oecumenic_enumerations.hpp
+  xenumtypes.hpp
+Refactor to facilitate elimination of old 'xenum' class.
+
+20080705T0203Z <gchicares@sbcglobal.net> [1129]
+
+  mc_enum_type_enums.hpp
+Force an 'mcenum' type to match its 'xenum' analog's values.
 
