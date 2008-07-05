@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_type_enums.hpp,v 1.11 2008-01-01 18:29:49 chicares Exp $
+// $Id: mc_enum_type_enums.hpp,v 1.12 2008-07-05 01:33:33 chicares Exp $
 
 #ifndef mc_enum_type_enums_hpp
 #define mc_enum_type_enums_hpp
@@ -51,6 +51,16 @@ enum mcenum_emission
     ,mce_emit_spreadsheet    =   64
     ,mce_emit_text_stream    =  128
     ,mce_emit_custom_0       =  256
+    };
+
+/// Not yet implemented--used only to initialize an unimplemented
+/// database entity.
+enum mcenum_spread_freq
+    {mce_spread_annual     = 1
+    ,mce_spread_semiannual = 2
+    ,mce_spread_quarterly  = 4
+    ,mce_spread_monthly    = 12
+    ,mce_spread_daily      = 365
     };
 
 #include "mc_enum_types.xpp"

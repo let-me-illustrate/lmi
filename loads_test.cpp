@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads_test.cpp,v 1.11 2008-01-01 18:29:48 chicares Exp $
+// $Id: loads_test.cpp,v 1.12 2008-07-05 01:33:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,6 +29,7 @@
 #include "loads.hpp"
 #include "loads_impl.hpp"
 
+#include "oecumenic_enumerations.hpp"
 #include "round_to.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
@@ -132,18 +133,18 @@ int test_main(int, char*[])
     std::vector<double> extra_policy_fee(length);
 
     load_details details
-        (length                // length_
-        ,false                 // AmortizePremLoad_
-        ,0.02                  // LowestPremiumTaxLoadRate_
-        ,0.02                  // premium_tax_rate_
-        ,0                     // premium_tax_amortization_rate_
-        ,0                     // premium_tax_amortization_period_
-        ,e_asset_charge_spread // asset_charge_type_
-        ,false                 // NeedMidpointRates_
-        ,round_interest_rate   // round_interest_rate_
-        ,extra_comp_load       // VectorExtraCompLoad_
-        ,extra_asset_comp      // VectorExtraAssetComp_
-        ,extra_policy_fee      // VectorExtraPolFee_
+        (length                 // length_
+        ,false                  // AmortizePremLoad_
+        ,0.02                   // LowestPremiumTaxLoadRate_
+        ,0.02                   // premium_tax_rate_
+        ,0                      // premium_tax_amortization_rate_
+        ,0                      // premium_tax_amortization_period_
+        ,oe_asset_charge_spread // asset_charge_type_
+        ,false                  // NeedMidpointRates_
+        ,round_interest_rate    // round_interest_rate_
+        ,extra_comp_load        // VectorExtraCompLoad_
+        ,extra_asset_comp       // VectorExtraAssetComp_
+        ,extra_policy_fee       // VectorExtraPolFee_
         );
 
     LoadsTest t(details);
