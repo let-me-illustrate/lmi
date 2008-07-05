@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.76 2008-07-03 21:47:27 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.77 2008-07-05 01:33:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2535,7 +2535,7 @@ void AccountValue::TxTakeSepAcctLoad()
             );
 
         double tiered_comp = 0.0;
-        if(e_asset_charge_load == Database_->Query(DB_AssetChargeType))
+        if(oe_asset_charge_load == Database_->Query(DB_AssetChargeType))
             {
             tiered_comp = StratifiedCharges_->tiered_asset_based_compensation(AssetsPostBom);
             }
@@ -2626,7 +2626,7 @@ void AccountValue::ApplyDynamicMandE(double assets)
             ;
         }
     double asset_comp_rate =
-        (e_asset_charge_spread == Database_->Query(DB_AssetChargeType))
+        (oe_asset_charge_spread == Database_->Query(DB_AssetChargeType))
             ? StratifiedCharges_->tiered_asset_based_compensation(assets)
             : 0.0
             ;

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads.cpp,v 1.16 2008-01-01 18:29:47 chicares Exp $
+// $Id: loads.cpp,v 1.17 2008-07-05 01:33:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -171,9 +171,9 @@ void Loads::Calculate(load_details const& details)
 
     // Deduct input extra asset comp as an account-value load, iff
     // database entity 'DB_AssetChargeType' has the value
-    // 'e_asset_charge_load'; otherwise, reflect it
+    // 'oe_asset_charge_load'; otherwise, reflect it
     // elsewhere as an interest spread.
-    if(e_asset_charge_load == details.asset_charge_type_)
+    if(oe_asset_charge_load == details.asset_charge_type_)
         {
         // ET !! Rewrite:
         // std::vector<double> extra_asset_comp = i_upper_12_over_12_from_i
@@ -227,7 +227,7 @@ void Loads::Calculate(load_details const& details)
                 }
             }
         }
-    else if(e_asset_charge_spread == details.asset_charge_type_)
+    else if(oe_asset_charge_spread == details.asset_charge_type_)
         {
         // Do nothing here: handle in interest-rate class instead.
         }

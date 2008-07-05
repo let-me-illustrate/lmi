@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbdict.cpp,v 1.21 2008-07-03 21:47:27 chicares Exp $
+// $Id: ihs_dbdict.cpp,v 1.22 2008-07-05 01:33:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,8 +32,9 @@
 #include "data_directory.hpp"
 #include "dbnames.hpp"
 #include "global_settings.hpp"
+#include "mc_enum_type_enums.hpp"
 #include "miscellany.hpp"
-#include "xenumtypes.hpp"
+#include "oecumenic_enumerations.hpp"
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/fstream.hpp>
@@ -289,7 +290,7 @@ void DBDictionary::WriteSampleDBFile()
     Add(TDBValue(DB_WaivePmTxInt1035    , true));
     Add(TDBValue(DB_FirstWDYear         , 0.0));
     Add(TDBValue(DB_MaxWDAVMult         , 1.0));
-    Add(TDBValue(DB_MaxWDDed            , e_to_next_anniversary));
+    Add(TDBValue(DB_MaxWDDed            , mce_to_next_anniversary));
     Add(TDBValue(DB_MinWD               , 100.0));
     Add(TDBValue(DB_WDFee               , 25.0));
     Add(TDBValue(DB_WDFeeRate           , 0.02));
@@ -302,7 +303,7 @@ void DBDictionary::WriteSampleDBFile()
     Add(TDBValue(DB_FixedLoanRate       , 0.06));
     Add(TDBValue(DB_AllowVLR            , true));
     Add(TDBValue(DB_MaxLoanAVMult       , 1.0));
-    Add(TDBValue(DB_MaxLoanDed          , e_to_next_anniversary));
+    Add(TDBValue(DB_MaxLoanDed          , mce_to_next_anniversary));
     Add(TDBValue(DB_GuarPrefLoanSpread  , 0.0));
     Add(TDBValue(DB_GuarRegLoanSpread   , 0.04));
     Add(TDBValue(DB_CurrPrefLoanSpread  , 0.0));
@@ -315,7 +316,7 @@ void DBDictionary::WriteSampleDBFile()
     Add(TDBValue(DB_CurrMandE           , 0.009));
     Add(TDBValue(DB_BonusInt            , 0.0));
     Add(TDBValue(DB_IntFloor            , 0.0));
-    Add(TDBValue(DB_SepAcctSpreadMethod , e_spread_is_effective_annual));
+    Add(TDBValue(DB_SepAcctSpreadMethod , mce_spread_is_effective_annual));
     Add(TDBValue(DB_DynamicMandE        , false));
 
     // gender, smoker
@@ -535,7 +536,7 @@ void DBDictionary::WriteSampleDBFile()
     Add(TDBValue(DB_GDBVxMethod         , 0.0));
     Add(TDBValue(DB_PrimaryHurdle       , 0.0));
     Add(TDBValue(DB_SecondaryHurdle     , 0.0));
-    Add(TDBValue(DB_LedgerType          , e_ill_reg));
+    Add(TDBValue(DB_LedgerType          , mce_ill_reg));
     Add(TDBValue(DB_AllowExpRating      , false));
 
     // These aren't really NY Table Y group rates--in fact, they're
@@ -586,13 +587,13 @@ void DBDictionary::WriteSampleDBFile()
     Add(TDBValue(DB_TgtPremPolFee       , 0.0));
     Add(TDBValue(DB_AllowExtraAssetComp , true));
     Add(TDBValue(DB_AllowExtraPremComp  , true));
-    Add(TDBValue(DB_AssetChargeType     , e_asset_charge_spread));
+    Add(TDBValue(DB_AssetChargeType     , oe_asset_charge_spread));
     Add(TDBValue(DB_AllowUltraPrefClass , false));
     Add(TDBValue(DB_MaxGenAcctRate      , 0.06));
     Add(TDBValue(DB_MaxSepAcctRate      , 0.12));
     Add(TDBValue(DB_MaxVLRRate          , 0.18));
     Add(TDBValue(DB_SurrChgAVMult       , 0.0));
-    Add(TDBValue(DB_IntSpreadFreq       , e_spread_daily));
+    Add(TDBValue(DB_IntSpreadFreq       , mce_spread_daily));
     Add(TDBValue(DB_StateApproved       , true));
     Add(TDBValue(DB_AllowStateXX        , true));
     Add(TDBValue(DB_AllowForeign        , true));
