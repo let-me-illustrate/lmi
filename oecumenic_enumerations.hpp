@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: oecumenic_enumerations.hpp,v 1.2 2008-07-03 21:47:27 chicares Exp $
+// $Id: oecumenic_enumerations.hpp,v 1.3 2008-07-05 01:33:33 chicares Exp $
 
 #ifndef oecumenic_enumerations_hpp
 #define oecumenic_enumerations_hpp
@@ -29,6 +29,11 @@
 enum oenum_allocation_method
     {oe_input_allocation
     ,oe_override_allocation
+    };
+
+enum oenum_asset_charge_type
+    {oe_asset_charge_spread
+    ,oe_asset_charge_load
     };
 
 enum oenum_increment_account_preference

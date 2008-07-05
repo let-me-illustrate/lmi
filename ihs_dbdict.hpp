@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbdict.hpp,v 1.12 2008-07-03 14:38:38 chicares Exp $
+// $Id: ihs_dbdict.hpp,v 1.13 2008-07-05 01:33:33 chicares Exp $
 
 #ifndef ihs_dbdict_hpp
 #define ihs_dbdict_hpp
@@ -32,7 +32,6 @@
 
 #include "ihs_dbvalue.hpp" // Needed here for map declaration.
 #include "obstruct_slicing.hpp"
-#include "oecumenic_enumerations.hpp"
 #include "so_attributes.hpp"
 
 #include <boost/utility.hpp>

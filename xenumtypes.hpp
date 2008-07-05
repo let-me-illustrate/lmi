@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenumtypes.hpp,v 1.13 2008-07-03 14:38:38 chicares Exp $
+// $Id: xenumtypes.hpp,v 1.14 2008-07-05 01:33:33 chicares Exp $
 
 #ifndef xenumtypes_hpp
 #define xenumtypes_hpp
@@ -397,16 +397,6 @@ enum enum_premium_table
     {e_default_premium_table
     };
 typedef xenum<enum_premium_table, 1> e_premium_table;
-
-// TODO ?? Not used yet.
-enum enum_spread_freq
-    {e_spread_annual     = 1
-    ,e_spread_semiannual = 2
-    ,e_spread_quarterly  = 4
-    ,e_spread_monthly    = 12
-    ,e_spread_daily      = 365
-    };
-typedef xenum<enum_spread_freq, 5> e_spread_freq;
 
 // TODO ?? Obsolescent.
 enum enum_post_ret_sa_strategy

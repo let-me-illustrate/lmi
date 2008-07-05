@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: interest_rates.cpp,v 1.19 2008-06-20 13:14:41 chicares Exp $
+// $Id: interest_rates.cpp,v 1.20 2008-07-05 01:33:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -325,9 +325,9 @@ void InterestRates::Initialize(BasicValues const& v)
 
     // Deduct miscellaneous fund charges and input extra asset comp in
     // the same way as M&E, iff database entity DB_AssetChargeType has
-    // the value 'e_asset_charge_spread'; otherwise, reflect them
+    // the value 'oe_asset_charge_spread'; otherwise, reflect them
     // elsewhere as an account-value load.
-    if(e_asset_charge_spread == v.Database_->Query(DB_AssetChargeType))
+    if(oe_asset_charge_spread == v.Database_->Query(DB_AssetChargeType))
         {
         // TODO ?? At least for the antediluvian branch, the vector in
         // the input class has an inappropriate size. Truncating it
