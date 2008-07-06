@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types.hpp,v 1.17 2008-07-05 00:35:22 chicares Exp $
+// $Id: mc_enum_types.hpp,v 1.18 2008-07-06 11:43:37 chicares Exp $
 
 #ifndef mc_enum_types_hpp
 #define mc_enum_types_hpp
@@ -54,8 +54,8 @@ MC_DECLARE(class,4)
 MC_DECLARE(dbopt,3)
 MC_DECLARE(dbopt_7702,2)
 MC_DECLARE(mode,4)
-MC_DECLARE(basis,3)
-MC_DECLARE(sep_acct_basis,3)
+MC_DECLARE(gen_basis,3)
+MC_DECLARE(sep_basis,3)
 MC_DECLARE(rate_period,2)
 MC_DECLARE(run_basis,7)
 MC_DECLARE(ledger_type,8)

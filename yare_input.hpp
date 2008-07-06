@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: yare_input.hpp,v 1.2 2008-06-29 20:39:40 chicares Exp $
+// $Id: yare_input.hpp,v 1.3 2008-07-06 11:43:38 chicares Exp $
 
 #ifndef yare_input_hpp
 #define yare_input_hpp
@@ -104,8 +104,8 @@ class yare_input
     mcenum_solve_target               SolveTarget                     ;
     double                            SolveTargetCashSurrenderValue   ;
     int                               SolveTargetYear                 ;
-    mcenum_basis                      SolveBasis                      ;
-    mcenum_sep_acct_basis             SolveSeparateAccountBasis       ;
+    mcenum_gen_basis                  SolveBasis                      ;
+    mcenum_sep_basis                  SolveSeparateAccountBasis       ;
 //    bool                              UseCurrentDeclaredRate          ;
     mcenum_interest_rate_type         GeneralAccountRateType          ;
     mcenum_interest_rate_type         SeparateAccountRateType         ;
