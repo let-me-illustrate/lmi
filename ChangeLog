@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1089 2008-07-06 17:36:41 chicares Exp $
+// $Id: ChangeLog,v 1.1090 2008-07-06 18:40:21 chicares Exp $
 
 MAINTENANCE
 
@@ -17600,4 +17600,11 @@ Add auxiliary functions that operate on certain types.
   mortality_rates.cpp
   mortality_rates.hpp
 Refactor, eliminating old 'xenum' class from mortality class.
+
+20080706T1840Z <gchicares@sbcglobal.net> [1130]
+
+  input_harmonization.cpp
+Fix defect introduced 20080705T0203Z. Perhaps mc_enum_base::allow()
+should take an enumerator as its argument, eventually. For now, it is
+necessary to defer that question.
 

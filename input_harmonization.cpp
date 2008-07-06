@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.62 2008-07-06 16:01:12 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.63 2008-07-06 18:40:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -661,10 +661,14 @@ false // Silly workaround for now.
     Payment           .enable(mce_solve_ee_prem != SolveType);
     CorporationPayment.enable(mce_solve_er_prem != SolveType);
 
-    IndividualPaymentMode.allow(mce_annual    , true);
-    IndividualPaymentMode.allow(mce_semiannual, true);
-    IndividualPaymentMode.allow(mce_quarterly , true);
-    IndividualPaymentMode.allow(mce_monthly   , true);
+    IndividualPaymentMode.allow_all(true);
+    // TODO ?? Should the following be permitted? If so, then either
+    // enumerators must always be simple zero-based ordinals, or
+    // arguments to allow() must be values instead of ordinals.
+//    IndividualPaymentMode.allow(mce_annual    , true);
+//    IndividualPaymentMode.allow(mce_semiannual, true);
+//    IndividualPaymentMode.allow(mce_quarterly , true);
+//    IndividualPaymentMode.allow(mce_monthly   , true);
 
 /*
     // TODO ?? WX PORT !! Figure out how to do this properly:
