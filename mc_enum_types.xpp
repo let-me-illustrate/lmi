@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types.xpp,v 1.16 2008-07-05 00:35:22 chicares Exp $
+// $Id: mc_enum_types.xpp,v 1.17 2008-07-06 11:43:38 chicares Exp $
 
 #define yes_or_no_VALUES \
     {mce_yes \
@@ -98,23 +98,23 @@
     ,"Monthly" \
     };
 
-#define basis_VALUES \
-    {mce_curr_basis \
-    ,mce_guar_basis \
-    ,mce_mdpt_basis \
+#define gen_basis_VALUES \
+    {mce_gen_curr \
+    ,mce_gen_guar \
+    ,mce_gen_mdpt \
     };
-#define basis_NAMES \
+#define gen_basis_NAMES \
     {"Current basis" \
     ,"Guaranteed basis" \
     ,"Midpoint basis" \
     };
 
-#define sep_acct_basis_VALUES \
-    {mce_sep_acct_full \
-    ,mce_sep_acct_zero \
-    ,mce_sep_acct_half \
+#define sep_basis_VALUES \
+    {mce_sep_full \
+    ,mce_sep_zero \
+    ,mce_sep_half \
     };
-#define sep_acct_basis_NAMES \
+#define sep_basis_NAMES \
     {"Input %" \
     ,"Zero %" \
     ,"Half of input %" \
@@ -130,22 +130,22 @@
     };
 
 #define run_basis_VALUES \
-    {mce_run_curr_basis \
-    ,mce_run_guar_basis \
-    ,mce_run_mdpt_basis \
-    ,mce_run_curr_basis_sa_zero \
-    ,mce_run_guar_basis_sa_zero \
-    ,mce_run_curr_basis_sa_half \
-    ,mce_run_guar_basis_sa_half \
+    {mce_run_gen_curr_sep_full \
+    ,mce_run_gen_guar_sep_full \
+    ,mce_run_gen_mdpt_sep_full \
+    ,mce_run_gen_curr_sep_zero \
+    ,mce_run_gen_guar_sep_zero \
+    ,mce_run_gen_curr_sep_half \
+    ,mce_run_gen_guar_sep_half \
     };
 #define run_basis_NAMES \
-    {"curr charges, curr GA int, curr SA int" \
-    ,"guar charges, guar GA int, curr SA int" \
-    ,"mdpt charges, mdpt GA int, no SA" \
-    ,"curr charges, curr GA int, 0 SA int" \
-    ,"guar charges, guar GA int, 0 SA int" \
-    ,"curr charges, curr GA int, 1/2 SA int" \
-    ,"guar charges, guar GA int, 1/2 SA int" \
+    {"curr charges and genacct int, full sepacct int" \
+    ,"guar charges and genacct int, full sepacct int" \
+    ,"mdpt charges and genacct int, no sepacct" \
+    ,"curr charges and genacct int, zero sepacct int" \
+    ,"guar charges and genacct int, zero sepacct int" \
+    ,"curr charges and genacct int, half sepacct int" \
+    ,"guar charges and genacct int, half sepacct int" \
     };
 
 #define ledger_type_VALUES \
