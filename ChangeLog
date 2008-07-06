@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1088 2008-07-05 02:03:39 chicares Exp $
+// $Id: ChangeLog,v 1.1089 2008-07-06 17:36:41 chicares Exp $
 
 MAINTENANCE
 
@@ -17565,4 +17565,39 @@ Refactor to facilitate elimination of old 'xenum' class.
 
   mc_enum_type_enums.hpp
 Force an 'mcenum' type to match its 'xenum' analog's values.
+
+20080706T1143Z <gchicares@sbcglobal.net> [1129]
+
+  input.hpp
+  input_harmonization.cpp
+  mc_enum_type_enums.hpp
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+  mc_enum_types.xpp
+  yare_input.cpp
+  yare_input.hpp
+Rename certain enumerative types for clarity.
+
+20080706T1601Z <gchicares@sbcglobal.net> [1129]
+
+  Makefile.am
+  input_harmonization.cpp
+  mc_enum_types_aux.cpp [new file]
+  mc_enum_types_aux.hpp [new file]
+  objects.make
+Add auxiliary functions that operate on certain types.
+
+20080706T1736Z <gchicares@sbcglobal.net> [1129]
+
+  account_value.hpp
+  accountvalue.cpp
+  basic_values.hpp
+  basicvalues.cpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+  ihs_mortal.cpp
+  mortality_rates.cpp
+  mortality_rates.hpp
+Refactor, eliminating old 'xenum' class from mortality class.
 

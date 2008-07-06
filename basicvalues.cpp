@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basicvalues.cpp,v 1.19 2008-07-02 22:39:16 chicares Exp $
+// $Id: basicvalues.cpp,v 1.20 2008-07-06 17:36:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -206,7 +206,7 @@ double BasicValues::GetModalTgtPrem
                 ,e_rate_period(e_monthly_rate)
                 )[a_Year]
         );
-    z *= MortalityRates_->MonthlyCoiRates(e_currbasis)[a_Year];
+    z *= MortalityRates_->MonthlyCoiRates(mce_gen_curr)[a_Year];
     z += Loads_->monthly_policy_fee(e_currbasis)[a_Year];
 // TODO ?? Would rider charges depend on month?
 //    z += AdbRate;
@@ -288,7 +288,7 @@ double BasicValues::GetModalTgtSpecAmt
 //    z /= WpRate;
 //    z -= AdbRate;
     z -= Loads_->monthly_policy_fee(e_currbasis)[0];
-    z /= MortalityRates_->MonthlyCoiRates(e_currbasis)[0];
+    z /= MortalityRates_->MonthlyCoiRates(mce_gen_curr)[0];
     z *=
         (   1.0
         +   InterestRates_->GenAcctNetRate

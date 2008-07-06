@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.111 2008-07-03 21:47:27 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.112 2008-07-06 17:36:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -46,6 +46,7 @@
 #include "ledger_variant.hpp"
 #include "loads.hpp"
 #include "materially_equal.hpp"
+#include "mc_enum_types_aux.hpp"
 #include "miscellany.hpp"
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
@@ -387,6 +388,11 @@ void AccountValue::InitializeLife(e_run_basis const& a_Basis)
 {
     RateBasis = a_Basis;
     set_separate_bases_from_run_basis(RateBasis, ExpAndGABasis, SABasis);
+
+    RunBasis_ = static_cast<mcenum_run_basis>(a_Basis.value());
+    set_cloven_bases_from_run_basis(RunBasis_, GenBasis_, SepBasis_);
+    LMI_ASSERT(static_cast<mcenum_gen_basis>(ExpAndGABasis.value()) == GenBasis_);
+    LMI_ASSERT(static_cast<mcenum_sep_basis>(SABasis      .value()) == SepBasis_);
 
 // JOE I moved the next three lines of code up here from below. Reason:
 // output showed wrong specamt if specamt strategy is target, non-MEC,
@@ -1260,7 +1266,7 @@ void AccountValue::SetProjectedCoiCharge()
         ,TotalAccountValue()
         );
     this_years_terminal_naar = std::max(0.0, this_years_terminal_naar);
-    double next_years_coi_rate = GetBandedCoiRates(ExpAndGABasis, ActualSpecAmt)[1 + Year];
+    double next_years_coi_rate = GetBandedCoiRates(GenBasis_, ActualSpecAmt)[1 + Year];
 
     NextYearsProjectedCoiCharge =
             12.0
@@ -1563,15 +1569,15 @@ void AccountValue::SetAnnualInvariants()
         [Year]
         ;
 
-    YearsCoiRate0           = MortalityRates_->MonthlyCoiRatesBand0(ExpAndGABasis)[Year];
-    YearsCoiRate1           = MortalityRates_->MonthlyCoiRatesBand1(ExpAndGABasis)[Year];
-    YearsCoiRate2           = MortalityRates_->MonthlyCoiRatesBand2(ExpAndGABasis)[Year];
-    Years7702CoiRate        = GetMly7702qc                     ()             [Year];
-    YearsAdbRate            = MortalityRates_->AdbRates        ()             [Year];
-    YearsTermRate           = MortalityRates_->MonthlyTermCoiRates(ExpAndGABasis)[Year];
-    YearsWpRate             = MortalityRates_->WpRates         ()             [Year];
-    YearsSpouseRiderRate    = MortalityRates_->SpouseRiderRates(ExpAndGABasis)[Year];
-    YearsChildRiderRate     = MortalityRates_->ChildRiderRates ()             [Year];
+    YearsCoiRate0           = MortalityRates_->MonthlyCoiRatesBand0(GenBasis_)[Year];
+    YearsCoiRate1           = MortalityRates_->MonthlyCoiRatesBand1(GenBasis_)[Year];
+    YearsCoiRate2           = MortalityRates_->MonthlyCoiRatesBand2(GenBasis_)[Year];
+    Years7702CoiRate        = GetMly7702qc                         ()         [Year];
+    YearsAdbRate            = MortalityRates_->AdbRates            ()         [Year];
+    YearsTermRate           = MortalityRates_->MonthlyTermCoiRates (GenBasis_)[Year];
+    YearsWpRate             = MortalityRates_->WpRates             ()         [Year];
+    YearsSpouseRiderRate    = MortalityRates_->SpouseRiderRates    (GenBasis_)[Year];
+    YearsChildRiderRate     = MortalityRates_->ChildRiderRates     ()         [Year];
 
     YearsSurrChgPremMult    = SurrChgRates_->RatePerDollarOfPremium()         [Year];
 

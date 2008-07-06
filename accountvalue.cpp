@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.34 2008-02-29 05:02:30 chicares Exp $
+// $Id: accountvalue.cpp,v 1.35 2008-07-06 17:36:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -39,6 +39,7 @@
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
 #include "loads.hpp"
+#include "mc_enum_types_aux.hpp"
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
 #include "rounding_rules.hpp"
@@ -218,6 +219,12 @@ double AccountValue::RunOneCell(e_run_basis const& TheBasis)
         InvariantValues().Init(this);
         }
     set_separate_bases_from_run_basis(TheBasis, ExpAndGABasis, SABasis);
+
+    RunBasis_ = static_cast<mcenum_run_basis>(TheBasis.value());
+    set_cloven_bases_from_run_basis(RunBasis_, GenBasis_, SepBasis_);
+    LMI_ASSERT(static_cast<mcenum_gen_basis>(ExpAndGABasis.value()) == GenBasis_);
+    LMI_ASSERT(static_cast<mcenum_sep_basis>(SABasis      .value()) == SepBasis_);
+
     VariantValues().Init(this, ExpAndGABasis, SABasis);
 
     Debugging       = false;
@@ -263,11 +270,16 @@ void AccountValue::DoYear
     Year = a_Year; // TODO ?? expunge?
     set_separate_bases_from_run_basis(a_TheBasis, ExpAndGABasis, SABasis);
 
+    RunBasis_ = static_cast<mcenum_run_basis>(a_TheBasis.value());
+    set_cloven_bases_from_run_basis(RunBasis_, GenBasis_, SepBasis_);
+    LMI_ASSERT(static_cast<mcenum_gen_basis>(ExpAndGABasis.value()) == GenBasis_);
+    LMI_ASSERT(static_cast<mcenum_sep_basis>(SABasis      .value()) == SepBasis_);
+
 // TODO ?? Solve...() should reset not inputs but...?
 
     // TODO ?? These variables are set in current run and used in
     // guaranteed and midpoint runs.
-    YearsCoiRate0   = MortalityRates_->MonthlyCoiRates(ExpAndGABasis)[Year];
+    YearsCoiRate0   = MortalityRates_->MonthlyCoiRates(GenBasis_)[Year];
 
     YearsWpRate     = MortalityRates_->WpRates()[Year];
     YearsAdbRate    = MortalityRates_->AdbRates()[Year];
