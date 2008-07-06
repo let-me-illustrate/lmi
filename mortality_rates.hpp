@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mortality_rates.hpp,v 1.15 2008-07-04 02:10:27 chicares Exp $
+// $Id: mortality_rates.hpp,v 1.16 2008-07-06 17:36:41 chicares Exp $
 
 #ifndef mortality_rates_hpp
 #define mortality_rates_hpp
@@ -28,7 +28,6 @@
 
 #include "mc_enum_type_enums.hpp"
 #include "round_to.hpp"
-#include "xenumtypes.hpp"
 
 #include <vector>
 
@@ -60,17 +59,17 @@ class MortalityRates
   public:
     MortalityRates(BasicValues const&);
 
-    std::vector<double> const& MonthlyCoiRates(enum_basis) const; // Antediluvian.
+    std::vector<double> const& MonthlyCoiRates(mcenum_gen_basis) const; // Antediluvian.
 
-    std::vector<double> const& MonthlyCoiRatesBand0(e_basis const& Basis) const;
-    std::vector<double> const& MonthlyCoiRatesBand1(e_basis const& Basis) const;
-    std::vector<double> const& MonthlyCoiRatesBand2(e_basis const& Basis) const;
+    std::vector<double> const& MonthlyCoiRatesBand0(mcenum_gen_basis) const;
+    std::vector<double> const& MonthlyCoiRatesBand1(mcenum_gen_basis) const;
+    std::vector<double> const& MonthlyCoiRatesBand2(mcenum_gen_basis) const;
 
-    std::vector<double> const& MonthlyTermCoiRates (e_basis const& Basis) const;
+    std::vector<double> const& MonthlyTermCoiRates (mcenum_gen_basis) const;
     std::vector<double> const& AdbRates            () const;
     std::vector<double> const& WpRates             () const;
     std::vector<double> const& ChildRiderRates     () const;
-    std::vector<double> const& SpouseRiderRates    (e_basis const& Basis) const;
+    std::vector<double> const& SpouseRiderRates    (mcenum_gen_basis) const;
 
     std::vector<double> const& TargetPremiumRates  () const;
 

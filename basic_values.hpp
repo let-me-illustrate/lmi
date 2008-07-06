@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.26 2008-07-03 21:47:27 chicares Exp $
+// $Id: basic_values.hpp,v 1.27 2008-07-06 17:36:40 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -275,8 +275,8 @@ class LMI_SO BasicValues
         ) const;
 
     std::vector<double> const& GetBandedCoiRates
-        (e_basis const& rate_basis
-        ,double specamt
+        (mcenum_gen_basis rate_basis
+        ,double           specamt
         ) const;
 
     // TODO ?? A priori, protected data is a defect.

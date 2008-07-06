@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.54 2008-07-03 21:47:27 chicares Exp $
+// $Id: account_value.hpp,v 1.55 2008-07-06 17:36:40 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -381,9 +381,13 @@ class LMI_SO AccountValue
     e_basis          SolveBasis;
     e_sep_acct_basis SolveSABasis;
 
-    e_run_basis      RateBasis;
-    e_basis          ExpAndGABasis;
-    e_sep_acct_basis SABasis;
+    e_run_basis      RateBasis;     // DEPRECATED
+    e_basis          ExpAndGABasis; // DEPRECATED
+    e_sep_acct_basis SABasis;       // DEPRECATED
+
+    mcenum_run_basis RunBasis_;
+    mcenum_gen_basis GenBasis_;
+    mcenum_sep_basis SepBasis_;
 
     int         LapseMonth; // Antediluvian.
     int         LapseYear;  // Antediluvian.
