@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.61 2008-07-06 11:43:37 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.62 2008-07-06 16:01:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -36,6 +36,7 @@
 #include "global_settings.hpp"
 #include "inputillus.hpp"
 #include "input_sequence.hpp"
+#include "mc_enum_types_aux.hpp"
 #include "value_cast.hpp"
 #include "xenum.hpp"
 
@@ -163,6 +164,8 @@ void Input::DoHarmonize()
     bool wd_allowed = database_->Query(DB_AllowWD);
     bool loan_allowed = database_->Query(DB_AllowLoan);
     bool pref_loan_allowed = loan_allowed && database_->Query(DB_AllowPrefLoan);
+
+    mcenum_ledger_type const ledger_type = static_cast<mcenum_ledger_type>(static_cast<int>(database_->Query(DB_LedgerType)));
 
     DefinitionOfLifeInsurance.allow(mce_gpt, database_->Query(DB_AllowGPT));
     DefinitionOfLifeInsurance.allow(mce_cvat, database_->Query(DB_AllowCVAT));
@@ -981,12 +984,12 @@ false // Silly workaround for now.
     SolveBasis .enable(actually_solving);
     SolveBasis .allow(mce_gen_curr, actually_solving);
     SolveBasis .allow(mce_gen_guar, actually_solving);
-    SolveBasis .allow(mce_gen_mdpt, actually_solving && is_subject_to_ill_reg(database_->Query(DB_LedgerType)));
+    SolveBasis .allow(mce_gen_mdpt, actually_solving && is_subject_to_ill_reg(ledger_type));
 
     SolveSeparateAccountBasis.enable(actually_solving);
     SolveSeparateAccountBasis.allow(mce_sep_full, actually_solving);
     SolveSeparateAccountBasis.allow(mce_sep_zero, actually_solving && allow_sep_acct);
-    SolveSeparateAccountBasis.allow(mce_sep_half, actually_solving && allow_sep_acct && is_three_rate_nasd(database_->Query(DB_LedgerType)));
+    SolveSeparateAccountBasis.allow(mce_sep_half, actually_solving && allow_sep_acct && is_three_rate_nasd(ledger_type));
 
     SolveTargetCashSurrenderValue.enable(actually_solving && mce_solve_for_target == SolveTarget);
     DeprecatedSolveTgtAtWhich    .enable(actually_solving && mce_solve_for_target == SolveTarget);
