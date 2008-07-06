@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.122 2008-07-04 00:04:36 chicares Exp $
+# $Id: objects.make,v 1.123 2008-07-06 16:01:51 chicares Exp $
 
 ################################################################################
 
@@ -209,6 +209,7 @@ common_common_objects := \
   loads.o \
   mc_enum.o \
   mc_enum_types.o \
+  mc_enum_types_aux.o \
   miscellany.o \
   multiple_cell_document.o \
   name_value_pairs.o \

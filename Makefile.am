@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.42 2008-06-30 19:25:09 zeitlin Exp $
+# $Id: Makefile.am,v 1.43 2008-07-06 16:01:12 chicares Exp $
 
 SUBDIRS = third_party
 
@@ -345,6 +345,7 @@ liblmi_la_SOURCES = \
     input_harmonization.cpp \
     mc_enum.cpp \
     mc_enum_types.cpp \
+    mc_enum_types_aux.cpp \
     md5.cpp \
     mvc_model.cpp \
     preferences_model.cpp \
@@ -929,6 +930,7 @@ noinst_HEADERS = \
     mc_enum_test_aux.hpp \
     mc_enum_type_enums.hpp \
     mc_enum_types.hpp \
+    mc_enum_types_aux.hpp \
     md5.hpp \
     miscellany.hpp \
     mortality_rates.hpp \
@@ -945,6 +947,7 @@ noinst_HEADERS = \
     numeric_io_cast.hpp \
     numeric_io_traits.hpp \
     obstruct_slicing.hpp \
+    oecumenic_enumerations.hpp \
     outlay.hpp \
     path_utility.hpp \
     pchfile.hpp \
@@ -1007,4 +1010,5 @@ noinst_HEADERS = \
     xrange.hpp \
     xrangetypes.hpp \
     xslt_lmi.hpp \
+    yare_input.hpp \
     zero.hpp
