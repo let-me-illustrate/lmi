@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.54 2008-07-04 02:10:27 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.55 2008-07-06 17:36:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1180,7 +1180,7 @@ double BasicValues::GetModalPremMlyDed
                 ,e_rate_period(e_monthly_rate)
                 )[Year]
         );
-    z *= GetBandedCoiRates(e_basis(e_currbasis), SpecAmt)[Year];
+    z *= GetBandedCoiRates(mce_gen_curr, SpecAmt)[Year];
     z += Loads_->monthly_policy_fee(e_basis(e_currbasis))[Year];
 
     if(Input_->Status[0].HasADD)
@@ -1422,7 +1422,7 @@ double BasicValues::GetModalSpecAmtMlyDed
     z -= Loads_->monthly_policy_fee(e_basis(e_currbasis))[0];
     // TODO ?? Probably we should respect banding. This is a
     // conservative shortcut.
-    z /= MortalityRates_->MonthlyCoiRatesBand0(e_basis(e_currbasis))[0];
+    z /= MortalityRates_->MonthlyCoiRatesBand0(mce_gen_curr)[0];
     z *= 1.0 + InterestRates_->GenAcctNetRate
         (e_basis(e_guarbasis)
         ,e_rate_period(e_monthly_rate)
@@ -1439,11 +1439,11 @@ double BasicValues::GetModalSpecAmtMlyDed
 // applies that single rate to the entire NAAR. No layers of coverage
 // are distinguished.
 std::vector<double> const& BasicValues::GetBandedCoiRates
-    (e_basis const& rate_basis
-    ,double specamt
+    (mcenum_gen_basis rate_basis
+    ,double           specamt
     ) const
 {
-    if(UseUnusualCOIBanding && e_guarbasis != rate_basis)
+    if(UseUnusualCOIBanding && mce_gen_guar != rate_basis)
         {
         double band_0_limit = Database_->Query(DB_CurrCOITable0Limit);
         double band_1_limit = Database_->Query(DB_CurrCOITable1Limit);

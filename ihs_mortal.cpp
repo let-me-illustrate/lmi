@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_mortal.cpp,v 1.27 2008-07-04 02:10:27 chicares Exp $
+// $Id: ihs_mortal.cpp,v 1.28 2008-07-06 17:36:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -206,7 +206,7 @@ void MortalityRates::initialize()
         }
 
 /*
-    input from Database, InputParms
+    input from database and input classes
     input
         unisex male proportion guar
         unisex male proportion curr
@@ -486,106 +486,76 @@ void MortalityRates::MakeCoiRateSubstandard
 
 //============================================================================
 std::vector<double> const& MortalityRates::MonthlyCoiRatesBand0
-    (e_basis const& Basis
+    (mcenum_gen_basis b
     ) const
 {
-    switch(Basis)
+    switch(b)
         {
-        case e_currbasis: return MonthlyCurrentCoiRatesBand0_;
-        case e_mdptbasis: return MonthlyMidpointCoiRatesBand0_;
-        case e_guarbasis: return MonthlyGuaranteedCoiRates_;
-        default:
-            fatal_error()
-                << "Case '"
-                << Basis
-                << "' not found."
-                << LMI_FLUSH
-                ;
+        case mce_gen_curr: return MonthlyCurrentCoiRatesBand0_;
+        case mce_gen_mdpt: return MonthlyMidpointCoiRatesBand0_;
+        case mce_gen_guar: return MonthlyGuaranteedCoiRates_;
+        default: fatal_error() << "Case " << b << " not found." << LMI_FLUSH;
         }
-    throw("Logic error");
+    throw "Unreachable--silences a compiler diagnostic.";
 }
 
 //============================================================================
 std::vector<double> const& MortalityRates::MonthlyCoiRatesBand1
-    (e_basis const& Basis
+    (mcenum_gen_basis b
     ) const
 {
-    switch(Basis)
+    switch(b)
         {
-        case e_currbasis: return MonthlyCurrentCoiRatesBand1_;
-        case e_mdptbasis: return MonthlyMidpointCoiRatesBand1_;
-        case e_guarbasis: return MonthlyGuaranteedCoiRates_;
-        default:
-            fatal_error()
-                << "Case '"
-                << Basis
-                << "' not found."
-                << LMI_FLUSH
-                ;
+        case mce_gen_curr: return MonthlyCurrentCoiRatesBand1_;
+        case mce_gen_mdpt: return MonthlyMidpointCoiRatesBand1_;
+        case mce_gen_guar: return MonthlyGuaranteedCoiRates_;
+        default: fatal_error() << "Case " << b << " not found." << LMI_FLUSH;
         }
-    throw("Logic error");
+    throw "Unreachable--silences a compiler diagnostic.";
 }
 
 //============================================================================
 std::vector<double> const& MortalityRates::MonthlyCoiRatesBand2
-    (e_basis const& Basis
+    (mcenum_gen_basis b
     ) const
 {
-    switch(Basis)
+    switch(b)
         {
-        case e_currbasis: return MonthlyCurrentCoiRatesBand2_;
-        case e_mdptbasis: return MonthlyMidpointCoiRatesBand2_;
-        case e_guarbasis: return MonthlyGuaranteedCoiRates_;
-        default:
-            fatal_error()
-                << "Case '"
-                << Basis
-                << "' not found."
-                << LMI_FLUSH
-                ;
+        case mce_gen_curr: return MonthlyCurrentCoiRatesBand2_;
+        case mce_gen_mdpt: return MonthlyMidpointCoiRatesBand2_;
+        case mce_gen_guar: return MonthlyGuaranteedCoiRates_;
+        default: fatal_error() << "Case " << b << " not found." << LMI_FLUSH;
         }
-    throw("Logic error");
+    throw "Unreachable--silences a compiler diagnostic.";
 }
 
 //============================================================================
 std::vector<double> const& MortalityRates::SpouseRiderRates
-    (e_basis const& Basis
+    (mcenum_gen_basis b
     ) const
 {
-    switch(Basis)
+    switch(b)
         {
-        case e_currbasis: return CurrentSpouseRiderRates_;
-        case e_mdptbasis: return MidpointSpouseRiderRates_;
-        case e_guarbasis: return GuaranteedSpouseRiderRates_;
-        default:
-            fatal_error()
-                << "Case '"
-                << Basis
-                << "' not found."
-                << LMI_FLUSH
-                ;
+        case mce_gen_curr: return CurrentSpouseRiderRates_;
+        case mce_gen_mdpt: return MidpointSpouseRiderRates_;
+        case mce_gen_guar: return GuaranteedSpouseRiderRates_;
+        default: fatal_error() << "Case " << b << " not found." << LMI_FLUSH;
         }
-    throw("Logic error");
+    throw "Unreachable--silences a compiler diagnostic.";
 }
 
 //============================================================================
 std::vector<double> const& MortalityRates::MonthlyTermCoiRates
-    (e_basis const& Basis
+    (mcenum_gen_basis b
     ) const
 {
-    switch(Basis)
+    switch(b)
         {
-        case e_currbasis: return MonthlyCurrentTermCoiRates_;
-        case e_mdptbasis: return MonthlyMidpointTermCoiRates_;
-        case e_guarbasis: return MonthlyGuaranteedTermCoiRates_;
-        default:
-            fatal_error()
-                << "Case '"
-                << Basis
-                << "' not found."
-                << LMI_FLUSH
-                ;
+        case mce_gen_curr: return MonthlyCurrentTermCoiRates_;
+        case mce_gen_mdpt: return MonthlyMidpointTermCoiRates_;
+        case mce_gen_guar: return MonthlyGuaranteedTermCoiRates_;
+        default: fatal_error() << "Case " << b << " not found." << LMI_FLUSH;
         }
-    throw("Logic error");
+    throw "Unreachable--silences a compiler diagnostic.";
 }
 

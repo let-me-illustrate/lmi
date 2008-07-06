@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.77 2008-07-05 01:33:32 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.78 2008-07-06 17:36:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2306,7 +2306,7 @@ void AccountValue::TxSetCoiCharge()
     DcvNaar = std::max(0.0, DcvNaar);
 
     double retention_charge = 0.0;
-    double coi_rate = GetBandedCoiRates(ExpAndGABasis, ActualSpecAmt)[Year];
+    double coi_rate = GetBandedCoiRates(GenBasis_, ActualSpecAmt)[Year];
     ActualCoiRate = coi_rate;
 
     // TODO ?? Need to divide CoiRetentionRate by CoiMultiplier
@@ -2322,7 +2322,7 @@ void AccountValue::TxSetCoiCharge()
         {
         ActualCoiRate = round_coi_rate
             (std::min
-                (GetBandedCoiRates(e_basis(e_guarbasis), ActualSpecAmt)[Year]
+                (GetBandedCoiRates(mce_gen_guar, ActualSpecAmt)[Year]
                 ,coi_rate * (case_k_factor + CoiRetentionRate)
                 )
             );

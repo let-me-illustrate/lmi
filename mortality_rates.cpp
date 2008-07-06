@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mortality_rates.cpp,v 1.11 2008-01-01 18:29:49 chicares Exp $
+// $Id: mortality_rates.cpp,v 1.12 2008-07-06 17:36:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -114,24 +114,16 @@ void MortalityRates::Init(BasicValues const& basic_values)
 
 //============================================================================
 std::vector<double> const& MortalityRates::MonthlyCoiRates
-    (enum_basis a_Basis
+    (mcenum_gen_basis b
     ) const
 {
-    switch(a_Basis)
+    switch(b)
         {
-        case e_currbasis: return MonthlyCurrentCoiRatesBand0_;
-        case e_mdptbasis: return MonthlyMidpointCoiRatesBand0_;
-        case e_guarbasis: return MonthlyGuaranteedCoiRates_;
-        default:
-            {
-            fatal_error()
-                << "Case '"
-                << a_Basis
-                << "' not found."
-                << LMI_FLUSH
-                ;
-            }
+        case mce_gen_curr: return MonthlyCurrentCoiRatesBand0_;
+        case mce_gen_mdpt: return MonthlyMidpointCoiRatesBand0_;
+        case mce_gen_guar: return MonthlyGuaranteedCoiRates_;
+        default: fatal_error() << "Case " << b << " not found." << LMI_FLUSH;
         }
-    throw "Case not found.";
+    throw "Unreachable--silences a compiler diagnostic.";
 }
 
