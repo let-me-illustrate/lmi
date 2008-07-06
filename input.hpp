@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.29 2008-06-29 20:37:41 chicares Exp $
+// $Id: input.hpp,v 1.30 2008-07-06 11:43:36 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -201,8 +201,8 @@ class LMI_SO Input
     mce_solve_target         SolveTarget                     ; // TODO ?? {csv@dur, endt]: could be bool.
     tnr_nonnegative_double   SolveTargetCashSurrenderValue   ;
     tnr_duration             SolveTargetYear                 ;
-    mce_basis                SolveBasis                      ; // TODO ?? Poor name, but enumerators are correct.
-    mce_sep_acct_basis       SolveSeparateAccountBasis       ;
+    mce_gen_basis            SolveBasis                      ; // TODO ?? Poor name, but enumerators are correct.
+    mce_sep_basis            SolveSeparateAccountBasis       ;
     mce_yes_or_no            UseCurrentDeclaredRate          ;
     mce_interest_rate_type   GeneralAccountRateType          ;
     mce_interest_rate_type   SeparateAccountRateType         ;
@@ -405,7 +405,7 @@ template<> struct reconstitutor<datum_base, Input>
         DesiredType* z = 0;
         z = exact_cast<ce_product_name         >(m); if(z) return z;
         z = exact_cast<datum_string            >(m); if(z) return z;
-        z = exact_cast<mce_basis               >(m); if(z) return z;
+        z = exact_cast<mce_gen_basis           >(m); if(z) return z;
         z = exact_cast<mce_class               >(m); if(z) return z;
         z = exact_cast<mce_country             >(m); if(z) return z;
         z = exact_cast<mce_dbopt               >(m); if(z) return z;
@@ -424,7 +424,7 @@ template<> struct reconstitutor<datum_base, Input>
         z = exact_cast<mce_report_column       >(m); if(z) return z;
         z = exact_cast<mce_run_order           >(m); if(z) return z;
         z = exact_cast<mce_sa_strategy         >(m); if(z) return z;
-        z = exact_cast<mce_sep_acct_basis      >(m); if(z) return z;
+        z = exact_cast<mce_sep_basis           >(m); if(z) return z;
         z = exact_cast<mce_smoking             >(m); if(z) return z;
         z = exact_cast<mce_solve_from          >(m); if(z) return z;
         z = exact_cast<mce_solve_target        >(m); if(z) return z;

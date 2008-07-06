@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: yare_input.cpp,v 1.2 2008-06-29 20:39:40 chicares Exp $
+// $Id: yare_input.cpp,v 1.3 2008-07-06 11:43:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -59,8 +59,8 @@ yare_input::yare_input(Input const& z)
     mcenum_solve_target               SolveTarget                     ;
     double                            SolveTargetCashSurrenderValue   ;
     int                               SolveTargetYear                 ;
-    mcenum_basis                      SolveBasis                      ;
-    mcenum_sep_acct_basis             SolveSeparateAccountBasis       ;
+    mcenum_gen_basis                  SolveBasis                      ;
+    mcenum_sep_basis                  SolveSeparateAccountBasis       ;
     mcenum_interest_rate_type         GeneralAccountRateType          ;
     mcenum_interest_rate_type         SeparateAccountRateType         ;
     double                            LoanRate                        ;
@@ -216,8 +216,8 @@ yare_input::yare_input(InputParms const& z)
     SolveTarget                     = static_cast<mcenum_solve_target        >(z.SolveTarget               .value());
     SolveTargetCashSurrenderValue   = z.SolveTgtCSV                     ;
     SolveTargetYear                 = z.SolveTgtYear                    ;
-    SolveBasis                      = static_cast<mcenum_basis               >(z.SolveBasis                .value());
-    SolveSeparateAccountBasis       = static_cast<mcenum_sep_acct_basis      >(z.SolveSABasis              .value());
+    SolveBasis                      = static_cast<mcenum_gen_basis           >(z.SolveBasis                .value());
+    SolveSeparateAccountBasis       = static_cast<mcenum_sep_basis           >(z.SolveSABasis              .value());
     GeneralAccountRateType          = static_cast<mcenum_interest_rate_type  >(z.IntRateTypeGA             .value());
     SeparateAccountRateType         = static_cast<mcenum_interest_rate_type  >(z.IntRateTypeSA             .value());
     LoanRate                        = z.LoanIntRate                     ;

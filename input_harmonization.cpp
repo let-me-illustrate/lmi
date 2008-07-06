@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.60 2008-07-02 22:39:17 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.61 2008-07-06 11:43:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -979,14 +979,14 @@ false // Silly workaround for now.
     SolveTarget.allow(mce_solve_for_target, actually_solving);
 
     SolveBasis .enable(actually_solving);
-    SolveBasis .allow(mce_curr_basis, actually_solving);
-    SolveBasis .allow(mce_guar_basis, actually_solving);
-    SolveBasis .allow(mce_mdpt_basis, actually_solving && is_subject_to_ill_reg(database_->Query(DB_LedgerType)));
+    SolveBasis .allow(mce_gen_curr, actually_solving);
+    SolveBasis .allow(mce_gen_guar, actually_solving);
+    SolveBasis .allow(mce_gen_mdpt, actually_solving && is_subject_to_ill_reg(database_->Query(DB_LedgerType)));
 
     SolveSeparateAccountBasis.enable(actually_solving);
-    SolveSeparateAccountBasis.allow(mce_sep_acct_full, actually_solving);
-    SolveSeparateAccountBasis.allow(mce_sep_acct_zero, actually_solving && allow_sep_acct);
-    SolveSeparateAccountBasis.allow(mce_sep_acct_half, actually_solving && allow_sep_acct && is_three_rate_nasd(database_->Query(DB_LedgerType)));
+    SolveSeparateAccountBasis.allow(mce_sep_full, actually_solving);
+    SolveSeparateAccountBasis.allow(mce_sep_zero, actually_solving && allow_sep_acct);
+    SolveSeparateAccountBasis.allow(mce_sep_half, actually_solving && allow_sep_acct && is_three_rate_nasd(database_->Query(DB_LedgerType)));
 
     SolveTargetCashSurrenderValue.enable(actually_solving && mce_solve_for_target == SolveTarget);
     DeprecatedSolveTgtAtWhich    .enable(actually_solving && mce_solve_for_target == SolveTarget);
