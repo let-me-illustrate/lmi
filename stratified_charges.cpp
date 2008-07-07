@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.cpp,v 1.25 2008-07-01 14:41:50 chicares Exp $
+// $Id: stratified_charges.cpp,v 1.26 2008-07-07 17:15:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -235,15 +235,15 @@ void stratified_charges::initialize_dictionary()
 
 //============================================================================
 double stratified_charges::stratified_sepacct_load
-    (e_basis const& basis
-    ,double         assets
-    ,double         premium
-    ,double         special_limit
+    (mcenum_gen_basis basis
+    ,double           assets
+    ,double           premium
+    ,double           special_limit
     )
 {
     switch(basis)
         {
-        case e_currbasis:
+        case mce_gen_curr:
             {
             return
                     banded_curr_sepacct_load(assets, premium, special_limit)
@@ -251,7 +251,7 @@ double stratified_charges::stratified_sepacct_load
                 ;
             }
             break;
-        case e_guarbasis:
+        case mce_gen_guar:
             {
             return
                     banded_guar_sepacct_load(assets, premium, special_limit)
@@ -259,7 +259,7 @@ double stratified_charges::stratified_sepacct_load
                 ;
             }
             break;
-        case e_mdptbasis:
+        case mce_gen_mdpt:
             {
             fatal_error()
                 << "Dynamic separate-account load not supported with "
