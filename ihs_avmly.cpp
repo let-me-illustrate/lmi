@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.78 2008-07-06 17:36:40 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.79 2008-07-07 17:15:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2528,7 +2528,7 @@ void AccountValue::TxTakeSepAcctLoad()
             special_limit = 2500000.0;
             }
         double stratified_load = StratifiedCharges_->stratified_sepacct_load
-            (ExpAndGABasis
+            (GenBasis_
             ,AssetsPostBom
             ,CumPmtsPostBom
             ,special_limit
