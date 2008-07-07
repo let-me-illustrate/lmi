@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum.hpp,v 1.18 2008-01-01 18:29:48 chicares Exp $
+// $Id: mc_enum.hpp,v 1.19 2008-07-07 17:17:24 chicares Exp $
 
 // Acknowledgment
 //
@@ -151,6 +151,7 @@ class mc_enum
 
   public:
     typedef T enum_type;
+    enum{Cardinality = n};
 
     mc_enum();
     explicit mc_enum(T);
