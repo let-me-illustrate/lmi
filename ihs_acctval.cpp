@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.112 2008-07-06 17:36:40 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.113 2008-07-07 17:16:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -104,6 +104,9 @@ AccountValue::AccountValue(InputParms const& input)
     ,ledger_(new Ledger(BasicValues::GetLedgerType(), BasicValues::GetLength()))
     ,ledger_invariant_     (new LedgerInvariant(BasicValues::GetLength()))
     ,ledger_variant_       (new LedgerVariant  (BasicValues::GetLength()))
+    ,RunBasis_             (mce_run_gen_curr_sep_full)
+    ,GenBasis_             (mce_gen_curr)
+    ,SepBasis_             (mce_sep_full)
     ,FirstYearPremiumExceedsRetaliationLimit(true)
 {
     InvariantValues().Init(this);
