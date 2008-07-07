@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: yare_input.cpp,v 1.3 2008-07-06 11:43:38 chicares Exp $
+// $Id: yare_input.cpp,v 1.4 2008-07-07 17:18:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -313,6 +313,16 @@ yare_input::yare_input(InputParms const& z)
     CorporationPaymentStrategy      = convert_vector_type<mcenum_pmt_strategy >(z.VectorCorpPaymentStrategy    );
     NewLoanStrategy                 = convert_vector_type<mcenum_loan_strategy>(z.VectorNewLoanStrategy        );
     WithdrawalStrategy              = convert_vector_type<mcenum_wd_strategy  >(z.VectorWithdrawalStrategy     );
+
+    // TODO ?? Resolve this ancient backward-compatibility issue.
+    if(mce_cred_rate == GeneralAccountRateType)
+        {
+        GeneralAccountRateType = mce_net_rate;
+        }
+    if(mce_cred_rate == SeparateAccountRateType)
+        {
+        SeparateAccountRateType = mce_net_rate;
+        }
 }
 
 yare_input::~yare_input()
