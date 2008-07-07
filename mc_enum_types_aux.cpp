@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types_aux.cpp,v 1.1 2008-07-06 16:01:12 chicares Exp $
+// $Id: mc_enum_types_aux.cpp,v 1.2 2008-07-07 17:17:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,6 +29,10 @@
 #include "mc_enum_types_aux.hpp"
 
 #include "alert.hpp"
+#include "mc_enum.hpp"
+#include "mc_enum_types.hpp"
+
+#include <boost/static_assert.hpp>
 
 /// Illustration reg requires midpoint basis and guaranteed premium.
 
@@ -46,6 +50,10 @@ bool is_three_rate_nasd(mcenum_ledger_type)
 {
     return false;
 }
+
+BOOST_STATIC_ASSERT(mc_n_gen_bases    == static_cast<std::size_t>(mce_gen_basis  ::Cardinality));
+BOOST_STATIC_ASSERT(mc_n_sep_bases    == static_cast<std::size_t>(mce_sep_basis  ::Cardinality));
+BOOST_STATIC_ASSERT(mc_n_rate_periods == static_cast<std::size_t>(mce_rate_period::Cardinality));
 
 /// Inverse of set_run_basis_from_cloven_bases(), q.v.
 
