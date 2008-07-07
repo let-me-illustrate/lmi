@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.hpp,v 1.17 2008-07-01 14:41:51 chicares Exp $
+// $Id: stratified_charges.hpp,v 1.18 2008-07-07 17:15:32 chicares Exp $
 
 #ifndef stratified_charges_hpp
 #define stratified_charges_hpp
@@ -29,7 +29,6 @@
 #include "mc_enum_type_enums.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
-#include "xenumtypes.hpp"
 
 #include <iosfwd>
 #include <map>
@@ -109,16 +108,16 @@ class LMI_SO stratified_charges
     // - tiered_guar_sepacct_load: seems to be incorrectly implemented.
 
     double stratified_sepacct_load
-        (e_basis const& basis
-        ,double         assets
-        ,double         premium
-        ,double         special_limit
+        (mcenum_gen_basis basis
+        ,double           assets
+        ,double           premium
+        ,double           special_limit
         );
 
     // TODO ?? In the public interface, consider replacing these:
     //   tiered_current_m_and_e()
     //   tiered_guaranteed_m_and_e()
-    // with a single tiered_m_and_e(e_basis const& basis, double assets).
+    // with a single tiered_m_and_e(mcenum_gen_basis basis, double assets).
 
     double tiered_current_m_and_e           (double assets) const;
     double tiered_guaranteed_m_and_e        (double assets) const;
