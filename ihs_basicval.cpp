@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.55 2008-07-06 17:36:40 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.56 2008-07-08 17:52:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1176,8 +1176,8 @@ double BasicValues::GetModalPremMlyDed
     z /=
         (   1.0
         +   InterestRates_->GenAcctNetRate
-                (e_basis(e_guarbasis)
-                ,e_rate_period(e_monthly_rate)
+                (mce_gen_guar
+                ,mce_monthly_rate
                 )[Year]
         );
     z *= GetBandedCoiRates(mce_gen_curr, SpecAmt)[Year];
@@ -1424,8 +1424,8 @@ double BasicValues::GetModalSpecAmtMlyDed
     // conservative shortcut.
     z /= MortalityRates_->MonthlyCoiRatesBand0(mce_gen_curr)[0];
     z *= 1.0 + InterestRates_->GenAcctNetRate
-        (e_basis(e_guarbasis)
-        ,e_rate_period(e_monthly_rate)
+        (mce_gen_guar
+        ,mce_monthly_rate
         )[0]
         ;
 
@@ -1488,8 +1488,8 @@ double BasicValues::GetAnnuityValueMlyDed
     double u = 1.0 + std::max
         (z
         ,InterestRates_->GenAcctNetRate
-            (e_basis(e_guarbasis)
-            ,e_rate_period(e_monthly_rate)
+            (mce_gen_guar
+            ,mce_monthly_rate
             )[Year]
         );
     u = 1.0 / u;

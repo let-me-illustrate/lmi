@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.79 2008-07-07 17:15:32 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.80 2008-07-08 17:52:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2644,8 +2644,8 @@ void AccountValue::ApplyDynamicMandE(double assets)
     double gross_rate = 0.0;
 
     InterestRates_->DynamicMlySepAcctRate
-        (ExpAndGABasis
-        ,SABasis
+        (GenBasis_
+        ,SepBasis_
         ,Year
         ,gross_rate
         ,m_and_e_rate
@@ -2654,9 +2654,9 @@ void AccountValue::ApplyDynamicMandE(double assets)
         ,stable_value_rate
         );
     YearsSepAcctIntRate     = InterestRates_->SepAcctNetRate
-        (SABasis
-        ,ExpAndGABasis
-        ,e_rate_period(e_monthly_rate)
+        (SepBasis_
+        ,GenBasis_
+        ,mce_monthly_rate
         )
         [Year]
         ;
@@ -2675,7 +2675,7 @@ void AccountValue::TxCreditInt()
     double sa_int_spread = 0.0;
 
     double gross_sep_acct_rate = i_upper_12_over_12_from_i<double>()
-        (InterestRates_->SepAcctGrossRate(SABasis)[Year]
+        (InterestRates_->SepAcctGrossRate(SepBasis_)[Year]
         );
 
     if(0.0 < AVSepAcct)
@@ -3180,14 +3180,14 @@ void AccountValue::SetMaxLoan()
 
     // Illustrations generally permit loans only on anniversary.
     double reg_loan_factor = InterestRates_->RegLnDueRate
-        (ExpAndGABasis
-        ,e_rate_period(e_annual_rate)
+        (GenBasis_
+        ,mce_annual_rate
         )
         [Year]
         ;
     double prf_loan_factor = InterestRates_->PrfLnDueRate
-        (ExpAndGABasis
-        ,e_rate_period(e_annual_rate)
+        (GenBasis_
+        ,mce_annual_rate
         )
         [Year]
         ;

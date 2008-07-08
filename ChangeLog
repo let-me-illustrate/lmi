@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1090 2008-07-06 18:40:21 chicares Exp $
+// $Id: ChangeLog,v 1.1091 2008-07-08 17:52:21 chicares Exp $
 
 MAINTENANCE
 
@@ -17607,4 +17607,43 @@ Refactor, eliminating old 'xenum' class from mortality class.
 Fix defect introduced 20080705T0203Z. Perhaps mc_enum_base::allow()
 should take an enumerator as its argument, eventually. For now, it is
 necessary to defer that question.
+
+20080707T1715Z <gchicares@sbcglobal.net> [1130]
+
+  ihs_avmly.cpp
+  stratified_charges.cpp
+  stratified_charges.hpp
+Refactor, eliminating old 'xenum' class from stratified-charge class.
+
+20080707T1716Z <gchicares@sbcglobal.net> [1130]
+
+  accountvalue.cpp
+  ihs_acctval.cpp
+Explicitly initialize data members added 20080706T1736Z.
+
+20080707T1717Z <gchicares@sbcglobal.net> [1130]
+
+  mc_enum.hpp
+  mc_enum_types_aux.cpp
+  mc_enum_types_aux.hpp
+Make cardinality more readily available.
+
+20080707T1718Z <gchicares@sbcglobal.net> [1131]
+
+  yare_input.cpp
+Temporarily work around a defect.
+
+20080708T1752Z <gchicares@sbcglobal.net> [1131]
+
+  accountvalue.cpp
+  basicvalues.cpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+  interest_rates.cpp
+  interest_rates.hpp
+  ledger_invariant.cpp
+  ledger_variant.cpp
+  ledger_variant.hpp
+Refactor, eliminating old 'xenum' class from interest class.
 

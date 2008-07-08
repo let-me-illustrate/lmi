@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.cpp,v 1.23 2008-06-22 13:20:30 chicares Exp $
+// $Id: ledger_variant.cpp,v 1.24 2008-07-08 17:52:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -42,7 +42,9 @@
 
 //============================================================================
 LedgerVariant::LedgerVariant(int len)
-    :LedgerBase(len)
+    :LedgerBase      (len)
+    ,GenBasis_       (mce_gen_curr)
+    ,SepBasis_       (mce_sep_full)
     ,FullyInitialized(false)
 {
     Alloc(len);
@@ -51,6 +53,8 @@ LedgerVariant::LedgerVariant(int len)
 //============================================================================
 LedgerVariant::LedgerVariant(LedgerVariant const& obj)
     :LedgerBase(obj)
+    ,GenBasis_       (mce_gen_curr)
+    ,SepBasis_       (mce_sep_full)
     ,FullyInitialized(false)
 {
     Alloc(obj.GetLength());
@@ -164,6 +168,9 @@ void LedgerVariant::Copy(LedgerVariant const& obj)
     ExpAndGABasis           = obj.ExpAndGABasis     ;
     SABasis                 = obj.SABasis           ;
     FullyInitialized        = obj.FullyInitialized  ;
+
+    GenBasis_ = static_cast<mcenum_gen_basis>(ExpAndGABasis.value());
+    SepBasis_ = static_cast<mcenum_sep_basis>(SABasis      .value());
 }
 
 //============================================================================
@@ -180,6 +187,9 @@ void LedgerVariant::Init()
 
     ExpAndGABasis           = e_basis(e_currbasis);
     SABasis                 = e_sep_acct_basis(e_sep_acct_full);
+
+    GenBasis_ = static_cast<mcenum_gen_basis>(ExpAndGABasis.value());
+    SepBasis_ = static_cast<mcenum_sep_basis>(SABasis      .value());
 
     LapseYear               = Length;
     LapseMonth              = 11;
@@ -199,54 +209,49 @@ void LedgerVariant::Init
     ExpAndGABasis       = a_ExpAndGABasis;
     SABasis             = a_SABasis;
 
+    GenBasis_ = static_cast<mcenum_gen_basis>(ExpAndGABasis.value());
+    SepBasis_ = static_cast<mcenum_sep_basis>(SABasis      .value());
+
 //  EOYDeathBft     =
 //  AcctVal         =
 //  CSVNet          =
 //  CV7702          =
 //  COICharge       =
 //  ExpenseCharges  =
-    MlySAIntRate               =
-        a_BV->InterestRates_->SepAcctNetRate
-            (a_SABasis
-            ,a_ExpAndGABasis
-            ,e_rate_period(e_monthly_rate)
-            );
-    MlyGAIntRate               =
-        a_BV->InterestRates_->GenAcctNetRate
-            (a_ExpAndGABasis
-            ,e_rate_period(e_monthly_rate)
-            );
-    MlyHoneymoonValueRate      =
-        a_BV->InterestRates_->HoneymoonValueRate
-            (a_ExpAndGABasis
-            ,e_rate_period(e_monthly_rate)
-            );
-    MlyPostHoneymoonRate       =
-        a_BV->InterestRates_->PostHoneymoonGenAcctRate
-            (a_ExpAndGABasis
-            ,e_rate_period(e_monthly_rate)
-            );
-    AnnSAIntRate               =
-        a_BV->InterestRates_->SepAcctNetRate
-            (a_SABasis
-            ,a_ExpAndGABasis
-            ,e_rate_period(e_annual_rate)
-            );
-    AnnGAIntRate               =
-        a_BV->InterestRates_->GenAcctNetRate
-            (a_ExpAndGABasis
-            ,e_rate_period(e_annual_rate)
-            );
-    AnnHoneymoonValueRate      =
-        a_BV->InterestRates_->HoneymoonValueRate
-            (a_ExpAndGABasis
-            ,e_rate_period(e_annual_rate)
-            );
-    AnnPostHoneymoonRate       =
-        a_BV->InterestRates_->PostHoneymoonGenAcctRate
-            (a_ExpAndGABasis
-            ,e_rate_period(e_annual_rate)
-            );
+    MlySAIntRate               = a_BV->InterestRates_->SepAcctNetRate
+        (SepBasis_
+        ,GenBasis_
+        ,mce_monthly_rate
+        );
+    MlyGAIntRate               = a_BV->InterestRates_->GenAcctNetRate
+        (GenBasis_
+        ,mce_monthly_rate
+        );
+    MlyHoneymoonValueRate      = a_BV->InterestRates_->HoneymoonValueRate
+        (GenBasis_
+        ,mce_monthly_rate
+        );
+    MlyPostHoneymoonRate       = a_BV->InterestRates_->PostHoneymoonGenAcctRate
+        (GenBasis_
+        ,mce_monthly_rate
+        );
+    AnnSAIntRate               = a_BV->InterestRates_->SepAcctNetRate
+        (SepBasis_
+        ,GenBasis_
+        ,mce_annual_rate
+        );
+    AnnGAIntRate               = a_BV->InterestRates_->GenAcctNetRate
+        (GenBasis_
+        ,mce_annual_rate
+        );
+    AnnHoneymoonValueRate      = a_BV->InterestRates_->HoneymoonValueRate
+        (GenBasis_
+        ,mce_annual_rate
+        );
+    AnnPostHoneymoonRate       = a_BV->InterestRates_->PostHoneymoonGenAcctRate
+        (GenBasis_
+        ,mce_annual_rate
+        );
 
 //  PrefLoanBalance =
 //  TotalLoanBalance=
@@ -259,23 +264,23 @@ void LedgerVariant::Init
 //  KFactor         =
 
     InitAnnLoanCredRate = a_BV->InterestRates_->RegLnCredRate
-        (a_ExpAndGABasis
-        ,e_rate_period(e_annual_rate)
+        (GenBasis_
+        ,mce_annual_rate
         )[0];
 
     InitAnnGenAcctInt = a_BV->InterestRates_->GenAcctNetRate
-        (a_ExpAndGABasis
-        ,e_rate_period(e_annual_rate)
+        (GenBasis_
+        ,mce_annual_rate
         )
         [0]
         ;
 
-    InitAnnSepAcctGrossInt = a_BV->InterestRates_->SepAcctGrossRate(a_SABasis)[0];
+    InitAnnSepAcctGrossInt = a_BV->InterestRates_->SepAcctGrossRate(SepBasis_)[0];
 
     InitAnnSepAcctNetInt = a_BV->InterestRates_->SepAcctNetRate
-        (a_SABasis
-        ,a_ExpAndGABasis
-        ,e_rate_period(e_annual_rate)
+        (SepBasis_
+        ,GenBasis_
+        ,mce_annual_rate
         )
         [0]
         ;

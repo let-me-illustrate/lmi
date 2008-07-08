@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: interest_rates.cpp,v 1.20 2008-07-05 01:33:33 chicares Exp $
+// $Id: interest_rates.cpp,v 1.21 2008-07-08 17:52:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -36,6 +36,7 @@
 #include "inputs.hpp"
 #include "math_functors.hpp"
 #include "rounding_rules.hpp"
+#include "yare_input.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -118,11 +119,11 @@ namespace
 // elsewhere to a monthly rate without loss of precision.
 //
 double transform_annual_gross_rate_to_annual_net
-    (double annual_gross_rate
-    ,double spread
-    ,e_spread_method const& spread_method
-    ,double floor
-    ,double fee
+    (double               annual_gross_rate
+    ,double               spread
+    ,mcenum_spread_method spread_method
+    ,double               floor
+    ,double               fee
     )
 {
     double i = annual_gross_rate;
@@ -130,11 +131,11 @@ double transform_annual_gross_rate_to_annual_net
         {
         i = annual_gross_rate;
         }
-    else if(e_spread_is_effective_annual == spread_method)
+    else if(mce_spread_is_effective_annual == spread_method)
         {
         i = annual_gross_rate - spread - fee;
         }
-    else if(e_spread_is_nominal_daily == spread_method)
+    else if(mce_spread_is_nominal_daily == spread_method)
         {
         i = net_i_from_gross<double,days_per_year>()
             (annual_gross_rate
@@ -144,12 +145,7 @@ double transform_annual_gross_rate_to_annual_net
         }
     else
         {
-        fatal_error()
-            << "Case '"
-            << spread_method
-            << "' not found."
-            << LMI_FLUSH
-            ;
+        fatal_error() << "No " << spread_method << " case." << LMI_FLUSH;
         }
     return std::max(floor, i);
 }
@@ -163,7 +159,7 @@ void convert_interest_rates
     ,double                & monthly_net_rate
     ,round_to<double> const& round_interest_rate
     ,double                  spread
-    ,e_spread_method  const& spread_method
+    ,mcenum_spread_method    spread_method
     ,double                  floor
     ,double                  fee
     )
@@ -191,7 +187,7 @@ void convert_interest_rates
     ,std::vector<double>      & monthly_net_rate
     ,round_to<double>    const& round_interest_rate
     ,std::vector<double> const& spread
-    ,e_spread_method     const& spread_method
+    ,mcenum_spread_method       spread_method
     ,std::vector<double> const& floor
     ,double                     fee
     )
@@ -239,7 +235,7 @@ InterestRates::~InterestRates()
 {
 }
 
-// Always calculate loan rates because they're always needed for 7702.
+// Always calculate loan rates because they're always needed for GPT.
 // Yet there is tested logic in place to suppress their calculation
 // if no loans are taken. It can be enabled with
 //    ,NeedLoanRates_     (v.Input_->NeedLoanRates())
@@ -253,14 +249,14 @@ InterestRates::InterestRates(BasicValues const& v)
     ,Round7702Rate_      (v.GetRoundingRules().round_interest_rate_7702())
     ,Zero_               (Length_)
     ,NeedMidpointRates_  (v.IsSubjectToIllustrationReg())
-    ,GenAcctRateType_    (v.Input_->IntRateTypeGA)
+    ,GenAcctRateType_    (v.yare_input_.GeneralAccountRateType)
     ,NeedSepAcctRates_   (v.Database_->Query(DB_AllowSepAcct))
-    ,SepAcctRateType_    (v.Input_->IntRateTypeSA)
-    ,SepAcctSpreadMethod_(static_cast<enum_spread_method>(static_cast<int>(v.Database_->Query(DB_SepAcctSpreadMethod))))
+    ,SepAcctRateType_    (v.yare_input_.SeparateAccountRateType)
+    ,SepAcctSpreadMethod_(static_cast<mcenum_spread_method>(static_cast<int>(v.Database_->Query(DB_SepAcctSpreadMethod))))
     ,AmortLoad_          (Zero_)
     ,ExtraSepAcctCharge_ (Zero_)
     ,NeedLoanRates_      (true)
-    ,LoanRateType_       (v.Input_->LoanRateType)
+    ,LoanRateType_       (v.yare_input_.LoanRateType)
     ,NeedPrefLoanRates_  (v.Database_->Query(DB_AllowPrefLoan))
     ,NeedHoneymoonRates_ (v.Input_->HasHoneymoon)
     ,SpreadFor7702_      (v.SpreadFor7702())
@@ -272,16 +268,16 @@ void InterestRates::Initialize(BasicValues const& v)
 {
     // Retrieve general-account data from class BasicValues.
 
-    v.Database_->Query(GenAcctGrossRate_[e_guarbasis], DB_GuarInt);
+    v.Database_->Query(GenAcctGrossRate_[mce_gen_guar], DB_GuarInt);
 
     std::copy
         (v.Input_->GenAcctRate.begin()
         ,v.Input_->GenAcctRate.end()
-        ,std::back_inserter(GenAcctGrossRate_[e_currbasis])
+        ,std::back_inserter(GenAcctGrossRate_[mce_gen_curr])
         );
     // TODO ?? At least for the antediluvian branch, the vector in
     // the input class has an inappropriate size.
-    GenAcctGrossRate_[e_currbasis].resize(Length_);
+    GenAcctGrossRate_[mce_gen_curr].resize(Length_);
 
     // General-account interest bonus implemented only as a simple
     // additive adjustment to the annual effective rate. It probably
@@ -298,10 +294,10 @@ void InterestRates::Initialize(BasicValues const& v)
     // temporary:
     //   GenAcctGrossRate_ += v.Database_->QueryVector(DB_GAIntBonus);
     std::transform
-        (GenAcctGrossRate_[e_currbasis].begin()
-        ,GenAcctGrossRate_[e_currbasis].end()
+        (GenAcctGrossRate_[mce_gen_curr].begin()
+        ,GenAcctGrossRate_[mce_gen_curr].end()
         ,general_account_interest_bonus.begin()
-        ,GenAcctGrossRate_[e_currbasis].begin()
+        ,GenAcctGrossRate_[mce_gen_curr].begin()
         ,std::plus<double>()
         );
 
@@ -312,16 +308,16 @@ void InterestRates::Initialize(BasicValues const& v)
     std::copy
         (v.Input_->SepAcctRate.begin()
         ,v.Input_->SepAcctRate.end()
-        ,std::back_inserter(SepAcctGrossRate_[e_sep_acct_full])
+        ,std::back_inserter(SepAcctGrossRate_[mce_sep_full])
         );
     // TODO ?? At least for the antediluvian branch, the vector in
     // the input class has an inappropriate size.
-    SepAcctGrossRate_[e_sep_acct_full].resize(Length_);
+    SepAcctGrossRate_[mce_sep_full].resize(Length_);
 
-    v.Database_->Query(MAndERate_[e_guarbasis], DB_GuarMandE            );
-    v.Database_->Query(MAndERate_[e_currbasis], DB_CurrMandE            );
+    v.Database_->Query(MAndERate_[mce_gen_guar], DB_GuarMandE          );
+    v.Database_->Query(MAndERate_[mce_gen_curr], DB_CurrMandE          );
 
-    v.Database_->Query(Stabilizer_,             DB_StableValFundCharge  );
+    v.Database_->Query(Stabilizer_,              DB_StableValFundCharge);
 
     // Deduct miscellaneous fund charges and input extra asset comp in
     // the same way as M&E, iff database entity DB_AssetChargeType has
@@ -369,31 +365,26 @@ void InterestRates::Initialize(BasicValues const& v)
 
     switch(LoanRateType_)
         {
-        case e_fixed_loan_rate:
+        case mce_fixed_loan_rate:
             {
             v.Database_->Query(PublishedLoanRate_, DB_FixedLoanRate);
             }
             break;
-        case e_variable_loan_rate:
+        case mce_variable_loan_rate:
             {
             PublishedLoanRate_.assign(Length_, v.Input_->LoanIntRate);
             }
             break;
         default:
             {
-            fatal_error()
-                << "Case '"
-                << LoanRateType_
-                << "' not found."
-                << LMI_FLUSH
-                ;
+            fatal_error() << "No " << LoanRateType_ << " case." << LMI_FLUSH;
             }
         }
 
-    v.Database_->Query(RegLoanSpread_[e_guarbasis], DB_GuarRegLoanSpread);
-    v.Database_->Query(RegLoanSpread_[e_currbasis], DB_CurrRegLoanSpread);
-    v.Database_->Query(PrfLoanSpread_[e_guarbasis], DB_GuarPrefLoanSpread);
-    v.Database_->Query(PrfLoanSpread_[e_currbasis], DB_CurrPrefLoanSpread);
+    v.Database_->Query(RegLoanSpread_[mce_gen_guar], DB_GuarRegLoanSpread);
+    v.Database_->Query(RegLoanSpread_[mce_gen_curr], DB_CurrRegLoanSpread);
+    v.Database_->Query(PrfLoanSpread_[mce_gen_guar], DB_GuarPrefLoanSpread);
+    v.Database_->Query(PrfLoanSpread_[mce_gen_curr], DB_CurrPrefLoanSpread);
 
     if(NeedHoneymoonRates_)
         {
@@ -414,16 +405,16 @@ void InterestRates::Initialize(BasicValues const& v)
 
     // Paranoid check.
     unsigned int z = static_cast<unsigned int>(Length_);
-    for(int i = e_annual_rate; i < n_rate_periods; i++)
+    for(int i = mce_annual_rate; i < mc_n_rate_periods; i++)
         {
-        for(int j = e_currbasis; j < n_illreg_bases; j++)
+        for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
             {
             // The next line gets executed more than once with
             // identical semantics, but it's cheap, and writing it
             // to avoid that little problem would make it unclear.
             LMI_ASSERT(z == GenAcctGrossRate_           [j]   .size());
             LMI_ASSERT(z == GenAcctNetRate_          [i][j]   .size());
-            for(int k = e_sep_acct_full; k < n_sepacct_bases; k++)
+            for(int k = mce_sep_full; k < mc_n_sep_bases; k++)
                 {
                 LMI_ASSERT(z == SepAcctGrossRate_          [k].size());
                 LMI_ASSERT(z == SepAcctNetRate_      [i][j][k].size());
@@ -440,63 +431,63 @@ void InterestRates::Initialize(BasicValues const& v)
 
 void InterestRates::InitializeGeneralAccountRates()
 {
-    std::vector<double> spread[n_illreg_bases] = {Zero_, Zero_, Zero_};
-    if(e_grossrate == GenAcctRateType_)
+    std::vector<double> spread[mc_n_gen_bases] = {Zero_, Zero_, Zero_};
+    if(mce_gross_rate == GenAcctRateType_)
         {
         fatal_error()
             << "General-account rate is unexpectedly gross."
             << LMI_FLUSH
             ;
-        spread[e_currbasis] = GenAcctSpread_;
-        // ET !! spread[e_currbasis] -= spread[e_currbasis][0];
+        spread[mce_gen_curr] = GenAcctSpread_;
+        // ET !! spread[mce_gen_curr] -= spread[mce_gen_curr][0];
         std::transform
-            (spread[e_currbasis].begin()
-            ,spread[e_currbasis].end()
-            ,spread[e_currbasis].begin()
-            ,std::bind2nd(std::minus<double>(), spread[e_currbasis].front())
+            (spread[mce_gen_curr].begin()
+            ,spread[mce_gen_curr].end()
+            ,spread[mce_gen_curr].begin()
+            ,std::bind2nd(std::minus<double>(), spread[mce_gen_curr].front())
             );
-        // ET !! spread[e_mdptbasis] = 0.5 * spread[e_currbasis];
+        // ET !! spread[mce_gen_mdpt] = 0.5 * spread[mce_gen_curr];
         // ...but writing it that way makes it look wrong.
         std::transform
-            (spread[e_currbasis].begin()
-            ,spread[e_currbasis].end()
-            ,spread[e_mdptbasis].begin()
+            (spread[mce_gen_curr].begin()
+            ,spread[mce_gen_curr].end()
+            ,spread[mce_gen_mdpt].begin()
             ,std::bind1st(std::multiplies<double>(), 0.5)
             );
         }
     else
         {
-        LMI_ASSERT(e_netrate == GenAcctRateType_);
+        LMI_ASSERT(mce_net_rate == GenAcctRateType_);
         }
 
-    GenAcctGrossRate_[e_mdptbasis] = Zero_;
+    GenAcctGrossRate_[mce_gen_mdpt] = Zero_;
     if(NeedMidpointRates_)
         {
-        // ET !! GenAcctGrossRate_[e_mdptbasis] = mean(GenAcctGrossRate_[e_guarbasis], GenAcctGrossRate_[e_currbasis]);
+        // ET !! GenAcctGrossRate_[mce_gen_mdpt] = mean(GenAcctGrossRate_[mce_gen_guar], GenAcctGrossRate_[mce_gen_curr]);
         std::transform
-            (GenAcctGrossRate_[e_guarbasis].begin()
-            ,GenAcctGrossRate_[e_guarbasis].end()
-            ,GenAcctGrossRate_[e_currbasis].begin()
-            ,GenAcctGrossRate_[e_mdptbasis].begin()
+            (GenAcctGrossRate_[mce_gen_guar].begin()
+            ,GenAcctGrossRate_[mce_gen_guar].end()
+            ,GenAcctGrossRate_[mce_gen_curr].begin()
+            ,GenAcctGrossRate_[mce_gen_mdpt].begin()
             ,mean<double>()
             );
         }
     else
         {
-        GenAcctNetRate_[e_annual_rate ][e_mdptbasis] = Zero_;
-        GenAcctNetRate_[e_monthly_rate][e_mdptbasis] = Zero_;
+        GenAcctNetRate_[mce_annual_rate ][mce_gen_mdpt] = Zero_;
+        GenAcctNetRate_[mce_monthly_rate][mce_gen_mdpt] = Zero_;
         }
 
-    for(int j = e_currbasis; j < n_illreg_bases; j++)
+    for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
         {
         convert_interest_rates
             (GenAcctGrossRate_[j]
-            ,GenAcctNetRate_[e_annual_rate ][j]
-            ,GenAcctNetRate_[e_monthly_rate][j]
+            ,GenAcctNetRate_[mce_annual_rate ][j]
+            ,GenAcctNetRate_[mce_monthly_rate][j]
             ,RoundIntRate_
             ,spread[j]
-            ,e_spread_method(e_spread_is_effective_annual)
-            ,GenAcctGrossRate_[e_guarbasis]
+            ,mce_spread_is_effective_annual
+            ,GenAcctGrossRate_[mce_gen_guar]
             ,0.0
             );
         }
@@ -507,13 +498,13 @@ void InterestRates::InitializeSeparateAccountRates()
     SepAcctFloor_.assign(Length_, -.999999999999);
     if(!NeedSepAcctRates_)
         {
-        for(int i = e_annual_rate; i < n_rate_periods; i++)
+        for(int i = mce_annual_rate; i < mc_n_rate_periods; i++)
             {
-            for(int j = e_currbasis; j < n_illreg_bases; j++)
+            for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
                 {
-                SepAcctGrossRate_[e_sep_acct_zero] = Zero_;
-                SepAcctGrossRate_[e_sep_acct_half] = Zero_;
-                for(int k = e_sep_acct_full; k < n_sepacct_bases; k++)
+                SepAcctGrossRate_[mce_sep_zero] = Zero_;
+                SepAcctGrossRate_[mce_sep_half] = Zero_;
+                for(int k = mce_sep_full; k < mc_n_sep_bases; k++)
                     {
                     SepAcctNetRate_[i][j][k] = Zero_;
                     }
@@ -530,10 +521,10 @@ void InterestRates::InitializeSeparateAccountRates()
     std::transform(miscellaneous_charges.begin(), miscellaneous_charges.end(), AmortLoad_         .begin(), miscellaneous_charges.begin(), std::plus<double>());
     std::transform(miscellaneous_charges.begin(), miscellaneous_charges.end(), ExtraSepAcctCharge_.begin(), miscellaneous_charges.begin(), std::plus<double>());
 
-    std::vector<double> total_charges[n_illreg_bases];
-    for(int j = e_currbasis; j < n_illreg_bases; j++)
+    std::vector<double> total_charges[mc_n_gen_bases];
+    for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
         {
-        if(e_mdptbasis == j)
+        if(mce_gen_mdpt == j)
             {
             continue;
             }
@@ -553,15 +544,15 @@ void InterestRates::InitializeSeparateAccountRates()
     // Take input scalar net rate as indicating a scalar gross rate
     // minus the first-year charges. If the charges aren't level, then
     // neither is the implicit net rate.
-    if(e_netrate == SepAcctRateType_)
+    if(mce_net_rate == SepAcctRateType_)
         {
         fatal_error()
             << "Separate-account rate is unexpectedly net."
             << LMI_FLUSH
             ;
-        for(int j = e_currbasis; j < n_illreg_bases; j++)
+        for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
             {
-            if(e_mdptbasis == j)
+            if(mce_gen_mdpt == j)
                 {
                 continue;
                 }
@@ -577,32 +568,32 @@ void InterestRates::InitializeSeparateAccountRates()
         }
     else
         {
-        LMI_ASSERT(e_grossrate == SepAcctRateType_);
+        LMI_ASSERT(mce_gross_rate == SepAcctRateType_);
         }
 
-    SepAcctGrossRate_[e_sep_acct_zero] = Zero_;
-    // ET !! SepAcctGrossRate_[e_sep_acct_half] = 0.5 * SepAcctGrossRate_[e_sep_acct_full];
+    SepAcctGrossRate_[mce_sep_zero] = Zero_;
+    // ET !! SepAcctGrossRate_[mce_sep_half] = 0.5 * SepAcctGrossRate_[mce_sep_full];
     std::transform
-        (SepAcctGrossRate_[e_sep_acct_full].begin()
-        ,SepAcctGrossRate_[e_sep_acct_full].end()
-        ,std::back_inserter(SepAcctGrossRate_[e_sep_acct_half])
+        (SepAcctGrossRate_[mce_sep_full].begin()
+        ,SepAcctGrossRate_[mce_sep_full].end()
+        ,std::back_inserter(SepAcctGrossRate_[mce_sep_half])
         ,std::bind1st(std::multiplies<double>(), 0.5)
         );
 
-    for(int j = e_currbasis; j < n_illreg_bases; j++)
+    for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
         {
-        for(int k = e_sep_acct_full; k < n_sepacct_bases; k++)
+        for(int k = mce_sep_full; k < mc_n_sep_bases; k++)
             {
-            if(e_mdptbasis == j)
+            if(mce_gen_mdpt == j)
                 {
-                SepAcctNetRate_[e_annual_rate ][j][k] = Zero_;
-                SepAcctNetRate_[e_monthly_rate][j][k] = Zero_;
+                SepAcctNetRate_[mce_annual_rate ][j][k] = Zero_;
+                SepAcctNetRate_[mce_monthly_rate][j][k] = Zero_;
                 continue;
                 }
             convert_interest_rates
                 (SepAcctGrossRate_[k]
-                ,SepAcctNetRate_[e_annual_rate ][j][k]
-                ,SepAcctNetRate_[e_monthly_rate][j][k]
+                ,SepAcctNetRate_[mce_annual_rate ][j][k]
+                ,SepAcctNetRate_[mce_monthly_rate][j][k]
                 ,RoundIntRate_
                 ,total_charges[j]
                 ,SepAcctSpreadMethod_
@@ -617,9 +608,9 @@ void InterestRates::InitializeLoanRates()
 {
     if(!NeedLoanRates_)
         {
-        for(int i = e_annual_rate; i < n_rate_periods; i++)
+        for(int i = mce_annual_rate; i < mc_n_rate_periods; i++)
             {
-            for(int j = e_currbasis; j < n_illreg_bases; j++)
+            for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
                 {
                 RegLnCredRate_[i][j] = Zero_;
                 RegLnDueRate_ [i][j] = Zero_;
@@ -630,86 +621,86 @@ void InterestRates::InitializeLoanRates()
         return;
         }
 
-    for(int j = e_currbasis; j < n_illreg_bases; j++)
+    for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
         {
-        RegLnDueRate_[e_annual_rate][j] = PublishedLoanRate_;
-        PrfLnDueRate_[e_annual_rate][j] = PublishedLoanRate_;
+        RegLnDueRate_[mce_annual_rate][j] = PublishedLoanRate_;
+        PrfLnDueRate_[mce_annual_rate][j] = PublishedLoanRate_;
         }
 
-    RegLoanSpread_[e_mdptbasis] = Zero_;
-    PrfLoanSpread_[e_mdptbasis] = Zero_;
+    RegLoanSpread_[mce_gen_mdpt] = Zero_;
+    PrfLoanSpread_[mce_gen_mdpt] = Zero_;
     if(NeedMidpointRates_)
         {
-        // ET !! RegLoanSpread_[e_mdptbasis] = mean(RegLoanSpread_[e_guarbasis], RegLoanSpread_[e_currbasis]);
+        // ET !! RegLoanSpread_[mce_gen_mdpt] = mean(RegLoanSpread_[mce_gen_guar], RegLoanSpread_[mce_gen_curr]);
         std::transform
-            (RegLoanSpread_[e_guarbasis].begin()
-            ,RegLoanSpread_[e_guarbasis].end()
-            ,RegLoanSpread_[e_currbasis].begin()
-            ,RegLoanSpread_[e_mdptbasis].begin()
+            (RegLoanSpread_[mce_gen_guar].begin()
+            ,RegLoanSpread_[mce_gen_guar].end()
+            ,RegLoanSpread_[mce_gen_curr].begin()
+            ,RegLoanSpread_[mce_gen_mdpt].begin()
             ,mean<double>()
             );
-        // ET !! PrfLoanSpread_[e_mdptbasis] = mean(PrfLoanSpread_[e_guarbasis], PrfLoanSpread_[e_currbasis]);
+        // ET !! PrfLoanSpread_[mce_gen_mdpt] = mean(PrfLoanSpread_[mce_gen_guar], PrfLoanSpread_[mce_gen_curr]);
         std::transform
-            (PrfLoanSpread_[e_guarbasis].begin()
-            ,PrfLoanSpread_[e_guarbasis].end()
-            ,PrfLoanSpread_[e_currbasis].begin()
-            ,PrfLoanSpread_[e_mdptbasis].begin()
+            (PrfLoanSpread_[mce_gen_guar].begin()
+            ,PrfLoanSpread_[mce_gen_guar].end()
+            ,PrfLoanSpread_[mce_gen_curr].begin()
+            ,PrfLoanSpread_[mce_gen_mdpt].begin()
             ,mean<double>()
             );
         }
 
-    for(int j = e_currbasis; j < n_illreg_bases; j++)
+    for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
         {
         convert_interest_rates
-            (RegLnDueRate_[e_annual_rate][j]
-            ,RegLnDueRate_[e_annual_rate ][j]
-            ,RegLnDueRate_[e_monthly_rate][j]
+            (RegLnDueRate_[mce_annual_rate ][j]
+            ,RegLnDueRate_[mce_annual_rate ][j]
+            ,RegLnDueRate_[mce_monthly_rate][j]
             ,RoundIntRate_
             ,Zero_
-            ,e_spread_method(e_spread_is_effective_annual)
-            ,GenAcctGrossRate_[e_guarbasis]
+            ,mce_spread_is_effective_annual
+            ,GenAcctGrossRate_[mce_gen_guar]
             ,0.0
             );
         convert_interest_rates
-            (RegLnDueRate_[e_annual_rate][j]
-            ,RegLnCredRate_[e_annual_rate ][j]
-            ,RegLnCredRate_[e_monthly_rate][j]
+            (RegLnDueRate_ [mce_annual_rate ][j]
+            ,RegLnCredRate_[mce_annual_rate ][j]
+            ,RegLnCredRate_[mce_monthly_rate][j]
             ,RoundIntRate_
             ,RegLoanSpread_[j]
-            ,e_spread_method(e_spread_is_effective_annual)
-            ,GenAcctGrossRate_[e_guarbasis]
+            ,mce_spread_is_effective_annual
+            ,GenAcctGrossRate_[mce_gen_guar]
             ,0.0
             );
         if(NeedPrefLoanRates_)
             {
             fatal_error() << "Preferred loans not implemented." << LMI_FLUSH;
             convert_interest_rates
-                (PrfLnDueRate_[e_annual_rate][j]
-                ,PrfLnDueRate_[e_annual_rate ][j]
-                ,PrfLnDueRate_[e_monthly_rate][j]
+                (PrfLnDueRate_[mce_annual_rate ][j]
+                ,PrfLnDueRate_[mce_annual_rate ][j]
+                ,PrfLnDueRate_[mce_monthly_rate][j]
                 ,RoundIntRate_
                 ,PrfLoanSpread_[j]
-                ,e_spread_method(e_spread_is_effective_annual)
+                ,mce_spread_is_effective_annual
                 ,Zero_
                 ,0.0
                 );
             convert_interest_rates
-                (PrfLnDueRate_[e_annual_rate][j]
-                ,PrfLnCredRate_[e_annual_rate ][j]
-                ,PrfLnCredRate_[e_monthly_rate][j]
+                (PrfLnDueRate_ [mce_annual_rate ][j]
+                ,PrfLnCredRate_[mce_annual_rate ][j]
+                ,PrfLnCredRate_[mce_monthly_rate][j]
                 ,RoundIntRate_
                 ,PrfLoanSpread_[j]
-                ,e_spread_method(e_spread_is_effective_annual)
-                ,GenAcctGrossRate_[e_guarbasis]
+                ,mce_spread_is_effective_annual
+                ,GenAcctGrossRate_[mce_gen_guar]
                 ,0.0
                 );
             }
         else
             {
-            PrfLnDueRate_ [e_annual_rate ][j] = Zero_;
-            PrfLnDueRate_ [e_monthly_rate][j] = Zero_;
-            PrfLnCredRate_[e_annual_rate ][j] = Zero_;
-            PrfLnCredRate_[e_monthly_rate][j] = Zero_;
+            PrfLnDueRate_ [mce_annual_rate ][j] = Zero_;
+            PrfLnDueRate_ [mce_monthly_rate][j] = Zero_;
+            PrfLnCredRate_[mce_annual_rate ][j] = Zero_;
+            PrfLnCredRate_[mce_monthly_rate][j] = Zero_;
             }
         }
 
@@ -718,12 +709,12 @@ void InterestRates::InitializeLoanRates()
         // indicating that this code should be reviewed.
         //
         LMI_ASSERT
-            (   RegLnDueRate_[e_annual_rate][e_guarbasis]
-            ==  RegLnDueRate_[e_annual_rate][e_currbasis]
+            (   RegLnDueRate_[mce_annual_rate ][mce_gen_guar]
+            ==  RegLnDueRate_[mce_annual_rate ][mce_gen_curr]
             );
         LMI_ASSERT
-            (   RegLnDueRate_[e_monthly_rate][e_guarbasis]
-            ==  RegLnDueRate_[e_monthly_rate][e_currbasis]
+            (   RegLnDueRate_[mce_monthly_rate][mce_gen_guar]
+            ==  RegLnDueRate_[mce_monthly_rate][mce_gen_curr]
             );
 }
 
@@ -731,9 +722,9 @@ void InterestRates::InitializeHoneymoonRates()
 {
     if(!NeedHoneymoonRates_)
         {
-        for(int i = e_annual_rate; i < n_rate_periods; i++)
+        for(int i = mce_annual_rate; i < mc_n_rate_periods; i++)
             {
-            for(int j = e_currbasis; j < n_illreg_bases; j++)
+            for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
                 {
                 HoneymoonValueRate_      [i][j] = Zero_;
                 PostHoneymoonGenAcctRate_[i][j] = Zero_;
@@ -748,28 +739,28 @@ void InterestRates::InitializeHoneymoonRates()
     // TODO ?? Someday, after we've implemented and tested the
     // alternative for the general account rate, we can aspire to
     // implement it for honeymoon rates too.
-    LMI_ASSERT(e_netrate == GenAcctRateType_);
+    LMI_ASSERT(mce_net_rate == GenAcctRateType_);
 
-    for(int j = e_currbasis; j < n_illreg_bases; j++)
+    for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
         {
         convert_interest_rates
-            (GenAcctNetRate_    [e_annual_rate ][j]
-            ,HoneymoonValueRate_[e_annual_rate ][j]
-            ,HoneymoonValueRate_[e_monthly_rate][j]
+            (GenAcctNetRate_    [mce_annual_rate ][j]
+            ,HoneymoonValueRate_[mce_annual_rate ][j]
+            ,HoneymoonValueRate_[mce_monthly_rate][j]
             ,RoundIntRate_
             ,HoneymoonValueSpread_
-            ,e_spread_method(e_spread_is_effective_annual)
+            ,mce_spread_is_effective_annual
             ,Zero_
             ,0.0
             );
         convert_interest_rates
-            (GenAcctNetRate_          [e_annual_rate ][j]
-            ,PostHoneymoonGenAcctRate_[e_annual_rate ][j]
-            ,PostHoneymoonGenAcctRate_[e_monthly_rate][j]
+            (GenAcctNetRate_          [mce_annual_rate ][j]
+            ,PostHoneymoonGenAcctRate_[mce_annual_rate ][j]
+            ,PostHoneymoonGenAcctRate_[mce_monthly_rate][j]
             ,RoundIntRate_
             ,PostHoneymoonSpread_
-            ,e_spread_method(e_spread_is_effective_annual)
-            ,GenAcctGrossRate_[e_guarbasis]
+            ,mce_spread_is_effective_annual
+            ,GenAcctGrossRate_[mce_gen_guar]
             ,0.0
             );
         }
@@ -788,14 +779,14 @@ void InterestRates::InitializeHoneymoonRates()
 // except that (bogusly) it adds the tiered IMF into the non-tiered
 // IMF held in this class and doesn't add non-tiered M&E to tiered M&E.
 void InterestRates::DynamicMlySepAcctRate
-    (e_basis const&          Basis
-    ,e_sep_acct_basis const& SABasis
-    ,int                     year
-    ,double&                 MonthlySepAcctGrossRate
-    ,double&                 AnnualSepAcctMandERate
-    ,double&                 AnnualSepAcctIMFRate
-    ,double&                 AnnualSepAcctMiscChargeRate
-    ,double&                 AnnualSepAcctSVRate
+    (mcenum_gen_basis gen_basis
+    ,mcenum_sep_basis sep_basis
+    ,int              year
+    ,double&          MonthlySepAcctGrossRate
+    ,double&          AnnualSepAcctMandERate
+    ,double&          AnnualSepAcctIMFRate
+    ,double&          AnnualSepAcctMiscChargeRate
+    ,double&          AnnualSepAcctSVRate
     )
 {
 //    AnnualSepAcctIMFRate    += TieredInvestmentManagementFee_[year]; // TODO ?? BOGUS
@@ -814,9 +805,9 @@ void InterestRates::DynamicMlySepAcctRate
 
     switch(SepAcctRateType_)
         {
-        case e_grossrate:
+        case mce_gross_rate:
             {
-            if(e_mdptbasis == Basis)
+            if(mce_gen_mdpt == gen_basis)
                 {
                 fatal_error()
                     << "Midpoint separate-account rate not supported."
@@ -828,13 +819,13 @@ void InterestRates::DynamicMlySepAcctRate
 
 // TODO ?? What if it's not 'full'--what if we want 'half' or 'zero'?
             MonthlySepAcctGrossRate = i_upper_12_over_12_from_i<double>()
-                (SepAcctGrossRate_[e_sep_acct_full][year]
+                (SepAcctGrossRate_[mce_sep_full][year]
                 );
 
             convert_interest_rates
-                (SepAcctGrossRate_[SABasis][year]
-                ,SepAcctNetRate_[e_annual_rate ][Basis][SABasis][year]
-                ,SepAcctNetRate_[e_monthly_rate][Basis][SABasis][year]
+                (SepAcctGrossRate_[sep_basis][year]
+                ,SepAcctNetRate_[mce_annual_rate ][gen_basis][sep_basis][year]
+                ,SepAcctNetRate_[mce_monthly_rate][gen_basis][sep_basis][year]
                 ,RoundIntRate_
                 ,dynamic_spread
                 ,SepAcctSpreadMethod_
@@ -843,19 +834,14 @@ void InterestRates::DynamicMlySepAcctRate
                 );
             }
             break;
-        case e_netrate:
+        case mce_net_rate:
             {
             fatal_error() << "Net rate not supported." << LMI_FLUSH;
             }
             break;
         default:
             {
-            fatal_error()
-                << "Case '"
-                << SepAcctRateType_
-                << "' not found."
-                << LMI_FLUSH
-                ;
+            fatal_error() << "No " << SepAcctRateType_ << " case." << LMI_FLUSH;
             }
         }
 }
@@ -1003,7 +989,7 @@ void InterestRates::Initialize7702Rates()
 //    std::vector<double> MlyGlpRate_;
 //    std::vector<double> MlyGspRate_;
 
-    std::vector<double> const& annual_guar_rate = GenAcctGrossRate_[e_guarbasis];
+    std::vector<double> const& annual_guar_rate = GenAcctGrossRate_[mce_gen_guar];
 
     MlyGlpRate_.resize(Length_);
     // ET !! MlyGlpRate_ = max(0.04, annual_guar_rate);
@@ -1030,14 +1016,14 @@ void InterestRates::Initialize7702Rates()
     // DCV calculations in the account value class as well as
     // GPT calculations in the 7702 class.
 
-    std::vector<double> guar_int = GenAcctGrossRate_[e_guarbasis];
+    std::vector<double> guar_int = GenAcctGrossRate_[mce_gen_guar];
 /*
     switch(LoanRateType_)
         {
-        case e_fixed_loan_rate:
+        case mce_fixed_loan_rate:
             {
-            // ET !! std::vector<double> guar_loan_rate = PublishedLoanRate_ - RegLoanSpread_[e_guarbasis];
-            // ET !! guar_int = max(guar_int, RegLoanSpread_[e_guarbasis]);
+            // ET !! std::vector<double> guar_loan_rate = PublishedLoanRate_ - RegLoanSpread_[mce_gen_guar];
+            // ET !! guar_int = max(guar_int, RegLoanSpread_[mce_gen_guar]);
             // TODO ?? But that looks incorrect when written clearly!
             // Perhaps this old comment:
             //   APL: guar_int gets guar_int max gross_loan_rate - guar_loan_spread
@@ -1046,7 +1032,7 @@ void InterestRates::Initialize7702Rates()
             // TODO ?? Need loan rates for 7702 whenever loans are allowed.
             std::vector<double> gross_loan_rate = PublishedLoanRate_;
             // TODO ?? Should at least assert that preferred <= regular spread.
-            std::vector<double> guar_loan_spread = RegLoanSpread_[e_guarbasis];
+            std::vector<double> guar_loan_spread = RegLoanSpread_[mce_gen_guar];
             std::vector<double> guar_loan_rate(Length);
             std::transform
                 (gross_loan_rate.begin()
@@ -1064,19 +1050,14 @@ void InterestRates::Initialize7702Rates()
                 );
             }
             break;
-        case e_variable_loan_rate:
+        case mce_variable_loan_rate:
             {
             // do nothing
             }
             break;
         default:
             {
-            fatal_error()
-                << "Case '"
-                << Input_.LoanRateType
-                << "' not found."
-                << LMI_FLUSH
-                ;
+            fatal_error() << "No " << LoanRateType_ << " case." << LMI_FLUSH;
             }
         }
 */

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.113 2008-07-07 17:16:24 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.114 2008-07-08 17:52:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1424,15 +1424,15 @@ void AccountValue::FinalizeYear()
         {
         VariantValues().RecordDynamicSepAcctRate
             (InterestRates_->SepAcctNetRate
-                (SABasis
-                ,ExpAndGABasis
-                ,e_rate_period(e_annual_rate)
+                (SepBasis_
+                ,GenBasis_
+                ,mce_annual_rate
                 )
                 [Year]
             ,InterestRates_->SepAcctNetRate
-                (SABasis
-                ,ExpAndGABasis
-                ,e_rate_period(e_monthly_rate)
+                (SepBasis_
+                ,GenBasis_
+                ,mce_monthly_rate
                 )
                 [Year]
             ,Year
@@ -1520,54 +1520,54 @@ void AccountValue::SetAnnualInvariants()
     YearsAnnualPolicyFee    = Loads_->annual_policy_fee(ExpAndGABasis)[Year];
 
     YearsGenAcctIntRate     = InterestRates_->GenAcctNetRate
-        (ExpAndGABasis
-        ,e_rate_period(e_monthly_rate)
+        (GenBasis_
+        ,mce_monthly_rate
         )
         [Year]
         ;
     YearsSepAcctIntRate     = InterestRates_->SepAcctNetRate
-        (SABasis
-        ,ExpAndGABasis
-        ,e_rate_period(e_monthly_rate)
+        (SepBasis_
+        ,GenBasis_
+        ,mce_monthly_rate
         )
         [Year]
         ;
 
     YearsDcvIntRate         = GetMly7702iGlp()[Year];
     YearsHoneymoonValueRate = InterestRates_->HoneymoonValueRate
-        (ExpAndGABasis
-        ,e_rate_period(e_monthly_rate)
+        (GenBasis_
+        ,mce_monthly_rate
         )
         [Year]
         ;
     YearsPostHoneymoonGenAcctIntRate = InterestRates_->PostHoneymoonGenAcctRate
-        (ExpAndGABasis
-        ,e_rate_period(e_monthly_rate)
+        (GenBasis_
+        ,mce_monthly_rate
         )
         [Year]
         ;
 
     YearsRegLnIntCredRate   = InterestRates_ ->RegLnCredRate
-        (ExpAndGABasis
-        ,e_rate_period(e_monthly_rate)
+        (GenBasis_
+        ,mce_monthly_rate
         )
         [Year]
         ;
     YearsPrfLnIntCredRate   = InterestRates_ ->PrfLnCredRate
-        (ExpAndGABasis
-        ,e_rate_period(e_monthly_rate)
+        (GenBasis_
+        ,mce_monthly_rate
         )
         [Year]
         ;
     YearsRegLnIntDueRate    = InterestRates_ ->RegLnDueRate
-        (ExpAndGABasis
-        ,e_rate_period(e_monthly_rate)
+        (GenBasis_
+        ,mce_monthly_rate
         )
         [Year]
         ;
     YearsPrfLnIntDueRate    = InterestRates_ ->PrfLnDueRate
-        (ExpAndGABasis
-        ,e_rate_period(e_monthly_rate)
+        (GenBasis_
+        ,mce_monthly_rate
         )
         [Year]
         ;
