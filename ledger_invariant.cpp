@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.37 2008-07-03 21:47:27 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.38 2008-07-08 17:52:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -393,7 +393,7 @@ void LedgerInvariant::Init(BasicValues* b)
     AddonCompOnAssets    = Input_.VectorAddonCompOnAssets       ;
     AddonCompOnPremium   = Input_.VectorAddonCompOnPremium      ;
     CorridorFactor       = b->GetCorridorFactor();
-    CurrMandE            = b->InterestRates_->MAndERate(e_basis(e_currbasis));
+    CurrMandE            = b->InterestRates_->MAndERate(mce_gen_curr);
     TotalIMF             = b->InterestRates_->InvestmentManagementFee();
     RefundableSalesLoad  = b->Loads_->refundable_sales_load_proportion();
 
@@ -485,7 +485,7 @@ void LedgerInvariant::Init(BasicValues* b)
     // Assert this because the illustration currently prints a scalar
     // guaranteed max, assuming that it's the same for all years.
     std::vector<double> const& guar_m_and_e_rate = b->InterestRates_->MAndERate
-        (e_basis(e_guarbasis)
+        (mce_gen_guar
         );
     LMI_ASSERT
         (each_equal
@@ -648,8 +648,8 @@ void LedgerInvariant::Init(BasicValues* b)
     LMI_ASSERT(0.0 == b->Database_->Query(DB_DACTaxFundCharge));
 
     InitAnnLoanDueRate      = b->InterestRates_->RegLnDueRate
-        (e_basis(e_currbasis)
-        ,e_rate_period(e_annual_rate)
+        (mce_gen_curr
+        ,mce_annual_rate
         )[0];
 
     IsInforce = 0 != Input_.InforceYear || 0 != Input_.InforceMonth;

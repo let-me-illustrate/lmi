@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basicvalues.cpp,v 1.20 2008-07-06 17:36:40 chicares Exp $
+// $Id: basicvalues.cpp,v 1.21 2008-07-08 17:52:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -190,8 +190,8 @@ double BasicValues::GetModalTgtPrem
     double u = 1.0 + std::max
         (.03
         ,    InterestRates_->GenAcctNetRate
-                (e_basis(e_currbasis)
-                ,e_rate_period(e_monthly_rate)
+                (mce_gen_curr
+                ,mce_monthly_rate
                 )[a_Year]
         -   spread
         );
@@ -202,8 +202,8 @@ double BasicValues::GetModalTgtPrem
     z /=
         (   1.0
         +   InterestRates_->GenAcctNetRate
-                (e_basis(e_guarbasis)
-                ,e_rate_period(e_monthly_rate)
+                (mce_gen_guar
+                ,mce_monthly_rate
                 )[a_Year]
         );
     z *= MortalityRates_->MonthlyCoiRates(mce_gen_curr)[a_Year];
@@ -275,8 +275,8 @@ double BasicValues::GetModalTgtSpecAmt
     double u = 1.0 + std::max
         (.03
         ,   InterestRates_->GenAcctNetRate
-                (e_basis(e_currbasis)
-                ,e_rate_period(e_monthly_rate)
+                (mce_gen_curr
+                ,mce_monthly_rate
                 )[0]
             -   spread
         );
@@ -292,8 +292,8 @@ double BasicValues::GetModalTgtSpecAmt
     z *=
         (   1.0
         +   InterestRates_->GenAcctNetRate
-                (e_basis(e_guarbasis)
-                ,e_rate_period(e_monthly_rate)
+                (mce_gen_guar
+                ,mce_monthly_rate
                 )[0]
         );
 
