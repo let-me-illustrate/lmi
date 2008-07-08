@@ -19,15 +19,16 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: interest_rates.hpp,v 1.6 2008-01-01 18:29:46 chicares Exp $
+// $Id: interest_rates.hpp,v 1.7 2008-07-08 17:52:21 chicares Exp $
 
 #ifndef interest_rates_hpp
 #define interest_rates_hpp
 
 #include "config.hpp"
 
+#include "mc_enum_type_enums.hpp"
+#include "mc_enum_types_aux.hpp"
 #include "round_to.hpp"
-#include "xenumtypes.hpp"
 
 #include <vector>
 
@@ -145,62 +146,62 @@ class InterestRates
     std::vector<double> const& MlyGspRate() const;
 
     std::vector<double> const& GenAcctGrossRate
-        (e_basis const& basis
+        (mcenum_gen_basis
         ) const;
     std::vector<double> const& GenAcctNetRate
-        (e_basis       const& basis
-        ,e_rate_period const& rate_period
+        (mcenum_gen_basis
+        ,mcenum_rate_period
         ) const;
 
     std::vector<double> const& SepAcctGrossRate
-        (e_sep_acct_basis const& sepacct_basis
+        (mcenum_sep_basis
         ) const;
     std::vector<double> const& SepAcctNetRate
-        (e_sep_acct_basis const& sepacct_basis
-        ,e_basis const&          expense_basis
-        ,e_rate_period const&    rate_period
+        (mcenum_sep_basis
+        ,mcenum_gen_basis
+        ,mcenum_rate_period
         ) const;
 
     void DynamicMlySepAcctRate
-        (e_basis const&          Basis
-        ,e_sep_acct_basis const& SABasis
-        ,int                     year
-        ,double&                 MonthlySepAcctGrossRate
-        ,double&                 AnnualSepAcctMandERate
-        ,double&                 AnnualSepAcctIMFRate
-        ,double&                 AnnualSepAcctMiscChargeRate
-        ,double&                 AnnualSepAcctSVRate
+        (mcenum_gen_basis gen_basis
+        ,mcenum_sep_basis sep_basis
+        ,int              year
+        ,double&          MonthlySepAcctGrossRate
+        ,double&          AnnualSepAcctMandERate
+        ,double&          AnnualSepAcctIMFRate
+        ,double&          AnnualSepAcctMiscChargeRate
+        ,double&          AnnualSepAcctSVRate
         );
 
     std::vector<double> const& RegLnCredRate
-        (e_basis       const& basis
-        ,e_rate_period const& rate_period
+        (mcenum_gen_basis
+        ,mcenum_rate_period
         ) const;
     std::vector<double> const& RegLnDueRate
-        (e_basis       const& basis
-        ,e_rate_period const& rate_period
+        (mcenum_gen_basis
+        ,mcenum_rate_period
         ) const;
     std::vector<double> const& PrfLnCredRate
-        (e_basis       const& basis
-        ,e_rate_period const& rate_period
+        (mcenum_gen_basis
+        ,mcenum_rate_period
         ) const;
     std::vector<double> const& PrfLnDueRate
-        (e_basis       const& basis
-        ,e_rate_period const& rate_period
+        (mcenum_gen_basis
+        ,mcenum_rate_period
         ) const;
 
     std::vector<double> const& HoneymoonValueRate
-        (e_basis       const& basis
-        ,e_rate_period const& rate_period
+        (mcenum_gen_basis
+        ,mcenum_rate_period
         ) const;
     std::vector<double> const& PostHoneymoonGenAcctRate
-        (e_basis       const& basis
-        ,e_rate_period const& rate_period
+        (mcenum_gen_basis
+        ,mcenum_rate_period
         ) const;
 
     std::vector<double> const& InvestmentManagementFee() const;
     std::vector<double> const& MAndERate
-        (e_basis const& Basis
+        (mcenum_gen_basis
         ) const;
 
   private:
@@ -225,68 +226,68 @@ class InterestRates
     // General account interest rates.
 //    bool NeedGenAcctRates_; // TODO ?? Would this be useful?
     bool NeedMidpointRates_;
-    e_int_rate_type GenAcctRateType_;
+    mcenum_interest_rate_type GenAcctRateType_;
     std::vector<double> GenAcctGrossRate_
-        [n_illreg_bases]
+        [mc_n_gen_bases]
         ;
     std::vector<double> GenAcctNetRate_
-        [n_rate_periods]
-        [n_illreg_bases]
+        [mc_n_rate_periods]
+        [mc_n_gen_bases]
         ;
     std::vector<double> GenAcctSpread_;
 
     // Separate account interest rates.
     bool NeedSepAcctRates_;
-    e_int_rate_type SepAcctRateType_;
+    mcenum_interest_rate_type SepAcctRateType_;
     std::vector<double> SepAcctGrossRate_
-        [n_sepacct_bases]
+        [mc_n_sep_bases]
         ;
     std::vector<double> SepAcctNetRate_
-        [n_rate_periods]
-        [n_illreg_bases]
-        [n_sepacct_bases]
+        [mc_n_rate_periods]
+        [mc_n_gen_bases]
+        [mc_n_sep_bases]
         ;
-    e_spread_method SepAcctSpreadMethod_;
+    mcenum_spread_method SepAcctSpreadMethod_;
     std::vector<double> SepAcctFloor_;
     std::vector<double> Stabilizer_; // TODO ?? Obsolete?
     std::vector<double> AmortLoad_;
     std::vector<double> ExtraSepAcctCharge_;
     std::vector<double> InvestmentManagementFee_;
-    std::vector<double> MAndERate_[n_illreg_bases];
+    std::vector<double> MAndERate_[mc_n_gen_bases];
 
     // Loan interest rates.
     bool NeedLoanRates_;
-    e_loan_rate_type LoanRateType_;
+    mcenum_loan_rate_type LoanRateType_;
     std::vector<double> PublishedLoanRate_;
     std::vector<double> RegLnCredRate_
-        [n_rate_periods]
-        [n_illreg_bases]
+        [mc_n_rate_periods]
+        [mc_n_gen_bases]
         ;
     std::vector<double> RegLnDueRate_
-        [n_rate_periods]
-        [n_illreg_bases]
+        [mc_n_rate_periods]
+        [mc_n_gen_bases]
         ;
     bool NeedPrefLoanRates_;
     std::vector<double> PrfLnCredRate_
-        [n_rate_periods]
-        [n_illreg_bases]
+        [mc_n_rate_periods]
+        [mc_n_gen_bases]
         ;
     std::vector<double> PrfLnDueRate_
-        [n_rate_periods]
-        [n_illreg_bases]
+        [mc_n_rate_periods]
+        [mc_n_gen_bases]
         ;
-    std::vector<double> RegLoanSpread_[n_illreg_bases];
-    std::vector<double> PrfLoanSpread_[n_illreg_bases];
+    std::vector<double> RegLoanSpread_[mc_n_gen_bases];
+    std::vector<double> PrfLoanSpread_[mc_n_gen_bases];
 
     // Honeymoon interest rates.
     bool NeedHoneymoonRates_;
     std::vector<double> HoneymoonValueRate_
-        [n_rate_periods]
-        [n_illreg_bases]
+        [mc_n_rate_periods]
+        [mc_n_gen_bases]
         ;
     std::vector<double> PostHoneymoonGenAcctRate_
-        [n_rate_periods]
-        [n_illreg_bases]
+        [mc_n_rate_periods]
+        [mc_n_gen_bases]
         ;
     std::vector<double> HoneymoonValueSpread_;
     std::vector<double> PostHoneymoonSpread_;
@@ -298,117 +299,105 @@ class InterestRates
 };
 
 inline std::vector<double> const& InterestRates::GenAcctGrossRate
-    (e_basis const& basis
+    (mcenum_gen_basis gen_basis
     ) const
-    {return GenAcctGrossRate_[basis.value()];}
+{
+    return GenAcctGrossRate_[gen_basis];
+}
 
 inline std::vector<double> const& InterestRates::GenAcctNetRate
-    (e_basis       const& basis
-    ,e_rate_period const& rate_period
+    (mcenum_gen_basis   gen_basis
+    ,mcenum_rate_period rate_period
     ) const
-    {
-    return GenAcctNetRate_
-        [rate_period.value()]
-        [basis      .value()]
-        ;
-    }
+{
+    return GenAcctNetRate_[rate_period][gen_basis];
+}
 
 inline std::vector<double> const& InterestRates::SepAcctGrossRate
-    (e_sep_acct_basis const& sepacct_basis
+    (mcenum_sep_basis sep_basis
     ) const
-    {return SepAcctGrossRate_[sepacct_basis.value()];}
+{
+    return SepAcctGrossRate_[sep_basis];
+}
 
 inline std::vector<double> const& InterestRates::SepAcctNetRate
-    (e_sep_acct_basis const& sepacct_basis
-    ,e_basis          const& expense_basis
-    ,e_rate_period    const& rate_period
+    (mcenum_sep_basis   sep_basis
+    ,mcenum_gen_basis   gen_basis
+    ,mcenum_rate_period rate_period
     ) const
-    {
-    return SepAcctNetRate_
-        [rate_period  .value()]
-        [expense_basis.value()]
-        [sepacct_basis.value()]
-        ;
-    }
+{
+    return SepAcctNetRate_[rate_period][gen_basis][sep_basis];
+}
 
 inline std::vector<double> const& InterestRates::InvestmentManagementFee() const
-    {return InvestmentManagementFee_;}
+{
+    return InvestmentManagementFee_;
+}
 
 inline std::vector<double> const& InterestRates::MAndERate
-    (e_basis const& Basis
+    (mcenum_gen_basis gen_basis
     ) const
-    {return MAndERate_[Basis.value()];}
+{
+    return MAndERate_[gen_basis];
+}
 
 inline std::vector<double> const& InterestRates::RegLnCredRate
-    (e_basis       const& basis
-    ,e_rate_period const& rate_period
+    (mcenum_gen_basis   gen_basis
+    ,mcenum_rate_period rate_period
     ) const
-    {
-    return RegLnCredRate_
-        [rate_period.value()]
-        [basis      .value()]
-        ;
-    }
+{
+    return RegLnCredRate_[rate_period][gen_basis];
+}
 
 inline std::vector<double> const& InterestRates::RegLnDueRate
-    (e_basis       const& basis
-    ,e_rate_period const& rate_period
+    (mcenum_gen_basis   gen_basis
+    ,mcenum_rate_period rate_period
     ) const
-    {
-    return RegLnDueRate_
-        [rate_period.value()]
-        [basis      .value()]
-        ;
-    }
+{
+    return RegLnDueRate_[rate_period][gen_basis];
+}
 
 inline std::vector<double> const& InterestRates::PrfLnCredRate
-    (e_basis       const& basis
-    ,e_rate_period const& rate_period
+    (mcenum_gen_basis   gen_basis
+    ,mcenum_rate_period rate_period
     ) const
-    {
-    return PrfLnCredRate_
-        [rate_period.value()]
-        [basis      .value()]
-        ;
-    }
+{
+    return PrfLnCredRate_[rate_period][gen_basis];
+}
 
 inline std::vector<double> const& InterestRates::PrfLnDueRate
-    (e_basis       const& basis
-    ,e_rate_period const& rate_period
+    (mcenum_gen_basis   gen_basis
+    ,mcenum_rate_period rate_period
     ) const
-    {
-    return RegLnCredRate_
-        [rate_period.value()]
-        [basis      .value()]
-        ;
-    }
+{
+    return RegLnCredRate_[rate_period][gen_basis];
+}
 
 inline std::vector<double> const& InterestRates::HoneymoonValueRate
-    (e_basis       const& basis
-    ,e_rate_period const& rate_period
+    (mcenum_gen_basis   gen_basis
+    ,mcenum_rate_period rate_period
     ) const
-    {
-    return HoneymoonValueRate_
-        [rate_period.value()]
-        [basis      .value()]
-        ;
-    }
+{
+    return HoneymoonValueRate_[rate_period][gen_basis];
+}
 
 inline std::vector<double> const& InterestRates::PostHoneymoonGenAcctRate
-    (e_basis       const& basis
-    ,e_rate_period const& rate_period
+    (mcenum_gen_basis   gen_basis
+    ,mcenum_rate_period rate_period
     ) const
-    {
-    return PostHoneymoonGenAcctRate_
-        [rate_period.value()]
-        [basis      .value()]
-        ;
-    }
+{
+    return PostHoneymoonGenAcctRate_[rate_period][gen_basis];
+}
 
 inline std::vector<double> const& InterestRates::MlyGlpRate() const
-    {return MlyGlpRate_;}
+{
+    return MlyGlpRate_;
+}
+
 inline std::vector<double> const& InterestRates::MlyGspRate() const
-    {return MlyGspRate_;}
+{
+    return MlyGspRate_;
+}
 
 #endif // interest_rates_hpp
 

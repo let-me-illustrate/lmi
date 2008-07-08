@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.36 2008-07-07 17:16:24 chicares Exp $
+// $Id: accountvalue.cpp,v 1.37 2008-07-08 17:52:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -290,8 +290,8 @@ void AccountValue::DoYear
     hasadb          = Input_->Status[0].HasADD.value();
 
     YearsGenAcctIntRate = InterestRates_->GenAcctNetRate
-        (e_basis(ExpAndGABasis)
-        ,e_rate_period(e_monthly_rate)
+        (GenBasis_
+        ,mce_monthly_rate
         )[Year]
         ;
 
@@ -308,8 +308,8 @@ void AccountValue::DoYear
     mlyguarv        =
             1.0
         /   (1.0 + InterestRates_->GenAcctNetRate
-                (e_basis(e_guarbasis)
-                ,e_rate_period(e_monthly_rate)
+                (mce_gen_guar
+                ,mce_monthly_rate
                 )[Year]
             );
     YearsSpecAmt    = DeathBfts_->specamt()[Year];
@@ -317,23 +317,23 @@ void AccountValue::DoYear
 
     // For guaranteed-basis run, what loan rates should be used?
     YearsRegLnIntCredRate = InterestRates_->RegLnCredRate
-        (e_basis(e_currbasis)
-        ,e_rate_period(e_monthly_rate)
+        (mce_gen_curr
+        ,mce_monthly_rate
         )[Year]
         ;
     YearsRegLnIntDueRate  = InterestRates_->RegLnDueRate
-        (e_basis(e_currbasis)
-        ,e_rate_period(e_monthly_rate)
+        (mce_gen_curr
+        ,mce_monthly_rate
         )[Year]
         ;
     YearsPrfLnIntCredRate = InterestRates_->PrfLnCredRate
-        (e_basis(e_currbasis)
-        ,e_rate_period(e_monthly_rate)
+        (mce_gen_curr
+        ,mce_monthly_rate
         )[Year]
         ;
     YearsPrfLnIntDueRate  = InterestRates_->PrfLnDueRate
-        (e_basis(e_currbasis)
-        ,e_rate_period(e_monthly_rate)
+        (mce_gen_curr
+        ,mce_monthly_rate
         )[Year]
         ;
 
