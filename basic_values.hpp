@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.27 2008-07-06 17:36:40 chicares Exp $
+// $Id: basic_values.hpp,v 1.28 2008-07-09 12:56:17 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -147,7 +147,6 @@ class LMI_SO BasicValues
 
     std::vector<double> const& GetCorridorFactor() const;
     e_dbopt_7702 const Get7702EffectiveDBOpt(e_dbopt const& a_DBOpt) const;
-    e_dbopt const Get7702EffectiveDBOpt(e_dbopt_7702 const& a_DBOpt) const;
     std::vector<double> const& SpreadFor7702() const;
     std::vector<double> const& GetMly7702iGlp() const;
     std::vector<double> const& GetMly7702qc() const;
