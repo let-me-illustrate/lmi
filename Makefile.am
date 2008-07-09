@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.43 2008-07-06 16:01:12 chicares Exp $
+# $Id: Makefile.am,v 1.44 2008-07-09 17:26:17 zeitlin Exp $
 
 SUBDIRS = third_party
 
@@ -893,7 +893,6 @@ noinst_HEADERS = \
     ihs_rnddata.hpp \
     ihs_server7702.hpp \
     ihs_server7702io.hpp \
-    ihs_standalone.hpp \
     ihs_x_type.hpp \
     illustration_document.hpp \
     illustration_view.hpp \
