@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.56 2008-07-08 17:52:21 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.57 2008-07-09 12:56:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -155,10 +155,15 @@ else
         ,a_FaceAmount
         );
 
+    e_dbopt const z
+        (e_option1_for_7702 == a_DBOptFor7702 ? e_option1
+        :e_option2_for_7702 == a_DBOptFor7702 ? e_option2
+        :throw std::runtime_error("Unexpected DB option.")
+        );
     std::fill_n
         (kludge_input->DBOpt.begin()
         ,kludge_input->YearsToMaturity()
-        ,Get7702EffectiveDBOpt(a_DBOptFor7702)
+        ,z
         );
 
     // TODO ?? EGREGIOUS_DEFECT Redesign this function instead.
@@ -1884,37 +1889,6 @@ e_dbopt_7702 const BasicValues::Get7702EffectiveDBOpt
         case e_rop:
             {
             z = Equiv7702DBO3;
-            }
-            break;
-        default:
-            {
-            fatal_error()
-                << "Case '"
-                << a_DBOpt
-                << "' not found."
-                << LMI_FLUSH
-                ;
-            }
-        }
-    return z;
-}
-
-//============================================================================
-e_dbopt const BasicValues::Get7702EffectiveDBOpt
-    (e_dbopt_7702 const& a_DBOpt
-    ) const
-{
-    e_dbopt z(e_option1);
-    switch(a_DBOpt)
-        {
-        case e_option1_for_7702:
-            {
-            z = e_option1;
-            }
-            break;
-        case e_option2_for_7702:
-            {
-            z = e_option2;
             }
             break;
         default:
