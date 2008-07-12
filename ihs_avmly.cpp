@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.84 2008-07-12 16:43:24 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.85 2008-07-12 19:52:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2681,12 +2681,17 @@ void AccountValue::TxCreditInt()
 
     double notional_sep_acct_charge = 0.0;
 
+    // SOMEDAY !! This should be done in the interest-rate class.
     double gross_sep_acct_rate = i_upper_12_over_12_from_i<double>()
         (InterestRates_->SepAcctGrossRate(SepBasis_)[Year]
         );
     gross_sep_acct_rate = round_interest_rate(gross_sep_acct_rate);
+    if(mce_gen_mdpt == GenBasis_)
+        {
+        gross_sep_acct_rate = 0.0;
+        }
 
-    if(0.0 < AVSepAcct && 0.0 != YearsSepAcctIntRate)
+    if(0.0 < AVSepAcct)
         {
         SepAcctIntCred = InterestCredited(AVSepAcct, YearsSepAcctIntRate);
         double gross   = InterestCredited(AVSepAcct, gross_sep_acct_rate);
