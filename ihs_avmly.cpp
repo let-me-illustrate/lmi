@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.81 2008-07-12 01:55:17 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.82 2008-07-12 14:56:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2662,31 +2662,32 @@ void AccountValue::ApplyDynamicMandE(double assets)
         ;
 }
 
-//============================================================================
-// Credit interest on unloaned account value.
+/// Credit interest on account value.
+///
+/// No interest is "credited" to a negative balance in either the
+/// general or the separate account.
+///
+/// Loan interest is calculated elsewhere, but credited here.
+
 void AccountValue::TxCreditInt()
 {
     ApplyDynamicMandE(AssetsPostBom);
 
-    // Accrue interest on unloaned and loaned account value separately,
-    // but do not charge interest on negative account value.
-
-    // TODO ?? This variable is unused.
     double sa_int_spread = 0.0;
 
     double gross_sep_acct_rate = i_upper_12_over_12_from_i<double>()
         (InterestRates_->SepAcctGrossRate(SepBasis_)[Year]
         );
 
-    if(0.0 < AVSepAcct)
+    if(0.0 < AVSepAcct && 0.0 != YearsSepAcctIntRate)
         {
-        // Each interest increment is rounded separately.
         SepAcctIntCred = InterestCredited(AVSepAcct, YearsSepAcctIntRate);
-        sa_int_spread =
-                AVSepAcct * gross_sep_acct_rate
-            -   SepAcctIntCred
-            ;
-
+        double gross_factor = gross_sep_acct_rate / YearsSepAcctIntRate - 1.0;
+        sa_int_spread = SepAcctIntCred * gross_factor;
+        // Something like this:
+//        double gross   = InterestCredited(AVSepAcct, gross_sep_acct_rate);
+//        sa_int_spread = gross - SepAcctIntCred;
+        // might eventually be written for clarity.
         AVSepAcct += SepAcctIntCred;
         }
     else
@@ -2696,7 +2697,6 @@ void AccountValue::TxCreditInt()
 
     if(0.0 < AVGenAcct)
         {
-        // Each interest increment is rounded separately.
         double effective_general_account_interest_factor = YearsGenAcctIntRate;
         if
             (  Input_->HasHoneymoon
@@ -2736,35 +2736,13 @@ void AccountValue::TxCreditInt()
     // Loaned account value must not be negative.
     LMI_ASSERT(0.0 <= AVRegLn && 0.0 <= AVPrfLn);
 
-    YearsTotalNetIntCredited +=
-            RegLnIntCred
-        +   PrfLnIntCred
-        +   SepAcctIntCred
-        +   GenAcctIntCred
-        ;
-
-    if(0.0 != YearsSepAcctIntRate)
-        {
-        YearsTotalGrossIntCredited +=
-              RegLnIntCred
-            + PrfLnIntCred
-            + SepAcctIntCred * gross_sep_acct_rate / YearsSepAcctIntRate
-            + GenAcctIntCred
-            ;
-        }
-    else
-        {
-        YearsTotalGrossIntCredited +=
-                RegLnIntCred
-            +   PrfLnIntCred
-            +   SepAcctIntCred
-            +   GenAcctIntCred
-            ;
-        }
+    double z = RegLnIntCred + PrfLnIntCred + SepAcctIntCred + GenAcctIntCred;
+    YearsTotalNetIntCredited   += z;
+    YearsTotalGrossIntCredited += z + sa_int_spread;
 }
 
-//============================================================================
-// Accrue loan interest and credit interest on loaned account value.
+/// Accrue loan interest and calculate interest credit on loaned account value.
+
 void AccountValue::TxLoanInt()
 {
     // Nothing to do if there's no loan outstanding.
