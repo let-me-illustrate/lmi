@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.83 2008-07-12 15:33:19 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.84 2008-07-12 16:43:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2668,12 +2668,18 @@ void AccountValue::ApplyDynamicMandE(double assets)
 /// general or the separate account.
 ///
 /// Loan interest is calculated elsewhere, but credited here.
+///
+/// For the separate account, the only reality is unit values, but a
+/// notional shadow calculation pretends that a gross rate is credited
+/// and then charges are deducted from it. There is no corresponding
+/// notion for the general account or for loans that makes as much
+/// "sense" for sales presentations.
 
 void AccountValue::TxCreditInt()
 {
     ApplyDynamicMandE(AssetsPostBom);
 
-    double sa_int_spread = 0.0;
+    double notional_sep_acct_charge = 0.0;
 
     double gross_sep_acct_rate = i_upper_12_over_12_from_i<double>()
         (InterestRates_->SepAcctGrossRate(SepBasis_)[Year]
@@ -2683,12 +2689,8 @@ void AccountValue::TxCreditInt()
     if(0.0 < AVSepAcct && 0.0 != YearsSepAcctIntRate)
         {
         SepAcctIntCred = InterestCredited(AVSepAcct, YearsSepAcctIntRate);
-        double gross_factor = gross_sep_acct_rate / YearsSepAcctIntRate - 1.0;
-        sa_int_spread = SepAcctIntCred * gross_factor;
-        // Something like this:
-//        double gross   = InterestCredited(AVSepAcct, gross_sep_acct_rate);
-//        sa_int_spread = gross - SepAcctIntCred;
-        // might eventually be written for clarity.
+        double gross   = InterestCredited(AVSepAcct, gross_sep_acct_rate);
+        notional_sep_acct_charge = gross - SepAcctIntCred;
         AVSepAcct += SepAcctIntCred;
         }
     else
@@ -2739,7 +2741,7 @@ void AccountValue::TxCreditInt()
 
     double z = RegLnIntCred + PrfLnIntCred + SepAcctIntCred + GenAcctIntCred;
     YearsTotalNetIntCredited   += z;
-    YearsTotalGrossIntCredited += z + sa_int_spread;
+    YearsTotalGrossIntCredited += z + notional_sep_acct_charge;
 }
 
 /// Accrue loan interest and calculate interest credit on loaned account value.
