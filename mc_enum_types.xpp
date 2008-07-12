@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types.xpp,v 1.17 2008-07-06 11:43:38 chicares Exp $
+// $Id: mc_enum_types.xpp,v 1.18 2008-07-12 00:37:17 chicares Exp $
 
 #define yes_or_no_VALUES \
     {mce_yes \
@@ -653,6 +653,10 @@
     ,mce_current_death_proceeds_paid \
     ,mce_current_claims_paid \
     ,mce_current_av_released_on_death \
+    ,mce_current_specified_amount_load \
+    ,mce_current_gross_interest_credited \
+    ,mce_current_net_interest_credited \
+    ,mce_current_sep_acct_charges \
     };
 #define report_column_NAMES \
     {"[none]" \
@@ -698,6 +702,10 @@
     ,"DeathProceedsPaid_Current" \
     ,"ClaimsPaid_Current" \
     ,"AVRelOnDeath_Current" \
+    ,"SpecAmtLoad_Current" \
+    ,"GrossIntCredited_Current" \
+    ,"NetIntCredited_Current" \
+    ,"SepAcctLoad_Current" \
     };
 #if 0
 // TODO ?? Nicer-looking names--implement later.
@@ -745,6 +753,10 @@
     ,"Current Death Proceeds Paid" \
     ,"Current Claims Paid" \
     ,"Current Account Value Released on Death" \
+    ,"Current Load on Specified Amount" \
+    ,"Current Interest Credited before Separate Account Charges" \
+    ,"Current Interest Credited Net of Separate Account Charges" \
+    ,"Current Charge on Separate Account Assets" \
     };
 #endif // 0
 
