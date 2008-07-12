@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.80 2008-07-08 17:52:21 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.81 2008-07-12 01:55:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2743,7 +2743,6 @@ void AccountValue::TxCreditInt()
         +   GenAcctIntCred
         ;
 
-    // TODO ?? What's this nonsense?
     if(0.0 != YearsSepAcctIntRate)
         {
         YearsTotalGrossIntCredited +=
@@ -2751,6 +2750,15 @@ void AccountValue::TxCreditInt()
             + PrfLnIntCred
             + SepAcctIntCred * gross_sep_acct_rate / YearsSepAcctIntRate
             + GenAcctIntCred
+            ;
+        }
+    else
+        {
+        YearsTotalGrossIntCredited +=
+                RegLnIntCred
+            +   PrfLnIntCred
+            +   SepAcctIntCred
+            +   GenAcctIntCred
             ;
         }
 }
