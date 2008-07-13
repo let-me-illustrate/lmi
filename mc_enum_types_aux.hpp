@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types_aux.hpp,v 1.3 2008-07-13 18:24:16 chicares Exp $
+// $Id: mc_enum_types_aux.hpp,v 1.4 2008-07-13 20:24:31 chicares Exp $
 
 #ifndef mc_enum_types_aux_hpp
 #define mc_enum_types_aux_hpp
@@ -27,6 +27,27 @@
 #include "config.hpp"
 
 #include "mc_enum_type_enums.hpp"
+
+/// Temporary--used only by porting_cast():
+
+#include <boost/static_assert.hpp>
+#include <boost/type_traits.hpp>
+
+/// Old 'xenum' types are being replaced by newer 'mcenum' types.
+/// As a temporary aid to porting, use this template function to
+/// convert between them where temporarily necessary. As types are
+/// replaced, error messages will indicate which casts have become
+/// unnecessary. Within about one month of its appearance, this
+/// template function should be expunged because no instance of its
+/// use will remain.
+
+template<typename To, typename From>
+To porting_cast(From f)
+{
+    // Double parentheses: don't parse comma as a macro parameter separator.
+    BOOST_STATIC_ASSERT((!boost::is_same<To,From>::value));
+    return static_cast<To>(f);
+}
 
 /// Cardinality of certain enumerations, useful as ICEs.
 ///
@@ -37,6 +58,11 @@ enum
     ,mc_n_sep_bases    = 3
     ,mc_n_rate_periods = 2
     };
+
+mcenum_dbopt_7702 effective_dbopt_7702
+    (mcenum_dbopt      actual_dbopt
+    ,mcenum_dbopt_7702 rop_equivalent
+    );
 
 bool is_subject_to_ill_reg(mcenum_ledger_type);
 
