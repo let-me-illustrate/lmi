@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702.cpp,v 1.20 2008-03-27 01:52:13 chicares Exp $
+// $Id: ihs_irc7702.cpp,v 1.21 2008-07-13 18:52:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -432,10 +432,10 @@ void Irc7702::InitCommFns()
             (Qc
             ,GLPic
             ,glp_naar_disc_rate
-            ,e_dbopt(e_option1)
-            ,e_mode(e_monthly)
-            ,e_mode(e_monthly)
-            ,e_mode(e_monthly)
+            ,mce_option1
+            ,mce_monthly
+            ,mce_monthly
+            ,mce_monthly
             )
         );
     DEndt[Opt1Int4Pct] = CommFns[Opt1Int4Pct]->aD()[Length];
@@ -445,10 +445,10 @@ void Irc7702::InitCommFns()
             (Qc
             ,GLPic
             ,glp_naar_disc_rate
-            ,e_dbopt(e_option2)
-            ,e_mode(e_monthly)
-            ,e_mode(e_monthly)
-            ,e_mode(e_monthly)
+            ,mce_option2
+            ,mce_monthly
+            ,mce_monthly
+            ,mce_monthly
             )
         );
     DEndt[Opt2Int4Pct] = CommFns[Opt2Int4Pct]->aD()[Length];
@@ -459,10 +459,10 @@ void Irc7702::InitCommFns()
             (Qc
             ,GSPic
             ,gsp_naar_disc_rate
-            ,e_dbopt(e_option1)
-            ,e_mode(e_monthly)
-            ,e_mode(e_monthly)
-            ,e_mode(e_monthly)
+            ,mce_option1
+            ,mce_monthly
+            ,mce_monthly
+            ,mce_monthly
             )
         );
     DEndt[Opt1Int6Pct] = CommFns[Opt1Int6Pct]->aD()[Length];

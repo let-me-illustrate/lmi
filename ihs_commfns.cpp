@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.cpp,v 1.14 2008-01-01 18:29:42 chicares Exp $
+// $Id: ihs_commfns.cpp,v 1.15 2008-07-13 18:52:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -89,10 +89,10 @@ ULCommFns::ULCommFns
     (std::vector<double> const& a_q
     ,std::vector<double> const& a_ic
     ,std::vector<double> const& a_ig
-    ,e_dbopt const&             a_db_option
-    ,e_mode const&              a_asspt_mode
-    ,e_mode const&              a_commfn_mode
-    ,e_mode const&              a_process_mode
+    ,mcenum_dbopt               a_db_option
+    ,mcenum_mode                a_asspt_mode
+    ,mcenum_mode                a_commfn_mode
+    ,mcenum_mode                a_process_mode
     )
     :qc          (a_q)
     ,ic          (a_ic)
@@ -118,16 +118,16 @@ ULCommFns::ULCommFns
 //  std::vector<double> p(1 + Length, 1.0);
 //  std::vector<double> a(1 + Length, 1.0);
 
-    int months_between_deductions = 12 / ProcessMode.value();
+    int months_between_deductions = 12 / ProcessMode;
 
     ad[0] = 1.0;
     for(int j = 0; j < Length; j++)
         {
         // Convert from input mode to monthly.
         // TODO ?? Ideally offer choice of methods.
-        if(e_mode(e_monthly) != a_asspt_mode)
+        if(mce_monthly != a_asspt_mode)
             {
-            double power = a_asspt_mode / static_cast<double>(e_monthly);
+            double power = a_asspt_mode / static_cast<double>(mce_monthly);
             qc[j] = 1.0     - std::pow(1.0 - qc[j], power);
             ic[j] = -1.0    + std::pow(1.0 + ic[j], power);
             ig[j] = -1.0    + std::pow(1.0 + ig[j], power);
@@ -143,7 +143,7 @@ ULCommFns::ULCommFns
         // Eckley equation (12)
         double q = f * g;
         // Eckley equation (19)
-        if(e_dbopt(e_option2) == DBOption)
+        if(mce_option2 == DBOption)
             {
             i = i - q;
             }
@@ -321,10 +321,10 @@ void ULCommFns::SelfTest()
             (coi
             ,ic
             ,ig
-            ,e_dbopt(e_option2)
-            ,e_mode(e_annual)
-            ,e_mode(e_annual)
-            ,e_mode(e_monthly)
+            ,mce_option2
+            ,mce_annual
+            ,mce_annual
+            ,mce_monthly
             );
         }
 //timer.stop();
@@ -347,10 +347,10 @@ void ULCommFns::SelfTest()
             (coi
             ,ic
             ,ig
-            ,e_dbopt(e_option2)
-            ,e_mode(e_annual)
-            ,e_mode(e_annual)
-            ,e_mode(e_monthly)
+            ,mce_option2
+            ,mce_annual
+            ,mce_annual
+            ,mce_monthly
             )
         );
 

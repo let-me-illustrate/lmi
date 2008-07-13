@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: commutation_functions_test.cpp,v 1.13 2008-01-01 18:29:36 chicares Exp $
+// $Id: commutation_functions_test.cpp,v 1.14 2008-07-13 18:52:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -74,10 +74,10 @@ void mete_ulcf
         (q
         ,ic
         ,ig
-        ,e_dbopt(e_option1)
-        ,e_mode (e_annual)
-        ,e_mode (e_annual)
-        ,e_mode (e_monthly)
+        ,mce_option1
+        ,mce_annual
+        ,mce_annual
+        ,mce_monthly
         );
 }
 
@@ -117,10 +117,10 @@ int test_main(int, char*[])
         (q
         ,ig
         ,ig
-        ,e_dbopt(e_option1)
-        ,e_mode (e_monthly)
-        ,e_mode (e_monthly)
-        ,e_mode (e_monthly)
+        ,mce_option1
+        ,mce_monthly
+        ,mce_monthly
+        ,mce_monthly
         );
     std::vector<double> cvat_corridor;
     std::transform
