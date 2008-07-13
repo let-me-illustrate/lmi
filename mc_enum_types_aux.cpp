@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types_aux.cpp,v 1.2 2008-07-07 17:17:24 chicares Exp $
+// $Id: mc_enum_types_aux.cpp,v 1.3 2008-07-13 20:24:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,6 +33,25 @@
 #include "mc_enum_types.hpp"
 
 #include <boost/static_assert.hpp>
+
+/// GPT recognizes death benefit options A and B only. A contract
+/// might have a death benefit option other than that usual pair,
+/// but for 7702 (and 7702A) purposes it's treated as either A or B.
+
+mcenum_dbopt_7702 effective_dbopt_7702
+    (mcenum_dbopt      actual_dbopt
+    ,mcenum_dbopt_7702 rop_equivalent
+    )
+{
+    switch(actual_dbopt)
+        {
+        case mce_option1: return mce_option1_for_7702;
+        case mce_option2: return mce_option2_for_7702;
+        case mce_rop:     return rop_equivalent      ;
+        default: fatal_error() << "No " << actual_dbopt << " case." << LMI_FLUSH;
+        }
+    throw "Unreachable--silences a compiler diagnostic.";
+}
 
 /// Illustration reg requires midpoint basis and guaranteed premium.
 
