@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1092 2008-07-12 19:52:49 chicares Exp $
+// $Id: ChangeLog,v 1.1093 2008-07-13 16:31:13 chicares Exp $
 
 MAINTENANCE
 
@@ -17656,7 +17656,7 @@ Refactor, eliminating a confusingly-named member function.
 20080709T1726Z <zeitlin> [1131]
 
   Makefile.am
-Refactor, eliminating a confusingly-named member function.
+Remove 'ihs_standalone.hpp', which doesn't exist anymore.
 
 20080712T0037Z <gchicares@sbcglobal.net> [1131]
 
@@ -17705,4 +17705,24 @@ fictitious quantity that affects no actual contract value.
 
   ihs_avmly.cpp
 Refine calculation of notional gross separate-account interest.
+
+20080713T0936Z <gchicares@sbcglobal.net> [1129]
+
+  ihs_acctval.cpp
+  ledger_formats.xml
+  ledger_text_formats.cpp
+  ledger_variant.cpp
+  ledger_variant.hpp
+  ledger_xml_io.cpp
+  ledger_xml_io2.cpp
+  mc_enum_types.xpp
+  microcosm_tsv.xsl
+  reg_d_individual.xsl
+  variable_annuity.xsl
+Rename ledger column "SepAcctLoad" to "SepAcctCharges". For now, it
+still contains the "load" only, rather than "load" + "M&E". This step
+is taken separately because it affects all system-testing '.test'
+files in a way that this command:
+  sed -e's/^SepAcctLoad$/SepAcctCharges/'
+predicts exactly.
 
