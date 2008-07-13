@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.hpp,v 1.12 2008-07-13 18:52:26 chicares Exp $
+// $Id: ihs_commfns.hpp,v 1.13 2008-07-13 19:39:16 chicares Exp $
 
 #ifndef ihs_commfns_hpp
 #define ihs_commfns_hpp
@@ -39,9 +39,6 @@
 // Can be reused for quick solving or initial solve guess
 // Can be reused for reserves
 // Can be reused for nonforfeiture
-
-// TODO ?? Should these two classes be factored into separate files?
-// Should they share an abstract base?
 
 /// Ordinary-life commutation functions.
 

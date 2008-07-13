@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: commutation_functions_test.cpp,v 1.14 2008-07-13 18:52:26 chicares Exp $
+// $Id: commutation_functions_test.cpp,v 1.15 2008-07-13 19:39:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -99,7 +99,8 @@ void mete_corridor
 
 int test_main(int, char*[])
 {
-//    ULCommFns::SelfTest(); TODO ?? Make that test meaningful, or expunge it.
+    ULCommFns::SelfTest();
+    OLCommFns::SelfTest();
 
     // ET !! q = coi_rate_from_q(sample_q, 1.0);
     std::vector<double> q;
