@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.hpp,v 1.19 2008-07-08 17:52:21 chicares Exp $
+// $Id: ledger_variant.hpp,v 1.20 2008-07-13 09:36:20 chicares Exp $
 
 #ifndef ledger_variant_hpp
 #define ledger_variant_hpp
@@ -114,7 +114,7 @@ class LMI_SO LedgerVariant
     std::vector<double> PremTaxLoad;
     std::vector<double> DacTaxLoad;
     std::vector<double> SpecAmtLoad;
-    std::vector<double> SepAcctLoad;
+    std::vector<double> SepAcctCharges;
     std::vector<double> ClaimsPaid;
     std::vector<double> DeathProceedsPaid;
     std::vector<double> NetClaims;

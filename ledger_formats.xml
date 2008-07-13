@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: ledger_formats.xml,v 1.8 2008-06-22 13:20:30 chicares Exp $
+    $Id: ledger_formats.xml,v 1.9 2008-07-13 09:36:20 chicares Exp $
 
     TODO ?? This file contains only 'column' elements, but they don't
     all correspond to columns: e.g., 'LapseYear' is a scalar and
@@ -452,9 +452,9 @@
         <title basis="run_guar_basis">Guar Account Value</title>
         <format>f1</format>
     </column>
-    <column name="SepAcctLoad">
-        <title basis="run_curr_basis">Curr Sep Acct Load</title>
-        <title basis="run_guar_basis">Guar Sep Acct Load</title>
+    <column name="SepAcctCharges">
+        <title basis="run_curr_basis">Curr Sep Acct Charges</title>
+        <title basis="run_guar_basis">Guar Sep Acct Charges</title>
         <format>f1</format>
     </column>
     <column name="AccumulatedPremium">
