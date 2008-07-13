@@ -19,12 +19,20 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.hpp,v 1.10 2008-01-01 18:29:42 chicares Exp $
+// $Id: ihs_commfns.hpp,v 1.11 2008-07-13 18:24:16 chicares Exp $
 
 #ifndef ihs_commfns_hpp
 #define ihs_commfns_hpp
 
 #include "config.hpp"
+
+#include "obstruct_slicing.hpp"
+#include "so_attributes.hpp"
+#include "xenumtypes.hpp"    // e_defn_life_ins, e_dbopt
+
+#include <boost/utility.hpp>
+
+#include <vector>
 
 // Commutation functions
 // C, D, M, and N from q and i
@@ -34,14 +42,6 @@
 
 // TODO ?? Should these two classes be factored into separate files?
 // Should they share an abstract base?
-
-#include "obstruct_slicing.hpp"
-#include "so_attributes.hpp"
-#include "xenumtypes.hpp"    // e_defn_life_ins, e_dbopt
-
-#include <boost/utility.hpp>
-
-#include <vector>
 
 /// Ordinary-life commutation functions.
 
