@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.cpp,v 1.15 2008-07-13 18:52:26 chicares Exp $
+// $Id: ihs_commfns.cpp,v 1.16 2008-07-13 19:39:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -259,16 +259,11 @@ void OLCommFns::OLCommFns()
 }
 */
 
-// TODO ?? Factor this out into a unit-test module, if it's even useful.
-
-// TODO ?? Apparently the original reason for using smart pointers
-// was to minimize stack usage in a 16-bit environment; clearly that
-// doesn't matter anymore.
+// TODO ?? Make these tests meaningful and move them to the unit-test module,
+// or expunge them.
 
 #include "miscellany.hpp"
 #include "timer.hpp"
-
-#include <boost/scoped_ptr.hpp>
 
 #include <algorithm>
 #include <fstream>
@@ -291,16 +286,14 @@ void ULCommFns::SelfTest()
     std::vector<double>ic           (coi.size(), i_upper_12_over_12_from_i<double>()(0.10));
     std::vector<double>ig           (coi.size(), i_upper_12_over_12_from_i<double>()(0.04));
 
-    boost::scoped_ptr<ULCommFns> CF
-        (new ULCommFns
-            (coi
-            ,ic
-            ,ig
-            ,OptionB
-            ,Monthly
-            ,Annual
-            ,Monthly
-            )
+    ULCommFns CF
+        (coi
+        ,ic
+        ,ig
+        ,OptionB
+        ,Monthly
+        ,Annual
+        ,Monthly
         );
 */
     std::vector<double>coi          (COI, COI + lmi_array_size(COI));
@@ -342,16 +335,14 @@ void ULCommFns::SelfTest()
         ;
 
 // 1 extra leak if #ifdef out remainder of fn
-    boost::scoped_ptr<ULCommFns> CF
-        (new ULCommFns
-            (coi
-            ,ic
-            ,ig
-            ,mce_option2
-            ,mce_annual
-            ,mce_annual
-            ,mce_monthly
-            )
+    ULCommFns CF
+        (coi
+        ,ic
+        ,ig
+        ,mce_option2
+        ,mce_annual
+        ,mce_annual
+        ,mce_monthly
         );
 
     os << "Universal life commutation functions\n";
@@ -359,10 +350,9 @@ void ULCommFns::SelfTest()
         << std::setw( 3) << "yr"
         << std::setw( 6) << "i"
         << std::setw( 9) << "q"
-        << std::setw(13) << "c"
-        << std::setw(13) << "d"
-        << std::setw(13) << "m"
-        << std::setw(13) << "n"
+        << std::setw(13) << "aD"
+        << std::setw(13) << "kD"
+        << std::setw(13) << "kC"
         << '\n'
         ;
     for(unsigned int j = 0; j < coi.size(); j++)
@@ -375,9 +365,9 @@ void ULCommFns::SelfTest()
             << std::setprecision(6)
             << std::setw(9)  << coi[j]
             << std::setprecision(9)
-            << std::setw(13) << CF->aD()[j]
-            << std::setw(13) << CF->kD()[j]
-            << std::setw(13) << CF->kC()[j]
+            << std::setw(13) << CF.aD()[j]
+            << std::setw(13) << CF.kD()[j]
+            << std::setw(13) << CF.kC()[j]
             << '\n'
             ;
         }
@@ -406,7 +396,7 @@ void OLCommFns::SelfTest()
     std::vector<double>q                (Q, Q + lmi_array_size(Q));
     std::vector<double>i                (100, 0.04);
 
-    boost::scoped_ptr<OLCommFns> CF(new OLCommFns(q, i));
+    OLCommFns CF(q, i);
 
     os << "Ordinary life commutation functions\n";
     os
@@ -429,10 +419,10 @@ void OLCommFns::SelfTest()
             << std::setprecision(6)
             << std::setw(9)  << q[j]
             << std::setprecision(9)
-            << std::setw(13) << CF->C()[j]
-            << std::setw(13) << CF->D()[j]
-            << std::setw(13) << CF->M()[j]
-            << std::setw(13) << CF->N()[j]
+            << std::setw(13) << CF.C()[j]
+            << std::setw(13) << CF.D()[j]
+            << std::setw(13) << CF.M()[j]
+            << std::setw(13) << CF.N()[j]
             << '\n'
             ;
         }
