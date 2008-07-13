@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.39 2008-01-06 18:58:18 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.40 2008-07-13 09:36:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -357,7 +357,7 @@ os << "\n\n" ;
         ,"MonthlyFlatExtra"
         ,"MortalityCharge"
         ,"NetMortalityCharge"
-        ,"AccountValueLoadAfterMonthlyDeduction"
+        ,"SeparateAccountCharges"
         ,"CurrentSeparateAccountInterestRate"
         ,"CurrentGeneralAccountInterestRate"
         ,"CurrentGrossInterestCredited"
@@ -439,7 +439,7 @@ os << "\n\n" ;
         os << Invar.value_str("MonthlyFlatExtra"      ,j) << '\t';
         os << Curr_.value_str("COICharge"             ,j) << '\t';
         os << Curr_.value_str("NetCOICharge"          ,j) << '\t';
-        os << Curr_.value_str("SepAcctLoad"           ,j) << '\t';
+        os << Curr_.value_str("SepAcctCharges"        ,j) << '\t';
 
         os << Curr_.value_str("AnnSAIntRate"          ,j) << '\t';
         os << Curr_.value_str("AnnGAIntRate"          ,j) << '\t';

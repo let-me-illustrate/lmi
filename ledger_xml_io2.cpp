@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io2.cpp,v 1.25 2008-05-08 04:11:37 chicares Exp $
+// $Id: ledger_xml_io2.cpp,v 1.26 2008-07-13 09:36:20 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -402,13 +402,13 @@ class double_formatter_t
 // > Format as a number with thousand separators and no decimal places (#,###,##0)
 // >
 // > AcctVal
-// > SepAcctLoad
+// > SepAcctCharges
 // > AccumulatedPremium
 //
 // I translated that into
 //
 //    format_map["AcctVal"                           ] = f1;
-//    format_map["SepAcctLoad"                       ] = f1;
+//    format_map["SepAcctCharges"                    ] = f1;
 //    format_map["AccumulatedPremium"                ] = f1;
 //
 // where 'f1' is one of several formats I abstracted from your specs
@@ -831,7 +831,7 @@ void Ledger::write_excerpt
         detailed_ids.push_back(value_id::from_name("MonthlyFlatExtra"));
         detailed_ids.push_back(value_id::from_name_basis("COICharge", e_run_curr_basis));
         detailed_ids.push_back(value_id::from_name_basis("NetCOICharge", e_run_curr_basis));
-        detailed_ids.push_back(value_id::from_name_basis("SepAcctLoad", e_run_curr_basis));
+        detailed_ids.push_back(value_id::from_name_basis("SepAcctCharges", e_run_curr_basis));
 
         detailed_ids.push_back(value_id::from_name_basis("AnnSAIntRate", e_run_curr_basis));
         detailed_ids.push_back(value_id::from_name_basis("AnnGAIntRate", e_run_curr_basis));
