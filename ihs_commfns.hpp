@@ -19,16 +19,16 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.hpp,v 1.11 2008-07-13 18:24:16 chicares Exp $
+// $Id: ihs_commfns.hpp,v 1.12 2008-07-13 18:52:26 chicares Exp $
 
 #ifndef ihs_commfns_hpp
 #define ihs_commfns_hpp
 
 #include "config.hpp"
 
+#include "mc_enum_type_enums.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
-#include "xenumtypes.hpp"    // e_defn_life_ins, e_dbopt
 
 #include <boost/utility.hpp>
 
@@ -87,10 +87,10 @@ class LMI_SO ULCommFns
         (std::vector<double> const& a_q
         ,std::vector<double> const& a_ic
         ,std::vector<double> const& a_ig
-        ,e_dbopt const&             a_db_option
-        ,e_mode const&              a_asspt_mode
-        ,e_mode const&              a_commfn_mode
-        ,e_mode const&              a_process_mode
+        ,mcenum_dbopt               a_db_option
+        ,mcenum_mode                a_asspt_mode
+        ,mcenum_mode                a_commfn_mode
+        ,mcenum_mode                a_process_mode
         );
 
     // ctor arguments:
@@ -143,15 +143,15 @@ class LMI_SO ULCommFns
 //  std::vector<double>        q;
 //  std::vector<double>        i;
 
-    e_dbopt DBOption;
+    mcenum_dbopt DBOption;
     // Assumption mode indicates the mode of input mortality and
     // interest assumptions.
-    e_mode AssptMode;
+    mcenum_mode AssptMode;
     // TODO ?? Should we keep this?
-    e_mode CommfnMode;
+    mcenum_mode CommfnMode;
     // Processing mode--usually monthly--governs how frequently
     // COIs and expense charges are deducted.
-    e_mode ProcessMode;
+    mcenum_mode ProcessMode;
 
     int Length;
 
