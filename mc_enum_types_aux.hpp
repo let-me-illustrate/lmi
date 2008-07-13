@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types_aux.hpp,v 1.2 2008-07-07 17:17:24 chicares Exp $
+// $Id: mc_enum_types_aux.hpp,v 1.3 2008-07-13 18:24:16 chicares Exp $
 
 #ifndef mc_enum_types_aux_hpp
 #define mc_enum_types_aux_hpp
@@ -27,10 +27,6 @@
 #include "config.hpp"
 
 #include "mc_enum_type_enums.hpp"
-
-bool is_subject_to_ill_reg(mcenum_ledger_type);
-
-bool is_three_rate_nasd(mcenum_ledger_type);
 
 /// Cardinality of certain enumerations, useful as ICEs.
 ///
@@ -41,6 +37,10 @@ enum
     ,mc_n_sep_bases    = 3
     ,mc_n_rate_periods = 2
     };
+
+bool is_subject_to_ill_reg(mcenum_ledger_type);
+
+bool is_three_rate_nasd(mcenum_ledger_type);
 
 void set_cloven_bases_from_run_basis
     (mcenum_run_basis

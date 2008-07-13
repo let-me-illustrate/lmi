@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.85 2008-07-12 19:52:48 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.86 2008-07-13 18:24:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -580,11 +580,7 @@ void AccountValue::TxExch1035()
         if(!SolvingForGuarPremium)
             {
             double fake_cum_pmt = 0.0; // TODO ?? Needs work.
-            Irc7702_->ProcessGptPmt
-                (Year
-                ,GrossPmts[Month]
-                ,fake_cum_pmt
-                );
+            Irc7702_->ProcessGptPmt(Year, GrossPmts[Month], fake_cum_pmt);
             }
         // Limit external 1035 first, then internal, as necessary to avoid
         // exceeding the guideline limit. This is what the customer would
@@ -1654,11 +1650,7 @@ void AccountValue::TxAscertainDesiredPayment()
             if(!SolvingForGuarPremium)
                 {
                 double fake_cum_pmt = 0.0; // TODO ?? Needs work.
-                Irc7702_->ProcessGptPmt
-                    (Year
-                    ,eepmt
-                    ,fake_cum_pmt
-                    );
+                Irc7702_->ProcessGptPmt(Year, eepmt, fake_cum_pmt);
                 }
             EeGrossPmts[Month] += eepmt;
             GrossPmts[Month] += eepmt;
@@ -1671,11 +1663,7 @@ void AccountValue::TxAscertainDesiredPayment()
             if(!SolvingForGuarPremium)
                 {
                 double fake_cum_pmt = 0.0; // TODO ?? Needs work.
-                Irc7702_->ProcessGptPmt
-                    (Year
-                    ,erpmt
-                    ,fake_cum_pmt
-                    );
+                Irc7702_->ProcessGptPmt(Year, erpmt, fake_cum_pmt);
                 }
             ErGrossPmts[Month] += erpmt;
             GrossPmts[Month] += erpmt;
@@ -1711,11 +1699,7 @@ void AccountValue::TxAscertainDesiredPayment()
         if(!SolvingForGuarPremium)
             {
             double fake_cum_pmt = 0.0; // TODO ?? Needs work.
-            Irc7702_->ProcessGptPmt
-                (Year
-                ,Dumpin
-                ,fake_cum_pmt
-                );
+            Irc7702_->ProcessGptPmt(Year, Dumpin, fake_cum_pmt);
             }
         EeGrossPmts[Month] += Dumpin;
         GrossPmts[Month] += Dumpin;
