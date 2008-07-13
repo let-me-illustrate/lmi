@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: microcosm_tsv.xsl,v 1.6 2008-01-01 18:29:49 chicares Exp $
+    $Id: microcosm_tsv.xsl,v 1.7 2008-07-13 09:36:20 chicares Exp $
 -->
 
 <!DOCTYPE xsl:stylesheet [
@@ -50,7 +50,7 @@
     <column name="MonthlyFlatExtra">MonthlyFlatExtra</column>
     <column name="COICharge" basis="run_curr_basis">MortalityCharge</column>
     <column name="NetCOICharge" basis="run_curr_basis">NetMortalityCharge</column>
-    <column name="SepAcctLoad" basis="run_curr_basis">AccountValueLoadAfterMonthlyDeduction</column>
+    <column name="SepAcctCharges" basis="run_curr_basis">SeparateAccountCharges</column>
 
     <column name="AnnSAIntRate" basis="run_curr_basis">CurrentSeparateAccountInterestRate</column>
     <column name="AnnGAIntRate" basis="run_curr_basis">CurrentGeneralAccountInterestRate</column>

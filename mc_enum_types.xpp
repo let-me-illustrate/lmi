@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types.xpp,v 1.18 2008-07-12 00:37:17 chicares Exp $
+// $Id: mc_enum_types.xpp,v 1.19 2008-07-13 09:36:20 chicares Exp $
 
 #define yes_or_no_VALUES \
     {mce_yes \
@@ -705,7 +705,7 @@
     ,"SpecAmtLoad_Current" \
     ,"GrossIntCredited_Current" \
     ,"NetIntCredited_Current" \
-    ,"SepAcctLoad_Current" \
+    ,"SepAcctCharges_Current" \
     };
 #if 0
 // TODO ?? Nicer-looking names--implement later.
@@ -756,7 +756,7 @@
     ,"Current Load on Specified Amount" \
     ,"Current Interest Credited before Separate Account Charges" \
     ,"Current Interest Credited Net of Separate Account Charges" \
-    ,"Current Charge on Separate Account Assets" \
+    ,"Current Separate Account Asset Charges" \
     };
 #endif // 0
 

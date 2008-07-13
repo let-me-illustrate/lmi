@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: reg_d_individual.xsl,v 1.1 2008-02-18 17:44:00 chicares Exp $
+    $Id: reg_d_individual.xsl,v 1.2 2008-07-13 09:36:20 chicares Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -980,8 +980,8 @@
       <xsl:when test="$special='Asset_Charges'">
         <xsl:variable name="GrossIntCredited_Current" select="$vectors[@name='GrossIntCredited_Current']/duration[$counter]/@column_value"/>
         <xsl:variable name="NetIntCredited_Current" select="$vectors[@name='NetIntCredited_Current']/duration[$counter]/@column_value"/>
-        <xsl:variable name="SepAcctLoad_Current" select="$vectors[@name='SepAcctLoad_Current']/duration[$counter]/@column_value"/>
-        <xsl:value-of select="format-number(translate($GrossIntCredited_Current,$numberswc,$numberswoc) - translate($NetIntCredited_Current,$numberswc,$numberswoc) + translate($SepAcctLoad_Current,$numberswc,$numberswoc),'###,###,###')"/>
+        <xsl:variable name="SepAcctCharges_Current" select="$vectors[@name='SepAcctCharges_Current']/duration[$counter]/@column_value"/>
+        <xsl:value-of select="format-number(translate($GrossIntCredited_Current,$numberswc,$numberswoc) - translate($NetIntCredited_Current,$numberswc,$numberswoc) + translate($SepAcctCharges_Current,$numberswc,$numberswoc),'###,###,###')"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:call-template name="ERROR_Unknown_Special_Column_Name_Specified"/>

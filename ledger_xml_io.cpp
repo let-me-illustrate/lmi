@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.74 2008-06-22 13:20:31 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.75 2008-07-13 09:36:20 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -357,8 +357,8 @@ void Ledger::write(xml::element& x) const
     title_map["ProjectedCoiCharge_Current"      ] = "Experience Rating Projected COI Charge";
     title_map["RefundableSalesLoad"             ] = " _____________ Refundable Sales Load";
     title_map["Salary"                          ] = " _____________ _____________ Salary";
-    title_map["SepAcctLoad_Current"             ] = "Curr Sep Acct Load";
-    title_map["SepAcctLoad_Guaranteed"          ] = "Guar Sep Acct Load";
+    title_map["SepAcctCharges_Current"          ] = "Curr Sep Acct Charges";
+    title_map["SepAcctCharges_Guaranteed"       ] = "Guar Sep Acct Charges";
     title_map["SpecAmt"                         ] = " _____________ _____________ Specified Amount";
     title_map["SpecAmtLoad_Current"             ] = " _____________ Curr Spec Amt Load";
     title_map["SpecAmtLoad_Guaranteed"          ] = " _____________ Guar Spec Amt Load";
@@ -625,7 +625,7 @@ void Ledger::write(xml::element& x) const
     format_map["ProjectedCoiCharge"                ] = f1;
     format_map["RefundableSalesLoad"               ] = f1;
     format_map["Salary"                            ] = f1;
-    format_map["SepAcctLoad"                       ] = f1;
+    format_map["SepAcctCharges"                    ] = f1;
     format_map["SpecAmt"                           ] = f1;
     format_map["SpecAmtLoad"                       ] = f1;
     format_map["SpouseRiderAmount"                 ] = f1;

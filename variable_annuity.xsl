@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.58 2008-01-01 18:29:58 chicares Exp $
+    $Id: variable_annuity.xsl,v 1.59 2008-07-13 09:36:20 chicares Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -855,8 +855,8 @@
       <xsl:when test="$special='SpecialIntCredited'">
         <xsl:variable name="GrossIntCredited" select="$vectors[@name=concat('GrossIntCredited', $name_suffix)]/duration[$counter]/@column_value"/>
         <xsl:variable name="NetIntCredited" select="$vectors[@name=concat('NetIntCredited', $name_suffix)]/duration[$counter]/@column_value"/>
-        <xsl:variable name="SepAcctLoad" select="$vectors[@name=concat('SepAcctLoad', $name_suffix)]/duration[$counter]/@column_value"/>
-        <xsl:value-of select="format-number(translate($GrossIntCredited,$numberswc,$numberswoc) - translate($NetIntCredited,$numberswc,$numberswoc) + translate($SepAcctLoad,$numberswc,$numberswoc), '###,###,###')"/>
+        <xsl:variable name="SepAcctCharges" select="$vectors[@name=concat('SepAcctCharges', $name_suffix)]/duration[$counter]/@column_value"/>
+        <xsl:value-of select="format-number(translate($GrossIntCredited,$numberswc,$numberswoc) - translate($NetIntCredited,$numberswc,$numberswoc) + translate($SepAcctCharges,$numberswc,$numberswoc), '###,###,###')"/>
       </xsl:when>
       <xsl:when test="$special='SpecialGrossIntCredited'">
         <xsl:value-of select="$vectors[@name=concat('GrossIntCredited', $name_suffix)]/duration[$counter]/@column_value"/>

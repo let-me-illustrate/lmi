@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.cpp,v 1.24 2008-07-08 17:52:21 chicares Exp $
+// $Id: ledger_variant.cpp,v 1.25 2008-07-13 09:36:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -111,7 +111,7 @@ void LedgerVariant::Alloc(int len)
     BegYearVectors  ["PremTaxLoad"          ] = &PremTaxLoad            ;
     BegYearVectors  ["DacTaxLoad"           ] = &DacTaxLoad             ;
     BegYearVectors  ["SpecAmtLoad"          ] = &SpecAmtLoad            ;
-    BegYearVectors  ["SepAcctLoad"          ] = &SepAcctLoad            ;
+    BegYearVectors  ["SepAcctCharges"       ] = &SepAcctCharges         ;
 
     // Deaths are assumed to come at the end of the year only; but
     // they're discounted by the proportion in force at the beginning.
