@@ -19,12 +19,24 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702.hpp,v 1.11 2008-01-01 18:29:43 chicares Exp $
+// $Id: ihs_irc7702.hpp,v 1.12 2008-07-13 18:24:16 chicares Exp $
 
 #ifndef ihs_irc7702_hpp
 #define ihs_irc7702_hpp
 
 #include "config.hpp"
+
+#include "obstruct_slicing.hpp"
+#include "round_to.hpp"
+#include "xenumtypes.hpp"    // e_defn_life_ins, e_dbopt
+
+#include <boost/scoped_ptr.hpp>
+#include <boost/utility.hpp>
+
+#include <vector>
+
+class BasicValues;
+class ULCommFns;
 
 // Specified amount (specamt) is carefully distinguished from benefit
 // amount (bftamt). The former is directly chosen by the owner, and
@@ -42,18 +54,6 @@
 // No rounding is performed in this class. Round the values it calculates
 // as needed, being sure to round conservatively if at all. Unrounded
 // values are especially needed for the iterative specamt calculation.
-
-#include "round_to.hpp"
-#include "obstruct_slicing.hpp"
-#include "xenumtypes.hpp"    // e_defn_life_ins, e_dbopt
-
-#include <boost/scoped_ptr.hpp>
-#include <boost/utility.hpp>
-
-#include <vector>
-
-class BasicValues;
-class ULCommFns;
 
 class Irc7702
     :private boost::noncopyable
