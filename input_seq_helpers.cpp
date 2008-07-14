@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_seq_helpers.cpp,v 1.4 2008-01-01 18:29:44 chicares Exp $
+// $Id: input_seq_helpers.cpp,v 1.5 2008-07-14 13:22:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -74,7 +74,7 @@ namespace detail
 std::map<std::string, std::string, std::less<std::string> > dbo_map()
 {
 // Available death benefit options:
-//   multiple-from-through  e_dbopt::names
+//   multiple-from-through    mce_dbopt
 //       a                    "A"
 //       b                    "B"
 //       rop                  "ROP"
@@ -91,7 +91,7 @@ std::map<std::string, std::string, std::less<std::string> > dbo_map()
 std::map<std::string, std::string, std::less<std::string> > mode_map()
 {
 // Available modes:
-//   multiple-from-through  e_dbopt::names
+//   multiple-from-through    mce_mode
 //       annual               "Annual"
 //       semiannual           "Semiannual"
 //       quarterly            "Quarterly"
@@ -110,7 +110,7 @@ std::map<std::string, std::string, std::less<std::string> > mode_map()
 std::map<std::string, std::string, std::less<std::string> > sastrategy_map()
 {
 // Available strategies:
-//   multiple-from-through  e_sa_strategy::names
+//   multiple-from-through    mce_sa_strategy
 //       [input amount]       "SAInputScalar"
 //       vector               "SAInputVector"
 //       maximum              "SAMaximum"
@@ -139,7 +139,7 @@ std::map<std::string, std::string, std::less<std::string> > sastrategy_map()
 std::map<std::string, std::string, std::less<std::string> > pmtstrategy_map()
 {
 // Available strategies:
-//   multiple-from-through  e_pmt_strategy::names
+//   multiple-from-through    mce_pmt_strategy
 //       [input amount]       "PmtInputScalar"
 //       vector               "PmtInputVector"
 //       minimum              "PmtMinimum"

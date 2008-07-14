@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io2.cpp,v 1.26 2008-07-13 09:36:20 chicares Exp $
+// $Id: ledger_xml_io2.cpp,v 1.27 2008-07-14 13:22:43 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -66,13 +66,13 @@ typedef std::vector< std::string > string_vector_t;
 int const n = 7;
 
 char const* char_p_suffixes[n] =
-    {"run_curr_basis"         // e_run_curr_basis
-    ,"run_guar_basis"         // e_run_guar_basis
-    ,"run_mdpt_basis"         // e_run_mdpt_basis
-    ,"run_curr_basis_sa_zero" // e_run_curr_basis_sa_zero
-    ,"run_guar_basis_sa_zero" // e_run_guar_basis_sa_zero
-    ,"run_curr_basis_sa_half" // e_run_curr_basis_sa_half
-    ,"run_guar_basis_sa_half" // e_run_guar_basis_sa_half
+    {"run_curr_basis"         // mce_run_gen_curr_sep_full
+    ,"run_guar_basis"         // mce_run_gen_guar_sep_full
+    ,"run_mdpt_basis"         // mce_run_gen_mdpt_sep_full
+    ,"run_curr_basis_sa_zero" // mce_run_gen_curr_sep_zero
+    ,"run_guar_basis_sa_zero" // mce_run_gen_guar_sep_zero
+    ,"run_curr_basis_sa_half" // mce_run_gen_curr_sep_half
+    ,"run_guar_basis_sa_half" // mce_run_gen_guar_sep_half
     };
 
 string_vector_t const suffixes
@@ -1149,8 +1149,8 @@ void Ledger::write_excerpt
 //
 //    // special cases
 //    int              Length;
-//    e_basis          ExpAndGABasis;
-//    e_sep_acct_basis SABasis;
+//    mcenum_gen_basis GenBasis_;
+//    mcenum_sep_basis SepBasis_;
 //    bool             FullyInitialized;   // i.e. by Init(BasicValues* b)
 
 // Now we're ready to write the xml.
