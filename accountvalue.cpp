@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.37 2008-07-08 17:52:20 chicares Exp $
+// $Id: accountvalue.cpp,v 1.38 2008-07-14 17:19:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -296,8 +296,8 @@ void AccountValue::DoYear
         ;
 
     pmt                   = InvariantValues().EePmt[Year];
-    YearsPremLoadTgt      = Loads_->target_premium_load(ExpAndGABasis)[Year];
-    YearsMonthlyPolicyFee = Loads_->monthly_policy_fee(ExpAndGABasis)[Year];
+    YearsPremLoadTgt      = Loads_->target_premium_load(GenBasis_)[Year];
+    YearsMonthlyPolicyFee = Loads_->monthly_policy_fee(GenBasis_)[Year];
     ActualSpecAmt         = InvariantValues().SpecAmt[Year];
 
     // These variables are set for each pass independently.

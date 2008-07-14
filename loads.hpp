@@ -19,14 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads.hpp,v 1.11 2008-01-01 18:29:48 chicares Exp $
+// $Id: loads.hpp,v 1.12 2008-07-14 17:19:26 chicares Exp $
 
 #ifndef loads_hpp
 #define loads_hpp
 
 #include "config.hpp"
 
-#include "xenumtypes.hpp"
+#include "mc_enum_type_enums.hpp"
 
 #include <vector>
 
@@ -50,16 +50,16 @@ class Loads
     // termination, the refund applies only to the sales load.
     std::vector<double> const& refundable_sales_load_proportion() const;
 
-    std::vector<double> const& monthly_policy_fee    (e_basis const&) const;
-    std::vector<double> const& annual_policy_fee     (e_basis const&) const;
-    std::vector<double> const& specified_amount_load (e_basis const&) const;
-    std::vector<double> const& separate_account_load (e_basis const&) const;
-    std::vector<double> const& target_premium_load   (e_basis const&) const;
-    std::vector<double> const& excess_premium_load   (e_basis const&) const;
-    std::vector<double> const& target_sales_load     (e_basis const&) const;
-    std::vector<double> const& excess_sales_load     (e_basis const&) const;
-    std::vector<double> const& target_total_load     (e_basis const&) const;
-    std::vector<double> const& excess_total_load     (e_basis const&) const;
+    std::vector<double> const& monthly_policy_fee    (mcenum_gen_basis) const;
+    std::vector<double> const& annual_policy_fee     (mcenum_gen_basis) const;
+    std::vector<double> const& specified_amount_load (mcenum_gen_basis) const;
+    std::vector<double> const& separate_account_load (mcenum_gen_basis) const;
+    std::vector<double> const& target_premium_load   (mcenum_gen_basis) const;
+    std::vector<double> const& excess_premium_load   (mcenum_gen_basis) const;
+    std::vector<double> const& target_sales_load     (mcenum_gen_basis) const;
+    std::vector<double> const& excess_sales_load     (mcenum_gen_basis) const;
+    std::vector<double> const& target_total_load     (mcenum_gen_basis) const;
+    std::vector<double> const& excess_total_load     (mcenum_gen_basis) const;
 
     std::vector<double> const& premium_tax_load           () const;
     std::vector<double> const& amortized_premium_tax_load () const;
@@ -69,12 +69,6 @@ class Loads
     std::vector<double> const& excess_premium_load_7702_excluding_premium_tax() const;
     std::vector<double> const& target_premium_load_7702_lowest_premium_tax() const;
     std::vector<double> const& excess_premium_load_7702_lowest_premium_tax() const;
-
-    // Accessors for antediluvian branch.
-    std::vector<double> const& monthly_policy_fee    (enum_basis) const;
-    std::vector<double> const& specified_amount_load (enum_basis) const;
-    std::vector<double> const& target_premium_load   (enum_basis) const;
-    std::vector<double> const& excess_premium_load   (enum_basis) const;
 
   private:
     Loads(); // Ctor for unit testing.
@@ -115,63 +109,63 @@ Loads::refundable_sales_load_proportion() const
 }
 
 inline std::vector<double> const&
-Loads::monthly_policy_fee(e_basis const& b) const
+Loads::monthly_policy_fee(mcenum_gen_basis b) const
 {
-    return monthly_policy_fee_[b.value()];
+    return monthly_policy_fee_[b];
 }
 
 inline std::vector<double> const&
-Loads::annual_policy_fee(e_basis const& b) const
+Loads::annual_policy_fee(mcenum_gen_basis b) const
 {
-    return annual_policy_fee_[b.value()];
+    return annual_policy_fee_[b];
 }
 
 inline std::vector<double> const&
-Loads::specified_amount_load(e_basis const& b) const
+Loads::specified_amount_load(mcenum_gen_basis b) const
 {
-    return specified_amount_load_[b.value()];
+    return specified_amount_load_[b];
 }
 
 inline std::vector<double> const&
-Loads::separate_account_load(e_basis const& b) const
+Loads::separate_account_load(mcenum_gen_basis b) const
 {
-    return separate_account_load_[b.value()];
+    return separate_account_load_[b];
 }
 
 inline std::vector<double> const&
-Loads::target_premium_load(e_basis const& b) const
+Loads::target_premium_load(mcenum_gen_basis b) const
 {
-    return target_premium_load_[b.value()];
+    return target_premium_load_[b];
 }
 
 inline std::vector<double> const&
-Loads::excess_premium_load(e_basis const& b) const
+Loads::excess_premium_load(mcenum_gen_basis b) const
 {
-    return excess_premium_load_[b.value()];
+    return excess_premium_load_[b];
 }
 
 inline std::vector<double> const&
-Loads::target_sales_load(e_basis const& b) const
+Loads::target_sales_load(mcenum_gen_basis b) const
 {
-    return target_sales_load_[b.value()];
+    return target_sales_load_[b];
 }
 
 inline std::vector<double> const&
-Loads::excess_sales_load(e_basis const& b) const
+Loads::excess_sales_load(mcenum_gen_basis b) const
 {
-    return excess_sales_load_[b.value()];
+    return excess_sales_load_[b];
 }
 
 inline std::vector<double> const&
-Loads::target_total_load(e_basis const& b) const
+Loads::target_total_load(mcenum_gen_basis b) const
 {
-    return target_total_load_[b.value()];
+    return target_total_load_[b];
 }
 
 inline std::vector<double> const&
-Loads::excess_total_load(e_basis const& b) const
+Loads::excess_total_load(mcenum_gen_basis b) const
 {
-    return excess_total_load_[b.value()];
+    return excess_total_load_[b];
 }
 
 inline std::vector<double> const&
@@ -214,32 +208,6 @@ inline std::vector<double> const&
 Loads::excess_premium_load_7702_lowest_premium_tax() const
 {
     return excess_premium_load_7702_lowest_premium_tax_;
-}
-
-// Accessors for antediluvian branch.
-
-inline std::vector<double> const&
-Loads::monthly_policy_fee(enum_basis b) const
-{
-    return monthly_policy_fee_[b];
-}
-
-inline std::vector<double> const&
-Loads::specified_amount_load(enum_basis b) const
-{
-    return specified_amount_load_[b];
-}
-
-inline std::vector<double> const&
-Loads::target_premium_load(enum_basis b) const
-{
-    return target_premium_load_[b];
-}
-
-inline std::vector<double> const&
-Loads::excess_premium_load(enum_basis b) const
-{
-    return excess_premium_load_[b];
 }
 
 #endif // loads_hpp

@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.87 2008-07-14 11:22:23 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.88 2008-07-14 17:19:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1122,16 +1122,16 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
             }
 
         double target_load =
-              Loads_->target_premium_load (ExpAndGABasis)[index]
-            + Loads_->target_sales_load   (ExpAndGABasis)[index]
-            + Loads_->premium_tax_load    ()             [index]
-            + Loads_->dac_tax_load        ()             [index]
+              Loads_->target_premium_load (GenBasis_)[index]
+            + Loads_->target_sales_load   (GenBasis_)[index]
+            + Loads_->premium_tax_load    ()         [index]
+            + Loads_->dac_tax_load        ()         [index]
             ;
         double excess_load =
-              Loads_->excess_premium_load (ExpAndGABasis)[index]
-            + Loads_->excess_sales_load   (ExpAndGABasis)[index]
-            + Loads_->premium_tax_load    ()             [index]
-            + Loads_->dac_tax_load        ()             [index]
+              Loads_->excess_premium_load (GenBasis_)[index]
+            + Loads_->excess_sales_load   (GenBasis_)[index]
+            + Loads_->premium_tax_load    ()         [index]
+            + Loads_->dac_tax_load        ()         [index]
             ;
         double unused_target = AnnualTargetPrem;
         if(0 == index)
@@ -1171,7 +1171,7 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
               ( CumulativeSalesLoad
               +
                   (   net_premium_intended[0]
-                  *   Loads_->target_sales_load(ExpAndGABasis)[Year]
+                  *   Loads_->target_sales_load(GenBasis_)[Year]
                   )
               )
 //          + std::max(0.0, ExpRatReserve) // This would be added if it existed.
@@ -2537,7 +2537,7 @@ void AccountValue::TxTakeSepAcctLoad()
         // adding some adjustments, and converting the result back to
         // monthly in this special case.
 
-        YearsSepAcctLoadRate = Loads_->separate_account_load(ExpAndGABasis)[Year];
+        YearsSepAcctLoadRate = Loads_->separate_account_load(GenBasis_)[Year];
         YearsSepAcctLoadRate = i_from_i_upper_12_over_12<double>()(YearsSepAcctLoadRate);
         YearsSepAcctLoadRate += stratified_load;
         YearsSepAcctLoadRate += tiered_comp;

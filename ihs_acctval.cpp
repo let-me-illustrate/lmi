@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.116 2008-07-14 11:22:23 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.117 2008-07-14 17:19:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1516,8 +1516,8 @@ void AccountValue::SetAnnualInvariants()
 {
     YearsCorridorFactor     = GetCorridorFactor()[Year];
     YearsDBOpt              = DeathBfts_->dbopt()[Year];
-    YearsMonthlyPolicyFee   = Loads_->monthly_policy_fee(ExpAndGABasis)[Year];
-    YearsAnnualPolicyFee    = Loads_->annual_policy_fee(ExpAndGABasis)[Year];
+    YearsMonthlyPolicyFee   = Loads_->monthly_policy_fee(GenBasis_)[Year];
+    YearsAnnualPolicyFee    = Loads_->annual_policy_fee (GenBasis_)[Year];
 
     YearsGenAcctIntRate     = InterestRates_->GenAcctNetRate
         (GenBasis_
@@ -1599,16 +1599,16 @@ void AccountValue::SetAnnualInvariants()
         * SurrChgRates_->SpecamtRateDurationalFactor() [Year]
         ;
 */
-    YearsTotLoadTgt         = Loads_->target_total_load  (ExpAndGABasis)[Year];
-    YearsTotLoadExc         = Loads_->excess_total_load  (ExpAndGABasis)[Year];
+    YearsTotLoadTgt         = Loads_->target_total_load     (GenBasis_)[Year];
+    YearsTotLoadExc         = Loads_->excess_total_load     (GenBasis_)[Year];
     YearsTotLoadTgtLowestPremtax = Loads_->target_premium_load_7702_lowest_premium_tax()[Year];
     YearsTotLoadExcLowestPremtax = Loads_->excess_premium_load_7702_lowest_premium_tax()[Year];
-    YearsPremLoadTgt        = Loads_->target_premium_load(ExpAndGABasis)[Year];
-    YearsPremLoadExc        = Loads_->excess_premium_load(ExpAndGABasis)[Year];
-    YearsSalesLoadTgt       = Loads_->target_sales_load  (ExpAndGABasis)[Year];
-    YearsSalesLoadExc       = Loads_->excess_sales_load  (ExpAndGABasis)[Year];
-    YearsSpecAmtLoadRate    = Loads_->specified_amount_load (ExpAndGABasis)[Year];
-    YearsSepAcctLoadRate    = Loads_->separate_account_load (ExpAndGABasis)[Year];
+    YearsPremLoadTgt        = Loads_->target_premium_load   (GenBasis_)[Year];
+    YearsPremLoadExc        = Loads_->excess_premium_load   (GenBasis_)[Year];
+    YearsSalesLoadTgt       = Loads_->target_sales_load     (GenBasis_)[Year];
+    YearsSalesLoadExc       = Loads_->excess_sales_load     (GenBasis_)[Year];
+    YearsSpecAmtLoadRate    = Loads_->specified_amount_load (GenBasis_)[Year];
+    YearsSepAcctLoadRate    = Loads_->separate_account_load (GenBasis_)[Year];
     YearsSalesLoadRefundRate= Loads_->refundable_sales_load_proportion()[Year];
     YearsPremTaxLoadRate    = Loads_->premium_tax_load                ()[Year];
     YearsDacTaxLoadRate     = Loads_->dac_tax_load                    ()[Year];
