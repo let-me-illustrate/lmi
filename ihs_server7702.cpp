@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_server7702.cpp,v 1.16 2008-07-14 11:22:24 chicares Exp $
+// $Id: ihs_server7702.cpp,v 1.17 2008-07-14 13:20:24 chicares Exp $
 
 // Known defects:
 // grep for "NEED DECISION"
@@ -42,11 +42,6 @@
 #include "ihs_server7702io.hpp"
 #include "ihs_x_type.hpp"
 #include "mc_enum_types_aux.hpp" // porting_cast()
-
-// TODO ?? Apparently the original reason for using smart pointers
-// was to minimize stack usage in a 16-bit environment; clearly that
-// doesn't matter anymore.
-#include <boost/scoped_ptr.hpp>
 
 #if defined LMI_MSW
 #   include <windows.h> // HINSTANCE etc.
@@ -538,23 +533,21 @@ void Server7702::ProcessAdjustableEvent()
 //============================================================================
 void Server7702::SetDoleBentsenValuesA()
 {
-    boost::scoped_ptr<BasicValues> basic_values_A
-        (new BasicValues
-            (Input.ProductName
-            ,Input.OldGender
-            ,Input.OldUnderwritingClass
-            ,Input.OldSmoker
-            ,Input.OldIssueAge
-            ,Input.UnderwritingBasis
-            ,Input.OldStateOfJurisdiction
-            ,Input.OldSpecifiedAmount
-            ,Input.OldDeathBenefitOption
-            ,Input.OldAccidentalDeathInForce
-            ,Input.TargetPremium
-            )
+    BasicValues basic_values_A
+        (Input.ProductName
+        ,Input.OldGender
+        ,Input.OldUnderwritingClass
+        ,Input.OldSmoker
+        ,Input.OldIssueAge
+        ,Input.UnderwritingBasis
+        ,Input.OldStateOfJurisdiction
+        ,Input.OldSpecifiedAmount
+        ,Input.OldDeathBenefitOption
+        ,Input.OldAccidentalDeathInForce
+        ,Input.TargetPremium
         );
 
-    Output.GuidelineLevelPremiumPolicyA = basic_values_A->Irc7702_->CalculateGLP
+    Output.GuidelineLevelPremiumPolicyA = basic_values_A.Irc7702_->CalculateGLP
         (0
         ,Input.OldBenefitAmount
         ,Input.OldSpecifiedAmount
@@ -562,7 +555,7 @@ void Server7702::SetDoleBentsenValuesA()
         ,porting_cast<mcenum_dbopt_7702>(Input.OldDeathBenefitOption.value())
         );
 
-    Output.GuidelineSinglePremiumPolicyA = basic_values_A->Irc7702_->CalculateGSP
+    Output.GuidelineSinglePremiumPolicyA = basic_values_A.Irc7702_->CalculateGSP
         (0
         ,Input.OldBenefitAmount
         ,Input.OldSpecifiedAmount
@@ -573,23 +566,21 @@ void Server7702::SetDoleBentsenValuesA()
 //============================================================================
 void Server7702::SetDoleBentsenValuesBC()
 {
-    boost::scoped_ptr<BasicValues> basic_values_B
-        (new BasicValues
-            (Input.ProductName
-            ,Input.NewGender
-            ,Input.NewUnderwritingClass
-            ,Input.NewSmoker
-            ,Input.NewIssueAge
-            ,Input.UnderwritingBasis
-            ,Input.NewStateOfJurisdiction
-            ,Input.NewSpecifiedAmount
-            ,Input.NewDeathBenefitOption
-            ,Input.NewAccidentalDeathInForce
-            ,Input.TargetPremium
-            )
+    BasicValues basic_values_B
+        (Input.ProductName
+        ,Input.NewGender
+        ,Input.NewUnderwritingClass
+        ,Input.NewSmoker
+        ,Input.NewIssueAge
+        ,Input.UnderwritingBasis
+        ,Input.NewStateOfJurisdiction
+        ,Input.NewSpecifiedAmount
+        ,Input.NewDeathBenefitOption
+        ,Input.NewAccidentalDeathInForce
+        ,Input.TargetPremium
         );
 
-    Output.GuidelineLevelPremiumPolicyB = basic_values_B->Irc7702_->CalculateGLP
+    Output.GuidelineLevelPremiumPolicyB = basic_values_B.Irc7702_->CalculateGLP
         (Input.Duration
         ,Input.NewBenefitAmount
         ,Input.NewSpecifiedAmount
@@ -597,30 +588,28 @@ void Server7702::SetDoleBentsenValuesBC()
         ,porting_cast<mcenum_dbopt_7702>(Input.NewDeathBenefitOption.value())
         );
 
-    Output.GuidelineSinglePremiumPolicyB = basic_values_B->Irc7702_->CalculateGSP
+    Output.GuidelineSinglePremiumPolicyB = basic_values_B.Irc7702_->CalculateGSP
         (Input.Duration
         ,Input.NewBenefitAmount
         ,Input.NewSpecifiedAmount
         ,Input.NewSpecifiedAmount
         );
 
-    boost::scoped_ptr<BasicValues> basic_values_C
-        (new BasicValues
-            (Input.ProductName
-            ,Input.OldGender
-            ,Input.OldUnderwritingClass
-            ,Input.OldSmoker
-            ,Input.OldIssueAge
-            ,Input.UnderwritingBasis
-            ,Input.OldStateOfJurisdiction
-            ,Input.OldSpecifiedAmount
-            ,Input.OldDeathBenefitOption
-            ,Input.OldAccidentalDeathInForce
-            ,Input.TargetPremium
-            )
+    BasicValues basic_values_C
+        (Input.ProductName
+        ,Input.OldGender
+        ,Input.OldUnderwritingClass
+        ,Input.OldSmoker
+        ,Input.OldIssueAge
+        ,Input.UnderwritingBasis
+        ,Input.OldStateOfJurisdiction
+        ,Input.OldSpecifiedAmount
+        ,Input.OldDeathBenefitOption
+        ,Input.OldAccidentalDeathInForce
+        ,Input.TargetPremium
         );
 
-    Output.GuidelineLevelPremiumPolicyC = basic_values_C->Irc7702_->CalculateGLP
+    Output.GuidelineLevelPremiumPolicyC = basic_values_C.Irc7702_->CalculateGLP
         (Input.Duration
         ,Input.OldBenefitAmount
         ,Input.OldSpecifiedAmount
@@ -628,7 +617,7 @@ void Server7702::SetDoleBentsenValuesBC()
         ,porting_cast<mcenum_dbopt_7702>(Input.OldDeathBenefitOption.value())
         );
 
-    Output.GuidelineSinglePremiumPolicyC = basic_values_C->Irc7702_->CalculateGSP
+    Output.GuidelineSinglePremiumPolicyC = basic_values_C.Irc7702_->CalculateGSP
         (Input.Duration
         ,Input.OldBenefitAmount
         ,Input.OldSpecifiedAmount
