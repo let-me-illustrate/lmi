@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_server7702.cpp,v 1.17 2008-07-14 13:20:24 chicares Exp $
+// $Id: ihs_server7702.cpp,v 1.18 2008-07-14 15:39:32 chicares Exp $
 
 // Known defects:
 // grep for "NEED DECISION"
@@ -535,14 +535,14 @@ void Server7702::SetDoleBentsenValuesA()
 {
     BasicValues basic_values_A
         (Input.ProductName
-        ,Input.OldGender
-        ,Input.OldUnderwritingClass
-        ,Input.OldSmoker
+        ,Input.OldGender                .value()
+        ,Input.OldUnderwritingClass     .value()
+        ,Input.OldSmoker                .value()
         ,Input.OldIssueAge
-        ,Input.UnderwritingBasis
-        ,Input.OldStateOfJurisdiction
+        ,Input.UnderwritingBasis        .value()
+        ,Input.OldStateOfJurisdiction   .value()
         ,Input.OldSpecifiedAmount
-        ,Input.OldDeathBenefitOption
+        ,Input.OldDeathBenefitOption    .value()
         ,Input.OldAccidentalDeathInForce
         ,Input.TargetPremium
         );
@@ -552,7 +552,7 @@ void Server7702::SetDoleBentsenValuesA()
         ,Input.OldBenefitAmount
         ,Input.OldSpecifiedAmount
         ,Input.OldSpecifiedAmount
-        ,porting_cast<mcenum_dbopt_7702>(Input.OldDeathBenefitOption.value())
+        ,Input.OldDeathBenefitOption.value()
         );
 
     Output.GuidelineSinglePremiumPolicyA = basic_values_A.Irc7702_->CalculateGSP
@@ -568,14 +568,14 @@ void Server7702::SetDoleBentsenValuesBC()
 {
     BasicValues basic_values_B
         (Input.ProductName
-        ,Input.NewGender
-        ,Input.NewUnderwritingClass
-        ,Input.NewSmoker
+        ,Input.NewGender                .value()
+        ,Input.NewUnderwritingClass     .value()
+        ,Input.NewSmoker                .value()
         ,Input.NewIssueAge
-        ,Input.UnderwritingBasis
-        ,Input.NewStateOfJurisdiction
+        ,Input.UnderwritingBasis        .value()
+        ,Input.NewStateOfJurisdiction   .value()
         ,Input.NewSpecifiedAmount
-        ,Input.NewDeathBenefitOption
+        ,Input.NewDeathBenefitOption    .value()
         ,Input.NewAccidentalDeathInForce
         ,Input.TargetPremium
         );
@@ -585,7 +585,7 @@ void Server7702::SetDoleBentsenValuesBC()
         ,Input.NewBenefitAmount
         ,Input.NewSpecifiedAmount
         ,Input.NewSpecifiedAmount
-        ,porting_cast<mcenum_dbopt_7702>(Input.NewDeathBenefitOption.value())
+        ,Input.NewDeathBenefitOption.value()
         );
 
     Output.GuidelineSinglePremiumPolicyB = basic_values_B.Irc7702_->CalculateGSP
@@ -597,14 +597,14 @@ void Server7702::SetDoleBentsenValuesBC()
 
     BasicValues basic_values_C
         (Input.ProductName
-        ,Input.OldGender
-        ,Input.OldUnderwritingClass
-        ,Input.OldSmoker
+        ,Input.OldGender                .value()
+        ,Input.OldUnderwritingClass     .value()
+        ,Input.OldSmoker                .value()
         ,Input.OldIssueAge
-        ,Input.UnderwritingBasis
-        ,Input.OldStateOfJurisdiction
+        ,Input.UnderwritingBasis        .value()
+        ,Input.OldStateOfJurisdiction   .value()
         ,Input.OldSpecifiedAmount
-        ,Input.OldDeathBenefitOption
+        ,Input.OldDeathBenefitOption    .value()
         ,Input.OldAccidentalDeathInForce
         ,Input.TargetPremium
         );
@@ -614,7 +614,7 @@ void Server7702::SetDoleBentsenValuesBC()
         ,Input.OldBenefitAmount
         ,Input.OldSpecifiedAmount
         ,Input.OldSpecifiedAmount
-        ,porting_cast<mcenum_dbopt_7702>(Input.OldDeathBenefitOption.value())
+        ,Input.OldDeathBenefitOption.value()
         );
 
     Output.GuidelineSinglePremiumPolicyC = basic_values_C.Irc7702_->CalculateGSP

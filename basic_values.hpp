@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.29 2008-07-14 11:22:23 chicares Exp $
+// $Id: basic_values.hpp,v 1.30 2008-07-14 15:39:31 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -91,17 +91,17 @@ class LMI_SO BasicValues
     // for now, it's used only by the lmi branch.
     BasicValues(InputParms const& input);
     BasicValues // GPT server only.
-        (std::string  const& a_ProductName
-        ,e_gender     const& a_Gender
-        ,e_class      const& a_UnderwritingClass
-        ,e_smoking    const& a_Smoker
-        ,int                 a_IssueAge
-        ,e_uw_basis   const& a_UnderwritingBasis
-        ,e_state      const& a_StateOfJurisdiction
-        ,double              a_FaceAmount
-        ,e_dbopt_7702 const& a_DBOpt
-        ,bool                a_AdbInForce
-        ,double              a_TargetPremium
+        (std::string const& a_ProductName
+        ,mcenum_gender      a_Gender
+        ,mcenum_class       a_UnderwritingClass
+        ,mcenum_smoking     a_Smoker
+        ,int                a_IssueAge
+        ,mcenum_uw_basis    a_UnderwritingBasis
+        ,mcenum_state       a_StateOfJurisdiction
+        ,double             a_FaceAmount
+        ,mcenum_dbopt_7702  a_DBOpt
+        ,bool               a_AdbInForce
+        ,double             a_TargetPremium
         );
     virtual ~BasicValues();
 
