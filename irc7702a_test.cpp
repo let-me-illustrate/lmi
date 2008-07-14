@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: irc7702a_test.cpp,v 1.8 2008-01-01 18:29:46 chicares Exp $
+// $Id: irc7702a_test.cpp,v 1.9 2008-07-14 22:27:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -224,10 +224,10 @@ int test_main(int, char*[])
 
     Irc7702A z
         (0
-        ,e_cvat
-        ,e_earlier_of_increase_or_unnecessary_premium
+        ,mce_cvat
+        ,mce_earlier_of_increase_or_unnecessary_premium
         ,false
-        ,e_allow_mec
+        ,mce_allow_mec
         ,true
         ,true
         ,prem_rate

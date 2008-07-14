@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.60 2008-07-14 17:19:26 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.61 2008-07-14 22:27:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -634,10 +634,10 @@ void BasicValues::Init7702A()
     Irc7702A_.reset
         (new Irc7702A
             (magic
-            ,DefnLifeIns.value()
-            ,DefnMaterialChange.value()
+            ,porting_cast<mcenum_defn_life_ins>(DefnLifeIns.value())
+            ,porting_cast<mcenum_defn_material_change>(DefnMaterialChange.value())
             ,false // TODO ?? Joint life: hardcoded for now.
-            ,Input_->AvoidMec.value()
+            ,yare_input_.AvoidMecMethod
             ,true  // TODO ?? Use table for 7pp: hardcoded for now.
             ,true  // TODO ?? Use table for NSP: hardcoded for now.
             ,MortalityRates_->SevenPayRates()

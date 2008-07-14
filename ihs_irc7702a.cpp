@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702a.cpp,v 1.14 2008-01-01 18:29:43 chicares Exp $
+// $Id: ihs_irc7702a.cpp,v 1.15 2008-07-14 22:27:21 chicares Exp $
 
 // TODO ?? Make this a server app. Consider where to store DB, SA history.
 
@@ -55,16 +55,16 @@ static int const         usual_test_period_length     = 7           ;
 
 //============================================================================
 Irc7702A::Irc7702A
-    (int                        a_magic
-    ,enum_defn_life_ins         a_DefnLifeIns
-    ,enum_defn_material_change  a_DefnMaterialChange
-    ,bool                       a_IsSurvivorship
-    ,enum_mec_avoid_method      a_AvoidMec
-    ,bool                       a_Use7PPTable
-    ,bool                       a_UseNSPTable
-    ,std::vector<double> const& a_SevenPPRateVec
-    ,std::vector<double> const& a_NSPVec
-    ,round_to<double>    const& a_RoundNonMecPrem
+    (int                         a_magic
+    ,mcenum_defn_life_ins        a_DefnLifeIns
+    ,mcenum_defn_material_change a_DefnMaterialChange
+    ,bool                        a_IsSurvivorship
+    ,mcenum_mec_avoid_method     a_AvoidMec
+    ,bool                        a_Use7PPTable
+    ,bool                        a_UseNSPTable
+    ,std::vector<double> const&  a_SevenPPRateVec
+    ,std::vector<double> const&  a_NSPVec
+    ,round_to<double>    const&  a_RoundNonMecPrem
     )
     :magic                (a_magic)
     ,DefnLifeIns          (a_DefnLifeIns)
@@ -104,7 +104,7 @@ Irc7702A::Irc7702A
     ,NetNecessaryPrem     (0.0)
     ,GrossNecessaryPrem   (0.0)
 {
-    if(e_cvat != DefnLifeIns && e_gpt != DefnLifeIns)
+    if(mce_cvat != DefnLifeIns && mce_gpt != DefnLifeIns)
         {
         Ignore = true;
         return;
@@ -119,46 +119,46 @@ Irc7702A::Irc7702A
 
     switch(DefnMaterialChange)
         {
-        case e_unnecessary_premium:
+        case mce_unnecessary_premium:
             {
-            HOPEFULLY(e_cvat == DefnLifeIns);
+            HOPEFULLY(mce_cvat == DefnLifeIns);
             UnnecPremIsMatChg    = true;
             ElectiveIncrIsMatChg = false;
             DBDefn = e_specamt_7702A;
             }
             break;
-        case e_benefit_increase:
+        case mce_benefit_increase:
             {
-            HOPEFULLY(e_cvat == DefnLifeIns);
+            HOPEFULLY(mce_cvat == DefnLifeIns);
             UnnecPremIsMatChg    = false;
             ElectiveIncrIsMatChg = true;
             DBDefn = e_death_benefit_7702A;
             }
             break;
-        case e_later_of_increase_or_unnecessary_premium:
+        case mce_later_of_increase_or_unnecessary_premium:
             {
             // TODO ?? Not implemented yet.
             fatal_error()
-                << "e_later_of_increase_or_unnecessary_premium not implemented."
+                << "mce_later_of_increase_or_unnecessary_premium not implemented."
                 << LMI_FLUSH
                 ;
-            HOPEFULLY(e_cvat == DefnLifeIns);
+            HOPEFULLY(mce_cvat == DefnLifeIns);
             UnnecPremIsMatChg    = true;
             ElectiveIncrIsMatChg = true;
             DBDefn = e_specamt_7702A;
             }
             break;
-        case e_earlier_of_increase_or_unnecessary_premium:
+        case mce_earlier_of_increase_or_unnecessary_premium:
             {
-            HOPEFULLY(e_cvat == DefnLifeIns);
+            HOPEFULLY(mce_cvat == DefnLifeIns);
             UnnecPremIsMatChg    = true;
             ElectiveIncrIsMatChg = true;
             DBDefn = e_specamt_7702A;
             }
             break;
-        case e_adjustment_event:
+        case mce_adjustment_event:
             {
-            HOPEFULLY(e_gpt == DefnLifeIns);
+            HOPEFULLY(mce_gpt == DefnLifeIns);
             UnnecPremIsMatChg    = false;
             ElectiveIncrIsMatChg = false;
             DBDefn = e_death_benefit_7702A;
@@ -219,7 +219,7 @@ void Irc7702A::Initialize7702A
     // If we can, then we don't need the latter as an argument.
 
     Ignore = false;
-    if(a_Ignore || (e_cvat != DefnLifeIns && e_gpt != DefnLifeIns))
+    if(a_Ignore || (mce_cvat != DefnLifeIns && mce_gpt != DefnLifeIns))
         {
         Ignore = true;
         // TODO ?? An early return here as a speed optimization is not yet
@@ -626,7 +626,7 @@ double Irc7702A::MaxNecessaryPremium
     ,double a_CashValue
     ) const
 {
-    if(Ignore || IsMec || e_gpt == DefnLifeIns)
+    if(Ignore || IsMec || mce_gpt == DefnLifeIns)
         {
         return std::numeric_limits<double>::max();
         }
@@ -696,7 +696,7 @@ double Irc7702A::UpdatePmt7702A
         // This won't avoid a retrospective MEC if Bfts later decreases.
         // TODO ?? This is unnecessary now--premium limited in caller.
         /*
-        if(AvoidMec == e_reduce_prem)
+        if(mce_reduce_prem == AvoidMec)
             {
             a_Payment = std::min
                 (a_Payment
@@ -714,7 +714,7 @@ double Irc7702A::UpdatePmt7702A
             {
             IsMec = true;
 /* TODO ?? Reenable after testing.
-            if(e_reduce_prem == AvoidMec)
+            if(mce_reduce_prem == AvoidMec)
                 {
                 warning()
                     << "Failed to avoid MEC by reducing premium."
@@ -730,7 +730,7 @@ double Irc7702A::UpdatePmt7702A
 
 // TODO ?? Under GPT always MatChg if (iff?) GLP increased or if pmt increases ROP Bfts.
 
-    if(e_gpt == DefnLifeIns)
+    if(mce_gpt == DefnLifeIns)
         {
         Pmts[TestPeriodDur] = a_Payment;
         return a_Payment;
@@ -739,7 +739,7 @@ double Irc7702A::UpdatePmt7702A
     // Reduce pmt to necessary premium if desired before accepting it.
     // This won't avoid a retrospective MEC if Bfts later decreases.
     // TODO ?? Anyway, why limit premium to necessary?
-    if(e_reduce_prem == AvoidMec)
+    if(mce_reduce_prem == AvoidMec)
         {
     // TODO ?? Not needed unless we try handling MEC avoidance here.
 /*
