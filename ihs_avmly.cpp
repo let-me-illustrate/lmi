@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.86 2008-07-13 18:24:16 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.87 2008-07-14 11:22:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1543,8 +1543,8 @@ but position could be reversed for variable policy with bad curr performance
     // If there is an adjustable event, then DB (not specamt) is used
     // in calculating the adjustment.
     //
-    e_dbopt_7702 const& new_dbopt(Get7702EffectiveDBOpt(YearsDBOpt));
-    e_dbopt_7702 const& old_dbopt(Get7702EffectiveDBOpt(OldDBOpt));
+    mcenum_dbopt_7702 const new_dbopt(effective_dbopt_7702(porting_cast<mcenum_dbopt>(YearsDBOpt.value()), Equiv7702DBO3));
+    mcenum_dbopt_7702 const old_dbopt(effective_dbopt_7702(porting_cast<mcenum_dbopt>(OldDBOpt  .value()), Equiv7702DBO3));
     bool adj_event =
             (
                 !materially_equal(OldSA, ActualSpecAmt + TermSpecAmt)

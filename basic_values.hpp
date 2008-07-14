@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.28 2008-07-09 12:56:17 chicares Exp $
+// $Id: basic_values.hpp,v 1.29 2008-07-14 11:22:23 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -138,15 +138,21 @@ class LMI_SO BasicValues
     boost::shared_ptr<Irc7702>            Irc7702_;
     boost::shared_ptr<Irc7702A>           Irc7702A_;
 
-    double GetTgtPrem
+    double GetTgtPrem // DEPRECATED
         (int            Year
         ,double         SpecAmt
         ,e_dbopt const& DBOpt
         ,e_mode  const& Mode
         ) const;
 
+    double GetTgtPrem
+        (int          Year
+        ,double       SpecAmt
+        ,mcenum_dbopt DBOpt
+        ,mcenum_mode  Mode
+        ) const;
+
     std::vector<double> const& GetCorridorFactor() const;
-    e_dbopt_7702 const Get7702EffectiveDBOpt(e_dbopt const& a_DBOpt) const;
     std::vector<double> const& SpreadFor7702() const;
     std::vector<double> const& GetMly7702iGlp() const;
     std::vector<double> const& GetMly7702qc() const;
@@ -293,7 +299,7 @@ class LMI_SO BasicValues
     double                  MaxSurvivalDur;
     e_defn_life_ins         DefnLifeIns;
     e_defn_material_change  DefnMaterialChange;
-    e_dbopt_7702            Equiv7702DBO3;
+    mcenum_dbopt_7702       Equiv7702DBO3;
     double                  MaxNAAR;
     int                     EndtAge;
     double                  MinRenlBaseFace;
