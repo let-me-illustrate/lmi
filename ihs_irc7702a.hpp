@@ -19,14 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702a.hpp,v 1.10 2008-02-07 13:40:30 chicares Exp $
+// $Id: ihs_irc7702a.hpp,v 1.11 2008-07-14 22:27:21 chicares Exp $
 
 #ifndef ihs_irc7702a_hpp
 #define ihs_irc7702a_hpp
 
 #include "config.hpp"
 
-#include "enums7702.hpp"
+#include "mc_enum_type_enums.hpp"
 #include "obstruct_slicing.hpp"
 #include "round_to.hpp"
 #include "so_attributes.hpp"
@@ -49,24 +49,24 @@ class Irc7702A
     enum e_death_benefit_definition {e_death_benefit_7702A, e_specamt_7702A};
 
     Irc7702A
-        (int                        a_magic
-        ,enum_defn_life_ins         a_DefnLifeIns
-        ,enum_defn_material_change  a_DefnMaterialChange
-        ,bool                       a_IsSurvivorship
-        ,enum_mec_avoid_method      a_AvoidMec
-        ,bool                       a_Use7PPTable
-        ,bool                       a_UseNSPTable
-        ,std::vector<double> const& a_SevenPPRateVec// TODO ?? Assume table passed, for now.
-        ,std::vector<double> const& a_NSPVec        // TODO ?? Assume table passed, for now.
-        ,round_to<double>    const& a_RoundNonMecPrem
-//      ,unsigned int               a_IssueAge
-//      ,double                     a_Face
-//      ,e_dbopt_7702 const&        a_DBOpt
-//      ,std::vector<double> const& a_q
-//      ,std::vector<double> const& a_i
-//      ,std::vector<double> const& a_PremLoad
-//      ,std::vector<double> const& a_PerKCharge
-//      ,std::vector<double> const& a_PolFee
+        (int                         a_magic
+        ,mcenum_defn_life_ins        a_DefnLifeIns
+        ,mcenum_defn_material_change a_DefnMaterialChange
+        ,bool                        a_IsSurvivorship
+        ,mcenum_mec_avoid_method     a_AvoidMec
+        ,bool                        a_Use7PPTable
+        ,bool                        a_UseNSPTable
+        ,std::vector<double> const&  a_SevenPPRateVec// TODO ?? Assume table passed, for now.
+        ,std::vector<double> const&  a_NSPVec        // TODO ?? Assume table passed, for now.
+        ,round_to<double>    const&  a_RoundNonMecPrem
+//      ,unsigned int                a_IssueAge
+//      ,double                      a_Face
+//      ,mcenum_dbopt_7702           a_DBOpt
+//      ,std::vector<double> const&  a_q
+//      ,std::vector<double> const&  a_i
+//      ,std::vector<double> const&  a_PremLoad
+//      ,std::vector<double> const&  a_PerKCharge
+//      ,std::vector<double> const&  a_PolFee
 // probably other arguments are needed for reproposals
         );
     ~Irc7702A();
@@ -223,8 +223,8 @@ class Irc7702A
 
     int magic; // TODO ?? Temporary kludge.
 
-    enum_defn_life_ins DefnLifeIns;
-    enum_defn_material_change DefnMaterialChange;
+    mcenum_defn_life_ins DefnLifeIns;
+    mcenum_defn_material_change DefnMaterialChange;
 
     bool UnnecPremIsMatChg;
     bool ElectiveIncrIsMatChg;
@@ -233,7 +233,7 @@ class Irc7702A
     bool InterpolateNspOnly;
 
     bool const      IsSurvivorship; // is policy multilife and not first to die?
-    enum_mec_avoid_method AvoidMec; // TODO ?? Document what this does.
+    mcenum_mec_avoid_method AvoidMec; // TODO ?? Document what this does.
     bool const      Use7PPTable;    // get SevenPP from table, not calculation
     bool const      UseNSPTable;    // get NSP from table, not calculation
 
