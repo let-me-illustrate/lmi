@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_server7702test.cpp,v 1.2 2008-07-04 00:04:35 chicares Exp $
+// $Id: ihs_server7702test.cpp,v 1.3 2008-07-14 16:20:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -188,10 +188,10 @@ int main()
         );
 */
     char c[] =
-        "1 1 0 0 10000 0 " "sample" " Medical .02 0 1000000 0 0 "
-        " 45 45 Male Male Nonsmoker Nonsmoker Preferred Preferred CT CT A A"
+        "1 1 0 0 10000 0 " "sample" "\nMedical\n .02 0 1000000 0 0 0"
+        " 45 45\nMale\nMale\nNonsmoker\nNonsmoker\nPreferred\nPreferred\nCT\nCT\nA\nA\n"
         " 1000000 1000000 1000000 1000000 0 0 0 0 0 0"
-        " A=+25% A=+25% 0 0 None None P=+400% P=+400%"
+        "\nA=+25%\nA=+25%\n0 0\nNone\nNone\nP=+400%\nP=+400%\n"
         " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 51640"
         ;
 
