@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.57 2008-07-09 12:56:18 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.58 2008-07-14 11:22:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -85,16 +85,18 @@ namespace
 
 //============================================================================
 BasicValues::BasicValues()
-    :Input_     (new InputParms)
-    ,yare_input_(*Input_)
+    :Input_       (new InputParms)
+    ,yare_input_  (*Input_)
+    ,Equiv7702DBO3(mce_option1_for_7702)
 {
     Init();
 }
 
 //============================================================================
 BasicValues::BasicValues(InputParms const* input)
-    :Input_     (new InputParms(*input))
-    ,yare_input_(*input)
+    :Input_       (new InputParms(*input))
+    ,yare_input_  (*input)
+    ,Equiv7702DBO3(mce_option1_for_7702)
 {
     Init();
 }
@@ -117,6 +119,7 @@ BasicValues::BasicValues
     )
     :Input_              (new InputParms)
     ,yare_input_         (*Input_)
+    ,Equiv7702DBO3       (mce_option1_for_7702)
     ,InitialTargetPremium(a_TargetPremium)
 {
     InputParms* kludge_input = new InputParms;
@@ -594,7 +597,7 @@ void BasicValues::Init7702()
     Irc7702_.reset
         (new Irc7702
             (*this
-            ,Input_->DefnLifeIns
+            ,yare_input_.DefinitionOfLifeInsurance
             ,Input_->Status[0].IssueAge
             ,EndtAge
             ,Mly7702qc  // MortalityRates_->GetaCoi7702() // TODO ?? This is monthly?
@@ -604,7 +607,7 @@ void BasicValues::Init7702()
             ,SpreadFor7702_
             ,Input_->SpecAmt[0] + Input_->Status[0].TermAmt
             ,Input_->SpecAmt[0] + Input_->Status[0].TermAmt
-            ,Get7702EffectiveDBOpt(Input_->DBOpt[0])
+            ,effective_dbopt_7702(yare_input_.DeathBenefitOption[0], Equiv7702DBO3)
             // TODO ?? Using the guaranteed basis for all the following should
             // be an optional behavior.
             ,Loads_->annual_policy_fee(e_basis(e_currbasis))
@@ -648,6 +651,35 @@ void BasicValues::Init7702A()
 // Needed for guideline premium.
 // TODO ?? dbopt is ignored for now, but some product designs will need it.
 double BasicValues::GetTgtPrem
+    (int          Year
+    ,double       SpecAmt
+    ,mcenum_dbopt // Unused for now.
+    ,mcenum_mode  Mode
+    ) const
+{
+    if(Database_->Query(DB_TgtPmFixedAtIssue))
+        {
+        if(0 == Year)
+            {
+            InitialTargetPremium = GetModalTgtPrem
+                (Year
+                ,e_mode(porting_cast<enum_mode>(Mode))
+                ,SpecAmt
+                );
+            }
+            return InitialTargetPremium;
+        }
+    else
+        {
+        return GetModalTgtPrem
+            (Year
+            ,e_mode(porting_cast<enum_mode>(Mode))
+            ,SpecAmt
+            );
+        }
+}
+
+double BasicValues::GetTgtPrem // DEPRECATED
     (int            Year
     ,double         SpecAmt
     ,e_dbopt const& // Unused for now.
@@ -792,7 +824,7 @@ void BasicValues::SetPermanentInvariants()
 
     DefnLifeIns         = Input_->DefnLifeIns;
     DefnMaterialChange  = Input_->DefnMaterialChange;
-    Equiv7702DBO3       = static_cast<enum_dbopt_7702>(static_cast<int>(Database_->Query(DB_Equiv7702DBO3)));
+    Equiv7702DBO3       = static_cast<mcenum_dbopt_7702>(static_cast<int>(Database_->Query(DB_Equiv7702DBO3)));
     MaxNAAR             = Input_->MaxNAAR;
 
     Database_->Query(MinPremIntSpread_, DB_MinPremIntSpread);
@@ -1136,7 +1168,7 @@ double BasicValues::GetModalPremGLP
         ,a_BftAmt
         ,a_SpecAmt
         ,Irc7702_->GetLeastBftAmtEver()
-        ,Get7702EffectiveDBOpt(DeathBfts_->dbopt()[0])
+        ,effective_dbopt_7702(porting_cast<mcenum_dbopt>(DeathBfts_->dbopt()[0].value()), Equiv7702DBO3)
         );
 
 // TODO ?? PROBLEMS HERE
@@ -1331,7 +1363,7 @@ double BasicValues::GetModalSpecAmtGLP
     return Irc7702_->CalculateGLPSpecAmt
         (0
         ,annualized_pmt
-        ,Get7702EffectiveDBOpt(DeathBfts_->dbopt()[0])
+        ,effective_dbopt_7702(porting_cast<mcenum_dbopt>(DeathBfts_->dbopt()[0].value()), Equiv7702DBO3)
         );
 // TODO ?? This should already be rounded, and rounding it again should
 // only be harmful. Expunge after testing and after reconsidering all
@@ -1860,47 +1892,6 @@ std::vector<double> const& BasicValues::GetCorridorFactor() const
         }
 
     static std::vector<double> z;
-    return z;
-}
-
-// 7702 recognizes death benefit options 1 and 2 only. A contract
-// might have a death benefit option other than the usual two, but
-// for 7702 (and 7702A) purposes it's treated as either option 1
-// or option 2.
-//
-//============================================================================
-e_dbopt_7702 const BasicValues::Get7702EffectiveDBOpt
-    (e_dbopt const& a_DBOpt
-    ) const
-{
-    e_dbopt_7702 z(e_option1_for_7702);
-    switch(a_DBOpt)
-        {
-        case e_option1:
-            {
-            z = e_option1_for_7702;
-            }
-            break;
-        case e_option2:
-            {
-            z = e_option2_for_7702;
-            }
-            break;
-        case e_rop:
-            {
-            z = Equiv7702DBO3;
-            }
-            break;
-        default:
-            {
-            fatal_error()
-                << "Case '"
-                << a_DBOpt
-                << "' not found."
-                << LMI_FLUSH
-                ;
-            }
-        }
     return z;
 }
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702.cpp,v 1.21 2008-07-13 18:52:26 chicares Exp $
+// $Id: ihs_irc7702.cpp,v 1.22 2008-07-14 11:22:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -116,7 +116,7 @@ namespace
 //============================================================================
 Irc7702::Irc7702
     (BasicValues         const& a_Values
-    ,e_defn_life_ins     const& a_Test7702
+    ,mcenum_defn_life_ins       a_Test7702
     ,int                        a_IssueAge
     ,int                        a_EndtAge
     ,std::vector<double> const& a_Qc
@@ -126,7 +126,7 @@ Irc7702::Irc7702
     ,std::vector<double> const& a_IntDed
     ,double                     a_PresentBftAmt
     ,double                     a_PresentSpecAmt
-    ,e_dbopt_7702 const&        a_PresentDBOpt
+    ,mcenum_dbopt_7702          a_PresentDBOpt
     ,std::vector<double> const& a_AnnChgPol
     ,std::vector<double> const& a_MlyChgPol
     ,std::vector<double> const& a_MlyChgSpecAmt
@@ -146,7 +146,7 @@ Irc7702::Irc7702
     ,double                     a_PriorBftAmt
     ,double                     a_PriorSpecAmt
     ,double                     a_LeastBftAmtEver
-    ,e_dbopt_7702        const& a_PriorDBOpt
+    ,mcenum_dbopt_7702          a_PriorDBOpt
     )
     :Values             (a_Values)
     ,Test7702           (a_Test7702)
@@ -185,35 +185,35 @@ Irc7702::Irc7702
     // TODO ?? Instead put these in initializer-list and write assertions?
     if(0 == InforceDuration)
         {
-        PriorBftAmt         = a_PresentBftAmt;
-        PriorSpecAmt        = a_PresentSpecAmt;
+        PriorBftAmt     = a_PresentBftAmt;
+        PriorSpecAmt    = a_PresentSpecAmt;
         // TODO ?? Assert that this is <= least-bft arg?
-        LeastBftAmtEver     = a_PresentSpecAmt;
-        CumGLP              = 0.0;
-        GptLimit            = 0.0;
-        CumPmts             = 0.0;
-        PresentGLP          = 0.0;
-        PriorGLP            = 0.0;
-        PresentGSP          = 0.0;
-        PriorGSP            = 0.0;
-        PriorDBOpt          = PresentDBOpt;
+        LeastBftAmtEver = a_PresentSpecAmt;
+        CumGLP          = 0.0;
+        GptLimit        = 0.0;
+        CumPmts         = 0.0;
+        PresentGLP      = 0.0;
+        PriorGLP        = 0.0;
+        PresentGSP      = 0.0;
+        PriorGSP        = 0.0;
+        PriorDBOpt      = PresentDBOpt;
         }
     else
         {
-        PriorBftAmt         = a_PriorBftAmt;
-        PriorSpecAmt        = a_PriorSpecAmt;
-        LeastBftAmtEver     = a_LeastBftAmtEver;
+        PriorBftAmt     = a_PriorBftAmt;
+        PriorSpecAmt    = a_PriorSpecAmt;
+        LeastBftAmtEver = a_LeastBftAmtEver;
         HOPEFULLY(LeastBftAmtEver <= PriorBftAmt);
         HOPEFULLY(LeastBftAmtEver <= PresentBftAmt);
 // TODO ?? Think more about inforce.
-        CumGLP              = InforceCumGLP;    // TODO ?? Don't need as member?
-        GptLimit            = 0.0;  // TODO ??
-        CumPmts             = 0.0;  // TODO ??
-        PresentGLP          = 0.0;  // TODO ??
-        PriorGLP            = 0.0;
-        PresentGSP          = 0.0;
-        PriorGSP            = a_InforceGSP;     // TODO ?? Don't need as member?
-//      PriorDBOpt          = PresentDBOpt;     // TODO ??
+        CumGLP          = InforceCumGLP;    // TODO ?? Don't need as member?
+        GptLimit        = 0.0;  // TODO ??
+        CumPmts         = 0.0;  // TODO ??
+        PresentGLP      = 0.0;  // TODO ??
+        PriorGLP        = 0.0;
+        PresentGSP      = 0.0;
+        PriorGSP        = a_InforceGSP;     // TODO ?? Don't need as member?
+//      PriorDBOpt      = PresentDBOpt;     // TODO ??
 // to handle inforce, we need to know:
 // the quantity A in A+B-C (i.e. both GSP and GLP)
 //  CumGLP
@@ -235,7 +235,7 @@ void Irc7702::ProcessGptPmt
     )
 {
 // TODO ?? Duration and CumPmt args not yet used.
-    if(e_gpt != Test7702)
+    if(mce_gpt != Test7702)
         {
         return;
         }
@@ -271,13 +271,13 @@ void Irc7702::ProcessGptPmt
 //  New guideline premium = A + B - C
 //
 void Irc7702::ProcessAdjustableEvent
-    (int                 a_Duration
-    ,double              a_NewBftAmt
-    ,double              a_PriorBftAmt
-    ,double              a_NewSpecAmt
-    ,double              a_PriorSpecAmt
-    ,e_dbopt_7702 const& a_NewDBOpt
-    ,e_dbopt_7702 const& a_PriorDBOpt
+    (int               a_Duration
+    ,double            a_NewBftAmt
+    ,double            a_PriorBftAmt
+    ,double            a_NewSpecAmt
+    ,double            a_PriorSpecAmt
+    ,mcenum_dbopt_7702 a_NewDBOpt
+    ,mcenum_dbopt_7702 a_PriorDBOpt
     )
 {
     HOPEFULLY(a_PriorSpecAmt <= a_PriorBftAmt);
@@ -306,12 +306,12 @@ void Irc7702::ProcessAdjustableEvent
     HOPEFULLY(adj_event);
 
     // Post BftAmt, SpecAmt, DBOpt changes to local state.
-    PriorBftAmt         = PresentBftAmt;
-    PresentBftAmt       = a_NewBftAmt;
-    PriorSpecAmt        = PresentSpecAmt;
-    PresentSpecAmt      = a_NewSpecAmt;
-    PriorDBOpt          = PresentDBOpt;
-    PresentDBOpt        = a_NewDBOpt;
+    PriorBftAmt     = PresentBftAmt;
+    PresentBftAmt   = a_NewBftAmt;
+    PriorSpecAmt    = PresentSpecAmt;
+    PresentSpecAmt  = a_NewSpecAmt;
+    PriorDBOpt      = PresentDBOpt;
+    PresentDBOpt    = a_NewDBOpt;
 
     // Apply A + B - C method for both GLP and GSP.
 
@@ -711,9 +711,9 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 // TODO ?? Is there any reason why dbopt would change?
 // --not used by server
 void Irc7702::Initialize7702
-    (double              a_BftAmt
-    ,double              a_SpecAmt
-    ,e_dbopt_7702 const& a_DBOpt
+    (double            a_BftAmt
+    ,double            a_SpecAmt
+    ,mcenum_dbopt_7702 a_DBOpt
     )
 {
     HOPEFULLY(a_SpecAmt <= a_BftAmt);
@@ -750,18 +750,18 @@ void Irc7702::Initialize7702
     // TODO ?? Some variables set in the ctor are reset here. Can
     // this be avoided?
 
-    PresentSpecAmt      = a_SpecAmt;
+    PresentSpecAmt  = a_SpecAmt;
 
-    PriorSpecAmt        = PresentSpecAmt;
-    LeastBftAmtEver     = PresentSpecAmt;
+    PriorSpecAmt    = PresentSpecAmt;
+    LeastBftAmtEver = PresentSpecAmt;
 
-    CumGLP              = 0.0;
-    GptLimit            = 0.0;
-    CumPmts             = 0.0;
-    PresentGLP          = 0.0;
-    PriorGLP            = 0.0;
-    PresentGSP          = 0.0;
-    PriorGSP            = 0.0;
+    CumGLP          = 0.0;
+    GptLimit        = 0.0;
+    CumPmts         = 0.0;
+    PresentGLP      = 0.0;
+    PriorGLP        = 0.0;
+    PresentGSP      = 0.0;
+    PriorGSP        = 0.0;
 }
 
 //============================================================================
@@ -781,11 +781,11 @@ std::vector<double> const& Irc7702::Corridor() const
 {
     // The 7702 test might indeed be neither CVAT nor GPT for a non-US
     // contract, but in that case this code shouldn't be reached.
-    if(e_gpt == Test7702)
+    if(mce_gpt == Test7702)
         {
         return GptCorridor;
         }
-    else if(e_cvat == Test7702)
+    else if(mce_cvat == Test7702)
         {
         return CvatCorridor;
         }
@@ -798,16 +798,16 @@ std::vector<double> const& Irc7702::Corridor() const
 
 //============================================================================
 Irc7702::EIOBasis Irc7702::Get4PctBasis
-    (e_dbopt_7702 const& a_DBOpt
+    (mcenum_dbopt_7702 a_DBOpt
     ) const
 {
     switch(a_DBOpt)
         {
-        case e_option1_for_7702:
+        case mce_option1_for_7702:
             {
             return Opt1Int4Pct;
             }
-        case e_option2_for_7702:
+        case mce_option2_for_7702:
             {
             return Opt2Int4Pct;
             }
@@ -826,11 +826,11 @@ Irc7702::EIOBasis Irc7702::Get4PctBasis
 
 //============================================================================
 double Irc7702::CalculateGLP
-    (int                 a_Duration
-    ,double              a_BftAmt
-    ,double              a_SpecAmt
-    ,double              a_LeastBftAmtEver
-    ,e_dbopt_7702 const& a_DBOpt
+    (int               a_Duration
+    ,double            a_BftAmt
+    ,double            a_SpecAmt
+    ,double            a_LeastBftAmtEver
+    ,mcenum_dbopt_7702 a_DBOpt
     ) const
 {
     HOPEFULLY(a_SpecAmt <= a_BftAmt);
@@ -892,8 +892,8 @@ double Irc7702::CalculatePremium
     double target = Values.GetTgtPrem
         (a_Duration
         ,a_SpecAmt
-        ,e_dbopt(e_option1) // TODO ?? Should pass dbopt.
-        ,e_mode(e_annual)
+        ,mce_option1 // TODO ?? Should pass dbopt.
+        ,mce_annual
         );
 
     double z =
@@ -962,9 +962,9 @@ void Irc7702::InitSevenPayPrem()
 
 //============================================================================
 double Irc7702::CalculateGLPSpecAmt
-    (int                 a_Duration
-    ,double              a_Premium
-    ,e_dbopt_7702 const& a_DBOpt
+    (int               a_Duration
+    ,double            a_Premium
+    ,mcenum_dbopt_7702 a_DBOpt
     ) const
 {
     return CalculateSpecAmt
@@ -996,13 +996,14 @@ double Irc7702::CalculateGSPSpecAmt
     class FindSpecAmt
     {
         typedef Irc7702::EIOBasis EIOBasis;
-        Irc7702 const&      Irc7702_;
-        EIOBasis const&     EIOBasis_;
-        int const           Duration;
-        double const        Premium;
-        double const        NetPmtFactorTgt;
-        double const        NetPmtFactorExc;
-        double              SpecAmt;
+        Irc7702 const&  Irc7702_;
+        EIOBasis const& EIOBasis_;
+        int const       Duration;
+        double const    Premium;
+        double const    NetPmtFactorTgt;
+        double const    NetPmtFactorExc;
+        double          SpecAmt;
+
       public:
         FindSpecAmt
             (Irc7702 const&  a_IRC7702

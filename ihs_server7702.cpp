@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_server7702.cpp,v 1.15 2008-01-31 18:49:12 chicares Exp $
+// $Id: ihs_server7702.cpp,v 1.16 2008-07-14 11:22:24 chicares Exp $
 
 // Known defects:
 // grep for "NEED DECISION"
@@ -41,6 +41,7 @@
 #include "ihs_rnddata.hpp"
 #include "ihs_server7702io.hpp"
 #include "ihs_x_type.hpp"
+#include "mc_enum_types_aux.hpp" // porting_cast()
 
 // TODO ?? Apparently the original reason for using smart pointers
 // was to minimize stack usage in a 16-bit environment; clearly that
@@ -558,7 +559,7 @@ void Server7702::SetDoleBentsenValuesA()
         ,Input.OldBenefitAmount
         ,Input.OldSpecifiedAmount
         ,Input.OldSpecifiedAmount
-        ,Input.OldDeathBenefitOption
+        ,porting_cast<mcenum_dbopt_7702>(Input.OldDeathBenefitOption.value())
         );
 
     Output.GuidelineSinglePremiumPolicyA = basic_values_A->Irc7702_->CalculateGSP
@@ -593,7 +594,7 @@ void Server7702::SetDoleBentsenValuesBC()
         ,Input.NewBenefitAmount
         ,Input.NewSpecifiedAmount
         ,Input.NewSpecifiedAmount
-        ,Input.NewDeathBenefitOption
+        ,porting_cast<mcenum_dbopt_7702>(Input.NewDeathBenefitOption.value())
         );
 
     Output.GuidelineSinglePremiumPolicyB = basic_values_B->Irc7702_->CalculateGSP
@@ -624,7 +625,7 @@ void Server7702::SetDoleBentsenValuesBC()
         ,Input.OldBenefitAmount
         ,Input.OldSpecifiedAmount
         ,Input.OldSpecifiedAmount
-        ,Input.OldDeathBenefitOption
+        ,porting_cast<mcenum_dbopt_7702>(Input.OldDeathBenefitOption.value())
         );
 
     Output.GuidelineSinglePremiumPolicyC = basic_values_C->Irc7702_->CalculateGSP

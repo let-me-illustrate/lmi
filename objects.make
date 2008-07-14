@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.123 2008-07-06 16:01:51 chicares Exp $
+# $Id: objects.make,v 1.124 2008-07-14 11:22:24 chicares Exp $
 
 ################################################################################
 
@@ -389,6 +389,7 @@ gpt_objects := \
   loads.o \
   mc_enum.o \
   mc_enum_types.o \
+  mc_enum_types_aux.o \
   miscellany.o \
   outlay.o \
   path_utility.o \
