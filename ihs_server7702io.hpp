@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_server7702io.hpp,v 1.7 2008-07-14 15:39:32 chicares Exp $
+// $Id: ihs_server7702io.hpp,v 1.8 2008-07-14 16:18:25 chicares Exp $
 
 #ifndef ihs_server7702io_hpp
 #define ihs_server7702io_hpp
@@ -30,6 +30,7 @@
 #include "mc_enum_types.hpp"
 
 #include <iosfwd>
+#include <string>
 
 struct Server7702Input
 {
