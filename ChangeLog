@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1094 2008-07-14 11:22:24 chicares Exp $
+// $Id: ChangeLog,v 1.1095 2008-07-14 16:20:19 chicares Exp $
 
 MAINTENANCE
 
@@ -17766,4 +17766,36 @@ Prepare for further refactoring.
   ihs_server7702.cpp
   objects.make
 Refactor, eliminating old 'xenum' class from GPT calculations.
+
+20080714T1320Z <gchicares@sbcglobal.net> [1125]
+
+  ihs_server7702.cpp
+Resolve a marked defect.
+
+20080714T1322Z <gchicares@sbcglobal.net> [1125]
+
+  dbindex.hpp
+  ihs_crc_comp.cpp
+  input_seq_helpers.cpp
+  ledger_xml_io.cpp
+  ledger_xml_io2.cpp
+Replace old 'xenum' class in comments.
+
+20080714T1539Z <gchicares@sbcglobal.net> [1125]
+
+  basic_values.hpp
+  ihs_basicval.cpp
+  ihs_server7702.cpp
+  ihs_server7702io.hpp
+Refactor, eliminating old 'xenum' class from GPT server.
+
+20080714T1618Z <gchicares@sbcglobal.net> [1125]
+
+  ihs_server7702io.hpp
+Include a required header.
+
+20080714T1620Z <gchicares@sbcglobal.net> [1125]
+
+  ihs_server7702test.cpp
+Make GPT server input work. The calculations still don't work yet.
 
