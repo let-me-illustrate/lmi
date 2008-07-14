@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.58 2008-07-14 11:22:23 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.59 2008-07-14 15:39:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -105,21 +105,21 @@ BasicValues::BasicValues(InputParms const* input)
 // TODO ?? Not for general use--use for GPT server only. This is bad design.
 BasicValues::BasicValues
     (std::string  const& a_ProductName
-    ,e_gender     const& a_Gender
-    ,e_class      const& a_UnderwritingClass
-    ,e_smoking    const& a_Smoker
+    ,mcenum_gender       a_Gender
+    ,mcenum_class        a_UnderwritingClass
+    ,mcenum_smoking      a_Smoker
     ,int                 a_IssueAge
-    ,e_uw_basis   const& a_UnderwritingBasis
-    ,e_state      const& a_StateOfJurisdiction
+    ,mcenum_uw_basis     a_UnderwritingBasis
+    ,mcenum_state        a_StateOfJurisdiction
     ,double              a_FaceAmount
-    ,e_dbopt_7702 const& a_DBOptFor7702
+    ,mcenum_dbopt_7702   a_DBOptFor7702
     ,bool                a_AdbInForce
     ,double              a_TargetPremium
     // TODO ?? Need loan rate type here?
     )
     :Input_              (new InputParms)
     ,yare_input_         (*Input_)
-    ,Equiv7702DBO3       (mce_option1_for_7702)
+    ,Equiv7702DBO3       (a_DBOptFor7702)
     ,InitialTargetPremium(a_TargetPremium)
 {
     InputParms* kludge_input = new InputParms;
@@ -128,9 +128,9 @@ BasicValues::BasicValues
 
     kludge_input->Status[0].IssueAge  = a_IssueAge               ;
     kludge_input->Status[0].RetAge    = a_IssueAge               ;
-    kludge_input->Status[0].Gender    = a_Gender                 ;
-    kludge_input->Status[0].Smoking   = a_Smoker                 ;
-    kludge_input->Status[0].Class     = a_UnderwritingClass      ;
+    kludge_input->Status[0].Gender    = porting_cast<enum_gender>(a_Gender)                 ;
+    kludge_input->Status[0].Smoking   = porting_cast<enum_smoking>(a_Smoker)                 ;
+    kludge_input->Status[0].Class     = porting_cast<enum_class>(a_UnderwritingClass)      ;
 //    kludge_input->Status[0].HasADD    = static_cast<enum_yes_or_no>(a_ADDInForce.operator const bool());
 // TODO ?? reinterpret_cast can't be right...
 //    kludge_input->Status[0].HasADD    = reinterpret_cast<enum_yes_or_no>(a_ADDInForce);
@@ -143,10 +143,10 @@ else
     {
     kludge_input->Status[0].HasADD = "No";
     }
-    kludge_input->GroupUWType         = a_UnderwritingBasis      ;
+    kludge_input->GroupUWType         = porting_cast<enum_uw_basis>(a_UnderwritingBasis)      ;
     kludge_input->ProductName         = a_ProductName            ;
-    kludge_input->InsdState           = a_StateOfJurisdiction    ;
-    kludge_input->SponsorState        = a_StateOfJurisdiction    ;
+    kludge_input->InsdState           = porting_cast<enum_state>(a_StateOfJurisdiction)    ;
+    kludge_input->SponsorState        = porting_cast<enum_state>(a_StateOfJurisdiction)    ;
     kludge_input->DefnLifeIns         = e_defn_life_ins(e_gpt)   ;
     kludge_input->DefnMaterialChange  = e_defn_material_change(e_adjustment_event);
 
@@ -159,8 +159,8 @@ else
         );
 
     e_dbopt const z
-        (e_option1_for_7702 == a_DBOptFor7702 ? e_option1
-        :e_option2_for_7702 == a_DBOptFor7702 ? e_option2
+        (mce_option1_for_7702 == a_DBOptFor7702 ? e_option1
+        :mce_option2_for_7702 == a_DBOptFor7702 ? e_option2
         :throw std::runtime_error("Unexpected DB option.")
         );
     std::fill_n
