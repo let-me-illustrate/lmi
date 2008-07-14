@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_crc_comp.cpp,v 1.10 2008-01-01 18:29:42 chicares Exp $
+// $Id: ihs_crc_comp.cpp,v 1.11 2008-07-14 13:22:43 chicares Exp $
 
 // Sample command line to compile:
 // /gcc-2.95.2-1/bin/g++ -Iming29521 ihs_crc_comp.cpp
@@ -350,8 +350,7 @@ void f_4(std::string const& line1, std::string const& line2)
 // first char alpha, has ==
 // compare what follows ==; print iff different
 
-// but always copy this
-//ExpAndGABasis==Guaranteed_basis etc.
+// but always copy lines specifying basis etc.
     if(line1 == line2)
         {
         return;

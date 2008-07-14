@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbindex.hpp,v 1.6 2008-01-01 18:29:38 chicares Exp $
+// $Id: dbindex.hpp,v 1.7 2008-07-14 13:22:42 chicares Exp $
 
 #ifndef dbindex_hpp
 #define dbindex_hpp
@@ -42,12 +42,12 @@ class TDBIndex
 
 /*
     TDBIndex
-        (e_gender       const& a_Gender    // gender
-        ,e_class        const& a_Class     // underwriting class
-        ,e_smoking      const& a_Smoker    // smoker class
-        ,r_attained_age const& a_IssueAge  // issue age
-        ,e_uw_basis     const& a_UWBasis   // underwriting basis
-        ,e_state        const& a_State     // state of jurisdiction
+        (mcenum_gender       a_Gender    // gender
+        ,mcenum_class        a_Class     // underwriting class
+        ,mcenum_smoking      a_Smoker    // smoker class
+        ,int                 a_IssueAge  // issue age
+        ,mcenum_uw_basis     a_UWBasis   // underwriting basis
+        ,mcenum_state        a_State     // state of jurisdiction
         );
 */
 
