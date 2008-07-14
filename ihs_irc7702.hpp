@@ -19,16 +19,16 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702.hpp,v 1.12 2008-07-13 18:24:16 chicares Exp $
+// $Id: ihs_irc7702.hpp,v 1.13 2008-07-14 11:22:24 chicares Exp $
 
 #ifndef ihs_irc7702_hpp
 #define ihs_irc7702_hpp
 
 #include "config.hpp"
 
+#include "mc_enum_type_enums.hpp"
 #include "obstruct_slicing.hpp"
 #include "round_to.hpp"
-#include "xenumtypes.hpp"    // e_defn_life_ins, e_dbopt
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/utility.hpp>
@@ -64,7 +64,7 @@ class Irc7702
   public:
     Irc7702
         (BasicValues         const& a_Values
-        ,e_defn_life_ins     const& a_Test7702
+        ,mcenum_defn_life_ins       a_Test7702
         ,int                        a_IssueAge
         ,int                        a_EndtAge
         ,std::vector<double> const& a_Qc
@@ -74,7 +74,7 @@ class Irc7702
         ,std::vector<double> const& a_IntDed
         ,double                     a_PresentBftAmt
         ,double                     a_PresentSpecAmt
-        ,e_dbopt_7702 const&        a_PresentDBOpt
+        ,mcenum_dbopt_7702          a_PresentDBOpt
         ,std::vector<double> const& a_AnnChgPol
         ,std::vector<double> const& a_MlyChgPol
         ,std::vector<double> const& a_MlyChgSpecAmt
@@ -95,7 +95,7 @@ class Irc7702
         ,double                     a_PriorBftAmt     = 0.0
         ,double                     a_PriorSpecAmt    = 0.0
         ,double                     a_LeastBftAmtEver = 0.0
-        ,e_dbopt_7702        const& a_PriorDBOpt = e_dbopt_7702(e_option1_for_7702)
+        ,mcenum_dbopt_7702          a_PriorDBOpt      = mce_option1_for_7702
         // TODO ?? Perhaps other arguments are needed for inforce.
         );
     ~Irc7702();
@@ -104,7 +104,7 @@ class Irc7702
     void Initialize7702
         (double                     a_BftAmt
         ,double                     a_SpecAmt
-        ,e_dbopt_7702 const&        a_DBOpt
+        ,mcenum_dbopt_7702          a_DBOpt
         );
     void UpdateBOY7702();
     void ProcessGptPmt
@@ -119,8 +119,8 @@ class Irc7702
         ,double                     a_PriorBftAmt
         ,double                     a_NewSpecAmt
         ,double                     a_PriorSpecAmt
-        ,e_dbopt_7702 const&        a_NewDBOpt
-        ,e_dbopt_7702 const&        a_PriorDBOpt
+        ,mcenum_dbopt_7702          a_NewDBOpt
+        ,mcenum_dbopt_7702          a_PriorDBOpt
         );
     double Forceout();
 
@@ -131,7 +131,7 @@ class Irc7702
         ,double                     a_BftAmt
         ,double                     a_SpecAmt
         ,double                     a_LeastBftAmtEver
-        ,e_dbopt_7702 const&        a_DBOpt
+        ,mcenum_dbopt_7702          a_DBOpt
         ) const;
     double CalculateGSP
         (int                        a_Duration
@@ -142,7 +142,7 @@ class Irc7702
     double CalculateGLPSpecAmt
         (int                        a_Duration
         ,double                     a_Premium
-        ,e_dbopt_7702 const&        a_DBOpt
+        ,mcenum_dbopt_7702          a_DBOpt
         ) const;
     double CalculateGSPSpecAmt
         (int                        a_Duration
@@ -189,11 +189,11 @@ class Irc7702
         ,double                     a_NetPmtFactorExc
         ) const;
     EIOBasis Get4PctBasis
-        (e_dbopt_7702 const&        a_DBOpt
+        (mcenum_dbopt_7702          a_DBOpt
         ) const;
 
     BasicValues const&         Values;     // needed for target premium callback
-    e_defn_life_ins const&     Test7702;   // 7702 test: CVAT or GPT
+    mcenum_defn_life_ins const Test7702;   // 7702 test: CVAT or GPT
     int const                  IssueAge;   // Issue age
     int const                  EndtAge;    // Endowment age
 
@@ -208,8 +208,8 @@ class Irc7702
     mutable double             PresentSpecAmt;
     mutable double             PriorSpecAmt;
     mutable double             LeastBftAmtEver;// Lowest bft amt since issue date // TODO ?? NOT!
-    e_dbopt_7702               PresentDBOpt;   // Present death benefit option
-    e_dbopt_7702               PriorDBOpt;     // Prior death benefit option
+    mcenum_dbopt_7702          PresentDBOpt;   // Present death benefit option
+    mcenum_dbopt_7702          PriorDBOpt;     // Prior death benefit option
 
     std::vector<double> const& AnnChgPol;  // Annual charge per policy
     std::vector<double> const& MlyChgPol;  // Monthly charge per policy

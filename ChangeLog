@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1093 2008-07-13 16:31:13 chicares Exp $
+// $Id: ChangeLog,v 1.1094 2008-07-14 11:22:24 chicares Exp $
 
 MAINTENANCE
 
@@ -17725,4 +17725,45 @@ is taken separately because it affects all system-testing '.test'
 files in a way that this command:
   sed -e's/^SepAcctLoad$/SepAcctCharges/'
 predicts exactly.
+
+20080713T1824Z <gchicares@sbcglobal.net> [1129]
+
+  ihs_avmly.cpp
+  ihs_commfns.hpp
+  ihs_irc7702.hpp
+  mc_enum_types_aux.hpp
+Reformat.
+
+20080713T1852Z <gchicares@sbcglobal.net> [1129]
+
+  commutation_functions_test.cpp
+  ihs_commfns.cpp
+  ihs_commfns.hpp
+  ihs_irc7702.cpp
+Refactor, eliminating old 'xenum' class from commutation functions.
+
+20080713T1939Z <gchicares@sbcglobal.net> [1126]
+
+  commutation_functions_test.cpp
+  ihs_commfns.cpp
+  ihs_commfns.hpp
+Address several marked and unmarked defects.
+
+20080713T2024Z <gchicares@sbcglobal.net> [1126]
+
+  mc_enum_types_aux.cpp
+  mc_enum_types_aux.hpp
+Prepare for further refactoring.
+
+20080714T1122Z <gchicares@sbcglobal.net> [1126]
+
+  basic_values.hpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+  ihs_irc7702.cpp
+  ihs_irc7702.hpp
+  ihs_server7702.cpp
+  objects.make
+Refactor, eliminating old 'xenum' class from GPT calculations.
 

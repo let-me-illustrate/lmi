@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.115 2008-07-13 09:36:20 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.116 2008-07-14 11:22:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -473,7 +473,7 @@ void AccountValue::InitializeLife(e_run_basis const& a_Basis)
     Irc7702_->Initialize7702
         (InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
         ,InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
-        ,Get7702EffectiveDBOpt(InvariantValues().DBOpt[0])
+        ,effective_dbopt_7702(porting_cast<mcenum_dbopt>(InvariantValues().DBOpt[0].value()), Equiv7702DBO3)
         );
 
     // JOE--Try this instead of your second change to ldginvar.cpp
