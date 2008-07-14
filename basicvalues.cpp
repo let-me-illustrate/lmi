@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basicvalues.cpp,v 1.21 2008-07-08 17:52:20 chicares Exp $
+// $Id: basicvalues.cpp,v 1.22 2008-07-14 17:19:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -207,11 +207,11 @@ double BasicValues::GetModalTgtPrem
                 )[a_Year]
         );
     z *= MortalityRates_->MonthlyCoiRates(mce_gen_curr)[a_Year];
-    z += Loads_->monthly_policy_fee(e_currbasis)[a_Year];
+    z += Loads_->monthly_policy_fee(mce_gen_curr)[a_Year];
 // TODO ?? Would rider charges depend on month?
 //    z += AdbRate;
 //    z *= 1.0 + WpRate;
-    z /= 1.0 - Loads_->target_premium_load(e_currbasis)[a_Year];
+    z /= 1.0 - Loads_->target_premium_load(mce_gen_curr)[a_Year];
     z *= Annuity;
 
     // TODO ?? Parameterize this.
@@ -284,10 +284,10 @@ double BasicValues::GetModalTgtSpecAmt
 
     double z = Pmt;
     z /= Annuity;
-    z *= 1.0 - Loads_->target_premium_load(e_currbasis)[0];
+    z *= 1.0 - Loads_->target_premium_load(mce_gen_curr)[0];
 //    z /= WpRate;
 //    z -= AdbRate;
-    z -= Loads_->monthly_policy_fee(e_currbasis)[0];
+    z -= Loads_->monthly_policy_fee(mce_gen_curr)[0];
     z /= MortalityRates_->MonthlyCoiRates(mce_gen_curr)[0];
     z *=
         (   1.0

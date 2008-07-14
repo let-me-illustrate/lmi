@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.59 2008-07-14 15:39:31 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.60 2008-07-14 17:19:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -610,9 +610,9 @@ void BasicValues::Init7702()
             ,effective_dbopt_7702(yare_input_.DeathBenefitOption[0], Equiv7702DBO3)
             // TODO ?? Using the guaranteed basis for all the following should
             // be an optional behavior.
-            ,Loads_->annual_policy_fee(e_basis(e_currbasis))
-            ,Loads_->monthly_policy_fee(e_basis(e_currbasis))
-            ,Loads_->specified_amount_load(e_basis(e_currbasis))
+            ,Loads_->annual_policy_fee    (mce_gen_curr)
+            ,Loads_->monthly_policy_fee   (mce_gen_curr)
+            ,Loads_->specified_amount_load(mce_gen_curr)
             ,SpecAmtLoadLimit
             ,local_mly_charge_add
             ,AdbLimit
@@ -1218,7 +1218,7 @@ double BasicValues::GetModalPremMlyDed
                 )[Year]
         );
     z *= GetBandedCoiRates(mce_gen_curr, SpecAmt)[Year];
-    z += Loads_->monthly_policy_fee(e_basis(e_currbasis))[Year];
+    z += Loads_->monthly_policy_fee(mce_gen_curr)[Year];
 
     if(Input_->Status[0].HasADD)
         {
@@ -1229,7 +1229,7 @@ double BasicValues::GetModalPremMlyDed
         }
     // TODO ?? Other riders should be considered here.
 
-    double annual_charge = Loads_->annual_policy_fee(e_basis(e_currbasis))[Year];
+    double annual_charge = Loads_->annual_policy_fee(mce_gen_curr)[Year];
 
     if(Input_->Status[0].HasWP)
         {
@@ -1240,7 +1240,7 @@ double BasicValues::GetModalPremMlyDed
         }
 
     // TODO ?? Only *target* load?
-    z /= 1.0 - Loads_->target_total_load(e_basis(e_currbasis))[Year];
+    z /= 1.0 - Loads_->target_total_load(mce_gen_curr)[Year];
 
     z *= GetAnnuityValueMlyDed(Year, Mode);
     z += annual_charge;
@@ -1421,7 +1421,7 @@ double BasicValues::GetModalSpecAmtMlyDed
     double z = a_EeMode * a_EePmt + a_ErMode * a_ErPmt;
     z /= guess_mode;
 
-    double annual_charge = Loads_->annual_policy_fee(e_basis(e_currbasis))[0];
+    double annual_charge = Loads_->annual_policy_fee(mce_gen_curr)[0];
 
     double wp_rate = 0.0;
     if(Input_->Status[0].HasWP)
@@ -1440,7 +1440,7 @@ double BasicValues::GetModalSpecAmtMlyDed
     z /= GetAnnuityValueMlyDed(0, guess_mode);
     // TODO ?? only *target* load?
 // TODO ?? Looks like none of our test decks exercise this line.
-    z *= 1.0 - Loads_->target_total_load(e_basis(e_currbasis))[0];
+    z *= 1.0 - Loads_->target_total_load(mce_gen_curr)[0];
 
     // TODO ?? Is this correct now?
     if(Input_->Status[0].HasWP && 0.0 != 1.0 + wp_rate)
@@ -1456,7 +1456,7 @@ double BasicValues::GetModalSpecAmtMlyDed
         }
     // TODO ?? Other riders should be considered here.
 
-    z -= Loads_->monthly_policy_fee(e_basis(e_currbasis))[0];
+    z -= Loads_->monthly_policy_fee(mce_gen_curr)[0];
     // TODO ?? Probably we should respect banding. This is a
     // conservative shortcut.
     z /= MortalityRates_->MonthlyCoiRatesBand0(mce_gen_curr)[0];
