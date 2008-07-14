@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads.cpp,v 1.17 2008-07-05 01:33:33 chicares Exp $
+// $Id: loads.cpp,v 1.18 2008-07-14 17:19:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -36,6 +36,7 @@
 #include "dbnames.hpp"
 #include "inputs.hpp"
 #include "math_functors.hpp"
+#include "mc_enum_types_aux.hpp"
 #include "rounding_rules.hpp"
 
 #include <boost/bind.hpp>
@@ -78,18 +79,18 @@ Loads::Loads(BasicValues& V)
 
 void Loads::Allocate(int length)
 {
-    monthly_policy_fee_    .resize(n_illreg_bases);
-    annual_policy_fee_     .resize(n_illreg_bases);
-    specified_amount_load_ .resize(n_illreg_bases);
-    separate_account_load_ .resize(n_illreg_bases);
-    target_premium_load_   .resize(n_illreg_bases);
-    excess_premium_load_   .resize(n_illreg_bases);
-    target_sales_load_     .resize(n_illreg_bases);
-    excess_sales_load_     .resize(n_illreg_bases);
-    target_total_load_     .resize(n_illreg_bases);
-    excess_total_load_     .resize(n_illreg_bases);
+    monthly_policy_fee_    .resize(mc_n_gen_bases);
+    annual_policy_fee_     .resize(mc_n_gen_bases);
+    specified_amount_load_ .resize(mc_n_gen_bases);
+    separate_account_load_ .resize(mc_n_gen_bases);
+    target_premium_load_   .resize(mc_n_gen_bases);
+    excess_premium_load_   .resize(mc_n_gen_bases);
+    target_sales_load_     .resize(mc_n_gen_bases);
+    excess_sales_load_     .resize(mc_n_gen_bases);
+    target_total_load_     .resize(mc_n_gen_bases);
+    excess_total_load_     .resize(mc_n_gen_bases);
 
-    for(int j = e_currbasis; j < n_illreg_bases; j++)
+    for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
         {
         // TODO ?? Consider skipping midpoint basis if unneeded.
 
@@ -129,23 +130,23 @@ void Loads::Initialize(TDatabase const& database)
     database.Query(premium_tax_load_                , DB_PremTaxLoad   );
     database.Query(dac_tax_load_                    , DB_DACTaxPremLoad);
 
-    database.Query(monthly_policy_fee_   [e_guarbasis], DB_GuarPolFee        );
-    database.Query(annual_policy_fee_    [e_guarbasis], DB_GuarIssueFee      );
-    database.Query(specified_amount_load_[e_guarbasis], DB_GuarSpecAmtLoad   );
-    database.Query(separate_account_load_[e_guarbasis], DB_GuarAcctValLoadAMD);
-    database.Query(target_premium_load_  [e_guarbasis], DB_GuarPremLoadTgt   );
-    database.Query(excess_premium_load_  [e_guarbasis], DB_GuarPremLoadExc   );
-    database.Query(target_sales_load_    [e_guarbasis], DB_GuarPremLoadTgtRfd);
-    database.Query(excess_sales_load_    [e_guarbasis], DB_GuarPremLoadExcRfd);
+    database.Query(monthly_policy_fee_   [mce_gen_guar], DB_GuarPolFee        );
+    database.Query(annual_policy_fee_    [mce_gen_guar], DB_GuarIssueFee      );
+    database.Query(specified_amount_load_[mce_gen_guar], DB_GuarSpecAmtLoad   );
+    database.Query(separate_account_load_[mce_gen_guar], DB_GuarAcctValLoadAMD);
+    database.Query(target_premium_load_  [mce_gen_guar], DB_GuarPremLoadTgt   );
+    database.Query(excess_premium_load_  [mce_gen_guar], DB_GuarPremLoadExc   );
+    database.Query(target_sales_load_    [mce_gen_guar], DB_GuarPremLoadTgtRfd);
+    database.Query(excess_sales_load_    [mce_gen_guar], DB_GuarPremLoadExcRfd);
 
-    database.Query(monthly_policy_fee_   [e_currbasis], DB_CurrPolFee        );
-    database.Query(annual_policy_fee_    [e_currbasis], DB_CurrIssueFee      );
-    database.Query(specified_amount_load_[e_currbasis], DB_CurrSpecAmtLoad   );
-    database.Query(separate_account_load_[e_currbasis], DB_CurrAcctValLoadAMD);
-    database.Query(target_premium_load_  [e_currbasis], DB_CurrPremLoadTgt   );
-    database.Query(excess_premium_load_  [e_currbasis], DB_CurrPremLoadExc   );
-    database.Query(target_sales_load_    [e_currbasis], DB_CurrPremLoadTgtRfd);
-    database.Query(excess_sales_load_    [e_currbasis], DB_CurrPremLoadExcRfd);
+    database.Query(monthly_policy_fee_   [mce_gen_curr], DB_CurrPolFee        );
+    database.Query(annual_policy_fee_    [mce_gen_curr], DB_CurrIssueFee      );
+    database.Query(specified_amount_load_[mce_gen_curr], DB_CurrSpecAmtLoad   );
+    database.Query(separate_account_load_[mce_gen_curr], DB_CurrAcctValLoadAMD);
+    database.Query(target_premium_load_  [mce_gen_curr], DB_CurrPremLoadTgt   );
+    database.Query(excess_premium_load_  [mce_gen_curr], DB_CurrPremLoadExc   );
+    database.Query(target_sales_load_    [mce_gen_curr], DB_CurrPremLoadTgtRfd);
+    database.Query(excess_sales_load_    [mce_gen_curr], DB_CurrPremLoadExcRfd);
 }
 
 /// Transform raw input and database data into directly-useful rates.
@@ -155,7 +156,7 @@ void Loads::Calculate(load_details const& details)
     // ET !! The loop and the std::transform call should both be
     // unnecessary: it should be possible to write simply
     //   separate_account_load_ = i_upper_12_over_12_from_i(separate_account_load_);
-    for(int j = e_currbasis; j != n_illreg_bases; j++)
+    for(int j = mce_gen_curr; j != mc_n_gen_bases; j++)
         {
         // ET !! Rewrite [but see above comment]
         // separate_account_load_[j] = i_upper_12_over_12_from_i
@@ -205,7 +206,7 @@ void Loads::Calculate(load_details const& details)
         // to apply a scalar function like rounding to all elements of a
         // matrix, with some natural syntax like
         //   separate_account_load_ = details.round_interest_rate_(separate_account_load_);
-        for(int j = e_currbasis; j != n_illreg_bases; j++)
+        for(int j = mce_gen_curr; j != mc_n_gen_bases; j++)
             {
             // ET !! separate_account_load_[j] += extra_asset_comp;
             std::transform
@@ -253,7 +254,7 @@ void Loads::Calculate(load_details const& details)
 
     // TODO ?? Clearly the common functionality should be factored out here.
     // TODO ?? It is probably unnecessary to handle the midpoint basis here.
-    for(int j = e_currbasis; j < n_illreg_bases; j++)
+    for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
         {
         // ET !! Naively, rewrite this whole loop body as:
         //
@@ -262,7 +263,7 @@ void Loads::Calculate(load_details const& details)
         //   target_sales_load_[j] += details.VectorExtraCompLoad_;
         //   target_total_load_[j] = target_sales_load_[j];
         //   target_total_load_[j] += target_premium_load_[j] + dac_tax_load_.begin();
-        //   if(e_currbasis == j)
+        //   if(mce_gen_curr == j)
         //     {
         //     target_total_load_before_premium_tax = target_total_load_[j];
         //     }
@@ -271,7 +272,7 @@ void Loads::Calculate(load_details const& details)
         //   excess_sales_load_[j] += details.VectorExtraCompLoad_;
         //   excess_total_load_[j] = excess_sales_load_[j];
         //   excess_total_load_[j] += excess_premium_load_[j] + dac_tax_load_.begin();
-        //   if(e_currbasis == j)
+        //   if(mce_gen_curr == j)
         //     {
         //     excess_total_load_before_premium_tax = excess_total_load_[j];
         //     }
@@ -310,7 +311,7 @@ void Loads::Calculate(load_details const& details)
             ,target_total_load_[j].begin()
             ,std::plus<double>()
             );
-        if(e_currbasis == j)
+        if(mce_gen_curr == j)
             {
             target_premium_load_7702_excluding_premium_tax_ = target_total_load_[j];
             target_premium_load_7702_lowest_premium_tax_    = target_total_load_[j];
@@ -351,7 +352,7 @@ void Loads::Calculate(load_details const& details)
             ,excess_total_load_[j].begin()
             ,std::plus<double>()
             );
-        if(e_currbasis == j)
+        if(mce_gen_curr == j)
             {
             excess_premium_load_7702_excluding_premium_tax_ = excess_total_load_[j];
             excess_premium_load_7702_lowest_premium_tax_    = excess_total_load_[j];
@@ -380,30 +381,30 @@ void Loads::Calculate(load_details const& details)
     // custodial fee, but can be used in any situation that's
     // consistent with this constraint.
 
-    // ET !! monthly_policy_fee_[e_currbasis] += details.VectorExtraPolFee_;
+    // ET !! monthly_policy_fee_[mce_gen_curr] += details.VectorExtraPolFee_;
     std::transform
-        (monthly_policy_fee_[e_currbasis].begin()
-        ,monthly_policy_fee_[e_currbasis].end()
+        (monthly_policy_fee_[mce_gen_curr].begin()
+        ,monthly_policy_fee_[mce_gen_curr].end()
         ,details.VectorExtraPolFee_.begin()
-        ,monthly_policy_fee_[e_currbasis].begin()
+        ,monthly_policy_fee_[mce_gen_curr].begin()
         ,std::plus<double>()
         );
     for(int j = 0; j < details.length_; ++j)
         {
         if
-            ( monthly_policy_fee_[e_guarbasis][j]
-            < monthly_policy_fee_[e_currbasis][j]
+            ( monthly_policy_fee_[mce_gen_guar][j]
+            < monthly_policy_fee_[mce_gen_curr][j]
             )
             {
             fatal_error()
                 << "Duration "
                 << j
                 << ": current monthly policy fee "
-                << monthly_policy_fee_[e_currbasis][j]
+                << monthly_policy_fee_[mce_gen_curr][j]
                 << " (which includes a custodial fee of "
                 << details.VectorExtraPolFee_[j]
                 << ") improperly exceeds guaranteed maximum of "
-                << monthly_policy_fee_[e_guarbasis][j]
+                << monthly_policy_fee_[mce_gen_guar][j]
                 << " ."
                 << LMI_FLUSH
                 ;
@@ -415,76 +416,76 @@ void Loads::Calculate(load_details const& details)
     if(details.NeedMidpointRates_)
         {
         // ET !! Matrix operations are most welcome here:
-        //   monthly_policy_fee_[e_mdptbasis] = mean(monthly_policy_fee_[e_guarbasis], monthly_policy_fee_[e_currbasis]);
+        //   monthly_policy_fee_[mce_gen_mdpt] = mean(monthly_policy_fee_[mce_gen_guar], monthly_policy_fee_[mce_gen_curr]);
         //   and so on, reiterating that line for every other name given here.
         std::transform
-            (monthly_policy_fee_[e_guarbasis].begin()
-            ,monthly_policy_fee_[e_guarbasis].end()
-            ,monthly_policy_fee_[e_currbasis].begin()
-            ,monthly_policy_fee_[e_mdptbasis].begin()
+            (monthly_policy_fee_[mce_gen_guar].begin()
+            ,monthly_policy_fee_[mce_gen_guar].end()
+            ,monthly_policy_fee_[mce_gen_curr].begin()
+            ,monthly_policy_fee_[mce_gen_mdpt].begin()
             ,mean<double>()
             );
         std::transform
-            (annual_policy_fee_[e_guarbasis].begin()
-            ,annual_policy_fee_[e_guarbasis].end()
-            ,annual_policy_fee_[e_currbasis].begin()
-            ,annual_policy_fee_[e_mdptbasis].begin()
+            (annual_policy_fee_[mce_gen_guar].begin()
+            ,annual_policy_fee_[mce_gen_guar].end()
+            ,annual_policy_fee_[mce_gen_curr].begin()
+            ,annual_policy_fee_[mce_gen_mdpt].begin()
             ,mean<double>()
             );
         std::transform
-            (specified_amount_load_[e_guarbasis].begin()
-            ,specified_amount_load_[e_guarbasis].end()
-            ,specified_amount_load_[e_currbasis].begin()
-            ,specified_amount_load_[e_mdptbasis].begin()
+            (specified_amount_load_[mce_gen_guar].begin()
+            ,specified_amount_load_[mce_gen_guar].end()
+            ,specified_amount_load_[mce_gen_curr].begin()
+            ,specified_amount_load_[mce_gen_mdpt].begin()
             ,mean<double>()
             );
         std::transform
-            (separate_account_load_[e_guarbasis].begin()
-            ,separate_account_load_[e_guarbasis].end()
-            ,separate_account_load_[e_currbasis].begin()
-            ,separate_account_load_[e_mdptbasis].begin()
+            (separate_account_load_[mce_gen_guar].begin()
+            ,separate_account_load_[mce_gen_guar].end()
+            ,separate_account_load_[mce_gen_curr].begin()
+            ,separate_account_load_[mce_gen_mdpt].begin()
             ,mean<double>()
             );
         std::transform
-            (target_premium_load_[e_guarbasis].begin()
-            ,target_premium_load_[e_guarbasis].end()
-            ,target_premium_load_[e_currbasis].begin()
-            ,target_premium_load_[e_mdptbasis].begin()
+            (target_premium_load_[mce_gen_guar].begin()
+            ,target_premium_load_[mce_gen_guar].end()
+            ,target_premium_load_[mce_gen_curr].begin()
+            ,target_premium_load_[mce_gen_mdpt].begin()
             ,mean<double>()
             );
         std::transform
-            (excess_premium_load_[e_guarbasis].begin()
-            ,excess_premium_load_[e_guarbasis].end()
-            ,excess_premium_load_[e_currbasis].begin()
-            ,excess_premium_load_[e_mdptbasis].begin()
+            (excess_premium_load_[mce_gen_guar].begin()
+            ,excess_premium_load_[mce_gen_guar].end()
+            ,excess_premium_load_[mce_gen_curr].begin()
+            ,excess_premium_load_[mce_gen_mdpt].begin()
             ,mean<double>()
             );
         std::transform
-            (target_sales_load_[e_guarbasis].begin()
-            ,target_sales_load_[e_guarbasis].end()
-            ,target_sales_load_[e_currbasis].begin()
-            ,target_sales_load_[e_mdptbasis].begin()
+            (target_sales_load_[mce_gen_guar].begin()
+            ,target_sales_load_[mce_gen_guar].end()
+            ,target_sales_load_[mce_gen_curr].begin()
+            ,target_sales_load_[mce_gen_mdpt].begin()
             ,mean<double>()
             );
         std::transform
-            (excess_sales_load_[e_guarbasis].begin()
-            ,excess_sales_load_[e_guarbasis].end()
-            ,excess_sales_load_[e_currbasis].begin()
-            ,excess_sales_load_[e_mdptbasis].begin()
+            (excess_sales_load_[mce_gen_guar].begin()
+            ,excess_sales_load_[mce_gen_guar].end()
+            ,excess_sales_load_[mce_gen_curr].begin()
+            ,excess_sales_load_[mce_gen_mdpt].begin()
             ,mean<double>()
             );
         std::transform
-            (target_total_load_[e_guarbasis].begin()
-            ,target_total_load_[e_guarbasis].end()
-            ,target_total_load_[e_currbasis].begin()
-            ,target_total_load_[e_mdptbasis].begin()
+            (target_total_load_[mce_gen_guar].begin()
+            ,target_total_load_[mce_gen_guar].end()
+            ,target_total_load_[mce_gen_curr].begin()
+            ,target_total_load_[mce_gen_mdpt].begin()
             ,mean<double>()
             );
         std::transform
-            (excess_total_load_[e_guarbasis].begin()
-            ,excess_total_load_[e_guarbasis].end()
-            ,excess_total_load_[e_currbasis].begin()
-            ,excess_total_load_[e_mdptbasis].begin()
+            (excess_total_load_[mce_gen_guar].begin()
+            ,excess_total_load_[mce_gen_guar].end()
+            ,excess_total_load_[mce_gen_curr].begin()
+            ,excess_total_load_[mce_gen_mdpt].begin()
             ,mean<double>()
             );
         }
@@ -517,58 +518,58 @@ void Loads::AmortizePremiumTax(load_details const&)
 
 Loads::Loads(TDatabase const& database, bool NeedMidpointRates)
 {
-    monthly_policy_fee_   .resize(n_illreg_bases);
-    target_premium_load_  .resize(n_illreg_bases);
-    excess_premium_load_  .resize(n_illreg_bases);
-    specified_amount_load_.resize(n_illreg_bases);
+    monthly_policy_fee_   .resize(mc_n_gen_bases);
+    target_premium_load_  .resize(mc_n_gen_bases);
+    excess_premium_load_  .resize(mc_n_gen_bases);
+    specified_amount_load_.resize(mc_n_gen_bases);
 
-    database.Query(monthly_policy_fee_   [e_guarbasis], DB_GuarPolFee     );
-    database.Query(target_premium_load_  [e_guarbasis], DB_GuarPremLoadTgt);
-    database.Query(excess_premium_load_  [e_guarbasis], DB_GuarPremLoadExc);
-    database.Query(specified_amount_load_[e_guarbasis], DB_GuarSpecAmtLoad);
+    database.Query(monthly_policy_fee_   [mce_gen_guar], DB_GuarPolFee     );
+    database.Query(target_premium_load_  [mce_gen_guar], DB_GuarPremLoadTgt);
+    database.Query(excess_premium_load_  [mce_gen_guar], DB_GuarPremLoadExc);
+    database.Query(specified_amount_load_[mce_gen_guar], DB_GuarSpecAmtLoad);
 
-    database.Query(monthly_policy_fee_   [e_currbasis], DB_CurrPolFee     );
-    database.Query(target_premium_load_  [e_currbasis], DB_CurrPremLoadTgt);
-    database.Query(excess_premium_load_  [e_currbasis], DB_CurrPremLoadExc);
-    database.Query(specified_amount_load_[e_currbasis], DB_CurrSpecAmtLoad);
+    database.Query(monthly_policy_fee_   [mce_gen_curr], DB_CurrPolFee     );
+    database.Query(target_premium_load_  [mce_gen_curr], DB_CurrPremLoadTgt);
+    database.Query(excess_premium_load_  [mce_gen_curr], DB_CurrPremLoadExc);
+    database.Query(specified_amount_load_[mce_gen_curr], DB_CurrSpecAmtLoad);
 
     // Calculate midpoint as mean of current and guaranteed.
     // A different average might be used instead.
     if(NeedMidpointRates)
         {
-        monthly_policy_fee_   [e_mdptbasis].resize(database.length());
+        monthly_policy_fee_   [mce_gen_mdpt].resize(database.length());
         // ET !! Matrix operations are most welcome here:
-        //   monthly_policy_fee_[e_mdptbasis] = mean(monthly_policy_fee_[e_guarbasis], monthly_policy_fee_[e_currbasis]);
+        //   monthly_policy_fee_[mce_gen_mdpt] = mean(monthly_policy_fee_[mce_gen_guar], monthly_policy_fee_[mce_gen_curr]);
         //   and so on, reiterating that line for every other name given here.
         std::transform
-            (monthly_policy_fee_[e_guarbasis].begin()
-            ,monthly_policy_fee_[e_guarbasis].end()
-            ,monthly_policy_fee_[e_currbasis].begin()
-            ,monthly_policy_fee_[e_mdptbasis].begin()
+            (monthly_policy_fee_[mce_gen_guar].begin()
+            ,monthly_policy_fee_[mce_gen_guar].end()
+            ,monthly_policy_fee_[mce_gen_curr].begin()
+            ,monthly_policy_fee_[mce_gen_mdpt].begin()
             ,mean<double>()
             );
-        target_premium_load_  [e_mdptbasis].resize(database.length());
+        target_premium_load_  [mce_gen_mdpt].resize(database.length());
         std::transform
-            (target_premium_load_[e_guarbasis].begin()
-            ,target_premium_load_[e_guarbasis].end()
-            ,target_premium_load_[e_currbasis].begin()
-            ,target_premium_load_[e_mdptbasis].begin()
+            (target_premium_load_[mce_gen_guar].begin()
+            ,target_premium_load_[mce_gen_guar].end()
+            ,target_premium_load_[mce_gen_curr].begin()
+            ,target_premium_load_[mce_gen_mdpt].begin()
             ,mean<double>()
             );
-        excess_premium_load_  [e_mdptbasis].resize(database.length());
+        excess_premium_load_  [mce_gen_mdpt].resize(database.length());
         std::transform
-            (excess_premium_load_[e_guarbasis].begin()
-            ,excess_premium_load_[e_guarbasis].end()
-            ,excess_premium_load_[e_currbasis].begin()
-            ,excess_premium_load_[e_mdptbasis].begin()
+            (excess_premium_load_[mce_gen_guar].begin()
+            ,excess_premium_load_[mce_gen_guar].end()
+            ,excess_premium_load_[mce_gen_curr].begin()
+            ,excess_premium_load_[mce_gen_mdpt].begin()
             ,mean<double>()
             );
-        specified_amount_load_[e_mdptbasis].resize(database.length());
+        specified_amount_load_[mce_gen_mdpt].resize(database.length());
         std::transform
-            (specified_amount_load_[e_guarbasis].begin()
-            ,specified_amount_load_[e_guarbasis].end()
-            ,specified_amount_load_[e_currbasis].begin()
-            ,specified_amount_load_[e_mdptbasis].begin()
+            (specified_amount_load_[mce_gen_guar].begin()
+            ,specified_amount_load_[mce_gen_guar].end()
+            ,specified_amount_load_[mce_gen_curr].begin()
+            ,specified_amount_load_[mce_gen_mdpt].begin()
             ,mean<double>()
             );
         }

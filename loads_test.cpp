@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads_test.cpp,v 1.12 2008-07-05 01:33:33 chicares Exp $
+// $Id: loads_test.cpp,v 1.13 2008-07-14 17:19:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -80,42 +80,38 @@ void LoadsTest::TestVectorLengths(char const* file, int line)
     INVOKE_BOOST_TEST_EQUAL(z, loads_.target_premium_load_7702_lowest_premium_tax   ().size(), file, line);
     INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_premium_load_7702_lowest_premium_tax   ().size(), file, line);
 
-    e_basis currbasis(e_currbasis);
-    e_basis guarbasis(e_guarbasis);
-    e_basis mdptbasis(e_mdptbasis);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.monthly_policy_fee    (mce_gen_curr).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.annual_policy_fee     (mce_gen_curr).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.specified_amount_load (mce_gen_curr).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.separate_account_load (mce_gen_curr).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_premium_load   (mce_gen_curr).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_premium_load   (mce_gen_curr).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_sales_load     (mce_gen_curr).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_sales_load     (mce_gen_curr).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_total_load     (mce_gen_curr).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_total_load     (mce_gen_curr).size(), file, line);
 
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.monthly_policy_fee    (currbasis).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.annual_policy_fee     (currbasis).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.specified_amount_load (currbasis).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.separate_account_load (currbasis).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_premium_load   (currbasis).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_premium_load   (currbasis).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_sales_load     (currbasis).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_sales_load     (currbasis).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_total_load     (currbasis).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_total_load     (currbasis).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.monthly_policy_fee    (mce_gen_guar).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.annual_policy_fee     (mce_gen_guar).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.specified_amount_load (mce_gen_guar).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.separate_account_load (mce_gen_guar).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_premium_load   (mce_gen_guar).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_premium_load   (mce_gen_guar).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_sales_load     (mce_gen_guar).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_sales_load     (mce_gen_guar).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_total_load     (mce_gen_guar).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_total_load     (mce_gen_guar).size(), file, line);
 
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.monthly_policy_fee    (guarbasis).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.annual_policy_fee     (guarbasis).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.specified_amount_load (guarbasis).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.separate_account_load (guarbasis).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_premium_load   (guarbasis).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_premium_load   (guarbasis).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_sales_load     (guarbasis).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_sales_load     (guarbasis).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_total_load     (guarbasis).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_total_load     (guarbasis).size(), file, line);
-
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.monthly_policy_fee    (mdptbasis).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.annual_policy_fee     (mdptbasis).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.specified_amount_load (mdptbasis).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.separate_account_load (mdptbasis).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_premium_load   (mdptbasis).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_premium_load   (mdptbasis).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_sales_load     (mdptbasis).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_sales_load     (mdptbasis).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_total_load     (mdptbasis).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_total_load     (mdptbasis).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.monthly_policy_fee    (mce_gen_mdpt).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.annual_policy_fee     (mce_gen_mdpt).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.specified_amount_load (mce_gen_mdpt).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.separate_account_load (mce_gen_mdpt).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_premium_load   (mce_gen_mdpt).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_premium_load   (mce_gen_mdpt).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_sales_load     (mce_gen_mdpt).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_sales_load     (mce_gen_mdpt).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_total_load     (mce_gen_mdpt).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_total_load     (mce_gen_mdpt).size(), file, line);
 }
 
 void LoadsTest::TestCalculations(char const* file, int line)
