@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1095 2008-07-14 16:20:19 chicares Exp $
+// $Id: ChangeLog,v 1.1096 2008-07-15 02:59:27 chicares Exp $
 
 MAINTENANCE
 
@@ -17798,4 +17798,41 @@ Include a required header.
 
   ihs_server7702test.cpp
 Make GPT server input work. The calculations still don't work yet.
+
+20080714T1719Z <gchicares@sbcglobal.net> [1125]
+
+  accountvalue.cpp
+  basicvalues.cpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+  loads.cpp
+  loads.hpp
+  loads_test.cpp
+Refactor, eliminating old 'xenum' class from loads class.
+
+20080714T2227Z <gchicares@sbcglobal.net> [1125]
+
+  ihs_basicval.cpp
+  ihs_irc7702a.cpp
+  ihs_irc7702a.hpp
+  irc7702a_test.cpp
+Refactor, eliminating old 'xenum' class from 7702A class.
+
+20080715T0258Z <gchicares@sbcglobal.net> [1125]
+
+  accountvalue.cpp
+  basic_values.hpp
+  basicvalues.cpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ihs_avstrtgy.cpp
+  ihs_basicval.cpp
+Regularize arguments of certain member functions.
+
+20080715T0259Z <gchicares@sbcglobal.net> [1125]
+
+  enums7702.hpp [expunged]
+  xenumtypes.hpp
+Combine two obsolescent headers.
 
