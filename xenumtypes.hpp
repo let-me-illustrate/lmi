@@ -19,14 +19,13 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenumtypes.hpp,v 1.14 2008-07-05 01:33:33 chicares Exp $
+// $Id: xenumtypes.hpp,v 1.15 2008-07-15 02:59:27 chicares Exp $
 
 #ifndef xenumtypes_hpp
 #define xenumtypes_hpp
 
 #include "config.hpp"
 
-#include "enums7702.hpp"
 #include "xenum.hpp"
 
 enum enum_yes_or_no
@@ -353,13 +352,27 @@ enum enum_country
     };
 typedef xenum<enum_country, 239> e_country;
 
-// enum enum_defn_life_ins defined in "enums7702.hpp".
+enum enum_defn_life_ins
+    {e_cvat
+    ,e_gpt
+    ,e_noncompliant
+    };
 typedef xenum<enum_defn_life_ins, 3> e_defn_life_ins;
 
-// enum enum_mec_avoid_method defined in "enums7702.hpp".
+enum enum_mec_avoid_method
+    {e_allow_mec
+    ,e_reduce_prem
+    ,e_increase_specamt
+    };
 typedef xenum<enum_mec_avoid_method, 3> e_mec_avoid_method;
 
-// enum enum_defn_material_change defined in "enums7702.hpp".
+enum enum_defn_material_change
+    {e_unnecessary_premium
+    ,e_benefit_increase
+    ,e_later_of_increase_or_unnecessary_premium
+    ,e_earlier_of_increase_or_unnecessary_premium
+    ,e_adjustment_event
+    };
 typedef xenum<enum_defn_material_change, 5> e_defn_material_change;
 
 enum enum_spread_method
