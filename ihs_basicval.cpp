@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.62 2008-07-15 02:58:19 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.63 2008-07-15 18:25:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -282,8 +282,8 @@ void BasicValues::Init()
     // Surrender-charge rates will eventually require mortality rates.
     SurrChgRates_  .reset(new SurrChgRates   (*Database_));
     DeathBfts_     .reset(new death_benefits (*this));
-    // Outlay requires interest rates.
-    Outlay_        .reset(new Outlay         (*this));
+    // Outlay requires only input; it might someday use interest rates.
+    Outlay_        .reset(new Outlay         (*Input_));
     SetLowestPremiumTaxLoad();
     Loads_         .reset(new Loads          (*this));
 
@@ -357,8 +357,8 @@ void BasicValues::GPTServerInit()
     // Will require mortality rates eventually.
 //  SurrChgRates_  .reset(new SurrChgRates   (Database_));
 //  DeathBfts_     .reset(new death_benefits (*this));
-    // Requires interest rates.
-//  Outlay_        .reset(new Outlay         (*this));
+    // Outlay requires only input; it might someday use interest rates.
+//  Outlay_        .reset(new Outlay         (*Input_));
     SetLowestPremiumTaxLoad();
     Loads_         .reset(new Loads          (*this));
 
