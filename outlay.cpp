@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: outlay.cpp,v 1.5 2008-01-01 18:29:52 chicares Exp $
+// $Id: outlay.cpp,v 1.6 2008-07-15 17:27:10 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,6 +28,7 @@
 
 #include "outlay.hpp"
 
+#include "assert_lmi.hpp"
 #include "basic_values.hpp"
 #include "inputs.hpp"
 
@@ -79,5 +80,12 @@ void Outlay::set_new_cash_loans(double z, int from_year, int to_year)
 void Outlay::set_withdrawals(double z, int from_year, int to_year)
 {
     std::fill_n(withdrawals_.begin() + from_year, to_year - from_year, z);
+}
+
+//============================================================================
+void Outlay::set_er_modal_premiums(std::vector<double> const& z)
+{
+    LMI_ASSERT(z.size() == er_modal_premiums_.size());
+    er_modal_premiums_ = z;
 }
 
