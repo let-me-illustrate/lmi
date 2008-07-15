@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avstrtgy.cpp,v 1.10 2008-02-19 16:22:15 chicares Exp $
+// $Id: ihs_avstrtgy.cpp,v 1.11 2008-07-15 02:58:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,6 +35,7 @@
 #include "inputstatus.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
+#include "mc_enum_types_aux.hpp" // porting_cast()
 #include "mortality_rates.hpp"
 
 #include <algorithm>
@@ -99,9 +100,9 @@ double AccountValue::CalculateSpecAmtFromStrategy
         case e_samaximum:
             {
             z = GetModalSpecAmtMax
-                (InvariantValues().EeMode[reference_year]
+                (porting_cast<mcenum_mode>(InvariantValues().EeMode[reference_year].value())
                 ,InvariantValues().EePmt [reference_year]
-                ,InvariantValues().ErMode[reference_year]
+                ,porting_cast<mcenum_mode>(InvariantValues().ErMode[reference_year].value())
                 ,InvariantValues().ErPmt [reference_year]
                 );
             }
@@ -109,9 +110,9 @@ double AccountValue::CalculateSpecAmtFromStrategy
         case e_satarget:
             {
             z = GetModalSpecAmtTgt
-                (InvariantValues().EeMode[reference_year]
+                (porting_cast<mcenum_mode>(InvariantValues().EeMode[reference_year].value())
                 ,InvariantValues().EePmt [reference_year]
-                ,InvariantValues().ErMode[reference_year]
+                ,porting_cast<mcenum_mode>(InvariantValues().ErMode[reference_year].value())
                 ,InvariantValues().ErPmt [reference_year]
                 );
             }
@@ -120,9 +121,9 @@ double AccountValue::CalculateSpecAmtFromStrategy
         case e_samep:
             {
             z = GetModalSpecAmtMinNonMec
-                (InvariantValues().EeMode[reference_year]
+                (porting_cast<mcenum_mode>(InvariantValues().EeMode[reference_year].value())
                 ,InvariantValues().EePmt [reference_year]
-                ,InvariantValues().ErMode[reference_year]
+                ,porting_cast<mcenum_mode>(InvariantValues().ErMode[reference_year].value())
                 ,InvariantValues().ErPmt [reference_year]
                 );
             }
@@ -130,9 +131,9 @@ double AccountValue::CalculateSpecAmtFromStrategy
         case e_sacorridor:
             {
             z = GetModalSpecAmtCorridor
-                (InvariantValues().EeMode[reference_year]
+                (porting_cast<mcenum_mode>(InvariantValues().EeMode[reference_year].value())
                 ,InvariantValues().EePmt [reference_year]
-                ,InvariantValues().ErMode[reference_year]
+                ,porting_cast<mcenum_mode>(InvariantValues().ErMode[reference_year].value())
                 ,InvariantValues().ErPmt [reference_year]
                 );
             }
@@ -140,9 +141,9 @@ double AccountValue::CalculateSpecAmtFromStrategy
         case e_saglp:
             {
             z = GetModalSpecAmtGLP
-                (InvariantValues().EeMode[reference_year]
+                (porting_cast<mcenum_mode>(InvariantValues().EeMode[reference_year].value())
                 ,InvariantValues().EePmt [reference_year]
-                ,InvariantValues().ErMode[reference_year]
+                ,porting_cast<mcenum_mode>(InvariantValues().ErMode[reference_year].value())
                 ,InvariantValues().ErPmt [reference_year]
                 );
             }
@@ -150,9 +151,9 @@ double AccountValue::CalculateSpecAmtFromStrategy
         case e_sagsp:
             {
             z = GetModalSpecAmtGSP
-                (InvariantValues().EeMode[reference_year]
+                (porting_cast<mcenum_mode>(InvariantValues().EeMode[reference_year].value())
                 ,InvariantValues().EePmt [reference_year]
-                ,InvariantValues().ErMode[reference_year]
+                ,porting_cast<mcenum_mode>(InvariantValues().ErMode[reference_year].value())
                 ,InvariantValues().ErPmt [reference_year]
                 );
             }
@@ -299,7 +300,7 @@ double AccountValue::DoPerformPmtStrategy
             {
             return GetModalMinPrem
                 (Year
-                ,a_CurrentMode
+                ,porting_cast<mcenum_mode>(a_CurrentMode.value())
                 ,ActualSpecAmt
                 );
             }
@@ -307,7 +308,7 @@ double AccountValue::DoPerformPmtStrategy
             {
             return GetModalTgtPrem
                 (Year
-                ,a_CurrentMode
+                ,porting_cast<mcenum_mode>(a_CurrentMode.value())
                 ,ActualSpecAmt
                 );
             }
@@ -317,7 +318,7 @@ double AccountValue::DoPerformPmtStrategy
 // We ought to have a database flag for that.
             return GetModalPremMaxNonMec
                 (0
-                ,a_InitialMode
+                ,porting_cast<mcenum_mode>(a_InitialMode.value())
                 ,InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
                 );
             }
@@ -325,7 +326,7 @@ double AccountValue::DoPerformPmtStrategy
             {
             return GetModalPremGLP
                 (0
-                ,a_InitialMode
+                ,porting_cast<mcenum_mode>(a_InitialMode.value())
                 ,InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
                 ,InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
                 );
@@ -334,7 +335,7 @@ double AccountValue::DoPerformPmtStrategy
             {
             return GetModalPremGSP
                 (0
-                ,a_InitialMode
+                ,porting_cast<mcenum_mode>(a_InitialMode.value())
                 ,InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
                 ,InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
                 );
@@ -344,7 +345,7 @@ double AccountValue::DoPerformPmtStrategy
             return
                 ActualSpecAmt
                 * MortalityRates_->TableYRates()[Year]
-                * (12.0 / a_CurrentMode)
+                * (12.0 / porting_cast<mcenum_mode>(a_CurrentMode.value()))
                 * a_TblMult;
             }
         case e_pmtcorridor:
@@ -353,7 +354,7 @@ double AccountValue::DoPerformPmtStrategy
 // We ought to have a database flag for that.
             return GetModalPremCorridor
                 (0
-                ,a_InitialMode
+                ,porting_cast<mcenum_mode>(a_InitialMode.value())
                 ,ActualSpecAmt
 // TODO ?? This may be wanted for an 'integrated' term rider.
 //                ,ActualSpecAmt + TermSpecAmt

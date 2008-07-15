@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.117 2008-07-14 17:19:26 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.118 2008-07-15 02:58:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -986,12 +986,12 @@ void AccountValue::InitializeSpecAmt()
         }
     MlyNoLapsePrem = GetModalTgtPrem
         (target_year
-        ,e_mode(e_monthly)
+        ,mce_monthly
         ,InvariantValues().SpecAmt[target_year]
         );
     UnusedTargetPrem = GetModalTgtPrem
         (target_year
-        ,e_mode(e_annual)
+        ,mce_annual
         ,InvariantValues().SpecAmt[target_year]
         );
     AnnualTargetPrem = UnusedTargetPrem;
@@ -1016,7 +1016,7 @@ void AccountValue::InitializeSpecAmt()
         (Year
         ,InvariantValues().SpecAmt[Year]
         ,InvariantValues().DBOpt[Year]
-        ,e_mode(e_monthly)
+        ,mce_monthly
         );
 
     // Target premium is annual mode. Using a different mode seems
@@ -1026,7 +1026,7 @@ void AccountValue::InitializeSpecAmt()
         (Year
         ,InvariantValues().SpecAmt[Year]
         ,InvariantValues().DBOpt[Year]
-        ,e_mode(e_annual)
+        ,mce_annual
         );
     AnnualTargetPrem = UnusedTargetPrem;
 */
