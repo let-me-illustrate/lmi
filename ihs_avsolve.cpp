@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.16 2008-06-22 00:46:18 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.17 2008-07-15 17:27:10 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -284,18 +284,18 @@ void AccountValue::SolveSetWDThenLoan(double a_CandidateValue)
 //============================================================================
 double AccountValue::SolveGuarPremium()
 {
-    // Make a copy of the current objects which will be used by Solve() .
-    Outlay temp_prem(*BasicValues::Outlay_);
-    // Zero out corp pmts and solve for ee pmts only.
+    // Store original er premiums for later restoration.
+    std::vector<double> stored = Outlay_->er_modal_premiums();
+    // Zero out er premiums and solve for ee premiums only.
     Outlay_->set_er_modal_premiums
         (0.0
         ,0
         ,static_cast<int>(InvariantValues().EndtAge - InvariantValues().Age)
         );
 
-    bool temp_solving       = Solving;
-    Solving                 = true;
-    SolvingForGuarPremium   = true;
+    bool temp_solving     = Solving;
+    Solving               = true;
+    SolvingForGuarPremium = true;
 
     // Run the solve using guaranteed assumptions.
     double guar_premium = Solve
@@ -309,10 +309,10 @@ double AccountValue::SolveGuarPremium()
         ,e_sep_acct_basis(e_sep_acct_full)
         );
 
-    // Restore original values of saved objects.
-    *BasicValues::Outlay_   = temp_prem;
-    Solving                 = temp_solving;
-    SolvingForGuarPremium   = false;
+    // Restore original values.
+    Outlay_->set_er_modal_premiums(stored);
+    Solving               = temp_solving;
+    SolvingForGuarPremium = false;
 
     return guar_premium;
 }

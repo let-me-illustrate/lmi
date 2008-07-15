@@ -19,20 +19,25 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: outlay.hpp,v 1.4 2008-01-01 18:29:52 chicares Exp $
+// $Id: outlay.hpp,v 1.5 2008-07-15 17:27:10 chicares Exp $
 
 #ifndef outlay_hpp
 #define outlay_hpp
 
 #include "config.hpp"
 
+#include "obstruct_slicing.hpp"
 #include "xenumtypes.hpp"
+
+#include <boost/utility.hpp>
 
 #include <vector>
 
 class BasicValues;
 
 class Outlay
+    :private boost::noncopyable
+    ,virtual private obstruct_slicing<Outlay>
 {
     friend class AccountValue;
 
@@ -63,6 +68,8 @@ class Outlay
     void set_er_modal_premiums(double z, int from_year, int to_year);
     void set_new_cash_loans   (double z, int from_year, int to_year);
     void set_withdrawals      (double z, int from_year, int to_year);
+
+    void set_er_modal_premiums(std::vector<double> const&);
 
     // Not yet used, but needed for MEC avoidance.
     void set_external_1035_amount(double z);
