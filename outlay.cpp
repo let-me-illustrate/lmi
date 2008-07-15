@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: outlay.cpp,v 1.6 2008-07-15 17:27:10 chicares Exp $
+// $Id: outlay.cpp,v 1.7 2008-07-15 17:37:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,13 +35,11 @@
 #include <algorithm>
 #include <iterator>
 
-//============================================================================
 Outlay::Outlay(BasicValues const& basic_values)
 {
     Init(basic_values);
 }
 
-//============================================================================
 void Outlay::Init(BasicValues const& basic_values)
 {
     InputParms const& in = *basic_values.Input_;
@@ -58,31 +56,30 @@ void Outlay::Init(BasicValues const& basic_values)
     std::copy(in.WD       .begin(), in.WD       .end(), std::back_inserter(withdrawals_      ));
 }
 
-//============================================================================
+Outlay::~Outlay()
+{
+}
+
 void Outlay::set_ee_modal_premiums(double z, int from_year, int to_year)
 {
     std::fill_n(ee_modal_premiums_.begin() + from_year, to_year - from_year, z);
 }
 
-//============================================================================
 void Outlay::set_er_modal_premiums(double z, int from_year, int to_year)
 {
     std::fill_n(er_modal_premiums_.begin() + from_year, to_year - from_year, z);
 }
 
-//============================================================================
 void Outlay::set_new_cash_loans(double z, int from_year, int to_year)
 {
     std::fill_n(new_cash_loans_.begin() + from_year, to_year - from_year, z);
 }
 
-//============================================================================
 void Outlay::set_withdrawals(double z, int from_year, int to_year)
 {
     std::fill_n(withdrawals_.begin() + from_year, to_year - from_year, z);
 }
 
-//============================================================================
 void Outlay::set_er_modal_premiums(std::vector<double> const& z)
 {
     LMI_ASSERT(z.size() == er_modal_premiums_.size());
