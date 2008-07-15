@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: outlay.hpp,v 1.6 2008-07-15 17:37:18 chicares Exp $
+// $Id: outlay.hpp,v 1.7 2008-07-15 18:25:09 chicares Exp $
 
 #ifndef outlay_hpp
 #define outlay_hpp
@@ -33,7 +33,7 @@
 
 #include <vector>
 
-class BasicValues;
+class InputParms;
 
 class Outlay
     :private boost::noncopyable
@@ -42,7 +42,7 @@ class Outlay
     friend class AccountValue;
 
   public:
-    explicit Outlay(BasicValues const&);
+    explicit Outlay(InputParms const&);
     ~Outlay();
 
     double dumpin() const;
@@ -58,8 +58,6 @@ class Outlay
 
   private:
     Outlay();
-
-    void Init(BasicValues const&);
 
     double dumpin_;
     double external_1035_amount_;
