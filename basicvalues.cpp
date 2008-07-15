@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basicvalues.cpp,v 1.22 2008-07-14 17:19:26 chicares Exp $
+// $Id: basicvalues.cpp,v 1.23 2008-07-15 02:58:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -133,19 +133,19 @@ double BasicValues::InvestmentManagementFee() const
 //============================================================================
 // TODO ?? Simply calls the target-premium routine for now.
 double BasicValues::GetModalMinPrem
-    (int           a_Year
-    ,e_mode const& a_Mode
-    ,double        a_SpecAmt
+    (int         a_year
+    ,mcenum_mode a_mode
+    ,double      a_specamt
     ) const
 {
-    return GetModalTgtPrem(a_Year, a_Mode, a_SpecAmt);
+    return GetModalTgtPrem(a_year, a_mode, a_specamt);
 }
 
 //============================================================================
 double BasicValues::GetModalTgtPrem
-    (int           a_Year
-    ,e_mode const& a_Mode
-    ,double        a_SpecAmt
+    (int         a_year
+    ,mcenum_mode a_mode
+    ,double      a_specamt
     ) const
 {
     // TODO ?? Simplistic. Ignores table ratings, flat extras, and
@@ -154,24 +154,24 @@ double BasicValues::GetModalTgtPrem
 
     double spread = 0.0;
 
-    switch(a_Mode.value())
+    switch(a_mode)
         {
-        case e_annual:
+        case mce_annual:
             {
             spread = 0.0200;
             }
             break;
-        case e_semiannual:
+        case mce_semiannual:
             {
             spread = 0.0100;
             }
             break;
-        case e_quarterly:
+        case mce_quarterly:
             {
             spread = 0.0050;
             }
             break;
-        case e_monthly:
+        case mce_monthly:
             {
             spread = 0.0000;
             }
@@ -179,9 +179,9 @@ double BasicValues::GetModalTgtPrem
         default:
             {
             fatal_error()
-                << "Case '"
-                << a_Mode.value()
-                << "' not found."
+                << "Case "
+                << a_mode
+                << " not found."
                 << LMI_FLUSH
                 ;
             }
@@ -192,26 +192,26 @@ double BasicValues::GetModalTgtPrem
         ,    InterestRates_->GenAcctNetRate
                 (mce_gen_curr
                 ,mce_monthly_rate
-                )[a_Year]
+                )[a_year]
         -   spread
         );
     // TODO ?? Write a functor to do this.
-    double Annuity = (1.0 - std::pow(u, 12 / a_Mode.value())) / (1.0 - u);
+    double Annuity = (1.0 - std::pow(u, 12 / a_mode)) / (1.0 - u);
 
-    double z = a_SpecAmt;
+    double z = a_specamt;
     z /=
         (   1.0
         +   InterestRates_->GenAcctNetRate
                 (mce_gen_guar
                 ,mce_monthly_rate
-                )[a_Year]
+                )[a_year]
         );
-    z *= MortalityRates_->MonthlyCoiRates(mce_gen_curr)[a_Year];
-    z += Loads_->monthly_policy_fee(mce_gen_curr)[a_Year];
+    z *= MortalityRates_->MonthlyCoiRates(mce_gen_curr)[a_year];
+    z += Loads_->monthly_policy_fee(mce_gen_curr)[a_year];
 // TODO ?? Would rider charges depend on month?
 //    z += AdbRate;
 //    z *= 1.0 + WpRate;
-    z /= 1.0 - Loads_->target_premium_load(mce_gen_curr)[a_Year];
+    z /= 1.0 - Loads_->target_premium_load(mce_gen_curr)[a_year];
     z *= Annuity;
 
     // TODO ?? Parameterize this.
@@ -222,41 +222,41 @@ double BasicValues::GetModalTgtPrem
 //============================================================================
 // Simply calls the target-specamt routine for now.
 double BasicValues::GetModalMaxSpecAmt
-    (e_mode const& Mode
-    ,double Pmt
+    (mcenum_mode a_mode
+    ,double      a_pmt
     ) const
 {
-    return GetModalTgtSpecAmt(Mode, Pmt);
+    return GetModalTgtSpecAmt(a_mode, a_pmt);
 }
 
 //============================================================================
 double BasicValues::GetModalTgtSpecAmt
-    (e_mode const& Mode
-    ,double Pmt
+    (mcenum_mode a_mode
+    ,double      a_pmt
     ) const
 {
     // TODO ?? Factor out the (defectively simplistic) code this
     // shares with GetModalTgtPrem().
     double spread = 0.0;
 
-    switch(Mode.value())
+    switch(a_mode)
         {
-        case e_annual:
+        case mce_annual:
             {
             spread = 0.0200;
             }
             break;
-        case e_semiannual:
+        case mce_semiannual:
             {
             spread = 0.0100;
             }
             break;
-        case e_quarterly:
+        case mce_quarterly:
             {
             spread = 0.0050;
             }
             break;
-        case e_monthly:
+        case mce_monthly:
             {
             spread = 0.0000;
             }
@@ -264,9 +264,9 @@ double BasicValues::GetModalTgtSpecAmt
         default:
             {
             fatal_error()
-                << "Case '"
-                << Mode.value()
-                << "' not found."
+                << "Case "
+                << a_mode
+                << " not found."
                 << LMI_FLUSH
                 ;
             }
@@ -280,9 +280,9 @@ double BasicValues::GetModalTgtSpecAmt
                 )[0]
             -   spread
         );
-    double Annuity = (1.0 - std::pow(u, 12 / Mode.value())) / (1.0 - u);
+    double Annuity = (1.0 - std::pow(u, 12 / a_mode)) / (1.0 - u);
 
-    double z = Pmt;
+    double z = a_pmt;
     z /= Annuity;
     z *= 1.0 - Loads_->target_premium_load(mce_gen_curr)[0];
 //    z /= WpRate;

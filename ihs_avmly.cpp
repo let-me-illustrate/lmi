@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.88 2008-07-14 17:19:26 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.89 2008-07-15 02:58:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1265,8 +1265,8 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
         double tentative_target = GetTgtPrem
             (Year
             ,std::max(ActualSpecAmt, round_min_specamt(min_benefit))
-            ,YearsDBOpt
-            ,e_mode(e_annual)
+            ,porting_cast<mcenum_dbopt>(YearsDBOpt.value())
+            ,mce_annual
             );
 
         double target_premium_rate = 0.0;

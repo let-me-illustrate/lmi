@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.38 2008-07-14 17:19:25 chicares Exp $
+// $Id: accountvalue.cpp,v 1.39 2008-07-15 02:58:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -470,12 +470,12 @@ void AccountValue::PerformSpecAmtStrategy()
             break;
         case e_samaximum:
             {
-            SA = GetModalMaxSpecAmt(InvariantValues().EeMode[0], InvariantValues().EePmt[0]);
+            SA = GetModalMaxSpecAmt(porting_cast<mcenum_mode>(InvariantValues().EeMode[0].value()), InvariantValues().EePmt[0]);
             }
             break;
         case e_satarget:
             {
-            SA = GetModalTgtSpecAmt(InvariantValues().EeMode[0], InvariantValues().EePmt[0]);
+            SA = GetModalTgtSpecAmt(porting_cast<mcenum_mode>(InvariantValues().EeMode[0].value()), InvariantValues().EePmt[0]);
             }
             break;
         case e_samep:
@@ -649,7 +649,7 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
             {
             *a_Pmt = GetModalMinPrem
                 (Year
-                ,mode
+                ,porting_cast<mcenum_mode>(mode.value())
                 ,ActualSpecAmt
                 );
             }
@@ -658,7 +658,7 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
             {
             *a_Pmt = GetModalTgtPrem
                 (Year
-                ,mode
+                ,porting_cast<mcenum_mode>(mode.value())
                 ,ActualSpecAmt
                 );
             }

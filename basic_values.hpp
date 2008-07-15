@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.30 2008-07-14 15:39:31 chicares Exp $
+// $Id: basic_values.hpp,v 1.31 2008-07-15 02:58:19 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -138,18 +138,11 @@ class LMI_SO BasicValues
     boost::shared_ptr<Irc7702>            Irc7702_;
     boost::shared_ptr<Irc7702A>           Irc7702A_;
 
-    double GetTgtPrem // DEPRECATED
-        (int            Year
-        ,double         SpecAmt
-        ,e_dbopt const& DBOpt
-        ,e_mode  const& Mode
-        ) const;
-
     double GetTgtPrem
-        (int          Year
-        ,double       SpecAmt
-        ,mcenum_dbopt DBOpt
-        ,mcenum_mode  Mode
+        (int          a_year
+        ,double       a_specamt
+        ,mcenum_dbopt a_dbopt
+        ,mcenum_mode  a_mode
         ) const;
 
     std::vector<double> const& GetCorridorFactor() const;
@@ -187,89 +180,89 @@ class LMI_SO BasicValues
 
   protected:
     double GetModalMinPrem
-        (int           Year
-        ,e_mode const& Mode
-        ,double        SpecAmt
+        (int         a_year
+        ,mcenum_mode a_mode
+        ,double      a_specamt
         ) const;
     double GetModalTgtPrem
-        (int           Year
-        ,e_mode const& Mode
-        ,double        SpecAmt
+        (int         a_year
+        ,mcenum_mode a_mode
+        ,double      a_specamt
         ) const;
     double GetModalPremMaxNonMec
-        (int           Year
-        ,e_mode const& Mode
-        ,double        SpecAmt
+        (int         a_year
+        ,mcenum_mode a_mode
+        ,double      a_specamt
         ) const;
     double GetModalPremTgtFromTable
-        (int           Year
-        ,e_mode const& Mode
-        ,double        SpecAmt
+        (int         a_year
+        ,mcenum_mode a_mode
+        ,double      a_specamt
         ) const;
     double GetModalPremCorridor
-        (int           Year
-        ,e_mode const& Mode
-        ,double        SpecAmt
+        (int         a_year
+        ,mcenum_mode a_mode
+        ,double      a_specamt
         ) const;
     double GetModalPremGLP
-        (int           a_Duration
-        ,e_mode const& a_Mode
-        ,double        a_BftAmt
-        ,double        a_SpecAmt
+        (int         a_duration
+        ,mcenum_mode a_mode
+        ,double      a_bft_amt
+        ,double      a_specamt
         ) const;
     double GetModalPremGSP
-        (int           a_Duration
-        ,e_mode const& a_Mode
-        ,double        a_BftAmt
-        ,double        a_SpecAmt
+        (int         a_duration
+        ,mcenum_mode a_mode
+        ,double      a_bft_amt
+        ,double      a_specamt
         ) const;
     double GetModalSpecAmtMax
-        (e_mode const& a_EeMode
-        ,double        a_EePmt
-        ,e_mode const& a_ErMode
-        ,double        a_ErPmt
+        (mcenum_mode a_ee_mode
+        ,double      a_ee_pmt
+        ,mcenum_mode a_er_mode
+        ,double      a_er_pmt
         ) const;
     double GetModalSpecAmtTgt
-        (e_mode const& a_EeMode
-        ,double        a_EePmt
-        ,e_mode const& a_ErMode
-        ,double        a_ErPmt
+        (mcenum_mode a_ee_mode
+        ,double      a_ee_pmt
+        ,mcenum_mode a_er_mode
+        ,double      a_er_pmt
         ) const;
     double GetModalSpecAmtMinNonMec
-        (e_mode const& a_EeMode
-        ,double        a_EePmt
-        ,e_mode const& a_ErMode
-        ,double        a_ErPmt
+        (mcenum_mode a_ee_mode
+        ,double      a_ee_pmt
+        ,mcenum_mode a_er_mode
+        ,double      a_er_pmt
         ) const;
     double GetModalSpecAmtCorridor
-        (e_mode const& a_EeMode
-        ,double        a_EePmt
-        ,e_mode const& a_ErMode
-        ,double        a_ErPmt
+        (mcenum_mode a_ee_mode
+        ,double      a_ee_pmt
+        ,mcenum_mode a_er_mode
+        ,double      a_er_pmt
         ) const;
     double GetModalSpecAmtGLP
-        (e_mode const& a_EeMode
-        ,double        a_EePmt
-        ,e_mode const& a_ErMode
-        ,double        a_ErPmt
+        (mcenum_mode a_ee_mode
+        ,double      a_ee_pmt
+        ,mcenum_mode a_er_mode
+        ,double      a_er_pmt
         ) const;
     double GetModalSpecAmtGSP
-        (e_mode const& a_EeMode
-        ,double        a_EePmt
-        ,e_mode const& a_ErMode
-        ,double        a_ErPmt
+        (mcenum_mode a_ee_mode
+        ,double      a_ee_pmt
+        ,mcenum_mode a_er_mode
+        ,double      a_er_pmt
         ) const;
     // Deprecated--used only by the lmi branch, which does not
     // distinguish ee from er premium.
     double GetModalMaxSpecAmt
-        (e_mode const& Mode
-        ,double Pmt
+        (mcenum_mode a_mode
+        ,double      a_pmt
         ) const;
     // Deprecated--used only by the lmi branch, which does not
     // distinguish ee from er premium.
     double GetModalTgtSpecAmt
-        (e_mode const& Mode
-        ,double Pmt
+        (mcenum_mode a_mode
+        ,double      a_pmt
         ) const;
     std::vector<double> GetTable
         (std::string const& TableFile
@@ -281,7 +274,7 @@ class LMI_SO BasicValues
 
     std::vector<double> const& GetBandedCoiRates
         (mcenum_gen_basis rate_basis
-        ,double           specamt
+        ,double           a_specamt
         ) const;
 
     // TODO ?? A priori, protected data is a defect.
@@ -387,32 +380,32 @@ class LMI_SO BasicValues
 
   private:
     double GetModalPrem
-        (int                   Year
-        ,e_mode const&         Mode
-        ,double                SpecAmt
-        ,oenum_modal_prem_type PremType
+        (int                   a_year
+        ,mcenum_mode           a_mode
+        ,double                a_specamt
+        ,oenum_modal_prem_type a_prem_type
         ) const;
     double GetModalPremMlyDed
-        (int           Year
-        ,e_mode const& Mode
-        ,double        SpecAmt
+        (int         a_year
+        ,mcenum_mode a_mode
+        ,double      a_specamt
         ) const;
     double GetModalSpecAmt
-        (e_mode const&         a_EeMode
-        ,double                a_EePmt
-        ,e_mode const&         a_ErMode
-        ,double                a_ErPmt
-        ,oenum_modal_prem_type a_PremType
+        (mcenum_mode           a_ee_mode
+        ,double                a_ee_pmt
+        ,mcenum_mode           a_er_mode
+        ,double                a_er_pmt
+        ,oenum_modal_prem_type a_prem_type
         ) const;
     double GetModalSpecAmtMlyDed
-        (e_mode const& a_EeMode
-        ,double        a_EePmt
-        ,e_mode const& a_ErMode
-        ,double        a_ErPmt
+        (mcenum_mode a_ee_mode
+        ,double      a_ee_pmt
+        ,mcenum_mode a_er_mode
+        ,double      a_er_pmt
         ) const;
     double GetAnnuityValueMlyDed
-        (int           Year
-        ,e_mode const& Mode
+        (int         a_year
+        ,mcenum_mode a_mode
         ) const;
 
     std::vector<double> GetActuarialTable

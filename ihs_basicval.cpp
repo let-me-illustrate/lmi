@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.61 2008-07-14 22:27:21 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.62 2008-07-15 02:58:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -649,22 +649,22 @@ void BasicValues::Init7702A()
 
 //============================================================================
 // Needed for guideline premium.
-// TODO ?? dbopt is ignored for now, but some product designs will need it.
+// TODO ?? a_dbopt is ignored for now, but some product designs will need it.
 double BasicValues::GetTgtPrem
-    (int          Year
-    ,double       SpecAmt
-    ,mcenum_dbopt // Unused for now.
-    ,mcenum_mode  Mode
+    (int          a_year
+    ,double       a_specamt
+    ,mcenum_dbopt // a_dbopt Unused for now.
+    ,mcenum_mode  a_mode
     ) const
 {
     if(Database_->Query(DB_TgtPmFixedAtIssue))
         {
-        if(0 == Year)
+        if(0 == a_year)
             {
             InitialTargetPremium = GetModalTgtPrem
-                (Year
-                ,e_mode(porting_cast<enum_mode>(Mode))
-                ,SpecAmt
+                (a_year
+                ,a_mode
+                ,a_specamt
                 );
             }
             return InitialTargetPremium;
@@ -672,38 +672,9 @@ double BasicValues::GetTgtPrem
     else
         {
         return GetModalTgtPrem
-            (Year
-            ,e_mode(porting_cast<enum_mode>(Mode))
-            ,SpecAmt
-            );
-        }
-}
-
-double BasicValues::GetTgtPrem // DEPRECATED
-    (int            Year
-    ,double         SpecAmt
-    ,e_dbopt const& // Unused for now.
-    ,e_mode  const& Mode
-    ) const
-{
-    if(Database_->Query(DB_TgtPmFixedAtIssue))
-        {
-        if(0 == Year)
-            {
-            InitialTargetPremium = GetModalTgtPrem
-                (Year
-                ,Mode
-                ,SpecAmt
-                );
-            }
-            return InitialTargetPremium;
-        }
-    else
-        {
-        return GetModalTgtPrem
-            (Year
-            ,Mode
-            ,SpecAmt
+            (a_year
+            ,a_mode
+            ,a_specamt
             );
         }
 }
@@ -1049,62 +1020,62 @@ void BasicValues::SetMaxSurvivalDur()
 //============================================================================
 // Simply calls the target prem routine for now
 double BasicValues::GetModalMinPrem
-    (int           Year
-    ,e_mode const& Mode
-    ,double        SpecAmt
+    (int         a_year
+    ,mcenum_mode a_mode
+    ,double      a_specamt
     ) const
 {
     oenum_modal_prem_type const PremType =
         static_cast<oenum_modal_prem_type>(static_cast<int>(Database_->Query(DB_MinPremType)));
-    return GetModalPrem(Year, Mode, SpecAmt, PremType);
+    return GetModalPrem(a_year, a_mode, a_specamt, PremType);
 }
 
 //============================================================================
 double BasicValues::GetModalTgtPrem
-    (int           Year
-    ,e_mode const& Mode
-    ,double        SpecAmt
+    (int         a_year
+    ,mcenum_mode a_mode
+    ,double      a_specamt
     ) const
 {
     oenum_modal_prem_type const PremType =
         static_cast<oenum_modal_prem_type>(static_cast<int>(Database_->Query(DB_TgtPremType)));
-    double modal_prem = GetModalPrem(Year, Mode, SpecAmt, PremType);
+    double modal_prem = GetModalPrem(a_year, a_mode, a_specamt, PremType);
 
     // TODO ?? Probably this should reflect policy fee. Some products
     // define only an annual target premium, and don't specify how to
     // modalize it.
-//      modal_prem += POLICYFEE / Mode;
+//      modal_prem += POLICYFEE / a_mode;
 
     return modal_prem;
 }
 
 //============================================================================
 double BasicValues::GetModalPrem
-    (int                   Year
-    ,e_mode const&         Mode
-    ,double                SpecAmt
-    ,oenum_modal_prem_type PremType
+    (int                   a_year
+    ,mcenum_mode           a_mode
+    ,double                a_specamt
+    ,oenum_modal_prem_type a_prem_type
     ) const
 {
-    if(oe_monthly_deduction == PremType)
+    if(oe_monthly_deduction == a_prem_type)
         {
-        return GetModalPremMlyDed(Year, Mode, SpecAmt);
+        return GetModalPremMlyDed(a_year, a_mode, a_specamt);
         }
-    else if(oe_modal_nonmec == PremType)
+    else if(oe_modal_nonmec == a_prem_type)
         {
-        return GetModalPremMaxNonMec(Year, Mode, SpecAmt);
+        return GetModalPremMaxNonMec(a_year, a_mode, a_specamt);
         }
-    else if(oe_modal_table == PremType)
+    else if(oe_modal_table == a_prem_type)
         {
         // The fn s/b generalized to allow an input premium file and an input
         // policy fee. If oe_modal_table is ever used for other than tgt prem,
         // it will be wrong. TODO ?? Fix this.
-        return GetModalPremTgtFromTable(Year, Mode, SpecAmt);
+        return GetModalPremTgtFromTable(a_year, a_mode, a_specamt);
         }
     else
         {
         fatal_error()
-            << "Unknown modal premium type " << PremType << '.'
+            << "Unknown modal premium type " << a_prem_type << '.'
             << LMI_FLUSH
             ;
         }
@@ -1113,136 +1084,136 @@ double BasicValues::GetModalPrem
 
 //============================================================================
 double BasicValues::GetModalPremMaxNonMec
-    (int           // Year TODO ?? Unused for now.
-    ,e_mode const& Mode
-    ,double        SpecAmt
+    (int         // a_year TODO ?? Unused for now.
+    ,mcenum_mode a_mode
+    ,double      a_specamt
     ) const
 {
     double temp = MortalityRates_->SevenPayRates()[0];
     // always use initial spec amt and mode--fixed at issue
     // round down--mustn't violate 7702A
-    return round_max_premium(temp * epsilon_plus_one * SpecAmt / Mode.value());
+    return round_max_premium(temp * epsilon_plus_one * a_specamt / a_mode);
 }
 
 //============================================================================
 double BasicValues::GetModalPremTgtFromTable
-    (int           // Year TODO ?? Unused for now.
-    ,e_mode const& Mode
-    ,double        SpecAmt
+    (int         // a_year TODO ?? Unused for now.
+    ,mcenum_mode a_mode
+    ,double      a_specamt
     ) const
 {
     return round_max_premium
         (
             (   Database_->Query(DB_TgtPremPolFee)
-            +       SpecAmt
+            +       a_specamt
                 *   epsilon_plus_one
                 *   MortalityRates_->TargetPremiumRates()[0]
             )
-        /   Mode.value()
+        /   a_mode
         );
 }
 
 //============================================================================
 double BasicValues::GetModalPremCorridor
-    (int           // Year TODO ?? Unused for now.
-    ,e_mode const& Mode
-    ,double        SpecAmt
+    (int         // a_year TODO ?? Unused for now.
+    ,mcenum_mode a_mode
+    ,double      a_specamt
     ) const
 {
     double temp = MortalityRates_->CvatCorridorFactors()[0];
     // always use initial spec amt and mode--fixed at issue
     // round down--mustn't violate 7702A
-    return round_max_premium((epsilon_plus_one * SpecAmt / temp) / Mode.value());
+    return round_max_premium((epsilon_plus_one * a_specamt / temp) / a_mode);
 }
 
 //============================================================================
 double BasicValues::GetModalPremGLP
-    (int           a_Duration
-    ,e_mode const& a_Mode
-    ,double        a_BftAmt
-    ,double        a_SpecAmt
+    (int         a_duration
+    ,mcenum_mode a_mode
+    ,double      a_bft_amt
+    ,double      a_specamt
     ) const
 {
     double z = Irc7702_->CalculateGLP
-        (a_Duration
-        ,a_BftAmt
-        ,a_SpecAmt
+        (a_duration
+        ,a_bft_amt
+        ,a_specamt
         ,Irc7702_->GetLeastBftAmtEver()
         ,effective_dbopt_7702(porting_cast<mcenum_dbopt>(DeathBfts_->dbopt()[0].value()), Equiv7702DBO3)
         );
 
 // TODO ?? PROBLEMS HERE
-// what if Year != 0 ?
+// what if a_year != 0 ?
 // term rider, dumpin
 
-    z /= a_Mode.value();
+    z /= a_mode;
     return round_max_premium(epsilon_plus_one * z);
 }
 
 //============================================================================
 double BasicValues::GetModalPremGSP
-    (int           a_Duration
-    ,e_mode const& a_Mode
-    ,double        a_BftAmt
-    ,double        a_SpecAmt
+    (int         a_duration
+    ,mcenum_mode a_mode
+    ,double      a_bft_amt
+    ,double      a_specamt
     ) const
 {
     double z = Irc7702_->CalculateGSP
-        (a_Duration
-        ,a_BftAmt
-        ,a_SpecAmt
+        (a_duration
+        ,a_bft_amt
+        ,a_specamt
         ,Irc7702_->GetLeastBftAmtEver()
         );
 
 // TODO ?? PROBLEMS HERE
-// what if Year != 0 ?
+// what if a_year != 0 ?
 // term rider, dumpin
 
-    z /= a_Mode.value();
+    z /= a_mode;
     return round_max_premium(epsilon_plus_one * z);
 }
 
 //============================================================================
 double BasicValues::GetModalPremMlyDed
-    (int           Year
-    ,e_mode const& Mode
-    ,double        SpecAmt
+    (int         a_year
+    ,mcenum_mode a_mode
+    ,double      a_specamt
     ) const
 {
-    double z = SpecAmt;
+    double z = a_specamt;
     z /=
         (   1.0
         +   InterestRates_->GenAcctNetRate
                 (mce_gen_guar
                 ,mce_monthly_rate
-                )[Year]
+                )[a_year]
         );
-    z *= GetBandedCoiRates(mce_gen_curr, SpecAmt)[Year];
-    z += Loads_->monthly_policy_fee(mce_gen_curr)[Year];
+    z *= GetBandedCoiRates(mce_gen_curr, a_specamt)[a_year];
+    z += Loads_->monthly_policy_fee(mce_gen_curr)[a_year];
 
     if(Input_->Status[0].HasADD)
         {
         z +=
-                MortalityRates_->AdbRates()[Year]
-            *   std::min(SpecAmt, AdbLimit)
+                MortalityRates_->AdbRates()[a_year]
+            *   std::min(a_specamt, AdbLimit)
             ;
         }
     // TODO ?? Other riders should be considered here.
 
-    double annual_charge = Loads_->annual_policy_fee(mce_gen_curr)[Year];
+    double annual_charge = Loads_->annual_policy_fee(mce_gen_curr)[a_year];
 
     if(Input_->Status[0].HasWP)
         {
         // TODO ?? For simplicity, ignore Database_->Query(DB_WPMax)
-        double r = MortalityRates_->WpRates()[Year];
+        double r = MortalityRates_->WpRates()[a_year];
         z *= 1.0 + r;
         annual_charge *= 1.0 + r;
         }
 
     // TODO ?? Only *target* load?
-    z /= 1.0 - Loads_->target_total_load(mce_gen_curr)[Year];
+    z /= 1.0 - Loads_->target_total_load(mce_gen_curr)[a_year];
 
-    z *= GetAnnuityValueMlyDed(Year, Mode);
+    z *= GetAnnuityValueMlyDed(a_year, a_mode);
     z += annual_charge;
 
     return round_min_premium(z);
@@ -1250,86 +1221,86 @@ double BasicValues::GetModalPremMlyDed
 
 //============================================================================
 double BasicValues::GetModalSpecAmtMax
-    (e_mode const& a_EeMode
-    ,double        a_EePmt
-    ,e_mode const& a_ErMode
-    ,double        a_ErPmt
+    (mcenum_mode a_ee_mode
+    ,double      a_ee_pmt
+    ,mcenum_mode a_er_mode
+    ,double      a_er_pmt
     ) const
 {
     oenum_modal_prem_type const prem_type = static_cast<oenum_modal_prem_type>
         (static_cast<int>(Database_->Query(DB_MinPremType))
         );
     return GetModalSpecAmt
-            (a_EeMode
-            ,a_EePmt
-            ,a_ErMode
-            ,a_ErPmt
+            (a_ee_mode
+            ,a_ee_pmt
+            ,a_er_mode
+            ,a_er_pmt
             ,prem_type
             );
 }
 
 //============================================================================
 double BasicValues::GetModalSpecAmtTgt
-    (e_mode const& a_EeMode
-    ,double        a_EePmt
-    ,e_mode const& a_ErMode
-    ,double        a_ErPmt
+    (mcenum_mode a_ee_mode
+    ,double      a_ee_pmt
+    ,mcenum_mode a_er_mode
+    ,double      a_er_pmt
     ) const
 {
     oenum_modal_prem_type const prem_type = static_cast<oenum_modal_prem_type>
         (static_cast<int>(Database_->Query(DB_TgtPremType))
         );
     return GetModalSpecAmt
-            (a_EeMode
-            ,a_EePmt
-            ,a_ErMode
-            ,a_ErPmt
+            (a_ee_mode
+            ,a_ee_pmt
+            ,a_er_mode
+            ,a_er_pmt
             ,prem_type
             );
 }
 
 //============================================================================
-// TODO ?? No 'Year' argument?
+// TODO ?? No 'a_year' argument?
 double BasicValues::GetModalSpecAmt
-    (e_mode const&         a_EeMode
-    ,double                a_EePmt
-    ,e_mode const&         a_ErMode
-    ,double                a_ErPmt
-    ,oenum_modal_prem_type a_PremType
+    (mcenum_mode           a_ee_mode
+    ,double                a_ee_pmt
+    ,mcenum_mode           a_er_mode
+    ,double                a_er_pmt
+    ,oenum_modal_prem_type a_prem_type
     ) const
 {
-    if(oe_monthly_deduction == a_PremType)
+    if(oe_monthly_deduction == a_prem_type)
         {
         return GetModalSpecAmtMlyDed
-            (a_EeMode
-            ,a_EePmt
-            ,a_ErMode
-            ,a_ErPmt
+            (a_ee_mode
+            ,a_ee_pmt
+            ,a_er_mode
+            ,a_er_pmt
             );
         }
-    else if(oe_modal_nonmec == a_PremType)
+    else if(oe_modal_nonmec == a_prem_type)
         {
         return GetModalSpecAmtMinNonMec
-            (a_EeMode
-            ,a_EePmt
-            ,a_ErMode
-            ,a_ErPmt
+            (a_ee_mode
+            ,a_ee_pmt
+            ,a_er_mode
+            ,a_er_pmt
             );
         }
-    else if(oe_modal_table == a_PremType)
+    else if(oe_modal_table == a_prem_type)
         {
         // TODO ?? This is dubious. If the table specified is a
         // seven-pay table, then this seems not to give the same
         // result as the seven-pay premium type.
-        double annualized_pmt = a_EeMode * a_EePmt + a_ErMode * a_ErPmt;
+        double annualized_pmt = a_ee_mode * a_ee_pmt + a_er_mode * a_er_pmt;
         return round_min_specamt
-            (annualized_pmt / GetModalPremTgtFromTable(0, a_EeMode, 1)
+            (annualized_pmt / GetModalPremTgtFromTable(0, a_ee_mode, 1)
             );
         }
     else
         {
         fatal_error()
-            << "Unknown modal premium type " << a_PremType << '.'
+            << "Unknown modal premium type " << a_prem_type << '.'
             << LMI_FLUSH
             ;
         }
@@ -1338,13 +1309,13 @@ double BasicValues::GetModalSpecAmt
 
 //============================================================================
 double BasicValues::GetModalSpecAmtMinNonMec
-    (e_mode const& a_EeMode
-    ,double        a_EePmt
-    ,e_mode const& a_ErMode
-    ,double        a_ErPmt
+    (mcenum_mode a_ee_mode
+    ,double      a_ee_pmt
+    ,mcenum_mode a_er_mode
+    ,double      a_er_pmt
     ) const
 {
-    double annualized_pmt = a_EeMode * a_EePmt + a_ErMode * a_ErPmt;
+    double annualized_pmt = a_ee_mode * a_ee_pmt + a_er_mode * a_er_pmt;
     return round_min_specamt
         (annualized_pmt / MortalityRates_->SevenPayRates()[0]
         );
@@ -1352,13 +1323,13 @@ double BasicValues::GetModalSpecAmtMinNonMec
 
 //============================================================================
 double BasicValues::GetModalSpecAmtGLP
-    (e_mode const& a_EeMode
-    ,double        a_EePmt
-    ,e_mode const& a_ErMode
-    ,double        a_ErPmt
+    (mcenum_mode a_ee_mode
+    ,double      a_ee_pmt
+    ,mcenum_mode a_er_mode
+    ,double      a_er_pmt
     ) const
 {
-    double annualized_pmt = a_EeMode * a_EePmt + a_ErMode * a_ErPmt;
+    double annualized_pmt = a_ee_mode * a_ee_pmt + a_er_mode * a_er_pmt;
 // TODO ?? Duration 0 hardcoded here, but prem functions use actual duration.
     return Irc7702_->CalculateGLPSpecAmt
         (0
@@ -1373,13 +1344,13 @@ double BasicValues::GetModalSpecAmtGLP
 
 //============================================================================
 double BasicValues::GetModalSpecAmtGSP
-    (e_mode const& a_EeMode
-    ,double        a_EePmt
-    ,e_mode const& a_ErMode
-    ,double        a_ErPmt
+    (mcenum_mode a_ee_mode
+    ,double      a_ee_pmt
+    ,mcenum_mode a_er_mode
+    ,double      a_er_pmt
     ) const
 {
-    double annualized_pmt = a_EeMode * a_EePmt + a_ErMode * a_ErPmt;
+    double annualized_pmt = a_ee_mode * a_ee_pmt + a_er_mode * a_er_pmt;
 // TODO ?? Duration 0 hardcoded here, but prem functions use actual duration.
     return Irc7702_->CalculateGSPSpecAmt
         (0
@@ -1393,13 +1364,13 @@ double BasicValues::GetModalSpecAmtGSP
 
 //============================================================================
 double BasicValues::GetModalSpecAmtCorridor
-    (e_mode const& a_EeMode
-    ,double        a_EePmt
-    ,e_mode const& a_ErMode
-    ,double        a_ErPmt
+    (mcenum_mode a_ee_mode
+    ,double      a_ee_pmt
+    ,mcenum_mode a_er_mode
+    ,double      a_er_pmt
     ) const
 {
-    double annualized_pmt = a_EeMode * a_EePmt + a_ErMode * a_ErPmt;
+    double annualized_pmt = a_ee_mode * a_ee_pmt + a_er_mode * a_er_pmt;
     double rate = MortalityRates_->CvatCorridorFactors()[0];
     // always use initial spec amt and mode--fixed at issue
     // round up--mustn't violate 7702A
@@ -1408,17 +1379,17 @@ double BasicValues::GetModalSpecAmtCorridor
 
 //============================================================================
 double BasicValues::GetModalSpecAmtMlyDed
-    (e_mode const& a_EeMode
-    ,double        a_EePmt
-    ,e_mode const& a_ErMode
-    ,double        a_ErPmt
+    (mcenum_mode a_ee_mode
+    ,double      a_ee_pmt
+    ,mcenum_mode a_er_mode
+    ,double      a_er_pmt
     ) const
 {
 // TODO ?? This is broken. It is supposed to take mode into account,
 // but what should be the behavior if ee and er both pay and their modes differ?
 // For now, we just assume that ee mode governs...only a guess...
-    e_mode guess_mode = a_EeMode;
-    double z = a_EeMode * a_EePmt + a_ErMode * a_ErPmt;
+    mcenum_mode guess_mode = a_ee_mode;
+    double z = a_ee_mode * a_ee_pmt + a_er_mode * a_er_pmt;
     z /= guess_mode;
 
     double annual_charge = Loads_->annual_policy_fee(mce_gen_curr)[0];
@@ -1477,7 +1448,7 @@ double BasicValues::GetModalSpecAmtMlyDed
 // are distinguished.
 std::vector<double> const& BasicValues::GetBandedCoiRates
     (mcenum_gen_basis rate_basis
-    ,double           specamt
+    ,double           a_specamt
     ) const
 {
     if(UseUnusualCOIBanding && mce_gen_guar != rate_basis)
@@ -1486,11 +1457,11 @@ std::vector<double> const& BasicValues::GetBandedCoiRates
         double band_1_limit = Database_->Query(DB_CurrCOITable1Limit);
         LMI_ASSERT(0.0 <= band_0_limit);
         LMI_ASSERT(band_0_limit <= band_1_limit);
-        if(band_0_limit <= specamt && specamt < band_1_limit)
+        if(band_0_limit <= a_specamt && a_specamt < band_1_limit)
             {
             return MortalityRates_->MonthlyCoiRatesBand1(rate_basis);
             }
-        else if(band_1_limit <= specamt)
+        else if(band_1_limit <= a_specamt)
             {
             return MortalityRates_->MonthlyCoiRatesBand2(rate_basis);
             }
@@ -1507,18 +1478,18 @@ std::vector<double> const& BasicValues::GetBandedCoiRates
 
 //============================================================================
 double BasicValues::GetAnnuityValueMlyDed
-    (int           Year
-    ,e_mode const& Mode
+    (int         a_year
+    ,mcenum_mode a_mode
     ) const
 {
-    LMI_ASSERT(0.0 != Mode);
+    LMI_ASSERT(0.0 != a_mode);
     double spread = 0.0;
-    if(e_monthly != Mode)
+    if(mce_monthly != a_mode)
         {
-        spread = MinPremIntSpread_[Year] * 1.0 / Mode.value();
+        spread = MinPremIntSpread_[a_year] * 1.0 / a_mode;
         }
     double z = i_upper_12_over_12_from_i<double>()
-        (   Input_->GenAcctRate[Year]
+        (   Input_->GenAcctRate[a_year]
         -   spread
         );
 // TODO ?? What do we do if SA and GA current rates differ?
@@ -1527,10 +1498,10 @@ double BasicValues::GetAnnuityValueMlyDed
         ,InterestRates_->GenAcctNetRate
             (mce_gen_guar
             ,mce_monthly_rate
-            )[Year]
+            )[a_year]
         );
     u = 1.0 / u;
-    return (1.0 - std::pow(u, 12.0 / Mode.value())) / (1.0 - u);
+    return (1.0 - std::pow(u, 12.0 / a_mode)) / (1.0 - u);
 }
 
 /// This forwarding function prevents the 'actuarial_table' module
