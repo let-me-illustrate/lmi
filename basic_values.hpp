@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.31 2008-07-15 02:58:19 chicares Exp $
+// $Id: basic_values.hpp,v 1.32 2008-07-15 18:47:38 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -60,11 +60,11 @@ class Irc7702;
 class Irc7702A;
 class Loads;
 class MortalityRates;
-class Outlay;
 class SurrChgRates;
 class TDatabase;
 class TProductData;
 class death_benefits;
+class modal_outlay;
 class rounding_rules;
 class stratified_charges;
 
@@ -133,7 +133,7 @@ class LMI_SO BasicValues
     boost::shared_ptr<InterestRates>      InterestRates_;
     boost::shared_ptr<SurrChgRates>       SurrChgRates_;
     boost::shared_ptr<death_benefits>     DeathBfts_;
-    boost::shared_ptr<Outlay>             Outlay_;
+    boost::shared_ptr<modal_outlay>       Outlay_;
     boost::shared_ptr<Loads>              Loads_;
     boost::shared_ptr<Irc7702>            Irc7702_;
     boost::shared_ptr<Irc7702A>           Irc7702A_;

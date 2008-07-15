@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: outlay.hpp,v 1.7 2008-07-15 18:25:09 chicares Exp $
+// $Id: outlay.hpp,v 1.8 2008-07-15 18:47:38 chicares Exp $
 
 #ifndef outlay_hpp
 #define outlay_hpp
@@ -35,15 +35,15 @@
 
 class InputParms;
 
-class Outlay
+class modal_outlay
     :private boost::noncopyable
-    ,virtual private obstruct_slicing<Outlay>
+    ,virtual private obstruct_slicing<modal_outlay>
 {
     friend class AccountValue;
 
   public:
-    explicit Outlay(InputParms const&);
-    ~Outlay();
+    explicit modal_outlay(InputParms const&);
+    ~modal_outlay();
 
     double dumpin() const;
     double external_1035_amount() const;
@@ -57,7 +57,7 @@ class Outlay
     std::vector<double> const& withdrawals       () const;
 
   private:
-    Outlay();
+    modal_outlay();
 
     double dumpin_;
     double external_1035_amount_;
@@ -82,57 +82,57 @@ class Outlay
     std::vector<double> withdrawals_;
 };
 
-inline void Outlay::set_external_1035_amount(double z)
+inline void modal_outlay::set_external_1035_amount(double z)
 {
     external_1035_amount_ = z;
 }
 
-inline void Outlay::set_internal_1035_amount(double z)
+inline void modal_outlay::set_internal_1035_amount(double z)
 {
     internal_1035_amount_ = z;
 }
 
-inline double Outlay::dumpin() const
+inline double modal_outlay::dumpin() const
 {
     return dumpin_;
 }
 
-inline double Outlay::external_1035_amount() const
+inline double modal_outlay::external_1035_amount() const
 {
     return external_1035_amount_;
 }
 
-inline double Outlay::internal_1035_amount() const
+inline double modal_outlay::internal_1035_amount() const
 {
     return internal_1035_amount_;
 }
 
-inline std::vector<e_mode> const& Outlay::ee_premium_modes() const
+inline std::vector<e_mode> const& modal_outlay::ee_premium_modes() const
 {
     return ee_premium_modes_;
 }
 
-inline std::vector<e_mode> const& Outlay::er_premium_modes() const
+inline std::vector<e_mode> const& modal_outlay::er_premium_modes() const
 {
     return er_premium_modes_;
 }
 
-inline std::vector<double> const& Outlay::ee_modal_premiums() const
+inline std::vector<double> const& modal_outlay::ee_modal_premiums() const
 {
     return ee_modal_premiums_;
 }
 
-inline std::vector<double> const& Outlay::er_modal_premiums() const
+inline std::vector<double> const& modal_outlay::er_modal_premiums() const
 {
     return er_modal_premiums_;
 }
 
-inline std::vector<double> const& Outlay::new_cash_loans() const
+inline std::vector<double> const& modal_outlay::new_cash_loans() const
 {
     return new_cash_loans_;
 }
 
-inline std::vector<double> const& Outlay::withdrawals() const
+inline std::vector<double> const& modal_outlay::withdrawals() const
 {
     return withdrawals_;
 }
