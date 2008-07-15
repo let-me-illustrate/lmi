@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.126 2008-04-21 13:14:36 chicares Exp $
+# $Id: GNUmakefile,v 1.127 2008-07-15 16:13:20 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -326,6 +326,7 @@ check_concinnity: source_clean custom_tools
 	@$(RM) --force TODAY
 	@$(RM) --force BOM
 	@$(RM) --force BOY
+	@for z in $(build_directory)/*.d; do [ -s $$z ] || echo $$z; done;
 	@$(ECHO) "  Problems detected by xmllint:"
 	@for z in $(xml_files); \
 	  do \
