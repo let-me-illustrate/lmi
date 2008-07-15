@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: outlay.cpp,v 1.7 2008-07-15 17:37:18 chicares Exp $
+// $Id: outlay.cpp,v 1.8 2008-07-15 18:25:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,21 +29,13 @@
 #include "outlay.hpp"
 
 #include "assert_lmi.hpp"
-#include "basic_values.hpp"
 #include "inputs.hpp"
 
 #include <algorithm>
 #include <iterator>
 
-Outlay::Outlay(BasicValues const& basic_values)
+Outlay::Outlay(InputParms const& in)
 {
-    Init(basic_values);
-}
-
-void Outlay::Init(BasicValues const& basic_values)
-{
-    InputParms const& in = *basic_values.Input_;
-
     dumpin_               = in.Dumpin;
     external_1035_amount_ = in.External1035ExchangeAmount.value();
     internal_1035_amount_ = in.Internal1035ExchangeAmount.value();

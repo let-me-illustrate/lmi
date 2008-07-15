@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basicvalues.cpp,v 1.23 2008-07-15 02:58:19 chicares Exp $
+// $Id: basicvalues.cpp,v 1.24 2008-07-15 18:25:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -111,7 +111,7 @@ void BasicValues::Init()
     InterestRates_ .reset(new InterestRates  (*this));
     SurrChgRates_  .reset(new SurrChgRates   (*Database_));
     DeathBfts_     .reset(new death_benefits (*this));
-    Outlay_        .reset(new Outlay         (*this));
+    Outlay_        .reset(new Outlay         (*Input_));
     Loads_         .reset(new Loads(*Database_, IsSubjectToIllustrationReg()));
 
     MinSpecAmt = Database_->Query(DB_MinSpecAmt);
