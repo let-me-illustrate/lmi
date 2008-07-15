@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: outlay.hpp,v 1.5 2008-07-15 17:27:10 chicares Exp $
+// $Id: outlay.hpp,v 1.6 2008-07-15 17:37:18 chicares Exp $
 
 #ifndef outlay_hpp
 #define outlay_hpp
@@ -43,6 +43,7 @@ class Outlay
 
   public:
     explicit Outlay(BasicValues const&);
+    ~Outlay();
 
     double dumpin() const;
     double external_1035_amount() const;
