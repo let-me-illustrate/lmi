@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.38 2008-07-08 17:52:21 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.39 2008-07-16 13:23:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -380,8 +380,11 @@ void LedgerInvariant::Init(BasicValues* b)
         TermSpecAmt     .assign(Length, 0.0);
         }
     SpecAmt         = b->DeathBfts_->specamt();
-    EeMode          = b->Outlay_->ee_premium_modes();
-    ErMode          = b->Outlay_->er_premium_modes();
+    for(int j = 0; j < Length; ++j)
+        {
+        EeMode[j] = porting_cast<enum_mode>(b->Outlay_->ee_premium_modes()[j]);
+        ErMode[j] = porting_cast<enum_mode>(b->Outlay_->er_premium_modes()[j]);
+        }
     DBOpt           = b->DeathBfts_->dbopt();
 
     IndvTaxBracket       = Input_.VectorIndvTaxBracket          ;

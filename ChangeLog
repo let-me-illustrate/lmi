@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1096 2008-07-15 02:59:27 chicares Exp $
+// $Id: ChangeLog,v 1.1097 2008-07-16 13:23:26 chicares Exp $
 
 MAINTENANCE
 
@@ -17835,4 +17835,62 @@ Regularize arguments of certain member functions.
   enums7702.hpp [expunged]
   xenumtypes.hpp
 Combine two obsolescent headers.
+
+20080715T1613Z <gchicares@sbcglobal.net> [1125]
+
+  GNUmakefile
+Test for zero-byte dependency files.
+
+20080715T1727Z <gchicares@sbcglobal.net> [1125]
+
+  ihs_avsolve.cpp
+  outlay.cpp
+  outlay.hpp
+Make outlay class noncopyable.
+
+20080715T1737Z <gchicares@sbcglobal.net> [1125]
+
+  outlay.cpp
+  outlay.hpp
+Add an explicit dtor; reformat.
+
+20080715T1825Z <gchicares@sbcglobal.net> [1125]
+
+  basicvalues.cpp
+  ihs_basicval.cpp
+  outlay.cpp
+  outlay.hpp
+Refactor outlay class.
+
+20080715T1847Z <gchicares@sbcglobal.net> [1125]
+
+  basic_values.hpp
+  basicvalues.cpp
+  ihs_basicval.cpp
+  outlay.cpp
+  outlay.hpp
+Rename outlay class.
+
+20080716T1120Z <gchicares@sbcglobal.net> [1125]
+
+  account_value.hpp
+  accountvalue.cpp
+  ihs_avmly.cpp
+  ihs_avstrtgy.cpp
+Refactor, eliminating type e_mode from account-value class.
+
+20080716T1215Z <gchicares@sbcglobal.net> [1125]
+
+  outlay.cpp
+  outlay.hpp
+Rearrange.
+
+20080716T1323Z <gchicares@sbcglobal.net> [1125]
+
+  basicvalues.cpp
+  ihs_basicval.cpp
+  ledger_invariant.cpp
+  outlay.cpp
+  outlay.hpp
+Refactor, eliminating old 'xenum' class from outlay class.
 
