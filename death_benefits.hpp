@@ -19,42 +19,42 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: death_benefits.hpp,v 1.5 2008-01-01 18:29:39 chicares Exp $
+// $Id: death_benefits.hpp,v 1.6 2008-07-16 15:58:24 chicares Exp $
 
 #ifndef death_benefits_hpp
 #define death_benefits_hpp
 
 #include "config.hpp"
 
+#include "mc_enum_type_enums.hpp"
 #include "obstruct_slicing.hpp"
-#include "xenumtypes.hpp"
 
 #include <boost/utility.hpp>
 
 #include <vector>
 
-class BasicValues;
+class yare_input;
 
 class death_benefits
     :private boost::noncopyable
     ,virtual private obstruct_slicing<death_benefits>
 {
   public:
-    explicit death_benefits(BasicValues const&);
+    death_benefits(int, yare_input const&);
     ~death_benefits();
 
-    void set_specamt(double amount, int begin_year, int end_year);
+    void set_specamt(double z, int from_year, int to_year);
 
-    std::vector<e_dbopt> const& dbopt()   const;
-    std::vector<double>  const& specamt() const;
+    std::vector<mcenum_dbopt> const& dbopt()   const;
+    std::vector<double>       const& specamt() const;
 
   private:
     int length_;
-    std::vector<e_dbopt> dbopt_;
-    std::vector<double>  specamt_;
+    std::vector<mcenum_dbopt> dbopt_;
+    std::vector<double>       specamt_;
 };
 
-inline std::vector<e_dbopt> const& death_benefits::dbopt() const
+inline std::vector<mcenum_dbopt> const& death_benefits::dbopt() const
 {
     return dbopt_;
 }

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.118 2008-07-15 02:58:19 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.119 2008-07-16 15:58:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -107,6 +107,8 @@ AccountValue::AccountValue(InputParms const& input)
     ,RunBasis_             (mce_run_gen_curr_sep_full)
     ,GenBasis_             (mce_gen_curr)
     ,SepBasis_             (mce_sep_full)
+    ,OldDBOpt              (mce_option1)
+    ,YearsDBOpt            (mce_option1)
     ,FirstYearPremiumExceedsRetaliationLimit(true)
 {
     InvariantValues().Init(this);
@@ -408,8 +410,8 @@ void AccountValue::InitializeLife(e_run_basis const& a_Basis)
 // then we call OldPerformSpecAmtStrategy(), which assigns values to
 // InvariantValues().SpecAmt; then we call InvariantValues().Init() again.
 // But calling InvariantValues().Init() again wiped out the SpecAmt, because
-// it reinitialized it based on DeathBfts_::SpecAmt, so I called
-// DeathBfts_->SetSpecAmt() in AccountValue::OldPerformSpecAmtStrategy().
+// it reinitialized it based on DeathBfts_::specamt(), so I called
+// DeathBfts_->set_specamt() in AccountValue::OldPerformSpecAmtStrategy().
 
     SetInitialValues();
 
@@ -442,7 +444,7 @@ void AccountValue::InitializeLife(e_run_basis const& a_Basis)
     VariantValues().Init(this, ExpAndGABasis, SABasis);
     InvariantValues().Init(this);
 
-    OldDBOpt = InvariantValues().DBOpt[0];
+    OldDBOpt = porting_cast<mcenum_dbopt>(InvariantValues().DBOpt[0].value());
     OldSA = InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0];
     // TODO ?? Shouldn't we increase initial SA if contract in corridor at issue?
     OldDB = OldSA;
@@ -689,7 +691,7 @@ void AccountValue::SetInitialValues()
 
     YearlyNoLapseActive.assign(BasicValues::GetLength(), true);
     NoLapseActive               = true;
-    if(NoLapseOpt1Only && e_option1 != DeathBfts_->dbopt()[0])
+    if(NoLapseOpt1Only && mce_option1 != DeathBfts_->dbopt()[0])
         {
         NoLapseActive           = false;
         }

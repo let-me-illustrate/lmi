@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avdebug.cpp,v 1.28 2008-01-01 18:29:41 chicares Exp $
+// $Id: ihs_avdebug.cpp,v 1.29 2008-07-16 15:58:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -359,7 +359,7 @@ void AccountValue::DebugPrint()
 
     SetMonthlyDetail(eRegLoanBal         ,RegLnBal                         );
     SetMonthlyDetail(ePrefLoanBal        ,PrfLnBal                         );
-    SetMonthlyDetail(eDBOption           ,YearsDBOpt.str()                 );
+    SetMonthlyDetail(eDBOption           ,YearsDBOpt                       );
     SetMonthlyDetail(eSpecAmt            ,ActualSpecAmt                    );
     SetMonthlyDetail(eCorridorFactor     ,YearsCorridorFactor              );
     SetMonthlyDetail(eDeathBft           ,DBReflectingCorr                 );
