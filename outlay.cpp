@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: outlay.cpp,v 1.9 2008-07-15 18:47:38 chicares Exp $
+// $Id: outlay.cpp,v 1.10 2008-07-16 12:15:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -41,8 +41,8 @@ modal_outlay::modal_outlay(InputParms const& in)
     internal_1035_amount_ = in.Internal1035ExchangeAmount.value();
 
     std::copy(in.EePremium.begin(), in.EePremium.end(), std::back_inserter(ee_modal_premiums_));
-    std::copy(in.ErPremium.begin(), in.ErPremium.end(), std::back_inserter(er_modal_premiums_));
     std::copy(in.EeMode   .begin(), in.EeMode   .end(), std::back_inserter(ee_premium_modes_ ));
+    std::copy(in.ErPremium.begin(), in.ErPremium.end(), std::back_inserter(er_modal_premiums_));
     std::copy(in.ErMode   .begin(), in.ErMode   .end(), std::back_inserter(er_premium_modes_ ));
     std::copy(in.Loan     .begin(), in.Loan     .end(), std::back_inserter(new_cash_loans_   ));
     std::copy(in.WD       .begin(), in.WD       .end(), std::back_inserter(withdrawals_      ));
@@ -62,6 +62,12 @@ void modal_outlay::set_er_modal_premiums(double z, int from_year, int to_year)
     std::fill_n(er_modal_premiums_.begin() + from_year, to_year - from_year, z);
 }
 
+void modal_outlay::set_er_modal_premiums(std::vector<double> const& z)
+{
+    LMI_ASSERT(z.size() == er_modal_premiums_.size());
+    er_modal_premiums_ = z;
+}
+
 void modal_outlay::set_new_cash_loans(double z, int from_year, int to_year)
 {
     std::fill_n(new_cash_loans_.begin() + from_year, to_year - from_year, z);
@@ -70,11 +76,5 @@ void modal_outlay::set_new_cash_loans(double z, int from_year, int to_year)
 void modal_outlay::set_withdrawals(double z, int from_year, int to_year)
 {
     std::fill_n(withdrawals_.begin() + from_year, to_year - from_year, z);
-}
-
-void modal_outlay::set_er_modal_premiums(std::vector<double> const& z)
-{
-    LMI_ASSERT(z.size() == er_modal_premiums_.size());
-    er_modal_premiums_ = z;
 }
 
