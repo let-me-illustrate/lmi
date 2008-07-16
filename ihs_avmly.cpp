@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.90 2008-07-16 11:20:25 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.91 2008-07-16 15:58:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -899,15 +899,15 @@ void AccountValue::TxOptionChange()
 
     // It's OK to index by [Year - 1] because above we return early
     // if 0 == Year.
-    e_dbopt const& old_option = DeathBfts_->dbopt()[Year - 1];
+    mcenum_dbopt const old_option = DeathBfts_->dbopt()[Year - 1];
 
     // Nothing to do if no option change requested.
-    if(YearsDBOpt == old_option)
+    if(old_option == YearsDBOpt)
         {
         return;
         }
 
-    if(!AllowChangeToDBO2 && YearsDBOpt == e_option2)
+    if(!AllowChangeToDBO2 && mce_option2 == YearsDBOpt)
         {
         fatal_error()
             << "Change to increasing death benefit option"
@@ -917,7 +917,7 @@ void AccountValue::TxOptionChange()
         return;
         }
 
-    if(NoLapseActive &&  e_option1 != YearsDBOpt &&  NoLapseOpt1Only)
+    if(NoLapseActive &&  mce_option1 != YearsDBOpt &&  NoLapseOpt1Only)
         {
         NoLapseActive = false;
         }
@@ -931,24 +931,21 @@ void AccountValue::TxOptionChange()
     // Change specified amount, keeping amount at risk invariant.
     switch(YearsDBOpt)
         {
-        case e_option1:
+        case mce_option1:
             {
             if(OptChgCanIncrSA)
                 {
-                if(e_option2 == old_option)
+                if(mce_option2 == old_option)
                     {
                     ChangeSpecAmtBy(std::max(0.0, TotalAccountValue()));
                     }
-                else if(e_rop == old_option)
+                else if(mce_rop == old_option)
                     {
                     ChangeSpecAmtBy(std::max(0.0, CumPmts));
                     }
                 else
                     {
-                    fatal_error()
-                        << "Unknown death benefit option."
-                        << LMI_FLUSH
-                        ;
+                    fatal_error() << "Unknown death benefit option." << LMI_FLUSH;
                     }
                 }
             else
@@ -959,7 +956,7 @@ void AccountValue::TxOptionChange()
             break;
         // TODO ?? Changes to option 1 take into account the old dbopt, but
         // changes to other options defectively do not.
-        case e_option2:
+        case mce_option2:
             if(OptChgCanDecrSA)
                 {
                 ChangeSpecAmtBy(-std::max(0.0, TotalAccountValue()));
@@ -969,7 +966,7 @@ void AccountValue::TxOptionChange()
                 // Do nothing.
                 }
             break;
-        case e_rop:
+        case mce_rop:
             if(OptChgCanDecrSA)
                 {
                 ChangeSpecAmtBy(-std::max(0.0, CumPmts));
@@ -981,12 +978,7 @@ void AccountValue::TxOptionChange()
             break;
         default:
             {
-            fatal_error()
-                << "Case '"
-                << YearsDBOpt
-                << "' not found."
-                << LMI_FLUSH
-                ;
+            fatal_error() << "Case " << YearsDBOpt << " not found." << LMI_FLUSH;
             }
         }
 }
@@ -1257,7 +1249,7 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
         double tentative_target = GetTgtPrem
             (Year
             ,std::max(ActualSpecAmt, round_min_specamt(min_benefit))
-            ,porting_cast<mcenum_dbopt>(YearsDBOpt.value())
+            ,YearsDBOpt
             ,mce_annual
             );
 
@@ -1361,7 +1353,7 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
             // do not allow specamt strategies with increase-to-avoid.
 
 // TODO ?? TEMPORARILY SUPPRESSED FOR REGRESSION TEST
-//            DeathBfts_->SetSpecAmt(min_benefit, 0, 7);
+//            DeathBfts_->set_specamt(min_benefit, 0, 7);
 
             InitializeLife(RateBasis);
             InitializeSpecAmt();
@@ -1371,7 +1363,7 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
     Irc7702A_->UpdateBOY7702A(Year);
 
 LedgerInvariant::Init(BasicValues* b)
-            YearsSpecAmt        = DeathBfts_->GetSpecAmt()[Year];
+            YearsSpecAmt        = DeathBfts_->specamt()[Year];
             ActualSpecAmt       = InvariantValues().SpecAmt[Year];
             InitializeSpecAmt()
 */
@@ -1535,8 +1527,8 @@ but position could be reversed for variable policy with bad curr performance
     // If there is an adjustable event, then DB (not specamt) is used
     // in calculating the adjustment.
     //
-    mcenum_dbopt_7702 const new_dbopt(effective_dbopt_7702(porting_cast<mcenum_dbopt>(YearsDBOpt.value()), Equiv7702DBO3));
-    mcenum_dbopt_7702 const old_dbopt(effective_dbopt_7702(porting_cast<mcenum_dbopt>(OldDBOpt  .value()), Equiv7702DBO3));
+    mcenum_dbopt_7702 const new_dbopt(effective_dbopt_7702(YearsDBOpt, Equiv7702DBO3));
+    mcenum_dbopt_7702 const old_dbopt(effective_dbopt_7702(OldDBOpt  , Equiv7702DBO3));
     bool adj_event =
             (
                 !materially_equal(OldSA, ActualSpecAmt + TermSpecAmt)
@@ -2098,20 +2090,20 @@ void AccountValue::TxSetDeathBft(bool force_eoy_behavior)
 
     switch(YearsDBOpt)
         {
-        case e_option1:
+        case mce_option1:
             {
             DBIgnoringCorr = ActualSpecAmt;
             DB7702A = ActualSpecAmt;
             }
             break;
-        case e_option2:
+        case mce_option2:
             {
             // Negative AV doesn't decrease death benefit.
             DBIgnoringCorr = ActualSpecAmt + std::max(0.0, AV);
             DB7702A = ActualSpecAmt;
             }
             break;
-        case e_rop:
+        case mce_rop:
             {
             // SA + sum of premiums less withdrawals, but not < SA.
             DBIgnoringCorr = ActualSpecAmt + std::max(0.0, CumPmts);
@@ -2120,12 +2112,7 @@ void AccountValue::TxSetDeathBft(bool force_eoy_behavior)
             break;
         default:
             {
-            fatal_error()
-                << "Case '"
-                << YearsDBOpt
-                << "' not found."
-                << LMI_FLUSH
-                ;
+            fatal_error() << "Case " << YearsDBOpt << " not found." << LMI_FLUSH;
             }
         }
 
@@ -3029,7 +3016,7 @@ void AccountValue::TxTakeWD()
     switch(YearsDBOpt)
         {
         // If DBOpt 1, SA = std::min(SA, DB - WD); if opt 2, no change.
-        case e_option1:
+        case mce_option1:
             {
             // Spec amt reduced for option 1 even if in corridor?
             //   --taken care of by max WD formula
@@ -3062,7 +3049,7 @@ void AccountValue::TxTakeWD()
                 }
             }
             break;
-        case e_option2:
+        case mce_option2:
             {
             if(WDCanDecrSADBO2)
                 {
@@ -3078,7 +3065,7 @@ void AccountValue::TxTakeWD()
                 }
             }
             break;
-        case e_rop:
+        case mce_rop:
             {
             if(WDCanDecrSADBO3)
                 {
@@ -3096,12 +3083,7 @@ void AccountValue::TxTakeWD()
             break;
         default:
             {
-            fatal_error()
-                << "Case '"
-                << YearsDBOpt
-                << "' not found."
-                << LMI_FLUSH
-                ;
+            fatal_error() << "Case " << YearsDBOpt << " not found." << LMI_FLUSH;
             }
         }
 

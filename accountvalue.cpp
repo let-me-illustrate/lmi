@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.40 2008-07-16 11:20:25 chicares Exp $
+// $Id: accountvalue.cpp,v 1.41 2008-07-16 15:58:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -128,6 +128,8 @@ AccountValue::AccountValue(InputParms const& input)
     ,GenBasis_         (mce_gen_curr)
     ,SepBasis_         (mce_sep_full)
     ,mode              (mce_annual)
+    ,OldDBOpt          (mce_option1)
+    ,YearsDBOpt        (mce_option1)
 {
     GrossPmts  .resize(12);
     NetPmts    .resize(12);
@@ -528,7 +530,7 @@ void AccountValue::TxOptionChange()
         }
 
     // Nothing to do if no option change requested.
-    if(YearsDBOpt.value() == DeathBfts_->dbopt()[Year - 1].value())
+    if(DeathBfts_->dbopt()[Year - 1] == YearsDBOpt)
         {
         return;
         }
@@ -541,15 +543,15 @@ void AccountValue::TxOptionChange()
         }
 
     // Change specified amount, keeping amount at risk invariant.
-    switch(YearsDBOpt.value())
+    switch(YearsDBOpt)
         {
-        case e_option1:
+        case mce_option1:
             {
             // Option 1: increase spec amt by AV.
             ActualSpecAmt += AV;
             }
             break;
-        case e_option2:
+        case mce_option2:
             {
             // Option 2: decrease spec amt by AV, but not below min spec amt.
             ActualSpecAmt -= AV;
@@ -559,12 +561,7 @@ void AccountValue::TxOptionChange()
             break;
         default:
             {
-            fatal_error()
-                << "Case '"
-                << YearsDBOpt.value()
-                << "' not found."
-                << LMI_FLUSH
-                ;
+            fatal_error() << "Case " << YearsDBOpt << " not found." << LMI_FLUSH;
             }
         }
     ActualSpecAmt = GetRoundingRules().round_specamt()(ActualSpecAmt);
@@ -773,15 +770,15 @@ void AccountValue::TxSetDeathBft(bool)
     double AV = AVUnloaned + AVRegLn + AVPrfLn;
 
     // Set death benefit reflecting corridor and death benefit option.
-    switch(YearsDBOpt.value())
+    switch(YearsDBOpt)
         {
-        case e_option1:
+        case mce_option1:
             {
             // Option 1: specamt, or corridor times AV if greater.
             deathbft = std::max(ActualSpecAmt, YearsCorridorFactor * AV);
             }
             break;
-        case e_option2:
+        case mce_option2:
             // Option 2: specamt plus AV, or corridor times AV if greater.
             // Negative AV doesn't decrease death benefit.
             deathbft = std::max
@@ -791,12 +788,7 @@ void AccountValue::TxSetDeathBft(bool)
             break;
         default:
             {
-            fatal_error()
-                << "Case '"
-                << YearsDBOpt.value()
-                << "' not found."
-                << LMI_FLUSH
-                ;
+            fatal_error() << "Case " << YearsDBOpt << " not found." << LMI_FLUSH;
             }
         }
 
@@ -941,9 +933,9 @@ void AccountValue::TxTakeWD()
 
     AVUnloaned -= wd;
 
-    switch(YearsDBOpt.value())
+    switch(YearsDBOpt)
         {
-        case e_option1:
+        case mce_option1:
             {
             // TODO ?? Spec amt reduced for option 1 even if in corridor?
             //   --taken care of by max WD formula
@@ -967,17 +959,12 @@ void AccountValue::TxTakeWD()
                 }
             }
             break;
-        case e_option2:
+        case mce_option2:
             ;
             break;
         default:
             {
-            fatal_error()
-                << "Case '"
-                << YearsDBOpt.value()
-                << "' not found."
-                << LMI_FLUSH
-                ;
+            fatal_error() << "Case " << YearsDBOpt << " not found." << LMI_FLUSH;
             }
         }
 
