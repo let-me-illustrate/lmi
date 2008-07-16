@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: outlay.cpp,v 1.10 2008-07-16 12:15:30 chicares Exp $
+// $Id: outlay.cpp,v 1.11 2008-07-16 13:23:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,23 +29,21 @@
 #include "outlay.hpp"
 
 #include "assert_lmi.hpp"
-#include "inputs.hpp"
+#include "yare_input.hpp"
 
 #include <algorithm>
-#include <iterator>
 
-modal_outlay::modal_outlay(InputParms const& in)
+modal_outlay::modal_outlay(yare_input const& yi)
+    :dumpin_               (yi.Dumpin)
+    ,external_1035_amount_ (yi.External1035ExchangeAmount)
+    ,internal_1035_amount_ (yi.Internal1035ExchangeAmount)
+    ,ee_modal_premiums_    (yi.Payment)
+    ,ee_premium_modes_     (yi.PaymentMode)
+    ,er_modal_premiums_    (yi.CorporationPayment)
+    ,er_premium_modes_     (yi.CorporationPaymentMode)
+    ,new_cash_loans_       (yi.NewLoan)
+    ,withdrawals_          (yi.Withdrawal)
 {
-    dumpin_               = in.Dumpin;
-    external_1035_amount_ = in.External1035ExchangeAmount.value();
-    internal_1035_amount_ = in.Internal1035ExchangeAmount.value();
-
-    std::copy(in.EePremium.begin(), in.EePremium.end(), std::back_inserter(ee_modal_premiums_));
-    std::copy(in.EeMode   .begin(), in.EeMode   .end(), std::back_inserter(ee_premium_modes_ ));
-    std::copy(in.ErPremium.begin(), in.ErPremium.end(), std::back_inserter(er_modal_premiums_));
-    std::copy(in.ErMode   .begin(), in.ErMode   .end(), std::back_inserter(er_premium_modes_ ));
-    std::copy(in.Loan     .begin(), in.Loan     .end(), std::back_inserter(new_cash_loans_   ));
-    std::copy(in.WD       .begin(), in.WD       .end(), std::back_inserter(withdrawals_      ));
 }
 
 modal_outlay::~modal_outlay()
