@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io2.cpp,v 1.27 2008-07-14 13:22:43 chicares Exp $
+// $Id: ledger_xml_io2.cpp,v 1.28 2008-07-16 18:57:22 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -33,6 +33,7 @@
 #include "ledger_base.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
+#include "mc_enum_aux.hpp" // mc_e_vector_to_string_vector()
 #include "miscellany.hpp" // ios_out_trunc_binary()
 #include "value_cast.hpp"
 #include "version.hpp"
@@ -286,20 +287,6 @@ bool value_id::operator<(value_id const& rhs) const
         }
 
     return false;
-}
-
-template<typename EnumType, int N>
-std::vector<std::string> enum_vector_to_string_vector
-    (std::vector<xenum<EnumType, N> > const& ve
-    )
-{
-    string_vector_t vs;
-    typename std::vector<xenum<EnumType, N> >::const_iterator ve_i;
-    for(ve_i = ve.begin(); ve_i != ve.end(); ++ve_i)
-        {
-        vs.push_back(ve_i->str());
-        }
-    return vs;
 }
 
 /// double_formatter_t implements the double number formatting into strings
@@ -1117,11 +1104,11 @@ void Ledger::write_excerpt
         }
 
     string_vectors[value_id::from_name("EeMode")] =
-        enum_vector_to_string_vector( ledger_invariant_->EeMode );
+        mc_e_vector_to_string_vector(ledger_invariant_->EeMode);
     string_vectors[value_id::from_name("ErMode")] =
-        enum_vector_to_string_vector( ledger_invariant_->ErMode );
+        mc_e_vector_to_string_vector(ledger_invariant_->ErMode);
     string_vectors[value_id::from_name("DBOpt")] =
-        enum_vector_to_string_vector( ledger_invariant_->DBOpt  );
+        mc_e_vector_to_string_vector(ledger_invariant_->DBOpt);
 
 // TODO ?? Here I copied some stuff from the ledger class files: the
 // parts that speak of odd members that aren't in those class's
