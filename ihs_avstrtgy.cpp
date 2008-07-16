@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avstrtgy.cpp,v 1.12 2008-07-16 11:20:25 chicares Exp $
+// $Id: ihs_avstrtgy.cpp,v 1.13 2008-07-16 18:57:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -100,9 +100,9 @@ double AccountValue::CalculateSpecAmtFromStrategy
         case e_samaximum:
             {
             z = GetModalSpecAmtMax
-                (porting_cast<mcenum_mode>(InvariantValues().EeMode[reference_year].value())
+                (InvariantValues().EeMode[reference_year].value()
                 ,InvariantValues().EePmt [reference_year]
-                ,porting_cast<mcenum_mode>(InvariantValues().ErMode[reference_year].value())
+                ,InvariantValues().ErMode[reference_year].value()
                 ,InvariantValues().ErPmt [reference_year]
                 );
             }
@@ -110,9 +110,9 @@ double AccountValue::CalculateSpecAmtFromStrategy
         case e_satarget:
             {
             z = GetModalSpecAmtTgt
-                (porting_cast<mcenum_mode>(InvariantValues().EeMode[reference_year].value())
+                (InvariantValues().EeMode[reference_year].value()
                 ,InvariantValues().EePmt [reference_year]
-                ,porting_cast<mcenum_mode>(InvariantValues().ErMode[reference_year].value())
+                ,InvariantValues().ErMode[reference_year].value()
                 ,InvariantValues().ErPmt [reference_year]
                 );
             }
@@ -121,9 +121,9 @@ double AccountValue::CalculateSpecAmtFromStrategy
         case e_samep:
             {
             z = GetModalSpecAmtMinNonMec
-                (porting_cast<mcenum_mode>(InvariantValues().EeMode[reference_year].value())
+                (InvariantValues().EeMode[reference_year].value()
                 ,InvariantValues().EePmt [reference_year]
-                ,porting_cast<mcenum_mode>(InvariantValues().ErMode[reference_year].value())
+                ,InvariantValues().ErMode[reference_year].value()
                 ,InvariantValues().ErPmt [reference_year]
                 );
             }
@@ -131,9 +131,9 @@ double AccountValue::CalculateSpecAmtFromStrategy
         case e_sacorridor:
             {
             z = GetModalSpecAmtCorridor
-                (porting_cast<mcenum_mode>(InvariantValues().EeMode[reference_year].value())
+                (InvariantValues().EeMode[reference_year].value()
                 ,InvariantValues().EePmt [reference_year]
-                ,porting_cast<mcenum_mode>(InvariantValues().ErMode[reference_year].value())
+                ,InvariantValues().ErMode[reference_year].value()
                 ,InvariantValues().ErPmt [reference_year]
                 );
             }
@@ -141,9 +141,9 @@ double AccountValue::CalculateSpecAmtFromStrategy
         case e_saglp:
             {
             z = GetModalSpecAmtGLP
-                (porting_cast<mcenum_mode>(InvariantValues().EeMode[reference_year].value())
+                (InvariantValues().EeMode[reference_year].value()
                 ,InvariantValues().EePmt [reference_year]
-                ,porting_cast<mcenum_mode>(InvariantValues().ErMode[reference_year].value())
+                ,InvariantValues().ErMode[reference_year].value()
                 ,InvariantValues().ErPmt [reference_year]
                 );
             }
@@ -151,9 +151,9 @@ double AccountValue::CalculateSpecAmtFromStrategy
         case e_sagsp:
             {
             z = GetModalSpecAmtGSP
-                (porting_cast<mcenum_mode>(InvariantValues().EeMode[reference_year].value())
+                (InvariantValues().EeMode[reference_year].value()
                 ,InvariantValues().EePmt [reference_year]
-                ,porting_cast<mcenum_mode>(InvariantValues().ErMode[reference_year].value())
+                ,InvariantValues().ErMode[reference_year].value()
                 ,InvariantValues().ErPmt [reference_year]
                 );
             }
@@ -378,8 +378,8 @@ double AccountValue::PerformEePmtStrategy() const
 {
     return DoPerformPmtStrategy
         (e_solve_type(e_solve_ee_prem)
-        ,porting_cast<mcenum_mode>(InvariantValues().EeMode[Year].value())
-        ,porting_cast<mcenum_mode>(InvariantValues().EeMode[0]   .value())
+        ,InvariantValues().EeMode[Year].value()
+        ,InvariantValues().EeMode[0]   .value()
         ,Input_->EePremTableMult
         ,InvariantValues().EePmt
         ,Input_->VectorIndvPaymentStrategy
@@ -391,8 +391,8 @@ double AccountValue::PerformErPmtStrategy() const
 {
     return DoPerformPmtStrategy
         (e_solve_type(e_solve_er_prem)
-        ,porting_cast<mcenum_mode>(InvariantValues().ErMode[Year].value())
-        ,porting_cast<mcenum_mode>(InvariantValues().ErMode[0]   .value())
+        ,InvariantValues().ErMode[Year].value()
+        ,InvariantValues().ErMode[0]   .value()
         ,Input_->ErPremTableMult
         ,InvariantValues().ErPmt
         ,Input_->VectorCorpPaymentStrategy

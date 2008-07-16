@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.40 2008-07-16 15:58:24 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.41 2008-07-16 18:57:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -45,6 +45,7 @@
 #include "ledger_variant.hpp" // TODO ?? For IRRs--prolly don't blong here.
 #include "loads.hpp"
 #include "materially_equal.hpp"
+#include "mc_enum_aux.hpp" // mc_e_vector_to_string_vector()
 #include "miscellany.hpp"
 #include "outlay.hpp"
 #include "rounding_rules.hpp"
@@ -308,9 +309,9 @@ void LedgerInvariant::Init()
 
     irr_precision       = 0;
 
-    EeMode              .assign(Length, e_mode(e_annual));
-    ErMode              .assign(Length, e_mode(e_annual));
-    DBOpt               .assign(Length, e_dbopt(e_option1));
+    EeMode              .assign(Length, mce_mode(mce_annual));
+    ErMode              .assign(Length, mce_mode(mce_annual));
+    DBOpt               .assign(Length, mce_dbopt(mce_option1));
 
     InforceYear         = Length;
     InforceMonth        = 11;
@@ -382,9 +383,9 @@ void LedgerInvariant::Init(BasicValues* b)
     SpecAmt         = b->DeathBfts_->specamt();
     for(int j = 0; j < Length; ++j)
         {
-        EeMode[j] = porting_cast<enum_mode>(b->Outlay_->ee_premium_modes()[j]);
-        ErMode[j] = porting_cast<enum_mode>(b->Outlay_->er_premium_modes()[j]);
-        DBOpt [j] = porting_cast<enum_dbopt>(b->DeathBfts_->dbopt()[j]);
+        EeMode[j] = b->Outlay_->ee_premium_modes()[j];
+        ErMode[j] = b->Outlay_->er_premium_modes()[j];
+        DBOpt [j] = b->DeathBfts_->dbopt()[j];
         }
 
     IndvTaxBracket       = Input_.VectorIndvTaxBracket          ;
@@ -986,9 +987,9 @@ void LedgerInvariant::UpdateCRC(CRC& a_crc) const
     LedgerBase::UpdateCRC(a_crc);
 
     a_crc += InforceLives;
-    a_crc += EeMode;
-    a_crc += ErMode;
-    a_crc += DBOpt;
+    a_crc += mc_e_vector_to_string_vector(EeMode);
+    a_crc += mc_e_vector_to_string_vector(ErMode);
+    a_crc += mc_e_vector_to_string_vector(DBOpt);
     a_crc += FundNumbers;
     a_crc += FundNames;
     a_crc += FundAllocs;

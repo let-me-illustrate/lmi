@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.91 2008-07-16 15:58:24 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.92 2008-07-16 18:57:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -711,7 +711,7 @@ int AccountValue::MonthsToNextModalPmtDate() const
 {
     // TODO ?? Answer is in terms of *ee* mode only, but it seems
     // wrong to ignore *er* mode.
-    return 1 + (11 - Month) % (12 / InvariantValues().EeMode[Year]);
+    return 1 + (11 - Month) % (12 / InvariantValues().EeMode[Year].value());
 }
 
 //============================================================================
@@ -1378,7 +1378,7 @@ LedgerInvariant::Init(BasicValues* b)
         GetModalTgtPrem
             (target_year
             ,mce_annual
-// erase--incorrect ,InvariantValues().EeMode[target_year]  // TODO ?? Ee only?
+// erase--incorrect ,InvariantValues().EeMode[target_year].value()  // TODO ?? Ee only?
             ,InvariantValues().SpecAmt[target_year]
             )
 */
@@ -1607,8 +1607,8 @@ void AccountValue::TxAscertainDesiredPayment()
 {
     // Do nothing if this is not a modal payment date.
     // TODO ?? There has to be a better criterion for early termination.
-    bool ee_pay_this_month  = IsModalPmtDate(porting_cast<mcenum_mode>(InvariantValues().EeMode[Year].value()));
-    bool er_pay_this_month  = IsModalPmtDate(porting_cast<mcenum_mode>(InvariantValues().ErMode[Year].value()));
+    bool ee_pay_this_month  = IsModalPmtDate(InvariantValues().EeMode[Year].value());
+    bool er_pay_this_month  = IsModalPmtDate(InvariantValues().ErMode[Year].value());
 
     if(!ee_pay_this_month && !er_pay_this_month)
         {

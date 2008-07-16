@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.41 2008-07-16 15:58:23 chicares Exp $
+// $Id: accountvalue.cpp,v 1.42 2008-07-16 18:57:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -78,10 +78,10 @@ namespace
     {
     switch(a_mode)
         {
-        case e_annual:     return 0; // A
-        case e_semiannual: return 1; // S
-        case e_quarterly:  return 2; // Q
-        case e_monthly:    return 3; // M
+        case mce_annual:     return 0; // A
+        case mce_semiannual: return 1; // S
+        case mce_quarterly:  return 2; // Q
+        case mce_monthly:    return 3; // M
         default:
             {
             fatal_error() << "Case " << a_mode << " not found." << LMI_FLUSH;
@@ -299,7 +299,7 @@ void AccountValue::DoYear
     ActualSpecAmt         = InvariantValues().SpecAmt[Year];
 
     // These variables are set for each pass independently.
-    mode            = porting_cast<mcenum_mode>(InvariantValues().EeMode[Year].value());
+    mode            = InvariantValues().EeMode[Year].value();
     ModeIndex       = get_mode_index(mode);
     RequestedLoan   = Outlay_->new_cash_loans()[Year];
     wd              = Outlay_->withdrawals()[Year];
@@ -468,12 +468,12 @@ void AccountValue::PerformSpecAmtStrategy()
             break;
         case e_samaximum:
             {
-            SA = GetModalMaxSpecAmt(porting_cast<mcenum_mode>(InvariantValues().EeMode[0].value()), InvariantValues().EePmt[0]);
+            SA = GetModalMaxSpecAmt(InvariantValues().EeMode[0].value(), InvariantValues().EePmt[0]);
             }
             break;
         case e_satarget:
             {
-            SA = GetModalTgtSpecAmt(porting_cast<mcenum_mode>(InvariantValues().EeMode[0].value()), InvariantValues().EePmt[0]);
+            SA = GetModalTgtSpecAmt(InvariantValues().EeMode[0].value(), InvariantValues().EePmt[0]);
             }
             break;
         case e_samep:

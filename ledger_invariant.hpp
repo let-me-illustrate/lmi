@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.hpp,v 1.16 2008-01-01 18:29:47 chicares Exp $
+// $Id: ledger_invariant.hpp,v 1.17 2008-07-16 18:57:21 chicares Exp $
 
 #ifndef ledger_invariant_hpp
 #define ledger_invariant_hpp
@@ -28,8 +28,9 @@
 
 #include "ledger_base.hpp"
 
+#include "mc_enum.hpp"
+#include "mc_enum_types.hpp"
 #include "so_attributes.hpp"
-#include "xenumtypes.hpp"
 
 #include <map>
 #include <ostream>
@@ -119,9 +120,9 @@ class LMI_SO LedgerInvariant
     std::vector<double> RefundableSalesLoad;
 
     // Special-case vectors (not <double>, or different length than others).
-    std::vector<e_mode> EeMode;
-    std::vector<e_mode> ErMode;
-    std::vector<e_dbopt>DBOpt;
+    std::vector<mce_mode> EeMode;
+    std::vector<mce_mode> ErMode;
+    std::vector<mce_dbopt>DBOpt;
 
     std::vector<double>      FundNumbers;
     std::vector<std::string> FundNames;
