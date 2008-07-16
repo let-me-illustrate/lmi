@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: death_benefits.cpp,v 1.7 2008-01-01 18:29:38 chicares Exp $
+// $Id: death_benefits.cpp,v 1.8 2008-07-16 15:58:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,27 +29,26 @@
 #include "death_benefits.hpp"
 
 #include "assert_lmi.hpp"
-#include "basic_values.hpp"
-#include "inputs.hpp"
+#include "yare_input.hpp"
 
 #include <algorithm> // std::min()
 
 //============================================================================
-death_benefits::death_benefits(BasicValues const& values)
-    :length_(values.GetLength())
+death_benefits::death_benefits(int length, yare_input const& yi)
+    :length_(length)
 {
     // In the antediluvian branch, the vector in the input class
     // is padded to a greater length.
-    LMI_ASSERT(length_ <= static_cast<int>(values.Input_->DBOpt  .size()));
-    LMI_ASSERT(length_ <= static_cast<int>(values.Input_->SpecAmt.size()));
+    LMI_ASSERT(length_ <= static_cast<int>(yi.DeathBenefitOption.size()));
+    LMI_ASSERT(length_ <= static_cast<int>(yi.SpecifiedAmount   .size()));
 
-    // Can't use std::copy() because types differ, length issues aside.
+    // SOMEDAY !! Can't use std::copy() because lengths differ?
     dbopt_  .resize(length_);
     specamt_.resize(length_);
     for(int j = 0; j < length_; ++j)
         {
-        dbopt_  [j] = values.Input_->DBOpt  [j]        ;
-        specamt_[j] = values.Input_->SpecAmt[j].value();
+        dbopt_  [j] = yi.DeathBenefitOption[j];
+        specamt_[j] = yi.SpecifiedAmount   [j];
         }
 }
 
@@ -59,12 +58,13 @@ death_benefits::~death_benefits()
 }
 
 //============================================================================
-void death_benefits::set_specamt(double amount, int begin_year, int end_year)
+void death_benefits::set_specamt(double z, int from_year, int to_year)
 {
-    // Can't use a standard algorithm because types differ.
-    for(int j = begin_year; j < std::min(length_, end_year); j++)
+//    std::fill_n(specamt_.begin() + from_year, to_year - from_year, z);
+    // SOMEDAY !! Can't use a standard algorithm?
+    for(int j = from_year; j < std::min(length_, to_year); ++j)
         {
-        specamt_[j] = amount;
+        specamt_[j] = z;
         }
 }
 

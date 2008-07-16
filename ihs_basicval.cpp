@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.65 2008-07-16 13:23:25 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.66 2008-07-16 15:58:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -281,7 +281,7 @@ void BasicValues::Init()
     InterestRates_ .reset(new InterestRates  (*this));
     // Surrender-charge rates will eventually require mortality rates.
     SurrChgRates_  .reset(new SurrChgRates   (*Database_));
-    DeathBfts_     .reset(new death_benefits (*this));
+    DeathBfts_     .reset(new death_benefits (GetLength(), yare_input_));
     // Outlay requires only input; it might someday use interest rates.
     Outlay_        .reset(new modal_outlay   (yare_input_));
     SetLowestPremiumTaxLoad();
@@ -356,7 +356,7 @@ void BasicValues::GPTServerInit()
 //  InterestRates_ .reset(new InterestRates  (*this));
     // Will require mortality rates eventually.
 //  SurrChgRates_  .reset(new SurrChgRates   (Database_));
-//  DeathBfts_     .reset(new death_benefits (*this));
+//  DeathBfts_     .reset(new death_benefits (GetLength(), yare_input_));
     // Outlay requires only input; it might someday use interest rates.
 //  Outlay_        .reset(new modal_outlay   (yare_input_));
     SetLowestPremiumTaxLoad();
@@ -1139,7 +1139,7 @@ double BasicValues::GetModalPremGLP
         ,a_bft_amt
         ,a_specamt
         ,Irc7702_->GetLeastBftAmtEver()
-        ,effective_dbopt_7702(porting_cast<mcenum_dbopt>(DeathBfts_->dbopt()[0].value()), Equiv7702DBO3)
+        ,effective_dbopt_7702(DeathBfts_->dbopt()[0], Equiv7702DBO3)
         );
 
 // TODO ?? PROBLEMS HERE
@@ -1334,7 +1334,7 @@ double BasicValues::GetModalSpecAmtGLP
     return Irc7702_->CalculateGLPSpecAmt
         (0
         ,annualized_pmt
-        ,effective_dbopt_7702(porting_cast<mcenum_dbopt>(DeathBfts_->dbopt()[0].value()), Equiv7702DBO3)
+        ,effective_dbopt_7702(DeathBfts_->dbopt()[0], Equiv7702DBO3)
         );
 // TODO ?? This should already be rounded, and rounding it again should
 // only be harmful. Expunge after testing and after reconsidering all

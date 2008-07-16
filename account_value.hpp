@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.56 2008-07-16 11:20:24 chicares Exp $
+// $Id: account_value.hpp,v 1.57 2008-07-16 15:58:23 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -493,54 +493,54 @@ class LMI_SO AccountValue
     double      mlyguarv;     // Antediluvian.
 
     // For GPT: SA, DB, and DBOpt before the day's transactions are applied.
-    double  OldSA;
-    double  OldDB;
-    e_dbopt OldDBOpt;
+    double       OldSA;
+    double       OldDB;
+    mcenum_dbopt OldDBOpt;
 
     // Permanent invariants are in class BasicValues; these are
     // annual invariants.
-    double  YearsCorridorFactor;
-    e_dbopt YearsDBOpt;
-    double  YearsSpecAmt;
-    double  YearsAnnualPolicyFee;
-    double  YearsMonthlyPolicyFee;
-    double  YearsGenAcctIntRate;
-    double  YearsSepAcctIntRate;
+    double       YearsCorridorFactor;
+    mcenum_dbopt YearsDBOpt;
+    double       YearsSpecAmt;
+    double       YearsAnnualPolicyFee;
+    double       YearsMonthlyPolicyFee;
+    double       YearsGenAcctIntRate;
+    double       YearsSepAcctIntRate;
 
-    double  YearsDcvIntRate;
+    double       YearsDcvIntRate;
 
-    double  YearsHoneymoonValueRate;
-    double  YearsPostHoneymoonGenAcctIntRate;
+    double       YearsHoneymoonValueRate;
+    double       YearsPostHoneymoonGenAcctIntRate;
 
-    double  YearsRegLnIntCredRate;
-    double  YearsPrfLnIntCredRate;
-    double  YearsRegLnIntDueRate;
-    double  YearsPrfLnIntDueRate;
-    double  YearsSurrChgPremMult;
-    double  YearsSurrChgAVMult;
-    double  YearsSurrChgSAMult;
-    double  YearsCoiRate0;
-    double  YearsCoiRate1;
-    double  YearsCoiRate2;
-    double  Years7702CoiRate;
-    double  YearsAdbRate;
-    double  YearsTermRate;
-    double  YearsWpRate;
-    double  YearsSpouseRiderRate;
-    double  YearsChildRiderRate;
-    double  YearsPremLoadTgt;
-    double  YearsPremLoadExc;
-    double  YearsTotLoadTgt;
-    double  YearsTotLoadExc;
-    double  YearsTotLoadTgtLowestPremtax;
-    double  YearsTotLoadExcLowestPremtax;
-    double  YearsSalesLoadTgt;
-    double  YearsSalesLoadExc;
-    double  YearsSpecAmtLoadRate;
-    double  YearsSepAcctLoadRate;
-    double  YearsSalesLoadRefundRate;
-    double  YearsPremTaxLoadRate;
-    double  YearsDacTaxLoadRate;
+    double       YearsRegLnIntCredRate;
+    double       YearsPrfLnIntCredRate;
+    double       YearsRegLnIntDueRate;
+    double       YearsPrfLnIntDueRate;
+    double       YearsSurrChgPremMult;
+    double       YearsSurrChgAVMult;
+    double       YearsSurrChgSAMult;
+    double       YearsCoiRate0;
+    double       YearsCoiRate1;
+    double       YearsCoiRate2;
+    double       Years7702CoiRate;
+    double       YearsAdbRate;
+    double       YearsTermRate;
+    double       YearsWpRate;
+    double       YearsSpouseRiderRate;
+    double       YearsChildRiderRate;
+    double       YearsPremLoadTgt;
+    double       YearsPremLoadExc;
+    double       YearsTotLoadTgt;
+    double       YearsTotLoadExc;
+    double       YearsTotLoadTgtLowestPremtax;
+    double       YearsTotLoadExcLowestPremtax;
+    double       YearsSalesLoadTgt;
+    double       YearsSalesLoadExc;
+    double       YearsSpecAmtLoadRate;
+    double       YearsSepAcctLoadRate;
+    double       YearsSalesLoadRefundRate;
+    double       YearsPremTaxLoadRate;
+    double       YearsDacTaxLoadRate;
 
     double  MonthsPolicyFees;
     double  SpecAmtLoad;
