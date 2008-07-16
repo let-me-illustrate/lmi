@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: outlay.hpp,v 1.8 2008-07-15 18:47:38 chicares Exp $
+// $Id: outlay.hpp,v 1.9 2008-07-16 12:15:30 chicares Exp $
 
 #ifndef outlay_hpp
 #define outlay_hpp
@@ -45,52 +45,39 @@ class modal_outlay
     explicit modal_outlay(InputParms const&);
     ~modal_outlay();
 
-    double dumpin() const;
-    double external_1035_amount() const;
-    double internal_1035_amount() const;
-
-    std::vector<e_mode> const& ee_premium_modes  () const;
-    std::vector<e_mode> const& er_premium_modes  () const;
-    std::vector<double> const& ee_modal_premiums () const;
-    std::vector<double> const& er_modal_premiums () const;
-    std::vector<double> const& new_cash_loans    () const;
-    std::vector<double> const& withdrawals       () const;
+    double                     dumpin               () const;
+    double                     external_1035_amount () const;
+    double                     internal_1035_amount () const;
+    std::vector<double> const& ee_modal_premiums    () const;
+    std::vector<e_mode> const& ee_premium_modes     () const;
+    std::vector<double> const& er_modal_premiums    () const;
+    std::vector<e_mode> const& er_premium_modes     () const;
+    std::vector<double> const& new_cash_loans       () const;
+    std::vector<double> const& withdrawals          () const;
 
   private:
     modal_outlay();
-
-    double dumpin_;
-    double external_1035_amount_;
-    double internal_1035_amount_;
-
-    void set_ee_modal_premiums(double z, int from_year, int to_year);
-    void set_er_modal_premiums(double z, int from_year, int to_year);
-    void set_new_cash_loans   (double z, int from_year, int to_year);
-    void set_withdrawals      (double z, int from_year, int to_year);
-
-    void set_er_modal_premiums(std::vector<double> const&);
 
     // Not yet used, but needed for MEC avoidance.
     void set_external_1035_amount(double z);
     void set_internal_1035_amount(double z);
 
+    void set_ee_modal_premiums(double z, int from_year, int to_year);
+    void set_er_modal_premiums(double z, int from_year, int to_year);
+    void set_er_modal_premiums(std::vector<double> const&);
+    void set_new_cash_loans   (double z, int from_year, int to_year);
+    void set_withdrawals      (double z, int from_year, int to_year);
+
+    double              dumpin_;
+    double              external_1035_amount_;
+    double              internal_1035_amount_;
     std::vector<double> ee_modal_premiums_;
-    std::vector<double> er_modal_premiums_;
     std::vector<e_mode> ee_premium_modes_;
+    std::vector<double> er_modal_premiums_;
     std::vector<e_mode> er_premium_modes_;
     std::vector<double> new_cash_loans_;
     std::vector<double> withdrawals_;
 };
-
-inline void modal_outlay::set_external_1035_amount(double z)
-{
-    external_1035_amount_ = z;
-}
-
-inline void modal_outlay::set_internal_1035_amount(double z)
-{
-    internal_1035_amount_ = z;
-}
 
 inline double modal_outlay::dumpin() const
 {
@@ -107,24 +94,24 @@ inline double modal_outlay::internal_1035_amount() const
     return internal_1035_amount_;
 }
 
-inline std::vector<e_mode> const& modal_outlay::ee_premium_modes() const
-{
-    return ee_premium_modes_;
-}
-
-inline std::vector<e_mode> const& modal_outlay::er_premium_modes() const
-{
-    return er_premium_modes_;
-}
-
 inline std::vector<double> const& modal_outlay::ee_modal_premiums() const
 {
     return ee_modal_premiums_;
 }
 
+inline std::vector<e_mode> const& modal_outlay::ee_premium_modes() const
+{
+    return ee_premium_modes_;
+}
+
 inline std::vector<double> const& modal_outlay::er_modal_premiums() const
 {
     return er_modal_premiums_;
+}
+
+inline std::vector<e_mode> const& modal_outlay::er_premium_modes() const
+{
+    return er_premium_modes_;
 }
 
 inline std::vector<double> const& modal_outlay::new_cash_loans() const
@@ -135,6 +122,16 @@ inline std::vector<double> const& modal_outlay::new_cash_loans() const
 inline std::vector<double> const& modal_outlay::withdrawals() const
 {
     return withdrawals_;
+}
+
+inline void modal_outlay::set_external_1035_amount(double z)
+{
+    external_1035_amount_ = z;
+}
+
+inline void modal_outlay::set_internal_1035_amount(double z)
+{
+    internal_1035_amount_ = z;
 }
 
 #endif // outlay_hpp
