@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: solve.cpp,v 1.10 2008-01-01 18:29:55 chicares Exp $
+// $Id: solve.cpp,v 1.11 2008-07-16 18:57:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -111,17 +111,17 @@ double SolveTest()
             // same for options A and B.
             switch(ConstThat->InvariantValues().DBOpt[ThatSolveTgtYear - 1].value())
                 {
-                case e_option1:
+                case mce_option1:
                     {
                     y = ConstThat->InvariantValues().SpecAmt[ThatSolveTgtYear - 1];
                     }
                     break;
-                case e_option2:
+                case mce_option2:
                     {
                     y = ConstThat->InvariantValues().SpecAmt[ThatSolveTgtYear - 1];
                     }
                     break;
-                case e_rop:
+                case mce_rop:
                     {
                     // TODO ?? What should be done here?
                     }

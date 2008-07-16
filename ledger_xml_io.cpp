@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.76 2008-07-14 13:22:43 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.77 2008-07-16 18:57:21 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -32,6 +32,7 @@
 #include "ledger_base.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
+#include "mc_enum_aux.hpp" // mc_e_vector_to_string_vector()
 #include "miscellany.hpp"
 #include "value_cast.hpp"
 #include "version.hpp"
@@ -75,20 +76,6 @@ std::vector<std::string> const suffixes
     (char_p_suffixes
     ,char_p_suffixes + n
     );
-
-template<typename EnumType, int N>
-std::vector<std::string> enum_vector_to_string_vector
-    (std::vector<xenum<EnumType, N> > const& ve
-    )
-{
-    std::vector<std::string> vs;
-    typename std::vector<xenum<EnumType, N> >::const_iterator ve_i;
-    for(ve_i = ve.begin(); ve_i != ve.end(); ++ve_i)
-        {
-        vs.push_back(ve_i->str());
-        }
-    return vs;
-}
 
 // The std::pair argument is notionally <int precision, bool percentage>.
 std::string format(double d, std::pair<int,bool> f)
@@ -873,9 +860,9 @@ void Ledger::write(xml::element& x) const
             }
         }
 
-    stringvectors["EeMode"] = enum_vector_to_string_vector(ledger_invariant_->EeMode);
-    stringvectors["ErMode"] = enum_vector_to_string_vector(ledger_invariant_->ErMode);
-    stringvectors["DBOpt"]  = enum_vector_to_string_vector(ledger_invariant_->DBOpt );
+    stringvectors["EeMode"] = mc_e_vector_to_string_vector(ledger_invariant_->EeMode);
+    stringvectors["ErMode"] = mc_e_vector_to_string_vector(ledger_invariant_->ErMode);
+    stringvectors["DBOpt"]  = mc_e_vector_to_string_vector(ledger_invariant_->DBOpt );
 
 // TODO ?? Here I copied some stuff from the ledger class files: the
 // parts that speak of odd members that aren't in those class's

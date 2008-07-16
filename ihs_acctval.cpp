@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.119 2008-07-16 15:58:24 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.120 2008-07-16 18:57:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -444,7 +444,7 @@ void AccountValue::InitializeLife(e_run_basis const& a_Basis)
     VariantValues().Init(this, ExpAndGABasis, SABasis);
     InvariantValues().Init(this);
 
-    OldDBOpt = porting_cast<mcenum_dbopt>(InvariantValues().DBOpt[0].value());
+    OldDBOpt = InvariantValues().DBOpt[0].value();
     OldSA = InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0];
     // TODO ?? Shouldn't we increase initial SA if contract in corridor at issue?
     OldDB = OldSA;
@@ -475,7 +475,7 @@ void AccountValue::InitializeLife(e_run_basis const& a_Basis)
     Irc7702_->Initialize7702
         (InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
         ,InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
-        ,effective_dbopt_7702(porting_cast<mcenum_dbopt>(InvariantValues().DBOpt[0].value()), Equiv7702DBO3)
+        ,effective_dbopt_7702(InvariantValues().DBOpt[0].value(), Equiv7702DBO3)
         );
 
     // JOE--Try this instead of your second change to ldginvar.cpp
@@ -1017,7 +1017,7 @@ void AccountValue::InitializeSpecAmt()
     MlyNoLapsePrem = GetTgtPrem
         (Year
         ,InvariantValues().SpecAmt[Year]
-        ,InvariantValues().DBOpt[Year]
+        ,InvariantValues().DBOpt[Year].value()
         ,mce_monthly
         );
 
@@ -1027,7 +1027,7 @@ void AccountValue::InitializeSpecAmt()
     UnusedTargetPrem = GetTgtPrem
         (Year
         ,InvariantValues().SpecAmt[Year]
-        ,InvariantValues().DBOpt[Year]
+        ,InvariantValues().DBOpt[Year].value()
         ,mce_annual
         );
     AnnualTargetPrem = UnusedTargetPrem;
@@ -1621,8 +1621,8 @@ double AccountValue::TaxableFirstYearPlannedPremium() const
 {
 // TODO ?? 'WaivePmTxInt1035' is not respected elsewhere, but should be.
     double z =
-          PerformEePmtStrategy() * InvariantValues().EeMode[0]
-        + PerformErPmtStrategy() * InvariantValues().ErMode[0]
+          PerformEePmtStrategy() * InvariantValues().EeMode[0].value()
+        + PerformErPmtStrategy() * InvariantValues().ErMode[0].value()
         + Outlay_->dumpin()
         + Outlay_->external_1035_amount()
         ;
