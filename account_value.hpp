@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.55 2008-07-06 17:36:40 chicares Exp $
+// $Id: account_value.hpp,v 1.56 2008-07-16 11:20:24 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -230,21 +230,14 @@ class LMI_SO AccountValue
         ) const;
     void OldPerformSpecAmtStrategy  ();
     void NewPerformSpecAmtStrategy  ();
-    void PerformSpecAmtStrategy
-        (double*                    sa
-        ,e_sa_strategy&             strategy
-        ,e_solve_type const&        SolveForWhichPrem
-        ,e_mode const&              m
-        ,std::vector<double> const& SAVector
-        );
 
     void PerformPmtStrategy(double* a_Pmt); // Antediluvian.
     double PerformEePmtStrategy       () const;
     double PerformErPmtStrategy       () const;
     double DoPerformPmtStrategy
         (e_solve_type const&                a_SolveForWhichPrem
-        ,e_mode const&                      a_CurrentMode
-        ,e_mode const&                      a_InitialMode
+        ,mcenum_mode                        a_CurrentMode
+        ,mcenum_mode                        a_InitialMode
         ,double                             a_TblMult
         ,std::vector<double> const&         a_PmtVector
         ,std::vector<e_pmt_strategy> const& a_StrategyVector
@@ -298,7 +291,7 @@ class LMI_SO AccountValue
         ,double monthly_rate
         ) const;
 
-    bool   IsModalPmtDate          (e_mode const& m) const;
+    bool   IsModalPmtDate          (mcenum_mode) const;
     bool   IsModalPmtDate          (); // Antediluvian.
     int    MonthsToNextModalPmtDate() const;
     double anticipated_deduction   (e_anticipated_deduction const&);
@@ -476,7 +469,7 @@ class LMI_SO AccountValue
 
     // Intermediate values within annual or monthly loop only.
     double      pmt;       // Antediluvian.
-    e_mode      mode;      // Antediluvian.
+    mcenum_mode mode;      // Antediluvian.
     int         ModeIndex; // Antediluvian.
 
     double  GenAcctIntCred;

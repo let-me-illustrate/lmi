@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avstrtgy.cpp,v 1.11 2008-07-15 02:58:19 chicares Exp $
+// $Id: ihs_avstrtgy.cpp,v 1.12 2008-07-16 11:20:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -262,8 +262,8 @@ void AccountValue::OldPerformSpecAmtStrategy()
 // Sets payment according to selected strategy, in each non-solve year
 double AccountValue::DoPerformPmtStrategy
     (e_solve_type const&                a_SolveForWhichPrem
-    ,e_mode const&                      a_CurrentMode
-    ,e_mode const&                      a_InitialMode
+    ,mcenum_mode                        a_CurrentMode
+    ,mcenum_mode                        a_InitialMode
     ,double                             a_TblMult
     ,std::vector<double> const&         a_PmtVector
     ,std::vector<e_pmt_strategy> const& a_StrategyVector
@@ -300,7 +300,7 @@ double AccountValue::DoPerformPmtStrategy
             {
             return GetModalMinPrem
                 (Year
-                ,porting_cast<mcenum_mode>(a_CurrentMode.value())
+                ,a_CurrentMode
                 ,ActualSpecAmt
                 );
             }
@@ -308,7 +308,7 @@ double AccountValue::DoPerformPmtStrategy
             {
             return GetModalTgtPrem
                 (Year
-                ,porting_cast<mcenum_mode>(a_CurrentMode.value())
+                ,a_CurrentMode
                 ,ActualSpecAmt
                 );
             }
@@ -318,7 +318,7 @@ double AccountValue::DoPerformPmtStrategy
 // We ought to have a database flag for that.
             return GetModalPremMaxNonMec
                 (0
-                ,porting_cast<mcenum_mode>(a_InitialMode.value())
+                ,a_InitialMode
                 ,InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
                 );
             }
@@ -326,7 +326,7 @@ double AccountValue::DoPerformPmtStrategy
             {
             return GetModalPremGLP
                 (0
-                ,porting_cast<mcenum_mode>(a_InitialMode.value())
+                ,a_InitialMode
                 ,InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
                 ,InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
                 );
@@ -335,7 +335,7 @@ double AccountValue::DoPerformPmtStrategy
             {
             return GetModalPremGSP
                 (0
-                ,porting_cast<mcenum_mode>(a_InitialMode.value())
+                ,a_InitialMode
                 ,InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
                 ,InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
                 );
@@ -345,7 +345,7 @@ double AccountValue::DoPerformPmtStrategy
             return
                 ActualSpecAmt
                 * MortalityRates_->TableYRates()[Year]
-                * (12.0 / porting_cast<mcenum_mode>(a_CurrentMode.value()))
+                * (12.0 / a_CurrentMode)
                 * a_TblMult;
             }
         case e_pmtcorridor:
@@ -354,7 +354,7 @@ double AccountValue::DoPerformPmtStrategy
 // We ought to have a database flag for that.
             return GetModalPremCorridor
                 (0
-                ,porting_cast<mcenum_mode>(a_InitialMode.value())
+                ,a_InitialMode
                 ,ActualSpecAmt
 // TODO ?? This may be wanted for an 'integrated' term rider.
 //                ,ActualSpecAmt + TermSpecAmt
@@ -378,8 +378,8 @@ double AccountValue::PerformEePmtStrategy() const
 {
     return DoPerformPmtStrategy
         (e_solve_type(e_solve_ee_prem)
-        ,InvariantValues().EeMode[Year]
-        ,InvariantValues().EeMode[0]
+        ,porting_cast<mcenum_mode>(InvariantValues().EeMode[Year].value())
+        ,porting_cast<mcenum_mode>(InvariantValues().EeMode[0]   .value())
         ,Input_->EePremTableMult
         ,InvariantValues().EePmt
         ,Input_->VectorIndvPaymentStrategy
@@ -391,8 +391,8 @@ double AccountValue::PerformErPmtStrategy() const
 {
     return DoPerformPmtStrategy
         (e_solve_type(e_solve_er_prem)
-        ,InvariantValues().ErMode[Year]
-        ,InvariantValues().ErMode[0]
+        ,porting_cast<mcenum_mode>(InvariantValues().ErMode[Year].value())
+        ,porting_cast<mcenum_mode>(InvariantValues().ErMode[0]   .value())
         ,Input_->ErPremTableMult
         ,InvariantValues().ErPmt
         ,Input_->VectorCorpPaymentStrategy
