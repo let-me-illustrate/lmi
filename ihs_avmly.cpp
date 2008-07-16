@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.89 2008-07-15 02:58:19 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.90 2008-07-16 11:20:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -120,16 +120,8 @@ void AccountValue::DoMonthDR()
     TxCapitalizeLoan();
 
     TxOptionChange();
-/*
-// TODO ?? Does this belong here?
-    PerformSpecAmtStrategy
-        (&ActualSpecAmt
-        ,Input_->SAStrategy
-        ,e_solve_specamt
-        ,VariantValues()->Mode[Year]
-        ,VariantValues()->SpecAmt
-        );
-*/
+
+// TODO ?? Should some function like PerformSpecAmtStrategy() be called here?
 
     IncreaseSpecAmtToAvoidMec();
     // TODO ?? The increased specamt doesn't get propagated back to
@@ -709,9 +701,9 @@ double AccountValue::InterestCredited
 }
 
 //============================================================================
-bool AccountValue::IsModalPmtDate(e_mode const& m) const
+bool AccountValue::IsModalPmtDate(mcenum_mode mode) const
 {
-    return 0 == Month % (12 / m.value());
+    return 0 == Month % (12 / mode);
 }
 
 //============================================================================
@@ -1393,7 +1385,7 @@ LedgerInvariant::Init(BasicValues* b)
     UnusedTargetPrem =
         GetModalTgtPrem
             (target_year
-            ,e_mode(e_annual)
+            ,mce_annual
 // erase--incorrect ,InvariantValues().EeMode[target_year]  // TODO ?? Ee only?
             ,InvariantValues().SpecAmt[target_year]
             )
@@ -1623,8 +1615,8 @@ void AccountValue::TxAscertainDesiredPayment()
 {
     // Do nothing if this is not a modal payment date.
     // TODO ?? There has to be a better criterion for early termination.
-    bool ee_pay_this_month  = IsModalPmtDate(InvariantValues().EeMode[Year]);
-    bool er_pay_this_month  = IsModalPmtDate(InvariantValues().ErMode[Year]);
+    bool ee_pay_this_month  = IsModalPmtDate(porting_cast<mcenum_mode>(InvariantValues().EeMode[Year].value()));
+    bool er_pay_this_month  = IsModalPmtDate(porting_cast<mcenum_mode>(InvariantValues().ErMode[Year].value()));
 
     if(!ee_pay_this_month && !er_pay_this_month)
         {

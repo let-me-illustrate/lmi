@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.39 2008-07-15 02:58:19 chicares Exp $
+// $Id: accountvalue.cpp,v 1.40 2008-07-16 11:20:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -53,9 +53,9 @@ namespace
 {
     // This table lookup approach is faster than determining
     //   whether this is a modal payment date
-    //     0 == Month % (12 / mode.value());
+    //     0 == Month % (12 / mode);
     //   or how many months until the next modal payment date
-    //     1 + (11 - Month) % (12 / mode.value());
+    //     1 + (11 - Month) % (12 / mode);
     // by arithmetic, by a large enough margin to make the
     // program noticeably faster.
 
@@ -74,9 +74,9 @@ namespace
         ,   { 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1} // M
         };
 
-    int get_mode_index(e_mode const& a_mode)
+    int get_mode_index(mcenum_mode a_mode)
     {
-    switch(a_mode.value())
+    switch(a_mode)
         {
         case e_annual:     return 0; // A
         case e_semiannual: return 1; // S
@@ -84,13 +84,8 @@ namespace
         case e_monthly:    return 3; // M
         default:
             {
-            fatal_error()
-                << "Case '"
-                << a_mode.value()
-                << "' not found."
-                << LMI_FLUSH
-                ;
-            return 0;
+            fatal_error() << "Case " << a_mode << " not found." << LMI_FLUSH;
+            throw "Unreachable--silences a compiler diagnostic.";
             }
         }
     }
@@ -132,6 +127,7 @@ AccountValue::AccountValue(InputParms const& input)
     ,RunBasis_         (mce_run_gen_curr_sep_full)
     ,GenBasis_         (mce_gen_curr)
     ,SepBasis_         (mce_sep_full)
+    ,mode              (mce_annual)
 {
     GrossPmts  .resize(12);
     NetPmts    .resize(12);
@@ -301,7 +297,7 @@ void AccountValue::DoYear
     ActualSpecAmt         = InvariantValues().SpecAmt[Year];
 
     // These variables are set for each pass independently.
-    mode            = InvariantValues().EeMode[Year];
+    mode            = porting_cast<mcenum_mode>(InvariantValues().EeMode[Year].value());
     ModeIndex       = get_mode_index(mode);
     RequestedLoan   = Outlay_->new_cash_loans()[Year];
     wd              = Outlay_->withdrawals()[Year];
@@ -649,7 +645,7 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
             {
             *a_Pmt = GetModalMinPrem
                 (Year
-                ,porting_cast<mcenum_mode>(mode.value())
+                ,mode
                 ,ActualSpecAmt
                 );
             }
@@ -658,7 +654,7 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
             {
             *a_Pmt = GetModalTgtPrem
                 (Year
-                ,porting_cast<mcenum_mode>(mode.value())
+                ,mode
                 ,ActualSpecAmt
                 );
             }
