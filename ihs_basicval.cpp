@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.64 2008-07-15 18:47:38 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.65 2008-07-16 13:23:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -283,7 +283,7 @@ void BasicValues::Init()
     SurrChgRates_  .reset(new SurrChgRates   (*Database_));
     DeathBfts_     .reset(new death_benefits (*this));
     // Outlay requires only input; it might someday use interest rates.
-    Outlay_        .reset(new modal_outlay   (*Input_));
+    Outlay_        .reset(new modal_outlay   (yare_input_));
     SetLowestPremiumTaxLoad();
     Loads_         .reset(new Loads          (*this));
 
@@ -358,7 +358,7 @@ void BasicValues::GPTServerInit()
 //  SurrChgRates_  .reset(new SurrChgRates   (Database_));
 //  DeathBfts_     .reset(new death_benefits (*this));
     // Outlay requires only input; it might someday use interest rates.
-//  Outlay_        .reset(new modal_outlay   (*Input_));
+//  Outlay_        .reset(new modal_outlay   (yare_input_));
     SetLowestPremiumTaxLoad();
     Loads_         .reset(new Loads          (*this));
 

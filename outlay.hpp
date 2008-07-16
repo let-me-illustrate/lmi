@@ -19,21 +19,21 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: outlay.hpp,v 1.9 2008-07-16 12:15:30 chicares Exp $
+// $Id: outlay.hpp,v 1.10 2008-07-16 13:23:26 chicares Exp $
 
 #ifndef outlay_hpp
 #define outlay_hpp
 
 #include "config.hpp"
 
+#include "mc_enum_type_enums.hpp"
 #include "obstruct_slicing.hpp"
-#include "xenumtypes.hpp"
 
 #include <boost/utility.hpp>
 
 #include <vector>
 
-class InputParms;
+class yare_input;
 
 class modal_outlay
     :private boost::noncopyable
@@ -42,18 +42,18 @@ class modal_outlay
     friend class AccountValue;
 
   public:
-    explicit modal_outlay(InputParms const&);
+    explicit modal_outlay(yare_input const&);
     ~modal_outlay();
 
-    double                     dumpin               () const;
-    double                     external_1035_amount () const;
-    double                     internal_1035_amount () const;
-    std::vector<double> const& ee_modal_premiums    () const;
-    std::vector<e_mode> const& ee_premium_modes     () const;
-    std::vector<double> const& er_modal_premiums    () const;
-    std::vector<e_mode> const& er_premium_modes     () const;
-    std::vector<double> const& new_cash_loans       () const;
-    std::vector<double> const& withdrawals          () const;
+    double                          dumpin               () const;
+    double                          external_1035_amount () const;
+    double                          internal_1035_amount () const;
+    std::vector<double>      const& ee_modal_premiums    () const;
+    std::vector<mcenum_mode> const& ee_premium_modes     () const;
+    std::vector<double>      const& er_modal_premiums    () const;
+    std::vector<mcenum_mode> const& er_premium_modes     () const;
+    std::vector<double>      const& new_cash_loans       () const;
+    std::vector<double>      const& withdrawals          () const;
 
   private:
     modal_outlay();
@@ -68,15 +68,15 @@ class modal_outlay
     void set_new_cash_loans   (double z, int from_year, int to_year);
     void set_withdrawals      (double z, int from_year, int to_year);
 
-    double              dumpin_;
-    double              external_1035_amount_;
-    double              internal_1035_amount_;
-    std::vector<double> ee_modal_premiums_;
-    std::vector<e_mode> ee_premium_modes_;
-    std::vector<double> er_modal_premiums_;
-    std::vector<e_mode> er_premium_modes_;
-    std::vector<double> new_cash_loans_;
-    std::vector<double> withdrawals_;
+    double                   dumpin_;
+    double                   external_1035_amount_;
+    double                   internal_1035_amount_;
+    std::vector<double>      ee_modal_premiums_;
+    std::vector<mcenum_mode> ee_premium_modes_;
+    std::vector<double>      er_modal_premiums_;
+    std::vector<mcenum_mode> er_premium_modes_;
+    std::vector<double>      new_cash_loans_;
+    std::vector<double>      withdrawals_;
 };
 
 inline double modal_outlay::dumpin() const
@@ -99,7 +99,7 @@ inline std::vector<double> const& modal_outlay::ee_modal_premiums() const
     return ee_modal_premiums_;
 }
 
-inline std::vector<e_mode> const& modal_outlay::ee_premium_modes() const
+inline std::vector<mcenum_mode> const& modal_outlay::ee_premium_modes() const
 {
     return ee_premium_modes_;
 }
@@ -109,7 +109,7 @@ inline std::vector<double> const& modal_outlay::er_modal_premiums() const
     return er_modal_premiums_;
 }
 
-inline std::vector<e_mode> const& modal_outlay::er_premium_modes() const
+inline std::vector<mcenum_mode> const& modal_outlay::er_premium_modes() const
 {
     return er_premium_modes_;
 }
