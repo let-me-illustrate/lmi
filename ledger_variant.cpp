@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.cpp,v 1.26 2008-07-17 13:19:27 chicares Exp $
+// $Id: ledger_variant.cpp,v 1.27 2008-07-17 14:05:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -381,17 +381,6 @@ ledger_map_holder::ledger_map_holder()
 ledger_map_holder::ledger_map_holder(ledger_map_t const& z)
     :held_(z)
 {
-}
-
-ledger_map_holder::ledger_map_holder(ledger_map_holder const& z)
-    :held_(z.held())
-{
-}
-
-ledger_map_holder& ledger_map_holder::operator=(ledger_map_holder const& z)
-{
-    held_ = z.held();
-    return *this;
 }
 
 ledger_map_holder::~ledger_map_holder()

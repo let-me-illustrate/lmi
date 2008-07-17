@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.hpp,v 1.21 2008-07-17 13:19:27 chicares Exp $
+// $Id: ledger_variant.hpp,v 1.22 2008-07-17 14:05:11 chicares Exp $
 
 #ifndef ledger_variant_hpp
 #define ledger_variant_hpp
@@ -134,8 +134,8 @@ class LMI_SO LedgerVariant
     std::vector<double> PrefLoanBalance; // Not used yet.
     std::vector<double> TotalLoanBalance;
     std::vector<double> ExcessLoan;
-    std::vector<double> AvgDeathBft;     // TODO ?? Never used?
-    std::vector<double> SurrChg;         // TODO ?? Never used?
+    std::vector<double> AvgDeathBft;     // Not used yet.
+    std::vector<double> SurrChg;         // Not used yet.
     std::vector<double> TermPurchased;
     std::vector<double> BaseDeathBft;
     std::vector<double> ProjectedCoiCharge;
@@ -179,11 +179,13 @@ class LMI_SO LedgerVariant
     bool             FullyInitialized; // I.e. by Init(BasicValues* b).
 };
 
-// C++98 17.4.3.6 forbids declaring std::map<S,T> where S or T is
-// incomplete. But class ledger_map_holder can be forward declared
-// even when class LedgerVariant is forward declared.
-
 typedef std::map<e_run_basis, LedgerVariant> ledger_map_t;
+
+/// C++98 17.4.3.6 forbids declaring std::map<S,T> where S or T is
+/// incomplete. But class ledger_map_holder can be forward declared
+/// even when class LedgerVariant is forward declared.
+///
+/// Implicitly-declared special member functions do the right thing.
 
 class ledger_map_holder
 {
@@ -192,8 +194,6 @@ class ledger_map_holder
   public:
     ledger_map_holder();
     explicit ledger_map_holder(ledger_map_t const&);
-    ledger_map_holder(ledger_map_holder const&);
-    ledger_map_holder& operator=(ledger_map_holder const&);
     ~ledger_map_holder();
 
     ledger_map_t const& held() const;
