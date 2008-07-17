@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.42 2008-07-16 18:57:21 chicares Exp $
+// $Id: accountvalue.cpp,v 1.43 2008-07-17 19:04:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -226,7 +226,7 @@ double AccountValue::RunOneCell(e_run_basis const& TheBasis)
     LMI_ASSERT(static_cast<mcenum_gen_basis>(ExpAndGABasis.value()) == GenBasis_);
     LMI_ASSERT(static_cast<mcenum_sep_basis>(SABasis      .value()) == SepBasis_);
 
-    VariantValues().Init(this, ExpAndGABasis, SABasis);
+    VariantValues().Init(*this, GenBasis_, SepBasis_);
 
     Debugging       = false;
 

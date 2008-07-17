@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.hpp,v 1.23 2008-07-17 16:13:42 chicares Exp $
+// $Id: ledger_variant.hpp,v 1.24 2008-07-17 19:04:29 chicares Exp $
 
 #ifndef ledger_variant_hpp
 #define ledger_variant_hpp
@@ -30,7 +30,6 @@
 
 #include "mc_enum_type_enums.hpp"
 #include "so_attributes.hpp"
-#include "xenumtypes.hpp"
 
 #include <functional>
 #include <iosfwd>
@@ -61,26 +60,14 @@ class LMI_SO LedgerVariant
         ,std::vector<double> const& a_Inforce
         );
 
-    void Init
-        (BasicValues*     a_BV
-        ,e_basis          a_ExpAndGABasis
-        ,e_sep_acct_basis a_SABasis
-        );
+    void Init(BasicValues const&, mcenum_gen_basis, mcenum_sep_basis);
 
-    bool                IsFullyInitialized() const {return FullyInitialized;}
+    bool IsFullyInitialized() const {return FullyInitialized;}
 
-    virtual int         GetLength() const {return Length;}
+    virtual int GetLength() const {return Length;}
 
-    void SetExpAndGABasis(e_basis const& a_ExpAndGABasis)
-        {
-        ExpAndGABasis = a_ExpAndGABasis;
-        GenBasis_ = static_cast<mcenum_gen_basis>(ExpAndGABasis.value());
-        }
-    void SetSABasis(e_sep_acct_basis const& a_SABasis)
-        {
-        SABasis = a_SABasis;
-        SepBasis_ = static_cast<mcenum_sep_basis>(SABasis      .value());
-        }
+    void set_run_basis(mcenum_run_basis);
+
     void RecordDynamicSepAcctRate
         (double annual_rate
         ,double monthly_rate
@@ -172,8 +159,6 @@ class LMI_SO LedgerVariant
 
     // Special cases.
     int              Length;
-    e_basis          ExpAndGABasis; // DEPRECATED
-    e_sep_acct_basis SABasis;       // DEPRECATED
     mcenum_gen_basis GenBasis_;
     mcenum_sep_basis SepBasis_;
     bool             FullyInitialized; // I.e. by Init(BasicValues* b).

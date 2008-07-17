@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.121 2008-07-17 16:13:42 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.122 2008-07-17 19:04:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -113,7 +113,7 @@ AccountValue::AccountValue(InputParms const& input)
 {
     InvariantValues().Init(this);
 // TODO ?? What are the values of the last two arguments here?
-    VariantValues().Init(this, ExpAndGABasis, SABasis);
+    VariantValues().Init(*this, GenBasis_, SepBasis_);
     // TODO ?? There are several variants. We have to initialize all of them.
     // This is probably best done through a function in class Ledger.
     // We haven't yet laid the groundwork for that, though.
@@ -441,7 +441,7 @@ void AccountValue::InitializeLife(e_run_basis const& a_Basis)
     // manipulate the state of just those elements of the ledgers
     // that it needs to, to avoid the massive overhead of
     // unconditionally reinitializing all elements.
-    VariantValues().Init(this, ExpAndGABasis, SABasis);
+    VariantValues().Init(*this, GenBasis_, SepBasis_);
     InvariantValues().Init(this);
 
     OldDBOpt = InvariantValues().DBOpt[0].value();
