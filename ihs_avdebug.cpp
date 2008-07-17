@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avdebug.cpp,v 1.29 2008-07-16 15:58:24 chicares Exp $
+// $Id: ihs_avdebug.cpp,v 1.30 2008-07-17 19:02:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,31 +29,15 @@
 #include "account_value.hpp"
 
 #include "assert_lmi.hpp"
-#include "calendar_date.hpp"
-#include "database.hpp"
-#include "dbnames.hpp"
-#include "death_benefits.hpp"
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
-#include "ihs_proddata.hpp"
-#include "ihs_rnddata.hpp"
-#include "inputs.hpp"
-#include "inputstatus.hpp"
-#include "interest_rates.hpp"
 #include "ledger_invariant.hpp"
-#include "ledger_variant.hpp"
-#include "loads.hpp"
+#include "mc_enum_types_aux.hpp"
 #include "miscellany.hpp"
-#include "outlay.hpp"
 #include "value_cast.hpp"
 
 #include <algorithm>
-#include <fstream>
-#include <iomanip>
-#include <ios>
-#include <iostream>
 #include <iterator>
-#include <ostream>
 #include <string>
 #include <vector>
 
@@ -71,7 +55,7 @@ namespace
     enum DebugColNames
         {eYear
         ,eMonth
-        ,eRateBasis
+        ,eBasis
         ,eAge
         ,eGenAcctBOMAV
         ,eSepAcctBOMAV
@@ -163,7 +147,7 @@ namespace
         static std::vector<std::string> v(eLast);
         v[eYear]                = "Year";
         v[eMonth]               = "Month";
-        v[eRateBasis]           = "Rate basis";
+        v[eBasis]               = "Basis for values";
         v[eAge]                 = "Age";
         v[eGenAcctBOMAV]        = "Unloaned BOM GA AV";
         v[eSepAcctBOMAV]        = "Unloaned BOM SA AV";
@@ -325,7 +309,7 @@ void AccountValue::DebugPrint()
 
     SetMonthlyDetail(eYear               ,Year);
     SetMonthlyDetail(eMonth              ,Month);
-    SetMonthlyDetail(eRateBasis          ,RateBasis.str());
+    SetMonthlyDetail(eBasis              ,mc_str(RunBasis_));
     SetMonthlyDetail(eAge                ,InvariantValues().Age + Year);
 
     // Initial values at beginning of run, reflecting inforce if applicable.
@@ -359,7 +343,7 @@ void AccountValue::DebugPrint()
 
     SetMonthlyDetail(eRegLoanBal         ,RegLnBal                         );
     SetMonthlyDetail(ePrefLoanBal        ,PrfLnBal                         );
-    SetMonthlyDetail(eDBOption           ,YearsDBOpt                       );
+    SetMonthlyDetail(eDBOption           ,mc_str(YearsDBOpt)               );
     SetMonthlyDetail(eSpecAmt            ,ActualSpecAmt                    );
     SetMonthlyDetail(eCorridorFactor     ,YearsCorridorFactor              );
     SetMonthlyDetail(eDeathBft           ,DBReflectingCorr                 );
@@ -443,12 +427,12 @@ void AccountValue::DebugPrint()
     SetMonthlyDetail(eEOMCSVNet          ,csv_net                          );
     SetMonthlyDetail(eEOMCV7702          ,CashValueFor7702()               );
 
-    LMI_ASSERT(0 != Input_->NumIdenticalLives); // Make sure division is safe.
+    LMI_ASSERT(0 != yare_input_.NumberOfIdenticalLives);
     SetMonthlyDetail
         (eInforceFactor
         ,ItLapsed
             ? 0.0
-            : InvariantValues().InforceLives[Year] / Input_->NumIdenticalLives
+            : InvariantValues().InforceLives[Year] / yare_input_.NumberOfIdenticalLives
         );
 
     // TODO ?? Claims appear as zero because SetClaims() is called not
@@ -464,7 +448,7 @@ void AccountValue::DebugPrint()
            InvariantValues().MecYear < Year
         ||    InvariantValues().MecYear == Year
            && InvariantValues().MecMonth < Month
-        || e_run_curr_basis != RateBasis
+        || mce_run_gen_curr_sep_full != RunBasis_
         ;
 
     if(!irc7702a_data_irrelevant)
