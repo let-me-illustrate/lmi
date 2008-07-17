@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.40 2008-07-13 09:36:20 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.41 2008-07-17 16:13:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -475,10 +475,10 @@ os << "\n\n" ;
 
         // Show experience-rating columns for current-expense, zero-
         // interest basis if used, to support testing.
-        std::vector<e_run_basis> const& bases(ledger_values.GetRunBases());
+        std::vector<mcenum_run_basis> const& bases(ledger_values.GetRunBases());
         if
             (   bases.end()
-            !=  std::find(bases.begin(), bases.end(), e_run_curr_basis_sa_zero)
+            !=  std::find(bases.begin(), bases.end(), mce_run_gen_curr_sep_zero)
             )
             {
             LedgerVariant const& Curr0 = ledger_values.GetCurrZero();
@@ -499,7 +499,7 @@ os << "\n\n" ;
 
         if
             (   bases.end()
-            !=  std::find(bases.begin(), bases.end(), e_run_curr_basis_sa_half)
+            !=  std::find(bases.begin(), bases.end(), mce_run_gen_curr_sep_half)
             )
             {
             fatal_error()

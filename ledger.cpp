@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.cpp,v 1.22 2008-07-17 13:19:27 chicares Exp $
+// $Id: ledger.cpp,v 1.23 2008-07-17 16:13:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,6 +33,7 @@
 #include "crc32.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
+#include "mc_enum_types_aux.hpp" // porting_cast()
 
 #include <algorithm>
 #include <ostream>
@@ -97,23 +98,23 @@ void Ledger::SetRunBases(int a_Length)
     ledger_map_t& l_map_rep = ledger_map_->held_;
     switch(ledger_type_)
         {
-        case e_ill_reg:
+        case mce_ill_reg:
             {
-            l_map_rep[e_run_basis(e_run_curr_basis)]         = LedgerVariant(a_Length);
-            l_map_rep[e_run_basis(e_run_guar_basis)]         = LedgerVariant(a_Length);
-            l_map_rep[e_run_basis(e_run_mdpt_basis)]         = LedgerVariant(a_Length);
+            l_map_rep[mce_run_gen_curr_sep_full] = LedgerVariant(a_Length);
+            l_map_rep[mce_run_gen_guar_sep_full] = LedgerVariant(a_Length);
+            l_map_rep[mce_run_gen_mdpt_sep_full] = LedgerVariant(a_Length);
             }
             break;
-        case e_group_private_placement:      // Deliberately fall through.
-        case e_offshore_private_placement:   // Deliberately fall through.
-        case e_individual_private_placement: // Deliberately fall through.
-        case e_variable_annuity:             // Deliberately fall through.
-        case e_nasd:
+        case mce_group_private_placement:      // Deliberately fall through.
+        case mce_offshore_private_placement:   // Deliberately fall through.
+        case mce_individual_private_placement: // Deliberately fall through.
+        case mce_variable_annuity:             // Deliberately fall through.
+        case mce_nasd:
             {
-            l_map_rep[e_run_basis(e_run_curr_basis)]         = LedgerVariant(a_Length);
-            l_map_rep[e_run_basis(e_run_guar_basis)]         = LedgerVariant(a_Length);
-            l_map_rep[e_run_basis(e_run_curr_basis_sa_zero)] = LedgerVariant(a_Length);
-            l_map_rep[e_run_basis(e_run_guar_basis_sa_zero)] = LedgerVariant(a_Length);
+            l_map_rep[mce_run_gen_curr_sep_full] = LedgerVariant(a_Length);
+            l_map_rep[mce_run_gen_guar_sep_full] = LedgerVariant(a_Length);
+            l_map_rep[mce_run_gen_curr_sep_zero] = LedgerVariant(a_Length);
+            l_map_rep[mce_run_gen_guar_sep_zero] = LedgerVariant(a_Length);
             }
             break;
 #if 0
@@ -124,12 +125,12 @@ void Ledger::SetRunBases(int a_Length)
         //
         case nonexistent:  // {current, 0% int, 1/2 int%} X {guar, curr}
             {
-            l_map_rep[e_run_basis(e_run_curr_basis)]         = LedgerVariant(a_Length);
-            l_map_rep[e_run_basis(e_run_guar_basis)]         = LedgerVariant(a_Length);
-            l_map_rep[e_run_basis(e_run_curr_basis_sa_zero)] = LedgerVariant(a_Length);
-            l_map_rep[e_run_basis(e_run_guar_basis_sa_zero)] = LedgerVariant(a_Length);
-            l_map_rep[e_run_basis(e_run_curr_basis_sa_half)] = LedgerVariant(a_Length);
-            l_map_rep[e_run_basis(e_run_guar_basis_sa_half)] = LedgerVariant(a_Length);
+            l_map_rep[mce_run_gen_curr_sep_full] = LedgerVariant(a_Length);
+            l_map_rep[mce_run_gen_guar_sep_full] = LedgerVariant(a_Length);
+            l_map_rep[mce_run_gen_curr_sep_zero] = LedgerVariant(a_Length);
+            l_map_rep[mce_run_gen_guar_sep_zero] = LedgerVariant(a_Length);
+            l_map_rep[mce_run_gen_curr_sep_half] = LedgerVariant(a_Length);
+            l_map_rep[mce_run_gen_guar_sep_half] = LedgerVariant(a_Length);
             }
             break;
 #endif
@@ -157,7 +158,7 @@ void Ledger::SetRunBases(int a_Length)
 
         e_basis exp_and_ga_basis;
         e_sep_acct_basis sa_basis;
-        set_separate_bases_from_run_basis(key, exp_and_ga_basis, sa_basis);
+        set_separate_bases_from_run_basis(e_run_basis(porting_cast<enum_run_basis>(key)), exp_and_ga_basis, sa_basis);
 
         data.SetExpAndGABasis(exp_and_ga_basis);
         data.SetSABasis(sa_basis);
@@ -289,10 +290,11 @@ void Ledger::SetOneLedgerVariant
     ,LedgerVariant const& a_Variant
     )
 {
+    mcenum_run_basis run_basis = porting_cast<mcenum_run_basis>(a_Basis.value());
     ledger_map_t& l_map_rep = ledger_map_->held_;
-    if(l_map_rep.count(a_Basis))
+    if(l_map_rep.count(run_basis))
         {
-        l_map_rep[a_Basis] = a_Variant;
+        l_map_rep[run_basis] = a_Variant;
         }
     else
         {
@@ -387,13 +389,13 @@ void Ledger::Spew(std::ostream& os) const
 }
 
 //============================================================================
-LedgerVariant const& Ledger::GetOneVariantLedger(enum_run_basis b) const
+LedgerVariant const& Ledger::GetOneVariantLedger(mcenum_run_basis b) const
 {
-    e_run_basis const basis(b);
-    ledger_map_t::const_iterator i(GetLedgerMap().held().find(basis));
+    ledger_map_t::const_iterator i(GetLedgerMap().held().find(b));
     if(i == GetLedgerMap().held().end())
         {
-        fatal_error() << "No values for basis '" << basis << "'" << LMI_FLUSH;
+        // DEPRECATED Should display string name.
+        fatal_error() << "No values for basis '" << b << "'" << LMI_FLUSH;
         }
     return i->second;
 }
@@ -401,42 +403,42 @@ LedgerVariant const& Ledger::GetOneVariantLedger(enum_run_basis b) const
 //============================================================================
 LedgerVariant const& Ledger::GetCurrFull() const
 {
-    return GetOneVariantLedger(e_run_curr_basis);
+    return GetOneVariantLedger(mce_run_gen_curr_sep_full);
 }
 
 //============================================================================
 LedgerVariant const& Ledger::GetGuarFull() const
 {
-    return GetOneVariantLedger(e_run_guar_basis);
+    return GetOneVariantLedger(mce_run_gen_guar_sep_full);
 }
 
 //============================================================================
 LedgerVariant const& Ledger::GetMdptFull() const
 {
-    return GetOneVariantLedger(e_run_mdpt_basis);
+    return GetOneVariantLedger(mce_run_gen_mdpt_sep_full);
 }
 
 //============================================================================
 LedgerVariant const& Ledger::GetCurrZero() const
 {
-    return GetOneVariantLedger(e_run_curr_basis_sa_zero);
+    return GetOneVariantLedger(mce_run_gen_curr_sep_zero);
 }
 
 //============================================================================
 LedgerVariant const& Ledger::GetGuarZero() const
 {
-    return GetOneVariantLedger(e_run_guar_basis_sa_zero);
+    return GetOneVariantLedger(mce_run_gen_guar_sep_zero);
 }
 
 //============================================================================
 LedgerVariant const& Ledger::GetCurrHalf() const
 {
-    return GetOneVariantLedger(e_run_curr_basis_sa_half);
+    return GetOneVariantLedger(mce_run_gen_curr_sep_half);
 }
 
 //============================================================================
 LedgerVariant const& Ledger::GetGuarHalf() const
 {
-    return GetOneVariantLedger(e_run_guar_basis_sa_half);
+    return GetOneVariantLedger(mce_run_gen_guar_sep_half);
 }
 
