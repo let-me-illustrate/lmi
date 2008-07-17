@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1098 2008-07-16 18:57:22 chicares Exp $
+// $Id: ChangeLog,v 1.1099 2008-07-17 19:04:29 chicares Exp $
 
 MAINTENANCE
 
@@ -17925,4 +17925,49 @@ Add an auxiliary function that'll soon be needed.
   ledger_xml_io2.cpp
   solve.cpp
 Refactor, eliminating old 'xenum' class from invariant-ledger header.
+
+20080717T1319Z <gchicares@sbcglobal.net> [1125]
+
+  ledger.cpp
+  ledger_variant.cpp
+  ledger_variant.hpp
+  ledger_xml_io.cpp
+  ledger_xml_io2.cpp
+Rename ledger-map type.
+
+20080717T1405Z <gchicares@sbcglobal.net> [1123]
+
+  ledger_variant.cpp
+  ledger_variant.hpp
+Remove special member functions that are better defined implicitly.
+
+20080717T1613Z <gchicares@sbcglobal.net> [1123]
+
+  group_values.cpp
+  ihs_acctval.cpp
+  ledger.cpp
+  ledger.hpp
+  ledger_invariant.cpp
+  ledger_text_formats.cpp
+  ledger_variant.hpp
+  ledger_xml_io2.cpp
+Refactor, removing 'xenum' class from ledger-map type.
+
+20080717T1902Z <gchicares@sbcglobal.net> [1123]
+
+  ihs_avdebug.cpp
+  mc_enum_types_aux.cpp
+  mc_enum_types_aux.hpp
+On second thought, translate DB option to string in monthly detail. It
+had seemed more trouble than it's worth, but "ROP" is more descriptive
+than "3" for death benefit option because DBO3 might mean e.g. COLA.
+
+20080717T1904Z <gchicares@sbcglobal.net> [1123]
+
+  accountvalue.cpp
+  ihs_acctval.cpp
+  ledger.cpp
+  ledger_variant.cpp
+  ledger_variant.hpp
+Refactor, eliminating old 'xenum' class from variant-ledger class.
 
