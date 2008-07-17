@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.120 2008-07-16 18:57:21 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.121 2008-07-17 16:13:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -313,14 +313,14 @@ double AccountValue::RunAllApplicableBases()
             );
         }
     // Run all bases, current first.
-    std::vector<e_run_basis> const& run_bases = ledger_->GetRunBases();
+    std::vector<mcenum_run_basis> const& run_bases = ledger_->GetRunBases();
     for
-        (std::vector<e_run_basis>::const_iterator b = run_bases.begin()
+        (std::vector<mcenum_run_basis>::const_iterator b = run_bases.begin()
         ;b != run_bases.end()
         ;++b
         )
         {
-        RunOneBasis(*b);
+        RunOneBasis(e_run_basis(porting_cast<enum_run_basis>(*b)));
         }
     return z;
 }

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.hpp,v 1.22 2008-01-01 18:29:46 chicares Exp $
+// $Id: ledger.hpp,v 1.23 2008-07-17 16:13:42 chicares Exp $
 
 #ifndef ledger_hpp
 #define ledger_hpp
@@ -27,6 +27,7 @@
 #include "config.hpp"
 
 #include "ledger_excerpt.hpp" // enum_xml_version
+#include "mc_enum_type_enums.hpp"
 #include "so_attributes.hpp"
 #include "streamable.hpp"
 #include "xenumtypes.hpp"
@@ -88,20 +89,20 @@ class LMI_SO Ledger
 
     void AutoScale();
 
-    ledger_map_holder const&        GetLedgerMap()       const;
-    LedgerInvariant const&          GetLedgerInvariant() const;
-    LedgerVariant const&            GetCurrFull()        const;
-    LedgerVariant const&            GetGuarFull()        const;
-    LedgerVariant const&            GetMdptFull()        const;
-    LedgerVariant const&            GetCurrZero()        const;
-    LedgerVariant const&            GetGuarZero()        const;
-    LedgerVariant const&            GetCurrHalf()        const;
-    LedgerVariant const&            GetGuarHalf()        const;
+    ledger_map_holder const&             GetLedgerMap()       const;
+    LedgerInvariant const&               GetLedgerInvariant() const;
+    LedgerVariant const&                 GetCurrFull()        const;
+    LedgerVariant const&                 GetGuarFull()        const;
+    LedgerVariant const&                 GetMdptFull()        const;
+    LedgerVariant const&                 GetCurrZero()        const;
+    LedgerVariant const&                 GetGuarZero()        const;
+    LedgerVariant const&                 GetCurrHalf()        const;
+    LedgerVariant const&                 GetGuarHalf()        const;
 
-    e_ledger_type const&            GetLedgerType()      const;
-    int                             GetMaxLength()       const;
-    std::vector<e_run_basis> const& GetRunBases()        const;
-    bool                            GetIsComposite()     const;
+    e_ledger_type const&                 GetLedgerType()      const;
+    int                                  GetMaxLength()       const;
+    std::vector<mcenum_run_basis> const& GetRunBases()        const;
+    bool                                 GetIsComposite()     const;
 
     unsigned int CalculateCRC() const;
     void Spew(std::ostream& os) const;
@@ -120,7 +121,7 @@ class LMI_SO Ledger
     void writeXXX(std::ostream& os) const;
 
   private:
-    LedgerVariant const& GetOneVariantLedger(enum_run_basis) const;
+    LedgerVariant const& GetOneVariantLedger(mcenum_run_basis) const;
     void SetRunBases(int a_Length);
 
     bool is_composite_;
@@ -142,7 +143,7 @@ class LMI_SO Ledger
     // i.e. just the key_type members of ledger_map_. We can use this for
     // iterating across all bases without exposing the map's data_type,
     // from which we want to shield other classes where possible.
-    std::vector<e_run_basis> run_bases_;
+    std::vector<mcenum_run_basis> run_bases_;
 };
 
 inline ledger_map_holder const& Ledger::GetLedgerMap() const
@@ -160,7 +161,7 @@ inline e_ledger_type const& Ledger::GetLedgerType() const
     return ledger_type_;
 }
 
-inline std::vector<e_run_basis> const& Ledger::GetRunBases() const
+inline std::vector<mcenum_run_basis> const& Ledger::GetRunBases() const
 {
     return run_bases_;
 }

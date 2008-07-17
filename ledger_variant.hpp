@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.hpp,v 1.22 2008-07-17 14:05:11 chicares Exp $
+// $Id: ledger_variant.hpp,v 1.23 2008-07-17 16:13:42 chicares Exp $
 
 #ifndef ledger_variant_hpp
 #define ledger_variant_hpp
@@ -179,7 +179,7 @@ class LMI_SO LedgerVariant
     bool             FullyInitialized; // I.e. by Init(BasicValues* b).
 };
 
-typedef std::map<e_run_basis, LedgerVariant> ledger_map_t;
+typedef std::map<mcenum_run_basis, LedgerVariant> ledger_map_t;
 
 /// C++98 17.4.3.6 forbids declaring std::map<S,T> where S or T is
 /// incomplete. But class ledger_map_holder can be forward declared

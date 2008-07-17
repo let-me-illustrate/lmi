@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.41 2008-07-16 18:57:21 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.42 2008-07-17 16:13:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -933,8 +933,8 @@ void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
         (0 == std::count
             (LedgerValues.GetRunBases().begin()
             ,LedgerValues.GetRunBases().end()
-            ,e_run_curr_basis_sa_zero
-            // Proxy for e_run_guar_basis_sa_zero too.
+            ,mce_run_gen_curr_sep_zero
+            // Proxy for mce_run_gen_guar_sep_zero too.
             )
         )
         {
