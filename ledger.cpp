@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.cpp,v 1.23 2008-07-17 16:13:42 chicares Exp $
+// $Id: ledger.cpp,v 1.24 2008-07-17 19:04:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -155,13 +155,15 @@ void Ledger::SetRunBases(int a_Length)
         ledger_map_t::mapped_type& data = (*p).second;
 
         run_bases_.push_back(key);
-
+#if 0
         e_basis exp_and_ga_basis;
         e_sep_acct_basis sa_basis;
         set_separate_bases_from_run_basis(e_run_basis(porting_cast<enum_run_basis>(key)), exp_and_ga_basis, sa_basis);
 
         data.SetExpAndGABasis(exp_and_ga_basis);
         data.SetSABasis(sa_basis);
+#endif // 0
+        data.set_run_basis(key);
 
         if(is_composite_)
             {

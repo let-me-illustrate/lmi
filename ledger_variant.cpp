@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.cpp,v 1.27 2008-07-17 14:05:11 chicares Exp $
+// $Id: ledger_variant.cpp,v 1.28 2008-07-17 19:04:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,6 +35,7 @@
 #include "inputs.hpp"
 #include "inputstatus.hpp"
 #include "interest_rates.hpp"
+#include "mc_enum_types_aux.hpp"
 #include "outlay.hpp"
 
 #include <algorithm>
@@ -165,12 +166,9 @@ void LedgerVariant::Copy(LedgerVariant const& obj)
 {
     LedgerBase::Copy(obj);
 
-    ExpAndGABasis           = obj.ExpAndGABasis     ;
-    SABasis                 = obj.SABasis           ;
-    FullyInitialized        = obj.FullyInitialized  ;
-
-    GenBasis_ = static_cast<mcenum_gen_basis>(ExpAndGABasis.value());
-    SepBasis_ = static_cast<mcenum_sep_basis>(SABasis      .value());
+    GenBasis_        = obj.GenBasis_       ;
+    SepBasis_        = obj.SepBasis_       ;
+    FullyInitialized = obj.FullyInitialized;
 }
 
 //============================================================================
@@ -185,11 +183,8 @@ void LedgerVariant::Init()
     // Initializes (almost) everything with zeros.
     LedgerBase::Initialize(GetLength());
 
-    ExpAndGABasis           = e_basis(e_currbasis);
-    SABasis                 = e_sep_acct_basis(e_sep_acct_full);
-
-    GenBasis_ = static_cast<mcenum_gen_basis>(ExpAndGABasis.value());
-    SepBasis_ = static_cast<mcenum_sep_basis>(SABasis      .value());
+    GenBasis_ = mce_gen_curr;
+    SepBasis_ = mce_sep_full;
 
     LapseYear               = Length;
     LapseMonth              = 11;
@@ -199,18 +194,15 @@ void LedgerVariant::Init()
 
 //============================================================================
 void LedgerVariant::Init
-    (BasicValues*     a_BV
-    ,e_basis          a_ExpAndGABasis
-    ,e_sep_acct_basis a_SABasis
+    (BasicValues const& bv
+    ,mcenum_gen_basis   gen_basis
+    ,mcenum_sep_basis   sep_basis
     )
 {
     Init(); // Zero out (almost) everything to start.
 
-    ExpAndGABasis       = a_ExpAndGABasis;
-    SABasis             = a_SABasis;
-
-    GenBasis_ = static_cast<mcenum_gen_basis>(ExpAndGABasis.value());
-    SepBasis_ = static_cast<mcenum_sep_basis>(SABasis      .value());
+    GenBasis_ = gen_basis;
+    SepBasis_ = sep_basis;
 
 //  EOYDeathBft     =
 //  AcctVal         =
@@ -218,37 +210,37 @@ void LedgerVariant::Init
 //  CV7702          =
 //  COICharge       =
 //  ExpenseCharges  =
-    MlySAIntRate               = a_BV->InterestRates_->SepAcctNetRate
+    MlySAIntRate               = bv.InterestRates_->SepAcctNetRate
         (SepBasis_
         ,GenBasis_
         ,mce_monthly_rate
         );
-    MlyGAIntRate               = a_BV->InterestRates_->GenAcctNetRate
+    MlyGAIntRate               = bv.InterestRates_->GenAcctNetRate
         (GenBasis_
         ,mce_monthly_rate
         );
-    MlyHoneymoonValueRate      = a_BV->InterestRates_->HoneymoonValueRate
+    MlyHoneymoonValueRate      = bv.InterestRates_->HoneymoonValueRate
         (GenBasis_
         ,mce_monthly_rate
         );
-    MlyPostHoneymoonRate       = a_BV->InterestRates_->PostHoneymoonGenAcctRate
+    MlyPostHoneymoonRate       = bv.InterestRates_->PostHoneymoonGenAcctRate
         (GenBasis_
         ,mce_monthly_rate
         );
-    AnnSAIntRate               = a_BV->InterestRates_->SepAcctNetRate
+    AnnSAIntRate               = bv.InterestRates_->SepAcctNetRate
         (SepBasis_
         ,GenBasis_
         ,mce_annual_rate
         );
-    AnnGAIntRate               = a_BV->InterestRates_->GenAcctNetRate
+    AnnGAIntRate               = bv.InterestRates_->GenAcctNetRate
         (GenBasis_
         ,mce_annual_rate
         );
-    AnnHoneymoonValueRate      = a_BV->InterestRates_->HoneymoonValueRate
+    AnnHoneymoonValueRate      = bv.InterestRates_->HoneymoonValueRate
         (GenBasis_
         ,mce_annual_rate
         );
-    AnnPostHoneymoonRate       = a_BV->InterestRates_->PostHoneymoonGenAcctRate
+    AnnPostHoneymoonRate       = bv.InterestRates_->PostHoneymoonGenAcctRate
         (GenBasis_
         ,mce_annual_rate
         );
@@ -263,21 +255,21 @@ void LedgerVariant::Init
 //  ProjectedCoiCharge =
 //  KFactor         =
 
-    InitAnnLoanCredRate = a_BV->InterestRates_->RegLnCredRate
+    InitAnnLoanCredRate = bv.InterestRates_->RegLnCredRate
         (GenBasis_
         ,mce_annual_rate
         )[0];
 
-    InitAnnGenAcctInt = a_BV->InterestRates_->GenAcctNetRate
+    InitAnnGenAcctInt = bv.InterestRates_->GenAcctNetRate
         (GenBasis_
         ,mce_annual_rate
         )
         [0]
         ;
 
-    InitAnnSepAcctGrossInt = a_BV->InterestRates_->SepAcctGrossRate(SepBasis_)[0];
+    InitAnnSepAcctGrossInt = bv.InterestRates_->SepAcctGrossRate(SepBasis_)[0];
 
-    InitAnnSepAcctNetInt = a_BV->InterestRates_->SepAcctNetRate
+    InitAnnSepAcctNetInt = bv.InterestRates_->SepAcctNetRate
         (SepBasis_
         ,GenBasis_
         ,mce_annual_rate
@@ -286,6 +278,12 @@ void LedgerVariant::Init
         ;
 
     FullyInitialized = true;
+}
+
+//============================================================================
+void LedgerVariant::set_run_basis(mcenum_run_basis b)
+{
+    set_cloven_bases_from_run_basis(b, GenBasis_, SepBasis_);
 }
 
 //============================================================================
@@ -318,8 +316,8 @@ LedgerVariant& LedgerVariant::PlusEq
         KFactor                   [j]  = a_Addend.KFactor                   [j];
         }
 
-    LMI_ASSERT(a_Addend.ExpAndGABasis == ExpAndGABasis);
-    LMI_ASSERT(a_Addend.SABasis       == SABasis);
+    LMI_ASSERT(a_Addend.GenBasis_ == GenBasis_);
+    LMI_ASSERT(a_Addend.SepBasis_ == SepBasis_);
 
     if(LapseYear == a_Addend.LapseYear)
         {
@@ -358,19 +356,9 @@ void LedgerVariant::UpdateCRC(CRC& a_crc) const
 //============================================================================
 void LedgerVariant::Spew(std::ostream& os) const
 {
-    os
-        << "ExpAndGABasis"
-        << "=="
-        << ExpAndGABasis
-        << '\n'
-        ;
-    os
-        << "SABasis"
-        << "=="
-        << SABasis
-        << '\n'
-        ;
-
+    mcenum_run_basis b(mce_run_gen_curr_sep_full);
+    set_run_basis_from_cloven_bases(b, GenBasis_, SepBasis_);
+    os << "Basis" << "==" << mc_str(b) << '\n';
     LedgerBase::Spew(os);
 }
 
