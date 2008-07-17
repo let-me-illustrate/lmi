@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io2.cpp,v 1.29 2008-07-17 13:19:27 chicares Exp $
+// $Id: ledger_xml_io2.cpp,v 1.30 2008-07-17 16:13:43 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -87,7 +87,7 @@ string_vector_t const suffixes
 /// name is required and basis is optional.
 /// Name is stored by value and basis is stored as a pointer to an element
 /// of the static vector of strings 'suffixes' which corresponds to
-/// enum_run_basis.
+/// mcenum_run_basis.
 
 class value_id
 {
@@ -99,7 +99,7 @@ class value_id
     static value_id empty_value();
     static value_id from_name(std::string const&);
     static value_id from_name_basis(std::string const&, std::string const*);
-    static value_id from_name_basis(std::string const&, enum_run_basis);
+    static value_id from_name_basis(std::string const&, mcenum_run_basis);
     static value_id from_report_column_title(std::string const&);
     static value_id from_xml_element(xml::element const&);
 
@@ -139,7 +139,7 @@ value_id value_id::from_name_basis
 
 value_id value_id::from_name_basis
     (std::string const& name
-    ,enum_run_basis basis
+    ,mcenum_run_basis basis
     )
 {
     return value_id(name, &suffixes[basis]);
@@ -187,18 +187,18 @@ bool string_ends_with(std::string const& name, std::string const& suffix)
 
 value_id value_id::from_report_column_title(std::string const& title)
 {
-    typedef std::map<std::string, e_run_basis> suffix_map_t;
+    typedef std::map<std::string, mcenum_run_basis> suffix_map_t;
     static suffix_map_t suffix_map;
     if(suffix_map.empty())
-    {
-        suffix_map["_Current"       ] = e_run_curr_basis;
-        suffix_map["_Guaranteed"    ] = e_run_guar_basis;
-        suffix_map["_Midpoint"      ] = e_run_mdpt_basis;
-        suffix_map["_CurrentZero"   ] = e_run_curr_basis_sa_zero;
-        suffix_map["_GuaranteedZero"] = e_run_guar_basis_sa_zero;
-        suffix_map["_CurrentHalf"   ] = e_run_curr_basis_sa_half;
-        suffix_map["_GuaranteedHalf"] = e_run_guar_basis_sa_half;
-    }
+        {
+        suffix_map["_Current"       ] = mce_run_gen_curr_sep_full;
+        suffix_map["_Guaranteed"    ] = mce_run_gen_guar_sep_full;
+        suffix_map["_Midpoint"      ] = mce_run_gen_mdpt_sep_full;
+        suffix_map["_CurrentZero"   ] = mce_run_gen_curr_sep_zero;
+        suffix_map["_GuaranteedZero"] = mce_run_gen_guar_sep_zero;
+        suffix_map["_CurrentHalf"   ] = mce_run_gen_curr_sep_half;
+        suffix_map["_GuaranteedHalf"] = mce_run_gen_guar_sep_half;
+        }
 
     for
         (suffix_map_t::const_iterator it = suffix_map.begin()
@@ -806,48 +806,48 @@ void Ledger::write_excerpt
         detailed_ids.push_back(value_id::from_name("ErGrossPmt"));
         detailed_ids.push_back(value_id::from_name("NetWD"));
         detailed_ids.push_back(value_id::from_name("NewCashLoan"));
-        detailed_ids.push_back(value_id::from_name_basis("TotalLoanBalance", e_run_curr_basis));
+        detailed_ids.push_back(value_id::from_name_basis("TotalLoanBalance"  , mce_run_gen_curr_sep_full));
         detailed_ids.push_back(value_id::from_name("Outlay"));
 
-        detailed_ids.push_back(value_id::from_name_basis("NetPmt", e_run_curr_basis));
+        detailed_ids.push_back(value_id::from_name_basis("NetPmt"            , mce_run_gen_curr_sep_full));
 
-        detailed_ids.push_back(value_id::from_name_basis("PremTaxLoad", e_run_curr_basis));
-        detailed_ids.push_back(value_id::from_name_basis("DacTaxLoad", e_run_curr_basis));
-        detailed_ids.push_back(value_id::from_name_basis("PolicyFee", e_run_curr_basis));
-        detailed_ids.push_back(value_id::from_name_basis("SpecAmtLoad", e_run_curr_basis));
+        detailed_ids.push_back(value_id::from_name_basis("PremTaxLoad"       , mce_run_gen_curr_sep_full));
+        detailed_ids.push_back(value_id::from_name_basis("DacTaxLoad"        , mce_run_gen_curr_sep_full));
+        detailed_ids.push_back(value_id::from_name_basis("PolicyFee"         , mce_run_gen_curr_sep_full));
+        detailed_ids.push_back(value_id::from_name_basis("SpecAmtLoad"       , mce_run_gen_curr_sep_full));
         detailed_ids.push_back(value_id::from_name("MonthlyFlatExtra"));
-        detailed_ids.push_back(value_id::from_name_basis("COICharge", e_run_curr_basis));
-        detailed_ids.push_back(value_id::from_name_basis("NetCOICharge", e_run_curr_basis));
-        detailed_ids.push_back(value_id::from_name_basis("SepAcctCharges", e_run_curr_basis));
+        detailed_ids.push_back(value_id::from_name_basis("COICharge"         , mce_run_gen_curr_sep_full));
+        detailed_ids.push_back(value_id::from_name_basis("NetCOICharge"      , mce_run_gen_curr_sep_full));
+        detailed_ids.push_back(value_id::from_name_basis("SepAcctCharges"    , mce_run_gen_curr_sep_full));
 
-        detailed_ids.push_back(value_id::from_name_basis("AnnSAIntRate", e_run_curr_basis));
-        detailed_ids.push_back(value_id::from_name_basis("AnnGAIntRate", e_run_curr_basis));
-        detailed_ids.push_back(value_id::from_name_basis("GrossIntCredited", e_run_curr_basis));
-        detailed_ids.push_back(value_id::from_name_basis("NetIntCredited", e_run_curr_basis));
+        detailed_ids.push_back(value_id::from_name_basis("AnnSAIntRate"      , mce_run_gen_curr_sep_full));
+        detailed_ids.push_back(value_id::from_name_basis("AnnGAIntRate"      , mce_run_gen_curr_sep_full));
+        detailed_ids.push_back(value_id::from_name_basis("GrossIntCredited"  , mce_run_gen_curr_sep_full));
+        detailed_ids.push_back(value_id::from_name_basis("NetIntCredited"    , mce_run_gen_curr_sep_full));
 
-        detailed_ids.push_back(value_id::from_name_basis("AcctVal", e_run_guar_basis));
-        detailed_ids.push_back(value_id::from_name_basis("CSVNet", e_run_guar_basis));
-        detailed_ids.push_back(value_id::from_name_basis("EOYDeathBft", e_run_guar_basis));
-        detailed_ids.push_back(value_id::from_name_basis("AcctVal", e_run_curr_basis));
-        detailed_ids.push_back(value_id::from_name_basis("CSVNet", e_run_curr_basis));
-        detailed_ids.push_back(value_id::from_name_basis("EOYDeathBft", e_run_curr_basis));
+        detailed_ids.push_back(value_id::from_name_basis("AcctVal"           , mce_run_gen_guar_sep_full));
+        detailed_ids.push_back(value_id::from_name_basis("CSVNet"            , mce_run_gen_guar_sep_full));
+        detailed_ids.push_back(value_id::from_name_basis("EOYDeathBft"       , mce_run_gen_guar_sep_full));
+        detailed_ids.push_back(value_id::from_name_basis("AcctVal"           , mce_run_gen_curr_sep_full));
+        detailed_ids.push_back(value_id::from_name_basis("CSVNet"            , mce_run_gen_curr_sep_full));
+        detailed_ids.push_back(value_id::from_name_basis("EOYDeathBft"       , mce_run_gen_curr_sep_full));
 
         detailed_ids.push_back(value_id::from_name("IrrOnSurrender"));
         detailed_ids.push_back(value_id::from_name("IrrOnDeath"));
 
         detailed_ids.push_back(value_id::from_name("InforceLives"));
 
-        detailed_ids.push_back(value_id::from_name_basis("ClaimsPaid", e_run_curr_basis));
-        detailed_ids.push_back(value_id::from_name_basis("NetClaims", e_run_curr_basis));
-        detailed_ids.push_back(value_id::from_name_basis("ExperienceReserve", e_run_curr_basis));
-        detailed_ids.push_back(value_id::from_name_basis("ProjectedCoiCharge", e_run_curr_basis));
-        detailed_ids.push_back(value_id::from_name_basis("KFactor", e_run_curr_basis));
+        detailed_ids.push_back(value_id::from_name_basis("ClaimsPaid"        , mce_run_gen_curr_sep_full));
+        detailed_ids.push_back(value_id::from_name_basis("NetClaims"         , mce_run_gen_curr_sep_full));
+        detailed_ids.push_back(value_id::from_name_basis("ExperienceReserve" , mce_run_gen_curr_sep_full));
+        detailed_ids.push_back(value_id::from_name_basis("ProjectedCoiCharge", mce_run_gen_curr_sep_full));
+        detailed_ids.push_back(value_id::from_name_basis("KFactor"           , mce_run_gen_curr_sep_full));
 
-        detailed_ids.push_back(value_id::from_name_basis("NetCOICharge", e_run_curr_basis_sa_zero));
-        detailed_ids.push_back(value_id::from_name_basis("NetClaims", e_run_curr_basis_sa_zero));
-        detailed_ids.push_back(value_id::from_name_basis("ExperienceReserve", e_run_curr_basis_sa_zero));
-        detailed_ids.push_back(value_id::from_name_basis("ProjectedCoiCharge", e_run_curr_basis_sa_zero));
-        detailed_ids.push_back(value_id::from_name_basis("KFactor", e_run_curr_basis_sa_zero));
+        detailed_ids.push_back(value_id::from_name_basis("NetCOICharge"      , mce_run_gen_curr_sep_zero));
+        detailed_ids.push_back(value_id::from_name_basis("NetClaims"         , mce_run_gen_curr_sep_zero));
+        detailed_ids.push_back(value_id::from_name_basis("ExperienceReserve" , mce_run_gen_curr_sep_zero));
+        detailed_ids.push_back(value_id::from_name_basis("ProjectedCoiCharge", mce_run_gen_curr_sep_zero));
+        detailed_ids.push_back(value_id::from_name_basis("KFactor"           , mce_run_gen_curr_sep_zero));
 
         detailed_ids.push_back(value_id::from_name("ProducerCompensation"));
         formatter.add_columns_to_format(detailed_ids);
@@ -1065,7 +1065,7 @@ void Ledger::write_excerpt
 
 //    doublescalars[value_id::from_name("GuarMaxMandE")] = *scalars[value_id::from_name("GuarMaxMandE")];
 //    stringvectors[value_id::from_name("CorridorFactor")] = double_vector_to_string_vector(*vectors[value_id::from_name("CorridorFactor")]);
-//    doublescalars[value_id::from_name_basis("InitAnnGenAcctInt", e_run_curr_basis)] = *scalars[value_id::from_name_basis("InitAnnGenAcctInt", e_run_curr_basis)];
+//    doublescalars[value_id::from_name_basis("InitAnnGenAcctInt", mce_run_gen_curr_sep_full)] = *scalars[value_id::from_name_basis("InitAnnGenAcctInt", mce_run_gen_curr_sep_full)];
 
     // That was the tricky part. Now it's all downhill.
 

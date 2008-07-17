@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.87 2008-01-23 03:35:29 chicares Exp $
+// $Id: group_values.cpp,v 1.88 2008-07-17 16:13:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -38,6 +38,7 @@
 #include "ledger.hpp"
 #include "ledgervalues.hpp"
 #include "materially_equal.hpp"
+#include "mc_enum_types_aux.hpp" // porting_cast()
 #include "path_utility.hpp"
 #include "progress_meter.hpp"
 #include "timer.hpp"
@@ -227,7 +228,7 @@ census_run_result run_census_in_parallel::operator()
     std::vector<IllusInputParms>::const_iterator ip;
     std::vector<boost::shared_ptr<AccountValue> > cell_values;
     std::vector<boost::shared_ptr<AccountValue> >::iterator i;
-    std::vector<e_run_basis> const& RunBases = composite.GetRunBases();
+    std::vector<mcenum_run_basis> const& RunBases = composite.GetRunBases();
 
     boost::shared_ptr<progress_meter> meter
         (create_progress_meter
@@ -298,7 +299,7 @@ census_run_result run_census_in_parallel::operator()
         }
 
     for
-        (std::vector<e_run_basis>::const_iterator run_basis = RunBases.begin()
+        (std::vector<mcenum_run_basis>::const_iterator run_basis = RunBases.begin()
         ;run_basis != RunBases.end()
         ;++run_basis
         )
@@ -321,7 +322,7 @@ census_run_result run_census_in_parallel::operator()
         e_basis          expense_and_general_account_basis;
         e_sep_acct_basis separate_account_basis;
         set_separate_bases_from_run_basis
-            (*run_basis
+            (e_run_basis(porting_cast<enum_run_basis>(*run_basis))
             ,expense_and_general_account_basis
             ,separate_account_basis
             );
@@ -330,14 +331,14 @@ census_run_result run_census_in_parallel::operator()
         int MaxYr = 0;
         for(i = cell_values.begin(); i != cell_values.end(); ++i)
             {
-            (*i)->InitializeLife(*run_basis);
+            (*i)->InitializeLife(e_run_basis(porting_cast<enum_run_basis>(*run_basis)));
             MaxYr = std::max(MaxYr, (*i)->GetLength());
             }
 
         boost::shared_ptr<progress_meter> meter
             (create_progress_meter
                 (MaxYr - first_cell_inforce_year
-                ,run_basis->str()
+                ,(e_run_basis(porting_cast<enum_run_basis>(*run_basis))).str()
                 ,progress_meter_mode(emission)
                 )
             );
@@ -609,7 +610,7 @@ census_run_result run_census_in_parallel::operator()
 
         for(i = cell_values.begin(); i != cell_values.end(); ++i)
             {
-            (*i)->FinalizeLife(*run_basis);
+            (*i)->FinalizeLife(e_run_basis(porting_cast<enum_run_basis>(*run_basis)));
             }
 
         } // End fenv_guard scope.
