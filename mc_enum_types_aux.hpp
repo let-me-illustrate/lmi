@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types_aux.hpp,v 1.4 2008-07-13 20:24:31 chicares Exp $
+// $Id: mc_enum_types_aux.hpp,v 1.5 2008-07-17 19:02:42 chicares Exp $
 
 #ifndef mc_enum_types_aux_hpp
 #define mc_enum_types_aux_hpp
@@ -27,6 +27,8 @@
 #include "config.hpp"
 
 #include "mc_enum_type_enums.hpp"
+
+#include <string>
 
 /// Temporary--used only by porting_cast():
 
@@ -67,6 +69,10 @@ mcenum_dbopt_7702 effective_dbopt_7702
 bool is_subject_to_ill_reg(mcenum_ledger_type);
 
 bool is_three_rate_nasd(mcenum_ledger_type);
+
+// DEPRECATED A more general solution is wanted.
+std::string mc_str(mcenum_dbopt);
+std::string mc_str(mcenum_run_basis);
 
 void set_cloven_bases_from_run_basis
     (mcenum_run_basis
