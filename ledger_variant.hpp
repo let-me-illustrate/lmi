@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.hpp,v 1.20 2008-07-13 09:36:20 chicares Exp $
+// $Id: ledger_variant.hpp,v 1.21 2008-07-17 13:19:27 chicares Exp $
 
 #ifndef ledger_variant_hpp
 #define ledger_variant_hpp
@@ -183,7 +183,7 @@ class LMI_SO LedgerVariant
 // incomplete. But class ledger_map_holder can be forward declared
 // even when class LedgerVariant is forward declared.
 
-typedef std::map<e_run_basis, LedgerVariant> ledger_map;
+typedef std::map<e_run_basis, LedgerVariant> ledger_map_t;
 
 class ledger_map_holder
 {
@@ -191,15 +191,15 @@ class ledger_map_holder
 
   public:
     ledger_map_holder();
-    explicit ledger_map_holder(ledger_map const&);
+    explicit ledger_map_holder(ledger_map_t const&);
     ledger_map_holder(ledger_map_holder const&);
     ledger_map_holder& operator=(ledger_map_holder const&);
     ~ledger_map_holder();
 
-    ledger_map const& held() const;
+    ledger_map_t const& held() const;
 
   private:
-    ledger_map held_;
+    ledger_map_t held_;
 };
 
 #endif // ledger_variant_hpp

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.cpp,v 1.21 2008-01-01 18:29:46 chicares Exp $
+// $Id: ledger.cpp,v 1.22 2008-07-17 13:19:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -94,7 +94,7 @@ Ledger::~Ledger()
 //============================================================================
 void Ledger::SetRunBases(int a_Length)
 {
-    ledger_map& l_map_rep = ledger_map_->held_;
+    ledger_map_t& l_map_rep = ledger_map_->held_;
     switch(ledger_type_)
         {
         case e_ill_reg:
@@ -145,13 +145,13 @@ void Ledger::SetRunBases(int a_Length)
         }
 
     for
-        (ledger_map::iterator p = l_map_rep.begin()
+        (ledger_map_t::iterator p = l_map_rep.begin()
         ;p != l_map_rep.end()
         ;++p
         )
         {
-        ledger_map::key_type const& key = (*p).first;
-        ledger_map::mapped_type& data = (*p).second;
+        ledger_map_t::key_type const& key = (*p).first;
+        ledger_map_t::mapped_type& data = (*p).second;
 
         run_bases_.push_back(key);
 
@@ -181,8 +181,8 @@ void Ledger::SetRunBases(int a_Length)
 // have been zero.
 void Ledger::ZeroInforceAfterLapse()
 {
-    ledger_map const& l_map_rep = ledger_map_->held();
-    ledger_map::const_iterator this_i = l_map_rep.begin();
+    ledger_map_t const& l_map_rep = ledger_map_->held();
+    ledger_map_t::const_iterator this_i = l_map_rep.begin();
 
     // Pick the highest lapse year of any basis (i.e. any LedgerVariant).
     // Set inforce lives to zero at the end of that year and thereafter.
@@ -237,11 +237,11 @@ Ledger& Ledger::PlusEq(Ledger const& a_Addend)
             ;
         }
 
-    ledger_map& l_map_rep = ledger_map_->held_;
-    ledger_map::iterator this_i = l_map_rep.begin();
+    ledger_map_t& l_map_rep = ledger_map_->held_;
+    ledger_map_t::iterator this_i = l_map_rep.begin();
 
-    ledger_map const& lm_addend = a_Addend.GetLedgerMap().held();
-    ledger_map::const_iterator addend_i = lm_addend.begin();
+    ledger_map_t const& lm_addend = a_Addend.GetLedgerMap().held();
+    ledger_map_t::const_iterator addend_i = lm_addend.begin();
 
     ledger_invariant_->PlusEq(*a_Addend.ledger_invariant_);
 
@@ -289,7 +289,7 @@ void Ledger::SetOneLedgerVariant
     ,LedgerVariant const& a_Variant
     )
 {
-    ledger_map& l_map_rep = ledger_map_->held_;
+    ledger_map_t& l_map_rep = ledger_map_->held_;
     if(l_map_rep.count(a_Basis))
         {
         l_map_rep[a_Basis] = a_Variant;
@@ -322,11 +322,11 @@ int Ledger::GetMaxLength() const
 
     // For all ledgers in the map, find the longest duration that must
     // be printed (until the last one lapses).
-    ledger_map const& l_map_rep = ledger_map_->held();
+    ledger_map_t const& l_map_rep = ledger_map_->held();
     double max_length = 0.0;
 
     for
-        (ledger_map::const_iterator lmci = l_map_rep.begin()
+        (ledger_map_t::const_iterator lmci = l_map_rep.begin()
         ;lmci != l_map_rep.end()
         ;++lmci
         )
@@ -343,8 +343,8 @@ void Ledger::AutoScale()
 {
     double mult = ledger_invariant_->DetermineScaleFactor();
 
-    ledger_map& l_map_rep = ledger_map_->held_;
-    ledger_map::const_iterator lmci = l_map_rep.begin();
+    ledger_map_t& l_map_rep = ledger_map_->held_;
+    ledger_map_t::const_iterator lmci = l_map_rep.begin();
     for(;lmci != l_map_rep.end(); ++lmci)
         {
         mult = std::min(mult, (*lmci).second.DetermineScaleFactor());
@@ -352,7 +352,7 @@ void Ledger::AutoScale()
 
     ledger_invariant_->ApplyScaleFactor(mult);
 
-    ledger_map::iterator lmi = l_map_rep.begin();
+    ledger_map_t::iterator lmi = l_map_rep.begin();
     for(;lmi != l_map_rep.end(); ++lmi)
         {
         (*lmi).second.ApplyScaleFactor(mult);
@@ -364,8 +364,8 @@ unsigned int Ledger::CalculateCRC() const
 {
     CRC crc;
     ledger_invariant_->UpdateCRC(crc);
-    ledger_map const& l_map_rep = ledger_map_->held();
-    ledger_map::const_iterator lmci = l_map_rep.begin();
+    ledger_map_t const& l_map_rep = ledger_map_->held();
+    ledger_map_t::const_iterator lmci = l_map_rep.begin();
     for(;lmci != l_map_rep.end(); ++lmci)
         {
         (*lmci).second.UpdateCRC(crc);
@@ -378,8 +378,8 @@ unsigned int Ledger::CalculateCRC() const
 void Ledger::Spew(std::ostream& os) const
 {
     ledger_invariant_->Spew(os);
-    ledger_map const& l_map_rep = ledger_map_->held();
-    ledger_map::const_iterator lmci = l_map_rep.begin();
+    ledger_map_t const& l_map_rep = ledger_map_->held();
+    ledger_map_t::const_iterator lmci = l_map_rep.begin();
     for(;lmci != l_map_rep.end(); ++lmci)
         {
         (*lmci).second.Spew(os);
@@ -390,7 +390,7 @@ void Ledger::Spew(std::ostream& os) const
 LedgerVariant const& Ledger::GetOneVariantLedger(enum_run_basis b) const
 {
     e_run_basis const basis(b);
-    ledger_map::const_iterator i(GetLedgerMap().held().find(basis));
+    ledger_map_t::const_iterator i(GetLedgerMap().held().find(basis));
     if(i == GetLedgerMap().held().end())
         {
         fatal_error() << "No values for basis '" << basis << "'" << LMI_FLUSH;

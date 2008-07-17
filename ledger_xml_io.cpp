@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.77 2008-07-16 18:57:21 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.78 2008-07-17 13:19:27 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -825,8 +825,8 @@ void Ledger::write(xml::element& x) const
 
     // That was the tricky part. Now it's all downhill.
 
-    ledger_map const& l_map_rep = ledger_map_->held();
-    ledger_map::const_iterator i = l_map_rep.begin();
+    ledger_map_t const& l_map_rep = ledger_map_->held();
+    ledger_map_t::const_iterator i = l_map_rep.begin();
     for(;i != l_map_rep.end(); i++)
         {
         std::string suffix = suffixes[i->first];
