@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types_aux.cpp,v 1.3 2008-07-13 20:24:30 chicares Exp $
+// $Id: mc_enum_types_aux.cpp,v 1.4 2008-07-17 19:02:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,6 +33,10 @@
 #include "mc_enum_types.hpp"
 
 #include <boost/static_assert.hpp>
+
+BOOST_STATIC_ASSERT(mc_n_gen_bases    == static_cast<std::size_t>(mce_gen_basis  ::Cardinality));
+BOOST_STATIC_ASSERT(mc_n_sep_bases    == static_cast<std::size_t>(mce_sep_basis  ::Cardinality));
+BOOST_STATIC_ASSERT(mc_n_rate_periods == static_cast<std::size_t>(mce_rate_period::Cardinality));
 
 /// GPT recognizes death benefit options A and B only. A contract
 /// might have a death benefit option other than that usual pair,
@@ -70,9 +74,15 @@ bool is_three_rate_nasd(mcenum_ledger_type)
     return false;
 }
 
-BOOST_STATIC_ASSERT(mc_n_gen_bases    == static_cast<std::size_t>(mce_gen_basis  ::Cardinality));
-BOOST_STATIC_ASSERT(mc_n_sep_bases    == static_cast<std::size_t>(mce_sep_basis  ::Cardinality));
-BOOST_STATIC_ASSERT(mc_n_rate_periods == static_cast<std::size_t>(mce_rate_period::Cardinality));
+std::string mc_str(mcenum_dbopt b)
+{
+    return mce_dbopt(b).str();
+}
+
+std::string mc_str(mcenum_run_basis b)
+{
+    return mce_run_basis(b).str();
+}
 
 /// Inverse of set_run_basis_from_cloven_bases(), q.v.
 
