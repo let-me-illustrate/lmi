@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1100 2008-07-18 12:57:42 chicares Exp $
+// $Id: ChangeLog,v 1.1101 2008-07-18 23:29:37 chicares Exp $
 
 MAINTENANCE
 
@@ -17996,4 +17996,46 @@ Refactor, eliminating old 'xenum' class from ledger class.
   ledger_invariant.cpp
   ledger_invariant.hpp
 Refactor, eliminating 'xenum' enumerators from invariant-ledger class.
+
+20080718T1521Z <gchicares@sbcglobal.net> [1123]
+
+  account_value.hpp
+  accountvalue.cpp
+  basic_values.hpp
+  basicvalues.cpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+Refactor, eliminating type 'e_ledger_type'.
+
+20080718T1706Z <gchicares@sbcglobal.net> [1123]
+
+  account_value.hpp
+  accountvalue.cpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ihs_avsolve.cpp
+  ihs_avstrtgy.cpp
+  solve.cpp
+Refactor, eliminating old 'xenum' class from solve functions.
+
+20080718T2143Z <gchicares@sbcglobal.net> [1123]
+
+  basic_values.hpp
+  ihs_basicval.cpp
+Refactor, eliminating old 'xenum' class from mortality-table code.
+
+20080718T2207Z <gchicares@sbcglobal.net> [1123]
+
+  account_value.hpp
+  ihs_avstrtgy.cpp
+Refactor, eliminating old 'xenum' class from payment-strategy code.
+
+20080718T2329Z <gchicares@sbcglobal.net> [1123]
+
+  account_value.hpp
+  basic_values.hpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+Refactor, eliminating various usages of old 'xenum' class.
 
