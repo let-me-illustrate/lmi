@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avstrtgy.cpp,v 1.13 2008-07-16 18:57:21 chicares Exp $
+// $Id: ihs_avstrtgy.cpp,v 1.14 2008-07-18 17:06:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -261,7 +261,7 @@ void AccountValue::OldPerformSpecAmtStrategy()
 //============================================================================
 // Sets payment according to selected strategy, in each non-solve year
 double AccountValue::DoPerformPmtStrategy
-    (e_solve_type const&                a_SolveForWhichPrem
+    (mcenum_solve_type                  a_SolveForWhichPrem
     ,mcenum_mode                        a_CurrentMode
     ,mcenum_mode                        a_InitialMode
     ,double                             a_TblMult
@@ -278,7 +278,7 @@ double AccountValue::DoPerformPmtStrategy
     // Don't override premium during premium solve period.
     if
         (
-            a_SolveForWhichPrem == Input_->SolveType
+            a_SolveForWhichPrem == yare_input_.SolveType
         &&  Input_->SolveBegYear <= Year
         &&  Year < std::min(Input_->SolveEndYear.value(), BasicValues::Length)
         )
@@ -377,7 +377,7 @@ double AccountValue::DoPerformPmtStrategy
 double AccountValue::PerformEePmtStrategy() const
 {
     return DoPerformPmtStrategy
-        (e_solve_type(e_solve_ee_prem)
+        (mce_solve_ee_prem
         ,InvariantValues().EeMode[Year].value()
         ,InvariantValues().EeMode[0]   .value()
         ,Input_->EePremTableMult
@@ -390,7 +390,7 @@ double AccountValue::PerformEePmtStrategy() const
 double AccountValue::PerformErPmtStrategy() const
 {
     return DoPerformPmtStrategy
-        (e_solve_type(e_solve_er_prem)
+        (mce_solve_er_prem
         ,InvariantValues().ErMode[Year].value()
         ,InvariantValues().ErMode[0]   .value()
         ,Input_->ErPremTableMult

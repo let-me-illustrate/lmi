@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.125 2008-07-18 15:21:26 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.126 2008-07-18 17:06:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -98,7 +98,7 @@ AccountValue::AccountValue(InputParms const& input)
     :BasicValues           (&input)
     ,DebugFilename         ("anonymous.debug")
     ,Debugging             (false)
-    ,Solving               (e_solve_none != Input_->SolveType)
+    ,Solving               (mce_solve_none != BasicValues::yare_input_.SolveType)
     ,SolvingForGuarPremium (false)
     ,ItLapsed              (false)
     ,ledger_(new Ledger(BasicValues::GetLedgerType(), BasicValues::GetLength()))
@@ -290,10 +290,10 @@ double AccountValue::RunAllApplicableBases()
             }
 
         z = Solve
-            (Input_->SolveType
+            (yare_input_.SolveType
             ,Input_->SolveBegYear
             ,Input_->SolveEndYear
-            ,Input_->SolveTarget
+            ,yare_input_.SolveTarget
             ,Input_->SolveTgtCSV
             ,Input_->SolveTgtYear
             ,Input_->SolveBasis
