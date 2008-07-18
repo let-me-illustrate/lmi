@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.67 2008-07-18 15:21:27 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.68 2008-07-18 21:43:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1562,13 +1562,13 @@ std::vector<double> BasicValues::GetUnblendedTable
 std::vector<double> BasicValues::GetUnblendedTable
     (std::string const& TableFile
     ,long int           TableID
-    ,e_gender    const& gender
-    ,e_smoking   const& smoking
+    ,mcenum_gender      gender
+    ,mcenum_smoking     smoking
     ) const
 {
     yare_input YI(*Input_);
-    YI.Gender  = static_cast<mcenum_gender >(gender .value());
-    YI.Smoking = static_cast<mcenum_smoking>(smoking.value());
+    YI.Gender  = gender ;
+    YI.Smoking = smoking;
 
     TDatabase TempDatabase(YI);
 
@@ -1707,14 +1707,14 @@ std::vector<double> BasicValues::GetTable
         std::vector<double> S = GetUnblendedTable
             (file_name
             ,TableID
-            ,Input_->Status[0].Gender
-            ,e_smoking(e_smoker)
+            ,yare_input_.Gender
+            ,mce_smoker
             );
         std::vector<double> N = GetUnblendedTable
             (file_name
             ,TableID
-            ,Input_->Status[0].Gender
-            ,e_smoking(e_nonsmoker)
+            ,yare_input_.Gender
+            ,mce_nonsmoker
             );
         double n = Input_->NonsmokerProportion;
         double s = 1.0 - n;
@@ -1734,14 +1734,14 @@ std::vector<double> BasicValues::GetTable
         std::vector<double> F = GetUnblendedTable
             (file_name
             ,TableID
-            ,e_gender(e_female)
-            ,Input_->Status[0].Smoking
+            ,mce_female
+            ,yare_input_.Smoking
             );
         std::vector<double> M = GetUnblendedTable
             (file_name
             ,TableID
-            ,e_gender(e_male)
-            ,Input_->Status[0].Smoking
+            ,mce_male
+            ,yare_input_.Smoking
             );
         double m = Input_->MaleProportion;
         double f = 1.0 - m;
@@ -1781,26 +1781,26 @@ std::vector<double> BasicValues::GetTable
         std::vector<double> FS = GetUnblendedTable
             (file_name
             ,TableID
-            ,e_gender(e_female)
-            ,e_smoking(e_smoker)
+            ,mce_female
+            ,mce_smoker
             );
         std::vector<double> FN = GetUnblendedTable
             (file_name
             ,TableID
-            ,e_gender(e_female)
-            ,e_smoking(e_nonsmoker)
+            ,mce_female
+            ,mce_nonsmoker
             );
         std::vector<double> MS = GetUnblendedTable
             (file_name
             ,TableID
-            ,e_gender(e_male)
-            ,e_smoking(e_smoker)
+            ,mce_male
+            ,mce_smoker
             );
         std::vector<double> MN = GetUnblendedTable
             (file_name
             ,TableID
-            ,e_gender(e_male)
-            ,e_smoking(e_nonsmoker)
+            ,mce_male
+            ,mce_nonsmoker
             );
         double n = Input_->NonsmokerProportion;
         double s = 1.0 - n;

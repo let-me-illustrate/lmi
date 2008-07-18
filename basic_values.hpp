@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.33 2008-07-18 15:21:26 chicares Exp $
+// $Id: basic_values.hpp,v 1.34 2008-07-18 21:43:14 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -422,8 +422,8 @@ class LMI_SO BasicValues
     std::vector<double> GetUnblendedTable
         (std::string const& TableFile
         ,long int           TableID
-        ,e_gender    const& gender
-        ,e_smoking   const& smoking
+        ,mcenum_gender      gender
+        ,mcenum_smoking     smoking
         ) const;
 
     mcenum_ledger_type  LedgerType_;
