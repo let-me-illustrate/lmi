@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.cpp,v 1.24 2008-07-17 19:04:29 chicares Exp $
+// $Id: ledger.cpp,v 1.25 2008-07-18 01:12:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,7 +33,7 @@
 #include "crc32.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
-#include "mc_enum_types_aux.hpp" // porting_cast()
+#include "mc_enum_types_aux.hpp" // porting_cast(), mc_str()
 
 #include <algorithm>
 #include <ostream>
@@ -155,14 +155,6 @@ void Ledger::SetRunBases(int a_Length)
         ledger_map_t::mapped_type& data = (*p).second;
 
         run_bases_.push_back(key);
-#if 0
-        e_basis exp_and_ga_basis;
-        e_sep_acct_basis sa_basis;
-        set_separate_bases_from_run_basis(e_run_basis(porting_cast<enum_run_basis>(key)), exp_and_ga_basis, sa_basis);
-
-        data.SetExpAndGABasis(exp_and_ga_basis);
-        data.SetSABasis(sa_basis);
-#endif // 0
         data.set_run_basis(key);
 
         if(is_composite_)
@@ -288,21 +280,20 @@ void Ledger::SetGuarPremium(double a_GuarPrem)
 
 //============================================================================
 void Ledger::SetOneLedgerVariant
-    (e_run_basis const& a_Basis
+    (mcenum_run_basis     a_Basis
     ,LedgerVariant const& a_Variant
     )
 {
-    mcenum_run_basis run_basis = porting_cast<mcenum_run_basis>(a_Basis.value());
     ledger_map_t& l_map_rep = ledger_map_->held_;
-    if(l_map_rep.count(run_basis))
+    if(l_map_rep.count(a_Basis))
         {
-        l_map_rep[run_basis] = a_Variant;
+        l_map_rep[a_Basis] = a_Variant;
         }
     else
         {
         fatal_error()
             << "Failed attempt to set ledger for unused basis '"
-            << a_Basis
+            << mc_str(a_Basis)
             << "'."
             << LMI_FLUSH
             ;
@@ -396,8 +387,7 @@ LedgerVariant const& Ledger::GetOneVariantLedger(mcenum_run_basis b) const
     ledger_map_t::const_iterator i(GetLedgerMap().held().find(b));
     if(i == GetLedgerMap().held().end())
         {
-        // DEPRECATED Should display string name.
-        fatal_error() << "No values for basis '" << b << "'" << LMI_FLUSH;
+        fatal_error() << "No values for basis '" << mc_str(b) << "'" << LMI_FLUSH;
         }
     return i->second;
 }

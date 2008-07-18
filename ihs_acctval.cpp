@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.122 2008-07-17 19:04:29 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.123 2008-07-18 01:12:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -591,7 +591,9 @@ void AccountValue::FinalizeLife(e_run_basis const& a_Basis)
         {
         ledger_->SetLedgerInvariant(InvariantValues());
         }
-    ledger_->SetOneLedgerVariant(a_Basis, VariantValues());
+    mcenum_run_basis temp; // DEPRECATED Dispense with this conversion.
+    temp = porting_cast<mcenum_run_basis>(a_Basis.value());
+    ledger_->SetOneLedgerVariant(temp, VariantValues());
 }
 
 //============================================================================
