@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.hpp,v 1.17 2008-07-16 18:57:21 chicares Exp $
+// $Id: ledger_invariant.hpp,v 1.18 2008-07-18 12:57:42 chicares Exp $
 
 #ifndef ledger_invariant_hpp
 #define ledger_invariant_hpp
@@ -32,8 +32,7 @@
 #include "mc_enum_types.hpp"
 #include "so_attributes.hpp"
 
-#include <map>
-#include <ostream>
+#include <iosfwd>
 #include <string>
 #include <vector>
 
