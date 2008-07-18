@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: solve.cpp,v 1.11 2008-07-16 18:57:22 chicares Exp $
+// $Id: solve.cpp,v 1.12 2008-07-18 17:06:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -54,15 +54,15 @@ TODO ?? no lapse period.
 
 namespace
 {
-    AccountValue*  That;
+    AccountValue*       That;
     // TODO ?? Use a struct for these?
-    double         ThatSolveTargetCSV;
-    e_solve_target ThatSolveTarget;
-    int            ThatSolveTgtYear;
-    int            ThatSolveBegYear;
-    int            ThatSolveEndYear;
-    enum_basis     ThatSolveBasis;
-    bool           only_set_values;
+    double              ThatSolveTargetCSV;
+    mcenum_solve_target ThatSolveTarget;
+    int                 ThatSolveTgtYear;
+    int                 ThatSolveBegYear;
+    int                 ThatSolveEndYear;
+    enum_basis          ThatSolveBasis;
+    bool                only_set_values;
 }
 
 //============================================================================
@@ -103,9 +103,9 @@ double SolveTest()
     // TODO ?? If SolveTgtYr within no-lapse period...
 
     double y = 0.0;
-    switch(ThatSolveTarget.value())
+    switch(ThatSolveTarget)
         {
-        case e_solve_for_endt:
+        case mce_solve_for_endt:
             {
             // We take endowment to mean for spec amt, so it's the
             // same for options A and B.
@@ -129,20 +129,21 @@ double SolveTest()
                 default:
                     {
                     fatal_error()
-                        << "Case '"
-                        << ThatSolveTarget.value()
-                        << "' not found."
+                        << "Case "
+                        << ThatSolveTarget
+                        << " not found."
                         << LMI_FLUSH
                         ;
                     }
                 }
             }
             break;
-        case e_solve_for_target:
+        case mce_solve_for_target:
             {
             y = ThatSolveTargetCSV;
             }
             break;
+        throw "Unreachable--silences a compiler diagnostic.";
         }
 
     return z - y;
@@ -239,7 +240,7 @@ double AccountValue::Solve()
 {
     That = this;
     ThatSolveTargetCSV  = Input_->SolveTgtCSV.value();
-    ThatSolveTarget     = Input_->SolveTarget.value();
+    ThatSolveTarget     = yare_input_.SolveTarget;
     ThatSolveBasis      = Input_->SolveBasis.value();
     only_set_values = !Solving;
 
@@ -252,7 +253,7 @@ double AccountValue::Solve()
     ThatSolveBegYear = Input_->SolveBegYear.value();
     ThatSolveEndYear = Input_->SolveEndYear.value();
 
-    if(e_solve_for_endt == ThatSolveTarget.value())
+    if(mce_solve_for_endt == ThatSolveTarget)
         {
         // We take endowment to mean at normal maturity.
         ThatSolveTgtYear = BasicValues::GetLength();
@@ -265,9 +266,9 @@ double AccountValue::Solve()
     root_bias        Bias        = bias_higher;
     int              Decimals    = 0;
 
-    switch(Input_->SolveType.value())
+    switch(yare_input_.SolveType)
         {
-        case e_solve_specamt:
+        case mce_solve_specamt:
             {
             // We aren't interested in negative specified amounts.
             LowerBound = 0.0;
@@ -278,7 +279,7 @@ double AccountValue::Solve()
             // TODO ?? Respect minimum premium?
             }
             break;
-        case e_solve_ee_prem:
+        case mce_solve_ee_prem:
             {
             // We aren't interested in negative premiums.
             LowerBound = 0.0;
@@ -289,7 +290,7 @@ double AccountValue::Solve()
             SolveFn    = SolvePrem;
             }
             break;
-        case e_solve_loan:
+        case mce_solve_loan:
             {
             // We aren't interested in negative loans.
             LowerBound = 0.0;
@@ -299,7 +300,7 @@ double AccountValue::Solve()
             SolveFn    = SolveLoan;
             }
             break;
-        case e_solve_wd:
+        case mce_solve_wd:
             {
             // We aren't interested in negative withdrawals.
             LowerBound = 0.0;
@@ -312,9 +313,9 @@ double AccountValue::Solve()
         default:
             {
             fatal_error()
-                << "Case '"
-                << Input_->SolveType.value()
-                << "' not found."
+                << "Case "
+                << yare_input_.SolveType
+                << " not found."
                 << LMI_FLUSH
                 ;
             }

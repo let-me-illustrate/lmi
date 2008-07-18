@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.46 2008-07-18 15:21:26 chicares Exp $
+// $Id: accountvalue.cpp,v 1.47 2008-07-18 17:06:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -144,7 +144,7 @@ double AccountValue::RunAV()
 {
     InvariantValues().Init(this);
     OverridingPmts = InvariantValues().EePmt;
-    Solving = e_solve_none != Input_->SolveType.value();
+    Solving = mce_solve_none != yare_input_.SolveType;
     return RunAllApplicableBases();
 }
 
@@ -614,7 +614,7 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
     // Don't override premium during solve period.
     if
         (
-            e_solve_ee_prem == Input_->SolveType.value()
+            mce_solve_ee_prem == yare_input_.SolveType
         &&  Input_->SolveBegYear.value() <= Year
         &&  Year < std::min
                 (Input_->SolveEndYear.value()

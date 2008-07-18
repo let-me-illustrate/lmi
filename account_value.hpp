@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.58 2008-07-18 15:21:26 chicares Exp $
+// $Id: account_value.hpp,v 1.59 2008-07-18 17:06:20 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -201,10 +201,10 @@ class LMI_SO AccountValue
 
     double Solve(); // Antediluvian.
     double Solve
-        (e_solve_type const&     a_SolveType
+        (mcenum_solve_type       a_SolveType
         ,int                     a_SolveBegYear
         ,int                     a_SolveEndYear
-        ,e_solve_target const&   a_SolveTarget
+        ,mcenum_solve_target     a_SolveTarget
         ,double                  a_SolveTgtCSV
         ,int                     a_SolveTgtYear
         ,e_basis const&          a_SolveBasis
@@ -213,9 +213,9 @@ class LMI_SO AccountValue
 
     double SolveTest               (double a_CandidateValue);
     void SolveSetTargetValueAndDuration
-        (e_solve_target const&  a_SolveTarget
-        ,double                 a_SolveTgtCSV
-        ,int                    a_SolveTgtYear
+        (mcenum_solve_target a_SolveTarget
+        ,double              a_SolveTgtCSV
+        ,int                 a_SolveTgtYear
         );
 
     double SolveGuarPremium        ();
@@ -234,7 +234,7 @@ class LMI_SO AccountValue
     double PerformEePmtStrategy       () const;
     double PerformErPmtStrategy       () const;
     double DoPerformPmtStrategy
-        (e_solve_type const&                a_SolveForWhichPrem
+        (mcenum_solve_type                  a_SolveForWhichPrem
         ,mcenum_mode                        a_CurrentMode
         ,mcenum_mode                        a_InitialMode
         ,double                             a_TblMult
