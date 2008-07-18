@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.hpp,v 1.23 2008-07-17 16:13:42 chicares Exp $
+// $Id: ledger.hpp,v 1.24 2008-07-18 01:12:38 chicares Exp $
 
 #ifndef ledger_hpp
 #define ledger_hpp
@@ -83,7 +83,7 @@ class LMI_SO Ledger
     Ledger& PlusEq(Ledger const& a_Addend);
 
     void SetLedgerInvariant(LedgerInvariant const&);
-    void SetOneLedgerVariant(e_run_basis const&, LedgerVariant const&);
+    void SetOneLedgerVariant(mcenum_run_basis, LedgerVariant const&);
 
     void SetGuarPremium(double);
 

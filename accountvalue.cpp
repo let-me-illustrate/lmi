@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.43 2008-07-17 19:04:29 chicares Exp $
+// $Id: accountvalue.cpp,v 1.44 2008-07-18 01:12:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -186,27 +186,32 @@ double AccountValue::RunAllApplicableBases()
         ,e_sep_acct_basis(e_sep_acct_full)
         );
 
+    mcenum_run_basis temp; // DEPRECATED Dispense with this conversion.
     double z = 0.0;
     if(Solving)
         {
         z = Solve();
         OverridingPmts = InvariantValues().EePmt;
-        ledger_->SetOneLedgerVariant(run_basis, VariantValues());
+        temp = porting_cast<mcenum_run_basis>(run_basis.value());
+        ledger_->SetOneLedgerVariant(temp, VariantValues());
         Solving = false;
         }
     ledger_->SetLedgerInvariant(InvariantValues());
 
     run_basis = e_run_basis(e_run_curr_basis);
     RunOneBasis(run_basis);
-    ledger_->SetOneLedgerVariant(run_basis, VariantValues());
+    temp = porting_cast<mcenum_run_basis>(run_basis.value());
+    ledger_->SetOneLedgerVariant(temp, VariantValues());
 
     run_basis = e_run_basis(e_run_guar_basis);
     RunOneBasis(run_basis);
-    ledger_->SetOneLedgerVariant(run_basis, VariantValues());
+    temp = porting_cast<mcenum_run_basis>(run_basis.value());
+    ledger_->SetOneLedgerVariant(temp, VariantValues());
 
     run_basis = e_run_basis(e_run_mdpt_basis);
     RunOneBasis(run_basis);
-    ledger_->SetOneLedgerVariant(run_basis, VariantValues());
+    temp = porting_cast<mcenum_run_basis>(run_basis.value());
+    ledger_->SetOneLedgerVariant(temp, VariantValues());
 
     return z;
 }
