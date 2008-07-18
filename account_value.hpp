@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.57 2008-07-16 15:58:23 chicares Exp $
+// $Id: account_value.hpp,v 1.58 2008-07-18 15:21:26 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -101,7 +101,6 @@ class LMI_SO AccountValue
     LedgerVariant   const& VariantValues  () const;
 
     int                    GetLength     () const;
-    e_ledger_type const&   GetLedgerType () const;
 
     double InforceLivesBoy         () const;
     double InforceLivesEoy         () const;
@@ -677,12 +676,6 @@ inline boost::shared_ptr<Ledger const> AccountValue::ledger_from_av() const
 inline int AccountValue::GetLength() const
 {
     return BasicValues::GetLength();
-}
-
-//============================================================================
-inline e_ledger_type const& AccountValue::GetLedgerType() const
-{
-    return BasicValues::GetLedgerType();
 }
 
 //============================================================================

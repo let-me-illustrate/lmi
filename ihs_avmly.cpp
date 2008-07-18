@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.92 2008-07-16 18:57:21 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.93 2008-07-18 15:21:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2486,7 +2486,7 @@ void AccountValue::TxTakeSepAcctLoad()
 // type to facilitate testing the new database entity that'll
 // eventually be added.
         double special_limit = 10000000.0;
-        if(e_variable_annuity == BasicValues::GetLedgerType())
+        if(mce_variable_annuity == BasicValues::GetLedgerType())
             {
             special_limit = 2500000.0;
             }

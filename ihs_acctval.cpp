@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.124 2008-07-18 12:56:33 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.125 2008-07-18 15:21:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -101,7 +101,7 @@ AccountValue::AccountValue(InputParms const& input)
     ,Solving               (e_solve_none != Input_->SolveType)
     ,SolvingForGuarPremium (false)
     ,ItLapsed              (false)
-    ,ledger_(new Ledger(porting_cast<mcenum_ledger_type>(BasicValues::GetLedgerType().value()), BasicValues::GetLength()))
+    ,ledger_(new Ledger(BasicValues::GetLedgerType(), BasicValues::GetLength()))
     ,ledger_invariant_     (new LedgerInvariant(BasicValues::GetLength()))
     ,ledger_variant_       (new LedgerVariant  (BasicValues::GetLength()))
     ,RunBasis_             (mce_run_gen_curr_sep_full)
@@ -265,8 +265,6 @@ double AccountValue::RunOneBasis(e_run_basis const& a_Basis)
 //
 double AccountValue::RunAllApplicableBases()
 {
-    // LedgerType determines the set of bases required (enum e_run_basis).
-
     double z = 0.0;
 
     // TODO ?? Normally, running on the current basis determines the
