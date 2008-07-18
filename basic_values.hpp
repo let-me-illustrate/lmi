@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.32 2008-07-15 18:47:38 chicares Exp $
+// $Id: basic_values.hpp,v 1.33 2008-07-18 15:21:26 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -111,7 +111,7 @@ class LMI_SO BasicValues
     int                   GetLength()                  const;
     int                   GetIssueAge()                const;
     int                   GetRetAge()                  const;
-    e_ledger_type  const& GetLedgerType()              const;
+    mcenum_ledger_type    GetLedgerType()              const;
     mce_state      const& GetStateOfJurisdiction()     const;
     mce_state      const& GetStateOfDomicile()         const;
     double                PremiumTaxRate()             const;
@@ -426,7 +426,7 @@ class LMI_SO BasicValues
         ,e_smoking   const& smoking
         ) const;
 
-    e_ledger_type       LedgerType;
+    mcenum_ledger_type  LedgerType_;
     bool                IsSubjectToIllustrationReg_;
     mce_state           StateOfJurisdiction_;
     mce_state           StateOfDomicile_;
@@ -460,9 +460,9 @@ inline int BasicValues::GetRetAge() const
     return RetAge;
 }
 
-inline e_ledger_type const& BasicValues::GetLedgerType() const
+inline mcenum_ledger_type BasicValues::GetLedgerType() const
 {
-    return LedgerType;
+    return LedgerType_;
 }
 
 inline mce_state const& BasicValues::GetStateOfJurisdiction() const
