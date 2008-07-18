@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basicvalues.cpp,v 1.27 2008-07-16 15:58:24 chicares Exp $
+// $Id: basicvalues.cpp,v 1.28 2008-07-18 15:21:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -98,8 +98,8 @@ void BasicValues::Init()
             )
         );
 
-    LedgerType = Input_->LedgerType();
-    IsSubjectToIllustrationReg_ = is_subject_to_ill_reg(LedgerType);
+    LedgerType_ = porting_cast<mcenum_ledger_type>(Input_->LedgerType().value());
+    IsSubjectToIllustrationReg_ = is_subject_to_ill_reg(GetLedgerType());
 
     RoundingRules_.reset(new rounding_rules);
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.66 2008-07-16 15:58:24 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.67 2008-07-18 15:21:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -826,8 +826,8 @@ void BasicValues::SetPermanentInvariants()
 //============================================================================
 void BasicValues::SetLedgerType()
 {
-    LedgerType = Input_->LedgerType();
-    IsSubjectToIllustrationReg_ = is_subject_to_ill_reg(LedgerType);
+    LedgerType_ = porting_cast<mcenum_ledger_type>(Input_->LedgerType().value());
+    IsSubjectToIllustrationReg_ = is_subject_to_ill_reg(GetLedgerType());
 }
 
 //============================================================================
