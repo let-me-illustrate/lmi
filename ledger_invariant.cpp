@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.42 2008-07-17 16:13:42 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.43 2008-07-18 12:57:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -53,6 +53,7 @@
 #include <algorithm>
 #include <numeric>   // std::accumulate()
 #include <ostream>
+#include <stdexcept>
 
 // TODO ?? It is extraordinary that this 'invariant' class includes
 // some data that vary by basis. Perhaps they should be in the
@@ -568,19 +569,19 @@ void LedgerInvariant::Init(BasicValues* b)
             );
     if(oe_tobacco_nontobacco == smoke_or_tobacco)
         {
-            switch(e_smoking(Status.Smoking))
+        switch(mce_smoking(b->yare_input_.Smoking).value())
             {
-            case e_smoker:
+            case mce_smoker:
                 {
                 Smoker = "Tobacco";
                 }
                 break;
-            case e_nonsmoker:
+            case mce_nonsmoker:
                 {
                 Smoker = "Nontobacco";
                 }
                 break;
-            case e_unismoke:
+            case mce_unismoke:
                 {
                 Smoker = "Unitobacco";
                 }
@@ -599,7 +600,7 @@ void LedgerInvariant::Init(BasicValues* b)
         }
     else if(oe_smoker_nonsmoker == smoke_or_tobacco)
         {
-        Smoker = Status.Smoking.str();
+        Smoker = mce_smoking(b->yare_input_.Smoking).str();
         }
     // TODO ?? Use a switch-statement instead. The original version of
     // this code was just if...else, and silently deemed the convention
