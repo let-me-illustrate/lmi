@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1099 2008-07-17 19:04:29 chicares Exp $
+// $Id: ChangeLog,v 1.1100 2008-07-18 12:57:42 chicares Exp $
 
 MAINTENANCE
 
@@ -17970,4 +17970,30 @@ than "3" for death benefit option because DBO3 might mean e.g. COLA.
   ledger_variant.cpp
   ledger_variant.hpp
 Refactor, eliminating old 'xenum' class from variant-ledger class.
+
+20080718T0112Z <gchicares@sbcglobal.net> [1123]
+
+  accountvalue.cpp
+  ihs_acctval.cpp
+  ledger.cpp
+  ledger.hpp
+Refactor, eliminating type 'e_run_basis' from ledger class.
+
+20080718T1256Z <gchicares@sbcglobal.net> [1123]
+
+  accountvalue.cpp
+  group_values.cpp
+  ihs_acctval.cpp
+  ledger.cpp
+  ledger.hpp
+  ledger_text_formats.cpp
+  ledger_xml_io2.cpp
+  ledger_xsl.cpp
+Refactor, eliminating old 'xenum' class from ledger class.
+
+20080718T1257Z <gchicares@sbcglobal.net> [1123]
+
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+Refactor, eliminating 'xenum' enumerators from invariant-ledger class.
 
