@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.hpp,v 1.24 2008-07-18 01:12:38 chicares Exp $
+// $Id: ledger.hpp,v 1.25 2008-07-18 12:56:33 chicares Exp $
 
 #ifndef ledger_hpp
 #define ledger_hpp
@@ -30,7 +30,6 @@
 #include "mc_enum_type_enums.hpp"
 #include "so_attributes.hpp"
 #include "streamable.hpp"
-#include "xenumtypes.hpp"
 
 #include <boost/shared_ptr.hpp>
 
@@ -73,9 +72,9 @@ class LMI_SO Ledger
     // for endt age. Yet 100 won't work for issue age 0 if coverage
     // beyond age 100 is to be shown.
     explicit Ledger
-        (e_ledger_type const& a_LedgerType
-        ,int                  a_Length        = 100
-        ,bool                 a_IsComposite   = false
+        (mcenum_ledger_type a_LedgerType
+        ,int                a_Length        = 100
+        ,bool               a_IsComposite   = false
         );
     virtual ~Ledger();
 
@@ -99,7 +98,7 @@ class LMI_SO Ledger
     LedgerVariant const&                 GetCurrHalf()        const;
     LedgerVariant const&                 GetGuarHalf()        const;
 
-    e_ledger_type const&                 GetLedgerType()      const;
+    mcenum_ledger_type                   GetLedgerType()      const;
     int                                  GetMaxLength()       const;
     std::vector<mcenum_run_basis> const& GetRunBases()        const;
     bool                                 GetIsComposite()     const;
@@ -134,7 +133,7 @@ class LMI_SO Ledger
     // composites but not for all cells.
     double composite_lapse_year_;
 
-    e_ledger_type ledger_type_;
+    mcenum_ledger_type ledger_type_;
 
     boost::shared_ptr<ledger_map_holder> ledger_map_;
     boost::shared_ptr<LedgerInvariant>   ledger_invariant_;
@@ -156,7 +155,7 @@ inline LedgerInvariant const& Ledger::GetLedgerInvariant() const
     return *ledger_invariant_;
 }
 
-inline e_ledger_type const& Ledger::GetLedgerType() const
+inline mcenum_ledger_type Ledger::GetLedgerType() const
 {
     return ledger_type_;
 }

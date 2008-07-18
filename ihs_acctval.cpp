@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.123 2008-07-18 01:12:38 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.124 2008-07-18 12:56:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -101,7 +101,7 @@ AccountValue::AccountValue(InputParms const& input)
     ,Solving               (e_solve_none != Input_->SolveType)
     ,SolvingForGuarPremium (false)
     ,ItLapsed              (false)
-    ,ledger_(new Ledger(BasicValues::GetLedgerType(), BasicValues::GetLength()))
+    ,ledger_(new Ledger(porting_cast<mcenum_ledger_type>(BasicValues::GetLedgerType().value()), BasicValues::GetLength()))
     ,ledger_invariant_     (new LedgerInvariant(BasicValues::GetLength()))
     ,ledger_variant_       (new LedgerVariant  (BasicValues::GetLength()))
     ,RunBasis_             (mce_run_gen_curr_sep_full)
