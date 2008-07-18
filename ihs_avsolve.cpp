@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.17 2008-07-15 17:27:10 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.18 2008-07-18 17:06:21 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -83,9 +83,9 @@ class SolveHelper
 
 //============================================================================
 void AccountValue::SolveSetTargetValueAndDuration
-    (e_solve_target const&  a_SolveTarget
-    ,double                 a_SolveTgtCSV
-    ,int                    a_SolveTgtYear
+    (mcenum_solve_target a_SolveTarget
+    ,double              a_SolveTgtCSV
+    ,int                 a_SolveTgtYear
     )
 {
     // TODO ?? EffectiveSolveTargetYear is in origin one. OK for loop counters,
@@ -102,7 +102,7 @@ void AccountValue::SolveSetTargetValueAndDuration
     SolveTargetValue            = a_SolveTgtCSV;
     EffectiveSolveTargetYear    = a_SolveTgtYear;
 
-    if(e_solve_for_endt == a_SolveTarget)
+    if(mce_solve_for_endt == a_SolveTarget)
         {
         // We take endowment to mean for spec amt at normal maturity,
         // so the target value is the same for all DB options
@@ -299,10 +299,10 @@ double AccountValue::SolveGuarPremium()
 
     // Run the solve using guaranteed assumptions.
     double guar_premium = Solve
-        (e_solve_type(e_solve_ee_prem)
+        (mce_solve_ee_prem
         ,0
         ,static_cast<int>(InvariantValues().EndtAge - InvariantValues().Age)
-        ,e_solve_target(e_solve_for_endt)
+        ,mce_solve_for_endt
         ,0.0
         ,static_cast<int>(InvariantValues().EndtAge - InvariantValues().Age)
         ,e_basis(e_guarbasis)
@@ -323,10 +323,10 @@ double AccountValue::SolveGuarPremium()
 //   SolveTargetValue
 // be dispensed with?
 double AccountValue::Solve
-    (e_solve_type const&     a_SolveType
+    (mcenum_solve_type       a_SolveType
     ,int                     a_SolveBegYear
     ,int                     a_SolveEndYear
-    ,e_solve_target const&   a_SolveTarget
+    ,mcenum_solve_target     a_SolveTarget
     ,double                  a_SolveTgtCSV
     ,int                     a_SolveTgtYear
     ,e_basis const&          a_SolveBasis
@@ -373,7 +373,7 @@ double AccountValue::Solve
 
     switch(a_SolveType)
         {
-        case e_solve_specamt:
+        case mce_solve_specamt:
             {
 // This:
 //          upper_bound  = 1000000.0 * Outlay_->GetPmts()[0];
@@ -383,32 +383,32 @@ double AccountValue::Solve
             // TODO ?? Respect minimum specamt?
             }
             break;
-        case e_solve_ee_prem:
+        case mce_solve_ee_prem:
             {
             solve_set_fn = &AccountValue::SolveSetEePrem;
             decimals     = round_gross_premium.decimals();
             }
             break;
-        case e_solve_er_prem:
+        case mce_solve_er_prem:
             {
             solve_set_fn = &AccountValue::SolveSetErPrem;
             decimals     = round_gross_premium.decimals();
             }
             break;
-        case e_solve_loan:
+        case mce_solve_loan:
             {
             solve_set_fn = &AccountValue::SolveSetLoan;
             decimals     = round_loan.decimals();
             }
             break;
-        case e_solve_wd:
+        case mce_solve_wd:
             {
             solve_set_fn = &AccountValue::SolveSetWD;
             decimals     = round_withdrawal.decimals();
             // TODO ?? Is minimum wd respected?
             }
             break;
-        case e_solve_wd_then_loan:
+        case mce_solve_wd_then_loan:
             {
             solve_set_fn = &AccountValue::SolveSetWDThenLoan;
             // Withdrawals and loans might be rounded differently.
@@ -421,14 +421,14 @@ double AccountValue::Solve
                 );
             }
             break;
-        case e_solve_ee_prem_dur: // Fall through: not yet implemented.
-        case e_solve_er_prem_dur: // Fall through: not yet implemented.
+        case mce_solve_ee_prem_dur: // Fall through: not yet implemented.
+        case mce_solve_er_prem_dur: // Fall through: not yet implemented.
         default:
             {
             fatal_error()
-                << "Case '"
+                << "Case "
                 << a_SolveType
-                << "' not found."
+                << " not found."
                 << LMI_FLUSH
                 ;
             }

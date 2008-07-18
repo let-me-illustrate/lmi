@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.93 2008-07-18 15:21:27 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.94 2008-07-18 17:06:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2918,7 +2918,7 @@ void AccountValue::TxTakeWD()
 // It appears that we need to do this even when not solving:
 // i.e. if Input_->WDToBasisThenLoan means to take loans after WDs stop...
 // TODO ?? Should the next line be suppressed?
-//      if(e_solve_wd_then_loan == Input_->SolveType)
+//      if(mce_solve_wd_then_loan == yare_input_.SolveType)
 //          {
             RequestedLoan += RequestedWD - NetWD;
 //          }
