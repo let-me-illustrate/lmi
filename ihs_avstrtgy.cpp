@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avstrtgy.cpp,v 1.14 2008-07-18 17:06:21 chicares Exp $
+// $Id: ihs_avstrtgy.cpp,v 1.15 2008-07-18 22:07:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -261,12 +261,12 @@ void AccountValue::OldPerformSpecAmtStrategy()
 //============================================================================
 // Sets payment according to selected strategy, in each non-solve year
 double AccountValue::DoPerformPmtStrategy
-    (mcenum_solve_type                  a_SolveForWhichPrem
-    ,mcenum_mode                        a_CurrentMode
-    ,mcenum_mode                        a_InitialMode
-    ,double                             a_TblMult
-    ,std::vector<double> const&         a_PmtVector
-    ,std::vector<e_pmt_strategy> const& a_StrategyVector
+    (mcenum_solve_type                       a_SolveForWhichPrem
+    ,mcenum_mode                             a_CurrentMode
+    ,mcenum_mode                             a_InitialMode
+    ,double                                  a_TblMult
+    ,std::vector<double> const&              a_PmtVector
+    ,std::vector<mcenum_pmt_strategy> const& a_StrategyVector
     ) const
 {
     // TODO ?? What happens if a corporation payment is specified?
@@ -286,17 +286,17 @@ double AccountValue::DoPerformPmtStrategy
         return a_PmtVector[Year];
         }
 
-    switch(static_cast<enum_pmt_strategy>(a_StrategyVector[Year]))
+    switch(a_StrategyVector[Year])
         {
-        case e_pmtinputscalar:
+        case mce_pmt_input_scalar:
             {
             return a_PmtVector[Year];
             }
-        case e_pmtinputvector:
+        case mce_pmt_input_vector:
             {
             return a_PmtVector[Year];
             }
-        case e_pmtminimum:
+        case mce_pmt_minimum:
             {
             return GetModalMinPrem
                 (Year
@@ -304,7 +304,7 @@ double AccountValue::DoPerformPmtStrategy
                 ,ActualSpecAmt
                 );
             }
-        case e_pmttarget:
+        case mce_pmt_target:
             {
             return GetModalTgtPrem
                 (Year
@@ -312,7 +312,7 @@ double AccountValue::DoPerformPmtStrategy
                 ,ActualSpecAmt
                 );
             }
-        case e_pmtmep:
+        case mce_pmt_mep:
             {
 // TODO ?? This assumes that the term rider continues to at least age 95.
 // We ought to have a database flag for that.
@@ -322,7 +322,7 @@ double AccountValue::DoPerformPmtStrategy
                 ,InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
                 );
             }
-        case e_pmtglp:
+        case mce_pmt_glp:
             {
             return GetModalPremGLP
                 (0
@@ -331,7 +331,7 @@ double AccountValue::DoPerformPmtStrategy
                 ,InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
                 );
             }
-        case e_pmtgsp:
+        case mce_pmt_gsp:
             {
             return GetModalPremGSP
                 (0
@@ -340,7 +340,7 @@ double AccountValue::DoPerformPmtStrategy
                 ,InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
                 );
             }
-        case e_pmttable:
+        case mce_pmt_table:
             {
             return
                 ActualSpecAmt
@@ -348,7 +348,7 @@ double AccountValue::DoPerformPmtStrategy
                 * (12.0 / a_CurrentMode)
                 * a_TblMult;
             }
-        case e_pmtcorridor:
+        case mce_pmt_corridor:
             {
 // TODO ?? This assumes that the term rider continues to at least age 95.
 // We ought to have a database flag for that.
@@ -363,9 +363,9 @@ double AccountValue::DoPerformPmtStrategy
         default:
             {
             fatal_error()
-                << "Case '"
+                << "Case "
                 << a_StrategyVector[Year]
-                << "' not found."
+                << " not found."
                 << LMI_FLUSH
                 ;
             throw "Unreachable--silences a compiler diagnostic.";
@@ -382,7 +382,7 @@ double AccountValue::PerformEePmtStrategy() const
         ,InvariantValues().EeMode[0]   .value()
         ,Input_->EePremTableMult
         ,InvariantValues().EePmt
-        ,Input_->VectorIndvPaymentStrategy
+        ,yare_input_.IndividualPaymentStrategy
         );
 }
 
@@ -395,7 +395,7 @@ double AccountValue::PerformErPmtStrategy() const
         ,InvariantValues().ErMode[0]   .value()
         ,Input_->ErPremTableMult
         ,InvariantValues().ErPmt
-        ,Input_->VectorCorpPaymentStrategy
+        ,yare_input_.CorporationPaymentStrategy
         );
 }
 
