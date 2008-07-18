@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.34 2008-07-18 21:43:14 chicares Exp $
+// $Id: basic_values.hpp,v 1.35 2008-07-18 23:29:36 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -284,41 +284,41 @@ class LMI_SO BasicValues
     int                     RetAge;
 
     // Invariant data.
-    void                    SetPermanentInvariants();
-    void                    SetLedgerType();
-    void                    SetLowestPremiumTaxLoad();
-    void                    TestPremiumTaxLoadConsistency();
-    void                    SetMaxSurvivalDur();
-    double                  MaxSurvivalDur;
-    e_defn_life_ins         DefnLifeIns;
-    e_defn_material_change  DefnMaterialChange;
-    mcenum_dbopt_7702       Equiv7702DBO3;
-    double                  MaxNAAR;
-    int                     EndtAge;
-    double                  MinRenlBaseFace;
-    double                  MinRenlFace;
-    bool                    NoLapseOpt1Only;
-    bool                    NoLapseUnratedOnly;
-    bool                    OptChgCanIncrSA;
-    bool                    OptChgCanDecrSA;
-    bool                    WDCanDecrSADBO1;
-    bool                    WDCanDecrSADBO2;
-    bool                    WDCanDecrSADBO3;
-    int                     MaxIncrAge;
-    bool                    WaivePmTxInt1035;
-    bool                    AllowTerm;
-    double                  ExpPerKLimit;
-    e_anticipated_deduction MaxWDDed;
-    double                  MaxWDAVMult;
-    e_anticipated_deduction MaxLoanDed;
-    double                  MaxLoanAVMult;
-    int                     NoLapseMinDur;
-    int                     NoLapseMinAge;
-    oenum_waiver_charge_method  WaiverChargeMethod;
-    bool                    LapseIgnoresSurrChg;
-    bool                    SurrChgOnIncr;
-    bool                    SurrChgOnDecr;
-    std::vector<double>     FreeWDProportion;
+    void                         SetPermanentInvariants();
+    void                         SetLedgerType();
+    void                         SetLowestPremiumTaxLoad();
+    void                         TestPremiumTaxLoadConsistency();
+    void                         SetMaxSurvivalDur();
+    double                       MaxSurvivalDur;
+    mcenum_defn_life_ins         DefnLifeIns_;
+    mcenum_defn_material_change  DefnMaterialChange_;
+    mcenum_dbopt_7702            Equiv7702DBO3;
+    double                       MaxNAAR;
+    int                          EndtAge;
+    double                       MinRenlBaseFace;
+    double                       MinRenlFace;
+    bool                         NoLapseOpt1Only;
+    bool                         NoLapseUnratedOnly;
+    bool                         OptChgCanIncrSA;
+    bool                         OptChgCanDecrSA;
+    bool                         WDCanDecrSADBO1;
+    bool                         WDCanDecrSADBO2;
+    bool                         WDCanDecrSADBO3;
+    int                          MaxIncrAge;
+    bool                         WaivePmTxInt1035;
+    bool                         AllowTerm;
+    double                       ExpPerKLimit;
+    mcenum_anticipated_deduction MaxWDDed_;
+    double                       MaxWDAVMult;
+    mcenum_anticipated_deduction MaxLoanDed_;
+    double                       MaxLoanAVMult;
+    int                          NoLapseMinDur;
+    int                          NoLapseMinAge;
+    oenum_waiver_charge_method   WaiverChargeMethod;
+    bool                         LapseIgnoresSurrChg;
+    bool                         SurrChgOnIncr;
+    bool                         SurrChgOnDecr;
+    std::vector<double>          FreeWDProportion;
 
     double                  MinSpecAmt;
     double                  AdbLimit;

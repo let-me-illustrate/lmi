@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.68 2008-07-18 21:43:14 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.69 2008-07-18 23:29:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -85,18 +85,26 @@ namespace
 
 //============================================================================
 BasicValues::BasicValues()
-    :Input_       (new InputParms)
-    ,yare_input_  (*Input_)
-    ,Equiv7702DBO3(mce_option1_for_7702)
+    :Input_              (new InputParms)
+    ,yare_input_         (*Input_)
+    ,DefnLifeIns_        (mce_cvat)
+    ,DefnMaterialChange_ (mce_unnecessary_premium)
+    ,Equiv7702DBO3       (mce_option1_for_7702)
+    ,MaxWDDed_           (mce_twelve_times_last)
+    ,MaxLoanDed_         (mce_twelve_times_last)
 {
     Init();
 }
 
 //============================================================================
 BasicValues::BasicValues(InputParms const* input)
-    :Input_       (new InputParms(*input))
-    ,yare_input_  (*input)
-    ,Equiv7702DBO3(mce_option1_for_7702)
+    :Input_              (new InputParms(*input))
+    ,yare_input_         (*input)
+    ,DefnLifeIns_        (mce_cvat)
+    ,DefnMaterialChange_ (mce_unnecessary_premium)
+    ,Equiv7702DBO3       (mce_option1_for_7702)
+    ,MaxWDDed_           (mce_twelve_times_last)
+    ,MaxLoanDed_         (mce_twelve_times_last)
 {
     Init();
 }
@@ -119,7 +127,11 @@ BasicValues::BasicValues
     )
     :Input_              (new InputParms)
     ,yare_input_         (*Input_)
+    ,DefnLifeIns_        (mce_cvat)
+    ,DefnMaterialChange_ (mce_unnecessary_premium)
     ,Equiv7702DBO3       (a_DBOptFor7702)
+    ,MaxWDDed_           (mce_twelve_times_last)
+    ,MaxLoanDed_         (mce_twelve_times_last)
     ,InitialTargetPremium(a_TargetPremium)
 {
     InputParms* kludge_input = new InputParms;
@@ -634,8 +646,8 @@ void BasicValues::Init7702A()
     Irc7702A_.reset
         (new Irc7702A
             (magic
-            ,porting_cast<mcenum_defn_life_ins>(DefnLifeIns.value())
-            ,porting_cast<mcenum_defn_material_change>(DefnMaterialChange.value())
+            ,DefnLifeIns_
+            ,DefnMaterialChange_
             ,false // TODO ?? Joint life: hardcoded for now.
             ,yare_input_.AvoidMecMethod
             ,true  // TODO ?? Use table for 7pp: hardcoded for now.
@@ -718,9 +730,9 @@ void BasicValues::SetPermanentInvariants()
     WaivePmTxInt1035    = Database_->Query(DB_WaivePmTxInt1035     );
     AllowTerm           = Database_->Query(DB_AllowTerm            );
     ExpPerKLimit        = Database_->Query(DB_ExpPerKLimit         );
-    MaxWDDed            = static_cast<enum_anticipated_deduction>(static_cast<int>(Database_->Query(DB_MaxWDDed)));
+    MaxWDDed_           = static_cast<mcenum_anticipated_deduction>(static_cast<int>(Database_->Query(DB_MaxWDDed)));
     MaxWDAVMult         = Database_->Query(DB_MaxWDAVMult          );
-    MaxLoanDed          = static_cast<enum_anticipated_deduction>(static_cast<int>(Database_->Query(DB_MaxLoanDed)));
+    MaxLoanDed_         = static_cast<mcenum_anticipated_deduction>(static_cast<int>(Database_->Query(DB_MaxLoanDed)));
     MaxLoanAVMult       = Database_->Query(DB_MaxLoanAVMult        );
     NoLapseMinDur       = static_cast<int>(Database_->Query(DB_NoLapseMinDur));
     NoLapseMinAge       = static_cast<int>(Database_->Query(DB_NoLapseMinAge));
@@ -793,8 +805,8 @@ void BasicValues::SetPermanentInvariants()
             ;
         }
 
-    DefnLifeIns         = Input_->DefnLifeIns;
-    DefnMaterialChange  = Input_->DefnMaterialChange;
+    DefnLifeIns_        = yare_input_.DefinitionOfLifeInsurance;
+    DefnMaterialChange_ = yare_input_.DefinitionOfMaterialChange;
     Equiv7702DBO3       = static_cast<mcenum_dbopt_7702>(static_cast<int>(Database_->Query(DB_Equiv7702DBO3)));
     MaxNAAR             = Input_->MaxNAAR;
 
@@ -1828,23 +1840,24 @@ std::vector<double> BasicValues::GetTable
 }
 
 //============================================================================
-// TODO ?? This might be reworked to go through class Irc7702 all the time.
+// TODO ?? This might be reworked to go through class Irc7702 all the time;
+// at least it shouldn't refer to the input class.
 // TODO ?? The profusion of similar names should be trimmed.
 std::vector<double> const& BasicValues::GetCorridorFactor() const
 {
-    switch(Input_->DefnLifeIns)
+    switch(yare_input_.DefinitionOfLifeInsurance)
         {
-        case e_cvat:
+        case mce_cvat:
             {
             return MortalityRates_->CvatCorridorFactors();
             }
             // break;
-        case e_gpt:
+        case mce_gpt:
             {
             return Irc7702_->Corridor();
             }
             // break;
-        case e_noncompliant:
+        case mce_noncompliant:
             {
             Non7702CompliantCorridor = std::vector<double>(Length, 1.0);
             return Non7702CompliantCorridor;
@@ -1853,9 +1866,9 @@ std::vector<double> const& BasicValues::GetCorridorFactor() const
         default:
             {
             fatal_error()
-                << "Case '"
-                << Input_->DefnLifeIns
-                << "' not found."
+                << "Case "
+                << yare_input_.DefinitionOfLifeInsurance
+                << " not found."
                 << LMI_FLUSH
                 ;
             }

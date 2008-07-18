@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.94 2008-07-18 17:06:20 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.95 2008-07-18 23:29:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -861,9 +861,9 @@ void AccountValue::InitializeMonth()
     // we still need to call these if we're in the
     // corridor, hence the final test. There may be
     // a more elegant solution, but this is a solution.
-    if(    e_gpt            != DefnLifeIns
-        || e_run_curr_basis != RateBasis
-        || DBReflectingCorr != DBIgnoringCorr
+    if(    mce_gpt                   != DefnLifeIns_
+        || mce_run_gen_curr_sep_full != RunBasis_
+        || DBReflectingCorr          != DBIgnoringCorr
        )
         {
         TxSetDeathBft();
@@ -1480,7 +1480,7 @@ if forceout needed, it will be higher for curr--OK
 but position could be reversed for variable policy with bad curr performance
 */
 
-    if(e_gpt != DefnLifeIns || e_run_curr_basis != RateBasis)
+    if(mce_gpt != DefnLifeIns_ || e_run_curr_basis != RateBasis)
         {
         return;
         }
@@ -2742,7 +2742,7 @@ void AccountValue::TxLoanInt()
 //============================================================================
 // Allowance for deductions withheld from max loan or wd formula.
 //
-// The 'e_to_next_anniversary' and 'e_to_next_modal_pmt_date' cases
+// Both 'mce_to_next_anniversary' and 'mce_to_next_modal_pmt_date'
 // aim to keep the contract from lapsing on the next anniversary or
 // the next modal payment date respectively. For example, in the first
 // month, with annual mode, both anticipate a deduction thirteen times
@@ -2758,32 +2758,32 @@ void AccountValue::TxLoanInt()
 // it is zero.
 //
 double AccountValue::anticipated_deduction
-    (e_anticipated_deduction const& method)
+    (mcenum_anticipated_deduction method)
 {
     switch(method)
         {
-        case e_twelve_times_last:
+        case mce_twelve_times_last:
             {
             return 12.0 * MlyDed;
             }
-        case e_eighteen_times_last:
+        case mce_eighteen_times_last:
             {
             return 18.0 * MlyDed;
             }
-        case e_to_next_anniversary:
+        case mce_to_next_anniversary:
             {
             return MlyDed * (13 - Month);
             }
-        case e_to_next_modal_pmt_date:
+        case mce_to_next_modal_pmt_date:
             {
             return MlyDed * (1 + MonthsToNextModalPmtDate());
             }
         default:
             {
             fatal_error()
-                << "Case '"
+                << "Case "
                 << method
-                << "' not found."
+                << " not found."
                 << LMI_FLUSH
                 ;
             throw "Unreachable--silences a compiler diagnostic.";
@@ -2810,7 +2810,7 @@ void AccountValue::SetMaxWD()
           (AVGenAcct + AVSepAcct) * MaxWDAVMult
         + (AVRegLn  + AVPrfLn)
         - (RegLnBal + PrfLnBal)
-        - anticipated_deduction(MaxWDDed)
+        - anticipated_deduction(MaxWDDed_)
         - std::max(0.0, SurrChg())
         ;
     MaxWD = std::max(0.0, MaxWD);
@@ -3126,7 +3126,7 @@ void AccountValue::SetMaxLoan()
     MaxLoan =
           (AVGenAcct + AVSepAcct) * MaxLoanAVMult
         + (AVRegLn + AVPrfLn)
-        - anticipated_deduction(MaxLoanDed)
+        - anticipated_deduction(MaxLoanDed_)
         - std::max(0.0, SurrChg())
         ;
 

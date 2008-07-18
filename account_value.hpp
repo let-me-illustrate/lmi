@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.60 2008-07-18 22:07:12 chicares Exp $
+// $Id: account_value.hpp,v 1.61 2008-07-18 23:29:36 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -293,7 +293,7 @@ class LMI_SO AccountValue
     bool   IsModalPmtDate          (mcenum_mode) const;
     bool   IsModalPmtDate          (); // Antediluvian.
     int    MonthsToNextModalPmtDate() const;
-    double anticipated_deduction   (e_anticipated_deduction const&);
+    double anticipated_deduction   (mcenum_anticipated_deduction);
 
     void   ChangeSpecAmtBy         (double delta);
     void   ChangeSurrChgSpecAmtBy  (double delta);
