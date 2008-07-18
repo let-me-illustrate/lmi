@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.88 2008-07-17 16:13:42 chicares Exp $
+// $Id: group_values.cpp,v 1.89 2008-07-18 12:56:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -668,7 +668,7 @@ census_run_result run_census::operator()
 
     composite_.reset
         (new Ledger
-            (cells[0].LedgerType()
+            (porting_cast<mcenum_ledger_type>(cells[0].LedgerType().value())
             ,100
             ,true
             )

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.27 2008-02-19 00:46:28 chicares Exp $
+// $Id: ledger_xsl.cpp,v 1.28 2008-07-18 12:56:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -55,15 +55,15 @@ namespace
 {
 std::string xsl_filename(Ledger const& ledger)
 {
-    e_ledger_type const z = ledger.GetLedgerType();
+    mcenum_ledger_type const z = ledger.GetLedgerType();
     switch(z)
         {
-        case e_ill_reg:                      return "illustration_reg.xsl";
-        case e_nasd:                         return "nasd.xsl";
-        case e_group_private_placement:      return "reg_d_group.xsl";
-        case e_offshore_private_placement:   return "reg_d_offshore.xsl";
-        case e_individual_private_placement: return "reg_d_individual.xsl";
-        case e_variable_annuity:             return "variable_annuity.xsl";
+        case mce_ill_reg:                      return "illustration_reg.xsl";
+        case mce_nasd:                         return "nasd.xsl";
+        case mce_group_private_placement:      return "reg_d_group.xsl";
+        case mce_offshore_private_placement:   return "reg_d_offshore.xsl";
+        case mce_individual_private_placement: return "reg_d_individual.xsl";
+        case mce_variable_annuity:             return "variable_annuity.xsl";
         default:
             {
             fatal_error() << "Case '" << z << "' not found." << LMI_FLUSH;
