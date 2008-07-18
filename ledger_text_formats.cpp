@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.41 2008-07-17 16:13:42 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.42 2008-07-18 12:56:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -42,6 +42,7 @@
 #endif // defined LMI_USE_NEW_REPORTS
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
+#include "mc_enum_types_aux.hpp" // is_subject_to_ill_reg()
 #include "miscellany.hpp"
 #include "obstruct_slicing.hpp"
 #include "value_cast.hpp"

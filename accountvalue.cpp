@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.44 2008-07-18 01:12:38 chicares Exp $
+// $Id: accountvalue.cpp,v 1.45 2008-07-18 12:56:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -43,7 +43,6 @@
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
 #include "rounding_rules.hpp"
-#include "xenumtypes.hpp"
 
 #include <algorithm> // std::max(), std::min()
 #include <cmath>     // std::pow()
@@ -121,7 +120,7 @@ showing {accesses, modifies current year, modifies future years}
 AccountValue::AccountValue(InputParms const& input)
     :BasicValues       (input)
     ,DebugFilename     ("anonymous.debug")
-    ,ledger_(new Ledger(BasicValues::GetLedgerType(), BasicValues::GetLength()))
+    ,ledger_(new Ledger(porting_cast<mcenum_ledger_type>(BasicValues::GetLedgerType().value()), BasicValues::GetLength()))
     ,ledger_invariant_ (new LedgerInvariant(BasicValues::GetLength()))
     ,ledger_variant_   (new LedgerVariant  (BasicValues::GetLength()))
     ,RunBasis_         (mce_run_gen_curr_sep_full)

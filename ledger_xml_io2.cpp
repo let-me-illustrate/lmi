@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io2.cpp,v 1.30 2008-07-17 16:13:43 chicares Exp $
+// $Id: ledger_xml_io2.cpp,v 1.31 2008-07-18 12:56:33 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -33,8 +33,9 @@
 #include "ledger_base.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
-#include "mc_enum_aux.hpp" // mc_e_vector_to_string_vector()
-#include "miscellany.hpp" // ios_out_trunc_binary()
+#include "mc_enum_aux.hpp"       // mc_e_vector_to_string_vector()
+#include "mc_enum_types_aux.hpp" // is_subject_to_ill_reg()
+#include "miscellany.hpp"        // ios_out_trunc_binary()
 #include "value_cast.hpp"
 #include "version.hpp"
 #include "xml_lmi.hpp"

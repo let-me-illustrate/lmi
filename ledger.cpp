@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.cpp,v 1.25 2008-07-18 01:12:38 chicares Exp $
+// $Id: ledger.cpp,v 1.26 2008-07-18 12:56:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,7 +33,7 @@
 #include "crc32.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
-#include "mc_enum_types_aux.hpp" // porting_cast(), mc_str()
+#include "mc_enum_types_aux.hpp" // mc_str()
 
 #include <algorithm>
 #include <ostream>
@@ -74,9 +74,9 @@
 
 //============================================================================
 Ledger::Ledger
-    (e_ledger_type const& a_LedgerType
-    ,int                  a_Length
-    ,bool                 a_IsComposite
+    (mcenum_ledger_type a_LedgerType
+    ,int                a_Length
+    ,bool               a_IsComposite
     )
     :is_composite_         (a_IsComposite)
     ,composite_lapse_year_ (0.0)
