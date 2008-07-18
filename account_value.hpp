@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.59 2008-07-18 17:06:20 chicares Exp $
+// $Id: account_value.hpp,v 1.60 2008-07-18 22:07:12 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -234,12 +234,12 @@ class LMI_SO AccountValue
     double PerformEePmtStrategy       () const;
     double PerformErPmtStrategy       () const;
     double DoPerformPmtStrategy
-        (mcenum_solve_type                  a_SolveForWhichPrem
-        ,mcenum_mode                        a_CurrentMode
-        ,mcenum_mode                        a_InitialMode
-        ,double                             a_TblMult
-        ,std::vector<double> const&         a_PmtVector
-        ,std::vector<e_pmt_strategy> const& a_StrategyVector
+        (mcenum_solve_type                       a_SolveForWhichPrem
+        ,mcenum_mode                             a_CurrentMode
+        ,mcenum_mode                             a_InitialMode
+        ,double                                  a_TblMult
+        ,std::vector<double> const&              a_PmtVector
+        ,std::vector<mcenum_pmt_strategy> const& a_StrategyVector
         ) const;
 
     void InitializeMonth            ();
