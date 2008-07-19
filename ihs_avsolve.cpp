@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.18 2008-07-18 17:06:21 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.19 2008-07-19 17:40:12 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -42,6 +42,7 @@
 #include "inputstatus.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
+#include "mc_enum_types_aux.hpp"
 #include "outlay.hpp"
 #include "zero.hpp"
 
@@ -158,13 +159,13 @@ double AccountValue::SolveTest(double a_CandidateValue)
 {
     (this->*solve_set_fn)(a_CandidateValue);
 
-    e_run_basis temp;
-    set_run_basis_from_separate_bases
-        (temp
-        ,e_basis(SolveBasis)
-        ,e_sep_acct_basis(SolveSABasis)
+    mcenum_run_basis z;
+    set_run_basis_from_cloven_bases
+        (z
+        ,SolveGenBasis_
+        ,SolveSepBasis_
         );
-    RunOneCell(temp);
+    RunOneCell(e_run_basis(porting_cast<enum_run_basis>(z)));
 
     // return least of
     //   CSV at target duration
@@ -333,12 +334,13 @@ double AccountValue::Solve
     ,e_sep_acct_basis const& a_SolveSABasis
     )
 {
-// TODO ?? We left these as class members for now:
-// SolveBegYear SolveEndYear SolveBasis SolveSABasis
-    SolveBegYear    = a_SolveBegYear;
-    SolveEndYear    = a_SolveEndYear;
-    SolveBasis      = a_SolveBasis;
-    SolveSABasis    = a_SolveSABasis;
+// TRICKY !! These data members:
+//   SolveBegYear SolveEndYear SolveGenBasis_ SolveSepBasis_
+// make state available to SolveTest().
+    SolveBegYear   = a_SolveBegYear;
+    SolveEndYear   = a_SolveEndYear;
+    SolveGenBasis_ = porting_cast<mcenum_gen_basis>(a_SolveBasis.value());
+    SolveSepBasis_ = porting_cast<mcenum_sep_basis>(a_SolveSABasis.value());
 
     SolveSetTargetValueAndDuration
         (a_SolveTarget
