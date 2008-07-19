@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.130 2008-07-19 14:51:18 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.131 2008-07-19 17:40:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -104,6 +104,8 @@ AccountValue::AccountValue(InputParms const& input)
     ,ledger_(new Ledger(BasicValues::GetLedgerType(), BasicValues::GetLength()))
     ,ledger_invariant_     (new LedgerInvariant(BasicValues::GetLength()))
     ,ledger_variant_       (new LedgerVariant  (BasicValues::GetLength()))
+    ,SolveGenBasis_        (mce_gen_curr)
+    ,SolveSepBasis_        (mce_sep_full)
     ,RunBasis_             (mce_run_gen_curr_sep_full)
     ,GenBasis_             (mce_gen_curr)
     ,SepBasis_             (mce_sep_full)
@@ -284,7 +286,12 @@ double AccountValue::RunAllApplicableBases()
         // here--why isn't that done only during input?
         Input_->SetSolveDurations();
 
-        if(e_run_curr_basis != SolveBasis)
+        // TODO ?? This conditional tests the value of SolveGenBasis_,
+        // which hasn't yet been assigned any contextual value. The
+        // test is invalid anyway: the types don't match. Furthermore,
+        // the purpose of the statement it controls is not pellucid;
+        // it seems safer to execute it than not.
+//        if(mce_run_gen_curr_sep_full != SolveGenBasis_)
             {
             RunOneBasis(e_run_basis(e_run_curr_basis));
             }
