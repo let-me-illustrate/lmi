@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.127 2008-07-19 11:47:42 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.128 2008-07-19 11:48:46 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -302,13 +302,6 @@ double AccountValue::RunAllApplicableBases()
         Solving = false;
         // TODO ?? Here we might save overriding parameters determined
         // on the solve basis.
-
-        e_run_basis solve_run_basis;
-        set_run_basis_from_separate_bases
-            (solve_run_basis
-            ,SolveBasis
-            ,SolveSABasis
-            );
         }
     // Run all bases, current first.
     std::vector<mcenum_run_basis> const& run_bases = ledger_->GetRunBases();
