@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.129 2008-07-19 13:43:38 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.130 2008-07-19 14:51:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -540,8 +540,9 @@ void AccountValue::InitializeLife(e_run_basis const& a_Basis)
         {
         lowest_death_benefit = bfts_7702a.front();
         }
+    ASSERT_PORTING_CONSISTENCY;
     Irc7702A_->Initialize7702A
-        (e_run_curr_basis != RateBasis
+        (mce_run_gen_curr_sep_full != RunBasis_
         ,is_already_a_mec
         ,IssueAge
         ,BasicValues::EndtAge
@@ -577,7 +578,8 @@ void AccountValue::FinalizeLife(e_run_basis const& a_Basis)
         return;
         }
 
-    if(e_run_curr_basis == RateBasis)
+    ASSERT_PORTING_CONSISTENCY;
+    if(mce_run_gen_curr_sep_full == RunBasis_)
         {
         ledger_->SetLedgerInvariant(InvariantValues());
         }
@@ -718,7 +720,8 @@ void AccountValue::SetInitialValues()
 
     HoneymoonActive             = false;
     HoneymoonValue              = -std::numeric_limits<double>::max();
-    if(e_currbasis == ExpAndGABasis)
+    ASSERT_PORTING_CONSISTENCY;
+    if(mce_gen_curr == GenBasis_)
         {
         HoneymoonActive = Input_->HasHoneymoon;
         if(0 != Year || 0 != Month)
@@ -841,10 +844,11 @@ double AccountValue::IncrementBOM
             ;
         }
 
+    ASSERT_PORTING_CONSISTENCY;
     if
         (   Input_->UsePartialMort
         &&  Input_->UseExperienceRating
-        &&  e_currbasis == ExpAndGABasis
+        &&  mce_gen_curr == GenBasis_
         )
         {
         case_k_factor = a_case_k_factor;
@@ -1235,12 +1239,13 @@ void AccountValue::SetClaims()
 // Proxy for next year's COI charge, used only for experience rating.
 void AccountValue::SetProjectedCoiCharge()
 {
+    ASSERT_PORTING_CONSISTENCY;
     if
         (   ItLapsed
         ||  BasicValues::GetLength() <= Year
         ||  !Input_->UsePartialMort
         ||  !Input_->UseExperienceRating
-        ||  e_currbasis != ExpAndGABasis
+        ||  mce_gen_curr != GenBasis_
         )
         {
         return;
@@ -1439,7 +1444,8 @@ void AccountValue::FinalizeYear()
         ,-YearsTotalGptForceout
         );
 
-    if(e_run_curr_basis == RateBasis)
+    ASSERT_PORTING_CONSISTENCY;
+    if(mce_run_gen_curr_sep_full == RunBasis_)
         {
         InvariantValues().GrossPmt  [Year]  = 0.0;
         InvariantValues().EeGrossPmt[Year]  = 0.0;
@@ -1701,12 +1707,13 @@ double AccountValue::GetSepAcctAssetsInforce() const
 //============================================================================
 double AccountValue::GetCurtateNetCoiChargeInforce() const
 {
+    ASSERT_PORTING_CONSISTENCY;
     if
         (   ItLapsed
         ||  BasicValues::GetLength() <= Year
         ||  !Input_->UsePartialMort
         ||  !Input_->UseExperienceRating
-        ||  e_currbasis != ExpAndGABasis
+        ||  mce_gen_curr != GenBasis_
         )
         {
         return 0.0;
@@ -1719,12 +1726,13 @@ double AccountValue::GetCurtateNetCoiChargeInforce() const
 //============================================================================
 double AccountValue::GetCurtateNetClaimsInforce() const
 {
+    ASSERT_PORTING_CONSISTENCY;
     if
         (   ItLapsed
         ||  BasicValues::GetLength() <= Year
         ||  !Input_->UsePartialMort
         ||  !Input_->UseExperienceRating
-        ||  e_currbasis != ExpAndGABasis
+        ||  mce_gen_curr != GenBasis_
         )
         {
         return 0.0;
@@ -1737,12 +1745,13 @@ double AccountValue::GetCurtateNetClaimsInforce() const
 //============================================================================
 double AccountValue::GetProjectedCoiChargeInforce() const
 {
+    ASSERT_PORTING_CONSISTENCY;
     if
         (   ItLapsed
         ||  BasicValues::GetLength() <= Year
         ||  !Input_->UsePartialMort
         ||  !Input_->UseExperienceRating
-        ||  e_currbasis != ExpAndGABasis
+        ||  mce_gen_curr != GenBasis_
         )
         {
         return 0.0;
@@ -1765,12 +1774,13 @@ double AccountValue::ApportionNetMortalityReserve
     (double reserve_per_life_inforce
     )
 {
+    ASSERT_PORTING_CONSISTENCY;
     if
         (   ItLapsed
         ||  BasicValues::GetLength() <= Year
         ||  !Input_->UsePartialMort
         ||  !Input_->UseExperienceRating
-        ||  e_currbasis != ExpAndGABasis
+        ||  mce_gen_curr != GenBasis_
         )
         {
         return 0.0;

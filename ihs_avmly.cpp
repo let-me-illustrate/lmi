@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.95 2008-07-18 23:29:36 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.96 2008-07-19 14:51:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -564,10 +564,11 @@ void AccountValue::TxExch1035()
 //        return;
 //        }
 
-//    if(!SolvingForGuarPremium && Solving || e_run_curr_basis == RateBasis)
+    ASSERT_PORTING_CONSISTENCY;
+//    if(!SolvingForGuarPremium && Solving || mce_run_gen_curr_sep_full == RunBasis_)
 // TODO ?? Probably the condition (here and elsewhere) should be:
-//   Solving || (!Solving && e_run_curr_basis == RateBasis)
-    if(Solving || e_run_curr_basis == RateBasis)
+//   Solving || (!Solving && mce_run_gen_curr_sep_full == RunBasis_)
+    if(Solving || mce_run_gen_curr_sep_full == RunBasis_)
         {
         if(!SolvingForGuarPremium)
             {
@@ -636,7 +637,8 @@ void AccountValue::TxExch1035()
         + Input_->Internal1035ExchangeBasis
         ;
 
-    if(e_run_curr_basis == RateBasis)
+    ASSERT_PORTING_CONSISTENCY;
+    if(mce_run_gen_curr_sep_full == RunBasis_)
         {
         // Immediately after a 1035 exchange, DCV should be
         // the 1035 amount reduced by any premium-based loads,
@@ -996,8 +998,9 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
         ((1 + Irc7702A_->DebugGetTestDur()) / 12.0
         );
 
+    ASSERT_PORTING_CONSISTENCY;
 #ifdef DEBUGGING_MEC_AVOIDANCE
-    if(0 == Month && 0 == Year && e_run_curr_basis == RateBasis)
+    if(0 == Month && 0 == Year && mce_run_gen_curr_sep_full == RunBasis_)
         {
         std::ofstream os("trace.txt", ios_out_trunc_binary());
         }
@@ -1007,7 +1010,7 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
         (  e_increase_specamt != Input_->AvoidMec
         || 0 != Month
         || Irc7702A_->IsMecAlready()
-        || e_run_curr_basis != RateBasis
+        || mce_run_gen_curr_sep_full != RunBasis_
         // We already looked ahead to the end of the current 7702A test period.
         || 0 < contract_year_7702A && contract_year_7702A < 7
         )
@@ -1333,10 +1336,11 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
         ;
 #endif // DEBUGGING_MEC_AVOIDANCE
 
+    ASSERT_PORTING_CONSISTENCY;
     if
         (  0 != max_avg_cum_gross_premium
         && ActualSpecAmt < min_benefit
-        && e_run_curr_basis == RateBasis
+        && mce_run_gen_curr_sep_full == RunBasis_
         )
         {
 #ifdef DEBUGGING_MEC_AVOIDANCE
@@ -1480,7 +1484,8 @@ if forceout needed, it will be higher for curr--OK
 but position could be reversed for variable policy with bad curr performance
 */
 
-    if(mce_gpt != DefnLifeIns_ || e_run_curr_basis != RateBasis)
+    ASSERT_PORTING_CONSISTENCY;
+    if(mce_gpt != DefnLifeIns_ || mce_run_gen_curr_sep_full != RunBasis_)
         {
         return;
         }
@@ -1622,9 +1627,10 @@ void AccountValue::TxAscertainDesiredPayment()
 
     HOPEFULLY(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
 
+    ASSERT_PORTING_CONSISTENCY;
 // TODO ?? Probably the condition (here and elsewhere) should be:
-//   Solving || (!Solving && e_run_curr_basis == RateBasis)
-    if(Solving || e_run_curr_basis == RateBasis)
+//   Solving || (!Solving && mce_run_gen_curr_sep_full == RunBasis_)
+    if(Solving || mce_run_gen_curr_sep_full == RunBasis_)
         {
         if(ee_pay_this_month)
             {
@@ -1673,10 +1679,11 @@ void AccountValue::TxAscertainDesiredPayment()
     // unique nature that requires them to be recognized before any
     // premium is paid, and dumpins do not share that nature.
 
+    ASSERT_PORTING_CONSISTENCY;
 // TODO ?? Probably the condition (here and elsewhere) should be:
-//   Solving || (!Solving && e_run_curr_basis == RateBasis)
+//   Solving || (!Solving && mce_run_gen_curr_sep_full == RunBasis_)
 // in addition to the first-year, first-month condition.
-    if(0 == Year && 0 == Month && (Solving || e_run_curr_basis == RateBasis))
+    if(0 == Year && 0 == Month && (Solving || mce_run_gen_curr_sep_full == RunBasis_))
         {
         // Don't enforce the GPT premium limit when solving for
         // illustration-reg guaranteed premium.
@@ -1727,9 +1734,10 @@ void AccountValue::TxLimitPayment(double a_maxpmt)
 
     HOPEFULLY(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
 
+    ASSERT_PORTING_CONSISTENCY;
 // TODO ?? Probably the condition (here and elsewhere) should be:
-//   Solving || (!Solving && e_run_curr_basis == RateBasis)
-    if(Solving || e_run_curr_basis == RateBasis)
+//   Solving || (!Solving && mce_run_gen_curr_sep_full == RunBasis_)
+    if(Solving || mce_run_gen_curr_sep_full == RunBasis_)
         {
         OverridingEePmts[MonthsSinceIssue] = EeGrossPmts[Month];
         OverridingErPmts[MonthsSinceIssue] = ErGrossPmts[Month];
@@ -2278,9 +2286,10 @@ void AccountValue::TxSetCoiCharge()
     // DATABASE !! Add such an entity; for now, 'ExpRatCOIRetention'
     // can be manipulated to achieve the same effect.
 
+    ASSERT_PORTING_CONSISTENCY;
     if
         (   Input_->UseExperienceRating
-        &&  e_currbasis == ExpAndGABasis
+        &&  mce_gen_curr == GenBasis_
         )
         {
         ActualCoiRate = round_coi_rate
@@ -2542,19 +2551,20 @@ void AccountValue::ApplyDynamicMandE(double assets)
         }
 
     // Calculate M&E dynamically for current expense basis only
-    switch(ExpAndGABasis)
+    ASSERT_PORTING_CONSISTENCY;
+    switch(GenBasis_)
         {
-        case e_currbasis:
+        case mce_gen_curr:
             {
             // do nothing here; what follows will be correct
             }
             break;
-        case e_guarbasis:
+        case mce_gen_guar:
             {
             // guaranteed M&E is not dynamic
             return;
             }
-        case e_mdptbasis:
+        case mce_gen_mdpt:
             {
             fatal_error()
                 << "Dynamic M&E not supported with midpoint expense basis."
@@ -2565,9 +2575,9 @@ void AccountValue::ApplyDynamicMandE(double assets)
         default:
             {
             fatal_error()
-                << "Case '"
-                << ExpAndGABasis
-                << "' not found."
+                << "Case "
+                << GenBasis_
+                << " not found."
                 << LMI_FLUSH
                 ;
             }
@@ -2669,10 +2679,11 @@ void AccountValue::TxCreditInt()
     if(0.0 < AVGenAcct)
         {
         double effective_general_account_interest_factor = YearsGenAcctIntRate;
+        ASSERT_PORTING_CONSISTENCY;
         if
             (  Input_->HasHoneymoon
             && !HoneymoonActive
-            && e_currbasis == ExpAndGABasis
+            && mce_gen_curr == GenBasis_
             )
             {
             effective_general_account_interest_factor =
@@ -2849,9 +2860,10 @@ void AccountValue::TxTakeWD()
     // If maximum exceeded...limit it, rather than letting it lapse, on
     // the current basis--but on other bases, let it lapse
     NetWD = RequestedWD;
+    ASSERT_PORTING_CONSISTENCY;
 // TODO ?? Probably the condition (here and elsewhere) should be:
-//   Solving || (!Solving && e_run_curr_basis == RateBasis)
-    if(RateBasis == e_run_curr_basis)
+//   Solving || (!Solving && mce_run_gen_curr_sep_full == RunBasis_)
+    if(mce_run_gen_curr_sep_full == RunBasis_)
         {
         if(MaxWD < RequestedWD)
             {
@@ -3232,9 +3244,10 @@ void AccountValue::TxTakeLoan()
         );
 
     {
+    ASSERT_PORTING_CONSISTENCY;
 // TODO ?? Probably the condition (here and elsewhere) should be:
-//   Solving || (!Solving && e_run_curr_basis == RateBasis)
-    if(RateBasis == e_run_curr_basis)
+//   Solving || (!Solving && mce_run_gen_curr_sep_full == RunBasis_)
+    if(mce_run_gen_curr_sep_full == RunBasis_)
         {
         OverridingLoan[Year] = ActualLoan;
         }
@@ -3392,7 +3405,8 @@ void AccountValue::TxTestLapse()
 //============================================================================
 void AccountValue::FinalizeMonth()
 {
-    if(e_run_curr_basis == RateBasis)
+    ASSERT_PORTING_CONSISTENCY;
+    if(mce_run_gen_curr_sep_full == RunBasis_)
         {
         if(0 == Year && 0 == Month)
             {
