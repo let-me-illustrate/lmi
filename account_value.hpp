@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.61 2008-07-18 23:29:36 chicares Exp $
+// $Id: account_value.hpp,v 1.62 2008-07-19 11:46:38 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -29,6 +29,7 @@
 #include "basic_values.hpp"
 #include "oecumenic_enumerations.hpp"
 #include "so_attributes.hpp"
+#include "xenumtypes.hpp" // DEPRECATED
 
 #include <boost/shared_ptr.hpp>
 #include <boost/utility.hpp>
