@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.47 2008-07-18 17:06:20 chicares Exp $
+// $Id: accountvalue.cpp,v 1.48 2008-07-19 11:47:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -156,8 +156,8 @@ double AccountValue::RunOneBasis(e_run_basis const& TheBasis)
         {
         // TODO ?? Isn't this unreachable?
         throw std::logic_error("This line had seemed to be unreachable.");
-        LMI_ASSERT(TheBasis == Input_->SolveBasis.value());
-        z = Solve();
+//        LMI_ASSERT(TheBasis corresponds to yare_input_.SolveBasis);
+//        z = Solve();
         }
     else
         {

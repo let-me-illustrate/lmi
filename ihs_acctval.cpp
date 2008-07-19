@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.126 2008-07-18 17:06:20 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.127 2008-07-19 11:47:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -245,8 +245,8 @@ double AccountValue::RunOneBasis(e_run_basis const& a_Basis)
         {
 // Apparently this should never be done because Solve() is called in
 //   RunAllApplicableBases() .
-// TODO ?? Do something more flexible.
-//      LMI_ASSERT(a_Basis == Input_->SolveBasis);
+// TODO ?? Isn't this unreachable?
+//      LMI_ASSERT(a_Basis corresponds to yare_input_.SolveBasis);
 //      z = Solve();
         }
     else
