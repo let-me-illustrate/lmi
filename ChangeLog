@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1101 2008-07-18 23:29:37 chicares Exp $
+// $Id: ChangeLog,v 1.1102 2008-07-19 16:00:42 chicares Exp $
 
 MAINTENANCE
 
@@ -18038,4 +18038,45 @@ Refactor, eliminating old 'xenum' class from payment-strategy code.
   ihs_avmly.cpp
   ihs_basicval.cpp
 Refactor, eliminating various usages of old 'xenum' class.
+
+20080719T1146Z <gchicares@sbcglobal.net> [1123]
+
+  account_value.hpp
+  basic_values.hpp
+Refactor, including headers for obsolescent UDTs more sparingly.
+
+20080719T1147Z <gchicares@sbcglobal.net> [1123]
+
+  accountvalue.cpp
+  ihs_acctval.cpp
+Change unexecutable-but-treacherous code to pseudocode.
+
+20080719T1148Z <gchicares@sbcglobal.net> [1123]
+
+  ihs_acctval.cpp
+Eliminate dead code.
+
+20080719T1343Z <gchicares@sbcglobal.net> [1123]
+
+  account_value.hpp
+  accountvalue.cpp
+  ihs_acctval.cpp
+Refactor basis translation.
+
+20080719T1450Z <gchicares@sbcglobal.net> [1123]
+
+  GNUmakefile
+Test for missing dependency files.
+
+20080719T1451Z <gchicares@sbcglobal.net> [1123]
+
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+Refactor.
+
+20080719T1600Z <gchicares@sbcglobal.net> [1123]
+
+  accountvalue.cpp
+  solve.cpp
+Refactor.
 

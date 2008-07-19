@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.49 2008-07-19 13:43:38 chicares Exp $
+// $Id: accountvalue.cpp,v 1.50 2008-07-19 16:00:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -178,39 +178,34 @@ double AccountValue::RunAllApplicableBases()
     // set pmts, specamt, surrchg
 
     // Separate-account basis hardcoded because separate account not supported.
-    e_run_basis run_basis;
-    set_run_basis_from_separate_bases
+    mcenum_run_basis run_basis;
+    set_run_basis_from_cloven_bases
         (run_basis
-        ,e_basis(Input_->SolveBasis.value())
-        ,e_sep_acct_basis(e_sep_acct_full)
+        ,yare_input_.SolveBasis
+        ,mce_sep_full
         );
 
-    mcenum_run_basis temp; // DEPRECATED Dispense with this conversion.
     double z = 0.0;
     if(Solving)
         {
         z = Solve();
         OverridingPmts = InvariantValues().EePmt;
-        temp = porting_cast<mcenum_run_basis>(run_basis.value());
-        ledger_->SetOneLedgerVariant(temp, VariantValues());
+        ledger_->SetOneLedgerVariant(run_basis, VariantValues());
         Solving = false;
         }
     ledger_->SetLedgerInvariant(InvariantValues());
 
-    run_basis = e_run_basis(e_run_curr_basis);
-    RunOneBasis(run_basis);
-    temp = porting_cast<mcenum_run_basis>(run_basis.value());
-    ledger_->SetOneLedgerVariant(temp, VariantValues());
+    run_basis = mce_run_gen_curr_sep_full;
+    RunOneBasis(e_run_basis(porting_cast<enum_run_basis>(run_basis)));
+    ledger_->SetOneLedgerVariant(run_basis, VariantValues());
 
-    run_basis = e_run_basis(e_run_guar_basis);
-    RunOneBasis(run_basis);
-    temp = porting_cast<mcenum_run_basis>(run_basis.value());
-    ledger_->SetOneLedgerVariant(temp, VariantValues());
+    run_basis = mce_run_gen_guar_sep_full;
+    RunOneBasis(e_run_basis(porting_cast<enum_run_basis>(run_basis)));
+    ledger_->SetOneLedgerVariant(run_basis, VariantValues());
 
-    run_basis = e_run_basis(e_run_mdpt_basis);
-    RunOneBasis(run_basis);
-    temp = porting_cast<mcenum_run_basis>(run_basis.value());
-    ledger_->SetOneLedgerVariant(temp, VariantValues());
+    run_basis = mce_run_gen_mdpt_sep_full;
+    RunOneBasis(e_run_basis(porting_cast<enum_run_basis>(run_basis)));
+    ledger_->SetOneLedgerVariant(run_basis, VariantValues());
 
     return z;
 }

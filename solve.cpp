@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: solve.cpp,v 1.12 2008-07-18 17:06:21 chicares Exp $
+// $Id: solve.cpp,v 1.13 2008-07-19 16:00:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,8 +33,8 @@
 #include "inputs.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
+#include "mc_enum_types_aux.hpp"
 #include "outlay.hpp"
-#include "xenumtypes.hpp"
 #include "zero.hpp"
 
 #include <algorithm>     // std::min(), std::max()
@@ -61,7 +61,7 @@ namespace
     int                 ThatSolveTgtYear;
     int                 ThatSolveBegYear;
     int                 ThatSolveEndYear;
-    enum_basis          ThatSolveBasis;
+    mcenum_gen_basis    ThatSolveBasis;
     bool                only_set_values;
 }
 
@@ -71,13 +71,13 @@ namespace
 double SolveTest()
 {
     // Separate-account basis hardcoded because separate account not supported.
-    e_run_basis temp;
-    set_run_basis_from_separate_bases
+    mcenum_run_basis temp;
+    set_run_basis_from_cloven_bases
         (temp
-        ,e_basis(ThatSolveBasis)
-        ,e_sep_acct_basis(e_sep_acct_full)
+        ,ThatSolveBasis
+        ,mce_sep_full
         );
-    That->RunOneCell(temp);
+    That->RunOneCell(e_run_basis(porting_cast<enum_run_basis>(temp)));
     // TRICKY !! This const reference is required for overload
     // resolution to choose the const versions of various functions.
     AccountValue const* ConstThat = const_cast<AccountValue const*>(That);
@@ -241,7 +241,7 @@ double AccountValue::Solve()
     That = this;
     ThatSolveTargetCSV  = Input_->SolveTgtCSV.value();
     ThatSolveTarget     = yare_input_.SolveTarget;
-    ThatSolveBasis      = Input_->SolveBasis.value();
+    ThatSolveBasis      = yare_input_.SolveBasis;
     only_set_values = !Solving;
 
     // We mustn't solve for a target at a duration beyond the end.
