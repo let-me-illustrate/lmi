@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.131 2008-07-19 17:40:12 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.132 2008-07-19 23:00:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -392,10 +392,6 @@ void AccountValue::InitializeLife(e_run_basis const& a_Basis)
     RunBasis_ = static_cast<mcenum_run_basis>(a_Basis.value());
     set_cloven_bases_from_run_basis(RunBasis_, GenBasis_, SepBasis_);
 
-    RateBasis = a_Basis;
-    set_separate_bases_from_run_basis(RateBasis, ExpAndGABasis, SABasis);
-    ASSERT_PORTING_CONSISTENCY;
-
 // JOE I moved the next three lines of code up here from below. Reason:
 // output showed wrong specamt if specamt strategy is target, non-MEC,
 // or corridor--because first the specamt for output was set by this line
@@ -547,7 +543,6 @@ void AccountValue::InitializeLife(e_run_basis const& a_Basis)
         {
         lowest_death_benefit = bfts_7702a.front();
         }
-    ASSERT_PORTING_CONSISTENCY;
     Irc7702A_->Initialize7702A
         (mce_run_gen_curr_sep_full != RunBasis_
         ,is_already_a_mec
@@ -576,7 +571,7 @@ void AccountValue::InitializeLife(e_run_basis const& a_Basis)
 //============================================================================
 void AccountValue::FinalizeLife(e_run_basis const& a_Basis)
 {
-    HOPEFULLY(RateBasis == a_Basis);
+    HOPEFULLY(RunBasis_ == porting_cast<mcenum_run_basis>(a_Basis.value()));
 
     DebugEndBasis();
 
@@ -585,7 +580,6 @@ void AccountValue::FinalizeLife(e_run_basis const& a_Basis)
         return;
         }
 
-    ASSERT_PORTING_CONSISTENCY;
     if(mce_run_gen_curr_sep_full == RunBasis_)
         {
         ledger_->SetLedgerInvariant(InvariantValues());
@@ -727,7 +721,6 @@ void AccountValue::SetInitialValues()
 
     HoneymoonActive             = false;
     HoneymoonValue              = -std::numeric_limits<double>::max();
-    ASSERT_PORTING_CONSISTENCY;
     if(mce_gen_curr == GenBasis_)
         {
         HoneymoonActive = Input_->HasHoneymoon;
@@ -851,7 +844,6 @@ double AccountValue::IncrementBOM
             ;
         }
 
-    ASSERT_PORTING_CONSISTENCY;
     if
         (   Input_->UsePartialMort
         &&  Input_->UseExperienceRating
@@ -1246,7 +1238,6 @@ void AccountValue::SetClaims()
 // Proxy for next year's COI charge, used only for experience rating.
 void AccountValue::SetProjectedCoiCharge()
 {
-    ASSERT_PORTING_CONSISTENCY;
     if
         (   ItLapsed
         ||  BasicValues::GetLength() <= Year
@@ -1451,7 +1442,6 @@ void AccountValue::FinalizeYear()
         ,-YearsTotalGptForceout
         );
 
-    ASSERT_PORTING_CONSISTENCY;
     if(mce_run_gen_curr_sep_full == RunBasis_)
         {
         InvariantValues().GrossPmt  [Year]  = 0.0;
@@ -1714,7 +1704,6 @@ double AccountValue::GetSepAcctAssetsInforce() const
 //============================================================================
 double AccountValue::GetCurtateNetCoiChargeInforce() const
 {
-    ASSERT_PORTING_CONSISTENCY;
     if
         (   ItLapsed
         ||  BasicValues::GetLength() <= Year
@@ -1733,7 +1722,6 @@ double AccountValue::GetCurtateNetCoiChargeInforce() const
 //============================================================================
 double AccountValue::GetCurtateNetClaimsInforce() const
 {
-    ASSERT_PORTING_CONSISTENCY;
     if
         (   ItLapsed
         ||  BasicValues::GetLength() <= Year
@@ -1752,7 +1740,6 @@ double AccountValue::GetCurtateNetClaimsInforce() const
 //============================================================================
 double AccountValue::GetProjectedCoiChargeInforce() const
 {
-    ASSERT_PORTING_CONSISTENCY;
     if
         (   ItLapsed
         ||  BasicValues::GetLength() <= Year
@@ -1781,7 +1768,6 @@ double AccountValue::ApportionNetMortalityReserve
     (double reserve_per_life_inforce
     )
 {
-    ASSERT_PORTING_CONSISTENCY;
     if
         (   ItLapsed
         ||  BasicValues::GetLength() <= Year
