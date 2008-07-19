@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.48 2008-07-19 11:47:42 chicares Exp $
+// $Id: accountvalue.cpp,v 1.49 2008-07-19 13:43:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -223,12 +223,13 @@ double AccountValue::RunOneCell(e_run_basis const& TheBasis)
         // TODO ?? This seems wasteful. Track down the reason for doing it.
         InvariantValues().Init(this);
         }
-    set_separate_bases_from_run_basis(TheBasis, ExpAndGABasis, SABasis);
 
     RunBasis_ = static_cast<mcenum_run_basis>(TheBasis.value());
     set_cloven_bases_from_run_basis(RunBasis_, GenBasis_, SepBasis_);
-    LMI_ASSERT(static_cast<mcenum_gen_basis>(ExpAndGABasis.value()) == GenBasis_);
-    LMI_ASSERT(static_cast<mcenum_sep_basis>(SABasis      .value()) == SepBasis_);
+
+    RateBasis = TheBasis;
+    set_separate_bases_from_run_basis(TheBasis, ExpAndGABasis, SABasis);
+    ASSERT_PORTING_CONSISTENCY;
 
     VariantValues().Init(*this, GenBasis_, SepBasis_);
 
@@ -273,12 +274,13 @@ void AccountValue::DoYear
     )
 {
     Year = a_Year; // TODO ?? expunge?
-    set_separate_bases_from_run_basis(a_TheBasis, ExpAndGABasis, SABasis);
 
     RunBasis_ = static_cast<mcenum_run_basis>(a_TheBasis.value());
     set_cloven_bases_from_run_basis(RunBasis_, GenBasis_, SepBasis_);
-    LMI_ASSERT(static_cast<mcenum_gen_basis>(ExpAndGABasis.value()) == GenBasis_);
-    LMI_ASSERT(static_cast<mcenum_sep_basis>(SABasis      .value()) == SepBasis_);
+
+    RateBasis = a_TheBasis;
+    set_separate_bases_from_run_basis(a_TheBasis, ExpAndGABasis, SABasis);
+    ASSERT_PORTING_CONSISTENCY;
 
 // TODO ?? Solve...() should reset not inputs but...?
 

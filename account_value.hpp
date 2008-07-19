@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.62 2008-07-19 11:46:38 chicares Exp $
+// $Id: account_value.hpp,v 1.63 2008-07-19 13:43:38 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -690,6 +690,13 @@ inline double AccountValue::ibnr_as_months_of_mortality_charges() const
 {
     return IbnrAsMonthsOfMortalityCharges;
 }
+
+// DEPRECATED
+#define ASSERT_PORTING_CONSISTENCY \
+    LMI_ASSERT(static_cast<mcenum_run_basis>(RateBasis    .value()) == RunBasis_); \
+    LMI_ASSERT(static_cast<mcenum_gen_basis>(ExpAndGABasis.value()) == GenBasis_); \
+    LMI_ASSERT(static_cast<mcenum_sep_basis>(SABasis      .value()) == SepBasis_); \
+    do {} while(0)
 
 #endif // account_value_hpp
 
