@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.128 2008-07-19 11:48:46 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.129 2008-07-19 13:43:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -382,13 +382,12 @@ double AccountValue::RunOneCell(e_run_basis const& a_Basis)
 //============================================================================
 void AccountValue::InitializeLife(e_run_basis const& a_Basis)
 {
-    RateBasis = a_Basis;
-    set_separate_bases_from_run_basis(RateBasis, ExpAndGABasis, SABasis);
-
     RunBasis_ = static_cast<mcenum_run_basis>(a_Basis.value());
     set_cloven_bases_from_run_basis(RunBasis_, GenBasis_, SepBasis_);
-    LMI_ASSERT(static_cast<mcenum_gen_basis>(ExpAndGABasis.value()) == GenBasis_);
-    LMI_ASSERT(static_cast<mcenum_sep_basis>(SABasis      .value()) == SepBasis_);
+
+    RateBasis = a_Basis;
+    set_separate_bases_from_run_basis(RateBasis, ExpAndGABasis, SABasis);
+    ASSERT_PORTING_CONSISTENCY;
 
 // JOE I moved the next three lines of code up here from below. Reason:
 // output showed wrong specamt if specamt strategy is target, non-MEC,
