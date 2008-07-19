@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.35 2008-07-18 23:29:36 chicares Exp $
+// $Id: basic_values.hpp,v 1.36 2008-07-19 11:46:38 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -31,8 +31,6 @@
 #include "oecumenic_enumerations.hpp"
 #include "round_to.hpp"
 #include "so_attributes.hpp"
-#include "xenumtypes.hpp"
-#include "xrangetypes.hpp"
 #include "yare_input.hpp"
 
 #include <boost/shared_ptr.hpp>
