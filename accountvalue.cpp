@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.50 2008-07-19 16:00:42 chicares Exp $
+// $Id: accountvalue.cpp,v 1.51 2008-07-19 23:00:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -222,10 +222,6 @@ double AccountValue::RunOneCell(e_run_basis const& TheBasis)
     RunBasis_ = static_cast<mcenum_run_basis>(TheBasis.value());
     set_cloven_bases_from_run_basis(RunBasis_, GenBasis_, SepBasis_);
 
-    RateBasis = TheBasis;
-    set_separate_bases_from_run_basis(TheBasis, ExpAndGABasis, SABasis);
-    ASSERT_PORTING_CONSISTENCY;
-
     VariantValues().Init(*this, GenBasis_, SepBasis_);
 
     Debugging       = false;
@@ -272,10 +268,6 @@ void AccountValue::DoYear
 
     RunBasis_ = static_cast<mcenum_run_basis>(a_TheBasis.value());
     set_cloven_bases_from_run_basis(RunBasis_, GenBasis_, SepBasis_);
-
-    RateBasis = a_TheBasis;
-    set_separate_bases_from_run_basis(a_TheBasis, ExpAndGABasis, SABasis);
-    ASSERT_PORTING_CONSISTENCY;
 
 // TODO ?? Solve...() should reset not inputs but...?
 
