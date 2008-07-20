@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: solve.cpp,v 1.13 2008-07-19 16:00:42 chicares Exp $
+// $Id: solve.cpp,v 1.14 2008-07-20 02:41:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -77,7 +77,7 @@ double SolveTest()
         ,ThatSolveBasis
         ,mce_sep_full
         );
-    That->RunOneCell(e_run_basis(porting_cast<enum_run_basis>(temp)));
+    That->RunOneCell(temp);
     // TRICKY !! This const reference is required for overload
     // resolution to choose the const versions of various functions.
     AccountValue const* ConstThat = const_cast<AccountValue const*>(That);
