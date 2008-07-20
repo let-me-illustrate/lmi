@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1103 2008-07-20 03:33:26 chicares Exp $
+// $Id: ChangeLog,v 1.1104 2008-07-20 18:39:23 chicares Exp $
 
 MAINTENANCE
 
@@ -18126,4 +18126,24 @@ Refactor, removing 'xenum' types from one function signature.
   accountvalue.cpp
   ihs_acctval.cpp
 Refactor, eliminating old 'xenum' class from account-value header.
+
+20080720T1836Z <gchicares@sbcglobal.net> [1123]
+
+  mc_enum_types.xpp
+Make yes-or-no enumerators equivalent to type bool.
+
+20080720T1837Z <gchicares@sbcglobal.net> [1123]
+
+  accountvalue.cpp
+  diagnostics.sed
+  group_values.cpp
+  ihs_avmly.cpp
+  ihs_avsolve.cpp
+  ihs_avstrtgy.cpp
+Refactor, eliminating 'xenum' enumerators from account-value class.
+
+20080720T1839Z <gchicares@sbcglobal.net> [1123]
+
+  ihs_server7702.cpp
+Remove unneeded header.
 
