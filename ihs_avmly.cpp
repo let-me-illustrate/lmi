@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.97 2008-07-19 23:00:25 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.98 2008-07-20 00:19:50 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1355,7 +1355,7 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
 // TODO ?? TEMPORARILY SUPPRESSED FOR REGRESSION TEST
 //            DeathBfts_->set_specamt(min_benefit, 0, 7);
 
-            InitializeLife(e_run_basis(porting_cast<enum_run_basis>(RunBasis_)));
+            InitializeLife(RunBasis_);
             InitializeSpecAmt();
 // TODO ?? Nasty...changes things like:
 /*

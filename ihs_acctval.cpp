@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.132 2008-07-19 23:00:25 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.133 2008-07-20 00:19:50 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -336,7 +336,7 @@ double AccountValue::RunOneCell(e_run_basis const& a_Basis)
 {
     GuessWhetherFirstYearPremiumExceedsRetaliationLimit();
   restart:
-    InitializeLife(a_Basis);
+    InitializeLife(porting_cast<mcenum_run_basis>(a_Basis.value()));
 
     for(int year = InforceYear; year < BasicValues::GetLength(); ++year)
         {
@@ -381,15 +381,15 @@ double AccountValue::RunOneCell(e_run_basis const& a_Basis)
         IncrementEOY(year);
         }
 
-    FinalizeLife(a_Basis);
+    FinalizeLife(porting_cast<mcenum_run_basis>(a_Basis.value()));
 
     return TotalAccountValue();
 }
 
 //============================================================================
-void AccountValue::InitializeLife(e_run_basis const& a_Basis)
+void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
 {
-    RunBasis_ = static_cast<mcenum_run_basis>(a_Basis.value());
+    RunBasis_ = a_Basis;
     set_cloven_bases_from_run_basis(RunBasis_, GenBasis_, SepBasis_);
 
 // JOE I moved the next three lines of code up here from below. Reason:
@@ -569,9 +569,9 @@ void AccountValue::InitializeLife(e_run_basis const& a_Basis)
 }
 
 //============================================================================
-void AccountValue::FinalizeLife(e_run_basis const& a_Basis)
+void AccountValue::FinalizeLife(mcenum_run_basis a_Basis)
 {
-    HOPEFULLY(RunBasis_ == porting_cast<mcenum_run_basis>(a_Basis.value()));
+    HOPEFULLY(RunBasis_ == a_Basis);
 
     DebugEndBasis();
 
@@ -584,9 +584,7 @@ void AccountValue::FinalizeLife(e_run_basis const& a_Basis)
         {
         ledger_->SetLedgerInvariant(InvariantValues());
         }
-    mcenum_run_basis temp; // DEPRECATED Dispense with this conversion.
-    temp = porting_cast<mcenum_run_basis>(a_Basis.value());
-    ledger_->SetOneLedgerVariant(temp, VariantValues());
+    ledger_->SetOneLedgerVariant(a_Basis, VariantValues());
 }
 
 //============================================================================

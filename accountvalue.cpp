@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.51 2008-07-19 23:00:25 chicares Exp $
+// $Id: accountvalue.cpp,v 1.52 2008-07-20 00:19:49 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1065,7 +1065,7 @@ void   AccountValue::DebugPrintInit()
     {return;}
 void   AccountValue::DebugRestart(std::string const&)
     {return;}
-void   AccountValue::FinalizeLife(e_run_basis const&)
+void   AccountValue::FinalizeLife(mcenum_run_basis)
     {return;}
 void   AccountValue::FinalizeLifeAllBases()
     {return;}
@@ -1089,7 +1089,7 @@ double AccountValue::InforceLivesBoy() const
     {return 0.0;}
 double AccountValue::InforceLivesEoy() const
     {return 0.0;}
-void   AccountValue::InitializeLife(e_run_basis const&)
+void   AccountValue::InitializeLife(mcenum_run_basis)
     {return;}
 void   AccountValue::InitializeYear()
     {return;}
