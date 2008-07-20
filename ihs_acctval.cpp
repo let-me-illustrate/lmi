@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.133 2008-07-20 00:19:50 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.134 2008-07-20 01:44:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -303,8 +303,8 @@ double AccountValue::RunAllApplicableBases()
             ,yare_input_.SolveTarget
             ,Input_->SolveTgtCSV
             ,Input_->SolveTgtYear
-            ,Input_->SolveBasis
-            ,Input_->SolveSABasis
+            ,yare_input_.SolveBasis
+            ,yare_input_.SolveSeparateAccountBasis
             );
         Solving = false;
         // TODO ?? Here we might save overriding parameters determined
