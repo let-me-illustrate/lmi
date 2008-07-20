@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.52 2008-07-20 00:19:49 chicares Exp $
+// $Id: accountvalue.cpp,v 1.53 2008-07-20 02:41:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -161,7 +161,7 @@ double AccountValue::RunOneBasis(e_run_basis const& TheBasis)
         }
     else
         {
-        z = RunOneCell(TheBasis);
+        z = RunOneCell(porting_cast<mcenum_run_basis>(TheBasis.value()));
         }
     return z;
 }
@@ -211,7 +211,7 @@ double AccountValue::RunAllApplicableBases()
 }
 
 //============================================================================
-double AccountValue::RunOneCell(e_run_basis const& TheBasis)
+double AccountValue::RunOneCell(mcenum_run_basis TheBasis)
 {
     if(Solving)
         {
@@ -219,7 +219,7 @@ double AccountValue::RunOneCell(e_run_basis const& TheBasis)
         InvariantValues().Init(this);
         }
 
-    RunBasis_ = static_cast<mcenum_run_basis>(TheBasis.value());
+    RunBasis_ = TheBasis;
     set_cloven_bases_from_run_basis(RunBasis_, GenBasis_, SepBasis_);
 
     VariantValues().Init(*this, GenBasis_, SepBasis_);
@@ -250,7 +250,7 @@ double AccountValue::RunOneCell(e_run_basis const& TheBasis)
         {
         if(!ItLapsed)
             {
-            DoYear(TheBasis, Year, (Year == InforceYear) ? InforceMonth : 0);
+            DoYear(e_run_basis(porting_cast<enum_run_basis>(TheBasis)), Year, (Year == InforceYear) ? InforceMonth : 0);
             }
         }
 

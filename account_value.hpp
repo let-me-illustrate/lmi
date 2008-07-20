@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.67 2008-07-20 01:44:13 chicares Exp $
+// $Id: account_value.hpp,v 1.68 2008-07-20 02:41:15 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -128,7 +128,7 @@ class LMI_SO AccountValue
     LedgerInvariant& InvariantValues();
     LedgerVariant  & VariantValues  ();
 
-    double RunOneCell              (e_run_basis const&);
+    double RunOneCell              (mcenum_run_basis);
     double RunOneBasis             (e_run_basis const&);
     double RunAllApplicableBases   ();
     void   InitializeLife          (mcenum_run_basis);
