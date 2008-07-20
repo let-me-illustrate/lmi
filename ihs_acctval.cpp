@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.135 2008-07-20 02:41:15 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.136 2008-07-20 03:33:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -229,11 +229,11 @@ void AccountValue::SetGuarPrem()
 }
 
 //============================================================================
-double AccountValue::RunOneBasis(e_run_basis const& a_Basis)
+double AccountValue::RunOneBasis(mcenum_run_basis a_Basis)
 {
     if
         (  !BasicValues::IsSubjectToIllustrationReg()
-        && e_mdptbasis == a_Basis
+        && mce_run_gen_mdpt_sep_full == a_Basis
         )
         {
         fatal_error()
@@ -253,7 +253,7 @@ double AccountValue::RunOneBasis(e_run_basis const& a_Basis)
         }
     else
         {
-        z = RunOneCell(porting_cast<mcenum_run_basis>(a_Basis.value()));
+        z = RunOneCell(a_Basis);
         }
     return z;
 }
@@ -293,7 +293,7 @@ double AccountValue::RunAllApplicableBases()
         // it seems safer to execute it than not.
 //        if(mce_run_gen_curr_sep_full != SolveGenBasis_)
             {
-            RunOneBasis(e_run_basis(e_run_curr_basis));
+            RunOneBasis(mce_run_gen_curr_sep_full);
             }
 
         z = Solve
@@ -318,7 +318,7 @@ double AccountValue::RunAllApplicableBases()
         ;++b
         )
         {
-        RunOneBasis(e_run_basis(porting_cast<enum_run_basis>(*b)));
+        RunOneBasis(*b);
         }
     return z;
 }

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.53 2008-07-20 02:41:15 chicares Exp $
+// $Id: accountvalue.cpp,v 1.54 2008-07-20 03:33:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -149,7 +149,7 @@ double AccountValue::RunAV()
 }
 
 //============================================================================
-double AccountValue::RunOneBasis(e_run_basis const& TheBasis)
+double AccountValue::RunOneBasis(mcenum_run_basis TheBasis)
 {
     double z;
     if(Solving)
@@ -161,7 +161,7 @@ double AccountValue::RunOneBasis(e_run_basis const& TheBasis)
         }
     else
         {
-        z = RunOneCell(porting_cast<mcenum_run_basis>(TheBasis.value()));
+        z = RunOneCell(TheBasis);
         }
     return z;
 }
@@ -196,15 +196,15 @@ double AccountValue::RunAllApplicableBases()
     ledger_->SetLedgerInvariant(InvariantValues());
 
     run_basis = mce_run_gen_curr_sep_full;
-    RunOneBasis(e_run_basis(porting_cast<enum_run_basis>(run_basis)));
+    RunOneBasis(run_basis);
     ledger_->SetOneLedgerVariant(run_basis, VariantValues());
 
     run_basis = mce_run_gen_guar_sep_full;
-    RunOneBasis(e_run_basis(porting_cast<enum_run_basis>(run_basis)));
+    RunOneBasis(run_basis);
     ledger_->SetOneLedgerVariant(run_basis, VariantValues());
 
     run_basis = mce_run_gen_mdpt_sep_full;
-    RunOneBasis(e_run_basis(porting_cast<enum_run_basis>(run_basis)));
+    RunOneBasis(run_basis);
     ledger_->SetOneLedgerVariant(run_basis, VariantValues());
 
     return z;
@@ -250,7 +250,7 @@ double AccountValue::RunOneCell(mcenum_run_basis TheBasis)
         {
         if(!ItLapsed)
             {
-            DoYear(e_run_basis(porting_cast<enum_run_basis>(TheBasis)), Year, (Year == InforceYear) ? InforceMonth : 0);
+            DoYear(TheBasis, Year, (Year == InforceYear) ? InforceMonth : 0);
             }
         }
 
@@ -259,14 +259,14 @@ double AccountValue::RunOneCell(mcenum_run_basis TheBasis)
 
 //============================================================================
 void AccountValue::DoYear
-    (e_run_basis const& a_TheBasis
-    ,int                a_Year
-    ,int                a_InforceMonth
+    (mcenum_run_basis a_TheBasis
+    ,int              a_Year
+    ,int              a_InforceMonth
     )
 {
     Year = a_Year; // TODO ?? expunge?
 
-    RunBasis_ = static_cast<mcenum_run_basis>(a_TheBasis.value());
+    RunBasis_ = a_TheBasis;
     set_cloven_bases_from_run_basis(RunBasis_, GenBasis_, SepBasis_);
 
 // TODO ?? Solve...() should reset not inputs but...?
