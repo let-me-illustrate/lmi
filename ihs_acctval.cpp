@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.134 2008-07-20 01:44:13 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.135 2008-07-20 02:41:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -253,7 +253,7 @@ double AccountValue::RunOneBasis(e_run_basis const& a_Basis)
         }
     else
         {
-        z = RunOneCell(a_Basis);
+        z = RunOneCell(porting_cast<mcenum_run_basis>(a_Basis.value()));
         }
     return z;
 }
@@ -332,11 +332,11 @@ double AccountValue::RunAllApplicableBases()
 /// which isn't necessary anyway because all the functions it calls
 /// contain such a condition.
 
-double AccountValue::RunOneCell(e_run_basis const& a_Basis)
+double AccountValue::RunOneCell(mcenum_run_basis a_Basis)
 {
     GuessWhetherFirstYearPremiumExceedsRetaliationLimit();
   restart:
-    InitializeLife(porting_cast<mcenum_run_basis>(a_Basis.value()));
+    InitializeLife(a_Basis);
 
     for(int year = InforceYear; year < BasicValues::GetLength(); ++year)
         {
@@ -381,7 +381,7 @@ double AccountValue::RunOneCell(e_run_basis const& a_Basis)
         IncrementEOY(year);
         }
 
-    FinalizeLife(porting_cast<mcenum_run_basis>(a_Basis.value()));
+    FinalizeLife(a_Basis);
 
     return TotalAccountValue();
 }
