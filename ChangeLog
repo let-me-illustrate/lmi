@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1102 2008-07-19 16:00:42 chicares Exp $
+// $Id: ChangeLog,v 1.1103 2008-07-20 03:33:26 chicares Exp $
 
 MAINTENANCE
 
@@ -18079,4 +18079,51 @@ Refactor.
   accountvalue.cpp
   solve.cpp
 Refactor.
+
+20080719T1740Z <gchicares@sbcglobal.net> [1123]
+
+  account_value.hpp
+  ihs_acctval.cpp
+  ihs_avsolve.cpp
+Rename data members; explain one mystery while noting another.
+
+20080719T2300Z <gchicares@sbcglobal.net> [1123]
+
+  account_value.hpp
+  accountvalue.cpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+Refactor, eliminating data members of 'xenum' types.
+
+20080720T0019Z <gchicares@sbcglobal.net> [1123]
+
+  account_value.hpp
+  accountvalue.cpp
+  group_values.cpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+Refactor, removing 'xenum' types from certain function signatures.
+
+20080720T0144Z <gchicares@sbcglobal.net> [1123]
+
+  account_value.hpp
+  ihs_acctval.cpp
+  ihs_avsolve.cpp
+Refactor, removing 'xenum' types from one function signature.
+
+20080720T0241Z <gchicares@sbcglobal.net> [1123]
+
+  account_value.hpp
+  accountvalue.cpp
+  ihs_acctval.cpp
+  ihs_avsolve.cpp
+  solve.cpp
+Refactor, removing 'xenum' types from one function signature.
+
+20080720T0333Z <gchicares@sbcglobal.net> [1123]
+
+  account_value.hpp
+  accountvalue.cpp
+  ihs_acctval.cpp
+Refactor, eliminating old 'xenum' class from account-value header.
 

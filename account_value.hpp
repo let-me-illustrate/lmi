@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.68 2008-07-20 02:41:15 chicares Exp $
+// $Id: account_value.hpp,v 1.69 2008-07-20 03:33:26 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -29,7 +29,6 @@
 #include "basic_values.hpp"
 #include "oecumenic_enumerations.hpp"
 #include "so_attributes.hpp"
-#include "xenumtypes.hpp" // DEPRECATED
 
 #include <boost/shared_ptr.hpp>
 #include <boost/utility.hpp>
@@ -129,7 +128,7 @@ class LMI_SO AccountValue
     LedgerVariant  & VariantValues  ();
 
     double RunOneCell              (mcenum_run_basis);
-    double RunOneBasis             (e_run_basis const&);
+    double RunOneBasis             (mcenum_run_basis);
     double RunAllApplicableBases   ();
     void   InitializeLife          (mcenum_run_basis);
     void   FinalizeLife            (mcenum_run_basis);
@@ -145,9 +144,9 @@ class LMI_SO AccountValue
     void   SetAnnualInvariants     ();
 
     void DoYear // Antediluvian.
-        (e_run_basis const& a_TheBasis
-        ,int                a_Year
-        ,int                a_InforceMonth = 0
+        (mcenum_run_basis a_TheBasis
+        ,int              a_Year
+        ,int              a_InforceMonth = 0
         );
 
     void   SolveSetSpecAmt      (double a_CandidateValue);
