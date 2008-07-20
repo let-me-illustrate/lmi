@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.89 2008-07-18 12:56:33 chicares Exp $
+// $Id: group_values.cpp,v 1.90 2008-07-20 00:19:50 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -38,7 +38,7 @@
 #include "ledger.hpp"
 #include "ledgervalues.hpp"
 #include "materially_equal.hpp"
-#include "mc_enum_types_aux.hpp" // porting_cast()
+#include "mc_enum_types_aux.hpp"
 #include "path_utility.hpp"
 #include "progress_meter.hpp"
 #include "timer.hpp"
@@ -319,10 +319,10 @@ census_run_result run_census_in_parallel::operator()
             (*i)->GuessWhetherFirstYearPremiumExceedsRetaliationLimit();
             }
   restart:
-        e_basis          expense_and_general_account_basis;
-        e_sep_acct_basis separate_account_basis;
-        set_separate_bases_from_run_basis
-            (e_run_basis(porting_cast<enum_run_basis>(*run_basis))
+        mcenum_gen_basis expense_and_general_account_basis;
+        mcenum_sep_basis separate_account_basis;
+        set_cloven_bases_from_run_basis
+            (*run_basis
             ,expense_and_general_account_basis
             ,separate_account_basis
             );
@@ -331,7 +331,7 @@ census_run_result run_census_in_parallel::operator()
         int MaxYr = 0;
         for(i = cell_values.begin(); i != cell_values.end(); ++i)
             {
-            (*i)->InitializeLife(e_run_basis(porting_cast<enum_run_basis>(*run_basis)));
+            (*i)->InitializeLife(*run_basis);
             MaxYr = std::max(MaxYr, (*i)->GetLength());
             }
 
@@ -531,7 +531,7 @@ census_run_result run_census_in_parallel::operator()
 
             if
                 (   cells[0].UseExperienceRating
-                &&  e_currbasis == expense_and_general_account_basis
+                &&  mce_gen_curr == expense_and_general_account_basis
                 &&  0.0 != eoy_inforce_lives
                 )
                 {
@@ -610,7 +610,7 @@ census_run_result run_census_in_parallel::operator()
 
         for(i = cell_values.begin(); i != cell_values.end(); ++i)
             {
-            (*i)->FinalizeLife(e_run_basis(porting_cast<enum_run_basis>(*run_basis)));
+            (*i)->FinalizeLife(*run_basis);
             }
 
         } // End fenv_guard scope.
