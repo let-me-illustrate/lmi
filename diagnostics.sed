@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 #
-# $Id: diagnostics.sed,v 1.18 2008-06-27 03:38:27 chicares Exp $
+# $Id: diagnostics.sed,v 1.19 2008-07-20 18:37:42 chicares Exp $
 #
   # Delete expected output from make.
 /Circular.*dependency dropped/d
@@ -81,9 +81,9 @@
   # Delete expected output from regression test.
 /^Regression testing:/d
 /^Initializing all cells./d
-/^curr charges,[^.]*\.*$/d
-/^guar charges,[^.]*\.*$/d
-/^mdpt charges,[^.]*\.*$/d
+/^curr charges and[^.]*\.*$/d
+/^guar charges and[^.]*\.*$/d
+/^mdpt charges and[^.]*\.*$/d
 /^Calculating all cells[^.]*\.*$/d
 /^no errors detected/d
   # Delete multiple blank lines.

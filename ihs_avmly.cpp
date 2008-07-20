@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.98 2008-07-20 00:19:50 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.99 2008-07-20 18:37:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -724,21 +724,21 @@ void AccountValue::ChangeSpecAmtBy(double delta)
     double prior_specamt = ActualSpecAmt;
     if(TermRiderActive)
         {
-        switch(Input_->TermAdj)
+        switch(yare_input_.TermAdjustmentMethod)
             {
-            case e_adjust_term:
+            case mce_adjust_term:
                 {
                 ProportionAppliedToTerm = 1.0;
                 }
                 break;
-            case e_adjust_both:
+            case mce_adjust_both:
                 {
                 ProportionAppliedToTerm =
                     TermSpecAmt
                     / (ActualSpecAmt + TermSpecAmt);
                 }
                 break;
-            case e_adjust_base:
+            case mce_adjust_base:
                 {
                 ProportionAppliedToTerm = 0.0;
                 }
@@ -746,9 +746,9 @@ void AccountValue::ChangeSpecAmtBy(double delta)
             default:
                 {
                 fatal_error()
-                    << "Case '"
-                    << Input_->TermAdj
-                    << "' not found."
+                    << "Case "
+                    << yare_input_.TermAdjustmentMethod
+                    << " not found."
                     << LMI_FLUSH
                     ;
                 }
@@ -1004,7 +1004,7 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
 #endif // DEBUGGING_MEC_AVOIDANCE
 
     if
-        (  e_increase_specamt != Input_->AvoidMec
+        (  mce_increase_specamt != yare_input_.AvoidMecMethod
         || 0 != Month
         || Irc7702A_->IsMecAlready()
         || mce_run_gen_curr_sep_full != RunBasis_
@@ -1703,7 +1703,7 @@ void AccountValue::TxLimitPayment(double a_maxpmt)
 
     HOPEFULLY(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
 
-    if(e_reduce_prem == Input_->AvoidMec && !Irc7702A_->IsMecAlready())
+    if(mce_reduce_prem == yare_input_.AvoidMecMethod && !Irc7702A_->IsMecAlready())
         {
         double gross_1035 = 0.0;
         if(0 == Year && 0 == Month)
@@ -2889,7 +2889,7 @@ void AccountValue::TxTakeWD()
     // order dependency: after prem pmt, before loan.
     if
         (
-        Input_->WDToBasisThenLoan
+        yare_input_.WithdrawToBasisThenLoan
 //      && Input_->SolveBegYear <= Year && Year < Input_->SolveEndYear
 // TODO ?? What about guar prem solve?
         )
@@ -2916,7 +2916,7 @@ void AccountValue::TxTakeWD()
 // we should fix? TODO ?? Investigate.
 //
 // It appears that we need to do this even when not solving:
-// i.e. if Input_->WDToBasisThenLoan means to take loans after WDs stop...
+// i.e. if yare_input_.WithdrawToBasisThenLoan means to take loans after WDs stop...
 // TODO ?? Should the next line be suppressed?
 //      if(mce_solve_wd_then_loan == yare_input_.SolveType)
 //          {

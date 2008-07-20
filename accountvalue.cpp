@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.54 2008-07-20 03:33:26 chicares Exp $
+// $Id: accountvalue.cpp,v 1.55 2008-07-20 18:37:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -442,14 +442,14 @@ inline int AccountValue::MonthsToNextModalPmtDate() const
 void AccountValue::PerformSpecAmtStrategy()
 {
     double SA = 0.0;
-    switch(Input_->SAStrategy.value())
+    switch(porting_cast<mcenum_sa_strategy>(Input_->SAStrategy.value()))
         {
-        case e_sainputscalar:
+        case mce_sa_input_scalar:
             {
             SA = InvariantValues().SpecAmt[0];
             }
             break;
-        case e_sainputvector: // Obsolete.
+        case mce_sa_input_vector: // Obsolete.
             {
             fatal_error()
                 << "Varying specified amount not implemented."
@@ -459,17 +459,17 @@ void AccountValue::PerformSpecAmtStrategy()
             SA = InvariantValues().SpecAmt[0];
             }
             break;
-        case e_samaximum:
+        case mce_sa_maximum:
             {
             SA = GetModalMaxSpecAmt(InvariantValues().EeMode[0].value(), InvariantValues().EePmt[0]);
             }
             break;
-        case e_satarget:
+        case mce_sa_target:
             {
             SA = GetModalTgtSpecAmt(InvariantValues().EeMode[0].value(), InvariantValues().EePmt[0]);
             }
             break;
-        case e_samep:
+        case mce_sa_mep:
             {
             fatal_error()
                 << "Modified endowment premium not implemented."
@@ -479,7 +479,7 @@ void AccountValue::PerformSpecAmtStrategy()
             SA = InvariantValues().SpecAmt[0];
             }
             break;
-        case e_saglp:
+        case mce_sa_glp:
             {
             fatal_error()
                 << "Guideline level premium not implemented."
@@ -614,14 +614,14 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
         return;
         }
 
-    switch(Input_->EePmtStrategy.value())
+    switch(porting_cast<mcenum_pmt_strategy>(Input_->EePmtStrategy.value()))
         {
-        case e_pmtinputscalar:
+        case mce_pmt_input_scalar:
             {
             *a_Pmt = InvariantValues().EePmt[Year];
             }
             break;
-        case e_pmtinputvector:
+        case mce_pmt_input_vector:
             {
             fatal_error()
                 << "Varying premium not implemented."
@@ -631,7 +631,7 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
             *a_Pmt = InvariantValues().EePmt[Year];
             }
             break;
-        case e_pmtminimum:
+        case mce_pmt_minimum:
             {
             *a_Pmt = GetModalMinPrem
                 (Year
@@ -640,7 +640,7 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
                 );
             }
             break;
-        case e_pmttarget:
+        case mce_pmt_target:
             {
             *a_Pmt = GetModalTgtPrem
                 (Year
@@ -649,7 +649,7 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
                 );
             }
             break;
-        case e_pmtmep:
+        case mce_pmt_mep:
             {
             fatal_error()
                 << "Modified endowment premium not implemented."
@@ -659,7 +659,7 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
             *a_Pmt = InvariantValues().EePmt[Year];
             }
             break;
-        case e_pmtglp:
+        case mce_pmt_glp:
             {
             fatal_error()
                 << "Guideline level premium not implemented."
