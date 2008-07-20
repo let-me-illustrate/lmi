@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.90 2008-07-20 00:19:50 chicares Exp $
+// $Id: group_values.cpp,v 1.91 2008-07-20 18:37:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -338,7 +338,7 @@ census_run_result run_census_in_parallel::operator()
         boost::shared_ptr<progress_meter> meter
             (create_progress_meter
                 (MaxYr - first_cell_inforce_year
-                ,(e_run_basis(porting_cast<enum_run_basis>(*run_basis))).str()
+                ,mc_str(*run_basis)
                 ,progress_meter_mode(emission)
                 )
             );
@@ -674,10 +674,10 @@ census_run_result run_census::operator()
             )
         );
 
-    enum_run_order order = cells[0].RunOrder;
+    mcenum_run_order order = porting_cast<mcenum_run_order>(cells[0].RunOrder.value());
     switch(order)
         {
-        case e_life_by_life:
+        case mce_life_by_life:
             {
             result = run_census_in_series()
                 (file
@@ -687,7 +687,7 @@ census_run_result run_census::operator()
                 );
             }
             break;
-        case e_month_by_month:
+        case mce_month_by_month:
             {
             result = run_census_in_parallel()
                 (file
@@ -700,9 +700,9 @@ census_run_result run_census::operator()
         default:
             {
             fatal_error()
-                << "Case '"
+                << "Case "
                 << order
-                << "' not found."
+                << " not found."
                 << LMI_FLUSH
                 ;
             }

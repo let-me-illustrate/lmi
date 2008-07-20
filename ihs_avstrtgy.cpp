@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avstrtgy.cpp,v 1.15 2008-07-18 22:07:13 chicares Exp $
+// $Id: ihs_avstrtgy.cpp,v 1.16 2008-07-20 18:37:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -64,9 +64,9 @@ double AccountValue::CalculateSpecAmtFromStrategy
     ) const
 {
     double z = 0.0;
-    switch(Input_->VectorSpecifiedAmountStrategy[actual_year])
+    switch(yare_input_.SpecifiedAmountStrategy[actual_year])
         {
-        case e_sasalary:
+        case mce_sa_salary:
             {
             // This ignores yearly-varying salary.
             double y;
@@ -79,12 +79,12 @@ double AccountValue::CalculateSpecAmtFromStrategy
             z = y;
             }
             break;
-        case e_sainputscalar:
+        case mce_sa_input_scalar:
             {
             z = DeathBfts_->specamt()[actual_year];
             }
             break;
-        case e_sainputvector:
+        case mce_sa_input_vector:
             {
             // TODO ?? It's somewhat frightening that this warning is
             // never displayed, even though the test deck contains
@@ -97,7 +97,7 @@ double AccountValue::CalculateSpecAmtFromStrategy
             z = DeathBfts_->specamt()[actual_year];
             }
             break;
-        case e_samaximum:
+        case mce_sa_maximum:
             {
             z = GetModalSpecAmtMax
                 (InvariantValues().EeMode[reference_year].value()
@@ -107,7 +107,7 @@ double AccountValue::CalculateSpecAmtFromStrategy
                 );
             }
             break;
-        case e_satarget:
+        case mce_sa_target:
             {
             z = GetModalSpecAmtTgt
                 (InvariantValues().EeMode[reference_year].value()
@@ -118,7 +118,7 @@ double AccountValue::CalculateSpecAmtFromStrategy
             }
             break;
 // TODO ?? The following strategies (at least) should recognize dumpins.
-        case e_samep:
+        case mce_sa_mep:
             {
             z = GetModalSpecAmtMinNonMec
                 (InvariantValues().EeMode[reference_year].value()
@@ -128,7 +128,7 @@ double AccountValue::CalculateSpecAmtFromStrategy
                 );
             }
             break;
-        case e_sacorridor:
+        case mce_sa_corridor:
             {
             z = GetModalSpecAmtCorridor
                 (InvariantValues().EeMode[reference_year].value()
@@ -138,7 +138,7 @@ double AccountValue::CalculateSpecAmtFromStrategy
                 );
             }
             break;
-        case e_saglp:
+        case mce_sa_glp:
             {
             z = GetModalSpecAmtGLP
                 (InvariantValues().EeMode[reference_year].value()
@@ -148,7 +148,7 @@ double AccountValue::CalculateSpecAmtFromStrategy
                 );
             }
             break;
-        case e_sagsp:
+        case mce_sa_gsp:
             {
             z = GetModalSpecAmtGSP
                 (InvariantValues().EeMode[reference_year].value()
@@ -161,9 +161,9 @@ double AccountValue::CalculateSpecAmtFromStrategy
         default:
             {
             fatal_error()
-                << "Case '"
-                << Input_->VectorSpecifiedAmountStrategy[actual_year]
-                << "' not found."
+                << "Case "
+                << yare_input_.SpecifiedAmountStrategy[actual_year]
+                << " not found."
                 << LMI_FLUSH
                 ;
             }
@@ -197,12 +197,13 @@ void AccountValue::OldPerformSpecAmtStrategy()
     // TODO ?? Needs work for post-retirement strategy.
     double SA = CalculateSpecAmtFromStrategy(0, 0);
 
+    mcenum_sa_strategy const obsolete_sa_strategy = porting_cast<mcenum_sa_strategy>(Input_->SAStrategy.value());
     // Done if no strategy to apply
     if
         (
-//            e_sasalary      == Input_->SAStrategy
-//        ||  e_sainputscalar == Input_->SAStrategy
-        e_sainputscalar == Input_->SAStrategy
+//            mce_sa_salary      == obsolete_sa_strategy
+//        ||  mce_sa_input_scalar == obsolete_sa_strategy
+        mce_sa_input_scalar == obsolete_sa_strategy
         )
         {
         return;

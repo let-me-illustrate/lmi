@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.21 2008-07-20 02:41:15 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.22 2008-07-20 18:37:42 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -278,7 +278,7 @@ void AccountValue::SolveSetWD(double a_CandidateValue)
 //============================================================================
 void AccountValue::SolveSetWDThenLoan(double a_CandidateValue)
 {
-    LMI_ASSERT(e_yes == Input_->WDToBasisThenLoan);
+    LMI_ASSERT(yare_input_.WithdrawToBasisThenLoan);
     Outlay_->set_withdrawals(a_CandidateValue, SolveBegYear, SolveEndYear);
 }
 
