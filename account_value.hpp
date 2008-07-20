@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.66 2008-07-20 00:19:49 chicares Exp $
+// $Id: account_value.hpp,v 1.67 2008-07-20 01:44:13 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -202,14 +202,14 @@ class LMI_SO AccountValue
 
     double Solve(); // Antediluvian.
     double Solve
-        (mcenum_solve_type       a_SolveType
-        ,int                     a_SolveBegYear
-        ,int                     a_SolveEndYear
-        ,mcenum_solve_target     a_SolveTarget
-        ,double                  a_SolveTgtCSV
-        ,int                     a_SolveTgtYear
-        ,e_basis const&          a_SolveBasis
-        ,e_sep_acct_basis const& a_SolveSABasis
+        (mcenum_solve_type   a_SolveType
+        ,int                 a_SolveBegYear
+        ,int                 a_SolveEndYear
+        ,mcenum_solve_target a_SolveTarget
+        ,double              a_SolveTgtCSV
+        ,int                 a_SolveTgtYear
+        ,mcenum_gen_basis    a_SolveBasis
+        ,mcenum_sep_basis    a_SolveSABasis
         );
 
     double SolveTest               (double a_CandidateValue);
