@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_server7702.cpp,v 1.18 2008-07-14 15:39:32 chicares Exp $
+// $Id: ihs_server7702.cpp,v 1.19 2008-07-20 18:39:23 chicares Exp $
 
 // Known defects:
 // grep for "NEED DECISION"
@@ -41,7 +41,6 @@
 #include "ihs_rnddata.hpp"
 #include "ihs_server7702io.hpp"
 #include "ihs_x_type.hpp"
-#include "mc_enum_types_aux.hpp" // porting_cast()
 
 #if defined LMI_MSW
 #   include <windows.h> // HINSTANCE etc.
