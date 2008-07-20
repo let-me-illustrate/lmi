@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avstrtgy.cpp,v 1.16 2008-07-20 18:37:42 chicares Exp $
+// $Id: ihs_avstrtgy.cpp,v 1.17 2008-07-20 22:17:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -189,74 +189,6 @@ void AccountValue::NewPerformSpecAmtStrategy()
 void AccountValue::OldPerformSpecAmtStrategy()
 {
     NewPerformSpecAmtStrategy();
-    if(e_obsolete_same_as_initial == Input_->PostRetType)
-        {
-        return;
-        }
-
-    // TODO ?? Needs work for post-retirement strategy.
-    double SA = CalculateSpecAmtFromStrategy(0, 0);
-
-    mcenum_sa_strategy const obsolete_sa_strategy = porting_cast<mcenum_sa_strategy>(Input_->SAStrategy.value());
-    // Done if no strategy to apply
-    if
-        (
-//            mce_sa_salary      == obsolete_sa_strategy
-//        ||  mce_sa_input_scalar == obsolete_sa_strategy
-        mce_sa_input_scalar == obsolete_sa_strategy
-        )
-        {
-        return;
-        }
-
-    SA = round_specamt(SA);
-
-    int RetDur = Input_->Status[0].YearsToRetirement();
-
-    // I think we really need to do this here, because
-    // DeathBenefits::SpecAmt is used downstream
-//  DeathBfts_->set_specamt(SA, 0, BasicValues::Length);
-    DeathBfts_->set_specamt(SA, 0, RetDur);
-// TODO ?? Error if post-ret is same as pre-ret strategy.
-
-    double postret_spec_amt = 0.0;
-    switch(Input_->PostRetType)
-        {
-        case e_obsolete_same_as_initial:
-            {
-            postret_spec_amt = SA;
-            }
-            break;
-        case e_obsolete_scalar:
-            {
-            return;
-            }
-//          break;
-        case e_obsolete_percent_of_initial:
-            {
-            postret_spec_amt = SA * Input_->PostRetPct;
-            }
-            break;
-        case e_obsolete_varying:
-            {
-            return;
-//            throw std::logic_error
-//                (
-//                "Internal error: 'impossible' case e_obsolete_varying in "
-//                __FILE__
-//                );
-            }
-        default:
-            {
-            fatal_error()
-                << "Case '"
-                << Input_->PostRetType
-                << "' not found."
-                << LMI_FLUSH
-                ;
-            }
-        }
-    DeathBfts_->set_specamt(postret_spec_amt, RetDur, BasicValues::GetLength());
 }
 
 //============================================================================
