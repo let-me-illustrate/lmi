@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.19 2008-07-19 17:40:12 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.20 2008-07-20 01:44:13 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -306,8 +306,8 @@ double AccountValue::SolveGuarPremium()
         ,mce_solve_for_endt
         ,0.0
         ,static_cast<int>(InvariantValues().EndtAge - InvariantValues().Age)
-        ,e_basis(e_guarbasis)
-        ,e_sep_acct_basis(e_sep_acct_full)
+        ,mce_gen_guar
+        ,mce_sep_full
         );
 
     // Restore original values.
@@ -324,14 +324,14 @@ double AccountValue::SolveGuarPremium()
 //   SolveTargetValue
 // be dispensed with?
 double AccountValue::Solve
-    (mcenum_solve_type       a_SolveType
-    ,int                     a_SolveBegYear
-    ,int                     a_SolveEndYear
-    ,mcenum_solve_target     a_SolveTarget
-    ,double                  a_SolveTgtCSV
-    ,int                     a_SolveTgtYear
-    ,e_basis const&          a_SolveBasis
-    ,e_sep_acct_basis const& a_SolveSABasis
+    (mcenum_solve_type   a_SolveType
+    ,int                 a_SolveBegYear
+    ,int                 a_SolveEndYear
+    ,mcenum_solve_target a_SolveTarget
+    ,double              a_SolveTgtCSV
+    ,int                 a_SolveTgtYear
+    ,mcenum_gen_basis    a_SolveBasis
+    ,mcenum_sep_basis    a_SolveSABasis
     )
 {
 // TRICKY !! These data members:
@@ -339,8 +339,8 @@ double AccountValue::Solve
 // make state available to SolveTest().
     SolveBegYear   = a_SolveBegYear;
     SolveEndYear   = a_SolveEndYear;
-    SolveGenBasis_ = porting_cast<mcenum_gen_basis>(a_SolveBasis.value());
-    SolveSepBasis_ = porting_cast<mcenum_sep_basis>(a_SolveSABasis.value());
+    SolveGenBasis_ = a_SolveBasis;
+    SolveSepBasis_ = a_SolveSABasis;
 
     SolveSetTargetValueAndDuration
         (a_SolveTarget
