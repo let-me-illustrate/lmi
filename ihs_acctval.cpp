@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.136 2008-07-20 03:33:26 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.137 2008-07-21 09:50:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -400,11 +400,11 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
 //
 // The situation is really unsatisfactory.
 // InvariantValues().Init() is called earlier in the ctor;
-// then we call OldPerformSpecAmtStrategy(), which assigns values to
+// then we call PerformSpecAmtStrategy(), which assigns values to
 // InvariantValues().SpecAmt; then we call InvariantValues().Init() again.
 // But calling InvariantValues().Init() again wiped out the SpecAmt, because
 // it reinitialized it based on DeathBfts_::specamt(), so I called
-// DeathBfts_->set_specamt() in AccountValue::OldPerformSpecAmtStrategy().
+// DeathBfts_->set_specamt() in AccountValue::PerformSpecAmtStrategy().
 
     SetInitialValues();
 
@@ -415,11 +415,11 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         {
         // TODO ?? There's some code in FinalizeYear() below that
         // sets InvariantValues().EePmt to an annualized value, but
-        // OldPerformSpecAmtStrategy() expects a modal value. The
+        // PerformSpecAmtStrategy() expects a modal value. The
         // annualized value is wiped out a few lines below anyway.
         // This is a crock to suppress an observed symptom.
         InvariantValues().Init(this);
-        OldPerformSpecAmtStrategy();
+        PerformSpecAmtStrategy();
         }
 
     // TODO ?? It seems wrong to initialize the ledger values here.
@@ -564,7 +564,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         ;
 
 /* TODO expunge?
-    OldPerformSpecAmtStrategy();
+    PerformSpecAmtStrategy();
 */
 }
 
