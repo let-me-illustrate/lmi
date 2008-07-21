@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.69 2008-07-20 03:33:26 chicares Exp $
+// $Id: account_value.hpp,v 1.70 2008-07-21 09:50:22 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -222,13 +222,11 @@ class LMI_SO AccountValue
 
     double GetPartMortQ            (int year) const;
 
-    void PerformSpecAmtStrategy(); // Antediluvian.
+    void PerformSpecAmtStrategy();
     double CalculateSpecAmtFromStrategy
         (int actual_year
         ,int reference_year
         ) const;
-    void OldPerformSpecAmtStrategy  ();
-    void NewPerformSpecAmtStrategy  ();
 
     void PerformPmtStrategy(double* a_Pmt); // Antediluvian.
     double PerformEePmtStrategy       () const;

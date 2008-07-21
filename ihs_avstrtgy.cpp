@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avstrtgy.cpp,v 1.17 2008-07-20 22:17:22 chicares Exp $
+// $Id: ihs_avstrtgy.cpp,v 1.18 2008-07-21 09:50:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -171,8 +171,9 @@ double AccountValue::CalculateSpecAmtFromStrategy
     return z;
 }
 
-//============================================================================
-void AccountValue::NewPerformSpecAmtStrategy()
+/// Set spec amt according to selected strategy, in every year.
+
+void AccountValue::PerformSpecAmtStrategy()
 {
     for
         (int j = 0; j < Input_->YearsToMaturity(); ++j)
@@ -180,15 +181,6 @@ void AccountValue::NewPerformSpecAmtStrategy()
         double z = round_specamt(CalculateSpecAmtFromStrategy(j, 0));
         DeathBfts_->set_specamt(z, j, 1 + j);
         }
-}
-
-//============================================================================
-// Sets spec amt according to selected strategy, in every year
-// TODO ?? Despite the name, this 'Old-' function is still used, but
-// the 'New-' variant apparently is not.
-void AccountValue::OldPerformSpecAmtStrategy()
-{
-    NewPerformSpecAmtStrategy();
 }
 
 //============================================================================
