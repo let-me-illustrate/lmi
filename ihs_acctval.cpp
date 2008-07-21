@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.137 2008-07-21 09:50:22 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.138 2008-07-21 17:25:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1400,7 +1400,13 @@ void AccountValue::FinalizeYear()
     VariantValues().PremTaxLoad       [Year] = YearsTotalPremTaxLoad      ;
     VariantValues().DacTaxLoad        [Year] = YearsTotalDacTaxLoad       ;
     VariantValues().SpecAmtLoad       [Year] = YearsTotalSpecAmtLoad      ;
-    VariantValues().SepAcctCharges    [Year] = YearsTotalSepAcctLoad      ;
+
+    double notional_sep_acct_charge =
+          YearsTotalSepAcctLoad
+        + YearsTotalGrossIntCredited
+        - YearsTotalNetIntCredited
+        ;
+    VariantValues().SepAcctCharges    [Year] = notional_sep_acct_charge   ;
 
     // Record dynamic interest rate in ledger object.
     //
