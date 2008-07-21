@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.69 2008-07-18 23:29:36 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.70 2008-07-21 18:31:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -494,9 +494,9 @@ void BasicValues::Init7702()
     std::vector<double> guar_int;
     Database_->Query(guar_int, DB_GuarInt);
 /*
-    switch(Input_.LoanRateType)
+    switch(yare_input_.LoanRateType)
         {
-        case e_fixed_loan_rate:
+        case mce_fixed_loan_rate:
             {
             std::vector<double> gross_loan_rate;
             Database_->Query(gross_loan_rate, DB_FixedLoanRate);
@@ -525,7 +525,7 @@ void BasicValues::Init7702()
                 );
             }
             break;
-        case e_variable_loan_rate:
+        case mce_variable_loan_rate:
             {
             // do nothing
             }
@@ -533,9 +533,9 @@ void BasicValues::Init7702()
         default:
             {
             fatal_error()
-                << "Case '"
-                << Input_.LoanRateType
-                << "' not found."
+                << "Case "
+                << yare_input_.LoanRateType
+                << " not found."
                 << LMI_FLUSH
                 ;
             }
@@ -779,7 +779,7 @@ void BasicValues::SetPermanentInvariants()
     // e.g. for aviation, occupation, avocation, or foreign travel.
     if
         (   mce_table_none != yare_input_.SubstandardTable
-        &&  e_medical      != Input_->GroupUWType
+        &&  mce_medical    != yare_input_.GroupUnderwritingType
         )
         {
         fatal_error()
@@ -982,24 +982,24 @@ void BasicValues::TestPremiumTaxLoadConsistency()
 //============================================================================
 void BasicValues::SetMaxSurvivalDur()
 {
-    switch(Input_->SurviveToType)
+    switch(yare_input_.SurviveToType)
         {
-        case e_no_survival_limit:
+        case mce_no_survival_limit:
             {
             MaxSurvivalDur  = EndtAge;
             }
             break;
-        case e_survive_to_age:
+        case mce_survive_to_age:
             {
             MaxSurvivalDur  = Input_->SurviveToAge - Input_->Status[0].IssueAge;
             }
             break;
-        case e_survive_to_year:
+        case mce_survive_to_year:
             {
             MaxSurvivalDur  = Input_->SurviveToYear;
             }
             break;
-        case e_survive_to_ex:
+        case mce_survive_to_expectancy:
             {
             std::vector<double> z(MortalityRates_->PartialMortalityQ());
             // ET !! z = 1.0 - z;
@@ -1019,9 +1019,9 @@ void BasicValues::SetMaxSurvivalDur()
         default:
             {
             fatal_error()
-                << "Case '"
-                << Input_->SurviveToType
-                << "' not found."
+                << "Case "
+                << yare_input_.SurviveToType
+                << " not found."
                 << LMI_FLUSH
                 ;
             }
