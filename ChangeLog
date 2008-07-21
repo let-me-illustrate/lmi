@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1104 2008-07-20 18:39:23 chicares Exp $
+// $Id: ChangeLog,v 1.1105 2008-07-21 18:31:20 chicares Exp $
 
 MAINTENANCE
 
@@ -18146,4 +18146,29 @@ Refactor, eliminating 'xenum' enumerators from account-value class.
 
   ihs_server7702.cpp
 Remove unneeded header.
+
+20080720T2217Z <gchicares@sbcglobal.net> [1121]
+
+  ihs_avstrtgy.cpp
+Eliminate dead code.
+
+20080721T0950Z <gchicares@sbcglobal.net> [1120]
+
+  account_value.hpp
+  ihs_acctval.cpp
+  ihs_avstrtgy.cpp
+Refactor for simplicity.
+
+20080721T1725Z <gchicares@sbcglobal.net> [1120]
+
+  ihs_acctval.cpp
+Make "SepAcctCharges" equal "load" + "M&E", completing the work begun
+20080713T0936Z by applying the patch given here:
+  http://lists.nongnu.org/archive/html/lmi/2008-07/msg00005.html
+
+20080721T1831Z <gchicares@sbcglobal.net> [1120]
+
+  ihs_basicval.cpp
+  mortality_rates.cpp
+Remove stray 'xenum' enumerators.
 
