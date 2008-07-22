@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.101 2008-07-22 22:46:17 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.102 2008-07-22 23:11:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2127,7 +2127,7 @@ void AccountValue::TxSetDeathBft(bool force_eoy_behavior)
 
     if
         (   force_eoy_behavior
-        ||  std::string::npos != Input_->Comments.find("idiosyncrasyV")
+        ||  std::string::npos != yare_input_.Comments.find("idiosyncrasyV")
         )
         {
         // The corridor death benefit ought always to reflect the
