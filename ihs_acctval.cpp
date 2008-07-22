@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.138 2008-07-21 17:25:29 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.139 2008-07-22 17:59:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -298,11 +298,11 @@ double AccountValue::RunAllApplicableBases()
 
         z = Solve
             (yare_input_.SolveType
-            ,Input_->SolveBegYear
-            ,Input_->SolveEndYear
+            ,yare_input_.SolveBeginYear
+            ,yare_input_.SolveEndYear
             ,yare_input_.SolveTarget
-            ,Input_->SolveTgtCSV
-            ,Input_->SolveTgtYear
+            ,yare_input_.SolveTargetCashSurrenderValue
+            ,yare_input_.SolveTargetYear
             ,yare_input_.SolveBasis
             ,yare_input_.SolveSeparateAccountBasis
             );

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avstrtgy.cpp,v 1.18 2008-07-21 09:50:22 chicares Exp $
+// $Id: ihs_avstrtgy.cpp,v 1.19 2008-07-22 17:59:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -204,8 +204,8 @@ double AccountValue::DoPerformPmtStrategy
     if
         (
             a_SolveForWhichPrem == yare_input_.SolveType
-        &&  Input_->SolveBegYear <= Year
-        &&  Year < std::min(Input_->SolveEndYear.value(), BasicValues::Length)
+        &&  yare_input_.SolveBeginYear <= Year
+        &&  Year < std::min(yare_input_.SolveEndYear, BasicValues::Length)
         )
         {
         return a_PmtVector[Year];

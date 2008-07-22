@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: solve.cpp,v 1.14 2008-07-20 02:41:15 chicares Exp $
+// $Id: solve.cpp,v 1.15 2008-07-22 17:59:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,7 +30,6 @@
 
 #include "alert.hpp"
 #include "death_benefits.hpp"
-#include "inputs.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
 #include "mc_enum_types_aux.hpp"
@@ -239,19 +238,19 @@ void AccountValue::SolveSetLoanThenWD
 double AccountValue::Solve()
 {
     That = this;
-    ThatSolveTargetCSV  = Input_->SolveTgtCSV.value();
+    ThatSolveTargetCSV  = yare_input_.SolveTargetCashSurrenderValue;
     ThatSolveTarget     = yare_input_.SolveTarget;
     ThatSolveBasis      = yare_input_.SolveBasis;
     only_set_values = !Solving;
 
     // We mustn't solve for a target at a duration beyond the end.
-    ThatSolveTgtYear = Input_->SolveTgtYear.value();
+    ThatSolveTgtYear = yare_input_.SolveTargetYear;
     ThatSolveTgtYear = std::min(ThatSolveTgtYear, BasicValues::GetLength());
     // ... or before the beginning
     ThatSolveTgtYear = std::max(ThatSolveTgtYear, 1);
     // We should do the same for these I guess...TODO ?? but here?
-    ThatSolveBegYear = Input_->SolveBegYear.value();
-    ThatSolveEndYear = Input_->SolveEndYear.value();
+    ThatSolveBegYear = yare_input_.SolveBeginYear;
+    ThatSolveEndYear = yare_input_.SolveEndYear;
 
     if(mce_solve_for_endt == ThatSolveTarget)
         {
