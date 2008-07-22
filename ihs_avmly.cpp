@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.100 2008-07-22 17:59:25 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.101 2008-07-22 22:46:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2670,7 +2670,7 @@ void AccountValue::TxCreditInt()
         {
         double effective_general_account_interest_factor = YearsGenAcctIntRate;
         if
-            (  Input_->HasHoneymoon
+            (  yare_input_.HoneymoonEndorsement
             && !HoneymoonActive
             && mce_gen_curr == GenBasis_
             )
