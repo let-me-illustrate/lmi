@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: interest_rates.cpp,v 1.21 2008-07-08 17:52:21 chicares Exp $
+// $Id: interest_rates.cpp,v 1.22 2008-07-22 22:09:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -335,20 +335,20 @@ void InterestRates::Initialize(BasicValues const& v)
 // Not reliably true:
 //        LMI_ASSERT
 //            (   ExtraSepAcctCharge_.size()
-//            ==  v.Input_->VectorAddonCompOnAssets.size()
+//            ==  v.yare_input_.ExtraCompensationOnAssets.size()
 //            );
-        // ET !! ExtraSepAcctCharge_ += v.Input_->VectorAddonCompOnAssets;
+        // ET !! ExtraSepAcctCharge_ += v.yare_input_.ExtraCompensationOnAssets;
         // ...but see the problem noted above.
         std::transform
             (ExtraSepAcctCharge_.begin()
             ,ExtraSepAcctCharge_.end()
-            ,v.Input_->VectorAddonCompOnAssets.begin()
+            ,v.yare_input_.ExtraCompensationOnAssets.begin()
             ,ExtraSepAcctCharge_.begin()
             ,std::plus<double>()
             );
         }
 
-    if(v.Input_->AmortizePremLoad)
+    if(v.yare_input_.AmortizePremiumLoad)
         {
         v.Database_->Query(AmortLoad_, DB_AmortPmLdFundCharge);
         }
