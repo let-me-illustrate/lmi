@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.139 2008-07-22 17:59:25 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.140 2008-07-22 18:51:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1689,7 +1689,7 @@ double AccountValue::GetPartMortQ(int a_year) const
 
     double z =
           MortalityRates_->PartialMortalityQ()[a_year]
-        * Input_->VectorPartialMortalityMultiplier[a_year]
+        * yare_input_.PartialMortalityMultiplier[a_year]
         ;
     return std::max(0.0, std::min(1.0, z));
 }

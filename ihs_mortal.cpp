@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_mortal.cpp,v 1.28 2008-07-06 17:36:40 chicares Exp $
+// $Id: ihs_mortal.cpp,v 1.29 2008-07-22 18:51:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -112,11 +112,11 @@ void MortalityRates::fetch_parameters(BasicValues const& basic_values)
     IsPolicyRated_        = basic_values.Input_->Status[0].IsPolicyRated();
     SubstandardTable_     = basic_values.yare_input_.SubstandardTable;
 
-    CurrentCoiMultiplier_ = basic_values.Input_->VectorCurrentCoiMultiplier;
-    MonthlyFlatExtra_     = basic_values.Input_->Status[0].VectorMonthlyFlatExtra;
+    CurrentCoiMultiplier_ = basic_values.yare_input_.CurrentCoiMultiplier;
+    MonthlyFlatExtra_     = basic_values.yare_input_.FlatExtra;
 
     // TODO ?? Defectively, this data member is not yet used.
-    PartialMortalityMultiplier_ = basic_values.Input_->VectorPartialMortalityMultiplier;
+    PartialMortalityMultiplier_ = basic_values.yare_input_.PartialMortalityMultiplier;
 
     round_coi_rate_ = basic_values.GetRoundingRules().round_coi_rate();
 
