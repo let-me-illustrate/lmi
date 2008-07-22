@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.43 2008-07-18 12:57:42 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.44 2008-07-22 18:51:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -392,7 +392,7 @@ void LedgerInvariant::Init(BasicValues* b)
     IndvTaxBracket       = Input_.VectorIndvTaxBracket          ;
     CorpTaxBracket       = Input_.VectorCorpTaxBracket          ;
     Salary               = Input_.Salary                        ;
-    MonthlyFlatExtra     = Status.VectorMonthlyFlatExtra        ;
+    MonthlyFlatExtra     = b->yare_input_.FlatExtra             ;
     HoneymoonValueSpread = Input_.VectorHoneymoonValueSpread    ;
     AddonMonthlyFee      = Input_.VectorAddonMonthlyCustodialFee;
     AddonCompOnAssets    = Input_.VectorAddonCompOnAssets       ;
@@ -485,7 +485,7 @@ void LedgerInvariant::Init(BasicValues* b)
 
     MaleProportion          = Input_.MaleProportion;
     NonsmokerProportion     = Input_.NonsmokerProportion;
-    PartMortTableMult       = Input_.VectorPartialMortalityMultiplier;
+    PartMortTableMult       = b->yare_input_.PartialMortalityMultiplier;
 
     // Assert this because the illustration currently prints a scalar
     // guaranteed max, assuming that it's the same for all years.
