@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.44 2008-07-22 18:51:15 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.45 2008-07-22 20:39:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -340,9 +340,6 @@ void LedgerInvariant::Init(BasicValues* b)
 
     irr_precision = b->GetRoundingRules().round_irr().decimals();
 
-    InputParms const& Input_    = *b->Input_;
-    InputStatus const& Status   = Input_.Status[0]; // TODO ?? Based on first life only.
-
 // TODO ?? These names are confusing. EePmt and ErPmt are *input* values.
 // If they're entered as $1000 for all years, then they have that value
 // every year, even after lapse. Variables whose names end in -'GrossPmt'
@@ -373,9 +370,9 @@ void LedgerInvariant::Init(BasicValues* b)
 //    NaarForceout    =
 //    ProducerCompensation =
 
-    if(Status.HasTerm)
+    if(b->Input_->Status[0].HasTerm)
         {
-        TermSpecAmt     .assign(Length, Status.TermAmt);
+        TermSpecAmt     .assign(Length, b->Input_->Status[0].TermAmt);
         }
     else
         {
@@ -389,23 +386,23 @@ void LedgerInvariant::Init(BasicValues* b)
         DBOpt [j] = b->DeathBfts_->dbopt()[j];
         }
 
-    IndvTaxBracket       = Input_.VectorIndvTaxBracket          ;
-    CorpTaxBracket       = Input_.VectorCorpTaxBracket          ;
-    Salary               = Input_.Salary                        ;
+    IndvTaxBracket       = b->Input_->VectorIndvTaxBracket          ;
+    CorpTaxBracket       = b->Input_->VectorCorpTaxBracket          ;
+    Salary               = b->Input_->Salary                        ;
     MonthlyFlatExtra     = b->yare_input_.FlatExtra             ;
-    HoneymoonValueSpread = Input_.VectorHoneymoonValueSpread    ;
-    AddonMonthlyFee      = Input_.VectorAddonMonthlyCustodialFee;
-    AddonCompOnAssets    = Input_.VectorAddonCompOnAssets       ;
-    AddonCompOnPremium   = Input_.VectorAddonCompOnPremium      ;
+    HoneymoonValueSpread = b->Input_->VectorHoneymoonValueSpread    ;
+    AddonMonthlyFee      = b->Input_->VectorAddonMonthlyCustodialFee;
+    AddonCompOnAssets    = b->Input_->VectorAddonCompOnAssets       ;
+    AddonCompOnPremium   = b->Input_->VectorAddonCompOnPremium      ;
     CorridorFactor       = b->GetCorridorFactor();
     CurrMandE            = b->InterestRates_->MAndERate(mce_gen_curr);
     TotalIMF             = b->InterestRates_->InvestmentManagementFee();
     RefundableSalesLoad  = b->Loads_->refundable_sales_load_proportion();
 
-    CountryCOIMultiplier = Input_.CountryCOIMultiplier;
+    CountryCOIMultiplier = b->Input_->CountryCOIMultiplier;
 
-    CountryIso3166Abbrev = Input_.Country.str();
-    Comments             = Input_.Comments;
+    CountryIso3166Abbrev = b->Input_->Country.str();
+    Comments             = b->Input_->Comments;
 
     FundNumbers           .resize(0);
     FundNames             .resize(0);
@@ -445,14 +442,14 @@ void LedgerInvariant::Init(BasicValues* b)
         // something like '.3333333...' would overflow the space available.
 
         FundAllocs.push_back
-            ((j < Input_.NumberOfFunds)
-            ? (Input_.FundAllocs[j].operator int const&())
+            ((j < b->Input_->NumberOfFunds)
+            ? (b->Input_->FundAllocs[j].operator int const&())
             : 0
             );
 
         FundAllocations.push_back
-            ((j < Input_.NumberOfFunds)
-            ? .01 * (Input_.FundAllocs[j].operator int const&())
+            ((j < b->Input_->NumberOfFunds)
+            ? .01 * (b->Input_->FundAllocs[j].operator int const&())
             : 0.0
             );
         }
@@ -475,16 +472,16 @@ void LedgerInvariant::Init(BasicValues* b)
 
     InitBaseSpecAmt         = b->DeathBfts_->specamt()[0];
     InitTermSpecAmt         = TermSpecAmt[0];
-    ChildRiderAmount        = Input_.ChildRiderAmount;
-    SpouseRiderAmount       = Input_.SpouseRiderAmount;
+    ChildRiderAmount        = b->Input_->ChildRiderAmount;
+    SpouseRiderAmount       = b->Input_->SpouseRiderAmount;
 
 //  InitPrem                = 0;
 //  GuarPrem                = 0;
 //  InitSevenPayPrem        =
 //  InitTgtPrem     =
 
-    MaleProportion          = Input_.MaleProportion;
-    NonsmokerProportion     = Input_.NonsmokerProportion;
+    MaleProportion          = b->Input_->MaleProportion;
+    NonsmokerProportion     = b->Input_->NonsmokerProportion;
     PartMortTableMult       = b->yare_input_.PartialMortalityMultiplier;
 
     // Assert this because the illustration currently prints a scalar
@@ -501,31 +498,31 @@ void LedgerInvariant::Init(BasicValues* b)
         );
     GuarMaxMandE            = guar_m_and_e_rate[0];
 //  GenderDistinct          = 0;
-    GenderBlended           = Input_.BlendMortGender;
+    GenderBlended           = b->Input_->BlendMortGender;
 //  SmokerDistinct          = 0;
-    SmokerBlended           = Input_.BlendMortSmoking;
+    SmokerBlended           = b->Input_->BlendMortSmoking;
 
-    SubstdTable             = Status.SubstdTable; // Prefer string 'SubstandardTable'.
+    SubstdTable             = b->Input_->Status[0].SubstdTable; // Prefer string 'SubstandardTable'.
 
-    Age                     = Status.IssueAge;
-    RetAge                  = Status.RetAge;
-    EndtAge                 = Status.IssueAge + b->GetLength();
-    UseExperienceRating     = Input_.UseExperienceRating;
-    UsePartialMort          = Input_.UsePartialMort;
-    AvgFund                 = Input_.AvgFund;
-    CustomFund              = Input_.OverrideFundMgmtFee;
+    Age                     = b->Input_->Status[0].IssueAge;
+    RetAge                  = b->Input_->Status[0].RetAge;
+    EndtAge                 = b->Input_->Status[0].IssueAge + b->GetLength();
+    UseExperienceRating     = b->Input_->UseExperienceRating;
+    UsePartialMort          = b->Input_->UsePartialMort;
+    AvgFund                 = b->Input_->AvgFund;
+    CustomFund              = b->Input_->OverrideFundMgmtFee;
 
-    HasWP                   = Status.HasWP;
-    HasADD                  = Status.HasADD;
-    HasTerm                 = Status.HasTerm;
+    HasWP                   = b->Input_->Status[0].HasWP;
+    HasADD                  = b->Input_->Status[0].HasADD;
+    HasTerm                 = b->Input_->Status[0].HasTerm;
 
-    HasChildRider           = Input_.HasChildRider;
-    HasSpouseRider          = Input_.HasSpouseRider;
-    SpouseIssueAge          = Input_.SpouseIssueAge;
+    HasChildRider           = b->Input_->HasChildRider;
+    HasSpouseRider          = b->Input_->HasSpouseRider;
+    SpouseIssueAge          = b->Input_->SpouseIssueAge;
 
-    HasHoneymoon            = Input_.HasHoneymoon;
+    HasHoneymoon            = b->Input_->HasHoneymoon;
     AllowDbo3               = b->Database_->Query(DB_AllowDBO3);
-    PostHoneymoonSpread     = Input_.PostHoneymoonSpread;
+    PostHoneymoonSpread     = b->Input_->PostHoneymoonSpread;
 
     // The antediluvian branch has a null ProductData_ object.
     if(b->ProductData_)
@@ -550,18 +547,18 @@ void LedgerInvariant::Init(BasicValues* b)
         InterestDisclaimer     = b->ProductData_->GetInterestDisclaimer();
         }
 
-    ProducerName            = Input_.AgentFullName();
+    ProducerName            = b->Input_->AgentFullName();
 
-    ProducerStreet          = Input_.AgentAddr1;
-    ProducerCity            = Input_.AgentCityStateZip();
-    CorpName                = Input_.SponsorFirstName;
+    ProducerStreet          = b->Input_->AgentAddr1;
+    ProducerCity            = b->Input_->AgentCityStateZip();
+    CorpName                = b->Input_->SponsorFirstName;
 
-    Franchise               = Input_.Franchise;
-    PolicyNumber            = Input_.PolicyNumber;
+    Franchise               = b->Input_->Franchise;
+    PolicyNumber            = b->Input_->PolicyNumber;
 
-    Insured1                = Input_.InsdFullName();
-    Gender                  = Status.Gender.str();
-    UWType                  = Input_.GroupUWType.str();
+    Insured1                = b->Input_->InsdFullName();
+    Gender                  = b->Input_->Status[0].Gender.str();
+    UWType                  = b->Input_->GroupUWType.str();
 
     oenum_smoking_or_tobacco smoke_or_tobacco =
         static_cast<oenum_smoking_or_tobacco>
@@ -613,14 +610,14 @@ void LedgerInvariant::Init(BasicValues* b)
         throw std::logic_error("Unknown oe_smoker_nonsmoker convention.");
         }
 
-    UWClass                 = Status.Class.str();
-    SubstandardTable        = Status.SubstdTable.str();
+    UWClass                 = b->Input_->Status[0].Class.str();
+    SubstandardTable        = b->Input_->Status[0].SubstdTable.str();
 
-    EffDate                 = calendar_date(Input_.EffDate).str();
-    EffDateJdn              = calendar_date(Input_.EffDate).julian_day_number();
-    DefnLifeIns             = Input_.DefnLifeIns.str();
-    DefnMaterialChange      = Input_.DefnMaterialChange.str();
-    AvoidMec                = Input_.AvoidMec.str();
+    EffDate                 = calendar_date(b->Input_->EffDate).str();
+    EffDateJdn              = calendar_date(b->Input_->EffDate).julian_day_number();
+    DefnLifeIns             = b->Input_->DefnLifeIns.str();
+    DefnMaterialChange      = b->Input_->DefnMaterialChange.str();
+    AvoidMec                = b->Input_->AvoidMec.str();
     PartMortTableName       = "1983 GAM"; // TODO ?? Hardcoded.
     StatePostalAbbrev       = b->GetStateOfJurisdiction().str();
 
@@ -657,21 +654,21 @@ void LedgerInvariant::Init(BasicValues* b)
         ,mce_annual_rate
         )[0];
 
-    IsInforce = 0 != Input_.InforceYear || 0 != Input_.InforceMonth;
+    IsInforce = 0 != b->Input_->InforceYear || 0 != b->Input_->InforceMonth;
 
-    SupplementalReport         = Input_.CreateSupplementalReport  ;
-    SupplementalReportColumn00 = Input_.SupplementalReportColumn00;
-    SupplementalReportColumn01 = Input_.SupplementalReportColumn01;
-    SupplementalReportColumn02 = Input_.SupplementalReportColumn02;
-    SupplementalReportColumn03 = Input_.SupplementalReportColumn03;
-    SupplementalReportColumn04 = Input_.SupplementalReportColumn04;
-    SupplementalReportColumn05 = Input_.SupplementalReportColumn05;
-    SupplementalReportColumn06 = Input_.SupplementalReportColumn06;
-    SupplementalReportColumn07 = Input_.SupplementalReportColumn07;
-    SupplementalReportColumn08 = Input_.SupplementalReportColumn08;
-    SupplementalReportColumn09 = Input_.SupplementalReportColumn09;
-    SupplementalReportColumn10 = Input_.SupplementalReportColumn10;
-    SupplementalReportColumn11 = Input_.SupplementalReportColumn11;
+    SupplementalReport         = b->Input_->CreateSupplementalReport  ;
+    SupplementalReportColumn00 = b->Input_->SupplementalReportColumn00;
+    SupplementalReportColumn01 = b->Input_->SupplementalReportColumn01;
+    SupplementalReportColumn02 = b->Input_->SupplementalReportColumn02;
+    SupplementalReportColumn03 = b->Input_->SupplementalReportColumn03;
+    SupplementalReportColumn04 = b->Input_->SupplementalReportColumn04;
+    SupplementalReportColumn05 = b->Input_->SupplementalReportColumn05;
+    SupplementalReportColumn06 = b->Input_->SupplementalReportColumn06;
+    SupplementalReportColumn07 = b->Input_->SupplementalReportColumn07;
+    SupplementalReportColumn08 = b->Input_->SupplementalReportColumn08;
+    SupplementalReportColumn09 = b->Input_->SupplementalReportColumn09;
+    SupplementalReportColumn10 = b->Input_->SupplementalReportColumn10;
+    SupplementalReportColumn11 = b->Input_->SupplementalReportColumn11;
 
     FullyInitialized = true;
 }
