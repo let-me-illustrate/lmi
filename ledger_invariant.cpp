@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.46 2008-07-22 22:09:37 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.47 2008-07-22 22:46:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -390,7 +390,7 @@ void LedgerInvariant::Init(BasicValues* b)
     CorpTaxBracket       = b->Input_->VectorCorpTaxBracket          ;
     Salary               = b->Input_->Salary                        ;
     MonthlyFlatExtra     = b->yare_input_.FlatExtra                 ;
-    HoneymoonValueSpread = b->Input_->VectorHoneymoonValueSpread    ;
+    HoneymoonValueSpread = b->yare_input_.HoneymoonValueSpread      ;
     AddonMonthlyFee      = b->yare_input_.ExtraMonthlyCustodialFee  ;
     AddonCompOnAssets    = b->yare_input_.ExtraCompensationOnAssets ;
     AddonCompOnPremium   = b->yare_input_.ExtraCompensationOnPremium;
@@ -520,9 +520,9 @@ void LedgerInvariant::Init(BasicValues* b)
     HasSpouseRider          = b->Input_->HasSpouseRider;
     SpouseIssueAge          = b->Input_->SpouseIssueAge;
 
-    HasHoneymoon            = b->Input_->HasHoneymoon;
+    HasHoneymoon            = b->yare_input_.HoneymoonEndorsement;
     AllowDbo3               = b->Database_->Query(DB_AllowDBO3);
-    PostHoneymoonSpread     = b->Input_->PostHoneymoonSpread;
+    PostHoneymoonSpread     = b->yare_input_.PostHoneymoonSpread;
 
     // The antediluvian branch has a null ProductData_ object.
     if(b->ProductData_)

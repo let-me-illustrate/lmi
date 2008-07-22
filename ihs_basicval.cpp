@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.71 2008-07-22 22:09:37 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.72 2008-07-22 22:46:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1501,7 +1501,7 @@ double BasicValues::GetAnnuityValueMlyDed
         spread = MinPremIntSpread_[a_year] * 1.0 / a_mode;
         }
     double z = i_upper_12_over_12_from_i<double>()
-        (   Input_->GenAcctRate[a_year]
+        (   yare_input_.GeneralAccountRate[a_year]
         -   spread
         );
 // TODO ?? What do we do if SA and GA current rates differ?
