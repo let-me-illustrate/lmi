@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.22 2008-07-20 18:37:42 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.23 2008-07-22 17:59:25 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -38,8 +38,6 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "death_benefits.hpp"
-#include "inputs.hpp"
-#include "inputstatus.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
 #include "mc_enum_types_aux.hpp"
@@ -366,7 +364,7 @@ double AccountValue::Solve
             (upper_bound
 // TODO ?? This is probably wrong. I think there are two term amounts, only
 // one of which is in Status. But I could be wrong.
-            ,DeathBfts_->specamt()[j] + Input_->Status[0].TermAmt
+            ,DeathBfts_->specamt()[j] + yare_input_.TermRiderAmount
             );
         }
     // TODO ?? Wait--initial premium may exceed input face, so

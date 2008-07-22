@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.99 2008-07-20 18:37:42 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.100 2008-07-22 17:59:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2890,7 +2890,7 @@ void AccountValue::TxTakeWD()
     if
         (
         yare_input_.WithdrawToBasisThenLoan
-//      && Input_->SolveBegYear <= Year && Year < Input_->SolveEndYear
+//      && yare_input_.SolveBeginYear <= Year && Year < yare_input_.SolveEndYear
 // TODO ?? What about guar prem solve?
         )
         {
