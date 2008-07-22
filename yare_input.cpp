@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: yare_input.cpp,v 1.4 2008-07-07 17:18:15 chicares Exp $
+// $Id: yare_input.cpp,v 1.5 2008-07-22 12:26:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -192,6 +192,10 @@ std::vector<NewType> convert_vector_type
 
 yare_input::yare_input(InputParms const& z)
 {
+    // DEPRECATED This works around an ancient problem that eventually
+    // must be fixed at its source.
+    z.SetSolveDurations();
+
     IssueAge                        = z.Status[0].IssueAge              ;
     RetirementAge                   = z.Status[0].RetAge                ;
     Gender                          = static_cast<mcenum_gender              >(z.Status[0].Gender          .value());
