@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: interest_rates.cpp,v 1.22 2008-07-22 22:09:37 chicares Exp $
+// $Id: interest_rates.cpp,v 1.23 2008-07-22 22:46:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,7 +33,6 @@
 #include "basic_values.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
-#include "inputs.hpp"
 #include "math_functors.hpp"
 #include "rounding_rules.hpp"
 #include "yare_input.hpp"
@@ -258,7 +257,7 @@ InterestRates::InterestRates(BasicValues const& v)
     ,NeedLoanRates_      (true)
     ,LoanRateType_       (v.yare_input_.LoanRateType)
     ,NeedPrefLoanRates_  (v.Database_->Query(DB_AllowPrefLoan))
-    ,NeedHoneymoonRates_ (v.Input_->HasHoneymoon)
+    ,NeedHoneymoonRates_ (v.yare_input_.HoneymoonEndorsement)
     ,SpreadFor7702_      (v.SpreadFor7702())
 {
     Initialize(v);
@@ -271,8 +270,8 @@ void InterestRates::Initialize(BasicValues const& v)
     v.Database_->Query(GenAcctGrossRate_[mce_gen_guar], DB_GuarInt);
 
     std::copy
-        (v.Input_->GenAcctRate.begin()
-        ,v.Input_->GenAcctRate.end()
+        (v.yare_input_.GeneralAccountRate.begin()
+        ,v.yare_input_.GeneralAccountRate.end()
         ,std::back_inserter(GenAcctGrossRate_[mce_gen_curr])
         );
     // TODO ?? At least for the antediluvian branch, the vector in
@@ -306,8 +305,8 @@ void InterestRates::Initialize(BasicValues const& v)
     // Retrieve separate-account data from class BasicValues.
 
     std::copy
-        (v.Input_->SepAcctRate.begin()
-        ,v.Input_->SepAcctRate.end()
+        (v.yare_input_.SeparateAccountRate.begin()
+        ,v.yare_input_.SeparateAccountRate.end()
         ,std::back_inserter(SepAcctGrossRate_[mce_sep_full])
         );
     // TODO ?? At least for the antediluvian branch, the vector in
@@ -372,7 +371,7 @@ void InterestRates::Initialize(BasicValues const& v)
             break;
         case mce_variable_loan_rate:
             {
-            PublishedLoanRate_.assign(Length_, v.Input_->LoanIntRate);
+            PublishedLoanRate_.assign(Length_, v.yare_input_.LoanRate);
             }
             break;
         default:
@@ -388,10 +387,10 @@ void InterestRates::Initialize(BasicValues const& v)
 
     if(NeedHoneymoonRates_)
         {
-        HoneymoonValueSpread_ = v.Input_->VectorHoneymoonValueSpread;
+        HoneymoonValueSpread_ = v.yare_input_.HoneymoonValueSpread;
         PostHoneymoonSpread_.assign
             (Length_
-            ,v.Input_->PostHoneymoonSpread
+            ,v.yare_input_.PostHoneymoonSpread
             );
         }
 
