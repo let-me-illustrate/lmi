@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1105 2008-07-21 18:31:20 chicares Exp $
+// $Id: ChangeLog,v 1.1106 2008-07-22 23:11:26 chicares Exp $
 
 MAINTENANCE
 
@@ -18171,4 +18171,68 @@ Make "SepAcctCharges" equal "load" + "M&E", completing the work begun
   ihs_basicval.cpp
   mortality_rates.cpp
 Remove stray 'xenum' enumerators.
+
+20080722T1226Z <gchicares@sbcglobal.net> [1120]
+
+  yare_input.cpp
+Forestall an ancient problem. This function:
+  InputParms::SetSolveDurations()
+, which is a mutator masquerading as const, is called in
+  AccountValue::RunAllApplicableBases()
+where it's marked as a defect. Soon class AccountValue will be
+constructed from a yare_input const& instead of an InputParms const&,
+and calling that inappropriate function there will no longer work, but
+this workaround will.
+
+20080722T1751Z <gchicares@sbcglobal.net> [1120]
+
+  main_cgi.cpp
+Forestall another ancient InputParms::SetSolveDurations() problem.
+
+20080722T1759Z <gchicares@sbcglobal.net> [1120]
+
+  accountvalue.cpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ihs_avsolve.cpp
+  ihs_avstrtgy.cpp
+  solve.cpp
+Refactor, using yare instead of obsolete input for solves.
+
+20080722T1851Z <gchicares@sbcglobal.net> [1120]
+
+  ihs_acctval.cpp
+  ihs_mortal.cpp
+  ledger_invariant.cpp
+Refactor, using yare instead of obsolete input for mortality, mostly.
+
+20080722T2039Z <gchicares@sbcglobal.net> [1119]
+
+  ledger_invariant.cpp
+Refactor to simplify later refactoring.
+
+20080722T2209Z <gchicares@sbcglobal.net> [1119]
+
+  ihs_basicval.cpp
+  interest_rates.cpp
+  ledger_invariant.cpp
+  loads.cpp
+Refactor, using yare instead of obsolete input for loads.
+
+20080722T2246Z <gchicares@sbcglobal.net> [1119]
+
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+  interest_rates.cpp
+  ledger_invariant.cpp
+Refactor, using yare instead of obsolete input for interest rates.
+
+20080722T2311Z <gchicares@sbcglobal.net> [1119]
+
+  group_values.cpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ledger_invariant.cpp
+Refactor, using yare instead of obsolete input for "Comments".
 

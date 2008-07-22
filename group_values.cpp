@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.91 2008-07-20 18:37:42 chicares Exp $
+// $Id: group_values.cpp,v 1.92 2008-07-22 23:11:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -254,7 +254,7 @@ census_run_result run_census_in_parallel::operator()
 
             cell_values.push_back(av);
 
-            if(std::string::npos != av->Input_->Comments.find("idiosyncrasyZ"))
+            if(std::string::npos != av->yare_input_.Comments.find("idiosyncrasyZ"))
                 {
                 av->Debugging = true;
                 av->DebugPrintInit();

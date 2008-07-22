@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.141 2008-07-22 22:46:17 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.142 2008-07-22 23:11:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -196,7 +196,7 @@ Then run other bases.
         it should also be possible to solve on a midpt basis as well
 */
 
-    if(std::string::npos != Input_->Comments.find("idiosyncrasyZ"))
+    if(std::string::npos != yare_input_.Comments.find("idiosyncrasyZ"))
         {
         Debugging = true;
         DebugPrintInit();
@@ -205,7 +205,7 @@ Then run other bases.
     double z = RunAllApplicableBases();
 
     FinalizeLifeAllBases();
-    if(std::string::npos != Input_->Comments.find("idiosyncrasy_spew"))
+    if(std::string::npos != yare_input_.Comments.find("idiosyncrasy_spew"))
         {
         std::ofstream os("raw_output", ios_out_trunc_binary());
         ledger_->Spew(os);
@@ -560,7 +560,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
 
     daily_interest_accounting =
             std::string::npos
-        !=  Input_->Comments.find("idiosyncrasy_daily_interest_accounting")
+        !=  yare_input_.Comments.find("idiosyncrasy_daily_interest_accounting")
         ;
 
 /* TODO expunge?
