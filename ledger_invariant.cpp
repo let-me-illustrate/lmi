@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.47 2008-07-22 22:46:17 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.48 2008-07-22 23:11:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -402,7 +402,7 @@ void LedgerInvariant::Init(BasicValues* b)
     CountryCOIMultiplier = b->Input_->CountryCOIMultiplier;
 
     CountryIso3166Abbrev = b->Input_->Country.str();
-    Comments             = b->Input_->Comments;
+    Comments             = b->yare_input_.Comments;
 
     FundNumbers           .resize(0);
     FundNames             .resize(0);
