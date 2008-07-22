@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads.cpp,v 1.18 2008-07-14 17:19:26 chicares Exp $
+// $Id: loads.cpp,v 1.19 2008-07-22 22:09:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,7 +34,6 @@
 #include "basic_values.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
-#include "inputs.hpp"
 #include "math_functors.hpp"
 #include "mc_enum_types_aux.hpp"
 #include "rounding_rules.hpp"
@@ -58,7 +57,7 @@ Loads::Loads(BasicValues& V)
     LMI_ASSERT(length == V.Database_->length());
     load_details details
         (length
-        ,V.Input_->AmortizePremLoad
+        ,V.yare_input_.AmortizePremiumLoad
         ,V.LowestPremiumTaxLoad()
         ,V.Database_->Query(DB_PremTaxRate)
         ,V.Database_->Query(DB_PmTxAmortIntRate)
@@ -66,9 +65,9 @@ Loads::Loads(BasicValues& V)
         ,V.Database_->Query(DB_AssetChargeType)
         ,V.IsSubjectToIllustrationReg()
         ,V.GetRoundingRules().round_interest_rate()
-        ,V.Input_->VectorAddonCompOnPremium
-        ,V.Input_->VectorAddonCompOnAssets
-        ,V.Input_->VectorAddonMonthlyCustodialFee
+        ,V.yare_input_.ExtraCompensationOnPremium
+        ,V.yare_input_.ExtraCompensationOnAssets
+        ,V.yare_input_.ExtraMonthlyCustodialFee
         );
     Allocate(length);
     Initialize(*V.Database_);

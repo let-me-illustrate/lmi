@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.70 2008-07-21 18:31:20 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.71 2008-07-22 22:09:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -710,7 +710,7 @@ void BasicValues::SetPermanentInvariants()
     YI.CorporationState = static_cast<mcenum_state>(GetStateOfDomicile().value());
     TDatabase TempDatabase(YI);
     DomiciliaryPremiumTaxLoad_ = 0.0;
-    if(!Input_->AmortizePremLoad)
+    if(!yare_input_.AmortizePremiumLoad)
         {
         DomiciliaryPremiumTaxLoad_ = TempDatabase.Query(DB_PremTaxLoad);
         }
@@ -864,7 +864,7 @@ void BasicValues::SetLowestPremiumTaxLoad()
     // so the tax rate equals the tax load.
 
     LowestPremiumTaxLoad_ = 0.0;
-    if(Input_->AmortizePremLoad)
+    if(yare_input_.AmortizePremiumLoad)
         {
         return;
         }
