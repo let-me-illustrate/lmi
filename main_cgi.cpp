@@ -31,7 +31,7 @@
 // other reasons evident in cvs or explained in 'ChangeLog'. Any
 // defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.31 2008-01-21 01:32:28 chicares Exp $
+// $Id: main_cgi.cpp,v 1.32 2008-07-22 17:51:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -520,6 +520,14 @@ void ShowOutput(cgicc::Cgicc const& data)
     input["LoanRateType"]                  = GetValue(data, "LoanRateType");
 
     input.propagate_changes_to_base_and_finalize();
+
+    // DEPRECATED Goofy workaround needed while porting input.
+    input.SolveTgtAtWhich = e_tgtatyear;
+    input.SolveToWhich    = e_toyear;
+    input.SolveEndTime    = input.SolveEndYear;
+    input.SolveTgtTime    = input.SolveTgtYear;
+    input.SetSolveDurations();
+
     std::string census_data = GetValue(data, "Census");
 
     std::cout
