@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.48 2008-07-22 23:11:26 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.49 2008-07-22 23:31:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -388,7 +388,7 @@ void LedgerInvariant::Init(BasicValues* b)
 
     IndvTaxBracket       = b->Input_->VectorIndvTaxBracket          ;
     CorpTaxBracket       = b->Input_->VectorCorpTaxBracket          ;
-    Salary               = b->Input_->Salary                        ;
+    Salary               = b->yare_input_.ProjectedSalary           ;
     MonthlyFlatExtra     = b->yare_input_.FlatExtra                 ;
     HoneymoonValueSpread = b->yare_input_.HoneymoonValueSpread      ;
     AddonMonthlyFee      = b->yare_input_.ExtraMonthlyCustodialFee  ;

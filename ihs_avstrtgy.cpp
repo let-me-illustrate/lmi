@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avstrtgy.cpp,v 1.19 2008-07-22 17:59:25 chicares Exp $
+// $Id: ihs_avstrtgy.cpp,v 1.20 2008-07-22 23:31:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,7 +32,6 @@
 #include "death_benefits.hpp"
 #include "ihs_rnddata.hpp"
 #include "inputs.hpp"
-#include "inputstatus.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
 #include "mc_enum_types_aux.hpp" // porting_cast()
@@ -70,12 +69,12 @@ double AccountValue::CalculateSpecAmtFromStrategy
             {
             // This ignores yearly-varying salary.
             double y;
-            y = Input_->Salary[actual_year] * Input_->SalarySAPct;
-            if(0.0 != Input_->SalarySACap)
+            y = yare_input_.ProjectedSalary[actual_year] * yare_input_.SalarySpecifiedAmountFactor;
+            if(0.0 != yare_input_.SalarySpecifiedAmountCap)
                 {
-                y = std::min(y, Input_->SalarySACap.value());
+                y = std::min(y, yare_input_.SalarySpecifiedAmountCap);
                 }
-            y -= Input_->SalarySAOffset;
+            y -= yare_input_.SalarySpecifiedAmountOffset;
             z = y;
             }
             break;
@@ -305,7 +304,7 @@ double AccountValue::PerformEePmtStrategy() const
         (mce_solve_ee_prem
         ,InvariantValues().EeMode[Year].value()
         ,InvariantValues().EeMode[0]   .value()
-        ,Input_->EePremTableMult
+        ,yare_input_.InsuredPremiumTableFactor
         ,InvariantValues().EePmt
         ,yare_input_.IndividualPaymentStrategy
         );
@@ -318,7 +317,7 @@ double AccountValue::PerformErPmtStrategy() const
         (mce_solve_er_prem
         ,InvariantValues().ErMode[Year].value()
         ,InvariantValues().ErMode[0]   .value()
-        ,Input_->ErPremTableMult
+        ,yare_input_.CorporationPremiumTableFactor
         ,InvariantValues().ErPmt
         ,yare_input_.CorporationPaymentStrategy
         );
