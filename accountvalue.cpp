@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.55 2008-07-20 18:37:42 chicares Exp $
+// $Id: accountvalue.cpp,v 1.56 2008-07-22 17:59:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -604,9 +604,9 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
     if
         (
             mce_solve_ee_prem == yare_input_.SolveType
-        &&  Input_->SolveBegYear.value() <= Year
+        &&  yare_input_.SolveBeginYear <= Year
         &&  Year < std::min
-                (Input_->SolveEndYear.value()
+                (yare_input_.SolveEndYear
                 ,BasicValues::GetLength()
                 )
         )
