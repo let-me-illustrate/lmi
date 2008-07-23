@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: yare_input.cpp,v 1.6 2008-07-23 13:35:13 chicares Exp $
+// $Id: yare_input.cpp,v 1.7 2008-07-23 14:19:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,6 +30,7 @@
 
 #include "input.hpp"
 #include "inputs.hpp"
+#include "miscellany.hpp" // each_equal()
 
 yare_input::yare_input(Input const& z)
 {
@@ -333,5 +334,13 @@ yare_input::yare_input(InputParms const& z)
 
 yare_input::~yare_input()
 {
+}
+
+bool is_policy_rated(yare_input const& z)
+{
+    return
+            mce_table_none != z.SubstandardTable
+        ||  !each_equal(z.FlatExtra.begin(), z.FlatExtra.end(), 0.0)
+        ;
 }
 

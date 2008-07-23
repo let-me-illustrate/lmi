@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.77 2008-07-23 11:06:33 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.78 2008-07-23 14:19:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -787,14 +787,14 @@ void BasicValues::SetPermanentInvariants()
 
     // Spouse and child riders are not similarly tested because
     // their rates shouldn't depend on the main insured's health.
-    if(Input_->Status[0].IsPolicyRated() && yare_input_.WaiverOfPremiumBenefit)
+    if(is_policy_rated(yare_input_) && yare_input_.WaiverOfPremiumBenefit)
         {
         fatal_error()
             << "Substandard waiver of premium not supported."
             << LMI_FLUSH
             ;
         }
-    if(Input_->Status[0].IsPolicyRated() && yare_input_.AccidentalDeathBenefit)
+    if(is_policy_rated(yare_input_) && yare_input_.AccidentalDeathBenefit)
         {
         fatal_error()
             << "Substandard accidental death rider not supported."

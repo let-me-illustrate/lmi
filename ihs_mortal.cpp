@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_mortal.cpp,v 1.30 2008-07-23 13:35:13 chicares Exp $
+// $Id: ihs_mortal.cpp,v 1.31 2008-07-23 14:19:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,8 +33,6 @@
 #include "basic_values.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
-#include "inputs.hpp"
-#include "inputstatus.hpp"
 #include "math_functors.hpp"
 #include "miscellany.hpp" // each_equal
 #include "rounding_rules.hpp"
@@ -109,7 +107,7 @@ void MortalityRates::fetch_parameters(BasicValues const& basic_values)
     basic_values.Database_->Query(SubstdTblMult_ , DB_SubstdTblMult );
 
     CountryCoiMultiplier_ = basic_values.yare_input_.CountryCoiMultiplier;
-    IsPolicyRated_        = basic_values.Input_->Status[0].IsPolicyRated();
+    IsPolicyRated_        = is_policy_rated(basic_values.yare_input_);
     SubstandardTable_     = basic_values.yare_input_.SubstandardTable;
 
     CurrentCoiMultiplier_ = basic_values.yare_input_.CurrentCoiMultiplier;
