@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basicvalues.cpp,v 1.29 2008-07-23 09:30:26 chicares Exp $
+// $Id: basicvalues.cpp,v 1.30 2008-07-23 21:51:49 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -80,7 +80,6 @@ void BasicValues::Init()
 
     // Bind to input and database representing policy form.
 
-    Length   = Input_->YearsToMaturity();
     IssueAge = yare_input_.IssueAge;
     RetAge   = yare_input_.RetirementAge;
     LMI_ASSERT(IssueAge <= RetAge);
@@ -97,7 +96,16 @@ void BasicValues::Init()
             )
         );
 
-    LedgerType_ = porting_cast<mcenum_ledger_type>(Input_->LedgerType().value());
+    // The database class constrains endowment age to be scalar.
+    EndtAge = static_cast<int>(Database_->Query(DB_EndtAge));
+    Length = EndtAge - IssueAge;
+
+    LedgerType_ =
+        static_cast<mcenum_ledger_type>
+            (static_cast<int>
+                (Database_->Query(DB_LedgerType))
+            )
+        ;
     IsSubjectToIllustrationReg_ = is_subject_to_ill_reg(GetLedgerType());
 
     RoundingRules_.reset(new rounding_rules);
