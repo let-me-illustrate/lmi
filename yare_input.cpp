@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: yare_input.cpp,v 1.5 2008-07-22 12:26:27 chicares Exp $
+// $Id: yare_input.cpp,v 1.6 2008-07-23 13:35:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -107,6 +107,7 @@ yare_input::yare_input(Input const& z)
     double                            InforcePreferredLoanBalance     ;
     double                            InforceCumulativeNoLapsePremium ;
     double                            InforceCumulativePayments       ;
+    double                            CountryCoiMultiplier            ;
     mcenum_survival_limit             SurviveToType                   ;
     int                               SurviveToYear                   ;
     int                               SurviveToAge                    ;
@@ -268,6 +269,7 @@ yare_input::yare_input(InputParms const& z)
     InforcePreferredLoanBalance     = z.InforcePrfLnBal                 ;
     InforceCumulativeNoLapsePremium = z.InforceCumNoLapsePrem           ;
     InforceCumulativePayments       = z.InforceCumPmts                  ;
+    CountryCoiMultiplier            = z.CountryCOIMultiplier            ;
     SurviveToType                   = static_cast<mcenum_survival_limit      >(z.SurviveToType             .value());
     SurviveToYear                   = z.SurviveToYear                   ;
     SurviveToAge                    = z.SurviveToAge                    ;

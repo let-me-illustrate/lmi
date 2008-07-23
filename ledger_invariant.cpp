@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.54 2008-07-23 11:06:34 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.55 2008-07-23 13:35:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -399,7 +399,7 @@ void LedgerInvariant::Init(BasicValues* b)
     TotalIMF             = b->InterestRates_->InvestmentManagementFee();
     RefundableSalesLoad  = b->Loads_->refundable_sales_load_proportion();
 
-    CountryCOIMultiplier = b->Input_->CountryCOIMultiplier;
+    CountryCOIMultiplier = b->yare_input_.CountryCoiMultiplier;
 
     CountryIso3166Abbrev = b->Input_->Country.str();
     Comments             = b->yare_input_.Comments;
