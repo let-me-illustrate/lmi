@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.50 2008-07-23 00:18:26 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.51 2008-07-23 09:30:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -209,25 +209,25 @@ void LedgerInvariant::Alloc(int len)
     Strings         ["NoLapseProvisionName"  ] = &NoLapseProvisionName   ;
     Strings         ["InterestDisclaimer"    ] = &InterestDisclaimer     ;
 
-    Strings         ["ProducerName"         ] = &ProducerName           ;
-    Strings         ["ProducerStreet"       ] = &ProducerStreet         ;
-    Strings         ["ProducerCity"         ] = &ProducerCity           ;
-    Strings         ["CorpName"             ] = &CorpName               ;
-    Strings         ["Franchise"            ] = &Franchise              ;
-    Strings         ["PolicyNumber"         ] = &PolicyNumber           ;
-    Strings         ["Insured1"             ] = &Insured1               ;
-    Strings         ["Gender"               ] = &Gender                 ;
-    Strings         ["UWType"               ] = &UWType                 ;
-    Strings         ["Smoker"               ] = &Smoker                 ;
-    Strings         ["UWClass"              ] = &UWClass                ;
-    Strings         ["SubstandardTable"     ] = &SubstandardTable       ;
-    Strings         ["DefnLifeIns"          ] = &DefnLifeIns            ;
-    Strings         ["DefnMaterialChange"   ] = &DefnMaterialChange     ;
-    Strings         ["AvoidMec"             ] = &AvoidMec               ;
-    Strings         ["PartMortTableName"    ] = &PartMortTableName      ;
-    Strings         ["StatePostalAbbrev"    ] = &StatePostalAbbrev      ;
-    Strings         ["CountryIso3166Abbrev" ] = &CountryIso3166Abbrev   ;
-    Strings         ["Comments"             ] = &Comments               ;
+    Strings         ["ProducerName"          ] = &ProducerName           ;
+    Strings         ["ProducerStreet"        ] = &ProducerStreet         ;
+    Strings         ["ProducerCity"          ] = &ProducerCity           ;
+    Strings         ["CorpName"              ] = &CorpName               ;
+    Strings         ["Franchise"             ] = &Franchise              ;
+    Strings         ["PolicyNumber"          ] = &PolicyNumber           ;
+    Strings         ["Insured1"              ] = &Insured1               ;
+    Strings         ["Gender"                ] = &Gender                 ;
+    Strings         ["UWType"                ] = &UWType                 ;
+    Strings         ["Smoker"                ] = &Smoker                 ;
+    Strings         ["UWClass"               ] = &UWClass                ;
+    Strings         ["SubstandardTable"      ] = &SubstandardTable       ;
+    Strings         ["DefnLifeIns"           ] = &DefnLifeIns            ;
+    Strings         ["DefnMaterialChange"    ] = &DefnMaterialChange     ;
+    Strings         ["AvoidMec"              ] = &AvoidMec               ;
+    Strings         ["PartMortTableName"     ] = &PartMortTableName      ;
+    Strings         ["StatePostalAbbrev"     ] = &StatePostalAbbrev      ;
+    Strings         ["CountryIso3166Abbrev"  ] = &CountryIso3166Abbrev   ;
+    Strings         ["Comments"              ] = &Comments               ;
 
     Strings         ["SupplementalReportColumn00" ] = &SupplementalReportColumn00;
     Strings         ["SupplementalReportColumn01" ] = &SupplementalReportColumn01;
@@ -504,9 +504,9 @@ void LedgerInvariant::Init(BasicValues* b)
 
     SubstdTable             = b->Input_->Status[0].SubstdTable; // Prefer string 'SubstandardTable'.
 
-    Age                     = b->Input_->Status[0].IssueAge;
-    RetAge                  = b->Input_->Status[0].RetAge;
-    EndtAge                 = b->Input_->Status[0].IssueAge + b->GetLength();
+    Age                     = b->yare_input_.IssueAge;
+    RetAge                  = b->yare_input_.RetirementAge;
+    EndtAge                 = b->yare_input_.IssueAge + b->GetLength();
     UseExperienceRating     = b->Input_->UseExperienceRating;
     UsePartialMort          = b->Input_->UsePartialMort;
     AvgFund                 = b->Input_->AvgFund;
