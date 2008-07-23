@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.49 2008-07-22 23:31:51 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.50 2008-07-23 00:18:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -370,9 +370,9 @@ void LedgerInvariant::Init(BasicValues* b)
 //    NaarForceout    =
 //    ProducerCompensation =
 
-    if(b->Input_->Status[0].HasTerm)
+    if(b->yare_input_.TermRider)
         {
-        TermSpecAmt     .assign(Length, b->Input_->Status[0].TermAmt);
+        TermSpecAmt     .assign(Length, b->yare_input_.TermRiderAmount);
         }
     else
         {
@@ -472,8 +472,8 @@ void LedgerInvariant::Init(BasicValues* b)
 
     InitBaseSpecAmt         = b->DeathBfts_->specamt()[0];
     InitTermSpecAmt         = TermSpecAmt[0];
-    ChildRiderAmount        = b->Input_->ChildRiderAmount;
-    SpouseRiderAmount       = b->Input_->SpouseRiderAmount;
+    ChildRiderAmount        = b->yare_input_.ChildRiderAmount;
+    SpouseRiderAmount       = b->yare_input_.SpouseRiderAmount;
 
 //  InitPrem                = 0;
 //  GuarPrem                = 0;
@@ -512,13 +512,13 @@ void LedgerInvariant::Init(BasicValues* b)
     AvgFund                 = b->Input_->AvgFund;
     CustomFund              = b->Input_->OverrideFundMgmtFee;
 
-    HasWP                   = b->Input_->Status[0].HasWP;
-    HasADD                  = b->Input_->Status[0].HasADD;
-    HasTerm                 = b->Input_->Status[0].HasTerm;
+    HasWP                   = b->yare_input_.WaiverOfPremiumBenefit;
+    HasADD                  = b->yare_input_.AccidentalDeathBenefit;
+    HasTerm                 = b->yare_input_.TermRider;
 
-    HasChildRider           = b->Input_->HasChildRider;
-    HasSpouseRider          = b->Input_->HasSpouseRider;
-    SpouseIssueAge          = b->Input_->SpouseIssueAge;
+    HasChildRider           = b->yare_input_.ChildRider;
+    HasSpouseRider          = b->yare_input_.SpouseRider;
+    SpouseIssueAge          = b->yare_input_.SpouseIssueAge;
 
     HasHoneymoon            = b->yare_input_.HoneymoonEndorsement;
     AllowDbo3               = b->Database_->Query(DB_AllowDBO3);

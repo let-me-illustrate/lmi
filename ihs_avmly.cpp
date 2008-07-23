@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.102 2008-07-22 23:11:26 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.103 2008-07-23 00:18:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -754,7 +754,7 @@ void AccountValue::ChangeSpecAmtBy(double delta)
                 }
             }
 
-        if(!AllowTerm || !Input_->Status[0].HasTerm || !TermRiderActive)
+        if(!AllowTerm || !yare_input_.TermRider || !TermRiderActive)
             {
             TermSpecAmt = 0.0;
             ProportionAppliedToTerm = 0.0;
@@ -812,7 +812,7 @@ void AccountValue::ChangeSpecAmtBy(double delta)
         InvariantValues().TermSpecAmt[j] = TermSpecAmt;
 // We have term specamt in class Inputs, in anticipation of differing
 // rider amounts on a multilife policy. It's scalar now:
-//   Input_->Status[0].TermAmt
+//   yare_input_.TermRiderAmount
 // TODO ?? Should it be a std::vector?
 // Probably this term rider deserves special treatment:
 //   maybe even a class of its own (7702-integrated term).
@@ -2028,7 +2028,7 @@ void AccountValue::TxSetBOMAV()
     // Set base for per K load at issue. Other approaches could be imagined.
     if(Year == InforceYear && Month == InforceMonth)
         {
-        if(!Input_->Status[0].HasTerm)
+        if(!yare_input_.TermRider)
             {
             HOPEFULLY(0.0 == InvariantValues().TermSpecAmt[0]);
             }
@@ -2184,7 +2184,7 @@ void AccountValue::TxSetTermAmt()
         {
         return;
         }
-    if(!AllowTerm || !Input_->Status[0].HasTerm)
+    if(!AllowTerm || !yare_input_.TermRider)
         {
         TermRiderActive = false;
         return;
@@ -2306,25 +2306,25 @@ void AccountValue::TxSetCoiCharge()
 void AccountValue::TxSetRiderDed()
 {
     AdbCharge = 0.0;
-    if(Input_->Status[0].HasADD)
+    if(yare_input_.AccidentalDeathBenefit)
         {
         AdbCharge = YearsAdbRate * std::min(ActualSpecAmt, AdbLimit);
         }
 
     SpouseRiderCharge = 0.0;
-    if(Input_->HasSpouseRider)
+    if(yare_input_.SpouseRider)
         {
-        SpouseRiderCharge = YearsSpouseRiderRate * Input_->SpouseRiderAmount;
+        SpouseRiderCharge = YearsSpouseRiderRate * yare_input_.SpouseRiderAmount;
         }
     ChildRiderCharge = 0.0;
-    if(Input_->HasChildRider)
+    if(yare_input_.ChildRider)
         {
-        ChildRiderCharge = YearsChildRiderRate * Input_->ChildRiderAmount;
+        ChildRiderCharge = YearsChildRiderRate * yare_input_.ChildRiderAmount;
         }
 
     TermCharge = 0.0;
     DcvTermCharge = 0.0;
-    if(TermRiderActive && Input_->Status[0].HasTerm)
+    if(TermRiderActive && yare_input_.TermRider)
         {
         TermCharge    = YearsTermRate    * TermDB * DBDiscountRate[Year];
         DcvTermCharge = Years7702CoiRate * TermDB * DBDiscountRate[Year];
@@ -2332,7 +2332,7 @@ void AccountValue::TxSetRiderDed()
 
     WpCharge = 0.0;
     DcvWpCharge = 0.0;
-    if(Input_->Status[0].HasWP)
+    if(yare_input_.WaiverOfPremiumBenefit)
         {
         switch(WaiverChargeMethod)
             {

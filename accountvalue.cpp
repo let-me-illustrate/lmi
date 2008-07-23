@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.56 2008-07-22 17:59:25 chicares Exp $
+// $Id: accountvalue.cpp,v 1.57 2008-07-23 00:18:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -277,8 +277,8 @@ void AccountValue::DoYear
 
     YearsWpRate     = MortalityRates_->WpRates()[Year];
     YearsAdbRate    = MortalityRates_->AdbRates()[Year];
-    haswp           = Input_->Status[0].HasWP.value();
-    hasadb          = Input_->Status[0].HasADD.value();
+    haswp           = yare_input_.WaiverOfPremiumBenefit;
+    hasadb          = yare_input_.AccidentalDeathBenefit;
 
     YearsGenAcctIntRate = InterestRates_->GenAcctNetRate
         (GenBasis_
