@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.79 2008-07-23 21:51:49 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.80 2008-07-23 23:19:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -212,22 +212,10 @@ void BasicValues::Init()
     // up the ALB/ANB switch using TDatabase::Query(int), which restricts
     // looked-up values to scalars that vary across no database axis.
 
-    // TODO ?? This really belongs in the database class.
     Database_.reset(new TDatabase(yare_input_));
     bool use_anb = Database_->Query(DB_AgeLastOrNearest);
-    if(Input_->Status[0].MakeAgesAndDatesConsistent(yare_input_.EffectiveDate, use_anb))
-        {
-        warning() << "Ages and dates are inconsistent." << LMI_FLUSH;
-        }
-    Database_.reset(new TDatabase(yare_input_));
-    use_anb = Database_->Query(DB_AgeLastOrNearest);
-    if(Input_->Status[0].MakeAgesAndDatesConsistent(yare_input_.EffectiveDate, use_anb))
-        {
-        warning() << "Ages and dates are inconsistent." << LMI_FLUSH;
-        }
-    // Now that we have the right issue age, we need to reinitialize
-    // the database with that age.
-    Database_.reset(new TDatabase(yare_input_));
+    AssertAgeAndDobAreConsistent(use_anb);
+
     StateOfJurisdiction_ = Database_->GetStateOfJurisdiction();
 
     if
@@ -323,17 +311,16 @@ void BasicValues::Init()
 void BasicValues::GPTServerInit()
 {
     ProductData_.reset(new TProductData(yare_input_.ProductName));
-
+    Database_.reset(new TDatabase(yare_input_));
     bool use_anb = Database_->Query(DB_AgeLastOrNearest);
-    // TODO ?? Does this even belong here?
-    Input_->Status[0].MakeAgesAndDatesConsistent(yare_input_.EffectiveDate, use_anb);
+    AssertAgeAndDobAreConsistent(use_anb);
+
     IssueAge = yare_input_.IssueAge;
     RetAge   = yare_input_.RetirementAge;
     HOPEFULLY(IssueAge < 100);
     HOPEFULLY(RetAge <= 100);
     HOPEFULLY(yare_input_.RetireesCanEnroll || IssueAge <= RetAge);
 
-    Database_.reset(new TDatabase(yare_input_));
     StateOfJurisdiction_ = Database_->GetStateOfJurisdiction();
 
     // The database class constrains endowment age to be scalar.
@@ -701,6 +688,25 @@ double BasicValues::GetTgtPrem
             ,a_mode
             ,a_specamt
             );
+        }
+}
+
+//============================================================================
+void BasicValues::AssertAgeAndDobAreConsistent(bool use_anb)
+{
+    int const a = attained_age(Input_->Status[0].DOB, yare_input_.EffectiveDate, use_anb);
+    if(Input_->Status[0].UseDOB)
+        {
+        LMI_ASSERT(a == yare_input_.IssueAge);
+        }
+    else
+        {
+        calendar_date const d = add_years
+            (Input_->Status[0].DOB.operator calendar_date const&()
+            ,a - yare_input_.IssueAge
+            ,true
+            );
+        LMI_ASSERT(d == Input_->Status[0].DOB);
         }
 }
 
