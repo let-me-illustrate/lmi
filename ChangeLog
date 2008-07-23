@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1106 2008-07-22 23:11:26 chicares Exp $
+// $Id: ChangeLog,v 1.1107 2008-07-23 11:06:34 chicares Exp $
 
 MAINTENANCE
 
@@ -18235,4 +18235,49 @@ Refactor, using yare instead of obsolete input for interest rates.
   ihs_avmly.cpp
   ledger_invariant.cpp
 Refactor, using yare instead of obsolete input for "Comments".
+
+20080722T2331Z <gchicares@sbcglobal.net> [1119]
+
+  ihs_avstrtgy.cpp
+  ledger_invariant.cpp
+Refactor, using yare instead of obsolete input for strategies.
+
+20080723T0018Z <gchicares@sbcglobal.net> [1119]
+
+  accountvalue.cpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+  ledger_invariant.cpp
+Refactor, using yare instead of obsolete input for riders.
+
+20080723T0930Z <gchicares@sbcglobal.net> [1119]
+
+  basicvalues.cpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+  ledger_invariant.cpp
+Refactor, using yare instead of obsolete input for principal ages.
+
+20080723T0957Z <gchicares@sbcglobal.net> [1119]
+
+  accountvalue.cpp
+  ihs_acctval.cpp
+  ihs_basicval.cpp
+  ledger_invariant.cpp
+Refactor, using yare instead of obsolete input for inforce.
+
+20080723T1021Z <gchicares@sbcglobal.net> [1119]
+
+  ihs_acctval.cpp
+  ihs_basicval.cpp
+  ledger_invariant.cpp
+Refactor, using yare instead of obsolete input for mortality.
+
+20080723T1106Z <gchicares@sbcglobal.net> [1119]
+
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+  ledger_invariant.cpp
+Refactor, using yare instead of obsolete input in miscellaneous cases.
 
