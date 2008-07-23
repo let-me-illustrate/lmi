@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.55 2008-07-23 13:35:13 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.56 2008-07-23 16:29:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -39,7 +39,6 @@
 #include "ihs_funddata.hpp"
 #include "ihs_proddata.hpp"
 #include "inputs.hpp"
-#include "inputstatus.hpp"
 #include "interest_rates.hpp"
 #include "ledger.hpp" // TODO ?? For IRRs--prolly don't blong here.
 #include "ledger_variant.hpp" // TODO ?? For IRRs--prolly don't blong here.
