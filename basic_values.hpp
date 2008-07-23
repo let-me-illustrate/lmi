@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.36 2008-07-19 11:46:38 chicares Exp $
+// $Id: basic_values.hpp,v 1.37 2008-07-23 21:51:49 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -283,7 +283,6 @@ class LMI_SO BasicValues
 
     // Invariant data.
     void                         SetPermanentInvariants();
-    void                         SetLedgerType();
     void                         SetLowestPremiumTaxLoad();
     void                         TestPremiumTaxLoadConsistency();
     void                         SetMaxSurvivalDur();
