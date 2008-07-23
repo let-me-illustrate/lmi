@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.145 2008-07-23 11:06:33 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.146 2008-07-23 13:36:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -281,10 +281,6 @@ double AccountValue::RunAllApplicableBases()
 
     if(Solving)
         {
-        // TODO ?? It seems odd to call a function of class InputParms
-        // here--why isn't that done only during input?
-        Input_->SetSolveDurations();
-
         // TODO ?? This conditional tests the value of SolveGenBasis_,
         // which hasn't yet been assigned any contextual value. The
         // test is invalid anyway: the types don't match. Furthermore,
