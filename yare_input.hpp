@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: yare_input.hpp,v 1.3 2008-07-06 11:43:38 chicares Exp $
+// $Id: yare_input.hpp,v 1.4 2008-07-23 13:35:13 chicares Exp $
 
 #ifndef yare_input_hpp
 #define yare_input_hpp
@@ -176,7 +176,7 @@ class yare_input
     double                            InforceCumulativePayments       ;
 //    mcenum_country                    Country                         ;
 //    bool                              OverrideCoiMultiplier           ;
-//    double                            CountryCoiMultiplier            ;
+    double                            CountryCoiMultiplier            ;
     mcenum_survival_limit             SurviveToType                   ;
     int                               SurviveToYear                   ;
     int                               SurviveToAge                    ;
