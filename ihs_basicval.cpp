@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.76 2008-07-23 10:21:44 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.77 2008-07-23 11:06:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -195,7 +195,7 @@ BasicValues::~BasicValues()
 //============================================================================
 void BasicValues::Init()
 {
-    ProductData_.reset(new TProductData(Input_->ProductName));
+    ProductData_.reset(new TProductData(yare_input_.ProductName));
     // bind to policy form
     //      one filename that brings in all the rest incl database?
     // controls as ctor arg?
@@ -215,13 +215,13 @@ void BasicValues::Init()
     // TODO ?? This really belongs in the database class.
     Database_.reset(new TDatabase(yare_input_));
     bool use_anb = Database_->Query(DB_AgeLastOrNearest);
-    if(Input_->Status[0].MakeAgesAndDatesConsistent(Input_->EffDate, use_anb))
+    if(Input_->Status[0].MakeAgesAndDatesConsistent(yare_input_.EffectiveDate, use_anb))
         {
         warning() << "Ages and dates are inconsistent." << LMI_FLUSH;
         }
     Database_.reset(new TDatabase(yare_input_));
     use_anb = Database_->Query(DB_AgeLastOrNearest);
-    if(Input_->Status[0].MakeAgesAndDatesConsistent(Input_->EffDate, use_anb))
+    if(Input_->Status[0].MakeAgesAndDatesConsistent(yare_input_.EffectiveDate, use_anb))
         {
         warning() << "Ages and dates are inconsistent." << LMI_FLUSH;
         }
@@ -237,7 +237,7 @@ void BasicValues::Init()
         )
         {
         throw std::runtime_error
-            (    Input_->ProductName
+            (    yare_input_.ProductName
             +    " not approved in state "
             +    GetStateOfJurisdiction().str()
             );
@@ -247,7 +247,7 @@ void BasicValues::Init()
     RetAge   = yare_input_.RetirementAge;
     HOPEFULLY(IssueAge < 100);
     HOPEFULLY(RetAge <= 100);
-    HOPEFULLY(Input_->RetireesCanEnroll || IssueAge <= RetAge);
+    HOPEFULLY(yare_input_.RetireesCanEnroll || IssueAge <= RetAge);
 
     int endt_age = static_cast<int>(Database_->Query(DB_EndtAge));
     Length = endt_age - IssueAge;
@@ -314,16 +314,16 @@ void BasicValues::Init()
 // TODO ??  Not for general use--use for GPT server only, for now--refactor later
 void BasicValues::GPTServerInit()
 {
-    ProductData_.reset(new TProductData(Input_->ProductName));
+    ProductData_.reset(new TProductData(yare_input_.ProductName));
 
     bool use_anb = Database_->Query(DB_AgeLastOrNearest);
     // TODO ?? Does this even belong here?
-    Input_->Status[0].MakeAgesAndDatesConsistent(Input_->EffDate, use_anb);
+    Input_->Status[0].MakeAgesAndDatesConsistent(yare_input_.EffectiveDate, use_anb);
     IssueAge = yare_input_.IssueAge;
     RetAge   = yare_input_.RetirementAge;
     HOPEFULLY(IssueAge < 100);
     HOPEFULLY(RetAge <= 100);
-    HOPEFULLY(Input_->RetireesCanEnroll || IssueAge <= RetAge);
+    HOPEFULLY(yare_input_.RetireesCanEnroll || IssueAge <= RetAge);
 
     Database_.reset(new TDatabase(yare_input_));
     StateOfJurisdiction_ = Database_->GetStateOfJurisdiction();
@@ -386,9 +386,9 @@ double BasicValues::InvestmentManagementFee() const
         return 0.0;
         }
 
-    if(Input_->OverrideFundMgmtFee)
+    if(yare_input_.OverrideFundManagementFee)
         {
-        return Input_->InputFundMgmtFee / 10000.0L;
+        return yare_input_.InputFundManagementFee / 10000.0L;
         }
 
     double z = 0.0;
@@ -403,7 +403,7 @@ double BasicValues::InvestmentManagementFee() const
         // zero. Custom funds are those whose name begins with "Custom".
         // Reason: "average" means average of the normally-available
         // funds only.
-        if(Input_->AvgFund)
+        if(yare_input_.UseAverageOfAllFunds)
             {
             char const s[] = "Custom";
             std::size_t n = std::strlen(s);
@@ -614,8 +614,8 @@ void BasicValues::Init7702()
             ,Mly7702iGsp
             ,Mly7702ig
             ,SpreadFor7702_
-            ,Input_->SpecAmt[0] + yare_input_.TermRiderAmount
-            ,Input_->SpecAmt[0] + yare_input_.TermRiderAmount
+            ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
+            ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
             ,effective_dbopt_7702(yare_input_.DeathBenefitOption[0], Equiv7702DBO3)
             // TODO ?? Using the guaranteed basis for all the following should
             // be an optional behavior.
@@ -768,7 +768,7 @@ void BasicValues::SetPermanentInvariants()
     // product which has no term rider and doesn't permit experience
     // rating, so we assert those preconditions and write simple code
     // for 'unusual' COI banding that ignores those features.
-    HOPEFULLY(!(UseUnusualCOIBanding && Input_->UseExperienceRating));
+    HOPEFULLY(!(UseUnusualCOIBanding && yare_input_.UseExperienceRating));
     HOPEFULLY(!(UseUnusualCOIBanding && AllowTerm));
 
     // Table ratings can arise only from medical underwriting.
@@ -805,7 +805,7 @@ void BasicValues::SetPermanentInvariants()
     DefnLifeIns_        = yare_input_.DefinitionOfLifeInsurance;
     DefnMaterialChange_ = yare_input_.DefinitionOfMaterialChange;
     Equiv7702DBO3       = static_cast<mcenum_dbopt_7702>(static_cast<int>(Database_->Query(DB_Equiv7702DBO3)));
-    MaxNAAR             = Input_->MaxNAAR;
+    MaxNAAR             = yare_input_.MaximumNaar;
 
     Database_->Query(MinPremIntSpread_, DB_MinPremIntSpread);
 
@@ -1540,7 +1540,7 @@ std::vector<double> BasicValues::GetActuarialTable
             ,GetLength()
             ,method
             ,yare_input_.InforceYear
-            ,integral_duration(Input_->EffDate, Input_->LastCoiReentryDate)
+            ,integral_duration(yare_input_.EffectiveDate, yare_input_.LastCoiReentryDate)
             );
         }
     else

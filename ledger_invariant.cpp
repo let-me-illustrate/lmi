@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.53 2008-07-23 10:21:45 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.54 2008-07-23 11:06:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -507,10 +507,10 @@ void LedgerInvariant::Init(BasicValues* b)
     Age                     = b->yare_input_.IssueAge;
     RetAge                  = b->yare_input_.RetirementAge;
     EndtAge                 = b->yare_input_.IssueAge + b->GetLength();
-    UseExperienceRating     = b->Input_->UseExperienceRating;
+    UseExperienceRating     = b->yare_input_.UseExperienceRating;
     UsePartialMort          = b->yare_input_.UsePartialMortality;
-    AvgFund                 = b->Input_->AvgFund;
-    CustomFund              = b->Input_->OverrideFundMgmtFee;
+    AvgFund                 = b->yare_input_.UseAverageOfAllFunds;
+    CustomFund              = b->yare_input_.OverrideFundManagementFee;
 
     HasWP                   = b->yare_input_.WaiverOfPremiumBenefit;
     HasADD                  = b->yare_input_.AccidentalDeathBenefit;
@@ -613,8 +613,8 @@ void LedgerInvariant::Init(BasicValues* b)
     UWClass                 = b->Input_->Status[0].Class.str();
     SubstandardTable        = b->Input_->Status[0].SubstdTable.str();
 
-    EffDate                 = calendar_date(b->Input_->EffDate).str();
-    EffDateJdn              = calendar_date(b->Input_->EffDate).julian_day_number();
+    EffDate                 = calendar_date(b->yare_input_.EffectiveDate).str();
+    EffDateJdn              = calendar_date(b->yare_input_.EffectiveDate).julian_day_number();
     DefnLifeIns             = b->Input_->DefnLifeIns.str();
     DefnMaterialChange      = b->Input_->DefnMaterialChange.str();
     AvoidMec                = b->Input_->AvoidMec.str();

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.144 2008-07-23 10:21:44 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.145 2008-07-23 11:06:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -39,7 +39,6 @@
 #include "ihs_rnddata.hpp"
 #include "ihs_proddata.hpp"
 #include "inputs.hpp"
-#include "inputstatus.hpp"
 #include "interest_rates.hpp"
 #include "ledger.hpp"
 #include "ledger_invariant.hpp"
@@ -456,9 +455,9 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
             {
             AddSurrChgLayer
                 (j
-                ,std::max(0.0, Input_->VectorSpecamtHistory[j] - prior_specamt)
+                ,std::max(0.0, yare_input_.SpecamtHistory[j] - prior_specamt)
                 );
-            prior_specamt = Input_->VectorSpecamtHistory[j];
+            prior_specamt = yare_input_.SpecamtHistory[j];
             }
         }
 
@@ -499,9 +498,9 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         ;
     InvariantValues().InforceIsMec = inforce_is_mec;
     bool mec_1035 =
-              Input_->External1035ExchangeFromMec
+              yare_input_.External1035ExchangeFromMec
            && 0.0 != Outlay_->external_1035_amount()
-        ||    Input_->Internal1035ExchangeFromMec
+        ||    yare_input_.Internal1035ExchangeFromMec
            && 0.0 != Outlay_->internal_1035_amount()
         ;
     bool is_already_a_mec = inforce_is_mec || mec_1035;
@@ -527,13 +526,13 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         {
         // Premium history starts at contract year zero.
         nonstd::copy_n
-            (Input_->VectorPremiumHistory.begin()
+            (yare_input_.PremiumHistory.begin()
             ,length_7702a
             ,std::back_inserter(pmts_7702a)
             );
         // Specamt history starts at policy year zero.
         nonstd::copy_n
-            (Input_->VectorSpecamtHistory.begin() + yare_input_.InforceContractYear
+            (yare_input_.SpecamtHistory.begin() + yare_input_.InforceContractYear
             ,length_7702a
             ,std::back_inserter(bfts_7702a)
             );
@@ -625,7 +624,7 @@ void AccountValue::SetInitialValues()
     AVGenAcct                   = InforceAVGenAcct;
     AVSepAcct                   = InforceAVSepAcct;
 
-    if(Input_->AvgFund || Input_->OverrideFundMgmtFee)
+    if(yare_input_.UseAverageOfAllFunds || yare_input_.OverrideFundManagementFee)
         {
         SepAcctPaymentAllocation = 1.0;
         }
@@ -844,7 +843,7 @@ double AccountValue::IncrementBOM
 
     if
         (   yare_input_.UsePartialMortality
-        &&  Input_->UseExperienceRating
+        &&  yare_input_.UseExperienceRating
         &&  mce_gen_curr == GenBasis_
         )
         {
@@ -1181,7 +1180,7 @@ double AccountValue::SurrChg()
         +   SurrChg_[Year]
 // TODO ?? expunge this and its antecedents:
 //        +   YearsSurrChgSAMult      * InvariantValues().SpecAmt[0]
-        -   Input_->VectorCashValueEnhancementRate[Year] * std::max(0.0, TotalAccountValue())
+        -   yare_input_.CashValueEnhancementRate[Year] * std::max(0.0, TotalAccountValue())
         ;
 }
 
@@ -1240,7 +1239,7 @@ void AccountValue::SetProjectedCoiCharge()
         (   ItLapsed
         ||  BasicValues::GetLength() <= Year
         ||  !yare_input_.UsePartialMortality
-        ||  !Input_->UseExperienceRating
+        ||  !yare_input_.UseExperienceRating
         ||  mce_gen_curr != GenBasis_
         )
         {
@@ -1712,7 +1711,7 @@ double AccountValue::GetCurtateNetCoiChargeInforce() const
         (   ItLapsed
         ||  BasicValues::GetLength() <= Year
         ||  !yare_input_.UsePartialMortality
-        ||  !Input_->UseExperienceRating
+        ||  !yare_input_.UseExperienceRating
         ||  mce_gen_curr != GenBasis_
         )
         {
@@ -1730,7 +1729,7 @@ double AccountValue::GetCurtateNetClaimsInforce() const
         (   ItLapsed
         ||  BasicValues::GetLength() <= Year
         ||  !yare_input_.UsePartialMortality
-        ||  !Input_->UseExperienceRating
+        ||  !yare_input_.UseExperienceRating
         ||  mce_gen_curr != GenBasis_
         )
         {
@@ -1748,7 +1747,7 @@ double AccountValue::GetProjectedCoiChargeInforce() const
         (   ItLapsed
         ||  BasicValues::GetLength() <= Year
         ||  !yare_input_.UsePartialMortality
-        ||  !Input_->UseExperienceRating
+        ||  !yare_input_.UseExperienceRating
         ||  mce_gen_curr != GenBasis_
         )
         {
@@ -1776,7 +1775,7 @@ double AccountValue::ApportionNetMortalityReserve
         (   ItLapsed
         ||  BasicValues::GetLength() <= Year
         ||  !yare_input_.UsePartialMortality
-        ||  !Input_->UseExperienceRating
+        ||  !yare_input_.UseExperienceRating
         ||  mce_gen_curr != GenBasis_
         )
         {
@@ -1842,12 +1841,12 @@ void AccountValue::CoordinateCounters()
     if(daily_interest_accounting)
         {
         calendar_date current_anniversary = add_years
-            (Input_->EffDate
+            (yare_input_.EffectiveDate
             ,Year
             ,true
             );
         calendar_date next_anniversary = add_years
-            (Input_->EffDate
+            (yare_input_.EffectiveDate
             ,1 + Year
             ,true
             );
@@ -1863,13 +1862,13 @@ void AccountValue::CoordinateCounters()
         HOPEFULLY(365 <= days_in_policy_year && days_in_policy_year <= 366);
 
         calendar_date current_monthiversary = add_years_and_months
-            (Input_->EffDate
+            (yare_input_.EffectiveDate
             ,Year
             ,Month
             ,true
             );
         calendar_date next_monthiversary = add_years_and_months
-            (Input_->EffDate
+            (yare_input_.EffectiveDate
             ,Year
             ,1 + Month
             ,true

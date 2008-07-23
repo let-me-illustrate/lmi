@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.104 2008-07-23 09:30:26 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.105 2008-07-23 11:06:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -39,8 +39,6 @@
 #include "ihs_irc7702a.hpp"
 #include "ihs_proddata.hpp"
 #include "ihs_rnddata.hpp"
-#include "inputs.hpp"
-#include "inputstatus.hpp"
 #include "interest_rates.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
@@ -632,8 +630,8 @@ void AccountValue::TxExch1035()
 
     CumPmts += GrossPmts[Month];
     TaxBasis +=
-          Input_->External1035ExchangeBasis
-        + Input_->Internal1035ExchangeBasis
+          yare_input_.External1035ExchangeBasis
+        + yare_input_.Internal1035ExchangeBasis
         ;
 
     if(mce_run_gen_curr_sep_full == RunBasis_)
@@ -2046,7 +2044,7 @@ void AccountValue::TxSetBOMAV()
             // have loads that depend on the initial specified amount,
             // which probably includes term; if it doesn't, then a new
             // input field would need to be added.
-            z = Input_->VectorSpecamtHistory.front().operator double const&();
+            z = yare_input_.SpecamtHistory.front();
             }
         SpecAmtLoadBase = std::max(z, NetPmts[Month] * YearsCorridorFactor);
         SpecAmtLoadBase = std::min(SpecAmtLoadBase, SpecAmtLoadLimit);
@@ -2279,7 +2277,7 @@ void AccountValue::TxSetCoiCharge()
     // can be manipulated to achieve the same effect.
 
     if
-        (   Input_->UseExperienceRating
+        (   yare_input_.UseExperienceRating
         &&  mce_gen_curr == GenBasis_
         )
         {
