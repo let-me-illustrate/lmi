@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: yare_input.hpp,v 1.4 2008-07-23 13:35:13 chicares Exp $
+// $Id: yare_input.hpp,v 1.5 2008-07-23 14:19:37 chicares Exp $
 
 #ifndef yare_input_hpp
 #define yare_input_hpp
@@ -289,6 +289,8 @@ class yare_input
     std::vector<mcenum_loan_strategy> NewLoanStrategy                 ;
     std::vector<mcenum_wd_strategy  > WithdrawalStrategy              ;
 };
+
+bool is_policy_rated(yare_input const&);
 
 #endif // yare_input_hpp
 

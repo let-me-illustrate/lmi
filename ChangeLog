@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1107 2008-07-23 11:06:34 chicares Exp $
+// $Id: ChangeLog,v 1.1108 2008-07-23 14:19:38 chicares Exp $
 
 MAINTENANCE
 
@@ -18280,4 +18280,35 @@ Refactor, using yare instead of obsolete input for mortality.
   ihs_basicval.cpp
   ledger_invariant.cpp
 Refactor, using yare instead of obsolete input in miscellaneous cases.
+
+20080723T1250Z <gchicares@sbcglobal.net> [1119]
+
+  interest_rates.cpp
+Refactor, eliminating need for InputParms::NeedLoanRates(). The old
+function isn't expunged because its entire class soon will be. The new
+function isn't yet used in order to avoid system-test perturbation at
+a most impropitious moment.
+
+20080723T1335Z <gchicares@sbcglobal.net> [1119]
+
+  ihs_mortal.cpp
+  ledger_invariant.cpp
+  yare_input.cpp
+  yare_input.hpp
+Refactor, using yare instead of obsolete country COI multiplier.
+
+20080723T1336Z <gchicares@sbcglobal.net> [1118]
+
+  ihs_acctval.cpp
+Don't call InputParms::SetSolveDurations() in account-value class. The
+20080722T1226Z change accomplishes the same thing, elsewhere.
+
+20080723T1419Z <gchicares@sbcglobal.net> [1118]
+
+  ihs_acctval.cpp
+  ihs_basicval.cpp
+  ihs_mortal.cpp
+  yare_input.cpp
+  yare_input.hpp
+Refactor, eliminating need for InputStatus::IsPolicyRated().
 
