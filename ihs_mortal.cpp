@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_mortal.cpp,v 1.29 2008-07-22 18:51:15 chicares Exp $
+// $Id: ihs_mortal.cpp,v 1.30 2008-07-23 13:35:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -108,7 +108,7 @@ void MortalityRates::fetch_parameters(BasicValues const& basic_values)
     basic_values.Database_->Query(CCoiMultiplier_, DB_CCOIMultiplier);
     basic_values.Database_->Query(SubstdTblMult_ , DB_SubstdTblMult );
 
-    CountryCoiMultiplier_ = basic_values.Input_->CountryCOIMultiplier;
+    CountryCoiMultiplier_ = basic_values.yare_input_.CountryCoiMultiplier;
     IsPolicyRated_        = basic_values.Input_->Status[0].IsPolicyRated();
     SubstandardTable_     = basic_values.yare_input_.SubstandardTable;
 
