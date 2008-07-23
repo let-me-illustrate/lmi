@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.78 2008-07-23 14:19:37 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.79 2008-07-23 21:51:49 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -249,9 +249,17 @@ void BasicValues::Init()
     HOPEFULLY(RetAge <= 100);
     HOPEFULLY(yare_input_.RetireesCanEnroll || IssueAge <= RetAge);
 
-    int endt_age = static_cast<int>(Database_->Query(DB_EndtAge));
-    Length = endt_age - IssueAge;
-    SetLedgerType();
+    // The database class constrains endowment age to be scalar.
+    EndtAge = static_cast<int>(Database_->Query(DB_EndtAge));
+    Length = EndtAge - IssueAge;
+
+    LedgerType_ =
+        static_cast<mcenum_ledger_type>
+            (static_cast<int>
+                (Database_->Query(DB_LedgerType))
+            )
+        ;
+    IsSubjectToIllustrationReg_ = is_subject_to_ill_reg(GetLedgerType());
 
     if(IssueAge < Database_->Query(DB_MinIssAge))
         {
@@ -328,9 +336,17 @@ void BasicValues::GPTServerInit()
     Database_.reset(new TDatabase(yare_input_));
     StateOfJurisdiction_ = Database_->GetStateOfJurisdiction();
 
-    int endt_age = static_cast<int>(Database_->Query(DB_EndtAge));
-    Length = endt_age - IssueAge;
-    SetLedgerType();
+    // The database class constrains endowment age to be scalar.
+    EndtAge = static_cast<int>(Database_->Query(DB_EndtAge));
+    Length = EndtAge - IssueAge;
+
+    LedgerType_ =
+        static_cast<mcenum_ledger_type>
+            (static_cast<int>
+                (Database_->Query(DB_LedgerType))
+            )
+        ;
+    IsSubjectToIllustrationReg_ = is_subject_to_ill_reg(GetLedgerType());
 
     if(IssueAge < Database_->Query(DB_MinIssAge))
         {
@@ -694,7 +710,6 @@ void BasicValues::SetPermanentInvariants()
     // TODO ?? It would be better not to constrain so many things
     // not to vary by duration by using Query(enumerator).
     StateOfDomicile_    = mce_state(ProductData_->GetInsCoDomicile());
-    EndtAge             = static_cast<int>(Database_->Query(DB_EndtAge));
 
     // TODO ?? Perhaps we want the premium-tax load instead of the
     // premium-tax rate here; or maybe we want neither as a member
@@ -830,13 +845,6 @@ void BasicValues::SetPermanentInvariants()
     round_interest_rate_7702 = RoundingRules_->round_interest_rate_7702();
 
     SetMaxSurvivalDur();
-}
-
-//============================================================================
-void BasicValues::SetLedgerType()
-{
-    LedgerType_ = porting_cast<mcenum_ledger_type>(Input_->LedgerType().value());
-    IsSubjectToIllustrationReg_ = is_subject_to_ill_reg(GetLedgerType());
 }
 
 //============================================================================
@@ -983,17 +991,17 @@ void BasicValues::SetMaxSurvivalDur()
         {
         case mce_no_survival_limit:
             {
-            MaxSurvivalDur  = EndtAge;
+            MaxSurvivalDur = EndtAge;
             }
             break;
         case mce_survive_to_age:
             {
-            MaxSurvivalDur  = yare_input_.SurviveToAge - yare_input_.IssueAge;
+            MaxSurvivalDur = yare_input_.SurviveToAge - yare_input_.IssueAge;
             }
             break;
         case mce_survive_to_year:
             {
-            MaxSurvivalDur  = yare_input_.SurviveToYear;
+            MaxSurvivalDur = yare_input_.SurviveToYear;
             }
             break;
         case mce_survive_to_expectancy:
@@ -2004,7 +2012,7 @@ std::vector<double> BasicValues::GetCurrentSpouseRiderRates() const
         (AddDataDir(ProductData_->GetCurrSpouseRiderFilename())
         ,static_cast<long int>(Database_->Query(DB_SpouseRiderTable))
         ,yare_input_.SpouseIssueAge
-        ,static_cast<int>(Database_->Query(DB_EndtAge)) - yare_input_.SpouseIssueAge
+        ,EndtAge - yare_input_.SpouseIssueAge
         );
     z.resize(Length);
     return z;
@@ -2020,7 +2028,7 @@ std::vector<double> BasicValues::GetGuaranteedSpouseRiderRates() const
         (AddDataDir(ProductData_->GetGuarSpouseRiderFilename())
         ,static_cast<long int>(Database_->Query(DB_SpousRiderGuarTable))
         ,yare_input_.SpouseIssueAge
-        ,static_cast<int>(Database_->Query(DB_EndtAge)) - yare_input_.SpouseIssueAge
+        ,EndtAge - yare_input_.SpouseIssueAge
         );
     z.resize(Length);
     return z;
