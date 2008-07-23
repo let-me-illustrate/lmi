@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.103 2008-07-23 00:18:26 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.104 2008-07-23 09:30:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -3308,7 +3308,7 @@ void AccountValue::TxTestLapse()
         {
         CumNoLapsePrem += MlyNoLapsePrem + RiderDeductions;
         if
-            (       NoLapseMinAge <= Year + Input_->Status[0].IssueAge
+            (       NoLapseMinAge <= Year + BasicValues::GetIssueAge()
                 &&  NoLapseMinDur <= Year
             ||      CumPmts < CumNoLapsePrem
                 &&  !materially_equal(CumPmts, CumNoLapsePrem)

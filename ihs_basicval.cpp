@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.73 2008-07-23 00:18:26 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.74 2008-07-23 09:30:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -201,8 +201,6 @@ void BasicValues::Init()
     // controls as ctor arg?
     // validate input in context of this policy form
 
-    InputStatus const& S = Input_->Status[0];
-
     // TRICKY !! We need the database to look up whether ALB or ANB should
     // be used, in case we need to determine issue age from DOB. But issue
     // age is a database lookup key, so it can change what we looked up in
@@ -217,13 +215,13 @@ void BasicValues::Init()
     // TODO ?? This really belongs in the database class.
     Database_.reset(new TDatabase(yare_input_));
     bool use_anb = Database_->Query(DB_AgeLastOrNearest);
-    if(S.MakeAgesAndDatesConsistent(Input_->EffDate, use_anb))
+    if(Input_->Status[0].MakeAgesAndDatesConsistent(Input_->EffDate, use_anb))
         {
         warning() << "Ages and dates are inconsistent." << LMI_FLUSH;
         }
     Database_.reset(new TDatabase(yare_input_));
     use_anb = Database_->Query(DB_AgeLastOrNearest);
-    if(S.MakeAgesAndDatesConsistent(Input_->EffDate, use_anb))
+    if(Input_->Status[0].MakeAgesAndDatesConsistent(Input_->EffDate, use_anb))
         {
         warning() << "Ages and dates are inconsistent." << LMI_FLUSH;
         }
@@ -245,8 +243,8 @@ void BasicValues::Init()
             );
         }
 
-    IssueAge = S.IssueAge;
-    RetAge = S.RetAge;
+    IssueAge = yare_input_.IssueAge;
+    RetAge   = yare_input_.RetirementAge;
     HOPEFULLY(IssueAge < 100);
     HOPEFULLY(RetAge <= 100);
     HOPEFULLY(Input_->RetireesCanEnroll || IssueAge <= RetAge);
@@ -318,12 +316,11 @@ void BasicValues::GPTServerInit()
 {
     ProductData_.reset(new TProductData(Input_->ProductName));
 
-    InputStatus const& S = Input_->Status[0];
     bool use_anb = Database_->Query(DB_AgeLastOrNearest);
     // TODO ?? Does this even belong here?
     Input_->Status[0].MakeAgesAndDatesConsistent(Input_->EffDate, use_anb);
-    IssueAge = S.IssueAge;
-    RetAge = S.RetAge;
+    IssueAge = yare_input_.IssueAge;
+    RetAge   = yare_input_.RetirementAge;
     HOPEFULLY(IssueAge < 100);
     HOPEFULLY(RetAge <= 100);
     HOPEFULLY(Input_->RetireesCanEnroll || IssueAge <= RetAge);
@@ -610,7 +607,7 @@ void BasicValues::Init7702()
         (new Irc7702
             (*this
             ,yare_input_.DefinitionOfLifeInsurance
-            ,Input_->Status[0].IssueAge
+            ,yare_input_.IssueAge
             ,EndtAge
             ,Mly7702qc  // MortalityRates_->GetaCoi7702() // TODO ?? This is monthly?
             ,Mly7702iGlp
@@ -991,7 +988,7 @@ void BasicValues::SetMaxSurvivalDur()
             break;
         case mce_survive_to_age:
             {
-            MaxSurvivalDur  = Input_->SurviveToAge - Input_->Status[0].IssueAge;
+            MaxSurvivalDur  = Input_->SurviveToAge - yare_input_.IssueAge;
             }
             break;
         case mce_survive_to_year:
