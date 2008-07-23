@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.72 2008-07-22 22:46:17 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.73 2008-07-23 00:18:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -601,7 +601,7 @@ void BasicValues::Init7702()
     // the GPT server doesn't initialize a MortalityRates object
     // that would hold those rates.
     std::vector<double> local_mly_charge_add(Length, 0.0);
-    if(Input_->Status[0].HasADD)
+    if(yare_input_.AccidentalDeathBenefit)
         {
         local_mly_charge_add = GetAdbRates();
         }
@@ -617,8 +617,8 @@ void BasicValues::Init7702()
             ,Mly7702iGsp
             ,Mly7702ig
             ,SpreadFor7702_
-            ,Input_->SpecAmt[0] + Input_->Status[0].TermAmt
-            ,Input_->SpecAmt[0] + Input_->Status[0].TermAmt
+            ,Input_->SpecAmt[0] + yare_input_.TermRiderAmount
+            ,Input_->SpecAmt[0] + yare_input_.TermRiderAmount
             ,effective_dbopt_7702(yare_input_.DeathBenefitOption[0], Equiv7702DBO3)
             // TODO ?? Using the guaranteed basis for all the following should
             // be an optional behavior.
@@ -790,14 +790,14 @@ void BasicValues::SetPermanentInvariants()
 
     // Spouse and child riders are not similarly tested because
     // their rates shouldn't depend on the main insured's health.
-    if(Input_->Status[0].IsPolicyRated() && Input_->Status[0].HasWP)
+    if(Input_->Status[0].IsPolicyRated() && yare_input_.WaiverOfPremiumBenefit)
         {
         fatal_error()
             << "Substandard waiver of premium not supported."
             << LMI_FLUSH
             ;
         }
-    if(Input_->Status[0].IsPolicyRated() && Input_->Status[0].HasADD)
+    if(Input_->Status[0].IsPolicyRated() && yare_input_.AccidentalDeathBenefit)
         {
         fatal_error()
             << "Substandard accidental death rider not supported."
@@ -1203,7 +1203,7 @@ double BasicValues::GetModalPremMlyDed
     z *= GetBandedCoiRates(mce_gen_curr, a_specamt)[a_year];
     z += Loads_->monthly_policy_fee(mce_gen_curr)[a_year];
 
-    if(Input_->Status[0].HasADD)
+    if(yare_input_.AccidentalDeathBenefit)
         {
         z +=
                 MortalityRates_->AdbRates()[a_year]
@@ -1214,7 +1214,7 @@ double BasicValues::GetModalPremMlyDed
 
     double annual_charge = Loads_->annual_policy_fee(mce_gen_curr)[a_year];
 
-    if(Input_->Status[0].HasWP)
+    if(yare_input_.WaiverOfPremiumBenefit)
         {
         // TODO ?? For simplicity, ignore Database_->Query(DB_WPMax)
         double r = MortalityRates_->WpRates()[a_year];
@@ -1407,7 +1407,7 @@ double BasicValues::GetModalSpecAmtMlyDed
     double annual_charge = Loads_->annual_policy_fee(mce_gen_curr)[0];
 
     double wp_rate = 0.0;
-    if(Input_->Status[0].HasWP)
+    if(yare_input_.WaiverOfPremiumBenefit)
         {
         // For simplicity, ignore Database_->Query(DB_WPMax)
         wp_rate = MortalityRates_->WpRates()[0];
@@ -1426,13 +1426,13 @@ double BasicValues::GetModalSpecAmtMlyDed
     z *= 1.0 - Loads_->target_total_load(mce_gen_curr)[0];
 
     // TODO ?? Is this correct now?
-    if(Input_->Status[0].HasWP && 0.0 != 1.0 + wp_rate)
+    if(yare_input_.WaiverOfPremiumBenefit && 0.0 != 1.0 + wp_rate)
         {
         // For simplicity, ignore Database_->Query(DB_WPMax)
         z /= (1.0 + wp_rate);
         }
 
-    if(Input_->Status[0].HasADD)
+    if(yare_input_.AccidentalDeathBenefit)
         {
         // TODO ?? For simplicity, ignore Database_->Query(DB_ADDMax)
         z -= MortalityRates_->AdbRates()[0];
@@ -2006,8 +2006,8 @@ std::vector<double> BasicValues::GetCurrentSpouseRiderRates() const
     std::vector<double> z = actuarial_table_rates
         (AddDataDir(ProductData_->GetCurrSpouseRiderFilename())
         ,static_cast<long int>(Database_->Query(DB_SpouseRiderTable))
-        ,Input_->SpouseIssueAge
-        ,static_cast<int>(Database_->Query(DB_EndtAge)) - Input_->SpouseIssueAge
+        ,yare_input_.SpouseIssueAge
+        ,static_cast<int>(Database_->Query(DB_EndtAge)) - yare_input_.SpouseIssueAge
         );
     z.resize(Length);
     return z;
@@ -2022,8 +2022,8 @@ std::vector<double> BasicValues::GetGuaranteedSpouseRiderRates() const
     std::vector<double> z = actuarial_table_rates
         (AddDataDir(ProductData_->GetGuarSpouseRiderFilename())
         ,static_cast<long int>(Database_->Query(DB_SpousRiderGuarTable))
-        ,Input_->SpouseIssueAge
-        ,static_cast<int>(Database_->Query(DB_EndtAge)) - Input_->SpouseIssueAge
+        ,yare_input_.SpouseIssueAge
+        ,static_cast<int>(Database_->Query(DB_EndtAge)) - yare_input_.SpouseIssueAge
         );
     z.resize(Length);
     return z;
