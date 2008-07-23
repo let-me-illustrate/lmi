@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.143 2008-07-23 09:57:16 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.144 2008-07-23 10:21:44 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -141,9 +141,9 @@ AccountValue::AccountValue(InputParms const& input)
     // It should either reflect lapses or be renamed. Meanwhile,
     // InforceLivesBoy() and InforceLivesEoy() may be used where
     // lapses should be taken into account.
-    if(Input_->UsePartialMort)
+    if(yare_input_.UsePartialMortality)
         {
-        double inforce_lives = Input_->NumIdenticalLives;
+        double inforce_lives = yare_input_.NumberOfIdenticalLives;
         InvariantValues().InforceLives[0] = inforce_lives;
         for(int j = 0; j < BasicValues::GetLength(); ++j)
             {
@@ -156,7 +156,7 @@ AccountValue::AccountValue(InputParms const& input)
         {
         InvariantValues().InforceLives.assign
             (InvariantValues().InforceLives.size()
-            ,Input_->NumIdenticalLives
+            ,yare_input_.NumberOfIdenticalLives
             );
         }
 
@@ -843,7 +843,7 @@ double AccountValue::IncrementBOM
         }
 
     if
-        (   Input_->UsePartialMort
+        (   yare_input_.UsePartialMortality
         &&  Input_->UseExperienceRating
         &&  mce_gen_curr == GenBasis_
         )
@@ -1211,7 +1211,7 @@ double AccountValue::SurrChg()
 
 void AccountValue::SetClaims()
 {
-    if(!Input_->UsePartialMort || ItLapsed || BasicValues::GetLength() <= Year)
+    if(!yare_input_.UsePartialMortality || ItLapsed || BasicValues::GetLength() <= Year)
         {
         return;
         }
@@ -1239,7 +1239,7 @@ void AccountValue::SetProjectedCoiCharge()
     if
         (   ItLapsed
         ||  BasicValues::GetLength() <= Year
-        ||  !Input_->UsePartialMort
+        ||  !yare_input_.UsePartialMortality
         ||  !Input_->UseExperienceRating
         ||  mce_gen_curr != GenBasis_
         )
@@ -1675,7 +1675,7 @@ bool AccountValue::TestWhetherFirstYearPremiumExceededRetaliationLimit()
 double AccountValue::GetPartMortQ(int a_year) const
 {
     HOPEFULLY(a_year <= BasicValues::GetLength());
-    if(!Input_->UsePartialMort || ItLapsed)
+    if(!yare_input_.UsePartialMortality || ItLapsed)
         {
         return 0.0;
         }
@@ -1711,7 +1711,7 @@ double AccountValue::GetCurtateNetCoiChargeInforce() const
     if
         (   ItLapsed
         ||  BasicValues::GetLength() <= Year
-        ||  !Input_->UsePartialMort
+        ||  !yare_input_.UsePartialMortality
         ||  !Input_->UseExperienceRating
         ||  mce_gen_curr != GenBasis_
         )
@@ -1729,7 +1729,7 @@ double AccountValue::GetCurtateNetClaimsInforce() const
     if
         (   ItLapsed
         ||  BasicValues::GetLength() <= Year
-        ||  !Input_->UsePartialMort
+        ||  !yare_input_.UsePartialMortality
         ||  !Input_->UseExperienceRating
         ||  mce_gen_curr != GenBasis_
         )
@@ -1747,7 +1747,7 @@ double AccountValue::GetProjectedCoiChargeInforce() const
     if
         (   ItLapsed
         ||  BasicValues::GetLength() <= Year
-        ||  !Input_->UsePartialMort
+        ||  !yare_input_.UsePartialMortality
         ||  !Input_->UseExperienceRating
         ||  mce_gen_curr != GenBasis_
         )
@@ -1775,7 +1775,7 @@ double AccountValue::ApportionNetMortalityReserve
     if
         (   ItLapsed
         ||  BasicValues::GetLength() <= Year
-        ||  !Input_->UsePartialMort
+        ||  !yare_input_.UsePartialMortality
         ||  !Input_->UseExperienceRating
         ||  mce_gen_curr != GenBasis_
         )
@@ -1784,8 +1784,8 @@ double AccountValue::ApportionNetMortalityReserve
         }
 
     double inforce_factor =
-        (0.0 != Input_->NumIdenticalLives)
-        ? InforceLivesEoy() / Input_->NumIdenticalLives
+        (0.0 != yare_input_.NumberOfIdenticalLives)
+        ? InforceLivesEoy() / yare_input_.NumberOfIdenticalLives
         : 0.0
         ;
 
@@ -1799,7 +1799,7 @@ double AccountValue::ApportionNetMortalityReserve
     VariantValues().ProjectedCoiCharge[Year] = NextYearsProjectedCoiCharge;
     VariantValues().KFactor           [Year] = case_k_factor;
 
-    return apportioned_reserve * Input_->NumIdenticalLives;
+    return apportioned_reserve * yare_input_.NumberOfIdenticalLives;
 }
 
 //============================================================================
