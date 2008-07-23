@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.52 2008-07-23 09:57:17 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.53 2008-07-23 10:21:45 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -480,8 +480,8 @@ void LedgerInvariant::Init(BasicValues* b)
 //  InitSevenPayPrem        =
 //  InitTgtPrem     =
 
-    MaleProportion          = b->Input_->MaleProportion;
-    NonsmokerProportion     = b->Input_->NonsmokerProportion;
+    MaleProportion          = b->yare_input_.MaleProportion;
+    NonsmokerProportion     = b->yare_input_.NonsmokerProportion;
     PartMortTableMult       = b->yare_input_.PartialMortalityMultiplier;
 
     // Assert this because the illustration currently prints a scalar
@@ -498,9 +498,9 @@ void LedgerInvariant::Init(BasicValues* b)
         );
     GuarMaxMandE            = guar_m_and_e_rate[0];
 //  GenderDistinct          = 0;
-    GenderBlended           = b->Input_->BlendMortGender;
+    GenderBlended           = b->yare_input_.BlendGender;
 //  SmokerDistinct          = 0;
-    SmokerBlended           = b->Input_->BlendMortSmoking;
+    SmokerBlended           = b->yare_input_.BlendSmoking;
 
     SubstdTable             = b->Input_->Status[0].SubstdTable; // Prefer string 'SubstandardTable'.
 
@@ -508,7 +508,7 @@ void LedgerInvariant::Init(BasicValues* b)
     RetAge                  = b->yare_input_.RetirementAge;
     EndtAge                 = b->yare_input_.IssueAge + b->GetLength();
     UseExperienceRating     = b->Input_->UseExperienceRating;
-    UsePartialMort          = b->Input_->UsePartialMort;
+    UsePartialMort          = b->yare_input_.UsePartialMortality;
     AvgFund                 = b->Input_->AvgFund;
     CustomFund              = b->Input_->OverrideFundMgmtFee;
 

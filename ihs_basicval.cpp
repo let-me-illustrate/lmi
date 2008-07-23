@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.75 2008-07-23 09:57:17 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.76 2008-07-23 10:21:44 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -988,12 +988,12 @@ void BasicValues::SetMaxSurvivalDur()
             break;
         case mce_survive_to_age:
             {
-            MaxSurvivalDur  = Input_->SurviveToAge - yare_input_.IssueAge;
+            MaxSurvivalDur  = yare_input_.SurviveToAge - yare_input_.IssueAge;
             }
             break;
         case mce_survive_to_year:
             {
-            MaxSurvivalDur  = Input_->SurviveToYear;
+            MaxSurvivalDur  = yare_input_.SurviveToYear;
             }
             break;
         case mce_survive_to_expectancy:
@@ -1636,7 +1636,7 @@ std::vector<double> BasicValues::GetTable
             break;
         case CanBlend:
             {
-            BlendSmoking = Input_->BlendMortSmoking;
+            BlendSmoking = yare_input_.BlendSmoking;
             }
             break;
         case MustBlend:
@@ -1665,7 +1665,7 @@ std::vector<double> BasicValues::GetTable
             break;
         case CanBlend:
             {
-            BlendGender = Input_->BlendMortGender;
+            BlendGender = yare_input_.BlendGender;
             }
             break;
         case MustBlend:
@@ -1693,8 +1693,8 @@ std::vector<double> BasicValues::GetTable
 /*
             !CanBlend
         ||  (
-                !Input_->BlendMortSmoking
-            &&  !Input_->BlendMortGender
+                !yare_input_.BlendSmoking
+            &&  !yare_input_.BlendGender
             )
 */
         )
@@ -1709,8 +1709,8 @@ std::vector<double> BasicValues::GetTable
     // no else because above if returned
     if
         (
-            BlendSmoking // Input_->BlendMortSmoking
-        &&  !BlendGender // Input_->BlendMortGender
+            BlendSmoking
+        &&  !BlendGender
         )
         {
         std::vector<double> S = GetUnblendedTable
@@ -1725,7 +1725,7 @@ std::vector<double> BasicValues::GetTable
             ,yare_input_.Gender
             ,mce_nonsmoker
             );
-        double n = Input_->NonsmokerProportion;
+        double n = yare_input_.NonsmokerProportion;
         double s = 1.0 - n;
         for(int j = 0; j < GetLength(); j++)
             {
@@ -1736,8 +1736,8 @@ std::vector<double> BasicValues::GetTable
     // Case 3: blend by gender only
     else if
         (
-            !BlendSmoking // Input_->BlendMortSmoking
-        &&  BlendGender // Input_->BlendMortGender
+            !BlendSmoking
+        &&  BlendGender
         )
         {
         std::vector<double> F = GetUnblendedTable
@@ -1752,7 +1752,7 @@ std::vector<double> BasicValues::GetTable
             ,mce_male
             ,yare_input_.Smoking
             );
-        double m = Input_->MaleProportion;
+        double m = yare_input_.MaleProportion;
         double f = 1.0 - m;
 
 /*
@@ -1783,8 +1783,8 @@ std::vector<double> BasicValues::GetTable
     // Case 4: blend by both smoking and gender
     else if
         (
-            BlendSmoking // Input_->BlendMortSmoking
-        &&  BlendGender // Input_->BlendMortGender
+            BlendSmoking
+        &&  BlendGender
         )
         {
         std::vector<double> FS = GetUnblendedTable
@@ -1811,9 +1811,9 @@ std::vector<double> BasicValues::GetTable
             ,mce_male
             ,mce_nonsmoker
             );
-        double n = Input_->NonsmokerProportion;
+        double n = yare_input_.NonsmokerProportion;
         double s = 1.0 - n;
-        double m = Input_->MaleProportion;
+        double m = yare_input_.MaleProportion;
         double f = 1.0 - m;
         for(int j = 0; j < GetLength(); j++)
             {
