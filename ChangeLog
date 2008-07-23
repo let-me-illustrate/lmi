@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1108 2008-07-23 14:19:38 chicares Exp $
+// $Id: ChangeLog,v 1.1109 2008-07-23 16:31:20 chicares Exp $
 
 MAINTENANCE
 
@@ -18311,4 +18311,15 @@ Don't call InputParms::SetSolveDurations() in account-value class. The
   yare_input.cpp
   yare_input.hpp
 Refactor, eliminating need for InputStatus::IsPolicyRated().
+
+20080723T1629Z <gchicares@sbcglobal.net> [1118]
+
+  ledger_invariant.cpp
+  ledger_variant.cpp
+Remove unneeded headers.
+
+20080723T1631Z <gchicares@sbcglobal.net> [1118]
+
+  ihs_avstrtgy.cpp
+Refactor, eliminating a dependency on class InputStatus.
 
