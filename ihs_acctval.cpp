@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.142 2008-07-22 23:11:25 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.143 2008-07-23 09:57:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -487,15 +487,15 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     // for all other bases. TODO ?? How should we handle MEC-avoid
     // solves on bases other than current?
 
-    InvariantValues().InforceYear  = Input_->InforceYear;
-    InvariantValues().InforceMonth = Input_->InforceMonth;
+    InvariantValues().InforceYear  = yare_input_.InforceYear;
+    InvariantValues().InforceMonth = yare_input_.InforceMonth;
 
     bool inforce_is_mec =
            (
-              0 != Input_->InforceYear
-           || 0 != Input_->InforceMonth
+              0 != yare_input_.InforceYear
+           || 0 != yare_input_.InforceMonth
            )
-        && Input_->InforceIsMec
+        && yare_input_.InforceIsMec
         ;
     InvariantValues().InforceIsMec = inforce_is_mec;
     bool mec_1035 =
@@ -533,12 +533,12 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
             );
         // Specamt history starts at policy year zero.
         nonstd::copy_n
-            (Input_->VectorSpecamtHistory.begin() + Input_->InforceContractYear.operator int const&()
+            (Input_->VectorSpecamtHistory.begin() + yare_input_.InforceContractYear
             ,length_7702a
             ,std::back_inserter(bfts_7702a)
             );
         }
-    double lowest_death_benefit = Input_->InforceLeastDeathBenefit;
+    double lowest_death_benefit = yare_input_.InforceLeastDeathBenefit;
     if(0 == InforceYear && 0 == InforceMonth)
         {
         lowest_death_benefit = bfts_7702a.front();
@@ -550,9 +550,9 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         ,BasicValues::EndtAge
         ,InforceYear
         ,InforceMonth
-        ,Input_->InforceContractYear
-        ,Input_->InforceContractMonth
-        ,Input_->InforceAvBeforeLastMc
+        ,yare_input_.InforceContractYear
+        ,yare_input_.InforceContractMonth
+        ,yare_input_.InforceAvBeforeLastMc
         ,lowest_death_benefit
         ,pmts_7702a
         ,bfts_7702a
@@ -600,17 +600,17 @@ void AccountValue::SetInitialValues()
     // These inforce things belong in input struct.
     // TODO ?? The list is not complete; others will be required:
     // payment history; surrender charges; DCV history?
-    InforceYear                 = Input_->InforceYear            ;
-    InforceMonth                = Input_->InforceMonth           ;
-    InforceAVGenAcct            = Input_->InforceAVGenAcct       ;
-    InforceAVSepAcct            = Input_->InforceAVSepAcct       ;
-    InforceAVRegLn              = Input_->InforceAVRegLn         ;
-    InforceAVPrfLn              = Input_->InforceAVPrfLn         ;
-    InforceRegLnBal             = Input_->InforceRegLnBal        ;
-    InforcePrfLnBal             = Input_->InforcePrfLnBal        ;
-    InforceCumNoLapsePrem       = Input_->InforceCumNoLapsePrem  ;
-    InforceCumPmts              = Input_->InforceCumPmts         ;
-    InforceTaxBasis             = Input_->InforceTaxBasis        ;
+    InforceYear                 = yare_input_.InforceYear                    ;
+    InforceMonth                = yare_input_.InforceMonth                   ;
+    InforceAVGenAcct            = yare_input_.InforceGeneralAccountValue     ;
+    InforceAVSepAcct            = yare_input_.InforceSeparateAccountValue    ;
+    InforceAVRegLn              = yare_input_.InforceRegularLoanValue        ;
+    InforceAVPrfLn              = yare_input_.InforcePreferredLoanValue      ;
+    InforceRegLnBal             = yare_input_.InforceRegularLoanBalance      ;
+    InforcePrfLnBal             = yare_input_.InforcePreferredLoanBalance    ;
+    InforceCumNoLapsePrem       = yare_input_.InforceCumulativeNoLapsePremium;
+    InforceCumPmts              = yare_input_.InforceCumulativePayments      ;
+    InforceTaxBasis             = yare_input_.InforceTaxBasis                ;
 
     Year                        = InforceYear;
     Month                       = InforceMonth;
@@ -710,7 +710,7 @@ void AccountValue::SetInitialValues()
     InvariantValues().IsMec     = false;
     InvariantValues().MecMonth  = 11;
     InvariantValues().MecYear   = BasicValues::GetLength();
-    Dcv                         = Input_->InforceDcv;
+    Dcv                         = yare_input_.InforceDcv;
     DcvDeathBft                 = 0.0;
     DcvNaar                     = 0.0;
     DcvCoiCharge                = 0.0;
@@ -726,12 +726,12 @@ void AccountValue::SetInitialValues()
             {
             HoneymoonActive =
                    HoneymoonActive
-                && 0.0 < Input_->InforceHoneymoonValue
+                && 0.0 < yare_input_.InforceHoneymoonValue
                 ;
             }
         if(HoneymoonActive)
             {
-            HoneymoonValue = Input_->InforceHoneymoonValue;
+            HoneymoonValue = yare_input_.InforceHoneymoonValue;
             }
         }
 
@@ -1644,8 +1644,8 @@ void AccountValue::GuessWhetherFirstYearPremiumExceedsRetaliationLimit()
     //   - how much premium has already been paid for inforce
     //       contracts that are still in the first policy year.
 
-    Year  = Input_->InforceYear;
-    Month = Input_->InforceMonth;
+    Year  = yare_input_.InforceYear;
+    Month = yare_input_.InforceMonth;
     CoordinateCounters();
     FirstYearPremiumExceedsRetaliationLimit =
            FirstYearPremiumRetaliationLimit
