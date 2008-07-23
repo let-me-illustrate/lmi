@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.57 2008-07-23 00:18:25 chicares Exp $
+// $Id: accountvalue.cpp,v 1.58 2008-07-23 09:57:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -226,9 +226,9 @@ double AccountValue::RunOneCell(mcenum_run_basis TheBasis)
 
     Debugging       = false;
 
-    InforceYear      = Input_->InforceYear;
-    InforceMonth     = Input_->InforceMonth;
-    InforceAVGenAcct = Input_->InforceAVGenAcct;
+    InforceYear      = yare_input_.InforceYear;
+    InforceMonth     = yare_input_.InforceMonth;
+    InforceAVGenAcct = yare_input_.InforceGeneralAccountValue;
 
     ItLapsed         = false;
     LapseMonth       = 0;

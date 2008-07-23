@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.51 2008-07-23 09:30:27 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.52 2008-07-23 09:57:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -654,7 +654,7 @@ void LedgerInvariant::Init(BasicValues* b)
         ,mce_annual_rate
         )[0];
 
-    IsInforce = 0 != b->Input_->InforceYear || 0 != b->Input_->InforceMonth;
+    IsInforce = 0 != b->yare_input_.InforceYear || 0 != b->yare_input_.InforceMonth;
 
     SupplementalReport         = b->Input_->CreateSupplementalReport  ;
     SupplementalReportColumn00 = b->Input_->SupplementalReportColumn00;
