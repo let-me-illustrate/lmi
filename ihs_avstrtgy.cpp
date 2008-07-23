@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avstrtgy.cpp,v 1.20 2008-07-22 23:31:51 chicares Exp $
+// $Id: ihs_avstrtgy.cpp,v 1.21 2008-07-23 16:31:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,10 +31,8 @@
 #include "alert.hpp"
 #include "death_benefits.hpp"
 #include "ihs_rnddata.hpp"
-#include "inputs.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
-#include "mc_enum_types_aux.hpp" // porting_cast()
 #include "mortality_rates.hpp"
 
 #include <algorithm>
@@ -175,7 +173,7 @@ double AccountValue::CalculateSpecAmtFromStrategy
 void AccountValue::PerformSpecAmtStrategy()
 {
     for
-        (int j = 0; j < Input_->YearsToMaturity(); ++j)
+        (int j = 0; j < BasicValues::Length; ++j)
         {
         double z = round_specamt(CalculateSpecAmtFromStrategy(j, 0));
         DeathBfts_->set_specamt(z, j, 1 + j);
