@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: interest_rates.cpp,v 1.23 2008-07-22 22:46:17 chicares Exp $
+// $Id: interest_rates.cpp,v 1.24 2008-07-23 12:50:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,6 +34,7 @@
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "math_functors.hpp"
+#include "miscellany.hpp" // each_equal()
 #include "rounding_rules.hpp"
 #include "yare_input.hpp"
 
@@ -228,20 +229,31 @@ void convert_interest_rates
         monthly_net_rate[j] = cached_monthly_net_rate;
         }
 }
+
+/// Determine whether loan rates are needed; else they can be zero.
+///
+/// Loan rates can potentially affect GPT calculations.
+
+bool need_loan_rates(yare_input const& yi)
+{
+    return
+            mce_gpt                == yi.DefinitionOfLifeInsurance
+        ||  mce_solve_loan         == yi.SolveType
+        ||  mce_solve_wd_then_loan == yi.SolveType
+        ||  true                   == yi.WithdrawToBasisThenLoan
+        ||  0.0                    != yi.InforceRegularLoanValue
+        ||  0.0                    != yi.InforcePreferredLoanValue
+        ||  0.0                    != yi.InforceRegularLoanBalance
+        ||  0.0                    != yi.InforcePreferredLoanBalance
+        ||  !each_equal(yi.NewLoan.begin(), yi.NewLoan.end(), 0.0)
+        ;
+}
 } // Unnamed namespace.
 
 InterestRates::~InterestRates()
 {
 }
 
-// Always calculate loan rates because they're always needed for GPT.
-// Yet there is tested logic in place to suppress their calculation
-// if no loans are taken. It can be enabled with
-//    ,NeedLoanRates_     (v.Input_->NeedLoanRates())
-// in the ctor-initializer. For now at least, this logic is not
-// removed because it might be useful someday for some purpose not
-// yet contemplated.
-//
 InterestRates::InterestRates(BasicValues const& v)
     :Length_             (v.GetLength())
     ,RoundIntRate_       (v.GetRoundingRules().round_interest_rate())
@@ -254,7 +266,8 @@ InterestRates::InterestRates(BasicValues const& v)
     ,SepAcctSpreadMethod_(static_cast<mcenum_spread_method>(static_cast<int>(v.Database_->Query(DB_SepAcctSpreadMethod))))
     ,AmortLoad_          (Zero_)
     ,ExtraSepAcctCharge_ (Zero_)
-    ,NeedLoanRates_      (true)
+//    ,NeedLoanRates_      (need_loan_rates(v.yare_input_))
+    ,NeedLoanRates_      (true) // DEPRECATED
     ,LoanRateType_       (v.yare_input_.LoanRateType)
     ,NeedPrefLoanRates_  (v.Database_->Query(DB_AllowPrefLoan))
     ,NeedHoneymoonRates_ (v.yare_input_.HoneymoonEndorsement)
