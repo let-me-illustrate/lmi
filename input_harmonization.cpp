@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.63 2008-07-06 18:40:21 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.64 2008-07-24 15:45:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1075,17 +1075,15 @@ void Input::DoTransmogrify()
         );
     if("No" == DeprecatedUseDOB)
         {
+        // If no DOB is supplied, assume a birthday occurs on the
+        // issue date--as good an assumption as any, and the simplest.
+        // It may need to be a day earlier for a contract issued on a
+        // leap-year day.
         DateOfBirth = add_years
             (DateOfBirth.value()
             ,apparent_age - IssueAge.value()
-            ,false // Is 'false' always right? See note below.
+            ,true
             );
-// TODO ?? Above, it appears that 'true' is always right. Inspect work
-// done in the 'skeleton' trunk around 2006-10 carefully to confirm
-// this; then correct the code above, and validate all other usage of
-// add_years(), paying special attention to the apparently-correct
-//   InputStatus::MakeAgesAndDatesConsistent()
-// code in 'inputstatus.cpp'.
         }
     else
         {
