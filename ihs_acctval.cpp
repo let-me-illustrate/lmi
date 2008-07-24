@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.147 2008-07-23 14:19:37 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.148 2008-07-24 12:12:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -38,7 +38,6 @@
 #include "ihs_irc7702a.hpp"
 #include "ihs_rnddata.hpp"
 #include "ihs_proddata.hpp"
-#include "inputs.hpp"
 #include "interest_rates.hpp"
 #include "ledger.hpp"
 #include "ledger_invariant.hpp"
@@ -620,11 +619,16 @@ void AccountValue::SetInitialValues()
     AVGenAcct                   = InforceAVGenAcct;
     AVSepAcct                   = InforceAVSepAcct;
 
+    double sum_of_fund_allocations = std::accumulate
+        (yare_input_.FundAllocations.begin()
+        ,yare_input_.FundAllocations.end()
+        ,0.0
+        );
     if(yare_input_.UseAverageOfAllFunds || yare_input_.OverrideFundManagementFee)
         {
         SepAcctPaymentAllocation = 1.0;
         }
-    else if(100 == Input_->SumOfSepAcctFundAllocs())
+    else if(100.0 == sum_of_fund_allocations)
         {
         // Because 100 * .01 does not exactly equal unity, treat 100%
         // as a special case to avoid catastrophic cancellation when
@@ -634,7 +638,7 @@ void AccountValue::SetInitialValues()
         }
     else
         {
-        SepAcctPaymentAllocation = .01 * Input_->SumOfSepAcctFundAllocs();
+        SepAcctPaymentAllocation = .01 * sum_of_fund_allocations;
         }
 
     GenAcctPaymentAllocation = 1.0 - SepAcctPaymentAllocation;

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: yare_input.hpp,v 1.5 2008-07-23 14:19:37 chicares Exp $
+// $Id: yare_input.hpp,v 1.6 2008-07-24 12:12:21 chicares Exp $
 
 #ifndef yare_input_hpp
 #define yare_input_hpp
@@ -234,7 +234,7 @@ class yare_input
     std::vector<double>               HoneymoonValueSpread            ;
     std::vector<double>               PremiumHistory                  ;
     std::vector<double>               SpecamtHistory                  ;
-//    std::vector<double>               FundAllocations                 ;
+    std::vector<double>               FundAllocations                 ;
     std::vector<double>               CashValueEnhancementRate        ;
 //
 //    bool                              CreateSupplementalReport        ;
