@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1111 2008-07-24 19:19:16 chicares Exp $
+// $Id: ChangeLog,v 1.1112 2008-07-24 20:01:26 wboutin Exp $
 
 MAINTENANCE
 
@@ -18376,4 +18376,10 @@ Remove an unnecessary member function. See:
   basicvalues.cpp
   ihs_basicval.cpp
 Refactor to facilitate expunction of obsolete input class.
+
+20080724T2001Z <wboutin@massmutual.com> [1115]
+
+  reg_d_individual.xsl
+  variable_annuity.xsl
+Redefine a column.
 
