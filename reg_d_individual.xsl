@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: reg_d_individual.xsl,v 1.2 2008-07-13 09:36:20 chicares Exp $
+    $Id: reg_d_individual.xsl,v 1.3 2008-07-24 20:01:26 wboutin Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -924,7 +924,7 @@
       <column special="Premium_Loads">Premium _Loads</column>
       <column special="Admin_Charges">Admin _Charges</column>
       <column name="COICharge_Current">Mortality _Charges</column>
-      <column special="Asset_Charges">Asset _Charges</column>
+      <column name="SepAcctCharges_Current">Asset _Charges</column>
       <column name="GrossIntCredited_Current">Investment _Income</column>
       <column name="AcctVal_Current">Account _Value</column>
       <column name="CSVNet_Current">Cash _Surr Value</column>
@@ -976,12 +976,6 @@
         <xsl:variable name="SpecAmtLoad_Current" select="$vectors[@name='SpecAmtLoad_Current']/duration[$counter]/@column_value"/>
         <xsl:variable name="PolicyFee_Current" select="$vectors[@name='PolicyFee_Current']/duration[$counter]/@column_value"/>
         <xsl:value-of select="format-number(translate($SpecAmtLoad_Current,$numberswc,$numberswoc) + translate($PolicyFee_Current,$numberswc,$numberswoc),'###,###,###')"/>
-      </xsl:when>
-      <xsl:when test="$special='Asset_Charges'">
-        <xsl:variable name="GrossIntCredited_Current" select="$vectors[@name='GrossIntCredited_Current']/duration[$counter]/@column_value"/>
-        <xsl:variable name="NetIntCredited_Current" select="$vectors[@name='NetIntCredited_Current']/duration[$counter]/@column_value"/>
-        <xsl:variable name="SepAcctCharges_Current" select="$vectors[@name='SepAcctCharges_Current']/duration[$counter]/@column_value"/>
-        <xsl:value-of select="format-number(translate($GrossIntCredited_Current,$numberswc,$numberswoc) - translate($NetIntCredited_Current,$numberswc,$numberswoc) + translate($SepAcctCharges_Current,$numberswc,$numberswoc),'###,###,###')"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:call-template name="ERROR_Unknown_Special_Column_Name_Specified"/>
