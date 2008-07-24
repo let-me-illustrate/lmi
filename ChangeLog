@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1110 2008-07-24 12:12:21 chicares Exp $
+// $Id: ChangeLog,v 1.1111 2008-07-24 19:19:16 chicares Exp $
 
 MAINTENANCE
 
@@ -18357,4 +18357,23 @@ Eliminate dependency on disused members of class InputStatus.
   yare_input.cpp
   yare_input.hpp
 Refactor, using yare instead of obsolete fund allocations.
+
+20080724T1545Z <gchicares@sbcglobal.net> [1115]
+
+  input_harmonization.cpp
+Fix defect introduced 20060924T1428Z. See:
+  http://lists.nongnu.org/archive/html/lmi/2008-07/msg00006.html
+
+20080724T1639Z <gchicares@sbcglobal.net> [1115]
+
+  basic_values.hpp
+  ihs_basicval.cpp
+Remove an unnecessary member function. See:
+  http://lists.nongnu.org/archive/html/lmi/2008-07/msg00006.html
+
+20080724T1919Z <gchicares@sbcglobal.net> [1115]
+
+  basicvalues.cpp
+  ihs_basicval.cpp
+Refactor to facilitate expunction of obsolete input class.
 

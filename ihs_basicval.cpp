@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.83 2008-07-24 16:39:34 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.84 2008-07-24 19:19:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -44,8 +44,6 @@
 #include "ihs_proddata.hpp"
 #include "ihs_rnddata.hpp"
 #include "ihs_x_type.hpp"
-#include "inputs.hpp"
-#include "inputstatus.hpp"
 #include "interest_rates.hpp"
 #include "loads.hpp"
 #include "math_functors.hpp"
@@ -82,97 +80,6 @@ namespace
         1.0L + std::numeric_limits<long double>::epsilon()
         ;
 } // Unnamed namespace.
-
-//============================================================================
-BasicValues::BasicValues(InputParms const* input)
-    :Input_              (new InputParms(*input))
-    ,yare_input_         (*input)
-    ,DefnLifeIns_        (mce_cvat)
-    ,DefnMaterialChange_ (mce_unnecessary_premium)
-    ,Equiv7702DBO3       (mce_option1_for_7702)
-    ,MaxWDDed_           (mce_twelve_times_last)
-    ,MaxLoanDed_         (mce_twelve_times_last)
-{
-    Init();
-}
-
-//============================================================================
-// TODO ?? Not for general use--use for GPT server only. This is bad design.
-BasicValues::BasicValues
-    (std::string  const& a_ProductName
-    ,mcenum_gender       a_Gender
-    ,mcenum_class        a_UnderwritingClass
-    ,mcenum_smoking      a_Smoker
-    ,int                 a_IssueAge
-    ,mcenum_uw_basis     a_UnderwritingBasis
-    ,mcenum_state        a_StateOfJurisdiction
-    ,double              a_FaceAmount
-    ,mcenum_dbopt_7702   a_DBOptFor7702
-    ,bool                a_AdbInForce
-    ,double              a_TargetPremium
-    // TODO ?? Need loan rate type here?
-    )
-    :Input_              (new InputParms)
-    ,yare_input_         (*Input_)
-    ,DefnLifeIns_        (mce_cvat)
-    ,DefnMaterialChange_ (mce_unnecessary_premium)
-    ,Equiv7702DBO3       (a_DBOptFor7702)
-    ,MaxWDDed_           (mce_twelve_times_last)
-    ,MaxLoanDed_         (mce_twelve_times_last)
-    ,InitialTargetPremium(a_TargetPremium)
-{
-    InputParms* kludge_input = new InputParms;
-
-    kludge_input->NumberOfLives       = 1                        ;
-
-    kludge_input->Status[0].IssueAge  = a_IssueAge               ;
-    kludge_input->Status[0].RetAge    = a_IssueAge               ;
-    kludge_input->Status[0].Gender    = porting_cast<enum_gender>(a_Gender)                 ;
-    kludge_input->Status[0].Smoking   = porting_cast<enum_smoking>(a_Smoker)                 ;
-    kludge_input->Status[0].Class     = porting_cast<enum_class>(a_UnderwritingClass)      ;
-//    kludge_input->Status[0].HasADD    = static_cast<enum_yes_or_no>(a_ADDInForce.operator const bool());
-// TODO ?? reinterpret_cast can't be right...
-//    kludge_input->Status[0].HasADD    = reinterpret_cast<enum_yes_or_no>(a_ADDInForce);
-//    kludge_input->Status[0].HasADD    = a_ADDInForce;
-if(a_AdbInForce)
-    {
-    kludge_input->Status[0].HasADD = "Yes";
-    }
-else
-    {
-    kludge_input->Status[0].HasADD = "No";
-    }
-    kludge_input->GroupUWType         = porting_cast<enum_uw_basis>(a_UnderwritingBasis)      ;
-    kludge_input->ProductName         = a_ProductName            ;
-    kludge_input->InsdState           = porting_cast<enum_state>(a_StateOfJurisdiction)    ;
-    kludge_input->SponsorState        = porting_cast<enum_state>(a_StateOfJurisdiction)    ;
-    kludge_input->DefnLifeIns         = e_defn_life_ins(e_gpt)   ;
-    kludge_input->DefnMaterialChange  = e_defn_material_change(e_adjustment_event);
-
-    kludge_input->EnforceConsistency();
-
-    std::fill_n
-        (kludge_input->SpecAmt.begin()
-        ,kludge_input->YearsToMaturity()
-        ,a_FaceAmount
-        );
-
-    e_dbopt const z
-        (mce_option1_for_7702 == a_DBOptFor7702 ? e_option1
-        :mce_option2_for_7702 == a_DBOptFor7702 ? e_option2
-        :throw std::runtime_error("Unexpected DB option.")
-        );
-    std::fill_n
-        (kludge_input->DBOpt.begin()
-        ,kludge_input->YearsToMaturity()
-        ,z
-        );
-
-    // TODO ?? EGREGIOUS_DEFECT Redesign this function instead.
-    const_cast<InputParms&>(*Input_) = *kludge_input;
-
-    GPTServerInit();
-}
 
 //============================================================================
 BasicValues::~BasicValues()
@@ -2063,5 +1970,100 @@ std::vector<double> BasicValues::Get83GamRates() const
         ,CannotBlend
         ,CanBlend
         );
+}
+
+// You have no chance to survive make your time.
+
+#include "inputs.hpp"
+
+//============================================================================
+BasicValues::BasicValues(InputParms const* input)
+    :Input_              (new InputParms(*input))
+    ,yare_input_         (*input)
+    ,DefnLifeIns_        (mce_cvat)
+    ,DefnMaterialChange_ (mce_unnecessary_premium)
+    ,Equiv7702DBO3       (mce_option1_for_7702)
+    ,MaxWDDed_           (mce_twelve_times_last)
+    ,MaxLoanDed_         (mce_twelve_times_last)
+{
+    Init();
+}
+
+//============================================================================
+// TODO ?? Not for general use--use for GPT server only. This is bad design.
+BasicValues::BasicValues
+    (std::string  const& a_ProductName
+    ,mcenum_gender       a_Gender
+    ,mcenum_class        a_UnderwritingClass
+    ,mcenum_smoking      a_Smoker
+    ,int                 a_IssueAge
+    ,mcenum_uw_basis     a_UnderwritingBasis
+    ,mcenum_state        a_StateOfJurisdiction
+    ,double              a_FaceAmount
+    ,mcenum_dbopt_7702   a_DBOptFor7702
+    ,bool                a_AdbInForce
+    ,double              a_TargetPremium
+    // TODO ?? Need loan rate type here?
+    )
+    :Input_              (new InputParms)
+    ,yare_input_         (*Input_)
+    ,DefnLifeIns_        (mce_cvat)
+    ,DefnMaterialChange_ (mce_unnecessary_premium)
+    ,Equiv7702DBO3       (a_DBOptFor7702)
+    ,MaxWDDed_           (mce_twelve_times_last)
+    ,MaxLoanDed_         (mce_twelve_times_last)
+    ,InitialTargetPremium(a_TargetPremium)
+{
+    InputParms* kludge_input = new InputParms;
+
+    kludge_input->NumberOfLives       = 1                        ;
+
+    kludge_input->Status[0].IssueAge  = a_IssueAge               ;
+    kludge_input->Status[0].RetAge    = a_IssueAge               ;
+    kludge_input->Status[0].Gender    = porting_cast<enum_gender>(a_Gender)                 ;
+    kludge_input->Status[0].Smoking   = porting_cast<enum_smoking>(a_Smoker)                 ;
+    kludge_input->Status[0].Class     = porting_cast<enum_class>(a_UnderwritingClass)      ;
+//    kludge_input->Status[0].HasADD    = static_cast<enum_yes_or_no>(a_ADDInForce.operator const bool());
+// TODO ?? reinterpret_cast can't be right...
+//    kludge_input->Status[0].HasADD    = reinterpret_cast<enum_yes_or_no>(a_ADDInForce);
+//    kludge_input->Status[0].HasADD    = a_ADDInForce;
+if(a_AdbInForce)
+    {
+    kludge_input->Status[0].HasADD = "Yes";
+    }
+else
+    {
+    kludge_input->Status[0].HasADD = "No";
+    }
+    kludge_input->GroupUWType         = porting_cast<enum_uw_basis>(a_UnderwritingBasis)      ;
+    kludge_input->ProductName         = a_ProductName            ;
+    kludge_input->InsdState           = porting_cast<enum_state>(a_StateOfJurisdiction)    ;
+    kludge_input->SponsorState        = porting_cast<enum_state>(a_StateOfJurisdiction)    ;
+    kludge_input->DefnLifeIns         = e_defn_life_ins(e_gpt)   ;
+    kludge_input->DefnMaterialChange  = e_defn_material_change(e_adjustment_event);
+
+    kludge_input->EnforceConsistency();
+
+    std::fill_n
+        (kludge_input->SpecAmt.begin()
+        ,kludge_input->YearsToMaturity()
+        ,a_FaceAmount
+        );
+
+    e_dbopt const z
+        (mce_option1_for_7702 == a_DBOptFor7702 ? e_option1
+        :mce_option2_for_7702 == a_DBOptFor7702 ? e_option2
+        :throw std::runtime_error("Unexpected DB option.")
+        );
+    std::fill_n
+        (kludge_input->DBOpt.begin()
+        ,kludge_input->YearsToMaturity()
+        ,z
+        );
+
+    // TODO ?? EGREGIOUS_DEFECT Redesign this function instead.
+    const_cast<InputParms&>(*Input_) = *kludge_input;
+
+    GPTServerInit();
 }
 
