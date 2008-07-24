@@ -31,7 +31,7 @@
 // other reasons evident in cvs or explained in 'ChangeLog'. Any
 // defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.32 2008-07-22 17:51:38 chicares Exp $
+// $Id: main_cgi.cpp,v 1.33 2008-07-24 10:16:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -129,11 +129,9 @@ int try_main(int argc, char* argv[])
         "&SolveTargetCashSurrenderValue=1000000"
         "&SolveTargetYear=20"
         "&SolveBasis=Current_basis"
-//        "&SAStrategy=SAInputScalar"
         "&SpecifiedAmount=1000000"
         "&DeathBenefitOption=a"
 //        "&sRetDBOpt=A"
-//        "&EePmtStrategy=PmtInputScalar"
         "&Payment=0"
         "&PaymentMode=annual"
         "&Dumpin=0"

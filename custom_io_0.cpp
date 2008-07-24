@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: custom_io_0.cpp,v 1.21 2008-07-02 22:39:16 chicares Exp $
+// $Id: custom_io_0.cpp,v 1.22 2008-07-24 10:16:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -366,8 +366,7 @@ bool custom_io_0_read(IllusInputParms& ip, std::string const& filename)
         }
 
     // For single-premium cases, the specified amount would normally
-    // be calculated this way:
-    //   ip.SAStrategy               = e_sacorridor;
+    // be calculated by using a "corridor" specified-amount strategy,
     // but the customer wants to enter the specified amount explicitly.
     ip.SpecifiedAmount = n_v_pairs.string_value("FaceAmt");
 
