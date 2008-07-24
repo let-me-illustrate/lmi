@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1112 2008-07-24 20:01:26 wboutin Exp $
+// $Id: ChangeLog,v 1.1113 2008-07-24 20:06:03 wboutin Exp $
 
 MAINTENANCE
 
@@ -18382,4 +18382,9 @@ Refactor to facilitate expunction of obsolete input class.
   reg_d_individual.xsl
   variable_annuity.xsl
 Redefine a column.
+
+20080724T2005Z <wboutin@massmutual.com> [1115]
+
+  version.hpp
+Mark release candidate.
 
