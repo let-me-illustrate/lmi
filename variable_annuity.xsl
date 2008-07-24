@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.59 2008-07-13 09:36:20 chicares Exp $
+    $Id: variable_annuity.xsl,v 1.60 2008-07-24 20:01:26 wboutin Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -810,7 +810,7 @@
         <column name="GrossPmt">Purchase _Payment</column>
         <column special="SpecialPmt">Purchase _Payment _Charges</column>
         <column name="NetWD">Withdrawal(s)</column>
-        <column special="SpecialIntCredited">Monthly _Charges</column>
+        <column name="SepAcctCharges_Current">Monthly _Charges</column>
         <column special="SpecialGrossIntCredited">Investment _Experience</column>
         <column special="SpecialAcctVal">End of Year _Contract Value</column>
         <column special="SpecialIrrCsv">Cumulative _Contract Value _IRR</column>
@@ -851,12 +851,6 @@
         <xsl:variable name="GrossPmt" select="$vectors[@name='GrossPmt']/duration[$counter]/@column_value"/>
         <xsl:variable name="NetPmt" select="$vectors[@name=concat('NetPmt', $name_suffix)]/duration[$counter]/@column_value"/>
         <xsl:value-of select="format-number(translate($GrossPmt,$numberswc,$numberswoc) - translate($NetPmt,$numberswc,$numberswoc), '###,###,###')"/>
-      </xsl:when>
-      <xsl:when test="$special='SpecialIntCredited'">
-        <xsl:variable name="GrossIntCredited" select="$vectors[@name=concat('GrossIntCredited', $name_suffix)]/duration[$counter]/@column_value"/>
-        <xsl:variable name="NetIntCredited" select="$vectors[@name=concat('NetIntCredited', $name_suffix)]/duration[$counter]/@column_value"/>
-        <xsl:variable name="SepAcctCharges" select="$vectors[@name=concat('SepAcctCharges', $name_suffix)]/duration[$counter]/@column_value"/>
-        <xsl:value-of select="format-number(translate($GrossIntCredited,$numberswc,$numberswoc) - translate($NetIntCredited,$numberswc,$numberswoc) + translate($SepAcctCharges,$numberswc,$numberswoc), '###,###,###')"/>
       </xsl:when>
       <xsl:when test="$special='SpecialGrossIntCredited'">
         <xsl:value-of select="$vectors[@name=concat('GrossIntCredited', $name_suffix)]/duration[$counter]/@column_value"/>
