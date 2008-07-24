@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1109 2008-07-23 16:31:20 chicares Exp $
+// $Id: ChangeLog,v 1.1110 2008-07-24 12:12:21 chicares Exp $
 
 MAINTENANCE
 
@@ -18322,4 +18322,39 @@ Remove unneeded headers.
 
   ihs_avstrtgy.cpp
 Refactor, eliminating a dependency on class InputStatus.
+
+20080723T2151Z <gchicares@sbcglobal.net> [1118]
+
+  basic_values.hpp
+  basicvalues.cpp
+  ihs_basicval.cpp
+Refactor, eliminating a dependency on class InputStatus.
+
+20080723T2319Z <gchicares@sbcglobal.net> [1116]
+
+  basic_values.hpp
+  ihs_basicval.cpp
+Rewrite database initialization.
+
+20080724T0049Z <gchicares@sbcglobal.net> [1116]
+
+  basic_values.hpp
+  basicvalues.cpp
+  ihs_basicval.cpp
+Remove an unused ctor.
+
+20080724T1016Z <gchicares@sbcglobal.net> [1116]
+
+  accountvalue.cpp
+  custom_io_0.cpp
+  main_cgi.cpp
+Eliminate dependency on disused members of class InputStatus.
+
+20080724T1212Z <gchicares@sbcglobal.net> [1116]
+
+  ihs_acctval.cpp
+  ihs_basicval.cpp
+  yare_input.cpp
+  yare_input.hpp
+Refactor, using yare instead of obsolete fund allocations.
 

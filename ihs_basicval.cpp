@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.81 2008-07-24 00:49:29 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.82 2008-07-24 12:12:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -409,27 +409,29 @@ double BasicValues::InvestmentManagementFee() const
 /*
         else
             {
-            // We allow Input_->NumberOfFunds < Funds.GetNumberOfFunds
+            // Allow hardcoded number of funds < Funds.GetNumberOfFunds
             // so an accurate fund average can be calculated (based
             // on the funds in the *.fnd file), even though the inputs
             // class may not accommodate that many funds. If j falls
-            // outside the range of Input_->FundAllocs, use a weight of zero.
-            bool legal_storage = j < Input_->FundAllocs.size();
-            double fund_alloc = Input_->FundAllocs[j];
+            // outside the range of yare_input_.FundAllocations, use a
+            // weight of zero.
+            bool legal_storage = j < yare_input_.FundAllocations.size();
+            double fund_alloc = yare_input_.FundAllocations[j];
             weight = legal_storage ? fund_alloc : 0.0;
             }
 */
-        else if(j < static_cast<int>(Input_->FundAllocs.size()))
+        else if(j < static_cast<int>(yare_input_.FundAllocations.size()))
             {
             // TODO ?? Can this be correct? Shouldn't we be looking to
             // the .fnd file rather than the input class?
             //
-            // We allow Input_->NumberOfFunds < Funds.GetNumberOfFunds
+            // Allow hardcoded number of funds < Funds.GetNumberOfFunds
             // so an accurate fund average can be calculated (based
             // on the funds in the *.fnd file), even though the inputs
             // class may not accommodate that many funds. If j falls
-            // outside the range of Input_->FundAllocs, use a weight of zero.
-            weight = Input_->FundAllocs[j];
+            // outside the range of yare_input_.FundAllocations, use a
+            // weight of zero.
+            weight = yare_input_.FundAllocations[j];
             }
         else
             {
