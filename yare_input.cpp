@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: yare_input.cpp,v 1.7 2008-07-23 14:19:37 chicares Exp $
+// $Id: yare_input.cpp,v 1.8 2008-07-24 12:12:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -152,6 +152,7 @@ yare_input::yare_input(Input const& z)
     std::vector<double>               HoneymoonValueSpread            ;
     std::vector<double>               PremiumHistory                  ;
     std::vector<double>               SpecamtHistory                  ;
+    std::vector<double>               FundAllocations                 ;
     std::vector<double>               CashValueEnhancementRate        ;
     std::vector<mcenum_sa_strategy  > SpecifiedAmountStrategy         ;
     std::vector<mcenum_pmt_strategy > IndividualPaymentStrategy       ;
@@ -314,6 +315,7 @@ yare_input::yare_input(InputParms const& z)
     HoneymoonValueSpread            = z.VectorHoneymoonValueSpread      ;
     PremiumHistory                  = convert_vector_type<double              >(z.VectorPremiumHistory         );
     SpecamtHistory                  = convert_vector_type<double              >(z.VectorSpecamtHistory         );
+    FundAllocations                 = convert_vector_type<double              >(z.FundAllocs                   );
     CashValueEnhancementRate        = z.VectorCashValueEnhancementRate  ;
     SpecifiedAmountStrategy         = convert_vector_type<mcenum_sa_strategy  >(z.VectorSpecifiedAmountStrategy);
     IndividualPaymentStrategy       = convert_vector_type<mcenum_pmt_strategy >(z.VectorIndvPaymentStrategy    );
