@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.80 2008-07-23 23:19:38 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.81 2008-07-24 00:49:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -82,19 +82,6 @@ namespace
         1.0L + std::numeric_limits<long double>::epsilon()
         ;
 } // Unnamed namespace.
-
-//============================================================================
-BasicValues::BasicValues()
-    :Input_              (new InputParms)
-    ,yare_input_         (*Input_)
-    ,DefnLifeIns_        (mce_cvat)
-    ,DefnMaterialChange_ (mce_unnecessary_premium)
-    ,Equiv7702DBO3       (mce_option1_for_7702)
-    ,MaxWDDed_           (mce_twelve_times_last)
-    ,MaxLoanDed_         (mce_twelve_times_last)
-{
-    Init();
-}
 
 //============================================================================
 BasicValues::BasicValues(InputParms const* input)
