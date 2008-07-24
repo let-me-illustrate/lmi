@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.39 2008-07-24 00:49:29 chicares Exp $
+// $Id: basic_values.hpp,v 1.40 2008-07-24 16:39:34 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -281,7 +281,6 @@ class LMI_SO BasicValues
     int                     RetAge;
 
     // Invariant data.
-    void                         AssertAgeAndDobAreConsistent(bool use_anb);
     void                         SetPermanentInvariants();
     void                         SetLowestPremiumTaxLoad();
     void                         TestPremiumTaxLoadConsistency();
