@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.38 2008-07-23 23:19:38 chicares Exp $
+// $Id: basic_values.hpp,v 1.39 2008-07-24 00:49:29 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -83,7 +83,6 @@ class LMI_SO BasicValues
     :virtual private boost::noncopyable
 {
   public:
-    BasicValues();
     BasicValues(InputParms const* input);
     // This signature is preferable to the version that takes a const*;
     // for now, it's used only by the lmi branch.
