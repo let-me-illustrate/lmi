@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basicvalues.cpp,v 1.30 2008-07-23 21:51:49 chicares Exp $
+// $Id: basicvalues.cpp,v 1.31 2008-07-24 00:49:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -51,14 +51,6 @@ char const* GuaranteedTableFile() {return "/opt/lmi/data/qx_cso";}
 
 // INELEGANT !! Many member variables are initialized not in ctors,
 // but rather in common initialization functions.
-
-//============================================================================
-BasicValues::BasicValues()
-    :Input_(new InputParms)
-    ,yare_input_(*Input_)
-{
-    Init();
-}
 
 //============================================================================
 BasicValues::BasicValues(InputParms const& input)
