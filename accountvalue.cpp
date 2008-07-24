@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.58 2008-07-23 09:57:16 chicares Exp $
+// $Id: accountvalue.cpp,v 1.59 2008-07-24 10:16:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,13 +33,11 @@
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "death_benefits.hpp"
-#include "inputs.hpp"
 #include "interest_rates.hpp"
 #include "ledger.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
 #include "loads.hpp"
-#include "mc_enum_types_aux.hpp"
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
 #include "rounding_rules.hpp"
@@ -442,7 +440,7 @@ inline int AccountValue::MonthsToNextModalPmtDate() const
 void AccountValue::PerformSpecAmtStrategy()
 {
     double SA = 0.0;
-    switch(porting_cast<mcenum_sa_strategy>(Input_->SAStrategy.value()))
+    switch(yare_input_.SpecifiedAmountStrategy[0])
         {
         case mce_sa_input_scalar:
             {
@@ -492,9 +490,9 @@ void AccountValue::PerformSpecAmtStrategy()
         default:
             {
             fatal_error()
-                << "Case '"
-                << Input_->SAStrategy.value()
-                << "' not found."
+                << "Case "
+                << yare_input_.SpecifiedAmountStrategy[0]
+                << " not found."
                 << LMI_FLUSH
                 ;
             }
@@ -614,7 +612,7 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
         return;
         }
 
-    switch(porting_cast<mcenum_pmt_strategy>(Input_->EePmtStrategy.value()))
+    switch(yare_input_.IndividualPaymentStrategy[0])
         {
         case mce_pmt_input_scalar:
             {
@@ -672,9 +670,9 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
         default:
             {
             fatal_error()
-                << "Case '"
-                << Input_->EePmtStrategy.value()
-                << "' not found."
+                << "Case "
+                << yare_input_.IndividualPaymentStrategy[0]
+                << " not found."
                 << LMI_FLUSH
                 ;
             }
