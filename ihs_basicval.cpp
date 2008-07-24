@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.82 2008-07-24 12:12:21 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.83 2008-07-24 16:39:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -200,8 +200,6 @@ void BasicValues::Init()
     // looked-up values to scalars that vary across no database axis.
 
     Database_.reset(new TDatabase(yare_input_));
-    bool use_anb = Database_->Query(DB_AgeLastOrNearest);
-    AssertAgeAndDobAreConsistent(use_anb);
 
     StateOfJurisdiction_ = Database_->GetStateOfJurisdiction();
 
@@ -299,8 +297,6 @@ void BasicValues::GPTServerInit()
 {
     ProductData_.reset(new TProductData(yare_input_.ProductName));
     Database_.reset(new TDatabase(yare_input_));
-    bool use_anb = Database_->Query(DB_AgeLastOrNearest);
-    AssertAgeAndDobAreConsistent(use_anb);
 
     IssueAge = yare_input_.IssueAge;
     RetAge   = yare_input_.RetirementAge;
@@ -677,25 +673,6 @@ double BasicValues::GetTgtPrem
             ,a_mode
             ,a_specamt
             );
-        }
-}
-
-//============================================================================
-void BasicValues::AssertAgeAndDobAreConsistent(bool use_anb)
-{
-    int const a = attained_age(Input_->Status[0].DOB, yare_input_.EffectiveDate, use_anb);
-    if(Input_->Status[0].UseDOB)
-        {
-        LMI_ASSERT(a == yare_input_.IssueAge);
-        }
-    else
-        {
-        calendar_date const d = add_years
-            (Input_->Status[0].DOB.operator calendar_date const&()
-            ,a - yare_input_.IssueAge
-            ,true
-            );
-        LMI_ASSERT(d == Input_->Status[0].DOB);
         }
 }
 
