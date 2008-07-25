@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_sequences.cpp,v 1.17 2008-01-21 01:32:28 chicares Exp $
+// $Id: inputillus_sequences.cpp,v 1.18 2008-07-25 13:59:47 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -61,7 +61,7 @@ std::string realize_sequence_string
         ,index_origin
         );
     detail::convert_vector(v, s.linear_number_representation());
-    return s.formatted_diagnostics(true); // TODO ?? Change default arg?
+    return s.formatted_diagnostics(true);
 }
 
 //============================================================================
@@ -94,7 +94,7 @@ std::string realize_sequence_string
         ,keyword_dictionary
         ,default_keyword
         );
-    return s.formatted_diagnostics(true); // TODO ?? Change default arg?
+    return s.formatted_diagnostics(true);
 }
 
 //============================================================================
@@ -129,7 +129,7 @@ std::string realize_sequence_string
         ,keyword_dictionary
         ,default_keyword
         );
-    return s.formatted_diagnostics(true); // TODO ?? Change default arg?
+    return s.formatted_diagnostics(true);
 }
 
 //============================================================================
@@ -389,21 +389,6 @@ std::string IllusInputParms::realize_sequence_string_for_non_us_corridor_factor(
         return s;
         }
 
-//    double lowest = *std::min_element
-//        (VectorNonUsCorridorFactor.begin()
-//        ,VectorNonUsCorridorFactor.end()
-//        );
-    // SOMEDAY !! If we add a production like
-    //   numeric-value: numeric-literal %
-    // then we might say "at least 100%." here.
-    //
-    // TODO ?? Temporarily suppressed to let an old hack work:
-    // this was used to suppress COIs or something like that.
-    // Need to fix that, then restore this.
-//    if(1.0 < lowest)
-//        {
-//        return "Corridor factor must be at least 1.";
-//        }
     return "";
 }
 
@@ -683,7 +668,7 @@ std::string IllusInputParms::realize_sequence_string_for_indv_payment()
 //============================================================================
 std::string IllusInputParms::realize_sequence_string_for_indv_payment_mode()
 {
-    // TODO ?? No universally appropriate default exists: some contracts
+    // SOMEDAY !! No universally appropriate default exists: some contracts
     // may forbid monthly mode, while others may require it. We enforce
     // no such restriction because our practice has been confined to
     // products that permit annual mode.
@@ -722,7 +707,7 @@ std::string IllusInputParms::realize_sequence_string_for_corp_payment()
 //============================================================================
 std::string IllusInputParms::realize_sequence_string_for_corp_payment_mode()
 {
-    // TODO ?? No universally appropriate default exists: some contracts
+    // SOMEDAY !! No universally appropriate default exists: some contracts
     // may forbid monthly mode, while others may require it. We enforce
     // no such restriction because our practice has been confined to
     // products that permit annual mode.
@@ -938,7 +923,6 @@ std::string IllusInputParms::realize_sequence_string_for_withdrawal()
             ;i < WD.end()
             ;++i
             )
-// TODO ?? Not sure...should we report all, or just the first?
             {
             if(0.0 < *i && *i < lowest_allowed_withdrawal)
                 {
