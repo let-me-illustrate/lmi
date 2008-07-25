@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_sequences.cpp,v 1.18 2008-07-25 13:59:47 chicares Exp $
+// $Id: inputillus_sequences.cpp,v 1.19 2008-07-25 18:07:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,12 +34,11 @@
 #include "dbnames.hpp"
 #include "global_settings.hpp"
 #include "input_seq_helpers.hpp"
-
-#include <boost/algorithm/minmax_element.hpp>
+#include "miscellany.hpp" // minmax<T>()
 
 #include <algorithm>
 #include <sstream>
-#include <utility> // std::pair
+#include <utility>        // std::pair
 
 //============================================================================
 // Realize sequence strings with only numeric values.
@@ -425,39 +424,21 @@ std::string IllusInputParms::realize_sequence_string_for_current_coi_grading()
         return s;
         }
 
-    double highest = *std::max_element
-        (VectorCurrentCoiGrading.begin()
-        ,VectorCurrentCoiGrading.end()
-        );
-    double lowest = *std::min_element
-        (VectorCurrentCoiGrading.begin()
-        ,VectorCurrentCoiGrading.end()
-        );
-
-    // TODO ?? Use this boost facility generally.
-    typedef std::vector<double>::iterator extremum_t;
-    std::pair<extremum_t,extremum_t> test = boost::minmax_element
-        (VectorCurrentCoiGrading.begin()
-        ,VectorCurrentCoiGrading.end()
-        );
-    LMI_ASSERT(*test.first  == lowest );
-    LMI_ASSERT(*test.second == highest);
-
     // SOMEDAY !! If we add a production like
     //   numeric-value: numeric-literal %
     // then we might say "between 0% and 100%." here.
     //
     // There's no particular reason to use 100% as the maximum.
     // Anything over that seems extreme.
-    //
-    if(!(0.0 <= lowest && highest <= 1.0))
+    minmax<double> extrema(VectorCurrentCoiGrading);
+    if(!(0.0 <= extrema.minimum() && extrema.maximum() <= 1.0))
         {
         std::ostringstream oss;
         oss
             << "Current COI grading entered ranges from "
-            << lowest
+            << extrema.minimum()
             << " to "
-            << highest
+            << extrema.maximum()
             << " but must be between 0 and 1 inclusive."
             ;
         return oss.str();
@@ -478,25 +459,18 @@ std::string IllusInputParms::realize_sequence_string_for_cash_value_enhancement_
         return s;
         }
 
-    double highest = *std::max_element
-        (VectorCashValueEnhancementRate.begin()
-        ,VectorCashValueEnhancementRate.end()
-        );
-    double lowest = *std::min_element
-        (VectorCashValueEnhancementRate.begin()
-        ,VectorCashValueEnhancementRate.end()
-        );
     // SOMEDAY !! If we add a production like
     //   numeric-value: numeric-literal %
     // then we might say "between 0% and 100%." here.
-    if(!(0.0 <= lowest && highest <= 1.0))
+    minmax<double> extrema(VectorCashValueEnhancementRate);
+    if(!(0.0 <= extrema.minimum() && extrema.maximum() <= 1.0))
         {
         std::ostringstream oss;
         oss
             << "Current COI grading entered ranges from "
-            << lowest
+            << extrema.minimum()
             << " to "
-            << highest
+            << extrema.maximum()
             << " but must be between 0 and 1 inclusive."
             ;
         return oss.str();
@@ -517,25 +491,18 @@ std::string IllusInputParms::realize_sequence_string_for_corp_tax_bracket()
         return s;
         }
 
-    double highest = *std::max_element
-        (VectorCorpTaxBracket.begin()
-        ,VectorCorpTaxBracket.end()
-        );
-    double lowest = *std::min_element
-        (VectorCorpTaxBracket.begin()
-        ,VectorCorpTaxBracket.end()
-        );
     // SOMEDAY !! If we add a production like
     //   numeric-value: numeric-literal %
     // then we might say "between 0% and 100%." here.
-    if(!(0.0 <= lowest && highest <= 1.0))
+    minmax<double> extrema(VectorCorpTaxBracket);
+    if(!(0.0 <= extrema.minimum() && extrema.maximum() <= 1.0))
         {
         std::ostringstream oss;
         oss
             << "Corporate tax bracket entered ranges from "
-            << lowest
+            << extrema.minimum()
             << " to "
-            << highest
+            << extrema.maximum()
             << " but must be between 0 and 1 inclusive."
             ;
         return oss.str();
@@ -556,25 +523,18 @@ std::string IllusInputParms::realize_sequence_string_for_indv_tax_bracket()
         return s;
         }
 
-    double highest = *std::max_element
-        (VectorIndvTaxBracket.begin()
-        ,VectorIndvTaxBracket.end()
-        );
-    double lowest = *std::min_element
-        (VectorIndvTaxBracket.begin()
-        ,VectorIndvTaxBracket.end()
-        );
     // SOMEDAY !! If we add a production like
     //   numeric-value: numeric-literal %
     // then we might say "between 0% and 100%." here.
-    if(!(0.0 <= lowest && highest <= 1.0))
+    minmax<double> extrema(VectorIndvTaxBracket);
+    if(!(0.0 <= extrema.minimum() && extrema.maximum() <= 1.0))
         {
         std::ostringstream oss;
         oss
             << "Individual tax bracket entered ranges from "
-            << lowest
+            << extrema.minimum()
             << " to "
-            << highest
+            << extrema.maximum()
             << " but must be between 0 and 1 inclusive."
             ;
         return oss.str();
@@ -861,15 +821,7 @@ std::string IllusInputParms::realize_sequence_string_for_new_loan()
         return "";
         }
 
-    r_loan highest = *std::max_element
-        (Loan.begin()
-        ,Loan.end()
-        );
-    r_loan lowest = *std::min_element
-        (Loan.begin()
-        ,Loan.end()
-        );
-    if(0.0 != highest || 0.0 != lowest)
+    if(!each_equal(Loan.begin(), Loan.end(), 0.0))
         {
         return "Loans may not be illustrated on this policy form.";
         }
@@ -899,18 +851,9 @@ std::string IllusInputParms::realize_sequence_string_for_withdrawal()
         ,InsdState
         );
 
-    r_wd highest = *std::max_element
-        (WD.begin()
-        ,WD.end()
-        );
-    r_wd lowest = *std::min_element
-        (WD.begin()
-        ,WD.end()
-        );
-
     if(!temp_database.Query(DB_AllowWD))
         {
-        if(0.0 != highest || 0.0 != lowest)
+        if(!each_equal(WD.begin(), WD.end(), 0.0))
             {
             return "Withdrawals may not be illustrated on this policy form.";
             }
@@ -970,15 +913,7 @@ std::string IllusInputParms::realize_sequence_string_for_flat_extra()
         return "";
         }
 
-    double highest = *std::max_element
-        (Status[0].VectorMonthlyFlatExtra.begin()
-        ,Status[0].VectorMonthlyFlatExtra.end()
-        );
-    double lowest = *std::min_element
-        (Status[0].VectorMonthlyFlatExtra.begin()
-        ,Status[0].VectorMonthlyFlatExtra.end()
-        );
-    if(0.0 != highest || 0.0 != lowest)
+    if(!each_equal(Status[0].VectorMonthlyFlatExtra.begin(), Status[0].VectorMonthlyFlatExtra.end(), 0.0))
         {
         return "Flat extras may not be illustrated on this policy form.";
         }

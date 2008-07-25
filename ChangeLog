@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1113 2008-07-24 20:06:03 wboutin Exp $
+// $Id: ChangeLog,v 1.1114 2008-07-25 18:07:40 chicares Exp $
 
 MAINTENANCE
 
@@ -18383,8 +18383,29 @@ Refactor to facilitate expunction of obsolete input class.
   variable_annuity.xsl
 Redefine a column.
 
-20080724T2005Z <wboutin@massmutual.com> [1115]
+20080724T2006Z <wboutin@massmutual.com> [1115]
 
   version.hpp
 Mark release candidate.
+
+20080725T1359Z <gchicares@sbcglobal.net> [1108]
+
+  inputillus_sequences.cpp
+Resolve certain defect markers. InputSequence::formatted_diagnostics()
+has appropriate default arguments. Since 20080319T1643Z, no non-US
+corridor factor is wanted. If annual mode is not permitted, then that
+must be indicated in the database. It suffices to report the first
+impermissible withdrawal amount.
+
+20080725T1807Z <gchicares@sbcglobal.net> [1105]
+
+  ihs_irc7702a.cpp
+  inputillus_sequences.cpp
+  ledger_base.cpp
+  miscellany.hpp
+  path_utility.cpp
+  stratified_algorithms.hpp
+  stratified_algorithms_test.cpp
+  stratified_charges.cpp
+Refactor, using boost::minmax_element() as appropriate.
 

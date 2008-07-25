@@ -19,12 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: miscellany.hpp,v 1.16 2008-04-14 00:51:24 chicares Exp $
+// $Id: miscellany.hpp,v 1.17 2008-07-25 18:07:40 chicares Exp $
 
 #ifndef miscellany_hpp
 #define miscellany_hpp
 
 #include "config.hpp"
+
+#include <boost/algorithm/minmax_element.hpp>
 
 #include <algorithm>
 #include <cctype>
@@ -33,34 +35,48 @@
 #include <ios>
 #include <iterator>
 #include <string>
+#include <utility>
+#include <vector>
 
 // TODO ?? Unit tests are needed.
 
-// TODO ?? Remove this header along with the old implentation after testing:
-#include "assert_lmi.hpp"
-// Test whether every element in a range equals the specified constant.
+/// Test whether every element in a range equals the specified constant.
+
 template<typename InputIterator, typename T>
 bool each_equal(InputIterator first, InputIterator last, T const& t)
 {
-// TODO ?? Remove this old implementation after testing:
-    bool rc = true;
-    for(InputIterator i = first; i != last; ++i)
-        {
-        if(!(t == *i))
-            {
-            rc = false;
-            }
-        }
-
-    bool new_answer = std::distance(first, last) == std::count(first, last, t);
-    LMI_ASSERT(rc == new_answer);
-
     return std::distance(first, last) == std::count(first, last, t);
 }
 
 /// Test whether two files are identical. Arguments are filenames.
 
 bool files_are_identical(std::string const&, std::string const&);
+
+/// Ascertain vector minimum and maximum efficiently.
+///
+/// Implicitly-declared special member functions do the right thing.
+
+template<typename T>
+class minmax
+{
+    typedef typename std::vector<T>::const_iterator extremum_t;
+    typedef std::pair<extremum_t,extremum_t> extrema_t;
+
+  public:
+    explicit minmax(std::vector<T> const& v)
+        {
+        extrema_t extrema = boost::minmax_element(v.begin(), v.end());
+        minimum_ = *extrema.first ;
+        maximum_ = *extrema.second;
+        }
+
+    T minimum() {return minimum_;}
+    T maximum() {return maximum_;}
+
+  private:
+    T minimum_;
+    T maximum_;
+};
 
 inline std::ios_base::openmode ios_in_binary()
 {
