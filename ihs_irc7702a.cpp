@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702a.cpp,v 1.15 2008-07-14 22:27:21 chicares Exp $
+// $Id: ihs_irc7702a.cpp,v 1.16 2008-07-25 18:07:40 chicares Exp $
 
 // TODO ?? Make this a server app. Consider where to store DB, SA history.
 
@@ -35,13 +35,15 @@
 #include "ihs_irc7702a.hpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "materially_equal.hpp"
+#include "miscellany.hpp"            // minmax<T>()
 #include "stratified_algorithms.hpp" // TieredNetToGross()
 
 #include <algorithm>
 #include <cmath>
 #include <limits>
-#include <numeric>  // std::accumulate()
+#include <numeric>                   // std::accumulate()
 #include <stdexcept>
 
 namespace
@@ -175,19 +177,13 @@ Irc7702A::Irc7702A
             }
         }
 
-    // Make sure the 7pp and NSP factors are all in (0, 1]
+    // Make sure the 7pp and NSP factors are all in (0, 1].
 
-    double min_7pp = *std::min_element(SevenPPRateVec.begin(), SevenPPRateVec.end());
-    HOPEFULLY(0.0 < min_7pp);
+    minmax<double> extrema_7pp(SevenPPRateVec);
+    LMI_ASSERT(0.0 < extrema_7pp.minimum() && extrema_7pp.maximum() <= 1.0);
 
-    double max_7pp = *std::max_element(SevenPPRateVec.begin(), SevenPPRateVec.end());
-    HOPEFULLY(max_7pp <= 1.0);
-
-    double min_nsp = *std::min_element(NSPVec.begin(), NSPVec.end());
-    HOPEFULLY(0.0 < min_nsp);
-
-    double max_nsp = *std::max_element(NSPVec.begin(), NSPVec.end());
-    HOPEFULLY(max_nsp <= 1.0);
+    minmax<double> extrema_nsp(NSPVec);
+    LMI_ASSERT(0.0 < extrema_nsp.minimum() && extrema_nsp.maximum() <= 1.0);
 }
 
 //============================================================================

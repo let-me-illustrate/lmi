@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_algorithms.hpp,v 1.18 2008-06-16 11:48:32 chicares Exp $
+// $Id: stratified_algorithms.hpp,v 1.19 2008-07-25 18:07:40 chicares Exp $
 
 #ifndef stratified_algorithms_hpp
 #define stratified_algorithms_hpp
@@ -27,9 +27,10 @@
 #include "config.hpp"
 
 #include "assert_lmi.hpp"
-#include "stl_extensions.hpp"
+#include "miscellany.hpp"     // minmax<T>()
+#include "stl_extensions.hpp" // nonstd::is_sorted()
 
-#include <algorithm> // std::upper_bound()
+#include <algorithm>          // std::upper_bound()
 #include <functional>
 #include <vector>
 
@@ -176,9 +177,10 @@ T tiered_product<T>::operator()
     LMI_ASSERT(zero <= prior_total_amount);
     LMI_ASSERT(!incremental_limits.empty());
     LMI_ASSERT(rates.size() == incremental_limits.size());
-    std::vector<T> const& z(incremental_limits);
-    LMI_ASSERT(zero <= *std::min_element(z.begin(), z.end()));
-    LMI_ASSERT(zero <  *std::max_element(z.begin(), z.end()));
+
+    minmax<T> extrema(incremental_limits);
+    LMI_ASSERT(zero <= extrema.minimum());
+    LMI_ASSERT(zero <  extrema.maximum());
 
     T result = zero;
     T remaining_amount = new_incremental_amount;
@@ -296,9 +298,12 @@ T banded_rate<T>::operator()
     LMI_ASSERT(zero <= total_amount);
     LMI_ASSERT(!cumulative_limits.empty());
     LMI_ASSERT(rates.size() == cumulative_limits.size());
+
+    minmax<T> extrema(cumulative_limits);
+    LMI_ASSERT(zero <= extrema.minimum());
+    LMI_ASSERT(zero <  extrema.maximum());
+
     std::vector<T> const& z(cumulative_limits);
-    LMI_ASSERT(zero <= *std::min_element(z.begin(), z.end()));
-    LMI_ASSERT(zero <  *std::max_element(z.begin(), z.end()));
     LMI_ASSERT(nonstd::is_sorted(z.begin(), z.end()));
 
     // TODO ?? This is ghastly. As designed, the last limit must

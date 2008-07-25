@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.cpp,v 1.26 2008-07-07 17:15:32 chicares Exp $
+// $Id: stratified_charges.cpp,v 1.27 2008-07-25 18:07:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,6 +31,7 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "data_directory.hpp"
+#include "miscellany.hpp"         // minmax<T>()
 #include "platform_dependent.hpp" // access()
 #include "stratified_algorithms.hpp"
 
@@ -95,8 +96,9 @@ void stratified_entity::assert_validity() const
     LMI_ASSERT(!limits_.empty());
     LMI_ASSERT(values_.size() == limits_.size());
     LMI_ASSERT(is_highest_representable_double(limits_.back()));
-    LMI_ASSERT(0.0 <= *std::min_element(limits_.begin(), limits_.end()));
-    LMI_ASSERT(0.0 <  *std::max_element(limits_.begin(), limits_.end()));
+    minmax<double> extrema(limits_);
+    LMI_ASSERT(0.0 <= extrema.minimum());
+    LMI_ASSERT(0.0 <  extrema.maximum());
 }
 
 //============================================================================
