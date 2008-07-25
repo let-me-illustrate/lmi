@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: path_utility.cpp,v 1.15 2008-01-31 06:00:24 chicares Exp $
+// $Id: path_utility.cpp,v 1.16 2008-07-25 18:07:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,6 +29,7 @@
 #include "path_utility.hpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "miscellany.hpp" // iso_8601_datestamp_terse()
 
 #include <boost/filesystem/convenience.hpp>

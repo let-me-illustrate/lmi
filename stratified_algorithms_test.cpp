@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_algorithms_test.cpp,v 1.16 2008-06-16 11:48:32 chicares Exp $
+// $Id: stratified_algorithms_test.cpp,v 1.17 2008-07-25 18:07:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -109,14 +109,14 @@ void banded_test()
     BOOST_TEST_THROW
         (banded_rate<double>()(0.0, negative, rates)
         ,std::runtime_error
-        ,"Assertion 'zero <= *std::min_element(z.begin(), z.end())' failed."
+        ,"Assertion 'zero <= extrema.minimum()' failed."
         );
 
     std::vector<double> const zero(limits.size(), 0.0);
     BOOST_TEST_THROW
         (banded_rate<double>()(0.0, zero, rates)
         ,std::runtime_error
-        ,"Assertion 'zero < *std::max_element(z.begin(), z.end())' failed."
+        ,"Assertion 'zero < extrema.maximum()' failed."
         );
 
     std::vector<double> nonincreasing(limits);
@@ -222,14 +222,14 @@ void tiered_test()
     BOOST_TEST_THROW
         (tiered_product<double>()(0.0, 0.0, negative, rates)
         ,std::runtime_error
-        ,"Assertion 'zero <= *std::min_element(z.begin(), z.end())' failed."
+        ,"Assertion 'zero <= extrema.minimum()' failed."
         );
 
     std::vector<double> const zero(limits.size(), 0.0);
     BOOST_TEST_THROW
         (tiered_product<double>()(0.0, 0.0, zero, rates)
         ,std::runtime_error
-        ,"Assertion 'zero < *std::max_element(z.begin(), z.end())' failed."
+        ,"Assertion 'zero < extrema.maximum()' failed."
         );
 
     std::vector<double> nonincreasing(limits);

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_base.cpp,v 1.15 2008-02-19 16:22:15 chicares Exp $
+// $Id: ledger_base.cpp,v 1.16 2008-07-25 18:07:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,10 +31,11 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "crc32.hpp"
+#include "miscellany.hpp" // minmax<T>()
 #include "value_cast.hpp"
 
 #include <algorithm>
-#include <cmath> // std::pow()
+#include <cmath>          // std::pow()
 #include <functional>
 #include <numeric>
 #include <string>
@@ -339,9 +340,9 @@ double LedgerBase::DetermineScaleFactor() const
         ;svmi++
         )
         {
-        std::vector<double> const& v = *(*svmi).second;
-        min_val = std::min(min_val, *std::min_element(v.begin(), v.end()));
-        max_val = std::max(max_val, *std::max_element(v.begin(), v.end()));
+        minmax<double> extrema(*(*svmi).second);
+        min_val = std::min(min_val, extrema.minimum());
+        max_val = std::max(max_val, extrema.maximum());
         }
 
     // If minimum value is negative, it needs an extra character to
