@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_sequences.cpp,v 1.19 2008-07-25 18:07:40 chicares Exp $
+// $Id: inputillus_sequences.cpp,v 1.20 2008-07-25 20:59:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,11 +34,14 @@
 #include "dbnames.hpp"
 #include "global_settings.hpp"
 #include "input_seq_helpers.hpp"
-#include "miscellany.hpp" // minmax<T>()
+#include "miscellany.hpp"     // minmax<T>()
+#include "stl_extensions.hpp" // nonstd::is_sorted()
+
+#include <boost/bind.hpp>
 
 #include <algorithm>
 #include <sstream>
-#include <utility>        // std::pair
+#include <utility>            // std::pair
 
 //============================================================================
 // Realize sequence strings with only numeric values.
@@ -583,22 +586,48 @@ std::string IllusInputParms::realize_sequence_string_for_death_benefit_option()
         return s;
         }
 
-    // TODO ?? Move the bodies of functions
-    //   CheckAllowChangeToDBO2()
-    //   CheckAllowDBO3()
-    // here for consistency, then expunge those functions.
-    if(!CheckAllowChangeToDBO2())
+    TDatabase temp_database
+        (ProductName
+        ,Status[0].Gender
+        ,Status[0].Class
+        ,Status[0].Smoking
+        ,Status[0].IssueAge
+        ,GroupUWType
+        ,InsdState
+        );
+
+    if
+        (   !temp_database.Query(DB_AllowChangeToDBO2)
+        &&  !nonstd::is_sorted
+                (DBOpt.begin()
+                ,DBOpt.end()
+                ,boost::bind
+                    (std::logical_and<bool>()
+                    ,boost::bind(std::equal_to<e_dbopt>(), _1, e_dbopt("B"))
+                    ,boost::bind(std::not_equal_to<e_dbopt>(), _2, e_dbopt("B"))
+                    )
+                )
+        )
         {
         return
             ("Policy form forbids change to increasing death benefit option."
             );
         }
-    if(!CheckAllowDBO3())
+
+    if
+        (   !temp_database.Query(DB_AllowDBO3)
+        &&  DBOpt.end() != std::find
+                (DBOpt.begin()
+                ,DBOpt.end()
+                ,e_dbopt("ROP")
+                )
+        )
         {
         return
             ("Policy form forbids ROP death benefit option."
             );
         }
+
     return "";
 }
 
