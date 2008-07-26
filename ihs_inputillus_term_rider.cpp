@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_inputillus_term_rider.cpp,v 1.6 2008-07-26 18:10:16 chicares Exp $
+// $Id: ihs_inputillus_term_rider.cpp,v 1.7 2008-07-26 23:29:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,10 +29,31 @@
 #include "inputillus.hpp"
 
 #include "alert.hpp"
-#include "data_directory.hpp" // AddDataDir(), needed to access product data.
-#include "ihs_proddata.hpp"   // Product data, needed to access rounding rules.
-#include "ihs_rnddata.hpp"    // Rounding.
+#include "round_to.hpp"
 #include "value_cast.hpp"
+
+// TODO ?? More attention could be paid to rounding.
+// This would be preferable:
+//
+// #include "data_directory.hpp" // AddDataDir(), needed to access product data.
+// #include "ihs_proddata.hpp"   // Product data, needed to access rounding rules.
+// #include "ihs_rnddata.hpp"    // Rounding.
+//
+//        term_spec_amt = StreamableRoundingRules
+//            (AddDataDir(TProductData(ProductName).GetRoundingFilename())
+//            ).get_rounding_rules().round_specamt()(term_spec_amt)
+//            ;
+//
+// except that it wouldn't work on the antediluvian branch.
+
+namespace
+{
+round_to<double> const& specamt_rounder()
+{
+    static round_to<double> z(0, r_upward);
+    return z;
+}
+} // Unnamed namespace.
 
 //============================================================================
 void IllusInputParms::make_term_rider_consistent(bool aggressively)
@@ -56,11 +77,7 @@ void IllusInputParms::make_term_rider_consistent(bool aggressively)
         double total_spec_amt  = Status[0].TotalSpecAmt;
         double term_proportion = Status[0].TermProportion;
         double term_spec_amt   = total_spec_amt * term_proportion;
-        // TODO ?? More attention could be paid to rounding.
-        term_spec_amt = StreamableRoundingRules
-            (AddDataDir(TProductData(ProductName).GetRoundingFilename())
-            ).get_rounding_rules().round_specamt()(term_spec_amt)
-            ;
+        term_spec_amt = specamt_rounder()(term_spec_amt);
         Status[0].TermAmt = term_spec_amt;
 
         if(aggressively)
