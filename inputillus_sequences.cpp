@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_sequences.cpp,v 1.20 2008-07-25 20:59:11 chicares Exp $
+// $Id: inputillus_sequences.cpp,v 1.21 2008-07-26 01:54:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -712,8 +712,6 @@ std::string IllusInputParms::realize_sequence_string_for_corp_payment_mode()
 //============================================================================
 std::string IllusInputParms::realize_sequence_string_for_gen_acct_int_rate()
 {
-    // TODO ?? How to handle DB_AllowGenAcct?
-    // TODO ?? How to handle ukase against illustrating varying rates?
     std::string s = realize_sequence_string
         (*this
         ,GenAcctRate
@@ -733,6 +731,12 @@ std::string IllusInputParms::realize_sequence_string_for_gen_acct_int_rate()
         ,GroupUWType
         ,InsdState
         );
+
+    // If the field is disabled, then its old contents aren't invalid.
+    if(!temp_database.Query(DB_AllowGenAcct))
+        {
+        return "";
+        }
 
     // TODO ?? Should enforce minimum = guar rate?
     std::vector<double> general_account_max_rate;
@@ -775,8 +779,6 @@ std::string IllusInputParms::realize_sequence_string_for_gen_acct_int_rate()
 //============================================================================
 std::string IllusInputParms::realize_sequence_string_for_sep_acct_int_rate()
 {
-    // TODO ?? How to handle DB_AllowSepAcct?
-    // TODO ?? How to handle ukase against illustrating varying rates?
     std::string s = realize_sequence_string
         (*this
         ,SepAcctRate
@@ -796,6 +798,12 @@ std::string IllusInputParms::realize_sequence_string_for_sep_acct_int_rate()
         ,GroupUWType
         ,InsdState
         );
+
+    // If the field is disabled, then its old contents aren't invalid.
+    if(!temp_database.Query(DB_AllowSepAcct))
+        {
+        return "";
+        }
 
     // TODO ?? Should enforce minimum = (0.0 - spread)?
     double max_sep_acct_rate = temp_database.Query(DB_MaxSepAcctRate);
