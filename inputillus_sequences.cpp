@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_sequences.cpp,v 1.21 2008-07-26 01:54:28 chicares Exp $
+// $Id: inputillus_sequences.cpp,v 1.22 2008-07-26 11:49:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -438,11 +438,11 @@ std::string IllusInputParms::realize_sequence_string_for_current_coi_grading()
         {
         std::ostringstream oss;
         oss
-            << "Current COI grading entered ranges from "
+            << "Current COI grading as entered ranges from "
             << extrema.minimum()
             << " to "
             << extrema.maximum()
-            << " but must be between 0 and 1 inclusive."
+            << ", but must be between 0 and 1 inclusive."
             ;
         return oss.str();
         }
@@ -470,11 +470,11 @@ std::string IllusInputParms::realize_sequence_string_for_cash_value_enhancement_
         {
         std::ostringstream oss;
         oss
-            << "Current COI grading entered ranges from "
+            << "Cash value enhancement rate as entered ranges from "
             << extrema.minimum()
             << " to "
             << extrema.maximum()
-            << " but must be between 0 and 1 inclusive."
+            << ", but must be between 0 and 1 inclusive."
             ;
         return oss.str();
         }
@@ -502,11 +502,11 @@ std::string IllusInputParms::realize_sequence_string_for_corp_tax_bracket()
         {
         std::ostringstream oss;
         oss
-            << "Corporate tax bracket entered ranges from "
+            << "Corporate tax bracket as entered ranges from "
             << extrema.minimum()
             << " to "
             << extrema.maximum()
-            << " but must be between 0 and 1 inclusive."
+            << ", but must be between 0 and 1 inclusive."
             ;
         return oss.str();
         }
@@ -534,11 +534,11 @@ std::string IllusInputParms::realize_sequence_string_for_indv_tax_bracket()
         {
         std::ostringstream oss;
         oss
-            << "Individual tax bracket entered ranges from "
+            << "Individual tax bracket as entered ranges from "
             << extrema.minimum()
             << " to "
             << extrema.maximum()
-            << " but must be between 0 and 1 inclusive."
+            << ", but must be between 0 and 1 inclusive."
             ;
         return oss.str();
         }
@@ -766,8 +766,9 @@ std::string IllusInputParms::realize_sequence_string_for_gen_acct_int_rate()
                 << j
                 << ": general-account interest rate entered is "
                 << GenAcctRate[j]
-                << ", but highest rate allowed is "
+                << ", but "
                 << general_account_max_rate[j]
+                << " is the highest rate allowed."
                 ;
             return oss.str();
             }
@@ -823,8 +824,9 @@ std::string IllusInputParms::realize_sequence_string_for_sep_acct_int_rate()
         oss
             << "Highest separate-account interest rate entered is "
             << highest
-            << " but highest rate allowed is "
+            << ", but "
             << max_sep_acct_rate
+            << " is the highest rate allowed."
             ;
         return oss.str();
         }
