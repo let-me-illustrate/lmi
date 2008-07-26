@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_term_rider.cpp,v 1.5 2008-01-01 18:29:45 chicares Exp $
+// $Id: inputillus_term_rider.cpp,v 1.6 2008-07-26 17:39:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -27,9 +27,9 @@
 #endif // __BORLANDC__
 
 #include "inputillus.hpp"
-#include "value_cast.hpp"
 
-#include <stdexcept>
+#include "alert.hpp"
+#include "value_cast.hpp"
 
 //============================================================================
 void IllusInputParms::make_term_rider_consistent(bool aggressively)
@@ -75,7 +75,10 @@ void IllusInputParms::make_term_rider_consistent(bool aggressively)
         }
     else
         {
-        throw std::logic_error("Term is neither proportional nor absolute.");
+        fatal_error()
+            << "Term is neither proportional nor absolute."
+            << LMI_FLUSH
+            ;
         }
 }
 
