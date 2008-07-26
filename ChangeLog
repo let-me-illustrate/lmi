@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1114 2008-07-25 18:07:40 chicares Exp $
+// $Id: ChangeLog,v 1.1115 2008-07-26 14:13:17 chicares Exp $
 
 MAINTENANCE
 
@@ -18408,4 +18408,28 @@ impermissible withdrawal amount.
   stratified_algorithms_test.cpp
   stratified_charges.cpp
 Refactor, using boost::minmax_element() as appropriate.
+
+20080725T2059Z <gchicares@sbcglobal.net> [1104]
+
+  inputillus_sequences.cpp
+Refactor.
+
+20080726T0154Z <gchicares@sbcglobal.net> [1100]
+
+  dbdict.cpp
+  inputillus_sequences.cpp
+Resolve certain defect markers. It is common industry practice to let
+input interest rates vary by duration. Old input in a disabled field
+is presumptively not invalid.
+
+20080726T1149Z <gchicares@sbcglobal.net> [1100]
+
+  inputillus_sequences.cpp
+Rewrite diagnostics.
+
+20080726T1413Z <gchicares@sbcglobal.net> [1098]
+
+  inputillus_sequences.cpp
+Resolve certain defect markers, imposing sensible lower limits on
+interest rates.
 
