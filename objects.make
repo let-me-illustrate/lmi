@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.124 2008-07-14 11:22:24 chicares Exp $
+# $Id: objects.make,v 1.125 2008-07-26 23:57:50 chicares Exp $
 
 ################################################################################
 
@@ -191,6 +191,7 @@ common_common_objects := \
   input_sequence.o \
   inputillus.o \
   inputillus_sequences.o \
+  inputillus_term_rider.o \
   inputillus_xml_io.o \
   inputs.o \
   inputstatus.o \
@@ -250,7 +251,6 @@ antediluvian_common_objects := \
   database.o \
   dbdict.o \
   dbvalue.o \
-  inputillus_term_rider.o \
   mortality_rates.o \
   solve.o \
 
@@ -273,7 +273,6 @@ lmi_common_objects := \
   ihs_dbvalue.o \
   ihs_fpios.o \
   ihs_funddata.o \
-  ihs_inputillus_term_rider.o \
   ihs_irc7702.o \
   ihs_irc7702a.o \
   ihs_mortal.o \

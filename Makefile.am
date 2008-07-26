@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.44 2008-07-09 17:26:17 zeitlin Exp $
+# $Id: Makefile.am,v 1.45 2008-07-26 23:57:50 chicares Exp $
 
 SUBDIRS = third_party
 
@@ -253,6 +253,7 @@ liblmi_common_sources = \
     input_sequence.cpp \
     inputillus.cpp \
     inputillus_sequences.cpp \
+    inputillus_term_rider.cpp \
     inputillus_xml_io.cpp \
     inputs.cpp \
     inputstatus.cpp \
@@ -306,7 +307,6 @@ libantediluvian_la_SOURCES = \
     database.cpp \
     dbdict.cpp \
     dbvalue.cpp \
-    inputillus_term_rider.cpp \
     mortality_rates.cpp \
     solve.cpp \
     $(liblmi_common_sources)
@@ -334,7 +334,6 @@ liblmi_la_SOURCES = \
     ihs_dbvalue.cpp \
     ihs_fpios.cpp \
     ihs_funddata.cpp \
-    ihs_inputillus_term_rider.cpp \
     ihs_irc7702.cpp \
     ihs_irc7702a.cpp \
     ihs_mortal.cpp \
@@ -869,7 +868,6 @@ noinst_HEADERS = \
     docmanager_ex.hpp \
     docmdichildframe_ex.hpp \
     emit_ledger.hpp \
-    enums7702.hpp \
     exit_codes.hpp \
     facets.hpp \
     fenv_guard.hpp \
@@ -925,6 +923,7 @@ noinst_HEADERS = \
     max_stream_precision.hpp \
     mc_enum_fwd.hpp \
     mc_enum.hpp \
+    mc_enum_aux.hpp \
     mc_enum_test_aux_enums.hpp \
     mc_enum_test_aux.hpp \
     mc_enum_type_enums.hpp \
