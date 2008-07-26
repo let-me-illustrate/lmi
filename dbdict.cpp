@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbdict.cpp,v 1.10 2008-07-03 02:11:47 chicares Exp $
+// $Id: dbdict.cpp,v 1.11 2008-07-26 01:54:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -112,6 +112,7 @@ void DBDictionary::Init()
     AddEntry(TDBEntry(DB_CurrPrefLoanSpread, TDBValue(DB_CurrPrefLoanSpread, n, dims, loan_spread)));
 
     double zilch[1] = {0.0};
+    double affirmative[1] = {1.0};
 
     AddEntry(TDBEntry(DB_GAIntBonus, TDBValue(DB_GAIntBonus, n, dims, zilch)));
     AddEntry(TDBEntry(DB_CurrIntSpread, TDBValue(DB_CurrIntSpread, n, dims, zilch)));
@@ -120,6 +121,7 @@ void DBDictionary::Init()
     AddEntry(TDBEntry(DB_StableValFundCharge, TDBValue(DB_StableValFundCharge, n, dims, zilch)));
     AddEntry(TDBEntry(DB_AssetChargeType, TDBValue(DB_AssetChargeType, n, dims, zilch)));
     AddEntry(TDBEntry(DB_AmortPmLdFundCharge, TDBValue(DB_AmortPmLdFundCharge, n, dims, zilch)));
+    AddEntry(TDBEntry(DB_AllowGenAcct, TDBValue(DB_AllowGenAcct, n, dims, affirmative)));
     AddEntry(TDBEntry(DB_AllowSepAcct, TDBValue(DB_AllowSepAcct, n, dims, zilch)));
     AddEntry(TDBEntry(DB_SepAcctSpreadMethod, TDBValue(DB_SepAcctSpreadMethod, n, dims, zilch)));
     AddEntry(TDBEntry(DB_AllowPrefLoan, TDBValue(DB_AllowPrefLoan, n, dims, zilch)));
