@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_sequences.cpp,v 1.22 2008-07-26 11:49:42 chicares Exp $
+// $Id: inputillus_sequences.cpp,v 1.23 2008-07-26 14:13:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -738,7 +738,7 @@ std::string IllusInputParms::realize_sequence_string_for_gen_acct_int_rate()
         return "";
         }
 
-    // TODO ?? Should enforce minimum = guar rate?
+    double guar_int = temp_database.Query(DB_GuarInt);
     std::vector<double> general_account_max_rate;
     temp_database.Query(general_account_max_rate, DB_MaxGenAcctRate);
 
@@ -769,6 +769,29 @@ std::string IllusInputParms::realize_sequence_string_for_gen_acct_int_rate()
                 << ", but "
                 << general_account_max_rate[j]
                 << " is the highest rate allowed."
+                ;
+            return oss.str();
+            }
+        }
+    // DEPRECATED An empty string is a tricky special case for the
+    // obsolete input class, which requires this goofy workaround.
+    if(GenAcctIntRate.empty())
+        {
+        return "";
+        }
+    for(unsigned int j = 0; j < general_account_max_rate.size(); ++j)
+        {
+        if(GenAcctRate[j] < guar_int)
+            {
+            std::ostringstream oss;
+            oss
+                << "Duration "
+                << j
+                << ": general-account interest rate entered is "
+                << GenAcctRate[j]
+                << ", but "
+                << guar_int
+                << " is the lowest rate allowed."
                 ;
             return oss.str();
             }
@@ -806,7 +829,11 @@ std::string IllusInputParms::realize_sequence_string_for_sep_acct_int_rate()
         return "";
         }
 
-    // TODO ?? Should enforce minimum = (0.0 - spread)?
+    // Arguably the minimum gross rate would be -(100% + spread).
+    // Such an exquisite refinement would complicate the program by
+    // making this field's range depend on gross versus net. The
+    // -100% minimum for type 'r_curr_int_rate' is low enough.
+
     double max_sep_acct_rate = temp_database.Query(DB_MaxSepAcctRate);
     if(global_settings::instance().ash_nazg())
         {
