@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_realization.cpp,v 1.2 2008-07-27 17:57:27 chicares Exp $
+// $Id: input_realization.cpp,v 1.3 2008-07-27 18:19:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -244,7 +244,7 @@ Input::permissible_payment_mode_keywords()
 }
 
 //============================================================================
-std::vector<std::string> Input::realize_all_sequence_strings(bool report_errors)
+std::vector<std::string> Input::RealizeAllSequenceInput(bool report_errors)
 {
     std::vector<std::string> s;
 
@@ -252,32 +252,29 @@ std::vector<std::string> Input::realize_all_sequence_strings(bool report_errors)
     // COMPILER !! Here's a mystery: unit test segfaults without this line.
     s.push_back("");
 #endif // mingw gcc 2.95.2-1 compiler.
-    s.push_back(realize_sequence_string_for_add_on_monthly_custodial_fee());
-    s.push_back(realize_sequence_string_for_add_on_comp_on_assets       ());
-    s.push_back(realize_sequence_string_for_add_on_comp_on_premium      ());
-    s.push_back(realize_sequence_string_for_non_us_corridor_factor      ());
-    s.push_back(realize_sequence_string_for_partial_mortality_multiplier());
-    s.push_back(realize_sequence_string_for_current_coi_multiplier      ());
-    s.push_back(realize_sequence_string_for_current_coi_grading         ());
-    s.push_back(realize_sequence_string_for_cash_value_enhancement_rate ());
-    s.push_back(realize_sequence_string_for_corp_tax_bracket            ());
-    s.push_back(realize_sequence_string_for_indv_tax_bracket            ());
-    s.push_back(realize_sequence_string_for_projected_salary            ());
-    s.push_back(realize_sequence_string_for_specified_amount            ());
-    s.push_back(realize_sequence_string_for_death_benefit_option        ());
-    s.push_back(realize_sequence_string_for_indv_payment                ());
-    s.push_back(realize_sequence_string_for_indv_payment_mode           ());
-    s.push_back(realize_sequence_string_for_corp_payment                ());
-    s.push_back(realize_sequence_string_for_corp_payment_mode           ());
-    s.push_back(realize_sequence_string_for_gen_acct_int_rate           ());
-    s.push_back(realize_sequence_string_for_sep_acct_int_rate           ());
-    s.push_back(realize_sequence_string_for_new_loan                    ());
-    s.push_back(realize_sequence_string_for_withdrawal                  ());
-    s.push_back(realize_sequence_string_for_flat_extra                  ());
-    s.push_back(realize_sequence_string_for_policy_level_flat_extra     ());
-    s.push_back(realize_sequence_string_for_honeymoon_value_spread      ());
-    s.push_back(realize_sequence_string_for_premium_history             ());
-    s.push_back(realize_sequence_string_for_specamt_history             ());
+    s.push_back(RealizeExtraMonthlyCustodialFee   ());
+    s.push_back(RealizeExtraCompensationOnAssets  ());
+    s.push_back(RealizeExtraCompensationOnPremium ());
+    s.push_back(RealizePartialMortalityMultiplier ());
+    s.push_back(RealizeCurrentCoiMultiplier       ());
+    s.push_back(RealizeCashValueEnhancementRate   ());
+    s.push_back(RealizeCorporationTaxBracket      ());
+    s.push_back(RealizeTaxBracket                 ());
+    s.push_back(RealizeProjectedSalary            ());
+    s.push_back(RealizeSpecifiedAmount            ());
+    s.push_back(RealizeDeathBenefitOption         ());
+    s.push_back(RealizePayment                    ());
+    s.push_back(RealizePaymentMode                ());
+    s.push_back(RealizeCorporationPayment         ());
+    s.push_back(RealizeCorporationPaymentMode     ());
+    s.push_back(RealizeGeneralAccountRate         ());
+    s.push_back(RealizeSeparateAccountRate        ());
+    s.push_back(RealizeNewLoan                    ());
+    s.push_back(RealizeWithdrawal                 ());
+    s.push_back(RealizeFlatExtra                  ());
+    s.push_back(RealizeHoneymoonValueSpread       ());
+    s.push_back(RealizePremiumHistory             ());
+    s.push_back(RealizeSpecamtHistory             ());
 
     if(report_errors)
         {
@@ -309,7 +306,7 @@ std::vector<std::string> Input::realize_all_sequence_strings(bool report_errors)
 }
 
 //============================================================================
-std::string Input::realize_sequence_string_for_add_on_monthly_custodial_fee()
+std::string Input::RealizeExtraMonthlyCustodialFee()
 {
     return realize_sequence_string
         (*this
@@ -319,7 +316,7 @@ std::string Input::realize_sequence_string_for_add_on_monthly_custodial_fee()
 }
 
 //============================================================================
-std::string Input::realize_sequence_string_for_add_on_comp_on_assets()
+std::string Input::RealizeExtraCompensationOnAssets()
 {
     std::string s = realize_sequence_string
         (*this
@@ -350,7 +347,7 @@ std::string Input::realize_sequence_string_for_add_on_comp_on_assets()
 }
 
 //============================================================================
-std::string Input::realize_sequence_string_for_add_on_comp_on_premium()
+std::string Input::RealizeExtraCompensationOnPremium()
 {
     std::string s = realize_sequence_string
         (*this
@@ -377,23 +374,7 @@ std::string Input::realize_sequence_string_for_add_on_comp_on_premium()
 }
 
 //============================================================================
-std::string Input::realize_sequence_string_for_non_us_corridor_factor()
-{
-    std::string s = realize_sequence_string
-        (*this
-        ,VectorNonUsCorridorFactor
-        ,NonUsCorridorFactor
-        );
-    if(s.size())
-        {
-        return s;
-        }
-
-    return "";
-}
-
-//============================================================================
-std::string Input::realize_sequence_string_for_partial_mortality_multiplier()
+std::string Input::RealizePartialMortalityMultiplier()
 {
     return realize_sequence_string
         (*this
@@ -403,7 +384,7 @@ std::string Input::realize_sequence_string_for_partial_mortality_multiplier()
 }
 
 //============================================================================
-std::string Input::realize_sequence_string_for_current_coi_multiplier()
+std::string Input::RealizeCurrentCoiMultiplier()
 {
     return realize_sequence_string
         (*this
@@ -413,42 +394,7 @@ std::string Input::realize_sequence_string_for_current_coi_multiplier()
 }
 
 //============================================================================
-std::string Input::realize_sequence_string_for_current_coi_grading()
-{
-    std::string s = realize_sequence_string
-        (*this
-        ,VectorCurrentCoiGrading
-        ,CurrentCoiGrading
-        );
-    if(s.size())
-        {
-        return s;
-        }
-
-    // SOMEDAY !! If we add a production like
-    //   numeric-value: numeric-literal %
-    // then we might say "between 0% and 100%." here.
-    //
-    // There's no particular reason to use 100% as the maximum.
-    // Anything over that seems extreme.
-    minmax<double> extrema(VectorCurrentCoiGrading);
-    if(!(0.0 <= extrema.minimum() && extrema.maximum() <= 1.0))
-        {
-        std::ostringstream oss;
-        oss
-            << "Current COI grading as entered ranges from "
-            << extrema.minimum()
-            << " to "
-            << extrema.maximum()
-            << ", but must be between 0 and 1 inclusive."
-            ;
-        return oss.str();
-        }
-    return "";
-}
-
-//============================================================================
-std::string Input::realize_sequence_string_for_cash_value_enhancement_rate()
+std::string Input::RealizeCashValueEnhancementRate()
 {
     std::string s = realize_sequence_string
         (*this
@@ -480,7 +426,7 @@ std::string Input::realize_sequence_string_for_cash_value_enhancement_rate()
 }
 
 //============================================================================
-std::string Input::realize_sequence_string_for_corp_tax_bracket()
+std::string Input::RealizeCorporationTaxBracket()
 {
     std::string s = realize_sequence_string
         (*this
@@ -512,7 +458,7 @@ std::string Input::realize_sequence_string_for_corp_tax_bracket()
 }
 
 //============================================================================
-std::string Input::realize_sequence_string_for_indv_tax_bracket()
+std::string Input::RealizeTaxBracket()
 {
     std::string s = realize_sequence_string
         (*this
@@ -544,7 +490,7 @@ std::string Input::realize_sequence_string_for_indv_tax_bracket()
 }
 
 //============================================================================
-std::string Input::realize_sequence_string_for_projected_salary()
+std::string Input::RealizeProjectedSalary()
 {
     return realize_sequence_string
         (*this
@@ -554,7 +500,7 @@ std::string Input::realize_sequence_string_for_projected_salary()
 }
 
 //============================================================================
-std::string Input::realize_sequence_string_for_specified_amount()
+std::string Input::RealizeSpecifiedAmount()
 {
 // We could enforce a minimum, using DB_MinSpecAmt from the database.
 // But some would think it useful to be able to enter zero and get
@@ -570,7 +516,7 @@ std::string Input::realize_sequence_string_for_specified_amount()
 }
 
 //============================================================================
-std::string Input::realize_sequence_string_for_death_benefit_option()
+std::string Input::RealizeDeathBenefitOption()
 {
     std::string s = realize_sequence_string
         (*this
@@ -630,7 +576,7 @@ std::string Input::realize_sequence_string_for_death_benefit_option()
 }
 
 //============================================================================
-std::string Input::realize_sequence_string_for_indv_payment()
+std::string Input::RealizePayment()
 {
     std::map<std::string,std::string> z = permissible_payment_strategy_keywords();
     if
@@ -653,7 +599,7 @@ std::string Input::realize_sequence_string_for_indv_payment()
 }
 
 //============================================================================
-std::string Input::realize_sequence_string_for_indv_payment_mode()
+std::string Input::RealizePaymentMode()
 {
     // SOMEDAY !! No universally appropriate default exists: some contracts
     // may forbid monthly mode, while others may require it. We enforce
@@ -669,7 +615,7 @@ std::string Input::realize_sequence_string_for_indv_payment_mode()
 }
 
 //============================================================================
-std::string Input::realize_sequence_string_for_corp_payment()
+std::string Input::RealizeCorporationPayment()
 {
     std::map<std::string,std::string> z = permissible_payment_strategy_keywords();
     if
@@ -692,7 +638,7 @@ std::string Input::realize_sequence_string_for_corp_payment()
 }
 
 //============================================================================
-std::string Input::realize_sequence_string_for_corp_payment_mode()
+std::string Input::RealizeCorporationPaymentMode()
 {
     // SOMEDAY !! No universally appropriate default exists: some contracts
     // may forbid monthly mode, while others may require it. We enforce
@@ -708,7 +654,7 @@ std::string Input::realize_sequence_string_for_corp_payment_mode()
 }
 
 //============================================================================
-std::string Input::realize_sequence_string_for_gen_acct_int_rate()
+std::string Input::RealizeGeneralAccountRate()
 {
     std::string s = realize_sequence_string
         (*this
@@ -799,7 +745,7 @@ std::string Input::realize_sequence_string_for_gen_acct_int_rate()
 }
 
 //============================================================================
-std::string Input::realize_sequence_string_for_sep_acct_int_rate()
+std::string Input::RealizeSeparateAccountRate()
 {
     std::string s = realize_sequence_string
         (*this
@@ -859,7 +805,7 @@ std::string Input::realize_sequence_string_for_sep_acct_int_rate()
 }
 
 //============================================================================
-std::string Input::realize_sequence_string_for_new_loan()
+std::string Input::RealizeNewLoan()
 {
     std::string s = realize_sequence_string
         (*this
@@ -893,7 +839,7 @@ std::string Input::realize_sequence_string_for_new_loan()
 }
 
 //============================================================================
-std::string Input::realize_sequence_string_for_withdrawal()
+std::string Input::RealizeWithdrawal()
 {
     std::string s = realize_sequence_string
         (*this
@@ -949,7 +895,7 @@ std::string Input::realize_sequence_string_for_withdrawal()
 }
 
 //============================================================================
-std::string Input::realize_sequence_string_for_flat_extra()
+std::string Input::RealizeFlatExtra()
 {
 // We could enforce a maximum of the monthly equivalent of unity,
 // and a minimum of zero; is that worth the bother though?
@@ -985,14 +931,7 @@ std::string Input::realize_sequence_string_for_flat_extra()
 }
 
 //============================================================================
-std::string Input::realize_sequence_string_for_policy_level_flat_extra()
-{
-// Not yet implemented. May be useful for survivorship.
-    return "";
-}
-
-//============================================================================
-std::string Input::realize_sequence_string_for_honeymoon_value_spread()
+std::string Input::RealizeHoneymoonValueSpread()
 {
     return realize_sequence_string
         (*this
@@ -1002,7 +941,7 @@ std::string Input::realize_sequence_string_for_honeymoon_value_spread()
 }
 
 //============================================================================
-std::string Input::realize_sequence_string_for_premium_history()
+std::string Input::RealizePremiumHistory()
 {
     return realize_sequence_string
         (*this
@@ -1012,7 +951,7 @@ std::string Input::realize_sequence_string_for_premium_history()
 }
 
 //============================================================================
-std::string Input::realize_sequence_string_for_specamt_history()
+std::string Input::RealizeSpecamtHistory()
 {
     return realize_sequence_string
         (*this
@@ -1075,14 +1014,14 @@ void Input::make_term_rider_consistent(bool aggressively)
             double base_spec_amt = total_spec_amt - term_spec_amt;
             SpecifiedAmount = value_cast<std::string>(base_spec_amt);
 // TODO ?? Are the next two calls necessary? or does
-//   realize_sequence_string_for_specified_amount();
+//   RealizeSpecifiedAmount();
 // take care of everything?
             SpecAmt.assign(100, r_spec_amt(base_spec_amt));
             VectorSpecifiedAmountStrategy.assign
                 (100
                 ,e_sa_strategy(e_sainputscalar)
                 );
-            realize_sequence_string_for_specified_amount();
+            RealizeSpecifiedAmount();
             }
         }
     else
