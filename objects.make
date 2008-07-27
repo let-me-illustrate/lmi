@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.126 2008-07-27 00:54:23 chicares Exp $
+# $Id: objects.make,v 1.127 2008-07-27 01:41:11 chicares Exp $
 
 ################################################################################
 
@@ -280,6 +280,7 @@ lmi_common_objects := \
   ihs_rnddata.o \
   input.o \
   input_harmonization.o \
+  input_realization.o \
   md5.o \
   mvc_model.o \
   preferences_model.o \
