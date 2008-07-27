@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.125 2008-07-26 23:57:50 chicares Exp $
+# $Id: objects.make,v 1.126 2008-07-27 00:54:23 chicares Exp $
 
 ################################################################################
 
@@ -191,7 +191,6 @@ common_common_objects := \
   input_sequence.o \
   inputillus.o \
   inputillus_sequences.o \
-  inputillus_term_rider.o \
   inputillus_xml_io.o \
   inputs.o \
   inputstatus.o \
@@ -635,7 +634,6 @@ input_test$(EXEEXT): \
   input_test.o \
   inputillus.o \
   inputillus_sequences.o \
-  inputillus_term_rider.o \
   inputillus_xml_io.o \
   inputs.o \
   inputstatus.o \

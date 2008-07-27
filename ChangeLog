@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1115 2008-07-26 14:13:17 chicares Exp $
+// $Id: ChangeLog,v 1.1116 2008-07-27 00:54:24 chicares Exp $
 
 MAINTENANCE
 
@@ -18432,4 +18432,35 @@ Rewrite diagnostics.
   inputillus_sequences.cpp
 Resolve certain defect markers, imposing sensible lower limits on
 interest rates.
+
+20080726T1739Z <gchicares@sbcglobal.net> [1098]
+
+  inputillus_term_rider.cpp
+Replace standard exceptions with 'alert' facility.
+
+20080726T1810Z <gchicares@sbcglobal.net> [1098]
+
+  ihs_inputillus_term_rider.cpp
+Replace standard exceptions with 'alert' facility.
+
+20080726T2329Z <gchicares@sbcglobal.net> [1097]
+
+  ihs_inputillus_term_rider.cpp
+  inputillus_term_rider.cpp
+Rewrite, making two files identical so that one may be expunged.
+
+20080726T2357Z <gchicares@sbcglobal.net> [1095]
+
+  Makefile.am
+  ihs_inputillus_term_rider.cpp [expunged]
+  objects.make
+Expunge a superfluous file.
+
+20080727T0054Z <gchicares@sbcglobal.net> [1095]
+
+  Makefile.am
+  inputillus_sequences.cpp
+  inputillus_term_rider.cpp [expunged]
+  objects.make
+Combine two files.
 
