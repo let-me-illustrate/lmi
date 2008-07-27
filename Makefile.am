@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.46 2008-07-27 00:54:23 chicares Exp $
+# $Id: Makefile.am,v 1.47 2008-07-27 01:41:10 chicares Exp $
 
 SUBDIRS = third_party
 
@@ -341,6 +341,7 @@ liblmi_la_SOURCES = \
     ihs_rnddata.cpp \
     input.cpp \
     input_harmonization.cpp \
+    input_realization.cpp \
     mc_enum.cpp \
     mc_enum_types.cpp \
     mc_enum_types_aux.cpp \
