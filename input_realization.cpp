@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_realization.cpp,v 1.4 2008-07-27 18:34:33 chicares Exp $
+// $Id: input_realization.cpp,v 1.5 2008-07-27 18:42:47 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -530,18 +530,8 @@ std::string Input::RealizeDeathBenefitOption()
         return s;
         }
 
-    TDatabase temp_database
-        (ProductName
-        ,Status[0].Gender
-        ,Status[0].Class
-        ,Status[0].Smoking
-        ,Status[0].IssueAge
-        ,GroupUWType
-        ,InsdState
-        );
-
     if
-        (   !temp_database.Query(DB_AllowChangeToDBO2)
+        (   !database_->Query(DB_AllowChangeToDBO2)
         &&  !nonstd::is_sorted
                 (DeathBenefitOptionRealized_.begin()
                 ,DeathBenefitOptionRealized_.end()
@@ -559,7 +549,7 @@ std::string Input::RealizeDeathBenefitOption()
         }
 
     if
-        (   !temp_database.Query(DB_AllowDBO3)
+        (   !database_->Query(DB_AllowDBO3)
         &&  DeathBenefitOptionRealized_.end() != std::find
                 (DeathBenefitOptionRealized_.begin()
                 ,DeathBenefitOptionRealized_.end()
@@ -666,25 +656,15 @@ std::string Input::RealizeGeneralAccountRate()
         return s;
         }
 
-    TDatabase temp_database
-        (ProductName
-        ,Status[0].Gender
-        ,Status[0].Class
-        ,Status[0].Smoking
-        ,Status[0].IssueAge
-        ,GroupUWType
-        ,InsdState
-        );
-
     // If the field is disabled, then its old contents aren't invalid.
-    if(!temp_database.Query(DB_AllowGenAcct))
+    if(!database_->Query(DB_AllowGenAcct))
         {
         return "";
         }
 
-    double guar_int = temp_database.Query(DB_GuarInt);
+    double guar_int = database_->Query(DB_GuarInt);
     std::vector<double> general_account_max_rate;
-    temp_database.Query(general_account_max_rate, DB_MaxGenAcctRate);
+    database_->Query(general_account_max_rate, DB_MaxGenAcctRate);
 
     if(global_settings::instance().ash_nazg())
         {
@@ -757,18 +737,8 @@ std::string Input::RealizeSeparateAccountRate()
         return s;
         }
 
-    TDatabase temp_database
-        (ProductName
-        ,Status[0].Gender
-        ,Status[0].Class
-        ,Status[0].Smoking
-        ,Status[0].IssueAge
-        ,GroupUWType
-        ,InsdState
-        );
-
     // If the field is disabled, then its old contents aren't invalid.
-    if(!temp_database.Query(DB_AllowSepAcct))
+    if(!database_->Query(DB_AllowSepAcct))
         {
         return "";
         }
@@ -778,7 +748,7 @@ std::string Input::RealizeSeparateAccountRate()
     // making this field's range depend on gross versus net. The
     // -100% minimum for type 'r_curr_int_rate' is low enough.
 
-    double max_sep_acct_rate = temp_database.Query(DB_MaxSepAcctRate);
+    double max_sep_acct_rate = database_->Query(DB_MaxSepAcctRate);
     if(global_settings::instance().ash_nazg())
         {
         // We have some regression-test files with rates higher even
@@ -817,16 +787,7 @@ std::string Input::RealizeNewLoan()
         return s;
         }
 
-    TDatabase temp_database
-        (ProductName
-        ,Status[0].Gender
-        ,Status[0].Class
-        ,Status[0].Smoking
-        ,Status[0].IssueAge
-        ,GroupUWType
-        ,InsdState
-        );
-    if(temp_database.Query(DB_AllowLoan))
+    if(database_->Query(DB_AllowLoan))
         {
         return "";
         }
@@ -851,17 +812,7 @@ std::string Input::RealizeWithdrawal()
         return s;
         }
 
-    TDatabase temp_database
-        (ProductName
-        ,Status[0].Gender
-        ,Status[0].Class
-        ,Status[0].Smoking
-        ,Status[0].IssueAge
-        ,GroupUWType
-        ,InsdState
-        );
-
-    if(!temp_database.Query(DB_AllowWD))
+    if(!database_->Query(DB_AllowWD))
         {
         if(!each_equal(WithdrawalRealized_.begin(), WithdrawalRealized_.end(), 0.0))
             {
@@ -870,7 +821,7 @@ std::string Input::RealizeWithdrawal()
         }
     else
         {
-        double lowest_allowed_withdrawal = temp_database.Query(DB_MinWD);
+        double lowest_allowed_withdrawal = database_->Query(DB_MinWD);
         for
             (std::vector<r_wd>::iterator i = WithdrawalRealized_.begin()
             ;i < WithdrawalRealized_.end()
@@ -909,16 +860,7 @@ std::string Input::RealizeFlatExtra()
         return s;
         }
 
-    TDatabase temp_database
-        (ProductName
-        ,Status[0].Gender
-        ,Status[0].Class
-        ,Status[0].Smoking
-        ,Status[0].IssueAge
-        ,GroupUWType
-        ,InsdState
-        );
-    if(temp_database.Query(DB_AllowFlatExtras))
+    if(database_->Query(DB_AllowFlatExtras))
         {
         return "";
         }
