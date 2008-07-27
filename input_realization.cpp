@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_realization.cpp,v 1.6 2008-07-27 19:07:20 chicares Exp $
+// $Id: input_realization.cpp,v 1.7 2008-07-27 19:30:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -50,10 +50,10 @@
 // Realize sequence strings with only numeric values.
 template<typename T>
 std::string realize_sequence_string
-    (Input            & input
-    ,std::vector<T>   & v
-    ,std::string const& sequence_string
-    ,int                index_origin = 0
+    (Input               & input
+    ,std::vector<T>      & v
+    ,datum_sequence const& sequence_string
+    ,int                   index_origin = 0
     )
 {
     InputSequence s
@@ -75,7 +75,7 @@ template<typename T>
 std::string realize_sequence_string
     (Input                  & input
     ,std::vector<T>         & v
-    ,std::string       const& sequence_string
+    ,datum_sequence    const& sequence_string
     ,detail::stringmap const& keyword_dictionary
     ,std::string       const& default_keyword
     ,int                      index_origin = 0
@@ -109,7 +109,7 @@ std::string realize_sequence_string
     (Input                    & input
     ,std::vector<Numeric>     & vn
     ,std::vector<Enumerative> & ve
-    ,std::string         const& sequence_string
+    ,datum_sequence      const& sequence_string
     ,detail::stringmap   const& keyword_dictionary
     ,std::string         const& default_keyword
     ,int                        index_origin = 0
@@ -926,13 +926,24 @@ round_to<double> const& specamt_rounder()
 } // Unnamed namespace.
 
 /// Special handling for proportional term rider.
+///
+/// Term rider can be specified either as a scalar or as a
+/// proportion of a specified total (term + base) specified amount.
+/// In the latter case, base specified amount generally needs to be
+/// modified. However, due to rounding, transforming values from
+/// one method to the other and back does not necessarily preserve
+/// the original value. It is therefore useful sometimes to avoid
+/// modifying the base specified amount by passing 'false' as the
+/// 'aggressively' argument, for instance in a GUI when it may be
+/// desirable to display the proportional term specified amount
+/// without necessarily changing the base specified amount.
 
 void Input::make_term_rider_consistent(bool aggressively)
 {
-    if(mce_no == Status[0].TermUseProportion)
+    if(mce_no == TermRiderUseProportion)
         {
-        double term_spec_amt   = Status[0].TermAmt;
-        double base_spec_amt   = SpecAmt[0];
+        double term_spec_amt   = TermRiderAmount.value();
+        double base_spec_amt   = SpecifiedAmountRealized_[0].value();
         double total_spec_amt  = term_spec_amt + base_spec_amt;
         double term_proportion = 0.0;
         if(0.0 != total_spec_amt)
@@ -940,16 +951,16 @@ void Input::make_term_rider_consistent(bool aggressively)
             term_proportion = term_spec_amt / total_spec_amt;
             }
 
-        Status[0].TotalSpecAmt = total_spec_amt;
-        Status[0].TermProportion = term_proportion;
+        TotalSpecifiedAmount = total_spec_amt;
+        TermRiderProportion = term_proportion;
         }
-    else if(mce_yes == Status[0].TermUseProportion)
+    else if(mce_yes == TermRiderUseProportion)
         {
-        double total_spec_amt  = Status[0].TotalSpecAmt;
-        double term_proportion = Status[0].TermProportion;
+        double total_spec_amt  = TotalSpecifiedAmount.value();
+        double term_proportion = TermRiderProportion.value();
         double term_spec_amt   = total_spec_amt * term_proportion;
         term_spec_amt = specamt_rounder()(term_spec_amt);
-        Status[0].TermAmt = term_spec_amt;
+        TermRiderAmount = term_spec_amt;
 
         if(aggressively)
             {
@@ -958,8 +969,8 @@ void Input::make_term_rider_consistent(bool aggressively)
 // TODO ?? Are the next two calls necessary? or does
 //   RealizeSpecifiedAmount();
 // take care of everything?
-            SpecAmt.assign(100, tnr_unrestricted_double(base_spec_amt));
-            VectorSpecifiedAmountStrategy.assign
+            SpecifiedAmountRealized_.assign(100, tnr_unrestricted_double(base_spec_amt));
+            SpecifiedAmountStrategyRealized_.assign
                 (100
                 ,mce_sa_strategy(mce_sa_input_scalar)
                 );
