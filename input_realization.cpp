@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_realization.cpp,v 1.5 2008-07-27 18:42:47 chicares Exp $
+// $Id: input_realization.cpp,v 1.6 2008-07-27 19:07:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -45,7 +45,7 @@
 #include <sstream>
 #include <utility>            // std::pair
 
-#if 0 // Just a copy of 'inputillus_sequences.cpp' for initial commit.
+#if 0 // An evolving copy of 'inputillus_sequences.cpp'....
 //============================================================================
 // Realize sequence strings with only numeric values.
 template<typename T>
@@ -164,7 +164,7 @@ Input::permissible_specified_amount_strategy_keywords()
     permissible_keywords.erase("none");
 
     bool specified_amount_indeterminate =
-           e_solve_specamt == SolveType
+           mce_solve_specamt == SolveType
     // TODO ?? Further conditions to disallow improper input:
     // need to compare corresponding years.
     //  || payment strategy is anything but 'none'
@@ -328,10 +328,10 @@ std::string Input::RealizeExtraCompensationOnAssets()
         return s;
         }
 
-    double highest = *std::max_element
+    double highest = std::max_element
         (ExtraCompensationOnAssetsRealized_.begin()
         ,ExtraCompensationOnAssetsRealized_.end()
-        );
+        )->value();
     // SOMEDAY !! If we add a production like
     //   numeric-value: numeric-literal bp
     // or
@@ -359,10 +359,10 @@ std::string Input::RealizeExtraCompensationOnPremium()
         return s;
         }
 
-    double highest = *std::max_element
+    double highest = std::max_element
         (ExtraCompensationOnPremiumRealized_.begin()
         ,ExtraCompensationOnPremiumRealized_.end()
-        );
+        )->value();
     // SOMEDAY !! If we add a production like
     //   numeric-value: numeric-literal %
     // then we might say "100%" here.
@@ -409,8 +409,8 @@ std::string Input::RealizeCashValueEnhancementRate()
     // SOMEDAY !! If we add a production like
     //   numeric-value: numeric-literal %
     // then we might say "between 0% and 100%." here.
-    minmax<double> extrema(CashValueEnhancementRateRealized_);
-    if(!(0.0 <= extrema.minimum() && extrema.maximum() <= 1.0))
+    minmax<tnr_proportion> extrema(CashValueEnhancementRateRealized_);
+    if(!(0.0 <= extrema.minimum().value() && extrema.maximum().value() <= 1.0))
         {
         std::ostringstream oss;
         oss
@@ -441,8 +441,8 @@ std::string Input::RealizeCorporationTaxBracket()
     // SOMEDAY !! If we add a production like
     //   numeric-value: numeric-literal %
     // then we might say "between 0% and 100%." here.
-    minmax<double> extrema(CorporationTaxBracketRealized_);
-    if(!(0.0 <= extrema.minimum() && extrema.maximum() <= 1.0))
+    minmax<tnr_proportion> extrema(CorporationTaxBracketRealized_);
+    if(!(0.0 <= extrema.minimum().value() && extrema.maximum().value() <= 1.0))
         {
         std::ostringstream oss;
         oss
@@ -473,8 +473,8 @@ std::string Input::RealizeTaxBracket()
     // SOMEDAY !! If we add a production like
     //   numeric-value: numeric-literal %
     // then we might say "between 0% and 100%." here.
-    minmax<double> extrema(TaxBracketRealized_);
-    if(!(0.0 <= extrema.minimum() && extrema.maximum() <= 1.0))
+    minmax<tnr_proportion> extrema(TaxBracketRealized_);
+    if(!(0.0 <= extrema.minimum().value() && extrema.maximum().value() <= 1.0))
         {
         std::ostringstream oss;
         oss
@@ -537,8 +537,8 @@ std::string Input::RealizeDeathBenefitOption()
                 ,DeathBenefitOptionRealized_.end()
                 ,boost::bind
                     (std::logical_and<bool>()
-                    ,boost::bind(std::equal_to<e_dbopt>(), _1, e_dbopt("B"))
-                    ,boost::bind(std::not_equal_to<e_dbopt>(), _2, e_dbopt("B"))
+                    ,boost::bind(std::equal_to    <mce_dbopt>(), _1, mce_dbopt("B"))
+                    ,boost::bind(std::not_equal_to<mce_dbopt>(), _2, mce_dbopt("B"))
                     )
                 )
         )
@@ -553,7 +553,7 @@ std::string Input::RealizeDeathBenefitOption()
         &&  DeathBenefitOptionRealized_.end() != std::find
                 (DeathBenefitOptionRealized_.begin()
                 ,DeathBenefitOptionRealized_.end()
-                ,e_dbopt("ROP")
+                ,mce_dbopt("ROP")
                 )
         )
         {
@@ -571,8 +571,8 @@ std::string Input::RealizePayment()
     std::map<std::string,std::string> z = permissible_payment_strategy_keywords();
     if
         (
-           e_solve_ee_prem     == SolveType
-        || e_solve_ee_prem_dur == SolveType
+           mce_solve_ee_prem     == SolveType
+        || mce_solve_ee_prem_dur == SolveType
         )
         {
         z.clear();
@@ -610,8 +610,8 @@ std::string Input::RealizeCorporationPayment()
     std::map<std::string,std::string> z = permissible_payment_strategy_keywords();
     if
         (
-           e_solve_er_prem     == SolveType
-        || e_solve_er_prem_dur == SolveType
+           mce_solve_er_prem     == SolveType
+        || mce_solve_er_prem_dur == SolveType
         )
         {
         z.clear();
@@ -682,7 +682,7 @@ std::string Input::RealizeGeneralAccountRate()
 
     for(unsigned int j = 0; j < general_account_max_rate.size(); ++j)
         {
-        if(general_account_max_rate[j] < GeneralAccountRateRealized_[j])
+        if(general_account_max_rate[j] < GeneralAccountRateRealized_[j].value())
             {
             std::ostringstream oss;
             oss
@@ -699,13 +699,13 @@ std::string Input::RealizeGeneralAccountRate()
         }
     // DEPRECATED An empty string is a tricky special case for the
     // obsolete input class, which requires this goofy workaround.
-    if(GeneralAccountRate.empty())
+    if(GeneralAccountRate.value().empty())
         {
         return "";
         }
     for(unsigned int j = 0; j < general_account_max_rate.size(); ++j)
         {
-        if(GeneralAccountRateRealized_[j] < guar_int)
+        if(GeneralAccountRateRealized_[j].value() < guar_int)
             {
             std::ostringstream oss;
             oss
@@ -746,7 +746,7 @@ std::string Input::RealizeSeparateAccountRate()
     // Arguably the minimum gross rate would be -(100% + spread).
     // Such an exquisite refinement would complicate the program by
     // making this field's range depend on gross versus net. The
-    // -100% minimum for type 'r_curr_int_rate' is low enough.
+    // -100% minimum for type 'tnr_sep_acct_rate' is low enough.
 
     double max_sep_acct_rate = database_->Query(DB_MaxSepAcctRate);
     if(global_settings::instance().ash_nazg())
@@ -755,10 +755,10 @@ std::string Input::RealizeSeparateAccountRate()
         // than twelve percent.
         max_sep_acct_rate = 1.0;
         }
-    double highest = *std::max_element
+    double highest = std::max_element
         (SeparateAccountRateRealized_.begin()
         ,SeparateAccountRateRealized_.end()
-        );
+        )->value();
     if(max_sep_acct_rate < highest)
         {
         std::ostringstream oss;
@@ -823,12 +823,12 @@ std::string Input::RealizeWithdrawal()
         {
         double lowest_allowed_withdrawal = database_->Query(DB_MinWD);
         for
-            (std::vector<r_wd>::iterator i = WithdrawalRealized_.begin()
+            (std::vector<tnr_nonnegative_double>::iterator i = WithdrawalRealized_.begin()
             ;i < WithdrawalRealized_.end()
             ;++i
             )
             {
-            if(0.0 < *i && *i < lowest_allowed_withdrawal)
+            if(0.0 < i->value() && i->value() < lowest_allowed_withdrawal)
                 {
                 std::ostringstream oss;
                 oss
@@ -929,7 +929,7 @@ round_to<double> const& specamt_rounder()
 
 void Input::make_term_rider_consistent(bool aggressively)
 {
-    if(e_no == Status[0].TermUseProportion)
+    if(mce_no == Status[0].TermUseProportion)
         {
         double term_spec_amt   = Status[0].TermAmt;
         double base_spec_amt   = SpecAmt[0];
@@ -943,7 +943,7 @@ void Input::make_term_rider_consistent(bool aggressively)
         Status[0].TotalSpecAmt = total_spec_amt;
         Status[0].TermProportion = term_proportion;
         }
-    else if(e_yes == Status[0].TermUseProportion)
+    else if(mce_yes == Status[0].TermUseProportion)
         {
         double total_spec_amt  = Status[0].TotalSpecAmt;
         double term_proportion = Status[0].TermProportion;
@@ -958,10 +958,10 @@ void Input::make_term_rider_consistent(bool aggressively)
 // TODO ?? Are the next two calls necessary? or does
 //   RealizeSpecifiedAmount();
 // take care of everything?
-            SpecAmt.assign(100, r_spec_amt(base_spec_amt));
+            SpecAmt.assign(100, tnr_unrestricted_double(base_spec_amt));
             VectorSpecifiedAmountStrategy.assign
                 (100
-                ,e_sa_strategy(e_sainputscalar)
+                ,mce_sa_strategy(mce_sa_input_scalar)
                 );
             RealizeSpecifiedAmount();
             }
