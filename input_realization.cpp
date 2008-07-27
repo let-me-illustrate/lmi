@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_realization.cpp,v 1.3 2008-07-27 18:19:23 chicares Exp $
+// $Id: input_realization.cpp,v 1.4 2008-07-27 18:34:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -310,8 +310,8 @@ std::string Input::RealizeExtraMonthlyCustodialFee()
 {
     return realize_sequence_string
         (*this
-        ,VectorAddonMonthlyCustodialFee
-        ,AddonMonthlyCustodialFee
+        ,ExtraMonthlyCustodialFeeRealized_
+        ,ExtraMonthlyCustodialFee
         );
 }
 
@@ -320,8 +320,8 @@ std::string Input::RealizeExtraCompensationOnAssets()
 {
     std::string s = realize_sequence_string
         (*this
-        ,VectorAddonCompOnAssets
-        ,AddonCompOnAssets
+        ,ExtraCompensationOnAssetsRealized_
+        ,ExtraCompensationOnAssets
         );
     if(s.size())
         {
@@ -329,8 +329,8 @@ std::string Input::RealizeExtraCompensationOnAssets()
         }
 
     double highest = *std::max_element
-        (VectorAddonCompOnAssets.begin()
-        ,VectorAddonCompOnAssets.end()
+        (ExtraCompensationOnAssetsRealized_.begin()
+        ,ExtraCompensationOnAssetsRealized_.end()
         );
     // SOMEDAY !! If we add a production like
     //   numeric-value: numeric-literal bp
@@ -351,8 +351,8 @@ std::string Input::RealizeExtraCompensationOnPremium()
 {
     std::string s = realize_sequence_string
         (*this
-        ,VectorAddonCompOnPremium
-        ,AddonCompOnPremium
+        ,ExtraCompensationOnPremiumRealized_
+        ,ExtraCompensationOnPremium
         );
     if(s.size())
         {
@@ -360,8 +360,8 @@ std::string Input::RealizeExtraCompensationOnPremium()
         }
 
     double highest = *std::max_element
-        (VectorAddonCompOnPremium.begin()
-        ,VectorAddonCompOnPremium.end()
+        (ExtraCompensationOnPremiumRealized_.begin()
+        ,ExtraCompensationOnPremiumRealized_.end()
         );
     // SOMEDAY !! If we add a production like
     //   numeric-value: numeric-literal %
@@ -378,7 +378,7 @@ std::string Input::RealizePartialMortalityMultiplier()
 {
     return realize_sequence_string
         (*this
-        ,VectorPartialMortalityMultiplier
+        ,PartialMortalityMultiplierRealized_
         ,PartialMortalityMultiplier
         );
 }
@@ -388,7 +388,7 @@ std::string Input::RealizeCurrentCoiMultiplier()
 {
     return realize_sequence_string
         (*this
-        ,VectorCurrentCoiMultiplier
+        ,CurrentCoiMultiplierRealized_
         ,CurrentCoiMultiplier
         );
 }
@@ -398,7 +398,7 @@ std::string Input::RealizeCashValueEnhancementRate()
 {
     std::string s = realize_sequence_string
         (*this
-        ,VectorCashValueEnhancementRate
+        ,CashValueEnhancementRateRealized_
         ,CashValueEnhancementRate
         );
     if(s.size())
@@ -409,7 +409,7 @@ std::string Input::RealizeCashValueEnhancementRate()
     // SOMEDAY !! If we add a production like
     //   numeric-value: numeric-literal %
     // then we might say "between 0% and 100%." here.
-    minmax<double> extrema(VectorCashValueEnhancementRate);
+    minmax<double> extrema(CashValueEnhancementRateRealized_);
     if(!(0.0 <= extrema.minimum() && extrema.maximum() <= 1.0))
         {
         std::ostringstream oss;
@@ -430,8 +430,8 @@ std::string Input::RealizeCorporationTaxBracket()
 {
     std::string s = realize_sequence_string
         (*this
-        ,VectorCorpTaxBracket
-        ,CorpTaxBracket
+        ,CorporationTaxBracketRealized_
+        ,CorporationTaxBracket
         );
     if(s.size())
         {
@@ -441,7 +441,7 @@ std::string Input::RealizeCorporationTaxBracket()
     // SOMEDAY !! If we add a production like
     //   numeric-value: numeric-literal %
     // then we might say "between 0% and 100%." here.
-    minmax<double> extrema(VectorCorpTaxBracket);
+    minmax<double> extrema(CorporationTaxBracketRealized_);
     if(!(0.0 <= extrema.minimum() && extrema.maximum() <= 1.0))
         {
         std::ostringstream oss;
@@ -462,8 +462,8 @@ std::string Input::RealizeTaxBracket()
 {
     std::string s = realize_sequence_string
         (*this
-        ,VectorIndvTaxBracket
-        ,IndvTaxBracket
+        ,TaxBracketRealized_
+        ,TaxBracket
         );
     if(s.size())
         {
@@ -473,7 +473,7 @@ std::string Input::RealizeTaxBracket()
     // SOMEDAY !! If we add a production like
     //   numeric-value: numeric-literal %
     // then we might say "between 0% and 100%." here.
-    minmax<double> extrema(VectorIndvTaxBracket);
+    minmax<double> extrema(TaxBracketRealized_);
     if(!(0.0 <= extrema.minimum() && extrema.maximum() <= 1.0))
         {
         std::ostringstream oss;
@@ -494,7 +494,7 @@ std::string Input::RealizeProjectedSalary()
 {
     return realize_sequence_string
         (*this
-        ,Salary
+        ,ProjectedSalaryRealized_
         ,ProjectedSalary
         );
 }
@@ -507,8 +507,8 @@ std::string Input::RealizeSpecifiedAmount()
 // that minimum.
     return realize_sequence_string
         (*this
-        ,SpecAmt
-        ,VectorSpecifiedAmountStrategy
+        ,SpecifiedAmountRealized_
+        ,SpecifiedAmountStrategyRealized_
         ,SpecifiedAmount
         ,permissible_specified_amount_strategy_keywords()
         ,std::string("none")
@@ -520,7 +520,7 @@ std::string Input::RealizeDeathBenefitOption()
 {
     std::string s = realize_sequence_string
         (*this
-        ,DBOpt
+        ,DeathBenefitOptionRealized_
         ,DeathBenefitOption
         ,permissible_death_benefit_option_keywords()
         ,std::string("a")
@@ -543,8 +543,8 @@ std::string Input::RealizeDeathBenefitOption()
     if
         (   !temp_database.Query(DB_AllowChangeToDBO2)
         &&  !nonstd::is_sorted
-                (DBOpt.begin()
-                ,DBOpt.end()
+                (DeathBenefitOptionRealized_.begin()
+                ,DeathBenefitOptionRealized_.end()
                 ,boost::bind
                     (std::logical_and<bool>()
                     ,boost::bind(std::equal_to<e_dbopt>(), _1, e_dbopt("B"))
@@ -560,9 +560,9 @@ std::string Input::RealizeDeathBenefitOption()
 
     if
         (   !temp_database.Query(DB_AllowDBO3)
-        &&  DBOpt.end() != std::find
-                (DBOpt.begin()
-                ,DBOpt.end()
+        &&  DeathBenefitOptionRealized_.end() != std::find
+                (DeathBenefitOptionRealized_.begin()
+                ,DeathBenefitOptionRealized_.end()
                 ,e_dbopt("ROP")
                 )
         )
@@ -590,9 +590,9 @@ std::string Input::RealizePayment()
 
     return realize_sequence_string
         (*this
-        ,EePremium
-        ,VectorIndvPaymentStrategy
-        ,IndvPayment
+        ,PaymentRealized_
+        ,PaymentStrategyRealized_
+        ,Payment
         ,z
         ,std::string("none")
         );
@@ -607,8 +607,8 @@ std::string Input::RealizePaymentMode()
     // products that permit annual mode.
     return realize_sequence_string
         (*this
-        ,EeMode
-        ,IndvPaymentMode
+        ,PaymentModeRealized_
+        ,PaymentMode
         ,permissible_payment_mode_keywords()
         ,std::string("annual")
         );
@@ -629,9 +629,9 @@ std::string Input::RealizeCorporationPayment()
 
     return realize_sequence_string
         (*this
-        ,ErPremium
-        ,VectorCorpPaymentStrategy
-        ,CorpPayment
+        ,CorporationPaymentRealized_
+        ,CorporationPaymentStrategyRealized_
+        ,CorporationPayment
         ,z
         ,std::string("none")
         );
@@ -646,8 +646,8 @@ std::string Input::RealizeCorporationPaymentMode()
     // products that permit annual mode.
     return realize_sequence_string
         (*this
-        ,ErMode
-        ,CorpPaymentMode
+        ,CorporationPaymentModeRealized_
+        ,CorporationPaymentMode
         ,permissible_payment_mode_keywords()
         ,std::string("annual")
         );
@@ -658,8 +658,8 @@ std::string Input::RealizeGeneralAccountRate()
 {
     std::string s = realize_sequence_string
         (*this
-        ,GenAcctRate
-        ,GenAcctIntRate
+        ,GeneralAccountRateRealized_
+        ,GeneralAccountRate
         );
     if(s.size())
         {
@@ -702,14 +702,14 @@ std::string Input::RealizeGeneralAccountRate()
 
     for(unsigned int j = 0; j < general_account_max_rate.size(); ++j)
         {
-        if(general_account_max_rate[j] < GenAcctRate[j])
+        if(general_account_max_rate[j] < GeneralAccountRateRealized_[j])
             {
             std::ostringstream oss;
             oss
                 << "Duration "
                 << j
                 << ": general-account interest rate entered is "
-                << GenAcctRate[j]
+                << GeneralAccountRateRealized_[j]
                 << ", but "
                 << general_account_max_rate[j]
                 << " is the highest rate allowed."
@@ -719,20 +719,20 @@ std::string Input::RealizeGeneralAccountRate()
         }
     // DEPRECATED An empty string is a tricky special case for the
     // obsolete input class, which requires this goofy workaround.
-    if(GenAcctIntRate.empty())
+    if(GeneralAccountRate.empty())
         {
         return "";
         }
     for(unsigned int j = 0; j < general_account_max_rate.size(); ++j)
         {
-        if(GenAcctRate[j] < guar_int)
+        if(GeneralAccountRateRealized_[j] < guar_int)
             {
             std::ostringstream oss;
             oss
                 << "Duration "
                 << j
                 << ": general-account interest rate entered is "
-                << GenAcctRate[j]
+                << GeneralAccountRateRealized_[j]
                 << ", but "
                 << guar_int
                 << " is the lowest rate allowed."
@@ -749,8 +749,8 @@ std::string Input::RealizeSeparateAccountRate()
 {
     std::string s = realize_sequence_string
         (*this
-        ,SepAcctRate
-        ,SepAcctIntRate
+        ,SeparateAccountRateRealized_
+        ,SeparateAccountRate
         );
     if(s.size())
         {
@@ -786,8 +786,8 @@ std::string Input::RealizeSeparateAccountRate()
         max_sep_acct_rate = 1.0;
         }
     double highest = *std::max_element
-        (SepAcctRate.begin()
-        ,SepAcctRate.end()
+        (SeparateAccountRateRealized_.begin()
+        ,SeparateAccountRateRealized_.end()
         );
     if(max_sep_acct_rate < highest)
         {
@@ -809,7 +809,7 @@ std::string Input::RealizeNewLoan()
 {
     std::string s = realize_sequence_string
         (*this
-        ,Loan
+        ,NewLoanRealized_
         ,NewLoan
         );
     if(s.size())
@@ -831,7 +831,7 @@ std::string Input::RealizeNewLoan()
         return "";
         }
 
-    if(!each_equal(Loan.begin(), Loan.end(), 0.0))
+    if(!each_equal(NewLoanRealized_.begin(), NewLoanRealized_.end(), 0.0))
         {
         return "Loans may not be illustrated on this policy form.";
         }
@@ -843,7 +843,7 @@ std::string Input::RealizeWithdrawal()
 {
     std::string s = realize_sequence_string
         (*this
-        ,WD
+        ,WithdrawalRealized_
         ,Withdrawal
         );
     if(s.size())
@@ -863,7 +863,7 @@ std::string Input::RealizeWithdrawal()
 
     if(!temp_database.Query(DB_AllowWD))
         {
-        if(!each_equal(WD.begin(), WD.end(), 0.0))
+        if(!each_equal(WithdrawalRealized_.begin(), WithdrawalRealized_.end(), 0.0))
             {
             return "Withdrawals may not be illustrated on this policy form.";
             }
@@ -872,8 +872,8 @@ std::string Input::RealizeWithdrawal()
         {
         double lowest_allowed_withdrawal = temp_database.Query(DB_MinWD);
         for
-            (std::vector<r_wd>::iterator i = WD.begin()
-            ;i < WD.end()
+            (std::vector<r_wd>::iterator i = WithdrawalRealized_.begin()
+            ;i < WithdrawalRealized_.end()
             ;++i
             )
             {
@@ -901,7 +901,7 @@ std::string Input::RealizeFlatExtra()
 // and a minimum of zero; is that worth the bother though?
     std::string s = realize_sequence_string
         (*this
-        ,Status[0].VectorMonthlyFlatExtra
+        ,FlatExtraRealized_
         ,FlatExtra
         );
     if(s.size())
@@ -923,7 +923,7 @@ std::string Input::RealizeFlatExtra()
         return "";
         }
 
-    if(!each_equal(Status[0].VectorMonthlyFlatExtra.begin(), Status[0].VectorMonthlyFlatExtra.end(), 0.0))
+    if(!each_equal(FlatExtraRealized_.begin(), FlatExtraRealized_.end(), 0.0))
         {
         return "Flat extras may not be illustrated on this policy form.";
         }
@@ -935,7 +935,7 @@ std::string Input::RealizeHoneymoonValueSpread()
 {
     return realize_sequence_string
         (*this
-        ,VectorHoneymoonValueSpread
+        ,HoneymoonValueSpreadRealized_
         ,HoneymoonValueSpread
         );
 }
@@ -945,7 +945,7 @@ std::string Input::RealizePremiumHistory()
 {
     return realize_sequence_string
         (*this
-        ,VectorPremiumHistory
+        ,PremiumHistoryRealized_
         ,PremiumHistory
         );
 }
@@ -955,7 +955,7 @@ std::string Input::RealizeSpecamtHistory()
 {
     return realize_sequence_string
         (*this
-        ,VectorSpecamtHistory
+        ,SpecamtHistoryRealized_
         ,SpecamtHistory
         );
 }
