@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_sequences.cpp,v 1.23 2008-07-26 14:13:17 chicares Exp $
+// $Id: inputillus_sequences.cpp,v 1.24 2008-07-27 00:54:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,7 +35,9 @@
 #include "global_settings.hpp"
 #include "input_seq_helpers.hpp"
 #include "miscellany.hpp"     // minmax<T>()
+#include "round_to.hpp"
 #include "stl_extensions.hpp" // nonstd::is_sorted()
+#include "value_cast.hpp"
 
 #include <boost/bind.hpp>
 
@@ -1021,5 +1023,78 @@ std::string IllusInputParms::realize_sequence_string_for_specamt_history()
         ,VectorSpecamtHistory
         ,SpecamtHistory
         );
+}
+
+// TODO ?? More attention could be paid to term-rider rounding.
+// This would be preferable:
+//
+// #include "data_directory.hpp" // AddDataDir(), needed to access product data.
+// #include "ihs_proddata.hpp"   // Product data, needed to access rounding rules.
+// #include "ihs_rnddata.hpp"    // Rounding.
+//
+//        term_spec_amt = StreamableRoundingRules
+//            (AddDataDir(TProductData(ProductName).GetRoundingFilename())
+//            ).get_rounding_rules().round_specamt()(term_spec_amt)
+//            ;
+//
+// except that it wouldn't work on the antediluvian branch.
+
+namespace
+{
+round_to<double> const& specamt_rounder()
+{
+    static round_to<double> z(0, r_upward);
+    return z;
+}
+} // Unnamed namespace.
+
+/// Special handling for proportional term rider.
+
+void IllusInputParms::make_term_rider_consistent(bool aggressively)
+{
+    if(e_no == Status[0].TermUseProportion)
+        {
+        double term_spec_amt   = Status[0].TermAmt;
+        double base_spec_amt   = SpecAmt[0];
+        double total_spec_amt  = term_spec_amt + base_spec_amt;
+        double term_proportion = 0.0;
+        if(0.0 != total_spec_amt)
+            {
+            term_proportion = term_spec_amt / total_spec_amt;
+            }
+
+        Status[0].TotalSpecAmt = total_spec_amt;
+        Status[0].TermProportion = term_proportion;
+        }
+    else if(e_yes == Status[0].TermUseProportion)
+        {
+        double total_spec_amt  = Status[0].TotalSpecAmt;
+        double term_proportion = Status[0].TermProportion;
+        double term_spec_amt   = total_spec_amt * term_proportion;
+        term_spec_amt = specamt_rounder()(term_spec_amt);
+        Status[0].TermAmt = term_spec_amt;
+
+        if(aggressively)
+            {
+            double base_spec_amt = total_spec_amt - term_spec_amt;
+            SpecifiedAmount = value_cast<std::string>(base_spec_amt);
+// TODO ?? Are the next two calls necessary? or does
+//   realize_sequence_string_for_specified_amount();
+// take care of everything?
+            SpecAmt.assign(100, r_spec_amt(base_spec_amt));
+            VectorSpecifiedAmountStrategy.assign
+                (100
+                ,e_sa_strategy(e_sainputscalar)
+                );
+            realize_sequence_string_for_specified_amount();
+            }
+        }
+    else
+        {
+        fatal_error()
+            << "Term is neither proportional nor absolute."
+            << LMI_FLUSH
+            ;
+        }
 }
 

@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.45 2008-07-26 23:57:50 chicares Exp $
+# $Id: Makefile.am,v 1.46 2008-07-27 00:54:23 chicares Exp $
 
 SUBDIRS = third_party
 
@@ -253,7 +253,6 @@ liblmi_common_sources = \
     input_sequence.cpp \
     inputillus.cpp \
     inputillus_sequences.cpp \
-    inputillus_term_rider.cpp \
     inputillus_xml_io.cpp \
     inputs.cpp \
     inputstatus.cpp \
@@ -604,7 +603,6 @@ test_input_SOURCES =    \
   input_test.cpp \
   inputillus.cpp \
   inputillus_sequences.cpp \
-  inputillus_term_rider.cpp \
   inputillus_xml_io.cpp \
   inputs.cpp \
   inputstatus.cpp \
