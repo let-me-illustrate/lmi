@@ -19,14 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_realization.cpp,v 1.1 2008-07-27 01:41:11 chicares Exp $
+// $Id: input_realization.cpp,v 1.2 2008-07-27 17:57:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "inputillus.hpp"
+#include "input.hpp"
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
@@ -50,7 +50,7 @@
 // Realize sequence strings with only numeric values.
 template<typename T>
 std::string realize_sequence_string
-    (IllusInputParms  & input
+    (Input            & input
     ,std::vector<T>   & v
     ,std::string const& sequence_string
     ,int                index_origin = 0
@@ -73,7 +73,7 @@ std::string realize_sequence_string
 // Realize sequence strings with only enumerative-string values.
 template<typename T>
 std::string realize_sequence_string
-    (IllusInputParms        & input
+    (Input                  & input
     ,std::vector<T>         & v
     ,std::string       const& sequence_string
     ,detail::stringmap const& keyword_dictionary
@@ -106,7 +106,7 @@ std::string realize_sequence_string
 // Realize sequence strings with both numeric and enumerative-string values.
 template<typename Numeric, typename Enumerative>
 std::string realize_sequence_string
-    (IllusInputParms          & input
+    (Input                    & input
     ,std::vector<Numeric>     & vn
     ,std::vector<Enumerative> & ve
     ,std::string         const& sequence_string
@@ -138,10 +138,10 @@ std::string realize_sequence_string
 }
 
 //============================================================================
-IllusInputParms::string_map const
-IllusInputParms::permissible_specified_amount_strategy_keywords()
+std::map<std::string,std::string> const
+Input::permissible_specified_amount_strategy_keywords()
 {
-    static string_map all_keywords;
+    static std::map<std::string,std::string> all_keywords;
     if(all_keywords.empty())
         {
         all_keywords["maximum" ] = "SAMaximum"       ;
@@ -153,14 +153,11 @@ IllusInputParms::permissible_specified_amount_strategy_keywords()
         all_keywords["salary"  ] = "SASalary"        ;
         all_keywords["none"    ] = "SAInputScalar"   ;
         }
-//    string_map permissible_keywords = all_keywords;
-    string_map permissible_keywords;
+//    std::map<std::string,std::string> permissible_keywords = all_keywords;
+    std::map<std::string,std::string> permissible_keywords;
     // Don't use initialization--we want this to happen every time [6.7].
-    for
-        (string_map_iterator i = all_keywords.begin()
-        ;i != all_keywords.end()
-        ;++i
-        )
+    typedef std::map<std::string,std::string>::const_iterator smci;
+    for(smci i = all_keywords.begin(); i != all_keywords.end(); ++i)
         {
         permissible_keywords.insert(*i);
         }
@@ -181,25 +178,25 @@ IllusInputParms::permissible_specified_amount_strategy_keywords()
 }
 
 //============================================================================
-IllusInputParms::string_map const
-IllusInputParms::permissible_death_benefit_option_keywords()
+std::map<std::string,std::string> const
+Input::permissible_death_benefit_option_keywords()
 {
-    static string_map all_keywords;
+    static std::map<std::string,std::string> all_keywords;
     if(all_keywords.empty())
         {
         all_keywords["a"  ] = "A"  ;
         all_keywords["b"  ] = "B"  ;
         all_keywords["rop"] = "ROP";
         }
-    string_map permissible_keywords = all_keywords;
+    std::map<std::string,std::string> permissible_keywords = all_keywords;
     return permissible_keywords;
 }
 
 //============================================================================
-IllusInputParms::string_map const
-IllusInputParms::permissible_payment_strategy_keywords()
+std::map<std::string,std::string> const
+Input::permissible_payment_strategy_keywords()
 {
-    static string_map all_keywords;
+    static std::map<std::string,std::string> all_keywords;
     if(all_keywords.empty())
         {
         all_keywords["minimum" ] = "PmtMinimum"      ;
@@ -211,7 +208,7 @@ IllusInputParms::permissible_payment_strategy_keywords()
         all_keywords["table"   ] = "PmtTable"        ;
         all_keywords["none"    ] = "PmtInputScalar"  ;
         }
-    string_map permissible_keywords = all_keywords;
+    std::map<std::string,std::string> permissible_keywords = all_keywords;
     permissible_keywords.erase("none");
 
     bool payment_indeterminate =
@@ -231,10 +228,10 @@ IllusInputParms::permissible_payment_strategy_keywords()
 }
 
 //============================================================================
-IllusInputParms::string_map const
-IllusInputParms::permissible_payment_mode_keywords()
+std::map<std::string,std::string> const
+Input::permissible_payment_mode_keywords()
 {
-    static string_map all_keywords;
+    static std::map<std::string,std::string> all_keywords;
     if(all_keywords.empty())
         {
         all_keywords["annual"    ] = "Annual";
@@ -242,14 +239,12 @@ IllusInputParms::permissible_payment_mode_keywords()
         all_keywords["quarterly" ] = "Quarterly";
         all_keywords["monthly"   ] = "Monthly";
         }
-    string_map permissible_keywords = all_keywords;
+    std::map<std::string,std::string> permissible_keywords = all_keywords;
     return permissible_keywords;
 }
 
 //============================================================================
-std::vector<std::string> IllusInputParms::realize_all_sequence_strings
-    (bool report_errors
-    )
+std::vector<std::string> Input::realize_all_sequence_strings(bool report_errors)
 {
     std::vector<std::string> s;
 
@@ -314,7 +309,7 @@ std::vector<std::string> IllusInputParms::realize_all_sequence_strings
 }
 
 //============================================================================
-std::string IllusInputParms::realize_sequence_string_for_add_on_monthly_custodial_fee()
+std::string Input::realize_sequence_string_for_add_on_monthly_custodial_fee()
 {
     return realize_sequence_string
         (*this
@@ -324,7 +319,7 @@ std::string IllusInputParms::realize_sequence_string_for_add_on_monthly_custodia
 }
 
 //============================================================================
-std::string IllusInputParms::realize_sequence_string_for_add_on_comp_on_assets()
+std::string Input::realize_sequence_string_for_add_on_comp_on_assets()
 {
     std::string s = realize_sequence_string
         (*this
@@ -355,7 +350,7 @@ std::string IllusInputParms::realize_sequence_string_for_add_on_comp_on_assets()
 }
 
 //============================================================================
-std::string IllusInputParms::realize_sequence_string_for_add_on_comp_on_premium()
+std::string Input::realize_sequence_string_for_add_on_comp_on_premium()
 {
     std::string s = realize_sequence_string
         (*this
@@ -382,7 +377,7 @@ std::string IllusInputParms::realize_sequence_string_for_add_on_comp_on_premium(
 }
 
 //============================================================================
-std::string IllusInputParms::realize_sequence_string_for_non_us_corridor_factor()
+std::string Input::realize_sequence_string_for_non_us_corridor_factor()
 {
     std::string s = realize_sequence_string
         (*this
@@ -398,7 +393,7 @@ std::string IllusInputParms::realize_sequence_string_for_non_us_corridor_factor(
 }
 
 //============================================================================
-std::string IllusInputParms::realize_sequence_string_for_partial_mortality_multiplier()
+std::string Input::realize_sequence_string_for_partial_mortality_multiplier()
 {
     return realize_sequence_string
         (*this
@@ -408,7 +403,7 @@ std::string IllusInputParms::realize_sequence_string_for_partial_mortality_multi
 }
 
 //============================================================================
-std::string IllusInputParms::realize_sequence_string_for_current_coi_multiplier()
+std::string Input::realize_sequence_string_for_current_coi_multiplier()
 {
     return realize_sequence_string
         (*this
@@ -418,7 +413,7 @@ std::string IllusInputParms::realize_sequence_string_for_current_coi_multiplier(
 }
 
 //============================================================================
-std::string IllusInputParms::realize_sequence_string_for_current_coi_grading()
+std::string Input::realize_sequence_string_for_current_coi_grading()
 {
     std::string s = realize_sequence_string
         (*this
@@ -453,7 +448,7 @@ std::string IllusInputParms::realize_sequence_string_for_current_coi_grading()
 }
 
 //============================================================================
-std::string IllusInputParms::realize_sequence_string_for_cash_value_enhancement_rate()
+std::string Input::realize_sequence_string_for_cash_value_enhancement_rate()
 {
     std::string s = realize_sequence_string
         (*this
@@ -485,7 +480,7 @@ std::string IllusInputParms::realize_sequence_string_for_cash_value_enhancement_
 }
 
 //============================================================================
-std::string IllusInputParms::realize_sequence_string_for_corp_tax_bracket()
+std::string Input::realize_sequence_string_for_corp_tax_bracket()
 {
     std::string s = realize_sequence_string
         (*this
@@ -517,7 +512,7 @@ std::string IllusInputParms::realize_sequence_string_for_corp_tax_bracket()
 }
 
 //============================================================================
-std::string IllusInputParms::realize_sequence_string_for_indv_tax_bracket()
+std::string Input::realize_sequence_string_for_indv_tax_bracket()
 {
     std::string s = realize_sequence_string
         (*this
@@ -549,7 +544,7 @@ std::string IllusInputParms::realize_sequence_string_for_indv_tax_bracket()
 }
 
 //============================================================================
-std::string IllusInputParms::realize_sequence_string_for_projected_salary()
+std::string Input::realize_sequence_string_for_projected_salary()
 {
     return realize_sequence_string
         (*this
@@ -559,7 +554,7 @@ std::string IllusInputParms::realize_sequence_string_for_projected_salary()
 }
 
 //============================================================================
-std::string IllusInputParms::realize_sequence_string_for_specified_amount()
+std::string Input::realize_sequence_string_for_specified_amount()
 {
 // We could enforce a minimum, using DB_MinSpecAmt from the database.
 // But some would think it useful to be able to enter zero and get
@@ -575,7 +570,7 @@ std::string IllusInputParms::realize_sequence_string_for_specified_amount()
 }
 
 //============================================================================
-std::string IllusInputParms::realize_sequence_string_for_death_benefit_option()
+std::string Input::realize_sequence_string_for_death_benefit_option()
 {
     std::string s = realize_sequence_string
         (*this
@@ -635,9 +630,9 @@ std::string IllusInputParms::realize_sequence_string_for_death_benefit_option()
 }
 
 //============================================================================
-std::string IllusInputParms::realize_sequence_string_for_indv_payment()
+std::string Input::realize_sequence_string_for_indv_payment()
 {
-    string_map z = permissible_payment_strategy_keywords();
+    std::map<std::string,std::string> z = permissible_payment_strategy_keywords();
     if
         (
            e_solve_ee_prem     == SolveType
@@ -658,7 +653,7 @@ std::string IllusInputParms::realize_sequence_string_for_indv_payment()
 }
 
 //============================================================================
-std::string IllusInputParms::realize_sequence_string_for_indv_payment_mode()
+std::string Input::realize_sequence_string_for_indv_payment_mode()
 {
     // SOMEDAY !! No universally appropriate default exists: some contracts
     // may forbid monthly mode, while others may require it. We enforce
@@ -674,9 +669,9 @@ std::string IllusInputParms::realize_sequence_string_for_indv_payment_mode()
 }
 
 //============================================================================
-std::string IllusInputParms::realize_sequence_string_for_corp_payment()
+std::string Input::realize_sequence_string_for_corp_payment()
 {
-    string_map z = permissible_payment_strategy_keywords();
+    std::map<std::string,std::string> z = permissible_payment_strategy_keywords();
     if
         (
            e_solve_er_prem     == SolveType
@@ -697,7 +692,7 @@ std::string IllusInputParms::realize_sequence_string_for_corp_payment()
 }
 
 //============================================================================
-std::string IllusInputParms::realize_sequence_string_for_corp_payment_mode()
+std::string Input::realize_sequence_string_for_corp_payment_mode()
 {
     // SOMEDAY !! No universally appropriate default exists: some contracts
     // may forbid monthly mode, while others may require it. We enforce
@@ -713,7 +708,7 @@ std::string IllusInputParms::realize_sequence_string_for_corp_payment_mode()
 }
 
 //============================================================================
-std::string IllusInputParms::realize_sequence_string_for_gen_acct_int_rate()
+std::string Input::realize_sequence_string_for_gen_acct_int_rate()
 {
     std::string s = realize_sequence_string
         (*this
@@ -804,7 +799,7 @@ std::string IllusInputParms::realize_sequence_string_for_gen_acct_int_rate()
 }
 
 //============================================================================
-std::string IllusInputParms::realize_sequence_string_for_sep_acct_int_rate()
+std::string Input::realize_sequence_string_for_sep_acct_int_rate()
 {
     std::string s = realize_sequence_string
         (*this
@@ -864,7 +859,7 @@ std::string IllusInputParms::realize_sequence_string_for_sep_acct_int_rate()
 }
 
 //============================================================================
-std::string IllusInputParms::realize_sequence_string_for_new_loan()
+std::string Input::realize_sequence_string_for_new_loan()
 {
     std::string s = realize_sequence_string
         (*this
@@ -898,7 +893,7 @@ std::string IllusInputParms::realize_sequence_string_for_new_loan()
 }
 
 //============================================================================
-std::string IllusInputParms::realize_sequence_string_for_withdrawal()
+std::string Input::realize_sequence_string_for_withdrawal()
 {
     std::string s = realize_sequence_string
         (*this
@@ -954,7 +949,7 @@ std::string IllusInputParms::realize_sequence_string_for_withdrawal()
 }
 
 //============================================================================
-std::string IllusInputParms::realize_sequence_string_for_flat_extra()
+std::string Input::realize_sequence_string_for_flat_extra()
 {
 // We could enforce a maximum of the monthly equivalent of unity,
 // and a minimum of zero; is that worth the bother though?
@@ -990,14 +985,14 @@ std::string IllusInputParms::realize_sequence_string_for_flat_extra()
 }
 
 //============================================================================
-std::string IllusInputParms::realize_sequence_string_for_policy_level_flat_extra()
+std::string Input::realize_sequence_string_for_policy_level_flat_extra()
 {
 // Not yet implemented. May be useful for survivorship.
     return "";
 }
 
 //============================================================================
-std::string IllusInputParms::realize_sequence_string_for_honeymoon_value_spread()
+std::string Input::realize_sequence_string_for_honeymoon_value_spread()
 {
     return realize_sequence_string
         (*this
@@ -1007,7 +1002,7 @@ std::string IllusInputParms::realize_sequence_string_for_honeymoon_value_spread(
 }
 
 //============================================================================
-std::string IllusInputParms::realize_sequence_string_for_premium_history()
+std::string Input::realize_sequence_string_for_premium_history()
 {
     return realize_sequence_string
         (*this
@@ -1017,7 +1012,7 @@ std::string IllusInputParms::realize_sequence_string_for_premium_history()
 }
 
 //============================================================================
-std::string IllusInputParms::realize_sequence_string_for_specamt_history()
+std::string Input::realize_sequence_string_for_specamt_history()
 {
     return realize_sequence_string
         (*this
@@ -1051,7 +1046,7 @@ round_to<double> const& specamt_rounder()
 
 /// Special handling for proportional term rider.
 
-void IllusInputParms::make_term_rider_consistent(bool aggressively)
+void Input::make_term_rider_consistent(bool aggressively)
 {
     if(e_no == Status[0].TermUseProportion)
         {
