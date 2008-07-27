@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.30 2008-07-06 11:43:36 chicares Exp $
+// $Id: input.hpp,v 1.31 2008-07-27 20:13:09 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -46,6 +46,8 @@ class TDatabase;
 #include <boost/operators.hpp>
 #include <boost/scoped_ptr.hpp>
 
+#include <map>
+#include <string>
 #include <vector>
 
 /// Design notes for class input.
@@ -155,6 +157,39 @@ class LMI_SO Input
     virtual void DoEnforceProscription   (std::string const&);
     virtual void DoHarmonize();
     virtual void DoTransmogrify();
+
+    std::map<std::string,std::string> const permissible_specified_amount_strategy_keywords();
+    std::map<std::string,std::string> const permissible_death_benefit_option_keywords();
+    std::map<std::string,std::string> const permissible_payment_strategy_keywords();
+    std::map<std::string,std::string> const permissible_payment_mode_keywords();
+
+    std::vector<std::string> RealizeAllSequenceInput(bool report_errors = true);
+
+    std::string RealizeExtraMonthlyCustodialFee   ();
+    std::string RealizeExtraCompensationOnAssets  ();
+    std::string RealizeExtraCompensationOnPremium ();
+    std::string RealizePartialMortalityMultiplier ();
+    std::string RealizeCurrentCoiMultiplier       ();
+    std::string RealizeCashValueEnhancementRate   ();
+    std::string RealizeCorporationTaxBracket      ();
+    std::string RealizeTaxBracket                 ();
+    std::string RealizeProjectedSalary            ();
+    std::string RealizeSpecifiedAmount            ();
+    std::string RealizeDeathBenefitOption         ();
+    std::string RealizePayment                    ();
+    std::string RealizePaymentMode                ();
+    std::string RealizeCorporationPayment         ();
+    std::string RealizeCorporationPaymentMode     ();
+    std::string RealizeGeneralAccountRate         ();
+    std::string RealizeSeparateAccountRate        ();
+    std::string RealizeNewLoan                    ();
+    std::string RealizeWithdrawal                 ();
+    std::string RealizeFlatExtra                  ();
+    std::string RealizeHoneymoonValueSpread       ();
+    std::string RealizePremiumHistory             ();
+    std::string RealizeSpecamtHistory             ();
+
+    void make_term_rider_consistent(bool aggressively = true);
 
     boost::scoped_ptr<TDatabase> database_;
 
@@ -333,7 +368,6 @@ class LMI_SO Input
     datum_sequence           SpecamtHistory                  ;
     datum_sequence           FundAllocations                 ; // TODO ?? Needs work.
     datum_sequence           CashValueEnhancementRate        ;
-
     mce_yes_or_no            CreateSupplementalReport        ;
     mce_report_column        SupplementalReportColumn00      ;
     mce_report_column        SupplementalReportColumn01      ;
@@ -347,7 +381,6 @@ class LMI_SO Input
     mce_report_column        SupplementalReportColumn09      ;
     mce_report_column        SupplementalReportColumn10      ;
     mce_report_column        SupplementalReportColumn11      ;
-
     mce_solve_tgt_at         DeprecatedSolveTgtAtWhich       ;
     mce_solve_from           DeprecatedSolveFromWhich        ;
     mce_solve_to             DeprecatedSolveToWhich          ;

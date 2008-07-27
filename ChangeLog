@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1116 2008-07-27 00:54:24 chicares Exp $
+// $Id: ChangeLog,v 1.1117 2008-07-27 20:13:09 chicares Exp $
 
 MAINTENANCE
 
@@ -18463,4 +18463,51 @@ Expunge a superfluous file.
   inputillus_term_rider.cpp [expunged]
   objects.make
 Combine two files.
+
+20080727T0141Z <gchicares@sbcglobal.net> [1100]
+
+  Makefile.am
+  input_realization.cpp [new file]
+  objects.make
+Prepare to realize sequence strings for modern input class. Initially
+'input_realization.cpp' is just a copy of 'inputillus_sequences.cpp'.
+
+20080727T1757Z <gchicares@sbcglobal.net> [1100]
+
+  input_realization.cpp
+Substitute class name and header, and map type.
+
+20080727T1819Z <gchicares@sbcglobal.net> [1100]
+
+  input_realization.cpp
+Rename realization member functions, discarding obsolete ones.
+
+20080727T1834Z <gchicares@sbcglobal.net> [1100]
+
+  input_realization.cpp
+Substitute names of this class's data members.
+
+20080727T1842Z <gchicares@sbcglobal.net> [1100]
+
+  input_realization.cpp
+Use this class's database member.
+
+20080727T1907Z <gchicares@sbcglobal.net> [1100]
+
+  input_realization.cpp
+Use this class's (tentative) UDTs. They generally need value() because
+they offer no implicit conversion to arithmetic type, but that's a
+Good Thing. Probably some hardcoded tests are rendered superfluous by
+the modern trammeled numeric range types; this should be tested.
+
+20080727T1930Z <gchicares@sbcglobal.net> [1100]
+
+  input_realization.cpp
+Revise auxiliary functions, copying proportional-term documentation
+from obsolete input class.
+
+20080727T2013Z <gchicares@sbcglobal.net> [1100]
+
+  input.hpp
+Prospectively support recent sequence-realization changes.
 
