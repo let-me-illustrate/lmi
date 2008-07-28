@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.31 2008-07-27 20:13:09 chicares Exp $
+// $Id: input.hpp,v 1.32 2008-07-28 17:17:45 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -413,6 +413,38 @@ class LMI_SO Input
     tnr_attained_age         WithdrawalToAge                 ;
     mce_to_point             WithdrawalToAlternative         ;
     tnr_duration             WithdrawalToDuration            ;
+
+    // TODO ?? For the nonce, only an unrestricted tn_range type is
+    // used, because tn_range doesn't permit initialization or
+    // assignment from any out-of-range value, but the Realize*()
+    // functions expect to test raw values themselves.
+
+    std::vector<tnr_unrestricted_double> ExtraMonthlyCustodialFeeRealized_  ;
+    std::vector<tnr_unrestricted_double> ExtraCompensationOnAssetsRealized_ ;
+    std::vector<tnr_unrestricted_double> ExtraCompensationOnPremiumRealized_;
+    std::vector<tnr_unrestricted_double> PartialMortalityMultiplierRealized_;
+    std::vector<tnr_unrestricted_double> CurrentCoiMultiplierRealized_      ;
+    std::vector<tnr_unrestricted_double> CashValueEnhancementRateRealized_  ;
+    std::vector<tnr_unrestricted_double> CorporationTaxBracketRealized_     ;
+    std::vector<tnr_unrestricted_double> TaxBracketRealized_                ;
+    std::vector<tnr_unrestricted_double> ProjectedSalaryRealized_           ;
+    std::vector<tnr_unrestricted_double> SpecifiedAmountRealized_           ;
+    std::vector<mce_sa_strategy>         SpecifiedAmountStrategyRealized_   ;
+    std::vector<mce_dbopt>               DeathBenefitOptionRealized_        ;
+    std::vector<tnr_unrestricted_double> PaymentRealized_                   ;
+    std::vector<mce_pmt_strategy>        PaymentStrategyRealized_           ;
+    std::vector<mce_mode>                PaymentModeRealized_               ;
+    std::vector<tnr_unrestricted_double> CorporationPaymentRealized_        ;
+    std::vector<mce_pmt_strategy>        CorporationPaymentStrategyRealized_;
+    std::vector<mce_mode>                CorporationPaymentModeRealized_    ;
+    std::vector<tnr_unrestricted_double> GeneralAccountRateRealized_        ;
+    std::vector<tnr_unrestricted_double> SeparateAccountRateRealized_       ;
+    std::vector<tnr_unrestricted_double> NewLoanRealized_                   ;
+    std::vector<tnr_unrestricted_double> WithdrawalRealized_                ;
+    std::vector<tnr_unrestricted_double> FlatExtraRealized_                 ;
+    std::vector<tnr_unrestricted_double> HoneymoonValueSpreadRealized_      ;
+    std::vector<tnr_unrestricted_double> PremiumHistoryRealized_            ;
+    std::vector<tnr_unrestricted_double> SpecamtHistoryRealized_            ;
 };
 
 void LMI_SO convert_to_ihs(IllusInputParms&, Input const&);
