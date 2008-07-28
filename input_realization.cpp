@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_realization.cpp,v 1.7 2008-07-27 19:30:33 chicares Exp $
+// $Id: input_realization.cpp,v 1.8 2008-07-28 18:20:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -343,6 +343,7 @@ std::string Input::RealizeExtraCompensationOnAssets()
         {
         return "Add-on compensation cannot exceed 10000 basis points.";
         }
+
     return "";
 }
 
@@ -370,6 +371,7 @@ std::string Input::RealizeExtraCompensationOnPremium()
         {
         return "Add-on compensation cannot exceed one times premium.";
         }
+
     return "";
 }
 
@@ -409,7 +411,7 @@ std::string Input::RealizeCashValueEnhancementRate()
     // SOMEDAY !! If we add a production like
     //   numeric-value: numeric-literal %
     // then we might say "between 0% and 100%." here.
-    minmax<tnr_proportion> extrema(CashValueEnhancementRateRealized_);
+    minmax<tnr_unrestricted_double> extrema(CashValueEnhancementRateRealized_);
     if(!(0.0 <= extrema.minimum().value() && extrema.maximum().value() <= 1.0))
         {
         std::ostringstream oss;
@@ -422,6 +424,7 @@ std::string Input::RealizeCashValueEnhancementRate()
             ;
         return oss.str();
         }
+
     return "";
 }
 
@@ -441,7 +444,7 @@ std::string Input::RealizeCorporationTaxBracket()
     // SOMEDAY !! If we add a production like
     //   numeric-value: numeric-literal %
     // then we might say "between 0% and 100%." here.
-    minmax<tnr_proportion> extrema(CorporationTaxBracketRealized_);
+    minmax<tnr_unrestricted_double> extrema(CorporationTaxBracketRealized_);
     if(!(0.0 <= extrema.minimum().value() && extrema.maximum().value() <= 1.0))
         {
         std::ostringstream oss;
@@ -454,6 +457,7 @@ std::string Input::RealizeCorporationTaxBracket()
             ;
         return oss.str();
         }
+
     return "";
 }
 
@@ -473,7 +477,7 @@ std::string Input::RealizeTaxBracket()
     // SOMEDAY !! If we add a production like
     //   numeric-value: numeric-literal %
     // then we might say "between 0% and 100%." here.
-    minmax<tnr_proportion> extrema(TaxBracketRealized_);
+    minmax<tnr_unrestricted_double> extrema(TaxBracketRealized_);
     if(!(0.0 <= extrema.minimum().value() && extrema.maximum().value() <= 1.0))
         {
         std::ostringstream oss;
@@ -486,6 +490,7 @@ std::string Input::RealizeTaxBracket()
             ;
         return oss.str();
         }
+
     return "";
 }
 
@@ -577,7 +582,6 @@ std::string Input::RealizePayment()
         {
         z.clear();
         }
-
     return realize_sequence_string
         (*this
         ,PaymentRealized_
@@ -697,6 +701,7 @@ std::string Input::RealizeGeneralAccountRate()
             return oss.str();
             }
         }
+
     // DEPRECATED An empty string is a tricky special case for the
     // obsolete input class, which requires this goofy workaround.
     if(GeneralAccountRate.value().empty())
@@ -745,8 +750,8 @@ std::string Input::RealizeSeparateAccountRate()
 
     // Arguably the minimum gross rate would be -(100% + spread).
     // Such an exquisite refinement would complicate the program by
-    // making this field's range depend on gross versus net. The
-    // -100% minimum for type 'tnr_sep_acct_rate' is low enough.
+    // making this field's range depend on gross versus net. The -100%
+    // minimum for an eventual tn_range type will be low enough.
 
     double max_sep_acct_rate = database_->Query(DB_MaxSepAcctRate);
     if(global_settings::instance().ash_nazg())
@@ -771,6 +776,7 @@ std::string Input::RealizeSeparateAccountRate()
             ;
         return oss.str();
         }
+
     return "";
 }
 
@@ -796,6 +802,7 @@ std::string Input::RealizeNewLoan()
         {
         return "Loans may not be illustrated on this policy form.";
         }
+
     return "";
 }
 
@@ -823,7 +830,7 @@ std::string Input::RealizeWithdrawal()
         {
         double lowest_allowed_withdrawal = database_->Query(DB_MinWD);
         for
-            (std::vector<tnr_nonnegative_double>::iterator i = WithdrawalRealized_.begin()
+            (std::vector<tnr_unrestricted_double>::iterator i = WithdrawalRealized_.begin()
             ;i < WithdrawalRealized_.end()
             ;++i
             )
@@ -842,6 +849,7 @@ std::string Input::RealizeWithdrawal()
                 }
             }
         }
+
     return "";
 }
 
@@ -869,6 +877,7 @@ std::string Input::RealizeFlatExtra()
         {
         return "Flat extras may not be illustrated on this policy form.";
         }
+
     return "";
 }
 
