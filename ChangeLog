@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1117 2008-07-27 20:13:09 chicares Exp $
+// $Id: ChangeLog,v 1.1118 2008-07-28 18:44:39 chicares Exp $
 
 MAINTENANCE
 
@@ -18510,4 +18510,32 @@ from obsolete input class.
 
   input.hpp
 Prospectively support recent sequence-realization changes.
+
+20080728T1406Z <gchicares@sbcglobal.net> [1100]
+
+  config_ming323.hpp
+Conditionally support C99 isnan(), even though it's not needed yet.
+
+20080728T1407Z <gchicares@sbcglobal.net> [1100]
+
+  tn_range.hpp
+  tn_range.tpp
+Add operator<() to make containers of tn_range more useful.
+
+20080728T1717Z <gchicares@sbcglobal.net> [1101]
+
+  input.hpp
+Provide data members needed for sequence-string realization.
+
+20080728T1820Z <gchicares@sbcglobal.net> [1101]
+
+  input_realization.cpp
+Use only the most permissive tn_range type, as explained in the header
+committed 20080728T1717Z.
+
+20080728T1844Z <gchicares@sbcglobal.net> [1101]
+
+  input.hpp
+  input_realization.cpp
+Remove conditionals: compile tentative realization code.
 
