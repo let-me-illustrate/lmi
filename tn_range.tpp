@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range.tpp,v 1.14 2008-02-19 16:22:16 chicares Exp $
+// $Id: tn_range.tpp,v 1.15 2008-07-28 14:07:12 chicares Exp $
 
 #include "tn_range.hpp"
 
@@ -550,6 +550,12 @@ template<typename Number, typename Trammel>
 bool tn_range<Number,Trammel>::operator==(std::string const& s) const
 {
     return value_cast<Number>(s) == value_;
+}
+
+template<typename Number, typename Trammel>
+bool tn_range<Number,Trammel>::operator<(tn_range<Number,Trammel> const& z) const
+{
+    return value_ < z.value_;
 }
 
 template<typename Number, typename Trammel>
