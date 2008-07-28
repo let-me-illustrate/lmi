@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_realization.cpp,v 1.8 2008-07-28 18:20:34 chicares Exp $
+// $Id: input_realization.cpp,v 1.9 2008-07-28 18:44:39 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -45,7 +45,6 @@
 #include <sstream>
 #include <utility>            // std::pair
 
-#if 0 // An evolving copy of 'inputillus_sequences.cpp'....
 //============================================================================
 // Realize sequence strings with only numeric values.
 template<typename T>
@@ -57,12 +56,12 @@ std::string realize_sequence_string
     )
 {
     InputSequence s
-        (sequence_string
-        ,input.YearsToMaturity()
-        ,static_cast<int>(input.Status[0].IssueAge)
-        ,static_cast<int>(input.Status[0].RetAge)
-        ,static_cast<int>(input.InforceYear)
-        ,calendar_date(input.EffDate).year()
+        (sequence_string.value()
+        ,100 // TODO ?? Wrong--should be years to maturity.
+        ,*exact_cast<int>(input["IssueAge"])
+        ,*exact_cast<int>(input["RetirementAge"])
+        ,*exact_cast<int>(input["InforceYear"])
+        ,exact_cast<calendar_date>(input["EffectiveDate"])->year()
         ,index_origin
         );
     detail::convert_vector(v, s.linear_number_representation());
@@ -82,12 +81,12 @@ std::string realize_sequence_string
     )
 {
     InputSequence s
-        (sequence_string
-        ,input.YearsToMaturity()
-        ,static_cast<int>(input.Status[0].IssueAge)
-        ,static_cast<int>(input.Status[0].RetAge)
-        ,static_cast<int>(input.InforceYear)
-        ,calendar_date(input.EffDate).year()
+        (sequence_string.value()
+        ,100 // Wrong--should be years to maturity.
+        ,*exact_cast<int>(input["IssueAge"])
+        ,*exact_cast<int>(input["RetirementAge"])
+        ,*exact_cast<int>(input["InforceYear"])
+        ,exact_cast<calendar_date>(input["EffectiveDate"])->year()
         ,index_origin
         ,detail::extract_keys_from_string_map(keyword_dictionary)
         ,default_keyword
@@ -116,12 +115,12 @@ std::string realize_sequence_string
     )
 {
     InputSequence s
-        (sequence_string
-        ,input.YearsToMaturity()
-        ,static_cast<int>(input.Status[0].IssueAge)
-        ,static_cast<int>(input.Status[0].RetAge)
-        ,static_cast<int>(input.InforceYear)
-        ,calendar_date(input.EffDate).year()
+        (sequence_string.value()
+        ,100 // Wrong--should be years to maturity.
+        ,*exact_cast<int>(input["IssueAge"])
+        ,*exact_cast<int>(input["RetirementAge"])
+        ,*exact_cast<int>(input["InforceYear"])
+        ,exact_cast<calendar_date>(input["EffectiveDate"])->year()
         ,index_origin
         ,detail::extract_keys_from_string_map(keyword_dictionary)
         ,default_keyword
@@ -994,5 +993,4 @@ void Input::make_term_rider_consistent(bool aggressively)
             ;
         }
 }
-#endif // 0
 

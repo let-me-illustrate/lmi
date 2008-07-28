@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.32 2008-07-28 17:17:45 chicares Exp $
+// $Id: input.hpp,v 1.33 2008-07-28 18:44:38 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -49,6 +49,11 @@ class TDatabase;
 #include <map>
 #include <string>
 #include <vector>
+
+/// Eventually it may become important to distinguish strings that
+/// represent input sequences, for interactive validation.
+
+typedef datum_string datum_sequence;
 
 /// Design notes for class input.
 ///
@@ -200,9 +205,6 @@ class LMI_SO Input
     tnr_issue_age            CachedIssueAge_             ;
     mce_uw_basis             CachedGroupUnderwritingType_;
     mce_state                CachedStateOfJurisdiction_  ;
-
-    // TODO ?? Temporary.
-    typedef datum_string datum_sequence;
 
     tnr_issue_age            IssueAge                        ;
     tnr_attained_age         RetirementAge                   ;
