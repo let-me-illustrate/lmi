@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range.hpp,v 1.14 2008-04-11 14:33:29 chicares Exp $
+// $Id: tn_range.hpp,v 1.15 2008-07-28 14:07:12 chicares Exp $
 
 #ifndef tn_range_hpp
 #define tn_range_hpp
@@ -271,6 +271,7 @@ class tn_range
     bool operator==(tn_range<Number,Trammel> const&) const;
     bool operator==(Number) const;
     bool operator==(std::string const&) const;
+    bool operator<(tn_range<Number,Trammel> const&) const;
 
     Trammel const& trammel() const;
     Number value() const;
