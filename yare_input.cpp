@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: yare_input.cpp,v 1.8 2008-07-24 12:12:21 chicares Exp $
+// $Id: yare_input.cpp,v 1.9 2008-07-29 15:00:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,134 +32,165 @@
 #include "inputs.hpp"
 #include "miscellany.hpp" // each_equal()
 
+namespace
+{
+template<typename T, std::size_t n, T const (&e)[n], char const*const (&c)[n]>
+std::vector<T> convert_vector_type
+    (std::vector<mc_enum<T,n,e,c> > const& ve
+    )
+{
+    std::vector<T> z;
+    typename std::vector<mc_enum<T,n,e,c> >::const_iterator ve_i;
+    for(ve_i = ve.begin(); ve_i != ve.end(); ++ve_i)
+        {
+        z.push_back(ve_i->value());
+        }
+    return z;
+}
+
+template<typename Number, typename Trammel>
+std::vector<Number> convert_vector_type
+    (std::vector<tn_range<Number,Trammel> > const& vr
+    )
+{
+    std::vector<Number> z;
+    typename std::vector<tn_range<Number,Trammel> >::const_iterator vr_i;
+    for(vr_i = vr.begin(); vr_i != vr.end(); ++vr_i)
+        {
+        z.push_back(vr_i->value());
+        }
+    return z;
+}
+} // Unnamed namespace.
+
 yare_input::yare_input(Input const& z)
 {
-(void)z;
-/*
-    int                               IssueAge                        ;
-    int                               RetirementAge                   ;
-    mcenum_gender                     Gender                          ;
-    mcenum_smoking                    Smoking                         ;
-    mcenum_class                      UnderwritingClass               ;
-    bool                              WaiverOfPremiumBenefit          ;
-    bool                              AccidentalDeathBenefit          ;
-    bool                              TermRider                       ;
-    double                            TermRiderAmount                 ;
-    mcenum_table_rating               SubstandardTable                ;
-    std::string                       ProductName                     ;
-    double                            Dumpin                          ;
-    double                            External1035ExchangeAmount      ;
-    double                            External1035ExchangeBasis       ;
-    bool                              External1035ExchangeFromMec     ;
-    double                            Internal1035ExchangeAmount      ;
-    double                            Internal1035ExchangeBasis       ;
-    bool                              Internal1035ExchangeFromMec     ;
-    mcenum_solve_type                 SolveType                       ;
-    int                               SolveBeginYear                  ;
-    int                               SolveEndYear                    ;
-    mcenum_solve_target               SolveTarget                     ;
-    double                            SolveTargetCashSurrenderValue   ;
-    int                               SolveTargetYear                 ;
-    mcenum_gen_basis                  SolveBasis                      ;
-    mcenum_sep_basis                  SolveSeparateAccountBasis       ;
-    mcenum_interest_rate_type         GeneralAccountRateType          ;
-    mcenum_interest_rate_type         SeparateAccountRateType         ;
-    double                            LoanRate                        ;
-    mcenum_loan_rate_type             LoanRateType                    ;
-    bool                              OverrideExperienceReserveRate   ;
-    double                            ExperienceReserveRate           ;
-    double                            ExperienceRatingInitialKFactor  ;
-    double                            InforceNetExperienceReserve     ;
-    double                            InforceYtdNetCoiCharge          ;
-    bool                              WithdrawToBasisThenLoan         ;
-    bool                              UseAverageOfAllFunds            ;
-    bool                              OverrideFundManagementFee       ;
-    double                            InputFundManagementFee          ;
-    mcenum_run_order                  RunOrder                        ;
-    int                               NumberOfIdenticalLives          ;
-    bool                              UseExperienceRating             ;
-    bool                              UsePartialMortality             ;
-    mcenum_state                      State                           ;
-    mcenum_state                      CorporationState                ;
-    double                            InsuredPremiumTableFactor       ;
-    double                            CorporationPremiumTableFactor   ;
-    calendar_date                     EffectiveDate                   ;
-    mcenum_defn_life_ins              DefinitionOfLifeInsurance       ;
-    mcenum_defn_material_change       DefinitionOfMaterialChange      ;
-    mcenum_mec_avoid_method           AvoidMecMethod                  ;
-    bool                              RetireesCanEnroll               ;
-    mcenum_uw_basis                   GroupUnderwritingType           ;
-    calendar_date                     LastCoiReentryDate              ;
-    bool                              BlendGender                     ;
-    bool                              BlendSmoking                    ;
-    double                            MaleProportion                  ;
-    double                            NonsmokerProportion             ;
-    mcenum_term_adj_method            TermAdjustmentMethod            ;
-    bool                              IncludeInComposite              ;
-    std::string                       Comments                        ;
-    bool                              AmortizePremiumLoad             ;
-    int                               InforceYear                     ;
-    int                               InforceMonth                    ;
-    double                            InforceGeneralAccountValue      ;
-    double                            InforceSeparateAccountValue     ;
-    double                            InforceRegularLoanValue         ;
-    double                            InforcePreferredLoanValue       ;
-    double                            InforceRegularLoanBalance       ;
-    double                            InforcePreferredLoanBalance     ;
-    double                            InforceCumulativeNoLapsePremium ;
-    double                            InforceCumulativePayments       ;
-    double                            CountryCoiMultiplier            ;
-    mcenum_survival_limit             SurviveToType                   ;
-    int                               SurviveToYear                   ;
-    int                               SurviveToAge                    ;
-    double                            MaximumNaar                     ;
-    bool                              ChildRider                      ;
-    double                            ChildRiderAmount                ;
-    bool                              SpouseRider                     ;
-    double                            SpouseRiderAmount               ;
-    int                               SpouseIssueAge                  ;
-    double                            InforceTaxBasis                 ;
-    bool                              InforceIsMec                    ;
-    double                            InforceDcv                      ;
-    double                            InforceAvBeforeLastMc           ;
-    int                               InforceContractYear             ;
-    int                               InforceContractMonth            ;
-    double                            InforceLeastDeathBenefit        ;
-    mcenum_state                      StateOfJurisdiction             ;
-    double                            SalarySpecifiedAmountFactor     ;
-    double                            SalarySpecifiedAmountCap        ;
-    double                            SalarySpecifiedAmountOffset     ;
-    bool                              HoneymoonEndorsement            ;
-    double                            PostHoneymoonSpread             ;
-    double                            InforceHoneymoonValue           ;
-    std::vector<double>               ExtraMonthlyCustodialFee        ;
-    std::vector<double>               ExtraCompensationOnAssets       ;
-    std::vector<double>               ExtraCompensationOnPremium      ;
-    std::vector<double>               PartialMortalityMultiplier      ;
-    std::vector<double>               CurrentCoiMultiplier            ;
-    std::vector<double>               ProjectedSalary                 ;
-    std::vector<double>               SpecifiedAmount                 ;
-    std::vector<mcenum_dbopt>         DeathBenefitOption              ;
-    std::vector<double>               Payment                         ;
-    std::vector<mcenum_mode>          PaymentMode                     ;
-    std::vector<double>               CorporationPayment              ;
-    std::vector<mcenum_mode>          CorporationPaymentMode          ;
-    std::vector<double>               GeneralAccountRate              ;
-    std::vector<double>               SeparateAccountRate             ;
-    std::vector<double>               NewLoan                         ;
-    std::vector<double>               Withdrawal                      ;
-    std::vector<double>               FlatExtra                       ;
-    std::vector<double>               HoneymoonValueSpread            ;
-    std::vector<double>               PremiumHistory                  ;
-    std::vector<double>               SpecamtHistory                  ;
-    std::vector<double>               FundAllocations                 ;
-    std::vector<double>               CashValueEnhancementRate        ;
-    std::vector<mcenum_sa_strategy  > SpecifiedAmountStrategy         ;
-    std::vector<mcenum_pmt_strategy > IndividualPaymentStrategy       ;
-    std::vector<mcenum_pmt_strategy > CorporationPaymentStrategy      ;
-    std::vector<mcenum_loan_strategy> NewLoanStrategy                 ;
-    std::vector<mcenum_wd_strategy  > WithdrawalStrategy              ;
-*/
+    IssueAge                        = z.IssueAge                       .value();
+    RetirementAge                   = z.RetirementAge                  .value();
+    Gender                          = z.Gender                         .value();
+    Smoking                         = z.Smoking                        .value();
+    UnderwritingClass               = z.UnderwritingClass              .value();
+    WaiverOfPremiumBenefit          = z.WaiverOfPremiumBenefit         .value();
+    AccidentalDeathBenefit          = z.AccidentalDeathBenefit         .value();
+    TermRider                       = z.TermRider                      .value();
+    TermRiderAmount                 = z.TermRiderAmount                .value();
+    SubstandardTable                = z.SubstandardTable               .value();
+    ProductName                     = z.ProductName                    .value();
+    Dumpin                          = z.Dumpin                         .value();
+    External1035ExchangeAmount      = z.External1035ExchangeAmount     .value();
+    External1035ExchangeBasis       = z.External1035ExchangeBasis      .value();
+    External1035ExchangeFromMec     = z.External1035ExchangeFromMec    .value();
+    Internal1035ExchangeAmount      = z.Internal1035ExchangeAmount     .value();
+    Internal1035ExchangeBasis       = z.Internal1035ExchangeBasis      .value();
+    Internal1035ExchangeFromMec     = z.Internal1035ExchangeFromMec    .value();
+    SolveType                       = z.SolveType                      .value();
+    SolveBeginYear                  = z.SolveBeginYear                 .value();
+    SolveEndYear                    = z.SolveEndYear                   .value();
+    SolveTarget                     = z.SolveTarget                    .value();
+    SolveTargetCashSurrenderValue   = z.SolveTargetCashSurrenderValue  .value();
+    SolveTargetYear                 = z.SolveTargetYear                .value();
+    SolveBasis                      = z.SolveBasis                     .value();
+    SolveSeparateAccountBasis       = z.SolveSeparateAccountBasis      .value();
+    GeneralAccountRateType          = z.GeneralAccountRateType         .value();
+    SeparateAccountRateType         = z.SeparateAccountRateType        .value();
+    LoanRate                        = z.LoanRate                       .value();
+    LoanRateType                    = z.LoanRateType                   .value();
+    OverrideExperienceReserveRate   = z.OverrideExperienceReserveRate  .value();
+    ExperienceReserveRate           = z.ExperienceReserveRate          .value();
+    ExperienceRatingInitialKFactor  = z.ExperienceRatingInitialKFactor .value();
+    InforceNetExperienceReserve     = z.InforceNetExperienceReserve    .value();
+    InforceYtdNetCoiCharge          = z.InforceYtdNetCoiCharge         .value();
+    WithdrawToBasisThenLoan         = z.WithdrawToBasisThenLoan        .value();
+    UseAverageOfAllFunds            = z.UseAverageOfAllFunds           .value();
+    OverrideFundManagementFee       = z.OverrideFundManagementFee      .value();
+    InputFundManagementFee          = z.InputFundManagementFee         .value();
+    RunOrder                        = z.RunOrder                       .value();
+    NumberOfIdenticalLives          = z.NumberOfIdenticalLives         .value();
+    UseExperienceRating             = z.UseExperienceRating            .value();
+    UsePartialMortality             = z.UsePartialMortality            .value();
+    State                           = z.State                          .value();
+    CorporationState                = z.CorporationState               .value();
+    InsuredPremiumTableFactor       = z.InsuredPremiumTableFactor      .value();
+    CorporationPremiumTableFactor   = z.CorporationPremiumTableFactor  .value();
+    EffectiveDate                   = z.EffectiveDate                  .value();
+    DefinitionOfLifeInsurance       = z.DefinitionOfLifeInsurance      .value();
+    DefinitionOfMaterialChange      = z.DefinitionOfMaterialChange     .value();
+    AvoidMecMethod                  = z.AvoidMecMethod                 .value();
+    RetireesCanEnroll               = z.RetireesCanEnroll              .value();
+    GroupUnderwritingType           = z.GroupUnderwritingType          .value();
+    LastCoiReentryDate              = z.LastCoiReentryDate             .value();
+    BlendGender                     = z.BlendGender                    .value();
+    BlendSmoking                    = z.BlendSmoking                   .value();
+    MaleProportion                  = z.MaleProportion                 .value();
+    NonsmokerProportion             = z.NonsmokerProportion            .value();
+    TermAdjustmentMethod            = z.TermAdjustmentMethod           .value();
+    IncludeInComposite              = z.IncludeInComposite             .value();
+    Comments                        = z.Comments                       .value();
+    AmortizePremiumLoad             = z.AmortizePremiumLoad            .value();
+    InforceYear                     = z.InforceYear                    .value();
+    InforceMonth                    = z.InforceMonth                   .value();
+    InforceGeneralAccountValue      = z.InforceGeneralAccountValue     .value();
+    InforceSeparateAccountValue     = z.InforceSeparateAccountValue    .value();
+    InforceRegularLoanValue         = z.InforceRegularLoanValue        .value();
+    InforcePreferredLoanValue       = z.InforcePreferredLoanValue      .value();
+    InforceRegularLoanBalance       = z.InforceRegularLoanBalance      .value();
+    InforcePreferredLoanBalance     = z.InforcePreferredLoanBalance    .value();
+    InforceCumulativeNoLapsePremium = z.InforceCumulativeNoLapsePremium.value();
+    InforceCumulativePayments       = z.InforceCumulativePayments      .value();
+    CountryCoiMultiplier            = z.CountryCoiMultiplier           .value();
+    SurviveToType                   = z.SurviveToType                  .value();
+    SurviveToYear                   = z.SurviveToYear                  .value();
+    SurviveToAge                    = z.SurviveToAge                   .value();
+    MaximumNaar                     = z.MaximumNaar                    .value();
+    ChildRider                      = z.ChildRider                     .value();
+    ChildRiderAmount                = z.ChildRiderAmount               .value();
+    SpouseRider                     = z.SpouseRider                    .value();
+    SpouseRiderAmount               = z.SpouseRiderAmount              .value();
+    SpouseIssueAge                  = z.SpouseIssueAge                 .value();
+    InforceTaxBasis                 = z.InforceTaxBasis                .value();
+    InforceIsMec                    = z.InforceIsMec                   .value();
+    InforceDcv                      = z.InforceDcv                     .value();
+    InforceAvBeforeLastMc           = z.InforceAvBeforeLastMc          .value();
+    InforceContractYear             = z.InforceContractYear            .value();
+    InforceContractMonth            = z.InforceContractMonth           .value();
+    InforceLeastDeathBenefit        = z.InforceLeastDeathBenefit       .value();
+    StateOfJurisdiction             = z.StateOfJurisdiction            .value();
+    SalarySpecifiedAmountFactor     = z.SalarySpecifiedAmountFactor    .value();
+    SalarySpecifiedAmountCap        = z.SalarySpecifiedAmountCap       .value();
+    SalarySpecifiedAmountOffset     = z.SalarySpecifiedAmountOffset    .value();
+    HoneymoonEndorsement            = z.HoneymoonEndorsement           .value();
+    PostHoneymoonSpread             = z.PostHoneymoonSpread            .value();
+    InforceHoneymoonValue           = z.InforceHoneymoonValue          .value();
+    ExtraMonthlyCustodialFee        = convert_vector_type<double              >(z.ExtraMonthlyCustodialFeeRealized_       );
+    ExtraCompensationOnAssets       = convert_vector_type<double              >(z.ExtraCompensationOnAssetsRealized_      );
+    ExtraCompensationOnPremium      = convert_vector_type<double              >(z.ExtraCompensationOnPremiumRealized_     );
+    PartialMortalityMultiplier      = convert_vector_type<double              >(z.PartialMortalityMultiplierRealized_     );
+    CurrentCoiMultiplier            = convert_vector_type<double              >(z.CurrentCoiMultiplierRealized_           );
+    ProjectedSalary                 = convert_vector_type<double              >(z.ProjectedSalaryRealized_                );
+    SpecifiedAmount                 = convert_vector_type<double              >(z.SpecifiedAmountRealized_                );
+    DeathBenefitOption              = convert_vector_type<mcenum_dbopt        >(z.DeathBenefitOptionRealized_             );
+    Payment                         = convert_vector_type<double              >(z.PaymentRealized_                        );
+    PaymentMode                     = convert_vector_type<mcenum_mode         >(z.PaymentModeRealized_                    );
+    CorporationPayment              = convert_vector_type<double              >(z.CorporationPaymentRealized_             );
+    CorporationPaymentMode          = convert_vector_type<mcenum_mode         >(z.CorporationPaymentModeRealized_         );
+    GeneralAccountRate              = convert_vector_type<double              >(z.GeneralAccountRateRealized_             );
+    SeparateAccountRate             = convert_vector_type<double              >(z.SeparateAccountRateRealized_            );
+    NewLoan                         = convert_vector_type<double              >(z.NewLoanRealized_                        );
+    Withdrawal                      = convert_vector_type<double              >(z.WithdrawalRealized_                     );
+    FlatExtra                       = convert_vector_type<double              >(z.FlatExtraRealized_                      );
+    HoneymoonValueSpread            = convert_vector_type<double              >(z.HoneymoonValueSpreadRealized_           );
+    PremiumHistory                  = convert_vector_type<double              >(z.PremiumHistoryRealized_                 );
+    SpecamtHistory                  = convert_vector_type<double              >(z.SpecamtHistoryRealized_                 );
+// INPUT !! Not yet implemented:
+//    FundAllocations                 = convert_vector_type<double              >(z.FundAllocationsRealized_                );
+    CashValueEnhancementRate        = convert_vector_type<double              >(z.CashValueEnhancementRateRealized_       );
+    SpecifiedAmountStrategy         = convert_vector_type<mcenum_sa_strategy  >(z.SpecifiedAmountStrategyRealized_        );
+// INPUT !! Anomalous name:
+    IndividualPaymentStrategy       = convert_vector_type<mcenum_pmt_strategy >(z.PaymentStrategyRealized_      );
+    CorporationPaymentStrategy      = convert_vector_type<mcenum_pmt_strategy >(z.CorporationPaymentStrategyRealized_     );
+// INPUT !! Not yet implemented:
+//    NewLoanStrategy                 = convert_vector_type<mcenum_loan_strategy>(z.NewLoanStrategyRealized_                );
+//    WithdrawalStrategy              = convert_vector_type<mcenum_wd_strategy  >(z.WithdrawalStrategyRealized_             );
 }
 
 namespace

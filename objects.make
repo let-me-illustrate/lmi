@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.127 2008-07-27 01:41:11 chicares Exp $
+# $Id: objects.make,v 1.128 2008-07-29 15:00:09 chicares Exp $
 
 ################################################################################
 
@@ -361,10 +361,12 @@ gpt_objects := \
   alert.o \
   alert_cli.o \
   calendar_date.o \
+  ce_product_name.o \
   configurable_settings.o \
   crc32.o \
   data_directory.o \
   datum_base.o \
+  datum_string.o \
   dbnames.o \
   death_benefits.o \
   expm1.o \
@@ -397,6 +399,7 @@ gpt_objects := \
   stratified_algorithms.o \
   stratified_charges.o \
   surrchg_rates.o \
+  tn_range_types.o \
   timer.o \
   xenumtypes.o \
   xml_lmi.o \
@@ -622,9 +625,12 @@ input_test$(EXEEXT): \
   $(common_test_objects) \
   $(xmlwrapp_objects) \
   calendar_date.o \
+  ce_product_name.o \
   configurable_settings.o \
   data_directory.o \
   database.o \
+  datum_base.o \
+  datum_string.o \
   dbdict.o \
   dbnames.o \
   dbvalue.o \
@@ -638,6 +644,8 @@ input_test$(EXEEXT): \
   inputillus_xml_io.o \
   inputs.o \
   inputstatus.o \
+  mc_enum.o \
+  mc_enum_types.o \
   miscellany.o \
   multiple_cell_document.o \
   path_utility.o \
@@ -645,6 +653,7 @@ input_test$(EXEEXT): \
   single_cell_document.o \
   streamable.o \
   timer.o \
+  tn_range_types.o \
   xenumtypes.o \
   xml_lmi.o \
   xrange.o \
