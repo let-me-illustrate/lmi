@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.33 2008-07-28 18:44:38 chicares Exp $
+// $Id: input.hpp,v 1.34 2008-07-29 02:54:42 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -139,6 +139,12 @@ class LMI_SO Input
 
     std::string differing_fields(Input const&) const;
 
+    int years_to_maturity() {return GleanedMaturityAge_ - IssueAge.value();}
+    int issue_age        () {return IssueAge     .value();}
+    int retirement_age   () {return RetirementAge.value();}
+    int inforce_year     () {return InforceYear  .value();}
+    int effective_year   () {return EffectiveDate.value().year();}
+
   private:
     void AscribeMembers();
 
@@ -198,13 +204,18 @@ class LMI_SO Input
 
     boost::scoped_ptr<TDatabase> database_;
 
-    ce_product_name          CachedProductName_          ;
-    mce_gender               CachedGender_               ;
-    mce_class                CachedUnderwritingClass_    ;
-    mce_smoking              CachedSmoking_              ;
-    tnr_issue_age            CachedIssueAge_             ;
-    mce_uw_basis             CachedGroupUnderwritingType_;
-    mce_state                CachedStateOfJurisdiction_  ;
+    // Database axes are independent variables; they're "cached" along
+    // with the database, which is reset when any of them changes.
+    // Dependent variables, stored only as an optimization, are
+    // "gleaned" whenever the database is reset.
+    std::string              CachedProductName_          ;
+    mcenum_gender            CachedGender_               ;
+    mcenum_class             CachedUnderwritingClass_    ;
+    mcenum_smoking           CachedSmoking_              ;
+    int                      CachedIssueAge_             ;
+    mcenum_uw_basis          CachedGroupUnderwritingType_;
+    mcenum_state             CachedStateOfJurisdiction_  ;
+    int                      GleanedMaturityAge_         ;
 
     tnr_issue_age            IssueAge                        ;
     tnr_attained_age         RetirementAge                   ;
