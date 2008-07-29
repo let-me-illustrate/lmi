@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_realization.cpp,v 1.9 2008-07-28 18:44:39 chicares Exp $
+// $Id: input_realization.cpp,v 1.10 2008-07-29 02:54:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -57,11 +57,11 @@ std::string realize_sequence_string
 {
     InputSequence s
         (sequence_string.value()
-        ,100 // TODO ?? Wrong--should be years to maturity.
-        ,*exact_cast<int>(input["IssueAge"])
-        ,*exact_cast<int>(input["RetirementAge"])
-        ,*exact_cast<int>(input["InforceYear"])
-        ,exact_cast<calendar_date>(input["EffectiveDate"])->year()
+        ,input.years_to_maturity()
+        ,input.issue_age        ()
+        ,input.retirement_age   ()
+        ,input.inforce_year     ()
+        ,input.effective_year   ()
         ,index_origin
         );
     detail::convert_vector(v, s.linear_number_representation());
@@ -82,11 +82,11 @@ std::string realize_sequence_string
 {
     InputSequence s
         (sequence_string.value()
-        ,100 // Wrong--should be years to maturity.
-        ,*exact_cast<int>(input["IssueAge"])
-        ,*exact_cast<int>(input["RetirementAge"])
-        ,*exact_cast<int>(input["InforceYear"])
-        ,exact_cast<calendar_date>(input["EffectiveDate"])->year()
+        ,input.years_to_maturity()
+        ,input.issue_age        ()
+        ,input.retirement_age   ()
+        ,input.inforce_year     ()
+        ,input.effective_year   ()
         ,index_origin
         ,detail::extract_keys_from_string_map(keyword_dictionary)
         ,default_keyword
@@ -116,11 +116,11 @@ std::string realize_sequence_string
 {
     InputSequence s
         (sequence_string.value()
-        ,100 // Wrong--should be years to maturity.
-        ,*exact_cast<int>(input["IssueAge"])
-        ,*exact_cast<int>(input["RetirementAge"])
-        ,*exact_cast<int>(input["InforceYear"])
-        ,exact_cast<calendar_date>(input["EffectiveDate"])->year()
+        ,input.years_to_maturity()
+        ,input.issue_age        ()
+        ,input.retirement_age   ()
+        ,input.inforce_year     ()
+        ,input.effective_year   ()
         ,index_origin
         ,detail::extract_keys_from_string_map(keyword_dictionary)
         ,default_keyword
