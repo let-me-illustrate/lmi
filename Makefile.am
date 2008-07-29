@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.47 2008-07-27 01:41:10 chicares Exp $
+# $Id: Makefile.am,v 1.48 2008-07-29 15:00:09 chicares Exp $
 
 SUBDIRS = third_party
 
@@ -591,9 +591,12 @@ test_input_seq_CXXFLAGS = $(AM_CXXFLAGS)
 test_input_SOURCES =    \
   $(common_test_objects) \
   calendar_date.cpp \
+  ce_product_name.cpp \
   configurable_settings.cpp \
   data_directory.cpp \
   database.cpp \
+  datum_base.cpp \
+  datum_string.cpp \
   dbdict.cpp \
   dbnames.cpp \
   dbvalue.cpp \
@@ -607,12 +610,15 @@ test_input_SOURCES =    \
   inputillus_xml_io.cpp \
   inputs.cpp \
   inputstatus.cpp \
+  mc_enum.cpp \
+  mc_enum_types.cpp \
   miscellany.cpp \
   multiple_cell_document.cpp \
   path_utility.cpp \
   product_names.cpp \
   single_cell_document.cpp \
   streamable.cpp \
+  tn_range_types.cpp \
   xenumtypes.cpp \
   xml_lmi.cpp \
   xrange.cpp \
