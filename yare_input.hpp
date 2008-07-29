@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: yare_input.hpp,v 1.6 2008-07-24 12:12:21 chicares Exp $
+// $Id: yare_input.hpp,v 1.7 2008-07-29 15:27:11 chicares Exp $
 
 #ifndef yare_input_hpp
 #define yare_input_hpp
@@ -284,7 +284,7 @@ class yare_input
 //    int                               WithdrawalToDuration            ;
 
     std::vector<mcenum_sa_strategy  > SpecifiedAmountStrategy         ;
-    std::vector<mcenum_pmt_strategy > IndividualPaymentStrategy       ;
+    std::vector<mcenum_pmt_strategy > PaymentStrategy                 ;
     std::vector<mcenum_pmt_strategy > CorporationPaymentStrategy      ;
     std::vector<mcenum_loan_strategy> NewLoanStrategy                 ;
     std::vector<mcenum_wd_strategy  > WithdrawalStrategy              ;
