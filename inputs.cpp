@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputs.cpp,v 1.26 2008-07-02 13:10:16 chicares Exp $
+// $Id: inputs.cpp,v 1.27 2008-07-29 22:23:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -848,42 +848,6 @@ std::string InputParms::AgentCityStateZip() const
         s += " ";
         }
     s += AgentZipCode;
-    return s;
-}
-
-// Obsolete, but not harmful if the unit tests are powerful enough.
-
-//============================================================================
-std::string InputParms::AgentFullName() const
-{
-    std::string s(AgentFirstName);
-    if(!s.empty() && !AgentMiddleName.empty())
-        {
-        s += " ";
-        }
-    s += AgentMiddleName;
-    if(!s.empty() && !AgentLastName.empty())
-        {
-        s += " ";
-        }
-    s += AgentLastName;
-    return s;
-}
-
-//============================================================================
-std::string InputParms::InsdFullName() const
-{
-    std::string s(InsdFirstName);
-    if(!s.empty() && !InsdMiddleName.empty())
-        {
-        s += " ";
-        }
-    s += InsdMiddleName;
-    if(!s.empty() && !InsdLastName.empty())
-        {
-        s += " ";
-        }
-    s += InsdLastName;
     return s;
 }
 
