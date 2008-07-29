@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputs.hpp,v 1.20 2008-07-02 13:10:16 chicares Exp $
+// $Id: inputs.hpp,v 1.21 2008-07-29 22:23:17 chicares Exp $
 
 #ifndef inputs_hpp
 #define inputs_hpp
@@ -61,8 +61,6 @@ class LMI_SO InputParms
 
     bool IsValid() const;
     std::string AgentCityStateZip() const;
-    std::string AgentFullName() const;
-    std::string InsdFullName() const;
 
 // TODO ?? Data should be private.
     std::string          ProductName          ; // TODO ?? Want validator.

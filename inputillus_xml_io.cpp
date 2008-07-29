@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.33 2008-05-29 23:55:20 chicares Exp $
+// $Id: inputillus_xml_io.cpp,v 1.34 2008-07-29 22:23:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -71,6 +71,26 @@ std::vector<std::string> const& detritus()
         };
     static std::vector<std::string> const v(s, s + lmi_array_size(s));
     return v;
+}
+
+std::string full_name
+    (std::string first_name
+    ,std::string middle_name
+    ,std::string last_name
+    )
+{
+    std::string s(first_name);
+    if(!s.empty() && !middle_name.empty())
+        {
+        s += " ";
+        }
+    s += middle_name;
+    if(!s.empty() && !last_name.empty())
+        {
+        s += " ";
+        }
+    s += last_name;
+    return s;
 }
 } // Unnnamed namespace.
 
@@ -188,16 +208,25 @@ using namespace xml;
                 }
             }
 
-        InputParms::AgentFirstName  = detritus_map["AgentFirstName" ];
-        InputParms::AgentLastName   = detritus_map["AgentLastName"  ];
-        InputParms::AgentMiddleName = detritus_map["AgentMiddleName"];
-        InputParms::InsdFirstName   = detritus_map["FirstName"      ];
-        InputParms::InsdLastName    = detritus_map["LastName"       ];
-        InputParms::InsdMiddleName  = detritus_map["MiddleName"     ];
+        std::string AgentFirstName  = detritus_map["AgentFirstName" ];
+        std::string AgentMiddleName = detritus_map["AgentMiddleName"];
+        std::string AgentLastName   = detritus_map["AgentLastName"  ];
+        std::string InsdFirstName   = detritus_map["FirstName"      ];
+        std::string InsdMiddleName  = detritus_map["MiddleName"     ];
+        std::string InsdLastName    = detritus_map["LastName"       ];
 
-        operator[]("AgentName"  ) = AgentFullName();
-        operator[]("InsuredName") = InsdFullName();
+        operator[]("AgentName"  ) = full_name // DEPRECATED Alias for 'AgentFirstName'.
+            (AgentFirstName
+            ,AgentMiddleName
+            ,AgentLastName
+            );
+        operator[]("InsuredName") = full_name // DEPRECATED Alias for 'InsdFirstName'.
+            (InsdFirstName
+            ,InsdMiddleName
+            ,InsdLastName
+            );
 
+        // DEPRECATED:
         InputParms::AgentLastName   = "";
         InputParms::AgentMiddleName = "";
         InputParms::InsdLastName    = "";

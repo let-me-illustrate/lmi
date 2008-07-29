@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.56 2008-07-23 16:29:27 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.57 2008-07-29 22:23:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -546,7 +546,7 @@ void LedgerInvariant::Init(BasicValues* b)
         InterestDisclaimer     = b->ProductData_->GetInterestDisclaimer();
         }
 
-    ProducerName            = b->Input_->AgentFullName();
+    ProducerName            = b->Input_->AgentFirstName; // DEPRECATED Maps to 'AgentName'.
 
     ProducerStreet          = b->Input_->AgentAddr1;
     ProducerCity            = b->Input_->AgentCityStateZip();
@@ -555,7 +555,7 @@ void LedgerInvariant::Init(BasicValues* b)
     Franchise               = b->Input_->Franchise;
     PolicyNumber            = b->Input_->PolicyNumber;
 
-    Insured1                = b->Input_->InsdFullName();
+    Insured1                = b->Input_->InsdFirstName; // DEPRECATED Maps to 'InsuredName'.
     Gender                  = b->Input_->Status[0].Gender.str();
     UWType                  = b->Input_->GroupUWType.str();
 
