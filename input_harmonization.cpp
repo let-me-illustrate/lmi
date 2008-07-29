@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.64 2008-07-24 15:45:40 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.65 2008-07-29 02:54:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -117,25 +117,27 @@ void Input::DoAdaptExternalities()
         }
 #endif // !defined SUPPORT_105822
 
-    CachedProductName_           = ProductName          ;
-    CachedGender_                = Gender               ;
-    CachedUnderwritingClass_     = UnderwritingClass    ;
-    CachedSmoking_               = Smoking              ;
-    CachedIssueAge_              = IssueAge             ;
-    CachedGroupUnderwritingType_ = GroupUnderwritingType;
-    CachedStateOfJurisdiction_   = StateOfJurisdiction  ;
+    CachedProductName_           = ProductName          .value();
+    CachedGender_                = Gender               .value();
+    CachedUnderwritingClass_     = UnderwritingClass    .value();
+    CachedSmoking_               = Smoking              .value();
+    CachedIssueAge_              = IssueAge             .value();
+    CachedGroupUnderwritingType_ = GroupUnderwritingType.value();
+    CachedStateOfJurisdiction_   = StateOfJurisdiction  .value();
 
     database_.reset
         (new TDatabase
-            (ProductName          .value()
-            ,Gender               .value()
-            ,UnderwritingClass    .value()
-            ,Smoking              .value()
-            ,IssueAge             .value()
-            ,GroupUnderwritingType.value()
-            ,StateOfJurisdiction  .value()
+            (CachedProductName_
+            ,CachedGender_
+            ,CachedUnderwritingClass_
+            ,CachedSmoking_
+            ,CachedIssueAge_
+            ,CachedGroupUnderwritingType_
+            ,CachedStateOfJurisdiction_
             )
         );
+
+    GleanedMaturityAge_ = static_cast<int>(database_->Query(DB_EndtAge));
 
 #if !defined SUPPORT_105822
     if
