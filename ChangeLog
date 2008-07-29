@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1118 2008-07-28 18:44:39 chicares Exp $
+// $Id: ChangeLog,v 1.1119 2008-07-29 22:23:17 chicares Exp $
 
 MAINTENANCE
 
@@ -18538,4 +18538,35 @@ committed 20080728T1717Z.
   input.hpp
   input_realization.cpp
 Remove conditionals: compile tentative realization code.
+
+20080729T0254Z <gchicares@sbcglobal.net> [1100]
+
+  input.hpp
+  input_harmonization.cpp
+  input_realization.cpp
+Cache maturity duration; refactor.
+
+20080729T1500Z <gchicares@sbcglobal.net> [1100]
+
+  Makefile.am
+  input.hpp
+  objects.make
+  yare_input.cpp
+Implement missing ctor 'yare_input(Input const& z)'.
+
+20080729T1527Z <gchicares@sbcglobal.net> [1100]
+
+  accountvalue.cpp
+  ihs_avstrtgy.cpp
+  yare_input.cpp
+  yare_input.hpp
+Fix an anomalous name.
+
+20080729T2223Z <gchicares@sbcglobal.net> [1100]
+
+  inputillus_xml_io.cpp
+  inputs.cpp
+  inputs.hpp
+  ledger_invariant.cpp
+Undo an ancient and obsolete workaround.
 
