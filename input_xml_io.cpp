@@ -1,4 +1,4 @@
-// Life insurance illustration inputs: xml I/O.
+// MVC Model for life-insurance illustrations: xml I/O.
 //
 // Copyright (C) 1998, 2001, 2002, 2004, 2005, 2006, 2007, 2008 Gregory W. Chicares.
 //
@@ -19,14 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_xml_io.cpp,v 1.1 2008-07-29 23:00:23 chicares Exp $
+// $Id: input_xml_io.cpp,v 1.2 2008-07-29 23:25:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "inputillus.hpp"
+#include "input.hpp"
 
 #include "alert.hpp"
 #include "calendar_date.hpp"
@@ -37,7 +37,7 @@
 
 #include <algorithm> // std::find()
 
-#if 0 // Just a copy of 'inputillus_xml_io.cpp' for initial commit.
+#if 0 // An evolving copy of 'inputillus_xml_io.cpp'.
 
 // Entities that were present in older versions and then removed
 // are recognized and ignored. If they're resurrected in a later
@@ -97,7 +97,7 @@ std::string full_name
 } // Unnnamed namespace.
 
 //============================================================================
-void IllusInputParms::read(xml::element const& x)
+void Input::read(xml::element const& x)
 {
     if(xml_root_name() != x.get_name())
         {
@@ -131,7 +131,7 @@ using namespace xml;
     std::map<std::string, std::string> detritus_map;
 
     std::vector<std::string> member_names
-        (IllusInputParms::member_names()
+        (Input::member_names()
         );
     std::vector<std::string>::iterator current_member;
 // XMLWRAPP !! The unit test demonstrates that the suppressed code is
@@ -190,7 +190,7 @@ using namespace xml;
     if(0 == cell_version)
         {
         // An older version with no distinct 'cell_version' didn't
-        // have 'DefnMaterialChange', whose default value is
+        // have 'DefinitionOfMaterialChange', whose default value is
         // unacceptable for GPT.
         if
             (member_names.end() != std::find
@@ -200,13 +200,13 @@ using namespace xml;
                 )
             )
             {
-            if(DefnLifeIns == e_defn_life_ins(e_gpt))
+            if(mce_gpt == DefinitionOfLifeInsurance)
                 {
-                DefnMaterialChange = e_adjustment_event;
+                DefinitionOfMaterialChange = mce_adjustment_event;
                 }
             else
                 {
-                DefnMaterialChange = e_earlier_of_increase_or_unnecessary_premium;
+                DefinitionOfMaterialChange = mce_earlier_of_increase_or_unnecessary_premium;
                 }
             }
 
@@ -250,16 +250,16 @@ using namespace xml;
 
     propagate_changes_to_base_and_finalize();
 
-    if(EffectiveDateToday && !global_settings::instance().regression_testing())
+    if(EffectiveDateToday.value() && !global_settings::instance().regression_testing())
         {
-        EffDate = calendar_date();
+        EffectiveDate = calendar_date();
         }
 
     // 'LastCoiReentryDate' was introduced 20071017T1454Z. For files
     // saved before then, its default value may be inappropriate.
     LastCoiReentryDate = std::min
         (LastCoiReentryDate.value()
-        ,add_years(EffDate, InforceYear, true)
+        ,add_years(EffectiveDate.value(), InforceYear.value(), true)
         );
 
 // If you want to see the ones that didn't get assigned:
@@ -270,7 +270,7 @@ using namespace xml;
 }
 
 //============================================================================
-void IllusInputParms::write(xml::element& x) const
+void Input::write(xml::element& x) const
 {
     xml::element root(xml_root_name().c_str());
 
@@ -279,7 +279,7 @@ void IllusInputParms::write(xml::element& x) const
     xml_lmi::set_attr(root, "version", version.c_str());
 
     std::vector<std::string> const member_names
-        (IllusInputParms::member_names()
+        (Input::member_names()
         );
     std::vector<std::string>::const_iterator i;
     for(i = member_names.begin(); i != member_names.end(); ++i)
@@ -293,13 +293,13 @@ void IllusInputParms::write(xml::element& x) const
 }
 
 //============================================================================
-int IllusInputParms::class_version() const
+int Input::class_version() const
 {
     return 1;
 }
 
 //============================================================================
-std::string IllusInputParms::xml_root_name() const
+std::string Input::xml_root_name() const
 {
     return "cell";
 }
