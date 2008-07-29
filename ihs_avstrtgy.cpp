@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avstrtgy.cpp,v 1.21 2008-07-23 16:31:20 chicares Exp $
+// $Id: ihs_avstrtgy.cpp,v 1.22 2008-07-29 15:27:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -304,7 +304,7 @@ double AccountValue::PerformEePmtStrategy() const
         ,InvariantValues().EeMode[0]   .value()
         ,yare_input_.InsuredPremiumTableFactor
         ,InvariantValues().EePmt
-        ,yare_input_.IndividualPaymentStrategy
+        ,yare_input_.PaymentStrategy
         );
 }
 

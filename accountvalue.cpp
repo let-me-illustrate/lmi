@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.59 2008-07-24 10:16:12 chicares Exp $
+// $Id: accountvalue.cpp,v 1.60 2008-07-29 15:27:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -612,7 +612,7 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
         return;
         }
 
-    switch(yare_input_.IndividualPaymentStrategy[0])
+    switch(yare_input_.PaymentStrategy[0])
         {
         case mce_pmt_input_scalar:
             {
@@ -671,7 +671,7 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
             {
             fatal_error()
                 << "Case "
-                << yare_input_.IndividualPaymentStrategy[0]
+                << yare_input_.PaymentStrategy[0]
                 << " not found."
                 << LMI_FLUSH
                 ;

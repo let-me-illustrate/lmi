@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: yare_input.cpp,v 1.9 2008-07-29 15:00:09 chicares Exp $
+// $Id: yare_input.cpp,v 1.10 2008-07-29 15:27:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -185,8 +185,7 @@ yare_input::yare_input(Input const& z)
 //    FundAllocations                 = convert_vector_type<double              >(z.FundAllocationsRealized_                );
     CashValueEnhancementRate        = convert_vector_type<double              >(z.CashValueEnhancementRateRealized_       );
     SpecifiedAmountStrategy         = convert_vector_type<mcenum_sa_strategy  >(z.SpecifiedAmountStrategyRealized_        );
-// INPUT !! Anomalous name:
-    IndividualPaymentStrategy       = convert_vector_type<mcenum_pmt_strategy >(z.PaymentStrategyRealized_      );
+    PaymentStrategy                 = convert_vector_type<mcenum_pmt_strategy >(z.PaymentStrategyRealized_      );
     CorporationPaymentStrategy      = convert_vector_type<mcenum_pmt_strategy >(z.CorporationPaymentStrategyRealized_     );
 // INPUT !! Not yet implemented:
 //    NewLoanStrategy                 = convert_vector_type<mcenum_loan_strategy>(z.NewLoanStrategyRealized_                );
@@ -349,7 +348,7 @@ yare_input::yare_input(InputParms const& z)
     FundAllocations                 = convert_vector_type<double              >(z.FundAllocs                   );
     CashValueEnhancementRate        = z.VectorCashValueEnhancementRate  ;
     SpecifiedAmountStrategy         = convert_vector_type<mcenum_sa_strategy  >(z.VectorSpecifiedAmountStrategy);
-    IndividualPaymentStrategy       = convert_vector_type<mcenum_pmt_strategy >(z.VectorIndvPaymentStrategy    );
+    PaymentStrategy                 = convert_vector_type<mcenum_pmt_strategy >(z.VectorIndvPaymentStrategy    );
     CorporationPaymentStrategy      = convert_vector_type<mcenum_pmt_strategy >(z.VectorCorpPaymentStrategy    );
     NewLoanStrategy                 = convert_vector_type<mcenum_loan_strategy>(z.VectorNewLoanStrategy        );
     WithdrawalStrategy              = convert_vector_type<mcenum_wd_strategy  >(z.VectorWithdrawalStrategy     );
