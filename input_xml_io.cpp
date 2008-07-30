@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_xml_io.cpp,v 1.2 2008-07-29 23:25:14 chicares Exp $
+// $Id: input_xml_io.cpp,v 1.3 2008-07-30 00:07:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -227,12 +227,6 @@ using namespace xml;
             ,InsdMiddleName
             ,InsdLastName
             );
-
-        // DEPRECATED:
-        InputParms::AgentLastName   = "";
-        InputParms::AgentMiddleName = "";
-        InputParms::InsdLastName    = "";
-        InputParms::InsdMiddleName  = "";
         }
 
     // Older versions lacked 'UseCurrentDeclaredRate', whose
@@ -247,8 +241,6 @@ using namespace xml;
         {
         UseCurrentDeclaredRate = "No";
         }
-
-    propagate_changes_to_base_and_finalize();
 
     if(EffectiveDateToday.value() && !global_settings::instance().regression_testing())
         {
