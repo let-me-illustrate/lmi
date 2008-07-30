@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.24 2008-05-29 23:55:19 chicares Exp $
+// $Id: input.cpp,v 1.25 2008-07-30 00:19:46 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -45,6 +45,7 @@ Input::Input()
 
 Input::Input(Input const& z)
     :obstruct_slicing<Input>()
+    ,streamable()
     ,MvcModel()
     ,MemberSymbolTable<Input>()
 {
