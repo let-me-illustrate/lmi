@@ -1,4 +1,4 @@
-// Inputs for life insurance illustrations--unit test.
+// MVC Model for life-insurance illustrations--unit test.
 //
 // Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Gregory W. Chicares.
 //
@@ -19,18 +19,20 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.33 2008-07-30 19:58:12 chicares Exp $
+// $Id: input_test.cpp,v 1.34 2008-07-30 23:53:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-// Facilities offered by all four of these headers are tested here.
+// Facilities offered by all of these headers are tested here.
+#include "input.hpp"
 #include "inputillus.hpp"
 #include "multiple_cell_document.hpp"
 #include "single_cell_document.hpp"
 #include "yare_input.hpp"
+// End of headers tested here.
 
 #include "assert_lmi.hpp"
 #include "miscellany.hpp"
@@ -57,12 +59,14 @@ class input_test
     static void test()
         {
         test_input_class();
+        test_input_class_obsolete();
         test_document_classes();
         assay_speed();
         }
 
   private:
     static void test_input_class();
+    static void test_input_class_obsolete();
     static void test_document_classes();
     static void assay_speed();
 
@@ -203,6 +207,112 @@ void input_test::assay_speed()
 
 void input_test::test_input_class()
 {
+    // Test << and >> operators.
+    Input original;
+    Input replica;
+
+    std::ofstream os0("eraseme0.xml", ios_out_trunc_binary());
+    BOOST_TEST(os0.good());
+
+    original.AgentName           = "Herbert Cassidy";
+    original.AgentPhone          = "123-4567";
+    original.InsuredName         = "Full Name";
+    original.Address             = "address";
+    original.City                = "city";
+//    original.FundAllocations     = "0.4 0.3 0.2 0.1";
+    original.SeparateAccountRate = "0.03125";
+
+    original.RealizeAllSequenceInput();
+/*
+    original.FundAllocs[0]       = 1.0;
+    original.SeparateAccountRateRealized_[0] = .01234567890123456789;
+    original.SeparateAccountRateRealized_[1] = .12345678901234567890;
+    original.SeparateAccountRateRealized_[2] = .23456789012345678901;
+    original.SeparateAccountRateRealized_[3] = .34567890123456789012;
+    original.SeparateAccountRateRealized_[4] = .45678901234567890123;
+    original.SeparateAccountRateRealized_[5] = .56789012345678901234;
+    original.SeparateAccountRateRealized_[6] = .67890123456789012345;
+    original.SeparateAccountRateRealized_[7] = .78901234567890123456;
+    original.SeparateAccountRateRealized_[8] = .89012345678901234567;
+    original.SeparateAccountRateRealized_[9] = .90123456789012345678;
+*/
+
+    xml_lmi::xml_document xml_document0("root");
+    xml::element& xml_root0 = xml_document0.root_node();
+    xml_root0 << original;
+    os0 << xml_document0;
+    os0.close();
+
+    xml::node::const_iterator i = xml_root0.begin();
+    LMI_ASSERT(!i->is_text());
+    xml::element const& xml_node = *i;
+
+    xml_node >> replica;
+    std::ofstream os1("eraseme1.xml", ios_out_trunc_binary());
+    BOOST_TEST(os1.good());
+
+    xml_lmi::xml_document xml_document1("root");
+    xml::element& xml_root1 = xml_document1.root_node();
+    xml_root1 << replica;
+    os1 << xml_document1;
+    os1.close();
+
+    BOOST_TEST(original == replica);
+    bool okay = files_are_identical("eraseme0.xml", "eraseme1.xml");
+    BOOST_TEST(okay);
+    // Leave the files for analysis if they didn't match.
+    if(okay)
+        {
+        BOOST_TEST(0 == std::remove("eraseme0.xml"));
+        BOOST_TEST(0 == std::remove("eraseme1.xml"));
+        }
+
+    BOOST_TEST(0.03125 == original.SeparateAccountRateRealized_[0]);
+    BOOST_TEST(replica.SeparateAccountRateRealized_.empty());
+    replica.RealizeAllSequenceInput();
+    BOOST_TEST(!replica.SeparateAccountRateRealized_.empty());
+    BOOST_TEST(0.03125 == replica.SeparateAccountRateRealized_[0]);
+
+/* TODO ?? The code this tests is defective--fix it someday.
+    BOOST_TEST(0.4 == original.FundAllocs[0]);
+    BOOST_TEST(0.4 == replica.FundAllocs[0]);
+std::cout << "original.FundAllocs[0] is " << original.FundAllocs[0] << '\n';
+std::cout << "replica.FundAllocs[0] is " << replica.FundAllocs[0] << '\n';
+
+std::cout << "original.FundAllocs.size() is " << original.FundAllocs.size() << '\n';
+std::cout << "replica.FundAllocs.size() is " << replica.FundAllocs.size() << '\n';
+*/
+
+    BOOST_TEST(0 == original.InforceYear);
+    original["InforceYear"] = std::string("3");
+    BOOST_TEST(3 == original.InforceYear);
+
+// Fails--need to change initialization.
+    BOOST_TEST(45 == original.IssueAge);
+    original["IssueAge"] = std::string("57");
+    BOOST_TEST(57 == original.IssueAge);
+
+    // Test copy constructor.
+    Input copy0(original);
+    BOOST_TEST(original == copy0);
+    copy0["InsuredName"] = "Claude Proulx";
+    BOOST_TEST(std::string("Claude Proulx") == copy0   .InsuredName.value());
+    BOOST_TEST(std::string("Full Name")     == original.InsuredName.value());
+
+    // Test assignment operator.
+    Input copy1;
+    copy1 = original;
+    BOOST_TEST(original == copy1);
+    copy1["InsuredName"] = "Angela";
+    BOOST_TEST(std::string("Angela")    == copy1   .InsuredName.value());
+    BOOST_TEST(std::string("Full Name") == original.InsuredName.value());
+
+    // For now at least, just test that this compiles and runs.
+    yare_input y(original);
+}
+
+void input_test::test_input_class_obsolete()
+{
     // Test IllusInputParms << and >> operators.
     IllusInputParms original;
     IllusInputParms replica;
@@ -271,7 +381,7 @@ void input_test::test_input_class()
     BOOST_TEST(0.03125 == original.SepAcctRate[0]);
     BOOST_TEST(0.03125 == replica.SepAcctRate[0]);
 
-/* TODO ?? The code this tests is defective--fix it someday.
+/* The code this tests is defective, but will soon be expunged.
     BOOST_TEST(0.4 == original.FundAllocs[0]);
     BOOST_TEST(0.4 == replica.FundAllocs[0]);
 std::cout << "original.FundAllocs[0] is " << original.FundAllocs[0] << '\n';

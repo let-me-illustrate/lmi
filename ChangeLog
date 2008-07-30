@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1121 2008-07-30 20:56:42 wboutin Exp $
+// $Id: ChangeLog,v 1.1122 2008-07-30 23:53:27 chicares Exp $
 
 MAINTENANCE
 
@@ -18595,6 +18595,27 @@ Eradicate artifacts of obsolete class.
   objects.make
 Add xml input and output to modern input class.
 
+20080730T1231Z <gchicares@sbcglobal.net> [1101]
+
+  group_values.cpp
+  ihs_acctval.cpp
+  ihs_avdebug.cpp
+  ihs_avsolve.cpp
+  illustration_document.cpp
+  input_harmonization.cpp
+  inputs.cpp
+  interest_rates.hpp
+  ledger_test.cpp
+  ledger_variant.cpp
+  loads.cpp
+  solve.cpp
+Include certain headers only with an explanation.
+
+20080730T1958Z <gchicares@sbcglobal.net> [1101]
+
+  input_test.cpp
+Refactor, emulating 'progress_meter_test.cpp'.
+
 20080730T2056Z <wboutin@massmutual.com> [1101]
 
   skin_coli_boli.xrc
@@ -18602,4 +18623,12 @@ Add xml input and output to modern input class.
   skin_reg_d.xrc
   skin_single_premium.xrc
 Make yes-or-no enumerators equivalent to type bool.
+
+20080730T2353Z <gchicares@sbcglobal.net> [1101]
+
+  Makefile.am
+  input.hpp
+  input_test.cpp
+  objects.make
+Begin to test new input class as well as old.
 
