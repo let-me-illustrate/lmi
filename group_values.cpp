@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.92 2008-07-22 23:11:25 chicares Exp $
+// $Id: group_values.cpp,v 1.93 2008-07-30 12:31:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -38,7 +38,7 @@
 #include "ledger.hpp"
 #include "ledgervalues.hpp"
 #include "materially_equal.hpp"
-#include "mc_enum_types_aux.hpp"
+#include "mc_enum_types_aux.hpp" // mc_str()
 #include "path_utility.hpp"
 #include "progress_meter.hpp"
 #include "timer.hpp"

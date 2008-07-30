@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.23 2008-07-22 17:59:25 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.24 2008-07-30 12:31:06 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -40,13 +40,13 @@
 #include "death_benefits.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
-#include "mc_enum_types_aux.hpp"
+#include "mc_enum_types_aux.hpp" // set_run_basis_from_cloven_bases()
 #include "outlay.hpp"
 #include "zero.hpp"
 
-#include <algorithm>    // std::min(), std::max()
+#include <algorithm>             // std::min(), std::max()
 #include <functional>
-#include <numeric>      // std::accumulate()
+#include <numeric>               // std::accumulate()
 
 /*
 TODO ?? Limitations
