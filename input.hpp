@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.35 2008-07-29 15:00:09 chicares Exp $
+// $Id: input.hpp,v 1.36 2008-07-30 00:19:46 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -36,6 +36,7 @@
 #include "mc_enum_types.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
+#include "streamable.hpp"
 #include "tn_range.hpp"
 #include "tn_range_types.hpp"
 
@@ -125,6 +126,7 @@ typedef datum_string datum_sequence;
 
 class LMI_SO Input
     :virtual private obstruct_slicing<Input>
+    ,virtual public streamable
     ,public MvcModel
     ,public MemberSymbolTable<Input>
     ,private boost::equality_comparable<Input>
@@ -157,6 +159,12 @@ class LMI_SO Input
     void TransferWithdrawalInputSequenceToSimpleControls
         (InputSequence const& s
         );
+
+    // Class 'streamable' required implementation.
+    virtual void read (xml::element const&);
+    virtual void write(xml::element&) const;
+    virtual int class_version() const;
+    virtual std::string xml_root_name() const;
 
     // MvcModel required implementation.
     virtual void DoAdaptExternalities();

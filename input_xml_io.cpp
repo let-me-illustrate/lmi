@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_xml_io.cpp,v 1.3 2008-07-30 00:07:24 chicares Exp $
+// $Id: input_xml_io.cpp,v 1.4 2008-07-30 00:19:47 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -36,8 +36,6 @@
 #include "xml_lmi.hpp"
 
 #include <algorithm> // std::find()
-
-#if 0 // An evolving copy of 'inputillus_xml_io.cpp'.
 
 // Entities that were present in older versions and then removed
 // are recognized and ignored. If they're resurrected in a later
@@ -295,5 +293,4 @@ std::string Input::xml_root_name() const
 {
     return "cell";
 }
-#endif // 0
 
