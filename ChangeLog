@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1119 2008-07-29 22:23:17 chicares Exp $
+// $Id: ChangeLog,v 1.1120 2008-07-30 00:19:47 chicares Exp $
 
 MAINTENANCE
 
@@ -18569,4 +18569,29 @@ Fix an anomalous name.
   inputs.hpp
   ledger_invariant.cpp
 Undo an ancient and obsolete workaround.
+
+20080729T2300Z <gchicares@sbcglobal.net> [1101]
+
+  input_xml_io.cpp [new file]
+Prepare to read and write modern input class as xml. Initially
+'input_xml_io.cpp' is just a copy of 'inputillus_xml_io.cpp'.
+
+20080729T2325Z <gchicares@sbcglobal.net> [1101]
+
+  input_xml_io.cpp
+Substitute class name and header, data-member names, and enumerators.
+
+20080730T0007Z <gchicares@sbcglobal.net> [1101]
+
+  input_xml_io.cpp
+Eradicate artifacts of obsolete class.
+
+20080730T0019Z <gchicares@sbcglobal.net> [1101]
+
+  Makefile.am
+  input.cpp
+  input.hpp
+  input_xml_io.cpp
+  objects.make
+Add xml input and output to modern input class.
 
