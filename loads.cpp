@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads.cpp,v 1.19 2008-07-22 22:09:38 chicares Exp $
+// $Id: loads.cpp,v 1.20 2008-07-30 12:31:07 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,7 +35,7 @@
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "math_functors.hpp"
-#include "mc_enum_types_aux.hpp"
+#include "mc_enum_types_aux.hpp" // mc_n_ enumerators
 #include "rounding_rules.hpp"
 
 #include <boost/bind.hpp>

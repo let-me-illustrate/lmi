@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: interest_rates.hpp,v 1.7 2008-07-08 17:52:21 chicares Exp $
+// $Id: interest_rates.hpp,v 1.8 2008-07-30 12:31:06 chicares Exp $
 
 #ifndef interest_rates_hpp
 #define interest_rates_hpp
@@ -27,7 +27,7 @@
 #include "config.hpp"
 
 #include "mc_enum_type_enums.hpp"
-#include "mc_enum_types_aux.hpp"
+#include "mc_enum_types_aux.hpp" // mc_n_ enumerators
 #include "round_to.hpp"
 
 #include <vector>
