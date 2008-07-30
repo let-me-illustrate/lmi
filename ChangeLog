@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1120 2008-07-30 00:19:47 chicares Exp $
+// $Id: ChangeLog,v 1.1121 2008-07-30 20:56:42 wboutin Exp $
 
 MAINTENANCE
 
@@ -18594,4 +18594,12 @@ Eradicate artifacts of obsolete class.
   input_xml_io.cpp
   objects.make
 Add xml input and output to modern input class.
+
+20080730T2056Z <wboutin@massmutual.com> [1101]
+
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_reg_d.xrc
+  skin_single_premium.xrc
+Make yes-or-no enumerators equivalent to type bool.
 

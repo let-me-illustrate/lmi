@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin_coli_boli.xrc,v 1.6 2008-04-23 18:34:24 wboutin Exp $
+    $Id: skin_coli_boli.xrc,v 1.7 2008-07-30 20:56:41 wboutin Exp $
 
     This version is designed for COLI and BOLI users; it omits input
     fields that seem irrelevant in that context, and reflects the
@@ -859,8 +859,8 @@ useful in the future.
                                         <style>wxRA_SPECIFY_COLS</style>
                                         <label>Use date</label>
                                         <content>
-                                            <item>Yes</item>
                                             <item>No</item>
+                                            <item>Yes</item>
                                         </content>
                                     </object>
                                 </object>
@@ -2767,8 +2767,8 @@ useful in the future.
                                                 <label>Use proportion</label>
                                                 <style>wxRA_SPECIFY_ROWS</style>
                                                 <content>
-                                                    <item>Yes</item>
                                                     <item>No</item>
+                                                    <item>Yes</item>
                                                 </content>
                                             </object>
                                         </object>
