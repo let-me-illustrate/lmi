@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.36 2008-07-30 00:19:46 chicares Exp $
+// $Id: input.hpp,v 1.37 2008-07-30 23:53:27 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -131,6 +131,7 @@ class LMI_SO Input
     ,public MemberSymbolTable<Input>
     ,private boost::equality_comparable<Input>
 {
+    friend class input_test;
     friend class yare_input;
 
   public:

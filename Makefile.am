@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.49 2008-07-30 00:19:46 chicares Exp $
+# $Id: Makefile.am,v 1.50 2008-07-30 23:53:27 chicares Exp $
 
 SUBDIRS = third_party
 
@@ -603,9 +603,13 @@ test_input_SOURCES =    \
   dbvalue.cpp \
   facets.cpp \
   global_settings.cpp \
+  input.cpp \
+  input_harmonization.cpp \
+  input_realization.cpp \
   input_seq_helpers.cpp \
   input_sequence.cpp \
   input_test.cpp \
+  input_xml_io.cpp \
   inputillus.cpp \
   inputillus_sequences.cpp \
   inputillus_xml_io.cpp \
@@ -615,6 +619,7 @@ test_input_SOURCES =    \
   mc_enum_types.cpp \
   miscellany.cpp \
   multiple_cell_document.cpp \
+  mvc_model.cpp \
   path_utility.cpp \
   product_names.cpp \
   single_cell_document.cpp \

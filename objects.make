@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.129 2008-07-30 00:19:47 chicares Exp $
+# $Id: objects.make,v 1.130 2008-07-30 23:53:27 chicares Exp $
 
 ################################################################################
 
@@ -637,9 +637,13 @@ input_test$(EXEEXT): \
   dbvalue.o \
   facets.o \
   global_settings.o \
+  input.o \
+  input_harmonization.o \
+  input_realization.o \
   input_seq_helpers.o \
   input_sequence.o \
   input_test.o \
+  input_xml_io.o \
   inputillus.o \
   inputillus_sequences.o \
   inputillus_xml_io.o \
@@ -649,6 +653,7 @@ input_test$(EXEEXT): \
   mc_enum_types.o \
   miscellany.o \
   multiple_cell_document.o \
+  mvc_model.o \
   path_utility.o \
   product_names.o \
   single_cell_document.o \
