@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_document.cpp,v 1.17 2008-05-16 13:54:27 chicares Exp $
+// $Id: illustration_document.cpp,v 1.18 2008-07-30 12:31:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,7 +31,6 @@
 
 #include "alert.hpp"
 #include "illustration_view.hpp"
-#include "inputillus.hpp"
 #include "miscellany.hpp"
 
 #include <fstream>

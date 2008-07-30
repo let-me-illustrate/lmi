@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_test.cpp,v 1.11 2008-01-21 01:32:28 chicares Exp $
+// $Id: ledger_test.cpp,v 1.12 2008-07-30 12:31:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,7 +34,6 @@
 #include "assert_lmi.hpp"
 #include "fenv_guard.hpp"
 #include "global_settings.hpp"
-#include "inputillus.hpp"
 #include "miscellany.hpp" // files_are_identical()
 #include "single_cell_document.hpp"
 #include "test_tools.hpp"

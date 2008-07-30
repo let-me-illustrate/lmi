@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.cpp,v 1.29 2008-07-23 16:29:28 chicares Exp $
+// $Id: ledger_variant.cpp,v 1.30 2008-07-30 12:31:07 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,7 +33,6 @@
 #include "database.hpp" // Used only for initial loan rate.
 #include "dbnames.hpp"  // Used only for initial loan rate.
 #include "interest_rates.hpp"
-#include "mc_enum_types_aux.hpp"
 #include "outlay.hpp"
 
 #include <algorithm>
