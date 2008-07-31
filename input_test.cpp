@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.35 2008-07-31 00:28:14 chicares Exp $
+// $Id: input_test.cpp,v 1.36 2008-07-31 11:40:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -62,6 +62,7 @@ class input_test
         test_input_class_obsolete();
         test_document_classes();
         assay_speed();
+        assay_speed_obsolete();
         }
 
   private:
@@ -69,6 +70,7 @@ class input_test
     static void test_input_class_obsolete();
     static void test_document_classes();
     static void assay_speed();
+    static void assay_speed_obsolete();
 
     template<typename DocumentClass>
     static void test_document_io
@@ -85,6 +87,14 @@ class input_test
     static void mete_write();
     static void mete_cns_io();
     static void mete_ill_io();
+
+    // No 'mete_[cns,ill]_io_obsolete()' exists, or is wanted.
+    // Functions 'mete_[cns,ill]_io()' merely bind xml to an input
+    // class's read() and write().
+    static void mete_overhead_obsolete();
+    static void mete_vector_obsolete(xml::element& xml_data);
+    static void mete_read_obsolete(xml::element& xml_data);
+    static void mete_write_obsolete();
 };
 
 void input_test::test_input_class()
@@ -339,7 +349,7 @@ void input_test::test_document_classes()
 
 void input_test::assay_speed()
 {
-    IllusInputParms raw_data;
+    Input raw_data;
     xml_lmi::xml_document document("root");
     xml::element& root = document.root_node();
     root << raw_data;
@@ -356,6 +366,26 @@ void input_test::assay_speed()
         << "  Write   : " << TimeAnAliquot(mete_write                 ) << '\n'
         << "  'cns' io: " << TimeAnAliquot(mete_cns_io                ) << '\n'
         << "  'ill' io: " << TimeAnAliquot(mete_ill_io                ) << '\n'
+        ;
+}
+
+void input_test::assay_speed_obsolete()
+{
+    IllusInputParms raw_data;
+    xml_lmi::xml_document document("root");
+    xml::element& root = document.root_node();
+    root << raw_data;
+
+    xml::node::const_iterator i = root.begin();
+    LMI_ASSERT(!i->is_text());
+    xml::element const& e = *i;
+
+    std::cout
+        << "  Speed tests for obsolete class...\n"
+        << "  Overhead: " << TimeAnAliquot(mete_overhead_obsolete              ) << '\n'
+        << "  Vector  : " << TimeAnAliquot(boost::bind(mete_vector_obsolete, e)) << '\n'
+        << "  Read    : " << TimeAnAliquot(boost::bind(mete_read_obsolete  , e)) << '\n'
+        << "  Write   : " << TimeAnAliquot(mete_write_obsolete                 ) << '\n'
         ;
 }
 
@@ -418,7 +448,7 @@ void input_test::test_document_io
 
 void input_test::mete_overhead()
 {
-    static IllusInputParms raw_data;
+    static Input raw_data;
     xml_lmi::xml_document document("root");
     xml::element& root = document.root_node();
     stifle_warning_for_unused_value(root);
@@ -431,13 +461,16 @@ void input_test::mete_vector(xml::element& xml_data)
 
 void input_test::mete_read(xml::element& xml_data)
 {
-    static IllusInputParms raw_data;
+    static Input raw_data;
     xml_data >> raw_data;
+    // DEPRECATED Realize sequence input here only for comparability
+    // to the obsolete class that does so automatically.
+    raw_data.RealizeAllSequenceInput();
 }
 
 void input_test::mete_write()
 {
-    static IllusInputParms raw_data;
+    static Input raw_data;
     xml_lmi::xml_document document("root");
     xml::element& root = document.root_node();
     root << raw_data;
@@ -453,6 +486,33 @@ void input_test::mete_ill_io()
 {
     typedef single_cell_document S;
     test_document_io<S>("sample.ill", "replica.ill", __FILE__, __LINE__, true);
+}
+
+void input_test::mete_overhead_obsolete()
+{
+    static IllusInputParms raw_data;
+    xml_lmi::xml_document document("root");
+    xml::element& root = document.root_node();
+    stifle_warning_for_unused_value(root);
+}
+
+void input_test::mete_vector_obsolete(xml::element& xml_data)
+{
+    xml_lmi::child_elements(xml_data);
+}
+
+void input_test::mete_read_obsolete(xml::element& xml_data)
+{
+    static IllusInputParms raw_data;
+    xml_data >> raw_data;
+}
+
+void input_test::mete_write_obsolete()
+{
+    static IllusInputParms raw_data;
+    xml_lmi::xml_document document("root");
+    xml::element& root = document.root_node();
+    root << raw_data;
 }
 
 int test_main(int, char*[])
