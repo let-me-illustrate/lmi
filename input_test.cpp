@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.36 2008-07-31 11:40:27 chicares Exp $
+// $Id: input_test.cpp,v 1.37 2008-07-31 22:10:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -60,6 +60,7 @@ class input_test
         {
         test_input_class();
         test_input_class_obsolete();
+        test_conversion();
         test_document_classes();
         assay_speed();
         assay_speed_obsolete();
@@ -68,6 +69,7 @@ class input_test
   private:
     static void test_input_class();
     static void test_input_class_obsolete();
+    static void test_conversion();
     static void test_document_classes();
     static void assay_speed();
     static void assay_speed_obsolete();
@@ -323,6 +325,42 @@ std::cout << "replica.FundAllocs.size() is " << replica.FundAllocs.size() << '\n
 
     // For now at least, just test that this compiles and runs.
     yare_input y(original);
+}
+
+namespace
+{
+void compare_inputs(IllusInputParms const& ihs, Input const& lmi)
+{
+    std::vector<std::string>::const_iterator i;
+    for(i = lmi.member_names().begin(); i != lmi.member_names().end(); ++i)
+        {
+        if(ihs[*i].str() != lmi[*i].str())
+            {
+            std::cout
+                << "'" << *i << "' differs:\n"
+                << "  " << ihs[*i] << " [ihs]\n"
+                << "  " << lmi[*i] << " [lmi]\n"
+                ;
+            }
+        }
+}
+} // Unnamed namespace.
+
+void input_test::test_conversion()
+{
+    IllusInputParms const original;
+    Input                 equivalent;
+    IllusInputParms       replica;
+
+    convert_from_ihs(original, equivalent);
+    convert_to_ihs  (replica , equivalent);
+    BOOST_TEST(original == replica);
+
+    if(!(original == replica))
+        {
+        compare_inputs(original, equivalent);
+        compare_inputs(replica , equivalent);
+        }
 }
 
 void input_test::test_document_classes()
