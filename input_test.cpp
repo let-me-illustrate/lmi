@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.34 2008-07-30 23:53:27 chicares Exp $
+// $Id: input_test.cpp,v 1.35 2008-07-31 00:28:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -79,131 +79,13 @@ class input_test
         ,bool               test_speed_only
         );
 
-    static void mete_cns_io();
-    static void mete_ill_io();
     static void mete_overhead();
     static void mete_vector(xml::element& xml_data);
     static void mete_read(xml::element& xml_data);
     static void mete_write();
+    static void mete_cns_io();
+    static void mete_ill_io();
 };
-
-template<typename DocumentClass>
-void input_test::test_document_io
-    (std::string const& original_filename
-    ,std::string const& replica_filename
-    ,char const*        file
-    ,int                line
-    ,bool               test_speed_only
-    )
-{
-    DocumentClass document(original_filename);
-    std::ofstream ofs(replica_filename.c_str(), ios_out_trunc_binary());
-#if defined LMI_USING_XML_SAVE_OPTION
-    document.write(ofs);
-#else  // !defined LMI_USING_XML_SAVE_OPTION
-// SOMEDAY !! XMLWRAPP !! Update 'xmlwrapp' to write empty elements as such:
-//   http://mail.gnome.org/archives/xml/2007-May/msg00007.html
-//   http://mail.gnome.org/archives/xml/2006-July/msg00048.html
-
-    std::ostringstream oss0;
-    document.write(oss0);
-    std::string const s(oss0.str());
-
-    std::istringstream iss(s);
-    std::ostringstream oss1;
-    for(;EOF != iss.peek();)
-        {
-        std::string line;
-        std::getline(iss, line);
-        std::string::size_type z = line.find("><");
-        if(std::string::npos != z)
-            {
-            line.erase(z);
-            line += "/>";
-            }
-        oss1 << line << '\n';
-        }
-
-    ofs << oss1.str();
-#endif // !defined LMI_USING_XML_SAVE_OPTION
-    if(test_speed_only)
-        {
-        return;
-        }
-    ofs.close();
-    bool okay = files_are_identical(original_filename, replica_filename);
-    INVOKE_BOOST_TEST(okay, file, line);
-    // Leave the file for analysis if it didn't match.
-    if(okay)
-        {
-        INVOKE_BOOST_TEST
-            (0 == std::remove(replica_filename.c_str())
-            ,file
-            ,line
-            );
-        }
-}
-
-void input_test::mete_cns_io()
-{
-    typedef multiple_cell_document M;
-    test_document_io<M>("sample.cns", "replica.cns", __FILE__, __LINE__, true);
-}
-
-void input_test::mete_ill_io()
-{
-    typedef single_cell_document S;
-    test_document_io<S>("sample.ill", "replica.ill", __FILE__, __LINE__, true);
-}
-
-void input_test::mete_overhead()
-{
-    static IllusInputParms raw_data;
-    xml_lmi::xml_document document("root");
-    xml::element& root = document.root_node();
-    stifle_warning_for_unused_value(root);
-}
-
-void input_test::mete_vector(xml::element& xml_data)
-{
-    xml_lmi::child_elements(xml_data);
-}
-
-void input_test::mete_read(xml::element& xml_data)
-{
-    static IllusInputParms raw_data;
-    xml_data >> raw_data;
-}
-
-void input_test::mete_write()
-{
-    static IllusInputParms raw_data;
-    xml_lmi::xml_document document("root");
-    xml::element& root = document.root_node();
-    root << raw_data;
-}
-
-void input_test::assay_speed()
-{
-    IllusInputParms raw_data;
-    xml_lmi::xml_document document("root");
-    xml::element& root = document.root_node();
-    root << raw_data;
-
-    xml::node::const_iterator i = root.begin();
-    LMI_ASSERT(!i->is_text());
-    xml::element const& e = *i;
-
-    std::cout
-        << "  Speed tests...\n"
-        << "  Overhead: " << TimeAnAliquot(mete_overhead              ) << '\n'
-        << "  Vector  : " << TimeAnAliquot(boost::bind(mete_vector, e)) << '\n'
-        << "  Read    : " << TimeAnAliquot(boost::bind(mete_read  , e)) << '\n'
-        << "  Write   : " << TimeAnAliquot(mete_write                 ) << '\n'
-        << "  'cns' io: " << TimeAnAliquot(mete_cns_io                ) << '\n'
-        << "  'ill' io: " << TimeAnAliquot(mete_ill_io                ) << '\n'
-        ;
-}
 
 void input_test::test_input_class()
 {
@@ -453,6 +335,124 @@ void input_test::test_document_classes()
     test_document_io<M>("sample.cns", "replica.cns", __FILE__, __LINE__, false);
     typedef single_cell_document S;
     test_document_io<S>("sample.ill", "replica.ill", __FILE__, __LINE__, false);
+}
+
+void input_test::assay_speed()
+{
+    IllusInputParms raw_data;
+    xml_lmi::xml_document document("root");
+    xml::element& root = document.root_node();
+    root << raw_data;
+
+    xml::node::const_iterator i = root.begin();
+    LMI_ASSERT(!i->is_text());
+    xml::element const& e = *i;
+
+    std::cout
+        << "  Speed tests...\n"
+        << "  Overhead: " << TimeAnAliquot(mete_overhead              ) << '\n'
+        << "  Vector  : " << TimeAnAliquot(boost::bind(mete_vector, e)) << '\n'
+        << "  Read    : " << TimeAnAliquot(boost::bind(mete_read  , e)) << '\n'
+        << "  Write   : " << TimeAnAliquot(mete_write                 ) << '\n'
+        << "  'cns' io: " << TimeAnAliquot(mete_cns_io                ) << '\n'
+        << "  'ill' io: " << TimeAnAliquot(mete_ill_io                ) << '\n'
+        ;
+}
+
+template<typename DocumentClass>
+void input_test::test_document_io
+    (std::string const& original_filename
+    ,std::string const& replica_filename
+    ,char const*        file
+    ,int                line
+    ,bool               test_speed_only
+    )
+{
+    DocumentClass document(original_filename);
+    std::ofstream ofs(replica_filename.c_str(), ios_out_trunc_binary());
+#if defined LMI_USING_XML_SAVE_OPTION
+    document.write(ofs);
+#else  // !defined LMI_USING_XML_SAVE_OPTION
+// SOMEDAY !! XMLWRAPP !! Update 'xmlwrapp' to write empty elements as such:
+//   http://mail.gnome.org/archives/xml/2007-May/msg00007.html
+//   http://mail.gnome.org/archives/xml/2006-July/msg00048.html
+
+    std::ostringstream oss0;
+    document.write(oss0);
+    std::string const s(oss0.str());
+
+    std::istringstream iss(s);
+    std::ostringstream oss1;
+    for(;EOF != iss.peek();)
+        {
+        std::string line;
+        std::getline(iss, line);
+        std::string::size_type z = line.find("><");
+        if(std::string::npos != z)
+            {
+            line.erase(z);
+            line += "/>";
+            }
+        oss1 << line << '\n';
+        }
+
+    ofs << oss1.str();
+#endif // !defined LMI_USING_XML_SAVE_OPTION
+    if(test_speed_only)
+        {
+        return;
+        }
+    ofs.close();
+    bool okay = files_are_identical(original_filename, replica_filename);
+    INVOKE_BOOST_TEST(okay, file, line);
+    // Leave the file for analysis if it didn't match.
+    if(okay)
+        {
+        INVOKE_BOOST_TEST
+            (0 == std::remove(replica_filename.c_str())
+            ,file
+            ,line
+            );
+        }
+}
+
+void input_test::mete_overhead()
+{
+    static IllusInputParms raw_data;
+    xml_lmi::xml_document document("root");
+    xml::element& root = document.root_node();
+    stifle_warning_for_unused_value(root);
+}
+
+void input_test::mete_vector(xml::element& xml_data)
+{
+    xml_lmi::child_elements(xml_data);
+}
+
+void input_test::mete_read(xml::element& xml_data)
+{
+    static IllusInputParms raw_data;
+    xml_data >> raw_data;
+}
+
+void input_test::mete_write()
+{
+    static IllusInputParms raw_data;
+    xml_lmi::xml_document document("root");
+    xml::element& root = document.root_node();
+    root << raw_data;
+}
+
+void input_test::mete_cns_io()
+{
+    typedef multiple_cell_document M;
+    test_document_io<M>("sample.cns", "replica.cns", __FILE__, __LINE__, true);
+}
+
+void input_test::mete_ill_io()
+{
+    typedef single_cell_document S;
+    test_document_io<S>("sample.ill", "replica.ill", __FILE__, __LINE__, true);
 }
 
 int test_main(int, char*[])
