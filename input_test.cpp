@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.37 2008-07-31 22:10:23 chicares Exp $
+// $Id: input_test.cpp,v 1.38 2008-08-01 11:47:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -348,6 +348,7 @@ void compare_inputs(IllusInputParms const& ihs, Input const& lmi)
 
 void input_test::test_conversion()
 {
+    {
     IllusInputParms const original;
     Input                 equivalent;
     IllusInputParms       replica;
@@ -361,6 +362,23 @@ void input_test::test_conversion()
         compare_inputs(original, equivalent);
         compare_inputs(replica , equivalent);
         }
+    }
+
+    {
+    Input           const original;
+    IllusInputParms       equivalent;
+    Input                 replica;
+
+    convert_to_ihs  (equivalent, original);
+    convert_from_ihs(equivalent, replica);
+    BOOST_TEST(original == replica);
+
+    if(!(original == replica))
+        {
+        compare_inputs(equivalent, original);
+        compare_inputs(equivalent, replica);
+        }
+    }
 }
 
 void input_test::test_document_classes()
