@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.38 2008-08-01 11:47:23 chicares Exp $
+// $Id: input_test.cpp,v 1.39 2008-08-01 16:38:35 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -61,6 +61,7 @@ class input_test
         test_input_class();
         test_input_class_obsolete();
         test_conversion();
+        test_initialization();
         test_document_classes();
         assay_speed();
         assay_speed_obsolete();
@@ -70,6 +71,7 @@ class input_test
     static void test_input_class();
     static void test_input_class_obsolete();
     static void test_conversion();
+    static void test_initialization();
     static void test_document_classes();
     static void assay_speed();
     static void assay_speed_obsolete();
@@ -378,6 +380,27 @@ void input_test::test_conversion()
         compare_inputs(equivalent, original);
         compare_inputs(equivalent, replica);
         }
+    }
+}
+
+// DEPRECATED This is merely an aid to porting. It would be easy to
+// test whether the files are identical, but they can't be, because
+// the old class writes '1e+006' where the new class writes '1000000'.
+
+void input_test::test_initialization()
+{
+    {
+    std::ofstream os("eraseme_new.xml", ios_out_trunc_binary());
+    xml_lmi::xml_document doc("root");
+    doc.root_node() << Input();
+    os << doc;
+    }
+
+    {
+    std::ofstream os("eraseme_old.xml", ios_out_trunc_binary());
+    xml_lmi::xml_document doc("root");
+    doc.root_node() << IllusInputParms();
+    os << doc;
     }
 }
 
