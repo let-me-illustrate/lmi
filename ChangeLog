@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1123 2008-08-01 00:53:34 chicares Exp $
+// $Id: ChangeLog,v 1.1124 2008-08-01 19:23:39 chicares Exp $
 
 MAINTENANCE
 
@@ -18656,4 +18656,20 @@ Work around issue discussed 20080731T2210Z. These trammels have never
 been set rigorously, and will doubtless require more work. This change
 introduces a visible inconsistency in the GUI, but makes a unit test
 validly succeed.
+
+20080801T1147Z <gchicares@sbcglobal.net> [1101]
+
+  input_test.cpp
+Test conversion in both directions.
+
+20080801T1638Z <gchicares@sbcglobal.net> [1101]
+
+  input_test.cpp
+Test initialization.
+
+20080801T1923Z <gchicares@sbcglobal.net> [1100]
+
+  input.cpp
+  input_test.cpp
+Initialize new input class the same way the old one was initialized.
 
