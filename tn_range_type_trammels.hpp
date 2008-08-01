@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range_type_trammels.hpp,v 1.10 2008-04-11 14:33:29 chicares Exp $
+// $Id: tn_range_type_trammels.hpp,v 1.11 2008-08-01 00:53:34 chicares Exp $
 
 #ifndef tn_range_type_trammels_hpp
 #define tn_range_type_trammels_hpp
@@ -109,9 +109,9 @@ template<typename T>
 class duration_trammel
     :public trammel_base<T>
 {
-    T nominal_minimum() const {return  0;}
-    T default_value()   const {return  0;}
-    T nominal_maximum() const {return 99;}
+    T nominal_minimum() const {return   0;}
+    T default_value()   const {return   0;}
+    T nominal_maximum() const {return 100;}
 };
 
 template<typename T>

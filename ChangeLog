@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1122 2008-07-30 23:53:27 chicares Exp $
+// $Id: ChangeLog,v 1.1123 2008-08-01 00:53:34 chicares Exp $
 
 MAINTENANCE
 
@@ -18631,4 +18631,29 @@ Make yes-or-no enumerators equivalent to type bool.
   input_test.cpp
   objects.make
 Begin to test new input class as well as old.
+
+20080731T0028Z <gchicares@sbcglobal.net> [1101]
+
+  input_test.cpp
+Rearrange.
+
+20080731T1140Z <gchicares@sbcglobal.net> [1101]
+
+  input_test.cpp
+Measure speed of new input class as well as old.
+
+20080731T2210Z <gchicares@sbcglobal.net> [1101]
+
+  input_test.cpp
+Test conversion between new input class and old, revealing a latent
+issue: the new class limits selection of survivorship age to 99, but
+100 would be legitimate.
+
+20080801T0053Z <gchicares@sbcglobal.net> [1101]
+
+  tn_range_type_trammels.hpp
+Work around issue discussed 20080731T2210Z. These trammels have never
+been set rigorously, and will doubtless require more work. This change
+introduces a visible inconsistency in the GUI, but makes a unit test
+validly succeed.
 
