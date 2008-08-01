@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.39 2008-08-01 16:38:35 chicares Exp $
+// $Id: input_test.cpp,v 1.40 2008-08-01 19:23:39 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -367,9 +367,10 @@ void input_test::test_conversion()
     }
 
     {
-    Input           const original;
-    IllusInputParms       equivalent;
-    Input                 replica;
+    Input           original;
+    original.DoTransmogrify(); // Set DOB from age.
+    IllusInputParms equivalent;
+    Input           replica;
 
     convert_to_ihs  (equivalent, original);
     convert_from_ihs(equivalent, replica);
