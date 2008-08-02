@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.18 2008-02-19 16:22:16 chicares Exp $
+// $Id: xml_lmi.cpp,v 1.19 2008-08-02 23:30:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -98,7 +98,7 @@ xml_lmi::dom_parser::dom_parser(std::string const& filename)
 /// is violated, or if xml-library calls throw an exception derived
 /// from std::exception.
 
-xml_lmi::dom_parser::dom_parser(std::istream& is)
+xml_lmi::dom_parser::dom_parser(std::istream const& is)
     :initializer_(new Initializer)
 {
     try
