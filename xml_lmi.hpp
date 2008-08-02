@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.hpp,v 1.20 2008-01-01 18:30:00 chicares Exp $
+// $Id: xml_lmi.hpp,v 1.21 2008-08-02 23:30:32 chicares Exp $
 
 #ifndef xml_lmi_hpp
 #define xml_lmi_hpp
@@ -51,7 +51,7 @@ namespace xml_lmi
 
       public:
         dom_parser(std::string const& filename);
-        dom_parser(std::istream&);
+        dom_parser(std::istream const&);
         ~dom_parser();
 
         Document const& document() const;

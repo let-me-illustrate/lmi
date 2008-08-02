@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: istream_to_string.hpp,v 1.5 2008-01-07 04:56:13 chicares Exp $
+// $Id: istream_to_string.hpp,v 1.6 2008-08-02 23:30:30 chicares Exp $
 
 #ifndef istream_to_string_hpp
 #define istream_to_string_hpp
@@ -42,7 +42,7 @@
 
 template<typename Char_t, typename Traits, typename Allocator>
 void istream_to_string
-    (std::istream&                               is
+    (std::istream const&                         is
     ,std::basic_string<Char_t,Traits,Allocator>& s
     )
 {

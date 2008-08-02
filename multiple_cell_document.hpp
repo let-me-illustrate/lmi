@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.hpp,v 1.14 2008-08-02 22:43:29 chicares Exp $
+// $Id: multiple_cell_document.hpp,v 1.15 2008-08-02 23:30:31 chicares Exp $
 
 #ifndef multiple_cell_document_hpp
 #define multiple_cell_document_hpp
@@ -53,8 +53,8 @@ class LMI_SO multiple_cell_document
     std::vector<IllusInputParms> const& class_parms() const;
     std::vector<IllusInputParms> const& cell_parms() const;
 
-    void read(std::istream& is);
-    void write(std::ostream& os) const;
+    void read(std::istream const&);
+    void write(std::ostream&) const;
 
   private:
     void parse(xml::element const&);
