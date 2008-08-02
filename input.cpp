@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.27 2008-08-02 12:58:32 chicares Exp $
+// $Id: input.cpp,v 1.28 2008-08-02 13:33:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -485,8 +485,8 @@ void Input::AscribeMembers()
     ascribe("PartialMortalityMultiplier"            , &Input::PartialMortalityMultiplier            );
     ascribe("CurrentCoiMultiplier"                  , &Input::CurrentCoiMultiplier                  );
     ascribe("CurrentCoiGrading"                     , &Input::CurrentCoiGrading                     );
-//    ascribe("CorporationTaxBracket"                 , &Input::CorporationTaxBracket                 ); // TODO ?? Not implemented.
-//    ascribe("TaxBracket"                            , &Input::TaxBracket                            ); // TODO ?? Not implemented.
+    ascribe("CorporationTaxBracket"                 , &Input::CorporationTaxBracket                 );
+    ascribe("TaxBracket"                            , &Input::TaxBracket                            );
     ascribe("ProjectedSalary"                       , &Input::ProjectedSalary                       );
     ascribe("SpecifiedAmount"                       , &Input::SpecifiedAmount                       );
     ascribe("DeathBenefitOption"                    , &Input::DeathBenefitOption                    );
