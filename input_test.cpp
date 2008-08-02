@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.40 2008-08-01 19:23:39 chicares Exp $
+// $Id: input_test.cpp,v 1.41 2008-08-02 15:23:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -62,6 +62,7 @@ class input_test
         test_input_class_obsolete();
         test_conversion();
         test_initialization();
+        test_xml_port();
         test_document_classes();
         assay_speed();
         assay_speed_obsolete();
@@ -72,6 +73,7 @@ class input_test
     static void test_input_class_obsolete();
     static void test_conversion();
     static void test_initialization();
+    static void test_xml_port();
     static void test_document_classes();
     static void assay_speed();
     static void assay_speed_obsolete();
@@ -403,6 +405,20 @@ void input_test::test_initialization()
     doc.root_node() << IllusInputParms();
     os << doc;
     }
+}
+
+void input_test::test_xml_port()
+{
+    IllusInputParms obsolete;
+    Input           modern;
+
+    xml_lmi::xml_document doc("root");
+    doc.root_node() << obsolete;
+
+    xml::node::const_iterator i = doc.root_node().begin();
+    LMI_ASSERT(!i->is_text());
+    xml::element const& xml_node = *i;
+    xml_node >> modern;
 }
 
 void input_test::test_document_classes()
