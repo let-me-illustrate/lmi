@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1125 2008-08-02 03:47:24 chicares Exp $
+// $Id: ChangeLog,v 1.1126 2008-08-02 15:23:15 chicares Exp $
 
 MAINTENANCE
 
@@ -18684,4 +18684,43 @@ Improve concinnity. See:
   main_wx.cpp
 Address defect report #20236. See:
   http://savannah.nongnu.org/bugs/?20236
+
+20080802T1159Z <gchicares@sbcglobal.net> [1099]
+
+  input_harmonization.cpp
+Mark defect resolved: checkboxes will soon replace yes-no radioboxes.
+See:
+  http://lists.nongnu.org/archive/html/lmi/2008-07/msg00007.html
+
+20080802T1258Z <gchicares@sbcglobal.net> [1097]
+
+  input.cpp
+  input.hpp
+  input_harmonization.cpp
+  input_xml_io.cpp
+  yare_input.hpp
+Expunge unused data member 'Input::TermProportion'. What's actually
+used is 'Input::TermRiderProportion'.
+
+20080802T1333Z <gchicares@sbcglobal.net> [1095]
+
+  input.cpp
+  input_xml_io.cpp
+Rehabilitate tax-bracket variables in modern input class. They aren't
+actually used at the moment, but it's reasonable to provide them for
+future needs; and ignoring them would cause regression-test errors
+when the new input class replaces the old.
+
+20080802T1444Z <gchicares@sbcglobal.net> [1092]
+
+  ce_product_name.cpp
+  mc_enum.tpp
+Resolve certain defect markers. The result of certain operations looks
+like it ought to be std::ptrdiff_t; but it cannot be negative, so it's
+okay to assign it to a variable of type std::size_t.
+
+20080802T1523Z <gchicares@sbcglobal.net> [1092]
+
+  input_test.cpp
+Test reading new input class from old class's xml.
 
