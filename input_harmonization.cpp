@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.66 2008-07-30 12:31:06 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.67 2008-08-02 11:59:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -861,10 +861,6 @@ false // Silly workaround for now.
         ;
 
     TermRiderUseProportion.enable(enable_term && !specamt_indeterminate_for_term);
-
-// TODO ?? WX PORT !! Huh? A yes-no radiobox, instead of a checkbox?
-// This doesn't seem to be in the legacy interface.
-//    TermRiderUseProportion.allow();
 
 // wx: TermProportion
     if(specamt_indeterminate_for_term && "Yes" == TermRiderUseProportion)
