@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads.hpp,v 1.12 2008-07-14 17:19:26 chicares Exp $
+// $Id: loads.hpp,v 1.13 2008-08-02 03:46:43 chicares Exp $
 
 #ifndef loads_hpp
 #define loads_hpp
@@ -32,7 +32,7 @@
 
 class BasicValues;
 class TDatabase;
-class load_details;
+struct load_details;
 
 /// Declaration of class Loads.
 
