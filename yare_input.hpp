@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: yare_input.hpp,v 1.7 2008-07-29 15:27:11 chicares Exp $
+// $Id: yare_input.hpp,v 1.8 2008-08-02 12:58:32 chicares Exp $
 
 #ifndef yare_input_hpp
 #define yare_input_hpp
@@ -159,7 +159,6 @@ class yare_input
     bool                              BlendSmoking                    ;
     double                            MaleProportion                  ;
     double                            NonsmokerProportion             ;
-//    double                            TermProportion                  ;
     mcenum_term_adj_method            TermAdjustmentMethod            ;
     bool                              IncludeInComposite              ;
     std::string                       Comments                        ;
