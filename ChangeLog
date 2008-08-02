@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1126 2008-08-02 15:23:15 chicares Exp $
+// $Id: ChangeLog,v 1.1127 2008-08-02 23:49:26 chicares Exp $
 
 MAINTENANCE
 
@@ -18723,4 +18723,38 @@ okay to assign it to a variable of type std::size_t.
 
   input_test.cpp
 Test reading new input class from old class's xml.
+
+20080802T1800Z <gchicares@sbcglobal.net> [1092]
+
+  mc_enum.tpp
+  mc_enum_test.cpp
+Provide for backward compatibility.
+
+20080802T2243Z <gchicares@sbcglobal.net> [1092]
+
+  multiple_cell_document.cpp
+  multiple_cell_document.hpp
+  single_cell_document.cpp
+  single_cell_document.hpp
+Eliminate unused streaming operators.
+
+20080802T2330Z <gchicares@sbcglobal.net> [1092]
+
+  istream_to_string.hpp
+  multiple_cell_document.cpp
+  multiple_cell_document.hpp
+  single_cell_document.cpp
+  single_cell_document.hpp
+  xml_lmi.cpp
+  xml_lmi.hpp
+Improve const-correctness.
+
+20080802T2349Z <gchicares@sbcglobal.net> [1090]
+
+  census_document.cpp
+  illustration_document.cpp
+Address certain defect markers. In '*_cell_document.?pp', read() and
+write() needn't accept a string argument denoting a filename. In the
+few places where they're called, physical files must be manipulated
+anyway, so the present separation of concerns is appropriate.
 
