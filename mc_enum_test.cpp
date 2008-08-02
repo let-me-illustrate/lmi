@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_test.cpp,v 1.16 2008-04-30 02:55:15 chicares Exp $
+// $Id: mc_enum_test.cpp,v 1.17 2008-08-02 18:00:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,11 +35,14 @@
 #include <sstream>
 #include <stdexcept>
 
-enum enum_island {i_Easter = 37, i_Pago_Pago = -17};
-extern enum_island const island_enums[] = {i_Easter, i_Pago_Pago};
-extern char const*const island_strings[] = {"Easter", "Pago Pago"};
-template class mc_enum<enum_island, 2, island_enums, island_strings>;
-typedef mc_enum<enum_island, 2, island_enums, island_strings> e_island;
+// Ni'ihau is deliberately (mis)spelled with an underbar instead of an
+// apostrophe, in order to test provide_for_backward_compatibility().
+
+enum enum_island {i_Easter = 37, i_Pago_Pago = -17, i_Ni_ihau = 13};
+extern enum_island const island_enums[] = {i_Easter, i_Pago_Pago, i_Ni_ihau};
+extern char const*const island_strings[] = {"Easter", "Pago Pago", "Ni_ihau"};
+template class mc_enum<enum_island, 3, island_enums, island_strings>;
+typedef mc_enum<enum_island, 3, island_enums, island_strings> e_island;
 
 // Enumerative type 'e_holiday' is explicitly instantiated in a
 // different translation unit.
@@ -200,6 +203,26 @@ void mc_enum_test::test()
     ss << island1;
     ss >> island1;
     BOOST_TEST_EQUAL("Pago Pago", island1);
+
+    // A long time ago, a predecessor of this class replaced spaces
+    // with underbars in its stream inserter. To maintain backward
+    // compatibilitiy with old files: if stream extraction would fail,
+    // then it's retried, substituting spaces for underbars.
+    e_island island2;
+    ss.clear();
+    ss.str("Pago_Pago");
+    ss >> island2;
+    BOOST_TEST_EQUAL("Pago Pago", island2);
+
+    // Backward compatibility, however, must not come at the expense
+    // of correctness. Underbars can legitimately appear in strings
+    // (though they never did in the era of underbar substitution),
+    // and they mustn't be replaced by spaces blithely.
+    e_island island3;
+    ss.clear();
+    ss.str("Ni_ihau");
+    ss >> island3;
+    BOOST_TEST_EQUAL("Ni_ihau", island3);
 
     BOOST_TEST_THROW
         (e_island unknown("Borneo")
