@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: single_cell_document.cpp,v 1.17 2008-01-01 18:29:55 chicares Exp $
+// $Id: single_cell_document.cpp,v 1.18 2008-08-02 22:43:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,6 +31,9 @@
 #include "assert_lmi.hpp"
 #include "inputillus.hpp"
 #include "xml_lmi.hpp"
+
+#include <istream>
+#include <ostream>
 
 //============================================================================
 single_cell_document::single_cell_document()

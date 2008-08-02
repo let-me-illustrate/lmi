@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.hpp,v 1.13 2008-01-01 18:29:50 chicares Exp $
+// $Id: multiple_cell_document.hpp,v 1.14 2008-08-02 22:43:29 chicares Exp $
 
 #ifndef multiple_cell_document_hpp
 #define multiple_cell_document_hpp
@@ -33,8 +33,7 @@
 
 #include <boost/utility.hpp>
 
-#include <istream>
-#include <ostream>
+#include <iosfwd>
 #include <string>
 #include <vector>
 
@@ -72,24 +71,6 @@ class LMI_SO multiple_cell_document
     // Parameters for each cell.
     std::vector<IllusInputParms> cell_parms_;
 };
-
-inline std::istream& operator>>
-    (std::istream& is
-    ,multiple_cell_document& doc
-    )
-{
-    doc.read(is);
-    return is;
-}
-
-inline std::ostream& operator<<
-    (std::ostream& os
-    ,multiple_cell_document& doc
-    )
-{
-    doc.write(os);
-    return os;
-}
 
 inline std::vector<IllusInputParms> const& multiple_cell_document::case_parms() const
 {
