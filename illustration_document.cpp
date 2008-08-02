@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_document.cpp,v 1.18 2008-07-30 12:31:06 chicares Exp $
+// $Id: illustration_document.cpp,v 1.19 2008-08-02 23:49:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -92,7 +92,6 @@ bool IllustrationDocument::OnCreate(wxString const& filename, long int flags)
         is_phony_ = true;
         }
 
-    // TODO ?? Why not offer doc_.read(filename)?
     if(!(wxDOC_NEW & flags) && !(is_phony_))
         {
         std::ifstream ifs(filename.c_str());
