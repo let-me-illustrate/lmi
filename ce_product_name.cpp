@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ce_product_name.cpp,v 1.11 2008-01-21 01:32:28 chicares Exp $
+// $Id: ce_product_name.cpp,v 1.12 2008-08-02 14:44:42 chicares Exp $
 
 #include "ce_product_name.hpp"
 
@@ -67,7 +67,6 @@ std::size_t ce_product_name::ordinal() const
 
 std::size_t ce_product_name::ordinal(std::string const& s)
 {
-// TODO ?? Shouldn't this be ptrdiff_t?
     std::size_t v =
             std::find
                 (product_names().begin()
