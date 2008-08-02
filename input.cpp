@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.26 2008-08-01 19:23:38 chicares Exp $
+// $Id: input.cpp,v 1.27 2008-08-02 12:58:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -130,7 +130,6 @@ Input::Input()
 //    ,BlendSmoking                     ("")
     ,MaleProportion                   ("1")
     ,NonsmokerProportion              ("1")
-//    ,TermProportion                   ("")
     ,TermAdjustmentMethod             ("Adjust term first")
     ,IncludeInComposite               ("Yes")
 //    ,Comments                         ("")
@@ -430,7 +429,6 @@ void Input::AscribeMembers()
     ascribe("BlendSmoking"                          , &Input::BlendSmoking                          );
     ascribe("MaleProportion"                        , &Input::MaleProportion                        );
     ascribe("NonsmokerProportion"                   , &Input::NonsmokerProportion                   );
-    ascribe("TermProportion"                        , &Input::TermProportion                        );
     ascribe("TermAdjustmentMethod"                  , &Input::TermAdjustmentMethod                  );
     ascribe("IncludeInComposite"                    , &Input::IncludeInComposite                    );
     ascribe("Comments"                              , &Input::Comments                              );

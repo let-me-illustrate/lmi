@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.67 2008-08-02 11:59:37 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.68 2008-08-02 12:58:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -862,7 +862,6 @@ false // Silly workaround for now.
 
     TermRiderUseProportion.enable(enable_term && !specamt_indeterminate_for_term);
 
-// wx: TermProportion
     if(specamt_indeterminate_for_term && "Yes" == TermRiderUseProportion)
         {
         TERM_USE_AMOUNT     ->SetCheck(BF_CHECKED);
