@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum.tpp,v 1.18 2008-08-02 14:44:42 chicares Exp $
+// $Id: mc_enum.tpp,v 1.19 2008-08-02 18:00:11 chicares Exp $
 
 #include "mc_enum.hpp"
 
@@ -83,14 +83,51 @@ bool mc_enum<T,n,e,c>::operator==(std::string const& s) const
     return s == str();
 }
 
+namespace
+{
+/// A whilom version of a vetust class substituted underbars for
+/// spaces, for reasons that, well, seemed good at the time.
+
+std::string provide_for_backward_compatibility(std::string const& s)
+{
+    static std::string const underbar("_");
+    std::string r(s);
+    for(;;)
+        {
+        std::string::size_type xpos = r.find_first_of(underbar);
+        if(std::string::npos == xpos)
+            {
+            break;
+            }
+        else
+            {
+            r[xpos] = ' ';
+            }
+        }
+    return r;
+}
+} // Unnamed namespace.
+
 template<typename T, std::size_t n, T const (&e)[n], char const*const (&c)[n]>
 std::istream& mc_enum<T,n,e,c>::read(std::istream& is)
 {
     std::locale old_locale = is.imbue(blank_is_not_whitespace_locale());
     std::string s;
     is >> s;
-    operator=(s);
     is.imbue(old_locale);
+
+    std::size_t v = std::find(c, c + n, s) - c;
+    if(n == v)
+        {
+        v = std::find(c, c + n, provide_for_backward_compatibility(s)) - c;
+        }
+    if(n == v)
+        {
+        ordinal(s); // Throws.
+        throw "Unreachable.";
+        }
+    value_ = e[v];
+
     return is;
 }
 
