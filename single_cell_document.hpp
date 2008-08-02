@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: single_cell_document.hpp,v 1.11 2008-01-01 18:29:55 chicares Exp $
+// $Id: single_cell_document.hpp,v 1.12 2008-08-02 22:43:29 chicares Exp $
 
 #ifndef single_cell_document_hpp
 #define single_cell_document_hpp
@@ -33,8 +33,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/utility.hpp>
 
-#include <istream>
-#include <ostream>
+#include <iosfwd>
 #include <string>
 
 class IllusInputParms;
@@ -66,24 +65,6 @@ class LMI_SO single_cell_document
 inline IllusInputParms const& single_cell_document::input_data() const
 {
     return *input_data_;
-}
-
-inline std::istream& operator>>
-    (std::istream& is
-    ,single_cell_document& doc
-    )
-{
-    doc.read(is);
-    return is;
-}
-
-inline std::ostream& operator<<
-    (std::ostream& os
-    ,single_cell_document& doc
-    )
-{
-    doc.write(os);
-    return os;
 }
 
 #endif // single_cell_document_hpp
