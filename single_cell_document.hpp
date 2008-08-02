@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: single_cell_document.hpp,v 1.12 2008-08-02 22:43:29 chicares Exp $
+// $Id: single_cell_document.hpp,v 1.13 2008-08-02 23:30:31 chicares Exp $
 
 #ifndef single_cell_document_hpp
 #define single_cell_document_hpp
@@ -52,8 +52,8 @@ class LMI_SO single_cell_document
 
     IllusInputParms const& input_data() const;
 
-    void read(std::istream& is);
-    void write(std::ostream& os);
+    void read(std::istream const&);
+    void write(std::ostream&);
 
   private:
     void parse(xml::element const&);
