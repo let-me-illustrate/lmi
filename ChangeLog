@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1124 2008-08-01 19:23:39 chicares Exp $
+// $Id: ChangeLog,v 1.1125 2008-08-02 03:47:24 chicares Exp $
 
 MAINTENANCE
 
@@ -18672,4 +18672,16 @@ Test initialization.
   input.cpp
   input_test.cpp
 Initialize new input class the same way the old one was initialized.
+
+20080802T0346Z <gchicares@sbcglobal.net> [1100]
+
+  loads.hpp
+Improve concinnity. See:
+  http://lists.nongnu.org/archive/html/lmi/2008-08/msg00001.html
+
+20080802T0347Z <gchicares@sbcglobal.net> [1100]
+
+  main_wx.cpp
+Address defect report #20236. See:
+  http://savannah.nongnu.org/bugs/?20236
 
