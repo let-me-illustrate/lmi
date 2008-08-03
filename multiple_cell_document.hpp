@@ -19,14 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.hpp,v 1.15 2008-08-02 23:30:31 chicares Exp $
+// $Id: multiple_cell_document.hpp,v 1.16 2008-08-03 23:23:14 chicares Exp $
 
 #ifndef multiple_cell_document_hpp
 #define multiple_cell_document_hpp
 
 #include "config.hpp"
 
-#include "inputillus.hpp"
+#include "input.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 #include "xml_lmi_fwd.hpp"
@@ -49,9 +49,9 @@ class LMI_SO multiple_cell_document
     multiple_cell_document(std::string const& filename);
     ~multiple_cell_document();
 
-    std::vector<IllusInputParms> const& case_parms() const;
-    std::vector<IllusInputParms> const& class_parms() const;
-    std::vector<IllusInputParms> const& cell_parms() const;
+    std::vector<Input> const& case_parms() const;
+    std::vector<Input> const& class_parms() const;
+    std::vector<Input> const& cell_parms() const;
 
     void read(std::istream const&);
     void write(std::ostream&) const;
@@ -63,26 +63,26 @@ class LMI_SO multiple_cell_document
     // Default parameters for the whole case, stored as a vector for
     // parallelism with class_parms_ and cell_parms_. Naturally, this
     // vector must have exactly one element.
-    std::vector<IllusInputParms> case_parms_;
+    std::vector<Input> case_parms_;
 
     // Default parameters for each employee class.
-    std::vector<IllusInputParms> class_parms_;
+    std::vector<Input> class_parms_;
 
     // Parameters for each cell.
-    std::vector<IllusInputParms> cell_parms_;
+    std::vector<Input> cell_parms_;
 };
 
-inline std::vector<IllusInputParms> const& multiple_cell_document::case_parms() const
+inline std::vector<Input> const& multiple_cell_document::case_parms() const
 {
     return case_parms_;
 }
 
-inline std::vector<IllusInputParms> const& multiple_cell_document::class_parms() const
+inline std::vector<Input> const& multiple_cell_document::class_parms() const
 {
     return class_parms_;
 }
 
-inline std::vector<IllusInputParms> const& multiple_cell_document::cell_parms() const
+inline std::vector<Input> const& multiple_cell_document::cell_parms() const
 {
     return cell_parms_;
 }

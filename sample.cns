@@ -25,10 +25,8 @@
     <CorporationPayment>0</CorporationPayment>
     <CorporationPaymentMode>annual</CorporationPaymentMode>
     <CorporationPremiumTableFactor>1</CorporationPremiumTableFactor>
-    <CorporationPremiumTableNumber>0</CorporationPremiumTableNumber>
     <CorporationState>CT</CorporationState>
     <CorporationTaxBracket>0</CorporationTaxBracket>
-    <CorporationTaxpayerId/>
     <CorporationZipCode/>
     <Country>US</Country>
     <CountryCoiMultiplier>1</CountryCoiMultiplier>
@@ -83,7 +81,6 @@
     <InforceCumulativeNoLapsePremium>0</InforceCumulativeNoLapsePremium>
     <InforceCumulativePayments>0</InforceCumulativePayments>
     <InforceDcv>0</InforceDcv>
-    <InforceDcvDeathBenefit>0</InforceDcvDeathBenefit>
     <InforceGeneralAccountValue>0</InforceGeneralAccountValue>
     <InforceGlp>0</InforceGlp>
     <InforceGsp>0</InforceGsp>
@@ -104,7 +101,6 @@
     <InputFundManagementFee>0</InputFundManagementFee>
     <InsuredName/>
     <InsuredPremiumTableFactor>1</InsuredPremiumTableFactor>
-    <InsuredPremiumTableNumber>0</InsuredPremiumTableNumber>
     <Internal1035ExchangeAmount>0</Internal1035ExchangeAmount>
     <Internal1035ExchangeBasis>0</Internal1035ExchangeBasis>
     <Internal1035ExchangeFromMec>No</Internal1035ExchangeFromMec>
@@ -121,7 +117,7 @@
     <LoanToAlternative>Maturity</LoanToAlternative>
     <LoanToDuration>50</LoanToDuration>
     <MaleProportion>1</MaleProportion>
-    <MaximumNaar>1e+007</MaximumNaar>
+    <MaximumNaar>10000000</MaximumNaar>
     <NewLoan>0</NewLoan>
     <NonsmokerProportion>1</NonsmokerProportion>
     <NumberOfIdenticalLives>1</NumberOfIdenticalLives>
@@ -130,12 +126,9 @@
     <OverrideExperienceReserveRate>Yes</OverrideExperienceReserveRate>
     <OverrideFundManagementFee>No</OverrideFundManagementFee>
     <PartialMortalityMultiplier>1</PartialMortalityMultiplier>
-    <PartialMortalityTable>0</PartialMortalityTable>
-    <PayLoanInterestInCash>No</PayLoanInterestInCash>
     <Payment>20000</Payment>
     <PaymentMode>annual</PaymentMode>
     <PolicyDate>2454040</PolicyDate>
-    <PolicyLevelFlatExtra>0</PolicyLevelFlatExtra>
     <PolicyNumber/>
     <PostHoneymoonSpread>0</PostHoneymoonSpread>
     <PremiumHistory>0</PremiumHistory>
@@ -163,8 +156,8 @@
     <SolveType>SolveNone</SolveType>
     <SpecamtHistory>0</SpecamtHistory>
     <SpecifiedAmount>1000000</SpecifiedAmount>
-    <SpecifiedAmountFromIssue>1e+006</SpecifiedAmountFromIssue>
-    <SpecifiedAmountFromRetirement>1e+006</SpecifiedAmountFromRetirement>
+    <SpecifiedAmountFromIssue>1000000</SpecifiedAmountFromIssue>
+    <SpecifiedAmountFromRetirement>1000000</SpecifiedAmountFromRetirement>
     <SpecifiedAmountStrategyFromIssue>SAInputScalar</SpecifiedAmountStrategyFromIssue>
     <SpouseIssueAge>45</SpouseIssueAge>
     <SpouseRider>No</SpouseRider>
@@ -189,12 +182,11 @@
     <SurviveToYear>99</SurviveToYear>
     <TaxBracket>0</TaxBracket>
     <TermAdjustmentMethod>Adjust term first</TermAdjustmentMethod>
-    <TermProportion>0</TermProportion>
     <TermRider>No</TermRider>
     <TermRiderAmount>0</TermRiderAmount>
     <TermRiderProportion>0</TermRiderProportion>
     <TermRiderUseProportion>No</TermRiderUseProportion>
-    <TotalSpecifiedAmount>1e+006</TotalSpecifiedAmount>
+    <TotalSpecifiedAmount>1000000</TotalSpecifiedAmount>
     <UnderwritingClass>Standard</UnderwritingClass>
     <UseAverageOfAllFunds>No</UseAverageOfAllFunds>
     <UseCurrentDeclaredRate>No</UseCurrentDeclaredRate>
@@ -239,10 +231,8 @@
     <CorporationPayment>0</CorporationPayment>
     <CorporationPaymentMode>annual</CorporationPaymentMode>
     <CorporationPremiumTableFactor>1</CorporationPremiumTableFactor>
-    <CorporationPremiumTableNumber>0</CorporationPremiumTableNumber>
     <CorporationState>CT</CorporationState>
     <CorporationTaxBracket>0</CorporationTaxBracket>
-    <CorporationTaxpayerId/>
     <CorporationZipCode/>
     <Country>US</Country>
     <CountryCoiMultiplier>1</CountryCoiMultiplier>
@@ -297,7 +287,6 @@
     <InforceCumulativeNoLapsePremium>0</InforceCumulativeNoLapsePremium>
     <InforceCumulativePayments>0</InforceCumulativePayments>
     <InforceDcv>0</InforceDcv>
-    <InforceDcvDeathBenefit>0</InforceDcvDeathBenefit>
     <InforceGeneralAccountValue>0</InforceGeneralAccountValue>
     <InforceGlp>0</InforceGlp>
     <InforceGsp>0</InforceGsp>
@@ -318,7 +307,6 @@
     <InputFundManagementFee>0</InputFundManagementFee>
     <InsuredName/>
     <InsuredPremiumTableFactor>1</InsuredPremiumTableFactor>
-    <InsuredPremiumTableNumber>0</InsuredPremiumTableNumber>
     <Internal1035ExchangeAmount>0</Internal1035ExchangeAmount>
     <Internal1035ExchangeBasis>0</Internal1035ExchangeBasis>
     <Internal1035ExchangeFromMec>No</Internal1035ExchangeFromMec>
@@ -335,7 +323,7 @@
     <LoanToAlternative>Maturity</LoanToAlternative>
     <LoanToDuration>50</LoanToDuration>
     <MaleProportion>1</MaleProportion>
-    <MaximumNaar>1e+007</MaximumNaar>
+    <MaximumNaar>10000000</MaximumNaar>
     <NewLoan>0</NewLoan>
     <NonsmokerProportion>1</NonsmokerProportion>
     <NumberOfIdenticalLives>1</NumberOfIdenticalLives>
@@ -344,12 +332,9 @@
     <OverrideExperienceReserveRate>Yes</OverrideExperienceReserveRate>
     <OverrideFundManagementFee>No</OverrideFundManagementFee>
     <PartialMortalityMultiplier>1</PartialMortalityMultiplier>
-    <PartialMortalityTable>0</PartialMortalityTable>
-    <PayLoanInterestInCash>No</PayLoanInterestInCash>
     <Payment>20000</Payment>
     <PaymentMode>annual</PaymentMode>
     <PolicyDate>2454040</PolicyDate>
-    <PolicyLevelFlatExtra>0</PolicyLevelFlatExtra>
     <PolicyNumber/>
     <PostHoneymoonSpread>0</PostHoneymoonSpread>
     <PremiumHistory>0</PremiumHistory>
@@ -377,8 +362,8 @@
     <SolveType>SolveNone</SolveType>
     <SpecamtHistory>0</SpecamtHistory>
     <SpecifiedAmount>1000000</SpecifiedAmount>
-    <SpecifiedAmountFromIssue>1e+006</SpecifiedAmountFromIssue>
-    <SpecifiedAmountFromRetirement>1e+006</SpecifiedAmountFromRetirement>
+    <SpecifiedAmountFromIssue>1000000</SpecifiedAmountFromIssue>
+    <SpecifiedAmountFromRetirement>1000000</SpecifiedAmountFromRetirement>
     <SpecifiedAmountStrategyFromIssue>SAInputScalar</SpecifiedAmountStrategyFromIssue>
     <SpouseIssueAge>45</SpouseIssueAge>
     <SpouseRider>No</SpouseRider>
@@ -403,12 +388,11 @@
     <SurviveToYear>99</SurviveToYear>
     <TaxBracket>0</TaxBracket>
     <TermAdjustmentMethod>Adjust term first</TermAdjustmentMethod>
-    <TermProportion>0</TermProportion>
     <TermRider>No</TermRider>
     <TermRiderAmount>0</TermRiderAmount>
     <TermRiderProportion>0</TermRiderProportion>
     <TermRiderUseProportion>No</TermRiderUseProportion>
-    <TotalSpecifiedAmount>1e+006</TotalSpecifiedAmount>
+    <TotalSpecifiedAmount>1000000</TotalSpecifiedAmount>
     <UnderwritingClass>Standard</UnderwritingClass>
     <UseAverageOfAllFunds>No</UseAverageOfAllFunds>
     <UseCurrentDeclaredRate>No</UseCurrentDeclaredRate>
@@ -453,10 +437,8 @@
     <CorporationPayment>0</CorporationPayment>
     <CorporationPaymentMode>annual</CorporationPaymentMode>
     <CorporationPremiumTableFactor>1</CorporationPremiumTableFactor>
-    <CorporationPremiumTableNumber>0</CorporationPremiumTableNumber>
     <CorporationState>CT</CorporationState>
     <CorporationTaxBracket>0</CorporationTaxBracket>
-    <CorporationTaxpayerId/>
     <CorporationZipCode/>
     <Country>US</Country>
     <CountryCoiMultiplier>1</CountryCoiMultiplier>
@@ -511,7 +493,6 @@
     <InforceCumulativeNoLapsePremium>0</InforceCumulativeNoLapsePremium>
     <InforceCumulativePayments>0</InforceCumulativePayments>
     <InforceDcv>0</InforceDcv>
-    <InforceDcvDeathBenefit>0</InforceDcvDeathBenefit>
     <InforceGeneralAccountValue>0</InforceGeneralAccountValue>
     <InforceGlp>0</InforceGlp>
     <InforceGsp>0</InforceGsp>
@@ -532,7 +513,6 @@
     <InputFundManagementFee>0</InputFundManagementFee>
     <InsuredName/>
     <InsuredPremiumTableFactor>1</InsuredPremiumTableFactor>
-    <InsuredPremiumTableNumber>0</InsuredPremiumTableNumber>
     <Internal1035ExchangeAmount>0</Internal1035ExchangeAmount>
     <Internal1035ExchangeBasis>0</Internal1035ExchangeBasis>
     <Internal1035ExchangeFromMec>No</Internal1035ExchangeFromMec>
@@ -549,7 +529,7 @@
     <LoanToAlternative>Maturity</LoanToAlternative>
     <LoanToDuration>50</LoanToDuration>
     <MaleProportion>1</MaleProportion>
-    <MaximumNaar>1e+007</MaximumNaar>
+    <MaximumNaar>10000000</MaximumNaar>
     <NewLoan>0</NewLoan>
     <NonsmokerProportion>1</NonsmokerProportion>
     <NumberOfIdenticalLives>1</NumberOfIdenticalLives>
@@ -558,12 +538,9 @@
     <OverrideExperienceReserveRate>Yes</OverrideExperienceReserveRate>
     <OverrideFundManagementFee>No</OverrideFundManagementFee>
     <PartialMortalityMultiplier>1</PartialMortalityMultiplier>
-    <PartialMortalityTable>0</PartialMortalityTable>
-    <PayLoanInterestInCash>No</PayLoanInterestInCash>
     <Payment>20000</Payment>
     <PaymentMode>annual</PaymentMode>
     <PolicyDate>2454040</PolicyDate>
-    <PolicyLevelFlatExtra>0</PolicyLevelFlatExtra>
     <PolicyNumber/>
     <PostHoneymoonSpread>0</PostHoneymoonSpread>
     <PremiumHistory>0</PremiumHistory>
@@ -591,8 +568,8 @@
     <SolveType>SolveNone</SolveType>
     <SpecamtHistory>0</SpecamtHistory>
     <SpecifiedAmount>1000000</SpecifiedAmount>
-    <SpecifiedAmountFromIssue>1e+006</SpecifiedAmountFromIssue>
-    <SpecifiedAmountFromRetirement>1e+006</SpecifiedAmountFromRetirement>
+    <SpecifiedAmountFromIssue>1000000</SpecifiedAmountFromIssue>
+    <SpecifiedAmountFromRetirement>1000000</SpecifiedAmountFromRetirement>
     <SpecifiedAmountStrategyFromIssue>SAInputScalar</SpecifiedAmountStrategyFromIssue>
     <SpouseIssueAge>45</SpouseIssueAge>
     <SpouseRider>No</SpouseRider>
@@ -617,12 +594,11 @@
     <SurviveToYear>99</SurviveToYear>
     <TaxBracket>0</TaxBracket>
     <TermAdjustmentMethod>Adjust term first</TermAdjustmentMethod>
-    <TermProportion>0</TermProportion>
     <TermRider>No</TermRider>
     <TermRiderAmount>0</TermRiderAmount>
     <TermRiderProportion>0</TermRiderProportion>
     <TermRiderUseProportion>No</TermRiderUseProportion>
-    <TotalSpecifiedAmount>1e+006</TotalSpecifiedAmount>
+    <TotalSpecifiedAmount>1000000</TotalSpecifiedAmount>
     <UnderwritingClass>Standard</UnderwritingClass>
     <UseAverageOfAllFunds>No</UseAverageOfAllFunds>
     <UseCurrentDeclaredRate>No</UseCurrentDeclaredRate>

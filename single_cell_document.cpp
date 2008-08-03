@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: single_cell_document.cpp,v 1.20 2008-08-03 13:05:23 chicares Exp $
+// $Id: single_cell_document.cpp,v 1.21 2008-08-03 23:23:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,7 +29,7 @@
 #include "single_cell_document.hpp"
 
 #include "assert_lmi.hpp"
-#include "inputillus.hpp"
+#include "input.hpp"
 #include "xml_lmi.hpp"
 
 #include <istream>
@@ -37,20 +37,20 @@
 
 //============================================================================
 single_cell_document::single_cell_document()
-    :input_data_(new IllusInputParms())
+    :input_data_(new Input)
 {
 }
 
 //============================================================================
-single_cell_document::single_cell_document(IllusInputParms const& parms)
-    :input_data_(new IllusInputParms(parms))
+single_cell_document::single_cell_document(Input const& parms)
+    :input_data_(new Input(parms))
 {
 }
 
 /// This ctor is used to read the default input file.
 
 single_cell_document::single_cell_document(std::string const& filename)
-    :input_data_(new IllusInputParms)
+    :input_data_(new Input)
 {
     xml_lmi::dom_parser parser(filename);
     parse(parser.root_node(xml_root_name()));

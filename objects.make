@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.130 2008-07-30 23:53:27 chicares Exp $
+# $Id: objects.make,v 1.131 2008-08-03 23:23:15 chicares Exp $
 
 ################################################################################
 
@@ -187,8 +187,12 @@ common_common_objects := \
   global_settings.o \
   group_values.o \
   illustrator.o \
+  input.o \
+  input_harmonization.o \
+  input_realization.o \
   input_seq_helpers.o \
   input_sequence.o \
+  input_xml_io.o \
   inputillus.o \
   inputillus_sequences.o \
   inputillus_xml_io.o \
@@ -212,6 +216,7 @@ common_common_objects := \
   mc_enum_types_aux.o \
   miscellany.o \
   multiple_cell_document.o \
+  mvc_model.o \
   name_value_pairs.o \
   outlay.o \
   path_utility.o \
@@ -278,12 +283,7 @@ lmi_common_objects := \
   ihs_pios.o \
   ihs_proddata.o \
   ihs_rnddata.o \
-  input.o \
-  input_harmonization.o \
-  input_realization.o \
-  input_xml_io.o \
   md5.o \
-  mvc_model.o \
   preferences_model.o \
   stratified_algorithms.o \
   stratified_charges.o \

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: single_cell_document.hpp,v 1.13 2008-08-02 23:30:31 chicares Exp $
+// $Id: single_cell_document.hpp,v 1.14 2008-08-03 23:23:15 chicares Exp $
 
 #ifndef single_cell_document_hpp
 #define single_cell_document_hpp
@@ -36,7 +36,7 @@
 #include <iosfwd>
 #include <string>
 
-class IllusInputParms;
+class Input;
 
 class LMI_SO single_cell_document
     :private boost::noncopyable
@@ -46,11 +46,11 @@ class LMI_SO single_cell_document
 
   public:
     single_cell_document();
-    single_cell_document(IllusInputParms const&);
+    single_cell_document(Input const&);
     single_cell_document(std::string const& filename);
     ~single_cell_document();
 
-    IllusInputParms const& input_data() const;
+    Input const& input_data() const;
 
     void read(std::istream const&);
     void write(std::ostream&);
@@ -59,10 +59,10 @@ class LMI_SO single_cell_document
     void parse(xml::element const&);
     std::string xml_root_name() const;
 
-    boost::scoped_ptr<IllusInputParms> const input_data_;
+    boost::scoped_ptr<Input> const input_data_;
 };
 
-inline IllusInputParms const& single_cell_document::input_data() const
+inline Input const& single_cell_document::input_data() const
 {
     return *input_data_;
 }
