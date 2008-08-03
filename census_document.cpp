@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_document.cpp,v 1.15 2008-08-02 23:49:26 chicares Exp $
+// $Id: census_document.cpp,v 1.16 2008-08-03 11:25:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,7 +30,9 @@
 #include "view_ex.tpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "census_view.hpp"
+#include "illustrator.hpp"
 #include "miscellany.hpp"
 
 #include <fstream>
@@ -56,7 +58,17 @@ wxListView& CensusDocument::PredominantViewWindow() const
 
 bool CensusDocument::OnCreate(wxString const& filename, long int flags)
 {
-    if(!(wxDOC_NEW & flags))
+    if(wxDOC_NEW & flags)
+        {
+        LMI_ASSERT(1 == doc_.case_parms_ .size());
+        LMI_ASSERT(1 == doc_.cell_parms_ .size());
+        LMI_ASSERT(1 == doc_.class_parms_.size());
+
+        doc_.case_parms_ [0] = default_cell();
+        doc_.cell_parms_ [0] = default_cell();
+        doc_.class_parms_[0] = default_cell();
+        }
+    else
         {
         std::ifstream ifs(filename.c_str());
         if(!ifs)

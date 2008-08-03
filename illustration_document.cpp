@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_document.cpp,v 1.19 2008-08-02 23:49:26 chicares Exp $
+// $Id: illustration_document.cpp,v 1.20 2008-08-03 11:25:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,6 +31,8 @@
 
 #include "alert.hpp"
 #include "illustration_view.hpp"
+#include "illustrator.hpp"
+#include "inputillus.hpp"
 #include "miscellany.hpp"
 
 #include <fstream>
@@ -91,8 +93,11 @@ bool IllustrationDocument::OnCreate(wxString const& filename, long int flags)
         {
         is_phony_ = true;
         }
-
-    if(!(wxDOC_NEW & flags) && !(is_phony_))
+    else if(wxDOC_NEW & flags)
+        {
+        *doc_.input_data_ = default_cell();
+        }
+    else
         {
         std::ifstream ifs(filename.c_str());
         if(!ifs)

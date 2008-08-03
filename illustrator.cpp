@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.cpp,v 1.24 2008-01-01 18:29:44 chicares Exp $
+// $Id: illustrator.cpp,v 1.25 2008-08-03 11:25:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,19 +29,25 @@
 #include "illustrator.hpp"
 
 #include "alert.hpp"
+#include "configurable_settings.hpp"
 #include "custom_io_0.hpp"
 #include "emit_ledger.hpp"
 #include "group_values.hpp"
+#include "handle_exceptions.hpp"
 #include "inputillus.hpp"
 #include "ledgervalues.hpp"
 #include "multiple_cell_document.hpp"
+#include "platform_dependent.hpp" // access()
 #include "single_cell_document.hpp"
 #include "timer.hpp"
 
 #include <boost/filesystem/convenience.hpp>
 
+#include <cstdio>                 // std::remove()
+#include <fstream>
 #include <iostream>
 #include <string>
+#include <vector>
 
 illustrator::illustrator(mcenum_emission emission)
     :emission_              (emission)
@@ -142,7 +148,50 @@ double illustrator::usec_for_output() const
     return usec_for_output_;
 }
 
-#include <fstream> // Needed only for this temporary kludge.
+IllusInputParms const& default_cell()
+{
+    static IllusInputParms const builtin_default;
+    static IllusInputParms       user_default;
+
+    std::string const default_input_file =
+        configurable_settings::instance().default_input_filename()
+        ;
+    if(0 != access(default_input_file.c_str(), F_OK))
+        {
+        user_default = builtin_default;
+        }
+    else
+        {
+        try
+            {
+            user_default = single_cell_document(default_input_file).input_data();
+            }
+        catch(...)
+            {
+            report_exception();
+            if(0 == std::remove(default_input_file.c_str()))
+                {
+                warning()
+                    << "Removed defective default input file '"
+                    << default_input_file
+                    << "'."
+                    << LMI_FLUSH
+                    ;
+                }
+            else
+                {
+                warning()
+                    << "Unable to remove defective default input file '"
+                    << default_input_file
+                    << "'. Make sure it is not write protected."
+                    << LMI_FLUSH
+                    ;
+                }
+            }
+        }
+
+    return user_default;
+}
 
 template<> void temporary_file_kludge(std::vector<IllusInputParms> const& z)
 {

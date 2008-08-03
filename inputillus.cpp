@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.cpp,v 1.34 2008-07-02 14:49:17 chicares Exp $
+// $Id: inputillus.cpp,v 1.35 2008-08-03 11:25:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,16 +29,8 @@
 #include "inputillus.hpp"
 
 #include "alert.hpp"
-#include "configurable_settings.hpp"
-#include "handle_exceptions.hpp"
-#include "platform_dependent.hpp" // access()
-#include "single_cell_document.hpp"
 
-#include <cstdio> // std::remove()
-#include <fstream>
-#include <istream>
 #include <iterator>
-#include <ostream>
 #include <sstream>
 
 /// Default input is read from a default '.ill' file if one exists.
@@ -52,7 +44,7 @@
 /// If you want different settings, edit and save the default '.ill'
 /// file.
 
-IllusInputParms::IllusInputParms(bool use_defaults)
+IllusInputParms::IllusInputParms(bool /* use_defaults */)
     :InputParms()
     ,AddonMonthlyCustodialFee         ("0")
     ,AddonCompOnAssets                ("0")
@@ -114,39 +106,6 @@ IllusInputParms::IllusInputParms(bool use_defaults)
     ,sEePremium  (0.0)
     ,sEeMode     (e_annual)
 {
-    std::string const default_input_file =
-        configurable_settings::instance().default_input_filename()
-        ;
-    if(use_defaults && 0 == access(default_input_file.c_str(), F_OK))
-        {
-        try
-            {
-            operator=(single_cell_document(default_input_file).input_data());
-            }
-        catch(...)
-            {
-            report_exception();
-            if(0 == std::remove(default_input_file.c_str()))
-                {
-                warning()
-                    << "Removed defective file '"
-                    << default_input_file
-                    << "'."
-                    << LMI_FLUSH
-                    ;
-                }
-            else
-                {
-                warning()
-                    << "Unable to remove defective file '"
-                    << default_input_file
-                    << "'. Make sure it is not write protected."
-                    << LMI_FLUSH
-                    ;
-                }
-            }
-        }
-
     propagate_changes_from_base_and_finalize();
     ascribe_members();
 // TODO ?? Debugging--expunge
