@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.80 2008-05-14 11:35:35 chicares Exp $
+// $Id: illustration_view.cpp,v 1.81 2008-08-03 13:05:23 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -509,7 +509,7 @@ bool custom_io_0_run_if_file_exists(wxDocManager* dm)
         {
         if(custom_io_0_file_exists())
             {
-            IllusInputParms input(false);
+            IllusInputParms input;
             bool close_when_done = custom_io_0_read(input, "");
 
             boost::shared_ptr<Ledger const> resulting_ledger;
