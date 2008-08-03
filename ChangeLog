@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1127 2008-08-02 23:49:26 chicares Exp $
+// $Id: ChangeLog,v 1.1128 2008-08-03 13:05:23 chicares Exp $
 
 MAINTENANCE
 
@@ -18757,4 +18757,33 @@ Address certain defect markers. In '*_cell_document.?pp', read() and
 write() needn't accept a string argument denoting a filename. In the
 few places where they're called, physical files must be manipulated
 anyway, so the present separation of concerns is appropriate.
+
+20080803T1125Z <gchicares@sbcglobal.net> [1090]
+
+  census_document.cpp
+  illustration_document.cpp
+  illustrator.cpp
+  illustrator.hpp
+  inputillus.cpp
+Rewrite handling of default input file. Formerly, if a default file
+existed, it was used to initialize almost every object of the obsolete
+input class--except when prevented by a magical bool ctor argument.
+The purpose of the magical argument is documented as preventing
+recursion in the ctor, yet it's used in other cases where the default
+file should not be read. Now, the default file is read only when a new
+document is created, its contents are used only in that circumstance,
+and the magical argument is ignored--it will be removed, and not
+ported to the modern input class.
+
+20080803T1305Z <gchicares@sbcglobal.net> [1090]
+
+  illustration_view.cpp
+  illustrator.cpp
+  inputillus.cpp
+  inputillus.hpp
+  single_cell_document.cpp
+Remove magic argument for obsolete input class's ctor. Formerly, it
+was necessary to distinguish cases that mustn't use the default input
+file. Now, the default input file is used, by explicit means, only in
+cases that require it.
 
