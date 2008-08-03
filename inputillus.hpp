@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.hpp,v 1.18 2008-01-21 17:52:23 chicares Exp $
+// $Id: inputillus.hpp,v 1.19 2008-08-03 13:05:23 chicares Exp $
 
 #ifndef inputillus_hpp
 #define inputillus_hpp
@@ -46,7 +46,7 @@ class LMI_SO IllusInputParms
     typedef std::map<std::string,std::string>::const_iterator string_map_iterator;
 
   public:
-    explicit IllusInputParms(bool use_defaults = true);
+    IllusInputParms();
     IllusInputParms(IllusInputParms const&);
     virtual ~IllusInputParms();
 

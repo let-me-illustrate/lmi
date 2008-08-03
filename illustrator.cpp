@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.cpp,v 1.25 2008-08-03 11:25:28 chicares Exp $
+// $Id: illustrator.cpp,v 1.26 2008-08-03 13:05:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -91,7 +91,7 @@ bool illustrator::operator()(fs::path const& file_path)
     else if(".ini" == extension)
         {
         Timer timer;
-        IllusInputParms input(false);
+        IllusInputParms input;
         custom_io_0_read(input, file_path.string());
         usec_for_input_ = timer.stop().elapsed_usec();
         timer.restart();

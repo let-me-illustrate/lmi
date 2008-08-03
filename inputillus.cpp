@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.cpp,v 1.35 2008-08-03 11:25:28 chicares Exp $
+// $Id: inputillus.cpp,v 1.36 2008-08-03 13:05:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -44,7 +44,7 @@
 /// If you want different settings, edit and save the default '.ill'
 /// file.
 
-IllusInputParms::IllusInputParms(bool /* use_defaults */)
+IllusInputParms::IllusInputParms()
     :InputParms()
     ,AddonMonthlyCustodialFee         ("0")
     ,AddonCompOnAssets                ("0")
