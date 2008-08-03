@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.28 2008-08-02 13:33:14 chicares Exp $
+// $Id: input.cpp,v 1.29 2008-08-03 22:07:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -252,7 +252,8 @@ Input::Input()
     ,WithdrawalToDuration             ("50")
 {
     AscribeMembers();
-    DoAdaptExternalities();
+    DoAdaptExternalities(); // Initialize database.
+    DoTransmogrify();       // Make DOB and age consistent.
 }
 
 Input::Input(Input const& z)
