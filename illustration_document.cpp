@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_document.cpp,v 1.20 2008-08-03 11:25:28 chicares Exp $
+// $Id: illustration_document.cpp,v 1.21 2008-08-03 23:23:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,7 +32,6 @@
 #include "alert.hpp"
 #include "illustration_view.hpp"
 #include "illustrator.hpp"
-#include "inputillus.hpp"
 #include "miscellany.hpp"
 
 #include <fstream>
@@ -112,7 +111,7 @@ bool IllustrationDocument::OnCreate(wxString const& filename, long int flags)
             }
         doc_.read(ifs);
         }
-    convert_from_ihs(doc_.input_data(), input_);
+    input_ = doc_.input_data();
 
     return wxDocument::OnCreate(filename, flags);
 }
@@ -165,7 +164,7 @@ bool IllustrationDocument::DoSaveDocument(wxString const& filename)
         return false;
         }
 
-    convert_to_ihs(*doc_.input_data_, input_);
+    *doc_.input_data_ = input_;
     std::ofstream ofs(filename.c_str(), ios_out_trunc_binary());
     doc_.write(ofs);
     if(!ofs)

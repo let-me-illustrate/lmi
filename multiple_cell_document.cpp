@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.cpp,v 1.24 2008-08-02 23:30:31 chicares Exp $
+// $Id: multiple_cell_document.cpp,v 1.25 2008-08-03 23:23:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -71,7 +71,7 @@ void multiple_cell_document::parse(xml::element const& root)
 //    is >> NumberOfCases;
 //    LMI_ASSERT(1 == NumberOfCases);
 
-    IllusInputParms temp;
+    Input temp;
 
     xml_lmi::ElementContainer const elements(xml_lmi::child_elements(root));
     typedef xml_lmi::ElementContainer::const_iterator eci;
