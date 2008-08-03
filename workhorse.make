@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.127 2008-07-04 00:04:36 chicares Exp $
+# $Id: workhorse.make,v 1.128 2008-08-03 23:23:15 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -966,12 +966,12 @@ wrap_fardel:
 .PHONY: test
 test: $(test_targets)
 
-# Some test targets require a '.pol' file to exist even though they
+# Some test targets require 'sample.pol' to exist even though they
 # don't actually read its contents.
 
-$(test_targets): eraseme.pol
+$(test_targets): sample.pol
 
-eraseme.pol:
+sample.pol:
 	@$(TOUCH) $@
 
 ################################################################################

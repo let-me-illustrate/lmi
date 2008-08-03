@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.cpp,v 1.26 2008-08-03 13:05:23 chicares Exp $
+// $Id: illustrator.cpp,v 1.27 2008-08-03 23:23:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,6 +34,7 @@
 #include "emit_ledger.hpp"
 #include "group_values.hpp"
 #include "handle_exceptions.hpp"
+#include "input.hpp"
 #include "inputillus.hpp"
 #include "ledgervalues.hpp"
 #include "multiple_cell_document.hpp"
@@ -72,7 +73,10 @@ bool illustrator::operator()(fs::path const& file_path)
         run_census::assert_consistency(doc.case_parms()[0], doc.cell_parms()[0]);
         usec_for_input_ = timer.stop().elapsed_usec();
         census_run_result result;
-        result = run_census()(file_path, emission_, doc.cell_parms());
+std::vector<IllusInputParms> z;
+convert_to_ihs(z, doc.cell_parms());
+//        result = run_census()(file_path, emission_, doc.cell_parms());
+        result = run_census()(file_path, emission_, z);
         completed_normally     = result.completed_normally_   ;
         usec_for_calculations_ = result.usec_for_calculations_;
         usec_for_output_       = result.usec_for_output_      ;
@@ -84,7 +88,10 @@ bool illustrator::operator()(fs::path const& file_path)
         usec_for_input_        = timer.stop().elapsed_usec();
         timer.restart();
         IllusVal IV;
-        IV.run(doc.input_data());
+IllusInputParms z;
+convert_to_ihs(z, doc.input_data());
+//        IV.run(doc.input_data());
+        IV.run(z);
         usec_for_calculations_ = timer.stop().elapsed_usec();
         usec_for_output_ = emit_ledger(file_path, 0, IV.ledger(), emission_);
         }
@@ -148,10 +155,10 @@ double illustrator::usec_for_output() const
     return usec_for_output_;
 }
 
-IllusInputParms const& default_cell()
+Input const& default_cell()
 {
-    static IllusInputParms const builtin_default;
-    static IllusInputParms       user_default;
+    static Input const builtin_default;
+    static Input       user_default;
 
     std::string const default_input_file =
         configurable_settings::instance().default_input_filename()
@@ -196,9 +203,12 @@ IllusInputParms const& default_cell()
 template<> void temporary_file_kludge(std::vector<IllusInputParms> const& z)
 {
     multiple_cell_document document;
-    typedef std::vector<IllusInputParms> T;
+    typedef std::vector<Input> T;
+T x;
+convert_from_ihs(z, x);
     T& cells = const_cast<T&>(document.cell_parms());
-    cells = z;
+//    cells = z;
+    cells = x;
     std::ofstream ofs("eraseme.cns");
     document.write(ofs);
 }
@@ -206,9 +216,12 @@ template<> void temporary_file_kludge(std::vector<IllusInputParms> const& z)
 template<> void temporary_file_kludge(IllusInputParms const& z)
 {
     single_cell_document document;
-    typedef IllusInputParms T;
+    typedef Input T;
+T x;
+convert_from_ihs(z, x);
     T& cell = const_cast<T&>(document.input_data());
-    cell = z;
+//    cell = z;
+    cell = x;
     std::ofstream ofs("eraseme.ill");
     document.write(ofs);
 }

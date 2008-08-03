@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.50 2008-07-30 23:53:27 chicares Exp $
+# $Id: Makefile.am,v 1.51 2008-08-03 23:23:14 chicares Exp $
 
 SUBDIRS = third_party
 
@@ -249,8 +249,12 @@ liblmi_common_sources = \
     global_settings.cpp \
     group_values.cpp \
     illustrator.cpp \
+    input.cpp \
+    input_harmonization.cpp \
+    input_realization.cpp \
     input_seq_helpers.cpp \
     input_sequence.cpp \
+    input_xml_io.cpp \
     inputillus.cpp \
     inputillus_sequences.cpp \
     inputillus_xml_io.cpp \
@@ -271,6 +275,7 @@ liblmi_common_sources = \
     loads.cpp \
     miscellany.cpp \
     multiple_cell_document.cpp \
+    mvc_model.cpp \
     name_value_pairs.cpp \
     outlay.cpp \
     path_utility.cpp \
@@ -339,15 +344,10 @@ liblmi_la_SOURCES = \
     ihs_pios.cpp \
     ihs_proddata.cpp \
     ihs_rnddata.cpp \
-    input.cpp \
-    input_harmonization.cpp \
-    input_realization.cpp \
-    input_xml_io.cpp \
     mc_enum.cpp \
     mc_enum_types.cpp \
     mc_enum_types_aux.cpp \
     md5.cpp \
-    mvc_model.cpp \
     preferences_model.cpp \
     stratified_algorithms.cpp \
     stratified_charges.cpp \

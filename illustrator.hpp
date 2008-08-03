@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.hpp,v 1.9 2008-08-03 11:25:28 chicares Exp $
+// $Id: illustrator.hpp,v 1.10 2008-08-03 23:23:14 chicares Exp $
 
 #ifndef illustrator_hpp
 #define illustrator_hpp
@@ -34,7 +34,7 @@
 
 #include <functional>
 
-class IllusInputParms;
+class Input;
 
 /// Sole top-level facility for illustration generation.
 /// TODO ?? Not yet the sole one, though.
@@ -62,7 +62,7 @@ class LMI_SO illustrator
     double usec_for_output_;
 };
 
-IllusInputParms const& default_cell();
+Input const& default_cell();
 
 // TODO ?? For now, illustrator::operator() requires a file, so
 // create one for data that should be handled in RAM. This kludge
