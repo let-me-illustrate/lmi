@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.38 2008-08-02 12:58:32 chicares Exp $
+// $Id: input.hpp,v 1.39 2008-08-04 14:28:13 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -142,6 +142,8 @@ class LMI_SO Input
     Input& operator=(Input const&);
     bool operator==(Input const&) const;
 
+    std::vector<std::string> RealizeAllSequenceInput(bool report_errors = true);
+
     std::string differing_fields(Input const&) const;
 
     int years_to_maturity() {return GleanedMaturityAge_ - IssueAge.value();}
@@ -184,8 +186,6 @@ class LMI_SO Input
     std::map<std::string,std::string> const permissible_death_benefit_option_keywords();
     std::map<std::string,std::string> const permissible_payment_strategy_keywords();
     std::map<std::string,std::string> const permissible_payment_mode_keywords();
-
-    std::vector<std::string> RealizeAllSequenceInput(bool report_errors = true);
 
     std::string RealizeExtraMonthlyCustodialFee   ();
     std::string RealizeExtraCompensationOnAssets  ();
