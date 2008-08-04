@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.hpp,v 1.27 2008-03-27 12:52:39 chicares Exp $
+// $Id: census_view.hpp,v 1.28 2008-08-04 22:07:40 chicares Exp $
 
 #ifndef census_view_hpp
 #define census_view_hpp
@@ -105,13 +105,6 @@ class CensusView
     std::vector<Input> const& cell_parms() const;
     std::vector<Input>&       class_parms();
     std::vector<Input> const& class_parms() const;
-
-    std::vector<Input>&       ihs_case_parms();
-    std::vector<Input> const& ihs_case_parms() const;
-    std::vector<Input>&       ihs_cell_parms();
-    std::vector<Input> const& ihs_cell_parms() const;
-    std::vector<Input>&       ihs_class_parms();
-    std::vector<Input> const& ihs_class_parms() const;
 
     std::string cell_title(int);
     std::string class_title(int);
