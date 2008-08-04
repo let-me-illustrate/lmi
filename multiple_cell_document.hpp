@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.hpp,v 1.16 2008-08-03 23:23:14 chicares Exp $
+// $Id: multiple_cell_document.hpp,v 1.17 2008-08-04 10:43:32 chicares Exp $
 
 #ifndef multiple_cell_document_hpp
 #define multiple_cell_document_hpp
@@ -41,8 +41,9 @@ class LMI_SO multiple_cell_document
     :private boost::noncopyable
     ,virtual private obstruct_slicing<multiple_cell_document>
 {
-// TODO ?? Avoid long-distance friendship.
+// TODO ?? Avoid long-distance friendship...in single-cell class, too.
     friend class CensusDocument;
+    friend class CensusView;
 
   public:
     multiple_cell_document();

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1128 2008-08-03 13:05:23 chicares Exp $
+// $Id: ChangeLog,v 1.1129 2008-08-04 10:43:32 chicares Exp $
 
 MAINTENANCE
 
@@ -18786,4 +18786,44 @@ Remove magic argument for obsolete input class's ctor. Formerly, it
 was necessary to distinguish cases that mustn't use the default input
 file. Now, the default input file is used, by explicit means, only in
 cases that require it.
+
+20080803T2154Z <gchicares@sbcglobal.net> [1090]
+
+  ce_product_name.cpp
+Use the best default value in the default ctor.
+
+20080803T2207Z <gchicares@sbcglobal.net> [1090]
+
+  input.cpp
+Always make DOB and age consistent in default ctor.
+
+20080803T2323Z <gchicares@sbcglobal.net> [1090]
+
+  Makefile.am
+  census_document.cpp
+  illustration_document.cpp
+  illustrator.cpp
+  illustrator.hpp
+  multiple_cell_document.cpp
+  multiple_cell_document.hpp
+  objects.make
+  sample.cns
+  sample.ill
+  single_cell_document.cpp
+  single_cell_document.hpp
+  workhorse.make
+Replace old input class with new in document modules.
+
+20080804T1043Z <gchicares@sbcglobal.net> [1090]
+
+  census_document.cpp
+  census_document.hpp
+  census_view.cpp
+  illustration_document.cpp
+  illustration_document.hpp
+  illustration_view.cpp
+  illustration_view.hpp
+  multiple_cell_document.hpp
+  single_cell_document.hpp
+Remove duplicative members of document classes.
 

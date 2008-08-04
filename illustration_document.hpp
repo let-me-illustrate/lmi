@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_document.hpp,v 1.13 2008-03-25 16:46:18 chicares Exp $
+// $Id: illustration_document.hpp,v 1.14 2008-08-04 10:43:32 chicares Exp $
 
 #ifndef illustration_document_hpp
 #define illustration_document_hpp
@@ -71,8 +71,6 @@ class IllustrationDocument
     virtual bool DoSaveDocument(wxString const& filename);
 
     single_cell_document doc_;
-
-    Input input_;
 
     bool is_phony_;
 

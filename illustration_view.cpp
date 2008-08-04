@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.81 2008-08-03 13:05:23 chicares Exp $
+// $Id: illustration_view.cpp,v 1.82 2008-08-04 10:43:32 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -116,6 +116,11 @@ IllustrationView::~IllustrationView()
 {
 }
 
+inline Input& IllustrationView::input_data()
+{
+    return *document().doc_.input_data_;
+}
+
 IllustrationDocument& IllustrationView::document() const
 {
     return safely_dereference_as<IllustrationDocument>(GetDocument());
@@ -136,21 +141,21 @@ warning() << "That command should have been disabled." << LMI_FLUSH;
 
     bool dirty = document().IsModified();
 
-    Input edited_lmi_input = document().input_;
+    Input edited_lmi_input = input_data();
     DefaultView const default_view;
     MvcController controller(GetFrame(), edited_lmi_input, default_view);
     int rc = controller.ShowModal();
     if(wxID_OK == rc)
         {
-        if(document().input_ != edited_lmi_input)
+        if(edited_lmi_input != input_data())
             {
 /* TODO ?? Expunge this?
             warning()
-                << document().input_.differing_fields(edited_lmi_input)
+                << input_data().differing_fields(edited_lmi_input)
                 << LMI_FLUSH
                 ;
 */
-            document().input_ = edited_lmi_input;
+            input_data() = edited_lmi_input;
             dirty = true;
             }
         document().Modify(dirty);
@@ -394,12 +399,12 @@ void IllustrationView::Run(Input* overriding_input)
 
     if(overriding_input)
         {
-        document().input_ = *overriding_input;
+        input_data() = *overriding_input;
         }
 
     // TODO ?? For now, convert input on the fly.
     IllusInputParms ihs_input;
-    convert_to_ihs(ihs_input, document().input_);
+    convert_to_ihs(ihs_input, input_data());
 
     boost::shared_ptr<Ledger const> resulting_ledger;
     { // Begin fenv_guard scope.

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.72 2008-03-27 17:13:12 chicares Exp $
+// $Id: census_view.cpp,v 1.73 2008-08-04 10:43:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -144,32 +144,32 @@ CensusView::~CensusView()
 
 inline std::vector<Input>& CensusView::case_parms()
 {
-    return document().case_parms_;
+    return document().doc_.case_parms_;
 }
 
 inline std::vector<Input> const& CensusView::case_parms() const
 {
-    return document().case_parms_;
+    return document().doc_.case_parms_;
 }
 
 inline std::vector<Input>& CensusView::cell_parms()
 {
-    return document().cell_parms_;
+    return document().doc_.cell_parms_;
 }
 
 inline std::vector<Input> const& CensusView::cell_parms() const
 {
-    return document().cell_parms_;
+    return document().doc_.cell_parms_;
 }
 
 inline std::vector<Input>& CensusView::class_parms()
 {
-    return document().class_parms_;
+    return document().doc_.class_parms_;
 }
 
 inline std::vector<Input> const& CensusView::class_parms() const
 {
-    return document().class_parms_;
+    return document().doc_.class_parms_;
 }
 
 // TODO ?? Is this abstraction actually useful?
