@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_realization.cpp,v 1.10 2008-07-29 02:54:42 chicares Exp $
+// $Id: input_realization.cpp,v 1.11 2008-08-04 14:45:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -293,8 +293,10 @@ std::vector<std::string> Input::RealizeAllSequenceInput(bool report_errors)
             if(diagnostics_present)
                 {
                 fatal_error()
-                    << "Input validation problems: "
-                    << oss.str() << '\n'
+                    << "Input validation problems for '"
+                    << InsuredName
+                    << "':\n"
+                    << oss.str()
                     << LMI_FLUSH
                     ;
                 }
