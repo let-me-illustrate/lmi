@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1129 2008-08-04 10:43:32 chicares Exp $
+// $Id: ChangeLog,v 1.1130 2008-08-04 14:47:22 chicares Exp $
 
 MAINTENANCE
 
@@ -18826,4 +18826,21 @@ Replace old input class with new in document modules.
   multiple_cell_document.hpp
   single_cell_document.hpp
 Remove duplicative members of document classes.
+
+20080804T1428Z <gchicares@sbcglobal.net> [1088]
+
+  census_view.cpp
+  input.hpp
+Refactor, eliminating one use of old input class.
+
+20080804T1445Z <gchicares@sbcglobal.net> [1086]
+
+  census_view.cpp
+  input_realization.cpp
+Merge nearly-identical code, addressing marked defects.
+
+20080804T1447Z <gchicares@sbcglobal.net> [1086]
+
+  main_wx.cpp
+Reenable html help, reverting the 20080618T0145Z reversion.
 
