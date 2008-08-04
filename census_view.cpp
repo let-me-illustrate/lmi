@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.74 2008-08-04 14:28:13 chicares Exp $
+// $Id: census_view.cpp,v 1.75 2008-08-04 14:45:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1011,39 +1011,6 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
     document().Modify(true);
 }
 
-namespace
-{
-// TODO ?? Does this deserve to be a member now?
-void diagnose_sequence_string_problems(Input& current_cell)
-{
-    // TODO ?? We could pass the input row number, to print it here.
-    // Messages don't say which life is the problem.
-    std::vector<std::string> errors = current_cell.RealizeAllSequenceInput(false);
-    for
-        (std::vector<std::string>::iterator i = errors.begin()
-        ;i != errors.end()
-        ;++i
-        )
-        {
-        std::ostringstream oss;
-        bool diagnostics_present = false;
-        if(!i->empty())
-            {
-            diagnostics_present = true;
-            oss << (*i) << "\r\n";
-            }
-        if(diagnostics_present)
-            {
-            fatal_error()
-                << "Input validation problems:\n"
-                << oss.str()
-                << LMI_FLUSH
-                ;
-            }
-        }
-}
-} // Unnamed namespace.
-
 // Print tab-delimited output to file loadable in spreadsheet programs.
 void CensusView::UponRunCaseToSpreadsheet(wxCommandEvent&)
 {
@@ -1183,7 +1150,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
             }
         current_cell.Reconcile();
 // warning() << "diagnosing sequence string problems..." << LMI_FLUSH;
-        diagnose_sequence_string_problems(current_cell);
+        current_cell.RealizeAllSequenceInput();
         cells.push_back(current_cell);
 // warning() << "Life added." << LMI_FLUSH;
 
