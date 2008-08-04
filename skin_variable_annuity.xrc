@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin_variable_annuity.xrc,v 1.2 2008-02-28 03:39:27 chicares Exp $
+    $Id: skin_variable_annuity.xrc,v 1.3 2008-08-04 16:12:33 wboutin Exp $
 
     This version is designed for private placement users; it omits input
     fields that seem irrelevant in that context, and reflects the
@@ -64,6 +64,7 @@
                             <flag>wxGROW|wxALL</flag>
                             <border>2</border>
                             <object class="wxListBox" name="ProductName">
+                                <help>Product</help>
                                 <size>-1,0</size>
                                 <style>wxLB_SINGLE</style>
                             </object>
@@ -125,6 +126,7 @@ useful in the future.
                                     <flag>wxGROW|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                     <border>2</border>
                                     <object class="wxComboBox" name="State">
+                                        <help>Insured state</help>
                                         <size>50,20</size>
                                         <style>wxCB_READONLY</style>
                                     </object>
@@ -135,6 +137,7 @@ useful in the future.
                             <flag>wxGROW|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>2</border>
                             <object class="wxCheckBox" name="EffectiveDateToday">
+                                <help>Set effective date to current date</help>
                                 <label>Case effective today</label>
                             </object>
                         </object>
@@ -153,6 +156,7 @@ useful in the future.
                                 <object class="sizeritem">
                                     <flag>wxGROW</flag>
                                     <object class="wxDatePickerCtrl" name="EffectiveDate">
+                                        <help>Case effective date</help>
                                         <size>80,-1</size>
                                     </object>
                                 </object>
@@ -162,6 +166,7 @@ useful in the future.
                             <flag>wxGROW|wxALL</flag>
                             <border>2</border>
                             <object class="wxCheckBox" name="DeprecatedUseDOB">
+                                <help>Calculate issue age based on date of birth and effective date, automatically reflecting changes in effective date</help>
                                 <label>Birthdate overrides issue age </label>
                             </object>
                         </object>
@@ -181,6 +186,7 @@ useful in the future.
                                     <flag>wxGROW|wxLEFT</flag>
                                     <border>2</border>
                                     <object class="wxDatePickerCtrl" name="DateOfBirth">
+                                        <help>Date of birth</help>
                                         <size>80,-1</size>
                                     </object>
                                 </object>
@@ -201,6 +207,7 @@ useful in the future.
                                 <object class="sizeritem">
                                     <flag>wxGROW</flag>
                                     <object class="wxSpinCtrl" name="IssueAge">
+                                        <help>Insurance age on date of issue</help>
                                         <size>10,-1</size>
                                     </object>
                                 </object>
@@ -245,6 +252,7 @@ useful in the future.
                                             <flag>wxGROW|wxLEFT|wxRIGHT|wxTOP</flag>
                                             <border>2</border>
                                             <object class="wxTextCtrl" name="Dumpin">
+                                                <help>First-year lump-sum payment other than 1035 exchange</help>
                                                 <size>10,-1</size>
                                             </object>
                                         </object>
@@ -280,6 +288,7 @@ useful in the future.
                                             <flag>wxGROW|wxLEFT|wxRIGHT|wxBOTTOM</flag>
                                             <border>2</border>
                                             <object class="wxTextCtrl" name="External1035ExchangeAmount">
+                                                <help>External 1035 exchange amount</help>
                                                 <size>10,-1</size>
                                             </object>
                                         </object>
@@ -287,6 +296,7 @@ useful in the future.
                                             <flag>wxGROW|wxLEFT|wxRIGHT|wxBOTTOM</flag>
                                             <border>2</border>
                                             <object class="wxTextCtrl" name="Internal1035ExchangeAmount">
+                                                <help>Internal 1035 exchange amount</help>
                                                 <size>10,-1</size>
                                             </object>
                                         </object>
@@ -301,6 +311,7 @@ useful in the future.
                                             <flag>wxGROW|wxALL</flag>
                                             <border>2</border>
                                             <object class="wxTextCtrl" name="External1035ExchangeBasis">
+                                                <help>Tax basis for external 1035 exchange</help>
                                                 <size>10,-1</size>
                                             </object>
                                         </object>
@@ -308,6 +319,7 @@ useful in the future.
                                             <flag>wxGROW|wxALL</flag>
                                             <border>2</border>
                                             <object class="wxTextCtrl" name="Internal1035ExchangeBasis">
+                                                <help>Tax basis for internal 1035 exchange</help>
                                                 <size>10,-1</size>
                                             </object>
                                         </object>
@@ -342,6 +354,7 @@ useful in the future.
                             <flag>wxGROW|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
                             <object class="wxTextCtrl" name="Payment">
+                                <help>Individual payment amount, or corridor, glp, gsp, minimum, sevenpay, table, target</help>
                             </object>
                         </object>
                         <object class="sizeritem">
@@ -355,6 +368,7 @@ useful in the future.
                             <flag>wxGROW|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
                             <object class="wxTextCtrl" name="PaymentMode">
+                                <help>Individual payment mode: annual, semiannual, quarterly, or monthly</help>
                             </object>
                         </object>
                     </object>
@@ -384,6 +398,7 @@ useful in the future.
                             <flag>wxGROW|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
                             <object class="wxTextCtrl" name="ExtraCompensationOnPremium">
+                                <help>Additional premium load (e.g., for negotiated premium-based compensation)</help>
                             </object>
                         </object>
                         <object class="sizeritem">
@@ -397,6 +412,7 @@ useful in the future.
                             <flag>wxGROW|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
                             <object class="wxTextCtrl" name="ExtraCompensationOnAssets">
+                                <help>Additional separate-account asset charge (e.g., for negotiated asset-based compensation)</help>
                             </object>
                         </object>
                     </object>
@@ -425,6 +441,7 @@ useful in the future.
                             <flag>wxGROW|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
                             <object class="wxTextCtrl" name="SeparateAccountRate">
+                                <help>Separate-account interest rate</help>
                             </object>
                         </object>
                         <object class="sizeritem">
@@ -438,6 +455,7 @@ useful in the future.
                             <flag>wxGROW|wxALIGN_RIGHT|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
                             <object class="wxTextCtrl" name="Withdrawal">
+                                <help>Withdrawal amount</help>
                             </object>
                         </object>
                         <object class="sizeritem">
@@ -451,6 +469,7 @@ useful in the future.
                             <flag>wxGROW|wxALIGN_RIGHT|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
                             <object class="wxTextCtrl" name="Comments">
+                                <help>Freeform comments</help>
                             </object>
                         </object>
                     </object>
@@ -487,6 +506,7 @@ useful in the future.
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
                             <object class="wxTextCtrl" name="InsuredName">
+                                <help>Insured full name</help>
                             </object>
                         </object>
                     </object>
@@ -543,6 +563,7 @@ useful in the future.
                                 <object class="sizeritem">
                                     <flag>wxGROW</flag>
                                     <object class="wxTextCtrl" name="AgentName">
+                                        <help>Agent full name</help>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -553,6 +574,7 @@ useful in the future.
                                         <object class="sizeritem">
                                             <flag>wxGROW</flag>
                                             <object class="wxTextCtrl" name="AgentAddress">
+                                                <help>Agent street address</help>
                                             </object>
                                         </object>
                                         <object class="sizeritem">
@@ -565,6 +587,7 @@ useful in the future.
                                         <object class="sizeritem">
                                             <flag>wxGROW</flag>
                                             <object class="wxTextCtrl" name="AgentCity">
+                                                <help>Agent city</help>
                                             </object>
                                         </object>
                                     </object>
@@ -577,6 +600,7 @@ useful in the future.
                                         <object class="sizeritem">
                                             <flag>wxGROW</flag>
                                             <object class="wxComboBox" name="AgentState">
+                                                <help>Agent state</help>
                                                 <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                                             </object>
                                         </object>
@@ -590,6 +614,7 @@ useful in the future.
                                         <object class="sizeritem">
                                             <flag>wxGROW</flag>
                                             <object class="wxTextCtrl" name="AgentZipCode">
+                                                <help>Agent ZIP code</help>
                                             </object>
                                         </object>
                                     </object>
@@ -611,6 +636,7 @@ useful in the future.
             <flag>wxALIGN_LEFT|wxALL</flag>
             <border>10</border>
             <object class="wxCheckBox" name="CreateSupplementalReport">
+                <help>Create supplemental report</help>
                 <label>Create supplemental report</label>
                 <checked>0</checked>
             </object>
@@ -638,6 +664,7 @@ useful in the future.
                             <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>2</border>
                             <object class="wxComboBox" name="SupplementalReportColumn00">
+                                <help>First supplemental-report column</help>
                                 <size>200,20</size>
                                 <style>wxCB_READONLY</style>
                             </object>
@@ -653,6 +680,7 @@ useful in the future.
                             <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>2</border>
                             <object class="wxComboBox" name="SupplementalReportColumn01">
+                                <help>Second supplemental-report column</help>
                                 <size>200,20</size>
                                 <style>wxCB_READONLY</style>
                             </object>
@@ -668,6 +696,7 @@ useful in the future.
                             <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>2</border>
                             <object class="wxComboBox" name="SupplementalReportColumn02">
+                                <help>Third supplemental-report column</help>
                                 <size>200,20</size>
                                 <style>wxCB_READONLY</style>
                             </object>
@@ -683,6 +712,7 @@ useful in the future.
                             <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>2</border>
                             <object class="wxComboBox" name="SupplementalReportColumn03">
+                                <help>Fourth supplemental-report column</help>
                                 <size>200,20</size>
                                 <style>wxCB_READONLY</style>
                             </object>
@@ -698,6 +728,7 @@ useful in the future.
                             <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>2</border>
                             <object class="wxComboBox" name="SupplementalReportColumn04">
+                                <help>Fifth supplemental-report column</help>
                                 <size>200,20</size>
                                 <style>wxCB_READONLY</style>
                             </object>
@@ -713,6 +744,7 @@ useful in the future.
                             <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>2</border>
                             <object class="wxComboBox" name="SupplementalReportColumn05">
+                                <help>Sixth supplemental-report column</help>
                                 <size>200,20</size>
                                 <style>wxCB_READONLY</style>
                             </object>
@@ -728,6 +760,7 @@ useful in the future.
                             <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>2</border>
                             <object class="wxComboBox" name="SupplementalReportColumn06">
+                                <help>Seventh supplemental-report column</help>
                                 <size>200,20</size>
                                 <style>wxCB_READONLY</style>
                             </object>
@@ -743,6 +776,7 @@ useful in the future.
                             <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>2</border>
                             <object class="wxComboBox" name="SupplementalReportColumn07">
+                                <help>Eighth supplemental-report column</help>
                                 <size>200,20</size>
                                 <style>wxCB_READONLY</style>
                             </object>
@@ -758,6 +792,7 @@ useful in the future.
                             <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>2</border>
                             <object class="wxComboBox" name="SupplementalReportColumn08">
+                                <help>Ninth supplemental-report column</help>
                                 <size>200,20</size>
                                 <style>wxCB_READONLY</style>
                             </object>
@@ -773,6 +808,7 @@ useful in the future.
                             <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>2</border>
                             <object class="wxComboBox" name="SupplementalReportColumn09">
+                                <help>Tenth supplemental-report column</help>
                                 <size>200,20</size>
                                 <style>wxCB_READONLY</style>
                             </object>
@@ -788,6 +824,7 @@ useful in the future.
                             <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>2</border>
                             <object class="wxComboBox" name="SupplementalReportColumn10">
+                                <help>Eleventh supplemental-report column</help>
                                 <size>200,20</size>
                                 <style>wxCB_READONLY</style>
                             </object>
@@ -803,6 +840,7 @@ useful in the future.
                             <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>2</border>
                             <object class="wxComboBox" name="SupplementalReportColumn11">
+                                <help>Twelfth supplemental-report column</help>
                                 <size>200,20</size>
                                 <style>wxCB_READONLY</style>
                             </object>
