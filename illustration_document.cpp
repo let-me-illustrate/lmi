@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_document.cpp,v 1.21 2008-08-03 23:23:14 chicares Exp $
+// $Id: illustration_document.cpp,v 1.22 2008-08-04 10:43:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -111,7 +111,6 @@ bool IllustrationDocument::OnCreate(wxString const& filename, long int flags)
             }
         doc_.read(ifs);
         }
-    input_ = doc_.input_data();
 
     return wxDocument::OnCreate(filename, flags);
 }
@@ -164,7 +163,6 @@ bool IllustrationDocument::DoSaveDocument(wxString const& filename)
         return false;
         }
 
-    *doc_.input_data_ = input_;
     std::ofstream ofs(filename.c_str(), ios_out_trunc_binary());
     doc_.write(ofs);
     if(!ofs)

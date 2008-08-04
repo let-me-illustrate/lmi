@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_document.hpp,v 1.12 2008-05-21 17:43:19 chicares Exp $
+// $Id: census_document.hpp,v 1.13 2008-08-04 10:43:31 chicares Exp $
 
 #ifndef census_document_hpp
 #define census_document_hpp
@@ -55,10 +55,6 @@ class CensusDocument
     virtual bool DoSaveDocument(wxString const& filename);
 
     multiple_cell_document doc_;
-
-    std::vector<Input> case_parms_;
-    std::vector<Input> cell_parms_;
-    std::vector<Input> class_parms_;
 
     DECLARE_DYNAMIC_CLASS(CensusDocument)
 };

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.hpp,v 1.31 2008-03-13 14:09:20 chicares Exp $
+// $Id: illustration_view.hpp,v 1.32 2008-08-04 10:43:32 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -113,6 +113,8 @@ class IllustrationView
     void UponUpdateFileSaveAs  (wxUpdateUIEvent&);
     void UponUpdateInapplicable(wxUpdateUIEvent&);
     void UponUpdateProperties  (wxUpdateUIEvent&);
+
+    Input& input_data();
 
     wxHtmlWindow* html_window_;
     bool is_phony_;
