@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1130 2008-08-04 14:47:22 chicares Exp $
+// $Id: ChangeLog,v 1.1131 2008-08-04 16:12:33 wboutin Exp $
 
 MAINTENANCE
 
@@ -18843,4 +18843,13 @@ Merge nearly-identical code, addressing marked defects.
 
   main_wx.cpp
 Reenable html help, reverting the 20080618T0145Z reversion.
+
+20080804T1612Z <wboutin@massmutual.com> [1086]
+
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_reg_d.xrc
+  skin_single_premium.xrc
+  skin_variable_annuity.xrc
+Add help text.
 
