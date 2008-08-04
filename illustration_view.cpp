@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.82 2008-08-04 10:43:32 chicares Exp $
+// $Id: illustration_view.cpp,v 1.83 2008-08-04 22:08:22 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -38,13 +38,11 @@
 
 #include "illustration_view.hpp"
 
-#include "account_value.hpp"
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "configurable_settings.hpp"
 #include "custom_io_0.hpp"
 #include "default_view.hpp"
-#include "fenv_guard.hpp"
 #include "file_command.hpp"
 #include "handle_exceptions.hpp"
 #include "illustration_document.hpp"
@@ -52,6 +50,7 @@
 #include "ledger.hpp"
 #include "ledger_text_formats.hpp"
 #include "ledger_xsl.hpp"
+#include "ledgervalues.hpp"
 #include "mvc_controller.hpp"
 #include "safely_dereference_as.hpp"
 #include "timer.hpp"
@@ -406,15 +405,10 @@ void IllustrationView::Run(Input* overriding_input)
     IllusInputParms ihs_input;
     convert_to_ihs(ihs_input, input_data());
 
-    boost::shared_ptr<Ledger const> resulting_ledger;
-    { // Begin fenv_guard scope.
-    fenv_guard fg;
-    AccountValue av(ihs_input);
-    av.SetDebugFilename(base_filename() + ".debug");
-    av.RunAV();
-    resulting_ledger = av.ledger_from_av();
-    } // End fenv_guard scope.
-    LMI_ASSERT(resulting_ledger.get());
+    IllusVal IV(base_filename() + ".debug");
+    IV.run(ihs_input);
+    boost::shared_ptr<Ledger> resulting_ledger(new Ledger(mce_ill_reg));
+    *resulting_ledger = IV.ledger();
 
 // EVGENIY !! Originally, we had this:
 //    status() << "Calculate: " << timer.stop().elapsed_msec_str();
@@ -516,17 +510,9 @@ bool custom_io_0_run_if_file_exists(wxDocManager* dm)
             {
             IllusInputParms input;
             bool close_when_done = custom_io_0_read(input, "");
-
-            boost::shared_ptr<Ledger const> resulting_ledger;
-            { // Begin fenv_guard scope.
-            fenv_guard fg;
-            AccountValue av(input);
-            av.RunAV();
-            resulting_ledger = av.ledger_from_av();
-            } // End fenv_guard scope.
-            LMI_ASSERT(resulting_ledger.get());
-
-            custom_io_0_write(*resulting_ledger, "");
+            IllusVal IV;
+            IV.run(input);
+            custom_io_0_write(IV.ledger(), "");
             if(close_when_done)
                 {
                 return true;
