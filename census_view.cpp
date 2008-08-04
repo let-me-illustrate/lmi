@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.73 2008-08-04 10:43:31 chicares Exp $
+// $Id: census_view.cpp,v 1.74 2008-08-04 14:28:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1014,11 +1014,11 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
 namespace
 {
 // TODO ?? Does this deserve to be a member now?
-void diagnose_sequence_string_problems(IllusInputParms& input)
+void diagnose_sequence_string_problems(Input& current_cell)
 {
     // TODO ?? We could pass the input row number, to print it here.
     // Messages don't say which life is the problem.
-    std::vector<std::string> errors = input.realize_all_sequence_strings(false);
+    std::vector<std::string> errors = current_cell.RealizeAllSequenceInput(false);
     for
         (std::vector<std::string>::iterator i = errors.begin()
         ;i != errors.end()
@@ -1134,10 +1134,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
 
         iss_census >> std::ws;
 
-IllusInputParms ihs_input;
-convert_to_ihs(ihs_input, case_parms()[0]);
-// TODO ?? expunge?
-//        IllusInputParms input(case_parms()[0]);
+        Input current_cell(case_parms()[0]);
 
         std::istringstream iss_line(line);
         std::string token;
@@ -1181,34 +1178,13 @@ convert_to_ihs(ihs_input, case_parms()[0]);
             {
 // warning() << "'" << headers[j] << "'" << " setting variable..." << LMI_FLUSH;
 // warning() << "'" << values[j] << "'" << " to value..." << LMI_FLUSH;
-//            input[headers[j]] = values[j];
-            ihs_input[std::string(headers[j])] = values[j];
+            current_cell[headers[j]] = values[j];
 // warning() << "OK...next value..." << LMI_FLUSH;
             }
+        current_cell.Reconcile();
 // warning() << "diagnosing sequence string problems..." << LMI_FLUSH;
-        diagnose_sequence_string_problems(ihs_input);
-        ihs_input.propagate_changes_to_base_and_finalize();
-Input lmi_input;
-convert_from_ihs(ihs_input, lmi_input);
-  {
-// TODO ?? Test this. If the test fails, then something like
-//        ihs_input.EnforceConsistency();
-//        ihs_input.propagate_changes_from_base_and_finalize();
-// might be needed above.
-  std::string const ihs_date = ihs_input.Status[0].DOB.str();
-  std::string const lmi_date = lmi_input["DateOfBirth"].str();
-  if(ihs_date != lmi_date)
-    {
-    warning()
-        << "Birthdates differ: "
-        << ihs_date
-        << " versus "
-        << lmi_date
-        << LMI_FLUSH
-        ;
-    }
-  }
-        cells.push_back(lmi_input);
+        diagnose_sequence_string_problems(current_cell);
+        cells.push_back(current_cell);
 // warning() << "Life added." << LMI_FLUSH;
 
         status() << "Added cell number " << cells.size() << '.' << std::flush;
