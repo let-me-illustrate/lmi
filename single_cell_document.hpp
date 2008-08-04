@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: single_cell_document.hpp,v 1.14 2008-08-03 23:23:15 chicares Exp $
+// $Id: single_cell_document.hpp,v 1.15 2008-08-04 10:43:32 chicares Exp $
 
 #ifndef single_cell_document_hpp
 #define single_cell_document_hpp
@@ -43,6 +43,7 @@ class LMI_SO single_cell_document
     ,virtual private obstruct_slicing<single_cell_document>
 {
     friend class IllustrationDocument;
+    friend class IllustrationView;
 
   public:
     single_cell_document();
