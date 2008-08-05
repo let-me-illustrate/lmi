@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.54 2008-08-05 09:22:40 chicares Exp $
+// $Id: main_cli.cpp,v 1.55 2008-08-05 09:32:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,7 +34,7 @@
 #include "global_settings.hpp"
 #include "handle_exceptions.hpp"
 #include "illustrator.hpp"
-#include "inputillus.hpp"
+#include "input.hpp"
 #include "ledger.hpp"
 #include "ledger_variant.hpp"
 #include "ledgervalues.hpp"
@@ -120,20 +120,19 @@ void SelfTest()
     bool const antediluvian = timestamp_of_production_release().empty();
 
     IllusVal IV;
-    IllusInputParms IP;
-    IP["Gender"           ] = "Male";
-    IP["Smoking"          ] = "Nonsmoker";
-    IP["UnderwritingClass"] = "Standard";
-    IP.GenAcctIntRate = "0.06";
-    IP.propagate_changes_to_base_and_finalize();
+    Input IP;
+    IP["Gender"            ] = "Male";
+    IP["Smoking"           ] = "Nonsmoker";
+    IP["UnderwritingClass" ] = "Standard";
+    IP["GeneralAccountRate"] = "0.06";
+    IP["Payment"           ] = "20000.0";
+    IP["SpecifiedAmount"   ] = "1000000.0";
+    IP.RealizeAllSequenceInput();
 
-    IP.EePremium.assign(IP.SpecAmt.size(), r_pmt(20000.0));
-    IP.SpecAmt.assign(IP.SpecAmt.size(), r_spec_amt(1000000.0));
     double expected_value = 0.0;
     double observed_value = 0.0;
 
     IP["SolveType"] = "SolveNone";
-
     expected_value = 6305652.52;
     IV.run(IP);
     observed_value = IV.ledger().GetCurrFull().AcctVal.back();
@@ -181,7 +180,7 @@ void SelfTest()
 
     // DEPRECATED As long as IllusVal::run() is overloaded to support
     // the old input class, this static_cast is required.
-    typedef double (IllusVal::*F)(InputParms const&);
+    typedef double (IllusVal::*F)(Input const&);
     std::cout
         << "Test solve speed: "
         << TimeAnAliquot(boost::bind(static_cast<F>(&IllusVal::run), &IV, IP), 0.1)
