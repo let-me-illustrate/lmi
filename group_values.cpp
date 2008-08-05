@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.93 2008-07-30 12:31:06 chicares Exp $
+// $Id: group_values.cpp,v 1.94 2008-08-05 19:49:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -50,7 +50,7 @@
 
 namespace
 {
-bool cell_should_be_ignored(IllusInputParms const& cell)
+bool cell_should_be_ignored(Input const& cell)
 {
     return
             0     == value_cast<int>(cell["NumberOfIdenticalLives"].str())
@@ -77,10 +77,10 @@ class run_census_in_series
 {
   public:
     census_run_result operator()
-        (fs::path const&                     file
-        ,mcenum_emission                     emission
-        ,std::vector<IllusInputParms> const& cells
-        ,Ledger&                             composite
+        (fs::path const&           file
+        ,mcenum_emission           emission
+        ,std::vector<Input> const& cells
+        ,Ledger&                   composite
         );
 };
 
@@ -88,18 +88,18 @@ class run_census_in_parallel
 {
   public:
     census_run_result operator()
-        (fs::path const&                     file
-        ,mcenum_emission                     emission
-        ,std::vector<IllusInputParms> const& cells
-        ,Ledger&                             composite
+        (fs::path const&           file
+        ,mcenum_emission           emission
+        ,std::vector<Input> const& cells
+        ,Ledger&                   composite
         );
 };
 
 census_run_result run_census_in_series::operator()
-    (fs::path const&                     file
-    ,mcenum_emission                     emission
-    ,std::vector<IllusInputParms> const& cells
-    ,Ledger&                             composite
+    (fs::path const&           file
+    ,mcenum_emission           emission
+    ,std::vector<Input> const& cells
+    ,Ledger&                   composite
     )
 {
     Timer timer;
@@ -216,16 +216,16 @@ census_run_result run_census_in_series::operator()
 /// on an illustration.
 
 census_run_result run_census_in_parallel::operator()
-    (fs::path const&                     file
-    ,mcenum_emission                     emission
-    ,std::vector<IllusInputParms> const& cells
-    ,Ledger&                             composite
+    (fs::path const&           file
+    ,mcenum_emission           emission
+    ,std::vector<Input> const& cells
+    ,Ledger&                   composite
     )
 {
     Timer timer;
     census_run_result result;
 
-    std::vector<IllusInputParms>::const_iterator ip;
+    std::vector<Input>::const_iterator ip;
     std::vector<boost::shared_ptr<AccountValue> > cell_values;
     std::vector<boost::shared_ptr<AccountValue> >::iterator i;
     std::vector<mcenum_run_basis> const& RunBases = composite.GetRunBases();
@@ -245,9 +245,12 @@ census_run_result run_census_in_parallel::operator()
         {
         if(!cell_should_be_ignored(cells[j]))
             {
+            IllusInputParms ihs_input;
+            convert_to_ihs(ihs_input, *ip);
             { // Begin fenv_guard scope.
             fenv_guard fg;
-            boost::shared_ptr<AccountValue> av(new AccountValue(*ip));
+//            boost::shared_ptr<AccountValue> av(new AccountValue(*ip));
+            boost::shared_ptr<AccountValue> av(new AccountValue(ihs_input));
             av->SetDebugFilename
                 (serialized_file_path(file, j, "debug").string()
                 );
@@ -346,15 +349,15 @@ census_run_result run_census_in_parallel::operator()
         // Variables to support tiering and experience rating.
 
         double const case_ibnr_months =
-            cell_values.front()->ibnr_as_months_of_mortality_charges()
+            cell_values[0]->ibnr_as_months_of_mortality_charges()
             ;
         double const case_experience_rating_amortization_years =
-            cell_values.front()->experience_rating_amortization_years()
+            cell_values[0]->experience_rating_amortization_years()
             ;
 
         double case_accum_net_mortchgs = 0.0;
         double case_accum_net_claims   = 0.0;
-        double case_k_factor = cells[0].ExperienceRatingInitialKFactor;
+        double case_k_factor = cell_values[0]->yare_input_.ExperienceRatingInitialKFactor;
 
         // Experience rating as implemented here uses either a special
         // scalar input rate, or the separate-account rate. Those
@@ -364,16 +367,16 @@ census_run_result run_census_in_parallel::operator()
 
         std::vector<double> experience_reserve_rate;
         std::copy
-            (cells[0].SepAcctRate.begin()
-            ,cells[0].SepAcctRate.end()
+            (cell_values[0]->yare_input_.SeparateAccountRate.begin()
+            ,cell_values[0]->yare_input_.SeparateAccountRate.end()
             ,std::back_inserter(experience_reserve_rate)
             );
         experience_reserve_rate.resize(MaxYr, experience_reserve_rate.back());
-        if(cells[0].OverrideExperienceReserveRate)
+        if(cell_values[0]->yare_input_.OverrideExperienceReserveRate)
             {
             experience_reserve_rate.assign
                 (experience_reserve_rate.size()
-                ,cells[0].ExperienceReserveRate
+                ,cell_values[0]->yare_input_.ExperienceReserveRate
                 );
             }
 
@@ -517,7 +520,7 @@ census_run_result run_census_in_parallel::operator()
 
             if(first_cell_inforce_year == year)
                 {
-                case_accum_net_mortchgs += cells[0].InforceNetExperienceReserve;
+                case_accum_net_mortchgs += cell_values[0]->yare_input_.InforceNetExperienceReserve;
                 }
 
             // Apportion experience-rating reserve uniformly across
@@ -530,14 +533,14 @@ census_run_result run_census_in_parallel::operator()
             // equal the original total reserve.
 
             if
-                (   cells[0].UseExperienceRating
+                (   cell_values[0]->yare_input_.UseExperienceRating
                 &&  mce_gen_curr == expense_and_general_account_basis
                 &&  0.0 != eoy_inforce_lives
                 )
                 {
                 if(first_cell_inforce_year == year)
                     {
-                    years_net_mortchgs += cells[0].InforceYtdNetCoiCharge;
+                    years_net_mortchgs += cell_values[0]->yare_input_.InforceYtdNetCoiCharge;
                     }
                 double case_ibnr =
                         years_net_mortchgs
@@ -659,22 +662,22 @@ run_census::~run_census()
 }
 
 census_run_result run_census::operator()
-    (fs::path const&                     file
-    ,mcenum_emission                     emission
-    ,std::vector<IllusInputParms> const& cells
+    (fs::path const&           file
+    ,mcenum_emission           emission
+    ,std::vector<Input> const& cells
     )
 {
     census_run_result result;
 
     composite_.reset
         (new Ledger
-            (porting_cast<mcenum_ledger_type>(cells[0].LedgerType().value())
+            (cells[0].ledger_type()
             ,100
             ,true
             )
         );
 
-    mcenum_run_order order = porting_cast<mcenum_run_order>(cells[0].RunOrder.value());
+    mcenum_run_order order = yare_input(cells[0]).RunOrder;
     switch(order)
         {
         case mce_life_by_life:
@@ -717,27 +720,9 @@ boost::shared_ptr<Ledger const> run_census::composite()
     return composite_;
 }
 
-// The run order depends on the first cell's parameters and ignores
-// any conflicting input for any individual cell. It might be cleaner
-// to offer this field (and certain others) only at the case level.
-//
-void run_census::assert_consistency
-    (IllusInputParms const& case_default
-    ,IllusInputParms const& cell
-    )
-{
-    if(case_default.RunOrder != cell.RunOrder)
-        {
-        fatal_error()
-            << "Case-default run order '"
-            << case_default.RunOrder
-            << "' differs from first cell's run order '"
-            << cell.RunOrder
-            << "'. Make them consistent before running illustrations."
-            << LMI_FLUSH
-            ;
-        }
-}
+/// The run order depends on the first cell's parameters and ignores
+/// any conflicting input for any individual cell. It might be cleaner
+/// to offer this field (and certain others) only at the case level.
 
 void run_census::assert_consistency
     (Input const& case_default

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.hpp,v 1.25 2008-01-01 18:29:41 chicares Exp $
+// $Id: group_values.hpp,v 1.26 2008-08-05 19:49:24 chicares Exp $
 
 #ifndef group_values_hpp
 #define group_values_hpp
@@ -35,7 +35,6 @@
 
 #include <vector>
 
-class IllusInputParms;
 class Input;
 class Ledger;
 
@@ -87,17 +86,12 @@ class LMI_SO run_census
     ~run_census();
 
     census_run_result operator()
-        (fs::path const&                     file
-        ,mcenum_emission                     emission
-        ,std::vector<IllusInputParms> const& cells
+        (fs::path const&           file
+        ,mcenum_emission           emission
+        ,std::vector<Input> const& cells
         );
 
     boost::shared_ptr<Ledger const> composite();
-
-    static void assert_consistency
-        (IllusInputParms const& case_default
-        ,IllusInputParms const& cell
-        );
 
     static void assert_consistency
         (Input const& case_default
