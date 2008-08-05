@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.68 2008-08-02 12:58:32 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.69 2008-08-05 19:48:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -136,6 +136,13 @@ void Input::DoAdaptExternalities()
 
     GleanedMaturityAge_ = static_cast<int>(database_->Query(DB_EndtAge));
 
+    GleanedLedgerType_ =
+        static_cast<mcenum_ledger_type>
+            (static_cast<int>
+                (database_->Query(DB_LedgerType)
+                )
+            );
+
 #if !defined SUPPORT_105822
     if
         (   GeneralAccountRate.value().empty()
@@ -163,8 +170,6 @@ void Input::DoHarmonize()
     bool wd_allowed = database_->Query(DB_AllowWD);
     bool loan_allowed = database_->Query(DB_AllowLoan);
     bool pref_loan_allowed = loan_allowed && database_->Query(DB_AllowPrefLoan);
-
-    mcenum_ledger_type const ledger_type = static_cast<mcenum_ledger_type>(static_cast<int>(database_->Query(DB_LedgerType)));
 
     DefinitionOfLifeInsurance.allow(mce_gpt, database_->Query(DB_AllowGPT));
     DefinitionOfLifeInsurance.allow(mce_cvat, database_->Query(DB_AllowCVAT));
@@ -982,12 +987,12 @@ false // Silly workaround for now.
     SolveBasis .enable(actually_solving);
     SolveBasis .allow(mce_gen_curr, actually_solving);
     SolveBasis .allow(mce_gen_guar, actually_solving);
-    SolveBasis .allow(mce_gen_mdpt, actually_solving && is_subject_to_ill_reg(ledger_type));
+    SolveBasis .allow(mce_gen_mdpt, actually_solving && is_subject_to_ill_reg(GleanedLedgerType_));
 
     SolveSeparateAccountBasis.enable(actually_solving);
     SolveSeparateAccountBasis.allow(mce_sep_full, actually_solving);
     SolveSeparateAccountBasis.allow(mce_sep_zero, actually_solving && allow_sep_acct);
-    SolveSeparateAccountBasis.allow(mce_sep_half, actually_solving && allow_sep_acct && is_three_rate_nasd(ledger_type));
+    SolveSeparateAccountBasis.allow(mce_sep_half, actually_solving && allow_sep_acct && is_three_rate_nasd(GleanedLedgerType_));
 
     SolveTargetCashSurrenderValue.enable(actually_solving && mce_solve_for_target == SolveTarget);
     DeprecatedSolveTgtAtWhich    .enable(actually_solving && mce_solve_for_target == SolveTarget);
