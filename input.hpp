@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.39 2008-08-04 14:28:13 chicares Exp $
+// $Id: input.hpp,v 1.40 2008-08-05 19:48:17 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -146,11 +146,15 @@ class LMI_SO Input
 
     std::string differing_fields(Input const&) const;
 
-    int years_to_maturity() {return GleanedMaturityAge_ - IssueAge.value();}
-    int issue_age        () {return IssueAge     .value();}
-    int retirement_age   () {return RetirementAge.value();}
-    int inforce_year     () {return InforceYear  .value();}
-    int effective_year   () {return EffectiveDate.value().year();}
+    // Required for input-sequence realization.
+    int years_to_maturity() const {return maturity_age() - issue_age();}
+    int issue_age        () const {return IssueAge     .value();}
+    int retirement_age   () const {return RetirementAge.value();}
+    int inforce_year     () const {return InforceYear  .value();}
+    int effective_year   () const {return EffectiveDate.value().year();}
+
+    int                maturity_age() const {return GleanedMaturityAge_;}
+    mcenum_ledger_type ledger_type () const {return GleanedLedgerType_;}
 
   private:
     void AscribeMembers();
@@ -227,6 +231,7 @@ class LMI_SO Input
     mcenum_uw_basis          CachedGroupUnderwritingType_;
     mcenum_state             CachedStateOfJurisdiction_  ;
     int                      GleanedMaturityAge_         ;
+    mcenum_ledger_type       GleanedLedgerType_          ;
 
     tnr_issue_age            IssueAge                        ;
     tnr_attained_age         RetirementAge                   ;
