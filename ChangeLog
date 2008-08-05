@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1132 2008-08-05 11:32:21 chicares Exp $
+// $Id: ChangeLog,v 1.1133 2008-08-05 19:52:18 chicares Exp $
 
 MAINTENANCE
 
@@ -18887,4 +18887,28 @@ Refactor.
   illustration_view.cpp
   illustrator.cpp
 Refactor.
+
+20080805T1947Z <gchicares@sbcglobal.net> [1085]
+
+  custom_io_0.cpp
+Fix defect introduced 20080805T1132Z.
+
+20080805T1948Z <gchicares@sbcglobal.net> [1085]
+
+  input.hpp
+  input_harmonization.cpp
+Make ledger type accessible.
+
+20080805T1949Z <gchicares@sbcglobal.net> [1084]
+
+  census_view.cpp
+  group_values.cpp
+  group_values.hpp
+  illustrator.cpp
+Replace old input class with new in census functors.
+
+20080805T1952Z <gchicares@sbcglobal.net> [1083]
+
+  census_view.cpp
+Address a defect marker: the census name already appears as the title.
 
