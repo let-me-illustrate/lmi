@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.cpp,v 1.32 2008-01-01 18:29:47 chicares Exp $
+// $Id: ledgervalues.cpp,v 1.33 2008-08-05 09:22:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,6 +31,8 @@
 #include "account_value.hpp"
 #include "assert_lmi.hpp"
 #include "fenv_guard.hpp"
+#include "input.hpp"
+#include "inputillus.hpp"
 #include "inputs.hpp"
 #include "ledger.hpp"
 
@@ -44,6 +46,13 @@ IllusVal::IllusVal(std::string const& filename)
 
 IllusVal::~IllusVal()
 {
+}
+
+double IllusVal::run(Input const& input)
+{
+    IllusInputParms ihs_input;
+    convert_to_ihs(ihs_input, input);
+    return run(ihs_input);
 }
 
 double IllusVal::run(InputParms const& input)
