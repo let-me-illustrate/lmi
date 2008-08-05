@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: custom_io_0.cpp,v 1.23 2008-08-05 11:32:21 chicares Exp $
+// $Id: custom_io_0.cpp,v 1.24 2008-08-05 19:47:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -201,6 +201,10 @@ void test_adjust_interest_rates()
 
 bool custom_io_0_read(Input& z, std::string const& filename)
 {
+    IllusInputParms ip;
+    convert_to_ihs(ip, z);
+    ip.propagate_changes_to_base_and_finalize();
+
     // Set global flag to liberalize input restrictions slightly.
     global_settings::instance().set_custom_io_0(true);
     std::string actual_filename =
@@ -220,8 +224,6 @@ bool custom_io_0_read(Input& z, std::string const& filename)
 
     name_value_pairs n_v_pairs(actual_filename);
 
-    IllusInputParms ip;
-    convert_from_ihs(ip, z);
     // The list is not complete; other items may be required eventually.
     ip.InforceYear              = static_cast<int>(n_v_pairs.numeric_value("InforceYear"));
     ip.InforceMonth             = static_cast<int>(n_v_pairs.numeric_value("InforceMonth"));
@@ -477,6 +479,8 @@ bool custom_io_0_read(Input& z, std::string const& filename)
     ip.propagate_changes_from_base_and_finalize();
 
     ip.ResetAllFunds(database.Query(DB_AllowGenAcct));
+
+    convert_from_ihs(ip, z);
 
     // "AutoClose": "Y" or "N". Either way, read the custom input file
     // and write the custom output file. Then:
