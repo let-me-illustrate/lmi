@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.cpp,v 1.28 2008-08-05 11:32:21 chicares Exp $
+// $Id: illustrator.cpp,v 1.29 2008-08-05 19:49:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -73,10 +73,7 @@ bool illustrator::operator()(fs::path const& file_path)
         run_census::assert_consistency(doc.case_parms()[0], doc.cell_parms()[0]);
         usec_for_input_ = timer.stop().elapsed_usec();
         census_run_result result;
-std::vector<IllusInputParms> z;
-convert_to_ihs(z, doc.cell_parms());
-//        result = run_census()(file_path, emission_, doc.cell_parms());
-        result = run_census()(file_path, emission_, z);
+        result = run_census()(file_path, emission_, doc.cell_parms());
         completed_normally     = result.completed_normally_   ;
         usec_for_calculations_ = result.usec_for_calculations_;
         usec_for_output_       = result.usec_for_output_      ;
@@ -88,10 +85,7 @@ convert_to_ihs(z, doc.cell_parms());
         usec_for_input_        = timer.stop().elapsed_usec();
         timer.restart();
         IllusVal IV;
-IllusInputParms z;
-convert_to_ihs(z, doc.input_data());
-//        IV.run(doc.input_data());
-        IV.run(z);
+        IV.run(doc.input_data());
         usec_for_calculations_ = timer.stop().elapsed_usec();
         usec_for_output_ = emit_ledger(file_path, 0, IV.ledger(), emission_);
         }

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.75 2008-08-04 14:45:22 chicares Exp $
+// $Id: census_view.cpp,v 1.76 2008-08-05 19:49:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -36,7 +36,6 @@
 #include "group_values.hpp"
 #include "illustration_view.hpp"
 #include "input.hpp"
-#include "inputillus.hpp"
 #include "ledger.hpp"
 #include "ledger_text_formats.hpp"
 #include "miscellany.hpp" // is_ok_for_cctype()
@@ -904,24 +903,12 @@ bool CensusView::DoAllCells(mcenum_emission emission)
 {
     run_census::assert_consistency(case_parms()[0], cell_parms()[0]);
 
-    // TODO ?? The census document already stores the cells as objects
-    // of the class they're turned into here. They might be accessed
-    // directly as such, but instead the old input class should be
-    // completely replaced with the new. In the meantime, a progress
-    // dialog might be wanted here.
-    std::vector<IllusInputParms> cells;
-    cells.reserve(cell_parms().size());
-    for(unsigned int j = 0; j < cell_parms().size(); ++j)
-        {
-        IllusInputParms cell;
-        convert_to_ihs(cell, cell_parms()[j]);
-        cells.push_back(cell);
-        }
     run_census runner;
-    if(!runner(base_filename(), emission, cells).completed_normally_)
+    if(!runner(base_filename(), emission, cell_parms()).completed_normally_)
         {
         return false;
         }
+
     composite_ledger_ = runner.composite();
     return true;
 }
