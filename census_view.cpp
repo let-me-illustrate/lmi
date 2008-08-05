@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.76 2008-08-05 19:49:24 chicares Exp $
+// $Id: census_view.cpp,v 1.77 2008-08-05 19:52:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -247,13 +247,6 @@ wxWindow* CensusView::CreateChildWindow()
     list_window_ = new(wx) wxListView
         (GetFrame()
         ,ID_LISTWINDOW
-// TODO ?? expunge unless census name is to be specified as title.
-// These are builtin defaults:
-//        ,wxDefaultPosition
-//        ,wxDefaultSize
-//        ,wxLC_REPORT
-//        ,wxDefaultValidator
-//        ,"Census name here..."
         );
 
     // Show headers.
