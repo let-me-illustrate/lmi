@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.cpp,v 1.27 2008-08-03 23:23:14 chicares Exp $
+// $Id: illustrator.cpp,v 1.28 2008-08-05 11:32:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -98,7 +98,7 @@ convert_to_ihs(z, doc.input_data());
     else if(".ini" == extension)
         {
         Timer timer;
-        IllusInputParms input;
+        Input input;
         custom_io_0_read(input, file_path.string());
         usec_for_input_ = timer.stop().elapsed_usec();
         timer.restart();

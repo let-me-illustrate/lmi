@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: custom_io_0.cpp,v 1.22 2008-07-24 10:16:12 chicares Exp $
+// $Id: custom_io_0.cpp,v 1.23 2008-08-05 11:32:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,6 +33,7 @@
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "global_settings.hpp"
+#include "input.hpp"
 #include "input_sequence.hpp"
 #include "inputillus.hpp"
 #include "inputstatus.hpp"
@@ -198,7 +199,7 @@ void test_adjust_interest_rates()
 
 /// Read custom input for a particular customer.
 
-bool custom_io_0_read(IllusInputParms& ip, std::string const& filename)
+bool custom_io_0_read(Input& z, std::string const& filename)
 {
     // Set global flag to liberalize input restrictions slightly.
     global_settings::instance().set_custom_io_0(true);
@@ -219,6 +220,8 @@ bool custom_io_0_read(IllusInputParms& ip, std::string const& filename)
 
     name_value_pairs n_v_pairs(actual_filename);
 
+    IllusInputParms ip;
+    convert_from_ihs(ip, z);
     // The list is not complete; other items may be required eventually.
     ip.InforceYear              = static_cast<int>(n_v_pairs.numeric_value("InforceYear"));
     ip.InforceMonth             = static_cast<int>(n_v_pairs.numeric_value("InforceMonth"));

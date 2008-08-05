@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.84 2008-08-05 10:43:19 chicares Exp $
+// $Id: illustration_view.cpp,v 1.85 2008-08-05 11:32:21 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -46,7 +46,7 @@
 #include "file_command.hpp"
 #include "handle_exceptions.hpp"
 #include "illustration_document.hpp"
-#include "inputillus.hpp"
+#include "input.hpp"
 #include "ledger.hpp"
 #include "ledger_text_formats.hpp"
 #include "ledger_xsl.hpp"
@@ -504,7 +504,7 @@ bool custom_io_0_run_if_file_exists(wxDocManager* dm)
         {
         if(custom_io_0_file_exists())
             {
-            IllusInputParms input;
+            Input input;
             bool close_when_done = custom_io_0_read(input, "");
             IllusVal IV;
             IV.run(input);
@@ -527,15 +527,7 @@ bool custom_io_0_run_if_file_exists(wxDocManager* dm)
                     (dm
                     ,f.c_str()
                     );
-
-                // It seems silly to perform this conversion here,
-                // because Run() performs an inverse conversion.
-                // But time is better spent removing the root of
-                // this silliness--the pair of duplicative input
-                // classes--than fretting over its symptoms.
-                Input x;
-                convert_from_ihs(input, x);
-                illview.Run(&x);
+                illview.Run(&input);
                 safely_dereference_as<wxFrame>(illview.GetFrame()).Maximize();
                 }
             }
