@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1131 2008-08-04 16:12:33 wboutin Exp $
+// $Id: ChangeLog,v 1.1132 2008-08-05 11:32:21 chicares Exp $
 
 MAINTENANCE
 
@@ -18852,4 +18852,39 @@ Reenable html help, reverting the 20080618T0145Z reversion.
   skin_single_premium.xrc
   skin_variable_annuity.xrc
 Add help text.
+
+20080804T2207Z <gchicares@sbcglobal.net> [1086]
+
+  census_view.hpp
+Purge unused member-function declarations.
+
+20080804T2208Z <gchicares@sbcglobal.net> [1086]
+
+  illustration_view.cpp
+Refactor.
+
+20080805T0922Z <gchicares@sbcglobal.net> [1086]
+
+  ledgervalues.cpp
+  ledgervalues.hpp
+  main_cli.cpp
+Overload IllusVal::run() to support new input class.
+
+20080805T0932Z <gchicares@sbcglobal.net> [1086]
+
+  main_cli.cpp
+Use new instead of old input class.
+
+20080805T1043Z <gchicares@sbcglobal.net> [1085]
+
+  illustration_view.cpp
+Refactor.
+
+20080805T1132Z <gchicares@sbcglobal.net> [1085]
+
+  custom_io_0.cpp
+  custom_io_0.hpp
+  illustration_view.cpp
+  illustrator.cpp
+Refactor.
 

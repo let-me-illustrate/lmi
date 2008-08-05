@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: custom_io_0.hpp,v 1.10 2008-01-01 18:29:37 chicares Exp $
+// $Id: custom_io_0.hpp,v 1.11 2008-08-05 11:32:21 chicares Exp $
 
 #ifndef custom_io_0_hpp
 #define custom_io_0_hpp
@@ -30,7 +30,7 @@
 
 #include <string>
 
-class IllusInputParms;
+class Input;
 class Ledger;
 
 bool LMI_SO custom_io_0_file_exists();
@@ -45,8 +45,8 @@ bool LMI_SO custom_io_0_file_exists();
 // that input and output files share a common stem; in this custom
 // situation, that need not be the case.
 
-bool LMI_SO custom_io_0_read(IllusInputParms&, std::string const& filename);
-void LMI_SO custom_io_0_write(Ledger const&  , std::string const& filename);
+bool LMI_SO custom_io_0_read (Input&       , std::string const& filename);
+void LMI_SO custom_io_0_write(Ledger const&, std::string const& filename);
 
 #endif // custom_io_0_hpp
 
