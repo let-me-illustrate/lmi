@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbdict.cpp,v 1.11 2008-07-26 01:54:28 chicares Exp $
+// $Id: dbdict.cpp,v 1.12 2008-08-08 18:47:45 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -98,6 +98,17 @@ void DBDictionary::Init()
     static int const n = 1 + TDBIndex::MaxIndex;
     int dims[n] = {1, 1, 1, 1, 1, 1, 1};
 
+    dictionary->erase(dictionary->begin(), dictionary->end());
+
+    double zilch[1] = {0.0};
+    // Zero is inappropriate for some entities ("DB_CCOIMultiplier",
+    // e.g.), but the antediluvian branch doesn't actually use most
+    // database entities.
+    for(int j = DB_FIRST; j < DB_LAST; ++j)
+        {
+        AddEntry(TDBEntry(j, TDBValue(j, n, dims, zilch)));
+        }
+
     double guar_int_rate[1] = {0.03};
     AddEntry(TDBEntry(DB_GuarInt, TDBValue(DB_GuarInt, n, dims, guar_int_rate)));
 
@@ -111,20 +122,10 @@ void DBDictionary::Init()
     AddEntry(TDBEntry(DB_GuarPrefLoanSpread, TDBValue(DB_GuarPrefLoanSpread, n, dims, loan_spread)));
     AddEntry(TDBEntry(DB_CurrPrefLoanSpread, TDBValue(DB_CurrPrefLoanSpread, n, dims, loan_spread)));
 
-    double zilch[1] = {0.0};
     double affirmative[1] = {1.0};
 
-    AddEntry(TDBEntry(DB_GAIntBonus, TDBValue(DB_GAIntBonus, n, dims, zilch)));
-    AddEntry(TDBEntry(DB_CurrIntSpread, TDBValue(DB_CurrIntSpread, n, dims, zilch)));
-    AddEntry(TDBEntry(DB_GuarMandE, TDBValue(DB_GuarMandE, n, dims, zilch)));
-    AddEntry(TDBEntry(DB_CurrMandE, TDBValue(DB_CurrMandE, n, dims, zilch)));
-    AddEntry(TDBEntry(DB_StableValFundCharge, TDBValue(DB_StableValFundCharge, n, dims, zilch)));
-    AddEntry(TDBEntry(DB_AssetChargeType, TDBValue(DB_AssetChargeType, n, dims, zilch)));
-    AddEntry(TDBEntry(DB_AmortPmLdFundCharge, TDBValue(DB_AmortPmLdFundCharge, n, dims, zilch)));
     AddEntry(TDBEntry(DB_AllowGenAcct, TDBValue(DB_AllowGenAcct, n, dims, affirmative)));
-    AddEntry(TDBEntry(DB_AllowSepAcct, TDBValue(DB_AllowSepAcct, n, dims, zilch)));
-    AddEntry(TDBEntry(DB_SepAcctSpreadMethod, TDBValue(DB_SepAcctSpreadMethod, n, dims, zilch)));
-    AddEntry(TDBEntry(DB_AllowPrefLoan, TDBValue(DB_AllowPrefLoan, n, dims, zilch)));
+    AddEntry(TDBEntry(DB_AllowPreferredClass, TDBValue(DB_AllowPreferredClass, n, dims, affirmative)));
 
     // premium loads
 
