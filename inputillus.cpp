@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.cpp,v 1.36 2008-08-03 13:05:23 chicares Exp $
+// $Id: inputillus.cpp,v 1.37 2008-08-08 21:41:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -528,7 +528,7 @@ void IllusInputParms::propagate_fund_allocations_from_string()
         {
         int i;
         iss >> i;
-        if(!iss || iss.eof())
+        if(!iss)
             {
             break;
             }
