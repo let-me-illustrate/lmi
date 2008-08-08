@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.40 2008-08-05 19:48:17 chicares Exp $
+// $Id: input.hpp,v 1.41 2008-08-08 21:43:21 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -446,6 +446,8 @@ class LMI_SO Input
     // used, because tn_range doesn't permit initialization or
     // assignment from any out-of-range value, but the Realize*()
     // functions expect to test raw values themselves.
+
+    std::vector<tnr_unrestricted_double> FundAllocationsRealized_;
 
     std::vector<tnr_unrestricted_double> ExtraMonthlyCustodialFeeRealized_  ;
     std::vector<tnr_unrestricted_double> ExtraCompensationOnAssetsRealized_ ;

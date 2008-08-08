@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1133 2008-08-05 19:52:18 chicares Exp $
+// $Id: ChangeLog,v 1.1134 2008-08-08 21:43:21 chicares Exp $
 
 MAINTENANCE
 
@@ -18911,4 +18911,46 @@ Replace old input class with new in census functors.
 
   census_view.cpp
 Address a defect marker: the census name already appears as the title.
+
+20080808T1623Z <gchicares@sbcglobal.net> [1083]
+
+  diagnostics.sed
+Tighten system-test filters.
+
+20080808T1847Z <gchicares@sbcglobal.net> [1083]
+
+  dbdict.cpp
+Initialize all entities to zero by default.
+
+20080808T1848Z <gchicares@sbcglobal.net> [1083]
+
+  dbnames.xpp
+Improve documentation.
+
+20080808T1849Z <gchicares@sbcglobal.net> [1083]
+
+  yare_input.cpp
+  yare_input.hpp
+Add tax-bracket variables to yare input class.
+
+20080808T1850Z <gchicares@sbcglobal.net> [1083]
+
+  group_values.cpp
+Refactor, preferring yare input class within monthiversary processing.
+
+20080808T2141Z <gchicares@sbcglobal.net> [1083]
+
+  inputillus.cpp
+Fix defect introduced 20061102T1845Z, while fixing the same defect.
+A well-formed number occuring at the end of the stream should not be
+discarded.
+
+20080808T2143Z <gchicares@sbcglobal.net> [1084]
+
+  input.cpp
+  input.hpp
+  input_realization.cpp
+  ledger_invariant.cpp
+  yare_input.cpp
+Treat ancient fund allocations as sequence input in new input class.
 
