@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.94 2008-08-05 19:49:24 chicares Exp $
+// $Id: group_values.cpp,v 1.95 2008-08-08 18:50:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -262,11 +262,10 @@ census_run_result run_census_in_parallel::operator()
                 av->Debugging = true;
                 av->DebugPrintInit();
                 }
-            } // End fenv_guard scope.
 
             if
-                (   first_cell_inforce_year  != value_cast<int>((*ip)["InforceYear"].str())
-                ||  first_cell_inforce_month != value_cast<int>((*ip)["InforceMonth"].str())
+                (   first_cell_inforce_year  != av->yare_input_.InforceYear
+                ||  first_cell_inforce_month != av->yare_input_.InforceMonth
                 )
                 {
                 fatal_error()
@@ -276,13 +275,14 @@ census_run_result run_census_in_parallel::operator()
                     ;
                 }
 
-            if("SolveNone" != (*ip)["SolveType"].str())
+            if(mce_solve_none != av->yare_input_.SolveType)
                 {
                 fatal_error()
                     << "Running census by month: solves not permitted."
                     << LMI_FLUSH
                     ;
                 }
+            } // End fenv_guard scope.
             }
 
         if(!meter->reflect_progress())
