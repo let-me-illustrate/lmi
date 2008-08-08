@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.29 2008-08-03 22:07:31 chicares Exp $
+// $Id: input.cpp,v 1.30 2008-08-08 21:43:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -204,7 +204,7 @@ Input::Input()
     ,HoneymoonValueSpread             ("0")
     ,PremiumHistory                   ("0")
     ,SpecamtHistory                   ("0")
-//    ,FundAllocations                  ("")
+    ,FundAllocations                  ("0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0")
     ,CashValueEnhancementRate         ("0")
 //    ,CreateSupplementalReport         ("")
 //    ,SupplementalReportColumn00       ("")

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.57 2008-07-29 22:23:17 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.58 2008-08-08 21:43:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -439,18 +439,19 @@ void LedgerInvariant::Init(BasicValues* b)
         // stated in words to be equal--because the spreadsheet layout
         // otherwise shows allocations as integer percentages, and
         // something like '.3333333...' would overflow the space available.
+        //
+        // As of 2008, most of the foregoing is no longer applicable,
+        // except for the hardcoded limit, which is copied here:
+        enum{NumberOfFunds = 30}; // DEPRECATED
+////
+if(!(NumberOfFunds <= b->yare_input_.FundAllocations.size()))
+  fatal_error() << NumberOfFunds << " vs. " << b->yare_input_.FundAllocations.size() << LMI_FLUSH;
+////
+        LMI_ASSERT(NumberOfFunds <= b->yare_input_.FundAllocations.size());
 
-        FundAllocs.push_back
-            ((j < b->Input_->NumberOfFunds)
-            ? (b->Input_->FundAllocs[j].operator int const&())
-            : 0
-            );
-
-        FundAllocations.push_back
-            ((j < b->Input_->NumberOfFunds)
-            ? .01 * (b->Input_->FundAllocs[j].operator int const&())
-            : 0.0
-            );
+        double const z = b->yare_input_.FundAllocations[j];
+        FundAllocs     .push_back(j < NumberOfFunds ? static_cast<int>(z) : 0);
+        FundAllocations.push_back(j < NumberOfFunds ? .01 * z : 0.0);
         }
 
     // TODO ?? Instead, share code now in AccountValue::SetInitialValues()
