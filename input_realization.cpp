@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_realization.cpp,v 1.11 2008-08-04 14:45:22 chicares Exp $
+// $Id: input_realization.cpp,v 1.12 2008-08-08 21:43:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -245,6 +245,29 @@ Input::permissible_payment_mode_keywords()
 //============================================================================
 std::vector<std::string> Input::RealizeAllSequenceInput(bool report_errors)
 {
+    // TODO ?? This doesn't really belong here; it's going to be
+    // reimplemented soon, anyway.
+    {
+    enum{NumberOfFunds = 30}; // DEPRECATED
+    std::istringstream iss(FundAllocations.value());
+    std::vector<tnr_unrestricted_double> v;
+    for(;;)
+        {
+        int i;
+        iss >> i;
+        if(!iss)
+            {
+            break;
+            }
+        v.push_back(tnr_unrestricted_double(i));
+        }
+    if(v.size() < NumberOfFunds)
+        {
+        v.insert(v.end(), NumberOfFunds - v.size(), tnr_unrestricted_double(0.0));
+        }
+    FundAllocationsRealized_ = v;
+    }
+
     std::vector<std::string> s;
 
 #if defined __MINGW32__ && defined __GNUC__ && __GNUC__ == 2 && __GNUC_MINOR__ == 95

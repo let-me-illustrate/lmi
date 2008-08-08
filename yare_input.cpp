@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: yare_input.cpp,v 1.11 2008-08-08 18:49:21 chicares Exp $
+// $Id: yare_input.cpp,v 1.12 2008-08-08 21:43:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -184,7 +184,7 @@ yare_input::yare_input(Input const& z)
     PremiumHistory                  = convert_vector_type<double              >(z.PremiumHistoryRealized_                 );
     SpecamtHistory                  = convert_vector_type<double              >(z.SpecamtHistoryRealized_                 );
 // INPUT !! Not yet implemented:
-//    FundAllocations                 = convert_vector_type<double              >(z.FundAllocationsRealized_                );
+    FundAllocations                 = convert_vector_type<double              >(z.FundAllocationsRealized_                );
     CashValueEnhancementRate        = convert_vector_type<double              >(z.CashValueEnhancementRateRealized_       );
     SpecifiedAmountStrategy         = convert_vector_type<mcenum_sa_strategy  >(z.SpecifiedAmountStrategyRealized_        );
     PaymentStrategy                 = convert_vector_type<mcenum_pmt_strategy >(z.PaymentStrategyRealized_      );
