@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: yare_input.cpp,v 1.10 2008-07-29 15:27:11 chicares Exp $
+// $Id: yare_input.cpp,v 1.11 2008-08-08 18:49:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -166,6 +166,8 @@ yare_input::yare_input(Input const& z)
     ExtraCompensationOnPremium      = convert_vector_type<double              >(z.ExtraCompensationOnPremiumRealized_     );
     PartialMortalityMultiplier      = convert_vector_type<double              >(z.PartialMortalityMultiplierRealized_     );
     CurrentCoiMultiplier            = convert_vector_type<double              >(z.CurrentCoiMultiplierRealized_           );
+    CorporationTaxBracket           = convert_vector_type<double              >(z.CorporationTaxBracketRealized_          );
+    TaxBracket                      = convert_vector_type<double              >(z.TaxBracketRealized_                     );
     ProjectedSalary                 = convert_vector_type<double              >(z.ProjectedSalaryRealized_                );
     SpecifiedAmount                 = convert_vector_type<double              >(z.SpecifiedAmountRealized_                );
     DeathBenefitOption              = convert_vector_type<mcenum_dbopt        >(z.DeathBenefitOptionRealized_             );
@@ -330,6 +332,8 @@ yare_input::yare_input(InputParms const& z)
     ExtraCompensationOnPremium      = z.VectorAddonCompOnPremium        ;
     PartialMortalityMultiplier      = z.VectorPartialMortalityMultiplier;
     CurrentCoiMultiplier            = z.VectorCurrentCoiMultiplier      ;
+    CorporationTaxBracket           = z.VectorCorpTaxBracket            ;
+    TaxBracket                      = z.VectorIndvTaxBracket            ;
     ProjectedSalary                 = z.Salary                          ;
     SpecifiedAmount                 = convert_vector_type<double              >(z.SpecAmt                      );
     DeathBenefitOption              = convert_vector_type<mcenum_dbopt        >(z.DBOpt                        );

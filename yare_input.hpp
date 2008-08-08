@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: yare_input.hpp,v 1.8 2008-08-02 12:58:32 chicares Exp $
+// $Id: yare_input.hpp,v 1.9 2008-08-08 18:49:21 chicares Exp $
 
 #ifndef yare_input_hpp
 #define yare_input_hpp
@@ -215,8 +215,8 @@ class yare_input
     std::vector<double>               PartialMortalityMultiplier      ;
     std::vector<double>               CurrentCoiMultiplier            ;
 //    std::vector<double>               CurrentCoiGrading               ;
-//    std::vector<double>               CorporationTaxBracket           ;
-//    std::vector<double>               TaxBracket                      ;
+    std::vector<double>               CorporationTaxBracket           ;
+    std::vector<double>               TaxBracket                      ;
     std::vector<double>               ProjectedSalary                 ;
     std::vector<double>               SpecifiedAmount                 ;
     std::vector<mcenum_dbopt>         DeathBenefitOption              ;
