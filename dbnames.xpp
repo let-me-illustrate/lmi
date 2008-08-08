@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.xpp,v 1.21 2008-03-19 16:43:29 chicares Exp $
+// $Id: dbnames.xpp,v 1.22 2008-08-08 18:48:35 chicares Exp $
 
 #define DB_NAMES \
 {DB_FIRST,DB_FIRST,"dummy","dummy",}, \
@@ -89,7 +89,7 @@
 {DB_GuarCOICeiling,DB_Topic_Mortality,"GuarCOICeiling","Dynamically decrease current cost of insurance rates to guaranteed wherever they would otherwise be higher [not yet implemented]",}, \
 {DB_COIGuarIsMin,DB_Topic_Mortality,"COIGuarIsMin","[not used]",}, \
 {DB_COINonforfIsGuar,DB_Topic_Mortality,"COINonforfIsGuar","Use guaranteed cost of insurance rates as nonforfeiture basis [not yet implemented]",}, \
-{DB_SubstdTblMult,DB_Topic_Mortality,"SubstdTblMult","Multiplier applied to guaranteed and current cost of insurance charges for substandard table rated lives only [we intend eventually to differentiate current from guaranteed] [not used]",}, \
+{DB_SubstdTblMult,DB_Topic_Mortality,"SubstdTblMult","Substandard table-rating multiplier applied to both guaranteed and current cost of insurance and term rider charges",}, \
 {DB_CCoiIsAnnual,DB_Topic_Mortality,"CCoiIsAnnual","Current cost of insurance table rates are: 0=monthly, 1=annual",}, \
 {DB_GCoiIsAnnual,DB_Topic_Mortality,"GCoiIsAnnual","Guaranteed cost of insurance table rates are: 0=monthly, 1=annual",}, \
 {DB_MCoiIsAnnual,DB_Topic_Mortality,"MCoiIsAnnual","Midpoint cost of insurance table rates are: 0=monthly, 1=annual [not used--calculated as mean of current and guaranteed]",}, \
