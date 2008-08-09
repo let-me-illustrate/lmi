@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.84 2008-07-24 19:19:16 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.85 2008-08-09 20:05:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1977,9 +1977,9 @@ std::vector<double> BasicValues::Get83GamRates() const
 #include "inputs.hpp"
 
 //============================================================================
-BasicValues::BasicValues(InputParms const* input)
-    :Input_              (new InputParms(*input))
-    ,yare_input_         (*input)
+BasicValues::BasicValues(InputParms const& input)
+    :Input_              (new InputParms(input))
+    ,yare_input_         (input)
     ,DefnLifeIns_        (mce_cvat)
     ,DefnMaterialChange_ (mce_unnecessary_premium)
     ,Equiv7702DBO3       (mce_option1_for_7702)

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.40 2008-07-24 16:39:34 chicares Exp $
+// $Id: basic_values.hpp,v 1.41 2008-08-09 20:05:22 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -83,9 +83,6 @@ class LMI_SO BasicValues
     :virtual private boost::noncopyable
 {
   public:
-    BasicValues(InputParms const* input);
-    // This signature is preferable to the version that takes a const*;
-    // for now, it's used only by the lmi branch.
     BasicValues(InputParms const& input);
     BasicValues // GPT server only.
         (std::string const& a_ProductName
