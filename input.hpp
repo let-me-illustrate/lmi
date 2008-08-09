@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.43 2008-08-09 02:57:49 chicares Exp $
+// $Id: input.hpp,v 1.44 2008-08-09 04:34:41 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -264,7 +264,7 @@ class LMI_SO Input
     mce_solve_type           SolveType                       ;
     tnr_duration             SolveBeginYear                  ;
     tnr_duration             SolveEndYear                    ;
-    mce_solve_target         SolveTarget                     ; // TODO ?? {csv@dur, endt]: could be bool.
+    mce_solve_target         SolveTarget                     ;
     tnr_nonnegative_double   SolveTargetCashSurrenderValue   ;
     tnr_duration             SolveTargetYear                 ;
     mce_gen_basis            SolveBasis                      ; // TODO ?? Poor name, but enumerators are correct.
