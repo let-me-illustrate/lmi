@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.42 2008-08-09 02:05:14 chicares Exp $
+// $Id: input.hpp,v 1.43 2008-08-09 02:57:49 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -185,6 +185,8 @@ class LMI_SO Input
     virtual void DoEnforceProscription   (std::string const&);
     virtual void DoHarmonize();
     virtual void DoTransmogrify();
+
+    void SetSolveDurations();
 
     std::map<std::string,std::string> const permissible_specified_amount_strategy_keywords();
     std::map<std::string,std::string> const permissible_death_benefit_option_keywords();
