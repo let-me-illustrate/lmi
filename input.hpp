@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.41 2008-08-08 21:43:21 chicares Exp $
+// $Id: input.hpp,v 1.42 2008-08-09 02:05:14 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -146,15 +146,15 @@ class LMI_SO Input
 
     std::string differing_fields(Input const&) const;
 
-    // Required for input-sequence realization.
-    int years_to_maturity() const {return maturity_age() - issue_age();}
-    int issue_age        () const {return IssueAge     .value();}
-    int retirement_age   () const {return RetirementAge.value();}
-    int inforce_year     () const {return InforceYear  .value();}
-    int effective_year   () const {return EffectiveDate.value().year();}
-
-    int                maturity_age() const {return GleanedMaturityAge_;}
     mcenum_ledger_type ledger_type () const {return GleanedLedgerType_;}
+    int                maturity_age() const {return GleanedMaturityAge_;}
+
+    int years_to_retirement() const {return retirement_age() - issue_age();}
+    int years_to_maturity  () const {return maturity_age() - issue_age();}
+    int issue_age          () const {return IssueAge     .value();}
+    int retirement_age     () const {return RetirementAge.value();}
+    int inforce_year       () const {return InforceYear  .value();}
+    int effective_year     () const {return EffectiveDate.value().year();}
 
   private:
     void AscribeMembers();
