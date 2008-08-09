@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.30 2008-08-08 21:43:21 chicares Exp $
+// $Id: input.cpp,v 1.31 2008-08-09 13:50:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -67,10 +67,10 @@ Input::Input()
     ,SolveEndTime                     ("95")
 //    ,SolveType                        ("")
 //    ,SolveBeginYear                   ("")
-    ,SolveEndYear                     ("55")
+    ,SolveEndYear                     ("50")
 //    ,SolveTarget                      ("")
 //    ,SolveTargetCashSurrenderValue    ("")
-    ,SolveTargetYear                  ("55")
+    ,SolveTargetYear                  ("50")
 //    ,SolveBasis                       ("")
 //    ,SolveSeparateAccountBasis        ("")
 #if !defined SUPPORT_105822
@@ -252,8 +252,8 @@ Input::Input()
     ,WithdrawalToDuration             ("50")
 {
     AscribeMembers();
-    DoAdaptExternalities(); // Initialize database.
-    DoTransmogrify();       // Make DOB and age consistent.
+    DoAdaptExternalities(); // Initialize database, e.g.
+    DoTransmogrify();       // Make DOB and age consistent, e.g.
 }
 
 Input::Input(Input const& z)

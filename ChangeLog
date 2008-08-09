@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1134 2008-08-08 21:43:21 chicares Exp $
+// $Id: ChangeLog,v 1.1135 2008-08-09 13:50:23 chicares Exp $
 
 MAINTENANCE
 
@@ -18953,4 +18953,34 @@ discarded.
   ledger_invariant.cpp
   yare_input.cpp
 Treat ancient fund allocations as sequence input in new input class.
+
+20080809T0204Z <gchicares@sbcglobal.net> [1084]
+
+  input_realization.cpp
+Add a sanity check.
+
+20080809T0205Z <gchicares@sbcglobal.net> [1084]
+
+  input.hpp
+Add a trivial accessor.
+
+20080809T0257Z <gchicares@sbcglobal.net> [1084]
+
+  input.hpp
+  input_harmonization.cpp
+  skin.xrc
+Somewhat improve solve GUI, importing logic inherited from the legacy
+system and unswapping input fields that had been wrongly swapped.
+
+20080809T0434Z <gchicares@sbcglobal.net> [1083]
+
+  input.hpp
+Affirm that 'SolveTarget' should not be changed to 'bool'. Cf.:
+  http://www.wxwidgets.org/develop/standard.htm#no_bool_params
+(the "Inextensible" point in particular).
+
+20080809T1350Z <gchicares@sbcglobal.net> [1083]
+
+  input.cpp
+Initialize solve parameters self-consistently.
 
