@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_realization.cpp,v 1.12 2008-08-08 21:43:21 chicares Exp $
+// $Id: input_realization.cpp,v 1.13 2008-08-09 02:04:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -245,6 +245,8 @@ Input::permissible_payment_mode_keywords()
 //============================================================================
 std::vector<std::string> Input::RealizeAllSequenceInput(bool report_errors)
 {
+    LMI_ASSERT(years_to_maturity() == database_->length());
+
     // TODO ?? This doesn't really belong here; it's going to be
     // reimplemented soon, anyway.
     {
