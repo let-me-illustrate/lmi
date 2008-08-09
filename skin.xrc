@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin.xrc,v 1.4 2008-03-19 16:43:30 chicares Exp $
+    $Id: skin.xrc,v 1.5 2008-08-09 02:57:49 chicares Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -1874,7 +1874,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                                 </object>
                                                 <object class="sizeritem">
                                                     <flag>wxGROW</flag>
-                                                    <object class="wxSpinCtrl" name="SolveBeginTime">
+                                                    <object class="wxSpinCtrl" name="SolveBeginYear">
                                                         <help>Solve beginning duration</help>
                                                         <size>10,-1</size>
                                                         <max>100</max>
@@ -1890,7 +1890,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                                 <object class="sizeritem">
                                                     <flag>wxGROW</flag>
 <!-- Really want something like "SolveFromAge"; this is a temporary kludge. -->
-                                                    <object class="wxSpinCtrl" name="SolveBeginYear">
+                                                    <object class="wxSpinCtrl" name="SolveBeginTime">
                                                         <help>Solve beginning age</help>
                                                         <size>10,-1</size>
                                                         <max>100</max>
@@ -1934,7 +1934,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                                 </object>
                                                 <object class="sizeritem">
                                                     <flag>wxGROW</flag>
-                                                    <object class="wxSpinCtrl" name="SolveEndTime">
+                                                    <object class="wxSpinCtrl" name="SolveEndYear">
                                                         <help>Solve ending duration</help>
                                                         <size>10,-1</size>
                                                         <max>100</max>
@@ -1950,7 +1950,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                                 <object class="sizeritem">
                                                     <flag>wxGROW</flag>
 <!-- Really want something like "SolveToAge"; this is a temporary kludge. -->
-                                                    <object class="wxSpinCtrl" name="SolveEndYear">
+                                                    <object class="wxSpinCtrl" name="SolveEndTime">
                                                         <help>Solve ending age</help>
                                                         <size>10,-1</size>
                                                         <max>100</max>
@@ -1994,7 +1994,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                                 </object>
                                                 <object class="sizeritem">
                                                     <flag>wxGROW</flag>
-                                                    <object class="wxSpinCtrl" name="SolveTargetTime">
+                                                    <object class="wxSpinCtrl" name="SolveTargetYear">
                                                         <help>Duration to achieve target account value</help>
                                                         <size>10,-1</size>
                                                         <max>100</max>
@@ -2010,7 +2010,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                                 <object class="sizeritem">
                                                     <flag>wxGROW</flag>
 <!-- Really want something like "SolveAtAge"; this is a temporary kludge. -->
-                                                    <object class="wxSpinCtrl" name="SolveTargetYear">
+                                                    <object class="wxSpinCtrl" name="SolveTargetTime">
                                                         <help>Attained age to achieve target account value</help>
                                                         <size>10,-1</size>
                                                         <max>100</max>
