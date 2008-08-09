@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.149 2008-07-30 12:31:06 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.150 2008-08-09 20:05:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -92,7 +92,7 @@ showing {accesses, modifies current year, modifies future years}
 
 //============================================================================
 AccountValue::AccountValue(InputParms const& input)
-    :BasicValues           (&input)
+    :BasicValues           (input)
     ,DebugFilename         ("anonymous.debug")
     ,Debugging             (false)
     ,Solving               (mce_solve_none != BasicValues::yare_input_.SolveType)
