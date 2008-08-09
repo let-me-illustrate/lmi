@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.69 2008-08-05 19:48:17 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.70 2008-08-09 02:57:49 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1100,6 +1100,138 @@ void Input::DoTransmogrify()
         ? "Yes"
         : "No"
         ;
+
+    SetSolveDurations();
+}
+
+void Input::SetSolveDurations()
+{
+    // Probably something like this should be done when a case is saved.
+    // Reproducible problem:
+    //   File | New | Illustration
+    //   increase the issue age
+    //   hit OK without focusing the Solve tab
+    //   save the case
+    //   close the document
+    //   File | 1 (open most recently used file--the one just saved
+    //   now the solve-to age is over 100
+    switch(DeprecatedSolveTgtAtWhich.value())
+        {
+        case mce_target_at_year:
+            {
+            SolveTargetYear = SolveTargetTime.value();
+            }
+            break;
+        case mce_target_at_age:
+            {
+            SolveTargetYear = SolveTargetTime.value() - issue_age();
+            }
+            break;
+        case mce_target_at_retirement:
+            {
+            SolveTargetYear = years_to_retirement();
+            }
+            break;
+        case mce_target_at_maturity:
+            {
+            SolveTargetYear = years_to_maturity();
+            }
+            break;
+        default:
+            {
+            fatal_error()
+                << "Case '"
+                << DeprecatedSolveTgtAtWhich.value()
+                << "' not found."
+                << LMI_FLUSH
+                ;
+            }
+        }
+    if(years_to_maturity() < SolveTargetYear.value())
+        {
+        fatal_error()
+            << "Solve target year exceeds maturity year."
+            << LMI_FLUSH
+            ;
+        }
+
+    switch(DeprecatedSolveFromWhich.value())
+        {
+        case mce_solve_from_year:
+            {
+            SolveBeginYear = SolveBeginTime.value();
+            }
+            break;
+        case mce_solve_from_age:
+            {
+            SolveBeginYear = SolveBeginTime.value() - issue_age();
+            }
+            break;
+        case mce_solve_from_issue:
+            {
+            SolveBeginYear = 0;
+            }
+            break;
+        case mce_solve_from_retirement:
+            {
+            SolveBeginYear = years_to_retirement();
+            }
+            break;
+        default:
+            {
+            fatal_error()
+                << "Case '"
+                << DeprecatedSolveFromWhich.value()
+                << "' not found."
+                << LMI_FLUSH
+                ;
+            }
+        }
+
+    switch(DeprecatedSolveToWhich.value())
+        {
+        case mce_solve_to_year:
+            {
+int z = SolveEndTime.value();
+if(0 <= z && z <= 100)
+            SolveEndYear = SolveEndTime.value();
+else warning() << "Solve end year out of range." << LMI_FLUSH;
+            }
+            break;
+        case mce_solve_to_age:
+            {
+int z = SolveEndTime.value() - issue_age();
+if(0 <= z && z <= 100)
+            SolveEndYear = SolveEndTime.value() - issue_age();
+else warning() << "Solve end year out of range." << LMI_FLUSH;
+            }
+            break;
+        case mce_solve_to_retirement:
+            {
+int z = years_to_retirement();
+if(0 <= z && z <= 100)
+            SolveEndYear = years_to_retirement();
+else warning() << "Solve end year out of range." << LMI_FLUSH;
+            }
+            break;
+        case mce_solve_to_maturity:
+            {
+int z = years_to_maturity();
+if(0 <= z && z <= 100)
+            SolveEndYear = years_to_maturity();
+else warning() << "Solve end year out of range." << LMI_FLUSH;
+            }
+            break;
+        default:
+            {
+            fatal_error()
+                << "Case '"
+                << DeprecatedSolveToWhich.value()
+                << "' not found."
+                << LMI_FLUSH
+                ;
+            }
+        }
 }
 
 #if 0
@@ -1135,7 +1267,7 @@ void Input::WithdrawalChanged()
 ////        ,*DIAGNOSTICS
 ////        ,*WITHDRAWAL
 ////        ,Withdrawal
-////        ,YearsToMaturity()
+////        ,years_to_maturity()
 ////        ,static_cast<int>(IssueAge)
 ////        ,static_cast<int>(RetirementAge)
 ////        ,static_cast<int>(InforceYear)
@@ -1158,7 +1290,7 @@ void Input::WithdrawalChanged()
 
     InputSequence s
         (Withdrawal
-        ,YearsToMaturity()
+        ,years_to_maturity()
         ,static_cast<int>(IssueAge)
         ,static_cast<int>(RetirementAge)
         ,static_cast<int>(InforceYear)
