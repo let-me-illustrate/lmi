@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.60 2008-08-10 01:12:23 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.61 2008-08-10 01:56:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -38,6 +38,7 @@
 #include "financial.hpp"  // TODO ?? For IRRs--prolly don't blong here.
 #include "ihs_funddata.hpp"
 #include "ihs_proddata.hpp"
+#include "input.hpp"
 #include "inputillus.hpp"
 #include "interest_rates.hpp"
 #include "ledger.hpp" // TODO ?? For IRRs--prolly don't blong here.
@@ -151,7 +152,7 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["GenderBlended"         ] = &GenderBlended          ;
     OtherScalars    ["SmokerDistinct"        ] = &SmokerDistinct         ;
     OtherScalars    ["SmokerBlended"         ] = &SmokerBlended          ;
-    OtherScalars    ["SubstdTable"           ] = &SubstdTable            ; // Prefer string 'SubstandardTable'.
+    OtherScalars    ["SubstdTable"           ] = &SubstdTable            ; // Prefer string 'b->Input_->SubstandardTable'.
     OtherScalars    ["Age"                   ] = &Age                    ;
     OtherScalars    ["RetAge"                ] = &RetAge                 ;
     OtherScalars    ["EndtAge"               ] = &EndtAge                ;
@@ -385,8 +386,8 @@ void LedgerInvariant::Init(BasicValues* b)
         DBOpt [j] = b->DeathBfts_->dbopt()[j];
         }
 
-    IndvTaxBracket       = b->Input_->VectorIndvTaxBracket          ;
-    CorpTaxBracket       = b->Input_->VectorCorpTaxBracket          ;
+    IndvTaxBracket       = b->yare_input_.TaxBracket                ;
+    CorpTaxBracket       = b->yare_input_.CorporationTaxBracket     ;
     Salary               = b->yare_input_.ProjectedSalary           ;
     MonthlyFlatExtra     = b->yare_input_.FlatExtra                 ;
     HoneymoonValueSpread = b->yare_input_.HoneymoonValueSpread      ;
@@ -400,7 +401,7 @@ void LedgerInvariant::Init(BasicValues* b)
 
     CountryCOIMultiplier = b->yare_input_.CountryCoiMultiplier;
 
-    CountryIso3166Abbrev = b->Input_->Country.str();
+    CountryIso3166Abbrev = (*b->Input_)["Country"].str();
     Comments             = b->yare_input_.Comments;
 
     FundNumbers           .resize(0);
@@ -414,16 +415,6 @@ void LedgerInvariant::Init(BasicValues* b)
         {
         number_of_funds = b->FundData_->GetNumberOfFunds();
         }
-
-//    enum{NumberOfFunds = 30}; // DEPRECATED
-    int const NumberOfFunds = 30; // DEPRECATED
-    int expected_number_of_funds = std::max(number_of_funds, NumberOfFunds);
-    std::vector<double> v(b->yare_input_.FundAllocations);
-    if(v.size() < static_cast<unsigned int>(expected_number_of_funds))
-        {
-        v.insert(v.end(), expected_number_of_funds - v.size(), 0.0);
-        }
-
     for(int j = 0; j < number_of_funds; j++)
         {
         FundNumbers.push_back(j);
@@ -451,9 +442,13 @@ void LedgerInvariant::Init(BasicValues* b)
         // something like '.3333333...' would overflow the space available.
         //
         // As of 2008, most of the foregoing is no longer applicable,
-        // except for the hardcoded limit, which is copied above.
-        FundAllocs     .push_back(static_cast<int>(v[j]));
-        FundAllocations.push_back(0.01 * v[j]);
+        // except for the hardcoded limit, which is copied here:
+        enum{NumberOfFunds = 30}; // DEPRECATED
+        LMI_ASSERT(NumberOfFunds <= b->yare_input_.FundAllocations.size());
+
+        double const z = b->yare_input_.FundAllocations[j];
+        FundAllocs     .push_back(j < NumberOfFunds ? static_cast<int>(z) : 0);
+        FundAllocations.push_back(j < NumberOfFunds ? .01 * z : 0.0);
         }
 
     // TODO ?? Instead, share code now in AccountValue::SetInitialValues()
@@ -504,7 +499,7 @@ void LedgerInvariant::Init(BasicValues* b)
 //  SmokerDistinct          = 0;
     SmokerBlended           = b->yare_input_.BlendSmoking;
 
-    SubstdTable             = b->Input_->Status[0].SubstdTable; // Prefer string 'SubstandardTable'.
+    SubstdTable             = b->yare_input_.SubstandardTable; // Prefer string 'b->Input_->SubstandardTable'.
 
     Age                     = b->yare_input_.IssueAge;
     RetAge                  = b->yare_input_.RetirementAge;
@@ -549,18 +544,28 @@ void LedgerInvariant::Init(BasicValues* b)
         InterestDisclaimer     = b->ProductData_->GetInterestDisclaimer();
         }
 
-    ProducerName            = b->Input_->AgentFirstName; // DEPRECATED Maps to 'AgentName'.
+    ProducerName            = (*b->Input_)["AgentName"].str();
 
-    ProducerStreet          = b->Input_->AgentAddr1;
-    ProducerCity            = b->Input_->AgentCityStateZip();
-    CorpName                = b->Input_->SponsorFirstName;
+    std::string agent_city     = (*b->Input_)["AgentCity"   ].str();
+    std::string agent_state    = (*b->Input_)["AgentState"  ].str();
+    std::string agent_zip_code = (*b->Input_)["AgentZipCode"].str();
+    std::string agent_city_etc(agent_city + ", " + agent_state);
+    if(!agent_zip_code.empty())
+        {
+        agent_city_etc += " ";
+        }
+    agent_city_etc += agent_zip_code;
 
-    Franchise               = b->Input_->Franchise;
-    PolicyNumber            = b->Input_->PolicyNumber;
+    ProducerStreet          = (*b->Input_)["AgentAddress"].str();
+    ProducerCity            = agent_city_etc;
+    CorpName                = (*b->Input_)["CorporationName"].str();
 
-    Insured1                = b->Input_->InsdFirstName; // DEPRECATED Maps to 'InsuredName'.
-    Gender                  = b->Input_->Status[0].Gender.str();
-    UWType                  = b->Input_->GroupUWType.str();
+    Franchise               = (*b->Input_)["Franchise"].str();
+    PolicyNumber            = (*b->Input_)["PolicyNumber"].str();
+
+    Insured1                = (*b->Input_)["InsuredName"].str();
+    Gender                  = (*b->Input_)["Gender"].str();
+    UWType                  = (*b->Input_)["GroupUnderwritingType"].str();
 
     oenum_smoking_or_tobacco smoke_or_tobacco =
         static_cast<oenum_smoking_or_tobacco>
@@ -599,7 +604,7 @@ void LedgerInvariant::Init(BasicValues* b)
         }
     else if(oe_smoker_nonsmoker == smoke_or_tobacco)
         {
-        Smoker = mce_smoking(b->yare_input_.Smoking).str();
+        Smoker = (*b->Input_)["Smoking"].str();
         }
     // TODO ?? Use a switch-statement instead. The original version of
     // this code was just if...else, and silently deemed the convention
@@ -612,14 +617,14 @@ void LedgerInvariant::Init(BasicValues* b)
         throw std::logic_error("Unknown oe_smoker_nonsmoker convention.");
         }
 
-    UWClass                 = b->Input_->Status[0].Class.str();
-    SubstandardTable        = b->Input_->Status[0].SubstdTable.str();
+    UWClass                 = (*b->Input_)["UnderwritingClass"].str();
+    SubstandardTable        = (*b->Input_)["SubstandardTable"].str();
 
     EffDate                 = calendar_date(b->yare_input_.EffectiveDate).str();
     EffDateJdn              = calendar_date(b->yare_input_.EffectiveDate).julian_day_number();
-    DefnLifeIns             = b->Input_->DefnLifeIns.str();
-    DefnMaterialChange      = b->Input_->DefnMaterialChange.str();
-    AvoidMec                = b->Input_->AvoidMec.str();
+    DefnLifeIns             = (*b->Input_)["DefinitionOfLifeInsurance"].str();
+    DefnMaterialChange      = (*b->Input_)["DefinitionOfMaterialChange"].str();
+    AvoidMec                = (*b->Input_)["AvoidMecMethod"].str();
     PartMortTableName       = "1983 GAM"; // TODO ?? Hardcoded.
     StatePostalAbbrev       = b->GetStateOfJurisdiction().str();
 
@@ -658,19 +663,19 @@ void LedgerInvariant::Init(BasicValues* b)
 
     IsInforce = 0 != b->yare_input_.InforceYear || 0 != b->yare_input_.InforceMonth;
 
-    SupplementalReport         = b->Input_->CreateSupplementalReport  ;
-    SupplementalReportColumn00 = b->Input_->SupplementalReportColumn00;
-    SupplementalReportColumn01 = b->Input_->SupplementalReportColumn01;
-    SupplementalReportColumn02 = b->Input_->SupplementalReportColumn02;
-    SupplementalReportColumn03 = b->Input_->SupplementalReportColumn03;
-    SupplementalReportColumn04 = b->Input_->SupplementalReportColumn04;
-    SupplementalReportColumn05 = b->Input_->SupplementalReportColumn05;
-    SupplementalReportColumn06 = b->Input_->SupplementalReportColumn06;
-    SupplementalReportColumn07 = b->Input_->SupplementalReportColumn07;
-    SupplementalReportColumn08 = b->Input_->SupplementalReportColumn08;
-    SupplementalReportColumn09 = b->Input_->SupplementalReportColumn09;
-    SupplementalReportColumn10 = b->Input_->SupplementalReportColumn10;
-    SupplementalReportColumn11 = b->Input_->SupplementalReportColumn11;
+    SupplementalReport         = "Yes" == (*b->Input_)["CreateSupplementalReport"].str();
+    SupplementalReportColumn00 = (*b->Input_)["SupplementalReportColumn00"].str();
+    SupplementalReportColumn01 = (*b->Input_)["SupplementalReportColumn01"].str();
+    SupplementalReportColumn02 = (*b->Input_)["SupplementalReportColumn02"].str();
+    SupplementalReportColumn03 = (*b->Input_)["SupplementalReportColumn03"].str();
+    SupplementalReportColumn04 = (*b->Input_)["SupplementalReportColumn04"].str();
+    SupplementalReportColumn05 = (*b->Input_)["SupplementalReportColumn05"].str();
+    SupplementalReportColumn06 = (*b->Input_)["SupplementalReportColumn06"].str();
+    SupplementalReportColumn07 = (*b->Input_)["SupplementalReportColumn07"].str();
+    SupplementalReportColumn08 = (*b->Input_)["SupplementalReportColumn08"].str();
+    SupplementalReportColumn09 = (*b->Input_)["SupplementalReportColumn09"].str();
+    SupplementalReportColumn10 = (*b->Input_)["SupplementalReportColumn10"].str();
+    SupplementalReportColumn11 = (*b->Input_)["SupplementalReportColumn11"].str();
 
     FullyInitialized = true;
 }
