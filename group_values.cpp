@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.95 2008-08-08 18:50:12 chicares Exp $
+// $Id: group_values.cpp,v 1.96 2008-08-10 16:45:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,7 +34,6 @@
 #include "emit_ledger.hpp"
 #include "fenv_guard.hpp"
 #include "input.hpp"
-#include "inputillus.hpp"
 #include "ledger.hpp"
 #include "ledgervalues.hpp"
 #include "materially_equal.hpp"
@@ -245,12 +244,9 @@ census_run_result run_census_in_parallel::operator()
         {
         if(!cell_should_be_ignored(cells[j]))
             {
-            IllusInputParms ihs_input;
-            convert_to_ihs(ihs_input, *ip);
             { // Begin fenv_guard scope.
             fenv_guard fg;
-//            boost::shared_ptr<AccountValue> av(new AccountValue(*ip));
-            boost::shared_ptr<AccountValue> av(new AccountValue(ihs_input));
+            boost::shared_ptr<AccountValue> av(new AccountValue(*ip));
             av->SetDebugFilename
                 (serialized_file_path(file, j, "debug").string()
                 );

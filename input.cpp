@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.31 2008-08-09 13:50:23 chicares Exp $
+// $Id: input.cpp,v 1.32 2008-08-10 16:45:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,7 +30,6 @@
 
 #include "alert.hpp"
 #include "database.hpp" // Needed only for database_'s dtor.
-#include "inputillus.hpp"
 #include "timer.hpp"
 
 /// Values are initialized by UDT defaults where appropriate, and here
@@ -617,6 +616,21 @@ void Input::DoEnforceProscription(std::string const& name)
         {
         datum->enforce_proscription();
         }
+}
+
+#if 0
+Input Input::magically_rectify(Input const&)
+{
+}
+#endif // 0
+
+#include "inputillus.hpp"
+
+IllusInputParms Input::magically_convert(Input const& original)
+{
+    IllusInputParms ihs_input;
+    convert_to_ihs(ihs_input, original);
+    return ihs_input;
 }
 
 void convert_to_ihs(IllusInputParms& ihs, Input const& lmi)
