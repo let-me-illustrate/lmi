@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.44 2008-08-09 04:34:41 chicares Exp $
+// $Id: input.hpp,v 1.45 2008-08-10 16:45:24 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -32,6 +32,7 @@
 #include "ce_product_name.hpp"
 #include "datum_boolean.hpp"
 #include "datum_string.hpp"
+#include "inputillus.hpp" // DEPRECATED magically_convert()
 #include "mc_enum.hpp"
 #include "mc_enum_types.hpp"
 #include "obstruct_slicing.hpp"
@@ -155,6 +156,9 @@ class LMI_SO Input
     int retirement_age     () const {return RetirementAge.value();}
     int inforce_year       () const {return InforceYear  .value();}
     int effective_year     () const {return EffectiveDate.value().year();}
+
+    static Input magically_rectify(Input const&);
+    static IllusInputParms magically_convert(Input const&); // DEPRECATED
 
   private:
     void AscribeMembers();

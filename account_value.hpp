@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.71 2008-08-10 01:12:23 chicares Exp $
+// $Id: account_value.hpp,v 1.72 2008-08-10 16:45:24 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -45,7 +45,7 @@
 //   preferred loans
 
 class DebugView;
-class IllusInputParms;
+class Input;
 class Ledger;
 class LedgerInvariant;
 class LedgerVariant;
@@ -61,7 +61,7 @@ class LMI_SO AccountValue
   public:
     enum {months_per_year = 12};
 
-    explicit AccountValue(IllusInputParms const& input);
+    explicit AccountValue(Input const& input);
     ~AccountValue();
 
     double RunAV                ();
