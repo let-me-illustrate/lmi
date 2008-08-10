@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.61 2008-08-10 01:56:23 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.62 2008-08-10 16:15:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -415,6 +415,16 @@ void LedgerInvariant::Init(BasicValues* b)
         {
         number_of_funds = b->FundData_->GetNumberOfFunds();
         }
+
+//    enum{NumberOfFunds = 30}; // DEPRECATED
+    int const NumberOfFunds = 30; // DEPRECATED
+    int expected_number_of_funds = std::max(number_of_funds, NumberOfFunds);
+    std::vector<double> v(b->yare_input_.FundAllocations);
+    if(v.size() < static_cast<unsigned int>(expected_number_of_funds))
+        {
+        v.insert(v.end(), expected_number_of_funds - v.size(), 0.0);
+        }
+
     for(int j = 0; j < number_of_funds; j++)
         {
         FundNumbers.push_back(j);
@@ -442,13 +452,9 @@ void LedgerInvariant::Init(BasicValues* b)
         // something like '.3333333...' would overflow the space available.
         //
         // As of 2008, most of the foregoing is no longer applicable,
-        // except for the hardcoded limit, which is copied here:
-        enum{NumberOfFunds = 30}; // DEPRECATED
-        LMI_ASSERT(NumberOfFunds <= b->yare_input_.FundAllocations.size());
-
-        double const z = b->yare_input_.FundAllocations[j];
-        FundAllocs     .push_back(j < NumberOfFunds ? static_cast<int>(z) : 0);
-        FundAllocations.push_back(j < NumberOfFunds ? .01 * z : 0.0);
+        // except for the hardcoded limit, which is copied above.
+        FundAllocs     .push_back(static_cast<int>(v[j]));
+        FundAllocations.push_back(0.01 * v[j]);
         }
 
     // TODO ?? Instead, share code now in AccountValue::SetInitialValues()
