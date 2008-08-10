@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.85 2008-08-09 20:05:23 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.86 2008-08-10 01:12:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1974,11 +1974,11 @@ std::vector<double> BasicValues::Get83GamRates() const
 
 // You have no chance to survive make your time.
 
-#include "inputs.hpp"
+#include "inputillus.hpp"
 
 //============================================================================
-BasicValues::BasicValues(InputParms const& input)
-    :Input_              (new InputParms(input))
+BasicValues::BasicValues(IllusInputParms const& input)
+    :Input_              (new IllusInputParms(input))
     ,yare_input_         (input)
     ,DefnLifeIns_        (mce_cvat)
     ,DefnMaterialChange_ (mce_unnecessary_premium)
@@ -2005,7 +2005,7 @@ BasicValues::BasicValues
     ,double              a_TargetPremium
     // TODO ?? Need loan rate type here?
     )
-    :Input_              (new InputParms)
+    :Input_              (new IllusInputParms)
     ,yare_input_         (*Input_)
     ,DefnLifeIns_        (mce_cvat)
     ,DefnMaterialChange_ (mce_unnecessary_premium)
@@ -2014,7 +2014,7 @@ BasicValues::BasicValues
     ,MaxLoanDed_         (mce_twelve_times_last)
     ,InitialTargetPremium(a_TargetPremium)
 {
-    InputParms* kludge_input = new InputParms;
+    IllusInputParms* kludge_input = new IllusInputParms;
 
     kludge_input->NumberOfLives       = 1                        ;
 
@@ -2062,7 +2062,7 @@ else
         );
 
     // TODO ?? EGREGIOUS_DEFECT Redesign this function instead.
-    const_cast<InputParms&>(*Input_) = *kludge_input;
+    const_cast<IllusInputParms&>(*Input_) = *kludge_input;
 
     GPTServerInit();
 }

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: yare_input.hpp,v 1.9 2008-08-08 18:49:21 chicares Exp $
+// $Id: yare_input.hpp,v 1.10 2008-08-10 01:12:24 chicares Exp $
 
 #ifndef yare_input_hpp
 #define yare_input_hpp
@@ -36,7 +36,7 @@
 #include <vector>
 
 class Input;
-class InputParms;
+class IllusInputParms;
 
 /// Illustration input ready for use in calculations.
 ///
@@ -55,7 +55,7 @@ class InputParms;
 /// calculation classes only through a const instance of this class,
 /// in particular dispensing with the considerable overhead of UDTs
 /// (mc_enum and tn_range classes) designed for interactive input.
-/// Eventually converting ctor yare_input(InputParms const&) will
+/// Eventually converting ctor yare_input(IllusInputParms const&) will
 /// become unnecessary.
 ///
 /// It is not yet known whether member functions such as
@@ -69,7 +69,7 @@ class yare_input
 {
   public:
     explicit yare_input(Input const&);
-    explicit yare_input(InputParms const&);
+    explicit yare_input(IllusInputParms const&);
     ~yare_input();
 
     int                               IssueAge                        ;

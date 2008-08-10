@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.cpp,v 1.33 2008-08-05 09:22:40 chicares Exp $
+// $Id: ledgervalues.cpp,v 1.34 2008-08-10 01:12:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,7 +33,6 @@
 #include "fenv_guard.hpp"
 #include "input.hpp"
 #include "inputillus.hpp"
-#include "inputs.hpp"
 #include "ledger.hpp"
 
 #include <boost/filesystem/convenience.hpp>
@@ -55,7 +54,7 @@ double IllusVal::run(Input const& input)
     return run(ihs_input);
 }
 
-double IllusVal::run(InputParms const& input)
+double IllusVal::run(IllusInputParms const& input)
 {
     fenv_guard fg;
     AccountValue av(input);

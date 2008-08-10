@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.hpp,v 1.22 2008-08-05 09:22:40 chicares Exp $
+// $Id: ledgervalues.hpp,v 1.23 2008-08-10 01:12:24 chicares Exp $
 
 #ifndef ledgervalues_hpp
 #define ledgervalues_hpp
@@ -35,7 +35,7 @@
 #include <string>
 
 class Input;
-class InputParms;
+class IllusInputParms;
 class Ledger;
 class LedgerInvariant;
 class LedgerVariant;
@@ -53,7 +53,7 @@ class LMI_SO IllusVal
     ~IllusVal();
 
     double run(Input const&);
-    double run(InputParms const&);
+    double run(IllusInputParms const&);
 
     Ledger const& ledger() const;
 

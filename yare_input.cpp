@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: yare_input.cpp,v 1.12 2008-08-08 21:43:21 chicares Exp $
+// $Id: yare_input.cpp,v 1.13 2008-08-10 01:12:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,7 +29,7 @@
 #include "yare_input.hpp"
 
 #include "input.hpp"
-#include "inputs.hpp"
+#include "inputillus.hpp"
 #include "miscellany.hpp" // each_equal()
 
 namespace
@@ -225,7 +225,7 @@ std::vector<NewType> convert_vector_type
 }
 } // Unnamed namespace.
 
-yare_input::yare_input(InputParms const& z)
+yare_input::yare_input(IllusInputParms const& z)
 {
     // DEPRECATED This works around an ancient problem that eventually
     // must be fixed at its source.
