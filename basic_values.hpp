@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.41 2008-08-09 20:05:22 chicares Exp $
+// $Id: basic_values.hpp,v 1.42 2008-08-10 01:12:23 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -52,7 +52,7 @@
 // build the class for us.
 
 class FundData;
-class InputParms;
+class IllusInputParms;
 class InterestRates;
 class Irc7702;
 class Irc7702A;
@@ -83,7 +83,7 @@ class LMI_SO BasicValues
     :virtual private boost::noncopyable
 {
   public:
-    BasicValues(InputParms const& input);
+    BasicValues(IllusInputParms const& input);
     BasicValues // GPT server only.
         (std::string const& a_ProductName
         ,mcenum_gender      a_Gender
@@ -116,7 +116,7 @@ class LMI_SO BasicValues
     rounding_rules const& GetRoundingRules()           const;
     double                InvestmentManagementFee()    const;
 
-    boost::shared_ptr<InputParms const>   Input_;
+    boost::shared_ptr<IllusInputParms const> Input_;
     yare_input                            yare_input_;
     boost::shared_ptr<TProductData>       ProductData_;
     boost::shared_ptr<TDatabase>          Database_;
