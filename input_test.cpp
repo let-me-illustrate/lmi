@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.41 2008-08-02 15:23:15 chicares Exp $
+// $Id: input_test.cpp,v 1.42 2008-08-11 18:14:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,7 +28,6 @@
 
 // Facilities offered by all of these headers are tested here.
 #include "input.hpp"
-#include "inputillus.hpp"
 #include "multiple_cell_document.hpp"
 #include "single_cell_document.hpp"
 #include "yare_input.hpp"
@@ -59,24 +58,14 @@ class input_test
     static void test()
         {
         test_input_class();
-        test_input_class_obsolete();
-        test_conversion();
-        test_initialization();
-        test_xml_port();
         test_document_classes();
         assay_speed();
-        assay_speed_obsolete();
         }
 
   private:
     static void test_input_class();
-    static void test_input_class_obsolete();
-    static void test_conversion();
-    static void test_initialization();
-    static void test_xml_port();
     static void test_document_classes();
     static void assay_speed();
-    static void assay_speed_obsolete();
 
     template<typename DocumentClass>
     static void test_document_io
@@ -93,14 +82,6 @@ class input_test
     static void mete_write();
     static void mete_cns_io();
     static void mete_ill_io();
-
-    // No 'mete_[cns,ill]_io_obsolete()' exists, or is wanted.
-    // Functions 'mete_[cns,ill]_io()' merely bind xml to an input
-    // class's read() and write().
-    static void mete_overhead_obsolete();
-    static void mete_vector_obsolete(xml::element& xml_data);
-    static void mete_read_obsolete(xml::element& xml_data);
-    static void mete_write_obsolete();
 };
 
 void input_test::test_input_class()
@@ -209,218 +190,6 @@ std::cout << "replica.FundAllocs.size() is " << replica.FundAllocs.size() << '\n
     yare_input y(original);
 }
 
-void input_test::test_input_class_obsolete()
-{
-    // Test IllusInputParms << and >> operators.
-    IllusInputParms original;
-    IllusInputParms replica;
-
-    std::ofstream os0("eraseme0.xml", ios_out_trunc_binary());
-    BOOST_TEST(os0.good());
-
-    // The obsolete first-, middle-, and last-name fields live on
-    // in base class 'InputParms', but the full name now actually
-    // resides in its first-name field, which is mapped to a single
-    // field in derived class 'IllusInputParms'.
-
-    original.AgentFirstName     = "Herbert Cassidy";
-    original.AgentPhone         = "123-4567";
-    original.InsdFirstName      = "Actually Full Name";
-    original.InsdAddr1          = "addr1";
-    original.InsdAddr2          = "addr2";
-    original.InsdCity           = "city";
-//    original.FundAllocations    = "0.4 0.3 0.2 0.1";
-    original.SepAcctIntRate     = "0.03125";
-/*
-    original.FundAllocs[0]      = 1.0;
-    original.SepAcctRate[0]     = .01234567890123456789;
-    original.SepAcctRate[1]     = .12345678901234567890;
-    original.SepAcctRate[2]     = .23456789012345678901;
-    original.SepAcctRate[3]     = .34567890123456789012;
-    original.SepAcctRate[4]     = .45678901234567890123;
-    original.SepAcctRate[5]     = .56789012345678901234;
-    original.SepAcctRate[6]     = .67890123456789012345;
-    original.SepAcctRate[7]     = .78901234567890123456;
-    original.SepAcctRate[8]     = .89012345678901234567;
-    original.SepAcctRate[9]     = .90123456789012345678;
-*/
-    original.propagate_changes_to_base_and_finalize();
-
-    xml_lmi::xml_document xml_document0("root");
-    xml::element& xml_root0 = xml_document0.root_node();
-    xml_root0 << original;
-    os0 << xml_document0;
-    os0.close();
-
-    xml::node::const_iterator i = xml_root0.begin();
-    LMI_ASSERT(!i->is_text());
-    xml::element const& xml_node = *i;
-
-    xml_node >> replica;
-    std::ofstream os1("eraseme1.xml", ios_out_trunc_binary());
-    BOOST_TEST(os1.good());
-
-    xml_lmi::xml_document xml_document1("root");
-    xml::element& xml_root1 = xml_document1.root_node();
-    xml_root1 << replica;
-    os1 << xml_document1;
-    os1.close();
-
-    BOOST_TEST(original == replica);
-    bool okay = files_are_identical("eraseme0.xml", "eraseme1.xml");
-    BOOST_TEST(okay);
-    // Leave the files for analysis if they didn't match.
-    if(okay)
-        {
-        BOOST_TEST(0 == std::remove("eraseme0.xml"));
-        BOOST_TEST(0 == std::remove("eraseme1.xml"));
-        }
-
-    BOOST_TEST(0.03125 == original.SepAcctRate[0]);
-    BOOST_TEST(0.03125 == replica.SepAcctRate[0]);
-
-/* The code this tests is defective, but will soon be expunged.
-    BOOST_TEST(0.4 == original.FundAllocs[0]);
-    BOOST_TEST(0.4 == replica.FundAllocs[0]);
-std::cout << "original.FundAllocs[0] is " << original.FundAllocs[0] << '\n';
-std::cout << "replica.FundAllocs[0] is " << replica.FundAllocs[0] << '\n';
-
-std::cout << "original.FundAllocs.size() is " << original.FundAllocs.size() << '\n';
-std::cout << "replica.FundAllocs.size() is " << replica.FundAllocs.size() << '\n';
-*/
-
-    BOOST_TEST(0 == original.InforceYear);
-    original["InforceYear"] = std::string("3");
-    BOOST_TEST(3 == original.InforceYear);
-
-    BOOST_TEST(45 == original.Status_IssueAge);
-    original["IssueAge"] = std::string("57");
-    BOOST_TEST(57 == original.Status_IssueAge);
-    // Unfortunately, this can't get updated automatically:
-    BOOST_TEST(45 == original.Status[0].IssueAge);
-
-    // Test copy constructor.
-    original.propagate_changes_to_base_and_finalize();
-    IllusInputParms copy0(original);
-    copy0.propagate_changes_from_base_and_finalize();
-    BOOST_TEST(original == copy0);
-    copy0["InsuredName"] = "Claude Proulx";
-    BOOST_TEST(std::string("Claude Proulx") == copy0   .InsdFirstName);
-    BOOST_TEST(std::string("Actually Full Name") == original.InsdFirstName);
-
-    BOOST_TEST(std::string("") == copy0   .InsdMiddleName);
-    BOOST_TEST(std::string("") == original.InsdMiddleName);
-
-    BOOST_TEST(std::string("") == copy0   .InsdLastName);
-    BOOST_TEST(std::string("") == original.InsdLastName);
-
-    // Reset this in case it changed.
-    original.InsdFirstName      = "Actually Full Name";
-
-    // Test assignment operator.
-    IllusInputParms copy1;
-    original.propagate_changes_to_base_and_finalize();
-    copy1 = original;
-    copy1.propagate_changes_from_base_and_finalize();
-    BOOST_TEST(original == copy1);
-    copy1["InsuredName"] = "Angela";
-    BOOST_TEST(std::string("Angela") == copy1   .InsdFirstName);
-    BOOST_TEST(std::string("Actually Full Name")  == original.InsdFirstName);
-
-    // For now at least, just test that this compiles and runs.
-    yare_input y(original);
-}
-
-namespace
-{
-void compare_inputs(IllusInputParms const& ihs, Input const& lmi)
-{
-    std::vector<std::string>::const_iterator i;
-    for(i = lmi.member_names().begin(); i != lmi.member_names().end(); ++i)
-        {
-        if(ihs[*i].str() != lmi[*i].str())
-            {
-            std::cout
-                << "'" << *i << "' differs:\n"
-                << "  " << ihs[*i] << " [ihs]\n"
-                << "  " << lmi[*i] << " [lmi]\n"
-                ;
-            }
-        }
-}
-} // Unnamed namespace.
-
-void input_test::test_conversion()
-{
-    {
-    IllusInputParms const original;
-    Input                 equivalent;
-    IllusInputParms       replica;
-
-    convert_from_ihs(original, equivalent);
-    convert_to_ihs  (replica , equivalent);
-    BOOST_TEST(original == replica);
-
-    if(!(original == replica))
-        {
-        compare_inputs(original, equivalent);
-        compare_inputs(replica , equivalent);
-        }
-    }
-
-    {
-    Input           original;
-    original.DoTransmogrify(); // Set DOB from age.
-    IllusInputParms equivalent;
-    Input           replica;
-
-    convert_to_ihs  (equivalent, original);
-    convert_from_ihs(equivalent, replica);
-    BOOST_TEST(original == replica);
-
-    if(!(original == replica))
-        {
-        compare_inputs(equivalent, original);
-        compare_inputs(equivalent, replica);
-        }
-    }
-}
-
-// DEPRECATED This is merely an aid to porting. It would be easy to
-// test whether the files are identical, but they can't be, because
-// the old class writes '1e+006' where the new class writes '1000000'.
-
-void input_test::test_initialization()
-{
-    {
-    std::ofstream os("eraseme_new.xml", ios_out_trunc_binary());
-    xml_lmi::xml_document doc("root");
-    doc.root_node() << Input();
-    os << doc;
-    }
-
-    {
-    std::ofstream os("eraseme_old.xml", ios_out_trunc_binary());
-    xml_lmi::xml_document doc("root");
-    doc.root_node() << IllusInputParms();
-    os << doc;
-    }
-}
-
-void input_test::test_xml_port()
-{
-    IllusInputParms obsolete;
-    Input           modern;
-
-    xml_lmi::xml_document doc("root");
-    doc.root_node() << obsolete;
-
-    xml::node::const_iterator i = doc.root_node().begin();
-    LMI_ASSERT(!i->is_text());
-    xml::element const& xml_node = *i;
-    xml_node >> modern;
-}
-
 void input_test::test_document_classes()
 {
     // TODO ?? Errors reported here with como seem to stem from
@@ -462,26 +231,6 @@ void input_test::assay_speed()
         << "  Write   : " << TimeAnAliquot(mete_write                 ) << '\n'
         << "  'cns' io: " << TimeAnAliquot(mete_cns_io                ) << '\n'
         << "  'ill' io: " << TimeAnAliquot(mete_ill_io                ) << '\n'
-        ;
-}
-
-void input_test::assay_speed_obsolete()
-{
-    IllusInputParms raw_data;
-    xml_lmi::xml_document document("root");
-    xml::element& root = document.root_node();
-    root << raw_data;
-
-    xml::node::const_iterator i = root.begin();
-    LMI_ASSERT(!i->is_text());
-    xml::element const& e = *i;
-
-    std::cout
-        << "  Speed tests for obsolete class...\n"
-        << "  Overhead: " << TimeAnAliquot(mete_overhead_obsolete              ) << '\n'
-        << "  Vector  : " << TimeAnAliquot(boost::bind(mete_vector_obsolete, e)) << '\n'
-        << "  Read    : " << TimeAnAliquot(boost::bind(mete_read_obsolete  , e)) << '\n'
-        << "  Write   : " << TimeAnAliquot(mete_write_obsolete                 ) << '\n'
         ;
 }
 
@@ -559,8 +308,8 @@ void input_test::mete_read(xml::element& xml_data)
 {
     static Input raw_data;
     xml_data >> raw_data;
-    // DEPRECATED Realize sequence input here only for comparability
-    // to the obsolete class that does so automatically.
+    // Realizing sequence input might be done separately, but it must
+    // somehow be done.
     raw_data.RealizeAllSequenceInput();
 }
 
@@ -582,33 +331,6 @@ void input_test::mete_ill_io()
 {
     typedef single_cell_document S;
     test_document_io<S>("sample.ill", "replica.ill", __FILE__, __LINE__, true);
-}
-
-void input_test::mete_overhead_obsolete()
-{
-    static IllusInputParms raw_data;
-    xml_lmi::xml_document document("root");
-    xml::element& root = document.root_node();
-    stifle_warning_for_unused_value(root);
-}
-
-void input_test::mete_vector_obsolete(xml::element& xml_data)
-{
-    xml_lmi::child_elements(xml_data);
-}
-
-void input_test::mete_read_obsolete(xml::element& xml_data)
-{
-    static IllusInputParms raw_data;
-    xml_data >> raw_data;
-}
-
-void input_test::mete_write_obsolete()
-{
-    static IllusInputParms raw_data;
-    xml_lmi::xml_document document("root");
-    xml::element& root = document.root_node();
-    root << raw_data;
 }
 
 int test_main(int, char*[])
