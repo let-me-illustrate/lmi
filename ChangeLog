@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1137 2008-08-11 14:49:23 chicares Exp $
+// $Id: ChangeLog,v 1.1138 2008-08-11 20:02:24 chicares Exp $
 
 MAINTENANCE
 
@@ -19103,4 +19103,60 @@ Eliminate old input class from "custom" input.
   yare_input.cpp
   yare_input.hpp
 Remove vestiges of old input class.
+
+20080811T1635Z <gchicares@sbcglobal.net> [1085]
+
+  illustrator.cpp
+  main_cgi.cpp
+Refactor, eliminating old input class's last substantive use.
+
+20080811T1813Z <gchicares@sbcglobal.net> [1085]
+
+  database_view_editor.cpp
+  database_view_editor.hpp
+  mc_enum.hpp
+  mc_enum.tpp
+  mc_enum_test.cpp
+Substitute modern for olden enumerator class.
+
+20080811T1814Z <gchicares@sbcglobal.net> [1083]
+
+  input.cpp
+  input_test.cpp
+Remove vestiges of old input class.
+
+20080811T1956Z <gchicares@sbcglobal.net> [1083]
+
+  Makefile.am
+  database.cpp
+  database.hpp
+  ihs_database.cpp
+  input_harmonization.cpp
+  objects.make
+Remove vestiges of old input and enumeration classes.
+
+20080811T2002Z <gchicares@sbcglobal.net> [986]
+
+  inputillus.cpp           [expunged]
+  inputillus.hpp           [expunged]
+  inputillus_sequences.cpp [expunged]
+  inputillus_xml_io.cpp    [expunged]
+  inputs.cpp               [expunged]
+  inputs.hpp               [expunged]
+  inputstatus.cpp          [expunged]
+  inputstatus.hpp          [expunged]
+  xenum.cpp                [expunged]
+  xenum.hpp                [expunged]
+  xenum_sample.cpp         [expunged]
+  xenum_sample.hpp         [expunged]
+  xenum_test.cpp           [expunged]
+  xenumfwd.hpp             [expunged]
+  xenumtypes.cpp           [expunged]
+  xenumtypes.hpp           [expunged]
+  xrange.cpp               [expunged]
+  xrange.hpp               [expunged]
+  xrange_test.cpp          [expunged]
+  xrangefwd.hpp            [expunged]
+  xrangetypes.hpp          [expunged]
+Expunge obsolete input, enumeration, and numeric-range classes.
 
