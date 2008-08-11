@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.33 2008-08-11 00:04:45 chicares Exp $
+// $Id: input.cpp,v 1.34 2008-08-11 00:43:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -664,13 +664,6 @@ Input Input::magically_rectify(Input const& original)
 }
 
 #include "inputillus.hpp"
-
-IllusInputParms Input::magically_convert(Input const& original)
-{
-    IllusInputParms ihs_input;
-    convert_to_ihs(ihs_input, original);
-    return ihs_input;
-}
 
 void convert_to_ihs(IllusInputParms& ihs, Input const& lmi)
 {
