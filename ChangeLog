@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1135 2008-08-09 13:50:23 chicares Exp $
+// $Id: ChangeLog,v 1.1136 2008-08-11 00:07:21 chicares Exp $
 
 MAINTENANCE
 
@@ -18983,4 +18983,83 @@ Affirm that 'SolveTarget' should not be changed to 'bool'. Cf.:
 
   input.cpp
 Initialize solve parameters self-consistently.
+
+20080809T1921Z <gchicares@sbcglobal.net> [1083]
+
+  ledger_invariant.cpp
+Fix defect introduced 20080808T2143Z. A vector was potentially indexed
+past its end.
+
+20080809T1922Z <gchicares@sbcglobal.net> [1083]
+
+  inputillus.cpp
+Copy a safety feature from 'input_realization.cpp'.
+
+20080809T2005Z <gchicares@sbcglobal.net> [1083]
+
+  basic_values.hpp
+  ihs_acctval.cpp
+  ihs_basicval.cpp
+Merge two BasicValues::BasicValues() signatures.
+
+20080810T0112Z <gchicares@sbcglobal.net> [1083]
+
+  account_value.hpp
+  accountvalue.cpp
+  basic_values.hpp
+  basicvalues.cpp
+  ihs_acctval.cpp
+  ihs_basicval.cpp
+  ledger_invariant.cpp
+  ledgervalues.cpp
+  ledgervalues.hpp
+  objects.make
+  yare_input.cpp
+  yare_input.hpp
+Substitute one obsolete class for another, to make it easier to
+eliminate both.
+
+20080810T0156Z <gchicares@sbcglobal.net> [1083]
+
+  ledger_invariant.cpp
+Use only interface common to old and new input classes.
+
+20080810T1615Z <gchicares@sbcglobal.net> [1083]
+
+  ledger_invariant.cpp
+Fix defect introduced 20080810T0156Z. The 20080809T1921Z changes were
+inadvertently reverted. Testing didn't catch this because the original
+defect only rarely causes an observable problem.
+
+20080810T1645Z <gchicares@sbcglobal.net> [1083]
+
+  account_value.hpp
+  accountvalue.cpp
+  group_values.cpp
+  ihs_acctval.cpp
+  input.cpp
+  input.hpp
+  ledgervalues.cpp
+  ledgervalues.hpp
+Encapsulate input conversion.
+
+20080811T0004Z <gchicares@sbcglobal.net> [1085]
+
+  accountvalue.cpp
+  basic_values.hpp
+  basicvalues.cpp
+  ihs_acctval.cpp
+  ihs_basicval.cpp
+  input.cpp
+  objects.make
+Mostly eliminate old input classes: they're still used only for the
+GPT server and for "custom" input. This change exposes latent defects
+in certain testdecks used with 'make system_test'.
+
+20080811T0007Z <gchicares@sbcglobal.net> [1087]
+
+  input_harmonization.cpp
+Defectively work around defects in proprietary testdecks. System tests
+fail without these broken workarounds, e.g., because they contain
+preferred lives with with table ratings.
 
