@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum.tpp,v 1.19 2008-08-02 18:00:11 chicares Exp $
+// $Id: mc_enum.tpp,v 1.20 2008-08-11 18:13:14 chicares Exp $
 
 #include "mc_enum.hpp"
 
@@ -210,5 +210,12 @@ template<typename T, std::size_t n, T const (&e)[n], char const*const (&c)[n]>
 std::string mc_enum<T,n,e,c>::str() const
 {
     return c[ordinal()];
+}
+
+template<typename T, std::size_t n, T const (&e)[n], char const*const (&c)[n]>
+std::vector<std::string> const& mc_enum<T,n,e,c>::all_strings()
+{
+    static std::vector<std::string> const v(c, c + n);
+    return v;
 }
 

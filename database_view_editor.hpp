@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view_editor.hpp,v 1.14 2008-02-17 15:17:12 chicares Exp $
+// $Id: database_view_editor.hpp,v 1.15 2008-08-11 18:13:13 chicares Exp $
 
 #ifndef database_view_editor_hpp
 #define database_view_editor_hpp
@@ -39,80 +39,10 @@
 // doesn't work today.
 
 #include "ihs_dbvalue.hpp"
-#include "xenumtypes.hpp"
 
 #include <boost/shared_ptr.hpp>
 
 #include <string>
-
-/// Database Axis definitions
-/// -------------------------
-
-class DatabaseGenderAxis
-  :public MultiDimEnumAxis<enum_gender>
-{
-  public:
-    DatabaseGenderAxis()
-        :MultiDimEnumAxis<enum_gender>("Gender", e_gender::all_strings())
-    {}
-};
-
-class DatabaseClassAxis
-  :public MultiDimEnumAxis<enum_class>
-{
-  public:
-    DatabaseClassAxis()
-        :MultiDimEnumAxis<enum_class>("Class", e_class::all_strings())
-    {}
-};
-
-class DatabaseSmokingAxis
-  :public MultiDimEnumAxis<enum_smoking>
-{
-  public:
-    DatabaseSmokingAxis()
-        :MultiDimEnumAxis<enum_smoking>("Smoking", e_smoking::all_strings())
-    {}
-};
-
-class DatabaseIssueAgeAxis
-  :public MultiDimIntAxis
-{
-  public:
-    DatabaseIssueAgeAxis()
-        :MultiDimIntAxis("Issue Age", 0, 99, 1)
-    {}
-};
-
-class DatabaseUwBasisAxis
-  :public MultiDimEnumAxis<enum_uw_basis>
-{
-  public:
-    DatabaseUwBasisAxis()
-        :MultiDimEnumAxis<enum_uw_basis>("UW Basis", e_uw_basis::all_strings())
-    {}
-};
-
-class DatabaseStateAxis
-  :public MultiDimEnumAxis<enum_state>
-{
-  public:
-    DatabaseStateAxis()
-        :MultiDimEnumAxis<enum_state>("State", e_state::all_strings())
-    {}
-};
-
-class DatabaseDurationAxis
-  :public AdjustableMaxBoundAxis<int>
-{
-    typedef AdjustableMaxBoundAxis<int> BaseClass;
-    static const int max_bound_duration = TDBValue::e_max_dim_duration - 1;
-
-  public:
-    DatabaseDurationAxis()
-        :BaseClass("Duration", 0, max_bound_duration, 1, max_bound_duration)
-    {}
-};
 
 /// Database dictionary adapter for TDBValue class
 ///
