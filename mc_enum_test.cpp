@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_test.cpp,v 1.17 2008-08-02 18:00:12 chicares Exp $
+// $Id: mc_enum_test.cpp,v 1.18 2008-08-11 18:13:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -143,6 +143,11 @@ void mc_enum_test::test()
     BOOST_TEST_EQUAL("Theophany", holiday4.str(0));
     BOOST_TEST_EQUAL("Easter"   , holiday4.str(1));
     BOOST_TEST_EQUAL("Pentecost", holiday4.str(2));
+    std::vector<std::string> v;
+    v.push_back(holiday4.str(0));
+    v.push_back(holiday4.str(1));
+    v.push_back(holiday4.str(2));
+    BOOST_TEST(v == e_holiday::all_strings());
 
     // Forced validity.
     holiday3.enforce_proscription();
