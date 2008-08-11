@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1136 2008-08-11 00:07:21 chicares Exp $
+// $Id: ChangeLog,v 1.1137 2008-08-11 14:49:23 chicares Exp $
 
 MAINTENANCE
 
@@ -19062,4 +19062,45 @@ in certain testdecks used with 'make system_test'.
 Defectively work around defects in proprietary testdecks. System tests
 fail without these broken workarounds, e.g., because they contain
 preferred lives with with table ratings.
+
+20080811T0043Z <gchicares@sbcglobal.net> [1087]
+
+  basicvalues.cpp
+  ihs_basicval.cpp
+  input.cpp
+  input.hpp
+Remove vestiges of old input class.
+
+20080811T0145Z <gchicares@sbcglobal.net> [1087]
+
+  ledger_invariant.cpp
+Remove vestige of old input class.
+
+20080811T0146Z <gchicares@sbcglobal.net> [1086]
+
+  ihs_basicval.cpp
+Disentangle old input class from GPT server.
+
+20080811T1407Z <gchicares@sbcglobal.net> [1086]
+
+  name_value_pairs.cpp
+  name_value_pairs.hpp
+  name_value_pairs_test.cpp
+Optionally convert numeric values to strings.
+
+20080811T1408Z <gchicares@sbcglobal.net> [1086]
+
+  custom_io_0.cpp
+Rewrite using interface common to old and new input classes.
+
+20080811T1446Z <gchicares@sbcglobal.net> [1086]
+
+  custom_io_0.cpp
+Eliminate old input class from "custom" input.
+
+20080811T1449Z <gchicares@sbcglobal.net> [1085]
+
+  yare_input.cpp
+  yare_input.hpp
+Remove vestiges of old input class.
 
