@@ -19,11 +19,13 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view_editor.cpp,v 1.13 2008-02-29 05:02:30 chicares Exp $
+// $Id: database_view_editor.cpp,v 1.14 2008-08-11 18:13:13 chicares Exp $
 
 #include "database_view_editor.hpp"
 
 #include "alert.hpp"
+#include "mc_enum.hpp"
+#include "mc_enum_types.hpp"
 #include "multidimgrid_safe.tpp"
 #include "value_cast.hpp"
 
@@ -32,6 +34,75 @@
 
 #include <exception>
 #include <numeric>    // std::accumulate()
+
+/// Database Axis definitions
+/// -------------------------
+
+class DatabaseGenderAxis
+  :public MultiDimEnumAxis<mcenum_gender>
+{
+  public:
+    DatabaseGenderAxis()
+        :MultiDimEnumAxis<mcenum_gender>("Gender", mce_gender::all_strings())
+    {}
+};
+
+class DatabaseClassAxis
+  :public MultiDimEnumAxis<mcenum_class>
+{
+  public:
+    DatabaseClassAxis()
+        :MultiDimEnumAxis<mcenum_class>("Class", mce_class::all_strings())
+    {}
+};
+
+class DatabaseSmokingAxis
+  :public MultiDimEnumAxis<mcenum_smoking>
+{
+  public:
+    DatabaseSmokingAxis()
+        :MultiDimEnumAxis<mcenum_smoking>("Smoking", mce_smoking::all_strings())
+    {}
+};
+
+class DatabaseIssueAgeAxis
+  :public MultiDimIntAxis
+{
+  public:
+    DatabaseIssueAgeAxis()
+        :MultiDimIntAxis("Issue Age", 0, 99, 1)
+    {}
+};
+
+class DatabaseUwBasisAxis
+  :public MultiDimEnumAxis<mcenum_uw_basis>
+{
+  public:
+    DatabaseUwBasisAxis()
+        :MultiDimEnumAxis<mcenum_uw_basis>("UW Basis", mce_uw_basis::all_strings())
+    {}
+};
+
+class DatabaseStateAxis
+  :public MultiDimEnumAxis<mcenum_state>
+{
+  public:
+    DatabaseStateAxis()
+        :MultiDimEnumAxis<mcenum_state>("State", mce_state::all_strings())
+    {}
+};
+
+class DatabaseDurationAxis
+  :public AdjustableMaxBoundAxis<int>
+{
+    typedef AdjustableMaxBoundAxis<int> BaseClass;
+    static const int max_bound_duration = TDBValue::e_max_dim_duration - 1;
+
+  public:
+    DatabaseDurationAxis()
+        :BaseClass("Duration", 0, max_bound_duration, 1, max_bound_duration)
+    {}
+};
 
 DatabaseTableAdapter::DatabaseTableAdapter(TDBValue* db_value)
     :db_value_(db_value)
@@ -206,13 +277,13 @@ void DatabaseTableAdapter::ConvertValue
     ,std::vector<int>& indexes
     )
 {
-    indexes[eda_gender]    = UnwrapAny<enum_gender>  (coords[eda_gender]);
-    indexes[eda_class]     = UnwrapAny<enum_class>   (coords[eda_class]);
-    indexes[eda_smoking]   = UnwrapAny<enum_smoking> (coords[eda_smoking]);
-    indexes[eda_issue_age] = UnwrapAny<int>          (coords[eda_issue_age]);
-    indexes[eda_uw_basis]  = UnwrapAny<enum_uw_basis>(coords[eda_uw_basis]);
-    indexes[eda_state]     = UnwrapAny<enum_state>   (coords[eda_state]);
-    indexes[eda_duration]  = UnwrapAny<int>          (coords[eda_duration]);
+    indexes[eda_gender]    = UnwrapAny<mcenum_gender>  (coords[eda_gender]);
+    indexes[eda_class]     = UnwrapAny<mcenum_class>   (coords[eda_class]);
+    indexes[eda_smoking]   = UnwrapAny<mcenum_smoking> (coords[eda_smoking]);
+    indexes[eda_issue_age] = UnwrapAny<int>            (coords[eda_issue_age]);
+    indexes[eda_uw_basis]  = UnwrapAny<mcenum_uw_basis>(coords[eda_uw_basis]);
+    indexes[eda_state]     = UnwrapAny<mcenum_state>   (coords[eda_state]);
+    indexes[eda_duration]  = UnwrapAny<int>            (coords[eda_duration]);
     // If the following assert fails, then it probably means that
     // the number of axes has been changed and the change should
     // be reflected in the code above.

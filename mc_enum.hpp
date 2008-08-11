@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum.hpp,v 1.19 2008-07-07 17:17:24 chicares Exp $
+// $Id: mc_enum.hpp,v 1.20 2008-08-11 18:13:13 chicares Exp $
 
 // Acknowledgment
 //
@@ -47,6 +47,7 @@
 #include <cstddef>
 #include <deque>
 #include <string>
+#include <vector>
 
 /// This abstract non-template base class serves two design purposes.
 /// It permits calling virtual member functions for arbitrary mc_enum
@@ -173,6 +174,8 @@ class mc_enum
 
     std::string str() const;
     T value() const;
+
+    static std::vector<std::string> const& all_strings();
 
   private:
     // datum_base required implementation.
