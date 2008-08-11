@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.cpp,v 1.29 2008-08-05 19:49:25 chicares Exp $
+// $Id: illustrator.cpp,v 1.30 2008-08-11 16:35:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,7 +35,6 @@
 #include "group_values.hpp"
 #include "handle_exceptions.hpp"
 #include "input.hpp"
-#include "inputillus.hpp"
 #include "ledgervalues.hpp"
 #include "multiple_cell_document.hpp"
 #include "platform_dependent.hpp" // access()
@@ -194,28 +193,22 @@ Input const& default_cell()
     return user_default;
 }
 
-template<> void temporary_file_kludge(std::vector<IllusInputParms> const& z)
+template<> void temporary_file_kludge(std::vector<Input> const& z)
 {
     multiple_cell_document document;
     typedef std::vector<Input> T;
-T x;
-convert_from_ihs(z, x);
     T& cells = const_cast<T&>(document.cell_parms());
-//    cells = z;
-    cells = x;
+    cells = z;
     std::ofstream ofs("eraseme.cns");
     document.write(ofs);
 }
 
-template<> void temporary_file_kludge(IllusInputParms const& z)
+template<> void temporary_file_kludge(Input const& z)
 {
     single_cell_document document;
     typedef Input T;
-T x;
-convert_from_ihs(z, x);
     T& cell = const_cast<T&>(document.input_data());
-//    cell = z;
-    cell = x;
+    cell = z;
     std::ofstream ofs("eraseme.ill");
     document.write(ofs);
 }
