@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basicvalues.cpp,v 1.33 2008-08-10 01:12:23 chicares Exp $
+// $Id: basicvalues.cpp,v 1.34 2008-08-11 00:04:44 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,6 +33,7 @@
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "death_benefits.hpp"
+#include "input.hpp"
 #include "interest_rates.hpp"
 #include "loads.hpp"
 #include "mortality_rates.hpp"
@@ -309,8 +310,8 @@ std::vector<double> const& BasicValues::GetCorridorFactor() const
 #include "inputillus.hpp"
 
 //============================================================================
-BasicValues::BasicValues(IllusInputParms const& input)
-    :Input_(new IllusInputParms(input))
+BasicValues::BasicValues(Input const& input)
+    :Input_(new Input(input))
     ,yare_input_(input)
 {
     Init();

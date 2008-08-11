@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.32 2008-08-10 16:45:24 chicares Exp $
+// $Id: input.cpp,v 1.33 2008-08-11 00:04:45 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -618,11 +618,50 @@ void Input::DoEnforceProscription(std::string const& name)
         }
 }
 
-#if 0
-Input Input::magically_rectify(Input const&)
+Input Input::magically_rectify(Input const& original)
 {
+    Input z(original);
+
+    // Repair a known problem in the legacy implementation, where
+    // these two possibilities were originally treated as independent
+    // boolean states (which is wrong, because they're mutually
+    // exclusive), and later unified into a single enumerative state
+    // (but defectively, so that only the boolean state is actually
+    // reliable).
+    if("Yes" == z["UseAverageOfAllFunds"].str())
+        {
+        z["FundChoiceType"] = "Average fund";
+        }
+    if("Yes" == z["OverrideFundManagementFee"].str())
+        {
+        z["FundChoiceType"] = "Override fund";
+        }
+
+    // Repair another problem in the legacy implementation.
+    if("CredRate" == z["GeneralAccountRateType"].str())
+        {
+        z["GeneralAccountRateType"] = "NetRate";
+        }
+    if("CredRate" == z["SeparateAccountRateType"].str())
+        {
+        z["SeparateAccountRateType"] = "NetRate";
+        }
+
+    z.Reconcile(); // TODO ?? Necessary only for problematic old cases.
+    z.RealizeAllSequenceInput();
+
+    // TODO ?? Do it again...only because certain testdecks are wrong?
+    if("CredRate" == z["GeneralAccountRateType"].str())
+        {
+        z["GeneralAccountRateType"] = "NetRate";
+        }
+    if("CredRate" == z["SeparateAccountRateType"].str())
+        {
+        z["SeparateAccountRateType"] = "NetRate";
+        }
+
+    return z;
 }
-#endif // 0
 
 #include "inputillus.hpp"
 
