@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: custom_io_0.cpp,v 1.25 2008-08-11 14:08:22 chicares Exp $
+// $Id: custom_io_0.cpp,v 1.26 2008-08-11 14:46:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,8 +35,6 @@
 #include "global_settings.hpp"
 #include "input.hpp"
 #include "input_sequence.hpp"
-#include "inputillus.hpp"
-#include "inputstatus.hpp"
 #include "ledger.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
@@ -201,10 +199,6 @@ void test_adjust_interest_rates()
 
 bool custom_io_0_read(Input& z, std::string const& filename)
 {
-    IllusInputParms ip;
-    convert_to_ihs(ip, z);
-    ip.propagate_changes_to_base_and_finalize();
-
     // Set global flag to liberalize input restrictions slightly.
     global_settings::instance().set_custom_io_0(true);
     std::string actual_filename =
@@ -225,37 +219,37 @@ bool custom_io_0_read(Input& z, std::string const& filename)
     name_value_pairs n_v_pairs(actual_filename);
 
     // The list is not complete; other items may be required eventually.
-    ip["InforceYear"]                     = n_v_pairs.string_numeric_value("InforceYear");
-    ip["InforceMonth"]                    = n_v_pairs.string_numeric_value("InforceMonth");
-    ip["InforceGeneralAccountValue"]      = n_v_pairs.string_numeric_value("InforceAVGenAcct");
-    ip["InforceSeparateAccountValue"]     = n_v_pairs.string_numeric_value("InforceAVSepAcct");
-    ip["InforceRegularLoanValue"]         = n_v_pairs.string_numeric_value("InforceAVRegLn");
-    ip["InforcePreferredLoanValue"]       = n_v_pairs.string_numeric_value("InforceAVPrfLn");
-    ip["InforceCumulativeNoLapsePremium"] = n_v_pairs.string_numeric_value("InforceCumNoLapsePrem");
-    ip["InforceCumulativePayments"]       = n_v_pairs.string_numeric_value("InforceCumPmts");
+    z["InforceYear"]                     = n_v_pairs.string_numeric_value("InforceYear");
+    z["InforceMonth"]                    = n_v_pairs.string_numeric_value("InforceMonth");
+    z["InforceGeneralAccountValue"]      = n_v_pairs.string_numeric_value("InforceAVGenAcct");
+    z["InforceSeparateAccountValue"]     = n_v_pairs.string_numeric_value("InforceAVSepAcct");
+    z["InforceRegularLoanValue"]         = n_v_pairs.string_numeric_value("InforceAVRegLn");
+    z["InforcePreferredLoanValue"]       = n_v_pairs.string_numeric_value("InforceAVPrfLn");
+    z["InforceCumulativeNoLapsePremium"] = n_v_pairs.string_numeric_value("InforceCumNoLapsePrem");
+    z["InforceCumulativePayments"]       = n_v_pairs.string_numeric_value("InforceCumPmts");
 
 // TRICKY !! Other input methods distinguish the insured's first, middle,
 // and last names. This method uses a single field to meet customer
 // requirements. Combining that single field with the middle and last
 // names works as long as we initialize the others to a nonempty string.
-    ip["InsuredName"]               = n_v_pairs.string_value("ApplicantName");
+    z["InsuredName"]               = n_v_pairs.string_value("ApplicantName");
 // Not yet used, but might be wanted someday:
 //  n_v_pairs.string_value("ApplicantDOB"); // ApplicantDOB=01/01/1968
-    ip["IssueAge"]                  = n_v_pairs.string_numeric_value("ApplicantIssueAge");
-    ip["RetirementAge"]             = "100";
+    z["IssueAge"]                  = n_v_pairs.string_numeric_value("ApplicantIssueAge");
+    z["RetirementAge"]             = "100";
 
     std::string gender = n_v_pairs.string_value("ApplicantGender");
     if("F" == gender)
         {
-        ip["Gender"] = "Female";
+        z["Gender"] = "Female";
         }
     else if("M" == gender)
         {
-        ip["Gender"] = "Male";
+        z["Gender"] = "Male";
         }
     else if("U" == gender)
         {
-        ip["Gender"] = "Unisex";
+        z["Gender"] = "Unisex";
         }
     else
         {
@@ -270,15 +264,15 @@ bool custom_io_0_read(Input& z, std::string const& filename)
     std::string tobacco = n_v_pairs.string_value("ApplicantTobacco");
     if("Y" == tobacco)
         {
-        ip["Smoking"] = "Smoker";
+        z["Smoking"] = "Smoker";
         }
     else if("N" == tobacco)
         {
-        ip["Smoking"] = "Nonsmoker";
+        z["Smoking"] = "Nonsmoker";
         }
     else if("U" == tobacco)
         {
-        ip["Smoking"] = "Unismoke";
+        z["Smoking"] = "Unismoke";
         }
     else
         {
@@ -290,8 +284,8 @@ bool custom_io_0_read(Input& z, std::string const& filename)
             ;
         }
 
-    ip["State"]                     = n_v_pairs.string_value("ApplicantState");
-    ip["CorporationState"]          = ip["State"];
+    z["State"]                     = n_v_pairs.string_value("ApplicantState");
+    z["CorporationState"]          = z["State"];
     // TRICKY !! This is probably unnecessary, but if so, it's because
     // of some kludge that works around the problem. 'State' and
     // 'CorporationState' should not exist; only 'StateOfJurisdiction'
@@ -304,14 +298,14 @@ bool custom_io_0_read(Input& z, std::string const& filename)
     // for "Applicant" and one for "Agent", but none for "Corporation"
     // that would correspond to 'CorporationState', and our intention
     // is to make lmi correspond to that paradigm anyway, someday.
-    ip["StateOfJurisdiction"]       = ip["State"];
+    z["StateOfJurisdiction"]       = z["State"];
 
 // Not yet used, but might be wanted someday:
 // PaymentsPerYear=1
 
-    ip["ProductName"]               = n_v_pairs.string_value("ProductCode");
+    z["ProductName"]               = n_v_pairs.string_value("ProductCode");
 
-    if("Standard" != ip["UnderwritingClass"].str())
+    if("Standard" != z["UnderwritingClass"].str())
         {
         fatal_error()
             << "Internal error: not initialized to standard rate class."
@@ -322,20 +316,20 @@ bool custom_io_0_read(Input& z, std::string const& filename)
     std::string undw = n_v_pairs.string_value("ProductOption");
     if("P" == undw)
         {
-        ip["UnderwritingClass"]     = "Preferred";
-        ip["GroupUnderwritingType"] = "Medical";
+        z["UnderwritingClass"]     = "Preferred";
+        z["GroupUnderwritingType"] = "Medical";
         }
     else if("F" == undw)
         {
-        ip["GroupUnderwritingType"] = "Medical";
+        z["GroupUnderwritingType"] = "Medical";
         }
     else if("S" == undw)
         {
-        ip["GroupUnderwritingType"] = "Simplified issue";
+        z["GroupUnderwritingType"] = "Simplified issue";
         }
     else if("G" == undw)
         {
-        ip["GroupUnderwritingType"] = "Guaranteed issue";
+        z["GroupUnderwritingType"] = "Guaranteed issue";
         }
     else
         {
@@ -350,15 +344,15 @@ bool custom_io_0_read(Input& z, std::string const& filename)
     std::string dbopt = n_v_pairs.string_value("DeathBenefitOption");
     if("L" == dbopt)
         {
-        ip["DeathBenefitOption"] = "a";
+        z["DeathBenefitOption"] = "a";
         }
     else if("I" == dbopt)
         {
-        ip["DeathBenefitOption"] = "b";
+        z["DeathBenefitOption"] = "b";
         }
     else if("ROP" == dbopt)
         {
-        ip["DeathBenefitOption"] = "rop";
+        z["DeathBenefitOption"] = "rop";
         }
     else
         {
@@ -373,15 +367,15 @@ bool custom_io_0_read(Input& z, std::string const& filename)
     // For single-premium cases, the specified amount would normally
     // be calculated by using a "corridor" specified-amount strategy,
     // but the customer wants to enter the specified amount explicitly.
-    ip["SpecifiedAmount"]           = n_v_pairs.string_value("FaceAmt");
+    z["SpecifiedAmount"]           = n_v_pairs.string_value("FaceAmt");
 
     // Zero out any default er premium.
-    ip["CorporationPayment"]        = "0";
+    z["CorporationPayment"]        = "0";
     // Assume single premium. Although the corporation pays it,
     // treat it, contrary to fact, as paid by the insured; reason:
     // consistency with GUI--see ChangeLog for 20050825T0122Z .
     // TODO ?? Revisit this later.
-    ip["Payment"]                   = n_v_pairs.string_value("PremiumAmt") + ";0";
+    z["Payment"]                   = n_v_pairs.string_value("PremiumAmt") + ";0";
 
 // Not yet used, but might be wanted someday:
 //ExchangeAmt=0
@@ -392,15 +386,14 @@ bool custom_io_0_read(Input& z, std::string const& filename)
 // Table ratings: not yet used, but might be wanted someday:
 // ApplicantRating=
 // ApplicantThruAge=
-    ip["SubstandardTable"]          = n_v_pairs.string_value("ApplicantRating");
+    z["SubstandardTable"]          = n_v_pairs.string_value("ApplicantRating");
 
     double permanent_flat         = n_v_pairs.numeric_value("PermFlatExtraAmt");
     double temporary_flat         = n_v_pairs.numeric_value("TempFlatExtraAmt");
     double temporary_flat_max_age = n_v_pairs.numeric_value("TempFlatExtraThruAge");
-    ip.propagate_changes_to_base_and_finalize();
-    if(ip.Status[0].IssueAge < temporary_flat_max_age)
+    if(z.issue_age() < temporary_flat_max_age)
         {
-        ip["FlatExtra"] =
+        z["FlatExtra"] =
               value_cast<std::string>(permanent_flat + temporary_flat)
             + "[0, @"
             + value_cast<std::string>(temporary_flat_max_age)
@@ -409,12 +402,12 @@ bool custom_io_0_read(Input& z, std::string const& filename)
             ;
         }
 
-    if("None" != ip["SubstandardTable"].str())
+    if("None" != z["SubstandardTable"].str())
         {
-        ip["UnderwritingClass"]     = "Rated";
+        z["UnderwritingClass"]     = "Rated";
         }
 
-    yare_input const yip(ip);
+    yare_input const yip(z);
     TDatabase database(yip);
 
     double first_year_general_account_rate =
@@ -428,7 +421,7 @@ bool custom_io_0_read(Input& z, std::string const& filename)
 
     std::vector<double> declared_rate;
     database.Query(declared_rate, DB_MaxGenAcctRate);
-    ip["GeneralAccountRate"] = adjust_interest_rates
+    z["GeneralAccountRate"] = adjust_interest_rates
         (first_year_general_account_rate
         ,renewal_year_general_account_rate
         ,declared_rate
@@ -444,13 +437,13 @@ bool custom_io_0_read(Input& z, std::string const& filename)
 // names works only  as long as we initialize the latter to a nonempty
 // string, which we do as a temporary workaround elsewhere; when that's
 // resolved, revisit this.
-    ip["AgentName"]                 = n_v_pairs.string_value("AgentName");
-    ip["AgentAddress"]              = n_v_pairs.string_value("AgentAddress");
-    ip["AgentCity"]                 = n_v_pairs.string_value("AgentCity");
-    ip["AgentState"]                = n_v_pairs.string_value("AgentState");
-    ip["AgentZipCode"]              = n_v_pairs.string_value("AgentZip");
-    ip["AgentPhone"]                = n_v_pairs.string_value("AgentPhone");
-    ip["AgentId"]                   = n_v_pairs.string_value("AgentLicense");
+    z["AgentName"]                 = n_v_pairs.string_value("AgentName");
+    z["AgentAddress"]              = n_v_pairs.string_value("AgentAddress");
+    z["AgentCity"]                 = n_v_pairs.string_value("AgentCity");
+    z["AgentState"]                = n_v_pairs.string_value("AgentState");
+    z["AgentZipCode"]              = n_v_pairs.string_value("AgentZip");
+    z["AgentPhone"]                = n_v_pairs.string_value("AgentPhone");
+    z["AgentId"]                   = n_v_pairs.string_value("AgentLicense");
 // Not yet used, but might be wanted someday:
 // AgentCompanyName
 // AgentLicense
@@ -460,7 +453,7 @@ bool custom_io_0_read(Input& z, std::string const& filename)
         *   n_v_pairs.numeric_value("InterestRateSepAcctFirstYr")
         ;
 
-    ip["SeparateAccountRate"]       = value_cast<std::string>(separate_account_rate);
+    z["SeparateAccountRate"]       = value_cast<std::string>(separate_account_rate);
 
     // TRICKY !! We need to consider the unconverted string: if it's empty,
     // it should be ignored, and must not be incorrectly converted to
@@ -469,15 +462,9 @@ bool custom_io_0_read(Input& z, std::string const& filename)
     std::string coi_mult            = n_v_pairs.string_value("COIMult");
     if(!coi_mult.empty())
         {
-        ip["OverrideCoiMultiplier"] = "Yes";
-        ip["CountryCoiMultiplier"]  = coi_mult;
+        z["OverrideCoiMultiplier"] = "Yes";
+        z["CountryCoiMultiplier"]  = coi_mult;
         }
-
-    ip.propagate_changes_to_base_and_finalize();
-
-    ip.ResetAllFunds(database.Query(DB_AllowGenAcct));
-
-    convert_from_ihs(ip, z);
 
     // "AutoClose": "Y" or "N". Either way, read the custom input file
     // and write the custom output file. Then:
