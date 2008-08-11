@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.88 2008-08-11 00:43:22 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.89 2008-08-11 01:46:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -93,6 +93,68 @@ BasicValues::BasicValues(Input const& input)
     ,MaxLoanDed_         (mce_twelve_times_last)
 {
     Init();
+}
+
+//============================================================================
+// TODO ?? Not for general use--use for GPT server only. This is bad design.
+BasicValues::BasicValues
+    (std::string  const& a_ProductName
+    ,mcenum_gender       a_Gender
+    ,mcenum_class        a_UnderwritingClass
+    ,mcenum_smoking      a_Smoker
+    ,int                 a_IssueAge
+    ,mcenum_uw_basis     a_UnderwritingBasis
+    ,mcenum_state        a_StateOfJurisdiction
+    ,double              a_FaceAmount
+    ,mcenum_dbopt_7702   a_DBOptFor7702
+    ,bool                a_AdbInForce
+    ,double              a_TargetPremium
+    // TODO ?? Need loan rate type here?
+    )
+    :Input_              (new Input)
+    ,yare_input_         (*Input_)
+    ,DefnLifeIns_        (mce_cvat)
+    ,DefnMaterialChange_ (mce_unnecessary_premium)
+    ,Equiv7702DBO3       (a_DBOptFor7702)
+    ,MaxWDDed_           (mce_twelve_times_last)
+    ,MaxLoanDed_         (mce_twelve_times_last)
+    ,InitialTargetPremium(a_TargetPremium)
+{
+    Input* kludge_input = new Input;
+
+    (*kludge_input)["IssueAge"         ] = value_cast<std::string>(a_IssueAge)         ;
+    (*kludge_input)["RetirementAge"    ] = value_cast<std::string>(a_IssueAge)         ;
+    (*kludge_input)["Gender"           ] = value_cast<std::string>(a_Gender)           ;
+    (*kludge_input)["Smoking"          ] = value_cast<std::string>(a_Smoker)           ;
+    (*kludge_input)["UnderwritingClass"] = value_cast<std::string>(a_UnderwritingClass);
+    if(a_AdbInForce)
+        {
+        (*kludge_input)["Status[0].HasADD"] = "Yes";
+        }
+    else
+        {
+        (*kludge_input)["Status[0].HasADD"] = "No";
+        }
+    (*kludge_input)["GroupUnderwritingType"     ] = value_cast<std::string>(a_UnderwritingBasis);
+    (*kludge_input)["ProductName"               ] = a_ProductName;
+    (*kludge_input)["State"                     ] = value_cast<std::string>(a_StateOfJurisdiction);
+    (*kludge_input)["CorporationState"          ] = value_cast<std::string>(a_StateOfJurisdiction);
+    (*kludge_input)["DefinitionOfLifeInsurance" ] = mce_defn_life_ins(mce_gpt).str();
+    (*kludge_input)["DefinitionOfMaterialChange"] = mce_defn_material_change(mce_adjustment_event).str();
+
+    (*kludge_input)["SpecifiedAmount"   ] = value_cast<std::string>(a_FaceAmount);
+
+    mce_dbopt const z
+        (mce_option1_for_7702 == a_DBOptFor7702 ? mce_option1
+        :mce_option2_for_7702 == a_DBOptFor7702 ? mce_option2
+        :throw std::runtime_error("Unexpected DB option.")
+        );
+    (*kludge_input)["DeathBenefitOption"] = mce_dbopt(z).str();
+
+    // TODO ?? EGREGIOUS_DEFECT Redesign this function instead.
+    const_cast<Input&>(*Input_) = *kludge_input;
+
+    GPTServerInit();
 }
 
 //============================================================================
@@ -1984,89 +2046,5 @@ std::vector<double> BasicValues::Get83GamRates() const
         ,CannotBlend
         ,CanBlend
         );
-}
-
-// You have no chance to survive make your time.
-
-#include "inputillus.hpp"
-
-//============================================================================
-// TODO ?? Not for general use--use for GPT server only. This is bad design.
-BasicValues::BasicValues
-    (std::string  const& a_ProductName
-    ,mcenum_gender       a_Gender
-    ,mcenum_class        a_UnderwritingClass
-    ,mcenum_smoking      a_Smoker
-    ,int                 a_IssueAge
-    ,mcenum_uw_basis     a_UnderwritingBasis
-    ,mcenum_state        a_StateOfJurisdiction
-    ,double              a_FaceAmount
-    ,mcenum_dbopt_7702   a_DBOptFor7702
-    ,bool                a_AdbInForce
-    ,double              a_TargetPremium
-    // TODO ?? Need loan rate type here?
-    )
-    :Input_              (new Input)
-    ,yare_input_         (*Input_)
-    ,DefnLifeIns_        (mce_cvat)
-    ,DefnMaterialChange_ (mce_unnecessary_premium)
-    ,Equiv7702DBO3       (a_DBOptFor7702)
-    ,MaxWDDed_           (mce_twelve_times_last)
-    ,MaxLoanDed_         (mce_twelve_times_last)
-    ,InitialTargetPremium(a_TargetPremium)
-{
-    IllusInputParms* kludge_input = new IllusInputParms;
-
-    kludge_input->NumberOfLives       = 1                        ;
-
-    kludge_input->Status[0].IssueAge  = a_IssueAge               ;
-    kludge_input->Status[0].RetAge    = a_IssueAge               ;
-    kludge_input->Status[0].Gender    = porting_cast<enum_gender>(a_Gender)                 ;
-    kludge_input->Status[0].Smoking   = porting_cast<enum_smoking>(a_Smoker)                 ;
-    kludge_input->Status[0].Class     = porting_cast<enum_class>(a_UnderwritingClass)      ;
-//    kludge_input->Status[0].HasADD    = static_cast<enum_yes_or_no>(a_ADDInForce.operator const bool());
-// TODO ?? reinterpret_cast can't be right...
-//    kludge_input->Status[0].HasADD    = reinterpret_cast<enum_yes_or_no>(a_ADDInForce);
-//    kludge_input->Status[0].HasADD    = a_ADDInForce;
-if(a_AdbInForce)
-    {
-    kludge_input->Status[0].HasADD = "Yes";
-    }
-else
-    {
-    kludge_input->Status[0].HasADD = "No";
-    }
-    kludge_input->GroupUWType         = porting_cast<enum_uw_basis>(a_UnderwritingBasis)      ;
-    kludge_input->ProductName         = a_ProductName            ;
-    kludge_input->InsdState           = porting_cast<enum_state>(a_StateOfJurisdiction)    ;
-    kludge_input->SponsorState        = porting_cast<enum_state>(a_StateOfJurisdiction)    ;
-    kludge_input->DefnLifeIns         = e_defn_life_ins(e_gpt)   ;
-    kludge_input->DefnMaterialChange  = e_defn_material_change(e_adjustment_event);
-
-    kludge_input->EnforceConsistency();
-
-    std::fill_n
-        (kludge_input->SpecAmt.begin()
-        ,kludge_input->YearsToMaturity()
-        ,a_FaceAmount
-        );
-
-    e_dbopt const z
-        (mce_option1_for_7702 == a_DBOptFor7702 ? e_option1
-        :mce_option2_for_7702 == a_DBOptFor7702 ? e_option2
-        :throw std::runtime_error("Unexpected DB option.")
-        );
-    std::fill_n
-        (kludge_input->DBOpt.begin()
-        ,kludge_input->YearsToMaturity()
-        ,z
-        );
-
-    Input lmi_input;
-    convert_from_ihs(*kludge_input, lmi_input);
-    // TODO ?? EGREGIOUS_DEFECT Redesign this function instead.
-    const_cast<Input&>(*Input_) = lmi_input;
-
-    GPTServerInit();
 }
 
