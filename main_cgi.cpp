@@ -31,7 +31,7 @@
 // other reasons evident in cvs or explained in 'ChangeLog'. Any
 // defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.33 2008-07-24 10:16:12 chicares Exp $
+// $Id: main_cgi.cpp,v 1.34 2008-08-11 16:35:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -42,8 +42,7 @@
 #include "argv0.hpp"
 #include "configurable_settings.hpp"
 #include "illustrator.hpp"
-#include "inputillus.hpp"
-#include "inputs.hpp"
+#include "input.hpp"
 #include "main_common.hpp"
 #include "mc_enum_type_enums.hpp" // mcenum_emission
 #include "miscellany.hpp"
@@ -85,8 +84,8 @@ std::ofstream gLogFile;
 void ShowEnvironment(cgicc::CgiEnvironment const& env);
 void ShowInput(cgicc::Cgicc const& formData);
 void ShowOutput(cgicc::Cgicc const& formData);
-void ShowIllusOutput(IllusInputParms const&);
-void ShowCensusOutput(IllusInputParms const&, std::string const&, bool);
+void ShowIllusOutput(Input const&);
+void ShowCensusOutput(Input const&, std::string const&, bool);
 
 // TODO ?? gnu getopt should be used here.
 int try_main(int argc, char* argv[])
@@ -122,6 +121,8 @@ int try_main(int argc, char* argv[])
         "&Gender=Female"
         "&UnderwritingClass=Preferred"
         "&Smoking=Smoker"
+        "&WaiverOfPremiumBenefit=No"
+        "&AccidentalDeathBenefit=No"
         "&SolveType=SolveEePrem"
         "&SolveBeginYear=0"
         "&SolveEndYear=10"
@@ -136,6 +137,7 @@ int try_main(int argc, char* argv[])
         "&PaymentMode=annual"
         "&Dumpin=0"
         "&1035ExchangeAmount=0"
+        "&1035ExchangeIsMec=No"
         "&1035ExchangeBasis=0"
         "&GeneralAccountRate=.055"
         "&GeneralAccountRateType=NetRate"
@@ -476,11 +478,11 @@ ShowInput(cgicc::Cgicc const& data)
 void ShowOutput(cgicc::Cgicc const& data)
 {
     Timer timer;
-    IllusInputParms input;
+    Input input;
 
     // TODO ?? More KLUDGE stuff.
-    input.Status_IssueAge      = 45;
-    input.Status_RetAge        = 65;
+    input["IssueAge"]                      = "45";
+    input["RetirementAge"]                 = "65";
 
     input["Gender"]                        = "Female";
     input["Smoking"]                       = "Smoker";
@@ -517,14 +519,13 @@ void ShowOutput(cgicc::Cgicc const& data)
     input["LoanRate"]                      = GetValue(data, "LoanRate" );
     input["LoanRateType"]                  = GetValue(data, "LoanRateType");
 
-    input.propagate_changes_to_base_and_finalize();
-
     // DEPRECATED Goofy workaround needed while porting input.
-    input.SolveTgtAtWhich = e_tgtatyear;
-    input.SolveToWhich    = e_toyear;
-    input.SolveEndTime    = input.SolveEndYear;
-    input.SolveTgtTime    = input.SolveTgtYear;
-    input.SetSolveDurations();
+    input["DeprecatedSolveTgtAtWhich"] = "TgtAtYear";
+    input["DeprecatedSolveToWhich"]    = "ToYear";
+    input["SolveEndTime"]              = input["SolveEndYear"   ].str();
+    input["SolveTargetTime"]           = input["SolveTargetYear"].str();
+
+    input.RealizeAllSequenceInput();
 
     std::string census_data = GetValue(data, "Census");
 
@@ -548,7 +549,7 @@ void ShowOutput(cgicc::Cgicc const& data)
         }
 }
 
-void ShowIllusOutput(IllusInputParms const& a_input)
+void ShowIllusOutput(Input const& a_input)
 {
     static mcenum_emission const emission = mcenum_emission
         (   mce_emit_text_stream
@@ -571,13 +572,13 @@ void ShowIllusOutput(IllusInputParms const& a_input)
 }
 
 void ShowCensusOutput
-    (IllusInputParms const& a_input
+    (Input const& a_input
     ,std::string const& a_census
     ,bool show_each_life
     )
 {
     std::vector<std::string> headers;
-    std::vector<IllusInputParms> lives;
+    std::vector<Input> lives;
 
     std::istringstream iss_census(a_census);
     std::string line;
@@ -604,7 +605,7 @@ void ShowCensusOutput
 
         iss_census >> std::ws;
 
-        IllusInputParms input(a_input);
+        Input input(a_input);
         std::istringstream iss_line(line);
         std::string token;
         std::vector<std::string> values;
@@ -629,12 +630,12 @@ void ShowCensusOutput
             {
             input[headers[j]] = values[j];
             }
-        input.propagate_changes_to_base_and_finalize();
+        input.RealizeAllSequenceInput();
         lives.push_back(input);
         }
 
     std::vector<std::string>::iterator h;
-    std::vector<IllusInputParms>::iterator i;
+    std::vector<Input>::iterator i;
 
     // Print census as HTML table.
     std::cout << "Census:<BR><BR>";
