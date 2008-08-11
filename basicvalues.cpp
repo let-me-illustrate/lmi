@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basicvalues.cpp,v 1.34 2008-08-11 00:04:44 chicares Exp $
+// $Id: basicvalues.cpp,v 1.35 2008-08-11 00:43:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -51,6 +51,14 @@ char const* GuaranteedTableFile() {return "/opt/lmi/data/qx_cso";}
 
 // INELEGANT !! Many member variables are initialized not in ctors,
 // but rather in common initialization functions.
+
+//============================================================================
+BasicValues::BasicValues(Input const& input)
+    :Input_(new Input(input))
+    ,yare_input_(input)
+{
+    Init();
+}
 
 //============================================================================
 BasicValues::~BasicValues()
@@ -303,17 +311,5 @@ std::vector<double> const& BasicValues::SpreadFor7702() const
 std::vector<double> const& BasicValues::GetCorridorFactor() const
 {
     return MortalityRates_->CvatCorridorFactors();
-}
-
-// You have no chance to survive make your time.
-
-#include "inputillus.hpp"
-
-//============================================================================
-BasicValues::BasicValues(Input const& input)
-    :Input_(new Input(input))
-    ,yare_input_(input)
-{
-    Init();
 }
 

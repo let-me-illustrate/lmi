@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.87 2008-08-11 00:04:44 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.88 2008-08-11 00:43:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -81,6 +81,19 @@ namespace
         1.0L + std::numeric_limits<long double>::epsilon()
         ;
 } // Unnamed namespace.
+
+//============================================================================
+BasicValues::BasicValues(Input const& input)
+    :Input_              (new Input(input))
+    ,yare_input_         (input)
+    ,DefnLifeIns_        (mce_cvat)
+    ,DefnMaterialChange_ (mce_unnecessary_premium)
+    ,Equiv7702DBO3       (mce_option1_for_7702)
+    ,MaxWDDed_           (mce_twelve_times_last)
+    ,MaxLoanDed_         (mce_twelve_times_last)
+{
+    Init();
+}
 
 //============================================================================
 BasicValues::~BasicValues()
@@ -1976,19 +1989,6 @@ std::vector<double> BasicValues::Get83GamRates() const
 // You have no chance to survive make your time.
 
 #include "inputillus.hpp"
-
-//============================================================================
-BasicValues::BasicValues(Input const& input)
-    :Input_              (new Input(input))
-    ,yare_input_         (input)
-    ,DefnLifeIns_        (mce_cvat)
-    ,DefnMaterialChange_ (mce_unnecessary_premium)
-    ,Equiv7702DBO3       (mce_option1_for_7702)
-    ,MaxWDDed_           (mce_twelve_times_last)
-    ,MaxLoanDed_         (mce_twelve_times_last)
-{
-    Init();
-}
 
 //============================================================================
 // TODO ?? Not for general use--use for GPT server only. This is bad design.
