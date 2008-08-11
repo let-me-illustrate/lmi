@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.132 2008-08-10 01:12:24 chicares Exp $
+# $Id: objects.make,v 1.133 2008-08-11 00:04:45 chicares Exp $
 
 ################################################################################
 
@@ -385,8 +385,12 @@ gpt_objects := \
   ihs_pios.o \
   ihs_proddata.o \
   ihs_rnddata.o \
+  input.o \
+  input_harmonization.o \
+  input_realization.o \
   input_seq_helpers.o \
   input_sequence.o \
+  input_xml_io.o \
   inputillus.o \
   inputillus_sequences.o \
   inputillus_xml_io.o \
@@ -398,6 +402,7 @@ gpt_objects := \
   mc_enum_types.o \
   mc_enum_types_aux.o \
   miscellany.o \
+  mvc_model.o \
   outlay.o \
   path_utility.o \
   product_names.o \

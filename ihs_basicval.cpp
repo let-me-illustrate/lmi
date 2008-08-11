@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.86 2008-08-10 01:12:23 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.87 2008-08-11 00:04:44 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -44,6 +44,7 @@
 #include "ihs_proddata.hpp"
 #include "ihs_rnddata.hpp"
 #include "ihs_x_type.hpp"
+#include "input.hpp"
 #include "interest_rates.hpp"
 #include "loads.hpp"
 #include "math_functors.hpp"
@@ -1977,8 +1978,8 @@ std::vector<double> BasicValues::Get83GamRates() const
 #include "inputillus.hpp"
 
 //============================================================================
-BasicValues::BasicValues(IllusInputParms const& input)
-    :Input_              (new IllusInputParms(input))
+BasicValues::BasicValues(Input const& input)
+    :Input_              (new Input(input))
     ,yare_input_         (input)
     ,DefnLifeIns_        (mce_cvat)
     ,DefnMaterialChange_ (mce_unnecessary_premium)
@@ -2005,7 +2006,7 @@ BasicValues::BasicValues
     ,double              a_TargetPremium
     // TODO ?? Need loan rate type here?
     )
-    :Input_              (new IllusInputParms)
+    :Input_              (new Input)
     ,yare_input_         (*Input_)
     ,DefnLifeIns_        (mce_cvat)
     ,DefnMaterialChange_ (mce_unnecessary_premium)
@@ -2061,8 +2062,10 @@ else
         ,z
         );
 
+    Input lmi_input;
+    convert_from_ihs(*kludge_input, lmi_input);
     // TODO ?? EGREGIOUS_DEFECT Redesign this function instead.
-    const_cast<IllusInputParms&>(*Input_) = *kludge_input;
+    const_cast<Input&>(*Input_) = lmi_input;
 
     GPTServerInit();
 }
