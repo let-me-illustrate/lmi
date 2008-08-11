@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: name_value_pairs_test.cpp,v 1.9 2008-01-01 18:29:51 chicares Exp $
+// $Id: name_value_pairs_test.cpp,v 1.10 2008-08-11 14:07:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -93,6 +93,9 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL( 0.0    , n_v_pairs_0.numeric_value("u"));
     BOOST_TEST_EQUAL( 0.0    , n_v_pairs_0.numeric_value("t"));
     BOOST_TEST_EQUAL( 0.0    , n_v_pairs_0.numeric_value("s"));
+
+    BOOST_TEST_EQUAL("2.718" , n_v_pairs_0.string_numeric_value("v"));
+    BOOST_TEST_EQUAL("0"     , n_v_pairs_0.string_numeric_value("s"));
 
     std::string filename1("/tmp/nonexistent_name_value_pairs_test_file");
     name_value_pairs n_v_pairs_1(filename1);
