@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.51 2008-08-03 23:23:14 chicares Exp $
+# $Id: Makefile.am,v 1.52 2008-08-11 19:56:18 chicares Exp $
 
 SUBDIRS = third_party
 
@@ -121,8 +121,6 @@ TESTS = \
     test_value_cast \
     test_vector \
     test_wx_new \
-    test_xenum \
-    test_xrange \
     test_zero
 
 check_PROGRAMS = $(TESTS)
@@ -255,11 +253,6 @@ liblmi_common_sources = \
     input_seq_helpers.cpp \
     input_sequence.cpp \
     input_xml_io.cpp \
-    inputillus.cpp \
-    inputillus_sequences.cpp \
-    inputillus_xml_io.cpp \
-    inputs.cpp \
-    inputstatus.cpp \
     interest_rates.cpp \
     ledger.cpp \
     ledger_base.cpp \
@@ -288,10 +281,8 @@ liblmi_common_sources = \
     surrchg_rates.cpp \
     system_command.cpp \
     timer.cpp \
-    xenumtypes.cpp \
     xml_lmi.cpp \
     xslt_lmi.cpp \
-    xrange.cpp \
     yare_input.cpp
 
 libmain_auxiliary_common_la_SOURCES = \
@@ -438,7 +429,6 @@ product_files_SOURCES = \
     my_prod.cpp \
     my_rnd.cpp \
     my_tier.cpp \
-    xenumtypes.cpp
 product_files_LDADD = \
     liblmi.la   \
     $(BOOST_LIBS) \
@@ -530,7 +520,6 @@ test_commutation_functions_SOURCES =    \
   $(common_test_objects) \
   commutation_functions_test.cpp \
   ihs_commfns.cpp \
-  xenumtypes.cpp
 test_commutation_functions_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_comma_punct_SOURCES =  \
@@ -610,13 +599,9 @@ test_input_SOURCES =    \
   input_sequence.cpp \
   input_test.cpp \
   input_xml_io.cpp \
-  inputillus.cpp \
-  inputillus_sequences.cpp \
-  inputillus_xml_io.cpp \
-  inputs.cpp \
-  inputstatus.cpp \
   mc_enum.cpp \
   mc_enum_types.cpp \
+  mc_enum_types_aux.o \
   miscellany.cpp \
   multiple_cell_document.cpp \
   mvc_model.cpp \
@@ -625,9 +610,7 @@ test_input_SOURCES =    \
   single_cell_document.cpp \
   streamable.cpp \
   tn_range_types.cpp \
-  xenumtypes.cpp \
   xml_lmi.cpp \
-  xrange.cpp \
   yare_input.cpp
 
 test_input_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_FLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
@@ -647,7 +630,6 @@ test_loads_SOURCES = \
   $(common_test_objects) \
   loads.cpp \
   loads_test.cpp \
-  xenumtypes.cpp \
   expm1.c
 test_loads_CXXFLAGS = $(AM_CXXFLAGS)
 
@@ -816,20 +798,6 @@ test_wx_new_SOURCES = \
   wx_new_test.cpp
 test_wx_new_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_xenum_SOURCES =    \
-  $(common_test_objects) \
-  xenum_sample.cpp \
-  xenum_test.cpp
-test_xenum_CXXFLAGS = $(AM_CXXFLAGS)
-
-test_xrange_SOURCES =   \
-  $(common_test_objects) \
-  calendar_date.cpp \
-  facets.cpp \
-  xrange.cpp \
-  xrange_test.cpp
-test_xrange_CXXFLAGS = $(AM_CXXFLAGS)
-
 test_zero_SOURCES = \
   $(common_test_objects) \
   zero_test.cpp
@@ -907,11 +875,8 @@ noinst_HEADERS = \
     illustration_view.hpp \
     illustrator.hpp \
     input.hpp \
-    inputillus.hpp \
     input_seq_helpers.hpp \
     input_sequence.hpp \
-    inputs.hpp \
-    inputstatus.hpp \
     interest_rates.hpp \
     istream_to_string.hpp \
     ledger_base.hpp \
@@ -1009,15 +974,8 @@ noinst_HEADERS = \
     wx_new.hpp \
     wx_utility.hpp \
     wx_workarounds.hpp \
-    xenumfwd.hpp \
-    xenum.hpp \
-    xenum_sample.hpp \
-    xenumtypes.hpp \
     xml_lmi_fwd.hpp \
     xml_lmi.hpp \
-    xrangefwd.hpp \
-    xrange.hpp \
-    xrangetypes.hpp \
     xslt_lmi.hpp \
     yare_input.hpp \
     zero.hpp

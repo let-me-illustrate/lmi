@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.133 2008-08-11 00:04:45 chicares Exp $
+# $Id: objects.make,v 1.134 2008-08-11 19:56:19 chicares Exp $
 
 ################################################################################
 
@@ -193,11 +193,6 @@ common_common_objects := \
   input_seq_helpers.o \
   input_sequence.o \
   input_xml_io.o \
-  inputillus.o \
-  inputillus_sequences.o \
-  inputillus_xml_io.o \
-  inputs.o \
-  inputstatus.o \
   interest_rates.o \
   ledger.o \
   ledger_base.o \
@@ -230,10 +225,8 @@ common_common_objects := \
   system_command.o \
   timer.o \
   tn_range_types.o \
-  xenumtypes.o \
   xml_lmi.o \
   xslt_lmi.o \
-  xrange.o \
   yare_input.o \
 
 ################################################################################
@@ -391,11 +384,6 @@ gpt_objects := \
   input_seq_helpers.o \
   input_sequence.o \
   input_xml_io.o \
-  inputillus.o \
-  inputillus_sequences.o \
-  inputillus_xml_io.o \
-  inputs.o \
-  inputstatus.o \
   interest_rates.o \
   loads.o \
   mc_enum.o \
@@ -413,9 +401,7 @@ gpt_objects := \
   surrchg_rates.o \
   tn_range_types.o \
   timer.o \
-  xenumtypes.o \
   xml_lmi.o \
-  xrange.o \
   yare_input.o \
 
 libgpt.a libgpt$(SHREXT): EXTRA_LDFLAGS =
@@ -495,8 +481,6 @@ unit_test_targets := \
   value_cast_test \
   vector_test \
   wx_new_test \
-  xenum_test \
-  xrange_test \
   zero_test \
 
 unit_test_targets := \
@@ -577,7 +561,6 @@ commutation_functions_test$(EXEEXT): \
   expm1.o \
   ihs_commfns.o \
   timer.o \
-  xenumtypes.o \
 
 comma_punct_test$(EXEEXT): \
   $(common_test_objects) \
@@ -655,13 +638,9 @@ input_test$(EXEEXT): \
   input_sequence.o \
   input_test.o \
   input_xml_io.o \
-  inputillus.o \
-  inputillus_sequences.o \
-  inputillus_xml_io.o \
-  inputs.o \
-  inputstatus.o \
   mc_enum.o \
   mc_enum_types.o \
+  mc_enum_types_aux.o \
   miscellany.o \
   multiple_cell_document.o \
   mvc_model.o \
@@ -671,9 +650,7 @@ input_test$(EXEEXT): \
   streamable.o \
   timer.o \
   tn_range_types.o \
-  xenumtypes.o \
   xml_lmi.o \
-  xrange.o \
   yare_input.o \
 
 irc7702a_test$(EXEEXT): \
@@ -693,7 +670,6 @@ loads_test$(EXEEXT): \
   loads.o \
   loads_test.o \
   timer.o \
-  xenumtypes.o \
 
 map_lookup_test$(EXEEXT): \
   $(common_test_objects) \
@@ -841,18 +817,6 @@ wx_new_test$(EXEEXT): \
   $(common_test_objects) \
   wx_new_test.o \
 
-xenum_test$(EXEEXT): \
-  $(common_test_objects) \
-  xenum_sample.o \
-  xenum_test.o \
-
-xrange_test$(EXEEXT): \
-  $(common_test_objects) \
-  calendar_date.o \
-  facets.o \
-  xrange.o \
-  xrange_test.o \
-
 zero_test$(EXEEXT): \
   $(common_test_objects) \
   zero_test.o \
@@ -946,6 +910,5 @@ product_files$(EXEEXT): \
   my_prod.o \
   my_rnd.o \
   my_tier.o \
-  xenumtypes.o \
   liblmi$(SHREXT) \
 

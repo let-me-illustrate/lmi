@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database.cpp,v 1.12 2008-07-01 14:41:49 chicares Exp $
+// $Id: database.cpp,v 1.13 2008-08-11 19:56:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,38 +31,11 @@
 #include "alert.hpp"
 #include "dbdict.hpp"
 #include "dbnames.hpp"
-#include "inputs.hpp"      // DEPRECATED
-#include "inputstatus.hpp" // DEPRECATED
 #include "yare_input.hpp"
 
 #include <algorithm>    // std::min()
 #include <iterator>
 #include <ostream>
-
-//============================================================================
-TDatabase::TDatabase // DEPRECATED
-    (std::string const& a_ProductName
-    ,e_gender    const& a_Gender
-    ,e_class     const& a_Class
-    ,e_smoking   const& a_Smoker
-    ,int                a_IssueAge
-    ,e_uw_basis  const& a_UWBasis
-    ,e_state     const& a_State
-    )
-    :Filename (a_ProductName)
-    ,length_  (0)
-    ,Gender   (static_cast<mcenum_gender  >(a_Gender  .value()))
-    ,Class    (static_cast<mcenum_class   >(a_Class   .value()))
-    ,Smoker   (static_cast<mcenum_smoking >(a_Smoker  .value()))
-    ,IssueAge                              (a_IssueAge)
-    ,UWBasis  (static_cast<mcenum_uw_basis>(a_UWBasis .value()))
-    ,State    (static_cast<mcenum_state   >(a_State   .value()))
-{
-    DBDictionary::instance().Init(Filename);
-    Init();
-    length_ = 100 - IssueAge;
-//    length_ = static_cast<int>(Query(DB_EndtAge)) - IssueAge;
-}
 
 //============================================================================
 TDatabase::TDatabase
@@ -106,22 +79,6 @@ TDatabase::TDatabase(yare_input const& input)
     IssueAge    = input.IssueAge;
     UWBasis     = input.GroupUnderwritingType;
     State       = input.State;
-
-    DBDictionary::instance().Init(Filename);
-    Init();
-    length_ = 100 - IssueAge;
-}
-
-//============================================================================
-TDatabase::TDatabase(InputParms const& input) // DEPRECATED
-    :Filename("Irrelevant in antediluvian branch for now")
-{
-    Gender   = static_cast<mcenum_gender  >(input.Status[0].Gender .value());
-    Class    = static_cast<mcenum_class   >(input.Status[0].Class  .value());
-    Smoker   = static_cast<mcenum_smoking >(input.Status[0].Smoking.value());
-    IssueAge =                              input.Status[0].IssueAge;
-    UWBasis  = static_cast<mcenum_uw_basis>(input.GroupUWType      .value());
-    State    = static_cast<mcenum_state   >(input.InsdState        .value());
 
     DBDictionary::instance().Init(Filename);
     Init();
