@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.34 2008-08-11 00:43:22 chicares Exp $
+// $Id: input.cpp,v 1.35 2008-08-11 18:14:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -661,127 +661,5 @@ Input Input::magically_rectify(Input const& original)
         }
 
     return z;
-}
-
-#include "inputillus.hpp"
-
-void convert_to_ihs(IllusInputParms& ihs, Input const& lmi)
-{
-    std::vector<std::string>::const_iterator i;
-    for(i = lmi.member_names().begin(); i != lmi.member_names().end(); ++i)
-        {
-        try
-            {
-            ihs[*i] = lmi[*i].str();
-/*
-// TODO ?? Track down a defect here: floating-point input truncated to integer?
-            if("InforceGeneralAccountValue" == *i)
-                {
-                warning()
-                    << "InforceGeneralAccountValue:"
-                    << "\nfrom lmi: " << lmi[*i]
-                    << "\nihs: " << value_cast<std::string>(ihs[*i])
-                    << "\nlmi: " << value_cast<std::string>(lmi[*i])
-                    << LMI_FLUSH
-                    ;
-                }
-// Look for this line
-//        operator[](node_tag) = content;
-// in 'inputillus_xml_io.cpp'....
-*/
-            }
-        catch(...)
-            {
-            warning()
-                << "Problem converting input from lmi to ihs: field '"
-                << *i
-                << "' has value '"
-                << lmi[*i].str()
-                << "'."
-                << LMI_FLUSH
-                ;
-            }
-        }
-    ihs.propagate_changes_to_base_and_finalize();
-}
-
-void convert_to_ihs(std::vector<IllusInputParms>& ihs, std::vector<Input> const& lmi)
-{
-    Timer timer;
-    ihs.resize(lmi.size());
-    for(unsigned int j = 0; j < lmi.size(); ++j)
-        {
-        convert_to_ihs(ihs[j], lmi[j]);
-        }
-    status()
-        << "Convert from lmi to ihs: "
-        << timer.stop().elapsed_msec_str()
-        << std::flush
-        ;
-}
-
-void convert_from_ihs(IllusInputParms const& ihs, Input& lmi)
-{
-    std::vector<std::string>::const_iterator i;
-    for(i = lmi.member_names().begin(); i != lmi.member_names().end(); ++i)
-        {
-        try
-            {
-            lmi[*i] = ihs[*i].str();
-/*
-// TODO ?? Track down a defect here: floating-point input truncated to integer?
-            if("InforceGeneralAccountValue" == *i)
-                {
-                warning()
-                    << "InforceGeneralAccountValue:"
-                    << "\nfrom ihs: " << ihs[*i]
-                    << "\nihs: " << value_cast<std::string>(ihs[*i])
-                    << "\nlmi: " << value_cast<std::string>(lmi[*i])
-                    << LMI_FLUSH
-                    ;
-                }
-*/
-            }
-        catch(...)
-            {
-            warning()
-                << "Problem converting input from ihs to lmi: field '"
-                << *i
-                << "' has value '"
-                << lmi[*i].str()
-                << "'."
-                << LMI_FLUSH
-                ;
-            }
-        }
-    // Repair a known problem in the legacy implementation, where
-    // these two possibilities were originally treated as independent
-    // boolean states (which is wrong, because they're mutually
-    // exclusive), and later unified into a single enumerative state
-    // (but defectively, so that only the boolean state is actually
-    // reliable).
-    if(ihs.AvgFund)
-        {
-        lmi["FundChoiceType"] = "Average fund";
-        }
-    if(ihs.OverrideFundMgmtFee)
-        {
-        lmi["FundChoiceType"] = "Override fund";
-        }
-}
-
-void convert_from_ihs(std::vector<IllusInputParms> const& ihs, std::vector<Input>& lmi)
-{
-    Timer timer;
-    lmi.resize(ihs.size());
-    for(unsigned int j = 0; j < ihs.size(); ++j)
-        {
-        convert_from_ihs(ihs[j], lmi[j]);
-        }
-    status()
-        << "Convert from ihs to lmi: "
-        << timer.stop().elapsed_msec_str()
-        << std::flush
-        ;
 }
 
