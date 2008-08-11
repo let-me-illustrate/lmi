@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.71 2008-08-11 00:07:21 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.72 2008-08-11 19:56:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,6 +35,7 @@
 #include "dbnames.hpp"
 #include "global_settings.hpp"
 #include "input_sequence.hpp"
+#include "mc_enum_types_aux.hpp"
 #include "value_cast.hpp"
 
 // Harmonization is physically separated for no better reason than to
