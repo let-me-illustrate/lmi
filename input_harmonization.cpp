@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.70 2008-08-09 02:57:49 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.71 2008-08-11 00:07:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -160,6 +160,7 @@ void Input::DoHarmonize()
 {
     bool anything_goes    = global_settings::instance().ash_nazg();
     bool home_office_only = global_settings::instance().mellon();
+    bool egregious_kludge = global_settings::instance().regression_testing();
 
     bool allow_sep_acct = database_->Query(DB_AllowSepAcct);
     bool allow_gen_acct = database_->Query(DB_AllowGenAcct);
@@ -385,6 +386,9 @@ void Input::DoHarmonize()
     PolicyDate.enable(false);
     LastMaterialChangeDate.enable(false);
 
+// TODO ?? Nomen est omen.
+if(!egregious_kludge)
+  {
     UnderwritingClass.allow(mce_ultrapreferred, database_->Query(DB_AllowUltraPrefClass));
     UnderwritingClass.allow(mce_preferred     , database_->Query(DB_AllowPreferredClass));
 
@@ -424,6 +428,7 @@ void Input::DoHarmonize()
     SubstandardTable.allow(mce_table_j, mce_rated == UnderwritingClass);
     SubstandardTable.allow(mce_table_l, mce_rated == UnderwritingClass);
     SubstandardTable.allow(mce_table_p, mce_rated == UnderwritingClass);
+  } // end if(!egregious_kludge)
 
     // Can't have a non-US country multiplier other than unity in a US state.
     bool allow_custom_coi_multiplier =
@@ -1089,6 +1094,10 @@ void Input::DoTransmogrify()
         IssueAge = apparent_age;
         }
 
+bool egregious_kludge = global_settings::instance().regression_testing();
+// TODO ?? Nomen est omen.
+if(!egregious_kludge)
+  {
     // TODO ?? WX PORT !! Icky kludge.
     UseAverageOfAllFunds =
         ("Average fund"  == FundChoiceType.str())
@@ -1100,6 +1109,7 @@ void Input::DoTransmogrify()
         ? "Yes"
         : "No"
         ;
+  } // end if(!egregious_kludge)
 
     SetSolveDurations();
 }
