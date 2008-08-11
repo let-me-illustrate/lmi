@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_database.cpp,v 1.19 2008-07-05 01:33:32 chicares Exp $
+// $Id: ihs_database.cpp,v 1.20 2008-08-11 19:56:18 chicares Exp $
 
 // TODO ?? Should length_ be dynamically reset when IssueAge is?
 // TODO ?? Should State be dynamically reset?
@@ -38,8 +38,6 @@
 #include "ihs_dbdict.hpp"
 #include "ihs_dbvalue.hpp"
 #include "ihs_proddata.hpp"
-#include "inputs.hpp"      // DEPRECATED
-#include "inputstatus.hpp" // DEPRECATED
 #include "oecumenic_enumerations.hpp"
 #include "yare_input.hpp"
 
@@ -49,33 +47,6 @@
 //
 // Can we dispense with Index? It's just an alias for a set of other
 //   members that are used as input parameters to one ctor.
-//
-// Change other code to use the simpler ctor(yare_input const&)?
-
-//============================================================================
-TDatabase::TDatabase // DEPRECATED
-    (std::string const& a_ProductName
-    ,e_gender const&    a_Gender
-    ,e_class const&     a_Class
-    ,e_smoking const&   a_Smoker
-    ,int                a_IssueAge
-    ,e_uw_basis const&  a_UWBasis
-    ,e_state const&     a_State
-    )
-    :Filename   (AddDataDir
-                    (TProductData(a_ProductName).GetDatabaseFilename()
-                    )
-                )
-    ,Gender   (static_cast<mcenum_gender  >(a_Gender  .value()))
-    ,Class    (static_cast<mcenum_class   >(a_Class   .value()))
-    ,Smoker   (static_cast<mcenum_smoking >(a_Smoker  .value()))
-    ,IssueAge                              (a_IssueAge)
-    ,UWBasis  (static_cast<mcenum_uw_basis>(a_UWBasis .value()))
-    ,State    (static_cast<mcenum_state   >(a_State   .value()))
-{
-    DBDictionary::instance().Init(Filename);
-    Init();
-}
 
 //============================================================================
 TDatabase::TDatabase
@@ -146,64 +117,6 @@ TDatabase::TDatabase(yare_input const& input)
         case oe_er_state:
             {
             State = input.CorporationState;
-            }
-            break;
-        default:
-            {
-            fatal_error()
-                << "Cannot determine state of jurisdiction."
-                << LMI_FLUSH
-                ;
-            }
-            break;
-        }
-
-    Index[5] = State;
-    Idx.State() = State;
-}
-
-//============================================================================
-TDatabase::TDatabase(InputParms const& input) // DEPRECATED
-    :Filename
-        (AddDataDir
-            (TProductData(input.ProductName).GetDatabaseFilename())
-        )
-{
-// GET RID OF Gender, Class, Smoker, etc.
-    Gender   = static_cast<mcenum_gender  >(input.Status[0].Gender .value());
-    Class    = static_cast<mcenum_class   >(input.Status[0].Class  .value());
-    Smoker   = static_cast<mcenum_smoking >(input.Status[0].Smoking.value());
-    IssueAge =                              input.Status[0].IssueAge;
-    UWBasis  = static_cast<mcenum_uw_basis>(input.GroupUWType      .value());
-    State    = mce_s_CT; // Dummy initialization.
-
-    DBDictionary::instance().Init(Filename);
-    Init();
-
-    // State of jurisdiction is governed by database item DB_PremTaxState.
-    // This must be determined by a database lookup, during construction
-    // of the database object.
-
-    // State of jurisdiction must not depend on itself
-    TDBValue const& StateEntry = GetEntry(DB_PremTaxState);
-    if(1 != StateEntry.GetLength(5))
-        {
-        fatal_error()
-            << "Database invalid: circular dependency."
-            << " State of jurisdiction depends on itself."
-            << LMI_FLUSH
-            ;
-        }
-    switch(static_cast<int>(Query(DB_PremTaxState)))
-        {
-        case oe_ee_state:
-            {
-            State = static_cast<mcenum_state>(input.InsdState.value());
-            }
-            break;
-        case oe_er_state:
-            {
-            State = static_cast<mcenum_state>(input.SponsorState.value());
             }
             break;
         default:
