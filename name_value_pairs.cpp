@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: name_value_pairs.cpp,v 1.6 2008-01-01 18:29:51 chicares Exp $
+// $Id: name_value_pairs.cpp,v 1.7 2008-08-11 14:07:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,6 +29,7 @@
 #include "name_value_pairs.hpp"
 
 #include "numeric_io_cast.hpp"
+#include "value_cast.hpp"
 
 #include <fstream>
 #include <sstream>
@@ -84,6 +85,11 @@ double name_value_pairs::numeric_value(std::string const& key) const
         }
 
     return z;
+}
+
+std::string name_value_pairs::string_numeric_value(std::string const& key) const
+{
+    return value_cast<std::string>(numeric_value(key));
 }
 
 std::map<std::string, std::string> const& name_value_pairs::map() const

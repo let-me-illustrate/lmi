@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: name_value_pairs.hpp,v 1.7 2008-01-01 18:29:51 chicares Exp $
+// $Id: name_value_pairs.hpp,v 1.8 2008-08-11 14:07:23 chicares Exp $
 
 #ifndef name_value_pairs_hpp
 #define name_value_pairs_hpp
@@ -56,7 +56,9 @@
 /// It may seem odd to provide a distinct numeric accessor. The
 /// rationale is that "missing" numeric data are to be treated as
 /// zero; furthermore, leading and trailing blanks are disregarded
-/// for numeric conversions.
+/// for numeric conversions. A distinct string-numeric accessor
+/// returns the result of the numeric accessor, formatted as a
+/// string.
 ///
 /// A private accessor to the internal std::map data member is
 /// provided only for use by the friend unit-test function.
@@ -94,8 +96,9 @@ class name_value_pairs
     name_value_pairs(std::string const& filename);
     ~name_value_pairs();
 
-    std::string const& string_value(std::string const& key) const;
-    double numeric_value(std::string const& key) const;
+    std::string const& string_value        (std::string const& key) const;
+    double             numeric_value       (std::string const& key) const;
+    std::string        string_numeric_value(std::string const& key) const;
 
   private:
     std::map<std::string, std::string> const& map() const;
