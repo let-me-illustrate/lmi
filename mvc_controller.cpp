@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_controller.cpp,v 1.21 2008-05-07 13:01:48 chicares Exp $
+// $Id: mvc_controller.cpp,v 1.22 2008-08-12 11:50:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -53,6 +53,17 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/wupdlock.h>
 
+#include <cstddef>  // std::size_t
+#include <cstring>  // std::strlen()
+
+namespace
+{
+/// Open new bookcontrol to page selected in most recent instance.
+///
+/// A page selection is maintained for each bookcontrol resource.
+
+std::map<std::string,std::size_t> last_selected_page;
+
 /// Custom event to trigger a call to SetFocus(). This action requires
 /// a custom event because wxFocusEvent does not change focus--it only
 /// notifies the affected windows that focus changes have occurred.
@@ -68,8 +79,6 @@
 /// and add a handler in the event table that invokes a function that
 /// calls SetFocus().
 
-namespace
-{
 wxEventType const wxEVT_REFOCUS_INVALID_CONTROL = wxNewEventType();
 } // Unnamed namespace.
 
@@ -86,6 +95,9 @@ MvcController::MvcController
     ,unit_test_under_way_                 (false)
 {
     model_.TestInitialConsistency();
+
+    char const* resource_file_name = view_.ResourceFileName();
+    LMI_ASSERT(0 != resource_file_name && 0 != std::strlen(resource_file_name));
 
     if(!wxXmlResource::Get()->LoadDialog(this, parent, view_.MainDialogName()))
         {
@@ -693,11 +705,19 @@ void MvcController::UponInitDialog(wxInitDialogEvent& event)
         ,&MvcController::UponUpdateUI
         ,wxXmlResource::GetXRCID(view_.MainDialogName())
         );
+
+    BookControl().ChangeSelection(last_selected_page[view_.ResourceFileName()]);
 }
 
 void MvcController::UponPageChanged(wxBookCtrlBaseEvent& event)
 {
     event.Skip();
+
+    int z = event.GetSelection();
+    if(-1 != z)
+        {
+        last_selected_page[view_.ResourceFileName()] = z;
+        }
 
     ConditionallyEnable();
 }
