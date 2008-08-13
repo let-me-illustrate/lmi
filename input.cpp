@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.35 2008-08-11 18:14:14 chicares Exp $
+// $Id: input.cpp,v 1.36 2008-08-13 01:31:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -61,15 +61,15 @@ Input::Input()
 //    ,Internal1035ExchangeAmount       ("")
 //    ,Internal1035ExchangeBasis        ("")
 //    ,Internal1035ExchangeFromMec      ("")
-    ,SolveTargetTime                  ("95")
+//    ,SolveTargetTime                  ("95")
 //    ,SolveBeginTime                   ("")
-    ,SolveEndTime                     ("95")
+//    ,SolveEndTime                     ("95")
 //    ,SolveType                        ("")
 //    ,SolveBeginYear                   ("")
-    ,SolveEndYear                     ("50")
+//    ,SolveEndYear                     ("50")
 //    ,SolveTarget                      ("")
 //    ,SolveTargetCashSurrenderValue    ("")
-    ,SolveTargetYear                  ("50")
+//    ,SolveTargetYear                  ("50")
 //    ,SolveBasis                       ("")
 //    ,SolveSeparateAccountBasis        ("")
 #if !defined SUPPORT_105822
@@ -219,8 +219,8 @@ Input::Input()
 //    ,SupplementalReportColumn10       ("")
 //    ,SupplementalReportColumn11       ("")
     ,DeprecatedSolveTgtAtWhich        ("TgtAtMaturity")
-    ,DeprecatedSolveFromWhich         ("FromYear")
-    ,DeprecatedSolveToWhich           ("ToMaturity")
+    ,DeprecatedSolveFromWhich         ("FromIssue")
+    ,DeprecatedSolveToWhich           ("ToRetirement")
 //    ,DeprecatedUseDOB                 ("")
 //    ,DeprecatedUseDOR                 ("")
 //    ,EffectiveDateToday               ("")
