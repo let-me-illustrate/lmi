@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <single_cell_document>
-  <cell version="1">
+  <cell version="2">
     <AccidentalDeathBenefit>No</AccidentalDeathBenefit>
     <Address/>
     <AgentAddress>*** REQUIRED FIELD MISSING ***</AgentAddress>
@@ -40,9 +40,9 @@
     <DeathBenefitOptionFromRetirement>A</DeathBenefitOptionFromRetirement>
     <DefinitionOfLifeInsurance>CVAT</DefinitionOfLifeInsurance>
     <DefinitionOfMaterialChange>Earlier of increase or unnecessary premium</DefinitionOfMaterialChange>
-    <DeprecatedSolveFromWhich>FromYear</DeprecatedSolveFromWhich>
+    <DeprecatedSolveFromWhich>FromIssue</DeprecatedSolveFromWhich>
     <DeprecatedSolveTgtAtWhich>TgtAtMaturity</DeprecatedSolveTgtAtWhich>
-    <DeprecatedSolveToWhich>ToMaturity</DeprecatedSolveToWhich>
+    <DeprecatedSolveToWhich>ToRetirement</DeprecatedSolveToWhich>
     <DeprecatedUseDOB>No</DeprecatedUseDOB>
     <DeprecatedUseDOR>No</DeprecatedUseDOR>
     <Dumpin>0</Dumpin>
@@ -144,14 +144,14 @@
     <SeparateAccountRateType>GrossRate</SeparateAccountRateType>
     <Smoking>Nonsmoker</Smoking>
     <SolveBasis>Current basis</SolveBasis>
-    <SolveBeginTime>0</SolveBeginTime>
+    <SolveBeginTime>45</SolveBeginTime>
     <SolveBeginYear>0</SolveBeginYear>
-    <SolveEndTime>95</SolveEndTime>
-    <SolveEndYear>55</SolveEndYear>
+    <SolveEndTime>65</SolveEndTime>
+    <SolveEndYear>20</SolveEndYear>
     <SolveSeparateAccountBasis>Input %</SolveSeparateAccountBasis>
     <SolveTarget>SolveForEndt</SolveTarget>
     <SolveTargetCashSurrenderValue>0</SolveTargetCashSurrenderValue>
-    <SolveTargetTime>95</SolveTargetTime>
+    <SolveTargetTime>100</SolveTargetTime>
     <SolveTargetYear>55</SolveTargetYear>
     <SolveType>SolveNone</SolveType>
     <SpecamtHistory>0</SpecamtHistory>

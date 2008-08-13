@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_xml_io.cpp,v 1.6 2008-08-02 13:33:14 chicares Exp $
+// $Id: input_xml_io.cpp,v 1.7 2008-08-13 01:31:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -251,6 +251,19 @@ using namespace xml;
         ,add_years(EffectiveDate.value(), InforceYear.value(), true)
         );
 
+    if(1 == cell_version)
+        {
+        // Solve 'Year' values were saved in solve 'Time' entities,
+        // in this version only.
+        SolveTargetYear = SolveTargetTime.value();
+        SolveBeginYear  = SolveBeginTime .value();
+        SolveEndYear    = SolveEndTime   .value();
+
+        SolveTargetTime = issue_age() + SolveTargetYear.value();
+        SolveBeginTime  = issue_age() + SolveBeginYear .value();
+        SolveEndTime    = issue_age() + SolveEndYear   .value();
+        }
+
 // If you want to see the ones that didn't get assigned:
 //std::ostringstream oss;
 //std::ostream_iterator<std::string> osi(oss, "\r\n");
@@ -284,7 +297,7 @@ void Input::write(xml::element& x) const
 //============================================================================
 int Input::class_version() const
 {
-    return 1;
+    return 2;
 }
 
 //============================================================================

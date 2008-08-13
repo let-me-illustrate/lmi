@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.72 2008-08-11 19:56:18 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.73 2008-08-13 01:31:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -958,33 +958,29 @@ false // Silly workaround for now.
     DeprecatedSolveTgtAtWhich .allow(mce_target_at_retirement , actually_solving && mce_solve_for_target == SolveTarget);
     DeprecatedSolveTgtAtWhich .allow(mce_target_at_year       , actually_solving && mce_solve_for_target == SolveTarget);
     DeprecatedSolveTgtAtWhich .allow(mce_target_at_age        , actually_solving && mce_solve_for_target == SolveTarget);
-    DeprecatedSolveTgtAtWhich .allow(mce_target_at_maturity   , actually_solving && mce_solve_for_target == SolveTarget);
+    DeprecatedSolveTgtAtWhich .allow(mce_target_at_maturity   , actually_solving);
     DeprecatedSolveTgtAtWhich .enable(actually_solving && mce_solve_for_target == SolveTarget);
 
-// TODO ?? This is a mess. Here's what's really needed:
-//   separate variables for {begin, end, target} X {age, duration}
-//   remove ancient code that mangles this stuff, e.g. InputParms::SetSolveDurations()
-//
-// This is what things should probably look like:
-//
-//    SolveBeginYear .enable(actually_solving && mce_solve_from_year == DeprecatedSolveFromWhich);
-//    SolveEndYear   .enable(actually_solving && mce_solve_to_year   == DeprecatedSolveToWhich);
-//    SolveTargetYear.enable(actually_solving && mce_target_at_year  == DeprecatedSolveTgtAtWhich && mce_solve_for_target == SolveTarget);
-//
-//    SolveBeginAge  .enable(actually_solving && mce_solve_from_age == DeprecatedSolveFromWhich);
-//    SolveEndAge    .enable(actually_solving && mce_solve_to_age   == DeprecatedSolveToWhich);
-//    SolveTargetAge .enable(actually_solving && mce_target_at_age  == DeprecatedSolveTgtAtWhich && mce_solve_for_target == SolveTarget);
-//
-// but for now, as a temporary workaround, these '-Year' variables are mapped
-// to 'age' controls, merely so that we can inhibit them...
-    SolveBeginYear .enable(false);
-    SolveEndYear   .enable(false);
-    SolveTargetYear.enable(false);
-// ...and this actually 'works' for duration, because legacy code translates
-// it so that it seems to do the right thing:
-    SolveBeginTime .enable(actually_solving && mce_solve_from_year == DeprecatedSolveFromWhich);
-    SolveEndTime   .enable(actually_solving && mce_solve_to_year   == DeprecatedSolveToWhich);
-    SolveTargetTime.enable(actually_solving && mce_target_at_year  == DeprecatedSolveTgtAtWhich && mce_solve_for_target == SolveTarget);
+    SolveBeginYear .enable(actually_solving && mce_solve_from_year == DeprecatedSolveFromWhich);
+    SolveEndYear   .enable(actually_solving && mce_solve_to_year   == DeprecatedSolveToWhich);
+    SolveTargetYear.enable(actually_solving && mce_target_at_year  == DeprecatedSolveTgtAtWhich && mce_solve_for_target == SolveTarget);
+
+    // INPUT !! The minimum 'SolveEndYear' and 'SolveTargetYear' set
+    // here mean that a solve to or at retirement is a request, not a
+    // command.
+    SolveBeginYear .minimum_and_maximum(0                     , years_to_maturity());
+    SolveEndYear   .minimum_and_maximum(SolveBeginYear.value(), years_to_maturity());
+    SolveTargetYear.minimum_and_maximum(SolveBeginYear.value(), years_to_maturity());
+
+    // INPUT !! Temporarily, existing -'Time' names are used where
+    // -'Age' names would be clearer.
+    SolveBeginTime .enable(actually_solving && mce_solve_from_age == DeprecatedSolveFromWhich);
+    SolveEndTime   .enable(actually_solving && mce_solve_to_age   == DeprecatedSolveToWhich);
+    SolveTargetTime.enable(actually_solving && mce_target_at_age  == DeprecatedSolveTgtAtWhich && mce_solve_for_target == SolveTarget);
+
+    SolveBeginTime .minimum_and_maximum(issue_age()           , maturity_age());
+    SolveEndTime   .minimum_and_maximum(SolveBeginTime.value(), maturity_age());
+    SolveTargetTime.minimum_and_maximum(SolveBeginTime.value(), maturity_age());
 
     SolveTarget.enable(actually_solving);
     SolveTarget.allow(mce_solve_for_endt  , actually_solving);
@@ -1117,20 +1113,11 @@ if(!egregious_kludge)
 
 void Input::SetSolveDurations()
 {
-    // Probably something like this should be done when a case is saved.
-    // Reproducible problem:
-    //   File | New | Illustration
-    //   increase the issue age
-    //   hit OK without focusing the Solve tab
-    //   save the case
-    //   close the document
-    //   File | 1 (open most recently used file--the one just saved
-    //   now the solve-to age is over 100
     switch(DeprecatedSolveTgtAtWhich.value())
         {
         case mce_target_at_year:
             {
-            SolveTargetYear = SolveTargetTime.value();
+            ; // Do nothing.
             }
             break;
         case mce_target_at_age:
@@ -1158,19 +1145,12 @@ void Input::SetSolveDurations()
                 ;
             }
         }
-    if(years_to_maturity() < SolveTargetYear.value())
-        {
-        fatal_error()
-            << "Solve target year exceeds maturity year."
-            << LMI_FLUSH
-            ;
-        }
 
     switch(DeprecatedSolveFromWhich.value())
         {
         case mce_solve_from_year:
             {
-            SolveBeginYear = SolveBeginTime.value();
+            ; // Do nothing.
             }
             break;
         case mce_solve_from_age:
@@ -1203,34 +1183,22 @@ void Input::SetSolveDurations()
         {
         case mce_solve_to_year:
             {
-int z = SolveEndTime.value();
-if(0 <= z && z <= 100)
-            SolveEndYear = SolveEndTime.value();
-else warning() << "Solve end year out of range." << LMI_FLUSH;
+            ; // Do nothing.
             }
             break;
         case mce_solve_to_age:
             {
-int z = SolveEndTime.value() - issue_age();
-if(0 <= z && z <= 100)
             SolveEndYear = SolveEndTime.value() - issue_age();
-else warning() << "Solve end year out of range." << LMI_FLUSH;
             }
             break;
         case mce_solve_to_retirement:
             {
-int z = years_to_retirement();
-if(0 <= z && z <= 100)
             SolveEndYear = years_to_retirement();
-else warning() << "Solve end year out of range." << LMI_FLUSH;
             }
             break;
         case mce_solve_to_maturity:
             {
-int z = years_to_maturity();
-if(0 <= z && z <= 100)
             SolveEndYear = years_to_maturity();
-else warning() << "Solve end year out of range." << LMI_FLUSH;
             }
             break;
         default:
@@ -1243,6 +1211,10 @@ else warning() << "Solve end year out of range." << LMI_FLUSH;
                 ;
             }
         }
+
+    SolveTargetTime = issue_age() + SolveTargetYear.value();
+    SolveBeginTime  = issue_age() + SolveBeginYear .value();
+    SolveEndTime    = issue_age() + SolveEndYear   .value();
 }
 
 #if 0
