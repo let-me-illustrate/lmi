@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1138 2008-08-11 20:02:24 chicares Exp $
+// $Id: ChangeLog,v 1.1139 2008-08-13 12:08:26 chicares Exp $
 
 MAINTENANCE
 
@@ -19159,4 +19159,25 @@ Remove vestiges of old input and enumeration classes.
   xrangefwd.hpp            [expunged]
   xrangetypes.hpp          [expunged]
 Expunge obsolete input, enumeration, and numeric-range classes.
+
+20080812T1150Z <gchicares@sbcglobal.net> [986]
+
+  mvc_controller.cpp
+Make book-control page selection persist within a session.
+
+20080813T0131Z <gchicares@sbcglobal.net> [985]
+
+  input.cpp
+  input_harmonization.cpp
+  input_xml_io.cpp
+  main_cli.cpp
+  sample.cns
+  sample.ill
+Improve solve GUI, tending to backward compatibility.
+
+20080813T1208Z <gchicares@sbcglobal.net> [985]
+
+  mvc_controller.cpp
+Improve wx style (Vaclav). See:
+  http://lists.nongnu.org/archive/html/lmi/2008-08/msg00021.html
 

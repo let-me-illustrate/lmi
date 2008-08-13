@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_controller.cpp,v 1.22 2008-08-12 11:50:38 chicares Exp $
+// $Id: mvc_controller.cpp,v 1.23 2008-08-13 12:08:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -104,6 +104,8 @@ MvcController::MvcController
         fatal_error() << "Unable to load dialog." << LMI_FLUSH;
         }
 
+    BookControl().ChangeSelection(last_selected_page[view_.ResourceFileName()]);
+
     // This assignment must follow the call to LoadDialog().
     // Initialization to 'parent' in the ctor-initializer-list
     // ensures that 'last_focused_window_' always points to a
@@ -149,6 +151,10 @@ MvcController::~MvcController()
 }
 
 /// Make the Model consistent, and change the View to comport with it.
+///
+/// While this function isn't called explicitly upon initialization,
+/// UponUpdateUI() guarantees that it's been called by the time the
+/// user can interact with the GUI.
 ///
 /// Argument 'name_to_ignore' allows callers to specify one entity to
 /// skip, so that NameOfControlToDeferEvaluating() can be passed over
@@ -705,19 +711,15 @@ void MvcController::UponInitDialog(wxInitDialogEvent& event)
         ,&MvcController::UponUpdateUI
         ,wxXmlResource::GetXRCID(view_.MainDialogName())
         );
-
-    BookControl().ChangeSelection(last_selected_page[view_.ResourceFileName()]);
 }
 
 void MvcController::UponPageChanged(wxBookCtrlBaseEvent& event)
 {
     event.Skip();
 
-    int z = event.GetSelection();
-    if(-1 != z)
-        {
-        last_selected_page[view_.ResourceFileName()] = z;
-        }
+    int const z = event.GetSelection();
+    LMI_ASSERT(wxNOT_FOUND != z);
+    last_selected_page[view_.ResourceFileName()] = z;
 
     ConditionallyEnable();
 }
@@ -777,6 +779,10 @@ void MvcController::UponUpdateUI(wxUpdateUIEvent& event)
     // already been handled. Complex processing of many inputs has
     // been observed to consume excessive CPU time when a malloc
     // debugger is running, so this optimization is significant.
+    //
+    // The early-exit condition cannot succeed until Assimilate() has
+    // been called: therefore, Assimilate() is guaranteed to be called
+    // here by the time the user can interact with the GUI.
     TransferDataFromWindow();
     if(cached_transfer_data_ == transfer_data_)
         {
