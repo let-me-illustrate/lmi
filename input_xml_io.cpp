@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_xml_io.cpp,v 1.7 2008-08-13 01:31:18 chicares Exp $
+// $Id: input_xml_io.cpp,v 1.8 2008-08-14 12:11:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -214,12 +214,12 @@ using namespace xml;
         std::string InsdMiddleName  = detritus_map["MiddleName"     ];
         std::string InsdLastName    = detritus_map["LastName"       ];
 
-        operator[]("AgentName"  ) = full_name // DEPRECATED Alias for 'AgentFirstName'.
+        operator[]("AgentName"  ) = full_name
             (AgentFirstName
             ,AgentMiddleName
             ,AgentLastName
             );
-        operator[]("InsuredName") = full_name // DEPRECATED Alias for 'InsdFirstName'.
+        operator[]("InsuredName") = full_name
             (InsdFirstName
             ,InsdMiddleName
             ,InsdLastName
