@@ -31,7 +31,7 @@
 // other reasons evident in cvs or explained in 'ChangeLog'. Any
 // defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.34 2008-08-11 16:35:16 chicares Exp $
+// $Id: main_cgi.cpp,v 1.35 2008-08-14 12:09:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -480,15 +480,16 @@ void ShowOutput(cgicc::Cgicc const& data)
     Timer timer;
     Input input;
 
-    // TODO ?? More KLUDGE stuff.
+    // Explicitly set certain defaults.
     input["IssueAge"]                      = "45";
     input["RetirementAge"]                 = "65";
-
     input["Gender"]                        = "Female";
     input["Smoking"]                       = "Smoker";
     input["UnderwritingClass"]             = "Preferred";
     input["WaiverOfPremiumBenefit"]        = "No";
     input["AccidentalDeathBenefit"]        = "No";
+    input["DeprecatedSolveTgtAtWhich"]     = "TgtAtYear";
+    input["DeprecatedSolveToWhich"]        = "ToYear";
 
     input["ProductName"]                   = GetValue(data, "ProductName" );
     input["IssueAge"]                      = GetValue(data, "IssueAge"    );
@@ -518,12 +519,6 @@ void ShowOutput(cgicc::Cgicc const& data)
 //    input["SeparateAccountRateType"]       = GetValue(data, "SeparateAccountRateType"); // not used yet
     input["LoanRate"]                      = GetValue(data, "LoanRate" );
     input["LoanRateType"]                  = GetValue(data, "LoanRateType");
-
-    // DEPRECATED Goofy workaround needed while porting input.
-    input["DeprecatedSolveTgtAtWhich"] = "TgtAtYear";
-    input["DeprecatedSolveToWhich"]    = "ToYear";
-    input["SolveEndTime"]              = input["SolveEndYear"   ].str();
-    input["SolveTargetTime"]           = input["SolveTargetYear"].str();
 
     input.RealizeAllSequenceInput();
 

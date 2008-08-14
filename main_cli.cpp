@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.56 2008-08-13 01:31:18 chicares Exp $
+// $Id: main_cli.cpp,v 1.57 2008-08-14 12:09:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -180,12 +180,9 @@ void SelfTest()
             ;
         }
 
-    // DEPRECATED As long as IllusVal::run() is overloaded to support
-    // the old input class, this static_cast is required.
-    typedef double (IllusVal::*F)(Input const&);
     std::cout
         << "Test solve speed: "
-        << TimeAnAliquot(boost::bind(static_cast<F>(&IllusVal::run), &IV, IP), 0.1)
+        << TimeAnAliquot(boost::bind(&IllusVal::run, &IV, IP), 0.1)
         << '\n'
         ;
 }
