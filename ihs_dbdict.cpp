@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbdict.cpp,v 1.22 2008-07-05 01:33:33 chicares Exp $
+// $Id: ihs_dbdict.cpp,v 1.23 2008-08-15 14:51:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -361,12 +361,12 @@ void DBDictionary::WriteSampleDBFile()
     Add(TDBValue(DB_AllowFlatExtras     , true));
     Add(TDBValue(DB_MinIssAge           , 15));
     Add(TDBValue(DB_MaxIssAge           , 70));
-    Add(TDBValue(DB_MinIssFace          , 0.0));
-    Add(TDBValue(DB_MaxIssFace          , 0.0));
-    Add(TDBValue(DB_MinRenlBaseFace     , 50000.0));
-    Add(TDBValue(DB_MinRenlFace         , 50000.0));
-    Add(TDBValue(DB_MaxRenlFace         , 0.0));
-    Add(TDBValue(DB_MinFaceIncr         , 0.0));
+    Add(TDBValue(DB_MinIssSpecAmt       , 0.0));
+    Add(TDBValue(DB_MaxIssSpecAmt       , 0.0));
+    Add(TDBValue(DB_MinRenlBaseSpecAmt  , 50000.0));
+    Add(TDBValue(DB_MinRenlSpecAmt      , 50000.0));
+    Add(TDBValue(DB_MaxRenlSpecAmt      , 0.0));
+    Add(TDBValue(DB_MinSpecAmtIncr      , 0.0));
     Add(TDBValue(DB_MaxIncrAge          , 99));
     Add(TDBValue(DB_MinPmt              , 0.0));
     Add(TDBValue(DB_SmokeOrTobacco      , oe_tobacco_nontobacco));
@@ -503,7 +503,7 @@ void DBDictionary::WriteSampleDBFile()
     Add(TDBValue(DB_WeightGender        , 0.0));
     Add(TDBValue(DB_WeightSmoking       , 0.0));
     Add(TDBValue(DB_WeightAge           , 0.0));
-    Add(TDBValue(DB_WeightFace          , 0.0));
+    Add(TDBValue(DB_WeightSpecAmt       , 0.0));
     Add(TDBValue(DB_WeightState         , 0.0));
     Add(TDBValue(DB_FullExpPol          , 0.0));
     Add(TDBValue(DB_FullExpPrem         , 0.0));
