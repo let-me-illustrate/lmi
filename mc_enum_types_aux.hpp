@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types_aux.hpp,v 1.6 2008-08-14 12:11:38 chicares Exp $
+// $Id: mc_enum_types_aux.hpp,v 1.7 2008-08-15 10:41:14 chicares Exp $
 
 #ifndef mc_enum_types_aux_hpp
 #define mc_enum_types_aux_hpp
@@ -75,9 +75,13 @@ bool is_three_rate_nasd(mcenum_ledger_type);
 /// This is rarely useful, but it's beneficial where it's used--see:
 ///   http://lists.nongnu.org/archive/html/lmi/2008-08/msg00022.html
 /// Of course, a more general facility could easily be created.
+/// Perhaps these should be written as a template anyway.
 
 std::string mc_str(mcenum_dbopt);
 std::string mc_str(mcenum_run_basis);
+std::string mc_str(mcenum_state);
+
+mcenum_state mc_state_from_string(std::string const&);
 
 void set_cloven_bases_from_run_basis
     (mcenum_run_basis
