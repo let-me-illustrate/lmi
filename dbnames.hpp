@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.hpp,v 1.12 2008-08-15 15:22:14 chicares Exp $
+// $Id: dbnames.hpp,v 1.13 2008-08-15 15:42:19 chicares Exp $
 
 #ifndef dbnames_hpp
 #define dbnames_hpp
@@ -411,26 +411,12 @@ enum DatabaseNames
     // instead of where a renumbered old item is used--that should make
     // such errors much easier to track down and repair. We can re-sort
     // additions into categories when preparing a major release.
-
-    // TODO ?? We ought to find a way to make this file change whenever
-    // dbnames.xpp changes. See that file for definition of each entity.
+    //
+    // See 'dbnames.xpp' for the definition of each entity.
     };
 
 struct db_names
 {
-/* TODO ?? Do we want such a ctor?
-    db_names
-        (DatabaseNames  a_Idx
-        ,DatabaseNames  a_ParentIdx
-        ,char*  a_ShortName
-        ,char*  a_LongName
-        )
-        :Idx        (a_Idx)
-        ,ParentIdx  (a_ParentIdx)
-        ,ShortName  (a_ShortName)
-        ,LongName   (a_LongName)
-        {}
-*/
     DatabaseNames       Idx;
     DatabaseNames       ParentIdx;
     char const*         ShortName;
