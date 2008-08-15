@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.105 2008-07-23 11:06:33 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.106 2008-08-15 10:41:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1892,7 +1892,7 @@ double AccountValue::GetPremLoad
         ;
     HOPEFULLY(0.0 <= sum_of_separate_loads);
     LMI_ASSERT
-        (   StratifiedCharges_->premium_tax_is_tiered(GetStateOfJurisdiction().value())
+        (   StratifiedCharges_->premium_tax_is_tiered(GetStateOfJurisdiction())
         ||  materially_equal(total_load, sum_of_separate_loads)
         );
 
@@ -1916,7 +1916,7 @@ double AccountValue::GetPremTaxLoad(double payment)
     if(PremiumTaxLoadIsTieredInStateOfJurisdiction)
         {
         tax_in_state_of_jurisdiction = StratifiedCharges_->tiered_premium_tax
-            (GetStateOfJurisdiction().value()
+            (GetStateOfJurisdiction()
             ,payment
             ,PolicyYearRunningTotalPremiumSubjectToPremiumTax
             );
@@ -1930,7 +1930,7 @@ double AccountValue::GetPremTaxLoad(double payment)
         if(PremiumTaxLoadIsTieredInStateOfDomicile)
             {
             tax_in_state_of_domicile = StratifiedCharges_->tiered_premium_tax
-                (GetStateOfDomicile().value()
+                (GetStateOfDomicile()
                 ,payment
                 ,PolicyYearRunningTotalPremiumSubjectToPremiumTax
                 );

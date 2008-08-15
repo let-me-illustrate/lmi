@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types_aux.cpp,v 1.4 2008-07-17 19:02:42 chicares Exp $
+// $Id: mc_enum_types_aux.cpp,v 1.5 2008-08-15 10:41:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -74,14 +74,28 @@ bool is_three_rate_nasd(mcenum_ledger_type)
     return false;
 }
 
-std::string mc_str(mcenum_dbopt b)
+std::string mc_str(mcenum_dbopt z)
 {
-    return mce_dbopt(b).str();
+    return mce_dbopt(z).str();
 }
 
-std::string mc_str(mcenum_run_basis b)
+std::string mc_str(mcenum_run_basis z)
 {
-    return mce_run_basis(b).str();
+    return mce_run_basis(z).str();
+}
+  #include "alert.hpp"
+std::string mc_str(mcenum_state z)
+{
+//    return mce_state(z).str();
+
+try{
+    return mce_state(z).str();
+} catch(...) {fatal_error() << z << " !" << LMI_FLUSH; throw 0;}
+}
+
+mcenum_state mc_state_from_string(std::string const& s)
+{
+    return mce_state(s).value();
 }
 
 /// Inverse of set_run_basis_from_cloven_bases(), q.v.
