@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.hpp,v 1.13 2008-08-15 15:42:19 chicares Exp $
+// $Id: dbnames.hpp,v 1.14 2008-08-15 17:49:24 chicares Exp $
 
 #ifndef dbnames_hpp
 #define dbnames_hpp
@@ -63,25 +63,37 @@ enum DatabaseNames
 
         ,DB_WaivePmTxInt1035
 
+        ,DB_PremTaxLoad
+        ,DB_GuarAcctValLoadAMD
+        ,DB_CurrAcctValLoadAMD
+        ,DB_DynamicSepAcctLoad
+        ,DB_SpecAmtLoadLimit
+        ,DB_PremTaxRetalLimit
+        ,DB_PremTaxTierGroup
+        ,DB_PremTaxTierPeriod
+        ,DB_PremTaxTierNonDecr
+
     ,DB_Topic_WD
 
-        ,DB_FirstWDYear
+        ,DB_AllowWD
+        ,DB_WDFee
+        ,DB_WDFeeRate
 
         ,DB_MaxWDAVMult
         ,DB_MaxWDDed
         ,DB_MinWD
 
-        ,DB_WDFee
-        ,DB_WDFeeRate
-
         ,DB_WDCanDecrSADBO1
         ,DB_WDCanDecrSADBO2
         ,DB_WDCanDecrSADBO3
 
+        ,DB_FreeWDProportion
+
+        ,DB_FirstWDYear
+
     ,DB_Topic_Loans
 
-        ,DB_FirstLoanYear
-
+        ,DB_AllowLoan
         ,DB_AllowPrefLoan
         ,DB_AllowFixedLoan
         ,DB_FixedLoanRate
@@ -95,6 +107,10 @@ enum DatabaseNames
 
         ,DB_CurrPrefLoanSpread
         ,DB_CurrRegLoanSpread
+
+        ,DB_MaxVLRRate
+
+        ,DB_FirstLoanYear
 
     ,DB_Topic_Interest
 
@@ -112,6 +128,11 @@ enum DatabaseNames
 
         ,DB_SepAcctSpreadMethod
         ,DB_DynamicMandE
+        ,DB_AllowHoneymoon
+        ,DB_MaxGenAcctRate
+        ,DB_MaxSepAcctRate
+        ,DB_IntSpreadFreq
+        ,DB_GAIntBonus
 
     ,DB_Topic_Mortality
 
@@ -130,6 +151,16 @@ enum DatabaseNames
         ,DB_CCoiIsAnnual
         ,DB_GCoiIsAnnual
         ,DB_MCoiIsAnnual
+
+        ,DB_GCOIMultiplier
+        ,DB_UnusualCOIBanding
+        ,DB_CurrCOITable0Limit
+        ,DB_CurrCOITable1
+        ,DB_CurrCOITable1Limit
+        ,DB_CurrCOITable2
+        ,DB_CoiUpper12Method
+        ,DB_MaxMonthlyCoiRate
+        ,DB_CoiInforceReentry
 
     ,DB_Topic_Issue_Rules
 
@@ -166,22 +197,34 @@ enum DatabaseNames
         ,DB_Allowable
         ,DB_AllowPreferredClass
 
+        ,DB_PrefOrSelect
+        ,DB_AllowUltraPrefClass
+        ,DB_StateApproved
+        ,DB_AllowStateXX
+        ,DB_AllowForeign
+
     ,DB_Topic_7702
 
         ,DB_AllowCVAT
         ,DB_AllowGPT
+        ,DB_AllowNo7702
 
         ,DB_CorridorTable
         ,DB_TAMRA7PayTable
         ,DB_IRC7702QTable
 
         ,DB_PremLoad7702
+        ,DB_Equiv7702DBO3
 
     ,DB_Topic_DeathBfts
 
         ,DB_AllowDBO1
         ,DB_AllowDBO2
         ,DB_AllowDBO3
+        ,DB_AllowChangeToDBO2
+        ,DB_AllowSAIncr
+        ,DB_EnforceNAARLimit
+
         ,DB_OptChgCanIncrSA
         ,DB_OptChgCanDecrSA
 
@@ -196,6 +239,14 @@ enum DatabaseNames
         ,DB_SurrChgEAMax
         ,DB_SurrChgPremMult
         ,DB_SurrChgIsMly
+
+        ,DB_SurrChgAVMult
+        ,DB_SurrChgSAMult
+        ,DB_SurrChgOnIncr
+        ,DB_SurrChgSADurFactor
+        ,DB_SurrChgAVDurFactor
+        ,DB_SurrChgOnDecr
+        ,DB_Has1035ExchCharge
 
     ,DB_Topic_Misc
 
@@ -219,33 +270,94 @@ enum DatabaseNames
         ,DB_NoLapseOpt1Only
 
         ,DB_PremRefund
+        ,DB_LedgerType
+        ,DB_NoLapseAlwaysActive
+        ,DB_DeductionMethod
+        ,DB_DeductionAcct
+        ,DB_DistributionMethod
+        ,DB_DistributionAcct
+        ,DB_EePremMethod
+        ,DB_EePremAcct
+        ,DB_ErPremMethod
+        ,DB_ErPremAcct
+        ,DB_DefaultProcessOrder
+        ,DB_MinPremIntSpread
+        ,DB_NominallyPar
+        ,DB_LapseIgnoresSurrChg
 
     ,DB_Topic_Riders
 
-        ,DB_TermTable
         ,DB_AllowTerm
+        ,DB_TermTable
         ,DB_TermMinIssAge
         ,DB_TermMaxIssAge
         ,DB_TermForcedConvAge
         ,DB_MaxTermProportion
         ,DB_TermCOIRate
         ,DB_TermPremRate
+        ,DB_GuarTermTable
 
-        ,DB_WPTable
         ,DB_AllowWP
+        ,DB_WPTable
         ,DB_WPMinIssAge
         ,DB_WPMaxIssAge
         ,DB_WPMax
         ,DB_WPCOIRate
         ,DB_WPPremRate
+        ,DB_WPChargeMethod
 
-        ,DB_ADDTable
         ,DB_AllowADD
+        ,DB_ADDTable
         ,DB_ADDMinIssAge
         ,DB_ADDMaxIssAge
         ,DB_ADDLimit
         ,DB_ADDCOIRate
         ,DB_ADDPremRate
+
+        ,DB_AllowSpouse
+        ,DB_SpouseRiderTable
+        ,DB_SpousRiderGuarTable
+
+        ,DB_AllowChild
+        ,DB_ChildRiderTable
+
+    ,DB_Topic_Comp
+
+        ,DB_CompTarget
+        ,DB_CompExcess
+        ,DB_CompChargeBack
+        ,DB_AllowExtraAssetComp
+        ,DB_AllowExtraPremComp
+        ,DB_AssetComp
+
+    ,DB_Topic_ExpRating
+
+        ,DB_AllowExpRating
+        ,DB_ExpRatStdDevMult
+        ,DB_ExpRatIBNRMult
+        ,DB_ExpRatCOIRetention
+        ,DB_ExpRatRiskCOIMult
+        ,DB_ExpRatAmortPeriod
+
+    ,DB_Topic_Tables
+
+        ,DB_PremTaxTable
+        ,DB_TableYTable
+        ,DB_83GamTable
+        ,DB_TgtPremTable
+        ,DB_TgtPremPolFee
+
+    ,DB_Topic_AssetCharges
+
+        ,DB_StableValFundCharge
+        ,DB_AmortPmLdFundCharge
+        ,DB_AllowAmortPremLoad
+
+        ,DB_PmTxAmortPeriod
+        ,DB_PmTxAmortIntRate
+
+        ,DB_AssetChargeType
+        ,DB_AllowCustomFund
 
     ,DB_Topic_Weights
 
@@ -287,12 +399,6 @@ enum DatabaseNames
         ,DB_DefVxQ
         ,DB_NonforfQ
 
-    ,DB_Topic_Comp
-
-        ,DB_CompTarget
-        ,DB_CompExcess
-        ,DB_CompChargeBack
-
     ,DB_Topic_MiscAsspts
 
         ,DB_LapseRate
@@ -303,107 +409,6 @@ enum DatabaseNames
         ,DB_GDBVxMethod
         ,DB_PrimaryHurdle
         ,DB_SecondaryHurdle
-
-// Other stuff
-
-        ,DB_LedgerType
-        ,DB_AllowExpRating
-
-    ,DB_Topic_Tables
-
-        ,DB_PremTaxTable
-        ,DB_TableYTable
-        ,DB_83GamTable
-
-        ,DB_AllowWD
-        ,DB_AllowLoan
-        ,DB_AllowChangeToDBO2
-        ,DB_AllowSAIncr
-        ,DB_NoLapseAlwaysActive
-        ,DB_PrefOrSelect
-
-    ,DB_Topic_ExpRating
-
-        ,DB_ExpRatStdDevMult
-        ,DB_ExpRatIBNRMult
-        ,DB_ExpRatCOIRetention
-
-    ,DB_Topic_AssetCharges
-
-        ,DB_StableValFundCharge
-        ,DB_AmortPmLdFundCharge
-        ,DB_AllowAmortPremLoad
-
-        ,DB_PmTxAmortPeriod
-        ,DB_PmTxAmortIntRate
-        ,DB_PremTaxLoad
-        ,DB_GCOIMultiplier
-
-        ,DB_AllowHoneymoon
-        ,DB_TgtPremTable
-        ,DB_TgtPremPolFee
-        ,DB_AllowExtraAssetComp
-        ,DB_AllowExtraPremComp
-        ,DB_AssetChargeType
-        ,DB_AllowUltraPrefClass
-        ,DB_MaxGenAcctRate
-        ,DB_MaxSepAcctRate
-        ,DB_MaxVLRRate
-        ,DB_SurrChgAVMult
-        ,DB_IntSpreadFreq
-        ,DB_StateApproved
-        ,DB_AllowStateXX
-        ,DB_AllowForeign
-        ,DB_AllowCustomFund
-        ,DB_AllowNo7702
-        ,DB_EnforceNAARLimit
-        ,DB_GuarAcctValLoadAMD
-        ,DB_CurrAcctValLoadAMD
-        ,DB_DynamicSepAcctLoad
-        ,DB_SpecAmtLoadLimit
-        ,DB_Equiv7702DBO3
-        ,DB_ExpRatRiskCOIMult
-        ,DB_SurrChgSAMult
-        ,DB_AllowChild
-        ,DB_AllowSpouse
-        ,DB_GAIntBonus
-        ,DB_DeductionMethod
-        ,DB_DeductionAcct
-        ,DB_DistributionMethod
-        ,DB_DistributionAcct
-        ,DB_EePremMethod
-        ,DB_EePremAcct
-        ,DB_ErPremMethod
-        ,DB_ErPremAcct
-        ,DB_PremTaxRetalLimit
-        ,DB_PremTaxTierGroup
-        ,DB_PremTaxTierPeriod
-        ,DB_PremTaxTierNonDecr
-        ,DB_UnusualCOIBanding
-        ,DB_CurrCOITable0Limit
-        ,DB_CurrCOITable1
-        ,DB_CurrCOITable1Limit
-        ,DB_CurrCOITable2
-        ,DB_SurrChgOnIncr
-        ,DB_FreeWDProportion
-        ,DB_SpouseRiderTable
-        ,DB_ChildRiderTable
-        ,DB_WPChargeMethod
-        ,DB_DefaultProcessOrder
-        ,DB_SurrChgSADurFactor
-        ,DB_SurrChgAVDurFactor
-        ,DB_SurrChgOnDecr
-        ,DB_MinPremIntSpread
-        ,DB_CoiUpper12Method
-        ,DB_MaxMonthlyCoiRate
-        ,DB_SpousRiderGuarTable
-        ,DB_GuarTermTable
-        ,DB_NominallyPar
-        ,DB_Has1035ExchCharge
-        ,DB_LapseIgnoresSurrChg
-        ,DB_CoiInforceReentry
-        ,DB_AssetComp
-        ,DB_ExpRatAmortPeriod
 
     ,DB_LAST    // Adding a new item? Insert directly above *only*.
     // That way, old databases remain compatible with new code, and any

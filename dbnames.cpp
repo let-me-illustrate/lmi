@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.cpp,v 1.6 2008-01-01 18:29:38 chicares Exp $
+// $Id: dbnames.cpp,v 1.7 2008-08-15 17:49:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,18 +29,51 @@
 #include "dbnames.hpp"
 #include "dbnames.xpp"
 
+#include "alert.hpp"
+#include "assert_lmi.hpp"
+#include "miscellany.hpp"
+
 namespace
 {
-    std::vector<db_names> const& static_get_db_names()
+bool check_order(std::vector<db_names> const& v)
+{
+    LMI_ASSERT(DB_LAST == v.size());
+
+    bool is_okay = true;
+    for(int j = 0; j < DB_LAST; ++j)
         {
-        static int const n = DB_LAST;
-
-        static db_names const static_DBNames[n] = {DB_NAMES};
-
-        static std::vector<db_names> const v(static_DBNames, static_DBNames + n);
-        return v;
+        if(j != v[j].Idx)
+            {
+            is_okay = false;
+            warning()
+                << "Entity " << j
+                << " '" << v[j].ShortName
+                << "' with index " << v[j].Idx
+                << " is out of order."
+                ;
+            }
         }
+    if(false == is_okay)
+        {
+        warning() << LMI_FLUSH;
+        }
+    return is_okay;
 }
+
+std::vector<db_names> const& static_get_db_names()
+{
+    static int const n = DB_LAST;
+
+    static db_names const static_DBNames[n] = {DB_NAMES};
+
+    static std::vector<db_names> const v(static_DBNames, static_DBNames + n);
+
+    static volatile bool b = check_order(v);
+    stifle_warning_for_unused_variable(b);
+
+    return v;
+}
+} // Unnamed namespace.
 
 std::vector<db_names> const& GetDBNames()
 {
