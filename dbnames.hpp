@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.hpp,v 1.10 2008-03-19 16:43:29 chicares Exp $
+// $Id: dbnames.hpp,v 1.11 2008-08-15 14:51:22 chicares Exp $
 
 #ifndef dbnames_hpp
 #define dbnames_hpp
@@ -144,12 +144,12 @@ enum DatabaseNames
 
         ,DB_MinIssAge
         ,DB_MaxIssAge
-        ,DB_MinIssFace
-        ,DB_MaxIssFace
-        ,DB_MinRenlBaseFace
-        ,DB_MinRenlFace
-        ,DB_MaxRenlFace
-        ,DB_MinFaceIncr
+        ,DB_MinIssSpecAmt
+        ,DB_MaxIssSpecAmt
+        ,DB_MinRenlBaseSpecAmt
+        ,DB_MinRenlSpecAmt
+        ,DB_MaxRenlSpecAmt
+        ,DB_MinSpecAmtIncr
         ,DB_MaxIncrAge
         ,DB_MinPmt
         ,DB_SmokeOrTobacco
@@ -256,7 +256,7 @@ enum DatabaseNames
         ,DB_WeightGender
         ,DB_WeightSmoking
         ,DB_WeightAge
-        ,DB_WeightFace
+        ,DB_WeightSpecAmt
         ,DB_WeightState
 
     ,DB_Topic_Expenses

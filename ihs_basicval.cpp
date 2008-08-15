@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.90 2008-08-15 10:41:14 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.91 2008-08-15 14:51:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -691,8 +691,8 @@ void BasicValues::SetPermanentInvariants()
     }
     TestPremiumTaxLoadConsistency();
 
-    MinRenlBaseFace     = Database_->Query(DB_MinRenlBaseFace      );
-    MinRenlFace         = Database_->Query(DB_MinRenlFace          );
+    MinRenlBaseFace     = Database_->Query(DB_MinRenlBaseSpecAmt   );
+    MinRenlFace         = Database_->Query(DB_MinRenlSpecAmt       );
     NoLapseOpt1Only     = Database_->Query(DB_NoLapseOpt1Only      );
     NoLapseUnratedOnly  = Database_->Query(DB_NoLapseUnratedOnly   );
     OptChgCanIncrSA     = Database_->Query(DB_OptChgCanIncrSA      );
