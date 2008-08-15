@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.46 2008-08-11 00:43:22 chicares Exp $
+// $Id: input.hpp,v 1.47 2008-08-15 11:27:27 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -450,35 +450,37 @@ class LMI_SO Input
     // used, because tn_range doesn't permit initialization or
     // assignment from any out-of-range value, but the Realize*()
     // functions expect to test raw values themselves.
+    //
+    // Likely types are suggested in comments for later consideration.
 
     std::vector<tnr_unrestricted_double> FundAllocationsRealized_;
 
-    std::vector<tnr_unrestricted_double> ExtraMonthlyCustodialFeeRealized_  ;
-    std::vector<tnr_unrestricted_double> ExtraCompensationOnAssetsRealized_ ;
-    std::vector<tnr_unrestricted_double> ExtraCompensationOnPremiumRealized_;
-    std::vector<tnr_unrestricted_double> PartialMortalityMultiplierRealized_;
-    std::vector<tnr_unrestricted_double> CurrentCoiMultiplierRealized_      ;
-    std::vector<tnr_unrestricted_double> CashValueEnhancementRateRealized_  ;
-    std::vector<tnr_unrestricted_double> CorporationTaxBracketRealized_     ;
-    std::vector<tnr_unrestricted_double> TaxBracketRealized_                ;
-    std::vector<tnr_unrestricted_double> ProjectedSalaryRealized_           ;
-    std::vector<tnr_unrestricted_double> SpecifiedAmountRealized_           ;
+    std::vector<tnr_unrestricted_double> ExtraMonthlyCustodialFeeRealized_  ; // [permit negative?]
+    std::vector<tnr_unrestricted_double> ExtraCompensationOnAssetsRealized_ ; // tnr_nonnegative_double
+    std::vector<tnr_unrestricted_double> ExtraCompensationOnPremiumRealized_; // tnr_nonnegative_double
+    std::vector<tnr_unrestricted_double> PartialMortalityMultiplierRealized_; // tnr_nonnegative_double
+    std::vector<tnr_unrestricted_double> CurrentCoiMultiplierRealized_      ; // tnr_nonnegative_double
+    std::vector<tnr_unrestricted_double> CashValueEnhancementRateRealized_  ; // [to be expunged]
+    std::vector<tnr_unrestricted_double> CorporationTaxBracketRealized_     ; // tnr_proportion
+    std::vector<tnr_unrestricted_double> TaxBracketRealized_                ; // tnr_proportion
+    std::vector<tnr_unrestricted_double> ProjectedSalaryRealized_           ; // tnr_nonnegative_double
+    std::vector<tnr_unrestricted_double> SpecifiedAmountRealized_           ; // [permit negative for term adjustment?]
     std::vector<mce_sa_strategy>         SpecifiedAmountStrategyRealized_   ;
     std::vector<mce_dbopt>               DeathBenefitOptionRealized_        ;
-    std::vector<tnr_unrestricted_double> PaymentRealized_                   ;
+    std::vector<tnr_unrestricted_double> PaymentRealized_                   ; // tnr_nonnegative_double
     std::vector<mce_pmt_strategy>        PaymentStrategyRealized_           ;
     std::vector<mce_mode>                PaymentModeRealized_               ;
-    std::vector<tnr_unrestricted_double> CorporationPaymentRealized_        ;
+    std::vector<tnr_unrestricted_double> CorporationPaymentRealized_        ; // tnr_nonnegative_double
     std::vector<mce_pmt_strategy>        CorporationPaymentStrategyRealized_;
     std::vector<mce_mode>                CorporationPaymentModeRealized_    ;
-    std::vector<tnr_unrestricted_double> GeneralAccountRateRealized_        ;
-    std::vector<tnr_unrestricted_double> SeparateAccountRateRealized_       ;
-    std::vector<tnr_unrestricted_double> NewLoanRealized_                   ;
-    std::vector<tnr_unrestricted_double> WithdrawalRealized_                ;
-    std::vector<tnr_unrestricted_double> FlatExtraRealized_                 ;
-    std::vector<tnr_unrestricted_double> HoneymoonValueSpreadRealized_      ;
-    std::vector<tnr_unrestricted_double> PremiumHistoryRealized_            ;
-    std::vector<tnr_unrestricted_double> SpecamtHistoryRealized_            ;
+    std::vector<tnr_unrestricted_double> GeneralAccountRateRealized_        ; // tnr_interest_rate (new)
+    std::vector<tnr_unrestricted_double> SeparateAccountRateRealized_       ; // tnr_interest_rate (new)
+    std::vector<tnr_unrestricted_double> NewLoanRealized_                   ; // tnr_nonnegative_double
+    std::vector<tnr_unrestricted_double> WithdrawalRealized_                ; // tnr_nonnegative_double
+    std::vector<tnr_unrestricted_double> FlatExtraRealized_                 ; // tnr_nonnegative_double
+    std::vector<tnr_unrestricted_double> HoneymoonValueSpreadRealized_      ; // tnr_interest_rate (new)
+    std::vector<tnr_unrestricted_double> PremiumHistoryRealized_            ; // tnr_unrestricted_double
+    std::vector<tnr_unrestricted_double> SpecamtHistoryRealized_            ; // tnr_nonnegative_double
 };
 
 void LMI_SO convert_to_ihs(IllusInputParms&, Input const&);
