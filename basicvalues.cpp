@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basicvalues.cpp,v 1.35 2008-08-11 00:43:21 chicares Exp $
+// $Id: basicvalues.cpp,v 1.36 2008-08-15 10:41:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -54,8 +54,10 @@ char const* GuaranteedTableFile() {return "/opt/lmi/data/qx_cso";}
 
 //============================================================================
 BasicValues::BasicValues(Input const& input)
-    :Input_(new Input(input))
-    ,yare_input_(input)
+    :Input_               (new Input(input))
+    ,yare_input_          (input)
+    ,StateOfJurisdiction_ (mce_s_CT)
+    ,StateOfDomicile_     (mce_s_CT)
 {
     Init();
 }

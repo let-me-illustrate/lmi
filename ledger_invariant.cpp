@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.63 2008-08-11 01:45:15 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.64 2008-08-15 10:41:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -631,7 +631,7 @@ void LedgerInvariant::Init(BasicValues* b)
     DefnMaterialChange      = (*b->Input_)["DefinitionOfMaterialChange"].str();
     AvoidMec                = (*b->Input_)["AvoidMecMethod"].str();
     PartMortTableName       = "1983 GAM"; // TODO ?? Hardcoded.
-    StatePostalAbbrev       = b->GetStateOfJurisdiction().str();
+    StatePostalAbbrev       = mc_str(b->GetStateOfJurisdiction());
 
     StatePremTaxRate        = b->PremiumTaxRate();
     // TODO ?? Output forms presuppose that the premium tax load is a

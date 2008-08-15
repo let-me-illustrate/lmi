@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.89 2008-08-11 01:46:12 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.90 2008-08-15 10:41:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -91,6 +91,8 @@ BasicValues::BasicValues(Input const& input)
     ,Equiv7702DBO3       (mce_option1_for_7702)
     ,MaxWDDed_           (mce_twelve_times_last)
     ,MaxLoanDed_         (mce_twelve_times_last)
+    ,StateOfJurisdiction_(mce_s_CT)
+    ,StateOfDomicile_    (mce_s_CT)
 {
     Init();
 }
@@ -118,6 +120,8 @@ BasicValues::BasicValues
     ,Equiv7702DBO3       (a_DBOptFor7702)
     ,MaxWDDed_           (mce_twelve_times_last)
     ,MaxLoanDed_         (mce_twelve_times_last)
+    ,StateOfJurisdiction_(mce_s_CT)
+    ,StateOfDomicile_    (mce_s_CT)
     ,InitialTargetPremium(a_TargetPremium)
 {
     Input* kludge_input = new Input;
@@ -137,10 +141,10 @@ BasicValues::BasicValues
         }
     (*kludge_input)["GroupUnderwritingType"     ] = value_cast<std::string>(a_UnderwritingBasis);
     (*kludge_input)["ProductName"               ] = a_ProductName;
-    (*kludge_input)["State"                     ] = value_cast<std::string>(a_StateOfJurisdiction);
-    (*kludge_input)["CorporationState"          ] = value_cast<std::string>(a_StateOfJurisdiction);
-    (*kludge_input)["DefinitionOfLifeInsurance" ] = mce_defn_life_ins(mce_gpt).str();
-    (*kludge_input)["DefinitionOfMaterialChange"] = mce_defn_material_change(mce_adjustment_event).str();
+    (*kludge_input)["State"                     ] = mc_str(a_StateOfJurisdiction);
+    (*kludge_input)["CorporationState"          ] = mc_str(a_StateOfJurisdiction);
+    (*kludge_input)["DefinitionOfLifeInsurance" ] = "GPT";
+    (*kludge_input)["DefinitionOfMaterialChange"] = "GPT adjustment event";
 
     (*kludge_input)["SpecifiedAmount"   ] = value_cast<std::string>(a_FaceAmount);
 
@@ -192,11 +196,14 @@ void BasicValues::Init()
         &&  !global_settings::instance().regression_testing()
         )
         {
-        throw std::runtime_error
-            (    yare_input_.ProductName
-            +    " not approved in state "
-            +    GetStateOfJurisdiction().str()
-            );
+        fatal_error()
+            << "Product "
+            << yare_input_.ProductName
+            << " not approved in state "
+            << mc_str(GetStateOfJurisdiction())
+            << "."
+            << LMI_FLUSH
+            ;
         }
 
     IssueAge = yare_input_.IssueAge;
@@ -664,7 +671,7 @@ void BasicValues::SetPermanentInvariants()
 {
     // TODO ?? It would be better not to constrain so many things
     // not to vary by duration by using Query(enumerator).
-    StateOfDomicile_    = mce_state(ProductData_->GetInsCoDomicile());
+    StateOfDomicile_    = mc_state_from_string(ProductData_->GetInsCoDomicile());
 
     // TODO ?? Perhaps we want the premium-tax load instead of the
     // premium-tax rate here; or maybe we want neither as a member
@@ -673,8 +680,8 @@ void BasicValues::SetPermanentInvariants()
 
     {
     yare_input YI(*Input_);
-    YI.State            = static_cast<mcenum_state>(GetStateOfDomicile().value());
-    YI.CorporationState = static_cast<mcenum_state>(GetStateOfDomicile().value());
+    YI.State            = GetStateOfDomicile();
+    YI.CorporationState = GetStateOfDomicile();
     TDatabase TempDatabase(YI);
     DomiciliaryPremiumTaxLoad_ = 0.0;
     if(!yare_input_.AmortizePremiumLoad)
@@ -854,7 +861,7 @@ void BasicValues::SetLowestPremiumTaxLoad()
             ;
         }
 
-    if(StratifiedCharges_->premium_tax_is_tiered(StateOfJurisdiction_.value()))
+    if(StratifiedCharges_->premium_tax_is_tiered(StateOfJurisdiction_))
         {
         // TODO ?? TestPremiumTaxLoadConsistency() repeats this test.
         // Probably all the consistency testing should be moved to
@@ -863,7 +870,7 @@ void BasicValues::SetLowestPremiumTaxLoad()
             {
             fatal_error()
                 << "Premium-tax rate is tiered in state "
-                << StateOfJurisdiction_
+                << mc_str(StateOfJurisdiction_)
                 << ", but the product database specifies a scalar load of "
                 << LowestPremiumTaxLoad_
                 << " instead of zero as expected. Probably the database"
@@ -873,7 +880,7 @@ void BasicValues::SetLowestPremiumTaxLoad()
             }
         LowestPremiumTaxLoad_ =
             StratifiedCharges_->minimum_tiered_premium_tax_rate
-                (StateOfJurisdiction_.value()
+                (StateOfJurisdiction_
                 );
         }
 }
@@ -896,14 +903,14 @@ void BasicValues::TestPremiumTaxLoadConsistency()
         return;
         }
 
-    if(StratifiedCharges_->premium_tax_is_tiered(GetStateOfJurisdiction().value()))
+    if(StratifiedCharges_->premium_tax_is_tiered(GetStateOfJurisdiction()))
         {
         PremiumTaxLoadIsTieredInStateOfJurisdiction = true;
         if(0.0 != Database_->Query(DB_PremTaxLoad))
             {
             fatal_error()
                 << "Premium-tax rate is tiered in state of jurisdiction "
-                << GetStateOfJurisdiction()
+                << mc_str(GetStateOfJurisdiction())
                 << ", but the product database specifies a scalar load of "
                 << Database_->Query(DB_PremTaxLoad)
                 << " instead of zero as expected. Probably the database"
@@ -913,14 +920,14 @@ void BasicValues::TestPremiumTaxLoadConsistency()
             }
         }
 
-    if(StratifiedCharges_->premium_tax_is_tiered(GetStateOfDomicile().value()))
+    if(StratifiedCharges_->premium_tax_is_tiered(GetStateOfDomicile()))
         {
         PremiumTaxLoadIsTieredInStateOfDomicile = true;
         if(0.0 != DomiciliaryPremiumTaxLoad())
             {
             fatal_error()
                 << "Premium-tax rate is tiered in state of domicile "
-                << GetStateOfDomicile()
+                << mc_str(GetStateOfDomicile())
                 << ", but the product database specifies a scalar load of "
                 << DomiciliaryPremiumTaxLoad()
                 << " instead of zero as expected. Probably the database"
@@ -931,7 +938,7 @@ void BasicValues::TestPremiumTaxLoadConsistency()
         // TODO ?? Code not tested if state of domicile has tiered rate.
         fatal_error()
             << "Premium-tax rate is tiered in state of domicile "
-            << GetStateOfDomicile()
+            << mc_str(GetStateOfDomicile())
             << ", but this program has not been tested for that case."
             << " Please test it carefully before using it."
             << LMI_FLUSH

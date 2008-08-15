@@ -19,15 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.43 2008-08-11 00:04:44 chicares Exp $
+// $Id: basic_values.hpp,v 1.44 2008-08-15 10:41:13 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
 
 #include "config.hpp"
 
-#include "mc_enum.hpp"
-#include "mc_enum_types.hpp"
+#include "mc_enum_type_enums.hpp"
 #include "oecumenic_enumerations.hpp"
 #include "round_to.hpp"
 #include "so_attributes.hpp"
@@ -106,8 +105,8 @@ class LMI_SO BasicValues
     int                   GetIssueAge()                const;
     int                   GetRetAge()                  const;
     mcenum_ledger_type    GetLedgerType()              const;
-    mce_state      const& GetStateOfJurisdiction()     const;
-    mce_state      const& GetStateOfDomicile()         const;
+    mcenum_state          GetStateOfJurisdiction()     const;
+    mcenum_state          GetStateOfDomicile()         const;
     double                PremiumTaxRate()             const;
     double                LowestPremiumTaxLoad()       const;
     double                DomiciliaryPremiumTaxLoad()  const;
@@ -421,8 +420,8 @@ class LMI_SO BasicValues
 
     mcenum_ledger_type  LedgerType_;
     bool                IsSubjectToIllustrationReg_;
-    mce_state           StateOfJurisdiction_;
-    mce_state           StateOfDomicile_;
+    mcenum_state        StateOfJurisdiction_;
+    mcenum_state        StateOfDomicile_;
     double              PremiumTaxRate_;
     double              LowestPremiumTaxLoad_;
     double              DomiciliaryPremiumTaxLoad_;
@@ -458,12 +457,12 @@ inline mcenum_ledger_type BasicValues::GetLedgerType() const
     return LedgerType_;
 }
 
-inline mce_state const& BasicValues::GetStateOfJurisdiction() const
+inline mcenum_state BasicValues::GetStateOfJurisdiction() const
 {
     return StateOfJurisdiction_;
 }
 
-inline mce_state const& BasicValues::GetStateOfDomicile() const
+inline mcenum_state BasicValues::GetStateOfDomicile() const
 {
     return StateOfDomicile_;
 }
