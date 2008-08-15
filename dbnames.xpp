@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.xpp,v 1.22 2008-08-08 18:48:35 chicares Exp $
+// $Id: dbnames.xpp,v 1.23 2008-08-15 14:51:22 chicares Exp $
 
 #define DB_NAMES \
 {DB_FIRST,DB_FIRST,"dummy","dummy",}, \
@@ -101,12 +101,12 @@
 {DB_AllowFlatExtras,DB_Topic_Issue_Rules,"AllowFlatExtras","Allow substandard flat extra ratings: 0= no, 1=yes",}, \
 {DB_MinIssAge,DB_Topic_Issue_Rules,"MinIssAge","Minimum issue age",}, \
 {DB_MaxIssAge,DB_Topic_Issue_Rules,"MaxIssAge","Maximum issue age",}, \
-{DB_MinIssFace,DB_Topic_Issue_Rules,"MinIssFace","Minimum specified amount allowed at issue",}, \
-{DB_MaxIssFace,DB_Topic_Issue_Rules,"MaxIssFace","Maximum specified amount allowed at issue",}, \
-{DB_MinRenlBaseFace,DB_Topic_Issue_Rules,"MinRenlBaseFace","Minimum specified amount after issue for base policy only, ignoring any term rider",}, \
-{DB_MinRenlFace,DB_Topic_Issue_Rules,"MinRenlFace","Minimum specified amount after issue for base policy including any term rider",}, \
-{DB_MaxRenlFace,DB_Topic_Issue_Rules,"MaxRenlFace","Maximum specified amount after issue for base policy only, ignoring any term rider",}, \
-{DB_MinFaceIncr,DB_Topic_Issue_Rules,"MinFaceIncr","Maximum specified amount after issue for base policy including any term rider[incorrect]",}, \
+{DB_MinIssSpecAmt,DB_Topic_Issue_Rules,"MinIssSpecAmt","Minimum specified amount allowed at issue",}, \
+{DB_MaxIssSpecAmt,DB_Topic_Issue_Rules,"MaxIssSpecAmt","Maximum specified amount allowed at issue",}, \
+{DB_MinRenlBaseSpecAmt,DB_Topic_Issue_Rules,"MinRenlBaseSpecAmt","Minimum specified amount after issue for base policy only, ignoring any term rider",}, \
+{DB_MinRenlSpecAmt,DB_Topic_Issue_Rules,"MinRenlSpecAmt","Minimum specified amount after issue for base policy including any term rider",}, \
+{DB_MaxRenlSpecAmt,DB_Topic_Issue_Rules,"MaxRenlSpecAmt","Maximum specified amount after issue for base policy only, ignoring any term rider",}, \
+{DB_MinSpecAmtIncr,DB_Topic_Issue_Rules,"MinSpecAmtIncr","Maximum specified amount after issue for base policy including any term rider[incorrect]",}, \
 {DB_MaxIncrAge,DB_Topic_Issue_Rules,"MaxIncrAge","Maximum age at which specified amount increases are permitted",}, \
 {DB_MinPmt,DB_Topic_Issue_Rules,"MinPmt","Minimum initial payment",}, \
 {DB_SmokeOrTobacco,DB_Topic_Issue_Rules,"SmokeOrTobacco","Policy form distinguishes mortality by: 0=smoking, 1=tobacco use",}, \
@@ -191,7 +191,7 @@
 {DB_WeightGender,DB_Topic_Weights,"WeightGender","Weight by gender [not yet implemented]",}, \
 {DB_WeightSmoking,DB_Topic_Weights,"WeightSmoking","Weight by smoking/tobacco use [not yet implemented]",}, \
 {DB_WeightAge,DB_Topic_Weights,"WeightAge","Weight by issue age [not yet implemented]",}, \
-{DB_WeightFace,DB_Topic_Weights,"WeightFace","Weight by specified amount [not used]",}, \
+{DB_WeightSpecAmt,DB_Topic_Weights,"WeightSpecAmt","Weight by specified amount [not used]",}, \
 {DB_WeightState,DB_Topic_Weights,"WeightState","Weight by state that determines premium tax rate [not yet implemented]",}, \
 {DB_Topic_Expenses,DB_FIRST,"Expenses","Insurance company expense assumptions [not yet implemented]",}, \
 {DB_FullExpPol,DB_Topic_Expenses,"FullExpPol","Full expense per policy [not yet implemented]",}, \
