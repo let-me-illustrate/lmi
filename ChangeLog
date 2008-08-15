@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1139 2008-08-13 12:08:26 chicares Exp $
+// $Id: ChangeLog,v 1.1140 2008-08-15 11:27:28 chicares Exp $
 
 MAINTENANCE
 
@@ -19180,4 +19180,38 @@ Improve solve GUI, tending to backward compatibility.
   mvc_controller.cpp
 Improve wx style (Vaclav). See:
   http://lists.nongnu.org/archive/html/lmi/2008-08/msg00021.html
+
+20080814T1209Z <gchicares@sbcglobal.net> [984]
+
+  main_cgi.cpp
+  main_cli.cpp
+Resolve some issues with "DEPRECATED" markers.
+
+20080814T1210Z <gchicares@sbcglobal.net> [984]
+
+  group_values.cpp
+  ledger_variant.cpp
+Include appropriate headers, with explanations only where appropriate.
+
+20080814T1211Z <gchicares@sbcglobal.net> [984]
+
+  input_xml_io.cpp
+  mc_enum_types_aux.hpp
+Remove "DEPRECATED" markers for issues already resolved.
+
+20080815T1041Z <gchicares@sbcglobal.net> [984]
+
+  basic_values.hpp
+  basicvalues.cpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+  ledger_invariant.cpp
+  mc_enum_types_aux.cpp
+  mc_enum_types_aux.hpp
+Remove templated enumeration class from insurance calculations.
+
+20080815T1127Z <gchicares@sbcglobal.net> [984]
+
+  input.hpp
+Record some likely eventual datatypes gleaned from old input class.
 
