@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.hpp,v 1.11 2008-08-15 14:51:22 chicares Exp $
+// $Id: dbnames.hpp,v 1.12 2008-08-15 15:22:14 chicares Exp $
 
 #ifndef dbnames_hpp
 #define dbnames_hpp
@@ -29,8 +29,6 @@
 #include "so_attributes.hpp"
 
 #include <vector>
-
-// TODO ?? Eradicate entites marked as deprecated.
 
 enum DatabaseNames
     {DB_FIRST
@@ -114,7 +112,6 @@ enum DatabaseNames
 
         ,DB_SepAcctSpreadMethod
         ,DB_DynamicMandE
-        ,DB_DynamicCOI
 
     ,DB_Topic_Mortality
 
@@ -331,18 +328,11 @@ enum DatabaseNames
         ,DB_ExpRatIBNRMult
         ,DB_ExpRatCOIRetention
 
-        ,DB_UsePMQOnCurrCOI // Deprecated.
-
     ,DB_Topic_AssetCharges
 
-        ,DB_MiscFundCharge // Deprecated.
         ,DB_StableValFundCharge
-        ,DB_MgmtFeeFundCharge // Deprecated.
         ,DB_AmortPmLdFundCharge
         ,DB_AllowAmortPremLoad
-
-        ,DB_GuarAcctValLoadBOM // Deprecated.
-        ,DB_CurrAcctValLoadBOM // Deprecated.
 
         ,DB_PmTxAmortPeriod
         ,DB_PmTxAmortIntRate
@@ -350,8 +340,6 @@ enum DatabaseNames
         ,DB_GCOIMultiplier
 
         ,DB_AllowHoneymoon
-        ,DB_HCVSpread         // Deprecated.
-        ,DB_ExtraHMSpreadonCV // Deprecated.
         ,DB_TgtPremTable
         ,DB_TgtPremPolFee
         ,DB_AllowExtraAssetComp
@@ -374,7 +362,6 @@ enum DatabaseNames
         ,DB_DynamicSepAcctLoad
         ,DB_SpecAmtLoadLimit
         ,DB_Equiv7702DBO3
-        ,DB_NonUSCorridorPivot // DATABASE !! Obsolete.
         ,DB_ExpRatRiskCOIMult
         ,DB_SurrChgSAMult
         ,DB_AllowChild
@@ -409,10 +396,6 @@ enum DatabaseNames
         ,DB_MinPremIntSpread
         ,DB_CoiUpper12Method
         ,DB_MaxMonthlyCoiRate
-        ,DB_ExpRatCoiMultGuar  // Deprecated.
-        ,DB_ExpRatCoiMultAlt   // Deprecated.
-        ,DB_ExpRatCoiMultCurr0 // Deprecated.
-        ,DB_ExpRatCoiMultCurr1 // Deprecated.
         ,DB_SpousRiderGuarTable
         ,DB_GuarTermTable
         ,DB_NominallyPar
