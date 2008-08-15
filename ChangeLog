@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1140 2008-08-15 11:27:28 chicares Exp $
+// $Id: ChangeLog,v 1.1141 2008-08-15 17:49:24 chicares Exp $
 
 MAINTENANCE
 
@@ -19214,4 +19214,38 @@ Remove templated enumeration class from insurance calculations.
 
   input.hpp
 Record some likely eventual datatypes gleaned from old input class.
+
+20080815T1451Z <gchicares@sbcglobal.net> [984]
+
+  dbnames.hpp
+  dbnames.xpp
+  ihs_basicval.cpp
+  ihs_dbdict.cpp
+Prefer 'SpecAmt' to 'Face' in database names.
+
+20080815T1522Z <gchicares@sbcglobal.net> [983]
+
+  dbnames.hpp
+  dbnames.xpp
+  ihs_dbdict.cpp
+Purge obsolete product-database entities.
+
+20080815T1542Z <gchicares@sbcglobal.net> [981]
+
+  dbnames.hpp
+Resolve defect markers. We want no external tool to generate one file
+from another even though it's possible. No need for the commented-out
+ctor has become apparent in the years since it was written.
+
+20080815T1543Z <gchicares@sbcglobal.net> [981]
+
+  dbnames.xpp
+Improve documentation.
+
+20080815T1749Z <gchicares@sbcglobal.net> [981]
+
+  dbnames.cpp
+  dbnames.hpp
+  dbnames.xpp
+Permute; make sure permutations match, just for concinnity.
 
