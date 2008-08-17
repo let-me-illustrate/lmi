@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.51 2008-06-01 22:27:25 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.52 2008-08-17 11:57:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,13 +34,41 @@
 
 namespace
 {
+/// SOA regulatory table database.
+
 std::string const qx_cso("/opt/lmi/data/qx_cso");
+
+/// SOA insurance table database.
+
 std::string const qx_ins("/opt/lmi/data/qx_ins");
 
-// SOA database 'qx_cso' table 42
-// "1980 US CSO Male Age nearest"
+/// 'qx_ins' table 750: "1924 US Linton A Lapse"
+///
+/// Table type: Duration.
+///
+/// Parameters:
+///   min "age" 1; max "age" 15
+
+std::vector<double> table_750()
+{
+    static int const n = 15;
+    static double const q[n] =
+        //   0      1      2      3      4      5      6      7      8      9
+        {0.100, 0.060, 0.050, 0.044, 0.040, 0.036, 0.032, 0.029, 0.027, 0.025 // 00
+        ,0.024, 0.023, 0.022, 0.021, 0.020                                    // 10
+        };
+    return std::vector<double>(q, q + n);
+}
+
+/// 'qx_cso' table 42: "1980 US CSO Male Age nearest"
+///
+/// Table type: Aggregate.
+///
+/// Parameters:
+///   min age 0; max age 99
+
 std::vector<double> table_42(int age)
-    {
+{
     static int const n = 100;
     static double const q[n] =
         //     0        1        2        3        4        5        6        7        8        9
@@ -56,11 +84,12 @@ std::vector<double> table_42(int age)
         ,0.22177, 0.23698, 0.25345, 0.27211, 0.29590, 0.32996, 0.38455, 0.48020, 0.65798, 1.00000 // 90
         };
     return std::vector<double>(q + age, q + n);
-    }
+}
 
-/// "1934 UK A1924-29, Male+Female, Age nearest"
+/// 'qx_ins' table 256: "1934 UK A1924-29, Male+Female, Age nearest"
 ///
-/// SOA database 'qx_ins' table 256
+/// Table type: Select.
+///
 /// Parameters:
 ///   min age 10; max age 121; select period 3; max select age 80
 /// This is a good table for testing because none of its parameters is
@@ -68,7 +97,7 @@ std::vector<double> table_42(int age)
 /// maximum select age.
 
 std::vector<double> table_256(int age, int duration)
-    {
+{
     LMI_ASSERT(0 <= duration && duration <= 3);
     // Select: issue age by duration.
     static int const nsel = 71 * 3;
@@ -167,7 +196,7 @@ std::vector<double> table_256(int age, int duration)
     std::vector<double> v(qsel + isel + duration, qsel + isel + 3);
     v.insert(v.end(), qult + age - 10, qult + nult);
     return v;
-    }
+}
 
 /// See 'ChangeLog' for 20080522T1353Z and 20080523T0153Z, as well as
 /// 'DefectLog' for 20080523T0407Z.
@@ -259,12 +288,13 @@ void test_lookup_errors()
         );
 }
 
-/// TODO ?? Also test a 'duration' table--has SOA published any?
-
 void test_e_reenter_never()
 {
     std::vector<double> rates;
     std::vector<double> gauge;
+
+    rates = actuarial_table(qx_ins, 750).values(1, 15);
+    BOOST_TEST(rates == table_750());
 
     rates = actuarial_table(qx_cso, 42).values( 0, 100);
     BOOST_TEST(rates == table_42(0));
