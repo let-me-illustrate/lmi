@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.45 2008-08-19 14:03:42 chicares Exp $
+// $Id: basic_values.hpp,v 1.46 2008-08-19 17:02:38 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -170,6 +170,9 @@ class LMI_SO BasicValues
     std::vector<double> GetTgtPremRates()               const;
     std::vector<double> GetIRC7702Rates()               const;
     std::vector<double> Get83GamRates()                 const;
+    std::vector<double> GetSubstdTblMultTable()         const;
+    std::vector<double> GetCurrSpecAmtLoadTable()       const;
+    std::vector<double> GetGuarSpecAmtLoadTable()       const;
 
   protected:
     double GetModalMinPrem
