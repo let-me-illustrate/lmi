@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.91 2008-08-15 14:51:22 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.92 2008-08-19 13:40:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1988,7 +1988,7 @@ std::vector<double> BasicValues::GetGuaranteedSpouseRiderRates() const
 
     std::vector<double> z = actuarial_table_rates
         (AddDataDir(ProductData_->GetGuarSpouseRiderFilename())
-        ,static_cast<long int>(Database_->Query(DB_SpousRiderGuarTable))
+        ,static_cast<long int>(Database_->Query(DB_SpouseRiderGuarTable))
         ,yare_input_.SpouseIssueAge
         ,EndtAge - yare_input_.SpouseIssueAge
         );
