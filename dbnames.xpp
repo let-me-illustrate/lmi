@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.xpp,v 1.29 2008-08-19 13:40:32 chicares Exp $
+// $Id: dbnames.xpp,v 1.30 2008-08-19 17:01:45 chicares Exp $
 
 #define DB_NAMES \
 {DB_FIRST,DB_FIRST,"dummy","dummy",}, \
@@ -87,7 +87,8 @@
 {DB_GuarCOICeiling,DB_Topic_MortalityCharges,"GuarCOICeiling","Dynamically decrease current cost of insurance rates to guaranteed wherever they would otherwise be higher [not yet implemented]",}, \
 {DB_COIGuarIsMin,DB_Topic_MortalityCharges,"COIGuarIsMin","[not used]",}, \
 {DB_COINonforfIsGuar,DB_Topic_MortalityCharges,"COINonforfIsGuar","Use guaranteed cost of insurance rates as nonforfeiture basis [not yet implemented]",}, \
-{DB_SubstdTblMult,DB_Topic_MortalityCharges,"SubstdTblMult","Substandard table-rating multiplier applied to both guaranteed and current cost of insurance and term rider charges",}, \
+{DB_SubstdTblMult,DB_Topic_MortalityCharges,"SubstdTblMult","Substandard table-rating multiplier applied to both guaranteed and current cost of insurance and term rider charges (also multiplied by 'SubstdTblMultTable')",}, \
+{DB_SubstdTblMultTable,DB_Topic_MortalityCharges,"SubstdTblMultTable","Substandard table-rating multiplier applied to both guaranteed and current cost of insurance and term rider charges (index in mortality table database)",}, \
 {DB_CoiUpper12Method,DB_Topic_MortalityCharges,"CoiUpper12Method","Method to derive monthly from annual COI rates: 0=exponential, 1=linear [not yet implemented]",}, \
 {DB_CoiInforceReentry,DB_Topic_MortalityCharges,"CoiInforceReentry","Reenter COI table: 0=never, 1=at beginning of inforce year, 2=on anniversary >= input reset date",}, \
 {DB_Topic_Interest,DB_FIRST,"Interest","Interest",}, \
@@ -119,7 +120,8 @@
 {DB_GuarPremLoadExc,DB_Topic_Loads,"GuarPremLoadExc","Guaranteed load on premium in excess of target",}, \
 {DB_GuarPremLoadTgtRfd,DB_Topic_Loads,"GuarPremLoadTgtRfd","Guaranteed load on premium up to target, refundable on lapse",}, \
 {DB_GuarPremLoadExcRfd,DB_Topic_Loads,"GuarPremLoadExcRfd","Guaranteed load on premium in excess of target, refundable on lapse",}, \
-{DB_GuarSpecAmtLoad,DB_Topic_Loads,"GuarSpecAmtLoad","Guaranteed charge per $1 of specified amount",}, \
+{DB_GuarSpecAmtLoad,DB_Topic_Loads,"GuarSpecAmtLoad","Guaranteed charge per $1 of specified amount, in addition to 'GuarSpecAmtLoadTable'",}, \
+{DB_GuarSpecAmtLoadTable,DB_Topic_Loads,"GuarSpecAmtLoadTable","Guaranteed charge per $1 of specified amount (index in mortality table database)",}, \
 {DB_GuarFundAdminChg,DB_Topic_Loads,"GuarFundAdminChg","Guaranteed fund administration charge [not used]",}, \
 {DB_GuarAcctValLoadAMD,DB_Topic_Loads,"GuarAcctValLoadAMD","Guaranteed maximum for expense charge as proportion of separate account value",}, \
 {DB_CurrPolFee,DB_Topic_Loads,"CurrPolFee","Current monthly policy fee",}, \
@@ -128,7 +130,8 @@
 {DB_CurrPremLoadExc,DB_Topic_Loads,"CurrPremLoadExc","Current load on premium in excess of target",}, \
 {DB_CurrPremLoadTgtRfd,DB_Topic_Loads,"CurrPremLoadTgtRfd","Current load on premium up to target, refundable on lapse",}, \
 {DB_CurrPremLoadExcRfd,DB_Topic_Loads,"CurrPremLoadExcRfd","Current load on premium in excess of target, refundable on lapse",}, \
-{DB_CurrSpecAmtLoad,DB_Topic_Loads,"CurrSpecAmtLoad","Current charge per $1 of specified amount",}, \
+{DB_CurrSpecAmtLoad,DB_Topic_Loads,"CurrSpecAmtLoad","Current charge per $1 of specified amount, in addition to 'CurrSpecAmtLoadTable'",}, \
+{DB_CurrSpecAmtLoadTable,DB_Topic_Loads,"CurrSpecAmtLoadTable","Current charge per $1 of specified amount (index in mortality table database)",}, \
 {DB_CurrFundAdminChg,DB_Topic_Loads,"CurrFundAdminChg","Current fund administration charge [not used]",}, \
 {DB_CurrAcctValLoadAMD,DB_Topic_Loads,"CurrAcctValLoadAMD","Expense charge as proportion of separate account value",}, \
 {DB_PremRefund,DB_Topic_Loads,"PremRefund","Proportion of sales load refundable on full surrender",}, \
