@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.44 2008-08-15 10:41:13 chicares Exp $
+// $Id: basic_values.hpp,v 1.45 2008-08-19 14:03:42 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -157,19 +157,19 @@ class LMI_SO BasicValues
     std::vector<double> GetGuarCOIRates()    const;
     // This function custom blends unismoke and unisex rates, using
     //   the same table as guaranteed COI rates.
-    std::vector<double> GetSmokerBlendedGuarCOIRates()   const;
-    std::vector<double> GetWpRates()                     const;
-    std::vector<double> GetAdbRates()                    const;
-    std::vector<double> GetChildRiderRates()             const;
-    std::vector<double> GetCurrentSpouseRiderRates()     const;
-    std::vector<double> GetGuaranteedSpouseRiderRates()  const;
-    std::vector<double> GetCurrentTermRates()            const;
-    std::vector<double> GetGuaranteedTermRates()         const;
-    std::vector<double> GetTableYRates()     const;
-    std::vector<double> GetTAMRA7PayRates()  const;
-    std::vector<double> GetTgtPremRates()    const;
-    std::vector<double> GetIRC7702Rates()    const;
-    std::vector<double> Get83GamRates()      const;
+    std::vector<double> GetSmokerBlendedGuarCOIRates()  const;
+    std::vector<double> GetWpRates()                    const;
+    std::vector<double> GetAdbRates()                   const;
+    std::vector<double> GetChildRiderRates()            const;
+    std::vector<double> GetCurrentSpouseRiderRates()    const;
+    std::vector<double> GetGuaranteedSpouseRiderRates() const;
+    std::vector<double> GetCurrentTermRates()           const;
+    std::vector<double> GetGuaranteedTermRates()        const;
+    std::vector<double> GetTableYRates()                const;
+    std::vector<double> GetTAMRA7PayRates()             const;
+    std::vector<double> GetTgtPremRates()               const;
+    std::vector<double> GetIRC7702Rates()               const;
+    std::vector<double> Get83GamRates()                 const;
 
   protected:
     double GetModalMinPrem

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_mortal.cpp,v 1.31 2008-07-23 14:19:37 chicares Exp $
+// $Id: ihs_mortal.cpp,v 1.32 2008-08-19 14:03:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -130,12 +130,12 @@ void MortalityRates::fetch_parameters(BasicValues const& basic_values)
 // TODO ?? These are delicate: they are needed only conditionally.
     MonthlyGuaranteedTermCoiRates_ = basic_values.GetGuaranteedTermRates();
     MonthlyCurrentTermCoiRates_    = basic_values.GetCurrentTermRates();
-    AdbRates_ = basic_values.GetAdbRates();
-    WpRates_ = basic_values.GetWpRates();
-    ChildRiderRates_ = basic_values.GetChildRiderRates();
+    AdbRates_                   = basic_values.GetAdbRates();
+    WpRates_                    = basic_values.GetWpRates();
+    ChildRiderRates_            = basic_values.GetChildRiderRates();
     GuaranteedSpouseRiderRates_ = basic_values.GetGuaranteedSpouseRiderRates();
     CurrentSpouseRiderRates_    = basic_values.GetCurrentSpouseRiderRates();
-    TargetPremiumRates_ = basic_values.GetTgtPremRates();
+    TargetPremiumRates_         = basic_values.GetTgtPremRates();
 
     // TODO ?? Why have these here, since they're already in the
     // basic-values class? Same question for 'TableYRates_' too.
@@ -157,10 +157,9 @@ void MortalityRates::fetch_parameters(BasicValues const& basic_values)
         }
 */
 
-    PartialMortalityQ_ = basic_values.Get83GamRates();
-
+    PartialMortalityQ_   = basic_values.Get83GamRates();
     CvatCorridorFactors_ = basic_values.GetCvatCorridorFactors();
-    SevenPayRates_ = basic_values.GetTAMRA7PayRates();
+    SevenPayRates_       = basic_values.GetTAMRA7PayRates();
 
 // TODO ?? Move this up here?
 //    CvatNspRates_;

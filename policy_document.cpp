@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: policy_document.cpp,v 1.6 2008-01-01 18:29:52 chicares Exp $
+// $Id: policy_document.cpp,v 1.7 2008-08-19 14:03:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -43,44 +43,44 @@ PolicyDocument::PolicyDocument()
     ,product_data_()
     ,values_()
 {
-    values_["DatabaseFilename"      ] = &product_data_.DatabaseFilename;
-    values_["FundFilename"          ] = &product_data_.FundFilename;
-    values_["CorridorFilename"      ] = &product_data_.CorridorFilename;
-    values_["CurrCOIFilename"       ] = &product_data_.CurrCOIFilename;
-    values_["GuarCOIFilename"       ] = &product_data_.GuarCOIFilename;
-    values_["WPFilename"            ] = &product_data_.WPFilename;
-    values_["ADDFilename"           ] = &product_data_.ADDFilename;
-    values_["ChildRiderFilename"    ] = &product_data_.ChildRiderFilename;
-    values_["CurrSpouseRiderFilename"]= &product_data_.CurrSpouseRiderFilename;
-    values_["GuarSpouseRiderFilename"]= &product_data_.GuarSpouseRiderFilename;
-    values_["CurrTermFilename"      ] = &product_data_.CurrTermFilename;
-    values_["GuarTermFilename"      ] = &product_data_.GuarTermFilename;
-    values_["TableYFilename"        ] = &product_data_.TableYFilename;
-    values_["PremTaxFilename"       ] = &product_data_.PremTaxFilename;
-    values_["TAMRA7PayFilename"     ] = &product_data_.TAMRA7PayFilename;
-    values_["TgtPremFilename"       ] = &product_data_.TgtPremFilename;
-    values_["IRC7702Filename"       ] = &product_data_.IRC7702Filename;
-    values_["Gam83Filename"         ] = &product_data_.Gam83Filename;
-    values_["RoundingFilename"      ] = &product_data_.RoundingFilename;
-    values_["TierFilename"          ] = &product_data_.TierFilename;
-    values_["PolicyForm"            ] = &product_data_.PolicyForm;
-    values_["PolicyMktgName"        ] = &product_data_.PolicyMktgName;
-    values_["PolicyLegalName"       ] = &product_data_.PolicyLegalName;
-    values_["InsCoShortName"        ] = &product_data_.InsCoShortName;
-    values_["InsCoName"             ] = &product_data_.InsCoName;
-    values_["InsCoAddr"             ] = &product_data_.InsCoAddr;
-    values_["InsCoStreet"           ] = &product_data_.InsCoStreet;
-    values_["InsCoPhone"            ] = &product_data_.InsCoPhone;
-    values_["InsCoDomicile"         ] = &product_data_.InsCoDomicile;
-    values_["MainUnderwriter"       ] = &product_data_.MainUnderwriter;
-    values_["MainUnderwriterAddress"] = &product_data_.MainUnderwriterAddress;
-    values_["CoUnderwriter"         ] = &product_data_.CoUnderwriter;
-    values_["CoUnderwriterAddress"  ] = &product_data_.CoUnderwriterAddress;
-    values_["AvName"                ] = &product_data_.AvName;
-    values_["CsvName"               ] = &product_data_.CsvName;
-    values_["CsvHeaderName"         ] = &product_data_.CsvHeaderName;
-    values_["NoLapseProvisionName"  ] = &product_data_.NoLapseProvisionName;
-    values_["InterestDisclaimer"    ] = &product_data_.InterestDisclaimer;
+    values_["DatabaseFilename"       ] = &product_data_.DatabaseFilename;
+    values_["FundFilename"           ] = &product_data_.FundFilename;
+    values_["CorridorFilename"       ] = &product_data_.CorridorFilename;
+    values_["CurrCOIFilename"        ] = &product_data_.CurrCOIFilename;
+    values_["GuarCOIFilename"        ] = &product_data_.GuarCOIFilename;
+    values_["WPFilename"             ] = &product_data_.WPFilename;
+    values_["ADDFilename"            ] = &product_data_.ADDFilename;
+    values_["ChildRiderFilename"     ] = &product_data_.ChildRiderFilename;
+    values_["CurrSpouseRiderFilename"] = &product_data_.CurrSpouseRiderFilename;
+    values_["GuarSpouseRiderFilename"] = &product_data_.GuarSpouseRiderFilename;
+    values_["CurrTermFilename"       ] = &product_data_.CurrTermFilename;
+    values_["GuarTermFilename"       ] = &product_data_.GuarTermFilename;
+    values_["TableYFilename"         ] = &product_data_.TableYFilename;
+    values_["PremTaxFilename"        ] = &product_data_.PremTaxFilename;
+    values_["TAMRA7PayFilename"      ] = &product_data_.TAMRA7PayFilename;
+    values_["TgtPremFilename"        ] = &product_data_.TgtPremFilename;
+    values_["IRC7702Filename"        ] = &product_data_.IRC7702Filename;
+    values_["Gam83Filename"          ] = &product_data_.Gam83Filename;
+    values_["RoundingFilename"       ] = &product_data_.RoundingFilename;
+    values_["TierFilename"           ] = &product_data_.TierFilename;
+    values_["PolicyForm"             ] = &product_data_.PolicyForm;
+    values_["PolicyMktgName"         ] = &product_data_.PolicyMktgName;
+    values_["PolicyLegalName"        ] = &product_data_.PolicyLegalName;
+    values_["InsCoShortName"         ] = &product_data_.InsCoShortName;
+    values_["InsCoName"              ] = &product_data_.InsCoName;
+    values_["InsCoAddr"              ] = &product_data_.InsCoAddr;
+    values_["InsCoStreet"            ] = &product_data_.InsCoStreet;
+    values_["InsCoPhone"             ] = &product_data_.InsCoPhone;
+    values_["InsCoDomicile"          ] = &product_data_.InsCoDomicile;
+    values_["MainUnderwriter"        ] = &product_data_.MainUnderwriter;
+    values_["MainUnderwriterAddress" ] = &product_data_.MainUnderwriterAddress;
+    values_["CoUnderwriter"          ] = &product_data_.CoUnderwriter;
+    values_["CoUnderwriterAddress"   ] = &product_data_.CoUnderwriterAddress;
+    values_["AvName"                 ] = &product_data_.AvName;
+    values_["CsvName"                ] = &product_data_.CsvName;
+    values_["CsvHeaderName"          ] = &product_data_.CsvHeaderName;
+    values_["NoLapseProvisionName"   ] = &product_data_.NoLapseProvisionName;
+    values_["InterestDisclaimer"     ] = &product_data_.InterestDisclaimer;
 }
 
 PolicyDocument::~PolicyDocument()
