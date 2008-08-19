@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_proddata.hpp,v 1.9 2008-01-01 18:29:43 chicares Exp $
+// $Id: ihs_proddata.hpp,v 1.10 2008-08-19 14:48:14 chicares Exp $
 
 #ifndef ihs_proddata_hpp
 #define ihs_proddata_hpp
@@ -62,6 +62,9 @@ class LMI_SO TProductData
     std::string const& GetTgtPremFilename        () const {return TgtPremFilename;        }
     std::string const& GetIRC7702Filename        () const {return IRC7702Filename;        }
     std::string const& GetGam83Filename          () const {return Gam83Filename;          }
+    std::string const& GetSubstdTblMultFilename  () const {return SubstdTblMultFilename;  }
+    std::string const& GetCurrSpecAmtLoadFilename() const {return CurrSpecAmtLoadFilename;}
+    std::string const& GetGuarSpecAmtLoadFilename() const {return GuarSpecAmtLoadFilename;}
     std::string const& GetRoundingFilename       () const {return RoundingFilename;       }
     std::string const& GetTierFilename           () const {return TierFilename;           }
 
@@ -109,6 +112,9 @@ class LMI_SO TProductData
     std::string TgtPremFilename;
     std::string IRC7702Filename;
     std::string Gam83Filename;
+    std::string SubstdTblMultFilename;
+    std::string CurrSpecAmtLoadFilename;
+    std::string GuarSpecAmtLoadFilename;
     std::string RoundingFilename;
     std::string TierFilename;
 
