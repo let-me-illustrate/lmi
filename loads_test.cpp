@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads_test.cpp,v 1.13 2008-07-14 17:19:26 chicares Exp $
+// $Id: loads_test.cpp,v 1.14 2008-08-19 17:03:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -38,7 +38,19 @@
 
 #include <cstddef> // std::size_t
 
-// TODO ?? Consider factoring out these database stubs.
+namespace
+{
+int const length = 50;
+std::vector<double> const dummy_vector(50);
+} // Unnamed namespace.
+
+// TODO ?? Consider factoring out these stubs...or abandoning the
+// present experiment and finding a better way of making classes such
+// as this one independent of class BasicValues.
+
+#include "basic_values.hpp"
+std::vector<double> BasicValues::GetCurrSpecAmtLoadTable() const {return dummy_vector;}
+std::vector<double> BasicValues::GetGuarSpecAmtLoadTable() const {return dummy_vector;}
 
 #include "database.hpp"
 TDatabase::TDatabase(int length) :length_(length) {}
@@ -122,11 +134,12 @@ void LoadsTest::TestCalculations(char const* file, int line)
 
 int test_main(int, char*[])
 {
-    int length = 50;
     round_to<double> round_interest_rate(0, r_not_at_all);
-    std::vector<double> extra_comp_load (length);
-    std::vector<double> extra_asset_comp(length);
-    std::vector<double> extra_policy_fee(length);
+    std::vector<double> extra_comp_load  (length);
+    std::vector<double> extra_asset_comp (length);
+    std::vector<double> extra_policy_fee (length);
+    std::vector<double> guar_specamt_load(length);
+    std::vector<double> curr_specamt_load(length);
 
     load_details details
         (length                 // length_
@@ -141,6 +154,8 @@ int test_main(int, char*[])
         ,extra_comp_load        // VectorExtraCompLoad_
         ,extra_asset_comp       // VectorExtraAssetComp_
         ,extra_policy_fee       // VectorExtraPolFee_
+        ,guar_specamt_load      // TabularGuarSpecAmtLoad_
+        ,curr_specamt_load      // TabularCurrSpecAmtLoad_
         );
 
     LoadsTest t(details);
