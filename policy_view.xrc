@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: policy_view.xrc,v 1.6 2008-08-19 14:02:47 chicares Exp $
+    $Id: policy_view.xrc,v 1.7 2008-08-19 14:48:14 chicares Exp $
 -->
 
 <object class="wxPanel" name="policy_view_panel">
@@ -284,6 +284,45 @@
                                     <object class="sizeritem">
                                         <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxGROW</flag>
                                         <object class="wxTextCtrl" name="Gam83Filename"/>
+                                        <minsize>160,-1</minsize>
+                                        <option>1</option>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                                        <object class="wxStaticText">
+                                            <label>SubstdTblMultFilename</label>
+                                        </object>
+                                        <option>0</option>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxGROW</flag>
+                                        <object class="wxTextCtrl" name="SubstdTblMultFilename"/>
+                                        <minsize>160,-1</minsize>
+                                        <option>1</option>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                                        <object class="wxStaticText">
+                                            <label>CurrSpecAmtLoadFilename</label>
+                                        </object>
+                                        <option>0</option>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxGROW</flag>
+                                        <object class="wxTextCtrl" name="CurrSpecAmtLoadFilename"/>
+                                        <minsize>160,-1</minsize>
+                                        <option>1</option>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                                        <object class="wxStaticText">
+                                            <label>GuarSpecAmtLoadFilename</label>
+                                        </object>
+                                        <option>0</option>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxGROW</flag>
+                                        <object class="wxTextCtrl" name="GuarSpecAmtLoadFilename"/>
                                         <minsize>160,-1</minsize>
                                         <option>1</option>
                                     </object>

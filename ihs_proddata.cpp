@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_proddata.cpp,v 1.16 2008-01-01 18:29:43 chicares Exp $
+// $Id: ihs_proddata.cpp,v 1.17 2008-08-19 14:48:14 chicares Exp $
 
 // This class contains names of files containing a product's tables as well
 // as strings that are the same for all instances of that product.
@@ -106,6 +106,9 @@ void TProductData::Read(std::string const& a_Filename)
     std::getline(is, TgtPremFilename,        '\n');
     std::getline(is, IRC7702Filename,        '\n');
     std::getline(is, Gam83Filename,          '\n');
+    std::getline(is, SubstdTblMultFilename,  '\n');
+    std::getline(is, CurrSpecAmtLoadFilename,'\n');
+    std::getline(is, GuarSpecAmtLoadFilename,'\n');
     std::getline(is, RoundingFilename,       '\n');
     std::getline(is, TierFilename,           '\n');
     std::getline(is, PolicyForm,             '\n');
@@ -174,6 +177,9 @@ void TProductData::Write(std::string const& a_Filename) const
     os << TgtPremFilename        << '\n';
     os << IRC7702Filename        << '\n';
     os << Gam83Filename          << '\n';
+    os << SubstdTblMultFilename  << '\n';
+    os << CurrSpecAmtLoadFilename<< '\n';
+    os << GuarSpecAmtLoadFilename<< '\n';
     os << RoundingFilename       << '\n';
     os << TierFilename           << '\n';
     os << PolicyForm             << '\n';
@@ -227,6 +233,9 @@ void TProductData::WritePolFiles()
     foo.TgtPremFilename         = "sample";
     foo.IRC7702Filename         = "qx_cso";
     foo.Gam83Filename           = "qx_ann";
+    foo.SubstdTblMultFilename   = "sample";
+    foo.CurrSpecAmtLoadFilename = "sample";
+    foo.GuarSpecAmtLoadFilename = "sample";
     foo.PolicyForm              = "UL32768-NY";
     foo.PolicyMktgName          = "UL Supreme";
     foo.PolicyLegalName = "Flexible Premium Adjustable Life Insurance Policy";

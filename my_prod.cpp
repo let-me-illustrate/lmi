@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: my_prod.cpp,v 1.5 2008-01-01 18:29:51 chicares Exp $
+// $Id: my_prod.cpp,v 1.6 2008-08-19 14:48:14 chicares Exp $
 
 // This file is a template for embedding product-specific data. Doing
 // that creates a derived work covered by the GPL. But you may prefer
@@ -69,6 +69,9 @@ void TProductData::WriteProprietaryPolFiles()
     foo.TgtPremFilename         = "sample";
     foo.IRC7702Filename         = "qx_cso";
     foo.Gam83Filename           = "qx_ann";
+    foo.SubstdTblMultFilename   = "sample";
+    foo.CurrSpecAmtLoadFilename = "sample";
+    foo.GuarSpecAmtLoadFilename = "sample";
     foo.PolicyForm              = "UL32768-NY";
     foo.PolicyMktgName          = "UL Supreme";
     foo.PolicyLegalName = "Flexible Premium Adjustable Life Insurance Policy";

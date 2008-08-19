@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: policy_document.cpp,v 1.7 2008-08-19 14:03:42 chicares Exp $
+// $Id: policy_document.cpp,v 1.8 2008-08-19 14:48:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -61,6 +61,9 @@ PolicyDocument::PolicyDocument()
     values_["TgtPremFilename"        ] = &product_data_.TgtPremFilename;
     values_["IRC7702Filename"        ] = &product_data_.IRC7702Filename;
     values_["Gam83Filename"          ] = &product_data_.Gam83Filename;
+    values_["SubstdTblMultFilename"  ] = &product_data_.SubstdTblMultFilename;
+    values_["CurrSpecAmtLoadFilename"] = &product_data_.CurrSpecAmtLoadFilename;
+    values_["GuarSpecAmtLoadFilename"] = &product_data_.GuarSpecAmtLoadFilename;
     values_["RoundingFilename"       ] = &product_data_.RoundingFilename;
     values_["TierFilename"           ] = &product_data_.TierFilename;
     values_["PolicyForm"             ] = &product_data_.PolicyForm;
