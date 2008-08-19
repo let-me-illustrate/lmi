@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_mortal.cpp,v 1.32 2008-08-19 14:03:42 chicares Exp $
+// $Id: ihs_mortal.cpp,v 1.33 2008-08-19 17:05:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -160,6 +160,14 @@ void MortalityRates::fetch_parameters(BasicValues const& basic_values)
     PartialMortalityQ_   = basic_values.Get83GamRates();
     CvatCorridorFactors_ = basic_values.GetCvatCorridorFactors();
     SevenPayRates_       = basic_values.GetTAMRA7PayRates();
+
+    std::transform
+        (SubstdTblMult_.begin()
+        ,SubstdTblMult_.end()
+        ,basic_values.GetSubstdTblMultTable().begin()
+        ,SubstdTblMult_.begin()
+        ,std::multiplies<double>()
+        );
 
 // TODO ?? Move this up here?
 //    CvatNspRates_;
