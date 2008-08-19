@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.xpp,v 1.28 2008-08-19 12:38:40 chicares Exp $
+// $Id: dbnames.xpp,v 1.29 2008-08-19 13:40:32 chicares Exp $
 
 #define DB_NAMES \
 {DB_FIRST,DB_FIRST,"dummy","dummy",}, \
@@ -204,7 +204,7 @@
 {DB_ADDCOIRate,DB_Topic_Riders,"ADDCOIRate","[not yet implemented--use external table instead]",}, \
 {DB_ADDPremRate,DB_Topic_Riders,"ADDPremRate","[not yet implemented--use external table instead]",}, \
 {DB_AllowSpouse,DB_Topic_Riders,"AllowSpouse","Allow spouse rider: 0=no, 1=yes",}, \
-{DB_SpousRiderGuarTable,DB_Topic_Riders,"SpousRiderGuarTable","Spouse rider guaranteed charge table (index in mortality table database)",}, \
+{DB_SpouseRiderGuarTable,DB_Topic_Riders,"SpouseRiderGuarTable","Spouse rider guaranteed charge table (index in mortality table database)",}, \
 {DB_SpouseRiderTable,DB_Topic_Riders,"SpouseRiderTable","Spouse rider current charge table (index in mortality table database)",}, \
 {DB_AllowChild,DB_Topic_Riders,"AllowChild","Allow child rider: 0=no, 1=yes",}, \
 {DB_ChildRiderTable,DB_Topic_Riders,"ChildRiderTable","Child rider charge table (index in mortality table database)",}, \
