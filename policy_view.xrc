@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: policy_view.xrc,v 1.7 2008-08-19 14:48:14 chicares Exp $
+    $Id: policy_view.xrc,v 1.8 2008-08-19 15:07:21 chicares Exp $
 -->
 
 <object class="wxPanel" name="policy_view_panel">
@@ -63,6 +63,32 @@
                                     <object class="sizeritem">
                                         <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxGROW|wxEXPAND</flag>
                                         <object class="wxTextCtrl" name="DatabaseFilename"/>
+                                        <minsize>160,-1</minsize>
+                                        <option>1</option>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                                        <object class="wxStaticText">
+                                            <label>TierFilename</label>
+                                        </object>
+                                        <option>0</option>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxGROW</flag>
+                                        <object class="wxTextCtrl" name="TierFilename"/>
+                                        <minsize>160,-1</minsize>
+                                        <option>1</option>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                                        <object class="wxStaticText">
+                                            <label>RoundingFilename</label>
+                                        </object>
+                                        <option>0</option>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxGROW</flag>
+                                        <object class="wxTextCtrl" name="RoundingFilename"/>
                                         <minsize>160,-1</minsize>
                                         <option>1</option>
                                     </object>
@@ -326,19 +352,6 @@
                                         <minsize>160,-1</minsize>
                                         <option>1</option>
                                     </object>
-                                    <object class="sizeritem">
-                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxStaticText">
-                                            <label>RoundingFilename</label>
-                                        </object>
-                                        <option>0</option>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxGROW</flag>
-                                        <object class="wxTextCtrl" name="RoundingFilename"/>
-                                        <minsize>160,-1</minsize>
-                                        <option>1</option>
-                                    </object>
                                 </object><!-- wxFlexGridSizer -->
                             </object><!-- sizeritem -->
                             <object class="sizeritem">
@@ -350,19 +363,6 @@
                                     <growablecols>1</growablecols>
                                     <hgap>8</hgap>
                                     <vgap>4</vgap>
-                                    <object class="sizeritem">
-                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxStaticText">
-                                            <label>TierFilename</label>
-                                        </object>
-                                        <option>0</option>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxGROW</flag>
-                                        <object class="wxTextCtrl" name="TierFilename"/>
-                                        <minsize>160,-1</minsize>
-                                        <option>1</option>
-                                    </object>
                                     <object class="sizeritem">
                                         <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
                                         <object class="wxStaticText">
