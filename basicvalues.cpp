@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basicvalues.cpp,v 1.36 2008-08-15 10:41:13 chicares Exp $
+// $Id: basicvalues.cpp,v 1.37 2008-08-19 17:02:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -313,5 +313,17 @@ std::vector<double> const& BasicValues::SpreadFor7702() const
 std::vector<double> const& BasicValues::GetCorridorFactor() const
 {
     return MortalityRates_->CvatCorridorFactors();
+}
+
+//============================================================================
+std::vector<double> BasicValues::GetCurrSpecAmtLoadTable() const
+{
+    return std::vector<double>(GetLength());
+}
+
+//============================================================================
+std::vector<double> BasicValues::GetGuarSpecAmtLoadTable() const
+{
+    return std::vector<double>(GetLength());
 }
 

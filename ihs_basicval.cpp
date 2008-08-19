@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.92 2008-08-19 13:40:33 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.93 2008-08-19 17:02:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2052,6 +2052,42 @@ std::vector<double> BasicValues::Get83GamRates() const
         ,true
         ,CannotBlend
         ,CanBlend
+        );
+}
+std::vector<double> BasicValues::GetSubstdTblMultTable() const
+{
+    if(0 == Database_->Query(DB_SubstdTblMultTable))
+        {
+        return std::vector<double>(GetLength(), 1.0);
+        }
+
+    return GetTable
+        (ProductData_->GetSubstdTblMultFilename()
+        ,DB_SubstdTblMultTable
+        );
+}
+std::vector<double> BasicValues::GetCurrSpecAmtLoadTable() const
+{
+    if(0 == Database_->Query(DB_CurrSpecAmtLoadTable))
+        {
+        return std::vector<double>(GetLength());
+        }
+
+    return GetTable
+        (ProductData_->GetCurrSpecAmtLoadFilename()
+        ,DB_CurrSpecAmtLoadTable
+        );
+}
+std::vector<double> BasicValues::GetGuarSpecAmtLoadTable() const
+{
+    if(0 == Database_->Query(DB_GuarSpecAmtLoadTable))
+        {
+        return std::vector<double>(GetLength());
+        }
+
+    return GetTable
+        (ProductData_->GetGuarSpecAmtLoadFilename()
+        ,DB_GuarSpecAmtLoadTable
         );
 }
 
