@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.hpp,v 1.17 2008-08-19 13:40:32 chicares Exp $
+// $Id: dbnames.hpp,v 1.18 2008-08-19 17:01:44 chicares Exp $
 
 #ifndef dbnames_hpp
 #define dbnames_hpp
@@ -115,6 +115,7 @@ enum DatabaseNames
         ,DB_COINonforfIsGuar
 
         ,DB_SubstdTblMult
+        ,DB_SubstdTblMultTable
 
         ,DB_CoiUpper12Method
         ,DB_CoiInforceReentry
@@ -162,6 +163,7 @@ enum DatabaseNames
         ,DB_GuarPremLoadExcRfd
 
         ,DB_GuarSpecAmtLoad
+        ,DB_GuarSpecAmtLoadTable
         ,DB_GuarFundAdminChg
         ,DB_GuarAcctValLoadAMD
 
@@ -174,6 +176,7 @@ enum DatabaseNames
         ,DB_CurrPremLoadExcRfd
 
         ,DB_CurrSpecAmtLoad
+        ,DB_CurrSpecAmtLoadTable
         ,DB_CurrFundAdminChg
         ,DB_CurrAcctValLoadAMD
 
