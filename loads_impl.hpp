@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads_impl.hpp,v 1.6 2008-01-01 18:29:48 chicares Exp $
+// $Id: loads_impl.hpp,v 1.7 2008-08-19 17:03:32 chicares Exp $
 
 #ifndef loads_impl_hpp
 #define loads_impl_hpp
@@ -63,6 +63,9 @@ class TDatabase;
 ///
 /// VectorExtraPolFee_: Input extra fee per month.
 ///
+/// TabularGuarSpecAmtLoad_, TabularCurrSpecAmtLoad_: Specified-amount
+/// loads read from tables--to be combined with those in the database.
+///
 /// These presently-unused data members
 ///   AmortizePremLoad
 ///   premium_tax_rate_
@@ -86,6 +89,8 @@ struct load_details
         ,std::vector<double> const& VectorExtraCompLoad
         ,std::vector<double> const& VectorExtraAssetComp
         ,std::vector<double> const& VectorExtraPolFee
+        ,std::vector<double> const& TabularGuarSpecAmtLoad
+        ,std::vector<double> const& TabularCurrSpecAmtLoad
         )
         :length_                          (length)
         ,AmortizePremLoad_                (AmortizePremLoad)
@@ -99,6 +104,8 @@ struct load_details
         ,VectorExtraCompLoad_             (VectorExtraCompLoad)
         ,VectorExtraAssetComp_            (VectorExtraAssetComp)
         ,VectorExtraPolFee_               (VectorExtraPolFee)
+        ,TabularGuarSpecAmtLoad_          (TabularGuarSpecAmtLoad)
+        ,TabularCurrSpecAmtLoad_          (TabularCurrSpecAmtLoad)
         {}
 
     int                        length_;
@@ -113,6 +120,8 @@ struct load_details
     std::vector<double> const& VectorExtraCompLoad_;
     std::vector<double> const& VectorExtraAssetComp_;
     std::vector<double> const& VectorExtraPolFee_;
+    std::vector<double> const  TabularGuarSpecAmtLoad_;
+    std::vector<double> const  TabularCurrSpecAmtLoad_;
 };
 
 #endif // loads_impl_hpp

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads.cpp,v 1.20 2008-07-30 12:31:07 chicares Exp $
+// $Id: loads.cpp,v 1.21 2008-08-19 17:03:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -68,6 +68,8 @@ Loads::Loads(BasicValues& V)
         ,V.yare_input_.ExtraCompensationOnPremium
         ,V.yare_input_.ExtraCompensationOnAssets
         ,V.yare_input_.ExtraMonthlyCustodialFee
+        ,V.GetGuarSpecAmtLoadTable()
+        ,V.GetCurrSpecAmtLoadTable()
         );
     Allocate(length);
     Initialize(*V.Database_);
@@ -245,6 +247,22 @@ void Loads::Calculate(load_details const& details)
         {
         AmortizePremiumTax(details);
         }
+
+    // ET !! specified_amount_load_[mce_gen_guar] *= details.TabularGuarSpecAmtLoad_
+    std::transform
+        (specified_amount_load_[mce_gen_guar].begin()
+        ,specified_amount_load_[mce_gen_guar].end()
+        ,details.TabularGuarSpecAmtLoad_.begin()
+        ,specified_amount_load_[mce_gen_guar].begin()
+        ,std::plus<double>()
+        );
+    std::transform
+        (specified_amount_load_[mce_gen_curr].begin()
+        ,specified_amount_load_[mce_gen_curr].end()
+        ,details.TabularCurrSpecAmtLoad_.begin()
+        ,specified_amount_load_[mce_gen_curr].begin()
+        ,std::plus<double>()
+        );
 
     // Total load excludes monthly_policy_fee_, annual_policy_fee_, and
     // amortized_premium_tax_load_ because they are charges rather than loads.
@@ -531,6 +549,8 @@ Loads::Loads(TDatabase const& database, bool NeedMidpointRates)
     database.Query(target_premium_load_  [mce_gen_curr], DB_CurrPremLoadTgt);
     database.Query(excess_premium_load_  [mce_gen_curr], DB_CurrPremLoadExc);
     database.Query(specified_amount_load_[mce_gen_curr], DB_CurrSpecAmtLoad);
+
+    // This ctor ignores tabular specified-amount loads.
 
     // Calculate midpoint as mean of current and guaranteed.
     // A different average might be used instead.
