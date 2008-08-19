@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.hpp,v 1.15 2008-08-16 17:36:13 chicares Exp $
+// $Id: dbnames.hpp,v 1.16 2008-08-19 12:38:40 chicares Exp $
 
 #ifndef dbnames_hpp
 #define dbnames_hpp
@@ -33,7 +33,7 @@
 enum DatabaseNames
     {DB_FIRST
 
-    ,DB_Topic_Issue_Rules
+    ,DB_Topic_IssueRules
 
         ,DB_AgeLastOrNearest
         ,DB_MinIssAge
@@ -76,7 +76,7 @@ enum DatabaseNames
 
         ,DB_Allowable
 
-    ,DB_Topic_7702
+    ,DB_Topic_7702And7702A
 
         ,DB_AllowCVAT
         ,DB_AllowGPT
@@ -89,7 +89,7 @@ enum DatabaseNames
         ,DB_PremLoad7702
         ,DB_Equiv7702DBO3
 
-    ,DB_Topic_Mortality
+    ,DB_Topic_MortalityCharges
 
         ,DB_GuarCOITable
         ,DB_GCoiIsAnnual
@@ -139,19 +139,17 @@ enum DatabaseNames
         ,DB_SepAcctSpreadMethod
         ,DB_IntSpreadFreq
         ,DB_DynamicMandE
-        ,DB_AllowHoneymoon
 
     ,DB_Topic_AssetCharges
 
         ,DB_AllowAmortPremLoad
         ,DB_AmortPmLdFundCharge
 
-        ,DB_PmTxAmortPeriod
-        ,DB_PmTxAmortIntRate
-
         ,DB_AllowCustomFund
         ,DB_AssetChargeType
         ,DB_StableValFundCharge
+
+        ,DB_FundCharge
 
     ,DB_Topic_Loads
 
@@ -183,20 +181,37 @@ enum DatabaseNames
         ,DB_TgtPremPolFee
         ,DB_DynamicSepAcctLoad
         ,DB_SpecAmtLoadLimit
-        ,DB_FundCharge
 
-        ,DB_DACTaxPremLoad
+    ,DB_Topic_DacAndPremiumTax
+
         ,DB_DACTaxFundCharge
+        ,DB_DACTaxPremLoad
 
-        ,DB_PremTaxLoad
         ,DB_PremTaxFundCharge
+        ,DB_PremTaxLoad
         ,DB_WaivePmTxInt1035
         ,DB_PremTaxRetalLimit
         ,DB_PremTaxTierGroup
         ,DB_PremTaxTierPeriod
         ,DB_PremTaxTierNonDecr
 
-    ,DB_Topic_SurrChgs
+        ,DB_PmTxAmortPeriod
+        ,DB_PmTxAmortIntRate
+
+        ,DB_PremTaxRate
+        ,DB_PremTaxState
+        ,DB_PremTaxTable
+
+    ,DB_Topic_SurrenderCharges
+
+        ,DB_SurrChgAVMult
+        ,DB_SurrChgAVDurFactor
+        ,DB_SurrChgSAMult
+        ,DB_SurrChgSADurFactor
+        ,DB_SurrChgPremMult
+        ,DB_SurrChgOnIncr
+        ,DB_SurrChgOnDecr
+        ,DB_Has1035ExchCharge
 
         ,DB_NonforfQTable
         ,DB_SurrChgByFormula
@@ -205,18 +220,9 @@ enum DatabaseNames
         ,DB_SurrChgNLPMult
         ,DB_SurrChgNLPMax
         ,DB_SurrChgEAMax
-        ,DB_SurrChgPremMult
         ,DB_SurrChgIsMly
 
-        ,DB_SurrChgAVMult
-        ,DB_SurrChgSAMult
-        ,DB_SurrChgOnIncr
-        ,DB_SurrChgSADurFactor
-        ,DB_SurrChgAVDurFactor
-        ,DB_SurrChgOnDecr
-        ,DB_Has1035ExchCharge
-
-    ,DB_Topic_DeathBfts
+    ,DB_Topic_DeathBenefits
 
         ,DB_AllowSAIncr
         ,DB_MinSpecAmtIncr
@@ -228,6 +234,8 @@ enum DatabaseNames
         ,DB_AllowChangeToDBO2
         ,DB_OptChgCanIncrSA
         ,DB_OptChgCanDecrSA
+
+        ,DB_AllowExtEndt
 
     ,DB_Topic_Riders
 
@@ -265,7 +273,7 @@ enum DatabaseNames
         ,DB_AllowChild
         ,DB_ChildRiderTable
 
-    ,DB_Topic_WD
+    ,DB_Topic_Withdrawals
 
         ,DB_AllowWD
         ,DB_WDFee
@@ -302,46 +310,29 @@ enum DatabaseNames
 
         ,DB_FirstLoanYear
 
-    ,DB_Topic_Comp
-
-        ,DB_CompTarget
-        ,DB_CompExcess
-        ,DB_CompChargeBack
-        ,DB_AllowExtraPremComp
-        ,DB_AllowExtraAssetComp
-        ,DB_AssetComp
-
-    ,DB_Topic_ExpRating
-
-        ,DB_AllowExpRating
-        ,DB_ExpRatStdDevMult
-        ,DB_ExpRatIBNRMult
-        ,DB_ExpRatCOIRetention
-        ,DB_ExpRatRiskCOIMult
-        ,DB_ExpRatAmortPeriod
-
-    ,DB_Topic_Tables
-
-        ,DB_TgtPremTable
-        ,DB_PremTaxTable
-        ,DB_TableYTable
-        ,DB_83GamTable
-
-    ,DB_Topic_Miscellanea
-
-        ,DB_LedgerType
-        ,DB_AllowGenAcct
-        ,DB_AllowSepAcct
-
-        ,DB_EndtAge
-        ,DB_AllowExtEndt
+    ,DB_Topic_Premiums
 
         ,DB_MinPremType
         ,DB_MinPremIntSpread
         ,DB_TgtPremType
+        ,DB_TgtPremTable
         ,DB_TgtPmFixedAtIssue
         ,DB_TgtPmIgnoreSubstd
 
+    ,DB_Topic_SecondaryGuarantees
+
+        ,DB_NoLapseMinDur
+        ,DB_NoLapseMinAge
+        ,DB_NoLapseUnratedOnly
+        ,DB_NoLapseOpt1Only
+        ,DB_NoLapseAlwaysActive
+
+        ,DB_AllowHoneymoon
+
+    ,DB_Topic_Allocations
+
+        ,DB_AllowGenAcct
+        ,DB_AllowSepAcct
         ,DB_DeductionMethod
         ,DB_DeductionAcct
         ,DB_DistributionMethod
@@ -351,18 +342,36 @@ enum DatabaseNames
         ,DB_ErPremMethod
         ,DB_ErPremAcct
 
-        ,DB_LapseIgnoresSurrChg
-        ,DB_NoLapseMinDur
-        ,DB_NoLapseMinAge
-        ,DB_NoLapseUnratedOnly
-        ,DB_NoLapseOpt1Only
-        ,DB_NoLapseAlwaysActive
+    ,DB_Topic_Compensation
 
+        ,DB_CompTarget
+        ,DB_CompExcess
+        ,DB_CompChargeBack
+        ,DB_AllowExtraPremComp
+        ,DB_AllowExtraAssetComp
+        ,DB_AssetComp
+
+    ,DB_Topic_ExperienceRating
+
+        ,DB_AllowExpRating
+        ,DB_ExpRatStdDevMult
+        ,DB_ExpRatIBNRMult
+        ,DB_ExpRatCOIRetention
+        ,DB_ExpRatRiskCOIMult
+        ,DB_ExpRatAmortPeriod
+
+    ,DB_Topic_Miscellanea
+
+        ,DB_LedgerType
+
+        ,DB_EndtAge
+
+        ,DB_LapseIgnoresSurrChg
         ,DB_DefaultProcessOrder
         ,DB_NominallyPar
 
-        ,DB_PremTaxRate
-        ,DB_PremTaxState
+        ,DB_TableYTable
+        ,DB_83GamTable
 
     ,DB_Topic_Weights
 
@@ -404,7 +413,7 @@ enum DatabaseNames
         ,DB_DefVxQ
         ,DB_NonforfQ
 
-    ,DB_Topic_OtherAsspts
+    ,DB_Topic_OtherAssumptions
 
         ,DB_LapseRate
         ,DB_ReqSurpNAAR

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.cpp,v 1.7 2008-08-15 17:49:24 chicares Exp $
+// $Id: dbnames.cpp,v 1.8 2008-08-19 12:38:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -39,9 +39,14 @@ bool check_order(std::vector<db_names> const& v)
 {
     LMI_ASSERT(DB_LAST == v.size());
 
+    int parent = DB_FIRST;
     bool is_okay = true;
     for(int j = 0; j < DB_LAST; ++j)
         {
+        if(DB_FIRST == v[j].ParentIdx)
+            {
+            parent = j;
+            }
         if(j != v[j].Idx)
             {
             is_okay = false;
@@ -49,7 +54,17 @@ bool check_order(std::vector<db_names> const& v)
                 << "Entity " << j
                 << " '" << v[j].ShortName
                 << "' with index " << v[j].Idx
-                << " is out of order."
+                << " is out of order.\n"
+                ;
+            }
+        if(parent != v[j].ParentIdx && DB_FIRST != v[j].ParentIdx)
+            {
+            is_okay = false;
+            warning()
+                << "Entity " << j
+                << " '" << v[j].ShortName
+                << "' with index " << v[j].Idx
+                << " has incorrect parent.\n"
                 ;
             }
         }
