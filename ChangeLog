@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1141 2008-08-15 17:49:24 chicares Exp $
+// $Id: ChangeLog,v 1.1142 2008-08-19 17:05:26 chicares Exp $
 
 MAINTENANCE
 
@@ -19248,4 +19248,82 @@ Improve documentation.
   dbnames.hpp
   dbnames.xpp
 Permute; make sure permutations match, just for concinnity.
+
+20080816T1736Z <gchicares@sbcglobal.net> [981]
+
+  dbnames.hpp
+  dbnames.xpp
+Permute more radically.
+
+20080817T1157Z <gchicares@sbcglobal.net> [979]
+
+  actuarial_table.cpp
+  actuarial_table_test.cpp
+Test an SOA "duration" table.
+
+20080819T1238Z <gchicares@sbcglobal.net> [979]
+
+  dbnames.cpp
+  dbnames.hpp
+  dbnames.xpp
+Permute more radically; rename topics; test concinnity better.
+
+20080819T1340Z <gchicares@sbcglobal.net> [979]
+
+  dbnames.hpp
+  dbnames.xpp
+  ihs_basicval.cpp
+Improve a name that looks incorrect.
+
+20080819T1402Z <gchicares@sbcglobal.net> [979]
+
+  policy_view.xrc
+Fix indentation.
+
+20080819T1403Z <gchicares@sbcglobal.net> [979]
+
+  basic_values.hpp
+  ihs_mortal.cpp
+  policy_document.cpp
+Reformat.
+
+20080819T1448Z <gchicares@sbcglobal.net> [979]
+
+  ihs_proddata.cpp
+  ihs_proddata.hpp
+  my_prod.cpp
+  policy_document.cpp
+  policy_view.xrc
+Add several tables.
+
+20080819T1507Z <gchicares@sbcglobal.net> [979]
+
+  policy_view.xrc
+Keep 'Filename' fields together. This is more important than forcing
+the number of rows in both columns to be even approximately the same.
+
+20080819T1701Z <gchicares@sbcglobal.net> [979]
+
+  dbnames.hpp
+  dbnames.xpp
+Add several entities.
+
+20080819T1702Z <gchicares@sbcglobal.net> [979]
+
+  basic_values.hpp
+  basicvalues.cpp
+  ihs_basicval.cpp
+Read tables added 20080819T1448Z.
+
+20080819T1703Z <gchicares@sbcglobal.net> [979]
+
+  loads.cpp
+  loads_impl.hpp
+  loads_test.cpp
+Implement new specified-amount-load tables.
+
+20080819T1705Z <gchicares@sbcglobal.net> [979]
+
+  ihs_mortal.cpp
+Implement new substandard-multiple table.
 
