@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1142 2008-08-19 17:05:26 chicares Exp $
+// $Id: ChangeLog,v 1.1143 2008-08-21 03:15:27 chicares Exp $
 
 MAINTENANCE
 
@@ -19326,4 +19326,37 @@ Implement new specified-amount-load tables.
 
   ihs_mortal.cpp
 Implement new substandard-multiple table.
+
+20080821T0219Z <gchicares@sbcglobal.net> [979]
+
+  dbnames.cpp
+Refine warnings.
+
+20080821T0220Z <gchicares@sbcglobal.net> [979]
+
+  dbnames.hpp
+  dbnames.xpp
+Permute entities.
+
+20080821T0223Z <gchicares@sbcglobal.net> [979]
+
+  dbnames.hpp
+  dbnames.xpp
+Improve documentation.
+
+20080821T0237Z <gchicares@sbcglobal.net> [979]
+
+  dbnames.hpp
+  dbnames.xpp
+Add two entities.
+
+20080821T0314Z <gchicares@sbcglobal.net> [979]
+
+  ihs_dbdict.cpp
+Improve defaults.
+
+20080821T0315Z <gchicares@sbcglobal.net> [978]
+
+  ihs_avmly.cpp
+Move a defectively hardcoded number to the database.
 
