@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbdict.cpp,v 1.24 2008-08-15 15:22:14 chicares Exp $
+// $Id: ihs_dbdict.cpp,v 1.25 2008-08-21 03:14:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -207,6 +207,8 @@ void DBDictionary::Add(TDBValue const& e)
 // Initialize all database entities to not-necessarily-plausible values.
 void DBDictionary::InitDB()
 {
+    static double const bignum = std::numeric_limits<double>::max();
+
     dictionary.erase(dictionary.begin(), dictionary.end());
     for(int j = DB_FIRST; j < DB_LAST; ++j)
         {
@@ -223,14 +225,18 @@ void DBDictionary::InitDB()
     // Generally you would want a value such as 1/12 or 1/11 here.
     Add(TDBValue(DB_MaxMonthlyCoiRate   , 1.0 / 12.0));
 
-    Add(TDBValue(DB_GuarIntSpread, std::numeric_limits<double>::max()));
+    Add(TDBValue(DB_GuarIntSpread       , bignum));
 
-    Add(TDBValue(DB_CurrCOITable0Limit  , std::numeric_limits<double>::max()));
+    Add(TDBValue(DB_CurrCOITable0Limit  , bignum));
     Add(TDBValue(DB_CurrCOITable1       , 999));
-    Add(TDBValue(DB_CurrCOITable1Limit  , std::numeric_limits<double>::max()));
+    Add(TDBValue(DB_CurrCOITable1Limit  , bignum));
     Add(TDBValue(DB_CurrCOITable2       , 999));
 
-    double const bignum = std::numeric_limits<double>::max();
+    Add(TDBValue(DB_SpecAmtLoadLimit    , bignum));
+    Add(TDBValue(DB_DynSepAcctLoadLimit , bignum));
+    Add(TDBValue(DB_ADDLimit            , bignum));
+    Add(TDBValue(DB_ExpPerKLimit        , bignum));
+
     int premium_tax_dimensions[TDBValue::e_number_of_axes] = {1, 1, 1, 1, 1, 53, 1};
     double premium_tax_retaliation_threshold[53] =
         {
@@ -513,7 +519,6 @@ void DBDictionary::WriteSampleDBFile()
     Add(TDBValue(DB_VarExpPrem          , 0.0));
     Add(TDBValue(DB_VarExpDumpin        , 0.0));
     Add(TDBValue(DB_VarExpPerK          , 0.0));
-    Add(TDBValue(DB_ExpPerKLimit        , 0.0));
     Add(TDBValue(DB_MedicalProportion   , 0.0));
     Add(TDBValue(DB_UWTestCost          , 0.0));
     Add(TDBValue(DB_VxBasicQTable       , 0.0));
