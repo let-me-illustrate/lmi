@@ -19,45 +19,35 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.xpp,v 1.30 2008-08-19 17:01:45 chicares Exp $
+// $Id: dbnames.xpp,v 1.31 2008-08-21 02:20:24 chicares Exp $
 
 #define DB_NAMES \
 {DB_FIRST,DB_FIRST,"dummy","dummy",}, \
-{DB_Topic_IssueRules,DB_FIRST,"Issue rules","Issue rules",}, \
-{DB_AgeLastOrNearest,DB_Topic_IssueRules,"AgeLastOrNearest","Age calculated as of last or nearest birthday: 0=ALB, 1=ANB",}, \
-{DB_MinIssAge,DB_Topic_IssueRules,"MinIssAge","Minimum issue age",}, \
-{DB_MaxIssAge,DB_Topic_IssueRules,"MaxIssAge","Maximum issue age",}, \
-{DB_MaxIncrAge,DB_Topic_IssueRules,"MaxIncrAge","Maximum age at which specified amount increases are permitted",}, \
-{DB_AllowRetirees,DB_Topic_IssueRules,"AllowRetirees","Retirees may be issued: 0= no, 1=yes",}, \
-{DB_AllowFullUW,DB_Topic_IssueRules,"AllowFullUW","Allow full underwriting: 0=no, 1=yes",}, \
-{DB_AllowSimpUW,DB_Topic_IssueRules,"AllowSimpUW","Allow simplified underwriting: 0=no, 1=yes",}, \
-{DB_AllowGuarUW,DB_Topic_IssueRules,"AllowGuarUW","Allow guaranteed underwriting: 0=no, 1=yes",}, \
-{DB_PrefOrSelect,DB_Topic_IssueRules,"PrefOrSelect","Underwriting class more restrictive than standard is called: 0=preferred, 1=select",}, \
-{DB_AllowPreferredClass,DB_Topic_IssueRules,"AllowPreferredClass","Allow preferred class: 0=no, 1=yes",}, \
-{DB_AllowUltraPrefClass,DB_Topic_IssueRules,"AllowUltraPrefClass","Allow ultra-preferred class: 0=no, 1=yes",}, \
-{DB_AllowSubstdTable,DB_Topic_IssueRules,"AllowSubstdTable","Allow substandard table ratings: 0= no, 1=yes",}, \
-{DB_AllowFlatExtras,DB_Topic_IssueRules,"AllowFlatExtras","Allow substandard flat extra ratings: 0= no, 1=yes",}, \
-{DB_AllowRatedWP,DB_Topic_IssueRules,"AllowRatedWP","Waiver benefit can be rated: 0=no, 1=yes",}, \
-{DB_AllowRatedADD,DB_Topic_IssueRules,"AllowRatedADD","Accidental death benefit can be rated: 0=no, 1=yes",}, \
-{DB_AllowRatedTerm,DB_Topic_IssueRules,"AllowRatedTerm","Term rider can be rated: 0=no, 1=yes",}, \
-{DB_MinPmt,DB_Topic_IssueRules,"MinPmt","Minimum initial payment",}, \
-{DB_MinSpecAmt,DB_Topic_IssueRules,"MinSpecAmt","Minimum specified amount [interaction with similar entities not yet documented]",}, \
-{DB_MinIssSpecAmt,DB_Topic_IssueRules,"MinIssSpecAmt","Minimum specified amount allowed at issue",}, \
-{DB_MinRenlSpecAmt,DB_Topic_IssueRules,"MinRenlSpecAmt","Minimum specified amount after issue for base policy including any term rider",}, \
-{DB_MinRenlBaseSpecAmt,DB_Topic_IssueRules,"MinRenlBaseSpecAmt","Minimum specified amount after issue for base policy only, ignoring any term rider",}, \
-{DB_MaxIssSpecAmt,DB_Topic_IssueRules,"MaxIssSpecAmt","Maximum specified amount allowed at issue",}, \
-{DB_MaxRenlSpecAmt,DB_Topic_IssueRules,"MaxRenlSpecAmt","Maximum specified amount after issue for base policy only, ignoring any term rider",}, \
-{DB_AllowUnisex,DB_Topic_IssueRules,"AllowUnisex","Allow unisex rating: 0=no, 1=yes",}, \
-{DB_AllowSexDistinct,DB_Topic_IssueRules,"AllowSexDistinct","Allow gender distinct rating: 0=no, 1=yes",}, \
-{DB_AllowUnismoke,DB_Topic_IssueRules,"AllowUnismoke","Allow unismoke/unitobacco rating: 0=no, 1=yes",}, \
-{DB_AllowSmokeDistinct,DB_Topic_IssueRules,"AllowSmokeDistinct","Allow smoker/tobacco distinct rating: 0=no, 1=yes",}, \
-{DB_SmokeOrTobacco,DB_Topic_IssueRules,"SmokeOrTobacco","Policy form distinguishes mortality by: 0=smoking, 1=tobacco use",}, \
-{DB_AllowMortBlendSex,DB_Topic_IssueRules,"AllowMortBlendSex","Mortality rating can be blended by gender: 0=no, 1=yes",}, \
-{DB_AllowMortBlendSmoke,DB_Topic_IssueRules,"AllowMortBlendSmoke","Mortality rating can be blended by smoking/tobacco use: 0=no, 1=yes",}, \
-{DB_StateApproved,DB_Topic_IssueRules,"StateApproved","Approved by state: 0=no, 1=yes",}, \
-{DB_AllowStateXX,DB_Topic_IssueRules,"AllowStateXX","Allow state 'XX': 0=no, 1=yes [not yet implemented]",}, \
-{DB_AllowForeign,DB_Topic_IssueRules,"AllowForeign","Allow foreign-country multiplier for cost of insurance charges: 0=no, 1=yes [not yet implemented]",}, \
-{DB_Allowable,DB_Topic_IssueRules,"Allowable","A catchall category for rules not otherwise expressible",}, \
+{DB_Topic_Underwriting,DB_FIRST,"Underwriting","Underwriting types, classifications, and restrictions; permissible rate classes; approved jurisdictions",}, \
+{DB_MinIssAge,DB_Topic_Underwriting,"MinIssAge","Minimum issue age",}, \
+{DB_MaxIssAge,DB_Topic_Underwriting,"MaxIssAge","Maximum issue age",}, \
+{DB_MaxIncrAge,DB_Topic_Underwriting,"MaxIncrAge","Maximum age at which specified amount increases are permitted",}, \
+{DB_AllowFullUW,DB_Topic_Underwriting,"AllowFullUW","Allow full underwriting: 0=no, 1=yes",}, \
+{DB_AllowSimpUW,DB_Topic_Underwriting,"AllowSimpUW","Allow simplified underwriting: 0=no, 1=yes",}, \
+{DB_AllowGuarUW,DB_Topic_Underwriting,"AllowGuarUW","Allow guaranteed underwriting: 0=no, 1=yes",}, \
+{DB_SmokeOrTobacco,DB_Topic_Underwriting,"SmokeOrTobacco","Policy form distinguishes mortality by: 0=smoking, 1=tobacco use",}, \
+{DB_PrefOrSelect,DB_Topic_Underwriting,"PrefOrSelect","Underwriting class more restrictive than standard is called: 0=preferred, 1=select",}, \
+{DB_AllowPreferredClass,DB_Topic_Underwriting,"AllowPreferredClass","Allow preferred class: 0=no, 1=yes",}, \
+{DB_AllowUltraPrefClass,DB_Topic_Underwriting,"AllowUltraPrefClass","Allow ultra-preferred class: 0=no, 1=yes",}, \
+{DB_AllowSubstdTable,DB_Topic_Underwriting,"AllowSubstdTable","Allow substandard table ratings: 0= no, 1=yes",}, \
+{DB_AllowFlatExtras,DB_Topic_Underwriting,"AllowFlatExtras","Allow substandard flat extra ratings: 0= no, 1=yes",}, \
+{DB_AllowRatedWP,DB_Topic_Underwriting,"AllowRatedWP","Waiver benefit can be rated: 0=no, 1=yes",}, \
+{DB_AllowRatedADD,DB_Topic_Underwriting,"AllowRatedADD","Accidental death benefit can be rated: 0=no, 1=yes",}, \
+{DB_AllowRatedTerm,DB_Topic_Underwriting,"AllowRatedTerm","Term rider can be rated: 0=no, 1=yes",}, \
+{DB_AllowRetirees,DB_Topic_Underwriting,"AllowRetirees","Retirees may be issued: 0= no, 1=yes",}, \
+{DB_AllowUnisex,DB_Topic_Underwriting,"AllowUnisex","Allow unisex rating: 0=no, 1=yes",}, \
+{DB_AllowSexDistinct,DB_Topic_Underwriting,"AllowSexDistinct","Allow gender distinct rating: 0=no, 1=yes",}, \
+{DB_AllowUnismoke,DB_Topic_Underwriting,"AllowUnismoke","Allow unismoke/unitobacco rating: 0=no, 1=yes",}, \
+{DB_AllowSmokeDistinct,DB_Topic_Underwriting,"AllowSmokeDistinct","Allow smoker/tobacco distinct rating: 0=no, 1=yes",}, \
+{DB_StateApproved,DB_Topic_Underwriting,"StateApproved","Approved by state: 0=no, 1=yes",}, \
+{DB_AllowStateXX,DB_Topic_Underwriting,"AllowStateXX","Allow state 'XX': 0=no, 1=yes [not yet implemented]",}, \
+{DB_AllowForeign,DB_Topic_Underwriting,"AllowForeign","Allow foreign-country multiplier for cost of insurance charges: 0=no, 1=yes [not yet implemented]",}, \
+{DB_Allowable,DB_Topic_Underwriting,"Allowable","A catchall category for rules not otherwise expressible",}, \
 {DB_Topic_7702And7702A,DB_FIRST,"7702 and 7702A","Internal Revenue Code sections 7702 and 7702A",}, \
 {DB_AllowCVAT,DB_Topic_7702And7702A,"AllowCVAT","Allow cash value accumulation test: 0=no, 1=yes",}, \
 {DB_AllowGPT,DB_Topic_7702And7702A,"AllowGPT","Allow guideline premium test: 0=no, 1=yes",}, \
@@ -86,11 +76,12 @@
 {DB_MaxMonthlyCoiRate,DB_Topic_MortalityCharges,"MaxMonthlyCoiRate","Maximum monthly COI rate per $1 of specified amount",}, \
 {DB_GuarCOICeiling,DB_Topic_MortalityCharges,"GuarCOICeiling","Dynamically decrease current cost of insurance rates to guaranteed wherever they would otherwise be higher [not yet implemented]",}, \
 {DB_COIGuarIsMin,DB_Topic_MortalityCharges,"COIGuarIsMin","[not used]",}, \
-{DB_COINonforfIsGuar,DB_Topic_MortalityCharges,"COINonforfIsGuar","Use guaranteed cost of insurance rates as nonforfeiture basis [not yet implemented]",}, \
 {DB_SubstdTblMult,DB_Topic_MortalityCharges,"SubstdTblMult","Substandard table-rating multiplier applied to both guaranteed and current cost of insurance and term rider charges (also multiplied by 'SubstdTblMultTable')",}, \
 {DB_SubstdTblMultTable,DB_Topic_MortalityCharges,"SubstdTblMultTable","Substandard table-rating multiplier applied to both guaranteed and current cost of insurance and term rider charges (index in mortality table database)",}, \
 {DB_CoiUpper12Method,DB_Topic_MortalityCharges,"CoiUpper12Method","Method to derive monthly from annual COI rates: 0=exponential, 1=linear [not yet implemented]",}, \
 {DB_CoiInforceReentry,DB_Topic_MortalityCharges,"CoiInforceReentry","Reenter COI table: 0=never, 1=at beginning of inforce year, 2=on anniversary >= input reset date",}, \
+{DB_AllowMortBlendSex,DB_Topic_MortalityCharges,"AllowMortBlendSex","Mortality rating can be blended by gender: 0=no, 1=yes",}, \
+{DB_AllowMortBlendSmoke,DB_Topic_MortalityCharges,"AllowMortBlendSmoke","Mortality rating can be blended by smoking/tobacco use: 0=no, 1=yes",}, \
 {DB_Topic_Interest,DB_FIRST,"Interest","Interest",}, \
 {DB_GuarInt,DB_Topic_Interest,"GuarInt","Guaranteed interest rate",}, \
 {DB_NAARDiscount,DB_Topic_Interest,"NAARDiscount","Net amount at risk discount rate e.g. 1.0 / 1.00246627 for 3% annual rate",}, \
@@ -112,6 +103,8 @@
 {DB_AllowCustomFund,DB_Topic_AssetCharges,"AllowCustomFund","Allow custom funds: 0=no, 1=yes",}, \
 {DB_AssetChargeType,DB_Topic_AssetCharges,"AssetChargeType","Treatment of input extra separate-account asset charge: 0=interest spread, 1=account-value load after monthly deduction",}, \
 {DB_StableValFundCharge,DB_Topic_AssetCharges,"StableValFundCharge","Stable value fund charge",}, \
+{DB_GuarFundAdminChg,DB_Topic_AssetCharges,"GuarFundAdminChg","Guaranteed fund administration charge [not used]",}, \
+{DB_CurrFundAdminChg,DB_Topic_AssetCharges,"CurrFundAdminChg","Current fund administration charge [not used]",}, \
 {DB_FundCharge,DB_Topic_AssetCharges,"FundCharge","[not used]",}, \
 {DB_Topic_Loads,DB_FIRST,"Loads","Loads and expense charges deducted from payments and account value",}, \
 {DB_GuarPolFee,DB_Topic_Loads,"GuarPolFee","Guaranteed monthly policy fee",}, \
@@ -122,7 +115,6 @@
 {DB_GuarPremLoadExcRfd,DB_Topic_Loads,"GuarPremLoadExcRfd","Guaranteed load on premium in excess of target, refundable on lapse",}, \
 {DB_GuarSpecAmtLoad,DB_Topic_Loads,"GuarSpecAmtLoad","Guaranteed charge per $1 of specified amount, in addition to 'GuarSpecAmtLoadTable'",}, \
 {DB_GuarSpecAmtLoadTable,DB_Topic_Loads,"GuarSpecAmtLoadTable","Guaranteed charge per $1 of specified amount (index in mortality table database)",}, \
-{DB_GuarFundAdminChg,DB_Topic_Loads,"GuarFundAdminChg","Guaranteed fund administration charge [not used]",}, \
 {DB_GuarAcctValLoadAMD,DB_Topic_Loads,"GuarAcctValLoadAMD","Guaranteed maximum for expense charge as proportion of separate account value",}, \
 {DB_CurrPolFee,DB_Topic_Loads,"CurrPolFee","Current monthly policy fee",}, \
 {DB_CurrIssueFee,DB_Topic_Loads,"CurrIssueFee","Current annual policy fee",}, \
@@ -132,12 +124,11 @@
 {DB_CurrPremLoadExcRfd,DB_Topic_Loads,"CurrPremLoadExcRfd","Current load on premium in excess of target, refundable on lapse",}, \
 {DB_CurrSpecAmtLoad,DB_Topic_Loads,"CurrSpecAmtLoad","Current charge per $1 of specified amount, in addition to 'CurrSpecAmtLoadTable'",}, \
 {DB_CurrSpecAmtLoadTable,DB_Topic_Loads,"CurrSpecAmtLoadTable","Current charge per $1 of specified amount (index in mortality table database)",}, \
-{DB_CurrFundAdminChg,DB_Topic_Loads,"CurrFundAdminChg","Current fund administration charge [not used]",}, \
 {DB_CurrAcctValLoadAMD,DB_Topic_Loads,"CurrAcctValLoadAMD","Expense charge as proportion of separate account value",}, \
-{DB_PremRefund,DB_Topic_Loads,"PremRefund","Proportion of sales load refundable on full surrender",}, \
 {DB_TgtPremPolFee,DB_Topic_Loads,"TgtPremPolFee","Target-premium monthly policy fee",}, \
-{DB_DynamicSepAcctLoad,DB_Topic_Loads,"DynamicSepAcctLoad","Separate account AV load dynamically determined based on total case assets: 0=no, 1=yes",}, \
+{DB_PremRefund,DB_Topic_Loads,"PremRefund","Proportion of sales load refundable on full surrender",}, \
 {DB_SpecAmtLoadLimit,DB_Topic_Loads,"SpecAmtLoadLimit","Limit up to which charge per $1 of specified amount applies",}, \
+{DB_DynamicSepAcctLoad,DB_Topic_Loads,"DynamicSepAcctLoad","Separate account AV load dynamically determined based on total case assets: 0=no, 1=yes",}, \
 {DB_Topic_DacAndPremiumTax,DB_FIRST,"DAC and premium tax","DAC and premium tax parameters and charges",}, \
 {DB_DACTaxFundCharge,DB_Topic_DacAndPremiumTax,"DACTaxFundCharge","DAC tax fund charge [not supported yet]",}, \
 {DB_DACTaxPremLoad,DB_Topic_DacAndPremiumTax,"DACTaxPremLoad","DAC tax premium load",}, \
@@ -163,6 +154,7 @@
 {DB_SurrChgOnDecr,DB_Topic_SurrenderCharges,"SurrChgOnDecr","Specified-amount decreases engender a new surrender layer: 0=no, 1=yes [not yet implemented]",}, \
 {DB_Has1035ExchCharge,DB_Topic_SurrenderCharges,"Has1035ExchCharge","Has charge or market-value adjustment on 1035 exchange",}, \
 {DB_NonforfQTable,DB_Topic_SurrenderCharges,"NonforfQTable","Nonforfeiture annual mortality rate (index in mortality table database) [not yet implemented]",}, \
+{DB_COINonforfIsGuar,DB_Topic_SurrenderCharges,"COINonforfIsGuar","Use guaranteed cost of insurance rates as nonforfeiture basis [not yet implemented]",}, \
 {DB_SurrChgByFormula,DB_Topic_SurrenderCharges,"SurrChgByFormula","Surrender charge calculation method: 0=table, 1=formula [not yet implemented]",}, \
 {DB_SurrChgPeriod,DB_Topic_SurrenderCharges,"SurrChgPeriod","Number of years formulaic surrender charges apply [not yet implemented]",}, \
 {DB_SurrChgZeroDur,DB_Topic_SurrenderCharges,"SurrChgZeroDur","Year at end of which formulaic surrender charges are set to zero [not yet implemented]",}, \
@@ -174,6 +166,12 @@
 {DB_AllowSAIncr,DB_Topic_DeathBenefits,"AllowSAIncr","Allow increases in specified amount: 0=no, 1=yes",}, \
 {DB_MinSpecAmtIncr,DB_Topic_DeathBenefits,"MinSpecAmtIncr","Minimum specified-amount increase [not yet implemented]",}, \
 {DB_EnforceNAARLimit,DB_Topic_DeathBenefits,"EnforceNAARLimit","Enforce input limit on net amount at risk: 0=no, 1=yes [not yet implemented]",}, \
+{DB_MinSpecAmt,DB_Topic_DeathBenefits,"MinSpecAmt","Minimum specified amount [interaction with similar entities not yet documented]",}, \
+{DB_MinIssSpecAmt,DB_Topic_DeathBenefits,"MinIssSpecAmt","Minimum specified amount allowed at issue",}, \
+{DB_MinRenlSpecAmt,DB_Topic_DeathBenefits,"MinRenlSpecAmt","Minimum specified amount after issue for base policy including any term rider",}, \
+{DB_MinRenlBaseSpecAmt,DB_Topic_DeathBenefits,"MinRenlBaseSpecAmt","Minimum specified amount after issue for base policy only, ignoring any term rider",}, \
+{DB_MaxIssSpecAmt,DB_Topic_DeathBenefits,"MaxIssSpecAmt","Maximum specified amount allowed at issue",}, \
+{DB_MaxRenlSpecAmt,DB_Topic_DeathBenefits,"MaxRenlSpecAmt","Maximum specified amount after issue for base policy only, ignoring any term rider",}, \
 {DB_AllowDBO1,DB_Topic_DeathBenefits,"AllowDBO1","Allow level death benefit option",}, \
 {DB_AllowDBO2,DB_Topic_DeathBenefits,"AllowDBO2","Allow increasing death benefit option",}, \
 {DB_AllowDBO3,DB_Topic_DeathBenefits,"AllowDBO3","Allow return of premium death benefit option",}, \
@@ -244,6 +242,7 @@
 {DB_TgtPremTable,DB_Topic_Premiums,"TgtPremTable","Target premium table (index in mortality table database)",}, \
 {DB_TgtPmFixedAtIssue,DB_Topic_Premiums,"TgtPmFixedAtIssue","Target premium set forever at issue: 0=no, 1=yes",}, \
 {DB_TgtPmIgnoreSubstd,DB_Topic_Premiums,"TgtPmIgnoreSubstd","Target premium ignores substandard rating: 0=no, 1=yes",}, \
+{DB_MinPmt,DB_Topic_Premiums,"MinPmt","Minimum initial payment",}, \
 {DB_Topic_SecondaryGuarantees,DB_FIRST,"Secondary guarantees","Secondary guarantees",}, \
 {DB_NoLapseMinDur,DB_Topic_SecondaryGuarantees,"NoLapseMinDur","Minimum number of years no-lapse guarantee remains in effect if premium requirement satisfied",}, \
 {DB_NoLapseMinAge,DB_Topic_SecondaryGuarantees,"NoLapseMinAge","Minimum age to which no-lapse guarantee remains in effect if premium requirement satisfied",}, \
@@ -266,9 +265,9 @@
 {DB_CompTarget,DB_Topic_Compensation,"CompBase","Producer-only compensation on premium up to target",}, \
 {DB_CompExcess,DB_Topic_Compensation,"CompExcess","Producer-only compensation on premium in excess of target",}, \
 {DB_CompChargeBack,DB_Topic_Compensation,"CompChargeBack","Compensation chargeback for early termination",}, \
-{DB_AllowExtraPremComp,DB_Topic_Compensation,"AllowExtraPremComp","Allow extra premium-based compensation: 0=no, 1=yes",}, \
-{DB_AllowExtraAssetComp,DB_Topic_Compensation,"AllowExtraAssetComp","Allow extra asset-based compensation: 0=no, 1=yes",}, \
 {DB_AssetComp,DB_Topic_Compensation,"AssetComp","Producer-only compensation on separate-account assets--not tiered by assets",}, \
+{DB_AllowExtraAssetComp,DB_Topic_Compensation,"AllowExtraAssetComp","Allow extra asset-based compensation: 0=no, 1=yes",}, \
+{DB_AllowExtraPremComp,DB_Topic_Compensation,"AllowExtraPremComp","Allow extra premium-based compensation: 0=no, 1=yes",}, \
 {DB_Topic_ExperienceRating,DB_FIRST,"Experience rating","Experience rating",}, \
 {DB_AllowExpRating,DB_Topic_ExperienceRating,"AllowExpRating","Allow experience rating: 0=no, 1=yes",}, \
 {DB_ExpRatStdDevMult,DB_Topic_ExperienceRating,"ExpRatStdDevMult","Experience rating reserve as multiple of standard deviation of expected claims net of account value released on death",}, \
@@ -278,6 +277,7 @@
 {DB_ExpRatAmortPeriod,DB_Topic_ExperienceRating,"ExpRatAmortPeriod","Experience rating amortization period",}, \
 {DB_Topic_Miscellanea,DB_FIRST,"Miscellanea","Miscellanea",}, \
 {DB_LedgerType,DB_Topic_Miscellanea,"LedgerType","Ledger type: 0=illustration reg, 1=NASD, 2=prospectus illustration, 3=group private placement, 4=offshore private placement, 5=private placement subject to illustration reg, 6=individual private placement, 7=variable annuity",}, \
+{DB_AgeLastOrNearest,DB_Topic_Miscellanea,"AgeLastOrNearest","Age calculated as of last or nearest birthday: 0=ALB, 1=ANB",}, \
 {DB_EndtAge,DB_Topic_Miscellanea,"EndtAge","Maturity age",}, \
 {DB_LapseIgnoresSurrChg,DB_Topic_Miscellanea,"LapseIgnoresSurrChg","Ignore tabular surrender charge for lapse processing",}, \
 {DB_DefaultProcessOrder,DB_Topic_Miscellanea,"DefaultProcessOrder","Default processing order: 0=life by life, 1=month by month [not yet implemented]",}, \
