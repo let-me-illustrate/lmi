@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.hpp,v 1.19 2008-08-21 02:20:23 chicares Exp $
+// $Id: dbnames.hpp,v 1.20 2008-08-21 02:23:13 chicares Exp $
 
 #ifndef dbnames_hpp
 #define dbnames_hpp
@@ -42,8 +42,8 @@ enum DatabaseNames
         ,DB_AllowFullUW
         ,DB_AllowSimpUW
         ,DB_AllowGuarUW
-        ,DB_SmokeOrTobacco
-        ,DB_PrefOrSelect
+        ,DB_SmokeOrTobacco       // DATABASE !! Move to '.pol'
+        ,DB_PrefOrSelect         // DATABASE !! Move to '.pol'
         ,DB_AllowPreferredClass
         ,DB_AllowUltraPrefClass
 
@@ -80,7 +80,7 @@ enum DatabaseNames
 
     ,DB_Topic_MortalityCharges
 
-        ,DB_GuarCOITable
+        ,DB_GuarCOITable         // DATABASE !! s/COI/Coi/ (passim)
         ,DB_GCoiIsAnnual
         ,DB_GCOIMultiplier
 
@@ -137,7 +137,7 @@ enum DatabaseNames
         ,DB_AllowAmortPremLoad
         ,DB_AmortPmLdFundCharge
 
-        ,DB_AllowCustomFund
+        ,DB_AllowCustomFund      // DATABASE !! DB_AllowImfOverride
         ,DB_AssetChargeType
         ,DB_StableValFundCharge
 
@@ -147,8 +147,8 @@ enum DatabaseNames
 
     ,DB_Topic_Loads
 
-        ,DB_GuarPolFee
-        ,DB_GuarIssueFee
+        ,DB_GuarPolFee           // DATABASE !! DB_GuarMonthlyPolFee
+        ,DB_GuarIssueFee         // DATABASE !! DB_GuarAnnualPolFee
 
         ,DB_GuarPremLoadTgt
         ,DB_GuarPremLoadExc
@@ -158,10 +158,10 @@ enum DatabaseNames
         ,DB_GuarSpecAmtLoad
         ,DB_GuarSpecAmtLoadTable
 
-        ,DB_GuarAcctValLoadAMD
+        ,DB_GuarAcctValLoadAMD   // DATABASE !! Lose the "AMD" suffix.
 
-        ,DB_CurrPolFee
-        ,DB_CurrIssueFee
+        ,DB_CurrPolFee           // DATABASE !! DB_CurrMonthlyPolFee
+        ,DB_CurrIssueFee         // DATABASE !! DB_CurrAnnualPolFee
 
         ,DB_CurrPremLoadTgt
         ,DB_CurrPremLoadExc
@@ -171,10 +171,10 @@ enum DatabaseNames
         ,DB_CurrSpecAmtLoad
         ,DB_CurrSpecAmtLoadTable
 
-        ,DB_CurrAcctValLoadAMD
+        ,DB_CurrAcctValLoadAMD   // DATABASE !! Lose the "AMD" suffix.
 
         ,DB_TgtPremPolFee
-        ,DB_PremRefund
+        ,DB_PremRefund           // DATABASE !! DB_RefundablePremLoad
         ,DB_SpecAmtLoadLimit
         ,DB_DynamicSepAcctLoad
 
@@ -207,9 +207,9 @@ enum DatabaseNames
         ,DB_SurrChgPremMult
         ,DB_SurrChgOnIncr
         ,DB_SurrChgOnDecr
-        ,DB_Has1035ExchCharge
+        ,DB_Has1035ExchCharge    // DATABASE !! DB_1035ExchCharge
 
-        ,DB_NonforfQTable
+        ,DB_NonforfQTable        // DATABASE !! s/Nonforf/Snfl/ (passim)
         ,DB_COINonforfIsGuar
         ,DB_SurrChgByFormula
         ,DB_SurrChgPeriod
@@ -239,7 +239,7 @@ enum DatabaseNames
         ,DB_OptChgCanIncrSA
         ,DB_OptChgCanDecrSA
 
-        ,DB_AllowExtEndt
+        ,DB_AllowExtEndt         // DATABASE !! DB_CovgBeyondMaturity
 
     ,DB_Topic_Riders
 
@@ -369,12 +369,12 @@ enum DatabaseNames
 
         ,DB_LedgerType
 
-        ,DB_AgeLastOrNearest
-        ,DB_EndtAge
+        ,DB_AgeLastOrNearest     // DATABASE !! Add more options...
+        ,DB_EndtAge              // DATABASE !! DB_MaturityAge
 
         ,DB_LapseIgnoresSurrChg
         ,DB_DefaultProcessOrder
-        ,DB_NominallyPar
+        ,DB_NominallyPar         // DATABASE !! Use a footnote instead.
 
         ,DB_TableYTable
         ,DB_83GamTable
