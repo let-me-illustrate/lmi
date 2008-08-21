@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.hpp,v 1.18 2008-08-19 17:01:44 chicares Exp $
+// $Id: dbnames.hpp,v 1.19 2008-08-21 02:20:23 chicares Exp $
 
 #ifndef dbnames_hpp
 #define dbnames_hpp
@@ -33,42 +33,31 @@
 enum DatabaseNames
     {DB_FIRST
 
-    ,DB_Topic_IssueRules
+    ,DB_Topic_Underwriting
 
-        ,DB_AgeLastOrNearest
         ,DB_MinIssAge
         ,DB_MaxIssAge
         ,DB_MaxIncrAge
-        ,DB_AllowRetirees
 
         ,DB_AllowFullUW
         ,DB_AllowSimpUW
         ,DB_AllowGuarUW
+        ,DB_SmokeOrTobacco
         ,DB_PrefOrSelect
         ,DB_AllowPreferredClass
         ,DB_AllowUltraPrefClass
+
         ,DB_AllowSubstdTable
         ,DB_AllowFlatExtras
         ,DB_AllowRatedWP
         ,DB_AllowRatedADD
         ,DB_AllowRatedTerm
-
-        ,DB_MinPmt
-        ,DB_MinSpecAmt
-        ,DB_MinIssSpecAmt
-        ,DB_MinRenlSpecAmt
-        ,DB_MinRenlBaseSpecAmt
-        ,DB_MaxIssSpecAmt
-        ,DB_MaxRenlSpecAmt
+        ,DB_AllowRetirees
 
         ,DB_AllowUnisex
         ,DB_AllowSexDistinct
         ,DB_AllowUnismoke
         ,DB_AllowSmokeDistinct
-        ,DB_SmokeOrTobacco
-
-        ,DB_AllowMortBlendSex
-        ,DB_AllowMortBlendSmoke
 
         ,DB_StateApproved
         ,DB_AllowStateXX
@@ -112,13 +101,15 @@ enum DatabaseNames
         ,DB_MaxMonthlyCoiRate
         ,DB_GuarCOICeiling
         ,DB_COIGuarIsMin
-        ,DB_COINonforfIsGuar
 
         ,DB_SubstdTblMult
         ,DB_SubstdTblMultTable
 
         ,DB_CoiUpper12Method
         ,DB_CoiInforceReentry
+
+        ,DB_AllowMortBlendSex
+        ,DB_AllowMortBlendSmoke
 
     ,DB_Topic_Interest
 
@@ -150,6 +141,8 @@ enum DatabaseNames
         ,DB_AssetChargeType
         ,DB_StableValFundCharge
 
+        ,DB_GuarFundAdminChg
+        ,DB_CurrFundAdminChg
         ,DB_FundCharge
 
     ,DB_Topic_Loads
@@ -164,7 +157,7 @@ enum DatabaseNames
 
         ,DB_GuarSpecAmtLoad
         ,DB_GuarSpecAmtLoadTable
-        ,DB_GuarFundAdminChg
+
         ,DB_GuarAcctValLoadAMD
 
         ,DB_CurrPolFee
@@ -177,13 +170,13 @@ enum DatabaseNames
 
         ,DB_CurrSpecAmtLoad
         ,DB_CurrSpecAmtLoadTable
-        ,DB_CurrFundAdminChg
+
         ,DB_CurrAcctValLoadAMD
 
-        ,DB_PremRefund
         ,DB_TgtPremPolFee
-        ,DB_DynamicSepAcctLoad
+        ,DB_PremRefund
         ,DB_SpecAmtLoadLimit
+        ,DB_DynamicSepAcctLoad
 
     ,DB_Topic_DacAndPremiumTax
 
@@ -217,6 +210,7 @@ enum DatabaseNames
         ,DB_Has1035ExchCharge
 
         ,DB_NonforfQTable
+        ,DB_COINonforfIsGuar
         ,DB_SurrChgByFormula
         ,DB_SurrChgPeriod
         ,DB_SurrChgZeroDur
@@ -230,6 +224,13 @@ enum DatabaseNames
         ,DB_AllowSAIncr
         ,DB_MinSpecAmtIncr
         ,DB_EnforceNAARLimit
+
+        ,DB_MinSpecAmt
+        ,DB_MinIssSpecAmt
+        ,DB_MinRenlSpecAmt
+        ,DB_MinRenlBaseSpecAmt
+        ,DB_MaxIssSpecAmt
+        ,DB_MaxRenlSpecAmt
 
         ,DB_AllowDBO1
         ,DB_AllowDBO2
@@ -321,6 +322,7 @@ enum DatabaseNames
         ,DB_TgtPremTable
         ,DB_TgtPmFixedAtIssue
         ,DB_TgtPmIgnoreSubstd
+        ,DB_MinPmt
 
     ,DB_Topic_SecondaryGuarantees
 
@@ -350,9 +352,9 @@ enum DatabaseNames
         ,DB_CompTarget
         ,DB_CompExcess
         ,DB_CompChargeBack
-        ,DB_AllowExtraPremComp
-        ,DB_AllowExtraAssetComp
         ,DB_AssetComp
+        ,DB_AllowExtraAssetComp
+        ,DB_AllowExtraPremComp
 
     ,DB_Topic_ExperienceRating
 
@@ -367,6 +369,7 @@ enum DatabaseNames
 
         ,DB_LedgerType
 
+        ,DB_AgeLastOrNearest
         ,DB_EndtAge
 
         ,DB_LapseIgnoresSurrChg
