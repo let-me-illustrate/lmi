@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_wx.cpp,v 1.17 2008-01-13 17:16:43 chicares Exp $
+// $Id: alert_wx.cpp,v 1.18 2008-08-22 00:19:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -166,7 +166,7 @@ void safe_message_alert(char const* message)
             handle = reinterpret_cast<HWND>(top_window->GetHandle());
             }
         }
-    ::MessageBox(handle, message, "Error", MB_OK | MB_ICONSTOP | MB_TASKMODAL);
+    ::MessageBoxA(handle, message, "Error", MB_OK | MB_ICONSTOP | MB_TASKMODAL);
 #endif // defined LMI_MSW
 }
 

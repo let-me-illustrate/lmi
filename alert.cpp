@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert.cpp,v 1.20 2008-06-28 02:00:42 chicares Exp $
+// $Id: alert.cpp,v 1.21 2008-08-22 00:19:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -85,7 +85,7 @@ void report_catastrophe(char const* message)
     std::fputc('\n'   , stderr);
     std::fflush(stderr);
 #else  // defined LMI_MSW
-    ::MessageBox
+    ::MessageBoxA
         (0
         ,message
         ,"Catastrophic error"
