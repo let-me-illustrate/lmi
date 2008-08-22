@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1143 2008-08-21 03:15:27 chicares Exp $
+// $Id: ChangeLog,v 1.1144 2008-08-22 22:17:09 wboutin Exp $
 
 MAINTENANCE
 
@@ -19359,4 +19359,11 @@ Improve defaults.
 
   ihs_avmly.cpp
 Move a defectively hardcoded number to the database.
+
+20080822T2217Z <wboutin@massmutual.com> [978]
+
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_reg_d.xrc
+Somewhat improve solve GUI.
 
