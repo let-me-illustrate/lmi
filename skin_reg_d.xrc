@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin_reg_d.xrc,v 1.4 2008-08-04 16:12:33 wboutin Exp $
+    $Id: skin_reg_d.xrc,v 1.5 2008-08-22 22:17:09 wboutin Exp $
 
     This version is designed for private placement users; it omits input
     fields that seem irrelevant in that context, and reflects the
@@ -1187,9 +1187,9 @@ the real 'StateOfJurisdiction' is implemented.
                                         <object class="sizeritem">
                                             <flag>wxALIGN_LEFT|wxALIGN_BOTTOM|wxTOP|wxBOTTOM</flag>
                                             <border>2</border>
-                                            <object class="wxSpinCtrl" name="SolveBeginTime">
+                                            <object class="wxSpinCtrl" name="SolveBeginYear">
                                                 <help>Solve beginning duration</help>
-                                                <size>45,-1</size>
+                                                <size>50,-1</size>
                                             </object>
                                         </object>
                                         <object class="sizeritem">
@@ -1210,9 +1210,9 @@ the real 'StateOfJurisdiction' is implemented.
                                         <object class="sizeritem">
                                             <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
                                             <border>4</border>
-                                            <object class="wxSpinCtrl" name="SolveBeginYear">
+                                            <object class="wxSpinCtrl" name="SolveBeginTime">
                                                 <help>Solve beginning age</help>
-                                                <size>45,-1</size>
+                                                <size>50,-1</size>
                                             </object>
                                         </object>
                                         <object class="sizeritem">
@@ -1265,9 +1265,9 @@ the real 'StateOfJurisdiction' is implemented.
                                         <object class="sizeritem">
                                             <flag>wxALIGN_LEFT|wxALIGN_BOTTOM|wxTOP|wxBOTTOM</flag>
                                             <border>2</border>
-                                            <object class="wxSpinCtrl" name="SolveEndTime">
+                                            <object class="wxSpinCtrl" name="SolveEndYear">
                                                 <help>Solve ending duration</help>
-                                                <size>45,-1</size>
+                                                <size>50,-1</size>
                                             </object>
                                         </object>
                                         <object class="sizeritem">
@@ -1288,9 +1288,9 @@ the real 'StateOfJurisdiction' is implemented.
                                         <object class="sizeritem">
                                             <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
                                             <border>4</border>
-                                            <object class="wxSpinCtrl" name="SolveEndYear">
+                                            <object class="wxSpinCtrl" name="SolveEndTime">
                                                 <help>Solve ending age</help>
-                                                <size>45,-1</size>
+                                                <size>50,-1</size>
                                             </object>
                                         </object>
                                         <object class="sizeritem">
@@ -1407,9 +1407,9 @@ the real 'StateOfJurisdiction' is implemented.
                                                                 <object class="sizeritem">
                                                                     <flag>wxALIGN_LEFT|wxALIGN_BOTTOM|wxTOP|wxBOTTOM</flag>
                                                                     <border>2</border>
-                                                                    <object class="wxSpinCtrl" name="SolveTargetTime">
+                                                                    <object class="wxSpinCtrl" name="SolveTargetYear">
                                                                         <help>Duration to achieve target account value</help>
-                                                                        <size>45,-1</size>
+                                                                        <size>50,-1</size>
                                                                     </object>
                                                                 </object>
                                                                 <object class="sizeritem">
@@ -1430,9 +1430,9 @@ the real 'StateOfJurisdiction' is implemented.
                                                                 <object class="sizeritem">
                                                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
                                                                     <border>4</border>
-                                                                    <object class="wxSpinCtrl" name="SolveTargetYear">
+                                                                    <object class="wxSpinCtrl" name="SolveTargetTime">
                                                                         <help>Attained age to achieve target account value</help>
-                                                                        <size>45,-1</size>
+                                                                        <size>50,-1</size>
                                                                     </object>
                                                                 </object>
                                                                 <object class="sizeritem">
