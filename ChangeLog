@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1144 2008-08-22 22:17:09 wboutin Exp $
+// $Id: ChangeLog,v 1.1145 2008-08-25 01:02:28 wboutin Exp $
 
 MAINTENANCE
 
@@ -19366,4 +19366,19 @@ Move a defectively hardcoded number to the database.
   skin_group_carveout.xrc
   skin_reg_d.xrc
 Somewhat improve solve GUI.
+
+20080825T0102Z <wboutin@massmutual.com> [978]
+
+  ihs_proddata.cpp
+  ihs_proddata.hpp
+  illustration_reg.xsl
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  my_prod.cpp
+  nasd.xsl
+  policy_document.cpp
+  policy_view.xrc
+  reg_d_group.xsl
+  reg_d_offshore.xsl
+Add new entity.
 

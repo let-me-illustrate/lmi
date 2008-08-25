@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_proddata.hpp,v 1.10 2008-08-19 14:48:14 chicares Exp $
+// $Id: ihs_proddata.hpp,v 1.11 2008-08-25 01:02:24 wboutin Exp $
 
 #ifndef ihs_proddata_hpp
 #define ihs_proddata_hpp
@@ -86,6 +86,7 @@ class LMI_SO TProductData
     std::string const& GetCsvHeaderName          () const {return CsvHeaderName;          }
     std::string const& GetNoLapseProvisionName   () const {return NoLapseProvisionName;   }
     std::string const& GetInterestDisclaimer     () const {return InterestDisclaimer;     }
+    std::string const& GetGuarMortalityFootnote  () const {return GuarMortalityFootnote;  }
 
   private:
     TProductData();
@@ -139,6 +140,7 @@ class LMI_SO TProductData
     std::string CsvHeaderName;
     std::string NoLapseProvisionName;
     std::string InterestDisclaimer;
+    std::string GuarMortalityFootnote;
 };
 
 #endif // ihs_proddata_hpp

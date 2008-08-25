@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: my_prod.cpp,v 1.6 2008-08-19 14:48:14 chicares Exp $
+// $Id: my_prod.cpp,v 1.7 2008-08-25 01:02:26 wboutin Exp $
 
 // This file is a template for embedding product-specific data. Doing
 // that creates a derived work covered by the GPL. But you may prefer
@@ -90,6 +90,7 @@ void TProductData::WriteProprietaryPolFiles()
     foo.CsvHeaderName           = "Cash Surr";
     foo.NoLapseProvisionName    = "No-lapse Provision";
     foo.InterestDisclaimer      = "";
+    foo.GuarMortalityFootnote   = "2001 CSO";
 
     // Sample policy form.
     foo.DatabaseFilename  = "sample.db4";
