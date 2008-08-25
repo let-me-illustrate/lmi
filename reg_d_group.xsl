@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: reg_d_group.xsl,v 1.2 2008-08-25 01:02:27 wboutin Exp $
+    $Id: reg_d_group.xsl,v 1.3 2008-08-25 09:50:24 wboutin Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -359,11 +359,7 @@
               or legal counsel.
             </fo:block>
             <fo:block padding-top="1em">
-              This contract has a guaranteed maximum cost of insurance(based on
-              <xsl:value-of select="$scalars/GuarMortalityFootnote"/> mortality
-              tables) and maximum administrative charges. The actual current
-              charges are lower than these and are reflected in the values.
-              However, these current charges are subject to change.
+              <xsl:value-of select="$scalars/GuarMortalityFootnote"/>
             </fo:block>
             <fo:block padding-top="1em">
               The loan interest rate may be fixed or adjustable as elected
