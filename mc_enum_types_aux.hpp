@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types_aux.hpp,v 1.7 2008-08-15 10:41:14 chicares Exp $
+// $Id: mc_enum_types_aux.hpp,v 1.8 2008-08-25 07:34:30 chicares Exp $
 
 #ifndef mc_enum_types_aux_hpp
 #define mc_enum_types_aux_hpp
@@ -29,27 +29,6 @@
 #include "mc_enum_type_enums.hpp"
 
 #include <string>
-
-/// Temporary--used only by porting_cast():
-
-#include <boost/static_assert.hpp>
-#include <boost/type_traits.hpp>
-
-/// Old 'xenum' types are being replaced by newer 'mcenum' types.
-/// As a temporary aid to porting, use this template function to
-/// convert between them where temporarily necessary. As types are
-/// replaced, error messages will indicate which casts have become
-/// unnecessary. Within about one month of its appearance, this
-/// template function should be expunged because no instance of its
-/// use will remain.
-
-template<typename To, typename From>
-To porting_cast(From f)
-{
-    // Double parentheses: don't parse comma as a macro parameter separator.
-    BOOST_STATIC_ASSERT((!boost::is_same<To,From>::value));
-    return static_cast<To>(f);
-}
 
 /// Cardinality of certain enumerations, useful as ICEs.
 ///
