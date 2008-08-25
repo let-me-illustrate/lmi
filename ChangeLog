@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1146 2008-08-25 07:34:30 chicares Exp $
+// $Id: ChangeLog,v 1.1147 2008-08-25 09:50:24 wboutin Exp $
 
 MAINTENANCE
 
@@ -19398,4 +19398,12 @@ Fix defect introduced 20080825T0102Z: remove stray '\'.
 
   mc_enum_types_aux.hpp
 Remove scaffolding.
+
+20080825T0950Z <wboutin@massmutual.com> [978]
+
+  illustration_reg.xsl
+  nasd.xsl
+  reg_d_group.xsl
+  reg_d_offshore.xsl
+Extract a footnote.
 
