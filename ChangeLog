@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1150 2008-08-25 21:01:07 wboutin Exp $
+// $Id: ChangeLog,v 1.1151 2008-08-25 21:03:30 wboutin Exp $
 
 MAINTENANCE
 
@@ -19433,4 +19433,9 @@ Update documentation.
 
   input_harmonization.cpp
 Suppress a defect.
+
+20080825T2103Z <wboutin@massmutual.com> [978]
+
+  version.hpp
+Mark a release candidate.
 
