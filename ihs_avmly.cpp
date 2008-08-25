@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.107 2008-08-21 03:15:26 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.108 2008-08-25 16:14:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -808,8 +808,7 @@ void AccountValue::ChangeSpecAmtBy(double delta)
 // probably be write-only instead.
         InvariantValues().SpecAmt[j] = ActualSpecAmt;
         InvariantValues().TermSpecAmt[j] = TermSpecAmt;
-// We have term specamt in class Inputs, in anticipation of differing
-// rider amounts on a multilife policy. It's scalar now:
+// We have term specamt in the input classes. It's scalar now:
 //   yare_input_.TermRiderAmount
 // TODO ?? Should it be a std::vector?
 // Probably this term rider deserves special treatment:
