@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1148 2008-08-25 14:46:32 wboutin Exp $
+// $Id: ChangeLog,v 1.1149 2008-08-25 16:14:25 chicares Exp $
 
 MAINTENANCE
 
@@ -19411,4 +19411,21 @@ Extract a footnote.
 
   my_prod.cpp
 Initialize new entity consistently.
+
+20080825T1612Z <gchicares@sbcglobal.net> [978]
+
+  input.hpp
+Remove disused declarations.
+
+20080825T1613Z <gchicares@sbcglobal.net> [978]
+
+  input.cpp
+Remove a comment that has become irrelevant. The suggested code is
+already in 'input_xml_io.cpp', which seems to be a better place to
+implement backward compatibility with old input files.
+
+20080825T1614Z <gchicares@sbcglobal.net> [978]
+
+  ihs_avmly.cpp
+Update documentation.
 
