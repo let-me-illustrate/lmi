@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1149 2008-08-25 16:14:25 chicares Exp $
+// $Id: ChangeLog,v 1.1150 2008-08-25 21:01:07 wboutin Exp $
 
 MAINTENANCE
 
@@ -19428,4 +19428,9 @@ implement backward compatibility with old input files.
 
   ihs_avmly.cpp
 Update documentation.
+
+20080825T2101Z <wboutin@massmutual.com> [978]
+
+  input_harmonization.cpp
+Suppress a defect.
 

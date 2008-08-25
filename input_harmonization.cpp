@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.73 2008-08-13 01:31:18 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.74 2008-08-25 21:01:02 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -968,9 +968,11 @@ false // Silly workaround for now.
     // INPUT !! The minimum 'SolveEndYear' and 'SolveTargetYear' set
     // here mean that a solve to or at retirement is a request, not a
     // command.
+#if 0 // http://lists.nongnu.org/archive/html/lmi/2008-08/msg00036.html
     SolveBeginYear .minimum_and_maximum(0                     , years_to_maturity());
     SolveEndYear   .minimum_and_maximum(SolveBeginYear.value(), years_to_maturity());
     SolveTargetYear.minimum_and_maximum(SolveBeginYear.value(), years_to_maturity());
+#endif // 0
 
     // INPUT !! Temporarily, existing -'Time' names are used where
     // -'Age' names would be clearer.
@@ -978,9 +980,11 @@ false // Silly workaround for now.
     SolveEndTime   .enable(actually_solving && mce_solve_to_age   == DeprecatedSolveToWhich);
     SolveTargetTime.enable(actually_solving && mce_target_at_age  == DeprecatedSolveTgtAtWhich && mce_solve_for_target == SolveTarget);
 
+#if 0 // http://lists.nongnu.org/archive/html/lmi/2008-08/msg00036.html
     SolveBeginTime .minimum_and_maximum(issue_age()           , maturity_age());
     SolveEndTime   .minimum_and_maximum(SolveBeginTime.value(), maturity_age());
     SolveTargetTime.minimum_and_maximum(SolveBeginTime.value(), maturity_age());
+#endif // 0
 
     SolveTarget.enable(actually_solving);
     SolveTarget.allow(mce_solve_for_endt  , actually_solving);
