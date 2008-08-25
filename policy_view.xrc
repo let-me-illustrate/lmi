@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: policy_view.xrc,v 1.9 2008-08-25 01:02:27 wboutin Exp $
+    $Id: policy_view.xrc,v 1.10 2008-08-25 07:33:37 chicares Exp $
 -->
 
 <object class="wxPanel" name="policy_view_panel">
@@ -606,7 +606,7 @@
                                     </object>
                                     <object class="sizeritem">
                                         <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxGROW</flag>
-                                        <object class="wxTextCtrl" name="GuarMortalityFootnote"/>\
+                                        <object class="wxTextCtrl" name="GuarMortalityFootnote"/>
                                         <minsize>160,-1</minsize>
                                         <option>1</option>
                                     </object>
