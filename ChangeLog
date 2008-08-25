@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1147 2008-08-25 09:50:24 wboutin Exp $
+// $Id: ChangeLog,v 1.1148 2008-08-25 14:46:32 wboutin Exp $
 
 MAINTENANCE
 
@@ -19406,4 +19406,9 @@ Remove scaffolding.
   reg_d_group.xsl
   reg_d_offshore.xsl
 Extract a footnote.
+
+20080825T1446Z <wboutin@massmutual.com> [978]
+
+  my_prod.cpp
+Initialize new entity consistently.
 
