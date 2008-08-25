@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: policy_document.cpp,v 1.8 2008-08-19 14:48:14 chicares Exp $
+// $Id: policy_document.cpp,v 1.9 2008-08-25 01:02:26 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -84,6 +84,7 @@ PolicyDocument::PolicyDocument()
     values_["CsvHeaderName"          ] = &product_data_.CsvHeaderName;
     values_["NoLapseProvisionName"   ] = &product_data_.NoLapseProvisionName;
     values_["InterestDisclaimer"     ] = &product_data_.InterestDisclaimer;
+    values_["GuarMortalityFootnote"  ] = &product_data_.GuarMortalityFootnote;
 }
 
 PolicyDocument::~PolicyDocument()
