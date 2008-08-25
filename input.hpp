@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.47 2008-08-15 11:27:27 chicares Exp $
+// $Id: input.hpp,v 1.48 2008-08-25 16:12:15 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -40,7 +40,6 @@
 #include "tn_range.hpp"
 #include "tn_range_types.hpp"
 
-class IllusInputParms;
 class InputSequence;
 class TDatabase;
 
@@ -482,18 +481,6 @@ class LMI_SO Input
     std::vector<tnr_unrestricted_double> PremiumHistoryRealized_            ; // tnr_unrestricted_double
     std::vector<tnr_unrestricted_double> SpecamtHistoryRealized_            ; // tnr_nonnegative_double
 };
-
-void LMI_SO convert_to_ihs(IllusInputParms&, Input const&);
-void LMI_SO convert_to_ihs
-    (std::vector<IllusInputParms>&
-    ,std::vector<Input> const&
-    );
-
-void LMI_SO convert_from_ihs(IllusInputParms const&, Input&);
-void LMI_SO convert_from_ihs
-    (std::vector<IllusInputParms> const&
-    ,std::vector<Input>&
-    );
 
 /// Specialization of struct template reconstitutor for this Model
 /// and the base class that all its UDTs share.
