@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_proddata.cpp,v 1.17 2008-08-19 14:48:14 chicares Exp $
+// $Id: ihs_proddata.cpp,v 1.18 2008-08-25 01:02:24 wboutin Exp $
 
 // This class contains names of files containing a product's tables as well
 // as strings that are the same for all instances of that product.
@@ -129,6 +129,7 @@ void TProductData::Read(std::string const& a_Filename)
     std::getline(is, CsvHeaderName,          '\n');
     std::getline(is, NoLapseProvisionName,   '\n');
     std::getline(is, InterestDisclaimer,     '\n');
+    std::getline(is, GuarMortalityFootnote,  '\n');
 
     bool okay = is.good();
     if(!okay)
@@ -200,6 +201,7 @@ void TProductData::Write(std::string const& a_Filename) const
     os << CsvHeaderName          << '\n';
     os << NoLapseProvisionName   << '\n';
     os << InterestDisclaimer     << '\n';
+    os << GuarMortalityFootnote  << '\n';
 
     if(!os.good())
         {
@@ -254,6 +256,7 @@ void TProductData::WritePolFiles()
     foo.CsvHeaderName           = "Cash Surr";
     foo.NoLapseProvisionName    = "No-lapse Provision";
     foo.InterestDisclaimer      = "";
+    foo.GuarMortalityFootnote   = "";
 
     foo.DatabaseFilename = "sample.db4";
     foo.FundFilename     = "sample.fnd";

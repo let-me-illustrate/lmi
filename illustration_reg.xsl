@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.67 2008-01-25 16:53:15 wboutin Exp $
+    $Id: illustration_reg.xsl,v 1.68 2008-08-25 01:02:25 wboutin Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -388,11 +388,11 @@ to the xsl files first.
               </fo:block>
             </xsl:if>
             <fo:block padding-top="1em">
-              This contract has a guaranteed maximum cost of insurance
-              (based on 1980 CSO mortality tables) and maximum
-              administrative charges. The actual current charges are lower
-              than these and are reflected in the non-guaranteed values.
-              However, these current charges are subject to change.
+              This contract has a guaranteed maximum cost of insurance(based on
+              <xsl:value-of select="$scalars/GuarMortalityFootnote"/> mortality
+              tables) and maximum administrative charges. The actual current
+              charges are lower than these and are reflected in the non-guaranteed
+              values. However, these current charges are subject to change.
             </fo:block>
             <fo:block padding-top="1em">
               This illustration assumes death of the insured

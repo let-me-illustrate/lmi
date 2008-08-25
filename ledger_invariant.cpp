@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.64 2008-08-15 10:41:14 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.65 2008-08-25 01:02:25 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -207,6 +207,7 @@ void LedgerInvariant::Alloc(int len)
     Strings         ["CsvHeaderName"         ] = &CsvHeaderName          ;
     Strings         ["NoLapseProvisionName"  ] = &NoLapseProvisionName   ;
     Strings         ["InterestDisclaimer"    ] = &InterestDisclaimer     ;
+    Strings         ["GuarMortalityFootnote" ] = &GuarMortalityFootnote  ;
 
     Strings         ["ProducerName"          ] = &ProducerName           ;
     Strings         ["ProducerStreet"        ] = &ProducerStreet         ;
@@ -547,6 +548,7 @@ void LedgerInvariant::Init(BasicValues* b)
         CsvHeaderName          = b->ProductData_->GetCsvHeaderName();
         NoLapseProvisionName   = b->ProductData_->GetNoLapseProvisionName();
         InterestDisclaimer     = b->ProductData_->GetInterestDisclaimer();
+        GuarMortalityFootnote  = b->ProductData_->GetGuarMortalityFootnote();
         }
 
     ProducerName            = (*b->Input_)["AgentName"].str();
@@ -779,6 +781,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     CsvHeaderName               = a_Addend.CsvHeaderName;
     NoLapseProvisionName        = a_Addend.NoLapseProvisionName;
     InterestDisclaimer          = a_Addend.InterestDisclaimer;
+    GuarMortalityFootnote       = a_Addend.GuarMortalityFootnote;
 
     Comments                    = a_Addend.Comments;
 
