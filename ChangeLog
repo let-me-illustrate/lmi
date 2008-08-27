@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1151 2008-08-25 21:03:30 wboutin Exp $
+// $Id: ChangeLog,v 1.1152 2008-08-27 16:42:36 wboutin Exp $
 
 MAINTENANCE
 
@@ -19438,4 +19438,9 @@ Suppress a defect.
 
   version.hpp
 Mark a release candidate.
+
+20080827T1642Z <wboutin@massmutual.com> [978]
+
+  input_xml_io.cpp
+Read old input files more robustly (GWC).
 

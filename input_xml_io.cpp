@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_xml_io.cpp,v 1.8 2008-08-14 12:11:38 chicares Exp $
+// $Id: input_xml_io.cpp,v 1.9 2008-08-27 16:42:36 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -254,10 +254,21 @@ using namespace xml;
     if(1 == cell_version)
         {
         // Solve 'Year' values were saved in solve 'Time' entities,
-        // in this version only.
-        SolveTargetYear = SolveTargetTime.value();
-        SolveBeginYear  = SolveBeginTime .value();
-        SolveEndYear    = SolveEndTime   .value();
+        // apparently in this version only.
+        //
+        // However, default values for
+        //   SolveTargetTime
+        //   SolveEndTime
+        // didn't work correctly with contemporary versions of the
+        // program. Users had to change them in order to make solves
+        // work correctly. For saved cases with unchanged defaults,
+        // limiting the two offending variables to the maturity
+        // duration produces a result consonant with the palpable
+        // intention of the quondam defaults.
+        //
+        SolveTargetYear = std::min(years_to_maturity(), SolveTargetTime.value());
+        SolveBeginYear  =                               SolveBeginTime .value() ;
+        SolveEndYear    = std::min(years_to_maturity(), SolveEndTime   .value());
 
         SolveTargetTime = issue_age() + SolveTargetYear.value();
         SolveBeginTime  = issue_age() + SolveBeginYear .value();
