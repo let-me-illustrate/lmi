@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.37 2008-06-30 20:21:11 zeitlin Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.38 2008-09-01 23:55:00 zeitlin Exp $)dnl
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -71,11 +71,6 @@ AC_ARG_WITH(boost-filesystem-src,
 
 dnl add support for --wxdir, --wx-config, --wx-prefix, ----wx-exec-prefix
 WX_CONFIG_OPTIONS
-
-AC_ARG_WITH(xmlwrapp-config,
-            [AC_HELP_STRING([--with-xmlwrapp-config=file],
-                            [How to invoke xmlwrapp configuration utility xmlwrapp-config])],
-            lmi_xmlwrapp_config=$withval)
 
 AC_ARG_ENABLE(debug,
              [AC_HELP_STRING([--enable-debug],
@@ -357,18 +352,17 @@ fi
 dnl The default boost library name should be used unless otherwise specified
 dnl via --with-boost-tookit options, in which case we need to add
 dnl toolkit suffix to the library name (example -lboost_filesystem-gcc-mt).
-if test "x$lmi_boost_toolkit" = "x"; then
-    boost_libfs="boost_filesystem"
-    boost_libregex="boost_regex"
-else
-    boost_libfs="boost_filesystem-$lmi_boost_toolkit"
-    boost_libregex="boost_regex-$lmi_boost_toolkit"
+if test "x$lmi_boost_toolkit" != "x"; then
+    lmi_boost_toolkit="-$lmi_boost_toolkit"
 fi
+boost_libsystem="boost_system$lmi_boost_toolkit"
+boost_libfs="boost_filesystem$lmi_boost_toolkit"
+boost_libregex="boost_regex$lmi_boost_toolkit"
 
 save_LIBS=$LIBS
 save_LDFLAGS=$LDFLAGS
 if test "x$lmi_boost_libs" != "x"; then
-    BOOST_LDFLAGS="-L$lmi_boost_libs "
+    BOOST_LDFLAGS="$BOOST_LDFLAGS -L$lmi_boost_libs "
     LDFLAGS="$LDFLAGS $BOOST_LDFLAGS"
     errmsg="even in $lmi_boost_libs"
 else
@@ -376,10 +370,16 @@ else
 if it is installed in non default location"
 fi
 
+dnl latest versions of boost extract some common functionality in
+dnl libboost_system which we must link when using any other Boost library, so
+dnl check for it first
+AC_CHECK_LIB($boost_libsystem,main,BOOST_LIBS="-l$boost_libsystem")
+
 dnl usually when we want to check for a library we use AC_CHECK_LIB and main()
 dnl but since under mingw with -pedantic and -std= options test does not pass
 dnl we are forced to use a bit more sophisticated construct
-LIBS="$LIBS -l$boost_libfs"
+
+LIBS="$LIBS $BOOST_LIBS -l$boost_libfs"
 LMI_BOOSTFS_BUILD=0
 AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <boost/filesystem/operations.hpp>]],
     [[boost::filesystem::current_path()]])],
@@ -424,12 +424,13 @@ fi
 
 BOOST_LIBS=third_party/boostfs/libboost_filesystem.la
 else
-BOOST_LIBS="$BOOST_LDFLAGS -l$boost_libfs"
+BOOST_LIBS="$BOOST_LDFLAGS $BOOST_LIBS -l$boost_libfs"
 fi
 
 BOOST_LIBS="$BOOST_LIBS -l$boost_libregex"
 
-dnl contains flags needed to link to externally or internally built boost::filesystem library
+dnl contains flags needed to link to externally or internally built
+dnl boost libraries
 AC_SUBST(BOOST_LIBS)
 
 dnl indicates weither do we need to build internally boost::filesystem library
@@ -437,26 +438,48 @@ AM_CONDITIONAL([LMI_BOOSTFS_BUILD], [test "x$LMI_BOOSTFS_BUILD" == "x1"])
 dnl indicates the directory path where sources could be found
 AC_SUBST(LMI_BOOSTFS_SRC)
 
-dnl --- GTK+ (required) -------------------
+dnl check for the other required libraries: under Unix we use pkg-config which
+dnl is easily available for (and often already installed under) any Linux
+dnl system but when using MSYS we do the checks manually as installing
+dnl pkg-config under Windows is unfortunately not trivial and so we can't rely
+dnl on its presence on the target system
 if test "$USE_LINUX" = "1"; then
   PKG_CHECK_MODULES(GTK, gtk+-2.0)
-fi
-
+  PKG_CHECK_MODULES(LIBXML, libxml-2.0 >= 2.6.0)
+  PKG_CHECK_MODULES(LIBXSLT, libxslt >= 1.1.0)
+else
 dnl --- libxml (required) -------------------
-PKG_CHECK_MODULES(LIBXML, libxml-2.0 >= 2.6.0)
+AC_CHECK_PROG(lmi_xml2_config, xml2-config, yes, no)
+if test "x$lmi_xml2_config" != "xyes"; then
+    AC_MSG_ERROR([Unable to find libxml configuration program xml2-config in the path.])
+fi
+LIBXML_FLAGS=`xml2-config --cflags`
+LIBXML_LIBS=`xml2-config --libs`
+
+AC_SUBST(LIBXML_FLAGS)
+AC_SUBST(LIBXML_LIBS)
+
 
 dnl --- libxslt (required) -------------------
-PKG_CHECK_MODULES(LIBXSLT, libxslt >= 1.1.0)
+AC_CHECK_PROG(lmi_xslt_config, xslt-config, yes, no)
+if test "x$lmi_xslt_config" != "xyes"; then
+    AC_MSG_ERROR([Unable to find libxml configuration program xslt-config in the path.])
+fi
+LIBXSLT_FLAGS=`xslt-config --cflags`
+LIBXSLT_LIBS=`xslt-config --libs`
+
+AC_SUBST(LIBXML_FLAGS)
+AC_SUBST(LIBXML_LIBS)
 
 dnl --- XMLWRAPP (required) -------------------
-if test "x$lmi_xmlwrapp_config" = "x"; then
-  lmi_xmlwrapp_config=xmlwrapp-config
+AC_CHECK_PROG(lmi_xmlwrapp_config, xmlwrapp-config, yes, no)
+if test "x$lmi_xmlwrapp_config" != "xyes"; then
+    AC_MSG_ERROR([Unable to find libxml++ configuration program xmlwrapp-config in the path.])
 fi
 
 dnl TODO: Pass --debug option and so on (depends on the actual build)
-
-XMLWRAPP_FLAGS=`$lmi_xmlwrapp_config --cxxflags`
-XMLWRAPP_LIBS=`$lmi_xmlwrapp_config --libs`
+XMLWRAPP_FLAGS=`xmlwrapp-config --cxxflags`
+XMLWRAPP_LIBS=`xmlwrapp-config --libs`
 
 save_CXXFLAGS=$CXXFLAGS
 save_LIBS=$LIBS
@@ -495,6 +518,7 @@ AC_CACHE_CHECK([if we are using recent version of xmlwrapp],
 )
 if test "x$lmi_cv_lib_xmlwrapp_recent" = "xyes"; then
     AC_DEFINE([USING_CURRENT_XMLWRAPP], [1], [Define this if you have the latest version of libxmlwrapp])
+fi
 fi
 
 dnl --- CGICC (optional) ----------------
