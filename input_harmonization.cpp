@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.74 2008-08-25 21:01:02 wboutin Exp $
+// $Id: input_harmonization.cpp,v 1.75 2008-09-01 14:29:46 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -54,38 +54,7 @@ namespace
 /// Implementation notes: DoAdaptExternalities().
 ///
 /// Reset database_ if necessary, i.e., if the product or any database
-/// axis changed. Update the general-account rate if it depends on the
-/// database.
-#if !defined SUPPORT_105822 // Expunge:
-///
-/// If the general-account interest-rate field holds the default value
-/// for the former product before the product changed, then change its
-/// contents to the new product's default value. What's tested is
-/// literal equality, not equivalence: even typing a blank at the end
-/// of the field makes it no longer equal to the default string.
-/// Similarly, given
-///   product X: credited rate 0.052
-///   product Y: credited rate 0.037
-/// if product X is selected and a rate of 0.037 is given, and the
-/// product is then changed to Y, then the default-rate behavior is
-/// in effect; and if the product is later changed back to X, then
-/// the rate changes to X's default of 0.052.
-///
-/// Take the same action if the field is empty.
-///
-/// Otherwise, leave it alone, deeming it to represent intentional
-/// user input that should be preserved--even if it exceeds the new
-/// product's current credited rate and will therefore be disallowed.
-///
-/// This behavior seems complicated, but generally does exactly what
-/// is desired. An alternative for future consideration is to add a
-/// "use current rate" checkbox. Until lmi has a historical database,
-/// that would only frustrate users running inforce or backdated
-/// illustrations. [That last sentence is not correct: when a
-/// historical database seemed imminent, it made sense to defer the
-/// checkbox; but now the former is not imminent and the latter makes
-/// perfect sense.]
-#endif // !defined SUPPORT_105822
+/// axis changed.
 
 void Input::DoAdaptExternalities()
 {
@@ -105,15 +74,6 @@ void Input::DoAdaptExternalities()
         {
         return;
         }
-
-#if !defined SUPPORT_105822
-    std::string cached_credited_rate;
-
-    if(database_.get())
-        {
-        cached_credited_rate = current_credited_rate(*database_);
-        }
-#endif // !defined SUPPORT_105822
 
     CachedProductName_           = ProductName          .value();
     CachedGender_                = Gender               .value();
@@ -143,17 +103,13 @@ void Input::DoAdaptExternalities()
                 (database_->Query(DB_LedgerType)
                 )
             );
+}
 
-#if !defined SUPPORT_105822
-    if
-        (   GeneralAccountRate.value().empty()
-        ||  cached_credited_rate == GeneralAccountRate.value()
-        )
-#else  // defined SUPPORT_105822
+void Input::DoCustomizeInitialValues()
+{
     if("Yes" == UseCurrentDeclaredRate)
-#endif // defined SUPPORT_105822
         {
-        GeneralAccountRate = datum_string(current_credited_rate(*database_));
+        GeneralAccountRate = current_credited_rate(*database_);
         }
 }
 
@@ -704,17 +660,17 @@ false // Silly workaround for now.
 //
 // genacct: legacy system offered only credited
 //   earned and credited are conceivable
-//   but earned is suppressed for compliance reasons
+//   but earned is suppressed for "compliance" reasons
 //   and earned is defectively called gross
 //   net is absurd because it's called credited
 //
 // sepacct: legacy system offered only gross
 //   gross and net are conceivable
-//   but net is suppressed for compliance reasons
+//   but net is suppressed for "compliance" reasons
 //   credited is absurd because it's called net
 //
-// The compliance reasons don't seem sensible, but that's another
-// matter; at any rate, they belong in the product database.
+// The "compliance" reasons don't seem sensible, but that's another
+// matter. DATABASE !! Control that in the product database.
 
     GeneralAccountRateType .allow(mce_gross_rate, anything_goes && "No" == UseCurrentDeclaredRate);
     GeneralAccountRateType .allow(mce_cred_rate , true);
@@ -1057,18 +1013,12 @@ void Input::DoTransmogrify()
         DoHarmonize();
         }
 
-#if !defined SUPPORT_105822 // Expunge:
-    // INPUT !! This won't be ready for release or testing (and must
-    // not be added to production '.xrc' files) until the rococo
-    // 'cached_credited_rate' approach is expunged.
-#endif // !defined SUPPORT_105822
     // USER !! This is the credited rate as of the database date,
     // regardless of the date of illustration, because the database
     // does not yet store historical rates.
     if("Yes" == UseCurrentDeclaredRate)
         {
-        GeneralAccountRate = datum_string(current_credited_rate(*database_));
-        DoHarmonize();
+        GeneralAccountRate = current_credited_rate(*database_);
         }
 
     bool const use_anb = database_->Query(DB_AgeLastOrNearest);

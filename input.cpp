@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.37 2008-08-25 16:13:19 chicares Exp $
+// $Id: input.cpp,v 1.38 2008-09-01 14:29:46 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -72,11 +72,7 @@ Input::Input()
 //    ,SolveTargetYear                  ("50")
 //    ,SolveBasis                       ("")
 //    ,SolveSeparateAccountBasis        ("")
-#if !defined SUPPORT_105822
-//    ,UseCurrentDeclaredRate        ("No")
-#else  // defined SUPPORT_105822
-//    ,UseCurrentDeclaredRate        ("Yes")
-#endif // defined SUPPORT_105822
+    ,UseCurrentDeclaredRate           ("Yes")
 //    ,GeneralAccountRateType           ("")
     ,SeparateAccountRateType          ("GrossRate")
     ,LoanRate                         ("0.06")
@@ -194,8 +190,8 @@ Input::Input()
     ,PaymentMode                      ("annual")
     ,CorporationPayment               ("0")
     ,CorporationPaymentMode           ("annual")
-//    ,GeneralAccountRate               ("")
-    ,SeparateAccountRate              (".08")
+//    ,GeneralAccountRate               ("") // See DoCustomizeInitialValues().
+    ,SeparateAccountRate              ("0.08")
     ,NewLoan                          ("0")
     ,Withdrawal                       ("0")
     ,FlatExtra                        ("0")
@@ -580,10 +576,6 @@ MvcModel::NamesType const& Input::DoNames() const
 MvcModel::StateType Input::DoState() const
 {
     return member_state(*this);
-}
-
-void Input::DoCustomizeInitialValues()
-{
 }
 
 void Input::DoEnforceCircumscription(std::string const& name)
