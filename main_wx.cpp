@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.113 2008-08-04 14:47:21 chicares Exp $
+// $Id: main_wx.cpp,v 1.114 2008-09-01 20:39:17 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -182,19 +182,6 @@ BEGIN_EVENT_TABLE(Skeleton, wxApp)
     EVT_UPDATE_UI(XRCID("column_width_fixed"   ),Skeleton::UponUpdateInapplicable)
 */
 END_EVENT_TABLE()
-
-#ifdef LMI_MSW
-// WX !! Oddly enough, wx seems to require this declaration, even
-// though <wx/app.h> has been included and that header in turn
-// includes <wx/msw/app.h>. Apparently the prototype in the latter
-// header differs in the types of the first two arguments.
-extern int wxEntry
-    (HINSTANCE hInstance
-    ,HINSTANCE hPrevInstance
-    ,LPSTR     pCmdLine
-    ,int       nCmdShow
-    );
-#endif // LMI_MSW defined.
 
 #ifndef LMI_MSW
 int main(int argc, char* argv[])
