@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: zero_test.cpp,v 1.9 2008-01-01 18:30:02 chicares Exp $
+// $Id: zero_test.cpp,v 1.10 2008-09-01 13:18:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -38,37 +38,38 @@ namespace
     static double const epsilon = std::numeric_limits<double>::epsilon();
 } // Unnamed namespace.
 
-#define TEST_ZERO(bound0, bound1, dec, f, exact_root)                         \
-{                                                                             \
-    root_type rn = decimal_root((bound0), (bound1), bias_none,   (dec), (f)); \
-    root_type rl = decimal_root((bound0), (bound1), bias_lower,  (dec), (f)); \
-    root_type rh = decimal_root((bound0), (bound1), bias_higher, (dec), (f)); \
-                                                                              \
-    BOOST_TEST(root_is_valid == rn.second);                                   \
-    BOOST_TEST(root_is_valid == rl.second);                                   \
-    BOOST_TEST(root_is_valid == rh.second);                                   \
-                                                                              \
-    BOOST_TEST(rl.first <= rn.first && rn.first <= rh.first);                 \
-                                                                              \
-    double tol =                                                              \
-            std::pow(10.0, -(dec))                                            \
-        +   6.0 * epsilon * std::max                                          \
-                (std::fabs(rl.first), std::fabs(rh.first)                     \
-                )                                                             \
-        ;                                                                     \
-    BOOST_TEST((rh.first - rl.first) <= tol);                                 \
-                                                                              \
-    double toll =                                                             \
-            std::pow(10.0, -(dec))                                            \
-        +   6.0 * epsilon * std::fabs(rl.first)                               \
-        ;                                                                     \
-    BOOST_TEST((rl.first - (exact_root)) <= toll);                            \
-                                                                              \
-    double tolh =                                                             \
-            std::pow(10.0, -(dec))                                            \
-        +   6.0 * epsilon * std::fabs(rh.first)                               \
-        ;                                                                     \
-    BOOST_TEST((rh.first - (exact_root)) <= tolh);                            \
+template<typename F>
+void test_zero(double bound0, double bound1, int dec, F f, double exact_root)
+{
+    root_type rn = decimal_root((bound0), (bound1), bias_none,   (dec), (f));
+    root_type rl = decimal_root((bound0), (bound1), bias_lower,  (dec), (f));
+    root_type rh = decimal_root((bound0), (bound1), bias_higher, (dec), (f));
+
+    BOOST_TEST(root_is_valid == rn.second);
+    BOOST_TEST(root_is_valid == rl.second);
+    BOOST_TEST(root_is_valid == rh.second);
+
+    BOOST_TEST(rl.first <= rn.first && rn.first <= rh.first);
+
+    double tol =
+            std::pow(10.0, -(dec))
+        +   6.0 * epsilon * std::max
+                (std::fabs(rl.first), std::fabs(rh.first)
+                )
+        ;
+    BOOST_TEST((rh.first - rl.first) <= tol);
+
+    double toll =
+            std::pow(10.0, -(dec))
+        +   6.0 * epsilon * std::fabs(rl.first)
+        ;
+    BOOST_TEST((rl.first - (exact_root)) <= toll);
+
+    double tolh =
+            std::pow(10.0, -(dec))
+        +   6.0 * epsilon * std::fabs(rh.first)
+        ;
+    BOOST_TEST((rh.first - (exact_root)) <= tolh);
 }
 
 double e_function(double z)
@@ -163,14 +164,14 @@ int test_main(int, char*[])
 
     // Various tests--see macro definition.
 
-    TEST_ZERO(0.5, 5.0, 1, e, std::exp(1.0));
-    TEST_ZERO(0.5, 5.0, 2, e, std::exp(1.0));
-    TEST_ZERO(0.5, 5.0, 3, e, std::exp(1.0));
-    TEST_ZERO(0.5, 5.0, 4, e, std::exp(1.0));
-    TEST_ZERO(0.5, 5.0, 5, e, std::exp(1.0));
-    TEST_ZERO(0.5, 5.0, 6, e, std::exp(1.0));
-    TEST_ZERO(0.5, 5.0, 7, e, std::exp(1.0));
-    TEST_ZERO(0.5, 5.0, 8, e, std::exp(1.0));
+    test_zero(0.5, 5.0, 1, e, std::exp(1.0));
+    test_zero(0.5, 5.0, 2, e, std::exp(1.0));
+    test_zero(0.5, 5.0, 3, e, std::exp(1.0));
+    test_zero(0.5, 5.0, 4, e, std::exp(1.0));
+    test_zero(0.5, 5.0, 5, e, std::exp(1.0));
+    test_zero(0.5, 5.0, 6, e, std::exp(1.0));
+    test_zero(0.5, 5.0, 7, e, std::exp(1.0));
+    test_zero(0.5, 5.0, 8, e, std::exp(1.0));
 
     // Brent's book uses the nineteenth-power function in examples.
     // His example using a tolerance of 1e-20 is subject to underflow
@@ -181,15 +182,16 @@ int test_main(int, char*[])
     // low input tolerance makes the effective tolerance simply
     //   6 * epsilon * |iterand|
     // because the other term vanishes--it does not give more
-    // precision than the hardware is capable of.
+    // precision than the hardware is capable of, though it's a
+    // chasing after wind that costs many iterations.
 
     e_nineteenth e_19;
     r = decimal_root(-1.0, 4.0, bias_none, -20, e_19);
     BOOST_TEST(root_is_valid == r.second);
 
-    TEST_ZERO(-1.0, 4.0, -100, e_19, std::exp(1.0));
-    TEST_ZERO(-1.0, 4.0,    0, e_19, std::exp(1.0));
-    TEST_ZERO(-1.0, 4.0,  100, e_19, std::exp(1.0));
+    test_zero(-1.0, 4.0, -100, e_19, std::exp(1.0));
+    test_zero(-1.0, 4.0,    0, e_19, std::exp(1.0));
+    test_zero(-1.0, 4.0,  100, e_19, std::exp(1.0));
 
     e_former_rounding_problem e_frp;
     r = decimal_root(0.12609, 0.12611, bias_lower, 5, e_frp);
