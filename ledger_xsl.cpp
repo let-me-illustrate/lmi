@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.29 2008-09-01 01:38:24 chicares Exp $
+// $Id: ledger_xsl.cpp,v 1.30 2008-09-01 03:16:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -146,9 +146,7 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath, 
         &&  std::string::npos != ledger.GetLedgerInvariant().Comments.find("idiosyncrasy_spreadsheet")
         )
         {
-        static dev_null_stream_buffer<char> no_output;
-        std::ostream null_stream(&no_output);
-        scaled_ledger.write(null_stream);
+        scaled_ledger.write(null_stream());
         }
 #else  // !defined LMI_USE_NEW_REPORTS
     scaled_ledger.write(ofs);

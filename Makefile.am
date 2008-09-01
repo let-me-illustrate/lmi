@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.53 2008-09-01 01:38:24 chicares Exp $
+# $Id: Makefile.am,v 1.54 2008-09-01 03:16:18 chicares Exp $
 
 SUBDIRS = third_party
 
@@ -270,6 +270,7 @@ liblmi_common_sources = \
     multiple_cell_document.cpp \
     mvc_model.cpp \
     name_value_pairs.cpp \
+    null_stream.cpp \
     outlay.cpp \
     path_utility.cpp \
     product_names.cpp \
@@ -704,6 +705,7 @@ test_print_matrix_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_progress_meter_SOURCES =   \
   $(common_test_objects) \
+  null_stream.cpp \
   progress_meter.cpp \
   progress_meter_cli.cpp \
   progress_meter_test.cpp
