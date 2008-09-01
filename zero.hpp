@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: zero.hpp,v 1.8 2008-06-19 13:39:16 chicares Exp $
+// $Id: zero.hpp,v 1.9 2008-09-01 13:17:31 chicares Exp $
 
 // R. P. Brent, _Algorithms for Minization without Derivatives_
 // ISBN 0-13-022335-2
@@ -29,11 +29,12 @@
 
 #include "config.hpp"
 
-#include "alert.hpp"
+#include "null_stream.hpp"
 #include "round_to.hpp"
 
 #include <cmath>
 #include <limits>
+#include <ostream>
 #include <utility>
 
 enum root_validity
@@ -100,6 +101,7 @@ root_type decimal_root
     ,int             decimals
     ,FunctionalType& f
     ,bool            guarantee_side_effects = false
+    ,std::ostream&   iteration_stream       = null_stream()
     )
 {
     static double const epsilon = std::numeric_limits<double>::epsilon();
@@ -248,11 +250,11 @@ root_type decimal_root
             {
             fb = static_cast<double>(f(b));
             last_evaluated_iterand = b;
-            status()
+            iteration_stream
                 << "iteration " << number_of_iterations++
                 << " iterand " << b
                 << " value " << fb
-                << std::flush
+                << std::endl
                 ;
             }
         }

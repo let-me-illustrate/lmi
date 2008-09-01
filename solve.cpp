@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: solve.cpp,v 1.16 2008-07-30 12:31:07 chicares Exp $
+// $Id: solve.cpp,v 1.17 2008-09-01 13:17:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -326,6 +326,8 @@ double AccountValue::Solve()
         ,Bias
         ,Decimals
         ,SolveFn
+        ,false
+        ,status()
         );
     if(root_not_bracketed == Solution.second)
         {
