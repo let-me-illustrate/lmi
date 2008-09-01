@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.85 2008-08-05 11:32:21 chicares Exp $
+// $Id: illustration_view.cpp,v 1.86 2008-09-01 14:02:23 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -406,17 +406,7 @@ void IllustrationView::Run(Input* overriding_input)
     boost::shared_ptr<Ledger> resulting_ledger(new Ledger(mce_ill_reg));
     *resulting_ledger = IV.ledger();
 
-// EVGENIY !! Originally, we had this:
-//    status() << "Calculate: " << timer.stop().elapsed_msec_str();
-// and that used to work; but now the call to
-//   DisplaySelectedValuesAsHtml() seems to empty that stream,
-// apparently on the line above that calls this function:
-//   ledger_formatter_.FormatAsHtml
-// Do you have any idea why? I don't see why that should have any
-// such effect.
-
-    std::ostringstream oss;
-    oss << "Calculate: " << timer.stop().elapsed_msec_str();
+    status() << "Calculate: " << timer.stop().elapsed_msec_str();
     timer.restart();
 
 // TODO ?? CALCULATION_SUMMARY Consider restoring this line:
@@ -426,7 +416,6 @@ void IllustrationView::Run(Input* overriding_input)
 
     DisplaySelectedValuesAsHtml();
 
-    status() << oss.str();
     status() << "; format: " << timer.stop().elapsed_msec_str();
     status() << std::flush;
 }
