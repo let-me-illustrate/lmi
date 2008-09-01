@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.cpp,v 1.31 2008-08-14 12:10:48 chicares Exp $
+// $Id: ledger_variant.cpp,v 1.32 2008-09-01 19:27:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -123,6 +123,11 @@ void LedgerVariant::Alloc(int len)
     EndYearVectors  ["DacTaxRsv"            ] = &DacTaxRsv              ;
     EndYearVectors  ["CSVNet"               ] = &CSVNet                 ;
 #if !defined REMOVE_THIS_NEXT_TIME_COLUMNS_CHANGE
+// Consider
+//   https://savannah.nongnu.org/support/?105978
+// and possibly
+//   https://savannah.nongnu.org/support/?105572
+// at that time.
     EndYearVectors  ["CSVGenAcct"           ] = &CSVGenAcct             ;
     EndYearVectors  ["CSVSepAcct"           ] = &CSVSepAcct             ;
 #endif // !defined REMOVE_THIS_NEXT_TIME_COLUMNS_CHANGE
