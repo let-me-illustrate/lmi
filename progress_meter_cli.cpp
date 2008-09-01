@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter_cli.cpp,v 1.18 2008-09-01 01:38:24 chicares Exp $
+// $Id: progress_meter_cli.cpp,v 1.19 2008-09-01 03:16:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -49,8 +49,7 @@ std::streambuf* select_streambuf(progress_meter::enum_display_mode display_mode)
             break;
         case progress_meter::e_quiet_display:
             {
-            static dev_null_stream_buffer<char> no_output;
-            z = &no_output;
+            z = &null_streambuf();
             }
             break;
         case progress_meter::e_unit_test_mode:

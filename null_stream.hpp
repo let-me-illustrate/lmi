@@ -1,4 +1,4 @@
-// Stream buffer that discards output like the null device.
+// Stream and stream buffer that discard output like the null device.
 //
 // Copyright (C) 2007, 2008 Gregory W. Chicares.
 //
@@ -19,51 +19,19 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: null_stream.hpp,v 1.1 2008-09-01 01:38:24 chicares Exp $
+// $Id: null_stream.hpp,v 1.2 2008-09-01 03:16:18 chicares Exp $
 
 #ifndef null_stream_hpp
 #define null_stream_hpp
 
 #include "config.hpp"
 
-#include <boost/utility.hpp>
+#include "so_attributes.hpp"
 
-#include <streambuf>
-#include <string>
+#include <iosfwd>
 
-/// Class dev_null_stream_buffer is intended for redirecting output as
-/// though to a null device. It is a derived work based on Dietmar
-/// Kühl's article
-///   http://groups.google.com/groups?selm=82mbke$l5c$1@nnrp1.deja.com
-/// which bears no copyright notice, as is usual in usenet.
-///
-/// GWC modified this class in 2007, and in any later year, as
-/// described in 'ChangeLog'; any defect in it should not reflect on
-/// Dietmar Kuehl's reputation.
-
-template<typename CharType, typename traits = std::char_traits<CharType> >
-class dev_null_stream_buffer
-    :public std::streambuf
-    ,private boost::noncopyable
-{
-  public:
-    dev_null_stream_buffer()
-        {
-        setp(buffer_, buffer_ + buffer_size_);
-        }
-    virtual ~dev_null_stream_buffer()
-        {}
-
-  private:
-    virtual int_type overflow(int_type c)
-        {
-        setp(buffer_, buffer_ + buffer_size_);
-        return traits_type::not_eof(c);
-        }
-
-    static int const buffer_size_ = 1024;
-    char buffer_[buffer_size_];
-};
+std::streambuf& LMI_SO null_streambuf();
+std::ostream&   LMI_SO null_stream();
 
 #endif // null_stream_hpp
 

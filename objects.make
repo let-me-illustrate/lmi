@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.134 2008-08-11 19:56:19 chicares Exp $
+# $Id: objects.make,v 1.135 2008-09-01 03:16:18 chicares Exp $
 
 ################################################################################
 
@@ -213,6 +213,7 @@ common_common_objects := \
   multiple_cell_document.o \
   mvc_model.o \
   name_value_pairs.o \
+  null_stream.o \
   outlay.o \
   path_utility.o \
   product_names.o \
@@ -734,6 +735,7 @@ print_matrix_test$(EXEEXT): \
 
 progress_meter_test$(EXEEXT): \
   $(common_test_objects) \
+  null_stream.o \
   progress_meter.o \
   progress_meter_cli.o \
   progress_meter_test.o \
