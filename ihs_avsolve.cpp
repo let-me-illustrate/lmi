@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.24 2008-07-30 12:31:06 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.25 2008-09-01 13:17:31 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -441,6 +441,8 @@ double AccountValue::Solve
         ,bias
         ,decimals
         ,solve_helper
+        ,false
+        ,status()
         );
 
     if(root_not_bracketed == solution.second)

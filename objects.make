@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.135 2008-09-01 03:16:18 chicares Exp $
+# $Id: objects.make,v 1.136 2008-09-01 13:17:31 chicares Exp $
 
 ################################################################################
 
@@ -392,6 +392,7 @@ gpt_objects := \
   mc_enum_types_aux.o \
   miscellany.o \
   mvc_model.o \
+  null_stream.o \
   outlay.o \
   path_utility.o \
   product_names.o \
@@ -542,6 +543,7 @@ authenticity_test$(EXEEXT): \
   global_settings.o \
   md5.o \
   miscellany.o \
+  null_stream.o \
   path_utility.o \
   system_command.o \
   system_command_non_wx.o \
@@ -550,6 +552,7 @@ calendar_date_test$(EXEEXT): \
   $(common_test_objects) \
   calendar_date.o \
   calendar_date_test.o \
+  null_stream.o \
   timer.o \
 
 callback_test$(EXEEXT): \
@@ -591,6 +594,7 @@ file_command_test$(EXEEXT): \
 financial_test$(EXEEXT): \
   $(common_test_objects) \
   financial_test.o \
+  null_stream.o \
   stratified_algorithms.o \
   timer.o \
 
@@ -645,6 +649,7 @@ input_test$(EXEEXT): \
   miscellany.o \
   multiple_cell_document.o \
   mvc_model.o \
+  null_stream.o \
   path_utility.o \
   product_names.o \
   single_cell_document.o \
@@ -821,6 +826,7 @@ wx_new_test$(EXEEXT): \
 
 zero_test$(EXEEXT): \
   $(common_test_objects) \
+  null_stream.o \
   zero_test.o \
 
 ################################################################################
@@ -843,6 +849,7 @@ generate_passkey$(EXEEXT): \
   global_settings.o \
   md5.o \
   miscellany.o \
+  null_stream.o \
   path_utility.o \
   system_command.o \
   system_command_non_wx.o \
