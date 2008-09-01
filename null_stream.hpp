@@ -19,10 +19,10 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dev_null_stream_buffer.hpp,v 1.2 2008-01-01 18:29:39 chicares Exp $
+// $Id: null_stream.hpp,v 1.1 2008-09-01 01:38:24 chicares Exp $
 
-#ifndef dev_null_stream_buffer_hpp
-#define dev_null_stream_buffer_hpp
+#ifndef null_stream_hpp
+#define null_stream_hpp
 
 #include "config.hpp"
 
@@ -65,5 +65,5 @@ class dev_null_stream_buffer
     char buffer_[buffer_size_];
 };
 
-#endif // dev_null_stream_buffer_hpp
+#endif // null_stream_hpp
 
