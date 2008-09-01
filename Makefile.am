@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.54 2008-09-01 03:16:18 chicares Exp $
+# $Id: Makefile.am,v 1.55 2008-09-01 13:17:31 chicares Exp $
 
 SUBDIRS = third_party
 
@@ -379,6 +379,7 @@ generate_passkey_SOURCES = \
     global_settings.cpp \
     md5.cpp \
     miscellany.cpp \
+    null_stream.cpp \
     path_utility.cpp \
     system_command.cpp \
     system_command_non_wx.cpp
@@ -499,6 +500,7 @@ test_authenticity_SOURCES = \
   global_settings.cpp \
   md5.cpp \
   miscellany.cpp \
+  null_stream.cpp \
   path_utility.cpp \
   system_command.cpp \
   system_command_non_wx.cpp
@@ -510,6 +512,7 @@ test_calendar_date_SOURCES =    \
   $(common_test_objects) \
   calendar_date.cpp \
   calendar_date_test.cpp
+  null_stream.cpp \
 test_calendar_date_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_callback_SOURCES = \
@@ -555,6 +558,7 @@ test_file_command_CXXFLAGS = $(AM_CXXFLAGS)
 test_financial_SOURCES =    \
   $(common_test_objects) \
   financial_test.cpp \
+  null_stream.cpp \
   stratified_algorithms.cpp
 test_financial_CXXFLAGS = $(AM_CXXFLAGS)
 
@@ -606,6 +610,7 @@ test_input_SOURCES =    \
   miscellany.cpp \
   multiple_cell_document.cpp \
   mvc_model.cpp \
+  null_stream.cpp \
   path_utility.cpp \
   product_names.cpp \
   single_cell_document.cpp \
@@ -802,6 +807,7 @@ test_wx_new_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_zero_SOURCES = \
   $(common_test_objects) \
+  null_stream.cpp \
   zero_test.cpp
 test_zero_CXXFLAGS = $(AM_CXXFLAGS)
 
