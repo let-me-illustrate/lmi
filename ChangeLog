@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1153 2008-08-27 16:44:26 wboutin Exp $
+// $Id: ChangeLog,v 1.1154 2008-09-01 14:02:23 chicares Exp $
 
 MAINTENANCE
 
@@ -19448,4 +19448,44 @@ Read old input files more robustly (GWC).
 
   version.hpp
 Mark a release candidate.
+
+20080901T0138Z <gchicares@sbcglobal.net> [978]
+
+  Makefile.am
+  dev_null_stream_buffer.hpp [expunged]
+  ledger_xsl.cpp
+  null_stream.hpp            [new file]
+  progress_meter_cli.cpp
+Rename 'dev_null_stream_buffer.hpp' to 'null_stream.hpp'.
+
+20080901T0316Z <gchicares@sbcglobal.net> [978]
+
+  Makefile.am
+  ledger_xsl.cpp
+  null_stream.cpp [new file]
+  null_stream.hpp
+  objects.make
+  progress_meter_cli.cpp
+Refactor.
+
+20080901T1317Z <gchicares@sbcglobal.net> [978]
+
+  Makefile.am
+  ihs_avsolve.cpp
+  objects.make
+  solve.cpp
+  zero.hpp
+Optionally suppress root-finding display.
+
+20080901T1318Z <gchicares@sbcglobal.net> [978]
+
+  zero_test.cpp
+Redress preprocessor abuse.
+
+20080901T1402Z <gchicares@sbcglobal.net> [978]
+
+  illustration_view.cpp
+Fix defect introduced 20061112T2107Z AFAICT. Apparently some inserted
+ledger-formatting code invoked decimal_root(), which overwrote text
+previously placed on the statusbar.
 
