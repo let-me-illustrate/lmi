@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.28 2008-07-18 12:56:33 chicares Exp $
+// $Id: ledger_xsl.cpp,v 1.29 2008-09-01 01:38:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,12 +30,12 @@
 
 #include "alert.hpp"
 #include "configurable_settings.hpp"
-#include "dev_null_stream_buffer.hpp" // "idiosyncrasy_spreadsheet" workaround
 #include "global_settings.hpp"
 #include "ledger.hpp"
 #include "ledger_invariant.hpp"       // "idiosyncrasy_spreadsheet" workaround
 #include "ledger_formatter.hpp"
 #include "miscellany.hpp"
+#include "null_stream.hpp"            // "idiosyncrasy_spreadsheet" workaround
 #include "path_utility.hpp"
 #include "system_command.hpp"
 

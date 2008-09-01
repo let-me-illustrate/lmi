@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.52 2008-08-11 19:56:18 chicares Exp $
+# $Id: Makefile.am,v 1.53 2008-09-01 01:38:24 chicares Exp $
 
 SUBDIRS = third_party
 
@@ -843,7 +843,6 @@ noinst_HEADERS = \
     dbvalue.hpp \
     death_benefits.hpp \
     default_view.hpp \
-    dev_null_stream_buffer.hpp \
     docmanager_ex.hpp \
     docmdichildframe_ex.hpp \
     emit_ledger.hpp \
@@ -918,6 +917,7 @@ noinst_HEADERS = \
     mvc_view.hpp \
     name_value_pairs.hpp \
     ncnnnpnn.hpp \
+    null_stream.hpp \
     numeric_io_cast.hpp \
     numeric_io_traits.hpp \
     obstruct_slicing.hpp \
