@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.55 2008-09-01 13:17:31 chicares Exp $
+# $Id: Makefile.am,v 1.56 2008-09-01 19:26:19 chicares Exp $
 
 SUBDIRS = third_party
 
@@ -430,7 +430,7 @@ product_files_SOURCES = \
     my_fund.cpp \
     my_prod.cpp \
     my_rnd.cpp \
-    my_tier.cpp \
+    my_tier.cpp
 product_files_LDADD = \
     liblmi.la   \
     $(BOOST_LIBS) \
@@ -511,8 +511,8 @@ test_authenticity_LDADD = \
 test_calendar_date_SOURCES =    \
   $(common_test_objects) \
   calendar_date.cpp \
-  calendar_date_test.cpp
-  null_stream.cpp \
+  calendar_date_test.cpp \
+  null_stream.cpp
 test_calendar_date_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_callback_SOURCES = \
@@ -523,7 +523,7 @@ test_callback_CXXFLAGS = $(AM_CXXFLAGS)
 test_commutation_functions_SOURCES =    \
   $(common_test_objects) \
   commutation_functions_test.cpp \
-  ihs_commfns.cpp \
+  ihs_commfns.cpp
 test_commutation_functions_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_comma_punct_SOURCES =  \
