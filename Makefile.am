@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.56 2008-09-01 19:26:19 chicares Exp $
+# $Id: Makefile.am,v 1.57 2008-09-02 00:32:52 zeitlin Exp $
 
 SUBDIRS = third_party
 
@@ -606,7 +606,7 @@ test_input_SOURCES =    \
   input_xml_io.cpp \
   mc_enum.cpp \
   mc_enum_types.cpp \
-  mc_enum_types_aux.o \
+  mc_enum_types_aux.cpp \
   miscellany.cpp \
   multiple_cell_document.cpp \
   mvc_model.cpp \
