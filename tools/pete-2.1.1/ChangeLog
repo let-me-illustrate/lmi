@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1 2008-09-04 13:55:08 chicares Exp $
+// $Id: ChangeLog,v 1.2 2008-09-04 23:20:20 chicares Exp $
 
 20080904T1355Z <gchicares@sbcglobal.net>
 
@@ -64,4 +64,13 @@ similar reasons, this file
   PETE/PoomaPETE.h [empty]
 is imported as a zero-byte file: it is referenced in 'PETE/PETE.h, but
 seems not to be used by PETE itself.
+
+20080904T2320Z <gchicares@sbcglobal.net>
+
+  PETE/Tools/makefile
+Remove an include directive that prevented this makefile from working
+in a standalone PETE context. Similarly remove a few other lines at
+the top of the file. Add a POOMA license and warranty disclaimer: the
+original LANL pete-2.1.0 version had the old LANL statement that has
+been replaced by the POOMA statement elsewhere.
 

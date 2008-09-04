@@ -1,10 +1,18 @@
-
-PROJECT_ROOT = ../../../
-include $(PROJECT_ROOT)/config/head.mk
-
-#CXX=g++-3.4
-#CXXINC=-I..
-#CXXARG=-O2 -g
+# Copyright (C) 1998, 1999, 2000, 2002  Los Alamos National Laboratory,
+# Copyright (C) 1998, 1999, 2000, 2002  CodeSourcery, LLC
+#
+# This file is part of FreePOOMA.
+#
+# FreePOOMA is free software; you can redistribute it and/or modify it
+# under the terms of the Expat license.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the Expat
+# license for more details.
+#
+# You should have received a copy of the Expat license along with
+# FreePOOMA; see the file LICENSE.
 
 default:: MakeOperators
 
@@ -38,6 +46,6 @@ clean:
 # ACL:rcsinfo
 #  ----------------------------------------------------------------------
 #  $RCSfile: makefile,v $   $Author: chicares $
-#  $Revision: 1.1 $   $Date: 2008-09-04 13:55:32 $
+#  $Revision: 1.2 $   $Date: 2008-09-04 23:20:21 $
 #  ----------------------------------------------------------------------
 # ACL:rcsinfo
