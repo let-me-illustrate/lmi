@@ -1,0 +1,67 @@
+// ChangeLog for "Let me illustrate..." PETE tools.
+//
+// Copyright (C) 2008 Gregory W. Chicares.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2 as
+// published by the Free Software Foundation.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software Foundation,
+// Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+//
+// http://savannah.nongnu.org/projects/lmi
+// email: <gchicares@sbcglobal.net>
+// snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+// $Id: ChangeLog,v 1.1 2008-09-04 13:55:08 chicares Exp $
+
+20080904T1355Z <gchicares@sbcglobal.net>
+
+  PETE/Combiners.h                [new file]
+  PETE/CreateLeaf.h               [new file]
+  PETE/ForEach.h                  [new file]
+  PETE/Functors.h                 [new file]
+  PETE/OperatorTags.h             [new file]
+  PETE/PETE.h                     [new file]
+  PETE/PoomaPETE.h                [new file]
+  PETE/Scalar.h                   [new file]
+  PETE/Tools                      [new file]
+  PETE/TreeNodes.h                [new file]
+  PETE/TypeComputations.h         [new file]
+  PETE/Tools/ClassDescriptor.h    [new file]
+  PETE/Tools/DescriptorBase.h     [new file]
+  PETE/Tools/Header.h             [new file]
+  PETE/Tools/Join.cpp             [new file]
+  PETE/Tools/Join.h               [new file]
+  PETE/Tools/MakeOperators.cpp    [new file]
+  PETE/Tools/OperatorDescriptor.h [new file]
+  PETE/Tools/Options.cpp          [new file]
+  PETE/Tools/Options.h            [new file]
+  PETE/Tools/PAssert.cpp          [new file]
+  PETE/Tools/PAssert.h            [new file]
+  PETE/Tools/Parser.h             [new file]
+  PETE/Tools/PeteOps.cpp          [new file]
+  PETE/Tools/PeteOps.h            [new file]
+  PETE/Tools/PeteOps.in           [new file]
+  PETE/Tools/PrintFunctions.h     [new file]
+  PETE/Tools/PrintList.h          [new file]
+  PETE/Tools/PrintOperators.h     [new file]
+  PETE/Tools/README               [new file]
+  PETE/Tools/makefile             [new file]
+Import pete-2.1.1 from FreePOOMA. These files
+  PETE/ErrorType.h      [not imported]
+  PETE/PETETypeInfo.h   [not imported]
+  PETE/Tools/include.mk [not imported]
+are not imported: they are not referenced in PETE itself, and were not
+present in pete-2.1.0, so presumably they are used only by POOMA. For
+similar reasons, this file
+  PETE/PoomaPETE.h [empty]
+is imported as a zero-byte file: it is referenced in 'PETE/PETE.h, but
+seems not to be used by PETE itself.
+
