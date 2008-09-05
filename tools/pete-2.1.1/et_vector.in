@@ -1,0 +1,5 @@
+classes
+-----
+  ARG   = "class T[n]"
+  CLASS = "std::vector<T[n]>"
+
