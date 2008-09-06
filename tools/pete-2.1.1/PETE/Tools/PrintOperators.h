@@ -180,7 +180,8 @@ public:
 	 << "  PETE_EMPTY_CONSTRUCTORS_TEMPLATE("
 	 << opdef.tag(false) << ", T1)" << endl
 	 << "  template<class T2>" << endl
-	 << "  inline UnaryReturn<T2, " << opdef.tag() << "<T1> >" << endl
+	 << "  inline typename UnaryReturn<T2, "
+	 << opdef.tag() << "<T1> >::Type_t" << endl
 	 << "  operator()(const T2 &a) const" << endl
 	 << "  {" << endl
 	 << "    " << opdef.expression() << endl
@@ -518,6 +519,6 @@ private:
 // ACL:rcsinfo
 // ----------------------------------------------------------------------
 // $RCSfile: PrintOperators.h,v $   $Author: chicares $
-// $Revision: 1.1 $   $Date: 2008-09-04 13:55:32 $
+// $Revision: 1.2 $   $Date: 2008-09-06 10:41:16 $
 // ----------------------------------------------------------------------
 // ACL:rcsinfo
