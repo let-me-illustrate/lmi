@@ -275,7 +275,7 @@ struct OpCast
 {
   PETE_EMPTY_CONSTRUCTORS_TEMPLATE(OpCast, T1)
   template<class T2>
-  inline UnaryReturn<T2, OpCast<T1> >
+  inline typename UnaryReturn<T2, OpCast<T1> >::Type_t
   operator()(const T2 &a) const
   {
     return T1(a);
@@ -772,6 +772,6 @@ struct FnWhere
 // ACL:rcsinfo
 // ----------------------------------------------------------------------
 // $RCSfile: OperatorTags.h,v $   $Author: chicares $
-// $Revision: 1.1 $   $Date: 2008-09-04 13:55:19 $
+// $Revision: 1.2 $   $Date: 2008-09-06 10:41:16 $
 // ----------------------------------------------------------------------
 // ACL:rcsinfo
