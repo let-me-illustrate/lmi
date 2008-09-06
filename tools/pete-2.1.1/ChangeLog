@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.3 2008-09-06 10:41:16 chicares Exp $
+// $Id: ChangeLog,v 1.4 2008-09-06 13:47:48 chicares Exp $
 
 MAINTENANCE
 
@@ -112,5 +112,13 @@ returns a PETE object instead of a PETE object's Type_t.
 Repair peteCast() anomaly demonstrated 20080906T0022Z. Regenerate
 'PETE/OperatorTags.h' by running 'make -f makefile installheaders',
 then patch it manually to restore the FreePOOMA notices and the
-<cmath> header (which really should be "math.h" instead).
+<cmath> header (which really should be <math.h> instead).
+
+20080906T1347Z <gchicares@sbcglobal.net>
+
+  PETE/OperatorTags.h
+Improve correctness by substituting <math.h> for <cmath>. For example,
+'PETE/Tools/PeteOps.in' uses the standard C inverse cosine function:
+  EXPR = "return (acos(a));"
+and <math.h> declares acos(), whereas <cmath> declares std::acos().
 
