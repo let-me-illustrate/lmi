@@ -34,7 +34,7 @@ OperatorTags.h: MakeOperators
 	--operators PeteOps.in --lanl-boilerplate --o OperatorTags.h
 
 installheaders: OperatorTags.h
-	cp OperatorTags.h ../PETE
+	mv OperatorTags.h ..
 
 clean:
 	rm -f MakeOperators
@@ -46,6 +46,6 @@ clean:
 # ACL:rcsinfo
 #  ----------------------------------------------------------------------
 #  $RCSfile: makefile,v $   $Author: chicares $
-#  $Revision: 1.2 $   $Date: 2008-09-04 23:20:21 $
+#  $Revision: 1.3 $   $Date: 2008-09-06 00:19:22 $
 #  ----------------------------------------------------------------------
 # ACL:rcsinfo
