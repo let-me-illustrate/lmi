@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: et_vector_test.cpp,v 1.2 2008-09-06 00:22:34 chicares Exp $
+// $Id: et_vector_test.cpp,v 1.3 2008-09-06 10:41:16 chicares Exp $
 
 #include "et_vector.hpp"
 
@@ -40,11 +40,9 @@ int main()
     std::ostream_iterator<double> osi(std::cout, "\n");
     std::copy(v0.begin(), v0.end(), osi);
 
-    // Demonstrate a peteCast() anomaly.
+    // Test peteCast().
     std::vector<int> v1(v0.size());
-    // This succeeds:
     peteCast(int(0), v0);
-    // Cannot convert UnaryReturn<double, OpCast<int> > to int:
     assign(v1, peteCast(int(0), v0));
     std::copy(v1.begin(), v1.end(), osi);
 }

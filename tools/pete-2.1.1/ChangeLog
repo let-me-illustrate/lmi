@@ -19,7 +19,11 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.2 2008-09-04 23:20:20 chicares Exp $
+// $Id: ChangeLog,v 1.3 2008-09-06 10:41:16 chicares Exp $
+
+MAINTENANCE
+
+See the main lmi 'ChangeLog' for maintenance instructions.
 
 20080904T1355Z <gchicares@sbcglobal.net>
 
@@ -73,4 +77,40 @@ in a standalone PETE context. Similarly remove a few other lines at
 the top of the file. Add a POOMA license and warranty disclaimer: the
 original LANL pete-2.1.0 version had the old LANL statement that has
 been replaced by the POOMA statement elsewhere.
+
+20080905T1620Z <gchicares@sbcglobal.net>
+
+  Makefile           [new file]
+  et_vector.hpp      [new file]
+  et_vector.in       [new file]
+  et_vector_test.cpp [new file]
+Demonstrate use of PETE with std::vector.
+
+20080906T0019Z <gchicares@sbcglobal.net>
+
+  PETE/Tools/makefile
+Repair an anomaly in target 'installheaders'. FreePOOMA has 'Tools' as
+a subdirectory of 'PETE', whereas those two directories were siblings
+in in LANL pete-2.1.0; therefore, 'OperatorTags.h' should now be
+installed to '..'. Installing to '../PETE' creates a file named 'PETE'
+in the 'PETE' directory, which is not the manifest intention. To avoid
+leaving a stray copy of 'OperatorTags.h' in '/PETE/Tools', 'cp' is
+replaced by 'mv' here.
+
+20080906T0022Z <gchicares@sbcglobal.net>
+
+  et_vector_test.cpp
+Demonstrate a peteCast() anomaly. Unlike every other function object
+in 'PETE/OperatorTags.h', struct 'OpCast' has an operator()() that
+returns a PETE object instead of a PETE object's Type_t.
+
+20080906T1041Z <gchicares@sbcglobal.net>
+
+  PETE/OperatorTags.h
+  PETE/Tools/PrintOperators.h
+  et_vector_test.cpp
+Repair peteCast() anomaly demonstrated 20080906T0022Z. Regenerate
+'PETE/OperatorTags.h' by running 'make -f makefile installheaders',
+then patch it manually to restore the FreePOOMA notices and the
+<cmath> header (which really should be "math.h" instead).
 
