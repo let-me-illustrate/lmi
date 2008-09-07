@@ -309,6 +309,7 @@ int main(int argc, char *argv[])
   
   if (printTags)
   {
+    *ofl << "#include <math.h>" << endl << endl;
     printList(*ofl,UnaryOp(),           inputOps["unaryOps"]);
     printList(*ofl,UnaryBoolOp(),       inputOps["unaryBoolOps"]);
     printList(*ofl,UnaryCastOp(),       inputOps["unaryCastOps"]);
@@ -499,6 +500,6 @@ int main(int argc, char *argv[])
 // ACL:rcsinfo
 // ----------------------------------------------------------------------
 // $RCSfile: MakeOperators.cpp,v $   $Author: chicares $
-// $Revision: 1.1 $   $Date: 2008-09-04 13:55:21 $
+// $Revision: 1.2 $   $Date: 2008-09-07 16:31:22 $
 // ----------------------------------------------------------------------
 // ACL:rcsinfo
