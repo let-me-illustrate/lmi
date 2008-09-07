@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.4 2008-09-06 13:47:48 chicares Exp $
+// $Id: ChangeLog,v 1.5 2008-09-07 10:57:35 chicares Exp $
 
 MAINTENANCE
 
@@ -121,4 +121,9 @@ Improve correctness by substituting <math.h> for <cmath>. For example,
 'PETE/Tools/PeteOps.in' uses the standard C inverse cosine function:
   EXPR = "return (acos(a));"
 and <math.h> declares acos(), whereas <cmath> declares std::acos().
+
+20080907T1057Z <gchicares@sbcglobal.net>
+
+  PETE/Tools/makefile
+Do not assume that '.' is on the $PATH.
 
