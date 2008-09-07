@@ -43,28 +43,28 @@ public:
     addData(0, ad);
     addData(1, ic);
   }
-  
+
   ClassDescriptor(const ClassDescriptor &model)
   : DescriptorBase<2>(model)
   { }
 
   //---------------------------------------------------------------------------
-  // Trivial destructor. 
-  
+  // Trivial destructor.
+
   ~ClassDescriptor() { }
-  
+
   //---------------------------------------------------------------------------
-  // Copy-assignment operator: just copy members. 
+  // Copy-assignment operator: just copy members.
 
   ClassDescriptor &operator=(const ClassDescriptor &rhs)
   {
     DescriptorBase<2>::operator=(rhs);
-    
+
     return *this;
   }
-  
+
   //---------------------------------------------------------------------------
-  // Return strings with numbers/args substituted. 
+  // Return strings with numbers/args substituted.
 
   string argDef(int i) const
   {
@@ -84,26 +84,26 @@ private:
     sprintf(n, "%d", i);
     string str(s), rep("[n]"), num(n);
     int pos;
-    
+
     while ((pos = str.find(rep, 0)) < str.size())
       str.replace(pos, 3, num);
-      
+
     return str;
   }
 
   // Currently substituteArg is unused.  Pooma used to convert
   // arguments without CreateLeaf, so this function was useful
-  // for conversions like l -> Scalar<T1>(l) 
+  // for conversions like l -> Scalar<T1>(l)
 
-  string substituteArg(const string &arg, 
+  string substituteArg(const string &arg,
     const string &s) const
   {
     string str(s), rep("[arg]");
     int pos;
-    
+
     while ((pos = str.find(rep, 0)) < str.size())
       str.replace(pos, 5, arg);
-      
+
     return str;
   }
 };
@@ -112,15 +112,15 @@ inline ostream &operator<<(ostream &os, const ClassDescriptor &o)
 {
   os << "ARG   = " << o.argDef(1) << endl;
   os << "CLASS = " << o.inputClass(1) << endl;
-  
+
   return os;
 }
-  
+
 #endif // PETE_SRC_TOOLS_CLASSDESCRIPTOR_H
 
 // ACL:rcsinfo
 // ----------------------------------------------------------------------
 // $RCSfile: ClassDescriptor.h,v $   $Author: chicares $
-// $Revision: 1.1 $   $Date: 2008-09-04 13:55:20 $
+// $Revision: 1.2 $   $Date: 2008-09-07 17:38:20 $
 // ----------------------------------------------------------------------
 // ACL:rcsinfo

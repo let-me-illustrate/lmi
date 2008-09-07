@@ -31,9 +31,9 @@
 //    the operation type Op.
 //
 //    There are a several sensible things one can do:
-//      o make the return type the same as the argument to the 
+//      o make the return type the same as the argument to the
 //        function/operation. For example, operator-(T) should return a T.
-//      o return a type based entirely on the operation. 
+//      o return a type based entirely on the operation.
 //        For example, operator! always returns a bool.
 //      o synthesize a type based on the type of the argument and the operation.
 //    The first case is most common. We therefore make it the behavior
@@ -340,20 +340,20 @@ struct Promote<double, double> {
 //    T2 and the operation type Op.
 //
 //    There are several sensible things one can do:
-//      o make the return type by promoting/converting the "simpler" type 
-//        into the more "complex." For example, we typically want to do 
-//        this with addition. 
-//      o return the type of the left-hand operand. For example, this is 
+//      o make the return type by promoting/converting the "simpler" type
+//        into the more "complex." For example, we typically want to do
+//        this with addition.
+//      o return the type of the left-hand operand. For example, this is
 //        what happens with operator<<.
-//      o return the type of the right-hand operand. 
-//      o return a type based entirely on the operation. 
+//      o return the type of the right-hand operand.
+//      o return a type based entirely on the operation.
 //        For example, operator!= always returns a bool.
 //      o synthesize the return type based on the operation and types.
 //    The first option is most common, so we make that the behavior of the
 //    base template. The other cases are handled by partial specialization.
 //
 //    For example, the multiplication between a matrix and a vector might do a
-//    matrix/vector product, thereby returning a vector. The appropriate 
+//    matrix/vector product, thereby returning a vector. The appropriate
 //    specialization here would be:
 //      struct BinaryReturn<Mat<double,3>, Vec<float,3>, OpMultiply> {
 //        typedef Vec<double,3> Type_t;
@@ -379,8 +379,8 @@ struct BinaryReturn {
 //    T3 and the operation type Op. The only trinary expression supported
 //    in C++ is the ?: operation. In this case, T1 should end up being bool
 //    and the result of the calculation is of type Binary_Promotion(T2,T3)
-//    with the value being that associated with T2 if T1's associated value 
-//    turns out to be true and T3 if T1's associated value turns out to be 
+//    with the value being that associated with T2 if T1's associated value
+//    turns out to be true and T3 if T1's associated value turns out to be
 //    false.
 //
 //-----------------------------------------------------------------------------
@@ -396,6 +396,6 @@ struct TrinaryReturn {
 // ACL:rcsinfo
 // ----------------------------------------------------------------------
 // $RCSfile: TypeComputations.h,v $   $Author: chicares $
-// $Revision: 1.1 $   $Date: 2008-09-04 13:55:20 $
+// $Revision: 1.2 $   $Date: 2008-09-07 17:38:20 $
 // ----------------------------------------------------------------------
 // ACL:rcsinfo

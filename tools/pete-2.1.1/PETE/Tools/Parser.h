@@ -90,7 +90,7 @@ public:
   Token(const string &str)
   : str_m(str), pos_m(0), len_m(0), type_m(NOTOKEN), line_m(0)
   { }
-  
+
   Token(const string &str, int pos, int len, TokenType type, int line)
   : str_m(str), pos_m(pos), len_m(len), type_m(type), line_m(line)
   { }
@@ -102,7 +102,7 @@ public:
     type_m = type;
     line_m = line;
   }
-  
+
   //---------------------------------------------------------------------------
   // Return information about the token.
 
@@ -110,12 +110,12 @@ public:
   {
     return str_m.substr(pos_m, len_m);
   }
-  
+
   TokenType type() const
   {
     return type_m;
   }
-  
+
   int line() const
   {
     return line_m;
@@ -136,7 +136,7 @@ private:
 inline ostream &operator<<(ostream &os, const Token &tok)
 {
   os << static_cast<int>(tok.type()) << ": " << tok.text();
-  
+
   return os;
 }
 
@@ -165,8 +165,8 @@ public:
     pos_m = 0;
 
     // Read input file.
-        
-    string buffer;  
+
+    string buffer;
     while (getline(is, buffer) || is.gcount())
       {
         if (is.eof())
@@ -185,14 +185,14 @@ public:
           }
       }
   }
-  
+
   //---------------------------------------------------------------------------
   // Adds a new keyword to the Lexical Analyzer. Up to 100 are supported.
 
   TokenType addKeyword(const string &kw)
   {
     TokenType kwNum = kws_m.size();
-    
+
     if (kwNum > 100)
       {
 	cerr << "ERROR: too many keywords." << endl;
@@ -208,10 +208,10 @@ public:
 
   const Token &nextToken()
   {
-    while (pos_m < str_m.size() && 
+    while (pos_m < str_m.size() &&
       (str_m[pos_m] == ' ' || str_m[pos_m] == '\t'))
         pos_m++;
-        
+
     if (pos_m == str_m.size())
       {
         tok_m.set(pos_m, 0, EOFile, line_m);
@@ -240,7 +240,7 @@ public:
             int pos = pos_m;
             do {
               pos_m++;
-            } while (pos_m < str_m.size() && 
+            } while (pos_m < str_m.size() &&
                      str_m[pos_m] != '\"' /* && str_m[pos_m] != '\n' */);
             if (pos_m == str_m.size() /* || str_m[pos_m] == '\n' */)
               {
@@ -304,7 +304,7 @@ public:
       }
 
     return tok_m;
-  }            
+  }
 
   //---------------------------------------------------------------------------
   // Returns the current token.
@@ -313,7 +313,7 @@ public:
   {
     return tok_m;
   }
-  
+
   //---------------------------------------------------------------------------
   // Matches the current token or else generates an error.
 
@@ -327,7 +327,7 @@ public:
         exit(3);
       }
   }
-  
+
   //---------------------------------------------------------------------------
   // Matches the next token or else generates an error.
 
@@ -336,15 +336,15 @@ public:
     nextToken();
     matchCurrent(type);
   }
-    
+
 private:
-  
+
   string file_m, str_m;
   vector<string> kws_m;
   Token tok_m;
   int pos_m, line_m;
 };
-            
+
 
 //-----------------------------------------------------------------------------
 //
@@ -368,7 +368,7 @@ public:
     map<string, vector<Descriptor> > &glist)
   : lexer_m(is, fn), glist_m(glist)
   { }
-  
+
   //--------------------------------------------------------------------------
   // Adds a new keyword to the Lexical Analyzer. Up to 100 are supported.
 
@@ -407,7 +407,7 @@ public:
   }
 
 private:
-  
+
   void prefixSuffix(TokenType t)
   {
     lexer_m.matchCurrent(t);
@@ -422,7 +422,7 @@ private:
       prefixText_m = lexer_m.currentToken().text();
     else
       suffixText_m = lexer_m.currentToken().text();
-  
+
     lexer_m.matchNext(EOL);
   }
 
@@ -432,10 +432,10 @@ private:
     group_m = lexer_m.currentToken().text();
     lexer_m.matchNext(EOL);
 
-    lexer_m.nextToken();    
+    lexer_m.nextToken();
     dataList();
   }
-  
+
   void dataList()
   {
     while (lexer_m.currentToken().type() == SEP)
@@ -460,20 +460,20 @@ private:
         glist_m[group_m].push_back(desc);
       }
   }
-  
+
   Lexer lexer_m;
   string group_m, prefixText_m, suffixText_m;
   map<string, vector<Descriptor> > &glist_m;
-  
+
 };
-  
+
 #endif // PETE_SRC_TOOLS_PARSER_H
 
 // ACL:rcsinfo
 // ----------------------------------------------------------------------
 // $RCSfile: Parser.h,v $   $Author: chicares $
-// $Revision: 1.1 $   $Date: 2008-09-04 13:55:27 $
+// $Revision: 1.2 $   $Date: 2008-09-07 17:38:20 $
 // ----------------------------------------------------------------------
 // ACL:rcsinfo
 
-    
+

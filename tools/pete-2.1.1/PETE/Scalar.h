@@ -33,13 +33,13 @@
 //
 // DESCRIPTION
 //    A wrapper around a scalar to be used in PETE expressions.
-// 
+//
 //-----------------------------------------------------------------------------
 
 template<class T>
 class Scalar
 {
-public: 
+public:
 
   //---------------------------------------------------------------------------
   // Default constructor takes no action.
@@ -77,7 +77,7 @@ public:
 
   inline
   Scalar(const Scalar<T> &s) : scalar_m(s.scalar_m) { }
-  
+
   //---------------------------------------------------------------------------
   // Return value.
 
@@ -91,18 +91,18 @@ public:
   Scalar<T> &operator=(const Scalar<T> &rhs)
   {
     scalar_m = rhs.scalar_m;
-    
+
     return *this;
   }
-  
+
   inline
   Scalar<T> &operator=(const T &rhs)
   {
     scalar_m = rhs;
-    
+
     return *this;
   }
-  
+
 private:
 
   //---------------------------------------------------------------------------
@@ -117,6 +117,6 @@ private:
 // ACL:rcsinfo
 // ----------------------------------------------------------------------
 // $RCSfile: Scalar.h,v $   $Author: chicares $
-// $Revision: 1.1 $   $Date: 2008-09-04 13:55:19 $
+// $Revision: 1.2 $   $Date: 2008-09-07 17:38:20 $
 // ----------------------------------------------------------------------
 // ACL:rcsinfo

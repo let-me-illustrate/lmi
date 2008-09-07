@@ -54,9 +54,9 @@
 //
 //   LeafFunctor specializations must define the following:
 //
-//      typedef ... Type_t; 
+//      typedef ... Type_t;
 //         - the return type of the functor.
-//      static Type_t apply(const LeafType &l, const LeafTag &f) {} 
+//      static Type_t apply(const LeafType &l, const LeafTag &f) {}
 //         - evaluates the functor on leaf l.
 //
 //-----------------------------------------------------------------------------
@@ -93,13 +93,13 @@ struct EvalLeaf1
   inline EvalLeaf1(int i1) : i1_m(i1) { }
   inline int val1() const { return i1_m; }
 };
-  
+
 template<class T>
 struct LeafFunctor<Scalar<T>, EvalLeaf1>
 {
   typedef T Type_t;
   inline static
-  const Type_t &apply(const Scalar<T> &s, const EvalLeaf1 &) 
+  const Type_t &apply(const Scalar<T> &s, const EvalLeaf1 &)
   {
     return s.value();
   }
@@ -114,13 +114,13 @@ struct EvalLeaf2
   inline int val1() const { return i1_m; }
   inline int val2() const { return i2_m; }
 };
-  
+
 template<class T>
 struct LeafFunctor<Scalar<T>, EvalLeaf2>
 {
   typedef T Type_t;
   inline static
-  const Type_t &apply(const Scalar<T> &s, const EvalLeaf2 &) 
+  const Type_t &apply(const Scalar<T> &s, const EvalLeaf2 &)
   {
     return s.value();
   }
@@ -131,19 +131,19 @@ struct LeafFunctor<Scalar<T>, EvalLeaf2>
 struct EvalLeaf3
 {
   int i1_m, i2_m, i3_m;
-  inline EvalLeaf3(int i1, int i2, int i3) 
+  inline EvalLeaf3(int i1, int i2, int i3)
     : i1_m(i1), i2_m(i2), i3_m(i3) { }
   inline int val1() const { return i1_m; }
   inline int val2() const { return i2_m; }
   inline int val3() const { return i3_m; }
 };
-  
+
 template<class T>
 struct LeafFunctor<Scalar<T>, EvalLeaf3>
 {
   typedef T Type_t;
   inline static
-  const Type_t &apply(const Scalar<T> &s, const EvalLeaf3 &) 
+  const Type_t &apply(const Scalar<T> &s, const EvalLeaf3 &)
   {
     return s.value();
   }
@@ -154,20 +154,20 @@ struct LeafFunctor<Scalar<T>, EvalLeaf3>
 struct EvalLeaf4
 {
   int i1_m, i2_m, i3_m, i4_m;
-  inline EvalLeaf4(int i1, int i2, int i3, int i4) 
+  inline EvalLeaf4(int i1, int i2, int i3, int i4)
     : i1_m(i1), i2_m(i2), i3_m(i3), i4_m(i4) { }
   inline int val1() const { return i1_m; }
   inline int val2() const { return i2_m; }
   inline int val3() const { return i3_m; }
   inline int val4() const { return i4_m; }
 };
-  
+
 template<class T>
 struct LeafFunctor<Scalar<T>, EvalLeaf4>
 {
   typedef T Type_t;
   inline static
-  const Type_t &apply(const Scalar<T> &s, const EvalLeaf4 &) 
+  const Type_t &apply(const Scalar<T> &s, const EvalLeaf4 &)
   {
     return s.value();
   }
@@ -178,7 +178,7 @@ struct LeafFunctor<Scalar<T>, EvalLeaf4>
 struct EvalLeaf5
 {
   int i1_m, i2_m, i3_m, i4_m, i5_m;
-  inline EvalLeaf5(int i1, int i2, int i3, int i4, int i5) 
+  inline EvalLeaf5(int i1, int i2, int i3, int i4, int i5)
     : i1_m(i1), i2_m(i2), i3_m(i3), i4_m(i4), i5_m(i5) { }
   inline int val1() const { return i1_m; }
   inline int val2() const { return i2_m; }
@@ -203,7 +203,7 @@ struct LeafFunctor<Scalar<T>, EvalLeaf5>
 struct EvalLeaf6
 {
   int i1_m, i2_m, i3_m, i4_m, i5_m, i6_m;
-  inline EvalLeaf6(int i1, int i2, int i3, int i4, int i5, int i6) 
+  inline EvalLeaf6(int i1, int i2, int i3, int i4, int i5, int i6)
     : i1_m(i1), i2_m(i2), i3_m(i3), i4_m(i4), i5_m(i5), i6_m(i6) { }
   inline int val1() const { return i1_m; }
   inline int val2() const { return i2_m; }
@@ -212,13 +212,13 @@ struct EvalLeaf6
   inline int val5() const { return i5_m; }
   inline int val6() const { return i6_m; }
 };
-  
+
 template<class T>
 struct LeafFunctor<Scalar<T>, EvalLeaf6>
 {
   typedef T Type_t;
   inline static
-  const Type_t &apply(const Scalar<T> &s, const EvalLeaf6 &) 
+  const Type_t &apply(const Scalar<T> &s, const EvalLeaf6 &)
   {
     return s.value();
   }
@@ -230,7 +230,7 @@ struct EvalLeaf7
 {
   int i1_m, i2_m, i3_m, i4_m, i5_m, i6_m, i7_m;
   inline EvalLeaf7(int i1, int i2, int i3, int i4, int i5, int i6,
-    int i7) 
+    int i7)
     : i1_m(i1), i2_m(i2), i3_m(i3), i4_m(i4), i5_m(i5), i6_m(i6), i7_m(i7) { }
   inline int val1() const { return i1_m; }
   inline int val2() const { return i2_m; }
@@ -240,13 +240,13 @@ struct EvalLeaf7
   inline int val6() const { return i6_m; }
   inline int val7() const { return i7_m; }
 };
-  
+
 template<class T>
 struct LeafFunctor<Scalar<T>, EvalLeaf7>
 {
   typedef T Type_t;
   inline static
-  const Type_t &apply(const Scalar<T> &s, const EvalLeaf7 &) 
+  const Type_t &apply(const Scalar<T> &s, const EvalLeaf7 &)
   {
     return s.value();
   }
@@ -266,13 +266,13 @@ struct LeafFunctor<Scalar<T>, EvalLeaf7>
 
 struct IncrementLeaf
 { };
-  
+
 template<class T>
 struct LeafFunctor<T, IncrementLeaf>
 {
   typedef int Type_t;
   inline static
-  Type_t apply(const T &cl, const IncrementLeaf &) 
+  Type_t apply(const T &cl, const IncrementLeaf &)
   {
     T &l = const_cast<T &>(cl);
     ++l;
@@ -285,7 +285,7 @@ struct LeafFunctor<T, IncrementLeaf>
 // Workaround for screwy CWPro 4.1 bug.
 
 template <class T>
-struct LeafFunctor<const T*, IncrementLeaf> 
+struct LeafFunctor<const T*, IncrementLeaf>
 {
   typedef int Type_t;
   inline static
@@ -298,13 +298,13 @@ struct LeafFunctor<const T*, IncrementLeaf>
 };
 
 #endif
-  
+
 template<class T>
 struct LeafFunctor<Scalar<T>, IncrementLeaf>
 {
   typedef int Type_t;
   inline static
-  Type_t apply(const Scalar<T> &, const IncrementLeaf &) 
+  Type_t apply(const Scalar<T> &, const IncrementLeaf &)
   {
     return 0;
   }
@@ -324,13 +324,13 @@ struct LeafFunctor<Scalar<T>, IncrementLeaf>
 
 struct DecrementLeaf
 { };
-  
+
 template<class T>
 struct LeafFunctor<T, DecrementLeaf>
 {
   typedef int Type_t;
   inline static
-  Type_t apply(const T &cl, const DecrementLeaf &) 
+  Type_t apply(const T &cl, const DecrementLeaf &)
   {
     T &l = const_cast<T &>(cl);
     --l;
@@ -341,7 +341,7 @@ struct LeafFunctor<T, DecrementLeaf>
 #if defined(__MWERKS__)
 // Workaround for screwy CWPro 4.1 bug.
 template <class T>
-struct LeafFunctor<const T*, DecrementLeaf> 
+struct LeafFunctor<const T*, DecrementLeaf>
 {
   typedef int Type_t;
   inline static
@@ -353,13 +353,13 @@ struct LeafFunctor<const T*, DecrementLeaf>
   }
 };
 #endif
-  
+
 template<class T>
 struct LeafFunctor<Scalar<T>, DecrementLeaf>
 {
   typedef int Type_t;
   inline static
-  Type_t apply(const Scalar<T> &, const DecrementLeaf &) 
+  Type_t apply(const Scalar<T> &, const DecrementLeaf &)
   {
     return 0;
   }
@@ -393,7 +393,7 @@ struct LeafFunctor<ForwardIterator, DereferenceLeaf>
 #if defined(__MWERKS__)
 // Workaround for screwy CWPro 4.1 bug.
 template <class T>
-struct LeafFunctor<const T*, DereferenceLeaf> 
+struct LeafFunctor<const T*, DereferenceLeaf>
 {
   typedef T Type_t;
   inline static
@@ -403,13 +403,13 @@ struct LeafFunctor<const T*, DereferenceLeaf>
   }
 };
 #endif
-  
+
 template<class T>
 struct LeafFunctor<Scalar<T>, DereferenceLeaf>
 {
   typedef T Type_t;
   inline static
-  const Type_t &apply(const Scalar<T> &s, const DereferenceLeaf &) 
+  const Type_t &apply(const Scalar<T> &s, const DereferenceLeaf &)
   {
     return s.value();
   }
@@ -421,6 +421,6 @@ struct LeafFunctor<Scalar<T>, DereferenceLeaf>
 // ACL:rcsinfo
 // ----------------------------------------------------------------------
 // $RCSfile: Functors.h,v $   $Author: chicares $
-// $Revision: 1.1 $   $Date: 2008-09-04 13:55:19 $
+// $Revision: 1.2 $   $Date: 2008-09-07 17:38:20 $
 // ----------------------------------------------------------------------
 // ACL:rcsinfo

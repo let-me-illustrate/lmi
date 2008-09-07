@@ -137,9 +137,9 @@ int main(int argc, char *argv[])
   string prefix, suffix;
 
   // Input the operator descriptors.
-  
+
   map<string, vector<OperatorDescriptor> > mOps;
-  map<string, vector<OperatorDescriptor> > inputOps;  
+  map<string, vector<OperatorDescriptor> > inputOps;
 
   if (flagOption(argc,argv,"--operators"))
   {
@@ -160,24 +160,24 @@ int main(int argc, char *argv[])
     suffix = pOps.suffixText();
   }
   inputOps = mOps;
-  
+
   if (addPeteOps)
   {
     peteOps(mOps);
   }
-  
+
   // Create vectors for unary operators.
-  
+
   vector<OperatorDescriptor> unaryOps(mOps["unaryOps"]);
   copy(mOps["unaryBoolOps"].begin(), mOps["unaryBoolOps"].end(),
        back_inserter(unaryOps));
   copy(mOps["unarySpecialOps"].begin(), mOps["unarySpecialOps"].end(),
        back_inserter(unaryOps));
-  
+
   vector<OperatorDescriptor> &unaryCastOps = mOps["unaryCastOps"];
 
   // Create vectors for binary operators.
-  
+
   vector<OperatorDescriptor> binaryOps(mOps["binaryOps"]);
   copy(mOps["binaryBoolOps"].begin(), mOps["binaryBoolOps"].end(),
        back_inserter(binaryOps));
@@ -185,15 +185,15 @@ int main(int argc, char *argv[])
   //       back_inserter(binaryOps));
   copy(mOps["binarySpecialOps"].begin(), mOps["binarySpecialOps"].end(),
        back_inserter(binaryOps));
-    
+
   vector<OperatorDescriptor> binaryLeftOps(mOps["binaryLeftOps"]);
 
   // Create reference for trinary operators.
-  
+
   vector<OperatorDescriptor> &trinaryOps = mOps["trinaryOps"];
-    
+
   // Create vector for assignment operators.
-  
+
   vector<OperatorDescriptor> assignOps(mOps["assignOp"]);
   copy(mOps["binaryAssignOps"].begin(),
        mOps["binaryAssignOps"].end(),
@@ -204,7 +204,7 @@ int main(int argc, char *argv[])
 
   // Input the class descriptors.
 
-  map<string, vector<ClassDescriptor> > mClasses;  
+  map<string, vector<ClassDescriptor> > mClasses;
 
   vector<ClassDescriptor> classes;
   vector<ClassDescriptor> extraClasses;
@@ -224,7 +224,7 @@ int main(int argc, char *argv[])
 
     PInsist1(!!fClasses, "ERROR: couldn't open class description file \""
 	    "%s\"", cls.c_str());
-    
+
     Parser<ClassDescriptor> pClasses(fClasses, cls, mClasses);
 
     pClasses.addKeyword("ARG");
@@ -237,7 +237,7 @@ int main(int argc, char *argv[])
       suffix += "\n\n";
     prefix += pClasses.prefixText();
     suffix += pClasses.suffixText();
-  
+
     classes = mClasses["classes"];
     extraClasses = mClasses["extraClasses"];
     scalars = mClasses["scalars"];
@@ -261,7 +261,7 @@ int main(int argc, char *argv[])
   generalT.push_back(ClassDescriptor("class T[n]","T[n]"));
 
   // Set up streams for printing.
-  
+
   ostream *ofl = &cout;
   if (ofile != string(""))
     {
@@ -272,9 +272,9 @@ int main(int argc, char *argv[])
       PInsist1(!!*ofl, "ERROR: couldn't open class description file \""
 	       "%s\"", ofile.c_str());
     }
-        
+
   // Print header.
-  
+
   printHeader(*ofl,includeGuard,filesUsed,lanlBoilerplate,prefix);
 
   // The following code is used when we generate PeteOps.cpp from
@@ -306,7 +306,7 @@ int main(int argc, char *argv[])
   }
 
   // Print operator tags.
-  
+
   if (printTags)
   {
     *ofl << "#include <math.h>" << endl << endl;
@@ -474,7 +474,7 @@ int main(int argc, char *argv[])
   }
 
   // Print assignment operators.
-  
+
   if (assignment)
   {
     if (!justExtraClasses)
@@ -488,11 +488,11 @@ int main(int argc, char *argv[])
   }
 
   // Print footer.
-  
+
   printFooter(*ofl,includeGuard,lanlBoilerplate,suffix);
-  
+
   // Clean up.
-  
+
   if (ofile != string(""))
     delete ofl;
 }
@@ -500,6 +500,6 @@ int main(int argc, char *argv[])
 // ACL:rcsinfo
 // ----------------------------------------------------------------------
 // $RCSfile: MakeOperators.cpp,v $   $Author: chicares $
-// $Revision: 1.2 $   $Date: 2008-09-07 16:31:22 $
+// $Revision: 1.3 $   $Date: 2008-09-07 17:38:20 $
 // ----------------------------------------------------------------------
 // ACL:rcsinfo

@@ -177,7 +177,7 @@ struct Combine2<A, B, Op, TreeCombine >
 {
   typedef BinaryNode<Op, A, B> Type_t;
   inline static
-  Type_t combine(const A &a, const B &b, const TreeCombine &t) 
+  Type_t combine(const A &a, const B &b, const TreeCombine &t)
   {
     return Type_t(a, b);
   }
@@ -188,8 +188,8 @@ struct Combine3<A, B, C, Op, TreeCombine >
 {
   typedef TrinaryNode<Op, A, B, C> Type_t;
   inline static
-  Type_t combine(const A &a, const B &b, const C &c, const TreeCombine &t) 
-  {    
+  Type_t combine(const A &a, const B &b, const C &c, const TreeCombine &t)
+  {
     return Type_t(a, b, c);
   }
 };
@@ -355,6 +355,6 @@ struct Combine2<int, int, Op, SumCombine>
 // ACL:rcsinfo
 // ----------------------------------------------------------------------
 // $RCSfile: Combiners.h,v $   $Author: chicares $
-// $Revision: 1.1 $   $Date: 2008-09-04 13:55:16 $
+// $Revision: 1.2 $   $Date: 2008-09-07 17:38:19 $
 // ----------------------------------------------------------------------
 // ACL:rcsinfo

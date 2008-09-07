@@ -66,7 +66,7 @@ void printHeader(OSTR& ostr,const string& includeGuard,
     << "//" << endl
     << fileList
     << "//" << endl
-    << "///////////////////////////////////////////////////////////////////////////////" 
+    << "///////////////////////////////////////////////////////////////////////////////"
     << endl
     << endl;
 
@@ -95,7 +95,7 @@ void printFooter(OSTR& ostr,const string& includeGuard,
 	<< "// ----------------------------------------------------------------------"
 	<< endl
 	<< "// $RCSfile: Header.h,v $   $Author: chicares $" << endl
-	<< "// $Revision: 1.1 $   $Date: 2008-09-04 13:55:20 $" << endl
+	<< "// $Revision: 1.2 $   $Date: 2008-09-07 17:38:20 $" << endl
 	<< "// ----------------------------------------------------------------------"
 	<< endl
 	<< "// ACL:rcsinfo" << endl;
@@ -107,6 +107,6 @@ void printFooter(OSTR& ostr,const string& includeGuard,
 // ACL:rcsinfo
 // ----------------------------------------------------------------------
 // $RCSfile: Header.h,v $   $Author: chicares $
-// $Revision: 1.1 $   $Date: 2008-09-04 13:55:20 $
+// $Revision: 1.2 $   $Date: 2008-09-07 17:38:20 $
 // ----------------------------------------------------------------------
 // ACL:rcsinfo

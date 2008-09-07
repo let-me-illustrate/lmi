@@ -39,7 +39,7 @@
 //////////////////////////////////////////////////////////////////////
 
 //-----------------------------------------------------------------------------
-// Overview: 
+// Overview:
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -147,9 +147,9 @@ public:
     UnaryOp().print(ostr, opdef);
 
     // Print UnaryReturn specialization:
-    
+
     string args = joinWithComma("class T", opdef.argDef());
-    
+
     ostr << endl << "template<" << args << " >" << endl
 	 << "struct UnaryReturn<T, " << opdef.tag() << " > {"
 	 << endl
@@ -189,7 +189,7 @@ public:
 	 << "};" << endl;
 
     // Print UnaryReturn specialization:
-    
+
     ostr << endl << "template<class T1, class T2>" << endl
 	 << "struct UnaryReturn<T2, " << opdef.tag() << "<T1> > {"
 	 << endl
@@ -209,7 +209,7 @@ class BinaryOp
 {
 public:
   template<class OSTR,class OPDEF>
-  void print(OSTR& ostr,const OPDEF& opdef) const 
+  void print(OSTR& ostr,const OPDEF& opdef) const
   {
     ostr << endl;
     if (opdef.templateArgs())
@@ -253,7 +253,7 @@ class BinarySpecialOp
 {
 public:
   template<class OSTR,class OPDEF>
-  void print(OSTR& ostr,const OPDEF& opdef) const 
+  void print(OSTR& ostr,const OPDEF& opdef) const
   {
     BinaryOp().print(ostr, opdef);
    }
@@ -276,14 +276,14 @@ public:
     // Print tag:
 
     BinaryOp().print(ostr, opdef);
-    
+
     // Print BinaryReturn specialization:
 
-    string args = joinWithComma("class T1, class T2", 
+    string args = joinWithComma("class T1, class T2",
 				     opdef.argDef());
-  
+
     ostr << endl << "template<" << args << " >" << endl
-	 << "struct BinaryReturn<T1, T2, " 
+	 << "struct BinaryReturn<T1, T2, "
 	 << opdef.tag() << " > {"
 	 << endl
 	 << "  typedef bool Type_t;" << endl
@@ -295,7 +295,7 @@ public:
 // BinaryLeftOp
 //
 // This class prints the operator tag for binary operations that return
-// the left operand. Also generates the appropriate BinaryReturn 
+// the left operand. Also generates the appropriate BinaryReturn
 // specialization.
 //-----------------------------------------------------------------------------
 
@@ -468,7 +468,7 @@ public:
       ostr << "  PETE_EMPTY_CONSTRUCTORS(" << opdef.tag(false) << ")"
 	   << endl;
     }
-    ostr << "  template<class T1, class T2, " 
+    ostr << "  template<class T1, class T2, "
 	 << "class T3>" << endl
          << "  inline typename "
 	 << "TrinaryReturn<T1, T2, T3, "
@@ -519,6 +519,6 @@ private:
 // ACL:rcsinfo
 // ----------------------------------------------------------------------
 // $RCSfile: PrintOperators.h,v $   $Author: chicares $
-// $Revision: 1.2 $   $Date: 2008-09-06 10:41:16 $
+// $Revision: 1.3 $   $Date: 2008-09-07 17:38:20 $
 // ----------------------------------------------------------------------
 // ACL:rcsinfo
