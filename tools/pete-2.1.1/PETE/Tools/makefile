@@ -24,13 +24,13 @@ MakeOperators: MakeOperators.cpp ClassDescriptor.h Header.h \
 	MakeOperators.cpp Options.cpp PAssert.cpp PeteOps.cpp Join.cpp
 
 newpeteops: MakeOperators
-	MakeOperators --operators PeteOps.in --guard "" --insert-op \
+	./MakeOperators --operators PeteOps.in --guard "" --insert-op \
 	--lanl-boilerplate --o PeteOps.cpp
 
 peteheaders: OperatorTags.h
 
 OperatorTags.h: MakeOperators
-	MakeOperators --guard PETE_PETE_OPERATORTAGS_H --op-tags \
+	./MakeOperators --guard PETE_PETE_OPERATORTAGS_H --op-tags \
 	--operators PeteOps.in --lanl-boilerplate --o OperatorTags.h
 
 installheaders: OperatorTags.h
@@ -46,6 +46,6 @@ clean:
 # ACL:rcsinfo
 #  ----------------------------------------------------------------------
 #  $RCSfile: makefile,v $   $Author: chicares $
-#  $Revision: 1.3 $   $Date: 2008-09-06 00:19:22 $
+#  $Revision: 1.4 $   $Date: 2008-09-07 10:57:35 $
 #  ----------------------------------------------------------------------
 # ACL:rcsinfo
