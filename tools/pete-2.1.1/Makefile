@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile,v 1.1 2008-09-05 16:20:30 chicares Exp $
+# $Id: Makefile,v 1.2 2008-09-07 16:42:24 chicares Exp $
 
 ################################################################################
 
@@ -33,16 +33,16 @@ endif
 all: et_vector_test$(EXEEXT)
 
 et_vector_test$(EXEEXT): et_vector_test.cpp
-	g++ -I. $^ -o $@
+	$(CXX) -I. $^ -o $@
 
 et_vector_test.cpp: et_vector_operators.hpp
 
 et_vector_operators.hpp: et_vector.in
 	PETE/Tools/MakeOperators \
-	  --classes et_vector.in \
 	  --guard et_vector_operators_hpp \
+	  --classes et_vector.in \
 	  --assign-ops \
-	  --o $@ \
+	  --o $@
 
 clean:
 	rm -f et_vector_test$(EXEEXT)
