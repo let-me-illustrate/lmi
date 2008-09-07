@@ -32,7 +32,7 @@
 //////////////////////////////////////////////////////////////////////
 
 //-----------------------------------------------------------------------------
-// Overview: 
+// Overview:
 //
 // The classes defined here are print functors that will print definitions
 // of C++ functions for given operators and classes.  They have static member
@@ -101,7 +101,7 @@ public:
 	 << opdef.tag() << "," << endl
 	 << "  " << typenameString << "CreateLeaf<"
 	 << class1.inputClass(1) << " >::Leaf_t> >::Expression_t" << endl
-	 << "" << opdef.function() << "(const " << class1.inputClass(1) 
+	 << "" << opdef.function() << "(const " << class1.inputClass(1)
 	 << " & l)"
 	 << endl
 	 << "{" << endl
@@ -280,7 +280,7 @@ public:
       << "{" << endl
       << "  typedef typename CreateLeaf<RHS>::Leaf_t Leaf_t;" << endl
       << "  evaluate(lhs," << opdef.tag()
-      << "(),MakeReturn<Leaf_t>::make(CreateLeaf<RHS>::make(rhs)));" 
+      << "(),MakeReturn<Leaf_t>::make(CreateLeaf<RHS>::make(rhs)));"
       << endl
       << "  return lhs;" << endl
       << "}" << endl;
@@ -306,7 +306,7 @@ public:
       << "{" << endl
       << "  typedef typename CreateLeaf<RHS>::Leaf_t Leaf_t;" << endl
       << "  evaluate(lhs," << opdef.tag()
-      << "(),MakeReturn<Leaf_t>::make(CreateLeaf<RHS>::make(rhs)));" 
+      << "(),MakeReturn<Leaf_t>::make(CreateLeaf<RHS>::make(rhs)));"
       << endl
       << "  return lhs;" << endl
       << "}" << endl;
@@ -320,6 +320,6 @@ public:
 // ACL:rcsinfo
 // ----------------------------------------------------------------------
 // $RCSfile: PrintFunctions.h,v $   $Author: chicares $
-// $Revision: 1.1 $   $Date: 2008-09-04 13:55:31 $
+// $Revision: 1.2 $   $Date: 2008-09-07 17:38:20 $
 // ----------------------------------------------------------------------
 // ACL:rcsinfo

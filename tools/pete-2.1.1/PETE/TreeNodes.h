@@ -45,7 +45,7 @@ struct Reference
   // Export the type of thing we're referencing.
 
   typedef T Type_t;
-  
+
   //---------------------------------------------------------------------------
   // Reference can be created from a const ref.
 
@@ -76,7 +76,7 @@ struct Reference
 
   operator const T& () const { return reference_m; }
   operator T& () const { return const_cast<T&>(reference_m); }
-  
+
   const T &reference_m;
 };
 
@@ -133,7 +133,7 @@ public:
 
   //---------------------------------------------------------------------------
   // Constructor using just the child.
-  
+
   inline
   UnaryNode(const Child &c)
     : child_m(c) { }
@@ -174,7 +174,7 @@ public:
 
   template<class OtherChild, class Arg1, class Arg2>
   inline
-  UnaryNode(const UnaryNode<Op, OtherChild> &t, 
+  UnaryNode(const UnaryNode<Op, OtherChild> &t,
 	    const Arg1 &a1, const Arg2 &a2)
     : child_m(t.child(), a1, a2)
     { }
@@ -193,9 +193,9 @@ private:
 //
 // DESCRIPTION
 //   A tree node for representing binary expressions. The node holds a
-//   left child (of type Left), which is the type of the LHS expression 
-//   sub tree, a right child (of type Right), which is the type of the RHS 
-//   expression sub tree, and an operation (of type OP), which is applied 
+//   left child (of type Left), which is the type of the LHS expression
+//   sub tree, a right child (of type Right), which is the type of the RHS
+//   expression sub tree, and an operation (of type OP), which is applied
 //   to the two sub trees.
 //
 //-----------------------------------------------------------------------------
@@ -215,7 +215,7 @@ public:
 
   //---------------------------------------------------------------------------
   // Constructor using just the two children.
-  
+
   inline
   BinaryNode(const Left &l, const Right &r)
     : left_m(l), right_m(r)
@@ -248,7 +248,7 @@ public:
 
   template<class OtherLeft, class OtherRight, class Arg>
   inline
-  BinaryNode(const BinaryNode<Op, OtherLeft, OtherRight> &t, 
+  BinaryNode(const BinaryNode<Op, OtherLeft, OtherRight> &t,
 	     const Arg &a)
     : left_m(t.left(), a), right_m(t.right(), a)
   { }
@@ -261,9 +261,9 @@ public:
 
   template<class OtherLeft, class OtherRight, class Arg1, class Arg2>
   inline
-  BinaryNode(const BinaryNode<Op, OtherLeft, OtherRight> &t, 
+  BinaryNode(const BinaryNode<Op, OtherLeft, OtherRight> &t,
 	     const Arg1 &a1, const Arg2 &a2)
-    : left_m(t.left(), a1, a2), right_m(t.right(), a1, a2) 
+    : left_m(t.left(), a1, a2), right_m(t.right(), a1, a2)
   { }
 
 private:
@@ -271,7 +271,7 @@ private:
   //---------------------------------------------------------------------------
   // The operation and left/right sub expressions stored in this node of the
   // tree.
-  
+
   Left  left_m;
   Right right_m;
 
@@ -285,11 +285,11 @@ private:
 //
 // DESCRIPTION
 //   A tree node for representing trinary expressions. The node holds a
-//   Left child (of type Left), which is the type of the LHS expression 
+//   Left child (of type Left), which is the type of the LHS expression
 //   sub tree (typically a comparison operation); a Middle child (of type
 //   Middle), which is the type of the middle (true branch) expression
-//   sub tree; a Right child (of type Right), which is the type of 
-//   the expression (false branch) sub tree; and an operation (of type Op), 
+//   sub tree; a Right child (of type Right), which is the type of
+//   the expression (false branch) sub tree; and an operation (of type Op),
 //   which is applied to the three sub trees.
 //
 //-----------------------------------------------------------------------------
@@ -322,7 +322,7 @@ public:
   //---------------------------------------------------------------------------
   // Copy constructor.
 
-  inline 
+  inline
   TrinaryNode(const TrinaryNode<Op, Left, Middle, Right> &t)
     : left_m(t.left()), middle_m(t.middle()), right_m(t.right())
   { }
@@ -357,13 +357,13 @@ public:
   // Note: for this to work, a Left/Middle/Right must be constructable
   // from an OtherLeft/OtherMiddle/OtherRight and an Arg1 & Arg2.
 
-  template<class OtherLeft, class OtherMiddle, class OtherRight, 
+  template<class OtherLeft, class OtherMiddle, class OtherRight,
     class Arg1, class Arg2>
   inline
-  TrinaryNode(const TrinaryNode<Op, OtherLeft, OtherMiddle, OtherRight> &t, 
+  TrinaryNode(const TrinaryNode<Op, OtherLeft, OtherMiddle, OtherRight> &t,
 	      const Arg1 &a1, const Arg2 &a2)
-    : left_m(t.left(), a1, a2), 
-      middle_m(t.middle(), a1, a2) , right_m(t.right(), a1, a2) 
+    : left_m(t.left(), a1, a2),
+      middle_m(t.middle(), a1, a2) , right_m(t.right(), a1, a2)
   { }
 
 private:
@@ -382,6 +382,6 @@ private:
 // ACL:rcsinfo
 // ----------------------------------------------------------------------
 // $RCSfile: TreeNodes.h,v $   $Author: chicares $
-// $Revision: 1.1 $   $Date: 2008-09-04 13:55:20 $
+// $Revision: 1.2 $   $Date: 2008-09-07 17:38:20 $
 // ----------------------------------------------------------------------
 // ACL:rcsinfo

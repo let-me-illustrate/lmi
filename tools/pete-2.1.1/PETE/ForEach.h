@@ -86,8 +86,8 @@ struct ForEach<UnaryNode<Op, A>, FTag, CTag>
   typedef typename ForEach<A, FTag, CTag>::Type_t TypeA_t;
   typedef typename Combine1<TypeA_t, Op, CTag>::Type_t Type_t;
   inline static
-  Type_t apply(const UnaryNode<Op, A> &expr, const FTag &f, 
-    const CTag &c) 
+  Type_t apply(const UnaryNode<Op, A> &expr, const FTag &f,
+    const CTag &c)
   {
     return Combine1<TypeA_t, Op, CTag>::
       combine(ForEach<A, FTag, CTag>::apply(expr.child(), f, c), c);
@@ -102,7 +102,7 @@ struct ForEach<BinaryNode<Op, A, B>, FTag, CTag >
   typedef typename Combine2<TypeA_t, TypeB_t, Op, CTag>::Type_t Type_t;
   inline static
   Type_t apply(const BinaryNode<Op, A, B> &expr, const FTag &f,
-	       const CTag &c) 
+	       const CTag &c)
   {
     return Combine2<TypeA_t, TypeB_t, Op, CTag>::
       combine(ForEach<A, FTag, CTag>::apply(expr.left(), f, c),
@@ -117,11 +117,11 @@ struct ForEach<TrinaryNode<Op, A, B, C>, FTag, CTag >
   typedef typename ForEach<A, FTag, CTag>::Type_t TypeA_t;
   typedef typename ForEach<B, FTag, CTag>::Type_t TypeB_t;
   typedef typename ForEach<C, FTag, CTag>::Type_t TypeC_t;
-  typedef typename Combine3<TypeA_t, TypeB_t, TypeC_t, Op, CTag>::Type_t 
+  typedef typename Combine3<TypeA_t, TypeB_t, TypeC_t, Op, CTag>::Type_t
     Type_t;
   inline static
   Type_t apply(const TrinaryNode<Op, A, B, C> &expr, const FTag &f,
-	       const CTag &c) 
+	       const CTag &c)
   {
     return Combine3<TypeA_t, TypeB_t, TypeC_t, Op, CTag>::
       combine(ForEach<A, FTag, CTag>::apply(expr.left(), f, c),
@@ -140,8 +140,8 @@ struct ForEach<Expression<T>, FTag, CTag>
 {
   typedef typename ForEach<T, FTag, CTag>::Type_t Type_t;
   inline static
-  Type_t apply(const Expression<T> &expr, const FTag &f, 
-	       const CTag &c) 
+  Type_t apply(const Expression<T> &expr, const FTag &f,
+	       const CTag &c)
   {
     return ForEach<T, FTag, CTag>::apply(expr.expression(), f, c);
   }
@@ -156,8 +156,8 @@ struct ForEach<Reference<T>, FTag, CTag>
 {
   typedef typename ForEach<T, FTag, CTag>::Type_t Type_t;
   inline static
-  Type_t apply(const Reference<T> &ref, const FTag &f, 
-	       const CTag &c) 
+  Type_t apply(const Reference<T> &ref, const FTag &f,
+	       const CTag &c)
   {
     return ForEach<T, FTag, CTag>::apply(ref.reference(), f, c);
   }
@@ -168,6 +168,6 @@ struct ForEach<Reference<T>, FTag, CTag>
 // ACL:rcsinfo
 // ----------------------------------------------------------------------
 // $RCSfile: ForEach.h,v $   $Author: chicares $
-// $Revision: 1.1 $   $Date: 2008-09-04 13:55:18 $
+// $Revision: 1.2 $   $Date: 2008-09-07 17:38:20 $
 // ----------------------------------------------------------------------
 // ACL:rcsinfo

@@ -37,13 +37,13 @@ extern string joinWithComma(const string& a,const string& b);
 
 extern string joinWithComma(const string& a,const string& b,
 			  const string& c);
-  
+
 #endif // PETE_SRC_TOOLS_JOIN_H
 
 // ACL:rcsinfo
 // ----------------------------------------------------------------------
 // $RCSfile: Join.h,v $   $Author: chicares $
-// $Revision: 1.1 $   $Date: 2008-09-04 13:55:21 $
+// $Revision: 1.2 $   $Date: 2008-09-07 17:38:20 $
 // ----------------------------------------------------------------------
 // ACL:rcsinfo
 

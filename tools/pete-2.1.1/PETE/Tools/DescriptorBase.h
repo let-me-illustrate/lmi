@@ -37,15 +37,15 @@ public:
 
   DescriptorBase()
   { }
-  
+
   DescriptorBase(const DescriptorBase<N> &model)
   {
     copy(model.strs_m, model.strs_m + N, strs_m);
   }
 
   //---------------------------------------------------------------------------
-  // Trivial destructor. 
-  
+  // Trivial destructor.
+
   ~DescriptorBase() { }
 
   //---------------------------------------------------------------------------
@@ -59,17 +59,17 @@ public:
   }
 
   //---------------------------------------------------------------------------
-  // Copy-assignment operator: just copy members. 
+  // Copy-assignment operator: just copy members.
 
   DescriptorBase &operator=(const DescriptorBase &rhs)
   {
     copy(rhs.strs_m, rhs.strs_m + N, strs_m);
-    
+
     return *this;
   }
-  
+
   //---------------------------------------------------------------------------
-  // Return strings. 
+  // Return strings.
 
   const string &str(int n) const
   {
@@ -77,18 +77,18 @@ public:
 
     return strs_m[n];
   }
-  
+
 private:
 
   string strs_m[N];
 
 };
-  
+
 #endif // PETE_SRC_TOOLS_DESCRIPTORBASE_H
 
 // ACL:rcsinfo
 // ----------------------------------------------------------------------
 // $RCSfile: DescriptorBase.h,v $   $Author: chicares $
-// $Revision: 1.1 $   $Date: 2008-09-04 13:55:20 $
+// $Revision: 1.2 $   $Date: 2008-09-07 17:38:20 $
 // ----------------------------------------------------------------------
 // ACL:rcsinfo

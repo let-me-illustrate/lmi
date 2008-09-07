@@ -54,22 +54,22 @@ public:
   { }
 
   //---------------------------------------------------------------------------
-  // Trivial destructor. 
-  
+  // Trivial destructor.
+
   ~OperatorDescriptor() { }
 
   //---------------------------------------------------------------------------
-  // Copy-assignment operator: just copy members. 
+  // Copy-assignment operator: just copy members.
 
   OperatorDescriptor &operator=(const OperatorDescriptor &rhs)
   {
     DescriptorBase<4>::operator=(rhs);
-    
+
     return *this;
   }
-  
+
   //---------------------------------------------------------------------------
-  // Return strings/info. 
+  // Return strings/info.
 
   const string tag(bool full = true) const
   {
@@ -107,15 +107,15 @@ inline ostream &operator<<(ostream &os, const OperatorDescriptor &o)
   os << "FUNC = " << o.function() << endl;
   os << "EXPR = " << o.expression() << endl;
   os << "ARG  = " << o.argDef() << endl;
-  
+
   return os;
 }
-  
+
 #endif // PETE_SRC_TOOLS_OPERATORDESCRIPTOR_H
 
 // ACL:rcsinfo
 // ----------------------------------------------------------------------
 // $RCSfile: OperatorDescriptor.h,v $   $Author: chicares $
-// $Revision: 1.1 $   $Date: 2008-09-04 13:55:21 $
+// $Revision: 1.2 $   $Date: 2008-09-07 17:38:20 $
 // ----------------------------------------------------------------------
 // ACL:rcsinfo

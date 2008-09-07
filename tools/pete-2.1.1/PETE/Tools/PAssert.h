@@ -45,7 +45,7 @@
 // yet, on compilers other than KCC.  So, this class will keep with the
 // "what" method evidenced in the standard, but dispense with inheriting from
 // classes for which we don't have implementations...
-// 
+//
 //-----------------------------------------------------------------------------
 
 namespace Pete {
@@ -63,7 +63,7 @@ public:
   const char *what() const { return msg_m; }
   const char *file() const { return file_m; }
   int line() const { return line_m; }
-  
+
   template<class OS>
   void print(OS &os) const
   {
@@ -87,7 +87,7 @@ void toss_cookies(const char *msg, const char *file, int line ...);
 //
 // That is, it tests the condition at compile time and if it is false
 // you get a compile error that it can't find CTAssert<false>::test().
-// 
+//
 // If NOCTAssert is defined, CTAssert will revert to the equivalent of PAssert.
 // To turn off the test completely, define NOPAssert as well.
 //
@@ -134,7 +134,7 @@ template<> struct PeteCTAssert<true> { static void test() {} };
 //-----------------------------------------------------------------------------
 
 #if defined NOPAssert
-#define PAssert(c) 
+#define PAssert(c)
 #else
 #define PAssert(c) if (c) {} else Pete::toss_cookies(#c, __FILE__, __LINE__)
 #endif
@@ -187,6 +187,6 @@ template<> struct PeteCTAssert<true> { static void test() {} };
 // ACL:rcsinfo
 // ----------------------------------------------------------------------
 // $RCSfile: PAssert.h,v $   $Author: chicares $
-// $Revision: 1.1 $   $Date: 2008-09-04 13:55:22 $
+// $Revision: 1.2 $   $Date: 2008-09-07 17:38:20 $
 // ----------------------------------------------------------------------
 // ACL:rcsinfo

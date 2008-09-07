@@ -27,16 +27,16 @@
 //-----------------------------------------------------------------------------
 // Use stdio.h instead of cstdio. Justification:
 //
-//   o Intel doesn't put these in the std:: namespace, 
+//   o Intel doesn't put these in the std:: namespace,
 //     and writing varargs wrapper functions doesn't
-//     sound like fun. 
+//     sound like fun.
 //   o Ultimately we should switch to ostringstreams,
-//     but currently EGCS doesn't have these. 
+//     but currently EGCS doesn't have these.
 //   o Finally, this is a .cmpl.cpp files, so using stdio.h
 //     doesn't pollute the global namespace of users of PAssert.
 //
 // Note that stdio.h (and other C header files) is required, but
-// deprecated, by the '98 version of the standard. 
+// deprecated, by the '98 version of the standard.
 //-----------------------------------------------------------------------------
 
 #include <stdarg.h>
@@ -113,6 +113,6 @@ void toss_cookies(const char *msg, const char *file, int line ...)
 // ACL:rcsinfo
 // ----------------------------------------------------------------------
 // $RCSfile: PAssert.cpp,v $   $Author: chicares $
-// $Revision: 1.1 $   $Date: 2008-09-04 13:55:22 $
+// $Revision: 1.2 $   $Date: 2008-09-07 17:38:20 $
 // ----------------------------------------------------------------------
 // ACL:rcsinfo
