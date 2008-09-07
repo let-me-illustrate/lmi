@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.6 2008-09-07 16:31:28 chicares Exp $
+// $Id: ChangeLog,v 1.7 2008-09-07 16:42:24 chicares Exp $
 
 MAINTENANCE
 
@@ -131,4 +131,9 @@ Do not assume that '.' is on the $PATH.
 
   PETE/Tools/MakeOperators.cpp
 Automatically include <math.h> in '--op-tags' output.
+
+20080907T1642Z <gchicares@sbcglobal.net>
+
+  Makefile
+Don't necessarily require g++.
 
