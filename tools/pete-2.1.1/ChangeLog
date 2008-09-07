@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.7 2008-09-07 16:42:24 chicares Exp $
+// $Id: ChangeLog,v 1.8 2008-09-07 17:38:21 chicares Exp $
 
 MAINTENANCE
 
@@ -136,4 +136,29 @@ Automatically include <math.h> in '--op-tags' output.
 
   Makefile
 Don't necessarily require g++.
+
+20080907T1738Z <gchicares@sbcglobal.net>
+
+  PETE/Combiners.h
+  PETE/ForEach.h
+  PETE/Functors.h
+  PETE/PETE.h
+  PETE/Scalar.h
+  PETE/TreeNodes.h
+  PETE/TypeComputations.h
+  PETE/Tools/ClassDescriptor.h
+  PETE/Tools/DescriptorBase.h
+  PETE/Tools/Header.h
+  PETE/Tools/Join.h
+  PETE/Tools/MakeOperators.cpp
+  PETE/Tools/OperatorDescriptor.h
+  PETE/Tools/PAssert.cpp
+  PETE/Tools/PAssert.h
+  PETE/Tools/Parser.h
+  PETE/Tools/PrintFunctions.h
+  PETE/Tools/PrintList.h
+  PETE/Tools/PrintOperators.h
+  PETE/Tools/README
+Remove trailing blanks once and for all. I have my editor remove them,
+so doing this all at once prevents piecemeal whitespace changes.
 

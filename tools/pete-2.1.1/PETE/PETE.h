@@ -22,9 +22,9 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// This is the header file you should include if you want to use PETE, the 
+// This is the header file you should include if you want to use PETE, the
 // Portable Expression Template Engine. You don't need add any member
-// functions to make your container class PETE-aware, but you will need to 
+// functions to make your container class PETE-aware, but you will need to
 // create some traits classes and use the MakeOperator tool to create
 // operator and math functions.
 //
@@ -77,7 +77,7 @@
 // ACL:rcsinfo
 // ----------------------------------------------------------------------
 // $RCSfile: PETE.h,v $   $Author: chicares $
-// $Revision: 1.1 $   $Date: 2008-09-04 13:55:19 $
+// $Revision: 1.2 $   $Date: 2008-09-07 17:38:20 $
 // ----------------------------------------------------------------------
 // ACL:rcsinfo
 

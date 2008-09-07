@@ -8,7 +8,7 @@ of the POOMA 2.4.0 distribution.
  *                       MakeOperators tool                        *
  *                                                                 *
  *******************************************************************/
-                            
+
 This directory contains the MakeOperators tool that generates
 operators and functions that return expression template objects.
 See the man page in html/makeoperators.html for a description
