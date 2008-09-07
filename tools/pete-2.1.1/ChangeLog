@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.5 2008-09-07 10:57:35 chicares Exp $
+// $Id: ChangeLog,v 1.6 2008-09-07 16:31:28 chicares Exp $
 
 MAINTENANCE
 
@@ -126,4 +126,9 @@ and <math.h> declares acos(), whereas <cmath> declares std::acos().
 
   PETE/Tools/makefile
 Do not assume that '.' is on the $PATH.
+
+20080907T1631Z <gchicares@sbcglobal.net>
+
+  PETE/Tools/MakeOperators.cpp
+Automatically include <math.h> in '--op-tags' output.
 
