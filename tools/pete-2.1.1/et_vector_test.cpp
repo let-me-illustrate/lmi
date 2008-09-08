@@ -19,13 +19,22 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: et_vector_test.cpp,v 1.3 2008-09-06 10:41:16 chicares Exp $
+// $Id: et_vector_test.cpp,v 1.4 2008-09-08 12:59:26 chicares Exp $
 
 #include "et_vector.hpp"
 
 #include <algorithm>
+#include <functional>
 #include <iostream>
 #include <iterator>
+
+template <typename T>
+void show_vector(std::vector<T> const& v)
+{
+    std::ostream_iterator<double> osi(std::cout, " ");
+    std::copy(v.begin(), v.end(), osi);
+    std::cout << std::endl;
+}
 
 int main()
 {
@@ -37,13 +46,29 @@ int main()
 
     v0 *= v0;
 
-    std::ostream_iterator<double> osi(std::cout, "\n");
-    std::copy(v0.begin(), v0.end(), osi);
+    show_vector(v0);
 
     // Test peteCast().
     std::vector<int> v1(v0.size());
     peteCast(int(0), v0);
     assign(v1, peteCast(int(0), v0));
-    std::copy(v1.begin(), v1.end(), osi);
+    show_vector(v1);
+
+    // Test std::unary_function.
+    assign(v0, apply_unary(std::negate<double>(), v0));
+    show_vector(v0);
+
+    // Test std::binary_function.
+    assign(v0, apply_binary(std::multiplies<double>(), -1.0, v0));
+    show_vector(v0);
+    assign(v0, sqrt(v0));
+    show_vector(v0);
+    assign(v0, apply_binary(std::multiplies<double>(), v0, -1.0));
+    show_vector(v0);
+    assign(v0, apply_binary(std::multiplies<double>(), v0, v0));
+    show_vector(v0);
+    assign(v0, apply_binary(std::plus<double>(), v0, 100.0));
+    assign(v0, apply_binary(std::plus<double>(), 10000.0, v0));
+    show_vector(v0);
 }
 

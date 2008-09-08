@@ -205,6 +205,11 @@ void peteOps(map<string,vector<OperatorDescriptor> > &m)
                                  "atan2",
                                  "return (atan2(a,b));",
                                  ""));
+  m["binaryStdOps"].push_back(
+              OperatorDescriptor("ApplyBinary",
+                                 "apply_binary",
+                                 "return T1()(a,b);",
+                                 ""));
   m["trinaryOps"].push_back(
               OperatorDescriptor("FnWhere",
                                  "where",
@@ -320,11 +325,16 @@ void peteOps(map<string,vector<OperatorDescriptor> > &m)
                                  "PETE_identity",
                                  "return (a);",
                                  ""));
+  m["unaryStdOps"].push_back(
+              OperatorDescriptor("ApplyUnary",
+                                 "apply_unary",
+                                 "return T1()(a);",
+                                 ""));
 }
 
 // ACL:rcsinfo
 // ----------------------------------------------------------------------
 // $RCSfile: PeteOps.cpp,v $   $Author: chicares $
-// $Revision: 1.1 $   $Date: 2008-09-04 13:55:30 $
+// $Revision: 1.2 $   $Date: 2008-09-08 12:59:25 $
 // ----------------------------------------------------------------------
 // ACL:rcsinfo
