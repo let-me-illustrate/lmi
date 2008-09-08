@@ -21,7 +21,9 @@
 // Class:
 // UnaryFunction
 // UnaryCastFunction
+// UnaryStdFunction
 // BinaryFunction
+// BinaryStdFunction
 // TrinaryFunction
 // AssignFunction
 //-----------------------------------------------------------------------------
@@ -95,7 +97,7 @@ public:
     ostr << endl;
     if (temp)
     {
-      ostr << "template<" << args <<">" << endl;
+      ostr << "template<" << args << ">" << endl;
     }
     ostr << "inline " << typenameString << "MakeReturn<UnaryNode<"
 	 << opdef.tag() << "," << endl
@@ -127,7 +129,38 @@ public:
   {
     ostr << endl
 	 << "template<" << joinWithComma("class T1",class1.argDef(2))
-	 <<">" << endl
+	 << ">" << endl
+	 << "inline typename MakeReturn<UnaryNode<" << opdef.tag() << "<T1>,"
+	 << endl
+	 << "  typename CreateLeaf<" << class1.inputClass(2)
+	 << " >::Leaf_t> >::Expression_t" << endl
+	 << "" << opdef.function() << "(const T1&, const "
+	 << class1.inputClass(2) << " & l)" << endl
+	 << "{" << endl
+	 << "  typedef UnaryNode<" << opdef.tag() << "<T1>," << endl
+	 << "    typename CreateLeaf<" << class1.inputClass(2)
+	 << " >::Leaf_t> Tree_t;" << endl
+	 << "  return MakeReturn<Tree_t>::make(Tree_t(" << endl
+	 << "    CreateLeaf<"
+	 << class1.inputClass(2) << " >::make(l)));" << endl
+	 << "}" << endl;
+  }
+};
+
+//-----------------------------------------------------------------------------
+// This happens to be the same as UnaryCastFunction, for now at least.
+//-----------------------------------------------------------------------------
+
+class UnaryStdFunction
+{
+public:
+  template<class OSTR>
+  void print(OSTR& ostr,const OperatorDescriptor& opdef,
+	     const ClassDescriptor& class1) const
+  {
+    ostr << endl
+	 << "template<" << joinWithComma("class T1",class1.argDef(2))
+	 << ">" << endl
 	 << "inline typename MakeReturn<UnaryNode<" << opdef.tag() << "<T1>,"
 	 << endl
 	 << "  typename CreateLeaf<" << class1.inputClass(2)
@@ -163,7 +196,7 @@ public:
     ostr << endl;
     if (temp)
     {
-      ostr << "template<" << args <<">" << endl;
+      ostr << "template<" << args << ">" << endl;
     }
     ostr << "inline " << typenameString << "MakeReturn<BinaryNode<"
 	 << opdef.tag() << "," << endl
@@ -193,6 +226,46 @@ public:
 };
 
 //-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
+class BinaryStdFunction
+{
+public:
+  template<class OSTR>
+  void print(OSTR& ostr,const OperatorDescriptor& opdef,
+	     const ClassDescriptor& class1,
+	     const ClassDescriptor& class2) const
+  {
+    ostr << endl
+	 << "template<"
+	 << joinWithComma("class T1",class1.argDef(2),class2.argDef(3))
+	 << ">" << endl
+	 << "inline typename MakeReturn<BinaryNode<"
+	 << opdef.tag() << "<T1>," << endl
+	 << "  typename CreateLeaf<" << class1.inputClass(2)
+	 << " >::Leaf_t," << endl
+	 << "  typename CreateLeaf<" << class2.inputClass(3)
+	 << " >::Leaf_t> >::Expression_t" << endl
+	 << "" << opdef.function()
+	 << "(const T1&,"
+	 << " const " << class1.inputClass(2) << " & l,"
+	 << " const " << class2.inputClass(3) << " & r)" << endl
+	 << "{" << endl
+	 << "  typedef BinaryNode<" << opdef.tag() << "<T1>," << endl
+	 << "    typename CreateLeaf<" << class1.inputClass(2)
+	 << " >::Leaf_t," << endl
+	 << "    typename CreateLeaf<" << class2.inputClass(3)
+	 << " >::Leaf_t> Tree_t;" << endl
+	 << "  return MakeReturn<Tree_t>::make(Tree_t(" << endl
+	 << "    CreateLeaf<" << class1.inputClass(2) << " >::make(l),"
+	 << endl
+	 << "    CreateLeaf<" << class2.inputClass(3) << " >::make(r)));"
+	 << endl
+	 << "}" << endl;
+  }
+};
+
+//-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 
@@ -214,7 +287,7 @@ public:
     ostr << endl;
     if (temp)
     {
-      ostr << "template<" << args <<">" << endl;
+      ostr << "template<" << args << ">" << endl;
     }
     ostr << "inline " << typenameString << "MakeReturn<TrinaryNode<"
 	 << opdef.tag() << "," << endl
@@ -320,6 +393,6 @@ public:
 // ACL:rcsinfo
 // ----------------------------------------------------------------------
 // $RCSfile: PrintFunctions.h,v $   $Author: chicares $
-// $Revision: 1.2 $   $Date: 2008-09-07 17:38:20 $
+// $Revision: 1.3 $   $Date: 2008-09-08 12:59:25 $
 // ----------------------------------------------------------------------
 // ACL:rcsinfo

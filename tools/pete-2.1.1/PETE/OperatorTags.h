@@ -34,6 +34,7 @@
 
 #include <math.h>
 
+
 struct FnArcCos
 {
   PETE_EMPTY_CONSTRUCTORS(FnArcCos)
@@ -285,6 +286,23 @@ struct OpCast
 template<class T1, class T2>
 struct UnaryReturn<T2, OpCast<T1> > {
   typedef T1 Type_t;
+};
+
+template <class T1>
+struct ApplyUnary
+{
+  PETE_EMPTY_CONSTRUCTORS_TEMPLATE(ApplyUnary, T1)
+  template<class T2>
+  inline typename UnaryReturn<T2, ApplyUnary<T1> >::Type_t
+  operator()(const T2 &a) const
+  {
+    return T1()(a);
+  }
+};
+
+template<class T1, class T2>
+struct UnaryReturn<T2, ApplyUnary<T1> > {
+  typedef typename T1::result_type Type_t;
 };
 
 struct OpAdd
@@ -579,6 +597,23 @@ struct BinaryReturn<T1, T2, OpRightShift > {
   typedef T1 Type_t;
 };
 
+template <class T1>
+struct ApplyBinary
+{
+  PETE_EMPTY_CONSTRUCTORS_TEMPLATE(ApplyBinary, T1)
+  template<class T2, class T3>
+  inline typename BinaryReturn<T2, T3, ApplyBinary<T1> >::Type_t
+  operator()(const T2 &a, const T3 &b) const
+  {
+    return T1()(a,b);
+  }
+};
+
+template<class T1, class T2, class T3>
+struct BinaryReturn<T2, T3, ApplyBinary<T1> > {
+  typedef typename T1::result_type Type_t;
+};
+
 struct OpAddAssign
 {
   PETE_EMPTY_CONSTRUCTORS(OpAddAssign)
@@ -772,6 +807,6 @@ struct FnWhere
 // ACL:rcsinfo
 // ----------------------------------------------------------------------
 // $RCSfile: OperatorTags.h,v $   $Author: chicares $
-// $Revision: 1.3 $   $Date: 2008-09-06 13:47:49 $
+// $Revision: 1.4 $   $Date: 2008-09-08 12:59:25 $
 // ----------------------------------------------------------------------
 // ACL:rcsinfo

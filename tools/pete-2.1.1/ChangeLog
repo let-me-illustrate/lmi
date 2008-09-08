@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.10 2008-09-08 12:48:43 chicares Exp $
+// $Id: ChangeLog,v 1.11 2008-09-08 12:59:26 chicares Exp $
 
 MAINTENANCE
 
@@ -177,4 +177,19 @@ that the macro has been implemented.
   PETE/Tools/MakeOperators.cpp
   PETE/Tools/Parser.h
 Remove trailing tab characters. Cf. 20080907T1738Z changes.
+
+20080908T1259Z <gchicares@sbcglobal.net>
+
+  PETE/OperatorTags.h
+  PETE/Tools/MakeOperators.cpp
+  PETE/Tools/PeteOps.cpp
+  PETE/Tools/PeteOps.in
+  PETE/Tools/PrintFunctions.h
+  PETE/Tools/PrintOperators.h
+  et_vector_test.cpp
+Extend PETE to support standard function objects [C++98 20.3.1].
+Regenerate files as follows:
+  'make -f makefile newpeteops'     --> 'PETE/Tools/PeteOps.cpp'
+  'make -f makefile installheaders' --> 'PETE/OperatorTags.h'
+then patch them manually to restore the FreePOOMA notices.
 

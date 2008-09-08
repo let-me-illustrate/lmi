@@ -92,6 +92,12 @@ unaryCastOps
   FUNCTION = "peteCast"
   EXPR = "return T1(a);"
 
+unaryStdOps
+-----
+  TAG = "ApplyUnary"
+  FUNCTION = "apply_unary"
+  EXPR = "return T1()(a);"
+
 binaryOps
 -----
   TAG = "OpAdd"
@@ -185,6 +191,12 @@ binaryLeftOps
   TAG = "OpRightShift"
   FUNCTION = "operator>>"
   EXPR = "return (a >> b);"
+
+binaryStdOps
+-----
+  TAG = "ApplyBinary"
+  FUNCTION = "apply_binary"
+  EXPR = "return T1()(a,b);"
 
 assignOp
 -----
