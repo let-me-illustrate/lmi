@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.8 2008-09-07 17:38:21 chicares Exp $
+// $Id: ChangeLog,v 1.9 2008-09-08 10:13:20 chicares Exp $
 
 MAINTENANCE
 
@@ -161,4 +161,14 @@ Don't necessarily require g++.
   PETE/Tools/README
 Remove trailing blanks once and for all. I have my editor remove them,
 so doing this all at once prevents piecemeal whitespace changes.
+
+20080908T1013Z <gchicares@sbcglobal.net>
+
+  PETE/Tools/MakeOperators.cpp
+Remove a vestige of an obsolete idea. Binary "left" operations (i.e.,
+bitwise shifts '<<' and '>>') were at first treated the same as other
+binary operations, but later distinguished upon introduction of macro
+PETE_ALLOW_SCALAR_SHIFT. Two lines of the original non-distinguising
+implementation were commented out; it is correct to remove them now
+that the macro has been implemented.
 
