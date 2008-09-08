@@ -175,6 +175,7 @@ int main(int argc, char *argv[])
        back_inserter(unaryOps));
 
   vector<OperatorDescriptor> &unaryCastOps = mOps["unaryCastOps"];
+  vector<OperatorDescriptor> unaryStdOps(mOps["unaryStdOps"]);
 
   // Create vectors for binary operators.
 
@@ -185,6 +186,7 @@ int main(int argc, char *argv[])
        back_inserter(binaryOps));
 
   vector<OperatorDescriptor> binaryLeftOps(mOps["binaryLeftOps"]);
+  vector<OperatorDescriptor> binaryStdOps(mOps["binaryStdOps"]);
 
   // Create reference for trinary operators.
 
@@ -312,10 +314,12 @@ int main(int argc, char *argv[])
     printList(*ofl,UnaryBoolOp(),       inputOps["unaryBoolOps"]);
     printList(*ofl,UnaryCastOp(),       inputOps["unaryCastOps"]);
     printList(*ofl,UnarySpecialOp(),    inputOps["unarySpecialOps"]);
+    printList(*ofl,UnaryStdOp(),        inputOps["unaryStdOps"]);
     printList(*ofl,BinaryOp(),          inputOps["binaryOps"]);
     printList(*ofl,BinaryBoolOp(),      inputOps["binaryBoolOps"]);
     printList(*ofl,BinaryLeftOp(),      inputOps["binaryLeftOps"]);
     printList(*ofl,BinarySpecialOp(),   inputOps["binarySpecialOps"]);
+    printList(*ofl,BinaryStdOp(),       inputOps["binaryStdOps"]);
     printList(*ofl,BinaryAssignOp(),    inputOps["binaryAssignOps"]);
     printList(*ofl,BinaryAssignOp(),    inputOps["assignOp"]);
     printList(*ofl,BinaryAssignBoolOp(),inputOps["binaryAssignBoolOps"]);
@@ -332,28 +336,38 @@ int main(int argc, char *argv[])
       {
 	printList(*ofl,UnaryFunction(),unaryOps,userClasses);
 	printList(*ofl,UnaryCastFunction(),unaryCastOps,userClasses);
+	printList(*ofl,UnaryStdFunction(),unaryStdOps,userClasses);
 	printList(*ofl,BinaryFunction(),binaryOps,userClasses,userClasses);
 	printList(*ofl,BinaryFunction(),binaryLeftOps,userClasses,userClasses);
+	printList(*ofl,BinaryStdFunction(),binaryStdOps,userClasses,userClasses);
 	printList(*ofl,BinaryFunction(),binaryOps,
 		  userClasses, expressionClass);
 	printList(*ofl,BinaryFunction(),binaryLeftOps,
+		  userClasses, expressionClass);
+	printList(*ofl,BinaryStdFunction(),binaryStdOps,
 		  userClasses, expressionClass);
 	printList(*ofl,BinaryFunction(),binaryOps,
 		  expressionClass, userClasses);
 	printList(*ofl,BinaryFunction(),binaryLeftOps,
+		  expressionClass, userClasses);
+	printList(*ofl,BinaryStdFunction(),binaryStdOps,
 		  expressionClass, userClasses);
       }
       else
       {
 	printList(*ofl,UnaryFunction(),unaryOps,extraClasses);
 	printList(*ofl,UnaryCastFunction(),unaryCastOps,extraClasses);
+	printList(*ofl,UnaryStdFunction(),unaryStdOps,extraClasses);
 	printList(*ofl,BinaryFunction(),binaryOps,extraClasses,extraClasses);
 	printList(*ofl,BinaryFunction(),binaryLeftOps,extraClasses,
 		  extraClasses);
+	printList(*ofl,BinaryStdFunction(),binaryStdOps,extraClasses,extraClasses);
 	printList(*ofl,BinaryFunction(),binaryOps,classes,extraClasses);
 	printList(*ofl,BinaryFunction(),binaryLeftOps,classes,extraClasses);
+	printList(*ofl,BinaryStdFunction(),binaryStdOps,classes,extraClasses);
 	printList(*ofl,BinaryFunction(),binaryOps,extraClasses,classes);
 	printList(*ofl,BinaryFunction(),binaryLeftOps,extraClasses,classes);
+	printList(*ofl,BinaryStdFunction(),binaryStdOps,extraClasses,classes);
       }
     }
 
@@ -361,13 +375,17 @@ int main(int argc, char *argv[])
     {
       printList(*ofl,BinaryFunction(),binaryOps,userClasses,scalars);
       printList(*ofl,BinaryFunction(),binaryLeftOps,userClasses,scalars);
+      printList(*ofl,BinaryStdFunction(),binaryStdOps,userClasses,scalars);
       printList(*ofl,BinaryFunction(),binaryOps,scalars,userClasses);
+      printList(*ofl,BinaryStdFunction(),binaryStdOps,scalars,userClasses);
     }
     else
     {
       printList(*ofl,BinaryFunction(),binaryOps,extraClasses,scalars);
       printList(*ofl,BinaryFunction(),binaryLeftOps,extraClasses,scalars);
+      printList(*ofl,BinaryStdFunction(),binaryStdOps,extraClasses,scalars);
       printList(*ofl,BinaryFunction(),binaryOps,scalars,extraClasses);
+      printList(*ofl,BinaryStdFunction(),binaryStdOps,scalars,extraClasses);
     }
 
     // The following flag covers the common situation where you define
@@ -429,9 +447,12 @@ int main(int argc, char *argv[])
 	  {
 	    printList(*ofl,UnaryFunction(),unaryOps,expressionClass);
 	    printList(*ofl,UnaryCastFunction(),unaryCastOps,expressionClass);
+	    printList(*ofl,UnaryStdFunction(),unaryStdOps,expressionClass);
 	    printList(*ofl,BinaryFunction(),binaryOps,
 		      expressionClass, expressionClass);
 	    printList(*ofl,BinaryFunction(),binaryLeftOps,
+		      expressionClass, expressionClass);
+	    printList(*ofl,BinaryStdFunction(),binaryStdOps,
 		      expressionClass, expressionClass);
 	  }
 	}
@@ -441,7 +462,9 @@ int main(int argc, char *argv[])
 	  printList(*ofl,BinaryFunction(),binaryOps,expressionClass,scalars);
 	  printList(*ofl,BinaryFunction(),binaryLeftOps,
 		    expressionClass, scalars);
+	  printList(*ofl,BinaryStdFunction(),binaryStdOps,expressionClass,scalars);
 	  printList(*ofl,BinaryFunction(),binaryOps,scalars,expressionClass);
+	  printList(*ofl,BinaryStdFunction(),binaryStdOps,scalars,expressionClass);
 	}
 
 	if (shiftGuard)
@@ -498,6 +521,6 @@ int main(int argc, char *argv[])
 // ACL:rcsinfo
 // ----------------------------------------------------------------------
 // $RCSfile: MakeOperators.cpp,v $   $Author: chicares $
-// $Revision: 1.5 $   $Date: 2008-09-08 12:48:43 $
+// $Revision: 1.6 $   $Date: 2008-09-08 12:59:25 $
 // ----------------------------------------------------------------------
 // ACL:rcsinfo

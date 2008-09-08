@@ -23,10 +23,12 @@
 // UnarySpecialOp
 // UnaryBoolOp
 // UnaryCastOp
+// UnaryStdOp
 // BinaryOp
 // BinarySpecialOp
 // BinaryBoolOp
 // BinaryLeftOp
+// BinaryStdOp
 // BinaryAssignOp
 // BinaryAssignBoolOp
 // TrinaryOp
@@ -199,6 +201,45 @@ public:
 };
 
 //-----------------------------------------------------------------------------
+// UnaryStdOp
+//
+// This class prints the operator tag for std::unary_function.
+//-----------------------------------------------------------------------------
+
+class UnaryStdOp
+{
+public:
+  template<class OSTR,class OPDEF>
+  void print(OSTR& ostr,const OPDEF& opdef) const
+  {
+    // Print Tag:
+
+    ostr << endl
+	 << "template <class T1>" << endl
+	 << "struct " << opdef.tag() << "" << endl
+	 << "{" << endl
+	 << "  PETE_EMPTY_CONSTRUCTORS_TEMPLATE("
+	 << opdef.tag(false) << ", T1)" << endl
+	 << "  template<class T2>" << endl
+	 << "  inline typename UnaryReturn<T2, "
+	 << opdef.tag() << "<T1> >::Type_t" << endl
+	 << "  operator()(const T2 &a) const" << endl
+	 << "  {" << endl
+	 << "    " << opdef.expression() << endl
+	 << "  }" << endl
+	 << "};" << endl;
+
+    // Print UnaryReturn specialization:
+
+    ostr << endl << "template<class T1, class T2>" << endl
+	 << "struct UnaryReturn<T2, " << opdef.tag() << "<T1> > {"
+	 << endl
+	 << "  typedef typename T1::result_type Type_t;" << endl
+	 << "};" << endl;
+  }
+};
+
+//-----------------------------------------------------------------------------
 // BinaryOp
 //
 // This class prints the operator tag for binary operations that compute
@@ -321,6 +362,45 @@ public:
          << "  typedef T1 Type_t;" << endl
          << "};" << endl;
    }
+};
+
+//-----------------------------------------------------------------------------
+// BinaryStdOp
+//
+// This class prints the operator tag for std::binary_function.
+//-----------------------------------------------------------------------------
+
+class BinaryStdOp
+{
+public:
+  template<class OSTR,class OPDEF>
+  void print(OSTR& ostr,const OPDEF& opdef) const
+  {
+    // Print Tag:
+
+    ostr << endl
+	 << "template <class T1>" << endl
+	 << "struct " << opdef.tag() << "" << endl
+	 << "{" << endl
+	 << "  PETE_EMPTY_CONSTRUCTORS_TEMPLATE("
+	 << opdef.tag(false) << ", T1)" << endl
+	 << "  template<class T2, class T3>" << endl
+	 << "  inline typename BinaryReturn<T2, T3, "
+	 << opdef.tag() << "<T1> >::Type_t" << endl
+	 << "  operator()(const T2 &a, const T3 &b) const" << endl
+	 << "  {" << endl
+	 << "    " << opdef.expression() << endl
+	 << "  }" << endl
+	 << "};" << endl;
+
+    // Print BinaryReturn specialization:
+
+    ostr << endl << "template<class T1, class T2, class T3>" << endl
+	 << "struct BinaryReturn<T2, T3, " << opdef.tag() << "<T1> > {"
+	 << endl
+	 << "  typedef typename T1::result_type Type_t;" << endl
+	 << "};" << endl;
+  }
 };
 
 //-----------------------------------------------------------------------------
@@ -519,6 +599,6 @@ private:
 // ACL:rcsinfo
 // ----------------------------------------------------------------------
 // $RCSfile: PrintOperators.h,v $   $Author: chicares $
-// $Revision: 1.3 $   $Date: 2008-09-07 17:38:20 $
+// $Revision: 1.4 $   $Date: 2008-09-08 12:59:25 $
 // ----------------------------------------------------------------------
 // ACL:rcsinfo
