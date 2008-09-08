@@ -435,7 +435,7 @@ int main(int argc, char *argv[])
 		      expressionClass, expressionClass);
 	  }
 	}
-	
+
 	if (!justExtraClasses)
 	{
 	  printList(*ofl,BinaryFunction(),binaryOps,expressionClass,scalars);
@@ -443,7 +443,7 @@ int main(int argc, char *argv[])
 		    expressionClass, scalars);
 	  printList(*ofl,BinaryFunction(),binaryOps,scalars,expressionClass);
 	}
-	
+
 	if (shiftGuard)
 	{
 	  *ofl << "#ifdef PETE_ALLOW_SCALAR_SHIFT" << endl;
@@ -498,6 +498,6 @@ int main(int argc, char *argv[])
 // ACL:rcsinfo
 // ----------------------------------------------------------------------
 // $RCSfile: MakeOperators.cpp,v $   $Author: chicares $
-// $Revision: 1.4 $   $Date: 2008-09-08 10:13:20 $
+// $Revision: 1.5 $   $Date: 2008-09-08 12:48:43 $
 // ----------------------------------------------------------------------
 // ACL:rcsinfo

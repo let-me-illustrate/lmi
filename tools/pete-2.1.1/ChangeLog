@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.9 2008-09-08 10:13:20 chicares Exp $
+// $Id: ChangeLog,v 1.10 2008-09-08 12:48:43 chicares Exp $
 
 MAINTENANCE
 
@@ -171,4 +171,10 @@ binary operations, but later distinguished upon introduction of macro
 PETE_ALLOW_SCALAR_SHIFT. Two lines of the original non-distinguising
 implementation were commented out; it is correct to remove them now
 that the macro has been implemented.
+
+20080908T1248Z <gchicares@sbcglobal.net>
+
+  PETE/Tools/MakeOperators.cpp
+  PETE/Tools/Parser.h
+Remove trailing tab characters. Cf. 20080907T1738Z changes.
 
