@@ -285,9 +285,9 @@ public:
 			break;
 		      }
 		  }
-		
+
 		// If it isn't a keyword, it is a group name.
-		
+
 		if (!foundKeyword)
 		  {
 		    tok_m.set(pos, pos_m - pos, GROUP, line_m);
@@ -472,7 +472,7 @@ private:
 // ACL:rcsinfo
 // ----------------------------------------------------------------------
 // $RCSfile: Parser.h,v $   $Author: chicares $
-// $Revision: 1.2 $   $Date: 2008-09-07 17:38:20 $
+// $Revision: 1.3 $   $Date: 2008-09-08 12:48:43 $
 // ----------------------------------------------------------------------
 // ACL:rcsinfo
 
