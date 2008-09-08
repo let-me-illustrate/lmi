@@ -181,8 +181,6 @@ int main(int argc, char *argv[])
   vector<OperatorDescriptor> binaryOps(mOps["binaryOps"]);
   copy(mOps["binaryBoolOps"].begin(), mOps["binaryBoolOps"].end(),
        back_inserter(binaryOps));
-  //  copy(mOps["binaryLeftOps"].begin(), mOps["binaryLeftOps"].end(),
-  //       back_inserter(binaryOps));
   copy(mOps["binarySpecialOps"].begin(), mOps["binarySpecialOps"].end(),
        back_inserter(binaryOps));
 
@@ -500,6 +498,6 @@ int main(int argc, char *argv[])
 // ACL:rcsinfo
 // ----------------------------------------------------------------------
 // $RCSfile: MakeOperators.cpp,v $   $Author: chicares $
-// $Revision: 1.3 $   $Date: 2008-09-07 17:38:20 $
+// $Revision: 1.4 $   $Date: 2008-09-08 10:13:20 $
 // ----------------------------------------------------------------------
 // ACL:rcsinfo
