@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.14 2008-09-09 03:15:22 chicares Exp $
+// $Id: ChangeLog,v 1.15 2008-09-09 03:27:13 chicares Exp $
 
 MAINTENANCE
 
@@ -207,4 +207,9 @@ Make PETE work with 'g++ -Wundef'.
 
   PETE/Tools/makefile
 Respect $(EXEEXT).
+
+20080909T0327Z <gchicares@sbcglobal.net>
+
+  Makefile
+Rebuild PETE by default: robust, and fast enough.
 
