@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile,v 1.2 2008-09-07 16:42:24 chicares Exp $
+# $Id: Makefile,v 1.3 2008-09-09 03:27:13 chicares Exp $
 
 ################################################################################
 
@@ -32,7 +32,15 @@ endif
 
 all: et_vector_test$(EXEEXT)
 
+submake_options := \
+  --directory=PETE/Tools/ \
+  --file=makefile \
+  EXEEXT='$(EXEEXT)' \
+
 et_vector_test$(EXEEXT): et_vector_test.cpp
+	$(MAKE) $(submake_options) clean
+	$(MAKE) $(submake_options) newpeteops
+	$(MAKE) $(submake_options) installheaders
 	$(CXX) -I. $^ -o $@
 
 et_vector_test.cpp: et_vector_operators.hpp
