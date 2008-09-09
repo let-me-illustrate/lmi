@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.13 2008-09-09 02:47:16 chicares Exp $
+// $Id: ChangeLog,v 1.14 2008-09-09 03:15:22 chicares Exp $
 
 MAINTENANCE
 
@@ -202,4 +202,9 @@ Commit generated operators.
 
   PETE/PETE.h
 Make PETE work with 'g++ -Wundef'.
+
+20080909T0315Z <gchicares@sbcglobal.net>
+
+  PETE/Tools/makefile
+Respect $(EXEEXT).
 
