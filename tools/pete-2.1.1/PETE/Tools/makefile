@@ -14,30 +14,30 @@
 # You should have received a copy of the Expat license along with
 # FreePOOMA; see the file LICENSE.
 
-default:: MakeOperators
+default:: MakeOperators$(EXEEXT)
 
-MakeOperators: MakeOperators.cpp ClassDescriptor.h Header.h \
+MakeOperators$(EXEEXT): MakeOperators.cpp ClassDescriptor.h Header.h \
 	OperatorDescriptor.h Parser.h PrintFunctions.h PrintOperators.h \
 	PrintList.h Options.cpp Options.h PeteOps.cpp PeteOps.h \
 	PAssert.cpp PAssert.h DescriptorBase.h Join.h Join.cpp
-	$(CXX) -o MakeOperators -I.. $(CXX_OPT_APP_ARGS) \
+	$(CXX) -o MakeOperators$(EXEEXT) -I.. $(CXX_OPT_APP_ARGS) \
 	MakeOperators.cpp Options.cpp PAssert.cpp PeteOps.cpp Join.cpp
 
-newpeteops: MakeOperators
-	./MakeOperators --operators PeteOps.in --guard "" --insert-op \
+newpeteops: MakeOperators$(EXEEXT)
+	./MakeOperators$(EXEEXT) --operators PeteOps.in --guard "" --insert-op \
 	--lanl-boilerplate --o PeteOps.cpp
 
 peteheaders: OperatorTags.h
 
-OperatorTags.h: MakeOperators
-	./MakeOperators --guard PETE_PETE_OPERATORTAGS_H --op-tags \
+OperatorTags.h: MakeOperators$(EXEEXT)
+	./MakeOperators$(EXEEXT) --guard PETE_PETE_OPERATORTAGS_H --op-tags \
 	--operators PeteOps.in --lanl-boilerplate --o OperatorTags.h
 
 installheaders: OperatorTags.h
 	mv OperatorTags.h ..
 
 clean:
-	rm -f MakeOperators
+	rm -f MakeOperators$(EXEEXT)
 	rm -f OperatorTags.h
 	rm -f *.o
 	rm -rf ti_files
@@ -46,6 +46,6 @@ clean:
 # ACL:rcsinfo
 #  ----------------------------------------------------------------------
 #  $RCSfile: makefile,v $   $Author: chicares $
-#  $Revision: 1.4 $   $Date: 2008-09-07 10:57:35 $
+#  $Revision: 1.5 $   $Date: 2008-09-09 03:15:19 $
 #  ----------------------------------------------------------------------
 # ACL:rcsinfo
