@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.38 2008-09-01 23:55:00 zeitlin Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.39 2008-09-10 03:51:24 chicares Exp $)dnl
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -458,7 +458,6 @@ LIBXML_LIBS=`xml2-config --libs`
 
 AC_SUBST(LIBXML_FLAGS)
 AC_SUBST(LIBXML_LIBS)
-
 
 dnl --- libxslt (required) -------------------
 AC_CHECK_PROG(lmi_xslt_config, xslt-config, yes, no)
