@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1154 2008-09-01 14:02:23 chicares Exp $
+// $Id: ChangeLog,v 1.1155 2008-09-10 03:54:25 chicares Exp $
 
 MAINTENANCE
 
@@ -19488,4 +19488,54 @@ Redress preprocessor abuse.
 Fix defect introduced 20061112T2107Z AFAICT. Apparently some inserted
 ledger-formatting code invoked decimal_root(), which overwrote text
 previously placed on the statusbar.
+
+20080901T1429Z <gchicares@sbcglobal.net> [978]
+
+  input.cpp
+  input_harmonization.cpp
+  skin.xrc
+Add a "use current declared rate" checkbox. See:
+  http://savannah.nongnu.org/support/?105822
+
+20080901T1926Z <gchicares@sbcglobal.net> [978]
+
+  Makefile.am
+Fix defect introduced 20080811T1956Z (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2008-09/msg00000.html
+
+20080901T1927Z <gchicares@sbcglobal.net> [978]
+
+  ledger_variant.cpp
+Note a support request inline.
+
+20080901T2039Z <gchicares@sbcglobal.net> [978]
+
+  main_wx.cpp
+Remove an obsolete workaround (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2008-09/msg00001.html
+
+20080901T2355Z <zeitlin> [978]
+
+  configure.ac
+Refine usage of third-party libraries.
+
+20080902T0032Z <zeitlin> [978]
+
+  Makefile.am
+Fix defect introduced 20080811T1956Z.
+
+20080910T0351Z <gchicares@sbcglobal.net> [978]
+
+  configure.ac
+Fix defect introduced 20080901T2355Z. Run 'make check_concinnity'.
+
+20080910T0352Z <gchicares@sbcglobal.net> [978]
+
+  main_cgi.cpp
+Fix defect introduced 20080901T1429Z. Run 'make cgi_tests'.
+
+20080910T0354Z <gchicares@sbcglobal.net> [978]
+
+  bcc_5_5_1.make
+Work around a borland defect.
 

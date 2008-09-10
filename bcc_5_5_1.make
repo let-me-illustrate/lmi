@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: bcc_5_5_1.make,v 1.17 2008-04-11 14:42:26 chicares Exp $
+# $Id: bcc_5_5_1.make,v 1.18 2008-09-10 03:54:25 chicares Exp $
 
 toolset      := bcc
 
@@ -43,12 +43,16 @@ compiler_runtime_files     := $(bcc_bin_dir)/cc3250.dll
 shadow_header_directory    := $(bcc_inc_dir)/shadow
 
 # Use gcc-3.x for autodependencies and physical-closure testing.
+#
+# Define WIN32_LEAN_AND_MEAN in order to avoid borland msw headers
+# that use '#define FOO /##/', which gcc properly rejects.
 
 compiler_impersonation_cppflags := \
   -undef -nostdinc \
   -U __GNUC__ -U __GNUG__ -U __GNUC_MINOR__ -U __GNUC_PATCHLEVEL__ \
   -D LMI_IGNORE_PCH \
   -D _M_IX86=300 -D __BORLANDC__=0x550 -D _WIN32 \
+  -D WIN32_LEAN_AND_MEAN \
   -I $(shadow_header_directory) \
 
 gcc3_dir     := /MinGW_
