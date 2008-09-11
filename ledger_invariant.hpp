@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.hpp,v 1.19 2008-08-25 01:02:25 wboutin Exp $
+// $Id: ledger_invariant.hpp,v 1.20 2008-09-11 23:40:52 wboutin Exp $
 
 #ifndef ledger_invariant_hpp
 #define ledger_invariant_hpp
@@ -218,6 +218,27 @@ class LMI_SO LedgerInvariant
     std::string     NoLapseProvisionName;
     std::string     InterestDisclaimer;
     std::string     GuarMortalityFootnote;
+
+    // Ledger column definitions.
+    std::string     AccountValueFootnote;
+    std::string     AttainedAgeFootnote;
+    std::string     CashSurrValueFootnote;
+    std::string     DeathBenefitFootnote;
+    std::string     InitialPremiumFootnote;
+    std::string     NetPremiumFootnote;
+    std::string     OutlayFootnote;
+    std::string     PolicyYearFootnote;
+
+    // Rider footnotes.
+    std::string     ADDFootnote;
+    std::string     ChildFootnote;
+    std::string     SpouseFootnote;
+    std::string     TermFootnote;
+    std::string     WaiverFootnote;
+
+    // Premium-specific footnotes.
+    std::string     MinimumPremiumFootnote;
+    std::string     PremAllocationFootnote;
 
     std::string     ProducerName;
     std::string     ProducerStreet;
