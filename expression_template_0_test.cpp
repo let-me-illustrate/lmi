@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: expression_template_0_test.cpp,v 1.19 2008-09-11 18:09:16 chicares Exp $
+// $Id: expression_template_0_test.cpp,v 1.20 2008-09-11 21:35:22 chicares Exp $
 
 #if !defined __BORLANDC__
 #   define USE_UBLAS
@@ -67,7 +67,7 @@
 // A facility for concise expression and fast execution of simple
 // operations on numeric arrays is wanted. This module calculates
 // the expression
-//   v2 += v0 - 2.0 * v1; // v0, v1, and v2 are arrays.
+//   v2 += v0 - 2.1 * v1; // v0, v1, and v2 are arrays.
 // using several methods:
 //   - straightforward C
 //   - STL only
@@ -116,7 +116,7 @@ namespace
     boost::numeric::ublas::vector<double> ub2;
     #endif // defined USE_UBLAS
 
-    // ps*: PETE standard vectors.
+    // pv*: PETE standard vectors.
     std::vector<double> pv0;
     std::vector<double> pv1;
     std::vector<double> pv2;
@@ -129,14 +129,14 @@ namespace
 /// Its shortcoming is that it is all too easy to code it incorrectly,
 /// for instance
 ///    for(int j = 1; i <= g_length; ++j)
-///        v2[j] += v0 - 2.0 * v1[0];
+///        v2[j] += v0 - 2.1 * v1[0];
 /// and that many such errors can be very difficult to find.
 
 void mete_c()
 {
     for(int j = 0; j < g_length; ++j)
         {
-        cv2[j] += cv0[j] - 2.0 * cv1[j];
+        cv2[j] += cv0[j] - 2.1 * cv1[j];
         }
 }
 
@@ -150,7 +150,7 @@ void mete_stl_plain()
         (sv1a.begin()
         ,sv1a.end()
         ,std::back_inserter(tmp0)
-        ,std::bind1st(std::multiplies<double>(), 2.0)
+        ,std::bind1st(std::multiplies<double>(), 2.1)
         );
     std::transform
         (sv0a.begin()
@@ -189,7 +189,7 @@ void mete_stl_plain()
 /// Here, two of the std::transform steps in the 'plain' example
 /// are combined, avoiding superfluous loads and stores, but still
 /// it's impossible to write
-///    v2 += v0 - 2.0 * v1;
+///    v2 += v0 - 2.1 * v1;
 /// with only one call to std::transform, which at best writes the
 /// result of a binary operation to an OutputIterator--and an
 /// OutputIterator can't access its own prior value.
@@ -212,7 +212,7 @@ void mete_stl_fancy()
             ,boost::bind
                 (std::multiplies<double>()
                 ,_2
-                ,2.0
+                ,2.1
                 )
             )
         );
@@ -230,7 +230,7 @@ void mete_stl_fancy()
 
 void mete_valarray()
 {
-    va2 += va0 - 2.0 * va1;
+    va2 += va0 - 2.1 * va1;
 }
 
 /// This implementation uses boost::numeric::ublas::vector.
@@ -238,13 +238,13 @@ void mete_valarray()
 #if defined USE_UBLAS
 void mete_ublas()
 {
-    ub2 += ub0 - 2.0 * ub1;
+    ub2 += ub0 - 2.1 * ub1;
 }
 #endif // defined USE_UBLAS
 
 void mete_pete()
 {
-    pv2 += pv0 - 2.0 * pv1;
+    pv2 += pv0 - 2.1 * pv1;
 }
 
 void run_one_test(std::string const& s, void(*f)())
@@ -276,8 +276,8 @@ void mete_valarray_typical()
     std::valarray<double> va9 = 3.14 - va0;
     va8 += va0;
     va8 += va0 * va1;
-// This doesn't compile, and apparently std::valarray's only
-// comparable facility is its very-limited apply() member function.
+// This doesn't compile, and std::valarray's only comparable facility
+// is its apply() member function, which applies only unary functions.
 //    va0 = std::max(2.7, va8);
 //    va0 = std::max(va8, va9);
     va9 = (1.0 - va8) * va9;
@@ -373,7 +373,7 @@ void time_one_array_length(int length)
 
     int const alpha = 1 < g_length ? 1 : 0;
     int const omega = g_length - 1;
-    double const value_alpha = alpha * (0.001 + 0.100 - 2.0 * 0.010);
+    double const value_alpha = alpha * (0.001 + 0.100 - 2.1 * 0.010);
     double const value_omega = omega * value_alpha;
 
     mete_c();
