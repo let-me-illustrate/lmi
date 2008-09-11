@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: my_prod.cpp,v 1.8 2008-08-25 14:46:31 wboutin Exp $
+// $Id: my_prod.cpp,v 1.9 2008-09-11 23:40:52 wboutin Exp $
 
 // This file is a template for embedding product-specific data. Doing
 // that creates a derived work covered by the GPL. But you may prefer
@@ -91,6 +91,21 @@ void TProductData::WriteProprietaryPolFiles()
     foo.NoLapseProvisionName    = "No-lapse Provision";
     foo.InterestDisclaimer      = "";
     foo.GuarMortalityFootnote   = "";
+    foo.AccountValueFootnote    = "";
+    foo.AttainedAgeFootnote     = "";
+    foo.CashSurrValueFootnote   = "";
+    foo.DeathBenefitFootnote    = "";
+    foo.InitialPremiumFootnote  = "";
+    foo.NetPremiumFootnote      = "";
+    foo.OutlayFootnote          = "";
+    foo.PolicyYearFootnote      = "";
+    foo.ADDFootnote             = "";
+    foo.ChildFootnote           = "";
+    foo.SpouseFootnote          = "";
+    foo.TermFootnote            = "";
+    foo.WaiverFootnote          = "";
+    foo.MinimumPremiumFootnote  = "";
+    foo.PremAllocationFootnote  = "";
 
     // Sample policy form.
     foo.DatabaseFilename  = "sample.db4";

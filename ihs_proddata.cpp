@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_proddata.cpp,v 1.18 2008-08-25 01:02:24 wboutin Exp $
+// $Id: ihs_proddata.cpp,v 1.19 2008-09-11 23:40:51 wboutin Exp $
 
 // This class contains names of files containing a product's tables as well
 // as strings that are the same for all instances of that product.
@@ -130,6 +130,21 @@ void TProductData::Read(std::string const& a_Filename)
     std::getline(is, NoLapseProvisionName,   '\n');
     std::getline(is, InterestDisclaimer,     '\n');
     std::getline(is, GuarMortalityFootnote,  '\n');
+    std::getline(is, AccountValueFootnote,   '\n');
+    std::getline(is, AttainedAgeFootnote,    '\n');
+    std::getline(is, CashSurrValueFootnote,  '\n');
+    std::getline(is, DeathBenefitFootnote,   '\n');
+    std::getline(is, InitialPremiumFootnote, '\n');
+    std::getline(is, NetPremiumFootnote,     '\n');
+    std::getline(is, OutlayFootnote,         '\n');
+    std::getline(is, PolicyYearFootnote,     '\n');
+    std::getline(is, ADDFootnote,            '\n');
+    std::getline(is, ChildFootnote,          '\n');
+    std::getline(is, SpouseFootnote,         '\n');
+    std::getline(is, TermFootnote,           '\n');
+    std::getline(is, WaiverFootnote,         '\n');
+    std::getline(is, MinimumPremiumFootnote, '\n');
+    std::getline(is, PremAllocationFootnote, '\n');
 
     bool okay = is.good();
     if(!okay)
@@ -202,6 +217,21 @@ void TProductData::Write(std::string const& a_Filename) const
     os << NoLapseProvisionName   << '\n';
     os << InterestDisclaimer     << '\n';
     os << GuarMortalityFootnote  << '\n';
+    os << AccountValueFootnote   << '\n';
+    os << AttainedAgeFootnote    << '\n';
+    os << CashSurrValueFootnote  << '\n';
+    os << DeathBenefitFootnote   << '\n';
+    os << InitialPremiumFootnote << '\n';
+    os << NetPremiumFootnote     << '\n';
+    os << OutlayFootnote         << '\n';
+    os << PolicyYearFootnote     << '\n';
+    os << ADDFootnote            << '\n';
+    os << ChildFootnote          << '\n';
+    os << SpouseFootnote         << '\n';
+    os << TermFootnote           << '\n';
+    os << WaiverFootnote         << '\n';
+    os << MinimumPremiumFootnote << '\n';
+    os << PremAllocationFootnote << '\n';
 
     if(!os.good())
         {
@@ -257,6 +287,21 @@ void TProductData::WritePolFiles()
     foo.NoLapseProvisionName    = "No-lapse Provision";
     foo.InterestDisclaimer      = "";
     foo.GuarMortalityFootnote   = "";
+    foo.AccountValueFootnote    = "";
+    foo.AttainedAgeFootnote     = "";
+    foo.CashSurrValueFootnote   = "";
+    foo.DeathBenefitFootnote    = "";
+    foo.InitialPremiumFootnote  = "";
+    foo.NetPremiumFootnote      = "";
+    foo.OutlayFootnote          = "";
+    foo.PolicyYearFootnote      = "";
+    foo.ADDFootnote             = "";
+    foo.ChildFootnote           = "";
+    foo.SpouseFootnote          = "";
+    foo.TermFootnote            = "";
+    foo.WaiverFootnote          = "";
+    foo.MinimumPremiumFootnote  = "";
+    foo.PremAllocationFootnote  = "";
 
     foo.DatabaseFilename = "sample.db4";
     foo.FundFilename     = "sample.fnd";
