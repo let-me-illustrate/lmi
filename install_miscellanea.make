@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_miscellanea.make,v 1.13 2008-04-27 16:44:22 chicares Exp $
+# $Id: install_miscellanea.make,v 1.14 2008-09-11 18:09:16 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -119,7 +119,7 @@ scratch_exists = \
 # Targets ######################################################################
 
 .PHONY: all
-all: boost cgicc fop md5sum_msw sample xmlwrapp
+all: boost cgicc fop md5sum_msw pete sample xmlwrapp
 
 # Patches were generated according to this advice:
 #
@@ -189,6 +189,23 @@ fop: $(file_list)
 .PHONY: md5sum_msw
 md5sum_msw: $(file_list)
 	$(CP) --preserve $(cache_dir)/$(stem) $(third_party_bin_dir)
+
+# For now at least, a locally-modified pete-2.1.1 resides in the lmi
+# repository, though eventually it might be supplied as a tarball.
+#
+# It is copied to the same directory as other third-party libraries
+# so that all follow the same usage paradigm.
+#
+# '*.*' in the $(CP) command is not an inadvertent msdos-ism.
+
+.PHONY: pete
+pete:
+	@$(MKDIR) $(third_party_include_dir)/PETE/
+	$(CP) \
+	  --force --preserve --recursive \
+	  --target-directory=$(third_party_include_dir)/PETE/ \
+	  /opt/lmi/src/lmi/tools/pete-2.1.1/*.* \
+	  /opt/lmi/src/lmi/tools/pete-2.1.1/PETE/*.* \
 
 # The 'clobber' target doesn't remove $(prefix)/data because that
 # directory might contain valuable user-customized files; hence, in
