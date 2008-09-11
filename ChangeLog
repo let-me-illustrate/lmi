@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1155 2008-09-10 03:54:25 chicares Exp $
+// $Id: ChangeLog,v 1.1156 2008-09-11 21:53:23 chicares Exp $
 
 MAINTENANCE
 
@@ -19538,4 +19538,23 @@ Fix defect introduced 20080901T1429Z. Run 'make cgi_tests'.
 
   bcc_5_5_1.make
 Work around a borland defect.
+
+20080911T1809Z <gchicares@sbcglobal.net> [978]
+
+  expression_template_0_test.cpp
+  install_miscellanea.make
+Install and test a locally-modified PETE.
+
+20080911T2135Z <gchicares@sbcglobal.net> [978]
+
+  expression_template_0_test.cpp
+Prevent strength reduction from skewing speed comparisons. Multiplying
+by exactly 2.0 invited that optimization in code that happened to be
+to a compiler's liking; notably, gcc-3.4.4 applied it in some cases,
+but not for PETE. This test's purpose is not to measure the optimizer.
+
+20080911T2153Z <gchicares@sbcglobal.net> [978]
+
+  expression_template_0_test.cpp
+Improve documentation.
 
