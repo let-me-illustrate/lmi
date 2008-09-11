@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.65 2008-08-25 01:02:25 wboutin Exp $
+// $Id: ledger_invariant.cpp,v 1.66 2008-09-11 23:40:52 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -208,6 +208,24 @@ void LedgerInvariant::Alloc(int len)
     Strings         ["NoLapseProvisionName"  ] = &NoLapseProvisionName   ;
     Strings         ["InterestDisclaimer"    ] = &InterestDisclaimer     ;
     Strings         ["GuarMortalityFootnote" ] = &GuarMortalityFootnote  ;
+
+    Strings         ["AccountValueFootnote"  ] = &AccountValueFootnote   ;
+    Strings         ["AttainedAgeFootnote"   ] = &AttainedAgeFootnote    ;
+    Strings         ["CashSurrValueFootnote" ] = &CashSurrValueFootnote  ;
+    Strings         ["DeathBenefitFootnote"  ] = &DeathBenefitFootnote   ;
+    Strings         ["InitialPremiumFootnote"] = &InitialPremiumFootnote ;
+    Strings         ["NetPremiumFootnote"    ] = &NetPremiumFootnote     ;
+    Strings         ["OutlayFootnote"        ] = &OutlayFootnote         ;
+    Strings         ["PolicyYearFootnote"    ] = &PolicyYearFootnote     ;
+
+    Strings         ["ADDFootnote"           ] = &ADDFootnote            ;
+    Strings         ["ChildFootnote"         ] = &ChildFootnote          ;
+    Strings         ["SpouseFootnote"        ] = &SpouseFootnote         ;
+    Strings         ["TermFootnote"          ] = &TermFootnote           ;
+    Strings         ["WaiverFootnote"        ] = &WaiverFootnote         ;
+
+    Strings         ["MinimumPremiumFootnote"] = &MinimumPremiumFootnote ;
+    Strings         ["PremAllocationFootnote"] = &PremAllocationFootnote ;
 
     Strings         ["ProducerName"          ] = &ProducerName           ;
     Strings         ["ProducerStreet"        ] = &ProducerStreet         ;
@@ -549,6 +567,24 @@ void LedgerInvariant::Init(BasicValues* b)
         NoLapseProvisionName   = b->ProductData_->GetNoLapseProvisionName();
         InterestDisclaimer     = b->ProductData_->GetInterestDisclaimer();
         GuarMortalityFootnote  = b->ProductData_->GetGuarMortalityFootnote();
+
+        AccountValueFootnote   = b->ProductData_->GetAccountValueFootnote();
+        AttainedAgeFootnote    = b->ProductData_->GetAttainedAgeFootnote();
+        CashSurrValueFootnote  = b->ProductData_->GetCashSurrValueFootnote();
+        DeathBenefitFootnote   = b->ProductData_->GetDeathBenefitFootnote();
+        InitialPremiumFootnote = b->ProductData_->GetInitialPremiumFootnote();
+        NetPremiumFootnote     = b->ProductData_->GetNetPremiumFootnote();
+        OutlayFootnote         = b->ProductData_->GetOutlayFootnote();
+        PolicyYearFootnote     = b->ProductData_->GetPolicyYearFootnote();
+
+        ADDFootnote            = b->ProductData_->GetADDFootnote();
+        ChildFootnote          = b->ProductData_->GetChildFootnote();
+        SpouseFootnote         = b->ProductData_->GetSpouseFootnote();
+        TermFootnote           = b->ProductData_->GetTermFootnote();
+        WaiverFootnote         = b->ProductData_->GetWaiverFootnote();
+
+        MinimumPremiumFootnote = b->ProductData_->GetMinimumPremiumFootnote();
+        PremAllocationFootnote = b->ProductData_->GetPremAllocationFootnote();
         }
 
     ProducerName            = (*b->Input_)["AgentName"].str();
@@ -782,6 +818,24 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     NoLapseProvisionName        = a_Addend.NoLapseProvisionName;
     InterestDisclaimer          = a_Addend.InterestDisclaimer;
     GuarMortalityFootnote       = a_Addend.GuarMortalityFootnote;
+
+    AccountValueFootnote        = a_Addend.AccountValueFootnote;
+    AttainedAgeFootnote         = a_Addend.AttainedAgeFootnote;
+    CashSurrValueFootnote       = a_Addend.CashSurrValueFootnote;
+    DeathBenefitFootnote        = a_Addend.DeathBenefitFootnote;
+    InitialPremiumFootnote      = a_Addend.InitialPremiumFootnote;
+    NetPremiumFootnote          = a_Addend.NetPremiumFootnote;
+    OutlayFootnote              = a_Addend.OutlayFootnote;
+    PolicyYearFootnote          = a_Addend.PolicyYearFootnote;
+
+    ADDFootnote                 = a_Addend.ADDFootnote;
+    ChildFootnote               = a_Addend.ChildFootnote;
+    SpouseFootnote              = a_Addend.SpouseFootnote;
+    TermFootnote                = a_Addend.TermFootnote;
+    WaiverFootnote              = a_Addend.WaiverFootnote;
+
+    MinimumPremiumFootnote      = a_Addend.MinimumPremiumFootnote;
+    PremAllocationFootnote      = a_Addend.PremAllocationFootnote;
 
     Comments                    = a_Addend.Comments;
 

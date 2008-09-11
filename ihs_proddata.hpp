@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_proddata.hpp,v 1.11 2008-08-25 01:02:24 wboutin Exp $
+// $Id: ihs_proddata.hpp,v 1.12 2008-09-11 23:40:52 wboutin Exp $
 
 #ifndef ihs_proddata_hpp
 #define ihs_proddata_hpp
@@ -87,6 +87,21 @@ class LMI_SO TProductData
     std::string const& GetNoLapseProvisionName   () const {return NoLapseProvisionName;   }
     std::string const& GetInterestDisclaimer     () const {return InterestDisclaimer;     }
     std::string const& GetGuarMortalityFootnote  () const {return GuarMortalityFootnote;  }
+    std::string const& GetAccountValueFootnote   () const {return AccountValueFootnote;   }
+    std::string const& GetAttainedAgeFootnote    () const {return AttainedAgeFootnote;    }
+    std::string const& GetCashSurrValueFootnote  () const {return CashSurrValueFootnote;  }
+    std::string const& GetDeathBenefitFootnote   () const {return DeathBenefitFootnote;   }
+    std::string const& GetInitialPremiumFootnote () const {return InitialPremiumFootnote; }
+    std::string const& GetNetPremiumFootnote     () const {return NetPremiumFootnote;     }
+    std::string const& GetOutlayFootnote         () const {return OutlayFootnote;         }
+    std::string const& GetPolicyYearFootnote     () const {return PolicyYearFootnote;     }
+    std::string const& GetADDFootnote            () const {return ADDFootnote;            }
+    std::string const& GetChildFootnote          () const {return ChildFootnote;          }
+    std::string const& GetSpouseFootnote         () const {return SpouseFootnote;         }
+    std::string const& GetTermFootnote           () const {return TermFootnote;           }
+    std::string const& GetWaiverFootnote         () const {return WaiverFootnote;         }
+    std::string const& GetMinimumPremiumFootnote () const {return MinimumPremiumFootnote; }
+    std::string const& GetPremAllocationFootnote () const {return PremAllocationFootnote; }
 
   private:
     TProductData();
@@ -141,6 +156,27 @@ class LMI_SO TProductData
     std::string NoLapseProvisionName;
     std::string InterestDisclaimer;
     std::string GuarMortalityFootnote;
+
+    // Ledger column definitions.
+    std::string AccountValueFootnote;
+    std::string AttainedAgeFootnote;
+    std::string CashSurrValueFootnote;
+    std::string DeathBenefitFootnote;
+    std::string InitialPremiumFootnote;
+    std::string NetPremiumFootnote;
+    std::string OutlayFootnote;
+    std::string PolicyYearFootnote;
+
+    // Rider footnotes.
+    std::string ADDFootnote;
+    std::string ChildFootnote;
+    std::string SpouseFootnote;
+    std::string TermFootnote;
+    std::string WaiverFootnote;
+
+    // Premium-specific footnotes.
+    std::string MinimumPremiumFootnote;
+    std::string PremAllocationFootnote;
 };
 
 #endif // ihs_proddata_hpp

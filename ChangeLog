@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1156 2008-09-11 21:53:23 chicares Exp $
+// $Id: ChangeLog,v 1.1157 2008-09-11 23:40:52 wboutin Exp $
 
 MAINTENANCE
 
@@ -19557,4 +19557,13 @@ but not for PETE. This test's purpose is not to measure the optimizer.
 
   expression_template_0_test.cpp
 Improve documentation.
+
+20080911T2342Z <wboutin@massmutual.com> [978]
+
+  ihs_proddata.cpp
+  ihs_proddata.hpp
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  my_prod.cpp
+Add new entities.
 
