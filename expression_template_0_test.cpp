@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: expression_template_0_test.cpp,v 1.20 2008-09-11 21:35:22 chicares Exp $
+// $Id: expression_template_0_test.cpp,v 1.21 2008-09-11 21:53:23 chicares Exp $
 
 #if !defined __BORLANDC__
 #   define USE_UBLAS
@@ -80,6 +80,16 @@
 
 namespace
 {
+template<typename T>
+struct greater_of
+    :public std::binary_function<T,T,T>
+{
+    T operator()(T const& x, T const& y) const
+        {
+        return std::max(x, y);
+        }
+};
+
     // Global variables for timing tests. It would be in better taste
     // to pass them as arguments, using boost::bind. However, that
     // would rule out using some compilers (e.g., borland), and it's
@@ -323,6 +333,10 @@ void mete_pete_typical()
 
 // This compiles, but doesn't apply the functor to each element pair:
 //    pv0 = std::max(pv8, pv9);
+
+// This works. It's commented out only for comparability to other
+// approaches.
+//    assign(pv0, apply_binary(greater_of<double>(), pv8, pv9));
 
     assign(pv9, (1.0 - pv8) * pv9);
 }
