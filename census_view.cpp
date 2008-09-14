@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.77 2008-08-05 19:52:18 chicares Exp $
+// $Id: census_view.cpp,v 1.78 2008-09-14 15:23:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -413,7 +413,7 @@ void CensusView::update_class_names()
             // If we do not already have default parameters for the class,
             // find the first individual that belongs to the class and
             // insert its parameters into the rebuilt vector.
-            std::vector<Input>::iterator j = cell_parms().begin();
+            std::vector<Input>::const_iterator j = cell_parms().begin();
             bool found = false;
             // TODO ?? There has to be a nicer way to do this with STL.
             while(j != cell_parms().end())
@@ -524,6 +524,23 @@ void CensusView::apply_changes
             }
         }
 
+    // Probably this should be factored out into a member function
+    // that's called elsewhere too--e.g., when a cell is read from
+    // file, or when a census is pasted. For this to work fully as
+    // desired, however, the DATABASE !! must be changed. Today,
+    // it caches exactly one product, and its cache-invalidation
+    // discipline isn't sufficiently strict. For now, applying the
+    // present technique elsewhere might well exacerbate crosstalk
+    // in a census that comprises more than one product.
+    std::vector<Input>::iterator j;
+    for(j = class_parms().begin(); j != class_parms().end(); ++j)
+        {
+        j->Reconcile();
+        }
+    for(j = cell_parms() .begin(); j != cell_parms() .end(); ++j)
+        {
+        j->Reconcile();
+        }
     composite_is_available_ = false;
 }
 
