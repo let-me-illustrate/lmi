@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1157 2008-09-11 23:40:52 wboutin Exp $
+// $Id: ChangeLog,v 1.1158 2008-09-14 00:53:13 chicares Exp $
 
 MAINTENANCE
 
@@ -19566,4 +19566,9 @@ Improve documentation.
   ledger_invariant.hpp
   my_prod.cpp
 Add new entities.
+
+20080914T0053Z <gchicares@sbcglobal.net> [978]
+
+  [ChangeLog only]
+Fix defect introduced 20080911T2342Z. Run 'make check_concinnity'.
 
