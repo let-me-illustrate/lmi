@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.hpp,v 1.31 2008-06-19 13:39:16 chicares Exp $
+// $Id: timer.hpp,v 1.32 2008-09-15 14:14:11 chicares Exp $
 
 #ifndef timer_hpp
 #define timer_hpp
@@ -120,15 +120,20 @@ class LMI_SO Timer
 ///
 /// Otherwise, discard the first observation (which is often anomalous
 /// due, e.g., to cache effects); execute the operation repeatedly,
-/// until either all allotted time has been used or the repetition
-/// count reaches one hundred; and record the mean measured time.
+/// until the stopping criterion is satisfied; and then record the
+/// mean measured time. The stopping criterion is that both:
+///  - at least one percent of the allotted time has been spent; and
+///  - either all allotted time has been used, or the repetition count
+///      has reached one hundred.
 ///
 /// The rationale for stopping after one hundred repetitions is that
-/// continuing is unlikely to increase accuracy. Consider timing an
-/// operation that takes one nanosecond, with a (default) limit of
-/// one second: one billion repetions would seem excessive, and
-/// hardcoding a lower time limit creates exactly the sort of problems
-/// that this class's adaptive behavior is intended to avoid.
+/// continuing is generally unlikely to increase accuracy. Consider
+/// timing an operation that takes one millisecond, with a (default)
+/// limit of one second: one million repetitions would seem excessive.
+///
+/// The rationale for not stopping until at least one percent of the
+/// allotted time has been spent is that this has been observed to
+/// increase accuracy for operations that take very little time.
 ///
 /// Template parameter 'F' is the type of the first ctor parameter,
 /// which either is a nullary function or behaves like one. A facility
@@ -212,14 +217,18 @@ AliquotTimer<F>& AliquotTimer<F>::operator()()
 
     Timer timer;
     double const limit = max_seconds_ * static_cast<double>(timer.frequency_);
-    double const expiry = limit + static_cast<double>(timer.time_when_started_);
+    double const start_time = static_cast<double>(timer.time_when_started_);
+    double const expiry_min = start_time + 0.01 * limit;
+    double const expiry_max = start_time +        limit;
     int j = 0;
-    do
+    for
+        (elapsed_t now = 0
+        ;now < expiry_min || j < 100 && now < expiry_max
+        ;++j, now = timer.inspect()
+        )
         {
         f_();
-        ++j;
         }
-    while(j < 100 && timer.inspect() < expiry);
     timer.stop();
     unit_time_ = timer.elapsed_usec() / j;
     std::ostringstream oss;
