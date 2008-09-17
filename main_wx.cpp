@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.114 2008-09-01 20:39:17 chicares Exp $
+// $Id: main_wx.cpp,v 1.115 2008-09-17 16:54:25 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -705,10 +705,10 @@ bool Skeleton::OnInit()
     return true;
 }
 
-// TODO ?? Should this call Skip()?
-
-void Skeleton::UponMenuOpen(wxMenuEvent&)
+void Skeleton::UponMenuOpen(wxMenuEvent& event)
 {
+    event.Skip();
+
     int child_frame_count = 0;
     wxWindowList wl = frame_->GetChildren();
     for(wxWindowList::const_iterator i = wl.begin(); i != wl.end(); ++i)
@@ -1083,7 +1083,7 @@ void Skeleton::UponUpdateFileSave(wxUpdateUIEvent& event)
 }
 
 // TODO ?? An unsuccessful experiment.
-void Skeleton::UponUpdateInapplicable(wxUpdateUIEvent& e)
+void Skeleton::UponUpdateInapplicable(wxUpdateUIEvent& event)
 {
 // This handler seems to override mdi childrens'.
 //    e.Enable(0 != frame_->GetChildren().GetCount());
