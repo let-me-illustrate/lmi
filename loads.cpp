@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads.cpp,v 1.21 2008-08-19 17:03:32 chicares Exp $
+// $Id: loads.cpp,v 1.22 2008-09-17 02:07:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -38,7 +38,7 @@
 #include "mc_enum_types_aux.hpp" // mc_n_ enumerators
 #include "rounding_rules.hpp"
 
-#include <boost/bind.hpp>
+#include <PETE/et_vector.hpp>
 
 #include <algorithm>
 #include <functional>
@@ -154,20 +154,19 @@ void Loads::Initialize(TDatabase const& database)
 
 void Loads::Calculate(load_details const& details)
 {
-    // ET !! The loop and the std::transform call should both be
-    // unnecessary: it should be possible to write simply
-    //   separate_account_load_ = i_upper_12_over_12_from_i(separate_account_load_);
     for(int j = mce_gen_curr; j != mc_n_gen_bases; j++)
         {
-        // ET !! Rewrite [but see above comment]
-        // separate_account_load_[j] = i_upper_12_over_12_from_i
-        //    (separate_account_load_[j]
-        //    );
-        std::transform
-            (separate_account_load_[j].begin()
-            ,separate_account_load_[j].end()
-            ,separate_account_load_[j].begin()
-            ,i_upper_12_over_12_from_i<double>()
+        // ET !! PETE could support an apply-and-assign operation, e.g.:
+        // apply_to_self
+        //     (i_upper_12_over_12_from_i<double>()
+        //     ,separate_account_load_[j]
+        //     );
+        assign
+            (separate_account_load_[j]
+            ,apply_unary
+                (i_upper_12_over_12_from_i<double>()
+                ,separate_account_load_[j]
+                )
             );
         }
 
@@ -177,48 +176,34 @@ void Loads::Calculate(load_details const& details)
     // elsewhere as an interest spread.
     if(oe_asset_charge_load == details.asset_charge_type_)
         {
-        // ET !! Rewrite:
-        // std::vector<double> extra_asset_comp = i_upper_12_over_12_from_i
-        //   ((1.0L / 10000.0L) * details.VectorExtraAssetComp_
-        //   );
-        std::vector<double> extra_asset_comp = details.VectorExtraAssetComp_;
-        std::transform
-            (extra_asset_comp.begin()
-            ,extra_asset_comp.end()
-            ,extra_asset_comp.begin()
-            ,boost::bind
+        static long double const units_per_bp = 1.0L / 10000.0L;
+        std::vector<double> extra_asset_comp(details.length_);
+        assign
+            (extra_asset_comp
+            ,apply_unary
                 (i_upper_12_over_12_from_i<double>()
-                ,boost::bind(std::multiplies<double>(), _1, 1.0 / 10000.0L)
+                ,details.VectorExtraAssetComp_ * units_per_bp
                 )
             );
 
-        // ET !! Rewrite: inside the loop, it could be:
-        //   separate_account_load_[j] += extra_asset_comp;
-        // ...yet OTOH any APL programmer would just write
-        //   separate_account_load_ +=
-        //     reshape(extra_asset_comp, shape_of(separate_account_load_));
-        // and would that be sensible with expression templates?
-        // No, probably not; optimized APL interpreters wouldn't allocate
-        // any extra storage for this, but that's probably too much to ask
-        // of an expression-template library. And if we were going to
-        // emulate APL, we'd want RPN, too....
-        //
         // ET !! As for rounding, we do want an expression-template library
         // to apply a scalar function like rounding to all elements of a
         // matrix, with some natural syntax like
         //   separate_account_load_ = details.round_interest_rate_(separate_account_load_);
         for(int j = mce_gen_curr; j != mc_n_gen_bases; j++)
             {
-            // ET !! separate_account_load_[j] += extra_asset_comp;
-            std::transform
-                (separate_account_load_[j].begin()
-                ,separate_account_load_[j].end()
-                ,extra_asset_comp.begin()
-                ,separate_account_load_[j].begin()
-                ,std::plus<double>()
+#if 0
+// ET !! This crashes:
+            assign
+                (separate_account_load_[j]
+                ,apply_unary
+                    (details.round_interest_rate_
+                    ,separate_account_load_[j] + extra_asset_comp
+                    )
                 );
+#endif // 0
+            separate_account_load_[j] += extra_asset_comp;
             std::vector<double>::iterator k;
-            // TODO ?? Test this. Why not use std::transform()?
             for
                 (k = separate_account_load_[j].begin()
                 ;k != separate_account_load_[j].end()
@@ -248,21 +233,8 @@ void Loads::Calculate(load_details const& details)
         AmortizePremiumTax(details);
         }
 
-    // ET !! specified_amount_load_[mce_gen_guar] *= details.TabularGuarSpecAmtLoad_
-    std::transform
-        (specified_amount_load_[mce_gen_guar].begin()
-        ,specified_amount_load_[mce_gen_guar].end()
-        ,details.TabularGuarSpecAmtLoad_.begin()
-        ,specified_amount_load_[mce_gen_guar].begin()
-        ,std::plus<double>()
-        );
-    std::transform
-        (specified_amount_load_[mce_gen_curr].begin()
-        ,specified_amount_load_[mce_gen_curr].end()
-        ,details.TabularCurrSpecAmtLoad_.begin()
-        ,specified_amount_load_[mce_gen_curr].begin()
-        ,std::plus<double>()
-        );
+    specified_amount_load_[mce_gen_guar] += details.TabularGuarSpecAmtLoad_;
+    specified_amount_load_[mce_gen_curr] += details.TabularCurrSpecAmtLoad_;
 
     // Total load excludes monthly_policy_fee_, annual_policy_fee_, and
     // amortized_premium_tax_load_ because they are charges rather than loads.
@@ -273,120 +245,27 @@ void Loads::Calculate(load_details const& details)
     // TODO ?? It is probably unnecessary to handle the midpoint basis here.
     for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
         {
-        // ET !! Naively, rewrite this whole loop body as:
-        //
-        //   std::vector target_total_load_before_premium_tax; [Declare outside loop.]
-        //
-        //   target_sales_load_[j] += details.VectorExtraCompLoad_;
-        //   target_total_load_[j] = target_sales_load_[j];
-        //   target_total_load_[j] += target_premium_load_[j] + dac_tax_load_.begin();
-        //   if(mce_gen_curr == j)
-        //     {
-        //     target_total_load_before_premium_tax = target_total_load_[j];
-        //     }
-        //   target_total_load_[j] += premium_tax_load_;
-        //
-        //   excess_sales_load_[j] += details.VectorExtraCompLoad_;
-        //   excess_total_load_[j] = excess_sales_load_[j];
-        //   excess_total_load_[j] += excess_premium_load_[j] + dac_tax_load_.begin();
-        //   if(mce_gen_curr == j)
-        //     {
-        //     excess_total_load_before_premium_tax = excess_total_load_[j];
-        //     }
-        //   excess_total_load_[j] += premium_tax_load_;
-        //
-        // Then, after the loop ends:
-        //
-        //  target_premium_load_7702_excluding_premium_tax_ = target_total_load_before_premium_tax;
-        //  target_premium_load_7702_lowest_premium_tax_    = target_load_before_premium_tax + details.LowestPremiumTaxLoadRate_;
-        //
-        //  excess_premium_load_7702_excluding_premium_tax_ = excess_total_load_before_premium_tax;
-        //  excess_premium_load_7702_lowest_premium_tax_    = excess_load_before_premium_tax + details.LowestPremiumTaxLoadRate_;
-        //
-        // Then go back and look at the ET version to see whether it can
-        // be rewritten more clearly, now that it can be comprehended.
-        //
-        std::transform
-            (target_sales_load_[j].begin()
-            ,target_sales_load_[j].end()
-            ,details.VectorExtraCompLoad_.begin()
-            ,target_sales_load_[j].begin()
-            ,std::plus<double>()
-            );
+        target_sales_load_[j] += details.VectorExtraCompLoad_;
         target_total_load_[j] = target_sales_load_[j];
-        std::transform
-            (target_total_load_[j].begin()
-            ,target_total_load_[j].end()
-            ,target_premium_load_[j].begin()
-            ,target_total_load_[j].begin()
-            ,std::plus<double>()
-            );
-        std::transform
-            (target_total_load_[j].begin()
-            ,target_total_load_[j].end()
-            ,dac_tax_load_.begin()
-            ,target_total_load_[j].begin()
-            ,std::plus<double>()
-            );
+        target_total_load_[j] += target_premium_load_[j] + dac_tax_load_;
         if(mce_gen_curr == j)
             {
             target_premium_load_7702_excluding_premium_tax_ = target_total_load_[j];
             target_premium_load_7702_lowest_premium_tax_    = target_total_load_[j];
-            std::transform
-                (target_premium_load_7702_lowest_premium_tax_.begin()
-                ,target_premium_load_7702_lowest_premium_tax_.end()
-                ,target_premium_load_7702_lowest_premium_tax_.begin()
-                ,std::bind2nd(std::plus<double>(), details.LowestPremiumTaxLoadRate_)
-                );
+            target_premium_load_7702_lowest_premium_tax_   += details.LowestPremiumTaxLoadRate_;
             }
-        std::transform
-            (target_total_load_[j].begin()
-            ,target_total_load_[j].end()
-            ,premium_tax_load_.begin()
-            ,target_total_load_[j].begin()
-            ,std::plus<double>()
-            );
+        target_total_load_[j] += premium_tax_load_;
 
-        std::transform
-            (excess_sales_load_[j].begin()
-            ,excess_sales_load_[j].end()
-            ,details.VectorExtraCompLoad_.begin()
-            ,excess_sales_load_[j].begin()
-            ,std::plus<double>()
-            );
+        excess_sales_load_[j] += details.VectorExtraCompLoad_;
         excess_total_load_[j] = excess_sales_load_[j];
-        std::transform
-            (excess_total_load_[j].begin()
-            ,excess_total_load_[j].end()
-            ,excess_premium_load_[j].begin()
-            ,excess_total_load_[j].begin()
-            ,std::plus<double>()
-            );
-        std::transform
-            (excess_total_load_[j].begin()
-            ,excess_total_load_[j].end()
-            ,dac_tax_load_.begin()
-            ,excess_total_load_[j].begin()
-            ,std::plus<double>()
-            );
+        excess_total_load_[j] += excess_premium_load_[j] + dac_tax_load_;
         if(mce_gen_curr == j)
             {
             excess_premium_load_7702_excluding_premium_tax_ = excess_total_load_[j];
             excess_premium_load_7702_lowest_premium_tax_    = excess_total_load_[j];
-            std::transform
-                (excess_premium_load_7702_lowest_premium_tax_.begin()
-                ,excess_premium_load_7702_lowest_premium_tax_.end()
-                ,excess_premium_load_7702_lowest_premium_tax_.begin()
-                ,std::bind2nd(std::plus<double>(), details.LowestPremiumTaxLoadRate_)
-                );
+            excess_premium_load_7702_lowest_premium_tax_   += details.LowestPremiumTaxLoadRate_;
             }
-        std::transform
-            (excess_total_load_[j].begin()
-            ,excess_total_load_[j].end()
-            ,premium_tax_load_.begin()
-            ,excess_total_load_[j].begin()
-            ,std::plus<double>()
-            );
+        excess_total_load_[j] += premium_tax_load_;
         }
 
     // USER !! Explain this in user documentation.
@@ -398,14 +277,7 @@ void Loads::Calculate(load_details const& details)
     // custodial fee, but can be used in any situation that's
     // consistent with this constraint.
 
-    // ET !! monthly_policy_fee_[mce_gen_curr] += details.VectorExtraPolFee_;
-    std::transform
-        (monthly_policy_fee_[mce_gen_curr].begin()
-        ,monthly_policy_fee_[mce_gen_curr].end()
-        ,details.VectorExtraPolFee_.begin()
-        ,monthly_policy_fee_[mce_gen_curr].begin()
-        ,std::plus<double>()
-        );
+    monthly_policy_fee_[mce_gen_curr] += details.VectorExtraPolFee_;
     for(int j = 0; j < details.length_; ++j)
         {
         if
@@ -432,79 +304,16 @@ void Loads::Calculate(load_details const& details)
     // A different average might be used instead.
     if(details.NeedMidpointRates_)
         {
-        // ET !! Matrix operations are most welcome here:
-        //   monthly_policy_fee_[mce_gen_mdpt] = mean(monthly_policy_fee_[mce_gen_guar], monthly_policy_fee_[mce_gen_curr]);
-        //   and so on, reiterating that line for every other name given here.
-        std::transform
-            (monthly_policy_fee_[mce_gen_guar].begin()
-            ,monthly_policy_fee_[mce_gen_guar].end()
-            ,monthly_policy_fee_[mce_gen_curr].begin()
-            ,monthly_policy_fee_[mce_gen_mdpt].begin()
-            ,mean<double>()
-            );
-        std::transform
-            (annual_policy_fee_[mce_gen_guar].begin()
-            ,annual_policy_fee_[mce_gen_guar].end()
-            ,annual_policy_fee_[mce_gen_curr].begin()
-            ,annual_policy_fee_[mce_gen_mdpt].begin()
-            ,mean<double>()
-            );
-        std::transform
-            (specified_amount_load_[mce_gen_guar].begin()
-            ,specified_amount_load_[mce_gen_guar].end()
-            ,specified_amount_load_[mce_gen_curr].begin()
-            ,specified_amount_load_[mce_gen_mdpt].begin()
-            ,mean<double>()
-            );
-        std::transform
-            (separate_account_load_[mce_gen_guar].begin()
-            ,separate_account_load_[mce_gen_guar].end()
-            ,separate_account_load_[mce_gen_curr].begin()
-            ,separate_account_load_[mce_gen_mdpt].begin()
-            ,mean<double>()
-            );
-        std::transform
-            (target_premium_load_[mce_gen_guar].begin()
-            ,target_premium_load_[mce_gen_guar].end()
-            ,target_premium_load_[mce_gen_curr].begin()
-            ,target_premium_load_[mce_gen_mdpt].begin()
-            ,mean<double>()
-            );
-        std::transform
-            (excess_premium_load_[mce_gen_guar].begin()
-            ,excess_premium_load_[mce_gen_guar].end()
-            ,excess_premium_load_[mce_gen_curr].begin()
-            ,excess_premium_load_[mce_gen_mdpt].begin()
-            ,mean<double>()
-            );
-        std::transform
-            (target_sales_load_[mce_gen_guar].begin()
-            ,target_sales_load_[mce_gen_guar].end()
-            ,target_sales_load_[mce_gen_curr].begin()
-            ,target_sales_load_[mce_gen_mdpt].begin()
-            ,mean<double>()
-            );
-        std::transform
-            (excess_sales_load_[mce_gen_guar].begin()
-            ,excess_sales_load_[mce_gen_guar].end()
-            ,excess_sales_load_[mce_gen_curr].begin()
-            ,excess_sales_load_[mce_gen_mdpt].begin()
-            ,mean<double>()
-            );
-        std::transform
-            (target_total_load_[mce_gen_guar].begin()
-            ,target_total_load_[mce_gen_guar].end()
-            ,target_total_load_[mce_gen_curr].begin()
-            ,target_total_load_[mce_gen_mdpt].begin()
-            ,mean<double>()
-            );
-        std::transform
-            (excess_total_load_[mce_gen_guar].begin()
-            ,excess_total_load_[mce_gen_guar].end()
-            ,excess_total_load_[mce_gen_curr].begin()
-            ,excess_total_load_[mce_gen_mdpt].begin()
-            ,mean<double>()
-            );
+        assign(monthly_policy_fee_   [mce_gen_mdpt], apply_binary(mean<double>(), monthly_policy_fee_   [mce_gen_guar], monthly_policy_fee_   [mce_gen_curr]));
+        assign(annual_policy_fee_    [mce_gen_mdpt], apply_binary(mean<double>(), annual_policy_fee_    [mce_gen_guar], annual_policy_fee_    [mce_gen_curr]));
+        assign(specified_amount_load_[mce_gen_mdpt], apply_binary(mean<double>(), specified_amount_load_[mce_gen_guar], specified_amount_load_[mce_gen_curr]));
+        assign(separate_account_load_[mce_gen_mdpt], apply_binary(mean<double>(), separate_account_load_[mce_gen_guar], separate_account_load_[mce_gen_curr]));
+        assign(target_premium_load_  [mce_gen_mdpt], apply_binary(mean<double>(), target_premium_load_  [mce_gen_guar], target_premium_load_  [mce_gen_curr]));
+        assign(excess_premium_load_  [mce_gen_mdpt], apply_binary(mean<double>(), excess_premium_load_  [mce_gen_guar], excess_premium_load_  [mce_gen_curr]));
+        assign(target_sales_load_    [mce_gen_mdpt], apply_binary(mean<double>(), target_sales_load_    [mce_gen_guar], target_sales_load_    [mce_gen_curr]));
+        assign(excess_sales_load_    [mce_gen_mdpt], apply_binary(mean<double>(), excess_sales_load_    [mce_gen_guar], excess_sales_load_    [mce_gen_curr]));
+        assign(target_total_load_    [mce_gen_mdpt], apply_binary(mean<double>(), target_total_load_    [mce_gen_guar], target_total_load_    [mce_gen_curr]));
+        assign(excess_total_load_    [mce_gen_mdpt], apply_binary(mean<double>(), excess_total_load_    [mce_gen_guar], excess_total_load_    [mce_gen_curr]));
         }
 }
 
@@ -557,40 +366,13 @@ Loads::Loads(TDatabase const& database, bool NeedMidpointRates)
     if(NeedMidpointRates)
         {
         monthly_policy_fee_   [mce_gen_mdpt].resize(database.length());
-        // ET !! Matrix operations are most welcome here:
-        //   monthly_policy_fee_[mce_gen_mdpt] = mean(monthly_policy_fee_[mce_gen_guar], monthly_policy_fee_[mce_gen_curr]);
-        //   and so on, reiterating that line for every other name given here.
-        std::transform
-            (monthly_policy_fee_[mce_gen_guar].begin()
-            ,monthly_policy_fee_[mce_gen_guar].end()
-            ,monthly_policy_fee_[mce_gen_curr].begin()
-            ,monthly_policy_fee_[mce_gen_mdpt].begin()
-            ,mean<double>()
-            );
+        assign(monthly_policy_fee_   [mce_gen_mdpt], apply_binary(mean<double>(), monthly_policy_fee_   [mce_gen_guar], monthly_policy_fee_   [mce_gen_curr]));
         target_premium_load_  [mce_gen_mdpt].resize(database.length());
-        std::transform
-            (target_premium_load_[mce_gen_guar].begin()
-            ,target_premium_load_[mce_gen_guar].end()
-            ,target_premium_load_[mce_gen_curr].begin()
-            ,target_premium_load_[mce_gen_mdpt].begin()
-            ,mean<double>()
-            );
+        assign(target_premium_load_  [mce_gen_mdpt], apply_binary(mean<double>(), target_premium_load_  [mce_gen_guar], target_premium_load_  [mce_gen_curr]));
         excess_premium_load_  [mce_gen_mdpt].resize(database.length());
-        std::transform
-            (excess_premium_load_[mce_gen_guar].begin()
-            ,excess_premium_load_[mce_gen_guar].end()
-            ,excess_premium_load_[mce_gen_curr].begin()
-            ,excess_premium_load_[mce_gen_mdpt].begin()
-            ,mean<double>()
-            );
+        assign(excess_premium_load_  [mce_gen_mdpt], apply_binary(mean<double>(), excess_premium_load_  [mce_gen_guar], excess_premium_load_  [mce_gen_curr]));
         specified_amount_load_[mce_gen_mdpt].resize(database.length());
-        std::transform
-            (specified_amount_load_[mce_gen_guar].begin()
-            ,specified_amount_load_[mce_gen_guar].end()
-            ,specified_amount_load_[mce_gen_curr].begin()
-            ,specified_amount_load_[mce_gen_mdpt].begin()
-            ,mean<double>()
-            );
+        assign(specified_amount_load_[mce_gen_mdpt], apply_binary(mean<double>(), specified_amount_load_[mce_gen_guar], specified_amount_load_[mce_gen_curr]));
         }
 
     premium_tax_load_.push_back(0.0);
