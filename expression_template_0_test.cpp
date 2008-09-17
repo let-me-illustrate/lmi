@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: expression_template_0_test.cpp,v 1.21 2008-09-11 21:53:23 chicares Exp $
+// $Id: expression_template_0_test.cpp,v 1.22 2008-09-17 02:06:28 chicares Exp $
 
 #if !defined __BORLANDC__
 #   define USE_UBLAS
@@ -47,6 +47,8 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
+#include <PETE/et_vector.hpp>
+
 #if !defined __BORLANDC__
 #   include <boost/bind.hpp>
 #endif // !defined __BORLANDC__
@@ -54,8 +56,6 @@
 #if defined USE_UBLAS
 #   include <boost/numeric/ublas/vector.hpp>
 #endif // defined USE_UBLAS
-
-#include <PETE/et_vector.hpp>
 
 #include <algorithm>
 #include <functional>
