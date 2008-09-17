@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.hpp,v 1.29 2008-09-17 17:09:28 chicares Exp $
+// $Id: main_wx.hpp,v 1.30 2008-09-17 17:29:36 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.h (C) 1998 Julian Smart and Markus Holzem
@@ -107,7 +107,6 @@ class Skeleton
 
     void UponTimer                        (wxTimerEvent&);
     void UponUpdateInapplicable           (wxUpdateUIEvent&);
-    void UponUpdateUI                     (wxUpdateUIEvent&);
     void UponWindowCascade                (wxCommandEvent&);
     void UponWindowNext                   (wxCommandEvent&);
     void UponWindowPrevious               (wxCommandEvent&);
