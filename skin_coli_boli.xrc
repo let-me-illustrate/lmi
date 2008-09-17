@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin_coli_boli.xrc,v 1.9 2008-08-22 22:17:08 wboutin Exp $
+    $Id: skin_coli_boli.xrc,v 1.10 2008-09-17 18:45:34 wboutin Exp $
 
     This version is designed for COLI and BOLI users; it omits input
     fields that seem irrelevant in that context, and reflects the
@@ -2586,6 +2586,14 @@ useful in the future.
                     <border>4</border>
                     <object class="wxStaticText">
                         <label>Rates by account:</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW|wxALIGN_LEFT|wxTOP|wxLEFT</flag>
+                    <border>8</border>
+                    <object class="wxCheckBox" name="UseCurrentDeclaredRate">
+                        <help>Use current general-account declared rate</help>
+                        <label>Use current general-account declared rate</label>
                     </object>
                 </object>
                 <object class="sizeritem">
