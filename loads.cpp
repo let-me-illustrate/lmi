@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads.cpp,v 1.22 2008-09-17 02:07:14 chicares Exp $
+// $Id: loads.cpp,v 1.23 2008-09-17 14:23:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -77,6 +77,9 @@ Loads::Loads(BasicValues& V)
 }
 
 /// Reserve required space for vector data members.
+///
+/// Zero-initializing everything is perhaps unnecessary, but the unit
+/// test shows that it costs very little.
 
 void Loads::Allocate(int length)
 {
@@ -93,10 +96,6 @@ void Loads::Allocate(int length)
 
     for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
         {
-        // TODO ?? Consider skipping midpoint basis if unneeded.
-
-        // TODO ?? Why is this necessary? Why aren't all of these
-        // initialized by database lookup?
         monthly_policy_fee_    [j].resize(length);
         annual_policy_fee_     [j].resize(length);
         specified_amount_load_ [j].resize(length);
@@ -106,15 +105,14 @@ void Loads::Allocate(int length)
         target_sales_load_     [j].resize(length);
         excess_sales_load_     [j].resize(length);
 
-        // TODO ?? Not retrieved from database. Initialize elsewhere?
         target_total_load_     [j].resize(length);
         excess_total_load_     [j].resize(length);
         }
 
-    // TODO ?? refundable_sales_load_proportion_ isn't resized.
-
-    premium_tax_load_                              .resize(length);
     amortized_premium_tax_load_                    .resize(length);
+
+    refundable_sales_load_proportion_              .resize(length);
+    premium_tax_load_                              .resize(length);
     dac_tax_load_                                  .resize(length);
 
     target_premium_load_7702_excluding_premium_tax_.resize(length);
@@ -236,15 +234,18 @@ void Loads::Calculate(load_details const& details)
     specified_amount_load_[mce_gen_guar] += details.TabularGuarSpecAmtLoad_;
     specified_amount_load_[mce_gen_curr] += details.TabularCurrSpecAmtLoad_;
 
-    // Total load excludes monthly_policy_fee_, annual_policy_fee_, and
-    // amortized_premium_tax_load_ because they are charges rather than loads.
-    //
-    // TODO ?? Is the specified-amount 'load' not a charge?
+    // Total load excludes monthly_policy_fee_, annual_policy_fee_,
+    // amortized_premium_tax_load_, and specified_amount_load_ because
+    // they are charges rather than loads (despite the last one's
+    // name): they're always deducted whether or not any payment is
+    // made.
 
-    // TODO ?? Clearly the common functionality should be factored out here.
-    // TODO ?? It is probably unnecessary to handle the midpoint basis here.
     for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
         {
+        if(mce_gen_mdpt == j)
+            {
+            continue;
+            }
         target_sales_load_[j] += details.VectorExtraCompLoad_;
         target_total_load_[j] = target_sales_load_[j];
         target_total_load_[j] += target_premium_load_[j] + dac_tax_load_;
