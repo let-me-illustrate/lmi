@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1159 2008-09-17 02:08:23 chicares Exp $
+// $Id: ChangeLog,v 1.1160 2008-09-17 17:29:37 chicares Exp $
 
 MAINTENANCE
 
@@ -19608,4 +19608,26 @@ Refactor, using PETE.
   custom_io_0.cpp
 Fix defect introduced 20080901T1429Z. "Custom" input treats declared
 rates in its own way.
+
+20080917T1423Z <gchicares@sbcglobal.net> [969]
+
+  loads.cpp
+Address several defect markers.
+
+20080917T1654Z <gchicares@sbcglobal.net> [968]
+
+  main_wx.cpp
+Permit default handling of menu-open events.
+
+20080917T1709Z <gchicares@sbcglobal.net> [966]
+
+  main_wx.cpp
+  main_wx.hpp
+Expunge an inutile member function.
+
+20080917T1729Z <gchicares@sbcglobal.net> [964]
+
+  main_wx.cpp
+  main_wx.hpp
+Expunge an inutile member function.
 
