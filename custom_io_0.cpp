@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: custom_io_0.cpp,v 1.26 2008-08-11 14:46:30 chicares Exp $
+// $Id: custom_io_0.cpp,v 1.27 2008-09-17 02:08:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -406,6 +406,10 @@ bool custom_io_0_read(Input& z, std::string const& filename)
         {
         z["UnderwritingClass"]     = "Rated";
         }
+
+    // The current declared rate isn't necessarily used: see function
+    // adjust_interest_rates() and its documentation.
+    z["UseCurrentDeclaredRate"] = "No";
 
     yare_input const yip(z);
     TDatabase database(yip);
