@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin_single_premium.xrc,v 1.4 2008-08-04 16:12:33 wboutin Exp $
+    $Id: skin_single_premium.xrc,v 1.5 2008-09-17 18:45:34 wboutin Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -960,6 +960,14 @@
                         </object>
                     </object>
                 </object>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxGROW|wxALIGN_LEFT|wxALL</flag>
+            <border>8</border>
+            <object class="wxCheckBox" name="UseCurrentDeclaredRate">
+                <help>Use current general-account declared rate</help>
+                <label>Use current general-account declared rate</label>
             </object>
         </object>
         <object class="sizeritem">
