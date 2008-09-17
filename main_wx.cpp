@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.115 2008-09-17 16:54:25 chicares Exp $
+// $Id: main_wx.cpp,v 1.116 2008-09-17 17:09:27 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -119,10 +119,6 @@ IMPLEMENT_WX_THEME_SUPPORT
 // using the XRCID here prevents the menu command from working, but
 // either one makes toolbar enablement work correctly.
 //
-// WX !! However, menu enablement still doesn't seem to work with the
-// EVT_UPDATE_UI(wxID_SAVE,...) handler here; that seems to require
-// the EVT_MENU_OPEN handler.
-//
 BEGIN_EVENT_TABLE(Skeleton, wxApp)
     EVT_DROP_FILES(                                    Skeleton::UponDropFiles                    )
     EVT_BUTTON(wxID_HELP                              ,Skeleton::UponHelp                         )
@@ -156,13 +152,6 @@ BEGIN_EVENT_TABLE(Skeleton, wxApp)
     EVT_TIMER(wxID_ANY                                ,Skeleton::UponTimer                        )
 // TODO ?? expunge
 //  EVT_UPDATE_UI(wxID_ANY                            ,Skeleton::UponUpdateUI                     )
-    EVT_UPDATE_UI(wxID_SAVE                           ,Skeleton::UponUpdateFileSave               )
-// TODO ?? expunge
-// Enabling this line prevents the menuitem from performing its required
-// action, whether or not the EVT_UPDATE_UI(wxID_SAVE...) handler is also
-// present.
-//  EVT_UPDATE_UI(XRCID("wxID_SAVE"                  ),Skeleton::UponUpdateFileSave               )
-
 // TODO ?? There has to be a better way.
 /*
     EVT_UPDATE_UI(XRCID("edit_cell"            ),Skeleton::UponUpdateInapplicable)
@@ -734,29 +723,6 @@ void Skeleton::UponMenuOpen(wxMenuEvent& event)
             {
             window_previous->Enable(1 < child_frame_count);
             }
-
-        // Needed for (xrc) menu enablement: a
-        //   EVT_UPDATE_UI(XRCID("wxID_SAVE"),Skeleton::UponUpdateFileSave)
-        // handler fails to update enablement for that menu item.
-        // However, enablement of an item with the same ID on the
-        // toolbar apparently requires the EVT_UPDATE_UI technique.
-        wxDocument* doc = doc_manager_->GetCurrentDocument();
-        wxMenuItem* file_save = child_frame->GetMenuBar()->FindItem
-            (XRCID("wxID_SAVE")
-            );
-        if(file_save)
-            {
-            file_save->Enable(doc && doc->IsModified());
-            }
-/*
-        wxMenuItem* file_save_as = child_frame->GetMenuBar()->FindItem
-            (XRCID("wxID_SAVEAS")
-            );
-        if(file_save_as)
-            {
-            file_save_as->Enable(true);
-            }
-*/
         }
     // (else) Parent menu enablement could be handled here, but, for
     // now at least, none is required.
@@ -1059,27 +1025,6 @@ void Skeleton::UponTimer(wxTimerEvent&)
 void Skeleton::OnUnhandledException()
 {
     wxSafeShowMessage("Terminating due to unhandled exception.", "Fatal error");
-}
-
-// TODO ?? Should this call Skip()?
-
-// Required for toolbar enablement. Although '.xrc' files use the same
-// xrc Id:
-//   <object class="wxMenuItem" name="wxID_SAVE">
-//   <object class="tool"       name="wxID_SAVE">
-// the UponMenuOpen() handler above doesn't handle toolbar enablement,
-// even when the menu is pulled down; and, OTOH, this function alone
-// doesn't handle menuitem enablement.
-//
-void Skeleton::UponUpdateFileSave(wxUpdateUIEvent& event)
-{
-    wxDocument* doc = doc_manager_->GetCurrentDocument();
-    event.Enable(doc && doc->IsModified());
-
-    // Setting the event's Id to the xrc Id fails to handle menu
-    // enablement--that is, this does not work:
-//    event.SetId(XRCID("wxID_SAVE"));
-//    event.Enable(doc && doc->IsModified());
 }
 
 // TODO ?? An unsuccessful experiment.
