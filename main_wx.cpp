@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.116 2008-09-17 17:09:27 chicares Exp $
+// $Id: main_wx.cpp,v 1.117 2008-09-17 17:29:36 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -150,8 +150,6 @@ BEGIN_EVENT_TABLE(Skeleton, wxApp)
     EVT_MENU(XRCID("window_tile_vertically"          ),Skeleton::UponWindowTileVertically         )
     EVT_MENU_OPEN(                                     Skeleton::UponMenuOpen                     )
     EVT_TIMER(wxID_ANY                                ,Skeleton::UponTimer                        )
-// TODO ?? expunge
-//  EVT_UPDATE_UI(wxID_ANY                            ,Skeleton::UponUpdateUI                     )
 // TODO ?? There has to be a better way.
 /*
     EVT_UPDATE_UI(XRCID("edit_cell"            ),Skeleton::UponUpdateInapplicable)
@@ -1043,16 +1041,6 @@ This doesn't undo that override.
 */
 
 // Presumably we need to use ProcessEvent(), somehow.
-}
-
-// TODO ?? Should this be expunged?
-
-// WX !! It seems that a function like this should be able to handle
-// all toolbar and menu enablement. But it appears that a much more
-// complex implementation is required for wxID_SAVE.
-//
-void Skeleton::UponUpdateUI(wxUpdateUIEvent&)
-{
 }
 
 void Skeleton::UponWindowCascade(wxCommandEvent&)
