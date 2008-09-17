@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1158 2008-09-14 00:53:13 chicares Exp $
+// $Id: ChangeLog,v 1.1159 2008-09-17 02:08:23 chicares Exp $
 
 MAINTENANCE
 
@@ -19571,4 +19571,41 @@ Add new entities.
 
   [ChangeLog only]
 Fix defect introduced 20080911T2342Z. Run 'make check_concinnity'.
+
+20080914T1523Z <gchicares@sbcglobal.net> [978]
+
+  census_view.cpp
+Casually work around a problem for the time being.
+
+20080915T1414Z <gchicares@sbcglobal.net> [978]
+
+  timer.hpp
+Improve timing accuracy for operations that take very little time.
+
+20080915T1415Z <gchicares@sbcglobal.net> [977]
+
+  loads_test.cpp
+Test calculations.
+
+20080916T1138Z <gchicares@sbcglobal.net> [977]
+
+  install_mingw.make
+Add md5sums for recent MinGW releases.
+
+20080917T0206Z <gchicares@sbcglobal.net> [977]
+
+  expression_template_0_test.cpp
+Sort header subdirectories in ASCII order. The "PETE" subdirectory
+cannot be renamed without invasive changes to PETE.
+
+20080917T0207Z <gchicares@sbcglobal.net> [976]
+
+  loads.cpp
+Refactor, using PETE.
+
+20080917T0208Z <gchicares@sbcglobal.net> [976]
+
+  custom_io_0.cpp
+Fix defect introduced 20080901T1429Z. "Custom" input treats declared
+rates in its own way.
 
