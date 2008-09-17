@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1160 2008-09-17 17:29:37 chicares Exp $
+// $Id: ChangeLog,v 1.1161 2008-09-17 18:45:34 wboutin Exp $
 
 MAINTENANCE
 
@@ -19630,4 +19630,11 @@ Expunge an inutile member function.
   main_wx.cpp
   main_wx.hpp
 Expunge an inutile member function.
+
+20080917T1845Z <wboutin@massmutual.com> [964]
+
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_single_premium.xrc
+Add a "use current declared rate" checkbox.
 
