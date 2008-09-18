@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.66 2008-02-21 19:36:18 wboutin Exp $
+    $Id: fo_common.xsl,v 1.67 2008-09-18 18:59:43 wboutin Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -767,7 +767,7 @@
           <fo:block font-size="20pt" font-weight="bold">
             <xsl:choose>
               <xsl:when test="$scalars/IsInforce!='1'">
-                Basic Life Insurance Illustration
+                Life Insurance Illustration
               </xsl:when>
               <xsl:otherwise>
                 In Force Life Insurance Illustration
@@ -821,19 +821,23 @@
             </fo:block>
           </fo:block>
 
-          <fo:block padding-top="9em">
+          <fo:block padding="9em 0 4em">
             <xsl:call-template name="company-logo"/>
           </fo:block>
+
+<!--
           <fo:block padding-top="1em">
             <xsl:value-of select="$scalars/InsCoName"/>
           </fo:block>
           <fo:block padding-bottom="1em">
             <xsl:value-of select="$scalars/InsCoAddr"/>
           </fo:block>
+-->
           <fo:block font-size="9pt">
             <xsl:value-of select="$scalars/InsCoShortName"/> Financial Group is
-            a marketing name for <xsl:value-of select="$scalars/InsCoName"/> and
-            its affiliated companies and sales representatives,
+            a marketing name for <xsl:value-of select="$scalars/InsCoName"/>
+            (<xsl:value-of select="$scalars/InsCoShortName"/>) and its affiliated
+            companies and sales representatives,
             <xsl:value-of select="$scalars/InsCoAddr"/>.
           </fo:block>
         </fo:block>

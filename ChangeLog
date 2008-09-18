@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1161 2008-09-17 18:45:34 wboutin Exp $
+// $Id: ChangeLog,v 1.1162 2008-09-18 18:59:44 wboutin Exp $
 
 MAINTENANCE
 
@@ -19637,4 +19637,10 @@ Expunge an inutile member function.
   skin_group_carveout.xrc
   skin_single_premium.xrc
 Add a "use current declared rate" checkbox.
+
+20080918T1859Z <wboutin@massmutual.com> [960]
+
+  fo_common.xsl
+  nasd.xsl
+Extract several disclosures.
 
