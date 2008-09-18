@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.86 2008-09-01 14:02:23 chicares Exp $
+// $Id: illustration_view.cpp,v 1.87 2008-09-18 13:31:49 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -77,10 +77,8 @@ BEGIN_EVENT_TABLE(IllustrationView, ViewEx)
     EVT_MENU(wxID_COPY                      ,IllustrationView::UponCopyFull)
     EVT_MENU(XRCID("preview_summary"       ),IllustrationView::UponPreviewSummary)
     EVT_MENU(XRCID("print_summary"         ),IllustrationView::UponPrintSummary)
-    EVT_MENU_OPEN(                           IllustrationView::UponMenuOpen  )
     EVT_UPDATE_UI(wxID_SAVE                 ,IllustrationView::UponUpdateFileSave)
-//    EVT_UPDATE_UI(wxID_SAVEAS               ,IllustrationView::UponUpdateFileSaveAs)
-//    EVT_UPDATE_UI(XRCID("wxID_SAVEAS"      ),IllustrationView::UponUpdateFileSaveAs)
+    EVT_UPDATE_UI(wxID_SAVEAS               ,IllustrationView::UponUpdateFileSaveAs)
     EVT_UPDATE_UI(XRCID("edit_cell"        ),IllustrationView::UponUpdateProperties)
 
 // There has to be a better way to inhibit these inapplicable ids.
@@ -221,39 +219,6 @@ void IllustrationView::UponCopySummary(wxCommandEvent&)
     CopyLedgerToClipboard(e_copy_summary);
 }
 
-void IllustrationView::UponMenuOpen(wxMenuEvent&)
-{
-// TODO ?? WX !! Never gets called. Does this need to be in the document class?
-    warning()
-        << "This function apparently should not be called."
-        << LMI_FLUSH
-        ;
-
-    wxMenuItem* file_save = MenuBar()->FindItem
-        (XRCID("wxID_SAVE")
-        );
-    if(file_save)
-        {
-        file_save->Enable(!is_phony_ && document().IsModified());
-        }
-
-    wxMenuItem* file_save_as = MenuBar()->FindItem
-        (XRCID("wxID_SAVEAS")
-        );
-    if(file_save_as)
-        {
-        file_save_as->Enable(!is_phony_);
-        }
-
-    wxMenuItem* edit_cell = MenuBar()->FindItem
-        (XRCID("edit_cell")
-        );
-    if(edit_cell)
-        {
-        edit_cell->Enable(!is_phony_);
-        }
-}
-
 void IllustrationView::UponPreviewPdf(wxCommandEvent&)
 {
     Pdf("open");
@@ -288,24 +253,19 @@ void IllustrationView::UponProperties(wxCommandEvent&)
         }
 }
 
-/// This completely replaces wxDocManager::OnUpdateFileSave(),
-/// and doesn't need to call Skip().
+/// This complete replacement for wxDocManager::OnUpdateFileSave()
+/// should not call Skip().
 
 void IllustrationView::UponUpdateFileSave(wxUpdateUIEvent& e)
 {
     e.Enable(!is_phony_ && document().IsModified());
 }
 
+/// This complete replacement for wxDocManager::OnUpdateFileSaveAs()
+/// should not call Skip().
+
 void IllustrationView::UponUpdateFileSaveAs(wxUpdateUIEvent& e)
 {
-// TODO ?? Doesn't seem to get called.
-    warning()
-        << "This function apparently should not be called."
-        << LMI_FLUSH
-        ;
-
-// TODO ?? Is special logic required, here and elsewhere, to prevent
-// actions that don't make sense with style LMI_WX_CHILD_DOCUMENT?
     e.Enable(!is_phony_);
 }
 
@@ -314,7 +274,6 @@ void IllustrationView::UponUpdateInapplicable(wxUpdateUIEvent& e)
     e.Enable(false);
 }
 
-// TODO ?? Doesn't seem to handle the menuitem--just the toolbar.
 void IllustrationView::UponUpdateProperties(wxUpdateUIEvent& e)
 {
     e.Enable(!is_phony_);
