@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.79 2008-08-25 09:50:24 wboutin Exp $
+    $Id: nasd.xsl,v 1.80 2008-09-18 18:59:43 wboutin Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -48,7 +48,7 @@
           <!-- Header -->
           <fo:region-before extent="3.0in"/>
           <!-- Footer -->
-          <fo:region-after extent="0.91in"/>
+          <fo:region-after extent="1.25in"/>
         </fo:simple-page-master>
 
         <!-- Define the explanatory notes page. -->
@@ -59,7 +59,7 @@
           <!-- Header -->
           <fo:region-before extent="3.0in"/>
           <!-- Footer -->
-          <fo:region-after extent="0.91in"/>
+          <fo:region-after extent="1.25in"/>
         </fo:simple-page-master>
 
         <!-- Define the explanatory notes page. -->
@@ -71,7 +71,7 @@
           <!-- Header -->
           <fo:region-before extent="3in"/>
           <!-- Footer -->
-          <fo:region-after extent="1.3in"/>
+          <fo:region-after extent="1.25in"/>
         </fo:simple-page-master>
 
         <!-- Define the Basic Illustration page. -->
@@ -82,7 +82,7 @@
           <!-- Header -->
           <fo:region-before extent="3in"/>
           <!-- Footer -->
-          <fo:region-after extent=".91in"/>
+          <fo:region-after extent="1.25in"/>
         </fo:simple-page-master>
 
         <!-- Define the Supplemental Illustration page. -->
@@ -93,7 +93,7 @@
           <!-- Header -->
           <fo:region-before extent="3in"/>
           <!-- Footer -->
-          <fo:region-after extent=".91in"/>
+          <fo:region-after extent="1.25in"/>
         </fo:simple-page-master>
 
         <!-- Define the Illustration Assumption Detail page. -->
@@ -105,7 +105,7 @@
             <!-- Header -->
             <fo:region-before extent="3in"/>
             <!-- Footer -->
-            <fo:region-after extent=".91in"/>
+            <fo:region-after extent="1.25in"/>
           </fo:simple-page-master>
         </xsl:if>
 
@@ -118,7 +118,7 @@
             <!-- Header -->
             <fo:region-before extent="3in"/>
             <!-- Footer -->
-            <fo:region-after extent=".96in"/>
+            <fo:region-after extent="1.25in"/>
           </fo:simple-page-master>
         </xsl:if>
       </fo:layout-master-set>
@@ -139,10 +139,9 @@
             <xsl:with-param name="reporttitle">
               <xsl:choose>
                 <xsl:when test="$scalars/IsInforce!='1'">
-                  Basic Life Illustration
                 </xsl:when>
                 <xsl:otherwise>
-                  In Force Basic Illustration
+                  In Force Illustration
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:with-param>
@@ -167,11 +166,7 @@
             <xsl:call-template name="company-logo"/>
           </fo:block>
           <xsl:call-template name="standardheader">
-            <xsl:with-param name="reporttitle" select="'Supplemental Illustration'"/>
           </xsl:call-template>
-          <fo:block text-align="center" font-size="9pt" font-family="sans-serif" padding-top="1em">
-            Using Current charges
-          </fo:block>
           <xsl:call-template name="dollar-units"/>
         </fo:static-content>
 
@@ -204,10 +199,24 @@
             </fo:block>
 
             <fo:block font-weight="bold" padding-top="2em">
-              Policy Year
+              Account Value
             </fo:block>
             <fo:block>
-              The number of years the policy is assumed to have been in force.
+              <xsl:value-of select="$scalars/AccountValueFootnote"/>
+            </fo:block>
+
+            <fo:block font-weight="bold" padding-top="2em">
+              Cash Surrender Value
+            </fo:block>
+            <fo:block>
+              <xsl:value-of select="$scalars/CashSurrValueFootnote"/>
+            </fo:block>
+
+            <fo:block font-weight="bold" padding-top="2em">
+              Death Benefit
+            </fo:block>
+            <fo:block>
+              <xsl:value-of select="$scalars/DeathBenefitFootnote"/>
             </fo:block>
 
             <xsl:if test="not($is_composite)">
@@ -215,46 +224,36 @@
                 End of Year Age
               </fo:block>
               <fo:block>
-                The issue age of the insured plus the number of completed policy
-                years since the policy date.
+              <xsl:value-of select="$scalars/AttainedAgeFootnote"/>
               </fo:block>
             </xsl:if>
 
             <fo:block font-weight="bold" padding-top="2em">
-              Premium Outlay
+              Initial Premium
             </fo:block>
             <fo:block>
-              The total amount the premium payor plans to pay each year,
-              assuming that each payment is made at the beginning
-              of the premium paying period.
+              <xsl:value-of select="$scalars/InitialPremiumFootnote"/>
             </fo:block>
 
             <fo:block font-weight="bold" padding-top="2em">
               Net Premium
             </fo:block>
             <fo:block>
-              The Net Premium is the Premium Outlay less any premium loads.
+              <xsl:value-of select="$scalars/NetPremiumFootnote"/>
             </fo:block>
 
             <fo:block font-weight="bold" padding-top="2em">
-              Cash Surrender Value
+              Policy Year
             </fo:block>
             <fo:block>
-              The Cash Surrender Value is the amount payable to a policy owner
-              upon surrender of the policy. It is equal to the Account Value
-              less any surrender charges, if applicable, and less any policy
-              debt and any unpaid monthly charges.
+              <xsl:value-of select="$scalars/PolicyYearFootnote"/>
             </fo:block>
 
             <fo:block font-weight="bold" padding-top="2em">
-              Death Benefit
+              Premium Outlay
             </fo:block>
             <fo:block>
-              The Death Benefit is the net amount paid to a beneficiary
-              following receipt of due proof of death. The Death Benefit
-              is equal to the benefit provided by the death benefit option
-              in effect on the date of death less any policy debt and
-              any unpaid monthly charges.
+              <xsl:value-of select="$scalars/OutlayFootnote"/>
             </fo:block>
           </fo:block>
         </fo:flow>
@@ -404,6 +403,7 @@
               Premium payments are assumed to be made at the beginning
               of the year. Account values, cash surrender values,
               and death benefits are illustrated as of the end of the year.
+              <xsl:value-of select="$scalars/MinimumPremiumFootnote"/>
             </fo:block>
           </fo:block>
         </fo:flow>
@@ -457,38 +457,16 @@
               contract, investors should carefully consider the investment
               objectives, risks, charges and expenses of the variable life
               insurance contract and its underlying investment choices.
-              Please read the prospectuses carefully before investing
-              or sending money.
+              Please read the prospectuses carefully before investing.
             </fo:block>
             <xsl:if test="$scalars/HasTerm='1'">
               <fo:block padding-top="1em">
-                A Term Rider is available for attachment to this policy.
-                The Term Rider provides the option to purchase monthly
-                term insurance on the life of the insured.
-                The term rider selected face amount supplements the selected
-                face amount of the contract. If the Term Rider is attached,
-                the policy to which it is attached may have a lower annual
-                cutoff premium and, as a result, the lower overall sales loads
-                paid may be lower than a contract having the same total
-                face amount, but with no Term Rider. Also, the lapse protection
-                feature of the contract's
-                <xsl:value-of select="$scalars/NoLapseProvisionName"/>
-                does not apply to the Term Rider's selected face amount.
+              <xsl:value-of select="$scalars/TermFootnote"/>
               </fo:block>
             </xsl:if>
             <xsl:if test="$scalars/HasWP='1'">
               <fo:block padding-top="1em">
-                A Waiver of Monthly Charges rider is available for attachment
-                to this policy for insureds with ages 20-64. The Waiver of
-                Monthly Charges Rider provides that in the event
-                of the disability of the insured that begins before attained
-                age 65 and continues for at least 6 months,
-                <xsl:value-of select="$scalars/InsCoShortName"/> will waive
-                certain monthly charges up to age 65, but not less than
-                two years, while the insured remains totally disabled.
-                An additional charge is associated with this rider, if elected.
-                Please refer to your contract for specific provisions
-                and a detailed schedule of charges.
+              <xsl:value-of select="$scalars/WaiverFootnote"/>
               </fo:block>
             </xsl:if>
             <xsl:if test="$scalars/UsePartialMort='1'">
@@ -556,7 +534,7 @@
               This illustration shows how the death benefit and account value
               could vary over an extended period of time, assuming the funds
               experience hypothetical gross rates of investment return.
-              Actual results of return may be more or less than those shown
+              Actual rates of return may be more or less than those shown
               and in all likelihood will vary year to year.
               Timing of premium payments, investment allocations and withdrawals
               or loans, if taken, may impact investment results.
@@ -586,6 +564,22 @@
                 </fo:block>
               </xsl:if>
             </xsl:if>
+            <fo:block padding-top="1em">
+              Securities offered through registered representatives of
+              <xsl:value-of select="$scalars/CoUnderwriter"/>
+              <xsl:value-of select="$scalars/CoUnderwriterAddress"/>
+              or of a broker-dealer with a selling agreement with
+              <xsl:value-of select="$scalars/MainUnderwriter"/>
+              <xsl:value-of select="$scalars/MainUnderwriterAddress"/>.
+            </fo:block>
+            <fo:block padding-top="1em">
+              The Principal Underwriter is
+              <xsl:value-of select="$scalars/MainUnderwriter"/>
+              , a wholly owned subsidiary of
+              <xsl:value-of select="$scalars/InsCoName"/>
+              and is located at
+              <xsl:value-of select="$scalars/MainUnderwriterAddress"/>
+            </fo:block>
           </fo:block>
           <xsl:if test="not($has_supplemental_report) and $is_composite">
             <fo:block id="endofdoc"/>
@@ -720,18 +714,42 @@
               </xsl:if>
               <xsl:if test="$scalars/HasWP='1'">
                 <fo:block text-align="left">
-                  Waiver of Monthly Charges Rider elected.
+                  Waiver of Monthly Charges Rider elected
+                </fo:block>
+              </xsl:if>
+              <xsl:if test="not($is_composite) and $scalars/UWClass='Rated'">
+                <fo:block text-align="left">
+                  Table Rating:
+                  <xsl:value-of select="$scalars/SubstandardTable"/>
                 </fo:block>
               </xsl:if>
               <xsl:call-template name="print-franchise-and-policynumber"/>
             </fo:table-cell>
             <fo:table-cell>
+<!-- Keep intact in case its useful to others; however regulators may find
+it confusing if the general account rates aren't included, too.
               <fo:block text-align="left">
-                Assumed Gross Rate:
-                <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_Current"/>
-                (<xsl:value-of select="$scalars/InitAnnSepAcctNetInt_Current"/>
-                Net)*
+                Assumed Separate Account Rate:
+                  <fo:block text-align="left">
+                    &nbsp;&nbsp;&nbsp;&nbsp;Gross
+                    <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_Current"/>
+                    (<xsl:value-of select="$scalars/InitAnnSepAcctNetInt_Current"/>
+                    Net)*
+                  </fo:block>
               </fo:block>
+-->
+                <fo:block text-align="left">
+                  Assumed Premium Allocation:**
+                  <fo:block text-align="left">
+                    &nbsp;&nbsp;&nbsp;&nbsp;Separate Account: 100%
+                  </fo:block>
+                  <fo:block>
+                    &nbsp;&nbsp;&nbsp;&nbsp;Guaranteed Principal Account (GPA): 0%
+<!-- Use when fund allocations are implemented
+                    <xsl:value-of select="$scalars/GenAcctAllocation"/>
+-->
+                  </fo:block>
+                </fo:block>
               <fo:block text-align="left">
                 Initial
                 <xsl:if test="$scalars/HasTerm!='0'">
@@ -747,12 +765,6 @@
                 <fo:block text-align="left">
                   Initial Term Face Amount:
                   $<xsl:value-of select="$scalars/InitTermSpecAmt"/>
-                </fo:block>
-              </xsl:if>
-              <xsl:if test="not($is_composite) and $scalars/UWClass='Rated'">
-                <fo:block text-align="left">
-                  Table Rating:
-                  <xsl:value-of select="$scalars/SubstandardTable"/>
                 </fo:block>
               </xsl:if>
             </fo:table-cell>
@@ -826,12 +838,16 @@
                 <xsl:call-template name="header-cell-with-border"/>
                 <fo:block text-align="center">
                   <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_GuaranteedZero"/>
-                  Hypothetical Gross
+                  Assumed Sep Acct
                 </fo:block>
                 <fo:block text-align="center">
-                  Return
+                  Gross Rate*
                   (<xsl:value-of select="$scalars/InitAnnSepAcctNetInt_GuaranteedZero"/>
                   net)
+                </fo:block>
+                <fo:block text-align="center">
+                  <xsl:value-of select="$scalars/InitAnnGenAcctInt_Guaranteed"/>
+                  GPA rate
                 </fo:block>
               </fo:table-cell>
               <fo:table-cell>
@@ -841,12 +857,16 @@
                 <xsl:call-template name="header-cell-with-border"/>
                 <fo:block text-align="center">
                   <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_Guaranteed"/>
-                  Hypothetical Gross
+                  Assumed Sep Acct
                 </fo:block>
                 <fo:block text-align="center">
-                  Return
+                  Gross Rate*
                   (<xsl:value-of select="$scalars/InitAnnSepAcctNetInt_Guaranteed"/>
                   net)
+                </fo:block>
+                <fo:block text-align="center">
+                  <xsl:value-of select="$scalars/InitAnnGenAcctInt_Guaranteed"/>
+                  GPA rate
                 </fo:block>
               </fo:table-cell>
               <fo:table-cell>
@@ -856,12 +876,16 @@
                 <xsl:call-template name="header-cell-with-border"/>
                 <fo:block text-align="center">
                   <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_CurrentZero"/>
-                  Hypothetical Gross
+                  Assumed Sep Acct
                 </fo:block>
                 <fo:block text-align="center">
-                  Return
+                  Gross Rate*
                   (<xsl:value-of select="$scalars/InitAnnSepAcctNetInt_CurrentZero"/>
                   net)
+                </fo:block>
+                <fo:block text-align="center">
+                  <xsl:value-of select="$scalars/InitAnnGenAcctInt_Current"/>
+                  GPA rate
                 </fo:block>
               </fo:table-cell>
               <fo:table-cell>
@@ -871,12 +895,16 @@
                 <xsl:call-template name="header-cell-with-border"/>
                 <fo:block text-align="center">
                   <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_Current"/>
-                  Hypothetical Gross
+                  Assumed Sep Acct
                 </fo:block>
                 <fo:block text-align="center">
-                  Return
+                  Gross Rate*
                   (<xsl:value-of select="$scalars/InitAnnSepAcctNetInt_Current"/>
                   net)
+                </fo:block>
+                <fo:block text-align="center">
+                  <xsl:value-of select="$scalars/InitAnnGenAcctInt_Current"/>
+                  GPA rate
                 </fo:block>
               </fo:table-cell>
             </fo:table-row>
@@ -910,7 +938,7 @@
       <column name="PremTaxLoad_Current">Premium _Tax Load</column>
       <column name="DacTaxLoad_Current">DAC _Tax Load</column>
       <column name="NetPmt_Current">Net _Premium</column>
-      <column name="COICharge_Current">Mortality _Charge</column>
+      <column name="COICharge_Current">Cost of Insurance _Charges</column>
       <column name="AcctVal_Current">Account _Value</column>
       <column name="CSVNet_Current">Cash Surr _Value</column>
       <column name="EOYDeathBft_Current">Death _Benefit</column>
@@ -1031,6 +1059,7 @@
     <xsl:param name="include-underwriter" select="boolean(0)"/>
     <xsl:call-template name="generic-footer">
       <xsl:with-param name="top-block">
+<!--
         <xsl:if test="$include-underwriter">
           <fo:block padding-top="1em">
             The Principal Underwriter is
@@ -1043,11 +1072,15 @@
             </fo:block>
           </fo:block>
         </xsl:if>
+-->
         <fo:block>
           * This illustration is based on the assumed Gross Rate shown.
           The Net Rate is provided for information purposes only.
         </fo:block>
         <fo:block>
+          ** <xsl:value-of select="$scalars/PremAllocationFootnote"/>
+        </fo:block>
+        <fo:block padding-top="0.25em">
           See the Explanatory Notes for important policy information.
           This illustration is not complete without all pages.
         </fo:block>
