@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.57 2008-09-02 00:32:52 zeitlin Exp $
+# $Id: Makefile.am,v 1.58 2008-09-21 15:34:05 zeitlin Exp $
 
 SUBDIRS = third_party
 
@@ -92,6 +92,7 @@ TESTS = \
     test_input_seq \
     test_input \
     test_irc7702a \
+    test_istream_to_string \
     test_loads \
     test_map_lookup \
     test_materially_equal \
@@ -631,6 +632,11 @@ test_irc7702a_SOURCES = \
   irc7702a_test.cpp \
   stratified_algorithms.cpp
 test_irc7702a_CXXFLAGS = $(AM_CXXFLAGS)
+
+test_istream_to_string_SOURCES = \
+  $(common_test_objects) \
+  istream_to_string_test.cpp
+test_istream_to_string_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_loads_SOURCES = \
   $(common_test_objects) \
