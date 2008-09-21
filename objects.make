@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.136 2008-09-01 13:17:31 chicares Exp $
+# $Id: objects.make,v 1.137 2008-09-21 13:09:29 chicares Exp $
 
 ################################################################################
 
@@ -452,6 +452,7 @@ unit_test_targets := \
   input_seq_test \
   input_test \
   irc7702a_test \
+  istream_to_string_test \
   ledger_test \
   loads_test \
   map_lookup_test \
@@ -664,6 +665,11 @@ irc7702a_test$(EXEEXT): \
   ihs_irc7702a.o \
   irc7702a_test.o \
   stratified_algorithms.o \
+
+istream_to_string_test$(EXEEXT): \
+  $(common_test_objects) \
+  istream_to_string_test.o \
+  timer.o \
 
 ledger_test$(EXEEXT): \
   $(common_test_objects) \
