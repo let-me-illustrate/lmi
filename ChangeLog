@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1162 2008-09-18 18:59:44 wboutin Exp $
+// $Id: ChangeLog,v 1.1163 2008-09-21 13:09:29 chicares Exp $
 
 MAINTENANCE
 
@@ -19638,9 +19638,22 @@ Expunge an inutile member function.
   skin_single_premium.xrc
 Add a "use current declared rate" checkbox.
 
+20080918T1331Z <gchicares@sbcglobal.net> [960]
+
+  illustration_view.cpp
+  illustration_view.hpp
+Improve menu and toolbar enablement. See:
+  https://savannah.nongnu.org/support/?104430
+
 20080918T1859Z <wboutin@massmutual.com> [960]
 
   fo_common.xsl
   nasd.xsl
 Extract several disclosures.
+
+20080921T1309Z <gchicares@sbcglobal.net> [960]
+
+  istream_to_string_test.cpp [new file]
+  objects.make
+Add unit test.
 
