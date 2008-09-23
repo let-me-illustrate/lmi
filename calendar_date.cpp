@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date.cpp,v 1.25 2008-09-23 03:30:15 chicares Exp $
+// $Id: calendar_date.cpp,v 1.26 2008-09-23 03:46:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -42,6 +42,7 @@
 #include <locale>
 #include <ostream>
 #include <sstream>
+#include <utility>
 
 namespace
 {
@@ -414,6 +415,37 @@ calendar_date add_years_and_months
 
 namespace
 {
+/// Successive anniversaries of 'base_date' that bracket 'other_date'.
+///
+/// Postcondition: 'other_date' is in [anniversary0, anniversary1).
+/// Thus, if 'other_date' falls exactly on an anniversary of
+/// 'base_date', then the bracket is chosen to begin on 'other_date'.
+
+std::pair<calendar_date,calendar_date> bracketing_anniversaries
+    (calendar_date const& base_date
+    ,calendar_date const& other_date
+    )
+{
+    calendar_date some_neighboring_anniversary = add_years
+        (base_date
+        ,other_date.year() - base_date.year()
+        ,false
+        );
+    calendar_date last_anniversary =
+        other_date < some_neighboring_anniversary
+        ?   add_years(some_neighboring_anniversary, -1, false)
+        :   some_neighboring_anniversary
+        ;
+    calendar_date next_anniversary =
+        other_date < some_neighboring_anniversary
+        ?   some_neighboring_anniversary
+        :   add_years(some_neighboring_anniversary,  1, false)
+        ;
+    LMI_ASSERT(last_anniversary <= other_date && other_date < next_anniversary);
+    LMI_ASSERT(1 == next_anniversary.year() - last_anniversary.year());
+    return std::make_pair(last_anniversary, next_anniversary);
+}
+
 /// Determine attained age without regard to its sign.
 ///
 /// Negative ages often indicate logic errors. This function is kept
@@ -425,23 +457,10 @@ int notional_age
     ,bool                 use_age_nearest_birthday
     )
 {
-    calendar_date some_neighboring_birthday = add_years
-        (birthdate
-        ,as_of_date.year() - birthdate.year()
-        ,false
-        );
-    calendar_date last_birthday =
-        as_of_date < some_neighboring_birthday
-        ?   add_years(some_neighboring_birthday, -1, false)
-        :   some_neighboring_birthday
-        ;
-    calendar_date next_birthday =
-        as_of_date < some_neighboring_birthday
-        ?   some_neighboring_birthday
-        :   add_years(some_neighboring_birthday,  1, false)
-        ;
-    LMI_ASSERT(last_birthday <= as_of_date && as_of_date < next_birthday);
-    LMI_ASSERT(1 == next_birthday.year() - last_birthday.year());
+    typedef std::pair<calendar_date,calendar_date> date_pair;
+    date_pair z = bracketing_anniversaries(birthdate, as_of_date);
+    calendar_date last_birthday = z.first;
+    calendar_date next_birthday = z.second;
 
     int days_since_last_birthday =
             as_of_date   .julian_day_number()
@@ -514,7 +533,10 @@ int integral_duration
     ,calendar_date const& other_date
     )
 {
-    return notional_age(base_date, other_date, false);
+    return
+          bracketing_anniversaries(base_date, other_date).first.year()
+        - base_date.year()
+        ;
 }
 
 /// Earliest as-of date consonant with a given maximum age and epoch.
