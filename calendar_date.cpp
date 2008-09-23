@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date.cpp,v 1.24 2008-09-23 00:01:11 chicares Exp $
+// $Id: calendar_date.cpp,v 1.25 2008-09-23 03:30:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -440,7 +440,8 @@ int notional_age
         ?   some_neighboring_birthday
         :   add_years(some_neighboring_birthday,  1, false)
         ;
-    LMI_ASSERT(last_birthday <= as_of_date && as_of_date <= next_birthday);
+    LMI_ASSERT(last_birthday <= as_of_date && as_of_date < next_birthday);
+    LMI_ASSERT(1 == next_birthday.year() - last_birthday.year());
 
     int days_since_last_birthday =
             as_of_date   .julian_day_number()
