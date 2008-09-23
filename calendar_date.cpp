@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date.cpp,v 1.26 2008-09-23 03:46:17 chicares Exp $
+// $Id: calendar_date.cpp,v 1.27 2008-09-23 14:18:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -524,11 +524,11 @@ int attained_age
 /// anniversary.
 ///
 /// It is important to select 'base_date' carefully, as these values:
-///    integral_duration(X, Y)
-///   -integral_duration(Y, X)
+///    duration_floor(X, Y)
+///   -duration_floor(Y, X)
 /// need not be equal.
 
-int integral_duration
+int duration_floor
     (calendar_date const& base_date
     ,calendar_date const& other_date
     )
@@ -537,6 +537,23 @@ int integral_duration
           bracketing_anniversaries(base_date, other_date).first.year()
         - base_date.year()
         ;
+}
+
+/// Anniversary of 'base_date' on or before which 'other_date' occurs.
+///
+/// Analogous to duration_floor(), q.v.
+///
+/// This function is not equivalent to 1+duration_floor() because
+/// 'other_date' may fall on an exact anniversary of 'base_date'.
+
+int duration_ceiling
+    (calendar_date const& base_date
+    ,calendar_date const& other_date
+    )
+{
+    int z = duration_floor(base_date, other_date);
+    z += other_date != add_years(base_date, z, false);
+    return z;
 }
 
 /// Earliest as-of date consonant with a given maximum age and epoch.

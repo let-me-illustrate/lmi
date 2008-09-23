@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date_test.cpp,v 1.23 2008-06-06 11:33:26 chicares Exp $
+// $Id: calendar_date_test.cpp,v 1.24 2008-09-23 14:18:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -572,78 +572,98 @@ void CalendarDateTest::TestIntegralDuration()
     // Test whole-year intervals.
 
     other_date = calendar_date(1999,  1,  1);
-    BOOST_TEST_EQUAL(-1, integral_duration(base_date, other_date));
+    BOOST_TEST_EQUAL(-1, duration_floor  (base_date, other_date));
+    BOOST_TEST_EQUAL(-1, duration_ceiling(base_date, other_date));
 
     other_date = calendar_date(2000,  1,  1);
-    BOOST_TEST_EQUAL( 0, integral_duration(base_date, other_date));
+    BOOST_TEST_EQUAL( 0, duration_floor  (base_date, other_date));
+    BOOST_TEST_EQUAL( 0, duration_ceiling(base_date, other_date));
 
     other_date = calendar_date(2001,  1,  1);
-    BOOST_TEST_EQUAL( 1, integral_duration(base_date, other_date));
+    BOOST_TEST_EQUAL( 1, duration_floor  (base_date, other_date));
+    BOOST_TEST_EQUAL( 1, duration_ceiling(base_date, other_date));
 
     // Test non-whole-year intervals.
 
     other_date = calendar_date(1999,  2,  2);
-    BOOST_TEST_EQUAL(-1, integral_duration(base_date, other_date));
+    BOOST_TEST_EQUAL(-1, duration_floor  (base_date, other_date));
+    BOOST_TEST_EQUAL( 0, duration_ceiling(base_date, other_date));
 
     other_date = calendar_date(2000,  2,  2);
-    BOOST_TEST_EQUAL( 0, integral_duration(base_date, other_date));
+    BOOST_TEST_EQUAL( 0, duration_floor  (base_date, other_date));
+    BOOST_TEST_EQUAL( 1, duration_ceiling(base_date, other_date));
 
     other_date = calendar_date(2001,  2,  2);
-    BOOST_TEST_EQUAL( 1, integral_duration(base_date, other_date));
+    BOOST_TEST_EQUAL( 1, duration_floor  (base_date, other_date));
+    BOOST_TEST_EQUAL( 2, duration_ceiling(base_date, other_date));
 
     // Test leap-year-day base date.
 
     base_date  = calendar_date(2000,  2, 29);
 
     other_date = calendar_date(1999,  2, 28);
-    BOOST_TEST_EQUAL(-2, integral_duration(base_date, other_date));
+    BOOST_TEST_EQUAL(-2, duration_floor  (base_date, other_date));
+    BOOST_TEST_EQUAL(-1, duration_ceiling(base_date, other_date));
 
     other_date = calendar_date(1999,  3,  1);
-    BOOST_TEST_EQUAL(-1, integral_duration(base_date, other_date));
+    BOOST_TEST_EQUAL(-1, duration_floor  (base_date, other_date));
+    BOOST_TEST_EQUAL(-1, duration_ceiling(base_date, other_date));
 
     other_date = calendar_date(2000,  2, 28);
-    BOOST_TEST_EQUAL(-1, integral_duration(base_date, other_date));
+    BOOST_TEST_EQUAL(-1, duration_floor  (base_date, other_date));
+    BOOST_TEST_EQUAL( 0, duration_ceiling(base_date, other_date));
 
     other_date = calendar_date(2000,  2, 29);
-    BOOST_TEST_EQUAL( 0, integral_duration(base_date, other_date));
+    BOOST_TEST_EQUAL( 0, duration_floor  (base_date, other_date));
+    BOOST_TEST_EQUAL( 0, duration_ceiling(base_date, other_date));
 
     other_date = calendar_date(2000,  3,  1);
-    BOOST_TEST_EQUAL( 0, integral_duration(base_date, other_date));
+    BOOST_TEST_EQUAL( 0, duration_floor  (base_date, other_date));
+    BOOST_TEST_EQUAL( 1, duration_ceiling(base_date, other_date));
 
     other_date = calendar_date(2001,  2, 28);
-    BOOST_TEST_EQUAL( 0, integral_duration(base_date, other_date));
+    BOOST_TEST_EQUAL( 0, duration_floor  (base_date, other_date));
+    BOOST_TEST_EQUAL( 1, duration_ceiling(base_date, other_date));
 
     other_date = calendar_date(2001,  3,  1);
-    BOOST_TEST_EQUAL( 1, integral_duration(base_date, other_date));
+    BOOST_TEST_EQUAL( 1, duration_floor  (base_date, other_date));
+    BOOST_TEST_EQUAL( 1, duration_ceiling(base_date, other_date));
 
     // Test leap-year-day other date.
 
     other_date = calendar_date(2000,  2, 29);
 
     base_date  = calendar_date(1999,  2, 28);
-    BOOST_TEST_EQUAL( 1, integral_duration(base_date, other_date));
+    BOOST_TEST_EQUAL( 1, duration_floor  (base_date, other_date));
+    BOOST_TEST_EQUAL( 2, duration_ceiling(base_date, other_date));
 
     base_date  = calendar_date(1999,  3,  1);
-    BOOST_TEST_EQUAL( 0, integral_duration(base_date, other_date));
+    BOOST_TEST_EQUAL( 0, duration_floor  (base_date, other_date));
+    BOOST_TEST_EQUAL( 1, duration_ceiling(base_date, other_date));
 
     base_date  = calendar_date(2000,  2, 28);
-    BOOST_TEST_EQUAL( 0, integral_duration(base_date, other_date));
+    BOOST_TEST_EQUAL( 0, duration_floor  (base_date, other_date));
+    BOOST_TEST_EQUAL( 1, duration_ceiling(base_date, other_date));
 
     base_date  = calendar_date(2000,  2, 29);
-    BOOST_TEST_EQUAL( 0, integral_duration(base_date, other_date));
+    BOOST_TEST_EQUAL( 0, duration_floor  (base_date, other_date));
+    BOOST_TEST_EQUAL( 0, duration_ceiling(base_date, other_date));
 
     base_date  = calendar_date(2000,  3,  1);
-    BOOST_TEST_EQUAL(-1, integral_duration(base_date, other_date));
+    BOOST_TEST_EQUAL(-1, duration_floor  (base_date, other_date));
+    BOOST_TEST_EQUAL( 0, duration_ceiling(base_date, other_date));
 
     base_date  = calendar_date(2001,  2, 28);
-    BOOST_TEST_EQUAL(-1, integral_duration(base_date, other_date));
+    BOOST_TEST_EQUAL(-1, duration_floor  (base_date, other_date));
+    BOOST_TEST_EQUAL( 0, duration_ceiling(base_date, other_date));
 
     base_date  = calendar_date(2001,  3,  1);
-    BOOST_TEST_EQUAL(-2, integral_duration(base_date, other_date));
+    BOOST_TEST_EQUAL(-2, duration_floor  (base_date, other_date));
+    BOOST_TEST_EQUAL(-1, duration_ceiling(base_date, other_date));
 
     // Demonstrate strong noncommutativity. To show that
-    //    integral_duration(X, Y)
-    //   -integral_duration(Y, X)
+    //    duration_floor(X, Y)
+    //   -duration_floor(Y, X)
     // may or may not be equal doesn't require "hard" testcases: the
     // first days of thirty-one-day months in non-leap years suffice.
 
@@ -651,14 +671,25 @@ void CalendarDateTest::TestIntegralDuration()
     calendar_date date1(2001, 3, 1);
     calendar_date date2(2003, 1, 1);
 
-    int d01 = integral_duration(date0, date1); BOOST_TEST_EQUAL( 0, d01);
-    int d10 = integral_duration(date1, date0); BOOST_TEST_EQUAL(-1, d10);
+    int f01 = duration_floor  (date0, date1); BOOST_TEST_EQUAL( 0, f01);
+    int f10 = duration_floor  (date1, date0); BOOST_TEST_EQUAL(-1, f10);
 
-    int d02 = integral_duration(date0, date2); BOOST_TEST_EQUAL( 2, d02);
-    int d20 = integral_duration(date2, date0); BOOST_TEST_EQUAL(-2, d20);
+    int f02 = duration_floor  (date0, date2); BOOST_TEST_EQUAL( 2, f02);
+    int f20 = duration_floor  (date2, date0); BOOST_TEST_EQUAL(-2, f20);
 
-    BOOST_TEST_UNEQUAL(d01, -d10);
-    BOOST_TEST_EQUAL  (d02, -d20);
+    BOOST_TEST_UNEQUAL(f01, -f10);
+    BOOST_TEST_EQUAL  (f02, -f20);
+
+    // duration_ceiling is similarly noncommutative.
+
+    int c01 = duration_ceiling(date0, date1); BOOST_TEST_EQUAL( 1, c01);
+    int c10 = duration_ceiling(date1, date0); BOOST_TEST_EQUAL( 0, c10);
+
+    int c02 = duration_ceiling(date0, date2); BOOST_TEST_EQUAL( 2, c02);
+    int c20 = duration_ceiling(date2, date0); BOOST_TEST_EQUAL(-2, c20);
+
+    BOOST_TEST_UNEQUAL(c01, -c10);
+    BOOST_TEST_EQUAL  (c02, -c20);
 }
 
 void CalendarDateTest::TestBirthdateLimits()
