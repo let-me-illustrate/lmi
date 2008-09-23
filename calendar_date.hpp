@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date.hpp,v 1.16 2008-06-06 11:32:30 chicares Exp $
+// $Id: calendar_date.hpp,v 1.17 2008-09-23 00:01:11 chicares Exp $
 
 #ifndef calendar_date_hpp
 #define calendar_date_hpp
@@ -199,47 +199,27 @@ calendar_date add_years_and_months
     ,bool                 is_curtate
     );
 
-/// Age on 'as_of_date' if born on 'birthdate'.
-///
-/// Throws an exception if 'as_of_date' precedes 'birthdate'.
-
 int attained_age
     (calendar_date const& birthdate
     ,calendar_date const& as_of_date
     ,bool                 use_age_nearest_birthday
     );
 
-/// Anniversary of 'base_date' on or after which 'other_date' occurs.
-///
-/// Result is not constrained as to sign. Any date is its own zeroth
-/// anniversary.
-///
-/// It is important to select 'base_date' carefully, as these values:
-///    integral_duration(X, Y)
-///   -integral_duration(Y, X)
-/// need not be equal.
-
 int integral_duration
     (calendar_date const& base_date
     ,calendar_date const& other_date
     );
-
-/// Earliest as-of date consonant with a given maximum age and epoch.
 
 calendar_date minimum_as_of_date
     (int                  maximum_age
     ,calendar_date const& epoch
     );
 
-/// Earliest birthdate consonant with a given age and as-of date.
-
 calendar_date minimum_birthdate
     (int                  age
     ,calendar_date const& as_of_date
     ,bool                 use_age_nearest_birthday
     );
-
-/// Latest birthdate consonant with a given age and as-of date.
 
 calendar_date maximum_birthdate
     (int                  age
