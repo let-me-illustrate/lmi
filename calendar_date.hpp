@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date.hpp,v 1.17 2008-09-23 00:01:11 chicares Exp $
+// $Id: calendar_date.hpp,v 1.18 2008-09-23 14:18:32 chicares Exp $
 
 #ifndef calendar_date_hpp
 #define calendar_date_hpp
@@ -205,7 +205,12 @@ int attained_age
     ,bool                 use_age_nearest_birthday
     );
 
-int integral_duration
+int duration_floor
+    (calendar_date const& base_date
+    ,calendar_date const& other_date
+    );
+
+int duration_ceiling
     (calendar_date const& base_date
     ,calendar_date const& other_date
     );

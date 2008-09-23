@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.93 2008-08-19 17:02:38 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.94 2008-09-23 14:18:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1510,7 +1510,10 @@ std::vector<double> BasicValues::GetActuarialTable
             ,GetLength()
             ,method
             ,yare_input_.InforceYear
-            ,integral_duration(yare_input_.EffectiveDate, yare_input_.LastCoiReentryDate)
+// For the present refactoring, floor is used in order to preserve previous
+// behavior momentarily. However, what's really wanted is ceiling:
+//            ,duration_ceiling(yare_input_.EffectiveDate, yare_input_.LastCoiReentryDate)
+            ,duration_floor(yare_input_.EffectiveDate, yare_input_.LastCoiReentryDate)
             );
         }
     else
