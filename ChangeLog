@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1163 2008-09-21 13:09:29 chicares Exp $
+// $Id: ChangeLog,v 1.1164 2008-09-23 14:37:35 chicares Exp $
 
 MAINTENANCE
 
@@ -19656,4 +19656,43 @@ Extract several disclosures.
   istream_to_string_test.cpp [new file]
   objects.make
 Add unit test.
+
+20080921T1534Z <zeitlin> [960]
+
+  Makefile.am
+Add 'istream_to_string' unit test.
+
+20080921T1823Z <gchicares@sbcglobal.net> [960]
+
+  istream_to_string_test.cpp
+Test various file sizes.
+
+20080923T0001Z <gchicares@sbcglobal.net> [960]
+
+  calendar_date.cpp
+  calendar_date.hpp
+Move certain documentation from header to implementation file.
+
+20080923T0330Z <gchicares@sbcglobal.net> [960]
+
+  calendar_date.cpp
+Strengthen invariants.
+
+20080923T0346Z <gchicares@sbcglobal.net> [960]
+
+  calendar_date.cpp
+Refactor.
+
+20080923T1418Z <gchicares@sbcglobal.net> [960]
+
+  calendar_date.cpp
+  calendar_date.hpp
+  calendar_date_test.cpp
+  ihs_basicval.cpp
+Split integral_duration() into floor and ceiling functions.
+
+20080923T1437Z <gchicares@sbcglobal.net> [960]
+
+  ihs_basicval.cpp
+Use ceiling instead of floor duration where semantically required.
 
