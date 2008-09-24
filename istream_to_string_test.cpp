@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: istream_to_string_test.cpp,v 1.2 2008-09-21 18:23:34 chicares Exp $
+// $Id: istream_to_string_test.cpp,v 1.3 2008-09-24 18:49:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -71,50 +71,64 @@ void istream_to_string_1
 }
 
 template<char* filename>
-void mete_0()
+std::string mete_0()
 {
     std::ifstream ifs(filename, ios_in_binary());
     std::string s;
     istream_to_string_0(ifs, s);
+    return s;
 }
 
 template<char* filename>
-void mete_1()
+std::string mete_1()
 {
     std::ifstream ifs(filename, ios_in_binary());
     std::string s;
     istream_to_string_1(ifs, s);
+    return s;
 }
 
 namespace
 {
-char f10      [] = "eraseme.10";
-char f100     [] = "eraseme.100";
-char f1000    [] = "eraseme.1000";
-char f10000   [] = "eraseme.10000";
-char f100000  [] = "eraseme.100000";
-char f1000000 [] = "eraseme.1000000";
-char f10000000[] = "eraseme.10000000";
+std::string const alphabet("abcdefghijklmnopqrstuvwxyz\n");
+
+char empty_file   [] = "eraseme.empty";
+char nonempty_file[] = "eraseme.nonempty";
+
+char f10          [] = "eraseme.10";
+char f100         [] = "eraseme.100";
+char f1000        [] = "eraseme.1000";
+char f10000       [] = "eraseme.10000";
+char f100000      [] = "eraseme.100000";
+char f1000000     [] = "eraseme.1000000";
+char f10000000    [] = "eraseme.10000000";
 } // Unnamed namespace.
 
-int test_main(int, char*[])
+void test_empty_file()
 {
-    // Test an empty file.
+    std::ofstream ofs(empty_file, ios_out_trunc_binary());
+    ofs.close();
 
-    char const* p = "/tmp/eraseme.empty";
-    {
-    std::ofstream ofs(p, ios_out_trunc_binary());
-    }
-    std::ifstream ifs(p, ios_in_binary());
-    std::string s;
-    istream_to_string_0(ifs, s);
-    BOOST_TEST(s.empty());
-    istream_to_string_1(ifs, s);
-    BOOST_TEST(s.empty());
-    std::remove(p);
+    BOOST_TEST(mete_0<empty_file>().empty());
+    BOOST_TEST(mete_1<empty_file>().empty());
 
-    // Test speed.
+    std::remove(empty_file);
+}
 
+void test_nonempty_file()
+{
+    std::ofstream ofs(nonempty_file, ios_out_trunc_binary());
+    ofs << alphabet;
+    ofs.close();
+
+    BOOST_TEST_EQUAL(alphabet, mete_0<nonempty_file>());
+    BOOST_TEST_EQUAL(alphabet, mete_1<nonempty_file>());
+
+    std::remove(nonempty_file);
+}
+
+void test_speed()
+{
     std::string const digits("0123456789");
     for(int i = 1; i < 10000000; i *= 10)
         {
@@ -154,6 +168,13 @@ int test_main(int, char*[])
     std::remove(f100000  );
     std::remove(f1000000 );
     std::remove(f10000000);
+}
+
+int test_main(int, char*[])
+{
+    test_empty_file();
+    test_nonempty_file();
+    test_speed();
 
     return 0;
 }
