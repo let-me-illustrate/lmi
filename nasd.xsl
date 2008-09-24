@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.80 2008-09-18 18:59:43 wboutin Exp $
+    $Id: nasd.xsl,v 1.81 2008-09-24 18:51:25 wboutin Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -89,7 +89,7 @@
         <fo:simple-page-master master-name="supplemental-illustration">
           <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
-          <fo:region-body margin="3in 0 1in"/>
+          <fo:region-body margin="2.5in 0 1in"/>
           <!-- Header -->
           <fo:region-before extent="3in"/>
           <!-- Footer -->
@@ -101,7 +101,7 @@
           <fo:simple-page-master master-name="illustration-assumption">
             <xsl:call-template name="set-page-size"/>
             <!-- Central part of page -->
-            <fo:region-body margin="2.8in 0 1in"/>
+            <fo:region-body margin="2.5in 0 1in"/>
             <!-- Header -->
             <fo:region-before extent="3in"/>
             <!-- Footer -->
@@ -566,10 +566,10 @@
             </xsl:if>
             <fo:block padding-top="1em">
               Securities offered through registered representatives of
-              <xsl:value-of select="$scalars/CoUnderwriter"/>
+              <xsl:value-of select="$scalars/CoUnderwriter"/>&nbsp;
               <xsl:value-of select="$scalars/CoUnderwriterAddress"/>
               or of a broker-dealer with a selling agreement with
-              <xsl:value-of select="$scalars/MainUnderwriter"/>
+              <xsl:value-of select="$scalars/MainUnderwriter"/>&nbsp;
               <xsl:value-of select="$scalars/MainUnderwriterAddress"/>.
             </fo:block>
             <fo:block padding-top="1em">
