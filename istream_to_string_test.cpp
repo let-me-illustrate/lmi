@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: istream_to_string_test.cpp,v 1.3 2008-09-24 18:49:11 chicares Exp $
+// $Id: istream_to_string_test.cpp,v 1.4 2008-09-25 04:41:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,7 +32,7 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
-#include <cstdio>         // std::remove()
+#include <cstdio>
 #include <fstream>
 #include <iterator>
 
@@ -88,6 +88,25 @@ std::string mete_1()
     return s;
 }
 
+/// This is a naive implementation that doesn't check return codes.
+
+template<char* filename>
+std::string mete_2()
+{
+    FILE* fp = std::fopen(filename, "rb");
+    static std::size_t const buffer_size = 4096;
+    static char buffer[buffer_size];
+    std::string s;
+    while(!std::feof(fp))
+        {
+        std::size_t bytes_read = std::fread(buffer, 1, buffer_size, fp);
+        if(0 != bytes_read)
+        s.append(buffer, bytes_read);
+        }
+    fclose(fp);
+    return s;
+}
+
 namespace
 {
 std::string const alphabet("abcdefghijklmnopqrstuvwxyz\n");
@@ -111,6 +130,7 @@ void test_empty_file()
 
     BOOST_TEST(mete_0<empty_file>().empty());
     BOOST_TEST(mete_1<empty_file>().empty());
+    BOOST_TEST(mete_2<empty_file>().empty());
 
     std::remove(empty_file);
 }
@@ -123,6 +143,7 @@ void test_nonempty_file()
 
     BOOST_TEST_EQUAL(alphabet, mete_0<nonempty_file>());
     BOOST_TEST_EQUAL(alphabet, mete_1<nonempty_file>());
+    BOOST_TEST_EQUAL(alphabet, mete_2<nonempty_file>());
 
     std::remove(nonempty_file);
 }
@@ -141,7 +162,7 @@ void test_speed()
             }
         }
 
-    std::cout << "\n  Speed tests for method 0...\n"
+    std::cout << "\n  Speed tests for istreambuf_iterator...\n"
         << "       10 bytes: " << TimeAnAliquot(mete_0<f10      >) << '\n'
         << "      100 bytes: " << TimeAnAliquot(mete_0<f100     >) << '\n'
         << "     1000 bytes: " << TimeAnAliquot(mete_0<f1000    >) << '\n'
@@ -151,7 +172,7 @@ void test_speed()
         << " 10000000 bytes: " << TimeAnAliquot(mete_0<f10000000>) << '\n'
         ;
 
-    std::cout << "\n  Speed tests for method 1...\n"
+    std::cout << "\n  Speed tests for extraction from streambuf...\n"
         << "       10 bytes: " << TimeAnAliquot(mete_1<f10      >) << '\n'
         << "      100 bytes: " << TimeAnAliquot(mete_1<f100     >) << '\n'
         << "     1000 bytes: " << TimeAnAliquot(mete_1<f1000    >) << '\n'
@@ -159,6 +180,16 @@ void test_speed()
         << "   100000 bytes: " << TimeAnAliquot(mete_1<f100000  >) << '\n'
         << "  1000000 bytes: " << TimeAnAliquot(mete_1<f1000000 >) << '\n'
         << " 10000000 bytes: " << TimeAnAliquot(mete_1<f10000000>) << '\n'
+        ;
+
+    std::cout << "\n  Speed tests for C equivalent...\n"
+        << "       10 bytes: " << TimeAnAliquot(mete_2<f10      >) << '\n'
+        << "      100 bytes: " << TimeAnAliquot(mete_2<f100     >) << '\n'
+        << "     1000 bytes: " << TimeAnAliquot(mete_2<f1000    >) << '\n'
+        << "    10000 bytes: " << TimeAnAliquot(mete_2<f10000   >) << '\n'
+        << "   100000 bytes: " << TimeAnAliquot(mete_2<f100000  >) << '\n'
+        << "  1000000 bytes: " << TimeAnAliquot(mete_2<f1000000 >) << '\n'
+        << " 10000000 bytes: " << TimeAnAliquot(mete_2<f10000000>) << '\n'
         ;
 
     std::remove(f10      );
