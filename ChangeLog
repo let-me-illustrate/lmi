@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1167 2008-09-25 14:37:24 chicares Exp $
+// $Id: ChangeLog,v 1.1168 2008-09-25 18:48:11 wboutin Exp $
 
 MAINTENANCE
 
@@ -19723,4 +19723,9 @@ avoid any risk of destabilizing an impending release.
 
   actuarial_table.hpp
 Revise documentation.
+
+20080925T1848Z <wboutin@massmutual.com> [960]
+
+  version.hpp
+Mark release candidate.
 
