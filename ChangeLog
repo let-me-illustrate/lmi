@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1165 2008-09-24 18:51:25 wboutin Exp $
+// $Id: ChangeLog,v 1.1166 2008-09-25 05:13:24 chicares Exp $
 
 MAINTENANCE
 
@@ -19696,8 +19696,26 @@ Split integral_duration() into floor and ceiling functions.
   ihs_basicval.cpp
 Use ceiling instead of floor duration where semantically required.
 
+20080924T1849Z <gchicares@sbcglobal.net> [960]
+
+  istream_to_string_test.cpp
+Test contents of a non-empty file explicitly.
+
 20080924T1851Z <wboutin@massmutual.com> [960]
 
   nasd.xsl
 Adjust formatting.
+
+20080925T0441Z <gchicares@sbcglobal.net> [960]
+
+  istream_to_string_test.cpp
+Compare performance to a C alternative.
+
+20080925T0513Z <gchicares@sbcglobal.net> [960]
+
+  istream_to_string_test.cpp
+Test an alternative to in_avail() (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2008-09/msg00032.html
+The production version is deliberately not changed yet, in order to
+avoid any risk of destabilizing an impending release.
 
