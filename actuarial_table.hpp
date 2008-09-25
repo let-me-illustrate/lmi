@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.hpp,v 1.17 2008-06-14 14:33:15 chicares Exp $
+// $Id: actuarial_table.hpp,v 1.18 2008-09-25 14:37:24 chicares Exp $
 
 #ifndef actuarial_table_hpp
 #define actuarial_table_hpp
@@ -56,18 +56,21 @@
 /// Let
 ///   CD = contract date
 ///   SD = [re]illustration date, CD <= SD
-///   RD = last reset date,       RD <= SD
+///   RD = last group reset date, RD <= SD [see stricter limit below]
 /// where RD may in general precede, follow, or coincide with CD. Let
-///   s = [years by which SD follows CD], 0 <= s
-///   r = [years by which RD follows CD], r <= s
+/// reillustration duration be
+///   s = floor  (years by which SD follows CD), 0 <= s
+/// and let contract reset duration be
+///   r = ceiling(years by which RD follows CD), r <= s
 ///         (or years by which RD precedes CD, giving a negative r)
-/// where '[]' is the greatest-integer function. Both durations are
-/// measured from CD because the absolute value of the number of full
-/// years between two dates depends on which is taken as the base for
-/// calculation. Let
+/// which latter imposes a stricter limit on RD, viz.
+///   RD <= CD + s
+/// (Durations are measured from CD because the absolute value of the
+/// integral number of years between two dates depends on which is
+/// taken as the base for calculation.) Let
 ///   x = insurance age
-///   j = projection duration, measured from from (CD+s), 0 <= j
-/// so the first rate actually used is for projection duration j=0.
+///   j = projection duration as measured from CD + s, 0 <= j
+/// so the first rate actually used is for projection duration j = 0.
 ///
 /// e_reenter_never
 ///   map [x]+s+j to [x]+s+j [the identity mapping]
@@ -86,10 +89,11 @@
 /// because no future reset is guaranteed. Certificates issued on
 /// divers dates may share a common group reset date that need not
 /// coincide with a certificate anniversary; in that case, rates reset
-/// on the last certificate anniversary preceding or coincident with
-/// the group reset date. As the same case makes clear, there can be
-/// no lower limit on the reset date: it can even precede a group
-/// insured's date of birth.
+/// on the next certificate anniversary following or coincident with
+/// the group reset date: i.e., on
+///   CD + r
+/// As the same case makes clear, there can be no lower limit on the
+/// reset date: it can even precede a group insured's date of birth.
 ///
 /// All three methods are affected by the "Important note" above: even
 /// e_reenter_never, if [x] exceeds max_select_age_ (see documentation
