@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: istream_to_string_test.cpp,v 1.4 2008-09-25 04:41:19 chicares Exp $
+// $Id: istream_to_string_test.cpp,v 1.5 2008-09-25 05:13:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -59,7 +59,7 @@ void istream_to_string_1
 {
     typedef std::basic_string<Char_t,Traits,Allocator> string_type;
     std::basic_ostringstream<Char_t,Traits,Allocator> oss;
-    if(is.rdbuf()->in_avail())
+    if(is.rdbuf()->sgetc() != Traits::eof())
         {
         oss << is.rdbuf();
         }
