@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1166 2008-09-25 05:13:24 chicares Exp $
+// $Id: ChangeLog,v 1.1167 2008-09-25 14:37:24 chicares Exp $
 
 MAINTENANCE
 
@@ -19718,4 +19718,9 @@ Test an alternative to in_avail() (VZ). See:
   http://lists.nongnu.org/archive/html/lmi/2008-09/msg00032.html
 The production version is deliberately not changed yet, in order to
 avoid any risk of destabilizing an impending release.
+
+20080925T1437Z <gchicares@sbcglobal.net> [960]
+
+  actuarial_table.hpp
+Revise documentation.
 
