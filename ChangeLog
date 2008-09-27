@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1168 2008-09-25 18:48:11 wboutin Exp $
+// $Id: ChangeLog,v 1.1169 2008-09-27 01:17:20 chicares Exp $
 
 MAINTENANCE
 
@@ -19728,4 +19728,15 @@ Revise documentation.
 
   version.hpp
 Mark release candidate.
+
+20080927T0049Z <gchicares@sbcglobal.net> [960]
+
+  istream_to_string.hpp
+  istream_to_string_test.cpp
+Use alternative to in_avail() tested 20080925T0513Z (VZ).
+
+20080927T0117Z <gchicares@sbcglobal.net> [960]
+
+  istream_to_string_test.cpp
+Make unit test acceptably fast.
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: istream_to_string_test.cpp,v 1.6 2008-09-27 00:49:12 chicares Exp $
+// $Id: istream_to_string_test.cpp,v 1.7 2008-09-27 01:17:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -173,44 +173,56 @@ void test_speed()
             }
         }
 
+    // Read each file once to flush disk cache.
+    mete_0<f10      >();
+    mete_0<f100     >();
+    mete_0<f1000    >();
+    mete_0<f10000   >();
+    mete_0<f100000  >();
+    mete_0<f1000000 >();
+    mete_0<f10000000>();
+
+    // Limit each measurement, to make the unit test acceptably fast.
+    double const t = 0.01;
+
     std::cout << "\n  Speed tests for production code...\n"
-        << "       10 bytes: " << TimeAnAliquot(mete_0<f10      >) << '\n'
-        << "      100 bytes: " << TimeAnAliquot(mete_0<f100     >) << '\n'
-        << "     1000 bytes: " << TimeAnAliquot(mete_0<f1000    >) << '\n'
-        << "    10000 bytes: " << TimeAnAliquot(mete_0<f10000   >) << '\n'
-        << "   100000 bytes: " << TimeAnAliquot(mete_0<f100000  >) << '\n'
-        << "  1000000 bytes: " << TimeAnAliquot(mete_0<f1000000 >) << '\n'
-        << " 10000000 bytes: " << TimeAnAliquot(mete_0<f10000000>) << '\n'
+        << "       10 bytes: " << TimeAnAliquot(mete_0<f10      >, t) << '\n'
+        << "      100 bytes: " << TimeAnAliquot(mete_0<f100     >, t) << '\n'
+        << "     1000 bytes: " << TimeAnAliquot(mete_0<f1000    >, t) << '\n'
+        << "    10000 bytes: " << TimeAnAliquot(mete_0<f10000   >, t) << '\n'
+        << "   100000 bytes: " << TimeAnAliquot(mete_0<f100000  >, t) << '\n'
+        << "  1000000 bytes: " << TimeAnAliquot(mete_0<f1000000 >, t) << '\n'
+        << " 10000000 bytes: " << TimeAnAliquot(mete_0<f10000000>, t) << '\n'
         ;
 
     std::cout << "\n  Speed tests for istreambuf_iterator...\n"
-        << "       10 bytes: " << TimeAnAliquot(mete_1<f10      >) << '\n'
-        << "      100 bytes: " << TimeAnAliquot(mete_1<f100     >) << '\n'
-        << "     1000 bytes: " << TimeAnAliquot(mete_1<f1000    >) << '\n'
-        << "    10000 bytes: " << TimeAnAliquot(mete_1<f10000   >) << '\n'
-        << "   100000 bytes: " << TimeAnAliquot(mete_1<f100000  >) << '\n'
-        << "  1000000 bytes: " << TimeAnAliquot(mete_1<f1000000 >) << '\n'
-        << " 10000000 bytes: " << TimeAnAliquot(mete_1<f10000000>) << '\n'
+        << "       10 bytes: " << TimeAnAliquot(mete_1<f10      >, t) << '\n'
+        << "      100 bytes: " << TimeAnAliquot(mete_1<f100     >, t) << '\n'
+        << "     1000 bytes: " << TimeAnAliquot(mete_1<f1000    >, t) << '\n'
+        << "    10000 bytes: " << TimeAnAliquot(mete_1<f10000   >, t) << '\n'
+        << "   100000 bytes: " << TimeAnAliquot(mete_1<f100000  >, t) << '\n'
+        << "  1000000 bytes: " << TimeAnAliquot(mete_1<f1000000 >, t) << '\n'
+        << " 10000000 bytes: " << TimeAnAliquot(mete_1<f10000000>, t) << '\n'
         ;
 
     std::cout << "\n  Speed tests for extraction from streambuf...\n"
-        << "       10 bytes: " << TimeAnAliquot(mete_2<f10      >) << '\n'
-        << "      100 bytes: " << TimeAnAliquot(mete_2<f100     >) << '\n'
-        << "     1000 bytes: " << TimeAnAliquot(mete_2<f1000    >) << '\n'
-        << "    10000 bytes: " << TimeAnAliquot(mete_2<f10000   >) << '\n'
-        << "   100000 bytes: " << TimeAnAliquot(mete_2<f100000  >) << '\n'
-        << "  1000000 bytes: " << TimeAnAliquot(mete_2<f1000000 >) << '\n'
-        << " 10000000 bytes: " << TimeAnAliquot(mete_2<f10000000>) << '\n'
+        << "       10 bytes: " << TimeAnAliquot(mete_2<f10      >, t) << '\n'
+        << "      100 bytes: " << TimeAnAliquot(mete_2<f100     >, t) << '\n'
+        << "     1000 bytes: " << TimeAnAliquot(mete_2<f1000    >, t) << '\n'
+        << "    10000 bytes: " << TimeAnAliquot(mete_2<f10000   >, t) << '\n'
+        << "   100000 bytes: " << TimeAnAliquot(mete_2<f100000  >, t) << '\n'
+        << "  1000000 bytes: " << TimeAnAliquot(mete_2<f1000000 >, t) << '\n'
+        << " 10000000 bytes: " << TimeAnAliquot(mete_2<f10000000>, t) << '\n'
         ;
 
     std::cout << "\n  Speed tests for C equivalent...\n"
-        << "       10 bytes: " << TimeAnAliquot(mete_3<f10      >) << '\n'
-        << "      100 bytes: " << TimeAnAliquot(mete_3<f100     >) << '\n'
-        << "     1000 bytes: " << TimeAnAliquot(mete_3<f1000    >) << '\n'
-        << "    10000 bytes: " << TimeAnAliquot(mete_3<f10000   >) << '\n'
-        << "   100000 bytes: " << TimeAnAliquot(mete_3<f100000  >) << '\n'
-        << "  1000000 bytes: " << TimeAnAliquot(mete_3<f1000000 >) << '\n'
-        << " 10000000 bytes: " << TimeAnAliquot(mete_3<f10000000>) << '\n'
+        << "       10 bytes: " << TimeAnAliquot(mete_3<f10      >, t) << '\n'
+        << "      100 bytes: " << TimeAnAliquot(mete_3<f100     >, t) << '\n'
+        << "     1000 bytes: " << TimeAnAliquot(mete_3<f1000    >, t) << '\n'
+        << "    10000 bytes: " << TimeAnAliquot(mete_3<f10000   >, t) << '\n'
+        << "   100000 bytes: " << TimeAnAliquot(mete_3<f100000  >, t) << '\n'
+        << "  1000000 bytes: " << TimeAnAliquot(mete_3<f1000000 >, t) << '\n'
+        << " 10000000 bytes: " << TimeAnAliquot(mete_3<f10000000>, t) << '\n'
         ;
 
     std::remove(f10      );
