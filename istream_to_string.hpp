@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: istream_to_string.hpp,v 1.6 2008-08-02 23:30:30 chicares Exp $
+// $Id: istream_to_string.hpp,v 1.7 2008-09-27 00:49:11 chicares Exp $
 
 #ifndef istream_to_string_hpp
 #define istream_to_string_hpp
@@ -57,7 +57,7 @@ void istream_to_string
         }
 #else // !0
     std::basic_ostringstream<Char_t,Traits,Allocator> oss;
-    if(is.rdbuf()->in_avail())
+    if(Traits::eof() != is.rdbuf()->sgetc())
         {
         oss << is.rdbuf();
         }
