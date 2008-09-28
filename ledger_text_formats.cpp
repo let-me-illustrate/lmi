@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.42 2008-07-18 12:56:33 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.43 2008-09-28 14:24:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -216,7 +216,7 @@ void PrintFormTabDelimited
         ,std::negate<double>()
         );
     // ET !! This is tricky: incompatible lengths.
-    // ET !! drop(-1, cash_flow) = net_payment;
+    // ET !! drop(-1, cash_flow) += net_payment;
     std::transform
         (net_payment.begin()
         ,net_payment.end()
@@ -236,7 +236,10 @@ void PrintFormTabDelimited
         ,csv_plus_claims.begin()
         ,std::plus<double>()
         );
-// TODO ?? Is this irr valid?
+// TODO ?? Is this irr valid? What about the preceding one--should it
+// be based on 'real_claims' initialized to 'DeathProceedsPaid'
+// instead of to 'ClaimsPaid'? And if so, should a 'DeathProceedsPaid'
+// column be shown here?
     std::vector<double> irr_on_surrender(Curr_.CSVNet.size());
     if(!Invar.IsInforce)
         {
