@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: emit_ledger.cpp,v 1.11 2008-02-19 00:46:28 chicares Exp $
+// $Id: emit_ledger.cpp,v 1.12 2008-09-28 01:25:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -112,6 +112,7 @@ double emit_ledger
         }
     if(emission & mce_emit_custom_0)
         {
+// EXPERIMENTAL. This is untested:
         custom_io_0_write(ledger, filepath.string());
         }
 

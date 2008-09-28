@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.108 2008-08-25 16:14:25 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.109 2008-09-28 01:25:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2269,11 +2269,13 @@ void AccountValue::TxSetCoiCharge()
     double coi_rate = GetBandedCoiRates(GenBasis_, ActualSpecAmt)[Year];
     ActualCoiRate = coi_rate;
 
-    // TODO ?? Need to divide CoiRetentionRate by CoiMultiplier
-    // depending on database entity 'UseRawTableForRetention'.
+    // COI retention is a percentage of tabular rather than current
+    // COI charge. It's a risk charge, so it follows mortality
+    // expectations rather than fluctuations.
     //
-    // DATABASE !! Add such an entity; for now, 'ExpRatCOIRetention'
-    // can be manipulated to achieve the same effect.
+    // TODO ?? For now, however, the COI retention calculated here
+    // improvidently reflects the current COI multiplier, so end users
+    // need to divide input CoiRetentionRate by that multiplier.
 
     if
         (   yare_input_.UseExperienceRating
