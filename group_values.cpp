@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.97 2008-08-14 12:10:48 chicares Exp $
+// $Id: group_values.cpp,v 1.98 2008-09-28 01:25:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -181,8 +181,9 @@ census_run_result run_census_in_series::operator()
 ///   retention charge        = NAAR *        C *  R
 ///   net mortality charge = actual mortality charge - retention charge
 ///
-/// where C is the current COI rate defined above, R is the retention
-/// rate, K is the k factor, and NAAR is by convention nonnegative.
+/// where C is the current COI rate defined above, G is its guaranteed
+/// analogue, R is the retention rate, K is the k factor, and NAAR is
+/// by convention nonnegative.
 ///
 /// Database entity 'UseRawTableForRetention' optionally causes R to be
 /// divided by the input current COI multiplier, removing the latter
