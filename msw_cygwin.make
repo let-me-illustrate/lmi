@@ -19,7 +19,24 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_cygwin.make,v 1.14 2008-04-28 03:02:21 chicares Exp $
+# $Id: msw_cygwin.make,v 1.15 2008-09-28 14:25:20 chicares Exp $
+
+################################################################################
+
+# Sanity checks.
+
+cygdrive_diagnostic := \
+  Current working directory '$(CURDIR)' contains '/cygdrive/'. \
+  This is likely to cause problems with native tools such as the \
+  MinGW compiler. Build from an identity-mount directory instead
+
+ifeq (/cygdrive/,$(findstring /cygdrive/,$(CURDIR)))
+  $(error $(cygdrive_diagnostic))
+endif
+
+ifeq (,$(wildcard /opt/lmi/*))
+  $(warning Installation may be invalid: /opt/lmi/ missing or empty. )
+endif
 
 ################################################################################
 
@@ -91,6 +108,9 @@ TOUCH   := $(PATH_USR_BIN)touch
 TR      := $(PATH_USR_BIN)tr
 WC      := $(PATH_USR_BIN)wc
 WGET    := $(PATH_USR_BIN)wget
+
+# Programs for which FHS doesn't specify a location.
+
 XMLLINT := $(PATH_USR_BIN)xmllint
 
 ################################################################################
