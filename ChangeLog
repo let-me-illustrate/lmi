@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1170 2008-09-28 14:25:20 chicares Exp $
+// $Id: ChangeLog,v 1.1171 2008-09-29 12:28:20 chicares Exp $
 
 MAINTENANCE
 
@@ -19756,4 +19756,28 @@ Improve documentation.
 
   msw_cygwin.make
 Add sanity checks.
+
+20080929T1227Z <gchicares@sbcglobal.net> [960]
+
+  authenticity.cpp
+  authenticity_test.cpp
+  config_bc551.hpp
+  config_como_mingw.hpp
+  fenv_lmi_x86.hpp
+  generate_passkey.cpp
+  ihs_basicval.cpp
+  ihs_pios.cpp
+  ihs_pios.hpp
+  istream_to_string_test.cpp
+  loads_test.cpp
+  md5.cpp
+  md5.hpp
+  path_utility_test.cpp
+  vector_test.cpp
+Explicitly qualify standard names.
+
+20080929T1228Z <gchicares@sbcglobal.net> [960]
+
+  objects.make
+Make a unit test work with borland tools.
 
