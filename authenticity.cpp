@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: authenticity.cpp,v 1.11 2008-02-19 16:22:15 chicares Exp $
+// $Id: authenticity.cpp,v 1.12 2008-09-29 12:27:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -241,7 +241,7 @@ std::string Authenticity::Assay
 
     char c_passkey[md5len];
     unsigned char u_passkey[md5len];
-    FILE* md5sums_file = std::fopen
+    std::FILE* md5sums_file = std::fopen
         ((data_path / md5sum_file()).string().c_str()
         ,"rb"
         );

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: generate_passkey.cpp,v 1.8 2008-01-01 18:29:41 chicares Exp $
+// $Id: generate_passkey.cpp,v 1.9 2008-09-29 12:27:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -48,7 +48,7 @@ int try_main(int, char*[])
 {
     char c_passkey[md5len];
     unsigned char u_passkey[md5len];
-    FILE* md5sums_file = std::fopen(md5sum_file(), "rb");
+    std::FILE* md5sums_file = std::fopen(md5sum_file(), "rb");
     if(0 == md5sums_file)
         {
         std::cerr << "File '" << md5sum_file() << "' not found.\n";

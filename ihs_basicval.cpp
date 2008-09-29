@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.95 2008-09-23 14:37:35 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.96 2008-09-29 12:27:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -55,7 +55,7 @@
 
 #include <algorithm>
 #include <cmath>        // std::pow()
-#include <cstring>      // std::strlen()
+#include <cstring>      // std::strlen(), std::strncmp()
 #include <functional>
 #include <limits>
 #include <numeric>
@@ -383,7 +383,7 @@ double BasicValues::InvestmentManagementFee() const
             {
             char const s[] = "Custom";
             std::size_t n = std::strlen(s);
-            bool ignore = 0 == strncmp
+            bool ignore = 0 == std::strncmp
                 (s
                 ,Funds.GetFundInfo(j).ShortName().c_str()
                 ,n

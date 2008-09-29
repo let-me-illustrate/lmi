@@ -34,7 +34,7 @@
  * email: <chicares@cox.net>
  * snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
  *
- * $Id: md5.cpp,v 1.8 2008-01-01 18:29:49 chicares Exp $
+ * $Id: md5.cpp,v 1.9 2008-09-29 12:27:21 chicares Exp $
  *
  * GWC: File renamed md5.c --> md5.cpp .
  * GWC: Put C rtl functions in namespace std.
@@ -57,7 +57,6 @@
  * function bcopy().
  */
 #if 1
-# include <cstdio>  // GWC added this required header.
 # include <cstdlib> // GWC replaced <stdlib.h> .
 # include <cstring> // GWC replaced <string.h> .
 #else
@@ -183,7 +182,7 @@ md5_finish_ctx (struct md5_ctx* ctx, void* resbuf)
  *      void *resblock;
  */
 int
-md5_stream (FILE* stream, void* resblock)
+md5_stream (std::FILE* stream, void* resblock)
 {
   /* Important: BLOCKSIZE must be a multiple of 64. */
 #define BLOCKSIZE 4096
@@ -392,7 +391,7 @@ md5_process_block (void const* buffer, std::size_t len, struct md5_ctx* ctx)
       /* Before we start, one word to the strange constants.
        * They are defined in RFC 1321 as
        *
-       * T[i] = (int) (4294967296.0 * fabs (sin (i))), i=1..64
+       * T[i] = (int) (4294967296.0 * std::fabs (std::sin (i))), i=1..64
        */
 
       /* Round 1. */

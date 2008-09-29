@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: vector_test.cpp,v 1.10 2008-01-01 18:29:58 chicares Exp $
+// $Id: vector_test.cpp,v 1.11 2008-09-29 12:27:21 chicares Exp $
 
 // This file is of historical interest only. It shows various attempts
 // to reinvent work that others have done better.
@@ -35,6 +35,7 @@
 #include "timer.hpp"
 
 #include <algorithm>
+#include <cstddef> // std::size_t
 #include <functional>
 #include <iomanip>
 #include <ios>
@@ -285,8 +286,8 @@ namespace
     simple_array0 g_w(g_array_length);
 
     std::valarray<double> g_va_u(g_array_length);
-    std::valarray<double> g_va_v(static_cast<size_t>(g_array_length));
-    std::valarray<double> g_va_w(static_cast<size_t>(g_array_length));
+    std::valarray<double> g_va_v(static_cast<std::size_t>(g_array_length));
+    std::valarray<double> g_va_w(static_cast<std::size_t>(g_array_length));
 } // Unnamed namespace.
 
 void mete_c()
