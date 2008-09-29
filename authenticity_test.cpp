@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: authenticity_test.cpp,v 1.10 2008-06-02 02:29:49 chicares Exp $
+// $Id: authenticity_test.cpp,v 1.11 2008-09-29 12:27:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -189,7 +189,7 @@ void PasskeyTest::InitializeDataFile() const
 void PasskeyTest::InitializeMd5sumFile() const
 {
     unsigned char sum[md5len];
-    FILE* in = std::fopen("coleridge", "rb");
+    std::FILE* in = std::fopen("coleridge", "rb");
     md5_stream(in, sum);
     std::fclose(in);
     BOOST_TEST_EQUAL("bf039dbb0e8061971a2c322c8336199c", md5_str(sum));
@@ -211,7 +211,7 @@ void PasskeyTest::InitializeMd5sumFile() const
 void PasskeyTest::InitializePasskeyFile() const
 {
     unsigned char sum[md5len];
-    FILE* md5 = std::fopen(md5sum_file(), "rb");
+    std::FILE* md5 = std::fopen(md5sum_file(), "rb");
     md5_stream(md5, sum);
     std::fclose(md5);
 

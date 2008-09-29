@@ -31,7 +31,7 @@
  * email: <chicares@cox.net>
  * snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
  *
- * $Id: md5.hpp,v 1.13 2008-01-08 05:58:18 chicares Exp $
+ * $Id: md5.hpp,v 1.14 2008-09-29 12:27:21 chicares Exp $
  *
  * GWC: File renamed md5.h --> md5.hpp so that grep whatever *.?pp
  * can be used across the lmi project.
@@ -49,11 +49,13 @@
 // GWC: lmi compatibility header.
 #include "config.hpp"
 
+#include <cstddef> // std::size_t
+#include <cstdio>  // GWC added this required header.
+
 /* GWC: Make this header usable with C++. */
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
-#include <stdio.h>
 
 /* GWC: Unconditionally assume we have the standard C headers.
  * #if defined HAVE_LIMITS_H || _LIBC
@@ -155,7 +157,7 @@ extern void md5_init_ctx LMI_P ((struct md5_ctx *ctx));
  * starting at BUFFER.
  * TRICKY !! It is necessary that LEN is a multiple of 64.
  */
-extern void md5_process_block LMI_P ((const void *buffer, size_t len,
+extern void md5_process_block LMI_P ((const void *buffer, std::size_t len,
                     struct md5_ctx *ctx));
 
 /* Starting with the result of former calls of this function (or the
@@ -163,7 +165,7 @@ extern void md5_process_block LMI_P ((const void *buffer, size_t len,
  * starting at BUFFER.
  * It is NOT required that LEN is a multiple of 64.
  */
-extern void md5_process_bytes LMI_P ((const void *buffer, size_t len,
+extern void md5_process_bytes LMI_P ((const void *buffer, std::size_t len,
                     struct md5_ctx *ctx));
 
 /* Process the remaining bytes in the buffer and put result from CTX
@@ -189,14 +191,14 @@ extern void *md5_read_ctx LMI_P ((const struct md5_ctx *ctx, void *resbuf));
  * resulting message digest number will be written into the 16 bytes
  * beginning at RESBLOCK.
  */
-extern int md5_stream LMI_P ((FILE *stream, void *resblock));
+extern int md5_stream LMI_P ((std::FILE *stream, void *resblock));
 
 /* Compute MD5 message digest for LEN bytes beginning at BUFFER. The
  * result is always in little endian byte order, so that a byte-wise
  * output yields to the wanted ASCII representation of the message
  * digest.
  */
-extern void *md5_buffer LMI_P ((const char *buffer, size_t len, void *resblock));
+extern void *md5_buffer LMI_P ((const char *buffer, std::size_t len, void *resblock));
 #ifdef __cplusplus
 } /* extern "C" */
 #endif /* __cplusplus */

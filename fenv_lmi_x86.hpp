@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi_x86.hpp,v 1.8 2008-01-01 18:29:40 chicares Exp $
+// $Id: fenv_lmi_x86.hpp,v 1.9 2008-09-29 12:27:20 chicares Exp $
 
 #ifndef fenv_lmi_x86_hpp
 #define fenv_lmi_x86_hpp
@@ -250,7 +250,7 @@ class control_word
     ref_type rc0()    {return cw_[0 + ControlWordType::rc_bit0];}
     ref_type rc1()    {return cw_[1 + ControlWordType::rc_bit0];}
 
-    // Not every implementation yet has operator[](size_t) const
+    // Not every implementation yet has operator[](std::size_t) const
     //   http://www.comeaucomputing.com/iso/lwg-defects.html#11
     // so test() is used where operator[] would suffice.
 

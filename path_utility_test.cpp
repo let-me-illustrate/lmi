@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: path_utility_test.cpp,v 1.8 2008-01-21 01:32:28 chicares Exp $
+// $Id: path_utility_test.cpp,v 1.9 2008-09-29 12:27:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -69,7 +69,7 @@ void test_normal_operation()
 
     // Don't test the return codes here. These files probably don't
     // exist, in which case C99 7.19.4.1 doesn't clearly prescribe
-    // the semantics of remove().
+    // the semantics of std::remove().
     std::remove(p);
     std::remove(q);
 

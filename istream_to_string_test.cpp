@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: istream_to_string_test.cpp,v 1.7 2008-09-27 01:17:20 chicares Exp $
+// $Id: istream_to_string_test.cpp,v 1.8 2008-09-29 12:27:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -102,7 +102,7 @@ std::string mete_2()
 template<char* filename>
 std::string mete_3()
 {
-    FILE* fp = std::fopen(filename, "rb");
+    std::FILE* fp = std::fopen(filename, "rb");
     static std::size_t const buffer_size = 4096;
     static char buffer[buffer_size];
     std::string s;

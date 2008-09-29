@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads_test.cpp,v 1.15 2008-09-15 14:15:16 chicares Exp $
+// $Id: loads_test.cpp,v 1.16 2008-09-29 12:27:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -110,7 +110,7 @@ void LoadsTest::Reinitialize()
 
 void LoadsTest::TestVectorLengths(char const* file, int line)
 {
-    size_t const z = details_.length_;
+    std::size_t const z = details_.length_;
 
     INVOKE_BOOST_TEST_EQUAL(z, loads_.refundable_sales_load_proportion              ().size(), file, line);
     INVOKE_BOOST_TEST_EQUAL(z, loads_.premium_tax_load                              ().size(), file, line);
