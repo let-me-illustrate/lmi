@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_pios.hpp,v 1.11 2008-01-01 18:29:43 chicares Exp $
+// $Id: ihs_pios.hpp,v 1.12 2008-09-29 12:27:21 chicares Exp $
 
 // This is a derived work based on Joshua Rowe's
 //   "Really cool persistent object stream library"
@@ -59,7 +59,7 @@
 #   include <cstring.h>
     // This BC++5.02 class uses upper case NPOS, but
     // ISO std C++ uses lower case npos .
-    #define npos (size_t(-1))
+    #define npos (std::size_t(-1))
     // This would be preferable, but the borland class doesn't
     // have string::size_type :
     // static const size_type npos = static_cast<size_type>(-1);

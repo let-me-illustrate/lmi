@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config_como_mingw.hpp,v 1.7 2008-01-01 18:29:36 chicares Exp $
+// $Id: config_como_mingw.hpp,v 1.8 2008-09-29 12:27:20 chicares Exp $
 
 // Configuration header for compiler quirks.
 
@@ -54,6 +54,12 @@
 #   define snprintf _snprintf
 #   define vsnprintf _vsnprintf
 #endif // LMI_MINGW_VERSION < 202
+
+#include <cstdio>
+    // COMPILER !! como 4.3.3 apparently should do this, but doesn't.
+    // See, e.g.,
+    //   http://groups.google.com/group/comp.std.c++/msg/05fcbb27929c6046
+    namespace std {using ::FILE;}
 
 #endif // config_como_mingw_hpp
 

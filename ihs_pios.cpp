@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_pios.cpp,v 1.8 2008-01-01 18:29:43 chicares Exp $
+// $Id: ihs_pios.cpp,v 1.9 2008-09-29 12:27:20 chicares Exp $
 
 // This is a derived work based on Joshua Rowe's
 //   "Really cool persistent object stream library"
@@ -48,6 +48,8 @@
 #endif // __BORLANDC__
 
 #include "ihs_pios.hpp" // GWC arbitrarily changed .hh to .hpp
+
+#include <cstring>
 
 namespace JOSHUA_ROWE_PERSISTENT_STREAMS
 {
@@ -213,10 +215,10 @@ void    JrPs_opstream::writeref(const JrPs_pstreamable * obj)
 
 void    JrPs_opstream::writestring(const char* s)
 {
-  int   l   = strlen(s);
+  int   l   = std::strlen(s);
   writeint(l);
   char* temp = new char[1 + l];
-  strcpy(temp, s);
+  std::strcpy(temp, s);
   writebytes(reinterpret_cast<void*>(temp), l);
   delete[]temp;
 }
@@ -578,7 +580,7 @@ JrPs_pstreamreg *   JrPs_pstreamreg::findclass(const char* aname)
 {
   JrPs_pstreamreg * p   = pstreamreged;
   for (; p != 0; p = p->next)
-    if (strcmp(aname, p->name) == 0)
+    if (std::strcmp(aname, p->name) == 0)
       break;
   return    p;      // p = 0 if not found, otherwise
                 // it points to the JrPs_pstreamreg

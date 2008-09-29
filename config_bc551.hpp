@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config_bc551.hpp,v 1.6 2008-01-01 18:29:36 chicares Exp $
+// $Id: config_bc551.hpp,v 1.7 2008-09-29 12:27:20 chicares Exp $
 
 // Configuration header for compiler quirks--bcc-5.5.1 .
 
@@ -54,6 +54,16 @@
     // See my post to borland.public.cppbuilder.language dated
     //   2001-11-08T18:23:48 -0500
     using std::size_t;
+    // COMPILER !! bc++5.5.1 fails to provide these as functions in
+    // namespace std as required by C++98 [17.4.1.2].
+#include <stdio.h>
+    namespace std
+    {
+#   undef feof
+    using ::feof;
+#   undef ferror
+    using ::ferror;
+    }
 #include <cfloat>
     // COMPILER !! bc++5.5.1 got this wrong too.
     // See my post to borland.public.cppbuilder.language dated
