@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.137 2008-09-21 13:09:29 chicares Exp $
+# $Id: objects.make,v 1.138 2008-09-29 12:28:20 chicares Exp $
 
 ################################################################################
 
@@ -715,6 +715,7 @@ mpatrol_patch_test$(EXEEXT): \
 
 name_value_pairs_test$(EXEEXT): \
   $(common_test_objects) \
+  facets.o \
   name_value_pairs.o \
   name_value_pairs_test.o \
 
