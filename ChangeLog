@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1171 2008-09-29 12:28:20 chicares Exp $
+// $Id: ChangeLog,v 1.1172 2008-09-30 03:57:27 chicares Exp $
 
 MAINTENANCE
 
@@ -19780,4 +19780,14 @@ Explicitly qualify standard names.
 
   objects.make
 Make a unit test work with borland tools.
+
+20080930T0242Z <gchicares@sbcglobal.net> [960]
+
+  skin.xrc
+Correct misstated flat-extra mode; improve layout.
+
+20080930T0357Z <gchicares@sbcglobal.net> [960]
+
+  skin.xrc
+Improve effective-date description and layout.
 

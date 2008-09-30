@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin.xrc,v 1.7 2008-09-30 02:42:20 chicares Exp $
+    $Id: skin.xrc,v 1.8 2008-09-30 03:57:27 chicares Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -145,6 +145,7 @@ demonstrate a defect in the wx library. See
                         </object>
                         <object class="sizeritem">
                             <flag>wxGROW|wxALL</flag>
+                            <border>2</border>
                             <object class="wxFlexGridSizer">
                                 <cols>1</cols>
                                 <growablecols>0</growablecols>
@@ -179,32 +180,32 @@ demonstrate a defect in the wx library. See
                                     </object>
                                 </object>
                                 <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALL</flag>
+                                    <border>4</border>
+                                    <object class="wxCheckBox" name="EffectiveDateToday">
+                                        <help>Synchronize effective date with current date</help>
+                                        <label>Effective today</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
                                     <flag>wxGROW|wxALL</flag>
+                                    <border>4</border>
                                     <object class="wxFlexGridSizer">
                                         <rows>1</rows>
                                         <growablecols>1</growablecols>
                                         <object class="sizeritem">
                                             <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
-                                            <border>4</border>
                                             <object class="wxStaticText">
-                                                <label>Case effective date </label>
+                                                <label>Effective date </label>
                                             </object>
                                         </object>
                                         <object class="sizeritem">
                                             <flag>wxGROW</flag>
                                             <object class="wxDatePickerCtrl" name="EffectiveDate">
-                                                <help>Case effective date</help>
+                                                <help>Effective date</help>
                                                 <size>80,-1</size>
                                             </object>
                                         </object>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                    <border>4</border>
-                                    <object class="wxCheckBox" name="EffectiveDateToday">
-                                        <help>Set effective date to current date</help>
-                                        <label>Case effective today</label>
                                     </object>
                                 </object>
                             </object>
