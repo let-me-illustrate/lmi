@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin.xrc,v 1.6 2008-09-01 14:29:46 chicares Exp $
+    $Id: skin.xrc,v 1.7 2008-09-30 02:42:20 chicares Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -1135,35 +1135,14 @@ demonstrate a defect in the wx library. See
                         <growablecols>1</growablecols>
                         <object class="sizeritem">
                             <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                            <object class="wxCheckBox" name="OverrideCoiMultiplier">
-                                <help>Override default country COI multiplier for current COI rates</help>
-                                <label>Override country COI multiplier </label>
-                            </object>
-                        </object>
-                        <object class="sizeritem">
-                            <flag>wxGROW</flag>
-                            <object class="wxTextCtrl" name="CountryCoiMultiplier">
-                                <help>Country multiplier for current COI rates</help>
-                                <size>10,-1</size>
-                            </object>
-                        </object>
-                    </object>
-                </object>
-                <object class="sizeritem">
-                    <flag>wxGROW|wxALL</flag>
-                    <object class="wxFlexGridSizer">
-                        <rows>1</rows>
-                        <growablecols>1</growablecols>
-                        <object class="sizeritem">
-                            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <object class="wxStaticText">
-                                <label>Monthly flat extra per thousand </label>
+                                <label>Flat extra </label>
                             </object>
                         </object>
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
                             <object class="wxTextCtrl" name="FlatExtra">
-                                <help>Flat extra: annual amount per thousand</help>
+                                <help>Annual flat extra per thousand</help>
                                 <size>10,-1</size>
                             </object>
                         </object>
@@ -1184,6 +1163,27 @@ demonstrate a defect in the wx library. See
                             <flag>wxGROW</flag>
                             <object class="wxTextCtrl" name="ProjectedSalary">
                                 <help>Projected annual salary</help>
+                                <size>10,-1</size>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW|wxALL</flag>
+                    <object class="wxFlexGridSizer">
+                        <rows>1</rows>
+                        <growablecols>1</growablecols>
+                        <object class="sizeritem">
+                            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <object class="wxCheckBox" name="OverrideCoiMultiplier">
+                                <help>Override default country COI multiplier for current COI rates</help>
+                                <label>Override country COI multiplier </label>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxGROW</flag>
+                            <object class="wxTextCtrl" name="CountryCoiMultiplier">
+                                <help>Country multiplier for current COI rates</help>
                                 <size>10,-1</size>
                             </object>
                         </object>
