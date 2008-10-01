@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.58 2008-09-21 15:34:05 zeitlin Exp $
+# $Id: Makefile.am,v 1.59 2008-10-01 23:17:17 chicares Exp $
 
 SUBDIRS = third_party
 
@@ -58,7 +58,7 @@ noinst_LTLIBRARIES = \
 
 # data files
 xrcdir = $(pkgdatadir)
-dist_xrc_DATA = $(shell ls -1 $(srcdir)/*.xrc $(srcdir)/*.xpm)
+dist_xrc_DATA = $(shell ls -1 $(srcdir)/*.png $(srcdir)/*.xrc $(srcdir)/*.xpm)
 
 xsldir = $(pkgdatadir)
 dist_xsl_DATA = $(shell ls -1 $(srcdir)/*.xsl)
@@ -153,6 +153,7 @@ lmi_wx_SOURCES = \
     docmdichildframe_ex.cpp \
     facets.cpp \
     file_command_wx.cpp \
+    icon_monger.cpp \
     illustration_document.cpp \
     illustration_view.cpp \
     main_common.cpp \
@@ -871,6 +872,7 @@ noinst_HEADERS = \
     global_settings.hpp \
     group_values.hpp \
     handle_exceptions.hpp \
+    icon_monger.hpp \
     ihs_commfns.hpp \
     ihs_dbdict.hpp \
     ihs_dbvalue.hpp \

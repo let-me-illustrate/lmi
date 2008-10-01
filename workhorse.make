@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.128 2008-08-03 23:23:15 chicares Exp $
+# $Id: workhorse.make,v 1.129 2008-10-01 23:17:24 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -805,7 +805,7 @@ test_dir       := $(exec_prefix)/test
 touchstone_dir := $(exec_prefix)/touchstone
 
 data_files := \
-  $(wildcard $(addprefix $(src_dir)/,*.xml *.xpm *.xrc *.xsd *.xsl)) \
+  $(wildcard $(addprefix $(src_dir)/,*.png *.xml *.xpm *.xrc *.xsd *.xsl)) \
 
 help_files := \
   $(wildcard $(addprefix $(htmldir)/,*.html *.hhc *.hhp)) \
