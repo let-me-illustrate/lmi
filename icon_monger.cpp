@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: icon_monger.cpp,v 1.3 2008-10-02 01:55:31 chicares Exp $
+// $Id: icon_monger.cpp,v 1.4 2008-10-02 02:05:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -67,6 +67,8 @@ wxSize desired_icon_size
 #if !defined LMI_MSW
     return z;
 #else  // defined LMI_MSW
+    // For the nonce, inhibit rescaling: it's not attractive enough.
+    return wxSize(24, 24);
     if     (wxART_MENU    == client) {return wxSize(16, 16);}
     else if(wxART_TOOLBAR == client) {return wxSize(24, 24);}
     else                             {return z;}
