@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1172 2008-09-30 03:57:27 chicares Exp $
+// $Id: ChangeLog,v 1.1173 2008-10-02 02:05:22 chicares Exp $
 
 MAINTENANCE
 
@@ -19790,4 +19790,114 @@ Correct misstated flat-extra mode; improve layout.
 
   skin.xrc
 Improve effective-date description and layout.
+
+20081001T2317Z <gchicares@sbcglobal.net> [960]
+
+  Makefile.am
+  icon_monger.cpp [new file]
+  icon_monger.hpp [new file]
+  objects.make
+  workhorse.make
+Prepare to revamp icon handling (VS). This is a portion of:
+  https://savannah.nongnu.org/patch/?6597
+with only minimal changes.
+
+20081002T0112Z <gchicares@sbcglobal.net> [960]
+
+  README
+  about-16.png          [new file]
+  about.png             [new file]
+  about.xpm             [expunged]
+  close-16.png          [new file]
+  close.png             [new file]
+  close.xpm             [expunged]
+  default-cell.png      [new file]
+  default_cell.xpm      [expunged]
+  delete-row-16.png     [new file]
+  delete-row.png        [new file]
+  delete-row.xpm        [expunged]
+  edit-case.png         [new file]
+  edit-case.xpm         [expunged]
+  edit-cell.png         [new file]
+  edit-cell.xpm         [expunged]
+  edit-class.png        [new file]
+  edit-class.xpm        [expunged]
+  exit.xpm              [expunged]
+  file-open-16.png      [new file]
+  file-open.png         [new file]
+  file-save-16.png      [new file]
+  file-save-as-16.png   [new file]
+  file-save-as.png      [new file]
+  file-save.png         [new file]
+  fixed-width.png       [new file]
+  fixed-width.xpm       [expunged]
+  help-16.png           [new file]
+  help.png              [new file]
+  help.xpm              [expunged]
+  insert-rows-16.png    [new file]
+  insert-rows.png       [new file]
+  insert-rows.xpm       [expunged]
+  menus.xrc
+  main_wx.cpp
+  new-16.png            [new file]
+  new.png               [new file]
+  new.xpm               [expunged]
+  open.xpm              [expunged]
+  paste-case.png        [new file]
+  paste-case.xpm        [expunged]
+  preferences-16.png    [new file]
+  preferences.png       [new file]
+  preferences.xpm       [expunged]
+  print-16.png          [new file]
+  print-case.png        [new file]
+  print-case.xpm        [expunged]
+  print-cell.png        [new file]
+  print-cell.xpm        [expunged]
+  print-options-16.png  [new file]
+  print-options.png     [new file]
+  print-options.xpm     [expunged]
+  print-preview-16.png  [new file]
+  print-preview.png     [new file]
+  print-preview.xpm     [expunged]
+  print.png             [new file]
+  print.xpm             [expunged]
+  quit-16.png           [new file]
+  quit.png              [new file]
+  run-case.png          [new file]
+  run-case.xpm          [expunged]
+  run-cell.png          [new file]
+  run-cell.xpm          [expunged]
+  save.xpm              [expunged]
+  saveas.xpm            [expunged]
+  toolbar.xrc
+  varying-width.png     [new file]
+  varying-width.xpm     [expunged]
+  write-spreadsheet.png [new file]
+  write_spreadsheet.xpm [expunged]
+Replace most 'xpm' files with 'png' files.
+
+20081002T0144Z <gchicares@sbcglobal.net> [960]
+
+  icon_monger.cpp
+  icon_monger.hpp
+  main_wx.cpp
+Refactor.
+
+20081002T0152Z <gchicares@sbcglobal.net> [960]
+
+  main_wx.cpp
+Restore code accidentally removed by patch #6597.
+
+20081002T0155Z <gchicares@sbcglobal.net> [960]
+
+  icon_monger.cpp
+  icon_monger.hpp
+  main_wx.cpp
+Refactor.
+
+20081002T0205Z <gchicares@sbcglobal.net> [960]
+
+  icon_monger.cpp
+Inhibit rescaling for the nonce. See:
+  http://lists.nongnu.org/archive/html/lmi/2008-08/msg00008.html
 
