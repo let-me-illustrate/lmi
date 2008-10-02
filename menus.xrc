@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: menus.xrc,v 1.41 2008-06-28 02:00:42 chicares Exp $
+    $Id: menus.xrc,v 1.42 2008-10-02 01:12:26 chicares Exp $
 -->
 
 <!-- reusable menus -->
@@ -34,60 +34,60 @@
     <object class="wxMenuItem" name="wxID_NEW">
         <label>_New</label>
         <help>Create a new document</help>
-        <bitmap>new.xpm</bitmap>
+        <bitmap platform="win" stock_id="wxART_NEW"/>
     </object>
     <object class="wxMenuItem" name="wxID_OPEN">
         <label>_Open...</label>
-        <bitmap>open.xpm</bitmap>
+        <bitmap platform="win" stock_id="wxART_FILE_OPEN"/>
         <help>Open an existing document</help>
     </object>
     <object class="wxMenuItem" name="wxID_CLOSE">
         <label>_Close\tCtrl-X</label>
-        <bitmap>close.xpm</bitmap>
+        <bitmap platform="win" stock_id="close"/>
         <help>Close this document</help>
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="wxID_SAVE">
         <label>_Save</label>
-        <bitmap>save.xpm</bitmap>
+        <bitmap platform="win" stock_id="wxART_FILE_SAVE"/>
         <help>Save this document</help>
     </object>
     <object class="wxMenuItem" name="wxID_SAVEAS">
         <label>Save _as...</label>
-        <bitmap>saveas.xpm</bitmap>
+        <bitmap platform="win" stock_id="wxART_FILE_SAVE_AS"/>
         <help>Save this document under a new name</help>
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="wxID_PRINT">
         <label>_Print</label>
-        <bitmap>print.xpm</bitmap>
+        <bitmap platform="win" stock_id="wxART_PRINT"/>
         <help>Print this document</help>
     </object>
     <object class="wxMenuItem" name="wxID_PAGE_SETUP">
         <label>Page set_up</label>
-        <bitmap>print-options.xpm</bitmap>
+        <bitmap platform="win" stock_id="print-options"/>
         <help>Choose printing options for this session</help>
     </object>
     <object class="wxMenuItem" name="wxID_PREVIEW">
         <label>Print pre_view</label>
-        <bitmap>print-preview.xpm</bitmap>
+        <bitmap platform="win" stock_id="print-preview"/>
         <help>See what this document will look like when printed</help>
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="edit_default_cell">
         <label>_Default</label>
-        <bitmap>default_cell.xpm</bitmap>
+        <bitmap stock_id="default-cell"/>
         <help>Edit default cell</help>
     </object>
     <object class="wxMenuItem" name="wxID_PREFERENCES">
         <label>Pre_ferences\tCtrl-F</label>
-        <bitmap>preferences.xpm</bitmap>
+        <bitmap platform="win" stock_id="preferences"/>
         <help>Manage preferences</help>
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="wxID_EXIT">
         <label>E_xit</label>
-        <bitmap>exit.xpm</bitmap>
+        <bitmap platform="win" stock_id="wxART_QUIT"/>
         <help>Exit this program</help>
     </object>
 </object>
@@ -97,44 +97,44 @@
     <object class="wxMenuItem" name="wxID_NEW">
         <label>_New</label>
         <help>Create a new document</help>
-        <bitmap>new.xpm</bitmap>
+        <bitmap platform="win" stock_id="wxART_NEW"/>
     </object>
     <object class="wxMenuItem" name="wxID_OPEN">
         <label>_Open...</label>
-        <bitmap>open.xpm</bitmap>
+        <bitmap platform="win" stock_id="wxART_FILE_OPEN"/>
         <help>Open an existing document</help>
     </object>
     <object class="wxMenuItem" name="wxID_CLOSE">
         <label>_Close\tCtrl-X</label>
-        <bitmap>close.xpm</bitmap>
+        <bitmap platform="win" stock_id="close"/>
         <help>Close this document</help>
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="wxID_SAVE">
         <label>_Save</label>
-        <bitmap>save.xpm</bitmap>
+        <bitmap platform="win" stock_id="wxART_FILE_SAVE"/>
         <help>Save this document</help>
     </object>
     <object class="wxMenuItem" name="wxID_SAVEAS">
         <label>Save _as...</label>
-        <bitmap>saveas.xpm</bitmap>
+        <bitmap platform="win" stock_id="wxART_FILE_SAVE_AS"/>
         <help>Save this document under a new name</help>
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="edit_default_cell">
         <label>_Default</label>
-        <bitmap>default_cell.xpm</bitmap>
+        <bitmap stock_id="default-cell"/>
         <help>Edit default cell</help>
     </object>
     <object class="wxMenuItem" name="wxID_PREFERENCES">
         <label>Pre_ferences\tCtrl-F</label>
-        <bitmap>preferences.xpm</bitmap>
+        <bitmap platform="win" stock_id="preferences"/>
         <help>Manage preferences</help>
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="wxID_EXIT">
         <label>E_xit</label>
-        <bitmap>exit.xpm</bitmap>
+        <bitmap platform="win" stock_id="wxART_QUIT"/>
         <help>Exit this program</help>
     </object>
 </object>
@@ -230,13 +230,13 @@
     <help>Help</help>
     <object class="wxMenuItem" name="wxID_HELP">
         <label>_Contents\tF1</label>
-        <bitmap>help.xpm</bitmap>
+        <bitmap platform="win" stock_id="wxART_HELP"/>
         <help>Read documentation</help>
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="wxID_ABOUT">
         <label>_About...</label>
-        <bitmap>about.xpm</bitmap>
+        <bitmap platform="win" stock_id="wxART_ABOUT"/>
         <help>Read copyright and license</help>
     </object>
 </object>
@@ -256,28 +256,28 @@
         <object class="wxMenuItem" name="wxID_NEW">
             <label>_New</label>
             <help>Create a new document</help>
-            <bitmap>new.xpm</bitmap>
+            <bitmap platform="win" stock_id="wxART_NEW"/>
         </object>
         <object class="wxMenuItem" name="wxID_OPEN">
             <label>_Open...</label>
-            <bitmap>open.xpm</bitmap>
+            <bitmap platform="win" stock_id="wxART_FILE_OPEN"/>
             <help>Open an existing document</help>
         </object>
         <object class="separator"/>
         <object class="wxMenuItem" name="edit_default_cell">
             <label>_Default</label>
-            <bitmap>default_cell.xpm</bitmap>
+            <bitmap stock_id="default-cell"/>
             <help>Edit default cell</help>
         </object>
         <object class="wxMenuItem" name="wxID_PREFERENCES">
             <label>Pre_ferences\tCtrl-F</label>
-            <bitmap>preferences.xpm</bitmap>
+            <bitmap platform="win" stock_id="wxART_PREFERENCES"/>
             <help>Manage preferences</help>
         </object>
         <object class="separator"/>
         <object class="wxMenuItem" name="wxID_EXIT">
             <label>E_xit</label>
-            <bitmap>exit.xpm</bitmap>
+            <bitmap platform="win" stock_id="wxART_QUIT"/>
             <help>Exit this program</help>
         </object>
     </object>
@@ -296,85 +296,85 @@
         <label>_Census</label>
         <object class="wxMenuItem" name="edit_cell">
             <label>_Edit cell\tCtrl-E</label>
-            <bitmap>edit-cell.xpm</bitmap>
+            <bitmap stock_id="edit-cell"/>
             <help>Edit selected cell</help>
         </object>
         <object class="wxMenuItem" name="edit_class">
             <label>Edit class defaults\tCtrl-Alt-E</label>
-            <bitmap>edit-class.xpm</bitmap>
+            <bitmap stock_id="edit-class"/>
             <help>Edit selected cell's class defaults</help>
         </object>
         <object class="wxMenuItem" name="edit_case">
             <label>Edit case defaults\tCtrl-Shift-E</label>
-            <bitmap>edit-case.xpm</bitmap>
+            <bitmap stock_id="edit-case"/>
             <help>Edit case defaults</help>
         </object>
         <object class="separator"/>
         <object class="wxMenuItem" name="run_cell">
             <label>_Run selected cell\tCtrl-R</label>
-            <bitmap>run-cell.xpm</bitmap>
+            <bitmap stock_id="run-cell"/>
             <help>Run selected cell</help>
         </object>
 <!-- SOMEDAY !! This may be useful for large cases.
         <object class="wxMenuItem" name="run_class">
             <label>Run class of selected cell\tCtrl-Alt-R</label>
-            <bitmap>run-class.xpm</bitmap>
+            <bitmap stock_id="run-class"/>
             <help>Run all cells in selected cell's class</help>
         </object>
 -->
         <object class="wxMenuItem" name="run_case">
             <label>Run case\tCtrl-Shift-R</label>
-            <bitmap>run-case.xpm</bitmap>
+            <bitmap stock_id="run-case"/>
             <help>Run all cells</help>
         </object>
         <object class="separator"/>
         <object class="wxMenuItem" name="print_cell">
             <label>Run and _print selected cell\tCtrl-P</label>
-            <bitmap>print-cell.xpm</bitmap>
+            <bitmap stock_id="print-cell"/>
             <help>Run and print selected cell</help>
         </object>
 <!-- SOMEDAY !! This may be useful for large cases.
         <object class="wxMenuItem" name="print_class">
             <label>Run and print all cells in selected cell's class\tCtrl-Alt-P</label>
-            <bitmap>print-class.xpm</bitmap>
+            <bitmap stock_id="print-class"/>
             <help>Run and print all cells in selected cell's class</help>
         </object>
 -->
         <object class="wxMenuItem" name="print_case">
             <label>Run and print all cells\tCtrl-Shift-P</label>
-            <bitmap>print-case.xpm</bitmap>
+            <bitmap stock_id="print-case"/>
             <help>Run and print all cells</help>
         </object>
         <object class="wxMenuItem" name="print_spreadsheet">
             <label>Print case to spreadsheet\tCtrl-Shift-S</label>
-            <bitmap>write_spreadsheet.xpm</bitmap>
+            <bitmap stock_id="write-spreadsheet"/>
             <help>Run and print all cells to a spreadsheet file</help>
         </object>
         <object class="separator"/>
         <object class="wxMenuItem" name="paste_census">
             <label>Pa_ste census data\tCtrl-S</label>
-            <bitmap>paste-case.xpm</bitmap>
+            <bitmap stock_id="paste-case"/>
             <help>Paste census data from clipboard</help>
         </object>
         <object class="wxMenuItem" name="add_cell">
             <label>_Add cell\tCtrl-A</label>
-            <bitmap>insert-rows.xpm</bitmap>
+            <bitmap stock_id="insert-rows"/>
             <help>Add a new cell with case default parameters</help>
         </object>
         <object class="wxMenuItem" name="delete_cells">
             <label>_Delete cell(s)\tCtrl-D</label>
-            <bitmap>delete-row.xpm</bitmap>
+            <bitmap stock_id="delete-row"/>
             <help>Delete selected cell(s)</help>
         </object>
         <object class="separator"/>
         <object class="wxMenuItem" name="column_width_varying">
             <label>_Varying column width\tCtrl-V</label>
-            <bitmap>varying-width.xpm</bitmap>
+            <bitmap stock_id="varying-width"/>
             <help>Vary each column's width to show its entire contents</help>
         </object>
         <object class="wxMenuItem" name="column_width_fixed">
             <label>Fixed col_umn width\tCtrl-U</label>
-            <bitmap>fixed-width.xpm</bitmap>
+            <bitmap stock_id="fixed-width"/>
             <help>Display all columns with the same fixed width</help>
         </object>
     </object>
@@ -394,7 +394,7 @@
         <label>_Illustration</label>
         <object class="wxMenuItem" name="edit_cell">
             <label>_Edit cell\tCtrl-E</label>
-            <bitmap>edit-cell.xpm</bitmap>
+            <bitmap stock_id="edit-cell"/>
             <help>Edit this cell</help>
         </object>
         <object class="separator"/>
