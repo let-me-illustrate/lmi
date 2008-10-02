@@ -1,4 +1,4 @@
-// Provider of icons for wx interface.
+// Icon provider for wx interface.
 //
 // Copyright (C) 2008 Gregory W. Chicares.
 //
@@ -19,12 +19,12 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: icon_monger.cpp,v 1.1 2008-10-01 23:17:20 chicares Exp $
+// $Id: icon_monger.cpp,v 1.2 2008-10-02 01:44:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
-#endif
+#endif // __BORLANDC__
 
 #include "icon_monger.hpp"
 
@@ -34,24 +34,29 @@
 
 namespace
 {
+/// Return desired icon size.
+///
+/// Most often, the 'size' argument is wxDefaultSize, and the returned
+/// size therefore depends only on the client that requested the icon.
+///
+/// For platforms with standard interface guidelines, GetSizeHint()
+/// does the right thing; but for msw it just returns 16 by 15 because
+/// there's no standard practice, so hardcoded sizes are given here.
 
-/// Return desirable size of icons, given the client that requested the icon
-/// and requested size (which should usually be unspecified)
-
-wxSize GetRealSize(wxArtClient const& client, wxSize const& size)
+wxSize desired_icon_size(wxArtClient const& client, wxSize const& size)
 {
-    if(size == wxDefaultSize)
+    if(wxDefaultSize == size)
         {
-        // on Windows, we don't want to use wxWidgets' 16x15 default size
-        // for everything
-#ifdef __WXMSW__
+#ifdef LMI_MSW
         if(client == wxART_MENU)
+            {
             return wxSize(16, 16);
-        else if(client == wxART_TOOLBAR)
+            }
+        if(client == wxART_TOOLBAR)
+            {
             return wxSize(24, 24);
+            }
 #endif
-        // fall back to defaults on other platforms and for things we don't
-        // care about:
         return wxArtProvider::GetSizeHint(client);
         }
     else
@@ -59,18 +64,25 @@ wxSize GetRealSize(wxArtClient const& client, wxSize const& size)
         return size;
         }
 }
+} // Unnamed namespace.
 
-} // unnamed namespace
+/// Provide the most suitable icon in the given context.
+///
+/// Builtin wxArtID values are converted to fitting filenames, e.g.:
+///   wxART_FOO_BAR --> foo-bar.png    [default size]
+///   wxART_FOO_BAR --> foo-bar-16.png [16 pixels square]
+///
+/// First, try to find an icon of the requested size. If none is
+/// found, then try to find an icon of default size and scale it.
+/// Failure to find an icon file is not an error when a builtin
+/// icon is available.
 
-wxBitmap LMIArtProvider::CreateBitmap
-    (wxArtID const& id
+wxBitmap icon_monger::CreateBitmap
+    (wxArtID const&     id
     ,wxArtClient const& client
-    ,wxSize const& size
+    ,wxSize const&      size
     )
-
 {
-    // convert wx's IDs in the form of "wxART_FOO_BAR" into nice filename
-    // such as "foo-bar"
     wxString iconname;
     if(id.StartsWith("wxART_", &iconname))
         {
@@ -82,25 +94,31 @@ wxBitmap LMIArtProvider::CreateBitmap
         iconname = id;
         }
 
-    const wxSize realsize = GetRealSize(client, size);
-    const std::string basename = AddDataDir(iconname.c_str());
+    wxSize const desired_size = desired_icon_size(client, size);
+    std::string const basename = AddDataDir(iconname.c_str());
 
-    // try to load icon of requested size; if it cannot be found, load default
-    // size and scale it:
-    wxString file = wxString::Format("%s-%d.png", basename.c_str(), realsize.x);
+    wxString file = wxString::Format("%s-%d.png", basename.c_str(), desired_size.x);
     if(!wxFileExists(file))
+        {
         file = basename + ".png";
+        }
 
     if(!wxFileExists(file))
-        return wxNullBitmap; // icon not provided by us
-
-    wxImage img(file, wxBITMAP_TYPE_PNG);
-    if(!img.IsOk())
+        {
         return wxNullBitmap;
+        }
 
-    if(img.GetWidth() != realsize.x || img.GetHeight() != realsize.y)
-        img.Rescale(realsize.x, realsize.y, wxIMAGE_QUALITY_HIGH);
+    wxImage image(file, wxBITMAP_TYPE_PNG);
+    if(!image.IsOk())
+        {
+        return wxNullBitmap;
+        }
 
-    return wxBitmap(img);
+    if(image.GetWidth() != desired_size.x || image.GetHeight() != desired_size.y)
+        {
+        image.Rescale(desired_size.x, desired_size.y, wxIMAGE_QUALITY_HIGH);
+        }
+
+    return wxBitmap(image);
 }
 
