@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.120 2008-10-02 01:52:12 chicares Exp $
+// $Id: main_wx.cpp,v 1.121 2008-10-02 01:55:31 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -585,14 +585,14 @@ bool Skeleton::OnInit()
         authenticate_system();
 
         wxInitAllImageHandlers();
-#ifdef __WXGTK__
-        // under GTK+, which has its own theme system, we want our icons
-        // provider to be the fallback, native icons theme takes precedence
-        wxArtProvider::Insert(new icon_monger);
-#else
-        // but on other platforms, we prefer to use our own icons
-        wxArtProvider::Push(new icon_monger);
-#endif
+
+        // For GTK+, native theme takes precedence over local icons.
+        // For other platforms, local icons take precedence.
+#if defined __WXGTK__
+        wxArtProvider::Insert(new(wx) icon_monger);
+#else  // !defined __WXGTK__
+        wxArtProvider::Push  (new(wx) icon_monger);
+#endif // !defined __WXGTK__
 
         wxXmlResource& xml_resources = *wxXmlResource::Get();
 
