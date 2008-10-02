@@ -1,4 +1,4 @@
-// Provider of icons for wx interface.
+// Icon provider for wx interface.
 //
 // Copyright (C) 2008 Gregory W. Chicares.
 //
@@ -19,16 +19,22 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: icon_monger.hpp,v 1.1 2008-10-01 23:17:23 chicares Exp $
+// $Id: icon_monger.hpp,v 1.2 2008-10-02 01:44:38 chicares Exp $
 
 #ifndef icon_monger_hpp
 #define icon_monger_hpp
 
 #include "config.hpp"
 
+#include <boost/utility.hpp>
+
 #include <wx/artprov.h>
 
-class LMIArtProvider : public wxArtProvider
+/// Icon provider for wx interface.
+
+class icon_monger
+    :public wxArtProvider
+    ,private boost::noncopyable
 {
   protected:
     virtual wxBitmap CreateBitmap
