@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: icon_monger.hpp,v 1.2 2008-10-02 01:44:38 chicares Exp $
+// $Id: icon_monger.hpp,v 1.3 2008-10-02 01:55:31 chicares Exp $
 
 #ifndef icon_monger_hpp
 #define icon_monger_hpp
@@ -36,11 +36,16 @@ class icon_monger
     :public wxArtProvider
     ,private boost::noncopyable
 {
-  protected:
+  public:
+    icon_monger();
+    virtual ~icon_monger();
+
+  private:
+    // wxArtProvider required implementation.
     virtual wxBitmap CreateBitmap
-        (wxArtID const&     id
-        ,wxArtClient const& client
-        ,wxSize const&      size
+        (wxArtID const&
+        ,wxArtClient const&
+        ,wxSize const&
         );
 };
 
