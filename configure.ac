@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.39 2008-09-10 03:51:24 chicares Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.40 2008-10-02 14:29:32 vslavik Exp $)dnl
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -444,45 +444,48 @@ dnl system but when using MSYS we do the checks manually as installing
 dnl pkg-config under Windows is unfortunately not trivial and so we can't rely
 dnl on its presence on the target system
 if test "$USE_LINUX" = "1"; then
-  PKG_CHECK_MODULES(GTK, gtk+-2.0)
-  PKG_CHECK_MODULES(LIBXML, libxml-2.0 >= 2.6.0)
-  PKG_CHECK_MODULES(LIBXSLT, libxslt >= 1.1.0)
+    PKG_CHECK_MODULES(GTK, gtk+-2.0)
+    PKG_CHECK_MODULES(LIBXML, libxml-2.0 >= 2.6.0)
+    PKG_CHECK_MODULES(LIBXSLT, libxslt >= 1.1.0)
+    PKG_CHECK_MODULES(XMLWRAPP, xmlwrapp)
 else
-dnl --- libxml (required) -------------------
-AC_CHECK_PROG(lmi_xml2_config, xml2-config, yes, no)
-if test "x$lmi_xml2_config" != "xyes"; then
-    AC_MSG_ERROR([Unable to find libxml configuration program xml2-config in the path.])
+    dnl --- libxml (required) -------------------
+    AC_CHECK_PROG(lmi_xml2_config, xml2-config, yes, no)
+    if test "x$lmi_xml2_config" != "xyes"; then
+        AC_MSG_ERROR([Unable to find libxml configuration program xml2-config in the path.])
+    fi
+    LIBXML_CFLAGS=`xml2-config --cflags`
+    LIBXML_LIBS=`xml2-config --libs`
+
+    AC_SUBST(LIBXML_CFLAGS)
+    AC_SUBST(LIBXML_LIBS)
+
+    dnl --- libxslt (required) -------------------
+    AC_CHECK_PROG(lmi_xslt_config, xslt-config, yes, no)
+    if test "x$lmi_xslt_config" != "xyes"; then
+        AC_MSG_ERROR([Unable to find libxml configuration program xslt-config in the path.])
+    fi
+    LIBXSLT_CFLAGS=`xslt-config --cflags`
+    LIBXSLT_LIBS=`xslt-config --libs`
+
+    AC_SUBST(LIBXML_CFLAGS)
+    AC_SUBST(LIBXML_LIBS)
+
+    dnl --- XMLWRAPP (required) -------------------
+    AC_CHECK_PROG(lmi_xmlwrapp_config, xmlwrapp-config, yes, no)
+    if test "x$lmi_xmlwrapp_config" != "xyes"; then
+        AC_MSG_ERROR([Unable to find libxml++ configuration program xmlwrapp-config in the path.])
+
+    dnl TODO: Pass --debug option and so on (depends on the actual build)
+    XMLWRAPP_CFLAGS=`xmlwrapp-config --cxxflags`
+    XMLWRAPP_LIBS=`xmlwrapp-config --libs`
+    AC_SUBST(XMLWRAPP_CFLAGS)
+    AC_SUBST(XMLWRAPP_LIBS)
 fi
-LIBXML_FLAGS=`xml2-config --cflags`
-LIBXML_LIBS=`xml2-config --libs`
-
-AC_SUBST(LIBXML_FLAGS)
-AC_SUBST(LIBXML_LIBS)
-
-dnl --- libxslt (required) -------------------
-AC_CHECK_PROG(lmi_xslt_config, xslt-config, yes, no)
-if test "x$lmi_xslt_config" != "xyes"; then
-    AC_MSG_ERROR([Unable to find libxml configuration program xslt-config in the path.])
-fi
-LIBXSLT_FLAGS=`xslt-config --cflags`
-LIBXSLT_LIBS=`xslt-config --libs`
-
-AC_SUBST(LIBXML_FLAGS)
-AC_SUBST(LIBXML_LIBS)
-
-dnl --- XMLWRAPP (required) -------------------
-AC_CHECK_PROG(lmi_xmlwrapp_config, xmlwrapp-config, yes, no)
-if test "x$lmi_xmlwrapp_config" != "xyes"; then
-    AC_MSG_ERROR([Unable to find libxml++ configuration program xmlwrapp-config in the path.])
-fi
-
-dnl TODO: Pass --debug option and so on (depends on the actual build)
-XMLWRAPP_FLAGS=`xmlwrapp-config --cxxflags`
-XMLWRAPP_LIBS=`xmlwrapp-config --libs`
 
 save_CXXFLAGS=$CXXFLAGS
 save_LIBS=$LIBS
-CXXFLAGS="$CXXFLAGS $XMLWRAPP_FLAGS"
+CXXFLAGS="$CXXFLAGS $XMLWRAPP_CFLAGS"
 LIBS="$LIBS $XMLWRAPP_LIBS"
 
 dnl check that the library options allow to build lmi
@@ -495,14 +498,11 @@ AC_TRY_COMPILE([#include <xmlwrapp/xmlwrapp.h>],
 CXXFLAGS=$save_CXXFLAGS
 LIBS=$save_LIBS
 
-AC_SUBST(XMLWRAPP_FLAGS)
-AC_SUBST(XMLWRAPP_LIBS)
-
 AC_CACHE_CHECK([if we are using recent version of xmlwrapp],
     lmi_cv_lib_xmlwrapp_recent,
     [
         save_CXXFLAGS=$CXXFLAGS
-        CXXFLAGS="$CXXFLAGS $XMLWRAPP_FLAGS"
+        CXXFLAGS="$CXXFLAGS $XMLWRAPP_CFLAGS"
         AC_TRY_COMPILE([#include <xmlwrapp/document.h>
             #include <xmlwrapp/tree_parser.h>
             #include <xmlwrapp/node.h>],
