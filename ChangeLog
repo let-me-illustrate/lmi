@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1173 2008-10-02 02:05:22 chicares Exp $
+// $Id: ChangeLog,v 1.1174 2008-10-02 14:29:31 vslavik Exp $
 
 MAINTENANCE
 
@@ -19900,4 +19900,10 @@ Refactor.
   icon_monger.cpp
 Inhibit rescaling for the nonce. See:
   http://lists.nongnu.org/archive/html/lmi/2008-08/msg00008.html
+
+20081002T1429Z <vslavik@fastmail.fm> [960]
+
+  configure.ac
+  Makefile.am
+Fix linking against third party libraries using autoconf makefiles.
 
