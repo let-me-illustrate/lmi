@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: toolbar.xrc,v 1.12 2008-03-19 13:00:22 chicares Exp $
+    $Id: toolbar.xrc,v 1.13 2008-10-02 01:12:36 chicares Exp $
 -->
 
 <object class="wxToolBar" name="toolbar">
@@ -32,122 +32,122 @@
     <bitmapsize>24,24</bitmapsize>
     <object class="tool" name="wxID_NEW">
         <tooltip>New</tooltip>
-        <bitmap>new.xpm</bitmap>
+        <bitmap stock_id="wxART_NEW"/>
         <longhelp>Open a new file</longhelp>
     </object>
     <object class="tool" name="wxID_OPEN">
         <tooltip>Open</tooltip>
-        <bitmap>open.xpm</bitmap>
+        <bitmap stock_id="wxART_FILE_OPEN"/>
         <longhelp>Open a file</longhelp>
     </object>
     <object class="tool" name="wxID_SAVE">
         <tooltip>Save</tooltip>
-        <bitmap>save.xpm</bitmap>
+        <bitmap stock_id="wxART_FILE_SAVE"/>
         <longhelp>Save file</longhelp>
     </object>
     <object class="tool" name="wxID_PRINT">
         <tooltip>Print</tooltip>
-        <bitmap>print.xpm</bitmap>
+        <bitmap stock_id="wxART_PRINT"/>
         <longhelp>Print</longhelp>
     </object>
     <object class="tool" name="wxID_PREVIEW">
         <tooltip>Print preview</tooltip>
-        <bitmap>print-preview.xpm</bitmap>
+        <bitmap stock_id="print-preview"/>
         <longhelp>See what this document will look like when printed</longhelp>
     </object>
     <object class="tool" name="wxID_PREFERENCES">
         <tooltip>Preferences</tooltip>
-        <bitmap>preferences.xpm</bitmap>
+        <bitmap stock_id="wxART_PREFERENCES"/>
         <longhelp>Manage preferences</longhelp>
     </object>
     <object class="separator"/>
     <object class="tool" name="edit_cell">
         <tooltip>Edit cell</tooltip>
-        <bitmap>edit-cell.xpm</bitmap>
+        <bitmap stock_id="edit-cell"/>
         <longhelp>Edit selected cell</longhelp>
     </object>
     <object class="tool" name="edit_class">
         <tooltip>Edit class defaults</tooltip>
-        <bitmap>edit-class.xpm</bitmap>
+        <bitmap stock_id="edit-class"/>
         <longhelp>Edit selected cell's class defaults</longhelp>
     </object>
     <object class="tool" name="edit_case">
         <tooltip>Edit case defaults</tooltip>
-        <bitmap>edit-case.xpm</bitmap>
+        <bitmap stock_id="edit-case"/>
         <longhelp>Edit case defaults</longhelp>
     </object>
     <object class="separator"/>
     <object class="tool" name="run_cell">
         <tooltip>Run cell</tooltip>
-        <bitmap>run-cell.xpm</bitmap>
+        <bitmap stock_id="run-cell"/>
         <longhelp>Run selected cell</longhelp>
     </object>
 <!-- SOMEDAY !! One might imagine wanting to run all cells in a class.
     <object class="tool" name="run_class">
         <tooltip>Run class</tooltip>
-        <bitmap>run-class.xpm</bitmap>
+        <bitmap stock_id="run-class"/>
         <longhelp>Run all cells in selected cell's class</longhelp>
     </object>
 -->
     <object class="tool" name="run_case">
         <tooltip>Run case</tooltip>
-        <bitmap>run-case.xpm</bitmap>
+        <bitmap stock_id="run-case"/>
         <longhelp>Run all cells</longhelp>
     </object>
     <object class="separator"/>
     <object class="tool" name="print_cell">
         <tooltip>Print cell</tooltip>
-        <bitmap>print-cell.xpm</bitmap>
+        <bitmap stock_id="print-cell"/>
         <longhelp>Run and print selected cell</longhelp>
     </object>
 <!-- SOMEDAY !! One might imagine wanting to run all cells in a class.
     <object class="tool" name="print_class">
         <tooltip>Print class</tooltip>
-        <bitmap>print-class.xpm</bitmap>
+        <bitmap stock_id="print-class"/>
         <longhelp>Run and print all cells in selected cell's class</longhelp>
     </object>
 -->
     <object class="tool" name="print_case">
         <tooltip>Print case</tooltip>
-        <bitmap>print-case.xpm</bitmap>
+        <bitmap stock_id="print-case"/>
         <longhelp>Run and print all cells</longhelp>
     </object>
     <object class="tool" name="print_spreadsheet">
         <tooltip>Print case to spreadsheet</tooltip>
-        <bitmap>write_spreadsheet.xpm</bitmap>
+        <bitmap stock_id="write-spreadsheet"/>
         <longhelp>Run and print all cells to a spreadsheet file</longhelp>
     </object>
     <object class="separator"/>
     <object class="tool" name="paste_census">
         <tooltip>Paste census</tooltip>
-        <bitmap>paste-case.xpm</bitmap>
+        <bitmap stock_id="paste-case"/>
         <longhelp>Paste census data from clipboard</longhelp>
     </object>
     <object class="tool" name="add_cell">
         <tooltip>Add cell</tooltip>
-        <bitmap>insert-rows.xpm</bitmap>
+        <bitmap stock_id="insert-rows"/>
         <longhelp>Add a new cell with case default parameters</longhelp>
     </object>
     <object class="tool" name="delete_cells">
         <tooltip>Delete selected cell(s)</tooltip>
-        <bitmap>delete-row.xpm</bitmap>
+        <bitmap stock_id="delete-row"/>
         <longhelp>Delete selected cell(s)</longhelp>
     </object>
     <object class="separator"/>
     <object class="tool" name="column_width_varying">
         <tooltip>Varying column width</tooltip>
-        <bitmap>varying-width.xpm</bitmap>
+        <bitmap stock_id="varying-width"/>
         <longhelp>Vary each column's width to show its entire contents</longhelp>
     </object>
     <object class="tool" name="column_width_fixed">
         <tooltip>Fixed column width</tooltip>
-        <bitmap>fixed-width.xpm</bitmap>
+        <bitmap stock_id="fixed-width"/>
         <longhelp>Display all columns with the same fixed width</longhelp>
     </object>
     <object class="separator"/>
     <object class="tool" name="wxID_HELP">
         <tooltip>Help</tooltip>
-        <bitmap>help.xpm</bitmap>
+        <bitmap stock_id="wxART_HELP"/>
         <longhelp>Help</longhelp>
     </object>
 </object>

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.117 2008-09-17 17:29:36 chicares Exp $
+// $Id: main_wx.cpp,v 1.118 2008-10-02 01:12:26 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -57,6 +57,7 @@
 #include "global_settings.hpp"
 #include "getopt.hpp"
 #include "handle_exceptions.hpp"
+#include "icon_monger.hpp"
 #include "ihs_dbdict.hpp"           // print_databases()
 #include "illustration_document.hpp"
 #include "illustration_view.hpp"
@@ -82,6 +83,7 @@
 #include "wx_new.hpp"
 #include "wx_utility.hpp"           // class ClipboardEx
 
+#include <wx/artprov.h>
 #include <wx/config.h>
 #include <wx/cshelp.h>
 #include <wx/docmdi.h>
@@ -223,21 +225,16 @@ int WINAPI WinMain
     return result;
 }
 
-/// 'config_' can't be initialized in the initializer list, because
-/// wxConfigBase::Get() must be called after SetAppName() and
-/// SetVendorName(). Otherwise, the configuration object wouldn't
-/// reflect the vendor and application name; on the msw platform,
-/// for instance, that would prevent writing to a registry key based
-/// on the application's name.
-///
-/// The application name contains 'wx' because it may someday become
-/// desirable to maintain different configuration information in a
-/// similar manner for other lmi user interfaces.
-///
-/// The application display name, however, omits 'wx', because:
-///  - it'll always be specific to wx; and
-///  - 'lmi' is all lowercase, but wx capitalizes the first letter of
-///     the "AppName" (but not the "AppDisplayName").
+// 'config_' can't be initialized in the initializer list, because
+// wxConfigBase::Get() must be called after SetAppName() and
+// SetVendorName(). Otherwise, the configuration object wouldn't
+// reflect the vendor and application name; on the msw platform,
+// for instance, that would prevent writing to a registry key based
+// on the application's name.
+//
+// The application name contains 'wx' because it may someday become
+// desirable to maintain different configuration information in a
+// similar manner for other lmi user interfaces.
 
 Skeleton::Skeleton()
     :doc_manager_     (0)
@@ -246,11 +243,6 @@ Skeleton::Skeleton()
     ,timer_           (this)
 {
     SetAppName("lmi_wx");
-
-#if wxCHECK_VERSION(2,9,0)
-    SetAppDisplayName("lmi...");
-#endif // wxCHECK_VERSION(2,9,0)
-
     SetVendorName("lmi");
     config_ = wxConfigBase::Get();
     timer_.Start(100);
@@ -582,6 +574,16 @@ bool Skeleton::OnInit()
 
         authenticate_system();
 
+        wxInitAllImageHandlers();
+#ifdef __WXGTK__
+        // under GTK+, which has its own theme system, we want our icons
+        // provider to be the fallback, native icons theme takes precedence
+        wxArtProvider::Insert(new LMIArtProvider);
+#else
+        // but on other platforms, we prefer to use our own icons
+        wxArtProvider::Push(new LMIArtProvider);
+#endif
+
         wxXmlResource& xml_resources = *wxXmlResource::Get();
 
         xml_resources.InitAllHandlers();
@@ -622,7 +624,6 @@ bool Skeleton::OnInit()
             fatal_error() << "Unable to load Rounding resources." << LMI_FLUSH;
             }
 
-        wxInitAllImageHandlers();
         InitDocManager();
 
         frame_ = new(wx) wxDocMDIParentFrame

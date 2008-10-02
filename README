@@ -19,48 +19,50 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: README,v 1.5 2008-01-01 18:29:33 chicares Exp $
+// $Id: README,v 1.6 2008-10-02 01:12:13 chicares Exp $
 
 * Copyright and license notices for graphics files
 
-The following graphics files (*.ico *.xpm) in this directory are
+The following graphics files (*.ico *.xpm *.png) in this directory are
 copyrighted and subject to the
   GNU General Public License version 2
 as stated at the top of this file. They are original works except for
 the derived works noted below.
 
-Derived from the gnome-icon-theme/24x24 icon set and copyrighted as
-stated at the beginning of this file:
+Derived from the gnome-icon-theme icon set (version 2.12, sizes 24x24 and
+16x16) and copyrighted as stated at the beginning of this file:
 
-  about.xpm             from stock_about.png
-  close.xpm             from stock_close.png
-  delete-row.xpm        from stock_delete-row.png
-  edit-case.xpm         from stock_zoom.png
-  edit-cell.xpm         from stock_zoom.png
-  edit-class.xpm        from stock_zoom.png
-  exit.xpm              from stock_exit.png
-  fixed-width.xpm       from stock_insert-rows.png
-  help.xpm              from stock_help.png
-  insert-rows.xpm       from stock_insert-rows.png
-  new.xpm               from stock_new.png
-  open.xpm              from stock_open.png
-  paste-case.xpm        from stock_paste.png
-  print-case.xpm        from stock_print.png
-  print-cell.xpm        from stock_print.png
-  print-options.xpm     from stock_print-options.png
-  print-preview.xpm     from stock_print-preview.png
-  print.xpm             from stock_print.png
-  run-case.xpm          from stock_print-layout.png
-  run-cell.xpm          from stock_print-layout.png
-  save.xpm              from stock_save.png
-  saveas.xpm            from stock_save-as.png
-  varying-width.xpm     from stock_insert-rows.png
-  write_spreadsheet.xpm from stock_insert-rows.png
+  about[-16].png              from stock_about.png
+  close[-16].png              from stock_close.png
+  delete-row[-16].png         from stock_delete-row.png
+  edit-case[-16].png          from stock_zoom.png
+  edit-cell[-16].png          from stock_zoom.png
+  edit-class[-16].png         from stock_zoom.png
+  file-open[-16].png          from stock_open.png
+  file-save[-16].png          from stock_save.png
+  file-save-as[-16].png       from stock_save-as.png
+  fixed-width[-16].png        from stock_insert-rows.png
+  help[-16].png               from stock_help.png
+  insert-rows[-16].png        from stock_insert-rows.png
+  new.png                     from stock_new.png
+  new-16.png                  from stock_new-formula.png
+  paste-case[-16].png         from stock_paste.png
+  preferences[-16].png        from gnome-settings.png
+  print-case[-16].png         from stock_print.png
+  print-cell[-16].png         from stock_print.png
+  print-options[-16].png      from stock_print-options.png
+  print-preview[-16].png      from stock_print-preview.png
+  print[-16].png              from stock_print.png
+  quit[-16].png               from stock_exit.png
+  run-case[-16].png           from stock_print-layout.png
+  run-cell[-16].png           from stock_print-layout.png
+  varying-width[-16].png      from stock_insert-rows.png
+  write-spreadsheet[-16].png  from stock_insert-rows.png
 
-Derived from the gnome-icon-theme/24x24 icon set and copyrighted as
-stated at the beginning of this file:
+Derived from the gnome-icon-theme icon set (version 2.12, sizes 24x24 and
+16x16) and copyrighted as stated at the beginning of this file:
 
-  default_cell.xpm      from stock_new.png
+  default-cell[-16].png       from stock_new.png
 
 Many of these icons are used by GNU emacs, and are in the emacs cvs at
 savannah.gnu.org . The original author of this gnome icon set is Jakub
