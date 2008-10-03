@@ -23,9 +23,9 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: autogen.sh,v 1.7 2008-01-01 18:29:35 chicares Exp $
+# $Id: autogen.sh,v 1.8 2008-10-03 10:41:44 vslavik Exp $
 
-if [ ! -f configure.ac -o ! -f Makefile.am -o ! -f lmi.xpm ]; then
+if [ ! -f configure.ac -o ! -f Makefile.am -o ! -f lmi.png ]; then
     echo "Please run this script from the lmi source directory."
     exit 2
 fi

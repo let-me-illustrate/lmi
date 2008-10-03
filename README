@@ -19,11 +19,11 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: README,v 1.6 2008-10-02 01:12:13 chicares Exp $
+// $Id: README,v 1.7 2008-10-03 10:41:44 vslavik Exp $
 
 * Copyright and license notices for graphics files
 
-The following graphics files (*.ico *.xpm *.png) in this directory are
+The following graphics files (*.ico *.png) in this directory are
 copyrighted and subject to the
   GNU General Public License version 2
 as stated at the top of this file. They are original works except for

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.77 2008-06-25 23:51:30 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.78 2008-10-03 10:41:47 vslavik Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -97,7 +97,6 @@ enum enum_phylum
     ,e_touchstone = 1 << 14
     ,e_xml_input  = 1 << 15
     ,e_xml_other  = 1 << 16
-    ,e_xpm        = 1 << 17
     };
 
 enum enum_kingdom
@@ -199,7 +198,6 @@ file::file(std::string const& file_path)
         : ".xrc"        == extension() ? e_xml_other
         : ".xsd"        == extension() ? e_xml_other
         : ".xsl"        == extension() ? e_xml_other
-        : ".xpm"        == extension() ? e_xpm
         : phyloanalyze("^COPYING$")    ? e_gpl
         : phyloanalyze("^quoted_gpl")  ? e_gpl
         : phyloanalyze("Log$")         ? e_log
@@ -323,7 +321,6 @@ void assay_whitespace(file const& f)
         (   !f.is_of_phylum(e_gpl)
         &&  !f.is_of_phylum(e_make)
         &&  !f.is_of_phylum(e_patch)
-        &&  !f.is_of_phylum(e_xpm)
         &&  std::string::npos != f.data().find('\t')
         )
         {
@@ -413,7 +410,6 @@ void check_copyright(file const& f)
         ||  f.is_of_phylum(e_patch)
         ||  f.is_of_phylum(e_touchstone)
         ||  f.is_of_phylum(e_xml_input)
-        ||  f.is_of_phylum(e_xpm)
         )
         {
         return;
@@ -499,7 +495,7 @@ void check_cxx(file const& f)
 
 void check_defect_markers(file const& f)
 {
-    if(f.is_of_phylum(e_xpm) || f.phyloanalyze("^test_coding_rules_test.sh$"))
+    if(f.phyloanalyze("^test_coding_rules_test.sh$"))
         {
         return;
         }
@@ -674,7 +670,6 @@ void check_preamble(file const& f)
         ||  f.is_of_phylum(e_patch)
         ||  f.is_of_phylum(e_touchstone)
         ||  f.is_of_phylum(e_xml_input)
-        ||  f.is_of_phylum(e_xpm)
         )
         {
         return;
@@ -854,22 +849,6 @@ void check_reserved_names(file const& f)
         }
 }
 
-void check_xpm(file const& f)
-{
-    if(!f.is_of_phylum(e_xpm))
-        {
-        return;
-        }
-
-    std::string const name = boost::regex_replace
-        (f.leaf_name()
-        ,boost::regex("[.-]")
-        ,"_"
-        );
-    std::string const z = "static char const\\* " + name + "\\[\\] = \\{";
-    require(f, z, "lacks proper variable assignment.");
-}
-
 void enforce_taboos(file const& f)
 {
     if(f.phyloanalyze("test_coding_rules"))
@@ -980,7 +959,6 @@ statistics statistics::analyze_file(file const& f)
         ||  f.is_of_phylum(e_patch)
         ||  f.is_of_phylum(e_touchstone)
         ||  f.is_of_phylum(e_xml_input)
-        ||  f.is_of_phylum(e_xpm)
         ||  f.phyloanalyze("^INSTALL")
         ||  f.phyloanalyze("^README")
         )
@@ -1045,7 +1023,6 @@ statistics process_file(std::string const& file_path)
     check_logs              (f);
     check_preamble          (f);
     check_reserved_names    (f);
-    check_xpm               (f);
 
     enforce_taboos          (f);
 
