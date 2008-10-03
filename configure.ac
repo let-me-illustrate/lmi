@@ -21,13 +21,13 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.40 2008-10-02 14:29:32 vslavik Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.41 2008-10-03 10:41:44 vslavik Exp $)dnl
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
 AM_INIT_AUTOMAKE()
 
-AC_CONFIG_SRCDIR([lmi.xpm])
+AC_CONFIG_SRCDIR([lmi.png])
 AC_CONFIG_HEADER([config.h])
 
 dnl remember, "build" is where we compile, "host" is where the resulting

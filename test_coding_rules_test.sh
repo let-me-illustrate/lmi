@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.40 2008-06-25 23:51:30 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.41 2008-10-03 10:41:47 vslavik Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -375,30 +375,6 @@ Tab can occur only at the beginning of a line.
  ${ascii_ht}
 EOF
 
-# X pixmaps.
-
-cat >eraseme_xpm_000.xpm <<EOF
-No boilerplate is required.
-static char const* eraseme_xpm_000_xpm[] = {
-EOF
-
-cat >eraseme_xpm_001.xpm <<EOF
-'const' is required.
-static char* eraseme_xpm_001_xpm[] = {
-EOF
-
-cat >eraseme_xpm_002.xpm <<EOF
-Variable name must match file name, with an underscore in place of any
-character that isn't allowed in a variable name.
-static char const* wrong_file_002_xpm[] = {
-EOF
-
-cat >eraseme_xpm_003-dot.dash-dot.xpm <<EOF
-Hyphens in file name must be changed to underscores in variable name.
-static char const* eraseme_xpm_003_dot_dash_dot_xpm[] = {
-Furthermore, this file's name is excessively long.
-EOF
-
 touch an_expungible_file.bak
 touch an_unexpected_file
 touch another.unexpected.file
@@ -477,9 +453,6 @@ Exception--file 'eraseme_whitespace_001': File contains '\f'.
 Exception--file 'eraseme_whitespace_002': File contains '\r' or '\v'.
 Exception--file 'eraseme_whitespace_003': File contains '\t'.
 Exception--file 'eraseme_whitespace_004': File contains '\r' or '\v'.
-File 'eraseme_xpm_001.xpm' lacks proper variable assignment.
-File 'eraseme_xpm_002.xpm' lacks proper variable assignment.
-File 'eraseme_xpm_003-dot.dash-dot.xpm' exceeds 31-character file-name limit.
 EOF
 
 diff --unified=0 eraseme_expected eraseme_observed && rm --force \

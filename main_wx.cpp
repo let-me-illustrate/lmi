@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.121 2008-10-02 01:55:31 chicares Exp $
+// $Id: main_wx.cpp,v 1.122 2008-10-03 10:41:44 vslavik Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -106,10 +106,6 @@
 #if defined __WXGTK__
 #   include <gtk/gtk.h>
 #endif
-
-#if !defined LMI_MSW
-#   include "lmi.xpm"
-#endif // !defined LMI_MSW
 
 IMPLEMENT_APP_NO_MAIN(Skeleton)
 IMPLEMENT_WX_THEME_SUPPORT
@@ -467,7 +463,7 @@ void Skeleton::InitIcon()
     // '.ico' file; but this shows the color icon:
     frame_->SetIcons(wxICON(AAAAAAAA));
 #else // Not defined LMI_MSW.
-    frame_->SetIcon(wxICON(lmi));
+    frame_->SetIcon(wxIcon(AddDataDir("lmi.png")));
 #endif // Not defined LMI_MSW.
 }
 
