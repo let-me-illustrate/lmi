@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1176 2008-10-03 15:04:26 chicares Exp $
+// $Id: ChangeLog,v 1.1177 2008-10-03 17:08:35 chicares Exp $
 
 MAINTENANCE
 
@@ -20006,4 +20006,11 @@ Replace remaining 'xpm' files with 'png' files.
 Fix defect introduced 20081002T0112Z. Binary files were committed
 without '-kb'. Section 9.2 of cederqvist-1.11.23 explains the problems
 this might cause.
+
+20081003T1708Z <gchicares@sbcglobal.net> [960]
+
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+Test length of every filename. Prior to 20081003T1041Z, binary files
+were undesirably exempted from this test.
 
