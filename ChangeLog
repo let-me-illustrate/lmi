@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1175 2008-10-03 10:41:43 vslavik Exp $
+// $Id: ChangeLog,v 1.1176 2008-10-03 15:04:26 chicares Exp $
 
 MAINTENANCE
 
@@ -19960,3 +19960,50 @@ Fix linking against third party libraries using autoconf makefiles.
   tier_view.xpm                 [expunged]
   workhorse.make
 Replace remaining 'xpm' files with 'png' files.
+
+20081003T1504Z <gchicares@sbcglobal.net> [960]
+
+  about-16.png
+  about.png
+  close-16.png
+  close.png
+  default-cell.png
+  delete-row-16.png
+  delete-row.png
+  edit-case.png
+  edit-cell.png
+  edit-class.png
+  file-open-16.png
+  file-open.png
+  file-save-16.png
+  file-save-as-16.png
+  file-save-as.png
+  file-save.png
+  fixed-width.png
+  help-16.png
+  help.png
+  insert-rows-16.png
+  insert-rows.png
+  new-16.png
+  new.png
+  paste-case.png
+  preferences-16.png
+  preferences.png
+  print-16.png
+  print-case.png
+  print-cell.png
+  print-options-16.png
+  print-options.png
+  print-preview-16.png
+  print-preview.png
+  print.png
+  quit-16.png
+  quit.png
+  run-case.png
+  run-cell.png
+  varying-width.png
+  write-spreadsheet.png
+Fix defect introduced 20081002T0112Z. Binary files were committed
+without '-kb'. Section 9.2 of cederqvist-1.11.23 explains the problems
+this might cause.
+
