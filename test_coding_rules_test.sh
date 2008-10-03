@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.41 2008-10-03 10:41:47 vslavik Exp $
+# $Id: test_coding_rules_test.sh,v 1.42 2008-10-03 17:08:35 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
@@ -375,6 +375,14 @@ Tab can occur only at the beginning of a line.
  ${ascii_ht}
 EOF
 
+# Check filename length, even for binary files.
+
+cat >eraseme_png_003-dot.dash-dot.png <<EOF
+     00000000011111111112222222222333
+     12345678901234567890123456789012
+This file's name is excessively long.
+EOF
+
 touch an_expungible_file.bak
 touch an_unexpected_file
 touch another.unexpected.file
@@ -437,6 +445,7 @@ File 'eraseme_marker_001' has irregular defect marker 'INELEGANT!! '.
 File 'eraseme_marker_001' has irregular defect marker 'INELEGANT !!B'.
 File 'eraseme_marker_001' has irregular defect marker 'INELEGANT !!!'.
 File 'eraseme_marker_001' has irregular defect marker 'ELEGANT !! '.
+File 'eraseme_png_003-dot.dash-dot.png' exceeds 31-character file-name limit.
 File 'eraseme_rcs_id_002' lacks a well-formed RCS Id.
 File 'eraseme_rcs_id_002' contains a malformed RCS Id.
 File 'eraseme_rcs_id_003' lacks a well-formed RCS Id.
