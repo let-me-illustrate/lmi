@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: rounding_view.xrc,v 1.4 2008-02-17 15:17:14 chicares Exp $
+    $Id: rounding_view.xrc,v 1.5 2008-10-03 10:41:47 vslavik Exp $
 -->
 
 <object class="wxPanel" name="rounding_view_panel">
@@ -335,29 +335,29 @@
 
 </object><!-- wxPanel -->
 
-<object class="wxBitmap" name="round_not_at_all">round_not_at_all.xpm</object>
+<object class="wxBitmap" name="round_not_at_all">round_not_at_all.png</object>
 
-<object class="wxBitmap" name="round_not_at_all_hover">round_not_at_all_hover.xpm</object>
+<object class="wxBitmap" name="round_not_at_all_hover">round_not_at_all_hover.png</object>
 
-<object class="wxBitmap" name="round_not_at_all_selected">round_not_at_all_selected.xpm</object>
+<object class="wxBitmap" name="round_not_at_all_selected">round_not_at_all_selected.png</object>
 
-<object class="wxBitmap" name="round_to_nearest">round_to_nearest.xpm</object>
+<object class="wxBitmap" name="round_to_nearest">round_to_nearest.png</object>
 
-<object class="wxBitmap" name="round_to_nearest_hover">round_to_nearest_hover.xpm</object>
+<object class="wxBitmap" name="round_to_nearest_hover">round_to_nearest_hover.png</object>
 
-<object class="wxBitmap" name="round_to_nearest_selected">round_to_nearest_selected.xpm</object>
+<object class="wxBitmap" name="round_to_nearest_selected">round_to_nearest_selected.png</object>
 
-<object class="wxBitmap" name="round_upward">round_upward.xpm</object>
+<object class="wxBitmap" name="round_upward">round_upward.png</object>
 
-<object class="wxBitmap" name="round_upward_hover">round_upward_hover.xpm</object>
+<object class="wxBitmap" name="round_upward_hover">round_upward_hover.png</object>
 
-<object class="wxBitmap" name="round_upward_selected">round_upward_selected.xpm</object>
+<object class="wxBitmap" name="round_upward_selected">round_upward_selected.png</object>
 
-<object class="wxBitmap" name="round_downward">round_downward.xpm</object>
+<object class="wxBitmap" name="round_downward">round_downward.png</object>
 
-<object class="wxBitmap" name="round_downward_hover">round_downward_hover.xpm</object>
+<object class="wxBitmap" name="round_downward_hover">round_downward_hover.png</object>
 
-<object class="wxBitmap" name="round_downward_selected">round_downward_selected.xpm</object>
+<object class="wxBitmap" name="round_downward_selected">round_downward_selected.png</object>
 
 </resource>
 

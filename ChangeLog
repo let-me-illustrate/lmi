@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1174 2008-10-02 14:29:31 vslavik Exp $
+// $Id: ChangeLog,v 1.1175 2008-10-03 10:41:43 vslavik Exp $
 
 MAINTENANCE
 
@@ -19907,3 +19907,56 @@ Inhibit rescaling for the nonce. See:
   Makefile.am
 Fix linking against third party libraries using autoconf makefiles.
 
+20081003T1041Z <vslavik@fastmail.fm> [960]
+
+  Makefile.am
+  README
+  autogen.sh
+  census_view.png               [new file]
+  census_view.xpm               [expunged]
+  configure.ac
+  database_view.png             [new file]
+  database_view.xpm             [expunged]
+  illustration_view.png         [new file]
+  illustration_view.xpm         [expunged]
+  lmi.png                       [new file]
+  lmi.xpm                       [expunged]
+  main_wx.cpp
+  menus.xrc
+  policy_view.png               [new file]
+  policy_view.xpm               [expunged]
+  round_downward.png            [new file]
+  round_downward.xpm            [expunged]
+  round_downward_hover.png      [new file]
+  round_downward_hover.xpm      [expunged]
+  round_downward_selected.png   [new file]
+  round_downward_selected.xpm   [expunged]
+  round_not_at_all.png          [new file]
+  round_not_at_all.xpm          [expunged]
+  round_not_at_all_hover.png    [new file]
+  round_not_at_all_hover.xpm    [expunged]
+  round_not_at_all_selected.png [new file]
+  round_not_at_all_selected.xpm [expunged]
+  round_to_nearest.png          [new file]
+  round_to_nearest.xpm          [expunged]
+  round_to_nearest_hover.png    [new file]
+  round_to_nearest_hover.xpm    [expunged]
+  round_to_nearest_selected.png [new file]
+  round_to_nearest_selected.xpm [expunged]
+  round_upward.png              [new file]
+  round_upward.xpm              [expunged]
+  round_upward_hover.png        [new file]
+  round_upward_hover.xpm        [expunged]
+  round_upward_selected.png     [new file]
+  round_upward_selected.xpm     [expunged]
+  rounding_view.png             [new file]
+  rounding_view.xpm             [expunged]
+  rounding_view.xrc
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+  text_view.png                 [new file]
+  text_view.xpm                 [expunged]
+  tier_view.png                 [new file]
+  tier_view.xpm                 [expunged]
+  workhorse.make
+Replace remaining 'xpm' files with 'png' files.

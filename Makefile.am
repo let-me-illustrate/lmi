@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.60 2008-10-02 14:29:32 vslavik Exp $
+# $Id: Makefile.am,v 1.61 2008-10-03 10:41:43 vslavik Exp $
 
 SUBDIRS = third_party
 
@@ -58,7 +58,7 @@ noinst_LTLIBRARIES = \
 
 # data files
 xrcdir = $(pkgdatadir)
-dist_xrc_DATA = $(shell ls -1 $(srcdir)/*.png $(srcdir)/*.xrc $(srcdir)/*.xpm)
+dist_xrc_DATA = $(shell ls -1 $(srcdir)/*.png $(srcdir)/*.xrc)
 
 xsldir = $(pkgdatadir)
 dist_xsl_DATA = $(shell ls -1 $(srcdir)/*.xsl)
