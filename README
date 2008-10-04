@@ -19,21 +19,20 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: README,v 1.7 2008-10-03 10:41:44 vslavik Exp $
+// $Id: README,v 1.8 2008-10-04 00:39:30 chicares Exp $
 
 * Copyright and license notices for graphics files
 
-The following graphics files (*.ico *.png) in this directory are
-copyrighted and subject to the
-  GNU General Public License version 2
-as stated at the top of this file. They are original works except for
-the derived works noted below.
+The copyright notice, license, and disclaimers at the top of this file
+apply to all graphics files (*.ico *.png) in this directory. They are
+original works except for the derived works listed below.
 
-Derived from the gnome-icon-theme icon set (version 2.12, sizes 24x24 and
-16x16) and copyrighted as stated at the beginning of this file:
+Derived from the gnome-icon-theme icon set (version 2.12, sizes 24x24
+and 16x16):
 
   about[-16].png              from stock_about.png
   close[-16].png              from stock_close.png
+  default-cell[-16].png       from stock_new.png
   delete-row[-16].png         from stock_delete-row.png
   edit-case[-16].png          from stock_zoom.png
   edit-cell[-16].png          from stock_zoom.png
@@ -44,8 +43,7 @@ Derived from the gnome-icon-theme icon set (version 2.12, sizes 24x24 and
   fixed-width[-16].png        from stock_insert-rows.png
   help[-16].png               from stock_help.png
   insert-rows[-16].png        from stock_insert-rows.png
-  new.png                     from stock_new.png
-  new-16.png                  from stock_new-formula.png
+  new[-16].png                from stock_new.png
   paste-case[-16].png         from stock_paste.png
   preferences[-16].png        from gnome-settings.png
   print-case[-16].png         from stock_print.png
@@ -59,11 +57,6 @@ Derived from the gnome-icon-theme icon set (version 2.12, sizes 24x24 and
   varying-width[-16].png      from stock_insert-rows.png
   write-spreadsheet[-16].png  from stock_insert-rows.png
 
-Derived from the gnome-icon-theme icon set (version 2.12, sizes 24x24 and
-16x16) and copyrighted as stated at the beginning of this file:
-
-  default-cell[-16].png       from stock_new.png
-
 Many of these icons are used by GNU emacs, and are in the emacs cvs at
 savannah.gnu.org . The original author of this gnome icon set is Jakub
 Steiner, and here
@@ -71,11 +64,4 @@ Steiner, and here
 is his employer's LGPL notice. The original files adapted here were
 retrieved from the gnome cvs (gnome is GPL), and converted or modified
 with the GIMP.
-
-* Maintenance note for xpm files
-
-Apparently the xpm format prescribes type 'char*' for string literals,
-which are actually of type 'char const*'. Ignore that prescription and
-follow the language standard: make them const. If a graphical editor
-removes the 'const', then restore it before committing any change.
 

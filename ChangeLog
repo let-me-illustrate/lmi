@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1177 2008-10-03 17:08:35 chicares Exp $
+// $Id: ChangeLog,v 1.1178 2008-10-04 00:39:30 chicares Exp $
 
 MAINTENANCE
 
@@ -20013,4 +20013,9 @@ this might cause.
   test_coding_rules_test.sh
 Test length of every filename. Prior to 20081003T1041Z, binary files
 were undesirably exempted from this test.
+
+20081004T0039Z <gchicares@sbcglobal.net> [960]
+
+  README
+Improve documentation.
 
