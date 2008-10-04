@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: icon_monger.cpp,v 1.4 2008-10-02 02:05:21 chicares Exp $
+// $Id: icon_monger.cpp,v 1.5 2008-10-04 13:47:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,7 +30,8 @@
 
 #include "alert.hpp"
 #include "data_directory.hpp"
-#include "miscellany.hpp" // lmi_tolower()
+#include "handle_exceptions.hpp"
+#include "map_lookup.hpp"
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
@@ -41,6 +42,15 @@
 
 icon_monger::icon_monger()
 {
+//    icon_names_by_wx_id_[wxART_ABOUT       ] = "about"       ; error: `wxART_ABOUT' undeclared
+    icon_names_by_wx_id_[wxART_FILE_OPEN   ] = "file-open"   ;
+    icon_names_by_wx_id_[wxART_FILE_SAVE   ] = "file-save"   ;
+    icon_names_by_wx_id_[wxART_FILE_SAVE_AS] = "file-save-as";
+    icon_names_by_wx_id_[wxART_HELP        ] = "help"        ;
+    icon_names_by_wx_id_[wxART_NEW         ] = "new"         ;
+//    icon_names_by_wx_id_[wxART_PREFERENCES ] = "preferences" ; error: `wxART_PREFERENCES' undeclared
+    icon_names_by_wx_id_[wxART_PRINT       ] = "print"       ;
+    icon_names_by_wx_id_[wxART_QUIT        ] = "quit"        ;
 }
 
 icon_monger::~icon_monger()
@@ -97,19 +107,16 @@ wxBitmap icon_monger::CreateBitmap
     )
 {
     std::string icon_name = id.c_str();
-    static std::string const builtin_id_prefix("wxART_");
-    bool is_builtin = 0 == icon_name.find(builtin_id_prefix);
+    bool is_builtin = 0 == icon_name.find("wxART_");
     if(is_builtin)
         {
-        icon_name.erase(0, builtin_id_prefix.size());
-        typedef std::string::iterator ssi;
-        for(ssi i = icon_name.begin(); i != icon_name.end(); ++i)
+        try
             {
-            *i = lmi_tolower(*i);
-            if('_' == *i)
-                {
-                *i = '-';
-                }
+            icon_name = map_lookup(icon_names_by_wx_id_, icon_name);
+            }
+        catch(...)
+            {
+            report_exception();
             }
         }
 
