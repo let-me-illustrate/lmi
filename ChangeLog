@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1179 2008-10-04 14:05:32 chicares Exp $
+// $Id: ChangeLog,v 1.1180 2008-10-04 15:16:26 chicares Exp $
 
 MAINTENANCE
 
@@ -20041,4 +20041,9 @@ some wxART ids are undeclared.
   quit-16.png         [renamed to exit-16.png]
   toolbar.xrc
 Resolve issue identified 20081004T1347Z; prefer gnome names for icons.
+
+20081004T1516Z <gchicares@sbcglobal.net> [960]
+
+  icon_monger.cpp
+Don't complain when falling back on builtin bitmaps.
 

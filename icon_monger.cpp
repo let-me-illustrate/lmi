@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: icon_monger.cpp,v 1.6 2008-10-04 14:05:32 chicares Exp $
+// $Id: icon_monger.cpp,v 1.7 2008-10-04 15:16:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,7 +30,6 @@
 
 #include "alert.hpp"
 #include "data_directory.hpp"
-#include "handle_exceptions.hpp"
 #include "map_lookup.hpp"
 
 #include <boost/filesystem/operations.hpp>
@@ -114,7 +113,7 @@ wxBitmap icon_monger::CreateBitmap
             }
         catch(...)
             {
-            report_exception();
+            ; // Do nothing.
             }
         }
 
