@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1178 2008-10-04 00:39:30 chicares Exp $
+// $Id: ChangeLog,v 1.1179 2008-10-04 14:05:32 chicares Exp $
 
 MAINTENANCE
 
@@ -20018,4 +20018,27 @@ were undesirably exempted from this test.
 
   README
 Improve documentation.
+
+20081004T1347Z <gchicares@sbcglobal.net> [960]
+
+  icon_monger.cpp
+  icon_monger.hpp
+Replace name manipulation with a lookup table, revealing an issue:
+some wxART ids are undeclared.
+
+20081004T1405Z <gchicares@sbcglobal.net> [960]
+
+  README
+  file-open.png       [renamed to open.png]
+  file-open-16.png    [renamed to open-16.png]
+  file-save.png       [renamed to save.png]
+  file-save-16.png    [renamed to save-16.png]
+  file-save-as.png    [renamed to save-as.png]
+  file-save-as-16.png [renamed to save-as-16.png]
+  icon_monger.cpp
+  menus.xrc
+  quit.png            [renamed to exit.png]
+  quit-16.png         [renamed to exit-16.png]
+  toolbar.xrc
+Resolve issue identified 20081004T1347Z; prefer gnome names for icons.
 
