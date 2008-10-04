@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: toolbar.xrc,v 1.13 2008-10-02 01:12:36 chicares Exp $
+    $Id: toolbar.xrc,v 1.14 2008-10-04 14:05:32 chicares Exp $
 -->
 
 <object class="wxToolBar" name="toolbar">
@@ -57,7 +57,7 @@
     </object>
     <object class="tool" name="wxID_PREFERENCES">
         <tooltip>Preferences</tooltip>
-        <bitmap stock_id="wxART_PREFERENCES"/>
+        <bitmap stock_id="preferences"/>
         <longhelp>Manage preferences</longhelp>
     </object>
     <object class="separator"/>

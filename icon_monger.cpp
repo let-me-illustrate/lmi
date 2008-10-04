@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: icon_monger.cpp,v 1.5 2008-10-04 13:47:20 chicares Exp $
+// $Id: icon_monger.cpp,v 1.6 2008-10-04 14:05:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -42,15 +42,13 @@
 
 icon_monger::icon_monger()
 {
-//    icon_names_by_wx_id_[wxART_ABOUT       ] = "about"       ; error: `wxART_ABOUT' undeclared
-    icon_names_by_wx_id_[wxART_FILE_OPEN   ] = "file-open"   ;
-    icon_names_by_wx_id_[wxART_FILE_SAVE   ] = "file-save"   ;
-    icon_names_by_wx_id_[wxART_FILE_SAVE_AS] = "file-save-as";
-    icon_names_by_wx_id_[wxART_HELP        ] = "help"        ;
-    icon_names_by_wx_id_[wxART_NEW         ] = "new"         ;
-//    icon_names_by_wx_id_[wxART_PREFERENCES ] = "preferences" ; error: `wxART_PREFERENCES' undeclared
-    icon_names_by_wx_id_[wxART_PRINT       ] = "print"       ;
-    icon_names_by_wx_id_[wxART_QUIT        ] = "quit"        ;
+    icon_names_by_wx_id_[wxART_QUIT        ] = "exit"   ;
+    icon_names_by_wx_id_[wxART_HELP        ] = "help"   ;
+    icon_names_by_wx_id_[wxART_NEW         ] = "new"    ;
+    icon_names_by_wx_id_[wxART_FILE_OPEN   ] = "open"   ;
+    icon_names_by_wx_id_[wxART_PRINT       ] = "print"  ;
+    icon_names_by_wx_id_[wxART_FILE_SAVE   ] = "save"   ;
+    icon_names_by_wx_id_[wxART_FILE_SAVE_AS] = "save-as";
 }
 
 icon_monger::~icon_monger()

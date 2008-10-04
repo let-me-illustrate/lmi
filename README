@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: README,v 1.8 2008-10-04 00:39:30 chicares Exp $
+// $Id: README,v 1.9 2008-10-04 14:05:32 chicares Exp $
 
 * Copyright and license notices for graphics files
 
@@ -37,13 +37,12 @@ and 16x16):
   edit-case[-16].png          from stock_zoom.png
   edit-cell[-16].png          from stock_zoom.png
   edit-class[-16].png         from stock_zoom.png
-  file-open[-16].png          from stock_open.png
-  file-save[-16].png          from stock_save.png
-  file-save-as[-16].png       from stock_save-as.png
+  exit[-16].png               from stock_exit.png
   fixed-width[-16].png        from stock_insert-rows.png
   help[-16].png               from stock_help.png
   insert-rows[-16].png        from stock_insert-rows.png
   new[-16].png                from stock_new.png
+  open[-16].png               from stock_open.png
   paste-case[-16].png         from stock_paste.png
   preferences[-16].png        from gnome-settings.png
   print-case[-16].png         from stock_print.png
@@ -51,9 +50,10 @@ and 16x16):
   print-options[-16].png      from stock_print-options.png
   print-preview[-16].png      from stock_print-preview.png
   print[-16].png              from stock_print.png
-  quit[-16].png               from stock_exit.png
   run-case[-16].png           from stock_print-layout.png
   run-cell[-16].png           from stock_print-layout.png
+  save[-16].png               from stock_save.png
+  save-as[-16].png            from stock_save-as.png
   varying-width[-16].png      from stock_insert-rows.png
   write-spreadsheet[-16].png  from stock_insert-rows.png
 
