@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.41 2008-10-03 10:41:44 vslavik Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.42 2008-10-08 18:46:03 vslavik Exp $)dnl
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -475,6 +475,7 @@ else
     AC_CHECK_PROG(lmi_xmlwrapp_config, xmlwrapp-config, yes, no)
     if test "x$lmi_xmlwrapp_config" != "xyes"; then
         AC_MSG_ERROR([Unable to find libxml++ configuration program xmlwrapp-config in the path.])
+    fi
 
     dnl TODO: Pass --debug option and so on (depends on the actual build)
     XMLWRAPP_CFLAGS=`xmlwrapp-config --cxxflags`
@@ -517,7 +518,6 @@ AC_CACHE_CHECK([if we are using recent version of xmlwrapp],
 )
 if test "x$lmi_cv_lib_xmlwrapp_recent" = "xyes"; then
     AC_DEFINE([USING_CURRENT_XMLWRAPP], [1], [Define this if you have the latest version of libxmlwrapp])
-fi
 fi
 
 dnl --- CGICC (optional) ----------------
