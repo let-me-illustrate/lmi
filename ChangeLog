@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1180 2008-10-04 15:16:26 chicares Exp $
+// $Id: ChangeLog,v 1.1181 2008-10-17 17:04:39 chicares Exp $
 
 MAINTENANCE
 
@@ -20046,4 +20046,15 @@ Resolve issue identified 20081004T1347Z; prefer gnome names for icons.
 
   icon_monger.cpp
 Don't complain when falling back on builtin bitmaps.
+
+20081008T1846Z <vslavik@fastmail.fm> [960]
+
+  configure.ac
+Fix incorrectly-closed if-blocks.
+
+20081017T1704Z <gchicares@sbcglobal.net> [960]
+
+  test_coding_rules.cpp
+  wx_checks.cpp
+Temporarily exempt html from a certain taboo.
 
