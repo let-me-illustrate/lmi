@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1181 2008-10-17 17:04:39 chicares Exp $
+// $Id: ChangeLog,v 1.1182 2008-10-17 22:55:34 chicares Exp $
 
 MAINTENANCE
 
@@ -20057,4 +20057,16 @@ Fix incorrectly-closed if-blocks.
   test_coding_rules.cpp
   wx_checks.cpp
 Temporarily exempt html from a certain taboo.
+
+20081017T2255Z <gchicares@sbcglobal.net> [960]
+
+  census_view.cpp
+  input_realization.cpp
+  input_sequence.cpp
+  input_sequence.hpp
+  input_xml_io.cpp
+  wx_utility.cpp
+Improve portability by eschewing carriage return. Filter it out where
+it would intrude instead of dealing with it downstream. This happens
+to make pasting the sample census from wx html help work.
 

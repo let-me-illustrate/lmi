@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_realization.cpp,v 1.13 2008-08-09 02:04:15 chicares Exp $
+// $Id: input_realization.cpp,v 1.14 2008-10-17 22:55:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -313,7 +313,7 @@ std::vector<std::string> Input::RealizeAllSequenceInput(bool report_errors)
             if(!i->empty())
                 {
                 diagnostics_present = true;
-                oss << (*i) << "\r\n";
+                oss << (*i) << "\n";
                 }
             if(diagnostics_present)
                 {

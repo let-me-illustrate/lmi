@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_sequence.hpp,v 1.5 2008-01-01 18:29:45 chicares Exp $
+// $Id: input_sequence.hpp,v 1.6 2008-10-17 22:55:34 chicares Exp $
 
 // Motivation.
 //
@@ -286,13 +286,8 @@ class InputSequence
 
     std::vector<ValueInterval> const& interval_representation() const;
 
-    // Option to show only first diagnostic:
-    //   downstream errors can confuse users.
-    // Option to separate messages with \r\n:
-    //   this is what msw uses as a line break.
     std::string formatted_diagnostics
-        (bool show_first_message_only       = false
-        ,bool use_carriage_return_line_feed = false
+        (bool show_first_message_only = false
         ) const;
 
   private:
