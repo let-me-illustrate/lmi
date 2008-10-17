@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_checks.cpp,v 1.9 2008-01-01 18:29:59 chicares Exp $
+// $Id: wx_checks.cpp,v 1.10 2008-10-17 17:04:39 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,6 +33,10 @@
 #if !wxCHECK_VERSION(2,5,4) // wx prior to version 2.5.4 .
 #   error Outdated library: wx-2.5.4 or greater is required.
 #endif // wx prior to version 2.5.4 .
+
+#if wxCHECK_VERSION(3,0,0)
+#   error Remove the "1252" html exception in 'test_coding_rules.cpp'.
+#endif // wxCHECK_VERSION(3,0,0)
 
 // Require certain optional wx components.
 

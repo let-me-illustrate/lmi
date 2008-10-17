@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.79 2008-10-03 17:08:35 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.80 2008-10-17 17:04:39 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -88,15 +88,16 @@ enum enum_phylum
     ,e_ephemeral  = 1 <<  5
     ,e_expungible = 1 <<  6
     ,e_gpl        = 1 <<  7
-    ,e_log        = 1 <<  8
-    ,e_make       = 1 <<  9
-    ,e_md5        = 1 << 10
-    ,e_patch      = 1 << 11
-    ,e_script     = 1 << 12
-    ,e_synopsis   = 1 << 13
-    ,e_touchstone = 1 << 14
-    ,e_xml_input  = 1 << 15
-    ,e_xml_other  = 1 << 16
+    ,e_html       = 1 <<  8
+    ,e_log        = 1 <<  9
+    ,e_make       = 1 << 10
+    ,e_md5        = 1 << 11
+    ,e_patch      = 1 << 12
+    ,e_script     = 1 << 13
+    ,e_synopsis   = 1 << 14
+    ,e_touchstone = 1 << 15
+    ,e_xml_input  = 1 << 16
+    ,e_xml_other  = 1 << 17
     };
 
 enum enum_kingdom
@@ -181,6 +182,7 @@ file::file(std::string const& file_path)
         : ".tpp"        == extension() ? e_cxx_source
         : ".xpp"        == extension() ? e_cxx_source
         : ".bak"        == extension() ? e_expungible
+        : ".html"       == extension() ? e_html
         : ".make"       == extension() ? e_make
         : ".md5sums"    == extension() ? e_md5
         : ".patch"      == extension() ? e_patch
@@ -193,7 +195,6 @@ file::file(std::string const& file_path)
         : ".cns"        == extension() ? e_xml_input
         : ".ill"        == extension() ? e_xml_input
         : ".hhc"        == extension() ? e_xml_other
-        : ".html"       == extension() ? e_xml_other
         : ".xml"        == extension() ? e_xml_other
         : ".xrc"        == extension() ? e_xml_other
         : ".xsd"        == extension() ? e_xml_other
@@ -879,7 +880,14 @@ void enforce_taboos(file const& f)
     taboo(f, "Microsoft Word");
     taboo(f, "Stylus Studio");
     taboo(f, "Sonic Software");
-    taboo(f, "windows-1252");
+    // Temporarily suppress this taboo for html. See:
+    //   http://lists.nongnu.org/archive/html/lmi/2008-03/msg00019.html
+    // Unsuppress it with wx-3.
+    // taboo(f, "windows-1252");
+    if(!f.is_of_phylum(e_html))
+        {
+        taboo(f, "windows-1252");
+        }
     taboo(f, "Arial");
 
     if
