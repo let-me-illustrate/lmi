@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_utility.cpp,v 1.17 2008-06-02 13:48:32 chicares Exp $
+// $Id: wx_utility.cpp,v 1.18 2008-10-17 22:55:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -45,7 +45,7 @@
 #include <sstream>
 
 /// Return whatever plain text the clipboard contains, or an empty
-/// string if it contains none.
+/// string if it contains none, replacing "\r\n" with "\n".
 ///
 /// Throw an exception if the clipboard cannot be locked.
 
@@ -59,7 +59,18 @@ std::string ClipboardEx::GetText()
 
     wxTextDataObject z;
     wxTheClipboard->GetData(z);
-    return std::string(z.GetText());
+    std::string s(z.GetText());
+
+    static std::string const crlf("\r\n");
+    static std::string const   lf(  "\n");
+    std::string::size_type position = s.find(crlf);
+    while(std::string::npos != position)
+        {
+        s.replace(position, crlf.length(), lf);
+        position = s.find(crlf, 1 + position);
+        }
+
+    return s;
 }
 
 /// Place plain text on the clipboard.

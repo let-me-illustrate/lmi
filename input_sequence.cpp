@@ -20,7 +20,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_sequence.cpp,v 1.10 2008-01-01 18:29:45 chicares Exp $
+// $Id: input_sequence.cpp,v 1.11 2008-10-17 22:55:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -993,9 +993,11 @@ void InputSequence::mark_diagnostic_context()
         ;
 }
 
+/// Rationale for option to show only first diagnostic:
+/// downstream errors can confuse users.
+
 std::string InputSequence::formatted_diagnostics
     (bool show_first_message_only
-    ,bool use_carriage_return_line_feed
     ) const
 {
     std::string s(diagnostics.str());
@@ -1005,17 +1007,6 @@ std::string InputSequence::formatted_diagnostics
         if(std::string::npos != z)
             {
             s.erase(z);
-            }
-        }
-    if(use_carriage_return_line_feed)
-        {
-        std::string::size_type z(s.find('\n'));
-        while(std::string::npos != z)
-            {
-            s.insert(z, "\r");
-            // Advance one to skip over the '\n' we found,
-            // plus one to skip over the '\r' we inserted before it.
-            z = s.find('\n', 2 + z);
             }
         }
     return s;

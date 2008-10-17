@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.78 2008-09-14 15:23:26 chicares Exp $
+// $Id: census_view.cpp,v 1.79 2008-10-17 22:55:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1066,7 +1066,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
     std::string line;
 
     // Get header line; parse into field names.
-    if(std::getline(iss_census, line, '\r'))
+    if(std::getline(iss_census, line, '\n'))
         {
 // warning() << "'" << line << "'" << "header line" << LMI_FLUSH;
         iss_census >> std::ws;
@@ -1091,7 +1091,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
 
     // Read each subsequent line into an input object representing one cell.
     int current_line = 0;
-    while(std::getline(iss_census, line, '\r'))
+    while(std::getline(iss_census, line, '\n'))
         {
 // warning() << "'" << line << "'" << "processing data line" << LMI_FLUSH;
         ++current_line;

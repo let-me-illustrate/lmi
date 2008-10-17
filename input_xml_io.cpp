@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_xml_io.cpp,v 1.9 2008-08-27 16:42:36 wboutin Exp $
+// $Id: input_xml_io.cpp,v 1.10 2008-10-17 22:55:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -277,7 +277,7 @@ using namespace xml;
 
 // If you want to see the ones that didn't get assigned:
 //std::ostringstream oss;
-//std::ostream_iterator<std::string> osi(oss, "\r\n");
+//std::ostream_iterator<std::string> osi(oss, "\n");
 //std::copy(member_names.begin(), member_names.end(), osi);
 //warning() << oss.str() << "Parameters absent in xml file" << LMI_FLUSH;
 }
