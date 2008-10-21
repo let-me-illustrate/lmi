@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1182 2008-10-17 22:55:34 chicares Exp $
+// $Id: ChangeLog,v 1.1183 2008-10-21 15:34:20 chicares Exp $
 
 MAINTENANCE
 
@@ -20069,4 +20069,10 @@ Temporarily exempt html from a certain taboo.
 Improve portability by eschewing carriage return. Filter it out where
 it would intrude instead of dealing with it downstream. This happens
 to make pasting the sample census from wx html help work.
+
+20081021T1534Z <gchicares@sbcglobal.net> [960]
+
+  ledger_text_formats.cpp
+Rewrite C++ calculation summary. This has no immediate effect because
+an xslt version is currently used in production.
 

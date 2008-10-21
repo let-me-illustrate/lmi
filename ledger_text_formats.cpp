@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.43 2008-09-28 14:24:15 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.44 2008-10-21 15:34:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -79,97 +79,132 @@ std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values)
     oss.setf(std::ios_base::fixed, std::ios_base::floatfield);
 
     oss
-        << "<html>"
-        << "<head><title>Let me illustrate...</title></head>"
-        << "<body>"
-
-        << "<p>"
-        << "Calculation summary for "
+        << "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\n"
+        << "    \"http://www.w3.org/TR/html4/loose.dtd\">\n"
+        << "<html>\n"
+        << "<head>\n"
+        << "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=ISO-8859-1\">\n"
+        << "<title>Let me illustrate...</title>\n"
+        << "</head>\n"
+        << "<body>\n"
         ;
 
     if(ledger_values.GetIsComposite())
         {
-        oss
-            << " composite<br>"
-            ;
+        oss << "<p>Composite calculation summary</p>\n";
         }
     else
         {
+        oss << "<p>\n";
         oss
+            << "Calculation summary for: "
             << Invar.Insured1
             << "<br>"
             << Invar.Gender << ", " << Invar.Smoker
             << std::setprecision(0)
             << ", age " << Invar.Age
-            << std::setprecision(2)
-            << "<br>"
+            << ", " << Invar.GetStatePostalAbbrev() << " jurisdiction\n"
+            << "<br>\n"
             ;
+        if(Invar.IsMec)
+            {
+            oss << "MEC in policy year " << 1 + Invar.MecYear;
+            }
+        else
+            {
+            oss << "Not a MEC";
+            }
+        oss << "</p>\n";
 
+        oss << "<table border=\"0\" cellpadding=\"0\" cellspacing=\"1\" width=\"100%\">\n";
         if(is_subject_to_ill_reg(ledger_values.GetLedgerType()))
             {
             oss
-                << Invar.GuarPrem << "   guaranteed premium<br>"
-                ;
+            << "<tr>\n"
+            << "  <td align=\"right\" nowrap></td>\n"
+            << "  <td align=\"left\"  nowrap></td>\n"
+            << std::setprecision(2)
+            << "  <td align=\"right\" nowrap>" << Invar.GuarPrem         << "</td>\n"
+            << "  <td align=\"left\"  nowrap> guaranteed premium</td>\n"
+            << "</tr>\n"
+            ;
             }
-
         oss
-            << "<br>"
-            << Invar.InitGLP          << "   initial guideline level premium<br>"
-            << Invar.InitGSP          << "   initial guideline single premium<br>"
-            << Invar.InitSevenPayPrem << "   initial seven-pay premium<br>"
-            << ((Invar.IsMec) ? "MEC" : "Non-MEC") << "<br>"
-            << "<br>"
-            << Invar.InitTgtPrem      << "   initial target premium<br>"
-            << Invar.InitBaseSpecAmt  << "   initial base specified amount<br>"
-            << Invar.InitTermSpecAmt  << "   initial term specified amount<br>"
-            << Invar.InitBaseSpecAmt + Invar.InitTermSpecAmt << "   initial total specified amount<br>"
-            << Invar.GetStatePostalAbbrev() << "   state of jurisdiction<br>"
+            << "<tr>\n"
+            << "  <td align=\"right\" nowrap></td>\n"
+            << "  <td align=\"left\"  nowrap></td>\n"
+            << std::setprecision(2)
+            << "  <td align=\"right\" nowrap>" << Invar.InitGLP          << "</td>\n"
+            << "  <td align=\"left\"  nowrap> initial guideline level premium</td>\n"
+            << "</tr>\n"
+            << "<tr>\n"
+            << std::setprecision(0)
+            << "  <td align=\"right\" nowrap>" << Invar.InitBaseSpecAmt  << "</td>\n"
+            << "  <td align=\"left\"  nowrap> initial base specified amount</td>\n"
+            << std::setprecision(2)
+            << "  <td align=\"right\" nowrap>" << Invar.InitGSP          << "</td>\n"
+            << "  <td align=\"left\"  nowrap> initial guideline single premium</td>\n"
+            << "</tr>\n"
+            << "<tr>\n"
+            << std::setprecision(0)
+            << "  <td align=\"right\" nowrap>" << Invar.InitTermSpecAmt << "</td>\n"
+            << "  <td align=\"left\"  nowrap> initial term specified amount</td>\n"
+            << std::setprecision(2)
+            << "  <td align=\"right\" nowrap>" << Invar.InitSevenPayPrem << "</td>\n"
+            << "  <td align=\"left\"  nowrap> initial seven-pay premium</td>\n"
+            << "</tr>\n"
+            << "<tr>\n"
+            << std::setprecision(0)
+            << "  <td align=\"right\" nowrap>" << Invar.InitBaseSpecAmt + Invar.InitTermSpecAmt << "</td>\n"
+            << "  <td align=\"left\"  nowrap> initial total specified amount</td>\n"
+            << std::setprecision(2)
+            << "  <td align=\"right\" nowrap>" << Invar.InitTgtPrem      << "</td>\n"
+            << "  <td align=\"left\"  nowrap> initial target premium</td>\n"
+            << "</tr>\n"
+            << "</table>\n"
             ;
         }
 
     oss
-        << "</p>"
-
-        << "<hr>"
-        << "<table align=right>"
-        << "  <tr>"
-        << "    <th></th>    <th></th>"
-        << "    <th>Guaranteed</th> <th>Guaranteed</th> <th>Guaranteed</th>"
-        << "    <th>Current</th>    <th>Current</th>    <th>Current</th>"
-        << "  </tr>"
-        << "  <tr>"
-        << "    <th></th>    <th></th>"
-        << "    <th>Account</th>    <th>Surrender</th>  <th>Death</th>"
-        << "    <th>Account</th>    <th>Surrender</th>  <th>Death</th>"
-        << "  </tr>"
-        << "  <tr>"
-        << "    <th>Age</th> <th>Outlay</th>"
-        << "    <th>Value</th>      <th>Value</th>      <th>Benefit</th>"
-        << "    <th>Value</th>      <th>Value</th>      <th>Benefit</th>"
-        << "  </tr>"
+        << "<hr>\n"
+        << "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n"
+        << "<tr align=\"right\">\n"
+        << "<th valign=\"bottom\" width=\"12.5%\"> Policy Year</th>\n"
+        << "<th valign=\"bottom\" width=\"12.5%\"> Outlay</th>\n"
+        << "<th valign=\"bottom\" width=\"12.5%\"> Guar Account Value</th>\n"
+        << "<th valign=\"bottom\" width=\"12.5%\"> Guar Cash Surr Value</th>\n"
+        << "<th valign=\"bottom\" width=\"12.5%\"> Guar Death Benefit</th>\n"
+        << "<th valign=\"bottom\" width=\"12.5%\"> Curr Account Value</th>\n"
+        << "<th valign=\"bottom\" width=\"12.5%\"> Curr Cash Surr Value</th>\n"
+        << "<th valign=\"bottom\" width=\"12.5%\"> Curr Death Benefit</th>\n"
+        << "</tr>\n"
         ;
 
     for(int j = 0; j < max_length; ++j)
         {
+        if(0 == j % 5)
+            {
+            oss << "<tr><td><br></td></tr>\n";
+            }
         oss
-            << "<tr>"
+            << "<tr align=\"right\">\n"
             << std::setprecision(0)
-            << "<td>" << j + Invar.Age        << "</td>"
-            << std::setprecision(2)
-            << "<td>" << Invar.Outlay[j]      << "</td>"
-            << "<td>" << Guar_.AcctVal[j]     << "</td>"
-            << "<td>" << Guar_.CSVNet[j]      << "</td>"
-            << "<td>" << Guar_.EOYDeathBft[j] << "</td>"
-            << "<td>" << Curr_.AcctVal[j]     << "</td>"
-            << "<td>" << Curr_.CSVNet[j]      << "</td>"
-            << "<td>" << Curr_.EOYDeathBft[j] << "</td>"
-            << "</tr>"
+            << "<td nowrap>" << 1 + j                 << "</td>\n"
+            << "<td nowrap>" << Invar.Outlay      [j] << "</td>\n"
+            << "<td nowrap>" << Guar_.AcctVal     [j] << "</td>\n"
+            << "<td nowrap>" << Guar_.CSVNet      [j] << "</td>\n"
+            << "<td nowrap>" << Guar_.EOYDeathBft [j] << "</td>\n"
+            << "<td nowrap>" << Curr_.AcctVal     [j] << "</td>\n"
+            << "<td nowrap>" << Curr_.CSVNet      [j] << "</td>\n"
+            << "<td nowrap>" << Curr_.EOYDeathBft [j] << "</td>\n"
+            << "</tr>\n"
             ;
         }
 
     oss
-        << "</table>"
-        << "</body>"
+        << "</table>\n"
+        << "</body>\n"
+        << "</html>\n"
         ;
     return oss.str();
 }
