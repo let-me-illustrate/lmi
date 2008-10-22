@@ -19,17 +19,20 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.hpp,v 1.9 2008-01-01 18:29:47 chicares Exp $
+// $Id: ledger_text_formats.hpp,v 1.10 2008-10-22 16:16:28 chicares Exp $
 
 #ifndef ledger_text_formats_hpp
 #define ledger_text_formats_hpp
 
 #include "config.hpp"
 
+#include "oecumenic_enumerations.hpp"
 #include "so_attributes.hpp"
 
 #include <iosfwd>
 #include <string>
+#include <utility>
+#include <vector>
 
 class Ledger;
 
@@ -38,6 +41,16 @@ std::string LMI_SO FormatSelectedValuesAsHtml(Ledger const&);
 void LMI_SO PrintFormTabDelimited(Ledger const&, std::string const& file_name);
 
 void LMI_SO PrintLedgerFlatText(Ledger const&, std::ostream&);
+
+std::string ledger_format
+    (double                            d
+    ,std::pair<int,oenum_format_style> f
+    );
+
+std::vector<std::string> ledger_format
+    (std::vector<double>               dv
+    ,std::pair<int,oenum_format_style> f
+    );
 
 #endif // ledger_text_formats_hpp
 

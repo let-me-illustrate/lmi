@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.44 2008-10-21 15:34:20 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.45 2008-10-22 16:16:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -58,7 +58,6 @@
 #include <locale>
 #include <ostream>
 #include <sstream>
-#include <vector>
 
 // TODO ?? Work around this problem
 //   http://sv.nongnu.org/bugs/index.php?func=detailitem&item_id=13856
@@ -367,7 +366,7 @@ os << "\n\n" ;
         os << "DatePrepared\t\t'" << Invar.EffDate << "'\n";
         }
 
-        os << '\n';
+    os << '\n';
 
     char const* cheaders[] =
         {"PolicyYear"
@@ -866,4 +865,80 @@ inline LedgerVariant   const& FlatTextLedgerPrinter::guar_() const
 
 inline LedgerVariant   const& FlatTextLedgerPrinter::mdpt_() const
 {return ledger_.GetMdptFull();}
+
+// These are the formats used in older files:
+//
+// F1: zero decimals, commas
+// F2: two decimals, commas
+// F3: scaled by 100, zero decimals, with '%' at end:
+// F4: scaled by 100, two decimals, with '%' at end:
+//
+// As discussed on the mailing list, e.g.:
+//   http://lists.nongnu.org/archive/html/lmi/2006-10/msg00066.html
+// the appropriate abstraction is
+//   {number of decimals [0, DECIMAL_DIG], style}
+// where for now percentage is the only nondefault 'style', but others
+// (e.g., basis points) can be envisioned.
+
+/// Apply an appropriate format to a value.
+///
+/// The first element of the std::pair argument is the number of
+/// digits to be shown to the right of the decimal point.
+
+std::string ledger_format
+    (double                            d
+    ,std::pair<int,oenum_format_style> f
+    )
+{
+    std::stringstream interpreter;
+    std::locale loc;
+    std::locale new_loc(loc, new comma_punct);
+    interpreter.imbue(new_loc);
+    interpreter.setf(std::ios_base::fixed, std::ios_base::floatfield);
+    interpreter.precision(f.first);
+    std::string s;
+    if(f.second)
+        {
+        d *= 100;
+        }
+    interpreter << d;
+    interpreter >> s;
+    if(!interpreter.eof())
+        {
+        fatal_error() << "Formatting error." << LMI_FLUSH;
+        }
+
+    if(f.second)
+        {
+        s += '%';
+        }
+
+#if defined __GNUC__ && LMI_GCC_VERSION <= 40001
+    // COMPILER !! Work around a gcc defect fixed in gcc-4.0.1: see
+    //   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=20914
+    static std::string const old_string("-,");
+    static std::string const new_string("-");
+    std::string::size_type position = s.find(old_string);
+    while(position != std::string::npos)
+        {
+        s.replace(position, old_string.length(), new_string);
+        position = s.find(old_string, 1 + position);
+        }
+#endif // gcc version less than 4.0.1 .
+
+    return s;
+}
+
+std::vector<std::string> ledger_format
+    (std::vector<double>               dv
+    ,std::pair<int,oenum_format_style> f
+    )
+{
+    std::vector<std::string> sv;
+    for(unsigned int j = 0; j < dv.size(); ++j)
+        {
+        sv.push_back(ledger_format(dv[j], f));
+        }
+    return sv;
+}
 
