@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1183 2008-10-21 15:34:20 chicares Exp $
+// $Id: ChangeLog,v 1.1184 2008-10-22 16:16:29 chicares Exp $
 
 MAINTENANCE
 
@@ -20075,4 +20075,17 @@ to make pasting the sample census from wx html help work.
   ledger_text_formats.cpp
 Rewrite C++ calculation summary. This has no immediate effect because
 an xslt version is currently used in production.
+
+20081022T1221Z <gchicares@sbcglobal.net> [960]
+
+  ledger_xml_io.cpp
+  oecumenic_enumerations.hpp
+Generalize a bool argument.
+
+20081022T1616Z <gchicares@sbcglobal.net> [960]
+
+  ledger_text_formats.cpp
+  ledger_text_formats.hpp
+  ledger_xml_io.cpp
+Refactor.
 
