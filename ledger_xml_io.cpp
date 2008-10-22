@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.79 2008-10-22 12:21:25 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.80 2008-10-22 16:16:28 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -31,6 +31,7 @@
 #include "global_settings.hpp"
 #include "ledger_base.hpp"
 #include "ledger_invariant.hpp"
+#include "ledger_text_formats.hpp"
 #include "ledger_variant.hpp"
 #include "mc_enum_aux.hpp" // mc_e_vector_to_string_vector()
 #include "miscellany.hpp"
@@ -45,10 +46,7 @@
 
 #include <fstream>
 #include <iomanip>
-#include <ios>
-#include <locale>
 #include <numeric>
-#include <sstream>
 #include <string>
 #include <utility>
 
@@ -77,68 +75,6 @@ std::vector<std::string> const suffixes
     (char_p_suffixes
     ,char_p_suffixes + n
     );
-
-/// Apply an appropriate format to a value.
-///
-/// The first element of the std::pair argument is the number of
-/// digits to be shown to the right of the decimal point.
-
-std::string format
-    (double                            d
-    ,std::pair<int,oenum_format_style> f
-    )
-{
-    std::stringstream interpreter;
-    std::locale loc;
-    std::locale new_loc(loc, new comma_punct);
-    interpreter.imbue(new_loc);
-    interpreter.setf(std::ios_base::fixed, std::ios_base::floatfield);
-    interpreter.precision(f.first);
-    std::string s;
-    if(f.second)
-        {
-        d *= 100;
-        }
-    interpreter << d;
-    interpreter >> s;
-    if(!interpreter.eof())
-        {
-        fatal_error() << "Formatting error." << LMI_FLUSH;
-        }
-
-    if(f.second)
-        {
-        s += '%';
-        }
-
-#if defined __GNUC__ && LMI_GCC_VERSION <= 40001
-    // COMPILER !! Work around a gcc defect fixed in gcc-4.0.1: see
-    //   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=20914
-    static std::string const old_string("-,");
-    static std::string const new_string("-");
-    std::string::size_type position = s.find(old_string);
-    while(position != std::string::npos)
-        {
-        s.replace(position, old_string.length(), new_string);
-        position = s.find(old_string, 1 + position);
-        }
-#endif // gcc version less than 4.0.1 .
-
-    return s;
-}
-
-std::vector<std::string> format
-    (std::vector<double>               dv
-    ,std::pair<int,oenum_format_style> f
-    )
-{
-    std::vector<std::string> sv;
-    for(unsigned int j = 0; j < dv.size(); ++j)
-        {
-        sv.push_back(format(dv[j], f));
-        }
-    return sv;
-}
 
 typedef std::map<std::string, std::pair<int, oenum_format_style> > format_map_t;
 typedef std::map<std::string, std::string> title_map_t;
@@ -814,7 +750,7 @@ void Ledger::write(xml::element& x) const
         )
         {
         if(format_exists(j->first, suffix, format_map))
-            stringscalars[j->first + suffix] = format(*j->second, format_map[j->first]);
+            stringscalars[j->first + suffix] = ledger_format(*j->second, format_map[j->first]);
         }
     for
         (string_map::const_iterator j = strings.begin()
@@ -831,12 +767,12 @@ void Ledger::write(xml::element& x) const
         )
         {
         if(format_exists(j->first, suffix, format_map))
-            stringvectors[j->first + suffix] = format(*j->second, format_map[j->first]);
+            stringvectors[j->first + suffix] = ledger_format(*j->second, format_map[j->first]);
         }
 
-//    stringscalars["GuarMaxMandE"] = format(*scalars["GuarMaxMandE"], 2, true);
-//    stringvectors["CorridorFactor"] = format(*vectors["CorridorFactor"], 0, true);
-//    stringscalars["InitAnnGenAcctInt_Current"] = format(*scalars["InitAnnGenAcctInt_Current"], 0, true);
+//    stringscalars["GuarMaxMandE"] = ledger_format(*scalars["GuarMaxMandE"], 2, true);
+//    stringvectors["CorridorFactor"] = ledger_format(*vectors["CorridorFactor"], 0, true);
+//    stringscalars["InitAnnGenAcctInt_Current"] = ledger_format(*scalars["InitAnnGenAcctInt_Current"], 0, true);
 
     // That was the tricky part. Now it's all downhill.
 
@@ -853,7 +789,7 @@ void Ledger::write(xml::element& x) const
             {
 //            scalars[j->first + suffix] = j->second;
             if(format_exists(j->first, suffix, format_map))
-                stringscalars[j->first + suffix] = format(*j->second, format_map[j->first]);
+                stringscalars[j->first + suffix] = ledger_format(*j->second, format_map[j->first]);
             }
         for
             (string_map::const_iterator j = i->second.Strings.begin()
@@ -871,7 +807,7 @@ void Ledger::write(xml::element& x) const
             {
 //            vectors[j->first + suffix] = j->second;
             if(format_exists(j->first, suffix, format_map))
-                stringvectors[j->first + suffix] = format(*j->second, format_map[j->first]);
+                stringvectors[j->first + suffix] = ledger_format(*j->second, format_map[j->first]);
             }
         }
 
