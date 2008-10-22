@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.78 2008-07-17 13:19:27 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.79 2008-10-22 12:21:25 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -34,6 +34,7 @@
 #include "ledger_variant.hpp"
 #include "mc_enum_aux.hpp" // mc_e_vector_to_string_vector()
 #include "miscellany.hpp"
+#include "oecumenic_enumerations.hpp"
 #include "value_cast.hpp"
 #include "version.hpp"
 #include "xml_lmi.hpp"
@@ -77,8 +78,15 @@ std::vector<std::string> const suffixes
     ,char_p_suffixes + n
     );
 
-// The std::pair argument is notionally <int precision, bool percentage>.
-std::string format(double d, std::pair<int,bool> f)
+/// Apply an appropriate format to a value.
+///
+/// The first element of the std::pair argument is the number of
+/// digits to be shown to the right of the decimal point.
+
+std::string format
+    (double                            d
+    ,std::pair<int,oenum_format_style> f
+    )
 {
     std::stringstream interpreter;
     std::locale loc;
@@ -119,7 +127,10 @@ std::string format(double d, std::pair<int,bool> f)
     return s;
 }
 
-std::vector<std::string> format(std::vector<double> dv, std::pair<int,bool> f)
+std::vector<std::string> format
+    (std::vector<double>               dv
+    ,std::pair<int,oenum_format_style> f
+    )
 {
     std::vector<std::string> sv;
     for(unsigned int j = 0; j < dv.size(); ++j)
@@ -129,7 +140,7 @@ std::vector<std::string> format(std::vector<double> dv, std::pair<int,bool> f)
     return sv;
 }
 
-typedef std::map<std::string, std::pair<int, bool> > format_map_t;
+typedef std::map<std::string, std::pair<int, oenum_format_style> > format_map_t;
 typedef std::map<std::string, std::string> title_map_t;
 
 // Look at file 'missing_formats'. It's important. You want
@@ -200,7 +211,11 @@ typedef std::map<std::string, std::string> title_map_t;
 // else one key like "A" would match anything beginning with
 // that letter.
 
-bool format_exists(std::string const& s, std::string const& suffix, format_map_t const& m)
+bool format_exists
+    (std::string const&  s
+    ,std::string const&  suffix
+    ,format_map_t const& m
+    )
 {
     if(m.end() != m.find(s))
         {
@@ -395,10 +410,10 @@ void Ledger::write(xml::element& x) const
 //   percentage (scaled by 100, '%' at end) or not
 // and therefore F0 is equivalent to F1
 
-    std::pair<int, bool> f1(0, false);
-    std::pair<int, bool> f2(2, false);
-    std::pair<int, bool> f3(0, true);
-    std::pair<int, bool> f4(2, true);
+    std::pair<int, oenum_format_style> f1(0, oe_format_normal);
+    std::pair<int, oenum_format_style> f2(2, oe_format_normal);
+    std::pair<int, oenum_format_style> f3(0, oe_format_percentage);
+    std::pair<int, oenum_format_style> f4(2, oe_format_percentage);
 
     format_map_t format_map;
 
