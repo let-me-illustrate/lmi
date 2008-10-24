@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.75 2008-09-01 14:29:46 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.76 2008-10-24 20:55:25 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -468,8 +468,9 @@ if(!egregious_kludge)
     bool salary_used =
 // TODO ?? WX PORT !! Figure out how to handle the next line:
 //           mce_sa_salary == VectorSpecifiedAmountStrategy[0]
-false // Silly workaround for now.
+true // Silly workaround for now.
         || mce_sa_salary == SpecifiedAmountStrategyFromIssue
+
         ;
 
     SalarySpecifiedAmountFactor .enable(!specamt_solve && salary_used);
