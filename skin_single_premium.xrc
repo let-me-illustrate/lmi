@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin_single_premium.xrc,v 1.6 2008-10-24 20:26:25 wboutin Exp $
+    $Id: skin_single_premium.xrc,v 1.7 2008-10-24 20:40:38 wboutin Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -830,7 +830,7 @@
                     <flag>wxALIGN_RIGHT|wxALL</flag>
                     <border>2</border>
                     <object class="wxStaticText">
-                        <label>Monthly flat extra per thousand </label>
+                        <label>Annual flat extra per thousand </label>
                     </object>
                 </object>
                 <object class="sizeritem">
