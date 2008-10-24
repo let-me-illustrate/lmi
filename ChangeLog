@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1185 2008-10-24 02:20:25 chicares Exp $
+// $Id: ChangeLog,v 1.1186 2008-10-24 20:26:25 wboutin Exp $
 
 MAINTENANCE
 
@@ -20101,4 +20101,13 @@ Add a trivial accessor.
   ledger.hpp
 Refactor. Triviality is not sufficient reason to write functions
 inline in a header.
+
+20081024T2026Z <wboutin@massmutual.com> [960]
+
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_reg_d.xrc
+  skin_single_premium.xrc
+  skin_variable_annuity.xrc
+Improve effective-date description (KM).
 

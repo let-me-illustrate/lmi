@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin_coli_boli.xrc,v 1.10 2008-09-17 18:45:34 wboutin Exp $
+    $Id: skin_coli_boli.xrc,v 1.11 2008-10-24 20:26:25 wboutin Exp $
 
     This version is designed for COLI and BOLI users; it omits input
     fields that seem irrelevant in that context, and reflects the
@@ -183,7 +183,7 @@
                                             <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                             <border>4</border>
                                             <object class="wxDatePickerCtrl" name="EffectiveDate">
-                                                <help>Case effective date</help>
+                                                <help>Effective date</help>
                                                 <size>90,-1</size>
                                             </object>
                                         </object>
