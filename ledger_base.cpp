@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_base.cpp,v 1.16 2008-07-25 18:07:40 chicares Exp $
+// $Id: ledger_base.cpp,v 1.17 2008-10-24 02:19:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -194,6 +194,12 @@ std::string LedgerBase::value_str(std::string const& map_key) const
         << LMI_FLUSH
         ;
     return "";
+}
+
+//============================================================================
+double_vector_map const& LedgerBase::all_vectors() const
+{
+    return AllVectors;
 }
 
 namespace

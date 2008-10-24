@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_base.hpp,v 1.8 2008-01-01 18:29:46 chicares Exp $
+// $Id: ledger_base.hpp,v 1.9 2008-10-24 02:19:21 chicares Exp $
 
 #ifndef ledger_base_hpp
 #define ledger_base_hpp
@@ -186,6 +186,8 @@ class LMI_SO LedgerBase
     double             ScaleFactor() const;
     std::string        value_str(std::string const& map_key, int index) const;
     std::string        value_str(std::string const& map_key) const;
+
+    double_vector_map const& all_vectors() const;
 
   protected:
     explicit LedgerBase(int a_Length);
