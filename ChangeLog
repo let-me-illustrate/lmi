@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1187 2008-10-24 20:40:38 wboutin Exp $
+// $Id: ChangeLog,v 1.1188 2008-10-24 20:55:25 wboutin Exp $
 
 MAINTENANCE
 
@@ -20115,4 +20115,10 @@ Improve effective-date description (KM).
 
   skin_single_premium.xrc
 Correct misstated flat-extra mode (KM).
+
+20081024T2055Z <wboutin@massmutual.com> [960]
+
+  input_harmonization.cpp
+  skin_group_carveout.xrc
+Add and enable salary-based controls.
 
