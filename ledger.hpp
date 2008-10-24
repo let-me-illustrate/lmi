@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.hpp,v 1.25 2008-07-18 12:56:33 chicares Exp $
+// $Id: ledger.hpp,v 1.26 2008-10-24 02:20:24 chicares Exp $
 
 #ifndef ledger_hpp
 #define ledger_hpp
@@ -144,31 +144,6 @@ class LMI_SO Ledger
     // from which we want to shield other classes where possible.
     std::vector<mcenum_run_basis> run_bases_;
 };
-
-inline ledger_map_holder const& Ledger::GetLedgerMap() const
-{
-    return *ledger_map_;
-}
-
-inline LedgerInvariant const& Ledger::GetLedgerInvariant() const
-{
-    return *ledger_invariant_;
-}
-
-inline mcenum_ledger_type Ledger::GetLedgerType() const
-{
-    return ledger_type_;
-}
-
-inline std::vector<mcenum_run_basis> const& Ledger::GetRunBases() const
-{
-    return run_bases_;
-}
-
-inline bool Ledger::GetIsComposite() const
-{
-    return is_composite_;
-}
 
 #endif // ledger_hpp
 

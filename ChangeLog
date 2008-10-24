@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1184 2008-10-22 16:16:29 chicares Exp $
+// $Id: ChangeLog,v 1.1185 2008-10-24 02:20:25 chicares Exp $
 
 MAINTENANCE
 
@@ -20088,4 +20088,17 @@ Generalize a bool argument.
   ledger_text_formats.hpp
   ledger_xml_io.cpp
 Refactor.
+
+20081024T0219Z <gchicares@sbcglobal.net> [960]
+
+  ledger_base.cpp
+  ledger_base.hpp
+Add a trivial accessor.
+
+20081024T0220Z <gchicares@sbcglobal.net> [960]
+
+  ledger.cpp
+  ledger.hpp
+Refactor. Triviality is not sufficient reason to write functions
+inline in a header.
 

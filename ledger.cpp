@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.cpp,v 1.26 2008-07-18 12:56:33 chicares Exp $
+// $Id: ledger.cpp,v 1.27 2008-10-24 02:20:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -379,6 +379,36 @@ void Ledger::Spew(std::ostream& os) const
         {
         (*lmci).second.Spew(os);
         }
+}
+
+//============================================================================
+ledger_map_holder const& Ledger::GetLedgerMap() const
+{
+    return *ledger_map_;
+}
+
+//============================================================================
+LedgerInvariant const& Ledger::GetLedgerInvariant() const
+{
+    return *ledger_invariant_;
+}
+
+//============================================================================
+mcenum_ledger_type Ledger::GetLedgerType() const
+{
+    return ledger_type_;
+}
+
+//============================================================================
+std::vector<mcenum_run_basis> const& Ledger::GetRunBases() const
+{
+    return run_bases_;
+}
+
+//============================================================================
+bool Ledger::GetIsComposite() const
+{
+    return is_composite_;
 }
 
 //============================================================================
