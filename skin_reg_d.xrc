@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin_reg_d.xrc,v 1.5 2008-08-22 22:17:09 wboutin Exp $
+    $Id: skin_reg_d.xrc,v 1.6 2008-10-24 20:26:25 wboutin Exp $
 
     This version is designed for private placement users; it omits input
     fields that seem irrelevant in that context, and reflects the
@@ -522,7 +522,7 @@
                                             <flag>wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
                                             <border>4</border>
                                             <object class="wxDatePickerCtrl" name="EffectiveDate">
-                                                <help>Case effective date</help>
+                                                <help>Effective date</help>
                                                 <size>90,-1</size>
                                             </object>
                                         </object>

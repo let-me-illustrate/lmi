@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin_single_premium.xrc,v 1.5 2008-09-17 18:45:34 wboutin Exp $
+    $Id: skin_single_premium.xrc,v 1.6 2008-10-24 20:26:25 wboutin Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -76,14 +76,14 @@
                             <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                             <border>4</border>
                             <object class="wxStaticText">
-                                <label>Case effective date </label>
+                                <label>Effective date </label>
                             </object>
                         </object>
                         <object class="sizeritem">
                             <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>4</border>
                             <object class="wxDatePickerCtrl" name="EffectiveDate">
-                                <help>Case effective date</help>
+                                <help>Effective date</help>
                                 <size>80,-1</size>
                             </object>
                         </object>
