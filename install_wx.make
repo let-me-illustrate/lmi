@@ -19,13 +19,13 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_wx.make,v 1.8 2008-04-21 13:01:38 chicares Exp $
+# $Id: install_wx.make,v 1.9 2008-10-25 19:11:17 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
 # Configurable settings ########################################################
 
-wx_version    := 2.8.7
+wx_version    := 2.8.9
 
 mingw_dir     := /MinGW_
 
@@ -77,6 +77,7 @@ config_options = \
 
 wx-2.8.6-md5 := 8a130e5b25448a17454a6b957a5e075c
 wx-2.8.7-md5 := e3455083afdf6404a569a8bf0701cf13
+wx-2.8.9-md5 := b0b2d0f6915a21ca6f33896ee8f50387
 
 wx_archive        := wxWidgets-$(wx_version).tar.bz2
 
@@ -103,7 +104,7 @@ patchset        := wx-$(wx_version).patch
 
 .PHONY: all
 all: clobber $(source_archives) $(libraries)
-	[ -e $(patchset) ] && $(PATCH) --directory=$(wx_dir) --strip=1 <$(patchset)
+	-[ -e $(patchset) ] && $(PATCH) --directory=$(wx_dir) --strip=1 <$(patchset)
 	$(MAKE) --file=$(this_makefile) --directory=$(build_dir) wx
 	$(MAKE) --file=$(this_makefile) --directory=$(prefix)/bin portable_script
 
