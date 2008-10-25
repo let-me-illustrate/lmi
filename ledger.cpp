@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.cpp,v 1.27 2008-10-24 02:20:23 chicares Exp $
+// $Id: ledger.cpp,v 1.28 2008-10-25 19:34:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,6 +33,7 @@
 #include "crc32.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
+#include "map_lookup.hpp"
 #include "mc_enum_types_aux.hpp" // mc_str()
 
 #include <algorithm>
@@ -462,5 +463,73 @@ LedgerVariant const& Ledger::GetCurrHalf() const
 LedgerVariant const& Ledger::GetGuarHalf() const
 {
     return GetOneVariantLedger(mce_run_gen_guar_sep_half);
+}
+
+/// Access a vector by the name used in xml output.
+///
+/// The name is generally a compound consisting of a base name
+/// indicating the vector's meaning, and a suffix indicating its
+/// calculation basis. A null suffix is used for vectors that do not
+/// vary by basis.
+///
+/// This function addresses some special cases, but not all. Some
+/// vectors, like 'InforceLives', are special by their nature, and
+/// therefore aren't accessible via all_vectors(). Some other
+/// vectors are special only because of design flaws: for example,
+/// IRRs that vary by basis reside in the invariant ledger. Only
+/// special cases represented by vectors offered for use in the
+/// calculation summary are addressed here for now--with the
+/// temporary exception of 'NetDeathBenefit'.
+///
+/// A better solution would intrude class template any_member into
+/// class Ledger. Then other special cases, such as vectors not of
+/// type double, could be handled automatically.
+///
+/// It seems inefficient to return by value, and that's especially
+/// regrettable because all vectors except for a few special cases
+/// could be returned by reference. Consideration should be given
+/// someday to putting every vector in the ledger object and then
+/// returning 'std::vector<double> const&'. However, this function
+/// is called only in FormatSelectedValuesAsHtml() as this is written
+/// in 2008-10, and measurement shows that function's speed to be
+/// the same whether this function returns by value or by reference.
+
+std::vector<double> numeric_vector
+    (Ledger const&      ledger
+    ,std::string const& compound_name
+    )
+{
+    std::string::size_type pos = compound_name.rfind("_");
+    if(std::string::npos == pos)
+        {
+        pos = compound_name.size();
+        }
+    std::string const base_name = compound_name.substr(0, pos);
+    std::string const suffix    = compound_name.substr(pos);
+
+    LedgerInvariant const& invar = ledger.GetLedgerInvariant();
+
+    typedef LedgerBase const& B;
+    B z =
+          "_Current"        == suffix ? static_cast<B>(ledger.GetCurrFull())
+        : "_Guaranteed"     == suffix ? static_cast<B>(ledger.GetGuarFull())
+        : "_Midpoint"       == suffix ? static_cast<B>(ledger.GetMdptFull())
+        : "_CurrentZero"    == suffix ? static_cast<B>(ledger.GetCurrZero())
+        : "_GuaranteedZero" == suffix ? static_cast<B>(ledger.GetGuarZero())
+        : "_CurrentHalf"    == suffix ? static_cast<B>(ledger.GetCurrHalf())
+        : "_GuaranteedHalf" == suffix ? static_cast<B>(ledger.GetGuarHalf())
+        :                               static_cast<B>(invar)
+        ;
+
+    return
+          "InforceLives"      == compound_name ? invar.InforceLives
+        : "IrrCsv_Current"    == compound_name ? invar.IrrCsvCurrInput
+        : "IrrCsv_Guaranteed" == compound_name ? invar.IrrCsvGuarInput
+        : "IrrDb_Current"     == compound_name ? invar.IrrDbCurrInput
+        : "IrrDb_Guaranteed"  == compound_name ? invar.IrrDbGuarInput
+//        : "NetDeathBenefit"   == compound_name ?
+//        : "PolicyYear"        == compound_name ?
+        : *map_lookup(z.all_vectors(), base_name)
+        ;
 }
 

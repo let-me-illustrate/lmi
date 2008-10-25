@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.hpp,v 1.26 2008-10-24 02:20:24 chicares Exp $
+// $Id: ledger.hpp,v 1.27 2008-10-25 19:34:21 chicares Exp $
 
 #ifndef ledger_hpp
 #define ledger_hpp
@@ -34,6 +34,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include <iosfwd>
+#include <string>
 #include <vector>
 
 /// Design notes for class Ledger.
@@ -144,6 +145,11 @@ class LMI_SO Ledger
     // from which we want to shield other classes where possible.
     std::vector<mcenum_run_basis> run_bases_;
 };
+
+std::vector<double> numeric_vector
+    (Ledger const&      ledger
+    ,std::string const& compound_name
+    );
 
 #endif // ledger_hpp
 
