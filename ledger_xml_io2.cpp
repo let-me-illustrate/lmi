@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io2.cpp,v 1.31 2008-07-18 12:56:33 chicares Exp $
+// $Id: ledger_xml_io2.cpp,v 1.32 2008-10-25 19:15:19 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -45,7 +45,6 @@
 #include <fstream>
 #include <iomanip>
 #include <ios>
-#include <iterator>
 #include <locale>
 #include <map>
 #include <ostream>
@@ -751,16 +750,9 @@ void Ledger::write_excerpt
     formatter.add_columns_to_format(required_columns);
 
     std::vector<value_id> calculation_summary_columns;
+    std::vector<std::string> columns = effective_calculation_summary_columns();
     try
         {
-        std::istringstream iss(effective_calculation_summary_columns());
-        std::vector<std::string> columns;
-        // split column names list by spaces and put int columns vector
-        std::copy
-            (std::istream_iterator<std::string>(iss)
-            ,std::istream_iterator<std::string>()
-            ,std::back_inserter(columns)
-            );
         std::vector<std::string>::const_iterator it = columns.begin();
         for(; it != columns.end(); ++it)
             {

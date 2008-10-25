@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.hpp,v 1.20 2008-01-01 18:29:37 chicares Exp $
+// $Id: configurable_settings.hpp,v 1.21 2008-10-25 19:15:18 chicares Exp $
 
 #ifndef configurable_settings_hpp
 #define configurable_settings_hpp
@@ -33,6 +33,7 @@
 #include <boost/utility.hpp>
 
 #include <string>
+#include <vector>
 
 /// Design notes for class configurable_settings.
 ///
@@ -186,7 +187,7 @@ class LMI_SO configurable_settings
     ~configurable_settings();
 };
 
-std::string const& effective_calculation_summary_columns();
+std::vector<std::string> effective_calculation_summary_columns();
 
 #endif // configurable_settings_hpp
 
