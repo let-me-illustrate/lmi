@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.76 2008-10-24 20:55:25 wboutin Exp $
+// $Id: input_harmonization.cpp,v 1.77 2008-10-25 12:59:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -470,7 +470,6 @@ if(!egregious_kludge)
 //           mce_sa_salary == VectorSpecifiedAmountStrategy[0]
 true // Silly workaround for now.
         || mce_sa_salary == SpecifiedAmountStrategyFromIssue
-
         ;
 
     SalarySpecifiedAmountFactor .enable(!specamt_solve && salary_used);

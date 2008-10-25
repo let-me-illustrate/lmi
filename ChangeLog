@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1188 2008-10-24 20:55:25 wboutin Exp $
+// $Id: ChangeLog,v 1.1189 2008-10-25 12:59:35 chicares Exp $
 
 MAINTENANCE
 
@@ -20121,4 +20121,10 @@ Correct misstated flat-extra mode (KM).
   input_harmonization.cpp
   skin_group_carveout.xrc
 Add and enable salary-based controls.
+
+20081025T1259Z <gchicares@sbcglobal.net> [960]
+
+  input_harmonization.cpp
+Fix defect introduced 20081024T2055Z. An extraneous newline had been
+inserted.
 
