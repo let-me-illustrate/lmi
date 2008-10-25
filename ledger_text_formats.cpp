@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.45 2008-10-22 16:16:27 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.46 2008-10-25 20:21:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,6 +33,7 @@
 #include "authenticity.hpp"
 #include "calendar_date.hpp"
 #include "comma_punct.hpp"
+#include "configurable_settings.hpp"
 #include "financial.hpp"
 #include "global_settings.hpp"
 #include "input_sequence.hpp"
@@ -42,6 +43,7 @@
 #endif // defined LMI_USE_NEW_REPORTS
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
+#include "map_lookup.hpp"
 #include "mc_enum_types_aux.hpp" // is_subject_to_ill_reg()
 #include "miscellany.hpp"
 #include "obstruct_slicing.hpp"
@@ -56,18 +58,81 @@
 #include <ios>
 #include <iterator>
 #include <locale>
+#include <map>
 #include <ostream>
 #include <sstream>
 
-// TODO ?? Work around this problem
-//   http://sv.nongnu.org/bugs/index.php?func=detailitem&item_id=13856
-// here, as was done in 'ledger_xml_io.cpp' revision 1.45 .
+namespace
+{
+/// Ledger metadata, for calculation-summary columns only.
+///
+/// The legends here are from 'mc_enum_types.xpp'; perhaps they should
+/// be changed to match PDF output.
+
+std::map<std::string,ledger_metadata> const& ledger_metadata_map()
+{
+    static std::map<std::string,ledger_metadata> m;
+
+    if(m.empty())
+        {
+        m["[none]"                     ] = ledger_metadata(0, oe_format_normal    , "[none]"                                                   );
+        m["AttainedAge"                ] = ledger_metadata(0, oe_format_normal    , "Attained Age"                                             );
+        m["PolicyYear"                 ] = ledger_metadata(0, oe_format_normal    , "Policy Year"                                              );
+        m["InforceLives"               ] = ledger_metadata(4, oe_format_normal    , "Inforce Lives BOY"                                        );
+        m["SpecAmt"                    ] = ledger_metadata(0, oe_format_normal    , "Base Specified Amount"                                    );
+        m["TermSpecAmt"                ] = ledger_metadata(0, oe_format_normal    , "Term Specified Amount"                                    );
+        m["CorridorFactor"             ] = ledger_metadata(0, oe_format_percentage, "Corridor Factor"                                          );
+        m["AnnGAIntRate_Current"       ] = ledger_metadata(2, oe_format_percentage, "General Account Crediting Rate"                           );
+        m["AnnSAIntRate_Current"       ] = ledger_metadata(2, oe_format_percentage, "Separate Account Net Rate"                                );
+        m["Outlay"                     ] = ledger_metadata(0, oe_format_normal    , "Net Outlay"                                               );
+        m["EeGrossPmt"                 ] = ledger_metadata(0, oe_format_normal    , "Employee Gross Payment"                                   );
+        m["ErGrossPmt"                 ] = ledger_metadata(0, oe_format_normal    , "Employer Gross Payment"                                   );
+        m["NetWD"                      ] = ledger_metadata(0, oe_format_normal    , "Withdrawal"                                               );
+        m["NewCashLoan"                ] = ledger_metadata(0, oe_format_normal    , "New Cash Loan"                                            );
+        m["TotalLoanBalance_Current"   ] = ledger_metadata(0, oe_format_normal    , "Current Total Loan Balance"                               );
+        m["TotalLoanBalance_Guaranteed"] = ledger_metadata(0, oe_format_normal    , "Guaranteed Total Loan Balance"                            );
+        m["AcctVal_Current"            ] = ledger_metadata(0, oe_format_normal    , "Current Account Value"                                    );
+        m["AcctVal_Guaranteed"         ] = ledger_metadata(0, oe_format_normal    , "Guaranteed Account Value"                                 );
+        m["CSVNet_Current"             ] = ledger_metadata(0, oe_format_normal    , "Current Cash Surrender Value"                             );
+        m["CSVNet_Guaranteed"          ] = ledger_metadata(0, oe_format_normal    , "Guaranteed Cash Surrender Value"                          );
+        m["EOYDeathBft_Current"        ] = ledger_metadata(0, oe_format_normal    , "Current Death Benefit"                                    );
+        m["EOYDeathBft_Guaranteed"     ] = ledger_metadata(0, oe_format_normal    , "Guaranteed Death Benefit"                                 );
+        m["BaseDeathBft_Current"       ] = ledger_metadata(0, oe_format_normal    , "Current Base Death Benefit"                               );
+        m["BaseDeathBft_Guaranteed"    ] = ledger_metadata(0, oe_format_normal    , "Guaranteed Base Death Benefit"                            );
+        m["TermPurchased_Current"      ] = ledger_metadata(0, oe_format_normal    , "Current Term Purchased"                                   );
+        m["TermPurchased_Guaranteed"   ] = ledger_metadata(0, oe_format_normal    , "Guaranteed Term Purchased"                                );
+        m["COICharge_Current"          ] = ledger_metadata(0, oe_format_normal    , "Current Mortality Charge"                                 );
+        m["COICharge_Guaranteed"       ] = ledger_metadata(0, oe_format_normal    , "Guaranteed Mortality Charge"                              );
+        m["IrrCsv_Current"             ] = ledger_metadata(2, oe_format_percentage, "Current Cash Value IRR"                                   );
+        m["IrrCsv_Guaranteed"          ] = ledger_metadata(2, oe_format_percentage, "Guaranteed Cash Value IRR"                                );
+        m["IrrDb_Current"              ] = ledger_metadata(2, oe_format_percentage, "Current Death Benefit IRR"                                );
+        m["IrrDb_Guaranteed"           ] = ledger_metadata(2, oe_format_percentage, "Guaranteed Death Benefit IRR"                             );
+        m["ExperienceReserve_Current"  ] = ledger_metadata(0, oe_format_normal    , "Net Mortality Reserve"                                    );
+        m["NetClaims_Current"          ] = ledger_metadata(0, oe_format_normal    , "Experience Rating Current Net Claims"                     );
+        m["NetCOICharge_Current"       ] = ledger_metadata(0, oe_format_normal    , "Net Mortality Charge"                                     );
+        m["ProjectedCoiCharge_Current" ] = ledger_metadata(0, oe_format_normal    , "Projected Mortality Charge"                               );
+        m["KFactor_Current"            ] = ledger_metadata(4, oe_format_normal    , "Experience Rating K Factor"                               );
+        m["GrossPmt"                   ] = ledger_metadata(0, oe_format_normal    , "Total Payment"                                            );
+        m["LoanIntAccrued_Current"     ] = ledger_metadata(0, oe_format_normal    , "Current Accrued Loan Interest"                            );
+        m["NetDeathBenefit"            ] = ledger_metadata(0, oe_format_normal    , "Current Net Death Benefit"                                );
+        m["DeathProceedsPaid_Current"  ] = ledger_metadata(0, oe_format_normal    , "Current Death Proceeds Paid"                              );
+        m["ClaimsPaid_Current"         ] = ledger_metadata(0, oe_format_normal    , "Current Claims Paid"                                      );
+        m["AVRelOnDeath_Current"       ] = ledger_metadata(0, oe_format_normal    , "Current Account Value Released on Death"                  );
+        m["SpecAmtLoad_Current"        ] = ledger_metadata(0, oe_format_normal    , "Current Load on Specified Amount"                         );
+        m["GrossIntCredited_Current"   ] = ledger_metadata(0, oe_format_normal    , "Current Interest Credited before Separate Account Charges");
+        m["NetIntCredited_Current"     ] = ledger_metadata(0, oe_format_normal    , "Current Interest Credited Net of Separate Account Charges");
+        m["SepAcctCharges_Current"     ] = ledger_metadata(0, oe_format_normal    , "Current Separate Account Asset Charges"                   );
+        }
+
+    return m;
+}
+} // Unnamed namespace.
 
 std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values)
 {
+    std::vector<std::string> columns = effective_calculation_summary_columns();
+
     LedgerInvariant const& Invar = ledger_values.GetLedgerInvariant();
-    LedgerVariant   const& Curr_ = ledger_values.GetCurrFull();
-    LedgerVariant   const& Guar_ = ledger_values.GetGuarFull();
     int max_length = ledger_values.GetMaxLength();
 
     std::ostringstream oss;
@@ -164,20 +229,18 @@ std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values)
             ;
         }
 
+    typedef std::vector<std::string>::const_iterator vsci;
     oss
         << "<hr>\n"
         << "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n"
         << "<tr align=\"right\">\n"
-        << "<th valign=\"bottom\" width=\"12.5%\"> Policy Year</th>\n"
-        << "<th valign=\"bottom\" width=\"12.5%\"> Outlay</th>\n"
-        << "<th valign=\"bottom\" width=\"12.5%\"> Guar Account Value</th>\n"
-        << "<th valign=\"bottom\" width=\"12.5%\"> Guar Cash Surr Value</th>\n"
-        << "<th valign=\"bottom\" width=\"12.5%\"> Guar Death Benefit</th>\n"
-        << "<th valign=\"bottom\" width=\"12.5%\"> Curr Account Value</th>\n"
-        << "<th valign=\"bottom\" width=\"12.5%\"> Curr Cash Surr Value</th>\n"
-        << "<th valign=\"bottom\" width=\"12.5%\"> Curr Death Benefit</th>\n"
-        << "</tr>\n"
         ;
+    for(vsci i = columns.begin(); i != columns.end(); ++i)
+        {
+        ledger_metadata const& z = map_lookup(ledger_metadata_map(), *i);
+        oss << "<th valign=\"bottom\" width=\"12.5%\">" << z.legend_ << "</th>\n";
+        }
+    oss << "</tr>\n";
 
     for(int j = 0; j < max_length; ++j)
         {
@@ -185,19 +248,17 @@ std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values)
             {
             oss << "<tr><td><br></td></tr>\n";
             }
-        oss
-            << "<tr align=\"right\">\n"
-            << std::setprecision(0)
-            << "<td nowrap>" << 1 + j                 << "</td>\n"
-            << "<td nowrap>" << Invar.Outlay      [j] << "</td>\n"
-            << "<td nowrap>" << Guar_.AcctVal     [j] << "</td>\n"
-            << "<td nowrap>" << Guar_.CSVNet      [j] << "</td>\n"
-            << "<td nowrap>" << Guar_.EOYDeathBft [j] << "</td>\n"
-            << "<td nowrap>" << Curr_.AcctVal     [j] << "</td>\n"
-            << "<td nowrap>" << Curr_.CSVNet      [j] << "</td>\n"
-            << "<td nowrap>" << Curr_.EOYDeathBft [j] << "</td>\n"
-            << "</tr>\n"
-            ;
+        oss << "<tr align=\"right\">\n";
+        for(vsci i = columns.begin(); i != columns.end(); ++i)
+            {
+            ledger_metadata const& z = map_lookup(ledger_metadata_map(), *i);
+            std::string s = ledger_format
+                (numeric_vector(ledger_values, *i)[j]
+                ,std::make_pair(z.decimals_, z.style_)
+                );
+            oss << "<td nowrap>" << s << "</td>\n";
+            }
+        oss << "</tr>\n";
         }
 
     oss

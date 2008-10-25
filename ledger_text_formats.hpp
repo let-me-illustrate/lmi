@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.hpp,v 1.10 2008-10-22 16:16:28 chicares Exp $
+// $Id: ledger_text_formats.hpp,v 1.11 2008-10-25 20:21:35 chicares Exp $
 
 #ifndef ledger_text_formats_hpp
 #define ledger_text_formats_hpp
@@ -51,6 +51,33 @@ std::vector<std::string> ledger_format
     (std::vector<double>               dv
     ,std::pair<int,oenum_format_style> f
     );
+
+/// Metadata for presentation of ledger entities.
+///
+/// Implicitly-declared special member functions do the right thing.
+
+struct ledger_metadata
+{
+    ledger_metadata()
+        :decimals_ (0)
+        ,style_    (oe_format_normal)
+        ,legend_   ("")
+        {}
+
+    ledger_metadata
+        (int                decimals
+        ,oenum_format_style style
+        ,std::string        legend
+        )
+        :decimals_ (decimals)
+        ,style_    (style)
+        ,legend_   (legend)
+        {}
+
+    int                decimals_;
+    oenum_format_style style_;
+    std::string        legend_;
+};
 
 #endif // ledger_text_formats_hpp
 
