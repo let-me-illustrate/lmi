@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.40 2008-05-01 14:23:13 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.41 2008-10-25 19:15:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -41,6 +41,7 @@
 #include <boost/filesystem/path.hpp>
 
 #include <algorithm> // std::find()
+#include <iterator>
 #include <sstream>
 
 // TODO ?? Need unit tests.
@@ -363,13 +364,20 @@ std::string const& configurable_settings::xslt_tab_delimited_filename() const
     return xslt_tab_delimited_filename_;
 }
 
-std::string const& effective_calculation_summary_columns()
+std::vector<std::string> effective_calculation_summary_columns()
 {
     configurable_settings const& z = configurable_settings::instance();
-    return
-        z.use_builtin_calculation_summary()
+    std::istringstream iss
+        (z.use_builtin_calculation_summary()
         ? default_calculation_summary_columns()
         : z.calculation_summary_columns()
-        ;
+        );
+    std::vector<std::string> columns;
+    std::copy
+        (std::istream_iterator<std::string>(iss)
+        ,std::istream_iterator<std::string>()
+        ,std::back_inserter(columns)
+        );
+    return columns;
 }
 
