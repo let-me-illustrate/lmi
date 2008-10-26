@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.122 2008-10-03 10:41:44 vslavik Exp $
+// $Id: main_wx.cpp,v 1.123 2008-10-26 15:28:30 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -1092,6 +1092,7 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
         {"help"      ,NO_ARG   ,0 ,'h' ,0 ,"display this help and exit"},
         {"mellon"    ,NO_ARG   ,0 ,002 ,0 ,"pedo mellon a minno"},
         {"mello"     ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
+        {"pyx"       ,REQD_ARG ,0 ,'x' ,0 ,"for docimasy"},
         {"data_path" ,REQD_ARG ,0 ,'d' ,0 ,"path to data files"},
         {"test_path" ,REQD_ARG ,0 ,'t' ,0 ,"path to test files"},
         {"print_db"  ,NO_ARG   ,0 ,'p' ,0 ,"print product databases"},
@@ -1152,6 +1153,12 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
                 global_settings::instance().set_regression_test_directory
                     (getopt_long.optarg
                     );
+                }
+                break;
+
+            case 'x':
+                {
+                global_settings::instance().set_pyx(getopt_long.optarg);
                 }
                 break;
 

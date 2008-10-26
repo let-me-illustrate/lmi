@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: global_settings.hpp,v 1.15 2008-01-01 18:29:41 chicares Exp $
+// $Id: global_settings.hpp,v 1.16 2008-10-26 15:28:29 chicares Exp $
 
 #ifndef global_settings_hpp
 #define global_settings_hpp
@@ -49,6 +49,8 @@
 /// other features--some of which may be experimental or perilous.
 /// (LOTR: 'ash nazg durbatulûk'.)
 ///
+/// pyx_: Enable experimental behaviors that vary from time to time.
+///
 /// custom_io_0_: Special input and output facility for one customer.
 ///
 /// regression_testing_: Enable special behaviors needed for regression
@@ -77,23 +79,26 @@ class LMI_SO global_settings
 
     void set_mellon                   (bool);
     void set_ash_nazg                 (bool);
+    void set_pyx                      (std::string const&);
     void set_custom_io_0              (bool);
     void set_regression_testing       (bool);
     void set_data_directory           (std::string const&);
     void set_regression_test_directory(std::string const&);
 
-    bool            mellon                   () const;
-    bool            ash_nazg                 () const;
-    bool            custom_io_0              () const;
-    bool            regression_testing       () const;
-    fs::path const& data_directory           () const;
-    fs::path const& regression_test_directory() const;
+    bool               mellon                   () const;
+    bool               ash_nazg                 () const;
+    std::string const& pyx                      () const;
+    bool               custom_io_0              () const;
+    bool               regression_testing       () const;
+    fs::path const&    data_directory           () const;
+    fs::path const&    regression_test_directory() const;
 
   private:
     global_settings();
 
     bool mellon_;
     bool ash_nazg_;
+    std::string pyx_;
     bool custom_io_0_;
     bool regression_testing_;
     fs::path data_directory_;
