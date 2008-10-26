@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1190 2008-10-25 20:21:35 chicares Exp $
+// $Id: ChangeLog,v 1.1191 2008-10-26 15:51:47 chicares Exp $
 
 MAINTENANCE
 
@@ -20151,4 +20151,22 @@ Add a free function to access certain ledger columns.
   ledger_text_formats.cpp
   ledger_text_formats.hpp
 Use input calculation-summary columns.
+
+20081026T1417Z <gchicares@sbcglobal.net> [959]
+
+  ledger_text_formats.cpp
+Adjust spacing.
+
+20081026T1528Z <gchicares@sbcglobal.net> [959]
+
+  global_settings.cpp
+  global_settings.hpp
+  main_cli.cpp
+  main_wx.cpp
+Add a global setting for experimentation.
+
+20081026T1551Z <gchicares@sbcglobal.net> [959]
+
+  illustration_view.cpp
+Experimentally expose the new old calculation summary.
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.87 2008-09-18 13:31:49 chicares Exp $
+// $Id: illustration_view.cpp,v 1.88 2008-10-26 15:51:47 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -160,8 +160,19 @@ warning() << "That command should have been disabled." << LMI_FLUSH;
     return rc;
 }
 
+// Headers used for the nonce only:
+#include <fstream>
+#include "global_settings.hpp"
+#include "miscellany.hpp"
 void IllustrationView::DisplaySelectedValuesAsHtml()
 {
+    LMI_ASSERT(ledger_values_.get());
+if(std::string::npos != global_settings::instance().pyx().find("new") || global_settings::instance().pyx().empty())
+{
+    html_window_->SetPage(FormatSelectedValuesAsHtml(*ledger_values_));
+return;
+}
+
     // TODO ?? CALCULATION_SUMMARY Resolve this issue.
     // EVGENIY Is a stream the best abstraction for LedgerFormatter?
     // Apparently std::ostream.write() is the only stream function
@@ -172,7 +183,23 @@ void IllustrationView::DisplaySelectedValuesAsHtml()
     ledger_formatter_.FormatAsHtml(oss);
     selected_values_as_html_ = oss.str();
 
+if(std::string::npos != global_settings::instance().pyx().find("old"))
+{
     html_window_->SetPage(selected_values_as_html_);
+}
+
+if(std::string::npos != global_settings::instance().pyx().find("both"))
+{
+    html_window_->SetPage(selected_values_as_html_ + FormatSelectedValuesAsHtml(*ledger_values_));
+}
+
+if(std::string::npos != global_settings::instance().pyx().find("write"))
+{
+std::ofstream ofs0("cpp.html", ios_out_trunc_binary());
+ofs0 << FormatSelectedValuesAsHtml(*ledger_values_);
+std::ofstream ofs1("xsl.html", ios_out_trunc_binary());
+ofs1 << selected_values_as_html_;
+}
 }
 
 wxIcon IllustrationView::Icon() const
