@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.57 2008-08-14 12:09:24 chicares Exp $
+// $Id: main_cli.cpp,v 1.58 2008-10-26 15:28:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -209,6 +209,7 @@ void process_command_line(int argc, char* argv[])
         {"ash_naz"   ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
         {"mellon"    ,NO_ARG   ,0 ,002 ,0 ,"pedo mellon a minno"},
         {"mello"     ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
+        {"pyx"       ,REQD_ARG ,0 ,'x' ,0 ,"for docimasy"},
         {"help"      ,NO_ARG   ,0 ,'h' ,0 ,"display this help and exit"},
         {"license"   ,NO_ARG   ,0 ,'l' ,0 ,"display license and exit"},
         {"accept"    ,NO_ARG   ,0 ,'a' ,0 ,"accept license (-l to display)"},
@@ -427,6 +428,12 @@ void process_command_line(int argc, char* argv[])
                 global_settings::instance().set_regression_test_directory
                     (getopt_long.optarg
                     );
+                }
+                break;
+
+            case 'x':
+                {
+                global_settings::instance().set_pyx(getopt_long.optarg);
                 }
                 break;
 

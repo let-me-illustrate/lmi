@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: global_settings.cpp,v 1.17 2008-02-19 16:22:15 chicares Exp $
+// $Id: global_settings.cpp,v 1.18 2008-10-26 15:28:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -49,6 +49,7 @@
 global_settings::global_settings()
     :mellon_                    (false)
     ,ash_nazg_                  (false)
+    ,pyx_                       ("")
     ,custom_io_0_               (false)
     ,regression_testing_        (false)
     ,data_directory_            (".")
@@ -88,6 +89,11 @@ void global_settings::set_ash_nazg(bool b)
         }
 }
 
+void global_settings::set_pyx(std::string const& s)
+{
+    pyx_ = s;
+}
+
 void global_settings::set_custom_io_0(bool b)
 {
     custom_io_0_ = b;
@@ -118,6 +124,11 @@ bool global_settings::mellon() const
 bool global_settings::ash_nazg() const
 {
     return ash_nazg_;
+}
+
+std::string const& global_settings::pyx() const
+{
+    return pyx_;
 }
 
 bool global_settings::custom_io_0() const
