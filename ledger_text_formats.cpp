@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.46 2008-10-25 20:21:33 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.47 2008-10-26 14:17:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -180,7 +180,7 @@ std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values)
             }
         oss << "</p>\n";
 
-        oss << "<table border=\"0\" cellpadding=\"0\" cellspacing=\"1\" width=\"100%\">\n";
+        oss << "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n";
         if(is_subject_to_ill_reg(ledger_values.GetLedgerType()))
             {
             oss
@@ -189,7 +189,7 @@ std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values)
             << "  <td align=\"left\"  nowrap></td>\n"
             << std::setprecision(2)
             << "  <td align=\"right\" nowrap>" << Invar.GuarPrem         << "</td>\n"
-            << "  <td align=\"left\"  nowrap> guaranteed premium</td>\n"
+            << "  <td align=\"left\"  nowrap>&nbsp;guaranteed premium</td>\n"
             << "</tr>\n"
             ;
             }
@@ -199,36 +199,37 @@ std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values)
             << "  <td align=\"left\"  nowrap></td>\n"
             << std::setprecision(2)
             << "  <td align=\"right\" nowrap>" << Invar.InitGLP          << "</td>\n"
-            << "  <td align=\"left\"  nowrap> initial guideline level premium</td>\n"
+            << "  <td align=\"left\"  nowrap>&nbsp;initial guideline level premium</td>\n"
             << "</tr>\n"
             << "<tr>\n"
             << std::setprecision(0)
             << "  <td align=\"right\" nowrap>" << Invar.InitBaseSpecAmt  << "</td>\n"
-            << "  <td align=\"left\"  nowrap> initial base specified amount</td>\n"
+            << "  <td align=\"left\"  nowrap>&nbsp;initial base specified amount</td>\n"
             << std::setprecision(2)
             << "  <td align=\"right\" nowrap>" << Invar.InitGSP          << "</td>\n"
-            << "  <td align=\"left\"  nowrap> initial guideline single premium</td>\n"
+            << "  <td align=\"left\"  nowrap>&nbsp;initial guideline single premium</td>\n"
             << "</tr>\n"
             << "<tr>\n"
             << std::setprecision(0)
             << "  <td align=\"right\" nowrap>" << Invar.InitTermSpecAmt << "</td>\n"
-            << "  <td align=\"left\"  nowrap> initial term specified amount</td>\n"
+            << "  <td align=\"left\"  nowrap>&nbsp;initial term specified amount</td>\n"
             << std::setprecision(2)
             << "  <td align=\"right\" nowrap>" << Invar.InitSevenPayPrem << "</td>\n"
-            << "  <td align=\"left\"  nowrap> initial seven-pay premium</td>\n"
+            << "  <td align=\"left\"  nowrap>&nbsp;initial seven-pay premium</td>\n"
             << "</tr>\n"
             << "<tr>\n"
             << std::setprecision(0)
             << "  <td align=\"right\" nowrap>" << Invar.InitBaseSpecAmt + Invar.InitTermSpecAmt << "</td>\n"
-            << "  <td align=\"left\"  nowrap> initial total specified amount</td>\n"
+            << "  <td align=\"left\"  nowrap>&nbsp;initial total specified amount</td>\n"
             << std::setprecision(2)
             << "  <td align=\"right\" nowrap>" << Invar.InitTgtPrem      << "</td>\n"
-            << "  <td align=\"left\"  nowrap> initial target premium</td>\n"
+            << "  <td align=\"left\"  nowrap>&nbsp;initial target premium</td>\n"
             << "</tr>\n"
             << "</table>\n"
             ;
         }
 
+    std::string const width = value_cast<std::string>(100 / columns.size());
     typedef std::vector<std::string>::const_iterator vsci;
     oss
         << "<hr>\n"
@@ -238,7 +239,7 @@ std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values)
     for(vsci i = columns.begin(); i != columns.end(); ++i)
         {
         ledger_metadata const& z = map_lookup(ledger_metadata_map(), *i);
-        oss << "<th valign=\"bottom\" width=\"12.5%\">" << z.legend_ << "</th>\n";
+        oss << "<th valign=\"bottom\" width=\"" << width << "%\">" << z.legend_ << "</th>\n";
         }
     oss << "</tr>\n";
 
@@ -256,7 +257,7 @@ std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values)
                 (numeric_vector(ledger_values, *i)[j]
                 ,std::make_pair(z.decimals_, z.style_)
                 );
-            oss << "<td nowrap>" << s << "</td>\n";
+            oss << "<td nowrap>&nbsp;&nbsp;&nbsp;" << s << "</td>\n";
             }
         oss << "</tr>\n";
         }
