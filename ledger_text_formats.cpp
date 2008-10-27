@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.47 2008-10-26 14:17:42 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.48 2008-10-27 03:09:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -66,8 +66,9 @@ namespace
 {
 /// Ledger metadata, for calculation-summary columns only.
 ///
-/// The legends here are from 'mc_enum_types.xpp'; perhaps they should
-/// be changed to match PDF output.
+/// The legends here are from 'ledger_formats.xml'. Alternative
+/// legends from 'mc_enum_types.xpp' are shown in comments when they
+/// differ.
 
 std::map<std::string,ledger_metadata> const& ledger_metadata_map()
 {
@@ -75,53 +76,53 @@ std::map<std::string,ledger_metadata> const& ledger_metadata_map()
 
     if(m.empty())
         {
-        m["[none]"                     ] = ledger_metadata(0, oe_format_normal    , "[none]"                                                   );
-        m["AttainedAge"                ] = ledger_metadata(0, oe_format_normal    , "Attained Age"                                             );
-        m["PolicyYear"                 ] = ledger_metadata(0, oe_format_normal    , "Policy Year"                                              );
-        m["InforceLives"               ] = ledger_metadata(4, oe_format_normal    , "Inforce Lives BOY"                                        );
-        m["SpecAmt"                    ] = ledger_metadata(0, oe_format_normal    , "Base Specified Amount"                                    );
-        m["TermSpecAmt"                ] = ledger_metadata(0, oe_format_normal    , "Term Specified Amount"                                    );
-        m["CorridorFactor"             ] = ledger_metadata(0, oe_format_percentage, "Corridor Factor"                                          );
-        m["AnnGAIntRate_Current"       ] = ledger_metadata(2, oe_format_percentage, "General Account Crediting Rate"                           );
-        m["AnnSAIntRate_Current"       ] = ledger_metadata(2, oe_format_percentage, "Separate Account Net Rate"                                );
-        m["Outlay"                     ] = ledger_metadata(0, oe_format_normal    , "Net Outlay"                                               );
-        m["EeGrossPmt"                 ] = ledger_metadata(0, oe_format_normal    , "Employee Gross Payment"                                   );
-        m["ErGrossPmt"                 ] = ledger_metadata(0, oe_format_normal    , "Employer Gross Payment"                                   );
-        m["NetWD"                      ] = ledger_metadata(0, oe_format_normal    , "Withdrawal"                                               );
-        m["NewCashLoan"                ] = ledger_metadata(0, oe_format_normal    , "New Cash Loan"                                            );
-        m["TotalLoanBalance_Current"   ] = ledger_metadata(0, oe_format_normal    , "Current Total Loan Balance"                               );
-        m["TotalLoanBalance_Guaranteed"] = ledger_metadata(0, oe_format_normal    , "Guaranteed Total Loan Balance"                            );
-        m["AcctVal_Current"            ] = ledger_metadata(0, oe_format_normal    , "Current Account Value"                                    );
-        m["AcctVal_Guaranteed"         ] = ledger_metadata(0, oe_format_normal    , "Guaranteed Account Value"                                 );
-        m["CSVNet_Current"             ] = ledger_metadata(0, oe_format_normal    , "Current Cash Surrender Value"                             );
-        m["CSVNet_Guaranteed"          ] = ledger_metadata(0, oe_format_normal    , "Guaranteed Cash Surrender Value"                          );
-        m["EOYDeathBft_Current"        ] = ledger_metadata(0, oe_format_normal    , "Current Death Benefit"                                    );
-        m["EOYDeathBft_Guaranteed"     ] = ledger_metadata(0, oe_format_normal    , "Guaranteed Death Benefit"                                 );
-        m["BaseDeathBft_Current"       ] = ledger_metadata(0, oe_format_normal    , "Current Base Death Benefit"                               );
-        m["BaseDeathBft_Guaranteed"    ] = ledger_metadata(0, oe_format_normal    , "Guaranteed Base Death Benefit"                            );
-        m["TermPurchased_Current"      ] = ledger_metadata(0, oe_format_normal    , "Current Term Purchased"                                   );
-        m["TermPurchased_Guaranteed"   ] = ledger_metadata(0, oe_format_normal    , "Guaranteed Term Purchased"                                );
-        m["COICharge_Current"          ] = ledger_metadata(0, oe_format_normal    , "Current Mortality Charge"                                 );
-        m["COICharge_Guaranteed"       ] = ledger_metadata(0, oe_format_normal    , "Guaranteed Mortality Charge"                              );
-        m["IrrCsv_Current"             ] = ledger_metadata(2, oe_format_percentage, "Current Cash Value IRR"                                   );
-        m["IrrCsv_Guaranteed"          ] = ledger_metadata(2, oe_format_percentage, "Guaranteed Cash Value IRR"                                );
-        m["IrrDb_Current"              ] = ledger_metadata(2, oe_format_percentage, "Current Death Benefit IRR"                                );
-        m["IrrDb_Guaranteed"           ] = ledger_metadata(2, oe_format_percentage, "Guaranteed Death Benefit IRR"                             );
-        m["ExperienceReserve_Current"  ] = ledger_metadata(0, oe_format_normal    , "Net Mortality Reserve"                                    );
-        m["NetClaims_Current"          ] = ledger_metadata(0, oe_format_normal    , "Experience Rating Current Net Claims"                     );
-        m["NetCOICharge_Current"       ] = ledger_metadata(0, oe_format_normal    , "Net Mortality Charge"                                     );
-        m["ProjectedCoiCharge_Current" ] = ledger_metadata(0, oe_format_normal    , "Projected Mortality Charge"                               );
-        m["KFactor_Current"            ] = ledger_metadata(4, oe_format_normal    , "Experience Rating K Factor"                               );
-        m["GrossPmt"                   ] = ledger_metadata(0, oe_format_normal    , "Total Payment"                                            );
-        m["LoanIntAccrued_Current"     ] = ledger_metadata(0, oe_format_normal    , "Current Accrued Loan Interest"                            );
-        m["NetDeathBenefit"            ] = ledger_metadata(0, oe_format_normal    , "Current Net Death Benefit"                                );
-        m["DeathProceedsPaid_Current"  ] = ledger_metadata(0, oe_format_normal    , "Current Death Proceeds Paid"                              );
-        m["ClaimsPaid_Current"         ] = ledger_metadata(0, oe_format_normal    , "Current Claims Paid"                                      );
-        m["AVRelOnDeath_Current"       ] = ledger_metadata(0, oe_format_normal    , "Current Account Value Released on Death"                  );
-        m["SpecAmtLoad_Current"        ] = ledger_metadata(0, oe_format_normal    , "Current Load on Specified Amount"                         );
-        m["GrossIntCredited_Current"   ] = ledger_metadata(0, oe_format_normal    , "Current Interest Credited before Separate Account Charges");
-        m["NetIntCredited_Current"     ] = ledger_metadata(0, oe_format_normal    , "Current Interest Credited Net of Separate Account Charges");
-        m["SepAcctCharges_Current"     ] = ledger_metadata(0, oe_format_normal    , "Current Separate Account Asset Charges"                   );
+        m["[none]"                     ] = ledger_metadata(0, oe_format_normal    , "[none]"                                );
+        m["AttainedAge"                ] = ledger_metadata(0, oe_format_normal    , "End of Year Age"                       ); // "Attained Age"
+        m["PolicyYear"                 ] = ledger_metadata(0, oe_format_normal    , "Policy Year"                           );
+        m["InforceLives"               ] = ledger_metadata(4, oe_format_normal    , "BOY Lives Inforce"                     ); // "Inforce Lives BOY"
+        m["SpecAmt"                    ] = ledger_metadata(0, oe_format_normal    , "Specified Amount"                      ); // "Base Specified Amount"
+        m["TermSpecAmt"                ] = ledger_metadata(0, oe_format_normal    , "Term Specified Amount"                 );
+        m["CorridorFactor"             ] = ledger_metadata(0, oe_format_percentage, "Corridor Factor"                       );
+        m["AnnGAIntRate_Current"       ] = ledger_metadata(2, oe_format_percentage, "Curr Ann Gen Acct Int Rate"            ); // "General Account Crediting Rate"
+        m["AnnSAIntRate_Current"       ] = ledger_metadata(2, oe_format_percentage, "Curr Ann Sep Acct Int Rate"            ); // "Separate Account Net Rate"
+        m["Outlay"                     ] = ledger_metadata(0, oe_format_normal    , "Net Outlay"                            );
+        m["EeGrossPmt"                 ] = ledger_metadata(0, oe_format_normal    , "EE Gross Payment"                      ); // "Employee Gross Payment"
+        m["ErGrossPmt"                 ] = ledger_metadata(0, oe_format_normal    , "ER Gross Payment"                      ); // "Employer Gross Payment"
+        m["NetWD"                      ] = ledger_metadata(0, oe_format_normal    , "Withdrawal"                            );
+        m["NewCashLoan"                ] = ledger_metadata(0, oe_format_normal    , "Annual Loan"                           ); // "New Cash Loan"
+        m["TotalLoanBalance_Current"   ] = ledger_metadata(0, oe_format_normal    , "Curr Total Loan Balance"               ); // "Current Total Loan Balance"
+        m["TotalLoanBalance_Guaranteed"] = ledger_metadata(0, oe_format_normal    , "Guar Total Loan Balance"               ); // "Guaranteed Total Loan Balance"
+        m["AcctVal_Current"            ] = ledger_metadata(0, oe_format_normal    , "Curr Account Value"                    ); // "Current Account Value"
+        m["AcctVal_Guaranteed"         ] = ledger_metadata(0, oe_format_normal    , "Guar Account Value"                    ); // "Guaranteed Account Value"
+        m["CSVNet_Current"             ] = ledger_metadata(0, oe_format_normal    , "Curr Net Cash Surr Value"              ); // "Current Cash Surrender Value"
+        m["CSVNet_Guaranteed"          ] = ledger_metadata(0, oe_format_normal    , "Guar Net Cash Surr Value"              ); // "Guaranteed Cash Surrender Value"
+        m["EOYDeathBft_Current"        ] = ledger_metadata(0, oe_format_normal    , "Curr EOY Death Benefit"                ); // "Current Death Benefit"
+        m["EOYDeathBft_Guaranteed"     ] = ledger_metadata(0, oe_format_normal    , "Guar EOY Death Benefit"                ); // "Guaranteed Death Benefit"
+        m["BaseDeathBft_Current"       ] = ledger_metadata(0, oe_format_normal    , "Curr Base Death Benefit"               ); // "Current Base Death Benefit"
+        m["BaseDeathBft_Guaranteed"    ] = ledger_metadata(0, oe_format_normal    , "Guar Base Death Benefit"               ); // "Guaranteed Base Death Benefit"
+        m["TermPurchased_Current"      ] = ledger_metadata(0, oe_format_normal    , "Curr Term Amt Purchased"               ); // "Current Term Purchased"
+        m["TermPurchased_Guaranteed"   ] = ledger_metadata(0, oe_format_normal    , "Guar Term Amt Purchased"               ); // "Guaranteed Term Purchased"
+        m["COICharge_Current"          ] = ledger_metadata(0, oe_format_normal    , "Curr COI Charge"                       ); // "Current Mortality Charge"
+        m["COICharge_Guaranteed"       ] = ledger_metadata(0, oe_format_normal    , "Guar COI Charge"                       ); // "Guaranteed Mortality Charge"
+        m["IrrCsv_Current"             ] = ledger_metadata(2, oe_format_percentage, "Curr IRR on CSV"                       ); // "Current Cash Value IRR"
+        m["IrrCsv_Guaranteed"          ] = ledger_metadata(2, oe_format_percentage, "Guar IRR on CSV"                       ); // "Guaranteed Cash Value IRR"
+        m["IrrDb_Current"              ] = ledger_metadata(2, oe_format_percentage, "Curr IRR on DB"                        ); // "Current Death Benefit IRR"
+        m["IrrDb_Guaranteed"           ] = ledger_metadata(2, oe_format_percentage, "Guar IRR on DB"                        ); // "Guaranteed Death Benefit IRR"
+        m["ExperienceReserve_Current"  ] = ledger_metadata(0, oe_format_normal    , "Experience Rating Reserve"             ); // "Net Mortality Reserve"
+        m["NetClaims_Current"          ] = ledger_metadata(0, oe_format_normal    , "Curr Net Claims"                       ); // "Experience Rating Current Net Claims"
+        m["NetCOICharge_Current"       ] = ledger_metadata(0, oe_format_normal    , "Experience Rating Net COI Charge"      ); // "Net Mortality Charge"
+        m["ProjectedCoiCharge_Current" ] = ledger_metadata(0, oe_format_normal    , "Experience Rating Projected COI Charge"); // "Projected Mortality Charge"
+        m["KFactor_Current"            ] = ledger_metadata(4, oe_format_normal    , "Experience Rating K Factor"            );
+        m["GrossPmt"                   ] = ledger_metadata(0, oe_format_normal    , "Premium Outlay"                        ); // "Total Payment"
+        m["LoanIntAccrued_Current"     ] = ledger_metadata(0, oe_format_normal    , "Curr Loan Int Accrued"                 ); // "Current Accrued Loan Interest"
+        m["NetDeathBenefit"            ] = ledger_metadata(0, oe_format_normal    , "Net Death Benefit"                     ); // "Current Net Death Benefit"
+        m["DeathProceedsPaid_Current"  ] = ledger_metadata(0, oe_format_normal    , "Curr Death Proceeds Paid"              ); // "Current Death Proceeds Paid"
+        m["ClaimsPaid_Current"         ] = ledger_metadata(0, oe_format_normal    , "Curr Claims Paid"                      ); // "Current Claims Paid"
+        m["AVRelOnDeath_Current"       ] = ledger_metadata(0, oe_format_normal    , "Account Value Released on Death"       ); // "Current Account Value Released on Death"
+        m["SpecAmtLoad_Current"        ] = ledger_metadata(0, oe_format_normal    , "Curr Spec Amt Load"                    ); // "Current Load on Specified Amount"
+        m["GrossIntCredited_Current"   ] = ledger_metadata(0, oe_format_normal    , "Curr Gross Int Credited"               ); // "Current Interest Credited before Separate Account Charges"
+        m["NetIntCredited_Current"     ] = ledger_metadata(0, oe_format_normal    , "Curr Net Int Credited"                 ); // "Current Interest Credited Net of Separate Account Charges"
+        m["SepAcctCharges_Current"     ] = ledger_metadata(0, oe_format_normal    , "Curr Sep Acct Charges"                 ); // "Current Separate Account Asset Charges"
         }
 
     return m;

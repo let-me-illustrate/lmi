@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1191 2008-10-26 15:51:47 chicares Exp $
+// $Id: ChangeLog,v 1.1192 2008-10-27 03:09:32 chicares Exp $
 
 MAINTENANCE
 
@@ -20169,4 +20169,9 @@ Add a global setting for experimentation.
 
   illustration_view.cpp
 Experimentally expose the new old calculation summary.
+
+20081027T0309Z <gchicares@sbcglobal.net> [959]
+
+  ledger_text_formats.cpp
+Use the same column headers as 'ledger_formats.xml'.
 
