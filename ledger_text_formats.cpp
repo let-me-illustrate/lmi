@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.48 2008-10-27 03:09:32 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.49 2008-10-27 13:28:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -395,6 +395,7 @@ os << "\n\n" ;
 
     os << "\n\nFOR BROKER-DEALER USE ONLY. NOT TO BE SHARED WITH CLIENTS.\n\n";
 
+    os << "PolicyNumber\t\t"      << Invar.value_str("PolicyNumber"   ) << '\n';
     os << "ProducerName\t\t"      << Invar.value_str("ProducerName"   ) << '\n';
     os << "ProducerStreet\t\t"    << Invar.value_str("ProducerStreet" ) << '\n';
     os << "ProducerCity\t\t"      << Invar.value_str("ProducerCity"   ) << '\n';
