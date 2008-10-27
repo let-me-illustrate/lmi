@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.88 2008-10-26 15:51:47 chicares Exp $
+// $Id: illustration_view.cpp,v 1.89 2008-10-27 13:27:14 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -161,9 +161,11 @@ warning() << "That command should have been disabled." << LMI_FLUSH;
 }
 
 // Headers used for the nonce only:
-#include <fstream>
 #include "global_settings.hpp"
+#include "istream_to_string.hpp"
 #include "miscellany.hpp"
+#include <cstdio>         // std::remove()
+#include <fstream>
 void IllustrationView::DisplaySelectedValuesAsHtml()
 {
     LMI_ASSERT(ledger_values_.get());
@@ -313,6 +315,22 @@ void IllustrationView::CopyLedgerToClipboard(enum_copy_option option)
     std::ostringstream oss;
     if(e_copy_full == option)
         {
+        LMI_ASSERT(ledger_values_.get());
+if(std::string::npos != global_settings::instance().pyx().find("new") || global_settings::instance().pyx().empty())
+{
+        std::string spreadsheet_filename =
+                base_filename()
+            +   configurable_settings::instance().spreadsheet_file_extension()
+            ;
+        std::remove(spreadsheet_filename.c_str());
+        PrintFormTabDelimited(*ledger_values_, spreadsheet_filename);
+        std::ifstream ifs(spreadsheet_filename.c_str());
+        std::string s;
+        istream_to_string(ifs, s);
+        ClipboardEx::SetText(s);
+        status() << "Format: " << timer.stop().elapsed_msec_str() << std::flush;
+return;
+}
         ledger_formatter_.FormatAsTabDelimited(oss);
         }
     // TODO ?? CALCULATION_SUMMARY This assumes, without asserting,
