@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1192 2008-10-27 03:09:32 chicares Exp $
+// $Id: ChangeLog,v 1.1193 2008-10-27 13:28:34 chicares Exp $
 
 MAINTENANCE
 
@@ -20174,4 +20174,16 @@ Experimentally expose the new old calculation summary.
 
   ledger_text_formats.cpp
 Use the same column headers as 'ledger_formats.xml'.
+
+20081027T1327Z <gchicares@sbcglobal.net> [959]
+
+  illustration_view.cpp
+Experimentally reimplement IllustrationView::CopyLedgerToClipboard()
+so that "Illustration | Copy full illustration data" uses the same
+code as "Census | Print case to spreadsheet".
+
+20081027T1328Z <gchicares@sbcglobal.net> [959]
+
+  ledger_text_formats.cpp
+Add policy number to tab-delimited output.
 
