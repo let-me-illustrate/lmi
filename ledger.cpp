@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.cpp,v 1.28 2008-10-25 19:34:21 chicares Exp $
+// $Id: ledger.cpp,v 1.29 2008-10-28 03:26:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -508,6 +508,19 @@ std::vector<double> numeric_vector
     std::string const suffix    = compound_name.substr(pos);
 
     LedgerInvariant const& invar = ledger.GetLedgerInvariant();
+    LedgerVariant   const& curr  = ledger.GetCurrFull();
+
+    int const length = invar.GetLength();
+
+    std::vector<double> attained_age     (length);
+    std::vector<double> policy_year      (length);
+    std::vector<double> net_death_benefit(length);
+    for(int j = 0; j < length; ++j)
+        {
+        attained_age     [j] = j + invar.Age;
+        policy_year      [j] = j + 1        ;
+        net_death_benefit[j] = curr.EOYDeathBft[j] - curr.TotalLoanBalance[j];
+        }
 
     typedef LedgerBase const& B;
     B z =
@@ -522,13 +535,14 @@ std::vector<double> numeric_vector
         ;
 
     return
-          "InforceLives"      == compound_name ? invar.InforceLives
+          "AttainedAge"       == compound_name ? attained_age
+        : "InforceLives"      == compound_name ? invar.InforceLives
         : "IrrCsv_Current"    == compound_name ? invar.IrrCsvCurrInput
         : "IrrCsv_Guaranteed" == compound_name ? invar.IrrCsvGuarInput
         : "IrrDb_Current"     == compound_name ? invar.IrrDbCurrInput
         : "IrrDb_Guaranteed"  == compound_name ? invar.IrrDbGuarInput
-//        : "NetDeathBenefit"   == compound_name ?
-//        : "PolicyYear"        == compound_name ?
+        : "NetDeathBenefit"   == compound_name ? net_death_benefit
+        : "PolicyYear"        == compound_name ? policy_year
         : *map_lookup(z.all_vectors(), base_name)
         ;
 }
