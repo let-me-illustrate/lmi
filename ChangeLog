@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1194 2008-10-28 03:57:24 chicares Exp $
+// $Id: ChangeLog,v 1.1195 2008-10-28 23:42:31 chicares Exp $
 
 MAINTENANCE
 
@@ -20201,4 +20201,10 @@ Calculate certain columns on the fly.
 
   ledger_text_formats.cpp
 Always show policy year on calculation summary.
+
+20081028T2342Z <gchicares@sbcglobal.net> [961]
+
+  illustration_view.cpp
+Fix defect introduced 20081026T1551Z. 'selected_values_as_html_'
+must be set for IllustrationView::PrintOrPreviewHtmlSummary().
 

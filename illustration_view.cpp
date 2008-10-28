@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.89 2008-10-27 13:27:14 chicares Exp $
+// $Id: illustration_view.cpp,v 1.90 2008-10-28 23:42:31 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -105,7 +105,7 @@ IllustrationView::IllustrationView()
     :ViewEx                  ()
     ,html_window_            (0)
     ,is_phony_               (false)
-    ,selected_values_as_html_("<html><body>Hello, world!</body></html>")
+    ,selected_values_as_html_("<html><body>[empty]</body></html>")
 {
 }
 
@@ -171,7 +171,8 @@ void IllustrationView::DisplaySelectedValuesAsHtml()
     LMI_ASSERT(ledger_values_.get());
 if(std::string::npos != global_settings::instance().pyx().find("new") || global_settings::instance().pyx().empty())
 {
-    html_window_->SetPage(FormatSelectedValuesAsHtml(*ledger_values_));
+    selected_values_as_html_ = FormatSelectedValuesAsHtml(*ledger_values_);
+    html_window_->SetPage(selected_values_as_html_);
 return;
 }
 
