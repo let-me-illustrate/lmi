@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.49 2008-10-27 13:28:34 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.50 2008-10-28 03:25:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -135,6 +135,30 @@ std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values)
 
     LedgerInvariant const& Invar = ledger_values.GetLedgerInvariant();
     int max_length = ledger_values.GetMaxLength();
+
+    unsigned int const length = Invar.GetLength();
+    if(length != Invar.IrrCsvCurrInput.size())
+        {
+        // TODO ?? This const_cast is safe, but it's still unclean.
+        LedgerInvariant& unclean = const_cast<LedgerInvariant&>(Invar);
+        bool want_any_irr =
+               columns.end() != std::find(columns.begin(), columns.end(), "IrrCsv_Current"   )
+            || columns.end() != std::find(columns.begin(), columns.end(), "IrrCsv_Guaranteed")
+            || columns.end() != std::find(columns.begin(), columns.end(), "IrrDb_Current"    )
+            || columns.end() != std::find(columns.begin(), columns.end(), "IrrDb_Guaranteed" )
+            ;
+        if(want_any_irr && !Invar.IsInforce)
+            {
+            unclean.CalculateIrrs(ledger_values);
+            }
+        else
+            {
+            unclean.IrrCsvCurrInput.resize(length);
+            unclean.IrrCsvGuarInput.resize(length);
+            unclean.IrrDbCurrInput .resize(length);
+            unclean.IrrDbGuarInput .resize(length);
+            }
+        }
 
     std::ostringstream oss;
 
