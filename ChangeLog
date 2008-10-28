@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1193 2008-10-27 13:28:34 chicares Exp $
+// $Id: ChangeLog,v 1.1194 2008-10-28 03:57:24 chicares Exp $
 
 MAINTENANCE
 
@@ -20186,4 +20186,19 @@ code as "Census | Print case to spreadsheet".
 
   ledger_text_formats.cpp
 Add policy number to tab-delimited output.
+
+20081028T0325Z <gchicares@sbcglobal.net> [960]
+
+  ledger_text_formats.cpp
+Conditionally calculate IRRs.
+
+20081028T0326Z <gchicares@sbcglobal.net> [960]
+
+  ledger.cpp
+Calculate certain columns on the fly.
+
+20081028T0357Z <gchicares@sbcglobal.net> [961]
+
+  ledger_text_formats.cpp
+Always show policy year on calculation summary.
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.50 2008-10-28 03:25:12 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.51 2008-10-28 03:57:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -132,6 +132,20 @@ std::map<std::string,ledger_metadata> const& ledger_metadata_map()
 std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values)
 {
     std::vector<std::string> columns = effective_calculation_summary_columns();
+    std::vector<std::string>::iterator p = std::find
+        (columns.begin()
+        ,columns.end()
+        ,"PolicyYear"
+        );
+    // TODO ?? This should be done in effective_calculation_summary_columns(),
+    // but that requires a difficult-to-test change in 'ledger_xml_io2.cpp'.
+    // As long as "PolicyYear" is always the first column, it shouldn't be
+    // offered for selection anyway.
+    if(columns.end() != p)
+        {
+        columns.erase(p);
+        }
+    columns.insert(columns.begin(), "PolicyYear");
 
     LedgerInvariant const& Invar = ledger_values.GetLedgerInvariant();
     int max_length = ledger_values.GetMaxLength();
