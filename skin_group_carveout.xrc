@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin_group_carveout.xrc,v 1.7 2008-10-24 20:26:25 wboutin Exp $
+    $Id: skin_group_carveout.xrc,v 1.8 2008-10-29 18:30:35 wboutin Exp $
 
     This version is designed for group-carveout users; it omits input
     fields that seem irrelevant in that context, and reflects the
@@ -1300,7 +1300,7 @@
                                     <border>2</border>
                                     <object class="wxTextCtrl" name="InsuredPremiumTableFactor">
                                         <help>Multiple of table used as basis for premium calculation</help>
-                                        <size>10,-1</size>
+                                        <size>100,-1</size>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -1314,7 +1314,7 @@
                                     <flag>wxGROW|wxLEFT|wxRIGHT|wxTOP</flag>
                                     <border>2</border>
                                     <object class="wxTextCtrl" name="CorporationPremiumTableFactor">
-                                        <size>10,-1</size>
+                                        <size>100,-1</size>
                                     </object>
                                 </object>
                             </object>
@@ -1322,7 +1322,77 @@
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxALIGN_RIGHT|wxTOP</flag>
+                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <border>2</border>
+                    <object class="wxStaticBoxSizer">
+                        <flag>wxGROW|wxALL</flag>
+                        <orient>wxVERTICAL</orient>
+                        <label>Salary-based specified amount</label>
+                        <object class="sizeritem">
+                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <border>4</border>
+                            <object class="wxFlexGridSizer">
+                                <cols>1</cols>
+                                <growablecols>0</growablecols>
+                                <growablerows>0,1,2,3,4</growablerows>
+                                <object class="sizeritem">
+                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                    <border>4</border>
+                                    <object class="wxFlexGridSizer">
+                                        <cols>2</cols>
+                                        <growablecols>1</growablecols>
+                                        <object class="sizeritem">
+                                            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                            <border>4</border>
+                                            <object class="wxStaticText">
+                                                <label>Salary multiple </label>
+                                            </object>
+                                        </object>
+                                        <object class="sizeritem">
+                                            <flag>wxGROW|wxBOTTOM</flag>
+                                            <border>2</border>
+                                            <object class="wxTextCtrl" name="SalarySpecifiedAmountFactor">
+                                                <help>Multiple of salary for specified amount calculation</help>
+                                                <size>40,-1</size>
+                                            </object>
+                                        </object>
+                                        <object class="sizeritem">
+                                            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                            <border>4</border>
+                                            <object class="wxStaticText">
+                                                <label>cap </label>
+                                            </object>
+                                        </object>
+                                        <object class="sizeritem">
+                                            <flag>wxGROW|wxBOTTOM</flag>
+                                            <border>2</border>
+                                            <object class="wxTextCtrl" name="SalarySpecifiedAmountCap">
+                                                <help>Limit on salary-based specified amount</help>
+                                                <size>40,-1</size>
+                                            </object>
+                                        </object>
+                                        <object class="sizeritem">
+                                            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                            <border>4</border>
+                                            <object class="wxStaticText">
+                                                <label>offset </label>
+                                            </object>
+                                        </object>
+                                        <object class="sizeritem">
+                                            <flag>wxGROW</flag>
+                                            <object class="wxTextCtrl" name="SalarySpecifiedAmountOffset">
+                                                <help>Amount subtracted from salary-based specified amount for group insurance offset</help>
+                                                <size>40,-1</size>
+                                            </object>
+                                        </object>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW|wxALIGN_RIGHT|wxALL</flag>
                     <border>2</border>
                     <object class="wxStaticBoxSizer">
                         <orient>wxVERTICAL</orient>
@@ -1510,7 +1580,7 @@
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxGROW</flag>
+                    <flag>wxGROW|wxBOTTOM</flag>
                     <border>2</border>
                     <object class="wxTextCtrl" name="CorporationPaymentMode">
                         <help>Corporation payment mode: annual, semiannual, quarterly, or monthly</help>
