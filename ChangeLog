@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1195 2008-10-28 23:42:31 chicares Exp $
+// $Id: ChangeLog,v 1.1196 2008-10-29 18:30:36 wboutin Exp $
 
 MAINTENANCE
 
@@ -20119,7 +20119,6 @@ Correct misstated flat-extra mode (KM).
 20081024T2055Z <wboutin@massmutual.com> [960]
 
   input_harmonization.cpp
-  skin_group_carveout.xrc
 Add and enable salary-based controls.
 
 20081025T1259Z <gchicares@sbcglobal.net> [960]
@@ -20207,4 +20206,10 @@ Always show policy year on calculation summary.
   illustration_view.cpp
 Fix defect introduced 20081026T1551Z. 'selected_values_as_html_'
 must be set for IllustrationView::PrintOrPreviewHtmlSummary().
+
+20081029T1830Z <wboutin@massmutual.com> [961]
+
+  skin_group_carveout.xrc
+Fix defect introduced 20081024T2055Z. Actually commit
+salary-based controls.
 
