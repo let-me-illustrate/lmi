@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.61 2008-10-03 10:41:43 vslavik Exp $
+# $Id: Makefile.am,v 1.62 2008-10-31 13:17:53 vslavik Exp $
 
 SUBDIRS = third_party
 
@@ -191,7 +191,7 @@ if LMI_MSW
 ## use old style suffix rule instead of the pattern one as automake only
 ## recognizes the old style rules
 .rc.o:
-	windres -I $(top_srcdir) $(WX_CPPFLAGS) $< $@
+	$(WINDRES) -I $(top_srcdir) $(WX_CPPFLAGS) $< $@
 
     lmi_wx_SOURCES += lmi.rc
     lmi_wx_CXXFLAGS += -mwindows
