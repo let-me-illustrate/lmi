@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.42 2008-10-08 18:46:03 vslavik Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.43 2008-10-31 13:17:53 vslavik Exp $)dnl
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -138,6 +138,10 @@ CXXFLAGS=${CXXFLAGS:=}
 AC_PROG_CXX
 
 AC_PROG_LD
+
+if test "$USE_WINDOWS" = "1"; then
+    AC_CHECK_TOOL([WINDRES], [windres], no)
+fi
 
 dnl Until the ihs_pios.*pp facilities are made portable use explicit flag to GCC
 dnl to ensure that sizeof(long double) is 12 bytes for binary compatibility.
