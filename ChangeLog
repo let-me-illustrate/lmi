@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1197 2008-10-29 18:33:35 wboutin Exp $
+// $Id: ChangeLog,v 1.1198 2008-11-01 15:48:19 chicares Exp $
 
 MAINTENANCE
 
@@ -20217,4 +20217,26 @@ salary-based controls.
 
   version.hpp
 Mark release candidate.
+
+20081031T1317Z <vslavik@fastmail.fm> [961]
+
+  Makefile.am
+  configure.ac
+Let the autotools 'configure' script find 'windres' for msw.
+
+20081101T1546Z <gchicares@sbcglobal.net> [959]
+
+  input_harmonization.cpp
+Remove toxic kludges from 20080811T0007Z.
+
+20081101T1547Z <gchicares@sbcglobal.net> [959]
+
+  icon_monger.hpp
+Use stronger typing (VS).
+
+20081101T1548Z <gchicares@sbcglobal.net> [959]
+
+  icon_monger.cpp
+Resolve a wx issue (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2008-10/msg00037.html
 
