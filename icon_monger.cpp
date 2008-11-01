@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: icon_monger.cpp,v 1.7 2008-10-04 15:16:26 chicares Exp $
+// $Id: icon_monger.cpp,v 1.8 2008-11-01 15:48:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -103,7 +103,7 @@ wxBitmap icon_monger::CreateBitmap
     ,wxSize const&      size
     )
 {
-    std::string icon_name = id.c_str();
+    std::string icon_name(id.c_str());
     bool is_builtin = 0 == icon_name.find("wxART_");
     if(is_builtin)
         {
