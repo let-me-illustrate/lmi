@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: icon_monger.hpp,v 1.4 2008-10-04 13:47:20 chicares Exp $
+// $Id: icon_monger.hpp,v 1.5 2008-11-01 15:47:13 chicares Exp $
 
 #ifndef icon_monger_hpp
 #define icon_monger_hpp
@@ -51,7 +51,7 @@ class icon_monger
         ,wxSize const&
         );
 
-    std::map<std::string,std::string> icon_names_by_wx_id_;
+    std::map<wxArtID,std::string> icon_names_by_wx_id_;
 };
 
 #endif // icon_monger_hpp
