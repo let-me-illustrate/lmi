@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_test.cpp,v 1.12 2008-07-30 12:31:06 chicares Exp $
+// $Id: ledger_test.cpp,v 1.13 2008-11-03 21:33:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -68,8 +68,6 @@ LedgerTest::LedgerTest()
     fenv_guard fg;
     AccountValue av(document.input_data());
     av.RunAV();
-    // TODO ?? Should this postcondition be enforced in the tested class?
-    LMI_ASSERT(av.ledger_from_av().get());
     ledger_ = av.ledger_from_av();
     } // End fenv_guard scope.
 }
