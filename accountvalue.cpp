@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.63 2008-08-11 00:04:44 chicares Exp $
+// $Id: accountvalue.cpp,v 1.64 2008-11-03 21:33:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -136,6 +136,13 @@ AccountValue::AccountValue(Input const& input)
 //============================================================================
 AccountValue::~AccountValue()
 {
+}
+
+//============================================================================
+boost::shared_ptr<Ledger const> AccountValue::ledger_from_av() const
+{
+    LMI_ASSERT(ledger_.get());
+    return ledger_;
 }
 
 //============================================================================

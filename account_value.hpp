@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.72 2008-08-10 16:45:24 chicares Exp $
+// $Id: account_value.hpp,v 1.73 2008-11-03 21:33:14 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -658,12 +658,6 @@ inline LedgerInvariant& AccountValue::InvariantValues() // Temporary artifact?
 inline LedgerInvariant const& AccountValue::InvariantValues() const
 {
     return *ledger_invariant_;
-}
-
-//============================================================================
-inline boost::shared_ptr<Ledger const> AccountValue::ledger_from_av() const
-{
-    return ledger_;
 }
 
 //============================================================================
