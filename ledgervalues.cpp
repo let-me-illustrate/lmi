@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.cpp,v 1.35 2008-08-10 16:45:24 chicares Exp $
+// $Id: ledgervalues.cpp,v 1.36 2008-11-03 21:33:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -59,7 +59,6 @@ double IllusVal::run(Input const& input)
 
     double z = av.RunAV();
     ledger_ = av.ledger_from_av();
-    LMI_ASSERT(ledger_.get());
 
     return z;
 }
