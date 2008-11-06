@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.53 2008-11-06 16:11:22 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.54 2008-11-06 16:31:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -309,6 +309,11 @@ std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values)
     return oss.str();
 }
 
+/// Write ledger to a tab-delimited file suitable for spreadsheets.
+///
+/// The file is appended to, rather than replaced, so that all cells
+/// in a census can be written to the same file.
+
 void PrintFormTabDelimited
     (Ledger const& ledger_values
     ,std::string const& file_name
@@ -537,6 +542,7 @@ void PrintFormTabDelimited
 
         os << '\n';
         }
+    LMI_ASSERT(os.good());
 #endif // !defined LMI_USE_NEW_REPORTS
 }
 
