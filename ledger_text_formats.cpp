@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.52 2008-11-06 15:22:23 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.53 2008-11-06 16:11:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -323,110 +323,16 @@ void PrintFormTabDelimited
 
     int max_length = ledger_values.GetMaxLength();
 
-    std::vector<double> net_payment(Invar.Outlay);
-
-    std::vector<double> real_claims;
-    if(ledger_values.GetIsComposite())
+    // TODO ?? This const_cast is safe, but it's still unclean.
+    LedgerInvariant& unclean = const_cast<LedgerInvariant&>(Invar);
+    if(!Invar.IsInforce)
         {
-        real_claims = Curr_.ClaimsPaid;
+        unclean.CalculateIrrs(ledger_values);
         }
     else
         {
-        real_claims.assign(Curr_.ClaimsPaid.size(), 0.0);
-        }
-
-    std::vector<double> cash_flow;
-    cash_flow.push_back(0.0); // No claims paid on issue date.
-    std::copy
-        (real_claims.begin()
-        ,real_claims.end()
-        ,std::inserter(cash_flow, cash_flow.end())
-        );
-    // ET !! This is tricky: incompatible lengths.
-    // ET !! cash_flow = catenate(0.0, -real_claims);
-    std::transform
-        (cash_flow.begin()
-        ,cash_flow.end()
-        ,cash_flow.begin()
-        ,std::negate<double>()
-        );
-    // ET !! This is tricky: incompatible lengths.
-    // ET !! drop(-1, cash_flow) += net_payment;
-    std::transform
-        (net_payment.begin()
-        ,net_payment.end()
-        ,cash_flow.begin()
-        ,cash_flow.begin()
-        ,std::plus<double>()
-        );
-
-    cash_flow.pop_back(); // Here we no longer need cash_flow[omega].
-
-    // ET !! std::vector<double> csv_plus_claims = Curr_.CSVNet + real_claims;
-    std::vector<double> csv_plus_claims(Curr_.CSVNet);
-    std::transform
-        (csv_plus_claims.begin()
-        ,csv_plus_claims.end()
-        ,real_claims.begin()
-        ,csv_plus_claims.begin()
-        ,std::plus<double>()
-        );
-// TODO ?? Is this irr valid? What about the preceding one--should it
-// be based on 'real_claims' initialized to 'DeathProceedsPaid'
-// instead of to 'ClaimsPaid'? And if so, should a 'DeathProceedsPaid'
-// column be shown here?
-    std::vector<double> irr_on_surrender(Curr_.CSVNet.size());
-    if(!Invar.IsInforce)
-        {
-        irr
-            (cash_flow
-            ,csv_plus_claims
-            ,irr_on_surrender
-            ,static_cast<std::vector<double>::size_type>(Curr_.LapseYear)
-            ,max_length
-            ,Invar.irr_precision
-            );
-
-#ifdef DEBUGGING_IRR
-std::ofstream os("irr.txt", ios_out_app_binary());
-os
-<< "  PrintFormTabDelimited():\n"
-        << "\n\tcash_flow.size() = " << cash_flow.size()
-        << "\n\tcsv_plus_claims.size() = " << csv_plus_claims.size()
-        << "\n\tirr_on_surrender.size() = " << irr_on_surrender.size()
-        << "\n\tCurr_.LapseYear = " << Curr_.LapseYear
-        << "\n\tmax_length = " << max_length
-        ;
-os << "\n\tcash_flow = ";
-std::copy(cash_flow.begin(), cash_flow.end(), std::ostream_iterator<double>(os, " "));
-os << "\n\tcsv_plus_claims = ";
-std::copy(csv_plus_claims.begin(), csv_plus_claims.end(), std::ostream_iterator<double>(os, " "));
-os << "\n\tirr_on_surrender = ";
-std::copy(irr_on_surrender.begin(), irr_on_surrender.end(), std::ostream_iterator<double>(os, " "));
-os << "\n\n" ;
-#endif // DEBUGGING_IRR
-        }
-
-    // ET !! std::vector<double> db_plus_claims = Curr_.EOYDeathBft + real_claims;
-    std::vector<double> db_plus_claims(Curr_.EOYDeathBft);
-    std::transform
-        (db_plus_claims.begin()
-        ,db_plus_claims.end()
-        ,real_claims.begin()
-        ,db_plus_claims.begin()
-        ,std::plus<double>()
-        );
-    std::vector<double> irr_on_death(Curr_.EOYDeathBft.size(), -1.0);
-    if(!Invar.IsInforce)
-        {
-        irr
-            (cash_flow
-            ,db_plus_claims
-            ,irr_on_death
-            ,static_cast<std::vector<double>::size_type>(Curr_.LapseYear)
-            ,max_length
-            ,Invar.irr_precision
-            );
+        unclean.IrrCsvCurrInput.resize(max_length);
+        unclean.IrrDbCurrInput .resize(max_length);
         }
 
     std::ofstream os(file_name.c_str(), ios_out_app_binary());
@@ -579,8 +485,8 @@ os << "\n\n" ;
             }
         else
             {
-            os << irr_on_surrender[j]                     << '\t';
-            os << irr_on_death[j]                         << '\t';
+            os << Invar.IrrCsvCurrInput               [j] << '\t';
+            os << Invar.IrrDbCurrInput                [j] << '\t';
             }
 
         // First element of InforceLives is BOY--show only EOY.
