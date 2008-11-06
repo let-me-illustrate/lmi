@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.51 2008-10-28 03:57:24 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.52 2008-11-06 15:22:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -524,37 +524,16 @@ os << "\n\n" ;
         ,"ProducerCompensation"
         };
 
-    std::vector<std::vector<std::string> > sheaders;
-
-    std::vector<std::string>::size_type max_header_rows = 0U;
-    for(unsigned int j = 0; j < lmi_array_size(cheaders); ++j)
+    std::vector<std::string> const sheaders
+        (cheaders
+        ,cheaders + lmi_array_size(cheaders)
+        );
+    typedef std::vector<std::string>::const_iterator vsi;
+    for(vsi i = sheaders.begin(); i != sheaders.end(); ++i)
         {
-        std::istringstream iss(cheaders[j]);
-        std::vector<std::string> v;
-        std::copy
-            (std::istream_iterator<std::string>(iss)
-            ,std::istream_iterator<std::string>()
-            ,std::back_inserter(v)
-            );
-        sheaders.push_back(v);
-        max_header_rows = std::max(max_header_rows, v.size());
+        os << *i << '\t';
         }
-    std::vector<std::vector<std::string> >::iterator shi;
-    for(shi = sheaders.begin(); shi != sheaders.end(); ++shi)
-        {
-        std::reverse(shi->begin(), shi->end());
-        shi->resize(max_header_rows);
-        std::reverse(shi->begin(), shi->end());
-        }
-    for(unsigned int j = 0; j < max_header_rows; ++j)
-        {
-        for(shi = sheaders.begin(); shi != sheaders.end(); ++shi)
-            {
-            os << (*shi)[j] << '\t';
-            }
-        os << '\n';
-        }
-    os << '\n';
+    os << "\n\n";
 
     for(int j = 0; j < max_length; ++j)
         {
