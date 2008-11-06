@@ -19,16 +19,17 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_test.cpp,v 1.13 2008-11-03 21:33:15 chicares Exp $
+// $Id: ledger_test.cpp,v 1.14 2008-11-06 14:28:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-// Facilities offered by both these headers are tested here.
+// Facilities offered by all of these headers are tested here.
 #include "ledger.hpp"
 #include "ledger_formatter.hpp"
+#include "ledger_text_formats.hpp"
 
 #include "account_value.hpp"
 #include "assert_lmi.hpp"
@@ -39,6 +40,7 @@
 #include "test_tools.hpp"
 
 #include <boost/filesystem/fstream.hpp>
+#include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/shared_ptr.hpp>
 
@@ -54,11 +56,18 @@ class LedgerTest
     void ValidateFile(fs::path const&, char const* file, int line) const;
 
   private:
+    fs::path dir_cxx_;
+    fs::path dir_xsl_;
     boost::shared_ptr<Ledger const> ledger_;
 };
 
 LedgerTest::LedgerTest()
+    :dir_cxx_("eraseme_cxx")
+    ,dir_xsl_("eraseme_xsl")
 {
+    fs::create_directory(dir_cxx_);
+    fs::create_directory(dir_xsl_);
+
     global_settings::instance().set_data_directory("/opt/lmi/data");
     global_settings::instance().set_regression_testing(true);
 
@@ -72,9 +81,7 @@ LedgerTest::LedgerTest()
     } // End fenv_guard scope.
 }
 
-/// This test compares the files it creates to touchstones that, for
-/// now at least, are saved in a particular directory, but in the
-/// future might be put in cvs.
+/// Compare different methods of writing ledger output.
 
 void LedgerTest::Test() const
 {
@@ -82,34 +89,56 @@ void LedgerTest::Test() const
     Ledger const& ledger = *ledger_.get();
 
     fs::path filepath0("sample.xml");
-    fs::ofstream ofs0(filepath0, ios_out_trunc_binary());
-    ledger.write(ofs0);
-    BOOST_TEST(ofs0.good());
-    ofs0.close();
+    // 'ledger_xml_io.cpp'
+    fs::ofstream ofs0cxx(dir_cxx_ / filepath0, ios_out_trunc_binary());
+    ledger.write(ofs0cxx);
+    BOOST_TEST(ofs0cxx.good());
+    ofs0cxx.close();
+    // 'ledger_xml_io2.cpp'
+    fs::ofstream ofs0xsl(dir_xsl_ / filepath0, ios_out_trunc_binary());
+    ledger.writeXXX(ofs0xsl);
+    BOOST_TEST(ofs0xsl.good());
+    ofs0xsl.close();
     ValidateFile(filepath0, __FILE__, __LINE__);
 
     LedgerFormatterFactory& factory = LedgerFormatterFactory::Instance();
     LedgerFormatter ledger_formatter = factory.CreateFormatter(ledger);
 
     fs::path filepath1("calculation_summary.html");
-    fs::ofstream ofs1(filepath1, ios_out_trunc_binary());
-    ledger_formatter.FormatAsHtml(ofs1);
-    BOOST_TEST(ofs1.good());
-    ofs1.close();
+    // C++
+    fs::ofstream ofs1cxx(dir_cxx_ / filepath1, ios_out_trunc_binary());
+    ofs1cxx << FormatSelectedValuesAsHtml(ledger);
+    BOOST_TEST(ofs1cxx.good());
+    ofs1cxx.close();
+    // xslt
+    fs::ofstream ofs1xsl(dir_xsl_ / filepath1, ios_out_trunc_binary());
+    ledger_formatter.FormatAsHtml(ofs1xsl);
+    BOOST_TEST(ofs1xsl.good());
+    ofs1xsl.close();
     ValidateFile(filepath1, __FILE__, __LINE__);
 
     fs::path filepath2("calculation_summary.tsv");
-    fs::ofstream ofs2(filepath2, ios_out_trunc_binary());
-    ledger_formatter.FormatAsLightTSV(ofs2);
-    BOOST_TEST(ofs2.good());
-    ofs2.close();
+    // C++
+    fs::ofstream ofs2cxx(dir_cxx_ / filepath2, ios_out_trunc_binary());
+// Not yet implemented.
+    BOOST_TEST(ofs2cxx.good());
+    ofs2cxx.close();
+    // xslt
+    fs::ofstream ofs2xsl(dir_xsl_ / filepath2, ios_out_trunc_binary());
+    ledger_formatter.FormatAsLightTSV(ofs2xsl);
+    BOOST_TEST(ofs2xsl.good());
+    ofs2xsl.close();
     ValidateFile(filepath2, __FILE__, __LINE__);
 
     fs::path filepath3("microcosm.tsv");
-    fs::ofstream ofs3(filepath3, ios_out_trunc_binary());
-    ledger_formatter.FormatAsTabDelimited(ofs3);
-    BOOST_TEST(ofs3.good());
-    ofs3.close();
+    // C++
+    std::remove((dir_cxx_ / filepath3).string().c_str());
+    PrintFormTabDelimited(ledger, (dir_cxx_ / filepath3).string());
+    // xslt
+    fs::ofstream ofs3xsl(dir_xsl_ / filepath3, ios_out_trunc_binary());
+    ledger_formatter.FormatAsTabDelimited(ofs3xsl);
+    BOOST_TEST(ofs3xsl.good());
+    ofs3xsl.close();
     ValidateFile(filepath3, __FILE__, __LINE__);
 }
 
@@ -119,19 +148,16 @@ void LedgerTest::ValidateFile
     ,int line
     ) const
 {
-    fs::path testpath("/opt/lmi/stuff");
-    fs::path testfile = testpath / p;
-    bool okay = files_are_identical(p.string(), testfile.string());
+    std::string const file_cxx((dir_cxx_ / p).string());
+    std::string const file_xsl((dir_xsl_ / p).string());
+    bool okay = files_are_identical(file_cxx, file_xsl);
 
     INVOKE_BOOST_TEST(okay, file, line);
     // Leave the file for analysis if it didn't match.
     if(okay)
         {
-        INVOKE_BOOST_TEST
-            (0 == std::remove(p.string().c_str())
-            ,file
-            ,line
-            );
+        INVOKE_BOOST_TEST(0 == std::remove(file_cxx.c_str()), file, line);
+        INVOKE_BOOST_TEST(0 == std::remove(file_xsl.c_str()), file, line);
         }
 }
 
