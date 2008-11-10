@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.54 2008-11-06 16:31:21 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.55 2008-11-10 20:47:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -202,11 +202,11 @@ std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values)
         oss
             << "Calculation summary for: "
             << Invar.Insured1
-            << "<br>"
+            << "<br>\n"
             << Invar.Gender << ", " << Invar.Smoker
             << std::setprecision(0)
             << ", age " << Invar.Age
-            << ", " << Invar.GetStatePostalAbbrev() << " jurisdiction\n"
+            << ", " << Invar.GetStatePostalAbbrev() << " jurisdiction"
             << "<br>\n"
             ;
         if(Invar.IsMec)
@@ -217,7 +217,7 @@ std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values)
             {
             oss << "Not a MEC";
             }
-        oss << "</p>\n";
+        oss << "\n</p>\n";
 
         oss << "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n";
         if(is_subject_to_ill_reg(ledger_values.GetLedgerType()))
