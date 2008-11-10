@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.55 2008-11-10 20:47:24 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.56 2008-11-10 22:55:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -127,43 +127,64 @@ std::map<std::string,ledger_metadata> const& ledger_metadata_map()
 
     return m;
 }
-} // Unnamed namespace.
 
-std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values)
+class calculation_summary_formatter
+    :private boost::noncopyable
+    ,virtual private obstruct_slicing<calculation_summary_formatter>
 {
-    std::vector<std::string> columns = effective_calculation_summary_columns();
+  public:
+    calculation_summary_formatter(Ledger const&);
+    ~calculation_summary_formatter();
+
+    std::string format_as_html() const;
+    std::string format_as_tsv () const;
+
+    std::string top_note(std::string const& line_break) const;
+
+  private:
+    Ledger          const&   ledger_;
+    LedgerInvariant const&   invar_;
+    int             const    max_length_;
+    std::vector<std::string> columns_;
+};
+
+calculation_summary_formatter::calculation_summary_formatter
+    (Ledger const& ledger_values
+    )
+    :ledger_    (ledger_values)
+    ,invar_     (ledger_values.GetLedgerInvariant())
+    ,max_length_(ledger_values.GetMaxLength())
+{
+    columns_ = effective_calculation_summary_columns();
     std::vector<std::string>::iterator p = std::find
-        (columns.begin()
-        ,columns.end()
+        (columns_.begin()
+        ,columns_.end()
         ,"PolicyYear"
         );
     // TODO ?? This should be done in effective_calculation_summary_columns(),
     // but that requires a difficult-to-test change in 'ledger_xml_io2.cpp'.
     // As long as "PolicyYear" is always the first column, it shouldn't be
     // offered for selection anyway.
-    if(columns.end() != p)
+    if(columns_.end() != p)
         {
-        columns.erase(p);
+        columns_.erase(p);
         }
-    columns.insert(columns.begin(), "PolicyYear");
+    columns_.insert(columns_.begin(), "PolicyYear");
 
-    LedgerInvariant const& Invar = ledger_values.GetLedgerInvariant();
-    int max_length = ledger_values.GetMaxLength();
-
-    unsigned int const length = Invar.GetLength();
-    if(length != Invar.IrrCsvCurrInput.size())
+    unsigned int const length = invar_.GetLength();
+    if(length != invar_.IrrCsvCurrInput.size())
         {
         // TODO ?? This const_cast is safe, but it's still unclean.
-        LedgerInvariant& unclean = const_cast<LedgerInvariant&>(Invar);
+        LedgerInvariant& unclean = const_cast<LedgerInvariant&>(invar_);
         bool want_any_irr =
-               columns.end() != std::find(columns.begin(), columns.end(), "IrrCsv_Current"   )
-            || columns.end() != std::find(columns.begin(), columns.end(), "IrrCsv_Guaranteed")
-            || columns.end() != std::find(columns.begin(), columns.end(), "IrrDb_Current"    )
-            || columns.end() != std::find(columns.begin(), columns.end(), "IrrDb_Guaranteed" )
+               columns_.end() != std::find(columns_.begin(), columns_.end(), "IrrCsv_Current"   )
+            || columns_.end() != std::find(columns_.begin(), columns_.end(), "IrrCsv_Guaranteed")
+            || columns_.end() != std::find(columns_.begin(), columns_.end(), "IrrDb_Current"    )
+            || columns_.end() != std::find(columns_.begin(), columns_.end(), "IrrDb_Guaranteed" )
             ;
-        if(want_any_irr && !Invar.IsInforce)
+        if(want_any_irr && !invar_.IsInforce)
             {
-            unclean.CalculateIrrs(ledger_values);
+            unclean.CalculateIrrs(ledger_);
             }
         else
             {
@@ -173,7 +194,51 @@ std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values)
             unclean.IrrDbGuarInput .resize(length);
             }
         }
+}
 
+calculation_summary_formatter::~calculation_summary_formatter()
+{
+}
+
+std::string calculation_summary_formatter::top_note
+    (std::string const& line_break
+    ) const
+{
+    std::ostringstream oss;
+    oss.setf(std::ios_base::fixed, std::ios_base::floatfield);
+
+    if(ledger_.GetIsComposite())
+        {
+        oss << "Composite calculation summary\n";
+        }
+    else
+        {
+        oss
+            << "Calculation summary for: "
+            << invar_.Insured1
+            << line_break
+            << invar_.Gender << ", " << invar_.Smoker
+            << std::setprecision(0)
+            << ", age " << invar_.Age
+            << ", " << invar_.GetStatePostalAbbrev() << " jurisdiction"
+            << line_break
+            ;
+        if(invar_.IsMec)
+            {
+            oss << "MEC in policy year " << 1 + invar_.MecYear;
+            }
+        else
+            {
+            oss << "Not a MEC";
+            }
+        oss << '\n';
+        }
+
+    return oss.str();
+}
+
+std::string calculation_summary_formatter::format_as_html() const
+{
     std::ostringstream oss;
 
     std::locale loc;
@@ -192,42 +257,19 @@ std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values)
         << "<body>\n"
         ;
 
-    if(ledger_values.GetIsComposite())
-        {
-        oss << "<p>Composite calculation summary</p>\n";
-        }
-    else
-        {
-        oss << "<p>\n";
-        oss
-            << "Calculation summary for: "
-            << Invar.Insured1
-            << "<br>\n"
-            << Invar.Gender << ", " << Invar.Smoker
-            << std::setprecision(0)
-            << ", age " << Invar.Age
-            << ", " << Invar.GetStatePostalAbbrev() << " jurisdiction"
-            << "<br>\n"
-            ;
-        if(Invar.IsMec)
-            {
-            oss << "MEC in policy year " << 1 + Invar.MecYear;
-            }
-        else
-            {
-            oss << "Not a MEC";
-            }
-        oss << "\n</p>\n";
+    oss << "<p>\n" << top_note("<br>\n") << "</p>\n";
 
+    if(!ledger_.GetIsComposite())
+        {
         oss << "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n";
-        if(is_subject_to_ill_reg(ledger_values.GetLedgerType()))
+        if(is_subject_to_ill_reg(ledger_.GetLedgerType()))
             {
             oss
             << "<tr>\n"
             << "  <td align=\"right\" nowrap></td>\n"
             << "  <td align=\"left\"  nowrap></td>\n"
             << std::setprecision(2)
-            << "  <td align=\"right\" nowrap>" << Invar.GuarPrem         << "</td>\n"
+            << "  <td align=\"right\" nowrap>" << invar_.GuarPrem         << "</td>\n"
             << "  <td align=\"left\"  nowrap>&nbsp;guaranteed premium</td>\n"
             << "</tr>\n"
             ;
@@ -237,63 +279,63 @@ std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values)
             << "  <td align=\"right\" nowrap></td>\n"
             << "  <td align=\"left\"  nowrap></td>\n"
             << std::setprecision(2)
-            << "  <td align=\"right\" nowrap>" << Invar.InitGLP          << "</td>\n"
+            << "  <td align=\"right\" nowrap>" << invar_.InitGLP          << "</td>\n"
             << "  <td align=\"left\"  nowrap>&nbsp;initial guideline level premium</td>\n"
             << "</tr>\n"
             << "<tr>\n"
             << std::setprecision(0)
-            << "  <td align=\"right\" nowrap>" << Invar.InitBaseSpecAmt  << "</td>\n"
+            << "  <td align=\"right\" nowrap>" << invar_.InitBaseSpecAmt  << "</td>\n"
             << "  <td align=\"left\"  nowrap>&nbsp;initial base specified amount</td>\n"
             << std::setprecision(2)
-            << "  <td align=\"right\" nowrap>" << Invar.InitGSP          << "</td>\n"
+            << "  <td align=\"right\" nowrap>" << invar_.InitGSP          << "</td>\n"
             << "  <td align=\"left\"  nowrap>&nbsp;initial guideline single premium</td>\n"
             << "</tr>\n"
             << "<tr>\n"
             << std::setprecision(0)
-            << "  <td align=\"right\" nowrap>" << Invar.InitTermSpecAmt << "</td>\n"
+            << "  <td align=\"right\" nowrap>" << invar_.InitTermSpecAmt << "</td>\n"
             << "  <td align=\"left\"  nowrap>&nbsp;initial term specified amount</td>\n"
             << std::setprecision(2)
-            << "  <td align=\"right\" nowrap>" << Invar.InitSevenPayPrem << "</td>\n"
+            << "  <td align=\"right\" nowrap>" << invar_.InitSevenPayPrem << "</td>\n"
             << "  <td align=\"left\"  nowrap>&nbsp;initial seven-pay premium</td>\n"
             << "</tr>\n"
             << "<tr>\n"
             << std::setprecision(0)
-            << "  <td align=\"right\" nowrap>" << Invar.InitBaseSpecAmt + Invar.InitTermSpecAmt << "</td>\n"
+            << "  <td align=\"right\" nowrap>" << invar_.InitBaseSpecAmt + invar_.InitTermSpecAmt << "</td>\n"
             << "  <td align=\"left\"  nowrap>&nbsp;initial total specified amount</td>\n"
             << std::setprecision(2)
-            << "  <td align=\"right\" nowrap>" << Invar.InitTgtPrem      << "</td>\n"
+            << "  <td align=\"right\" nowrap>" << invar_.InitTgtPrem      << "</td>\n"
             << "  <td align=\"left\"  nowrap>&nbsp;initial target premium</td>\n"
             << "</tr>\n"
             << "</table>\n"
             ;
         }
 
-    std::string const width = value_cast<std::string>(100 / columns.size());
+    std::string const width = value_cast<std::string>(100 / columns_.size());
     typedef std::vector<std::string>::const_iterator vsci;
     oss
         << "<hr>\n"
         << "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n"
         << "<tr align=\"right\">\n"
         ;
-    for(vsci i = columns.begin(); i != columns.end(); ++i)
+    for(vsci i = columns_.begin(); i != columns_.end(); ++i)
         {
         ledger_metadata const& z = map_lookup(ledger_metadata_map(), *i);
         oss << "<th valign=\"bottom\" width=\"" << width << "%\">" << z.legend_ << "</th>\n";
         }
     oss << "</tr>\n";
 
-    for(int j = 0; j < max_length; ++j)
+    for(int j = 0; j < max_length_; ++j)
         {
         if(0 == j % 5)
             {
             oss << "<tr><td><br></td></tr>\n";
             }
         oss << "<tr align=\"right\">\n";
-        for(vsci i = columns.begin(); i != columns.end(); ++i)
+        for(vsci i = columns_.begin(); i != columns_.end(); ++i)
             {
             ledger_metadata const& z = map_lookup(ledger_metadata_map(), *i);
             std::string s = ledger_format
-                (numeric_vector(ledger_values, *i)[j]
+                (numeric_vector(ledger_, *i)[j]
                 ,std::make_pair(z.decimals_, z.style_)
                 );
             oss << "<td nowrap>&nbsp;&nbsp;&nbsp;" << s << "</td>\n";
@@ -307,6 +349,14 @@ std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values)
         << "</html>\n"
         ;
     return oss.str();
+}
+} // Unnamed namespace.
+
+/// Write calculation summary to an html string.
+
+std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values)
+{
+    return calculation_summary_formatter(ledger_values).format_as_html();
 }
 
 /// Write ledger to a tab-delimited file suitable for spreadsheets.
