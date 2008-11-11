@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.90 2008-10-28 23:42:31 chicares Exp $
+// $Id: illustration_view.cpp,v 1.91 2008-11-11 08:46:39 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -311,12 +311,13 @@ void IllustrationView::UponUpdateProperties(wxUpdateUIEvent& e)
 
 void IllustrationView::CopyLedgerToClipboard(enum_copy_option option)
 {
+    LMI_ASSERT(ledger_values_.get());
+
     Timer timer;
 
     std::ostringstream oss;
     if(e_copy_full == option)
         {
-        LMI_ASSERT(ledger_values_.get());
 if(std::string::npos != global_settings::instance().pyx().find("new") || global_settings::instance().pyx().empty())
 {
         std::string spreadsheet_filename =
@@ -338,6 +339,13 @@ return;
     // that the enumeration has exactly two enumerators.
     else
         {
+if(std::string::npos != global_settings::instance().pyx().find("new") || global_settings::instance().pyx().empty())
+{
+        std::string s = FormatSelectedValuesAsTsv(*ledger_values_);
+        ClipboardEx::SetText(s);
+        status() << "Format: " << timer.stop().elapsed_msec_str() << std::flush;
+return;
+}
         ledger_formatter_.FormatAsLightTSV(oss);
         }
 

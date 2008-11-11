@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1199 2008-11-06 16:31:22 chicares Exp $
+// $Id: ChangeLog,v 1.1200 2008-11-11 08:46:39 chicares Exp $
 
 MAINTENANCE
 
@@ -20274,4 +20274,26 @@ such discrepancy because it runs a single isolated cell.
 
   ledger_text_formats.cpp
 Validate output-stream state; improve documentation.
+
+20081110T2047Z <gchicares@sbcglobal.net> [958]
+
+  ledger_text_formats.cpp
+Write clearer but equivalent html.
+
+20081110T2255Z <gchicares@sbcglobal.net> [958]
+
+  ledger_text_formats.cpp
+Refactor.
+
+20081111T0105Z <gchicares@sbcglobal.net> [958]
+
+  ledger_test.cpp
+  ledger_text_formats.cpp
+  ledger_text_formats.hpp
+Add and test C++ code to write calculation summary as TSV.
+
+20081111T0846Z <gchicares@sbcglobal.net> [958]
+
+  illustration_view.cpp
+Use 20081111T0105Z code to copy calculation summary to clipboard.
 
