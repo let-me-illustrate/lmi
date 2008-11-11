@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_test.cpp,v 1.14 2008-11-06 14:28:21 chicares Exp $
+// $Id: ledger_test.cpp,v 1.15 2008-11-11 01:05:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -120,7 +120,7 @@ void LedgerTest::Test() const
     fs::path filepath2("calculation_summary.tsv");
     // C++
     fs::ofstream ofs2cxx(dir_cxx_ / filepath2, ios_out_trunc_binary());
-// Not yet implemented.
+    ofs2cxx << FormatSelectedValuesAsTsv(ledger);
     BOOST_TEST(ofs2cxx.good());
     ofs2cxx.close();
     // xslt
