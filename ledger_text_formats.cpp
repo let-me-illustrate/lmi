@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.56 2008-11-10 22:55:21 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.57 2008-11-11 01:05:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -350,6 +350,81 @@ std::string calculation_summary_formatter::format_as_html() const
         ;
     return oss.str();
 }
+
+std::string calculation_summary_formatter::format_as_tsv() const
+{
+    std::ostringstream oss;
+
+    std::locale loc;
+    std::locale new_loc(loc, new comma_punct);
+    oss.imbue(new_loc);
+    oss.setf(std::ios_base::fixed, std::ios_base::floatfield);
+
+    oss << "\n\nFOR BROKER-DEALER USE ONLY. NOT TO BE SHARED WITH CLIENTS.\n\n";
+
+    oss << top_note("\n") << '\n';
+
+    if(!ledger_.GetIsComposite())
+        {
+        if(is_subject_to_ill_reg(ledger_.GetLedgerType()))
+            {
+            oss
+            << std::setprecision(2)
+            << invar_.GuarPrem
+            << "\tguaranteed premium\n"
+            ;
+            }
+        oss
+            << std::setprecision(2)
+            << invar_.InitGLP
+            << "\tinitial guideline level premium\n"
+            << std::setprecision(2)
+            << invar_.InitGSP
+            << "\tinitial guideline single premium\n"
+            << std::setprecision(2)
+            << invar_.InitSevenPayPrem
+            << "\tinitial seven-pay premium\n"
+            << std::setprecision(2)
+            << invar_.InitTgtPrem
+            << "\tinitial target premium\n"
+            << std::setprecision(0)
+            << invar_.InitBaseSpecAmt
+            << "\tinitial base specified amount\n"
+            << std::setprecision(0)
+            << invar_.InitTermSpecAmt
+            << "\tinitial term specified amount\n"
+            << std::setprecision(0)
+            << invar_.InitBaseSpecAmt + invar_.InitTermSpecAmt
+            << "\tinitial total specified amount\n"
+            ;
+        }
+
+    std::string const width = value_cast<std::string>(100 / columns_.size());
+    typedef std::vector<std::string>::const_iterator vsci;
+    oss << '\n';
+    for(vsci i = columns_.begin(); i != columns_.end(); ++i)
+        {
+        ledger_metadata const& z = map_lookup(ledger_metadata_map(), *i);
+        oss << z.legend_ << '\t';
+        }
+    oss << '\n';
+
+    for(int j = 0; j < max_length_; ++j)
+        {
+        for(vsci i = columns_.begin(); i != columns_.end(); ++i)
+            {
+            ledger_metadata const& z = map_lookup(ledger_metadata_map(), *i);
+            std::string s = ledger_format
+                (numeric_vector(ledger_, *i)[j]
+                ,std::make_pair(z.decimals_, z.style_)
+                );
+            oss << s << '\t';
+            }
+        oss << '\n';
+        }
+
+    return oss.str();
+}
 } // Unnamed namespace.
 
 /// Write calculation summary to an html string.
@@ -357,6 +432,13 @@ std::string calculation_summary_formatter::format_as_html() const
 std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values)
 {
     return calculation_summary_formatter(ledger_values).format_as_html();
+}
+
+/// Write calculation summary to a tab-delimited string.
+
+std::string FormatSelectedValuesAsTsv(Ledger const& ledger_values)
+{
+    return calculation_summary_formatter(ledger_values).format_as_tsv();
 }
 
 /// Write ledger to a tab-delimited file suitable for spreadsheets.
