@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.hpp,v 1.28 2008-11-13 20:40:15 chicares Exp $
+// $Id: ledger.hpp,v 1.29 2008-11-13 21:37:12 chicares Exp $
 
 #ifndef ledger_hpp
 #define ledger_hpp
@@ -115,7 +115,8 @@ class LMI_SO Ledger
     virtual int class_version() const;
     virtual std::string xml_root_name() const;
 
-    void write(std::ostream& os) const;
+    void write       (std::ostream& os) const;
+    void write_xsl_fo(std::ostream& os) const;
 
     void write_excerpt(xml::element&, enum_xml_version) const;
 
