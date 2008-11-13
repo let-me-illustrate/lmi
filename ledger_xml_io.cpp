@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.80 2008-10-22 16:16:28 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.81 2008-11-13 21:37:12 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -33,12 +33,14 @@
 #include "ledger_invariant.hpp"
 #include "ledger_text_formats.hpp"
 #include "ledger_variant.hpp"
+#include "ledger_xsl.hpp"
 #include "mc_enum_aux.hpp" // mc_e_vector_to_string_vector()
 #include "miscellany.hpp"
 #include "oecumenic_enumerations.hpp"
 #include "value_cast.hpp"
 #include "version.hpp"
 #include "xml_lmi.hpp"
+#include "xslt_lmi.hpp"
 
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
@@ -1039,5 +1041,25 @@ void Ledger::write(std::ostream& os) const
         );
     os << s;
 #endif // !defined LMI_USE_NEW_REPORTS
+}
+
+void Ledger::write_xsl_fo(std::ostream& os) const
+{
+    // Scale a copy of the 'ledger' argument. The original must not be
+    // modified because scaling is not reentrant. However, copying
+    // does not prevent that problem here, because what is scaled is
+    // actually not copied due to use of shared_ptr; see comment on
+    //   https://savannah.nongnu.org/bugs/?13599
+    // in the ledger-class implementation.
+    Ledger scaled_ledger(*this);
+    scaled_ledger.AutoScale();
+
+    xml_lmi::xml_document document(xml_root_name());
+    document.root_node() << scaled_ledger;
+    xslt_lmi::Stylesheet(xsl_filepath(scaled_ledger).string()).transform
+        (document.document()
+        ,os
+        ,xslt_lmi::Stylesheet::e_output_xml
+        );
 }
 
