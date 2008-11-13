@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_test.cpp,v 1.15 2008-11-11 01:05:12 chicares Exp $
+// $Id: ledger_test.cpp,v 1.16 2008-11-13 21:37:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -140,6 +140,19 @@ void LedgerTest::Test() const
     BOOST_TEST(ofs3xsl.good());
     ofs3xsl.close();
     ValidateFile(filepath3, __FILE__, __LINE__);
+
+    fs::path filepath4("sample.fo.xml");
+    // 'ledger_xml_io.cpp'
+    fs::ofstream ofs4cxx(dir_cxx_ / filepath4, ios_out_trunc_binary());
+    ledger.write_xsl_fo(ofs4cxx);
+    BOOST_TEST(ofs4cxx.good());
+    ofs4cxx.close();
+    // 'ledger_xml_io2.cpp' and 'ledger_formatter.cpp'
+    fs::ofstream ofs4xsl(dir_xsl_ / filepath4, ios_out_trunc_binary());
+    ledger_formatter.FormatAsXslFo(ofs4xsl);
+    BOOST_TEST(ofs4xsl.good());
+    ofs4xsl.close();
+    ValidateFile(filepath4, __FILE__, __LINE__);
 }
 
 void LedgerTest::ValidateFile
