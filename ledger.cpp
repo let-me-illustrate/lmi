@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.cpp,v 1.29 2008-10-28 03:26:20 chicares Exp $
+// $Id: ledger.cpp,v 1.30 2008-11-13 20:27:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -61,17 +61,6 @@
 //   Ledger ScaledLedger() const;
 // yet would that double the memory requirements when a container of
 // ledgers must be retained?
-//
-// Composites typically have zeros in all columns for numerous years
-// at the end, which is a defect for printing at least. Perhaps
-//   ApplyScaleFactor()
-// (implemented elsewhere) should be augmented (and renamed) to
-// serve the more general purpose of preparing a ledger for printing;
-// then, it might truncate every column to GetMaxLength() (which has
-// documented problems of its own). Or perhaps this truncation should
-// be a separate function, which could then be applied even for the
-// composite output used for regression testing. Is it only the
-// composite which stands in need of truncation?
 
 //============================================================================
 Ledger::Ledger
