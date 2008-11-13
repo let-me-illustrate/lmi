@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.cpp,v 1.30 2008-11-13 20:27:31 chicares Exp $
+// $Id: ledger.cpp,v 1.31 2008-11-13 20:40:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -39,10 +39,8 @@
 #include <algorithm>
 #include <ostream>
 
-// TODO ?? Doubts and shortcomings:
-//
-// Is it really a good idea to have shared_ptr data members? If so,
-// should there be a member function
+// TODO ?? Is it really a good idea to have shared_ptr data members?
+// If so, should there be a member function
 //   Ledger Ledger::Clone() const
 //   {
 //       Ledger new_ledger(*this);
@@ -61,6 +59,10 @@
 //   Ledger ScaledLedger() const;
 // yet would that double the memory requirements when a container of
 // ledgers must be retained?
+//
+// See this discussion
+//   https://savannah.nongnu.org/bugs/?13599
+// of a demonstrable problem stemming from this defect.
 
 //============================================================================
 Ledger::Ledger

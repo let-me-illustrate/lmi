@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.hpp,v 1.27 2008-10-25 19:34:21 chicares Exp $
+// $Id: ledger.hpp,v 1.28 2008-11-13 20:40:15 chicares Exp $
 
 #ifndef ledger_hpp
 #define ledger_hpp
@@ -54,8 +54,10 @@
 /// data structure.
 ///
 /// The implicitly-defined copy ctor and copy assignment operator do
-/// the right thing. TODO ?? However, the "right thing" may be somewhat
-/// surprising if the shared_ptr members are misunderstood.
+/// the right thing. However, the "right thing" may be somewhat
+/// surprising due to the shared_ptr members; see the comment on
+///   https://savannah.nongnu.org/bugs/?13599
+/// in the implementation file.
 
 class LedgerInvariant;
 class LedgerVariant;
