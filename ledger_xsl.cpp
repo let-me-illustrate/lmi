@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.32 2008-11-14 04:42:18 chicares Exp $
+// $Id: ledger_xsl.cpp,v 1.33 2008-11-14 05:06:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -129,6 +129,13 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath, 
     fs::path xml_out_file = unique_filepath(print_dir / real_filepath, ".fo.xml");
 
     fs::ofstream ofs(xml_out_file, ios_out_trunc_binary());
+
+if(std::string::npos != global_settings::instance().pyx().find("new") || global_settings::instance().pyx().empty())
+{
+    ledger.write_xsl_fo(ofs);
+}
+else
+{
     // Scale a copy of the 'ledger' argument. The original must not be
     // modified because scaling is not reentrant. However, copying
     // does not prevent that problem here, because what is scaled is
@@ -152,6 +159,7 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath, 
 #else  // !defined LMI_USE_NEW_REPORTS
     scaled_ledger.write(ofs);
 #endif // !defined LMI_USE_NEW_REPORTS
+}
     ofs.close();
 
     fs::path xsl_file = xsl_filepath(ledger);
@@ -230,12 +238,19 @@ void write_ledger_as_fo_xml(Ledger const& ledger, fs::path const& filepath)
     fs::path out_file(filepath.string() + ".fo.xml");
     fs::ofstream ofs(out_file, ios_out_trunc_binary());
 
+if(std::string::npos != global_settings::instance().pyx().find("new") || global_settings::instance().pyx().empty())
+{
+    ledger.write_xsl_fo(ofs);
+}
+else
+{
     Ledger scaled_ledger(ledger);
     scaled_ledger.AutoScale();
 
     LedgerFormatterFactory& factory = LedgerFormatterFactory::Instance();
     LedgerFormatter formatter(factory.CreateFormatter(scaled_ledger));
     formatter.FormatAsXslFo(ofs);
+}
 }
 
 // EVGENIY !! Here's my testcase:
