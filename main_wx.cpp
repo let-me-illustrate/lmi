@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.123 2008-10-26 15:28:30 chicares Exp $
+// $Id: main_wx.cpp,v 1.124 2008-11-14 05:11:35 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -657,10 +657,9 @@ bool Skeleton::OnInit()
         InitMenuBar();
         InitToolBar();
         frame_->CreateStatusBar();
-    // FSF !! Need to implement this in a generic way for GNU/linux.
-#ifdef LMI_MSW
+#if defined LMI_MSW || wxCHECK_VERSION(2,8,10)
         frame_->DragAcceptFiles(true);
-#endif // LMI_MSW defined.
+#endif // defined LMI_MSW || wxCHECK_VERSION(2,8,10)
         frame_->Centre(wxBOTH);
         frame_->Maximize(true);
 
