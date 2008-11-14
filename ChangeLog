@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1200 2008-11-11 08:46:39 chicares Exp $
+// $Id: ChangeLog,v 1.1201 2008-11-14 05:11:35 chicares Exp $
 
 MAINTENANCE
 
@@ -20296,4 +20296,41 @@ Add and test C++ code to write calculation summary as TSV.
 
   illustration_view.cpp
 Use 20081111T0105Z code to copy calculation summary to clipboard.
+
+20081113T2027Z <gchicares@sbcglobal.net> [958]
+
+  ledger.cpp
+Remove discussion of defects that were fixed long ago. See:
+  https://savannah.nongnu.org/bugs/index.php?13655
+  https://savannah.nongnu.org/bugs/index.php?13656
+
+20081113T2040Z <gchicares@sbcglobal.net> [956]
+
+  ledger.cpp
+  ledger.hpp
+  ledger_xsl.cpp
+Mark a particular defect once and only once. See:
+  https://savannah.nongnu.org/bugs/?13599
+
+20081113T2137Z <gchicares@sbcglobal.net> [956]
+
+  ledger.hpp
+  ledger_test.cpp
+  ledger_xml_io.cpp
+Add and test a function to write xsl-fo directly.
+
+20081114T0442Z <gchicares@sbcglobal.net> [956]
+
+  ledger_xsl.cpp
+Improve a misleading variable name.
+
+20081114T0506Z <gchicares@sbcglobal.net> [956]
+
+  ledger_xsl.cpp
+Experimentally use 20081113T2137Z xsl-fo function in production.
+
+20081114T0511Z <gchicares@sbcglobal.net> [956]
+
+  main_wx.cpp
+Use generic DragAcceptFiles() with wx-2.8.10 or later (VS).
 
