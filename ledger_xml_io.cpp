@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.81 2008-11-13 21:37:12 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.82 2008-11-15 14:47:21 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -52,12 +52,10 @@
 #include <string>
 #include <utility>
 
-#if !defined LMI_USE_NEW_REPORTS
 void Ledger::read(xml::element const&)
 {
-    // TODO ?? Not yet implemented.
+    fatal_error() << "Not implemented." << LMI_FLUSH;
 }
-#endif // !defined LMI_USE_NEW_REPORTS
 
 namespace
 {
@@ -175,9 +173,6 @@ bool format_exists
 
 void Ledger::write(xml::element& x) const
 {
-#if defined LMI_USE_NEW_REPORTS
-    writeXXX(x);
-#else  // !defined LMI_USE_NEW_REPORTS
     title_map_t title_map;
 
 // Can't seem to get a literal &nbsp; into the output.
@@ -998,10 +993,8 @@ void Ledger::write(xml::element& x) const
                 ;
             }
         }
-#endif // !defined LMI_USE_NEW_REPORTS
 }
 
-#if !defined LMI_USE_NEW_REPORTS
 int Ledger::class_version() const
 {
     return 0;
@@ -1011,17 +1004,9 @@ std::string Ledger::xml_root_name() const
 {
     return "illustration";
 }
-#endif // !defined LMI_USE_NEW_REPORTS
-
-// TODO ?? Can this function be removed when LMI_USE_NEW_REPORTS is
-// defined? It seems to be used only by write_ledger_as_pdf(), and
-// there only if LMI_USE_NEW_REPORTS is not defined.
 
 void Ledger::write(std::ostream& os) const
 {
-#if defined LMI_USE_NEW_REPORTS
-    writeXXX(os);
-#else  // !defined LMI_USE_NEW_REPORTS
     xml_lmi::xml_document document(xml_root_name());
     xml::element& root = document.root_node();
 
@@ -1040,7 +1025,6 @@ void Ledger::write(std::ostream& os) const
         ,string_to_insert
         );
     os << s;
-#endif // !defined LMI_USE_NEW_REPORTS
 }
 
 void Ledger::write_xsl_fo(std::ostream& os) const
