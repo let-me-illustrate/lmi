@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.57 2008-11-11 01:05:16 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.58 2008-11-15 14:47:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -38,9 +38,6 @@
 #include "global_settings.hpp"
 #include "input_sequence.hpp"
 #include "ledger.hpp"
-#if defined LMI_USE_NEW_REPORTS
-#   include "ledger_formatter.hpp"
-#endif // defined LMI_USE_NEW_REPORTS
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
 #include "map_lookup.hpp"
@@ -451,9 +448,6 @@ void PrintFormTabDelimited
     ,std::string const& file_name
     )
 {
-#if defined LMI_USE_NEW_REPORTS
-    PrintFormTabDelimitedXXX(ledger_values, file_name);
-#else  // !defined LMI_USE_NEW_REPORTS
     LedgerInvariant const& Invar = ledger_values.GetLedgerInvariant();
     LedgerVariant   const& Curr_ = ledger_values.GetCurrFull();
     LedgerVariant   const& Guar_ = ledger_values.GetGuarFull();
@@ -675,7 +669,6 @@ void PrintFormTabDelimited
         os << '\n';
         }
     LMI_ASSERT(os.good());
-#endif // !defined LMI_USE_NEW_REPORTS
 }
 
 class FlatTextLedgerPrinter
