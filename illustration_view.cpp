@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.91 2008-11-11 08:46:39 chicares Exp $
+// $Id: illustration_view.cpp,v 1.92 2008-11-15 13:58:17 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -47,6 +47,7 @@
 #include "handle_exceptions.hpp"
 #include "illustration_document.hpp"
 #include "input.hpp"
+#include "istream_to_string.hpp"
 #include "ledger.hpp"
 #include "ledger_text_formats.hpp"
 #include "ledger_xsl.hpp"
@@ -65,7 +66,8 @@
 #include <wx/menu.h>
 #include <wx/xrc/xmlres.h>
 
-#include <sstream>
+#include <cstdio>         // std::remove()
+#include <fstream>
 
 IMPLEMENT_DYNAMIC_CLASS(IllustrationView, ViewEx)
 
@@ -160,49 +162,11 @@ warning() << "That command should have been disabled." << LMI_FLUSH;
     return rc;
 }
 
-// Headers used for the nonce only:
-#include "global_settings.hpp"
-#include "istream_to_string.hpp"
-#include "miscellany.hpp"
-#include <cstdio>         // std::remove()
-#include <fstream>
 void IllustrationView::DisplaySelectedValuesAsHtml()
 {
     LMI_ASSERT(ledger_values_.get());
-if(std::string::npos != global_settings::instance().pyx().find("new") || global_settings::instance().pyx().empty())
-{
     selected_values_as_html_ = FormatSelectedValuesAsHtml(*ledger_values_);
     html_window_->SetPage(selected_values_as_html_);
-return;
-}
-
-    // TODO ?? CALCULATION_SUMMARY Resolve this issue.
-    // EVGENIY Is a stream the best abstraction for LedgerFormatter?
-    // Apparently std::ostream.write() is the only stream function
-    // that actually gets called. This code could be simpler if a
-    // std::string were used instead; is there a reason to do
-    // otherwise?
-    std::ostringstream oss;
-    ledger_formatter_.FormatAsHtml(oss);
-    selected_values_as_html_ = oss.str();
-
-if(std::string::npos != global_settings::instance().pyx().find("old"))
-{
-    html_window_->SetPage(selected_values_as_html_);
-}
-
-if(std::string::npos != global_settings::instance().pyx().find("both"))
-{
-    html_window_->SetPage(selected_values_as_html_ + FormatSelectedValuesAsHtml(*ledger_values_));
-}
-
-if(std::string::npos != global_settings::instance().pyx().find("write"))
-{
-std::ofstream ofs0("cpp.html", ios_out_trunc_binary());
-ofs0 << FormatSelectedValuesAsHtml(*ledger_values_);
-std::ofstream ofs1("xsl.html", ios_out_trunc_binary());
-ofs1 << selected_values_as_html_;
-}
 }
 
 wxIcon IllustrationView::Icon() const
@@ -312,54 +276,42 @@ void IllustrationView::UponUpdateProperties(wxUpdateUIEvent& e)
 void IllustrationView::CopyLedgerToClipboard(enum_copy_option option)
 {
     LMI_ASSERT(ledger_values_.get());
-
     Timer timer;
+    std::string s;
 
-    std::ostringstream oss;
-    if(e_copy_full == option)
+    switch(option)
         {
-if(std::string::npos != global_settings::instance().pyx().find("new") || global_settings::instance().pyx().empty())
-{
-        std::string spreadsheet_filename =
-                base_filename()
-            +   configurable_settings::instance().spreadsheet_file_extension()
-            ;
-        std::remove(spreadsheet_filename.c_str());
-        PrintFormTabDelimited(*ledger_values_, spreadsheet_filename);
-        std::ifstream ifs(spreadsheet_filename.c_str());
-        std::string s;
-        istream_to_string(ifs, s);
-        ClipboardEx::SetText(s);
-        status() << "Format: " << timer.stop().elapsed_msec_str() << std::flush;
-return;
-}
-        ledger_formatter_.FormatAsTabDelimited(oss);
-        }
-    // TODO ?? CALCULATION_SUMMARY This assumes, without asserting,
-    // that the enumeration has exactly two enumerators.
-    else
-        {
-if(std::string::npos != global_settings::instance().pyx().find("new") || global_settings::instance().pyx().empty())
-{
-        std::string s = FormatSelectedValuesAsTsv(*ledger_values_);
-        ClipboardEx::SetText(s);
-        status() << "Format: " << timer.stop().elapsed_msec_str() << std::flush;
-return;
-}
-        ledger_formatter_.FormatAsLightTSV(oss);
+        case e_copy_full:
+            {
+            std::string spreadsheet_filename =
+                    base_filename()
+                +   configurable_settings::instance().spreadsheet_file_extension()
+                ;
+            std::remove(spreadsheet_filename.c_str());
+            PrintFormTabDelimited(*ledger_values_, spreadsheet_filename);
+            std::ifstream ifs(spreadsheet_filename.c_str());
+            istream_to_string(ifs, s);
+            }
+            break;
+        case e_copy_summary:
+            {
+            s = FormatSelectedValuesAsTsv(*ledger_values_);
+            }
+            break;
+        default:
+            {
+            fatal_error() << "Case " << option << " not found." << LMI_FLUSH;
+            }
         }
 
-    ClipboardEx::SetText(oss.str());
-
-    status() << "Format: " << timer.stop().elapsed_msec_str() << std::flush;
+    ClipboardEx::SetText(s);
+    status() << "Copy: " << timer.stop().elapsed_msec_str() << std::flush;
 }
 
 void IllustrationView::Pdf(std::string const& action) const
 {
     LMI_ASSERT(ledger_values_.get());
-
     std::string filename(document().GetUserReadableName());
-
     std::string pdf_out_file = write_ledger_as_pdf(*ledger_values_, filename);
     file_command()(pdf_out_file, action);
 }
@@ -422,10 +374,7 @@ void IllustrationView::Run(Input* overriding_input)
     status() << "Calculate: " << timer.stop().elapsed_msec_str();
     timer.restart();
 
-// TODO ?? CALCULATION_SUMMARY Consider restoring this line:
-//    ledger_values_ = resulting_ledger;
-// in place of the following, which is discussed below:
-    SetLedger(resulting_ledger);
+    ledger_values_ = resulting_ledger;
 
     DisplaySelectedValuesAsHtml();
 
@@ -433,38 +382,15 @@ void IllustrationView::Run(Input* overriding_input)
     status() << std::flush;
 }
 
-// TODO ?? EVGENIY This function was created merely as a kludge: class
+// TODO ?? This function was created merely as a kludge: class
 // CensusView calls MakeNewIllustrationDocAndView(), and for some
 // forgotten reason I didn't find a better way to pass the 'ledger'
 // shared_ptr.
-//
-// I'd prefer not to call it anywhere else, because that makes it
-// harder to remove the kludge.
-//
-// Anyway, I think that it's an error if '0 == get()' for that
-// shared_ptr argument, and that I should have asserted that here.
-//
-// Therefore, I think we can avoid the else-statement, which seems
-// suspicious anyway: how would a default-constructed LedgerFormatter
-// behave when we try to use it?
-//
-// And should ledger_formatter_ be held by value anyway? Why not use a
-// shared_ptr for it, as is done for ledger_values_, or probably a
-// scoped_ptr member instead? Then "ledger_formatter.hpp" could be
-// removed from the header, simplifying the physical design.
 
 void IllustrationView::SetLedger(boost::shared_ptr<Ledger const> ledger)
 {
     ledger_values_ = ledger;
-    if(ledger_values_.get())
-        {
-        LedgerFormatterFactory& factory = LedgerFormatterFactory::Instance();
-        ledger_formatter_ = factory.CreateFormatter(*ledger_values_);
-        }
-    else
-        {
-        ledger_formatter_ = LedgerFormatter();
-        }
+    LMI_ASSERT(ledger_values_.get());
 }
 
 // This could be generalized as a function template if that ever
