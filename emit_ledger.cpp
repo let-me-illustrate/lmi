@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: emit_ledger.cpp,v 1.12 2008-09-28 01:25:28 chicares Exp $
+// $Id: emit_ledger.cpp,v 1.13 2008-11-17 00:37:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -42,9 +42,6 @@
 
 #include <iostream>
 #include <string>
-
-// EVGENIY !! EXPERIMENTAL.
-void experiment(fs::path const&, int, Ledger const&);
 
 /// Emit a ledger in various guises.
 ///
@@ -69,19 +66,14 @@ double emit_ledger
 
     if(emission & mce_emit_pdf_file)
         {
-// EVGENIY !! EXPERIMENTAL.
-        experiment(filepath, serial_index, ledger);
-// Has nondefault behavior due to experimental argument; except for
-// that, this might already work from the command line (untested).
         write_ledger_as_pdf
             (ledger
             ,serialized_file_path(filepath, serial_index, "ill").string()
-            ,true // EVGENIY !! EXPERIMENTAL
             );
         }
     if(emission & mce_emit_pdf_to_printer)
         {
-// EVGENIY !! EXPERIMENTAL.
+// EXPERIMENTAL.
 // Does not yet work from command line interface: file_command() unimplemented.
 // Should we pass '-print' to 'fop' instead of using wxTheMimeTypesManager?
         std::string pdf_out_file = write_ledger_as_pdf
@@ -118,70 +110,5 @@ double emit_ledger
 
   done:
     return timer.stop().elapsed_usec();
-}
-
-// EVGENIY !! EXPERIMENTAL.
-//
-// For now, "emit_pdf_file" writes some intermediate files, but no pdf.
-// As experimentally implemented here, it needs these extra headers:
-
-#include "system_command.hpp"
-
-#include <boost/filesystem/convenience.hpp>
-
-#include <sstream>
-
-void experiment
-    (fs::path const& filepath
-    ,int             serial_index
-    ,Ledger const&   ledger
-    )
-{
-    std::string exemplar = filepath.leaf() + serialize_extension(serial_index, "change_this");
-std::cout << "Processing file stem " << fs::basename(exemplar) << '\n';
-Timer timer0;
-    write_ledger_as_xml(ledger, fs::basename(exemplar));
-std::cout
-    << "...wrote '"
-    << fs::change_extension(exemplar, ".xml").string()
-    << "'.\n"
-    << "  time: " << timer0.stop().elapsed_msec_str()
-    << std::endl
-    ;
-timer0.restart();
-    write_ledger_as_xml2(ledger, fs::basename(exemplar));
-std::cout
-    << "...wrote '"
-    << fs::change_extension(exemplar, ".v2.xml").string()
-    << "'.\n"
-    << "  time: " << timer0.stop().elapsed_msec_str()
-    << std::endl
-    ;
-timer0.restart();
-    write_ledger_as_fo_xml(ledger, fs::basename(exemplar));
-std::cout
-    << "...wrote '"
-    << fs::change_extension(exemplar, ".fo.xml").string()
-    << "'.\n"
-    << "  time: " << timer0.stop().elapsed_msec_str()
-    << std::endl
-    ;
-timer0.restart();
-    std::ostringstream oss;
-    oss
-        << "xsltproc"
-        << " -o " << fs::change_extension(exemplar, ".xsltproc.xml").string()
-        << " "    << xsl_filepath(ledger).string()
-        << " "    << fs::change_extension(exemplar, ".xml").string()
-        ;
-std::cout << "...executing command:\n    " << oss.str() << '\n';
-    system_command(oss.str());
-std::cout
-    << "...wrote '"
-    << fs::change_extension(exemplar, ".xsltproc.xml").string()
-    << "'.\n"
-    << "  time: " << timer0.stop().elapsed_msec_str()
-    << std::endl
-    ;
 }
 
