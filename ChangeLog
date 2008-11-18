@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1201 2008-11-14 05:11:35 chicares Exp $
+// $Id: ChangeLog,v 1.1202 2008-11-18 22:51:31 chicares Exp $
 
 MAINTENANCE
 
@@ -20333,4 +20333,30 @@ Experimentally use 20081113T2137Z xsl-fo function in production.
 
   main_wx.cpp
 Use generic DragAcceptFiles() with wx-2.8.10 or later (VS).
+
+20081115T1358Z <gchicares@sbcglobal.net> [951]
+
+  illustration_view.cpp
+  illustration_view.hpp
+Remove xslt vestiges.
+
+20081115T1447Z <gchicares@sbcglobal.net> [949]
+
+  ledger_text_formats.cpp
+  ledger_xml_io.cpp
+Remove deprecated conditionals.
+
+20081117T0037Z <gchicares@sbcglobal.net> [949]
+
+  emit_ledger.cpp
+  ledger_xsl.cpp
+  ledger_xsl.hpp
+  main_cli.cpp
+Remove experimental xsl-fo code. See:
+  http://lists.nongnu.org/archive/html/lmi/2008-11/msg00005.html
+
+ <gchicares@sbcglobal.net> [949]
+
+  version.hpp
+Mark release candidate.
 
