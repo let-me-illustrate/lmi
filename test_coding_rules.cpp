@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.80 2008-10-17 17:04:39 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.81 2008-11-19 02:33:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -816,11 +816,8 @@ bool check_reserved_name_exception(std::string const& s)
 
 void check_reserved_names(file const& f)
 {
-    // Remove this once these hopeless files have been expunged.
-    if
-        (   f.phyloanalyze("^ledger_formats.xml$")
-        ||  f.phyloanalyze("^ledger_xml_io.cpp$")
-        )
+    // Remove this exception once this file has been reworked.
+    if(f.phyloanalyze("^ledger_xml_io.cpp$"))
         {
         return;
         }
