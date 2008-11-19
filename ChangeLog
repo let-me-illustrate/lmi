@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1203 2008-11-19 02:33:30 chicares Exp $
+// $Id: ChangeLog,v 1.1204 2008-11-19 16:38:23 chicares Exp $
 
 MAINTENANCE
 
@@ -20382,4 +20382,26 @@ Mark release candidate.
   test_coding_rules.cpp
   xml2to1.xsl                  [expunged]
 Remove dead code.
+
+20081119T1634Z <gchicares@sbcglobal.net> [911]
+
+  ledger_text_formats.cpp
+Rectify a reference to an expunged file.
+
+20081119T1636Z <gchicares@sbcglobal.net> [911]
+
+  database_view_editor.cpp
+  illustrator.hpp
+  mc_enum_types_aux.cpp
+  mc_enum_types_aux.hpp
+  stratified_charges.hpp
+Reduce physical dependency by fixing 'build_type=so_test' erosion.
+
+20081119T1638Z <gchicares@sbcglobal.net> [911]
+
+  workhorse.make
+Remove a broken workaround added 20070413T0107Z. We don't and won't
+use Cygwin's gcc-3.4.4-3; for msw, instead we use MinGW gcc, in a
+Cygwin environment, with an identity mount--see:
+  http://lists.nongnu.org/archive/html/lmi/2007-11/msg00007.html
 
