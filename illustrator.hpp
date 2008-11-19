@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.hpp,v 1.10 2008-08-03 23:23:14 chicares Exp $
+// $Id: illustrator.hpp,v 1.11 2008-11-19 16:36:36 chicares Exp $
 
 #ifndef illustrator_hpp
 #define illustrator_hpp
@@ -62,7 +62,7 @@ class LMI_SO illustrator
     double usec_for_output_;
 };
 
-Input const& default_cell();
+Input const& LMI_SO default_cell();
 
 // TODO ?? For now, illustrator::operator() requires a file, so
 // create one for data that should be handled in RAM. This kludge

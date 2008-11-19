@@ -19,13 +19,12 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view_editor.cpp,v 1.14 2008-08-11 18:13:13 chicares Exp $
+// $Id: database_view_editor.cpp,v 1.15 2008-11-19 16:36:36 chicares Exp $
 
 #include "database_view_editor.hpp"
 
 #include "alert.hpp"
-#include "mc_enum.hpp"
-#include "mc_enum_types.hpp"
+#include "mc_enum_types_aux.hpp"
 #include "multidimgrid_safe.tpp"
 #include "value_cast.hpp"
 
@@ -43,7 +42,7 @@ class DatabaseGenderAxis
 {
   public:
     DatabaseGenderAxis()
-        :MultiDimEnumAxis<mcenum_gender>("Gender", mce_gender::all_strings())
+        :MultiDimEnumAxis<mcenum_gender>("Gender", all_strings_gender())
     {}
 };
 
@@ -52,7 +51,7 @@ class DatabaseClassAxis
 {
   public:
     DatabaseClassAxis()
-        :MultiDimEnumAxis<mcenum_class>("Class", mce_class::all_strings())
+        :MultiDimEnumAxis<mcenum_class>("Class", all_strings_class())
     {}
 };
 
@@ -61,7 +60,7 @@ class DatabaseSmokingAxis
 {
   public:
     DatabaseSmokingAxis()
-        :MultiDimEnumAxis<mcenum_smoking>("Smoking", mce_smoking::all_strings())
+        :MultiDimEnumAxis<mcenum_smoking>("Smoking", all_strings_smoking())
     {}
 };
 
@@ -79,7 +78,7 @@ class DatabaseUwBasisAxis
 {
   public:
     DatabaseUwBasisAxis()
-        :MultiDimEnumAxis<mcenum_uw_basis>("UW Basis", mce_uw_basis::all_strings())
+        :MultiDimEnumAxis<mcenum_uw_basis>("UW Basis", all_strings_uw_basis())
     {}
 };
 
@@ -88,7 +87,7 @@ class DatabaseStateAxis
 {
   public:
     DatabaseStateAxis()
-        :MultiDimEnumAxis<mcenum_state>("State", mce_state::all_strings())
+        :MultiDimEnumAxis<mcenum_state>("State", all_strings_state())
     {}
 };
 
