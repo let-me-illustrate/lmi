@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types_aux.hpp,v 1.8 2008-08-25 07:34:30 chicares Exp $
+// $Id: mc_enum_types_aux.hpp,v 1.9 2008-11-19 16:36:36 chicares Exp $
 
 #ifndef mc_enum_types_aux_hpp
 #define mc_enum_types_aux_hpp
@@ -27,8 +27,10 @@
 #include "config.hpp"
 
 #include "mc_enum_type_enums.hpp"
+#include "so_attributes.hpp"
 
 #include <string>
+#include <vector>
 
 /// Cardinality of certain enumerations, useful as ICEs.
 ///
@@ -39,6 +41,12 @@ enum
     ,mc_n_sep_bases    = 3
     ,mc_n_rate_periods = 2
     };
+
+std::vector<std::string> const& LMI_SO all_strings_gender   ();
+std::vector<std::string> const& LMI_SO all_strings_class    ();
+std::vector<std::string> const& LMI_SO all_strings_smoking  ();
+std::vector<std::string> const& LMI_SO all_strings_uw_basis ();
+std::vector<std::string> const& LMI_SO all_strings_state    ();
 
 mcenum_dbopt_7702 effective_dbopt_7702
     (mcenum_dbopt      actual_dbopt

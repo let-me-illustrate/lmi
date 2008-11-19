@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types_aux.cpp,v 1.5 2008-08-15 10:41:14 chicares Exp $
+// $Id: mc_enum_types_aux.cpp,v 1.6 2008-11-19 16:36:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -37,6 +37,12 @@
 BOOST_STATIC_ASSERT(mc_n_gen_bases    == static_cast<std::size_t>(mce_gen_basis  ::Cardinality));
 BOOST_STATIC_ASSERT(mc_n_sep_bases    == static_cast<std::size_t>(mce_sep_basis  ::Cardinality));
 BOOST_STATIC_ASSERT(mc_n_rate_periods == static_cast<std::size_t>(mce_rate_period::Cardinality));
+
+std::vector<std::string> const& LMI_SO all_strings_gender   () {return mce_gender  ::all_strings();}
+std::vector<std::string> const& LMI_SO all_strings_class    () {return mce_class   ::all_strings();}
+std::vector<std::string> const& LMI_SO all_strings_smoking  () {return mce_smoking ::all_strings();}
+std::vector<std::string> const& LMI_SO all_strings_uw_basis () {return mce_uw_basis::all_strings();}
+std::vector<std::string> const& LMI_SO all_strings_state    () {return mce_state   ::all_strings();}
 
 /// GPT recognizes death benefit options A and B only. A contract
 /// might have a death benefit option other than that usual pair,
