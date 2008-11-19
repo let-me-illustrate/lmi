@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.58 2008-11-15 14:47:20 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.59 2008-11-19 16:34:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -63,9 +63,9 @@ namespace
 {
 /// Ledger metadata, for calculation-summary columns only.
 ///
-/// The legends here are from 'ledger_formats.xml'. Alternative
-/// legends from 'mc_enum_types.xpp' are shown in comments when they
-/// differ.
+/// The legends here are from 'ledger_xml_io.cpp', with underscores
+/// removed. Alternative legends from 'mc_enum_types.xpp' are shown in
+/// comments when they differ.
 
 std::map<std::string,ledger_metadata> const& ledger_metadata_map()
 {
