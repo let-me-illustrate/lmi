@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.139 2008-10-01 23:17:24 chicares Exp $
+# $Id: objects.make,v 1.140 2008-11-19 02:33:30 chicares Exp $
 
 ################################################################################
 
@@ -196,12 +196,10 @@ common_common_objects := \
   interest_rates.o \
   ledger.o \
   ledger_base.o \
-  ledger_formatter.o \
   ledger_invariant.o \
   ledger_text_formats.o \
   ledger_variant.o \
   ledger_xml_io.o \
-  ledger_xml_io2.o \
   ledger_xsl.o \
   ledgervalues.o \
   license.o \
