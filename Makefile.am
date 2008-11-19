@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.62 2008-10-31 13:17:53 vslavik Exp $
+# $Id: Makefile.am,v 1.63 2008-11-19 02:33:29 chicares Exp $
 
 SUBDIRS = third_party
 
@@ -258,12 +258,10 @@ liblmi_common_sources = \
     interest_rates.cpp \
     ledger.cpp \
     ledger_base.cpp \
-    ledger_formatter.cpp \
     ledger_invariant.cpp \
     ledger_text_formats.cpp \
     ledger_variant.cpp \
     ledger_xml_io.cpp \
-    ledger_xml_io2.cpp \
     ledger_xsl.cpp \
     ledgervalues.cpp \
     license.cpp \
@@ -895,8 +893,6 @@ noinst_HEADERS = \
     interest_rates.hpp \
     istream_to_string.hpp \
     ledger_base.hpp \
-    ledger_excerpt.hpp \
-    ledger_formatter.hpp \
     ledger.hpp \
     ledger_invariant.hpp \
     ledger_text_formats.hpp \

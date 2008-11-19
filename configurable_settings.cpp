@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.41 2008-10-25 19:15:18 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.42 2008-11-19 02:33:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -122,13 +122,7 @@ configurable_settings::configurable_settings()
     ,skin_filename_                    ("skin.xrc"                    )
     ,spreadsheet_file_extension_       (".gnumeric"                   )
     ,use_builtin_calculation_summary_  (false                         )
-    ,xml_schema_filename_              ("ledger.xsd"                  )
     ,xsl_fo_command_                   ("fo"                          )
-    ,xsl_directory_                    (""                            )
-    ,xslt_format_xml_filename_         ("ledger_formats.xml"          )
-    ,xslt_html_filename_               ("calculation_summary_html.xsl")
-    ,xslt_light_tab_delimited_filename_("calculation_summary_tsv.xsl" )
-    ,xslt_tab_delimited_filename_      ("microcosm_tsv.xsl"           )
 {
     ascribe_members();
     load();
@@ -168,13 +162,7 @@ void configurable_settings::ascribe_members()
     ascribe("skin_filename"                    ,&configurable_settings::skin_filename_                    );
     ascribe("spreadsheet_file_extension"       ,&configurable_settings::spreadsheet_file_extension_       );
     ascribe("use_builtin_calculation_summary"  ,&configurable_settings::use_builtin_calculation_summary_  );
-    ascribe("xml_schema_filename"              ,&configurable_settings::xml_schema_filename_              );
     ascribe("xsl_fo_command"                   ,&configurable_settings::xsl_fo_command_                   );
-    ascribe("xsl_directory"                    ,&configurable_settings::xsl_directory_                    );
-    ascribe("xslt_format_xml_filename"         ,&configurable_settings::xslt_format_xml_filename_         );
-    ascribe("xslt_html_filename"               ,&configurable_settings::xslt_html_filename_               );
-    ascribe("xslt_light_tab_delimited_filename",&configurable_settings::xslt_light_tab_delimited_filename_);
-    ascribe("xslt_tab_delimited_filename"      ,&configurable_settings::xslt_tab_delimited_filename_      );
 }
 
 // TODO ?? CALCULATION_SUMMARY Class template any_member should expose
@@ -227,15 +215,6 @@ void configurable_settings::save() const
     std::vector<std::string>::const_iterator i;
     for(i = member_names().begin(); i != member_names().end(); ++i)
         {
-        // TODO ?? CALCULATION_SUMMARY Move these things to class
-        // global_settings.
-        if("xml_schema_filename"               == *i) continue;
-        if("xsl_directory"                     == *i) continue;
-        if("xslt_format_xml_filename"          == *i) continue;
-        if("xslt_html_filename"                == *i) continue;
-        if("xslt_light_tab_delimited_filename" == *i) continue;
-        if("xslt_tab_delimited_filename"       == *i) continue;
-
         xml_lmi::add_node(root, *i, operator[](*i).str());
         }
 
@@ -329,39 +308,9 @@ bool configurable_settings::use_builtin_calculation_summary() const
     return use_builtin_calculation_summary_;
 }
 
-std::string const& configurable_settings::xml_schema_filename() const
-{
-    return xml_schema_filename_;
-}
-
 std::string const& configurable_settings::xsl_fo_command() const
 {
     return xsl_fo_command_;
-}
-
-std::string const& configurable_settings::xsl_directory() const
-{
-    return xsl_directory_;
-}
-
-std::string const& configurable_settings::xslt_format_xml_filename() const
-{
-    return xslt_format_xml_filename_;
-}
-
-std::string const& configurable_settings::xslt_html_filename() const
-{
-    return xslt_html_filename_;
-}
-
-std::string const& configurable_settings::xslt_light_tab_delimited_filename() const
-{
-    return xslt_light_tab_delimited_filename_;
-}
-
-std::string const& configurable_settings::xslt_tab_delimited_filename() const
-{
-    return xslt_tab_delimited_filename_;
 }
 
 std::vector<std::string> effective_calculation_summary_columns()

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.hpp,v 1.21 2008-10-25 19:15:18 chicares Exp $
+// $Id: configurable_settings.hpp,v 1.22 2008-11-19 02:33:29 chicares Exp $
 
 #ifndef configurable_settings_hpp
 #define configurable_settings_hpp
@@ -80,46 +80,10 @@
 /// use_builtin_calculation_summary_: If true, then use built-in
 /// defaults instead of calculation_summary_columns_.
 ///
-/// xml_schema_filename_: xsd for xslt_format_xml_filename_ and xml
-/// ledger data.
-///
 /// xsl_fo_command_: Command to execute xsl 'formatting objects'
 /// processor. Making this an external command permits using a program
 /// with a free but not GPL-compatible license, such as apache fop,
 /// which cannot be linked with a GPL version 2 program.
-///
-/// xsl_directory_: Directory where xml and xsl files reside.
-/// TODO ?? CALCULATION_SUMMARY Should this be expunged, since these
-/// files actually reside in the data directory?
-///
-/// xslt_format_xml_filename_: xml file containing column titles and
-/// value formats used by calculation summary.
-///
-/// xslt_html_filename_: xsl template that produces calculation-
-/// summary html output from ledger xml data.
-///
-/// TODO ?? CALCULATION_SUMMARY Names should indicate function, not "lightness".
-///
-/// xslt_light_tab_delimited_filename_: xsl template that produces
-/// calculation-summary tab-delimited output suitable for pasting into
-/// a spreadsheet.
-///
-/// xslt_tab_delimited_filename_: xsl template that produces
-/// comprehensive tab-delimited output suitable for pasting into
-/// a spreadsheet.
-///
-/// TODO ?? CALCULATION_SUMMARY Should all recently-added settings be
-/// configurable? Why would a user configure the following, e.g.?
-///   xml_schema_filename_
-///   xslt_format_xml_filename_
-///   xslt_html_filename_
-///   xslt_light_tab_delimited_filename_
-///   xslt_tab_delimited_filename_
-/// Shouldn't these be in 'global_settings.?pp' instead?
-///
-/// TODO ?? CALCULATION_SUMMARY Should this
-///   xsl_directory_
-/// be distinct from what 'data_directory.?pp' already does?
 
 class LMI_SO configurable_settings
     :public MemberSymbolTable<configurable_settings>
@@ -146,13 +110,7 @@ class LMI_SO configurable_settings
     std::string const& skin_filename                    () const;
     std::string const& spreadsheet_file_extension       () const;
     bool               use_builtin_calculation_summary  () const;
-    std::string const& xml_schema_filename              () const;
     std::string const& xsl_fo_command                   () const;
-    std::string const& xsl_directory                    () const;
-    std::string const& xslt_format_xml_filename         () const;
-    std::string const& xslt_html_filename               () const;
-    std::string const& xslt_light_tab_delimited_filename() const;
-    std::string const& xslt_tab_delimited_filename      () const;
 
   private:
     configurable_settings();
@@ -170,13 +128,7 @@ class LMI_SO configurable_settings
     std::string skin_filename_;
     std::string spreadsheet_file_extension_;
     bool        use_builtin_calculation_summary_;
-    std::string xml_schema_filename_;
     std::string xsl_fo_command_;
-    std::string xsl_directory_;
-    std::string xslt_format_xml_filename_;
-    std::string xslt_html_filename_;
-    std::string xslt_light_tab_delimited_filename_;
-    std::string xslt_tab_delimited_filename_;
 
 #ifdef __BORLANDC__
 // COMPILER !! Borland compilers defectively [11/5] require a public dtor; see:

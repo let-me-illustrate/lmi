@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.34 2008-11-17 00:37:12 chicares Exp $
+// $Id: ledger_xsl.cpp,v 1.35 2008-11-19 02:33:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,7 +33,6 @@
 #include "global_settings.hpp"
 #include "ledger.hpp"
 #include "ledger_invariant.hpp"       // "idiosyncrasy_spreadsheet" workaround
-#include "ledger_formatter.hpp"
 #include "miscellany.hpp"
 #include "null_stream.hpp"            // "idiosyncrasy_spreadsheet" workaround
 #include "path_utility.hpp"
@@ -45,11 +44,6 @@
 #include <ios>
 #include <ostream>                    // "idiosyncrasy_spreadsheet" workaround
 #include <sstream>
-
-// Define this macro here, after including all the headers that it
-// could potentially affect.
-
-#define LMI_USE_NEW_REPORTS
 
 namespace
 {
@@ -127,37 +121,7 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
     fs::path xml_out_file = unique_filepath(print_dir / real_filepath, ".fo.xml");
 
     fs::ofstream ofs(xml_out_file, ios_out_trunc_binary());
-
-if(std::string::npos != global_settings::instance().pyx().find("new") || global_settings::instance().pyx().empty())
-{
     ledger.write_xsl_fo(ofs);
-}
-else
-{
-    // Scale a copy of the 'ledger' argument. The original must not be
-    // modified because scaling is not reentrant. However, copying
-    // does not prevent that problem here, because what is scaled is
-    // actually not copied due to use of shared_ptr; see comment on
-    //   https://savannah.nongnu.org/bugs/?13599
-    // in the ledger-class implementation.
-    Ledger scaled_ledger(ledger);
-    scaled_ledger.AutoScale();
-#if defined LMI_USE_NEW_REPORTS
-    LedgerFormatterFactory& factory = LedgerFormatterFactory::Instance();
-    LedgerFormatter formatter(factory.CreateFormatter(scaled_ledger));
-    formatter.FormatAsXslFo(ofs);
-    // TODO ?? Eliminate the problem that this works around.
-    if
-        (   ledger.GetIsComposite()
-        &&  std::string::npos != ledger.GetLedgerInvariant().Comments.find("idiosyncrasy_spreadsheet")
-        )
-        {
-        scaled_ledger.write(null_stream());
-        }
-#else  // !defined LMI_USE_NEW_REPORTS
-    scaled_ledger.write(ofs);
-#endif // !defined LMI_USE_NEW_REPORTS
-}
     ofs.close();
 
     fs::path xsl_file = xsl_filepath(ledger);
@@ -165,20 +129,19 @@ else
     fs::path pdf_out_file = unique_filepath(print_dir / real_filepath, ".pdf");
 
     std::ostringstream oss;
-#if defined LMI_USE_NEW_REPORTS
     oss
         << configurable_settings::instance().xsl_fo_command()
         << " -fo "  << '"' << xml_out_file.string() << '"'
         << " -pdf " << '"' << pdf_out_file.string() << '"'
         ;
-#else  // !defined LMI_USE_NEW_REPORTS
+#if 0 // Here's a less efficient alternative:
     oss
         << configurable_settings::instance().xsl_fo_command()
         << " -xsl "  << '"' << xsl_file.string()     << '"'
         << " -xml "  << '"' << xml_out_file.string() << '"'
         << " "       << '"' << pdf_out_file.string() << '"'
         ;
-#endif // !defined LMI_USE_NEW_REPORTS
+#endif // 0
 
     system_command(oss.str());
     return pdf_out_file.string();
