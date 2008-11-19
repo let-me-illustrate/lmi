@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.130 2008-10-03 10:41:48 vslavik Exp $
+# $Id: workhorse.make,v 1.131 2008-11-19 16:38:23 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -83,18 +83,8 @@ $(src_dir)/objects.make:: ;
 
 # Effective default target (described above under "Default target").
 
-# TODO ?? Some dllimport attributes in 'cgicc' headers elicit warnings
-# with cygwin's gcc-3.4.4-3. This must be addressed before cygwin can
-# become the primary environment; it also affects the 'cgi_tests'
-# target. And the conditional here isn't as clear as it ought to be:
-# the condition really means the build environment, not its makefile.
-
-ifneq (msw_cygwin.make,$(platform-makefile))
-  antediluvian_cgi_target := antediluvian_cgi$(EXEEXT)
-endif
-
 default_targets := \
-  $(antediluvian_cgi_target) \
+  antediluvian_cgi$(EXEEXT) \
   antediluvian_cli$(EXEEXT) \
   libantediluvian$(SHREXT) \
   liblmi$(SHREXT) \
