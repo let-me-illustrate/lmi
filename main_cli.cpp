@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.59 2008-11-17 00:37:12 chicares Exp $
+// $Id: main_cli.cpp,v 1.60 2008-11-20 10:55:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -245,6 +245,7 @@ void process_command_line(int argc, char* argv[])
     e_emission emission(mce_emit_nothing);
     // Suppress enumerators for options not fully implemented.
     emission.allow(emission.ordinal("emit_pdf_to_printer"), false);
+    emission.allow(emission.ordinal("emit_pdf_to_viewer" ), false);
     emission.allow(emission.ordinal("emit_custom_0"      ), false);
 
     std::vector<std::string> ill_names;
