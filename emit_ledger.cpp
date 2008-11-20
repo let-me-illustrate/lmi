@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: emit_ledger.cpp,v 1.13 2008-11-17 00:37:12 chicares Exp $
+// $Id: emit_ledger.cpp,v 1.14 2008-11-20 10:55:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -45,9 +45,12 @@
 
 /// Emit a ledger in various guises.
 ///
-/// The commands for mce_emit_pdf_file and mce_emit_pdf_to_printer are
-/// spelled out separately and in full, though one uses a copy of the
-/// other. Reason: in the future, they may be implemented differently,
+/// The commands for
+///   mce_emit_pdf_file
+///   mce_emit_pdf_to_printer
+///   mce_emit_pdf_to_viewer
+/// are spelled out separately and in full, which is redundant.
+/// Reason: in the future, they may be implemented differently,
 /// and mce_emit_pdf_to_printer may write directly to the printer
 /// without creating any file.
 
@@ -81,6 +84,16 @@ double emit_ledger
             ,serialized_file_path(filepath, serial_index, "ill").string()
             );
         file_command()(pdf_out_file, "print");
+        }
+    if(emission & mce_emit_pdf_to_viewer)
+        {
+// EXPERIMENTAL.
+// Does not work from command line interface: file_command() unimplemented.
+        std::string pdf_out_file = write_ledger_as_pdf
+            (ledger
+            ,serialized_file_path(filepath, serial_index, "ill").string()
+            );
+        file_command()(pdf_out_file, "open");
         }
     if(emission & mce_emit_test_data)
         {

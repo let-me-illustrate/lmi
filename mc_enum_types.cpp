@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types.cpp,v 1.19 2008-07-12 00:37:17 chicares Exp $
+// $Id: mc_enum_types.cpp,v 1.20 2008-11-20 10:55:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -62,6 +62,7 @@ extern mcenum_emission const emission_enums[] =
     ,mce_emit_timings
     ,mce_emit_pdf_file
     ,mce_emit_pdf_to_printer
+    ,mce_emit_pdf_to_viewer
     ,mce_emit_test_data
     ,mce_emit_spreadsheet
     ,mce_emit_text_stream
@@ -74,12 +75,13 @@ extern char const*const emission_strings[] =
     ,"emit_timings"
     ,"emit_pdf_file"
     ,"emit_pdf_to_printer"
+    ,"emit_pdf_to_viewer"
     ,"emit_test_data"
     ,"emit_spreadsheet"
     ,"emit_text_stream"
     ,"emit_custom_0"
     };
-template class mc_enum<mcenum_emission, 10, emission_enums, emission_strings>;
+template class mc_enum<mcenum_emission, 11, emission_enums, emission_strings>;
 
 #include "mc_enum_types.xpp"
 
