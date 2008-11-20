@@ -31,7 +31,7 @@
 // other reasons evident in cvs or explained in 'ChangeLog'. Any
 // defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.36 2008-09-10 03:52:44 chicares Exp $
+// $Id: main_cgi.cpp,v 1.37 2008-11-20 13:18:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -553,8 +553,7 @@ void ShowIllusOutput(Input const& a_input)
         );
     illustrator run_functor(emission);
     std::cout << "<pre><small>";
-    temporary_file_kludge(a_input);
-    run_functor("eraseme.ill");
+    run_functor("", a_input);
     std::cout << "</small></pre>";
     std::cout << "<hr>\n\n";
     std::cout
@@ -664,8 +663,7 @@ void ShowCensusOutput
         );
     illustrator run_functor(emission);
     std::cout << "<pre><small>";
-    temporary_file_kludge(lives);
-    run_functor("eraseme.cns");
+    run_functor("", lives);
     std::cout << "</small></pre>";
     std::cout << "<hr>\n\n";
     std::cout

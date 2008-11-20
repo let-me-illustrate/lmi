@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.hpp,v 1.11 2008-11-19 16:36:36 chicares Exp $
+// $Id: illustrator.hpp,v 1.12 2008-11-20 13:18:13 chicares Exp $
 
 #ifndef illustrator_hpp
 #define illustrator_hpp
@@ -33,6 +33,7 @@
 #include <boost/filesystem/path.hpp>
 
 #include <functional>
+#include <vector>
 
 class Input;
 
@@ -50,10 +51,14 @@ class LMI_SO illustrator
     ~illustrator();
 
     bool operator()(fs::path const&);
+    bool operator()(fs::path const&, Input const&);
+    bool operator()(fs::path const&, std::vector<Input> const&);
 
-    double usec_for_input() const;
+    void conditionally_show_timings_on_stdout() const;
+
+    double usec_for_input       () const;
     double usec_for_calculations() const;
-    double usec_for_output() const;
+    double usec_for_output      () const;
 
   private:
     mcenum_emission emission_;
@@ -63,12 +68,6 @@ class LMI_SO illustrator
 };
 
 Input const& LMI_SO default_cell();
-
-// TODO ?? For now, illustrator::operator() requires a file, so
-// create one for data that should be handled in RAM. This kludge
-// permits removing some other code that's even worse.
-
-template<typename T> void temporary_file_kludge(T const&);
 
 #endif // illustrator_hpp
 

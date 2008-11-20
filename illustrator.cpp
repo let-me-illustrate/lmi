@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.cpp,v 1.30 2008-08-11 16:35:16 chicares Exp $
+// $Id: illustrator.cpp,v 1.31 2008-11-20 13:18:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -44,10 +44,8 @@
 #include <boost/filesystem/convenience.hpp>
 
 #include <cstdio>                 // std::remove()
-#include <fstream>
 #include <iostream>
 #include <string>
-#include <vector>
 
 illustrator::illustrator(mcenum_emission emission)
     :emission_              (emission)
@@ -63,7 +61,6 @@ illustrator::~illustrator()
 
 bool illustrator::operator()(fs::path const& file_path)
 {
-    bool completed_normally = true;
     std::string const extension = fs::extension(file_path);
     if(".cns" == extension)
         {
@@ -71,25 +68,21 @@ bool illustrator::operator()(fs::path const& file_path)
         multiple_cell_document doc(file_path.string());
         run_census::assert_consistency(doc.case_parms()[0], doc.cell_parms()[0]);
         usec_for_input_ = timer.stop().elapsed_usec();
-        census_run_result result;
-        result = run_census()(file_path, emission_, doc.cell_parms());
-        completed_normally     = result.completed_normally_   ;
-        usec_for_calculations_ = result.usec_for_calculations_;
-        usec_for_output_       = result.usec_for_output_      ;
+        return operator()(file_path, doc.cell_parms());
         }
     else if(".ill" == extension)
         {
         Timer timer;
         single_cell_document doc(file_path.string());
-        usec_for_input_        = timer.stop().elapsed_usec();
-        timer.restart();
-        IllusVal IV;
-        IV.run(doc.input_data());
-        usec_for_calculations_ = timer.stop().elapsed_usec();
-        usec_for_output_ = emit_ledger(file_path, 0, IV.ledger(), emission_);
+        usec_for_input_ = timer.stop().elapsed_usec();
+        return operator()(file_path, doc.input_data());
         }
     else if(".ini" == extension)
         {
+        // EXPERIMENTAL. At the moment, this meets only regression-
+        // testing needs. The quaint test for an empty path somehow
+        // represents the notion of default input and output files
+        // used in production.
         Timer timer;
         Input input;
         custom_io_0_read(input, file_path.string());
@@ -104,6 +97,8 @@ bool illustrator::operator()(fs::path const& file_path)
             out_file = fs::change_extension(file_path, ".test0");
             }
         usec_for_output_ = emit_ledger(out_file, 0, z.ledger(), emission_);
+        conditionally_show_timings_on_stdout();
+        return true;
         }
     else
         {
@@ -115,8 +110,33 @@ bool illustrator::operator()(fs::path const& file_path)
             << "' not supported."
             << LMI_FLUSH
             ;
+        return false;
         }
+}
 
+bool illustrator::operator()(fs::path const& file_path, Input const& z)
+{
+    Timer timer;
+    IllusVal IV;
+    IV.run(z);
+    usec_for_calculations_ = timer.stop().elapsed_usec();
+    usec_for_output_       = emit_ledger(file_path, 0, IV.ledger(), emission_);
+    conditionally_show_timings_on_stdout();
+    return true;
+}
+
+bool illustrator::operator()(fs::path const& file_path, std::vector<Input> const& z)
+{
+    census_run_result result;
+    result = run_census()(file_path, emission_, z);
+    usec_for_calculations_ = result.usec_for_calculations_;
+    usec_for_output_       = result.usec_for_output_      ;
+    conditionally_show_timings_on_stdout();
+    return result.completed_normally_;
+}
+
+void illustrator::conditionally_show_timings_on_stdout() const
+{
     if(mce_emit_timings & emission_)
         {
         std::cout
@@ -129,8 +149,6 @@ bool illustrator::operator()(fs::path const& file_path)
             << '\n'
             ;
         }
-
-    return completed_normally;
 }
 
 double illustrator::usec_for_input() const
@@ -191,25 +209,5 @@ Input const& default_cell()
         }
 
     return user_default;
-}
-
-template<> void temporary_file_kludge(std::vector<Input> const& z)
-{
-    multiple_cell_document document;
-    typedef std::vector<Input> T;
-    T& cells = const_cast<T&>(document.cell_parms());
-    cells = z;
-    std::ofstream ofs("eraseme.cns");
-    document.write(ofs);
-}
-
-template<> void temporary_file_kludge(Input const& z)
-{
-    single_cell_document document;
-    typedef Input T;
-    T& cell = const_cast<T&>(document.input_data());
-    cell = z;
-    std::ofstream ofs("eraseme.ill");
-    document.write(ofs);
 }
 
