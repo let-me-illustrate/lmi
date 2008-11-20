@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types.hpp,v 1.19 2008-07-12 00:37:17 chicares Exp $
+// $Id: mc_enum_types.hpp,v 1.20 2008-11-20 10:55:21 chicares Exp $
 
 #ifndef mc_enum_types_hpp
 #define mc_enum_types_hpp
@@ -36,9 +36,9 @@ extern enum_option const option_enums[3];
 extern char const*const option_strings[3];
 typedef mc_enum<enum_option, 3, option_enums, option_strings> e_option;
 
-extern mcenum_emission const emission_enums[10];
-extern char const*const emission_strings[10];
-typedef mc_enum<mcenum_emission, 10, emission_enums, emission_strings> e_emission;
+extern mcenum_emission const emission_enums[11];
+extern char const*const emission_strings[11];
+typedef mc_enum<mcenum_emission, 11, emission_enums, emission_strings> e_emission;
 
 #include "mc_enum_types.xpp"
 
