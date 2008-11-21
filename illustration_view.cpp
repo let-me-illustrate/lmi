@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.94 2008-11-21 15:53:12 chicares Exp $
+// $Id: illustration_view.cpp,v 1.95 2008-11-21 17:02:19 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -375,10 +375,11 @@ void IllustrationView::Run(Input* overriding_input)
     status() << std::flush;
 }
 
-// TODO ?? This function was created merely as a kludge: class
-// CensusView calls MakeNewIllustrationDocAndView(), and for some
-// forgotten reason I didn't find a better way to pass the 'ledger'
-// shared_ptr.
+/// Set ledger member from a calculation done elsewhere.
+///
+/// CensusView::ViewComposite() calls MakeNewIllustrationDocAndView()
+/// to view a composite whose values are not conveniently calculated
+/// in this TU, so they're passed via this function.
 
 void IllustrationView::SetLedger(boost::shared_ptr<Ledger const> ledger)
 {
