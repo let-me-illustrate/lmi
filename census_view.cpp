@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.80 2008-11-21 03:06:23 chicares Exp $
+// $Id: census_view.cpp,v 1.81 2008-11-21 15:52:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,6 +35,7 @@
 #include "default_view.hpp"
 #include "group_values.hpp"
 #include "illustration_view.hpp"
+#include "illustrator.hpp"
 #include "input.hpp"
 #include "ledger.hpp"
 #include "ledger_text_formats.hpp"
@@ -833,17 +834,14 @@ void CensusView::UpdatePreservingSelection()
 
 void CensusView::UponPrintCell(wxCommandEvent&)
 {
-// TODO ?? Refactor.
     if(is_invalid())
         {
         return;
         }
 
     int cell_number = selected_row();
-    // TODO ?? Is it desirable to create a view here, or would it be
-    // better to print invisibly? If the latter, then probably
-    // ViewOneCell() could be simplified to return void.
-    ViewOneCell(cell_number).Pdf(mce_emit_pdf_to_printer);
+    illustrator z(mce_emit_pdf_to_printer);
+    z(serial_filename(cell_number, "ill"), cell_parms()[cell_number]);
 }
 
 void CensusView::UponPrintCase(wxCommandEvent&)
@@ -872,7 +870,7 @@ void CensusView::UponRunCell(wxCommandEvent&)
     ViewOneCell(cell_number);
 }
 
-IllustrationView& CensusView::ViewOneCell(int index)
+void CensusView::ViewOneCell(int index)
 {
     std::string file_name(serial_filename(index, "ill"));
     IllustrationView& illview = MakeNewIllustrationDocAndView
@@ -880,7 +878,6 @@ IllustrationView& CensusView::ViewOneCell(int index)
         ,file_name.c_str()
         );
     illview.Run(&cell_parms()[index]);
-    return illview;
 }
 
 void CensusView::ViewComposite()
