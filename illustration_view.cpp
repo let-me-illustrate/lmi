@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.93 2008-11-21 03:06:24 chicares Exp $
+// $Id: illustration_view.cpp,v 1.94 2008-11-21 15:53:12 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -214,7 +214,8 @@ void IllustrationView::UponCopySummary(wxCommandEvent&)
 
 void IllustrationView::UponPreviewPdf(wxCommandEvent&)
 {
-    Pdf(mce_emit_pdf_to_viewer);
+    LMI_ASSERT(ledger_values_.get());
+    emit_ledger(base_filename(), *ledger_values_, mce_emit_pdf_to_viewer);
 }
 
 void IllustrationView::UponPreviewSummary(wxCommandEvent&)
@@ -224,7 +225,8 @@ void IllustrationView::UponPreviewSummary(wxCommandEvent&)
 
 void IllustrationView::UponPrintPdf(wxCommandEvent&)
 {
-    Pdf(mce_emit_pdf_to_printer);
+    LMI_ASSERT(ledger_values_.get());
+    emit_ledger(base_filename(), *ledger_values_, mce_emit_pdf_to_printer);
 }
 
 void IllustrationView::UponPrintSummary(wxCommandEvent&)
@@ -305,12 +307,6 @@ void IllustrationView::CopyLedgerToClipboard(enum_copy_option option)
 
     ClipboardEx::SetText(s);
     status() << "Copy: " << timer.stop().elapsed_msec_str() << std::flush;
-}
-
-void IllustrationView::Pdf(mcenum_emission emission) const
-{
-    LMI_ASSERT(ledger_values_.get());
-    emit_ledger(document().GetUserReadableName(), *ledger_values_, emission);
 }
 
 // TODO ?? CALCULATION_SUMMARY This should use either the code or the
