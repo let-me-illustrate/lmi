@@ -19,14 +19,12 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.hpp,v 1.12 2008-11-17 00:37:12 chicares Exp $
+// $Id: ledger_xsl.hpp,v 1.13 2008-11-21 03:06:24 chicares Exp $
 
 #ifndef ledger_xsl_hpp
 #define ledger_xsl_hpp
 
 #include "config.hpp"
-
-#include "so_attributes.hpp"
 
 #include <boost/filesystem/path.hpp>
 
@@ -34,12 +32,7 @@
 
 class Ledger;
 
-/// Write ledger as pdf.
-///
-/// Ideally, this would be called only by emit_ledger(), and would not
-/// be exported from a shared library.
-
-std::string LMI_SO write_ledger_as_pdf(Ledger const&, fs::path const&);
+std::string write_ledger_as_pdf(Ledger const&, fs::path const&);
 
 fs::path xsl_filepath(Ledger const&);
 

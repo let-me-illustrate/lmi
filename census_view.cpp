@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.79 2008-10-17 22:55:34 chicares Exp $
+// $Id: census_view.cpp,v 1.80 2008-11-21 03:06:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -843,7 +843,7 @@ void CensusView::UponPrintCell(wxCommandEvent&)
     // TODO ?? Is it desirable to create a view here, or would it be
     // better to print invisibly? If the latter, then probably
     // ViewOneCell() could be simplified to return void.
-    ViewOneCell(cell_number).Pdf("print");
+    ViewOneCell(cell_number).Pdf(mce_emit_pdf_to_printer);
 }
 
 void CensusView::UponPrintCase(wxCommandEvent&)

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: emit_ledger.hpp,v 1.4 2008-11-21 01:35:20 chicares Exp $
+// $Id: emit_ledger.hpp,v 1.5 2008-11-21 03:06:24 chicares Exp $
 
 #ifndef emit_ledger_hpp
 #define emit_ledger_hpp
@@ -27,12 +27,13 @@
 #include "config.hpp"
 
 #include "mc_enum_type_enums.hpp" // enum mcenum_emission
+#include "so_attributes.hpp"
 
 #include <boost/filesystem/path.hpp>
 
 class Ledger;
 
-double emit_ledger
+double LMI_SO emit_ledger
     (fs::path const& filepath
     ,Ledger const&   ledger
     ,mcenum_emission emission
