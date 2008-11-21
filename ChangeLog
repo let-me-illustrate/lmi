@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1205 2008-11-21 03:06:24 chicares Exp $
+// $Id: ChangeLog,v 1.1206 2008-11-21 20:10:19 chicares Exp $
 
 MAINTENANCE
 
@@ -20437,4 +20437,26 @@ Refactor to improve separation of concerns.
   illustration_view.hpp
   ledger_xsl.hpp
 Refactor to encapsulate pdf handling.
+
+20081121T1552Z <gchicares@sbcglobal.net> [908]
+
+  census_view.cpp
+  census_view.hpp
+Don't create a view when merely printing a cell.
+
+20081121T1553Z <gchicares@sbcglobal.net> [908]
+
+  illustration_view.cpp
+  illustration_view.hpp
+Refactor, eliminating a member function.
+
+20081121T1702Z <gchicares@sbcglobal.net> [907]
+
+  illustration_view.cpp
+Improve documentation.
+
+20081121T2010Z <gchicares@sbcglobal.net> [906]
+
+  illustration_view.cpp
+Fix defect introduced 20061112T2107Z.
 
