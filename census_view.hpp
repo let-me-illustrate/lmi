@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.hpp,v 1.28 2008-08-04 22:07:40 chicares Exp $
+// $Id: census_view.hpp,v 1.29 2008-11-21 15:52:23 chicares Exp $
 
 #ifndef census_view_hpp
 #define census_view_hpp
@@ -42,7 +42,6 @@
 #include <vector>
 
 class CensusDocument;
-class IllustrationView;
 class WXDLLIMPEXP_FWD_CORE wxListEvent;
 class WXDLLIMPEXP_FWD_CORE wxListView;
 
@@ -90,7 +89,7 @@ class CensusView
 
     void Update();
     void UpdatePreservingSelection();
-    IllustrationView& ViewOneCell(int);
+    void ViewOneCell(int);
     void ViewComposite();
 
     void apply_changes
