@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: emit_ledger.cpp,v 1.14 2008-11-20 10:55:20 chicares Exp $
+// $Id: emit_ledger.cpp,v 1.15 2008-11-21 01:35:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,9 +35,9 @@
 #include "ledger_text_formats.hpp"
 #include "ledger_xsl.hpp"
 #include "miscellany.hpp"          // ios_out_trunc_binary()
-#include "path_utility.hpp"
 #include "timer.hpp"
 
+#include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/fstream.hpp>
 
 #include <iostream>
@@ -56,7 +56,6 @@
 
 double emit_ledger
     (fs::path const& filepath
-    ,int             serial_index
     ,Ledger const&   ledger
     ,mcenum_emission emission
     )
@@ -69,36 +68,27 @@ double emit_ledger
 
     if(emission & mce_emit_pdf_file)
         {
-        write_ledger_as_pdf
-            (ledger
-            ,serialized_file_path(filepath, serial_index, "ill").string()
-            );
+        write_ledger_as_pdf(ledger, filepath);
         }
     if(emission & mce_emit_pdf_to_printer)
         {
 // EXPERIMENTAL.
 // Does not yet work from command line interface: file_command() unimplemented.
 // Should we pass '-print' to 'fop' instead of using wxTheMimeTypesManager?
-        std::string pdf_out_file = write_ledger_as_pdf
-            (ledger
-            ,serialized_file_path(filepath, serial_index, "ill").string()
-            );
+        std::string pdf_out_file = write_ledger_as_pdf(ledger, filepath);
         file_command()(pdf_out_file, "print");
         }
     if(emission & mce_emit_pdf_to_viewer)
         {
 // EXPERIMENTAL.
 // Does not work from command line interface: file_command() unimplemented.
-        std::string pdf_out_file = write_ledger_as_pdf
-            (ledger
-            ,serialized_file_path(filepath, serial_index, "ill").string()
-            );
+        std::string pdf_out_file = write_ledger_as_pdf(ledger, filepath);
         file_command()(pdf_out_file, "open");
         }
     if(emission & mce_emit_test_data)
         {
         fs::ofstream ofs
-            (serialized_file_path(filepath, serial_index, "test")
+            (fs::change_extension(filepath, ".test")
             ,ios_out_trunc_binary()
             );
         ledger.Spew(ofs);
