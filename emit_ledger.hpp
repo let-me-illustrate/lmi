@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: emit_ledger.hpp,v 1.3 2008-01-01 18:29:39 chicares Exp $
+// $Id: emit_ledger.hpp,v 1.4 2008-11-21 01:35:20 chicares Exp $
 
 #ifndef emit_ledger_hpp
 #define emit_ledger_hpp
@@ -34,7 +34,6 @@ class Ledger;
 
 double emit_ledger
     (fs::path const& filepath
-    ,int             serial_index
     ,Ledger const&   ledger
     ,mcenum_emission emission
     );

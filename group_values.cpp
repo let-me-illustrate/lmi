@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.98 2008-09-28 01:25:28 chicares Exp $
+// $Id: group_values.cpp,v 1.99 2008-11-21 01:35:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -119,8 +119,7 @@ census_run_result run_census_in_series::operator()
             IV.run(cells[j]);
             composite.PlusEq(IV.ledger());
             result.usec_for_output_ += emit_ledger
-                (file
-                ,j
+                (serialized_file_path(file, j, "hastur")
                 ,IV.ledger()
                 ,emission
                 );
@@ -134,8 +133,7 @@ census_run_result run_census_in_series::operator()
     meter->culminate();
 
     result.usec_for_output_ += emit_ledger
-        (file
-        ,-1
+        (serialized_file_path(file, -1, "hastur")
         ,composite
         ,emission
         );
@@ -628,8 +626,7 @@ census_run_result run_census_in_parallel::operator()
     for(i = cell_values.begin(); i != cell_values.end(); ++i, ++j)
         {
         result.usec_for_output_ += emit_ledger
-            (file
-            ,j
+            (serialized_file_path(file, j, "hastur")
             ,*(*i)->ledger_from_av()
             ,emission
             );
@@ -637,8 +634,7 @@ census_run_result run_census_in_parallel::operator()
     }
 
     result.usec_for_output_ += emit_ledger
-        (file
-        ,-1
+        (serialized_file_path(file, -1, "hastur")
         ,composite
         ,emission
         );
