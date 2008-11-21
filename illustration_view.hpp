@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.hpp,v 1.34 2008-11-15 13:58:17 chicares Exp $
+// $Id: illustration_view.hpp,v 1.35 2008-11-21 03:06:24 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -36,6 +36,7 @@
 
 #include "view_ex.hpp"
 
+#include "mc_enum_type_enums.hpp" // enum mcenum_emission
 #include "obstruct_slicing.hpp"
 
 #include <boost/shared_ptr.hpp>
@@ -79,7 +80,7 @@ class IllustrationView
     // friend.
     //
     void DisplaySelectedValuesAsHtml();
-    void Pdf(std::string const& action) const;
+    void Pdf(mcenum_emission) const;
     void Run(Input* = 0);
     void SetLedger(boost::shared_ptr<Ledger const>);
 

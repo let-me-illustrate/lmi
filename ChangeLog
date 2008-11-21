@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1204 2008-11-19 16:38:23 chicares Exp $
+// $Id: ChangeLog,v 1.1205 2008-11-21 03:06:24 chicares Exp $
 
 MAINTENANCE
 
@@ -20404,4 +20404,37 @@ Remove a broken workaround added 20070413T0107Z. We don't and won't
 use Cygwin's gcc-3.4.4-3; for msw, instead we use MinGW gcc, in a
 Cygwin environment, with an identity mount--see:
   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00007.html
+
+20081120T1055Z <gchicares@sbcglobal.net> [911]
+
+  emit_ledger.cpp
+  main_cli.cpp
+  mc_enum_type_enums.hpp
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+Prepare to encapsulate pdf handling.
+
+20081120T1318Z <gchicares@sbcglobal.net> [910]
+
+  illustrator.cpp
+  illustrator.hpp
+  main_cgi.cpp
+Generalize top-level illustration class, removing a defect.
+
+20081121T0135Z <gchicares@sbcglobal.net> [910]
+
+  emit_ledger.cpp
+  emit_ledger.hpp
+  group_values.cpp
+  illustrator.cpp
+Refactor to improve separation of concerns.
+
+20081121T0306Z <gchicares@sbcglobal.net> [910]
+
+  census_view.cpp
+  emit_ledger.hpp
+  illustration_view.cpp
+  illustration_view.hpp
+  ledger_xsl.hpp
+Refactor to encapsulate pdf handling.
 
