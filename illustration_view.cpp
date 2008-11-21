@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.92 2008-11-15 13:58:17 chicares Exp $
+// $Id: illustration_view.cpp,v 1.93 2008-11-21 03:06:24 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -43,14 +43,13 @@
 #include "configurable_settings.hpp"
 #include "custom_io_0.hpp"
 #include "default_view.hpp"
-#include "file_command.hpp"
+#include "emit_ledger.hpp"
 #include "handle_exceptions.hpp"
 #include "illustration_document.hpp"
 #include "input.hpp"
 #include "istream_to_string.hpp"
 #include "ledger.hpp"
 #include "ledger_text_formats.hpp"
-#include "ledger_xsl.hpp"
 #include "ledgervalues.hpp"
 #include "mvc_controller.hpp"
 #include "safely_dereference_as.hpp"
@@ -215,7 +214,7 @@ void IllustrationView::UponCopySummary(wxCommandEvent&)
 
 void IllustrationView::UponPreviewPdf(wxCommandEvent&)
 {
-    Pdf("open");
+    Pdf(mce_emit_pdf_to_viewer);
 }
 
 void IllustrationView::UponPreviewSummary(wxCommandEvent&)
@@ -225,7 +224,7 @@ void IllustrationView::UponPreviewSummary(wxCommandEvent&)
 
 void IllustrationView::UponPrintPdf(wxCommandEvent&)
 {
-    Pdf("print");
+    Pdf(mce_emit_pdf_to_printer);
 }
 
 void IllustrationView::UponPrintSummary(wxCommandEvent&)
@@ -308,12 +307,10 @@ void IllustrationView::CopyLedgerToClipboard(enum_copy_option option)
     status() << "Copy: " << timer.stop().elapsed_msec_str() << std::flush;
 }
 
-void IllustrationView::Pdf(std::string const& action) const
+void IllustrationView::Pdf(mcenum_emission emission) const
 {
     LMI_ASSERT(ledger_values_.get());
-    std::string filename(document().GetUserReadableName());
-    std::string pdf_out_file = write_ledger_as_pdf(*ledger_values_, filename);
-    file_command()(pdf_out_file, action);
+    emit_ledger(document().GetUserReadableName(), *ledger_values_, emission);
 }
 
 // TODO ?? CALCULATION_SUMMARY This should use either the code or the
