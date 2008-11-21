@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.95 2008-11-21 17:02:19 chicares Exp $
+// $Id: illustration_view.cpp,v 1.96 2008-11-21 20:10:18 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -338,15 +338,22 @@ void IllustrationView::PrintOrPreviewHtmlSummary(enum_print_option option) const
     // a US locale, where 'A4' is a poor default?
     printer.GetPrintData()->SetPaperId(wxPAPER_LETTER);
 
-    if(e_print_printer == option)
+    switch(option)
         {
-        printer.PrintText(selected_values_as_html_);
-        }
-    // TODO ?? CALCULATION_SUMMARY This assumes, without asserting,
-    // that the enumeration has exactly two enumerators.
-    else
-        {
-        printer.PreviewText(selected_values_as_html_);
+        case e_print_printer:
+            {
+            printer.PrintText(selected_values_as_html_);
+            }
+            break;
+        case e_print_preview:
+            {
+            printer.PreviewText(selected_values_as_html_);
+            }
+            break;
+        default:
+            {
+            fatal_error() << "Case " << option << " not found." << LMI_FLUSH;
+            }
         }
 }
 
