@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: miscellany.cpp,v 1.12 2008-11-22 16:34:12 chicares Exp $
+// $Id: miscellany.cpp,v 1.13 2008-11-22 17:56:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -61,12 +61,10 @@ bool streams_are_identical(std::istream& is0, std::istream& is1)
 }
 } // Unnamed namespace.
 
-// TODO ?? Add unit tests.
-
 bool files_are_identical(std::string const& file0, std::string const& file1)
 {
-    std::ifstream ifs0(file0.c_str());
-    std::ifstream ifs1(file1.c_str());
+    std::ifstream ifs0(file0.c_str(), ios_in_binary());
+    std::ifstream ifs1(file1.c_str(), ios_in_binary());
     if(!ifs0) fatal_error() << "Unable to open '" << file0 << "'." << LMI_FLUSH;
     if(!ifs1) fatal_error() << "Unable to open '" << file1 << "'." << LMI_FLUSH;
     return streams_are_identical(ifs0, ifs1);
