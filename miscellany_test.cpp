@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: miscellany_test.cpp,v 1.2 2008-11-22 15:25:27 chicares Exp $
+// $Id: miscellany_test.cpp,v 1.3 2008-11-22 16:34:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -37,7 +37,7 @@ void test_files_are_identical()
     BOOST_TEST_THROW
         (files_are_identical(f0, f1)
         ,std::runtime_error
-        ,"Assertion '! !is0' failed."
+        ,"Unable to open 'unlikely_file_name_0'."
         );
 }
 
