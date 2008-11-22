@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: miscellany_test.cpp,v 1.3 2008-11-22 16:34:12 chicares Exp $
+// $Id: miscellany_test.cpp,v 1.4 2008-11-22 17:53:44 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,15 +30,49 @@
 
 #include "test_tools.hpp"
 
+#include <cstdio> // std::remove()
+#include <fstream>
+
 void test_files_are_identical()
 {
-    std::string f0("unlikely_file_name_0");
-    std::string f1("unlikely_file_name_1");
+    char const* f0("unlikely_file_name_0");
+    char const* f1("unlikely_file_name_1");
+
+    std::remove(f0);
+    std::remove(f1);
+
+    // Nonexistent files.
     BOOST_TEST_THROW
         (files_are_identical(f0, f1)
         ,std::runtime_error
         ,"Unable to open 'unlikely_file_name_0'."
         );
+
+    // Identical empty files.
+    {
+    std::ofstream ofs0(f0, ios_out_trunc_binary());
+    std::ofstream ofs1(f1, ios_out_trunc_binary());
+    }
+    BOOST_TEST(files_are_identical(f0, f1));
+
+    // Identical nonempty files.
+    {
+    std::ofstream ofs0(f0, ios_out_trunc_binary());
+    std::ofstream ofs1(f1, ios_out_trunc_binary());
+    ofs0 << "Test";
+    ofs1 << "Test";
+    }
+    BOOST_TEST(files_are_identical(f0, f1));
+
+    // Files whose contents might be identical in text mode but differ
+    // in binary mode are nonidentical.
+    {
+    std::ofstream ofs0(f0, ios_out_trunc_binary());
+    std::ofstream ofs1(f1, ios_out_trunc_binary());
+    ofs0 << "Test\r\n";
+    ofs1 << "Test\n";
+    }
+    BOOST_TEST(!files_are_identical(f0, f1));
 }
 
 int test_main(int, char*[])
