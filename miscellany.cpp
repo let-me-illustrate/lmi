@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: miscellany.cpp,v 1.10 2008-01-01 18:29:49 chicares Exp $
+// $Id: miscellany.cpp,v 1.11 2008-11-22 15:25:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -43,6 +43,8 @@ namespace
 
 bool streams_are_identical(std::istream& is0, std::istream& is1)
 {
+    LMI_ASSERT(! !is0);
+    LMI_ASSERT(! !is1);
     std::istreambuf_iterator<char> i(is0);
     std::istreambuf_iterator<char> j(is1);
     std::istreambuf_iterator<char> end;
