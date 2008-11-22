@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.63 2008-11-19 02:33:29 chicares Exp $
+# $Id: Makefile.am,v 1.64 2008-11-22 14:43:28 chicares Exp $
 
 SUBDIRS = third_party
 
@@ -672,6 +672,12 @@ test_mc_enum_SOURCES =  \
 test_mc_enum_CXXFLAGS = $(AM_CXXFLAGS)
 test_mc_enum_LDADD =  \
   $(BOOST_LIBS)
+
+test_miscellany_SOURCES =    \
+  $(common_test_objects) \
+  miscellany.cpp \
+  miscellany_test.cpp
+test_miscellany_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_mpatrol_patch_SOURCES =    \
   $(common_test_objects) \
