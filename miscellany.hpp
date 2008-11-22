@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: miscellany.hpp,v 1.17 2008-07-25 18:07:40 chicares Exp $
+// $Id: miscellany.hpp,v 1.18 2008-11-22 23:55:21 chicares Exp $
 
 #ifndef miscellany_hpp
 #define miscellany_hpp
@@ -30,15 +30,13 @@
 
 #include <algorithm>
 #include <cctype>
-#include <climits> // UCHAR_MAX
-#include <cstddef>
+#include <climits>  // UCHAR_MAX
+#include <cstddef>  // std::size_t
 #include <ios>
-#include <iterator>
+#include <iterator> // std::distance()
 #include <string>
 #include <utility>
 #include <vector>
-
-// TODO ?? Unit tests are needed.
 
 /// Test whether every element in a range equals the specified constant.
 
@@ -104,16 +102,19 @@ inline std::ios_base::openmode ios_out_trunc_binary()
         ;
 }
 
-// 27.4.4.1/3
+/// 27.4.4.1/3
+
 inline std::ios::fmtflags set_default_format_flags(std::ios_base& stream)
 {
     return stream.setf(std::ios::skipws | std::ios::dec);
 }
 
-// Omitting colons yields a valid posix path.
+/// Omitting colons yields a valid posix path.
+
 std::string iso_8601_datestamp_terse();
 
-// Colons separate HH:MM:SS, so result is not a valid posix path.
+/// Colons separate HH:MM:SS, so result is not a valid posix path.
+
 std::string iso_8601_datestamp_verbose();
 
 template<typename T, std::size_t n>

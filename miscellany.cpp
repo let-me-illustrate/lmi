@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: miscellany.cpp,v 1.13 2008-11-22 17:56:24 chicares Exp $
+// $Id: miscellany.cpp,v 1.14 2008-11-22 23:55:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,7 +34,6 @@
 #include <ctime>
 #include <fstream>
 #include <istream>
-#include <iterator>
 
 namespace
 {
@@ -46,6 +45,7 @@ bool streams_are_identical(std::istream& is0, std::istream& is1)
 {
     LMI_ASSERT(! !is0);
     LMI_ASSERT(! !is1);
+
     std::istreambuf_iterator<char> i(is0);
     std::istreambuf_iterator<char> j(is1);
     std::istreambuf_iterator<char> end;
@@ -70,8 +70,9 @@ bool files_are_identical(std::string const& file0, std::string const& file1)
     return streams_are_identical(ifs0, ifs1);
 }
 
-// http://groups-beta.google.com/group/borland.public.cpp.borlandcpp/msg/638d1f25e66472d9
-// 18 Jul 2001 18:25:15 -0400
+/// http://groups.google.com/group/borland.public.cpp.borlandcpp/msg/638d1f25e66472d9
+///   [2001-07-18T22:25:15Z from Greg Chicares]
+
 std::string iso_8601_datestamp_verbose()
 {
     std::size_t const len = sizeof "CCYY-MM-DDTHH:MM:SSZ";
