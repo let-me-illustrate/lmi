@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1206 2008-11-21 20:10:19 chicares Exp $
+// $Id: ChangeLog,v 1.1207 2008-11-22 17:56:24 chicares Exp $
 
 MAINTENANCE
 
@@ -20459,4 +20459,49 @@ Improve documentation.
 
   illustration_view.cpp
 Fix defect introduced 20061112T2107Z.
+
+20081122T1241Z <gchicares@sbcglobal.net> [906]
+
+  main_cli.cpp
+Add a test for class illustrator, exposing two latent defects.
+
+20081122T1256Z <gchicares@sbcglobal.net> [906]
+
+  basicvalues.cpp
+  main_cli.cpp
+Fix one defect exposed 20081122T1241Z.
+
+20081122T1443Z <gchicares@sbcglobal.net> [906]
+
+  Makefile.am
+  miscellany_test.cpp [new file]
+  objects.make
+Add a unit test for a defect exposed 20081122T1241Z.
+
+20081122T1525Z <gchicares@sbcglobal.net> [906]
+
+  miscellany.cpp
+  miscellany_test.cpp
+Fix defect demonstrated 20081122T1443Z by unit test.
+
+20081122T1528Z <gchicares@sbcglobal.net> [906]
+
+  main_cli.cpp
+Remove remaining defect exposed 20081122T1241Z.
+
+20081122T1634Z <gchicares@sbcglobal.net> [906]
+
+  miscellany.cpp
+  miscellany_test.cpp
+Improve a diagnostic.
+
+20081122T1753Z <gchicares@sbcglobal.net> [906]
+
+  miscellany_test.cpp
+Expand unit test, revealing another latent defect.
+
+20081122T1756Z <gchicares@sbcglobal.net> [905]
+
+  miscellany.cpp
+Fix defect demonstrated 20081122T1753Z.
 
