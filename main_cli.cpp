@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.61 2008-11-22 12:41:19 chicares Exp $
+// $Id: main_cli.cpp,v 1.62 2008-11-22 12:56:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -214,8 +214,7 @@ void illustrator_test()
     // A felicitous error, deliberately not fixed yet: two nonexistent
     // files are reported to be identical.
     LMI_ASSERT(files_are_identical("eraseme0", "eraseme1"));
-    // This is the correct test, which correctly fails due to another
-    // latent defect elsewhere.
+    // This is the correct test.
     LMI_ASSERT(files_are_identical("eraseme0.test", "eraseme1.test"));
 
     std::remove("eraseme0.test");
