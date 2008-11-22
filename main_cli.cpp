@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.60 2008-11-20 10:55:21 chicares Exp $
+// $Id: main_cli.cpp,v 1.61 2008-11-22 12:41:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,6 +30,7 @@
 #include "argv0.hpp"
 #include "assert_lmi.hpp"
 #include "authenticity.hpp" // timestamp_of_production_release()
+#include "emit_ledger.hpp"
 #include "getopt.hpp"
 #include "global_settings.hpp"
 #include "handle_exceptions.hpp"
@@ -56,7 +57,7 @@
 #include <algorithm>
 #include <cmath>
 #include <cstddef> // NULL, std::size_t
-#include <cstdio>  // std::printf()
+#include <cstdio>  // std::printf(), std::remove()
 #include <ios>
 #include <iostream>
 #include <iterator>
@@ -185,6 +186,40 @@ void SelfTest()
         << TimeAnAliquot(boost::bind(&IllusVal::run, &IV, IP), 0.1)
         << '\n'
         ;
+}
+
+/// Test class illustrator.
+///
+/// Compare output created in different ways from the same input. The
+/// mce_emit_test_data output type is chosen only for convenience;
+/// it might be good to test other output types as well in future.
+///
+/// Keep this separate from SelfTest() so that the latter can be used
+/// for timing and profiling. It is not interesting to time or profile
+/// the file IO performed here.
+
+void illustrator_test()
+{
+    std::remove("eraseme0.test");
+    std::remove("eraseme1.test");
+
+    Input input;
+
+    (illustrator(mce_emit_test_data))("eraseme1", input);
+
+    IllusVal values;
+    values.run(input);
+    emit_ledger("eraseme0", values.ledger(), mce_emit_test_data);
+
+    // A felicitous error, deliberately not fixed yet: two nonexistent
+    // files are reported to be identical.
+    LMI_ASSERT(files_are_identical("eraseme0", "eraseme1"));
+    // This is the correct test, which correctly fails due to another
+    // latent defect elsewhere.
+    LMI_ASSERT(files_are_identical("eraseme0.test", "eraseme1.test"));
+
+    std::remove("eraseme0.test");
+    std::remove("eraseme1.test");
 }
 
 //============================================================================
@@ -485,6 +520,7 @@ void process_command_line(int argc, char* argv[])
     if(run_selftest)
         {
         SelfTest();
+        illustrator_test();
         return;
         }
 
