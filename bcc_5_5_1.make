@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: bcc_5_5_1.make,v 1.18 2008-09-10 03:54:25 chicares Exp $
+# $Id: bcc_5_5_1.make,v 1.19 2008-11-23 00:32:20 chicares Exp $
 
 toolset      := bcc
 
@@ -137,7 +137,6 @@ platform_wx_libraries :=
 excluded_unit_test_targets := \
   commutation_functions_test \
   input_test \
-  ledger_test \
   loads_test \
   math_functors_test \
   mc_enum_test \
