@@ -20,9 +20,22 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.64 2008-11-22 14:43:28 chicares Exp $
+# $Id: Makefile.am,v 1.65 2008-11-23 13:40:23 chicares Exp $
 
 SUBDIRS = third_party
+
+##############################################################################
+# Common compilation flags
+##############################################################################
+
+AM_CPPFLAGS = -I$(srcdir)/tools/pete-2.1.1
+
+# On windows use auto import feature
+if LMI_MSW
+    AM_LDFLAGS=--enable-auto-import
+else
+    AM_LDFLAGS=
+endif
 
 ##############################################################################
 # All Targets
@@ -125,15 +138,6 @@ TESTS = \
     test_zero
 
 check_PROGRAMS = $(TESTS)
-
-####################################
-# On windows use auto import feature
-####################################
-if LMI_MSW
-    AM_LDFLAGS=--enable-auto-import
-else
-    AM_LDFLAGS=
-endif
 
 ##############################################################################
 # Targets definitions

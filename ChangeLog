@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1207 2008-11-22 17:56:24 chicares Exp $
+// $Id: ChangeLog,v 1.1208 2008-11-23 13:40:24 chicares Exp $
 
 MAINTENANCE
 
@@ -20504,4 +20504,28 @@ Expand unit test, revealing another latent defect.
 
   miscellany.cpp
 Fix defect demonstrated 20081122T1753Z.
+
+20081122T2355Z <gchicares@sbcglobal.net> [904]
+
+  miscellany.cpp
+  miscellany.hpp
+Include only appropriate headers; improve documentation.
+
+20081123T0032Z <gchicares@sbcglobal.net> [904]
+
+  bcc_5_5_1.make
+  como_4_3_3.make
+  ledger_test.cpp [expunged]
+  objects.make
+Expunge a misbegotten unit test.
+
+20081123T1340Z <gchicares@sbcglobal.net> [904]
+
+  Makefile.am
+  expression_template_0_test.cpp
+  install_miscellanea.make
+  loads.cpp
+  workhorse.make
+Simplify PETE usage (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2008-11/msg00008.html
 
