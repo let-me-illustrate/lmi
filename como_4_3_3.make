@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: como_4_3_3.make,v 1.29 2008-04-13 23:36:20 chicares Exp $
+# $Id: como_4_3_3.make,v 1.30 2008-11-23 00:32:20 chicares Exp $
 
 # Limited workarounds for Comeau C++ version 4.3.3, using gcc as the
 # underlying C compiler, with a Cygwin shell. Comeau C++ is useful
@@ -194,7 +194,6 @@ REQUIRED_LIBS := \
 MPATROL_LIBS :=
 
 excluded_unit_test_targets := \
-  ledger_test \
   regex_test \
 
 GNU_CPP := $(gcc3_bin_dir)/cpp
