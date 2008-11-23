@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.131 2008-11-19 16:38:23 chicares Exp $
+# $Id: workhorse.make,v 1.132 2008-11-23 13:40:24 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -266,6 +266,7 @@ wx_config_check:
 
 all_include_directories := \
   $(src_dir) \
+  $(src_dir)/tools/pete-2.1.1 \
   $(overriding_include_directories) \
   $(compiler_include_directory) \
   $(wx_include_paths) \
