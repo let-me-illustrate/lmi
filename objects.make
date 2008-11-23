@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.141 2008-11-22 14:43:29 chicares Exp $
+# $Id: objects.make,v 1.142 2008-11-23 00:32:20 chicares Exp $
 
 ################################################################################
 
@@ -415,8 +415,6 @@ gpt_so_test$(EXEEXT): ihs_server7702test.o libgpt$(SHREXT)
 
 # Unit tests.
 
-# 'ledger_test' was arguably a mistake.
-#
 # 'round_test' fails spectacularly with MinGW gcc, and is therefore
 # suppressed until we upgrade to the new libmingwex version that it
 # was designed to test.
@@ -425,7 +423,6 @@ gpt_so_test$(EXEEXT): ihs_server7702test.o libgpt$(SHREXT)
 # e.g., when a test doesn't even compile with a particular toolchain.
 
 excluded_unit_test_targets := \
-  ledger_test \
   round_test \
 
 unit_test_targets := \
@@ -452,7 +449,6 @@ unit_test_targets := \
   input_test \
   irc7702a_test \
   istream_to_string_test \
-  ledger_test \
   loads_test \
   map_lookup_test \
   materially_equal_test \
@@ -670,11 +666,6 @@ istream_to_string_test$(EXEEXT): \
   $(common_test_objects) \
   istream_to_string_test.o \
   timer.o \
-
-ledger_test$(EXEEXT): \
-  $(common_test_objects) \
-  $(lmi_common_objects) \
-  ledger_test.o \
 
 loads_test$(EXEEXT): \
   $(common_test_objects) \
