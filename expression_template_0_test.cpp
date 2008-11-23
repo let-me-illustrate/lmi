@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: expression_template_0_test.cpp,v 1.22 2008-09-17 02:06:28 chicares Exp $
+// $Id: expression_template_0_test.cpp,v 1.23 2008-11-23 13:40:24 chicares Exp $
 
 #if !defined __BORLANDC__
 #   define USE_UBLAS
@@ -43,11 +43,10 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
+#include "et_vector.hpp"
 #include "materially_equal.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
-
-#include <PETE/et_vector.hpp>
 
 #if !defined __BORLANDC__
 #   include <boost/bind.hpp>
