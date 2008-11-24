@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.99 2008-11-21 01:35:21 chicares Exp $
+// $Id: group_values.cpp,v 1.100 2008-11-24 18:13:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -115,11 +115,11 @@ census_run_result run_census_in_series::operator()
         {
         if(!cell_should_be_ignored(cells[j]))
             {
-            IllusVal IV(serialized_file_path(file, j, "debug").string());
+            IllusVal IV(serial_file_path(file, j, "debug").string());
             IV.run(cells[j]);
             composite.PlusEq(IV.ledger());
             result.usec_for_output_ += emit_ledger
-                (serialized_file_path(file, j, "hastur")
+                (serial_file_path(file, j, "hastur")
                 ,IV.ledger()
                 ,emission
                 );
@@ -133,7 +133,7 @@ census_run_result run_census_in_series::operator()
     meter->culminate();
 
     result.usec_for_output_ += emit_ledger
-        (serialized_file_path(file, -1, "hastur")
+        (serial_file_path(file, -1, "hastur")
         ,composite
         ,emission
         );
@@ -247,7 +247,7 @@ census_run_result run_census_in_parallel::operator()
             fenv_guard fg;
             boost::shared_ptr<AccountValue> av(new AccountValue(*ip));
             av->SetDebugFilename
-                (serialized_file_path(file, j, "debug").string()
+                (serial_file_path(file, j, "debug").string()
                 );
 
             cell_values.push_back(av);
@@ -626,7 +626,7 @@ census_run_result run_census_in_parallel::operator()
     for(i = cell_values.begin(); i != cell_values.end(); ++i, ++j)
         {
         result.usec_for_output_ += emit_ledger
-            (serialized_file_path(file, j, "hastur")
+            (serial_file_path(file, j, "hastur")
             ,*(*i)->ledger_from_av()
             ,emission
             );
@@ -634,7 +634,7 @@ census_run_result run_census_in_parallel::operator()
     }
 
     result.usec_for_output_ += emit_ledger
-        (serialized_file_path(file, -1, "hastur")
+        (serial_file_path(file, -1, "hastur")
         ,composite
         ,emission
         );
