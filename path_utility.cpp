@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: path_utility.cpp,v 1.16 2008-07-25 18:07:40 chicares Exp $
+// $Id: path_utility.cpp,v 1.17 2008-11-24 10:42:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -92,6 +92,120 @@ void initialize_filesystem()
 {
     fs::path::default_name_check(fs::native);
     fs::initial_path();
+}
+
+/// Prepend a serial number to a file extension. This is intended to
+/// be used for creating output file names for cells in a census. The
+/// input serial number is an origin-zero index into the container of
+/// individual cells. The formatted serial number embedded in the
+/// output string is in origin one, so that the census's composite can
+/// use output serial number zero--that's more satisfying than having
+/// it use one plus the number of individual cells.
+///
+/// The output serial number is formatted to nine places and filled
+/// with zeros, so that output file names sort well. It is hardly
+/// conceivable for a census to have more cells than nine places
+/// accommodate (it's enough to represent all US Social Security
+/// numbers), but if it does, then the file names are still unique;
+/// they just don't sort as nicely.
+///
+/// TODO ?? Need unit tests.
+
+std::string serialize_extension
+    (int                serial_number
+    ,std::string const& extension
+    )
+{
+    std::ostringstream oss;
+    oss
+        << '.'
+        << std::setfill('0') << std::setw(9) << 1 + serial_number
+        << '.'
+        << extension
+        ;
+    return oss.str();
+}
+
+/// TODO ?? Need documentation and unit tests.
+
+fs::path serialized_file_path
+    (fs::path const&    exemplar
+    ,int                serial_number
+    ,std::string const& extension
+    )
+{
+    return fs::change_extension
+        (exemplar
+        ,serialize_extension(serial_number, extension)
+        );
+}
+
+/// Create a unique file path, following input as closely as possible.
+///
+/// Motivating example. Suppose an illustration is created from input
+/// file 'foo.in', and output is to be saved in a pdf file. A natural
+/// name for the pdf file would be 'foo.pdf'. If a file with that
+/// exact name already exists, it should normally be erased, and its
+/// name reused: that's what an end user would expect. But that's not
+/// possible of 'foo.pdf' is already open in some viewer that locks it
+/// against modification; in that case, a distinct new name must be
+/// devised.
+///
+/// Postcondition: !exists(returned_filepath).
+///
+/// Algorithm. Copy the given file path, changing its extension, if
+/// any, to the given extension. If the resulting file path already
+/// exists, then try to remove it. If that fails, then try to make the
+/// file path unique by inserting a "YYYYMMDDTHHMMSSZ" timestamp right
+/// before the extension: that should suffice because an end user can
+/// hardly run illustrations faster than once a second. If even that
+/// fails to establish the postcondition, then throw an exception.
+///
+/// Implementation note.
+///
+/// A try-block is necessary because fs::remove() can throw. The
+/// postcondition is asserted explicitly at the end of the try-block
+/// because that boost function's semantics have changed between
+/// versions, and its documentation is still unclear in boost-1.34:
+/// apparently it mustn't fail without throwing, yet it doesn't throw
+/// on an operation that must fail, like removing a file that's locked
+/// by another process as in the motivating example above.
+
+fs::path unique_filepath
+    (fs::path const&    original_filepath
+    ,std::string const& extension
+    )
+{
+    fs::path filepath(original_filepath);
+    filepath = fs::change_extension(filepath, extension);
+    if(!fs::exists(filepath))
+        {
+        return filepath;
+        }
+
+    try
+        {
+        fs::remove(filepath);
+        LMI_ASSERT(!fs::exists(filepath));
+        }
+    catch(std::exception const&)
+        {
+        std::string basename = fs::basename(filepath);
+        basename += '-' + iso_8601_datestamp_terse() + extension;
+        filepath = filepath.branch_path() / basename;
+        if(fs::exists(filepath))
+            {
+            fatal_error()
+                << "Cannot create unique file path from file name '"
+                << original_filepath.string()
+                << "' with extension '"
+                << extension
+                << "'."
+                << LMI_FLUSH
+                ;
+            }
+        }
+    return filepath;
 }
 
 // TODO ?? CALCULATION_SUMMARY Refactor duplication:
@@ -217,119 +331,5 @@ void validate_filepath
             << LMI_FLUSH
             ;
         }
-}
-
-/// Prepend a serial number to a file extension. This is intended to
-/// be used for creating output file names for cells in a census. The
-/// input serial number is an origin-zero index into the container of
-/// individual cells. The formatted serial number embedded in the
-/// output string is in origin one, so that the census's composite can
-/// use output serial number zero--that's more satisfying than having
-/// it use one plus the number of individual cells.
-///
-/// The output serial number is formatted to nine places and filled
-/// with zeros, so that output file names sort well. It is hardly
-/// conceivable for a census to have more cells than nine places
-/// accommodate (it's enough to represent all US Social Security
-/// numbers), but if it does, then the file names are still unique;
-/// they just don't sort as nicely.
-///
-/// TODO ?? Need unit tests.
-
-std::string serialize_extension
-    (int                serial_number
-    ,std::string const& extension
-    )
-{
-    std::ostringstream oss;
-    oss
-        << '.'
-        << std::setfill('0') << std::setw(9) << 1 + serial_number
-        << '.'
-        << extension
-        ;
-    return oss.str();
-}
-
-/// TODO ?? Need documentation and unit tests.
-
-fs::path serialized_file_path
-    (fs::path const&    exemplar
-    ,int                serial_number
-    ,std::string const& extension
-    )
-{
-    return fs::change_extension
-        (exemplar
-        ,serialize_extension(serial_number, extension)
-        );
-}
-
-/// Create a unique file path, following input as closely as possible.
-///
-/// Motivating example. Suppose an illustration is created from input
-/// file 'foo.in', and output is to be saved in a pdf file. A natural
-/// name for the pdf file would be 'foo.pdf'. If a file with that
-/// exact name already exists, it should normally be erased, and its
-/// name reused: that's what an end user would expect. But that's not
-/// possible of 'foo.pdf' is already open in some viewer that locks it
-/// against modification; in that case, a distinct new name must be
-/// devised.
-///
-/// Postcondition: !exists(returned_filepath).
-///
-/// Algorithm. Copy the given file path, changing its extension, if
-/// any, to the given extension. If the resulting file path already
-/// exists, then try to remove it. If that fails, then try to make the
-/// file path unique by inserting a "YYYYMMDDTHHMMSSZ" timestamp right
-/// before the extension: that should suffice because an end user can
-/// hardly run illustrations faster than once a second. If even that
-/// fails to establish the postcondition, then throw an exception.
-///
-/// Implementation note.
-///
-/// A try-block is necessary because fs::remove() can throw. The
-/// postcondition is asserted explicitly at the end of the try-block
-/// because that boost function's semantics have changed between
-/// versions, and its documentation is still unclear in boost-1.34:
-/// apparently it mustn't fail without throwing, yet it doesn't throw
-/// on an operation that must fail, like removing a file that's locked
-/// by another process as in the motivating example above.
-
-fs::path unique_filepath
-    (fs::path const&    original_filepath
-    ,std::string const& extension
-    )
-{
-    fs::path filepath(original_filepath);
-    filepath = fs::change_extension(filepath, extension);
-    if(!fs::exists(filepath))
-        {
-        return filepath;
-        }
-
-    try
-        {
-        fs::remove(filepath);
-        LMI_ASSERT(!fs::exists(filepath));
-        }
-    catch(std::exception const&)
-        {
-        std::string basename = fs::basename(filepath);
-        basename += '-' + iso_8601_datestamp_terse() + extension;
-        filepath = filepath.branch_path() / basename;
-        if(fs::exists(filepath))
-            {
-            fatal_error()
-                << "Cannot create unique file path from file name '"
-                << original_filepath.string()
-                << "' with extension '"
-                << extension
-                << "'."
-                << LMI_FLUSH
-                ;
-            }
-        }
-    return filepath;
 }
 
