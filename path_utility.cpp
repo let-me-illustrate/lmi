@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: path_utility.cpp,v 1.17 2008-11-24 10:42:17 chicares Exp $
+// $Id: path_utility.cpp,v 1.18 2008-11-24 18:13:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -111,7 +111,7 @@ void initialize_filesystem()
 ///
 /// TODO ?? Need unit tests.
 
-std::string serialize_extension
+std::string serial_extension
     (int                serial_number
     ,std::string const& extension
     )
@@ -128,7 +128,7 @@ std::string serialize_extension
 
 /// TODO ?? Need documentation and unit tests.
 
-fs::path serialized_file_path
+fs::path serial_file_path
     (fs::path const&    exemplar
     ,int                serial_number
     ,std::string const& extension
@@ -136,7 +136,7 @@ fs::path serialized_file_path
 {
     return fs::change_extension
         (exemplar
-        ,serialize_extension(serial_number, extension)
+        ,serial_extension(serial_number, extension)
         );
 }
 

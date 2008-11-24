@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: view_ex.cpp,v 1.18 2008-05-14 11:35:35 chicares Exp $
+// $Id: view_ex.cpp,v 1.19 2008-11-24 18:13:14 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -188,6 +188,6 @@ std::string ViewEx::serial_filename
     ,std::string const& extension
     ) const
 {
-    return base_filename() + serialize_extension(serial_number, extension);
+    return base_filename() + serial_extension(serial_number, extension);
 }
 
