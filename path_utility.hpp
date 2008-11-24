@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: path_utility.hpp,v 1.11 2008-01-31 05:07:42 chicares Exp $
+// $Id: path_utility.hpp,v 1.12 2008-11-24 10:42:17 chicares Exp $
 
 #ifndef path_utility_hpp
 #define path_utility_hpp
@@ -33,16 +33,6 @@
 #include <string>
 
 void LMI_SO initialize_filesystem();
-
-void LMI_SO validate_directory
-    (std::string const& directory
-    ,std::string const& context
-    );
-
-void LMI_SO validate_filepath
-    (std::string const& filepath
-    ,std::string const& context
-    );
 
 std::string LMI_SO serialize_extension
     (int                serial_number
@@ -58,6 +48,16 @@ fs::path LMI_SO serialized_file_path
 fs::path LMI_SO unique_filepath
     (fs::path const&    original_filepath
     ,std::string const& extension
+    );
+
+void LMI_SO validate_directory
+    (std::string const& directory
+    ,std::string const& context
+    );
+
+void LMI_SO validate_filepath
+    (std::string const& filepath
+    ,std::string const& context
     );
 
 #endif // path_utility_hpp
