@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: path_utility_test.cpp,v 1.10 2008-11-25 01:47:11 chicares Exp $
+// $Id: path_utility_test.cpp,v 1.11 2008-11-25 16:16:35 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -37,6 +37,7 @@
 
 #include <cstdio> // std::remove()
 #include <fstream>
+#include <stdexcept>
 
 namespace
 {
@@ -54,6 +55,43 @@ namespace
         fs::ofstream ofs(p);
         ofs << p.string();
     }
+}
+
+void test_orthodox_filename()
+{
+    BOOST_TEST_THROW
+        (orthodox_filename("")
+        ,std::runtime_error
+        ,"Assertion '!original_filename.empty()' failed."
+        );
+
+    BOOST_TEST_EQUAL("Z"     , orthodox_filename("Z"));
+    BOOST_TEST_EQUAL("_"     , orthodox_filename("."));
+    BOOST_TEST_EQUAL("_"     , orthodox_filename("#"));
+
+    BOOST_TEST_EQUAL("AZ"    , orthodox_filename("AZ"));
+    BOOST_TEST_EQUAL("A_"    , orthodox_filename("A."));
+    BOOST_TEST_EQUAL("_Z"    , orthodox_filename(".Z"));
+    BOOST_TEST_EQUAL("__"    , orthodox_filename(".."));
+    BOOST_TEST_EQUAL("__"    , orthodox_filename("##"));
+
+    BOOST_TEST_EQUAL("A.Z"   , orthodox_filename("A.Z"));
+    BOOST_TEST_EQUAL("A-Z"   , orthodox_filename("A-Z"));
+
+    BOOST_TEST_EQUAL("_xyz_" , orthodox_filename(".xyz."));
+    BOOST_TEST_EQUAL("_xyz_" , orthodox_filename("-xyz-"));
+
+    BOOST_TEST_EQUAL("and_or", orthodox_filename("and/or"));
+
+    BOOST_TEST_EQUAL
+        (                  "Crime_and_or_Punishment.text"
+        ,orthodox_filename("Crime and/or Punishment.text")
+        );
+
+    BOOST_TEST_EQUAL
+        (                  "_Fyodor_Dostoyevskiy_Crime_and_Punishment.text"
+        ,orthodox_filename("/Fyodor Dostoyevskiy/Crime and Punishment.text")
+        );
 }
 
 void test_unique_filepath_with_normal_filenames()
@@ -124,12 +162,14 @@ void test_unique_filepath_with_ludicrous_filenames()
 
     BOOST_TEST_THROW
         (unique_filepath(fs::path(".."), "..")
-        ,fs::filesystem_error, ""
+        ,fs::filesystem_error
+        ,""
         );
 }
 
 int test_main(int, char*[])
 {
+    test_orthodox_filename();
     test_unique_filepath_with_normal_filenames();
     test_unique_filepath_with_ludicrous_filenames();
 

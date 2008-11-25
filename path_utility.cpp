@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: path_utility.cpp,v 1.18 2008-11-24 18:13:14 chicares Exp $
+// $Id: path_utility.cpp,v 1.19 2008-11-25 16:16:35 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -36,6 +36,7 @@
 #include <boost/filesystem/exception.hpp>
 #include <boost/filesystem/operations.hpp>
 
+#include <cctype>         // std::isalnum()
 #include <exception>
 #include <iomanip>
 #include <sstream>
@@ -92,6 +93,59 @@ void initialize_filesystem()
 {
     fs::path::default_name_check(fs::native);
     fs::initial_path();
+}
+
+/// Return a filename appropriate for posix as well as msw.
+///
+/// Precondition: argument is not empty.
+///
+/// Postcondition: regex [0-9A-Za-z][0-9A-Za-z.-]*[0-9A-Za-z]
+/// or [0-9A-Za-z] matches the result, '_' having replaced all
+/// other characters.
+///
+/// Motivation: create a valid filename for apache fop, which, being
+/// written in 'java', has its own notion of portability that may
+/// clash with every platform it's implemented on. Thus, only pathless
+/// filenames should be operated upon: hypothetically, given
+///   /Fyodor Dostoyevskiy/Crime and Punishment.text
+/// it would be all right to create
+///   /Fyodor Dostoyevskiy/Crime_and_Punishment.pdf
+/// but it would be wrong to attempt to create
+///   /Fyodor_Dostoyevskiy/Crime_and_Punishment.pdf
+/// in a directory that doesn't exist. However, path separators in the
+/// argument are treated as any other invalid character--deliberately,
+/// in case an end user types something like
+///   Crime and/or Punishment
+/// with no intention of denoting a path.
+///
+/// Although portable_filename() would be better name, that would be
+/// confusing because the boost filesystem library already provides
+/// boolean predicates like portable_file_name(), where Myers
+///   http://www.cantrip.org/coding-standard2.html
+/// would prefer a predicate phrase like is_portable_file_name():
+/// cf. std::isalnum(), std::numeric_limits::is_signed().
+
+std::string LMI_SO orthodox_filename(std::string const& original_filename)
+{
+    LMI_ASSERT(!original_filename.empty());
+    std::string s(original_filename);
+    for(std::string::size_type j = 0; j < s.size(); ++j)
+        {
+        unsigned char const c = static_cast<unsigned char>(s[j]);
+        if
+            (  std::isalnum(c)
+            || '_' == c
+            || ('.' == c || '-' == c) && !(0 == j || s.size() == 1 + j)
+            )
+            {
+            continue;
+            }
+        else
+            {
+            s[j] = '_';
+            }
+        }
+    return s;
 }
 
 /// Prepend a serial number to a file extension. This is intended to
