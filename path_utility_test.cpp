@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: path_utility_test.cpp,v 1.9 2008-09-29 12:27:21 chicares Exp $
+// $Id: path_utility_test.cpp,v 1.10 2008-11-25 01:47:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -56,7 +56,7 @@ namespace
     }
 }
 
-void test_normal_operation()
+void test_unique_filepath_with_normal_filenames()
 {
     // These tests would fail if read-only files with the following
     // names already exist.
@@ -107,7 +107,7 @@ void test_normal_operation()
     BOOST_TEST(0 == std::remove(path2.string().c_str()));
 }
 
-void test_ludicrous_filenames()
+void test_unique_filepath_with_ludicrous_filenames()
 {
     fs::path path0 = unique_filepath(fs::path("eraseme1"), "");
     BOOST_TEST_EQUAL(path0.string(), "eraseme1");
@@ -130,8 +130,8 @@ void test_ludicrous_filenames()
 
 int test_main(int, char*[])
 {
-    test_normal_operation();
-    test_ludicrous_filenames();
+    test_unique_filepath_with_normal_filenames();
+    test_unique_filepath_with_ludicrous_filenames();
 
     return EXIT_SUCCESS;
 }
