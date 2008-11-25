@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: view_ex.cpp,v 1.19 2008-11-24 18:13:14 chicares Exp $
+// $Id: view_ex.cpp,v 1.20 2008-11-25 01:36:26 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -49,9 +49,10 @@
 #include "assert_lmi.hpp"
 #include "docmanager_ex.hpp"
 #include "main_wx.hpp" // wxGetApp()
-#include "path_utility.hpp"
 #include "safely_dereference_as.hpp"
 #include "wx_new.hpp"
+
+#include <boost/filesystem/path.hpp>
 
 #include <wx/dc.h>
 #include <wx/icon.h>
@@ -181,13 +182,5 @@ std::string ViewEx::base_filename() const
     std::string t(GetDocument()->GetUserReadableName());
     fs::path path(t);
     return path.leaf();
-}
-
-std::string ViewEx::serial_filename
-    (int                serial_number
-    ,std::string const& extension
-    ) const
-{
-    return base_filename() + serial_extension(serial_number, extension);
 }
 

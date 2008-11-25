@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: view_ex.hpp,v 1.13 2008-03-25 16:46:18 chicares Exp $
+// $Id: view_ex.hpp,v 1.14 2008-11-25 01:36:26 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -129,11 +129,6 @@ class ViewEx
     wxFrame& FrameWindow() const;
 
     std::string base_filename() const;
-
-    std::string serial_filename
-        (int                serial_number
-        ,std::string const& extension
-        ) const;
 
     // TODO ?? Probably better to provide the implementation in
     // separate functions that can be called by derived classes.
