@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1208 2008-11-23 13:40:24 chicares Exp $
+// $Id: ChangeLog,v 1.1209 2008-11-25 16:16:35 chicares Exp $
 
 MAINTENANCE
 
@@ -20528,4 +20528,46 @@ Expunge a misbegotten unit test.
   workhorse.make
 Simplify PETE usage (VS). See:
   http://lists.nongnu.org/archive/html/lmi/2008-11/msg00008.html
+
+20081123T1409Z <gchicares@sbcglobal.net> [904]
+
+  loads.cpp
+Fix defect introduced 20081123T1340Z: headers weren't alphabetized.
+
+20081124T1042Z <gchicares@sbcglobal.net> [904]
+
+  path_utility.cpp
+  path_utility.hpp
+Generally prefer to present functions in alphabetical order.
+
+20081124T1813Z <gchicares@sbcglobal.net> [904]
+
+  group_values.cpp
+  path_utility.cpp
+  path_utility.hpp
+  view_ex.cpp
+Rectify names.
+
+20081125T0136Z <gchicares@sbcglobal.net> [904]
+
+  census_view.cpp
+  view_ex.cpp
+  view_ex.hpp
+Refactor, eliminating ViewEx::serial_filename().
+
+20081125T0147Z <gchicares@sbcglobal.net> [904]
+
+  path_utility_test.cpp
+Rectify names.
+
+20081125T1616Z <gchicares@sbcglobal.net> [904]
+
+  path_utility.cpp
+  path_utility.hpp
+  path_utility_test.cpp
+Add a function to make a filename portable. This is required for
+  http://savannah.nongnu.org/support/?105907
+because 'CensusFilename.Firstname Lastname.000000001.pdf' is not
+portable, so write_ledger_as_pdf() would turn it into 'output.pdf';
+yet people's names, unlike portable filenames, do contain spaces.
 
