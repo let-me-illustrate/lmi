@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: path_utility.hpp,v 1.14 2008-11-25 16:16:35 chicares Exp $
+// $Id: path_utility.hpp,v 1.15 2008-11-26 16:07:24 chicares Exp $
 
 #ifndef path_utility_hpp
 #define path_utility_hpp
@@ -38,13 +38,9 @@ std::string LMI_SO orthodox_filename
     (std::string const& original_filename
     );
 
-std::string LMI_SO serial_extension
-    (int                serial_number
-    ,std::string const& extension
-    );
-
 fs::path LMI_SO serial_file_path
     (fs::path const&    exemplar
+    ,std::string const& personal_name
     ,int                serial_number
     ,std::string const& extension
     );
