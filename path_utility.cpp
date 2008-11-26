@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: path_utility.cpp,v 1.19 2008-11-25 16:16:35 chicares Exp $
+// $Id: path_utility.cpp,v 1.20 2008-11-26 16:07:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -99,8 +99,8 @@ void initialize_filesystem()
 ///
 /// Precondition: argument is not empty.
 ///
-/// Postcondition: regex [0-9A-Za-z][0-9A-Za-z.-]*[0-9A-Za-z]
-/// or [0-9A-Za-z] matches the result, '_' having replaced all
+/// Postcondition: regex [0-9A-Za-z_][0-9A-Za-z_.-]*[0-9A-Za-z_]
+/// or [0-9A-Za-z_] matches the result, '_' having replaced all
 /// other characters.
 ///
 /// Motivation: create a valid filename for apache fop, which, being
@@ -118,12 +118,13 @@ void initialize_filesystem()
 ///   Crime and/or Punishment
 /// with no intention of denoting a path.
 ///
-/// Although portable_filename() would be better name, that would be
+/// Although portable_filename() would be a better name, that would be
 /// confusing because the boost filesystem library already provides
 /// boolean predicates like portable_file_name(), where Myers
 ///   http://www.cantrip.org/coding-standard2.html
 /// would prefer a predicate phrase like is_portable_file_name():
-/// cf. std::isalnum(), std::numeric_limits::is_signed().
+/// cf. std::isalnum(), std::numeric_limits::is_signed(), and even
+/// boost::filesystem::is_complete().
 
 std::string LMI_SO orthodox_filename(std::string const& original_filename)
 {
@@ -148,6 +149,8 @@ std::string LMI_SO orthodox_filename(std::string const& original_filename)
     return s;
 }
 
+namespace
+{
 /// Prepend a serial number to a file extension. This is intended to
 /// be used for creating output file names for cells in a census. The
 /// input serial number is an origin-zero index into the container of
@@ -162,8 +165,6 @@ std::string LMI_SO orthodox_filename(std::string const& original_filename)
 /// accommodate (it's enough to represent all US Social Security
 /// numbers), but if it does, then the file names are still unique;
 /// they just don't sort as nicely.
-///
-/// TODO ?? Need unit tests.
 
 std::string serial_extension
     (int                serial_number
@@ -179,19 +180,44 @@ std::string serial_extension
         ;
     return oss.str();
 }
+} // Unnamed namespace.
 
-/// TODO ?? Need documentation and unit tests.
+/// Create an output filename from census information.
+///
+/// Motivation: see
+///   http://savannah.nongnu.org/support/?105907
+/// The output filename is composed of:
+///  - the census input filename, which identifies the case;
+///  - the insured's name, iff one was furnished;
+///  - the serial number of the insured within the census; and
+///  - an extension appropriate to the output type.
+///
+/// Preconditions: census input filepath is nonempty and has a leaf.
+/// It's not apparent how a nonempty path could fail to have a leaf,
+/// but presumably boost has some undocumented reason.
+///
+/// Any extension or path is discarded from the input census filepath;
+/// only the filename leaf is used.
+///
+/// It is necessary to call orthodox_filename() on the insured's name
+/// in case it contains a character (probably whitespace) that might
+/// be fail a boost::filesystem name check.
 
 fs::path serial_file_path
     (fs::path const&    exemplar
+    ,std::string const& personal_name
     ,int                serial_number
     ,std::string const& extension
     )
 {
-    return fs::change_extension
-        (exemplar
-        ,serial_extension(serial_number, extension)
-        );
+    LMI_ASSERT(!exemplar.empty());
+    LMI_ASSERT(exemplar.has_leaf());
+    std::string s(serial_extension(serial_number, extension));
+    if(!personal_name.empty())
+        {
+        s = '.' + orthodox_filename(personal_name) + s;
+        }
+    return fs::change_extension(exemplar.leaf(), s);
 }
 
 /// Create a unique file path, following input as closely as possible.

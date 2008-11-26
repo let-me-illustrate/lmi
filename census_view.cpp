@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.82 2008-11-25 01:36:26 chicares Exp $
+// $Id: census_view.cpp,v 1.83 2008-11-26 16:07:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -841,9 +841,10 @@ void CensusView::UponPrintCell(wxCommandEvent&)
         }
 
     int cell_number = selected_row();
+    std::string const name(cell_parms()[cell_number]["InsuredName"].str());
     illustrator z(mce_emit_pdf_to_printer);
     z
-        (serial_file_path(base_filename(), cell_number, "hastur")
+        (serial_file_path(base_filename(), name, cell_number, "hastur")
         ,cell_parms()[cell_number]
         );
 }
@@ -876,9 +877,10 @@ void CensusView::UponRunCell(wxCommandEvent&)
 
 void CensusView::ViewOneCell(int index)
 {
+    std::string const name(cell_parms()[index]["InsuredName"].str());
     IllustrationView& illview = MakeNewIllustrationDocAndView
         (document().GetDocumentManager()
-        ,serial_file_path(base_filename(), index, "ill").string().c_str()
+        ,serial_file_path(base_filename(), name, index, "ill").string().c_str()
         );
     illview.Run(&cell_parms()[index]);
 }
@@ -896,9 +898,10 @@ void CensusView::ViewComposite()
 
     if(!was_cancelled_)
         {
+        std::string const name("composite");
         IllustrationView& illview = MakeNewIllustrationDocAndView
             (document().GetDocumentManager()
-            ,serial_file_path(base_filename(), -1, "ill").string().c_str()
+            ,serial_file_path(base_filename(), name, -1, "ill").string().c_str()
             );
 
         // This is necessary for the view to be able to print.
