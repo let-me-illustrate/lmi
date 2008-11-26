@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: view_ex.cpp,v 1.20 2008-11-25 01:36:26 chicares Exp $
+// $Id: view_ex.cpp,v 1.21 2008-11-26 16:53:17 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -177,10 +177,19 @@ void ViewEx::OnDraw(wxDC*)
 {
 }
 
+/// A pathless name, useful for naming output files.
+///
+/// Using wxDocument::GetUserReadableName() means the name can be
+/// altered by calling wxDocument::SetTitle(). By default, the title
+/// is the filename with no path. The call to leaf() guarantees that
+/// the result is pathless, even if e.g. the title has been set to the
+/// document's full filepath. If leaf() is empty, then a name that
+/// recognizably should never be uttered is returned.
+
 std::string ViewEx::base_filename() const
 {
     std::string t(GetDocument()->GetUserReadableName());
     fs::path path(t);
-    return path.leaf();
+    return path.has_leaf() ? path.leaf() : std::string("Hastur");
 }
 
