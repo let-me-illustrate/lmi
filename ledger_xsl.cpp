@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.36 2008-11-26 15:28:14 chicares Exp $
+// $Id: ledger_xsl.cpp,v 1.37 2008-11-26 16:00:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,9 +32,7 @@
 #include "configurable_settings.hpp"
 #include "global_settings.hpp"
 #include "ledger.hpp"
-#include "ledger_invariant.hpp"       // "idiosyncrasy_spreadsheet" workaround
 #include "miscellany.hpp"
-#include "null_stream.hpp"            // "idiosyncrasy_spreadsheet" workaround
 #include "path_utility.hpp"
 #include "system_command.hpp"
 
@@ -42,7 +40,6 @@
 #include <boost/filesystem/operations.hpp>
 
 #include <ios>
-#include <ostream>                    // "idiosyncrasy_spreadsheet" workaround
 #include <sstream>
 
 namespace
@@ -87,24 +84,26 @@ fs::path xsl_filepath(Ledger const& ledger)
     return xsl_file;
 }
 
+/// Write ledger as pdf via xsl-fo.
+///
+/// Ensure that the output filename is portable. Apache fop rejects
+/// some names for '-xml' that it accepts for pdf output, without
+/// documenting what names it considers valid, so using the boost
+///   http://www.boost.org/doc/libs/1_37_0/libs/filesystem/doc/portability_guide.htm
+/// conventions here is just a guess. Nonportable names that apache
+/// fop accepts for pdf output seem not to work well with the most
+/// popular msw pdf viewer, at least in a msw 'dde conversation',
+/// so use a similar portable name for pdf output.
+///
+/// USER !! This filename change should be documented for users.
+/// Ultimately, for fop, the reason why their nonportable msw
+/// filenames must be transformed is that apache fop is java, and
+/// java is "portable".
+
 std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
 {
     fs::path print_dir(configurable_settings::instance().print_directory());
 
-    // Ensure that the output filename is portable. Apache fop rejects
-    // some names for '-xml' that it accepts for pdf output, without
-    // documenting what names it considers valid, so using the boost
-    //   http://www.boost.org/doc/libs/1_37_0/libs/filesystem/doc/portability_guide.htm
-    // conventions here is just a guess. Nonportable names that apache
-    // fop accepts for pdf output seem not to work well with the most
-    // popular msw pdf viewer, at least in a msw 'dde conversation',
-    // so use a similar portable name for pdf output.
-    //
-    // USER !! This filename change should be documented for users.
-    // Ultimately, for fop, the reason why their nonportable msw
-    // filenames must be transformed is that apache fop is java, and
-    // java is "portable".
-    //
     fs::path real_filepath(orthodox_filename(filepath.leaf()));
     LMI_ASSERT(fs::portable_name(real_filepath.string()));
 
@@ -114,8 +113,6 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
     ledger.write_xsl_fo(ofs);
     ofs.close();
 
-    fs::path xsl_file = xsl_filepath(ledger);
-
     fs::path pdf_out_file = unique_filepath(print_dir / real_filepath, ".pdf");
 
     std::ostringstream oss;
@@ -124,19 +121,6 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
         << " -fo "  << '"' << xml_fo_file .string() << '"'
         << " -pdf " << '"' << pdf_out_file.string() << '"'
         ;
-#if 0 // Here's a less efficient alternative:
-    fs::path xml_out_file = unique_filepath(print_dir / real_filepath, ".fo.xml");
-    fs::ofstream ofs(xml_out_file, ios_out_trunc_binary());
-    ledger.write(ofs);
-    ofs.close();
-    oss
-        << configurable_settings::instance().xsl_fo_command()
-        << " -xsl "  << '"' << xsl_file    .string() << '"'
-        << " -xml "  << '"' << xml_out_file.string() << '"'
-        << " "       << '"' << pdf_out_file.string() << '"'
-        ;
-#endif // 0
-
     system_command(oss.str());
     return pdf_out_file.string();
 }
