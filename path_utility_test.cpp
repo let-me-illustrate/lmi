@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: path_utility_test.cpp,v 1.11 2008-11-25 16:16:35 chicares Exp $
+// $Id: path_utility_test.cpp,v 1.12 2008-11-26 16:07:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -91,6 +91,48 @@ void test_orthodox_filename()
     BOOST_TEST_EQUAL
         (                  "_Fyodor_Dostoyevskiy_Crime_and_Punishment.text"
         ,orthodox_filename("/Fyodor Dostoyevskiy/Crime and Punishment.text")
+        );
+}
+
+void test_serial_file_path()
+{
+    BOOST_TEST_EQUAL
+        (                         "Abolitionists.John_Brown.018591203.text"
+        ,serial_file_path("Abolitionists.cns", "John Brown", 18591202, "text").string()
+        );
+
+    // Serial number is zero-padded to nine positions, but can use more.
+    BOOST_TEST_EQUAL
+        (                            "x.000012346.y"
+        ,serial_file_path("x.cns", "",      12345, "y").string()
+        );
+    BOOST_TEST_EQUAL
+        (                            "x.123456790.y"
+        ,serial_file_path("x.cns", "",  123456789, "y").string()
+        );
+    BOOST_TEST_EQUAL
+        (                           "x.1234567891.y"
+        ,serial_file_path("x.cns", "", 1234567890, "y").string()
+        );
+
+    // Input census filepath needn't have any extension.
+    BOOST_TEST_EQUAL
+        (serial_file_path("x.ignored", "",      12345, "y").string()
+        ,serial_file_path("x"        , "",      12345, "y").string()
+        );
+    BOOST_TEST_EQUAL
+        (                                "x.000012346.y"
+        ,serial_file_path("x.ignored", "",      12345, "y").string()
+        );
+
+    // Discard path from input census filepath; use only leaf.
+    BOOST_TEST_EQUAL
+        (serial_file_path("/path/to/x", "",      12345, "y").string()
+        ,serial_file_path("x"         , "",      12345, "y").string()
+        );
+    BOOST_TEST_EQUAL
+        (                                 "x.000012346.y"
+        ,serial_file_path("/path/to/x", "",      12345, "y").string()
         );
 }
 
@@ -170,6 +212,7 @@ void test_unique_filepath_with_ludicrous_filenames()
 int test_main(int, char*[])
 {
     test_orthodox_filename();
+    test_serial_file_path();
     test_unique_filepath_with_normal_filenames();
     test_unique_filepath_with_ludicrous_filenames();
 

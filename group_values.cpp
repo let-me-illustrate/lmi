@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.100 2008-11-24 18:13:14 chicares Exp $
+// $Id: group_values.cpp,v 1.101 2008-11-26 16:07:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -115,11 +115,12 @@ census_run_result run_census_in_series::operator()
         {
         if(!cell_should_be_ignored(cells[j]))
             {
-            IllusVal IV(serial_file_path(file, j, "debug").string());
+            std::string const name(cells[j]["InsuredName"].str());
+            IllusVal IV(serial_file_path(file, name, j, "debug").string());
             IV.run(cells[j]);
             composite.PlusEq(IV.ledger());
             result.usec_for_output_ += emit_ledger
-                (serial_file_path(file, j, "hastur")
+                (serial_file_path(file, name, j, "hastur")
                 ,IV.ledger()
                 ,emission
                 );
@@ -133,7 +134,7 @@ census_run_result run_census_in_series::operator()
     meter->culminate();
 
     result.usec_for_output_ += emit_ledger
-        (serial_file_path(file, -1, "hastur")
+        (serial_file_path(file, "composite", -1, "hastur")
         ,composite
         ,emission
         );
@@ -246,8 +247,9 @@ census_run_result run_census_in_parallel::operator()
             { // Begin fenv_guard scope.
             fenv_guard fg;
             boost::shared_ptr<AccountValue> av(new AccountValue(*ip));
+            std::string const name(cells[j]["InsuredName"].str());
             av->SetDebugFilename
-                (serial_file_path(file, j, "debug").string()
+                (serial_file_path(file, name, j, "debug").string()
                 );
 
             cell_values.push_back(av);
@@ -625,8 +627,9 @@ census_run_result run_census_in_parallel::operator()
     int j = 0;
     for(i = cell_values.begin(); i != cell_values.end(); ++i, ++j)
         {
+        std::string const name(cells[j]["InsuredName"].str());
         result.usec_for_output_ += emit_ledger
-            (serial_file_path(file, j, "hastur")
+            (serial_file_path(file, name, j, "hastur")
             ,*(*i)->ledger_from_av()
             ,emission
             );
@@ -634,7 +637,7 @@ census_run_result run_census_in_parallel::operator()
     }
 
     result.usec_for_output_ += emit_ledger
-        (serial_file_path(file, -1, "hastur")
+        (serial_file_path(file, "composite", -1, "hastur")
         ,composite
         ,emission
         );
