@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1209 2008-11-25 16:16:35 chicares Exp $
+// $Id: ChangeLog,v 1.1210 2008-11-26 16:53:17 chicares Exp $
 
 MAINTENANCE
 
@@ -20570,4 +20570,29 @@ Add a function to make a filename portable. This is required for
 because 'CensusFilename.Firstname Lastname.000000001.pdf' is not
 portable, so write_ledger_as_pdf() would turn it into 'output.pdf';
 yet people's names, unlike portable filenames, do contain spaces.
+
+20081126T1528Z <gchicares@sbcglobal.net> [904]
+
+  ledger_xsl.cpp
+Use function added 20081125T1616Z to make xsl-fo filenames portable.
+
+20081126T1600Z <gchicares@sbcglobal.net> [904]
+
+  ledger_xsl.cpp
+Remove superannuated code; improve documentation.
+
+20081126T1607Z <gchicares@sbcglobal.net> [902]
+
+  census_view.cpp
+  group_values.cpp
+  path_utility.cpp
+  path_utility.hpp
+  path_utility_test.cpp
+Add insured's name to census output filenames. See:
+  http://savannah.nongnu.org/support/?105907
+
+20081126T1653Z <gchicares@sbcglobal.net> [902]
+
+  view_ex.cpp
+Improve safety and documentation.
 
