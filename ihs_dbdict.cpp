@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbdict.cpp,v 1.25 2008-08-21 03:14:28 chicares Exp $
+// $Id: ihs_dbdict.cpp,v 1.26 2008-12-02 13:29:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -237,6 +237,12 @@ void DBDictionary::InitDB()
     Add(TDBValue(DB_ADDLimit            , bignum));
     Add(TDBValue(DB_ExpPerKLimit        , bignum));
 
+    // SD Chapter 260 (HB 1200), signed 2008-02-19, amended 58-6-70
+    // by removing the former million-dollar threshold.
+    //
+    // TODO ?? For now, only the threshold here is changed. Much
+    // complex code elsewhere can be removed when time permits.
+
     int premium_tax_dimensions[TDBValue::e_number_of_axes] = {1, 1, 1, 1, 1, 53, 1};
     double premium_tax_retaliation_threshold[53] =
         {
@@ -253,7 +259,7 @@ void DBDictionary::InitDB()
     //  NC      ND      OH      OK      OR      PA
         bignum, bignum, bignum, bignum, bignum, bignum,
     //  PR      RI      SC      SD      TN      TX      UT
-        bignum, bignum, bignum, 1E6   , bignum, bignum, bignum,
+        bignum, bignum, bignum, 0.0   , bignum, bignum, bignum,
     //  VT      VA      WA      WV      WI      WY      XX
         bignum, bignum, bignum, bignum, bignum, bignum, 0.0   ,
         };

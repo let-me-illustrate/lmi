@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1210 2008-11-26 16:53:17 chicares Exp $
+// $Id: ChangeLog,v 1.1211 2008-12-02 13:29:29 chicares Exp $
 
 MAINTENANCE
 
@@ -20595,4 +20595,16 @@ Add insured's name to census output filenames. See:
 
   view_ex.cpp
 Improve safety and documentation.
+
+20081202T0412Z <gchicares@sbcglobal.net> [902]
+
+  Makefile.am
+  objects.make
+  path_utility.cpp
+Omit insured's name from filenames in system tests.
+
+20081202T1329Z <gchicares@sbcglobal.net> [903]
+
+  ihs_dbdict.cpp
+Remove SD premium-tax threshold, reflecting a 2008 amendment.
 
