@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.65 2008-11-23 13:40:23 chicares Exp $
+# $Id: Makefile.am,v 1.66 2008-12-02 04:12:16 chicares Exp $
 
 SUBDIRS = third_party
 
@@ -711,6 +711,7 @@ test_obstruct_slicing_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_path_utility_SOURCES = \
   $(common_test_objects) \
+  global_settings.cpp \
   miscellany.cpp \
   path_utility.cpp \
   path_utility_test.cpp

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: path_utility.cpp,v 1.20 2008-11-26 16:07:24 chicares Exp $
+// $Id: path_utility.cpp,v 1.21 2008-12-02 04:12:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,6 +30,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "global_settings.hpp"
 #include "miscellany.hpp" // iso_8601_datestamp_terse()
 
 #include <boost/filesystem/convenience.hpp>
@@ -188,9 +189,13 @@ std::string serial_extension
 ///   http://savannah.nongnu.org/support/?105907
 /// The output filename is composed of:
 ///  - the census input filename, which identifies the case;
-///  - the insured's name, iff one was furnished;
+///  - the insured's name, if nonempty, except in regression tests;
 ///  - the serial number of the insured within the census; and
 ///  - an extension appropriate to the output type.
+///
+/// Excluding the insured's name when running regression tests makes
+/// output filenames simpler and more regular, yet doesn't suppress
+/// any information that would actually be useful.
 ///
 /// Preconditions: census input filepath is nonempty and has a leaf.
 /// It's not apparent how a nonempty path could fail to have a leaf,
@@ -213,7 +218,10 @@ fs::path serial_file_path
     LMI_ASSERT(!exemplar.empty());
     LMI_ASSERT(exemplar.has_leaf());
     std::string s(serial_extension(serial_number, extension));
-    if(!personal_name.empty())
+    if
+        (  !personal_name.empty()
+        && !global_settings::instance().regression_testing()
+        )
         {
         s = '.' + orthodox_filename(personal_name) + s;
         }
