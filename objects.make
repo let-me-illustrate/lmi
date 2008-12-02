@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.142 2008-11-23 00:32:20 chicares Exp $
+# $Id: objects.make,v 1.143 2008-12-02 04:12:16 chicares Exp $
 
 ################################################################################
 
@@ -732,6 +732,7 @@ obstruct_slicing_test$(EXEEXT): \
 path_utility_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
+  global_settings.o \
   miscellany.o \
   path_utility.o \
   path_utility_test.o \
