@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mortality_rates.hpp,v 1.16 2008-07-06 17:36:41 chicares Exp $
+// $Id: mortality_rates.hpp,v 1.17 2008-12-04 15:43:22 chicares Exp $
 
 #ifndef mortality_rates_hpp
 #define mortality_rates_hpp
@@ -56,6 +56,8 @@ class BasicValues;
 
 class MortalityRates
 {
+    friend class mortality_rates_test;
+
   public:
     MortalityRates(BasicValues const&);
 
@@ -81,12 +83,11 @@ class MortalityRates
     std::vector<double> const& CvatNspRates        () const;
 
   private:
-    MortalityRates();
+    MortalityRates(); // For unit testing only.
 
     void Init(BasicValues const&); // Antediluvian.
 
     void reserve_vectors();
-    // TODO ?? Want alternative for unit testing.
     void fetch_parameters(BasicValues const&);
     void initialize();
 
@@ -130,7 +131,6 @@ class MortalityRates
     std::vector<double> CCoiMultiplier_;
     std::vector<double> SubstdTblMult_;
 
-// MonthlyCoiRatesBand2
     std::vector<double> MonthlyGuaranteedCoiRates_;
     std::vector<double> MonthlyCurrentCoiRatesBand0_;
     std::vector<double> MonthlyCurrentCoiRatesBand1_;
