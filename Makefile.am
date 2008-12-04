@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.66 2008-12-02 04:12:16 chicares Exp $
+# $Id: Makefile.am,v 1.67 2008-12-04 15:35:33 chicares Exp $
 
 SUBDIRS = third_party
 
@@ -111,6 +111,7 @@ TESTS = \
     test_materially_equal \
     test_math_functors \
     test_mc_enum \
+    test_miscellany \
     test_mpatrol_patch \
     test_name_value_pairs \
     test_ncnnnpnn \
