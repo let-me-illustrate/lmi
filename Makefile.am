@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.67 2008-12-04 15:35:33 chicares Exp $
+# $Id: Makefile.am,v 1.68 2008-12-04 15:43:22 chicares Exp $
 
 SUBDIRS = third_party
 
@@ -112,6 +112,7 @@ TESTS = \
     test_math_functors \
     test_mc_enum \
     test_miscellany \
+    test_mortality_rates \
     test_mpatrol_patch \
     test_name_value_pairs \
     test_ncnnnpnn \
@@ -345,6 +346,7 @@ liblmi_la_SOURCES = \
     mc_enum_types.cpp \
     mc_enum_types_aux.cpp \
     md5.cpp \
+    mortality_rates_fetch.cpp \
     preferences_model.cpp \
     stratified_algorithms.cpp \
     stratified_charges.cpp \
@@ -683,6 +685,12 @@ test_miscellany_SOURCES =    \
   miscellany.cpp \
   miscellany_test.cpp
 test_miscellany_CXXFLAGS = $(AM_CXXFLAGS)
+
+test_mortality_rates_SOURCES =    \
+  $(common_test_objects) \
+  ihs_mortal.cpp \
+  mortality_rates_test.cpp
+test_mortality_rates_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_mpatrol_patch_SOURCES =    \
   $(common_test_objects) \

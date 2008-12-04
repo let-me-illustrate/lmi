@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.143 2008-12-02 04:12:16 chicares Exp $
+# $Id: objects.make,v 1.144 2008-12-04 15:43:22 chicares Exp $
 
 ################################################################################
 
@@ -276,6 +276,7 @@ lmi_common_objects := \
   ihs_proddata.o \
   ihs_rnddata.o \
   md5.o \
+  mortality_rates_fetch.o \
   preferences_model.o \
   stratified_algorithms.o \
   stratified_charges.o \
@@ -390,6 +391,7 @@ gpt_objects := \
   mc_enum_types.o \
   mc_enum_types_aux.o \
   miscellany.o \
+  mortality_rates_fetch.o \
   mvc_model.o \
   null_stream.o \
   outlay.o \
@@ -455,6 +457,7 @@ unit_test_targets := \
   math_functors_test \
   mc_enum_test \
   miscellany_test \
+  mortality_rates_test \
   mpatrol_patch_test \
   name_value_pairs_test \
   ncnnnpnn_test \
@@ -704,6 +707,11 @@ miscellany_test$(EXEEXT): \
   $(common_test_objects) \
   miscellany.o \
   miscellany_test.o \
+
+mortality_rates_test$(EXEEXT): \
+  $(common_test_objects) \
+  ihs_mortal.o \
+  mortality_rates_test.o \
 
 mpatrol_patch_test$(EXEEXT): \
   $(common_test_objects) \

@@ -1,0 +1,225 @@
+// Mortality rates--unit test.
+//
+// Copyright (C) 2008 Gregory W. Chicares.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2 as
+// published by the Free Software Foundation.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software Foundation,
+// Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+//
+// http://savannah.nongnu.org/projects/lmi
+// email: <chicares@cox.net>
+// snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+// $Id: mortality_rates_test.cpp,v 1.1 2008-12-04 15:43:22 chicares Exp $
+
+#ifdef __BORLANDC__
+#   include "pchfile.hpp"
+#   pragma hdrstop
+#endif // __BORLANDC__
+
+#include "mortality_rates.hpp"
+
+#include "assert_lmi.hpp"
+#include "materially_equal.hpp"
+#include "math_functors.hpp"
+#include "test_tools.hpp"
+
+namespace
+{
+/// Arbitrary q's spanning a wide range, for testing.
+
+std::vector<double> annual_rates()
+{
+    static int const n = 8;
+    static double const q[n] =
+        {0.0
+        ,0.000001
+        ,0.001
+        ,0.01
+        ,0.1
+        ,0.5
+        ,0.999755859375 // 1 - 2^12
+        ,1.0
+        };
+    return std::vector<double>(q, q + n);
+}
+
+/// Monthly rates corresponding to annual_rates().
+///
+/// Only fifteen digits are given: see floating_point_decimals()
+/// elsewhere for a discussion.
+///
+/// For q = 0.000001, a monthly equivalent calculated naively as
+///   qm = 1 - (1-q)^(1/12)
+///   qm = qm / (1-qm)
+/// diverges even in the tenth significant digit. Values given here
+/// use expm1() and log1p() for better accuracy.
+
+std::vector<double> monthly_rates()
+{
+    static int const n = 8;
+    static double const q[n] =
+        {0.0
+        ,0.0000000833333784722536
+        ,0.0000833785035928555
+        ,0.000837878812291897
+        ,0.00881870060450726
+        ,0.0594630943592953
+        ,1.0
+        ,1.0
+        };
+    return std::vector<double>(q, q + n);
+}
+} // Unnamed namespace.
+
+void MortalityRates::fetch_parameters(BasicValues const&) {throw "Error";}
+
+MortalityRates::MortalityRates()
+    :Length_               (0)
+    ,AllowAdb_             (false)
+    ,AllowChild_           (false)
+    ,AllowExpRating_       (false)
+    ,AllowFlatExtras_      (false)
+    ,AllowSpouse_          (false)
+    ,AllowSubstdTable_     (false)
+    ,AllowTerm_            (false)
+    ,AllowWp_              (false)
+    ,CCoiIsAnnual_         (false)
+    ,GCoiIsAnnual_         (false)
+    ,IsTgtPremTabular_     (false)
+    ,MaxMonthlyCoiRate_    (1.0)
+    ,CountryCoiMultiplier_ (1.0)
+    ,IsPolicyRated_        (false)
+    ,SubstandardTable_     (mce_table_none)
+    ,round_coi_rate_       (0, r_not_at_all)
+{
+}
+
+class mortality_rates_test
+{
+  public:
+    static void test()
+        {
+        LMI_ASSERT(annual_rates().size() == monthly_rates().size());
+        test_4095_4096ths();
+        test_annual_to_monthly_conversion();
+        test_guaranteed_rates(1.0, 1.0, round_to<double>(0, r_not_at_all));
+//        test_guaranteed_rates(0.9, 1.0, round_to<double>(0, r_not_at_all));
+        test_guaranteed_rates(1.0, 0.9, round_to<double>(0, r_not_at_all));
+        }
+
+  private:
+    static void test_4095_4096ths();
+    static void test_annual_to_monthly_conversion();
+    static void test_guaranteed_rates
+        (double           mult
+        ,double           max
+        ,round_to<double> rounder
+        );
+};
+
+/// Test a calculation that ought to be exact.
+///
+/// 0.999755859375 should be exactly representable as long as the
+/// hardware accommodates at least a twelve-bit mantissa.
+///
+/// If
+///   q = 4095/4096
+/// then
+///   0.5 = 1 - (1-q)^(1/12)
+/// and
+///   1 = 0.5 / (1-0.5)
+/// which is a boundary for coi_rate_from_q().
+///
+/// In this case, a test for absolute floating-point equality ought to
+/// be appropriate.
+
+void mortality_rates_test::test_4095_4096ths()
+{
+    static double const q = static_cast<double>(1.0L - 1.0L / 4096.0L);
+    BOOST_TEST_EQUAL(0.999755859375, q);
+    BOOST_TEST_EQUAL(1.0, coi_rate_from_q<double>()(q, 1.0));
+}
+
+void mortality_rates_test::test_annual_to_monthly_conversion()
+{
+    for(unsigned int j = 0; j < annual_rates().size(); ++j)
+        {
+        BOOST_TEST
+            (materially_equal
+                (                          monthly_rates()[j]
+                ,coi_rate_from_q<double>()(annual_rates ()[j], 1.0)
+                )
+            );
+        }
+}
+
+void mortality_rates_test::test_guaranteed_rates
+    (double           mult
+    ,double           max
+    ,round_to<double> rounder
+    )
+{
+    MortalityRates z;
+    z.Length_            = annual_rates().size();
+
+    z.GCoiMultiplier_    = std::vector<double>(z.Length_, mult);
+    z.MaxMonthlyCoiRate_ = max;
+    z.round_coi_rate_    = rounder;
+
+    std::cout
+        << "Testing with "
+        << " mult = "     << mult
+        << " max = "      << max
+        << " decimals = " << rounder.decimals()
+        << " style = "    << rounder.style()
+        << ".\n"
+        << std::flush
+        ;
+
+    z.GCoiIsAnnual_   = true;
+    z.AllowExpRating_ = true;
+    z.MonthlyGuaranteedCoiRates_ = annual_rates();
+    z.SetGuaranteedRates();
+    std::vector<double> v0 = z.MonthlyGuaranteedCoiRates_;
+
+    z.GCoiIsAnnual_   = true;
+    z.AllowExpRating_ = false;
+    z.MonthlyGuaranteedCoiRates_ = annual_rates();
+    z.SetGuaranteedRates();
+    std::vector<double> v1 = z.MonthlyGuaranteedCoiRates_;
+
+    z.GCoiIsAnnual_   = false;
+    z.AllowExpRating_ = false;
+    z.MonthlyGuaranteedCoiRates_ = monthly_rates();
+    z.SetGuaranteedRates();
+    std::vector<double> v2 = z.MonthlyGuaranteedCoiRates_;
+
+    for(int j = 0; j < z.Length_; ++j)
+        {
+        double x = z.GCoiMultiplier_[j] * monthly_rates()[j];
+        x = std::min(x, z.MaxMonthlyCoiRate_);
+        x = rounder(x);
+        BOOST_TEST(materially_equal(v0[j], x));
+        // There's no good reason for these not to be absolutely equal.
+        BOOST_TEST_EQUAL(v0[j], v1[j]);
+        BOOST_TEST(materially_equal(v0[j], v1[j]));
+        BOOST_TEST(materially_equal(v0[j], v2[j]));
+        }
+}
+
+int test_main(int, char*[])
+{
+    mortality_rates_test::test();
+    return EXIT_SUCCESS;
+}
+
