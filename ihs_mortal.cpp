@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_mortal.cpp,v 1.39 2008-12-05 20:27:33 chicares Exp $
+// $Id: ihs_mortal.cpp,v 1.40 2008-12-05 21:06:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -324,15 +324,12 @@ void MortalityRates::MakeCoiRateSubstandard
         // Flat extra: input as annual per K, want monthly per $.
         double flat_extra = MonthlyFlatExtra_[j] / 12000.0;
 
-// TODO ?? Results here really should be rounded. Instead, for the
-// nonce, we round only the maximum, in order to match old
-// regression tests.
-        double z = round_coi_rate_(MaxMonthlyCoiRate_);
         coi_rates[j] = std::min
-            (z
+            (MaxMonthlyCoiRate_
             ,   flat_extra
             +   coi_rates[j] * (1.0 + SubstdTblMult_[j] * table_multiple)
             );
+        coi_rates[j] = round_coi_rate_(coi_rates[j]);
 
 // TODO ?? Some UL admin systems convert flat extras to an integral
 // number of cents per thousand per month. It would be nice to offer
