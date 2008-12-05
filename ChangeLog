@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1215 2008-12-05 20:27:33 chicares Exp $
+// $Id: ChangeLog,v 1.1216 2008-12-05 21:06:29 chicares Exp $
 
 MAINTENANCE
 
@@ -20676,4 +20676,14 @@ Remove a data member that's no longer used.
   ihs_mortal.cpp
   mortality_rates.cpp
 Prefer preincrement to postincrement even where it doesn't matter.
+
+20081205T2105Z <gchicares@sbcglobal.net> [893]
+
+  mortality_rates.cpp
+Remove a comment that lacks merit.
+
+20081205T2106Z <gchicares@sbcglobal.net> [892]
+
+  ihs_mortal.cpp
+Round substandard COI rates.
 
