@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_mortal.cpp,v 1.35 2008-12-05 10:59:33 chicares Exp $
+// $Id: ihs_mortal.cpp,v 1.36 2008-12-05 13:01:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -120,9 +120,71 @@ void MortalityRates::initialize()
 */
 }
 
+/// Multiply monthly tabular rates by multiplier; limit to maximum.
+///
+/// If tabular rates are annual, convert them to monthly first.
+
+void MortalityRates::SetCoiRates
+    (std::vector<double>      & coi_rates
+    ,std::vector<double> const& coi_multiplier
+    ,std::vector<double> const& maximum
+    ,bool                       table_is_annual
+    )
+{
+    if(table_is_annual)
+        {
+// ABOUT TO BE ADDRESSED: Merge these pointlessly-distinguished alternatives.
+        // If experience rating is ALLOWED, not necessarily USED
+        if(AllowExpRating_)
+            {
+            for(int j = 0; j < Length_; j++)
+                {
+                double q = coi_multiplier[j] * coi_rates[j];
+                q = coi_rate_from_q<double>()(q, maximum[j]);
+                // ABOUT TO BE ADDRESSED: Is this not handled already by coi_rate_from_q()?
+                q = std::min(q, maximum[j]);
+                coi_rates[j] = round_coi_rate_(q);
+                }
+            }
+        // This is just one way it might be done...
+        else
+            {
+            for(int j = 0; j < Length_; j++)
+                {
+// ABOUT TO BE CONSOLIDATED: should respect DB_CoiUpper12Method
+                coi_rates[j] *= coi_multiplier[j];
+                coi_rates[j] = coi_rate_from_q<double>()
+                    (coi_rates[j]
+                    ,maximum[j]
+                    );
+                coi_rates[j] = round_coi_rate_(coi_rates[j]);
+                }
+            }
+        }
+    else
+        {
+        for(int j = 0; j < Length_; j++)
+            {
+            double q = coi_rates[j];
+            // USER !! Multiplier is applied to the monthly COI rate
+            // if only a monthly rate is given.
+            q = std::min(coi_multiplier[j] * q, maximum[j]);
+            coi_rates[j] = round_coi_rate_(q);
+            }
+        }
+}
+
 //============================================================================
 void MortalityRates::SetGuaranteedRates()
 {
+    SetCoiRates
+        (MonthlyGuaranteedCoiRates_
+        ,GCoiMultiplier_
+        ,std::vector<double>(Length_, MaxMonthlyCoiRate_)
+        ,GCoiIsAnnual_
+        );
+return;
+
     if(GCoiIsAnnual_) // TODO ?? Assume this means experience rated?
         {
 // TODO ?? Merge these pointlessly-distinguished alternatives.
@@ -213,6 +275,14 @@ void MortalityRates::SetOneNonguaranteedRateBand
     ,std::vector<double> const& curr_coi_multiplier
     )
 {
+    SetCoiRates
+        (coi_rates
+        ,curr_coi_multiplier
+        ,MonthlyGuaranteedCoiRates_
+        ,CCoiIsAnnual_
+        );
+return;
+
     if(CCoiIsAnnual_)
         {
 // TODO ?? Merge these pointlessly-distinguished alternatives.
