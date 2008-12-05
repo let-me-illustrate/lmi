@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mortality_rates_test.cpp,v 1.2 2008-12-05 19:50:14 chicares Exp $
+// $Id: mortality_rates_test.cpp,v 1.3 2008-12-05 20:26:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -87,7 +87,6 @@ MortalityRates::MortalityRates()
     :Length_               (0)
     ,AllowAdb_             (false)
     ,AllowChild_           (false)
-    ,AllowExpRating_       (false)
     ,AllowFlatExtras_      (false)
     ,AllowSpouse_          (false)
     ,AllowSubstdTable_     (false)
@@ -189,22 +188,14 @@ void mortality_rates_test::test_guaranteed_rates
         ;
 
     z.GCoiIsAnnual_   = true;
-    z.AllowExpRating_ = true;
     z.MonthlyGuaranteedCoiRates_ = annual_rates();
     z.SetGuaranteedRates();
     std::vector<double> v0 = z.MonthlyGuaranteedCoiRates_;
 
-    z.GCoiIsAnnual_   = true;
-    z.AllowExpRating_ = false;
-    z.MonthlyGuaranteedCoiRates_ = annual_rates();
-    z.SetGuaranteedRates();
-    std::vector<double> v1 = z.MonthlyGuaranteedCoiRates_;
-
     z.GCoiIsAnnual_   = false;
-    z.AllowExpRating_ = false;
     z.MonthlyGuaranteedCoiRates_ = monthly_rates();
     z.SetGuaranteedRates();
-    std::vector<double> v2 = z.MonthlyGuaranteedCoiRates_;
+    std::vector<double> v1 = z.MonthlyGuaranteedCoiRates_;
 
     for(int j = 0; j < z.Length_; ++j)
         {
@@ -217,10 +208,7 @@ void mortality_rates_test::test_guaranteed_rates
         y = rounder(y);
 
         BOOST_TEST(materially_equal(y, v0[j]));
-        // There's no good reason for these not to be absolutely equal.
-        BOOST_TEST_EQUAL(v0[j], v1[j]);
-        BOOST_TEST(materially_equal(y, v1[j]));
-        BOOST_TEST(materially_equal(x, v2[j]));
+        BOOST_TEST(materially_equal(x, v1[j]));
 // This needn't necessarily hold:
 //        BOOST_TEST(materially_equal(x, y));
 // To compare values:
