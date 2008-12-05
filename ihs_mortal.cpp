@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_mortal.cpp,v 1.38 2008-12-05 19:51:26 chicares Exp $
+// $Id: ihs_mortal.cpp,v 1.39 2008-12-05 20:27:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -83,7 +83,7 @@ void MortalityRates::initialize()
     LMI_ASSERT(0 == MonthlyMidpointCoiRatesBand0_.size());
     LMI_ASSERT(0 == MonthlyMidpointCoiRatesBand1_.size());
     LMI_ASSERT(0 == MonthlyMidpointCoiRatesBand2_.size());
-    for(int j = 0; j < Length_; j++)
+    for(int j = 0; j < Length_; ++j)
         {
         // Here we take midpoint as average of monthly curr and guar.
         // Other approaches are possible.
@@ -134,7 +134,7 @@ void MortalityRates::SetCoiRates
     ,bool                       table_is_annual
     )
 {
-    for(int j = 0; j < Length_; j++)
+    for(int j = 0; j < Length_; ++j)
         {
         double z = coi_rates[j] * coi_multiplier[j];
         if(table_is_annual)
@@ -224,7 +224,7 @@ void MortalityRates::SetOtherRates()
         MakeCoiRateSubstandard(MonthlyGuaranteedTermCoiRates_);
 
         LMI_ASSERT(0 == MonthlyMidpointTermCoiRates_.size());
-        for(int j = 0; j < Length_; j++)
+        for(int j = 0; j < Length_; ++j)
             {
             // Here we take midpoint as average of monthly curr and guar.
             // Other approaches are possible.
@@ -258,7 +258,7 @@ void MortalityRates::SetOtherRates()
         {
         // Spouse rider can't be substandard--spouse not underwritten.
         LMI_ASSERT(0 == MidpointSpouseRiderRates_.size());
-        for(int j = 0; j < Length_; j++)
+        for(int j = 0; j < Length_; ++j)
             {
             // Here we take midpoint as average of monthly curr and guar.
             // Other approaches are possible.
@@ -289,7 +289,7 @@ void MortalityRates::SetOtherRates()
     // TODO ?? Temporary stuff to support NSP for 7702A
     // TODO ?? Incorrect if GPT
     LMI_ASSERT(0 == CvatNspRates_.size());
-    for(int j = 0; j < Length_; j++)
+    for(int j = 0; j < Length_; ++j)
         {
         LMI_ASSERT(0.0 < CvatCorridorFactors_[j]);
         CvatNspRates_.push_back(1.0 / CvatCorridorFactors_[j]);

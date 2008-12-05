@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1214 2008-12-05 13:33:21 chicares Exp $
+// $Id: ChangeLog,v 1.1215 2008-12-05 20:27:33 chicares Exp $
 
 MAINTENANCE
 
@@ -20653,4 +20653,27 @@ current and guaranteed, making it easier to test and refactor. See:
   ihs_mortal.cpp
   mortality_rates.hpp
 Remove duplication noted 20081205T1301Z.
+
+20081205T1950Z <gchicares@sbcglobal.net> [897]
+
+  mortality_rates_test.cpp
+Improve unit test.
+
+20081205T1951Z <gchicares@sbcglobal.net> [894]
+
+  ihs_mortal.cpp
+Merge two equivalent blocks.
+
+20081205T2026Z <gchicares@sbcglobal.net> [894]
+
+  mortality_rates.hpp
+  mortality_rates_fetch.cpp
+  mortality_rates_test.cpp
+Remove a data member that's no longer used.
+
+20081205T2027Z <gchicares@sbcglobal.net> [894]
+
+  ihs_mortal.cpp
+  mortality_rates.cpp
+Prefer preincrement to postincrement even where it doesn't matter.
 
