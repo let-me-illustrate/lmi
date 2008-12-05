@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mortality_rates.cpp,v 1.13 2008-07-21 18:31:20 chicares Exp $
+// $Id: mortality_rates.cpp,v 1.14 2008-12-05 20:27:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -69,7 +69,7 @@ void MortalityRates::Init(BasicValues const& basic_values)
         );
 
     static double const one_twelfth = 1.0 / 12.0;
-    for(int j = 0; j < length; j++)
+    for(int j = 0; j < length; ++j)
         {
         MonthlyGuaranteedCoiRates_[j] = std::min
             (one_twelfth
