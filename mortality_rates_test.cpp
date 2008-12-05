@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mortality_rates_test.cpp,v 1.1 2008-12-04 15:43:22 chicares Exp $
+// $Id: mortality_rates_test.cpp,v 1.2 2008-12-05 19:50:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -112,9 +112,11 @@ class mortality_rates_test
         LMI_ASSERT(annual_rates().size() == monthly_rates().size());
         test_4095_4096ths();
         test_annual_to_monthly_conversion();
-        test_guaranteed_rates(1.0, 1.0, round_to<double>(0, r_not_at_all));
-//        test_guaranteed_rates(0.9, 1.0, round_to<double>(0, r_not_at_all));
-        test_guaranteed_rates(1.0, 0.9, round_to<double>(0, r_not_at_all));
+        test_guaranteed_rates( 1.0, 1.0, round_to<double>(0, r_not_at_all));
+        test_guaranteed_rates( 0.9, 1.0, round_to<double>(0, r_not_at_all));
+        test_guaranteed_rates( 1.1, 1.0, round_to<double>(0, r_not_at_all));
+        test_guaranteed_rates( 1.0, 0.9, round_to<double>(0, r_not_at_all));
+        test_guaranteed_rates(10.0, 0.9, round_to<double>(0, r_not_at_all));
         }
 
   private:
@@ -177,11 +179,11 @@ void mortality_rates_test::test_guaranteed_rates
     z.round_coi_rate_    = rounder;
 
     std::cout
-        << "Testing with "
-        << " mult = "     << mult
-        << " max = "      << max
-        << " decimals = " << rounder.decimals()
-        << " style = "    << rounder.style()
+        << "Testing with"
+        << " mult = "      << mult
+        << ", max = "      << max
+        << ", decimals = " << rounder.decimals()
+        << ", style = "    << rounder.style()
         << ".\n"
         << std::flush
         ;
@@ -209,11 +211,20 @@ void mortality_rates_test::test_guaranteed_rates
         double x = z.GCoiMultiplier_[j] * monthly_rates()[j];
         x = std::min(x, z.MaxMonthlyCoiRate_);
         x = rounder(x);
-        BOOST_TEST(materially_equal(v0[j], x));
+
+        double y = z.GCoiMultiplier_[j] * annual_rates()[j];
+        y = coi_rate_from_q<double>()(y, z.MaxMonthlyCoiRate_);
+        y = rounder(y);
+
+        BOOST_TEST(materially_equal(y, v0[j]));
         // There's no good reason for these not to be absolutely equal.
         BOOST_TEST_EQUAL(v0[j], v1[j]);
-        BOOST_TEST(materially_equal(v0[j], v1[j]));
-        BOOST_TEST(materially_equal(v0[j], v2[j]));
+        BOOST_TEST(materially_equal(y, v1[j]));
+        BOOST_TEST(materially_equal(x, v2[j]));
+// This needn't necessarily hold:
+//        BOOST_TEST(materially_equal(x, y));
+// To compare values:
+//        std::cout << j << '\t' << x << '\t' << y << std::endl;
         }
 }
 
