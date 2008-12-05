@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mortality_rates.cpp,v 1.14 2008-12-05 20:27:33 chicares Exp $
+// $Id: mortality_rates.cpp,v 1.15 2008-12-05 21:05:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -36,11 +36,6 @@
 #include "math_functors.hpp" // mean()
 
 #include <algorithm> // std::min()
-
-/* TODO ?? Mortality-rate pointer-to-implementation might contain:
-    double MonthlyRateLimit_;
-    mce_coi_rate_method AnnualToMonthlyMethod_;
-*/
 
 //============================================================================
 MortalityRates::MortalityRates(BasicValues const& basic_values)
