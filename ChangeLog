@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1212 2008-12-05 10:59:33 chicares Exp $
+// $Id: ChangeLog,v 1.1213 2008-12-05 13:01:21 chicares Exp $
 
 MAINTENANCE
 
@@ -20633,4 +20633,18 @@ been limited only by an overall maximum (e.g. 0.08333333) when the
 current COI rate table is monthly. Instead, it is now limited to the
 product of guaranteed COI and guaranteed-COI multiplier, as has always
 been correctly done if the current COI rate table is annual.
+
+20081205T1301Z <gchicares@sbcglobal.net> [901]
+
+  ihs_mortal.cpp
+Refactor. Old code, temporarily left in place though now dead, is
+equivalent, though not quite identical. For example, in the annual,
+experience-rated case, guaranteed COI was limited to unity, then
+converted to monthly and limited to a monthly maximum that makes the
+earlier limitation to unity superfluous; current COI, on the other
+hand, was converted to monthly, limited to a monthly maximum, and then
+limited again to the same maximum. Now, the same code is used for both
+current and guaranteed, making it easier to test and refactor. See:
+  http://groups.google.com/group/comp.software.extreme-programming\
+  /msg/b50c9cc70e9d7a3a
 
