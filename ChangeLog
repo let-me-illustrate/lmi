@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1211 2008-12-02 13:29:29 chicares Exp $
+// $Id: ChangeLog,v 1.1212 2008-12-05 10:59:33 chicares Exp $
 
 MAINTENANCE
 
@@ -20607,4 +20607,30 @@ Omit insured's name from filenames in system tests.
 
   ihs_dbdict.cpp
 Remove SD premium-tax threshold, reflecting a 2008 amendment.
+
+20081204T1535Z <gchicares@sbcglobal.net> [903]
+
+  Makefile.am
+Fix defect introduced 20081122T1443Z. A new unit test was specified,
+but wasn't added to the list of tests that are normally run.
+
+20081204T1543Z <gchicares@sbcglobal.net> [901]
+
+  Makefile.am
+  ihs_mortal.cpp
+  mortality_rates.hpp
+  mortality_rates_fetch.cpp [new file]
+  mortality_rates_test.cpp  [new file]
+  objects.make
+Refactor mortality rates; add unit tests.
+
+20081205T1059Z <gchicares@sbcglobal.net> [901]
+
+  ihs_mortal.cpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch. The product of current COI rate and its multiplier had
+been limited only by an overall maximum (e.g. 0.08333333) when the
+current COI rate table is monthly. Instead, it is now limited to the
+product of guaranteed COI and guaranteed-COI multiplier, as has always
+been correctly done if the current COI rate table is annual.
 

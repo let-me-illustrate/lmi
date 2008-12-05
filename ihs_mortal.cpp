@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_mortal.cpp,v 1.34 2008-12-04 15:43:22 chicares Exp $
+// $Id: ihs_mortal.cpp,v 1.35 2008-12-05 10:59:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -250,7 +250,7 @@ void MortalityRates::SetOneNonguaranteedRateBand
             double q = coi_rates[j];
             // USER !! Multiplier is applied to the monthly COI rate
             // if only a monthly rate is given.
-            q = std::min(curr_coi_multiplier[j] * q, MaxMonthlyCoiRate_);
+            q = std::min(curr_coi_multiplier[j] * q, MonthlyGuaranteedCoiRates_[j]);
             coi_rates[j] = round_coi_rate_(q);
             }
         }
