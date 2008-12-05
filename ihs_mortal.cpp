@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_mortal.cpp,v 1.37 2008-12-05 13:33:21 chicares Exp $
+// $Id: ihs_mortal.cpp,v 1.38 2008-12-05 19:51:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -122,7 +122,10 @@ void MortalityRates::initialize()
 
 /// Multiply monthly tabular rates by multiplier; limit to maximum.
 ///
-/// If tabular rates are annual, convert them to monthly first.
+/// If tabular rates are annual, convert them to monthly after
+/// multiplying by the multiplier, but before limiting them.
+///
+/// SOMEDAY !! Differentiate algorithm by DB_CoiUpper12Method.
 
 void MortalityRates::SetCoiRates
     (std::vector<double>      & coi_rates
@@ -131,46 +134,18 @@ void MortalityRates::SetCoiRates
     ,bool                       table_is_annual
     )
 {
-    if(table_is_annual)
+    for(int j = 0; j < Length_; j++)
         {
-// TODO ?? Merge these pointlessly-distinguished alternatives.
-        // If experience rating is ALLOWED, not necessarily USED
-        if(AllowExpRating_)
+        double z = coi_rates[j] * coi_multiplier[j];
+        if(table_is_annual)
             {
-            for(int j = 0; j < Length_; j++)
-                {
-                double q = coi_multiplier[j] * coi_rates[j];
-                q = coi_rate_from_q<double>()(q, maximum[j]);
-                // TODO ?? Is this not handled already by coi_rate_from_q()?
-                q = std::min(q, maximum[j]);
-                coi_rates[j] = round_coi_rate_(q);
-                }
+            z = coi_rate_from_q<double>()(z, maximum[j]);
             }
-        // This is just one way it might be done...
         else
             {
-            for(int j = 0; j < Length_; j++)
-                {
-                // TODO ?? Should respect DB_CoiUpper12Method.
-                coi_rates[j] *= coi_multiplier[j];
-                coi_rates[j] = coi_rate_from_q<double>()
-                    (coi_rates[j]
-                    ,maximum[j]
-                    );
-                coi_rates[j] = round_coi_rate_(coi_rates[j]);
-                }
+            z = std::min                 (z, maximum[j]);
             }
-        }
-    else
-        {
-        for(int j = 0; j < Length_; j++)
-            {
-            double q = coi_rates[j];
-            // USER !! Multiplier is applied to the monthly COI rate
-            // if only a monthly rate is given.
-            q = std::min(coi_multiplier[j] * q, maximum[j]);
-            coi_rates[j] = round_coi_rate_(q);
-            }
+        coi_rates[j] = round_coi_rate_(z);
         }
 }
 
