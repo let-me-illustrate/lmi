@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mortality_rates_fetch.cpp,v 1.1 2008-12-04 15:43:22 chicares Exp $
+// $Id: mortality_rates_fetch.cpp,v 1.2 2008-12-05 20:26:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -51,7 +51,6 @@ void MortalityRates::fetch_parameters(BasicValues const& basic_values)
     // class BasicValues.
     AllowAdb_          = basic_values.Database_->Query(DB_AllowADD         );
     AllowChild_        = basic_values.Database_->Query(DB_AllowChild       );
-    AllowExpRating_    = basic_values.Database_->Query(DB_AllowExpRating   );
     AllowFlatExtras_   = basic_values.Database_->Query(DB_AllowFlatExtras  );
     AllowSpouse_       = basic_values.Database_->Query(DB_AllowSpouse      );
     AllowSubstdTable_  = basic_values.Database_->Query(DB_AllowSubstdTable );

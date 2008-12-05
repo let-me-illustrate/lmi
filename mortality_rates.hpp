@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mortality_rates.hpp,v 1.18 2008-12-05 13:33:21 chicares Exp $
+// $Id: mortality_rates.hpp,v 1.19 2008-12-05 20:26:37 chicares Exp $
 
 #ifndef mortality_rates_hpp
 #define mortality_rates_hpp
@@ -111,7 +111,6 @@ class MortalityRates
 
     bool AllowAdb_        ;
     bool AllowChild_      ;
-    bool AllowExpRating_  ;
     bool AllowFlatExtras_ ;
     bool AllowSpouse_     ;
     bool AllowSubstdTable_;
