@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1213 2008-12-05 13:01:21 chicares Exp $
+// $Id: ChangeLog,v 1.1214 2008-12-05 13:33:21 chicares Exp $
 
 MAINTENANCE
 
@@ -20647,4 +20647,10 @@ limited again to the same maximum. Now, the same code is used for both
 current and guaranteed, making it easier to test and refactor. See:
   http://groups.google.com/group/comp.software.extreme-programming\
   /msg/b50c9cc70e9d7a3a
+
+20081205T1333Z <gchicares@sbcglobal.net> [897]
+
+  ihs_mortal.cpp
+  mortality_rates.hpp
+Remove duplication noted 20081205T1301Z.
 

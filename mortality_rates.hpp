@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mortality_rates.hpp,v 1.17 2008-12-04 15:43:22 chicares Exp $
+// $Id: mortality_rates.hpp,v 1.18 2008-12-05 13:33:21 chicares Exp $
 
 #ifndef mortality_rates_hpp
 #define mortality_rates_hpp
@@ -91,6 +91,12 @@ class MortalityRates
     void fetch_parameters(BasicValues const&);
     void initialize();
 
+    void SetCoiRates
+        (std::vector<double>      & coi_rates
+        ,std::vector<double> const& coi_multiplier
+        ,std::vector<double> const& maximum
+        ,bool                       table_is_annual
+        );
     void SetGuaranteedRates();
     void SetNonguaranteedRates();
     void SetOneNonguaranteedRateBand
