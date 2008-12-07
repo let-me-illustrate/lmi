@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1216 2008-12-05 21:06:29 chicares Exp $
+// $Id: ChangeLog,v 1.1217 2008-12-07 00:49:36 chicares Exp $
 
 MAINTENANCE
 
@@ -20686,4 +20686,11 @@ Remove a comment that lacks merit.
 
   ihs_mortal.cpp
 Round substandard COI rates.
+
+20081207T0049Z <gchicares@sbcglobal.net> [892]
+
+  ihs_avsolve.cpp
+Experimentally solve for surrender value equal to tax basis. See:
+  http://savannah.nongnu.org/support/index.php?106573
+  http://lists.nongnu.org/archive/html/lmi/2008-12/msg00001.html
 
