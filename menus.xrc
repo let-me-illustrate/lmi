@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: menus.xrc,v 1.44 2008-10-04 14:05:32 chicares Exp $
+    $Id: menus.xrc,v 1.45 2008-12-08 12:41:10 chicares Exp $
 -->
 
 <!-- reusable menus -->
@@ -32,50 +32,50 @@
 <object class="wxMenu" name="file_menu_with_print_ref">
     <label>_File</label>
     <object class="wxMenuItem" name="wxID_NEW">
-        <label>_New</label>
+        <label>_New\tCtrl-N</label>
         <help>Create a new document</help>
         <bitmap platform="win" stock_id="wxART_NEW"/>
     </object>
     <object class="wxMenuItem" name="wxID_OPEN">
-        <label>_Open...</label>
+        <label>_Open...\tCtrl-O</label>
         <bitmap platform="win" stock_id="wxART_FILE_OPEN"/>
         <help>Open an existing document</help>
     </object>
     <object class="wxMenuItem" name="wxID_CLOSE">
-        <label>_Close\tCtrl-X</label>
+        <label>C_lose\tCtrl-L</label>
         <bitmap platform="win" stock_id="close"/>
         <help>Close this document</help>
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="wxID_SAVE">
-        <label>_Save</label>
+        <label>_Save\tCtrl-S</label>
         <bitmap platform="win" stock_id="wxART_FILE_SAVE"/>
         <help>Save this document</help>
     </object>
     <object class="wxMenuItem" name="wxID_SAVEAS">
-        <label>Save _as...</label>
+        <label>Save _as...\tCtrl-A</label>
         <bitmap platform="win" stock_id="wxART_FILE_SAVE_AS"/>
         <help>Save this document under a new name</help>
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="wxID_PRINT">
-        <label>_Print</label>
+        <label>_Print\tCtrl-P</label>
         <bitmap platform="win" stock_id="wxART_PRINT"/>
         <help>Print this document</help>
     </object>
     <object class="wxMenuItem" name="wxID_PAGE_SETUP">
-        <label>Page set_up</label>
+        <label>Page set_up\tCtrl-U</label>
         <bitmap platform="win" stock_id="print-options"/>
         <help>Choose printing options for this session</help>
     </object>
     <object class="wxMenuItem" name="wxID_PREVIEW">
-        <label>Print pre_view</label>
+        <label>Print pre_view\tCtrl-V</label>
         <bitmap platform="win" stock_id="print-preview"/>
         <help>See what this document will look like when printed</help>
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="edit_default_cell">
-        <label>_Default</label>
+        <label>Defaul_t\tCtrl-T</label>
         <bitmap stock_id="default-cell"/>
         <help>Edit default cell</help>
     </object>
@@ -95,34 +95,34 @@
 <object class="wxMenu" name="file_menu_without_print_ref">
     <label>_File</label>
     <object class="wxMenuItem" name="wxID_NEW">
-        <label>_New</label>
+        <label>_New\tCtrl-N</label>
         <help>Create a new document</help>
         <bitmap platform="win" stock_id="wxART_NEW"/>
     </object>
     <object class="wxMenuItem" name="wxID_OPEN">
-        <label>_Open...</label>
+        <label>_Open...\tCtrl-O</label>
         <bitmap platform="win" stock_id="wxART_FILE_OPEN"/>
         <help>Open an existing document</help>
     </object>
     <object class="wxMenuItem" name="wxID_CLOSE">
-        <label>_Close\tCtrl-X</label>
+        <label>C_lose\tCtrl-L</label>
         <bitmap platform="win" stock_id="close"/>
         <help>Close this document</help>
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="wxID_SAVE">
-        <label>_Save</label>
+        <label>_Save\tCtrl-S</label>
         <bitmap platform="win" stock_id="wxART_FILE_SAVE"/>
         <help>Save this document</help>
     </object>
     <object class="wxMenuItem" name="wxID_SAVEAS">
-        <label>Save _as...</label>
+        <label>Save _as...\tCtrl-A</label>
         <bitmap platform="win" stock_id="wxART_FILE_SAVE_AS"/>
         <help>Save this document under a new name</help>
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="edit_default_cell">
-        <label>_Default</label>
+        <label>Defaul_t\tCtrl-T</label>
         <bitmap stock_id="default-cell"/>
         <help>Edit default cell</help>
     </object>
@@ -254,18 +254,18 @@
     <object class="wxMenu">
         <label>_File</label>
         <object class="wxMenuItem" name="wxID_NEW">
-            <label>_New</label>
+            <label>_New\tCtrl-N</label>
             <help>Create a new document</help>
             <bitmap platform="win" stock_id="wxART_NEW"/>
         </object>
         <object class="wxMenuItem" name="wxID_OPEN">
-            <label>_Open...</label>
+            <label>_Open...\tCtrl-O</label>
             <bitmap platform="win" stock_id="wxART_FILE_OPEN"/>
             <help>Open an existing document</help>
         </object>
         <object class="separator"/>
         <object class="wxMenuItem" name="edit_default_cell">
-            <label>_Default</label>
+            <label>Defaul_t\tCtrl-T</label>
             <bitmap stock_id="default-cell"/>
             <help>Edit default cell</help>
         </object>
@@ -329,6 +329,7 @@
         </object>
         <object class="separator"/>
         <object class="wxMenuItem" name="print_cell">
+<!-- Here, 'Ctrl-P' conflicts with 'File|Print', but this menuitem will soon be removed. -->
             <label>Run and _print selected cell\tCtrl-P</label>
             <bitmap stock_id="print-cell"/>
             <help>Run and print selected cell</help>
@@ -346,34 +347,34 @@
             <help>Run and print all cells</help>
         </object>
         <object class="wxMenuItem" name="print_spreadsheet">
-            <label>Print case to spreadsheet\tCtrl-Shift-S</label>
+            <label>Print case to spreads_heet\tCtrl-Shift-H</label>
             <bitmap stock_id="write-spreadsheet"/>
             <help>Run and print all cells to a spreadsheet file</help>
         </object>
         <object class="separator"/>
         <object class="wxMenuItem" name="paste_census">
-            <label>Pa_ste census data\tCtrl-S</label>
+            <label>Pa_ste census data\tCtrl-Shift-S</label>
             <bitmap stock_id="paste-case"/>
             <help>Paste census data from clipboard</help>
         </object>
         <object class="wxMenuItem" name="add_cell">
-            <label>_Add cell\tCtrl-A</label>
+            <label>_Add cell\tCtrl-+</label>
             <bitmap stock_id="insert-rows"/>
             <help>Add a new cell with case default parameters</help>
         </object>
         <object class="wxMenuItem" name="delete_cells">
-            <label>_Delete cell(s)\tCtrl-D</label>
+            <label>_Delete cell(s)\tCtrl--</label>
             <bitmap stock_id="delete-row"/>
             <help>Delete selected cell(s)</help>
         </object>
         <object class="separator"/>
         <object class="wxMenuItem" name="column_width_varying">
-            <label>_Varying column width\tCtrl-V</label>
+            <label>_Varying column width\tCtrl-]</label>
             <bitmap stock_id="varying-width"/>
             <help>Vary each column's width to show its entire contents</help>
         </object>
         <object class="wxMenuItem" name="column_width_fixed">
-            <label>Fixed col_umn width\tCtrl-U</label>
+            <label>Fixed col_umn width\tCtrl-[</label>
             <bitmap stock_id="fixed-width"/>
             <help>Display all columns with the same fixed width</help>
         </object>
@@ -408,11 +409,11 @@
         </object>
         <object class="separator"/>
         <object class="wxMenuItem" name="preview_summary">
-            <label>Pre_view calculation summary\tCtrl-V</label>
+            <label>Pre_view calculation summary\tCtrl-Shift-V</label>
             <help>Preview calculation summary</help>
         </object>
         <object class="wxMenuItem" name="print_summary">
-            <label>_Print calculation summary\tCtrl-P</label>
+            <label>Print calculation s_ummary\tCtrl-Shift-U</label>
             <help>Print calculation summary</help>
         </object>
     </object>
