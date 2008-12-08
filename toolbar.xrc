@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: toolbar.xrc,v 1.14 2008-10-04 14:05:32 chicares Exp $
+    $Id: toolbar.xrc,v 1.15 2008-12-08 13:00:23 chicares Exp $
 -->
 
 <object class="wxToolBar" name="toolbar">
@@ -95,23 +95,18 @@
         <longhelp>Run all cells</longhelp>
     </object>
     <object class="separator"/>
-    <object class="tool" name="print_cell">
-        <tooltip>Print cell</tooltip>
-        <bitmap stock_id="print-cell"/>
-        <longhelp>Run and print selected cell</longhelp>
-    </object>
-<!-- SOMEDAY !! One might imagine wanting to run all cells in a class.
-    <object class="tool" name="print_class">
-        <tooltip>Print class</tooltip>
-        <bitmap stock_id="print-class"/>
-        <longhelp>Run and print all cells in selected cell's class</longhelp>
-    </object>
--->
     <object class="tool" name="print_case">
         <tooltip>Print case</tooltip>
         <bitmap stock_id="print-case"/>
         <longhelp>Run and print all cells</longhelp>
     </object>
+<!-- SOMEDAY !! Perhaps this merits a toolbar button.
+    <object class="tool" name="print_case_to_disk">
+        <tooltip>Print case to disk</tooltip>
+        <bitmap stock_id="print-case-to-disk"/>
+        <longhelp>Run and print all cells to disk instead of printer</longhelp>
+    </object>
+-->
     <object class="tool" name="print_spreadsheet">
         <tooltip>Print case to spreadsheet</tooltip>
         <bitmap stock_id="write-spreadsheet"/>

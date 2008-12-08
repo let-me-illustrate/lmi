@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.hpp,v 1.29 2008-11-21 15:52:23 chicares Exp $
+// $Id: census_view.hpp,v 1.30 2008-12-08 13:00:23 chicares Exp $
 
 #ifndef census_view_hpp
 #define census_view_hpp
@@ -78,8 +78,8 @@ class CensusView
     void UponRightClick0            (wxCommandEvent&);
     void UponRightClick1            (wxMouseEvent&);
     void UponRightClick2            (wxContextMenuEvent&);
-    void UponPrintCell              (wxCommandEvent&);
     void UponPrintCase              (wxCommandEvent&);
+    void UponPrintCaseToDisk        (wxCommandEvent&);
     void UponRunCell                (wxCommandEvent&);
     void UponRunCase                (wxCommandEvent&);
     void UponRunCaseToSpreadsheet   (wxCommandEvent&);
