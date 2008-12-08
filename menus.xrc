@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: menus.xrc,v 1.45 2008-12-08 12:41:10 chicares Exp $
+    $Id: menus.xrc,v 1.46 2008-12-08 13:00:23 chicares Exp $
 -->
 
 <!-- reusable menus -->
@@ -328,23 +328,17 @@
             <help>Run all cells</help>
         </object>
         <object class="separator"/>
-        <object class="wxMenuItem" name="print_cell">
-<!-- Here, 'Ctrl-P' conflicts with 'File|Print', but this menuitem will soon be removed. -->
-            <label>Run and _print selected cell\tCtrl-P</label>
-            <bitmap stock_id="print-cell"/>
-            <help>Run and print selected cell</help>
-        </object>
-<!-- SOMEDAY !! This may be useful for large cases.
-        <object class="wxMenuItem" name="print_class">
-            <label>Run and print all cells in selected cell's class\tCtrl-Alt-P</label>
-            <bitmap stock_id="print-class"/>
-            <help>Run and print all cells in selected cell's class</help>
-        </object>
--->
         <object class="wxMenuItem" name="print_case">
-            <label>Run and print all cells\tCtrl-Shift-P</label>
+            <label>Print case\tCtrl-Shift-P</label>
             <bitmap stock_id="print-case"/>
             <help>Run and print all cells</help>
+        </object>
+        <object class="wxMenuItem" name="print_case_to_disk">
+            <label>Print case to dis_k\tCtrl-Shift-K</label>
+<!-- SOMEDAY !! Perhaps this merits a toolbar button.
+            <bitmap stock_id="print-case-to-disk"/>
+-->
+            <help>Run and print all cells to disk rather than to printer</help>
         </object>
         <object class="wxMenuItem" name="print_spreadsheet">
             <label>Print case to spreads_heet\tCtrl-Shift-H</label>

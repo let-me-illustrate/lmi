@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.83 2008-11-26 16:07:23 chicares Exp $
+// $Id: census_view.cpp,v 1.84 2008-12-08 13:00:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -98,9 +98,8 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
     EVT_MENU(XRCID("run_cell"              ),CensusView::UponRunCell)
 //    EVT_MENU(XRCID("run_class"             ),CensusView::UponRunClass)   // SOMEDAY !! This may be useful for large cases.
     EVT_MENU(XRCID("run_case"              ),CensusView::UponRunCase)
-    EVT_MENU(XRCID("print_cell"            ),CensusView::UponPrintCell)
-//    EVT_MENU(XRCID("print_class"           ),CensusView::UponPrintClass) // SOMEDAY !! This may be useful for large cases.
     EVT_MENU(XRCID("print_case"            ),CensusView::UponPrintCase)
+    EVT_MENU(XRCID("print_case_to_disk"    ),CensusView::UponPrintCaseToDisk)
     EVT_MENU(XRCID("print_spreadsheet"     ),CensusView::UponRunCaseToSpreadsheet)
     EVT_MENU(XRCID("paste_census"          ),CensusView::UponPasteCensus)
     EVT_MENU(XRCID("add_cell"              ),CensusView::UponAddCell)
@@ -115,9 +114,8 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
     EVT_UPDATE_UI(XRCID("run_cell"             ),CensusView::UponUpdateApplicable)
     EVT_UPDATE_UI(XRCID("run_class"            ),CensusView::UponUpdateApplicable)
     EVT_UPDATE_UI(XRCID("run_case"             ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("print_cell"           ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("print_class"          ),CensusView::UponUpdateApplicable)
     EVT_UPDATE_UI(XRCID("print_case"           ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("print_case_to_disk"   ),CensusView::UponUpdateApplicable)
     EVT_UPDATE_UI(XRCID("print_spreadsheet"    ),CensusView::UponUpdateApplicable)
     EVT_UPDATE_UI(XRCID("paste_census"         ),CensusView::UponUpdateApplicable)
     EVT_UPDATE_UI(XRCID("add_cell"             ),CensusView::UponUpdateApplicable)
@@ -833,25 +831,14 @@ void CensusView::UpdatePreservingSelection()
     list_window_->EnsureVisible(selection);
 }
 
-void CensusView::UponPrintCell(wxCommandEvent&)
-{
-    if(is_invalid())
-        {
-        return;
-        }
-
-    int cell_number = selected_row();
-    std::string const name(cell_parms()[cell_number]["InsuredName"].str());
-    illustrator z(mce_emit_pdf_to_printer);
-    z
-        (serial_file_path(base_filename(), name, cell_number, "hastur")
-        ,cell_parms()[cell_number]
-        );
-}
-
 void CensusView::UponPrintCase(wxCommandEvent&)
 {
     DoAllCells(mce_emit_pdf_to_printer);
+}
+
+void CensusView::UponPrintCaseToDisk(wxCommandEvent&)
+{
+    DoAllCells(mce_emit_pdf_file);
 }
 
 void CensusView::UponRunCase(wxCommandEvent&)

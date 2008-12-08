@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1217 2008-12-07 00:49:36 chicares Exp $
+// $Id: ChangeLog,v 1.1218 2008-12-08 13:00:23 chicares Exp $
 
 MAINTENANCE
 
@@ -20693,4 +20693,26 @@ Round substandard COI rates.
 Experimentally solve for surrender value equal to tax basis. See:
   http://savannah.nongnu.org/support/index.php?106573
   http://lists.nongnu.org/archive/html/lmi/2008-12/msg00001.html
+
+20081207T0049Z <gchicares@sbcglobal.net> [892]
+
+  ihs_avsolve.cpp
+Experimentally solve for surrender value equal to tax basis. See:
+
+20081208T1241Z <gchicares@sbcglobal.net> [892]
+
+  menus.xrc
+Rationalize accelerators. In particular, avoid duplication:
+  grep 'Ctrl-' menus.xrc |sed -e's/^ *//' |sort |uniq \
+  |sed -e's/\(^.*Ctrl-\)\([^<]*\)\(.*$\)/\2\t\1\2\3/' |sort |less -S
+so that each is globally unique and therefore independent of context.
+
+20081208T1300Z <gchicares@sbcglobal.net> [892]
+
+  census_view.cpp
+  census_view.hpp
+  menus.xrc
+  toolbar.xrc
+Add command to print all census cells and composite to disk. See:
+  http://savannah.nongnu.org/support/?105907
 
