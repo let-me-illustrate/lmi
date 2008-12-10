@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.68 2008-12-04 15:43:22 chicares Exp $
+# $Id: Makefile.am,v 1.69 2008-12-10 22:47:52 vslavik Exp $
 
 SUBDIRS = third_party
 
@@ -430,6 +430,7 @@ ihs_crc_comp_SOURCES = ihs_crc_comp.cpp
 ihs_crc_comp_LDADD = libmain_auxiliary_common.la
 
 product_files_SOURCES = \
+    alert_cli.cpp \
     generate_product_files.cpp \
     main_common.cpp \
     main_common_non_wx.cpp \
@@ -444,6 +445,7 @@ product_files_LDADD = \
     $(XMLWRAPP_LIBS)
 
 test_coding_rules_SOURCES = \
+  $(common_test_objects) \
   my_test_coding_rules.cpp \
   test_coding_rules.cpp
 test_coding_rules_CXXFLAGS = $(AM_CXXFLAGS) $(BOOST_INCLUDE_FLAGS)
