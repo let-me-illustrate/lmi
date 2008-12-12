@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.hpp,v 1.12 2008-11-20 13:18:13 chicares Exp $
+// $Id: illustrator.hpp,v 1.13 2008-12-12 12:40:33 chicares Exp $
 
 #ifndef illustrator_hpp
 #define illustrator_hpp
@@ -68,6 +68,11 @@ class LMI_SO illustrator
 };
 
 Input const& LMI_SO default_cell();
+
+void LMI_SO assert_consistency
+    (Input const& case_default
+    ,Input const& cell
+    );
 
 #endif // illustrator_hpp
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.hpp,v 1.26 2008-08-05 19:49:24 chicares Exp $
+// $Id: group_values.hpp,v 1.27 2008-12-12 12:40:33 chicares Exp $
 
 #ifndef group_values_hpp
 #define group_values_hpp
@@ -72,10 +72,6 @@ struct census_run_result
 /// composite is generated, so adding an emit-composite-only flag here
 /// would make little sense.
 ///
-/// assert_consistency() throws if an inconsistency is detected
-/// between a cell and its corresponding case default.
-/// TODO ?? Instead, this should be enforced when data is entered.
-///
 /// Implicitly-declared special member functions do the right thing.
 
 class LMI_SO run_census
@@ -92,11 +88,6 @@ class LMI_SO run_census
         );
 
     boost::shared_ptr<Ledger const> composite();
-
-    static void assert_consistency
-        (Input const& case_default
-        ,Input const& cell
-        );
 
   private:
     boost::shared_ptr<Ledger> composite_;

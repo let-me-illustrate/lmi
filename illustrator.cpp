@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.cpp,v 1.32 2008-11-21 01:35:21 chicares Exp $
+// $Id: illustrator.cpp,v 1.33 2008-12-12 12:40:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -66,7 +66,7 @@ bool illustrator::operator()(fs::path const& file_path)
         {
         Timer timer;
         multiple_cell_document doc(file_path.string());
-        run_census::assert_consistency(doc.case_parms()[0], doc.cell_parms()[0]);
+        assert_consistency(doc.case_parms()[0], doc.cell_parms()[0]);
         usec_for_input_ = timer.stop().elapsed_usec();
         return operator()(file_path, doc.cell_parms());
         }
@@ -209,5 +209,32 @@ Input const& default_cell()
         }
 
     return user_default;
+}
+
+/// Throw if an inconsistency is detected between a cell and its
+/// corresponding case default.
+///
+/// The run order depends on the first cell's parameters and ignores
+/// any conflicting input for any individual cell. It might be cleaner
+/// to offer this field (and certain others) only at the case level.
+///
+/// TODO ?? Instead, this should be enforced when data is entered.
+
+void assert_consistency
+    (Input const& case_default
+    ,Input const& cell
+    )
+{
+    if(case_default["RunOrder"] != cell["RunOrder"])
+        {
+        fatal_error()
+            << "Case-default run order '"
+            << case_default["RunOrder"]
+            << "' differs from first cell's run order '"
+            << cell["RunOrder"]
+            << "'. Make them consistent before running illustrations."
+            << LMI_FLUSH
+            ;
+        }
 }
 
