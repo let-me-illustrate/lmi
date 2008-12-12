@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.101 2008-11-26 16:07:24 chicares Exp $
+// $Id: group_values.cpp,v 1.102 2008-12-12 12:40:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,6 +33,7 @@
 #include "assert_lmi.hpp"
 #include "emit_ledger.hpp"
 #include "fenv_guard.hpp"
+#include "illustrator.hpp" // assert_consistency()
 #include "input.hpp"
 #include "ledger.hpp"
 #include "ledgervalues.hpp"
@@ -714,27 +715,5 @@ boost::shared_ptr<Ledger const> run_census::composite()
 {
     LMI_ASSERT(composite_.get());
     return composite_;
-}
-
-/// The run order depends on the first cell's parameters and ignores
-/// any conflicting input for any individual cell. It might be cleaner
-/// to offer this field (and certain others) only at the case level.
-
-void run_census::assert_consistency
-    (Input const& case_default
-    ,Input const& cell
-    )
-{
-    if(case_default["RunOrder"] != cell["RunOrder"])
-        {
-        fatal_error()
-            << "Case-default run order '"
-            << case_default["RunOrder"]
-            << "' differs from first cell's run order '"
-            << cell["RunOrder"]
-            << "'. Make them consistent before running illustrations."
-            << LMI_FLUSH
-            ;
-        }
 }
 
