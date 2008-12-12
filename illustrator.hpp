@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.hpp,v 1.13 2008-12-12 12:40:33 chicares Exp $
+// $Id: illustrator.hpp,v 1.14 2008-12-12 14:39:12 chicares Exp $
 
 #ifndef illustrator_hpp
 #define illustrator_hpp
@@ -31,11 +31,13 @@
 #include "so_attributes.hpp"
 
 #include <boost/filesystem/path.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include <functional>
 #include <vector>
 
 class Input;
+class Ledger;
 
 /// Sole top-level facility for illustration generation.
 /// TODO ?? Not yet the sole one, though.
@@ -56,12 +58,15 @@ class LMI_SO illustrator
 
     void conditionally_show_timings_on_stdout() const;
 
+    boost::shared_ptr<Ledger const> principal_ledger() const;
+
     double usec_for_input       () const;
     double usec_for_calculations() const;
     double usec_for_output      () const;
 
   private:
     mcenum_emission emission_;
+    boost::shared_ptr<Ledger const> principal_ledger_;
     double usec_for_input_;
     double usec_for_calculations_;
     double usec_for_output_;
