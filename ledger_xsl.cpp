@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.37 2008-11-26 16:00:32 chicares Exp $
+// $Id: ledger_xsl.cpp,v 1.38 2008-12-12 02:00:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -106,6 +106,15 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
 
     fs::path real_filepath(orthodox_filename(filepath.leaf()));
     LMI_ASSERT(fs::portable_name(real_filepath.string()));
+
+    if(std::string::npos != global_settings::instance().pyx().find("xml"))
+        {
+        fs::path xml_file = unique_filepath(print_dir / real_filepath, ".xml");
+
+        fs::ofstream ofs(xml_file, ios_out_trunc_binary());
+        ledger.write(ofs);
+        ofs.close();
+        }
 
     fs::path xml_fo_file = unique_filepath(print_dir / real_filepath, ".fo.xml");
 
