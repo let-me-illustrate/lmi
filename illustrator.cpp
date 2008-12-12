@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.cpp,v 1.35 2008-12-12 14:39:12 chicares Exp $
+// $Id: illustrator.cpp,v 1.36 2008-12-12 21:13:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -80,27 +80,24 @@ bool illustrator::operator()(fs::path const& file_path)
         }
     else if(".ini" == extension)
         {
-        // EXPERIMENTAL. At the moment, this meets only regression-
-        // testing needs. The quaint test for an empty path somehow
-        // represents the notion of default input and output files
-        // used in production.
+        configurable_settings const& c = configurable_settings::instance();
         Timer timer;
         Input input;
-        custom_io_0_read(input, file_path.string());
+        bool close_when_done = custom_io_0_read(input, file_path.string());
         usec_for_input_ = timer.stop().elapsed_usec();
         timer.restart();
-        IllusVal z;
+        IllusVal z(file_path.string());
         z.run(input);
         principal_ledger_ = z.ledger();
         usec_for_calculations_ = timer.stop().elapsed_usec();
-        fs::path out_file = file_path;
-        if(!file_path.string().empty())
-            {
-            out_file = fs::change_extension(file_path, ".test0");
-            }
+        fs::path out_file =
+            file_path.string() == c.custom_input_filename()
+            ? c.custom_output_filename()
+            : fs::change_extension(file_path, ".test0")
+            ;
         usec_for_output_ = emit_ledger(out_file, *z.ledger(), emission_);
         conditionally_show_timings_on_stdout();
-        return true;
+        return close_when_done;
         }
     else
         {
@@ -119,7 +116,7 @@ bool illustrator::operator()(fs::path const& file_path)
 bool illustrator::operator()(fs::path const& file_path, Input const& z)
 {
     Timer timer;
-    IllusVal IV;
+    IllusVal IV(file_path.string());
     IV.run(z);
     principal_ledger_ = IV.ledger();
     usec_for_calculations_ = timer.stop().elapsed_usec();
@@ -187,9 +184,8 @@ Input const& default_cell()
     static Input const builtin_default;
     static Input       user_default;
 
-    std::string const default_input_file =
-        configurable_settings::instance().default_input_filename()
-        ;
+    configurable_settings const& c = configurable_settings::instance();
+    std::string const default_input_file = c.default_input_filename();
     if(0 != access(default_input_file.c_str(), F_OK))
         {
         user_default = builtin_default;

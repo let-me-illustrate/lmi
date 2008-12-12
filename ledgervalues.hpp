@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.hpp,v 1.25 2008-12-12 13:32:19 chicares Exp $
+// $Id: ledgervalues.hpp,v 1.26 2008-12-12 21:13:26 chicares Exp $
 
 #ifndef ledgervalues_hpp
 #define ledgervalues_hpp
@@ -48,7 +48,7 @@ class LMI_SO IllusVal
     ,virtual private obstruct_slicing<IllusVal>
 {
   public:
-    explicit IllusVal(std::string const& filename = "anonymous");
+    explicit IllusVal(std::string const& filename);
     ~IllusVal();
 
     double run(Input const&);
