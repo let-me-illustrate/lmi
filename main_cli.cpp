@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.64 2008-12-12 01:30:30 chicares Exp $
+// $Id: main_cli.cpp,v 1.65 2008-12-12 13:32:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -136,7 +136,7 @@ void SelfTest()
     IP["SolveType"] = "SolveNone";
     expected_value = 6305652.52;
     IV.run(IP);
-    observed_value = IV.ledger().GetCurrFull().AcctVal.back();
+    observed_value = IV.ledger()->GetCurrFull().AcctVal.back();
     if(!antediluvian && .005 < std::fabs(expected_value - observed_value))
         {
         warning()
@@ -209,7 +209,7 @@ void illustrator_test()
 
     IllusVal values;
     values.run(input);
-    emit_ledger("eraseme0", values.ledger(), mce_emit_test_data);
+    emit_ledger("eraseme0", *values.ledger(), mce_emit_test_data);
 
     LMI_ASSERT(files_are_identical("eraseme0.test", "eraseme1.test"));
 

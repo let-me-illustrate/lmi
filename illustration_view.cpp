@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.96 2008-11-21 20:10:18 chicares Exp $
+// $Id: illustration_view.cpp,v 1.97 2008-12-12 13:32:19 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -369,12 +369,10 @@ void IllustrationView::Run(Input* overriding_input)
     IllusVal IV(base_filename() + ".debug");
     IV.run(input_data());
     boost::shared_ptr<Ledger> resulting_ledger(new Ledger(mce_ill_reg));
-    *resulting_ledger = IV.ledger();
+    ledger_values_ = IV.ledger();
 
     status() << "Calculate: " << timer.stop().elapsed_msec_str();
     timer.restart();
-
-    ledger_values_ = resulting_ledger;
 
     DisplaySelectedValuesAsHtml();
 
@@ -437,7 +435,7 @@ bool custom_io_0_run_if_file_exists(wxDocManager* dm)
             bool close_when_done = custom_io_0_read(input, "");
             IllusVal IV;
             IV.run(input);
-            custom_io_0_write(IV.ledger(), "");
+            custom_io_0_write(*IV.ledger(), "");
             if(close_when_done)
                 {
                 return true;
