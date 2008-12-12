@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.hpp,v 1.27 2008-12-12 12:40:33 chicares Exp $
+// $Id: group_values.hpp,v 1.28 2008-12-12 13:32:19 chicares Exp $
 
 #ifndef group_values_hpp
 #define group_values_hpp
@@ -87,7 +87,7 @@ class LMI_SO run_census
         ,std::vector<Input> const& cells
         );
 
-    boost::shared_ptr<Ledger const> composite();
+    boost::shared_ptr<Ledger const> composite() const;
 
   private:
     boost::shared_ptr<Ledger> composite_;
