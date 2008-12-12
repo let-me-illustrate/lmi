@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.84 2008-12-08 13:00:23 chicares Exp $
+// $Id: census_view.cpp,v 1.85 2008-12-12 12:40:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -900,7 +900,7 @@ void CensusView::ViewComposite()
 
 bool CensusView::DoAllCells(mcenum_emission emission)
 {
-    run_census::assert_consistency(case_parms()[0], cell_parms()[0]);
+    assert_consistency(case_parms()[0], cell_parms()[0]);
 
     run_census runner;
     if(!runner(base_filename(), emission, cell_parms()).completed_normally_)
