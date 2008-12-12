@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.97 2008-12-12 13:32:19 chicares Exp $
+// $Id: illustration_view.cpp,v 1.98 2008-12-12 21:13:25 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -46,11 +46,11 @@
 #include "emit_ledger.hpp"
 #include "handle_exceptions.hpp"
 #include "illustration_document.hpp"
+#include "illustrator.hpp"
 #include "input.hpp"
 #include "istream_to_string.hpp"
 #include "ledger.hpp"
 #include "ledger_text_formats.hpp"
-#include "ledgervalues.hpp"
 #include "mvc_controller.hpp"
 #include "safely_dereference_as.hpp"
 #include "timer.hpp"
@@ -284,9 +284,10 @@ void IllustrationView::CopyLedgerToClipboard(enum_copy_option option)
         {
         case e_copy_full:
             {
+            configurable_settings const& c = configurable_settings::instance();
             std::string spreadsheet_filename =
                     base_filename()
-                +   configurable_settings::instance().spreadsheet_file_extension()
+                +   c.spreadsheet_file_extension()
                 ;
             std::remove(spreadsheet_filename.c_str());
             PrintFormTabDelimited(*ledger_values_, spreadsheet_filename);
@@ -366,10 +367,9 @@ void IllustrationView::Run(Input* overriding_input)
         input_data() = *overriding_input;
         }
 
-    IllusVal IV(base_filename() + ".debug");
-    IV.run(input_data());
-    boost::shared_ptr<Ledger> resulting_ledger(new Ledger(mce_ill_reg));
-    ledger_values_ = IV.ledger();
+    illustrator z(mce_emit_nothing);
+    z(base_filename() + ".debug", input_data());
+    ledger_values_ = z.principal_ledger();
 
     status() << "Calculate: " << timer.stop().elapsed_msec_str();
     timer.restart();
@@ -385,6 +385,8 @@ void IllustrationView::Run(Input* overriding_input)
 /// CensusView::ViewComposite() calls MakeNewIllustrationDocAndView()
 /// to view a composite whose values are not conveniently calculated
 /// in this TU, so they're passed via this function.
+///
+/// custom_io_0_run_if_file_exists() uses this function similarly.
 
 void IllustrationView::SetLedger(boost::shared_ptr<Ledger const> ledger)
 {
@@ -431,11 +433,9 @@ bool custom_io_0_run_if_file_exists(wxDocManager* dm)
         {
         if(custom_io_0_file_exists())
             {
-            Input input;
-            bool close_when_done = custom_io_0_read(input, "");
-            IllusVal IV;
-            IV.run(input);
-            custom_io_0_write(*IV.ledger(), "");
+            configurable_settings const& c = configurable_settings::instance();
+            illustrator z(mce_emit_custom_0);
+            bool close_when_done = z(c.custom_input_filename());
             if(close_when_done)
                 {
                 return true;
@@ -443,18 +443,15 @@ bool custom_io_0_run_if_file_exists(wxDocManager* dm)
             else
                 {
                 LMI_ASSERT(0 != dm);
-                std::string f
-                    (configurable_settings::instance().custom_output_filename()
-                    );
                 // Add '.ill' extension to force use of the correct
                 // document template, even if the filename didn't
                 // match it.
-                f += ".ill";
                 IllustrationView& illview = MakeNewIllustrationDocAndView
                     (dm
-                    ,f.c_str()
+                    ,(c.custom_output_filename() + ".ill").c_str()
                     );
-                illview.Run(&input);
+                illview.SetLedger(z.principal_ledger());
+                illview.DisplaySelectedValuesAsHtml();
                 safely_dereference_as<wxFrame>(illview.GetFrame()).Maximize();
                 }
             }

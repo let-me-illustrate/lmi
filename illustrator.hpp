@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.hpp,v 1.14 2008-12-12 14:39:12 chicares Exp $
+// $Id: illustrator.hpp,v 1.15 2008-12-12 21:13:26 chicares Exp $
 
 #ifndef illustrator_hpp
 #define illustrator_hpp
@@ -40,7 +40,6 @@ class Input;
 class Ledger;
 
 /// Sole top-level facility for illustration generation.
-/// TODO ?? Not yet the sole one, though.
 ///
 /// Implicitly-declared special member functions do the right thing.
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.65 2008-12-12 13:32:19 chicares Exp $
+// $Id: main_cli.cpp,v 1.66 2008-12-12 21:13:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -37,8 +37,8 @@
 #include "illustrator.hpp"
 #include "input.hpp"
 #include "ledger.hpp"
+#include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
-#include "ledgervalues.hpp"
 #include "license.hpp"
 #include "main_common.hpp"
 #include "mc_enum.hpp"
@@ -120,7 +120,8 @@ void SelfTest()
 {
     bool const antediluvian = timestamp_of_production_release().empty();
 
-    IllusVal IV;
+    illustrator z(mce_emit_nothing);
+
     Input IP;
     IP["Gender"            ] = "Male";
     IP["Smoking"           ] = "Nonsmoker";
@@ -135,8 +136,8 @@ void SelfTest()
 
     IP["SolveType"] = "SolveNone";
     expected_value = 6305652.52;
-    IV.run(IP);
-    observed_value = IV.ledger()->GetCurrFull().AcctVal.back();
+    z("", IP);
+    observed_value = z.principal_ledger()->GetCurrFull().AcctVal.back();
     if(!antediluvian && .005 < std::fabs(expected_value - observed_value))
         {
         warning()
@@ -153,7 +154,8 @@ void SelfTest()
 
     IP["SolveType"] = "SolveSpecAmt";
     expected_value = 1884064;
-    observed_value = IV.run(IP);
+    z("", IP);
+    observed_value = z.principal_ledger()->GetLedgerInvariant().SpecAmt.front();
     if(!antediluvian && .005 < std::fabs(expected_value - observed_value))
         {
         warning()
@@ -168,7 +170,8 @@ void SelfTest()
 
     IP["SolveType"] = "SolveEePrem";
     expected_value = 10673.51;
-    observed_value = IV.run(IP);
+    z("", IP);
+    observed_value = z.principal_ledger()->GetLedgerInvariant().EeGrossPmt.front();
     if(!antediluvian && .005 < std::fabs(expected_value - observed_value))
         {
         warning()
@@ -183,38 +186,9 @@ void SelfTest()
 
     std::cout
         << "Test solve speed: "
-        << TimeAnAliquot(boost::bind(&IllusVal::run, &IV, IP), 0.1)
+        << TimeAnAliquot(boost::bind(z, "", IP), 0.1)
         << '\n'
         ;
-}
-
-/// Test class illustrator.
-///
-/// Compare output created in different ways from the same input. The
-/// mce_emit_test_data output type is chosen only for convenience;
-/// it might be good to test other output types as well in future.
-///
-/// Keep this separate from SelfTest() so that the latter can be used
-/// for timing and profiling. It is not interesting to time or profile
-/// the file IO performed here.
-
-void illustrator_test()
-{
-    std::remove("eraseme0.test");
-    std::remove("eraseme1.test");
-
-    Input input;
-
-    (illustrator(mce_emit_test_data))("eraseme1", input);
-
-    IllusVal values;
-    values.run(input);
-    emit_ledger("eraseme0", *values.ledger(), mce_emit_test_data);
-
-    LMI_ASSERT(files_are_identical("eraseme0.test", "eraseme1.test"));
-
-    std::remove("eraseme0.test");
-    std::remove("eraseme1.test");
 }
 
 //============================================================================
@@ -519,7 +493,6 @@ void process_command_line(int argc, char* argv[])
     if(run_selftest)
         {
         SelfTest();
-        illustrator_test();
         return;
         }
 

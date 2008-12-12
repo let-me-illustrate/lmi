@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1218 2008-12-08 13:00:23 chicares Exp $
+// $Id: ChangeLog,v 1.1219 2008-12-12 21:13:26 chicares Exp $
 
 MAINTENANCE
 
@@ -20694,11 +20694,6 @@ Experimentally solve for surrender value equal to tax basis. See:
   http://savannah.nongnu.org/support/index.php?106573
   http://lists.nongnu.org/archive/html/lmi/2008-12/msg00001.html
 
-20081207T0049Z <gchicares@sbcglobal.net> [892]
-
-  ihs_avsolve.cpp
-Experimentally solve for surrender value equal to tax basis. See:
-
 20081208T1241Z <gchicares@sbcglobal.net> [892]
 
   menus.xrc
@@ -20715,4 +20710,62 @@ so that each is globally unique and therefore independent of context.
   toolbar.xrc
 Add command to print all census cells and composite to disk. See:
   http://savannah.nongnu.org/support/?105907
+
+20081210T2247Z <vslavik@fastmail.fm> [892]
+
+  Makefile.am
+Fix targets for certain ancillary programs.
+
+20081212T0130Z <gchicares@sbcglobal.net> [892]
+
+  main_cli.cpp
+  main_wx.cpp
+Experimentally expose an internal flag for testing.
+
+20081212T0200Z <gchicares@sbcglobal.net> [892]
+
+  ledger_xsl.cpp
+Optionally print xml before transformation to xsl-fo.
+
+20081212T0201Z <gchicares@sbcglobal.net> [892]
+
+  ledger_xml_io.cpp
+Remove unneeded DOCTYPE etc. See:
+  http://lists.nongnu.org/archive/html/lmi/2008-12/msg00004.html
+
+20081212T1240Z <gchicares@sbcglobal.net> [892]
+
+  census_view.cpp
+  group_values.cpp
+  group_values.hpp
+  illustrator.cpp
+  illustrator.hpp
+Improve encapsulation by making a member function a non-member.
+
+20081212T1332Z <gchicares@sbcglobal.net> [892]
+
+  group_values.cpp
+  group_values.hpp
+  illustration_view.cpp
+  illustrator.cpp
+  ledgervalues.cpp
+  ledgervalues.hpp
+  main_cli.cpp
+Regularize accessors to shared pointers to ledger.
+
+20081212T1439Z <gchicares@sbcglobal.net> [892]
+
+  illustrator.cpp
+  illustrator.hpp
+Unify accessors to shared pointers to ledger.
+
+20081212T2113Z <gchicares@sbcglobal.net> [891]
+
+  census_view.cpp
+  illustration_view.cpp
+  illustrator.cpp
+  illustrator.hpp
+  ledgervalues.hpp
+  main_cli.cpp
+Refactor to improve encapsulation.
 
