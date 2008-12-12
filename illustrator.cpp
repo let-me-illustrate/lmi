@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.cpp,v 1.34 2008-12-12 13:32:19 chicares Exp $
+// $Id: illustrator.cpp,v 1.35 2008-12-12 14:39:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,6 +29,7 @@
 #include "illustrator.hpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "configurable_settings.hpp"
 #include "custom_io_0.hpp"
 #include "emit_ledger.hpp"
@@ -90,6 +91,7 @@ bool illustrator::operator()(fs::path const& file_path)
         timer.restart();
         IllusVal z;
         z.run(input);
+        principal_ledger_ = z.ledger();
         usec_for_calculations_ = timer.stop().elapsed_usec();
         fs::path out_file = file_path;
         if(!file_path.string().empty())
@@ -119,6 +121,7 @@ bool illustrator::operator()(fs::path const& file_path, Input const& z)
     Timer timer;
     IllusVal IV;
     IV.run(z);
+    principal_ledger_ = IV.ledger();
     usec_for_calculations_ = timer.stop().elapsed_usec();
     usec_for_output_       = emit_ledger(file_path, *IV.ledger(), emission_);
     conditionally_show_timings_on_stdout();
@@ -128,7 +131,9 @@ bool illustrator::operator()(fs::path const& file_path, Input const& z)
 bool illustrator::operator()(fs::path const& file_path, std::vector<Input> const& z)
 {
     census_run_result result;
-    result = run_census()(file_path, emission_, z);
+    run_census runner;
+    result = runner(file_path, emission_, z);
+    principal_ledger_ = runner.composite();
     usec_for_calculations_ = result.usec_for_calculations_;
     usec_for_output_       = result.usec_for_output_      ;
     conditionally_show_timings_on_stdout();
@@ -149,6 +154,17 @@ void illustrator::conditionally_show_timings_on_stdout() const
             << '\n'
             ;
         }
+}
+
+/// The "principal" ledger is the one most likely to be retained for
+/// other uses, such as displaying in a GUI. For a single-cell
+/// illustration, it's the one and only ledger. For a multiple-cell
+/// illustration, it's the composite ledger.
+
+boost::shared_ptr<Ledger const> illustrator::principal_ledger() const
+{
+    LMI_ASSERT(principal_ledger_.get());
+    return principal_ledger_;
 }
 
 double illustrator::usec_for_input() const
