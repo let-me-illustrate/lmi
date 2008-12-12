@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.63 2008-11-22 15:28:23 chicares Exp $
+// $Id: main_cli.cpp,v 1.64 2008-12-12 01:30:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -460,6 +460,10 @@ void process_command_line(int argc, char* argv[])
             case 'x':
                 {
                 global_settings::instance().set_pyx(getopt_long.optarg);
+                if(std::string::npos != global_settings::instance().pyx().find("system_testing"))
+                    {
+                    global_settings::instance().set_regression_testing(true);
+                    }
                 }
                 break;
 
