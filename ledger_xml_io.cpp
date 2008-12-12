@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.82 2008-11-15 14:47:21 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.83 2008-12-12 02:01:51 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -844,10 +844,6 @@ void Ledger::write(xml::element& x) const
 
 // Now we're ready to write the xml.
 
-//  want: <?xml-stylesheet type="text/xsl" href="NewTransform.xsl"?>
-//  want: <!DOCTYPE sales []>
-// kludged in write(std::ostream& os) below
-
     xml::element scalar("scalar");
     xml::element data("data");
     for
@@ -1009,22 +1005,8 @@ void Ledger::write(std::ostream& os) const
 {
     xml_lmi::xml_document document(xml_root_name());
     xml::element& root = document.root_node();
-
     root << *this;
-// Need DOCTYPE support, which xmlwrapp lacks--so can't do this:
-//    os << root;
-
-    std::string s = document.str();
-    std::string token("<?xml version=\"1.0\"?>");
-    std::string string_to_insert
-        ("\n<!DOCTYPE sales [\n]>\n"
-        "<?xml-stylesheet type=\"text/xsl\" href=\"NewTransform.xsl\"?>"
-        );
-    s.insert
-        (s.find(token) + token.length()
-        ,string_to_insert
-        );
-    os << s;
+    os << root;
 }
 
 void Ledger::write_xsl_fo(std::ostream& os) const
