@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.85 2008-12-12 12:40:33 chicares Exp $
+// $Id: census_view.cpp,v 1.86 2008-12-12 21:13:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,7 +33,6 @@
 #include "census_document.hpp"
 #include "configurable_settings.hpp"
 #include "default_view.hpp"
-#include "group_values.hpp"
 #include "illustration_view.hpp"
 #include "illustrator.hpp"
 #include "input.hpp"
@@ -902,13 +901,13 @@ bool CensusView::DoAllCells(mcenum_emission emission)
 {
     assert_consistency(case_parms()[0], cell_parms()[0]);
 
-    run_census runner;
-    if(!runner(base_filename(), emission, cell_parms()).completed_normally_)
+    illustrator z(emission);
+    if(!z(base_filename(), cell_parms()))
         {
         return false;
         }
 
-    composite_ledger_ = runner.composite();
+    composite_ledger_ = z.principal_ledger();
     return true;
 }
 
