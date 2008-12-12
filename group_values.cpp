@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.102 2008-12-12 12:40:33 chicares Exp $
+// $Id: group_values.cpp,v 1.103 2008-12-12 13:32:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -119,10 +119,10 @@ census_run_result run_census_in_series::operator()
             std::string const name(cells[j]["InsuredName"].str());
             IllusVal IV(serial_file_path(file, name, j, "debug").string());
             IV.run(cells[j]);
-            composite.PlusEq(IV.ledger());
+            composite.PlusEq(*IV.ledger());
             result.usec_for_output_ += emit_ledger
                 (serial_file_path(file, name, j, "hastur")
-                ,IV.ledger()
+                ,*IV.ledger()
                 ,emission
                 );
             }
@@ -711,7 +711,7 @@ census_run_result run_census::operator()
     return result;
 }
 
-boost::shared_ptr<Ledger const> run_census::composite()
+boost::shared_ptr<Ledger const> run_census::composite() const
 {
     LMI_ASSERT(composite_.get());
     return composite_;
