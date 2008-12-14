@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.59 2008-11-19 16:34:27 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.60 2008-12-14 11:59:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -65,7 +65,11 @@ namespace
 ///
 /// The legends here are from 'ledger_xml_io.cpp', with underscores
 /// removed. Alternative legends from 'mc_enum_types.xpp' are shown in
-/// comments when they differ.
+/// comments when they differ. Exception:
+///  - 'AttainedAge' is not labelled "End of Year Age" as in
+///    'ledger_xml_io.cpp', where it differs numerically. Insurance
+///    age changes not at the end of the current year, but rather at
+///    the beginning of the next year.
 
 std::map<std::string,ledger_metadata> const& ledger_metadata_map()
 {
@@ -74,7 +78,7 @@ std::map<std::string,ledger_metadata> const& ledger_metadata_map()
     if(m.empty())
         {
         m["[none]"                     ] = ledger_metadata(0, oe_format_normal    , "[none]"                                );
-        m["AttainedAge"                ] = ledger_metadata(0, oe_format_normal    , "End of Year Age"                       ); // "Attained Age"
+        m["AttainedAge"                ] = ledger_metadata(0, oe_format_normal    , "Attained Age"                          );
         m["PolicyYear"                 ] = ledger_metadata(0, oe_format_normal    , "Policy Year"                           );
         m["InforceLives"               ] = ledger_metadata(4, oe_format_normal    , "BOY Lives Inforce"                     ); // "Inforce Lives BOY"
         m["SpecAmt"                    ] = ledger_metadata(0, oe_format_normal    , "Specified Amount"                      ); // "Base Specified Amount"
