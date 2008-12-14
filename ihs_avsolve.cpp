@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.26 2008-12-07 00:49:36 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.27 2008-12-14 15:25:17 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -104,11 +104,15 @@ void AccountValue::SolveSetTargetValueAndDuration
     if(mce_solve_for_endt == a_SolveTarget)
         {
         // We take endowment to mean for spec amt at normal maturity,
-        // so the target value is the same for all DB options
+        // so the target value is the same for all DB options.
         EffectiveSolveTargetYear = BasicValues::GetLength();
         // We can't just get spec amt from the original input, because
         // a solve for spec amt can change it dynamically.
         SolveTargetValue = InvariantValues().SpecAmt.back();
+        // TODO ?? However, that fails, precisely in the case cited:
+        // a solve for specified amount. Example:
+        //   alt-F N I
+        //   solve for specified amount from issue to maturity
         }
 
     // TODO ?? This assertion seems odd because 0 is a valid input value on
