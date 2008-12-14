@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: emit_ledger.cpp,v 1.15 2008-11-21 01:35:20 chicares Exp $
+// $Id: emit_ledger.cpp,v 1.16 2008-12-14 11:06:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -50,9 +50,14 @@
 ///   mce_emit_pdf_to_printer
 ///   mce_emit_pdf_to_viewer
 /// are spelled out separately and in full, which is redundant.
-/// Reason: in the future, they may be implemented differently,
-/// and mce_emit_pdf_to_printer may write directly to the printer
-/// without creating any file.
+/// Reason: in the future, they may be implemented differently.
+/// In particular, mce_emit_pdf_to_printer might pass '-print' to
+/// 'fop' instead of using wxTheMimeTypesManager, which would make
+/// it available with the command-line interface. That interface
+/// doesn't support mce_emit_pdf_to_viewer at all: it could be
+/// supported in a platform-dependent way, but it would be strange
+/// to require a command-line program to invoke an external GUI
+/// program.
 
 double emit_ledger
     (fs::path const& filepath
@@ -72,16 +77,11 @@ double emit_ledger
         }
     if(emission & mce_emit_pdf_to_printer)
         {
-// EXPERIMENTAL.
-// Does not yet work from command line interface: file_command() unimplemented.
-// Should we pass '-print' to 'fop' instead of using wxTheMimeTypesManager?
         std::string pdf_out_file = write_ledger_as_pdf(ledger, filepath);
         file_command()(pdf_out_file, "print");
         }
     if(emission & mce_emit_pdf_to_viewer)
         {
-// EXPERIMENTAL.
-// Does not work from command line interface: file_command() unimplemented.
         std::string pdf_out_file = write_ledger_as_pdf(ledger, filepath);
         file_command()(pdf_out_file, "open");
         }
@@ -107,7 +107,6 @@ double emit_ledger
         }
     if(emission & mce_emit_custom_0)
         {
-// EXPERIMENTAL. This is untested:
         custom_io_0_write(ledger, filepath.string());
         }
 
