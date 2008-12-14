@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.73 2008-11-03 21:33:14 chicares Exp $
+// $Id: account_value.hpp,v 1.74 2008-12-14 22:05:17 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -323,6 +323,7 @@ class LMI_SO AccountValue
     // reduce the premium below the threshold, so it's useful only as
     // a hint. Premium exempt from premium tax (e.g. internal 1035
     // exchanges when the database makes them so exempt) is excluded.
+    // SOMEDAY !! Expunge this because SD 10-4-22(2) repealed it.
     double TaxableFirstYearPlannedPremium() const;
 
     // Monthly calculation detail.
@@ -358,11 +359,6 @@ class LMI_SO AccountValue
 
     double GuarPremium;
 
-    // If solving for endowment, we use endowment duration instead of
-    // input target duration. But we don't want to change the input
-    // value--we just want to override it. If input duration was other
-    // than endowment, then we want that value still to be there if
-    // the goal is later changed to use input duration.
     int    EffectiveSolveTargetYear;
     double SolveTargetValue;
 
