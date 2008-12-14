@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.79 2008-12-14 14:34:18 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.80 2008-12-14 20:27:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -957,7 +957,6 @@ false // Silly workaround for now.
     SolveSeparateAccountBasis.allow(mce_sep_half, actually_solving && allow_sep_acct && is_three_rate_nasd(GleanedLedgerType_));
 
     SolveTargetCashSurrenderValue.enable(actually_solving && mce_solve_for_target == SolveTarget);
-    DeprecatedSolveTgtAtWhich    .enable(actually_solving && mce_solve_for_target == SolveTarget);
 
     bool create_supplemental_report = "Yes" == CreateSupplementalReport;
     SupplementalReportColumn00.enable(create_supplemental_report);
