@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.hpp,v 1.26 2008-12-12 21:13:26 chicares Exp $
+// $Id: ledgervalues.hpp,v 1.27 2008-12-14 11:05:17 chicares Exp $
 
 #ifndef ledgervalues_hpp
 #define ledgervalues_hpp
@@ -36,14 +36,12 @@
 
 class Input;
 class Ledger;
-class LedgerInvariant;
-class LedgerVariant;
 
 /// Run an individual illustration, producing a ledger.
 ///
 /// This class encapsulates a frequently-used series of operations.
 
-class LMI_SO IllusVal
+class IllusVal
     :private boost::noncopyable
     ,virtual private obstruct_slicing<IllusVal>
 {
