@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1219 2008-12-12 21:13:26 chicares Exp $
+// $Id: ChangeLog,v 1.1220 2008-12-14 14:34:18 chicares Exp $
 
 MAINTENANCE
 
@@ -20768,4 +20768,24 @@ Unify accessors to shared pointers to ledger.
   ledgervalues.hpp
   main_cli.cpp
 Refactor to improve encapsulation.
+
+20081214T1105Z <gchicares@sbcglobal.net> [891]
+
+  ledgervalues.hpp
+Further improve encapsulation.
+
+20081214T1106Z <gchicares@sbcglobal.net> [891]
+
+  emit_ledger.cpp
+Improve documentation.
+
+20081214T1159Z <gchicares@sbcglobal.net> [891]
+
+  ledger_text_formats.cpp
+Correct a misleading calculation-summary column heading.
+
+20081214T1434Z <gchicares@sbcglobal.net> [893]
+
+  input_harmonization.cpp
+Reinstate toxic kludges from 20080811T0007Z, removed 20081101T1546Z.
 
