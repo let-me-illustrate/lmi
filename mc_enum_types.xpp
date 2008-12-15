@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types.xpp,v 1.20 2008-07-20 18:36:15 chicares Exp $
+// $Id: mc_enum_types.xpp,v 1.21 2008-12-15 01:59:31 chicares Exp $
 
 #define yes_or_no_VALUES \
     {mce_no \
@@ -237,10 +237,12 @@
 #define solve_target_VALUES \
     {mce_solve_for_endt \
     ,mce_solve_for_target \
+    ,mce_solve_for_tax_basis \
     };
 #define solve_target_NAMES \
     {"SolveForEndt" \
     ,"SolveForTarget" \
+    ,"SolveForTaxBasis" \
     };
 
 #define solve_tgt_at_VALUES \

@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin.xrc,v 1.8 2008-09-30 03:57:27 chicares Exp $
+    $Id: skin.xrc,v 1.9 2008-12-15 01:59:31 chicares Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -1803,19 +1803,10 @@ here, but it looks weird if we don't make this look like its siblings.
                                 <content>
                                     <item>SolveForEndt</item>
                                     <item>SolveForTarget</item>
+                                    <item>SolveForTaxBasis</item>
                                 </content>
                             </object>
                         </object>
-<!-- TODO ?? Wouldn't this be better as a checkbox?
-                        <object class="sizeritem">
-                            <flag>wxALIGN_LEFT|wxALL</flag>
-                            <border>4</border>
-                            <object class="wxCheckBox" name="solve_for_endowment">
-                                <help>Solve for endowment</help>
-                                <label>Solve for endowment</label>
-                            </object>
-                        </object>
--->
                         <object class="sizeritem">
                             <flag>wxGROW|wxALL</flag>
                             <object class="wxFlexGridSizer">
