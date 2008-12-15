@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.81 2008-09-24 18:51:25 wboutin Exp $
+    $Id: nasd.xsl,v 1.82 2008-12-15 12:14:18 chicares Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -741,13 +741,10 @@ it confusing if the general account rates aren't included, too.
                 <fo:block text-align="left">
                   Assumed Premium Allocation:**
                   <fo:block text-align="left">
-                    &nbsp;&nbsp;&nbsp;&nbsp;Separate Account: 100%
+                    &nbsp;&nbsp;&nbsp;&nbsp;Separate Account: <xsl:value-of select="format-number(1 - $scalars/GenAcctAllocation, '###%')"/>
                   </fo:block>
                   <fo:block>
-                    &nbsp;&nbsp;&nbsp;&nbsp;Guaranteed Principal Account (GPA): 0%
-<!-- Use when fund allocations are implemented
-                    <xsl:value-of select="$scalars/GenAcctAllocation"/>
--->
+                    &nbsp;&nbsp;&nbsp;&nbsp;Guaranteed Principal Account (GPA): <xsl:value-of select="format-number($scalars/GenAcctAllocation, '###%')"/>
                   </fo:block>
                 </fo:block>
               <fo:block text-align="left">
