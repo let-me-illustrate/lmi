@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: solve.cpp,v 1.17 2008-09-01 13:17:31 chicares Exp $
+// $Id: solve.cpp,v 1.18 2008-12-15 01:59:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -140,6 +140,11 @@ double SolveTest()
         case mce_solve_for_target:
             {
             y = ThatSolveTargetCSV;
+            }
+            break;
+        case mce_solve_for_tax_basis:
+            {
+            fatal_error() << "Not implemented.";
             }
             break;
         throw "Unreachable--silences a compiler diagnostic.";

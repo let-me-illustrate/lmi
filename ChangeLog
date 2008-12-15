@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1220 2008-12-14 14:34:18 chicares Exp $
+// $Id: ChangeLog,v 1.1221 2008-12-15 01:59:31 chicares Exp $
 
 MAINTENANCE
 
@@ -20788,4 +20788,45 @@ Correct a misleading calculation-summary column heading.
 
   input_harmonization.cpp
 Reinstate toxic kludges from 20080811T0007Z, removed 20081101T1546Z.
+
+20081214T1525Z <gchicares@sbcglobal.net> [894]
+
+  ihs_avsolve.cpp
+Mark a hitherto-unnoticed defect.
+
+20081214T2027Z <gchicares@sbcglobal.net> [894]
+
+  input_harmonization.cpp
+Fix defect introduced 20050312T0301Z (revision 1.1). Line 960 was a
+pointless duplicate of line 918.
+
+20081214T2204Z <gchicares@sbcglobal.net> [894]
+
+  ihs_avsolve.cpp
+  input_harmonization.cpp
+Permit solve to endow at a duration before maturity.
+
+20081214T2205Z <gchicares@sbcglobal.net> [894]
+
+  account_value.hpp
+Update documentation.
+
+20081215T0045Z <gchicares@sbcglobal.net> [893]
+
+  ihs_avsolve.cpp
+  input_harmonization.cpp
+Clarify and improve enforcement of lower limit on solve duration.
+
+20081215T0159Z <gchicares@sbcglobal.net> [892]
+
+  account_value.hpp
+  ihs_avsolve.cpp
+  input_harmonization.cpp
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+  mc_enum_types.xpp
+  skin.xrc
+  solve.cpp
+Solve for surrender value equal to tax basis, adding GUI support to
+the 20081207T0049Z change.
 
