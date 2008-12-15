@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: yare_input.cpp,v 1.14 2008-08-11 14:49:23 chicares Exp $
+// $Id: yare_input.cpp,v 1.15 2008-12-15 12:13:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,6 +30,8 @@
 
 #include "input.hpp"
 #include "miscellany.hpp" // each_equal()
+
+#include <numeric>        // std::accumulate()
 
 namespace
 {
@@ -203,5 +205,40 @@ bool is_policy_rated(yare_input const& z)
             mce_table_none != z.SubstandardTable
         ||  !each_equal(z.FlatExtra.begin(), z.FlatExtra.end(), 0.0)
         ;
+}
+
+/// Calculate proportion of premium allocated to separate account.
+///
+/// If "average of all funds" or "custom fund" is selected, then this
+/// proportion is taken as unity.
+///
+/// Otherwise, it's the sum of allocations to all separate-account
+/// funds. Those allocations are represented as percentages [0, 100];
+/// because 100 * .01 does not exactly equal unity, treat a 100% sum
+/// as a special case in order to avoid catastrophic cancellation when
+/// calculating general-account proportion as the difference between
+/// this quantity and unity.
+
+double premium_allocation_to_sepacct(yare_input const& yi)
+{
+    double z = 0.0;
+    double sum_of_fund_allocations = std::accumulate
+        (yi.FundAllocations.begin()
+        ,yi.FundAllocations.end()
+        ,0.0
+        );
+    if(yi.UseAverageOfAllFunds || yi.OverrideFundManagementFee)
+        {
+        z = 1.0;
+        }
+    else if(100.0 == sum_of_fund_allocations)
+        {
+        z = 1.0;
+        }
+    else
+        {
+        z = .01 * sum_of_fund_allocations;
+        }
+    return z;
 }
 

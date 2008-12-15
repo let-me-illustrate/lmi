@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.154 2008-11-03 21:33:15 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.155 2008-12-15 12:13:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -626,37 +626,15 @@ void AccountValue::SetInitialValues()
     AVGenAcct                   = InforceAVGenAcct;
     AVSepAcct                   = InforceAVSepAcct;
 
-    double sum_of_fund_allocations = std::accumulate
-        (yare_input_.FundAllocations.begin()
-        ,yare_input_.FundAllocations.end()
-        ,0.0
-        );
-    if(yare_input_.UseAverageOfAllFunds || yare_input_.OverrideFundManagementFee)
-        {
-        SepAcctPaymentAllocation = 1.0;
-        }
-    else if(100.0 == sum_of_fund_allocations)
-        {
-        // Because 100 * .01 does not exactly equal unity, treat 100%
-        // as a special case to avoid catastrophic cancellation when
-        // calculating general-account allocation as the difference
-        // between this quantity and unity.
-        SepAcctPaymentAllocation = 1.0;
-        }
-    else
-        {
-        SepAcctPaymentAllocation = .01 * sum_of_fund_allocations;
-        }
-
+    SepAcctPaymentAllocation = premium_allocation_to_sepacct(yare_input_);
     GenAcctPaymentAllocation = 1.0 - SepAcctPaymentAllocation;
 
     if(!Database_->Query(DB_AllowGenAcct) && 0.0 != GenAcctPaymentAllocation)
         {
         fatal_error()
             << "No general account is allowed for this product, but "
-            << "allocation to general account is "
             << GenAcctPaymentAllocation
-            << " ."
+            << " is allocated to the general account."
             << LMI_FLUSH
             ;
         }
@@ -665,9 +643,8 @@ void AccountValue::SetInitialValues()
         {
         fatal_error()
             << "No separate account is allowed for this product, but "
-            << " total allocation to separate accounts is "
             << SepAcctPaymentAllocation
-            << " ."
+            << " is allocated to the separate account."
             << LMI_FLUSH
             ;
         }
