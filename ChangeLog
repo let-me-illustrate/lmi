@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1221 2008-12-15 01:59:31 chicares Exp $
+// $Id: ChangeLog,v 1.1222 2008-12-15 12:15:30 chicares Exp $
 
 MAINTENANCE
 
@@ -20829,4 +20829,24 @@ Clarify and improve enforcement of lower limit on solve duration.
   solve.cpp
 Solve for surrender value equal to tax basis, adding GUI support to
 the 20081207T0049Z change.
+
+20081215T1213Z <gchicares@sbcglobal.net> [892]
+
+  ihs_acctval.cpp
+  yare_input.cpp
+  yare_input.hpp
+Refactor.
+
+20081215T1214Z <gchicares@sbcglobal.net> [892]
+
+  ledger_xml_io.cpp
+  nasd.xsl
+Fix defect introduced 20080918T1859Z: hardcoded premium allocation.
+
+20081215T1215Z <gchicares@sbcglobal.net> [891]
+
+  ledger_invariant.cpp
+Fix defect introduced 20050212T1259Z, from an original file predating
+the lmi epoch. Premium allocation to separate account was incorrect
+due to flawed code duplication, as was noted 20050710T1242Z.
 

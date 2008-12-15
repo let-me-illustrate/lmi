@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.66 2008-09-11 23:40:52 wboutin Exp $
+// $Id: ledger_invariant.cpp,v 1.67 2008-12-15 12:15:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -43,14 +43,12 @@
 #include "ledger.hpp" // TODO ?? For IRRs--prolly don't blong here.
 #include "ledger_variant.hpp" // TODO ?? For IRRs--prolly don't blong here.
 #include "loads.hpp"
-#include "materially_equal.hpp"
 #include "mc_enum_aux.hpp" // mc_e_vector_to_string_vector()
 #include "miscellany.hpp"
 #include "outlay.hpp"
 #include "rounding_rules.hpp"
 
 #include <algorithm>
-#include <numeric>   // std::accumulate()
 #include <ostream>
 #include <stdexcept>
 
@@ -475,13 +473,7 @@ void LedgerInvariant::Init(BasicValues* b)
         FundAllocations.push_back(0.01 * v[j]);
         }
 
-    // TODO ?? Instead, share code now in AccountValue::SetInitialValues()
-    // to avoid catastrophic cancellation. Probably this should be pushed
-    // into the funds class.
-    GenAcctAllocation = material_difference
-        (1.0
-        ,std::accumulate(FundAllocations.begin(), FundAllocations.end(), 0.0)
-        );
+    GenAcctAllocation = 1.0 - premium_allocation_to_sepacct(b->yare_input_);
 
     PremiumTaxLoadIsTiered  = b->IsPremiumTaxLoadTiered();
 
