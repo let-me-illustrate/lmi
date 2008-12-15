@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.74 2008-12-14 22:05:17 chicares Exp $
+// $Id: account_value.hpp,v 1.75 2008-12-15 01:59:31 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -362,10 +362,11 @@ class LMI_SO AccountValue
     int    EffectiveSolveTargetYear;
     double SolveTargetValue;
 
-    int              SolveBegYear;
-    int              SolveEndYear;
-    mcenum_gen_basis SolveGenBasis_;
-    mcenum_sep_basis SolveSepBasis_;
+    int                 SolveBegYear;
+    int                 SolveEndYear;
+    mcenum_solve_target SolveTarget_;
+    mcenum_gen_basis    SolveGenBasis_;
+    mcenum_sep_basis    SolveSepBasis_;
 
     mcenum_run_basis RunBasis_;
     mcenum_gen_basis GenBasis_;

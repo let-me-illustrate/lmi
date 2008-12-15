@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.29 2008-12-15 00:45:32 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.30 2008-12-15 01:59:31 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -238,7 +238,7 @@ double AccountValue::SolveTest(double a_CandidateValue)
         value = std::min(value, worst_negative);
         }
 
-    if(std::string::npos != yare_input_.Comments.find("idiosyncrasyJ"))
+    if(mce_solve_for_tax_basis == SolveTarget_)
         {
         SolveTargetValue = std::accumulate
             (InvariantValues().GrossPmt.begin()
@@ -345,10 +345,11 @@ double AccountValue::Solve
     )
 {
 // TRICKY !! These data members:
-//   SolveBegYear SolveEndYear SolveGenBasis_ SolveSepBasis_
+//   SolveBegYear SolveEndYear SolveTarget_ SolveGenBasis_ SolveSepBasis_
 // make state available to SolveTest().
     SolveBegYear   = a_SolveBegYear;
     SolveEndYear   = a_SolveEndYear;
+    SolveTarget_   = a_SolveTarget;
     SolveGenBasis_ = a_SolveBasis;
     SolveSepBasis_ = a_SolveSABasis;
 

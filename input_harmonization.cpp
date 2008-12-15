@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.82 2008-12-15 00:45:35 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.83 2008-12-15 01:59:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -944,8 +944,9 @@ false // Silly workaround for now.
 #endif // 0
 
     SolveTarget.enable(actually_solving);
-    SolveTarget.allow(mce_solve_for_endt  , actually_solving);
-    SolveTarget.allow(mce_solve_for_target, actually_solving);
+    SolveTarget.allow(mce_solve_for_endt     , actually_solving);
+    SolveTarget.allow(mce_solve_for_target   , actually_solving);
+    SolveTarget.allow(mce_solve_for_tax_basis, actually_solving);
 
     SolveBasis .enable(actually_solving);
     SolveBasis .allow(mce_gen_curr, actually_solving);
