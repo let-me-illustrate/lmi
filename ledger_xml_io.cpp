@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.83 2008-12-12 02:01:51 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.84 2008-12-15 12:14:18 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -376,7 +376,6 @@ void Ledger::write(xml::element& x) const
 
 // F3: scaled by 100, zero decimals, with '%' at end:
 // > Format as percentage with no decimal places (##0%)
-    format_map["GenAcctAllocation"                 ] = f3;
     format_map["SalesLoadRefund"                   ] = f3;
     format_map["SalesLoadRefundRate0"              ] = f3;
     format_map["SalesLoadRefundRate1"              ] = f3;
@@ -405,6 +404,7 @@ void Ledger::write(xml::element& x) const
     format_map["Dumpin"                            ] = f1;
     format_map["EndtAge"                           ] = f1;
     format_map["External1035Amount"                ] = f1;
+    format_map["GenAcctAllocation"                 ] = f1;
     format_map["GenderBlended"                     ] = f1;
     format_map["GenderDistinct"                    ] = f1;
     format_map["Has1035ExchCharge"                 ] = f1;
