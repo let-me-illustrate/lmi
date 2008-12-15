@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.81 2008-12-14 22:04:13 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.82 2008-12-15 00:45:35 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -921,13 +921,14 @@ false // Silly workaround for now.
     SolveEndYear   .enable(actually_solving && mce_solve_to_year   == DeprecatedSolveToWhich);
     SolveTargetYear.enable(actually_solving && mce_target_at_year  == DeprecatedSolveTgtAtWhich);
 
+    SolveTargetYear.minimum(1);
     // INPUT !! The minimum 'SolveEndYear' and 'SolveTargetYear' set
     // here mean that a solve to or at retirement is a request, not a
     // command.
 #if 0 // http://lists.nongnu.org/archive/html/lmi/2008-08/msg00036.html
-    SolveBeginYear .minimum_and_maximum(0                     , years_to_maturity());
-    SolveEndYear   .minimum_and_maximum(SolveBeginYear.value(), years_to_maturity());
-    SolveTargetYear.minimum_and_maximum(SolveBeginYear.value(), years_to_maturity());
+    SolveBeginYear .minimum_and_maximum(0                         , years_to_maturity());
+    SolveEndYear   .minimum_and_maximum(    SolveBeginYear.value(), years_to_maturity());
+    SolveTargetYear.minimum_and_maximum(1 + SolveBeginYear.value(), years_to_maturity());
 #endif // 0
 
     // INPUT !! Temporarily, existing -'Time' names are used where

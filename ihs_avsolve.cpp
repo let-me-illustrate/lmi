@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.28 2008-12-14 22:04:13 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.29 2008-12-15 00:45:32 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -87,9 +87,6 @@ void AccountValue::SolveSetTargetValueAndDuration
     ,int                 a_SolveTgtYear
     )
 {
-    // TODO ?? EffectiveSolveTargetYear is in origin one. OK for loop counters,
-    // bad for indexing. Should we change it to origin zero?
-
     // TODO ?? EffectiveSolveTargetYear and SolveTargetValue are copies of
     //    SolveTgtYear and SolveTgtCSV--however I see instances where
     //    one of these copies gets changed during the Solve routine.
@@ -116,9 +113,9 @@ void AccountValue::SolveSetTargetValueAndDuration
         //   solve for specified amount from issue to maturity
         }
 
-    // TODO ?? This assertion seems odd because 0 is a valid input value on
-    // the screen. Did it get changed to origin 1 in class InputParms?
-    HOPEFULLY(1 <= EffectiveSolveTargetYear);
+    // TODO ?? EffectiveSolveTargetYear is in origin one. OK for loop counters,
+    // bad for indexing. Should we change it to origin zero?
+    LMI_ASSERT(0 < EffectiveSolveTargetYear);
 }
 
 //============================================================================
