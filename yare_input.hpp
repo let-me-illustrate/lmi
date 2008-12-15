@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: yare_input.hpp,v 1.11 2008-08-11 14:49:23 chicares Exp $
+// $Id: yare_input.hpp,v 1.12 2008-12-15 12:13:11 chicares Exp $
 
 #ifndef yare_input_hpp
 #define yare_input_hpp
@@ -281,6 +281,8 @@ class yare_input
 };
 
 bool is_policy_rated(yare_input const&);
+
+double premium_allocation_to_sepacct(yare_input const&);
 
 #endif // yare_input_hpp
 
