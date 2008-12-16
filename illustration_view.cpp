@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.98 2008-12-12 21:13:25 chicares Exp $
+// $Id: illustration_view.cpp,v 1.99 2008-12-16 02:28:32 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -60,13 +60,13 @@
 #include <boost/scoped_ptr.hpp>
 
 #include <wx/html/htmlwin.h>
-#include <wx/html/htmprint.h>
 #include <wx/icon.h>
 #include <wx/menu.h>
 #include <wx/xrc/xmlres.h>
 
 #include <cstdio>         // std::remove()
 #include <fstream>
+#include <string>
 
 IMPLEMENT_DYNAMIC_CLASS(IllustrationView, ViewEx)
 
@@ -76,8 +76,6 @@ BEGIN_EVENT_TABLE(IllustrationView, ViewEx)
     EVT_MENU(XRCID("edit_cell"             ),IllustrationView::UponProperties)
     EVT_MENU(XRCID("copy_summary"          ),IllustrationView::UponCopySummary)
     EVT_MENU(wxID_COPY                      ,IllustrationView::UponCopyFull)
-    EVT_MENU(XRCID("preview_summary"       ),IllustrationView::UponPreviewSummary)
-    EVT_MENU(XRCID("print_summary"         ),IllustrationView::UponPrintSummary)
     EVT_UPDATE_UI(wxID_SAVE                 ,IllustrationView::UponUpdateFileSave)
     EVT_UPDATE_UI(wxID_SAVEAS               ,IllustrationView::UponUpdateFileSaveAs)
     EVT_UPDATE_UI(XRCID("edit_cell"        ),IllustrationView::UponUpdateProperties)
@@ -106,7 +104,6 @@ IllustrationView::IllustrationView()
     :ViewEx                  ()
     ,html_window_            (0)
     ,is_phony_               (false)
-    ,selected_values_as_html_("<html><body>[empty]</body></html>")
 {
 }
 
@@ -164,8 +161,7 @@ warning() << "That command should have been disabled." << LMI_FLUSH;
 void IllustrationView::DisplaySelectedValuesAsHtml()
 {
     LMI_ASSERT(ledger_values_.get());
-    selected_values_as_html_ = FormatSelectedValuesAsHtml(*ledger_values_);
-    html_window_->SetPage(selected_values_as_html_);
+    html_window_->SetPage(FormatSelectedValuesAsHtml(*ledger_values_));
 }
 
 wxIcon IllustrationView::Icon() const
@@ -204,12 +200,28 @@ bool IllustrationView::OnCreate(wxDocument* doc, long int flags)
 
 void IllustrationView::UponCopyFull(wxCommandEvent&)
 {
-    CopyLedgerToClipboard(e_copy_full);
+    LMI_ASSERT(ledger_values_.get());
+    Timer timer;
+    configurable_settings const& c = configurable_settings::instance();
+    std::string spreadsheet_filename =
+            base_filename()
+        +   c.spreadsheet_file_extension()
+        ;
+    std::remove(spreadsheet_filename.c_str());
+    PrintFormTabDelimited(*ledger_values_, spreadsheet_filename);
+    std::ifstream ifs(spreadsheet_filename.c_str());
+    std::string s;
+    istream_to_string(ifs, s);
+    ClipboardEx::SetText(s);
+    status() << "Copy: " << timer.stop().elapsed_msec_str() << std::flush;
 }
 
 void IllustrationView::UponCopySummary(wxCommandEvent&)
 {
-    CopyLedgerToClipboard(e_copy_summary);
+    LMI_ASSERT(ledger_values_.get());
+    Timer timer;
+    ClipboardEx::SetText(FormatSelectedValuesAsTsv(*ledger_values_));
+    status() << "Copy: " << timer.stop().elapsed_msec_str() << std::flush;
 }
 
 void IllustrationView::UponPreviewPdf(wxCommandEvent&)
@@ -218,20 +230,10 @@ void IllustrationView::UponPreviewPdf(wxCommandEvent&)
     emit_ledger(base_filename(), *ledger_values_, mce_emit_pdf_to_viewer);
 }
 
-void IllustrationView::UponPreviewSummary(wxCommandEvent&)
-{
-    PrintOrPreviewHtmlSummary(e_print_preview);
-}
-
 void IllustrationView::UponPrintPdf(wxCommandEvent&)
 {
     LMI_ASSERT(ledger_values_.get());
     emit_ledger(base_filename(), *ledger_values_, mce_emit_pdf_to_printer);
-}
-
-void IllustrationView::UponPrintSummary(wxCommandEvent&)
-{
-    PrintOrPreviewHtmlSummary(e_print_printer);
 }
 
 void IllustrationView::UponProperties(wxCommandEvent&)
@@ -272,90 +274,6 @@ void IllustrationView::UponUpdateInapplicable(wxUpdateUIEvent& e)
 void IllustrationView::UponUpdateProperties(wxUpdateUIEvent& e)
 {
     e.Enable(!is_phony_);
-}
-
-void IllustrationView::CopyLedgerToClipboard(enum_copy_option option)
-{
-    LMI_ASSERT(ledger_values_.get());
-    Timer timer;
-    std::string s;
-
-    switch(option)
-        {
-        case e_copy_full:
-            {
-            configurable_settings const& c = configurable_settings::instance();
-            std::string spreadsheet_filename =
-                    base_filename()
-                +   c.spreadsheet_file_extension()
-                ;
-            std::remove(spreadsheet_filename.c_str());
-            PrintFormTabDelimited(*ledger_values_, spreadsheet_filename);
-            std::ifstream ifs(spreadsheet_filename.c_str());
-            istream_to_string(ifs, s);
-            }
-            break;
-        case e_copy_summary:
-            {
-            s = FormatSelectedValuesAsTsv(*ledger_values_);
-            }
-            break;
-        default:
-            {
-            fatal_error() << "Case " << option << " not found." << LMI_FLUSH;
-            }
-        }
-
-    ClipboardEx::SetText(s);
-    status() << "Copy: " << timer.stop().elapsed_msec_str() << std::flush;
-}
-
-// TODO ?? CALCULATION_SUMMARY This should use either the code or the
-// ideas in DocManagerEx::UponPreview().
-
-void IllustrationView::PrintOrPreviewHtmlSummary(enum_print_option option) const
-{
-    std::string disclaimer
-        ("FOR BROKER-DEALER USE ONLY. NOT TO BE SHARED WITH CLIENTS."
-        " (Page @PAGENUM@ of @PAGESCNT@)<hr/>"
-        );
-    wxHtmlEasyPrinting printer("Calculation Summary", html_window_);
-
-    printer.SetHeader(disclaimer, wxPAGE_ALL);
-
-    // TODO ?? CALCULATION_SUMMARY Resolve this issue. This advice:
-    //   You should create an instance on app startup and use this
-    //   instance for all printing operations. The reason is that this
-    //   class stores various settings in it.
-    // from the wxHtmlEasyPrinting documentation has not been heeded.
-    // Furthermore, no corresponding change has been made anywhere
-    // else that lmi uses a wxPrintData object.
-    //
-    // WX !! Could printer settings should be set globally, OAOO,
-    // for all classes that ought to use them? It was reported that
-    // 'A4' was used here unless explicitly overridden, but it seems
-    // that the paper id was actually wxPAPER_NONE; if that causes
-    // 'A4' to be used, then should wx instead use wxPAPER_LETTER in
-    // a US locale, where 'A4' is a poor default?
-    printer.GetPrintData()->SetPaperId(wxPAPER_LETTER);
-
-    switch(option)
-        {
-        case e_print_printer:
-            {
-            printer.PrintText(selected_values_as_html_);
-            }
-            break;
-        case e_print_preview:
-            {
-            printer.PreviewText(selected_values_as_html_);
-            }
-            break;
-        default:
-            {
-            fatal_error() << "Case " << option << " not found." << LMI_FLUSH;
-            }
-        }
 }
 
 void IllustrationView::Run(Input* overriding_input)
