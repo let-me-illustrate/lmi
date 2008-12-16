@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.42 2008-11-19 02:33:29 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.43 2008-12-16 02:30:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -48,66 +48,84 @@
 
 namespace
 {
-    std::string const& configuration_filename()
-    {
-        static std::string s("configurable_settings.xml");
-        return s;
-    }
+std::string const& configuration_filename()
+{
+    static std::string s("configurable_settings.xml");
+    return s;
+}
 
-    /// Store the complete configuration-file path at startup, in case
-    /// it's non-complete--as is typical msw usage.
-    ///
-    /// Look for the configuration file first where FHS would have it.
-    /// To support non-FHS platforms, if it's not found there, then
-    /// look in the data directory.
-    ///
-    /// TODO ?? CALCULATION_SUMMARY Should write access be checked
-    /// here? What if the first file found is read-only, but the
-    /// second is read-write?
+/// Store the complete configuration-file path at startup, in case
+/// it's non-complete--as is typical msw usage.
+///
+/// Look for the configuration file first where FHS would have it.
+/// To support non-FHS platforms, if it's not found there, then
+/// look in the data directory.
+///
+/// TODO ?? CALCULATION_SUMMARY Should write access be checked
+/// here? What if the first file found is read-only, but the
+/// second is read-write?
 
-    fs::path const& configuration_filepath()
-    {
-        static fs::path complete_path;
-        if(!complete_path.empty())
-            {
-            return complete_path;
-            }
+fs::path const& configuration_filepath()
+{
+    static fs::path complete_path;
+    if(!complete_path.empty())
+        {
+        return complete_path;
+        }
 
-        std::string filename = "/etc/opt/lmi/" + configuration_filename();
+    std::string filename = "/etc/opt/lmi/" + configuration_filename();
+    if(access(filename.c_str(), R_OK))
+        {
+        filename = AddDataDir(configuration_filename());
         if(access(filename.c_str(), R_OK))
             {
-            filename = AddDataDir(configuration_filename());
-            if(access(filename.c_str(), R_OK))
-                {
-                fatal_error()
-                    << "No readable file '"
-                    << configuration_filename()
-                    << "' exists."
-                    << LMI_FLUSH
-                    ;
-                }
+            fatal_error()
+                << "No readable file '"
+                << configuration_filename()
+                << "' exists."
+                << LMI_FLUSH
+                ;
             }
-        validate_filepath(filename, "Configurable-settings file");
-        complete_path = fs::system_complete(filename);
-        return complete_path;
-    }
+        }
+    validate_filepath(filename, "Configurable-settings file");
+    complete_path = fs::system_complete(filename);
+    return complete_path;
+}
 
-    std::string const& default_calculation_summary_columns()
-    {
-        static std::string s
-            ("Outlay"
-            " AcctVal_Current"
-            " CSVNet_Current"
-            " EOYDeathBft_Current"
-            );
-        return s;
-    }
+std::string const& default_calculation_summary_columns()
+{
+    static std::string s
+        ("Outlay"
+        " AcctVal_Current"
+        " CSVNet_Current"
+        " EOYDeathBft_Current"
+        );
+    return s;
+}
 
-    std::string const& xml_root_name()
-    {
-        static std::string s("configurable_settings");
-        return s;
-    }
+/// Entities that were present in older versions and then removed
+/// are recognized and ignored. If they're resurrected in a later
+/// version, then they aren't ignored.
+
+bool is_detritus(std::string const& s)
+{
+    static std::string const a[] =
+        {"xml_schema_filename"               // Withdrawn.
+        ,"xsl_directory"                     // Withdrawn.
+        ,"xslt_format_xml_filename"          // Withdrawn.
+        ,"xslt_html_filename"                // Withdrawn.
+        ,"xslt_light_tab_delimited_filename" // Withdrawn.
+        ,"xslt_tab_delimited_filename"       // Withdrawn.
+        };
+    static std::vector<std::string> const v(a, a + lmi_array_size(a));
+    return v.end() != std::find(v.begin(), v.end(), s);
+}
+
+std::string const& xml_root_name()
+{
+    static std::string s("configurable_settings");
+    return s;
+}
 } // Unnamed namespace.
 
 configurable_settings::configurable_settings()
@@ -168,9 +186,6 @@ void configurable_settings::ascribe_members()
 // TODO ?? CALCULATION_SUMMARY Class template any_member should expose
 // a has_element() function.
 
-// TODO ?? CALCULATION_SUMMARY Use the 'detritus_map' technique found
-// elsewhere to ignore obsolete elements silently.
-
 void configurable_settings::load()
 {
     std::ostringstream oss;
@@ -187,6 +202,11 @@ void configurable_settings::load()
             )
             {
             operator[]((*i)->get_name()) = xml_lmi::get_content(**i);
+            }
+        else if(is_detritus(name))
+            {
+            // Hold certain obsolete entities that must be translated.
+            // For now, there are none.
             }
         else
             {

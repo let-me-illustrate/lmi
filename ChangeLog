@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1222 2008-12-15 12:15:30 chicares Exp $
+// $Id: ChangeLog,v 1.1223 2008-12-16 02:30:35 chicares Exp $
 
 MAINTENANCE
 
@@ -20849,4 +20849,22 @@ Fix defect introduced 20080918T1859Z: hardcoded premium allocation.
 Fix defect introduced 20050212T1259Z, from an original file predating
 the lmi epoch. Premium allocation to separate account was incorrect
 due to flawed code duplication, as was noted 20050710T1242Z.
+
+20081216T0228Z <gchicares@sbcglobal.net> [889]
+
+  docmanager_ex.cpp
+  illustration_view.cpp
+  illustration_view.hpp
+  menus.xrc
+Remove two poorly-implemented commands that no one used.
+
+20081216T0229Z <gchicares@sbcglobal.net> [889]
+
+  input_xml_io.cpp
+Refactor.
+
+20081216T0230Z <gchicares@sbcglobal.net> [888]
+
+  configurable_settings.cpp
+Silently disregard elements removed 20081119T0233Z.
 
