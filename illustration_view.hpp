@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.hpp,v 1.36 2008-11-21 15:53:12 chicares Exp $
+// $Id: illustration_view.hpp,v 1.37 2008-12-16 02:28:32 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -43,8 +43,6 @@
 
 #include <wx/event.h>
 
-#include <string>
-
 class IllustrationDocument;
 class Input;
 class Ledger;
@@ -59,16 +57,6 @@ class IllustrationView
     ,virtual private obstruct_slicing<IllustrationView>
 {
     friend class IllustrationDocument;
-
-    enum enum_copy_option
-        {e_copy_full
-        ,e_copy_summary
-        };
-
-    enum enum_print_option
-        {e_print_printer
-        ,e_print_preview
-        };
 
   public:
     IllustrationView();
@@ -85,9 +73,7 @@ class IllustrationView
   private:
     IllustrationDocument& document() const;
 
-    void CopyLedgerToClipboard(enum_copy_option);
     int EditProperties();
-    void PrintOrPreviewHtmlSummary(enum_print_option) const;
 
     // ViewEx required implementation.
     virtual wxWindow* CreateChildWindow();
@@ -100,9 +86,7 @@ class IllustrationView
     void UponCopyFull          (wxCommandEvent&);
     void UponCopySummary       (wxCommandEvent&);
     void UponPreviewPdf        (wxCommandEvent&);
-    void UponPreviewSummary    (wxCommandEvent&);
     void UponPrintPdf          (wxCommandEvent&);
-    void UponPrintSummary      (wxCommandEvent&);
     void UponProperties        (wxCommandEvent&);
     void UponUpdateFileSave    (wxUpdateUIEvent&);
     void UponUpdateFileSaveAs  (wxUpdateUIEvent&);
@@ -114,7 +98,6 @@ class IllustrationView
     wxHtmlWindow* html_window_;
     bool is_phony_;
     boost::shared_ptr<Ledger const> ledger_values_;
-    std::string selected_values_as_html_;
 
     DECLARE_DYNAMIC_CLASS(IllustrationView)
     DECLARE_EVENT_TABLE()
