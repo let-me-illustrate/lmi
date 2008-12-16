@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_xml_io.cpp,v 1.10 2008-10-17 22:55:34 chicares Exp $
+// $Id: input_xml_io.cpp,v 1.11 2008-12-16 02:29:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -37,15 +37,15 @@
 
 #include <algorithm> // std::find()
 
-// Entities that were present in older versions and then removed
-// are recognized and ignored. If they're resurrected in a later
-// version, then they aren't ignored.
-
 namespace
 {
-std::vector<std::string> const& detritus()
+/// Entities that were present in older versions and then removed
+/// are recognized and ignored. If they're resurrected in a later
+/// version, then they aren't ignored.
+
+bool is_detritus(std::string const& s)
 {
-    static std::string const s[] =
+    static std::string const a[] =
         {"AgentFirstName"                // Single name instead.
         ,"AgentLastName"                 // Single name instead.
         ,"AgentMiddleName"               // Single name instead.
@@ -68,8 +68,8 @@ std::vector<std::string> const& detritus()
         ,"TermProportion"                // 'TermRiderProportion' instead.
         ,"YearsOfZeroDeaths"             // Withdrawn.
         };
-    static std::vector<std::string> const v(s, s + lmi_array_size(s));
-    return v;
+    static std::vector<std::string> const v(a, a + lmi_array_size(a));
+    return v.end() != std::find(v.begin(), v.end(), s);
 }
 
 std::string full_name
@@ -162,13 +162,7 @@ using namespace xml;
             // TODO ?? Perhaps a std::list would perform better.
             member_names.erase(current_member);
             }
-        else if
-            (detritus().end() != std::find
-                (detritus().begin()
-                ,detritus().end()
-                ,node_tag
-                )
-            )
+        else if(is_detritus(node_tag))
             {
             // Hold certain obsolete entities that must be translated.
             detritus_map[node_tag] = xml_lmi::get_content(*child);
