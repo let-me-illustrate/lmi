@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.75 2008-12-15 01:59:31 chicares Exp $
+// $Id: account_value.hpp,v 1.76 2008-12-17 23:41:28 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -202,21 +202,16 @@ class LMI_SO AccountValue
     double Solve(); // Antediluvian.
     double Solve
         (mcenum_solve_type   a_SolveType
-        ,int                 a_SolveBegYear
+        ,int                 a_SolveBeginYear
         ,int                 a_SolveEndYear
         ,mcenum_solve_target a_SolveTarget
-        ,double              a_SolveTgtCSV
-        ,int                 a_SolveTgtYear
-        ,mcenum_gen_basis    a_SolveBasis
-        ,mcenum_sep_basis    a_SolveSABasis
+        ,double              a_SolveTargetCsv
+        ,int                 a_SolveTargetYear
+        ,mcenum_gen_basis    a_SolveGenBasis
+        ,mcenum_sep_basis    a_SolveSepBasis
         );
 
     double SolveTest               (double a_CandidateValue);
-    void SolveSetTargetValueAndDuration
-        (mcenum_solve_target a_SolveTarget
-        ,double              a_SolveTgtCSV
-        ,int                 a_SolveTgtYear
-        );
 
     double SolveGuarPremium        ();
 
@@ -359,12 +354,12 @@ class LMI_SO AccountValue
 
     double GuarPremium;
 
-    int    EffectiveSolveTargetYear;
-    double SolveTargetValue;
-
-    int                 SolveBegYear;
-    int                 SolveEndYear;
+    // These data members make Solve() arguments available to SolveTest().
+    int                 SolveBeginYear_;
+    int                 SolveEndYear_;
     mcenum_solve_target SolveTarget_;
+    double              SolveTargetCsv_;
+    int                 SolveTargetDuration_;
     mcenum_gen_basis    SolveGenBasis_;
     mcenum_sep_basis    SolveSepBasis_;
 
