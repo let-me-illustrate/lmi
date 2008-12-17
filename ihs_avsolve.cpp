@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.31 2008-12-17 02:47:14 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.32 2008-12-17 23:41:28 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -79,29 +79,6 @@ class SolveHelper
         return av.SolveTest(a_CandidateValue);
         }
 };
-
-//============================================================================
-void AccountValue::SolveSetTargetValueAndDuration
-    (mcenum_solve_target // a_SolveTarget
-    ,double              a_SolveTgtCSV
-    ,int                 a_SolveTgtYear
-    )
-{
-    // TODO ?? EffectiveSolveTargetYear and SolveTargetValue are copies of
-    //    SolveTgtYear and SolveTgtCSV--however I see instances where
-    //    one of these copies gets changed during the Solve routine.
-// if solve for endt
-//      EffectiveSolveTargetYear = BasicValues::GetLength();
-// and always these:
-//  std::max(EffectiveSolveTargetYear, BasicValues::GetLength())
-//  std::max(EffectiveSolveTargetYear, 1)
-    SolveTargetValue            = a_SolveTgtCSV;
-    EffectiveSolveTargetYear    = a_SolveTgtYear;
-
-    // TODO ?? EffectiveSolveTargetYear is in origin one. OK for loop counters,
-    // bad for indexing. Should we change it to origin zero?
-    LMI_ASSERT(0 < EffectiveSolveTargetYear);
-}
 
 //============================================================================
 // Test results of a trial value for a given input item
@@ -169,18 +146,18 @@ double AccountValue::SolveTest(double a_CandidateValue)
     std::vector<double> const& csv(VariantValues().CSVNet);
 
     // If [no-lapse dur, solve target dur) is a valid range, then use it
-    if(no_lapse_dur < (EffectiveSolveTargetYear - 1))
+    if(no_lapse_dur < (SolveTargetDuration_ - 1))
         {
         std::vector<double>::const_iterator csv_begin = csv.begin();
         LMI_ASSERT(static_cast<unsigned int>(no_lapse_dur) <= csv.size());
         std::advance(csv_begin, no_lapse_dur);
-        // Stop at EffectiveSolveTargetYear
+        // Stop at SolveTargetDuration_
         std::vector<double>::const_iterator csv_end = csv.begin();
         LMI_ASSERT
-            (   static_cast<unsigned int>(EffectiveSolveTargetYear - 1)
+            (   static_cast<unsigned int>(SolveTargetDuration_ - 1)
             <=  csv.size()
             );
-        std::advance(csv_end, EffectiveSolveTargetYear - 1);
+        std::advance(csv_end, SolveTargetDuration_ - 1);
 
         // Paranoid check that solvetgtyr is within no-lapse period.
         std::vector<double>::difference_type dist = csv_end - csv_begin;
@@ -196,16 +173,16 @@ double AccountValue::SolveTest(double a_CandidateValue)
     // TODO ?? Assert that.
     // TODO ?? If ExcessLoan is negative, then its name is confusing.
     double most_negative_loan_deficit = 0.0;
-    if(0 < (EffectiveSolveTargetYear - 1))  // TODO ?? "-1" ?
+    if(0 < (SolveTargetDuration_ - 1))  // TODO ?? "-1" ?
         {
-        // Stop at EffectiveSolveTargetYear
+        // Stop at SolveTargetDuration_
         std::vector<double>::iterator excess_loan_end =
             VariantValues().ExcessLoan.begin();
         LMI_ASSERT
-            (   static_cast<unsigned int>(EffectiveSolveTargetYear)
+            (   static_cast<unsigned int>(SolveTargetDuration_)
             <=  VariantValues().ExcessLoan.size()
             );
-        std::advance(excess_loan_end, EffectiveSolveTargetYear);
+        std::advance(excess_loan_end, SolveTargetDuration_);
         most_negative_loan_deficit = *std::min_element
             (VariantValues().ExcessLoan.begin()
             ,excess_loan_end
@@ -217,7 +194,7 @@ double AccountValue::SolveTest(double a_CandidateValue)
         ,most_negative_loan_deficit
         );
     // Need to index it: back() doesn't work if solve target is not last dur
-    double value = csv[EffectiveSolveTargetYear - 1];
+    double value = csv[SolveTargetDuration_ - 1];
     if(worst_negative < 0.0)
         {
         value = std::min(value, worst_negative);
@@ -231,19 +208,19 @@ double AccountValue::SolveTest(double a_CandidateValue)
         //
         // The input specified amount mustn't be used here because
         // it wouldn't reflect dynamic adjustments.
-        SolveTargetValue = InvariantValues().SpecAmt[-1 + EffectiveSolveTargetYear];
+        SolveTargetCsv_ = InvariantValues().SpecAmt[-1 + SolveTargetDuration_];
         }
 
     if(mce_solve_for_tax_basis == SolveTarget_)
         {
-        SolveTargetValue = std::accumulate
+        SolveTargetCsv_ = std::accumulate
             (InvariantValues().GrossPmt.begin()
-            ,InvariantValues().GrossPmt.begin() + EffectiveSolveTargetYear
+            ,InvariantValues().GrossPmt.begin() + SolveTargetDuration_
             ,0.0
             );
         }
 
-    return value - SolveTargetValue;
+    return value - SolveTargetCsv_;
 }
 
 //============================================================================
@@ -252,40 +229,40 @@ void AccountValue::SolveSetSpecAmt(double a_CandidateValue)
 // TODO ?? Does this change the surrchg when specamt changes?
     DeathBfts_->set_specamt
         (a_CandidateValue
-        ,SolveBegYear
-        ,SolveEndYear
+        ,SolveBeginYear_
+        ,SolveEndYear_
         );
 }
 
 //============================================================================
 void AccountValue::SolveSetEePrem(double a_CandidateValue)
 {
-    Outlay_->set_ee_modal_premiums(a_CandidateValue, SolveBegYear, SolveEndYear);
+    Outlay_->set_ee_modal_premiums(a_CandidateValue, SolveBeginYear_, SolveEndYear_);
 }
 
 //============================================================================
 void AccountValue::SolveSetErPrem(double a_CandidateValue)
 {
-    Outlay_->set_er_modal_premiums(a_CandidateValue, SolveBegYear, SolveEndYear);
+    Outlay_->set_er_modal_premiums(a_CandidateValue, SolveBeginYear_, SolveEndYear_);
 }
 
 //============================================================================
 void AccountValue::SolveSetLoan(double a_CandidateValue)
 {
-    Outlay_->set_new_cash_loans(a_CandidateValue, SolveBegYear, SolveEndYear);
+    Outlay_->set_new_cash_loans(a_CandidateValue, SolveBeginYear_, SolveEndYear_);
 }
 
 //============================================================================
 void AccountValue::SolveSetWD(double a_CandidateValue)
 {
-    Outlay_->set_withdrawals(a_CandidateValue, SolveBegYear, SolveEndYear);
+    Outlay_->set_withdrawals(a_CandidateValue, SolveBeginYear_, SolveEndYear_);
 }
 
 //============================================================================
 void AccountValue::SolveSetWDThenLoan(double a_CandidateValue)
 {
     LMI_ASSERT(yare_input_.WithdrawToBasisThenLoan);
-    Outlay_->set_withdrawals(a_CandidateValue, SolveBegYear, SolveEndYear);
+    Outlay_->set_withdrawals(a_CandidateValue, SolveBeginYear_, SolveEndYear_);
 }
 
 //============================================================================
@@ -325,39 +302,33 @@ double AccountValue::SolveGuarPremium()
 }
 
 //============================================================================
-// TODO ?? Can these member variables
-//   EffectiveSolveTargetYear
-//   SolveTargetValue
-// be dispensed with?
 double AccountValue::Solve
     (mcenum_solve_type   a_SolveType
-    ,int                 a_SolveBegYear
+    ,int                 a_SolveBeginYear
     ,int                 a_SolveEndYear
     ,mcenum_solve_target a_SolveTarget
-    ,double              a_SolveTgtCSV
-    ,int                 a_SolveTgtYear
-    ,mcenum_gen_basis    a_SolveBasis
-    ,mcenum_sep_basis    a_SolveSABasis
+    ,double              a_SolveTargetCsv
+    ,int                 a_SolveTargetYear
+    ,mcenum_gen_basis    a_SolveGenBasis
+    ,mcenum_sep_basis    a_SolveSepBasis
     )
 {
-// TRICKY !! These data members:
-//   SolveBegYear SolveEndYear SolveTarget_ SolveGenBasis_ SolveSepBasis_
-// make state available to SolveTest().
-    SolveBegYear   = a_SolveBegYear;
-    SolveEndYear   = a_SolveEndYear;
-    SolveTarget_   = a_SolveTarget;
-    SolveGenBasis_ = a_SolveBasis;
-    SolveSepBasis_ = a_SolveSABasis;
+    SolveBeginYear_      = a_SolveBeginYear;
+    SolveEndYear_        = a_SolveEndYear;
+    SolveTarget_         = a_SolveTarget;
+    SolveTargetCsv_      = a_SolveTargetCsv;
+    // TODO ?? SolveTargetDuration_ is in origin one. OK for loop counters,
+    // bad for indexing. Should we change it to origin zero?
+    SolveTargetDuration_ = a_SolveTargetYear;
+    SolveGenBasis_       = a_SolveGenBasis;
+    SolveSepBasis_       = a_SolveSepBasis;
 
-    SolveSetTargetValueAndDuration
-        (a_SolveTarget
-        ,a_SolveTgtCSV
-        ,a_SolveTgtYear
-        );
+    LMI_ASSERT(0 <= SolveBeginYear_);
+    LMI_ASSERT(     SolveBeginYear_ <= SolveEndYear_);
+    LMI_ASSERT(                        SolveEndYear_ <= BasicValues::GetLength());
 
-//  LMI_ASSERT(0 <= SolveBegYear);
-    HOPEFULLY(SolveBegYear <= SolveEndYear);
-    HOPEFULLY(SolveEndYear <= BasicValues::GetLength());
+    LMI_ASSERT(0 < SolveTargetDuration_);
+    LMI_ASSERT(    SolveTargetDuration_ <= BasicValues::GetLength());
 
     // Defaults: may be overridden by some cases
     // We aren't interested in negative solve results
@@ -367,7 +338,7 @@ double AccountValue::Solve
     int              decimals    = 0;
 
     // Many things don't plausibly exceed max input face
-    for(int j = 0; j < EffectiveSolveTargetYear; j++)
+    for(int j = 0; j < SolveTargetDuration_; j++)
         {
         upper_bound = std::max
             (upper_bound
