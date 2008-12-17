@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.cpp,v 1.14 2008-06-19 13:39:16 chicares Exp $
+// $Id: timer.cpp,v 1.15 2008-12-17 01:11:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -165,7 +165,7 @@ elapsed_t Timer::inspect() const
 #if defined LMI_POSIX
     timeval x;
     gettimeofday(&x, 0);
-    return 1000000 * x.tv_sec + x.tv_usec;
+    return elapsed_t(1000000) * x.tv_sec + x.tv_usec;
 #elif defined LMI_MSW
 #   ifdef LMI_MS_HEADER_INCLUDED
     LARGE_INTEGER z;
