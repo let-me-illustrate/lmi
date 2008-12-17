@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.66 2008-12-12 21:13:26 chicares Exp $
+// $Id: main_cli.cpp,v 1.67 2008-12-17 02:47:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -153,9 +153,9 @@ void SelfTest()
     IP["DeprecatedSolveToWhich"] = "ToMaturity";
 
     IP["SolveType"] = "SolveSpecAmt";
-    expected_value = 1884064;
+    expected_value = 1879139.14;
     z("", IP);
-    observed_value = z.principal_ledger()->GetLedgerInvariant().SpecAmt.front();
+    observed_value = z.principal_ledger()->GetCurrFull().AcctVal.back();
     if(!antediluvian && .005 < std::fabs(expected_value - observed_value))
         {
         warning()
