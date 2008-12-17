@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.30 2008-12-15 01:59:31 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.31 2008-12-17 02:47:14 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -82,7 +82,7 @@ class SolveHelper
 
 //============================================================================
 void AccountValue::SolveSetTargetValueAndDuration
-    (mcenum_solve_target a_SolveTarget
+    (mcenum_solve_target // a_SolveTarget
     ,double              a_SolveTgtCSV
     ,int                 a_SolveTgtYear
     )
@@ -97,21 +97,6 @@ void AccountValue::SolveSetTargetValueAndDuration
 //  std::max(EffectiveSolveTargetYear, 1)
     SolveTargetValue            = a_SolveTgtCSV;
     EffectiveSolveTargetYear    = a_SolveTgtYear;
-
-    if(mce_solve_for_endt == a_SolveTarget)
-        {
-        // "Solve for endowment" is deemed to mean cash surrender
-        // value equals specified amount at target duration, so the
-        // target value is the same for all death benefit options.
-        //
-        // We can't just get spec amt from the original input, because
-        // a solve for spec amt can change it dynamically.
-        SolveTargetValue = InvariantValues().SpecAmt[-1 + EffectiveSolveTargetYear];
-        // TODO ?? However, that fails, precisely in the case cited:
-        // a solve for specified amount. Example:
-        //   alt-F N I
-        //   solve for specified amount from issue to maturity
-        }
 
     // TODO ?? EffectiveSolveTargetYear is in origin one. OK for loop counters,
     // bad for indexing. Should we change it to origin zero?
@@ -236,6 +221,17 @@ double AccountValue::SolveTest(double a_CandidateValue)
     if(worst_negative < 0.0)
         {
         value = std::min(value, worst_negative);
+        }
+
+    if(mce_solve_for_endt == SolveTarget_)
+        {
+        // "Solve for endowment" is deemed to mean cash surrender
+        // value equals specified amount at target duration, so the
+        // target value is the same for all death benefit options.
+        //
+        // The input specified amount mustn't be used here because
+        // it wouldn't reflect dynamic adjustments.
+        SolveTargetValue = InvariantValues().SpecAmt[-1 + EffectiveSolveTargetYear];
         }
 
     if(mce_solve_for_tax_basis == SolveTarget_)
