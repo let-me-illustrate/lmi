@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1224 2008-12-18 02:44:23 chicares Exp $
+// $Id: ChangeLog,v 1.1225 2008-12-18 15:23:26 chicares Exp $
 
 MAINTENANCE
 
@@ -20904,4 +20904,16 @@ Resolve a shortcoming.
 
   ihs_avsolve.cpp
 Remove a defect marker that is no longer meaningful.
+
+20081218T1426Z <gchicares@sbcglobal.net> [880]
+
+  ihs_avsolve.cpp
+Fix defect introduced 20050205T0302Z, from an original file predating
+the lmi epoch. Fencepost errors in the objective function would have
+retarded convergence without affecting the solution.
+
+20081218T1523Z <gchicares@sbcglobal.net> [879]
+
+  ihs_avsolve.cpp
+Remove a defect marker that is no longer correct.
 
