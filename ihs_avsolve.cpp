@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.35 2008-12-18 02:44:23 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.36 2008-12-18 14:26:13 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -131,31 +131,29 @@ double AccountValue::SolveTest(double a_CandidateValue)
         ,0
         );
     double most_negative_csv = 0.0;
-    // If [no-lapse dur, solve target dur) is a valid range, then use it
-    if(no_lapse_dur < (SolveTargetDuration_ - 1))
+    if(no_lapse_dur < SolveTargetDuration_)
         {
         most_negative_csv = *std::min_element
             (VariantValues().CSVNet.begin() + no_lapse_dur
-            ,VariantValues().CSVNet.begin() + SolveTargetDuration_ - 1
+            ,VariantValues().CSVNet.begin() + SolveTargetDuration_
             );
         }
 
-    // Assume that any no-lapse provision doesn't allow overloan.
+    // Assume any no-lapse provision is inoperative when overloaned.
     // TODO ?? ExcessLoan is negative; is LoanDeficit a better name?
-    double most_negative_loan_deficit = 0.0;
-    if(0 < (SolveTargetDuration_ - 1))
-        {
-        most_negative_loan_deficit = *std::min_element
-            (VariantValues().ExcessLoan.begin()
-            ,VariantValues().ExcessLoan.begin() + SolveTargetDuration_
-            );
-        }
+    LMI_ASSERT(0 < SolveTargetDuration_);
+    double most_negative_loan_deficit = *std::min_element
+        (VariantValues().ExcessLoan.begin()
+        ,VariantValues().ExcessLoan.begin() + SolveTargetDuration_
+        );
 
     double worst_negative = std::min
         (most_negative_csv
         ,most_negative_loan_deficit
         );
-    // Need to index it: back() doesn't work if solve target is not last dur
+    // SolveTargetDuration_ is in origin one. That's natural for loop
+    // counters and iterators--it's one past the end--but indexing
+    // must decrement it.
     double value = VariantValues().CSVNet[SolveTargetDuration_ - 1];
     if(worst_negative < 0.0)
         {
@@ -170,7 +168,7 @@ double AccountValue::SolveTest(double a_CandidateValue)
         //
         // The input specified amount mustn't be used here because
         // it wouldn't reflect dynamic adjustments.
-        SolveTargetCsv_ = InvariantValues().SpecAmt[-1 + SolveTargetDuration_];
+        SolveTargetCsv_ = InvariantValues().SpecAmt[SolveTargetDuration_ - 1];
         }
 
     if(mce_solve_for_tax_basis == SolveTarget_)
@@ -279,8 +277,6 @@ double AccountValue::Solve
     SolveEndYear_        = a_SolveEndYear;
     SolveTarget_         = a_SolveTarget;
     SolveTargetCsv_      = a_SolveTargetCsv;
-    // TODO ?? SolveTargetDuration_ is in origin one. OK for loop counters,
-    // bad for indexing. Should we change it to origin zero?
     SolveTargetDuration_ = a_SolveTargetYear;
     SolveGenBasis_       = a_SolveGenBasis;
     SolveSepBasis_       = a_SolveSepBasis;
