@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.34 2008-12-18 02:39:17 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.35 2008-12-18 02:44:23 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -47,17 +47,6 @@
 #include <algorithm>             // std::min(), std::max()
 #include <functional>
 #include <numeric>               // std::accumulate()
-
-/*
-TODO ?? Limitations
-
-Restrict targetyear to Length
-
-Multiple solves may be incompatible
-
-no lapse period not yet reflected?
-
-*/
 
 namespace
 {
