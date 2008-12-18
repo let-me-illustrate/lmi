@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.32 2008-12-17 23:41:28 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.33 2008-12-18 02:32:21 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -143,49 +143,23 @@ double AccountValue::SolveTest(double a_CandidateValue)
         ,0
         );
     double most_negative_csv = 0.0;
-    std::vector<double> const& csv(VariantValues().CSVNet);
-
     // If [no-lapse dur, solve target dur) is a valid range, then use it
     if(no_lapse_dur < (SolveTargetDuration_ - 1))
         {
-        std::vector<double>::const_iterator csv_begin = csv.begin();
-        LMI_ASSERT(static_cast<unsigned int>(no_lapse_dur) <= csv.size());
-        std::advance(csv_begin, no_lapse_dur);
-        // Stop at SolveTargetDuration_
-        std::vector<double>::const_iterator csv_end = csv.begin();
-        LMI_ASSERT
-            (   static_cast<unsigned int>(SolveTargetDuration_ - 1)
-            <=  csv.size()
-            );
-        std::advance(csv_end, SolveTargetDuration_ - 1);
-
-        // Paranoid check that solvetgtyr is within no-lapse period.
-        std::vector<double>::difference_type dist = csv_end - csv_begin;
-        LMI_ASSERT(0 < dist);
-
         most_negative_csv = *std::min_element
-            (csv_begin
-            ,csv_end
+            (VariantValues().CSVNet.begin() + no_lapse_dur
+            ,VariantValues().CSVNet.begin() + SolveTargetDuration_ - 1
             );
         }
 
-    // Start at year 0--assume no-lapse provision doesn't allow overloan.
-    // TODO ?? Assert that.
-    // TODO ?? If ExcessLoan is negative, then its name is confusing.
+    // Assume that any no-lapse provision doesn't allow overloan.
+    // TODO ?? ExcessLoan is negative; is LoanDeficit a better name?
     double most_negative_loan_deficit = 0.0;
-    if(0 < (SolveTargetDuration_ - 1))  // TODO ?? "-1" ?
+    if(0 < (SolveTargetDuration_ - 1))
         {
-        // Stop at SolveTargetDuration_
-        std::vector<double>::iterator excess_loan_end =
-            VariantValues().ExcessLoan.begin();
-        LMI_ASSERT
-            (   static_cast<unsigned int>(SolveTargetDuration_)
-            <=  VariantValues().ExcessLoan.size()
-            );
-        std::advance(excess_loan_end, SolveTargetDuration_);
         most_negative_loan_deficit = *std::min_element
             (VariantValues().ExcessLoan.begin()
-            ,excess_loan_end
+            ,VariantValues().ExcessLoan.begin() + SolveTargetDuration_
             );
         }
 
@@ -194,7 +168,7 @@ double AccountValue::SolveTest(double a_CandidateValue)
         ,most_negative_loan_deficit
         );
     // Need to index it: back() doesn't work if solve target is not last dur
-    double value = csv[SolveTargetDuration_ - 1];
+    double value = VariantValues().CSVNet[SolveTargetDuration_ - 1];
     if(worst_negative < 0.0)
         {
         value = std::min(value, worst_negative);
