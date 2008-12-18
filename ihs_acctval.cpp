@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.155 2008-12-15 12:13:11 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.156 2008-12-18 02:39:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -665,7 +665,9 @@ void AccountValue::SetInitialValues()
     MlyNoLapsePrem              = 0.0;
     CumNoLapsePrem              = InforceCumNoLapsePrem;
 
-    YearlyNoLapseActive.assign(BasicValues::GetLength(), true);
+    // Initialize all elements of this vector to 'false'. Then, when
+    // the no-lapse criteria fail to be met, future values are right.
+    YearlyNoLapseActive.assign(BasicValues::GetLength(), false);
     NoLapseActive               = true;
     if(NoLapseOpt1Only && mce_option1 != DeathBfts_->dbopt()[0])
         {
