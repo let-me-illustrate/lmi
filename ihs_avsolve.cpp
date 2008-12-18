@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.36 2008-12-18 14:26:13 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.37 2008-12-18 15:23:25 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -300,8 +300,6 @@ double AccountValue::Solve
         {
         upper_bound = std::max
             (upper_bound
-// TODO ?? This is probably wrong. I think there are two term amounts, only
-// one of which is in Status. But I could be wrong.
             ,DeathBfts_->specamt()[j] + yare_input_.TermRiderAmount
             );
         }
