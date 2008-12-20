@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.156 2008-12-18 02:39:17 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.157 2008-12-20 16:58:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -166,6 +166,7 @@ AccountValue::AccountValue(Input const& input)
 
     SurrChg_            .resize(BasicValues::GetLength());
 
+    YearlyTaxBasis      .reserve(BasicValues::GetLength());
     YearlyNoLapseActive .reserve(BasicValues::GetLength());
 }
 
@@ -662,6 +663,7 @@ void AccountValue::SetInitialValues()
 
     CumPmts                     = InforceCumPmts;
     TaxBasis                    = InforceTaxBasis;
+    YearlyTaxBasis.assign(BasicValues::GetLength(), 0.0);
     MlyNoLapsePrem              = 0.0;
     CumNoLapsePrem              = InforceCumNoLapsePrem;
 
@@ -1299,6 +1301,11 @@ void AccountValue::FinalizeYear()
     if(!(Solving && !LapseIgnoresSurrChg))
         {
         csv_net = std::max(csv_net, 0.0);
+        }
+
+    if(Solving)
+        {
+        YearlyTaxBasis[Year] = TaxBasis;
         }
 
 #if !defined REMOVE_THIS_NEXT_TIME_COLUMNS_CHANGE

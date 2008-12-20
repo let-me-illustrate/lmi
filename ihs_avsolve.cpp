@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.37 2008-12-18 15:23:25 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.38 2008-12-20 16:58:41 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -173,11 +173,7 @@ double AccountValue::SolveTest(double a_CandidateValue)
 
     if(mce_solve_for_tax_basis == SolveTarget_)
         {
-        SolveTargetCsv_ = std::accumulate
-            (InvariantValues().GrossPmt.begin()
-            ,InvariantValues().GrossPmt.begin() + SolveTargetDuration_
-            ,0.0
-            );
+        SolveTargetCsv_ = YearlyTaxBasis[SolveTargetDuration_ - 1];
         }
 
     return value - SolveTargetCsv_;
@@ -290,10 +286,14 @@ double AccountValue::Solve
 
     // Defaults: may be overridden by some cases
     // We aren't interested in negative solve results
-    double           lower_bound = 0.0;
-    double           upper_bound = 0.0;
-    root_bias        bias        = bias_higher;
-    int              decimals    = 0;
+    double lower_bound = 0.0;
+    double upper_bound = 0.0;
+    root_bias bias =
+        mce_solve_for_tax_basis == SolveTarget_
+        ? bias_lower
+        : bias_higher
+        ;
+    int decimals = 0;
 
     // Many things don't plausibly exceed max input face
     for(int j = 0; j < SolveTargetDuration_; j++)
