@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1226 2008-12-20 16:59:40 chicares Exp $
+// $Id: ChangeLog,v 1.1227 2008-12-20 19:03:53 wboutin Exp $
 
 MAINTENANCE
 
@@ -20929,4 +20929,12 @@ Refine the 20081207T0049Z tax-basis-solve calculation.
   input_xml_io.cpp
 Load input files faster (Vaclav). See:
   http://lists.nongnu.org/archive/html/lmi/2008-12/msg00014.html
+
+20081220T1902Z <wboutin@massmutual.com> [878]
+
+  illustration_reg.xsl
+  nasd.xsl
+  reg_d_group.xsl
+  reg_d_individual.xsl
+Conform to recent compliance requirements.
 

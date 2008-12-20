@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: reg_d_group.xsl,v 1.3 2008-08-25 09:50:24 wboutin Exp $
+    $Id: reg_d_group.xsl,v 1.4 2008-12-20 19:03:52 wboutin Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -259,8 +259,26 @@
               and Option 2 (death benefit equal to the greater of
               (a) the selected face amount in effect on the date of death plus
               account value on that date or (b) the minimum face amount
-              in effect on the date of death). A policy with the stable
-              value endorsement requires Death Benefit Option 1.
+              in effect on the date of death). A policy with the stable value
+              endorsement requires Death Benefit Option 1 or Death Benefit
+              Option 2. If available under the policy, Option 3 is a death
+              benefit option equal to the greatest of (a) the selected face
+              amount at death plus the sum of premiums paid less withdrawals;
+              or (b) selected face amount at death; or (c) minimum face amount
+              at death.
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline text-decoration="underline">Stable Value Feature</fo:inline>
+              This policy offers a Stable Value Feature. The Stable Value
+              Feature enables the smoothing over time of the volatile returns
+              normally associated with investments in variable account
+              divisions by means of the Stable Value Crediting Rate. For policy
+              owners that want to maintain the the Stable Value Feature,
+              certain conditions and restrictions apply to various policy
+              provisions, including, but not limited to, policy loans,
+              transfers, surrenders and withdrawals.  Refer to the offering
+              memorandum and the stable value endorsement to the policy for
+              additional information.
             </fo:block>
             <fo:block padding-top="1em">
               This illustration assumes Initial Death Benefit Option
@@ -358,32 +376,34 @@
               or owning this policy, consult with your own independent tax
               or legal counsel.
             </fo:block>
-            <fo:block padding-top="1em">
-              <xsl:value-of select="$scalars/GuarMortalityFootnote"/>
-            </fo:block>
-            <fo:block padding-top="1em">
-              The loan interest rate may be fixed or adjustable as elected
-              by the policy owner.
-            </fo:block>
-            <fo:block padding-top="1em">
-              <xsl:choose>
-                <xsl:when test="$scalars/UseExperienceRating='1'">
-                  The illustration assumes mortality experience rating.
-                  To the extent that other clients participate in the pool
-                  your results will be affected by the experience
-                  of the entire pool.
-                </xsl:when>
-                <xsl:otherwise>
-                  The illustration does not assume any mortality
-                  experience rating.
-                </xsl:otherwise>
-              </xsl:choose>
-            </fo:block>
 
             <!-- Force new page -->
             <fo:block break-after="page"/>
 
-            <fo:block font-style="italic">
+              <fo:block padding-top="1em">
+                <xsl:value-of select="$scalars/GuarMortalityFootnote"/>
+              </fo:block>
+              <fo:block padding-top="1em">
+                The loan interest rate may be fixed or adjustable as elected
+                by the policy owner.
+              </fo:block>
+              <fo:block padding-top="1em">
+                <xsl:choose>
+                  <xsl:when test="$scalars/UseExperienceRating='1'">
+                    The illustration assumes mortality experience rating.
+                    To the extent that other clients participate in the pool
+                    your results will be affected by the experience
+                    of the entire pool.
+                  </xsl:when>
+                  <xsl:otherwise>
+                    The illustration does not assume any mortality
+                    experience rating.
+                  </xsl:otherwise>
+                </xsl:choose>
+              </fo:block>
+            </fo:block>
+            <fo:block padding-top="1em" font-size="10pt">
+              <fo:block font-weight="bold">
               This illustration may only be used when preceded or accompanied
               by the offering memorandum for
               <xsl:value-of select="$scalars/PolicyLegalName"/>
@@ -498,7 +518,7 @@
             </fo:block>
             <fo:block padding-top="1em">
               This illustration shows how the death benefit could vary over
-              an extend period of time, assuming hypothetical gross rates
+              an extended period of time, assuming hypothetical gross rates
               of investment return for the funds.
               These hypothetical returns do not reflect past performance
               and are not predictive of future results.
@@ -519,22 +539,26 @@
               This illustration is based on total Separate Account fund expenses
               of <xsl:value-of select="$vectors[@name='TotalIMF']/duration[1]/@column_value"/>.
             </fo:block>
-            <fo:block font-size="10.5pt" font-weight="bold" padding-top="1em">
+            <fo:block font-weight="bold" padding-top="1em">
               This illustration may not reflect your actual tax
               and accounting consequences and is not intended as tax advice
               nor may it be relied on for purposes of avoiding any federal
               tax penalties. Consult professional tax advisors for tax advice.
             </fo:block>
             <fo:block padding-top="1em">
-              Placement Agent: <xsl:value-of select="$scalars/MainUnderwriter"/>
-              (a registered broker-dealer)
-            </fo:block>
-            <fo:block>
-              <xsl:value-of select="$scalars/MainUnderwriterAddress"/>
+              Placement Agent:
+              <xsl:value-of select="$scalars/MainUnderwriter"/>,
+              <xsl:value-of select="$scalars/MainUnderwriterAddress"/>.
+              <xsl:value-of select="$scalars/MainUnderwriter"/> is a wholly
+              owned subsidiary of <xsl:value-of select="$scalars/InsCoName"/>.
             </fo:block>
             <fo:block padding-top="1em">
-              Wholly owned subsidiary of
-              <xsl:value-of select="$scalars/InsCoName"/>
+              Securities offered through registered representatives of
+              <xsl:value-of select="$scalars/CoUnderwriter"/>&nbsp;
+              <xsl:value-of select="$scalars/CoUnderwriterAddress"/>
+              or of a broker-dealer with a selling agreement with
+              <xsl:value-of select="$scalars/MainUnderwriter"/>&nbsp;
+              <xsl:value-of select="$scalars/MainUnderwriterAddress"/>.
             </fo:block>
           </fo:block>
           <xsl:if test="not($has_supplemental_report)">
