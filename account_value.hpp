@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.76 2008-12-17 23:41:28 chicares Exp $
+// $Id: account_value.hpp,v 1.77 2008-12-20 16:58:41 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -383,9 +383,11 @@ class LMI_SO AccountValue
 
     double RiderDeductions;
 
-    // These two things can be different: IRC section 72
     double CumPmts;
     double TaxBasis;
+    // This supports solves for tax basis. Eventually it should be
+    // moved into the invariant-ledger class.
+    std::vector<double> YearlyTaxBasis;
 
     // Ee- and Er-GrossPmts aren't used directly in the AV calculations.
     // They must be kept separate for ledger output, and also for
