@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1225 2008-12-18 15:23:26 chicares Exp $
+// $Id: ChangeLog,v 1.1226 2008-12-20 16:59:40 chicares Exp $
 
 MAINTENANCE
 
@@ -20916,4 +20916,17 @@ retarded convergence without affecting the solution.
 
   ihs_avsolve.cpp
 Remove a defect marker that is no longer correct.
+
+20081220T1658Z <gchicares@sbcglobal.net> [879]
+
+  account_value.hpp
+  ihs_acctval.cpp
+  ihs_avsolve.cpp
+Refine the 20081207T0049Z tax-basis-solve calculation.
+
+20081220T1659Z <gchicares@sbcglobal.net> [878]
+
+  input_xml_io.cpp
+Load input files faster (Vaclav). See:
+  http://lists.nongnu.org/archive/html/lmi/2008-12/msg00014.html
 

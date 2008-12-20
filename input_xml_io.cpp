@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_xml_io.cpp,v 1.11 2008-12-16 02:29:18 chicares Exp $
+// $Id: input_xml_io.cpp,v 1.12 2008-12-20 16:59:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -36,6 +36,7 @@
 #include "xml_lmi.hpp"
 
 #include <algorithm> // std::find()
+#include <list>
 
 namespace
 {
@@ -127,10 +128,14 @@ using namespace xml;
 
     std::map<std::string, std::string> detritus_map;
 
-    std::vector<std::string> member_names
-        (Input::member_names()
+    std::list<std::string> member_names;
+    std::copy
+        (Input::member_names().begin()
+        ,Input::member_names().end()
+        ,std::back_inserter(member_names)
         );
-    std::vector<std::string>::iterator current_member;
+    std::list<std::string>::iterator current_member;
+
 // XMLWRAPP !! The unit test demonstrates that the suppressed code is
 // twenty-five percent slower. What would be really desirable is an
 // (efficient) element-iterator class.
@@ -159,7 +164,6 @@ using namespace xml;
         if(member_names.end() != current_member)
             {
             operator[](node_tag) = xml_lmi::get_content(*child);
-            // TODO ?? Perhaps a std::list would perform better.
             member_names.erase(current_member);
             }
         else if(is_detritus(node_tag))
