@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1228 2008-12-20 19:21:54 wboutin Exp $
+// $Id: ChangeLog,v 1.1229 2008-12-20 20:01:59 wboutin Exp $
 
 MAINTENANCE
 
@@ -20942,4 +20942,11 @@ Conform to recent compliance requirements.
 
   illustration_reg.xsl
 Fix a longstanding defect.
+
+20081220T2000Z <wboutin@massmutual.com> [878]
+
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_reg_d.xrc
+Provide GUI access to solve for surrender value equal to tax basis.
 
