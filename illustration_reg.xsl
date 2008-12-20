@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.69 2008-08-25 09:50:24 wboutin Exp $
+    $Id: illustration_reg.xsl,v 1.70 2008-12-20 19:03:52 wboutin Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -689,13 +689,17 @@ to the xsl files first.
                 </fo:block>
               </xsl:if>
             </xsl:if>
-            <fo:block padding-top="1em">
+
+            <!-- Single Premium Logic -->
+            <xsl:if test="$SinglePremium='0'">
+              <fo:block padding-top="1em">
               <fo:inline font-weight="bold">
                 Flexible Premiums:
               </fo:inline>
               Premiums that may be increased, reduced, or not paid,
               if the account value is sufficient to cover the monthly charges.
-            </fo:block>
+              </fo:block>
+            </xsl:if>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">
                 Guaranteed Values:

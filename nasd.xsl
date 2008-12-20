@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.82 2008-12-15 12:14:18 chicares Exp $
+    $Id: nasd.xsl,v 1.83 2008-12-20 19:03:52 wboutin Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -449,7 +449,7 @@
               The loan interest rate may be fixed or adjustable
               as elected by the sponsor.
             </fo:block>
-            <fo:block padding-top="1em">
+            <fo:block font-weight="bold" padding-top="1em">
               This illustration must be preceded or accompanied by the current
               prospectuses for <xsl:value-of select="$scalars/PolicyMktgName"/>
               variable life insurance contract and its underlying
@@ -692,7 +692,7 @@
                 Contract: <xsl:value-of select="$scalars/PolicyMktgName"/>
               </fo:block>
               <fo:block text-align="left">
-                Initial Premium: <xsl:value-of select="$scalars/InitPrem"/>
+                Initial Premium: $<xsl:value-of select="$scalars/InitPrem"/>
               </fo:block>
               <xsl:if test="not($is_composite)">
                 <fo:block text-align="left">
