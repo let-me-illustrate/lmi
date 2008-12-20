@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: reg_d_individual.xsl,v 1.3 2008-07-24 20:01:26 wboutin Exp $
+    $Id: reg_d_individual.xsl,v 1.4 2008-12-20 19:03:52 wboutin Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -37,7 +37,10 @@
         <!-- Define the cover page. -->
         <fo:simple-page-master master-name="cover">
           <xsl:call-template name="set-page-size"/>
-          <fo:region-body margin=".25in 0 .4in"/>
+          <!-- Central part of page -->
+          <fo:region-body margin="1.4in 0 1.2in"/>
+          <!-- Footer -->
+          <fo:region-after extent=".6in"/>
         </fo:simple-page-master>
 
         <!-- Define the IRR (Guaranteed Charges) Illustration page. -->
@@ -48,7 +51,7 @@
           <!-- Header -->
           <fo:region-before extent="3in"/>
           <!-- Footer -->
-          <fo:region-after extent="1.1in"/>
+          <fo:region-after extent=".6in"/>
         </fo:simple-page-master>
 
         <!-- Define the IRR (Current Charges) Illustration page -->
@@ -59,7 +62,7 @@
           <!-- Header -->
           <fo:region-before extent="3in"/>
           <!-- Footer -->
-          <fo:region-after extent="1.1in"/>
+          <fo:region-after extent=".6in"/>
         </fo:simple-page-master>
 
         <!-- Define the Current Values Illustration page -->
@@ -70,16 +73,38 @@
           <!-- Header -->
           <fo:region-before extent="3in"/>
           <!-- Footer -->
-          <fo:region-after extent="1.1in"/>
+          <fo:region-after extent=".6in"/>
         </fo:simple-page-master>
 
-        <!-- Define the footnotes page. -->
-        <fo:simple-page-master master-name="footnotes">
+        <!-- Define the Explanation and Footnotes page 1. -->
+        <fo:simple-page-master master-name="explanation-and-footnotes-1">
           <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
-          <fo:region-body margin="2.25in 0 .6in"/>
+          <fo:region-body margin="1in 0 1.1in"/>
           <!-- Header -->
-          <fo:region-before extent="3in"/>
+          <fo:region-before extent="1in"/>
+          <!-- Footer -->
+          <fo:region-after extent=".6in"/>
+        </fo:simple-page-master>
+
+        <!-- Define the Explanation and Footnotes page 2. -->
+        <fo:simple-page-master master-name="explanation-and-footnotes-2">
+          <xsl:call-template name="set-page-size"/>
+          <!-- Central part of page -->
+          <fo:region-body margin="1in 0 1.1in"/>
+          <!-- Header -->
+          <fo:region-before extent="1in"/>
+          <!-- Footer -->
+          <fo:region-after extent=".6in"/>
+        </fo:simple-page-master>
+
+        <!-- Define the Certification Statements page. -->
+        <fo:simple-page-master master-name="certification-statements">
+          <xsl:call-template name="set-page-size"/>
+          <!-- Central part of page -->
+          <fo:region-body margin="1.6in 0 1.1in"/>
+          <!-- Header -->
+          <fo:region-before extent="1in"/>
           <!-- Footer -->
           <fo:region-after extent=".6in"/>
         </fo:simple-page-master>
@@ -93,173 +118,118 @@
             <!-- Header -->
             <fo:region-before extent="3in"/>
             <!-- Footer -->
-            <fo:region-after extent="1.1in"/>
+            <fo:region-after extent=".6in"/>
           </fo:simple-page-master>
         </xsl:if>
       </fo:layout-master-set>
 
-      <!-- The data to be diplayed in the pages, cover page first -->
-      <!-- Disabled for now
-        <fo:page-sequence master-reference="cover" initial-page-number="200">
-          <fo:flow flow-name="xsl-region-body">
-            <fo:block text-align="left" font-size="9pt" font-family="sans-serif">
-              <fo:block>
-                <xsl:value-of select="$scalars/PolicyMktgName"/>
-              </fo:block>
-              <fo:block>
-                <xsl:value-of select="$scalars/PolicyLegalName"/> Cover Sheet
-              </fo:block>
-              <fo:block padding-top="1em">
-                The purpose of the attached illustration is to show
-                how the performance of the underlying separate account divisions
-                could affect the proposed contract's cash values
-                and death benefits. The illustration is hypothetical
-                and may not be used to project or predict investment results.
-                The illustration must be accompanied or preceded
-                by a Confidential Private Placement Memorandum
-                offering the Contract.
-              </fo:block>
-              <fo:block padding-top="1em">
-                Placement agent:
-                <xsl:value-of select="$scalars/MainUnderwriter"/>
-              </fo:block>
-              <xsl:if test="$scalars/ScaleUnit!=''">
-                <fo:block padding-top="1em">
-                  Values per
-                  <xsl:value-of select="$scalars/ScaleUnit"/> US dollars.
-                </fo:block>
-              </xsl:if>
-              <fo:block text-align="center" padding-top="1em">
-                THIS ILLUSTRATION COVER SHEET IS
-                FOR REGISTERED REPRESENTATIVE USE ONLY.
-                NOT FOR USE WITH CLIENTS.
-              </fo:block>
-              <fo:block padding-top="1em">
-                Date prepared:
-                <!- Comment: The original date format was 'Y-M-D' ->
-                <xsl:call-template name="date-prepared"/>
-              </fo:block>
-              <fo:block>
-                Producer: <xsl:value-of select="$scalars/ProducerName"/>
-              </fo:block>
-              <fo:block>
-                Client: <xsl:value-of select="$scalars/Insured1"/>
-              </fo:block>
-              <fo:block>
-                Gender: <xsl:value-of select="$scalars/Gender"/>
-              </fo:block>
-              <fo:block>
-                Issue age: <xsl:value-of select="$scalars/Age"/>
-              </fo:block>
-              <fo:block>
-                State of jurisdiction:
-                <xsl:value-of select="$scalars/GetStatePostalAbbrev"/>
-              </fo:block>
-              <fo:block>
-                Country: <xsl:value-of select="$scalars/CountryIso3166Abbrev"/>
-              </fo:block>
-              <fo:block>
-                Non-US corridor factor:
-                <xsl:value-of select="$scalars/CorridorFactorSequence"/>
-              </fo:block>
-              <fo:block>
-                Rate class: <xsl:value-of select="$scalars/UWClass"/>
-              </fo:block>
-              <fo:block>
-                7702 test: <xsl:value-of select="$scalars/DefnLifeIns"/>
-              </fo:block>
-              <fo:block>
-                MEC:
-                <xsl:choose>
-                  <xsl:when test="$scalars/IsMec='1'">
-                    Yes
-                  </xsl:when>
-                  <xsl:otherwise>
-                    No
-                  </xsl:otherwise>
-                </xsl:choose>
-              </fo:block>
-              <fo:block>
-                Assumed gross rate:
-                <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_Current"/>
-              </fo:block>
-              <fo:block>
-                New cash loan:
-                <xsl:value-of select="$scalars/LoanSequence"/>
-              </fo:block>
-              <fo:block>
-                Withdrawal:
-                <xsl:value-of select="$scalars/NetWDSequence"/>
-              </fo:block>
-              <fo:block>
-                Comments: <xsl:value-of select="$scalars/Comments"/>
-              </fo:block>
-              <fo:block padding-top="1em">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                Premiums and death benefits
-              </fo:block>
-              <fo:block padding-top="1em">
-                Premium: <xsl:value-of select="$scalars/GrossPmtSequence"/>
-              </fo:block>
-              <fo:block>
-                Dumpin: <xsl:value-of select="$scalars/DumpinScaled"/>
-              </fo:block>
-              <fo:block>
-                Internal 1035 exchange:
-                <xsl:value-of select="$scalars/Internal1035AmountScaled"/>
-              </fo:block>
-              <fo:block>
-                External 1035 exchange:
-                <xsl:value-of select="$scalars/External1035AmountScaled"/>
-              </fo:block>
-              <fo:block>
-                Specified amount:
-                <xsl:value-of select="$scalars/SpecAmtSequence"/>
-              </fo:block>
-              <fo:block>
-                Death benefit option:
-                <xsl:value-of select="$scalars/DBOptSquence"/>
-              </fo:block>
-              <fo:block padding-top="1em">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                Current fees and charges
-              </fo:block>
-              <fo:block padding-top="1em">
-                State premium tax load:
-                <xsl:value-of select="$scalars/StatePremTaxLoad"/>
-              </fo:block>
-              <fo:block>
-                DAC tax premium load:
-                <xsl:value-of select="$scalars/DacTaxPremLoadRate"/>
-              </fo:block>
-              <fo:block>
-                Asset-based compensation:
-                <xsl:value-of select="$scalars/AddonCompOnAssetsSquence"/>
-              </fo:block>
-              <fo:block>
-                Premium-based compensation:
-                <xsl:value-of select="$scalars/AddonCompOnPremiumSequence"/>
-              </fo:block>
-              <fo:block>
-                Add-on custodial fee:
-                <xsl:value-of select="$scalars/AddonMonthlyFeeSquence"/>
-              </fo:block>
-              <fo:block>
-                Country COI multiplier:
-                <xsl:value-of select="$scalars/CountryCOIMultiplier"/>
-              </fo:block>
-              <fo:block>
-                Separate account load:
-                <xsl:value-of select="$scalars/TieredSepAcctLoadBands"/>
-              </fo:block>
+      <!-- Cover Page -->
+      <!-- Body page -->
+      <fo:page-sequence master-reference="cover" force-page-count="no-force">
+
+        <!-- Define the contents of the footer. -->
+        <xsl:call-template name="standardfooter">
+          <xsl:with-param name="omit-disclaimer" select="1"/>
+        </xsl:call-template>
+
+        <fo:flow flow-name="xsl-region-body">
+          <fo:block font-weight="bold" font-size="11pt" font-family="sans-serif" text-align="center">
+            <fo:block font-size="18pt" padding="1em 0 25pt">
+              <xsl:value-of select="$scalars/PolicyMktgName"/>
+              <xsl:value-of font-size="10pt" select="$registered-symbol"/>
             </fo:block>
-          </fo:flow>
-        </fo:page-sequence>
-      -->
+            <fo:block font-size="12pt" padding-after="45pt">
+              Hypothetical Life Insurance Illustration
+            </fo:block>
+            <fo:block padding-after="25pt">
+              Prepared by: <xsl:value-of select="$scalars/InsCoShortName"/>
+            </fo:block>
+            <fo:block padding-after="25pt">
+              Prepared for:
+              <!--
+              Properly adjust for long user input strings limit output
+              to 140 characters for appox. 2 lines
+              -->
+              <xsl:call-template name="limitstring">
+                <xsl:with-param name="length" select="140"/>
+                <xsl:with-param name="passString">
+                  <xsl:choose>
+                    <xsl:when test="not($is_composite)">
+                      <xsl:value-of select="$scalars/Insured1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:value-of select="$scalars/CorpName"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:with-param>
+              </xsl:call-template>
+            </fo:block>
+            <fo:block padding-after="140.0pt">
+              Date Prepared: <xsl:call-template name="date-prepared"/>
+            </fo:block>
+          </fo:block>
+          <fo:block font-weight="normal" font-size="9pt" font-family="sans-serif" text-align="left">
+            <fo:block padding-after="10.0pt">
+              The purpose of this illustration is to show how hypothetical rates
+              of return will affect policy account value. These hypothetical
+              returns do not reflect past performance and are not predictive
+              of future results. Actual results could be less than or greater
+              than the hypothetical rates and in all likelihood will vary from
+              year to year.
+            </fo:block>
+            <fo:block font-weight="bold" padding-after="10.0pt">
+              This material must be preceded or accompanied by the current
+              Confidential Private Placement Memorandum for
+              <xsl:value-of select="$scalars/PolicyMktgName"/>
+              <xsl:value-of select="$registered-symbol"/>
+              and the current prospectuses and private placement memoranda
+              for its underlying investment choices. Investors should
+              carefully consider the investment objectives, risks,
+              charges and expenses of the policy and its underlying investment
+              choices. Please read the prospectuses and private placement
+              memoranda carefully before investing or sending money.
+            </fo:block>
+            <fo:block padding-after="10.0pt">
+              <xsl:value-of select="$scalars/PolicyMktgName"/>
+              <xsl:value-of select="$registered-symbol"/>
+              is a flexible premium variable adjustable life insurance policy
+              issued by <xsl:value-of select="$scalars/InsCoName"/>
+              (<xsl:value-of select="$scalars/InsCoShortName"/>),
+              <xsl:value-of select="$scalars/InsCoStreet"/>.
+            </fo:block>
+            <fo:block padding-after="10.0pt">
+              Placement Agent:
+              <xsl:value-of select="$scalars/MainUnderwriter"/>,
+              <xsl:value-of select="$scalars/MainUnderwriterAddress"/>.
+              <xsl:value-of select="$scalars/MainUnderwriter"/> is a wholly
+              owned subsidiary of <xsl:value-of select="$scalars/InsCoName"/>.
+            </fo:block>
+            <fo:block padding-after="10.0pt">
+              Securities offered through registered representatives of
+              <xsl:value-of select="$scalars/CoUnderwriter"/>&nbsp;
+              <xsl:value-of select="$scalars/CoUnderwriterAddress"/>
+              or of a broker-dealer with a selling agreement with
+              <xsl:value-of select="$scalars/MainUnderwriter"/>&nbsp;
+              <xsl:value-of select="$scalars/MainUnderwriterAddress"/>.
+            </fo:block>
+            <fo:block padding-after="10.0pt">
+              <xsl:value-of select="$scalars/InsCoShortName"/> Financial Group
+              is a marketing designation
+              for <xsl:value-of select="$scalars/InsCoName"/>
+              (<xsl:value-of select="$scalars/InsCoShortName"/>)
+              and its subsidiaries.
+            </fo:block>
+            <fo:block>
+              Compliance tracking number:
+              <xsl:value-of select="$compliance_tracking_number"/>
+            </fo:block>
+          </fo:block>
+        </fo:flow>
+      </fo:page-sequence>
 
       <!-- IRR (Guaranteed Charges) Illustration -->
       <!-- Body page -->
-      <fo:page-sequence master-reference="irr-guaranteed-illustration" initial-page-number="1">
+      <fo:page-sequence master-reference="irr-guaranteed-illustration">
 
         <!-- Define the contents of the header. -->
         <fo:static-content flow-name="xsl-region-before">
@@ -268,7 +238,7 @@
             <xsl:with-param name="displaydisclaimer" select="1"/>
           </xsl:call-template>
           <fo:block text-align="center" font-size="9pt" font-family="serif" padding-top="1em">
-            End of Year Contract Values using Guaranteed Charges
+            End of Year Policy Values using Guaranteed Charges
             <xsl:call-template name="dollar-units"/>
           </fo:block>
         </fo:static-content>
@@ -291,7 +261,7 @@
             <xsl:with-param name="displaydisclaimer" select="1"/>
           </xsl:call-template>
           <fo:block text-align="center" font-size="9pt" font-family="serif" padding-top="1em">
-            End of Year Contract Values using Current Charges
+            End of Year Policy Values using Current Charges
             <xsl:call-template name="dollar-units"/>
           </fo:block>
         </fo:static-content>
@@ -314,7 +284,7 @@
             <xsl:with-param name="displaydisclaimer" select="1"/>
           </xsl:call-template>
           <fo:block text-align="center" font-size="9pt" font-family="serif" padding-top="1em">
-            End of Year Contract Values using Current Charges
+            End of Year Policy Values using Current Charges
             <xsl:call-template name="dollar-units"/>
           </fo:block>
         </fo:static-content>
@@ -326,162 +296,298 @@
 
       </fo:page-sequence>
 
-      <!-- FOOTNOTES - begins here -->
-      <fo:page-sequence master-reference="footnotes">
+      <!-- Explanation and Footnotes page 1 -->
+      <fo:page-sequence master-reference="explanation-and-footnotes-1">
 
         <!-- Define the contents of the header. -->
         <fo:static-content flow-name="xsl-region-before">
-          <xsl:call-template name="standardheader">
-            <xsl:with-param name="displaycontractlanguage" select="0"/>
-            <xsl:with-param name="displaydisclaimer" select="0"/>
-          </xsl:call-template>
-          <fo:block text-align="center" font-size="10pt" font-family="serif" padding="2em 0 1em">
-            Footnotes
+          <xsl:call-template name="plain-header"/>
+          <fo:block font-weight="bold" font-size="11pt" font-family="sans-serif" text-align="center">
+            Explanatory Notes
           </fo:block>
         </fo:static-content>
 
         <!-- Define the contents of the footer. -->
-        <xsl:call-template name="standardfooter">
-          <xsl:with-param name="omit-disclaimer" select="1"/>
-        </xsl:call-template>
+        <xsl:call-template name="standardfooter"/>
 
-        <!-- FOOTNOTES Body  -->
         <fo:flow flow-name="xsl-region-body">
-          <fo:block text-align="left" font-size="9pt" font-family="sans-serif">
-            <fo:block>
-              This Contract is only available to persons who are deemed
-              accredited investors or qualified purchasers under applicable
-              Federal securities laws. The minimum initial case premium
-              is $1,000,000. In the case of a dedicated separate account
-              or division, the minimum initial case premium is $5,000,000.
-              You must be able to bear the risk of loss of your entire
-              investment in the Contract. You will be required to represent
-              to <xsl:value-of select="$scalars/InsCoShortName"/> that
-              you satisfy these Contract requirements.
+
+          <fo:block font-weight="normal" font-size="9pt" font-family="sans-serif" text-align="left">
+            <fo:block font-size="10pt" font-weight="bold" text-decoration="underline">
+              The Illustration
             </fo:block>
             <fo:block padding-top="1em">
-              The information provided is an illustration only
-              and is not intended to predict actual performance.
+              This illustration is not a policy or an offer or solicitation
+              to purchase a policy. Offers are made only through the
+              Confidential Private Placement Memorandum ("the PPM") for
+              <xsl:value-of select="$scalars/PolicyMktgName"/>
+              <xsl:value-of select="$registered-symbol"/>.
             </fo:block>
             <fo:block padding-top="1em">
-              Interest rates and values set forth in the illustration
-              are not guaranteed. This illustration assumes that the currently
-              illustrated elements will continue unchanged for all years shown.
-              This is not likely to occur and actual results may be more or less
-              favorable than shown. Benefits and values are not guaranteed
-              and are based on assumptions such as investment income and current
-              monthly charges. Current charges are subject to change.
+              Interest rates, assumed rates of return and values set forth in
+              the illustration are not guaranteed. This illustration assumes
+              that the currently illustrated elements will continue unchanged
+              for all years shown. This is not likely to occur and actual
+              results may be more or less favorable than shown. Benefits and
+              values are not guaranteed and are based on assumptions set forth
+              in this illustration. Current charges are subject to change.
             </fo:block>
             <fo:block padding-top="1em">
-              These illustrations assume a gross rate of return of 0% and
-              <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_Current"/>,
-              respectively, on the account value in the separate account.
-              For purposes of this illustration, the assumed
-              "gross rate of return" takes into account all investment
-              management, custody and other expenses charged by the investment
-              manager or underlying fund. Actual rates of return
-              will be different because they will be based on the actual
-              performance of the separate account divisions. However, the actual
-              returns of the separate account divisions will also be net
-              of investment management, custody and other expenses
-              of the investment manager or the fund. For some separate accounts
-              or divisions, there may be additional investment management
-              and/or separate account administrative fees that may be charged,
-              in which case those fees will be included in the Asset Charges
-              illustrated above. If additional fees are determined subsequent
-              to issuance of this illustration, such fees will be added
-              to the Asset Charges. You should request a new illustration
-              to review the impact of such fees on contract performance.
-              No tax charge is currently applied to the investment returns
-              of the separate account. A charge could be made in the future.
+              This illustration assumes a hypothetical rate of return on the
+              account value in the separate account that is net of all
+              investment management, custody and other expenses of the
+              investment manager or fund. As the investment options offered
+              within the policy include funds that invest in other funds,
+              investment management fees, custody and other expenses may be
+              charged at multiple levels. Please refer to the PPM and offering
+              memoranda for the underlying investment options for further
+              details.
             </fo:block>
             <fo:block padding-top="1em">
-              Asset charges in the illustration include the contract's
-              mortality and expense (asset charges), separate account
-              administrative charges (including in certain cases investment
-              management expenses), and, where applicable,
-              asset-based compensation and/or amortized premium loads.
+              Premiums are assumed to be paid at the beginning of the policy
+              year. Age, account values, cash surrender values and death
+              benefits are illustrated as of the end of the policy year.
             </fo:block>
             <fo:block padding-top="1em">
-              Account values may be used to pay monthly charges. Monthly charges
-              are due during the life of the insured, and depending
-              on actual results, the premium payer may need to continue
-              or resume premium outlays. If account values are allocated
-              to certain separate account divisions, on each
-              Contract Anniversary Date there must be at least 18 months
-              of current monthly charges maintained in the money
-              market division to pay contract charges.
+              In certain states,
+              <xsl:value-of select="$scalars/InsCoShortName"/>
+              issues certificates under a group life insurance policy rather
+              than individual life insurance policies. For purposes of this
+              illustration, the term "policy" refers to both individual life
+              insurance policies and certificates.
             </fo:block>
             <fo:block padding-top="1em">
-              The premium outlay column includes premium payments,
-              reduced by withdrawals and loan disbursements, if any.
-            </fo:block>
-            <fo:block padding-top="1em">
-              Premiums are assumed to be paid on
-              <xsl:choose>
-                <xsl:when test="$vectors[@name='ErMode']/duration[1]/@column_value='Annual'">
-                  an
-                </xsl:when>
-                <xsl:otherwise>
-                  a
-                </xsl:otherwise>
-              </xsl:choose>
-              <xsl:value-of select="translate($vectors[@name='ErMode']/duration[1]/@column_value,$ucletters,$lcletters)"/>
-              basis and received at the beginning of the contract year.
-              Age, account values, cash surrender values and death benefits
-              are illustrated as of the end of the contract year.
-            </fo:block>
-            <fo:block padding-top="1em">
-              PLEASE READ THE FOLLOWING IMPORTANT MAXIMUM NET AMOUNT
-              AT RISK DISCLOSURE
-            </fo:block>
-            <fo:block>
-              <xsl:value-of select="$scalars/InsCoShortName"/> has the right
-              to promptly refund any amount of premium paid if
-              the premium payment will cause the net amount at risk
-              to exceed the maximum net amount at risk under the Contract.
-              <xsl:value-of select="$scalars/InsCoShortName"/> also
-              has the right to automatically withdraw from the divisions
-              of the separate account, and distribute to the Contract holder,
-              excess amounts that cause the net amount at risk to exceed
-              the maximum net amount at risk under the Contract.
-            </fo:block>
-            <fo:block padding-top="1em">
-              If extensive loans or withdrawals are made, additional
-              premium payments may be necessary to avoid lapse of the Contract.
-              Periods of poor performance in the underlying
-              investment portfolios may also contribute to the potential need
-              for additional premium payments.
-            </fo:block>
-            <fo:block padding-top="1em">
-              Certain investment divisions have restrictions on the ability
-              to access account values allocated to those divisions.
-              If account values are allocated to such divisions, the Owner
-              will not be able to transfer account values or effect a loan,
-              withdrawal or surrender of the Contract until specified dates.
-              In addition, payment of a portion of the death benefit
-              may be deferred until the account values in such division
-              can be liquidated. Refer to the private placement memorandum
-              for details.
+              Please refer to the policy for a complete explanation of benefits,
+              rights and obligations. In the event of a conflict between the
+              illustration and policy, the terms of the policy will control.
             </fo:block>
           </fo:block>
 
-          <!-- Forced New Page -->
-          <fo:block break-after="page"/>
-          <fo:block text-align="left" font-size="9pt" font-family="sans-serif">
-            <fo:block>
-              In the states of Alaska or South Dakota, there may be a surrender
-              charge in connection with premium tax liability that would
-              generally be limited to 6 years. This surrender charge
-              is not reflected in the illustrated values. Nevertheless,
-              surrender charges under the Contract are limited by applicable
-              non-forfeiture laws and regulations.
+          <fo:block font-weight="normal" font-size="9pt" font-family="sans-serif" text-align="left">
+            <fo:block font-size="10pt" font-weight="bold" padding-top="2em" text-decoration="underline">
+              The Policy
             </fo:block>
-            <fo:block font-weight="bold" padding-top="1em">
-              PLEASE READ THE FOLLOWING IMPORTANT TAX DISCLOSURE
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">Policy Requirements:</fo:inline>
+              This policy is only available to persons who are deemed
+              accredited investors and qualified purchasers under applicable
+              federal securities laws. The policy owner must be able to bear
+              the risk of loss of the entire investment in the policy. The
+              policy owner must be familiar with and understand the fundamental
+              risks and financial hazards of investing in the policy, and be
+              willing to represent as such to
+              <xsl:value-of select="$scalars/InsCoShortName"/>.
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">Maximum Net Amount at Risk Limitation: </fo:inline>
+              <xsl:value-of select="$scalars/InsCoShortName"/> has the right to
+              promptly refund any amount of premium paid if the premium payment
+              will cause the net amount at risk to exceed the maximum net amount
+              at risk under the policy. <xsl:value-of select="$scalars/InsCoShortName"/>
+              also has the right to automatically withdraw from the divisions of
+              the separate account, and distribute to the policy owner, excess
+              amounts that cause the net amount at risk to exceed the maximum
+              net amount at risk under the policy.
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">Monthly Charges:</fo:inline>
+              Account values may be used to pay monthly charges. Monthly charges
+              are due during the life of the insured, and depending on actual
+              investment results, the policy owner may need to continue or
+              resume premium outlays. If account values are allocated to certain
+              illiquid separate account divisions, the policy will be subject to
+              a minimum money market requirement as described in the PPM and the
+              policy.
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">Surrender Charges:</fo:inline>
+              In certain states, there may be a surrender charge in connection
+              with premium tax liability. This surrender charge is not reflected
+              in the illustrated values. Surrender charges under the policy are
+              limited by applicable non-forfeiture laws and regulations.
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">Issue State: </fo:inline>
+              <xsl:value-of select="$scalars/StatePostalAbbrev"/>
+            </fo:block>
+          </fo:block>
+
+          <fo:block font-weight="normal" font-size="9pt" font-family="sans-serif" text-align="left">
+            <fo:block font-size="10.0pt" font-weight="bold" padding-top="2em" text-decoration="underline">
+              Column Definitions
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">Account Value:</fo:inline>
+              The sum of all premium payments adjusted to reflect premium loads,
+              mortality charges, asset charges, administrative charges (if any)
+              and investment income.
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">Administrative Charge:</fo:inline>
+              A flat monthly charge payable from account value.
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">Asset Charges:</fo:inline>
+              Asset charges include a mortality and expense risk charge
+              ("M&amp;E") as described in the Table of Charges of the PPM,
+              negotiated asset based compensation (if any), and a separate
+              account administrative charge (if any).
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">Cash Surrender Value:</fo:inline>
+              The account value less any policy debt. If applicable, surrender
+              charges are not reflected in the illustrated case surrender value.
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">Death Benefit:</fo:inline>
+              The death benefit is the amount paid to the policy beneficiary(ies)
+              after the death of the insured less any policy debt and unpaid
+              monthly charges.
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">End of Year Age:</fo:inline>
+              The insured's age at the end of the illustrated policy year.
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">Investment Income:</fo:inline>
+              The investment experience of the account value allocated to the
+              separate account divisions at the hypothetical rate of return.
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">IRR on Death Benefit:</fo:inline>
+              The interest rate at which the premium outlay would have to be
+              invested outside the policy to generate the death benefit.
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">IRR on Surrender Value:</fo:inline>
+              The interest rate at which the premium outlay would have to be
+              invested outside the policy to generate the cash surrender value.
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">Mortality Charges:</fo:inline>
+              The insurance risk charge based on age, gender and underwriting
+              class. Generally, insurance risk charge rates increase annually
+              as the age of the insured increases.
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">Policy Year:</fo:inline>
+              The period from the illustrated policy date to the first policy
+              anniversary date, or from one policy anniversary date to the next.
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">Premium Loads:</fo:inline>
+              The applicable state premium tax, deferred acquisition cost tax
+              charge, sales load (if any), separate account administrative
+              charge (if any), and other charges incurred as a result of
+              retaining an unaffiliated money manager (if any).
+            </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">Premium Outlay:</fo:inline>
+              The premium payment prior to the deduction of any premium loads.
+            </fo:block>
+          </fo:block>
+
+          <fo:block font-weight="normal" font-size="9pt" font-family="sans-serif" text-align="left">
+            <fo:block font-size="10.0pt" font-weight="bold" padding-top="2em" text-decoration="underline">
+              Separate Account
+            </fo:block>
+            <fo:block padding-top="1em">
+              * This illustration assumes a hypothetical rate of return on the
+              account value in the separate account. The hypothetical rate of
+              return illustrated assumes that all investment management, custody
+              and other expenses of the investment manager or underlying fund
+              have beed deducted from the rate of return. Premuim loads are
+              deducted from each premium payment and have not been deducted from
+              the rate of return Mortality Charges, Asset Charges and
+              Administrative Charges ("Monthly Charges") are deducted from
+              Account Value on a monthly basis and have not been deducted from
+              the rate of return. Actual rates of return will be different
+              because they will be based on the actual performance of the
+              separate account divisions selected by the policy owner.
+            </fo:block>
+            <fo:block padding-top="1em">
+              For some separate accounts or divisions, there may be additional
+              investment management and/or separate account administrative fees
+              that may be charged, in which case those fees may be included in
+              the asset charges illustrated above. If additional fees are
+              determined subsequent to issuance of this illustration, such fees
+              will be added to the asset charges. You should request a new
+              illustration to review the impact of such fees on policy
+              performance.
+            </fo:block>
+            <fo:block padding-top="1em">
+              Certain separate account divisions have restrictions on the
+              ability to access account values allocated to those divisions.
+              Refer to the PPM and policy for details.
+            </fo:block>
+            <fo:block padding-top="1em">
+              No tax charge is currently applied to the investment returns of
+              the separate account. A charge could be made in the future.
+            </fo:block>
+          </fo:block>
+
+          <fo:block font-weight="normal" font-size="9pt" font-family="sans-serif" text-align="left">
+            <fo:block font-size="10.0pt" font-weight="bold" padding-top="2em" text-decoration="underline">
+              Withdrawals and Policy Loans
+            </fo:block>
+            <fo:block padding-top="1em">
+              If applicable, withdrawals and policy loans will appear on a
+              supplemental report at the end of the illustration. Withdrawals
+              and policy loans are assumed to be taken at the beginnings of the
+              applicable policy year. The illustration and supplemental report
+              reflect a fixed policy loan interest rate of <xsl:value-of select="$scalars/InitAnnLoanDueRate"/>.
+            </fo:block>
+            <fo:block padding-top="1em">
+              Taking a withdrawal or policy loan could have adverse tax
+              consequences. If aggregate policy loans substantially exceed
+              cost basis, the policy owner may incur a significant income tax
+              liability if the policy terminates before the insured's death.
+              Substantial payments to cover policy charges and policy loan
+              interest may be necessary to prevent termination of the policy
+              and to avoid the potential income tax liability. Some of the
+              indications that such a situation may arise include: (1) high
+              outstanding debt relative to the policy's account value; (2) low
+              account value relative to a high death benefit; and (3) lower than
+              expected investment income credited to the account value.
+              Mortality Charge rates increase annually as the age of the insured
+              increases, and the risk charge increases as the amount of the
+              policy risk increases.
+            </fo:block>
+            <fo:block padding-top="1em">
+              The policy owner can reduce the likelihood of incurring a
+              significant income tax liability should the policy terminate
+              before the death of the insured, or the need to make substantial
+              payments to keep the policy from terminating by monitoring and
+              reviewing all aspects of the policy on a regular basis with a tax
+              advisor, financial representative and/or financial advisor.
+            </fo:block>
+          </fo:block>
+        </fo:flow>
+
+      </fo:page-sequence>
+
+      <!-- Explanation and Footnotes page 2 -->
+
+      <fo:page-sequence master-reference="explanation-and-footnotes-2">
+
+        <fo:static-content flow-name="xsl-region-before">
+          <xsl:call-template name="plain-header"/>
+          <fo:block font-weight="bold" font-size="11pt" font-family="sans-serif" text-align="center">
+            Explanatory Notes
+          </fo:block>
+        </fo:static-content>
+
+        <!-- Define the contents of the footer. -->
+        <xsl:call-template name="standardfooter"/>
+
+        <fo:flow flow-name="xsl-region-body">
+
+          <fo:block font-weight="normal" font-size="9pt" font-family="sans-serif" text-align="left">
+            <fo:block font-size="10.0pt" font-weight="bold" padding-top="2em" text-decoration="underline">
+              Important Tax Disclosures
             </fo:block>
             <fo:block>
-              The definition of life insurance elected for this Contract is
+              The definition of life insurance elected for this policy is
               <xsl:choose>
                 <xsl:when test="$scalars/DefnLifeIns='GPT'">
                   the guideline premium test. The guideline single premium
@@ -497,7 +603,7 @@
             <fo:block padding-top="1em">
               The initial 7-pay premium limit
               is $<xsl:value-of select="$scalars/InitSevenPayPrem"/>.
-              As illustrated, this contract
+              As illustrated, this policy
               <xsl:choose>
                 <xsl:when test="$scalars/IsMec='1'">
                   fails
@@ -515,102 +621,62 @@
                 </xsl:when>
                 <xsl:otherwise>
                   is not a Modified Endowment Contract (MEC). Subsequent changes
-                  in the contract, including but not limited to increases
-                  and decreases in premiums or benefits, may cause the contract
-                  to be retested and may result in the contract becoming a MEC.
+                  to the policy, including but not limited to increases
+                  and decreases in premiums or benefits, may cause the policy
+                  to be retested and may result in the policy becoming a MEC.
                 </xsl:otherwise>
               </xsl:choose>
             </fo:block>
             <fo:block padding-top="1em">
-              If a contract is a MEC, any distributions are taxed to the extent
-              of any gain in the contract, and an additional 10% penalty tax
-              will apply to the taxable portion of the distribution.
-              The 10% penalty tax applies if the contract owner is an individual
-              under age 59 1/2 and does not meet any applicable exception,
-              or if the contract is owned by a corporation or other entity.
+              If a policy is a MEC, any withdrawals and policy loans are taxed
+              to the extent of any gain in the policy, and an additional penalty
+              tax may apply to the taxable portion of the distribution.
             </fo:block>
             <fo:block font-weight="bold" padding-top="1em">
-              This illustration is not written or intended as tax
-              or legal advice and may not be relied on for purposes
-              of avoiding any federal tax penalties.
-              For more information pertaining to the tax consequences
-              of purchasing or owning this policy, consult with your own
-              independent tax or legal counsel.
+              The information provided in this illustration is not written or
+              intended as tax or legal advice and may not be relied on for
+              purposes of avoiding any federal tax penalties.
+              <xsl:value-of select="$scalars/InsCoShortName"/>, its employees
+              and representatives are not authorized to give tax or legal advice.
+              Individuals are encouraged to seek advice from their own tax or
+              legal counsel.
             </fo:block>
+          </fo:block>
+
+          <!-- Certification Statements -->
+          <fo:block font-weight="bold" font-size="11pt" font-family="sans-serif" text-align="center" padding-top="2em">
+            Certification Statements
+          </fo:block>
+          <fo:block font-weight="normal" font-size="9pt" font-family="sans-serif" text-align="left" padding-top="1em">
             <fo:block padding-top="1em">
-              The state of issue
-              is <xsl:value-of select="$scalars/StatePostalAbbrev"/>.
+              CONTRACT OWNER / APPLICANT
             </fo:block>
-            <xsl:if test="$compliance_tracking_number">
-              <fo:block padding-top="1em">
-                Compliance tracking number:
-                <xsl:value-of select="$compliance_tracking_number"/>
-              </fo:block>
-            </xsl:if>
-            <fo:block padding-top="1em">
-              Please refer to the Contract for a complete explanation
-              of benefits, rights and obligations. In the event
-              of a conflict between the illustration and the Contract,
-              the terms of the Contract will control.
+            <fo:block padding-bottom="1em">
+              I have received a copy of this illustration, and I understand
+              that any non-guaranteed charges illustrated are subject
+              to change and could be either higher or lower. Additionally,
+              I have been informed by my agent that these values
+              are not guaranteed.
             </fo:block>
-            <fo:block padding-top="1em">
-              Internal Rate of Return ("IRR") is an interest rate
-              at which the Premium Outlay illustrated would have to be invested
-              outside the Contract to generate the Cash Surrender Value
-              or Death Benefit. The IRR is illustrative only
-              and does not reflect past or future results.
+            <fo:block text-decoration="overline" padding="2em">
+              CONTRACT OWNER OR APPLICANT SIGNATURE &nbsp;&nbsp;&nbsp;
+              <fo:inline text-decoration="no-overline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</fo:inline>DATE
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             </fo:block>
-            <fo:block padding-top="1em">
-              Placement Agent: <xsl:value-of select="$scalars/MainUnderwriter"/>,
-              <xsl:value-of select="$scalars/MainUnderwriterAddress"/>.
-              <xsl:value-of select="$scalars/MainUnderwriter"/> is a wholly owned
-              subsidiary of <xsl:value-of select="$scalars/InsCoName"/>.
+            <fo:block padding-top="2em">
+              AGENT / AUTHORIZED REPRESENTATIVE
             </fo:block>
-            <fo:block padding-top="1em">
-              This illustration reflects a fixed policy loan interest rate
-              of <xsl:value-of select="$scalars/InitAnnLoanDueRate"/>.
+            <fo:block padding-bottom="1em">
+              I certify that this illustration has been presented
+              to the applicant, and that I have explained that any
+              non-guaranteed charges illustrated are subject to change. I have
+              made no statements that are inconsistent with the illustration.
             </fo:block>
-            <fo:block padding-top="1em">
-              In general, policy loan interest is not deductible. If the policy
-              is owned by a business, deductibility is extremely limited.
-              Please see your tax counsel for advice.
-            </fo:block>
-            <fo:block padding-top="1em">
-              Taking a policy loan could have adverse tax consequences.
-              If your aggregate policy loans substantially exceed
-              your cost basis, you may incur a significant income tax liability
-              if the policy terminates before the insured's death. You may
-              have to make substantial payments to cover policy charges
-              and policy loan interest to prevent termination of the policy
-              and to avoid the potential income tax liability.
-              Some of the indications that such a situation may arise include:
-              (1) high outstanding debt relative to the policy's account value;
-              (2) low account value relative to a high death benefit;
-              and (3) lower than expected interest credited
-              to your account value. You should also understand that generally
-              your insurance risk charge rates increase annually as the age
-              of the insured increases, and that the risk charge increases
-              as the amount of policy risk increases. You can reduce
-              the likelihood that you either will incur a significant income
-              tax liability should your policy terminate before the death
-              of the insured, or that you will need to make substantial payments
-              to keep your policy from terminating by monitoring
-              and reviewing all aspects of your policy on a regular basis
-              with your tax advisor, your financial representative,
-              and/or any other financial advisor you might have.
-            </fo:block>
-            <fo:block padding-top="1em">
-              This illustration must be preceded or accompanied
-              by the current confidential private placement memorandum
-              for <xsl:value-of select="$scalars/PolicyMktgName"/> variable
-              life insurance contract and the current prospectuses
-              and private placement memorandums for its underlying investment
-              choices. Before purchasing a variable life insurance contract,
-              investors should carefully consider the investment objectives,
-              risks, charges and expenses of the variable life insurance
-              contract and its underlying investment choices. Please read
-              the prospectuses and private placement memorandums carefully
-              before investing or sending money.
+            <fo:block text-decoration="overline" padding="2em">
+              AGENT OR AUTHORIZED REPRESENTATIVE
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <fo:inline text-decoration="no-overline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</fo:inline>DATE
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             </fo:block>
           </fo:block>
           <xsl:if test="not($has_supplemental_report)">
@@ -647,6 +713,27 @@
   </xsl:template>
 
   <xsl:template name="standardheader">
+    <xsl:param name="logo_only"/>
+    <fo:table table-layout="fixed" padding-after="2.5pt" font-weight="bold" font-size="13.0pt" font-family="sans-serif">
+      <fo:table-column column-width="50mm"/>
+      <fo:table-column column-width="90mm"/>
+      <fo:table-column column-width="50mm"/>
+      <fo:table-body>
+        <fo:table-row>
+          <fo:table-cell>
+            <fo:block text-align="left">
+              <xsl:call-template name="company-logo"/>
+            </fo:block>
+          </fo:table-cell>
+          <fo:table-cell>
+            <fo:block/>
+          </fo:table-cell>
+          <fo:table-cell>
+            <fo:block/>
+          </fo:table-cell>
+        </fo:table-row>
+      </fo:table-body>
+    </fo:table>
     <xsl:param name="displaycontractlanguage"/>
     <xsl:param name="displaydisclaimer"/>
     <fo:block text-align="center" font-size="9pt">
@@ -666,16 +753,10 @@
       </xsl:if>
       <xsl:if test="$displaydisclaimer=1">
         <fo:block padding-top="1em">
-          The purpose of the Illustration is to show how the performance
-          of the underlying separate account divisions could affect
-          the Contract's cash values and death benefits. This Illustration
-          is hypothetical and may not be used to project
-          or predict investment results.
-        </fo:block>
-        <fo:block padding-top=".5em">
-          This Illustration must be accompanied or preceded
-          by a Confidential Private Placement Memorandum
-          offering the Contract.
+          The purpose of the Illustration is to show how the performance of the
+          underlying separate account divisions could affect the policy's
+          account values and death benefits. This Illustration is hypothetical
+          and may not be used to project or predict investment results.
         </fo:block>
       </xsl:if>
     </fo:block>
@@ -728,7 +809,8 @@
           <fo:table-cell>
             <fo:block text-align="left" font-size="9pt">
               <fo:block>
-                Contract: <xsl:value-of select="$scalars/PolicyMktgName"/>
+                Policy: <xsl:value-of select="$scalars/PolicyMktgName"/>
+                <xsl:value-of select="$registered-symbol"/>
               </fo:block>
               <fo:block/>
               <xsl:if test="not($is_composite)">
@@ -773,6 +855,30 @@
     </fo:block>
   </xsl:template>
 
+  <xsl:template name="plain-header">
+    <xsl:param name="logo_only"/>
+    <fo:table table-layout="fixed" padding-after="2.5pt" font-weight="bold" font-size="13.0pt" font-family="sans-serif">
+      <fo:table-column column-width="50mm"/>
+      <fo:table-column column-width="90mm"/>
+      <fo:table-column column-width="50mm"/>
+      <fo:table-body>
+        <fo:table-row>
+          <fo:table-cell>
+            <fo:block text-align="left">
+              <xsl:call-template name="company-logo"/>
+            </fo:block>
+          </fo:table-cell>
+          <fo:table-cell>
+            <fo:block/>
+          </fo:table-cell>
+          <fo:table-cell>
+            <fo:block/>
+          </fo:table-cell>
+        </fo:table-row>
+      </fo:table-body>
+    </fo:table>
+  </xsl:template>
+
   <xsl:template name="irr-guaranteed-illustration-report">
     <xsl:variable name="irr_guaranteed_illustration_columns_raw">
       <column name="PolicyYear">Policy _Year</column>
@@ -810,7 +916,7 @@
                 <xsl:call-template name="header-cell-with-border"/>
                 <fo:block text-align="center">
                   <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_GuaranteedZero"/>
-                  Gross / Net Rate
+                  Hypothetical Rate of Return*
                 </fo:block>
               </fo:table-cell>
               <fo:table-cell number-columns-spanned="3">
@@ -820,7 +926,7 @@
                 <xsl:call-template name="header-cell-with-border"/>
                 <fo:block text-align="center">
                   <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_Guaranteed"/>
-                  Gross / Net Rate
+                  Hypothetical Rate of Return*
                 </fo:block>
               </fo:table-cell>
             </fo:table-row>
@@ -881,7 +987,7 @@
                 <xsl:call-template name="header-cell-with-border"/>
                 <fo:block text-align="center">
                   <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_CurrentZero"/>
-                  Gross / Net Rate
+                  Hypothetical Rate of Return*
                 </fo:block>
               </fo:table-cell>
               <fo:table-cell number-columns-spanned="3">
@@ -891,7 +997,7 @@
                 <xsl:call-template name="header-cell-with-border"/>
                 <fo:block text-align="center">
                   <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_Current"/>
-                  Gross / Net Rate
+                  Hypothetical Rate of Return*
                 </fo:block>
               </fo:table-cell>
             </fo:table-row>
@@ -942,6 +1048,20 @@
           </xsl:call-template>
 
           <fo:table-header>
+            <!-- Custom part of the table header -->
+            <fo:table-row>
+              <fo:table-cell number-columns-spanned="7">
+                <fo:block/>
+              </fo:table-cell>
+              <fo:table-cell number-columns-spanned="7">
+                <xsl:call-template name="header-cell-with-border"/>
+                <fo:block text-align="center">
+                  <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_Guaranteed"/>
+                  Hypothetical Rate of Return*
+                </fo:block>
+              </fo:table-cell>
+            </fo:table-row>
+
             <!-- Generic part of the table header -->
             <xsl:call-template name="generate-table-headers">
               <xsl:with-param name="columns" select="$columns"/>
@@ -960,6 +1080,8 @@
       </fo:block>
     </fo:flow>
   </xsl:template>
+
+  <xsl:variable name="registered-symbol">&#174;</xsl:variable>
 
   <xsl:template name="get-special-column-value">
     <xsl:param name="special"/>
@@ -987,28 +1109,24 @@
     <xsl:param name="omit-pagenumber" select="boolean(0)"/>
     <xsl:param name="omit-disclaimer" select="boolean(0)"/>
     <xsl:call-template name="generic-footer">
-      <xsl:with-param name="top-block">
-        <xsl:if test="not($omit-disclaimer)">
-          This Illustration is not a contract, or an offer or solicitation
-          to enter into a contract. Illustrated values are based on
-          the investment earnings assumptions shown above and are
-          not guaranteed. Values based on current charges reflect applicable
-          fees and charges which are subject to change. There are no guaranteed
-          values under this contract. The impact of tax requirements
-          is not reflected in these values. Consult your tax advisor.
-        </xsl:if>
-      </xsl:with-param>
+
       <xsl:with-param name="left-block">
         <fo:block><xsl:value-of select="$scalars/InsCoName"/></fo:block>
         <fo:block><xsl:value-of select="$scalars/InsCoAddr"/></fo:block>
       </xsl:with-param>
-      <xsl:with-param name="right-block">
+      <xsl:with-param name="center-block">
         <xsl:if test="$scalars/LmiVersion!=''">
           <fo:block>
             System Version:
             <xsl:value-of select="$scalars/LmiVersion"/>
           </fo:block>
         </xsl:if>
+      </xsl:with-param>
+      <xsl:with-param name="right-block">
+        <fo:block>
+          Policy Form:
+          <xsl:value-of select="$scalars/PolicyForm"/>
+        </fo:block>
         <fo:block>
           <xsl:choose>
             <xsl:when test="not($omit-pagenumber)">
@@ -1020,6 +1138,7 @@
           </xsl:choose>
         </fo:block>
       </xsl:with-param>
+
     </xsl:call-template>
   </xsl:template>
 
