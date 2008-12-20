@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1227 2008-12-20 19:03:53 wboutin Exp $
+// $Id: ChangeLog,v 1.1228 2008-12-20 19:21:54 wboutin Exp $
 
 MAINTENANCE
 
@@ -20937,4 +20937,9 @@ Load input files faster (Vaclav). See:
   reg_d_group.xsl
   reg_d_individual.xsl
 Conform to recent compliance requirements.
+
+20081220T1920Z <wboutin@massmutual.com> [878]
+
+  illustration_reg.xsl
+Fix a longstanding defect.
 

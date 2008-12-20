@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.70 2008-12-20 19:03:52 wboutin Exp $
+    $Id: illustration_reg.xsl,v 1.71 2008-12-20 19:21:54 wboutin Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -513,35 +513,23 @@ to the xsl files first.
               IMPORTANT TAX DISCLOSURE
             </fo:block>
             <fo:block padding-top="1em">
-              <!-- Single Premium Logic -->
+              As illustrated, this contract
               <xsl:choose>
-                <xsl:when test="$SinglePremium!='1'">
-                  As illustrated, this contract
-                  <xsl:choose>
-                    <xsl:when test="$scalars/IsMec='1'">
-                      becomes
-                    </xsl:when>
-                    <xsl:otherwise>
-                      would not become
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  a Modified Endowment Contract (MEC)
-                  under the Internal Revenue Code<!-- prevent trailing space -->
-                  <xsl:if test="$scalars/IsMec='1'">
-                      in year <xsl:value-of select="$scalars/MecYear+1"/>
-                  </xsl:if>.
-                  To the extent of gain in the contract, loans, distributions
-                  and withdrawals from a MEC are subject to income tax
-                  and may also trigger a penalty tax.
+                <xsl:when test="$scalars/IsMec='1'">
+                  becomes
                 </xsl:when>
                 <xsl:otherwise>
-                  This contract is a Modified Endowment Contract (MEC)
-                  under the Internal Revenue Code. To the extent of gain
-                  in the contract, loans, distributions and withdrawals
-                  from a MEC are subject to income tax and may also trigger
-                  a penalty tax.
+                  would not become
                 </xsl:otherwise>
               </xsl:choose>
+              a Modified Endowment Contract (MEC)
+              under the Internal Revenue Code<!-- prevent trailing space -->
+              <xsl:if test="$scalars/IsMec='1'">
+                in year <xsl:value-of select="$scalars/MecYear+1"/>
+              </xsl:if>.
+              To the extent of gain in the contract, loans, distributions
+              and withdrawals from a MEC are subject to income tax
+              and may also trigger a penalty tax.
             </fo:block>
             <!-- Single Premium Logic -->
             <xsl:if test="$SinglePremium!='1' and $scalars/IsInforce!='1'">
