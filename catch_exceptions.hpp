@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: catch_exceptions.hpp,v 1.8 2008-01-31 18:56:27 chicares Exp $
+// $Id: catch_exceptions.hpp,v 1.9 2008-12-26 04:46:33 chicares Exp $
 
 // This is a derived work based on Beman Dawes's boost test library
 // that bears the following copyright and license statement:
@@ -113,51 +113,51 @@ namespace lmi_test
     // required, but it doesn't hurt and some programmers ask for it.
 
         catch(char const* e)
-            {detail::report_exception(out, "", e);}
+            {detail::report_exception(out, ""                      , e);}
         catch(std::string const& e)
-            {detail::report_exception(out, "", e.c_str());}
+            {detail::report_exception(out, ""                      , e.c_str());}
 
         // std:: exceptions
         catch(std::bad_alloc const& e)
-            {detail::report_exception( out, "std::bad_alloc:", e.what());}
+            {detail::report_exception(out, "std::bad_alloc:"       , e.what());}
 
 #if !defined(__BORLANDC__) || 0x0551 < __BORLANDC__
         catch(std::bad_cast const& e)
-            {detail::report_exception(out, "std::bad_cast:", e.what());}
+            {detail::report_exception(out, "std::bad_cast:"        , e.what());}
         catch(std::bad_typeid const& e)
-            {detail::report_exception(out, "std::bad_typeid:", e.what());}
+            {detail::report_exception(out, "std::bad_typeid:"      , e.what());}
 #else // Old borland compiler.
         catch(std::bad_cast const&)
-            {detail::report_exception(out, "std::bad_cast", "");}
+            {detail::report_exception(out, "std::bad_cast"         , "");}
         catch(std::bad_typeid const&)
-            {detail::report_exception(out, "std::bad_typeid", "");}
+            {detail::report_exception(out, "std::bad_typeid"       , "");}
 #endif // Old borland compiler.
 
         catch(std::bad_exception const& e)
-            {detail::report_exception(out, "std::bad_exception:", e.what());}
+            {detail::report_exception(out, "std::bad_exception:"   , e.what());}
         catch(std::domain_error const& e)
-            {detail::report_exception(out, "std::domain_error:", e.what());}
+            {detail::report_exception(out, "std::domain_error:"    , e.what());}
         catch(std::invalid_argument const& e)
             {detail::report_exception(out, "std::invalid_argument:", e.what());}
         catch(std::length_error const& e)
-            {detail::report_exception(out, "std::length_error:", e.what());}
+            {detail::report_exception(out, "std::length_error:"    , e.what());}
         catch(std::out_of_range const& e)
-            {detail::report_exception(out, "std::out_of_range:", e.what());}
+            {detail::report_exception(out, "std::out_of_range:"    , e.what());}
         catch(std::range_error const& e)
-            {detail::report_exception(out, "std::range_error:", e.what());}
+            {detail::report_exception(out, "std::range_error:"     , e.what());}
         catch(std::overflow_error const& e)
-            {detail::report_exception(out, "std::overflow_error:", e.what());}
+            {detail::report_exception(out, "std::overflow_error:"  , e.what());}
         catch(std::underflow_error const& e)
-            {detail::report_exception(out, "std::underflow_error:", e.what());}
+            {detail::report_exception(out, "std::underflow_error:" , e.what());}
         catch(std::logic_error const& e)
-            {detail::report_exception(out, "std::logic_error:", e.what());}
+            {detail::report_exception(out, "std::logic_error:"     , e.what());}
         catch(std::runtime_error const& e)
-            {detail::report_exception(out, "std::runtime_error:", e.what());}
+            {detail::report_exception(out, "std::runtime_error:"   , e.what());}
         catch(std::exception const& e)
-            {detail::report_exception(out, "std::exception:", e.what());}
+            {detail::report_exception(out, "std::exception:"       , e.what());}
 
         catch(...)
-            {detail::report_exception(out, "unknown exception", "");}
+            {detail::report_exception(out, "unknown exception"     , "");}
 
         if(exception_thrown) result = lmi_test::exit_exception_failure;
 

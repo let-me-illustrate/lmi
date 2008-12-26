@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1229 2008-12-20 20:01:59 wboutin Exp $
+// $Id: ChangeLog,v 1.1230 2008-12-26 04:46:33 chicares Exp $
 
 MAINTENANCE
 
@@ -20930,7 +20930,7 @@ Refine the 20081207T0049Z tax-basis-solve calculation.
 Load input files faster (Vaclav). See:
   http://lists.nongnu.org/archive/html/lmi/2008-12/msg00014.html
 
-20081220T1902Z <wboutin@massmutual.com> [878]
+20081220T1903Z <wboutin@massmutual.com> [878]
 
   illustration_reg.xsl
   nasd.xsl
@@ -20938,15 +20938,32 @@ Load input files faster (Vaclav). See:
   reg_d_individual.xsl
 Conform to recent compliance requirements.
 
-20081220T1920Z <wboutin@massmutual.com> [878]
+20081220T1921Z <wboutin@massmutual.com> [878]
 
   illustration_reg.xsl
 Fix a longstanding defect.
 
-20081220T2000Z <wboutin@massmutual.com> [878]
+20081220T2001Z <wboutin@massmutual.com> [878]
 
   skin_coli_boli.xrc
   skin_group_carveout.xrc
   skin_reg_d.xrc
 Provide GUI access to solve for surrender value equal to tax basis.
+
+20081226T0445Z <gchicares@sbcglobal.net> [878]
+
+  autodependency.make
+  como_4_3_3.make
+  docmanager_ex.cpp
+  main_wx.cpp
+  platform_dependent.hpp
+  rtti_lmi.hpp
+  workhorse.make
+Improve documentation.
+
+20081226T0446Z <gchicares@sbcglobal.net> [878]
+
+  catch_exceptions.hpp
+  transferor.hpp
+Improve layout.
 
