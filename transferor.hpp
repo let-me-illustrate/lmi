@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: transferor.hpp,v 1.7 2008-02-07 13:40:31 chicares Exp $
+// $Id: transferor.hpp,v 1.8 2008-12-26 04:46:33 chicares Exp $
 
 // Acknowledgment
 
@@ -72,10 +72,10 @@ enum transfer_direction
 ///   wxChoice       * str = GetStringSelection()   SetStringSelection(*str)
 ///   wxComboBox     * int = GetSelection()         SetSelection(*int)
 ///                  * str = GetValue()             SetStringSelection(*str)
-///                                                SetValue(*str)
+///                                                 SetValue(*str)
 ///   wxGauge        * int = GetValue()             SetValue(*int)
 ///   wxListBox      * str = GetStringSelection()   SetStringSelection(*str)
-///                  if(Selected(i)) array->Add(i) SetSelection(array->Item(i))
+///                  if(Selected(i)) array->Add(i)  SetSelection(array->Item(i))
 ///   wxRadioBox     * int = GetSelection()         SetSelection(*int)
 ///                  * str = GetStringSelection()   SetStringSelection(*str)
 ///   wxRadioButton  * int = GetValue()             SetValue(*int)
