@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.132 2008-11-23 13:40:24 chicares Exp $
+# $Id: workhorse.make,v 1.133 2008-12-26 04:45:18 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -614,8 +614,8 @@ REQUIRED_ARFLAGS = \
 # they're both binaries and libraries in a sense. These two
 # subdirectories seem to be the most popular choices, and usage
 # varies, at least for msw:
-#  - libxml2 and mpatrol put their dlls in bin/
 #  - wx-2.7.0 built with autotools puts its dll in lib/
+#  - libxml2 and mpatrol put their dlls in bin/
 # It is crucial to list these two subdirectories in exactly the order
 # given. If they were specified in reverse order, then gnu 'ld' would
 # find a dll before its import library, which latter would therefore

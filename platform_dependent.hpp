@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: platform_dependent.hpp,v 1.14 2008-06-24 13:31:43 chicares Exp $
+// $Id: platform_dependent.hpp,v 1.15 2008-12-26 04:45:18 chicares Exp $
 
 #ifndef platform_dependent_hpp
 #define platform_dependent_hpp
@@ -86,6 +86,16 @@
     // so just complain.
 #   error Unknown platform. Consider contributing support.
 #endif // Unknown platform.
+
+// Formerly, this function
+//   extern "C" int getch();
+// was provided for above, thus:
+//   #include <curses.h> // getch()
+// for posix, and similarly for msw. However, the 'curses' header
+// pollutes the global namespace intolerably with ill-named macros:
+//   http://lists.nongnu.org/archive/html/lmi/2008-06/msg00045.html
+// and therefore a prototype for getch() is instead provided by other
+// means, locally, wherever it's needed.
 
 // GNU/Linux (but not MinGW) requires including certain headers while
 // __STRICT_ANSI__ is not defined in order to get prototypes for
