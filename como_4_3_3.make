@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: como_4_3_3.make,v 1.30 2008-11-23 00:32:20 chicares Exp $
+# $Id: como_4_3_3.make,v 1.31 2008-12-26 04:45:18 chicares Exp $
 
 # Limited workarounds for Comeau C++ version 4.3.3, using gcc as the
 # underlying C compiler, with a Cygwin shell. Comeau C++ is useful
@@ -115,6 +115,7 @@ CPPFLAGS := \
   -D_X86_ \
 
 CC                 := gcc
+# Overridden below, but only after use for $(LD):
 CXX                := como
 
 C_WARNINGS         :=
@@ -177,6 +178,8 @@ CXXFLAGS := $(nonstrict_cxxflags) --no_prelink_verbose
 # special case if necessary.
 
 LD := $(CXX)
+
+LDFLAGS :=
 
 # Library order is crucial.
 #

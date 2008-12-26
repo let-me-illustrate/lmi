@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: docmanager_ex.cpp,v 1.16 2008-12-16 02:28:31 chicares Exp $
+// $Id: docmanager_ex.cpp,v 1.17 2008-12-26 04:45:18 chicares Exp $
 
 // This implementation is a derived work based on wxWindows code, viz.
 //   samples/printing/printing.cpp (C) 1995 Julian Smart
@@ -59,8 +59,8 @@ BEGIN_EVENT_TABLE(DocManagerEx, wxDocManager)
     EVT_MENU(wxID_PAGE_SETUP, DocManagerEx::UponPageSetup)
 END_EVENT_TABLE()
 
-// WX !! Could printer settings should be set globally, OAOO,
-// for all classes that ought to use them? It was reported that
+// WX !! Printer settings should be configured globally, OAOO,
+// for all classes that ought to use them. It was reported that
 // 'A4' was used unless explicitly overridden, but it seems
 // that the paper id was actually wxPAPER_NONE; if that causes
 // 'A4' to be used, then should wx instead use wxPAPER_LETTER in

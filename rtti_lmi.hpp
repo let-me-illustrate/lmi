@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rtti_lmi.hpp,v 1.9 2008-04-29 23:08:30 chicares Exp $
+// $Id: rtti_lmi.hpp,v 1.10 2008-12-26 04:45:18 chicares Exp $
 
 #ifndef rtti_lmi_hpp
 #define rtti_lmi_hpp
@@ -45,8 +45,8 @@ namespace lmi
   namespace detail
   {
     /// Demangle C++ names. Only gcc is supported at this time, and
-    /// only from version 4, because the gcc-3.x demangler so gravely
-    /// broken that it actually segfaults on some input: see
+    /// only from version 4, because the gcc-3.x demangler is so
+    /// gravely broken that it actually segfaults on some input: see
     ///   http://article.gmane.org/gmane.comp.gnu.mingw.user/19874/
     ///     [2006-06-08T16:41:35Z from Greg Chicares]
     ///   http://sf.net/tracker/?func=detail&atid=102435&aid=1504421&group_id=2435
