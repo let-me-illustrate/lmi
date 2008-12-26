@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.125 2008-12-12 01:30:33 chicares Exp $
+// $Id: main_wx.cpp,v 1.126 2008-12-26 04:45:18 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -529,9 +529,12 @@ void Skeleton::UponHelp(wxCommandEvent&)
 /// For MinGW gcc-3.4.4 and earlier
 ///   http://article.gmane.org/gmane.comp.gnu.mingw.user/18594
 ///     [2006-01-10T22:00:24Z from Danny Smith]
-/// it is crucial that the exception be thrown from the same shared
-/// library that caught it. This workaround requires a 'monolithic'
-/// wx shared library.
+/// it is crucial that the exception be rethrown from the same shared
+/// library that caught it. That need is met by calling a base class's
+/// OnExceptionInMainLoop() explicitly; since wx-2.7 at least, that
+/// function is provided by class wxAppBase, but some earlier versions
+/// provide it only in class wxAppConsole, and the latter requires a
+/// 'monolithic' wx shared library.
 
 bool Skeleton::OnExceptionInMainLoop()
 {

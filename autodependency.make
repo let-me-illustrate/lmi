@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: autodependency.make,v 1.15 2008-04-11 14:42:26 chicares Exp $
+# $Id: autodependency.make,v 1.16 2008-12-26 04:45:18 chicares Exp $
 
 ################################################################################
 
@@ -115,6 +115,12 @@ MAKEDEPEND_NON_GCC_COMMAND = \
     $(compiler_impersonation_cppflags) \
     -MM $(common_autodependency_flags) \
     $< \
+
+# A problem can arise if cpp fails abnormally:
+#   http://mail.gnu.org/archive/html/help-make/2004-01/msg00065.html
+# In that case, empty dependency files may be created, which prevent
+# make from working correctly. I know of no better method to handle
+# this than to check for zero-byte '.d' files explicitly.
 
 -include *.d
 *.d:: ;
