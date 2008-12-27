@@ -1,6 +1,6 @@
 # Top-level lmi makefile.
 #
-# Copyright (C) 2005, 2006, 2007, 2008 Gregory W. Chicares.
+# Copyright (C) 2005, 2006, 2007, 2008, 2009 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -16,10 +16,10 @@
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 #
 # http://savannah.nongnu.org/projects/lmi
-# email: <chicares@cox.net>
+# email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.128 2008-07-19 14:50:18 chicares Exp $
+# $Id: GNUmakefile,v 1.129 2008-12-27 02:56:35 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -254,7 +254,7 @@ gpl_notices := \
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA\n\
 //\n\
 // http://savannah.nongnu.org/projects/lmi\n\
-// email: <chicares@cox.net>\n\
+// email: <gchicares@sbcglobal.net>\n\
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA\n\
 \n\
 // $$\rId: $$\n\
@@ -360,8 +360,8 @@ cvs_ready: source_clean
 
 # Update copyright notices.
 
-old_year := 2007
-new_year := 2008
+old_year := 2008
+new_year := 2009
 
 backup_directory := saved_$(old_year)
 

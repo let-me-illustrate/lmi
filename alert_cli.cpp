@@ -1,6 +1,6 @@
 // Alert messages for command-line interface.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -16,10 +16,10 @@
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
 // http://savannah.nongnu.org/projects/lmi
-// email: <chicares@cox.net>
+// email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_cli.cpp,v 1.15 2008-06-24 13:31:43 chicares Exp $
+// $Id: alert_cli.cpp,v 1.16 2008-12-27 02:56:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"

@@ -1,6 +1,6 @@
 // Precision for lossless floating-point I/O.
 //
-// Copyright (C) 2002, 2004, 2005, 2006, 2007, 2008 Gregory W. Chicares.
+// Copyright (C) 2002, 2004, 2005, 2006, 2007, 2008, 2009 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -16,10 +16,10 @@
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
 // http://savannah.nongnu.org/projects/lmi
-// email: <chicares@cox.net>
+// email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: max_stream_precision.hpp,v 1.6 2008-01-01 18:29:48 chicares Exp $
+// $Id: max_stream_precision.hpp,v 1.7 2008-12-27 02:56:48 chicares Exp $
 
 #ifndef max_stream_precision_hpp
 #define max_stream_precision_hpp

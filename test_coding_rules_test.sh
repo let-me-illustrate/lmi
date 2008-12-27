@@ -2,7 +2,7 @@
 
 # Test files for consistency with various rules: unit test.
 
-# Copyright (C) 2007, 2008 Gregory W. Chicares.
+# Copyright (C) 2007, 2008, 2009 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -18,10 +18,10 @@
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 #
 # http://savannah.nongnu.org/projects/lmi
-# email: <chicares@cox.net>
+# email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: test_coding_rules_test.sh,v 1.42 2008-10-03 17:08:35 chicares Exp $
+# $Id: test_coding_rules_test.sh,v 1.43 2008-12-27 02:56:57 chicares Exp $
 
 echo "Testing 'test_coding_rules'."
 
