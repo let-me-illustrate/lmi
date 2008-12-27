@@ -1,6 +1,6 @@
 dnl configure.ac script for lmi, process with autoconf to create configure
 dnl
-dnl Copyright (C) 2005, 2006, 2007, 2008 Vadim Zeitlin.
+dnl Copyright (C) 2005, 2006, 2007, 2008, 2009 Vadim Zeitlin.
 dnl
 dnl This program is free software; you can redistribute it and/or modify
 dnl it under the terms of the GNU General Public License version 2 as
@@ -16,15 +16,15 @@ dnl along with this program; if not, write to the Free Software Foundation,
 dnl Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 dnl
 dnl http://savannah.nongnu.org/projects/lmi
-dnl email: <chicares@cox.net>
+dnl email: <gchicares@sbcglobal.net>
 dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.43 2008-10-31 13:17:53 vslavik Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.44 2008-12-27 02:56:38 chicares Exp $)dnl
 
 AC_PREREQ(2.56)
-AC_INIT(LMI, 1.0.0, [chicares@cox.net])
+AC_INIT(LMI, 1.0.0, [gchicares@sbcglobal.net])
 AM_INIT_AUTOMAKE()
 
 AC_CONFIG_SRCDIR([lmi.png])

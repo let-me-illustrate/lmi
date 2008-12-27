@@ -1,5 +1,5 @@
 /* This is public domain. It's not
- *   "Copyright (C) 2005, 2006, 2007, 2008 Gregory W. Chicares"
+ *   "Copyright (C) 2005, 2006, 2007, 2008, 2009 Gregory W. Chicares"
  * but including that quoted string satisfies lmi's style-conformity
  * tests. Eventually this will become part of MinGW and cygwin, and
  * will then be removed from the lmi repository. Find the original at:
@@ -9,7 +9,7 @@
  */
 
 /*
- * Written 2005 by Gregory W. Chicares <chicares@cox.net>.
+ * Written 2005 by Gregory W. Chicares <gchicares@sbcglobal.net>.
  * Adapted to double by Danny Smith <dannysmith@users.sourceforge.net>.
  * Public domain.
  *
@@ -39,10 +39,10 @@ long double expm1l(long double x);
 
 /*
  * http://savannah.nongnu.org/projects/lmi
- * email: <chicares@cox.net>
+ * email: <gchicares@sbcglobal.net>
  * snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
  *
- * $Id: expm1.c,v 1.10 2008-06-23 18:27:27 chicares Exp $
+ * $Id: expm1.c,v 1.11 2008-12-27 02:56:40 chicares Exp $
  *
  * End local GWC modifications. */
 
