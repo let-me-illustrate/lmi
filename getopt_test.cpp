@@ -19,7 +19,7 @@
 // the reputations of Douglas C. Schmidt or Vinicius J. Latorre.
 //
 // GWC modifications are
-//   Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Gregory W. Chicares
+//   Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Gregory W. Chicares
 // and released with the same licensing terms as the original, viz.:
 
 // This file is part of the GNU C++ Library.  This library is free
@@ -36,11 +36,11 @@
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 
 // http://savannah.nongnu.org/projects/lmi
-// email: <chicares@cox.net>
+// email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt_test.cpp,v 1.7 2008-01-01 18:29:41 chicares Exp $
+// $Id: getopt_test.cpp,v 1.8 2008-12-27 02:56:42 chicares Exp $
 
 // GWC added this to conform to LMI standards.
 #ifdef __BORLANDC__

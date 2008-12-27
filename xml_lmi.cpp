@@ -1,6 +1,6 @@
 // Interface to xmlwrapp.
 //
-// Copyright (C) 2006, 2007, 2008 Gregory W. Chicares.
+// Copyright (C) 2006, 2007, 2008, 2009 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -16,10 +16,10 @@
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
 // http://savannah.nongnu.org/projects/lmi
-// email: <chicares@cox.net>
+// email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.19 2008-08-02 23:30:32 chicares Exp $
+// $Id: xml_lmi.cpp,v 1.20 2008-12-27 02:56:59 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"

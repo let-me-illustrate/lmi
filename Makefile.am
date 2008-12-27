@@ -1,7 +1,7 @@
 # Master automake makefile, run automake to generate Makefile.am from it (this
 # is also done by autogen.sh script)
 #
-# Copyright (C) 2005, 2006, 2007, 2008 Vadim Zeitlin.
+# Copyright (C) 2005, 2006, 2007, 2008, 2009 Vadim Zeitlin.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -17,10 +17,10 @@
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 #
 # http://savannah.nongnu.org/projects/lmi
-# email: <chicares@cox.net>
+# email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.69 2008-12-10 22:47:52 vslavik Exp $
+# $Id: Makefile.am,v 1.70 2008-12-27 02:56:35 chicares Exp $
 
 SUBDIRS = third_party
 

@@ -1,6 +1,6 @@
 // SGI extensions to STL.
 //
-// Copyright (C) 2001, 2002, 2005, 2006, 2007, 2008 Gregory W. Chicares.
+// Copyright (C) 2001, 2002, 2005, 2006, 2007, 2008, 2009 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -16,10 +16,10 @@
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
 // http://savannah.nongnu.org/projects/lmi
-// email: <chicares@cox.net>
+// email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stl_extensions.hpp,v 1.2 2008-01-01 18:29:55 chicares Exp $
+// $Id: stl_extensions.hpp,v 1.3 2008-12-27 02:56:55 chicares Exp $
 
 // Copyright (C) 1994
 // Hewlett-Packard Company

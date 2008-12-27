@@ -1,6 +1,6 @@
 // Test files for consistency with various rules.
 //
-// Copyright (C) 2006, 2007, 2008 Gregory W. Chicares.
+// Copyright (C) 2006, 2007, 2008, 2009 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -16,10 +16,10 @@
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
 // http://savannah.nongnu.org/projects/lmi
-// email: <chicares@cox.net>
+// email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.81 2008-11-19 02:33:30 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.82 2008-12-27 02:56:56 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"

@@ -1,6 +1,6 @@
 // Decimal conversion between std::string and arithmetic types.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -16,10 +16,10 @@
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
 // http://savannah.nongnu.org/projects/lmi
-// email: <chicares@cox.net>
+// email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_cast.hpp,v 1.16 2008-04-29 23:08:29 chicares Exp $
+// $Id: numeric_io_cast.hpp,v 1.17 2008-12-27 02:56:51 chicares Exp $
 
 #ifndef numeric_io_cast_hpp
 #define numeric_io_cast_hpp

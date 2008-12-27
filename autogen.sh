@@ -4,7 +4,7 @@
 # sources from a version control system: this script creates all generated
 # files which are needed for the build but not stored under version control.
 #
-# Copyright (C) 2005, 2006, 2007, 2008 Vadim Zeitlin.
+# Copyright (C) 2005, 2006, 2007, 2008, 2009 Vadim Zeitlin.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -20,10 +20,10 @@
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 #
 # http://savannah.nongnu.org/projects/lmi
-# email: <chicares@cox.net>
+# email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: autogen.sh,v 1.8 2008-10-03 10:41:44 vslavik Exp $
+# $Id: autogen.sh,v 1.9 2008-12-27 02:56:37 chicares Exp $
 
 if [ ! -f configure.ac -o ! -f Makefile.am -o ! -f lmi.png ]; then
     echo "Please run this script from the lmi source directory."
