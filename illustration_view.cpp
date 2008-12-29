@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.100 2008-12-27 02:56:45 chicares Exp $
+// $Id: illustration_view.cpp,v 1.101 2008-12-29 06:09:32 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -174,7 +174,12 @@ wxMenuBar* IllustrationView::MenuBar() const
     return MenuBarFromXmlResource("illustration_view_menu");
 }
 
-// This virtual function calls the base-class version explicitly.
+/// This virtual function calls its base-class namesake explicitly.
+///
+/// Trap any exception thrown by EditProperties() to ensure that this
+/// function returns 'false' on failure, lest wx's doc-view framework
+/// create a zombie view. See:
+///   http://lists.nongnu.org/archive/html/lmi/2008-12/msg00017.html
 
 bool IllustrationView::OnCreate(wxDocument* doc, long int flags)
 {
@@ -184,8 +189,16 @@ bool IllustrationView::OnCreate(wxDocument* doc, long int flags)
         return ViewEx::OnCreate(doc, flags);
         }
 
-    if(wxID_OK != EditProperties())
+    try
         {
+        if(wxID_OK != EditProperties())
+            {
+            return false;
+            }
+        }
+    catch(...)
+        {
+        report_exception();
         return false;
         }
 
