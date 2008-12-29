@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1232 2008-12-27 02:56:35 chicares Exp $
+// $Id: ChangeLog,v 1.1233 2008-12-29 06:09:32 chicares Exp $
 
 MAINTENANCE
 
@@ -21436,4 +21436,20 @@ Mark release candidate.
   zero.hpp
   zero_test.cpp
 Update copyright notice and email address.
+
+20081229T0607Z <gchicares@sbcglobal.net> [878]
+
+  config.hpp
+Import selected changes from skeleton trunk.
+
+20081229T0608Z <gchicares@sbcglobal.net> [878]
+
+  about_dialog.cpp
+Improve documentation.
+
+20081229T0609Z <gchicares@sbcglobal.net> [878]
+
+  illustration_view.cpp
+Trap an exception to prevent an unpleasant GUI consequence. See:
+  http://lists.nongnu.org/archive/html/lmi/2008-12/msg00017.html
 
