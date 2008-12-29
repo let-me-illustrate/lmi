@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: about_dialog.cpp,v 1.12 2008-12-27 02:56:35 chicares Exp $
+// $Id: about_dialog.cpp,v 1.13 2008-12-29 06:08:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -55,7 +55,7 @@ AboutDialog::~AboutDialog()
 {
 }
 
-/// This virtual function calls the base-class version at the end.
+/// This virtual function calls its base-class namesake explicitly.
 
 int AboutDialog::ShowModal()
 {
