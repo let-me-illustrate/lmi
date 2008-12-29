@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config.hpp,v 1.25 2008-12-27 02:56:38 chicares Exp $
+// $Id: config.hpp,v 1.26 2008-12-29 06:07:16 chicares Exp $
 
 // Configuration header for compiler quirks. Include at the beginning of
 // every .hpp file (and nowhere else).
@@ -44,9 +44,10 @@ namespace fs = boost::filesystem;
 // I define macro LMI_POSIX not to avoid saying "POSIX", but because
 // someone might point out a better way to detect POSIX, and a macro
 // defined in only one place can easily be modified. There seems to be
-// no direct way to detect POSIX, though, so I look for common macros
-// that regrettably use four characters that could be taken as naming
-// a non-free operating system.
+// no direct way to detect POSIX, though, so I use common macros that
+// regrettably appear to name a non-free operating system.
+//
+// Reference: http://predef.sourceforge.net/preos.html
 
 #if defined unix || defined __unix__ || defined __unix // Detected POSIX.
 #   define LMI_POSIX
@@ -56,11 +57,13 @@ namespace fs = boost::filesystem;
 #   error Unknown operating system. Consider contributing support.
 #endif // Unknown OS.
 
+// Reference: http://predef.sourceforge.net/prearch.html
+
 #if defined __x86_64 || defined __x86_64__ || defined __amd64 || defined __amd64__ || defined _M_X64
 #   define LMI_X86
 #   define LMI_X86_64
 #elif defined _X86_ || defined _M_IX86 || defined i386 || defined __i386
-// Not amd64, so presumably x86-32.
+    // Not amd64, so presumably x86-32.
 #   define LMI_X86
 #   define LMI_X86_32
 #else  // Unknown hardware.
