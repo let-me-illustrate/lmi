@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: system_command_non_wx.cpp,v 1.4 2008-12-27 02:56:56 chicares Exp $
+// $Id: system_command_non_wx.cpp,v 1.5 2008-12-31 21:55:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -74,7 +74,7 @@ void concrete_system_command(std::string const& command_line)
 
     char* non_const_cmd_line_copy = new char[1 + command_line.size()];
     std::strcpy(non_const_cmd_line_copy, command_line.c_str());
-    ::CreateProcess
+    ::CreateProcessA
         (0
         ,non_const_cmd_line_copy
         ,0
