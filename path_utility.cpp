@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: path_utility.cpp,v 1.22 2008-12-27 02:56:52 chicares Exp $
+// $Id: path_utility.cpp,v 1.23 2008-12-31 21:54:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -206,7 +206,7 @@ std::string serial_extension
 ///
 /// It is necessary to call orthodox_filename() on the insured's name
 /// in case it contains a character (probably whitespace) that might
-/// be fail a boost::filesystem name check.
+/// fail a boost::filesystem name check.
 
 fs::path serial_file_path
     (fs::path const&    exemplar
