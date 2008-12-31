@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_wx.cpp,v 1.19 2008-12-27 02:56:36 chicares Exp $
+// $Id: alert_wx.cpp,v 1.20 2008-12-31 21:54:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -125,7 +125,7 @@ void fatal_error_alert(std::string const& s)
 /// Show a message reliably, even before initialization has finished
 /// or after termination has begun.
 ///
-/// The msw implementation of wxSafeShowMessage() uses ::MessageBox()
+/// The msw implementation of wxSafeShowMessage() uses ::MessageBoxA()
 /// with a null parent, which adds an undesirable extra "task" to the
 /// alt-Tab order, yet doesn't disable the application's top window.
 ///
