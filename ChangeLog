@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1233 2008-12-29 06:09:32 chicares Exp $
+// $Id: ChangeLog,v 1.1234 2008-12-31 21:55:20 chicares Exp $
 
 MAINTENANCE
 
@@ -21452,4 +21452,22 @@ Improve documentation.
   illustration_view.cpp
 Trap an exception to prevent an unpleasant GUI consequence. See:
   http://lists.nongnu.org/archive/html/lmi/2008-12/msg00017.html
+
+20081231T2153Z <gchicares@sbcglobal.net> [878]
+
+  ihs_avmly.cpp
+Update copyright notice.
+
+20081231T2154Z <gchicares@sbcglobal.net> [878]
+
+  alert_wx.cpp
+  path_utility.cpp
+Improve documentation.
+
+20081231T2155Z <gchicares@sbcglobal.net> [878]
+
+  msw_workarounds.cpp
+  system_command_non_wx.cpp
+Accommodate wx unicode builds (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2008-12/msg00029.html
 
