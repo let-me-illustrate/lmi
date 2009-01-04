@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.82 2008-12-27 02:56:56 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.83 2009-01-04 02:39:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -145,6 +145,14 @@ class file
 /// Add a '\n' sentry at the beginning of the string for the reason
 /// explained in 'regex_test.cpp'.
 ///
+/// Files
+///   ChangeLog-2004-and-prior *.txt *.xpm
+/// occur in the skeleton trunk, and are treated as though they were
+/// binary so that they are in effect ignored: the first because it's
+/// historical and doesn't conform to the e_log rules, and the rest
+/// because they don't fit in any general category: for instance, the
+/// '.txt' files may contain carriage returns.
+///
 /// Phylum 'e_ephemeral' is used for this program's unit test, so
 /// assign files to that phylum last, and only if they fit no other.
 
@@ -172,9 +180,12 @@ file::file(std::string const& file_path)
         throw std::runtime_error("Failure in file input stream.");
         }
 
+    // Sort these lists by enumerator, but keep 'e_ephemeral' last.
     phylum_ =
           ".ico"        == extension() ? e_binary
         : ".png"        == extension() ? e_binary
+        : ".txt"        == extension() ? e_binary
+        : ".xpm"        == extension() ? e_binary
         : ".h"          == extension() ? e_c_header
         : ".c"          == extension() ? e_c_source
         : ".hpp"        == extension() ? e_cxx_header
@@ -199,6 +210,7 @@ file::file(std::string const& file_path)
         : ".xrc"        == extension() ? e_xml_other
         : ".xsd"        == extension() ? e_xml_other
         : ".xsl"        == extension() ? e_xml_other
+        : phyloanalyze("^ChangeLog-")  ? e_binary
         : phyloanalyze("^COPYING$")    ? e_gpl
         : phyloanalyze("^quoted_gpl")  ? e_gpl
         : phyloanalyze("Log$")         ? e_log
