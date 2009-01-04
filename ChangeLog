@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1234 2008-12-31 21:55:20 chicares Exp $
+// $Id: ChangeLog,v 1.1235 2009-01-04 02:40:26 chicares Exp $
 
 MAINTENANCE
 
@@ -21470,4 +21470,21 @@ Improve documentation.
   system_command_non_wx.cpp
 Accommodate wx unicode builds (VZ). See:
   http://lists.nongnu.org/archive/html/lmi/2008-12/msg00029.html
+
+20090104T0238Z <gchicares@sbcglobal.net> [878]
+
+  mvc_controller.cpp
+Import recent changes from skeleton branch. See:
+  http://lists.nongnu.org/archive/html/lmi/2008-12/msg00036.html
+  http://lists.nongnu.org/archive/html/lmi/2009-01/msg00001.html
+
+20090104T0239Z <gchicares@sbcglobal.net> [878]
+
+  test_coding_rules.cpp
+Accommodate idiosyncrasies of the skeleton trunk.
+
+20090104T0240Z <gchicares@sbcglobal.net> [878]
+
+  license.cpp
+Reformat.
 
