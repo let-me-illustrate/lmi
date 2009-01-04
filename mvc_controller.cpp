@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_controller.cpp,v 1.24 2008-12-27 02:56:50 chicares Exp $
+// $Id: mvc_controller.cpp,v 1.25 2009-01-04 02:38:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -629,16 +629,21 @@ void MvcController::UpdateCircumscription
 /// last_focused_window_ is not changed: to do so would serve no end,
 /// and to avoid doing so preserves the useful invariant that
 /// last_focused_window_ is the only window that may need validation.
-///
-/// WX !! It seems surprising that calling GetWindow() on the
-/// wxChildFocusEvent argument doesn't return the same thing as
-/// FindFocus(): instead, it returns a pointer to the notebook tab.
 
 void MvcController::UponChildFocus(wxChildFocusEvent& event)
 {
     event.Skip();
 
     wxWindow* new_focused_window = FindFocus();
+
+    // A wxChildFocusEvent is sent for every window in the hierarchy,
+    // from new_focused_window up to this MvcController. Ignore all
+    // but the "deepest" one--see:
+    //   http://lists.nongnu.org/archive/html/lmi/2009-01/msg00001.html
+    if(event.GetWindow() != new_focused_window)
+        {
+        return;
+        }
 
     // Do nothing if focus hasn't changed. This case arises when
     // another application is activated, and then this application
@@ -648,7 +653,7 @@ void MvcController::UponChildFocus(wxChildFocusEvent& event)
         return;
         }
 
-    if(FindWindow(wxID_CANCEL) == new_focused_window)
+    if(wxID_CANCEL == new_focused_window->GetId())
         {
         return;
         }
