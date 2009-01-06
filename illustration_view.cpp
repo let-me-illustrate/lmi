@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.101 2008-12-29 06:09:32 chicares Exp $
+// $Id: illustration_view.cpp,v 1.102 2009-01-06 15:01:22 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -240,13 +240,13 @@ void IllustrationView::UponCopySummary(wxCommandEvent&)
 void IllustrationView::UponPreviewPdf(wxCommandEvent&)
 {
     LMI_ASSERT(ledger_values_.get());
-    emit_ledger(base_filename(), *ledger_values_, mce_emit_pdf_to_viewer);
+    emit_ledger(base_filename(), "", *ledger_values_, mce_emit_pdf_to_viewer);
 }
 
 void IllustrationView::UponPrintPdf(wxCommandEvent&)
 {
     LMI_ASSERT(ledger_values_.get());
-    emit_ledger(base_filename(), *ledger_values_, mce_emit_pdf_to_printer);
+    emit_ledger(base_filename(), "", *ledger_values_, mce_emit_pdf_to_printer);
 }
 
 void IllustrationView::UponProperties(wxCommandEvent&)

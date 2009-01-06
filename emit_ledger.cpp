@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: emit_ledger.cpp,v 1.17 2008-12-27 02:56:40 chicares Exp $
+// $Id: emit_ledger.cpp,v 1.18 2009-01-06 15:01:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -58,9 +58,14 @@
 /// supported in a platform-dependent way, but it would be strange
 /// to require a command-line program to invoke an external GUI
 /// program.
+///
+/// The 'tsv_filepath' argument is used only for mce_emit_spreadsheet,
+/// for which a single output file encompasses all cells in a census,
+/// whereas other output types produce a separate file for each cell.
 
 double emit_ledger
     (fs::path const& filepath
+    ,fs::path const& tsv_filepath
     ,Ledger const&   ledger
     ,mcenum_emission emission
     )
@@ -95,9 +100,10 @@ double emit_ledger
         }
     if(emission & mce_emit_spreadsheet)
         {
+        LMI_ASSERT(!tsv_filepath.empty());
         PrintFormTabDelimited
             (ledger
-            ,   filepath.string()
+            ,   tsv_filepath.string()
             +   configurable_settings::instance().spreadsheet_file_extension()
             );
         }

@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.104 2008-12-27 02:56:42 chicares Exp $
+// $Id: group_values.cpp,v 1.105 2009-01-06 15:01:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -122,6 +122,7 @@ census_run_result run_census_in_series::operator()
             composite.PlusEq(*IV.ledger());
             result.usec_for_output_ += emit_ledger
                 (serial_file_path(file, name, j, "hastur")
+                ,file
                 ,*IV.ledger()
                 ,emission
                 );
@@ -136,6 +137,7 @@ census_run_result run_census_in_series::operator()
 
     result.usec_for_output_ += emit_ledger
         (serial_file_path(file, "composite", -1, "hastur")
+        ,file
         ,composite
         ,emission
         );
@@ -631,6 +633,7 @@ census_run_result run_census_in_parallel::operator()
         std::string const name(cells[j]["InsuredName"].str());
         result.usec_for_output_ += emit_ledger
             (serial_file_path(file, name, j, "hastur")
+            ,file
             ,*(*i)->ledger_from_av()
             ,emission
             );
@@ -639,6 +642,7 @@ census_run_result run_census_in_parallel::operator()
 
     result.usec_for_output_ += emit_ledger
         (serial_file_path(file, "composite", -1, "hastur")
+        ,file
         ,composite
         ,emission
         );

@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: DefectLog,v 1.7 2008-12-27 02:56:35 chicares Exp $
+// $Id: DefectLog,v 1.8 2009-01-06 15:01:22 chicares Exp $
 
 MAINTENANCE
 
@@ -399,7 +399,7 @@ Critique of the past: Even superficial testing of inforce cannot have
 been performed. System specifications cannot have been reviewed. It
 was not disclosed that these requirements were not met.
 
-Watchwords for the future: It has been said [jfgi] that
+Watchwords for the future: It has been said [giyf] that
   "Given enough eyeballs, all bugs are shallow." --esr, CatB
 and, to our great cost, we have demonstrated the inverse. Testing that
 is undocumented may be perfunctory or worse.
@@ -438,4 +438,86 @@ well it might; and no conditional reentry is to be illustrated. The
 system, therefore, correctly refuses to accept this reentry date; the
 proper input is the last group reentry date preceding or coincident
 with a certificate's most recent anniversary.
+
+20090106T1501Z <gchicares@sbcglobal.net>
+
+Symptom: Spreadsheet output for a census was written to separate
+files, one for each cell as well as one for the composite, instead of
+to a single file for all. "Census | Print case to spreadsheet"
+reproduces the problem with any census.
+
+Discovered: By local end users, within hours of first using a new
+release, while running production cases.
+
+Location: In 'emit_ledger.cpp', calls to serialized_file_path() were
+moved upstream, because that function is useful only for groups.
+However, the 'mce_emit_spreadsheet' case was overlooked: it had used
+the non-serialized filepath previously, but as a result of refactoring
+error received an already-serialized argument. This case requires the
+same (non-serialized) filepath for all cells in a group, so that all
+are printed to a single file.
+
+| http://cvs.savannah.gnu.org/viewvc/lmi/lmi/emit_ledger.cpp?r1=1.14&r2=1.15&diff_format=s
+
+|   --------------------------- 1.14 ---------------------------     ----------------- 1.15 ----------------
+
+| if(emission & mce_emit_pdf_file)
+|   serialized_file_path(filepath, serial_index, "ill").string() --> filepath
+| if(emission & mce_emit_pdf_to_printer)
+|   serialized_file_path(filepath, serial_index, "ill").string() --> filepath
+| if(emission & mce_emit_pdf_to_viewer)
+|   serialized_file_path(filepath, serial_index, "ill").string() --> filepath
+| if(emission & mce_emit_test_data)
+|   serialized_file_path(filepath, serial_index, "test")         --> fs::change_extension(filepath, ".test")
+| if(emission & mce_emit_spreadsheet)
+|   filepath.string()                                            --> filepath.string()
+| if(emission & mce_emit_custom_0)
+|   filepath.string()                                            --> filepath.string()
+
+The 'mce_emit_custom_0' case may appear to have the same problem, but
+in fact does not: that output type by its nature cannot be used with a
+census, and upstream code always passes it an appropriate filepath.
+
+Premonitory defect markers: None.
+
+Cause: The proximate cause was an oversight. The ultimate cause for
+this error going into production was lack of testing.
+
+Genesis: Introduced 20081121T0135Z in a refactoring.
+
+Provident safeguards: None.
+
+Similar defects elsewhere: None.
+
+Critique of the past: This should have been caught in testing.
+
+Watchwords for the future: Same as for the 20080609T1629Z defect.
+It has been said [giyf] that
+  "Given enough eyeballs, all bugs are shallow." --esr, CatB
+and, to our great cost, we have demonstrated the inverse. Testing that
+is undocumented may be perfunctory or worse.
+
+Person-hours spent on diagnosis and repair: Thirty.
+
+Automated tests: 'path_utility_test.cpp' contains unit tests, which
+were augmented contemporaneously with this refactoring; however, this
+was an integration error. No automated test covers menu commands, and
+none has been added for this command.
+
+Repairs completed: See 'ChangeLog' for 20090106T1501Z.
+
+Pinpointing the error was the most laborious subtask. To prove that
+the "Genesis" and "Location" above are correct, bracketing snapshots
+were built as follows, then tested:
+
+| mkdir 20081121T0100; pushd 20081121T0100; cvs -z3 checkout -D "2008-11-21 01:00" lmi 2>&1 |less; popd
+| mkdir 20081121T0200; pushd 20081121T0200; cvs -z3 checkout -D "2008-11-21 02:00" lmi 2>&1 |less; popd
+
+This patch:
+  http://lists.nongnu.org/archive/html/lmi/2008-11/msg00008.html
+had to be applied in both snapshot directories. Patching failed for
+'install_miscellanea.make', but that file can be disregarded because
+it is not used in a normal build.
+
+Repairs postponed: None.
 
