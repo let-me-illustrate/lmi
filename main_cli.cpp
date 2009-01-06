@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.68 2008-12-27 02:56:47 chicares Exp $
+// $Id: main_cli.cpp,v 1.69 2009-01-06 14:56:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,7 +30,6 @@
 #include "argv0.hpp"
 #include "assert_lmi.hpp"
 #include "authenticity.hpp" // timestamp_of_production_release()
-#include "emit_ledger.hpp"
 #include "getopt.hpp"
 #include "global_settings.hpp"
 #include "handle_exceptions.hpp"
