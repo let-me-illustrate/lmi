@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.cpp,v 1.37 2008-12-27 02:56:45 chicares Exp $
+// $Id: illustrator.cpp,v 1.38 2009-01-06 15:01:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -95,7 +95,12 @@ bool illustrator::operator()(fs::path const& file_path)
             ? c.custom_output_filename()
             : fs::change_extension(file_path, ".test0")
             ;
-        usec_for_output_ = emit_ledger(out_file, *z.ledger(), emission_);
+        usec_for_output_ = emit_ledger
+            (out_file
+            ,out_file
+            ,*z.ledger()
+            ,emission_
+            );
         conditionally_show_timings_on_stdout();
         return close_when_done;
         }
@@ -120,7 +125,12 @@ bool illustrator::operator()(fs::path const& file_path, Input const& z)
     IV.run(z);
     principal_ledger_ = IV.ledger();
     usec_for_calculations_ = timer.stop().elapsed_usec();
-    usec_for_output_       = emit_ledger(file_path, *IV.ledger(), emission_);
+    usec_for_output_ = emit_ledger
+        (file_path
+        ,file_path
+        ,*IV.ledger()
+        ,emission_
+        );
     conditionally_show_timings_on_stdout();
     return true;
 }
