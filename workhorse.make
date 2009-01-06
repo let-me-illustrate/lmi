@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.134 2008-12-27 02:56:59 chicares Exp $
+# $Id: workhorse.make,v 1.135 2009-01-06 15:02:26 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -532,7 +532,7 @@ wx_ldflags = \
 
 # Flags.
 
-# Define these variables recursively for greater flexibility: e.g., so
+# Define FLAGS variables recursively for greater flexibility: e.g., so
 # that they reflect downstream conditional changes to the variables
 # they're composed from.
 
