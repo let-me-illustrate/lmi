@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: emit_ledger.hpp,v 1.6 2008-12-27 02:56:40 chicares Exp $
+// $Id: emit_ledger.hpp,v 1.7 2009-01-06 15:01:22 chicares Exp $
 
 #ifndef emit_ledger_hpp
 #define emit_ledger_hpp
@@ -35,6 +35,7 @@ class Ledger;
 
 double LMI_SO emit_ledger
     (fs::path const& filepath
+    ,fs::path const& tsv_filepath
     ,Ledger const&   ledger
     ,mcenum_emission emission
     );
