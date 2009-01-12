@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: README,v 1.10 2008-12-27 02:56:35 chicares Exp $
+// $Id: README,v 1.11 2009-01-12 18:20:18 chicares Exp $
 
 * Copyright and license notices for graphics files
 
@@ -46,7 +46,6 @@ and 16x16):
   paste-case[-16].png         from stock_paste.png
   preferences[-16].png        from gnome-settings.png
   print-case[-16].png         from stock_print.png
-  print-cell[-16].png         from stock_print.png
   print-options[-16].png      from stock_print-options.png
   print-preview[-16].png      from stock_print-preview.png
   print[-16].png              from stock_print.png
