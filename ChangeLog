@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1236 2009-01-06 15:02:26 chicares Exp $
+// $Id: ChangeLog,v 1.1237 2009-01-12 19:10:28 chicares Exp $
 
 MAINTENANCE
 
@@ -21507,4 +21507,55 @@ Fix defect introduced 20081121T0135Z.
 
   workhorse.make
 Improve documentation.
+
+20090112T1820Z <gchicares@sbcglobal.net> [878]
+
+  README
+  print-cell.png [expunged]
+Expunge disused bitmap.
+
+20090112T1855Z <gchicares@sbcglobal.net> [878]
+
+  README
+  copy-16.png                     [new file]
+  copy-cell-16.png                [new file]
+  copy-cell.png                   [new file]
+  copy.png                        [new file]
+  default-cell-16.png             [new file]
+  edit-case-16.png                [new file]
+  edit-cell-16.png                [new file]
+  edit-class-16.png               [new file]
+  fixed-width-16.png              [new file]
+  icon_monger.cpp
+  menus.xrc
+  paste-case-16.png               [new file]
+  print-case-16.png               [new file]
+  run-case-16.png                 [new file]
+  run-cell-16.png                 [new file]
+  save-pdf-16.png                 [new file]
+  save-pdf.png                    [new file]
+  varying-width-16.png            [new file]
+  window-cascade-16.png           [new file]
+  window-cascade.png              [new file]
+  window-next-16.png              [new file]
+  window-next.png                 [new file]
+  window-previous-16.png          [new file]
+  window-previous.png             [new file]
+  window-tile-horizontally-16.png [new file]
+  window-tile-horizontally.png    [new file]
+  window-tile-vertically-16.png   [new file]
+  window-tile-vertically.png      [new file]
+  write-spreadsheet-16.png        [new file]
+Provide bitmaps for all toolbar and menu commands.
+
+20090112T1906Z <gchicares@sbcglobal.net> [878]
+
+  icon_monger.cpp
+Revert the 20081002T0205Z workaround.
+
+20090112T1910Z <gchicares@sbcglobal.net> [878]
+
+  icon_monger.cpp
+Revert the 20081004T1516Z workaround. Complain when falling back on a
+builtin wx bitmap: it causes a theme clash.
 
