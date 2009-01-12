@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: icon_monger.cpp,v 1.9 2008-12-27 02:56:42 chicares Exp $
+// $Id: icon_monger.cpp,v 1.10 2009-01-12 18:55:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -39,8 +39,13 @@
 
 #include <sstream>
 
+/// Map 'wxART_' id's to icon names.
+///
+/// Statements are ordered by icon name, not by 'wxART_' id.
+
 icon_monger::icon_monger()
 {
+    icon_names_by_wx_id_[wxART_COPY        ] = "copy"   ;
     icon_names_by_wx_id_[wxART_QUIT        ] = "exit"   ;
     icon_names_by_wx_id_[wxART_HELP        ] = "help"   ;
     icon_names_by_wx_id_[wxART_NEW         ] = "new"    ;
