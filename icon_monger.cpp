@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: icon_monger.cpp,v 1.12 2009-01-12 19:10:27 chicares Exp $
+// $Id: icon_monger.cpp,v 1.13 2009-01-15 19:43:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -93,10 +93,14 @@ wxSize desired_icon_size
 ///   wxART_FOO_BAR --> foo-bar.png    [default size]
 ///   wxART_FOO_BAR --> foo-bar-16.png [16 pixels square]
 ///
-/// First, try to find an icon of the requested size. If none is
-/// found, then try to find an icon of default size and scale it.
-/// Inability to find an icon file is not an error when a builtin
-/// icon is available.
+/// First, if the icon sought is known to be used only by wx html help
+/// and is not provided by lmi, then return a null bitmap, causing wx
+/// to use its own builtin icon.
+///
+/// Otherwise, try to find an icon of the requested size. If none is
+/// found, then try to find an icon of default size and scale it--but
+/// complain even if that succeeds, because the result of scaling may
+/// be quite unappealing.
 ///
 /// Diagnosed failures are presented merely as warnings because they
 /// do not make the system impossible to use.
@@ -107,6 +111,25 @@ wxBitmap icon_monger::CreateBitmap
     ,wxSize const&      size
     )
 {
+    bool is_used_only_by_wx_html_help =
+           wxART_ADD_BOOKMARK    == id
+        || wxART_DEL_BOOKMARK    == id
+        || wxART_GO_BACK         == id
+        || wxART_GO_DOWN         == id
+        || wxART_GO_FORWARD      == id
+        || wxART_GO_TO_PARENT    == id
+        || wxART_GO_UP           == id
+        || wxART_HELP_BOOK       == id
+        || wxART_HELP_FOLDER     == id
+        || wxART_HELP_PAGE       == id
+        || wxART_HELP_SETTINGS   == id
+        || wxART_HELP_SIDE_PANEL == id
+        ;
+    if(is_used_only_by_wx_html_help)
+        {
+        return wxNullBitmap;
+        }
+
     std::string icon_name(id.c_str());
     bool is_builtin = 0 == icon_name.find("wxART_");
     if(is_builtin)
@@ -124,7 +147,7 @@ wxBitmap icon_monger::CreateBitmap
     wxSize const desired_size = desired_icon_size(client, size);
 
     std::ostringstream oss;
-    oss << AddDataDir(icon_name) << '-' << desired_size.x;
+    oss << AddDataDir(icon_name) << '-' << desired_size.GetWidth();
     fs::path icon_path(oss.str() + ".png");
     if(!fs::exists(icon_path))
         {
@@ -158,7 +181,25 @@ wxBitmap icon_monger::CreateBitmap
 
     if(desired_size != wxSize(image.GetWidth(), image.GetHeight()))
         {
-        image.Rescale(desired_size.x, desired_size.y, wxIMAGE_QUALITY_HIGH);
+        warning()
+            << "Image '"
+            << icon_path.string()
+            << "' of size "
+            << image.GetWidth()
+            << " by "
+            << image.GetHeight()
+            << " has been scaled because no bitmap of requested size "
+            << desired_size.GetWidth()
+            << " by "
+            << desired_size.GetHeight()
+            << " was found."
+            << LMI_FLUSH
+            ;
+        image.Rescale
+            (desired_size.GetWidth()
+            ,desired_size.GetHeight()
+            ,wxIMAGE_QUALITY_HIGH
+            );
         }
 
     return wxBitmap(image);
