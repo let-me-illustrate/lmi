@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1237 2009-01-12 19:10:28 chicares Exp $
+// $Id: ChangeLog,v 1.1238 2009-01-15 19:44:22 chicares Exp $
 
 MAINTENANCE
 
@@ -21558,4 +21558,15 @@ Revert the 20081002T0205Z workaround.
   icon_monger.cpp
 Revert the 20081004T1516Z workaround. Complain when falling back on a
 builtin wx bitmap: it causes a theme clash.
+
+20090115T1943Z <gchicares@sbcglobal.net> [878]
+
+  icon_monger.cpp
+Improve art-provider diagnostics. See, however:
+  http://lists.nongnu.org/archive/html/lmi/2009-01/msg00004.html
+
+20090115T1944Z <gchicares@sbcglobal.net> [878]
+
+  ledger_invariant.cpp
+Summarize premium allocation for composites.
 
