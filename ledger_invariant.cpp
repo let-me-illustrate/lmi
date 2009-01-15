@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.68 2008-12-27 02:56:46 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.69 2009-01-15 19:44:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -846,6 +846,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     FundNames                   = a_Addend.FundNames;
     FundAllocs                  = a_Addend.FundAllocs;
     FundAllocations             = a_Addend.FundAllocations;
+    GenAcctAllocation           = a_Addend.GenAcctAllocation;
     GenderDistinct              = a_Addend.GenderDistinct;
     GenderBlended               = a_Addend.GenderBlended;
     Smoker                      = a_Addend.Smoker;
