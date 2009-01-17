@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: icon_monger.cpp,v 1.13 2009-01-15 19:43:19 chicares Exp $
+// $Id: icon_monger.cpp,v 1.14 2009-01-17 21:44:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -144,7 +144,17 @@ wxBitmap icon_monger::CreateBitmap
             }
         }
 
+#if wxCHECK_VERSION(2,9,0)
     wxSize const desired_size = desired_icon_size(client, size);
+#else  // !wxCHECK_VERSION(2,9,0)
+    // See:
+    //   http://lists.nongnu.org/archive/html/lmi/2008-10/msg00022.html
+    wxSize const desired_size =
+        wxART_HELP == id && wxART_HELP_BROWSER == client
+        ? wxSize(16, 16)
+        : desired_icon_size(client, size)
+        ;
+#endif // !wxCHECK_VERSION(2,9,0)
 
     std::ostringstream oss;
     oss << AddDataDir(icon_name) << '-' << desired_size.GetWidth();
