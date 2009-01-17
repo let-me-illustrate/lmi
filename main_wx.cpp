@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.127 2008-12-27 02:56:48 chicares Exp $
+// $Id: main_wx.cpp,v 1.128 2009-01-17 21:45:12 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -443,7 +443,15 @@ void Skeleton::InitHelp()
     wxHelpProvider::Set(new(wx) wxSimpleHelpProvider);
     LMI_ASSERT(wxHelpProvider::Get());
 
-    help_controller_ = new(wx) wxHtmlHelpController(wxHF_DEFAULT_STYLE, frame_);
+    int const html_help_style =
+          wxHF_TOOLBAR
+        | wxHF_CONTENTS
+//      | wxHF_INDEX     // Not implemented by lmi's user manual.
+        | wxHF_SEARCH
+//      | wxHF_BOOKMARKS // Not useful with lmi's user manual.
+        | wxHF_PRINT
+        ;
+    help_controller_ = new(wx) wxHtmlHelpController(html_help_style, frame_);
     LMI_ASSERT(help_controller_);
 
     help_controller_->AddBook(wxFileName(AddDataDir("user_manual.hhp")));
