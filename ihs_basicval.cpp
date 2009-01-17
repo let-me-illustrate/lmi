@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.97 2008-12-27 02:56:43 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.98 2009-01-17 21:46:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1099,7 +1099,7 @@ double BasicValues::GetModalPremCorridor
     ,double      a_specamt
     ) const
 {
-    double temp = MortalityRates_->CvatCorridorFactors()[0];
+    double temp = GetCorridorFactor()[0];
     // always use initial spec amt and mode--fixed at issue
     // round down--mustn't violate 7702A
     return round_max_premium((epsilon_plus_one * a_specamt / temp) / a_mode);
@@ -1350,7 +1350,7 @@ double BasicValues::GetModalSpecAmtCorridor
     ) const
 {
     double annualized_pmt = a_ee_mode * a_ee_pmt + a_er_mode * a_er_pmt;
-    double rate = MortalityRates_->CvatCorridorFactors()[0];
+    double rate = GetCorridorFactor()[0];
     // always use initial spec amt and mode--fixed at issue
     // round up--mustn't violate 7702A
     return round_min_specamt(annualized_pmt * rate);

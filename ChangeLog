@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1238 2009-01-15 19:44:22 chicares Exp $
+// $Id: ChangeLog,v 1.1239 2009-01-17 21:46:29 chicares Exp $
 
 MAINTENANCE
 
@@ -21569,4 +21569,22 @@ Improve art-provider diagnostics. See, however:
 
   ledger_invariant.cpp
 Summarize premium allocation for composites.
+
+20090117T2144Z <gchicares@sbcglobal.net> [878]
+
+  icon_monger.cpp
+Set html-help frame icon (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2008-10/msg00022.html
+
+20090117T2145Z <gchicares@sbcglobal.net> [878]
+
+  main_wx.cpp
+Inhibit bookmarks and index in html help.
+
+20090117T2146Z <gchicares@sbcglobal.net> [878]
+
+  ihs_basicval.cpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch. Corridor strategies for specamt and premium used CVAT
+corridor factors always, instead of the actual definitional test.
 
