@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.99 2009-01-18 11:24:27 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.100 2009-01-18 15:35:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1361,7 +1361,8 @@ double BasicValues::GetModalSpecAmtCorridor
 /// In general, strategies linking specamt and premium commute. The
 /// "pay deductions" strategy, however, doesn't have a useful analog
 /// for determining specamt as a function of initial premium: the
-/// contract would almost certainly lapse after one year.
+/// contract would almost certainly lapse after one year. Therefore,
+/// calling this function elicits an error message.
 
 double BasicValues::GetModalSpecAmtMlyDed
     (mcenum_mode a_ee_mode
@@ -1372,7 +1373,10 @@ double BasicValues::GetModalSpecAmtMlyDed
 {
     if(!global_settings::instance().regression_testing())
         {
-        fatal_error() << "Maximum specified amount undefined for this product.";
+        fatal_error()
+            << "No maximum specified amount is defined for this product."
+            << LMI_FLUSH
+            ;
         }
 
     // For now, we just assume that ee mode governs...only a guess...
