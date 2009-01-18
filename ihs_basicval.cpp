@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.100 2009-01-18 15:35:15 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.101 2009-01-18 16:17:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1170,16 +1170,26 @@ double BasicValues::GetModalPremMlyDed
                 )[a_year]
         );
     z *= GetBandedCoiRates(mce_gen_curr, a_specamt)[a_year];
+
     z += Loads_->monthly_policy_fee(mce_gen_curr)[a_year];
 
     if(yare_input_.AccidentalDeathBenefit)
         {
-        z +=
-                MortalityRates_->AdbRates()[a_year]
-            *   std::min(a_specamt, AdbLimit)
-            ;
+        double r = MortalityRates_->AdbRates()[a_year];
+        z += r * std::min(a_specamt, AdbLimit);
         }
-    // TODO ?? Other riders should be considered here.
+
+    if(yare_input_.SpouseRider)
+        {
+        double r = MortalityRates_->SpouseRiderRates(mce_gen_curr)[a_year];
+        z += r * yare_input_.SpouseRiderAmount;
+        }
+
+    if(yare_input_.ChildRider)
+        {
+        double r = MortalityRates_->ChildRiderRates()[a_year];
+        z += r * yare_input_.ChildRiderAmount;
+        }
 
     double annual_charge = Loads_->annual_policy_fee(mce_gen_curr)[a_year];
 
