@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.98 2009-01-17 21:46:29 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.99 2009-01-18 11:24:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1153,6 +1153,8 @@ double BasicValues::GetModalPremGSP
 }
 
 //============================================================================
+// TODO ?? What should be the behavior if ee and er both pay and their
+// modes differ?
 double BasicValues::GetModalPremMlyDed
     (int         a_year
     ,mcenum_mode a_mode
@@ -1356,7 +1358,11 @@ double BasicValues::GetModalSpecAmtCorridor
     return round_min_specamt(annualized_pmt * rate);
 }
 
-//============================================================================
+/// In general, strategies linking specamt and premium commute. The
+/// "pay deductions" strategy, however, doesn't have a useful analog
+/// for determining specamt as a function of initial premium: the
+/// contract would almost certainly lapse after one year.
+
 double BasicValues::GetModalSpecAmtMlyDed
     (mcenum_mode a_ee_mode
     ,double      a_ee_pmt
@@ -1364,9 +1370,12 @@ double BasicValues::GetModalSpecAmtMlyDed
     ,double      a_er_pmt
     ) const
 {
-// TODO ?? This is broken. It is supposed to take mode into account,
-// but what should be the behavior if ee and er both pay and their modes differ?
-// For now, we just assume that ee mode governs...only a guess...
+    if(!global_settings::instance().regression_testing())
+        {
+        fatal_error() << "Maximum specified amount undefined for this product.";
+        }
+
+    // For now, we just assume that ee mode governs...only a guess...
     mcenum_mode guess_mode = a_ee_mode;
     double z = a_ee_mode * a_ee_pmt + a_er_mode * a_er_pmt;
     z /= guess_mode;
