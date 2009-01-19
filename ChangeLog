@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1240 2009-01-19 10:45:31 chicares Exp $
+// $Id: ChangeLog,v 1.1241 2009-01-19 12:24:24 chicares Exp $
 
 MAINTENANCE
 
@@ -21611,4 +21611,13 @@ Take certain riders into account for pay-deductions strategy.
   ihs_avmly.cpp
 Avoid lapse due to catastrophic cancellation. The outcome avoided was
 reminiscent of the 20080516T1359Z change, but the cause differed.
+
+20090119T1224Z <gchicares@sbcglobal.net> [877]
+
+  ihs_basicval.cpp
+Refine death-benefit discount for pay-deductions strategy. The rounded
+discount rate typically spelled out in the contract ("NAARDiscount" in
+the product database) should be used instead of an unrounded rate. The
+parallel code in GetModalSpecAmtMlyDed() needs no such change because
+it is slated for expunction as noted 20090118T1124Z.
 
