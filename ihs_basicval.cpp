@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.101 2009-01-18 16:17:19 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.102 2009-01-19 12:24:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1161,14 +1161,7 @@ double BasicValues::GetModalPremMlyDed
     ,double      a_specamt
     ) const
 {
-    double z = a_specamt;
-    z /=
-        (   1.0
-        +   InterestRates_->GenAcctNetRate
-                (mce_gen_guar
-                ,mce_monthly_rate
-                )[a_year]
-        );
+    double z = a_specamt * DBDiscountRate[a_year];
     z *= GetBandedCoiRates(mce_gen_curr, a_specamt)[a_year];
 
     z += Loads_->monthly_policy_fee(mce_gen_curr)[a_year];
