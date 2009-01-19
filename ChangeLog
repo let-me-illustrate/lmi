@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1239 2009-01-17 21:46:29 chicares Exp $
+// $Id: ChangeLog,v 1.1240 2009-01-19 10:45:31 chicares Exp $
 
 MAINTENANCE
 
@@ -21587,4 +21587,28 @@ Inhibit bookmarks and index in html help.
 Fix defect introduced 20050114T1947Z, from an original file predating
 the lmi epoch. Corridor strategies for specamt and premium used CVAT
 corridor factors always, instead of the actual definitional test.
+
+20090118T1124Z <gchicares@sbcglobal.net> [878]
+
+  ihs_basicval.cpp
+Warn instead of attempting a calculation that's not worthwhile, moving
+an important defect marker elsewhere. The implementation is left in
+place temporarily in order to avoid breaking regression tests, but it
+will soon be removed altogether.
+
+20090118T1535Z <gchicares@sbcglobal.net> [878]
+
+  ihs_basicval.cpp
+Fix defect introduced 20090118T1124Z: unflushed error message.
+
+20090118T1617Z <gchicares@sbcglobal.net> [877]
+
+  ihs_basicval.cpp
+Take certain riders into account for pay-deductions strategy.
+
+20090119T1045Z <gchicares@sbcglobal.net> [877]
+
+  ihs_avmly.cpp
+Avoid lapse due to catastrophic cancellation. The outcome avoided was
+reminiscent of the 20080516T1359Z change, but the cause differed.
 
