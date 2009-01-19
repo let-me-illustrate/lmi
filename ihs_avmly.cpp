@@ -21,7 +21,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.111 2008-12-31 21:53:14 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.112 2009-01-19 10:45:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2646,7 +2646,19 @@ void AccountValue::TxCreditInt()
         SepAcctIntCred = InterestCredited(AVSepAcct, YearsSepAcctIntRate);
         double gross   = InterestCredited(AVSepAcct, gross_sep_acct_rate);
         notional_sep_acct_charge = gross - SepAcctIntCred;
-        AVSepAcct += SepAcctIntCred;
+        // Guard against catastrophic cancellation. Testing the
+        // absolute values of the addends for material equality is not
+        // sufficient, because the interest increment has already been
+        // rounded.
+        double result = AVSepAcct + SepAcctIntCred;
+        if(result < 0.0 && 0.0 <= AVSepAcct)
+            {
+            AVSepAcct = 0.0;
+            }
+        else
+            {
+            AVSepAcct = result;
+            }
         }
     else
         {
