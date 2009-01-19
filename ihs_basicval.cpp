@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.102 2009-01-19 12:24:24 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.103 2009-01-19 22:23:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1164,8 +1164,6 @@ double BasicValues::GetModalPremMlyDed
     double z = a_specamt * DBDiscountRate[a_year];
     z *= GetBandedCoiRates(mce_gen_curr, a_specamt)[a_year];
 
-    z += Loads_->monthly_policy_fee(mce_gen_curr)[a_year];
-
     if(yare_input_.AccidentalDeathBenefit)
         {
         double r = MortalityRates_->AdbRates()[a_year];
@@ -1183,6 +1181,14 @@ double BasicValues::GetModalPremMlyDed
         double r = MortalityRates_->ChildRiderRates()[a_year];
         z += r * yare_input_.ChildRiderAmount;
         }
+
+    if(true) // Written thus for parallelism and to keep 'r' local.
+        {
+        double r = Loads_->specified_amount_load(mce_gen_curr)[a_year];
+        z += r * std::min(a_specamt, SpecAmtLoadLimit);
+        }
+
+    z += Loads_->monthly_policy_fee(mce_gen_curr)[a_year];
 
     double annual_charge = Loads_->annual_policy_fee(mce_gen_curr)[a_year];
 
