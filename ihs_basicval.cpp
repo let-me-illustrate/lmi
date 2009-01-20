@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.103 2009-01-19 22:23:42 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.104 2009-01-20 13:15:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1152,9 +1152,31 @@ double BasicValues::GetModalPremGSP
     return round_max_premium(epsilon_plus_one * z);
 }
 
-//============================================================================
-// TODO ?? What should be the behavior if ee and er both pay and their
-// modes differ?
+/// Determine an approximate "pay as you go" modal premium.
+///
+/// This more or less represents actual monthly deductions, at least
+/// for monthly mode on an option B contract, generally favoring
+/// sufficiency over minimality, but simplicity most of all.
+///
+/// For simplicity, certain details are disregarded:
+///   - waiver benefits are generally subject to a maximum
+///   - premium loads are often stratified--the rate used here is
+///     likely to be the highest that might apply, but deductions at
+///     age 99 may well exceed target
+///   - account-value loads (including, but not limited to, M&E
+///     charges) are presumed to be overcome by interest
+///   - the specified amount is taken as a scalar, which might not
+///     reflect any value it assumes elsewhere (e.g., as a result of a
+///     strategy, or of an initial minimum due to the corridor), and
+///     might not be the same as the basis for the accident benefit or
+///     the specified-amount load, especially if it includes any term
+///     rider amount
+///   - any term rider included as specified amount is treated as
+///     though its charges equal the base policy's COI rates
+///
+/// TODO ?? What should be the behavior if ee and er both pay and their
+/// modes differ?
+
 double BasicValues::GetModalPremMlyDed
     (int         a_year
     ,mcenum_mode a_mode
@@ -1194,13 +1216,11 @@ double BasicValues::GetModalPremMlyDed
 
     if(yare_input_.WaiverOfPremiumBenefit)
         {
-        // TODO ?? For simplicity, ignore Database_->Query(DB_WPMax)
         double r = MortalityRates_->WpRates()[a_year];
         z *= 1.0 + r;
         annual_charge *= 1.0 + r;
         }
 
-    // TODO ?? Only *target* load?
     z /= 1.0 - Loads_->target_total_load(mce_gen_curr)[a_year];
 
     z *= GetAnnuityValueMlyDed(a_year, a_mode);
@@ -1388,6 +1408,11 @@ double BasicValues::GetModalSpecAmtMlyDed
             ;
         }
 
+    // Soon this ancient implementation will be expunged. Original
+    // 'todo' defect markers have been replaced with the word "DEFECT"
+    // in capital letters: they no longer count toward the global
+    // total because they're already unreachable for end users.
+
     // For now, we just assume that ee mode governs...only a guess...
     mcenum_mode guess_mode = a_ee_mode;
     double z = a_ee_mode * a_ee_pmt + a_er_mode * a_er_pmt;
@@ -1408,13 +1433,13 @@ double BasicValues::GetModalSpecAmtMlyDed
 
     z -= annual_charge;
 
-    // TODO ?? Use first-year values only--don't want this to vary by year.
+    // DEFECT Use first-year values only--don't want this to vary by year.
     z /= GetAnnuityValueMlyDed(0, guess_mode);
-    // TODO ?? only *target* load?
-// TODO ?? Looks like none of our test decks exercise this line.
+    // DEFECT only *target* load?
+// DEFECT Looks like none of our test decks exercise this line.
     z *= 1.0 - Loads_->target_total_load(mce_gen_curr)[0];
 
-    // TODO ?? Is this correct now?
+    // DEFECT Is this correct now?
     if(yare_input_.WaiverOfPremiumBenefit && 0.0 != 1.0 + wp_rate)
         {
         // For simplicity, ignore Database_->Query(DB_WPMax)
@@ -1423,13 +1448,13 @@ double BasicValues::GetModalSpecAmtMlyDed
 
     if(yare_input_.AccidentalDeathBenefit)
         {
-        // TODO ?? For simplicity, ignore Database_->Query(DB_ADDMax)
+        // DEFECT For simplicity, ignore Database_->Query(DB_ADDMax)
         z -= MortalityRates_->AdbRates()[0];
         }
-    // TODO ?? Other riders should be considered here.
+    // DEFECT Other riders should be considered here.
 
     z -= Loads_->monthly_policy_fee(mce_gen_curr)[0];
-    // TODO ?? Probably we should respect banding. This is a
+    // DEFECT Probably we should respect banding. This is a
     // conservative shortcut.
     z /= MortalityRates_->MonthlyCoiRatesBand0(mce_gen_curr)[0];
     z *= 1.0 + InterestRates_->GenAcctNetRate
@@ -1441,12 +1466,12 @@ double BasicValues::GetModalSpecAmtMlyDed
     return round_max_specamt(z);
 }
 
-//============================================================================
-// 'Unusual' banding is one particular approach we needed to model.
-// Simpler than the banding method generally used in the industry, it
-// determines a single COI rate from the total specified amount and
-// applies that single rate to the entire NAAR. No layers of coverage
-// are distinguished.
+/// 'Unusual' banding is one particular approach we needed to model.
+/// Simpler than the banding method generally used in the industry, it
+/// determines a single COI rate from the total specified amount and
+/// applies that single rate to the entire NAAR. No layers of coverage
+/// are distinguished.
+
 std::vector<double> const& BasicValues::GetBandedCoiRates
     (mcenum_gen_basis rate_basis
     ,double           a_specamt
@@ -1477,7 +1502,17 @@ std::vector<double> const& BasicValues::GetBandedCoiRates
         }
 }
 
-//============================================================================
+/// Calculate a special modal factor on the fly.
+///
+/// This factor depends on the general-account rate, which is always
+/// specified, even for separate-account-only products.
+///
+/// This concept is at the same time overelaborate and inadequate.
+/// If the crediting rate changes during a policy year, it results in
+/// a "pay-deductions" premium that varies between anniversaries, yet
+/// may not prevent the contract from lapsing; both those outcomes are
+/// likely to frustrate customers.
+
 double BasicValues::GetAnnuityValueMlyDed
     (int         a_year
     ,mcenum_mode a_mode
@@ -1493,7 +1528,6 @@ double BasicValues::GetAnnuityValueMlyDed
         (   yare_input_.GeneralAccountRate[a_year]
         -   spread
         );
-// TODO ?? What do we do if SA and GA current rates differ?
     double u = 1.0 + std::max
         (z
         ,InterestRates_->GenAcctNetRate

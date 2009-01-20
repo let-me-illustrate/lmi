@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1241 2009-01-19 12:24:24 chicares Exp $
+// $Id: ChangeLog,v 1.1242 2009-01-20 13:15:22 chicares Exp $
 
 MAINTENANCE
 
@@ -21620,4 +21620,19 @@ discount rate typically spelled out in the contract ("NAARDiscount" in
 the product database) should be used instead of an unrounded rate. The
 parallel code in GetModalSpecAmtMlyDed() needs no such change because
 it is slated for expunction as noted 20090118T1124Z.
+
+20090119T2223Z <gchicares@sbcglobal.net> [877]
+
+  ihs_basicval.cpp
+Reflect specified-amount load in pay-deductions strategy.
+
+20090120T1314Z <gchicares@sbcglobal.net> [877]
+
+  ihs_avstrtgy.cpp
+Reflect term rider in pay-deductions strategy.
+
+20090120T1315Z <gchicares@sbcglobal.net> [867]
+
+  ihs_basicval.cpp
+Improve documentation; resolve numerous defect markers.
 
