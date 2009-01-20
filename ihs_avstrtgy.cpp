@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avstrtgy.cpp,v 1.23 2008-12-27 02:56:43 chicares Exp $
+// $Id: ihs_avstrtgy.cpp,v 1.24 2009-01-20 13:14:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -223,7 +223,7 @@ double AccountValue::DoPerformPmtStrategy
             return GetModalMinPrem
                 (Year
                 ,a_CurrentMode
-                ,ActualSpecAmt
+                ,ActualSpecAmt + TermSpecAmt
                 );
             }
         case mce_pmt_target:
