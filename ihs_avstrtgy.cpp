@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avstrtgy.cpp,v 1.24 2009-01-20 13:14:15 chicares Exp $
+// $Id: ihs_avstrtgy.cpp,v 1.25 2009-01-21 13:17:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -228,6 +228,12 @@ double AccountValue::DoPerformPmtStrategy
             }
         case mce_pmt_target:
             {
+// TODO ?? Shouldn't a modalized version of something like
+//   InitialTargetPremium
+//   AnnualTargetPrem
+// be used instead, at least in the
+//       if(Database_->Query(DB_TgtPmFixedAtIssue))
+// case?
             return GetModalTgtPrem
                 (Year
                 ,a_CurrentMode
@@ -277,6 +283,7 @@ double AccountValue::DoPerformPmtStrategy
             return GetModalPremCorridor
                 (0
                 ,a_InitialMode
+// TODO ?? Shouldn't this be initial specified amount?
                 ,ActualSpecAmt
 // TODO ?? This may be wanted for an 'integrated' term rider.
 //                ,ActualSpecAmt + TermSpecAmt

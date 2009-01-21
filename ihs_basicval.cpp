@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.104 2009-01-20 13:15:22 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.105 2009-01-21 13:17:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -997,7 +997,7 @@ void BasicValues::SetMaxSurvivalDur()
 }
 
 //============================================================================
-// Simply calls the target prem routine for now
+// For now at least, calls the same subroutine as GetModalTgtPrem().
 double BasicValues::GetModalMinPrem
     (int         a_year
     ,mcenum_mode a_mode
@@ -1061,22 +1061,31 @@ double BasicValues::GetModalPrem
     return 0.0;
 }
 
-//============================================================================
+/// Calculate premium using a seven-pay ratio.
+///
+/// Only the initial seven-pay premium rate is used here. Material
+/// changes dramatically complicate the relationship between premium
+/// and specified amount. Thus, arguments should represent initial
+/// premium and mode.
+
 double BasicValues::GetModalPremMaxNonMec
-    (int         // a_year TODO ?? Unused for now.
+    (int      // a_year // Unused.
     ,mcenum_mode a_mode
     ,double      a_specamt
     ) const
 {
     double temp = MortalityRates_->SevenPayRates()[0];
-    // always use initial spec amt and mode--fixed at issue
-    // round down--mustn't violate 7702A
     return round_max_premium(temp * epsilon_plus_one * a_specamt / a_mode);
 }
 
-//============================================================================
+/// Calculate premium using a target-premium ratio.
+///
+/// Only the initial target-premium rate is used here, because that's
+/// generally fixed at issue. However, this calculation remains naive
+/// in that the initial specified amount may also be fixed at issue.
+
 double BasicValues::GetModalPremTgtFromTable
-    (int         // a_year TODO ?? Unused for now.
+    (int      // a_year // Unused.
     ,mcenum_mode a_mode
     ,double      a_specamt
     ) const
@@ -1092,16 +1101,19 @@ double BasicValues::GetModalPremTgtFromTable
         );
 }
 
-//============================================================================
+/// Calculate premium using a corridor ratio.
+///
+/// Only the initial corridor factor is used here, because this
+/// strategy makes sense only at issue. Thus, arguments should
+/// represent initial specified amount and mode.
+
 double BasicValues::GetModalPremCorridor
-    (int         // a_year TODO ?? Unused for now.
+    (int      // a_year // Unused.
     ,mcenum_mode a_mode
     ,double      a_specamt
     ) const
 {
     double temp = GetCorridorFactor()[0];
-    // always use initial spec amt and mode--fixed at issue
-    // round down--mustn't violate 7702A
     return round_max_premium((epsilon_plus_one * a_specamt / temp) / a_mode);
 }
 
@@ -1269,8 +1281,13 @@ double BasicValues::GetModalSpecAmtTgt
             );
 }
 
-//============================================================================
-// TODO ?? No 'a_year' argument?
+/// Calculate specified amount as a simple function of premium.
+///
+/// Only scalar premiums and modes are used here. They're intended to
+/// represent initial values. Reason: it's generally inappropriate for
+/// a specified-amount strategy to produce a result that varies by
+/// duration.
+
 double BasicValues::GetModalSpecAmt
     (mcenum_mode           a_ee_mode
     ,double                a_ee_pmt
@@ -1317,7 +1334,12 @@ double BasicValues::GetModalSpecAmt
     return 0.0;
 }
 
-//============================================================================
+/// Calculate specified amount using a seven-pay ratio.
+///
+/// Only the initial seven-pay premium rate is used here. Material
+/// changes dramatically complicate the relationship between premium
+/// and specified amount.
+
 double BasicValues::GetModalSpecAmtMinNonMec
     (mcenum_mode a_ee_mode
     ,double      a_ee_pmt
@@ -1372,7 +1394,12 @@ double BasicValues::GetModalSpecAmtGSP
 //    return round_min_specamt(z);
 }
 
-//============================================================================
+/// Calculate specified amount using a corridor ratio.
+///
+/// Only the initial corridor factor is used here, because this
+/// strategy makes sense only at issue. Thus, arguments should
+/// represent initial premium and mode.
+
 double BasicValues::GetModalSpecAmtCorridor
     (mcenum_mode a_ee_mode
     ,double      a_ee_pmt
@@ -1382,8 +1409,6 @@ double BasicValues::GetModalSpecAmtCorridor
 {
     double annualized_pmt = a_ee_mode * a_ee_pmt + a_er_mode * a_er_pmt;
     double rate = GetCorridorFactor()[0];
-    // always use initial spec amt and mode--fixed at issue
-    // round up--mustn't violate 7702A
     return round_min_specamt(annualized_pmt * rate);
 }
 
