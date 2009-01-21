@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.105 2009-01-21 13:17:20 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.106 2009-01-21 13:43:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1362,6 +1362,12 @@ double BasicValues::GetModalSpecAmtGLP
     ) const
 {
     double annualized_pmt = a_ee_mode * a_ee_pmt + a_er_mode * a_er_pmt;
+double z = Irc7702_->CalculateGLPSpecAmt
+        (0
+        ,annualized_pmt
+        ,effective_dbopt_7702(DeathBfts_->dbopt()[0], Equiv7702DBO3)
+        );
+LMI_ASSERT(z == round_min_specamt(z));
 // TODO ?? Duration 0 hardcoded here, but prem functions use actual duration.
     return Irc7702_->CalculateGLPSpecAmt
         (0
@@ -1383,6 +1389,11 @@ double BasicValues::GetModalSpecAmtGSP
     ) const
 {
     double annualized_pmt = a_ee_mode * a_ee_pmt + a_er_mode * a_er_pmt;
+double z = Irc7702_->CalculateGSPSpecAmt
+        (0
+        ,annualized_pmt
+        );
+LMI_ASSERT(z == round_min_specamt(z));
 // TODO ?? Duration 0 hardcoded here, but prem functions use actual duration.
     return Irc7702_->CalculateGSPSpecAmt
         (0
