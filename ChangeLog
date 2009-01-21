@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1242 2009-01-20 13:15:22 chicares Exp $
+// $Id: ChangeLog,v 1.1243 2009-01-21 13:47:37 chicares Exp $
 
 MAINTENANCE
 
@@ -21635,4 +21635,21 @@ Reflect term rider in pay-deductions strategy.
 
   ihs_basicval.cpp
 Improve documentation; resolve numerous defect markers.
+
+20090121T1317Z <gchicares@sbcglobal.net> [865]
+
+  ihs_avstrtgy.cpp
+  ihs_basicval.cpp
+Resolve some defect markers; mark some newly-noticed defects.
+
+20090121T1343Z <gchicares@sbcglobal.net> [865]
+
+  ihs_basicval.cpp
+Test certain defect markers.
+
+20090121T1347Z <gchicares@sbcglobal.net> [861]
+
+  ihs_basicval.cpp
+Resolve certain defect markers. A full system test using the
+YYYYMMDDTHHMMSS diagnostics found no defect.
 
