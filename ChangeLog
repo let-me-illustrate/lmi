@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1243 2009-01-21 13:47:37 chicares Exp $
+// $Id: ChangeLog,v 1.1244 2009-01-28 14:23:57 wboutin Exp $
 
 MAINTENANCE
 
@@ -21651,5 +21651,10 @@ Test certain defect markers.
 
   ihs_basicval.cpp
 Resolve certain defect markers. A full system test using the
-YYYYMMDDTHHMMSS diagnostics found no defect.
+20090121T1343Z diagnostics found no defect.
+
+20090128T1423Z <wboutin@massmutual.com> [861]
+
+  version.hpp
+Mark release candidate.
 
