@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: zero.hpp,v 1.13 2009-01-29 00:28:20 chicares Exp $
+// $Id: zero.hpp,v 1.14 2009-01-29 01:26:19 chicares Exp $
 
 #ifndef zero_hpp
 #define zero_hpp
@@ -28,10 +28,12 @@
 
 #include "null_stream.hpp"
 #include "round_to.hpp"
+#include "value_cast.hpp"
 
 #include <cmath>
 #include <limits>
 #include <ostream>
+#include <string>
 #include <utility>
 
 enum root_validity
@@ -377,8 +379,8 @@ root_type decimal_root
             last_evaluated_iterand = b;
             iteration_stream
                 << "iteration " << number_of_iterations++
-                << " iterand " << b
-                << " value " << fb
+                << " iterand "  << value_cast<std::string>(b)
+                << " value "    << value_cast<std::string>(fb)
                 << std::endl
                 ;
             }
