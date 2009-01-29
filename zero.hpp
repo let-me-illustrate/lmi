@@ -19,10 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: zero.hpp,v 1.12 2009-01-29 00:07:24 chicares Exp $
-
-// R. P. Brent, _Algorithms for Minization without Derivatives_
-// ISBN 0-13-022335-2
+// $Id: zero.hpp,v 1.13 2009-01-29 00:28:20 chicares Exp $
 
 #ifndef zero_hpp
 #define zero_hpp
@@ -50,7 +47,53 @@ enum root_bias
 
 typedef std::pair<double, root_validity> root_type;
 
-/// Brent's algorithm with the following GWC modifications.
+/// Brent's algorithm with GWC modifications described below. See:
+/// R. P. Brent, _Algorithms for Minization without Derivatives_
+/// ISBN 0-13-022335-2
+///
+/// Rationale for choice of algorithm
+///
+/// "Brent's method combines the sureness of bisection with the speed
+/// of a higher-order method when appropriate. We recommend it as the
+/// method of choice for general one-dimensional root finding where a
+/// function's values only (and not its derivative or functional form)
+/// are available." --Press et al., _Numerical Recipes_
+///
+/// Newton's method has quadratic convergence, in the vicinity of a
+/// root, for well-behaved functions (though its performance in the
+/// worst case is infinitely poor). Sometimes we're asked why we don't
+/// use it, as other illustration systems are said to do. The truth is
+/// that they don't really use it, either. For a hundred years' worth
+/// of monthiversary processing, a solve requires finding a root of a
+/// polynomial of order 1200. Newton's method requires a derivative,
+/// which nobody evaluates analytically--the polynomial's coefficients
+/// are likely to change with each iteration. There are two obvious
+/// ways to approximate the derivative numerically:
+///
+///  - Use the slope of the last two iterates. That's actually the
+///    secant method, whose order of convergence is 1.618..., the
+///    golden ratio.
+///
+///  - Calculate f(x) and f(x+delta), where delta might typically be
+///    one cent. Because two evaluations are required, the order of
+///    convergence per (costly) function evaluation cannot exceed
+///    1.414..., the square root of two, so the secant method would
+///    be preferable.
+///
+/// Once it has localized a root well enough, Brent's method uses
+/// inverse quadratic interpolation, whose order of convergence is
+/// 1.8393..., faster than either method above. Furthermore, in the
+/// worst case, it's "never much slower than bisection" [Brent, op.
+/// cit., Chapter 4, soon after equation (2.8)], which is the optimal
+/// method for the most ill-conditioned functions. (To see why, seek
+/// a faster method than bisection to find the root of
+///   f(x) = -1, x < C
+///        =  0, x = C
+///        =  1, x > C
+/// in the a priori interval [a,b] such that f(a) < 0 and f(b) > 0,
+/// for an unspecified C in that interval.)
+///
+/// GWC modifications
 ///
 /// The original algorithm returns a zero z of the function f in
 ///   [bound0 bound1]
@@ -92,7 +135,9 @@ typedef std::pair<double, root_validity> root_type;
 /// algorithm does not test that requirement. This implementation does
 /// enforce it, and also handles the special case where both ordinates
 /// are zero.
-
+///
+/// Notes referred to in the source code
+///
 /// Note 0. For abscissae a, b, c:
 ///   a and b are a priori bounds;
 ///   b is the best approximation so far to the true root r;
