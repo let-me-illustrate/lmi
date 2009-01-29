@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1244 2009-01-28 14:23:57 wboutin Exp $
+// $Id: ChangeLog,v 1.1245 2009-01-29 12:50:24 chicares Exp $
 
 MAINTENANCE
 
@@ -21657,4 +21657,29 @@ Resolve certain defect markers. A full system test using the
 
   version.hpp
 Mark release candidate.
+
+20090128T2336Z <gchicares@sbcglobal.net> [861]
+
+  zero.hpp
+Rearrange comments.
+
+20090129T0007Z <gchicares@sbcglobal.net> [861]
+
+  zero.hpp
+Reformat comments.
+
+20090129T0028Z <gchicares@sbcglobal.net> [861]
+
+  zero.hpp
+Improve documentation.
+
+20090129T0126Z <gchicares@sbcglobal.net> [861]
+
+  zero.hpp
+Improve formatting of per-iteration details.
+
+20090129T1250Z <gchicares@sbcglobal.net> [861]
+
+  ihs_avsolve.cpp
+Experimentally write solve iteration details to a file.
 
