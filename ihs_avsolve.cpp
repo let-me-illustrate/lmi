@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.39 2008-12-27 02:56:42 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.40 2009-01-29 12:50:20 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -41,6 +41,7 @@
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
 #include "mc_enum_types_aux.hpp" // set_run_basis_from_cloven_bases()
+#include "miscellany.hpp"        // ios_out_app_binary()
 #include "outlay.hpp"
 #include "zero.hpp"
 
@@ -370,6 +371,14 @@ double AccountValue::Solve
             }
         }
 
+    std::ostream os_trace(status().rdbuf());
+    std::ofstream ofs_trace;
+    if(std::string::npos != yare_input_.Comments.find("idiosyncrasyT") && !SolvingForGuarPremium)
+        {
+        ofs_trace.open("trace.txt", ios_out_app_binary());
+        os_trace.rdbuf(ofs_trace.rdbuf());
+        }
+
     SolveHelper solve_helper(*this);
     root_type solution = decimal_root
         (lower_bound
@@ -378,7 +387,7 @@ double AccountValue::Solve
         ,decimals
         ,solve_helper
         ,false
-        ,status()
+        ,os_trace
         );
 
     if(root_not_bracketed == solution.second)
