@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: zero.hpp,v 1.14 2009-01-29 01:26:19 chicares Exp $
+// $Id: zero.hpp,v 1.15 2009-01-30 11:11:14 chicares Exp $
 
 #ifndef zero_hpp
 #define zero_hpp
@@ -243,12 +243,24 @@ root_type decimal_root
     double b = round_(bound1);
 
     double fa = static_cast<double>(f(a));
+    iteration_stream
+        << "iteration " << number_of_iterations++
+        << " iterand "  << value_cast<std::string>(a)
+        << " value "    << value_cast<std::string>(fa)
+        << std::endl
+        ;
     if(0.0 == fa)
         {
         return std::make_pair(a, root_is_valid);
         }
 
     double fb = static_cast<double>(f(b));
+    iteration_stream
+        << "iteration " << number_of_iterations++
+        << " iterand "  << value_cast<std::string>(b)
+        << " value "    << value_cast<std::string>(fb)
+        << std::endl
+        ;
     double last_evaluated_iterand = b; // Note 1.
     if(0.0 == fb)
         {
