@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1245 2009-01-29 12:50:24 chicares Exp $
+// $Id: ChangeLog,v 1.1246 2009-01-30 11:35:24 chicares Exp $
 
 MAINTENANCE
 
@@ -21682,4 +21682,14 @@ Improve formatting of per-iteration details.
 
   ihs_avsolve.cpp
 Experimentally write solve iteration details to a file.
+
+20090130T1111Z <gchicares@sbcglobal.net> [861]
+
+  zero.hpp
+Include evaluation of input bounds in per-iteration details.
+
+20090130T1135Z <gchicares@sbcglobal.net> [861]
+
+  zero.hpp
+Improve documentation.
 

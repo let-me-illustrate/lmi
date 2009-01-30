@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: zero.hpp,v 1.15 2009-01-30 11:11:14 chicares Exp $
+// $Id: zero.hpp,v 1.16 2009-01-30 11:35:24 chicares Exp $
 
 #ifndef zero_hpp
 #define zero_hpp
@@ -49,6 +49,18 @@ enum root_bias
 
 typedef std::pair<double, root_validity> root_type;
 
+/// Return a zero z of a function f within input bounds [a,b].
+///
+/// Precondition: either
+///   0.0 == f(a), or
+///   0.0 == f(b), or
+///   f(a) and f(b) have opposite signs;
+/// that is, the input bounds include or bracket a root.
+///
+/// Postcondition: z is within a tolerance
+///   6 * epsilon * |z| + 10^-decimals
+/// of a true zero.
+///
 /// Brent's algorithm with GWC modifications described below. See:
 /// R. P. Brent, _Algorithms for Minization without Derivatives_
 /// ISBN 0-13-022335-2
