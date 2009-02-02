@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1246 2009-01-30 11:35:24 chicares Exp $
+// $Id: ChangeLog,v 1.1247 2009-02-02 02:47:30 chicares Exp $
 
 MAINTENANCE
 
@@ -21692,4 +21692,10 @@ Include evaluation of input bounds in per-iteration details.
 
   zero.hpp
 Improve documentation.
+
+20090202T0247Z <gchicares@sbcglobal.net> [861]
+
+  ihs_avmly.cpp
+Experimentally change withdrawal solves.
+  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00000.html
 
