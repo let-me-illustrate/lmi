@@ -21,7 +21,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.112 2009-01-19 10:45:31 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.113 2009-02-02 02:47:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2852,7 +2852,7 @@ void AccountValue::TxTakeWD()
 //   Solving || (!Solving && mce_run_gen_curr_sep_full == RunBasis_)
     if(mce_run_gen_curr_sep_full == RunBasis_)
         {
-        if(MaxWD < RequestedWD)
+        if(!Solving && MaxWD < RequestedWD)
             {
             NetWD = MaxWD;
             }
