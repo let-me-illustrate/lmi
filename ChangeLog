@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1247 2009-02-02 02:47:30 chicares Exp $
+// $Id: ChangeLog,v 1.1248 2009-02-06 01:53:23 chicares Exp $
 
 MAINTENANCE
 
@@ -21696,6 +21696,18 @@ Improve documentation.
 20090202T0247Z <gchicares@sbcglobal.net> [861]
 
   ihs_avmly.cpp
-Experimentally change withdrawal solves.
+Experimentally change withdrawal solves. See:
   http://lists.nongnu.org/archive/html/lmi/2009-02/msg00000.html
+
+20090206T0153Z <gchicares@sbcglobal.net> [860]
+
+  ihs_acctval.cpp
+Fix defect introduced 20080623T1318Z (and remarked then). For products
+that set the 'LapseIgnoresSurrChg' flag (which prevents lapse merely
+due to a surrender charge as long as account value is nonnegative),
+some solves were unsuccessful. Because of the precaution described in
+footnote [4] here:
+  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00000.html
+an unsuccessful solve does not lead to an incorrect illustration. See:
+  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00005.html
 
