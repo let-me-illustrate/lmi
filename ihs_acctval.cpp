@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.158 2008-12-27 02:56:42 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.159 2009-02-06 01:53:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1288,17 +1288,25 @@ void AccountValue::FinalizeYear()
     double surr_chg = SurrChg();
     double csv_net =
           total_av
-        - surr_chg
         - (RegLnBal + PrfLnBal)
         + GetRefundableSalesLoad()
 //        + ExpRatReserve // This would be added if it existed.
         ;
+
+    // While performing a solve, ignore any positive surrender charge
+    // that cannot cause the contract to lapse.
+    if(Solving && 0.0 < surr_chg && LapseIgnoresSurrChg)
+        {
+        ; // Do nothing.
+        }
+    else
+        {
+        csv_net -= surr_chg;
+        }
+
     csv_net = std::max(csv_net, HoneymoonValue);
 
-    // TODO ?? AccountValue::Solve() really should be redesigned.
-    // For now, this obscure workaround simulates circumstances
-    // that its present implementation originally assumed.
-    if(!(Solving && !LapseIgnoresSurrChg))
+    if(!Solving)
         {
         csv_net = std::max(csv_net, 0.0);
         }
