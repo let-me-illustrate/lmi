@@ -21,7 +21,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.113 2009-02-02 02:47:30 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.114 2009-02-07 12:57:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -562,9 +562,8 @@ void AccountValue::TxExch1035()
 //        return;
 //        }
 
+// TODO ?? Perhaps this condition should be:
 //    if(!SolvingForGuarPremium && Solving || mce_run_gen_curr_sep_full == RunBasis_)
-// TODO ?? Probably the condition (here and elsewhere) should be:
-//   Solving || (!Solving && mce_run_gen_curr_sep_full == RunBasis_)
     if(Solving || mce_run_gen_curr_sep_full == RunBasis_)
         {
         if(!SolvingForGuarPremium)
@@ -1619,8 +1618,6 @@ void AccountValue::TxAscertainDesiredPayment()
 
     HOPEFULLY(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
 
-// TODO ?? Probably the condition (here and elsewhere) should be:
-//   Solving || (!Solving && mce_run_gen_curr_sep_full == RunBasis_)
     if(Solving || mce_run_gen_curr_sep_full == RunBasis_)
         {
         if(ee_pay_this_month)
@@ -1670,9 +1667,6 @@ void AccountValue::TxAscertainDesiredPayment()
     // unique nature that requires them to be recognized before any
     // premium is paid, and dumpins do not share that nature.
 
-// TODO ?? Probably the condition (here and elsewhere) should be:
-//   Solving || (!Solving && mce_run_gen_curr_sep_full == RunBasis_)
-// in addition to the first-year, first-month condition.
     if(0 == Year && 0 == Month && (Solving || mce_run_gen_curr_sep_full == RunBasis_))
         {
         // Don't enforce the GPT premium limit when solving for
@@ -1724,8 +1718,6 @@ void AccountValue::TxLimitPayment(double a_maxpmt)
 
     HOPEFULLY(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
 
-// TODO ?? Probably the condition (here and elsewhere) should be:
-//   Solving || (!Solving && mce_run_gen_curr_sep_full == RunBasis_)
     if(Solving || mce_run_gen_curr_sep_full == RunBasis_)
         {
         OverridingEePmts[MonthsSinceIssue] = EeGrossPmts[Month];
@@ -2848,8 +2840,8 @@ void AccountValue::TxTakeWD()
     // If maximum exceeded...limit it, rather than letting it lapse, on
     // the current basis--but on other bases, let it lapse
     NetWD = RequestedWD;
-// TODO ?? Probably the condition (here and elsewhere) should be:
-//   Solving || (!Solving && mce_run_gen_curr_sep_full == RunBasis_)
+// TODO ?? Perhaps this condition should be:
+//   Solving || mce_run_gen_curr_sep_full == RunBasis_
     if(mce_run_gen_curr_sep_full == RunBasis_)
         {
         if(!Solving && MaxWD < RequestedWD)
@@ -3231,8 +3223,8 @@ void AccountValue::TxTakeLoan()
         );
 
     {
-// TODO ?? Probably the condition (here and elsewhere) should be:
-//   Solving || (!Solving && mce_run_gen_curr_sep_full == RunBasis_)
+// TODO ?? Perhaps this condition should be:
+//   Solving || mce_run_gen_curr_sep_full == RunBasis_
     if(mce_run_gen_curr_sep_full == RunBasis_)
         {
         OverridingLoan[Year] = ActualLoan;
