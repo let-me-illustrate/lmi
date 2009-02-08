@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_wx.make,v 1.10 2008-12-27 02:56:46 chicares Exp $
+# $Id: install_wx.make,v 1.11 2009-02-08 00:55:13 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -54,6 +54,8 @@ build_dir     := $(wx_dir)/wxWidgets-$(wx_version)/gcc$(vendor)
 # '--enable-debug_flag'.
 
 config_options = \
+  --build=i686-pc-cygwin \
+  --host=i686-pc-mingw32 \
   --disable-gif \
   --disable-apple_ieee \
   --without-libjpeg \
