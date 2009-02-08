@@ -21,7 +21,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.114 2009-02-07 12:57:20 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.115 2009-02-08 01:50:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2003,7 +2003,7 @@ void AccountValue::TxLoanRepay()
 // bases, why do we change it for each basis?
 // TODO ?? Shouldn't this be moved to FinalizeMonth()?
     InvariantValues().NewCashLoan[Year] = ActualLoan;
-    // TODO ?? Do we need to change VariantValues().ExcessLoan[Year]?
+    // TODO ?? Consider changing loan_ullage_[Year] here.
 }
 
 //============================================================================
@@ -3195,6 +3195,7 @@ void AccountValue::TxTakeLoan()
     // Nothing more to do if no loan requested.
     if(RequestedLoan <= 0.0)
         {
+        loan_ullage_[Year] = 0.0;
         return;
         }
 
@@ -3209,6 +3210,7 @@ void AccountValue::TxTakeLoan()
     if(Solving)
         {
         ActualLoan = RequestedLoan;
+        loan_ullage_[Year] = std::max(0.0, RequestedLoan - max_loan_increment);
         }
     else
         {
@@ -3217,10 +3219,15 @@ void AccountValue::TxTakeLoan()
         // TODO ?? Shouldn't this happen in FinalizeMonth()?
         InvariantValues().NewCashLoan[Year] = ActualLoan;
         }
-    VariantValues().ExcessLoan[Year] = std::min
-        (0.0
-        ,max_loan_increment - RequestedLoan
-        );
+    {
+    // Expungible block--replaced by loan_ullage_. Retained for the
+    // nonce in order not to perturb system testing.
+    VariantValues().ExcessLoan[Year] = std::min(0.0, max_loan_increment - RequestedLoan);
+    if(Solving)
+        {
+        LMI_ASSERT(VariantValues().ExcessLoan[Year] == -loan_ullage_[Year]);
+        }
+    }
 
     {
 // TODO ?? Perhaps this condition should be:

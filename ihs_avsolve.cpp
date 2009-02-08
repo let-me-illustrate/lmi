@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.40 2009-01-29 12:50:20 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.41 2009-02-08 01:50:37 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -89,9 +89,10 @@ class SolveHelper
 // if any, but disregarding any duration at which a no-lapse guarantee
 // is in effect
 //
-// 3. we ascertain the lowest (negative) loan deficit (maximum loan minus
-// actual loan balance) over the solve period, if any, ignoring any
-// no-lapse guarantee
+// 3. we ascertain the greatest loan ullage (any excess of requested
+// over maximum) throughout the solve period, ignoring any no-lapse
+// guarantee; and negate it for use as an objective-function penalty
+// quite like negative CSV
 //
 // 4. if either 2. or 3. is negative, we return the difference between
 // the target value and whichever of them is more negative; else we
@@ -131,6 +132,7 @@ double AccountValue::SolveTest(double a_CandidateValue)
         ,YearlyNoLapseActive.end()
         ,0
         );
+    LMI_ASSERT(0 <= no_lapse_dur);
     double most_negative_csv = 0.0;
     if(no_lapse_dur < SolveTargetDuration_)
         {
@@ -140,17 +142,28 @@ double AccountValue::SolveTest(double a_CandidateValue)
             );
         }
 
-    // Assume any no-lapse provision is inoperative when overloaned.
-    // TODO ?? ExcessLoan is negative; is LoanDeficit a better name?
-    LMI_ASSERT(0 < SolveTargetDuration_);
+    // Consider ullage over the entire period from issue through the
+    // solve target duration--disregarding any no-lapse provision,
+    // which wouldn't override internal limits.
+    //
+    // AccountValue::Solve() asserts that SolveTargetDuration_ lies
+    // within appropriate bounds.
+    double greatest_loan_ullage = *std::max_element
+        (loan_ullage_.begin()
+        ,loan_ullage_.begin() + SolveTargetDuration_
+        );
+    {
+    // This block to be expunged after testing:
     double most_negative_loan_deficit = *std::min_element
         (VariantValues().ExcessLoan.begin()
         ,VariantValues().ExcessLoan.begin() + SolveTargetDuration_
         );
+    LMI_ASSERT(greatest_loan_ullage == -most_negative_loan_deficit);
+    }
 
     double worst_negative = std::min
         (most_negative_csv
-        ,most_negative_loan_deficit
+        ,-greatest_loan_ullage
         );
     // SolveTargetDuration_ is in origin one. That's natural for loop
     // counters and iterators--it's one past the end--but indexing
