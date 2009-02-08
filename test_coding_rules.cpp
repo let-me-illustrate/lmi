@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.83 2009-01-04 02:39:11 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.84 2009-02-08 15:19:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -547,6 +547,7 @@ void check_defect_markers(file const& f)
             &&  "DATABASE "    != z[1]
             &&  "ET "          != z[1]
             &&  "EVGENIY "     != z[1]
+            &&  "IHS "         != z[1]
             &&  "INELEGANT "   != z[1]
             &&  "INPUT "       != z[1]
             &&  "MPATROL "     != z[1]
