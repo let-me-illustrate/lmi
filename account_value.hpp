@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.78 2008-12-27 02:56:35 chicares Exp $
+// $Id: account_value.hpp,v 1.79 2009-02-08 01:50:36 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -377,9 +377,13 @@ class LMI_SO AccountValue
     double MlyNoLapsePrem;
     double CumNoLapsePrem;
     bool   NoLapseActive;
-    // Solve routines need to know period when no lapse was active; we
-    // represent it as int rather than bool so we can use accumulate().
+
+    // Solves need to know when a no-lapse guarantee is active.
+    // Prefer int here because vector<bool> is not a container.
     std::vector<int> YearlyNoLapseActive;
+
+    // Ullage is any positive excess of amount requested over amount available.
+    std::vector<double> loan_ullage_;
 
     double RiderDeductions;
 

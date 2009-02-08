@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: solve.cpp,v 1.19 2008-12-27 02:56:55 chicares Exp $
+// $Id: solve.cpp,v 1.20 2009-02-08 01:50:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -92,7 +92,11 @@ double SolveTest()
         {
         Negative = std::min
             (Negative
-            ,std::min(ConstThat->VariantValues().CSVNet[j], ConstThat->VariantValues().ExcessLoan[j])
+            ,ConstThat->VariantValues().CSVNet[j]
+// Ideally, it'd be this:
+//          ,std::min(ConstThat->VariantValues().CSVNet[j], ConstThat->loan_ullage_[j])
+// but the antediluvian branch doesn't calculate ullage at all--not even
+// in obsolete variable ExcessLoan.
             );
         }
 
