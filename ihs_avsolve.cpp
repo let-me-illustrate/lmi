@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.41 2009-02-08 01:50:37 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.42 2009-02-08 12:58:46 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -152,14 +152,6 @@ double AccountValue::SolveTest(double a_CandidateValue)
         (loan_ullage_.begin()
         ,loan_ullage_.begin() + SolveTargetDuration_
         );
-    {
-    // This block to be expunged after testing:
-    double most_negative_loan_deficit = *std::min_element
-        (VariantValues().ExcessLoan.begin()
-        ,VariantValues().ExcessLoan.begin() + SolveTargetDuration_
-        );
-    LMI_ASSERT(greatest_loan_ullage == -most_negative_loan_deficit);
-    }
 
     double worst_negative = std::min
         (most_negative_csv
