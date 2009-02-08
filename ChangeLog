@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1248 2009-02-06 01:53:23 chicares Exp $
+// $Id: ChangeLog,v 1.1249 2009-02-08 01:50:37 chicares Exp $
 
 MAINTENANCE
 
@@ -21710,4 +21710,27 @@ footnote [4] here:
   http://lists.nongnu.org/archive/html/lmi/2009-02/msg00000.html
 an unsuccessful solve does not lead to an incorrect illustration. See:
   http://lists.nongnu.org/archive/html/lmi/2009-02/msg00005.html
+
+20090207T1257Z <gchicares@sbcglobal.net> [857]
+
+  ihs_avmly.cpp
+A || (!A && B) <-> A || B.
+
+20090208T0055Z <gchicares@sbcglobal.net> [857]
+
+  install_libxml2_libxslt.make
+  install_wx.make
+Configure with '--build=i686-pc-cygwin --host=i686-pc-mingw32' for
+greater robustness. See:
+  http://cygwin.com/ml/cygwin/2009-01/msg00848.html
+
+20090208T0150Z <gchicares@sbcglobal.net> [856]
+
+  account_value.hpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ihs_avsolve.cpp
+  ledger_variant.hpp
+  solve.cpp
+Replace one badly-named data member with another that's well named.
 
