@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: solve.cpp,v 1.20 2009-02-08 01:50:37 chicares Exp $
+// $Id: solve.cpp,v 1.21 2009-02-08 15:20:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -39,16 +39,15 @@
 #include <algorithm>     // std::min(), std::max()
 
 /*
-TODO ?? Restrict targetyear to Length.
+IHS !! These issues have been addressed in lmi, but not here:
 
-TODO ?? Some solves happen other than in the first year; need input
-and calculations.
+ - Restrict targetyear to Length.
 
-TODO ?? Multiple solves may be incompatible.
+ - Some solves happen other than in the first year; need input and calculations.
 
-TODO ?? Solve basis: curr, guar.
+ - Solve basis: curr, guar.
 
-TODO ?? no lapse period.
+ - no-lapse period.
 */
 
 namespace
@@ -87,7 +86,7 @@ double SolveTest()
     //   amount of loan in excess of maximum loan through target duration
     double Negative = 0.0;
 
-    // TODO ?? Start counting only at end of no-lapse period?
+    // IHS !! Start counting only at end of no-lapse period--lmi does that already.
     for(int j = 0; j < ThatSolveTgtYear; j++)
         {
         Negative = std::min
@@ -103,7 +102,7 @@ double SolveTest()
     double z = ConstThat->VariantValues().CSVNet[ThatSolveTgtYear - 1];
     if(Negative < 0.0)
         z = std::min(z, Negative);
-    // TODO ?? If SolveTgtYr within no-lapse period...
+    // IHS !! If SolveTgtYr within no-lapse period...see lmi.
 
     double y = 0.0;
     switch(ThatSolveTarget)
@@ -126,9 +125,9 @@ double SolveTest()
                     break;
                 case mce_rop:
                     {
-                    // TODO ?? What should be done here?
+                    // IHS !! What should be done here? See lmi.
                     }
-// TODO ?? fall through...    break;
+// fall through...
                 default:
                     {
                     fatal_error()
@@ -187,7 +186,7 @@ inline static double SolveWD(double CandidateValue)
 }
 
 //============================================================================
-// TODO ?? Never used.
+// IHS !! Implemented in lmi, but not here.
 inline static double SolveWDThenLoan(double /* CandidateValue */)
 {
     return 0.0;
@@ -240,7 +239,7 @@ void AccountValue::SolveSetLoanThenWD
     ,int    // ThatSolveEndYear
     )
 {
-    // TODO ?? Needs an implementation.
+    // IHS !! Implemented in lmi.
 }
 
 //============================================================================
@@ -280,7 +279,7 @@ double AccountValue::Solve()
             {
             // We aren't interested in negative specified amounts.
             LowerBound = 0.0;
-            // TODO ?? Not satisfactory.
+            // IHS !! Not satisfactory; lmi tries a bit harder.
             UpperBound = 1000000.0 * Outlay_->ee_modal_premiums()[0];
             Decimals   = 0;
             SolveFn    = SolveSpecAmt;
