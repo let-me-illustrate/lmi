@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_libxml2_libxslt.make,v 1.8 2008-12-27 02:56:45 chicares Exp $
+# $Id: install_libxml2_libxslt.make,v 1.9 2009-02-08 00:55:13 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -54,7 +54,7 @@ mingw_bin_dir := $(mingw_dir)/bin
 #   .deps/DOCBparser.Plo:1: *** multiple target patterns.  Stop.
 
 common_options := \
-  --build=i686-pc-mingw32 \
+  --build=i686-pc-cygwin \
   --host=i686-pc-mingw32 \
   --disable-dependency-tracking \
   --disable-static \
