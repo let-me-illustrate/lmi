@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.65 2008-12-27 02:56:35 chicares Exp $
+// $Id: accountvalue.cpp,v 1.66 2009-02-08 15:20:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -355,7 +355,6 @@ void AccountValue::DoYear
     // Update death benefit: "deathbft" currently holds benefit as of the
     //   beginning of month 12, but we want it as of the end of that month,
     //   in case the corridor or option 2 drove it up during the last month.
-    //   TODO ?? needs end of year corridor factor, if it varies monthly?
     TxSetDeathBft();
     VariantValues().EOYDeathBft[Year] = deathbft;
 
@@ -369,7 +368,7 @@ void AccountValue::DoYear
 
     if(Debugging)
         {
-//        DebugPrint(); // TODO ?? Need stream argument.
+//        DebugPrint(); // IHS !! Implemented in lmi.
         }
 }
 
@@ -382,7 +381,7 @@ void AccountValue::DoMonth()
         return;
         }
 
-    // TODO ?? not yet implemented:
+    // IHS !! Implemented in lmi but not here:
     //   rounding of premium load
     //   multiple lives
     //   min and max prem (yearly and cumulative)
@@ -392,7 +391,7 @@ void AccountValue::DoMonth()
     //   solve for endt?
     //   debug detail
     //   7702A
-    //   CVT corridor
+    //   CVAT corridor
     //   rounding
     //   ADB and WP rates; WP rider duration
     //   preferred loans; loan parameterization
@@ -413,8 +412,8 @@ void AccountValue::DoMonth()
     TxOptionChange();
     TxSpecAmtChange();
 //    TxTestGPT();        // Not yet implemented.
-    TxPmt();            // TODO ?? Incomplete.
-    TxLoanRepay();      // TODO ?? Not called.
+    TxPmt();            // IHS !! Incomplete here; better in lmi.
+    TxLoanRepay();
 
     TxSetBOMAV();
     TxSetCoiCharge();
@@ -694,7 +693,7 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
 // Ignores no-lapse periods and other death benefit guarantees.
 // Some systems force monthly premium to be integral cents even though
 //   mode is not monthly; TODO ?? is this something we need to do here?
-// TODO ?? Tiered premium loads not implemented.
+// IHS !! Tiered premium implemented in lmi, but not here.
 void AccountValue::TxPmt()
 {
     // Do nothing if this is not a modal payment date.
@@ -703,7 +702,7 @@ void AccountValue::TxPmt()
         return;
         }
 
-    // TODO ?? Put GPT stuff like forceout and premium limit here.
+    // IHS !! Put GPT stuff like forceout and premium limit here--see lmi.
 
     // Pay premium.
     PerformPmtStrategy(&pmt);
@@ -749,13 +748,13 @@ void AccountValue::TxLoanRepay()
         }
 
     AVUnloaned -= RequestedLoan;
-    AVRegLn += RequestedLoan;    // TODO ?? Also preferred.
+    AVRegLn += RequestedLoan;    // IHS !! Preferred loans--see lmi.
     InvariantValues().NewCashLoan[Year] = RequestedLoan;
 }
 
 //============================================================================
 // Set account value before monthly deductions.
-// TODO ?? Should this function live?
+// IHS !! This function seems bogus here; the lmi implementation does much more.
 void AccountValue::TxSetBOMAV()
 {
     AVUnloaned -= YearsMonthlyPolicyFee;
@@ -793,7 +792,7 @@ void AccountValue::TxSetDeathBft(bool)
 
     deathbft = GetRoundingRules().round_death_benefit()(deathbft);
 
-    // TODO ?? Here we should accumulate average death benefit for profit testing.
+    // SOMEDAY !! Accumulate average death benefit for profit testing here.
 }
 
 //============================================================================
@@ -847,7 +846,7 @@ void AccountValue::TxCreditInt()
     //   but do not charge interest on negative account value.
     if(0.0 < AVUnloaned)
         {
-        // TODO ?? Should each interest increment be rounded separately?
+        // IHS !! Each interest increment is rounded separately in lmi.
         double z = GetRoundingRules().round_interest_credit()
             (AVUnloaned * YearsGenAcctIntRate
             );
@@ -868,7 +867,7 @@ void AccountValue::TxLoanInt()
         }
 
     // We may want to display credited interest separately.
-    // TODO ?? Should each interest increment be rounded separately?
+    // IHS !! Each interest increment is rounded separately in lmi.
     RegLnIntCred = GetRoundingRules().round_interest_credit()
         (AVRegLn * YearsRegLnIntCredRate
         );
@@ -891,7 +890,8 @@ void AccountValue::TxLoanInt()
 }
 
 //============================================================================
-// TODO ?? Min AV after WD not implemented--does max WD calculation take care of it?
+// IHS !! Min AV after WD not implemented here, though max WD calculation
+// may take care of it. It is implemented in lmi.
 void AccountValue::TxTakeWD()
 {
     // Illustrations allow withdrawals only on anniversary.
@@ -916,10 +916,12 @@ void AccountValue::TxTakeWD()
 
     // Impose maximum amount.
     // If maximum exceeded, limit it.
-    // TODO ?? Max WD and max loan formulas treat loan interest differently:
+    // IHS !! Max WD and max loan formulas treat loan interest differently:
     //   max WD on a loaned policy: cannot become overloaned until next
     //     modal premium date;
     //   max loan: cannot become overloaned until end of policy year.
+    // However, lmi provides a variety of implementations instead of
+    // only one.
     double MaxWD =
           AVUnloaned
         + (AVRegLn  + AVPrfLn)
@@ -969,10 +971,10 @@ void AccountValue::TxTakeWD()
 
     // Deduct withdrawal fee.
     wd -= std::min(WDFee, wd * WDFeeRate);
-    // TODO ?? This treats input WD as gross; it prolly should be net.
+    // IHS !! This treats input WD as gross; it prolly should be net. But compare lmi.
 
     InvariantValues().NetWD[Year] = wd;
-// TODO ??    TaxBasis -= wd;
+// IHS !!    TaxBasis -= wd; // Withdrawals are subtracted from basis in lmi.
 }
 
 //============================================================================
@@ -993,9 +995,9 @@ void AccountValue::TxTakeLoan()
 
     // Impose maximum amount.
     // If maximum exceeded...limit it.
-    // TODO ?? For solves, we may wish to ignore max.
+    // IHS !! For solves, the lmi branch uses an 'ullage' concept.
     MaxLoan =
-          AVUnloaned * 0.9    // TODO ?? Icky manifest constant.
+          AVUnloaned * 0.9    // IHS !! Icky manifest constant--lmi uses a database entity.
         // - surrchg
         + (AVRegLn + AVPrfLn)
         - RegLnBal * (std::pow((1.0 + YearsRegLnIntDueRate), 12 - Month) - 1.0)
@@ -1009,7 +1011,7 @@ void AccountValue::TxTakeLoan()
     MaxLoan = std::max(0.0, MaxLoan);
     MaxLoan = GetRoundingRules().round_loan()(MaxLoan);
 
-    // TODO ?? Preferred loan calculations go here.
+    // IHS !! Preferred loan calculations would go here: implemented in lmi.
 
     // Update loan AV, loan balance.
 
@@ -1019,7 +1021,7 @@ void AccountValue::TxTakeLoan()
         }
 
     AVUnloaned -= RequestedLoan;
-    AVRegLn += RequestedLoan;    // TODO ?? Also preferred.
+    AVRegLn += RequestedLoan;    // IHS !! Also preferred loans: implemented in lmi.
     InvariantValues().NewCashLoan[Year] = RequestedLoan;
 }
 
@@ -1052,7 +1054,7 @@ void AccountValue::TxTestLapse()
 //============================================================================
 void AccountValue::TxDebug()
 {
-// TODO ?? Not yet implemented.
+// IHS !! Implemented in lmi, but not here.
 }
 
 //============================================================================

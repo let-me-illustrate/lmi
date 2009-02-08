@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basicvalues.cpp,v 1.39 2008-12-27 02:56:37 chicares Exp $
+// $Id: basicvalues.cpp,v 1.40 2009-02-08 15:20:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -44,7 +44,7 @@
 #include <algorithm> // std::max()
 #include <cmath>     // std::pow()
 
-// TODO ??  Instead of this hardcoded path, use a configuration file.
+// IHS !! Instead of these hardcoded paths, lmi uses a configuration file.
 //
 char const* CurrentTableFile()    {return "/opt/lmi/data/sample";}
 char const* GuaranteedTableFile() {return "/opt/lmi/data/qx_cso";}
@@ -104,7 +104,7 @@ void BasicValues::Init()
 
     RoundingRules_.reset(new rounding_rules);
 
-    // TODO ?? Just a dummy initialization for now.
+    // IHS !! Just a dummy initialization here--implemented in lmi.
     SpreadFor7702_.assign(Length, 0.0);
 
     // Multilife contracts will need a vector of mortality-rate objects.
@@ -129,12 +129,12 @@ void BasicValues::Init()
 //============================================================================
 double BasicValues::InvestmentManagementFee() const
 {
-    // TODO ?? Just a stub for now.
+    // IHS !! Just a stub here--implemented in lmi.
     return 0.0;
 }
 
 //============================================================================
-// TODO ?? Simply calls the target-premium routine for now.
+// IHS !! Simply calls the target-premium routine for now--see lmi.
 double BasicValues::GetModalMinPrem
     (int         a_year
     ,mcenum_mode a_mode
@@ -151,9 +151,10 @@ double BasicValues::GetModalTgtPrem
     ,double      a_specamt
     ) const
 {
-    // TODO ?? Simplistic. Ignores table ratings, flat extras, and
+    // IHS !! Simplistic. Ignores table ratings, flat extras, and
     // riders. The interest rates are arbitrary, and given as repeated
     // floating literals; they should come from the database instead.
+    // See lmi for a much better implementation.
 
     double spread = 0.0;
 
@@ -198,7 +199,7 @@ double BasicValues::GetModalTgtPrem
                 )[a_year]
         -   spread
         );
-    // TODO ?? Write a functor to do this.
+    // IHS !! Implemented better in lmi.
     double Annuity = (1.0 - std::pow(u, 12 / a_mode)) / (1.0 - u);
 
     double z = a_specamt;
@@ -211,13 +212,12 @@ double BasicValues::GetModalTgtPrem
         );
     z *= MortalityRates_->MonthlyCoiRates(mce_gen_curr)[a_year];
     z += Loads_->monthly_policy_fee(mce_gen_curr)[a_year];
-// TODO ?? Would rider charges depend on month?
 //    z += AdbRate;
 //    z *= 1.0 + WpRate;
     z /= 1.0 - Loads_->target_premium_load(mce_gen_curr)[a_year];
     z *= Annuity;
 
-    // TODO ?? Parameterize this.
+    // IHS !! Parameterized in lmi.
     static round_to<double> const round_it(2, r_upward);
     return round_it(z);
 }
@@ -238,8 +238,8 @@ double BasicValues::GetModalTgtSpecAmt
     ,double      a_pmt
     ) const
 {
-    // TODO ?? Factor out the (defectively simplistic) code this
-    // shares with GetModalTgtPrem().
+    // IHS !! Factor out the (defectively simplistic) code this
+    // shares with GetModalTgtPrem()--see lmi.
     double spread = 0.0;
 
     switch(a_mode)
@@ -300,7 +300,7 @@ double BasicValues::GetModalTgtSpecAmt
                 )[0]
         );
 
-    // TODO ?? Parameterize this.
+    // IHS !! Parameterized in lmi.
     static round_to<double> const round_it(0, r_downward);
     return round_it(z);
 }
