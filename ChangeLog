@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1249 2009-02-08 01:50:37 chicares Exp $
+// $Id: ChangeLog,v 1.1250 2009-02-09 16:05:27 chicares Exp $
 
 MAINTENANCE
 
@@ -21733,4 +21733,34 @@ greater robustness. See:
   ledger_variant.hpp
   solve.cpp
 Replace one badly-named data member with another that's well named.
+
+20090208T1258Z <gchicares@sbcglobal.net> [856]
+
+  ihs_avsolve.cpp
+Remove a complex assertion, as planned.
+
+20090208T1519Z <gchicares@sbcglobal.net> [856]
+
+  test_coding_rules.cpp
+Permit a new marker in comments. Issues in the antediluvian ("ihs")
+fork that have been addressed in the production system ("lmi") should
+be marked 'IHS !! '.
+
+20090208T1520Z <gchicares@sbcglobal.net> [813]
+
+  accountvalue.cpp
+  basicvalues.cpp
+  solve.cpp
+Reconsider ihs-only defect markers. Defects in the ihs fork that have
+been resolved in the production system are now marked 'IHS !! '.
+
+20090209T1605Z <gchicares@sbcglobal.net> [814]
+
+  account_value.hpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ihs_avsolve.cpp
+Experimentally change withdrawal solves, reverting the 20090202T0247Z
+experiment. See:
+  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00010.html
 
