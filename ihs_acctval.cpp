@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.160 2009-02-08 01:50:36 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.161 2009-02-09 16:05:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -169,6 +169,7 @@ AccountValue::AccountValue(Input const& input)
     YearlyTaxBasis      .reserve(BasicValues::GetLength());
     YearlyNoLapseActive .reserve(BasicValues::GetLength());
     loan_ullage_        .reserve(BasicValues::GetLength());
+    withdrawal_ullage_  .reserve(BasicValues::GetLength());
 }
 
 //============================================================================
@@ -672,6 +673,7 @@ void AccountValue::SetInitialValues()
     // the no-lapse criteria fail to be met, future values are right.
     YearlyNoLapseActive.assign(BasicValues::GetLength(), false);
     loan_ullage_       .assign(BasicValues::GetLength(), 0.0);
+    withdrawal_ullage_ .assign(BasicValues::GetLength(), 0.0);
     NoLapseActive               = true;
     if(NoLapseOpt1Only && mce_option1 != DeathBfts_->dbopt()[0])
         {
