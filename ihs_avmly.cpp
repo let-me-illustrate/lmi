@@ -21,7 +21,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.115 2009-02-08 01:50:37 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.116 2009-02-09 16:05:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2829,6 +2829,7 @@ void AccountValue::TxTakeWD()
     // Nothing more to do if no withdrawal requested.
     if(0.0 == RequestedWD)
         {
+        withdrawal_ullage_[Year] = 0.0;
 // This seems wrong. If we're changing something that's invariant among
 // bases, why do we change it for each basis?
 // TODO ?? Shouldn't this be moved to FinalizeMonth()?
@@ -2839,15 +2840,15 @@ void AccountValue::TxTakeWD()
     // TODO ?? Maximum withdrawal--is it gross or net?
     // If maximum exceeded...limit it, rather than letting it lapse, on
     // the current basis--but on other bases, let it lapse
-    NetWD = RequestedWD;
-// TODO ?? Perhaps this condition should be:
-//   Solving || mce_run_gen_curr_sep_full == RunBasis_
-    if(mce_run_gen_curr_sep_full == RunBasis_)
+
+    if(Solving)
         {
-        if(!Solving && MaxWD < RequestedWD)
-            {
-            NetWD = MaxWD;
-            }
+        withdrawal_ullage_[Year] = std::max(0.0, RequestedWD - MaxWD);
+        }
+
+    if(Solving || mce_run_gen_curr_sep_full == RunBasis_)
+        {
+        NetWD = std::min(RequestedWD, MaxWD);
         OverridingWD[Year] = NetWD;
         }
     else
@@ -2866,6 +2867,7 @@ void AccountValue::TxTakeWD()
     // Impose minimum amount (if nonzero) on withdrawals.
     if(RequestedWD < MinWD)
         {
+        withdrawal_ullage_[Year] = 0.0;
         // TODO ?? This was an error:
 //      NetWD == 0.0;
         // but the regression test deck as of 5 Sept 1999 didn't catch it;
@@ -2893,6 +2895,7 @@ void AccountValue::TxTakeWD()
         // TODO ?? Should RequestedWD be constrained by MaxWD and MinWD here?
         if(0.0 == TaxBasis || std::min(TaxBasis, RequestedWD) < MinWD) // All loan
             {
+            withdrawal_ullage_[Year] = 0.0;
             NetWD = 0.0;
             }
         else if(NetWD < TaxBasis) // All WD
@@ -2917,6 +2920,9 @@ void AccountValue::TxTakeWD()
 
     if(NetWD <= 0.0)
         {
+// TODO ?? What should this be?
+//      withdrawal_ullage_[Year] = ?
+//
 // This seems wrong. If we're changing something that's invariant among
 // bases, why do we change it for each basis?
 // TODO ?? Shouldn't this be moved to FinalizeMonth()?
@@ -2969,6 +2975,9 @@ void AccountValue::TxTakeWD()
     HOPEFULLY(0.0 <= SurrChg_[Year]);
     if(csv <= 0.0)
         {
+// TODO ?? What should this be?
+//      withdrawal_ullage_[Year] = ?
+//
 // This seems wrong. If we're changing something that's invariant among
 // bases, why do we change it for each basis?
 // TODO ?? Shouldn't this be moved to FinalizeMonth()?

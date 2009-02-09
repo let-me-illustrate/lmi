@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.79 2009-02-08 01:50:36 chicares Exp $
+// $Id: account_value.hpp,v 1.80 2009-02-09 16:05:27 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -384,6 +384,7 @@ class LMI_SO AccountValue
 
     // Ullage is any positive excess of amount requested over amount available.
     std::vector<double> loan_ullage_;
+    std::vector<double> withdrawal_ullage_;
 
     double RiderDeductions;
 

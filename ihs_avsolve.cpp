@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.42 2009-02-08 12:58:46 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.43 2009-02-09 16:05:27 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -89,10 +89,12 @@ class SolveHelper
 // if any, but disregarding any duration at which a no-lapse guarantee
 // is in effect
 //
-// 3. we ascertain the greatest loan ullage (any excess of requested
-// over maximum) throughout the solve period, ignoring any no-lapse
-// guarantee; and negate it for use as an objective-function penalty
-// quite like negative CSV
+// 3. ascertain the greatest ullage (any positive excess of requested
+// over maximum) throughout the solve period in
+//  - loan, or
+//  - withdrawal
+// ignoring any no-lapse guarantee; and negate it for use as an
+// objective-function penalty quite like negative CSV
 //
 // 4. if either 2. or 3. is negative, we return the difference between
 // the target value and whichever of them is more negative; else we
@@ -120,11 +122,11 @@ double AccountValue::SolveTest(double a_CandidateValue)
         );
     RunOneCell(z);
 
-    // return least of
+    // Return least of
     //   CSV at target duration
     //   lowest negative CSV through target duration
-    //   amount of loan in excess of maximum loan through target duration
-    // Use UnderlyingCSV so that sales load refund doesn't prevent lapse.
+    //   negative of greatest loan or withdrawal ullage
+    // Use 'CSVNet' so that sales load refund doesn't prevent lapse.
 
     // Start only after no-lapse period, if any.
     int no_lapse_dur = std::accumulate
@@ -152,11 +154,19 @@ double AccountValue::SolveTest(double a_CandidateValue)
         (loan_ullage_.begin()
         ,loan_ullage_.begin() + SolveTargetDuration_
         );
-
+    double greatest_withdrawal_ullage = *std::max_element
+        (withdrawal_ullage_.begin()
+        ,withdrawal_ullage_.begin() + SolveTargetDuration_
+        );
+    double greatest_ullage = std::max
+        (greatest_loan_ullage
+        ,greatest_withdrawal_ullage
+        );
     double worst_negative = std::min
         (most_negative_csv
-        ,-greatest_loan_ullage
+        ,-greatest_ullage
         );
+
     // SolveTargetDuration_ is in origin one. That's natural for loop
     // counters and iterators--it's one past the end--but indexing
     // must decrement it.
