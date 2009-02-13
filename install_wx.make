@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_wx.make,v 1.11 2009-02-08 00:55:13 chicares Exp $
+# $Id: install_wx.make,v 1.12 2009-02-13 12:33:42 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -54,22 +54,22 @@ build_dir     := $(wx_dir)/wxWidgets-$(wx_version)/gcc$(vendor)
 # '--enable-debug_flag'.
 
 config_options = \
+  --prefix=$(prefix) \
   --build=i686-pc-cygwin \
   --host=i686-pc-mingw32 \
-  --disable-gif \
   --disable-apple_ieee \
+  --disable-compat24 \
+  --disable-gif \
+  --disable-threads \
+  --disable-vararg_macros \
+  --enable-commondlg \
+  --enable-monolithic \
+  --enable-shared \
+  --enable-std_iostreams \
+  --enable-stl \
   --without-libjpeg \
   --without-libtiff \
   --without-regex \
-  --enable-monolithic \
-  --enable-shared \
-  --disable-threads \
-  --enable-stl \
-  --enable-std_iostreams \
-  --enable-commondlg \
-  --disable-compat24 \
-  --disable-vararg_macros \
-  --prefix=$(prefix) \
   VENDOR='$(vendor)' \
   CPPFLAGS='-DNO_GCC_PRAGMA' \
   CC='$(mingw_bin_dir)/gcc' \
