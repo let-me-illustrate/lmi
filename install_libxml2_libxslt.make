@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_libxml2_libxslt.make,v 1.9 2009-02-08 00:55:13 chicares Exp $
+# $Id: install_libxml2_libxslt.make,v 1.10 2009-02-13 12:53:22 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -61,9 +61,19 @@ common_options := \
   --enable-shared \
   --with-debug \
   --without-python \
-  CC='$(mingw_bin_dir)/gcc' \
-  LD='$(mingw_bin_dir)/ld' \
   LDFLAGS='-lws2_32' \
+       AR='$(mingw_bin_dir)/ar' \
+       AS='$(mingw_bin_dir)/as' \
+       CC='$(mingw_bin_dir)/gcc' \
+      CPP='$(mingw_bin_dir)/cpp' \
+      CXX='$(mingw_bin_dir)/g++' \
+  DLLTOOL='$(mingw_bin_dir)/dlltool' \
+       LD='$(mingw_bin_dir)/ld' \
+       NM='$(mingw_bin_dir)/nm' \
+  OBJDUMP='$(mingw_bin_dir)/objdump' \
+   RANLIB='$(mingw_bin_dir)/ranlib' \
+    STRIP='$(mingw_bin_dir)/strip' \
+  WINDRES='$(mingw_bin_dir)/windres' \
 
 libxml2-2.6.26_options := \
   $(common_options) \
