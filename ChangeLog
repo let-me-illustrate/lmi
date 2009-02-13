@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1250 2009-02-09 16:05:27 chicares Exp $
+// $Id: ChangeLog,v 1.1251 2009-02-13 12:53:22 chicares Exp $
 
 MAINTENANCE
 
@@ -21763,4 +21763,22 @@ been resolved in the production system are now marked 'IHS !! '.
 Experimentally change withdrawal solves, reverting the 20090202T0247Z
 experiment. See:
   http://lists.nongnu.org/archive/html/lmi/2009-02/msg00010.html
+
+20090213T1233Z <gchicares@sbcglobal.net> [814]
+
+  install_wx.make
+Alphabetize 'configure' options of comparable moment.
+
+20090213T1244Z <gchicares@sbcglobal.net> [814]
+
+  install_wx.make
+Remove an unneeded 'configure' option. See:
+  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00014.html
+
+20090213T1253Z <gchicares@sbcglobal.net> [814]
+
+  install_libxml2_libxslt.make
+  install_wx.make
+Explicitly specify cross tools. See:
+  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00014.html
 
