@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_wx.make,v 1.12 2009-02-13 12:33:42 chicares Exp $
+# $Id: install_wx.make,v 1.13 2009-02-13 12:44:29 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -62,7 +62,6 @@ config_options = \
   --disable-gif \
   --disable-threads \
   --disable-vararg_macros \
-  --enable-commondlg \
   --enable-monolithic \
   --enable-shared \
   --enable-std_iostreams \
