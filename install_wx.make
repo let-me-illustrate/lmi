@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_wx.make,v 1.13 2009-02-13 12:44:29 chicares Exp $
+# $Id: install_wx.make,v 1.14 2009-02-13 12:53:22 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -71,8 +71,18 @@ config_options = \
   --without-regex \
   VENDOR='$(vendor)' \
   CPPFLAGS='-DNO_GCC_PRAGMA' \
-  CC='$(mingw_bin_dir)/gcc' \
-  CXX='$(mingw_bin_dir)/g++' \
+       AR='$(mingw_bin_dir)/ar' \
+       AS='$(mingw_bin_dir)/as' \
+       CC='$(mingw_bin_dir)/gcc' \
+      CPP='$(mingw_bin_dir)/cpp' \
+      CXX='$(mingw_bin_dir)/g++' \
+  DLLTOOL='$(mingw_bin_dir)/dlltool' \
+       LD='$(mingw_bin_dir)/ld' \
+       NM='$(mingw_bin_dir)/nm' \
+  OBJDUMP='$(mingw_bin_dir)/objdump' \
+   RANLIB='$(mingw_bin_dir)/ranlib' \
+    STRIP='$(mingw_bin_dir)/strip' \
+  WINDRES='$(mingw_bin_dir)/windres' \
 
 # URLs and archive md5sums #####################################################
 
