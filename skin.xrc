@@ -24,7 +24,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin.xrc,v 1.10 2008-12-27 02:56:55 chicares Exp $
+    $Id: skin.xrc,v 1.11 2009-02-14 22:04:38 chicares Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -1815,7 +1815,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                 <object class="sizeritem">
                                     <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                     <object class="wxStaticText">
-                                        <label>Target account value </label>
+                                        <label>Target surrender value </label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
