@@ -21,7 +21,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.116 2009-02-09 16:05:27 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.117 2009-02-15 13:01:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -992,13 +992,6 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
         ((1 + Irc7702A_->DebugGetTestDur()) / 12.0
         );
 
-#ifdef DEBUGGING_MEC_AVOIDANCE
-    if(0 == Month && 0 == Year && mce_run_gen_curr_sep_full == RunBasis_)
-        {
-        std::ofstream os("trace.txt", ios_out_trunc_binary());
-        }
-#endif // DEBUGGING_MEC_AVOIDANCE
-
     if
         (  mce_increase_specamt != yare_input_.AvoidMecMethod
         || 0 != Month
@@ -1010,15 +1003,6 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
         {
         return;
         }
-
-#ifdef DEBUGGING_MEC_AVOIDANCE
-    std::ofstream os("trace.txt", ios_out_app_binary());
-    os
-        << "Year = " << Year
-        << ", Month = " << Month
-        << ", contract year = " << contract_year_7702A << '\n'
-        ;
-#endif // DEBUGGING_MEC_AVOIDANCE
 
     double gross_1035 = 0.0;
     double net_1035_less_target_premium_load = 0.0;
@@ -1124,16 +1108,6 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
             ,target_load
             ,excess_load
             );
-#ifdef DEBUGGING_MEC_AVOIDANCE
-        os
-            << "j             = " << j << '\n'
-            << "index         = " << index << '\n'
-            << "  target load = " << target_load << '\n'
-            << "  excess load = " << excess_load << '\n'
-            << "  intended gross premium = " << gross_premium_intended[j] << '\n'
-            << "  intended net   premium = " << net_premium_intended[j] << '\n'
-            ;
-#endif // DEBUGGING_MEC_AVOIDANCE
         }
 
     double kludge_account_value = std::max(TotalAccountValue(), HoneymoonValue);
@@ -1164,13 +1138,6 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
         ,kludge_account_value
         );
     double net_max_necessary_premium = Irc7702A_->DebugGetNetMaxNecPm();
-#ifdef DEBUGGING_MEC_AVOIDANCE
-    os
-        << "necessary premium limit:" << '\n'
-        << "  gross = " << gross_max_necessary_premium << '\n'
-        << "  net   = " << net_max_necessary_premium << '\n'
-        ;
-#endif // DEBUGGING_MEC_AVOIDANCE
 
     double gross_necessary_premium_paid =
         std::min(gross_max_necessary_premium, gross_premium_intended[0])
@@ -1178,13 +1145,6 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
     double net_necessary_premium_paid =
         std::min(net_max_necessary_premium, net_premium_intended[0])
         ;
-#ifdef DEBUGGING_MEC_AVOIDANCE
-    os
-        << "necessary premium paid:" << '\n'
-        << "  gross = " << gross_necessary_premium_paid << '\n'
-        << "  net   = " << net_necessary_premium_paid << '\n'
-        ;
-#endif // DEBUGGING_MEC_AVOIDANCE
 
     double max_avg_cum_gross_premium =
           gross_premium_intended[0]
@@ -1205,13 +1165,6 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
             (max_avg_cum_gross_premium
             ,(gross_premium_intended[j] + max_avg_cum_gross_premium * j) / (1 + j)
             );
-#ifdef DEBUGGING_MEC_AVOIDANCE
-        os
-            << "j = " << j << '\n'
-            << "  intended gross premium = " << gross_premium_intended[j] << '\n'
-            << "  max avg cum gross prem = " << max_avg_cum_gross_premium << '\n'
-            ;
-#endif // DEBUGGING_MEC_AVOIDANCE
         }
 
 //    d. new Ben[t] = MACP/7pp + corr*(CSV + NNPpaid[t])
@@ -1294,40 +1247,9 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
                     )
                 ;
             }
-
-#ifdef DEBUGGING_MEC_AVOIDANCE
-        os
-            << "gross 1035      = " << gross_1035 << '\n'
-            << "1035 - tgt load = " << net_1035_less_target_premium_load << '\n'
-            << "1035 - exc load = " << net_1035_less_excess_premium_load << '\n'
-            << "tentative target= " << tentative_target << '\n'
-            << "term specamt    = " << TermSpecAmt << '\n'
-            << "target prem rate= " << target_premium_rate << '\n'
-            << "tgt load        = " << net_1035_less_target_premium_load << '\n'
-            << "exc load        = " << net_1035_less_excess_premium_load << '\n'
-            ;
-#endif // DEBUGGING_MEC_AVOIDANCE
         }
 
-#ifdef DEBUGGING_MEC_AVOIDANCE
-    os << std::setiosflags(std::ios_base::fixed);
-    os << "Unrounded min specamt = " << min_benefit << '\n';
-#endif // DEBUGGING_MEC_AVOIDANCE
-
     min_benefit = round_min_specamt(min_benefit);
-
-#ifdef DEBUGGING_MEC_AVOIDANCE
-    os << std::setiosflags(std::ios_base::fixed);
-    os << "Rounded   min specamt = " << min_benefit << '\n';
-    os
-        << "7pp rate  = " << Irc7702A_->DebugGet7ppRate() << '\n'
-        << "corridor  = " << YearsCorridorFactor << '\n'
-        << "max avg pm= " << max_avg_cum_gross_premium << '\n'
-        << "CSV       = " << CashValueFor7702() << '\n'
-        << "nec pm pd = " << net_necessary_premium_paid << '\n'
-        << "minimum specified amount = " << min_benefit << '\n'
-        ;
-#endif // DEBUGGING_MEC_AVOIDANCE
 
     if
         (  0 != max_avg_cum_gross_premium
@@ -1335,9 +1257,6 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
         && mce_run_gen_curr_sep_full == RunBasis_
         )
         {
-#ifdef DEBUGGING_MEC_AVOIDANCE
-        os << "*** Increase specamt by " << (min_benefit - ActualSpecAmt) << '\n';
-#endif // DEBUGGING_MEC_AVOIDANCE
         if(0 == Year && 0 == Month)
             {
             // TODO ?? For the nonce, we increase only the base policy.
@@ -1378,10 +1297,6 @@ LedgerInvariant::Init(BasicValues* b)
             ,InvariantValues().SpecAmt[target_year]
             )
 */
-
-#ifdef DEBUGGING_MEC_AVOIDANCE
-    os << '\n';
-#endif // DEBUGGING_MEC_AVOIDANCE
 }
 
 //============================================================================
@@ -3095,24 +3010,6 @@ void AccountValue::TxTakeWD()
 // bases, why do we change it for each basis?
 // TODO ?? Shouldn't this be moved to FinalizeMonth()?
     InvariantValues().NetWD[Year] = NetWD;
-
-#ifdef DEBUGGING_SC
-    std::ofstream os("trace.txt", ios_out_app_binary());
-    os
-        << "\n TxTakeWD():"
-        << "\n Year = " << Year
-        << "\n Month = " << Month
-        << "\n RequestedWD = " << RequestedWD
-        << "\n MaxWD = " << MaxWD
-        << "\n NetWD = " << NetWD
-        << "\n csv = " << csv
-        << "\n av = " << av
-        << "\n SurrChg_[Year] = " << SurrChg_[Year]
-        << "\n surrchg_proportion = " << surrchg_proportion
-        << "\n partial_surrchg = " << partial_surrchg
-        << std::endl
-        ;
-#endif // DEBUGGING_SC
 
     ReduceSurrChg(Year, partial_surrchg);
 
