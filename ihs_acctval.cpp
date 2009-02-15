@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.161 2009-02-09 16:05:27 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.162 2009-02-15 13:01:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1060,30 +1060,6 @@ void AccountValue::AddSurrChgLayer(int year, double delta_specamt)
         ,year + SurrChg_.begin()
         ,std::plus<double>()
         );
-
-#ifdef DEBUGGING_SC
-double target_premium_rate = MortalityRates_->TargetPremiumRates()[year];
-std::ofstream os("surrchg.txt", ios_out_app_binary());
-os
-<< "AccountValue::AddSurrChgLayer(): \n   "
-        << "\n\t delta_specamt = " << delta_specamt
-        << "\n\t year = " << year
-        << "\n\t InforceYear = " << InforceYear
-        << "\n\t Year = " << Year
-        << "\n\t InforceMonth = " << InforceMonth
-        << "\n\t Month = " << Month
-        << "\n\t z = " << z
-        << "\n\t target_premium_rate = " << target_premium_rate
-        ;
-
-os << "\n\t SurrChgRates_->SpecamtRateDurationalFactor() = ";
-std::copy(SurrChgRates_->SpecamtRateDurationalFactor().begin(), SurrChgRates_->SpecamtRateDurationalFactor().end(), std::ostream_iterator<double>(os, " "));
-os << "\n\t new_layer = ";
-std::copy(new_layer.begin(), new_layer.end(), std::ostream_iterator<double>(os, " "));
-os << "\n\t SurrChg_ = ";
-std::copy(SurrChg_.begin(), SurrChg_.end(), std::ostream_iterator<double>(os, " "));
-os << "\n\n";
-#endif // DEBUGGING_SC
 }
 
 //============================================================================
@@ -1091,31 +1067,6 @@ os << "\n\n";
 //   1 - (partial surrchg / full surrchg)
 void AccountValue::ReduceSurrChg(int year, double partial_surrchg)
 {
-#ifdef DEBUGGING_SC
-    std::ofstream os("trace.txt", ios_out_app_binary());
-    int year0 = std::min(0 + year, BasicValues::GetLength());
-    int year1 = std::min(1 + year, BasicValues::GetLength());
-    int year2 = std::min(2 + year, BasicValues::GetLength());
-    int year3 = std::min(3 + year, BasicValues::GetLength());
-    int year4 = std::min(4 + year, BasicValues::GetLength());
-    int year5 = std::min(5 + year, BasicValues::GetLength());
-    os
-        << "\n ReduceSurrChg() [before]:"
-        << "\n Year = " << Year
-        << "\n Month = " << Month
-        << "\n year = " << year
-        << "\n partial_surrchg = " << partial_surrchg
-        << "\n (partial_surrchg / SurrChg_[year]) = " << (partial_surrchg / SurrChg_[year])
-        << "\n SurrChg_[year0] = " << SurrChg_[year0]
-        << "\n SurrChg_[year1] = " << SurrChg_[year1]
-        << "\n SurrChg_[year2] = " << SurrChg_[year2]
-        << "\n SurrChg_[year3] = " << SurrChg_[year3]
-        << "\n SurrChg_[year4] = " << SurrChg_[year4]
-        << "\n SurrChg_[year5] = " << SurrChg_[year5]
-        << std::endl
-        ;
-#endif // DEBUGGING_SC
-
     if(!SurrChgOnIncr || 0.0 == partial_surrchg)
         {
         return;
@@ -1135,20 +1086,6 @@ void AccountValue::ReduceSurrChg(int year, double partial_surrchg)
                 )
             );
         }
-
-#ifdef DEBUGGING_SC
-    os
-        << "\n ReduceSurrChg() [after]:"
-        << "\n multiplier = " << (1.0 - partial_surrchg / SurrChg_[year])
-        << "\n SurrChg_[year0] = " << SurrChg_[year0]
-        << "\n SurrChg_[year1] = " << SurrChg_[year1]
-        << "\n SurrChg_[year2] = " << SurrChg_[year2]
-        << "\n SurrChg_[year3] = " << SurrChg_[year3]
-        << "\n SurrChg_[year4] = " << SurrChg_[year4]
-        << "\n SurrChg_[year5] = " << SurrChg_[year5]
-        << std::endl
-        ;
-#endif // DEBUGGING_SC
 }
 
 //============================================================================
