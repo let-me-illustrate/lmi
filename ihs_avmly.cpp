@@ -21,7 +21,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.119 2009-02-16 10:26:18 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.120 2009-02-16 10:27:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2699,6 +2699,9 @@ double AccountValue::anticipated_deduction
 
 /// Calculate maximum permissible withdrawal.
 ///
+/// If the (dynamic) maximum withdrawal would be less than the
+/// (fixed) minimum, then the maximum becomes zero.
+///
 /// Anticipated monthly deductions reduce the maximum withdrawal.
 /// They may be calculated in various ways, none of which necessarily
 /// prevents the contract from lapsing before the end of the current
@@ -2719,6 +2722,10 @@ void AccountValue::SetMaxWD()
         - anticipated_deduction(MaxWDDed_)
         - std::max(0.0, SurrChg())
         ;
+    if(MaxWD < MinWD)
+        {
+        MaxWD = 0.0;
+        }
     MaxWD = std::max(0.0, MaxWD);
 }
 
