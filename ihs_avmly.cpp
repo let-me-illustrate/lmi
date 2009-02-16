@@ -21,7 +21,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.117 2009-02-15 13:01:33 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.118 2009-02-16 08:01:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2709,7 +2709,7 @@ void AccountValue::SetMaxWD()
     // Some contracts make only a portion of account value eligible
     // for withdrawal, say 80% or 90%. Some apply such a multiple only
     // to separate-account value--a refinement we don't need yet.
-    // SOMEDAY !! Add a database item to restrict the multiple to the
+    // DATABASE !! Add a database item to restrict the multiple to the
     // separate account only.
 
     MaxWD =
@@ -2783,10 +2783,6 @@ void AccountValue::TxTakeWD()
     if(RequestedWD < MinWD)
         {
         withdrawal_ullage_[Year] = 0.0;
-        // TODO ?? This was an error:
-//      NetWD == 0.0;
-        // but the regression test deck as of 5 Sept 1999 didn't catch it;
-        // does that mean the 'MinWD' limitation doesn't work?
         NetWD = 0.0;
         }
 // TODO ?? If WD zero, skip some steps? Cannot simply return in this case
