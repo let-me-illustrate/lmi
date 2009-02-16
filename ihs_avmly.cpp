@@ -21,7 +21,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.118 2009-02-16 08:01:23 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.119 2009-02-16 10:26:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2697,21 +2697,21 @@ double AccountValue::anticipated_deduction
         }
 }
 
-//============================================================================
-// Calculate maximum permissible withdrawal.
+/// Calculate maximum permissible withdrawal.
+///
+/// Anticipated monthly deductions reduce the maximum withdrawal.
+/// They may be calculated in various ways, none of which necessarily
+/// prevents the contract from lapsing before the end of the current
+/// policy year.
+///
+/// Some contracts make only a portion of account value eligible for
+/// withdrawal, say 80% or 90%. Some apply such a multiple only to
+/// separate-account value--a refinement not yet implemented.
+/// DATABASE !! Add a database item to restrict the multiple to the
+/// separate account only.
+
 void AccountValue::SetMaxWD()
 {
-    // Anticipated monthly deductions reduce the maximum withdrawal.
-    // Several methods are offered. At present, none of them prevents
-    // a policy from becoming overloaned before the end of the current
-    // policy year.
-
-    // Some contracts make only a portion of account value eligible
-    // for withdrawal, say 80% or 90%. Some apply such a multiple only
-    // to separate-account value--a refinement we don't need yet.
-    // DATABASE !! Add a database item to restrict the multiple to the
-    // separate account only.
-
     MaxWD =
           (AVGenAcct + AVSepAcct) * MaxWDAVMult
         + (AVRegLn  + AVPrfLn)
@@ -2748,7 +2748,7 @@ void AccountValue::TxTakeWD()
 // This seems wrong. If we're changing something that's invariant among
 // bases, why do we change it for each basis?
 // TODO ?? Shouldn't this be moved to FinalizeMonth()?
-        InvariantValues().NetWD[Year] = 0;
+        InvariantValues().NetWD[Year] = 0.0;
         return;
         }
 
@@ -2767,8 +2767,8 @@ void AccountValue::TxTakeWD()
         OverridingWD[Year] = NetWD;
         }
     else
-    // TODO ?? This block is garbage. If it's going to lapse, call the lapse
-    // function--don't manipulate the state variables directly.
+    // TODO ?? If it's going to lapse, call the lapse function--don't
+    // manipulate the state variables directly.
         {
         NetWD = OverridingWD[Year];
         if(MaxWD < NetWD)
@@ -2779,7 +2779,7 @@ void AccountValue::TxTakeWD()
             }
         }
 
-    // Impose minimum amount (if nonzero) on withdrawals.
+    // Impose minimum amount on withdrawals.
     if(RequestedWD < MinWD)
         {
         withdrawal_ullage_[Year] = 0.0;
@@ -2837,7 +2837,7 @@ void AccountValue::TxTakeWD()
 // This seems wrong. If we're changing something that's invariant among
 // bases, why do we change it for each basis?
 // TODO ?? Shouldn't this be moved to FinalizeMonth()?
-        InvariantValues().NetWD[Year] = 0;
+        InvariantValues().NetWD[Year] = 0.0;
         return;
         }
 
@@ -3139,8 +3139,8 @@ void AccountValue::TxTakeLoan()
         OverridingLoan[Year] = ActualLoan;
         }
     else
-    // TODO ?? This block is garbage. If it's going to lapse, call the lapse
-    // function--don't manipulate the state variables directly.
+    // TODO ?? If it's going to lapse, call the lapse function--don't
+    // manipulate the state variables directly.
         {
         //
         ActualLoan = OverridingLoan[Year];
