@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1251 2009-02-13 12:53:22 chicares Exp $
+// $Id: ChangeLog,v 1.1252 2009-02-17 02:23:28 chicares Exp $
 
 MAINTENANCE
 
@@ -21781,4 +21781,37 @@ Remove an unneeded 'configure' option. See:
   install_wx.make
 Explicitly specify cross tools. See:
   http://lists.nongnu.org/archive/html/lmi/2009-02/msg00014.html
+
+20090214T2204Z <gchicares@sbcglobal.net> [814]
+
+  skin.xrc
+Correct a label: solve target is surrender value, not account value.
+
+20090215T1301Z <gchicares@sbcglobal.net> [814]
+
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+Remove tracing code that hasn't been used in years.
+
+20090216T0801Z <gchicares@sbcglobal.net> [813]
+
+  ihs_avmly.cpp
+Resolve a marked defect. Minimum withdrawal is respected, though we
+still have no regression test for it.
+
+20090216T1026Z <gchicares@sbcglobal.net> [813]
+
+  ihs_avmly.cpp
+Reformat and improve documentation.
+
+20090216T1027Z <gchicares@sbcglobal.net> [813]
+
+  ihs_avmly.cpp
+Limit maximum withdrawal to minimum.
+
+20090217T0223Z <gchicares@sbcglobal.net> [813]
+
+  ihs_avsolve.cpp
+Experimentally implement non-MEC solves. See: [update after posting]
+  http://lists.nongnu.org/archive/html/lmi/2009-02/msg000XX.html
 
