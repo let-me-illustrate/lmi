@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1252 2009-02-17 02:23:28 chicares Exp $
+// $Id: ChangeLog,v 1.1253 2009-02-18 22:12:12 wboutin Exp $
 
 MAINTENANCE
 
@@ -21814,4 +21814,13 @@ Limit maximum withdrawal to minimum.
   ihs_avsolve.cpp
 Experimentally implement non-MEC solves. See: [update after posting]
   http://lists.nongnu.org/archive/html/lmi/2009-02/msg000XX.html
+
+20090218T2212Z <wboutin@massmutual.com> [813]
+
+  ihs_proddata.cpp
+  ihs_proddata.hpp
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  my_prod.cpp
+Add new entities.
 

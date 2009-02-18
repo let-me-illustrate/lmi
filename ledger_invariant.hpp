@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.hpp,v 1.21 2008-12-27 02:56:46 chicares Exp $
+// $Id: ledger_invariant.hpp,v 1.22 2009-02-18 22:12:12 wboutin Exp $
 
 #ifndef ledger_invariant_hpp
 #define ledger_invariant_hpp
@@ -239,6 +239,44 @@ class LMI_SO LedgerInvariant
     // Premium-specific footnotes.
     std::string     MinimumPremiumFootnote;
     std::string     PremAllocationFootnote;
+
+    std::string     ProductDescription;
+    std::string     StableValueFootnote;
+    std::string     NoVanishPremiumFootnote;
+    std::string     RejectPremiumFootnote;
+    std::string     ExpRatingFootnote;
+    std::string     MortalityBlendFootnote;
+    std::string     HypotheticalRatesFootnote;
+    std::string     SalesLoadRefundFootnote;
+    std::string     NoLapseFootnote;
+    std::string     MarketValueAdjFootnote;
+    std::string     ExchangeChargeFootnote0;
+    std::string     CurrentValuesFootnote;
+    std::string     DBOption1Footnote;
+    std::string     DBOption2Footnote;
+    std::string     ExpRatRiskChargeFootnote;
+    std::string     ExchangeChargeFootnote1;
+    std::string     FlexiblePremiumFootnote;
+    std::string     GuaranteedValuesFootnote;
+    std::string     CreditingRateFootnote;
+    std::string     MecFootnote;
+    std::string     MidpointValuesFootnote;
+    std::string     SinglePremiumFootnote;
+    std::string     MonthlyChargesFootnote;
+    std::string     UltCreditingRateFootnote;
+    std::string     MaxNaarFootnote;
+    std::string     PremTaxSurrChgFootnote;
+    std::string     PolicyFeeFootnote;
+    std::string     AssetChargeFootnote;
+    std::string     InvestmentIncomeFootnote;
+    std::string     IrrDbFootnote;
+    std::string     IrrCsvFootnote;
+    std::string     MortalityChargesFootnote;
+    std::string     LoanAndWithdrawalFootnote;
+    std::string     PresaleTrackingNumber;
+    std::string     CompositeTrackingNumber;
+    std::string     InforceTrackingNumber;
+    std::string     InforceCompositeTrackingNumber;
 
     std::string     ProducerName;
     std::string     ProducerStreet;
