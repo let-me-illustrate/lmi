@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_proddata.hpp,v 1.13 2008-12-27 02:56:44 chicares Exp $
+// $Id: ihs_proddata.hpp,v 1.14 2009-02-18 22:12:12 wboutin Exp $
 
 #ifndef ihs_proddata_hpp
 #define ihs_proddata_hpp
@@ -68,40 +68,77 @@ class LMI_SO TProductData
     std::string const& GetRoundingFilename       () const {return RoundingFilename;       }
     std::string const& GetTierFilename           () const {return TierFilename;           }
 
-    std::string const& GetPolicyForm             () const {return PolicyForm;             }
-    std::string const& GetPolicyMktgName         () const {return PolicyMktgName;         }
-    std::string const& GetPolicyLegalName        () const {return PolicyLegalName;        }
-    std::string const& GetInsCoShortName         () const {return InsCoShortName;         }
-    std::string const& GetInsCoName              () const {return InsCoName;              }
-    std::string const& GetInsCoAddr              () const {return InsCoAddr;              }
-    std::string const& GetInsCoStreet            () const {return InsCoStreet;            }
-    std::string const& GetInsCoPhone             () const {return InsCoPhone;             }
-    std::string const& GetInsCoDomicile          () const {return InsCoDomicile;          }
-    std::string const& GetMainUnderwriter        () const {return MainUnderwriter;        }
-    std::string const& GetMainUnderwriterAddress () const {return MainUnderwriterAddress; }
-    std::string const& GetCoUnderwriter          () const {return CoUnderwriter;          }
-    std::string const& GetCoUnderwriterAddress   () const {return CoUnderwriterAddress;   }
-    std::string const& GetAvName                 () const {return AvName;                 }
-    std::string const& GetCsvName                () const {return CsvName;                }
-    std::string const& GetCsvHeaderName          () const {return CsvHeaderName;          }
-    std::string const& GetNoLapseProvisionName   () const {return NoLapseProvisionName;   }
-    std::string const& GetInterestDisclaimer     () const {return InterestDisclaimer;     }
-    std::string const& GetGuarMortalityFootnote  () const {return GuarMortalityFootnote;  }
-    std::string const& GetAccountValueFootnote   () const {return AccountValueFootnote;   }
-    std::string const& GetAttainedAgeFootnote    () const {return AttainedAgeFootnote;    }
-    std::string const& GetCashSurrValueFootnote  () const {return CashSurrValueFootnote;  }
-    std::string const& GetDeathBenefitFootnote   () const {return DeathBenefitFootnote;   }
-    std::string const& GetInitialPremiumFootnote () const {return InitialPremiumFootnote; }
-    std::string const& GetNetPremiumFootnote     () const {return NetPremiumFootnote;     }
-    std::string const& GetOutlayFootnote         () const {return OutlayFootnote;         }
-    std::string const& GetPolicyYearFootnote     () const {return PolicyYearFootnote;     }
-    std::string const& GetADDFootnote            () const {return ADDFootnote;            }
-    std::string const& GetChildFootnote          () const {return ChildFootnote;          }
-    std::string const& GetSpouseFootnote         () const {return SpouseFootnote;         }
-    std::string const& GetTermFootnote           () const {return TermFootnote;           }
-    std::string const& GetWaiverFootnote         () const {return WaiverFootnote;         }
-    std::string const& GetMinimumPremiumFootnote () const {return MinimumPremiumFootnote; }
-    std::string const& GetPremAllocationFootnote () const {return PremAllocationFootnote; }
+    std::string const& GetPolicyForm                    () const {return PolicyForm;                    }
+    std::string const& GetPolicyMktgName                () const {return PolicyMktgName;                }
+    std::string const& GetPolicyLegalName               () const {return PolicyLegalName;               }
+    std::string const& GetInsCoShortName                () const {return InsCoShortName;                }
+    std::string const& GetInsCoName                     () const {return InsCoName;                     }
+    std::string const& GetInsCoAddr                     () const {return InsCoAddr;                     }
+    std::string const& GetInsCoStreet                   () const {return InsCoStreet;                   }
+    std::string const& GetInsCoPhone                    () const {return InsCoPhone;                    }
+    std::string const& GetInsCoDomicile                 () const {return InsCoDomicile;                 }
+    std::string const& GetMainUnderwriter               () const {return MainUnderwriter;               }
+    std::string const& GetMainUnderwriterAddress        () const {return MainUnderwriterAddress;        }
+    std::string const& GetCoUnderwriter                 () const {return CoUnderwriter;                 }
+    std::string const& GetCoUnderwriterAddress          () const {return CoUnderwriterAddress;          }
+    std::string const& GetAvName                        () const {return AvName;                        }
+    std::string const& GetCsvName                       () const {return CsvName;                       }
+    std::string const& GetCsvHeaderName                 () const {return CsvHeaderName;                 }
+    std::string const& GetNoLapseProvisionName          () const {return NoLapseProvisionName;          }
+    std::string const& GetInterestDisclaimer            () const {return InterestDisclaimer;            }
+    std::string const& GetGuarMortalityFootnote         () const {return GuarMortalityFootnote;         }
+    std::string const& GetAccountValueFootnote          () const {return AccountValueFootnote;          }
+    std::string const& GetAttainedAgeFootnote           () const {return AttainedAgeFootnote;           }
+    std::string const& GetCashSurrValueFootnote         () const {return CashSurrValueFootnote;         }
+    std::string const& GetDeathBenefitFootnote          () const {return DeathBenefitFootnote;          }
+    std::string const& GetInitialPremiumFootnote        () const {return InitialPremiumFootnote;        }
+    std::string const& GetNetPremiumFootnote            () const {return NetPremiumFootnote;            }
+    std::string const& GetOutlayFootnote                () const {return OutlayFootnote;                }
+    std::string const& GetPolicyYearFootnote            () const {return PolicyYearFootnote;            }
+    std::string const& GetADDFootnote                   () const {return ADDFootnote;                   }
+    std::string const& GetChildFootnote                 () const {return ChildFootnote;                 }
+    std::string const& GetSpouseFootnote                () const {return SpouseFootnote;                }
+    std::string const& GetTermFootnote                  () const {return TermFootnote;                  }
+    std::string const& GetWaiverFootnote                () const {return WaiverFootnote;                }
+    std::string const& GetMinimumPremiumFootnote        () const {return MinimumPremiumFootnote;        }
+    std::string const& GetPremAllocationFootnote        () const {return PremAllocationFootnote;        }
+    std::string const& GetProductDescription            () const {return ProductDescription;            }
+    std::string const& GetStableValueFootnote           () const {return StableValueFootnote;           }
+    std::string const& GetNoVanishPremiumFootnote       () const {return NoVanishPremiumFootnote;       }
+    std::string const& GetRejectPremiumFootnote         () const {return RejectPremiumFootnote;         }
+    std::string const& GetExpRatingFootnote             () const {return ExpRatingFootnote;             }
+    std::string const& GetMortalityBlendFootnote        () const {return MortalityBlendFootnote;        }
+    std::string const& GetHypotheticalRatesFootnote     () const {return HypotheticalRatesFootnote;     }
+    std::string const& GetSalesLoadRefundFootnote       () const {return SalesLoadRefundFootnote;       }
+    std::string const& GetNoLapseFootnote               () const {return NoLapseFootnote;               }
+    std::string const& GetMarketValueAdjFootnote        () const {return MarketValueAdjFootnote;        }
+    std::string const& GetExchangeChargeFootnote0       () const {return ExchangeChargeFootnote0;       }
+    std::string const& GetCurrentValuesFootnote         () const {return CurrentValuesFootnote;         }
+    std::string const& GetDBOption1Footnote             () const {return DBOption1Footnote;             }
+    std::string const& GetDBOption2Footnote             () const {return DBOption2Footnote;             }
+    std::string const& GetExpRatRiskChargeFootnote      () const {return ExpRatRiskChargeFootnote;      }
+    std::string const& GetExchangeChargeFootnote1       () const {return ExchangeChargeFootnote1;       }
+    std::string const& GetFlexiblePremiumFootnote       () const {return FlexiblePremiumFootnote;       }
+    std::string const& GetGuaranteedValuesFootnote      () const {return GuaranteedValuesFootnote;      }
+    std::string const& GetCreditingRateFootnote         () const {return CreditingRateFootnote;         }
+    std::string const& GetMecFootnote                   () const {return MecFootnote;                   }
+    std::string const& GetMidpointValuesFootnote        () const {return MidpointValuesFootnote;        }
+    std::string const& GetSinglePremiumFootnote         () const {return SinglePremiumFootnote;         }
+    std::string const& GetMonthlyChargesFootnote        () const {return MonthlyChargesFootnote;        }
+    std::string const& GetUltCreditingRateFootnote      () const {return UltCreditingRateFootnote;      }
+    std::string const& GetMaxNaarFootnote               () const {return MaxNaarFootnote;               }
+    std::string const& GetPremTaxSurrChgFootnote        () const {return PremTaxSurrChgFootnote;        }
+    std::string const& GetPolicyFeeFootnote             () const {return PolicyFeeFootnote;             }
+    std::string const& GetAssetChargeFootnote           () const {return AssetChargeFootnote;           }
+    std::string const& GetInvestmentIncomeFootnote      () const {return InvestmentIncomeFootnote;      }
+    std::string const& GetIrrDbFootnote                 () const {return IrrDbFootnote;                 }
+    std::string const& GetIrrCsvFootnote                () const {return IrrCsvFootnote;                }
+    std::string const& GetMortalityChargesFootnote      () const {return MortalityChargesFootnote;      }
+    std::string const& GetLoanAndWithdrawalFootnote     () const {return LoanAndWithdrawalFootnote;     }
+    std::string const& GetPresaleTrackingNumber         () const {return PresaleTrackingNumber;         }
+    std::string const& GetCompositeTrackingNumber       () const {return CompositeTrackingNumber;       }
+    std::string const& GetInforceTrackingNumber         () const {return InforceTrackingNumber;         }
+    std::string const& GetInforceCompositeTrackingNumber() const {return InforceCompositeTrackingNumber;}
 
   private:
     TProductData();
@@ -177,6 +214,44 @@ class LMI_SO TProductData
     // Premium-specific footnotes.
     std::string MinimumPremiumFootnote;
     std::string PremAllocationFootnote;
+
+    std::string ProductDescription;
+    std::string StableValueFootnote;
+    std::string NoVanishPremiumFootnote;
+    std::string RejectPremiumFootnote;
+    std::string ExpRatingFootnote;
+    std::string MortalityBlendFootnote;
+    std::string HypotheticalRatesFootnote;
+    std::string SalesLoadRefundFootnote;
+    std::string NoLapseFootnote;
+    std::string MarketValueAdjFootnote;
+    std::string ExchangeChargeFootnote0;
+    std::string CurrentValuesFootnote;
+    std::string DBOption1Footnote;
+    std::string DBOption2Footnote;
+    std::string ExpRatRiskChargeFootnote;
+    std::string ExchangeChargeFootnote1;
+    std::string FlexiblePremiumFootnote;
+    std::string GuaranteedValuesFootnote;
+    std::string CreditingRateFootnote;
+    std::string MecFootnote;
+    std::string MidpointValuesFootnote;
+    std::string SinglePremiumFootnote;
+    std::string MonthlyChargesFootnote;
+    std::string UltCreditingRateFootnote;
+    std::string MaxNaarFootnote;
+    std::string PremTaxSurrChgFootnote;
+    std::string PolicyFeeFootnote;
+    std::string AssetChargeFootnote;
+    std::string InvestmentIncomeFootnote;
+    std::string IrrDbFootnote;
+    std::string IrrCsvFootnote;
+    std::string MortalityChargesFootnote;
+    std::string LoanAndWithdrawalFootnote;
+    std::string PresaleTrackingNumber;
+    std::string CompositeTrackingNumber;
+    std::string InforceTrackingNumber;
+    std::string InforceCompositeTrackingNumber;
 };
 
 #endif // ihs_proddata_hpp
