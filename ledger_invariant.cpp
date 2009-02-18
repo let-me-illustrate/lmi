@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.69 2009-01-15 19:44:22 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.70 2009-02-18 22:12:12 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -222,8 +222,45 @@ void LedgerInvariant::Alloc(int len)
     Strings         ["TermFootnote"          ] = &TermFootnote           ;
     Strings         ["WaiverFootnote"        ] = &WaiverFootnote         ;
 
-    Strings         ["MinimumPremiumFootnote"] = &MinimumPremiumFootnote ;
-    Strings         ["PremAllocationFootnote"] = &PremAllocationFootnote ;
+    Strings         ["MinimumPremiumFootnote"        ] = &MinimumPremiumFootnote         ;
+    Strings         ["PremAllocationFootnote"        ] = &PremAllocationFootnote         ;
+    Strings         ["ProductDescription"            ] = &ProductDescription             ;
+    Strings         ["StableValueFootnote"           ] = &StableValueFootnote            ;
+    Strings         ["NoVanishPremiumFootnote"       ] = &NoVanishPremiumFootnote        ;
+    Strings         ["RejectPremiumFootnote"         ] = &RejectPremiumFootnote          ;
+    Strings         ["ExpRatingFootnote"             ] = &ExpRatingFootnote              ;
+    Strings         ["MortalityBlendFootnote"        ] = &MortalityBlendFootnote         ;
+    Strings         ["HypotheticalRatesFootnote"     ] = &HypotheticalRatesFootnote      ;
+    Strings         ["SalesLoadRefundFootnote"       ] = &SalesLoadRefundFootnote        ;
+    Strings         ["NoLapseFootnote"               ] = &NoLapseFootnote                ;
+    Strings         ["MarketValueAdjFootnote"        ] = &MarketValueAdjFootnote         ;
+    Strings         ["ExchangeChargeFootnote0"       ] = &ExchangeChargeFootnote0        ;
+    Strings         ["CurrentValuesFootnote"         ] = &CurrentValuesFootnote          ;
+    Strings         ["DBOption1Footnote"             ] = &DBOption1Footnote              ;
+    Strings         ["DBOption2Footnote"             ] = &DBOption2Footnote              ;
+    Strings         ["ExpRatRiskChargeFootnote"      ] = &ExpRatRiskChargeFootnote       ;
+    Strings         ["ExchangeChargeFootnote1"       ] = &ExchangeChargeFootnote1        ;
+    Strings         ["FlexiblePremiumFootnote"       ] = &FlexiblePremiumFootnote        ;
+    Strings         ["GuaranteedValuesFootnote"      ] = &GuaranteedValuesFootnote       ;
+    Strings         ["CreditingRateFootnote"         ] = &CreditingRateFootnote          ;
+    Strings         ["MecFootnote"                   ] = &MecFootnote                    ;
+    Strings         ["MidpointValuesFootnote"        ] = &MidpointValuesFootnote         ;
+    Strings         ["SinglePremiumFootnote"         ] = &SinglePremiumFootnote          ;
+    Strings         ["MonthlyChargesFootnote"        ] = &MonthlyChargesFootnote         ;
+    Strings         ["UltCreditingRateFootnote"      ] = &UltCreditingRateFootnote       ;
+    Strings         ["MaxNaarFootnote"               ] = &MaxNaarFootnote                ;
+    Strings         ["PremTaxSurrChgFootnote"        ] = &PremTaxSurrChgFootnote         ;
+    Strings         ["PolicyFeeFootnote"             ] = &PolicyFeeFootnote              ;
+    Strings         ["AssetChargeFootnote"           ] = &AssetChargeFootnote            ;
+    Strings         ["InvestmentIncomeFootnote"      ] = &InvestmentIncomeFootnote       ;
+    Strings         ["IrrDbFootnote"                 ] = &IrrDbFootnote                  ;
+    Strings         ["IrrCsvFootnote"                ] = &IrrCsvFootnote                 ;
+    Strings         ["MortalityChargesFootnote"      ] = &MortalityChargesFootnote       ;
+    Strings         ["LoanAndWithdrawalFootnote"     ] = &LoanAndWithdrawalFootnote      ;
+    Strings         ["PresaleTrackingNumber"         ] = &PresaleTrackingNumber          ;
+    Strings         ["CompositeTrackingNumber"       ] = &CompositeTrackingNumber        ;
+    Strings         ["InforceTrackingNumber"         ] = &InforceTrackingNumber          ;
+    Strings         ["InforceCompositeTrackingNumber"] = &InforceCompositeTrackingNumber ;
 
     Strings         ["ProducerName"          ] = &ProducerName           ;
     Strings         ["ProducerStreet"        ] = &ProducerStreet         ;
@@ -577,6 +614,44 @@ void LedgerInvariant::Init(BasicValues* b)
 
         MinimumPremiumFootnote = b->ProductData_->GetMinimumPremiumFootnote();
         PremAllocationFootnote = b->ProductData_->GetPremAllocationFootnote();
+
+        ProductDescription             = b->ProductData_->GetProductDescription();
+        StableValueFootnote            = b->ProductData_->GetStableValueFootnote();
+        NoVanishPremiumFootnote        = b->ProductData_->GetNoVanishPremiumFootnote();
+        RejectPremiumFootnote          = b->ProductData_->GetRejectPremiumFootnote();
+        ExpRatingFootnote              = b->ProductData_->GetExpRatingFootnote();
+        MortalityBlendFootnote         = b->ProductData_->GetMortalityBlendFootnote();
+        HypotheticalRatesFootnote      = b->ProductData_->GetHypotheticalRatesFootnote();
+        SalesLoadRefundFootnote        = b->ProductData_->GetSalesLoadRefundFootnote();
+        NoLapseFootnote                = b->ProductData_->GetNoLapseFootnote();
+        MarketValueAdjFootnote         = b->ProductData_->GetMarketValueAdjFootnote();
+        ExchangeChargeFootnote0        = b->ProductData_->GetExchangeChargeFootnote0();
+        CurrentValuesFootnote          = b->ProductData_->GetCurrentValuesFootnote();
+        DBOption1Footnote              = b->ProductData_->GetDBOption1Footnote();
+        DBOption2Footnote              = b->ProductData_->GetDBOption2Footnote();
+        ExpRatRiskChargeFootnote       = b->ProductData_->GetExpRatRiskChargeFootnote();
+        ExchangeChargeFootnote1        = b->ProductData_->GetExchangeChargeFootnote1();
+        FlexiblePremiumFootnote        = b->ProductData_->GetFlexiblePremiumFootnote();
+        GuaranteedValuesFootnote       = b->ProductData_->GetGuaranteedValuesFootnote();
+        CreditingRateFootnote          = b->ProductData_->GetCreditingRateFootnote();
+        MecFootnote                    = b->ProductData_->GetMecFootnote();
+        MidpointValuesFootnote         = b->ProductData_->GetMidpointValuesFootnote();
+        SinglePremiumFootnote          = b->ProductData_->GetSinglePremiumFootnote();
+        MonthlyChargesFootnote         = b->ProductData_->GetMonthlyChargesFootnote();
+        UltCreditingRateFootnote       = b->ProductData_->GetUltCreditingRateFootnote();
+        MaxNaarFootnote                = b->ProductData_->GetMaxNaarFootnote();
+        PremTaxSurrChgFootnote         = b->ProductData_->GetPremTaxSurrChgFootnote();
+        PolicyFeeFootnote              = b->ProductData_->GetPolicyFeeFootnote();
+        AssetChargeFootnote            = b->ProductData_->GetAssetChargeFootnote();
+        InvestmentIncomeFootnote       = b->ProductData_->GetInvestmentIncomeFootnote();
+        IrrDbFootnote                  = b->ProductData_->GetIrrDbFootnote();
+        IrrCsvFootnote                 = b->ProductData_->GetIrrCsvFootnote();
+        MortalityChargesFootnote       = b->ProductData_->GetMortalityChargesFootnote();
+        LoanAndWithdrawalFootnote      = b->ProductData_->GetLoanAndWithdrawalFootnote();
+        PresaleTrackingNumber          = b->ProductData_->GetPresaleTrackingNumber();
+        CompositeTrackingNumber        = b->ProductData_->GetCompositeTrackingNumber();
+        InforceTrackingNumber          = b->ProductData_->GetInforceTrackingNumber();
+        InforceCompositeTrackingNumber = b->ProductData_->GetInforceCompositeTrackingNumber();
         }
 
     ProducerName            = (*b->Input_)["AgentName"].str();
@@ -828,6 +903,44 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 
     MinimumPremiumFootnote      = a_Addend.MinimumPremiumFootnote;
     PremAllocationFootnote      = a_Addend.PremAllocationFootnote;
+
+    ProductDescription             = a_Addend.ProductDescription;
+    StableValueFootnote            = a_Addend.StableValueFootnote;
+    NoVanishPremiumFootnote        = a_Addend.NoVanishPremiumFootnote;
+    RejectPremiumFootnote          = a_Addend.RejectPremiumFootnote;
+    ExpRatingFootnote              = a_Addend.ExpRatingFootnote;
+    MortalityBlendFootnote         = a_Addend.MortalityBlendFootnote;
+    HypotheticalRatesFootnote      = a_Addend.HypotheticalRatesFootnote;
+    SalesLoadRefundFootnote        = a_Addend.SalesLoadRefundFootnote;
+    NoLapseFootnote                = a_Addend.NoLapseFootnote;
+    MarketValueAdjFootnote         = a_Addend.MarketValueAdjFootnote;
+    ExchangeChargeFootnote0        = a_Addend.ExchangeChargeFootnote0;
+    CurrentValuesFootnote          = a_Addend.CurrentValuesFootnote;
+    DBOption1Footnote              = a_Addend.DBOption1Footnote;
+    DBOption2Footnote              = a_Addend.DBOption2Footnote;
+    ExpRatRiskChargeFootnote       = a_Addend.ExpRatRiskChargeFootnote;
+    ExchangeChargeFootnote1        = a_Addend.ExchangeChargeFootnote1;
+    FlexiblePremiumFootnote        = a_Addend.FlexiblePremiumFootnote;
+    GuaranteedValuesFootnote       = a_Addend.GuaranteedValuesFootnote;
+    CreditingRateFootnote          = a_Addend.CreditingRateFootnote;
+    MecFootnote                    = a_Addend.MecFootnote;
+    MidpointValuesFootnote         = a_Addend.MidpointValuesFootnote;
+    SinglePremiumFootnote          = a_Addend.SinglePremiumFootnote;
+    MonthlyChargesFootnote         = a_Addend.MonthlyChargesFootnote;
+    UltCreditingRateFootnote       = a_Addend.UltCreditingRateFootnote;
+    MaxNaarFootnote                = a_Addend.MaxNaarFootnote;
+    PremTaxSurrChgFootnote         = a_Addend.PremTaxSurrChgFootnote;
+    PolicyFeeFootnote              = a_Addend.PolicyFeeFootnote;
+    AssetChargeFootnote            = a_Addend.AssetChargeFootnote;
+    InvestmentIncomeFootnote       = a_Addend.InvestmentIncomeFootnote;
+    IrrDbFootnote                  = a_Addend.IrrDbFootnote;
+    IrrCsvFootnote                 = a_Addend.IrrCsvFootnote;
+    MortalityChargesFootnote       = a_Addend.MortalityChargesFootnote;
+    LoanAndWithdrawalFootnote      = a_Addend.LoanAndWithdrawalFootnote;
+    PresaleTrackingNumber          = a_Addend.PresaleTrackingNumber;
+    CompositeTrackingNumber        = a_Addend.CompositeTrackingNumber;
+    InforceTrackingNumber          = a_Addend.InforceTrackingNumber;
+    InforceCompositeTrackingNumber = a_Addend.InforceCompositeTrackingNumber;
 
     Comments                    = a_Addend.Comments;
 
