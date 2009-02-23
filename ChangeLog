@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1254 2009-02-23 15:55:47 chicares Exp $
+// $Id: ChangeLog,v 1.1255 2009-02-23 20:40:18 wboutin Exp $
 
 MAINTENANCE
 
@@ -21845,4 +21845,9 @@ Enable COI multiplier for all users, guarding against all-blank input
 zero). Only home-office users can enter a value less than a minimum
 that for now is hardcoded as ninety percent. Anyone can enter an
 arbitrarily large multiplier.
+
+20090223T2040Z <wboutin@massmutual.com> [812]
+
+  version.hpp
+Mark release candidate.
 
