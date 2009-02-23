@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_realization.cpp,v 1.15 2008-12-27 02:56:45 chicares Exp $
+// $Id: input_realization.cpp,v 1.16 2009-02-23 15:55:47 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -414,11 +414,51 @@ std::string Input::RealizePartialMortalityMultiplier()
 //============================================================================
 std::string Input::RealizeCurrentCoiMultiplier()
 {
-    return realize_sequence_string
+    if(std::string::npos == CurrentCoiMultiplier.value().find_first_of("123456789"))
+        {
+        std::ostringstream oss;
+        oss
+            << "COI multiplier entered is '"
+            << CurrentCoiMultiplier
+            << "', but it must contain at least one number other than zero."
+            ;
+        return oss.str();
+        }
+
+    std::string s = realize_sequence_string
         (*this
         ,CurrentCoiMultiplierRealized_
         ,CurrentCoiMultiplier
         );
+    if(s.size())
+        {
+        return s;
+        }
+
+    if(global_settings::instance().mellon())
+        {
+        return s;
+        }
+
+    double z = 0.9; // DATABASE !! This belongs in the product database.
+    double lowest = std::min_element
+        (CurrentCoiMultiplierRealized_.begin()
+        ,CurrentCoiMultiplierRealized_.end()
+        )->value();
+    if(lowest < z)
+        {
+        std::ostringstream oss;
+        oss
+            << "Lowest COI multiplier entered is "
+            << lowest
+            << ", but "
+            << z
+            << " is the lowest multiplier allowed."
+            ;
+        return oss.str();
+        }
+
+    return "";
 }
 
 //============================================================================

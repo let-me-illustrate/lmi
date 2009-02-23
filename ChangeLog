@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1253 2009-02-18 22:12:12 wboutin Exp $
+// $Id: ChangeLog,v 1.1254 2009-02-23 15:55:47 chicares Exp $
 
 MAINTENANCE
 
@@ -21812,8 +21812,8 @@ Limit maximum withdrawal to minimum.
 20090217T0223Z <gchicares@sbcglobal.net> [813]
 
   ihs_avsolve.cpp
-Experimentally implement non-MEC solves. See: [update after posting]
-  http://lists.nongnu.org/archive/html/lmi/2009-02/msg000XX.html
+Experimentally implement non-MEC solves. See:
+  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00028.html
 
 20090218T2212Z <wboutin@massmutual.com> [813]
 
@@ -21823,4 +21823,26 @@ Experimentally implement non-MEC solves. See: [update after posting]
   ledger_invariant.hpp
   my_prod.cpp
 Add new entities.
+
+20090223T1305Z <gchicares@sbcglobal.net> [812]
+
+  input_harmonization.cpp
+Remove an illogical restriction. Loan solves were forbidden, due to
+some once-suspected but unspecified defect, when withdrawal-then-loan
+solves and explicitly-entered loans are permitted.
+
+20090223T1313Z <gchicares@sbcglobal.net> [812]
+
+  input_seq_test.cpp
+Demonstrate default behavior: an all-blank string is treated as zero.
+
+20090223T1555Z <gchicares@sbcglobal.net> [812]
+
+  input_harmonization.cpp
+  input_realization.cpp
+Enable COI multiplier for all users, guarding against all-blank input
+(erasing the input mustn't silently set the multiplier to a default of
+zero). Only home-office users can enter a value less than a minimum
+that for now is hardcoded as ninety percent. Anyone can enter an
+arbitrarily large multiplier.
 
