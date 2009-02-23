@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.85 2009-02-23 13:05:23 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.86 2009-02-23 15:55:47 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -250,7 +250,6 @@ void Input::DoHarmonize()
     PartialMortalityTable     .enable(part_mort_used);
     PartialMortalityMultiplier.enable(part_mort_used);
 
-    CurrentCoiMultiplier      .enable(home_office_only);
     CurrentCoiGrading         .enable(part_mort_used && home_office_only);
     CashValueEnhancementRate  .enable(home_office_only);
 
