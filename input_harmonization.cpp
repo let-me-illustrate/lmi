@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.84 2008-12-27 02:56:45 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.85 2009-02-23 13:05:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -869,7 +869,6 @@ false // Silly workaround for now.
     HoneymoonValueSpread .enable("Yes" == HoneymoonEndorsement);
     InforceHoneymoonValue.enable("Yes" == HoneymoonEndorsement);
 
-    bool loan_solve_allowed = loan_allowed && home_office_only;  // TODO ?? Until we fix loan calculations.
     bool solves_allowed = mce_life_by_life == RunOrder;
 
     bool enable_prem_and_specamt_solves =
@@ -891,11 +890,11 @@ false // Silly workaround for now.
     SolveType.allow(mce_solve_specamt     , solves_allowed && enable_prem_and_specamt_solves);
     SolveType.allow(mce_solve_ee_prem     , solves_allowed && enable_prem_and_specamt_solves);
     SolveType.allow(mce_solve_er_prem     , solves_allowed && enable_prem_and_specamt_solves);
-    SolveType.allow(mce_solve_loan        , solves_allowed && loan_solve_allowed);
+    SolveType.allow(mce_solve_loan        , solves_allowed && loan_allowed);
     SolveType.allow(mce_solve_wd          , solves_allowed && wd_allowed);
     SolveType.allow(mce_solve_ee_prem_dur , solves_allowed && false);
     SolveType.allow(mce_solve_er_prem_dur , solves_allowed && false);
-    SolveType.allow(mce_solve_wd_then_loan, solves_allowed && wd_allowed && loan_solve_allowed);
+    SolveType.allow(mce_solve_wd_then_loan, solves_allowed && wd_allowed && loan_allowed);
 
     bool actually_solving = solves_allowed && mce_solve_none != SolveType;
 
