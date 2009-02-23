@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_seq_test.cpp,v 1.7 2008-12-27 02:56:45 chicares Exp $
+// $Id: input_seq_test.cpp,v 1.8 2009-02-23 13:13:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -134,6 +134,14 @@ void check
 
 int test_main(int, char*[])
 {
+    // An all-blank string is treated as zero.
+    {
+    int const n = 9;
+    double const d[n] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+    std::string e(" ");
+    CHECK0(d, n, e);
+    }
+
     // Make sure example in comment at top works.
     //   1 3; 7 5;0; --> 1 1 1 7 7 0...
     {
