@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1255 2009-02-23 20:40:18 wboutin Exp $
+// $Id: ChangeLog,v 1.1256 2009-02-26 15:57:28 chicares Exp $
 
 MAINTENANCE
 
@@ -21850,4 +21850,16 @@ arbitrarily large multiplier.
 
   version.hpp
 Mark release candidate.
+
+20090226T1556Z <gchicares@sbcglobal.net> [813]
+
+  ihs_avsolve.cpp
+Improve documentation, noting a newly-discovered defect.
+
+20090226T1557Z <gchicares@sbcglobal.net> [814]
+
+  yare_input.cpp
+Work around a defect (reliance on implementation-defined behavior).
+See:
+  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00074.html
 
