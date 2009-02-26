@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.44 2009-02-17 02:23:28 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.45 2009-02-26 15:56:16 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -70,46 +70,85 @@ class SolveHelper
         }
 };
 
-//============================================================================
-// Test results of a trial value for a given input item
-//
-// Naively we would calculate the cash value for a given input and return
-// the difference between it and the target cash value at the specified
-// target duration. However, if the policy lapsed before that duration,
-// that approach would return zero. That's not the best way, because it
-// provides little information that the solve routine can use to refine
-// the input value. Therefore, we take certain steps to make the
-// objective function more well-behaved as its value approaches zero
-// from either direction:
-//
-// 1. we prevent the policy from lapsing during a solve, by setting
-// AccountValue::Solving
-//
-// 2. we ascertain the lowest negative cash value over the solve period,
-// if any, but disregarding any duration at which a no-lapse guarantee
-// is in effect
-//
-// 3. ascertain the greatest ullage (any positive excess of requested
-// over maximum) throughout the solve period in
-//  - loan, or
-//  - withdrawal
-// ignoring any no-lapse guarantee; and negate it for use as an
-// objective-function penalty quite like negative CSV
-//
-// 4. if either 2. or 3. is negative, we return the difference between
-// the target value and whichever of them is more negative; else we
-// return the difference between the target value and the cash value at
-// the solve target duration
-//
-// We also note here (although the supporting code is elsewhere) that
-// when we solve for illustration-reg guaranteed premium for a GPT
-// contract, we suspend guideline premium limitations. Thus, we realize
-// the intention of state law by overlooking the very real possibility
-// of a conflict with federal law. See NAIC Q&A 7.9:
-//   http://www.naic.org/committe/modelaws/liiq&a.htm
-//   "Section 7B(2) does not preclude the illustrating of premiums
-//   that exceed the guideline premiums in Section 7702 of the IRC."
-//
+/// Return outcome of a trial with a given input value.
+///
+/// Naively, one might run an illustration for a given input, and
+/// return the difference between actual and target CSV at the
+/// specified target duration. However, if the policy lapsed before
+/// that duration, this naive approach would return zero. That's not
+/// desirable: even if it lead to the right answer, it provides little
+/// information that the solve routine can use to refine the input
+/// value. Instead, therefore, certain steps are taken to make the
+/// objective function more tractable as its value approaches zero
+/// from either direction:
+///
+/// 1. Prevent the policy from lapsing during a solve, by setting the
+/// AccountValue::Solving flag.
+///
+/// 2. Ascertain the lowest negative CSV over the solve period, if
+/// any, excluding any duration at which a no-lapse guarantee is in
+/// effect.
+///
+/// 3. Ascertain the greatest ullage (any positive excess of requested
+/// over maximum) throughout the solve period in
+///  - loan, or
+///  - withdrawal
+/// but ignoring any no-lapse provision (which wouldn't override
+/// internal limits on these amounts); and negate it for use as an
+/// objective-function penalty quite like negative CSV.
+///
+/// 4. If either 2. or 3. is negative, return the difference between
+/// whichever of them is more negative and the target value; else
+/// return the difference between the target value and the CSV at the
+/// solve target duration. (Non-MEC solves (v.i.) return something
+/// altogether different.)
+///
+/// In all cases, solves use the same CSV as lapse processing, which
+/// is not always the same as the CSV printed on an illustration. For
+/// example, any sales-load refund increases the value for which the
+/// contract can be surrendered, but does not prevent lapse.
+/// TODO ?? But if that comment is correct, then the code is wrong.
+///
+/// "Solve for endowment" is deemed to mean that CSV equals specified
+/// amount at the target duration, so the target value is the same for
+/// all death benefit options.
+///
+/// Non-MEC solves use an extremely simple objective function that
+/// disregards any input target value or duration. The duration is
+/// implicitly the maturity date: all that matters is whether the
+/// contract ever becomes a MEC. The result is naturally a boundary
+/// value, so it is not interesting to compare it to any solve input.
+///
+/// Non-MEC solves seem acceptably fast despite this two-valued step
+/// function. Other options considered include:
+///  - Use MEC duration. This inserts a monotone segment into the
+///    function in a one-sided neighborhood of the "root" sought.
+///    Experiments suggest that this is a pessimization: the monotone
+///    segment is rather short, and reaching a point on it causes
+///    Brent's algorithm to choose a linear or quadratic interpolation
+///    when bisection would actually converge faster.
+///  - Minimize the difference between DCV and NSP, subject to not
+///    violating the seven-pay limit. The possible improvement in
+///    performance does not seem to justify the complexity: e.g.,
+///    there is no obvious way to combine the two criteria into one
+///    function whose "root" can be found rapidly. Such an objective
+///    function would depend on how the necessary-premium exception
+///    is applied, if at all; and of course it would be inappropriate
+///    for GPT contracts.
+/// Alternatively, MEC avoidance could have been treated not as a
+/// distinct solve species but rather as a constraint optionally
+/// superimposed on other solves; but that would lead to a more
+/// general optimization problem.
+///
+/// When solving for illustration-reg guaranteed premium for a GPT
+/// contract, guideline premium limitations are suspended (in code
+/// found elsewhere). Thus, the intention of state law is realized by
+/// overlooking the very real possibility of a conflict with federal
+/// law. See NAIC Q&A 7.9:
+///   http://www.naic.org/committe/modelaws/liiq&a.htm
+///   "Section 7B(2) does not preclude the illustrating of premiums
+///   that exceed the guideline premiums in Section 7702 of the IRC."
+
 double AccountValue::SolveTest(double a_CandidateValue)
 {
     (this->*solve_set_fn)(a_CandidateValue);
@@ -122,13 +161,6 @@ double AccountValue::SolveTest(double a_CandidateValue)
         );
     RunOneCell(z);
 
-    // Return least of
-    //   CSV at target duration
-    //   lowest negative CSV through target duration
-    //   negative of greatest loan or withdrawal ullage
-    // Use 'CSVNet' so that sales load refund doesn't prevent lapse.
-
-    // Start only after no-lapse period, if any.
     int no_lapse_dur = std::accumulate
         (YearlyNoLapseActive.begin()
         ,YearlyNoLapseActive.end()
@@ -144,10 +176,6 @@ double AccountValue::SolveTest(double a_CandidateValue)
             );
         }
 
-    // Consider ullage over the entire period from issue through the
-    // solve target duration--disregarding any no-lapse provision,
-    // which wouldn't override internal limits.
-    //
     // AccountValue::Solve() asserts that SolveTargetDuration_ lies
     // within appropriate bounds.
     double greatest_loan_ullage = *std::max_element
@@ -178,10 +206,6 @@ double AccountValue::SolveTest(double a_CandidateValue)
 
     if(mce_solve_for_endt == SolveTarget_)
         {
-        // "Solve for endowment" is deemed to mean cash surrender
-        // value equals specified amount at target duration, so the
-        // target value is the same for all death benefit options.
-        //
         // The input specified amount mustn't be used here because
         // it wouldn't reflect dynamic adjustments.
         SolveTargetCsv_ = InvariantValues().SpecAmt[SolveTargetDuration_ - 1];
