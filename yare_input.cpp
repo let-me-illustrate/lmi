@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: yare_input.cpp,v 1.16 2008-12-27 02:57:00 chicares Exp $
+// $Id: yare_input.cpp,v 1.17 2009-02-26 15:57:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -66,6 +66,12 @@ std::vector<Number> convert_vector_type
 
 yare_input::yare_input(Input const& z)
 {
+// TODO ?? This temporarily works around a deeper defect. See:
+//   http://lists.nongnu.org/archive/html/lmi/2009-02/msg00074.html
+#if defined LMI_MSC
+    const_cast<Input&>(z).RealizeAllSequenceInput();
+#endif // defined LMI_MSC
+
     IssueAge                        = z.IssueAge                       .value();
     RetirementAge                   = z.RetirementAge                  .value();
     Gender                          = z.Gender                         .value();
