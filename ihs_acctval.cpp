@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.162 2009-02-15 13:01:32 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.163 2009-02-28 00:02:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1230,9 +1230,15 @@ void AccountValue::FinalizeYear()
     double csv_net =
           total_av
         - (RegLnBal + PrfLnBal)
-        + GetRefundableSalesLoad()
 //        + ExpRatReserve // This would be added if it existed.
         ;
+
+    // While performing a solve, ignore any sales-load refund, because
+    // it wouldn't prevent the contract from lapsing.
+    if(!Solving)
+        {
+        csv_net += GetRefundableSalesLoad();
+        }
 
     // While performing a solve, ignore any positive surrender charge
     // that cannot cause the contract to lapse.

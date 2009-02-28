@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.45 2009-02-26 15:56:16 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.46 2009-02-28 00:02:20 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -107,7 +107,6 @@ class SolveHelper
 /// is not always the same as the CSV printed on an illustration. For
 /// example, any sales-load refund increases the value for which the
 /// contract can be surrendered, but does not prevent lapse.
-/// TODO ?? But if that comment is correct, then the code is wrong.
 ///
 /// "Solve for endowment" is deemed to mean that CSV equals specified
 /// amount at the target duration, so the target value is the same for
