@@ -21,7 +21,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.120 2009-02-16 10:27:28 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.121 2009-02-28 00:01:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -85,7 +85,7 @@
 // - surrender charge         yes  if<0  if<0 if>0 if>0 if>0  if>0? yes
 // + experience reserve       yes  if>0  if>0 no   no   no    yes   if>0
 // - anticipated deductions   no   no    no   yes  yes  no    no    no
-// honeymoon value if greater yes  ?     yes  no   no   no?   no    n/a
+// honeymoon value if greater yes  ?     yes  no   no   no?   yes   n/a
 //
 //  * means times an optional multiplier
 //  ? means maybe--depends on contract
