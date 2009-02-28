@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.53 2008-12-27 02:56:36 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.54 2009-02-28 13:47:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,6 +31,9 @@
 #include "assert_lmi.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
+
+#include <cstdio> // std::remove()
+#include <fstream>
 
 namespace
 {
@@ -230,6 +233,15 @@ void assay_speed()
     std::cout << "  Speed test: " << TimeAnAliquot(mete) << '\n';
 }
 
+/// Test general preconditions.
+///
+/// Table numbers must be positive.
+///
+/// Both '.ndx' and '.dat' files must exist.
+///
+/// The function for nondefault lookup methods cannot be used with the
+/// default lookup method: even attempting to do so is an error.
+
 void test_precondition_failures()
 {
     BOOST_TEST_THROW
@@ -237,6 +249,25 @@ void test_precondition_failures()
         ,std::runtime_error
         ,"There is no table number 0 in file 'nonexistent'."
         );
+
+    BOOST_TEST_THROW
+        (actuarial_table("nonexistent", 1)
+        ,std::runtime_error
+        ,"File 'nonexistent.ndx' is required but could not be found."
+         " Try reinstalling."
+        );
+
+    std::ifstream ifs((qx_cso + ".ndx").c_str());
+    std::ofstream ofs("eraseme.ndx");
+    ofs << ifs.rdbuf();
+    ofs.close();
+    BOOST_TEST_THROW
+        (actuarial_table("eraseme", 1)
+        ,std::runtime_error
+        ,"File 'eraseme.dat' is required but could not be found."
+         " Try reinstalling."
+        );
+    BOOST_TEST(0 == std::remove("eraseme.ndx"));
 
     actuarial_table z(qx_ins, 256);
     BOOST_TEST_THROW
