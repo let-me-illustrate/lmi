@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.51 2008-12-27 02:56:35 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.52 2009-02-28 13:47:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -215,6 +215,15 @@ void actuarial_table::find_table()
     fs::path index_path(filename_);
     index_path = fs::change_extension(index_path, ".ndx");
     fs::ifstream index_ifs(index_path, ios_in_binary());
+    if(!index_ifs)
+        {
+        fatal_error()
+            << "File '"
+            << index_path.string()
+            << "' is required but could not be found. Try reinstalling."
+            << LMI_FLUSH
+            ;
+        }
 
     // TODO ?? Assert endianness too? SOA tables are not portable;
     // probably they can easily be read only on x86 hardware.
@@ -305,6 +314,15 @@ void actuarial_table::parse_table()
     fs::path data_path(filename_);
     data_path = fs::change_extension(data_path, ".dat");
     fs::ifstream data_ifs(data_path, ios_in_binary());
+    if(!data_ifs)
+        {
+        fatal_error()
+            << "File '"
+            << data_path.string()
+            << "' is required but could not be found. Try reinstalling."
+            << LMI_FLUSH
+            ;
+        }
 
     data_ifs.seekg(table_offset_, std::ios::beg);
     LMI_ASSERT(table_offset_ == data_ifs.tellg());
