@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.46 2009-02-28 00:02:20 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.47 2009-02-28 23:33:32 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -215,9 +215,9 @@ double AccountValue::SolveTest(double a_CandidateValue)
         SolveTargetCsv_ = YearlyTaxBasis[SolveTargetDuration_ - 1];
         }
 
-    if(mce_solve_for_tax_basis == SolveTarget_ && std::string::npos != yare_input_.Comments.find("idiosyncrasyN"))
+    if(mce_solve_for_non_mec == SolveTarget_)
         {
-        return InvariantValues().IsMec - 0.5;
+        return 0.5 - InvariantValues().IsMec;
         }
 
     return value - SolveTargetCsv_;

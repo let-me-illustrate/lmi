@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: solve.cpp,v 1.21 2009-02-08 15:20:24 chicares Exp $
+// $Id: solve.cpp,v 1.22 2009-02-28 23:33:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -145,7 +145,8 @@ double SolveTest()
             y = ThatSolveTargetCSV;
             }
             break;
-        case mce_solve_for_tax_basis:
+        case mce_solve_for_tax_basis: // Fall through.
+        case mce_solve_for_non_mec:
             {
             fatal_error() << "Not implemented.";
             }

@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.86 2009-02-23 15:55:47 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.87 2009-02-28 23:33:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -162,7 +162,7 @@ void Input::DoHarmonize()
             ;
         }
 
-    bool enable_reduce_to_avoid_mec   = true;
+    bool enable_reduce_to_avoid_mec   = mce_solve_for_non_mec != SolveTarget;
 /* TODO ?? Want something like this?
     bool enable_reduce_to_avoid_mec =
         (
@@ -913,11 +913,11 @@ false // Silly workaround for now.
     DeprecatedSolveTgtAtWhich .allow(mce_target_at_year       , actually_solving);
     DeprecatedSolveTgtAtWhich .allow(mce_target_at_age        , actually_solving);
     DeprecatedSolveTgtAtWhich .allow(mce_target_at_maturity   , actually_solving);
-    DeprecatedSolveTgtAtWhich .enable(actually_solving);
+    DeprecatedSolveTgtAtWhich .enable(actually_solving && mce_solve_for_non_mec != SolveTarget);
 
     SolveBeginYear .enable(actually_solving && mce_solve_from_year == DeprecatedSolveFromWhich);
     SolveEndYear   .enable(actually_solving && mce_solve_to_year   == DeprecatedSolveToWhich);
-    SolveTargetYear.enable(actually_solving && mce_target_at_year  == DeprecatedSolveTgtAtWhich);
+    SolveTargetYear.enable(actually_solving && mce_target_at_year  == DeprecatedSolveTgtAtWhich && mce_solve_for_non_mec != SolveTarget);
 
     SolveTargetYear.minimum(1);
     // INPUT !! The minimum 'SolveEndYear' and 'SolveTargetYear' set
@@ -933,7 +933,7 @@ false // Silly workaround for now.
     // -'Age' names would be clearer.
     SolveBeginTime .enable(actually_solving && mce_solve_from_age == DeprecatedSolveFromWhich);
     SolveEndTime   .enable(actually_solving && mce_solve_to_age   == DeprecatedSolveToWhich);
-    SolveTargetTime.enable(actually_solving && mce_target_at_age  == DeprecatedSolveTgtAtWhich);
+    SolveTargetTime.enable(actually_solving && mce_target_at_age  == DeprecatedSolveTgtAtWhich && mce_solve_for_non_mec != SolveTarget);
 
 #if 0 // http://lists.nongnu.org/archive/html/lmi/2008-08/msg00036.html
     SolveBeginTime .minimum_and_maximum(issue_age()           , maturity_age());
@@ -945,6 +945,7 @@ false // Silly workaround for now.
     SolveTarget.allow(mce_solve_for_endt     , actually_solving);
     SolveTarget.allow(mce_solve_for_target   , actually_solving);
     SolveTarget.allow(mce_solve_for_tax_basis, actually_solving);
+    SolveTarget.allow(mce_solve_for_non_mec  , actually_solving && mce_solve_loan != SolveType);
 
     SolveBasis .enable(actually_solving);
     SolveBasis .allow(mce_gen_curr, actually_solving);
