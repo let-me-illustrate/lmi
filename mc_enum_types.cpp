@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types.cpp,v 1.22 2008-12-27 02:56:48 chicares Exp $
+// $Id: mc_enum_types.cpp,v 1.23 2009-02-28 23:33:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -105,7 +105,7 @@ MC_DEFINE(ledger_type,8)
 MC_DEFINE(uw_basis,5)
 MC_DEFINE(table_rating,11)
 MC_DEFINE(solve_type,9)
-MC_DEFINE(solve_target,3)
+MC_DEFINE(solve_target,4)
 MC_DEFINE(solve_tgt_at,4)
 MC_DEFINE(solve_from,4)
 MC_DEFINE(solve_to,4)
