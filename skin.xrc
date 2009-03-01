@@ -24,7 +24,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin.xrc,v 1.12 2009-02-28 23:33:32 chicares Exp $
+    $Id: skin.xrc,v 1.13 2009-03-01 14:00:25 chicares Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -286,12 +286,12 @@ demonstrate a defect in the wx library. See
             <object class="wxFlexGridSizer">
                 <cols>3</cols>
                 <growablecols>1</growablecols>
-                <growablerows>0,1</growablerows>
+                <growablerows>0</growablerows>
                 <object class="sizeritem">
                     <flag>wxGROW|wxALL</flag>
                     <object class="wxFlexGridSizer">
                         <cols>1</cols>
-                        <growablecols>0,1</growablecols>
+                        <growablecols>0</growablecols>
                         <growablerows>0,1</growablerows>
                         <object class="sizeritem">
                             <flag>wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
@@ -524,7 +524,7 @@ demonstrate a defect in the wx library. See
                     <flag>wxGROW|wxALL</flag>
                     <object class="wxFlexGridSizer">
                         <cols>1</cols>
-                        <growablecols>0,1</growablecols>
+                        <growablecols>0</growablecols>
                         <growablerows>0,1</growablerows>
                         <object class="sizeritem">
                             <object class="wxRadioBox" name="RunOrder">
@@ -1199,7 +1199,7 @@ demonstrate a defect in the wx library. See
     <object class="wxFlexGridSizer">
         <cols>1</cols>
         <growablecols>0</growablecols>
-        <growablerows>0,1</growablerows>
+        <growablerows>0</growablerows>
         <object class="sizeritem">
             <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
             <border>4</border>
@@ -1667,7 +1667,7 @@ here, but it looks weird if we don't make this look like its siblings.
             <object class="wxFlexGridSizer">
                 <cols>1</cols>
                 <growablecols>0</growablecols>
-                <growablerows>0,1</growablerows>
+                <growablerows>0</growablerows>
                 <object class="sizeritem">
                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                     <object class="wxFlexGridSizer">
@@ -1713,13 +1713,13 @@ here, but it looks weird if we don't make this look like its siblings.
     <object class="wxFlexGridSizer">
         <rows>1</rows>
         <growablecols>2</growablecols>
-        <growablerows>0,1,2,3</growablerows>
+        <growablerows>0</growablerows>
         <object class="sizeritem">
             <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
             <border>4</border>
             <object class="wxFlexGridSizer">
                 <rows>1</rows>
-                <growablecols>0,1</growablecols>
+                <growablecols>0</growablecols>
                 <growablerows>0</growablerows>
                 <object class="sizeritem">
                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
@@ -1787,7 +1787,7 @@ here, but it looks weird if we don't make this look like its siblings.
             <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
             <object class="wxFlexGridSizer">
                 <rows>1</rows>
-                <growablecols>0,1,2</growablecols>
+                <growablecols>0</growablecols>
                 <growablerows>0</growablerows>
                 <object class="sizeritem">
                     <flag>wxGROW|wxALL</flag>
@@ -2022,7 +2022,7 @@ here, but it looks weird if we don't make this look like its siblings.
                             <border>4</border>
                             <object class="wxFlexGridSizer">
                                 <rows>1</rows>
-                                <growablecols>0,1,2</growablecols>
+                                <growablecols>0</growablecols>
                                 <growablerows>0</growablerows>
                                 <object class="sizeritem">
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
@@ -2050,7 +2050,7 @@ here, but it looks weird if we don't make this look like its siblings.
             <border>4</border>
             <object class="wxFlexGridSizer">
                 <rows>1</rows>
-                <growablecols>0,1,2</growablecols>
+                <growablecols>0</growablecols>
                 <growablerows>0</growablerows>
                 <object class="sizeritem">
                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
@@ -2065,7 +2065,7 @@ here, but it looks weird if we don't make this look like its siblings.
                             <object class="wxFlexGridSizer">
                                 <cols>1</cols>
                                 <growablecols>0</growablecols>
-                                <growablerows>0,1,2,3,4</growablerows>
+                                <growablerows>0</growablerows>
                                 <object class="sizeritem">
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                     <border>4</border>
@@ -2171,7 +2171,7 @@ here, but it looks weird if we don't make this look like its siblings.
             <border>4</border>
             <object class="wxFlexGridSizer">
                 <rows>1</rows>
-                <growablecols>0,1,2</growablecols>
+                <growablecols>0,1</growablecols>
                 <growablerows>0</growablerows>
                 <object class="sizeritem">
                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
@@ -2186,7 +2186,7 @@ here, but it looks weird if we don't make this look like its siblings.
                             <object class="wxFlexGridSizer">
                                 <cols>1</cols>
                                 <growablecols>0</growablecols>
-                                <growablerows>0,1,2,3,4</growablerows>
+                                <growablerows>0</growablerows>
                                 <object class="sizeritem">
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                     <border>4</border>
@@ -2666,7 +2666,7 @@ the other is perforce ignored.
     <object class="wxFlexGridSizer">
         <cols>1</cols>
         <growablecols>0</growablecols>
-        <growablerows>0,1</growablerows>
+        <growablerows>0</growablerows>
         <object class="sizeritem">
             <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
             <border>4</border>
