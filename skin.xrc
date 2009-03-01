@@ -24,7 +24,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin.xrc,v 1.13 2009-03-01 14:00:25 chicares Exp $
+    $Id: skin.xrc,v 1.14 2009-03-01 21:25:34 chicares Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -2012,23 +2012,6 @@ here, but it looks weird if we don't make this look like its siblings.
                                                 </object>
                                             </object>
                                         </object>
-                                    </object>
-                                </object>
-                            </object>
-                        </object>
-<!-- TODO ?? Tuck this under the first two columns instead. -->
-                        <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                            <border>4</border>
-                            <object class="wxFlexGridSizer">
-                                <rows>1</rows>
-                                <growablecols>0</growablecols>
-                                <growablerows>0</growablerows>
-                                <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                    <object class="wxCheckBox" name="WithdrawToBasisThenLoan">
-                                        <help>Switch withdrawals to loans after tax basis has been recovered</help>
-                                        <label>Change withdrawals to loans after basis</label>
                                     </object>
                                 </object>
                             </object>
