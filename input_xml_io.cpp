@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_xml_io.cpp,v 1.13 2008-12-27 02:56:45 chicares Exp $
+// $Id: input_xml_io.cpp,v 1.14 2009-03-02 05:09:39 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -163,7 +163,24 @@ using namespace xml;
             );
         if(member_names.end() != current_member)
             {
-            operator[](node_tag) = xml_lmi::get_content(*child);
+            std::string value = xml_lmi::get_content(*child);
+
+            // Prior to version 3, 'SolveType' distinguished:
+            //   mce_solve_wd           --> !WithdrawToBasisThenLoan
+            //   mce_solve_wd_then_loan -->  WithdrawToBasisThenLoan
+            // but in version 3 that superfluous distinction was
+            // removed. 'WithdrawToBasisThenLoan' needn't be altered
+            // here because the material-implications above had
+            // already been asserted in a prior revision.
+            if(cell_version < 3)
+                {
+                if("SolveWDThenLoan" == value && "SolveType" == node_tag)
+                    {
+                    value = "SolveWD";
+                    }
+                }
+
+            operator[](node_tag) = value;
             member_names.erase(current_member);
             }
         else if(is_detritus(node_tag))
@@ -306,7 +323,7 @@ void Input::write(xml::element& x) const
 //============================================================================
 int Input::class_version() const
 {
-    return 2;
+    return 3;
 }
 
 //============================================================================
