@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.49 2009-03-02 05:09:39 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.50 2009-03-02 05:43:16 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -259,13 +259,6 @@ void AccountValue::SolveSetWD(double a_CandidateValue)
 }
 
 //============================================================================
-void AccountValue::SolveSetWDThenLoan(double a_CandidateValue)
-{
-    LMI_ASSERT(false); // Now unreachable.
-    Outlay_->set_withdrawals(a_CandidateValue, SolveBeginYear_, SolveEndYear_);
-}
-
-//============================================================================
 double AccountValue::SolveGuarPremium()
 {
     // Store original er premiums for later restoration.
@@ -383,22 +376,20 @@ double AccountValue::Solve
             break;
         case mce_solve_wd:
             {
+            // TODO ?? Is minimum wd respected?
             solve_set_fn = &AccountValue::SolveSetWD;
             decimals     = round_withdrawal.decimals();
-            // TODO ?? Is minimum wd respected?
-            }
-            break;
-        case mce_solve_wd_then_loan:
-            {
-            solve_set_fn = &AccountValue::SolveSetWDThenLoan;
-            // Withdrawals and loans might be rounded differently.
-            // To obtain a level income as a mixture of loans and
-            // withdrawals, both should be rounded to the less precise
-            // number of decimals normally used for either.
-            decimals = std::min
-                (round_withdrawal.decimals()
-                ,round_loan.decimals()
-                );
+            if(yare_input_.WithdrawToBasisThenLoan)
+                {
+                // Withdrawals and loans might be rounded differently.
+                // To obtain a level income as a mixture of loans and
+                // withdrawals, both should be rounded to the less
+                // precise number of decimals normally used for either.
+                decimals = std::min
+                    (round_withdrawal.decimals()
+                    ,round_loan      .decimals()
+                    );
+                }
             }
             break;
         case mce_solve_ee_prem_dur: // Fall through: not yet implemented.

@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: interest_rates.cpp,v 1.25 2008-12-27 02:56:46 chicares Exp $
+// $Id: interest_rates.cpp,v 1.26 2009-03-02 05:43:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -239,7 +239,6 @@ bool need_loan_rates(yare_input const& yi)
     return
             mce_gpt                == yi.DefinitionOfLifeInsurance
         ||  mce_solve_loan         == yi.SolveType
-        ||  mce_solve_wd_then_loan == yi.SolveType
         ||  true                   == yi.WithdrawToBasisThenLoan
         ||  0.0                    != yi.InforceRegularLoanValue
         ||  0.0                    != yi.InforcePreferredLoanValue

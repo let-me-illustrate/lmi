@@ -21,7 +21,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.121 2009-02-28 00:01:19 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.122 2009-03-02 05:43:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2826,14 +2826,7 @@ void AccountValue::TxTakeWD()
 // The code below switches to loans even if the basis has not yet been
 // recovered through withdrawals. Is this a good thing, or a problem
 // we should fix? TODO ?? Investigate.
-//
-// It appears that we need to do this even when not solving:
-// i.e. if yare_input_.WithdrawToBasisThenLoan means to take loans after WDs stop...
-// TODO ?? Should the next line be suppressed?
-//      if(mce_solve_wd_then_loan == yare_input_.SolveType)
-//          {
-            RequestedLoan += RequestedWD - NetWD;
-//          }
+        RequestedLoan += RequestedWD - NetWD;
         }
 
     if(NetWD <= 0.0)
