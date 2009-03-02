@@ -24,7 +24,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin.xrc,v 1.14 2009-03-01 21:25:34 chicares Exp $
+    $Id: skin.xrc,v 1.15 2009-03-02 05:43:16 chicares Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -1738,7 +1738,6 @@ here, but it looks weird if we don't make this look like its siblings.
                             <item>SolveWD</item>
                             <item>SolveEePremDur</item>
                             <item>SolveErPremDur</item>
-                            <item>SolveWDThenLoan</item>
                         </content>
                     </object>
                 </object>

@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.80 2009-02-09 16:05:27 chicares Exp $
+// $Id: account_value.hpp,v 1.81 2009-03-02 05:43:16 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -154,7 +154,6 @@ class LMI_SO AccountValue
     void   SolveSetErPrem       (double a_CandidateValue);
     void   SolveSetLoan         (double a_CandidateValue);
     void   SolveSetWD           (double a_CandidateValue);
-    void   SolveSetWDThenLoan   (double a_CandidateValue);
 
     void   DebugPrint(std::ostream& os) const; // Antediluvian.
     void   DebugPrint           ();
