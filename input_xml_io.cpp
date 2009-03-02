@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_xml_io.cpp,v 1.14 2009-03-02 05:09:39 chicares Exp $
+// $Id: input_xml_io.cpp,v 1.15 2009-03-02 22:43:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -177,6 +177,25 @@ using namespace xml;
                 if("SolveWDThenLoan" == value && "SolveType" == node_tag)
                     {
                     value = "SolveWD";
+                    }
+                if
+                    (  "AvoidMecMethod" == node_tag
+                    &&  (
+                            "Increase specified amount" == value
+                        ||  "Increase_specified_amount" == value
+                        )
+                    )
+                    {
+                    if(!global_settings::instance().regression_testing())
+                        {
+                        warning()
+                            << "The obsolete 'Increase specified amount'"
+                            << " MEC-avoidance strategy is no longer supported."
+                            << " Consider using a non-MEC solve instead."
+                            << LMI_FLUSH
+                            ;
+                        }
+                    value = "Allow MEC";
                     }
                 }
 
