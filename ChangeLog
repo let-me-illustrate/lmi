@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1256 2009-02-26 15:57:28 chicares Exp $
+// $Id: ChangeLog,v 1.1257 2009-03-02 06:28:35 chicares Exp $
 
 MAINTENANCE
 
@@ -21862,4 +21862,88 @@ Improve documentation, noting a newly-discovered defect.
 Work around a defect (reliance on implementation-defined behavior).
 See:
   http://lists.nongnu.org/archive/html/lmi/2009-02/msg00074.html
+
+20090228T0001Z <gchicares@sbcglobal.net> [814]
+
+  ihs_avmly.cpp
+Improve documentation.
+
+20090228T0002Z <gchicares@sbcglobal.net> [813]
+
+  ihs_acctval.cpp
+  ihs_avsolve.cpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch, and noted 20090226T1556Z.
+
+20090228T1347Z <gchicares@sbcglobal.net> [813]
+
+  actuarial_table.cpp
+  actuarial_table_test.cpp
+Improve missing-file diagnostics. See:
+  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00064.html
+
+20090228T2333Z <gchicares@sbcglobal.net> [813]
+
+  ihs_avsolve.cpp
+  input_harmonization.cpp
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+  mc_enum_types.xpp
+  skin.xrc
+  solve.cpp
+Solve for non-MEC, adding GUI support to the 20090217T0223Z change.
+
+20090301T1400Z <gchicares@sbcglobal.net> [813]
+
+  skin.xrc
+Remove invalid growable row and column indices. See:
+  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00063.html
+
+20090301T2125Z <gchicares@sbcglobal.net> [812]
+
+  skin.xrc
+Remove a control that was (harmfully) duplicated on another tab.
+
+20090301T2126Z <gchicares@sbcglobal.net> [812]
+
+  ihs_avsolve.cpp
+Assert consistency of WD vs. WD-then-loan inputs: specifically, these
+relationships between 'SolveType' and 'WithdrawToBasisThenLoan':
+   mce_solve_wd           --> !WithdrawToBasisThenLoan
+   mce_solve_wd_then_loan -->  WithdrawToBasisThenLoan
+must hold, or the program is probably incorrect. These assertions show
+that the {WD, WD-then-loan} distinction in 'SolveType' is superfluous.
+
+20090302T0509Z <gchicares@sbcglobal.net> [812]
+
+  ihs_avsolve.cpp
+  input_xml_io.cpp
+Demonstrate the redundancy of the 'mce_solve_wd_then_loan' enumerator.
+All automated system tests pass, though GUI changes are still needed.
+
+20090302T0543Z <gchicares@sbcglobal.net> [811]
+
+  account_value.hpp
+  ihs_avmly.cpp
+  ihs_avsolve.cpp
+  input_harmonization.cpp
+  interest_rates.cpp
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+  mc_enum_types.xpp
+  skin.xrc
+  solve.cpp
+Eliminate the redundant 'mce_solve_wd_then_loan' enumerator. Changes
+to other skins are still needed.
+
+20090302T0628Z <gchicares@sbcglobal.net> [811]
+
+  ihs_avsolve.cpp
+  input_harmonization.cpp
+  input_realization.cpp
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+  mc_enum_types.xpp
+  skin.xrc
+Eradicate vestiges of unimplemented solves for duration.
 
