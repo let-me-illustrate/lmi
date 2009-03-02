@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.87 2009-02-28 23:33:32 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.88 2009-03-02 05:43:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -746,11 +746,7 @@ false // Silly workaround for now.
         );
 */
 
-    bool wd_solve =
-        (
-            mce_solve_wd           == SolveType
-        ||  mce_solve_wd_then_loan == SolveType
-        );
+    bool wd_solve = (mce_solve_wd == SolveType);
     bool wd_forbidden = !wd_allowed;
     // TODO ?? Also need to inhibit affected solves.
 
@@ -893,7 +889,6 @@ false // Silly workaround for now.
     SolveType.allow(mce_solve_wd          , solves_allowed && wd_allowed);
     SolveType.allow(mce_solve_ee_prem_dur , solves_allowed && false);
     SolveType.allow(mce_solve_er_prem_dur , solves_allowed && false);
-    SolveType.allow(mce_solve_wd_then_loan, solves_allowed && wd_allowed && loan_allowed);
 
     bool actually_solving = solves_allowed && mce_solve_none != SolveType;
 

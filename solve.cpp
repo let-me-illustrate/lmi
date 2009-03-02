@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: solve.cpp,v 1.22 2009-02-28 23:33:32 chicares Exp $
+// $Id: solve.cpp,v 1.23 2009-03-02 05:43:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -184,13 +184,6 @@ inline static double SolveWD(double CandidateValue)
 {
     That->SolveSetWDs(CandidateValue, ThatSolveBegYear, ThatSolveEndYear);
     return only_set_values ? 0.0 : SolveTest();
-}
-
-//============================================================================
-// IHS !! Implemented in lmi, but not here.
-inline static double SolveWDThenLoan(double /* CandidateValue */)
-{
-    return 0.0;
 }
 
 //============================================================================
