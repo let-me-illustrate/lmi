@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.88 2009-03-02 05:43:16 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.89 2009-03-02 06:28:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -444,9 +444,7 @@ if(!egregious_kludge)
             IndividualPaymentStrategy != mce_pmt_input_scalar
 // TODO ??        ||  mce_pmt_input_scalar != ErPmtStrategy
         ||  mce_solve_ee_prem     == SolveType
-        ||  mce_solve_ee_prem_dur == SolveType
         ||  mce_solve_er_prem     == SolveType
-        ||  mce_solve_er_prem_dur == SolveType
         ||  mce_reduce_prem       == AvoidMecMethod
         );
 
@@ -572,10 +570,7 @@ true // Silly workaround for now.
         }
 */
 
-    bool prem_solve =
-            mce_solve_ee_prem     == SolveType
-        ||  mce_solve_ee_prem_dur == SolveType
-        ;
+    bool prem_solve = mce_solve_ee_prem == SolveType;
 
     // Many payment strategies are forbidden if specamt is a function
     // of payment.
@@ -887,8 +882,6 @@ false // Silly workaround for now.
     SolveType.allow(mce_solve_er_prem     , solves_allowed && enable_prem_and_specamt_solves);
     SolveType.allow(mce_solve_loan        , solves_allowed && loan_allowed);
     SolveType.allow(mce_solve_wd          , solves_allowed && wd_allowed);
-    SolveType.allow(mce_solve_ee_prem_dur , solves_allowed && false);
-    SolveType.allow(mce_solve_er_prem_dur , solves_allowed && false);
 
     bool actually_solving = solves_allowed && mce_solve_none != SolveType;
 

@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.50 2009-03-02 05:43:16 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.51 2009-03-02 06:28:34 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -392,8 +392,6 @@ double AccountValue::Solve
                 }
             }
             break;
-        case mce_solve_ee_prem_dur: // Fall through: not yet implemented.
-        case mce_solve_er_prem_dur: // Fall through: not yet implemented.
         default:
             {
             fatal_error()

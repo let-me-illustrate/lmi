@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_realization.cpp,v 1.16 2009-02-23 15:55:47 chicares Exp $
+// $Id: input_realization.cpp,v 1.17 2009-03-02 06:28:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -640,11 +640,7 @@ std::string Input::RealizeDeathBenefitOption()
 std::string Input::RealizePayment()
 {
     std::map<std::string,std::string> z = permissible_payment_strategy_keywords();
-    if
-        (
-           mce_solve_ee_prem     == SolveType
-        || mce_solve_ee_prem_dur == SolveType
-        )
+    if(mce_solve_ee_prem == SolveType)
         {
         z.clear();
         }
@@ -678,11 +674,7 @@ std::string Input::RealizePaymentMode()
 std::string Input::RealizeCorporationPayment()
 {
     std::map<std::string,std::string> z = permissible_payment_strategy_keywords();
-    if
-        (
-           mce_solve_er_prem     == SolveType
-        || mce_solve_er_prem_dur == SolveType
-        )
+    if(mce_solve_er_prem == SolveType)
         {
         z.clear();
         }
