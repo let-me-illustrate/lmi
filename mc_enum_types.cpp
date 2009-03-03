@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types.cpp,v 1.25 2009-03-02 06:28:34 chicares Exp $
+// $Id: mc_enum_types.cpp,v 1.26 2009-03-03 13:55:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -122,7 +122,7 @@ MC_DEFINE(term_adj_method,3)
 MC_DEFINE(state,53)
 MC_DEFINE(country,239)
 MC_DEFINE(defn_life_ins,3)
-MC_DEFINE(mec_avoid_method,3)
+MC_DEFINE(mec_avoid_method,2)
 MC_DEFINE(defn_material_change,5)
 MC_DEFINE(spread_method,2)
 MC_DEFINE(coi_rate_method,2)

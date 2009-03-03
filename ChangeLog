@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1259 2009-03-03 03:05:31 wboutin Exp $
+// $Id: ChangeLog,v 1.1260 2009-03-03 13:55:31 chicares Exp $
 
 MAINTENANCE
 
@@ -21947,6 +21947,15 @@ to other skins are still needed.
   skin.xrc
 Eradicate vestiges of unimplemented solves for duration.
 
+20090302T2243Z <gchicares@sbcglobal.net> [811]
+
+  input_xml_io.cpp
+Provide limited backward compatibility for an obsolete "feature".
+Avoiding a MEC by increasing the specified amount every seven years
+prn was a flawed concept, poorly implemented, and will soon be
+eradicated. See:
+  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00002.html
+
 20090303T0010Z <wboutin@massmutual.com> [811]
 
   reg_d_group.xsl
@@ -21956,4 +21965,16 @@ Extract several disclosures.
 
   reg_d_individual.xsl
 Extract several disclosures.
+
+20090303T1355Z <gchicares@sbcglobal.net> [798]
+
+  account_value.hpp
+  ihs_avmly.cpp
+  input_harmonization.cpp
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+  mc_enum_types.xpp
+  skin.xrc
+Eradicate 'mce_increase_specamt'. Changes to other skins are still
+needed.
 
