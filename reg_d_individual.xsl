@@ -21,7 +21,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: reg_d_individual.xsl,v 1.5 2008-12-27 02:56:53 chicares Exp $
+    $Id: reg_d_individual.xsl,v 1.6 2009-03-03 03:05:31 wboutin Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -324,42 +324,7 @@
               <xsl:value-of select="$registered-symbol"/>.
             </fo:block>
             <fo:block padding-top="1em">
-              Interest rates, assumed rates of return and values set forth in
-              the illustration are not guaranteed. This illustration assumes
-              that the currently illustrated elements will continue unchanged
-              for all years shown. This is not likely to occur and actual
-              results may be more or less favorable than shown. Benefits and
-              values are not guaranteed and are based on assumptions set forth
-              in this illustration. Current charges are subject to change.
-            </fo:block>
-            <fo:block padding-top="1em">
-              This illustration assumes a hypothetical rate of return on the
-              account value in the separate account that is net of all
-              investment management, custody and other expenses of the
-              investment manager or fund. As the investment options offered
-              within the policy include funds that invest in other funds,
-              investment management fees, custody and other expenses may be
-              charged at multiple levels. Please refer to the PPM and offering
-              memoranda for the underlying investment options for further
-              details.
-            </fo:block>
-            <fo:block padding-top="1em">
-              Premiums are assumed to be paid at the beginning of the policy
-              year. Age, account values, cash surrender values and death
-              benefits are illustrated as of the end of the policy year.
-            </fo:block>
-            <fo:block padding-top="1em">
-              In certain states,
-              <xsl:value-of select="$scalars/InsCoShortName"/>
-              issues certificates under a group life insurance policy rather
-              than individual life insurance policies. For purposes of this
-              illustration, the term "policy" refers to both individual life
-              insurance policies and certificates.
-            </fo:block>
-            <fo:block padding-top="1em">
-              Please refer to the policy for a complete explanation of benefits,
-              rights and obligations. In the event of a conflict between the
-              illustration and policy, the terms of the policy will control.
+              <xsl:value-of select="$scalars/ProductDescription"/>.
             </fo:block>
           </fo:block>
 
@@ -380,31 +345,15 @@
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">Maximum Net Amount at Risk Limitation: </fo:inline>
-              <xsl:value-of select="$scalars/InsCoShortName"/> has the right to
-              promptly refund any amount of premium paid if the premium payment
-              will cause the net amount at risk to exceed the maximum net amount
-              at risk under the policy. <xsl:value-of select="$scalars/InsCoShortName"/>
-              also has the right to automatically withdraw from the divisions of
-              the separate account, and distribute to the policy owner, excess
-              amounts that cause the net amount at risk to exceed the maximum
-              net amount at risk under the policy.
+              <xsl:value-of select="$scalars/MaxNaarFootnote"/>
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">Monthly Charges:</fo:inline>
-              Account values may be used to pay monthly charges. Monthly charges
-              are due during the life of the insured, and depending on actual
-              investment results, the policy owner may need to continue or
-              resume premium outlays. If account values are allocated to certain
-              illiquid separate account divisions, the policy will be subject to
-              a minimum money market requirement as described in the PPM and the
-              policy.
+              <xsl:value-of select="$scalars/MonthlyChargesFootnote"/>
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">Surrender Charges:</fo:inline>
-              In certain states, there may be a surrender charge in connection
-              with premium tax liability. This surrender charge is not reflected
-              in the illustrated values. Surrender charges under the policy are
-              limited by applicable non-forfeiture laws and regulations.
+              <xsl:value-of select="$scalars/PremTaxSurrChgFootnote"/>
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">Issue State: </fo:inline>
@@ -418,61 +367,47 @@
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">Account Value:</fo:inline>
-              The sum of all premium payments adjusted to reflect premium loads,
-              mortality charges, asset charges, administrative charges (if any)
-              and investment income.
+              <xsl:value-of select="$scalars/AccountValueFootnote"/>
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">Administrative Charge:</fo:inline>
-              A flat monthly charge payable from account value.
+              <xsl:value-of select="$scalars/PolicyFeeFootnote"/>
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">Asset Charges:</fo:inline>
-              Asset charges include a mortality and expense risk charge
-              ("M&amp;E") as described in the Table of Charges of the PPM,
-              negotiated asset based compensation (if any), and a separate
-              account administrative charge (if any).
+              <xsl:value-of select="$scalars/AssetChargeFootnote"/>
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">Cash Surrender Value:</fo:inline>
-              The account value less any policy debt. If applicable, surrender
-              charges are not reflected in the illustrated case surrender value.
+              <xsl:value-of select="$scalars/CashSurrValueFootnote"/>
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">Death Benefit:</fo:inline>
-              The death benefit is the amount paid to the policy beneficiary(ies)
-              after the death of the insured less any policy debt and unpaid
-              monthly charges.
+              <xsl:value-of select="$scalars/DeathBenefitFootnote"/>
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">End of Year Age:</fo:inline>
-              The insured's age at the end of the illustrated policy year.
+              <xsl:value-of select="$scalars/AttainedAgeFootnote"/>
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">Investment Income:</fo:inline>
-              The investment experience of the account value allocated to the
-              separate account divisions at the hypothetical rate of return.
+              <xsl:value-of select="$scalars/InvestmentIncomeFootnote"/>
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">IRR on Death Benefit:</fo:inline>
-              The interest rate at which the premium outlay would have to be
-              invested outside the policy to generate the death benefit.
+              <xsl:value-of select="$scalars/IrrDbFootnote"/>
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">IRR on Surrender Value:</fo:inline>
-              The interest rate at which the premium outlay would have to be
-              invested outside the policy to generate the cash surrender value.
+              <xsl:value-of select="$scalars/IrrCsvFootnote"/>
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">Mortality Charges:</fo:inline>
-              The insurance risk charge based on age, gender and underwriting
-              class. Generally, insurance risk charge rates increase annually
-              as the age of the insured increases.
+              <xsl:value-of select="$scalars/MortalityChargesFootnote"/>
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">Policy Year:</fo:inline>
-              The period from the illustrated policy date to the first policy
-              anniversary date, or from one policy anniversary date to the next.
+              <xsl:value-of select="$scalars/PolicyYearFootnote"/>
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">Premium Loads:</fo:inline>
@@ -483,7 +418,7 @@
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">Premium Outlay:</fo:inline>
-              The premium payment prior to the deduction of any premium loads.
+              <xsl:value-of select="$scalars/OutlayFootnote"/>
             </fo:block>
           </fo:block>
 
@@ -492,37 +427,7 @@
               Separate Account
             </fo:block>
             <fo:block padding-top="1em">
-              * This illustration assumes a hypothetical rate of return on the
-              account value in the separate account. The hypothetical rate of
-              return illustrated assumes that all investment management, custody
-              and other expenses of the investment manager or underlying fund
-              have beed deducted from the rate of return. Premuim loads are
-              deducted from each premium payment and have not been deducted from
-              the rate of return Mortality Charges, Asset Charges and
-              Administrative Charges ("Monthly Charges") are deducted from
-              Account Value on a monthly basis and have not been deducted from
-              the rate of return. Actual rates of return will be different
-              because they will be based on the actual performance of the
-              separate account divisions selected by the policy owner.
-            </fo:block>
-            <fo:block padding-top="1em">
-              For some separate accounts or divisions, there may be additional
-              investment management and/or separate account administrative fees
-              that may be charged, in which case those fees may be included in
-              the asset charges illustrated above. If additional fees are
-              determined subsequent to issuance of this illustration, such fees
-              will be added to the asset charges. You should request a new
-              illustration to review the impact of such fees on policy
-              performance.
-            </fo:block>
-            <fo:block padding-top="1em">
-              Certain separate account divisions have restrictions on the
-              ability to access account values allocated to those divisions.
-              Refer to the PPM and policy for details.
-            </fo:block>
-            <fo:block padding-top="1em">
-              No tax charge is currently applied to the investment returns of
-              the separate account. A charge could be made in the future.
+              <xsl:value-of select="$scalars/HypotheticalRatesFootnote"/>
             </fo:block>
           </fo:block>
 
@@ -537,30 +442,7 @@
               applicable policy year. The illustration and supplemental report
               reflect a fixed policy loan interest rate of <xsl:value-of select="$scalars/InitAnnLoanDueRate"/>.
             </fo:block>
-            <fo:block padding-top="1em">
-              Taking a withdrawal or policy loan could have adverse tax
-              consequences. If aggregate policy loans substantially exceed
-              cost basis, the policy owner may incur a significant income tax
-              liability if the policy terminates before the insured's death.
-              Substantial payments to cover policy charges and policy loan
-              interest may be necessary to prevent termination of the policy
-              and to avoid the potential income tax liability. Some of the
-              indications that such a situation may arise include: (1) high
-              outstanding debt relative to the policy's account value; (2) low
-              account value relative to a high death benefit; and (3) lower than
-              expected investment income credited to the account value.
-              Mortality Charge rates increase annually as the age of the insured
-              increases, and the risk charge increases as the amount of the
-              policy risk increases.
-            </fo:block>
-            <fo:block padding-top="1em">
-              The policy owner can reduce the likelihood of incurring a
-              significant income tax liability should the policy terminate
-              before the death of the insured, or the need to make substantial
-              payments to keep the policy from terminating by monitoring and
-              reviewing all aspects of the policy on a regular basis with a tax
-              advisor, financial representative and/or financial advisor.
-            </fo:block>
+              <xsl:value-of select="$scalars/LoanAndWithdrawalFootnote"/>
           </fo:block>
         </fo:flow>
 
