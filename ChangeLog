@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1258 2009-03-03 00:10:18 wboutin Exp $
+// $Id: ChangeLog,v 1.1259 2009-03-03 03:05:31 wboutin Exp $
 
 MAINTENANCE
 
@@ -21950,5 +21950,10 @@ Eradicate vestiges of unimplemented solves for duration.
 20090303T0010Z <wboutin@massmutual.com> [811]
 
   reg_d_group.xsl
+Extract several disclosures.
+
+20090303T0305Z <wboutin@massmutual.com> [811]
+
+  reg_d_individual.xsl
 Extract several disclosures.
 
