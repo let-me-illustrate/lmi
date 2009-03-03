@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.89 2009-03-02 06:28:34 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.90 2009-03-03 13:55:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -162,7 +162,7 @@ void Input::DoHarmonize()
             ;
         }
 
-    bool enable_reduce_to_avoid_mec   = mce_solve_for_non_mec != SolveTarget;
+    bool enable_reduce_to_avoid_mec = mce_solve_for_non_mec != SolveTarget;
 /* TODO ?? Want something like this?
     bool enable_reduce_to_avoid_mec =
         (
@@ -171,60 +171,6 @@ void Input::DoHarmonize()
         ||  SpecifiedAmountStrategyFromIssue == mce_sa_salary
         );
 */
-    bool enable_increase_to_avoid_mec =
-            DefinitionOfMaterialChange == mce_benefit_increase
-        ||  DefinitionOfMaterialChange == mce_earlier_of_increase_or_unnecessary_premium
-        ||  DefinitionOfMaterialChange == mce_adjustment_event
-        ;
-/* TODO ?? Want something like this?
-    bool enable_increase_to_avoid_mec =
-            (
-                EePmtStrategy == mce_pmtinputscalar
-            ||  EePmtStrategy == mce_pmtinputvector
-            )
-        &&  (
-                ErPmtStrategy == mce_pmtinputscalar
-            ||  ErPmtStrategy == mce_pmtinputvector
-            )
-// TODO ?? We could write it more simply this way if we transfered
-// the DefnMaterialChange controls first....
-//        &&
-//            (
-//                DefinitionOfMaterialChange == mce_benefit_increase
-//            ||  DefinitionOfMaterialChange == mce_earlier_of_increase_or_unnecessary_premium
-//            ||  DefinitionOfMaterialChange == mce_adjustment_event
-//            )
-        ;
-*/
-    if(DefinitionOfMaterialChange == mce_unnecessary_premium)
-        {
-        enable_increase_to_avoid_mec = false || anything_goes;
-        }
-    else if(DefinitionOfMaterialChange == mce_benefit_increase)
-        {
-        // Do nothing.
-        }
-    else if(DefinitionOfMaterialChange == mce_later_of_increase_or_unnecessary_premium)
-        {
-        enable_increase_to_avoid_mec = false || anything_goes;
-        }
-    else if(DefinitionOfMaterialChange == mce_earlier_of_increase_or_unnecessary_premium)
-        {
-        // Do nothing.
-        }
-    else if(DefinitionOfMaterialChange == mce_adjustment_event)
-        {
-        // Do nothing.
-        }
-    else
-        {
-        fatal_error()
-            << "No option selected for definition of material change."
-            << LMI_FLUSH
-            ;
-        }
-
-    AvoidMecMethod.allow(mce_increase_specamt, enable_increase_to_avoid_mec);
     AvoidMecMethod.allow(mce_reduce_prem, enable_reduce_to_avoid_mec);
 
     MaximumNaar.enable(anything_goes);
@@ -576,7 +522,6 @@ true // Silly workaround for now.
     // of payment.
     bool specamt_indeterminate =
             mce_solve_specamt == SolveType
-        ||  AvoidMecMethod == mce_increase_specamt
         ||  (
                mce_sa_input_scalar != SpecifiedAmountStrategyFromIssue
             && mce_sa_salary       != SpecifiedAmountStrategyFromIssue
