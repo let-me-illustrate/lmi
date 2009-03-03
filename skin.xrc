@@ -24,7 +24,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin.xrc,v 1.16 2009-03-02 06:28:35 chicares Exp $
+    $Id: skin.xrc,v 1.17 2009-03-03 13:55:31 chicares Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -94,10 +94,10 @@ demonstrate a defect in the wx library. See
                                 <label>MEC avoidance</label>
                                 <dimension>1</dimension>
                                 <selection>0</selection>
+<!-- SOMEDAY !! This should become a checkbox. -->
                                 <content>
                                     <item helptext="Do not try to avoid a MEC">Allow MEC</item>
                                     <item helptext="Avoid a MEC by decreasing premium">Reduce premium</item>
-                                    <item helptext="Avoid a MEC by increasing specified amount">Increase specified amount</item>
                                 </content>
                             </object>
                         </object>
