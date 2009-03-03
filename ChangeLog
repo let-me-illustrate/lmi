@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1257 2009-03-02 06:28:35 chicares Exp $
+// $Id: ChangeLog,v 1.1258 2009-03-03 00:10:18 wboutin Exp $
 
 MAINTENANCE
 
@@ -21946,4 +21946,9 @@ to other skins are still needed.
   mc_enum_types.xpp
   skin.xrc
 Eradicate vestiges of unimplemented solves for duration.
+
+20090303T0010Z <wboutin@massmutual.com> [811]
+
+  reg_d_group.xsl
+Extract several disclosures.
 

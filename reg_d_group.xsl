@@ -21,7 +21,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: reg_d_group.xsl,v 1.5 2008-12-27 02:56:53 chicares Exp $
+    $Id: reg_d_group.xsl,v 1.6 2009-03-03 00:10:15 wboutin Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -181,7 +181,7 @@
               Policy Year
             </fo:block>
             <fo:block>
-              The number of years the policy is assumed to have been in force.
+              <xsl:value-of select="$scalars/PolicyYearFootnote"/>
             </fo:block>
 
             <xsl:if test="not($is_composite)">
@@ -189,8 +189,7 @@
                 End of Year Age
               </fo:block>
               <fo:block>
-                The issue age of the insured plus the number of completed
-                policy years since the policy date.
+              <xsl:value-of select="$scalars/AttainedAgeFootnote"/>
               </fo:block>
             </xsl:if>
 
@@ -198,30 +197,21 @@
               Premium Outlay
             </fo:block>
             <fo:block>
-              The total amount the premium payor plans to pay each year,
-              assuming that each payment is made at the beginning of the premium
-              paying period.
+              <xsl:value-of select="$scalars/OutlayFootnote"/>
             </fo:block>
 
             <fo:block font-weight="bold" padding-top="2em">
               Cash Surrender Value
             </fo:block>
             <fo:block>
-              The Cash Surrender Value is the amount payable to a policy owner
-              upon surrender of the policy. It is equal to the Account Value
-              less any surrender charges and less any policy debt and any unpaid
-              monthly charges.
+              <xsl:value-of select="$scalars/CashSurrValueFootnote"/>
             </fo:block>
 
             <fo:block font-weight="bold" padding-top="2em">
               Death Benefit
             </fo:block>
             <fo:block>
-              The Death Benefit is the net amount paid to a beneficiary
-              following receipt of due proof of death. The Death Benefit
-              is equal to the benefit provided by the death benefit option
-              in effect on the date of death less any policy debt and any
-              unpaid monthly charges.
+              <xsl:value-of select="$scalars/DeathBenefitFootnote"/>
             </fo:block>
           </fo:block>
         </fo:flow>
@@ -250,35 +240,11 @@
               <xsl:value-of select="$scalars/PolicyMktgName"/>
               is a <xsl:value-of select="$scalars/PolicyLegalName"/>
               issued by <xsl:value-of select="$scalars/InsCoName"/>.
-              The policy provides lifetime insurance protection for as long
-              as it remains in force. The policy is available at issue
-              with at least two death benefit options:
-              Option 1 (death benefit equal to the greater of
-              (a) the selected face amount in effect on the date of death or
-              (b) the minimum face amount in effect on the date of death);
-              and Option 2 (death benefit equal to the greater of
-              (a) the selected face amount in effect on the date of death plus
-              account value on that date or (b) the minimum face amount
-              in effect on the date of death). A policy with the stable value
-              endorsement requires Death Benefit Option 1 or Death Benefit
-              Option 2. If available under the policy, Option 3 is a death
-              benefit option equal to the greatest of (a) the selected face
-              amount at death plus the sum of premiums paid less withdrawals;
-              or (b) selected face amount at death; or (c) minimum face amount
-              at death.
+              <xsl:value-of select="$scalars/ProductDescription"/>
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline text-decoration="underline">Stable Value Feature</fo:inline>
-              This policy offers a Stable Value Feature. The Stable Value
-              Feature enables the smoothing over time of the volatile returns
-              normally associated with investments in variable account
-              divisions by means of the Stable Value Crediting Rate. For policy
-              owners that want to maintain the the Stable Value Feature,
-              certain conditions and restrictions apply to various policy
-              provisions, including, but not limited to, policy loans,
-              transfers, surrenders and withdrawals.  Refer to the offering
-              memorandum and the stable value endorsement to the policy for
-              additional information.
+              <xsl:value-of select="$scalars/StableValueFootnote"/>
             </fo:block>
             <fo:block padding-top="1em">
               This illustration assumes Initial Death Benefit Option
@@ -296,10 +262,7 @@
               suitability standards.
             </fo:block>
             <fo:block padding-top="1em">
-              Account values may be used to pay contract charges.
-              Contract charges are due during the life of the insured;
-              depending on actual results, the premium payer may need
-              to continue or resume premium outlays.
+              <xsl:value-of select="$scalars/NoVanishPremiumFootnote"/>
             </fo:block>
             <fo:block padding-top="1em">
               The definition of life insurance elected for this contract
@@ -317,10 +280,8 @@
               </xsl:choose>
             </fo:block>
             <fo:block padding-top="1em">
-              <xsl:value-of select="$scalars/InsCoName"/> has the right
-              to promptly return any amount of premium paid if it will increase
-              the net amount at risk (referred to in the contract as
-              the Amount of Insurance that Requires a Charge).
+              <xsl:value-of select="$scalars/InsCoName"/>
+              <xsl:value-of select="$scalars/RejectPremiumFootnote"/>
             </fo:block>
             <fo:block padding-top="1em">
               Account values, cash surrender values, and death benefits
@@ -390,10 +351,7 @@
               <fo:block padding-top="1em">
                 <xsl:choose>
                   <xsl:when test="$scalars/UseExperienceRating='1'">
-                    The illustration assumes mortality experience rating.
-                    To the extent that other clients participate in the pool
-                    your results will be affected by the experience
-                    of the entire pool.
+                  <xsl:value-of select="$scalars/ExpRatingFootnote"/>
                   </xsl:when>
                   <xsl:otherwise>
                     The illustration does not assume any mortality
@@ -421,33 +379,12 @@
 
             <xsl:if test="$scalars/HasTerm='1'">
               <fo:block padding-top="1em">
-                A Term Rider is available for attachment to this policy.
-                The Term Rider provides the option to purchase monthly
-                term insurance on the life of the insured.
-                The term rider selected face amount supplements the selected
-                face amount of the contract. If the Term Rider is attached,
-                the policy to which it is attached may have a lower annual
-                cutoff premium and, as a result, the lower overall sales
-                loads paid may be lower than a contract having the same total
-                face amount, but with no Term Rider. Also, the lapse protection
-                feature of the contract's
-                <xsl:value-of select="$scalars/NoLapseProvisionName"/>
-                does not apply to the Term Rider's selected face amount.
+                <xsl:value-of select="$scalars/TermFootnote"/>
               </fo:block>
             </xsl:if>
             <xsl:if test="$scalars/HasWP='1'">
               <fo:block padding-top="1em">
-                A Waiver of Monthly Charges rider is available for attachment
-                to this policy for insureds with ages 20-64. The Waiver
-                of Monthly Charges Rider provides that in the event
-                of the disability of the insured that begins before attained
-                age 65 and continues for at least 6 months,
-                <xsl:value-of select="$scalars/InsCoShortName"/> will waive
-                certain monthly charges up to age 65, but not less than
-                two years, while the insured remains totally disabled.
-                An additional charge is associated with this rider, if elected.
-                Please refer to your contract for specific provisions
-                and a detailed schedule of charges.
+                <xsl:value-of select="$scalars/WaiverFootnote"/>
               </fo:block>
             </xsl:if>
             <xsl:if test="$scalars/UsePartialMort='1'">
@@ -461,12 +398,7 @@
             <xsl:choose>
               <xsl:when test="$scalars/GenderBlended='1'">
                 <fo:block padding-top="1em">
-                  Custom blending of cost of insurance charges is based
-                  on the plan's assumed distribution of initial selected
-                  face amount by gender and tobacco use. This illustration
-                  assumes that the distribution remains constant
-                  in future years. Custom blending is available only on plans
-                  of 100 or more lives.
+                  <xsl:value-of select="$scalars/MortalityBlendFootnote"/>
                   Custom blend assumptions:
                   <xsl:choose>
                     <xsl:when test="$scalars/SmokerBlended='1'">
@@ -482,12 +414,7 @@
               <xsl:otherwise>
                 <xsl:if test="$scalars/SmokerBlended='1'">
                   <fo:block padding-top="1em">
-                    Custom blending of cost of insurance charges is based
-                    on the plan's assumed distribution of initial selected
-                    face amount by gender and tobacco use. This illustration
-                    assumes that the distribution remains constant
-                    in future years. Custom blending is available only on plans
-                    of 100 or more lives.
+                    <xsl:value-of select="$scalars/MortalityBlendFootnote"/>
                     Custom blend assumptions:
                     tobacco = <xsl:value-of select="$scalars/SmokerPct"/>;
                     <xsl:choose>
@@ -517,23 +444,7 @@
               SEPARATE ACCOUNT
             </fo:block>
             <fo:block padding-top="1em">
-              This illustration shows how the death benefit could vary over
-              an extended period of time, assuming hypothetical gross rates
-              of investment return for the funds.
-              These hypothetical returns do not reflect past performance
-              and are not predictive of future results.
-              Actual results could be less than or greater than
-              the hypothetical results and in all likelihood will vary
-              year to year. Timing of premium payments, investment allocations
-              and withdrawals or loans, if taken, may impact investment results.
-              Separate Account Charges are deducted from the gross
-              investment rate to determine the net investment rate.
-              These charges include a mortality and expense charge,
-              and an investment management fee and other fund operating
-              expenses. The total fund operating expenses charged vary by fund.
-              No tax charge is made to the Separate Account. However, such
-              a charge may be made in the future.
-              SEE OFFERING MEMORANDUM.
+              <xsl:value-of select="$scalars/HypotheticalRatesFootnote"/>
             </fo:block>
             <fo:block padding-top="1em">
               This illustration is based on total Separate Account fund expenses
