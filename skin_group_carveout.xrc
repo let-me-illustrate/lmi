@@ -24,7 +24,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin_group_carveout.xrc,v 1.15 2009-03-04 21:20:10 wboutin Exp $
+    $Id: skin_group_carveout.xrc,v 1.16 2009-03-04 22:30:36 wboutin Exp $
 
     This version is designed for group-carveout users; it omits input
     fields that seem irrelevant in that context, and reflects the
@@ -421,20 +421,6 @@
                 <cols>2</cols>
                 <rows>2</rows>
                 <growablecols>1</growablecols>
-                <object class="sizeritem">
-                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                    <border>2</border>
-                    <object class="wxStaticText">
-                        <label>Salary</label>
-                    </object>
-                </object>
-                <object class="sizeritem">
-                    <flag>wxGROW|wxALL</flag>
-                    <border>2</border>
-                    <object class="wxTextCtrl" name="ProjectedSalary">
-                        <help>Projected annual salary</help>
-                    </object>
-                </object>
                 <object class="sizeritem">
                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                     <border>2</border>
@@ -1583,6 +1569,20 @@
                     <border>2</border>
                     <object class="wxTextCtrl" name="CorporationPaymentMode">
                         <help>Corporation payment mode: annual, semiannual, quarterly, or monthly</help>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Salary</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW|wxBOTTOM</flag>
+                    <border>2</border>
+                    <object class="wxTextCtrl" name="ProjectedSalary">
+                        <help>Projected annual salary</help>
                     </object>
                 </object>
                 <object class="sizeritem">
