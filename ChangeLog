@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1264 2009-03-04 21:00:38 wboutin Exp $
+// $Id: ChangeLog,v 1.1265 2009-03-04 21:20:13 wboutin Exp $
 
 MAINTENANCE
 
@@ -22005,4 +22005,11 @@ Reflect 20090228T2333Z non-MEC solve GUI support.
   skin_group_carveout.xrc
   skin_reg_d.xrc
 Reflect 20090302T0543Z elimination of redundant enumerator.
+
+20090304T2120Z <wboutin@massmutual.com> [796]
+
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_reg_d.xrc
+Finish eradicating 20090302T0628Z unimplemented solves for duration.
 
