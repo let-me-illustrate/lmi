@@ -24,7 +24,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin_group_carveout.xrc,v 1.17 2009-03-04 23:11:19 wboutin Exp $
+    $Id: skin_group_carveout.xrc,v 1.18 2009-03-04 23:49:05 wboutin Exp $
 
     This version is designed for group-carveout users; it omits input
     fields that seem irrelevant in that context, and reflects the
@@ -1794,7 +1794,7 @@
                 </object>
                 <object class="sizeritem">
                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                    <border>4</border>
+                    <border>2</border>
                     <object class="wxFlexGridSizer">
                         <cols>2</cols>
                         <rows>0</rows>
@@ -1808,14 +1808,14 @@
                                 <growablecols>1</growablecols>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <border>4</border>
+                                    <border>2</border>
                                     <object class="wxStaticText">
                                         <label>General</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_BOTTOM|wxTOP|wxBOTTOM</flag>
-                                    <border>4</border>
+                                    <flag>wxGROW|wxALIGN_BOTTOM|wxALL</flag>
+                                    <border>2</border>
                                     <object class="wxTextCtrl" name="GeneralAccountRate">
                                         <help>General-account (non-loaned) interest rate</help>
                                         <size>-1,22</size>
@@ -1824,54 +1824,18 @@
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <border>4</border>
+                                    <border>2</border>
                                     <object class="wxStaticText">
                                         <label>Separate</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxTOP|wxBOTTOM</flag>
-                                    <border>4</border>
+                                    <flag>wxGROW|wxTOP|wxALL</flag>
+                                    <border>2</border>
                                     <object class="wxTextCtrl" name="SeparateAccountRate">
                                         <help>Separate-account interest rate</help>
                                         <size>-1,22</size>
                                         <style>wxTE_LEFT</style>
-                                    </object>
-                                </object>
-                            </object>
-                        </object>
-                        <object class="sizeritem">
-                            <flag>wxALIGN_LEFT|wxALIGN_TOP|wxLEFT|wxRIGHT</flag>
-                            <border>2</border>
-                            <object class="wxFlexGridSizer">
-                                <cols>1</cols>
-                                <rows>3</rows>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_LEFT|wxALIGN_TOP</flag>
-                                    <border>0</border>
-                                    <object class="wxRadioBox" name="GeneralAccountRateType">
-                                        <help>General-account rate type</help>
-                                        <size>-1,35</size>
-                                        <style>wxRA_SPECIFY_ROWS</style>
-                                        <content>
-                                            <item helptext="General-account rate is credited (net)">CredRate</item>
-                                            <item helptext="General-account rate is earned (gross)">GrossRate</item>
-                                            <item helptext="General-account rate is credited (net)">NetRate</item>
-                                        </content>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_TOP|wxALL</flag>
-                                    <border>0</border>
-                                    <object class="wxRadioBox" name="SeparateAccountRateType">
-                                        <help>Separate-account rate type</help>
-                                        <size>-1,35</size>
-                                        <style>wxRA_SPECIFY_ROWS</style>
-                                        <content>
-                                            <item helptext="Separate-account rate is credited (net)">CredRate</item>
-                                            <item helptext="Separate-account rate is earned (gross)">GrossRate</item>
-                                            <item helptext="Separate-account rate is credited (net)">NetRate</item>
-                                        </content>
                                     </object>
                                 </object>
                             </object>

@@ -24,7 +24,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin_coli_boli.xrc,v 1.18 2009-03-04 21:20:08 wboutin Exp $
+    $Id: skin_coli_boli.xrc,v 1.19 2009-03-04 23:49:05 wboutin Exp $
 
     This version is designed for COLI and BOLI users; it omits input
     fields that seem irrelevant in that context, and reflects the
@@ -2660,42 +2660,14 @@ useful in the future.
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxALIGN_LEFT|wxALIGN_TOP|wxLEFT|wxRIGHT</flag>
-                            <border>2</border>
+                            <flag>wxALIGN_LEFT|wxALIGN_BOTTOM|wxALL</flag>
+                            <border>4</border>
                             <object class="wxFlexGridSizer">
                                 <cols>1</cols>
-                                <rows>3</rows>
+                                <rows>1</rows>
                                 <object class="sizeritem">
-                                    <flag>wxALIGN_LEFT|wxALIGN_TOP</flag>
-                                    <border>0</border>
-                                    <object class="wxRadioBox" name="GeneralAccountRateType">
-                                        <help>General-account rate type</help>
-                                        <size>-1,35</size>
-                                        <style>wxRA_SPECIFY_ROWS</style>
-                                        <content>
-                                            <item helptext="General-account rate is credited (net)">CredRate</item>
-                                            <item helptext="General-account rate is earned (gross)">GrossRate</item>
-                                            <item helptext="General-account rate is credited (net)">NetRate</item>
-                                        </content>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_TOP|wxALL</flag>
-                                    <border>0</border>
-                                    <object class="wxRadioBox" name="SeparateAccountRateType">
-                                        <help>Separate-account rate type</help>
-                                        <size>-1,35</size>
-                                        <style>wxRA_SPECIFY_ROWS</style>
-                                        <content>
-                                            <item helptext="Separate-account rate is credited (net)">CredRate</item>
-                                            <item helptext="Separate-account rate is earned (gross)">GrossRate</item>
-                                            <item helptext="Separate-account rate is credited (net)">NetRate</item>
-                                        </content>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_TOP|wxBOTTOM</flag>
-                                    <border>0</border>
+                                    <flag>wxGROW|wxALIGN_BOTTOM|wxALL</flag>
+                                    <border>2</border>
                                     <object class="wxRadioBox" name="LoanRateType">
                                         <help>Loan rate type</help>
                                         <size>-1,35</size>
