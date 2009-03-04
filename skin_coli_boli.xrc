@@ -24,7 +24,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin_coli_boli.xrc,v 1.13 2008-12-27 02:56:55 chicares Exp $
+    $Id: skin_coli_boli.xrc,v 1.14 2009-03-04 17:45:08 wboutin Exp $
 
     This version is designed for COLI and BOLI users; it omits input
     fields that seem irrelevant in that context, and reflects the
@@ -85,10 +85,10 @@
                                 <help>MEC avoidance</help>
                                 <style>wxRA_SPECIFY_COLS</style>
                                 <label>MEC avoidance</label>
+<!-- SOMEDAY !! This should become a checkbox. -->
                                 <content>
                                     <item helptext="Do not try to avoid a MEC">Allow MEC</item>
                                     <item helptext="Avoid a MEC by decreasing premium">Reduce premium</item>
-                                    <item helptext="Avoid a MEC by increasing specified amount">Increase specified amount</item>
                                 </content>
                             </object>
                         </object>
