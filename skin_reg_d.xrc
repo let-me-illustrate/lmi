@@ -24,7 +24,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin_reg_d.xrc,v 1.8 2008-12-27 02:56:55 chicares Exp $
+    $Id: skin_reg_d.xrc,v 1.9 2009-03-04 20:15:09 wboutin Exp $
 
     This version is designed for private placement users; it omits input
     fields that seem irrelevant in that context, and reflects the
@@ -1366,7 +1366,7 @@ the real 'StateOfJurisdiction' is implemented.
                                                     <flag>wxGROW|wxBOTTOM</flag>
                                                     <border>4</border>
                                                     <object class="wxTextCtrl" name="SolveTargetCashSurrenderValue">
-                                                        <help>Target account value</help>
+                                                        <help>Target surrender value</help>
                                                     </object>
                                                 </object>
                                             </object>
@@ -1409,7 +1409,7 @@ the real 'StateOfJurisdiction' is implemented.
                                                                     <flag>wxALIGN_LEFT|wxALIGN_BOTTOM|wxTOP|wxBOTTOM</flag>
                                                                     <border>2</border>
                                                                     <object class="wxSpinCtrl" name="SolveTargetYear">
-                                                                        <help>Duration to achieve target account value</help>
+                                                                        <help>Duration to achieve target surrender value</help>
                                                                         <size>50,-1</size>
                                                                     </object>
                                                                 </object>
@@ -1432,7 +1432,7 @@ the real 'StateOfJurisdiction' is implemented.
                                                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
                                                                     <border>4</border>
                                                                     <object class="wxSpinCtrl" name="SolveTargetTime">
-                                                                        <help>Attained age to achieve target account value</help>
+                                                                        <help>Attained age to achieve target surrender value</help>
                                                                         <size>50,-1</size>
                                                                     </object>
                                                                 </object>
