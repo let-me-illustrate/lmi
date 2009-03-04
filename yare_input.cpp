@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: yare_input.cpp,v 1.17 2009-02-26 15:57:28 chicares Exp $
+// $Id: yare_input.cpp,v 1.18 2009-03-04 12:34:45 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -196,9 +196,6 @@ yare_input::yare_input(Input const& z)
     SpecifiedAmountStrategy         = convert_vector_type<mcenum_sa_strategy  >(z.SpecifiedAmountStrategyRealized_        );
     PaymentStrategy                 = convert_vector_type<mcenum_pmt_strategy >(z.PaymentStrategyRealized_      );
     CorporationPaymentStrategy      = convert_vector_type<mcenum_pmt_strategy >(z.CorporationPaymentStrategyRealized_     );
-// INPUT !! Not yet implemented:
-//    NewLoanStrategy                 = convert_vector_type<mcenum_loan_strategy>(z.NewLoanStrategyRealized_                );
-//    WithdrawalStrategy              = convert_vector_type<mcenum_wd_strategy  >(z.WithdrawalStrategyRealized_             );
 }
 
 yare_input::~yare_input()

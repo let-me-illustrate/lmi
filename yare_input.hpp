@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: yare_input.hpp,v 1.13 2008-12-27 02:57:00 chicares Exp $
+// $Id: yare_input.hpp,v 1.14 2009-03-04 12:34:46 chicares Exp $
 
 #ifndef yare_input_hpp
 #define yare_input_hpp
@@ -276,8 +276,6 @@ class yare_input
     std::vector<mcenum_sa_strategy  > SpecifiedAmountStrategy         ;
     std::vector<mcenum_pmt_strategy > PaymentStrategy                 ;
     std::vector<mcenum_pmt_strategy > CorporationPaymentStrategy      ;
-    std::vector<mcenum_loan_strategy> NewLoanStrategy                 ;
-    std::vector<mcenum_wd_strategy  > WithdrawalStrategy              ;
 };
 
 bool is_policy_rated(yare_input const&);

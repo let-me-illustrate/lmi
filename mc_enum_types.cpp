@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types.cpp,v 1.26 2009-03-03 13:55:31 chicares Exp $
+// $Id: mc_enum_types.cpp,v 1.27 2009-03-04 12:34:45 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -109,10 +109,8 @@ MC_DEFINE(solve_target,4)
 MC_DEFINE(solve_tgt_at,4)
 MC_DEFINE(solve_from,4)
 MC_DEFINE(solve_to,4)
-MC_DEFINE(pmt_strategy,9)
-MC_DEFINE(sa_strategy,9)
-MC_DEFINE(loan_strategy,4)
-MC_DEFINE(wd_strategy,4)
+MC_DEFINE(pmt_strategy,8)
+MC_DEFINE(sa_strategy,8)
 MC_DEFINE(interest_rate_type,3)
 MC_DEFINE(loan_rate_type,2)
 MC_DEFINE(fund_input_method,3)
