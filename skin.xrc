@@ -24,7 +24,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin.xrc,v 1.17 2009-03-03 13:55:31 chicares Exp $
+    $Id: skin.xrc,v 1.18 2009-03-04 20:15:08 wboutin Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -1819,7 +1819,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                 <object class="sizeritem">
                                     <flag>wxGROW</flag>
                                     <object class="wxTextCtrl" name="SolveTargetCashSurrenderValue">
-                                        <help>Target account value</help>
+                                        <help>Target surrender value</help>
                                         <size>10,-1</size>
                                     </object>
                                 </object>
@@ -1985,7 +1985,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                                 <object class="sizeritem">
                                                     <flag>wxGROW</flag>
                                                     <object class="wxSpinCtrl" name="SolveTargetYear">
-                                                        <help>Duration to achieve target account value</help>
+                                                        <help>Duration to achieve target surrender value</help>
                                                         <size>10,-1</size>
                                                         <max>100</max>
                                                         <value>99</value>
@@ -2001,7 +2001,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                                     <flag>wxGROW</flag>
 <!-- Really want something like "SolveAtAge"; this is a temporary kludge. -->
                                                     <object class="wxSpinCtrl" name="SolveTargetTime">
-                                                        <help>Attained age to achieve target account value</help>
+                                                        <help>Attained age to achieve target surrender value</help>
                                                         <size>10,-1</size>
                                                         <max>100</max>
                                                         <value>99</value>
