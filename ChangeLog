@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1266 2009-03-04 22:30:36 wboutin Exp $
+// $Id: ChangeLog,v 1.1267 2009-03-04 23:11:20 wboutin Exp $
 
 MAINTENANCE
 
@@ -22017,4 +22017,9 @@ Finish eradicating 20090302T0628Z unimplemented solves for duration.
 
   skin_group_carveout.xrc
 Resposition 'ProjectedSalary'.
+
+20090304T2311Z <wboutin@massmutual.com> [796]
+
+  skin_group_carveout.xrc
+Add 'EmployeeClass'.
 
