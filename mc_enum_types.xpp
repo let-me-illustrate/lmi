@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types.xpp,v 1.26 2009-03-03 13:55:31 chicares Exp $
+// $Id: mc_enum_types.xpp,v 1.27 2009-03-04 12:34:45 chicares Exp $
 
 #define yes_or_no_VALUES \
     {mce_no \
@@ -282,7 +282,6 @@
 
 #define pmt_strategy_VALUES \
     {mce_pmt_input_scalar \
-    ,mce_pmt_input_vector \
     ,mce_pmt_minimum \
     ,mce_pmt_target \
     ,mce_pmt_mep \
@@ -293,7 +292,6 @@
     };
 #define pmt_strategy_NAMES \
     {"PmtInputScalar" \
-    ,"PmtInputVector" \
     ,"PmtMinimum" \
     ,"PmtTarget" \
     ,"PmtMEP" \
@@ -305,7 +303,6 @@
 
 #define sa_strategy_VALUES \
     {mce_sa_input_scalar \
-    ,mce_sa_input_vector \
     ,mce_sa_maximum \
     ,mce_sa_target \
     ,mce_sa_mep \
@@ -316,7 +313,6 @@
     };
 #define sa_strategy_NAMES \
     {"SAInputScalar" \
-    ,"SAInputVector" \
     ,"SAMaximum" \
     ,"SATarget" \
     ,"SAMEP" \
@@ -324,32 +320,6 @@
     ,"SAGSP" \
     ,"SACorridor" \
     ,"SASalary" \
-    };
-
-#define loan_strategy_VALUES \
-    {mce_loan_asinput \
-    ,mce_loan_maximum \
-    ,mce_loan_input_scalar \
-    ,mce_loan_input_vector \
-    };
-#define loan_strategy_NAMES \
-    {"LoanAsInput" \
-    ,"LoanMaximum" \
-    ,"LoanInputScalar" \
-    ,"LoanInputVector" \
-    };
-
-#define wd_strategy_VALUES \
-    {mce_wd_asinput \
-    ,mce_wd_maximum \
-    ,mce_wd_input_scalar \
-    ,mce_wd_input_vector \
-    };
-#define wd_strategy_NAMES \
-    {"WDAsInput" \
-    ,"WDMaximum" \
-    ,"WDInputScalar" \
-    ,"WDInputVector" \
     };
 
 #define interest_rate_type_VALUES \
