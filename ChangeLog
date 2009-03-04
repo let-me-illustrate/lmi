@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1263 2009-03-04 20:26:11 wboutin Exp $
+// $Id: ChangeLog,v 1.1264 2009-03-04 21:00:38 wboutin Exp $
 
 MAINTENANCE
 
@@ -21998,4 +21998,11 @@ Reflect 20090214T2204Z renaming.
   skin_group_carveout.xrc
   skin_reg_d.xrc
 Reflect 20090228T2333Z non-MEC solve GUI support.
+
+20090304T2100Z <wboutin@massmutual.com> [796]
+
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_reg_d.xrc
+Reflect 20090302T0543Z elimination of redundant enumerator.
 
