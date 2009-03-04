@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.66 2009-02-08 15:20:23 chicares Exp $
+// $Id: accountvalue.cpp,v 1.67 2009-03-04 12:34:45 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -454,16 +454,6 @@ void AccountValue::PerformSpecAmtStrategy()
             SA = InvariantValues().SpecAmt[0];
             }
             break;
-        case mce_sa_input_vector: // Obsolete.
-            {
-            fatal_error()
-                << "Varying specified amount not implemented."
-                << " Specified amount set to scalar input value."
-                << LMI_FLUSH
-                ;
-            SA = InvariantValues().SpecAmt[0];
-            }
-            break;
         case mce_sa_maximum:
             {
             SA = GetModalMaxSpecAmt(InvariantValues().EeMode[0].value(), InvariantValues().EePmt[0]);
@@ -623,16 +613,6 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
         {
         case mce_pmt_input_scalar:
             {
-            *a_Pmt = InvariantValues().EePmt[Year];
-            }
-            break;
-        case mce_pmt_input_vector:
-            {
-            fatal_error()
-                << "Varying premium not implemented."
-                << " Payment set to scalar input value"
-                << LMI_FLUSH
-                ;
             *a_Pmt = InvariantValues().EePmt[Year];
             }
             break;

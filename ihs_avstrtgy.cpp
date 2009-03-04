@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avstrtgy.cpp,v 1.25 2009-01-21 13:17:19 chicares Exp $
+// $Id: ihs_avstrtgy.cpp,v 1.26 2009-03-04 12:34:45 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -78,19 +78,6 @@ double AccountValue::CalculateSpecAmtFromStrategy
             break;
         case mce_sa_input_scalar:
             {
-            z = DeathBfts_->specamt()[actual_year];
-            }
-            break;
-        case mce_sa_input_vector:
-            {
-            // TODO ?? It's somewhat frightening that this warning is
-            // never displayed, even though the test deck contains
-            // cases with yearly varying spec amt.
-            fatal_error()
-                << "Varying specified amount not implemented."
-                << " Specified amount set to scalar input value."
-                << LMI_FLUSH
-                ;
             z = DeathBfts_->specamt()[actual_year];
             }
             break;
@@ -211,10 +198,6 @@ double AccountValue::DoPerformPmtStrategy
     switch(a_StrategyVector[Year])
         {
         case mce_pmt_input_scalar:
-            {
-            return a_PmtVector[Year];
-            }
-        case mce_pmt_input_vector:
             {
             return a_PmtVector[Year];
             }
