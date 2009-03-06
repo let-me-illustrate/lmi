@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_type_enums.hpp,v 1.17 2009-03-04 12:34:45 chicares Exp $
+// $Id: mc_enum_type_enums.hpp,v 1.18 2009-03-06 22:35:05 chicares Exp $
 
 #ifndef mc_enum_type_enums_hpp
 #define mc_enum_type_enums_hpp
@@ -94,9 +94,6 @@ MC_DEFINE_ENUMS(uw_basis)
 MC_DEFINE_ENUMS(table_rating)
 MC_DEFINE_ENUMS(solve_type)
 MC_DEFINE_ENUMS(solve_target)
-MC_DEFINE_ENUMS(solve_tgt_at)
-MC_DEFINE_ENUMS(solve_from)
-MC_DEFINE_ENUMS(solve_to)
 MC_DEFINE_ENUMS(pmt_strategy)
 MC_DEFINE_ENUMS(sa_strategy)
 MC_DEFINE_ENUMS(interest_rate_type)
