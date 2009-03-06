@@ -24,7 +24,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin.xrc,v 1.18 2009-03-04 20:15:08 wboutin Exp $
+    $Id: skin.xrc,v 1.19 2009-03-06 18:39:21 chicares Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -1844,10 +1844,10 @@ here, but it looks weird if we don't make this look like its siblings.
                                                 <dimension>1</dimension>
                                                 <selection>0</selection>
                                                 <content>
-                                                    <item>FromIssue</item>
-                                                    <item>FromYear</item>
-                                                    <item>FromAge</item>
-                                                    <item>FromRetirement</item>
+                                                    <item>Issue</item>
+                                                    <item>Year</item>
+                                                    <item>Age</item>
+                                                    <item>Retirement</item>
                                                 </content>
                                             </object>
                                         </object>
@@ -1904,10 +1904,10 @@ here, but it looks weird if we don't make this look like its siblings.
                                                 <dimension>1</dimension>
                                                 <selection>0</selection>
                                                 <content>
-                                                    <item>ToRetirement</item>
-                                                    <item>ToYear</item>
-                                                    <item>ToAge</item>
-                                                    <item>ToMaturity</item>
+                                                    <item>Retirement</item>
+                                                    <item>Year</item>
+                                                    <item>Age</item>
+                                                    <item>Maturity</item>
                                                 </content>
                                             </object>
                                         </object>
@@ -1964,10 +1964,10 @@ here, but it looks weird if we don't make this look like its siblings.
                                                 <dimension>1</dimension>
                                                 <selection>0</selection>
                                                 <content>
-                                                    <item>TgtAtRetirement</item>
-                                                    <item>TgtAtYear</item>
-                                                    <item>TgtAtAge</item>
-                                                    <item>TgtAtMaturity</item>
+                                                    <item>Retirement</item>
+                                                    <item>Year</item>
+                                                    <item>Age</item>
+                                                    <item>Maturity</item>
                                                 </content>
                                             </object>
                                         </object>

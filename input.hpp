@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.51 2009-03-06 04:32:22 chicares Exp $
+// $Id: input.hpp,v 1.52 2009-03-06 18:39:20 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -425,9 +425,9 @@ class LMI_SO Input
     mce_report_column        SupplementalReportColumn09      ;
     mce_report_column        SupplementalReportColumn10      ;
     mce_report_column        SupplementalReportColumn11      ;
-    mce_solve_tgt_at         DeprecatedSolveTgtAtWhich       ;
-    mce_solve_from           DeprecatedSolveFromWhich        ;
-    mce_solve_to             DeprecatedSolveToWhich          ;
+    mce_to_point             DeprecatedSolveTgtAtWhich       ;
+    mce_from_point           DeprecatedSolveFromWhich        ;
+    mce_to_point             DeprecatedSolveToWhich          ;
     mce_yes_or_no            DeprecatedUseDOB                ;
     mce_yes_or_no            DeprecatedUseDOR                ;
     mce_yes_or_no            EffectiveDateToday              ;
@@ -527,10 +527,7 @@ template<> struct reconstitutor<datum_base, Input>
         z = exact_cast<mce_sa_strategy         >(m); if(z) return z;
         z = exact_cast<mce_sep_basis           >(m); if(z) return z;
         z = exact_cast<mce_smoking             >(m); if(z) return z;
-        z = exact_cast<mce_solve_from          >(m); if(z) return z;
         z = exact_cast<mce_solve_target        >(m); if(z) return z;
-        z = exact_cast<mce_solve_tgt_at        >(m); if(z) return z;
-        z = exact_cast<mce_solve_to            >(m); if(z) return z;
         z = exact_cast<mce_solve_type          >(m); if(z) return z;
         z = exact_cast<mce_state               >(m); if(z) return z;
         z = exact_cast<mce_survival_limit      >(m); if(z) return z;

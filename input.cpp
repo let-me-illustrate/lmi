@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.39 2008-12-27 02:56:45 chicares Exp $
+// $Id: input.cpp,v 1.40 2009-03-06 18:39:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -214,9 +214,9 @@ Input::Input()
 //    ,SupplementalReportColumn09       ("")
 //    ,SupplementalReportColumn10       ("")
 //    ,SupplementalReportColumn11       ("")
-    ,DeprecatedSolveTgtAtWhich        ("TgtAtMaturity")
-    ,DeprecatedSolveFromWhich         ("FromIssue")
-    ,DeprecatedSolveToWhich           ("ToRetirement")
+    ,DeprecatedSolveTgtAtWhich        ("Maturity")
+    ,DeprecatedSolveFromWhich         ("Issue")
+    ,DeprecatedSolveToWhich           ("Retirement")
 //    ,DeprecatedUseDOB                 ("")
 //    ,DeprecatedUseDOR                 ("")
 //    ,EffectiveDateToday               ("")
