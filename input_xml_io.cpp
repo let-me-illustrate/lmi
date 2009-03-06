@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_xml_io.cpp,v 1.17 2009-03-06 03:10:22 chicares Exp $
+// $Id: input_xml_io.cpp,v 1.18 2009-03-06 04:32:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -226,7 +226,7 @@ std::string Input::RedintegrateExAnte
     (int                file_version
     ,std::string const& name
     ,std::string const& value
-    )
+    ) const
 {
     if(class_version() == file_version)
         {
@@ -298,32 +298,22 @@ void Input::RedintegrateExPost
                 )
             )
             {
-            if(mce_gpt == DefinitionOfLifeInsurance)
-                {
-                DefinitionOfMaterialChange = mce_adjustment_event;
-                }
-            else
-                {
-                DefinitionOfMaterialChange = mce_earlier_of_increase_or_unnecessary_premium;
-                }
+            DefinitionOfMaterialChange =
+                mce_gpt == DefinitionOfLifeInsurance
+                ? mce_adjustment_event
+                : mce_earlier_of_increase_or_unnecessary_premium
+                ;
             }
 
-        std::string AgentFirstName  = detritus_map["AgentFirstName" ];
-        std::string AgentMiddleName = detritus_map["AgentMiddleName"];
-        std::string AgentLastName   = detritus_map["AgentLastName"  ];
-        std::string InsdFirstName   = detritus_map["FirstName"      ];
-        std::string InsdMiddleName  = detritus_map["MiddleName"     ];
-        std::string InsdLastName    = detritus_map["LastName"       ];
-
         operator[]("AgentName"  ) = full_name
-            (AgentFirstName
-            ,AgentMiddleName
-            ,AgentLastName
+            (detritus_map["AgentFirstName" ]
+            ,detritus_map["AgentMiddleName"]
+            ,detritus_map["AgentLastName"  ]
             );
         operator[]("InsuredName") = full_name
-            (InsdFirstName
-            ,InsdMiddleName
-            ,InsdLastName
+            (detritus_map["FirstName"      ]
+            ,detritus_map["MiddleName"     ]
+            ,detritus_map["LastName"       ]
             );
         }
 
