@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1269 2009-03-06 00:37:27 chicares Exp $
+// $Id: ChangeLog,v 1.1270 2009-03-06 22:35:56 chicares Exp $
 
 MAINTENANCE
 
@@ -22046,4 +22046,48 @@ Remove a few enumerators.
 
   input_xml_io.cpp
 Refactor, renaming certain variables to increase clarity.
+
+20090306T0310Z <gchicares@sbcglobal.net> [796]
+
+  input.hpp
+  input_xml_io.cpp
+Refactor backward-compatibility code into subroutines.
+
+20090306T0432Z <gchicares@sbcglobal.net> [796]
+
+  input.hpp
+  input_xml_io.cpp
+Refactor.
+
+20090306T1457Z <gchicares@sbcglobal.net> [796]
+
+  input_xml_io.cpp
+Refactor, in particular to reflect file-version history.
+
+20090306T1839Z <gchicares@sbcglobal.net> [796]
+
+  input.cpp
+  input.hpp
+  input_harmonization.cpp
+  input_xml_io.cpp
+  main_cgi.cpp
+  main_cli.cpp
+  sample.cns
+  sample.ill
+  skin.xrc
+  yare_input.hpp
+Merge certain enumerations for [from, to) half-open intervals:
+  mce_solve_from   --> mce_from_point
+  mce_solve_tgt_at --> mce_to_point
+  mce_solve_to     --> mce_to_point
+as a first step toward this goal:
+  http://savannah.nongnu.org/support/?104431
+
+20090306T2235Z <gchicares@sbcglobal.net> [796]
+
+  mc_enum_type_enums.hpp
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+  mc_enum_types.xpp
+Remove enumerations rendered obsolete 20090306T1839Z.
 

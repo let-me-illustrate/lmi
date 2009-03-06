@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types.xpp,v 1.27 2009-03-04 12:34:45 chicares Exp $
+// $Id: mc_enum_types.xpp,v 1.28 2009-03-06 22:35:05 chicares Exp $
 
 #define yes_or_no_VALUES \
     {mce_no \
@@ -239,45 +239,6 @@
     ,"SolveForTarget" \
     ,"SolveForTaxBasis" \
     ,"SolveForNonMec" \
-    };
-
-#define solve_tgt_at_VALUES \
-    {mce_target_at_retirement \
-    ,mce_target_at_year \
-    ,mce_target_at_age \
-    ,mce_target_at_maturity \
-    };
-#define solve_tgt_at_NAMES \
-    {"TgtAtRetirement" \
-    ,"TgtAtYear" \
-    ,"TgtAtAge" \
-    ,"TgtAtMaturity" \
-    };
-
-#define solve_from_VALUES \
-    {mce_solve_from_issue \
-    ,mce_solve_from_year \
-    ,mce_solve_from_age \
-    ,mce_solve_from_retirement \
-    };
-#define solve_from_NAMES \
-    {"FromIssue" \
-    ,"FromYear" \
-    ,"FromAge" \
-    ,"FromRetirement" \
-    };
-
-#define solve_to_VALUES \
-    {mce_solve_to_retirement \
-    ,mce_solve_to_year \
-    ,mce_solve_to_age \
-    ,mce_solve_to_maturity \
-    };
-#define solve_to_NAMES \
-    {"ToRetirement" \
-    ,"ToYear" \
-    ,"ToAge" \
-    ,"ToMaturity" \
     };
 
 #define pmt_strategy_VALUES \
