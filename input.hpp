@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.50 2009-03-06 03:10:15 chicares Exp $
+// $Id: input.hpp,v 1.51 2009-03-06 04:32:22 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -180,7 +180,7 @@ class LMI_SO Input
         (int                file_version
         ,std::string const& name
         ,std::string const& value
-        );
+        ) const;
     void        RedintegrateExPost
         (int                                file_version
         ,std::map<std::string, std::string> detritus_map
