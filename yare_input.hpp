@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: yare_input.hpp,v 1.14 2009-03-04 12:34:46 chicares Exp $
+// $Id: yare_input.hpp,v 1.15 2009-03-06 18:39:21 chicares Exp $
 
 #ifndef yare_input_hpp
 #define yare_input_hpp
@@ -241,9 +241,9 @@ class yare_input
 //    mcenum_report_column              SupplementalReportColumn10      ;
 //    mcenum_report_column              SupplementalReportColumn11      ;
 //
-//    mcenum_solve_tgt_at               DeprecatedSolveTgtAtWhich       ;
-//    mcenum_solve_from                 DeprecatedSolveFromWhich        ;
-//    mcenum_solve_to                   DeprecatedSolveToWhich          ;
+//    mcenum_to_point                   DeprecatedSolveTgtAtWhich       ;
+//    mcenum_from_point                 DeprecatedSolveFromWhich        ;
+//    mcenum_to_point                   DeprecatedSolveToWhich          ;
 //    bool                              DeprecatedUseDOB                ;
 //    bool                              DeprecatedUseDOR                ;
 //    bool                              EffectiveDateToday              ;
