@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_xml_io.cpp,v 1.18 2009-03-06 04:32:22 chicares Exp $
+// $Id: input_xml_io.cpp,v 1.19 2009-03-06 14:57:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -186,6 +186,11 @@ using namespace xml;
         }
 
     RedintegrateExPost(file_version, detritus_map, residuary_names);
+
+    if(EffectiveDateToday.value() && !global_settings::instance().regression_testing())
+        {
+        EffectiveDate = calendar_date();
+        }
 }
 
 //============================================================================
@@ -208,7 +213,13 @@ void Input::write(xml::element& x) const
     x.push_back(root);
 }
 
-//============================================================================
+/// Serial number of this class's xml version.
+///
+/// version 0: [prior to the lmi epoch]
+/// version 1: 20050114T1947Z
+/// version 2: 20080813T0131Z
+/// version 3: 20090302T0509Z
+
 int Input::class_version() const
 {
     return 3;
@@ -282,7 +293,7 @@ void Input::RedintegrateExPost
 {
     if(class_version() == file_version)
         {
-//        return; // Not yet: see 'EffectiveDateToday' below.
+        return;
         }
 
     if(0 == file_version)
@@ -317,30 +328,28 @@ void Input::RedintegrateExPost
             );
         }
 
-    // Older versions lacked 'UseCurrentDeclaredRate', whose
-    // default value of "Yes" would break backward compatibility.
-    if
-        (residuary_names.end() != std::find
-            (residuary_names.begin()
-            ,residuary_names.end()
-            ,std::string("UseCurrentDeclaredRate")
+    if(file_version < 2)
+        {
+        // 'UseCurrentDeclaredRate' was introduced 20071017T1454Z; its
+        // default value of "Yes" would break backward compatibility.
+        if
+            (residuary_names.end() != std::find
+                (residuary_names.begin()
+                ,residuary_names.end()
+                ,std::string("UseCurrentDeclaredRate")
+                )
             )
-        )
-        {
-        UseCurrentDeclaredRate = "No";
-        }
+            {
+            UseCurrentDeclaredRate = "No";
+            }
 
-    if(EffectiveDateToday.value() && !global_settings::instance().regression_testing())
-        {
-        EffectiveDate = calendar_date();
+        // 'LastCoiReentryDate' was introduced 20071017T1454Z; its
+        // default value may be inappropriate for files saved earlier.
+        LastCoiReentryDate = std::min
+            (LastCoiReentryDate.value()
+            ,add_years(EffectiveDate.value(), InforceYear.value(), true)
+            );
         }
-
-    // 'LastCoiReentryDate' was introduced 20071017T1454Z. For files
-    // saved before then, its default value may be inappropriate.
-    LastCoiReentryDate = std::min
-        (LastCoiReentryDate.value()
-        ,add_years(EffectiveDate.value(), InforceYear.value(), true)
-        );
 
     if(1 == file_version)
         {
