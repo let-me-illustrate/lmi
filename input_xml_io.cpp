@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_xml_io.cpp,v 1.15 2009-03-02 22:43:26 chicares Exp $
+// $Id: input_xml_io.cpp,v 1.16 2009-03-06 00:37:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -109,8 +109,8 @@ void Input::read(xml::element const& x)
             ;
         }
 
-    std::string cell_version_string;
-    if(!xml_lmi::get_attr(x, "version", cell_version_string))
+    std::string file_version_string;
+    if(!xml_lmi::get_attr(x, "version", file_version_string))
         {
         fatal_error()
             << "XML tag <"
@@ -119,7 +119,7 @@ void Input::read(xml::element const& x)
             << LMI_FLUSH
             ;
         }
-    int cell_version = value_cast<int>(cell_version_string);
+    int file_version = value_cast<int>(file_version_string);
 
 // COMPILER !! Borland doesn't find operator==() in ns xml.
 #ifdef __BORLANDC__
@@ -128,11 +128,11 @@ using namespace xml;
 
     std::map<std::string, std::string> detritus_map;
 
-    std::list<std::string> member_names;
+    std::list<std::string> residuary_names;
     std::copy
-        (Input::member_names().begin()
-        ,Input::member_names().end()
-        ,std::back_inserter(member_names)
+        (member_names().begin()
+        ,member_names().end()
+        ,std::back_inserter(residuary_names)
         );
     std::list<std::string>::iterator current_member;
 
@@ -157,11 +157,11 @@ using namespace xml;
             }
         std::string node_tag(child->get_name());
         current_member = std::find
-            (member_names.begin()
-            ,member_names.end()
+            (residuary_names.begin()
+            ,residuary_names.end()
             ,node_tag
             );
-        if(member_names.end() != current_member)
+        if(residuary_names.end() != current_member)
             {
             std::string value = xml_lmi::get_content(*child);
 
@@ -172,7 +172,7 @@ using namespace xml;
             // removed. 'WithdrawToBasisThenLoan' needn't be altered
             // here because the material-implications above had
             // already been asserted in a prior revision.
-            if(cell_version < 3)
+            if(file_version < 3)
                 {
                 if("SolveWDThenLoan" == value && "SolveType" == node_tag)
                     {
@@ -200,7 +200,7 @@ using namespace xml;
                 }
 
             operator[](node_tag) = value;
-            member_names.erase(current_member);
+            residuary_names.erase(current_member);
             }
         else if(is_detritus(node_tag))
             {
@@ -218,15 +218,15 @@ using namespace xml;
             }
         }
 
-    if(0 == cell_version)
+    if(0 == file_version)
         {
-        // An older version with no distinct 'cell_version' didn't
+        // An older version with no distinct 'file_version' didn't
         // have 'DefinitionOfMaterialChange', whose default value is
         // unacceptable for GPT.
         if
-            (member_names.end() != std::find
-                (member_names.begin()
-                ,member_names.end()
+            (residuary_names.end() != std::find
+                (residuary_names.begin()
+                ,residuary_names.end()
                 ,std::string("DefinitionOfMaterialChange")
                 )
             )
@@ -263,9 +263,9 @@ using namespace xml;
     // Older versions lacked 'UseCurrentDeclaredRate', whose
     // default value of "Yes" would break backward compatibility.
     if
-        (member_names.end() != std::find
-            (member_names.begin()
-            ,member_names.end()
+        (residuary_names.end() != std::find
+            (residuary_names.begin()
+            ,residuary_names.end()
             ,std::string("UseCurrentDeclaredRate")
             )
         )
@@ -285,7 +285,7 @@ using namespace xml;
         ,add_years(EffectiveDate.value(), InforceYear.value(), true)
         );
 
-    if(1 == cell_version)
+    if(1 == file_version)
         {
         // Solve 'Year' values were saved in solve 'Time' entities,
         // apparently in this version only.
@@ -308,12 +308,6 @@ using namespace xml;
         SolveBeginTime  = issue_age() + SolveBeginYear .value();
         SolveEndTime    = issue_age() + SolveEndYear   .value();
         }
-
-// If you want to see the ones that didn't get assigned:
-//std::ostringstream oss;
-//std::ostream_iterator<std::string> osi(oss, "\n");
-//std::copy(member_names.begin(), member_names.end(), osi);
-//warning() << oss.str() << "Parameters absent in xml file" << LMI_FLUSH;
 }
 
 //============================================================================
@@ -325,11 +319,8 @@ void Input::write(xml::element& x) const
     std::string const version(value_cast<std::string>(class_version()));
     xml_lmi::set_attr(root, "version", version.c_str());
 
-    std::vector<std::string> const member_names
-        (Input::member_names()
-        );
     std::vector<std::string>::const_iterator i;
-    for(i = member_names.begin(); i != member_names.end(); ++i)
+    for(i = member_names().begin(); i != member_names().end(); ++i)
         {
         std::string node_tag(*i);
         std::string value = operator[](*i).str();
