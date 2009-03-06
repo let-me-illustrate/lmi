@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.49 2008-12-27 02:56:45 chicares Exp $
+// $Id: input.hpp,v 1.50 2009-03-06 03:10:15 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -46,6 +46,7 @@ class TDatabase;
 #include <boost/operators.hpp>
 #include <boost/scoped_ptr.hpp>
 
+#include <list>
 #include <map>
 #include <string>
 #include <vector>
@@ -173,6 +174,18 @@ class LMI_SO Input
     virtual void write(xml::element&) const;
     virtual int class_version() const;
     virtual std::string xml_root_name() const;
+
+    // Backward compatibility.
+    std::string RedintegrateExAnte
+        (int                file_version
+        ,std::string const& name
+        ,std::string const& value
+        );
+    void        RedintegrateExPost
+        (int                                file_version
+        ,std::map<std::string, std::string> detritus_map
+        ,std::list<std::string>             residuary_names
+        );
 
     // MvcModel required implementation.
     virtual void DoAdaptExternalities();
