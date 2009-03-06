@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1268 2009-03-04 23:49:05 wboutin Exp $
+// $Id: ChangeLog,v 1.1269 2009-03-06 00:37:27 chicares Exp $
 
 MAINTENANCE
 
@@ -21978,6 +21978,19 @@ Extract several disclosures.
 Eradicate 'mce_increase_specamt'. Changes to other skins are still
 needed.
 
+20090304T1234Z <gchicares@sbcglobal.net> [796]
+
+  accountvalue.cpp
+  ihs_avstrtgy.cpp
+  input_harmonization.cpp
+  mc_enum_type_enums.hpp
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+  mc_enum_types.xpp
+  yare_input.cpp
+  yare_input.hpp
+Remove obsolete enumerations and enumerators.
+
 20090304T1745Z <wboutin@massmutual.com> [796]
 
   skin_coli_boli.xrc
@@ -22028,4 +22041,9 @@ Add 'EmployeeClass'.
   skin_coli_boli.xrc
   skin_group_carveout.xrc
 Remove a few enumerators.
+
+20090306T0037Z <gchicares@sbcglobal.net> [796]
+
+  input_xml_io.cpp
+Refactor, renaming certain variables to increase clarity.
 
