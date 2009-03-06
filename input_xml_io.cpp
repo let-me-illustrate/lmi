@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_xml_io.cpp,v 1.16 2009-03-06 00:37:26 chicares Exp $
+// $Id: input_xml_io.cpp,v 1.17 2009-03-06 03:10:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -36,7 +36,6 @@
 #include "xml_lmi.hpp"
 
 #include <algorithm> // std::find()
-#include <list>
 
 namespace
 {
@@ -163,43 +162,11 @@ using namespace xml;
             );
         if(residuary_names.end() != current_member)
             {
-            std::string value = xml_lmi::get_content(*child);
-
-            // Prior to version 3, 'SolveType' distinguished:
-            //   mce_solve_wd           --> !WithdrawToBasisThenLoan
-            //   mce_solve_wd_then_loan -->  WithdrawToBasisThenLoan
-            // but in version 3 that superfluous distinction was
-            // removed. 'WithdrawToBasisThenLoan' needn't be altered
-            // here because the material-implications above had
-            // already been asserted in a prior revision.
-            if(file_version < 3)
-                {
-                if("SolveWDThenLoan" == value && "SolveType" == node_tag)
-                    {
-                    value = "SolveWD";
-                    }
-                if
-                    (  "AvoidMecMethod" == node_tag
-                    &&  (
-                            "Increase specified amount" == value
-                        ||  "Increase_specified_amount" == value
-                        )
-                    )
-                    {
-                    if(!global_settings::instance().regression_testing())
-                        {
-                        warning()
-                            << "The obsolete 'Increase specified amount'"
-                            << " MEC-avoidance strategy is no longer supported."
-                            << " Consider using a non-MEC solve instead."
-                            << LMI_FLUSH
-                            ;
-                        }
-                    value = "Allow MEC";
-                    }
-                }
-
-            operator[](node_tag) = value;
+            operator[](node_tag) = RedintegrateExAnte
+                (file_version
+                ,node_tag
+                ,xml_lmi::get_content(*child)
+                );
             residuary_names.erase(current_member);
             }
         else if(is_detritus(node_tag))
@@ -216,6 +183,106 @@ using namespace xml;
                 << LMI_FLUSH
                 ;
             }
+        }
+
+    RedintegrateExPost(file_version, detritus_map, residuary_names);
+}
+
+//============================================================================
+void Input::write(xml::element& x) const
+{
+    xml::element root(xml_root_name().c_str());
+
+// XMLWRAPP !! There's no way to set an integer attribute.
+    std::string const version(value_cast<std::string>(class_version()));
+    xml_lmi::set_attr(root, "version", version.c_str());
+
+    std::vector<std::string>::const_iterator i;
+    for(i = member_names().begin(); i != member_names().end(); ++i)
+        {
+        std::string node_tag(*i);
+        std::string value = operator[](*i).str();
+        root.push_back(xml::element(node_tag.c_str(), value.c_str()));
+        }
+
+    x.push_back(root);
+}
+
+//============================================================================
+int Input::class_version() const
+{
+    return 3;
+}
+
+//============================================================================
+std::string Input::xml_root_name() const
+{
+    return "cell";
+}
+
+/// Provide for backward compatibility before assigning values.
+
+std::string Input::RedintegrateExAnte
+    (int                file_version
+    ,std::string const& name
+    ,std::string const& value
+    )
+{
+    if(class_version() == file_version)
+        {
+        return value;
+        }
+
+    std::string new_value(value);
+
+    if(file_version < 3)
+        {
+        // Prior to version 3, 'SolveType' distinguished:
+        //   mce_solve_wd           --> !WithdrawToBasisThenLoan
+        //   mce_solve_wd_then_loan -->  WithdrawToBasisThenLoan
+        // but in version 3 that superfluous distinction was
+        // removed. 'WithdrawToBasisThenLoan' needn't be altered
+        // here because the material-implications above had
+        // already been asserted in a prior revision.
+        if("SolveWDThenLoan" == value && "SolveType" == name)
+            {
+            new_value = "SolveWD";
+            }
+        if
+            (  "AvoidMecMethod" == name
+            &&  (
+                    "Increase specified amount" == value
+                ||  "Increase_specified_amount" == value
+                )
+            )
+            {
+            if(!global_settings::instance().regression_testing())
+                {
+                warning()
+                    << "The obsolete 'Increase specified amount'"
+                    << " MEC-avoidance strategy is no longer supported."
+                    << " Consider using a non-MEC solve instead."
+                    << LMI_FLUSH
+                    ;
+                }
+            new_value = "Allow MEC";
+            }
+        }
+
+    return new_value;
+}
+
+/// Provide for backward compatibility after assigning values.
+
+void Input::RedintegrateExPost
+    (int                                file_version
+    ,std::map<std::string, std::string> detritus_map
+    ,std::list<std::string>             residuary_names
+    )
+{
+    if(class_version() == file_version)
+        {
+//        return; // Not yet: see 'EffectiveDateToday' below.
         }
 
     if(0 == file_version)
@@ -308,37 +375,5 @@ using namespace xml;
         SolveBeginTime  = issue_age() + SolveBeginYear .value();
         SolveEndTime    = issue_age() + SolveEndYear   .value();
         }
-}
-
-//============================================================================
-void Input::write(xml::element& x) const
-{
-    xml::element root(xml_root_name().c_str());
-
-// XMLWRAPP !! There's no way to set an integer attribute.
-    std::string const version(value_cast<std::string>(class_version()));
-    xml_lmi::set_attr(root, "version", version.c_str());
-
-    std::vector<std::string>::const_iterator i;
-    for(i = member_names().begin(); i != member_names().end(); ++i)
-        {
-        std::string node_tag(*i);
-        std::string value = operator[](*i).str();
-        root.push_back(xml::element(node_tag.c_str(), value.c_str()));
-        }
-
-    x.push_back(root);
-}
-
-//============================================================================
-int Input::class_version() const
-{
-    return 3;
-}
-
-//============================================================================
-std::string Input::xml_root_name() const
-{
-    return "cell";
 }
 
