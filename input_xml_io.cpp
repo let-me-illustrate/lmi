@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_xml_io.cpp,v 1.19 2009-03-06 14:57:43 chicares Exp $
+// $Id: input_xml_io.cpp,v 1.20 2009-03-06 18:39:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -36,6 +36,7 @@
 #include "xml_lmi.hpp"
 
 #include <algorithm> // std::find()
+#include <stdexcept>
 
 namespace
 {
@@ -277,6 +278,36 @@ std::string Input::RedintegrateExAnte
                     ;
                 }
             new_value = "Allow MEC";
+            }
+        if("DeprecatedSolveTgtAtWhich" == name)
+            {
+            new_value =
+                  ("TgtAtRetirement" == value) ? "Retirement"
+                : ("TgtAtYear"       == value) ? "Year"
+                : ("TgtAtAge"        == value) ? "Age"
+                : ("TgtAtMaturity"   == value) ? "Maturity"
+                : throw std::runtime_error("Unexpected solve duration.")
+                ;
+            }
+        if("DeprecatedSolveFromWhich" == name)
+            {
+            new_value =
+                  ("FromIssue"       == value) ? "Issue"
+                : ("FromYear"        == value) ? "Year"
+                : ("FromAge"         == value) ? "Age"
+                : ("FromRetirement"  == value) ? "Retirement"
+                : throw std::runtime_error("Unexpected solve duration.")
+                ;
+            }
+        if("DeprecatedSolveToWhich" == name)
+            {
+            new_value =
+                  ("ToRetirement"    == value) ? "Retirement"
+                : ("ToYear"          == value) ? "Year"
+                : ("ToAge"           == value) ? "Age"
+                : ("ToMaturity"      == value) ? "Maturity"
+                : throw std::runtime_error("Unexpected solve duration.")
+                ;
             }
         }
 

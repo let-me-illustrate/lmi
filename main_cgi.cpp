@@ -31,7 +31,7 @@
 // other reasons evident in cvs or explained in 'ChangeLog'. Any
 // defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.38 2008-12-27 02:56:47 chicares Exp $
+// $Id: main_cgi.cpp,v 1.39 2009-03-06 18:39:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -488,8 +488,8 @@ void ShowOutput(cgicc::Cgicc const& data)
     input["UnderwritingClass"]             = "Preferred";
     input["WaiverOfPremiumBenefit"]        = "No";
     input["AccidentalDeathBenefit"]        = "No";
-    input["DeprecatedSolveTgtAtWhich"]     = "TgtAtYear";
-    input["DeprecatedSolveToWhich"]        = "ToYear";
+    input["DeprecatedSolveTgtAtWhich"]     = "Year";
+    input["DeprecatedSolveToWhich"]        = "Year";
     input["UseCurrentDeclaredRate"]        = "No";
 
     input["ProductName"]                   = GetValue(data, "ProductName" );

@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.69 2009-01-06 14:56:26 chicares Exp $
+// $Id: main_cli.cpp,v 1.70 2009-03-06 18:39:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -149,7 +149,7 @@ void SelfTest()
             ;
         }
 
-    IP["DeprecatedSolveToWhich"] = "ToMaturity";
+    IP["DeprecatedSolveToWhich"] = "Maturity";
 
     IP["SolveType"] = "SolveSpecAmt";
     expected_value = 1879139.14;

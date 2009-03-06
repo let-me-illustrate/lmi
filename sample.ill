@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <single_cell_document>
-  <cell version="2">
+  <cell version="3">
     <AccidentalDeathBenefit>No</AccidentalDeathBenefit>
     <Address/>
     <AgentAddress>*** REQUIRED FIELD MISSING ***</AgentAddress>
@@ -40,9 +40,9 @@
     <DeathBenefitOptionFromRetirement>A</DeathBenefitOptionFromRetirement>
     <DefinitionOfLifeInsurance>CVAT</DefinitionOfLifeInsurance>
     <DefinitionOfMaterialChange>Earlier of increase or unnecessary premium</DefinitionOfMaterialChange>
-    <DeprecatedSolveFromWhich>FromIssue</DeprecatedSolveFromWhich>
-    <DeprecatedSolveTgtAtWhich>TgtAtMaturity</DeprecatedSolveTgtAtWhich>
-    <DeprecatedSolveToWhich>ToRetirement</DeprecatedSolveToWhich>
+    <DeprecatedSolveFromWhich>Issue</DeprecatedSolveFromWhich>
+    <DeprecatedSolveTgtAtWhich>Maturity</DeprecatedSolveTgtAtWhich>
+    <DeprecatedSolveToWhich>Retirement</DeprecatedSolveToWhich>
     <DeprecatedUseDOB>No</DeprecatedUseDOB>
     <DeprecatedUseDOR>No</DeprecatedUseDOR>
     <Dumpin>0</Dumpin>

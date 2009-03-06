@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.91 2009-03-04 12:34:45 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.92 2009-03-06 18:39:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -828,27 +828,27 @@ false // Silly workaround for now.
 
     bool actually_solving = solves_allowed && mce_solve_none != SolveType;
 
-    DeprecatedSolveFromWhich  .allow(mce_solve_from_issue     , actually_solving);
-    DeprecatedSolveFromWhich  .allow(mce_solve_from_year      , actually_solving);
-    DeprecatedSolveFromWhich  .allow(mce_solve_from_age       , actually_solving);
-    DeprecatedSolveFromWhich  .allow(mce_solve_from_retirement, actually_solving);
+    DeprecatedSolveFromWhich  .allow(mce_from_issue     , actually_solving);
+    DeprecatedSolveFromWhich  .allow(mce_from_year      , actually_solving);
+    DeprecatedSolveFromWhich  .allow(mce_from_age       , actually_solving);
+    DeprecatedSolveFromWhich  .allow(mce_from_retirement, actually_solving);
     DeprecatedSolveFromWhich  .enable(actually_solving);
 
-    DeprecatedSolveToWhich    .allow(mce_solve_to_retirement  , actually_solving);
-    DeprecatedSolveToWhich    .allow(mce_solve_to_year        , actually_solving);
-    DeprecatedSolveToWhich    .allow(mce_solve_to_age         , actually_solving);
-    DeprecatedSolveToWhich    .allow(mce_solve_to_maturity    , actually_solving);
+    DeprecatedSolveToWhich    .allow(mce_to_retirement  , actually_solving);
+    DeprecatedSolveToWhich    .allow(mce_to_year        , actually_solving);
+    DeprecatedSolveToWhich    .allow(mce_to_age         , actually_solving);
+    DeprecatedSolveToWhich    .allow(mce_to_maturity    , actually_solving);
     DeprecatedSolveToWhich    .enable(actually_solving);
 
-    DeprecatedSolveTgtAtWhich .allow(mce_target_at_retirement , actually_solving);
-    DeprecatedSolveTgtAtWhich .allow(mce_target_at_year       , actually_solving);
-    DeprecatedSolveTgtAtWhich .allow(mce_target_at_age        , actually_solving);
-    DeprecatedSolveTgtAtWhich .allow(mce_target_at_maturity   , actually_solving);
+    DeprecatedSolveTgtAtWhich .allow(mce_to_retirement  , actually_solving);
+    DeprecatedSolveTgtAtWhich .allow(mce_to_year        , actually_solving);
+    DeprecatedSolveTgtAtWhich .allow(mce_to_age         , actually_solving);
+    DeprecatedSolveTgtAtWhich .allow(mce_to_maturity    , actually_solving);
     DeprecatedSolveTgtAtWhich .enable(actually_solving && mce_solve_for_non_mec != SolveTarget);
 
-    SolveBeginYear .enable(actually_solving && mce_solve_from_year == DeprecatedSolveFromWhich);
-    SolveEndYear   .enable(actually_solving && mce_solve_to_year   == DeprecatedSolveToWhich);
-    SolveTargetYear.enable(actually_solving && mce_target_at_year  == DeprecatedSolveTgtAtWhich && mce_solve_for_non_mec != SolveTarget);
+    SolveBeginYear .enable(actually_solving && mce_from_year == DeprecatedSolveFromWhich);
+    SolveEndYear   .enable(actually_solving && mce_to_year   == DeprecatedSolveToWhich);
+    SolveTargetYear.enable(actually_solving && mce_to_year   == DeprecatedSolveTgtAtWhich && mce_solve_for_non_mec != SolveTarget);
 
     SolveTargetYear.minimum(1);
     // INPUT !! The minimum 'SolveEndYear' and 'SolveTargetYear' set
@@ -862,9 +862,9 @@ false // Silly workaround for now.
 
     // INPUT !! Temporarily, existing -'Time' names are used where
     // -'Age' names would be clearer.
-    SolveBeginTime .enable(actually_solving && mce_solve_from_age == DeprecatedSolveFromWhich);
-    SolveEndTime   .enable(actually_solving && mce_solve_to_age   == DeprecatedSolveToWhich);
-    SolveTargetTime.enable(actually_solving && mce_target_at_age  == DeprecatedSolveTgtAtWhich && mce_solve_for_non_mec != SolveTarget);
+    SolveBeginTime .enable(actually_solving && mce_from_age == DeprecatedSolveFromWhich);
+    SolveEndTime   .enable(actually_solving && mce_to_age   == DeprecatedSolveToWhich);
+    SolveTargetTime.enable(actually_solving && mce_to_age   == DeprecatedSolveTgtAtWhich && mce_solve_for_non_mec != SolveTarget);
 
 #if 0 // http://lists.nongnu.org/archive/html/lmi/2008-08/msg00036.html
     SolveBeginTime .minimum_and_maximum(issue_age()           , maturity_age());
@@ -1000,22 +1000,22 @@ void Input::SetSolveDurations()
 {
     switch(DeprecatedSolveTgtAtWhich.value())
         {
-        case mce_target_at_year:
+        case mce_to_year:
             {
             ; // Do nothing.
             }
             break;
-        case mce_target_at_age:
+        case mce_to_age:
             {
             SolveTargetYear = SolveTargetTime.value() - issue_age();
             }
             break;
-        case mce_target_at_retirement:
+        case mce_to_retirement:
             {
             SolveTargetYear = years_to_retirement();
             }
             break;
-        case mce_target_at_maturity:
+        case mce_to_maturity:
             {
             SolveTargetYear = years_to_maturity();
             }
@@ -1033,22 +1033,22 @@ void Input::SetSolveDurations()
 
     switch(DeprecatedSolveFromWhich.value())
         {
-        case mce_solve_from_year:
+        case mce_from_year:
             {
             ; // Do nothing.
             }
             break;
-        case mce_solve_from_age:
+        case mce_from_age:
             {
             SolveBeginYear = SolveBeginTime.value() - issue_age();
             }
             break;
-        case mce_solve_from_issue:
+        case mce_from_issue:
             {
             SolveBeginYear = 0;
             }
             break;
-        case mce_solve_from_retirement:
+        case mce_from_retirement:
             {
             SolveBeginYear = years_to_retirement();
             }
@@ -1066,22 +1066,22 @@ void Input::SetSolveDurations()
 
     switch(DeprecatedSolveToWhich.value())
         {
-        case mce_solve_to_year:
+        case mce_to_year:
             {
             ; // Do nothing.
             }
             break;
-        case mce_solve_to_age:
+        case mce_to_age:
             {
             SolveEndYear = SolveEndTime.value() - issue_age();
             }
             break;
-        case mce_solve_to_retirement:
+        case mce_to_retirement:
             {
             SolveEndYear = years_to_retirement();
             }
             break;
-        case mce_solve_to_maturity:
+        case mce_to_maturity:
             {
             SolveEndYear = years_to_maturity();
             }
