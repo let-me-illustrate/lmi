@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.40 2009-03-06 18:39:20 chicares Exp $
+// $Id: input.cpp,v 1.41 2009-03-07 22:04:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -74,7 +74,7 @@ Input::Input()
 //    ,SolveSeparateAccountBasis        ("")
     ,UseCurrentDeclaredRate           ("Yes")
 //    ,GeneralAccountRateType           ("")
-    ,SeparateAccountRateType          ("GrossRate")
+    ,SeparateAccountRateType          ("Gross rate")
     ,LoanRate                         ("0.06")
 //    ,LoanRateType                     ("")
     ,OverrideExperienceReserveRate    ("Yes")
@@ -621,26 +621,26 @@ Input Input::magically_rectify(Input const& original)
         }
 
     // Repair another problem in the legacy implementation.
-    if("CredRate" == z["GeneralAccountRateType"].str())
+    if("Crediting rate" == z["GeneralAccountRateType"].str())
         {
-        z["GeneralAccountRateType"] = "NetRate";
+        z["GeneralAccountRateType"] = "Net rate";
         }
-    if("CredRate" == z["SeparateAccountRateType"].str())
+    if("Crediting rate" == z["SeparateAccountRateType"].str())
         {
-        z["SeparateAccountRateType"] = "NetRate";
+        z["SeparateAccountRateType"] = "Net rate";
         }
 
     z.Reconcile(); // TODO ?? Necessary only for problematic old cases.
     z.RealizeAllSequenceInput();
 
     // TODO ?? Do it again...only because certain testdecks are wrong?
-    if("CredRate" == z["GeneralAccountRateType"].str())
+    if("Crediting rate" == z["GeneralAccountRateType"].str())
         {
-        z["GeneralAccountRateType"] = "NetRate";
+        z["GeneralAccountRateType"] = "Net rate";
         }
-    if("CredRate" == z["SeparateAccountRateType"].str())
+    if("Crediting rate" == z["SeparateAccountRateType"].str())
         {
-        z["SeparateAccountRateType"] = "NetRate";
+        z["SeparateAccountRateType"] = "Net rate";
         }
 
     return z;

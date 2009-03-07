@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_xml_io.cpp,v 1.20 2009-03-06 18:39:21 chicares Exp $
+// $Id: input_xml_io.cpp,v 1.21 2009-03-07 22:04:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -247,19 +247,15 @@ std::string Input::RedintegrateExAnte
 
     std::string new_value(value);
 
+    // Prior to version 3, 'SolveType' distinguished:
+    //   mce_solve_wd           --> !WithdrawToBasisThenLoan
+    //   mce_solve_wd_then_loan -->  WithdrawToBasisThenLoan
+    // but in version 3 that superfluous distinction was
+    // removed. 'WithdrawToBasisThenLoan' needn't be altered
+    // here because the material-implications above had
+    // already been asserted in a prior revision.
     if(file_version < 3)
         {
-        // Prior to version 3, 'SolveType' distinguished:
-        //   mce_solve_wd           --> !WithdrawToBasisThenLoan
-        //   mce_solve_wd_then_loan -->  WithdrawToBasisThenLoan
-        // but in version 3 that superfluous distinction was
-        // removed. 'WithdrawToBasisThenLoan' needn't be altered
-        // here because the material-implications above had
-        // already been asserted in a prior revision.
-        if("SolveWDThenLoan" == value && "SolveType" == name)
-            {
-            new_value = "SolveWD";
-            }
         if
             (  "AvoidMecMethod" == name
             &&  (
@@ -286,17 +282,17 @@ std::string Input::RedintegrateExAnte
                 : ("TgtAtYear"       == value) ? "Year"
                 : ("TgtAtAge"        == value) ? "Age"
                 : ("TgtAtMaturity"   == value) ? "Maturity"
-                : throw std::runtime_error("Unexpected solve duration.")
+                : throw std::runtime_error(value + ": unexpected solve-at duration.")
                 ;
             }
         if("DeprecatedSolveFromWhich" == name)
             {
             new_value =
-                  ("FromIssue"       == value) ? "Issue"
-                : ("FromYear"        == value) ? "Year"
-                : ("FromAge"         == value) ? "Age"
-                : ("FromRetirement"  == value) ? "Retirement"
-                : throw std::runtime_error("Unexpected solve duration.")
+                  ("FromIssue"      == value) ? "Issue"
+                : ("FromYear"       == value) ? "Year"
+                : ("FromAge"        == value) ? "Age"
+                : ("FromRetirement" == value) ? "Retirement"
+                : throw std::runtime_error(value + ": unexpected solve-from duration.")
                 ;
             }
         if("DeprecatedSolveToWhich" == name)
@@ -306,7 +302,86 @@ std::string Input::RedintegrateExAnte
                 : ("ToYear"          == value) ? "Year"
                 : ("ToAge"           == value) ? "Age"
                 : ("ToMaturity"      == value) ? "Maturity"
-                : throw std::runtime_error("Unexpected solve duration.")
+                : throw std::runtime_error(value + ": unexpected solve-to duration.")
+                ;
+            }
+        if("SolveBasis" == name)
+            {
+            new_value =
+                  ("Current basis"    == value) ? "Current"
+                : ("Current_basis"    == value) ? "Current"
+                : ("Guaranteed basis" == value) ? "Guaranteed"
+                : ("Guaranteed_basis" == value) ? "Guaranteed"
+                : ("Midpoint basis"   == value) ? "Midpoint"
+                : ("Midpoint_basis"   == value) ? "Midpoint"
+                : throw std::runtime_error(value + ": unexpected deduction basis.")
+                ;
+            }
+
+        if("SolveSeparateAccountBasis" == name)
+            {
+            new_value =
+                  ("Input %"         == value) ? "Hypothetical"
+                : ("Input_%"         == value) ? "Hypothetical"
+                : ("Zero %"          == value) ? "Zero"
+                : ("Zero_%"          == value) ? "Zero"
+                : ("Half of input %" == value) ? "Half of hypothetical"
+                : ("Half_of_input_%" == value) ? "Half of hypothetical"
+                : throw std::runtime_error(value + ": unexpected separate-account basis.")
+                ;
+            }
+
+        if("SolveType" == name)
+            {
+            new_value =
+                  ("SolveNone"       == value) ? "No solve"
+                : ("SolveSpecAmt"    == value) ? "Specified amount"
+                : ("SolveEePrem"     == value) ? "Employee premium"
+                : ("SolveErPrem"     == value) ? "Employer premium"
+                : ("SolveLoan"       == value) ? "Loan"
+                : ("SolveWD"         == value) ? "Withdrawal"
+                : ("SolveWDThenLoan" == value) ? "Withdrawal"
+                : throw std::runtime_error(value + ": unexpected solve type.")
+                ;
+            }
+
+        if("SolveTarget" == name)
+            {
+            new_value =
+                  ("SolveForEndt"     == value) ? "Endowment"
+                : ("SolveForTarget"   == value) ? "Target CSV"
+                : ("SolveForTaxBasis" == value) ? "CSV = tax basis"
+                : ("SolveForNonMec"   == value) ? "Avoid MEC"
+                : throw std::runtime_error(value + ": unexpected solve goal.")
+                ;
+            }
+
+        if("GeneralAccountRateType" == name)
+            {
+            new_value =
+                  ("CredRate"  == value) ? "Crediting rate"
+                : ("GrossRate" == value) ? "Gross rate"
+                : ("NetRate"   == value) ? "Net rate"
+                : throw std::runtime_error(value + ": unexpected general-account type.")
+                ;
+            }
+
+        if("SeparateAccountRateType" == name)
+            {
+            new_value =
+                  ("CredRate"  == value) ? "Crediting rate"
+                : ("GrossRate" == value) ? "Gross rate"
+                : ("NetRate"   == value) ? "Net rate"
+                : throw std::runtime_error(value + ": unexpected separate-account type.")
+                ;
+            }
+
+        if("LoanRateType" == name)
+            {
+            new_value =
+                  ("Fixed" == value) ? "Fixed loan rate"
+                : ("VLR"   == value) ? "Variable loan rate"
+                : throw std::runtime_error(value + ": unexpected loan-rate type.")
                 ;
             }
         }
