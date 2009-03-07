@@ -63,7 +63,7 @@
     <FundChoiceType>Choose funds</FundChoiceType>
     <Gender>Male</Gender>
     <GeneralAccountRate>0.06</GeneralAccountRate>
-    <GeneralAccountRateType>CredRate</GeneralAccountRateType>
+    <GeneralAccountRateType>Crediting rate</GeneralAccountRateType>
     <GroupUnderwritingType>Medical</GroupUnderwritingType>
     <HoneymoonEndorsement>No</HoneymoonEndorsement>
     <HoneymoonValueSpread>0</HoneymoonValueSpread>
@@ -112,7 +112,7 @@
     <LoanFromAlternative>Retirement</LoanFromAlternative>
     <LoanFromDuration>20</LoanFromDuration>
     <LoanRate>0.06</LoanRate>
-    <LoanRateType>Fixed</LoanRateType>
+    <LoanRateType>Fixed loan rate</LoanRateType>
     <LoanToAge>95</LoanToAge>
     <LoanToAlternative>Maturity</LoanToAlternative>
     <LoanToDuration>50</LoanToDuration>
@@ -141,19 +141,19 @@
     <SalarySpecifiedAmountFactor>1</SalarySpecifiedAmountFactor>
     <SalarySpecifiedAmountOffset>50000</SalarySpecifiedAmountOffset>
     <SeparateAccountRate>.08</SeparateAccountRate>
-    <SeparateAccountRateType>GrossRate</SeparateAccountRateType>
+    <SeparateAccountRateType>Gross rate</SeparateAccountRateType>
     <Smoking>Nonsmoker</Smoking>
-    <SolveBasis>Current basis</SolveBasis>
+    <SolveBasis>Current</SolveBasis>
     <SolveBeginTime>45</SolveBeginTime>
     <SolveBeginYear>0</SolveBeginYear>
     <SolveEndTime>65</SolveEndTime>
     <SolveEndYear>20</SolveEndYear>
-    <SolveSeparateAccountBasis>Input %</SolveSeparateAccountBasis>
-    <SolveTarget>SolveForEndt</SolveTarget>
+    <SolveSeparateAccountBasis>Hypothetical</SolveSeparateAccountBasis>
+    <SolveTarget>Endowment</SolveTarget>
     <SolveTargetCashSurrenderValue>0</SolveTargetCashSurrenderValue>
     <SolveTargetTime>100</SolveTargetTime>
     <SolveTargetYear>55</SolveTargetYear>
-    <SolveType>SolveNone</SolveType>
+    <SolveType>No solve</SolveType>
     <SpecamtHistory>0</SpecamtHistory>
     <SpecifiedAmount>1000000</SpecifiedAmount>
     <SpecifiedAmountFromIssue>1000000</SpecifiedAmountFromIssue>
