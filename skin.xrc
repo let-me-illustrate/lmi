@@ -24,7 +24,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin.xrc,v 1.19 2009-03-06 18:39:21 chicares Exp $
+    $Id: skin.xrc,v 1.20 2009-03-07 22:04:19 chicares Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -1730,12 +1730,12 @@ here, but it looks weird if we don't make this look like its siblings.
                         <dimension>1</dimension>
                         <selection>0</selection>
                         <content>
-                            <item>SolveNone</item>
-                            <item>SolveSpecAmt</item>
-                            <item>SolveEePrem</item>
-                            <item>SolveErPrem</item>
-                            <item>SolveLoan</item>
-                            <item>SolveWD</item>
+                            <item>No solve</item>
+                            <item>Specified amount</item>
+                            <item>Employee premium</item>
+                            <item>Employer premium</item>
+                            <item>Loan</item>
+                            <item>Withdrawal</item>
                         </content>
                     </object>
                 </object>
@@ -1757,9 +1757,9 @@ here, but it looks weird if we don't make this look like its siblings.
                         <dimension>1</dimension>
                         <selection>0</selection>
                         <content>
-                            <item>Current basis</item>
-                            <item>Guaranteed basis</item>
-                            <item>Midpoint basis</item>
+                            <item>Current</item>
+                            <item>Guaranteed</item>
+                            <item>Midpoint</item>
                         </content>
                     </object>
                 </object>
@@ -1772,9 +1772,9 @@ here, but it looks weird if we don't make this look like its siblings.
                         <dimension>1</dimension>
                         <selection>0</selection>
                         <content>
-                            <item>Input %</item>
-                            <item>Zero %</item>
-                            <item>Half of input %</item>
+                            <item>Hypothetical</item>
+                            <item>Zero</item>
+                            <item>Half of hypothetical</item>
                         </content>
                     </object>
                 </object>
@@ -1798,10 +1798,10 @@ here, but it looks weird if we don't make this look like its siblings.
                                 <help>Target to solve for</help>
                                 <style>wxRA_SPECIFY_COLS</style>
                                 <content>
-                                    <item>SolveForEndt</item>
-                                    <item>SolveForTarget</item>
-                                    <item>SolveForTaxBasis</item>
-                                    <item>SolveForNonMec</item>
+                                    <item>Endowment</item>
+                                    <item>Target CSV</item>
+                                    <item>CSV = tax basis</item>
+                                    <item>Avoid MEC</item>
                                 </content>
                             </object>
                         </object>
@@ -2515,9 +2515,9 @@ the other is perforce ignored.
                         <help>General-account rate type</help>
                         <style>wxRA_SPECIFY_ROWS</style>
                         <content>
-                            <item helptext="General-account rate is credited (net)">CredRate</item>
-                            <item helptext="General-account rate is earned (gross)">GrossRate</item>
-                            <item helptext="General-account rate is credited (net)">NetRate</item>
+                            <item helptext="General-account rate is credited (net)">Crediting rate</item>
+                            <item helptext="General-account rate is earned (gross)">Gross rate</item>
+                            <item helptext="General-account rate is credited (net)">Net rate</item>
                         </content>
                     </object>
                 </object>
@@ -2548,9 +2548,9 @@ the other is perforce ignored.
                         <help>Separate-account rate type</help>
                         <style>wxRA_SPECIFY_ROWS</style>
                         <content>
-                            <item helptext="Separate-account rate is net of investment management fee">CredRate</item>
-                            <item helptext="Separate-account rate is gross before investment management fee deduction">GrossRate</item>
-                            <item helptext="Separate-account rate is net of investment management fee">NetRate</item>
+                            <item helptext="Separate-account rate is net of investment management fee">Crediting rate</item>
+                            <item helptext="Separate-account rate is gross before investment management fee deduction">Gross rate</item>
+                            <item helptext="Separate-account rate is net of investment management fee">Net rate</item>
                         </content>
                     </object>
                 </object>
@@ -2581,8 +2581,8 @@ the other is perforce ignored.
                         <help>Loan rate type</help>
                         <style>wxRA_SPECIFY_ROWS</style>
                         <content>
-                            <item helptext="Loan rate is fixed">Fixed</item>
-                            <item helptext="Loan rate is variable">VLR</item>
+                            <item helptext="Loan rate is fixed">Fixed loan rate</item>
+                            <item helptext="Loan rate is variable">Variable loan rate</item>
                         </content>
                     </object>
                 </object>

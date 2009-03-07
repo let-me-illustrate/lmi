@@ -31,7 +31,7 @@
 // other reasons evident in cvs or explained in 'ChangeLog'. Any
 // defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.39 2009-03-06 18:39:21 chicares Exp $
+// $Id: main_cgi.cpp,v 1.40 2009-03-07 22:04:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -123,13 +123,13 @@ int try_main(int argc, char* argv[])
         "&Smoking=Smoker"
         "&WaiverOfPremiumBenefit=No"
         "&AccidentalDeathBenefit=No"
-        "&SolveType=SolveEePrem"
+        "&SolveType=Employee premium"
         "&SolveBeginYear=0"
         "&SolveEndYear=10"
-        "&SolveTarget=SolveForTarget"
+        "&SolveTarget=Target CSV"
         "&SolveTargetCashSurrenderValue=1000000"
         "&SolveTargetYear=20"
-        "&SolveBasis=Current_basis"
+        "&SolveBasis=Current"
         "&SpecifiedAmount=1000000"
         "&DeathBenefitOption=a"
 //        "&sRetDBOpt=A"
@@ -140,10 +140,10 @@ int try_main(int argc, char* argv[])
         "&1035ExchangeIsMec=No"
         "&1035ExchangeBasis=0"
         "&GeneralAccountRate=.055"
-        "&GeneralAccountRateType=NetRate"
-//        "&SeparateAccountRateType=NetRate" // not used yet
+        "&GeneralAccountRateType=Net rate"
+//        "&SeparateAccountRateType=Net rate" // not used yet
         "&LoanRate=.055"
-        "&LoanRateType=Fixed"
+        "&LoanRateType=Fixed loan rate"
         "&Comments="
         "&Census="
         "&ShowOutput=on"

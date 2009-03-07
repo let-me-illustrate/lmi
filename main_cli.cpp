@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.70 2009-03-06 18:39:21 chicares Exp $
+// $Id: main_cli.cpp,v 1.71 2009-03-07 22:04:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -133,7 +133,7 @@ void SelfTest()
     double expected_value = 0.0;
     double observed_value = 0.0;
 
-    IP["SolveType"] = "SolveNone";
+    IP["SolveType"] = "No solve";
     expected_value = 6305652.52;
     z("", IP);
     observed_value = z.principal_ledger()->GetCurrFull().AcctVal.back();
@@ -151,7 +151,7 @@ void SelfTest()
 
     IP["DeprecatedSolveToWhich"] = "Maturity";
 
-    IP["SolveType"] = "SolveSpecAmt";
+    IP["SolveType"] = "Specified amount";
     expected_value = 1879139.14;
     z("", IP);
     observed_value = z.principal_ledger()->GetCurrFull().AcctVal.back();
@@ -167,7 +167,7 @@ void SelfTest()
             ;
         }
 
-    IP["SolveType"] = "SolveEePrem";
+    IP["SolveType"] = "Employee premium";
     expected_value = 10673.51;
     z("", IP);
     observed_value = z.principal_ledger()->GetLedgerInvariant().EeGrossPmt.front();

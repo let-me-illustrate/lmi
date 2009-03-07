@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types.xpp,v 1.28 2009-03-06 22:35:05 chicares Exp $
+// $Id: mc_enum_types.xpp,v 1.29 2009-03-07 22:04:19 chicares Exp $
 
 #define yes_or_no_VALUES \
     {mce_no \
@@ -104,9 +104,9 @@
     ,mce_gen_mdpt \
     };
 #define gen_basis_NAMES \
-    {"Current basis" \
-    ,"Guaranteed basis" \
-    ,"Midpoint basis" \
+    {"Current" \
+    ,"Guaranteed" \
+    ,"Midpoint" \
     };
 
 #define sep_basis_VALUES \
@@ -115,9 +115,9 @@
     ,mce_sep_half \
     };
 #define sep_basis_NAMES \
-    {"Input %" \
-    ,"Zero %" \
-    ,"Half of input %" \
+    {"Hypothetical" \
+    ,"Zero" \
+    ,"Half of hypothetical" \
     };
 
 #define rate_period_VALUES \
@@ -220,12 +220,12 @@
     ,mce_solve_wd \
     };
 #define solve_type_NAMES \
-    {"SolveNone" \
-    ,"SolveSpecAmt" \
-    ,"SolveEePrem" \
-    ,"SolveErPrem" \
-    ,"SolveLoan" \
-    ,"SolveWD" \
+    {"No solve" \
+    ,"Specified amount" \
+    ,"Employee premium" \
+    ,"Employer premium" \
+    ,"Loan" \
+    ,"Withdrawal" \
     };
 
 #define solve_target_VALUES \
@@ -235,10 +235,10 @@
     ,mce_solve_for_non_mec \
     };
 #define solve_target_NAMES \
-    {"SolveForEndt" \
-    ,"SolveForTarget" \
-    ,"SolveForTaxBasis" \
-    ,"SolveForNonMec" \
+    {"Endowment" \
+    ,"Target CSV" \
+    ,"CSV = tax basis" \
+    ,"Avoid MEC" \
     };
 
 #define pmt_strategy_VALUES \
@@ -289,9 +289,9 @@
     ,mce_net_rate \
     };
 #define interest_rate_type_NAMES \
-    {"CredRate" \
-    ,"GrossRate" \
-    ,"NetRate" \
+    {"Crediting rate" \
+    ,"Gross rate" \
+    ,"Net rate" \
     };
 
 #define loan_rate_type_VALUES \
@@ -299,8 +299,8 @@
     ,mce_variable_loan_rate \
     };
 #define loan_rate_type_NAMES \
-    {"Fixed" \
-    ,"VLR" \
+    {"Fixed loan rate" \
+    ,"Variable loan rate" \
     };
 
 #define fund_input_method_VALUES \
