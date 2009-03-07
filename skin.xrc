@@ -24,7 +24,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin.xrc,v 1.20 2009-03-07 22:04:19 chicares Exp $
+    $Id: skin.xrc,v 1.21 2009-03-07 23:43:28 chicares Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -1782,6 +1782,7 @@ here, but it looks weird if we don't make this look like its siblings.
         </object>
         <object class="sizeritem">
             <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <border>4</border>
             <object class="wxFlexGridSizer">
                 <rows>1</rows>
                 <growablecols>0</growablecols>
@@ -1797,6 +1798,7 @@ here, but it looks weird if we don't make this look like its siblings.
                             <object class="wxRadioBox" name="SolveTarget">
                                 <help>Target to solve for</help>
                                 <style>wxRA_SPECIFY_COLS</style>
+                                <label>Goal</label>
                                 <content>
                                     <item>Endowment</item>
                                     <item>Target CSV</item>
@@ -1813,7 +1815,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                 <object class="sizeritem">
                                     <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                     <object class="wxStaticText">
-                                        <label>Target surrender value </label>
+                                        <label>Target CSV amount </label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
