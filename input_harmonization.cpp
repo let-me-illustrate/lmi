@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.92 2009-03-06 18:39:21 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.93 2009-03-08 20:14:45 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -592,29 +592,16 @@ false // Silly workaround for now.
         }
 */
 
-// TODO ?? Change the legacy enumerators in the calculations library.
-// They conflate disparate concepts. Here's what is really meant:
-//
-// genacct: legacy system offered only credited
-//   earned and credited are conceivable
-//   but earned is suppressed for "compliance" reasons
-//   and earned is defectively called gross
-//   net is absurd because it's called credited
-//
-// sepacct: legacy system offered only gross
-//   gross and net are conceivable
-//   but net is suppressed for "compliance" reasons
-//   credited is absurd because it's called net
+// genacct: earned is suppressed for "compliance" reasons
+// sepacct: net is suppressed for "compliance" reasons
 //
 // The "compliance" reasons don't seem sensible, but that's another
 // matter. DATABASE !! Control that in the product database.
 
-    GeneralAccountRateType .allow(mce_gross_rate, anything_goes && "No" == UseCurrentDeclaredRate);
-    GeneralAccountRateType .allow(mce_cred_rate , true);
-    GeneralAccountRateType .allow(mce_net_rate  , false);
+    GeneralAccountRateType .allow(mce_credited_rate , true);
+    GeneralAccountRateType .allow(mce_earned_rate, anything_goes && "No" == UseCurrentDeclaredRate);
 
     SeparateAccountRateType.allow(mce_gross_rate, true);
-    SeparateAccountRateType.allow(mce_cred_rate , false);
     SeparateAccountRateType.allow(mce_net_rate  , anything_goes);
 
     bool curr_int_rate_solve = false; // May be useful someday.

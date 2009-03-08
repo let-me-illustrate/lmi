@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: interest_rates.cpp,v 1.26 2009-03-02 05:43:16 chicares Exp $
+// $Id: interest_rates.cpp,v 1.27 2009-03-08 20:14:45 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -443,10 +443,10 @@ void InterestRates::Initialize(BasicValues const& v)
 void InterestRates::InitializeGeneralAccountRates()
 {
     std::vector<double> spread[mc_n_gen_bases] = {Zero_, Zero_, Zero_};
-    if(mce_gross_rate == GenAcctRateType_)
+    if(mce_earned_rate == GenAcctRateType_)
         {
         fatal_error()
-            << "General-account rate is unexpectedly gross."
+            << "General-account rate is unexpectedly an earned rate."
             << LMI_FLUSH
             ;
         spread[mce_gen_curr] = GenAcctSpread_;
@@ -468,7 +468,7 @@ void InterestRates::InitializeGeneralAccountRates()
         }
     else
         {
-        LMI_ASSERT(mce_net_rate == GenAcctRateType_);
+        LMI_ASSERT(mce_credited_rate == GenAcctRateType_);
         }
 
     GenAcctGrossRate_[mce_gen_mdpt] = Zero_;
@@ -558,7 +558,7 @@ void InterestRates::InitializeSeparateAccountRates()
     if(mce_net_rate == SepAcctRateType_)
         {
         fatal_error()
-            << "Separate-account rate is unexpectedly net."
+            << "Separate-account rate is unexpectedly a net rate."
             << LMI_FLUSH
             ;
         for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
@@ -750,7 +750,7 @@ void InterestRates::InitializeHoneymoonRates()
     // TODO ?? Someday, after we've implemented and tested the
     // alternative for the general account rate, we can aspire to
     // implement it for honeymoon rates too.
-    LMI_ASSERT(mce_net_rate == GenAcctRateType_);
+    LMI_ASSERT(mce_credited_rate == GenAcctRateType_);
 
     for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
         {

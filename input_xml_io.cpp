@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_xml_io.cpp,v 1.21 2009-03-07 22:04:19 chicares Exp $
+// $Id: input_xml_io.cpp,v 1.22 2009-03-08 20:14:45 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -359,9 +359,9 @@ std::string Input::RedintegrateExAnte
         if("GeneralAccountRateType" == name)
             {
             new_value =
-                  ("CredRate"  == value) ? "Crediting rate"
-                : ("GrossRate" == value) ? "Gross rate"
-                : ("NetRate"   == value) ? "Net rate"
+                  ("CredRate"  == value) ? "Credited rate"
+                : ("NetRate"   == value) ? "Credited rate"
+                : ("GrossRate" == value) ? "Earned rate"
                 : throw std::runtime_error(value + ": unexpected general-account type.")
                 ;
             }
@@ -369,9 +369,9 @@ std::string Input::RedintegrateExAnte
         if("SeparateAccountRateType" == name)
             {
             new_value =
-                  ("CredRate"  == value) ? "Crediting rate"
-                : ("GrossRate" == value) ? "Gross rate"
+                  ("CredRate"  == value) ? "Net rate"
                 : ("NetRate"   == value) ? "Net rate"
+                : ("GrossRate" == value) ? "Gross rate"
                 : throw std::runtime_error(value + ": unexpected separate-account type.")
                 ;
             }

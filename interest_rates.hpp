@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: interest_rates.hpp,v 1.9 2008-12-27 02:56:46 chicares Exp $
+// $Id: interest_rates.hpp,v 1.10 2009-03-08 20:14:45 chicares Exp $
 
 #ifndef interest_rates_hpp
 #define interest_rates_hpp
@@ -226,7 +226,7 @@ class InterestRates
     // General account interest rates.
 //    bool NeedGenAcctRates_; // TODO ?? Would this be useful?
     bool NeedMidpointRates_;
-    mcenum_interest_rate_type GenAcctRateType_;
+    mcenum_gen_acct_rate_type GenAcctRateType_;
     std::vector<double> GenAcctGrossRate_
         [mc_n_gen_bases]
         ;
@@ -238,7 +238,7 @@ class InterestRates
 
     // Separate account interest rates.
     bool NeedSepAcctRates_;
-    mcenum_interest_rate_type SepAcctRateType_;
+    mcenum_sep_acct_rate_type SepAcctRateType_;
     std::vector<double> SepAcctGrossRate_
         [mc_n_sep_bases]
         ;
