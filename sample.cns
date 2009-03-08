@@ -63,7 +63,7 @@
     <FundChoiceType>Choose funds</FundChoiceType>
     <Gender>Male</Gender>
     <GeneralAccountRate>0.06</GeneralAccountRate>
-    <GeneralAccountRateType>Crediting rate</GeneralAccountRateType>
+    <GeneralAccountRateType>Credited rate</GeneralAccountRateType>
     <GroupUnderwritingType>Medical</GroupUnderwritingType>
     <HoneymoonEndorsement>No</HoneymoonEndorsement>
     <HoneymoonValueSpread>0</HoneymoonValueSpread>
@@ -269,7 +269,7 @@
     <FundChoiceType>Choose funds</FundChoiceType>
     <Gender>Male</Gender>
     <GeneralAccountRate>0.06</GeneralAccountRate>
-    <GeneralAccountRateType>Crediting rate</GeneralAccountRateType>
+    <GeneralAccountRateType>Credited rate</GeneralAccountRateType>
     <GroupUnderwritingType>Medical</GroupUnderwritingType>
     <HoneymoonEndorsement>No</HoneymoonEndorsement>
     <HoneymoonValueSpread>0</HoneymoonValueSpread>
@@ -475,7 +475,7 @@
     <FundChoiceType>Choose funds</FundChoiceType>
     <Gender>Male</Gender>
     <GeneralAccountRate>0.06</GeneralAccountRate>
-    <GeneralAccountRateType>Crediting rate</GeneralAccountRateType>
+    <GeneralAccountRateType>Credited rate</GeneralAccountRateType>
     <GroupUnderwritingType>Medical</GroupUnderwritingType>
     <HoneymoonEndorsement>No</HoneymoonEndorsement>
     <HoneymoonValueSpread>0</HoneymoonValueSpread>

@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: yare_input.hpp,v 1.15 2009-03-06 18:39:21 chicares Exp $
+// $Id: yare_input.hpp,v 1.16 2009-03-08 20:14:47 chicares Exp $
 
 #ifndef yare_input_hpp
 #define yare_input_hpp
@@ -98,8 +98,8 @@ class yare_input
     mcenum_gen_basis                  SolveBasis                      ;
     mcenum_sep_basis                  SolveSeparateAccountBasis       ;
 //    bool                              UseCurrentDeclaredRate          ;
-    mcenum_interest_rate_type         GeneralAccountRateType          ;
-    mcenum_interest_rate_type         SeparateAccountRateType         ;
+    mcenum_gen_acct_rate_type         GeneralAccountRateType          ;
+    mcenum_sep_acct_rate_type         SeparateAccountRateType         ;
     double                            LoanRate                        ;
     mcenum_loan_rate_type             LoanRateType                    ;
     bool                              OverrideExperienceReserveRate   ;
