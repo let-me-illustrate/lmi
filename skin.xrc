@@ -24,7 +24,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin.xrc,v 1.21 2009-03-07 23:43:28 chicares Exp $
+    $Id: skin.xrc,v 1.22 2009-03-08 00:52:32 chicares Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -1744,40 +1744,16 @@ here, but it looks weird if we don't make this look like its siblings.
         <object class="sizeritem">
             <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
             <border>4</border>
-            <object class="wxFlexGridSizer">
-                <cols>1</cols>
-                <growablecols>0</growablecols>
-                <growablerows>0,1</growablerows>
-                <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                    <object class="wxRadioBox" name="SolveBasis">
-                        <help>Expense and mortality basis for solve</help>
-                        <style>wxRA_SPECIFY_COLS</style>
-                        <label>Deductions</label>
-                        <dimension>1</dimension>
-                        <selection>0</selection>
-                        <content>
-                            <item>Current</item>
-                            <item>Guaranteed</item>
-                            <item>Midpoint</item>
-                        </content>
-                    </object>
-                </object>
-                <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                    <object class="wxRadioBox" name="SolveSeparateAccountBasis">
-                        <help>Separate-account basis for solve</help>
-                        <style>wxRA_SPECIFY_COLS</style>
-                        <label>Separate-account rate</label>
-                        <dimension>1</dimension>
-                        <selection>0</selection>
-                        <content>
-                            <item>Hypothetical</item>
-                            <item>Zero</item>
-                            <item>Half of hypothetical</item>
-                        </content>
-                    </object>
-                </object>
+            <object class="wxRadioBox" name="SolveTarget">
+                <help>Target to solve for</help>
+                <style>wxRA_SPECIFY_COLS</style>
+                <label>Goal</label>
+                <content>
+                    <item>Endowment</item>
+                    <item>Target CSV</item>
+                    <item>CSV = tax basis</item>
+                    <item>Avoid MEC</item>
+                </content>
             </object>
         </object>
         <object class="sizeritem">
@@ -1792,21 +1768,7 @@ here, but it looks weird if we don't make this look like its siblings.
                     <object class="wxFlexGridSizer">
                         <cols>1</cols>
                         <growablecols>0</growablecols>
-                        <growablerows>1,2</growablerows>
-                        <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                            <object class="wxRadioBox" name="SolveTarget">
-                                <help>Target to solve for</help>
-                                <style>wxRA_SPECIFY_COLS</style>
-                                <label>Goal</label>
-                                <content>
-                                    <item>Endowment</item>
-                                    <item>Target CSV</item>
-                                    <item>CSV = tax basis</item>
-                                    <item>Avoid MEC</item>
-                                </content>
-                            </object>
-                        </object>
+                        <growablerows>0,1</growablerows>
                         <object class="sizeritem">
                             <flag>wxGROW|wxALL</flag>
                             <object class="wxFlexGridSizer">
@@ -2011,6 +1973,44 @@ here, but it looks weird if we don't make this look like its siblings.
                                                 </object>
                                             </object>
                                         </object>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <object class="wxFlexGridSizer">
+                                <rows>1</rows>
+                                <growablecols>0,1</growablecols>
+                                <growablerows>0</growablerows>
+                                <object class="sizeritem">
+                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                    <object class="wxRadioBox" name="SolveBasis">
+                                        <help>Expense, mortality, and general-account basis for solve</help>
+                                        <style>wxRA_SPECIFY_COLS</style>
+                                        <label>General basis</label>
+                                        <dimension>1</dimension>
+                                        <selection>0</selection>
+                                        <content>
+                                            <item>Current</item>
+                                            <item>Guaranteed</item>
+                                            <item>Midpoint</item>
+                                        </content>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                    <object class="wxRadioBox" name="SolveSeparateAccountBasis">
+                                        <help>Separate-account basis for solve</help>
+                                        <style>wxRA_SPECIFY_COLS</style>
+                                        <label>Separate-account basis</label>
+                                        <dimension>1</dimension>
+                                        <selection>0</selection>
+                                        <content>
+                                            <item>Hypothetical</item>
+                                            <item>Zero</item>
+                                            <item>Half of hypothetical</item>
+                                        </content>
                                     </object>
                                 </object>
                             </object>
