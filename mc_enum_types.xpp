@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types.xpp,v 1.29 2009-03-07 22:04:19 chicares Exp $
+// $Id: mc_enum_types.xpp,v 1.30 2009-03-08 20:14:46 chicares Exp $
 
 #define yes_or_no_VALUES \
     {mce_no \
@@ -283,15 +283,22 @@
     ,"SASalary" \
     };
 
-#define interest_rate_type_VALUES \
-    {mce_cred_rate \
-    ,mce_gross_rate \
-    ,mce_net_rate \
+#define gen_acct_rate_type_VALUES \
+    {mce_credited_rate \
+    ,mce_earned_rate \
     };
-#define interest_rate_type_NAMES \
-    {"Crediting rate" \
+#define gen_acct_rate_type_NAMES \
+    {"Credited rate" \
+    ,"Earned rate" \
+    };
+
+#define sep_acct_rate_type_VALUES \
+    {mce_net_rate \
+    ,mce_gross_rate \
+    };
+#define sep_acct_rate_type_NAMES \
+    {"Net rate" \
     ,"Gross rate" \
-    ,"Net rate" \
     };
 
 #define loan_rate_type_VALUES \

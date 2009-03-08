@@ -24,7 +24,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin.xrc,v 1.22 2009-03-08 00:52:32 chicares Exp $
+    $Id: skin.xrc,v 1.23 2009-03-08 20:14:46 chicares Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -2517,9 +2517,8 @@ the other is perforce ignored.
                         <help>General-account rate type</help>
                         <style>wxRA_SPECIFY_ROWS</style>
                         <content>
-                            <item helptext="General-account rate is credited (net)">Crediting rate</item>
-                            <item helptext="General-account rate is earned (gross)">Gross rate</item>
-                            <item helptext="General-account rate is credited (net)">Net rate</item>
+                            <item helptext="General-account rate is net credited rate">Credited rate</item>
+                            <item helptext="General-account rate is gross earned rate before deduction of spread">Earned rate</item>
                         </content>
                     </object>
                 </object>
@@ -2550,9 +2549,8 @@ the other is perforce ignored.
                         <help>Separate-account rate type</help>
                         <style>wxRA_SPECIFY_ROWS</style>
                         <content>
-                            <item helptext="Separate-account rate is net of investment management fee">Crediting rate</item>
-                            <item helptext="Separate-account rate is gross before investment management fee deduction">Gross rate</item>
-                            <item helptext="Separate-account rate is net of investment management fee">Net rate</item>
+                            <item helptext="Separate-account rate is net of M&amp;E charge and investment management fee">Net rate</item>
+                            <item helptext="Separate-account rate is gross before deduction of M&amp;E charge and investment management fee">Gross rate</item>
                         </content>
                     </object>
                 </object>

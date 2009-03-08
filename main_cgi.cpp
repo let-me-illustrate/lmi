@@ -31,7 +31,7 @@
 // other reasons evident in cvs or explained in 'ChangeLog'. Any
 // defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.40 2009-03-07 22:04:19 chicares Exp $
+// $Id: main_cgi.cpp,v 1.41 2009-03-08 20:14:45 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -140,8 +140,8 @@ int try_main(int argc, char* argv[])
         "&1035ExchangeIsMec=No"
         "&1035ExchangeBasis=0"
         "&GeneralAccountRate=.055"
-        "&GeneralAccountRateType=Net rate"
-//        "&SeparateAccountRateType=Net rate" // not used yet
+        "&GeneralAccountRateType=Credited rate"
+//        "&SeparateAccountRateType=Gross rate" // not used yet
         "&LoanRate=.055"
         "&LoanRateType=Fixed loan rate"
         "&Comments="

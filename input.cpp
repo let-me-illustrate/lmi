@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.41 2009-03-07 22:04:19 chicares Exp $
+// $Id: input.cpp,v 1.42 2009-03-08 20:14:44 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -73,7 +73,7 @@ Input::Input()
 //    ,SolveBasis                       ("")
 //    ,SolveSeparateAccountBasis        ("")
     ,UseCurrentDeclaredRate           ("Yes")
-//    ,GeneralAccountRateType           ("")
+//    ,GeneralAccountRateType           ("Credited rate")
     ,SeparateAccountRateType          ("Gross rate")
     ,LoanRate                         ("0.06")
 //    ,LoanRateType                     ("")
@@ -620,28 +620,8 @@ Input Input::magically_rectify(Input const& original)
         z["FundChoiceType"] = "Override fund";
         }
 
-    // Repair another problem in the legacy implementation.
-    if("Crediting rate" == z["GeneralAccountRateType"].str())
-        {
-        z["GeneralAccountRateType"] = "Net rate";
-        }
-    if("Crediting rate" == z["SeparateAccountRateType"].str())
-        {
-        z["SeparateAccountRateType"] = "Net rate";
-        }
-
     z.Reconcile(); // TODO ?? Necessary only for problematic old cases.
     z.RealizeAllSequenceInput();
-
-    // TODO ?? Do it again...only because certain testdecks are wrong?
-    if("Crediting rate" == z["GeneralAccountRateType"].str())
-        {
-        z["GeneralAccountRateType"] = "Net rate";
-        }
-    if("Crediting rate" == z["SeparateAccountRateType"].str())
-        {
-        z["SeparateAccountRateType"] = "Net rate";
-        }
 
     return z;
 }
