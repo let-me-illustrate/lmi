@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1271 2009-03-08 20:14:47 chicares Exp $
+// $Id: ChangeLog,v 1.1272 2009-03-09 00:27:28 chicares Exp $
 
 MAINTENANCE
 
@@ -22132,4 +22132,14 @@ Improve layout.
   skin.xrc
   yare_input.hpp
 Regenerate interest-rate types.
+
+20090309T0009Z <gchicares@sbcglobal.net> [794]
+
+  input_harmonization.cpp
+Rearrange.
+
+20090309T0027Z <gchicares@sbcglobal.net> [793]
+
+  input_harmonization.cpp
+Restrict reduce-premium-to-avoid-MEC option more carefully.
 
