@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.94 2009-03-09 00:09:46 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.95 2009-03-09 00:27:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -866,15 +866,10 @@ false // Silly workaround for now.
 
     SolveTargetCashSurrenderValue.enable(actually_solving && mce_solve_for_target == SolveTarget);
 
-    bool enable_reduce_to_avoid_mec = mce_solve_for_non_mec != SolveTarget;
-/* TODO ?? Want something like this?
     bool enable_reduce_to_avoid_mec =
-        (
-            SpecifiedAmountStrategyFromIssue == mce_sainputscalar
-        ||  SpecifiedAmountStrategyFromIssue == mce_sainputvector
-        ||  SpecifiedAmountStrategyFromIssue == mce_sa_salary
-        );
-*/
+            !(actually_solving && mce_solve_for_non_mec == SolveTarget)
+        &&  !specamt_indeterminate
+        ;
     AvoidMecMethod.allow(mce_reduce_prem, enable_reduce_to_avoid_mec);
 
     bool create_supplemental_report = "Yes" == CreateSupplementalReport;
