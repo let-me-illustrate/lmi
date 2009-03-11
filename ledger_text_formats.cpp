@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.62 2009-03-11 15:49:40 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.63 2009-03-11 15:51:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -321,7 +321,7 @@ std::string calculation_summary_formatter::format_as_html() const
     for(vsci i = columns_.begin(); i != columns_.end(); ++i)
         {
         ledger_metadata const& z = map_lookup(ledger_metadata_map(), *i);
-        oss << "<td valign=\"bottom\" width=\"" << width << "%\">" << z.legend_ << "</td>\n";
+        oss << "<td valign=\"bottom\" width=\"" << width << "%\">" << z.legend_ << " </td>\n";
         }
     oss << "</tr>\n";
 
