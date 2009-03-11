@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.128 2009-01-17 21:45:12 chicares Exp $
+// $Id: main_wx.cpp,v 1.129 2009-03-11 15:59:39 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -596,9 +596,9 @@ bool Skeleton::OnInit()
         // For GTK+, native theme takes precedence over local icons.
         // For other platforms, local icons take precedence.
 #if defined __WXGTK__
-        wxArtProvider::Insert(new(wx) icon_monger);
+        wxArtProvider::PushBack(new(wx) icon_monger);
 #else  // !defined __WXGTK__
-        wxArtProvider::Push  (new(wx) icon_monger);
+        wxArtProvider::Push    (new(wx) icon_monger);
 #endif // !defined __WXGTK__
 
         wxXmlResource& xml_resources = *wxXmlResource::Get();

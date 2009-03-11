@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1272 2009-03-09 00:27:28 chicares Exp $
+// $Id: ChangeLog,v 1.1273 2009-03-11 15:59:39 chicares Exp $
 
 MAINTENANCE
 
@@ -22142,4 +22142,23 @@ Rearrange.
 
   input_harmonization.cpp
 Restrict reduce-premium-to-avoid-MEC option more carefully.
+
+20090311T1549Z <gchicares@sbcglobal.net> [793]
+
+  ledger_text_formats.cpp
+Prevent boldface table headers in html calculation summary. See:
+  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00010.html
+
+20090311T1551Z <gchicares@sbcglobal.net> [793]
+
+  ledger_text_formats.cpp
+Adjust table header alignment in html calculation summary. See:
+  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00016.html
+  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00021.html
+
+20090311T1559Z <gchicares@sbcglobal.net> [793]
+
+  main_wx.cpp
+Replace a deprecated with a precated function (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00027.html
 
