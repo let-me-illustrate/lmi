@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_document.cpp,v 1.23 2008-12-27 02:56:44 chicares Exp $
+// $Id: illustration_document.cpp,v 1.24 2009-03-13 16:21:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -115,13 +115,24 @@ bool IllustrationDocument::OnCreate(wxString const& filename, long int flags)
     return wxDocument::OnCreate(filename, flags);
 }
 
-/// WX !! Oddly, wxDocument::OnNewDocument() calls OnSaveModified().
+#if !wxCHECK_VERSION(2,9,0)
+/// Formerly, wxDocument::OnNewDocument() called OnSaveModified().
 /// That would seem appropriate if an existing document were being
 /// overlaid, but the function is designed to create an entirely new
-/// document. It's a problem here because this class sets the dirty
+/// document. It was a problem here because this class sets the dirty
 /// flag earlier. wxDocument::OnNewDocument() also clears the dirty
 /// flag, but it seems more sensible to set it. For these and perhaps
 /// other reasons, the base-class function must not be called here.
+///
+/// Setting the dirty flag peremptorily here was intemperate. The
+/// behavior with wx-2.9 or later is preferable: the dirty flag is set
+/// iff any change is made, so that when no change is made...
+///   File | New | Illustration
+///   OK
+///   File | Close
+/// ...this messagebox...
+///   "Do you want to save changes to unnamed1?"
+/// is no longer presented.
 
 bool IllustrationDocument::OnNewDocument()
 {
@@ -139,6 +150,7 @@ bool IllustrationDocument::OnNewDocument()
 
     return true;
 }
+#endif // !wxCHECK_VERSION(2,9,0)
 
 /// Override wx's built-in file management: doc_ handles that.
 ///

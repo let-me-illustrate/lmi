@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_document.hpp,v 1.15 2008-12-27 02:56:44 chicares Exp $
+// $Id: illustration_document.hpp,v 1.16 2009-03-13 16:21:36 chicares Exp $
 
 #ifndef illustration_document_hpp
 #define illustration_document_hpp
@@ -66,7 +66,9 @@ class IllustrationDocument
 
     // wxDocument overrides.
     virtual bool OnCreate(wxString const& filename, long int flags);
+#if !wxCHECK_VERSION(2,9,0)
     virtual bool OnNewDocument();
+#endif // !wxCHECK_VERSION(2,9,0)
     virtual bool DoOpenDocument(wxString const& filename);
     virtual bool DoSaveDocument(wxString const& filename);
 
