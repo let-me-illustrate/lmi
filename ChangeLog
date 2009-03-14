@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1273 2009-03-11 15:59:39 chicares Exp $
+// $Id: ChangeLog,v 1.1274 2009-03-14 13:41:37 chicares Exp $
 
 MAINTENANCE
 
@@ -22161,4 +22161,29 @@ Adjust table header alignment in html calculation summary. See:
   main_wx.cpp
 Replace a deprecated with a precated function (VZ). See:
   http://lists.nongnu.org/archive/html/lmi/2009-03/msg00027.html
+
+20090313T1621Z <gchicares@sbcglobal.net> [793]
+
+  illustration_document.cpp
+  illustration_document.hpp
+Forestall an untimely save dialog (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00009.html
+
+20090314T0432Z <gchicares@sbcglobal.net> [793]
+
+  illustration_view.cpp
+Prevent view-creation exceptions from escaping to wx. See:
+  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00036.html
+
+20090314T1244Z <gchicares@sbcglobal.net> [793]
+
+  illustration_view.cpp
+Fix defect introduced 20081216T0228Z. An "html string" data member,
+'selected_values_as_html_', had been removed without also removing a
+worrisome warning about the consequences of failing to initialize it.
+
+20090314T1341Z <gchicares@sbcglobal.net> [791]
+
+  illustration_view.cpp
+Improve documentation, unmarking two pseudodefects.
 
