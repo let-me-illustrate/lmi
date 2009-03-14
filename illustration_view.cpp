@@ -19,13 +19,13 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.104 2009-03-14 12:44:17 chicares Exp $
+// $Id: illustration_view.cpp,v 1.105 2009-03-14 13:41:37 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
 // which is covered by the wxWindows license, and Julian Smart's
 // message here:
-// http://groups-beta.google.com/group/comp.soft-sys.wxwindows/msg/b05623f68906edbd
+//   http://groups.google.com/group/comp.soft-sys.wxwindows/msg/b05623f68906edbd
 //
 // The originals were modified by GWC in 2003 to create a standalone
 // view class customized for illustration documents, and in the later
@@ -141,12 +141,6 @@ warning() << "That command should have been disabled." << LMI_FLUSH;
         {
         if(edited_lmi_input != input_data())
             {
-/* TODO ?? Expunge this?
-            warning()
-                << input_data().differing_fields(edited_lmi_input)
-                << LMI_FLUSH
-                ;
-*/
             input_data() = edited_lmi_input;
             dirty = true;
             }
@@ -324,8 +318,11 @@ void IllustrationView::SetLedger(boost::shared_ptr<Ledger const> ledger)
     LMI_ASSERT(ledger_values_.get());
 }
 
-// This could be generalized as a function template if that ever
-// becomes useful.
+/// Create a phantom child document and an associated corporeal view.
+///
+/// This could be generalized as a function template if that ever
+/// becomes useful.
+
 IllustrationView& MakeNewIllustrationDocAndView
     (wxDocManager* dm
     ,char const*   filename
@@ -351,14 +348,22 @@ IllustrationView& MakeNewIllustrationDocAndView
     return illdoc.PredominantView();
 }
 
-// Must follow document-manager initialization.
-// Return value: prevent displaying GUI.
+/// Run an illustration from "custom" input.
+///
+/// The return value indicates whether to prevent displaying the GUI.
+///
+/// If the GUI is to be displayed, then an '.ill' extension is added
+/// to the output filename in order to force selection of the correct
+/// document template.
+///
+/// This must be called only after document-manager initialization.
+///
+/// Because this function may prevent the GUI from being displayed, it
+/// must trap and handle its own exceptions rather than letting them
+/// escape to wx.
+
 bool custom_io_0_run_if_file_exists(wxDocManager* dm)
 {
-// TODO ?? It's silly to write try...catch here, but the customer that
-// needs this is a thousand miles away, and wx still seems not to
-// handle exceptions well--an exception thrown here was demonstrably
-// unobservable without this extra work.
     try
         {
         if(custom_io_0_file_exists())
@@ -373,9 +378,6 @@ bool custom_io_0_run_if_file_exists(wxDocManager* dm)
             else
                 {
                 LMI_ASSERT(0 != dm);
-                // Add '.ill' extension to force use of the correct
-                // document template, even if the filename didn't
-                // match it.
                 IllustrationView& illview = MakeNewIllustrationDocAndView
                     (dm
                     ,(c.custom_output_filename() + ".ill").c_str()
