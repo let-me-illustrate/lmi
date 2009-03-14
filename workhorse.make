@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.135 2009-01-06 15:02:26 chicares Exp $
+# $Id: workhorse.make,v 1.136 2009-03-14 16:09:18 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -799,7 +799,7 @@ data_files := \
   $(wildcard $(addprefix $(src_dir)/,*.png *.xml *.xrc *.xsd *.xsl)) \
 
 help_files := \
-  $(wildcard $(addprefix $(htmldir)/,*.html *.hhc *.hhp)) \
+  $(wildcard $(addprefix $(htmldir)/,*.html)) \
 
 .PHONY: install
 install: $(default_targets)
