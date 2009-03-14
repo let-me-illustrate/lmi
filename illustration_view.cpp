@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.103 2009-03-14 04:32:20 chicares Exp $
+// $Id: illustration_view.cpp,v 1.104 2009-03-14 12:44:17 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -97,9 +97,6 @@ BEGIN_EVENT_TABLE(IllustrationView, ViewEx)
     EVT_UPDATE_UI(XRCID("column_width_fixed"   ),IllustrationView::UponUpdateInapplicable)
 END_EVENT_TABLE()
 
-// WX !! The html string must be initialized here, because passing an
-// empty string to wxHtmlWindow::SetPage() would crash the application.
-//
 IllustrationView::IllustrationView()
     :ViewEx                  ()
     ,html_window_            (0)
