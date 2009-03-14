@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.102 2009-01-06 15:01:22 chicares Exp $
+// $Id: illustration_view.cpp,v 1.103 2009-03-14 04:32:20 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -189,26 +189,28 @@ bool IllustrationView::OnCreate(wxDocument* doc, long int flags)
         return ViewEx::OnCreate(doc, flags);
         }
 
+    bool has_view_been_created = false;
     try
         {
         if(wxID_OK != EditProperties())
             {
-            return false;
+            return has_view_been_created;
             }
+
+        has_view_been_created = ViewEx::OnCreate(doc, flags);
+        if(!has_view_been_created)
+            {
+            return has_view_been_created;
+            }
+
+        Run();
         }
     catch(...)
         {
         report_exception();
-        return false;
         }
 
-    if(!ViewEx::OnCreate(doc, flags))
-        {
-        return false;
-        }
-
-    Run();
-    return true;
+    return has_view_been_created;
 }
 
 void IllustrationView::UponCopyFull(wxCommandEvent&)
