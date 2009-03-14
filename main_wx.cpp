@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.130 2009-03-14 16:09:17 chicares Exp $
+// $Id: main_wx.cpp,v 1.131 2009-03-14 17:31:55 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -511,6 +511,10 @@ void Skeleton::UponEditDefaultCell(wxCommandEvent&)
 ///
 /// If this changes the x86 floating-point control word, suppress the
 /// resulting diagnostic unless it changed to a really bizarre value.
+///
+/// If wxLaunchDefaultBrowser() fails, then it normally displays an
+/// error message of its own, which is suppressed here. See:
+///   http://lists.nongnu.org/archive/html/lmi/2009-03/msg00039.html
 
 void Skeleton::UponHelp(wxCommandEvent&)
 {
@@ -537,22 +541,27 @@ void Skeleton::UponHelp(wxCommandEvent&)
         s = canonical_url;
         }
 
-    if(!wxLaunchDefaultBrowser(s))
+    bool r = false;
+    {
+    wxLogNull x;
+    r = wxLaunchDefaultBrowser(s);
+    }
+    if(!r)
         {
-        warning()
+        fatal_error()
             << "Unable to open"
             << "\n    " << s
             << "\nin default browser."
             ;
         if(canonical_url != s)
             {
-            warning()
+            fatal_error()
                 << '\n'
                 << "\nThe user manual can be read online here:"
                 << "\n    " << canonical_url
                 ;
             }
-        warning() << std::flush;
+        fatal_error() << std::flush;
         }
 
     fenv_validate(e_fenv_indulge_0x027f);
