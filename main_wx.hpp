@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.hpp,v 1.31 2008-12-27 02:56:48 chicares Exp $
+// $Id: main_wx.hpp,v 1.32 2009-03-14 16:09:17 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.h (C) 1998 Julian Smart and Markus Holzem
@@ -51,7 +51,6 @@ class WXDLLIMPEXP_FWD_CORE wxDocMDIParentFrame;
 class WXDLLIMPEXP_FWD_CORE wxDocument;
 class WXDLLIMPEXP_FWD_CORE wxMDIChildFrame;
 class WXDLLIMPEXP_FWD_CORE wxMenuBar;
-class WXDLLIMPEXP_FWD_HTML wxHtmlHelpController;
 
 class Skeleton
     :public wxApp
@@ -125,7 +124,6 @@ class Skeleton
     wxConfigBase*         config_;
     DocManagerEx*         doc_manager_;
     wxDocMDIParentFrame*  frame_;
-    wxHtmlHelpController* help_controller_;
     wxTimer               timer_;
 
     DECLARE_EVENT_TABLE()
