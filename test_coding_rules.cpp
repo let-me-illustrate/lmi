@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.84 2009-02-08 15:19:13 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.85 2009-03-14 16:09:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -198,14 +198,12 @@ file::file(std::string const& file_path)
         : ".md5sums"    == extension() ? e_md5
         : ".patch"      == extension() ? e_patch
         : ".ac"         == extension() ? e_script
-        : ".hhp"        == extension() ? e_script
         : ".rc"         == extension() ? e_script
         : ".sed"        == extension() ? e_script
         : ".sh"         == extension() ? e_script
         : ".touchstone" == extension() ? e_touchstone
         : ".cns"        == extension() ? e_xml_input
         : ".ill"        == extension() ? e_xml_input
-        : ".hhc"        == extension() ? e_xml_other
         : ".xml"        == extension() ? e_xml_other
         : ".xrc"        == extension() ? e_xml_other
         : ".xsd"        == extension() ? e_xml_other

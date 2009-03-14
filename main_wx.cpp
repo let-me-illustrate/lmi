@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.129 2009-03-11 15:59:39 chicares Exp $
+// $Id: main_wx.cpp,v 1.130 2009-03-14 16:09:17 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -83,12 +83,13 @@
 #include "wx_new.hpp"
 #include "wx_utility.hpp"           // class ClipboardEx
 
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/path.hpp>
+
 #include <wx/artprov.h>
 #include <wx/config.h>
 #include <wx/cshelp.h>
 #include <wx/docmdi.h>
-#include <wx/filename.h>
-#include <wx/html/helpctrl.h>
 #include <wx/image.h>
 #include <wx/log.h>                 // wxSafeShowMessage()
 #include <wx/menu.h>
@@ -240,7 +241,6 @@ int WINAPI WinMain
 Skeleton::Skeleton()
     :doc_manager_     (0)
     ,frame_           (0)
-    ,help_controller_ (0)
     ,timer_           (this)
 {
     SetAppName("lmi_wx");
@@ -431,30 +431,13 @@ void Skeleton::InitDocManager()
 /// Contextual <help> elements in wxxrc files are made available by
 /// wxSimpleHelpProvider. No fancier version of that class is needed.
 ///
-/// html help files are made available by wxHtmlHelpController.
-/// Failure to load help files is not treated as a fatal error because
-/// the application behaves properly without them.
-///
-/// WX !! wxHtmlHelpController::AddBook() on msw does not accept a
-/// posix-style path, but wxFileName::wxFileName() does.
+/// An html user manual is displayed by wxLaunchDefaultBrowser(),
+/// which requires no initialization here.
 
 void Skeleton::InitHelp()
 {
     wxHelpProvider::Set(new(wx) wxSimpleHelpProvider);
     LMI_ASSERT(wxHelpProvider::Get());
-
-    int const html_help_style =
-          wxHF_TOOLBAR
-        | wxHF_CONTENTS
-//      | wxHF_INDEX     // Not implemented by lmi's user manual.
-        | wxHF_SEARCH
-//      | wxHF_BOOKMARKS // Not useful with lmi's user manual.
-        | wxHF_PRINT
-        ;
-    help_controller_ = new(wx) wxHtmlHelpController(html_help_style, frame_);
-    LMI_ASSERT(help_controller_);
-
-    help_controller_->AddBook(wxFileName(AddDataDir("user_manual.hhp")));
 }
 
 void Skeleton::InitIcon()
@@ -524,9 +507,55 @@ void Skeleton::UponEditDefaultCell(wxCommandEvent&)
         );
 }
 
+/// Display user manual in default browser.
+///
+/// If this changes the x86 floating-point control word, suppress the
+/// resulting diagnostic unless it changed to a really bizarre value.
+
 void Skeleton::UponHelp(wxCommandEvent&)
 {
-    help_controller_->DisplayContents();
+    fenv_guard fg;
+
+    std::string const canonical_url("http://lmi.nongnu.org/user_manual.html");
+
+    std::string s(AddDataDir("user_manual.html"));
+    fs::path p(fs::system_complete(fs::path(s)));
+    if(fs::exists(p))
+        {
+        s = "file://" + p.native_file_string();
+        }
+    else
+        {
+        warning()
+            << "A local copy of the user manual should have been placed here:"
+            << "\n    " << p.native_file_string()
+            << "\nbut was not. Try reinstalling."
+            << '\n'
+            << "\nMeanwhile, the online user manual will be used if possible."
+            << std::flush
+            ;
+        s = canonical_url;
+        }
+
+    if(!wxLaunchDefaultBrowser(s))
+        {
+        warning()
+            << "Unable to open"
+            << "\n    " << s
+            << "\nin default browser."
+            ;
+        if(canonical_url != s)
+            {
+            warning()
+                << '\n'
+                << "\nThe user manual can be read online here:"
+                << "\n    " << canonical_url
+                ;
+            }
+        warning() << std::flush;
+        }
+
+    fenv_validate(e_fenv_indulge_0x027f);
 }
 
 /// Rethrow an exception caught by wx into a local catch clause.
@@ -568,7 +597,6 @@ bool Skeleton::OnExceptionInMainLoop()
 int Skeleton::OnExit()
 {
     doc_manager_->FileHistorySave(*config_);
-    delete help_controller_;
     delete doc_manager_;
     delete config_;
     return 0;
