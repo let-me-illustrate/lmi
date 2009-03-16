@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1275 2009-03-16 03:03:25 chicares Exp $
+// $Id: ChangeLog,v 1.1276 2009-03-16 22:47:32 chicares Exp $
 
 MAINTENANCE
 
@@ -22212,4 +22212,19 @@ little sense; besides, as heretofore implemented, it failed.
   input_harmonization.cpp
 Limit solve ages. See:
   http://lists.nongnu.org/archive/html/lmi/2009-03/msg00053.html
+
+20090316T2243Z <gchicares@sbcglobal.net> [791]
+
+  skin.xrc
+Add riders.
+
+20090316T2244Z <gchicares@sbcglobal.net> [790]
+
+  input_harmonization.cpp
+Improve conditional enablement of rider fields.
+
+20090316T2247Z <gchicares@sbcglobal.net> [789]
+
+  input_harmonization.cpp
+Remove an apparently-invalid defect marker.
 

@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.98 2009-03-16 22:44:18 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.99 2009-03-16 22:47:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -748,19 +748,6 @@ false // Silly workaround for now.
     WaiverOfPremiumBenefit.allow(mce_yes, database_->Query(DB_AllowWP));
     AccidentalDeathBenefit.enable(        database_->Query(DB_AllowADD));
     AccidentalDeathBenefit.allow(mce_yes, database_->Query(DB_AllowADD));
-
-    // TODO ?? Logic differs from term rider handling above.
-    // Which is better? Check it out. For term, choose a policy
-    // form that allows term, elect the term rider, and fill in
-    // a nonzero amount; then change to a policy form that does
-    // not allow term, and return to the rider tab: the term
-    // amount has been changed to zero. For spouse or child,
-    // the amount is left as it was, but grayed out. I believe
-    // the latter behavior is better, but I hesitate to change
-    // the code above for term rider, because I don't know
-    // whether a nonzero amount for a nonelected rider has any
-    // actual effect (it shouldn't, but I don't know what really
-    // happens).
 
     ChildRider       .enable(        database_->Query(DB_AllowChild));
     ChildRider       .allow(mce_yes, database_->Query(DB_AllowChild));
