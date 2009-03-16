@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1274 2009-03-14 13:41:37 chicares Exp $
+// $Id: ChangeLog,v 1.1275 2009-03-16 03:03:25 chicares Exp $
 
 MAINTENANCE
 
@@ -22186,4 +22186,30 @@ worrisome warning about the consequences of failing to initialize it.
 
   illustration_view.cpp
 Improve documentation, unmarking two pseudodefects.
+
+20090314T1609Z <gchicares@sbcglobal.net> [791]
+
+  main_wx.cpp
+  main_wx.hpp
+  test_coding_rules.cpp
+  workhorse.make
+Use default browser instead of wxHtmlHelpController for user manual.
+
+20090314T1731Z <gchicares@sbcglobal.net> [791]
+
+  main_wx.cpp
+Suppress a wx error message in favor of lmi's own alternative.
+
+20090316T0040Z <gchicares@sbcglobal.net> [791]
+
+  input_harmonization.cpp
+Forbid selection of bases for non-MEC solves. There being only one MEC
+status for all bases, MEC avoidance on, say, a guaranteed basis makes
+little sense; besides, as heretofore implemented, it failed.
+
+20090316T0303Z <gchicares@sbcglobal.net> [791]
+
+  input_harmonization.cpp
+Limit solve ages. See:
+  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00053.html
 

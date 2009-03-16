@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.96 2009-03-16 00:40:27 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.97 2009-03-16 03:03:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -37,6 +37,8 @@
 #include "input_sequence.hpp"
 #include "mc_enum_types_aux.hpp"
 #include "value_cast.hpp"
+
+#include <algorithm> // std::min(), std::max()
 
 // Harmonization is physically separated for no better reason than to
 // facilitate its development at a time when it frequently changes.
@@ -1078,6 +1080,12 @@ void Input::SetSolveDurations()
                 ;
             }
         }
+
+    // Remove the following three lines (and <algorithm>) after fixing this:
+    //   http://lists.nongnu.org/archive/html/lmi/2008-08/msg00036.html
+    SolveTargetYear = std::max(0, std::min(years_to_maturity(), SolveTargetYear.value()));
+    SolveBeginYear  = std::max(0, std::min(years_to_maturity(), SolveBeginYear .value()));
+    SolveEndYear    = std::max(0, std::min(years_to_maturity(), SolveEndYear   .value()));
 
     SolveTargetTime = issue_age() + SolveTargetYear.value();
     SolveBeginTime  = issue_age() + SolveBeginYear .value();
