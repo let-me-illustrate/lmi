@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.97 2009-03-16 03:03:25 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.98 2009-03-16 22:44:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -725,36 +725,29 @@ false // Silly workaround for now.
     LoanToDuration     .enable(!loan_inhibit_simple && mce_to_year   == LoanToAlternative);
 
     TermRider.enable(database_->Query(DB_AllowTerm));
+    TermRider.allow(mce_yes, database_->Query(DB_AllowTerm));
 
     bool enable_term = "Yes" == TermRider;
-
-    TermAdjustmentMethod.allow(mce_adjust_base, enable_term);
-    TermAdjustmentMethod.allow(mce_adjust_term, enable_term);
-    TermAdjustmentMethod.allow(mce_adjust_both, enable_term);
-
-/* TODO ??
-      bool specamt_indeterminate_for_term =
+    bool specamt_indeterminate_for_term =
            mce_solve_specamt == SolveType
         || mce_sa_input_scalar != SpecifiedAmountStrategyFromIssue
         ;
 
     TermRiderUseProportion.enable(enable_term && !specamt_indeterminate_for_term);
+    TermRiderUseProportion.allow(mce_yes, !specamt_indeterminate_for_term);
+    bool term_is_proportional = mce_yes == TermRiderUseProportion;
+    TermRiderAmount     .enable(enable_term && !term_is_proportional);
+    TotalSpecifiedAmount.enable(enable_term &&  term_is_proportional);
+    TermRiderProportion .enable(enable_term &&  term_is_proportional);
 
-    if(specamt_indeterminate_for_term && "Yes" == TermRiderUseProportion)
-        {
-        TERM_USE_AMOUNT     ->SetCheck(BF_CHECKED);
-        }
-    TERM_USE_AMOUNT     ->EnableWindow(enable_term);
+    TermAdjustmentMethod.allow(mce_adjust_base, enable_term);
+    TermAdjustmentMethod.allow(mce_adjust_term, enable_term);
+    TermAdjustmentMethod.allow(mce_adjust_both, enable_term);
 
-    bool term_use_amount = BF_CHECKED == TERM_USE_AMOUNT->GetCheck();
-    LMI_ASSERT(term_use_amount || BF_CHECKED == TermRiderUseProportion->GetCheck());
-    TERM_SPECAMT        ->EnableWindow(enable_term &&  term_use_amount);
-    TotalSpecifiedAmount       ->EnableWindow(enable_term && !term_use_amount);
-    TERM_PROPORTION     ->EnableWindow(enable_term && !term_use_amount);
-*/
-
-    WaiverOfPremiumBenefit.enable(database_->Query(DB_AllowWP));
-    AccidentalDeathBenefit.enable(database_->Query(DB_AllowADD));
+    WaiverOfPremiumBenefit.enable(        database_->Query(DB_AllowWP));
+    WaiverOfPremiumBenefit.allow(mce_yes, database_->Query(DB_AllowWP));
+    AccidentalDeathBenefit.enable(        database_->Query(DB_AllowADD));
+    AccidentalDeathBenefit.allow(mce_yes, database_->Query(DB_AllowADD));
 
     // TODO ?? Logic differs from term rider handling above.
     // Which is better? Check it out. For term, choose a policy
@@ -769,13 +762,24 @@ false // Silly workaround for now.
     // actual effect (it shouldn't, but I don't know what really
     // happens).
 
-    ChildRider       .enable(database_->Query(DB_AllowChild));
+    ChildRider       .enable(        database_->Query(DB_AllowChild));
+    ChildRider       .allow(mce_yes, database_->Query(DB_AllowChild));
     ChildRiderAmount .enable("Yes" == ChildRider);
-    SpouseRider      .enable(database_->Query(DB_AllowSpouse));
+    SpouseRider      .enable(        database_->Query(DB_AllowSpouse));
+    SpouseRider      .allow(mce_yes, database_->Query(DB_AllowSpouse));
     SpouseRiderAmount.enable("Yes" == SpouseRider);
     SpouseIssueAge   .enable("Yes" == SpouseRider);
+#if 0
+// DATABASE !! Add spouse minimum and maximum issue ages, as well as
+// minimum and maximum amounts for both spouse and child.
+    SpouseIssueAge.minimum_and_maximum
+        (static_cast<int>(database_->Query(DB_MinIssAge))
+        ,static_cast<int>(database_->Query(DB_MaxIssAge))
+        );
+#endif // 0
 
-    HoneymoonEndorsement .enable(database_->Query(DB_AllowHoneymoon));
+    HoneymoonEndorsement .enable(        database_->Query(DB_AllowHoneymoon));
+    HoneymoonEndorsement .allow(mce_yes, database_->Query(DB_AllowHoneymoon));
     PostHoneymoonSpread  .enable("Yes" == HoneymoonEndorsement);
     HoneymoonValueSpread .enable("Yes" == HoneymoonEndorsement);
     InforceHoneymoonValue.enable("Yes" == HoneymoonEndorsement);
