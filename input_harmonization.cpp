@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.95 2009-03-09 00:27:28 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.96 2009-03-16 00:40:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -854,12 +854,12 @@ false // Silly workaround for now.
     SolveTarget.allow(mce_solve_for_tax_basis, actually_solving);
     SolveTarget.allow(mce_solve_for_non_mec  , actually_solving && mce_solve_loan != SolveType);
 
-    SolveBasis .enable(actually_solving);
+    SolveBasis .enable(actually_solving && mce_solve_for_non_mec != SolveTarget);
     SolveBasis .allow(mce_gen_curr, actually_solving);
     SolveBasis .allow(mce_gen_guar, actually_solving);
     SolveBasis .allow(mce_gen_mdpt, actually_solving && is_subject_to_ill_reg(GleanedLedgerType_));
 
-    SolveSeparateAccountBasis.enable(actually_solving);
+    SolveSeparateAccountBasis.enable(actually_solving && mce_solve_for_non_mec != SolveTarget);
     SolveSeparateAccountBasis.allow(mce_sep_full, actually_solving);
     SolveSeparateAccountBasis.allow(mce_sep_zero, actually_solving && allow_sep_acct);
     SolveSeparateAccountBasis.allow(mce_sep_half, actually_solving && allow_sep_acct && is_three_rate_nasd(GleanedLedgerType_));
