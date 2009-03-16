@@ -24,7 +24,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin.xrc,v 1.23 2009-03-08 20:14:46 chicares Exp $
+    $Id: skin.xrc,v 1.24 2009-03-16 22:43:16 chicares Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -2238,7 +2238,7 @@ the other is perforce ignored.
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
-                                        <!-- No label, by design. -->
+                                        <!-- Spacer: no label, by design. -->
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -2644,46 +2644,379 @@ the other is perforce ignored.
 
 <object class="wxPanel" name="rider_panel">
     <object class="wxFlexGridSizer">
-        <cols>1</cols>
-        <growablecols>0</growablecols>
+        <cols>2</cols>
+        <growablecols>0,1</growablecols>
         <growablerows>0</growablerows>
         <object class="sizeritem">
             <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
-            <border>4</border>
             <object class="wxFlexGridSizer">
-                <rows>1</rows>
-                <growablecols>1</growablecols>
+                <cols>1</cols>
+                <growablecols>0</growablecols>
+                <growablerows>0,1,2,3</growablerows>
+                <flag>wxGROW|wxALIGN_LEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>4</border>
+                <!-- waiver -->
                 <object class="sizeritem">
-                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                     <border>4</border>
-                    <object class="wxCheckBox" name="WaiverOfPremiumBenefit">
-                        <help>Waiver</help>
+                    <object class="wxStaticBoxSizer">
+                        <flag>wxGROW|wxALL</flag>
+                        <orient>wxVERTICAL</orient>
                         <label>Waiver</label>
+                        <object class="sizeritem">
+                            <flag>wxGROW|wxALL</flag>
+                            <border>2</border>
+                            <object class="wxFlexGridSizer">
+                                <rows>1</rows>
+                                <growablecols>1</growablecols>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxCheckBox" name="WaiverOfPremiumBenefit">
+                                        <help>Waiver</help>
+                                        <label>Elected</label>
+                                    </object>
+                                </object>
+<!-- Rated waiver not yet supported.
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Rating</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxGROW</flag>
+                                    <object class="wxComboBox" name="waiver_rating">
+                                        <help>Waiver rating</help>
+                                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                                        <selection>0</selection>
+                                        <content>
+                                            <item>none</item>
+                                        </content>
+                                    </object>
+                                </object>
+-->
+                            </object>
+                        </object>
                     </object>
                 </object>
+                <!-- accident benefit -->
                 <object class="sizeritem">
-                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                     <border>4</border>
-                    <object class="wxStaticText">
-                        <label> rating </label>
+                    <object class="wxStaticBoxSizer">
+                        <flag>wxGROW|wxALL</flag>
+                        <orient>wxVERTICAL</orient>
+                        <label>Accidental death benefit</label>
+                        <object class="sizeritem">
+                            <flag>wxGROW|wxALL</flag>
+                            <border>2</border>
+                            <object class="wxFlexGridSizer">
+                                <rows>1</rows>
+                                <growablecols>1</growablecols>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxCheckBox" name="AccidentalDeathBenefit">
+                                        <help>Accidental death benefit</help>
+                                        <label>Elected</label>
+                                    </object>
+                                </object>
+<!-- Rated ADB not yet supported.
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Rating</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxGROW</flag>
+                                    <object class="wxComboBox" name="adb_rating">
+                                        <help>Accident benefit rating</help>
+                                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                                        <selection>0</selection>
+                                        <content>
+                                            <item>none</item>
+                                        </content>
+                                    </object>
+                                </object>
+-->
+                            </object>
+                        </object>
                     </object>
                 </object>
+                <!-- spouse rider -->
                 <object class="sizeritem">
-                    <flag>wxGROW</flag>
-                    <object class="wxComboBox" name="waiver_rating">
-                        <help>Waiver rating</help>
-                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
-                        <selection>0</selection>
-                        <content>
-                            <item>none</item>
-                        </content>
-                    </object>
-                </object>
-                <object class="sizeritem">
-                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                     <border>4</border>
-                    <object class="wxStaticText">
-                        <label>[NEEDS WORK]</label>
+                    <object class="wxStaticBoxSizer">
+                        <flag>wxGROW|wxALL</flag>
+                        <orient>wxVERTICAL</orient>
+                        <label>Spouse rider</label>
+                        <object class="sizeritem">
+                            <flag>wxGROW|wxALL</flag>
+                            <border>2</border>
+                            <object class="wxFlexGridSizer">
+                                <rows>1</rows>
+                                <growablecols>1,2,3</growablecols>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxCheckBox" name="SpouseRider">
+                                        <help>Spouse rider</help>
+                                        <label>Elected</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Amount</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxGROW</flag>
+                                    <border>4</border>
+                                    <object class="wxTextCtrl" name="SpouseRiderAmount">
+                                        <help>Spouse rider amount</help>
+                                        <size>60,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Issue age</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxGROW</flag>
+                                    <border>4</border>
+                                    <object class="wxSpinCtrl" name="SpouseIssueAge">
+                                        <help>Spouse's Insurance age on date of issue</help>
+                                        <size>50,-1</size>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+                <!-- child rider -->
+                <object class="sizeritem">
+                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <border>4</border>
+                    <object class="wxStaticBoxSizer">
+                        <flag>wxGROW|wxALL</flag>
+                        <orient>wxVERTICAL</orient>
+                        <label>Child rider</label>
+                        <object class="sizeritem">
+                            <flag>wxGROW|wxALL</flag>
+                            <border>2</border>
+                            <object class="wxFlexGridSizer">
+                                <rows>1</rows>
+                                <growablecols>1</growablecols>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxCheckBox" name="ChildRider">
+                                        <help>Child rider</help>
+                                        <label>Elected</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Amount</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxGROW</flag>
+                                    <border>4</border>
+                                    <object class="wxTextCtrl" name="ChildRiderAmount">
+                                        <help>Child rider amount</help>
+                                        <size>60,-1</size>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <object class="wxFlexGridSizer">
+                <cols>1</cols>
+                <growablecols>0</growablecols>
+                <growablerows>0,1</growablerows>
+                <flag>wxGROW|wxALIGN_RIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>4</border>
+                <!-- term rider -->
+                <object class="sizeritem">
+                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <border>4</border>
+                    <object class="wxStaticBoxSizer">
+                        <flag>wxGROW|wxALL</flag>
+                        <orient>wxVERTICAL</orient>
+                        <label>Term rider</label>
+                        <object class="sizeritem">
+                            <flag>wxGROW|wxALL</flag>
+                            <border>2</border>
+                            <object class="wxFlexGridSizer">
+                                <cols>2</cols>
+                                <growablecols>1</growablecols>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxCheckBox" name="TermRider">
+                                        <help>Term rider</help>
+                                        <label>Elected</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Initial specified amount</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Term only</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxGROW</flag>
+                                    <border>4</border>
+                                    <object class="wxTextCtrl" name="TermRiderAmount">
+                                        <help>Term rider initial specified amount</help>
+                                        <size>60,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Term + base</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxGROW</flag>
+                                    <border>4</border>
+                                    <object class="wxTextCtrl" name="TotalSpecifiedAmount">
+                                        <help>Total term + base initial specified amount</help>
+                                        <size>60,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxCheckBox" name="TermRiderUseProportion">
+                                        <help>Express term as a proportion of term + base</help>
+                                        <label>Use proportion</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxGROW</flag>
+                                    <border>4</border>
+                                    <object class="wxTextCtrl" name="TermRiderProportion">
+                                        <help>Ratio of term to term + base initial specified amount</help>
+                                        <size>60,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <!-- Spacer: no label, by design. -->
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
+                                    <border>0</border>
+                                    <object class="wxRadioBox" name="TermAdjustmentMethod">
+                                        <help>Method for changes in specified amount</help>
+                                        <style>wxRA_SPECIFY_COLS</style>
+                                        <label>Specified-amount changes</label>
+                                        <dimension>1</dimension>
+                                        <selection>0</selection>
+                                        <content>
+                                            <item helptext="Apply changes in specified amount to base first">Adjust base first</item>
+                                            <item helptext="Apply changes in specified amount to term first">Adjust term first</item>
+                                            <item helptext="Apply changes in specified amount to term and base proportionately">Adjust base and term proportionately</item>
+                                        </content>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+                <!-- honeymoon endorsement -->
+                <object class="sizeritem">
+                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <border>4</border>
+                    <object class="wxStaticBoxSizer">
+                        <flag>wxGROW|wxALL</flag>
+                        <orient>wxVERTICAL</orient>
+                        <label>Honeymoon</label>
+                        <object class="sizeritem">
+                            <flag>wxGROW|wxALL</flag>
+                            <border>2</border>
+                            <object class="wxFlexGridSizer">
+                                <cols>2</cols>
+                                <growablecols>1</growablecols>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxCheckBox" name="HoneymoonEndorsement">
+                                        <help>Honeymoon endorsement</help>
+                                        <label>Elected</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <!-- Spacer: no label, by design. -->
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Honeymoon-value spread</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxGROW</flag>
+                                    <border>4</border>
+                                    <object class="wxTextCtrl" name="HoneymoonValueSpread">
+                                        <help>Spread for honeymoon value</help>
+                                        <size>60,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Post-honeymoon spread</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxGROW</flag>
+                                    <border>4</border>
+                                    <object class="wxTextCtrl" name="PostHoneymoonSpread">
+                                        <help>Extra spread charged after honeymoon expires</help>
+                                        <size>60,-1</size>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
                     </object>
                 </object>
             </object>
