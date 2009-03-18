@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: icon_monger.cpp,v 1.15 2009-03-18 14:53:14 chicares Exp $
+// $Id: icon_monger.cpp,v 1.16 2009-03-18 19:23:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -93,11 +93,7 @@ wxSize desired_icon_size
 ///   wxART_FOO_BAR --> foo-bar.png    [default size]
 ///   wxART_FOO_BAR --> foo-bar-16.png [16 pixels square]
 ///
-/// First, if the icon sought is known to be used only by wx html help
-/// and is not provided by lmi, then return a null bitmap, causing wx
-/// to use its own builtin icon.
-///
-/// Otherwise, try to find an icon of the requested size. If none is
+/// First, try to find an icon of the requested size. If none is
 /// found, then try to find an icon of default size and scale it--but
 /// complain even if that succeeds, because the result of scaling may
 /// be quite unappealing.
@@ -111,25 +107,6 @@ wxBitmap icon_monger::CreateBitmap
     ,wxSize const&      size
     )
 {
-    bool is_used_only_by_wx_html_help =
-           wxART_ADD_BOOKMARK    == id
-        || wxART_DEL_BOOKMARK    == id
-        || wxART_GO_BACK         == id
-        || wxART_GO_DOWN         == id
-        || wxART_GO_FORWARD      == id
-        || wxART_GO_TO_PARENT    == id
-        || wxART_GO_UP           == id
-        || wxART_HELP_BOOK       == id
-        || wxART_HELP_FOLDER     == id
-        || wxART_HELP_PAGE       == id
-        || wxART_HELP_SETTINGS   == id
-        || wxART_HELP_SIDE_PANEL == id
-        ;
-    if(is_used_only_by_wx_html_help)
-        {
-        return wxNullBitmap;
-        }
-
     std::string icon_name(id.c_str());
     bool is_builtin = 0 == icon_name.find("wxART_");
     if(is_builtin)
