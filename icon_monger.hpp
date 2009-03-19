@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: icon_monger.hpp,v 1.6 2008-12-27 02:56:42 chicares Exp $
+// $Id: icon_monger.hpp,v 1.7 2009-03-19 10:19:23 chicares Exp $
 
 #ifndef icon_monger_hpp
 #define icon_monger_hpp
@@ -31,6 +31,7 @@
 #include <wx/artprov.h>
 
 #include <map>
+#include <set>
 #include <string>
 
 /// Icon provider for wx interface.
@@ -52,6 +53,7 @@ class icon_monger
         );
 
     std::map<wxArtID,std::string> icon_names_by_wx_id_;
+    std::set<std::string>         lmi_specific_icon_names_;
 };
 
 #endif // icon_monger_hpp

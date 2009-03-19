@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1276 2009-03-16 22:47:32 chicares Exp $
+// $Id: ChangeLog,v 1.1277 2009-03-19 10:19:23 chicares Exp $
 
 MAINTENANCE
 
@@ -22227,4 +22227,30 @@ Improve conditional enablement of rider fields.
 
   input_harmonization.cpp
 Remove an apparently-invalid defect marker.
+
+20090318T1453Z <gchicares@sbcglobal.net> [789]
+
+  icon_monger.cpp
+Revert the 20090117T2144Z change, which is no longer needed. The
+20090314T1609Z change makes it unnecessary.
+
+20090318T1923Z <gchicares@sbcglobal.net> [789]
+
+  icon_monger.cpp
+Revert a part of the 20090115T1943Z change that is no longer needed
+because of the 20090314T1609Z change.
+
+20090319T0026Z <gchicares@sbcglobal.net> [789]
+
+  icon_monger.cpp
+Revert the 20090112T1910Z change. Soon, any msw theme clash will be
+diagnosed in a different way. See:
+  http://lists.nongnu.org/archive/html/lmi/2009-01/msg00006.html
+
+20090319T1019Z <gchicares@sbcglobal.net> [789]
+
+  icon_monger.cpp
+  icon_monger.hpp
+Improve diagnostics (using VS's ideas). See:
+  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00061.html
 
