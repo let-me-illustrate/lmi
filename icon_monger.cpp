@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: icon_monger.cpp,v 1.17 2009-03-19 00:26:33 chicares Exp $
+// $Id: icon_monger.cpp,v 1.18 2009-03-19 10:19:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -39,12 +39,33 @@
 
 #include <sstream>
 
-/// Map 'wxART_' id's to icon names.
+namespace
+{
+// SOMEDAY !! Write a "contains.hpp" header that implements this
+// function for every standard container as well as std::string.
+// Rationale: this usage represents half of our find() calls, and
+// the idiom is verbose.
+template<typename Key, typename Compare, typename Allocator>
+bool contains(std::set<Key,Compare,Allocator> const& c, Key const& k)
+{
+    return c.end() != c.find(k);
+}
+} // Unnamed namespace.
+
+/// Enumerate lmi icon names; map 'wxART_' id's to icon names.
 ///
-/// Statements are ordered by icon name, not by 'wxART_' id.
+/// The wxART mapping permits the use of simpler gnome-standard names:
+/// e.g., "copy" rather than "wxART_COPY".
+///
+/// Typically, only one instance of this class would be created, in a
+/// wxApp::OnInit() override. Creating more than one instance is safe,
+/// though, and needn't be guarded against. Speed being insignificant,
+/// associative-container members are populated directly here; there's
+/// no compelling reason to make them static.
 
 icon_monger::icon_monger()
 {
+    // Statements are ordered by icon name, not by 'wxART_' id.
     icon_names_by_wx_id_[wxART_COPY        ] = "copy"   ;
     icon_names_by_wx_id_[wxART_QUIT        ] = "exit"   ;
     icon_names_by_wx_id_[wxART_HELP        ] = "help"   ;
@@ -53,6 +74,46 @@ icon_monger::icon_monger()
     icon_names_by_wx_id_[wxART_PRINT       ] = "print"  ;
     icon_names_by_wx_id_[wxART_FILE_SAVE   ] = "save"   ;
     icon_names_by_wx_id_[wxART_FILE_SAVE_AS] = "save-as";
+
+#if defined LMI_MSW
+    // Stock icons explicitly provided by lmi, for msw only; for gtk,
+    // themes would control.
+    lmi_specific_icon_names_.insert("about"        );
+    lmi_specific_icon_names_.insert("close"        );
+    lmi_specific_icon_names_.insert("copy"         );
+    lmi_specific_icon_names_.insert("delete-row"   );
+    lmi_specific_icon_names_.insert("exit"         );
+    lmi_specific_icon_names_.insert("help"         );
+    lmi_specific_icon_names_.insert("insert-rows"  );
+    lmi_specific_icon_names_.insert("new"          );
+    lmi_specific_icon_names_.insert("open"         );
+    lmi_specific_icon_names_.insert("print"        );
+    lmi_specific_icon_names_.insert("print-options");
+    lmi_specific_icon_names_.insert("print-preview");
+    lmi_specific_icon_names_.insert("save"         );
+    lmi_specific_icon_names_.insert("save-as"      );
+    lmi_specific_icon_names_.insert("save-pdf"     );
+#endif // defined LMI_MSW
+
+    // Non-stock icons.
+    lmi_specific_icon_names_.insert("copy-cell"               );
+    lmi_specific_icon_names_.insert("default-cell"            );
+    lmi_specific_icon_names_.insert("edit-case"               );
+    lmi_specific_icon_names_.insert("edit-cell"               );
+    lmi_specific_icon_names_.insert("edit-class"              );
+    lmi_specific_icon_names_.insert("fixed-width"             );
+    lmi_specific_icon_names_.insert("paste-case"              );
+    lmi_specific_icon_names_.insert("preferences"             );
+    lmi_specific_icon_names_.insert("print-case"              );
+    lmi_specific_icon_names_.insert("run-case"                );
+    lmi_specific_icon_names_.insert("run-cell"                );
+    lmi_specific_icon_names_.insert("varying-width"           );
+    lmi_specific_icon_names_.insert("window-cascade"          );
+    lmi_specific_icon_names_.insert("window-next"             );
+    lmi_specific_icon_names_.insert("window-previous"         );
+    lmi_specific_icon_names_.insert("window-tile-horizontally");
+    lmi_specific_icon_names_.insert("window-tile-vertically"  );
+    lmi_specific_icon_names_.insert("write-spreadsheet"       );
 }
 
 icon_monger::~icon_monger()
@@ -88,7 +149,7 @@ wxSize desired_icon_size
 
 /// Provide the most suitable icon in the given context.
 ///
-/// Builtin wxArtID values are converted to fitting filenames, e.g.:
+/// Convert builtin wxArtID values to fitting filenames, e.g.:
 ///   wxART_FOO_BAR --> foo-bar.png    [default size]
 ///   wxART_FOO_BAR --> foo-bar-16.png [16 pixels square]
 ///
@@ -131,16 +192,33 @@ wxBitmap icon_monger::CreateBitmap
         }
     if(!fs::exists(icon_path))
         {
-        if(!is_builtin)
+        if(!contains(lmi_specific_icon_names_, icon_name))
+            {
+            return wxNullBitmap;
+            }
+        else if(is_builtin)
             {
             warning()
-                << "Unable to find '"
+                << "Unable to find icon '"
                 << icon_path.string()
                 << "'. Try reinstalling."
+                << "\nA builtin alternative will be used instead,"
+                << " but it may be visually jarring."
                 << LMI_FLUSH
                 ;
+            return wxNullBitmap;
             }
-        return wxNullBitmap;
+        else
+            {
+            warning()
+                << "Unable to find icon '"
+                << icon_path.string()
+                << "'. Try reinstalling."
+                << "\nA blank icon will be used instead."
+                << LMI_FLUSH
+                ;
+            return wxNullBitmap;
+            }
         }
 
     wxImage image(icon_path.string().c_str(), wxBITMAP_TYPE_PNG);
