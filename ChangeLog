@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1277 2009-03-19 10:19:23 chicares Exp $
+// $Id: ChangeLog,v 1.1278 2009-03-20 04:49:41 chicares Exp $
 
 MAINTENANCE
 
@@ -22253,4 +22253,10 @@ diagnosed in a different way. See:
   icon_monger.hpp
 Improve diagnostics (using VS's ideas). See:
   http://lists.nongnu.org/archive/html/lmi/2009-03/msg00061.html
+
+20090320T0449Z <gchicares@sbcglobal.net> [789]
+
+  actuarial_table_test.cpp
+Make a unit test more robust by specifying binary mode explicitly.
+Updating a data file broke a test that didn't specify file mode.
 

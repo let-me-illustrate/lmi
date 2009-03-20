@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.54 2009-02-28 13:47:13 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.55 2009-03-20 04:49:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,6 +29,7 @@
 #include "actuarial_table.hpp"
 
 #include "assert_lmi.hpp"
+#include "miscellany.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
 
@@ -257,8 +258,8 @@ void test_precondition_failures()
          " Try reinstalling."
         );
 
-    std::ifstream ifs((qx_cso + ".ndx").c_str());
-    std::ofstream ofs("eraseme.ndx");
+    std::ifstream ifs((qx_cso + ".ndx").c_str(), ios_in_binary());
+    std::ofstream ofs("eraseme.ndx", ios_out_trunc_binary());
     ofs << ifs.rdbuf();
     ofs.close();
     BOOST_TEST_THROW
