@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1278 2009-03-20 04:49:41 chicares Exp $
+// $Id: ChangeLog,v 1.1279 2009-03-20 13:42:24 wboutin Exp $
 
 MAINTENANCE
 
@@ -22259,4 +22259,11 @@ Improve diagnostics (using VS's ideas). See:
   actuarial_table_test.cpp
 Make a unit test more robust by specifying binary mode explicitly.
 Updating a data file broke a test that didn't specify file mode.
+
+20090320T1342Z <wboutin@massmutual.com> [788]
+
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_reg_d.xrc
+Rectify 20090307T2204Z antic enumerative names.
 
