@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.42 2009-03-08 20:14:44 chicares Exp $
+// $Id: input.cpp,v 1.43 2009-03-21 14:43:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -622,6 +622,7 @@ Input Input::magically_rectify(Input const& original)
 
     z.Reconcile(); // TODO ?? Necessary only for problematic old cases.
     z.RealizeAllSequenceInput();
+    z.make_term_rider_consistent();
 
     return z;
 }
