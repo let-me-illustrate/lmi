@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_realization.cpp,v 1.17 2009-03-02 06:28:34 chicares Exp $
+// $Id: input_realization.cpp,v 1.18 2009-03-21 18:27:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1033,14 +1033,6 @@ void Input::make_term_rider_consistent(bool aggressively)
             {
             double base_spec_amt = total_spec_amt - term_spec_amt;
             SpecifiedAmount = value_cast<std::string>(base_spec_amt);
-// TODO ?? Are the next two calls necessary? or does
-//   RealizeSpecifiedAmount();
-// take care of everything?
-            SpecifiedAmountRealized_.assign(100, tnr_unrestricted_double(base_spec_amt));
-            SpecifiedAmountStrategyRealized_.assign
-                (100
-                ,mce_sa_strategy(mce_sa_input_scalar)
-                );
             RealizeSpecifiedAmount();
             }
         }
