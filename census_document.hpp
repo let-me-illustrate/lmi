@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_document.hpp,v 1.14 2008-12-27 02:56:37 chicares Exp $
+// $Id: census_document.hpp,v 1.15 2009-03-22 17:32:25 chicares Exp $
 
 #ifndef census_document_hpp
 #define census_document_hpp
@@ -50,7 +50,9 @@ class CensusDocument
 
     // wxDocument overrides.
     virtual bool OnCreate(wxString const& filename, long int flags);
+#if !wxCHECK_VERSION(2,9,0)
     virtual bool OnNewDocument();
+#endif // !wxCHECK_VERSION(2,9,0)
     virtual bool DoOpenDocument(wxString const& filename);
     virtual bool DoSaveDocument(wxString const& filename);
 
