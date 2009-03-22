@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_realization.cpp,v 1.19 2009-03-22 13:23:57 chicares Exp $
+// $Id: input_realization.cpp,v 1.20 2009-03-22 16:29:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1036,6 +1036,11 @@ round_to<double> const& specamt_rounder()
 void Input::make_term_rider_consistent(bool aggressively)
 {
     LMI_ASSERT(!SpecifiedAmountRealized_.empty());
+    if(mce_no == TermRider)
+        {
+        return;
+        }
+
     if(mce_no == TermRiderUseProportion)
         {
         double term_spec_amt   = TermRiderAmount.value();
@@ -1069,6 +1074,21 @@ void Input::make_term_rider_consistent(bool aggressively)
         {
         fatal_error()
             << "Term is neither proportional nor absolute."
+            << LMI_FLUSH
+            ;
+        }
+
+    if
+        (  mce_adjust_base != TermAdjustmentMethod
+        && 0.0 != TermRiderAmount.value()
+        && !global_settings::instance().ash_nazg()
+        && !global_settings::instance().regression_testing()
+        )
+        {
+        hobsons_choice()
+            << "Method '"
+            << TermAdjustmentMethod.str()
+            << "' is unreliable."
             << LMI_FLUSH
             ;
         }
