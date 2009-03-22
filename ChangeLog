@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1279 2009-03-20 13:42:24 wboutin Exp $
+// $Id: ChangeLog,v 1.1280 2009-03-22 16:29:24 chicares Exp $
 
 MAINTENANCE
 
@@ -22266,4 +22266,35 @@ Updating a data file broke a test that didn't specify file mode.
   skin_group_carveout.xrc
   skin_reg_d.xrc
 Rectify 20090307T2204Z antic enumerative names.
+
+20090321T1443Z <gchicares@sbcglobal.net> [788]
+
+  input.cpp
+Fix defect introduced 20080811T0004Z or thereabouts: term-rider
+proportion was ignored because Input::make_term_rider_consistent()
+was never called.
+
+20090321T1827Z <gchicares@sbcglobal.net> [787]
+
+  input_realization.cpp
+Remove superfluous statements.
+
+20090322T1323Z <gchicares@sbcglobal.net> [787]
+
+  ihs_avmly.cpp
+  input_realization.cpp
+Improve documentation of a known defect.
+
+20090322T1627Z <gchicares@sbcglobal.net> [787]
+
+  input.cpp
+  sample.cns
+  sample.ill
+Change 'TermAdjustmentMethod' default to "Adjust base first". Other
+values are known to be problematic.
+
+20090322T1629Z <gchicares@sbcglobal.net> [787]
+
+  input_realization.cpp
+Warn when 'TermAdjustmentMethod' would be problematic.
 
