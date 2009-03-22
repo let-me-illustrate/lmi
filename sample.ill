@@ -181,7 +181,7 @@
     <SurviveToType>Survive to age limit</SurviveToType>
     <SurviveToYear>99</SurviveToYear>
     <TaxBracket>0</TaxBracket>
-    <TermAdjustmentMethod>Adjust term first</TermAdjustmentMethod>
+    <TermAdjustmentMethod>Adjust base first</TermAdjustmentMethod>
     <TermRider>No</TermRider>
     <TermRiderAmount>0</TermRiderAmount>
     <TermRiderProportion>0</TermRiderProportion>
