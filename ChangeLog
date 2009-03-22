@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1280 2009-03-22 16:29:24 chicares Exp $
+// $Id: ChangeLog,v 1.1281 2009-03-22 17:32:25 chicares Exp $
 
 MAINTENANCE
 
@@ -22297,4 +22297,11 @@ values are known to be problematic.
 
   input_realization.cpp
 Warn when 'TermAdjustmentMethod' would be problematic.
+
+20090322T1732Z <gchicares@sbcglobal.net> [787]
+
+  census_document.cpp
+  census_document.hpp
+Forestall an unwanted save dialog (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00063.html
 
