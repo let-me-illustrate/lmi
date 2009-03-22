@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_realization.cpp,v 1.18 2009-03-21 18:27:29 chicares Exp $
+// $Id: input_realization.cpp,v 1.19 2009-03-22 13:23:57 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -994,19 +994,48 @@ round_to<double> const& specamt_rounder()
 
 /// Special handling for proportional term rider.
 ///
-/// Term rider can be specified either as a scalar or as a
-/// proportion of a specified total (term + base) specified amount.
-/// In the latter case, base specified amount generally needs to be
-/// modified. However, due to rounding, transforming values from
-/// one method to the other and back does not necessarily preserve
-/// the original value. It is therefore useful sometimes to avoid
-/// modifying the base specified amount by passing 'false' as the
-/// 'aggressively' argument, for instance in a GUI when it may be
-/// desirable to display the proportional term specified amount
-/// without necessarily changing the base specified amount.
+/// See the reference in AccountValue::ChangeSpecAmtBy() to issues
+/// that affect this function as well.
+///
+/// Term rider can be specified either as a scalar or as a proportion
+/// of a given aggregate (base + term) specified amount. In the latter
+/// case, base specified amount generally needs to be adjusted here to
+/// conserve the aggregate amount. However, transforming values from
+/// one formula to the other and back:
+///   aggregate = base + term
+/// vs.
+///   base = (1-P) * aggregate
+///   term =    P  * aggregate
+/// does not necessarily preserve the original values, due to rounding
+/// and enforcement of contractual minimums. The legacy system from
+/// which this code descends attempted to avoid that issue by passing
+/// a 'false' argument when it needed to display a proportional term
+/// specified amount while graying out and not changing the control
+/// depicting the base specified amount.
+///
+/// Probably it is desirable to update and display these resultant
+/// amounts within the GUI. The present implementation doesn't do so,
+/// because:
+///  - A call to RealizeSpecifiedAmount() would be required. Probably
+///    every input sequence should be "realized" as its corresponding
+///    control loses focus. That would let exceptions be trapped and
+///    error messages displayed without leaving the dialog, but it's a
+///    potentially slow operation that should be performed only when
+///    actually necessary. Once that's done, this function could be
+///    called by Input::DoTransmogrify() without impairing the GUI's
+///    responsiveness.
+///  - It's not obvious that the legacy implementation was ideal. For
+///    example, in the "proportionate" case, it constrained both term
+///    and base to be scalar, because the aggregate specified amount
+///    was a scalar field.
+/// A future implementation should probably either:
+///  - add a sequence field for the aggregate specified amount; or
+///  - overload the existing specified-amount field to mean aggregate
+///    iff mce_yes == TermRiderUseProportion.
 
 void Input::make_term_rider_consistent(bool aggressively)
 {
+    LMI_ASSERT(!SpecifiedAmountRealized_.empty());
     if(mce_no == TermRiderUseProportion)
         {
         double term_spec_amt   = TermRiderAmount.value();
