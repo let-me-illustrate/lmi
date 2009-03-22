@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.123 2009-03-03 13:55:31 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.124 2009-03-22 13:23:56 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -757,8 +757,17 @@ void AccountValue::ChangeSpecAmtBy(double delta)
             }
         else
             {
-            // TODO ?? Need to set base first (minimum = MinRenlBaseFace)
-            // and then set term (minimum = MinRenlFace - base).
+            // TODO ?? Only the mce_adjust_base method seems to work
+            // correctly. More care must be given to rounding and to
+            // minimums, and the order of adjustment (and term-rider
+            // removal) in Input::make_term_rider_consistent() as well
+            // as here. DATABASE !! Are these parameters:
+            //   DB_MinSpecAmt
+            //   DB_MinIssSpecAmt
+            //   DB_MinRenlSpecAmt
+            //   DB_MinRenlBaseSpecAmt
+            // sufficient, or might there also be a minimum total
+            // specified amount for base and term combined?
             if(TermRiderActive)
                 {
                 TermSpecAmt =
