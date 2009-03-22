@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_document.cpp,v 1.19 2008-12-27 02:56:37 chicares Exp $
+// $Id: census_document.cpp,v 1.20 2009-03-22 17:32:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -87,6 +87,7 @@ bool CensusDocument::OnCreate(wxString const& filename, long int flags)
     return wxDocument::OnCreate(filename, flags);
 }
 
+#if !wxCHECK_VERSION(2,9,0)
 bool CensusDocument::OnNewDocument()
 {
     Modify(true);
@@ -103,6 +104,7 @@ bool CensusDocument::OnNewDocument()
 
     return true;
 }
+#endif // !wxCHECK_VERSION(2,9,0)
 
 /// See documentation for IllustrationDocument::DoOpenDocument().
 
