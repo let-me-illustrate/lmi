@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_wx.make,v 1.15 2009-03-23 16:09:26 chicares Exp $
+# $Id: install_wx.make,v 1.16 2009-03-23 16:17:25 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -47,16 +47,16 @@ $(wx_archive)-url := ftp://ftp.wxwidgets.org/pub/$(wx_version)/$(wx_archive)
 
 $(wx_archive)-md5 := $(wx-$(wx_version)-md5)
 
-# Variables that normally should be left alone #################################
+wx_md5            := $(wx-$(wx_version)-md5)
 
-date           = $(shell date -u +'%Y%m%dT%H%MZ')
+# Variables that normally should be left alone #################################
 
 mingw_bin_dir := $(mingw_dir)/bin
 
-vendor        := $(shell $(mingw_bin_dir)/gcc -dumpversion)
-vendor        := $(subst .,,$(vendor))
+compiler      := gcc-$(shell $(mingw_bin_dir)/gcc -dumpversion)
+vendor        := $(subst .,,$(compiler))-$(wx_md5)
 
-build_dir     := $(wx_dir)/wxWidgets-$(wx_version)/gcc$(vendor)
+build_dir     := $(wx_dir)/wxWidgets-$(wx_version)/$(vendor)
 
 # Configuration reference:
 #   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00001.html
