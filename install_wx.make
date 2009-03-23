@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_wx.make,v 1.14 2009-02-13 12:53:22 chicares Exp $
+# $Id: install_wx.make,v 1.15 2009-03-23 16:09:26 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -34,6 +34,18 @@ prefix        := /opt/lmi/local
 cache_dir     := /tmp/lmi_cache
 
 wx_dir        := /opt/lmi/wx-scratch
+
+# URLs and archive md5sums #####################################################
+
+wx-2.8.6-md5 := 8a130e5b25448a17454a6b957a5e075c
+wx-2.8.7-md5 := e3455083afdf6404a569a8bf0701cf13
+wx-2.8.9-md5 := b0b2d0f6915a21ca6f33896ee8f50387
+
+wx_archive        := wxWidgets-$(wx_version).tar.bz2
+
+$(wx_archive)-url := ftp://ftp.wxwidgets.org/pub/$(wx_version)/$(wx_archive)
+
+$(wx_archive)-md5 := $(wx-$(wx_version)-md5)
 
 # Variables that normally should be left alone #################################
 
@@ -83,18 +95,6 @@ config_options = \
    RANLIB='$(mingw_bin_dir)/ranlib' \
     STRIP='$(mingw_bin_dir)/strip' \
   WINDRES='$(mingw_bin_dir)/windres' \
-
-# URLs and archive md5sums #####################################################
-
-wx-2.8.6-md5 := 8a130e5b25448a17454a6b957a5e075c
-wx-2.8.7-md5 := e3455083afdf6404a569a8bf0701cf13
-wx-2.8.9-md5 := b0b2d0f6915a21ca6f33896ee8f50387
-
-wx_archive        := wxWidgets-$(wx_version).tar.bz2
-
-$(wx_archive)-url := ftp://ftp.wxwidgets.org/pub/$(wx_version)/$(wx_archive)
-
-$(wx_archive)-md5 := $(wx-$(wx_version)-md5)
 
 # Utilities ####################################################################
 
