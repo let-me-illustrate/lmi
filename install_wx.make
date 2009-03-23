@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_wx.make,v 1.16 2009-03-23 16:17:25 chicares Exp $
+# $Id: install_wx.make,v 1.17 2009-03-23 16:19:40 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -78,11 +78,10 @@ config_options = \
   --enable-shared \
   --enable-std_iostreams \
   --enable-stl \
+  --enable-vendor='$(vendor)' \
   --without-libjpeg \
   --without-libtiff \
   --without-regex \
-  VENDOR='$(vendor)' \
-  CPPFLAGS='-DNO_GCC_PRAGMA' \
        AR='$(mingw_bin_dir)/ar' \
        AS='$(mingw_bin_dir)/as' \
        CC='$(mingw_bin_dir)/gcc' \
