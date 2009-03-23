@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1281 2009-03-22 17:32:25 chicares Exp $
+// $Id: ChangeLog,v 1.1282 2009-03-23 16:23:33 chicares Exp $
 
 MAINTENANCE
 
@@ -22304,4 +22304,28 @@ Warn when 'TermAdjustmentMethod' would be problematic.
   census_document.hpp
 Forestall an unwanted save dialog (VZ). See:
   http://lists.nongnu.org/archive/html/lmi/2009-03/msg00063.html
+
+20090323T1609Z <gchicares@sbcglobal.net> [787]
+
+  install_wx.make
+Rearrange.
+
+20090323T1617Z <gchicares@sbcglobal.net> [787]
+
+  install_wx.make
+Make $(vendor) unique; remove unused $(date). The "use case" here:
+  http://lists.nongnu.org/archive/html/lmi/2008-12/msg00033.html
+shows why a unique $(vendor) is wanted.
+
+20090323T1619Z <gchicares@sbcglobal.net> [787]
+
+  install_wx.make
+Modernize flags. See:
+  http://lists.nongnu.org/archive/html/lmi/2008-12/msg00034.html
+
+20090323T1623Z <gchicares@sbcglobal.net> [787]
+
+  install_wx.make
+Upgrade to wx-2.8.10 . See:
+  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00065.html
 
