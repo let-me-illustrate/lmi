@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.100 2009-03-24 18:09:13 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.101 2009-03-24 20:31:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -273,6 +273,20 @@ void Input::DoHarmonize()
     // the contract needn't endow).
     int max_age = static_cast<int>(database_->Query(DB_EndtAge));
     InforceYear.maximum(-1 + max_age - IssueAge.value());
+
+    InforceCumulativeGlp.enable(mce_gpt == DefinitionOfLifeInsurance);
+    InforceGlp          .enable(mce_gpt == DefinitionOfLifeInsurance);
+    InforceGsp          .enable(mce_gpt == DefinitionOfLifeInsurance);
+
+    bool non_mec = mce_no == InforceIsMec;
+
+    InforceSevenPayPremium  .enable(non_mec);
+    LastMaterialChangeDate  .enable(non_mec);
+    InforceDcv              .enable(non_mec && mce_cvat == DefinitionOfLifeInsurance);
+    InforceAvBeforeLastMc   .enable(non_mec);
+    InforceContractYear     .enable(non_mec);
+    InforceContractMonth    .enable(non_mec);
+    InforceLeastDeathBenefit.enable(non_mec);
 
     // These fields have no effect for now. They're suppressed to
     // avoid confusion.
