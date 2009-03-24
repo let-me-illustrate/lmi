@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.99 2009-03-16 22:47:32 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.100 2009-03-24 18:09:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -109,7 +109,7 @@ void Input::DoAdaptExternalities()
 
 void Input::DoCustomizeInitialValues()
 {
-    if("Yes" == UseCurrentDeclaredRate)
+    if(mce_yes == UseCurrentDeclaredRate)
         {
         GeneralAccountRate = current_credited_rate(*database_);
         }
@@ -182,7 +182,7 @@ void Input::DoHarmonize()
     GroupUnderwritingType.allow(mce_simplified_issue, database_->Query(DB_AllowSimpUW));
     GroupUnderwritingType.allow(mce_guaranteed_issue, database_->Query(DB_AllowGuarUW));
 
-    bool part_mort_used = "Yes" == UsePartialMortality;
+    bool part_mort_used = mce_yes == UsePartialMortality;
 
     PartialMortalityTable     .enable(part_mort_used);
     PartialMortalityMultiplier.enable(part_mort_used);
@@ -211,30 +211,30 @@ void Input::DoHarmonize()
     // enabled.
     OverrideExperienceReserveRate.enable
         (   enable_experience_rating
-        &&  "Yes" == UseExperienceRating
+        &&  mce_yes == UseExperienceRating
         );
     ExperienceReserveRate.enable
         (   enable_experience_rating
-        &&  "Yes" == UseExperienceRating
-        &&  "Yes" == OverrideExperienceReserveRate
+        &&  mce_yes == UseExperienceRating
+        &&  mce_yes == OverrideExperienceReserveRate
         );
     ExperienceRatingInitialKFactor.enable
         (   enable_experience_rating
-        &&  "Yes" == UseExperienceRating
+        &&  mce_yes == UseExperienceRating
         );
     InforceNetExperienceReserve.enable
         (   enable_experience_rating
-        &&  "Yes" == UseExperienceRating
+        &&  mce_yes == UseExperienceRating
         );
     InforceYtdNetCoiCharge.enable
         (   enable_experience_rating
-        &&  "Yes" == UseExperienceRating
+        &&  mce_yes == UseExperienceRating
         );
 
-    EffectiveDate.enable("No" == EffectiveDateToday);
+    EffectiveDate.enable(mce_no == EffectiveDateToday);
 
-    IssueAge        .enable("No"  == DeprecatedUseDOB);
-    DateOfBirth     .enable("Yes" == DeprecatedUseDOB);
+    IssueAge        .enable(mce_no  == DeprecatedUseDOB);
+    DateOfBirth     .enable(mce_yes == DeprecatedUseDOB);
 
     // The ranges of both EffectiveDate and IssueAge are treated as
     // independent, to prevent one's value from affecting the other's
@@ -265,8 +265,8 @@ void Input::DoHarmonize()
         ,maximum_birthdate(IssueAge.minimum(), EffectiveDate.value(), use_anb)
         );
 
-    RetirementAge   .enable("No"  == DeprecatedUseDOR);
-    DateOfRetirement.enable("Yes" == DeprecatedUseDOR);
+    RetirementAge   .enable(mce_no  == DeprecatedUseDOR);
+    DateOfRetirement.enable(mce_yes == DeprecatedUseDOR);
 
     // DATABASE !! Maximum illustrated age should be distinguished
     // from maturity age (which shouldn't be called 'EndtAge' because
@@ -331,7 +331,7 @@ if(!egregious_kludge)
     OverrideCoiMultiplier.enable(allow_custom_coi_multiplier);
     CountryCoiMultiplier.enable
         (   allow_custom_coi_multiplier
-        &&  "Yes" == OverrideCoiMultiplier
+        &&  mce_yes == OverrideCoiMultiplier
         );
     FlatExtra.enable(database_->Query(DB_AllowFlatExtras));
 
@@ -350,10 +350,10 @@ if(!egregious_kludge)
     LastCoiReentryDate.enable(2 == database_->Query(DB_CoiInforceReentry));
 
     BlendGender.enable(database_->Query(DB_AllowMortBlendSex));
-    bool blend_mortality_by_gender = "Yes" == BlendGender;
+    bool blend_mortality_by_gender = mce_yes == BlendGender;
 
     BlendSmoking.enable(database_->Query(DB_AllowMortBlendSmoke));
-    bool blend_mortality_by_smoking = "Yes" == BlendSmoking;
+    bool blend_mortality_by_smoking = mce_yes == BlendSmoking;
 
     MaleProportion     .enable(blend_mortality_by_gender);
     NonsmokerProportion.enable(blend_mortality_by_smoking);
@@ -389,8 +389,8 @@ if(!egregious_kludge)
 
     bool specamt_from_term_proportion =
            database_->Query(DB_AllowTerm)
-        && "Yes" == TermRiderUseProportion
-        && "Yes" == TermRider
+        && mce_yes == TermRiderUseProportion
+        && mce_yes == TermRider
         ;
 
     bool inhibit_premium_based_strategies =
@@ -590,15 +590,15 @@ false // Silly workaround for now.
 // matter. DATABASE !! Control that in the product database.
 
     GeneralAccountRateType .allow(mce_credited_rate , true);
-    GeneralAccountRateType .allow(mce_earned_rate, anything_goes && "No" == UseCurrentDeclaredRate);
+    GeneralAccountRateType .allow(mce_earned_rate, anything_goes && mce_no == UseCurrentDeclaredRate);
 
     SeparateAccountRateType.allow(mce_gross_rate, true);
     SeparateAccountRateType.allow(mce_net_rate  , anything_goes);
 
     bool curr_int_rate_solve = false; // May be useful someday.
     UseCurrentDeclaredRate .enable(!curr_int_rate_solve && allow_gen_acct);
-    GeneralAccountRate     .enable(!curr_int_rate_solve && allow_gen_acct && "No" == UseCurrentDeclaredRate);
-    GeneralAccountRateType .enable(!curr_int_rate_solve && allow_gen_acct && "No" == UseCurrentDeclaredRate);
+    GeneralAccountRate     .enable(!curr_int_rate_solve && allow_gen_acct && mce_no == UseCurrentDeclaredRate);
+    GeneralAccountRateType .enable(!curr_int_rate_solve && allow_gen_acct && mce_no == UseCurrentDeclaredRate);
     SeparateAccountRate    .enable(!curr_int_rate_solve && allow_sep_acct);
     SeparateAccountRateType.enable(!curr_int_rate_solve && allow_sep_acct);
 
@@ -624,7 +624,7 @@ false // Silly workaround for now.
         ;
     OverrideFundManagementFee.enable(enable_custom_fund);
 
-    InputFundManagementFee.enable("Yes" == OverrideFundManagementFee || mce_fund_override == FundChoiceType);
+    InputFundManagementFee.enable(mce_yes == OverrideFundManagementFee || mce_fund_override == FundChoiceType);
 
 // TODO ?? WX PORT !! There seems to be some confusion here. We seem to have
 // checkboxes 'OverrideFundManagementFee' and 'UseAverageOfAllFunds'
@@ -727,7 +727,7 @@ false // Silly workaround for now.
     TermRider.enable(database_->Query(DB_AllowTerm));
     TermRider.allow(mce_yes, database_->Query(DB_AllowTerm));
 
-    bool enable_term = "Yes" == TermRider;
+    bool enable_term = mce_yes == TermRider;
     bool specamt_indeterminate_for_term =
            mce_solve_specamt == SolveType
         || mce_sa_input_scalar != SpecifiedAmountStrategyFromIssue
@@ -751,11 +751,11 @@ false // Silly workaround for now.
 
     ChildRider       .enable(        database_->Query(DB_AllowChild));
     ChildRider       .allow(mce_yes, database_->Query(DB_AllowChild));
-    ChildRiderAmount .enable("Yes" == ChildRider);
+    ChildRiderAmount .enable(mce_yes == ChildRider);
     SpouseRider      .enable(        database_->Query(DB_AllowSpouse));
     SpouseRider      .allow(mce_yes, database_->Query(DB_AllowSpouse));
-    SpouseRiderAmount.enable("Yes" == SpouseRider);
-    SpouseIssueAge   .enable("Yes" == SpouseRider);
+    SpouseRiderAmount.enable(mce_yes == SpouseRider);
+    SpouseIssueAge   .enable(mce_yes == SpouseRider);
 #if 0
 // DATABASE !! Add spouse minimum and maximum issue ages, as well as
 // minimum and maximum amounts for both spouse and child.
@@ -767,9 +767,9 @@ false // Silly workaround for now.
 
     HoneymoonEndorsement .enable(        database_->Query(DB_AllowHoneymoon));
     HoneymoonEndorsement .allow(mce_yes, database_->Query(DB_AllowHoneymoon));
-    PostHoneymoonSpread  .enable("Yes" == HoneymoonEndorsement);
-    HoneymoonValueSpread .enable("Yes" == HoneymoonEndorsement);
-    InforceHoneymoonValue.enable("Yes" == HoneymoonEndorsement);
+    PostHoneymoonSpread  .enable(mce_yes == HoneymoonEndorsement);
+    HoneymoonValueSpread .enable(mce_yes == HoneymoonEndorsement);
+    InforceHoneymoonValue.enable(mce_yes == HoneymoonEndorsement);
 
     bool solves_allowed = mce_life_by_life == RunOrder;
 
@@ -865,7 +865,7 @@ false // Silly workaround for now.
         ;
     AvoidMecMethod.allow(mce_reduce_prem, enable_reduce_to_avoid_mec);
 
-    bool create_supplemental_report = "Yes" == CreateSupplementalReport;
+    bool create_supplemental_report = mce_yes == CreateSupplementalReport;
     SupplementalReportColumn00.enable(create_supplemental_report);
     SupplementalReportColumn01.enable(create_supplemental_report);
     SupplementalReportColumn02.enable(create_supplemental_report);
@@ -911,7 +911,7 @@ false // Silly workaround for now.
 
 void Input::DoTransmogrify()
 {
-    if("Yes" == EffectiveDateToday)
+    if(mce_yes == EffectiveDateToday)
         {
         EffectiveDate = calendar_date();
         // TODO ?? Consider factoring out date calculations and making
@@ -922,7 +922,7 @@ void Input::DoTransmogrify()
     // USER !! This is the credited rate as of the database date,
     // regardless of the date of illustration, because the database
     // does not yet store historical rates.
-    if("Yes" == UseCurrentDeclaredRate)
+    if(mce_yes == UseCurrentDeclaredRate)
         {
         GeneralAccountRate = current_credited_rate(*database_);
         }
@@ -934,7 +934,7 @@ void Input::DoTransmogrify()
         ,EffectiveDate.value()
         ,use_anb
         );
-    if("No" == DeprecatedUseDOB)
+    if(mce_no == DeprecatedUseDOB)
         {
         // If no DOB is supplied, assume a birthday occurs on the
         // issue date--as good an assumption as any, and the simplest.
@@ -957,14 +957,14 @@ if(!egregious_kludge)
   {
     // TODO ?? WX PORT !! Icky kludge.
     UseAverageOfAllFunds =
-        ("Average fund"  == FundChoiceType.str())
-        ? "Yes"
-        : "No"
+        (mce_fund_average  == FundChoiceType)
+        ? mce_yes
+        : mce_no
         ;
     OverrideFundManagementFee =
-        ("Override fund" == FundChoiceType.str())
-        ? "Yes"
-        : "No"
+        (mce_fund_override == FundChoiceType)
+        ? mce_yes
+        : mce_no
         ;
   } // end if(!egregious_kludge)
 
