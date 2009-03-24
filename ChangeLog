@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1282 2009-03-23 16:23:33 chicares Exp $
+// $Id: ChangeLog,v 1.1283 2009-03-24 12:34:27 chicares Exp $
 
 MAINTENANCE
 
@@ -22328,4 +22328,9 @@ Modernize flags. See:
   install_wx.make
 Upgrade to wx-2.8.10 . See:
   http://lists.nongnu.org/archive/html/lmi/2009-03/msg00065.html
+
+20090324T1234Z <gchicares@sbcglobal.net> [787]
+
+  version.hpp
+Mark release candidate.
 
