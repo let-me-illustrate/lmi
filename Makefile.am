@@ -20,7 +20,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.70 2008-12-27 02:56:35 chicares Exp $
+# $Id: Makefile.am,v 1.71 2009-03-26 16:47:29 chicares Exp $
 
 SUBDIRS = third_party
 
@@ -88,7 +88,6 @@ TESTS = \
     test_actuarial_table \
     test_alert \
     test_any_member \
-    test_argv0 \
     test_assert_lmi \
     test_authenticity \
     test_calendar_date \
@@ -489,13 +488,6 @@ test_any_member_SOURCES =   \
   facets.cpp
 test_any_member_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_argv0_SOURCES =    \
-  $(common_test_objects) \
-  argv0_test.cpp
-test_argv0_CXXFLAGS = $(AM_CXXFLAGS)
-test_argv0_LDADD =    \
-  $(BOOST_LIBS)
-
 test_assert_lmi_SOURCES = \
   $(common_test_objects) \
   assert_lmi_test.cpp
@@ -846,7 +838,6 @@ noinst_HEADERS = \
     alert.hpp \
     any_entity.hpp \
     any_member.hpp \
-    argv0.hpp \
     assert_lmi.hpp \
     authenticity.hpp \
     basic_values.hpp \
