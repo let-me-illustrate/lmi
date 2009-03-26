@@ -24,7 +24,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin.xrc,v 1.24 2009-03-16 22:43:16 chicares Exp $
+    $Id: skin.xrc,v 1.25 2009-03-26 09:19:40 chicares Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -1551,21 +1551,6 @@ demonstrate a defect in the wx library. See
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
-                                        <label>7PP</label>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <object class="wxTextCtrl" name="InforceSevenPayPremium">
-                                        <help>Inforce seven pay premium</help>
-                                        <size>80,-1</size>
-                                        <value>0</value>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <border>4</border>
-                                    <object class="wxStaticText">
                                         <label>MEC</label>
                                     </object>
                                 </object>
@@ -1578,6 +1563,21 @@ It's unusual to place a checkbox's "label" on the left, as is simulated
 here, but it looks weird if we don't make this look like its siblings.
 -->
                                         <size>80,20</size>
+                                        <value>0</value>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>7PP</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxTextCtrl" name="InforceSevenPayPremium">
+                                        <help>Inforce seven pay premium</help>
+                                        <size>80,-1</size>
                                         <value>0</value>
                                     </object>
                                 </object>
@@ -1632,6 +1632,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                         <label>DCV</label>
                                     </object>
                                 </object>
+<!-- Missing 'InforceAvBeforeLastMc'. -->
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxTextCtrl" name="InforceDcv">
