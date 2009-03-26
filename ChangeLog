@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1283 2009-03-24 12:34:27 chicares Exp $
+// $Id: ChangeLog,v 1.1284 2009-03-26 09:19:41 chicares Exp $
 
 MAINTENANCE
 
@@ -22333,4 +22333,20 @@ Upgrade to wx-2.8.10 . See:
 
   version.hpp
 Mark release candidate.
+
+20090324T1809Z <gchicares@sbcglobal.net> [787]
+
+  input_harmonization.cpp
+Refactor, preferring enumerators to strings.
+
+20090324T2031Z <gchicares@sbcglobal.net> [787]
+
+  input_harmonization.cpp
+Improve conditional enablement.
+
+20090326T0919Z <gchicares@sbcglobal.net> [787]
+
+  skin.xrc
+Improve order of controls. Generally, a checkbox should precede other
+controls that it selectively enables.
 
