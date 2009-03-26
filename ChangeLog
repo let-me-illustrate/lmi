@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1284 2009-03-26 09:19:41 chicares Exp $
+// $Id: ChangeLog,v 1.1285 2009-03-26 16:47:29 chicares Exp $
 
 MAINTENANCE
 
@@ -22349,4 +22349,17 @@ Improve conditional enablement.
   skin.xrc
 Improve order of controls. Generally, a checkbox should precede other
 controls that it selectively enables.
+
+20090326T1647Z <gchicares@sbcglobal.net> [785]
+
+  Makefile.am
+  argv0.hpp      [expunged]
+  argv0_test.cpp [expunged]
+  main_cgi.cpp
+  main_cli.cpp
+  main_wx.cpp
+  objects.make
+Expunge a reprobate argv[0] facility. See section 1.14 of the *nix
+programming FAQ:
+  http://www.steve.org.uk/Reference/Unix/faq_2.html#SEC23
 
