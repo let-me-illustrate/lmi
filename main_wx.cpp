@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.131 2009-03-14 17:31:55 chicares Exp $
+// $Id: main_wx.cpp,v 1.132 2009-03-26 16:47:29 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -40,7 +40,6 @@
 
 #include "about_dialog.hpp"
 #include "alert.hpp"
-#include "argv0.hpp"
 #include "assert_lmi.hpp"
 #include "authenticity.hpp"
 #include "census_document.hpp"

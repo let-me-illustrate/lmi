@@ -31,7 +31,7 @@
 // other reasons evident in cvs or explained in 'ChangeLog'. Any
 // defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.41 2009-03-08 20:14:45 chicares Exp $
+// $Id: main_cgi.cpp,v 1.42 2009-03-26 16:47:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -39,7 +39,6 @@
 #endif // __BORLANDC__
 
 #include "alert.hpp"
-#include "argv0.hpp"
 #include "configurable_settings.hpp"
 #include "illustrator.hpp"
 #include "input.hpp"

@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.145 2008-12-27 02:56:52 chicares Exp $
+# $Id: objects.make,v 1.146 2009-03-26 16:47:29 chicares Exp $
 
 ################################################################################
 
@@ -432,7 +432,6 @@ unit_test_targets := \
   actuarial_table_test \
   alert_test \
   any_member_test \
-  argv0_test \
   assert_lmi_test \
   authenticity_test \
   calendar_date_test \
@@ -524,11 +523,6 @@ any_member_test$(EXEEXT): \
   $(common_test_objects) \
   any_member_test.o \
   facets.o \
-
-argv0_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
-  $(common_test_objects) \
-  argv0_test.o \
 
 assert_lmi_test$(EXEEXT): \
   $(common_test_objects) \
