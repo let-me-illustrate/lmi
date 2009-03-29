@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1285 2009-03-26 16:47:29 chicares Exp $
+// $Id: ChangeLog,v 1.1286 2009-03-29 15:07:24 chicares Exp $
 
 MAINTENANCE
 
@@ -22362,4 +22362,40 @@ controls that it selectively enables.
 Expunge a reprobate argv[0] facility. See section 1.14 of the *nix
 programming FAQ:
   http://www.steve.org.uk/Reference/Unix/faq_2.html#SEC23
+
+20090329T0034Z <gchicares@sbcglobal.net> [785]
+
+  ledger_xsl.cpp
+Improve error messages. Prior to this change, if the print directory
+failed to exist, apache 'fop' presented a distressingly verbose error
+message.
+
+20090329T0035Z <gchicares@sbcglobal.net> [785]
+
+  configurable_settings.hpp
+Make a member function private.
+
+20090329T0036Z <gchicares@sbcglobal.net> [785]
+
+  configurable_settings.cpp
+Reformat.
+
+20090329T0037Z <gchicares@sbcglobal.net> [785]
+
+  configurable_settings.cpp
+Fix an obviously-erroneous default mem-initializer.
+
+20090329T0236Z <gchicares@sbcglobal.net> [785]
+
+  configurable_settings.cpp
+  global_settings.cpp
+  global_settings_test.cpp
+Make crucial paths absolute (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00065.html
+
+20090329T1507Z <gchicares@sbcglobal.net> [783]
+
+  configurable_settings.cpp
+  install_msw.sh
+Use default directory if print directory fails to exist.
 

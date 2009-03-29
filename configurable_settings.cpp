@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.47 2009-03-29 02:36:11 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.48 2009-03-29 15:07:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -148,9 +148,23 @@ configurable_settings::configurable_settings()
     default_input_filename_ = fs::system_complete(default_input_filename_).string();
     print_directory_        = fs::system_complete(print_directory_       ).string();
 
-    // TODO ?? CALCULATION_SUMMARY Something like this:
-//    validate_directory(print_directory_, "Print directory");
-    // might be appropriate here.
+    try
+        {
+        validate_directory(print_directory_, "Print directory");
+        }
+    catch(...)
+        {
+        report_exception();
+        print_directory_ = fs::system_complete(".").string();
+        std::ostringstream oss;
+        oss
+            << "If possible, current directory '"
+            << print_directory_
+            << "' will be used for print files instead."
+            ;
+        safely_show_message(oss.str());
+        validate_directory(print_directory_, "Fallback print directory");
+        }
 }
 
 configurable_settings::~configurable_settings()
