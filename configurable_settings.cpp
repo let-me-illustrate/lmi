@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.45 2009-03-29 00:36:13 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.46 2009-03-29 00:37:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -133,7 +133,7 @@ configurable_settings::configurable_settings()
     ,cgi_bin_log_filename_            ("cgi_bin.log"                        )
     ,custom_input_filename_           ("custom.ini"                         )
     ,custom_output_filename_          ("custom.out"                         )
-    ,default_input_filename_          ("etc/opt/default.ini"                )
+    ,default_input_filename_          ("/etc/opt/lmi/default.ill"           )
     ,libraries_to_preload_            (""                                   )
     ,offer_hobsons_choice_            (false                                )
     ,print_directory_                 ("/var/opt/lmi/spool"                 )
