@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.39 2008-12-27 02:56:47 chicares Exp $
+// $Id: ledger_xsl.cpp,v 1.40 2009-03-29 00:34:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -114,6 +114,15 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
         fs::ofstream ofs(xml_file, ios_out_trunc_binary());
         ledger.write(ofs);
         ofs.close();
+        if(!ofs.good())
+            {
+            fatal_error()
+                << "Unable to write output file '"
+                << xml_file.string()
+                << "'."
+                << LMI_FLUSH
+                ;
+            }
         }
 
     fs::path xml_fo_file = unique_filepath(print_dir / real_filepath, ".fo.xml");
@@ -121,6 +130,15 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
     fs::ofstream ofs(xml_fo_file, ios_out_trunc_binary());
     ledger.write_xsl_fo(ofs);
     ofs.close();
+    if(!ofs.good())
+        {
+        fatal_error()
+            << "Unable to write output file '"
+            << xml_fo_file.string()
+            << "'."
+            << LMI_FLUSH
+            ;
+        }
 
     fs::path pdf_out_file = unique_filepath(print_dir / real_filepath, ".pdf");
 
