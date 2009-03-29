@@ -21,7 +21,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_msw.sh,v 1.13 2008-12-27 02:56:46 chicares Exp $
+# $Id: install_msw.sh,v 1.14 2009-03-29 15:07:23 chicares Exp $
 
 set -v
 
@@ -31,7 +31,7 @@ set -v
 
 # To remove lmi prior to reinstalling with this script:
 #
-# rm --force --recursive /opt/lmi /cygdrive/c/var/opt/lmi
+# rm --force --recursive /opt/lmi
 #
 # Downloaded archives are left in /tmp/lmi_cache because they are
 # costly to download and some host might be temporarily unavailable.
@@ -159,16 +159,13 @@ cat >/opt/lmi/bin/configurable_settings.xml <<EOF
   <default_input_filename>/etc/opt/lmi/default.ill</default_input_filename>
   <libraries_to_preload/>
   <offer_hobsons_choice>0</offer_hobsons_choice>
-  <print_directory>/var/opt/lmi/spool</print_directory>
+  <print_directory>.</print_directory>
   <skin_filename>skin.xrc</skin_filename>
   <spreadsheet_file_extension>.dif</spreadsheet_file_extension>
   <use_builtin_calculation_summary>1</use_builtin_calculation_summary>
   <xsl_fo_command>CMD /c /opt/lmi/third_party/fop-0.20.5/fop</xsl_fo_command>
 </configurable_settings>
 EOF
-
-# TODO ?? The program shouldn't require this directory to exist.
-pushd /cygdrive/c; mkdir --parents var/opt/lmi/spool; popd
 
 date -u +'%Y%m%dT%H%MZ'
 
