@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.46 2009-03-29 00:37:37 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.47 2009-03-29 02:36:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -144,6 +144,10 @@ configurable_settings::configurable_settings()
 {
     ascribe_members();
     load();
+
+    default_input_filename_ = fs::system_complete(default_input_filename_).string();
+    print_directory_        = fs::system_complete(print_directory_       ).string();
+
     // TODO ?? CALCULATION_SUMMARY Something like this:
 //    validate_directory(print_directory_, "Print directory");
     // might be appropriate here.

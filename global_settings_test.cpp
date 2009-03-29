@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: global_settings_test.cpp,v 1.11 2008-12-27 02:56:42 chicares Exp $
+// $Id: global_settings_test.cpp,v 1.12 2009-03-29 02:36:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,6 +28,7 @@
 
 #include "global_settings.hpp"
 
+#include "path_utility.hpp" // initialize_filesystem()
 #include "test_tools.hpp"
 
 #include <boost/filesystem/exception.hpp>
@@ -89,6 +90,10 @@ void test_directory_exceptions()
 
 int test_main(int, char*[])
 {
+    // Absolute paths require "native" name-checking policy for msw.
+
+    initialize_filesystem();
+
     // Initial values of 'directory' data members must be valid: the
     // operations tested here are required not to throw.
 
