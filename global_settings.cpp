@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: global_settings.cpp,v 1.19 2008-12-27 02:56:42 chicares Exp $
+// $Id: global_settings.cpp,v 1.20 2009-03-29 02:36:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,6 +31,8 @@
 #include "alert.hpp"
 #include "handle_exceptions.hpp"
 #include "path_utility.hpp"
+
+#include <boost/filesystem/operations.hpp>
 
 /// Initialize directory paths to ".", not an empty string. Reason:
 /// objects of the boost filesystem library's path class are created
@@ -52,8 +54,8 @@ global_settings::global_settings()
     ,pyx_                       ("")
     ,custom_io_0_               (false)
     ,regression_testing_        (false)
-    ,data_directory_            (".")
-    ,regression_test_directory_ (".")
+    ,data_directory_            (fs::system_complete("."))
+    ,regression_test_directory_ (fs::system_complete("."))
 {}
 
 global_settings::~global_settings()
@@ -107,13 +109,13 @@ void global_settings::set_regression_testing(bool b)
 void global_settings::set_data_directory(std::string const& s)
 {
     validate_directory(s, "Data directory");
-    data_directory_ = s;
+    data_directory_ = fs::system_complete(s);
 }
 
 void global_settings::set_regression_test_directory(std::string const& s)
 {
     validate_directory(s, "Regression-test directory");
-    regression_test_directory_ = s;
+    regression_test_directory_ = fs::system_complete(s);
 }
 
 bool global_settings::mellon() const
