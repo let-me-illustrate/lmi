@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.44 2008-12-27 02:56:38 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.45 2009-03-29 00:36:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -129,18 +129,18 @@ std::string const& xml_root_name()
 } // Unnamed namespace.
 
 configurable_settings::configurable_settings()
-    :calculation_summary_columns_      (default_calculation_summary_columns())
-    ,cgi_bin_log_filename_             ("cgi_bin.log"                 )
-    ,custom_input_filename_            ("custom.ini"                  )
-    ,custom_output_filename_           ("custom.out"                  )
-    ,default_input_filename_           ("etc/opt/default.ini"         )
-    ,libraries_to_preload_             (""                            )
-    ,offer_hobsons_choice_             (false                         )
-    ,print_directory_                  ("/var/opt/lmi/spool"          )
-    ,skin_filename_                    ("skin.xrc"                    )
-    ,spreadsheet_file_extension_       (".gnumeric"                   )
-    ,use_builtin_calculation_summary_  (false                         )
-    ,xsl_fo_command_                   ("fo"                          )
+    :calculation_summary_columns_     (default_calculation_summary_columns())
+    ,cgi_bin_log_filename_            ("cgi_bin.log"                        )
+    ,custom_input_filename_           ("custom.ini"                         )
+    ,custom_output_filename_          ("custom.out"                         )
+    ,default_input_filename_          ("etc/opt/default.ini"                )
+    ,libraries_to_preload_            (""                                   )
+    ,offer_hobsons_choice_            (false                                )
+    ,print_directory_                 ("/var/opt/lmi/spool"                 )
+    ,skin_filename_                   ("skin.xrc"                           )
+    ,spreadsheet_file_extension_      (".gnumeric"                          )
+    ,use_builtin_calculation_summary_ (false                                )
+    ,xsl_fo_command_                  ("fo"                                 )
 {
     ascribe_members();
     load();
