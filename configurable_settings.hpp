@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.hpp,v 1.23 2008-12-27 02:56:38 chicares Exp $
+// $Id: configurable_settings.hpp,v 1.24 2009-03-29 00:35:12 chicares Exp $
 
 #ifndef configurable_settings_hpp
 #define configurable_settings_hpp
@@ -93,7 +93,6 @@ class LMI_SO configurable_settings
   public:
     static configurable_settings& instance();
 
-    void load();
     void save() const;
 
     void calculation_summary_columns(std::string const&);
@@ -116,6 +115,7 @@ class LMI_SO configurable_settings
     configurable_settings();
 
     void ascribe_members();
+    void load();
 
     std::string calculation_summary_columns_;
     std::string cgi_bin_log_filename_;
