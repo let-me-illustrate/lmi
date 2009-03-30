@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: path_utility_test.cpp,v 1.13 2008-12-27 02:56:52 chicares Exp $
+// $Id: path_utility_test.cpp,v 1.14 2009-03-30 09:46:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -37,6 +37,7 @@
 
 #include <cstdio> // std::remove()
 #include <fstream>
+#include <sstream>
 #include <stdexcept>
 
 namespace
@@ -209,12 +210,22 @@ void test_unique_filepath_with_ludicrous_filenames()
         );
 }
 
+void test_path_inserter()
+{
+    char const* z = "/opt/lmi/test/foo.bar";
+    fs::path const p(z);
+    std::ostringstream oss;
+    oss << p;
+    BOOST_TEST_EQUAL(z, oss.str());
+}
+
 int test_main(int, char*[])
 {
     test_orthodox_filename();
     test_serial_file_path();
     test_unique_filepath_with_normal_filenames();
     test_unique_filepath_with_ludicrous_filenames();
+    test_path_inserter();
 
     return EXIT_SUCCESS;
 }
