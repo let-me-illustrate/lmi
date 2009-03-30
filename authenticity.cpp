@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: authenticity.cpp,v 1.13 2008-12-27 02:56:36 chicares Exp $
+// $Id: authenticity.cpp,v 1.14 2009-03-30 12:07:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,6 +34,7 @@
 #include "global_settings.hpp"
 #include "handle_exceptions.hpp"
 #include "md5.hpp"
+#include "path_utility.hpp"       // fs::path inserter
 #include "platform_dependent.hpp" // chdir()
 #include "system_command.hpp"
 #include "version.hpp"
@@ -119,7 +120,7 @@ std::string Authenticity::Assay
         {
         oss
             << "Unable to read passkey file '"
-            << passkey_path.string()
+            << passkey_path
             << "'. Try reinstalling."
             ;
         return oss.str();
@@ -130,7 +131,7 @@ std::string Authenticity::Assay
         {
         oss
             << "Error reading passkey file '"
-            << passkey_path.string()
+            << passkey_path
             << "'. Try reinstalling."
             ;
         return oss.str();
@@ -161,7 +162,7 @@ std::string Authenticity::Assay
         {
         oss
             << "Unable to read expiry file '"
-            << expiry_path.string()
+            << expiry_path
             << "'. Try reinstalling."
             ;
         return oss.str();
@@ -172,7 +173,7 @@ std::string Authenticity::Assay
         {
         oss
             << "Error reading expiry file '"
-            << expiry_path.string()
+            << expiry_path
             << "'. Try reinstalling."
             ;
         return oss.str();
@@ -209,7 +210,7 @@ std::string Authenticity::Assay
         {
         oss
             << "Unable to change directory to '"
-            << data_path.string()
+            << data_path
             << "'. Try reinstalling."
             ;
         return oss.str();
@@ -230,7 +231,7 @@ std::string Authenticity::Assay
         {
         oss
             << "Unable to restore directory to '"
-            << original_path.string()
+            << original_path
             << "'. Try reinstalling."
             ;
         return oss.str();

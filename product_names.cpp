@@ -19,13 +19,14 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: product_names.cpp,v 1.5 2008-12-27 02:56:53 chicares Exp $
+// $Id: product_names.cpp,v 1.6 2009-03-30 12:07:19 chicares Exp $
 
 #include "product_names.hpp"
 
 #include "alert.hpp"
 #include "global_settings.hpp"
 #include "miscellany.hpp"
+#include "path_utility.hpp" // fs::path inserter
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/operations.hpp>
@@ -61,7 +62,7 @@ std::vector<std::string> fetch_product_names()
         {
         fatal_error()
             << "Data directory '"
-            << path.string()
+            << path
             << "' contains no product files."
             << LMI_FLUSH
             ;

@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: path_utility_test.cpp,v 1.14 2009-03-30 09:46:19 chicares Exp $
+// $Id: path_utility_test.cpp,v 1.15 2009-03-30 12:07:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -54,7 +54,7 @@ namespace
     void write_dummy_file(fs::path p)
     {
         fs::ofstream ofs(p);
-        ofs << p.string();
+        ofs << p;
     }
 }
 

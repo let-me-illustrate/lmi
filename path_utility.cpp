@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: path_utility.cpp,v 1.23 2008-12-31 21:54:11 chicares Exp $
+// $Id: path_utility.cpp,v 1.24 2009-03-30 12:07:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -285,7 +285,7 @@ fs::path unique_filepath
             {
             fatal_error()
                 << "Cannot create unique file path from file name '"
-                << original_filepath.string()
+                << original_filepath
                 << "' with extension '"
                 << extension
                 << "'."
@@ -354,7 +354,7 @@ void validate_directory
         fatal_error()
             << context
             << " '"
-            << path.string()
+            << path
             << "' not found."
             << LMI_FLUSH
             ;
@@ -364,7 +364,7 @@ void validate_directory
         fatal_error()
             << context
             << " '"
-            << path.string()
+            << path
             << "' is not a directory."
             << LMI_FLUSH
             ;
@@ -404,7 +404,7 @@ void validate_filepath
         fatal_error()
             << context
             << " '"
-            << path.string()
+            << path
             << "' not found."
             << LMI_FLUSH
             ;
@@ -414,7 +414,7 @@ void validate_filepath
         fatal_error()
             << context
             << " '"
-            << path.string()
+            << path
             << "' is a directory."
             << LMI_FLUSH
             ;

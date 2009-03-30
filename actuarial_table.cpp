@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.52 2009-02-28 13:47:13 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.53 2009-03-30 12:07:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,6 +31,7 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "miscellany.hpp"
+#include "path_utility.hpp" // fs::path inserter
 
 #include <boost/cstdint.hpp>
 #include <boost/filesystem/convenience.hpp>
@@ -219,7 +220,7 @@ void actuarial_table::find_table()
         {
         fatal_error()
             << "File '"
-            << index_path.string()
+            << index_path
             << "' is required but could not be found. Try reinstalling."
             << LMI_FLUSH
             ;
@@ -318,7 +319,7 @@ void actuarial_table::parse_table()
         {
         fatal_error()
             << "File '"
-            << data_path.string()
+            << data_path
             << "' is required but could not be found. Try reinstalling."
             << LMI_FLUSH
             ;
