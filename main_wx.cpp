@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.132 2009-03-26 16:47:29 chicares Exp $
+// $Id: main_wx.cpp,v 1.133 2009-03-30 17:23:19 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -646,33 +646,57 @@ bool Skeleton::OnInit()
         xml_resources.AddHandler(new(wx) RoundingButtonsXmlHandler);
 
         DefaultView const v0;
+#if wxCHECK_VERSION(2,9,0)
+        if(!xml_resources.LoadFile(AddDataDir(v0.ResourceFileName())))
+#else  // !wxCHECK_VERSION(2,9,0)
         if(!xml_resources.Load(AddDataDir(v0.ResourceFileName())))
+#endif // !wxCHECK_VERSION(2,9,0)
             {
             fatal_error() << "Unable to load xml resources." << LMI_FLUSH;
             }
 
         PreferencesView const v1;
+#if wxCHECK_VERSION(2,9,0)
+        if(!xml_resources.LoadFile(AddDataDir(v1.ResourceFileName())))
+#else  // !wxCHECK_VERSION(2,9,0)
         if(!xml_resources.Load(AddDataDir(v1.ResourceFileName())))
+#endif // !wxCHECK_VERSION(2,9,0)
             {
             fatal_error() << "Unable to load xml resources." << LMI_FLUSH;
             }
 
+#if wxCHECK_VERSION(2,9,0)
+        if(!xml_resources.LoadFile(AddDataDir("menus.xrc")))
+#else  // !wxCHECK_VERSION(2,9,0)
         if(!xml_resources.Load(AddDataDir("menus.xrc")))
+#endif // !wxCHECK_VERSION(2,9,0)
             {
             fatal_error() << "Unable to load menubar." << LMI_FLUSH;
             }
 
+#if wxCHECK_VERSION(2,9,0)
+        if(!xml_resources.LoadFile(AddDataDir("toolbar.xrc")))
+#else  // !wxCHECK_VERSION(2,9,0)
         if(!xml_resources.Load(AddDataDir("toolbar.xrc")))
+#endif // !wxCHECK_VERSION(2,9,0)
             {
             fatal_error() << "Unable to load toolbar." << LMI_FLUSH;
             }
 
+#if wxCHECK_VERSION(2,9,0)
+        if(!xml_resources.LoadFile(AddDataDir(PolicyView::resource_file_name())))
+#else  // !wxCHECK_VERSION(2,9,0)
         if(!xml_resources.Load(AddDataDir(PolicyView::resource_file_name())))
+#endif // !wxCHECK_VERSION(2,9,0)
             {
             fatal_error() << "Unable to load Policy resources." << LMI_FLUSH;
             }
 
+#if wxCHECK_VERSION(2,9,0)
+        if(!xml_resources.LoadFile(AddDataDir(RoundingView::resource_file_name())))
+#else  // !wxCHECK_VERSION(2,9,0)
         if(!xml_resources.Load(AddDataDir(RoundingView::resource_file_name())))
+#endif // !wxCHECK_VERSION(2,9,0)
             {
             fatal_error() << "Unable to load Rounding resources." << LMI_FLUSH;
             }
