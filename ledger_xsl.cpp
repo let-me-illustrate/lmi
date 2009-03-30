@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.40 2009-03-29 00:34:14 chicares Exp $
+// $Id: ledger_xsl.cpp,v 1.41 2009-03-30 12:07:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -74,7 +74,7 @@ fs::path xsl_filepath(Ledger const& ledger)
         {
         fatal_error()
             << "Unable to read file '"
-            << xsl_file.string()
+            << xsl_file
             << "' required for ledger type '"
             << ledger.GetLedgerType()
             << "'."
@@ -118,7 +118,7 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
             {
             fatal_error()
                 << "Unable to write output file '"
-                << xml_file.string()
+                << xml_file
                 << "'."
                 << LMI_FLUSH
                 ;
@@ -134,7 +134,7 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
         {
         fatal_error()
             << "Unable to write output file '"
-            << xml_fo_file.string()
+            << xml_fo_file
             << "'."
             << LMI_FLUSH
             ;
@@ -145,8 +145,8 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
     std::ostringstream oss;
     oss
         << configurable_settings::instance().xsl_fo_command()
-        << " -fo "  << '"' << xml_fo_file .string() << '"'
-        << " -pdf " << '"' << pdf_out_file.string() << '"'
+        << " -fo "  << '"' << xml_fo_file  << '"'
+        << " -pdf " << '"' << pdf_out_file << '"'
         ;
     system_command(oss.str());
     return pdf_out_file.string();

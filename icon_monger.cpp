@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: icon_monger.cpp,v 1.18 2009-03-19 10:19:22 chicares Exp $
+// $Id: icon_monger.cpp,v 1.19 2009-03-30 12:07:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,6 +31,7 @@
 #include "alert.hpp"
 #include "data_directory.hpp"
 #include "map_lookup.hpp"
+#include "path_utility.hpp" // fs::path inserter
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
@@ -200,7 +201,7 @@ wxBitmap icon_monger::CreateBitmap
             {
             warning()
                 << "Unable to find icon '"
-                << icon_path.string()
+                << icon_path
                 << "'. Try reinstalling."
                 << "\nA builtin alternative will be used instead,"
                 << " but it may be visually jarring."
@@ -212,7 +213,7 @@ wxBitmap icon_monger::CreateBitmap
             {
             warning()
                 << "Unable to find icon '"
-                << icon_path.string()
+                << icon_path
                 << "'. Try reinstalling."
                 << "\nA blank icon will be used instead."
                 << LMI_FLUSH
@@ -226,7 +227,7 @@ wxBitmap icon_monger::CreateBitmap
         {
         warning()
             << "Unable to load image '"
-            << icon_path.string()
+            << icon_path
             << "'. Try reinstalling."
             << LMI_FLUSH
             ;
@@ -237,7 +238,7 @@ wxBitmap icon_monger::CreateBitmap
         {
         warning()
             << "Image '"
-            << icon_path.string()
+            << icon_path
             << "' of size "
             << image.GetWidth()
             << " by "

@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.48 2009-03-29 15:07:23 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.49 2009-03-30 12:07:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -236,7 +236,7 @@ void configurable_settings::load()
         std::ostringstream oss2;
         oss2
             << "Configurable-settings file '"
-            << configuration_filepath().string()
+            << configuration_filepath()
             << "':\n"
             << oss.str()
             << "not recognized."
@@ -256,21 +256,13 @@ void configurable_settings::save() const
         xml_lmi::add_node(root, *i, operator[](*i).str());
         }
 
-// TODO ?? CALCULATION_SUMMARY Choose one fstream class.
-#if 0
     fs::ofstream ofs(configuration_filepath(), ios_out_trunc_binary());
-#else // not 0
-    std::ofstream ofs
-        (configuration_filepath().string().c_str()
-        ,ios_out_trunc_binary()
-        );
-#endif
     ofs << document;
     if(!ofs)
         {
         fatal_error()
             << "Configurable-settings file '"
-            << configuration_filepath().string()
+            << configuration_filepath()
             << "' is not writeable."
             << LMI_FLUSH
             ;

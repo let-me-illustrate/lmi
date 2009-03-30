@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1287 2009-03-30 03:13:38 chicares Exp $
+// $Id: ChangeLog,v 1.1288 2009-03-30 12:07:19 chicares Exp $
 
 MAINTENANCE
 
@@ -22410,4 +22410,26 @@ Attempt to work around a lapse in release discipline.
 
   version.hpp
 Mark release candidate.
+
+20090330T0946Z <gchicares@sbcglobal.net> [783]
+
+  path_utility.hpp
+  path_utility_test.cpp
+Add filesystem::path inserter. A later version of boost than lmi uses
+provides a comparable inserter, but '<< some_path.string()' code can
+be cleaned up now.
+
+20090330T1207Z <gchicares@sbcglobal.net> [782]
+
+  actuarial_table.cpp
+  authenticity.cpp
+  configurable_settings.cpp
+  icon_monger.cpp
+  illustrator.cpp
+  ledger_xml_io.cpp
+  ledger_xsl.cpp
+  path_utility.cpp
+  path_utility_test.cpp
+  product_names.cpp
+Use filesystem::path inserter.
 
