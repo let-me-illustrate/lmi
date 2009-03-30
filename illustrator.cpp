@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.cpp,v 1.38 2009-01-06 15:01:23 chicares Exp $
+// $Id: illustrator.cpp,v 1.39 2009-03-30 12:07:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -38,6 +38,7 @@
 #include "input.hpp"
 #include "ledgervalues.hpp"
 #include "multiple_cell_document.hpp"
+#include "path_utility.hpp"       // fs::path inserter
 #include "platform_dependent.hpp" // access()
 #include "single_cell_document.hpp"
 #include "timer.hpp"
@@ -108,7 +109,7 @@ bool illustrator::operator()(fs::path const& file_path)
         {
         fatal_error()
             << "File '"
-            << file_path.string()
+            << file_path
             << "': extension '"
             << extension
             << "' not supported."
