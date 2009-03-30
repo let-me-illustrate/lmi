@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <single_cell_document>
-  <cell version="3">
+  <cell version="4">
     <AccidentalDeathBenefit>No</AccidentalDeathBenefit>
     <Address/>
     <AgentAddress>*** REQUIRED FIELD MISSING ***</AgentAddress>
