@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1286 2009-03-29 15:07:24 chicares Exp $
+// $Id: ChangeLog,v 1.1287 2009-03-30 03:13:38 chicares Exp $
 
 MAINTENANCE
 
@@ -22398,4 +22398,16 @@ Make crucial paths absolute (VS). See:
   configurable_settings.cpp
   install_msw.sh
 Use default directory if print directory fails to exist.
+
+20090330T0137Z <gchicares@sbcglobal.net> [783]
+
+  input_xml_io.cpp
+  sample.cns
+  sample.ill
+Attempt to work around a lapse in release discipline.
+
+20090330T0313Z <gchicares@sbcglobal.net> [783]
+
+  version.hpp
+Mark release candidate.
 
