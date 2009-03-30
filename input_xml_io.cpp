@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_xml_io.cpp,v 1.22 2009-03-08 20:14:45 chicares Exp $
+// $Id: input_xml_io.cpp,v 1.23 2009-03-30 01:37:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -219,11 +219,17 @@ void Input::write(xml::element& x) const
 /// version 0: [prior to the lmi epoch]
 /// version 1: 20050114T1947Z
 /// version 2: 20080813T0131Z
-/// version 3: 20090302T0509Z
+/// version 3: 20090302T0509Z [see important note below]
+/// version 4: 20090330T0137Z
+///
+/// Important note concerning version 3. On or about 20090311, some
+/// end users were given an off-cycle release that should have used
+/// code tagged 'lmi-20090223T2040Z', but erroneously used an untagged
+/// (and untested) version of HEAD.
 
 int Input::class_version() const
 {
-    return 3;
+    return 4;
 }
 
 //============================================================================
@@ -250,11 +256,14 @@ std::string Input::RedintegrateExAnte
     // Prior to version 3, 'SolveType' distinguished:
     //   mce_solve_wd           --> !WithdrawToBasisThenLoan
     //   mce_solve_wd_then_loan -->  WithdrawToBasisThenLoan
-    // but in version 3 that superfluous distinction was
+    // but in version 4 that superfluous distinction was
     // removed. 'WithdrawToBasisThenLoan' needn't be altered
     // here because the material-implications above had
-    // already been asserted in a prior revision.
-    if(file_version < 3)
+    // already been asserted in a prior revision. It is not
+    // certain whether this distinction was present in the
+    // erroneous version 3.
+
+    if(file_version < 4)
         {
         if
             (  "AvoidMecMethod" == name
