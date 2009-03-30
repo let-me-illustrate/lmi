@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <multiple_cell_document>
-  <cell version="3">
+  <cell version="4">
     <AccidentalDeathBenefit>No</AccidentalDeathBenefit>
     <Address/>
     <AgentAddress>*** REQUIRED FIELD MISSING ***</AgentAddress>
@@ -206,7 +206,7 @@
     <ZipCode/>
   </cell>
   <NumberOfClasses>1</NumberOfClasses>
-  <cell version="3">
+  <cell version="4">
     <AccidentalDeathBenefit>No</AccidentalDeathBenefit>
     <Address/>
     <AgentAddress>*** REQUIRED FIELD MISSING ***</AgentAddress>
@@ -412,7 +412,7 @@
     <ZipCode/>
   </cell>
   <NumberOfCells>1</NumberOfCells>
-  <cell version="3">
+  <cell version="4">
     <AccidentalDeathBenefit>No</AccidentalDeathBenefit>
     <Address/>
     <AgentAddress>*** REQUIRED FIELD MISSING ***</AgentAddress>
