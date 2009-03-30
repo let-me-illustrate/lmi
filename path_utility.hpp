@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: path_utility.hpp,v 1.16 2008-12-27 02:56:52 chicares Exp $
+// $Id: path_utility.hpp,v 1.17 2009-03-30 09:46:19 chicares Exp $
 
 #ifndef path_utility_hpp
 #define path_utility_hpp
@@ -30,6 +30,7 @@
 
 #include <boost/filesystem/path.hpp>
 
+#include <ostream>
 #include <string>
 
 void LMI_SO initialize_filesystem(); // Listed first because of its importance.
@@ -59,6 +60,11 @@ void LMI_SO validate_filepath
     (std::string const& filepath
     ,std::string const& context
     );
+
+inline std::ostream& operator<<(std::ostream& os, fs::path const& z)
+{
+    return os << z.string();
+}
 
 #endif // path_utility_hpp
 
