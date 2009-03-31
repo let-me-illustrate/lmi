@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.133 2009-03-30 17:23:19 chicares Exp $
+// $Id: main_wx.cpp,v 1.134 2009-03-31 02:19:27 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -441,20 +441,11 @@ void Skeleton::InitHelp()
 
 void Skeleton::InitIcon()
 {
-#ifdef LMI_MSW
-    // If a wxIcon rather than a wxIconBundle were used here, then
-    // lossy shrinkage of a large icon could occur on msw; this
-    // approach uses a smaller icon in the '.ico' file instead.
-    //
-    // WX !! However, this method:
-//    frame_->SetIcons(wxIconBundle("mondrian.ico", wxBITMAP_TYPE_ICO));
-    // displays a black-and-white icon in the alt-tab task switcher
-    // on msw, even though the 256-color 32x32 icon comes first in the
-    // '.ico' file; but this shows the color icon:
-    frame_->SetIcons(wxICON(AAAAAAAA));
-#else // Not defined LMI_MSW.
-    frame_->SetIcon(wxIcon(AddDataDir("lmi.png")));
-#endif // Not defined LMI_MSW.
+#if wxCHECK_VERSION(2,9,0)
+    frame_->SetIcons(wxIconBundle(AddDataDir("lmi.ico")));
+#else  // !wxCHECK_VERSION(2,9,0)
+    frame_->SetIcons(wxIconBundle(AddDataDir("lmi.ico"), wxBITMAP_TYPE_ICO));
+#endif // !wxCHECK_VERSION(2,9,0)
 }
 
 void Skeleton::InitMenuBar()
