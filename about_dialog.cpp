@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: about_dialog.cpp,v 1.13 2008-12-29 06:08:11 chicares Exp $
+// $Id: about_dialog.cpp,v 1.14 2009-03-31 19:33:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -59,12 +59,6 @@ AboutDialog::~AboutDialog()
 
 int AboutDialog::ShowModal()
 {
-// WX !! Style wxHW_NO_SELECTION must be set at creation. Trying to
-// change it later, e.g.
-//    html_window->SetWindowStyle(html_window->GetWindowStyle() | wxHW_NO_SELECTION);
-//    html_window->SetExtraStyle (html_window->GetExtraStyle()  | wxHW_NO_SELECTION);
-// doesn't work. Is that reasonable?
-
     wxHtmlWindow* html_window = new wxHtmlWindow
         (this
         ,wxID_ANY
