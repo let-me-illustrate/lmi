@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.136 2009-03-14 16:09:18 chicares Exp $
+# $Id: workhorse.make,v 1.137 2009-03-31 02:19:27 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -298,6 +298,7 @@ vpath %.tpp           $(all_source_directories)
 vpath %.xpp           $(all_source_directories)
 
 vpath %.rc            $(all_source_directories)
+vpath %.ico           $(src_dir)
 
 vpath quoted_gpl      $(src_dir)
 vpath quoted_gpl_html $(src_dir)
@@ -768,6 +769,8 @@ wx_new$(SHREXT): wx_new.o
 # TODO ?? This needs a corresponding test target.
 lmi_cgi$(EXEEXT): $(cgi_objects) $(lmi_common_objects)
 
+lmi.rc.o: lmi.ico
+
 ################################################################################
 
 # Install.
@@ -796,7 +799,7 @@ test_dir       := $(exec_prefix)/test
 touchstone_dir := $(exec_prefix)/touchstone
 
 data_files := \
-  $(wildcard $(addprefix $(src_dir)/,*.png *.xml *.xrc *.xsd *.xsl)) \
+  $(wildcard $(addprefix $(src_dir)/,*.ico *.png *.xml *.xrc *.xsd *.xsl)) \
 
 help_files := \
   $(wildcard $(addprefix $(htmldir)/,*.html)) \

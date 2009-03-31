@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1288 2009-03-30 12:07:19 chicares Exp $
+// $Id: ChangeLog,v 1.1289 2009-03-31 02:19:27 chicares Exp $
 
 MAINTENANCE
 
@@ -22432,4 +22432,18 @@ be cleaned up now.
   path_utility_test.cpp
   product_names.cpp
 Use filesystem::path inserter.
+
+20090330T1723Z <gchicares@sbcglobal.net> [782]
+
+  main_wx.cpp
+Prefer wxXmlResource::LoadFile() to wxXmlResource::Load() (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00073.html
+
+20090331T0219Z <gchicares@sbcglobal.net> [782]
+
+  lmi.ico
+  main_wx.cpp
+  workhorse.make
+Rewrite InitIcon() (VS) and redesign lmi icon. See:
+  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00070.html
 
