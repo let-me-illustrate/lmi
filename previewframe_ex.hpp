@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: previewframe_ex.hpp,v 1.7 2008-12-27 02:56:53 chicares Exp $
+// $Id: previewframe_ex.hpp,v 1.8 2009-03-31 17:22:15 chicares Exp $
 
 // This implementation is a derived work based on wxWindows code, viz.
 //   include/wx/prntbase.h (C) 1997 Julian Smart and Markus Holzem
@@ -53,7 +53,6 @@ class PreviewFrameEx
         ,long int            style  = wxDEFAULT_FRAME_STYLE | wxFULL_REPAINT_ON_RESIZE
         ,wxString     const& name   = "Loading print preview..."
         );
-    // WX !! Recommend marking the base class's dtor as virtual.
     virtual ~PreviewFrameEx();
 
     // wxPreviewFrame overrides.

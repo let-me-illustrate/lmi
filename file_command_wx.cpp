@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: file_command_wx.cpp,v 1.8 2008-12-27 02:56:41 chicares Exp $
+// $Id: file_command_wx.cpp,v 1.9 2009-03-31 17:22:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,9 +34,6 @@
 #include <boost/filesystem/path.hpp>
 #include <boost/scoped_ptr.hpp>
 
-// WX !! wx/mimetype.h should include wx/arrstr.h; until it does,
-// include the required header here explicitly:
-#include <wx/arrstr.h>
 #include <wx/mimetype.h>
 #include <wx/utils.h> // wxExecute()
 
