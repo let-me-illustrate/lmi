@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.134 2009-03-31 02:19:27 chicares Exp $
+// $Id: main_wx.cpp,v 1.135 2009-03-31 17:01:14 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -441,11 +441,7 @@ void Skeleton::InitHelp()
 
 void Skeleton::InitIcon()
 {
-#if wxCHECK_VERSION(2,9,0)
-    frame_->SetIcons(wxIconBundle(AddDataDir("lmi.ico")));
-#else  // !wxCHECK_VERSION(2,9,0)
     frame_->SetIcons(wxIconBundle(AddDataDir("lmi.ico"), wxBITMAP_TYPE_ICO));
-#endif // !wxCHECK_VERSION(2,9,0)
 }
 
 void Skeleton::InitMenuBar()
