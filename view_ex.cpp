@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: view_ex.cpp,v 1.22 2008-12-27 02:56:59 chicares Exp $
+// $Id: view_ex.cpp,v 1.23 2009-03-31 19:34:26 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -82,11 +82,12 @@ wxFrame& ViewEx::FrameWindow() const
     return safely_dereference_as<wxFrame>(GetFrame());
 }
 
-// WX !! Elsewhere, the result of wxXmlResource::Get()->LoadX is
-// checked before doing anything with it. But here, LoadIcon returns a
-// reference, not a pointer. The library returns a default-constructed
-// wxIcon on load failure. This seems inconsistent with the way other
-// resources such as menubars and toolbars are treated.
+/// Elsewhere, the result of wxXmlResource::Get()->LoadX is checked
+/// before doing anything with it. However, LoadIcon() returns a
+/// reference, not a pointer, because it's a graphics object:
+///   http://lists.nongnu.org/archive/html/lmi/2009-03/msg00077.html
+/// and therefore it returns a default-constructed wxIcon on failure.
+
 wxIcon ViewEx::IconFromXmlResource(char const* z) const
 {
     wxIcon icon = wxXmlResource::Get()->LoadIcon(z);
