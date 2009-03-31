@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1289 2009-03-31 02:19:27 chicares Exp $
+// $Id: ChangeLog,v 1.1290 2009-03-31 19:34:26 chicares Exp $
 
 MAINTENANCE
 
@@ -22446,4 +22446,35 @@ Prefer wxXmlResource::LoadFile() to wxXmlResource::Load() (VS). See:
   workhorse.make
 Rewrite InitIcon() (VS) and redesign lmi icon. See:
   http://lists.nongnu.org/archive/html/lmi/2009-03/msg00070.html
+
+20090331T1701Z <gchicares@sbcglobal.net> [782]
+
+  main_wx.cpp
+Further simplify InitIcon() (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00076.html
+
+20090331T1701Z <gchicares@sbcglobal.net> [782]
+
+  main_wx.cpp
+Further simplify InitIcon() (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00076.html
+
+20090331T1722Z <gchicares@sbcglobal.net> [782]
+
+  file_command_wx.cpp
+  previewframe_ex.hpp
+Remove obsolete 'WX' markers (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00077.html
+
+20090331T1933Z <gchicares@sbcglobal.net> [782]
+
+  about_dialog.cpp
+Remove an obsolete 'WX' marker (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00077.html
+
+20090331T1934Z <gchicares@sbcglobal.net> [782]
+
+  view_ex.cpp
+Improve documentation (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00077.html
 
