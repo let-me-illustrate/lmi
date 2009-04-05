@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: math_functors_test.cpp,v 1.13 2008-12-27 02:56:48 chicares Exp $
+// $Id: math_functors_test.cpp,v 1.14 2009-04-05 10:34:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -45,10 +45,10 @@
 
 namespace
 {
-// C99's isnan macro can't be written correctly in portable C++.
-// This implementation is portable, but compilers needn't implement
-// it correctly.
-//
+/// C99's isnan macro can't be written correctly in portable C++.
+/// This implementation is portable, but compilers needn't implement
+/// it correctly.
+
 template<typename T>
 bool lmi_isnan(T t)
 {
@@ -141,17 +141,23 @@ struct coi_rate_from_q_naive
 };
 } // Unnamed namespace.
 
-// This function isn't a unit test per se. Its purpose is to show
-// how a sample calculation is affected by
-//   exponential versus power method, and
-//   hardware precision.
-//
+/// This function isn't a unit test per se. Its purpose is to show
+/// how a sample calculation is affected by
+///   exponential versus power method, and
+///   hardware precision.
+///
+/// Define f(i,m) = (1+i)^(1/m) - 1, i.e., "i upper m over m".
+/// Let i0 = 0.0004 (forty bp).
+/// Let i1 = f(i0, 365)
+/// Then the number calculated here is f(-i1, 1/365).
+
 void sample_results()
 {
     fenv_initialize();
     fenv_precision(fe_ldblprec);
     std::cout
-        << "\n  -0.004 upper 365 by various methods\n"
+        << "\n  annual rate corresponding to a 0.004 daily spread"
+        << ", by various methods\n"
         << std::setprecision(20)
         << "    long double precision, expm1l and log1pl\n      "
         << net_i_from_gross<double,365>()(0.0, 0.004, 0.0) << '\n'
