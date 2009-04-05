@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_wx.cpp,v 1.20 2008-12-31 21:54:11 chicares Exp $
+// $Id: alert_wx.cpp,v 1.21 2009-04-05 11:44:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -67,7 +67,7 @@ namespace
 void status_alert(std::string const& s)
 {
     wxWindow* w = wxTheApp->GetTopWindow();
-    wxLogStatus(dynamic_cast<wxFrame*>(w), s.c_str());
+    wxLogStatus(dynamic_cast<wxFrame*>(w), "%s", s.c_str());
     // TODO ?? If no frame with statusbar, consider writing to
     // diagnostics static control on dialog if that exists.
 }
@@ -80,7 +80,7 @@ void status_alert(std::string const& s)
 
 void warning_alert(std::string const& s)
 {
-    wxLogWarning(s.c_str());
+    wxLogWarning("%s", s.c_str());
     wxLog::FlushActive();
 }
 
