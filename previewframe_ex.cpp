@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: previewframe_ex.cpp,v 1.8 2008-12-27 02:56:53 chicares Exp $
+// $Id: previewframe_ex.cpp,v 1.9 2009-04-06 18:44:26 chicares Exp $
 
 // This implementation is a derived work based on wxWindows code, viz.
 //   src/common/prntbase.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -71,12 +71,12 @@ PreviewFrameEx::~PreviewFrameEx()
 void PreviewFrameEx::Initialize()
 {
     wxPreviewFrame::Initialize();
-    wxTheApp->GetTopWindow()->Show(false);
+    TopWindow().Show(false);
 }
 
 void PreviewFrameEx::UponCloseWindow(wxCloseEvent& event)
 {
-    wxTheApp->GetTopWindow()->Show(true);
+    TopWindow().Show(true);
     event.Skip();
 }
 
