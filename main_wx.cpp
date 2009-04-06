@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.136 2009-04-05 10:33:28 chicares Exp $
+// $Id: main_wx.cpp,v 1.137 2009-04-06 18:44:26 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -1050,7 +1050,7 @@ void Skeleton::UponTestSystemCommand(wxCommandEvent&)
         ("Type a command."
         ,"Test system_command()"
         ,""
-        ,wxTheApp->GetTopWindow()
+        ,&TopWindow()
         );
     std::string const z(w.c_str());
     system_command(z);

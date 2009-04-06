@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_controller.cpp,v 1.25 2009-01-04 02:38:12 chicares Exp $
+// $Id: mvc_controller.cpp,v 1.26 2009-04-06 18:44:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -43,7 +43,7 @@
 #include "wx_utility.hpp"
 #include "wx_workarounds.hpp"
 
-#include <wx/app.h> // wxTheApp
+#include <wx/app.h> // wxApp::IsActive()
 #include <wx/checkbox.h>
 #include <wx/ctrlsub.h>
 #include <wx/datectrl.h>
@@ -768,7 +768,7 @@ void MvcController::UponUpdateUI(wxUpdateUIEvent& event)
     // application is not active: see
     //   http://lists.gnu.org/archive/html/lmi/2006-03/msg00006.html
     // for a discussion.
-    if(!wxTheApp->IsActive())
+    if(!TheApp().IsActive())
         {
         return;
         }

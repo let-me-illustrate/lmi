@@ -19,14 +19,15 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: single_choice_popup_menu.hpp,v 1.6 2008-12-27 02:56:55 chicares Exp $
+// $Id: single_choice_popup_menu.hpp,v 1.7 2009-04-06 18:44:26 chicares Exp $
 
 #ifndef single_choice_popup_menu_hpp
 #define single_choice_popup_menu_hpp
 
 #include "config.hpp"
 
-#include <wx/app.h>    // wxTheApp
+#include "wx_utility.hpp"
+
 #include <wx/arrstr.h> // wxArrayString
 #include <wx/menu.h>
 #include <wx/string.h>
@@ -47,8 +48,8 @@ class SingleChoicePopupMenu
   public:
     SingleChoicePopupMenu
         (wxArrayString const& choices
-        ,wxString const&      title = wxEmptyString
-        ,wxWindow*            parent = wxTheApp->GetTopWindow()
+        ,wxString const&      title  = wxEmptyString
+        ,wxWindow*            parent = &TopWindow()
         );
 
     virtual ~SingleChoicePopupMenu();
