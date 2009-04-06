@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_utility.cpp,v 1.19 2008-12-27 02:56:59 chicares Exp $
+// $Id: wx_utility.cpp,v 1.20 2009-04-06 18:44:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,6 +33,7 @@
 #include "calendar_date.hpp"
 #include "wx_new.hpp"
 
+#include <wx/app.h>                     // wxTheApp
 #include <wx/bookctrl.h>
 #include <wx/clipbrd.h>
 #include <wx/dataobj.h>
@@ -264,5 +265,30 @@ std::string NameLabelId(wxWindow const* w)
         << "; name '"   << w->GetName () << "'"
         ;
     return oss.str();
+}
+
+/// Safe accessor for wxTheApp: throws if null.
+
+wxApp& TheApp()
+{
+    if(!wxTheApp)
+        {
+        safely_show_message("Application object unavailable.");
+        throw 0;
+        }
+    return *wxTheApp;
+}
+
+/// Safe cover function for wxApp::GetTopWindow(): throws if null.
+
+wxWindow& TopWindow()
+{
+    wxWindow* w = TheApp().GetTopWindow();
+    if(!w)
+        {
+        safely_show_message("Top window not found.");
+        throw 0;
+        }
+    return *w;
 }
 

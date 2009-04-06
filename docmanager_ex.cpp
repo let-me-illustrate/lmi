@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: docmanager_ex.cpp,v 1.18 2008-12-27 02:56:40 chicares Exp $
+// $Id: docmanager_ex.cpp,v 1.19 2009-04-06 18:44:26 chicares Exp $
 
 // This implementation is a derived work based on wxWindows code, viz.
 //   samples/printing/printing.cpp (C) 1995 Julian Smart
@@ -44,8 +44,8 @@
 #include "previewframe_ex.hpp"
 #include "single_choice_popup_menu.hpp"
 #include "wx_new.hpp"
+#include "wx_utility.hpp"
 
-#include <wx/app.h> // wxTheApp
 #include <wx/cmndata.h>
 #include <wx/menu.h>
 #include <wx/msgdlg.h>
@@ -113,7 +113,7 @@ void DocManagerEx::UponPageSetup(wxCommandEvent&)
     *page_setup_data_ = *print_data_;
 
     wxPageSetupDialog pageSetupDialog
-        (wxTheApp->GetTopWindow()
+        (&TopWindow()
         ,page_setup_data_.get()
         );
     pageSetupDialog.ShowModal();

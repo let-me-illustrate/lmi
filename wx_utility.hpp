@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_utility.hpp,v 1.13 2008-12-27 02:56:59 chicares Exp $
+// $Id: wx_utility.hpp,v 1.14 2009-04-06 18:44:26 chicares Exp $
 
 #ifndef wx_utility_hpp
 #define wx_utility_hpp
@@ -38,6 +38,7 @@
 #include <vector>
 
 class LMI_SO calendar_date;
+class WXDLLIMPEXP_FWD_CORE wxApp;
 class WXDLLIMPEXP_FWD_CORE wxBookCtrlBase;
 class WXDLLIMPEXP_FWD_CORE wxDateTime;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
@@ -106,6 +107,8 @@ wxDateTime ConvertDateToWx(jdn_t const&);
 bool operator==(calendar_date const& lmi_date, wxDateTime const& wx_date);
 bool operator==(wxDateTime const& wx_date, calendar_date const& lmi_date);
 
+// This function is grouped with the functions it tests.
+
 void TestDateConversions();
 
 /// Return a vector comprising the names of all book-control pages, in
@@ -131,6 +134,9 @@ std::vector<wxWindow*> Lineage(wxWindow const*);
 /// Return a string comprising a window's name, label, and id.
 
 std::string NameLabelId(wxWindow const*);
+
+wxApp& TheApp();
+wxWindow& TopWindow();
 
 #endif // wx_utility_hpp
 

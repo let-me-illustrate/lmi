@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1290 2009-03-31 19:34:26 chicares Exp $
+// $Id: ChangeLog,v 1.1291 2009-04-06 18:44:26 chicares Exp $
 
 MAINTENANCE
 
@@ -22477,4 +22477,35 @@ Remove an obsolete 'WX' marker (VS). See:
   view_ex.cpp
 Improve documentation (VS). See:
   http://lists.nongnu.org/archive/html/lmi/2009-03/msg00077.html
+
+20090405T1033Z <gchicares@sbcglobal.net> [782]
+
+  main_wx.cpp
+Fix defect introduced 20090330T1723Z. See:
+  http://lists.nongnu.org/archive/html/lmi/2009-04/msg00005.html
+
+20090405T1034Z <gchicares@sbcglobal.net> [782]
+
+  math_functors_test.cpp
+Improve documentation.
+
+20090405T1144Z <gchicares@sbcglobal.net> [782]
+
+  alert_wx.cpp
+Prevent accidents with printf conversion specifiers (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00069.html
+
+20090406T1844Z <gchicares@sbcglobal.net> [782]
+
+  alert_wx.cpp
+  docmanager_ex.cpp
+  main_wx.cpp
+  mvc_controller.cpp
+  previewframe_ex.cpp
+  previewframe_ex.hpp
+  progress_meter_wx.cpp
+  single_choice_popup_menu.hpp
+  wx_utility.cpp
+  wx_utility.hpp
+Add and use safe cover functions for wxTheApp and GetTopWindow().
 

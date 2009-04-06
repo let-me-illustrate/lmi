@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter_wx.cpp,v 1.14 2008-12-27 02:56:53 chicares Exp $
+// $Id: progress_meter_wx.cpp,v 1.15 2009-04-06 18:44:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,7 +28,8 @@
 
 #include "progress_meter.hpp"
 
-#include <wx/app.h> // wxTheApp
+#include "wx_utility.hpp"
+
 #include <wx/progdlg.h>
 
 #include <sstream>
@@ -89,7 +90,7 @@ concrete_progress_meter::concrete_progress_meter
         (title
         ,progress_message()
         ,max_count
-        ,wxTheApp->GetTopWindow()
+        ,&TopWindow()
         ,progress_dialog_style
         )
 {

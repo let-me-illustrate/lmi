@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: previewframe_ex.hpp,v 1.8 2009-03-31 17:22:15 chicares Exp $
+// $Id: previewframe_ex.hpp,v 1.9 2009-04-06 18:44:26 chicares Exp $
 
 // This implementation is a derived work based on wxWindows code, viz.
 //   include/wx/prntbase.h (C) 1997 Julian Smart and Markus Holzem
@@ -37,7 +37,8 @@
 
 #include "config.hpp"
 
-#include <wx/app.h> // wxTheApp
+#include "wx_utility.hpp"
+
 #include <wx/prntbase.h>
 
 class PreviewFrameEx
@@ -46,10 +47,10 @@ class PreviewFrameEx
   public:
     PreviewFrameEx
         (wxPrintPreviewBase* preview
-        ,wxFrame*            parent = dynamic_cast<wxFrame*>(wxTheApp->GetTopWindow())
+        ,wxFrame*            parent = dynamic_cast<wxFrame*>(&TopWindow())
         ,wxString     const& title  = "Print preview"
         ,wxPoint      const& pos    = wxDefaultPosition
-        ,wxSize       const& size   = wxTheApp->GetTopWindow()->GetSize()
+        ,wxSize       const& size   = TopWindow().GetSize()
         ,long int            style  = wxDEFAULT_FRAME_STYLE | wxFULL_REPAINT_ON_RESIZE
         ,wxString     const& name   = "Loading print preview..."
         );

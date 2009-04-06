@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_wx.cpp,v 1.21 2009-04-05 11:44:17 chicares Exp $
+// $Id: alert_wx.cpp,v 1.22 2009-04-06 18:44:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,11 +29,15 @@
 #include "alert.hpp"
 
 #include "configurable_settings.hpp"
+#include "wx_utility.hpp"
 
 #include <wx/app.h>                              // wxTheApp
 #include <wx/frame.h>
 #include <wx/log.h>
 #include <wx/msgdlg.h>
+#if defined LMI_MSW
+#   include <wx/msw/wrapwin.h>                   // HWND etc.
+#endif // defined LMI_MSW
 
 #include <cstdio>
 #include <stdexcept>
@@ -66,7 +70,7 @@ namespace
 
 void status_alert(std::string const& s)
 {
-    wxWindow* w = wxTheApp->GetTopWindow();
+    wxWindow* w = &TopWindow();
     wxLogStatus(dynamic_cast<wxFrame*>(w), "%s", s.c_str());
     // TODO ?? If no frame with statusbar, consider writing to
     // diagnostics static control on dialog if that exists.
@@ -92,7 +96,7 @@ void hobsons_choice_alert(std::string const& s)
             (s
             ,hobsons_prompt()
             ,wxYES_NO | wxICON_QUESTION
-            ,wxTheApp->GetTopWindow()
+            ,&TopWindow()
             );
         if(wxYES == rc)
             {
@@ -107,7 +111,7 @@ void hobsons_choice_alert(std::string const& s)
                 (s
                 ,"Warning: the result may be invalid."
                 ,wxOK | wxICON_EXCLAMATION
-                ,wxTheApp->GetTopWindow()
+                ,&TopWindow()
                 );
             }
         }
@@ -158,13 +162,9 @@ void safe_message_alert(char const* message)
     std::fflush(stderr);
 #else  // defined LMI_MSW
     HWND handle = 0;
-    if(wxTheApp)
+    if(wxTheApp && wxTheApp->GetTopWindow())
         {
-        wxWindow* top_window = wxTheApp->GetTopWindow();
-        if(top_window)
-            {
-            handle = reinterpret_cast<HWND>(top_window->GetHandle());
-            }
+        handle = reinterpret_cast<HWND>(wxTheApp->GetTopWindow()->GetHandle());
         }
     ::MessageBoxA(handle, message, "Error", MB_OK | MB_ICONSTOP | MB_TASKMODAL);
 #endif // defined LMI_MSW
