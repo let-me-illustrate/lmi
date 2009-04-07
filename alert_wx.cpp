@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_wx.cpp,v 1.22 2009-04-06 18:44:26 chicares Exp $
+// $Id: alert_wx.cpp,v 1.23 2009-04-07 01:15:10 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -72,8 +72,6 @@ void status_alert(std::string const& s)
 {
     wxWindow* w = &TopWindow();
     wxLogStatus(dynamic_cast<wxFrame*>(w), "%s", s.c_str());
-    // TODO ?? If no frame with statusbar, consider writing to
-    // diagnostics static control on dialog if that exists.
 }
 
 /// By design, wx buffers warning messages, and even discards them if
@@ -87,6 +85,11 @@ void warning_alert(std::string const& s)
     wxLogWarning("%s", s.c_str());
     wxLog::FlushActive();
 }
+
+/// It seems silly to offer an option that should never be declined,
+/// and then rebuke the user for declining it. However, some users
+/// continue to demand this, so they continue to need reproof. Avoid
+/// using this in new code.
 
 void hobsons_choice_alert(std::string const& s)
 {
@@ -104,9 +107,6 @@ void hobsons_choice_alert(std::string const& s)
             }
         else
             {
-            // TODO ?? Is it a really good idea to offer an option
-            // that it's probably foolish to decline, then rebuke
-            // the user for choosing it?
             wxMessageBox
                 (s
                 ,"Warning: the result may be invalid."
