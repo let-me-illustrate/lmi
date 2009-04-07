@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_wx.cpp,v 1.23 2009-04-07 01:15:10 chicares Exp $
+// $Id: alert_wx.cpp,v 1.24 2009-04-07 17:17:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -44,34 +44,30 @@
 
 namespace
 {
-    bool ensure_setup = set_alert_functions
-        (status_alert
-        ,warning_alert
-        ,hobsons_choice_alert
-        ,fatal_error_alert
-        ,safe_message_alert
-        );
-
-#if 0
-    /// Alert messages could be lost if they're flushed before wx has
-    /// initialized its logging facility. Here is an untested idea for
-    /// a function that could be called prior to each use of that
-    /// facility in this file. It's probably not correct to rely on
-    /// the particular condition tested here, though.
-    void show_safely_if_log_uninitialized(std::string const& s)
-        {
-        if(0 == wxLog::GetActiveTarget())
-            {
-            safe_message_alert(s.c_str());
-            }
-        }
-#endif // 0
+bool ensure_setup = set_alert_functions
+    (status_alert
+    ,warning_alert
+    ,hobsons_choice_alert
+    ,fatal_error_alert
+    ,safe_message_alert
+    );
 } // Unnamed namespace.
 
 void status_alert(std::string const& s)
 {
-    wxWindow* w = &TopWindow();
-    wxLogStatus(dynamic_cast<wxFrame*>(w), "%s", s.c_str());
+    try
+        {
+        wxFrame* f = dynamic_cast<wxFrame*>(&TopWindow());
+        if(!f)
+            {
+            throw 0;
+            }
+        wxLogStatus(f, "%s", s.c_str());
+        }
+    catch(...)
+        {
+        safely_show_message("No statusbar to display message:\n" + s);
+        }
 }
 
 /// By design, wx buffers warning messages, and even discards them if
@@ -82,24 +78,45 @@ void status_alert(std::string const& s)
 
 void warning_alert(std::string const& s)
 {
-    wxLogWarning("%s", s.c_str());
-    wxLog::FlushActive();
+    if(dynamic_cast<wxLogGui*>(wxLog::GetActiveTarget()))
+        {
+        wxLogWarning("%s", s.c_str());
+        wxLog::FlushActive();
+        }
+    else
+        {
+        safely_show_message("Untimely warning:\n" + s);
+        }
 }
 
 /// It seems silly to offer an option that should never be declined,
 /// and then rebuke the user for declining it. However, some users
 /// continue to demand this, so they continue to need reproof. Avoid
 /// using this in new code.
+///
+/// The catch-clause throws an exception explicitly because accessing
+/// configurable_settings during startup may be problematic.
 
 void hobsons_choice_alert(std::string const& s)
 {
+    wxWindow* w = 0;
+    try
+        {
+        w = &TopWindow();
+        }
+    catch(...)
+        {
+        safely_show_message("Untimely error:\n" + s);
+        throw hobsons_choice_exception();
+        }
+
     if(configurable_settings::instance().offer_hobsons_choice())
         {
         int rc = wxMessageBox
             (s
             ,hobsons_prompt()
             ,wxYES_NO | wxICON_QUESTION
-            ,&TopWindow()
+            ,w
             );
         if(wxYES == rc)
             {
@@ -111,7 +128,7 @@ void hobsons_choice_alert(std::string const& s)
                 (s
                 ,"Warning: the result may be invalid."
                 ,wxOK | wxICON_EXCLAMATION
-                ,&TopWindow()
+                ,w
                 );
             }
         }
@@ -123,6 +140,10 @@ void hobsons_choice_alert(std::string const& s)
 
 void fatal_error_alert(std::string const& s)
 {
+    if(!wxTheApp)
+        {
+        safely_show_message("Untimely error message:\n" + s);
+        }
     throw std::runtime_error(s);
 }
 
