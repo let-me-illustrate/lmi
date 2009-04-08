@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: view_ex.cpp,v 1.23 2009-03-31 19:34:26 chicares Exp $
+// $Id: view_ex.cpp,v 1.24 2009-04-08 01:26:28 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -111,10 +111,11 @@ wxMenuBar* ViewEx::MenuBarFromXmlResource(char const* z) const
         menubar = new(wx) wxMenuBar;
         if(!menubar)
             {
-            safely_show_message
-                ("Terminating abnormally:"
-                " failed to construct default menubar."
-                );
+            warning()
+                << "Terminating abnormally:"
+                << " failed to construct default menubar."
+                << LMI_FLUSH
+                ;
             std::exit(EXIT_FAILURE);
             }
         }

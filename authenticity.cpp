@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: authenticity.cpp,v 1.14 2009-03-30 12:07:19 chicares Exp $
+// $Id: authenticity.cpp,v 1.15 2009-04-08 01:26:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -284,7 +284,7 @@ void authenticate_system()
         && "cached"    != diagnostic_message
         )
         {
-        safely_show_message(diagnostic_message);
+        warning() << diagnostic_message << LMI_FLUSH;
         std::exit(EXIT_FAILURE);
         }
 }
