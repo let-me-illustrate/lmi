@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.49 2009-03-30 12:07:19 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.50 2009-04-08 01:26:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -156,13 +156,12 @@ configurable_settings::configurable_settings()
         {
         report_exception();
         print_directory_ = fs::system_complete(".").string();
-        std::ostringstream oss;
-        oss
+        warning()
             << "If possible, current directory '"
             << print_directory_
             << "' will be used for print files instead."
+            << LMI_FLUSH
             ;
-        safely_show_message(oss.str());
         validate_directory(print_directory_, "Fallback print directory");
         }
 }
@@ -233,15 +232,14 @@ void configurable_settings::load()
         }
     if(!oss.str().empty())
         {
-        std::ostringstream oss2;
-        oss2
+        warning()
             << "Configurable-settings file '"
             << configuration_filepath()
             << "':\n"
             << oss.str()
             << "not recognized."
+            << LMI_FLUSH
             ;
-        safely_show_message(oss2.str());
         }
 }
 

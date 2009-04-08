@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi.cpp,v 1.27 2008-12-27 02:56:41 chicares Exp $
+// $Id: fenv_lmi.cpp,v 1.28 2009-04-08 01:26:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,7 +28,7 @@
 
 #include "fenv_lmi.hpp"
 
-#include "alert.hpp" // safely_show_message()
+#include "alert.hpp"
 
 #include <iomanip>
 #include <ios>
@@ -225,10 +225,6 @@ std::string fenv_explain_invalid_control_word()
 /// indulgence.
 ///
 /// Postcondition: control word is valid.
-///
-/// Use safely_show_message() instead of any less-robust alternative
-/// because this function is intended to be safe to call in unusual
-/// circumstances, e.g., just before the program closes.
 
 bool fenv_validate(enum_fenv_indulgence indulgence)
 {
@@ -250,7 +246,7 @@ bool fenv_validate(enum_fenv_indulgence indulgence)
         {
         std::string s(fenv_explain_invalid_control_word());
         fenv_initialize();
-        safely_show_message(s);
+        warning() << s << LMI_FLUSH;
         }
 
     return okay;

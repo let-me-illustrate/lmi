@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: msw_workarounds.cpp,v 1.10 2008-12-31 21:55:19 chicares Exp $
+// $Id: msw_workarounds.cpp,v 1.11 2009-04-08 01:26:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -92,24 +92,21 @@ void MswDllPreloader::PreloadOneDll(std::string const& dll_name)
 
     if(0 == ::LoadLibraryA(dll_name.c_str()))
         {
-        std::ostringstream oss;
-        oss << "Failed to preload '" << dll_name << "'.";
-        safely_show_message(oss.str());
+        warning() << "Failed to preload '" << dll_name << "'." << LMI_FLUSH;
         }
     else
         {
         SuccessfullyPreloadedDlls_.push_front(dll_name);
         if(fenv_is_valid())
             {
-            std::ostringstream oss;
-            oss
+            warning()
                 << "Preloading '"
                 << dll_name
                 << "' had no effect on the floating-point control word."
                 << " You can safely remove it from 'libraries_to_preload'"
                 << " in 'configurable_settings.xml'."
+                << LMI_FLUSH
                 ;
-            safely_show_message(oss.str());
             }
         }
 #endif // LMI_MSW defined.
@@ -120,9 +117,7 @@ void MswDllPreloader::UnloadOneDll(std::string const& dll_name)
 #ifdef LMI_MSW
     if(0 == ::FreeLibrary(::GetModuleHandleA(dll_name.c_str())))
         {
-        std::ostringstream oss;
-        oss << "Failed to unload '" << dll_name << "'.";
-        safely_show_message(oss.str());
+        warning() << "Failed to unload '" << dll_name << "'." << LMI_FLUSH;
         }
 #endif // LMI_MSW defined.
 }
