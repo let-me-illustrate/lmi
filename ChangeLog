@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1291 2009-04-06 18:44:26 chicares Exp $
+// $Id: ChangeLog,v 1.1292 2009-04-08 01:26:28 chicares Exp $
 
 MAINTENANCE
 
@@ -22508,4 +22508,24 @@ Prevent accidents with printf conversion specifiers (VZ). See:
   wx_utility.cpp
   wx_utility.hpp
 Add and use safe cover functions for wxTheApp and GetTopWindow().
+
+20090407T0115Z <gchicares@sbcglobal.net> [780]
+
+  alert_wx.cpp
+Resolve some defect markers.
+
+20090407T1717Z <gchicares@sbcglobal.net> [780]
+
+  alert_wx.cpp
+Make it safe to call wx 'alert' functions at any time. See:
+  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00069.html
+
+20090408T0126Z <gchicares@sbcglobal.net> [780]
+
+  authenticity.cpp
+  configurable_settings.cpp
+  fenv_lmi.cpp
+  msw_workarounds.cpp
+  view_ex.cpp
+Avoid using safely_show_message() where not imperative.
 
