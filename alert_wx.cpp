@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_wx.cpp,v 1.24 2009-04-07 17:17:26 chicares Exp $
+// $Id: alert_wx.cpp,v 1.25 2009-04-10 11:13:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,7 +33,6 @@
 
 #include <wx/app.h>                              // wxTheApp
 #include <wx/frame.h>
-#include <wx/log.h>
 #include <wx/msgdlg.h>
 #if defined LMI_MSW
 #   include <wx/msw/wrapwin.h>                   // HWND etc.
@@ -58,11 +57,11 @@ void status_alert(std::string const& s)
     try
         {
         wxFrame* f = dynamic_cast<wxFrame*>(&TopWindow());
-        if(!f)
+        if(!f || !f->GetStatusBar())
             {
             throw 0;
             }
-        wxLogStatus(f, "%s", s.c_str());
+        f->SetStatusText(s);
         }
     catch(...)
         {
@@ -70,20 +69,13 @@ void status_alert(std::string const& s)
         }
 }
 
-/// By design, wx buffers warning messages, and even discards them if
-/// a (more severe) error message occurs later. This design flushes
-/// warnings explicitly as soon as they occur, discarding none, as is
-/// more suitable in the intended problem domain; of course, that
-/// choice could be made configurable if desired.
-
 void warning_alert(std::string const& s)
 {
-    if(dynamic_cast<wxLogGui*>(wxLog::GetActiveTarget()))
+    try
         {
-        wxLogWarning("%s", s.c_str());
-        wxLog::FlushActive();
+        wxMessageBox(s, "Warning", wxOK, &TopWindow());
         }
-    else
+    catch(...)
         {
         safely_show_message("Untimely warning:\n" + s);
         }
