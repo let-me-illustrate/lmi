@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_realization.cpp,v 1.20 2009-03-22 16:29:24 chicares Exp $
+// $Id: input_realization.cpp,v 1.21 2009-04-12 01:02:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -831,6 +831,22 @@ std::string Input::RealizeSeparateAccountRate()
             << ", but "
             << max_sep_acct_rate
             << " is the highest rate allowed."
+            ;
+        return oss.str();
+        }
+    double lowest = std::min_element
+        (SeparateAccountRateRealized_.begin()
+        ,SeparateAccountRateRealized_.end()
+        )->value();
+    if(lowest < -1.0)
+        {
+        std::ostringstream oss;
+        oss
+            << "Lowest separate-account interest rate entered is "
+            << lowest
+            << ", but "
+            << max_sep_acct_rate
+            << " is the lowest rate allowed."
             ;
         return oss.str();
         }
