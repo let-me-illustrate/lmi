@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.137 2009-04-06 18:44:26 chicares Exp $
+// $Id: main_wx.cpp,v 1.138 2009-04-12 01:03:22 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -92,7 +92,6 @@
 #include <wx/image.h>
 #include <wx/log.h>                 // wxSafeShowMessage()
 #include <wx/menu.h>
-#include <wx/msgdlg.h>
 #include <wx/textctrl.h>
 #include <wx/textdlg.h>             // wxGetTextFromUser()
 #include <wx/toolbar.h>
