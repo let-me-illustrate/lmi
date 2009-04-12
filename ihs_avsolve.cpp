@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.51 2009-03-02 06:28:34 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.52 2009-04-12 01:01:22 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -341,7 +341,8 @@ double AccountValue::Solve
             );
         }
     // TODO ?? Wait--initial premium may exceed input face, so
-    // for now we'll bail out with this:
+    // for now we'll bail out with this: no amount solved for can
+    // plausibly reach one billion dollars.
     upper_bound = 999999999.99;
 
     switch(a_SolveType)

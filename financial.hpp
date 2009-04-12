@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: financial.hpp,v 1.9 2008-12-27 02:56:41 chicares Exp $
+// $Id: financial.hpp,v 1.10 2009-04-12 01:01:22 chicares Exp $
 
 #ifndef financial_hpp
 #define financial_hpp
@@ -115,8 +115,8 @@ class irr_helper
     long double operator()()
         {
         root_type z = decimal_root
-            (-0.99999   // A priori lower bound.
-            ,1000.0     // A priori upper bound.
+            (-1.0       // A priori lower bound.
+            ,1000.0     // Assumed upper bound.
             ,bias_lower // Return the final bound with the lower fv.
             ,decimals_
             ,*this

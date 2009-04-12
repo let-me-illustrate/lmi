@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: interest_rates.cpp,v 1.27 2009-03-08 20:14:45 chicares Exp $
+// $Id: interest_rates.cpp,v 1.28 2009-04-12 01:01:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -506,7 +506,7 @@ void InterestRates::InitializeGeneralAccountRates()
 
 void InterestRates::InitializeSeparateAccountRates()
 {
-    SepAcctFloor_.assign(Length_, -.999999999999);
+    SepAcctFloor_.assign(Length_, -1.0);
     if(!NeedSepAcctRates_)
         {
         for(int i = mce_annual_rate; i < mc_n_rate_periods; i++)
