@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1292 2009-04-08 01:26:28 chicares Exp $
+// $Id: ChangeLog,v 1.1293 2009-04-12 01:04:53 chicares Exp $
 
 MAINTENANCE
 
@@ -22528,4 +22528,35 @@ Make it safe to call wx 'alert' functions at any time. See:
   msw_workarounds.cpp
   view_ex.cpp
 Avoid using safely_show_message() where not imperative.
+
+20090410T1113Z <gchicares@sbcglobal.net> [780]
+
+  alert_wx.cpp
+Avoid using wxLog in wx 'alert' implementation. See:
+  http://lists.nongnu.org/archive/html/lmi/2009-04/msg00018.html
+
+20090412T0101Z <gchicares@sbcglobal.net> [779]
+
+  financial.hpp
+  ihs_avsolve.cpp
+  ihs_commfns.cpp
+  ihs_irc7702.cpp
+  interest_rates.cpp
+  quiet_nan.hpp
+Refine or document manifest constants differing slightly from 1EN.
+
+20090412T0102Z <gchicares@sbcglobal.net> [779]
+
+  input_realization.cpp
+Impose -100% floor on separate-account interest rate.
+
+20090412T0103Z <gchicares@sbcglobal.net> [779]
+
+  main_wx.cpp
+Remove unneeded header.
+
+20090412T0104Z <gchicares@sbcglobal.net> [779]
+
+  max_stream_precision.hpp
+Improve documentation.
 
