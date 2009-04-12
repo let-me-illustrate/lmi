@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702.cpp,v 1.23 2008-12-27 02:56:43 chicares Exp $
+// $Id: ihs_irc7702.cpp,v 1.24 2009-04-12 01:01:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1075,7 +1075,8 @@ double Irc7702::CalculateSpecAmt
         ,a_NetPmtFactorExc
         );
 
-    // TODO ?? The hard-coded upper bound shouldn't be a manifest constant.
+    // TODO ?? The upper bound ideally wouldn't be hard coded; but if
+    // it must be, then it can't plausibly reach one billion dollars.
     decimal_root
         (0.0
         ,999999999.99

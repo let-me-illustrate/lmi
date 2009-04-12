@@ -20,7 +20,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: quiet_nan.hpp,v 1.9 2008-12-27 02:56:53 chicares Exp $
+// $Id: quiet_nan.hpp,v 1.10 2009-04-12 01:01:23 chicares Exp $
 
 #ifndef quiet_nan_hpp
 #define quiet_nan_hpp
@@ -36,14 +36,21 @@
 
 #include <limits>
 
-// For non-conforming implementations, an 'implausible' value may be
-// specified if desired, although there's no guarantee that it won't
-// arise in practice. If none is specified, then we choose one with
-// FLT_DIG decimal digits and an exponent a bit under FLT_MAX_10_EXP,
-// using the minimum values of those macros in C99 5.2.4.2.2/8.
-
-// TODO ?? Consider:
-// http://lists.boost.org/MailArchives/boost/msg12131.php
+/// It is sometimes profitable to initialize a floating-point variable
+/// to a recognizably implausible value. A quiet NaN is generally the
+/// best such value.
+///
+/// For non-conforming implementations, an 'implausible' value may be
+/// specified if desired, although there's no guarantee that it won't
+/// arise in practice. If none is specified, then we choose one with
+/// FLT_DIG decimal digits and an exponent a bit under FLT_MAX_10_EXP,
+/// using the minimum values of those macros in C99 5.2.4.2.2/8. The
+/// same behavior is used for borland tools, which claim to support
+/// qNaNs but do not:
+///   http://lists.boost.org/MailArchives/boost/msg12131.php
+///   there's no borland option to set the floating-point hardware to
+///   allow quiet NaNs to work without raising an exception.
+/// Without this workaround, bc++5.5.1 would produce a BSOD on msw xp.
 
 template<typename T>
 T implausible_value(T const& t = -9.99999e35)
@@ -51,9 +58,8 @@ T implausible_value(T const& t = -9.99999e35)
     BOOST_STATIC_ASSERT(::boost::is_float<T>::value);
 
 #if defined __BORLANDC__
-    // Without this 'workaround', bc++5.5.1 gives a BSOD on msw xp.
     return t;
-#else // __BORLANDC__
+#else  // !defined __BORLANDC__
 
     if(std::numeric_limits<T>::has_quiet_NaN)
         {
@@ -63,7 +69,7 @@ T implausible_value(T const& t = -9.99999e35)
         {
         return t;
         }
-#endif // Not newer borland compiler.
+#endif // !defined __BORLANDC__
 }
 
 #endif // quiet_nan_hpp
