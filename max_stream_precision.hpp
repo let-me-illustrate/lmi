@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: max_stream_precision.hpp,v 1.7 2008-12-27 02:56:48 chicares Exp $
+// $Id: max_stream_precision.hpp,v 1.8 2009-04-12 01:04:52 chicares Exp $
 
 #ifndef max_stream_precision_hpp
 #define max_stream_precision_hpp
@@ -30,7 +30,7 @@
 #include <limits>
 
 /// Return the stream precision necessary to map any base-ten
-/// scientific-notation representation back to binary without
+/// scientific-notation representation to binary and back without
 /// loss of accuracy.
 ///
 /// Return a value of type int, rather than type std::streamsize .
