@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.105 2009-03-14 13:41:37 chicares Exp $
+// $Id: illustration_view.cpp,v 1.106 2009-04-14 23:04:12 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -292,7 +292,7 @@ void IllustrationView::Run(Input* overriding_input)
         }
 
     illustrator z(mce_emit_nothing);
-    z(base_filename() + ".debug", input_data());
+    z(base_filename(), input_data());
     ledger_values_ = z.principal_ledger();
 
     status() << "Calculate: " << timer.stop().elapsed_msec_str();
