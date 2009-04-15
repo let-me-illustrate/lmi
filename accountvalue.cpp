@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.67 2009-03-04 12:34:45 chicares Exp $
+// $Id: accountvalue.cpp,v 1.68 2009-04-15 02:05:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -118,7 +118,7 @@ showing {accesses, modifies current year, modifies future years}
 //============================================================================
 AccountValue::AccountValue(Input const& input)
     :BasicValues       (Input::magically_rectify(input))
-    ,DebugFilename     ("anonymous.debug")
+    ,DebugFilename     ("anonymous.monthly_trace")
     ,ledger_(new Ledger(BasicValues::GetLedgerType(), BasicValues::GetLength()))
     ,ledger_invariant_ (new LedgerInvariant(BasicValues::GetLength()))
     ,ledger_variant_   (new LedgerVariant  (BasicValues::GetLength()))
@@ -389,7 +389,7 @@ void AccountValue::DoMonth()
     //   where is loan capitalized?
     //   solve for WD then loan
     //   solve for endt?
-    //   debug detail
+    //   monthly trace
     //   7702A
     //   CVAT corridor
     //   rounding

@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.82 2009-03-03 13:55:30 chicares Exp $
+// $Id: account_value.hpp,v 1.83 2009-04-15 02:05:22 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -44,7 +44,6 @@
 //   regular loans
 //   preferred loans
 
-class DebugView;
 class Input;
 class Ledger;
 class LedgerInvariant;
@@ -319,7 +318,7 @@ class LMI_SO AccountValue
     // SOMEDAY !! Expunge this because SD 10-4-22(2) repealed it.
     double TaxableFirstYearPlannedPremium() const;
 
-    // Monthly calculation detail.
+    // Detailed monthly trace.
     std::string     DebugFilename;
     std::ofstream   DebugStream;
     std::vector<std::string> DebugRecord;
