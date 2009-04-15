@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.105 2009-01-06 15:01:22 chicares Exp $
+// $Id: group_values.cpp,v 1.106 2009-04-15 00:41:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -117,7 +117,7 @@ census_run_result run_census_in_series::operator()
         if(!cell_should_be_ignored(cells[j]))
             {
             std::string const name(cells[j]["InsuredName"].str());
-            IllusVal IV(serial_file_path(file, name, j, "debug").string());
+            IllusVal IV(serial_file_path(file, name, j, "hastur").string());
             IV.run(cells[j]);
             composite.PlusEq(*IV.ledger());
             result.usec_for_output_ += emit_ledger
@@ -252,7 +252,7 @@ census_run_result run_census_in_parallel::operator()
             boost::shared_ptr<AccountValue> av(new AccountValue(*ip));
             std::string const name(cells[j]["InsuredName"].str());
             av->SetDebugFilename
-                (serial_file_path(file, name, j, "debug").string()
+                (serial_file_path(file, name, j, "hastur").string()
                 );
 
             cell_values.push_back(av);
