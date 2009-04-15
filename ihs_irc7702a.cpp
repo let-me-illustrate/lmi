@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702a.cpp,v 1.17 2008-12-27 02:56:44 chicares Exp $
+// $Id: ihs_irc7702a.cpp,v 1.18 2009-04-15 02:05:23 chicares Exp $
 
 // TODO ?? Make this a server app. Consider where to store DB, SA history.
 
@@ -468,7 +468,7 @@ HOPEFULLY(0 == PolicyYear && 0 == PolicyMonth);
             ,a_Net1035Amount
             );
         IsMatChg = false;
-        // SavedDCV is used only for debug output
+        // 'SavedDCV' is used only for monthly trace.
         SavedDCV = a_DeemedCashValue;
         }
 }
@@ -961,7 +961,7 @@ void Irc7702A::TestBftDecrease(double a_NewBft)
     else
         {
         // ...but even if we exited the loop early, let's update CumPmts
-        // for our debug output. This doesn't matter for any other purpose,
+        // for the monthly trace. This doesn't matter for any other purpose,
         // because if we got here, the policy is a MEC.
         CumPmts = cum_prem;
         }
@@ -995,7 +995,7 @@ void Irc7702A::RedressMatChg
 
     // Set DCV = AV upon material change
     a_DeemedCashValue = std::max(0.0, a_CashValue);
-    // SavedDCV is used only for debug output
+    // 'SavedDCV' is used only for monthly trace.
     SavedDCV = a_DeemedCashValue;
 
     // TODO ?? What if account value is less than zero here?
@@ -1105,9 +1105,9 @@ void Irc7702A::Determine7PP
 //          HOPEFULLY(0.0                == SavedAVBeforeMatChg);
 // SavedAVBeforeMatChg should be zero unless there was a 1035, in
 // which case it should be the net 1035 amount. I'm not sure we should
-// either rely on SavedDCV (which was added for debugging only) or
+// either rely on 'SavedDCV' (which was added for monthly trace only) or
 // pass DCV as an argument; maybe we should drop the assertion. Note
-// that SavedDCV, because of its limited purpose, isn't reliably
+// that 'SavedDCV', because of its limited purpose, isn't reliably
 // initialized; I'm not sure we should promote that variable to a
 // first-class citizen by initializing it carefully.
             HOPEFULLY
