@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avdebug.cpp,v 1.34 2009-04-15 02:05:22 chicares Exp $
+// $Id: ihs_avdebug.cpp,v 1.35 2009-04-15 11:16:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,6 +35,7 @@
 #include "ledger_invariant.hpp"
 #include "mc_enum_types_aux.hpp" // mc_str()
 #include "miscellany.hpp"
+#include "path_utility.hpp"
 #include "value_cast.hpp"
 
 #include <boost/filesystem/convenience.hpp>
@@ -259,8 +260,9 @@ inline void AccountValue::SetMonthlyDetail(int enumerator, double d)
 void AccountValue::SetDebugFilename(std::string const& s)
 {
     configurable_settings const& c = configurable_settings::instance();
-    std::string const z = ".monthly_trace" + c.spreadsheet_file_extension();
-    DebugFilename = fs::change_extension(s, z).string();
+    std::string const z = c.spreadsheet_file_extension();
+    fs::path p = fs::change_extension(s, ".monthly_trace" + z);
+    DebugFilename = unique_filepath(p, z).string();
 }
 
 //============================================================================

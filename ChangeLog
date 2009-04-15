@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1293 2009-04-12 01:04:53 chicares Exp $
+// $Id: ChangeLog,v 1.1294 2009-04-15 11:16:34 chicares Exp $
 
 MAINTENANCE
 
@@ -22559,4 +22559,34 @@ Remove unneeded header.
 
   max_stream_precision.hpp
 Improve documentation.
+
+20090414T2304Z <gchicares@sbcglobal.net> [779]
+
+  illustration_view.cpp
+Regularize name of monthly trace file. Formerly, an extra '.ill'
+particle appeared in the filename with Ctrl-R versus Ctrl-Shift-R for
+census files, due to downstream alterations.
+
+20090415T0041Z <gchicares@sbcglobal.net> [779]
+
+  group_values.cpp
+  ihs_avdebug.cpp
+  ledgervalues.cpp
+Refactor.
+
+20090415T0205Z <gchicares@sbcglobal.net> [779]
+
+  account_value.hpp
+  accountvalue.cpp
+  ihs_acctval.cpp
+  ihs_avdebug.cpp
+  ihs_avmly.cpp
+  ihs_irc7702a.cpp
+  ihs_irc7702a.hpp
+Rename monthly trace file, notably using spreadsheet file extension.
+
+20090415T1116Z <gchicares@sbcglobal.net> [779]
+
+  ihs_avdebug.cpp
+Add timestamp prn to make monthly trace filename unique.
 
