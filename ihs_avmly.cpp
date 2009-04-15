@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.124 2009-03-22 13:23:56 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.125 2009-04-15 02:05:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2767,8 +2767,8 @@ void AccountValue::TxTakeLoan()
         return;
         }
 
-    // Even if no loan is requested, the maximum loan is still of
-    // interest for debugging.
+    // Even if no loan is requested, the maximum loan is still shown
+    // in a monthly trace.
     if(Debugging || 0.0 <= RequestedLoan)
         {
         SetMaxLoan();

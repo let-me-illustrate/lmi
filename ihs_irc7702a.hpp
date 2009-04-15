@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702a.hpp,v 1.12 2008-12-27 02:56:44 chicares Exp $
+// $Id: ihs_irc7702a.hpp,v 1.13 2009-04-15 02:05:23 chicares Exp $
 
 #ifndef ihs_irc7702a_hpp
 #define ihs_irc7702a_hpp
@@ -162,7 +162,7 @@ class Irc7702A
     // Share internals with routines that display monthly details
     // of account value calculations. These Debug- functions are all
     // const accessors that cannot change the internal state. They
-    // are designed to be called only by debugging routines, so they
+    // are designed to be called only by monthly-trace routines, so they
     // are not designed to be elegant or fast. They should not be used
     // for other purposes. They may be changed or eliminated in future
     // versions. I don't regard them as part of the public interface,
