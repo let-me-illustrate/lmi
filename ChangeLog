@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1294 2009-04-15 11:16:34 chicares Exp $
+// $Id: ChangeLog,v 1.1295 2009-04-15 17:31:34 chicares Exp $
 
 MAINTENANCE
 
@@ -22589,4 +22589,9 @@ Rename monthly trace file, notably using spreadsheet file extension.
 
   ihs_avdebug.cpp
 Add timestamp prn to make monthly trace filename unique.
+
+20090415T1731Z <gchicares@sbcglobal.net> [779]
+
+  workhorse.make
+Reflect 20090415T0205Z renaming of monthly trace file.
 

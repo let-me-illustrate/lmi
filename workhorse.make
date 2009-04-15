@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.137 2009-03-31 02:19:27 chicares Exp $
+# $Id: workhorse.make,v 1.138 2009-04-15 17:31:34 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -1109,7 +1109,7 @@ cgi_tests: $(test_data) antediluvian_cgi$(EXEEXT)
 # shown that the discrepancies thus ignored are never material, but
 # larger discrepancies may be.
 
-test_result_suffixes     := test test0 debug
+test_result_suffixes     := test test0 monthly_trace.*
 
 system_test_analysis := $(test_dir)/analysis-$(yyyymmddhhmm)
 system_test_diffs    := $(test_dir)/diffs-$(yyyymmddhhmm)
