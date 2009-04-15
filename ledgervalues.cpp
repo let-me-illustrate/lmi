@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.cpp,v 1.38 2008-12-27 02:56:47 chicares Exp $
+// $Id: ledgervalues.cpp,v 1.39 2009-04-15 00:41:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,9 +34,6 @@
 #include "input.hpp"
 #include "ledger.hpp"
 
-#include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/path.hpp>
-
 IllusVal::IllusVal(std::string const& filename)
     :filename_ (filename)
 {
@@ -50,12 +47,7 @@ double IllusVal::run(Input const& input)
 {
     fenv_guard fg;
     AccountValue av(input);
-
-    fs::path debug_filename = fs::change_extension
-        (fs::path(filename_)
-        ,".debug"
-        );
-    av.SetDebugFilename(debug_filename.string());
+    av.SetDebugFilename(filename_);
 
     double z = av.RunAV();
     ledger_ = av.ledger_from_av();
