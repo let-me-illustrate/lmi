@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.138 2009-04-15 17:31:34 chicares Exp $
+# $Id: workhorse.make,v 1.139 2009-04-16 02:08:25 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -302,11 +302,6 @@ vpath %.ico           $(src_dir)
 
 vpath quoted_gpl      $(src_dir)
 vpath quoted_gpl_html $(src_dir)
-
-# This rule must exist for the parent makefile to make these targets,
-# apparently; TODO ?? but why?
-
-quoted_gpl quoted_gpl_html:
 
 ################################################################################
 
