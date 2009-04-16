@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.68 2009-04-15 02:05:22 chicares Exp $
+// $Id: accountvalue.cpp,v 1.69 2009-04-16 02:07:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1048,6 +1048,8 @@ void AccountValue::SetDebugFilename(std::string const& s)
 double AccountValue::ApportionNetMortalityReserve(double)
     {return 0.0;}
 void   AccountValue::CoordinateCounters()
+    {return;}
+void   AccountValue::DebugPrint()
     {return;}
 void   AccountValue::DebugPrintInit()
     {return;}
