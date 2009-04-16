@@ -20,7 +20,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.71 2009-03-26 16:47:29 chicares Exp $
+# $Id: Makefile.am,v 1.72 2009-04-16 02:07:14 chicares Exp $
 
 SUBDIRS = third_party
 
@@ -303,7 +303,6 @@ libmain_auxiliary_common_la_CXXFLAGS = $(AM_CXXFLAGS)
 libantediluvian_la_SOURCES = \
     accountvalue.cpp \
     antediluvian_stubs.cpp \
-    avdebug.cpp \
     basicvalues.cpp \
     database.cpp \
     dbdict.cpp \

@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.146 2009-03-26 16:47:29 chicares Exp $
+# $Id: objects.make,v 1.147 2009-04-16 02:07:14 chicares Exp $
 
 ################################################################################
 
@@ -242,7 +242,6 @@ antediluvian_common_objects := \
   $(common_common_objects) \
   accountvalue.o \
   antediluvian_stubs.o \
-  avdebug.o \
   basicvalues.o \
   database.o \
   dbdict.o \
