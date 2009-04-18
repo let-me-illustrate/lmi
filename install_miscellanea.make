@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_miscellanea.make,v 1.17 2009-04-18 13:15:18 chicares Exp $
+# $Id: install_miscellanea.make,v 1.18 2009-04-18 21:29:13 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -200,9 +200,14 @@ sample: $(file_list)
 	@-$(MKDIR) --parents $(prefix)/data
 	$(MV) scratch/$(stem)/* $(prefix)/data
 
+# Avoid collision on name 'init.o' by renaming 'src/libxslt/init.cxx'.
+# See the last paragraph here:
+#   http://lists.nongnu.org/archive/html/lmi/2009-04/msg00027.html
+
 .PHONY: xmlwrapp
 xmlwrapp: $(file_list)
 	-[ -e $(stem).patch ] && $(PATCH) --directory=scratch --strip=1 < $(stem).patch
+	$(MV) scratch/$(stem)/src/libxslt/init.cxx scratch/$(stem)/src/libxslt/xslt_init.cxx
 	@$(MKDIR) $(third_party_include_dir)/xmlwrapp/
 	$(MV) scratch/$(stem)/include/xmlwrapp/*.h $(third_party_include_dir)/xmlwrapp/
 	@$(MKDIR) $(third_party_include_dir)/xsltwrapp/
