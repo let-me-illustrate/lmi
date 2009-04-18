@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.147 2009-04-16 02:07:14 chicares Exp $
+# $Id: objects.make,v 1.148 2009-04-18 13:15:19 chicares Exp $
 
 ################################################################################
 
@@ -86,7 +86,7 @@ cgicc_3_1_4_objects = \
   HTTPHeaders.o \
   MStreamable.o \
 
-# xmlwrapp library from pmade.org .
+# xmlwrapp (and xsltwrapp, soon).
 
 xmlwrapp_objects := \
   ait_impl.o \
@@ -98,6 +98,7 @@ xmlwrapp_objects := \
   node.o \
   node_iterator.o \
   node_manip.o \
+  nodes_view.o \
   tree_parser.o \
   utility.o \
 
