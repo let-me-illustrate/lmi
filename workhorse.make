@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.140 2009-04-18 13:13:21 chicares Exp $
+# $Id: workhorse.make,v 1.141 2009-04-18 20:49:12 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -243,11 +243,12 @@ wx_config_check:
 # be compiled and linked explicitly here, instead of building them
 # separately and linking them as normal libraries. Rationale:
 #
-# boost: the build system provided is not free.
+# boost: the build system provided is outlandish.
 #
 # cgicc: './configure && make' fails in the MSYS environment.
 #
-# xmlwrapp: avoid the nonstandard build system provided.
+# xmlwrapp: the autotoolized build system doesn't support Comeau C++
+# (or any other compiler but gcc) on msw.
 #
 # For msw at least, these libraries are somewhat arbitrarily placed in
 #   /opt/lmi/third_party/
