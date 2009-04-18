@@ -20,7 +20,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.72 2009-04-16 02:07:14 chicares Exp $
+# $Id: Makefile.am,v 1.73 2009-04-18 22:59:16 chicares Exp $
 
 SUBDIRS = third_party
 
@@ -288,7 +288,6 @@ liblmi_common_sources = \
     system_command.cpp \
     timer.cpp \
     xml_lmi.cpp \
-    xslt_lmi.cpp \
     yare_input.cpp
 
 libmain_auxiliary_common_la_SOURCES = \
@@ -1000,6 +999,5 @@ noinst_HEADERS = \
     wx_workarounds.hpp \
     xml_lmi_fwd.hpp \
     xml_lmi.hpp \
-    xslt_lmi.hpp \
     yare_input.hpp \
     zero.hpp
