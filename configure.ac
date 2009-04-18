@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.44 2008-12-27 02:56:38 chicares Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.45 2009-04-18 22:59:16 chicares Exp $)dnl
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [gchicares@sbcglobal.net])
@@ -451,7 +451,7 @@ if test "$USE_LINUX" = "1"; then
     PKG_CHECK_MODULES(GTK, gtk+-2.0)
     PKG_CHECK_MODULES(LIBXML, libxml-2.0 >= 2.6.0)
     PKG_CHECK_MODULES(LIBXSLT, libxslt >= 1.1.0)
-    PKG_CHECK_MODULES(XMLWRAPP, xmlwrapp)
+    PKG_CHECK_MODULES(XMLWRAPP, xmlwrapp >= 0.6.0 xsltwrapp)
 else
     dnl --- libxml (required) -------------------
     AC_CHECK_PROG(lmi_xml2_config, xml2-config, yes, no)
@@ -502,27 +502,6 @@ AC_TRY_COMPILE([#include <xmlwrapp/xmlwrapp.h>],
 
 CXXFLAGS=$save_CXXFLAGS
 LIBS=$save_LIBS
-
-AC_CACHE_CHECK([if we are using recent version of xmlwrapp],
-    lmi_cv_lib_xmlwrapp_recent,
-    [
-        save_CXXFLAGS=$CXXFLAGS
-        CXXFLAGS="$CXXFLAGS $XMLWRAPP_CFLAGS"
-        AC_TRY_COMPILE([#include <xmlwrapp/document.h>
-            #include <xmlwrapp/tree_parser.h>
-            #include <xmlwrapp/node.h>],
-            [
-                xml::tree_parser parser("");
-                parser.get_document().get_root_node();
-            ],
-            lmi_cv_lib_xmlwrapp_recent=yes,
-            lmi_cv_lib_xmlwrapp_recent=no
-        )
-    ]
-)
-if test "x$lmi_cv_lib_xmlwrapp_recent" = "xyes"; then
-    AC_DEFINE([USING_CURRENT_XMLWRAPP], [1], [Define this if you have the latest version of libxmlwrapp])
-fi
 
 dnl --- CGICC (optional) ----------------
 if test "x$lmi_cgicc_option" != "xno"; then
