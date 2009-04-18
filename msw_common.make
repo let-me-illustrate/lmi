@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_common.make,v 1.17 2008-12-27 02:56:49 chicares Exp $
+# $Id: msw_common.make,v 1.18 2009-04-18 13:39:17 chicares Exp $
 
 ################################################################################
 
@@ -44,6 +44,7 @@ platform_defines := \
 platform_gui_ldflags := -mwindows
 
 platform_gnome_xml_libraries := \
+  -lexslt.dll \
   -lxslt.dll \
   -lxml2.dll \
 
