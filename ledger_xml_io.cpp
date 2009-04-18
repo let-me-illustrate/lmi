@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.86 2009-03-30 12:07:19 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.87 2009-04-18 22:59:16 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -29,6 +29,7 @@
 #include "comma_punct.hpp"
 #include "configurable_settings.hpp"
 #include "global_settings.hpp"
+#include "handle_exceptions.hpp"
 #include "ledger_base.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_text_formats.hpp"
@@ -41,11 +42,12 @@
 #include "value_cast.hpp"
 #include "version.hpp"
 #include "xml_lmi.hpp"
-#include "xslt_lmi.hpp"
 
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
+
+#include <xsltwrapp/xsltwrapp.h>
 
 #include <fstream>
 #include <iomanip>
@@ -1006,23 +1008,31 @@ void Ledger::write(std::ostream& os) const
     os << root;
 }
 
+/// Write a scaled copy of the ledger as xsl-fo.
+///
+/// The original ledger must not be modified because scaling is not
+/// reentrant. However, copying does not prevent that problem here,
+/// because what is scaled is actually not copied due to use of
+/// shared_ptr; see comment on
+///   https://savannah.nongnu.org/bugs/?13599
+/// in the ledger-class implementation.
+
 void Ledger::write_xsl_fo(std::ostream& os) const
 {
-    // Scale a copy of the 'ledger' argument. The original must not be
-    // modified because scaling is not reentrant. However, copying
-    // does not prevent that problem here, because what is scaled is
-    // actually not copied due to use of shared_ptr; see comment on
-    //   https://savannah.nongnu.org/bugs/?13599
-    // in the ledger-class implementation.
-    Ledger scaled_ledger(*this);
-    scaled_ledger.AutoScale();
+    try
+        {
+        Ledger scaled_ledger(*this);
+        scaled_ledger.AutoScale();
 
-    xml_lmi::xml_document document(xml_root_name());
-    document.root_node() << scaled_ledger;
-    xslt_lmi::Stylesheet(xsl_filepath(scaled_ledger).string()).transform
-        (document.document()
-        ,os
-        ,xslt_lmi::Stylesheet::e_output_xml
-        );
+        xml_lmi::xml_document d(xml_root_name());
+        d.root_node() << scaled_ledger;
+
+        xslt::stylesheet z(xsl_filepath(scaled_ledger).string().c_str());
+        os << z.apply(d.document());
+        }
+    catch(...)
+        {
+        report_exception();
+        }
 }
 
