@@ -20,7 +20,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: posix_fhs.make,v 1.19 2008-12-27 02:56:52 chicares Exp $
+# $Id: posix_fhs.make,v 1.20 2009-04-18 13:39:17 chicares Exp $
 
 ################################################################################
 
@@ -31,11 +31,16 @@ SHREXT := .so
 platform_boost_libraries := \
   -lboost_filesystem-gcc \
 
+# '-lexslt'--see:
+#   http://mail.gnome.org/archives/xslt/2001-October/msg00133.html
+
 platform_gnome_xml_libraries := \
-  $(shell xml2-config --libs) \
+  -lexslt \
   $(shell xslt-config --libs) \
+  $(shell xml2-config --libs) \
 
 platform_xmlwrapp_libraries := \
+  -lxsltwrapp \
   -lxmlwrapp \
 
 # Let the user override this on the make command line to use a
