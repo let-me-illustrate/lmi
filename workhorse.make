@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.139 2009-04-16 02:08:25 chicares Exp $
+# $Id: workhorse.make,v 1.140 2009-04-18 13:13:21 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -517,8 +517,8 @@ endif
 
 REQUIRED_LIBS := \
   $(platform_boost_libraries) \
-  $(platform_gnome_xml_libraries) \
   $(platform_xmlwrapp_libraries) \
+  $(platform_gnome_xml_libraries) \
 
 wx_ldflags = \
   $(platform_wx_libraries) \
