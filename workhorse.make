@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.141 2009-04-18 20:49:12 chicares Exp $
+# $Id: workhorse.make,v 1.142 2009-04-18 21:29:13 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -280,6 +280,7 @@ all_source_directories := \
   /opt/lmi/third_party/src/boost/libs/filesystem/src \
   /opt/lmi/third_party/src/cgicc \
   /opt/lmi/third_party/src/libxml \
+  /opt/lmi/third_party/src/libxslt \
 
 vpath lib%.a          $(CURDIR)
 vpath %.o             $(CURDIR)

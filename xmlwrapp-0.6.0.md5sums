@@ -28,6 +28,6 @@ c962fa2d79bdabd16f032be45b5c43a8 *src/libxml/node_manip.h
 c01c13ab1bd9eb51c842efc7cdf394a5 *src/libxml/tree_parser.cxx
 f8b36d9fbddf62ff468c6a99d5800c2d *src/libxml/utility.cxx
 be36d3453c63aed5f7b8f46728b293de *src/libxml/utility.h
-555f8cbd24884fe8204d619cc08f7f53 *src/libxslt/init.cxx
 c74a9b4e0e5fce11ce41c5660869dc14 *src/libxslt/result.h
 b3d179064161f80671cff333e29d8e98 *src/libxslt/stylesheet.cxx
+555f8cbd24884fe8204d619cc08f7f53 *src/libxslt/xslt_init.cxx
