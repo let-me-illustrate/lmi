@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.20 2008-12-27 02:56:59 chicares Exp $
+// $Id: xml_lmi.cpp,v 1.21 2009-04-19 20:33:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -54,7 +54,6 @@ namespace xml_lmi
 /// from std::exception.
 
 xml_lmi::dom_parser::dom_parser(std::string const& filename)
-    :initializer_(new Initializer)
 {
     try
         {
@@ -99,7 +98,6 @@ xml_lmi::dom_parser::dom_parser(std::string const& filename)
 /// from std::exception.
 
 xml_lmi::dom_parser::dom_parser(std::istream const& is)
-    :initializer_(new Initializer)
 {
     try
         {
@@ -197,8 +195,7 @@ xml::element const& xml_lmi::dom_parser::root_node
 }
 
 xml_lmi::xml_document::xml_document(std::string const& root_node_name)
-    :initializer_(new Initializer)
-    ,document_   (new xml_lmi::Document(root_node_name.c_str()))
+    :document_(new xml_lmi::Document(root_node_name.c_str()))
 {
 }
 
@@ -224,32 +221,6 @@ void add_node
     )
 {
     element.push_back(xml::element(name.c_str(), content.c_str()));
-}
-
-xml_lmi::ElementContainer child_elements
-    (xml::element const& parent
-    ,std::string  const& name
-    )
-{
-    try
-        {
-        xml_lmi::ElementContainer z;
-        typedef xml::node::const_iterator NodeConstIterator;
-        for(NodeConstIterator i = parent.begin(); i != parent.end(); ++i)
-            {
-            if(!i->is_text() && (name.empty() || name == i->get_name()))
-                {
-                // Note that 'z.push_back(&*i);' does not work.
-                z.push_back(i->self());
-                }
-            }
-        return z;
-        }
-    catch(std::exception const& e)
-        {
-        fatal_error() << e.what() << LMI_FLUSH;
-        throw "Unreachable--silences a compiler diagnostic.";
-        }
 }
 
 std::string get_content(xml::element const& element)

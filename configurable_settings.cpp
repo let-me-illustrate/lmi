@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.50 2009-04-08 01:26:27 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.51 2009-04-19 20:33:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -39,6 +39,8 @@
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
+
+#include <xmlwrapp/nodes_view.h>
 
 #include <algorithm> // std::find()
 #include <iterator>
@@ -208,17 +210,17 @@ void configurable_settings::load()
     std::ostringstream oss;
     xml_lmi::dom_parser parser(configuration_filepath().string());
     xml::element const& root = parser.root_node(xml_root_name());
-    xml_lmi::ElementContainer const elements(xml_lmi::child_elements(root));
-    typedef xml_lmi::ElementContainer::const_iterator eci;
-    for(eci i = elements.begin(); i != elements.end(); ++i)
+    xml::const_nodes_view const elements(root.elements());
+    typedef xml::const_nodes_view::const_iterator cnvi;
+    for(cnvi i = elements.begin(); i != elements.end(); ++i)
         {
-        std::string name = (*i)->get_name();
+        std::string name = i->get_name();
         if
             (   member_names().end()
             !=  std::find(member_names().begin(), member_names().end(), name)
             )
             {
-            operator[]((*i)->get_name()) = xml_lmi::get_content(**i);
+            operator[](i->get_name()) = xml_lmi::get_content(*i);
             }
         else if(is_detritus(name))
             {

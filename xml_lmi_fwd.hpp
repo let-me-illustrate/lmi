@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi_fwd.hpp,v 1.10 2008-12-27 02:56:59 chicares Exp $
+// $Id: xml_lmi_fwd.hpp,v 1.11 2009-04-19 20:33:39 chicares Exp $
 
 #ifndef xml_lmi_fwd_hpp
 #define xml_lmi_fwd_hpp
@@ -49,10 +49,6 @@ namespace xml_lmi
 
     typedef xml::attributes Attribute;
     typedef xml::document   Document;
-
-// Something like this might be useful:
-//    typedef std::vector<xml::node::const_iterator> ElementContainer;
-// but a nested class can't be forward declared.
 } // namespace xml_lmi
 
 #endif // xml_lmi_fwd_hpp

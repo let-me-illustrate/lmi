@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: single_cell_document.cpp,v 1.22 2008-12-27 02:56:55 chicares Exp $
+// $Id: single_cell_document.cpp,v 1.23 2009-04-19 20:33:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,6 +31,8 @@
 #include "assert_lmi.hpp"
 #include "input.hpp"
 #include "xml_lmi.hpp"
+
+#include <xmlwrapp/nodes_view.h>
 
 #include <istream>
 #include <ostream>
@@ -70,9 +72,14 @@ std::string single_cell_document::xml_root_name() const
 //============================================================================
 void single_cell_document::parse(xml::element const& root)
 {
-    xml_lmi::ElementContainer const elements(xml_lmi::child_elements(root));
-    LMI_ASSERT(1 == elements.size());
-    *elements[0] >> *input_data_;
+    xml::const_nodes_view const elements(root.elements());
+    LMI_ASSERT(!elements.empty());
+    xml::const_nodes_view::const_iterator i(elements.begin());
+    *i >> *input_data_;
+    // XMLWRAPP !! It would be better to have operator+(int) in the
+    // iterator class, and to write this check above as
+    //   LMI_ASSERT(elements.end() == 1 + i);
+    LMI_ASSERT(elements.end() == ++i);
 }
 
 //============================================================================

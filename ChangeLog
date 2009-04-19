@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1296 2009-04-16 02:08:25 chicares Exp $
+// $Id: ChangeLog,v 1.1297 2009-04-19 20:33:39 chicares Exp $
 
 MAINTENANCE
 
@@ -22611,4 +22611,66 @@ Remove a defunct defect marker. The problem it described is no longer
 reproducible; probably it was a defect of an old version of 'make'.
 Cf.:
   http://cvs.savannah.gnu.org/viewvc/lmi/skeleton/workhorse.make?r1=1.40&r2=1.41
+
+20090418T1313Z <gchicares@sbcglobal.net> [778]
+
+  workhorse.make
+Refine linker command: xmlwrapp uses libxml2 (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00048.html
+
+20090418T1315Z <gchicares@sbcglobal.net> [778]
+
+  install_miscellanea.make
+  objects.make
+  xmlwrapp-0.5.0.md5sums [expunged]
+  xmlwrapp-0.5.0.patch   [expunged]
+  xmlwrapp-0.6.0.md5sums [new file]
+Upgrade to xmlwrapp-0.6.0 (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00048.html
+
+20090418T1339Z <gchicares@sbcglobal.net> [778]
+
+  msw_common.make
+  posix_fhs.make
+Prepare to use xsltwrapp (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00048.html
+
+20090418T2049Z <gchicares@sbcglobal.net> [778]
+
+  workhorse.make
+Update documentation.
+
+20090418T2129Z <gchicares@sbcglobal.net> [778]
+
+  install_miscellanea.make
+  objects.make
+  workhorse.make
+  xmlwrapp-0.6.0.md5sums
+Prepare to use xsltwrapp; rename 'src/libxslt/init.cxx' distinctively.
+See the last paragraph here:
+  http://lists.nongnu.org/archive/html/lmi/2009-04/msg00027.html
+
+20090418T2259Z <gchicares@sbcglobal.net> [775]
+
+  Makefile.am
+  configure.ac
+  ledger_xml_io.cpp
+  objects.make
+  xslt_lmi.cpp [expunged]
+  xslt_lmi.hpp [expunged]
+Use xsltwrapp (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00048.html
+
+20090419T2033Z <gchicares@sbcglobal.net> [775]
+
+  configurable_settings.cpp
+  input_test.cpp
+  input_xml_io.cpp
+  multiple_cell_document.cpp
+  single_cell_document.cpp
+  xml_lmi.cpp
+  xml_lmi.hpp
+  xml_lmi_fwd.hpp
+Use xmlwrapp nodes_view iterator (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00048.html
 
