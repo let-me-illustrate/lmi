@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.43 2008-12-27 02:56:45 chicares Exp $
+// $Id: input_test.cpp,v 1.44 2009-04-19 20:33:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -77,7 +77,6 @@ class input_test
         );
 
     static void mete_overhead();
-    static void mete_vector(xml::element& xml_data);
     static void mete_read(xml::element& xml_data);
     static void mete_write();
     static void mete_cns_io();
@@ -225,12 +224,11 @@ void input_test::assay_speed()
 
     std::cout
         << "  Speed tests...\n"
-        << "  Overhead: " << TimeAnAliquot(mete_overhead              ) << '\n'
-        << "  Vector  : " << TimeAnAliquot(boost::bind(mete_vector, e)) << '\n'
-        << "  Read    : " << TimeAnAliquot(boost::bind(mete_read  , e)) << '\n'
-        << "  Write   : " << TimeAnAliquot(mete_write                 ) << '\n'
-        << "  'cns' io: " << TimeAnAliquot(mete_cns_io                ) << '\n'
-        << "  'ill' io: " << TimeAnAliquot(mete_ill_io                ) << '\n'
+        << "  Overhead: " << TimeAnAliquot(mete_overhead            ) << '\n'
+        << "  Read    : " << TimeAnAliquot(boost::bind(mete_read, e)) << '\n'
+        << "  Write   : " << TimeAnAliquot(mete_write               ) << '\n'
+        << "  'cns' io: " << TimeAnAliquot(mete_cns_io              ) << '\n'
+        << "  'ill' io: " << TimeAnAliquot(mete_ill_io              ) << '\n'
         ;
 }
 
@@ -297,11 +295,6 @@ void input_test::mete_overhead()
     xml_lmi::xml_document document("root");
     xml::element& root = document.root_node();
     stifle_warning_for_unused_value(root);
-}
-
-void input_test::mete_vector(xml::element& xml_data)
-{
-    xml_lmi::child_elements(xml_data);
 }
 
 void input_test::mete_read(xml::element& xml_data)

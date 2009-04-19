@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.hpp,v 1.22 2008-12-27 02:56:59 chicares Exp $
+// $Id: xml_lmi.hpp,v 1.23 2009-04-19 20:33:39 chicares Exp $
 
 #ifndef xml_lmi_hpp
 #define xml_lmi_hpp
@@ -41,13 +41,10 @@
 
 namespace xml_lmi
 {
-    typedef std::vector<xml::node::const_iterator> ElementContainer;
-
     class dom_parser
         :private boost::noncopyable
     {
         typedef xml::tree_parser DomParser;
-        typedef xml::init        Initializer;
 
       public:
         dom_parser(std::string const& filename);
@@ -59,15 +56,12 @@ namespace xml_lmi
 
       private:
         std::string                    error_context_;
-        boost::scoped_ptr<Initializer> initializer_;
         boost::scoped_ptr<DomParser>   parser_;
     };
 
     class xml_document
         :private boost::noncopyable
     {
-        typedef xml::init Initializer;
-
       public:
         xml_document(std::string const& root_node_name);
         ~xml_document();
@@ -78,7 +72,6 @@ namespace xml_lmi
 
       private:
         std::string                    error_context_;
-        boost::scoped_ptr<Initializer> initializer_;
         boost::scoped_ptr<Document>    document_;
     };
 
@@ -86,32 +79,6 @@ namespace xml_lmi
         (xml::element&
         ,std::string const& name
         ,std::string const& content
-        );
-
-    /// Create a container of pointers to an element's child elements.
-    /// The contents are notionally pointers, but actually iterators,
-    /// because that's the abstraction xmlwrapp provides; they seem to
-    /// function as incrementable smart pointers.
-    ///
-    /// If the second argument is specified, then only elements having
-    /// the given name are placed in the container.
-    ///
-    /// Only direct children are considered: children of child nodes
-    /// are not. Only child nodes that are elements are placed in the
-    /// container; other types of nodes are not.
-    ///
-    /// Precondition: No child element pointer returned by xml-library
-    /// calls is null.
-    ///
-    /// Postcondition: The container holds no null pointers.
-    ///
-    /// Throws: an exception, via fatal_error(), if a precondition is
-    /// violated, or if xml-library calls throw an exception derived
-    /// from std::exception.
-
-    ElementContainer child_elements
-        (xml::element const&
-        ,std::string const& name = std::string()
         );
 
     /// Retrieve an xml element's full text-node contents.
