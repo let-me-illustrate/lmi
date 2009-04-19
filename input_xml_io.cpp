@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_xml_io.cpp,v 1.23 2009-03-30 01:37:40 chicares Exp $
+// $Id: input_xml_io.cpp,v 1.24 2009-04-19 20:33:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,6 +34,8 @@
 #include "miscellany.hpp"
 #include "value_cast.hpp"
 #include "xml_lmi.hpp"
+
+#include <xmlwrapp/nodes_view.h>
 
 #include <algorithm> // std::find()
 #include <stdexcept>
@@ -136,25 +138,10 @@ using namespace xml;
         );
     std::list<std::string>::iterator current_member;
 
-// XMLWRAPP !! The unit test demonstrates that the suppressed code is
-// twenty-five percent slower. What would be really desirable is an
-// (efficient) element-iterator class.
-//
-#if 0
-    xml_lmi::ElementContainer const elements(xml_lmi::child_elements(x));
-    typedef xml_lmi::ElementContainer::const_iterator eci;
-    for(eci i = elements.begin(); i != elements.end(); ++i)
+    xml::const_nodes_view const elements(x.elements());
+    typedef xml::const_nodes_view::const_iterator cnvi;
+    for(cnvi child = elements.begin(); child != elements.end(); ++child)
         {
-        xml::node::const_iterator const& child = *i;
-#else  // not 0
-    xml::node::const_iterator child;
-    for(child = x.begin(); child != x.end(); ++child)
-        {
-#endif // not 0
-        if(child->is_text())
-            {
-            continue;
-            }
         std::string node_tag(child->get_name());
         current_member = std::find
             (residuary_names.begin()
