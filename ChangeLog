@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1297 2009-04-19 20:33:39 chicares Exp $
+// $Id: ChangeLog,v 1.1298 2009-04-20 05:43:51 chicares Exp $
 
 MAINTENANCE
 
@@ -22673,4 +22673,13 @@ Use xsltwrapp (VS). See:
   xml_lmi_fwd.hpp
 Use xmlwrapp nodes_view iterator (VS). See:
   http://lists.nongnu.org/archive/html/lmi/2009-02/msg00048.html
+
+20090420T0543Z <gchicares@sbcglobal.net> [775]
+
+  system_command_wx.cpp
+Conditionally inhibit system_command() statusbar messages. Formerly,
+Authenticity::Assay() had attempted to display its command's elapsed
+time, but silently failed. Since 20090407T1717Z, it has displayed
+diagnostics that weren't actually wanted. Now, such failures are
+silently ignored.
 
