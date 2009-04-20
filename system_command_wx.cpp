@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: system_command_wx.cpp,v 1.8 2008-12-27 02:56:56 chicares Exp $
+// $Id: system_command_wx.cpp,v 1.9 2009-04-20 05:43:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,8 +29,11 @@
 #include "system_command.hpp"
 
 #include "alert.hpp"
+#include "null_stream.hpp"
 #include "timer.hpp"
 
+#include <wx/app.h> // wxTheApp
+#include <wx/frame.h>
 #include <wx/utils.h>
 
 #include <cstddef>  // std::size_t
@@ -69,17 +72,30 @@ void assemble_console_lines
 /// Otherwise, show what would have appeared on stdout and stderr if
 /// the command had been run in an interactive shell, along with the
 /// exit code and the command itself.
+///
+/// Show elapsed time on statusbar iff statusbar is available.
 
 void concrete_system_command(std::string const& command_line)
 {
     Timer timer;
     wxBusyCursor wait;
-    status() << "Running..." << std::flush;
 
+    bool const b =
+                                  wxTheApp
+        && dynamic_cast<wxFrame*>(wxTheApp->GetTopWindow())
+        && dynamic_cast<wxFrame*>(wxTheApp->GetTopWindow())->GetStatusBar()
+        ;
+    std::ostream& statusbar_if_available =
+        b
+        ? status()
+        : null_stream()
+        ;
+
+    statusbar_if_available << "Running..." << std::flush;
     wxArrayString output;
     wxArrayString errors;
     long int exit_code = wxExecute(command_line, output, errors);
-    status() << timer.stop().elapsed_msec_str() << std::flush;
+    statusbar_if_available << timer.stop().elapsed_msec_str() << std::flush;
 
     if(0L == exit_code)
         {
