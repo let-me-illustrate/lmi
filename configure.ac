@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.45 2009-04-18 22:59:16 chicares Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.46 2009-04-23 16:13:20 chicares Exp $)dnl
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [gchicares@sbcglobal.net])
@@ -449,39 +449,19 @@ dnl pkg-config under Windows is unfortunately not trivial and so we can't rely
 dnl on its presence on the target system
 if test "$USE_LINUX" = "1"; then
     PKG_CHECK_MODULES(GTK, gtk+-2.0)
-    PKG_CHECK_MODULES(LIBXML, libxml-2.0 >= 2.6.0)
-    PKG_CHECK_MODULES(LIBXSLT, libxslt >= 1.1.0)
     PKG_CHECK_MODULES(XMLWRAPP, xmlwrapp >= 0.6.0 xsltwrapp)
 else
-    dnl --- libxml (required) -------------------
-    AC_CHECK_PROG(lmi_xml2_config, xml2-config, yes, no)
-    if test "x$lmi_xml2_config" != "xyes"; then
-        AC_MSG_ERROR([Unable to find libxml configuration program xml2-config in the path.])
-    fi
-    LIBXML_CFLAGS=`xml2-config --cflags`
-    LIBXML_LIBS=`xml2-config --libs`
-
-    AC_SUBST(LIBXML_CFLAGS)
-    AC_SUBST(LIBXML_LIBS)
-
-    dnl --- libxslt (required) -------------------
-    AC_CHECK_PROG(lmi_xslt_config, xslt-config, yes, no)
-    if test "x$lmi_xslt_config" != "xyes"; then
-        AC_MSG_ERROR([Unable to find libxml configuration program xslt-config in the path.])
-    fi
-    LIBXSLT_CFLAGS=`xslt-config --cflags`
-    LIBXSLT_LIBS=`xslt-config --libs`
-
-    AC_SUBST(LIBXML_CFLAGS)
-    AC_SUBST(LIBXML_LIBS)
-
     dnl --- XMLWRAPP (required) -------------------
     AC_CHECK_PROG(lmi_xmlwrapp_config, xmlwrapp-config, yes, no)
     if test "x$lmi_xmlwrapp_config" != "xyes"; then
-        AC_MSG_ERROR([Unable to find libxml++ configuration program xmlwrapp-config in the path.])
+        AC_MSG_ERROR([Unable to find xmlwrapp configuration program xmlwrapp-config in the path.])
     fi
 
-    dnl TODO: Pass --debug option and so on (depends on the actual build)
+    dnl make sure xmlwrapp was compiled with XSLT support:
+    if xmlwrapp-config --libs | grep -v -q xslt; then
+        AC_MSG_ERROR([xmlwrapp with XSLT support is required.])
+    fi
+
     XMLWRAPP_CFLAGS=`xmlwrapp-config --cxxflags`
     XMLWRAPP_LIBS=`xmlwrapp-config --libs`
     AC_SUBST(XMLWRAPP_CFLAGS)
