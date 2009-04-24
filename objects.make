@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.150 2009-04-18 22:59:16 chicares Exp $
+# $Id: objects.make,v 1.151 2009-04-24 14:57:27 chicares Exp $
 
 ################################################################################
 
@@ -88,21 +88,7 @@ cgicc_3_1_4_objects = \
 
 # xmlwrapp and xsltwrapp.
 
-xmlwrapp_objects := \
-  ait_impl.o \
-  attributes.o \
-  document.o \
-  dtd_impl.o \
-  event_parser.o \
-  init.o \
-  node.o \
-  node_iterator.o \
-  node_manip.o \
-  nodes_view.o \
-  stylesheet.o \
-  tree_parser.o \
-  utility.o \
-  xslt_init.o \
+xmlwrapp_objects := xml_xslt_wrapp.o
 
 # For systems that already have boost, cgicc, and xmlwrapp libraries
 # installed, define 'HAVE_THIRD_PARTY_LIBRARIES' to use them instead

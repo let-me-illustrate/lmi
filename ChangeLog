@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1298 2009-04-20 05:43:51 chicares Exp $
+// $Id: ChangeLog,v 1.1299 2009-04-24 14:57:28 chicares Exp $
 
 MAINTENANCE
 
@@ -22453,12 +22453,6 @@ Rewrite InitIcon() (VS) and redesign lmi icon. See:
 Further simplify InitIcon() (VS). See:
   http://lists.nongnu.org/archive/html/lmi/2009-03/msg00076.html
 
-20090331T1701Z <gchicares@sbcglobal.net> [782]
-
-  main_wx.cpp
-Further simplify InitIcon() (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00076.html
-
 20090331T1722Z <gchicares@sbcglobal.net> [782]
 
   file_command_wx.cpp
@@ -22682,4 +22676,20 @@ Authenticity::Assay() had attempted to display its command's elapsed
 time, but silently failed. Since 20090407T1717Z, it has displayed
 diagnostics that weren't actually wanted. Now, such failures are
 silently ignored.
+
+20090423T1613Z <gchicares@sbcglobal.net> [775]
+
+  Makefile.am
+  configure.ac
+Remove some variables that are no longer needed (VS).
+
+20090424T1457Z <gchicares@sbcglobal.net> [775]
+
+  install_miscellanea.make
+  objects.make
+  workhorse.make
+  xml_xslt_wrapp.cpp [new file]
+  xmlwrapp-0.6.0.md5sums
+Improve use of xmlwrapp and xsltwrapp. See:
+  http://lists.nongnu.org/archive/html/lmi/2009-04/msg00030.html
 

@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.142 2009-04-18 21:29:13 chicares Exp $
+# $Id: workhorse.make,v 1.143 2009-04-24 14:57:27 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -272,6 +272,7 @@ all_include_directories := \
   $(compiler_include_directory) \
   $(wx_include_paths) \
   /opt/lmi/third_party/include \
+  /opt/lmi/third_party/src \
   /opt/lmi/local/include \
   /opt/lmi/local/include/libxml2 \
 
@@ -279,8 +280,6 @@ all_source_directories := \
   $(src_dir) \
   /opt/lmi/third_party/src/boost/libs/filesystem/src \
   /opt/lmi/third_party/src/cgicc \
-  /opt/lmi/third_party/src/libxml \
-  /opt/lmi/third_party/src/libxslt \
 
 vpath lib%.a          $(CURDIR)
 vpath %.o             $(CURDIR)
@@ -293,7 +292,6 @@ vpath my_%.cpp        $(src_dir)/../products/src
 
 vpath %.c             $(all_source_directories)
 vpath %.cpp           $(all_source_directories)
-vpath %.cxx           $(all_source_directories)
 vpath %.h             $(all_source_directories)
 vpath %.hpp           $(all_source_directories)
 vpath %.tpp           $(all_source_directories)
@@ -671,10 +669,6 @@ ALL_RCFLAGS  = $(REQUIRED_RCFLAGS)  $(RCFLAGS)
 	$($(MAKEDEPEND_COMMAND))
 
 %.o: %.cpp
-	$(CXX) $(MAKEDEPEND_FLAGS) -c $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) $< -o$@
-	$($(MAKEDEPEND_COMMAND))
-
-%.o: %.cxx
 	$(CXX) $(MAKEDEPEND_FLAGS) -c $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) $< -o$@
 	$($(MAKEDEPEND_COMMAND))
 
