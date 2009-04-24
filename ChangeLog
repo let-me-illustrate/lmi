@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1299 2009-04-24 14:57:28 chicares Exp $
+// $Id: ChangeLog,v 1.1300 2009-04-24 15:49:33 wboutin Exp $
 
 MAINTENANCE
 
@@ -22692,4 +22692,9 @@ Remove some variables that are no longer needed (VS).
   xmlwrapp-0.6.0.md5sums
 Improve use of xmlwrapp and xsltwrapp. See:
   http://lists.nongnu.org/archive/html/lmi/2009-04/msg00030.html
+
+20090424T1549Z <wboutin@massmutual.com> [775]
+
+  skin_group_carveout2.xrc [new file]
+Add skin with minimal inputs.
 
