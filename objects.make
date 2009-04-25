@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.151 2009-04-24 14:57:27 chicares Exp $
+# $Id: objects.make,v 1.152 2009-04-25 16:18:31 chicares Exp $
 
 ################################################################################
 
@@ -27,8 +27,9 @@
 # is reached through 'vpath' directives. See the rationale in
 # 'workhorse.make'.
 
-# Boost filesystem library. The other boost libraries that lmi
-# requires are implemented entirely in headers.
+# Boost filesystem library. The other boost libraries that lmi itself
+# requires are implemented entirely in headers. (An auxiliary program,
+# however, uses the boost regex library.)
 
 boost_filesystem_objects := \
   convenience.o \
