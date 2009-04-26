@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.144 2009-04-26 00:34:39 chicares Exp $
+# $Id: workhorse.make,v 1.145 2009-04-26 01:04:36 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -365,6 +365,9 @@ wx_dependent_physical_closure_files := \
 
 # Warning options for gcc.
 
+c_standard   := -std=c99
+cxx_standard := -std=c++98
+
 # Specify $(gcc_version_specific_warnings) last, in order to override
 # other options.
 
@@ -397,13 +400,13 @@ gcc_common_warnings := \
 gcc_common_warnings += -Wno-long-long
 
 gcc_c_warnings := \
+  $(c_standard) \
   $(gcc_common_warnings) \
-  -std=c99 \
   -Wmissing-prototypes \
 
 gcc_cxx_warnings := \
+  $(cxx_standard) \
   $(gcc_common_warnings) \
-  -std=c++98 \
   -Wctor-dtor-privacy \
   -Wdeprecated \
   -Wnon-template-friend \
