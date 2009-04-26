@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.143 2009-04-24 14:57:27 chicares Exp $
+# $Id: workhorse.make,v 1.144 2009-04-26 00:34:39 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -891,6 +891,7 @@ fardel_binaries := \
 fardel_files := \
   $(addprefix $(data_dir)/,$(shared_data_files)) \
   $(data_files) \
+  $(help_files) \
   $(extra_fardel_files) \
 
 # Sensitive files are authenticated at run time.
