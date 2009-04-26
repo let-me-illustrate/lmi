@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.145 2009-04-26 01:04:36 chicares Exp $
+# $Id: workhorse.make,v 1.146 2009-04-26 14:37:22 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -125,12 +125,21 @@ ifeq (gcc,$(toolset))
   gcc_version := $(shell $(CXX) -dumpversion)
 endif
 
-ifneq (3.4.4,$(shell $(GNU_CPP) -dumpversion))
-  $(error Untested $(GNU_CPP) version)
+# These are defined even for toolsets other than gcc.
+
+gnu_cpp_version := $(shell $(GNU_CPP) -dumpversion)
+gnu_cxx_version := $(shell $(GNU_CXX) -dumpversion)
+
+ifeq      (3.4.4,$(gnu_cpp_version))
+else ifeq (3.4.5,$(gnu_cpp_version))
+else
+  $(error Untested $(GNU_CPP) version '$(gnu_cpp_version)')
 endif
 
-ifneq (3.4.4,$(shell $(GNU_CXX) -dumpversion))
-  $(error Untested $(GNU_CXX) version)
+ifeq      (3.4.4,$(gnu_cxx_version))
+else ifeq (3.4.5,$(gnu_cxx_version))
+else
+  $(error Untested $(GNU_CXX) version '$(gnu_cxx_version)')
 endif
 
 ################################################################################
@@ -375,6 +384,16 @@ ifeq (3.4.4,$(gcc_version))
   # Suppress spurious gcc-3.4.4 warnings:
   #   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=22207
   gcc_version_specific_warnings := -Wno-uninitialized
+else ifeq (3.4.5,$(gcc_version))
+  # Suppress spurious gcc-3.4.5 warnings:
+  #   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=22207
+  gcc_version_specific_warnings := -Wno-uninitialized
+  # Fix "hello world":
+  #   http://sourceforge.net/tracker/index.php?func=detail&aid=2373234&group_id=2435&atid=102435
+  cxx_standard := -std=gnu++98
+  # Use a correct snprintf() implementation:
+  #   http://article.gmane.org/gmane.comp.gnu.mingw.user/27539
+  cxx_standard += -posix
 endif
 
 treat_warnings_as_errors := -pedantic-errors -Werror
@@ -431,7 +450,7 @@ $(wx_dependent_physical_closure_files): gcc_common_extra_warnings :=
 
 # Boost didn't remove an unused parameter in this file:
 
-operations_posix_windows.o:    gcc_common_extra_warnings :=
+operations_posix_windows.o:    gcc_common_extra_warnings += -Wno-unused-parameter
 
 # Boost normally makes '-Wundef' give spurious warnings:
 #   http://aspn.activestate.com/ASPN/Mail/Message/boost/1822550

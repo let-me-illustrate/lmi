@@ -19,13 +19,13 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_mingw.make,v 1.17 2008-12-27 02:56:45 chicares Exp $
+# $Id: install_mingw.make,v 1.18 2009-04-26 14:37:22 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
 # Configurable settings ########################################################
 
-# Use the 2005-08-27 version by default.
+# Set default version.
 
 version   := MinGW-20050827
 
@@ -56,6 +56,13 @@ cache_dir := .
 mirror    := http://downloads.sourceforge.net/mingw
 
 # File lists ###################################################################
+
+MinGW-20090203 = \
+  binutils-2.19.1-mingw32-bin.tar.gz \
+  gcc-core-3.4.5-20060117-3.tar.gz \
+  gcc-g++-3.4.5-20060117-3.tar.gz \
+  mingwrt-3.15.2-mingw32-dev.tar.gz \
+  w32api-3.13-mingw32-dev.tar.gz \
 
 # $(MinGW-20080502): For the nonce, the (humongous) java tarball is
 # required due to a g++ packaging defect--see:
@@ -124,11 +131,14 @@ binutils-2.11.90-20010705.tar.gz-md5    := 0173ff92655b77fafe63fca4ef68e005
 binutils-2.16.91-20050827-1.tar.gz-md5  := 9d2de9e3cd5fede3d12150b8a7d0bbf7
 binutils-2.16.91-20060119-1.tar.gz-md5  := a54f33ca9d6cf56dc99c0c5367f58ea3
 binutils-2.17.50-20060824-1.tar.gz-md5  := 401468f2873a75923d3753144e171401
+binutils-2.19.1-mingw32-bin.tar.gz-md5  := 6bba3bd1bf510d152a42d0beeeefa14d
 gcc-2.95.3-20010723.tar.gz-md5          := caf08d8b16e79265c110c01a57c892f7
 gcc-core-3.4.4-20050522-1.tar.gz-md5    := 46f17998ab61be9dbede233b44c7b0e6
 gcc-core-3.4.5-20060117-1.tar.gz-md5    := 1a4afae471ea93b975e3f8b3ac529eac
+gcc-core-3.4.5-20060117-3.tar.gz-md5    := 33c9fdf7468a3c410f830471d0e3ffb8
 gcc-g++-3.4.4-20050522-1.tar.gz-md5     := db44ac5b06d7f262c59422ae21511659
 gcc-g++-3.4.5-20060117-1.tar.gz-md5     := d11a9d63a0f862650f755fdb4e947dc4
+gcc-g++-3.4.5-20060117-3.tar.gz-md5     := b3e7875d160fd8df2b13c5448ca78c4e
 gcc-part-core-4.3.0-20080502-2-mingw32-alpha-bin.tar.gz-md5 := 1f157b66d097da0d07940dd6cec54a91
 gcc-part-c++-4.3.0-20080502-2-mingw32-alpha-bin.tar.gz-md5  := 869751a0ace9bf47b8a0627fdd91e0a9
 gcc-part-java-4.3.0-20080502-2-mingw32-alpha-bin.tar.gz-md5 := 7d8d0a13e66887b13dc0e463ad946f89
@@ -138,12 +148,14 @@ mingw-runtime-3.9.tar.gz-md5            := 0cb66b1071da224ea2174f960c593e2e
 mingw-runtime-3.11.tar.gz-md5           := e1c21f8c4ece49d8bd9fef9e1b0e44a7
 mingw-runtime-3.14.tar.gz-md5           := 44a42fc00ccaa50f1dd17f465078cc61
 mingwrt-3.15-mingw32-dev.tar.gz-md5     := 8a34bb94197d93647375ef70438bcb37
+mingwrt-3.15.2-mingw32-dev.tar.gz-md5   := 31520c8cce50eae09021f560cbf1485b
 w32api-1.0.1-20010726.tar.gz-md5        := d8d6d91d41f638e742be9d21ca046c42
 w32api-3.3.tar.gz-md5                   := 2da21c26013711ae90d3b2416c20856e
 w32api-3.6.tar.gz-md5                   := 2f86ec42cafd774ec82162fbc6e6808d
 w32api-3.8.tar.gz-md5                   := b53fdf670f33d2e901749f4792e659f2
 w32api-3.11.tar.gz-md5                  := 3cb523f58ea5d12f81397cf85f3b7011
 w32api-3.12-mingw32-dev.tar.gz-md5      := 2542596278bc805d92ee27c56ce9e16f
+w32api-3.13-mingw32-dev.tar.gz-md5      := a50fff6bc1e1542451722e2650cb53b4
 
 # Utilities ####################################################################
 
