@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.152 2009-04-25 16:18:31 chicares Exp $
+# $Id: objects.make,v 1.153 2009-04-27 15:26:18 chicares Exp $
 
 ################################################################################
 
@@ -411,9 +411,16 @@ gpt_so_test$(EXEEXT): ihs_server7702test.o libgpt$(SHREXT)
 #
 # Override this variable to exclude other tests where appropriate,
 # e.g., when a test doesn't even compile with a particular toolchain.
+#
+# 'calendar_date_test' is excluded for mpatrol builds because it takes
+# too long to run: at least fifteen minutes on my machine in 2009.
 
 excluded_unit_test_targets := \
   round_test \
+
+ifeq (mpatrol,$(build_type))
+  excluded_unit_test_targets += calendar_date_test
+endif
 
 unit_test_targets := \
   account_value_test \
