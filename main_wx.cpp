@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.138 2009-04-12 01:03:22 chicares Exp $
+// $Id: main_wx.cpp,v 1.139 2009-04-27 16:47:13 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -146,7 +146,6 @@ BEGIN_EVENT_TABLE(Skeleton, wxApp)
     EVT_MENU(XRCID("window_tile_horizontally"        ),Skeleton::UponWindowTileHorizontally       )
     EVT_MENU(XRCID("window_tile_vertically"          ),Skeleton::UponWindowTileVertically         )
     EVT_MENU_OPEN(                                     Skeleton::UponMenuOpen                     )
-    EVT_TIMER(wxID_ANY                                ,Skeleton::UponTimer                        )
 // TODO ?? There has to be a better way.
 /*
     EVT_UPDATE_UI(XRCID("edit_cell"            ),Skeleton::UponUpdateInapplicable)
@@ -702,13 +701,6 @@ bool Skeleton::OnInit()
             |   wxVSCROLL
             );
 
-        // Intercept 'Text Paste' events for all windows.
-        Connect
-            (wxID_ANY
-            ,wxEVT_COMMAND_TEXT_PASTE
-            ,wxClipboardTextEventHandler(Skeleton::UponPaste)
-            );
-
         InitHelp();
         InitIcon();
         InitMenuBar();
@@ -727,6 +719,19 @@ bool Skeleton::OnInit()
 
         frame_->Show(true);
         SetTopWindow(frame_);
+
+        // This handler may write to the statusbar, so connect it only
+        // after the frame has been created.
+        Connect
+            (wxEVT_TIMER
+            ,wxTimerEventHandler(Skeleton::UponTimer)
+            );
+
+        // Intercept 'Text Paste' events for all windows.
+        Connect
+            (wxEVT_COMMAND_TEXT_PASTE
+            ,wxClipboardTextEventHandler(Skeleton::UponPaste)
+            );
 
         if
             (!
