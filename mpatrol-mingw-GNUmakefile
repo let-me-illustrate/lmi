@@ -38,7 +38,7 @@
 
 # GNU Makefile to compile on msw with mingw gcc.
 
-# $Id: mpatrol-mingw-GNUmakefile,v 1.9 2008-12-27 02:56:49 chicares Exp $
+# $Id: mpatrol-mingw-GNUmakefile,v 1.10 2009-04-27 15:26:18 chicares Exp $
 
 # Definitions
 
@@ -132,6 +132,7 @@ $(ARCHIVE_MPATROL): $(ARCHIVE_MPTOBJS)
 $(SHARED_MPATROL): $(SHARED_MPTOBJS)
 	$(LD) -shared \
 	  -Wl,--out-implib=$(IMPLIB_MPATROL) \
+	  -Wl,--allow-multiple-definition \
 	  -o$@ $(SHARED_MPTOBJS) \
 	  -lbfd -liberty -limagehlp
 
@@ -145,6 +146,7 @@ $(ARCHTS_MPATROL): $(ARCHTS_MPTOBJS)
 $(SHARTS_MPATROL): $(SHARTS_MPTOBJS) $(MPATROL)mt.def
 	$(LD) -shared \
 	  -Wl,--out-implib=$(IMPLTS_MPATROL) \
+	  -Wl,--allow-multiple-definition \
 	  -o$@ $(SHARTS_MPTOBJS) \
 	  -lbfd -liberty -limagehlp
 
@@ -431,9 +433,11 @@ mgauge.o: $(TOOLS)/mgauge.c $(TOOLS)/mgauge.h $(SOURCE)/mpatrol.h \
 mtrace.o: $(TOOLS)/mtrace.c $(TOOLS)/mtrace.h $(SOURCE)/mpatrol.h \
 	$(SOURCE)/config.h $(SOURCE)/target.h
 
+prefix ?= /usr/local
+
 install:
-	@mkdir --parents /usr/local/lib
-	@cp --force --preserve lib*.a /usr/local/lib
-	@mkdir --parents /usr/local/bin
-	@cp --force --preserve *.dll /usr/local/bin
+	@mkdir --parents $(prefix)/lib
+	@cp --force --preserve lib*.a $(prefix)/lib
+	@mkdir --parents $(prefix)/bin
+	@cp --force --preserve *.dll  $(prefix)/bin
 
