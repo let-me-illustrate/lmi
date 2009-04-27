@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1301 2009-04-24 16:13:37 wboutin Exp $
+// $Id: ChangeLog,v 1.1302 2009-04-27 15:27:37 chicares Exp $
 
 MAINTENANCE
 
@@ -22702,4 +22702,40 @@ Add skin with minimal inputs.
 
   version.hpp
 Mark release candidate.
+
+20090425T1618Z <gchicares@sbcglobal.net> [775]
+
+  objects.make
+Improve documentation.
+
+20090426T0034Z <gchicares@sbcglobal.net> [775]
+
+  workhorse.make
+Add user manual to fardel.
+
+20090426T0104Z <gchicares@sbcglobal.net> [775]
+
+  workhorse.make
+Refactor.
+
+20090426T1437Z <gchicares@sbcglobal.net> [775]
+
+  install_mingw.make
+  workhorse.make
+Prepare to upgrade to MinGW gcc-3.4.5 .
+
+20090427T1526Z <gchicares@sbcglobal.net> [775]
+
+  install_mpatrol.make [new file]
+  mpatrol-mingw-GNUmakefile
+  mpatrol_1.4.8.patch  [new file]
+  objects.make
+  test_coding_rules.cpp
+Build mpatrol.
+
+20090427T1527Z <gchicares@sbcglobal.net> [775]
+
+  INSTALL
+  workhorse.make
+Improve documentation.
 

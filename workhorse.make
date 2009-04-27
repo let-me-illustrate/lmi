@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.146 2009-04-26 14:37:22 chicares Exp $
+# $Id: workhorse.make,v 1.147 2009-04-27 15:27:37 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -536,6 +536,12 @@ endif
 #
 # TODO ?? Consider refining it anyway, because it's unclean: libxml2
 # isn't actually required for all targets.
+#
+# Rationale for freezing particular versions of third-party libraries:
+# see topic:
+#   "How can the Boost libraries be used successfully for important projects?"
+# in this faq:
+#   http://boost.org/more/faq.htm
 
 REQUIRED_LIBS := \
   $(platform_boost_libraries) \
