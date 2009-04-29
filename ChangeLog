@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1302 2009-04-27 15:27:37 chicares Exp $
+// $Id: ChangeLog,v 1.1303 2009-04-29 03:09:25 chicares Exp $
 
 MAINTENANCE
 
@@ -22738,4 +22738,16 @@ Build mpatrol.
   INSTALL
   workhorse.make
 Improve documentation.
+
+20090427T1647Z <gchicares@sbcglobal.net> [775]
+
+  main_wx.cpp
+Connect certain event handlers only at the appropriate moment.
+
+20090429T0309Z <gchicares@sbcglobal.net> [775]
+
+  alert_wx.cpp
+Avoid superfluous messageboxes. Formerly, an extra
+  "Top window not found."
+messagebox had been displayed whenever an untimely message was shown.
 
