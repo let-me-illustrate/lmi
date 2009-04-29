@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_wx.cpp,v 1.25 2009-04-10 11:13:23 chicares Exp $
+// $Id: alert_wx.cpp,v 1.26 2009-04-29 03:09:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,7 +29,6 @@
 #include "alert.hpp"
 
 #include "configurable_settings.hpp"
-#include "wx_utility.hpp"
 
 #include <wx/app.h>                              // wxTheApp
 #include <wx/frame.h>
@@ -52,30 +51,30 @@ bool ensure_setup = set_alert_functions
     );
 } // Unnamed namespace.
 
+/// Show a message on the statusbar, if a statusbar is available.
+///
+/// Otherwise, simply return. If the message were crucial, then it
+/// wouldn't have been relegated to the statusbar.
+
 void status_alert(std::string const& s)
 {
-    try
+    if(wxTheApp && wxTheApp->GetTopWindow())
         {
-        wxFrame* f = dynamic_cast<wxFrame*>(&TopWindow());
-        if(!f || !f->GetStatusBar())
+        wxFrame* f = dynamic_cast<wxFrame*>(wxTheApp->GetTopWindow());
+        if(f && f->GetStatusBar())
             {
-            throw 0;
+            f->SetStatusText(s);
             }
-        f->SetStatusText(s);
-        }
-    catch(...)
-        {
-        safely_show_message("No statusbar to display message:\n" + s);
         }
 }
 
 void warning_alert(std::string const& s)
 {
-    try
+    if(wxTheApp && wxTheApp->GetTopWindow())
         {
-        wxMessageBox(s, "Warning", wxOK, &TopWindow());
+        wxMessageBox(s, "Warning", wxOK, wxTheApp->GetTopWindow());
         }
-    catch(...)
+    else
         {
         safely_show_message("Untimely warning:\n" + s);
         }
@@ -92,11 +91,11 @@ void warning_alert(std::string const& s)
 void hobsons_choice_alert(std::string const& s)
 {
     wxWindow* w = 0;
-    try
+    if(wxTheApp && wxTheApp->GetTopWindow())
         {
-        w = &TopWindow();
+        w = wxTheApp->GetTopWindow();
         }
-    catch(...)
+    else
         {
         safely_show_message("Untimely error:\n" + s);
         throw hobsons_choice_exception();
