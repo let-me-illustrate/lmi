@@ -17,14 +17,14 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: version.hpp,v 1.76 2009-04-24 16:13:37 wboutin Exp $
+// $Id: version.hpp,v 1.77 2009-04-29 13:00:32 wboutin Exp $
 
 #ifndef version_hpp
 #define version_hpp
 
 #include "config.hpp"
 
-#define LMI_VERSION "20090424T1613Z"
+#define LMI_VERSION "20090429T1300Z"
 
 #endif // version_hpp
 
