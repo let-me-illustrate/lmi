@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1303 2009-04-29 03:09:25 chicares Exp $
+// $Id: ChangeLog,v 1.1304 2009-04-29 13:00:36 wboutin Exp $
 
 MAINTENANCE
 
@@ -22750,4 +22750,9 @@ Connect certain event handlers only at the appropriate moment.
 Avoid superfluous messageboxes. Formerly, an extra
   "Top window not found."
 messagebox had been displayed whenever an untimely message was shown.
+
+20090429T1300Z <wboutin@massmutual.com> [775]
+
+  version.hpp
+Mark release candidate.
 
