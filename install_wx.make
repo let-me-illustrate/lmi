@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_wx.make,v 1.18 2009-03-23 16:23:33 chicares Exp $
+# $Id: install_wx.make,v 1.19 2009-04-30 15:38:15 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -98,7 +98,6 @@ config_options = \
 
 # Utilities ####################################################################
 
-CP     := cp
 ECHO   := echo
 MD5SUM := md5sum
 MKDIR  := mkdir
@@ -110,17 +109,15 @@ WGET   := wget
 # Targets ######################################################################
 
 source_archives := $(wx_archive)
-libraries       := $(source_archives:.tar.bz2=)
 patchset        := wx-$(wx_version).patch
 
 .PHONY: all
-all: clobber $(source_archives) $(libraries)
+all: clobber $(source_archives)
 	-[ -e $(patchset) ] && $(PATCH) --directory=$(wx_dir) --strip=1 <$(patchset)
 	$(MAKE) --file=$(this_makefile) --directory=$(build_dir) wx
 	$(MAKE) --file=$(this_makefile) --directory=$(prefix)/bin portable_script
 
 # Simulated order-only prerequisites.
-$(libraries): $(source_archives)
 $(source_archives): initial_setup
 initial_setup: clobber
 
@@ -130,11 +127,11 @@ initial_setup:
 	@$(MKDIR) --parents $(cache_dir)
 	@$(MKDIR) --parents $(build_dir)
 
+WGETFLAGS := '--timestamping'
+
 TARFLAGS := --keep-old-files
 %.tar.bz2: TARFLAGS += --bzip2
 %.tar.gz:  TARFLAGS += --gzip
-
-WGETFLAGS := '--timestamping'
 
 .PHONY: %.tar.bz2 %.tar.gz
 %.tar.bz2 %.tar.gz:
