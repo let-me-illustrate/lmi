@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_miscellanea.make,v 1.19 2009-04-24 14:57:26 chicares Exp $
+# $Id: install_miscellanea.make,v 1.20 2009-04-30 12:57:35 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -33,8 +33,6 @@ cache_dir := /tmp/lmi_cache
 # when this is passed to wget:
 sf_mirror := http://downloads.sourceforge.net
 
-mingw_dir := /MinGW_
-
 # Nonconfigurable settings #####################################################
 
 destination := $(prefix)/third_party
@@ -43,8 +41,6 @@ third_party_bin_dir     := $(destination)/bin
 third_party_include_dir := $(destination)/include
 third_party_lib_dir     := $(destination)/lib
 third_party_source_dir  := $(destination)/src
-
-mingw_bin_dir := $(mingw_dir)/bin
 
 # File lists ###################################################################
 
@@ -151,9 +147,6 @@ boost: $(file_list)
 	$(CP) --force --preserve --recursive scratch/$(stem)/boost/* $(third_party_include_dir)/boost/
 	@$(MKDIR) $(third_party_source_dir)/boost/
 	$(MV)                                scratch/$(stem)/*       $(third_party_source_dir)/boost/
-	cd $(third_party_source_dir)/boost/libs/regex/build && PATH=$(mingw_bin_dir):$$PATH $(MAKE) -f gcc.mak
-	@$(MKDIR) --parents $(prefix)/local/lib
-	$(CP) --force --preserve $(third_party_source_dir)/boost/libs/regex/build/gcc/lib*.a $(prefix)/local/lib
 
 .PHONY: cgicc
 cgicc: $(file_list)

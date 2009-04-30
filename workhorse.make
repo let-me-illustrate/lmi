@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.147 2009-04-27 15:27:37 chicares Exp $
+# $Id: workhorse.make,v 1.148 2009-04-30 12:57:35 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -288,6 +288,7 @@ all_include_directories := \
 all_source_directories := \
   $(src_dir) \
   /opt/lmi/third_party/src/boost/libs/filesystem/src \
+  /opt/lmi/third_party/src/boost/libs/regex/src \
   /opt/lmi/third_party/src/cgicc \
 
 vpath lib%.a          $(CURDIR)
@@ -450,7 +451,18 @@ $(wx_dependent_physical_closure_files): gcc_common_extra_warnings :=
 
 # Boost didn't remove an unused parameter in this file:
 
-operations_posix_windows.o:    gcc_common_extra_warnings += -Wno-unused-parameter
+operations_posix_windows.o: gcc_common_extra_warnings += -Wno-unused-parameter
+
+# The boost regex library improperly defines "NOMINMAX":
+#   http://lists.boost.org/Archives/boost/2006/03/102189.php
+# at least in version 1.33.1, and there seems to be no easy workaround
+# except to blow away all warning options and let a warning appear.
+# This library also seems to require
+#   -Wl,--allow-multiple-definition
+# for reasons unknown, at least with MinGW gcc-3.4.5 .
+
+static_mutex.o: gcc_common_extra_warnings :=
+static_mutex.o:          gcc_cxx_warnings :=
 
 # Boost normally makes '-Wundef' give spurious warnings:
 #   http://aspn.activestate.com/ASPN/Mail/Message/boost/1822550
