@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_mingw.make,v 1.18 2009-04-26 14:37:22 chicares Exp $
+# $Id: install_mingw.make,v 1.19 2009-04-30 15:40:43 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -27,7 +27,7 @@ this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
 # Set default version.
 
-version   := MinGW-20050827
+version   := MinGW-20090203
 
 file_list  = $($(version))
 
