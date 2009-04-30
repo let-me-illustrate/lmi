@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.153 2009-04-27 15:26:18 chicares Exp $
+# $Id: objects.make,v 1.154 2009-04-30 12:57:35 chicares Exp $
 
 ################################################################################
 
@@ -27,9 +27,12 @@
 # is reached through 'vpath' directives. See the rationale in
 # 'workhorse.make'.
 
-# Boost filesystem library. The other boost libraries that lmi itself
-# requires are implemented entirely in headers. (An auxiliary program,
-# however, uses the boost regex library.)
+# Boost filesystem and regex libraries. The other boost libraries that
+# lmi requires are implemented entirely in headers.
+#
+# As for listing the object files here, the regex author says:
+#   http://groups.google.com/group/boost-list/msg/7f925ca50d69384b
+# | add the libs/regex/src/*.cpp files to your project
 
 boost_filesystem_objects := \
   convenience.o \
@@ -37,13 +40,32 @@ boost_filesystem_objects := \
   path_posix_windows.o \
   operations_posix_windows.o \
 
+boost_regex_objects := \
+  c_regex_traits.o \
+  cpp_regex_traits.o \
+  cregex.o \
+  fileiter.o \
+  icu.o \
+  instances.o \
+  posix_api.o \
+  regex.o \
+  regex_debug.o \
+  regex_raw_buffer.o \
+  regex_traits_defaults.o \
+  static_mutex.o \
+  usinstances.o \
+  w32_regex_traits.o \
+  wc_regex_traits.o \
+  wide_posix_api.o \
+  winstances.o \
+
 # These object files are used in both an application and a shared
 # library that it links to, only for builds that use shared-library
 # 'attributes'. This workaround is used merely because we don't yet
 # build these objects as a library.
 
 ifneq (,$(USE_SO_ATTRIBUTES))
-  duplicated_objects = $(boost_filesystem_objects)
+  duplicated_objects = $(boost_filesystem_objects) $(boost_regex_objects)
 endif
 
 # GNU cgicc.
@@ -101,6 +123,7 @@ xmlwrapp_objects := xml_xslt_wrapp.o
 
 ifdef HAVE_THIRD_PARTY_LIBRARIES
   boost_filesystem_objects :=
+  boost_regex_objects :=
   cgicc_objects :=
   xmlwrapp_objects :=
 endif
@@ -750,8 +773,9 @@ quiet_nan_test$(EXEEXT): \
   $(common_test_objects) \
   quiet_nan_test.o \
 
-regex_test$(EXEEXT): EXTRA_LDFLAGS = -lboost_regex-gcc-1_33_1
+regex_test$(EXEEXT): EXTRA_LDFLAGS = -Wl,--allow-multiple-definition
 regex_test$(EXEEXT): \
+  $(boost_regex_objects) \
   $(common_test_objects) \
   regex_test.o \
   timer.o \
@@ -861,9 +885,10 @@ ihs_crc_comp$(EXEEXT): \
 
 test_coding_rules_test := $(src_dir)/test_coding_rules_test.sh
 test_coding_rules$(EXEEXT): POST_LINK_COMMAND = $(test_coding_rules_test)
-test_coding_rules$(EXEEXT): EXTRA_LDFLAGS = -lboost_regex-gcc-1_33_1
+test_coding_rules$(EXEEXT): EXTRA_LDFLAGS = -Wl,--allow-multiple-definition
 test_coding_rules$(EXEEXT): \
   $(boost_filesystem_objects) \
+  $(boost_regex_objects) \
   $(main_auxiliary_common_objects) \
   my_test_coding_rules.o \
   test_coding_rules.o \
