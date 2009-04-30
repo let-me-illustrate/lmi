@@ -21,7 +21,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_msw.sh,v 1.14 2009-03-29 15:07:23 chicares Exp $
+# $Id: install_msw.sh,v 1.15 2009-04-30 15:40:43 chicares Exp $
 
 set -v
 
@@ -115,9 +115,9 @@ cd /opt/lmi/src/lmi
 
 restore_MinGW_mount=`mount --mount-commands |grep '"/MinGW_"'`
 [ -z "$restore_MinGW_mount" ] \
-  || echo $restore_MinGW_mount |grep --silent '"C:/opt/lmi/MinGW-20050827"' \
+  || echo $restore_MinGW_mount |grep --silent '"C:/opt/lmi/MinGW-20090203"' \
   || echo -e "Replacing former MinGW_ mount:\n  $restore_MinGW_mount" >/dev/tty
-mount --force "C:/opt/lmi/MinGW-20050827" "/MinGW_"
+mount --force "C:/opt/lmi/MinGW-20090203" "/MinGW_"
 rm --force --recursive scratch
 rm --force --recursive /MinGW_
 make prefix=/MinGW_ cache_dir=/tmp/lmi_cache -f install_mingw.make
