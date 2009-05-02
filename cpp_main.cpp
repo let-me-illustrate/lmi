@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: cpp_main.cpp,v 1.10 2008-12-27 02:56:38 chicares Exp $
+// $Id: cpp_main.cpp,v 1.11 2009-05-02 13:29:19 chicares Exp $
 
 // This is a derived work based on Beman Dawes's boost test library
 // that bears the following copyright and license statement:
@@ -69,6 +69,16 @@
 
 #include <cstdlib>  // std::free()
 #include <iostream>
+
+#if defined __MINGW32__
+/// Conform to C99 [7.19.6.1/8]:
+///   "The exponent always contains at least two digits, and only as
+///   many more digits as necessary to represent the exponent."
+/// See:
+///   http://article.gmane.org/gmane.comp.gnu.mingw.user/28747
+
+extern "C" int _get_output_format(void) {return 1;}
+#endif // defined __MINGW32__
 
 // main()  ------------------------------------------------------------------//
 

@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_common.cpp,v 1.10 2008-12-27 02:56:47 chicares Exp $
+// $Id: main_common.cpp,v 1.11 2009-05-02 13:29:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -36,7 +36,19 @@
 #include <exception> // std::set_terminate()
 #include <stdexcept>
 
+#if defined __MINGW32__
+/// Conform to C99 [7.19.6.1/8]:
+///   "The exponent always contains at least two digits, and only as
+///   many more digits as necessary to represent the exponent."
+/// See:
+///   http://article.gmane.org/gmane.comp.gnu.mingw.user/28747
+
+extern "C" int _get_output_format(void) {return 1;}
+#endif // defined __MINGW32__
+
 /// Common application initialization.
+///
+/// Also see the similar code in 'cpp_main.cpp' (for unit tests).
 ///
 /// Don't initialize boost::filesystem here, to avoid creating a
 /// dependency on its object files for applications that don't use it.
