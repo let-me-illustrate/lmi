@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.154 2009-04-30 12:57:35 chicares Exp $
+# $Id: objects.make,v 1.155 2009-05-03 13:08:32 chicares Exp $
 
 ################################################################################
 
@@ -428,18 +428,14 @@ gpt_so_test$(EXEEXT): ihs_server7702test.o libgpt$(SHREXT)
 
 # Unit tests.
 
-# 'round_test' fails spectacularly with MinGW gcc, and is therefore
-# suppressed until we upgrade to the new libmingwex version that it
-# was designed to test.
-#
-# Override this variable to exclude other tests where appropriate,
-# e.g., when a test doesn't even compile with a particular toolchain.
+# Override this variable to exclude tests that are inappropriate in
+# context--e.g., tests that don't even compile with a particular
+# toolchain.
 #
 # 'calendar_date_test' is excluded for mpatrol builds because it takes
 # too long to run: at least fifteen minutes on my machine in 2009.
 
-excluded_unit_test_targets := \
-  round_test \
+excluded_unit_test_targets :=
 
 ifeq (mpatrol,$(build_type))
   excluded_unit_test_targets += calendar_date_test
