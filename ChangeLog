@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1304 2009-04-29 13:00:36 wboutin Exp $
+// $Id: ChangeLog,v 1.1305 2009-05-03 13:13:24 chicares Exp $
 
 MAINTENANCE
 
@@ -22755,4 +22755,52 @@ messagebox had been displayed whenever an untimely message was shown.
 
   version.hpp
 Mark release candidate.
+
+20090430T1257Z <gchicares@sbcglobal.net> [775]
+
+  install_miscellanea.make
+  objects.make
+  workhorse.make
+Improve use of boost regex library.
+
+20090430T1538Z <gchicares@sbcglobal.net> [775]
+
+  install_wx.make
+Refactor for simplicity.
+
+20090430T1539Z <gchicares@sbcglobal.net> [775]
+
+  wx-2.8.10.patch [new file]
+Forestall a gcc-3.4.5 warning. See:
+  http://gcc.gnu.org/bugzilla/show_bug.cgi?id=22207
+  http://lists.nongnu.org/archive/html/lmi/2006-04/msg00000.html
+
+20090430T1540Z <gchicares@sbcglobal.net> [775]
+
+  install_mingw.make
+  install_msw.sh
+Upgrade to MinGW gcc-3.4.5 .
+
+20090502T1329Z <gchicares@sbcglobal.net> [775]
+
+  cpp_main.cpp
+  main_common.cpp
+Make MinGW gcc conform to C99 7.19.6.1/8 .
+
+20090503T1308Z <gchicares@sbcglobal.net> [775]
+
+  bcc_5_5_1.make
+  como_4_3_3.make
+  objects.make
+Build and run 'round_test' for suitable compilers only.
+
+20090503T1311Z <gchicares@sbcglobal.net> [775]
+
+  fenv_lmi_test.cpp
+Guard a C99 header more carefully. Cf. the 20080617T1530Z change.
+
+20090503T1313Z <gchicares@sbcglobal.net> [775]
+
+  workhorse.make
+Work around a gcc-3.4.5 defect.
 
