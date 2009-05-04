@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<resource xmlns="http://www.wxwindows.org/wxxrc" version="2.3.0.1">
+<resource xmlns="http://www.wxwidgets.org/wxxrc" version="2.5.3.0">
 
 <!--
     Life insurance illustrations: wxWindows xml resources.
@@ -24,7 +24,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: menus.xrc,v 1.49 2009-01-12 18:55:16 chicares Exp $
+    $Id: menus.xrc,v 1.50 2009-05-04 19:06:38 chicares Exp $
 -->
 
 <!-- reusable menus -->
