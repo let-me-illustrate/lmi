@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: value_cast_test.cpp,v 1.21 2008-12-27 02:56:58 chicares Exp $
+// $Id: value_cast_test.cpp,v 1.22 2009-05-04 13:23:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -350,6 +350,19 @@ int extra_tests0()
         (static_cast<double>(std::numeric_limits<double>::radix)
         ,static_cast<double>(std::numeric_limits<double>::max_exponent - 1)
         );
+
+    // MPATROL !! This call to std::strtod() produces a segfault with mpatrol
+    // when built with MinGW gcc-3.4.5 .
+    {
+    // Initialize 'nptr' to the string representation of 'big',
+    // copied from the output of:
+    //   std::cout << value_cast<std::string>(big) << std::endl;
+    char const* nptr = "89884656743115795386465259539451236680898848947115328636715040578866337902750481566354238661203768010560056939935696678829394884407208311246423715319737062188883946712432742638151109800623047059726541476042502884419075341171231440736956555270413618581675255342293149119973622969239858152417678164812112068608";
+    // Pointer to which strtoT()'s 'endptr' argument refers.
+    char* rendptr;
+    std::strtod(nptr, &rendptr); // mpatrol segfault here.
+    }
+
     BOOST_TEST_EQUAL( big, value_cast<double>(value_cast<std::string>( big)));
     BOOST_TEST_EQUAL(-big, value_cast<double>(value_cast<std::string>(-big)));
 
