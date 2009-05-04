@@ -24,7 +24,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin_single_premium.xrc,v 1.8 2008-12-27 02:56:55 chicares Exp $
+    $Id: skin_single_premium.xrc,v 1.9 2009-05-04 19:00:57 chicares Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -33,7 +33,7 @@
 <object class="wxPanel" name="plan_panel">
     <object class="wxFlexGridSizer">
         <rows>2</rows>
-        <growablecols>0,1</growablecols>
+        <growablecols>0</growablecols>
         <growablerows>0</growablerows>
         <object class="sizeritem">
             <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
@@ -132,7 +132,7 @@
                     <flag>wxGROW|wxALL</flag>
                     <object class="wxFlexGridSizer">
                         <cols>1</cols>
-                        <growablecols>0,1</growablecols>
+                        <growablecols>0</growablecols>
                         <growablerows>0,1,2</growablerows>
                         <object class="sizeritem">
                             <flag>wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
@@ -202,7 +202,7 @@
                     <flag>wxGROW|wxALL</flag>
                     <object class="wxFlexGridSizer">
                         <cols>1</cols>
-                        <growablecols>0,1</growablecols>
+                        <growablecols>0</growablecols>
                         <growablerows>0,1</growablerows>
                         <object class="sizeritem">
                             <flag>wxGROW|wxALL</flag>
@@ -563,7 +563,7 @@
                             <border>2</border>
                             <object class="wxFlexGridSizer">
                                 <cols>1</cols>
-                                <growablecols>1,3</growablecols>
+                                <growablecols>0</growablecols>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                     <border>4</border>
@@ -725,7 +725,7 @@
                     <flag>wxGROW|wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
                     <object class="wxFlexGridSizer">
                         <cols>1</cols>
-                        <growablecols>0,1,2,3</growablecols>
+                        <growablecols>0</growablecols>
                         <growablerows>0</growablerows>
                         <object class="sizeritem">
                             <flag>wxGROW|wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
@@ -856,7 +856,7 @@
             <border>4</border>
             <object class="wxFlexGridSizer">
                 <rows>1</rows>
-                <growablecols>0,1,2</growablecols>
+                <growablecols>0</growablecols>
                 <growablerows>0</growablerows>
                 <object class="sizeritem">
                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
