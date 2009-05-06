@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1305 2009-05-03 13:13:24 chicares Exp $
+// $Id: ChangeLog,v 1.1306 2009-05-06 14:53:33 chicares Exp $
 
 MAINTENANCE
 
@@ -22803,4 +22803,56 @@ Guard a C99 header more carefully. Cf. the 20080617T1530Z change.
 
   workhorse.make
 Work around a gcc-3.4.5 defect.
+
+20090504T1323Z <gchicares@sbcglobal.net> [775]
+
+  value_cast_test.cpp
+Note an mpatrol issue.
+
+20090504T1900Z <gchicares@sbcglobal.net> [775]
+
+  skin.xrc
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_group_carveout2.xrc
+  skin_reg_d.xrc
+  skin_single_premium.xrc
+  skin_variable_annuity.xrc
+Fix various XRC defects (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2009-05/msg00000.html
+
+20090504T1906Z <gchicares@sbcglobal.net> [775]
+
+  menus.xrc
+  policy_view.xrc
+  preferences_view.xrc
+  rounding_view.xrc
+  skin.xrc
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_group_carveout2.xrc
+  skin_reg_d.xrc
+  skin_single_premium.xrc
+  skin_variable_annuity.xrc
+  toolbar.xrc
+Update XRC version and namespace (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2009-05/msg00000.html
+
+20090506T1451Z <gchicares@sbcglobal.net> [775]
+
+  install_miscellanea.make
+  install_msw.sh
+Upgrade to fop-0.95 .
+
+20090506T1452Z <gchicares@sbcglobal.net> [775]
+
+  fo_common.xsl
+Improve orphan control (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2009-04/msg00042.html
+
+20090506T1453Z <gchicares@sbcglobal.net> [775]
+
+  illustration_reg.xsl
+Remove a doubted 20070611T1337Z workaround for fop-0.20.5 . See:
+  http://lists.nongnu.org/archive/html/lmi/2009-05/msg00002.html
 
