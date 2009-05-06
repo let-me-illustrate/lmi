@@ -21,7 +21,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.72 2008-12-27 02:56:44 chicares Exp $
+    $Id: illustration_reg.xsl,v 1.73 2009-05-06 14:53:33 chicares Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -1638,14 +1638,7 @@ to the xsl files first.
         </xsl:choose>
       </xsl:with-param>
       <xsl:with-param name="right-block">
-        <!--
-        APACHE !! The '/text()' suffix in the XPath expression is a workaround
-        for Apache-FOP 0.20.5 bug that somehow treats <xsl:value-of/> as
-        <xsl:copy-of/> if it is encountered inside a <xsl:with-param/> as
-        a single child. Therefore we explicitly convert the expression into
-        a string.
-        -->
-        <xsl:value-of select="$scalars/InsCoName/text()"/>
+        <xsl:value-of select="$scalars/InsCoName"/>
         <xsl:if test="$compliance_tracking_number">
           <fo:block>
             <xsl:value-of select="$compliance_tracking_number"/>
