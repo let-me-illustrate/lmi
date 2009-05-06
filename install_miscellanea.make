@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_miscellanea.make,v 1.20 2009-04-30 12:57:35 chicares Exp $
+# $Id: install_miscellanea.make,v 1.21 2009-05-06 14:51:22 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -46,7 +46,7 @@ third_party_source_dir  := $(destination)/src
 
 boost_archive    := boost_1_33_1.tar.bz2
 cgicc_archive    := cgicc-3.1.4.tar.bz2
-fop_archive      := fop-0.20.5-bin.tar.gz
+fop_archive      := fop-0.95-bin.tar.gz
 md5sum_msw_exe   := md5sum.exe
 sample_archive   := lmi-data-20050618T1440Z.tar.bz2
 xmlwrapp_archive := xmlwrapp-0.6.0.tar.gz
@@ -75,7 +75,7 @@ $(xmlwrapp_archive)-url := $(sf_mirror)/xmlwrapp/$(xmlwrapp_archive)
 
 $(boost_archive)-md5    := 2b999b2fb7798e1737d1fff8fac602ef
 $(cgicc_archive)-md5    := 6cb5153fc9fa64b4e50c7962aa557bbe
-$(fop_archive)-md5      := d6b43e3eddf9378536ad8127bc057d41
+$(fop_archive)-md5      := 7af50bf58924dd22d71d22d8ad90b268
 $(md5sum_msw_exe)-md5   := eb574b236133e60c989c6f472f07827b
 $(sample_archive)-md5   := e7f07133abfc3b9c2252dfa3b61191bc
 $(xmlwrapp_archive)-md5 := 331369a1b0e0539b1ce95a67e4c2bec4
@@ -158,11 +158,6 @@ cgicc: $(file_list)
 	cd $(destination) && $(MD5SUM) include/cgicc/* src/cgicc/* >$(stem).md5sums
 	cd $(destination) && $(MD5SUM) --check $(CURDIR)/$(stem).md5sums
 	$(DIFF) $(stem).md5sums $(destination)/$(stem).md5sums && $(RM) $(destination)/$(stem).md5sums
-
-# When the 'fop' tarball is extracted, this message:
-#   tar: A lone zero block at 20398
-# is expected, and harmless--see:
-#   http://issues.apache.org/bugzilla/show_bug.cgi?id=28776
 
 .PHONY: fop
 fop: $(file_list)
