@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1306 2009-05-06 14:53:33 chicares Exp $
+// $Id: ChangeLog,v 1.1307 2009-05-08 02:33:28 chicares Exp $
 
 MAINTENANCE
 
@@ -22855,4 +22855,10 @@ Improve orphan control (VS). See:
   illustration_reg.xsl
 Remove a doubted 20070611T1337Z workaround for fop-0.20.5 . See:
   http://lists.nongnu.org/archive/html/lmi/2009-05/msg00002.html
+
+20090508T0233Z <gchicares@sbcglobal.net> [775]
+
+  install_mingw.make
+Adapt to an unadvertised MinGW change. See:
+  http://lists.nongnu.org/archive/html/lmi/2009-05/msg00008.html
 

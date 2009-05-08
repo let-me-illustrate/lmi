@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_mingw.make,v 1.19 2009-04-30 15:40:43 chicares Exp $
+# $Id: install_mingw.make,v 1.20 2009-05-08 02:33:27 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -148,7 +148,7 @@ mingw-runtime-3.9.tar.gz-md5            := 0cb66b1071da224ea2174f960c593e2e
 mingw-runtime-3.11.tar.gz-md5           := e1c21f8c4ece49d8bd9fef9e1b0e44a7
 mingw-runtime-3.14.tar.gz-md5           := 44a42fc00ccaa50f1dd17f465078cc61
 mingwrt-3.15-mingw32-dev.tar.gz-md5     := 8a34bb94197d93647375ef70438bcb37
-mingwrt-3.15.2-mingw32-dev.tar.gz-md5   := 31520c8cce50eae09021f560cbf1485b
+mingwrt-3.15.2-mingw32-dev.tar.gz-md5   := f24d63744af66b54547223bd5476b8f0
 w32api-1.0.1-20010726.tar.gz-md5        := d8d6d91d41f638e742be9d21ca046c42
 w32api-3.3.tar.gz-md5                   := 2da21c26013711ae90d3b2416c20856e
 w32api-3.6.tar.gz-md5                   := 2f86ec42cafd774ec82162fbc6e6808d
