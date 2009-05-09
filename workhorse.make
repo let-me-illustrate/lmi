@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.149 2009-05-03 13:13:24 chicares Exp $
+# $Id: workhorse.make,v 1.150 2009-05-09 22:56:36 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -448,7 +448,6 @@ gcc_common_extra_warnings := \
 
 ifeq (safestdlib,$(findstring safestdlib,$(build_type)))
   ifeq (3.4.5,$(gcc_version))
-    MPATROL_LDFLAGS := -Wl,--allow-multiple-definition
     expression_template_0_test.o: gcc_common_extra_warnings += -Wno-unused-parameter
   endif
 endif
