@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1307 2009-05-08 02:33:28 chicares Exp $
+// $Id: ChangeLog,v 1.1308 2009-05-09 22:56:36 chicares Exp $
 
 MAINTENANCE
 
@@ -22861,4 +22861,14 @@ Remove a doubted 20070611T1337Z workaround for fop-0.20.5 . See:
   install_mingw.make
 Adapt to an unadvertised MinGW change. See:
   http://lists.nongnu.org/archive/html/lmi/2009-05/msg00008.html
+
+20090509T2255Z <gchicares@sbcglobal.net> [775]
+
+  fenv_lmi_test.cpp
+Fix defect introduced 20090503T1311Z.
+
+20090509T2256Z <gchicares@sbcglobal.net> [775]
+
+  workhorse.make
+Revert an apparently-overzealous workaround committed 20090503T1313Z.
 
