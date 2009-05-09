@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi_test.cpp,v 1.19 2009-05-03 13:11:21 chicares Exp $
+// $Id: fenv_lmi_test.cpp,v 1.20 2009-05-09 22:55:35 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -46,7 +46,8 @@
 
 #include <bitset>
 #include <climits> // CHAR_BIT
-#if defined LMI_IEC_559
+#if defined LMI_IEC_559 || defined __MINGW32__
+// Specify '|| defined __MINGW32__' to test MinGW extensions like FE_PC64_ENV.
 #   include <fenv.h>
 #endif // defined LMI_IEC_559
 #include <stdexcept>
