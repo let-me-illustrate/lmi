@@ -21,7 +21,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_msw.sh,v 1.16 2009-05-06 14:51:23 chicares Exp $
+# $Id: install_msw.sh,v 1.17 2009-05-21 15:46:27 chicares Exp $
 
 set -v
 
@@ -163,7 +163,7 @@ cat >/opt/lmi/bin/configurable_settings.xml <<EOF
   <skin_filename>skin.xrc</skin_filename>
   <spreadsheet_file_extension>.dif</spreadsheet_file_extension>
   <use_builtin_calculation_summary>1</use_builtin_calculation_summary>
-  <xsl_fo_command>CMD /c /opt/lmi/third_party/fop-0.95/fop</xsl_fo_command>
+  <xsl_fo_command>CMD /c /opt/lmi/third_party/fop-0.20.5/fop</xsl_fo_command>
 </configurable_settings>
 EOF
 
