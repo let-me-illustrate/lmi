@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date.hpp,v 1.19 2008-12-27 02:56:37 chicares Exp $
+// $Id: calendar_date.hpp,v 1.20 2009-05-24 14:04:18 chicares Exp $
 
 #ifndef calendar_date_hpp
 #define calendar_date_hpp
@@ -32,6 +32,7 @@
 
 #include <iosfwd>
 #include <string>
+#include <utility>
 
 /// Julian day number, encapsulated in a class for use as a ctor
 /// argument for class calendar_date.
@@ -203,6 +204,11 @@ int attained_age
     (calendar_date const& birthdate
     ,calendar_date const& as_of_date
     ,bool                 use_age_nearest_birthday
+    );
+
+std::pair<int,int> years_and_months_since
+    (calendar_date const& base_date
+    ,calendar_date const& other_date
     );
 
 int duration_floor
