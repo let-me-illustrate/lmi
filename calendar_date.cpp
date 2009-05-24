@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date.cpp,v 1.28 2008-12-27 02:56:37 chicares Exp $
+// $Id: calendar_date.cpp,v 1.29 2009-05-24 14:04:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -42,7 +42,6 @@
 #include <locale>
 #include <ostream>
 #include <sstream>
-#include <utility>
 
 namespace
 {
@@ -495,7 +494,7 @@ int notional_age
 
 /// Age on 'as_of_date' if born on 'birthdate'.
 ///
-/// Throws an exception if 'as_of_date' precedes 'birthdate'.
+/// Throws if 'as_of_date' precedes 'birthdate'.
 
 int attained_age
     (calendar_date const& birthdate
@@ -516,6 +515,54 @@ int attained_age
         }
 
     return notional_age(birthdate, as_of_date, use_age_nearest_birthday);
+}
+
+/// Full curtate years and months by which 'other_date' follows 'base_date'.
+///
+/// Throws if 'other_date' precedes 'base_date'.
+///
+/// Postconditions:
+///   0 <= months < 12
+/// and
+///   a <= other_date < b
+/// for calendar dates a, b such that
+///   a = add_years_and_months(base_date, years,     months, true)
+///   b = add_years_and_months(base_date, years, 1 + months, true)
+
+std::pair<int,int> years_and_months_since
+    (calendar_date const& base_date
+    ,calendar_date const& other_date
+    )
+{
+    if(other_date < base_date)
+        {
+        fatal_error()
+            << "Second date ("
+            << other_date.str()
+            << ") precedes first date ("
+            << base_date.str()
+            << ")."
+            << LMI_FLUSH
+            ;
+        }
+
+    int const m0 = base_date .month() + 12 * base_date .year();
+    int const m1 = other_date.month() + 12 * other_date.year();
+    int mdiff  = m1 - m0;
+    int years  = mdiff / 12;
+    int months = mdiff % 12;
+
+    calendar_date z = add_years_and_months(base_date, years, months, true);
+    if(other_date < z)
+        {
+        --mdiff;
+        years  = mdiff / 12;
+        months = mdiff % 12;
+        }
+
+    LMI_ASSERT(0 <= years);
+    LMI_ASSERT(0 <= months && months < 12);
+    return std::make_pair(years, months);
 }
 
 /// Anniversary of 'base_date' on or after which 'other_date' occurs.
