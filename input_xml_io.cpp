@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_xml_io.cpp,v 1.25 2009-05-26 12:12:28 chicares Exp $
+// $Id: input_xml_io.cpp,v 1.26 2009-05-26 13:31:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -209,6 +209,7 @@ void Input::write(xml::element& x) const
 /// version 2: 20080813T0131Z
 /// version 3: 20090302T0509Z [see important note below]
 /// version 4: 20090330T0137Z
+/// version 5: 20090526T1331Z
 ///
 /// Important note concerning version 3. On or about 20090311, some
 /// end users were given an off-cycle release that should have used
@@ -217,7 +218,7 @@ void Input::write(xml::element& x) const
 
 int Input::class_version() const
 {
-    return 4;
+    return 5;
 }
 
 //============================================================================
@@ -476,6 +477,22 @@ void Input::RedintegrateExPost
         SolveTargetTime = issue_age() + SolveTargetYear.value();
         SolveBeginTime  = issue_age() + SolveBeginYear .value();
         SolveEndTime    = issue_age() + SolveEndYear   .value();
+        }
+
+    if(file_version < 5)
+        {
+        InforceDate = add_years_and_months
+            (EffectiveDate.value()
+            ,InforceYear  .value()
+            ,InforceMonth .value()
+            ,true
+            );
+        LastMaterialChangeDate = add_years_and_months
+            (EffectiveDate.value()
+            ,InforceYear  .value() - InforceContractYear .value()
+            ,InforceMonth .value() - InforceContractMonth.value()
+            ,true
+            );
         }
 }
 

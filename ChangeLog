@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1310 2009-05-26 12:12:29 chicares Exp $
+// $Id: ChangeLog,v 1.1311 2009-05-26 13:31:26 chicares Exp $
 
 MAINTENANCE
 
@@ -22908,4 +22908,10 @@ Mark release candidate.
   skin_reg_d.xrc
   yare_input.hpp
 Remove unused 'PolicyDate'; add 'InforceDate'.
+
+20090526T1331Z <gchicares@sbcglobal.net> [775]
+
+  input_harmonization.cpp
+  input_xml_io.cpp
+Use dates instead of durations for inforce.
 
