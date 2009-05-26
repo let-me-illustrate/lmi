@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_xml_io.cpp,v 1.24 2009-04-19 20:33:38 chicares Exp $
+// $Id: input_xml_io.cpp,v 1.25 2009-05-26 12:12:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -66,6 +66,7 @@ bool is_detritus(std::string const& s)
         ,"NetMortalityChargeHistory"     // Renamed before implementation.
         ,"PartialMortalityTable"         // Never implemented.
         ,"PayLoanInterestInCash"         // Never implemented.
+        ,"PolicyDate"                    // Never implemented.
         ,"PolicyLevelFlatExtra"          // Never implemented; poor name.
         ,"SocialSecurityNumber"          // Withdrawn: would violate privacy.
         ,"TermProportion"                // 'TermRiderProportion' instead.

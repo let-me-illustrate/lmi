@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.101 2009-03-24 20:31:34 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.102 2009-05-26 12:12:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -290,7 +290,7 @@ void Input::DoHarmonize()
 
     // These fields have no effect for now. They're suppressed to
     // avoid confusion.
-    PolicyDate.enable(false);
+    InforceDate.enable(false);
     LastMaterialChangeDate.enable(false);
 
 // TODO ?? Nomen est omen.
