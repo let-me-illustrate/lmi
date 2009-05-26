@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1308 2009-05-09 22:56:36 chicares Exp $
+// $Id: ChangeLog,v 1.1309 2009-05-26 11:28:19 chicares Exp $
 
 MAINTENANCE
 
@@ -22871,4 +22871,26 @@ Fix defect introduced 20090503T1311Z.
 
   workhorse.make
 Revert an apparently-overzealous workaround committed 20090503T1313Z.
+
+20090521T1546Z <gchicares@sbcglobal.net> [775]
+
+  fo_common.xsl
+  illustration_reg.xsl
+  install_miscellanea.make
+  install_msw.sh
+Revert recent xsl-fo changes, in order to test them on a branch: i.e.,
+the {20090506T1451Z, 20090506T1452Z, 20090506T1453Z} changes. See:
+  http://lists.nongnu.org/archive/html/lmi/2009-05/msg00033.html
+
+20090524T1404Z <gchicares@sbcglobal.net> [775]
+
+  calendar_date.cpp
+  calendar_date.hpp
+  calendar_date_test.cpp
+Add a free function to measure years and months between two dates.
+
+ <gchicares@sbcglobal.net> [775]
+
+  version.hpp
+Mark release candidate.
 
