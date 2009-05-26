@@ -80,6 +80,7 @@
     <InforceCumulativeGlp>0</InforceCumulativeGlp>
     <InforceCumulativeNoLapsePremium>0</InforceCumulativeNoLapsePremium>
     <InforceCumulativePayments>0</InforceCumulativePayments>
+    <InforceDate>2454040</InforceDate>
     <InforceDcv>0</InforceDcv>
     <InforceGeneralAccountValue>0</InforceGeneralAccountValue>
     <InforceGlp>0</InforceGlp>
@@ -128,7 +129,6 @@
     <PartialMortalityMultiplier>1</PartialMortalityMultiplier>
     <Payment>20000</Payment>
     <PaymentMode>annual</PaymentMode>
-    <PolicyDate>2454040</PolicyDate>
     <PolicyNumber/>
     <PostHoneymoonSpread>0</PostHoneymoonSpread>
     <PremiumHistory>0</PremiumHistory>
@@ -286,6 +286,7 @@
     <InforceCumulativeGlp>0</InforceCumulativeGlp>
     <InforceCumulativeNoLapsePremium>0</InforceCumulativeNoLapsePremium>
     <InforceCumulativePayments>0</InforceCumulativePayments>
+    <InforceDate>2454040</InforceDate>
     <InforceDcv>0</InforceDcv>
     <InforceGeneralAccountValue>0</InforceGeneralAccountValue>
     <InforceGlp>0</InforceGlp>
@@ -334,7 +335,6 @@
     <PartialMortalityMultiplier>1</PartialMortalityMultiplier>
     <Payment>20000</Payment>
     <PaymentMode>annual</PaymentMode>
-    <PolicyDate>2454040</PolicyDate>
     <PolicyNumber/>
     <PostHoneymoonSpread>0</PostHoneymoonSpread>
     <PremiumHistory>0</PremiumHistory>
@@ -492,6 +492,7 @@
     <InforceCumulativeGlp>0</InforceCumulativeGlp>
     <InforceCumulativeNoLapsePremium>0</InforceCumulativeNoLapsePremium>
     <InforceCumulativePayments>0</InforceCumulativePayments>
+    <InforceDate>2454040</InforceDate>
     <InforceDcv>0</InforceDcv>
     <InforceGeneralAccountValue>0</InforceGeneralAccountValue>
     <InforceGlp>0</InforceGlp>
@@ -540,7 +541,6 @@
     <PartialMortalityMultiplier>1</PartialMortalityMultiplier>
     <Payment>20000</Payment>
     <PaymentMode>annual</PaymentMode>
-    <PolicyDate>2454040</PolicyDate>
     <PolicyNumber/>
     <PostHoneymoonSpread>0</PostHoneymoonSpread>
     <PremiumHistory>0</PremiumHistory>
