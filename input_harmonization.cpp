@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.102 2009-05-26 12:12:27 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.103 2009-05-26 13:31:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -272,7 +272,23 @@ void Input::DoHarmonize()
     // from maturity age (which shouldn't be called 'EndtAge' because
     // the contract needn't endow).
     int max_age = static_cast<int>(database_->Query(DB_EndtAge));
-    InforceYear.maximum(-1 + max_age - IssueAge.value());
+    InforceDate.minimum_and_maximum
+        (EffectiveDate.value()
+        ,add_years_and_months
+            (EffectiveDate.value()
+            ,-1 + max_age - IssueAge.value()
+            ,11
+            ,true
+            )
+        );
+    // SOMEDAY !! Here, it's important to use std::max(): otherwise,
+    // when values change, the maximum could be less than the minimum,
+    // because 'InforceDate' has not yet been constrained to the limit
+    // just set. Should the MVC framework handle this somehow?
+    LastMaterialChangeDate.minimum_and_maximum
+        (EffectiveDate.value()
+        ,std::max(InforceDate.value(), InforceDate.minimum())
+        );
 
     InforceCumulativeGlp.enable(mce_gpt == DefinitionOfLifeInsurance);
     InforceGlp          .enable(mce_gpt == DefinitionOfLifeInsurance);
@@ -288,10 +304,11 @@ void Input::DoHarmonize()
     InforceContractMonth    .enable(non_mec);
     InforceLeastDeathBenefit.enable(non_mec);
 
-    // These fields have no effect for now. They're suppressed to
-    // avoid confusion.
-    InforceDate.enable(false);
-    LastMaterialChangeDate.enable(false);
+    // These will soon be removed from the GUI:
+    InforceYear         .enable(false);
+    InforceMonth        .enable(false);
+    InforceContractYear .enable(false);
+    InforceContractMonth.enable(false);
 
 // TODO ?? Nomen est omen.
 if(!egregious_kludge)
@@ -932,6 +949,20 @@ void Input::DoTransmogrify()
         // them conditional, if justified by measurement of their cost.
         DoHarmonize();
         }
+
+    std::pair<int,int> ym0 = years_and_months_since
+        (EffectiveDate.value()
+        ,InforceDate  .value()
+        );
+    InforceYear  = ym0.first;
+    InforceMonth = ym0.second;
+
+    std::pair<int,int> ym1 = years_and_months_since
+        (LastMaterialChangeDate.value()
+        ,InforceDate           .value()
+        );
+    InforceContractYear  = ym1.first;
+    InforceContractMonth = ym1.second;
 
     // USER !! This is the credited rate as of the database date,
     // regardless of the date of illustration, because the database
