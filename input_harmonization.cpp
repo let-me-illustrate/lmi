@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.103 2009-05-26 13:31:26 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.104 2009-06-13 17:57:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -304,11 +304,21 @@ void Input::DoHarmonize()
     InforceContractMonth    .enable(non_mec);
     InforceLeastDeathBenefit.enable(non_mec);
 
-    // These will soon be removed from the GUI:
-    InforceYear         .enable(false);
-    InforceMonth        .enable(false);
-    InforceContractYear .enable(false);
-    InforceContractMonth.enable(false);
+    if(std::string::npos != global_settings::instance().pyx().find("old_inforce"))
+        {
+        // These fields have no effect for now. They're suppressed to
+        // avoid confusion.
+        InforceDate.enable(false);
+        LastMaterialChangeDate.enable(false);
+        }
+    else
+        {
+        // These will soon be removed from the GUI:
+        InforceYear         .enable(false);
+        InforceMonth        .enable(false);
+        InforceContractYear .enable(false);
+        InforceContractMonth.enable(false);
+        }
 
 // TODO ?? Nomen est omen.
 if(!egregious_kludge)
@@ -950,19 +960,37 @@ void Input::DoTransmogrify()
         DoHarmonize();
         }
 
-    std::pair<int,int> ym0 = years_and_months_since
-        (EffectiveDate.value()
-        ,InforceDate  .value()
-        );
-    InforceYear  = ym0.first;
-    InforceMonth = ym0.second;
+    if(std::string::npos != global_settings::instance().pyx().find("old_inforce"))
+        {
+        InforceDate = add_years_and_months
+            (EffectiveDate.value()
+            ,InforceYear  .value()
+            ,InforceMonth .value()
+            ,true
+            );
+        LastMaterialChangeDate = add_years_and_months
+            (EffectiveDate.value()
+            ,InforceYear  .value() - InforceContractYear .value()
+            ,InforceMonth .value() - InforceContractMonth.value()
+            ,true
+            );
+        }
+    else
+        {
+        std::pair<int,int> ym0 = years_and_months_since
+            (EffectiveDate.value()
+            ,InforceDate  .value()
+            );
+        InforceYear  = ym0.first;
+        InforceMonth = ym0.second;
 
-    std::pair<int,int> ym1 = years_and_months_since
-        (LastMaterialChangeDate.value()
-        ,InforceDate           .value()
-        );
-    InforceContractYear  = ym1.first;
-    InforceContractMonth = ym1.second;
+        std::pair<int,int> ym1 = years_and_months_since
+            (LastMaterialChangeDate.value()
+            ,InforceDate           .value()
+            );
+        InforceContractYear  = ym1.first;
+        InforceContractMonth = ym1.second;
+        }
 
     // USER !! This is the credited rate as of the database date,
     // regardless of the date of illustration, because the database
