@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_cygwin.make,v 1.16 2008-12-27 02:56:50 chicares Exp $
+# $Id: msw_cygwin.make,v 1.17 2009-06-15 20:01:36 chicares Exp $
 
 ################################################################################
 
@@ -111,7 +111,10 @@ WGET    := $(PATH_USR_BIN)wget
 
 # Programs for which FHS doesn't specify a location.
 
-XMLLINT := $(PATH_USR_BIN)xmllint
+# Instead of requiring installation of Cygwin's libxml2:
+#   XMLLINT := $(PATH_USR_BIN)xmllint
+# use the one that lmi builds:
+XMLLINT := /opt/lmi/local/bin/xmllint
 
 ################################################################################
 
