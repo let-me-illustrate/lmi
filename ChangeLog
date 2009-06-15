@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1311 2009-05-26 13:31:26 chicares Exp $
+// $Id: ChangeLog,v 1.1312 2009-06-15 20:01:36 chicares Exp $
 
 MAINTENANCE
 
@@ -22914,4 +22914,22 @@ Remove unused 'PolicyDate'; add 'InforceDate'.
   input_harmonization.cpp
   input_xml_io.cpp
 Use dates instead of durations for inforce.
+
+20090613T1757Z <gchicares@sbcglobal.net> [775]
+
+  input_harmonization.cpp
+Temporarily allow durations for inforce with '--pyx=old_inforce'. See:
+  http://lists.nongnu.org/archive/html/lmi/2009-05/msg00037.html
+
+20090614T1335Z <gchicares@sbcglobal.net> [775]
+
+  sample.cns
+  sample.ill
+Reflect 20090526T1331Z change in file version.
+
+20090615T2001Z <gchicares@sbcglobal.net> [775]
+
+  msw_cygwin.make
+Remove dependency on Cygwin's own libxml2 for 'xmllint'. Instead, use
+the native binary that lmi already builds.
 
