@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: yare_input.hpp,v 1.17 2009-05-26 12:12:28 chicares Exp $
+// $Id: yare_input.hpp,v 1.18 2009-06-24 20:05:14 wboutin Exp $
 
 #ifndef yare_input_hpp
 #define yare_input_hpp
@@ -179,7 +179,7 @@ class yare_input
     int                               SpouseIssueAge                  ;
 //    std::string                       Franchise                       ;
 //    std::string                       PolicyNumber                    ;
-//    calendar_date                     InforceDate                     ;
+//    calendar_date                     InforceAsOfDate                 ;
     double                            InforceTaxBasis                 ;
 //    double                            InforceCumulativeGlp            ;
 //    double                            InforceGlp                      ;

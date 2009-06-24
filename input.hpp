@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.54 2009-05-26 12:12:27 chicares Exp $
+// $Id: input.hpp,v 1.55 2009-06-24 20:05:14 wboutin Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -365,7 +365,7 @@ class LMI_SO Input
     tnr_issue_age            SpouseIssueAge                  ; // TODO ?? Specialize?
     datum_string             Franchise                       ;
     datum_string             PolicyNumber                    ;
-    tnr_date                 InforceDate                     ;
+    tnr_date                 InforceAsOfDate                 ;
     tnr_nonnegative_double   InforceTaxBasis                 ;
     tnr_nonnegative_double   InforceCumulativeGlp            ;
     tnr_nonnegative_double   InforceGlp                      ;
