@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.45 2009-05-26 12:12:27 chicares Exp $
+// $Id: input.cpp,v 1.46 2009-06-24 20:05:14 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -154,7 +154,7 @@ Input::Input()
     ,SpouseIssueAge                   ("45")
 //    ,Franchise                        ("")
 //    ,PolicyNumber                     ("")
-//    ,InforceDate                      ("")
+//    ,InforceAsOfDate                  ("")
 //    ,InforceTaxBasis                  ("")
 //    ,InforceCumulativeGlp             ("")
 //    ,InforceGlp                       ("")
@@ -454,7 +454,7 @@ void Input::AscribeMembers()
     ascribe("SpouseIssueAge"                        , &Input::SpouseIssueAge                        );
     ascribe("Franchise"                             , &Input::Franchise                             );
     ascribe("PolicyNumber"                          , &Input::PolicyNumber                          );
-    ascribe("InforceDate"                           , &Input::InforceDate                           );
+    ascribe("InforceAsOfDate"                       , &Input::InforceAsOfDate                       );
     ascribe("InforceTaxBasis"                       , &Input::InforceTaxBasis                       );
     ascribe("InforceCumulativeGlp"                  , &Input::InforceCumulativeGlp                  );
     ascribe("InforceGlp"                            , &Input::InforceGlp                            );

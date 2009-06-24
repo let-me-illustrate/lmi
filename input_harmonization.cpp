@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.104 2009-06-13 17:57:16 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.105 2009-06-24 20:05:14 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -272,7 +272,7 @@ void Input::DoHarmonize()
     // from maturity age (which shouldn't be called 'EndtAge' because
     // the contract needn't endow).
     int max_age = static_cast<int>(database_->Query(DB_EndtAge));
-    InforceDate.minimum_and_maximum
+    InforceAsOfDate.minimum_and_maximum
         (EffectiveDate.value()
         ,add_years_and_months
             (EffectiveDate.value()
@@ -283,11 +283,11 @@ void Input::DoHarmonize()
         );
     // SOMEDAY !! Here, it's important to use std::max(): otherwise,
     // when values change, the maximum could be less than the minimum,
-    // because 'InforceDate' has not yet been constrained to the limit
-    // just set. Should the MVC framework handle this somehow?
+    // because 'InforceAsOfDate' has not yet been constrained to the
+    // limit just set. Should the MVC framework handle this somehow?
     LastMaterialChangeDate.minimum_and_maximum
         (EffectiveDate.value()
-        ,std::max(InforceDate.value(), InforceDate.minimum())
+        ,std::max(InforceAsOfDate.value(), InforceAsOfDate.minimum())
         );
 
     InforceCumulativeGlp.enable(mce_gpt == DefinitionOfLifeInsurance);
@@ -308,7 +308,7 @@ void Input::DoHarmonize()
         {
         // These fields have no effect for now. They're suppressed to
         // avoid confusion.
-        InforceDate.enable(false);
+        InforceAsOfDate.enable(false);
         LastMaterialChangeDate.enable(false);
         }
     else
@@ -962,7 +962,7 @@ void Input::DoTransmogrify()
 
     if(std::string::npos != global_settings::instance().pyx().find("old_inforce"))
         {
-        InforceDate = add_years_and_months
+        InforceAsOfDate = add_years_and_months
             (EffectiveDate.value()
             ,InforceYear  .value()
             ,InforceMonth .value()
@@ -978,15 +978,15 @@ void Input::DoTransmogrify()
     else
         {
         std::pair<int,int> ym0 = years_and_months_since
-            (EffectiveDate.value()
-            ,InforceDate  .value()
+            (EffectiveDate  .value()
+            ,InforceAsOfDate.value()
             );
         InforceYear  = ym0.first;
         InforceMonth = ym0.second;
 
         std::pair<int,int> ym1 = years_and_months_since
             (LastMaterialChangeDate.value()
-            ,InforceDate           .value()
+            ,InforceAsOfDate       .value()
             );
         InforceContractYear  = ym1.first;
         InforceContractMonth = ym1.second;

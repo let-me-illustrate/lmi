@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1312 2009-06-15 20:01:36 chicares Exp $
+// $Id: ChangeLog,v 1.1313 2009-06-24 20:05:14 wboutin Exp $
 
 MAINTENANCE
 
@@ -22932,4 +22932,19 @@ Reflect 20090526T1331Z change in file version.
   msw_cygwin.make
 Remove dependency on Cygwin's own libxml2 for 'xmllint'. Instead, use
 the native binary that lmi already builds.
+
+20090624T2005Z <wboutin@massmutual.com> [775]
+
+  input.cpp
+  input.hpp
+  input_harmonization.cpp
+  input_xml_io.cpp
+  sample.cns
+  sample.ill
+  skin.xrc
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_reg_d.xrc
+  yare_input.hpp
+Rename 'InforceDate' to InforceAsOfDate.
 
