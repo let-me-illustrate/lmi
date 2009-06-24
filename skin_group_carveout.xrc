@@ -24,7 +24,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin_group_carveout.xrc,v 1.22 2009-05-26 12:12:28 chicares Exp $
+    $Id: skin_group_carveout.xrc,v 1.23 2009-06-24 20:05:14 wboutin Exp $
 
     This version is designed for group-carveout users; it omits input
     fields that seem irrelevant in that context, and reflects the
@@ -487,13 +487,13 @@
                             <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                             <border>4</border>
                             <object class="wxStaticText">
-                                <label>Inforce date</label>
+                                <label>Inforce as of date</label>
                              </object>
                         </object>
                         <object class="sizeritem">
                             <flag>wxGROW|wxBOTTOM</flag>
                             <border>2</border>
-                            <object class="wxDatePickerCtrl" name="InforceDate">
+                            <object class="wxDatePickerCtrl" name="InforceAsOfDate">
                                 <help>Monthiversary as of which inforce data is provided</help>
                                 <size>50,-1</size>
                             </object>

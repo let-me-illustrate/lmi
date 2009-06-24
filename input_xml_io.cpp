@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_xml_io.cpp,v 1.26 2009-05-26 13:31:26 chicares Exp $
+// $Id: input_xml_io.cpp,v 1.27 2009-06-24 20:05:14 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -481,7 +481,7 @@ void Input::RedintegrateExPost
 
     if(file_version < 5)
         {
-        InforceDate = add_years_and_months
+        InforceAsOfDate = add_years_and_months
             (EffectiveDate.value()
             ,InforceYear  .value()
             ,InforceMonth .value()

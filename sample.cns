@@ -80,7 +80,7 @@
     <InforceCumulativeGlp>0</InforceCumulativeGlp>
     <InforceCumulativeNoLapsePremium>0</InforceCumulativeNoLapsePremium>
     <InforceCumulativePayments>0</InforceCumulativePayments>
-    <InforceDate>2454040</InforceDate>
+    <InforceAsOfDate>2454040</InforceAsOfDate>
     <InforceDcv>0</InforceDcv>
     <InforceGeneralAccountValue>0</InforceGeneralAccountValue>
     <InforceGlp>0</InforceGlp>
@@ -286,7 +286,7 @@
     <InforceCumulativeGlp>0</InforceCumulativeGlp>
     <InforceCumulativeNoLapsePremium>0</InforceCumulativeNoLapsePremium>
     <InforceCumulativePayments>0</InforceCumulativePayments>
-    <InforceDate>2454040</InforceDate>
+    <InforceAsOfDate>2454040</InforceAsOfDate>
     <InforceDcv>0</InforceDcv>
     <InforceGeneralAccountValue>0</InforceGeneralAccountValue>
     <InforceGlp>0</InforceGlp>
@@ -492,7 +492,7 @@
     <InforceCumulativeGlp>0</InforceCumulativeGlp>
     <InforceCumulativeNoLapsePremium>0</InforceCumulativeNoLapsePremium>
     <InforceCumulativePayments>0</InforceCumulativePayments>
-    <InforceDate>2454040</InforceDate>
+    <InforceAsOfDate>2454040</InforceAsOfDate>
     <InforceDcv>0</InforceDcv>
     <InforceGeneralAccountValue>0</InforceGeneralAccountValue>
     <InforceGlp>0</InforceGlp>
