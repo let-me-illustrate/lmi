@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1313 2009-06-24 20:05:14 wboutin Exp $
+// $Id: ChangeLog,v 1.1314 2009-06-24 20:09:04 wboutin Exp $
 
 MAINTENANCE
 
@@ -22947,4 +22947,9 @@ the native binary that lmi already builds.
   skin_reg_d.xrc
   yare_input.hpp
 Rename 'InforceDate' to InforceAsOfDate.
+
+20090624T2009Z <wboutin@massmutual.com> [775]
+
+  version.hpp
+Mark release candidate.
 
