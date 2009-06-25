@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1314 2009-06-24 20:09:04 wboutin Exp $
+// $Id: ChangeLog,v 1.1315 2009-06-25 20:20:46 chicares Exp $
 
 MAINTENANCE
 
@@ -22952,4 +22952,18 @@ Rename 'InforceDate' to InforceAsOfDate.
 
   version.hpp
 Mark release candidate.
+
+20090625T2019Z <gchicares@sbcglobal.net> [775]
+
+  sample.cns
+  sample.ill
+Fix defect introduced 20090624T2005Z: unit-test failure.
+
+20090625T2020Z <gchicares@sbcglobal.net> [775]
+
+  skin.xrc
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_reg_d.xrc
+Hyphenate a prenominal compound modifier.
 
