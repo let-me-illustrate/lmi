@@ -24,7 +24,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin_reg_d.xrc,v 1.17 2009-06-24 20:05:14 wboutin Exp $
+    $Id: skin_reg_d.xrc,v 1.18 2009-06-25 20:20:45 chicares Exp $
 
     This version is designed for private placement users; it omits input
     fields that seem irrelevant in that context, and reflects the
@@ -1499,7 +1499,7 @@ the real 'StateOfJurisdiction' is implemented.
                                             <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                             <border>4</border>
                                             <object class="wxStaticText">
-                                                <label>Inforce as of date</label>
+                                                <label>Inforce as-of date</label>
                                             </object>
                                         </object>
                                         <object class="sizeritem">
