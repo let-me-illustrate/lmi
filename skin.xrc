@@ -24,7 +24,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: skin.xrc,v 1.29 2009-06-24 20:05:14 wboutin Exp $
+    $Id: skin.xrc,v 1.30 2009-06-25 20:20:43 chicares Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -1252,7 +1252,7 @@ demonstrate a defect in the wx library. See
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
-                                        <label>Inforce as of date</label>
+                                        <label>Inforce as-of date</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
