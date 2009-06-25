@@ -74,13 +74,13 @@
     <IndividualPaymentToAge>95</IndividualPaymentToAge>
     <IndividualPaymentToAlternative>Maturity</IndividualPaymentToAlternative>
     <IndividualPaymentToDuration>50</IndividualPaymentToDuration>
+    <InforceAsOfDate>2454040</InforceAsOfDate>
     <InforceAvBeforeLastMc>0</InforceAvBeforeLastMc>
     <InforceContractMonth>0</InforceContractMonth>
     <InforceContractYear>0</InforceContractYear>
     <InforceCumulativeGlp>0</InforceCumulativeGlp>
     <InforceCumulativeNoLapsePremium>0</InforceCumulativeNoLapsePremium>
     <InforceCumulativePayments>0</InforceCumulativePayments>
-    <InforceAsOfDate>2454040</InforceAsOfDate>
     <InforceDcv>0</InforceDcv>
     <InforceGeneralAccountValue>0</InforceGeneralAccountValue>
     <InforceGlp>0</InforceGlp>
