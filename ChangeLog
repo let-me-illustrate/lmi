@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1316 2009-06-27 03:53:37 chicares Exp $
+// $Id: ChangeLog,v 1.1317 2009-06-27 17:47:39 chicares Exp $
 
 MAINTENANCE
 
@@ -22972,4 +22972,21 @@ Hyphenate a prenominal compound modifier.
 
   main_wx.cpp
 Capitalize certain wxDocTemplate ctor arguments more naturally.
+
+20090627T1747Z <gchicares@sbcglobal.net> [775]
+
+  main_wx.cpp
+  mec.xrc              [new file]
+  mec_document.cpp     [new file]
+  mec_document.hpp     [new file]
+  mec_input.cpp        [new file]
+  mec_input.hpp        [new file]
+  mec_view.cpp         [new file]
+  mec_view.hpp         [new file]
+  mec_view.png         [new file]
+  mec_xml_document.cpp [new file]
+  mec_xml_document.hpp [new file]
+  menus.xrc
+  objects.make
+Add MEC-testing GUI.
 
