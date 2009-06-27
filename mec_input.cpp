@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_input.cpp,v 1.1 2009-06-27 17:47:39 chicares Exp $
+// $Id: mec_input.cpp,v 1.2 2009-06-27 22:49:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -50,7 +50,7 @@ bool is_detritus(std::string const& s)
     static std::vector<std::string> const v(a, a + lmi_array_size(a));
     return v.end() != std::find(v.begin(), v.end(), s);
 }
-} // Unnnamed namespace.
+} // Unnamed namespace.
 
 /// Values are initialized by UDT defaults where appropriate, and here
 /// in the initializer-list otherwise. All "ascribed" data members are
@@ -364,7 +364,7 @@ void mec_input::write(xml::element& x) const
 
 /// Serial number of this class's xml version.
 ///
-/// version 0: 20099999T9999Z
+/// version 0: 20090627T2249Z
 
 int mec_input::class_version() const
 {
