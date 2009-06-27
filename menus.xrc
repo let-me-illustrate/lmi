@@ -24,7 +24,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: menus.xrc,v 1.50 2009-05-04 19:06:38 chicares Exp $
+    $Id: menus.xrc,v 1.51 2009-06-27 17:47:39 chicares Exp $
 -->
 
 <!-- reusable menus -->
@@ -492,6 +492,26 @@
         <label>Te_xt</label>
     </object>
 -->
+    <object_ref name="test_menu" ref="test_menu_ref"/>
+    <object_ref name="window_menu" ref="window_menu_ref"/>
+    <object_ref name="wxID_HELP" ref="help_menu_ref"/>
+</object>
+
+<!-- MEC-testing menu -->
+
+<object class="wxIcon" name="mec_view_icon">mec_view.png</object>
+
+<object class="wxMenuBar" name="mec_view_menu">
+<style>wxMB_DOCKABLE</style>
+    <object_ref name="file_menu" ref="file_menu_without_print_ref"/>
+    <object class="wxMenu" name="mec_menu">
+        <label>_MEC</label>
+        <object class="wxMenuItem" name="edit_cell">
+            <label>_Edit\tCtrl-E</label>
+            <bitmap stock_id="edit-cell"/>
+            <help>Edit this file</help>
+        </object>
+    </object>
     <object_ref name="test_menu" ref="test_menu_ref"/>
     <object_ref name="window_menu" ref="window_menu_ref"/>
     <object_ref name="wxID_HELP" ref="help_menu_ref"/>

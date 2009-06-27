@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.140 2009-06-27 03:53:37 chicares Exp $
+// $Id: main_wx.cpp,v 1.141 2009-06-27 17:47:39 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -62,6 +62,8 @@
 #include "illustration_view.hpp"
 #include "license.hpp"
 #include "main_common.hpp"
+#include "mec_document.hpp"
+#include "mec_view.hpp"
 #include "miscellany.hpp"
 #include "msw_workarounds.hpp"
 #include "mvc_controller.hpp"
@@ -405,6 +407,18 @@ void Skeleton::InitDocManager()
         ,CLASSINFO(TierView)
         );
 
+    new(wx) wxDocTemplate
+        (doc_manager_
+        ,"MEC testing"
+        ,"*.mec"
+        ,""
+        ,"mec"
+        ,"MEC-testing document"
+        ,"MEC-testing view"
+        ,CLASSINFO(mec_document)
+        ,CLASSINFO(mec_view)
+        );
+
     if(!global_settings::instance().ash_nazg())
         {
         return;
@@ -645,6 +659,16 @@ bool Skeleton::OnInit()
         if(!xml_resources.LoadFile(wxFileName(AddDataDir(v1.ResourceFileName()))))
 #else  // !wxCHECK_VERSION(2,9,0)
         if(!xml_resources.Load(AddDataDir(v1.ResourceFileName())))
+#endif // !wxCHECK_VERSION(2,9,0)
+            {
+            fatal_error() << "Unable to load xml resources." << LMI_FLUSH;
+            }
+
+        mec_mvc_view const v2;
+#if wxCHECK_VERSION(2,9,0)
+        if(!xml_resources.LoadFile(wxFileName(AddDataDir(v2.ResourceFileName()))))
+#else  // !wxCHECK_VERSION(2,9,0)
+        if(!xml_resources.Load(AddDataDir(v2.ResourceFileName())))
 #endif // !wxCHECK_VERSION(2,9,0)
             {
             fatal_error() << "Unable to load xml resources." << LMI_FLUSH;
