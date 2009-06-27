@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.155 2009-05-03 13:08:32 chicares Exp $
+# $Id: objects.make,v 1.156 2009-06-27 17:47:39 chicares Exp $
 
 ################################################################################
 
@@ -220,6 +220,8 @@ common_common_objects := \
   mc_enum.o \
   mc_enum_types.o \
   mc_enum_types_aux.o \
+  mec_input.o \
+  mec_xml_document.o \
   miscellany.o \
   multiple_cell_document.o \
   mvc_model.o \
@@ -310,6 +312,8 @@ lmi_wx_objects := \
   illustration_view.o \
   main_common.o \
   main_wx.o \
+  mec_document.o \
+  mec_view.o \
   msw_workarounds.o \
   multidimgrid_any.o \
   multidimgrid_tools.o \
