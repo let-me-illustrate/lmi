@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_xml_io.cpp,v 1.27 2009-06-24 20:05:14 wboutin Exp $
+// $Id: input_xml_io.cpp,v 1.28 2009-06-27 22:49:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -95,7 +95,7 @@ std::string full_name
     s += last_name;
     return s;
 }
-} // Unnnamed namespace.
+} // Unnamed namespace.
 
 //============================================================================
 void Input::read(xml::element const& x)
