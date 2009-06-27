@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1315 2009-06-25 20:20:46 chicares Exp $
+// $Id: ChangeLog,v 1.1316 2009-06-27 03:53:37 chicares Exp $
 
 MAINTENANCE
 
@@ -22946,7 +22946,8 @@ the native binary that lmi already builds.
   skin_group_carveout.xrc
   skin_reg_d.xrc
   yare_input.hpp
-Rename 'InforceDate' to InforceAsOfDate.
+Rename 'InforceDate' to 'InforceAsOfDate'. See:
+  http://lists.nongnu.org/archive/html/lmi/2009-05/msg00037.html
 
 20090624T2009Z <wboutin@massmutual.com> [775]
 
@@ -22966,4 +22967,9 @@ Fix defect introduced 20090624T2005Z: unit-test failure.
   skin_group_carveout.xrc
   skin_reg_d.xrc
 Hyphenate a prenominal compound modifier.
+
+20090627T0353Z <gchicares@sbcglobal.net> [775]
+
+  main_wx.cpp
+Capitalize certain wxDocTemplate ctor arguments more naturally.
 
