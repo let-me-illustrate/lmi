@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.139 2009-04-27 16:47:13 chicares Exp $
+// $Id: main_wx.cpp,v 1.140 2009-06-27 03:53:37 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -53,8 +53,8 @@
 #include "docmdichildframe_ex.hpp"
 #include "fenv_guard.hpp"
 #include "fenv_lmi.hpp"
-#include "global_settings.hpp"
 #include "getopt.hpp"
+#include "global_settings.hpp"
 #include "handle_exceptions.hpp"
 #include "icon_monger.hpp"
 #include "ihs_dbdict.hpp"           // print_databases()
@@ -334,8 +334,8 @@ void Skeleton::InitDocManager()
         ,"*.cns"
         ,""
         ,"cns"
-        ,"Census Document"
-        ,"Census View"
+        ,"Census document"
+        ,"Census view"
         ,CLASSINFO(CensusDocument)
         ,CLASSINFO(CensusView)
         );
@@ -346,8 +346,8 @@ void Skeleton::InitDocManager()
         ,"*.ill"
         ,""
         ,"ill"
-        ,"Illustration Document"
-        ,"Illustration View"
+        ,"Illustration document"
+        ,"Illustration view"
         ,CLASSINFO(IllustrationDocument)
         ,CLASSINFO(IllustrationView)
         );
@@ -363,8 +363,8 @@ void Skeleton::InitDocManager()
         ,"*.db4"
         ,""
         ,"db4"
-        ,"Database Document"
-        ,"Database View"
+        ,"Database document"
+        ,"Database view"
         ,CLASSINFO(DatabaseDocument)
         ,CLASSINFO(DatabaseView)
         );
@@ -375,8 +375,8 @@ void Skeleton::InitDocManager()
         ,"*.pol"
         ,""
         ,"pol"
-        ,"Policy Document"
-        ,"Policy View"
+        ,"Policy document"
+        ,"Policy view"
         ,CLASSINFO(PolicyDocument)
         ,CLASSINFO(PolicyView)
         );
@@ -387,8 +387,8 @@ void Skeleton::InitDocManager()
         ,"*.rnd"
         ,""
         ,"rnd"
-        ,"Rounding Document"
-        ,"Rounding View"
+        ,"Rounding document"
+        ,"Rounding view"
         ,CLASSINFO(RoundingDocument)
         ,CLASSINFO(RoundingView)
         );
@@ -399,8 +399,8 @@ void Skeleton::InitDocManager()
         ,"*.tir"
         ,""
         ,"tir"
-        ,"Tier Document"
-        ,"Tier View"
+        ,"Tier document"
+        ,"Tier view"
         ,CLASSINFO(TierDocument)
         ,CLASSINFO(TierView)
         );
@@ -416,8 +416,8 @@ void Skeleton::InitDocManager()
         ,"*.txt"
         ,""
         ,"txt"
-        ,"Text Document"
-        ,"Text View"
+        ,"Text document"
+        ,"Text view"
         ,CLASSINFO(TextEditDocument)
         ,CLASSINFO(TextEditView)
         );
