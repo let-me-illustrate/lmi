@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_input.cpp,v 1.2 2009-06-27 22:49:42 chicares Exp $
+// $Id: mec_input.cpp,v 1.3 2009-06-28 16:47:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,7 +29,8 @@
 #include "mec_input.hpp"
 
 #include "alert.hpp"
-#include "database.hpp"   // Needed only for database_'s dtor.
+#include "database.hpp"
+#include "dbnames.hpp"
 #include "global_settings.hpp"
 #include "miscellany.hpp" // lmi_array_size()
 #include "xml_lmi.hpp"
@@ -188,8 +189,49 @@ void mec_input::AscribeMembers()
     ascribe("BenefitAmount"                         , &mec_input::BenefitAmount                         );
 }
 
+/// Reset database_ if necessary, i.e., if the product or any database
+/// axis changed.
+
 void mec_input::DoAdaptExternalities()
 {
+    // This early-exit condition has to fail the first time this
+    // function is called, because database_ is initialized only here.
+    if
+        (
+            database_.get()
+        &&  CachedProductName_           == ProductName
+        &&  CachedGender_                == Gender
+        &&  CachedUnderwritingClass_     == UnderwritingClass
+        &&  CachedSmoking_               == Smoking
+        &&  CachedIssueAge_              == IssueAge
+        &&  CachedGroupUnderwritingType_ == GroupUnderwritingType
+        &&  CachedStateOfJurisdiction_   == StateOfJurisdiction
+        )
+        {
+        return;
+        }
+
+    CachedProductName_           = ProductName          .value();
+    CachedGender_                = Gender               .value();
+    CachedUnderwritingClass_     = UnderwritingClass    .value();
+    CachedSmoking_               = Smoking              .value();
+    CachedIssueAge_              = IssueAge             .value();
+    CachedGroupUnderwritingType_ = GroupUnderwritingType.value();
+    CachedStateOfJurisdiction_   = StateOfJurisdiction  .value();
+
+    database_.reset
+        (new TDatabase
+            (CachedProductName_
+            ,CachedGender_
+            ,CachedUnderwritingClass_
+            ,CachedSmoking_
+            ,CachedIssueAge_
+            ,CachedGroupUnderwritingType_
+            ,CachedStateOfJurisdiction_
+            )
+        );
+
+    GleanedMaturityAge_ = static_cast<int>(database_->Query(DB_EndtAge));
 }
 
 datum_base const* mec_input::DoBaseDatumPointer
@@ -246,12 +288,204 @@ void mec_input::DoEnforceProscription(std::string const& name)
         }
 }
 
+/// Cf. Input::DoHarmonize().
+
 void mec_input::DoHarmonize()
 {
+    bool anything_goes    = global_settings::instance().ash_nazg();
+
+    DefinitionOfLifeInsurance.allow(mce_gpt , database_->Query(DB_AllowGPT ));
+    DefinitionOfLifeInsurance.allow(mce_cvat, database_->Query(DB_AllowCVAT));
+    DefinitionOfLifeInsurance.allow(mce_noncompliant, false);
+
+    DefinitionOfMaterialChange.enable(mce_noncompliant != DefinitionOfLifeInsurance);
+    if(mce_noncompliant == DefinitionOfLifeInsurance)
+        {
+        // Nothing to do: all choices ignored because control is disabled.
+        }
+    else if(mce_cvat == DefinitionOfLifeInsurance)
+        {
+        DefinitionOfMaterialChange.allow(mce_unnecessary_premium                        ,anything_goes);
+        DefinitionOfMaterialChange.allow(mce_benefit_increase                           ,anything_goes);
+        DefinitionOfMaterialChange.allow(mce_later_of_increase_or_unnecessary_premium   ,anything_goes);
+        DefinitionOfMaterialChange.allow(mce_earlier_of_increase_or_unnecessary_premium ,true         );
+        DefinitionOfMaterialChange.allow(mce_adjustment_event                           ,false        );
+        }
+    else if(mce_gpt == DefinitionOfLifeInsurance)
+        {
+        DefinitionOfMaterialChange.allow(mce_unnecessary_premium                        ,false        );
+        DefinitionOfMaterialChange.allow(mce_benefit_increase                           ,false        );
+        DefinitionOfMaterialChange.allow(mce_later_of_increase_or_unnecessary_premium   ,false        );
+        DefinitionOfMaterialChange.allow(mce_earlier_of_increase_or_unnecessary_premium ,false        );
+        DefinitionOfMaterialChange.allow(mce_adjustment_event                           ,true         );
+        }
+    else
+        {
+        fatal_error()
+            << "No option selected for definition of life insurance."
+            << LMI_FLUSH
+            ;
+        }
+
+    // DATABASE !! There should be flags in the database to allow or
+    // forbid paramedical and nonmedical underwriting; arbitrarily,
+    // until they are added, those options are always inhibited.
+    GroupUnderwritingType.allow(mce_medical, database_->Query(DB_AllowFullUW));
+    GroupUnderwritingType.allow(mce_paramedical, false);
+    GroupUnderwritingType.allow(mce_nonmedical, false);
+    GroupUnderwritingType.allow(mce_simplified_issue, database_->Query(DB_AllowSimpUW));
+    GroupUnderwritingType.allow(mce_guaranteed_issue, database_->Query(DB_AllowGuarUW));
+
+    EffectiveDate.enable(mce_no == EffectiveDateToday);
+
+    IssueAge        .enable(mce_no  == DeprecatedUseDOB);
+    DateOfBirth     .enable(mce_yes == DeprecatedUseDOB);
+
+    // The ranges of both EffectiveDate and IssueAge are treated as
+    // independent, to prevent one's value from affecting the other's
+    // range and therefore possibly forcing its value to change. Thus,
+    // if the maximum conceivable IssueAge is 100, then the earliest
+    // permitted EffectiveDate is approximately the centennial of the
+    // gregorian epoch.
+
+    IssueAge.minimum_and_maximum
+        (static_cast<int>(database_->Query(DB_MinIssAge))
+        ,static_cast<int>(database_->Query(DB_MaxIssAge))
+        );
+    EffectiveDate.minimum
+        (minimum_as_of_date
+            (     IssueAge.trammel().maximum_maximorum()
+            ,EffectiveDate.trammel().minimum_minimorum()
+            )
+        );
+
+    bool const use_anb = database_->Query(DB_AgeLastOrNearest);
+    DateOfBirth.minimum_and_maximum
+        (minimum_birthdate(IssueAge.maximum(), EffectiveDate.value(), use_anb)
+        ,maximum_birthdate(IssueAge.minimum(), EffectiveDate.value(), use_anb)
+        );
+
+    int max_age = static_cast<int>(database_->Query(DB_EndtAge));
+    InforceAsOfDate.minimum_and_maximum
+        (EffectiveDate.value()
+        ,add_years_and_months
+            (EffectiveDate.value()
+            ,-1 + max_age - IssueAge.value()
+            ,11
+            ,true
+            )
+        );
+    // SOMEDAY !! Here, it's important to use std::max(): otherwise,
+    // when values change, the maximum could be less than the minimum,
+    // because 'InforceAsOfDate' has not yet been constrained to the
+    // limit just set. Should the MVC framework handle this somehow?
+    LastMaterialChangeDate.minimum_and_maximum
+        (EffectiveDate.value()
+        ,std::max(InforceAsOfDate.value(), InforceAsOfDate.minimum())
+        );
+
+    // SOMEDAY !! Do this in class Input as well.
+    bool mec_due_to_1035 =
+            mce_yes == External1035ExchangeFromMec && 0.0 != External1035ExchangeAmount
+        ||  mce_yes == Internal1035ExchangeFromMec && 0.0 != Internal1035ExchangeAmount
+        ;
+    InforceIsMec.allow(mce_no, !mec_due_to_1035);
+    InforceIsMec.enable(!mec_due_to_1035);
+    bool non_mec = mce_no == InforceIsMec;
+
+    InforceAccountValue     .enable(non_mec);
+    InforceSevenPayPremium  .enable(non_mec);
+    LastMaterialChangeDate  .enable(non_mec);
+    InforceDcv              .enable(non_mec && mce_cvat == DefinitionOfLifeInsurance);
+    InforceAvBeforeLastMc   .enable(non_mec);
+    InforceLeastDeathBenefit.enable(non_mec);
+    PaymentHistory          .enable(non_mec);
+    BenefitHistory          .enable(non_mec);
+
+    UnderwritingClass.allow(mce_ultrapreferred, database_->Query(DB_AllowUltraPrefClass));
+    UnderwritingClass.allow(mce_preferred     , database_->Query(DB_AllowPreferredClass));
+    UnderwritingClass.allow(mce_rated, database_->Query(DB_AllowSubstdTable));
+
+    SubstandardTable.enable(mce_rated == UnderwritingClass);
+
+    SubstandardTable.allow(mce_table_a, mce_rated == UnderwritingClass);
+    SubstandardTable.allow(mce_table_b, mce_rated == UnderwritingClass);
+    SubstandardTable.allow(mce_table_c, mce_rated == UnderwritingClass);
+    SubstandardTable.allow(mce_table_d, mce_rated == UnderwritingClass);
+    SubstandardTable.allow(mce_table_e, mce_rated == UnderwritingClass);
+    SubstandardTable.allow(mce_table_f, mce_rated == UnderwritingClass);
+    SubstandardTable.allow(mce_table_h, mce_rated == UnderwritingClass);
+    SubstandardTable.allow(mce_table_j, mce_rated == UnderwritingClass);
+    SubstandardTable.allow(mce_table_l, mce_rated == UnderwritingClass);
+    SubstandardTable.allow(mce_table_p, mce_rated == UnderwritingClass);
+
+    FlatExtra.enable(database_->Query(DB_AllowFlatExtras));
+
+    bool blend_mortality_by_gender  = false;
+    bool blend_mortality_by_smoking = false;
+
+    bool allow_gender_distinct = database_->Query(DB_AllowSexDistinct);
+    bool allow_unisex          = database_->Query(DB_AllowUnisex);
+
+    Gender.allow(mce_female, !blend_mortality_by_gender && allow_gender_distinct);
+    Gender.allow(mce_male  , !blend_mortality_by_gender && allow_gender_distinct);
+    Gender.allow(mce_unisex,  blend_mortality_by_gender || allow_unisex);
+
+    bool allow_smoker_distinct = database_->Query(DB_AllowSmokeDistinct);
+    bool allow_unismoke        = database_->Query(DB_AllowUnismoke);
+
+    Smoking.allow(mce_smoker,    !blend_mortality_by_smoking && allow_smoker_distinct);
+    Smoking.allow(mce_nonsmoker, !blend_mortality_by_smoking && allow_smoker_distinct);
+    Smoking.allow(mce_unismoke,   blend_mortality_by_smoking || allow_unismoke);
 }
+
+/// Change values as required for consistency.
 
 void mec_input::DoTransmogrify()
 {
+    if(mce_yes == EffectiveDateToday)
+        {
+        EffectiveDate = calendar_date();
+        DoHarmonize();
+        }
+
+    std::pair<int,int> ym0 = years_and_months_since
+        (EffectiveDate  .value()
+        ,InforceAsOfDate.value()
+        );
+    InforceYear  = ym0.first;
+    InforceMonth = ym0.second;
+
+    std::pair<int,int> ym1 = years_and_months_since
+        (LastMaterialChangeDate.value()
+        ,InforceAsOfDate       .value()
+        );
+    InforceContractYear  = ym1.first;
+    InforceContractMonth = ym1.second;
+
+    bool const use_anb = database_->Query(DB_AgeLastOrNearest);
+
+    int apparent_age = attained_age
+        (DateOfBirth.value()
+        ,EffectiveDate.value()
+        ,use_anb
+        );
+    if(mce_no == DeprecatedUseDOB)
+        {
+        // If no DOB is supplied, assume a birthday occurs on the
+        // issue date--as good an assumption as any, and the simplest.
+        // It may need to be a day earlier for a contract issued on a
+        // leap-year day.
+        DateOfBirth = add_years
+            (DateOfBirth.value()
+            ,apparent_age - IssueAge.value()
+            ,true
+            );
+        }
+    else
+        {
+        IssueAge = apparent_age;
+        }
 }
 
 std::vector<std::string> mec_input::RealizeAllSequenceInput(bool /* report_errors */)
