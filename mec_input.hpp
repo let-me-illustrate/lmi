@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_input.hpp,v 1.1 2009-06-27 17:47:39 chicares Exp $
+// $Id: mec_input.hpp,v 1.2 2009-06-28 16:46:11 chicares Exp $
 
 #ifndef mec_input_hpp
 #define mec_input_hpp
@@ -77,7 +77,6 @@ class LMI_SO mec_input
 
     std::vector<std::string> RealizeAllSequenceInput(bool report_errors = true);
 
-    mcenum_ledger_type ledger_type () const {return GleanedLedgerType_;}
     int                maturity_age() const {return GleanedMaturityAge_;}
 
     int years_to_maturity  () const {return maturity_age() - issue_age();}
@@ -137,7 +136,6 @@ class LMI_SO mec_input
     mcenum_uw_basis          CachedGroupUnderwritingType_;
     mcenum_state             CachedStateOfJurisdiction_  ;
     int                      GleanedMaturityAge_         ;
-    mcenum_ledger_type       GleanedLedgerType_          ;
 
     tnr_issue_age            IssueAge                        ;
     mce_gender               Gender                          ;
