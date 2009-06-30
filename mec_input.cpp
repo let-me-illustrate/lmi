@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_input.cpp,v 1.3 2009-06-28 16:47:16 chicares Exp $
+// $Id: mec_input.cpp,v 1.4 2009-06-30 04:36:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,6 +32,7 @@
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "global_settings.hpp"
+#include "input_seq_helpers.hpp"
 #include "miscellany.hpp" // lmi_array_size()
 #include "xml_lmi.hpp"
 
@@ -50,6 +51,27 @@ bool is_detritus(std::string const& s)
         };
     static std::vector<std::string> const v(a, a + lmi_array_size(a));
     return v.end() != std::find(v.begin(), v.end(), s);
+}
+
+template<typename T>
+std::string realize_sequence_string
+    (mec_input           & input
+    ,std::vector<T>      & v
+    ,datum_sequence const& sequence_string
+    ,int                   index_origin = 0
+    )
+{
+    InputSequence s
+        (sequence_string.value()
+        ,input.years_to_maturity()
+        ,input.issue_age        ()
+        ,input.maturity_age     () // This class has no "retirement age".
+        ,input.inforce_year     ()
+        ,input.effective_year   ()
+        ,index_origin
+        );
+    detail::convert_vector(v, s.linear_number_representation());
+    return s.formatted_diagnostics(true);
 }
 } // Unnamed namespace.
 
@@ -348,10 +370,15 @@ void mec_input::DoHarmonize()
     // permitted EffectiveDate is approximately the centennial of the
     // gregorian epoch.
 
+#if 0
+// Temporarily suppress this while exploring automatic-
+// enforcement options in the skeleton trunk.
     IssueAge.minimum_and_maximum
         (static_cast<int>(database_->Query(DB_MinIssAge))
         ,static_cast<int>(database_->Query(DB_MaxIssAge))
         );
+#endif // 0
+
     EffectiveDate.minimum
         (minimum_as_of_date
             (     IssueAge.trammel().maximum_maximorum()
@@ -488,9 +515,87 @@ void mec_input::DoTransmogrify()
         }
 }
 
-std::vector<std::string> mec_input::RealizeAllSequenceInput(bool /* report_errors */)
+std::vector<std::string> mec_input::RealizeAllSequenceInput(bool report_errors)
 {
-    return std::vector<std::string>();
+    LMI_ASSERT(years_to_maturity() == database_->length());
+
+    std::vector<std::string> s;
+    s.push_back(RealizeFlatExtra                  ());
+    s.push_back(RealizePaymentHistory             ());
+    s.push_back(RealizeBenefitHistory             ());
+
+    if(report_errors)
+        {
+        for
+            (std::vector<std::string>::iterator i = s.begin()
+            ;i != s.end()
+            ;++i
+            )
+            {
+            std::ostringstream oss;
+            bool diagnostics_present = false;
+            if(!i->empty())
+                {
+                diagnostics_present = true;
+                oss << (*i) << "\n";
+                }
+            if(diagnostics_present)
+                {
+                fatal_error()
+                    << "Input validation problems:\n"
+                    << oss.str()
+                    << LMI_FLUSH
+                    ;
+                }
+            }
+        }
+
+    return s;
+}
+
+std::string mec_input::RealizeFlatExtra()
+{
+// We could enforce a maximum of the monthly equivalent of unity,
+// and a minimum of zero; is that worth the bother though?
+    std::string s = realize_sequence_string
+        (*this
+        ,FlatExtraRealized_
+        ,FlatExtra
+        );
+    if(s.size())
+        {
+        return s;
+        }
+
+    if(database_->Query(DB_AllowFlatExtras))
+        {
+        return "";
+        }
+
+    if(!each_equal(FlatExtraRealized_.begin(), FlatExtraRealized_.end(), 0.0))
+        {
+        return "Flat extras may not be illustrated on this policy form.";
+        }
+
+    return "";
+}
+
+std::string mec_input::RealizePaymentHistory()
+{
+    return realize_sequence_string
+        (*this
+        ,PaymentHistoryRealized_
+        ,PaymentHistory
+        );
+}
+
+std::string mec_input::RealizeBenefitHistory()
+{
+    return realize_sequence_string
+        (*this
+        ,BenefitHistoryRealized_
+        ,BenefitHistory
+        );
 }
 
 void mec_input::read(xml::element const& x)
@@ -645,5 +750,37 @@ void mec_input::RedintegrateExPost
         {
         fatal_error() << "Incompatible file version." << LMI_FLUSH;
         }
+}
+
+namespace
+{
+template<typename Number, typename Trammel>
+std::vector<Number> convert_vector_type
+    (std::vector<tn_range<Number,Trammel> > const& vr
+    )
+{
+    std::vector<Number> z;
+    typename std::vector<tn_range<Number,Trammel> >::const_iterator vr_i;
+    for(vr_i = vr.begin(); vr_i != vr.end(); ++vr_i)
+        {
+        z.push_back(vr_i->value());
+        }
+    return z;
+}
+} // Unnamed namespace.
+
+std::vector<double> mec_input::FlatExtraRealized() const
+{
+    return convert_vector_type<double>(FlatExtraRealized_);
+}
+
+std::vector<double> mec_input::PaymentHistoryRealized() const
+{
+    return convert_vector_type<double>(PaymentHistoryRealized_);
+}
+
+std::vector<double> mec_input::BenefitHistoryRealized() const
+{
+    return convert_vector_type<double>(BenefitHistoryRealized_);
 }
 

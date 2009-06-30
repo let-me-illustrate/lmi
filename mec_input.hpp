@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_input.hpp,v 1.2 2009-06-28 16:46:11 chicares Exp $
+// $Id: mec_input.hpp,v 1.3 2009-06-30 04:36:12 chicares Exp $
 
 #ifndef mec_input_hpp
 #define mec_input_hpp
@@ -83,6 +83,10 @@ class LMI_SO mec_input
     int issue_age          () const {return IssueAge     .value();}
     int inforce_year       () const {return InforceYear  .value();}
     int effective_year     () const {return EffectiveDate.value().year();}
+
+    std::vector<double> FlatExtraRealized     () const;
+    std::vector<double> PaymentHistoryRealized() const;
+    std::vector<double> BenefitHistoryRealized() const;
 
   private:
     void AscribeMembers();
