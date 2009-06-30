@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_view.cpp,v 1.1 2009-06-27 17:47:39 chicares Exp $
+// $Id: mec_view.cpp,v 1.2 2009-06-30 04:37:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,13 +28,22 @@
 
 #include "mec_view.hpp"
 
+#include "actuarial_table.hpp"
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "comma_punct.hpp"
+#include "data_directory.hpp"
+#include "database.hpp"
+#include "dbnames.hpp"
 #include "handle_exceptions.hpp"
+#include "ihs_irc7702a.hpp"
+#include "ihs_proddata.hpp"
+#include "materially_equal.hpp"
 #include "mec_document.hpp"
 #include "mec_input.hpp"
 #include "mvc_controller.hpp"
 #include "safely_dereference_as.hpp"
+#include "stratified_algorithms.hpp" // TieredGrossToNet()
 #include "timer.hpp"
 #include "wx_new.hpp"
 
@@ -44,6 +53,7 @@
 #include <wx/xrc/xmlres.h>
 
 #include <string>
+#include <sstream>
 
 mec_mvc_view::mec_mvc_view()
 {
@@ -137,11 +147,6 @@ int mec_view::EditProperties()
     return rc;
 }
 
-void mec_view::DisplaySelectedValuesAsHtml()
-{
-//    html_window_->SetPage(...);
-}
-
 wxIcon mec_view::Icon() const
 {
     return IconFromXmlResource("mec_view_icon");
@@ -221,5 +226,308 @@ void mec_view::UponUpdateProperties(wxUpdateUIEvent& e)
 
 void mec_view::Run()
 {
+    input_data().RealizeAllSequenceInput();
+
+//  int                         IssueAge                    = exact_cast<tnr_issue_age           >(input_data()["IssueAge"                   ])->value();
+    mcenum_gender               Gender                      = exact_cast<mce_gender              >(input_data()["Gender"                     ])->value();
+    mcenum_smoking              Smoking                     = exact_cast<mce_smoking             >(input_data()["Smoking"                    ])->value();
+    mcenum_class                UnderwritingClass           = exact_cast<mce_class               >(input_data()["UnderwritingClass"          ])->value();
+//  calendar_date               DateOfBirth                 = exact_cast<tnr_date                >(input_data()["DateOfBirth"                ])->value();
+//  mcenum_table_rating         SubstandardTable            = exact_cast<mce_table_rating        >(input_data()["SubstandardTable"           ])->value();
+    std::string                 ProductName                 = exact_cast<ce_product_name         >(input_data()["ProductName"                ])->value();
+    double                      External1035ExchangeAmount  = exact_cast<tnr_nonnegative_double  >(input_data()["External1035ExchangeAmount" ])->value();
+//  bool                        External1035ExchangeFromMec = exact_cast<mce_yes_or_no           >(input_data()["External1035ExchangeFromMec"])->value();
+    double                      Internal1035ExchangeAmount  = exact_cast<tnr_nonnegative_double  >(input_data()["Internal1035ExchangeAmount" ])->value();
+//  bool                        Internal1035ExchangeFromMec = exact_cast<mce_yes_or_no           >(input_data()["Internal1035ExchangeFromMec"])->value();
+//  calendar_date               EffectiveDate               = exact_cast<tnr_date                >(input_data()["EffectiveDate"              ])->value();
+    mcenum_defn_life_ins        DefinitionOfLifeInsurance   = exact_cast<mce_defn_life_ins       >(input_data()["DefinitionOfLifeInsurance"  ])->value();
+    mcenum_defn_material_change DefinitionOfMaterialChange  = exact_cast<mce_defn_material_change>(input_data()["DefinitionOfMaterialChange" ])->value();
+    mcenum_uw_basis             GroupUnderwritingType       = exact_cast<mce_uw_basis            >(input_data()["GroupUnderwritingType"      ])->value();
+    std::string                 Comments                    = exact_cast<datum_string            >(input_data()["Comments"                   ])->value();
+    int                         InforceYear                 = exact_cast<tnr_duration            >(input_data()["InforceYear"                ])->value();
+    int                         InforceMonth                = exact_cast<tnr_month               >(input_data()["InforceMonth"               ])->value();
+    double                      InforceAccountValue         = exact_cast<tnr_nonnegative_double  >(input_data()["InforceAccountValue"        ])->value();
+//  calendar_date               InforceAsOfDate             = exact_cast<tnr_date                >(input_data()["InforceAsOfDate"            ])->value();
+    double                      InforceSevenPayPremium      = exact_cast<tnr_nonnegative_double  >(input_data()["InforceSevenPayPremium"     ])->value();
+    bool                        InforceIsMec                = exact_cast<mce_yes_or_no           >(input_data()["InforceIsMec"               ])->value();
+    calendar_date               LastMaterialChangeDate      = exact_cast<tnr_date                >(input_data()["LastMaterialChangeDate"     ])->value();
+    double                      InforceDcv                  = exact_cast<tnr_nonnegative_double  >(input_data()["InforceDcv"                 ])->value();
+    double                      InforceAvBeforeLastMc       = exact_cast<tnr_nonnegative_double  >(input_data()["InforceAvBeforeLastMc"      ])->value();
+    int                         InforceContractYear         = exact_cast<tnr_duration            >(input_data()["InforceContractYear"        ])->value();
+    int                         InforceContractMonth        = exact_cast<tnr_month               >(input_data()["InforceContractMonth"       ])->value();
+    double                      InforceLeastDeathBenefit    = exact_cast<tnr_nonnegative_double  >(input_data()["InforceLeastDeathBenefit"   ])->value();
+    mcenum_state                StateOfJurisdiction         = exact_cast<mce_state               >(input_data()["StateOfJurisdiction"        ])->value();
+//  std::string                 FlatExtra                   = exact_cast<datum_sequence          >(input_data()["FlatExtra"                  ])->value();
+//  std::string                 PaymentHistory              = exact_cast<datum_sequence          >(input_data()["PaymentHistory"             ])->value();
+//  std::string                 BenefitHistory              = exact_cast<datum_sequence          >(input_data()["BenefitHistory"             ])->value();
+//  bool                        DeprecatedUseDOB            = exact_cast<mce_yes_or_no           >(input_data()["DeprecatedUseDOB"           ])->value();
+//  bool                        EffectiveDateToday          = exact_cast<mce_yes_or_no           >(input_data()["EffectiveDateToday"         ])->value();
+    double                      Payment                     = exact_cast<tnr_nonnegative_double  >(input_data()["Payment"                    ])->value();
+    double                      BenefitAmount               = exact_cast<tnr_nonnegative_double  >(input_data()["BenefitAmount"              ])->value();
+
+(void)InforceSevenPayPremium    ; // TODO ?? Unused?
+
+    TProductData product_data(ProductName);
+
+    TDatabase database
+        (ProductName
+        ,Gender
+        ,UnderwritingClass
+        ,Smoking
+        ,input_data().issue_age()
+        ,GroupUnderwritingType
+        ,StateOfJurisdiction
+        );
+
+    // SOMEDAY !! Ideally this would be in the GUI (or read from product files).
+    round_to<double> const RoundNonMecPrem(2, r_downward);
+
+    std::vector<double> SevenPayRates = actuarial_table_rates
+        (AddDataDir(product_data.GetTAMRA7PayFilename())
+        ,static_cast<long int>(database.Query(DB_TAMRA7PayTable))
+        ,input_data().issue_age()
+        ,input_data().years_to_maturity()
+        );
+
+    std::vector<double> CvatCorridorFactors = actuarial_table_rates
+        (AddDataDir(product_data.GetCorridorFilename())
+        ,static_cast<long int>(database.Query(DB_CorridorTable))
+        ,input_data().issue_age()
+        ,input_data().years_to_maturity()
+        );
+
+    std::vector<double> CvatNspRates;
+    for(int j = 0; j < input_data().years_to_maturity(); ++j)
+        {
+        LMI_ASSERT(0.0 < CvatCorridorFactors[j]);
+        CvatNspRates.push_back(1.0 / CvatCorridorFactors[j]);
+        }
+    CvatNspRates.push_back(1.0);
+
+    Irc7702A z
+        (0
+        ,DefinitionOfLifeInsurance
+        ,DefinitionOfMaterialChange
+        ,false // Survivorship: hardcoded for now.
+        ,mce_allow_mec
+        ,true  // Use table for 7pp: hardcoded for now.
+        ,true  // Use table for NSP: hardcoded for now.
+        ,SevenPayRates
+        ,CvatNspRates
+        ,RoundNonMecPrem
+        );
+
+    z.Initialize7702A
+        (false       // a_Ignore
+        ,InforceIsMec
+        ,input_data().issue_age()
+        ,input_data().maturity_age()
+        ,InforceYear
+        ,InforceMonth
+        ,InforceContractYear
+        ,InforceContractMonth
+        ,InforceAvBeforeLastMc
+        ,InforceLeastDeathBenefit
+        ,input_data().PaymentHistoryRealized()
+        ,input_data().BenefitHistoryRealized()
+        );
+    z.UpdateBOY7702A(InforceYear);
+    z.UpdateBOM7702A(InforceMonth);
+
+#if 1
+// TODO ?? This needs to be an input field: for some contracts,
+// it's determined once and for all at issue.
+    double AnnualTargetPrem = 50000.0;
+#endif // 1
+
+    std::vector<double> target_sales_load  ;
+    std::vector<double> excess_sales_load  ;
+    std::vector<double> target_premium_load;
+    std::vector<double> excess_premium_load;
+    std::vector<double> dac_tax_load       ;
+
+    database.Query(target_sales_load  , DB_CurrPremLoadTgtRfd);
+    database.Query(excess_sales_load  , DB_CurrPremLoadExcRfd);
+    database.Query(target_premium_load, DB_CurrPremLoadTgt);
+    database.Query(excess_premium_load, DB_CurrPremLoadExc);
+    database.Query(dac_tax_load       , DB_DACTaxPremLoad);
+
+    double LoadTarget = target_sales_load[InforceYear] + target_premium_load[InforceYear] + dac_tax_load[InforceYear];
+    double LoadExcess = excess_sales_load[InforceYear] + excess_premium_load[InforceYear] + dac_tax_load[InforceYear];
+
+    std::ostringstream oss;
+
+    std::locale loc;
+    std::locale new_loc(loc, new comma_punct);
+    oss.imbue(new_loc);
+    oss.setf(std::ios_base::fixed, std::ios_base::floatfield);
+
+    oss
+        << "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\n"
+        << "    \"http://www.w3.org/TR/html4/loose.dtd\">\n"
+        << "<html>\n"
+        << "<head>\n"
+        << "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=ISO-8859-1\">\n"
+        << "<title>Let me illustrate...</title>\n"
+        << "</head>\n"
+        << "<body>\n"
+        ;
+
+    oss
+        << Comments                                                     << "<br>\n"
+        << InforceYear                << "\tPolicy year"                << "<br>\n"
+        << InforceMonth               << "\tPolicy month"               << "<br>\n"
+        << InforceContractYear        << "\tContract year"              << "<br>\n"
+        << InforceContractMonth       << "\tContract month"             << "<br>\n"
+        << LoadTarget                 << "\tTarget load"                << "<br>\n"
+        << LoadExcess                 << "\tExcess load"                << "<br>\n"
+        << SevenPayRates[0]           << "\tInitial 7-pay rate"         << "<br>\n"
+        << CvatCorridorFactors[0]     << "\tInitial corridor factor"    << "<br>\n"
+        << CvatNspRates[0]            << "\tInitial NSP rate"           << "<br>\n"
+        << z.IsMecAlready()           << "\tAlready a MEC"              << "<br>\n"
+        << InforceDcv                 << "\tInitial DCV"                << "<br>\n"
+        << z.GetPresent7pp()          << "\t7PP"                        << "<br>\n"
+        ;
+
+    LMI_ASSERT(static_cast<unsigned int>(InforceContractYear) < input_data().BenefitHistoryRealized().size());
+    double old_benefit_amount = input_data().BenefitHistoryRealized()[InforceContractYear];
+
+    double total_1035_amount = TieredGrossToNet
+        (External1035ExchangeAmount + Internal1035ExchangeAmount
+        ,AnnualTargetPrem
+        ,LoadTarget
+        ,LoadExcess
+        );
+    if(0.0 != total_1035_amount)
+        {
+        LMI_ASSERT(0 == InforceYear );
+        LMI_ASSERT(0 == InforceMonth);
+        z.Update1035Exch7702A
+            (InforceDcv
+            ,total_1035_amount
+            ,old_benefit_amount
+            );
+        oss
+            << "* 1035 exchange"                    << "<br>\n"
+            << total_1035_amount << "\t1035 amount" << "<br>\n"
+            << z.IsMecAlready()  << "\tMEC"         << "<br>\n"
+            << InforceDcv        << "\tDCV"         << "<br>\n"
+            << z.GetPresent7pp() << "\t7PP"         << "<br>\n"
+            ;
+        }
+
+    if(BenefitAmount != old_benefit_amount)
+        {
+        z.UpdateBft7702A
+            (InforceDcv          // Not actually used.
+            ,BenefitAmount
+            ,old_benefit_amount
+            ,false               // Ignored.
+            ,BenefitAmount
+            ,old_benefit_amount
+            ,InforceAccountValue // Not actually used.
+            );
+        oss
+            << "* benefit change"                             << "<br>\n"
+            << old_benefit_amount          << "\told benefit" << "<br>\n"
+            << BenefitAmount               << "\tnew benefit" << "<br>\n"
+            << z.DebugGetLowestBft()       << "\tLDB"         << "<br>\n"
+            << z.GetPresent7pp()           << "\t7PP"         << "<br>\n"
+            << z.IsMecAlready()            << "\tMEC"         << "<br>\n"
+            << z.IsMaterialChangeInQueue() << "\tMC pending"  << "<br>\n"
+            ;
+        }
+
+    double kludge_account_value = InforceAccountValue;
+    if(0 == InforceYear && 0 == InforceMonth)
+        {
+        kludge_account_value = InforceDcv; // TODO ?? Why?
+        }
+    double max_necessary_premium = z.MaxNecessaryPremium
+        (InforceDcv
+        ,AnnualTargetPrem
+        ,LoadTarget
+        ,LoadExcess
+        ,kludge_account_value
+        );
+    double max_non_mec_premium = z.MaxNonMecPremium
+        (InforceDcv
+        ,AnnualTargetPrem
+        ,LoadTarget
+        ,LoadExcess
+        ,kludge_account_value
+        );
+    if(!z.IsMecAlready())
+        {
+        oss
+            << z.DebugGetGrossMaxNecPm() << "\tGross maximum necessary premium" << "<br>\n"
+            << max_necessary_premium     << "\tMaximum necessary premium" << "<br>\n"
+            << max_non_mec_premium       << "\tMaximum non-MEC premium" << "<br>\n"
+            ;
+        }
+
+    double necessary_premium = std::min(Payment, max_necessary_premium);
+    double unnecessary_premium = material_difference(Payment, necessary_premium);
+
+    if(!z.IsMecAlready() && 0.0 != necessary_premium)
+        {
+        z.UpdatePmt7702A
+            (InforceDcv           // Unused.
+            ,necessary_premium
+            ,false
+            ,AnnualTargetPrem     // Unused.
+            ,LoadTarget           // Unused.
+            ,LoadExcess           // Unused.
+            ,kludge_account_value // Unused.
+            );
+        oss
+            << "* accept necessary premium"                       << "<br>\n"
+            << z.DebugGetCumPmts() << "\tCumulative amounts paid" << "<br>\n"
+            << z.DebugGetCum7pp()  << "\tCumulative 7PP"          << "<br>\n"
+            << z.IsMecAlready()    << "\tMEC"                     << "<br>\n"
+            ;
+        }
+
+    if(z.IsMaterialChangeInQueue())
+        {
+        z.RedressMatChg
+            (InforceDcv
+            ,unnecessary_premium
+            ,necessary_premium
+            ,InforceAccountValue // TODO ?? Update for payment?
+            );
+        oss
+            << "* material change"                            << "<br>\n"
+            << z.IsMecAlready()            << "\tMEC"         << "<br>\n"
+            << InforceDcv                  << "\tDCV"         << "<br>\n"
+            << z.DebugGetLowestBft()       << "\tLDB"         << "<br>\n"
+            << z.GetPresent7pp()           << "\t7PP"         << "<br>\n"
+            ;
+        }
+
+    if(!z.IsMecAlready() && 0.0 != unnecessary_premium)
+        {
+        z.UpdatePmt7702A
+            (InforceDcv           // Unused.
+            ,unnecessary_premium
+            ,true
+            ,AnnualTargetPrem     // Unused.
+            ,LoadTarget           // Unused.
+            ,LoadExcess           // Unused.
+            ,kludge_account_value // Unused.
+            );
+        oss
+            << "* accept unnecessary premium"                     << "<br>\n"
+            << z.DebugGetCumPmts() << "\tCumulative amounts paid" << "<br>\n"
+            << z.DebugGetCum7pp()  << "\tCumulative 7PP"          << "<br>\n"
+            << z.IsMecAlready()    << "\tMEC"                     << "<br>\n"
+            ;
+        }
+
+    oss
+        << "</body>\n"
+        << "</html>\n"
+        ;
+    html_window_->SetPage(oss.str());
 }
 
