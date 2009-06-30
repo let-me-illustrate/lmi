@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1317 2009-06-27 17:47:39 chicares Exp $
+// $Id: ChangeLog,v 1.1318 2009-06-30 04:37:23 chicares Exp $
 
 MAINTENANCE
 
@@ -22989,4 +22989,37 @@ Capitalize certain wxDocTemplate ctor arguments more naturally.
   menus.xrc
   objects.make
 Add MEC-testing GUI.
+
+20090627T1806Z <gchicares@sbcglobal.net> [775]
+
+  mec_view.png
+Fix defect introduced 20090627T1747Z: forgotten '-kb'.
+
+20090627T2249Z <gchicares@sbcglobal.net> [775]
+
+  input_xml_io.cpp
+  mec_input.cpp
+Correct a typographical error in a comment.
+
+20090628T1646Z <gchicares@sbcglobal.net> [775]
+
+  mec_input.hpp
+Remove unused members.
+
+20090628T1647Z <gchicares@sbcglobal.net> [775]
+
+  mec_input.cpp
+Implement MVC Model virtuals.
+
+20090630T0436Z <gchicares@sbcglobal.net> [775]
+
+  mec_input.cpp
+  mec_input.hpp
+Realize input sequences.
+
+20090630T0437Z <gchicares@sbcglobal.net> [779]
+
+  mec_view.cpp
+  mec_view.hpp
+Display calculations.
 
