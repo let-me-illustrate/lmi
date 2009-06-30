@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_view.cpp,v 1.3 2009-06-30 16:00:47 chicares Exp $
+// $Id: mec_view.cpp,v 1.4 2009-06-30 17:28:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -294,7 +294,7 @@ void mec_view::Run()
     std::vector<double> TargetPremiumRates(input_data().years_to_maturity());
     if(oe_modal_table == database.Query(DB_TgtPremType))
         {
-        std::vector<double> TargetPremiumRates = actuarial_table_rates
+        TargetPremiumRates = actuarial_table_rates
             (AddDataDir(product_data.GetTgtPremFilename())
             ,static_cast<long int>(database.Query(DB_TgtPremTable))
             ,input_data().issue_age()
