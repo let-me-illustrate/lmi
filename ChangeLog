@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1320 2009-06-30 17:28:36 chicares Exp $
+// $Id: ChangeLog,v 1.1321 2009-06-30 20:00:33 wboutin Exp $
 
 MAINTENANCE
 
@@ -23032,4 +23032,9 @@ Refine target premium.
 
   mec_view.cpp
 Fix defect introduced 20090630T1600Z.
+
+20090630T2000Z <wboutin@massmutual.com> [779]
+
+  version.hpp
+Mark release candidate.
 
