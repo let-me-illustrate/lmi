@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_view.cpp,v 1.2 2009-06-30 04:37:23 chicares Exp $
+// $Id: mec_view.cpp,v 1.3 2009-06-30 16:00:47 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -42,6 +42,7 @@
 #include "mec_document.hpp"
 #include "mec_input.hpp"
 #include "mvc_controller.hpp"
+#include "oecumenic_enumerations.hpp"
 #include "safely_dereference_as.hpp"
 #include "stratified_algorithms.hpp" // TieredGrossToNet()
 #include "timer.hpp"
@@ -279,8 +280,9 @@ void mec_view::Run()
         ,StateOfJurisdiction
         );
 
-    // SOMEDAY !! Ideally this would be in the GUI (or read from product files).
+    // SOMEDAY !! Ideally these would be in the GUI (or read from product files).
     round_to<double> const RoundNonMecPrem(2, r_downward);
+    round_to<double> const round_max_premium(2, r_downward);
 
     std::vector<double> SevenPayRates = actuarial_table_rates
         (AddDataDir(product_data.GetTAMRA7PayFilename())
@@ -288,6 +290,17 @@ void mec_view::Run()
         ,input_data().issue_age()
         ,input_data().years_to_maturity()
         );
+
+    std::vector<double> TargetPremiumRates(input_data().years_to_maturity());
+    if(oe_modal_table == database.Query(DB_TgtPremType))
+        {
+        std::vector<double> TargetPremiumRates = actuarial_table_rates
+            (AddDataDir(product_data.GetTgtPremFilename())
+            ,static_cast<long int>(database.Query(DB_TgtPremTable))
+            ,input_data().issue_age()
+            ,input_data().years_to_maturity()
+            );
+        }
 
     std::vector<double> CvatCorridorFactors = actuarial_table_rates
         (AddDataDir(product_data.GetCorridorFilename())
@@ -334,11 +347,44 @@ void mec_view::Run()
     z.UpdateBOY7702A(InforceYear);
     z.UpdateBOM7702A(InforceMonth);
 
-#if 1
-// TODO ?? This needs to be an input field: for some contracts,
-// it's determined once and for all at issue.
-    double AnnualTargetPrem = 50000.0;
-#endif // 1
+    // See the implementation of class BasicValues.
+    long double const epsilon_plus_one =
+        1.0L + std::numeric_limits<long double>::epsilon()
+        ;
+
+    // TODO ?? This should be an input field.
+    double target_premium_specamt = input_data().BenefitHistoryRealized()[0];
+    double AnnualTargetPrem = 1000000000.0; // No higher premium is anticipated.
+    oenum_modal_prem_type const premium_type =
+        static_cast<oenum_modal_prem_type>(static_cast<int>(database.Query(DB_TgtPremType)));
+    if(oe_monthly_deduction == premium_type)
+        {
+        warning() << "Unsupported modal premium type." << LMI_FLUSH;
+        }
+    else if(oe_modal_nonmec == premium_type)
+        {
+        AnnualTargetPrem = round_max_premium
+            (   target_premium_specamt
+            *   epsilon_plus_one
+            *   SevenPayRates[0]
+            );
+        }
+    else if(oe_modal_table == premium_type)
+        {
+        AnnualTargetPrem = round_max_premium
+            (   database.Query(DB_TgtPremPolFee)
+            +       target_premium_specamt
+                *   epsilon_plus_one
+                *   TargetPremiumRates[0]
+            );
+        }
+    else
+        {
+        fatal_error()
+            << "Unknown modal premium type " << premium_type << '.'
+            << LMI_FLUSH
+            ;
+        }
 
     std::vector<double> target_sales_load  ;
     std::vector<double> excess_sales_load  ;
@@ -379,6 +425,7 @@ void mec_view::Run()
         << InforceMonth               << "\tPolicy month"               << "<br>\n"
         << InforceContractYear        << "\tContract year"              << "<br>\n"
         << InforceContractMonth       << "\tContract month"             << "<br>\n"
+        << AnnualTargetPrem           << "\tTarget premium"             << "<br>\n"
         << LoadTarget                 << "\tTarget load"                << "<br>\n"
         << LoadExcess                 << "\tExcess load"                << "<br>\n"
         << SevenPayRates[0]           << "\tInitial 7-pay rate"         << "<br>\n"
