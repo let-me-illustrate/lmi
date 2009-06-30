@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_view.hpp,v 1.1 2009-06-27 17:47:39 chicares Exp $
+// $Id: mec_view.hpp,v 1.2 2009-06-30 04:37:23 chicares Exp $
 
 #ifndef mec_view_hpp
 #define mec_view_hpp
@@ -74,7 +74,6 @@ class mec_view
   private:
     mec_document& document() const;
 
-    void DisplaySelectedValuesAsHtml();
     int EditProperties();
     void Run();
 
