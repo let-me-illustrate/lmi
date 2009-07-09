@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702a.cpp,v 1.18 2009-04-15 02:05:23 chicares Exp $
+// $Id: ihs_irc7702a.cpp,v 1.19 2009-07-09 01:05:38 chicares Exp $
 
 // TODO ?? Make this a server app. Consider where to store DB, SA history.
 
@@ -208,8 +208,9 @@ void Irc7702A::Initialize7702A
     ,std::vector<double> const& a_Bfts
     )
 {
-    // We allow zero == Bfts for solves.
+    LMI_ASSERT(0 < a_Bfts.size());
     double lowest_bft = *std::min_element(a_Bfts.begin(), a_Bfts.end());
+    // Allow Bfts to be zero for solves.
     HOPEFULLY(0.0 <= lowest_bft);
     // TODO ?? Should we assert that this equals 'a_LowestBft'?
     // If we can, then we don't need the latter as an argument.
@@ -798,7 +799,7 @@ double Irc7702A::UpdateBft7702A
         return 0.0;
         }
 
-    // We allow zero == Bfts for solves
+    // Allow Bfts to be zero for solves.
     HOPEFULLY(0.0 <= a_NewDB);
     HOPEFULLY(0.0 <= a_OldDB);
     HOPEFULLY(0.0 <= a_NewSA);
@@ -1148,8 +1149,8 @@ tries running an inforce case as of month 0, year 0.
     //   P * Bfts * [1 - (AV+NecP)/(A*Bfts)]
     // because it avoids a division. The reason is not so much the cost
     // of a division as its inherent risk--this way, we don't have to
-    // worry about whether the denominator is zero. For instance, our
-    // solve routine may use zero == Bfts.
+    // worry about whether the denominator is zero. For instance, Bfts
+    // is allowed to be zero for solves.
     double bft_adjustment = SavedAVBeforeMatChg / SavedNSP;
 // TODO ?? expunge
 //    double bft_adjustment =
@@ -1172,14 +1173,13 @@ tries running an inforce case as of month 0, year 0.
 // update LowestBft dynamically
 double Irc7702A::DetermineLowestBft() const
 {
+    LMI_ASSERT(0 <= TestPeriodLen && 0 <= TestPeriodDur);
     std::vector<double>::const_iterator last_bft_in_test_period = std::min
         (Bfts.end()
         ,Bfts.begin() + std::min(TestPeriodLen, TestPeriodDur)
         );
-    LowestBft = *std::min_element
-        (Bfts.begin()
-        ,last_bft_in_test_period
-        );
+    LMI_ASSERT(Bfts.begin() <= last_bft_in_test_period);
+    LowestBft = *std::min_element(Bfts.begin(), last_bft_in_test_period);
     return LowestBft;
 }
 
