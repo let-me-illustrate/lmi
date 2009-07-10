@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_view.cpp,v 1.4 2009-06-30 17:28:36 chicares Exp $
+// $Id: mec_view.cpp,v 1.5 2009-07-10 12:41:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,6 +31,7 @@
 #include "actuarial_table.hpp"
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "basic_values.hpp"          // lowest_premium_tax_load()
 #include "comma_punct.hpp"
 #include "data_directory.hpp"
 #include "database.hpp"
@@ -45,6 +46,7 @@
 #include "oecumenic_enumerations.hpp"
 #include "safely_dereference_as.hpp"
 #include "stratified_algorithms.hpp" // TieredGrossToNet()
+#include "stratified_charges.hpp"
 #include "timer.hpp"
 #include "wx_new.hpp"
 
@@ -280,6 +282,8 @@ void mec_view::Run()
         ,StateOfJurisdiction
         );
 
+    stratified_charges stratified(AddDataDir(product_data.GetTierFilename()));
+
     // SOMEDAY !! Ideally these would be in the GUI (or read from product files).
     round_to<double> const RoundNonMecPrem(2, r_downward);
     round_to<double> const round_max_premium(2, r_downward);
@@ -386,6 +390,13 @@ void mec_view::Run()
             ;
         }
 
+    double premium_tax_load = lowest_premium_tax_load
+        (database
+        ,stratified
+        ,StateOfJurisdiction
+        ,false
+        );
+
     std::vector<double> target_sales_load  ;
     std::vector<double> excess_sales_load  ;
     std::vector<double> target_premium_load;
@@ -398,8 +409,8 @@ void mec_view::Run()
     database.Query(excess_premium_load, DB_CurrPremLoadExc);
     database.Query(dac_tax_load       , DB_DACTaxPremLoad);
 
-    double LoadTarget = target_sales_load[InforceYear] + target_premium_load[InforceYear] + dac_tax_load[InforceYear];
-    double LoadExcess = excess_sales_load[InforceYear] + excess_premium_load[InforceYear] + dac_tax_load[InforceYear];
+    double LoadTarget = target_sales_load[InforceYear] + target_premium_load[InforceYear] + dac_tax_load[InforceYear] + premium_tax_load;
+    double LoadExcess = excess_sales_load[InforceYear] + excess_premium_load[InforceYear] + dac_tax_load[InforceYear] + premium_tax_load;
 
     std::ostringstream oss;
 
