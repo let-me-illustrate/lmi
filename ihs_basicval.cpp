@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.107 2009-01-21 13:47:37 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.108 2009-07-10 12:40:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -812,8 +812,27 @@ void BasicValues::SetPermanentInvariants()
 //============================================================================
 void BasicValues::SetLowestPremiumTaxLoad()
 {
+    LMI_ASSERT(Database_         .get());
+    LMI_ASSERT(StratifiedCharges_.get());
+    LowestPremiumTaxLoad_ = lowest_premium_tax_load
+        (*Database_
+        ,*StratifiedCharges_
+        ,StateOfJurisdiction_
+        ,yare_input_.AmortizePremiumLoad
+        );
+}
+
+/// Lowest premium-tax load, for 7702 and 7702A purposes.
+
+double lowest_premium_tax_load
+    (TDatabase          const& db
+    ,stratified_charges const& stratified
+    ,mcenum_state              state_of_jurisdiction
+    ,bool                      amortize_premium_load
+    )
+{
     // TRICKY !! Here, we use 'DB_PremTaxLoad', not 'DB_PremTaxRate',
-    // to set the value of 'LowestPremiumTaxLoad_'. Premium-tax loads
+    // to determine the lowest premium-tax load. Premium-tax loads
     // (charged by the insurer to the contract) and rates (charged by
     // the state to the insurer) really shouldn't be mixed. The
     // intention is to support products that pass actual premium tax
@@ -830,25 +849,25 @@ void BasicValues::SetLowestPremiumTaxLoad()
     // In the second case, the exact premium tax is passed through,
     // so the tax rate equals the tax load.
 
-    LowestPremiumTaxLoad_ = 0.0;
-    if(yare_input_.AmortizePremiumLoad)
+    double z = 0.0;
+    if(amortize_premium_load)
         {
-        return;
+        return z;
         }
 
-    LowestPremiumTaxLoad_ = Database_->Query(DB_PremTaxLoad);
+    z = db.Query(DB_PremTaxLoad);
 
-    TDBValue const& premium_tax_loads = Database_->GetEntry(DB_PremTaxLoad);
+    TDBValue const& premium_tax_loads = db.GetEntry(DB_PremTaxLoad);
     if(!TDBValue::VariesByState(premium_tax_loads))
         {
-        return;
+        return z;
         }
 
     // If premium-tax load varies by state, we're assuming that
     // it equals premium-tax rate--i.e. that premium tax is passed
     // through exactly--and that therefore tiered tax rates determine
     // loads where applicable and implemented.
-    TDBValue const& premium_tax_rates = Database_->GetEntry(DB_PremTaxRate);
+    TDBValue const& premium_tax_rates = db.GetEntry(DB_PremTaxRate);
     if(!TDBValue::Equivalent(premium_tax_loads, premium_tax_rates))
         {
         fatal_error()
@@ -861,28 +880,27 @@ void BasicValues::SetLowestPremiumTaxLoad()
             ;
         }
 
-    if(StratifiedCharges_->premium_tax_is_tiered(StateOfJurisdiction_))
+    if(stratified.premium_tax_is_tiered(state_of_jurisdiction))
         {
         // TODO ?? TestPremiumTaxLoadConsistency() repeats this test.
         // Probably all the consistency testing should be moved to
         // the database class.
-        if(0.0 != LowestPremiumTaxLoad_)
+        if(0.0 != z)
             {
             fatal_error()
                 << "Premium-tax rate is tiered in state "
-                << mc_str(StateOfJurisdiction_)
+                << mc_str(state_of_jurisdiction)
                 << ", but the product database specifies a scalar load of "
-                << LowestPremiumTaxLoad_
+                << z
                 << " instead of zero as expected. Probably the database"
                 << " is incorrect."
                 << LMI_FLUSH
                 ;
             }
-        LowestPremiumTaxLoad_ =
-            StratifiedCharges_->minimum_tiered_premium_tax_rate
-                (StateOfJurisdiction_
-                );
+        z = stratified.minimum_tiered_premium_tax_rate(state_of_jurisdiction);
         }
+
+    return z;
 }
 
 //============================================================================
