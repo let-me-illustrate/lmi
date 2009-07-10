@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.47 2008-12-27 02:56:37 chicares Exp $
+// $Id: basic_values.hpp,v 1.48 2009-07-10 12:40:13 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -499,6 +499,13 @@ inline rounding_rules const& BasicValues::GetRoundingRules() const
 {
     return *RoundingRules_;
 }
+
+double lowest_premium_tax_load
+    (TDatabase          const& db
+    ,stratified_charges const& stratified
+    ,mcenum_state              state_of_jurisdiction
+    ,bool                      amortize_premium_load
+    );
 
 // TODO ?? Use a configuration file instead. These deprecated
 // functions are used only by the lmi branch.
