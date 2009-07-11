@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_input.cpp,v 1.4 2009-06-30 04:36:12 chicares Exp $
+// $Id: mec_input.cpp,v 1.5 2009-07-11 15:26:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -680,6 +680,8 @@ using namespace xml;
         {
         EffectiveDate = calendar_date();
         }
+
+    Reconcile();
 }
 
 void mec_input::write(xml::element& x) const
