@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1321 2009-06-30 20:00:33 wboutin Exp $
+// $Id: ChangeLog,v 1.1322 2009-07-11 15:26:34 chicares Exp $
 
 MAINTENANCE
 
@@ -23037,4 +23037,25 @@ Fix defect introduced 20090630T1600Z.
 
   version.hpp
 Mark release candidate.
+
+20090709T0105Z <gchicares@sbcglobal.net> [779]
+
+  ihs_irc7702a.cpp
+Assert certain preconditions.
+
+20090710T1240Z <gchicares@sbcglobal.net> [779]
+
+  basic_values.hpp
+  ihs_basicval.cpp
+Refactor, using a free function to determine lowest premium-tax load.
+
+20090710T1241Z <gchicares@sbcglobal.net> [779]
+
+  mec_view.cpp
+Reflect premium-tax load in 7702A calculations.
+
+20090711T1526Z <gchicares@sbcglobal.net> [779]
+
+  mec_input.cpp
+Ensure that maturity age reflects policy-form changes.
 
