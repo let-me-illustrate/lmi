@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.46 2009-04-23 16:13:20 chicares Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.47 2009-07-16 18:09:31 zeitlin Exp $)dnl
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [gchicares@sbcglobal.net])
@@ -541,7 +541,6 @@ CFLAGS_gcc_common="\
     -Werror \
     -Wall \
     -Wcast-align \
-    -Wconversion \
     -Wdeprecated-declarations \
     -Wdisabled-optimization \
     -Wimport \
@@ -565,6 +564,17 @@ if test "x$GXX" == "xyes"; then
         -Woverloaded-virtual \
         -Wpmf-conversions \
         -Wsynth"
+
+    dnl we need to use this option with g++ 4.3 to prevent its complaints
+    dnl about "-funit-at-a-time is required for inlining of functions that are
+    dnl only called once" in debug builds
+    dnl
+    dnl NB: this is needed for expm1.c so we must add it to CFLAGS too
+    LMI_C_CXX_ADD_IF_SUPPORTED(-fno-inline-functions-called-once)
+
+    dnl this one must be disabled with g++ 4.x because there are tons of
+    dnl occurrences of this warning in both wx and LMI sources
+    LMI_CXX_ADD_IF_SUPPORTED(-Wno-parentheses)
 
     dnl This makes Boost compile with -Wundef; see workhorse.make for
     dnl more detailed explanation.
