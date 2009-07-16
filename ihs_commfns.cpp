@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.cpp,v 1.18 2009-04-12 01:01:22 chicares Exp $
+// $Id: ihs_commfns.cpp,v 1.19 2009-07-16 22:02:35 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -175,8 +175,9 @@ ULCommFns::ULCommFns
         kc[j] = ka * ad[j] * v * q;
         ad[1 + j] = ad[j] * vp12;
         }
-// TODO ?? Wrong--don't want last element.
     an = ad;
+    // Don't want last element here.
+    an.erase(--an.end());
     std::reverse(an.begin(), an.end());
     std::partial_sum(an.begin(), an.end(), an.begin());
     std::reverse(an.begin(), an.end());
