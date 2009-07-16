@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.108 2009-07-10 12:40:13 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.109 2009-07-16 22:01:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -444,8 +444,7 @@ double BasicValues::InvestmentManagementFee() const
 //============================================================================
 void BasicValues::Init7702()
 {
-//  Mly7702qc = MortalityRates_->GetaCoi7702(); // TODO ?? Should this function be eliminated?
-    Mly7702qc = GetIRC7702Rates(); // TODO ?? This could use a better name.
+    Mly7702qc = GetIRC7702Rates();
     // ET !! Mly7702qc = coi_rate_from_q(Mly7702qc, Database_->Query(DB_MaxMonthlyCoiRate));
     std::transform
         (Mly7702qc.begin()
@@ -540,7 +539,7 @@ void BasicValues::Init7702()
         ,i_upper_12_over_12_from_i<double>()
         );
 
-    // ET !! Mly7702iGlp = i_upper_12_over_12_from_i(max(.06, guar_int) - SpreadFor7702_);
+    // ET !! Mly7702iGsp = i_upper_12_over_12_from_i(max(.06, guar_int) - SpreadFor7702_);
     Mly7702iGsp.assign(Length, 0.06);
     std::transform
         (guar_int.begin()
@@ -587,7 +586,7 @@ void BasicValues::Init7702()
             ,yare_input_.DefinitionOfLifeInsurance
             ,yare_input_.IssueAge
             ,EndtAge
-            ,Mly7702qc  // MortalityRates_->GetaCoi7702() // TODO ?? This is monthly?
+            ,Mly7702qc
             ,Mly7702iGlp
             ,Mly7702iGsp
             ,Mly7702ig
