@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_view.cpp,v 1.6 2009-07-17 02:52:29 chicares Exp $
+// $Id: mec_view.cpp,v 1.7 2009-07-17 14:10:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -307,13 +307,6 @@ void mec_view::Run()
     round_to<double> const RoundNonMecPrem(2, r_downward);
     round_to<double> const round_max_premium(2, r_downward);
 
-    std::vector<double> SevenPayRates = actuarial_table_rates
-        (AddDataDir(product_data.GetTAMRA7PayFilename())
-        ,static_cast<long int>(database.Query(DB_TAMRA7PayTable))
-        ,input_data().issue_age()
-        ,input_data().years_to_maturity()
-        );
-
     std::vector<double> TargetPremiumRates(input_data().years_to_maturity());
     if(oe_modal_table == database.Query(DB_TgtPremType))
         {
@@ -323,6 +316,10 @@ void mec_view::Run()
             ,input_data().issue_age()
             ,input_data().years_to_maturity()
             );
+        }
+    else
+        {
+        ; // Do nothing: 'TargetPremiumRates' won't be used.
         }
 
     std::vector<double> CvatCorridorFactors = actuarial_table_rates
@@ -339,6 +336,13 @@ void mec_view::Run()
         CvatNspRates.push_back(1.0 / CvatCorridorFactors[j]);
         }
     CvatNspRates.push_back(1.0);
+
+    std::vector<double> SevenPayRates = actuarial_table_rates
+        (AddDataDir(product_data.GetTAMRA7PayFilename())
+        ,static_cast<long int>(database.Query(DB_TAMRA7PayTable))
+        ,input_data().issue_age()
+        ,input_data().years_to_maturity()
+        );
 
     Irc7702A z
         (0
