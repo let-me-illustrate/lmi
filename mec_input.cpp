@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_input.cpp,v 1.5 2009-07-11 15:26:33 chicares Exp $
+// $Id: mec_input.cpp,v 1.6 2009-07-17 12:32:50 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -37,6 +37,14 @@
 #include "xml_lmi.hpp"
 
 #include <xmlwrapp/nodes_view.h>
+
+#include <algorithm>
+#include <limits>
+#include <list>
+#include <map>
+#include <sstream>
+#include <string>
+#include <vector>
 
 namespace
 {
@@ -410,6 +418,14 @@ void mec_input::DoHarmonize()
         (EffectiveDate.value()
         ,std::max(InforceAsOfDate.value(), InforceAsOfDate.minimum())
         );
+
+    double maximum_1035 =
+        InforceAsOfDate == EffectiveDate
+        ? std::numeric_limits<double>::max()
+        : 0.0
+        ;
+    External1035ExchangeAmount.maximum(maximum_1035);
+    Internal1035ExchangeAmount.maximum(maximum_1035);
 
     // SOMEDAY !! Do this in class Input as well.
     bool mec_due_to_1035 =
