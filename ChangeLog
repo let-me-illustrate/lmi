@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1322 2009-07-11 15:26:34 chicares Exp $
+// $Id: ChangeLog,v 1.1323 2009-07-17 02:52:29 chicares Exp $
 
 MAINTENANCE
 
@@ -23058,4 +23058,39 @@ Reflect premium-tax load in 7702A calculations.
 
   mec_input.cpp
 Ensure that maturity age reflects policy-form changes.
+
+20090716T1809Z <vadim@tt-solutions.com> [779]
+
+  acinclude.m4 [new file]
+  autogen.sh
+  configure.ac
+Update for gcc-4.3.0 .
+
+20090716T2159Z <gchicares@sbcglobal.net> [779]
+
+  acinclude.m4
+Add RCS Id.
+
+20090716T2200Z <gchicares@sbcglobal.net> [779]
+
+  test_coding_rules.cpp
+Handle '.m4' files.
+
+20090716T2201Z <gchicares@sbcglobal.net> [776]
+
+  ihs_basicval.cpp
+Remove vestiges of an extinct function.
+
+20090716T2202Z <gchicares@sbcglobal.net> [775]
+
+  ihs_commfns.cpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch.
+
+20090717T0252Z <gchicares@sbcglobal.net> [774]
+
+  ihs_irc7702a.cpp
+  ihs_irc7702a.hpp
+  mec_view.cpp
+Preserve and display evanescent state.
 

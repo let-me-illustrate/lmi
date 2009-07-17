@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_view.cpp,v 1.5 2009-07-10 12:41:12 chicares Exp $
+// $Id: mec_view.cpp,v 1.6 2009-07-17 02:52:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,7 +32,6 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "basic_values.hpp"          // lowest_premium_tax_load()
-#include "comma_punct.hpp"
 #include "data_directory.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
@@ -48,6 +47,7 @@
 #include "stratified_algorithms.hpp" // TieredGrossToNet()
 #include "stratified_charges.hpp"
 #include "timer.hpp"
+#include "value_cast.hpp"
 #include "wx_new.hpp"
 
 #include <wx/html/htmlwin.h>
@@ -55,8 +55,10 @@
 #include <wx/menu.h>
 #include <wx/xrc/xmlres.h>
 
-#include <string>
+#include <limits>
 #include <sstream>
+#include <string>
+#include <vector>
 
 mec_mvc_view::mec_mvc_view()
 {
@@ -226,6 +228,23 @@ void mec_view::UponUpdateProperties(wxUpdateUIEvent& e)
 {
     e.Enable(true);
 }
+
+namespace
+{
+template<typename T>
+std::string f(T t)
+{
+    static double const bignum = std::numeric_limits<double>::max();
+    if(bignum == t)
+        {
+        return "&nbsp;&nbsp;&nbsp;BIGNUM";
+        }
+    else
+        {
+        return "&nbsp;&nbsp;&nbsp;" + value_cast<std::string>(t);
+        }
+}
+} // Unnamed namespace.
 
 void mec_view::Run()
 {
@@ -414,11 +433,6 @@ void mec_view::Run()
 
     std::ostringstream oss;
 
-    std::locale loc;
-    std::locale new_loc(loc, new comma_punct);
-    oss.imbue(new_loc);
-    oss.setf(std::ios_base::fixed, std::ios_base::floatfield);
-
     oss
         << "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\n"
         << "    \"http://www.w3.org/TR/html4/loose.dtd\">\n"
@@ -430,22 +444,7 @@ void mec_view::Run()
         << "<body>\n"
         ;
 
-    oss
-        << Comments                                                     << "<br>\n"
-        << InforceYear                << "\tPolicy year"                << "<br>\n"
-        << InforceMonth               << "\tPolicy month"               << "<br>\n"
-        << InforceContractYear        << "\tContract year"              << "<br>\n"
-        << InforceContractMonth       << "\tContract month"             << "<br>\n"
-        << AnnualTargetPrem           << "\tTarget premium"             << "<br>\n"
-        << LoadTarget                 << "\tTarget load"                << "<br>\n"
-        << LoadExcess                 << "\tExcess load"                << "<br>\n"
-        << SevenPayRates[0]           << "\tInitial 7-pay rate"         << "<br>\n"
-        << CvatCorridorFactors[0]     << "\tInitial corridor factor"    << "<br>\n"
-        << CvatNspRates[0]            << "\tInitial NSP rate"           << "<br>\n"
-        << z.IsMecAlready()           << "\tAlready a MEC"              << "<br>\n"
-        << InforceDcv                 << "\tInitial DCV"                << "<br>\n"
-        << z.GetPresent7pp()          << "\t7PP"                        << "<br>\n"
-        ;
+    oss << Comments << "<br>\n";
 
     LMI_ASSERT(static_cast<unsigned int>(InforceContractYear) < input_data().BenefitHistoryRealized().size());
     double old_benefit_amount = input_data().BenefitHistoryRealized()[InforceContractYear];
@@ -465,13 +464,6 @@ void mec_view::Run()
             ,total_1035_amount
             ,old_benefit_amount
             );
-        oss
-            << "* 1035 exchange"                    << "<br>\n"
-            << total_1035_amount << "\t1035 amount" << "<br>\n"
-            << z.IsMecAlready()  << "\tMEC"         << "<br>\n"
-            << InforceDcv        << "\tDCV"         << "<br>\n"
-            << z.GetPresent7pp() << "\t7PP"         << "<br>\n"
-            ;
         }
 
     if(BenefitAmount != old_benefit_amount)
@@ -485,15 +477,6 @@ void mec_view::Run()
             ,old_benefit_amount
             ,InforceAccountValue // Not actually used.
             );
-        oss
-            << "* benefit change"                             << "<br>\n"
-            << old_benefit_amount          << "\told benefit" << "<br>\n"
-            << BenefitAmount               << "\tnew benefit" << "<br>\n"
-            << z.DebugGetLowestBft()       << "\tLDB"         << "<br>\n"
-            << z.GetPresent7pp()           << "\t7PP"         << "<br>\n"
-            << z.IsMecAlready()            << "\tMEC"         << "<br>\n"
-            << z.IsMaterialChangeInQueue() << "\tMC pending"  << "<br>\n"
-            ;
         }
 
     double kludge_account_value = InforceAccountValue;
@@ -508,29 +491,20 @@ void mec_view::Run()
         ,LoadExcess
         ,kludge_account_value
         );
-    double max_non_mec_premium = z.MaxNonMecPremium
+    z.MaxNonMecPremium
         (InforceDcv
         ,AnnualTargetPrem
         ,LoadTarget
         ,LoadExcess
         ,kludge_account_value
         );
-    if(!z.IsMecAlready())
-        {
-        oss
-            << z.DebugGetGrossMaxNecPm() << "\tGross maximum necessary premium" << "<br>\n"
-            << max_necessary_premium     << "\tMaximum necessary premium" << "<br>\n"
-            << max_non_mec_premium       << "\tMaximum non-MEC premium" << "<br>\n"
-            ;
-        }
-
     double necessary_premium = std::min(Payment, max_necessary_premium);
     double unnecessary_premium = material_difference(Payment, necessary_premium);
 
     if(!z.IsMecAlready() && 0.0 != necessary_premium)
         {
         z.UpdatePmt7702A
-            (InforceDcv           // Unused.
+            (InforceDcv
             ,necessary_premium
             ,false
             ,AnnualTargetPrem     // Unused.
@@ -538,12 +512,6 @@ void mec_view::Run()
             ,LoadExcess           // Unused.
             ,kludge_account_value // Unused.
             );
-        oss
-            << "* accept necessary premium"                       << "<br>\n"
-            << z.DebugGetCumPmts() << "\tCumulative amounts paid" << "<br>\n"
-            << z.DebugGetCum7pp()  << "\tCumulative 7PP"          << "<br>\n"
-            << z.IsMecAlready()    << "\tMEC"                     << "<br>\n"
-            ;
         }
 
     if(z.IsMaterialChangeInQueue())
@@ -554,19 +522,12 @@ void mec_view::Run()
             ,necessary_premium
             ,InforceAccountValue // TODO ?? Update for payment?
             );
-        oss
-            << "* material change"                            << "<br>\n"
-            << z.IsMecAlready()            << "\tMEC"         << "<br>\n"
-            << InforceDcv                  << "\tDCV"         << "<br>\n"
-            << z.DebugGetLowestBft()       << "\tLDB"         << "<br>\n"
-            << z.GetPresent7pp()           << "\t7PP"         << "<br>\n"
-            ;
         }
 
     if(!z.IsMecAlready() && 0.0 != unnecessary_premium)
         {
         z.UpdatePmt7702A
-            (InforceDcv           // Unused.
+            (InforceDcv
             ,unnecessary_premium
             ,true
             ,AnnualTargetPrem     // Unused.
@@ -574,13 +535,163 @@ void mec_view::Run()
             ,LoadExcess           // Unused.
             ,kludge_account_value // Unused.
             );
-        oss
-            << "* accept unnecessary premium"                     << "<br>\n"
-            << z.DebugGetCumPmts() << "\tCumulative amounts paid" << "<br>\n"
-            << z.DebugGetCum7pp()  << "\tCumulative 7PP"          << "<br>\n"
-            << z.IsMecAlready()    << "\tMEC"                     << "<br>\n"
-            ;
         }
+
+    irc7702A_state const& state = z.state();
+    oss
+        << "<hr>\n"
+        << "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "policy year"                     << "</td>\n"
+        << "<td nowrap>" << f(state.B0_deduced_policy_year   ) << "</td>\n"
+        << "</tr>\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "contract year"                   << "</td>\n"
+        << "<td nowrap>" << f(state.B1_deduced_contract_year ) << "</td>\n"
+        << "</tr>\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "seven-pay rate"                  << "</td>\n"
+        << "<td nowrap>" << f(state.B2_deduced_px7_rate      ) << "</td>\n"
+        << "</tr>\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "nsp rate"                        << "</td>\n"
+        << "<td nowrap>" << f(state.B3_deduced_nsp_rate      ) << "</td>\n"
+        << "</tr>\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "target premium"                  << "</td>\n"
+        << "<td nowrap>" << f(state.B4_deduced_target_premium) << "</td>\n"
+        << "</tr>\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "target load"                     << "</td>\n"
+        << "<td nowrap>" << f(state.B5_deduced_target_load   ) << "</td>\n"
+        << "</tr>\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "excess load"                     << "</td>\n"
+        << "<td nowrap>" << f(state.B6_deduced_excess_load   ) << "</td>\n"
+        << "</tr>\n"
+        << "</table>\n"
+        ;
+
+    oss
+        << "<hr>\n"
+        << "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n"
+
+        << "<tr align=\"right\">\n"
+        << "<td valign=\"bottom\" width=\"14%\">" << ""           << " </td>\n"
+        << "<td valign=\"bottom\" width=\"14%\">" << "initial"    << " </td>\n"
+        << "<td valign=\"bottom\" width=\"14%\">" << "incr"       << " </td>\n"
+        << "<td valign=\"bottom\" width=\"14%\">" << "decr"       << " </td>\n"
+        << "<td valign=\"bottom\" width=\"14%\">" << "nec_prem"   << " </td>\n"
+        << "<td valign=\"bottom\" width=\"14%\">" << "MC"         << " </td>\n"
+        << "<td valign=\"bottom\" width=\"14%\">" << "unnec_prem" << " </td>\n"
+        << "</tr>\n"
+
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "benefit"                   << "</td>\n"
+        << "<td nowrap>" << f(state.C0_init_bft       ) << "</td>\n"
+        << "<td nowrap>" << f(state.D0_incr_bft       ) << "</td>\n"
+        << "<td nowrap>" << f(state.E0_decr_bft       ) << "</td>\n"
+        << "<td nowrap>" << f(state.F0_nec_pm_bft     ) << "</td>\n"
+        << "<td nowrap>" << f(state.G0_do_mc_bft      ) << "</td>\n"
+        << "<td nowrap>" << f(state.H0_unnec_pm_bft   ) << "</td>\n"
+        << "</tr>\n"
+
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "LDB"                       << "</td>\n"
+        << "<td nowrap>" << f(state.C1_init_ldb       ) << "</td>\n"
+        << "<td nowrap>" << f(state.D1_incr_ldb       ) << "</td>\n"
+        << "<td nowrap>" << f(state.E1_decr_ldb       ) << "</td>\n"
+        << "<td nowrap>" << f(state.F1_nec_pm_ldb     ) << "</td>\n"
+        << "<td nowrap>" << f(state.G1_do_mc_ldb      ) << "</td>\n"
+        << "<td nowrap>" << f(state.H1_unnec_pm_ldb   ) << "</td>\n"
+        << "</tr>\n"
+
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "amts pd"                   << "</td>\n"
+        << "<td nowrap>" << f(state.C2_init_amt_pd    ) << "</td>\n"
+        << "<td nowrap>" << f(state.D2_incr_amt_pd    ) << "</td>\n"
+        << "<td nowrap>" << f(state.E2_decr_amt_pd    ) << "</td>\n"
+        << "<td nowrap>" << f(state.F2_nec_pm_amt_pd  ) << "</td>\n"
+        << "<td nowrap>" << f(state.G2_do_mc_amt_pd   ) << "</td>\n"
+        << "<td nowrap>" << f(state.H2_unnec_pm_amt_pd) << "</td>\n"
+        << "</tr>\n"
+
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "MC"                        << "</td>\n"
+        << "<td nowrap>" << f(state.C3_init_is_mc     ) << "</td>\n"
+        << "<td nowrap>" << f(state.D3_incr_is_mc     ) << "</td>\n"
+        << "<td nowrap>" << f(state.E3_decr_is_mc     ) << "</td>\n"
+        << "<td nowrap>" << f(state.F3_nec_pm_is_mc   ) << "</td>\n"
+        << "<td nowrap>" << f(state.G3_do_mc_is_mc    ) << "</td>\n"
+        << "<td nowrap>" << f(state.H3_unnec_pm_is_mc ) << "</td>\n"
+        << "</tr>\n"
+
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "DCV"                       << "</td>\n"
+        << "<td nowrap>" << f(state.C4_init_dcv       ) << "</td>\n"
+        << "<td nowrap>" << f(state.D4_incr_dcv       ) << "</td>\n"
+        << "<td nowrap>" << f(state.E4_decr_dcv       ) << "</td>\n"
+        << "<td nowrap>" << f(state.F4_nec_pm_dcv     ) << "</td>\n"
+        << "<td nowrap>" << f(state.G4_do_mc_dcv      ) << "</td>\n"
+        << "<td nowrap>" << f(state.H4_unnec_pm_dcv   ) << "</td>\n"
+        << "</tr>\n"
+
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "7PP"                       << "</td>\n"
+        << "<td nowrap>" << f(state.C5_init_px7       ) << "</td>\n"
+        << "<td nowrap>" << f(state.D5_incr_px7       ) << "</td>\n"
+        << "<td nowrap>" << f(state.E5_decr_px7       ) << "</td>\n"
+        << "<td nowrap>" << f(state.F5_nec_pm_px7     ) << "</td>\n"
+        << "<td nowrap>" << f(state.G5_do_mc_px7      ) << "</td>\n"
+        << "<td nowrap>" << f(state.H5_unnec_pm_px7   ) << "</td>\n"
+        << "</tr>\n"
+
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "MEC"                       << "</td>\n"
+        << "<td nowrap>" << f(state.C6_init_mec       ) << "</td>\n"
+        << "<td nowrap>" << f(state.D6_incr_mec       ) << "</td>\n"
+        << "<td nowrap>" << f(state.E6_decr_mec       ) << "</td>\n"
+        << "<td nowrap>" << f(state.F6_nec_pm_mec     ) << "</td>\n"
+        << "<td nowrap>" << f(state.G6_do_mc_mec      ) << "</td>\n"
+        << "<td nowrap>" << f(state.H6_unnec_pm_mec   ) << "</td>\n"
+        << "</tr>\n"
+
+        << "</table>\n"
+        ;
+
+    oss
+        << "<hr>\n"
+        << "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "net 1035 amount"              << "</td>\n"
+        << "<td nowrap>" << f(state.Q0_net_1035          ) << "</td>\n"
+        << "</tr>\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "net max necessary premium"    << "</td>\n"
+        << "<td nowrap>" << f(state.Q1_max_nec_prem_net  ) << "</td>\n"
+        << "</tr>\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "gross max necessary premium"  << "</td>\n"
+        << "<td nowrap>" << f(state.Q2_max_nec_prem_gross) << "</td>\n"
+        << "</tr>\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "CV before last MC"            << "</td>\n"
+        << "<td nowrap>" << f(state.Q3_cv_before_last_mc ) << "</td>\n"
+        << "</tr>\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "cumulative seven-pay premium" << "</td>\n"
+        << "<td nowrap>" << f(state.Q4_cum_px7           ) << "</td>\n"
+        << "</tr>\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "cumulative amounts paid"      << "</td>\n"
+        << "<td nowrap>" << f(state.Q5_cum_amt_pd        ) << "</td>\n"
+        << "</tr>\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "max non-MEC premium"          << "</td>\n"
+        << "<td nowrap>" << f(state.Q6_max_non_mec_prem  ) << "</td>\n"
+        << "</tr>\n"
+        << "</table>\n"
+        ;
 
     oss
         << "</body>\n"
