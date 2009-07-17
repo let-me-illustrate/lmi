@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_view.cpp,v 1.8 2009-07-17 15:21:42 chicares Exp $
+// $Id: mec_view.cpp,v 1.9 2009-07-17 23:39:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -307,8 +307,10 @@ void mec_view::Run()
     round_to<double> const RoundNonMecPrem(2, r_downward);
     round_to<double> const round_max_premium(2, r_downward);
 
+    oenum_modal_prem_type const target_premium_type =
+        static_cast<oenum_modal_prem_type>(static_cast<int>(database.Query(DB_TgtPremType)));
     std::vector<double> TargetPremiumRates(input_data().years_to_maturity());
-    if(oe_modal_table == database.Query(DB_TgtPremType))
+    if(oe_modal_table == target_premium_type)
         {
         TargetPremiumRates = actuarial_table_rates
             (AddDataDir(product_data.GetTgtPremFilename())
@@ -382,33 +384,36 @@ void mec_view::Run()
     // TODO ?? This should be an input field.
     double target_premium_specamt = input_data().BenefitHistoryRealized()[0];
     double AnnualTargetPrem = 1000000000.0; // No higher premium is anticipated.
-    oenum_modal_prem_type const premium_type =
-        static_cast<oenum_modal_prem_type>(static_cast<int>(database.Query(DB_TgtPremType)));
-    if(oe_monthly_deduction == premium_type)
+    int target_year =
+        database.Query(DB_TgtPmFixedAtIssue)
+        ? 0
+        : input_data().inforce_year()
+        ;
+    if(oe_monthly_deduction == target_premium_type)
         {
         warning() << "Unsupported modal premium type." << LMI_FLUSH;
         }
-    else if(oe_modal_nonmec == premium_type)
+    else if(oe_modal_nonmec == target_premium_type)
         {
         AnnualTargetPrem = round_max_premium
             (   target_premium_specamt
             *   epsilon_plus_one
-            *   SevenPayRates[0]
+            *   SevenPayRates[target_year]
             );
         }
-    else if(oe_modal_table == premium_type)
+    else if(oe_modal_table == target_premium_type)
         {
         AnnualTargetPrem = round_max_premium
             (   database.Query(DB_TgtPremPolFee)
             +       target_premium_specamt
                 *   epsilon_plus_one
-                *   TargetPremiumRates[0]
+                *   TargetPremiumRates[target_year]
             );
         }
     else
         {
         fatal_error()
-            << "Unknown modal premium type " << premium_type << '.'
+            << "Unknown modal premium type " << target_premium_type << '.'
             << LMI_FLUSH
             ;
         }
