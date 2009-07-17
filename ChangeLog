@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1323 2009-07-17 02:52:29 chicares Exp $
+// $Id: ChangeLog,v 1.1324 2009-07-17 15:21:42 chicares Exp $
 
 MAINTENANCE
 
@@ -23093,4 +23093,35 @@ the lmi epoch.
   ihs_irc7702a.hpp
   mec_view.cpp
 Preserve and display evanescent state.
+
+20090717T1232Z <gchicares@sbcglobal.net> [774]
+
+  mec_input.cpp
+Allow 1035 exchange only as of issue date.
+
+20090717T1304Z <gchicares@sbcglobal.net> [774]
+
+  mec_input.cpp
+Forbid 1035 exchange from MEC when exchange amount is zero.
+
+20090717T1341Z <gchicares@sbcglobal.net> [774]
+
+  mvc_controller.cpp
+Permit 'Help', like 'Cancel', when validation has failed.
+
+20090717T1410Z <gchicares@sbcglobal.net> [774]
+
+  mec_view.cpp
+Rearrange; improve documentation.
+
+20090717T1520Z <gchicares@sbcglobal.net> [774]
+
+  ihs_irc7702a.cpp
+Mark a defect.
+
+20090717T1521Z <gchicares@sbcglobal.net> [774]
+
+  mec_view.cpp
+Fix defect introduced 20090630T0437Z. A material change must be
+processed before accepting unnecessary premium.
 
