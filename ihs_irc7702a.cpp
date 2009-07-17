@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702a.cpp,v 1.20 2009-07-17 02:52:29 chicares Exp $
+// $Id: ihs_irc7702a.cpp,v 1.21 2009-07-17 15:20:52 chicares Exp $
 
 // TODO ?? Make this a server app. Consider where to store DB, SA history.
 
@@ -828,6 +828,13 @@ double Irc7702A::UpdatePmt7702A
         // subsequent increase in Bfts (including increases due to the
         // corridor, or to DB increments for option 2), which might
         // never occur.
+        //
+        // However, a material change must be processed before any
+        // unnecessary premium is accepted. This code defectively
+        // accepts it while raising a flag calling for the material
+        // change to be processed later. That's okay as long as a
+        // material change has just been processed--but in that case
+        // the 'IsMatChg' flag shouldn't be raised here.
         if(UnnecPremIsMatChg) // TRUE
             {
             IsMatChg = true;
