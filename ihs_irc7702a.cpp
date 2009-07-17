@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702a.cpp,v 1.19 2009-07-09 01:05:38 chicares Exp $
+// $Id: ihs_irc7702a.cpp,v 1.20 2009-07-17 02:52:29 chicares Exp $
 
 // TODO ?? Make this a server app. Consider where to store DB, SA history.
 
@@ -68,7 +68,8 @@ Irc7702A::Irc7702A
     ,std::vector<double> const&  a_NSPVec
     ,round_to<double>    const&  a_RoundNonMecPrem
     )
-    :magic                (a_magic)
+    :state_               ()
+    ,magic                (a_magic)
     ,DefnLifeIns          (a_DefnLifeIns)
     ,DefnMaterialChange   (a_DefnMaterialChange)
     ,UnnecPremIsMatChg    (false)
@@ -208,6 +209,9 @@ void Irc7702A::Initialize7702A
     ,std::vector<double> const& a_Bfts
     )
 {
+    LMI_ASSERT(a_ContractYear <= a_PolicyYear);
+    state_.B0_deduced_policy_year   = a_PolicyYear;
+    state_.B1_deduced_contract_year = a_ContractYear;
     LMI_ASSERT(0 < a_Bfts.size());
     double lowest_bft = *std::min_element(a_Bfts.begin(), a_Bfts.end());
     // Allow Bfts to be zero for solves.
@@ -287,15 +291,16 @@ void Irc7702A::Initialize7702A
     AssumedBft      = a_LowestBft; // TODO ?? Is this needed? Is it not always Bfts[0]?
     LowestBft       = a_LowestBft;
 
-    HOPEFULLY(a_ContractYear <= PolicyYear);
     HOPEFULLY
         (   static_cast<unsigned int>(PolicyYear - a_ContractYear)
         <   SevenPPRateVec.size()
         );
-    Saved7PPRate    = SevenPPRateVec[std::max(0, PolicyYear - a_ContractYear)];
+    Saved7PPRate       = SevenPPRateVec[std::max(0, PolicyYear - a_ContractYear)];
+    state_.B2_deduced_px7_rate = SevenPPRateVec[std::max(0, PolicyYear - a_ContractYear)];
     SavedNecPrem    = 0.0;
     UnnecPrem       = 0.0;
     SavedNSP        = NSPVec[PolicyYear]; // TODO ?? Ignores interpolation.
+    state_.B3_deduced_nsp_rate = NSPVec[PolicyYear];
 
     Determine7PP
         (a_LowestBft         // a_Bft
@@ -317,6 +322,19 @@ void Irc7702A::Initialize7702A
 
     NetNecessaryPrem   = 0.0;
     GrossNecessaryPrem = 0.0;
+
+    LMI_ASSERT(TestPeriodDur < static_cast<int>(Bfts.size()));
+
+    state_.C0_init_bft    = Bfts[TestPeriodDur];
+    state_.C1_init_ldb    = a_LowestBft;
+    state_.C2_init_amt_pd = 0.0;
+    state_.C3_init_is_mc  = false;
+    state_.C4_init_dcv    = 0.0;
+    state_.C5_init_px7    = SevenPP;
+    state_.C6_init_mec    = IsMec;
+
+    state_.Q4_cum_px7    = CumSevenPP;
+    state_.Q5_cum_amt_pd = CumPmts;
 }
 
 //============================================================================
@@ -328,6 +346,7 @@ void Irc7702A::UpdateBOY7702A(int a_PolicyYear)
         return;
         }
 
+    state_.B0_deduced_policy_year = a_PolicyYear;
     PolicyYear = a_PolicyYear;
 
     // A negative policy year makes no sense
@@ -391,6 +410,12 @@ void Irc7702A::UpdateBOY7702A(int a_PolicyYear)
         // true in the case of a high substandard rating that is "forgiven"
         // after some period of time.
         }
+
+    // state_.Q4_cum_px7 and state_.Q5_cum_amt_pd are not updated here
+    // even though this function modifies CumSevenPP. Perhaps that
+    // modification is a mistake: this function is called at the
+    // beginning of each policy year, but the premium limit applies
+    // to contract years.
 }
 
 //============================================================================
@@ -451,27 +476,37 @@ void Irc7702A::Update1035Exch7702A
     if(IsMec)
         {
         SevenPP = 0.0;
-        return;
         }
-
-    // For illustrations, allow 1035 only at issue
-// TODO ?? RESTORE NEXT LINE AFTER WE REDO CLASS AccountValue.
-HOPEFULLY(0 == PolicyYear && 0 == PolicyMonth);
-    Bfts[TestPeriodDur] = a_Bft;
-
-    if(Exch1035IsMatChg && 0.0 != a_Net1035Amount)
+    else
         {
-        IsMatChg = true;
-        RedressMatChg
-            (a_DeemedCashValue
-            ,0.0                // a_UnnecPrem
-            ,0.0                // a_NecPrem
-            ,a_Net1035Amount
-            );
-        IsMatChg = false;
-        // 'SavedDCV' is used only for monthly trace.
-        SavedDCV = a_DeemedCashValue;
+        // For illustrations, allow 1035 only at issue
+        LMI_ASSERT(0 == PolicyYear && 0 == PolicyMonth);
+        Bfts[TestPeriodDur] = a_Bft;
+
+        if(Exch1035IsMatChg && 0.0 != a_Net1035Amount)
+            {
+            IsMatChg = true;
+            RedressMatChg
+                (a_DeemedCashValue
+                ,0.0                // a_UnnecPrem
+                ,0.0                // a_NecPrem
+                ,a_Net1035Amount
+                );
+            IsMatChg = false;
+            // 'SavedDCV' is used only for monthly trace.
+            SavedDCV = a_DeemedCashValue;
+            }
         }
+
+    state_.C0_init_bft    = Bfts[TestPeriodDur];
+//  state_.C1_init_ldb      does not change here.
+//  state_.C2_init_amt_pd   does not change here.
+//  state_.C3_init_is_mc    does not change here.
+    state_.C4_init_dcv    = a_DeemedCashValue;
+    state_.C5_init_px7    = SevenPP;
+    state_.C6_init_mec    = IsMec;
+
+    state_.Q0_net_1035    = a_Net1035Amount;
 }
 
 //============================================================================
@@ -546,9 +581,15 @@ double Irc7702A::MaxNonMecPremium
     ,double a_CashValue
     ) const
 {
+    // state_.B4_deduced_target_premium etc. are not set here because
+    // this function is a mere inquiry, not an essential transaction.
+    // However, state_.Q6_max_non_mec_prem is recorded because it's
+    // useful to test despite all that.
+
     if(Ignore || IsMec)
         {
-        return std::numeric_limits<double>::max();
+        state_.Q6_max_non_mec_prem = std::numeric_limits<double>::max();
+        return state_.Q6_max_non_mec_prem;
         }
 
     // We queue all material change events arising on the same day,
@@ -569,17 +610,19 @@ double Irc7702A::MaxNonMecPremium
         if(TestPeriodDur < TestPeriodLen)
             {
             HOPEFULLY(CumPmts <= CumSevenPP);
-            return RoundNonMecPrem(CumSevenPP - CumPmts);
+            state_.Q6_max_non_mec_prem = RoundNonMecPrem(CumSevenPP - CumPmts);
+            return state_.Q6_max_non_mec_prem;
             }
         else
             {
-            return MaxNecessaryPremium
+            state_.Q6_max_non_mec_prem = MaxNecessaryPremium
                 (a_DeemedCashValue
                 ,a_TargetPrem
                 ,a_LoadTarget
                 ,a_LoadExcess
                 ,a_CashValue
                 );
+            return state_.Q6_max_non_mec_prem;
             }
         }
     else
@@ -610,7 +653,8 @@ double Irc7702A::MaxNonMecPremium
                   )
                 ;
             }
-        return RoundNonMecPrem(g);
+        state_.Q6_max_non_mec_prem = RoundNonMecPrem(g);
+        return state_.Q6_max_non_mec_prem;
         }
 }
 
@@ -623,8 +667,13 @@ double Irc7702A::MaxNecessaryPremium
     ,double a_CashValue
     ) const
 {
+    state_.B4_deduced_target_premium = a_TargetPrem;
+    state_.B5_deduced_target_load    = a_LoadTarget;
+    state_.B6_deduced_excess_load    = a_LoadExcess;
     if(Ignore || IsMec || mce_gpt == DefnLifeIns)
         {
+        state_.Q1_max_nec_prem_net   = std::numeric_limits<double>::max();
+        state_.Q2_max_nec_prem_gross = std::numeric_limits<double>::max();
         return std::numeric_limits<double>::max();
         }
 
@@ -650,13 +699,15 @@ double Irc7702A::MaxNecessaryPremium
         ,a_LoadExcess
         );
 
-    return RoundNonMecPrem(GrossNecessaryPrem);
+    state_.Q1_max_nec_prem_net = NetNecessaryPrem;
+    state_.Q2_max_nec_prem_gross = RoundNonMecPrem(GrossNecessaryPrem);
+    return state_.Q2_max_nec_prem_gross;
 }
 
 //============================================================================
 // record and test monthly Pmts
 double Irc7702A::UpdatePmt7702A
-    (double // a_DeemedCashValue
+    (double a_DeemedCashValue
     ,double a_Payment
     ,bool   a_ThisPaymentIsUnnecessary
     ,double // a_TargetPrem
@@ -719,7 +770,10 @@ double Irc7702A::UpdatePmt7702A
                     ;
                 }
 */
-            return a_Payment;
+            state_.Q4_cum_px7    = CumSevenPP;
+            state_.Q5_cum_amt_pd = CumPmts;
+// Don't return before recording state_.
+//            return a_Payment;
             }
         }
 
@@ -730,6 +784,15 @@ double Irc7702A::UpdatePmt7702A
     if(mce_gpt == DefnLifeIns)
         {
         Pmts[TestPeriodDur] = a_Payment;
+//      state_.F0_nec_pm_bft       does not change here.
+//      state_.F1_nec_pm_ldb       does not change here.
+        state_.F2_nec_pm_amt_pd  = Pmts[TestPeriodDur];
+//      state_.F3_nec_pm_is_mc     does not change here.
+//      state_.F4_nec_pm_dcv       does not change here.
+//      state_.F5_nec_pm_px7       does not change here.
+        state_.F6_nec_pm_mec     = IsMec;
+        state_.Q4_cum_px7    = CumSevenPP;
+        state_.Q5_cum_amt_pd = CumPmts;
         return a_Payment;
         }
 
@@ -757,6 +820,7 @@ double Irc7702A::UpdatePmt7702A
     // If unnecessary premium was paid...
     if(a_ThisPaymentIsUnnecessary)
         {
+        LMI_ASSERT(mce_cvat == DefnLifeIns);
         UnnecPrem = a_Payment;
         UnnecPremPaid = true;
         // One school of thought deems any unnecessary premium to be a MatChg.
@@ -777,13 +841,39 @@ double Irc7702A::UpdatePmt7702A
                 );
 */
             }
+        // a_DeemedCashValue is used only for setting state_. It isn't
+        // changed by this function, because the caller might handle
+        // it in some special manner unrelated to 7702A calculations:
+        // for instance, rounding it piecewise for allocation among
+        // separate accounts.
+//      state_.H0_unnec_pm_bft      does not change here.
+//      state_.H1_unnec_pm_ldb      does not change here.
+        state_.H2_unnec_pm_amt_pd = Pmts[TestPeriodDur];
+        state_.H3_unnec_pm_is_mc  = IsMatChg;
+        state_.H4_unnec_pm_dcv    = a_DeemedCashValue;
+//      state_.H5_unnec_pm_px7      does not change here.
+        state_.H6_unnec_pm_mec    = IsMec;
         }
+    else
+        {
+//      state_.F0_nec_pm_bft       does not change here.
+//      state_.F1_nec_pm_ldb       does not change here.
+        state_.F2_nec_pm_amt_pd  = Pmts[TestPeriodDur];
+//      state_.F3_nec_pm_is_mc     does not change here.
+        state_.F4_nec_pm_dcv     = a_DeemedCashValue;
+//      state_.F5_nec_pm_px7       does not change here.
+        state_.F6_nec_pm_mec     = IsMec;
+        }
+
+    state_.Q4_cum_px7    = CumSevenPP;
+    state_.Q5_cum_amt_pd = CumPmts;
 
     return a_Payment;
 }
 
 //============================================================================
 // record and test monthly Bfts
+// This function always returns zero, so it shouldn't return anything.
 double Irc7702A::UpdateBft7702A
     (double // a_DeemedCashValue // TODO ?? Not used.
     ,double  a_NewDB
@@ -828,7 +918,22 @@ double Irc7702A::UpdateBft7702A
         }
 
     Bfts[TestPeriodDur] = current_bft;
-    if(current_bft < AssumedBft)
+    if(current_bft == AssumedBft)
+        {
+        return 0.0;
+        }
+
+    if(AssumedBft < current_bft)
+        {
+        state_.D0_incr_bft    = current_bft;
+//      state_.D1_incr_ldb      does not change here.
+//      state_.D2_incr_amt_pd   does not change here.
+//      state_.D3_incr_is_mc    may change below.
+//      state_.D4_incr_dcv      does not change here.
+//      state_.D5_incr_px7      does not change here.
+//      state_.D6_incr_mec      does not change here.
+        }
+    else
         {
         TestBftDecrease(current_bft);
         }
@@ -838,6 +943,20 @@ double Irc7702A::UpdateBft7702A
     bool is_material_change = false;
     // One school of thought treats any elective increase as a MatChg.
     // This code will also pick up SA increases due to certain option changes.
+    // TRICKY !! This is not the same criterion as
+    //   AssumedBft < current_bft
+    // used above. Suppose SA is initially $3M, is reduced to $1M
+    // after seven years (avoiding the reduction rule), and is then
+    // increased to $2M. Then:
+    //   $3M = AssumedBft
+    //   $1M = a_OldSA
+    //   $2M = a_NewSA
+    // and this code triggers a material change for that "increase",
+    // even though the new SA is less than that used last time 7PP
+    // was calculated (i.e., LDB, which is $3M throughout this
+    // example). Therefore, this assertion:
+    //   LMI_ASSERT(AssumedBft < current_bft);
+    // had to be suppressed below when a material change is noted.
     if(ElectiveIncrIsMatChg && a_OldSA < a_NewSA)
         {
         // Some adherents of that school however ignore SA increases
@@ -864,7 +983,10 @@ double Irc7702A::UpdateBft7702A
 
     if(is_material_change)
         {
+// Suppressed--see note above:
+//        LMI_ASSERT(AssumedBft < current_bft); // No decrease is a MC.
         IsMatChg = true;
+        state_.D3_incr_is_mc = true;
 /*
         RedressMatChg
             (a_DeemedCashValue
@@ -966,6 +1088,17 @@ void Irc7702A::TestBftDecrease(double a_NewBft)
         // because if we got here, the policy is a MEC.
         CumPmts = cum_prem;
         }
+
+    state_.E0_decr_bft    = a_NewBft;
+    state_.E1_decr_ldb    = LowestBft;
+//  state_.E2_decr_amt_pd   does not change here.
+//  state_.E3_decr_is_mc    does not change here.
+//  state_.E4_decr_dcv      does not change here.
+    state_.E5_decr_px7    = SevenPP;
+    state_.E6_decr_mec    = IsMec;
+
+    state_.Q4_cum_px7    = CumSevenPP;
+    state_.Q5_cum_amt_pd = CumPmts;
 }
 
 //============================================================================
@@ -991,6 +1124,8 @@ void Irc7702A::RedressMatChg
         {
         return;
         }
+
+    state_.Q3_cv_before_last_mc = a_CashValue;
 
     UnnecPremPaid = false;
 
@@ -1040,6 +1175,17 @@ void Irc7702A::RedressMatChg
         {
         IsMec = true;
         }
+
+//  state_.G0_do_mc_bft      does not change here.
+    state_.G1_do_mc_ldb    = LowestBft;
+//  state_.G2_do_mc_amt_pd   does not change here.
+    state_.G3_do_mc_is_mc  = false;
+    state_.G4_do_mc_dcv    = a_DeemedCashValue;
+    state_.G5_do_mc_px7    = SevenPP;
+    state_.G6_do_mc_mec    = IsMec;
+
+    state_.Q4_cum_px7    = CumSevenPP;
+    state_.Q5_cum_amt_pd = CumPmts;
 }
 
 //============================================================================
@@ -1066,7 +1212,8 @@ void Irc7702A::Determine7PP
 
     // Store new values for
     //  Saved7PPRate, SavedAVBeforeMatChg, SavedNecPrem, and SavedNSP
-    // iff 7pp recalculation due to material change.
+    // iff 7pp recalculation due to material change. (But how could
+    // a material change mutate 'Saved7PPRate'?)
     // But leave those values undisturbed if triggered by Bfts decrease.
     if(a_TriggeredByMatChg)
         {
