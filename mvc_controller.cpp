@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_controller.cpp,v 1.26 2009-04-06 18:44:26 chicares Exp $
+// $Id: mvc_controller.cpp,v 1.27 2009-07-17 13:41:55 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -629,6 +629,8 @@ void MvcController::UpdateCircumscription
 /// last_focused_window_ is not changed: to do so would serve no end,
 /// and to avoid doing so preserves the useful invariant that
 /// last_focused_window_ is the only window that may need validation.
+///
+/// The 'Help' button is treated the same way as the 'Cancel' button.
 
 void MvcController::UponChildFocus(wxChildFocusEvent& event)
 {
@@ -653,7 +655,10 @@ void MvcController::UponChildFocus(wxChildFocusEvent& event)
         return;
         }
 
-    if(wxID_CANCEL == new_focused_window->GetId())
+    if
+        (  wxID_CANCEL == new_focused_window->GetId()
+        || wxID_HELP   == new_focused_window->GetId()
+        )
         {
         return;
         }
