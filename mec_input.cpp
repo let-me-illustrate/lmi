@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_input.cpp,v 1.6 2009-07-17 12:32:50 chicares Exp $
+// $Id: mec_input.cpp,v 1.7 2009-07-17 13:04:56 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -427,13 +427,18 @@ void mec_input::DoHarmonize()
     External1035ExchangeAmount.maximum(maximum_1035);
     Internal1035ExchangeAmount.maximum(maximum_1035);
 
+    External1035ExchangeFromMec.allow (mce_yes, 0.0 != External1035ExchangeAmount);
+    External1035ExchangeFromMec.enable(         0.0 != External1035ExchangeAmount);
+    Internal1035ExchangeFromMec.allow (mce_yes, 0.0 != Internal1035ExchangeAmount);
+    Internal1035ExchangeFromMec.enable(         0.0 != Internal1035ExchangeAmount);
+
     // SOMEDAY !! Do this in class Input as well.
     bool mec_due_to_1035 =
-            mce_yes == External1035ExchangeFromMec && 0.0 != External1035ExchangeAmount
-        ||  mce_yes == Internal1035ExchangeFromMec && 0.0 != Internal1035ExchangeAmount
+            mce_yes == External1035ExchangeFromMec
+        ||  mce_yes == Internal1035ExchangeFromMec
         ;
-    InforceIsMec.allow(mce_no, !mec_due_to_1035);
-    InforceIsMec.enable(!mec_due_to_1035);
+    InforceIsMec.allow (mce_no, !mec_due_to_1035);
+    InforceIsMec.enable(        !mec_due_to_1035);
     bool non_mec = mce_no == InforceIsMec;
 
     InforceAccountValue     .enable(non_mec);
