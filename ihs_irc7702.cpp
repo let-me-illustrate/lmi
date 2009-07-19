@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702.cpp,v 1.24 2009-04-12 01:01:23 chicares Exp $
+// $Id: ihs_irc7702.cpp,v 1.25 2009-07-19 23:09:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -475,12 +475,18 @@ void Irc7702::InitCorridor()
     // TODO ?? Substandard: set last NSP to 1.0? ignore flats? set NSP[omega] to 1?
     // --better to ignore susbstandard
     CvatCorridor.resize(Length);
-    // CVAT NSP = M/D, so corridor factor = D/M
     // ET !! CvatCorridor = drop(CommFns[Opt1Int4Pct]->aD(), 1) / CommFns[Opt1Int4Pct]->kM();
+    std::vector<double> denominator(CommFns[Opt1Int4Pct]->kM());
+    std::transform
+        (denominator.begin()
+        ,denominator.end()
+        ,denominator.begin()
+        ,std::bind1st(std::plus<double>(), DEndt[Opt1Int4Pct])
+        );
     std::transform
         (CommFns[Opt1Int4Pct]->aD().begin()
         ,CommFns[Opt1Int4Pct]->aD().end() - 1
-        ,CommFns[Opt1Int4Pct]->kM().begin()
+        ,denominator.begin()
         ,CvatCorridor.begin()
         ,std::divides<double>()
         );
