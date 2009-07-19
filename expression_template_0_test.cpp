@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: expression_template_0_test.cpp,v 1.24 2008-12-27 02:56:40 chicares Exp $
+// $Id: expression_template_0_test.cpp,v 1.25 2009-07-19 01:03:11 chicares Exp $
 
 #if !defined __BORLANDC__
 #   define USE_UBLAS
@@ -316,12 +316,34 @@ void mete_ublas_typical()
 }
 #endif // defined USE_UBLAS
 
+// See comment in mete_pete_typical().
+//
+// operator^=() or operator<<=() would probably be better, but would
+// require changing the PETE sources, whereas the normally-undefined
+// macro PETE_ALLOW_SCALAR_SHIFT leaves operator<<() available without
+// any such change. But is this syntactic sugar sweet enough?
+
+template<typename T, typename V>
+std::vector<T>& operator<<(std::vector<T>& t, V v)
+{
+    return assign(t, v);
+}
+
 void mete_pete_typical()
 {
 // PETE doesn't support this:
 //    std::vector<double> pv8 = pv0 - pv1;
 // because it's impossible to intrude a copy-assignment operator into
 // the standard class template.
+//
+// With the operator<<() above, this:
+//    std::vector<double> pv7a(pv0.size()); assign(pv7a, pv0 - pv1);
+// could be written thus:
+//    std::vector<double> pv7b(pv0.size()); pv7b << pv0 - pv1;
+// but these still wouldn't work:
+//    std::vector<double> pv7c << pv0 - pv1;
+//    std::vector<double> pv7d(pv0 - pv1);
+
     std::vector<double> pv8(pv0.size()); assign(pv8, pv0 - pv1);
     std::vector<double> pv9(pv0.size()); assign(pv9, 3.14 - pv0);
     pv8 += pv0;
