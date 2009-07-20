@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1324 2009-07-17 15:21:42 chicares Exp $
+// $Id: ChangeLog,v 1.1325 2009-07-20 16:47:22 chicares Exp $
 
 MAINTENANCE
 
@@ -23124,4 +23124,30 @@ Mark a defect.
   mec_view.cpp
 Fix defect introduced 20090630T0437Z. A material change must be
 processed before accepting unnecessary premium.
+
+20090717T2339Z <gchicares@sbcglobal.net> [774]
+
+  mec_view.cpp
+Refine target-premium calculation.
+
+20090719T0103Z <gchicares@sbcglobal.net> [774]
+
+  expression_template_0_test.cpp
+Record an idea of controvertible merit.
+
+20090719T2309Z <gchicares@sbcglobal.net> [774]
+
+  ihs_irc7702.cpp
+Reflect endowment benefit in CVAT corridor factors.
+
+20090720T1510Z <gchicares@sbcglobal.net> [774]
+
+  mec_view.cpp
+Rename certain variables in preparation for a first-principles option.
+
+20090720T1647Z <gchicares@sbcglobal.net> [774]
+
+  mec_view.cpp
+Calculate 7702A factors from first principles--to be supported as a
+GUI option later.
 
