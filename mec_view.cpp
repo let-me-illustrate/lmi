@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_view.cpp,v 1.9 2009-07-17 23:39:18 chicares Exp $
+// $Id: mec_view.cpp,v 1.10 2009-07-20 15:10:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -331,20 +331,23 @@ void mec_view::Run()
         ,input_data().years_to_maturity()
         );
 
-    std::vector<double> CvatNspRates;
+    std::vector<double> tabular_Ax;
     for(int j = 0; j < input_data().years_to_maturity(); ++j)
         {
         LMI_ASSERT(0.0 < CvatCorridorFactors[j]);
-        CvatNspRates.push_back(1.0 / CvatCorridorFactors[j]);
+        tabular_Ax.push_back(1.0 / CvatCorridorFactors[j]);
         }
-    CvatNspRates.push_back(1.0);
+    tabular_Ax.push_back(1.0);
 
-    std::vector<double> SevenPayRates = actuarial_table_rates
+    std::vector<double> tabular_7Px = actuarial_table_rates
         (AddDataDir(product_data.GetTAMRA7PayFilename())
         ,static_cast<long int>(database.Query(DB_TAMRA7PayTable))
         ,input_data().issue_age()
         ,input_data().years_to_maturity()
         );
+
+    std::vector<double> const& chosen_Ax  = tabular_Ax ;
+    std::vector<double> const& chosen_7Px = tabular_7Px;
 
     Irc7702A z
         (0
@@ -354,8 +357,8 @@ void mec_view::Run()
         ,mce_allow_mec
         ,true  // Use table for 7pp: hardcoded for now.
         ,true  // Use table for NSP: hardcoded for now.
-        ,SevenPayRates
-        ,CvatNspRates
+        ,chosen_7Px
+        ,chosen_Ax
         ,RoundNonMecPrem
         );
 
@@ -395,10 +398,13 @@ void mec_view::Run()
         }
     else if(oe_modal_nonmec == target_premium_type)
         {
+        // When 7Px is calculated from first principles, presumably
+        // the target premium should be the same as for oe_modal_table
+        // with a 7Px table and a DB_TgtPremPolFee of zero.
         AnnualTargetPrem = round_max_premium
             (   target_premium_specamt
             *   epsilon_plus_one
-            *   SevenPayRates[target_year]
+            *   tabular_7Px[target_year]
             );
         }
     else if(oe_modal_table == target_premium_type)
