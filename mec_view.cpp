@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_view.cpp,v 1.10 2009-07-20 15:10:28 chicares Exp $
+// $Id: mec_view.cpp,v 1.11 2009-07-20 16:47:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,12 +35,16 @@
 #include "data_directory.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
+#include "et_vector.hpp"
 #include "handle_exceptions.hpp"
+#include "ihs_commfns.hpp"
 #include "ihs_irc7702a.hpp"
 #include "ihs_proddata.hpp"
 #include "materially_equal.hpp"
+#include "math_functors.hpp"
 #include "mec_document.hpp"
 #include "mec_input.hpp"
+#include "miscellany.hpp"            // each_equal()
 #include "mvc_controller.hpp"
 #include "oecumenic_enumerations.hpp"
 #include "safely_dereference_as.hpp"
@@ -345,6 +349,68 @@ void mec_view::Run()
         ,input_data().issue_age()
         ,input_data().years_to_maturity()
         );
+
+    std::vector<double> Mly7702qc = actuarial_table_rates
+        (AddDataDir(product_data.GetIRC7702Filename())
+        ,static_cast<long int>(database.Query(DB_IRC7702QTable))
+        ,input_data().issue_age()
+        ,input_data().years_to_maturity()
+        );
+    double const max_coi_rate = database.Query(DB_MaxMonthlyCoiRate);
+    // ET !! Mly7702qc = coi_rate_from_q(Mly7702qc, Database_->Query(DB_MaxMonthlyCoiRate));
+    assign(Mly7702qc, apply_binary(coi_rate_from_q<double>(), Mly7702qc, max_coi_rate));
+
+    std::vector<double> guar_int;
+    database.Query(guar_int, DB_GuarInt);
+
+    std::vector<double> spread
+        (input_data().years_to_maturity()
+        ,stratified.minimum_tiered_spread_for_7702()
+        );
+
+    // ET !! Mly7702iGlp = i_upper_12_over_12_from_i(max(.04, guar_int) - spread);
+    std::vector<double> Mly7702iGlp(input_data().years_to_maturity());
+    assign
+        (Mly7702iGlp
+        ,apply_unary
+            (i_upper_12_over_12_from_i<double>()
+            ,apply_binary(greater_of<double>(), 0.04, guar_int) - spread
+            )
+        );
+
+    std::vector<double> DBDiscountRate;
+    database.Query(DBDiscountRate, DB_NAARDiscount);
+    // ET !! Mly7702ig = -1.0 + 1.0 / DBDiscountRate;
+    std::vector<double> Mly7702ig(input_data().years_to_maturity());
+    assign(Mly7702ig, -1.0 + 1.0 / DBDiscountRate);
+
+    // Use zero if that's the guaranteed rate; else use the statutory rate.
+    // ET !! Use each_equal() here because PETE seems to interfere with
+    // the normal operator==(). Is that a PETE defect?
+    std::vector<double> const zero(input_data().years_to_maturity(), 0.0);
+    std::vector<double> naar_disc_rate =
+          each_equal(Mly7702ig.begin(), Mly7702ig.end(), 0.0)
+        ? zero
+        : Mly7702iGlp
+        ;
+    ULCommFns commfns
+        (Mly7702qc
+        ,Mly7702iGlp
+        ,naar_disc_rate
+        ,mce_option1
+        ,mce_monthly
+        ,mce_monthly
+        ,mce_monthly
+        );
+
+    std::vector<double> analytic_Ax(input_data().years_to_maturity());
+    analytic_Ax += (commfns.kM() + commfns.aD().back()) / commfns.aD();
+
+    std::vector<double> E7aN(commfns.aN());
+    E7aN.insert(E7aN.end(), 7, 0.0);
+    E7aN.erase(E7aN.begin(), 7 + E7aN.begin());
+    std::vector<double> analytic_7Px(input_data().years_to_maturity());
+    analytic_7Px += (commfns.kM() + commfns.aD().back()) / (commfns.aN() - E7aN);
 
     std::vector<double> const& chosen_Ax  = tabular_Ax ;
     std::vector<double> const& chosen_7Px = tabular_7Px;
