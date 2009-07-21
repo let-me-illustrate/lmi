@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_view.cpp,v 1.11 2009-07-20 16:47:22 chicares Exp $
+// $Id: mec_view.cpp,v 1.12 2009-07-21 17:59:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -328,7 +328,7 @@ void mec_view::Run()
         ; // Do nothing: 'TargetPremiumRates' won't be used.
         }
 
-    std::vector<double> CvatCorridorFactors = actuarial_table_rates
+    std::vector<double> const CvatCorridorFactors = actuarial_table_rates
         (AddDataDir(product_data.GetCorridorFilename())
         ,static_cast<long int>(database.Query(DB_CorridorTable))
         ,input_data().issue_age()
@@ -343,7 +343,7 @@ void mec_view::Run()
         }
     tabular_Ax.push_back(1.0);
 
-    std::vector<double> tabular_7Px = actuarial_table_rates
+    std::vector<double> const tabular_7Px = actuarial_table_rates
         (AddDataDir(product_data.GetTAMRA7PayFilename())
         ,static_cast<long int>(database.Query(DB_TAMRA7PayTable))
         ,input_data().issue_age()
@@ -363,7 +363,7 @@ void mec_view::Run()
     std::vector<double> guar_int;
     database.Query(guar_int, DB_GuarInt);
 
-    std::vector<double> spread
+    std::vector<double> const spread
         (input_data().years_to_maturity()
         ,stratified.minimum_tiered_spread_for_7702()
         );
@@ -388,7 +388,7 @@ void mec_view::Run()
     // ET !! Use each_equal() here because PETE seems to interfere with
     // the normal operator==(). Is that a PETE defect?
     std::vector<double> const zero(input_data().years_to_maturity(), 0.0);
-    std::vector<double> naar_disc_rate =
+    std::vector<double> const& naar_disc_rate =
           each_equal(Mly7702ig.begin(), Mly7702ig.end(), 0.0)
         ? zero
         : Mly7702iGlp
@@ -451,9 +451,9 @@ void mec_view::Run()
         ;
 
     // TODO ?? This should be an input field.
-    double target_premium_specamt = input_data().BenefitHistoryRealized()[0];
+    double const target_premium_specamt = input_data().BenefitHistoryRealized()[0];
     double AnnualTargetPrem = 1000000000.0; // No higher premium is anticipated.
-    int target_year =
+    int const target_year =
         database.Query(DB_TgtPmFixedAtIssue)
         ? 0
         : input_data().inforce_year()
@@ -490,7 +490,7 @@ void mec_view::Run()
             ;
         }
 
-    double premium_tax_load = lowest_premium_tax_load
+    double const premium_tax_load = lowest_premium_tax_load
         (database
         ,stratified
         ,StateOfJurisdiction
@@ -509,8 +509,8 @@ void mec_view::Run()
     database.Query(excess_premium_load, DB_CurrPremLoadExc);
     database.Query(dac_tax_load       , DB_DACTaxPremLoad);
 
-    double LoadTarget = target_sales_load[InforceYear] + target_premium_load[InforceYear] + dac_tax_load[InforceYear] + premium_tax_load;
-    double LoadExcess = excess_sales_load[InforceYear] + excess_premium_load[InforceYear] + dac_tax_load[InforceYear] + premium_tax_load;
+    double const LoadTarget = target_sales_load[InforceYear] + target_premium_load[InforceYear] + dac_tax_load[InforceYear] + premium_tax_load;
+    double const LoadExcess = excess_sales_load[InforceYear] + excess_premium_load[InforceYear] + dac_tax_load[InforceYear] + premium_tax_load;
 
     std::ostringstream oss;
 
@@ -528,9 +528,9 @@ void mec_view::Run()
     oss << Comments << "<br>\n";
 
     LMI_ASSERT(static_cast<unsigned int>(InforceContractYear) < input_data().BenefitHistoryRealized().size());
-    double old_benefit_amount = input_data().BenefitHistoryRealized()[InforceContractYear];
+    double const old_benefit_amount = input_data().BenefitHistoryRealized()[InforceContractYear];
 
-    double total_1035_amount = TieredGrossToNet
+    double const total_1035_amount = TieredGrossToNet
         (External1035ExchangeAmount + Internal1035ExchangeAmount
         ,AnnualTargetPrem
         ,LoadTarget
@@ -565,7 +565,7 @@ void mec_view::Run()
         {
         kludge_account_value = InforceDcv; // TODO ?? Why?
         }
-    double max_necessary_premium = z.MaxNecessaryPremium
+    double const max_necessary_premium = z.MaxNecessaryPremium
         (InforceDcv
         ,AnnualTargetPrem
         ,LoadTarget
@@ -579,8 +579,8 @@ void mec_view::Run()
         ,LoadExcess
         ,kludge_account_value
         );
-    double necessary_premium = std::min(Payment, max_necessary_premium);
-    double unnecessary_premium = material_difference(Payment, necessary_premium);
+    double const necessary_premium = std::min(Payment, max_necessary_premium);
+    double const unnecessary_premium = material_difference(Payment, necessary_premium);
 
     if(!z.IsMecAlready() && 0.0 != necessary_premium)
         {
