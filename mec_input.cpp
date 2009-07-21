@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_input.cpp,v 1.7 2009-07-17 13:04:56 chicares Exp $
+// $Id: mec_input.cpp,v 1.8 2009-07-21 20:13:10 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -116,15 +116,15 @@ mec_input::mec_input()
 //    ,InforceAvBeforeLastMc            ("")
 //    ,InforceContractYear              ("")
 //    ,InforceContractMonth             ("")
-//    ,InforceLeastDeathBenefit         ("")
+    ,InforceLeastDeathBenefit         ("1000000")
     ,StateOfJurisdiction              ("CT")
     ,FlatExtra                        ("0")
     ,PaymentHistory                   ("0")
-    ,BenefitHistory                   ("0")
+    ,BenefitHistory                   ("1000000")
 //    ,DeprecatedUseDOB                 ("")
 //    ,EffectiveDateToday               ("")
     ,Payment                          ("0")
-    ,BenefitAmount                    ("0")
+    ,BenefitAmount                    ("1000000")
 {
     AscribeMembers();
     DoAdaptExternalities(); // Initialize database, e.g.
