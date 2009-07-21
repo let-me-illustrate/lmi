@@ -24,7 +24,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: mec.xrc,v 1.1 2009-06-27 17:47:39 chicares Exp $
+    $Id: mec.xrc,v 1.2 2009-07-21 18:20:32 chicares Exp $
 -->
 
 <object class="wxPanel" name="plan_mec_panel">
@@ -233,8 +233,9 @@ demonstrate a defect in the wx library. See
                         <growablecols>1</growablecols>
                         <object class="sizeritem">
                             <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <border>4</border>
                             <object class="wxStaticText">
-                                <label>Substandard table </label>
+                                <label>Substandard table</label>
                             </object>
                         </object>
                         <object class="sizeritem">
@@ -253,8 +254,9 @@ demonstrate a defect in the wx library. See
                         <growablecols>1</growablecols>
                         <object class="sizeritem">
                             <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <border>4</border>
                             <object class="wxStaticText">
-                                <label>Flat extra </label>
+                                <label>Flat extra</label>
                             </object>
                         </object>
                         <object class="sizeritem">
@@ -315,8 +317,9 @@ here, but it looks weird if we don't make this look like its siblings.
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
                                     <object class="wxStaticText">
-                                        <label>Effective date </label>
+                                        <label>Effective date</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -330,7 +333,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
-                                        <label>Birthdate overrides issue age </label>
+                                        <label>Birthdate overrides issue age</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -347,8 +350,9 @@ here, but it looks weird if we don't make this look like its siblings.
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
                                     <object class="wxStaticText">
-                                        <label>Birthdate </label>
+                                        <label>Birthdate</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -360,8 +364,9 @@ here, but it looks weird if we don't make this look like its siblings.
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
                                     <object class="wxStaticText">
-                                        <label>Issue age </label>
+                                        <label>Issue age</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -373,8 +378,9 @@ here, but it looks weird if we don't make this look like its siblings.
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
                                     <object class="wxStaticText">
-                                        <label>State of jurisdiction </label>
+                                        <label>State of jurisdiction</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -726,8 +732,8 @@ here, but it looks weird if we don't make this look like its siblings.
                 <growablecols>0</growablecols>
                 <growablerows>0</growablerows>
                 <object class="sizeritem">
-                    <border>4</border>
                     <flag>wxGROW|wxRIGHT</flag>
+                    <border>4</border>
                     <object class="wxStaticText" name="diagnostics">
                         <style>wxSUNKEN_BORDER|wxST_NO_AUTORESIZE</style>
                         <label>[diagnostics]</label>
