@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_input.cpp,v 1.9 2009-07-22 00:51:22 chicares Exp $
+// $Id: mec_input.cpp,v 1.10 2009-07-22 18:53:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -419,7 +419,7 @@ void mec_input::DoHarmonize()
         );
 
     double maximum_1035 =
-        InforceAsOfDate == EffectiveDate
+          InforceAsOfDate == EffectiveDate
         ? std::numeric_limits<double>::max()
         : 0.0
         ;
@@ -439,6 +439,14 @@ void mec_input::DoHarmonize()
     InforceIsMec.allow (mce_no, !mec_due_to_1035);
     InforceIsMec.enable(        !mec_due_to_1035);
     bool non_mec = mce_no == InforceIsMec;
+
+    double maximum_7702A_csv_at_issue =
+          InforceAsOfDate == EffectiveDate
+        ? 0.0
+        : std::numeric_limits<double>::max()
+        ;
+    InforceAccountValue.maximum(maximum_7702A_csv_at_issue);
+    InforceDcv         .maximum(maximum_7702A_csv_at_issue);
 
     InforceTargetSpecifiedAmount.enable(non_mec);
     InforceAccountValue         .enable(non_mec);
