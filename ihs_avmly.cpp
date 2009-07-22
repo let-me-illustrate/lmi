@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.125 2009-04-15 02:05:23 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.126 2009-07-22 18:52:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -141,6 +141,10 @@ void AccountValue::DoMonthDR()
     double kludge_account_value = std::max(TotalAccountValue(), HoneymoonValue);
     if(0 == Year && 0 == Month)
         {
+        // This special case was apparently intended for 1035
+        // exchanges, but now seems unnecessary because this
+        // assertion never fires:
+        //   LMI_ASSERT(kludge_account_value == Dcv);
         kludge_account_value = Dcv;
         }
     kludge_account_value = std::max
