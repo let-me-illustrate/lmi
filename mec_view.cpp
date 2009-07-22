@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_view.cpp,v 1.13 2009-07-22 00:51:22 chicares Exp $
+// $Id: mec_view.cpp,v 1.14 2009-07-22 18:54:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -450,7 +450,7 @@ void mec_view::Run()
 
     double AnnualTargetPrem = 1000000000.0; // No higher premium is anticipated.
     int const target_year =
-        database.Query(DB_TgtPmFixedAtIssue)
+          database.Query(DB_TgtPmFixedAtIssue)
         ? 0
         : input_data().inforce_year()
         ;
@@ -534,13 +534,12 @@ void mec_view::Run()
         );
     if(0.0 != total_1035_amount)
         {
-        LMI_ASSERT(0 == InforceYear );
-        LMI_ASSERT(0 == InforceMonth);
         z.Update1035Exch7702A
             (InforceDcv
             ,total_1035_amount
             ,old_benefit_amount
             );
+        InforceAccountValue = InforceDcv;
         }
 
     if(BenefitAmount != old_benefit_amount)
@@ -556,24 +555,19 @@ void mec_view::Run()
             );
         }
 
-    double kludge_account_value = InforceAccountValue;
-    if(0 == InforceYear && 0 == InforceMonth)
-        {
-        kludge_account_value = InforceDcv; // TODO ?? Why?
-        }
     double const max_necessary_premium = z.MaxNecessaryPremium
         (InforceDcv
         ,AnnualTargetPrem
         ,LoadTarget
         ,LoadExcess
-        ,kludge_account_value
+        ,InforceAccountValue
         );
     z.MaxNonMecPremium
         (InforceDcv
         ,AnnualTargetPrem
         ,LoadTarget
         ,LoadExcess
-        ,kludge_account_value
+        ,InforceAccountValue
         );
     double const necessary_premium = std::min(Payment, max_necessary_premium);
     double const unnecessary_premium = material_difference(Payment, necessary_premium);
@@ -584,10 +578,10 @@ void mec_view::Run()
             (InforceDcv
             ,necessary_premium
             ,false
-            ,AnnualTargetPrem     // Unused.
-            ,LoadTarget           // Unused.
-            ,LoadExcess           // Unused.
-            ,kludge_account_value // Unused.
+            ,AnnualTargetPrem    // Unused.
+            ,LoadTarget          // Unused.
+            ,LoadExcess          // Unused.
+            ,InforceAccountValue // Unused.
             );
         }
 
@@ -611,10 +605,10 @@ void mec_view::Run()
             (InforceDcv
             ,unnecessary_premium
             ,true
-            ,AnnualTargetPrem     // Unused.
-            ,LoadTarget           // Unused.
-            ,LoadExcess           // Unused.
-            ,kludge_account_value // Unused.
+            ,AnnualTargetPrem    // Unused.
+            ,LoadTarget          // Unused.
+            ,LoadExcess          // Unused.
+            ,InforceAccountValue // Unused.
             );
         }
 
