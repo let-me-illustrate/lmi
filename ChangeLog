@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1326 2009-07-22 00:51:22 chicares Exp $
+// $Id: ChangeLog,v 1.1327 2009-07-22 18:54:25 chicares Exp $
 
 MAINTENANCE
 
@@ -23177,4 +23177,26 @@ Add [remove] needed [unneeded] input fields. Later, in class Input:
   - InforceSevenPayPremium       [remove...or use for validation]
 and let the product database indicate whether 7702A factors are to be
 calculated or looked up.
+
+20090722T1851Z <gchicares@sbcglobal.net> [772]
+
+  workhorse.make
+Filter '1e-15' as well as '1e-015'.
+
+20090722T1852Z <gchicares@sbcglobal.net> [772]
+
+  ihs_avmly.cpp
+Document an apparently-superfluous workaround. It's documented rather
+than removed today because adding an assertion changes some regression
+test results by something on the order of one ulp.
+
+20090722T1853Z <gchicares@sbcglobal.net> [772]
+
+  mec_input.cpp
+Forbid nonzero DCV and 7702A "CSV" at issue.
+
+20090722T1854Z <gchicares@sbcglobal.net> [771]
+
+  mec_view.cpp
+Remove a confusing workaround.
 
