@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.150 2009-05-09 22:56:36 chicares Exp $
+# $Id: workhorse.make,v 1.151 2009-07-22 18:51:36 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -1172,7 +1172,7 @@ system_test: install
 	      | $(SED) -e ';/Summary/!d' -e "s/^ /$$z/"; \
 	    done > $(system_test_analysis);
 	@-< $(system_test_analysis) $(SED) \
-	  -e ';/rel err.*e-01[5-9]/d' \
+	  -e ';/rel err.*e-0*1[5-9]/d' \
 	  -e ';/abs.*0\.00.*rel/d' \
 	  -e ';/abs diff: 0 /d'
 	@-$(DIFF) \
