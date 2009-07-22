@@ -24,7 +24,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: mec.xrc,v 1.2 2009-07-21 18:20:32 chicares Exp $
+    $Id: mec.xrc,v 1.3 2009-07-22 00:51:22 chicares Exp $
 -->
 
 <object class="wxPanel" name="plan_mec_panel">
@@ -61,6 +61,14 @@ demonstrate a defect in the wx library. See
   https://savannah.nongnu.org/bugs/?func=detailitem&item_id=13415
 -->
                         <style>wxLB_SINGLE</style>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALL</flag>
+                    <border>4</border>
+                    <object class="wxCheckBox" name="Use7702ATables">
+                        <help>For net single premium and seven-pay premium, use table lookup instead of first principles</help>
+                        <label>Use Ax and 7Px tables</label>
                     </object>
                 </object>
             </object>
@@ -300,25 +308,6 @@ demonstrate a defect in the wx library. See
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
-                                        <label>Effective today</label>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <object class="wxCheckBox" name="EffectiveDateToday">
-                                        <help>Synchronize effective date with current date</help>
-<!--
-It's unusual to place a checkbox's "label" on the left, as is simulated
-here, but it looks weird if we don't make this look like its siblings.
--->
-                                        <size>80,20</size>
-                                        <value>0</value>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <border>4</border>
-                                    <object class="wxStaticText">
                                         <label>Effective date</label>
                                     </object>
                                 </object>
@@ -457,13 +446,13 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
-                                        <label>7PP</label>
+                                        <label>Target-premium SA</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <object class="wxTextCtrl" name="InforceSevenPayPremium">
-                                        <help>Inforce seven pay premium</help>
+                                    <object class="wxTextCtrl" name="InforceTargetSpecifiedAmount">
+                                        <help>Target-premium specified amount</help>
                                         <size>80,-1</size>
                                         <value>0</value>
                                     </object>
