@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_input.hpp,v 1.3 2009-06-30 04:36:12 chicares Exp $
+// $Id: mec_input.hpp,v 1.4 2009-07-22 00:51:22 chicares Exp $
 
 #ifndef mec_input_hpp
 #define mec_input_hpp
@@ -59,6 +59,18 @@ typedef datum_string datum_sequence;
 /// This class is the Model of the MVC framework for MEC testing.
 ///
 /// See general notes on class Input.
+///
+/// These variables:
+///   InforceContractYear
+///   InforceYear
+/// are dependent, but useful. These:
+///   DeprecatedUseDOB
+///   IssueAge
+/// are superfluous, but convenient. These:
+///   InforceContractMonth
+///   InforceMonth
+/// are just excess baggage that can be eliminated once the 7702A
+/// calculations are rewritten.
 
 class LMI_SO mec_input
     :virtual private obstruct_slicing<mec_input>
@@ -141,6 +153,7 @@ class LMI_SO mec_input
     mcenum_state             CachedStateOfJurisdiction_  ;
     int                      GleanedMaturityAge_         ;
 
+    mce_yes_or_no            Use7702ATables                  ;
     tnr_issue_age            IssueAge                        ;
     mce_gender               Gender                          ;
     mce_smoking              Smoking                         ;
@@ -159,9 +172,9 @@ class LMI_SO mec_input
     datum_string             Comments                        ;
     tnr_duration             InforceYear                     ;
     tnr_month                InforceMonth                    ;
+    tnr_nonnegative_double   InforceTargetSpecifiedAmount    ;
     tnr_nonnegative_double   InforceAccountValue             ;
     tnr_date                 InforceAsOfDate                 ;
-    tnr_nonnegative_double   InforceSevenPayPremium          ;
     mce_yes_or_no            InforceIsMec                    ;
     tnr_date                 LastMaterialChangeDate          ;
     tnr_nonnegative_double   InforceDcv                      ;
@@ -174,7 +187,6 @@ class LMI_SO mec_input
     datum_sequence           PaymentHistory                  ;
     datum_sequence           BenefitHistory                  ;
     mce_yes_or_no            DeprecatedUseDOB                ;
-    mce_yes_or_no            EffectiveDateToday              ;
     tnr_nonnegative_double   Payment                         ;
     tnr_nonnegative_double   BenefitAmount                   ;
 

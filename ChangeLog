@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1325 2009-07-20 16:47:22 chicares Exp $
+// $Id: ChangeLog,v 1.1326 2009-07-22 00:51:22 chicares Exp $
 
 MAINTENANCE
 
@@ -23150,4 +23150,31 @@ Rename certain variables in preparation for a first-principles option.
   mec_view.cpp
 Calculate 7702A factors from first principles--to be supported as a
 GUI option later.
+
+20090721T1759Z <gchicares@sbcglobal.net> [774]
+
+  mec_view.cpp
+Improve const correctness.
+
+20090721T1820Z <gchicares@sbcglobal.net> [774]
+
+  mec.xrc
+Regularize border-tag usage.
+
+20090721T2013Z <gchicares@sbcglobal.net> [774]
+
+  mec_input.cpp
+Improve defaults.
+
+20090722T0051Z <gchicares@sbcglobal.net> [772]
+
+  mec.xrc
+  mec_input.cpp
+  mec_input.hpp
+  mec_view.cpp
+Add [remove] needed [unneeded] input fields. Later, in class Input:
+  + InforceTargetSpecifiedAmount [add needed field]
+  - InforceSevenPayPremium       [remove...or use for validation]
+and let the product database indicate whether 7702A factors are to be
+calculated or looked up.
 
