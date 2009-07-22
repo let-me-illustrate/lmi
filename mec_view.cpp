@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_view.cpp,v 1.12 2009-07-21 17:59:17 chicares Exp $
+// $Id: mec_view.cpp,v 1.13 2009-07-22 00:51:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -254,44 +254,42 @@ void mec_view::Run()
 {
     input_data().RealizeAllSequenceInput();
 
-//  int                         IssueAge                    = exact_cast<tnr_issue_age           >(input_data()["IssueAge"                   ])->value();
-    mcenum_gender               Gender                      = exact_cast<mce_gender              >(input_data()["Gender"                     ])->value();
-    mcenum_smoking              Smoking                     = exact_cast<mce_smoking             >(input_data()["Smoking"                    ])->value();
-    mcenum_class                UnderwritingClass           = exact_cast<mce_class               >(input_data()["UnderwritingClass"          ])->value();
-//  calendar_date               DateOfBirth                 = exact_cast<tnr_date                >(input_data()["DateOfBirth"                ])->value();
-//  mcenum_table_rating         SubstandardTable            = exact_cast<mce_table_rating        >(input_data()["SubstandardTable"           ])->value();
-    std::string                 ProductName                 = exact_cast<ce_product_name         >(input_data()["ProductName"                ])->value();
-    double                      External1035ExchangeAmount  = exact_cast<tnr_nonnegative_double  >(input_data()["External1035ExchangeAmount" ])->value();
-//  bool                        External1035ExchangeFromMec = exact_cast<mce_yes_or_no           >(input_data()["External1035ExchangeFromMec"])->value();
-    double                      Internal1035ExchangeAmount  = exact_cast<tnr_nonnegative_double  >(input_data()["Internal1035ExchangeAmount" ])->value();
-//  bool                        Internal1035ExchangeFromMec = exact_cast<mce_yes_or_no           >(input_data()["Internal1035ExchangeFromMec"])->value();
-//  calendar_date               EffectiveDate               = exact_cast<tnr_date                >(input_data()["EffectiveDate"              ])->value();
-    mcenum_defn_life_ins        DefinitionOfLifeInsurance   = exact_cast<mce_defn_life_ins       >(input_data()["DefinitionOfLifeInsurance"  ])->value();
-    mcenum_defn_material_change DefinitionOfMaterialChange  = exact_cast<mce_defn_material_change>(input_data()["DefinitionOfMaterialChange" ])->value();
-    mcenum_uw_basis             GroupUnderwritingType       = exact_cast<mce_uw_basis            >(input_data()["GroupUnderwritingType"      ])->value();
-    std::string                 Comments                    = exact_cast<datum_string            >(input_data()["Comments"                   ])->value();
-    int                         InforceYear                 = exact_cast<tnr_duration            >(input_data()["InforceYear"                ])->value();
-    int                         InforceMonth                = exact_cast<tnr_month               >(input_data()["InforceMonth"               ])->value();
-    double                      InforceAccountValue         = exact_cast<tnr_nonnegative_double  >(input_data()["InforceAccountValue"        ])->value();
-//  calendar_date               InforceAsOfDate             = exact_cast<tnr_date                >(input_data()["InforceAsOfDate"            ])->value();
-    double                      InforceSevenPayPremium      = exact_cast<tnr_nonnegative_double  >(input_data()["InforceSevenPayPremium"     ])->value();
-    bool                        InforceIsMec                = exact_cast<mce_yes_or_no           >(input_data()["InforceIsMec"               ])->value();
-    calendar_date               LastMaterialChangeDate      = exact_cast<tnr_date                >(input_data()["LastMaterialChangeDate"     ])->value();
-    double                      InforceDcv                  = exact_cast<tnr_nonnegative_double  >(input_data()["InforceDcv"                 ])->value();
-    double                      InforceAvBeforeLastMc       = exact_cast<tnr_nonnegative_double  >(input_data()["InforceAvBeforeLastMc"      ])->value();
-    int                         InforceContractYear         = exact_cast<tnr_duration            >(input_data()["InforceContractYear"        ])->value();
-    int                         InforceContractMonth        = exact_cast<tnr_month               >(input_data()["InforceContractMonth"       ])->value();
-    double                      InforceLeastDeathBenefit    = exact_cast<tnr_nonnegative_double  >(input_data()["InforceLeastDeathBenefit"   ])->value();
-    mcenum_state                StateOfJurisdiction         = exact_cast<mce_state               >(input_data()["StateOfJurisdiction"        ])->value();
-//  std::string                 FlatExtra                   = exact_cast<datum_sequence          >(input_data()["FlatExtra"                  ])->value();
-//  std::string                 PaymentHistory              = exact_cast<datum_sequence          >(input_data()["PaymentHistory"             ])->value();
-//  std::string                 BenefitHistory              = exact_cast<datum_sequence          >(input_data()["BenefitHistory"             ])->value();
-//  bool                        DeprecatedUseDOB            = exact_cast<mce_yes_or_no           >(input_data()["DeprecatedUseDOB"           ])->value();
-//  bool                        EffectiveDateToday          = exact_cast<mce_yes_or_no           >(input_data()["EffectiveDateToday"         ])->value();
-    double                      Payment                     = exact_cast<tnr_nonnegative_double  >(input_data()["Payment"                    ])->value();
-    double                      BenefitAmount               = exact_cast<tnr_nonnegative_double  >(input_data()["BenefitAmount"              ])->value();
-
-(void)InforceSevenPayPremium    ; // TODO ?? Unused?
+    bool                        Use7702ATables               = exact_cast<mce_yes_or_no           >(input_data()["Use7702ATables"              ])->value();
+//  int                         IssueAge                     = exact_cast<tnr_issue_age           >(input_data()["IssueAge"                    ])->value();
+    mcenum_gender               Gender                       = exact_cast<mce_gender              >(input_data()["Gender"                      ])->value();
+    mcenum_smoking              Smoking                      = exact_cast<mce_smoking             >(input_data()["Smoking"                     ])->value();
+    mcenum_class                UnderwritingClass            = exact_cast<mce_class               >(input_data()["UnderwritingClass"           ])->value();
+//  calendar_date               DateOfBirth                  = exact_cast<tnr_date                >(input_data()["DateOfBirth"                 ])->value();
+//  mcenum_table_rating         SubstandardTable             = exact_cast<mce_table_rating        >(input_data()["SubstandardTable"            ])->value();
+    std::string                 ProductName                  = exact_cast<ce_product_name         >(input_data()["ProductName"                 ])->value();
+    double                      External1035ExchangeAmount   = exact_cast<tnr_nonnegative_double  >(input_data()["External1035ExchangeAmount"  ])->value();
+//  bool                        External1035ExchangeFromMec  = exact_cast<mce_yes_or_no           >(input_data()["External1035ExchangeFromMec" ])->value();
+    double                      Internal1035ExchangeAmount   = exact_cast<tnr_nonnegative_double  >(input_data()["Internal1035ExchangeAmount"  ])->value();
+//  bool                        Internal1035ExchangeFromMec  = exact_cast<mce_yes_or_no           >(input_data()["Internal1035ExchangeFromMec" ])->value();
+//  calendar_date               EffectiveDate                = exact_cast<tnr_date                >(input_data()["EffectiveDate"               ])->value();
+    mcenum_defn_life_ins        DefinitionOfLifeInsurance    = exact_cast<mce_defn_life_ins       >(input_data()["DefinitionOfLifeInsurance"   ])->value();
+    mcenum_defn_material_change DefinitionOfMaterialChange   = exact_cast<mce_defn_material_change>(input_data()["DefinitionOfMaterialChange"  ])->value();
+    mcenum_uw_basis             GroupUnderwritingType        = exact_cast<mce_uw_basis            >(input_data()["GroupUnderwritingType"       ])->value();
+    std::string                 Comments                     = exact_cast<datum_string            >(input_data()["Comments"                    ])->value();
+    int                         InforceYear                  = exact_cast<tnr_duration            >(input_data()["InforceYear"                 ])->value();
+    int                         InforceMonth                 = exact_cast<tnr_month               >(input_data()["InforceMonth"                ])->value();
+    double                      InforceTargetSpecifiedAmount = exact_cast<tnr_nonnegative_double  >(input_data()["InforceTargetSpecifiedAmount"])->value();
+    double                      InforceAccountValue          = exact_cast<tnr_nonnegative_double  >(input_data()["InforceAccountValue"         ])->value();
+//  calendar_date               InforceAsOfDate              = exact_cast<tnr_date                >(input_data()["InforceAsOfDate"             ])->value();
+    bool                        InforceIsMec                 = exact_cast<mce_yes_or_no           >(input_data()["InforceIsMec"                ])->value();
+    calendar_date               LastMaterialChangeDate       = exact_cast<tnr_date                >(input_data()["LastMaterialChangeDate"      ])->value();
+    double                      InforceDcv                   = exact_cast<tnr_nonnegative_double  >(input_data()["InforceDcv"                  ])->value();
+    double                      InforceAvBeforeLastMc        = exact_cast<tnr_nonnegative_double  >(input_data()["InforceAvBeforeLastMc"       ])->value();
+    int                         InforceContractYear          = exact_cast<tnr_duration            >(input_data()["InforceContractYear"         ])->value();
+    int                         InforceContractMonth         = exact_cast<tnr_month               >(input_data()["InforceContractMonth"        ])->value();
+    double                      InforceLeastDeathBenefit     = exact_cast<tnr_nonnegative_double  >(input_data()["InforceLeastDeathBenefit"    ])->value();
+    mcenum_state                StateOfJurisdiction          = exact_cast<mce_state               >(input_data()["StateOfJurisdiction"         ])->value();
+//  std::string                 FlatExtra                    = exact_cast<datum_sequence          >(input_data()["FlatExtra"                   ])->value();
+//  std::string                 PaymentHistory               = exact_cast<datum_sequence          >(input_data()["PaymentHistory"              ])->value();
+//  std::string                 BenefitHistory               = exact_cast<datum_sequence          >(input_data()["BenefitHistory"              ])->value();
+//  bool                        DeprecatedUseDOB             = exact_cast<mce_yes_or_no           >(input_data()["DeprecatedUseDOB"            ])->value();
+    double                      Payment                      = exact_cast<tnr_nonnegative_double  >(input_data()["Payment"                     ])->value();
+    double                      BenefitAmount                = exact_cast<tnr_nonnegative_double  >(input_data()["BenefitAmount"               ])->value();
 
     TProductData product_data(ProductName);
 
@@ -412,8 +410,8 @@ void mec_view::Run()
     std::vector<double> analytic_7Px(input_data().years_to_maturity());
     analytic_7Px += (commfns.kM() + commfns.aD().back()) / (commfns.aN() - E7aN);
 
-    std::vector<double> const& chosen_Ax  = tabular_Ax ;
-    std::vector<double> const& chosen_7Px = tabular_7Px;
+    std::vector<double> const& chosen_Ax  = Use7702ATables ? tabular_Ax  : analytic_Ax ;
+    std::vector<double> const& chosen_7Px = Use7702ATables ? tabular_7Px : analytic_7Px;
 
     Irc7702A z
         (0
@@ -450,8 +448,6 @@ void mec_view::Run()
         1.0L + std::numeric_limits<long double>::epsilon()
         ;
 
-    // TODO ?? This should be an input field.
-    double const target_premium_specamt = input_data().BenefitHistoryRealized()[0];
     double AnnualTargetPrem = 1000000000.0; // No higher premium is anticipated.
     int const target_year =
         database.Query(DB_TgtPmFixedAtIssue)
@@ -468,7 +464,7 @@ void mec_view::Run()
         // the target premium should be the same as for oe_modal_table
         // with a 7Px table and a DB_TgtPremPolFee of zero.
         AnnualTargetPrem = round_max_premium
-            (   target_premium_specamt
+            (   InforceTargetSpecifiedAmount
             *   epsilon_plus_one
             *   tabular_7Px[target_year]
             );
@@ -477,7 +473,7 @@ void mec_view::Run()
         {
         AnnualTargetPrem = round_max_premium
             (   database.Query(DB_TgtPremPolFee)
-            +       target_premium_specamt
+            +       InforceTargetSpecifiedAmount
                 *   epsilon_plus_one
                 *   TargetPremiumRates[target_year]
             );

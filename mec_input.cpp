@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_input.cpp,v 1.8 2009-07-21 20:13:10 chicares Exp $
+// $Id: mec_input.cpp,v 1.9 2009-07-22 00:51:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -55,7 +55,8 @@ namespace
 bool is_detritus(std::string const& s)
 {
     static std::string const a[] =
-        {"Remove this string when adding the first removed entity."
+        {"EffectiveDateToday"
+        ,"InforceSevenPayPremium"
         };
     static std::vector<std::string> const v(a, a + lmi_array_size(a));
     return v.end() != std::find(v.begin(), v.end(), s);
@@ -89,7 +90,8 @@ std::string realize_sequence_string
 /// UDT defaults are presently appropriate.
 
 mec_input::mec_input()
-    :IssueAge                         ("45")
+    :Use7702ATables                   ("Yes")
+    ,IssueAge                         ("45")
     ,Gender                           ("Male")
     ,Smoking                          ("Nonsmoker")
     ,UnderwritingClass                ("Standard")
@@ -107,9 +109,9 @@ mec_input::mec_input()
 //    ,Comments                         ("")
 //    ,InforceYear                      ("")
 //    ,InforceMonth                     ("")
+    ,InforceTargetSpecifiedAmount     ("1000000")
 //    ,InforceAccountValue              ("")
 //    ,InforceAsOfDate                  ("")
-//    ,InforceSevenPayPremium           ("")
 //    ,InforceIsMec                     ("")
 //    ,LastMaterialChangeDate           ("")
 //    ,InforceDcv                       ("")
@@ -122,7 +124,6 @@ mec_input::mec_input()
     ,PaymentHistory                   ("0")
     ,BenefitHistory                   ("1000000")
 //    ,DeprecatedUseDOB                 ("")
-//    ,EffectiveDateToday               ("")
     ,Payment                          ("0")
     ,BenefitAmount                    ("1000000")
 {
@@ -181,6 +182,7 @@ bool mec_input::operator==(mec_input const& z) const
 
 void mec_input::AscribeMembers()
 {
+    ascribe("Use7702ATables"                        , &mec_input::Use7702ATables                        );
     ascribe("IssueAge"                              , &mec_input::IssueAge                              );
     ascribe("Gender"                                , &mec_input::Gender                                );
     ascribe("Smoking"                               , &mec_input::Smoking                               );
@@ -199,9 +201,9 @@ void mec_input::AscribeMembers()
     ascribe("Comments"                              , &mec_input::Comments                              );
     ascribe("InforceYear"                           , &mec_input::InforceYear                           );
     ascribe("InforceMonth"                          , &mec_input::InforceMonth                          );
+    ascribe("InforceTargetSpecifiedAmount"          , &mec_input::InforceTargetSpecifiedAmount          );
     ascribe("InforceAccountValue"                   , &mec_input::InforceAccountValue                   );
     ascribe("InforceAsOfDate"                       , &mec_input::InforceAsOfDate                       );
-    ascribe("InforceSevenPayPremium"                , &mec_input::InforceSevenPayPremium                );
     ascribe("InforceIsMec"                          , &mec_input::InforceIsMec                          );
     ascribe("LastMaterialChangeDate"                , &mec_input::LastMaterialChangeDate                );
     ascribe("InforceDcv"                            , &mec_input::InforceDcv                            );
@@ -214,7 +216,6 @@ void mec_input::AscribeMembers()
     ascribe("PaymentHistory"                        , &mec_input::PaymentHistory                        );
     ascribe("BenefitHistory"                        , &mec_input::BenefitHistory                        );
     ascribe("DeprecatedUseDOB"                      , &mec_input::DeprecatedUseDOB                      );
-    ascribe("EffectiveDateToday"                    , &mec_input::EffectiveDateToday                    );
     ascribe("Payment"                               , &mec_input::Payment                               );
     ascribe("BenefitAmount"                         , &mec_input::BenefitAmount                         );
 }
@@ -366,8 +367,6 @@ void mec_input::DoHarmonize()
     GroupUnderwritingType.allow(mce_simplified_issue, database_->Query(DB_AllowSimpUW));
     GroupUnderwritingType.allow(mce_guaranteed_issue, database_->Query(DB_AllowGuarUW));
 
-    EffectiveDate.enable(mce_no == EffectiveDateToday);
-
     IssueAge        .enable(mce_no  == DeprecatedUseDOB);
     DateOfBirth     .enable(mce_yes == DeprecatedUseDOB);
 
@@ -441,14 +440,14 @@ void mec_input::DoHarmonize()
     InforceIsMec.enable(        !mec_due_to_1035);
     bool non_mec = mce_no == InforceIsMec;
 
-    InforceAccountValue     .enable(non_mec);
-    InforceSevenPayPremium  .enable(non_mec);
-    LastMaterialChangeDate  .enable(non_mec);
-    InforceDcv              .enable(non_mec && mce_cvat == DefinitionOfLifeInsurance);
-    InforceAvBeforeLastMc   .enable(non_mec);
-    InforceLeastDeathBenefit.enable(non_mec);
-    PaymentHistory          .enable(non_mec);
-    BenefitHistory          .enable(non_mec);
+    InforceTargetSpecifiedAmount.enable(non_mec);
+    InforceAccountValue         .enable(non_mec);
+    LastMaterialChangeDate      .enable(non_mec);
+    InforceDcv                  .enable(non_mec && mce_cvat == DefinitionOfLifeInsurance);
+    InforceAvBeforeLastMc       .enable(non_mec);
+    InforceLeastDeathBenefit    .enable(non_mec);
+    PaymentHistory              .enable(non_mec);
+    BenefitHistory              .enable(non_mec);
 
     UnderwritingClass.allow(mce_ultrapreferred, database_->Query(DB_AllowUltraPrefClass));
     UnderwritingClass.allow(mce_preferred     , database_->Query(DB_AllowPreferredClass));
@@ -491,12 +490,6 @@ void mec_input::DoHarmonize()
 
 void mec_input::DoTransmogrify()
 {
-    if(mce_yes == EffectiveDateToday)
-        {
-        EffectiveDate = calendar_date();
-        DoHarmonize();
-        }
-
     std::pair<int,int> ym0 = years_and_months_since
         (EffectiveDate  .value()
         ,InforceAsOfDate.value()
@@ -696,11 +689,6 @@ using namespace xml;
         }
 
     RedintegrateExPost(file_version, detritus_map, residuary_names);
-
-    if(EffectiveDateToday.value() && !global_settings::instance().regression_testing())
-        {
-        EffectiveDate = calendar_date();
-        }
 
     Reconcile();
 }
