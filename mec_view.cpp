@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_view.cpp,v 1.14 2009-07-22 18:54:24 chicares Exp $
+// $Id: mec_view.cpp,v 1.15 2009-07-23 00:30:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -583,6 +583,14 @@ void mec_view::Run()
             ,LoadExcess          // Unused.
             ,InforceAccountValue // Unused.
             );
+        double net_necessary_premium = TieredGrossToNet
+            (necessary_premium
+            ,AnnualTargetPrem
+            ,LoadTarget
+            ,LoadExcess
+            );
+        InforceDcv          += net_necessary_premium;
+        InforceAccountValue += net_necessary_premium;
         }
 
     if(0.0 < unnecessary_premium)
@@ -595,7 +603,7 @@ void mec_view::Run()
             (InforceDcv
             ,unnecessary_premium
             ,necessary_premium
-            ,InforceAccountValue // TODO ?? Update for payment?
+            ,InforceAccountValue
             );
         }
 
