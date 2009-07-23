@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_view.cpp,v 1.15 2009-07-23 00:30:27 chicares Exp $
+// $Id: mec_view.cpp,v 1.16 2009-07-23 12:20:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -526,11 +526,13 @@ void mec_view::Run()
     LMI_ASSERT(static_cast<unsigned int>(InforceContractYear) < input_data().BenefitHistoryRealized().size());
     double const old_benefit_amount = input_data().BenefitHistoryRealized()[InforceContractYear];
 
-    double const total_1035_amount = TieredGrossToNet
-        (External1035ExchangeAmount + Internal1035ExchangeAmount
-        ,AnnualTargetPrem
-        ,LoadTarget
-        ,LoadExcess
+    double const total_1035_amount = round_max_premium
+        (TieredGrossToNet
+            (External1035ExchangeAmount + Internal1035ExchangeAmount
+            ,AnnualTargetPrem
+            ,LoadTarget
+            ,LoadExcess
+            )
         );
     if(0.0 != total_1035_amount)
         {
@@ -583,11 +585,13 @@ void mec_view::Run()
             ,LoadExcess          // Unused.
             ,InforceAccountValue // Unused.
             );
-        double net_necessary_premium = TieredGrossToNet
-            (necessary_premium
-            ,AnnualTargetPrem
-            ,LoadTarget
-            ,LoadExcess
+        double const net_necessary_premium = round_max_premium
+            (TieredGrossToNet
+                (necessary_premium
+                ,AnnualTargetPrem
+                ,LoadTarget
+                ,LoadExcess
+                )
             );
         InforceDcv          += net_necessary_premium;
         InforceAccountValue += net_necessary_premium;
