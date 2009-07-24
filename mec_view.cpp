@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_view.cpp,v 1.16 2009-07-23 12:20:43 chicares Exp $
+// $Id: mec_view.cpp,v 1.17 2009-07-24 00:35:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,6 +32,7 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "basic_values.hpp"          // lowest_premium_tax_load()
+#include "configurable_settings.hpp"
 #include "data_directory.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
@@ -59,6 +60,7 @@
 #include <wx/menu.h>
 #include <wx/xrc/xmlres.h>
 
+#include <fstream>
 #include <limits>
 #include <sstream>
 #include <string>
@@ -785,5 +787,69 @@ void mec_view::Run()
         << "</html>\n"
         ;
     html_window_->SetPage(oss.str());
+
+    std::vector<double> ratio_Ax (input_data().years_to_maturity());
+    ratio_Ax  += tabular_Ax  / analytic_Ax ;
+    std::vector<double> ratio_7Px(input_data().years_to_maturity());
+    ratio_7Px += tabular_7Px / analytic_7Px;
+
+    configurable_settings const& c = configurable_settings::instance();
+    std::string const extension(c.spreadsheet_file_extension());
+    std::string spreadsheet_filename = base_filename() + extension;
+    std::ofstream ofs(spreadsheet_filename.c_str(), ios_out_trunc_binary());
+    ofs << "This temporary output file will be removed in a future release.\n";
+    ofs
+        << "t\t"
+        << "i\t"
+        << "q\t"
+        << "aD\t"
+        << "kC\t"
+        << "aN\t"
+        << "kM\t"
+        << "E7aN\t"
+        << "Ax\t"
+        << "tabular\t"
+        << "ratio\t"
+        << "7Px\t"
+        << "tabular\t"
+        << "ratio\t"
+        << '\n'
+        ;
+    for(int j = 0; j < input_data().years_to_maturity(); ++j)
+        {
+        ofs
+            <<               j  << '\t'
+            << value_cast<std::string>(Mly7702iGlp [j]) << '\t'
+            << value_cast<std::string>(Mly7702qc   [j]) << '\t'
+            << value_cast<std::string>(commfns.aD()[j]) << '\t'
+            << value_cast<std::string>(commfns.kC()[j]) << '\t'
+            << value_cast<std::string>(commfns.aN()[j]) << '\t'
+            << value_cast<std::string>(commfns.kM()[j]) << '\t'
+            << value_cast<std::string>(E7aN        [j]) << '\t'
+            << value_cast<std::string>(analytic_Ax [j]) << '\t'
+            << value_cast<std::string>(tabular_Ax  [j]) << '\t'
+            << value_cast<std::string>(ratio_Ax    [j]) << '\t'
+            << value_cast<std::string>(analytic_7Px[j]) << '\t'
+            << value_cast<std::string>(tabular_7Px [j]) << '\t'
+            << value_cast<std::string>(ratio_7Px   [j]) << '\t'
+            << '\n'
+        ;
+        }
+    ofs
+        << input_data().years_to_maturity()
+        << "\t\t\t"
+        << value_cast<std::string>(commfns.aD().back())
+        << "\t\t\t\t\t\t\t\t\t\t\t"
+        << '\n'
+        ;
+    if(!ofs)
+        {
+        warning()
+            << "Unable to write '"
+            << spreadsheet_filename
+            << "'."
+            << LMI_FLUSH
+            ;
+        }
 }
 
