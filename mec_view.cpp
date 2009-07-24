@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_view.cpp,v 1.17 2009-07-24 00:35:16 chicares Exp $
+// $Id: mec_view.cpp,v 1.18 2009-07-24 14:14:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -56,6 +56,7 @@
 #include "wx_new.hpp"
 
 #include <wx/html/htmlwin.h>
+#include <wx/html/htmprint.h>
 #include <wx/icon.h>
 #include <wx/menu.h>
 #include <wx/xrc/xmlres.h>
@@ -63,7 +64,6 @@
 #include <fstream>
 #include <limits>
 #include <sstream>
-#include <string>
 #include <vector>
 
 mec_mvc_view::mec_mvc_view()
@@ -116,6 +116,7 @@ END_EVENT_TABLE()
 
 mec_view::mec_view()
     :ViewEx       ()
+    ,html_content_("Unable to display results.")
     ,html_window_ (0)
 {
 }
@@ -199,6 +200,13 @@ bool mec_view::OnCreate(wxDocument* doc, long int flags)
         }
 
     return has_view_been_created;
+}
+
+wxPrintout* mec_view::OnCreatePrintout()
+{
+    wxHtmlPrintout* z = new(wx) wxHtmlPrintout;
+    safely_dereference_as<wxHtmlPrintout>(z).SetHtmlText(html_content_.c_str());
+    return z;
 }
 
 void mec_view::UponProperties(wxCommandEvent&)
@@ -786,7 +794,8 @@ void mec_view::Run()
         << "</body>\n"
         << "</html>\n"
         ;
-    html_window_->SetPage(oss.str());
+    html_content_ = oss.str();
+    html_window_->SetPage(html_content_);
 
     std::vector<double> ratio_Ax (input_data().years_to_maturity());
     ratio_Ax  += tabular_Ax  / analytic_Ax ;
