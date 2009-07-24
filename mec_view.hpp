@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_view.hpp,v 1.2 2009-06-30 04:37:23 chicares Exp $
+// $Id: mec_view.hpp,v 1.3 2009-07-24 14:14:26 chicares Exp $
 
 #ifndef mec_view_hpp
 #define mec_view_hpp
@@ -34,6 +34,8 @@
 #include <boost/utility.hpp>
 
 #include <wx/event.h>
+
+#include <string>
 
 class mec_document;
 class mec_input;
@@ -85,6 +87,9 @@ class mec_view
     // ViewEx overrides.
     virtual bool OnCreate(wxDocument*, long int);
 
+    // wxView overrides.
+    virtual wxPrintout* OnCreatePrintout();
+
     void UponProperties        (wxCommandEvent&);
     void UponUpdateFileSave    (wxUpdateUIEvent&);
     void UponUpdateFileSaveAs  (wxUpdateUIEvent&);
@@ -93,6 +98,7 @@ class mec_view
 
     mec_input& input_data();
 
+    std::string html_content_;
     wxHtmlWindow* html_window_;
 
     DECLARE_DYNAMIC_CLASS(mec_view)
