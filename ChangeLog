@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1327 2009-07-22 18:54:25 chicares Exp $
+// $Id: ChangeLog,v 1.1328 2009-07-24 14:14:26 chicares Exp $
 
 MAINTENANCE
 
@@ -23199,4 +23199,26 @@ Forbid nonzero DCV and 7702A "CSV" at issue.
 
   mec_view.cpp
 Remove a confusing workaround.
+
+20090723T0030Z <gchicares@sbcglobal.net> [770]
+
+  mec_view.cpp
+Reflect necessary premium in material-change calculations.
+
+20090723T1220Z <gchicares@sbcglobal.net> [770]
+
+  mec_view.cpp
+Round increments to account value.
+
+20090724T0035Z <gchicares@sbcglobal.net> [770]
+
+  mec_view.cpp
+Temporarily write life-contingencies details to a file.
+
+20090724T1414Z <gchicares@sbcglobal.net> [770]
+
+  mec_view.cpp
+  mec_view.hpp
+  menus.xrc
+Enable printing for 7702A testing.
 
