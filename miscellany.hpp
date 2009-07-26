@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: miscellany.hpp,v 1.19 2008-12-27 02:56:49 chicares Exp $
+// $Id: miscellany.hpp,v 1.20 2009-07-26 00:29:15 chicares Exp $
 
 #ifndef miscellany_hpp
 #define miscellany_hpp
@@ -75,6 +75,8 @@ class minmax
     T minimum_;
     T maximum_;
 };
+
+std::string htmlize(std::string const&);
 
 inline std::ios_base::openmode ios_in_binary()
 {

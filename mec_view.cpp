@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_view.cpp,v 1.19 2009-07-25 18:57:16 chicares Exp $
+// $Id: mec_view.cpp,v 1.20 2009-07-26 00:29:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -45,7 +45,7 @@
 #include "math_functors.hpp"
 #include "mec_document.hpp"
 #include "mec_input.hpp"
-#include "miscellany.hpp"            // each_equal()
+#include "miscellany.hpp"            // each_equal(), htmlize()
 #include "mvc_controller.hpp"
 #include "oecumenic_enumerations.hpp"
 #include "safely_dereference_as.hpp"
@@ -531,7 +531,7 @@ void mec_view::Run()
         << "<body>\n"
         ;
 
-    oss << "<p>" << Comments << "</p>\n";
+    oss << "<p>" << htmlize(Comments) << "</p>\n";
 
     LMI_ASSERT(static_cast<unsigned int>(InforceContractYear) < input_data().BenefitHistoryRealized().size());
     double const old_benefit_amount = input_data().BenefitHistoryRealized()[InforceContractYear];

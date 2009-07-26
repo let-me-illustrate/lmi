@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: miscellany.cpp,v 1.15 2008-12-27 02:56:49 chicares Exp $
+// $Id: miscellany.cpp,v 1.16 2009-07-26 00:29:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -68,6 +68,29 @@ bool files_are_identical(std::string const& file0, std::string const& file1)
     if(!ifs0) fatal_error() << "Unable to open '" << file0 << "'." << LMI_FLUSH;
     if(!ifs1) fatal_error() << "Unable to open '" << file1 << "'." << LMI_FLUSH;
     return streams_are_identical(ifs0, ifs1);
+}
+
+/// Escape text for html, e.g., "a < b" --> "a &lt; b".
+
+std::string htmlize(std::string const& raw_text)
+{
+    std::string html;
+    html.reserve(raw_text.size());
+
+    typedef std::string::const_iterator sci;
+    for(sci i = raw_text.begin(); i != raw_text.end(); ++i)
+        {
+        std::string::const_reference c = *i;
+        switch(c)
+            {
+            case '&': {html += "&amp;";} break;
+            case '<': {html += "&lt;" ;} break;
+            case '>': {html += "&gt;" ;} break;
+            default : {html += c      ;}
+            }
+        }
+
+    return html;
 }
 
 /// http://groups.google.com/group/borland.public.cpp.borlandcpp/msg/638d1f25e66472d9
