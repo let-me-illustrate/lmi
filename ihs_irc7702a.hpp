@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702a.hpp,v 1.14 2009-07-17 02:52:29 chicares Exp $
+// $Id: ihs_irc7702a.hpp,v 1.15 2009-07-27 20:05:43 chicares Exp $
 
 #ifndef ihs_irc7702a_hpp
 #define ihs_irc7702a_hpp
@@ -35,14 +35,16 @@
 
 void LMI_SO TestIrc7702A();
 
-/// State of 7702A calculations at each step. See:
+/// Transient state of MEC testing.
+///
+/// For design discussion, see:
 ///   http://lists.nongnu.org/archive/html/lmi/2009-07/msg00002.html
 ///
 /// Variables are prefixed '[A-Z][0-9]_' so that they sort by groups:
 /// in particular, when their names are used to nominate xml elements.
 /// 'A*_' is reserved in case it's wanted later--e.g., for arguments.
 
-struct irc7702A_state
+struct mec_state
 {
     int     B0_deduced_policy_year;
     int     B1_deduced_contract_year;
@@ -233,7 +235,7 @@ class Irc7702A
     double GetPresent7pp() const        {return SevenPP;}
     bool IsMecAlready() const           {return IsMec;}
 
-    irc7702A_state const& state() {return state_;}
+    mec_state const& state() {return state_;}
 
     // Share internals with routines that display monthly details
     // of account value calculations. These Debug- functions are all
@@ -294,7 +296,7 @@ class Irc7702A
         );
     double  DetermineLowestBft() const; // update LowestBft dynamically
 
-    mutable irc7702A_state state_;
+    mutable mec_state state_;
 
 // NOTE: table lookup really means supplied via arguments ?
 // TODO ?? Need to calculate if not table lookup.

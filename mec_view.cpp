@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_view.cpp,v 1.20 2009-07-26 00:29:15 chicares Exp $
+// $Id: mec_view.cpp,v 1.21 2009-07-27 20:05:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -634,7 +634,7 @@ void mec_view::Run()
             );
         }
 
-    irc7702A_state const& state = z.state();
+    mec_state const& state = z.state();
     oss
         << "<hr>\n"
         << "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n"
