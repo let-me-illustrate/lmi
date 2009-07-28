@@ -19,14 +19,23 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_state.hpp,v 1.1 2009-07-28 00:13:32 chicares Exp $
+// $Id: mec_state.hpp,v 1.2 2009-07-28 13:24:12 chicares Exp $
 
 #ifndef mec_state_hpp
 #define mec_state_hpp
 
 #include "config.hpp"
 
+#include "any_member.hpp"
+#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
+#include "streamable.hpp"
+
+#include <boost/operators.hpp>
+
+#include <list>
+#include <map>
+#include <string>
 
 /// Transient state of MEC testing.
 ///
@@ -37,15 +46,51 @@
 /// in particular, when their names are used to nominate xml elements.
 /// 'A*_' is reserved in case it's wanted later--e.g., for arguments.
 
-struct LMI_SO mec_state
+class LMI_SO mec_state
+    :virtual private obstruct_slicing<mec_state>
+    ,virtual public streamable
+    ,public MemberSymbolTable<mec_state>
+    ,private boost::equality_comparable<mec_state>
 {
-    int     B0_deduced_policy_year;
-    int     B1_deduced_contract_year;
-    double  B2_deduced_px7_rate;
-    double  B3_deduced_nsp_rate;
-    double  B4_deduced_target_premium;
-    double  B5_deduced_target_load;
-    double  B6_deduced_excess_load;
+    friend class Irc7702A;
+    friend class mec_view;
+
+  public:
+    mec_state();
+    mec_state(mec_state const&);
+    virtual ~mec_state();
+
+    mec_state& operator=(mec_state const&);
+    bool operator==(mec_state const&) const;
+
+  private:
+    void AscribeMembers();
+
+    // Class 'streamable' required implementation.
+    virtual void read (xml::element const&);
+    virtual void write(xml::element&) const;
+    virtual int class_version() const;
+    virtual std::string xml_root_name() const;
+
+    // Backward compatibility.
+    std::string RedintegrateExAnte
+        (int                file_version
+        ,std::string const& name
+        ,std::string const& value
+        ) const;
+    void        RedintegrateExPost
+        (int                                file_version
+        ,std::map<std::string, std::string> detritus_map
+        ,std::list<std::string>             residuary_names
+        );
+
+    int    B0_deduced_policy_year;
+    int    B1_deduced_contract_year;
+    double B2_deduced_px7_rate;
+    double B3_deduced_nsp_rate;
+    double B4_deduced_target_premium;
+    double B5_deduced_target_load;
+    double B6_deduced_excess_load;
 
     double C0_init_bft;
     double C1_init_ldb;
