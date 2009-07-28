@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.156 2009-06-27 17:47:39 chicares Exp $
+# $Id: objects.make,v 1.157 2009-07-28 13:24:12 chicares Exp $
 
 ################################################################################
 
@@ -289,6 +289,7 @@ lmi_common_objects := \
   ihs_proddata.o \
   ihs_rnddata.o \
   md5.o \
+  mec_state.o \
   mortality_rates_fetch.o \
   preferences_model.o \
   stratified_algorithms.o \
@@ -357,8 +358,9 @@ gpt_objects_unique_to_server := \
 # Only these files are directly concerned with the GPT:
 
 gpt_objects_directly_concerned_with_gpt := \
-  ihs_irc7702a.o \
   ihs_irc7702.o \
+  ihs_irc7702a.o \
+  mec_state.o \
 
 # These files provide general product support:
 
@@ -675,6 +677,7 @@ irc7702a_test$(EXEEXT): \
   $(common_test_objects) \
   ihs_irc7702a.o \
   irc7702a_test.o \
+  mec_state.o \
   stratified_algorithms.o \
 
 istream_to_string_test$(EXEEXT): \
