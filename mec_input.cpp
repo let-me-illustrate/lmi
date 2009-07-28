@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_input.cpp,v 1.10 2009-07-22 18:53:17 chicares Exp $
+// $Id: mec_input.cpp,v 1.11 2009-07-28 16:20:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -90,7 +90,7 @@ std::string realize_sequence_string
 /// UDT defaults are presently appropriate.
 
 mec_input::mec_input()
-    :Use7702ATables                   ("Yes")
+    :Use7702ATables                   ("No")
     ,IssueAge                         ("45")
     ,Gender                           ("Male")
     ,Smoking                          ("Nonsmoker")
@@ -104,7 +104,7 @@ mec_input::mec_input()
 //    ,Internal1035ExchangeFromMec      ("")
 //    ,EffectiveDate                    ("")
 //    ,DefinitionOfLifeInsurance        ("")
-    ,DefinitionOfMaterialChange       ("Earlier of increase or unnecessary premium")
+    ,DefinitionOfMaterialChange       ("Unnecessary premium")
 //    ,GroupUnderwritingType            ("")
 //    ,Comments                         ("")
 //    ,InforceYear                      ("")
