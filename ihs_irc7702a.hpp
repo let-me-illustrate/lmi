@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702a.hpp,v 1.15 2009-07-27 20:05:43 chicares Exp $
+// $Id: ihs_irc7702a.hpp,v 1.16 2009-07-28 00:13:32 chicares Exp $
 
 #ifndef ihs_irc7702a_hpp
 #define ihs_irc7702a_hpp
@@ -27,6 +27,7 @@
 #include "config.hpp"
 
 #include "mc_enum_type_enums.hpp"
+#include "mec_state.hpp"
 #include "obstruct_slicing.hpp"
 #include "round_to.hpp"
 #include "so_attributes.hpp"
@@ -34,82 +35,6 @@
 #include <vector>
 
 void LMI_SO TestIrc7702A();
-
-/// Transient state of MEC testing.
-///
-/// For design discussion, see:
-///   http://lists.nongnu.org/archive/html/lmi/2009-07/msg00002.html
-///
-/// Variables are prefixed '[A-Z][0-9]_' so that they sort by groups:
-/// in particular, when their names are used to nominate xml elements.
-/// 'A*_' is reserved in case it's wanted later--e.g., for arguments.
-
-struct mec_state
-{
-    int     B0_deduced_policy_year;
-    int     B1_deduced_contract_year;
-    double  B2_deduced_px7_rate;
-    double  B3_deduced_nsp_rate;
-    double  B4_deduced_target_premium;
-    double  B5_deduced_target_load;
-    double  B6_deduced_excess_load;
-
-    double C0_init_bft;
-    double C1_init_ldb;
-    double C2_init_amt_pd;
-    bool   C3_init_is_mc;
-    double C4_init_dcv;
-    double C5_init_px7;
-    bool   C6_init_mec;
-
-    double D0_incr_bft;
-    double D1_incr_ldb;
-    double D2_incr_amt_pd;
-    bool   D3_incr_is_mc;
-    double D4_incr_dcv;
-    double D5_incr_px7;
-    bool   D6_incr_mec;
-
-    double E0_decr_bft;
-    double E1_decr_ldb;
-    double E2_decr_amt_pd;
-    bool   E3_decr_is_mc;
-    double E4_decr_dcv;
-    double E5_decr_px7;
-    bool   E6_decr_mec;
-
-    double F0_nec_pm_bft;
-    double F1_nec_pm_ldb;
-    double F2_nec_pm_amt_pd;
-    bool   F3_nec_pm_is_mc;
-    double F4_nec_pm_dcv;
-    double F5_nec_pm_px7;
-    bool   F6_nec_pm_mec;
-
-    double G0_do_mc_bft;
-    double G1_do_mc_ldb;
-    double G2_do_mc_amt_pd;
-    bool   G3_do_mc_is_mc;
-    double G4_do_mc_dcv;
-    double G5_do_mc_px7;
-    bool   G6_do_mc_mec;
-
-    double H0_unnec_pm_bft;
-    double H1_unnec_pm_ldb;
-    double H2_unnec_pm_amt_pd;
-    bool   H3_unnec_pm_is_mc;
-    double H4_unnec_pm_dcv;
-    double H5_unnec_pm_px7;
-    bool   H6_unnec_pm_mec;
-
-    double Q0_net_1035;
-    double Q1_max_nec_prem_net;
-    double Q2_max_nec_prem_gross;
-    double Q3_cv_before_last_mc;
-    double Q4_cum_px7;
-    double Q5_cum_amt_pd;
-    double Q6_max_non_mec_prem;
-};
 
 // TODO ?? Known defects:
 //   need to handle withdrawals correctly;
