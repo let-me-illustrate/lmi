@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1328 2009-07-24 14:14:26 chicares Exp $
+// $Id: ChangeLog,v 1.1329 2009-07-28 14:24:28 chicares Exp $
 
 MAINTENANCE
 
@@ -23221,4 +23221,42 @@ Temporarily write life-contingencies details to a file.
   mec_view.hpp
   menus.xrc
 Enable printing for 7702A testing.
+
+20090725T1857Z <gchicares@sbcglobal.net> [770]
+
+  mec_view.cpp
+Enclose plain text in paragraph tags even for HTML 4.01 Transitional.
+
+20090726T0029Z <gchicares@sbcglobal.net> [770]
+
+  mec_view.cpp
+  miscellany.cpp
+  miscellany.hpp
+Escape raw text for html.
+
+20090727T2005Z <gchicares@sbcglobal.net> [770]
+
+  ihs_irc7702a.hpp
+  mec_view.cpp
+Rename a struct; improve its documentation.
+
+20090728T0013Z <gchicares@sbcglobal.net> [770]
+
+  ihs_irc7702a.hpp
+  mec_state.hpp [new file]
+Move a struct declaration between files.
+
+20090728T1324Z <gchicares@sbcglobal.net> [770]
+
+  mec_state.cpp [new file]
+  mec_state.hpp
+  objects.make
+Add xml support to 'mec_state'.
+
+20090728T1424Z <gchicares@sbcglobal.net> [770]
+
+  mec_state.cpp
+  mec_state.hpp
+  mec_view.cpp
+Save 'mec_state' as an xml file; regularize spreadsheet name.
 
