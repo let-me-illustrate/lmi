@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_view.cpp,v 1.22 2009-07-28 14:24:28 chicares Exp $
+// $Id: mec_view.cpp,v 1.23 2009-07-28 15:15:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -45,7 +45,7 @@
 #include "math_functors.hpp"
 #include "mec_document.hpp"
 #include "mec_input.hpp"
-#include "miscellany.hpp"            // each_equal(), htmlize()
+#include "miscellany.hpp"            // each_equal()
 #include "mvc_controller.hpp"
 #include "oecumenic_enumerations.hpp"
 #include "safely_dereference_as.hpp"
@@ -65,7 +65,6 @@
 
 #include <fstream>
 #include <limits>
-#include <sstream>
 #include <vector>
 
 mec_mvc_view::mec_mvc_view()
@@ -244,23 +243,6 @@ void mec_view::UponUpdateProperties(wxUpdateUIEvent& e)
 {
     e.Enable(true);
 }
-
-namespace
-{
-template<typename T>
-std::string f(T t)
-{
-    static double const bignum = std::numeric_limits<double>::max();
-    if(bignum == t)
-        {
-        return "&nbsp;&nbsp;&nbsp;BIGNUM";
-        }
-    else
-        {
-        return "&nbsp;&nbsp;&nbsp;" + value_cast<std::string>(t);
-        }
-}
-} // Unnamed namespace.
 
 void mec_view::Run()
 {
@@ -520,21 +502,6 @@ void mec_view::Run()
     double const LoadTarget = target_sales_load[InforceYear] + target_premium_load[InforceYear] + dac_tax_load[InforceYear] + premium_tax_load;
     double const LoadExcess = excess_sales_load[InforceYear] + excess_premium_load[InforceYear] + dac_tax_load[InforceYear] + premium_tax_load;
 
-    std::ostringstream oss;
-
-    oss
-        << "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\n"
-        << "    \"http://www.w3.org/TR/html4/loose.dtd\">\n"
-        << "<html>\n"
-        << "<head>\n"
-        << "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=ISO-8859-1\">\n"
-        << "<title>Let me illustrate...</title>\n"
-        << "</head>\n"
-        << "<body>\n"
-        ;
-
-    oss << "<p>" << htmlize(Comments) << "</p>\n";
-
     LMI_ASSERT(static_cast<unsigned int>(InforceContractYear) < input_data().BenefitHistoryRealized().size());
     double const old_benefit_amount = input_data().BenefitHistoryRealized()[InforceContractYear];
 
@@ -636,170 +603,10 @@ void mec_view::Run()
             );
         }
 
-    mec_state const& state = z.state();
-    oss
-        << "<hr>\n"
-        << "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n"
-        << "<tr align=\"right\">\n"
-        << "<td nowrap>" << "policy year"                     << "</td>\n"
-        << "<td nowrap>" << f(state.B0_deduced_policy_year   ) << "</td>\n"
-        << "</tr>\n"
-        << "<tr align=\"right\">\n"
-        << "<td nowrap>" << "contract year"                   << "</td>\n"
-        << "<td nowrap>" << f(state.B1_deduced_contract_year ) << "</td>\n"
-        << "</tr>\n"
-        << "<tr align=\"right\">\n"
-        << "<td nowrap>" << "seven-pay rate"                  << "</td>\n"
-        << "<td nowrap>" << f(state.B2_deduced_px7_rate      ) << "</td>\n"
-        << "</tr>\n"
-        << "<tr align=\"right\">\n"
-        << "<td nowrap>" << "nsp rate"                        << "</td>\n"
-        << "<td nowrap>" << f(state.B3_deduced_nsp_rate      ) << "</td>\n"
-        << "</tr>\n"
-        << "<tr align=\"right\">\n"
-        << "<td nowrap>" << "target premium"                  << "</td>\n"
-        << "<td nowrap>" << f(state.B4_deduced_target_premium) << "</td>\n"
-        << "</tr>\n"
-        << "<tr align=\"right\">\n"
-        << "<td nowrap>" << "target load"                     << "</td>\n"
-        << "<td nowrap>" << f(state.B5_deduced_target_load   ) << "</td>\n"
-        << "</tr>\n"
-        << "<tr align=\"right\">\n"
-        << "<td nowrap>" << "excess load"                     << "</td>\n"
-        << "<td nowrap>" << f(state.B6_deduced_excess_load   ) << "</td>\n"
-        << "</tr>\n"
-        << "</table>\n"
-        ;
-
-    oss
-        << "<hr>\n"
-        << "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n"
-
-        << "<tr align=\"right\">\n"
-        << "<td valign=\"bottom\" width=\"14%\">" << ""           << " </td>\n"
-        << "<td valign=\"bottom\" width=\"14%\">" << "initial"    << " </td>\n"
-        << "<td valign=\"bottom\" width=\"14%\">" << "incr"       << " </td>\n"
-        << "<td valign=\"bottom\" width=\"14%\">" << "decr"       << " </td>\n"
-        << "<td valign=\"bottom\" width=\"14%\">" << "nec_prem"   << " </td>\n"
-        << "<td valign=\"bottom\" width=\"14%\">" << "MC"         << " </td>\n"
-        << "<td valign=\"bottom\" width=\"14%\">" << "unnec_prem" << " </td>\n"
-        << "</tr>\n"
-
-        << "<tr align=\"right\">\n"
-        << "<td nowrap>" << "benefit"                   << "</td>\n"
-        << "<td nowrap>" << f(state.C0_init_bft       ) << "</td>\n"
-        << "<td nowrap>" << f(state.D0_incr_bft       ) << "</td>\n"
-        << "<td nowrap>" << f(state.E0_decr_bft       ) << "</td>\n"
-        << "<td nowrap>" << f(state.F0_nec_pm_bft     ) << "</td>\n"
-        << "<td nowrap>" << f(state.G0_do_mc_bft      ) << "</td>\n"
-        << "<td nowrap>" << f(state.H0_unnec_pm_bft   ) << "</td>\n"
-        << "</tr>\n"
-
-        << "<tr align=\"right\">\n"
-        << "<td nowrap>" << "LDB"                       << "</td>\n"
-        << "<td nowrap>" << f(state.C1_init_ldb       ) << "</td>\n"
-        << "<td nowrap>" << f(state.D1_incr_ldb       ) << "</td>\n"
-        << "<td nowrap>" << f(state.E1_decr_ldb       ) << "</td>\n"
-        << "<td nowrap>" << f(state.F1_nec_pm_ldb     ) << "</td>\n"
-        << "<td nowrap>" << f(state.G1_do_mc_ldb      ) << "</td>\n"
-        << "<td nowrap>" << f(state.H1_unnec_pm_ldb   ) << "</td>\n"
-        << "</tr>\n"
-
-        << "<tr align=\"right\">\n"
-        << "<td nowrap>" << "amts pd"                   << "</td>\n"
-        << "<td nowrap>" << f(state.C2_init_amt_pd    ) << "</td>\n"
-        << "<td nowrap>" << f(state.D2_incr_amt_pd    ) << "</td>\n"
-        << "<td nowrap>" << f(state.E2_decr_amt_pd    ) << "</td>\n"
-        << "<td nowrap>" << f(state.F2_nec_pm_amt_pd  ) << "</td>\n"
-        << "<td nowrap>" << f(state.G2_do_mc_amt_pd   ) << "</td>\n"
-        << "<td nowrap>" << f(state.H2_unnec_pm_amt_pd) << "</td>\n"
-        << "</tr>\n"
-
-        << "<tr align=\"right\">\n"
-        << "<td nowrap>" << "MC"                        << "</td>\n"
-        << "<td nowrap>" << f(state.C3_init_is_mc     ) << "</td>\n"
-        << "<td nowrap>" << f(state.D3_incr_is_mc     ) << "</td>\n"
-        << "<td nowrap>" << f(state.E3_decr_is_mc     ) << "</td>\n"
-        << "<td nowrap>" << f(state.F3_nec_pm_is_mc   ) << "</td>\n"
-        << "<td nowrap>" << f(state.G3_do_mc_is_mc    ) << "</td>\n"
-        << "<td nowrap>" << f(state.H3_unnec_pm_is_mc ) << "</td>\n"
-        << "</tr>\n"
-
-        << "<tr align=\"right\">\n"
-        << "<td nowrap>" << "DCV"                       << "</td>\n"
-        << "<td nowrap>" << f(state.C4_init_dcv       ) << "</td>\n"
-        << "<td nowrap>" << f(state.D4_incr_dcv       ) << "</td>\n"
-        << "<td nowrap>" << f(state.E4_decr_dcv       ) << "</td>\n"
-        << "<td nowrap>" << f(state.F4_nec_pm_dcv     ) << "</td>\n"
-        << "<td nowrap>" << f(state.G4_do_mc_dcv      ) << "</td>\n"
-        << "<td nowrap>" << f(state.H4_unnec_pm_dcv   ) << "</td>\n"
-        << "</tr>\n"
-
-        << "<tr align=\"right\">\n"
-        << "<td nowrap>" << "7PP"                       << "</td>\n"
-        << "<td nowrap>" << f(state.C5_init_px7       ) << "</td>\n"
-        << "<td nowrap>" << f(state.D5_incr_px7       ) << "</td>\n"
-        << "<td nowrap>" << f(state.E5_decr_px7       ) << "</td>\n"
-        << "<td nowrap>" << f(state.F5_nec_pm_px7     ) << "</td>\n"
-        << "<td nowrap>" << f(state.G5_do_mc_px7      ) << "</td>\n"
-        << "<td nowrap>" << f(state.H5_unnec_pm_px7   ) << "</td>\n"
-        << "</tr>\n"
-
-        << "<tr align=\"right\">\n"
-        << "<td nowrap>" << "MEC"                       << "</td>\n"
-        << "<td nowrap>" << f(state.C6_init_mec       ) << "</td>\n"
-        << "<td nowrap>" << f(state.D6_incr_mec       ) << "</td>\n"
-        << "<td nowrap>" << f(state.E6_decr_mec       ) << "</td>\n"
-        << "<td nowrap>" << f(state.F6_nec_pm_mec     ) << "</td>\n"
-        << "<td nowrap>" << f(state.G6_do_mc_mec      ) << "</td>\n"
-        << "<td nowrap>" << f(state.H6_unnec_pm_mec   ) << "</td>\n"
-        << "</tr>\n"
-
-        << "</table>\n"
-        ;
-
-    oss
-        << "<hr>\n"
-        << "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n"
-        << "<tr align=\"right\">\n"
-        << "<td nowrap>" << "net 1035 amount"              << "</td>\n"
-        << "<td nowrap>" << f(state.Q0_net_1035          ) << "</td>\n"
-        << "</tr>\n"
-        << "<tr align=\"right\">\n"
-        << "<td nowrap>" << "net max necessary premium"    << "</td>\n"
-        << "<td nowrap>" << f(state.Q1_max_nec_prem_net  ) << "</td>\n"
-        << "</tr>\n"
-        << "<tr align=\"right\">\n"
-        << "<td nowrap>" << "gross max necessary premium"  << "</td>\n"
-        << "<td nowrap>" << f(state.Q2_max_nec_prem_gross) << "</td>\n"
-        << "</tr>\n"
-        << "<tr align=\"right\">\n"
-        << "<td nowrap>" << "CV before last MC"            << "</td>\n"
-        << "<td nowrap>" << f(state.Q3_cv_before_last_mc ) << "</td>\n"
-        << "</tr>\n"
-        << "<tr align=\"right\">\n"
-        << "<td nowrap>" << "cumulative seven-pay premium" << "</td>\n"
-        << "<td nowrap>" << f(state.Q4_cum_px7           ) << "</td>\n"
-        << "</tr>\n"
-        << "<tr align=\"right\">\n"
-        << "<td nowrap>" << "cumulative amounts paid"      << "</td>\n"
-        << "<td nowrap>" << f(state.Q5_cum_amt_pd        ) << "</td>\n"
-        << "</tr>\n"
-        << "<tr align=\"right\">\n"
-        << "<td nowrap>" << "max non-MEC premium"          << "</td>\n"
-        << "<td nowrap>" << f(state.Q6_max_non_mec_prem  ) << "</td>\n"
-        << "</tr>\n"
-        << "</table>\n"
-        ;
-
-    oss
-        << "</body>\n"
-        << "</html>\n"
-        ;
-    html_content_ = oss.str();
+    html_content_ = z.state().format_as_html(Comments);
     html_window_->SetPage(html_content_);
 
-    state.save(fs::change_extension(base_filename(), ".mec.xml"));
+    z.state().save(fs::change_extension(base_filename(), ".mec.xml"));
 
     std::vector<double> ratio_Ax (input_data().years_to_maturity());
     ratio_Ax  += tabular_Ax  / analytic_Ax ;
