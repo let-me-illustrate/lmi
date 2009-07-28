@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_state.cpp,v 1.1 2009-07-28 13:24:12 chicares Exp $
+// $Id: mec_state.cpp,v 1.2 2009-07-28 14:24:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,6 +32,8 @@
 #include "miscellany.hpp" // lmi_array_size()
 #include "value_cast.hpp"
 #include "xml_lmi.hpp"
+
+#include <boost/filesystem/fstream.hpp>
 
 #include <xmlwrapp/nodes_view.h>
 
@@ -110,6 +112,19 @@ bool mec_state::operator==(mec_state const& z) const
             }
         }
     return true;
+}
+
+void mec_state::save(fs::path const& filepath) const
+{
+    fs::ofstream ofs(filepath, ios_out_trunc_binary());
+    xml_lmi::xml_document document(xml_root_name() + "_document");
+    xml::element& root = document.root_node();
+    root << *this;
+    ofs << document;
+    if(!ofs)
+        {
+        warning() << "Unable to save '" << filepath.string() << "'." << LMI_FLUSH;
+        }
 }
 
 void mec_state::AscribeMembers()

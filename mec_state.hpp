@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_state.hpp,v 1.2 2009-07-28 13:24:12 chicares Exp $
+// $Id: mec_state.hpp,v 1.3 2009-07-28 14:24:28 chicares Exp $
 
 #ifndef mec_state_hpp
 #define mec_state_hpp
@@ -31,6 +31,7 @@
 #include "so_attributes.hpp"
 #include "streamable.hpp"
 
+#include <boost/filesystem/path.hpp>
 #include <boost/operators.hpp>
 
 #include <list>
@@ -62,6 +63,8 @@ class LMI_SO mec_state
 
     mec_state& operator=(mec_state const&);
     bool operator==(mec_state const&) const;
+
+    void save(fs::path const&) const;
 
   private:
     void AscribeMembers();
