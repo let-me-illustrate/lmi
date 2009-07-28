@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_state.cpp,v 1.2 2009-07-28 14:24:28 chicares Exp $
+// $Id: mec_state.cpp,v 1.3 2009-07-28 15:15:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,7 +29,7 @@
 #include "mec_state.hpp"
 
 #include "alert.hpp"
-#include "miscellany.hpp" // lmi_array_size()
+#include "miscellany.hpp" // htmlize(), lmi_array_size()
 #include "value_cast.hpp"
 #include "xml_lmi.hpp"
 
@@ -39,6 +39,7 @@
 
 #include <algorithm>      // std::find()
 #include <iterator>       // std::back_inserter
+#include <sstream>
 #include <vector>
 
 namespace
@@ -112,6 +113,203 @@ bool mec_state::operator==(mec_state const& z) const
             }
         }
     return true;
+}
+
+namespace
+{
+template<typename T>
+std::string f(T t)
+{
+    static double const bignum = std::numeric_limits<double>::max();
+    if(bignum == t)
+        {
+        return "&nbsp;&nbsp;&nbsp;BIGNUM";
+        }
+    else
+        {
+        return "&nbsp;&nbsp;&nbsp;" + value_cast<std::string>(t);
+        }
+}
+} // Unnamed namespace.
+
+std::string mec_state::format_as_html(std::string const& heading) const
+{
+    std::ostringstream oss;
+
+    oss
+        << "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\n"
+        << "    \"http://www.w3.org/TR/html4/loose.dtd\">\n"
+        << "<html>\n"
+        << "<head>\n"
+        << "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=ISO-8859-1\">\n"
+        << "<title>Let me illustrate...</title>\n"
+        << "</head>\n"
+        << "<body>\n"
+        ;
+
+    oss << "<p>" << htmlize(heading) << "</p>\n";
+
+    oss
+        << "<hr>\n"
+        << "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "policy year"                     << "</td>\n"
+        << "<td nowrap>" << f(B0_deduced_policy_year   ) << "</td>\n"
+        << "</tr>\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "contract year"                   << "</td>\n"
+        << "<td nowrap>" << f(B1_deduced_contract_year ) << "</td>\n"
+        << "</tr>\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "seven-pay rate"                  << "</td>\n"
+        << "<td nowrap>" << f(B2_deduced_px7_rate      ) << "</td>\n"
+        << "</tr>\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "nsp rate"                        << "</td>\n"
+        << "<td nowrap>" << f(B3_deduced_nsp_rate      ) << "</td>\n"
+        << "</tr>\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "target premium"                  << "</td>\n"
+        << "<td nowrap>" << f(B4_deduced_target_premium) << "</td>\n"
+        << "</tr>\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "target load"                     << "</td>\n"
+        << "<td nowrap>" << f(B5_deduced_target_load   ) << "</td>\n"
+        << "</tr>\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "excess load"                     << "</td>\n"
+        << "<td nowrap>" << f(B6_deduced_excess_load   ) << "</td>\n"
+        << "</tr>\n"
+        << "</table>\n"
+        ;
+
+    oss
+        << "<hr>\n"
+        << "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n"
+
+        << "<tr align=\"right\">\n"
+        << "<td valign=\"bottom\" width=\"14%\">" << ""           << " </td>\n"
+        << "<td valign=\"bottom\" width=\"14%\">" << "initial"    << " </td>\n"
+        << "<td valign=\"bottom\" width=\"14%\">" << "incr"       << " </td>\n"
+        << "<td valign=\"bottom\" width=\"14%\">" << "decr"       << " </td>\n"
+        << "<td valign=\"bottom\" width=\"14%\">" << "nec_prem"   << " </td>\n"
+        << "<td valign=\"bottom\" width=\"14%\">" << "MC"         << " </td>\n"
+        << "<td valign=\"bottom\" width=\"14%\">" << "unnec_prem" << " </td>\n"
+        << "</tr>\n"
+
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "benefit"                   << "</td>\n"
+        << "<td nowrap>" << f(C0_init_bft       ) << "</td>\n"
+        << "<td nowrap>" << f(D0_incr_bft       ) << "</td>\n"
+        << "<td nowrap>" << f(E0_decr_bft       ) << "</td>\n"
+        << "<td nowrap>" << f(F0_nec_pm_bft     ) << "</td>\n"
+        << "<td nowrap>" << f(G0_do_mc_bft      ) << "</td>\n"
+        << "<td nowrap>" << f(H0_unnec_pm_bft   ) << "</td>\n"
+        << "</tr>\n"
+
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "LDB"                       << "</td>\n"
+        << "<td nowrap>" << f(C1_init_ldb       ) << "</td>\n"
+        << "<td nowrap>" << f(D1_incr_ldb       ) << "</td>\n"
+        << "<td nowrap>" << f(E1_decr_ldb       ) << "</td>\n"
+        << "<td nowrap>" << f(F1_nec_pm_ldb     ) << "</td>\n"
+        << "<td nowrap>" << f(G1_do_mc_ldb      ) << "</td>\n"
+        << "<td nowrap>" << f(H1_unnec_pm_ldb   ) << "</td>\n"
+        << "</tr>\n"
+
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "amts pd"                   << "</td>\n"
+        << "<td nowrap>" << f(C2_init_amt_pd    ) << "</td>\n"
+        << "<td nowrap>" << f(D2_incr_amt_pd    ) << "</td>\n"
+        << "<td nowrap>" << f(E2_decr_amt_pd    ) << "</td>\n"
+        << "<td nowrap>" << f(F2_nec_pm_amt_pd  ) << "</td>\n"
+        << "<td nowrap>" << f(G2_do_mc_amt_pd   ) << "</td>\n"
+        << "<td nowrap>" << f(H2_unnec_pm_amt_pd) << "</td>\n"
+        << "</tr>\n"
+
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "MC"                        << "</td>\n"
+        << "<td nowrap>" << f(C3_init_is_mc     ) << "</td>\n"
+        << "<td nowrap>" << f(D3_incr_is_mc     ) << "</td>\n"
+        << "<td nowrap>" << f(E3_decr_is_mc     ) << "</td>\n"
+        << "<td nowrap>" << f(F3_nec_pm_is_mc   ) << "</td>\n"
+        << "<td nowrap>" << f(G3_do_mc_is_mc    ) << "</td>\n"
+        << "<td nowrap>" << f(H3_unnec_pm_is_mc ) << "</td>\n"
+        << "</tr>\n"
+
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "DCV"                       << "</td>\n"
+        << "<td nowrap>" << f(C4_init_dcv       ) << "</td>\n"
+        << "<td nowrap>" << f(D4_incr_dcv       ) << "</td>\n"
+        << "<td nowrap>" << f(E4_decr_dcv       ) << "</td>\n"
+        << "<td nowrap>" << f(F4_nec_pm_dcv     ) << "</td>\n"
+        << "<td nowrap>" << f(G4_do_mc_dcv      ) << "</td>\n"
+        << "<td nowrap>" << f(H4_unnec_pm_dcv   ) << "</td>\n"
+        << "</tr>\n"
+
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "7PP"                       << "</td>\n"
+        << "<td nowrap>" << f(C5_init_px7       ) << "</td>\n"
+        << "<td nowrap>" << f(D5_incr_px7       ) << "</td>\n"
+        << "<td nowrap>" << f(E5_decr_px7       ) << "</td>\n"
+        << "<td nowrap>" << f(F5_nec_pm_px7     ) << "</td>\n"
+        << "<td nowrap>" << f(G5_do_mc_px7      ) << "</td>\n"
+        << "<td nowrap>" << f(H5_unnec_pm_px7   ) << "</td>\n"
+        << "</tr>\n"
+
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "MEC"                       << "</td>\n"
+        << "<td nowrap>" << f(C6_init_mec       ) << "</td>\n"
+        << "<td nowrap>" << f(D6_incr_mec       ) << "</td>\n"
+        << "<td nowrap>" << f(E6_decr_mec       ) << "</td>\n"
+        << "<td nowrap>" << f(F6_nec_pm_mec     ) << "</td>\n"
+        << "<td nowrap>" << f(G6_do_mc_mec      ) << "</td>\n"
+        << "<td nowrap>" << f(H6_unnec_pm_mec   ) << "</td>\n"
+        << "</tr>\n"
+
+        << "</table>\n"
+        ;
+
+    oss
+        << "<hr>\n"
+        << "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "net 1035 amount"              << "</td>\n"
+        << "<td nowrap>" << f(Q0_net_1035          ) << "</td>\n"
+        << "</tr>\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "net max necessary premium"    << "</td>\n"
+        << "<td nowrap>" << f(Q1_max_nec_prem_net  ) << "</td>\n"
+        << "</tr>\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "gross max necessary premium"  << "</td>\n"
+        << "<td nowrap>" << f(Q2_max_nec_prem_gross) << "</td>\n"
+        << "</tr>\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "CV before last MC"            << "</td>\n"
+        << "<td nowrap>" << f(Q3_cv_before_last_mc ) << "</td>\n"
+        << "</tr>\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "cumulative seven-pay premium" << "</td>\n"
+        << "<td nowrap>" << f(Q4_cum_px7           ) << "</td>\n"
+        << "</tr>\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "cumulative amounts paid"      << "</td>\n"
+        << "<td nowrap>" << f(Q5_cum_amt_pd        ) << "</td>\n"
+        << "</tr>\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "max non-MEC premium"          << "</td>\n"
+        << "<td nowrap>" << f(Q6_max_non_mec_prem  ) << "</td>\n"
+        << "</tr>\n"
+        << "</table>\n"
+        ;
+
+    oss
+        << "</body>\n"
+        << "</html>\n"
+        ;
+
+    return oss.str();
 }
 
 void mec_state::save(fs::path const& filepath) const
