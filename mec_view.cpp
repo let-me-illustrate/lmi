@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_view.cpp,v 1.21 2009-07-27 20:05:43 chicares Exp $
+// $Id: mec_view.cpp,v 1.22 2009-07-28 14:24:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -54,6 +54,8 @@
 #include "timer.hpp"
 #include "value_cast.hpp"
 #include "wx_new.hpp"
+
+#include <boost/filesystem/convenience.hpp>
 
 #include <wx/html/htmlwin.h>
 #include <wx/html/htmprint.h>
@@ -797,14 +799,16 @@ void mec_view::Run()
     html_content_ = oss.str();
     html_window_->SetPage(html_content_);
 
+    state.save(fs::change_extension(base_filename(), ".mec.xml"));
+
     std::vector<double> ratio_Ax (input_data().years_to_maturity());
     ratio_Ax  += tabular_Ax  / analytic_Ax ;
     std::vector<double> ratio_7Px(input_data().years_to_maturity());
     ratio_7Px += tabular_7Px / analytic_7Px;
 
     configurable_settings const& c = configurable_settings::instance();
-    std::string const extension(c.spreadsheet_file_extension());
-    std::string spreadsheet_filename = base_filename() + extension;
+    std::string const extension(".mec" + c.spreadsheet_file_extension());
+    std::string spreadsheet_filename = (fs::change_extension(base_filename(), extension)).string();
     std::ofstream ofs(spreadsheet_filename.c_str(), ios_out_trunc_binary());
     ofs << "This temporary output file will be removed in a future release.\n";
     ofs
