@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.157 2009-07-28 13:24:12 chicares Exp $
+# $Id: objects.make,v 1.158 2009-07-30 01:27:18 chicares Exp $
 
 ################################################################################
 
@@ -674,11 +674,16 @@ input_test$(EXEEXT): \
   yare_input.o \
 
 irc7702a_test$(EXEEXT): \
+  $(boost_filesystem_objects) \
   $(common_test_objects) \
+  $(xmlwrapp_objects) \
   ihs_irc7702a.o \
   irc7702a_test.o \
   mec_state.o \
+  miscellany.o \
   stratified_algorithms.o \
+  streamable.o \
+  xml_lmi.o \
 
 istream_to_string_test$(EXEEXT): \
   $(common_test_objects) \
