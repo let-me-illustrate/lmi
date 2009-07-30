@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1330 2009-07-28 16:20:26 chicares Exp $
+// $Id: ChangeLog,v 1.1331 2009-07-30 01:29:24 chicares Exp $
 
 MAINTENANCE
 
@@ -23277,4 +23277,14 @@ Fix defect introduced 20090717T0252Z, and detected by VZ--see:
 
   mec_input.cpp
 Modify defaults.
+
+20090730T0127Z <gchicares@sbcglobal.net> [770]
+
+  objects.make
+Rework linker dependencies of an obsolescent unit test.
+
+20090730T0129Z <gchicares@sbcglobal.net> [770]
+
+  version.hpp
+Mark release candidate.
 
