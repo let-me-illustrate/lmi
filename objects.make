@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.158 2009-07-30 01:27:18 chicares Exp $
+# $Id: objects.make,v 1.159 2009-07-30 20:37:43 chicares Exp $
 
 ################################################################################
 
@@ -220,8 +220,6 @@ common_common_objects := \
   mc_enum.o \
   mc_enum_types.o \
   mc_enum_types_aux.o \
-  mec_input.o \
-  mec_xml_document.o \
   miscellany.o \
   multiple_cell_document.o \
   mvc_model.o \
@@ -289,7 +287,9 @@ lmi_common_objects := \
   ihs_proddata.o \
   ihs_rnddata.o \
   md5.o \
+  mec_input.o \
   mec_state.o \
+  mec_xml_document.o \
   mortality_rates_fetch.o \
   preferences_model.o \
   stratified_algorithms.o \
