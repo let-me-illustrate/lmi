@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.159 2009-07-30 20:37:43 chicares Exp $
+# $Id: objects.make,v 1.160 2009-07-30 21:46:13 chicares Exp $
 
 ################################################################################
 
@@ -288,6 +288,7 @@ lmi_common_objects := \
   ihs_rnddata.o \
   md5.o \
   mec_input.o \
+  mec_server.o \
   mec_state.o \
   mec_xml_document.o \
   mortality_rates_fetch.o \
