@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_server.cpp,v 1.2 2009-07-30 22:30:44 chicares Exp $
+// $Id: mec_server.cpp,v 1.3 2009-07-30 23:12:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -56,7 +56,6 @@
 #include <boost/filesystem/fstream.hpp>
 
 #include <algorithm>                 // std::min()
-#include <fstream>
 #include <iostream>
 #include <limits>
 #include <string>
@@ -85,14 +84,14 @@ mec_state test_one_days_7702A_transactions
     mcenum_defn_life_ins        DefinitionOfLifeInsurance    = exact_cast<mce_defn_life_ins       >(input["DefinitionOfLifeInsurance"   ])->value();
     mcenum_defn_material_change DefinitionOfMaterialChange   = exact_cast<mce_defn_material_change>(input["DefinitionOfMaterialChange"  ])->value();
     mcenum_uw_basis             GroupUnderwritingType        = exact_cast<mce_uw_basis            >(input["GroupUnderwritingType"       ])->value();
-    std::string                 Comments                     = exact_cast<datum_string            >(input["Comments"                    ])->value();
+//  std::string                 Comments                     = exact_cast<datum_string            >(input["Comments"                    ])->value();
     int                         InforceYear                  = exact_cast<tnr_duration            >(input["InforceYear"                 ])->value();
     int                         InforceMonth                 = exact_cast<tnr_month               >(input["InforceMonth"                ])->value();
     double                      InforceTargetSpecifiedAmount = exact_cast<tnr_nonnegative_double  >(input["InforceTargetSpecifiedAmount"])->value();
     double                      InforceAccountValue          = exact_cast<tnr_nonnegative_double  >(input["InforceAccountValue"         ])->value();
 //  calendar_date               InforceAsOfDate              = exact_cast<tnr_date                >(input["InforceAsOfDate"             ])->value();
     bool                        InforceIsMec                 = exact_cast<mce_yes_or_no           >(input["InforceIsMec"                ])->value();
-    calendar_date               LastMaterialChangeDate       = exact_cast<tnr_date                >(input["LastMaterialChangeDate"      ])->value();
+//  calendar_date               LastMaterialChangeDate       = exact_cast<tnr_date                >(input["LastMaterialChangeDate"      ])->value();
     double                      InforceDcv                   = exact_cast<tnr_nonnegative_double  >(input["InforceDcv"                  ])->value();
     double                      InforceAvBeforeLastMc        = exact_cast<tnr_nonnegative_double  >(input["InforceAvBeforeLastMc"       ])->value();
     int                         InforceContractYear          = exact_cast<tnr_duration            >(input["InforceContractYear"         ])->value();
@@ -424,8 +423,6 @@ mec_state test_one_days_7702A_transactions
             );
         }
 
-    z.state().save(fs::change_extension(file_path, ".mec.xml"));
-
     std::vector<double> ratio_Ax (input.years_to_maturity());
     ratio_Ax  += tabular_Ax  / analytic_Ax ;
     std::vector<double> ratio_7Px(input.years_to_maturity());
@@ -433,8 +430,8 @@ mec_state test_one_days_7702A_transactions
 
     configurable_settings const& c = configurable_settings::instance();
     std::string const extension(".mec" + c.spreadsheet_file_extension());
-    std::string spreadsheet_filename = (fs::change_extension(file_path, extension)).string();
-    std::ofstream ofs(spreadsheet_filename.c_str(), ios_out_trunc_binary());
+    fs::path spreadsheet_filename = fs::change_extension(file_path, extension);
+    fs::ofstream ofs(spreadsheet_filename, ios_out_trunc_binary());
     ofs << "This temporary output file will be removed in a future release.\n";
     ofs
         << "t\t"
@@ -546,7 +543,12 @@ bool mec_server::operator()(fs::path const& file_path, mec_input const& z)
     Timer timer;
     state_ = test_one_days_7702A_transactions(file_path, z);
     usec_for_calculations_ = timer.stop().elapsed_usec();
-    usec_for_output_ = 0.0;
+    timer.restart();
+    if(mce_emit_test_data && emission_)
+        {
+        state_.save(fs::change_extension(file_path, ".mec.xml"));
+        }
+    usec_for_output_       = timer.stop().elapsed_usec();
     conditionally_show_timings_on_stdout();
     return true;
 }
