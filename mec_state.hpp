@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_state.hpp,v 1.4 2009-07-28 15:15:33 chicares Exp $
+// $Id: mec_state.hpp,v 1.5 2009-07-30 16:35:15 chicares Exp $
 
 #ifndef mec_state_hpp
 #define mec_state_hpp
@@ -54,7 +54,6 @@ class LMI_SO mec_state
     ,private boost::equality_comparable<mec_state>
 {
     friend class Irc7702A;
-    friend class mec_view;
 
   public:
     mec_state();
