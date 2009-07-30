@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.72 2009-03-26 16:47:29 chicares Exp $
+// $Id: main_cli.cpp,v 1.73 2009-07-30 23:17:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -341,31 +341,6 @@ void process_command_line(int argc, char* argv[])
                 }
                 break;
 
-            case 'h':
-                {
-                show_help = true;
-                }
-                break;
-
-            case 'i':
-                {
-                run_illustration = true;
-                ill_names.push_back(getopt_long.optarg);
-                }
-                break;
-
-            case 'l':
-                {
-                show_license = true;
-                }
-                break;
-
-            case 'o':
-                {
-                run_profile = true;
-                }
-                break;
-
             case 'e':
                 {
                 int emission_suboptions = mce_emit_nothing;
@@ -400,6 +375,31 @@ void process_command_line(int argc, char* argv[])
                         }
                     }
                 emission = mcenum_emission(emission_suboptions);
+                }
+                break;
+
+            case 'h':
+                {
+                show_help = true;
+                }
+                break;
+
+            case 'i':
+                {
+                run_illustration = true;
+                ill_names.push_back(getopt_long.optarg);
+                }
+                break;
+
+            case 'l':
+                {
+                show_license = true;
+                }
+                break;
+
+            case 'o':
+                {
+                run_profile = true;
                 }
                 break;
 
