@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member.hpp,v 1.21 2008-12-27 02:56:36 chicares Exp $
+// $Id: any_member.hpp,v 1.22 2009-07-30 16:36:25 chicares Exp $
 
 // This is a derived work based on boost::any, which bears the following
 // copyright and permissions notice:
@@ -452,6 +452,12 @@ template<typename MemberType, typename ClassType>
 MemberType* exact_cast(any_member<ClassType>& member)
 {
     return member.template exact_cast<MemberType>();
+}
+
+template<typename MemberType, typename ClassType>
+MemberType const* exact_cast(any_member<ClassType> const& member)
+{
+    return exact_cast<MemberType>(const_cast<any_member<ClassType>&>(member));
 }
 
 /// Implementation of free function template member_cast().
