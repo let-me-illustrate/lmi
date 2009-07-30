@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_view.cpp,v 1.24 2009-07-30 16:37:41 chicares Exp $
+// $Id: mec_view.cpp,v 1.25 2009-07-30 19:16:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -56,6 +56,7 @@
 #include "wx_new.hpp"
 
 #include <boost/filesystem/convenience.hpp>
+#include <boost/filesystem/path.hpp>
 
 #include <wx/html/htmlwin.h>
 #include <wx/html/htmprint.h>
@@ -244,11 +245,13 @@ void mec_view::UponUpdateProperties(wxUpdateUIEvent& e)
     e.Enable(true);
 }
 
-void mec_view::Run()
+namespace
 {
-    input_data().RealizeAllSequenceInput();
-    mec_input const& input(input_data());
-
+mec_state test_one_days_7702A_transactions
+    (fs::path  const& file_path
+    ,mec_input const& input
+    )
+{
     bool                        Use7702ATables               = exact_cast<mce_yes_or_no           >(input["Use7702ATables"              ])->value();
 //  int                         IssueAge                     = exact_cast<tnr_issue_age           >(input["IssueAge"                    ])->value();
     mcenum_gender               Gender                       = exact_cast<mce_gender              >(input["Gender"                      ])->value();
@@ -604,10 +607,7 @@ void mec_view::Run()
             );
         }
 
-    html_content_ = z.state().format_as_html(Comments);
-    html_window_->SetPage(html_content_);
-
-    z.state().save(fs::change_extension(base_filename(), ".mec.xml"));
+    z.state().save(fs::change_extension(file_path, ".mec.xml"));
 
     std::vector<double> ratio_Ax (input.years_to_maturity());
     ratio_Ax  += tabular_Ax  / analytic_Ax ;
@@ -616,7 +616,7 @@ void mec_view::Run()
 
     configurable_settings const& c = configurable_settings::instance();
     std::string const extension(".mec" + c.spreadsheet_file_extension());
-    std::string spreadsheet_filename = (fs::change_extension(base_filename(), extension)).string();
+    std::string spreadsheet_filename = (fs::change_extension(file_path, extension)).string();
     std::ofstream ofs(spreadsheet_filename.c_str(), ios_out_trunc_binary());
     ofs << "This temporary output file will be removed in a future release.\n";
     ofs
@@ -672,5 +672,17 @@ void mec_view::Run()
             << LMI_FLUSH
             ;
         }
+
+    return z.state();
+}
+} // Unnamed namespace.
+
+void mec_view::Run()
+{
+    input_data().RealizeAllSequenceInput();
+    mec_state state;
+    state = test_one_days_7702A_transactions(base_filename(), input_data());
+    html_content_ = state.format_as_html(input_data()["Comments"].str());
+    html_window_->SetPage(html_content_);
 }
 
