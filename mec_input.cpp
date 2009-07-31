@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_input.cpp,v 1.11 2009-07-28 16:20:26 chicares Exp $
+// $Id: mec_input.cpp,v 1.12 2009-07-31 02:41:45 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -336,9 +336,9 @@ void mec_input::DoHarmonize()
         }
     else if(mce_cvat == DefinitionOfLifeInsurance)
         {
-        DefinitionOfMaterialChange.allow(mce_unnecessary_premium                        ,anything_goes);
-        DefinitionOfMaterialChange.allow(mce_benefit_increase                           ,anything_goes);
-        DefinitionOfMaterialChange.allow(mce_later_of_increase_or_unnecessary_premium   ,anything_goes);
+        DefinitionOfMaterialChange.allow(mce_unnecessary_premium                        ,true         );
+        DefinitionOfMaterialChange.allow(mce_benefit_increase                           ,true         );
+        DefinitionOfMaterialChange.allow(mce_later_of_increase_or_unnecessary_premium   ,anything_goes); // Not yet implemented.
         DefinitionOfMaterialChange.allow(mce_earlier_of_increase_or_unnecessary_premium ,true         );
         DefinitionOfMaterialChange.allow(mce_adjustment_event                           ,false        );
         }
