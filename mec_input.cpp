@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_input.cpp,v 1.12 2009-07-31 02:41:45 chicares Exp $
+// $Id: mec_input.cpp,v 1.13 2009-07-31 13:46:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -699,6 +699,7 @@ using namespace xml;
     RedintegrateExPost(file_version, detritus_map, residuary_names);
 
     Reconcile();
+    RealizeAllSequenceInput(false);
 }
 
 void mec_input::write(xml::element& x) const
