@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: antediluvian_stubs.cpp,v 1.10 2008-12-27 02:56:36 chicares Exp $
+// $Id: antediluvian_stubs.cpp,v 1.11 2009-07-31 02:59:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -27,12 +27,60 @@
 #endif // __BORLANDC__
 
 #include "authenticity.hpp"
+#include "mec_server.hpp"
 
 void authenticate_system()
 {
 }
 
 std::string const& timestamp_of_production_release()
+{
+    static std::string const s("");
+    return s;
+}
+
+mec_server::mec_server(mcenum_emission)
+{
+}
+
+mec_server::~mec_server()
+{
+}
+
+bool mec_server::operator()(fs::path const&)
+{
+    return false;
+}
+
+mec_state::mec_state()
+{
+}
+
+mec_state::mec_state(mec_state const&)
+    :obstruct_slicing<mec_state>()
+    ,streamable()
+    ,MemberSymbolTable<mec_state>()
+{
+}
+
+mec_state::~mec_state()
+{
+}
+
+void mec_state::read(xml::element const&)
+{
+}
+
+void mec_state::write(xml::element&) const
+{
+}
+
+int mec_state::class_version() const
+{
+    return 0;
+}
+
+std::string mec_state::xml_root_name() const
 {
     static std::string const s("");
     return s;

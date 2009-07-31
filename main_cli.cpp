@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.73 2009-07-30 23:17:28 chicares Exp $
+// $Id: main_cli.cpp,v 1.74 2009-07-31 02:59:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -41,6 +41,7 @@
 #include "main_common.hpp"
 #include "mc_enum.hpp"
 #include "mc_enum_types.hpp"
+#include "mec_server.hpp"
 #include "miscellany.hpp"
 #include "path_utility.hpp"
 #include "so_attributes.hpp"
@@ -92,7 +93,12 @@ void RegressionTest()
             else if(".ini" == fs::extension(*i))
                 {
                 std::cout << "Regression testing: " << i->string() << std::endl;
-                (illustrator(mce_emit_custom_0))(*i);
+                (illustrator(mce_emit_custom_0 ))(*i);
+                }
+            else if(".mec" == fs::extension(*i))
+                {
+                std::cout << "Regression testing: " << i->string() << std::endl;
+                (mec_server (mce_emit_test_data))(*i);
                 }
             else
                 {
@@ -220,6 +226,8 @@ void process_command_line(int argc, char* argv[])
         {"emit"      ,REQD_ARG ,0 ,'e' ,0 ,"choose what output to emit"},
         {"illfile"   ,REQD_ARG ,0 ,'i' ,0 ,"run illustration"},
         {"cnsfile"   ,REQD_ARG ,0 ,'c' ,0 ,"run census"},
+//      {"gptfile"   ,REQD_ARG ,0 ,'g' ,0 ,"test GPT"}, // Reserved for future use.
+        {"mecfile"   ,REQD_ARG ,0 ,'m' ,0 ,"test MEC testing"},
         {"data_path" ,REQD_ARG ,0 ,'d' ,0 ,"path to data files"},
         {"print_db"  ,NO_ARG   ,0 ,'p', 0, "print product databases"},
         {"regress"   ,NO_ARG   ,0 ,'r' ,0 ,"run regression test"},
@@ -243,6 +251,7 @@ void process_command_line(int argc, char* argv[])
     bool print_all_databases = false;
     bool run_illustration    = false;
     bool run_census          = false;
+    bool run_mec_test        = false;
 
     e_emission emission(mce_emit_nothing);
     // Suppress enumerators for options not fully implemented.
@@ -252,6 +261,7 @@ void process_command_line(int argc, char* argv[])
 
     std::vector<std::string> ill_names;
     std::vector<std::string> cns_names;
+    std::vector<std::string> mec_names;
 
     int digit_optind = 0;
     int this_option_optind = 1;
@@ -378,6 +388,8 @@ void process_command_line(int argc, char* argv[])
                 }
                 break;
 
+//          case 'g': // Reserved for future use.
+
             case 'h':
                 {
                 show_help = true;
@@ -394,6 +406,13 @@ void process_command_line(int argc, char* argv[])
             case 'l':
                 {
                 show_license = true;
+                }
+                break;
+
+            case 'm':
+                {
+                run_mec_test = true;
+                mec_names.push_back(getopt_long.optarg);
                 }
                 break;
 
@@ -527,6 +546,15 @@ void process_command_line(int argc, char* argv[])
             (cns_names.begin()
             ,cns_names.end()
             ,illustrator(emission.value())
+            );
+        }
+
+    if(run_mec_test)
+        {
+        std::for_each
+            (mec_names.begin()
+            ,mec_names.end()
+            ,mec_server(emission.value())
             );
         }
 }
