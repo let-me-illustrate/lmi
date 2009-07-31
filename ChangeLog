@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1331 2009-07-30 01:29:24 chicares Exp $
+// $Id: ChangeLog,v 1.1332 2009-07-31 13:54:21 chicares Exp $
 
 MAINTENANCE
 
@@ -23284,6 +23284,82 @@ Modify defaults.
 Rework linker dependencies of an obsolescent unit test.
 
 20090730T0129Z <gchicares@sbcglobal.net> [770]
+
+  version.hpp
+Mark release candidate.
+
+20090730T1635Z <gchicares@sbcglobal.net> [770]
+
+  mec_state.hpp
+Withdraw a friendship that has become unnecessary.
+
+20090730T1636Z <gchicares@sbcglobal.net> [770]
+
+  any_member.hpp
+Add a complementary free function.
+
+20090730T1637Z <gchicares@sbcglobal.net> [770]
+
+  mec_view.cpp
+Refactor.
+
+20090730T1916Z <gchicares@sbcglobal.net> [770]
+
+  mec_view.cpp
+Refactor.
+
+20090730T2037Z <gchicares@sbcglobal.net> [770]
+
+  objects.make
+Remove gratuitous linker dependencies of antediluvian binaries.
+
+20090730T2146Z <gchicares@sbcglobal.net> [770]
+
+  mec_server.cpp [new file]
+  mec_server.hpp [new file]
+  objects.make
+Prepare to move test_one_days_7702A_transactions().
+
+20090730T2230Z <gchicares@sbcglobal.net> [770]
+
+  mec_server.cpp
+  mec_view.cpp
+Move test_one_days_7702A_transactions().
+
+20090730T2312Z <gchicares@sbcglobal.net> [770]
+
+  mec_server.cpp
+Refactor.
+
+20090730T2317Z <gchicares@sbcglobal.net> [770]
+
+  main_cli.cpp
+Reorder.
+
+20090731T0241Z <gchicares@sbcglobal.net> [770]
+
+  mec_input.cpp
+Permit certain options that might be useful for testing.
+
+20090731T0259Z <gchicares@sbcglobal.net> [770]
+
+  antediluvian_stubs.cpp
+  main_cli.cpp
+  workhorse.make
+Add 7702A to automated system test.
+
+20090731T1345Z <gchicares@sbcglobal.net> [770]
+
+  diagnostics.sed
+Filter out expected output from 7702A testing.
+
+20090731T1346Z <gchicares@sbcglobal.net> [770]
+
+  mec_input.cpp
+Realize sequence input upon reading file. This would otherwise not be
+done for command-line binaries, e.g. for automated system testing.
+
+20090731T1354Z <gchicares@sbcglobal.net> [770]
 
   version.hpp
 Mark release candidate.
