@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 #
-# $Id: diagnostics.sed,v 1.21 2008-12-27 02:56:40 chicares Exp $
+# $Id: diagnostics.sed,v 1.22 2009-07-31 13:45:11 chicares Exp $
 #
   # Delete expected output from make.
 /Circular.*dependency dropped/d
@@ -79,7 +79,7 @@
 /^Turbo Incremental Link/d
 /^\\[/A-Za-z0-9_]*.cpp:$/d
   # Delete expected output from regression test.
-/^Regression testing:.*\.\(cns\|ini\)$/d
+/^Regression testing:.*\.\(cns\|ini\|mec\)$/d
 /^Initializing all cells\.*$/d
 /^curr charges and genacct int, full sepacct int\.*$/d
 /^guar charges and genacct int, full sepacct int\.*$/d
