@@ -21,7 +21,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: reg_d_individual.xsl,v 1.6 2009-03-03 03:05:31 wboutin Exp $
+    $Id: reg_d_individual.xsl,v 1.7 2009-09-12 02:26:16 wboutin Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -40,7 +40,7 @@
           <!-- Central part of page -->
           <fo:region-body margin="1.4in 0 1.2in"/>
           <!-- Footer -->
-          <fo:region-after extent=".6in"/>
+          <fo:region-after extent=".75in"/>
         </fo:simple-page-master>
 
         <!-- Define the IRR (Guaranteed Charges) Illustration page. -->
@@ -51,7 +51,7 @@
           <!-- Header -->
           <fo:region-before extent="3in"/>
           <!-- Footer -->
-          <fo:region-after extent=".6in"/>
+          <fo:region-after extent=".75in"/>
         </fo:simple-page-master>
 
         <!-- Define the IRR (Current Charges) Illustration page -->
@@ -62,7 +62,7 @@
           <!-- Header -->
           <fo:region-before extent="3in"/>
           <!-- Footer -->
-          <fo:region-after extent=".6in"/>
+          <fo:region-after extent=".75in"/>
         </fo:simple-page-master>
 
         <!-- Define the Current Values Illustration page -->
@@ -73,7 +73,7 @@
           <!-- Header -->
           <fo:region-before extent="3in"/>
           <!-- Footer -->
-          <fo:region-after extent=".6in"/>
+          <fo:region-after extent=".75in"/>
         </fo:simple-page-master>
 
         <!-- Define the Explanation and Footnotes page 1. -->
@@ -84,7 +84,7 @@
           <!-- Header -->
           <fo:region-before extent="1in"/>
           <!-- Footer -->
-          <fo:region-after extent=".6in"/>
+          <fo:region-after extent=".75in"/>
         </fo:simple-page-master>
 
         <!-- Define the Explanation and Footnotes page 2. -->
@@ -95,7 +95,7 @@
           <!-- Header -->
           <fo:region-before extent="1in"/>
           <!-- Footer -->
-          <fo:region-after extent=".6in"/>
+          <fo:region-after extent=".75in"/>
         </fo:simple-page-master>
 
         <!-- Define the Certification Statements page. -->
@@ -106,7 +106,7 @@
           <!-- Header -->
           <fo:region-before extent="1in"/>
           <!-- Footer -->
-          <fo:region-after extent=".6in"/>
+          <fo:region-after extent=".75in"/>
         </fo:simple-page-master>
 
         <!-- Define the Supplemental Illustration page. -->
@@ -118,7 +118,7 @@
             <!-- Header -->
             <fo:region-before extent="3in"/>
             <!-- Footer -->
-            <fo:region-after extent=".6in"/>
+            <fo:region-after extent=".75in"/>
           </fo:simple-page-master>
         </xsl:if>
       </fo:layout-master-set>
@@ -136,7 +136,6 @@
           <fo:block font-weight="bold" font-size="11pt" font-family="sans-serif" text-align="center">
             <fo:block font-size="18pt" padding="1em 0 25pt">
               <xsl:value-of select="$scalars/PolicyMktgName"/>
-              <xsl:value-of font-size="10pt" select="$registered-symbol"/>
             </fo:block>
             <fo:block font-size="12pt" padding-after="45pt">
               Hypothetical Life Insurance Illustration
@@ -164,7 +163,7 @@
                 </xsl:with-param>
               </xsl:call-template>
             </fo:block>
-            <fo:block padding-after="140.0pt">
+            <fo:block padding-after="130.0pt">
               Date Prepared: <xsl:call-template name="date-prepared"/>
             </fo:block>
           </fo:block>
@@ -181,7 +180,6 @@
               This material must be preceded or accompanied by the current
               Confidential Private Placement Memorandum for
               <xsl:value-of select="$scalars/PolicyMktgName"/>
-              <xsl:value-of select="$registered-symbol"/>
               and the current prospectuses and private placement memoranda
               for its underlying investment choices. Investors should
               carefully consider the investment objectives, risks,
@@ -191,7 +189,6 @@
             </fo:block>
             <fo:block padding-after="10.0pt">
               <xsl:value-of select="$scalars/PolicyMktgName"/>
-              <xsl:value-of select="$registered-symbol"/>
               is a flexible premium variable adjustable life insurance policy
               issued by <xsl:value-of select="$scalars/InsCoName"/>
               (<xsl:value-of select="$scalars/InsCoShortName"/>),
@@ -200,8 +197,7 @@
             <fo:block padding-after="10.0pt">
               Placement Agent:
               <xsl:value-of select="$scalars/MainUnderwriter"/>,
-              <xsl:value-of select="$scalars/MainUnderwriterAddress"/>.
-              <xsl:value-of select="$scalars/MainUnderwriter"/> is a wholly
+              <xsl:value-of select="$scalars/MainUnderwriterAddress"/>. Wholly
               owned subsidiary of <xsl:value-of select="$scalars/InsCoName"/>.
             </fo:block>
             <fo:block padding-after="10.0pt">
@@ -217,7 +213,7 @@
               is a marketing designation
               for <xsl:value-of select="$scalars/InsCoName"/>
               (<xsl:value-of select="$scalars/InsCoShortName"/>)
-              and its subsidiaries.
+              and its affiliate companies and sales representatives.
             </fo:block>
             <fo:block>
               Compliance tracking number:
@@ -320,8 +316,7 @@
               This illustration is not a policy or an offer or solicitation
               to purchase a policy. Offers are made only through the
               Confidential Private Placement Memorandum ("the PPM") for
-              <xsl:value-of select="$scalars/PolicyMktgName"/>
-              <xsl:value-of select="$registered-symbol"/>.
+              <xsl:value-of select="$scalars/PolicyMktgName"/>.
             </fo:block>
             <fo:block padding-top="1em">
               <xsl:value-of select="$scalars/ProductDescription"/>.
@@ -349,65 +344,60 @@
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">Monthly Charges:</fo:inline>
-              <xsl:value-of select="$scalars/MonthlyChargesFootnote"/>
+              &nbsp;<xsl:value-of select="$scalars/MonthlyChargesFootnote"/>
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">Surrender Charges:</fo:inline>
-              <xsl:value-of select="$scalars/PremTaxSurrChgFootnote"/>
-            </fo:block>
-            <fo:block padding-top="1em">
-              <fo:inline font-weight="bold">Issue State: </fo:inline>
-              <xsl:value-of select="$scalars/StatePostalAbbrev"/>
+              &nbsp;<xsl:value-of select="$scalars/PremTaxSurrChgFootnote"/>
             </fo:block>
           </fo:block>
-
           <fo:block font-weight="normal" font-size="9pt" font-family="sans-serif" text-align="left">
             <fo:block font-size="10.0pt" font-weight="bold" padding-top="2em" text-decoration="underline">
               Column Definitions
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">Account Value:</fo:inline>
-              <xsl:value-of select="$scalars/AccountValueFootnote"/>
+              &nbsp;<xsl:value-of select="$scalars/AccountValueFootnote"/>
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">Administrative Charge:</fo:inline>
-              <xsl:value-of select="$scalars/PolicyFeeFootnote"/>
+              &nbsp;<xsl:value-of select="$scalars/PolicyFeeFootnote"/>
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">Asset Charges:</fo:inline>
-              <xsl:value-of select="$scalars/AssetChargeFootnote"/>
+              &nbsp;<xsl:value-of select="$scalars/AssetChargeFootnote"/>
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">Cash Surrender Value:</fo:inline>
-              <xsl:value-of select="$scalars/CashSurrValueFootnote"/>
+              &nbsp;<xsl:value-of select="$scalars/CashSurrValueFootnote"/>
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">Death Benefit:</fo:inline>
-              <xsl:value-of select="$scalars/DeathBenefitFootnote"/>
+              &nbsp;<xsl:value-of select="$scalars/DeathBenefitFootnote"/>
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">End of Year Age:</fo:inline>
-              <xsl:value-of select="$scalars/AttainedAgeFootnote"/>
+              &nbsp;<xsl:value-of select="$scalars/AttainedAgeFootnote"/>
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">Investment Income:</fo:inline>
-              <xsl:value-of select="$scalars/InvestmentIncomeFootnote"/>
+              &nbsp;<xsl:value-of select="$scalars/InvestmentIncomeFootnote"/>
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">IRR on Death Benefit:</fo:inline>
-              <xsl:value-of select="$scalars/IrrDbFootnote"/>
+              &nbsp;<xsl:value-of select="$scalars/IrrDbFootnote"/>
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">IRR on Surrender Value:</fo:inline>
-              <xsl:value-of select="$scalars/IrrCsvFootnote"/>
+              &nbsp;<xsl:value-of select="$scalars/IrrCsvFootnote"/>
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">Mortality Charges:</fo:inline>
-              <xsl:value-of select="$scalars/MortalityChargesFootnote"/>
+              &nbsp;<xsl:value-of select="$scalars/MortalityChargesFootnote"/>
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">Policy Year:</fo:inline>
-              <xsl:value-of select="$scalars/PolicyYearFootnote"/>
+              &nbsp;<xsl:value-of select="$scalars/PolicyYearFootnote"/>
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">Premium Loads:</fo:inline>
@@ -418,7 +408,7 @@
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">Premium Outlay:</fo:inline>
-              <xsl:value-of select="$scalars/OutlayFootnote"/>
+              &nbsp;<xsl:value-of select="$scalars/OutlayFootnote"/>
             </fo:block>
           </fo:block>
 
@@ -438,11 +428,13 @@
             <fo:block padding-top="1em">
               If applicable, withdrawals and policy loans will appear on a
               supplemental report at the end of the illustration. Withdrawals
-              and policy loans are assumed to be taken at the beginnings of the
+              and policy loans are assumed to be taken at the beginning of the
               applicable policy year. The illustration and supplemental report
               reflect a fixed policy loan interest rate of <xsl:value-of select="$scalars/InitAnnLoanDueRate"/>.
             </fo:block>
+            <fo:block padding-top="1em">
               <xsl:value-of select="$scalars/LoanAndWithdrawalFootnote"/>
+            </fo:block>
           </fo:block>
         </fo:flow>
 
@@ -475,7 +467,7 @@
                   the guideline premium test. The guideline single premium
                   is $<xsl:value-of select="$scalars/InitGSP"/>
                   and the guideline level premium
-                  is $<xsl:value-of select="$scalars/InitGLP"/>
+                  is $<xsl:value-of select="$scalars/InitGLP"/>.
                 </xsl:when>
                 <xsl:otherwise>
                   the cash value accumulation test.
@@ -499,7 +491,7 @@
               <xsl:choose>
                 <xsl:when test="$scalars/IsMec='1'">
                   becomes a Modified Endowment Contract (MEC)
-                  in policy year <xsl:value-of select="$scalars/MecYear+1"/>
+                  in policy year <xsl:value-of select="$scalars/MecYear+1"/>.
                 </xsl:when>
                 <xsl:otherwise>
                   is not a Modified Endowment Contract (MEC). Subsequent changes
@@ -510,8 +502,8 @@
               </xsl:choose>
             </fo:block>
             <fo:block padding-top="1em">
-              If a policy is a MEC, any withdrawals and policy loans are taxed
-              to the extent of any gain in the policy, and an additional penalty
+              If a policy is a MEC, withdrawals and policy loans are taxed to
+              the extent of any gain in the policy, and an additional penalty
               tax may apply to the taxable portion of the distribution.
             </fo:block>
             <fo:block font-weight="bold" padding-top="1em">
@@ -531,7 +523,7 @@
           </fo:block>
           <fo:block font-weight="normal" font-size="9pt" font-family="sans-serif" text-align="left" padding-top="1em">
             <fo:block padding-top="1em">
-              CONTRACT OWNER / APPLICANT
+              POLICY OWNER / APPLICANT
             </fo:block>
             <fo:block padding-bottom="1em">
               I have received a copy of this illustration, and I understand
@@ -541,7 +533,7 @@
               are not guaranteed.
             </fo:block>
             <fo:block text-decoration="overline" padding="2em">
-              CONTRACT OWNER OR APPLICANT SIGNATURE &nbsp;&nbsp;&nbsp;
+              POLICY OWNER OR APPLICANT SIGNATURE &nbsp;&nbsp;&nbsp;
               <fo:inline text-decoration="no-overline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</fo:inline>DATE
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             </fo:block>
@@ -669,12 +661,12 @@
               </fo:block>
               <xsl:if test="not($is_composite)">
                 <fo:block>
-                  Gender: <xsl:value-of select="$scalars/Gender"/>
+                  Age: <xsl:value-of select="$scalars/Age"/>
                 </fo:block>
               </xsl:if>
               <xsl:if test="not($is_composite)">
                 <fo:block>
-                  Age: <xsl:value-of select="$scalars/Age"/>
+                  Issue State: <xsl:value-of select="$scalars/StatePostalAbbrev"/>
                 </fo:block>
               </xsl:if>
               <fo:block>
@@ -692,7 +684,6 @@
             <fo:block text-align="left" font-size="9pt">
               <fo:block>
                 Policy: <xsl:value-of select="$scalars/PolicyMktgName"/>
-                <xsl:value-of select="$registered-symbol"/>
               </fo:block>
               <fo:block/>
               <xsl:if test="not($is_composite)">
@@ -963,8 +954,6 @@
     </fo:flow>
   </xsl:template>
 
-  <xsl:variable name="registered-symbol">&#174;</xsl:variable>
-
   <xsl:template name="get-special-column-value">
     <xsl:param name="special"/>
     <xsl:param name="column"/>
@@ -991,7 +980,12 @@
     <xsl:param name="omit-pagenumber" select="boolean(0)"/>
     <xsl:param name="omit-disclaimer" select="boolean(0)"/>
     <xsl:call-template name="generic-footer">
-
+      <xsl:with-param name="top-block">
+        <fo:block>
+          This illustration is not complete unless all pages as noted
+          below are included.
+        </fo:block>
+      </xsl:with-param>
       <xsl:with-param name="left-block">
         <fo:block><xsl:value-of select="$scalars/InsCoName"/></fo:block>
         <fo:block><xsl:value-of select="$scalars/InsCoAddr"/></fo:block>
@@ -1020,7 +1014,6 @@
           </xsl:choose>
         </fo:block>
       </xsl:with-param>
-
     </xsl:call-template>
   </xsl:template>
 

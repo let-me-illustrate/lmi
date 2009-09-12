@@ -21,7 +21,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.84 2008-12-27 02:56:51 chicares Exp $
+    $Id: nasd.xsl,v 1.85 2009-09-12 02:26:16 wboutin Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -328,22 +328,10 @@
             </fo:block>
 
             <fo:block padding-top="1em">
-              <xsl:value-of select="$scalars/PolicyMktgName"/> is
-              a <xsl:value-of select="$scalars/PolicyLegalName"/> issued
-              by <xsl:value-of select="$scalars/InsCoName"/>.
-              The policy provides lifetime insurance protection for as long
-              as it remains in force. The policy is available at issue
-              with at least two death benefit options:
-              Option 1 (death benefit equal to the greater of (a) the selected
-              face amount at death or (b) the minimum face amount at death);
-              and Option 2 (death benefit equal to the greater of (a)
-              the selected face amount plus account value at death
-              or (b) the minimum face amount at death).
-              If available under the policy, Option 3 is a death benefit option
-              equal to the greatest of (a) the selected face amount at death
-              plus the sum of premiums paid less withdrawals;
-              or (b) selected face amount at death;
-              or (c) minimum face amount at death.
+              <xsl:value-of select="$scalars/PolicyMktgName"/> is a
+              <xsl:value-of select="$scalars/PolicyLegalName"/> issued by
+              <xsl:value-of select="$scalars/InsCoName"/>.
+              <xsl:value-of select="$scalars/ProductDescription"/>
             </fo:block>
 
             <fo:block padding-top="1em">
@@ -443,6 +431,14 @@
                 Guaranteed Issue Underwriting is referred to as
                 "Limited Underwriting" and Simplified Issue Underwriting
                 is referred to as "Simplified Underwriting".
+              </fo:block>
+            </xsl:if>
+            <xsl:if test="$scalars/StatePostalAbbrev='MD'">
+              <fo:block padding-top="1em">
+                In the state of Maryland, Guaranteed Issue Underwriting
+                is referred to as "Nonstandard Limited Underwriting"
+                and Simplified Issue Underwriting is referred to as
+                "Nonstandard Simplified Underwriting".
               </fo:block>
             </xsl:if>
             <fo:block padding-top="1em">
@@ -573,12 +569,13 @@
               <xsl:value-of select="$scalars/MainUnderwriterAddress"/>.
             </fo:block>
             <fo:block padding-top="1em">
-              The Principal Underwriter is
+              Principal Underwriters:
+              <xsl:value-of select="$scalars/CoUnderwriter"/>
+               and
               <xsl:value-of select="$scalars/MainUnderwriter"/>
-              , a wholly owned subsidiary of
+               are subsidiaries of
               <xsl:value-of select="$scalars/InsCoName"/>
-              and is located at
-              <xsl:value-of select="$scalars/MainUnderwriterAddress"/>
+              &nbsp;<xsl:value-of select="$scalars/InsCoStreet"/>.
             </fo:block>
           </fo:block>
           <xsl:if test="not($has_supplemental_report) and $is_composite">
