@@ -21,7 +21,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: reg_d_group.xsl,v 1.6 2009-03-03 00:10:15 wboutin Exp $
+    $Id: reg_d_group.xsl,v 1.7 2009-09-12 02:26:16 wboutin Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -244,7 +244,7 @@
             </fo:block>
             <fo:block padding-top="1em">
               <fo:inline text-decoration="underline">Stable Value Feature</fo:inline>
-              <xsl:value-of select="$scalars/StableValueFootnote"/>
+              &nbsp;<xsl:value-of select="$scalars/StableValueFootnote"/>
             </fo:block>
             <fo:block padding-top="1em">
               This illustration assumes Initial Death Benefit Option
@@ -459,8 +459,7 @@
             <fo:block padding-top="1em">
               Placement Agent:
               <xsl:value-of select="$scalars/MainUnderwriter"/>,
-              <xsl:value-of select="$scalars/MainUnderwriterAddress"/>.
-              <xsl:value-of select="$scalars/MainUnderwriter"/> is a wholly
+              <xsl:value-of select="$scalars/MainUnderwriterAddress"/>. Wholly
               owned subsidiary of <xsl:value-of select="$scalars/InsCoName"/>.
             </fo:block>
             <fo:block padding-top="1em">
