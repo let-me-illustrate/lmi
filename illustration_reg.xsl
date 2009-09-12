@@ -21,7 +21,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.74 2009-05-21 15:46:27 chicares Exp $
+    $Id: illustration_reg.xsl,v 1.75 2009-09-12 02:26:16 wboutin Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -416,6 +416,14 @@ to the xsl files first.
                 Issue Underwriting is referred to as "Simplified Underwriting".
               </fo:block>
             </xsl:if>
+            <xsl:if test="$scalars/StatePostalAbbrev='MD'">
+              <fo:block padding-top="1em">
+                In the state of Maryland, Guaranteed Issue Underwriting
+                is referred to as "Nonstandard Limited Underwriting"
+                and Simplified Issue Underwriting is referred to as
+                "Nonstandard Simplified Underwriting".
+              </fo:block>
+            </xsl:if>
             <xsl:if test="$scalars/StatePostalAbbrev='TX'">
               <xsl:if test="$scalars/UWType='Guaranteed issue'">
                 <fo:block padding-top="1em">
@@ -429,10 +437,11 @@ to the xsl files first.
               <fo:block padding-top="1em">
                 We may assess a Market Value Adjustment upon a surrender
                 of the certificate when the surrender proceeds are intended
-                to be applied to an insurance policy issued
-                by an insurer unaffilliated with MML Bay State with an intent
-                to qualify the exchange as a tax free exchange under IRC
-                section 1035.
+                to be applied to an insurance policy issued by an insurer
+                unaffilliated with
+                <xsl:value-of select="$scalars/InsCoShortName"/>
+                with an intent to qualify the exchange as a tax free exchange
+                under IRC section 1035.
               </fo:block>
               <xsl:if test="$scalars/UseExperienceRating!='1'">
                 <fo:block padding-top="1em">

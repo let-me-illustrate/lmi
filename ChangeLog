@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1332 2009-07-31 13:54:21 chicares Exp $
+// $Id: ChangeLog,v 1.1333 2009-09-12 02:26:16 wboutin Exp $
 
 MAINTENANCE
 
@@ -23363,4 +23363,12 @@ done for command-line binaries, e.g. for automated system testing.
 
   version.hpp
 Mark release candidate.
+
+20090912T0226Z <boutinw@cox.net> [770]
+
+  illustration_reg.xsl
+  nasd.xsl
+  reg_d_group.xsl
+  reg_d_individual.xsl
+Reword and reformat a few disclosures.
 
