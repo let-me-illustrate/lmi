@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.hpp,v 1.26 2009-02-08 01:50:37 chicares Exp $
+// $Id: ledger_variant.hpp,v 1.27 2009-09-22 14:49:35 chicares Exp $
 
 #ifndef ledger_variant_hpp
 #define ledger_variant_hpp
@@ -120,9 +120,6 @@ class LMI_SO LedgerVariant
     std::vector<double> EOYDeathBft;
     std::vector<double> PrefLoanBalance; // Not used yet.
     std::vector<double> TotalLoanBalance;
-#if !defined REMOVE_THIS_NEXT_TIME_COLUMNS_CHANGE
-    std::vector<double> ExcessLoan;
-#endif // !defined REMOVE_THIS_NEXT_TIME_COLUMNS_CHANGE
     std::vector<double> AvgDeathBft;     // Not used yet.
     std::vector<double> SurrChg;         // Not used yet.
     std::vector<double> TermPurchased;

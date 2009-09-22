@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.cpp,v 1.33 2008-12-27 02:56:46 chicares Exp $
+// $Id: ledger_variant.cpp,v 1.34 2009-09-22 14:49:35 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -135,7 +135,6 @@ void LedgerVariant::Alloc(int len)
     EndYearVectors  ["EOYDeathBft"          ] = &EOYDeathBft            ;
     EndYearVectors  ["PrefLoanBalance"      ] = &PrefLoanBalance        ;
     EndYearVectors  ["TotalLoanBalance"     ] = &TotalLoanBalance       ;
-    EndYearVectors  ["ExcessLoan"           ] = &ExcessLoan             ;
     EndYearVectors  ["AvgDeathBft"          ] = &AvgDeathBft            ;
     EndYearVectors  ["SurrChg"              ] = &SurrChg                ;
     EndYearVectors  ["TermPurchased"        ] = &TermPurchased          ;
@@ -250,7 +249,6 @@ void LedgerVariant::Init
 
 //  PrefLoanBalance =
 //  TotalLoanBalance=
-//  ExcessLoan      =
 //  AvgDeathBft     =
 //  SurrChg         =
 //  TermPurchased   =
