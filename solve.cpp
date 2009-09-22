@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: solve.cpp,v 1.23 2009-03-02 05:43:16 chicares Exp $
+// $Id: solve.cpp,v 1.24 2009-09-22 14:49:35 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -94,8 +94,7 @@ double SolveTest()
             ,ConstThat->VariantValues().CSVNet[j]
 // Ideally, it'd be this:
 //          ,std::min(ConstThat->VariantValues().CSVNet[j], ConstThat->loan_ullage_[j])
-// but the antediluvian branch doesn't calculate ullage at all--not even
-// in obsolete variable ExcessLoan.
+// but the antediluvian branch doesn't calculate ullage at all.
             );
         }
 
