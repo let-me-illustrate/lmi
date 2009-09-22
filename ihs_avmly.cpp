@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.126 2009-07-22 18:52:27 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.127 2009-09-22 14:49:35 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2805,15 +2805,6 @@ void AccountValue::TxTakeLoan()
         // TODO ?? Shouldn't this happen in FinalizeMonth()?
         InvariantValues().NewCashLoan[Year] = ActualLoan;
         }
-    {
-    // Expungible block--replaced by loan_ullage_. Retained for the
-    // nonce in order not to perturb system testing.
-    VariantValues().ExcessLoan[Year] = std::min(0.0, max_loan_increment - RequestedLoan);
-    if(Solving)
-        {
-        LMI_ASSERT(VariantValues().ExcessLoan[Year] == -loan_ullage_[Year]);
-        }
-    }
 
     {
 // TODO ?? Perhaps this condition should be:

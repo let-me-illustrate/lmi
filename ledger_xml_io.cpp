@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.87 2009-04-18 22:59:16 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.88 2009-09-22 14:49:35 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -243,8 +243,6 @@ void Ledger::write(xml::element& x) const
     title_map["ErMode"                          ] = "ER Payment Mode";
 // TODO ?? This can't be a mode. I don't know how it differs from 'ErGrossPmt' above.
     title_map["ErPmt"                           ] = "ER Payment Mode";
-    title_map["ExcessLoan_Current"              ] = " _ Curr Excess Loan";
-    title_map["ExcessLoan_Guaranteed"           ] = "Guar Excess Loan";
     title_map["ExpenseCharges_Current"          ] = "Curr Expense Charge";
     title_map["ExpenseCharges_Guaranteed"       ] = "Guar Expense Charge";
     title_map["ExperienceReserve_Current"       ] = " _____________ Experience Rating Reserve";
@@ -538,7 +536,6 @@ void Ledger::write(xml::element& x) const
     format_map["ErGrossPmt"                        ] = f1;
 //    format_map["ErMode"                            ] = f1; // Not numeric.
     format_map["ErPmt"                             ] = f1;
-    format_map["ExcessLoan"                        ] = f1;
     format_map["ExpenseCharges"                    ] = f1;
     format_map["ExperienceReserve"                 ] = f1;
     format_map["FundNumbers"                       ] = f1;
