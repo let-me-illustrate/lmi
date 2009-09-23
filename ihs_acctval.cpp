@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.164 2009-04-15 02:05:22 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.165 2009-09-23 00:49:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1263,15 +1263,6 @@ void AccountValue::FinalizeYear()
         YearlyTaxBasis[Year] = TaxBasis;
         }
 
-#if !defined REMOVE_THIS_NEXT_TIME_COLUMNS_CHANGE
-    double csv_sep_acct = 0.0;
-    if(0.0 != AVGenAcct + AVSepAcct)
-        {
-        csv_sep_acct = csv_net * AVSepAcct / (AVGenAcct + AVSepAcct);
-        }
-    double csv_gen_acct = material_difference(csv_net, csv_sep_acct);
-#endif // !defined REMOVE_THIS_NEXT_TIME_COLUMNS_CHANGE
-
     // 7702(f)(2)(A)
     double cv_7702 =
           total_av
@@ -1289,12 +1280,10 @@ void AccountValue::FinalizeYear()
     cv_7702 = std::max(cv_7702, HoneymoonValue);
 
     VariantValues().AcctVal     [Year] = total_av;
+    VariantValues().AVGenAcct   [Year] = AVGenAcct + AVRegLn + AVPrfLn;
+    VariantValues().AVSepAcct   [Year] = AVSepAcct;
     VariantValues().DacTaxRsv   [Year] = DacTaxRsv;
     VariantValues().CSVNet      [Year] = csv_net;
-#if !defined REMOVE_THIS_NEXT_TIME_COLUMNS_CHANGE
-    VariantValues().CSVGenAcct  [Year] = csv_gen_acct;
-    VariantValues().CSVSepAcct  [Year] = csv_sep_acct;
-#endif // !defined REMOVE_THIS_NEXT_TIME_COLUMNS_CHANGE
     VariantValues().CV7702      [Year] = cv_7702;
 
     // Update death benefit. 'DBReflectingCorr' currently equals the

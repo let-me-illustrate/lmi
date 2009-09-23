@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.cpp,v 1.34 2009-09-22 14:49:35 chicares Exp $
+// $Id: ledger_variant.cpp,v 1.35 2009-09-23 00:49:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -120,17 +120,10 @@ void LedgerVariant::Alloc(int len)
     BegYearVectors  ["NetPmt"               ] = &NetPmt                 ;
 
     EndYearVectors  ["AcctVal"              ] = &AcctVal                ;
+    EndYearVectors  ["AVGenAcct"            ] = &AVGenAcct              ;
+    EndYearVectors  ["AVSepAcct"            ] = &AVSepAcct              ;
     EndYearVectors  ["DacTaxRsv"            ] = &DacTaxRsv              ;
     EndYearVectors  ["CSVNet"               ] = &CSVNet                 ;
-#if !defined REMOVE_THIS_NEXT_TIME_COLUMNS_CHANGE
-// Consider
-//   https://savannah.nongnu.org/support/?105978
-// and possibly
-//   https://savannah.nongnu.org/support/?105572
-// at that time.
-    EndYearVectors  ["CSVGenAcct"           ] = &CSVGenAcct             ;
-    EndYearVectors  ["CSVSepAcct"           ] = &CSVSepAcct             ;
-#endif // !defined REMOVE_THIS_NEXT_TIME_COLUMNS_CHANGE
     EndYearVectors  ["CV7702"               ] = &CV7702                 ;
     EndYearVectors  ["EOYDeathBft"          ] = &EOYDeathBft            ;
     EndYearVectors  ["PrefLoanBalance"      ] = &PrefLoanBalance        ;
