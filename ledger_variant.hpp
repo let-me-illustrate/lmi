@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.hpp,v 1.27 2009-09-22 14:49:35 chicares Exp $
+// $Id: ledger_variant.hpp,v 1.28 2009-09-23 00:49:32 chicares Exp $
 
 #ifndef ledger_variant_hpp
 #define ledger_variant_hpp
@@ -109,13 +109,11 @@ class LMI_SO LedgerVariant
 
     // EOY vectors
     std::vector<double> AcctVal;
+    std::vector<double> AVGenAcct;
+    std::vector<double> AVSepAcct;
     std::vector<double> DacTaxRsv;
     // See account value class for CSV definitions.
     std::vector<double> CSVNet;
-#if !defined REMOVE_THIS_NEXT_TIME_COLUMNS_CHANGE
-    std::vector<double> CSVGenAcct;
-    std::vector<double> CSVSepAcct;
-#endif // !defined REMOVE_THIS_NEXT_TIME_COLUMNS_CHANGE
     std::vector<double> CV7702;
     std::vector<double> EOYDeathBft;
     std::vector<double> PrefLoanBalance; // Not used yet.
