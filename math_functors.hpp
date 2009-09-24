@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: math_functors.hpp,v 1.16 2008-12-27 02:56:48 chicares Exp $
+// $Id: math_functors.hpp,v 1.17 2009-09-24 16:06:28 chicares Exp $
 
 #ifndef math_functors_hpp
 #define math_functors_hpp
@@ -105,7 +105,7 @@ struct mean
 // Typically, the period 'n' is a constant known at compile time, so
 // it is makes sense for it to be a non-type template parameter. That,
 // however, makes derivation from std::binary_function nonsensical:
-// what is of interest is not the type of 'n', but its value. But 'n'
+// what is important is not the type of 'n', but its value. But 'n'
 // equals twelve in the most common case, for which functors derived
 // from std::unary_function are provided.
 //
@@ -124,6 +124,8 @@ struct i_upper_n_over_n_from_i
     T operator()(T const& i) const
         {
         static long double const reciprocal_n = 1.0L / n;
+        // naively:    (1+i)^(1/n) - 1
+        // substitute: (1+i)^n - 1 <-> expm1l(log1pl(i) * n)
         long double z = expm1l(log1pl(i) * reciprocal_n);
         return static_cast<T>(z);
         }
@@ -148,6 +150,8 @@ struct i_from_i_upper_n_over_n
     BOOST_STATIC_ASSERT(0 < n);
     T operator()(T const& i) const
         {
+        // naively:    (1+i)^n - 1
+        // substitute: (1+i)^n - 1 <-> expm1l(log1pl(i) * n)
         long double z = expm1l(log1pl(i) * n);
         return static_cast<T>(z);
         }
@@ -173,6 +177,8 @@ struct d_upper_n_from_i
     T operator()(T const& i) const
         {
         static long double const reciprocal_n = 1.0L / n;
+        // naively:    n * (1 - (1+i)^(-1/n))
+        // substitute: (1+i)^n - 1 <-> expm1l(log1pl(i) * n)
         long double z = -n * expm1l(log1pl(i) * -reciprocal_n);
         return static_cast<T>(z);
         }
@@ -203,6 +209,13 @@ struct net_i_from_gross
     T operator()(T const& i, T const& spread, T const& fee) const
         {
         static long double const reciprocal_n = 1.0L / n;
+        // naively:
+        //   (1
+        //   +   (1+     i)^(1/n)
+        //   -   (1+spread)^(1/n)
+        //   -         fee *(1/n)
+        //   )^n - 1
+        // substitute: (1+i)^n - 1 <-> expm1l(log1pl(i) * n)
         long double z = expm1l
             (
             n * log1pl
@@ -215,10 +228,12 @@ struct net_i_from_gross
         }
 };
 
-/// Convert q to a monthly COI rate. The COI charge is assessed against
-/// all insureds who are alive at the beginning of the month. Assuming
-/// that deaths occur at the end of the month, the monthly-equivalent
-/// q should be divided by one minus itself to obtain the COI rate.
+/// Convert q to a monthly COI rate.
+///
+/// The COI rate is the monthly equivalent of q divided by one minus
+/// itself, because deducting the COI charge at the beginning of the
+/// month increases the amount actually at risk--see:
+///   http://lists.nongnu.org/archive/html/lmi/2009-09/msg00001.html
 ///
 /// The value of 'q' might exceed unity, for example if guaranteed COI
 /// rates for simplified issue are 120% of 1980 CSO, so that case is
@@ -264,6 +279,8 @@ struct coi_rate_from_q
         else
             {
             static long double const reciprocal_12 = 1.0L / 12;
+            // naively:    1 - (1-q)^(1/12)
+            // substitute: (1+i)^n - 1 <-> expm1l(log1pl(i) * n)
             long double monthly_q = -expm1l(log1pl(-q) * reciprocal_12);
             if(1.0L == monthly_q)
                 {
