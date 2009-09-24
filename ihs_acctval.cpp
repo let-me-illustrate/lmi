@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.165 2009-09-23 00:49:32 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.166 2009-09-24 16:05:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -729,7 +729,7 @@ void AccountValue::SetInitialValues()
     CoiCharge                   = 0.0;
     NetCoiCharge                = 0.0;
     MlyDed                      = 0.0;
-    CumulativeSalesLoad         = 0.0;
+    CumulativeSalesLoad         = 0.0; // INFORCE !! Add to inforce input.
 
     CoiRetentionRate                  = Database_->Query(DB_ExpRatCOIRetention);
     ExperienceRatingAmortizationYears = Database_->Query(DB_ExpRatAmortPeriod);
