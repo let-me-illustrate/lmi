@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types.xpp,v 1.30 2009-03-08 20:14:46 chicares Exp $
+// $Id: mc_enum_types.xpp,v 1.31 2009-09-24 16:07:28 chicares Exp $
 
 #define yes_or_no_VALUES \
     {mce_no \
@@ -591,6 +591,15 @@
     ,mce_current_gross_interest_credited \
     ,mce_current_net_interest_credited \
     ,mce_current_sep_acct_charges \
+    ,mce_current_policy_fee \
+    ,mce_current_0_account_value_general_account \
+    ,mce_guaranteed_0_account_value_general_account \
+    ,mce_current_0_account_value_separate_account \
+    ,mce_guaranteed_0_account_value_separate_account \
+    ,mce_current_0_account_value \
+    ,mce_guaranteed_0_account_value \
+    ,mce_current_0_cash_surrender_value \
+    ,mce_guaranteed_0_cash_surrender_value \
     };
 #define report_column_NAMES \
     {"[none]" \
@@ -640,6 +649,15 @@
     ,"GrossIntCredited_Current" \
     ,"NetIntCredited_Current" \
     ,"SepAcctCharges_Current" \
+    ,"PolicyFee_Current" \
+    ,"AVGenAcct_CurrentZero" \
+    ,"AVGenAcct_GuaranteedZero" \
+    ,"AVSepAcct_CurrentZero" \
+    ,"AVSepAcct_GuaranteedZero" \
+    ,"AcctVal_CurrentZero" \
+    ,"AcctVal_GuaranteedZero" \
+    ,"CSVNet_CurrentZero" \
+    ,"CSVNet_GuaranteedZero" \
     };
 #if 0
 // TODO ?? Nicer-looking names--implement later.
@@ -691,6 +709,15 @@
     ,"Current Interest Credited before Separate Account Charges" \
     ,"Current Interest Credited Net of Separate Account Charges" \
     ,"Current Separate Account Asset Charges" \
+    ,"Current Policy Fee" \
+    ,"Curr Charges 0% Account Value General Account" \
+    ,"Guar Charges 0% Account Value General Account" \
+    ,"Curr Charges 0% Account Value Separate Account" \
+    ,"Guar Charges 0% Account Value Separate Account" \
+    ,"Curr Charges 0% Account Value" \
+    ,"Guar Charges 0% Account Value" \
+    ,"Curr Charges 0% Net Cash Surrender Value" \
+    ,"Guar Charges 0% Net Cash Surrender Value" \
     };
 #endif // 0
 
