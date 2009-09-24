@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1333 2009-09-12 02:26:16 wboutin Exp $
+// $Id: ChangeLog,v 1.1334 2009-09-24 16:13:33 chicares Exp $
 
 MAINTENANCE
 
@@ -23371,4 +23371,44 @@ Mark release candidate.
   reg_d_group.xsl
   reg_d_individual.xsl
 Reword and reformat a few disclosures.
+
+20090922T1449Z <gchicares@sbcglobal.net> [770]
+
+  ihs_avmly.cpp
+  ledger_variant.cpp
+  ledger_variant.hpp
+  ledger_xml_io.cpp
+  solve.cpp
+Remove obsolete 'ExcessLoan'.
+
+20090923T0049Z <gchicares@sbcglobal.net> [770]
+
+  ihs_acctval.cpp
+  ledger_variant.cpp
+  ledger_variant.hpp
+Split AV, and not CSV, by general versus separate account.
+
+20090924T1605Z <gchicares@sbcglobal.net> [770]
+
+  ihs_acctval.cpp
+  test_coding_rules.cpp
+Note a deficiency in inforce data.
+
+20090924T1606Z <gchicares@sbcglobal.net> [770]
+
+  math_functors.hpp
+Improve documentation.
+
+20090924T1607Z <gchicares@sbcglobal.net> [770]
+
+  ledger_xml_io.cpp
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+  mc_enum_types.xpp
+Offer additional supplemental-report columns.
+
+20090924T1613Z <gchicares@sbcglobal.net> [770]
+
+  version.hpp
+Mark release candidate.
 
