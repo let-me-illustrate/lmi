@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.88 2009-09-22 14:49:35 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.89 2009-09-24 16:07:27 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -196,9 +196,15 @@ void Ledger::write(xml::element& x) const
     // they are defined only on a current basis--experience-rating
     // columns, e.g.
 
+    title_map["AVGenAcct_CurrentZero"           ] = "Curr Charges 0% Account Value Gen Acct";
+    title_map["AVGenAcct_GuaranteedZero"        ] = "Guar Charges 0% Account Value Gen Acct";
     title_map["AVRelOnDeath_Current"            ] = "Account Value ____Released on Death";
+    title_map["AVSepAcct_CurrentZero"           ] = "Curr Charges 0% Account Value Sep Acct";
+    title_map["AVSepAcct_GuaranteedZero"        ] = "Guar Charges 0% Account Value Sep Acct";
     title_map["AcctVal_Current"                 ] = " _____________ Curr Account Value";
+    title_map["AcctVal_CurrentZero"             ] = "Curr Charges 0% Account Value";
     title_map["AcctVal_Guaranteed"              ] = " _____________ Guar Account Value";
+    title_map["AcctVal_GuaranteedZero"          ] = "Guar Charges 0% Account Value";
     title_map["AddonCompOnAssets"               ] = "Additional Comp on Assets";
     title_map["AddonCompOnPremium"              ] = "Additional Comp on Premium";
     title_map["AddonMonthlyFee"                 ] = "Additional Monthly Fee";
@@ -218,7 +224,9 @@ void Ledger::write(xml::element& x) const
     title_map["COICharge_Current"               ] = " _____________ _____________ Curr COI Charge";
     title_map["COICharge_Guaranteed"            ] = " _____________ _____________ Guar COI Charge";
     title_map["CSVNet_Current"                  ] = " _____________ Curr Net Cash Surr Value";
+    title_map["CSVNet_CurrentZero"              ] = "Curr Charges 0% Net Cash Surr Value";
     title_map["CSVNet_Guaranteed"               ] = " _____________ Guar Net Cash Surr Value";
+    title_map["CSVNet_GuaranteedZero"           ] = "Guar Charges 0% Net Cash Surr Value";
     title_map["CV7702_Current"                  ] = "Curr 7702 Cash Value";
     title_map["CV7702_Guaranteed"               ] = "Guar 7702 Cash Value";
     title_map["ClaimsPaid_Current"              ] = " _____________ _______ Curr ___Claims ___Paid";
@@ -514,17 +522,15 @@ void Ledger::write(xml::element& x) const
     format_map["AddonCompOnAssets"                 ] = f1;
     format_map["AddonCompOnPremium"                ] = f1;
     format_map["AvgDeathBft"                       ] = f1;
+    format_map["AVGenAcct"                         ] = f1;
     format_map["AVRelOnDeath"                      ] = f1;
+    format_map["AVSepAcct"                         ] = f1;
     format_map["BaseDeathBft"                      ] = f1;
     format_map["BOYAssets"                         ] = f1;
     format_map["ClaimsPaid"                        ] = f1;
     format_map["COICharge"                         ] = f1;
     format_map["Composite"                         ] = f1;
     format_map["CSVNet"                            ] = f1;
-#if !defined REMOVE_THIS_NEXT_TIME_COLUMNS_CHANGE
-    format_map["CSVGenAcct"                        ] = f1;
-    format_map["CSVSepAcct"                        ] = f1;
-#endif // !defined REMOVE_THIS_NEXT_TIME_COLUMNS_CHANGE
     format_map["CV7702"                            ] = f1;
     format_map["DacTaxLoad"                        ] = f1;
     format_map["DacTaxRsv"                         ] = f1;
