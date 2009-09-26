@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.63 2009-03-11 15:51:34 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.64 2009-09-26 01:37:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -124,6 +124,15 @@ std::map<std::string,ledger_metadata> const& ledger_metadata_map()
         m["GrossIntCredited_Current"   ] = ledger_metadata(0, oe_format_normal    , "Curr Gross Int Credited"               ); // "Current Interest Credited before Separate Account Charges"
         m["NetIntCredited_Current"     ] = ledger_metadata(0, oe_format_normal    , "Curr Net Int Credited"                 ); // "Current Interest Credited Net of Separate Account Charges"
         m["SepAcctCharges_Current"     ] = ledger_metadata(0, oe_format_normal    , "Curr Sep Acct Charges"                 ); // "Current Separate Account Asset Charges"
+        m["PolicyFee_Current"          ] = ledger_metadata(0, oe_format_normal    , "Curr Policy Fee"                       ); // "Current Policy Fee"
+        m["AVGenAcct_CurrentZero"      ] = ledger_metadata(0, oe_format_normal    , "Curr Charges 0% Account Value Gen Acct"); // "Curr Charges 0% Account Value General Account"
+        m["AVGenAcct_GuaranteedZero"   ] = ledger_metadata(0, oe_format_normal    , "Guar Charges 0% Account Value Gen Acct"); // "Guar Charges 0% Account Value General Account"
+        m["AVSepAcct_CurrentZero"      ] = ledger_metadata(0, oe_format_normal    , "Curr Charges 0% Account Value Sep Acct"); // "Curr Charges 0% Account Value Separate Account"
+        m["AVSepAcct_GuaranteedZero"   ] = ledger_metadata(0, oe_format_normal    , "Guar Charges 0% Account Value Sep Acct"); // "Guar Charges 0% Account Value Separate Account"
+        m["AcctVal_CurrentZero"        ] = ledger_metadata(0, oe_format_normal    , "Curr Charges 0% Account Value"         ); // "Curr Charges 0% Account Value"
+        m["AcctVal_GuaranteedZero"     ] = ledger_metadata(0, oe_format_normal    , "Guar Charges 0% Account Value"         ); // "Guar Charges 0% Account Value"
+        m["CSVNet_CurrentZero"         ] = ledger_metadata(0, oe_format_normal    , "Curr Charges 0% Net Cash Surr Value"   ); // "Curr Charges 0% Net Cash Surrender Value"
+        m["CSVNet_GuaranteedZero"      ] = ledger_metadata(0, oe_format_normal    , "Guar Charges 0% Net Cash Surr Value"   ); // "Guar Charges 0% Net Cash Surrender Value"
         }
 
     return m;
