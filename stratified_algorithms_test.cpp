@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_algorithms_test.cpp,v 1.18 2008-12-27 02:56:56 chicares Exp $
+// $Id: stratified_algorithms_test.cpp,v 1.19 2009-09-28 01:45:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -560,16 +560,23 @@ void progressively_reduce_test()
 
     // These values are designed to fail with IEC 60559:1989 64-bit doubles.
     double ad, bd, zd, rd;
-    ad = .03; bd = 0.04; zd = .07;
+    ad = 0.03; bd = 0.04; zd = 0.07;
     rd = progressively_reduce(ad, bd, zd);
     // This is likely to fail with 'rd' being something like 6.93889e-18:
-    //   BOOST_TEST( 0.0 == ad &&  0.0 == bd &&  0.0 == rd);
+    //   BOOST_TEST(0.0 == ad && 0.0 == bd && 0.0 == rd);
     // We can expect only that it's within a tolerance of
     //   machine epsilon
     //   times largest value
     //   times number of operations (taken approximately as ten).
     double t = 10.0 * zd * std::numeric_limits<double>::epsilon();
     BOOST_TEST(std::fabs(ad) < t && std::fabs(bd) < t && std::fabs(rd) < t);
+
+    // Here, delta is less than the sum of the first two arguments,
+    // but greater than the first alone, so the first argument and
+    // the returned remainder should both be reduced to exactly zero.
+    ad = 0.0301; bd = 0.1110; zd = 0.0711;
+    rd = progressively_reduce(ad, bd, zd);
+    BOOST_TEST(0.0 == ad && materially_equal(0.07, bd) && 0.0 == rd);
 }
 
 int test_main(int, char*[])
