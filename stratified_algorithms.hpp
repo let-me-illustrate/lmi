@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_algorithms.hpp,v 1.20 2008-12-27 02:56:56 chicares Exp $
+// $Id: stratified_algorithms.hpp,v 1.21 2009-09-28 01:46:26 chicares Exp $
 
 #ifndef stratified_algorithms_hpp
 #define stratified_algorithms_hpp
@@ -461,6 +461,17 @@ void progressively_limit(T& a, T& b, T const& limit)
 /// insufficient reason to write this routine less generically, even
 /// though it would be a significant simplification. --end note]
 ///
+/// The implementation sedulously avoids catastrophic cancellation.
+/// Where it presently does this:
+///   if(a == r)     {        a = r = zero;}
+///   else if(a < r) {a -= r;     r = zero;}
+///   else           {r -= a; a     = zero;}
+/// an earlier version did this instead:
+///   T z(std::max(a, r));
+///   a -= z;
+///   r -= z;
+/// which often caused neither a nor r to equal zero exactly.
+///
 /// Preconditions:
 ///   None. In particular, there is no restriction on the algebraic
 ///   sign of a, b, or delta.
@@ -471,75 +482,57 @@ void progressively_limit(T& a, T& b, T const& limit)
 template<typename T>
 T progressively_reduce(T& a, T& b, T const& delta)
 {
-    // Cache T(0) in case it's expensive to construct.
-    T const zero = T(0);
-
-    // Return value.
-    T r(delta);
-
+    T const zero = T(0); // Cache T(0) in case it's expensive to construct.
+    T r(delta);          // Return value.
     if(zero == r)
         {
         return r;
         }
 
+    // To the extent that a negative delta (a positive increment) is
+    // available, use it to bring any negative account to zero, in
+    // account-preference order.
+
     if(a < zero && r < zero)
         {
-        T z(std::max(a, r));
-        a -= z;
-        r -= z;
+        if(a == r)     {        a = r = zero;}
+        else if(a < r) {a -= r;     r = zero;} // |r| < |a|
+        else           {r -= a; a     = zero;}
         }
     if(b < zero && r < zero)
         {
-        T z(std::max(b, r));
-        b -= z;
-        r -= z;
+        if(b == r)     {        b = r = zero;}
+        else if(b < r) {b -= r;     r = zero;} // |r| < |b|
+        else           {r -= b; b     = zero;}
         }
 
-    if(r < zero)
-        {
-        a -= r;
-        r = zero;
-        }
-    else
-        {
-        T za(std::min(std::max(zero, a), r));
-        a -= za;
-        r -= za;
-        if(zero < r)
-            {
-            T zb(std::min(std::max(zero, b), r));
-            b -= zb;
-            r -= zb;
-            }
-        }
+    // Apply any remaining negative delta (a positive increment) to
+    // the preferred account.
 
-    // In a precise number system, we could now assert:
-    //   LMI_ASSERT(zero <= r);
-    // But due to the imprecision of floating-point arithmetic, that
-    // could easily fail. A value close to zero, but of random sign,
-    // can arise from subtraction of two nearly-identical quantities.
-    // There are many subtractions in this function, and it's not
-    // necessarily obvious which one caused such an outcome, so it's
-    // not trivial to set a reasonable tolerance. Instead, we just let
-    // negatives arise as they will, and move them into the preferred
-    // account, explicitly zeroing the return value.
-    if(r < zero)
-        {
-        a -= r;
-        r = zero;
-        }
-    // However, r can still have a tiny positive floating-point value
-    // when it would be zero in a precise number system. There really
-    // isn't anything we can do to prevent that.
+    if(r < zero)  {a -= r; r = zero;}
+    LMI_ASSERT(zero <= r);
 
-    // Due to the imprecision of floating-point arithmetic, we could
-    // probably force an assertion like this to fire with legitimate
-    // input. It would hold, though, in a precise number system.
-    //
-    // At top: save original sum just for assertion.
-    //   T const original_sum(a + b - r);
-    // Just before exit:
-    //   LMI_ASSERT(materially_equal(original_sum, a + b - r));
+    // To the extent that positive account balances are available,
+    // reduce them by any remaining positive delta (decrement) in
+    // account-preference order, but don't make any account balance
+    // negative.
+
+    if(zero < a && zero < r)
+        {
+        if(a == r)     {        a = r = zero;}
+        else if(r < a) {a -= r;     r = zero;} // |r| < |a|
+        else           {r -= a; a     = zero;}
+        }
+    if(zero < b && zero < r)
+        {
+        if(b == r)     {        b = r = zero;}
+        else if(r < b) {b -= r;     r = zero;} // |r| < |b|
+        else           {r -= b; b     = zero;}
+        }
+    LMI_ASSERT(zero <= r);
+
+    // Return any remaining decrement that couldn't be applied because
+    // both accounts have already been reduced to zero.
 
     return r;
 }
