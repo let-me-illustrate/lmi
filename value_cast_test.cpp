@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: value_cast_test.cpp,v 1.22 2009-05-04 13:23:16 chicares Exp $
+// $Id: value_cast_test.cpp,v 1.23 2009-09-29 23:37:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -351,20 +351,37 @@ int extra_tests0()
         ,static_cast<double>(std::numeric_limits<double>::max_exponent - 1)
         );
 
-    // MPATROL !! This call to std::strtod() produces a segfault with mpatrol
-    // when built with MinGW gcc-3.4.5 .
-    {
-    // Initialize 'nptr' to the string representation of 'big',
-    // copied from the output of:
-    //   std::cout << value_cast<std::string>(big) << std::endl;
-    char const* nptr = "89884656743115795386465259539451236680898848947115328636715040578866337902750481566354238661203768010560056939935696678829394884407208311246423715319737062188883946712432742638151109800623047059726541476042502884419075341171231440736956555270413618581675255342293149119973622969239858152417678164812112068608";
-    // Pointer to which strtoT()'s 'endptr' argument refers.
-    char* rendptr;
-    std::strtod(nptr, &rendptr); // mpatrol segfault here.
-    }
-
+    std::cout
+        << "Using libmingwex's strtod() to convert a really big number"
+        << " fails with mpatrol."
+        << std::endl
+        ;
     BOOST_TEST_EQUAL( big, value_cast<double>(value_cast<std::string>( big)));
     BOOST_TEST_EQUAL(-big, value_cast<double>(value_cast<std::string>(-big)));
+    // MPATROL !! This minimal, self-contained testcase produces an
+    // "ILLMEM" error with mpatrol when built with MinGW gcc-3.4.5 and
+    // 'mingwrt-3.15.2-mingw32-dev.tar.gz'. The value of 'nptr' is the
+    // string representation of 'big', copied from the output of:
+    //   std::cout << value_cast<std::string>(big) << std::endl;
+    {
+    // Initialize 'nptr' to a string representation of
+    //   FLT_RADIX^(DBL_MAX_EXP-1)
+    // produced by snprintf(), verifiable thus:
+    //    double big = pow(FLT_RADIX, DBL_MAX_EXP - 1.0);
+    //    snprintf(buffer, buffer_length, "%.*f", 0, big);
+    char const* nptr =
+    //   12345678901234567890123456789012345678901234567890 <-- 50 digits/line
+        "89884656743115795386465259539451236680898848947115"
+        "32863671504057886633790275048156635423866120376801"
+        "05600569399356966788293948844072083112464237153197"
+        "37062188883946712432742638151109800623047059726541"
+        "47604250288441907534117123144073695655527041361858"
+        "16752553422931491199736229692398581524176781648121"
+        "12068608";
+    // Pointer to which strtoT()'s 'endptr' argument refers.
+    char* rendptr;
+    std::strtod(nptr, &rendptr); // mpatrol illegal access here.
+    }
 
     // A small number that must be representable as a normalized
     // floating-point number [18.2.1.2/23].
