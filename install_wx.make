@@ -19,13 +19,13 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_wx.make,v 1.19 2009-04-30 15:38:15 chicares Exp $
+# $Id: install_wx.make,v 1.20 2009-09-29 23:38:09 chicares Exp $
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
 # Configurable settings ########################################################
 
-wx_version    := 2.8.10
+wx_version    := 2.9.0
 
 mingw_dir     := /MinGW_
 
@@ -41,6 +41,7 @@ wx-2.8.6-md5  := 8a130e5b25448a17454a6b957a5e075c
 wx-2.8.7-md5  := e3455083afdf6404a569a8bf0701cf13
 wx-2.8.9-md5  := b0b2d0f6915a21ca6f33896ee8f50387
 wx-2.8.10-md5 := 0461c2085ac1ad7e648aa84c4ba51dd1
+wx-2.9.0-md5  := 09058928eeb72853142c062bdec056ce
 
 wx_archive        := wxWidgets-$(wx_version).tar.bz2
 
