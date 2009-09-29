@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1334 2009-09-24 16:13:33 chicares Exp $
+// $Id: ChangeLog,v 1.1335 2009-09-29 01:21:18 chicares Exp $
 
 MAINTENANCE
 
@@ -23408,6 +23408,37 @@ Improve documentation.
 Offer additional supplemental-report columns.
 
 20090924T1613Z <gchicares@sbcglobal.net> [770]
+
+  version.hpp
+Mark release candidate.
+
+20090926T0137Z <gchicares@sbcglobal.net> [770]
+
+  ledger_text_formats.cpp
+Fix defect introduced 20090924T1607Z: overlooked updating metadata for
+calculation summary.
+
+20090928T0145Z <gchicares@sbcglobal.net> [770]
+
+  stratified_algorithms_test.cpp
+Add a unit test to illuminate a documented shortcoming.
+
+20090928T0146Z <gchicares@sbcglobal.net> [770]
+
+  stratified_algorithms.hpp
+Sedulously avoid catastrophic cancellation, removing the shortcoming
+illuminated 20090928T0145Z.
+
+20090929T0118Z <gchicares@sbcglobal.net> [773]
+
+  input_harmonization.cpp
+  ledger_text_formats.cpp
+  preferences_model.cpp
+Fix defect introduced 20090926T0137Z, while fixing the same defect.
+See:
+  http://lists.nongnu.org/archive/html/lmi/2009-09/msg00012.html
+
+20090929T0121Z <gchicares@sbcglobal.net> [773]
 
   version.hpp
 Mark release candidate.
