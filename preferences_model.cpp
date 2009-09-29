@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: preferences_model.cpp,v 1.13 2008-12-27 02:56:52 chicares Exp $
+// $Id: preferences_model.cpp,v 1.14 2009-09-29 01:18:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -144,6 +144,34 @@ void PreferencesModel::DoHarmonize()
     CalculationSummaryColumn09.enable(do_not_use_builtin_defaults);
     CalculationSummaryColumn10.enable(do_not_use_builtin_defaults);
     CalculationSummaryColumn11.enable(do_not_use_builtin_defaults);
+
+    // TODO ?? EGREGIOUS_DEFECT: instead, don't offer these columns at all.
+    std::vector<mcenum_report_column> weird_report_columns;
+    weird_report_columns.push_back(mce_current_0_account_value_general_account    );
+    weird_report_columns.push_back(mce_guaranteed_0_account_value_general_account );
+    weird_report_columns.push_back(mce_current_0_account_value_separate_account   );
+    weird_report_columns.push_back(mce_guaranteed_0_account_value_separate_account);
+    weird_report_columns.push_back(mce_current_0_account_value                    );
+    weird_report_columns.push_back(mce_guaranteed_0_account_value                 );
+    weird_report_columns.push_back(mce_current_0_cash_surrender_value             );
+    weird_report_columns.push_back(mce_guaranteed_0_cash_surrender_value          );
+
+    typedef std::vector<mcenum_report_column>::const_iterator vrci;
+    for(vrci i = weird_report_columns.begin(); i != weird_report_columns.end(); ++i)
+        {
+        CalculationSummaryColumn00.allow(*i, false);
+        CalculationSummaryColumn01.allow(*i, false);
+        CalculationSummaryColumn02.allow(*i, false);
+        CalculationSummaryColumn03.allow(*i, false);
+        CalculationSummaryColumn04.allow(*i, false);
+        CalculationSummaryColumn05.allow(*i, false);
+        CalculationSummaryColumn06.allow(*i, false);
+        CalculationSummaryColumn07.allow(*i, false);
+        CalculationSummaryColumn08.allow(*i, false);
+        CalculationSummaryColumn09.allow(*i, false);
+        CalculationSummaryColumn10.allow(*i, false);
+        CalculationSummaryColumn11.allow(*i, false);
+        }
 }
 
 void PreferencesModel::DoTransmogrify()
