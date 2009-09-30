@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: commutation_functions_test.cpp,v 1.16 2008-12-27 02:56:38 chicares Exp $
+// $Id: commutation_functions_test.cpp,v 1.17 2009-09-30 00:48:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -93,6 +93,176 @@ void mete_corridor
         ,cvat_corridor.begin()
         ,std::divides<double>()
         );
+}
+
+// TODO ?? Make these tests meaningful and move them to the unit-test module,
+// or expunge them.
+
+#include "miscellany.hpp"
+#include "timer.hpp"
+
+#include <algorithm>
+#include <fstream>
+#include <iomanip>
+#include <ios>
+
+//============================================================================
+void ULCommFns::SelfTest()
+{
+    std::ofstream os("ulcf.txt", ios_out_trunc_binary());
+    static double const COI[30] =   // TSA XXIX, page 32, table 5
+        {
+        .00018,.00007,.00007,.00006,.00006,.00006,.00006,.00005,.00005,.00005,
+        .00005,.00005,.00006,.00007,.00008,.00009,.00010,.00010,.00011,.00011,
+        .00011,.00011,.00011,.00011,.00010,.00010,.00010,.00010,.00010,.00010,
+        };
+/*
+[#include "math_functors.hpp"]
+    std::vector<double>coi          (COI, COI + lmi_array_size(COI));
+    std::vector<double>ic           (coi.size(), i_upper_12_over_12_from_i<double>()(0.10));
+    std::vector<double>ig           (coi.size(), i_upper_12_over_12_from_i<double>()(0.04));
+
+    ULCommFns CF
+        (coi
+        ,ic
+        ,ig
+        ,OptionB
+        ,Monthly
+        ,Annual
+        ,Monthly
+        );
+*/
+    std::vector<double>coi          (COI, COI + lmi_array_size(COI));
+    std::vector<double>ic           (coi.size(), 0.10);
+    std::vector<double>ig           (coi.size(), 0.04);
+    for(unsigned int j = 0; j < coi.size(); j++)
+        {
+        coi[j] = 1.0 - std::pow(1.0 - coi[j], 12.0);
+        }
+
+    Timer timer;
+
+// 0 extra leaks if #ifdef out remainder of fn
+    int const trials = 1000;
+    for(int j = 0; j < trials; j++)
+        {
+        ULCommFns
+            (coi
+            ,ic
+            ,ig
+            ,mce_option2
+            ,mce_annual
+            ,mce_annual
+            ,mce_monthly
+            );
+        }
+//timer.stop();
+//timer.elapsed_msec_str();
+//string xxx = foo();
+// 1 extra leaks if #ifdef out remainder of fn
+    os
+        << "Commutation function calculation time for "
+        << trials
+        << " trials: "
+        << timer.stop().elapsed_msec_str()
+//      << timer.elapsed_msec_str()
+///     << xxx
+        << "\n\n"
+        ;
+
+// 1 extra leak if #ifdef out remainder of fn
+    ULCommFns CF
+        (coi
+        ,ic
+        ,ig
+        ,mce_option2
+        ,mce_annual
+        ,mce_annual
+        ,mce_monthly
+        );
+
+    os << "Universal life commutation functions\n";
+    os
+        << std::setw( 3) << "yr"
+        << std::setw( 6) << "i"
+        << std::setw( 9) << "q"
+        << std::setw(13) << "aD"
+        << std::setw(13) << "kD"
+        << std::setw(13) << "kC"
+        << '\n'
+        ;
+    for(unsigned int j = 0; j < coi.size(); j++)
+        {
+        os
+            << std::setw(3)  << j
+            << std::setiosflags(std::ios_base::fixed)
+            << std::setprecision(3)
+            << std::setw(6)  << ic[j]
+            << std::setprecision(6)
+            << std::setw(9)  << coi[j]
+            << std::setprecision(9)
+            << std::setw(13) << CF.aD()[j]
+            << std::setw(13) << CF.kD()[j]
+            << std::setw(13) << CF.kC()[j]
+            << '\n'
+            ;
+        }
+    os << '\n';
+}
+
+//============================================================================
+void OLCommFns::SelfTest()
+{
+    std::ofstream os("olcf.txt", ios_out_trunc_binary());
+
+    static double const Q[100] =    // I think this is unisex unismoke ANB 80CSO
+        {
+        .00354,.00097,.00091,.00089,.00085,.00083,.00079,.00077,.00073,.00072,
+        .00071,.00072,.00078,.00087,.00097,.00110,.00121,.00131,.00139,.00144,
+        .00148,.00149,.00150,.00149,.00149,.00147,.00147,.00146,.00148,.00151,
+        .00154,.00158,.00164,.00170,.00179,.00188,.00200,.00214,.00231,.00251,
+        .00272,.00297,.00322,.00349,.00375,.00406,.00436,.00468,.00503,.00541,
+        .00583,.00630,.00682,.00742,.00807,.00877,.00950,.01023,.01099,.01181,
+        .01271,.01375,.01496,.01639,.01802,.01978,.02164,.02359,.02558,.02773,
+        .03016,.03296,.03629,.04020,.04466,.04955,.05480,.06031,.06606,.07223,
+        .07907,.08680,.09568,.10581,.11702,.12911,.14191,.15541,.16955,.18445,
+        .20023,.21723,.23591,.25743,.28381,.32074,.37793,.47661,.65644,1.0000,
+        };
+
+    std::vector<double>q                (Q, Q + lmi_array_size(Q));
+    std::vector<double>i                (100, 0.04);
+
+    OLCommFns CF(q, i);
+
+    os << "Ordinary life commutation functions\n";
+    os
+        << std::setw( 3) << "yr"
+        << std::setw( 6) << "i"
+        << std::setw( 9) << "q"
+        << std::setw(13) << "c"
+        << std::setw(13) << "d"
+        << std::setw(13) << "m"
+        << std::setw(13) << "n"
+        << '\n'
+        ;
+    for(unsigned int j = 0; j < q.size(); j++)
+        {
+        os
+            << std::setw(3)  << j
+            << std::setiosflags(std::ios_base::fixed)
+            << std::setprecision(3)
+            << std::setw(6)  << i[j]
+            << std::setprecision(6)
+            << std::setw(9)  << q[j]
+            << std::setprecision(9)
+            << std::setw(13) << CF.C()[j]
+            << std::setw(13) << CF.D()[j]
+            << std::setw(13) << CF.M()[j]
+            << std::setw(13) << CF.N()[j]
+            << '\n'
+            ;
+        }
+    os << '\n';
 }
 
 // TODO ?? This doesn't actually test its results.
