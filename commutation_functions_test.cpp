@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: commutation_functions_test.cpp,v 1.17 2009-09-30 00:48:19 chicares Exp $
+// $Id: commutation_functions_test.cpp,v 1.18 2009-10-01 15:15:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,9 +35,11 @@
 #include <boost/bind.hpp>
 
 #include <algorithm>
+#include <cmath>      // std::pow()
+#include <fstream>
 #include <functional>
-#include <iostream>
-#include <iterator>
+#include <iomanip>    // std::setw() etc.
+#include <iterator>   // std::back_inserter()
 #include <vector>
 
 namespace
@@ -95,16 +97,7 @@ void mete_corridor
         );
 }
 
-// TODO ?? Make these tests meaningful and move them to the unit-test module,
-// or expunge them.
-
-#include "miscellany.hpp"
-#include "timer.hpp"
-
-#include <algorithm>
-#include <fstream>
-#include <iomanip>
-#include <ios>
+// TODO ?? Make these tests meaningful, or expunge them.
 
 //============================================================================
 void ULCommFns::SelfTest()
