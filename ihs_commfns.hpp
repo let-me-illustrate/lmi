@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.hpp,v 1.14 2008-12-27 02:56:43 chicares Exp $
+// $Id: ihs_commfns.hpp,v 1.15 2009-10-01 23:37:14 chicares Exp $
 
 #ifndef ihs_commfns_hpp
 #define ihs_commfns_hpp
@@ -58,8 +58,6 @@ class LMI_SO OLCommFns
     std::vector<double> const& D() {return d;}
     std::vector<double> const& M() {return m;}
     std::vector<double> const& N() {return n;}
-
-    static void SelfTest();
 
   private:
     int Length;
@@ -129,8 +127,6 @@ class LMI_SO ULCommFns
     std::vector<double> const& kC() const {return kc;}
     std::vector<double> const& aN() const {return an;}
     std::vector<double> const& kM() const {return km;}
-
-    static void SelfTest();
 
   private:
     std::vector<double>        qc;

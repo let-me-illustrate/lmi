@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: commutation_functions_test.cpp,v 1.18 2009-10-01 15:15:11 chicares Exp $
+// $Id: commutation_functions_test.cpp,v 1.19 2009-10-01 23:37:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -99,8 +99,7 @@ void mete_corridor
 
 // TODO ?? Make these tests meaningful, or expunge them.
 
-//============================================================================
-void ULCommFns::SelfTest()
+void ULCommFnsTest()
 {
     std::ofstream os("ulcf.txt", ios_out_trunc_binary());
     static double const COI[30] =   // TSA XXIX, page 32, table 5
@@ -203,8 +202,7 @@ void ULCommFns::SelfTest()
     os << '\n';
 }
 
-//============================================================================
-void OLCommFns::SelfTest()
+void OLCommFnsTest()
 {
     std::ofstream os("olcf.txt", ios_out_trunc_binary());
 
@@ -262,8 +260,8 @@ void OLCommFns::SelfTest()
 
 int test_main(int, char*[])
 {
-    ULCommFns::SelfTest();
-    OLCommFns::SelfTest();
+    ULCommFnsTest();
+    OLCommFnsTest();
 
     // ET !! q = coi_rate_from_q(sample_q, 1.0);
     std::vector<double> q;
