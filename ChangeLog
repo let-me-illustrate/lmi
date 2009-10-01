@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1335 2009-09-29 01:21:18 chicares Exp $
+// $Id: ChangeLog,v 1.1336 2009-10-01 20:37:39 chicares Exp $
 
 MAINTENANCE
 
@@ -23442,4 +23442,38 @@ See:
 
   version.hpp
 Mark release candidate.
+
+20090929T2337Z <gchicares@sbcglobal.net> [773]
+
+  value_cast_test.cpp
+Improve documentation.
+
+20090929T2338Z <gchicares@sbcglobal.net> [773]
+
+  install_wx.make
+Upgrade to wx-2.9.0 .
+
+20090930T0048Z <gchicares@sbcglobal.net> [773]
+
+  commutation_functions_test.cpp
+  ihs_commfns.cpp
+Move SelfTest() functions between files.
+
+20091001T1515Z <gchicares@sbcglobal.net> [773]
+
+  commutation_functions_test.cpp
+Refactor, consolidating headers.
+
+20091001T1516Z <gchicares@sbcglobal.net> [773]
+
+  ihs_commfns.cpp
+Repair a defect that the standard defectively endorses. See:
+  http://www.open-std.org/jtc1/sc22/wg21/docs/lwg-defects.html#355
+The defective code was accepted by gcc, but rejected by comeau.
+
+20091001T2037Z <gchicares@sbcglobal.net> [773]
+
+  expm1.c
+  math_functors.hpp
+Work around issues with certain transcendental functions for comeau.
 
