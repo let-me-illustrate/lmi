@@ -42,7 +42,7 @@ long double expm1l(long double x);
  * email: <gchicares@sbcglobal.net>
  * snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
  *
- * $Id: expm1.c,v 1.11 2008-12-27 02:56:40 chicares Exp $
+ * $Id: expm1.c,v 1.12 2009-10-01 20:37:39 chicares Exp $
  *
  * End local GWC modifications. */
 
@@ -58,6 +58,31 @@ long double expm1l(long double x) /* Local GWC modification: type changed. */
     return exp(x) - 1.0;
 }
 
+double expm1(double x)
+{
+  if (fabs(x) < LOGE2L)
+    {
+      x *= LOG2EL;
+      __asm__("f2xm1" : "=t" (x) : "0" (x));
+      return x;
+    }
+  else
+    return exp(x) - 1.0;
+}
+
+#define SQRT2 1.41421356237309504880L
+
+long double log1pl(long double x)
+{
+  if (fabs(x) < 1.0 - 0.5 * SQRT2)
+    {
+      __asm__("fldln2\n\t" "fxch\n\t" "fyl2xp1" : "=t" (x) : "0" (x));
+      return x;
+    }
+  else
+    return log(1.0 + x);
+}
+
 /* COMPILER !! Apparently como compiles this file as C++ despite its '.c'
  * extension: else 'extern "C"' wouldn't be required (or permitted).
  */
@@ -68,7 +93,7 @@ long double expm1l(long double x) /* Local GWC modification: type changed. */
 #       ifdef __COMO__
             extern "C"
 #       endif // __COMO__
-            long double expm1l(long double x) {return exp(x) - 1.0;}
+            double expm1(double x) {return expm1l(x);}
 #   endif // Not gcc.
 #endif // !defined LMI_COMPILER_PROVIDES_EXPM1L
 
@@ -77,7 +102,7 @@ long double expm1l(long double x) /* Local GWC modification: type changed. */
 #       ifdef __COMO__
             extern "C"
 #       endif // __COMO__
-            long double log1pl(long double x) {return log(1.0 + x);}
+            double log1p(double x) {return log1pl(x);}
 #endif // !defined LMI_COMPILER_PROVIDES_LOG1PL
 
 /* End local GWC modifications. */
