@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.cpp,v 1.20 2009-09-30 00:48:19 chicares Exp $
+// $Id: ihs_commfns.cpp,v 1.21 2009-10-01 15:16:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -177,7 +177,7 @@ ULCommFns::ULCommFns
         }
     an = ad;
     // Don't want last element here.
-    an.erase(--an.end());
+    an.pop_back();
     std::reverse(an.begin(), an.end());
     std::partial_sum(an.begin(), an.end(), an.begin());
     std::reverse(an.begin(), an.end());
