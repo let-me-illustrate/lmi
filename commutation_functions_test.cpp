@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: commutation_functions_test.cpp,v 1.21 2009-10-02 00:45:38 chicares Exp $
+// $Id: commutation_functions_test.cpp,v 1.22 2009-10-02 10:18:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,16 +29,18 @@
 #include "ihs_commfns.hpp"
 
 #include "math_functors.hpp"
+#include "miscellany.hpp" // ios_out_trunc_binary()
 #include "test_tools.hpp"
 #include "timer.hpp"
 
 #include <boost/bind.hpp>
 
 #include <algorithm>
-#include <cmath>      // std::pow()
+#include <cmath>      // std::pow(), std::fabs()
 #include <fstream>
 #include <functional>
 #include <iomanip>    // std::setw() etc.
+#include <ios>        // ios_base::fixed()
 #include <iterator>   // std::back_inserter()
 #include <vector>
 
@@ -97,18 +99,54 @@ void mete_corridor
         );
 }
 
-// TODO ?? Make these tests meaningful, or expunge them.
+/// Exactly reproduce a comprehensive example from Eckley's paper.
+///
+/// Eckley's paper contains five tables:
+///   (1) annual basis; iterative application of a Fackler formula
+///   (2) like (1), but current and guaranteed interest rates differ
+///   (3) like (2), but option B
+///   (4) same as (3), but using commutation functions
+///   (5) monthly basis; commutation functions; option B
+/// Table 5 on page 32 of TSA XXIX is the most advanced example that's
+/// applicable to the present work, and the only one that uses monthly
+/// functions. Only its last three columns (Dx, Dx12, and Cx12) are
+/// crucial; the others represent assumptions or intermediate results
+/// upon which the last three depend.
+///
+/// The table gives results to a precision of six decimals only, so
+/// its maximum roundoff error is 0.0000005: half a unit in the sixth
+/// decimal place, which is five units in the seventh. This unit test
+/// demonstrates that every number in the three crucial columns is
+/// reproduced within that tightest-possible tolerance.
 
 void ULCommFnsTest()
 {
-    static double const COI[30] =   // TSA XXIX, page 32, table 5
-        {
-        .00018,.00007,.00007,.00006,.00006,.00006,.00006,.00005,.00005,.00005,
-        .00005,.00005,.00006,.00007,.00008,.00009,.00010,.00010,.00011,.00011,
-        .00011,.00011,.00011,.00011,.00010,.00010,.00010,.00010,.00010,.00010,
+    static double const Dx[31] =
+        {1.000000, 0.909085, 0.826438, 0.751305, 0.683003, 0.620911, 0.564463, 0.513147, 0.466496, 0.424087
+        ,0.385533, 0.350483, 0.318621, 0.289655, 0.263322, 0.239382, 0.217620, 0.197835, 0.179850, 0.163499
+        ,0.148635, 0.135122, 0.122838, 0.111670, 0.101518, 0.092289, 0.083898, 0.076271, 0.069337, 0.063033
+        ,0.057303
+        };
+    static double const Dx12[31] =
+        {0.957613, 0.870553, 0.791410, 0.719462, 0.654054, 0.594594, 0.540538, 0.491397, 0.446724, 0.406112
+        ,0.369192, 0.335628, 0.305116, 0.277378, 0.252161, 0.229236, 0.208396, 0.189450, 0.172227, 0.156569
+        ,0.142335, 0.129395, 0.117631, 0.106937, 0.097215, 0.088377, 0.080342, 0.073038, 0.066398, 0.060362
+        ,0.054874
+        };
+    static double const Cx12[31] =
+        {0.002062, 0.000729, 0.000663, 0.000516, 0.000469, 0.000427, 0.000388, 0.000294, 0.000267, 0.000243
+        ,0.000221, 0.000201, 0.000219, 0.000232, 0.000241, 0.000247, 0.000249, 0.000227, 0.000227, 0.000206
+        ,0.000187, 0.000170, 0.000155, 0.000141, 0.000116, 0.000106, 0.000096, 0.000087, 0.000079, 0.000072
+        ,0.000066
+        };
+
+    static double const COI[31] =
+        {0.00018,  0.00007,  0.00007,  0.00006,  0.00006,  0.00006,  0.00006,  0.00005,  0.00005,  0.00005
+        ,0.00005,  0.00005,  0.00006,  0.00007,  0.00008,  0.00009,  0.00010,  0.00010,  0.00011,  0.00011
+        ,0.00011,  0.00011,  0.00011,  0.00011,  0.00010,  0.00010,  0.00010,  0.00010,  0.00010,  0.00010
+        ,0.00010
         };
 /*
-[#include "math_functors.hpp"]
     std::vector<double>coi          (COI, COI + lmi_array_size(COI));
     std::vector<double>ic           (coi.size(), i_upper_12_over_12_from_i<double>()(0.10));
     std::vector<double>ig           (coi.size(), i_upper_12_over_12_from_i<double>()(0.04));
@@ -141,34 +179,38 @@ void ULCommFnsTest()
         ,mce_monthly
         );
 
-    std::ofstream os("ulcf.txt", ios_out_trunc_binary());
-    os << "Universal life commutation functions\n";
-    os
-        << std::setw( 3) << "yr"
-        << std::setw( 6) << "i"
-        << std::setw( 9) << "q"
-        << std::setw(13) << "aD"
-        << std::setw(13) << "kD"
-        << std::setw(13) << "kC"
-        << '\n'
-        ;
+    double tolerance = 0.0000005;
+    double worst_discrepancy = 0.0;
     for(unsigned int j = 0; j < coi.size(); j++)
         {
-        os
-            << std::setw(3)  << j
-            << std::setiosflags(std::ios_base::fixed)
-            << std::setprecision(3)
-            << std::setw(6)  << ic[j]
-            << std::setprecision(6)
-            << std::setw(9)  << coi[j]
-            << std::setprecision(9)
-            << std::setw(13) << CF.aD()[j]
-            << std::setw(13) << CF.kD()[j]
-            << std::setw(13) << CF.kC()[j]
-            << '\n'
-            ;
+        double d0 = fabs(CF.aD()[j]        - Dx  [j]);
+        double d1 = fabs(CF.kD()[j] / 12.0 - Dx12[j]);
+        double d2 = fabs(CF.kC()[j]        - Cx12[j]);
+        worst_discrepancy = std::max(worst_discrepancy, d0);
+        worst_discrepancy = std::max(worst_discrepancy, d1);
+        worst_discrepancy = std::max(worst_discrepancy, d2);
+        if
+            (  tolerance < d0
+            || tolerance < d1
+            || tolerance < d2
+            )
+            {
+            std::cerr
+                << "Failed to match Eckley's results at duration "
+                << j
+                << ".\n"
+                << "  differences: " << d0 << ' ' << d1 << ' ' << d2 << '\n'
+                << std::endl
+                ;
+            }
         }
-    os << '\n';
+    std::cout
+        << std::setiosflags(std::ios_base::fixed)
+        << std::setprecision(9)
+        << "  " << std::setw(13) << tolerance         << " tolerance\n"
+        << "  " << std::setw(13) << worst_discrepancy << " worst_discrepancy\n"
+        << std::endl
+        ;
 }
 
 void OLCommFnsTest()
@@ -224,8 +266,6 @@ void OLCommFnsTest()
         }
     os << '\n';
 }
-
-// TODO ?? This doesn't actually test its results.
 
 int test_main(int, char*[])
 {
