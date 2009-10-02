@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1336 2009-10-01 20:37:39 chicares Exp $
+// $Id: ChangeLog,v 1.1337 2009-10-02 10:18:22 chicares Exp $
 
 MAINTENANCE
 
@@ -23476,4 +23476,32 @@ The defective code was accepted by gcc, but rejected by comeau.
   expm1.c
   math_functors.hpp
 Work around issues with certain transcendental functions for comeau.
+
+20091001T2337Z <gchicares@sbcglobal.net> [773]
+
+  commutation_functions_test.cpp
+  ihs_commfns.hpp
+Replace SelfTest() members with nonmembers.
+
+20091002T0041Z <gchicares@sbcglobal.net> [773]
+
+  commutation_functions_test.cpp
+Remove meaningless ancient notes about leaks. Running with
+  MPATROL_OPTIONS=LEAKTABLE
+produces:
+       bytes   count  location
+    --------  ------  --------
+          84       1  ___w32_sharedptr_initialize
+          84       1  total
+so all conditions are nominal.
+
+20091002T0045Z <gchicares@sbcglobal.net> [773]
+
+  commutation_functions_test.cpp
+Remove ancient in favor of modern speed measurement.
+
+20091002T1018Z <gchicares@sbcglobal.net> [771]
+
+  commutation_functions_test.cpp
+Validate against a published benchmark.
 
