@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: commutation_functions_test.cpp,v 1.20 2009-10-02 00:41:27 chicares Exp $
+// $Id: commutation_functions_test.cpp,v 1.21 2009-10-02 00:45:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -101,7 +101,6 @@ void mete_corridor
 
 void ULCommFnsTest()
 {
-    std::ofstream os("ulcf.txt", ios_out_trunc_binary());
     static double const COI[30] =   // TSA XXIX, page 32, table 5
         {
         .00018,.00007,.00007,.00006,.00006,.00006,.00006,.00005,.00005,.00005,
@@ -132,34 +131,6 @@ void ULCommFnsTest()
         coi[j] = 1.0 - std::pow(1.0 - coi[j], 12.0);
         }
 
-    Timer timer;
-
-    int const trials = 1000;
-    for(int j = 0; j < trials; j++)
-        {
-        ULCommFns
-            (coi
-            ,ic
-            ,ig
-            ,mce_option2
-            ,mce_annual
-            ,mce_annual
-            ,mce_monthly
-            );
-        }
-//timer.stop();
-//timer.elapsed_msec_str();
-//string xxx = foo();
-    os
-        << "Commutation function calculation time for "
-        << trials
-        << " trials: "
-        << timer.stop().elapsed_msec_str()
-//      << timer.elapsed_msec_str()
-///     << xxx
-        << "\n\n"
-        ;
-
     ULCommFns CF
         (coi
         ,ic
@@ -170,6 +141,7 @@ void ULCommFnsTest()
         ,mce_monthly
         );
 
+    std::ofstream os("ulcf.txt", ios_out_trunc_binary());
     os << "Universal life commutation functions\n";
     os
         << std::setw( 3) << "yr"
