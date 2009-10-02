@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: commutation_functions_test.cpp,v 1.19 2009-10-01 23:37:13 chicares Exp $
+// $Id: commutation_functions_test.cpp,v 1.20 2009-10-02 00:41:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -134,7 +134,6 @@ void ULCommFnsTest()
 
     Timer timer;
 
-// 0 extra leaks if #ifdef out remainder of fn
     int const trials = 1000;
     for(int j = 0; j < trials; j++)
         {
@@ -151,7 +150,6 @@ void ULCommFnsTest()
 //timer.stop();
 //timer.elapsed_msec_str();
 //string xxx = foo();
-// 1 extra leaks if #ifdef out remainder of fn
     os
         << "Commutation function calculation time for "
         << trials
@@ -162,7 +160,6 @@ void ULCommFnsTest()
         << "\n\n"
         ;
 
-// 1 extra leak if #ifdef out remainder of fn
     ULCommFns CF
         (coi
         ,ic
