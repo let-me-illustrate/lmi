@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.cpp,v 1.22 2009-10-03 17:32:15 chicares Exp $
+// $Id: ihs_commfns.cpp,v 1.23 2009-10-03 18:13:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -90,14 +90,12 @@ ULCommFns::ULCommFns
     ,std::vector<double> const& a_ic
     ,std::vector<double> const& a_ig
     ,mcenum_dbopt               a_db_option
-    ,mcenum_mode                a_commfn_mode
     ,mcenum_mode                a_process_mode
     )
     :qc          (a_q)
     ,ic          (a_ic)
     ,ig          (a_ig)
     ,DBOption    (a_db_option)
-    ,CommfnMode  (a_commfn_mode)
     ,ProcessMode (a_process_mode)
 {
     Length = qc.size();
