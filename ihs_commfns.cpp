@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.cpp,v 1.24 2009-10-03 18:31:31 chicares Exp $
+// $Id: ihs_commfns.cpp,v 1.25 2009-10-03 19:30:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -86,13 +86,13 @@ OLCommFns::~OLCommFns()
 
 //============================================================================
 ULCommFns::ULCommFns
-    (std::vector<double> const& a_q
+    (std::vector<double> const& a_qc
     ,std::vector<double> const& a_ic
     ,std::vector<double> const& a_ig
     ,mcenum_dbopt               dbo
     ,mcenum_mode                mode
     )
-    :qc    (a_q)
+    :qc    (a_qc)
     ,ic    (a_ic)
     ,ig    (a_ig)
     ,dbo_  (dbo)

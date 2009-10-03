@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.hpp,v 1.18 2009-10-03 18:31:31 chicares Exp $
+// $Id: ihs_commfns.hpp,v 1.19 2009-10-03 19:30:22 chicares Exp $
 
 #ifndef ihs_commfns_hpp
 #define ihs_commfns_hpp
@@ -33,12 +33,6 @@
 #include <boost/utility.hpp>
 
 #include <vector>
-
-// Commutation functions
-// C, D, M, and N from q and i
-// Can be reused for quick solving or initial solve guess
-// Can be reused for reserves
-// Can be reused for nonforfeiture
 
 /// Ordinary-life commutation functions.
 
@@ -79,7 +73,7 @@ class LMI_SO ULCommFns
 {
   public:
     ULCommFns
-        (std::vector<double> const& a_q
+        (std::vector<double> const& a_qc
         ,std::vector<double> const& a_ic
         ,std::vector<double> const& a_ig
         ,mcenum_dbopt               dbo
@@ -87,11 +81,11 @@ class LMI_SO ULCommFns
         );
 
     // ctor arguments:
-    // a_q  mortality rates
-    // a_ic interest rates
-    // a_ig guaranteed interest rate
-    // dbo  death benefit option
-    // mode contract processing mode
+    // a_qc  mortality rates
+    // a_ic  interest rates
+    // a_ig  guaranteed interest rate
+    // dbo   death benefit option
+    // mode  n-iversary mode
     //
     // Numeric arguments--mortality and interest rates--must be on
     // the mode for which commutation functions are wanted. If monthly
@@ -100,24 +94,24 @@ class LMI_SO ULCommFns
     // than one way to perform a modal conversion, and it's not this
     // class's responsibility to choose.
     //
-    // TODO ?? The primary (?) interest rate is a_i.
-    //
     // UL commutation functions require two interest rates:
     // a_ic corresponds to Eckley's ic;
     // a_ig corresponds to Eckley's ig.
 
     // UL commutation functions vary by death benefit option.
-    // TODO ?? It would be nice to let db option vary by year.
+    // SOMEDAY !! It would be nice to let db option vary by year.
     //
-    // UL commutation functions D and N are calculated on the mode
-    // specified by mode_. For instance, apply monthly
-    // D and N to monthly premiums and monthly policy fees.
-    // TODO ?? Functions C and M do not depend on a_commfn_mode because...why?
-// input mode for C -> freq of clm pmt?
+    // The contract processing mode, mode_, specifies how often UL
+    // n-iversary processing is done. This is most often monthly, but
+    // need not be.
     //
-    // The contract processing mode, mode_, specifies
-    // how often UL n-iversary processing is done. This is most
-    // commonly performed monthly, but need not be.
+    // All commutation functions are calculated on the mode specified
+    // by mode_. Annual D and N are always also calculated because
+    // premiums are often paid annually. Use monthly D and N for
+    // monthly deductions in the numerator of an actuarial function,
+    // but use their annual analogs in the denominator when premiums
+    // are assumed to be paid annually. C and M have no such analogs
+    // because no contract pays claims only at year end.
 
     ~ULCommFns();
 
@@ -132,12 +126,7 @@ class LMI_SO ULCommFns
     std::vector<double>        ic;
     std::vector<double>        ig;
 
-//  std::vector<double>        q;
-//  std::vector<double>        i;
-
     mcenum_dbopt dbo_;
-    // Processing mode--usually monthly--governs how frequently
-    // COIs and expense charges are deducted.
     mcenum_mode mode_;
 
     int Length;
