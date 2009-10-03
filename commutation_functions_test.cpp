@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: commutation_functions_test.cpp,v 1.22 2009-10-02 10:18:22 chicares Exp $
+// $Id: commutation_functions_test.cpp,v 1.23 2009-10-03 10:53:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -36,7 +36,7 @@
 #include <boost/bind.hpp>
 
 #include <algorithm>
-#include <cmath>      // std::pow(), std::fabs()
+#include <cmath>      // std::fabs()
 #include <fstream>
 #include <functional>
 #include <iomanip>    // std::setw() etc.
@@ -146,35 +146,17 @@ void ULCommFnsTest()
         ,0.00011,  0.00011,  0.00011,  0.00011,  0.00010,  0.00010,  0.00010,  0.00010,  0.00010,  0.00010
         ,0.00010
         };
-/*
-    std::vector<double>coi          (COI, COI + lmi_array_size(COI));
-    std::vector<double>ic           (coi.size(), i_upper_12_over_12_from_i<double>()(0.10));
-    std::vector<double>ig           (coi.size(), i_upper_12_over_12_from_i<double>()(0.04));
 
-    ULCommFns CF
-        (coi
-        ,ic
-        ,ig
-        ,OptionB
-        ,Monthly
-        ,Annual
-        ,Monthly
-        );
-*/
-    std::vector<double>coi          (COI, COI + lmi_array_size(COI));
-    std::vector<double>ic           (coi.size(), 0.10);
-    std::vector<double>ig           (coi.size(), 0.04);
-    for(unsigned int j = 0; j < coi.size(); j++)
-        {
-        coi[j] = 1.0 - std::pow(1.0 - coi[j], 12.0);
-        }
+    std::vector<double>coi (COI, COI + lmi_array_size(COI));
+    std::vector<double>ic  (coi.size(), i_upper_12_over_12_from_i<double>()(0.10));
+    std::vector<double>ig  (coi.size(), i_upper_12_over_12_from_i<double>()(0.04));
 
     ULCommFns CF
         (coi
         ,ic
         ,ig
         ,mce_option2
-        ,mce_annual
+        ,mce_monthly
         ,mce_annual
         ,mce_monthly
         );
@@ -204,6 +186,7 @@ void ULCommFnsTest()
                 ;
             }
         }
+    BOOST_TEST_RELATION(worst_discrepancy,<,tolerance);
     std::cout
         << std::setiosflags(std::ios_base::fixed)
         << std::setprecision(9)
