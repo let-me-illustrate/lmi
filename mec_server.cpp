@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_server.cpp,v 1.3 2009-07-30 23:12:15 chicares Exp $
+// $Id: mec_server.cpp,v 1.4 2009-10-03 11:13:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -435,8 +435,9 @@ mec_state test_one_days_7702A_transactions
     ofs << "This temporary output file will be removed in a future release.\n";
     ofs
         << "t\t"
-        << "i\t"
-        << "q\t"
+        << "ic\t"
+        << "ig\t"
+        << "qc\t"
         << "aD\t"
         << "kC\t"
         << "aN\t"
@@ -454,25 +455,26 @@ mec_state test_one_days_7702A_transactions
         {
         ofs
             <<               j  << '\t'
-            << value_cast<std::string>(Mly7702iGlp [j]) << '\t'
-            << value_cast<std::string>(Mly7702qc   [j]) << '\t'
-            << value_cast<std::string>(commfns.aD()[j]) << '\t'
-            << value_cast<std::string>(commfns.kC()[j]) << '\t'
-            << value_cast<std::string>(commfns.aN()[j]) << '\t'
-            << value_cast<std::string>(commfns.kM()[j]) << '\t'
-            << value_cast<std::string>(E7aN        [j]) << '\t'
-            << value_cast<std::string>(analytic_Ax [j]) << '\t'
-            << value_cast<std::string>(tabular_Ax  [j]) << '\t'
-            << value_cast<std::string>(ratio_Ax    [j]) << '\t'
-            << value_cast<std::string>(analytic_7Px[j]) << '\t'
-            << value_cast<std::string>(tabular_7Px [j]) << '\t'
-            << value_cast<std::string>(ratio_7Px   [j]) << '\t'
+            << value_cast<std::string>(Mly7702iGlp    [j]) << '\t'
+            << value_cast<std::string>(naar_disc_rate [j]) << '\t'
+            << value_cast<std::string>(Mly7702qc      [j]) << '\t'
+            << value_cast<std::string>(commfns.aD()   [j]) << '\t'
+            << value_cast<std::string>(commfns.kC()   [j]) << '\t'
+            << value_cast<std::string>(commfns.aN()   [j]) << '\t'
+            << value_cast<std::string>(commfns.kM()   [j]) << '\t'
+            << value_cast<std::string>(E7aN           [j]) << '\t'
+            << value_cast<std::string>(analytic_Ax    [j]) << '\t'
+            << value_cast<std::string>(tabular_Ax     [j]) << '\t'
+            << value_cast<std::string>(ratio_Ax       [j]) << '\t'
+            << value_cast<std::string>(analytic_7Px   [j]) << '\t'
+            << value_cast<std::string>(tabular_7Px    [j]) << '\t'
+            << value_cast<std::string>(ratio_7Px      [j]) << '\t'
             << '\n'
         ;
         }
     ofs
         << input.years_to_maturity()
-        << "\t\t\t"
+        << "\t\t\t\t"
         << value_cast<std::string>(commfns.aD().back())
         << "\t\t\t\t\t\t\t\t\t\t\t"
         << '\n'
