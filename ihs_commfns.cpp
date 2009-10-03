@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.cpp,v 1.23 2009-10-03 18:13:40 chicares Exp $
+// $Id: ihs_commfns.cpp,v 1.24 2009-10-03 18:31:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -89,14 +89,14 @@ ULCommFns::ULCommFns
     (std::vector<double> const& a_q
     ,std::vector<double> const& a_ic
     ,std::vector<double> const& a_ig
-    ,mcenum_dbopt               a_db_option
-    ,mcenum_mode                a_process_mode
+    ,mcenum_dbopt               dbo
+    ,mcenum_mode                mode
     )
-    :qc          (a_q)
-    ,ic          (a_ic)
-    ,ig          (a_ig)
-    ,DBOption    (a_db_option)
-    ,ProcessMode (a_process_mode)
+    :qc    (a_q)
+    ,ic    (a_ic)
+    ,ig    (a_ig)
+    ,dbo_  (dbo)
+    ,mode_ (mode)
 {
     Length = qc.size();
     LMI_ASSERT(ic.size() == qc.size());
@@ -114,7 +114,7 @@ ULCommFns::ULCommFns
 //  std::vector<double> p(1 + Length, 1.0);
 //  std::vector<double> a(1 + Length, 1.0);
 
-    int months_between_deductions = 12 / ProcessMode;
+    int months_between_deductions = 12 / mode_;
 
     ad[0] = 1.0;
     for(int j = 0; j < Length; j++)
@@ -131,7 +131,7 @@ ULCommFns::ULCommFns
         // Eckley equation (12)
         double q = f * g;
         // Eckley equation (19)
-        if(mce_option2 == DBOption)
+        if(mce_option2 == dbo_)
             {
             i = i - q;
             }
