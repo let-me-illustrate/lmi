@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: commutation_functions_test.cpp,v 1.23 2009-10-03 10:53:37 chicares Exp $
+// $Id: commutation_functions_test.cpp,v 1.24 2009-10-03 11:02:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -79,7 +79,7 @@ void mete_ulcf
         ,ic
         ,ig
         ,mce_option1
-        ,mce_annual
+        ,mce_monthly
         ,mce_annual
         ,mce_monthly
         );
