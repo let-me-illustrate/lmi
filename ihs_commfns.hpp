@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.hpp,v 1.17 2009-10-03 18:13:40 chicares Exp $
+// $Id: ihs_commfns.hpp,v 1.18 2009-10-03 18:31:31 chicares Exp $
 
 #ifndef ihs_commfns_hpp
 #define ihs_commfns_hpp
@@ -82,16 +82,16 @@ class LMI_SO ULCommFns
         (std::vector<double> const& a_q
         ,std::vector<double> const& a_ic
         ,std::vector<double> const& a_ig
-        ,mcenum_dbopt               a_db_option
-        ,mcenum_mode                a_process_mode
+        ,mcenum_dbopt               dbo
+        ,mcenum_mode                mode
         );
 
     // ctor arguments:
-    // a_q              mortality rates
-    // a_ic             interest rates
-    // a_ig             guaranteed interest rate
-    // a_db_option      death benefit option
-    // a_process_mode   contract processing mode
+    // a_q  mortality rates
+    // a_ic interest rates
+    // a_ig guaranteed interest rate
+    // dbo  death benefit option
+    // mode contract processing mode
     //
     // Numeric arguments--mortality and interest rates--must be on
     // the mode for which commutation functions are wanted. If monthly
@@ -110,12 +110,12 @@ class LMI_SO ULCommFns
     // TODO ?? It would be nice to let db option vary by year.
     //
     // UL commutation functions D and N are calculated on the mode
-    // specified by a_process_mode. For instance, apply monthly
+    // specified by mode_. For instance, apply monthly
     // D and N to monthly premiums and monthly policy fees.
     // TODO ?? Functions C and M do not depend on a_commfn_mode because...why?
 // input mode for C -> freq of clm pmt?
     //
-    // The contract processing mode, a_process_mode, specifies
+    // The contract processing mode, mode_, specifies
     // how often UL n-iversary processing is done. This is most
     // commonly performed monthly, but need not be.
 
@@ -135,10 +135,10 @@ class LMI_SO ULCommFns
 //  std::vector<double>        q;
 //  std::vector<double>        i;
 
-    mcenum_dbopt DBOption;
+    mcenum_dbopt dbo_;
     // Processing mode--usually monthly--governs how frequently
     // COIs and expense charges are deducted.
-    mcenum_mode ProcessMode;
+    mcenum_mode mode_;
 
     int Length;
 
