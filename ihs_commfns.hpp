@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.hpp,v 1.15 2009-10-01 23:37:14 chicares Exp $
+// $Id: ihs_commfns.hpp,v 1.16 2009-10-03 17:32:15 chicares Exp $
 
 #ifndef ihs_commfns_hpp
 #define ihs_commfns_hpp
@@ -83,7 +83,6 @@ class LMI_SO ULCommFns
         ,std::vector<double> const& a_ic
         ,std::vector<double> const& a_ig
         ,mcenum_dbopt               a_db_option
-        ,mcenum_mode                a_asspt_mode
         ,mcenum_mode                a_commfn_mode
         ,mcenum_mode                a_process_mode
         );
@@ -93,13 +92,15 @@ class LMI_SO ULCommFns
     // a_ic             interest rates
     // a_ig             guaranteed interest rate
     // a_db_option      death benefit option
-    // a_asspt_mode     mode of input q and i
     // a_commfn_mode    mode of desired commutation functions
     // a_process_mode   contract processing mode
     //
-    // Numeric arguments--mortality and interest rates--can be on any
-    // enumerated mode for UL as long as they are all the same mode;
-    // a_asspt_mode specifies the mode for these input assumptions.
+    // Numeric arguments--mortality and interest rates--must be on
+    // the mode for which commutation functions are wanted. If monthly
+    // functions are to be obtained from annual rates, convert the
+    // rates to monthly before passing them as arguments. There's more
+    // than one way to perform a modal conversion, and it's not this
+    // class's responsibility to choose.
     //
     // TODO ?? The primary (?) interest rate is a_i.
     //
@@ -137,9 +138,6 @@ class LMI_SO ULCommFns
 //  std::vector<double>        i;
 
     mcenum_dbopt DBOption;
-    // Assumption mode indicates the mode of input mortality and
-    // interest assumptions.
-    mcenum_mode AssptMode;
     // TODO ?? Should we keep this?
     mcenum_mode CommfnMode;
     // Processing mode--usually monthly--governs how frequently

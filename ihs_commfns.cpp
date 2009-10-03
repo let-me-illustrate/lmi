@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.cpp,v 1.21 2009-10-01 15:16:09 chicares Exp $
+// $Id: ihs_commfns.cpp,v 1.22 2009-10-03 17:32:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -90,7 +90,6 @@ ULCommFns::ULCommFns
     ,std::vector<double> const& a_ic
     ,std::vector<double> const& a_ig
     ,mcenum_dbopt               a_db_option
-    ,mcenum_mode                a_asspt_mode
     ,mcenum_mode                a_commfn_mode
     ,mcenum_mode                a_process_mode
     )
@@ -98,7 +97,6 @@ ULCommFns::ULCommFns
     ,ic          (a_ic)
     ,ig          (a_ig)
     ,DBOption    (a_db_option)
-    ,AssptMode   (a_asspt_mode)
     ,CommfnMode  (a_commfn_mode)
     ,ProcessMode (a_process_mode)
 {
@@ -123,15 +121,6 @@ ULCommFns::ULCommFns
     ad[0] = 1.0;
     for(int j = 0; j < Length; j++)
         {
-        // Convert from input mode to monthly.
-        // TODO ?? Ideally offer choice of methods.
-        if(mce_monthly != a_asspt_mode)
-            {
-            double power = a_asspt_mode / static_cast<double>(mce_monthly);
-            qc[j] = 1.0     - std::pow(1.0 - qc[j], power);
-            ic[j] = -1.0    + std::pow(1.0 + ic[j], power);
-            ig[j] = -1.0    + std::pow(1.0 + ig[j], power);
-            }
         // Eckley equations (7) and (8)
         double f = qc[j] * (1.0 + ic[j]) / (1.0 + ig[j]);
 // TODO ?? What if it exceeds 1.0? If there really is any upper limit,
