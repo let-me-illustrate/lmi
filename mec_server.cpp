@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_server.cpp,v 1.5 2009-10-03 17:32:15 chicares Exp $
+// $Id: mec_server.cpp,v 1.6 2009-10-03 18:13:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -210,7 +210,6 @@ mec_state test_one_days_7702A_transactions
         ,Mly7702iGlp
         ,naar_disc_rate
         ,mce_option1
-        ,mce_monthly
         ,mce_monthly
         );
 

@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702.cpp,v 1.26 2009-10-03 17:32:15 chicares Exp $
+// $Id: ihs_irc7702.cpp,v 1.27 2009-10-03 18:13:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -434,7 +434,6 @@ void Irc7702::InitCommFns()
             ,glp_naar_disc_rate
             ,mce_option1
             ,mce_monthly
-            ,mce_monthly
             )
         );
     DEndt[Opt1Int4Pct] = CommFns[Opt1Int4Pct]->aD()[Length];
@@ -445,7 +444,6 @@ void Irc7702::InitCommFns()
             ,GLPic
             ,glp_naar_disc_rate
             ,mce_option2
-            ,mce_monthly
             ,mce_monthly
             )
         );
@@ -458,7 +456,6 @@ void Irc7702::InitCommFns()
             ,GSPic
             ,gsp_naar_disc_rate
             ,mce_option1
-            ,mce_monthly
             ,mce_monthly
             )
         );
