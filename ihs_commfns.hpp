@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.hpp,v 1.19 2009-10-03 19:30:22 chicares Exp $
+// $Id: ihs_commfns.hpp,v 1.20 2009-10-04 00:07:47 chicares Exp $
 
 #ifndef ihs_commfns_hpp
 #define ihs_commfns_hpp
@@ -66,6 +66,36 @@ class LMI_SO OLCommFns
 };
 
 /// Universal-life commutation functions: Eckley, TSA XXXIX, page 18.
+///
+/// Constructor arguments:
+///   a_qc  Eckley's Q:  mortality rates
+///   a_ic  Eckley's ic: "current"    interest rates
+///   a_ig  Eckley's ig: "guaranteed" interest rates
+///   dbo   death benefit option
+///   mode  n-iversary mode
+///
+/// Numeric arguments--mortality and interest rates--must be on
+/// the mode for which commutation functions are wanted. If monthly
+/// functions are to be obtained from annual rates, convert the
+/// rates to monthly before passing them as arguments. There's more
+/// than one way to perform a modal conversion, and it's not this
+/// class's responsibility to choose.
+///
+/// The mode argument specifies the frequency of UL n-iversary
+/// processing. This is most often monthly, but need not be.
+///
+/// All commutation functions are calculated on the mode specified
+/// by mode_. Annual D and N are always also calculated because
+/// premiums are often paid annually. Use monthly D and N for
+/// monthly deductions in the numerator of an actuarial function,
+/// but use their annual analogs in the denominator when premiums
+/// are assumed to be paid annually. C and M have no such analogs
+/// because no contract pays claims only at year end.
+///
+/// Accessors have names like aD() for the always-annual Dx, versus
+/// kD() for the modal Dx. The 'k-' prefix signifies that the mode is
+/// k-ly, for mode parameter k; 'm-' might seem more clearly to stand
+/// for "modal", but would too easily be taken as connoting "monthly".
 
 class LMI_SO ULCommFns
     :private boost::noncopyable
@@ -80,39 +110,6 @@ class LMI_SO ULCommFns
         ,mcenum_mode                mode
         );
 
-    // ctor arguments:
-    // a_qc  mortality rates
-    // a_ic  interest rates
-    // a_ig  guaranteed interest rate
-    // dbo   death benefit option
-    // mode  n-iversary mode
-    //
-    // Numeric arguments--mortality and interest rates--must be on
-    // the mode for which commutation functions are wanted. If monthly
-    // functions are to be obtained from annual rates, convert the
-    // rates to monthly before passing them as arguments. There's more
-    // than one way to perform a modal conversion, and it's not this
-    // class's responsibility to choose.
-    //
-    // UL commutation functions require two interest rates:
-    // a_ic corresponds to Eckley's ic;
-    // a_ig corresponds to Eckley's ig.
-
-    // UL commutation functions vary by death benefit option.
-    // SOMEDAY !! It would be nice to let db option vary by year.
-    //
-    // The contract processing mode, mode_, specifies how often UL
-    // n-iversary processing is done. This is most often monthly, but
-    // need not be.
-    //
-    // All commutation functions are calculated on the mode specified
-    // by mode_. Annual D and N are always also calculated because
-    // premiums are often paid annually. Use monthly D and N for
-    // monthly deductions in the numerator of an actuarial function,
-    // but use their annual analogs in the denominator when premiums
-    // are assumed to be paid annually. C and M have no such analogs
-    // because no contract pays claims only at year end.
-
     ~ULCommFns();
 
     std::vector<double> const& aD() const {return ad;}
@@ -126,6 +123,7 @@ class LMI_SO ULCommFns
     std::vector<double>        ic;
     std::vector<double>        ig;
 
+    // SOMEDAY !! It would be nice to let dbo_ vary by year.
     mcenum_dbopt dbo_;
     mcenum_mode mode_;
 
