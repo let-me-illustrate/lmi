@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1337 2009-10-02 10:18:22 chicares Exp $
+// $Id: ChangeLog,v 1.1338 2009-10-04 00:07:47 chicares Exp $
 
 MAINTENANCE
 
@@ -23504,4 +23504,58 @@ Remove ancient in favor of modern speed measurement.
 
   commutation_functions_test.cpp
 Validate against a published benchmark.
+
+20091003T1053Z <gchicares@sbcglobal.net> [771]
+
+  commutation_functions_test.cpp
+Avoid unnecessary modal conversion. Monthly COI rates had been
+converted to annual and back again; now they're used directly.
+
+20091003T1102Z <gchicares@sbcglobal.net> [771]
+
+  commutation_functions_test.cpp
+Avoid modal conversion in speed measurement. It increased run time by
+about four hundred percent.
+
+20091003T1113Z <gchicares@sbcglobal.net> [771]
+
+  mec_server.cpp
+Show both interest rates used for commutation functions. Generally,
+they'll be the same for all 7702 and 7702A calculations, but it does
+no harm to make that more unmistakably clear.
+
+20091003T1732Z <gchicares@sbcglobal.net> [770]
+
+  commutation_functions_test.cpp
+  ihs_commfns.cpp
+  ihs_commfns.hpp
+  ihs_irc7702.cpp
+  mec_server.cpp
+Eliminate miscreated modal conversion.
+
+20091003T1813Z <gchicares@sbcglobal.net> [769]
+
+  commutation_functions_test.cpp
+  ihs_commfns.cpp
+  ihs_commfns.hpp
+  ihs_irc7702.cpp
+  mec_server.cpp
+Eliminate an unused argument.
+
+20091003T1831Z <gchicares@sbcglobal.net> [769]
+
+  ihs_commfns.cpp
+  ihs_commfns.hpp
+Rename certain data members and ctor arguments.
+
+20091003T1930Z <gchicares@sbcglobal.net> [766]
+
+  ihs_commfns.cpp
+  ihs_commfns.hpp
+Improve documentation.
+
+20091004T0007Z <gchicares@sbcglobal.net> [766]
+
+  ihs_commfns.hpp
+Rearrange and improve documentation.
 
