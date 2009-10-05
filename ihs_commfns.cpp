@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.cpp,v 1.25 2009-10-03 19:30:22 chicares Exp $
+// $Id: ihs_commfns.cpp,v 1.26 2009-10-05 01:00:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -119,36 +119,36 @@ ULCommFns::ULCommFns
     ad[0] = 1.0;
     for(int j = 0; j < Length; j++)
         {
-        // Eckley equations (7) and (8)
+        // Eckley equations (7) and (8).
         double f = qc[j] * (1.0 + ic[j]) / (1.0 + ig[j]);
 // TODO ?? What if it exceeds 1.0? If there really is any upper limit,
 // then it is certainly not exactly equal to 0.99999999 .
 //      LMI_ASSERT(1.0 != f);
         f = std::min(0.99999999, f);
         double g = 1.0 / (1.0 + f);
-        // Eckley equation (11)
+        // Eckley equation (11).
         double i = (ic[j] + ig[j] * f) * g;
-        // Eckley equation (12)
+        // Eckley equation (12).
         double q = f * g;
-        // Eckley equation (19)
+        // Eckley equation (19).
         if(mce_option2 == dbo_)
             {
             i = i - q;
             }
         double v = 1.0 / (1.0 + i);
         double p = 1.0 - q;
-        // TODO ?? Present value of $1 one month (?) hence
+        // Present value of $1 one month hence.
         double vp = v * p;
         LMI_ASSERT(1.0 != vp);
-        // TODO ?? Present value of $1 twelve (?) months (?) hence
+        // Present value of $1 twelve months hence.
         double vp12 = std::pow(vp, 12);
-        // Reciprocal of Eckley's a'' upper 12 (eqs 28, 32)
-        // analytically determined by geometric series theorem
+        // Twelve times a'' upper 12 (Eckley equations 28 and 31),
+        // determined analytically using the geometric series theorem.
 //      double aa = 1.0;
-//      // Eckley equation (32)
+//      // Eckley equation (31).
 //      double sa = (1.0 - vp12) / (1.0 - std::pow(vp, 6));
 //      double qa = (1.0 - vp12) / (1.0 - std::pow(vp, 3));
-//      // Eckley equation (28)
+//      // Eckley equation (28).
 //      double ma = (1.0 - vp12) / (1.0 - vp);
         // The prefix k indicates the processing mode, which is
         // an input parameter.
