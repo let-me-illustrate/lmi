@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: commutation_functions_test.cpp,v 1.29 2009-10-06 13:03:38 chicares Exp $
+// $Id: commutation_functions_test.cpp,v 1.30 2009-10-06 23:41:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -222,6 +222,7 @@ void TestEckleyTable2()
         }
     BOOST_TEST_RELATION(worst_discrepancy,<,tolerance);
     std::cout
+        << "Table 2; Ax and ax:\n"
         << std::setiosflags(std::ios_base::fixed)
         << std::setprecision(9)
         << "  " << std::setw(13) << tolerance         << " tolerance\n"
@@ -256,6 +257,7 @@ void TestEckleyTable2()
         }
     BOOST_TEST_RELATION(worst_discrepancy,<,tolerance);
     std::cout
+        << "Table 2; Px and Vx:\n"
         << std::setiosflags(std::ios_base::fixed)
         << std::setprecision(9)
         << "  " << std::setw(13) << tolerance         << " tolerance\n"
@@ -263,6 +265,100 @@ void TestEckleyTable2()
         << std::endl
         ;
     }
+}
+
+/// Exactly reproduce Tables 3 and 4 from Eckley's paper.
+///
+/// Tables 3 and 4 on pages 29-30 of TSA XXIX use annual functions to
+/// develop the reserve for a common scenario in two different ways.
+/// They both tabulate actuarial functions Px and Vx for an option B
+/// solve for endowment at age 65. Their other columns represent
+/// assumptions or intermediate results upon which Px and Vx depend.
+///
+/// Px and Vx per thousand are given to two decimals only; on a unit
+/// basis, their maximum roundoff error is 0.000005: half a unit in
+/// the fifth decimal place, which is five units in the sixth. This
+/// unit test demonstrates that every number in those two columns is
+/// reproduced within its tightest-possible tolerance.
+
+void TestEckleyTables3and4()
+{
+    static double const Px[30] =
+        {    14.83,     16.21,     17.74,     19.44,     21.32,     23.43,     25.77,     28.39,     31.32,     34.61
+        ,    38.31,     42.50,     47.24,     52.64,     58.81,     65.92,     74.17,     83.82,     95.23,    108.88
+        ,   125.45,    145.90,    171.66,    205.02,    249.77,    312.71,    407.47,    565.83,    883.12,   1836.08
+        };
+    // To get end-of-year values, omit Eckley's first element and append $2000.
+    static double const Vx[30] =
+        {  /* 0.00, */  14.20,     29.75,     46.77,     65.40,     85.76,    108.01,    132.33,    158.90,    187.94
+        ,   219.65,    254.25,    291.99,    333.12,    377.95,    426.80,    480.08,    538.22,    601.68,    670.96
+        ,   746.59,    829.10,    919.09,   1017.23,   1124.23,   1240.85,   1367.94,   1506.36,   1657.11,   1821.25
+        ,  2000.00
+        };
+
+    // Eckley's final COI rate is superfluous.
+    static double const COI[30] =
+        {  0.00200,   0.00206,   0.00214,   0.00224,   0.00236,   0.00250,   0.00265,   0.00282,   0.00301,   0.00324
+        ,  0.00350,   0.00382,   0.00419,   0.00460,   0.00504,   0.00550,   0.00596,   0.00645,   0.00697,   0.00756
+        ,  0.00825,   0.00903,   0.00990,   0.01088,   0.01199,   0.01325,   0.01469,   0.01631,   0.01811,   0.02009
+        ,/*0.02225 */
+        };
+
+    std::vector<double>coi (COI, COI + lmi_array_size(COI));
+    std::vector<double>ic  (coi.size(), 0.10);
+    std::vector<double>ig  (coi.size(), 0.04);
+
+    ULCommFns CF
+        (coi
+        ,ic
+        ,ig
+        ,mce_option2
+        ,mce_annual
+        );
+
+    std::vector<double> premium(coi.size());
+    premium += (2.0 * CF.aD().back() + CF.kM()) / CF.aN();
+
+    std::vector<double> reserve(coi.size());
+    reserve += premium[0] * CF.aD() - CF.kC();
+    std::partial_sum(reserve.begin(), reserve.end(), reserve.begin());
+    std::vector<double> EaD(CF.aD());
+    EaD.erase(EaD.begin());
+    reserve /= EaD;
+
+    double tolerance = 0.000005;
+    double worst_discrepancy = 0.0;
+    for(unsigned int j = 0; j < coi.size(); j++)
+        {
+        double d0 = fabs(premium[j] - Px[j] * .001);
+        double d1 = fabs(reserve[j] - Vx[j] * .001);
+        worst_discrepancy = std::max(worst_discrepancy, d0);
+        worst_discrepancy = std::max(worst_discrepancy, d1);
+        if
+            (  tolerance < d0
+            || tolerance < d1
+            )
+            {
+            std::cerr
+                << "Failed to match Eckley's results at duration "
+                << j
+                << ".\n"
+                << "  differences: " << d0 << ' ' << d1
+                << "\n  " << value_cast<std::string>(premium[j]) << " " << value_cast<std::string>(Px[j] * .001) << '\n'
+                << "\n  " << value_cast<std::string>(reserve[j]) << " " << value_cast<std::string>(Vx[j] * .001) << '\n'
+                << std::endl
+                ;
+            }
+        }
+    BOOST_TEST_RELATION(worst_discrepancy,<,tolerance);
+    std::cout
+        << "Table 3; Px and Vx:\n"
+        << std::setiosflags(std::ios_base::fixed)
+        << std::setprecision(9)
+        << "  " << std::setw(13) << tolerance         << " tolerance\n"
+        << "  " << std::setw(13) << worst_discrepancy << " worst_discrepancy\n"
+        << std::endl
+        ;
 }
 
 /// Exactly reproduce Table 5 from Eckley's paper.
@@ -346,6 +442,7 @@ void TestEckleyTable5()
         }
     BOOST_TEST_RELATION(worst_discrepancy,<,tolerance);
     std::cout
+        << "Table 5; Dx, Dx12, and Cx12:\n"
         << std::setiosflags(std::ios_base::fixed)
         << std::setprecision(9)
         << "  " << std::setw(13) << tolerance         << " tolerance\n"
@@ -356,17 +453,21 @@ void TestEckleyTable5()
 
 /// Validate against published numerical results.
 ///
-/// Eckley's paper contains five tables:
+/// Eckley's paper in TSA XXIX contains five tables:
 ///   (1) annual basis; iterative application of a Fackler formula
 ///   (2) like (1), but current and guaranteed interest rates differ
 ///   (3) like (2), but option B
 ///   (4) same as (3), but using commutation functions
 ///   (5) monthly basis; commutation functions; option B
-/// Tables 2 and 5 are validated here.
+/// Table 1 isn't a useful example for the present purpose.
+/// Tables 2, 3, 4, and 5 are all validated here: all their crucial
+/// columns are tested, and all numbers in all tested columns match
+/// Eckley's published figures exactly.
 
 void ULCommFnsTest()
 {
     TestEckleyTable2();
+    TestEckleyTables3and4();
     TestEckleyTable5();
 }
 
