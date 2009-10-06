@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.cpp,v 1.28 2009-10-06 03:02:43 chicares Exp $
+// $Id: ihs_commfns.cpp,v 1.29 2009-10-06 03:09:39 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -122,10 +122,6 @@ ULCommFns::ULCommFns
         {
         // Eckley equations (7) and (8).
         double f = qc[j] * (1.0 + ic[j]) / (1.0 + ig[j]);
-// TODO ?? What if it exceeds 1.0? If there really is any upper limit,
-// then it is certainly not exactly equal to 0.99999999 .
-//      LMI_ASSERT(1.0 != f);
-        f = std::min(0.99999999, f);
         double g = 1.0 / (1.0 + f);
         // Eckley equation (11).
         double i = (ic[j] + ig[j] * f) * g;
