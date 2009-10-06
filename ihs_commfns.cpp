@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.cpp,v 1.26 2009-10-05 01:00:36 chicares Exp $
+// $Id: ihs_commfns.cpp,v 1.27 2009-10-06 02:58:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -114,7 +114,8 @@ ULCommFns::ULCommFns
 //  std::vector<double> p(1 + Length, 1.0);
 //  std::vector<double> a(1 + Length, 1.0);
 
-    int months_between_deductions = 12 / mode_;
+    int periods_per_year = mode_;
+    int months_between_deductions = 12 / periods_per_year;
 
     ad[0] = 1.0;
     for(int j = 0; j < Length; j++)
@@ -142,6 +143,7 @@ ULCommFns::ULCommFns
         LMI_ASSERT(1.0 != vp);
         // Present value of $1 twelve months hence.
         double vp12 = std::pow(vp, 12);
+        double vpn  = std::pow(vp, periods_per_year);
         // Twelve times a'' upper 12 (Eckley equations 28 and 31),
         // determined analytically using the geometric series theorem.
 //      double aa = 1.0;
@@ -160,7 +162,7 @@ ULCommFns::ULCommFns
 
         kd[j] = ka * ad[j];
         kc[j] = ka * ad[j] * v * q;
-        ad[1 + j] = ad[j] * vp12;
+        ad[1 + j] = ad[j] * vpn;
         }
     an = ad;
     // Don't want last element here.
