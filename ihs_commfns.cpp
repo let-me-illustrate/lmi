@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.cpp,v 1.27 2009-10-06 02:58:42 chicares Exp $
+// $Id: ihs_commfns.cpp,v 1.28 2009-10-06 03:02:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -155,8 +155,7 @@ ULCommFns::ULCommFns
         // The prefix k indicates the processing mode, which is
         // an input parameter.
         double ka =
-                months_between_deductions
-            *   (1.0 - vp12)
+                (1.0 - vp12)
             /   (1.0 - std::pow(vp, months_between_deductions))
             ;
 
