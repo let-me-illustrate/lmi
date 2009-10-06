@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: commutation_functions_test.cpp,v 1.26 2009-10-03 18:13:40 chicares Exp $
+// $Id: commutation_functions_test.cpp,v 1.27 2009-10-06 02:57:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -97,6 +97,91 @@ void mete_corridor
         );
 }
 
+// To be refactored soon....
+#include "et_vector.hpp"
+#include "value_cast.hpp"
+void TestEckleyTable2()
+{
+    static double const Ax[65] =
+        { 0.052458,  0.055704,  0.059222,  0.063020,  0.067108,  0.071497,  0.076199,  0.081238,  0.086632,  0.092398
+        , 0.098540,  0.105072,  0.111980,  0.119262,  0.126926,  0.134992,  0.143491,  0.152477,  0.161984,  0.172052
+        , 0.182692,  0.193893,  0.205657,  0.217992,  0.230892,  0.244345,  0.258326,  0.272795,  0.287718,  0.303067
+        , 0.318822,  0.334974,  0.351544,  0.368555,  0.385979,  0.403753,  0.421764,  0.439846,  0.457858,  0.475703
+        , 0.493351,  0.510833,  0.528213,  0.545524,  0.562767,  0.579890,  0.596800,  0.613301,  0.629220,  0.644478
+        , 0.659128,  0.673331,  0.687317,  0.701355,  0.715664,  0.730401,  0.745726,  0.761868,  0.779511,  0.800303
+        , 0.825126,  0.847617,  0.869722,  0.896096,  0.935315
+        };
+    static double const ax[65] =
+        {10.454430, 10.420672, 10.384087, 10.344586, 10.302069, 10.256425, 10.207522, 10.155114, 10.099025, 10.039054
+        , 9.975175,  9.907247,  9.835400,  9.759662,  9.679952,  9.596069,  9.507682,  9.414227,  9.315348,  9.210637
+        , 9.099980,  8.983486,  8.861134,  8.732856,  8.598688,  8.458776,  8.313365,  8.162878,  8.007675,  7.848043
+        , 7.684182,  7.516195,  7.343856,  7.166934,  6.985711,  6.800839,  6.613508,  6.425435,  6.238089,  6.052470
+        , 5.868894,  5.687038,  5.506229,  5.326138,  5.146733,  4.968557,  4.792568,  4.620797,  4.455047,  4.296105
+        , 4.143395,  3.995240,  3.849173,  3.702364,  3.552436,  3.397629,  3.236080,  3.065091,  2.877095,  2.654244
+        , 2.386077,  2.134559,  1.872022,  1.534759,  1.000000
+        };
+
+    static double const COI[65] =
+        {  0.00200,   0.00206,   0.00214,   0.00224,   0.00236,   0.00250,   0.00265,   0.00282,   0.00301,   0.00324
+        ,  0.00350,   0.00382,   0.00419,   0.00460,   0.00504,   0.00550,   0.00596,   0.00645,   0.00697,   0.00756
+        ,  0.00825,   0.00903,   0.00990,   0.01088,   0.01199,   0.01325,   0.01469,   0.01631,   0.01811,   0.02009
+        ,  0.02225,   0.02456,   0.02704,   0.02979,   0.03289,   0.03645,   0.04058,   0.04526,   0.05043,   0.05599
+        ,  0.06185,   0.06798,   0.07450,   0.08153,   0.08926,   0.09785,   0.10762,   0.11855,   0.13039,   0.14278
+        ,  0.15545,   0.16827,   0.18132,   0.19506,   0.21012,   0.22700,   0.24613,   0.26655,   0.28547,   0.31127
+        ,  0.40000,   0.50000,   0.60000,   0.70000,   1.00000
+        };
+
+    std::vector<double>coi (COI, COI + lmi_array_size(COI));
+    std::vector<double>ic  (coi.size(), 0.10);
+    std::vector<double>ig  (coi.size(), 0.04);
+
+    ULCommFns CF
+        (coi
+        ,ic
+        ,ig
+        ,mce_option1
+        ,mce_annual
+        );
+
+    std::vector<double> nsp    (coi.size());
+    nsp     += (CF.aD().back() + CF.kM()) / CF.aD();
+    std::vector<double> annuity(coi.size());
+    annuity += (                 CF.aN()) / CF.aD();
+
+    double tolerance = 0.0000005;
+    double worst_discrepancy = 0.0;
+    for(unsigned int j = 0; j < coi.size(); j++)
+        {
+        double d0 = fabs(nsp    [j]        - Ax  [j]);
+        double d1 = fabs(annuity[j]        - ax  [j]);
+        worst_discrepancy = std::max(worst_discrepancy, d0);
+        worst_discrepancy = std::max(worst_discrepancy, d1);
+        if
+            (  tolerance < d0
+            || tolerance < d1
+            )
+            {
+            std::cerr
+                << "Failed to match Eckley's results at duration "
+                << j
+                << ".\n"
+                << "  differences: " << d0 << ' ' << d1
+                << "\n  " << value_cast<std::string>(nsp    [j]) << " " << value_cast<std::string>(Ax[j]) << '\n'
+                << "\n  " << value_cast<std::string>(annuity[j]) << " " << value_cast<std::string>(ax[j]) << '\n'
+                << std::endl
+                ;
+            }
+        }
+    BOOST_TEST_RELATION(worst_discrepancy,<,tolerance);
+    std::cout
+        << std::setiosflags(std::ios_base::fixed)
+        << std::setprecision(9)
+        << "  " << std::setw(13) << tolerance         << " tolerance\n"
+        << "  " << std::setw(13) << worst_discrepancy << " worst_discrepancy\n"
+        << std::endl
+        ;
+}
+
 /// Exactly reproduce a comprehensive example from Eckley's paper.
 ///
 /// Eckley's paper contains five tables:
@@ -119,6 +204,7 @@ void mete_corridor
 
 void ULCommFnsTest()
 {
+    TestEckleyTable2(); // To be refactored soon....
     static double const Dx[31] =
         {1.000000, 0.909085, 0.826438, 0.751305, 0.683003, 0.620911, 0.564463, 0.513147, 0.466496, 0.424087
         ,0.385533, 0.350483, 0.318621, 0.289655, 0.263322, 0.239382, 0.217620, 0.197835, 0.179850, 0.163499
