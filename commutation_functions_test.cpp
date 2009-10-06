@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: commutation_functions_test.cpp,v 1.30 2009-10-06 23:41:43 chicares Exp $
+// $Id: commutation_functions_test.cpp,v 1.31 2009-10-06 23:47:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -116,7 +116,6 @@ void mete_corridor
 
 // To be refactored soon....
 #include "et_vector.hpp"
-#include "value_cast.hpp"
 void TestEckleyTable2()
 {
     static double const Ax[65] =
@@ -214,8 +213,8 @@ void TestEckleyTable2()
                 << j
                 << ".\n"
                 << "  differences: " << d0 << ' ' << d1
-                << "\n  " << value_cast<std::string>(nsp    [j]) << " " << value_cast<std::string>(Ax[j]) << '\n'
-                << "\n  " << value_cast<std::string>(annuity[j]) << " " << value_cast<std::string>(ax[j]) << '\n'
+                << "\n  " << nsp    [j] << " " << Ax[j] << '\n'
+                << "\n  " << annuity[j] << " " << ax[j] << '\n'
                 << std::endl
                 ;
             }
@@ -249,8 +248,8 @@ void TestEckleyTable2()
                 << j
                 << ".\n"
                 << "  differences: " << d0 << ' ' << d1
-                << "\n  " << value_cast<std::string>(premium[j]) << " " << value_cast<std::string>(Px[j] * .001) << '\n'
-                << "\n  " << value_cast<std::string>(reserve[j]) << " " << value_cast<std::string>(Vx[j] * .001) << '\n'
+                << "\n  " << premium[j] << " " << Px[j] * .001 << '\n'
+                << "\n  " << reserve[j] << " " << Vx[j] * .001 << '\n'
                 << std::endl
                 ;
             }
@@ -344,15 +343,15 @@ void TestEckleyTables3and4()
                 << j
                 << ".\n"
                 << "  differences: " << d0 << ' ' << d1
-                << "\n  " << value_cast<std::string>(premium[j]) << " " << value_cast<std::string>(Px[j] * .001) << '\n'
-                << "\n  " << value_cast<std::string>(reserve[j]) << " " << value_cast<std::string>(Vx[j] * .001) << '\n'
+                << "\n  " << premium[j] << " " << Px[j] * .001 << '\n'
+                << "\n  " << reserve[j] << " " << Vx[j] * .001 << '\n'
                 << std::endl
                 ;
             }
         }
     BOOST_TEST_RELATION(worst_discrepancy,<,tolerance);
     std::cout
-        << "Table 3; Px and Vx:\n"
+        << "Tables 3 and 4; Px and Vx:\n"
         << std::setiosflags(std::ios_base::fixed)
         << std::setprecision(9)
         << "  " << std::setw(13) << tolerance         << " tolerance\n"
