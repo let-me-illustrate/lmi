@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: commutation_functions_test.cpp,v 1.27 2009-10-06 02:57:22 chicares Exp $
+// $Id: commutation_functions_test.cpp,v 1.28 2009-10-06 11:38:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -96,6 +96,19 @@ void mete_corridor
         ,std::divides<double>()
         );
 }
+
+/// Exactly reproduce Table 2 from Eckley's paper.
+///
+/// Table 2 on pages 25-26 of TSA XXIX uses annual functions, and
+/// tabulates actuarial functions Ax, ax, Px, and Vx. Its other
+/// columns represent assumptions or intermediate results upon which
+/// those functions depend.
+///
+/// Ax and ax are given to a precision of six decimals only, so their
+/// maximum roundoff error is 0.0000005: half a unit in the sixth
+/// decimal place, which is five units in the seventh. This unit test
+/// demonstrates that every number in those two columns is reproduced
+/// within that tightest-possible tolerance.
 
 // To be refactored soon....
 #include "et_vector.hpp"
@@ -182,14 +195,8 @@ void TestEckleyTable2()
         ;
 }
 
-/// Exactly reproduce a comprehensive example from Eckley's paper.
+/// Exactly reproduce Table 5 from Eckley's paper.
 ///
-/// Eckley's paper contains five tables:
-///   (1) annual basis; iterative application of a Fackler formula
-///   (2) like (1), but current and guaranteed interest rates differ
-///   (3) like (2), but option B
-///   (4) same as (3), but using commutation functions
-///   (5) monthly basis; commutation functions; option B
 /// Table 5 on page 32 of TSA XXIX is the most advanced example that's
 /// applicable to the present work, and the only one that uses monthly
 /// functions. Only its last three columns (Dx, Dx12, and Cx12) are
@@ -202,9 +209,8 @@ void TestEckleyTable2()
 /// demonstrates that every number in the three crucial columns is
 /// reproduced within that tightest-possible tolerance.
 
-void ULCommFnsTest()
+void TestEckleyTable5()
 {
-    TestEckleyTable2(); // To be refactored soon....
     static double const Dx[31] =
         {1.000000, 0.909085, 0.826438, 0.751305, 0.683003, 0.620911, 0.564463, 0.513147, 0.466496, 0.424087
         ,0.385533, 0.350483, 0.318621, 0.289655, 0.263322, 0.239382, 0.217620, 0.197835, 0.179850, 0.163499
@@ -276,6 +282,22 @@ void ULCommFnsTest()
         << "  " << std::setw(13) << worst_discrepancy << " worst_discrepancy\n"
         << std::endl
         ;
+}
+
+/// Validate against published numerical results.
+///
+/// Eckley's paper contains five tables:
+///   (1) annual basis; iterative application of a Fackler formula
+///   (2) like (1), but current and guaranteed interest rates differ
+///   (3) like (2), but option B
+///   (4) same as (3), but using commutation functions
+///   (5) monthly basis; commutation functions; option B
+/// Tables 2 and 5 are validated here.
+
+void ULCommFnsTest()
+{
+    TestEckleyTable2();
+    TestEckleyTable5();
 }
 
 void OLCommFnsTest()
