@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: commutation_functions_test.cpp,v 1.28 2009-10-06 11:38:14 chicares Exp $
+// $Id: commutation_functions_test.cpp,v 1.29 2009-10-06 13:03:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -42,6 +42,7 @@
 #include <iomanip>    // std::setw() etc.
 #include <ios>        // ios_base::fixed()
 #include <iterator>   // std::back_inserter()
+#include <numeric>    // std::partial_sum()
 #include <vector>
 
 namespace
@@ -106,9 +107,12 @@ void mete_corridor
 ///
 /// Ax and ax are given to a precision of six decimals only, so their
 /// maximum roundoff error is 0.0000005: half a unit in the sixth
-/// decimal place, which is five units in the seventh. This unit test
-/// demonstrates that every number in those two columns is reproduced
-/// within that tightest-possible tolerance.
+/// decimal place, which is five units in the seventh. Px and Vx per
+/// thousand are given to two decimals only; on a unit basis, their
+/// maximum roundoff error is 0.000005: half a unit in the fifth
+/// decimal place, which is five units in the sixth. This unit test
+/// demonstrates that every number in those four columns is reproduced
+/// within its tightest-possible tolerance.
 
 // To be refactored soon....
 #include "et_vector.hpp"
@@ -132,6 +136,25 @@ void TestEckleyTable2()
         , 5.868894,  5.687038,  5.506229,  5.326138,  5.146733,  4.968557,  4.792568,  4.620797,  4.455047,  4.296105
         , 4.143395,  3.995240,  3.849173,  3.702364,  3.552436,  3.397629,  3.236080,  3.065091,  2.877095,  2.654244
         , 2.386077,  2.134559,  1.872022,  1.534759,  1.000000
+        };
+    static double const Px[65] =
+        {     5.02,      5.35,      5.70,      6.09,      6.51,      6.97,      7.47,      8.00,      8.58,      9.20
+        ,     9.88,     10.61,     11.39,     12.22,     13.11,     14.07,     15.09,     16.20,     17.39,     18.68
+        ,    20.08,     21.58,     23.21,     24.96,     26.85,     28.89,     31.07,     33.42,     35.93,     38.62
+        ,    41.49,     44.57,     47.87,     51.42,     55.25,     59.37,     63.77,     68.45,     73.40,     78.60
+        ,    84.06,     89.82,     95.93,    102.42,    109.34,    116.71,    124.53,    132.73,    141.24,    150.01
+        ,   159.08,    168.53,    178.56,    189.43,    201.46,    214.97,    230.44,    248.56,    270.94,    301.52
+        ,   345.81,    397.09,    464.59,    583.87,    935.31
+        };
+    // To get end-of-year values, omit Eckley's first element.
+    static double const Vx[65] =
+        {  /* 0.00, */   3.42,      7.12,     11.11,     15.41,     20.03,     24.98,     30.28,     35.96,     42.02
+        ,    48.49,     55.36,     62.63,     70.29,     78.35,     86.84,     95.78,    105.24,    115.24,    125.83
+        ,   137.03,    148.82,    161.19,    174.17,    187.75,    201.90,    216.61,    231.84,    247.54,    263.69
+        ,   280.26,    297.26,    314.69,    332.59,    350.93,    369.63,    388.58,    407.60,    426.56,    445.33
+        ,   463.90,    482.30,    500.58,    518.80,    536.94,    554.96,    572.75,    590.12,    606.87,    622.92
+        ,   638.34,    653.28,    668.00,    682.78,    697.84,    713.35,    729.49,    746.49,    765.07,    786.98
+        ,   813.15,    836.91,    860.33,    888.39,    930.30,   1000.00
         };
 
     static double const COI[65] =
@@ -158,15 +181,27 @@ void TestEckleyTable2()
 
     std::vector<double> nsp    (coi.size());
     nsp     += (CF.aD().back() + CF.kM()) / CF.aD();
+
     std::vector<double> annuity(coi.size());
     annuity += (                 CF.aN()) / CF.aD();
 
+    std::vector<double> premium(coi.size());
+    premium += (CF.aD().back() + CF.kM()) / CF.aN();
+
+    std::vector<double> reserve(coi.size());
+    reserve += premium[0] * CF.aD() - CF.kC();
+    std::partial_sum(reserve.begin(), reserve.end(), reserve.begin());
+    std::vector<double> EaD(CF.aD());
+    EaD.erase(EaD.begin());
+    reserve /= EaD;
+
+    {
     double tolerance = 0.0000005;
     double worst_discrepancy = 0.0;
     for(unsigned int j = 0; j < coi.size(); j++)
         {
-        double d0 = fabs(nsp    [j]        - Ax  [j]);
-        double d1 = fabs(annuity[j]        - ax  [j]);
+        double d0 = fabs(nsp    [j] - Ax[j]);
+        double d1 = fabs(annuity[j] - ax[j]);
         worst_discrepancy = std::max(worst_discrepancy, d0);
         worst_discrepancy = std::max(worst_discrepancy, d1);
         if
@@ -193,6 +228,41 @@ void TestEckleyTable2()
         << "  " << std::setw(13) << worst_discrepancy << " worst_discrepancy\n"
         << std::endl
         ;
+    }
+    {
+    double tolerance = 0.000005;
+    double worst_discrepancy = 0.0;
+    for(unsigned int j = 0; j < coi.size(); j++)
+        {
+        double d0 = fabs(premium[j] - Px[j] * .001);
+        double d1 = fabs(reserve[j] - Vx[j] * .001);
+        worst_discrepancy = std::max(worst_discrepancy, d0);
+        worst_discrepancy = std::max(worst_discrepancy, d1);
+        if
+            (  tolerance < d0
+            || tolerance < d1
+            )
+            {
+            std::cerr
+                << "Failed to match Eckley's results at duration "
+                << j
+                << ".\n"
+                << "  differences: " << d0 << ' ' << d1
+                << "\n  " << value_cast<std::string>(premium[j]) << " " << value_cast<std::string>(Px[j] * .001) << '\n'
+                << "\n  " << value_cast<std::string>(reserve[j]) << " " << value_cast<std::string>(Vx[j] * .001) << '\n'
+                << std::endl
+                ;
+            }
+        }
+    BOOST_TEST_RELATION(worst_discrepancy,<,tolerance);
+    std::cout
+        << std::setiosflags(std::ios_base::fixed)
+        << std::setprecision(9)
+        << "  " << std::setw(13) << tolerance         << " tolerance\n"
+        << "  " << std::setw(13) << worst_discrepancy << " worst_discrepancy\n"
+        << std::endl
+        ;
+    }
 }
 
 /// Exactly reproduce Table 5 from Eckley's paper.
