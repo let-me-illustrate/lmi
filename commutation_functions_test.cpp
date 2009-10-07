@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: commutation_functions_test.cpp,v 1.31 2009-10-06 23:47:31 chicares Exp $
+// $Id: commutation_functions_test.cpp,v 1.32 2009-10-07 02:09:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -529,6 +529,29 @@ int test_main(int, char*[])
     ULCommFnsTest();
     OLCommFnsTest();
 
+    static double const corr[100] =
+        {11.5155941548, 11.5717444478, 11.2511618763, 10.9268748291, 10.6075226031
+        ,10.2913859926,  9.9771316152,  9.6663478955,  9.3579791433,  9.0542634126
+        , 8.7570239233,  8.4670610486,  8.1873962320,  7.9197656963,  7.6664702016
+        , 7.4272382833,  7.2017265978,  6.9886875525,  6.7862127605,  6.5915437072
+        , 6.4030929009,  6.2191988647,  6.0388071507,  5.8610637314,  5.6858418498
+        , 5.5130604894,  5.3426790343,  5.1751347261,  5.0109975486,  4.8505302398
+        , 4.6941151008,  4.5418746624,  4.3941942697,  4.2509217446,  4.1123070988
+        , 3.9782673353,  3.8488163906,  3.7239278744,  3.6036386979,  3.4878459075
+        , 3.3765099599,  3.2694800052,  3.1667376485,  3.0679625126,  2.9731079660
+        , 2.8819286367,  2.7943510758,  2.7101358062,  2.6291494842,  2.5512124160
+        , 2.4762652780,  2.4041581409,  2.3349362484,  2.2685404737,  2.2049454976
+        , 2.1441220539,  2.0859171152,  2.0302206075,  1.9768318802,  1.9256180648
+        , 1.8764615085,  1.8293199329,  1.7841597502,  1.7409791334,  1.6997842416
+        , 1.6605376641,  1.6231684568,  1.5875398191,  1.5535220010,  1.5209816139
+        , 1.4898379655,  1.4600928985,  1.4317807452,  1.4049711235,  1.3797420497
+        , 1.3560914847,  1.3339417967,  1.3131570687,  1.2935632913,  1.2749655961
+        , 1.2572407121,  1.2403529897,  1.2243171854,  1.2092127824,  1.1951291078
+        , 1.1820699720,  1.1699675267,  1.1586903305,  1.1480777621,  1.1379436131
+        , 1.1280806087,  1.1182600678,  1.1082179807,  1.0976491758,  1.0861908041
+        , 1.0735757756,  1.0596478210,  1.0443864169,  1.0276234532,  1.0065459325
+        };
+
     // ET !! q = coi_rate_from_q(sample_q, 1.0);
     std::vector<double> q;
     std::transform
@@ -538,26 +561,61 @@ int test_main(int, char*[])
         ,std::bind2nd(coi_rate_from_q<double>(), 1.0)
         );
 
-    std::vector<double>ic(q.size(), i_upper_12_over_12_from_i<double>()(0.10));
+    std::vector<double>ic(q.size(), i_upper_12_over_12_from_i<double>()(0.04));
     std::vector<double>ig(q.size(), i_upper_12_over_12_from_i<double>()(0.04));
 
     ULCommFns ulcf
         (q
-        ,ig
+        ,ic
         ,ig
         ,mce_option1
         ,mce_monthly
         );
     std::vector<double> cvat_corridor;
+    std::vector<double> denominator(ulcf.kM());
+    std::transform
+        (denominator.begin()
+        ,denominator.end()
+        ,denominator.begin()
+        ,std::bind1st(std::plus<double>(), ulcf.aD().back())
+        );
     std::transform
         (ulcf.aD().begin()
         ,ulcf.aD().end() - 1
-        ,ulcf.kM().begin()
+        ,denominator.begin()
         ,std::back_inserter(cvat_corridor)
         ,std::divides<double>()
         );
-    // TODO ?? Add tests to validate values. Consider using examples
-    // published in Eckley's paper.
+
+    double tolerance = 0.00000000005;
+    double worst_discrepancy = 0.0;
+    for(unsigned int j = 0; j < q.size(); j++)
+        {
+        double d0 = fabs(cvat_corridor[j] - corr[j]);
+        worst_discrepancy = std::max(worst_discrepancy, d0);
+        if
+            (  tolerance < d0
+            )
+            {
+            std::cerr
+                << "Failed to match stored results at duration "
+                << j
+                << ".\n"
+                << "  difference: " << d0
+                << "\n  " << cvat_corridor[j] << " " << corr[j] << '\n'
+                << std::endl
+                ;
+            }
+        }
+    BOOST_TEST_RELATION(worst_discrepancy,<,tolerance);
+    std::cout
+        << "CVAT corridor factor:\n"
+        << std::setiosflags(std::ios_base::fixed)
+        << std::setprecision(13)
+        << "  " << std::setw(17) << tolerance         << " tolerance\n"
+        << "  " << std::setw(17) << worst_discrepancy << " worst_discrepancy\n"
+        << std::endl
+        ;
 
     std::cout
         << "  Speed test: generate UL commutation functions\n    "
