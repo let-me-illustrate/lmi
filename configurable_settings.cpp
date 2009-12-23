@@ -46,6 +46,12 @@
 #include <iterator>
 #include <sstream>
 
+// This symbol is defined by configure when it is used. If we don't use
+// configure, fall back to the default installation location which is "/"
+#ifndef LMI_INSTALL_PREFIX
+    #define LMI_INSTALL_PREFIX ""
+#endif
+
 // TODO ?? Need unit tests.
 
 namespace
@@ -75,7 +81,8 @@ fs::path const& configuration_filepath()
         return complete_path;
         }
 
-    std::string filename = "/etc/opt/lmi/" + configuration_filename();
+    std::string filename = LMI_INSTALL_PREFIX "/etc/opt/lmi/"
+                            + configuration_filename();
     if(access(filename.c_str(), R_OK))
         {
         filename = AddDataDir(configuration_filename());
