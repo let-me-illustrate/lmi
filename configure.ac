@@ -126,6 +126,16 @@ AC_ARG_ENABLE(cgicc,
 dnl Pass standard options to wx.
 WX_STANDARD_OPTIONS([debug,shared,toolkit,wxshared])
 
+dnl make the installation prefix available to C++ code
+if test "x$prefix" != "xNONE"; then
+    lmi_prefix=$prefix
+else
+    lmi_prefix=$ac_default_prefix
+fi
+
+AC_DEFINE_UNQUOTED(LMI_INSTALL_PREFIX, "$lmi_prefix", [Program installation prefix])
+
+
 dnl === Program checks ===
 
 dnl this magic incantation is needed to prevent AC_PROG_CC from setting the
