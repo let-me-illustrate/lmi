@@ -87,13 +87,13 @@ int AboutDialog::ShowModal()
         ,"Let me illustrate"
         );
 
-    wxFlexGridSizer* sizer1 = new wxFlexGridSizer(0, 1);
+    wxFlexGridSizer* sizer1 = new wxFlexGridSizer(2);
     sizer1->AddGrowableCol(0);
     sizer1->AddGrowableCol(1);
     sizer1->Add(license_button, 1, wxALL|wxALIGN_LEFT , 5);
     sizer1->Add(cancel_button , 1, wxALL|wxALIGN_RIGHT, 5);
 
-    wxFlexGridSizer* sizer0 = new wxFlexGridSizer(1, 0);
+    wxFlexGridSizer* sizer0 = new wxFlexGridSizer(1);
     sizer0->AddGrowableRow(0);
     sizer0->Add(html_window, 1, wxALL, 10);
     sizer0->Add(sizer1     , 1, wxALL, 10);
