@@ -163,6 +163,8 @@ lmi_wx_SOURCES = \
     illustration_view.cpp \
     main_common.cpp \
     main_wx.cpp \
+    mec_document.cpp \
+    mec_view.cpp \
     msw_workarounds.cpp \
     multidimgrid_any.cpp \
     multidimgrid_tools.cpp \
@@ -269,6 +271,10 @@ liblmi_common_sources = \
     ledgervalues.cpp \
     license.cpp \
     loads.cpp \
+    mec_input.cpp \
+    mec_server.cpp \
+    mec_state.cpp \
+    mec_xml_document.cpp \
     miscellany.cpp \
     multiple_cell_document.cpp \
     mvc_model.cpp \
