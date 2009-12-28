@@ -31,7 +31,7 @@
 #include <string>
 #include <vector>
 
-template<typename T, std::size_t n, T const (&e)[n], char const*const (&c)[n]>
+template<typename T, std::size_t n, T const (*e)[n], char const*const (*c)[n]>
 std::vector<std::string> mc_e_vector_to_string_vector
     (std::vector<mc_enum<T,n,e,c> > const& ve
     )

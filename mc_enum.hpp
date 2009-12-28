@@ -138,7 +138,7 @@ class LMI_SO mc_enum_base
 /// macro. This built-in approach is preferred because it avoids using
 /// the preprocessor and its compile-time checking is automatic.
 
-template<typename T, std::size_t n, T const (&e)[n], char const*const (&c)[n]>
+template<typename T, std::size_t n, T const (*e)[n], char const*const (*c)[n]>
 class mc_enum
     :public mc_enum_base
     ,private boost::equality_comparable<mc_enum<T,n,e,c>, mc_enum<T,n,e,c> >

@@ -44,5 +44,5 @@ extern char const*const holiday_strings[] =
     ,"Easter"
     ,"Pentecost"
     };
-template class mc_enum<enum_holiday, 3, holiday_enums, holiday_strings>;
+template class mc_enum<enum_holiday, 3, &holiday_enums, &holiday_strings>;
 

@@ -35,7 +35,7 @@
 
 namespace
 {
-template<typename T, std::size_t n, T const (&e)[n], char const*const (&c)[n]>
+template<typename T, std::size_t n, T const (*e)[n], char const*const (*c)[n]>
 std::vector<T> convert_vector_type
     (std::vector<mc_enum<T,n,e,c> > const& ve
     )

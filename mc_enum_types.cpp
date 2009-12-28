@@ -53,7 +53,7 @@ extern char const*const option_strings[] =
     ,"B"
     ,"C"
     };
-template class mc_enum<enum_option, 3, option_enums, option_strings>;
+template class mc_enum<enum_option, 3, &option_enums, &option_strings>;
 
 extern mcenum_emission const emission_enums[] =
     {mce_emit_nothing
@@ -81,14 +81,14 @@ extern char const*const emission_strings[] =
     ,"emit_text_stream"
     ,"emit_custom_0"
     };
-template class mc_enum<mcenum_emission, 11, emission_enums, emission_strings>;
+template class mc_enum<mcenum_emission, 11, &emission_enums, &emission_strings>;
 
 #include "mc_enum_types.xpp"
 
 #define MC_DEFINE(TYPE,NUMBER) \
 extern mcenum_##TYPE const TYPE##_enums[] = TYPE##_VALUES \
 extern char const*const TYPE##_strings[] = TYPE##_NAMES \
-template class mc_enum<mcenum_##TYPE, NUMBER, TYPE##_enums, TYPE##_strings>;
+template class mc_enum<mcenum_##TYPE, NUMBER, &TYPE##_enums, &TYPE##_strings>;
 
 MC_DEFINE(yes_or_no,2)
 MC_DEFINE(gender,3)
