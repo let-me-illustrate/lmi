@@ -24,6 +24,11 @@
 // Sample command line to compile:
 // /gcc-2.95.2-1/bin/g++ -Iming29521 ihs_crc_comp.cpp
 
+#include LMI_PCH_HEADER
+#ifdef __BORLANDC__
+#   pragma hdrstop
+#endif // __BORLANDC__
+
 #include "main_common.hpp"
 #include "miscellany.hpp"
 #include "value_cast.hpp"

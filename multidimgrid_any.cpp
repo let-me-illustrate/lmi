@@ -21,10 +21,10 @@
 
 // $Id: multidimgrid_any.cpp,v 1.24 2008-12-27 02:56:50 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
-#endif
+#endif // __BORLANDC__
 
 #include "multidimgrid_any.hpp"
 

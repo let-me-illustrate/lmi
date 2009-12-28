@@ -33,8 +33,8 @@
 
 // $Id: main_cgi.cpp,v 1.42 2009-03-26 16:47:29 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

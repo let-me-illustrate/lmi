@@ -21,8 +21,8 @@
 
 // $Id: alert_wx.cpp,v 1.26 2009-04-29 03:09:25 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

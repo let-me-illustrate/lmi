@@ -21,8 +21,8 @@
 
 // $Id: main_cli.cpp,v 1.74 2009-07-31 02:59:28 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

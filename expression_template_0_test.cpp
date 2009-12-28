@@ -38,8 +38,8 @@
 #   define NDEBUG 1
 #endif // defined USE_UBLAS
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

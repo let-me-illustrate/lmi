@@ -21,6 +21,11 @@
 
 // $Id: tier_view_editor.cpp,v 1.14 2008-12-27 02:56:57 chicares Exp $
 
+#include LMI_PCH_HEADER
+#ifdef __BORLANDC__
+#   pragma hdrstop
+#endif // __BORLANDC__
+
 #include "tier_view_editor.hpp"
 
 #include "assert_lmi.hpp"

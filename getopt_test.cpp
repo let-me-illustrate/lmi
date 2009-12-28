@@ -43,8 +43,8 @@
 // $Id: getopt_test.cpp,v 1.8 2008-12-27 02:56:42 chicares Exp $
 
 // GWC added this to conform to LMI standards.
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

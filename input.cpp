@@ -21,8 +21,8 @@
 
 // $Id: input.cpp,v 1.46 2009-06-24 20:05:14 wboutin Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

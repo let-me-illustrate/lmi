@@ -21,8 +21,8 @@
 
 // $Id: generate_product_files.cpp,v 1.12 2008-12-27 02:56:41 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

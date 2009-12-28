@@ -31,8 +31,8 @@
 // tables with the default methods that look to the database for table numbers.
 // This is handled automatically in class BasicValues, where those methods are.
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

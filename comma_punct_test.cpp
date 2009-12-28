@@ -21,8 +21,8 @@
 
 // $Id: comma_punct_test.cpp,v 1.8 2008-12-27 02:56:38 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

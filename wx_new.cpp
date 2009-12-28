@@ -21,10 +21,10 @@
 
 // $Id: wx_new.cpp,v 1.7 2008-12-27 02:56:59 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
-#endif
+#endif // __BORLANDC__
 
 #include "wx_new.hpp"
 

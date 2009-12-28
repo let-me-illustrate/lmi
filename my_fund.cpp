@@ -34,8 +34,8 @@
 // Those files are all you need: distributing the program itself isn't
 // necessary anyway.
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

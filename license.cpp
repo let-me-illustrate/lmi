@@ -21,8 +21,8 @@
 
 // $Id: license.cpp,v 1.9 2009-01-04 02:40:26 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

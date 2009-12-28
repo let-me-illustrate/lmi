@@ -21,8 +21,8 @@
 
 // $Id: commutation_functions_test.cpp,v 1.32 2009-10-07 02:09:29 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

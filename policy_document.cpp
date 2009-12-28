@@ -21,10 +21,10 @@
 
 // $Id: policy_document.cpp,v 1.10 2008-12-27 02:56:52 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
-#endif
+#endif // __BORLANDC__
 
 #include "policy_document.hpp"
 

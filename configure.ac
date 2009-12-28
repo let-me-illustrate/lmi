@@ -123,6 +123,20 @@ AC_ARG_ENABLE(cgicc,
              esac],
              lmi_cgicc_option=no)
 
+dnl Note: PCH is not enabled by default, because it doesn't bring any
+dnl       speed improvements on typical setups. Because of that, it doesn't
+dnl       seem worth autodetecting PCH support either.
+AC_ARG_ENABLE(pch,
+             [AC_HELP_STRING([--enable-pch],
+                             [use GCC precompiled headers])],
+             [case "x${enableval}" in
+                   x) lmi_use_pch=yes ;;
+                xyes) lmi_use_pch=yes ;;
+                 xno) lmi_use_pch=no ;;
+                   *) AC_MSG_ERROR(bad value ${enableval} for --enable-pch[=yes|no]) ;;
+             esac], lmi_use_pch=no)
+AM_CONDITIONAL(LMI_USE_PCH, [ test "x$lmi_use_pch" = "xyes" ])
+
 dnl Pass standard options to wx.
 WX_STANDARD_OPTIONS([debug,shared,toolkit,wxshared])
 

@@ -21,8 +21,8 @@
 
 // $Id: my_test_coding_rules.cpp,v 1.3 2008-12-27 02:56:51 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

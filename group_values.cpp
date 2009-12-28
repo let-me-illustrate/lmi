@@ -21,8 +21,8 @@
 
 // $Id: group_values.cpp,v 1.106 2009-04-15 00:41:12 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

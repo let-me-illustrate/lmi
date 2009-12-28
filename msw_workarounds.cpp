@@ -21,8 +21,8 @@
 
 // $Id: msw_workarounds.cpp,v 1.11 2009-04-08 01:26:28 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

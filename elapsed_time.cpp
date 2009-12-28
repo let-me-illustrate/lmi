@@ -21,6 +21,11 @@
 
 // $Id: elapsed_time.cpp,v 1.9 2008-12-27 02:56:40 chicares Exp $
 
+#include LMI_PCH_HEADER
+#ifdef __BORLANDC__
+#   pragma hdrstop
+#endif // __BORLANDC__
+
 #include "handle_exceptions.hpp"
 #include "main_common.hpp"
 #include "system_command.hpp"

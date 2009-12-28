@@ -21,6 +21,11 @@
 
 // $Id: rounding_document.cpp,v 1.8 2008-12-27 02:56:54 chicares Exp $
 
+#include LMI_PCH_HEADER
+#ifdef __BORLANDC__
+#   pragma hdrstop
+#endif // __BORLANDC__
+
 #include "rounding_document.hpp"
 
 // EVGENIY !! Doesn't it seem strange that class RoundingButtons,

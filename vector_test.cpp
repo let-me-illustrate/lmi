@@ -24,8 +24,8 @@
 // This file is of historical interest only. It shows various attempts
 // to reinvent work that others have done better.
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

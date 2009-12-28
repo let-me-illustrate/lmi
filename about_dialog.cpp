@@ -21,10 +21,10 @@
 
 // $Id: about_dialog.cpp,v 1.14 2009-03-31 19:33:09 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
-#endif
+#endif // __BORLANDC__
 
 #include "about_dialog.hpp"
 

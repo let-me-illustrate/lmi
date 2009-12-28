@@ -21,6 +21,11 @@
 
 // $Id: product_names.cpp,v 1.6 2009-03-30 12:07:19 chicares Exp $
 
+#include LMI_PCH_HEADER
+#ifdef __BORLANDC__
+#   pragma hdrstop
+#endif // __BORLANDC__
+
 #include "product_names.hpp"
 
 #include "alert.hpp"

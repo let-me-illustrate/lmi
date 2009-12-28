@@ -21,8 +21,8 @@
 
 // $Id: actuarial_table_test.cpp,v 1.55 2009-03-20 04:49:41 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

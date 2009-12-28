@@ -25,10 +25,10 @@
 // suite ensures that it'll be compiled with stronger warning options
 // than wx would permit.
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
-#endif
+#endif // __BORLANDC__
 
 // The '.cpp' file is deliberately included here instead of the header
 // because it was probably already compiled for inclusion in a dll,

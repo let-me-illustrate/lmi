@@ -21,8 +21,8 @@
 
 // $Id: preferences_model.cpp,v 1.14 2009-09-29 01:18:24 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

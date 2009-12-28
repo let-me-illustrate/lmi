@@ -21,6 +21,11 @@
 
 // $Id: multidimgrid_tools.cpp,v 1.8 2008-12-27 02:56:50 chicares Exp $
 
+#include LMI_PCH_HEADER
+#ifdef __BORLANDC__
+#   pragma hdrstop
+#endif // __BORLANDC__
+
 #include "multidimgrid_tools.hpp"
 
 #include <wx/wupdlock.h>

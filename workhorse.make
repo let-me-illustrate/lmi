@@ -275,6 +275,7 @@ wx_config_check:
 # so there's no point in calling them.
 
 all_include_directories := \
+  . \
   $(src_dir) \
   $(src_dir)/tools/pete-2.1.1 \
   $(overriding_include_directories) \
@@ -432,6 +433,7 @@ gcc_cxx_warnings := \
   -Wnon-template-friend \
   -Woverloaded-virtual \
   -Wpmf-conversions \
+  -Winvalid-pch \
   -Wsynth \
 
 # Too many warnings on correct code, e.g. exact comparison to zero:
@@ -588,6 +590,44 @@ ifeq (3.4.2,$(gcc_version))
   gcc_version_specific_warnings := -Wno-uninitialized
 endif
 
+pch_header := "<pchfile.hpp>"
+$(wx_dependent_objects): pch_header := "<pchfile_wx.hpp>"
+
+
+all:
+
+ifneq (,$(USE_PCH))
+
+.PHONY: pch
+pch: pchfile.hpp.gch pchfile_wx.hpp.gch
+
+%.hpp.gch: %.hpp
+	$(CXX) -x c++-header -c $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) $< -o$@
+
+# Files are deemed to depend on wx iff they contain 'include *<wx/'.
+# This heuristic isn't foolproof because wx headers might be included
+# indirectly. Include an innocuous header like <wx/version.h> in files
+# for which it fails.
+
+pch_using_objects := \
+  $(addsuffix .o,\
+    $(basename \
+      $(notdir \
+        $(shell $(GREP) \
+          --files-with-matches \
+          'include LMI_PCH_HEADER' \
+          $(src_dir)/*.?pp \
+        ) \
+      ) \
+    ) \
+  )
+
+$(pch_using_objects): pch
+
+actually_used_pch_flags := -DLMI_COMPILER_USES_PCH
+
+endif # USE_PCH
+
 CFLAGS = \
   $(debug_flag) $(optimization_flag) $(gprof_flag) \
 
@@ -615,6 +655,8 @@ REQUIRED_CPPFLAGS = \
   $(libstdcxx_warning_macros) \
   $(wx_predefinitions) \
   -DBOOST_STRICT_CONFIG \
+ -DLMI_PCH_HEADER=$(pch_header) \
+  $(actually_used_pch_flags) \
 
 REQUIRED_CFLAGS = \
   $(C_WARNINGS) \

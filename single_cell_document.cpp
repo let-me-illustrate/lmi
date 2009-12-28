@@ -21,8 +21,8 @@
 
 // $Id: single_cell_document.cpp,v 1.23 2009-04-19 20:33:38 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

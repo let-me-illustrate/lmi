@@ -29,8 +29,8 @@
 // but is implemented differently and has different goals, so any
 // problems introduced here don't reflect on Kevin Smith's reputation.
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

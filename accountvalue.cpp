@@ -21,8 +21,8 @@
 
 // $Id: accountvalue.cpp,v 1.69 2009-04-16 02:07:14 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

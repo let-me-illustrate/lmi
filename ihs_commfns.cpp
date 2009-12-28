@@ -21,8 +21,8 @@
 
 // $Id: ihs_commfns.cpp,v 1.29 2009-10-06 03:09:39 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

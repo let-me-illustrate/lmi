@@ -21,8 +21,8 @@
 
 // $Id: ihs_avdebug.cpp,v 1.35 2009-04-15 11:16:31 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

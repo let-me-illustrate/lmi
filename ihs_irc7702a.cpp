@@ -27,8 +27,8 @@
 
 // TODO ?? Treat ROP increases as material changes exactly where needed.
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

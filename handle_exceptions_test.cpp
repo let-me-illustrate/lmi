@@ -21,8 +21,8 @@
 
 // $Id: handle_exceptions_test.cpp,v 1.7 2008-12-27 02:56:42 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
