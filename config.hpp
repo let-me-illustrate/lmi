@@ -169,6 +169,12 @@ namespace fs = boost::filesystem;
 #       undef  OK_TO_INCLUDE_CONFIG_BC551_HPP
 #   endif // Borland 5.5.1+ .
 
+#   if defined _MSC_VER
+#       define OK_TO_INCLUDE_CONFIG_MSVC_HPP
+#       include "config_msvc.hpp"
+#       undef  OK_TO_INCLUDE_CONFIG_MSVC_HPP
+#   endif // Microsoft Visual C++
+
 #endif // Not using autoconf.
 
 #endif // config_hpp

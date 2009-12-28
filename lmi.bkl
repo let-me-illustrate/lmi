@@ -1,0 +1,94 @@
+<?xml version="1.0" ?>
+<!-- $Id:$ -->
+
+<!--
+  To generate Microsoft Visual C++ 2003 project files from this file use
+
+  bakefile -f msvs2003prj -DWX_UNICODE=1 lmi.bkl
+ -->
+<makefile>
+    <!--
+        We pre-define this option which is usually defined in wx presets to
+        change its descriptions: we don't want to have "Static" in the names of
+        static configurations (having "DLL" for the shared ones is enough)
+     -->
+    <option name="WX_SHARED">
+        <values>0,1</values>
+        <values-description>,DLL</values-description>
+        <default-value>0</default-value>
+        <description>Use DLL build of wx library?</description>
+    </option>
+
+    <!--
+        Predefining WX_PORT gets rid of unwanted wxUniversal build
+        configurations in MSVC projects. Similarly, predefining WX_MONOLITHIC
+        removes the configurations using monolithic build of the library.
+        Neither is strictly necessary but things are tidier like this.
+
+        Finally, compiler is unknown (at makefile generation time) in the
+        autoconf format so we need to wrap the test for it inside format test.
+     -->
+    <if cond="FORMAT!='autoconf'">
+        <if cond="COMPILER=='vc'">
+            <set var="WX_PORT">msw</set>
+            <set var="WX_MONOLITHIC">0</set>
+        </if>
+    </if>
+
+    <include file="presets/simple.bkl"/>
+    <include file="presets/wx.bkl"/>
+    <include file="lmi_files.bkl"/>
+
+    <template id="lmibase">
+        <warnings>max</warnings>
+    </template>
+
+    <template id="lmilib" template="wx-lib,wxlike,lmibase"/>
+    <template id="lmiapp" template="wxlike,lmibase"/>
+
+    <lib id="lmi" template="lmilib">
+        <include>tools/pete-2.1.1</include>
+        <sources>
+            $(LIBLMI_SOURCES)
+            $(LIBLMI_COMMON_SOURCES)
+        </sources>
+    </lib>
+
+    <!--
+        We inherit from wxgui template which defines debug and release build
+        configurations and provides everything we need for building a wx
+        application. The wxlike template is needed to ensure that we use the
+        same debug/release configuration of wx as of the main application as we
+        don't want to have configurations involving debug build of the
+        application and release build of the library and vice versa.
+     -->
+    <exe id="lmi_wx" template="wxgui,lmiapp">
+        <sources>
+            $(LMI_WX_SOURCES)
+            <!--
+                Include this one directly here too to avoid creating a library
+                with just a single file in it.
+              -->
+            $(LIBWX_NEW_SOURCES)
+        </sources>
+        <win32-res>lmi.rc</win32-res>
+        <wx-lib>base</wx-lib>
+        <wx-lib>core</wx-lib>
+        <wx-lib>adv</wx-lib>
+        <wx-lib>html</wx-lib>
+        <wx-lib>xrc</wx-lib>
+        <wx-lib>xml</wx-lib>
+        <library>lmi</library>
+        <sys-lib>xsltwrapp$(WX3RDPARTYLIBPOSTFIX)</sys-lib>
+        <sys-lib>xmlwrapp$(WX3RDPARTYLIBPOSTFIX)</sys-lib>
+        <sys-lib>libexslt</sys-lib>
+        <sys-lib>libxslt</sys-lib>
+        <sys-lib>libxml2</sys-lib>
+    </exe>
+
+    <exe id="product_files" template="wxconsole,lmiapp">
+        <sources>$(PRODUCT_FILES_SOURCES)</sources>
+        <library>lmi</library>
+        <sys-lib>xmlwrapp$(WX3RDPARTYLIBPOSTFIX)</sys-lib>
+    </exe>
+</makefile>

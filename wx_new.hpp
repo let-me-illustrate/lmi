@@ -40,7 +40,7 @@
 #   elif defined LMI_WX_NEW_USE_SO
 #       define LMI_WX_NEW_SO __declspec(dllimport)
 #   else  // !defined LMI_WX_NEW_BUILD_SO && !defined LMI_WX_NEW_USE_SO
-#       error Either LMI_WX_NEW_BUILD_SO or LMI_WX_NEW_USE_SO must be defined.
+#       define LMI_WX_NEW_SO
 #   endif // !defined LMI_WX_NEW_BUILD_SO && !defined LMI_WX_NEW_USE_SO
 #else  // !defined HAVE_CONFIG_H && !defined LMI_MSW
 #   error Unknown platform and build system.
