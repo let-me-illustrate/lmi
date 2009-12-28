@@ -29,10 +29,10 @@
 //   while preview is active, application hidden as well as disabled
 // and in the later years given in the copyright notice above.
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
-#endif
+#endif // __BORLANDC__
 
 #include "previewframe_ex.hpp"
 

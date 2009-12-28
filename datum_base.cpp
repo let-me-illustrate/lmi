@@ -21,8 +21,8 @@
 
 // $Id: datum_base.cpp,v 1.7 2008-12-27 02:56:39 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

@@ -29,10 +29,10 @@
 // enhanced view class, and in the later years given in the copyright
 // notice above.
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
-#endif
+#endif // __BORLANDC__
 
 #include "view_ex.hpp"
 

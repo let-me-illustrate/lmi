@@ -21,8 +21,8 @@
 
 // $Id: ledgervalues.cpp,v 1.39 2009-04-15 00:41:12 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

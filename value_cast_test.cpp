@@ -21,8 +21,8 @@
 
 // $Id: value_cast_test.cpp,v 1.23 2009-09-29 23:37:23 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

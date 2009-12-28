@@ -88,8 +88,8 @@
 // evidence here to support banning alloca() from this project.
 
 // GWC added this to conform to LMI standards.
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

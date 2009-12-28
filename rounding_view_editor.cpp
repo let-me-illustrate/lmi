@@ -21,6 +21,11 @@
 
 // $Id: rounding_view_editor.cpp,v 1.16 2008-12-27 02:56:54 chicares Exp $
 
+#include LMI_PCH_HEADER
+#ifdef __BORLANDC__
+#   pragma hdrstop
+#endif // __BORLANDC__
+
 #include "rounding_view_editor.hpp"
 
 #include "alert.hpp"

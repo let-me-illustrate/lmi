@@ -21,10 +21,10 @@
 
 // $Id: illustration_document.cpp,v 1.24 2009-03-13 16:21:30 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
-#endif
+#endif // __BORLANDC__
 
 #include "illustration_document.hpp"
 #include "view_ex.tpp"

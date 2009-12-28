@@ -21,6 +21,11 @@
 
 // $Id: database_view_editor.cpp,v 1.16 2008-12-27 02:56:39 chicares Exp $
 
+#include LMI_PCH_HEADER
+#ifdef __BORLANDC__
+#   pragma hdrstop
+#endif // __BORLANDC__
+
 #include "database_view_editor.hpp"
 
 #include "alert.hpp"

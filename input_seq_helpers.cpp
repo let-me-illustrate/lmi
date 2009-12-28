@@ -21,8 +21,8 @@
 
 // $Id: input_seq_helpers.cpp,v 1.6 2008-12-27 02:56:45 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

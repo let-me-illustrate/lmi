@@ -24,8 +24,8 @@
 // Known defects:
 // grep for "NEED DECISION"
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

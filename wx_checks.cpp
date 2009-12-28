@@ -21,8 +21,8 @@
 
 // $Id: wx_checks.cpp,v 1.11 2008-12-27 02:56:59 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

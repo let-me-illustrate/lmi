@@ -21,8 +21,8 @@
 
 // $Id: fenv_lmi_test.cpp,v 1.20 2009-05-09 22:55:35 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

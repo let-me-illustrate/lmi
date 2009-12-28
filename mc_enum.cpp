@@ -21,8 +21,8 @@
 
 // $Id: mc_enum.cpp,v 1.13 2008-12-27 02:56:48 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

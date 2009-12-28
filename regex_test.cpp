@@ -21,10 +21,10 @@
 
 // $Id: regex_test.cpp,v 1.6 2008-12-27 02:56:54 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
-#endif
+#endif // __BORLANDC__
 
 #include "test_tools.hpp"
 #include "timer.hpp"

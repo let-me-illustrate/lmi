@@ -21,8 +21,8 @@
 
 // $Id: emit_ledger.cpp,v 1.18 2009-01-06 15:01:22 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

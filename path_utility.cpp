@@ -21,8 +21,8 @@
 
 // $Id: path_utility.cpp,v 1.24 2009-03-30 12:07:19 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

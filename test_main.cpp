@@ -58,8 +58,8 @@
 // may elect to do so because header-only implementation requires no library
 // build support. (Suggested by Ed Brey)
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

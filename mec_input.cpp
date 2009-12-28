@@ -21,8 +21,8 @@
 
 // $Id: mec_input.cpp,v 1.13 2009-07-31 13:46:21 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

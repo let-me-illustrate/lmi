@@ -21,8 +21,8 @@
 
 // $Id: mec_xml_document.cpp,v 1.1 2009-06-27 17:47:39 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

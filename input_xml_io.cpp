@@ -21,8 +21,8 @@
 
 // $Id: input_xml_io.cpp,v 1.28 2009-06-27 22:49:42 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

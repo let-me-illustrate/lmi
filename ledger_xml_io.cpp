@@ -21,6 +21,11 @@
 
 // $Id: ledger_xml_io.cpp,v 1.89 2009-09-24 16:07:27 chicares Exp $
 
+#include LMI_PCH_HEADER
+#ifdef __BORLANDC__
+#   pragma hdrstop
+#endif // __BORLANDC__
+
 #include "ledger.hpp"
 
 #include "alert.hpp"

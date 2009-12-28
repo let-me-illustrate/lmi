@@ -21,8 +21,8 @@
 
 // $Id: antediluvian_stubs.cpp,v 1.11 2009-07-31 02:59:27 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

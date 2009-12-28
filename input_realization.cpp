@@ -21,8 +21,8 @@
 
 // $Id: input_realization.cpp,v 1.21 2009-04-12 01:02:34 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

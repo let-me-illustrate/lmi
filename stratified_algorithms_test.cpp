@@ -21,8 +21,8 @@
 
 // $Id: stratified_algorithms_test.cpp,v 1.19 2009-09-28 01:45:25 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

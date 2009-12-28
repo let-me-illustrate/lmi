@@ -25,8 +25,8 @@
 // TODO ?? An extension other than .fnd would be preferable: msw uses
 // .fnd for "find"
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

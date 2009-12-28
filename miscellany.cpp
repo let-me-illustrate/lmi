@@ -21,8 +21,8 @@
 
 // $Id: miscellany.cpp,v 1.16 2009-07-26 00:29:15 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

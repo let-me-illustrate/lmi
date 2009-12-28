@@ -21,8 +21,8 @@
 
 // $Id: basicvalues.cpp,v 1.40 2009-02-08 15:20:23 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

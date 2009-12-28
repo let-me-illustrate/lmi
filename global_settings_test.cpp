@@ -21,8 +21,8 @@
 
 // $Id: global_settings_test.cpp,v 1.12 2009-03-29 02:36:12 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

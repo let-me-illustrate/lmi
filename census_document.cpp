@@ -21,10 +21,10 @@
 
 // $Id: census_document.cpp,v 1.20 2009-03-22 17:32:24 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
-#endif
+#endif // __BORLANDC__
 
 #include "census_document.hpp"
 #include "view_ex.tpp"

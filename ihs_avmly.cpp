@@ -21,8 +21,8 @@
 
 // $Id: ihs_avmly.cpp,v 1.127 2009-09-22 14:49:35 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

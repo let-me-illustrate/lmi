@@ -1,6 +1,6 @@
-// MVC View base class.
+// Precompiled header file.
 //
-// Copyright (C) 2006, 2007, 2008, 2009 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,35 +19,27 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_view.cpp,v 1.4 2008-12-27 02:56:50 chicares Exp $
+// $Id$
 
-#include LMI_PCH_HEADER
-#ifdef __BORLANDC__
-#   pragma hdrstop
-#endif // __BORLANDC__
+// Always include this header first in every '.cpp' file that uses wxWidgets,
+// before anything else except comments and whitespace. Never include it in
+// any header file.
 
-#include "mvc_view.hpp"
+#ifndef pchfile_wx_hpp
+#define pchfile_wx_hpp
 
-MvcView::MvcView()
-{
-}
+#include "pchfile.hpp"
 
-MvcView::~MvcView()
-{
-}
+#if defined LMI_COMPILER_USES_PCH && !defined LMI_IGNORE_PCH
+#   include <wx/wx.h>
 
-char const* MvcView::BookControlName() const
-{
-    return DoBookControlName();
-}
+#   include "wx_new.hpp"
+#   include "wx_utility.hpp"
+#   include "wx_workarounds.hpp"
 
-char const* MvcView::MainDialogName() const
-{
-    return DoMainDialogName();
-}
+#   include "product_editor.hpp"
+#   include "view_ex.hpp"
+#endif
 
-char const* MvcView::ResourceFileName() const
-{
-    return DoResourceFileName();
-}
+#endif // pchfile_wx_hpp
 

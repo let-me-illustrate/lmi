@@ -21,8 +21,8 @@
 
 // $Id: progress_meter_wx.cpp,v 1.15 2009-04-06 18:44:26 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

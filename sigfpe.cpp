@@ -31,8 +31,8 @@
 // to work. This file is retained because it might be useful on other
 // platforms (on which it hasn't been tested).
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

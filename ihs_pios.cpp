@@ -42,8 +42,8 @@
  * Definitions for the streamable class library
  */
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

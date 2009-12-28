@@ -31,10 +31,10 @@
 // view class customized for illustration documents, and in the later
 // years given in the copyright notice above.
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
-#endif
+#endif // __BORLANDC__
 
 #include "illustration_view.hpp"
 

@@ -21,8 +21,8 @@
 
 // $Id: ledger_invariant.cpp,v 1.70 2009-02-18 22:12:12 wboutin Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

@@ -38,6 +38,35 @@ else
 endif
 
 ##############################################################################
+# Precompiled headers support
+##############################################################################
+
+AM_CXXFLAGS = -DLMI_PCH_HEADER="<pchfile.hpp>"
+
+if LMI_USE_PCH
+
+AM_CXXFLAGS += -fPIC -DLMI_COMPILER_USES_PCH
+
+PCH_FILES = pchfile.hpp.gch pchfile_wx.hpp.gch
+
+CLEANFILES = $(PCH_FILES) .deps/
+
+# Adding a file to BUILT_SOURCES ensures that it is built before any source
+# files are compiled. That's exactly what is needed for PCH files.
+BUILT_SOURCES = $(PCH_FILES)
+
+pchfile.hpp.gch: $(srcdir)/pchfile.hpp
+	$(CXXCOMPILE) -x c++-header -c -o $@ -MD -MF $(DEPDIR)/$@.d  $<
+
+pchfile_wx.hpp.gch: $(srcdir)/pchfile_wx.hpp
+	$(CXXCOMPILE) $(WX_CXXFLAGS) -x c++-header -c -o $@ -MD -MF $(DEPDIR)/$@.d $<
+
+include $(DEPDIR)/pchfile.hpp.gch.d
+include $(DEPDIR)/pchfile_wx.hpp.gch.d
+
+endif # LMI_USE_PCH
+
+##############################################################################
 # All Targets
 ##############################################################################
 
@@ -191,7 +220,9 @@ lmi_wx_SOURCES = \
     wx_checks.cpp \
     wx_utility.cpp
 
-lmi_wx_CXXFLAGS = $(AM_CXXFLAGS) $(WX_CXXFLAGS) $(XMLWRAPP_CFLAGS) $(GTK_CFLAGS)
+lmi_wx_CXXFLAGS = $(AM_CXXFLAGS) \
+                  $(WX_CXXFLAGS) $(XMLWRAPP_CFLAGS) $(GTK_CFLAGS) \
+                  -ULMI_PCH_HEADER -DLMI_PCH_HEADER="<pchfile_wx.hpp>"
 # $(CGICC_INCLUDE_FLAGS)
 
 if LMI_MSW

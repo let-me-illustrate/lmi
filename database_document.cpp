@@ -21,6 +21,11 @@
 
 // $Id: database_document.cpp,v 1.11 2008-12-27 02:56:39 chicares Exp $
 
+#include LMI_PCH_HEADER
+#ifdef __BORLANDC__
+#   pragma hdrstop
+#endif // __BORLANDC__
+
 #include "database_document.hpp"
 
 #include "alert.hpp"

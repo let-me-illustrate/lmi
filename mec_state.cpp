@@ -21,8 +21,8 @@
 
 // $Id: mec_state.cpp,v 1.4 2009-07-28 15:55:41 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 

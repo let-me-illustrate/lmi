@@ -21,6 +21,11 @@
 
 // $Id: docmdichildframe_ex.cpp,v 1.9 2008-12-27 02:56:40 chicares Exp $
 
+#include LMI_PCH_HEADER
+#ifdef __BORLANDC__
+#   pragma hdrstop
+#endif // __BORLANDC__
+
 #include "docmdichildframe_ex.hpp"
 
 #include <wx/menu.h>

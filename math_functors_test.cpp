@@ -21,8 +21,8 @@
 
 // $Id: math_functors_test.cpp,v 1.14 2009-04-05 10:34:24 chicares Exp $
 
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
