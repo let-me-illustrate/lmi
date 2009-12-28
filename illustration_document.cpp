@@ -98,7 +98,7 @@ bool IllustrationDocument::OnCreate(wxString const& filename, long int flags)
         }
     else
         {
-        std::ifstream ifs(filename.c_str());
+        std::ifstream ifs(filename.mb_str());
         if(!ifs)
             {
             warning()
@@ -175,7 +175,7 @@ bool IllustrationDocument::DoSaveDocument(wxString const& filename)
         return false;
         }
 
-    std::ofstream ofs(filename.c_str(), ios_out_trunc_binary());
+    std::ofstream ofs(filename.mb_str(), ios_out_trunc_binary());
     doc_.write(ofs);
     if(!ofs)
         {
