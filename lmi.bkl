@@ -40,7 +40,16 @@
     <include file="lmi_files.bkl"/>
 
     <template id="lmibase">
+        <include>$(SRCDIR)</include>
         <warnings>max</warnings>
+
+        <!-- for PCH support, LMI_PCH_HEADER must always be defined;
+             let the default be the one for non-wx sources -->
+        <set var="LMI_PCH_HEADER">pchfile.hpp</set>
+        <set var="LMI_PCH_HEADER_DEFINE" eval="0">
+            LMI_PCH_HEADER="$(LMI_PCH_HEADER)"
+        </set>
+        <define>$(LMI_PCH_HEADER_DEFINE)</define>
     </template>
 
     <template id="lmilib" template="wx-lib,wxlike,lmibase"/>
