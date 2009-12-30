@@ -276,7 +276,6 @@ liblmi_common_sources = \
     dbnames.cpp \
     death_benefits.cpp \
     emit_ledger.cpp \
-    expm1.c \
     facets.cpp \
     fenv_guard.cpp \
     fenv_lmi.cpp \
@@ -672,8 +671,7 @@ test_istream_to_string_CXXFLAGS = $(AM_CXXFLAGS)
 test_loads_SOURCES = \
   $(common_test_objects) \
   loads.cpp \
-  loads_test.cpp \
-  expm1.c
+  loads_test.cpp
 test_loads_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_map_lookup_SOURCES = \
