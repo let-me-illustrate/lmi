@@ -27,18 +27,18 @@
 # is reached through 'vpath' directives. See the rationale in
 # 'workhorse.make'.
 
-# Boost filesystem and regex libraries. The other boost libraries that
-# lmi requires are implemented entirely in headers.
+# Boost filesystem,  regex  and system libraries. The other boost libraries
+# that lmi requires are implemented entirely in headers.
 #
 # As for listing the object files here, the regex author says:
 #   http://groups.google.com/group/boost-list/msg/7f925ca50d69384b
 # | add the libs/regex/src/*.cpp files to your project
 
 boost_filesystem_objects := \
-  convenience.o \
-  exception.o \
-  path_posix_windows.o \
-  operations_posix_windows.o \
+  operations.o \
+  path.o \
+  portability.o \
+  utf8_codecvt_facet.o \
 
 boost_regex_objects := \
   c_regex_traits.o \
@@ -59,13 +59,20 @@ boost_regex_objects := \
   wide_posix_api.o \
   winstances.o \
 
+boost_system_objects := \
+  error_code.o \
+
+boost_common_objects := \
+  $(boost_filesystem_objects) \
+  $(boost_system_objects) \
+
 # These object files are used in both an application and a shared
 # library that it links to, only for builds that use shared-library
 # 'attributes'. This workaround is used merely because we don't yet
 # build these objects as a library.
 
 ifneq (,$(USE_SO_ATTRIBUTES))
-  duplicated_objects = $(boost_filesystem_objects) $(boost_regex_objects)
+  duplicated_objects = $(boost_common_objects) $(boost_regex_objects)
 endif
 
 # GNU cgicc.
@@ -122,7 +129,7 @@ xmlwrapp_objects := xml_xslt_wrapp.o
 # have them as libraries.
 
 ifdef HAVE_THIRD_PARTY_LIBRARIES
-  boost_filesystem_objects :=
+  boost_common_objects :=
   boost_regex_objects :=
   cgicc_objects :=
   xmlwrapp_objects :=
@@ -175,7 +182,7 @@ cli_objects := \
 # Illustrations: files shared by the antediluvian and production branches.
 
 common_common_objects := \
-  $(boost_filesystem_objects) \
+  $(boost_common_objects) \
   $(xmlwrapp_objects) \
   actuarial_table.o \
   alert.o \
@@ -366,7 +373,7 @@ gpt_objects_directly_concerned_with_gpt := \
 # These files provide general product support:
 
 gpt_objects := \
-  $(boost_filesystem_objects) \
+  $(boost_common_objects) \
   $(gpt_objects_unique_to_server) \
   $(gpt_objects_directly_concerned_with_gpt) \
   $(xmlwrapp_objects) \
@@ -530,7 +537,7 @@ account_value_test$(EXEEXT): \
   account_value_test.o \
 
 actuarial_table_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
+  $(boost_common_objects) \
   $(common_test_objects) \
   actuarial_table.o \
   actuarial_table_test.o \
@@ -550,7 +557,7 @@ assert_lmi_test$(EXEEXT): \
   assert_lmi_test.o \
 
 authenticity_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
+  $(boost_common_objects) \
   $(common_test_objects) \
   authenticity.o \
   authenticity_test.o \
@@ -619,7 +626,7 @@ getopt_test$(EXEEXT): \
   getopt_test.o \
 
 global_settings_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
+  $(boost_common_objects) \
   $(common_test_objects) \
   global_settings.o \
   global_settings_test.o \
@@ -636,7 +643,7 @@ input_seq_test$(EXEEXT): \
   input_sequence.o \
 
 input_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
+  $(boost_common_objects) \
   $(common_test_objects) \
   $(xmlwrapp_objects) \
   calendar_date.o \
@@ -675,7 +682,7 @@ input_test$(EXEEXT): \
   yare_input.o \
 
 irc7702a_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
+  $(boost_common_objects) \
   $(common_test_objects) \
   $(xmlwrapp_objects) \
   ihs_irc7702a.o \
@@ -713,7 +720,7 @@ math_functors_test$(EXEEXT): \
   timer.o \
 
 mc_enum_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
+  $(boost_common_objects) \
   $(common_test_objects) \
   datum_base.o \
   facets.o \
@@ -759,7 +766,7 @@ obstruct_slicing_test$(EXEEXT): \
   timer.o \
 
 path_utility_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
+  $(boost_common_objects) \
   $(common_test_objects) \
   global_settings.o \
   miscellany.o \
@@ -875,7 +882,7 @@ elapsed_time$(EXEEXT): \
   timer.o \
 
 generate_passkey$(EXEEXT): \
-  $(boost_filesystem_objects) \
+  $(boost_common_objects) \
   $(main_auxiliary_common_objects) \
   authenticity.o \
   calendar_date.o \
@@ -896,7 +903,7 @@ test_coding_rules_test := $(src_dir)/test_coding_rules_test.sh
 test_coding_rules$(EXEEXT): POST_LINK_COMMAND = $(test_coding_rules_test)
 test_coding_rules$(EXEEXT): EXTRA_LDFLAGS = -Wl,--allow-multiple-definition
 test_coding_rules$(EXEEXT): \
-  $(boost_filesystem_objects) \
+  $(boost_common_objects) \
   $(boost_regex_objects) \
   $(main_auxiliary_common_objects) \
   my_test_coding_rules.o \
