@@ -308,8 +308,8 @@
                 <xsl:when test="$scalars/IsMec='1'">
                   <xsl:choose>
                     <xsl:when test="$scalars/MecYear!='0'">
-                      becomes a Modified Endowment Contract (MEC) in policy year.
-                      <xsl:value-of select="$scalars/MecYear+1"/>
+                      becomes a Modified Endowment Contract (MEC) in policy year
+                      <xsl:value-of select="$scalars/MecYear+1"/>.
                     </xsl:when>
                     <xsl:otherwise>
                       is a Modified Endowment Contract (MEC).
@@ -457,18 +457,22 @@
               tax penalties. Consult professional tax advisors for tax advice.
             </fo:block>
             <fo:block padding-top="1em">
-              Placement Agent:
-              <xsl:value-of select="$scalars/MainUnderwriter"/>,
-              <xsl:value-of select="$scalars/MainUnderwriterAddress"/>. Wholly
-              owned subsidiary of <xsl:value-of select="$scalars/InsCoName"/>.
+              Placement Agents:
+              <xsl:value-of select="$scalars/CoUnderwriter"/> serves as the
+              placement agent for contracts sold by its registered
+              representatives.
+              &nbsp;<xsl:value-of select="$scalars/MainUnderwriter"/>
+              serves as the placement agent for contracts sold by registered
+              representatives of other broker-dealers that have entered into
+              distribution agreements with
+              &nbsp;<xsl:value-of select="$scalars/MainUnderwriter"/>.
             </fo:block>
             <fo:block padding-top="1em">
-              Securities offered through registered representatives of
-              <xsl:value-of select="$scalars/CoUnderwriter"/>&nbsp;
-              <xsl:value-of select="$scalars/CoUnderwriterAddress"/>
-              or of a broker-dealer with a selling agreement with
-              <xsl:value-of select="$scalars/MainUnderwriter"/>&nbsp;
-              <xsl:value-of select="$scalars/MainUnderwriterAddress"/>.
+              <xsl:value-of select="$scalars/CoUnderwriter"/> and
+              &nbsp;<xsl:value-of select="$scalars/MainUnderwriter"/> are
+              subsidiaries of <xsl:value-of select="$scalars/InsCoName"/>
+              (<xsl:value-of select="$scalars/InsCoShortName"/>) and are
+              located at <xsl:value-of select="$scalars/InsCoStreet"/>.
             </fo:block>
           </fo:block>
           <xsl:if test="not($has_supplemental_report)">
