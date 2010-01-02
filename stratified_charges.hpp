@@ -29,6 +29,7 @@
 #include "mc_enum_type_enums.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
+#include "xml_lmi_fwd.hpp"
 
 #include <iosfwd>
 #include <map>
@@ -74,8 +75,9 @@ class LMI_SO stratified_entity
         );
     ~stratified_entity();
 
-    void read (std::istream&);
-    void write(std::ostream&) const;
+    void read       (xml::element const& node);
+    void read_legacy(std::istream&);
+    void write      (xml::node&) const;
 
   private:
     void assert_validity() const;
@@ -149,8 +151,11 @@ class LMI_SO stratified_charges
 
     void initialize_dictionary();
 
-    void read (std::string const& filename);
-    void write(std::string const& filename) const;
+    void read        (std::string const& filename);
+    void read_legacy (std::string const& filename);
+    void write       (std::string const& filename) const;
+    void read_entity (xml::element const& node, e_stratified);
+    void write_entity(xml::element& node, e_stratified) const;
 
     double banded_curr_sepacct_load
         (double assets

@@ -398,9 +398,9 @@ void Skeleton::InitDocManager()
     new(wx) wxDocTemplate
         (doc_manager_
         ,"Tier"
-        ,"*.tir"
+        ,"*.xtir;*.tir"
         ,""
-        ,"tir"
+        ,"xtir"
         ,"Tier document"
         ,"Tier view"
         ,CLASSINFO(TierDocument)

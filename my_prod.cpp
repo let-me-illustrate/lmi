@@ -148,7 +148,7 @@ void TProductData::WriteProprietaryPolFiles()
     foo.DatabaseFilename  = "sample.db4";
     foo.FundFilename      = "sample.fnd";
     foo.RoundingFilename  = "sample.rnd";
-    foo.TierFilename      = "sample.tir";
+    foo.TierFilename      = "sample.xtir";
 
     foo.Write(AddDataDir("sample.pol"));
 
