@@ -45,13 +45,12 @@ class LMI_SO StreamableRoundingRules
 
     rounding_rules const& get_rounding_rules();
 
-  protected:
-    void Init(std::string const& a_Filename);
-    void Read(std::string const& a_Filename);
-
   private:
     StreamableRoundingRules();
 
+    void Init(std::string const& a_Filename);
+    void Read(std::string const& a_Filename);
+    void ReadLegacy(std::string const& a_Filename);
     void Write(std::string const& a_Filename);
 };
 

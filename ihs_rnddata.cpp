@@ -33,6 +33,10 @@
 #include "alert.hpp"
 #include "data_directory.hpp"
 #include "platform_dependent.hpp" // access()
+#include "xml_serialize.hpp"
+
+#include <boost/filesystem/convenience.hpp>
+#include <boost/static_assert.hpp>
 
 #include <fstream>
 
@@ -67,6 +71,7 @@ rounding_rules const& StreamableRoundingRules::get_rounding_rules()
 
 namespace
 {
+    // for legacy file format, see ReadLegacy() below
     inline std::istream& operator>>(std::istream& is, round_to<double>& r)
         {
         int decimals;
@@ -77,25 +82,49 @@ namespace
         r = round_to<double>(decimals, style);
         return is;
         }
-    inline std::ostream& operator<<(std::ostream& os, round_to<double> const& r)
-        {
-        os << r.decimals() << '\n';
-        os << r.style() << '\n';
-        return os;
-        }
 } // Unnamed namespace.
 
-//============================================================================
-void StreamableRoundingRules::Read(std::string const& a_Filename)
+namespace xml_serialize
 {
-    if(access(a_Filename.c_str(), R_OK))
+    template<>
+    struct type_io< round_to<double> >
+    {
+        static void to_xml(xml::node& out, round_to<double> const& in)
         {
-        fatal_error()
-            << "File '"
-            << a_Filename
-            << "' is required but could not be found. Try reinstalling."
-            ;
+            add_property(out, "decimals", in.decimals());
+            add_property(out, "style", in.style());
         }
+
+        static void from_xml(round_to<double>& out, xml::node const& in)
+        {
+            int decimals;
+            get_property(in, "decimals", decimals);
+            rounding_style style;
+            get_property(in, "style", style);
+            out = round_to<double>(decimals, style);
+        }
+    };
+
+    template<>
+    struct type_io<rounding_style> : public enum_type_io<rounding_style> {};
+
+    // TODO ?? Consider using mc_enum instead.
+    template<>
+    const enum_type_io_map<rounding_style>::MapEntry
+    enum_type_io_map<rounding_style>::map[] =
+        { {r_indeterminate, "indeterminate"}
+        , {r_toward_zero,   "toward-zero"}
+        , {r_to_nearest,    "to-nearest"}
+        , {r_upward,        "upward"}
+        , {r_downward,      "downward"}
+        , {r_current,       "current"}
+        , {r_not_at_all,    "not-at-all"}
+        };
+} // namespace xml_serialize
+
+//============================================================================
+void StreamableRoundingRules::ReadLegacy(std::string const& a_Filename)
+{
     std::ifstream is(a_Filename.c_str());
 
     is >> round_specamt_;
@@ -138,26 +167,68 @@ void StreamableRoundingRules::Read(std::string const& a_Filename)
 }
 
 //============================================================================
+void StreamableRoundingRules::Read(std::string const& a_Filename)
+{
+    if(access(a_Filename.c_str(), R_OK))
+        {
+        fatal_error()
+            << "File '"
+            << a_Filename
+            << "' is required but could not be found. Try reinstalling."
+            ;
+        }
+
+    // We temporarily support reading both XML and the old file formats.
+    if(".rnd" == fs::extension(a_Filename))
+        {
+        ReadLegacy(a_Filename);
+        return;
+        }
+
+    xml_lmi::dom_parser doc(a_Filename);
+    xml::element const& root = doc.root_node("rounding");
+
+    using namespace xml_serialize;
+    get_property(root, "specamt",          round_specamt_);
+    get_property(root, "death_benefit",    round_death_benefit_);
+    get_property(root, "naar",             round_naar_);
+    get_property(root, "coi_rate",         round_coi_rate_);
+    get_property(root, "coi_charge",       round_coi_charge_);
+    get_property(root, "gross_premium",    round_gross_premium_);
+    get_property(root, "net_premium",      round_net_premium_);
+    get_property(root, "interest_rate",    round_interest_rate_);
+    get_property(root, "interest_credit",  round_interest_credit_);
+    get_property(root, "withdrawal",       round_withdrawal_);
+    get_property(root, "loan",             round_loan_);
+    get_property(root, "corridor_factor",  round_corridor_factor_);
+    get_property(root, "surrender_charge", round_surrender_charge_);
+    get_property(root, "irr",              round_irr_);
+}
+
+//============================================================================
 void StreamableRoundingRules::Write(std::string const& a_Filename)
 {
-    std::ofstream os(a_Filename.c_str());
+    xml::document doc("rounding");
+    xml::node& root = doc.get_root_node();
 
-    os << round_specamt_;
-    os << round_death_benefit_;
-    os << round_naar_;
-    os << round_coi_rate_;
-    os << round_coi_charge_;
-    os << round_gross_premium_;
-    os << round_net_premium_;
-    os << round_interest_rate_;
-    os << round_interest_credit_;
-    os << round_withdrawal_;
-    os << round_loan_;
-    os << round_corridor_factor_;
-    os << round_surrender_charge_;
-    os << round_irr_;
+    using namespace xml_serialize;
 
-    if(!os.good())
+    add_property(root, "specamt",          round_specamt_);
+    add_property(root, "death_benefit",    round_death_benefit_);
+    add_property(root, "naar",             round_naar_);
+    add_property(root, "coi_rate",         round_coi_rate_);
+    add_property(root, "coi_charge",       round_coi_charge_);
+    add_property(root, "gross_premium",    round_gross_premium_);
+    add_property(root, "net_premium",      round_net_premium_);
+    add_property(root, "interest_rate",    round_interest_rate_);
+    add_property(root, "interest_credit",  round_interest_credit_);
+    add_property(root, "withdrawal",       round_withdrawal_);
+    add_property(root, "loan",             round_loan_);
+    add_property(root, "corridor_factor",  round_corridor_factor_);
+    add_property(root, "surrender_charge", round_surrender_charge_);
+    add_property(root, "irr",              round_irr_);
+
+    if(!doc.save_to_file(a_Filename.c_str()))
         {
         fatal_error()
             << "Unable to write rounding file '"
@@ -172,6 +243,6 @@ void StreamableRoundingRules::Write(std::string const& a_Filename)
 void StreamableRoundingRules::WriteRndFiles()
 {
     StreamableRoundingRules sample;
-    sample.Write(AddDataDir("sample.rnd"));
+    sample.Write(AddDataDir("sample.xrnd"));
 }
 

@@ -416,7 +416,7 @@ void TProductData::WritePolFiles()
 
     foo.DatabaseFilename = "sample.db4";
     foo.FundFilename     = "sample.fnd";
-    foo.RoundingFilename = "sample.rnd";
+    foo.RoundingFilename = "sample.xrnd";
     foo.TierFilename     = "sample.xtir";
 
     foo.Write(AddDataDir("sample.pol"));

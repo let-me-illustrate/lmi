@@ -386,9 +386,9 @@ void Skeleton::InitDocManager()
     new(wx) wxDocTemplate
         (doc_manager_
         ,"Rounding"
-        ,"*.rnd"
+        ,"*.xrnd;*.rnd"
         ,""
-        ,"rnd"
+        ,"xrnd"
         ,"Rounding document"
         ,"Rounding view"
         ,CLASSINFO(RoundingDocument)

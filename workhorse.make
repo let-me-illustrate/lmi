@@ -917,7 +917,7 @@ shared_data_files = \
   sample.fnd \
   sample.ndx \
   sample.pol \
-  sample.rnd \
+  sample.xrnd \
   sample.xtir \
 
 .PHONY: archive_shared_data_files
@@ -1001,7 +1001,7 @@ fardel_files := \
 # one file of each given type.
 
 fardel_checksummed_files = \
-  *.dat *.db4 *.fnd *.ndx *.pol *.rnd *.xtir \
+  *.dat *.db4 *.fnd *.ndx *.pol *.xrnd *.xtir \
   configurable_settings.xml \
   expiry \
   md5sum$(EXEEXT) \
