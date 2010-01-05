@@ -55,6 +55,8 @@ namespace xml_serialize
         {
             std::ostringstream s;
             s << in;
+            if(!s.good())
+                throw std::runtime_error("Failure to serialize data into XML.");
             out.set_content(s.str().c_str());
         }
 
@@ -153,8 +155,9 @@ namespace xml_serialize
 
 
     /// Adds a property to given XML node (root).
-    /// A property is serialized as <property-name>value</property-name>,
-    /// using C++ streams' operator<<.
+    /// A property is serialized as <property-name>value</property-name>.
+    /// Serialization format is defined by xml_serialize::type_io<T>;
+    /// by default, C++ streams' operator<< is used.
 
     template<typename T>
     void add_property
