@@ -23626,3 +23626,10 @@ Refactor.
   commutation_functions_test.cpp
 Refine corridor calculation, and test it against stored values.
 
+20100101T1918Z <gchicares@sbcglobal.net> [762]
+
+  reg_d_group.xsl
+  reg_d_individual.xsl
+  variable_annuity.xsl
+Improve several footnotes.
+
