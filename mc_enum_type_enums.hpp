@@ -72,6 +72,24 @@ enum mcenum_mode
     ,mce_monthly    = 12
     };
 
+// See HTML documentation.
+enum rounding_style
+    {r_indeterminate = -1
+    ,r_toward_zero   =  0
+    ,r_to_nearest    =  1 // See note below.
+    ,r_upward        =  2
+    ,r_downward      =  3
+    ,r_current       =  4
+    ,r_not_at_all    =  5
+
+    // Note: 'r_to_nearest' means bankers rounding, which
+    // rounds halfway cases to even:
+    //   x - (x REM 1.0)
+    // as in the C99 remainder() function [7.12.10.2/2], instead of
+    // rounding halfway cases away from zero, as the C99 round()
+    // function does [7.12.9.6/2]. See the HTML documentation.
+    };
+
 #include "mc_enum_types.xpp"
 
 #define MC_DEFINE_ENUMS(TYPE) \
