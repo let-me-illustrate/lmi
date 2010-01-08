@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_type_enums.hpp,v 1.19 2009-03-08 20:14:46 chicares Exp $
+// $Id$
 
 #ifndef mc_enum_type_enums_hpp
 #define mc_enum_type_enums_hpp

@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: death_benefits.hpp,v 1.7 2008-12-27 02:56:40 chicares Exp $
+// $Id$
 
 #ifndef death_benefits_hpp
 #define death_benefits_hpp

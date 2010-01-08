@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702a.cpp,v 1.21 2009-07-17 15:20:52 chicares Exp $
+// $Id$
 
 // TODO ?? Make this a server app. Consider where to store DB, SA history.
 

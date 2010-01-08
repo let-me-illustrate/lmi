@@ -20,7 +20,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.74 2009-04-23 16:13:20 chicares Exp $
+# $Id$
 
 SUBDIRS = third_party
 

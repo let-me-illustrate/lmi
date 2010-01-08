@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: math_functors.hpp,v 1.18 2009-10-01 20:37:39 chicares Exp $
+// $Id$
 
 #ifndef math_functors_hpp
 #define math_functors_hpp

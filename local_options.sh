@@ -21,7 +21,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: local_options.sh,v 1.6 2008-12-27 02:56:47 chicares Exp $
+# $Id$
 
 # This sample usage:
 #   ./local_options mingw_dir=/MinGW-20050120/ CFLAGS='-g -O0'

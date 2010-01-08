@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: interest_rates.hpp,v 1.10 2009-03-08 20:14:45 chicares Exp $
+// $Id$
 
 #ifndef interest_rates_hpp
 #define interest_rates_hpp

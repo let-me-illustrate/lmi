@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: docmdichildframe_ex.hpp,v 1.9 2008-12-27 02:56:40 chicares Exp $
+// $Id$
 
 // Enhance class wxDocMDIChildFrame to support MDI without requiring
 // the parent MDI frame window to display a 'Window' menu when it has

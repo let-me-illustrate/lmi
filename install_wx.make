@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_wx.make,v 1.20 2009-09-29 23:38:09 chicares Exp $
+# $Id$
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 

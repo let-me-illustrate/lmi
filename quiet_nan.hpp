@@ -20,7 +20,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: quiet_nan.hpp,v 1.10 2009-04-12 01:01:23 chicares Exp $
+// $Id$
 
 #ifndef quiet_nan_hpp
 #define quiet_nan_hpp

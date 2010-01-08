@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: max_stream_precision.hpp,v 1.8 2009-04-12 01:04:52 chicares Exp $
+// $Id$
 
 #ifndef max_stream_precision_hpp
 #define max_stream_precision_hpp

@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: sigfpe.cpp,v 1.8 2008-12-27 02:56:55 chicares Exp $
+// $Id$
 
 // This is not portable because a signal handler isn't guaranteed to
 // work if it does anything other than set a volatile global or static

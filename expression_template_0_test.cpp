@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: expression_template_0_test.cpp,v 1.25 2009-07-19 01:03:11 chicares Exp $
+// $Id$
 
 #if !defined __BORLANDC__
 #   define USE_UBLAS

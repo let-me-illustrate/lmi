@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stream_cast.hpp,v 1.20 2008-12-27 02:56:56 chicares Exp $
+// $Id$
 
 // This is a derived work based on boost::lexical_cast, which bears
 // the following copyright and permissions notice:

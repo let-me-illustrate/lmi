@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_controller.tpp,v 1.6 2008-12-27 02:56:50 chicares Exp $
+// $Id$
 
 #include "mvc_controller.hpp"
 
