@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: oecumenic_enumerations.hpp,v 1.5 2008-12-27 02:56:52 chicares Exp $
+// $Id$
 
 #ifndef oecumenic_enumerations_hpp
 #define oecumenic_enumerations_hpp

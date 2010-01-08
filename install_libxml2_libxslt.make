@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_libxml2_libxslt.make,v 1.10 2009-02-13 12:53:22 chicares Exp $
+# $Id$
 
 # Configurable settings ########################################################
 

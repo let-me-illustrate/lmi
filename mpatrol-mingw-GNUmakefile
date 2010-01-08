@@ -38,7 +38,7 @@
 
 # GNU Makefile to compile on msw with mingw gcc.
 
-# $Id: mpatrol-mingw-GNUmakefile,v 1.10 2009-04-27 15:26:18 chicares Exp $
+# $Id$
 
 # Definitions
 

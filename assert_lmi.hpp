@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: assert_lmi.hpp,v 1.4 2008-12-27 02:56:36 chicares Exp $
+// $Id$
 
 #ifndef assert_lmi_hpp
 #define assert_lmi_hpp

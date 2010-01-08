@@ -21,7 +21,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.61 2008-12-27 02:56:58 chicares Exp $
+    $Id$
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">

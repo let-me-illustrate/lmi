@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_algorithms.hpp,v 1.21 2009-09-28 01:46:26 chicares Exp $
+// $Id$
 
 #ifndef stratified_algorithms_hpp
 #define stratified_algorithms_hpp

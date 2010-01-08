@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.hpp,v 1.33 2008-12-27 02:56:57 chicares Exp $
+// $Id$
 
 #ifndef timer_hpp
 #define timer_hpp

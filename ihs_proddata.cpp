@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_proddata.cpp,v 1.21 2009-02-18 22:12:11 wboutin Exp $
+// $Id$
 
 // This class contains names of files containing a product's tables as well
 // as strings that are the same for all instances of that product.

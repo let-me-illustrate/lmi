@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: null_stream.hpp,v 1.3 2008-12-27 02:56:51 chicares Exp $
+// $Id$
 
 #ifndef null_stream_hpp
 #define null_stream_hpp

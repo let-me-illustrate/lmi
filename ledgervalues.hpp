@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.hpp,v 1.28 2008-12-27 02:56:47 chicares Exp $
+// $Id$
 
 #ifndef ledgervalues_hpp
 #define ledgervalues_hpp

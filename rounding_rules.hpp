@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_rules.hpp,v 1.8 2008-12-27 02:56:54 chicares Exp $
+// $Id$
 
 #ifndef rounding_rules_hpp
 #define rounding_rules_hpp

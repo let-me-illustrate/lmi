@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_view_editor.cpp,v 1.16 2008-12-27 02:56:54 chicares Exp $
+// $Id$
 
 #include "rounding_view_editor.hpp"
 

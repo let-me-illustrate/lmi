@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702a.hpp,v 1.16 2009-07-28 00:13:32 chicares Exp $
+// $Id$
 
 #ifndef ihs_irc7702a_hpp
 #define ihs_irc7702a_hpp

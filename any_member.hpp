@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member.hpp,v 1.22 2009-07-30 16:36:25 chicares Exp $
+// $Id$
 
 // This is a derived work based on boost::any, which bears the following
 // copyright and permissions notice:

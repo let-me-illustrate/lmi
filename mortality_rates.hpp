@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mortality_rates.hpp,v 1.20 2008-12-27 02:56:49 chicares Exp $
+// $Id$
 
 #ifndef mortality_rates_hpp
 #define mortality_rates_hpp

@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.hpp,v 1.18 2008-12-27 02:56:50 chicares Exp $
+// $Id$
 
 #ifndef multiple_cell_document_hpp
 #define multiple_cell_document_hpp

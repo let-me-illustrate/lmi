@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: crc32.hpp,v 1.10 2008-12-27 02:56:38 chicares Exp $
+// $Id$
 
 #ifndef crc32_hpp
 #define crc32_hpp

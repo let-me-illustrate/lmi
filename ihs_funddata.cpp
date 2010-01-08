@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_funddata.cpp,v 1.11 2008-12-27 02:56:43 chicares Exp $
+// $Id$
 
 // This class describes funds: their names and investment mgmt fees.
 // TODO ?? An extension other than .fnd would be preferable: msw uses
