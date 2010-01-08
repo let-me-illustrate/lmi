@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.hpp,v 1.19 2008-12-27 02:56:36 chicares Exp $
+// $Id$
 
 #ifndef actuarial_table_hpp
 #define actuarial_table_hpp

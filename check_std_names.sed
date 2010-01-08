@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 #
-# $Id: check_std_names.sed,v 1.5 2008-12-27 02:56:38 chicares Exp $
+# $Id$
 #
 # grep -n ^ *.?pp | sed -nf check_std_names.sed
 #

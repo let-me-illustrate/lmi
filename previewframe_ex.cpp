@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: previewframe_ex.cpp,v 1.9 2009-04-06 18:44:26 chicares Exp $
+// $Id$
 
 // This implementation is a derived work based on wxWindows code, viz.
 //   src/common/prntbase.cpp (C) 1998 Julian Smart and Markus Holzem

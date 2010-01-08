@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: streamable.hpp,v 1.14 2008-12-27 02:56:56 chicares Exp $
+// $Id$
 
 #ifndef streamable_hpp
 #define streamable_hpp

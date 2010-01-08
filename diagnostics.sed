@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 #
-# $Id: diagnostics.sed,v 1.22 2009-07-31 13:45:11 chicares Exp $
+# $Id$
 #
   # Delete expected output from make.
 /Circular.*dependency dropped/d

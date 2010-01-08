@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_safe.hpp,v 1.11 2008-12-27 02:56:50 chicares Exp $
+// $Id$
 
 #ifndef multidimgrid_safe_hpp
 #define multidimgrid_safe_hpp

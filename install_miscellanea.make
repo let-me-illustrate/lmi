@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_miscellanea.make,v 1.22 2009-05-21 15:46:27 chicares Exp $
+# $Id$
 
 # Configurable settings ########################################################
 

@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config.hpp,v 1.26 2008-12-29 06:07:16 chicares Exp $
+// $Id$
 
 // Configuration header for compiler quirks. Include at the beginning of
 // every .hpp file (and nowhere else).

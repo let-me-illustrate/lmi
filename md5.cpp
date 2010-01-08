@@ -34,7 +34,7 @@
  * email: <gchicares@sbcglobal.net>
  * snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
  *
- * $Id: md5.cpp,v 1.10 2008-12-27 02:56:49 chicares Exp $
+ * $Id$
  *
  * GWC: File renamed md5.c --> md5.cpp .
  * GWC: Put C rtl functions in namespace std.

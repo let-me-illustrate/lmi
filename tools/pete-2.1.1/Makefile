@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile,v 1.3 2008-09-09 03:27:13 chicares Exp $
+# $Id$
 
 ################################################################################
 

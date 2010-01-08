@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.hpp,v 1.31 2008-12-27 02:56:38 chicares Exp $
+// $Id$
 
 #ifndef census_view_hpp
 #define census_view_hpp

@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: bcc_5_5_1.make,v 1.21 2009-05-03 13:08:32 chicares Exp $
+# $Id$
 
 toolset      := bcc
 

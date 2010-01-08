@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: sigfpe.hpp,v 1.6 2008-12-27 02:56:55 chicares Exp $
+// $Id$
 
 #ifndef sigfpe_hpp
 #define sigfpe_hpp

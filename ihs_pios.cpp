@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_pios.cpp,v 1.10 2008-12-27 02:56:44 chicares Exp $
+// $Id$
 
 // This is a derived work based on Joshua Rowe's
 //   "Really cool persistent object stream library"

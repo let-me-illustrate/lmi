@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.46 2009-06-24 20:05:14 wboutin Exp $
+// $Id$
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"

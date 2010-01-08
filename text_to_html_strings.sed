@@ -25,7 +25,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: text_to_html_strings.sed,v 1.5 2008-12-27 02:56:57 chicares Exp $
+# $Id$
 
 # Replace certain special characters with html entities as required
 # for the output to be valid html. This script does not attempt to

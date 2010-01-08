@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: cpp_main.cpp,v 1.11 2009-05-02 13:29:19 chicares Exp $
+// $Id$
 
 // This is a derived work based on Beman Dawes's boost test library
 // that bears the following copyright and license statement:

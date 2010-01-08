@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: istream_to_string.hpp,v 1.8 2008-12-27 02:56:46 chicares Exp $
+// $Id$
 
 #ifndef istream_to_string_hpp
 #define istream_to_string_hpp

@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: materially_equal.hpp,v 1.9 2008-12-27 02:56:48 chicares Exp $
+// $Id$
 
 #ifndef materially_equal_hpp
 #define materially_equal_hpp
