@@ -24110,3 +24110,8 @@ Improve several footnotes.
   zero_test.cpp
 Update copyright notices.
 
+20100111T0016Z <gchicares@sbcglobal.net> [762]
+
+  install_miscellanea.make
+Replace a defunct URL.
+
