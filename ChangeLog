@@ -24115,3 +24115,10 @@ Update copyright notices.
   install_miscellanea.make
 Replace a defunct URL.
 
+20100111T1731Z <gchicares@sbcglobal.net> [762]
+
+  about_dialog.cpp
+Fix defect introduced 20050311T0309Z, from an original file predating
+the lmi epoch. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-01/msg00001.html
+
