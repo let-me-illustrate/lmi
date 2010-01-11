@@ -30,6 +30,7 @@
 
 #include "license.hpp"
 #include "version.hpp"
+#include "wx_new.hpp"
 
 #include <wx/button.h>
 #include <wx/html/htmlwin.h>
@@ -59,7 +60,7 @@ AboutDialog::~AboutDialog()
 
 int AboutDialog::ShowModal()
 {
-    wxHtmlWindow* html_window = new wxHtmlWindow
+    wxHtmlWindow* html_window = new(wx) wxHtmlWindow
         (this
         ,wxID_ANY
         ,wxDefaultPosition
@@ -75,25 +76,25 @@ int AboutDialog::ShowModal()
     int height = html_window->GetInternalRepresentation()->GetHeight();
     html_window->SetSize(width, height);
 
-    wxButton* license_button = new wxButton
+    wxButton* license_button = new(wx) wxButton
         (this
         ,wxID_ABOUT
         ,"Read the GNU General Public License"
         );
     license_button->SetDefault();
-    wxButton* cancel_button = new wxButton
+    wxButton* cancel_button = new(wx) wxButton
         (this
         ,wxID_CANCEL
         ,"Let me illustrate"
         );
 
-    wxFlexGridSizer* sizer1 = new wxFlexGridSizer(0, 1);
+    wxFlexGridSizer* sizer1 = new(wx) wxFlexGridSizer(1, 0, 0, 0);
     sizer1->AddGrowableCol(0);
     sizer1->AddGrowableCol(1);
     sizer1->Add(license_button, 1, wxALL|wxALIGN_LEFT , 5);
     sizer1->Add(cancel_button , 1, wxALL|wxALIGN_RIGHT, 5);
 
-    wxFlexGridSizer* sizer0 = new wxFlexGridSizer(1, 0);
+    wxFlexGridSizer* sizer0 = new(wx) wxFlexGridSizer(0, 1, 0, 0);
     sizer0->AddGrowableRow(0);
     sizer0->Add(html_window, 1, wxALL, 10);
     sizer0->Add(sizer1     , 1, wxALL, 10);
@@ -108,7 +109,7 @@ int AboutDialog::ShowModal()
 void AboutDialog::UponReadLicense(wxCommandEvent&)
 {
     wxDialog dialog(this, wxID_ANY, std::string("GNU General Public License"));
-    wxHtmlWindow* html_window = new wxHtmlWindow
+    wxHtmlWindow* html_window = new(wx) wxHtmlWindow
         (&dialog
         ,wxID_ANY
         ,wxDefaultPosition
@@ -125,10 +126,10 @@ void AboutDialog::UponReadLicense(wxCommandEvent&)
     int height = html_window->GetInternalRepresentation()->GetHeight();
     html_window->SetSize(width, height);
 
-    wxButton* button = new wxButton(&dialog, wxID_CANCEL, "Close");
+    wxButton* button = new(wx) wxButton(&dialog, wxID_CANCEL, "Close");
     button->SetDefault();
 
-    wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+    wxBoxSizer* sizer = new(wx) wxBoxSizer(wxVERTICAL);
     sizer->Add(html_window, 1, wxALL              , 10);
     sizer->Add(button     , 0, wxALL|wxALIGN_RIGHT, 10);
 
