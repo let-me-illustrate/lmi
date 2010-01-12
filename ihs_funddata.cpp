@@ -1,6 +1,6 @@
 // Fund data.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_funddata.cpp,v 1.11 2008-12-27 02:56:43 chicares Exp $
+// $Id$
 
 // This class describes funds: their names and investment mgmt fees.
 // TODO ?? An extension other than .fnd would be preferable: msw uses

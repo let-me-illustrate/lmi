@@ -1,6 +1,6 @@
 // Frontend for borland C++ librarians.
 //
-// Copyright (C) 2004, 2008, 2009 Gregory W. Chicares.
+// Copyright (C) 2004, 2008, 2009, 2010 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: bcc_ar.cpp,v 1.2 2008-12-27 02:56:37 chicares Exp $
+// $Id$
 
 // This program makes borland's 'tlib' work somewhat like gnu 'ar'.
 // The emulation is very limited. Only the following 'ar' commands are

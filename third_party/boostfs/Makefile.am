@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.2 2007-02-12 17:04:57 wboutin Exp $
+# $Id$
 
 
 if LMI_BOOSTFS_BUILD

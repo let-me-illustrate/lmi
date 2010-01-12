@@ -1,6 +1,6 @@
 // MVC Model for MEC testing.
 //
-// Copyright (C) 2009 Gregory W. Chicares.
+// Copyright (C) 2009, 2010 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_input.hpp,v 1.4 2009-07-22 00:51:22 chicares Exp $
+// $Id$
 
 #ifndef mec_input_hpp
 #define mec_input_hpp

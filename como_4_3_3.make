@@ -1,6 +1,6 @@
 # Limited support for a particular non-free compiler under msw only.
 
-# Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009 Gregory W. Chicares.
+# Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: como_4_3_3.make,v 1.33 2009-05-03 13:08:32 chicares Exp $
+# $Id$
 
 # Limited workarounds for Comeau C++ version 4.3.3, using gcc as the
 # underlying C compiler, with a Cygwin shell. Comeau C++ is useful
