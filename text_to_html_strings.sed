@@ -35,10 +35,12 @@ s|&|\&amp;|g
 s|<|\&lt;|g
 s|>|\&gt;|g
 
-# Replace formfeed with CSS2 page break, closing and then reopening
-# the <pre> section that encloses the transformed input because <div>
-# cannot appear in a <pre> section.
-s|\f|<\/pre><div style="page-break-before:always"><\/div><pre>|
+# Expunge formfeeds; insert paragraph tags.
+s|\f||g
+s|^$|</p>\n\n<p>|
+
+# Don't pretend that '`' is &lsquo;.
+s|`|'|g
 
 # Add a generic html header and footer. Implementation notes:
 #
@@ -73,10 +75,10 @@ s|\f|<\/pre><div style="page-break-before:always"><\/div><pre>|
 1s|\a|\n<title></title>\a|
 1s|\a|\n</head>\a|
 1s|\a|\n<body>\a|
-1s|\a|\n<pre>\a|
+1s|\a|\n<p>\a|
 1s|\a|\n|
 # Add generic footer.
-$s|$|\n</pre>|
+$s|$|\n</p>|
 $s|$|\n</body>|
 $s|$|\n</html>|
 
