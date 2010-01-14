@@ -33,6 +33,7 @@
 #include "wx_new.hpp"
 
 #include <wx/button.h>
+#include <wx/display.h>
 #include <wx/html/htmlwin.h>
 #include <wx/settings.h>
 #include <wx/sizer.h>
@@ -74,7 +75,7 @@ int AboutDialog::ShowModal()
         +   wxSystemSettings::GetMetric(wxSYS_VSCROLL_X)
         ;
     int height = html_window->GetInternalRepresentation()->GetHeight();
-    html_window->SetSize(width, height);
+    html_window->SetMinSize(wxSize(width, height));
 
     wxButton* license_button = new(wx) wxButton
         (this
@@ -91,13 +92,13 @@ int AboutDialog::ShowModal()
     wxFlexGridSizer* sizer1 = new(wx) wxFlexGridSizer(1, 0, 0, 0);
     sizer1->AddGrowableCol(0);
     sizer1->AddGrowableCol(1);
-    sizer1->Add(license_button, 1, wxALL|wxALIGN_LEFT , 5);
-    sizer1->Add(cancel_button , 1, wxALL|wxALIGN_RIGHT, 5);
+    sizer1->Add(license_button, 1, wxALL|wxALIGN_LEFT , 2);
+    sizer1->Add(cancel_button , 1, wxALL|wxALIGN_RIGHT, 2);
 
     wxFlexGridSizer* sizer0 = new(wx) wxFlexGridSizer(0, 1, 0, 0);
     sizer0->AddGrowableRow(0);
-    sizer0->Add(html_window, 1, wxALL, 10);
-    sizer0->Add(sizer1     , 1, wxALL, 10);
+    sizer0->Add(html_window, 1, wxALL, 2);
+    sizer0->Add(sizer1     , 1, wxALL, 0); // Buttons have their own borders.
 
     SetAutoLayout(true);
     SetSizer(sizer0);
@@ -119,19 +120,21 @@ void AboutDialog::UponReadLicense(wxCommandEvent&)
     html_window->SetBorders(0);
     html_window->SetPage(license_as_html());
     html_window->GetInternalRepresentation()->Layout(1);
-    int width =
-            html_window->GetInternalRepresentation()->GetWidth()
-        +   wxSystemSettings::GetMetric(wxSYS_VSCROLL_X)
-        ;
-    int height = html_window->GetInternalRepresentation()->GetHeight();
-    html_window->SetSize(width, height);
+
+    wxRect r = wxDisplay(wxDisplay::GetFromWindow(this)).GetClientArea();
+    // Using the whole client area would seem unnatural. Pushbuttons
+    // can't plausibly take more than twenty percent of the vertical
+    // space.
+    int width  = r.GetWidth () * 4 / 5;
+    int height = r.GetHeight() * 4 / 5;
+    html_window->SetMinSize(wxSize(width, height));
 
     wxButton* button = new(wx) wxButton(&dialog, wxID_CANCEL, "Close");
     button->SetDefault();
 
     wxBoxSizer* sizer = new(wx) wxBoxSizer(wxVERTICAL);
-    sizer->Add(html_window, 1, wxALL              , 10);
-    sizer->Add(button     , 0, wxALL|wxALIGN_RIGHT, 10);
+    sizer->Add(html_window, 1, wxALL              , 2);
+    sizer->Add(button     , 0, wxALL|wxALIGN_RIGHT, 2);
 
     dialog.SetAutoLayout(true);
     dialog.SetSizer(sizer);
