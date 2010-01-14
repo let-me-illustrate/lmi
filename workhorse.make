@@ -932,6 +932,7 @@ fardel_binaries := \
   $(bin_dir)/wx_new$(SHREXT) \
   $(wildcard $(prefix)/local/bin/*$(SHREXT)) \
   $(wildcard $(prefix)/local/lib/*$(SHREXT)) \
+  $(wildcard $(bin_dir)/product_files$(EXEEXT)) \
   $(extra_fardel_binaries) \
 
 fardel_files := \
