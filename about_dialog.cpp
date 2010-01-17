@@ -100,9 +100,7 @@ int AboutDialog::ShowModal()
     sizer0->Add(html_window, 1, wxALL, 2);
     sizer0->Add(sizer1     , 1, wxALL, 0); // Buttons have their own borders.
 
-    SetAutoLayout(true);
-    SetSizer(sizer0);
-    sizer0->Fit(this);
+    SetSizerAndFit(sizer0);
     Center();
     return wxDialog::ShowModal();
 }
@@ -136,9 +134,7 @@ void AboutDialog::UponReadLicense(wxCommandEvent&)
     sizer->Add(html_window, 1, wxALL              , 2);
     sizer->Add(button     , 0, wxALL|wxALIGN_RIGHT, 2);
 
-    dialog.SetAutoLayout(true);
-    dialog.SetSizer(sizer);
-    sizer->Fit(&dialog);
+    dialog.SetSizerAndFit(sizer);
     dialog.Center();
     dialog.ShowModal();
 }
