@@ -104,7 +104,14 @@ int AboutDialog::ShowModal()
 
 void AboutDialog::UponReadLicense(wxCommandEvent&)
 {
-    wxDialog dialog(this, wxID_ANY, std::string("GNU General Public License"));
+    wxDialog dialog
+        (this
+        ,wxID_ANY
+        ,std::string("GNU General Public License")
+        ,wxDefaultPosition
+        ,wxDefaultSize
+        ,wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMAXIMIZE_BOX
+        );
     wxHtmlWindow* html_window = new(wx) wxHtmlWindow
         (&dialog
         ,wxID_ANY
@@ -114,7 +121,6 @@ void AboutDialog::UponReadLicense(wxCommandEvent&)
         );
     html_window->SetBorders(0);
     html_window->SetPage(license_as_html());
-    html_window->GetInternalRepresentation()->Layout(1);
 
     wxRect r = wxDisplay(wxDisplay::GetFromWindow(this)).GetClientArea();
     // Using the whole client area would seem unnatural. Pushbuttons
@@ -128,7 +134,7 @@ void AboutDialog::UponReadLicense(wxCommandEvent&)
     button->SetDefault();
 
     wxBoxSizer* sizer = new(wx) wxBoxSizer(wxVERTICAL);
-    sizer->Add(html_window, 1, wxALL                , 0);
+    sizer->Add(html_window, 1, wxALL | wxEXPAND     , 0);
     sizer->Add(button     , 0, wxALL | wxALIGN_RIGHT, 6);
 
     dialog.SetSizerAndFit(sizer);
