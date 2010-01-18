@@ -89,27 +89,29 @@ int AboutDialog::ShowModal()
         ,"Let me illustrate"
         );
 
-    wxFlexGridSizer* sizer1 = new(wx) wxFlexGridSizer(1, 0, 0, 0);
-    sizer1->AddGrowableCol(0);
-    sizer1->AddGrowableCol(1);
-    sizer1->Add(license_button, 1, wxALL|wxALIGN_LEFT , 2);
-    sizer1->Add(cancel_button , 1, wxALL|wxALIGN_RIGHT, 2);
+    wxBoxSizer* sizer1 = new(wx) wxBoxSizer(wxHORIZONTAL);
+    sizer1->Add(license_button, 0, wxALL, 3);
+    sizer1->Add(cancel_button , 0, wxALL, 3);
 
-    wxFlexGridSizer* sizer0 = new(wx) wxFlexGridSizer(0, 1, 0, 0);
-    sizer0->AddGrowableRow(0);
-    sizer0->Add(html_window, 1, wxALL, 2);
-    sizer0->Add(sizer1     , 1, wxALL, 0); // Buttons have their own borders.
+    wxBoxSizer* sizer0 = new(wx) wxBoxSizer(wxVERTICAL);
+    sizer0->Add(html_window, 1, wxALL                , 0);
+    sizer0->Add(sizer1     , 0, wxALL | wxALIGN_RIGHT, 3);
 
-    SetAutoLayout(true);
-    SetSizer(sizer0);
-    sizer0->Fit(this);
+    SetSizerAndFit(sizer0);
     Center();
     return wxDialog::ShowModal();
 }
 
 void AboutDialog::UponReadLicense(wxCommandEvent&)
 {
-    wxDialog dialog(this, wxID_ANY, std::string("GNU General Public License"));
+    wxDialog dialog
+        (this
+        ,wxID_ANY
+        ,std::string("GNU General Public License")
+        ,wxDefaultPosition
+        ,wxDefaultSize
+        ,wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMAXIMIZE_BOX
+        );
     wxHtmlWindow* html_window = new(wx) wxHtmlWindow
         (&dialog
         ,wxID_ANY
@@ -119,7 +121,6 @@ void AboutDialog::UponReadLicense(wxCommandEvent&)
         );
     html_window->SetBorders(0);
     html_window->SetPage(license_as_html());
-    html_window->GetInternalRepresentation()->Layout(1);
 
     wxRect r = wxDisplay(wxDisplay::GetFromWindow(this)).GetClientArea();
     // Using the whole client area would seem unnatural. Pushbuttons
@@ -133,12 +134,10 @@ void AboutDialog::UponReadLicense(wxCommandEvent&)
     button->SetDefault();
 
     wxBoxSizer* sizer = new(wx) wxBoxSizer(wxVERTICAL);
-    sizer->Add(html_window, 1, wxALL              , 2);
-    sizer->Add(button     , 0, wxALL|wxALIGN_RIGHT, 2);
+    sizer->Add(html_window, 1, wxALL | wxEXPAND     , 0);
+    sizer->Add(button     , 0, wxALL | wxALIGN_RIGHT, 6);
 
-    dialog.SetAutoLayout(true);
-    dialog.SetSizer(sizer);
-    sizer->Fit(&dialog);
+    dialog.SetSizerAndFit(sizer);
     dialog.Center();
     dialog.ShowModal();
 }
