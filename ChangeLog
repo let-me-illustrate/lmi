@@ -24160,3 +24160,12 @@ Improve layout. See:
 Make "license" dialog resizable. See:
   http://lists.nongnu.org/archive/html/lmi/2010-01/msg00011.html
 
+20100118T2036Z <wboutin@charter.net> [762]
+
+  ihs_proddata.cpp
+  ihs_proddata.hpp
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  my_prod.cpp
+Add new entities.
+
