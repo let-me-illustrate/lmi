@@ -261,12 +261,12 @@ void LedgerInvariant::Alloc(int len)
     Strings         ["CompositeTrackingNumber"       ] = &CompositeTrackingNumber        ;
     Strings         ["InforceTrackingNumber"         ] = &InforceTrackingNumber          ;
     Strings         ["InforceCompositeTrackingNumber"] = &InforceCompositeTrackingNumber ;
-    Strings         ["InforceNonGuaranteedFootnote0" ] = &InforceCompositeTrackingNumber ;
-    Strings         ["InforceNonGuaranteedFootnote1" ] = &InforceCompositeTrackingNumber ;
-    Strings         ["InforceNonGuaranteedFootnote2" ] = &InforceCompositeTrackingNumber ;
-    Strings         ["InforceNonGuaranteedFootnote3" ] = &InforceCompositeTrackingNumber ;
-    Strings         ["PresaleNonGuaranteedFootnote"  ] = &InforceCompositeTrackingNumber ;
-    Strings         ["MonthlyChargesPaymentFootnote" ] = &InforceCompositeTrackingNumber ;
+    Strings         ["InforceNonGuaranteedFootnote0" ] = &InforceNonGuaranteedFootnote0  ;
+    Strings         ["InforceNonGuaranteedFootnote1" ] = &InforceNonGuaranteedFootnote1  ;
+    Strings         ["InforceNonGuaranteedFootnote2" ] = &InforceNonGuaranteedFootnote2  ;
+    Strings         ["InforceNonGuaranteedFootnote3" ] = &InforceNonGuaranteedFootnote3  ;
+    Strings         ["PresaleNonGuaranteedFootnote"  ] = &PresaleNonGuaranteedFootnote   ;
+    Strings         ["MonthlyChargesPaymentFootnote" ] = &MonthlyChargesPaymentFootnote  ;
 
     Strings         ["ProducerName"          ] = &ProducerName           ;
     Strings         ["ProducerStreet"        ] = &ProducerStreet         ;

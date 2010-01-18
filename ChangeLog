@@ -24169,3 +24169,8 @@ Make "license" dialog resizable. See:
   my_prod.cpp
 Add new entities.
 
+20100118T2045Z <wboutin@charter.net> [762]
+
+  ledger_invariant.cpp
+Fix a defect introduced 20100118T2036Z.
+
