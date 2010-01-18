@@ -277,6 +277,12 @@ class LMI_SO LedgerInvariant
     std::string     CompositeTrackingNumber;
     std::string     InforceTrackingNumber;
     std::string     InforceCompositeTrackingNumber;
+    std::string     InforceNonGuaranteedFootnote0;
+    std::string     InforceNonGuaranteedFootnote1;
+    std::string     InforceNonGuaranteedFootnote2;
+    std::string     InforceNonGuaranteedFootnote3;
+    std::string     PresaleNonGuaranteedFootnote;
+    std::string     MonthlyChargesPaymentFootnote;
 
     std::string     ProducerName;
     std::string     ProducerStreet;
