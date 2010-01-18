@@ -24136,3 +24136,27 @@ et seqq.
   workhorse.make
 Add 'product_files' binary (if it exists) to fardel.
 
+20100117T2332Z <gchicares@sbcglobal.net> [762]
+
+  about_dialog.cpp
+Refactor: prefer SetSizerAndFit() to multiple functions. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-01/msg00011.html
+
+20100118T0004Z <gchicares@sbcglobal.net> [762]
+
+  about_dialog.cpp
+Refactor: prefer wxBoxSizer to wxFlexGridSizer. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-01/msg00011.html
+
+20100118T1431Z <gchicares@sbcglobal.net> [762]
+
+  about_dialog.cpp
+Improve layout. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-01/msg00028.html
+
+20100118T1748Z <gchicares@sbcglobal.net> [762]
+
+  about_dialog.cpp
+Make "license" dialog resizable. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-01/msg00011.html
+
