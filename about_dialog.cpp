@@ -131,9 +131,11 @@ void AboutDialog::UponReadLicense(wxCommandEvent&)
     dialog.SetSizerAndFit(sizer);
 
     wxRect r = wxDisplay(wxDisplay::GetFromWindow(this)).GetClientArea();
-    int const width  = r.GetWidth () * 4 / 5;
-    int const height = r.GetHeight() * 4 / 5;
-    dialog.SetInitialSize(wxSize(width, height));
+    int const minimum_width  = 60 * dialog.GetCharWidth();
+    int const default_width  = r.GetWidth () * 4 / 5;
+    int const default_height = r.GetHeight() * 4 / 5;
+    dialog.SetInitialSize(wxSize(minimum_width, default_height));
+    dialog.SetSize       (wxSize(default_width, default_height));
     dialog.Center();
     dialog.ShowModal();
 }
