@@ -70,11 +70,9 @@ int AboutDialog::ShowModal()
         );
     html_window->SetBorders(0);
     html_window->SetPage(license_notices_as_html());
-    int width =
-            html_window->GetInternalRepresentation()->GetWidth()
-        +   wxSystemSettings::GetMetric(wxSYS_VSCROLL_X)
-        ;
-    int height = html_window->GetInternalRepresentation()->GetHeight();
+    html_window->GetInternalRepresentation()->Layout(450);
+    int const width  = html_window->GetInternalRepresentation()->GetWidth ();
+    int const height = html_window->GetInternalRepresentation()->GetHeight();
     html_window->SetMinSize(wxSize(width, height));
 
     wxButton* license_button = new(wx) wxButton
