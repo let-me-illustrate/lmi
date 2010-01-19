@@ -24185,3 +24185,10 @@ Size the dialog, not its html window. See:
   about_dialog.cpp
 Let "license" dialog be made narrower than its initial width.
 
+20100119T1959Z <gchicares@sbcglobal.net> [762]
+
+  about_dialog.cpp
+  license.cpp
+Use the same font on two related dialogs. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-01/msg00031.html
+
