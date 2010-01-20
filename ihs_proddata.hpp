@@ -143,7 +143,7 @@ class LMI_SO TProductData
     std::string const& GetInforceNonGuaranteedFootnote1 () const {return InforceNonGuaranteedFootnote1 ;}
     std::string const& GetInforceNonGuaranteedFootnote2 () const {return InforceNonGuaranteedFootnote2 ;}
     std::string const& GetInforceNonGuaranteedFootnote3 () const {return InforceNonGuaranteedFootnote3 ;}
-    std::string const& GetPresaleNonGuaranteedFootnote  () const {return PresaleNonGuaranteedFootnote  ;}
+    std::string const& GetNonGuaranteedFootnote         () const {return NonGuaranteedFootnote         ;}
     std::string const& GetMonthlyChargesPaymentFootnote () const {return MonthlyChargesPaymentFootnote ;}
 
   private:
@@ -262,7 +262,7 @@ class LMI_SO TProductData
     std::string InforceNonGuaranteedFootnote1;
     std::string InforceNonGuaranteedFootnote2;
     std::string InforceNonGuaranteedFootnote3;
-    std::string PresaleNonGuaranteedFootnote;
+    std::string NonGuaranteedFootnote;
     std::string MonthlyChargesPaymentFootnote;
 };
 

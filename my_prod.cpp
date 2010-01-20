@@ -147,7 +147,7 @@ void TProductData::WriteProprietaryPolFiles()
     foo.InforceNonGuaranteedFootnote1  = "";
     foo.InforceNonGuaranteedFootnote2  = "";
     foo.InforceNonGuaranteedFootnote3  = "";
-    foo.PresaleNonGuaranteedFootnote   = "";
+    foo.NonGuaranteedFootnote          = "";
     foo.MonthlyChargesPaymentFootnote  = "";
 
     // Sample policy form.
