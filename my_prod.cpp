@@ -143,6 +143,12 @@ void TProductData::WriteProprietaryPolFiles()
     foo.CompositeTrackingNumber        = "";
     foo.InforceTrackingNumber          = "";
     foo.InforceCompositeTrackingNumber = "";
+    foo.InforceNonGuaranteedFootnote0  = "";
+    foo.InforceNonGuaranteedFootnote1  = "";
+    foo.InforceNonGuaranteedFootnote2  = "";
+    foo.InforceNonGuaranteedFootnote3  = "";
+    foo.PresaleNonGuaranteedFootnote   = "";
+    foo.MonthlyChargesPaymentFootnote  = "";
 
     // Sample policy form.
     foo.DatabaseFilename  = "sample.db4";

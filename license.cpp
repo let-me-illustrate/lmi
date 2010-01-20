@@ -77,6 +77,16 @@ char const notices_text[] =
 
 std::string htmlize_licence_text(std::string const& s)
 {
+    std::string t(s);
+    static std::string const double_newline("\n\n");
+    static std::string const paragraph_separator("\n</p>\n<p>\n");
+    std::string::size_type t_pos = t.find(double_newline);
+    while(t_pos != std::string::npos)
+        {
+        t.replace(t_pos, double_newline.length(), paragraph_separator);
+        t_pos = t.find(double_newline, 1 + t_pos);
+        }
+
     std::string r
         ("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">"
         "<html>"
@@ -86,20 +96,20 @@ std::string htmlize_licence_text(std::string const& s)
         "<title>About 'Let me illustrate...'</title>"
         "</head>"
         "<body>"
-        "<pre>"
-        + s +
-        "</pre>"
+        "<p>"
+        + t +
+        "</p>"
         "</body>"
         "</html>"
         );
 
-    static std::string const ascii("(C)");
-    static std::string const html("&copy;");
-    std::string::size_type position = r.find(ascii);
-    while(position != std::string::npos)
+    static std::string const ascii_copyright("(C)");
+    static std::string const html_copyright("&copy;");
+    std::string::size_type r_pos = r.find(ascii_copyright);
+    while(r_pos != std::string::npos)
         {
-        r.replace(position, ascii.length(), html);
-        position = r.find(ascii, 1 + position);
+        r.replace(r_pos, ascii_copyright.length(), html_copyright);
+        r_pos = r.find(ascii_copyright, 1 + r_pos);
         }
     return r;
 }

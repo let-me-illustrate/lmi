@@ -139,6 +139,12 @@ class LMI_SO TProductData
     std::string const& GetCompositeTrackingNumber       () const {return CompositeTrackingNumber;       }
     std::string const& GetInforceTrackingNumber         () const {return InforceTrackingNumber;         }
     std::string const& GetInforceCompositeTrackingNumber() const {return InforceCompositeTrackingNumber;}
+    std::string const& GetInforceNonGuaranteedFootnote0 () const {return InforceNonGuaranteedFootnote0 ;}
+    std::string const& GetInforceNonGuaranteedFootnote1 () const {return InforceNonGuaranteedFootnote1 ;}
+    std::string const& GetInforceNonGuaranteedFootnote2 () const {return InforceNonGuaranteedFootnote2 ;}
+    std::string const& GetInforceNonGuaranteedFootnote3 () const {return InforceNonGuaranteedFootnote3 ;}
+    std::string const& GetPresaleNonGuaranteedFootnote  () const {return PresaleNonGuaranteedFootnote  ;}
+    std::string const& GetMonthlyChargesPaymentFootnote () const {return MonthlyChargesPaymentFootnote ;}
 
   private:
     TProductData();
@@ -252,6 +258,12 @@ class LMI_SO TProductData
     std::string CompositeTrackingNumber;
     std::string InforceTrackingNumber;
     std::string InforceCompositeTrackingNumber;
+    std::string InforceNonGuaranteedFootnote0;
+    std::string InforceNonGuaranteedFootnote1;
+    std::string InforceNonGuaranteedFootnote2;
+    std::string InforceNonGuaranteedFootnote3;
+    std::string PresaleNonGuaranteedFootnote;
+    std::string MonthlyChargesPaymentFootnote;
 };
 
 #endif // ihs_proddata_hpp

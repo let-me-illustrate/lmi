@@ -70,11 +70,9 @@ int AboutDialog::ShowModal()
         );
     html_window->SetBorders(0);
     html_window->SetPage(license_notices_as_html());
-    int width =
-            html_window->GetInternalRepresentation()->GetWidth()
-        +   wxSystemSettings::GetMetric(wxSYS_VSCROLL_X)
-        ;
-    int height = html_window->GetInternalRepresentation()->GetHeight();
+    html_window->GetInternalRepresentation()->Layout(450);
+    int const width  = html_window->GetInternalRepresentation()->GetWidth ();
+    int const height = html_window->GetInternalRepresentation()->GetHeight();
     html_window->SetMinSize(wxSize(width, height));
 
     wxButton* license_button = new(wx) wxButton
@@ -122,22 +120,20 @@ void AboutDialog::UponReadLicense(wxCommandEvent&)
     html_window->SetBorders(0);
     html_window->SetPage(license_as_html());
 
-    wxRect r = wxDisplay(wxDisplay::GetFromWindow(this)).GetClientArea();
-    // Using the whole client area would seem unnatural. Pushbuttons
-    // can't plausibly take more than twenty percent of the vertical
-    // space.
-    int width  = r.GetWidth () * 4 / 5;
-    int height = r.GetHeight() * 4 / 5;
-    html_window->SetMinSize(wxSize(width, height));
-
     wxButton* button = new(wx) wxButton(&dialog, wxID_CANCEL, "Close");
     button->SetDefault();
 
     wxBoxSizer* sizer = new(wx) wxBoxSizer(wxVERTICAL);
     sizer->Add(html_window, 1, wxALL | wxEXPAND     , 0);
     sizer->Add(button     , 0, wxALL | wxALIGN_RIGHT, 6);
-
     dialog.SetSizerAndFit(sizer);
+
+    wxRect r = wxDisplay(wxDisplay::GetFromWindow(this)).GetClientArea();
+    int const minimum_width  = 60 * dialog.GetCharWidth();
+    int const default_width  = r.GetWidth () * 4 / 5;
+    int const default_height = r.GetHeight() * 4 / 5;
+    dialog.SetInitialSize(wxSize(minimum_width, default_height));
+    dialog.SetSize       (wxSize(default_width, default_height));
     dialog.Center();
     dialog.ShowModal();
 }

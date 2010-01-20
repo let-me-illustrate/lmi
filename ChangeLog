@@ -24160,3 +24160,35 @@ Improve layout. See:
 Make "license" dialog resizable. See:
   http://lists.nongnu.org/archive/html/lmi/2010-01/msg00011.html
 
+20100118T2036Z <wboutin@charter.net> [762]
+
+  ihs_proddata.cpp
+  ihs_proddata.hpp
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  my_prod.cpp
+Add new entities.
+
+20100118T2045Z <wboutin@charter.net> [762]
+
+  ledger_invariant.cpp
+Fix a defect introduced 20100118T2036Z.
+
+20100119T1408Z <gchicares@sbcglobal.net> [762]
+
+  about_dialog.cpp
+Size the dialog, not its html window. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-01/msg00011.html
+
+20100119T1525Z <gchicares@sbcglobal.net> [762]
+
+  about_dialog.cpp
+Let "license" dialog be made narrower than its initial width.
+
+20100119T1959Z <gchicares@sbcglobal.net> [762]
+
+  about_dialog.cpp
+  license.cpp
+Use the same font on two related dialogs. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-01/msg00031.html
+

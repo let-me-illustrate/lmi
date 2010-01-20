@@ -261,6 +261,12 @@ void LedgerInvariant::Alloc(int len)
     Strings         ["CompositeTrackingNumber"       ] = &CompositeTrackingNumber        ;
     Strings         ["InforceTrackingNumber"         ] = &InforceTrackingNumber          ;
     Strings         ["InforceCompositeTrackingNumber"] = &InforceCompositeTrackingNumber ;
+    Strings         ["InforceNonGuaranteedFootnote0" ] = &InforceNonGuaranteedFootnote0  ;
+    Strings         ["InforceNonGuaranteedFootnote1" ] = &InforceNonGuaranteedFootnote1  ;
+    Strings         ["InforceNonGuaranteedFootnote2" ] = &InforceNonGuaranteedFootnote2  ;
+    Strings         ["InforceNonGuaranteedFootnote3" ] = &InforceNonGuaranteedFootnote3  ;
+    Strings         ["PresaleNonGuaranteedFootnote"  ] = &PresaleNonGuaranteedFootnote   ;
+    Strings         ["MonthlyChargesPaymentFootnote" ] = &MonthlyChargesPaymentFootnote  ;
 
     Strings         ["ProducerName"          ] = &ProducerName           ;
     Strings         ["ProducerStreet"        ] = &ProducerStreet         ;
@@ -652,6 +658,12 @@ void LedgerInvariant::Init(BasicValues* b)
         CompositeTrackingNumber        = b->ProductData_->GetCompositeTrackingNumber();
         InforceTrackingNumber          = b->ProductData_->GetInforceTrackingNumber();
         InforceCompositeTrackingNumber = b->ProductData_->GetInforceCompositeTrackingNumber();
+        InforceNonGuaranteedFootnote0  = b->ProductData_->GetInforceNonGuaranteedFootnote0();
+        InforceNonGuaranteedFootnote1  = b->ProductData_->GetInforceNonGuaranteedFootnote1();
+        InforceNonGuaranteedFootnote2  = b->ProductData_->GetInforceNonGuaranteedFootnote2();
+        InforceNonGuaranteedFootnote3  = b->ProductData_->GetInforceNonGuaranteedFootnote3();
+        PresaleNonGuaranteedFootnote   = b->ProductData_->GetPresaleNonGuaranteedFootnote();
+        MonthlyChargesPaymentFootnote  = b->ProductData_->GetMonthlyChargesPaymentFootnote();
         }
 
     ProducerName            = (*b->Input_)["AgentName"].str();
@@ -941,6 +953,12 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     CompositeTrackingNumber        = a_Addend.CompositeTrackingNumber;
     InforceTrackingNumber          = a_Addend.InforceTrackingNumber;
     InforceCompositeTrackingNumber = a_Addend.InforceCompositeTrackingNumber;
+    InforceNonGuaranteedFootnote0  = a_Addend.InforceNonGuaranteedFootnote0;
+    InforceNonGuaranteedFootnote1  = a_Addend.InforceNonGuaranteedFootnote1;
+    InforceNonGuaranteedFootnote2  = a_Addend.InforceNonGuaranteedFootnote2;
+    InforceNonGuaranteedFootnote3  = a_Addend.InforceNonGuaranteedFootnote3;
+    PresaleNonGuaranteedFootnote   = a_Addend.PresaleNonGuaranteedFootnote;
+    MonthlyChargesPaymentFootnote  = a_Addend.MonthlyChargesPaymentFootnote;
 
     Comments                    = a_Addend.Comments;
 
