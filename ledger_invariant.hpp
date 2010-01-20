@@ -281,7 +281,7 @@ class LMI_SO LedgerInvariant
     std::string     InforceNonGuaranteedFootnote1;
     std::string     InforceNonGuaranteedFootnote2;
     std::string     InforceNonGuaranteedFootnote3;
-    std::string     PresaleNonGuaranteedFootnote;
+    std::string     NonGuaranteedFootnote;
     std::string     MonthlyChargesPaymentFootnote;
 
     std::string     ProducerName;

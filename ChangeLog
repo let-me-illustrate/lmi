@@ -24192,3 +24192,12 @@ Let "license" dialog be made narrower than its initial width.
 Use the same font on two related dialogs. See:
   http://lists.nongnu.org/archive/html/lmi/2010-01/msg00031.html
 
+20100120T2030Z <wboutin@charter.net> [762]
+
+  ihs_proddata.cpp
+  ihs_proddata.hpp
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  my_prod.cpp
+Rename a variable.
+
