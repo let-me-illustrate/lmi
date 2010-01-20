@@ -186,7 +186,7 @@ void TProductData::Read(std::string const& a_Filename)
     std::getline(is, InforceNonGuaranteedFootnote1, '\n');
     std::getline(is, InforceNonGuaranteedFootnote2, '\n');
     std::getline(is, InforceNonGuaranteedFootnote3, '\n');
-    std::getline(is, PresaleNonGuaranteedFootnote,  '\n');
+    std::getline(is, NonGuaranteedFootnote,         '\n');
     std::getline(is, MonthlyChargesPaymentFootnote, '\n');
 
     bool okay = is.good();
@@ -316,7 +316,7 @@ void TProductData::Write(std::string const& a_Filename) const
     os << InforceNonGuaranteedFootnote1 << '\n';
     os << InforceNonGuaranteedFootnote2 << '\n';
     os << InforceNonGuaranteedFootnote3 << '\n';
-    os << PresaleNonGuaranteedFootnote  << '\n';
+    os << NonGuaranteedFootnote         << '\n';
     os << MonthlyChargesPaymentFootnote << '\n';
 
     if(!os.good())
@@ -429,7 +429,7 @@ void TProductData::WritePolFiles()
     foo.InforceNonGuaranteedFootnote1  = "";
     foo.InforceNonGuaranteedFootnote2  = "";
     foo.InforceNonGuaranteedFootnote3  = "";
-    foo.PresaleNonGuaranteedFootnote   = "";
+    foo.NonGuaranteedFootnote          = "";
     foo.MonthlyChargesPaymentFootnote  = "";
 
     foo.DatabaseFilename = "sample.db4";

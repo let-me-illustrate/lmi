@@ -265,7 +265,7 @@ void LedgerInvariant::Alloc(int len)
     Strings         ["InforceNonGuaranteedFootnote1" ] = &InforceNonGuaranteedFootnote1  ;
     Strings         ["InforceNonGuaranteedFootnote2" ] = &InforceNonGuaranteedFootnote2  ;
     Strings         ["InforceNonGuaranteedFootnote3" ] = &InforceNonGuaranteedFootnote3  ;
-    Strings         ["PresaleNonGuaranteedFootnote"  ] = &PresaleNonGuaranteedFootnote   ;
+    Strings         ["NonGuaranteedFootnote"         ] = &NonGuaranteedFootnote          ;
     Strings         ["MonthlyChargesPaymentFootnote" ] = &MonthlyChargesPaymentFootnote  ;
 
     Strings         ["ProducerName"          ] = &ProducerName           ;
@@ -662,7 +662,7 @@ void LedgerInvariant::Init(BasicValues* b)
         InforceNonGuaranteedFootnote1  = b->ProductData_->GetInforceNonGuaranteedFootnote1();
         InforceNonGuaranteedFootnote2  = b->ProductData_->GetInforceNonGuaranteedFootnote2();
         InforceNonGuaranteedFootnote3  = b->ProductData_->GetInforceNonGuaranteedFootnote3();
-        PresaleNonGuaranteedFootnote   = b->ProductData_->GetPresaleNonGuaranteedFootnote();
+        NonGuaranteedFootnote          = b->ProductData_->GetNonGuaranteedFootnote();
         MonthlyChargesPaymentFootnote  = b->ProductData_->GetMonthlyChargesPaymentFootnote();
         }
 
@@ -957,7 +957,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     InforceNonGuaranteedFootnote1  = a_Addend.InforceNonGuaranteedFootnote1;
     InforceNonGuaranteedFootnote2  = a_Addend.InforceNonGuaranteedFootnote2;
     InforceNonGuaranteedFootnote3  = a_Addend.InforceNonGuaranteedFootnote3;
-    PresaleNonGuaranteedFootnote   = a_Addend.PresaleNonGuaranteedFootnote;
+    NonGuaranteedFootnote   = a_Addend.NonGuaranteedFootnote;
     MonthlyChargesPaymentFootnote  = a_Addend.MonthlyChargesPaymentFootnote;
 
     Comments                    = a_Addend.Comments;
