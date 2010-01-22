@@ -66,7 +66,7 @@ int AboutDialog::ShowModal()
         ,wxID_ANY
         ,wxDefaultPosition
         ,wxDefaultSize
-        ,wxHW_SCROLLBAR_AUTO | wxHW_NO_SELECTION
+        ,wxHW_SCROLLBAR_NEVER | wxHW_NO_SELECTION
         );
     html_window->SetBorders(0);
     html_window->SetPage(license_notices_as_html());
