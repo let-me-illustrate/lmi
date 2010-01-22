@@ -24201,3 +24201,9 @@ Use the same font on two related dialogs. See:
   my_prod.cpp
 Rename a variable.
 
+20100122T1700Z <gchicares@sbcglobal.net> [762]
+
+  about_dialog.cpp
+Never use a scrollbar on the "Help | About" dialog. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-01/msg00032.html
+
