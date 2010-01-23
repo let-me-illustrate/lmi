@@ -735,11 +735,25 @@ void Test_1980_CSO_Male_ANB()
         ;
 }
 
+/// Test UL commutation functions in extreme cases.
+///
+/// For example, ic and ig can both be zero, and qc may round to zero
+/// for a Frasierized survivorship contract.
+
+void TestLimits()
+{
+    std::vector<double> zero(10, 0.0);
+    ULCommFns ulcf(zero, zero, zero, mce_option1, mce_monthly);
+    BOOST_TEST_EQUAL(1.0, ulcf.aDomega());
+    BOOST_TEST_EQUAL(0.0, ulcf.kC().back());
+}
+
 int test_main(int, char*[])
 {
     ULCommFnsTest();
     OLCommFnsTest();
     Test_1980_CSO_Male_ANB();
+    TestLimits();
 
     return EXIT_SUCCESS;
 }
