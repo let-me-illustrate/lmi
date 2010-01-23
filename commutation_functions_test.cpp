@@ -67,19 +67,21 @@ std::vector<double> const& sample_q()
 }
 } // Unnamed namespace.
 
+void mete_olcf
+    (std::vector<double> const& q
+    ,std::vector<double> const& i
+    )
+{
+    OLCommFns(q, i);
+}
+
 void mete_ulcf
     (std::vector<double> const& q
     ,std::vector<double> const& ic
     ,std::vector<double> const& ig
     )
 {
-    ULCommFns
-        (q
-        ,ic
-        ,ig
-        ,mce_option1
-        ,mce_monthly
-        );
+    ULCommFns(q, ic, ig, mce_option1, mce_monthly);
 }
 
 void mete_reserve
@@ -707,6 +709,18 @@ void Test_1980_CSO_Male_ANB()
         << "  " << std::setw(17) << tolerance         << " tolerance\n"
         << "  " << std::setw(17) << worst_discrepancy << " worst_discrepancy\n"
         << std::endl
+        ;
+
+    std::cout
+        << "  Speed test: generate ordinary-life commutation functions\n    "
+        << TimeAnAliquot
+            (boost::bind
+                (mete_olcf
+                ,q
+                ,ic
+                )
+            )
+        << '\n'
         ;
 
     std::cout
