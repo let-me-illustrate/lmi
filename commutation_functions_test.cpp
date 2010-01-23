@@ -28,6 +28,7 @@
 
 #include "ihs_commfns.hpp"
 
+#include "et_vector.hpp"
 #include "math_functors.hpp"
 #include "miscellany.hpp" // ios_out_trunc_binary()
 #include "test_tools.hpp"
@@ -121,8 +122,6 @@ void mete_corridor
 /// demonstrates that every number in those four columns is reproduced
 /// within its tightest-possible tolerance.
 
-// To be refactored soon....
-#include "et_vector.hpp"
 void TestEckleyTable2()
 {
     static double const Ax[65] =
@@ -578,6 +577,31 @@ int test_main(int, char*[])
         ,mce_option1
         ,mce_monthly
         );
+
+#if 1
+// This demonstrates a problem.
+    std::vector<double> denominator(ulcf.kM());
+    denominator += ulcf.aD().back();
+// When 'cvat_corridor' is initialized this way, the division
+// immediately below segfaults with libstdc++ safe mode; it would
+// be detected as a length error if PETE were built to detect it:
+    std::vector<double> cvat_corridor(ulcf.aD());
+// This alternative is correct, but insufficiently obvious:
+//  std::vector<double> cvat_corridor(ulcf.aD().begin(), -1 + ulcf.aD().end());
+// Vectorization (using expression templates) will present such
+// traps for the unwary as long as aD() is defined to have one
+// more element than other commutation functions.
+    cvat_corridor /= denominator;
+#endif // 1
+
+#if 0
+    // This is more or less what should be done.
+    std::vector<double> cvat_corridor(q.size());
+    assign(cvat_corridor, ulcf.aD() / (ulcf.aD().back() + ulcf.kM()));
+#endif // 0
+
+#if 0
+    // This is correct, but too verbose to understand at a glance.
     std::vector<double> cvat_corridor;
     std::vector<double> denominator(ulcf.kM());
     std::transform
@@ -593,6 +617,7 @@ int test_main(int, char*[])
         ,std::back_inserter(cvat_corridor)
         ,std::divides<double>()
         );
+#endif // 0
 
     double tolerance = 0.00000000005;
     double worst_discrepancy = 0.0;
