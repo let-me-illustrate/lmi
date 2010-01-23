@@ -51,26 +51,20 @@ OLCommFns::OLCommFns
     Length = q.size();
     LMI_ASSERT(i.size() == q.size());
 
-    c.assign(1 + Length, 1.0);
-    d.assign(1 + Length, 1.0);
-    m.assign(1 + Length, 1.0);
-    n.assign(1 + Length, 1.0);
-
-    std::vector<double> v(1 + Length, 1.0);
-    std::vector<double> p(1 + Length, 1.0);
+    d.resize(1 + Length);
+    c.resize(1 + Length);
+    n.resize(1 + Length);
+    m.resize(1 + Length);
 
     d[0] = 1.0;
     for(int j = 0; j < Length; j++)
         {
         LMI_ASSERT(-1.0 != i[j]);
-        v[j] = 1.0 / (1.0 + i[j]);
-        p[j] = 1.0 - q[j];
-        c[j] = d[j] * v[j] * q[j];
-        d[1 + j] = d[j] * v[j] * p[j];
+        double v = 1.0 / (1.0 + i[j]);
+        double p = 1.0 - q[j];
+        c[j] = d[j] * v * q[j];
+        d[1 + j] = d[j] * v * p;
         }
-// ignore these commented lines
-//  c[Length] = v[Length] * d[Length];  // assumes 1 == p[Length]
-//  c[Length] = d[Length];  // but there's no i[Length]
 
     m[-1 + Length] = c[-1 + Length];
     n[-1 + Length] = d[-1 + Length];
@@ -122,11 +116,11 @@ ULCommFns::ULCommFns
     LMI_ASSERT(ig.size() == qc.size());
 
     ad.resize(1 + Length);
-    kd.resize(Length);
-    kc.resize(Length);
+    kd.resize(    Length);
+    kc.resize(    Length);
 
     int periods_per_year = mode_;
-    int months_between_deductions = 12 / periods_per_year;
+    int months_per_period = 12 / periods_per_year;
 
     ad[0] = 1.0;
     for(int j = 0; j < Length; j++)
@@ -168,7 +162,7 @@ ULCommFns::ULCommFns
         double ka = 1.0;
         if(1.0 != vp)
             {
-            ka = (1.0 - vp12) / (1.0 - std::pow(vp, months_between_deductions));
+            ka = (1.0 - vp12) / (1.0 - std::pow(vp, months_per_period));
             }
         kd[j] = ka * ad[j];
         kc[j] = ka * ad[j] * v * q;
