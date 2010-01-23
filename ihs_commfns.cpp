@@ -30,15 +30,17 @@
 
 #include "assert_lmi.hpp"
 
-#include <algorithm>
+#include <algorithm> // std::reverse()
 #include <cmath>     // std::pow()
-#include <numeric>
+#include <numeric>   // std::partial_sum()
 
-// Calculate C D M N given vector q and vector i.
-// We could gain some speed by optionally allowing scalar i and
-// treating it as a special case, but this will always work.
+/// Interest- and mortality-rate vectors --> commutation functions.
+///
+/// In the general case, interest rates may vary by year. Most often,
+/// they are the same for all years; but optimizing for that common
+/// special case at the cost of code complexity would probably be
+/// a mistake.
 
-//============================================================================
 OLCommFns::OLCommFns
     (std::vector<double> const& a_q
     ,std::vector<double> const& a_i
@@ -79,12 +81,29 @@ OLCommFns::OLCommFns
         }
 }
 
-//============================================================================
 OLCommFns::~OLCommFns()
 {
 }
 
-//============================================================================
+/// Interest- and mortality-rate vectors --> commutation functions.
+///
+/// Constructor arguments:
+///   a_qc  Eckley's Q:  mortality rates
+///   a_ic  Eckley's ic: "current"    interest rates
+///   a_ig  Eckley's ig: "guaranteed" interest rates
+///   dbo   death benefit option
+///   mode  n-iversary mode
+///
+/// Numeric arguments--mortality and interest rates--must be on
+/// the mode for which commutation functions are wanted. If monthly
+/// functions are to be obtained from annual rates, convert the
+/// rates to monthly before passing them as arguments. There's more
+/// than one way to perform a modal conversion, and it's not this
+/// class's responsibility to choose.
+///
+/// The mode argument specifies the frequency of UL n-iversary
+/// processing. This is most often monthly, but need not be.
+
 ULCommFns::ULCommFns
     (std::vector<double> const& a_qc
     ,std::vector<double> const& a_ic
@@ -102,17 +121,9 @@ ULCommFns::ULCommFns
     LMI_ASSERT(ic.size() == qc.size());
     LMI_ASSERT(ig.size() == qc.size());
 
-//  q.assign(1 + Length, 1.0);
-//  i.assign(1 + Length, 1.0);
-
     ad.resize(1 + Length);
     kd.resize(Length);
     kc.resize(Length);
-
-// erase    std::vector<double> q_prime(1 + Length, 1.0);
-//  std::vector<double> v(1 + Length, 1.0);
-//  std::vector<double> p(1 + Length, 1.0);
-//  std::vector<double> a(1 + Length, 1.0);
 
     int periods_per_year = mode_;
     int months_between_deductions = 12 / periods_per_year;
@@ -189,13 +200,11 @@ ULCommFns::ULCommFns
 */
 }
 
-//============================================================================
 ULCommFns::~ULCommFns()
 {
 }
 
 /*
-//============================================================================
 // The algorithm can be expressed so concisely in APL that I tried
 // an STL approach; but the balkiness of the notation makes it
 // harder to read than the C approach. This is untested.
