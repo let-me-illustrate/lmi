@@ -436,7 +436,7 @@ void Irc7702::InitCommFns()
             ,mce_monthly
             )
         );
-    DEndt[Opt1Int4Pct] = CommFns[Opt1Int4Pct]->aD()[Length];
+    DEndt[Opt1Int4Pct] = CommFns[Opt1Int4Pct]->aDomega();
 
     CommFns[Opt2Int4Pct].reset
         (new ULCommFns
@@ -447,7 +447,7 @@ void Irc7702::InitCommFns()
             ,mce_monthly
             )
         );
-    DEndt[Opt2Int4Pct] = CommFns[Opt2Int4Pct]->aD()[Length];
+    DEndt[Opt2Int4Pct] = CommFns[Opt2Int4Pct]->aDomega();
 
     // Commutation functions using 6% min i: always option 1
     CommFns[Opt1Int6Pct].reset
@@ -459,7 +459,7 @@ void Irc7702::InitCommFns()
             ,mce_monthly
             )
         );
-    DEndt[Opt1Int6Pct] = CommFns[Opt1Int6Pct]->aD()[Length];
+    DEndt[Opt1Int6Pct] = CommFns[Opt1Int6Pct]->aDomega();
 }
 
 //============================================================================
@@ -469,7 +469,7 @@ void Irc7702::InitCorridor()
     // TODO ?? Substandard: set last NSP to 1.0? ignore flats? set NSP[omega] to 1?
     // --better to ignore susbstandard
     CvatCorridor.resize(Length);
-    // ET !! CvatCorridor = drop(CommFns[Opt1Int4Pct]->aD(), 1) / CommFns[Opt1Int4Pct]->kM();
+    // ET !! CvatCorridor = CommFns[Opt1Int4Pct]->aD() / CommFns[Opt1Int4Pct]->kM();
     std::vector<double> denominator(CommFns[Opt1Int4Pct]->kM());
     std::transform
         (denominator.begin()
@@ -479,7 +479,7 @@ void Irc7702::InitCorridor()
         );
     std::transform
         (CommFns[Opt1Int4Pct]->aD().begin()
-        ,CommFns[Opt1Int4Pct]->aD().end() - 1
+        ,CommFns[Opt1Int4Pct]->aD().end()
         ,denominator.begin()
         ,CvatCorridor.begin()
         ,std::divides<double>()
@@ -517,11 +517,11 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 
     unsigned int u_length = static_cast<unsigned int>(Length);
 
-    // ET !! std::vector<double> ann_chg_pol = AnnChgPol * drop(comm_fns.aD(), -1);
+    // ET !! std::vector<double> ann_chg_pol = AnnChgPol * comm_fns.aD();
     std::vector<double> ann_chg_pol(Length);
     HOPEFULLY(u_length == ann_chg_pol.size());
     HOPEFULLY(u_length == AnnChgPol.size());
-    HOPEFULLY(u_length <= comm_fns.aD().size());
+    HOPEFULLY(u_length == comm_fns.aD().size());
     std::transform
         (AnnChgPol.begin()
         ,AnnChgPol.end()
@@ -631,7 +631,7 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
         ,std::bind1st(std::minus<double>(), 1.0)
         );
     HOPEFULLY(u_length == npf_sgl_tgt.size());
-    HOPEFULLY(u_length <= comm_fns.aD().size());
+    HOPEFULLY(u_length == comm_fns.aD().size());
     std::transform
         (npf_sgl_tgt.begin()
         ,npf_sgl_tgt.end()
@@ -658,7 +658,7 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
         ,std::bind1st(std::minus<double>(), 1.0)
         );
     HOPEFULLY(u_length == npf_sgl_tgt.size());
-    HOPEFULLY(u_length <= comm_fns.aD().size());
+    HOPEFULLY(u_length == comm_fns.aD().size());
     std::transform
         (npf_sgl_exc.begin()
         ,npf_sgl_exc.end()
