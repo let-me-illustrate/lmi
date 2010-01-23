@@ -24207,3 +24207,32 @@ Rename a variable.
 Never use a scrollbar on the "Help | About" dialog. See:
   http://lists.nongnu.org/archive/html/lmi/2010-01/msg00032.html
 
+20100123T0252Z <gchicares@sbcglobal.net> [762]
+
+  commutation_functions_test.cpp
+Reflect endowment in CVAT corridor speed test.
+
+20100123T0303Z <gchicares@sbcglobal.net> [762]
+
+  commutation_functions_test.cpp
+Demonstrate a problem.
+
+20100123T0316Z <gchicares@sbcglobal.net> [762]
+
+  commutation_functions_test.cpp
+  ihs_commfns.cpp
+  ihs_commfns.hpp
+  ihs_irc7702.cpp
+  mec_server.cpp
+Remove the problem identified 20100123T0303Z.
+
+20100123T0328Z <gchicares@sbcglobal.net> [762]
+
+  commutation_functions_test.cpp
+Refactor, favoring expression templates.
+
+20100123T0355Z <gchicares@sbcglobal.net> [762]
+
+  commutation_functions_test.cpp
+Validate against published numerical results.
+
