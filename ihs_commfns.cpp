@@ -120,8 +120,12 @@ ULCommFns::ULCommFns
     ad[0] = 1.0;
     for(int j = 0; j < Length; j++)
         {
+        LMI_ASSERT( 0.0 <= qc[j] && qc[j] <= 1.0);
+        LMI_ASSERT(-1.0 <  ic[j]);
+        LMI_ASSERT( 0.0 <= ig[j]);
         // Eckley equations (7) and (8).
         double f = qc[j] * (1.0 + ic[j]) / (1.0 + ig[j]);
+        // f cannot be negative, so division by 1+f is safe.
         double g = 1.0 / (1.0 + f);
         // Eckley equation (11).
         double i = (ic[j] + ig[j] * f) * g;
@@ -132,6 +136,7 @@ ULCommFns::ULCommFns
             {
             i = i - q;
             }
+        LMI_ASSERT(-1.0 != i);
         double v = 1.0 / (1.0 + i);
         double p = 1.0 - q;
         // Present value of $1 one month hence.
