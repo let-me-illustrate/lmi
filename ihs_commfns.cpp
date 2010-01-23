@@ -70,13 +70,8 @@ OLCommFns::OLCommFns
     ed.erase(ed.begin());
     d.pop_back();
 
-    m[-1 + Length] = c[-1 + Length];
-    n[-1 + Length] = d[-1 + Length];
-    for(int j = -1 + Length; j; j--)
-        {
-        m[-1 + j] = m[j] + c[-1 + j];
-        n[-1 + j] = n[j] + d[-1 + j];
-        }
+    std::partial_sum(d.rbegin(), d.rend(), n.rbegin());
+    std::partial_sum(c.rbegin(), c.rend(), m.rbegin());
 }
 
 OLCommFns::~OLCommFns()
@@ -122,6 +117,8 @@ ULCommFns::ULCommFns
     ad.resize(1 + Length);
     kd.resize(    Length);
     kc.resize(    Length);
+    an.resize(    Length);
+    km.resize(    Length);
 
     int periods_per_year = mode_;
     int months_per_period = 12 / periods_per_year;
@@ -177,25 +174,8 @@ ULCommFns::ULCommFns
     ead.erase(ead.begin());
     ad.pop_back();
 
-    an = ad;
-    std::reverse(an.begin(), an.end());
-    std::partial_sum(an.begin(), an.end(), an.begin());
-    std::reverse(an.begin(), an.end());
-
-    km = kc;
-    std::reverse(km.begin(), km.end());
-    std::partial_sum(km.begin(), km.end(), km.begin());
-    std::reverse(km.begin(), km.end());
-
-/*
-    m[-1 + Length] = c[-1 + Length];
-    n[-1 + Length] = d[-1 + Length];
-    for(int j = -1 + Length; j; j--)
-        {
-        m[-1 + j] = m[j] + c[-1 + j];
-        n[-1 + j] = n[j] + d[-1 + j];
-        }
-*/
+    std::partial_sum(ad.rbegin(), ad.rend(), an.rbegin());
+    std::partial_sum(kc.rbegin(), kc.rend(), km.rbegin());
 }
 
 ULCommFns::~ULCommFns()
