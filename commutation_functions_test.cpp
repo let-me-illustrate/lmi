@@ -82,12 +82,15 @@ void mete_ulcf
         );
 }
 
-void mete_corridor
+void mete_reserve
     (ULCommFns const&     ulcf
-    ,std::vector<double>& cvat_corridor
+    ,std::vector<double>& reserve
     )
 {
-    assign(cvat_corridor, ulcf.aD() / (ulcf.aDomega() + ulcf.kM()));
+    double premium = (10.0 * ulcf.aDomega() + ulcf.kM()[0]) / ulcf.aN()[0];
+    assign(reserve, premium * ulcf.aD() - ulcf.kC());
+    std::partial_sum(reserve.begin(), reserve.end(), reserve.begin());
+    reserve /= ulcf.EaD();
 }
 
 /// Exactly reproduce Table 2 from Eckley's paper.
@@ -603,53 +606,84 @@ void OLCommFnsTest()
     Test_1954_1958_IET_3pct();
 }
 
+/// Comprehensive UL example with speed tests.
+///
+/// Calculate year-by-year option B account value for a no-load UL
+/// contract; compare to results imported from a spreadsheet. All
+/// values are identical, so the comparison tolerance is arbitrary.
+///
+/// This example calculates and uses a premium to endow for ten times
+/// the specified amount. It is worth pointing out that the 7702
+/// corridor (calculated using option A and four percent) would be
+/// entered (at ages 33 through 92 inclusive), and the actual account
+/// value would therefore differ. That's one important reason why UL
+/// commutation functions cannot replace a general monthiversary loop.
+///
+/// The monthly COI rate is limited to one-eleventh: one-twelfth
+/// divided by one minus itself, because deducting the COI charge at
+/// the beginning of the month increases the amount actually at risk:
+///   http://lists.nongnu.org/archive/html/lmi/2009-09/msg00001.html
+/// It is interesting to substitute a limit of unity and observe the
+/// effect on account value in the last few years before maturity;
+/// that exercise shows why a COI limit of unity is impractical.
+///
+/// A no-load account value is the same thing as a terminal reserve
+/// calculated on a monthly basis. The negative first value may seem
+/// surprising at first glance, but see Donald B. Warren's article
+/// "A Discussion of Negative Reserves" in _The Actuary_, Volume 2,
+/// Number 8, October 1968, page 4, which says negative reserves can
+/// occur "in the first policy year at age 0 on a whole life plan".
+
 void Test_1980_CSO_Male_ANB()
 {
-    static double const corr[100] =
-        {11.5155941548, 11.5717444478, 11.2511618763, 10.9268748291, 10.6075226031
-        ,10.2913859926,  9.9771316152,  9.6663478955,  9.3579791433,  9.0542634126
-        , 8.7570239233,  8.4670610486,  8.1873962320,  7.9197656963,  7.6664702016
-        , 7.4272382833,  7.2017265978,  6.9886875525,  6.7862127605,  6.5915437072
-        , 6.4030929009,  6.2191988647,  6.0388071507,  5.8610637314,  5.6858418498
-        , 5.5130604894,  5.3426790343,  5.1751347261,  5.0109975486,  4.8505302398
-        , 4.6941151008,  4.5418746624,  4.3941942697,  4.2509217446,  4.1123070988
-        , 3.9782673353,  3.8488163906,  3.7239278744,  3.6036386979,  3.4878459075
-        , 3.3765099599,  3.2694800052,  3.1667376485,  3.0679625126,  2.9731079660
-        , 2.8819286367,  2.7943510758,  2.7101358062,  2.6291494842,  2.5512124160
-        , 2.4762652780,  2.4041581409,  2.3349362484,  2.2685404737,  2.2049454976
-        , 2.1441220539,  2.0859171152,  2.0302206075,  1.9768318802,  1.9256180648
-        , 1.8764615085,  1.8293199329,  1.7841597502,  1.7409791334,  1.6997842416
-        , 1.6605376641,  1.6231684568,  1.5875398191,  1.5535220010,  1.5209816139
-        , 1.4898379655,  1.4600928985,  1.4317807452,  1.4049711235,  1.3797420497
-        , 1.3560914847,  1.3339417967,  1.3131570687,  1.2935632913,  1.2749655961
-        , 1.2572407121,  1.2403529897,  1.2243171854,  1.2092127824,  1.1951291078
-        , 1.1820699720,  1.1699675267,  1.1586903305,  1.1480777621,  1.1379436131
-        , 1.1280806087,  1.1182600678,  1.1082179807,  1.0976491758,  1.0861908041
-        , 1.0735757756,  1.0596478210,  1.0443864169,  1.0276234532,  1.0065459325
+    static double const Vx[100] =
+        { -0.000473738046570228,  0.002247295730502510,  0.005241698768037180,  0.008456078393915230,  0.011926553664244400
+        ,  0.015691769467939000,  0.019761995744489900,  0.024179297721835100,  0.028947251189598200,  0.034069685539281000
+        ,  0.039561057270306400,  0.045395407505165400,  0.051555313767552100,  0.058001406638023500,  0.064732980666241300
+        ,  0.071749271581902700,  0.079070180589403600,  0.086737735362197200,  0.094828018387171600,  0.103401718256485000
+        ,  0.112534146880374000,  0.122295523126233000,  0.132760980422963000,  0.143990173553493000,  0.156046931411633000
+        ,  0.168999548728468000,  0.182900369141144000,  0.197795038675394000,  0.213742765788671000,  0.230796542052218000
+        ,  0.249023433690621000,  0.268474476756488000,  0.289235369742501000,  0.311366720949799000,  0.334954107313756000
+        ,  0.360078731819493000,  0.386827479699909000,  0.415282949068701000,  0.445543880422913000,  0.477705552320073000
+        ,  0.511880273535238000,  0.548167462221616000,  0.586714977324978000,  0.627639523709731000,  0.671097094012278000
+        ,  0.717223451381438000,  0.766194995364633000,  0.818179696136829000,  0.873367657041347000,  0.931931091773773000
+        ,  0.994075027674961000,  1.059956390662080000,  1.129763798156960000,  1.203678136735230000,  1.281882375519170000
+        ,  1.364613829788600000,  1.452105427192480000,  1.544648036036500000,  1.642521430146680000,  1.746014332704110000
+        ,  1.855383042188360000,  1.970880381760790000,  2.092734253416150000,  2.221156076811710000,  2.356381500538860000
+        ,  2.498672040708790000,  2.648359273853150000,  2.805786375699680000,  2.971319414972850000,  3.145274051622670000
+        ,  3.327846632421640000,  3.519146679140360000,  3.719167032899280000,  3.927805107918920000,  4.145027867087800000
+        ,  4.370910301296340000,  4.605645006036620000,  4.849530703628870000,  5.102948373913000000,  5.366096833315380000
+        ,  5.638870088173630000,  5.920892749892160000,  6.211406544675650000,  6.509423574587250000,  6.814138523878090000
+        ,  7.124963331396290000,  7.441556798621420000,  7.763670987547260000,  8.091088523083450000,  8.423497506567270000
+        ,  8.760319112455540000,  9.100519387440450000,  9.442178781312990000,  9.781775452586130000, 10.110922159784500000
+        , 10.411786134120300000, 10.645096296084700000, 10.716449549065400000, 10.370818742354000000, 10.000000000000000000
         };
 
     std::vector<double> q(sample_q());
-    assign(q, apply_binary(coi_rate_from_q<double>(), q, 1.0));
+    assign(q, apply_binary(coi_rate_from_q<double>(), q, 1.0 / 11.0));
 
-    std::vector<double>ic(q.size(), i_upper_12_over_12_from_i<double>()(0.04));
-    std::vector<double>ig(q.size(), i_upper_12_over_12_from_i<double>()(0.04));
+    std::vector<double>ic(q.size(), i_upper_12_over_12_from_i<double>()(0.07));
+    std::vector<double>ig(q.size(), i_upper_12_over_12_from_i<double>()(0.03));
 
     ULCommFns ulcf
         (q
         ,ic
         ,ig
-        ,mce_option1
+        ,mce_option2
         ,mce_monthly
         );
 
-    std::vector<double> cvat_corridor(q.size());
-    assign(cvat_corridor, ulcf.aD() / (ulcf.aDomega() + ulcf.kM()));
+    double premium = (10.0 * ulcf.aDomega() + ulcf.kM()[0]) / ulcf.aN()[0];
+    std::vector<double> reserve(q.size());
+    assign(reserve, premium * ulcf.aD() - ulcf.kC());
+    std::partial_sum(reserve.begin(), reserve.end(), reserve.begin());
+    reserve /= ulcf.EaD();
 
     double tolerance = 0.00000000005;
     double worst_discrepancy = 0.0;
     for(unsigned int j = 0; j < q.size(); j++)
         {
-        double d0 = fabs(cvat_corridor[j] - corr[j]);
+        double d0 = fabs(reserve[j] - Vx[j]);
         worst_discrepancy = std::max(worst_discrepancy, d0);
         if
             (  tolerance < d0
@@ -660,14 +694,14 @@ void Test_1980_CSO_Male_ANB()
                 << j
                 << ".\n"
                 << "  difference: " << d0
-                << "\n  " << cvat_corridor[j] << " " << corr[j] << '\n'
+                << "\n  " << reserve[j] << " " << Vx[j] << '\n'
                 << std::endl
                 ;
             }
         }
     BOOST_TEST_RELATION(worst_discrepancy,<,tolerance);
     std::cout
-        << "CVAT corridor factor:\n"
+        << "Yearly account values:\n"
         << std::setiosflags(std::ios_base::fixed)
         << std::setprecision(13)
         << "  " << std::setw(17) << tolerance         << " tolerance\n"
@@ -689,12 +723,12 @@ void Test_1980_CSO_Male_ANB()
         ;
 
     std::cout
-        << "  Speed test: calculate CVAT corridor factors\n    "
+        << "  Speed test: calculate yearly account values\n    "
         << TimeAnAliquot
             (boost::bind
-                (mete_corridor
+                (mete_reserve
                 ,boost::ref(ulcf)
-                ,cvat_corridor
+                ,reserve
                 )
             )
         << '\n'
