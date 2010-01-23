@@ -159,9 +159,12 @@ ULCommFns::ULCommFns
         kc[j] = ka * ad[j] * v * q;
         ad[1 + j] = ad[j] * vpn;
         }
+
+    ead = ad;
+    ead.erase(ead.begin());
+    ad.pop_back();
+
     an = ad;
-    // Don't want last element here.
-    an.pop_back();
     std::reverse(an.begin(), an.end());
     std::partial_sum(an.begin(), an.end(), an.begin());
     std::reverse(an.begin(), an.end());
