@@ -24236,3 +24236,28 @@ Refactor, favoring expression templates.
   commutation_functions_test.cpp
 Validate against published numerical results.
 
+20100123T1226Z <gchicares@sbcglobal.net> [762]
+
+  commutation_functions_test.cpp
+Refactor for clarity.
+
+20100123T1545Z <gchicares@sbcglobal.net> [762]
+
+  commutation_functions_test.cpp
+Validate a comprehensive UL example against spreadsheet results.
+
+20100123T1558Z <gchicares@sbcglobal.net> [762]
+
+  ihs_commfns.cpp
+Strengthen assertions.
+
+20100123T1612Z <gchicares@sbcglobal.net> [762]
+
+  commutation_functions_test.cpp
+Test extreme parameters, exposing a latent defect.
+
+20100123T1613Z <gchicares@sbcglobal.net> [762]
+
+  ihs_commfns.cpp
+Remove the defect identified 20100123T1612Z.
+
