@@ -30,7 +30,6 @@
 
 #include "assert_lmi.hpp"
 
-#include <algorithm> // std::reverse()
 #include <cmath>     // std::pow()
 #include <numeric>   // std::partial_sum()
 
@@ -40,7 +39,7 @@
 /// they are the same for all years; but optimizing for that common
 /// special case at the cost of code complexity would probably be
 /// a mistake.
-
+#if 0
 OLCommFns::OLCommFns
     (std::vector<double> const& a_q
     ,std::vector<double> const& a_i
@@ -73,7 +72,7 @@ OLCommFns::OLCommFns
     std::partial_sum(d.rbegin(), d.rend(), n.rbegin());
     std::partial_sum(c.rbegin(), c.rend(), m.rbegin());
 }
-
+#endif // 0
 OLCommFns::~OLCommFns()
 {
 }
@@ -182,28 +181,49 @@ ULCommFns::~ULCommFns()
 {
 }
 
-/*
+#include "et_vector.hpp"
+
+#include <algorithm> // std::rotate_copy()
+#include <functional>
+
 // The algorithm can be expressed so concisely in APL that I tried
 // an STL approach; but the balkiness of the notation makes it
-// harder to read than the C approach. This is untested.
-void OLCommFns::OLCommFns()
+// harder to read than the C approach.
+//
+// The decade-old STL-based sketch survives temporarily in C comments
+// interleaved with an alternative that's less balky thanks to careful
+// STL usage and, especially, expression templates.
+OLCommFns::OLCommFns
+    (std::vector<double> const& a_q
+    ,std::vector<double> const& a_i
+    )
+    :q(a_q)
+    ,i(a_i)
 {
-    std::vector<double>         c_;
-    std::vector<double>         m_;
-    std::vector<double>         n_;
-    std::vector<double>         p_;
+    Length = q.size();
+    LMI_ASSERT(i.size() == q.size());
+
+    ed.resize(Length);
+    d .resize(Length);
+    c .resize(Length);
+    n .resize(Length);
+    m .resize(Length);
 
 //  v gets recip(1+i)
-
+/*
     std::vector<double> v_(i);
     std::transform(v_.begin(), v_.end(), v_.begin()
         ,compose1
             (bind1st(divides<double>(), 1.0)
             ,bind1st(lesser_of<double>(), MinI)
         );
+*/
+
+    std::vector<double> v(Length);
+    v += 1.0 / (1.0 + i);
 
 //  d gets prod cat (1,v*p)
-//  std::vector<double> d_(Length, 1.0);
+/*
     std::vector<double> d_(q);
     std::transform(d_.begin(), d_.end(), d_.begin(),
           bind1st(minus<double>(), 1.0)
@@ -215,8 +235,16 @@ void OLCommFns::OLCommFns()
           );
     std::partial_sum(d_.begin(), d_.end(), multiplies<double>()
         );
+*/
+
+    ed += v * (1.0 - q);
+    std::partial_sum(ed.begin(), ed.end(), ed.begin(), std::multiplies<double>());
+
+    std::rotate_copy(ed.begin(), -1 + ed.end(), ed.end(), d.begin());
+    d[0] = 1.0;
 
 //  c gets d * cat(v*q, 1)
+/*
     std::vector<double> c_(q);
     std::transform(c_.begin(), c_.end(), v_.begin(), c_.begin(),
         multiplies<double>()
@@ -224,18 +252,28 @@ void OLCommFns::OLCommFns()
     std::partial_sum(c_.begin(), c_.end(),
         multiplies<double>()
         );
+*/
+
+    c += d * v * q;
 
 //  n gets backsum d
+/*
     std::vector<double> n_(d_);
     std::reverse(n_.begin(), n_.end());
     std::partial_sum(n_.begin(), n_.end(), n_.begin());
     std::reverse(n_.begin(), n_.end());
+*/
+
+    std::partial_sum(d.rbegin(), d.rend(), n.rbegin());
 
 //  m gets backsum c
+/*
     std::vector<double> m_(c_);
     std::reverse(m_.begin(), m_.end());
     std::partial_sum(m_.begin(), m_.end(), m_.begin());
     std::reverse(m_.begin(), m_.end());
-}
 */
+
+    std::partial_sum(c.rbegin(), c.rend(), m.rbegin());
+}
 
