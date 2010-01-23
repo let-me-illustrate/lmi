@@ -67,23 +67,6 @@ class LMI_SO OLCommFns
 
 /// Universal-life commutation functions: Eckley, TSA XXXIX, page 18.
 ///
-/// Constructor arguments:
-///   a_qc  Eckley's Q:  mortality rates
-///   a_ic  Eckley's ic: "current"    interest rates
-///   a_ig  Eckley's ig: "guaranteed" interest rates
-///   dbo   death benefit option
-///   mode  n-iversary mode
-///
-/// Numeric arguments--mortality and interest rates--must be on
-/// the mode for which commutation functions are wanted. If monthly
-/// functions are to be obtained from annual rates, convert the
-/// rates to monthly before passing them as arguments. There's more
-/// than one way to perform a modal conversion, and it's not this
-/// class's responsibility to choose.
-///
-/// The mode argument specifies the frequency of UL n-iversary
-/// processing. This is most often monthly, but need not be.
-///
 /// All commutation functions are calculated on the mode specified
 /// by mode_. Annual D and N are always also calculated because
 /// premiums are often paid annually. Use monthly D and N for
