@@ -48,10 +48,12 @@ class LMI_SO OLCommFns
 
     ~OLCommFns();
 
-    std::vector<double> const& C() {return c;}
-    std::vector<double> const& D() {return d;}
-    std::vector<double> const& M() {return m;}
-    std::vector<double> const& N() {return n;}
+    double                 Domega() const {return ed.back();}
+    std::vector<double> const& ED() const {return ed;}
+    std::vector<double> const&  D() const {return  d;}
+    std::vector<double> const&  C() const {return  c;}
+    std::vector<double> const&  N() const {return  n;}
+    std::vector<double> const&  M() const {return  m;}
 
   private:
     int Length;
@@ -59,10 +61,11 @@ class LMI_SO OLCommFns
     std::vector<double> const& q;
     std::vector<double> const& i;
 
-    std::vector<double>        c;
-    std::vector<double>        d;
-    std::vector<double>        m;
-    std::vector<double>        n;
+    std::vector<double> ed;
+    std::vector<double>  d;
+    std::vector<double>  c;
+    std::vector<double>  n;
+    std::vector<double>  m;
 };
 
 /// Universal-life commutation functions: Eckley, TSA XXXIX, page 18.
@@ -95,7 +98,7 @@ class LMI_SO ULCommFns
 
     ~ULCommFns();
 
-    double aDomega()                 const {return ead.back();}
+    double                 aDomega() const {return ead.back();}
     std::vector<double> const& EaD() const {return ead;}
     std::vector<double> const&  aD() const {return  ad;}
     std::vector<double> const&  kD() const {return  kd;}
