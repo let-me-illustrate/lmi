@@ -603,11 +603,8 @@ void OLCommFnsTest()
     Test_1954_1958_IET_3pct();
 }
 
-int test_main(int, char*[])
+void Test_1980_CSO_Male_ANB()
 {
-    ULCommFnsTest();
-    OLCommFnsTest();
-
     static double const corr[100] =
         {11.5155941548, 11.5717444478, 11.2511618763, 10.9268748291, 10.6075226031
         ,10.2913859926,  9.9771316152,  9.6663478955,  9.3579791433,  9.0542634126
@@ -702,6 +699,13 @@ int test_main(int, char*[])
             )
         << '\n'
         ;
+}
+
+int test_main(int, char*[])
+{
+    ULCommFnsTest();
+    OLCommFnsTest();
+    Test_1980_CSO_Male_ANB();
 
     return EXIT_SUCCESS;
 }
