@@ -112,11 +112,13 @@ class LMI_SO ULCommFns
 
     ~ULCommFns();
 
-    std::vector<double> const& aD() const {return ad;}
-    std::vector<double> const& kD() const {return kd;}
-    std::vector<double> const& kC() const {return kc;}
-    std::vector<double> const& aN() const {return an;}
-    std::vector<double> const& kM() const {return km;}
+    double aDomega()                 const {return ead.back();}
+    std::vector<double> const& EaD() const {return ead;}
+    std::vector<double> const&  aD() const {return  ad;}
+    std::vector<double> const&  kD() const {return  kd;}
+    std::vector<double> const&  kC() const {return  kc;}
+    std::vector<double> const&  aN() const {return  an;}
+    std::vector<double> const&  kM() const {return  km;}
 
   private:
     std::vector<double>        qc;
@@ -129,11 +131,12 @@ class LMI_SO ULCommFns
 
     int Length;
 
-    std::vector<double> ad;
-    std::vector<double> kd;
-    std::vector<double> kc;
-    std::vector<double> an;
-    std::vector<double> km;
+    std::vector<double> ead;
+    std::vector<double>  ad;
+    std::vector<double>  kd;
+    std::vector<double>  kc;
+    std::vector<double>  an;
+    std::vector<double>  km;
 };
 
 #endif // ihs_commfns_hpp

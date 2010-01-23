@@ -95,11 +95,11 @@ void mete_corridor
         (denominator.begin()
         ,denominator.end()
         ,denominator.begin()
-        ,std::bind1st(std::plus<double>(), ulcf.aD().back())
+        ,std::bind1st(std::plus<double>(), ulcf.aDomega())
         );
     std::transform
         (ulcf.aD().begin()
-        ,ulcf.aD().end() - 1
+        ,ulcf.aD().end()
         ,denominator.begin()
         ,cvat_corridor.begin()
         ,std::divides<double>()
@@ -185,20 +185,18 @@ void TestEckleyTable2()
         );
 
     std::vector<double> nsp    (coi.size());
-    nsp     += (CF.aD().back() + CF.kM()) / CF.aD();
+    nsp     += (CF.aDomega() + CF.kM()) / CF.aD();
 
     std::vector<double> annuity(coi.size());
-    annuity += (                 CF.aN()) / CF.aD();
+    annuity += (               CF.aN()) / CF.aD();
 
     std::vector<double> premium(coi.size());
-    premium += (CF.aD().back() + CF.kM()) / CF.aN();
+    premium += (CF.aDomega() + CF.kM()) / CF.aN();
 
     std::vector<double> reserve(coi.size());
     reserve += premium[0] * CF.aD() - CF.kC();
     std::partial_sum(reserve.begin(), reserve.end(), reserve.begin());
-    std::vector<double> EaD(CF.aD());
-    EaD.erase(EaD.begin());
-    reserve /= EaD;
+    reserve /= CF.EaD();
 
     {
     double tolerance = 0.0000005;
@@ -322,14 +320,12 @@ void TestEckleyTables3and4()
         );
 
     std::vector<double> premium(coi.size());
-    premium += (2.0 * CF.aD().back() + CF.kM()) / CF.aN();
+    premium += (2.0 * CF.aDomega() + CF.kM()) / CF.aN();
 
     std::vector<double> reserve(coi.size());
     reserve += premium[0] * CF.aD() - CF.kC();
     std::partial_sum(reserve.begin(), reserve.end(), reserve.begin());
-    std::vector<double> EaD(CF.aD());
-    EaD.erase(EaD.begin());
-    reserve /= EaD;
+    reserve /= CF.EaD();
 
     double tolerance = 0.000005;
     double worst_discrepancy = 0.0;
@@ -579,25 +575,17 @@ int test_main(int, char*[])
         );
 
 #if 1
-// This demonstrates a problem.
+// This isn't expressed as simply as it might be.
     std::vector<double> denominator(ulcf.kM());
-    denominator += ulcf.aD().back();
-// When 'cvat_corridor' is initialized this way, the division
-// immediately below segfaults with libstdc++ safe mode; it would
-// be detected as a length error if PETE were built to detect it:
+    denominator += ulcf.aDomega();
     std::vector<double> cvat_corridor(ulcf.aD());
-// This alternative is correct, but insufficiently obvious:
-//  std::vector<double> cvat_corridor(ulcf.aD().begin(), -1 + ulcf.aD().end());
-// Vectorization (using expression templates) will present such
-// traps for the unwary as long as aD() is defined to have one
-// more element than other commutation functions.
     cvat_corridor /= denominator;
 #endif // 1
 
 #if 0
     // This is more or less what should be done.
     std::vector<double> cvat_corridor(q.size());
-    assign(cvat_corridor, ulcf.aD() / (ulcf.aD().back() + ulcf.kM()));
+    assign(cvat_corridor, ulcf.aD() / (ulcf.aDomega() + ulcf.kM()));
 #endif // 0
 
 #if 0
@@ -608,11 +596,11 @@ int test_main(int, char*[])
         (denominator.begin()
         ,denominator.end()
         ,denominator.begin()
-        ,std::bind1st(std::plus<double>(), ulcf.aD().back())
+        ,std::bind1st(std::plus<double>(), ulcf.aDomega())
         );
     std::transform
         (ulcf.aD().begin()
-        ,ulcf.aD().end() - 1
+        ,ulcf.aD().end()
         ,denominator.begin()
         ,std::back_inserter(cvat_corridor)
         ,std::divides<double>()
