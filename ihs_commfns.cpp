@@ -52,9 +52,9 @@ OLCommFns::OLCommFns
     LMI_ASSERT(i.size() == q.size());
 
     d.resize(1 + Length);
-    c.resize(1 + Length);
-    n.resize(1 + Length);
-    m.resize(1 + Length);
+    c.resize(    Length);
+    n.resize(    Length);
+    m.resize(    Length);
 
     d[0] = 1.0;
     for(int j = 0; j < Length; j++)
@@ -65,6 +65,10 @@ OLCommFns::OLCommFns
         c[j] = d[j] * v * q[j];
         d[1 + j] = d[j] * v * p;
         }
+
+    ed = d;
+    ed.erase(ed.begin());
+    d.pop_back();
 
     m[-1 + Length] = c[-1 + Length];
     n[-1 + Length] = d[-1 + Length];
