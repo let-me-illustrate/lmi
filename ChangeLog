@@ -24284,3 +24284,18 @@ Refactor for simplicity and clarity.
 Refactor for concinnity. This changeset does for ordinary life what
 revision 4750 of 20100123T0316Z did for universal life.
 
+20100123T1656Z <gchicares@sbcglobal.net> [762]
+
+  ihs_commfns.cpp
+Refactor, choosing algorithms judiciously.
+
+20100123T1842Z <gchicares@sbcglobal.net> [762]
+
+  ihs_commfns.cpp
+Rewrite an old experimental implementation.
+
+20100123T1936Z <gchicares@sbcglobal.net> [762]
+
+  ihs_commfns.cpp
+Rewrite for clarity, putting the vector implementation aside for now.
+
