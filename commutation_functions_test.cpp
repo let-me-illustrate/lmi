@@ -39,10 +39,8 @@
 #include <algorithm>
 #include <cmath>      // std::fabs()
 #include <fstream>
-#include <functional>
 #include <iomanip>    // std::setw() etc.
 #include <ios>        // ios_base::fixed()
-#include <iterator>   // std::back_inserter()
 #include <numeric>    // std::partial_sum()
 #include <vector>
 
@@ -90,20 +88,7 @@ void mete_corridor
     ,std::vector<double>& cvat_corridor
     )
 {
-    std::vector<double> denominator(ulcf.kM());
-    std::transform
-        (denominator.begin()
-        ,denominator.end()
-        ,denominator.begin()
-        ,std::bind1st(std::plus<double>(), ulcf.aDomega())
-        );
-    std::transform
-        (ulcf.aD().begin()
-        ,ulcf.aD().end()
-        ,denominator.begin()
-        ,cvat_corridor.begin()
-        ,std::divides<double>()
-        );
+    assign(cvat_corridor, ulcf.aD() / (ulcf.aDomega() + ulcf.kM()));
 }
 
 /// Exactly reproduce Table 2 from Eckley's paper.
@@ -554,14 +539,8 @@ int test_main(int, char*[])
         , 1.0735757756,  1.0596478210,  1.0443864169,  1.0276234532,  1.0065459325
         };
 
-    // ET !! q = coi_rate_from_q(sample_q, 1.0);
-    std::vector<double> q;
-    std::transform
-        (sample_q().begin()
-        ,sample_q().end()
-        ,std::back_inserter(q)
-        ,std::bind2nd(coi_rate_from_q<double>(), 1.0)
-        );
+    std::vector<double> q(sample_q());
+    assign(q, apply_binary(coi_rate_from_q<double>(), q, 1.0));
 
     std::vector<double>ic(q.size(), i_upper_12_over_12_from_i<double>()(0.04));
     std::vector<double>ig(q.size(), i_upper_12_over_12_from_i<double>()(0.04));
@@ -574,38 +553,8 @@ int test_main(int, char*[])
         ,mce_monthly
         );
 
-#if 1
-// This isn't expressed as simply as it might be.
-    std::vector<double> denominator(ulcf.kM());
-    denominator += ulcf.aDomega();
-    std::vector<double> cvat_corridor(ulcf.aD());
-    cvat_corridor /= denominator;
-#endif // 1
-
-#if 0
-    // This is more or less what should be done.
     std::vector<double> cvat_corridor(q.size());
     assign(cvat_corridor, ulcf.aD() / (ulcf.aDomega() + ulcf.kM()));
-#endif // 0
-
-#if 0
-    // This is correct, but too verbose to understand at a glance.
-    std::vector<double> cvat_corridor;
-    std::vector<double> denominator(ulcf.kM());
-    std::transform
-        (denominator.begin()
-        ,denominator.end()
-        ,denominator.begin()
-        ,std::bind1st(std::plus<double>(), ulcf.aDomega())
-        );
-    std::transform
-        (ulcf.aD().begin()
-        ,ulcf.aD().end()
-        ,denominator.begin()
-        ,std::back_inserter(cvat_corridor)
-        ,std::divides<double>()
-        );
-#endif // 0
 
     double tolerance = 0.00000000005;
     double worst_discrepancy = 0.0;
