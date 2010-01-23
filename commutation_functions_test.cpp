@@ -89,10 +89,17 @@ void mete_corridor
     ,std::vector<double>& cvat_corridor
     )
 {
+    std::vector<double> denominator(ulcf.kM());
+    std::transform
+        (denominator.begin()
+        ,denominator.end()
+        ,denominator.begin()
+        ,std::bind1st(std::plus<double>(), ulcf.aD().back())
+        );
     std::transform
         (ulcf.aD().begin()
         ,ulcf.aD().end() - 1
-        ,ulcf.kM().begin()
+        ,denominator.begin()
         ,cvat_corridor.begin()
         ,std::divides<double>()
         );
