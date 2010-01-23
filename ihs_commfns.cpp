@@ -141,7 +141,6 @@ ULCommFns::ULCommFns
         double p = 1.0 - q;
         // Present value of $1 one month hence.
         double vp = v * p;
-        LMI_ASSERT(1.0 != vp);
         // Present value of $1 twelve months hence.
         double vp12 = std::pow(vp, 12);
         double vpn  = std::pow(vp, periods_per_year);
@@ -155,11 +154,11 @@ ULCommFns::ULCommFns
 //      double ma = (1.0 - vp12) / (1.0 - vp);
         // The prefix k indicates the processing mode, which is
         // an input parameter.
-        double ka =
-                (1.0 - vp12)
-            /   (1.0 - std::pow(vp, months_between_deductions))
-            ;
-
+        double ka = 1.0;
+        if(1.0 != vp)
+            {
+            ka = (1.0 - vp12) / (1.0 - std::pow(vp, months_between_deductions));
+            }
         kd[j] = ka * ad[j];
         kc[j] = ka * ad[j] * v * q;
         ad[1 + j] = ad[j] * vpn;
