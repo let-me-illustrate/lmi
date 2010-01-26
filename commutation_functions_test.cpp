@@ -611,8 +611,8 @@ void OLCommFnsTest()
 /// Comprehensive UL example with speed tests.
 ///
 /// Calculate year-by-year option B account value for a no-load UL
-/// contract; compare to results imported from a spreadsheet. All
-/// values are identical, so the comparison tolerance is arbitrary.
+/// contract; compare to results imported from a spreadsheet, with
+/// a comparison tolerance of 1.0e-13 (see 'materially_equal.hpp').
 ///
 /// This example calculates and uses a premium to endow for ten times
 /// the specified amount. It is worth pointing out that the 7702
@@ -681,7 +681,7 @@ void Test_1980_CSO_Male_ANB()
     std::partial_sum(reserve.begin(), reserve.end(), reserve.begin());
     reserve /= ulcf.EaD();
 
-    double tolerance = 0.00000000005;
+    double tolerance = 1.0e-13;
     double worst_discrepancy = 0.0;
     for(unsigned int j = 0; j < q.size(); j++)
         {
@@ -705,9 +705,9 @@ void Test_1980_CSO_Male_ANB()
     std::cout
         << "Yearly account values:\n"
         << std::setiosflags(std::ios_base::fixed)
-        << std::setprecision(13)
-        << "  " << std::setw(17) << tolerance         << " tolerance\n"
-        << "  " << std::setw(17) << worst_discrepancy << " worst_discrepancy\n"
+        << std::setprecision(17)
+        << "  " << std::setw(21) << tolerance         << " tolerance\n"
+        << "  " << std::setw(21) << worst_discrepancy << " worst_discrepancy\n"
         << std::endl
         ;
 
