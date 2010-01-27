@@ -24309,3 +24309,8 @@ Refine tolerance and printing precision for one unit test.
   illustration_reg.xsl
 Use new entities.
 
+20100127T1615Z <wboutin@charter.net> [762]
+
+  version.hpp
+Mark release candidate.
+
