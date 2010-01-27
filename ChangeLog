@@ -24304,8 +24304,8 @@ Rewrite for clarity, putting the vector implementation aside for now.
   commutation_functions_test.cpp
 Refine tolerance and printing precision for one unit test.
 
-20100126T1901Z <gchicares@sbcglobal.net> [762]
+20100127T1612Z <wboutin@charter.net> [762]
 
-  commutation_functions_test.cpp
-For reserve cross-checking, prefer openoffice 'calc' to 'excel'.
+  illustration_reg.xsl
+Use new entities.
 
