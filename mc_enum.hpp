@@ -99,7 +99,7 @@ class LMI_SO mc_enum_base
 ///   static strings_t strings();
 ///
 /// A convenient way of achieving that is deriving it from
-/// mc_enum_type_info_impl<>.
+/// mc_enum_type_info_impl<> or using the MC_ENUM_TYPE_IMPL() macro.
 
 template<typename T>
 struct mc_enum_type_info
@@ -157,6 +157,13 @@ struct mc_enum_type_info_impl
     static enums_t enums() { return *e; }
     static strings_t strings() {return *c; }
 };
+
+/// Helper macro that makes mc_enum_type_info_impl<>'s use simpler.
+#define MC_ENUM_TYPE_IMPL(T, n, e, c) \
+template<> \
+struct mc_enum_type_info<T> :public mc_enum_type_info_impl<T, n, &e, &c> \
+{ \
+}
 
 /// M C Enums: string-Mapped, value-Constrained Enumerations.
 ///
