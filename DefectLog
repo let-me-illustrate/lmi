@@ -119,8 +119,9 @@ below.
 
 Critique of the past: "Care about the output variable of an extractor"
 (Langer & Kreft 3.1.3.3). Extractors should set 'failbit' (and reset
-'eofbit') on error (news:3A5D9F04.AACDF32B@dresdner-bank.com). Stream
-state should be tested at the end of each series of stream operations.
+'eofbit') on error--see:
+  http://groups.google.com/groups?selm=3A5D9F04.AACDF32B@dresdner-bank.com
+Stream state should be tested after each series of stream operations.
 
 Watchwords for the future: Don't copy idioms from old code blithely.
 Include all edge conditions in unit tests.
