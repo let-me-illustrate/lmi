@@ -124,10 +124,11 @@ void concrete_file_command
         }
 }
 
-// See
-//   <news:1006352851.15484.0.nnrp-08.3e31d362@news.demon.co.uk>
-// and Kanze's reply.
-//
+/// See:
+///   http://groups.google.com/groups?selm=1006352851.15484.0.nnrp-08.3e31d362@news.demon.co.uk
+/// and Kanze's reply:
+///   http://groups.google.com/groups?selm=d6651fb6.0111221034.42e78b95@posting.google.com
+
 volatile bool ensure_setup = file_command_initialize(concrete_file_command);
 } // Unnamed namespace.
 

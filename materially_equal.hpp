@@ -42,8 +42,8 @@
 /// APL language's 'comparison tolerance', and the only such value
 /// permitted in the A+ language.
 ///
-/// See the discussion in this usenet article:
-/// <41b09b41$2@newsgroups.borland.com>
+/// See the discussion here:
+///   http://groups.google.com/groups?selm=41b09b41$2@newsgroups.borland.com
 ///
 /// See also
 ///   http://groups.google.com/group/comp.lang.tcl/msg/3eee29ef533d73cd
