@@ -190,10 +190,12 @@ void safe_message_alert   (char const*);
 /// This function's actual return value doesn't matter, but it must
 /// exist because the implementation provided uses it to initialize a
 /// non-local object, thus ensuring that the pointers are initialized.
-/// TODO ?? See
-///   <news:1006352851.15484.0.nnrp-08.3e31d362@news.demon.co.uk>
-/// and Kanze's reply. The technique and its documentation could be
-/// improved as discussed here:
+/// TODO ?? See:
+///   http://groups.google.com/groups?selm=1006352851.15484.0.nnrp-08.3e31d362@news.demon.co.uk
+/// and Kanze's reply:
+///   http://groups.google.com/groups?selm=d6651fb6.0111221034.42e78b95@posting.google.com
+/// The technique and its documentation could be improved as discussed
+/// here:
 ///   http://lists.nongnu.org/archive/html/lmi/2005-11/msg00016.html
 
 bool LMI_SO set_alert_functions
