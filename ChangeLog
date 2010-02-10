@@ -24324,3 +24324,16 @@ Mark release candidate.
   [ChangeLog only]
 Fix defect introduced 20100127T1612Z.
 
+20100210T1443Z <gchicares@sbcglobal.net> [762]
+
+  DefectLog
+  alert.hpp
+  file_command_wx.cpp
+  materially_equal.hpp
+Provide direct links to usenet articles.
+
+20100210T1444Z <gchicares@sbcglobal.net> [762]
+
+  fenv_lmi_x86.hpp
+Improve documentation.
+
