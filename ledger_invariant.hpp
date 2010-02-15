@@ -1,6 +1,6 @@
 // Ledger data that do not vary by basis.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.hpp,v 1.22 2009-02-18 22:12:12 wboutin Exp $
+// $Id$
 
 #ifndef ledger_invariant_hpp
 #define ledger_invariant_hpp
@@ -277,6 +277,12 @@ class LMI_SO LedgerInvariant
     std::string     CompositeTrackingNumber;
     std::string     InforceTrackingNumber;
     std::string     InforceCompositeTrackingNumber;
+    std::string     InforceNonGuaranteedFootnote0;
+    std::string     InforceNonGuaranteedFootnote1;
+    std::string     InforceNonGuaranteedFootnote2;
+    std::string     InforceNonGuaranteedFootnote3;
+    std::string     NonGuaranteedFootnote;
+    std::string     MonthlyChargesPaymentFootnote;
 
     std::string     ProducerName;
     std::string     ProducerStreet;

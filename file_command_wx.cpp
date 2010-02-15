@@ -1,6 +1,6 @@
 // Run file command--wx interface.
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: file_command_wx.cpp,v 1.9 2009-03-31 17:22:15 chicares Exp $
+// $Id$
 
 #include LMI_PCH_HEADER
 #ifdef __BORLANDC__
@@ -124,10 +124,11 @@ void concrete_file_command
         }
 }
 
-// See
-//   <news:1006352851.15484.0.nnrp-08.3e31d362@news.demon.co.uk>
-// and Kanze's reply.
-//
+/// See:
+///   http://groups.google.com/groups?selm=1006352851.15484.0.nnrp-08.3e31d362@news.demon.co.uk
+/// and Kanze's reply:
+///   http://groups.google.com/groups?selm=d6651fb6.0111221034.42e78b95@posting.google.com
+
 volatile bool ensure_setup = file_command_initialize(concrete_file_command);
 } // Unnamed namespace.
 

@@ -1,6 +1,6 @@
 # Install msw-native libxml2 and libxslt with options suitable for lmi.
 #
-# Copyright (C) 2006, 2007, 2008, 2009 Gregory W. Chicares.
+# Copyright (C) 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_libxml2_libxslt.make,v 1.10 2009-02-13 12:53:22 chicares Exp $
+# $Id$
 
 # Configurable settings ########################################################
 

@@ -1,6 +1,6 @@
 // Show progress on lengthy operations, optionally letting users cancel them.
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter.hpp,v 1.23 2008-12-27 02:56:53 chicares Exp $
+// $Id$
 
 /// Design notes for class progress_meter.
 ///

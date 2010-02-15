@@ -1,6 +1,6 @@
 dnl configure.ac script for lmi, process with autoconf to create configure
 dnl
-dnl Copyright (C) 2009 Vadim Zeitlin.
+dnl Copyright (C) 2009, 2010 Vadim Zeitlin.
 dnl
 dnl This program is free software; you can redistribute it and/or modify
 dnl it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@ dnl http://savannah.nongnu.org/projects/lmi
 dnl email: <gchicares@sbcglobal.net>
 dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-dnl $Id: acinclude.m4,v 1.2 2009-07-16 21:59:08 chicares Exp $
+dnl $Id$
 
 dnl Add the given option to CXXFLAGS if it is supported by the compiler.
 dnl

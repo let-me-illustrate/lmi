@@ -1,6 +1,6 @@
 // Test material equality of floating-point values.
 //
-// Copyright (C) 1998, 2001, 2002, 2005, 2006, 2007, 2008, 2009 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: materially_equal.hpp,v 1.9 2008-12-27 02:56:48 chicares Exp $
+// $Id$
 
 #ifndef materially_equal_hpp
 #define materially_equal_hpp
@@ -42,8 +42,8 @@
 /// APL language's 'comparison tolerance', and the only such value
 /// permitted in the A+ language.
 ///
-/// See the discussion in this usenet article:
-/// <41b09b41$2@newsgroups.borland.com>
+/// See the discussion here:
+///   http://groups.google.com/groups?selm=41b09b41$2@newsgroups.borland.com
 ///
 /// See also
 ///   http://groups.google.com/group/comp.lang.tcl/msg/3eee29ef533d73cd

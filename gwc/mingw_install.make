@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: mingw_install.make,v 1.13 2008-01-01 18:40:05 chicares Exp $
+# $Id$
 
 # Configurable settings ########################################################
 

@@ -1,6 +1,6 @@
 // Manage floating-point environment: x86 implementation details.
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi_x86.hpp,v 1.10 2008-12-27 02:56:41 chicares Exp $
+// $Id$
 
 #ifndef fenv_lmi_x86_hpp
 #define fenv_lmi_x86_hpp
@@ -39,7 +39,7 @@
 /// is that C was strangely slow to adopt sophisticated numerics:
 ///   1980: 8087 introduced
 ///   1985: IEEE 754
-///   1999: C finally gets fesetenv(), but without precision control
+///   1999: C finally gets fesetenv(), but without precision control *
 /// which left setting the control word to nonstandard routines or
 /// nonportable asm, and part is that function _control87() in the
 /// widely-used ms C rtl takes an argument that differs gratuitously
@@ -57,6 +57,18 @@
 ///   RC rounding control
 /// Bit 12 is IC, the infinity-control bit, which is meaningful only
 /// for the 8087 and 80287, but settable (and ignored) on later chips.
+///
+/// * "without precision control"
+/// According to Goldberg:
+///   http://docs.sun.com/source/806-3568/ncg_goldberg.html#4130
+/// "fegetprec and fesetprec functions" were recommended in early
+/// drafts, but "this recommendation was removed before the changes
+/// were made to the C99 standard." The Rationale:
+///   www.open-std.org/jtc1/sc22/wg14/www/C99RationaleV5.10.pdf
+/// suggests that IEC 60559 is "ambivalent" as to whether precision
+/// control must be dynamic. Yet IEEE 754r Draft 1.2.5 [G.2] says:
+/// "changing the rounding direction or precision during execution may
+/// help identify subprograms that are unusually sensitive to roundoff"
 
 namespace fenv_lmi_x86 {} // doxygen workaround.
 

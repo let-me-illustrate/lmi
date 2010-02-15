@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: et_vector_test.cpp,v 1.4 2008-09-08 12:59:26 chicares Exp $
+// $Id$
 
 #include "et_vector.hpp"
 

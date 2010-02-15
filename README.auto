@@ -1,6 +1,6 @@
 // README.auto for "Let me illustrate...".
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009 Vadim Zeitlin.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 Vadim Zeitlin.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: README.auto,v 1.9 2008-12-27 02:56:35 chicares Exp $
+// $Id$
 
                   README file for building LMI with autotools
                   ===========================================

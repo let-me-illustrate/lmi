@@ -1,6 +1,6 @@
 // State application's purpose and show GPL notices.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: about_dialog.cpp,v 1.14 2009-03-31 19:33:09 chicares Exp $
+// $Id$
 
 #include LMI_PCH_HEADER
 #ifdef __BORLANDC__
@@ -30,8 +30,10 @@
 
 #include "license.hpp"
 #include "version.hpp"
+#include "wx_new.hpp"
 
 #include <wx/button.h>
+#include <wx/display.h>
 #include <wx/html/htmlwin.h>
 #include <wx/settings.h>
 #include <wx/sizer.h>
@@ -59,56 +61,56 @@ AboutDialog::~AboutDialog()
 
 int AboutDialog::ShowModal()
 {
-    wxHtmlWindow* html_window = new wxHtmlWindow
+    wxHtmlWindow* html_window = new(wx) wxHtmlWindow
         (this
         ,wxID_ANY
         ,wxDefaultPosition
         ,wxDefaultSize
-        ,wxHW_SCROLLBAR_AUTO | wxHW_NO_SELECTION
+        ,wxHW_SCROLLBAR_NEVER | wxHW_NO_SELECTION
         );
     html_window->SetBorders(0);
     html_window->SetPage(license_notices_as_html());
-    int width =
-            html_window->GetInternalRepresentation()->GetWidth()
-        +   wxSystemSettings::GetMetric(wxSYS_VSCROLL_X)
-        ;
-    int height = html_window->GetInternalRepresentation()->GetHeight();
-    html_window->SetSize(width, height);
+    html_window->GetInternalRepresentation()->Layout(450);
+    int const width  = html_window->GetInternalRepresentation()->GetWidth ();
+    int const height = html_window->GetInternalRepresentation()->GetHeight();
+    html_window->SetMinSize(wxSize(width, height));
 
-    wxButton* license_button = new wxButton
+    wxButton* license_button = new(wx) wxButton
         (this
         ,wxID_ABOUT
         ,"Read the GNU General Public License"
         );
     license_button->SetDefault();
-    wxButton* cancel_button = new wxButton
+    wxButton* cancel_button = new(wx) wxButton
         (this
         ,wxID_CANCEL
         ,"Let me illustrate"
         );
 
-    wxFlexGridSizer* sizer1 = new wxFlexGridSizer(2);
-    sizer1->AddGrowableCol(0);
-    sizer1->AddGrowableCol(1);
-    sizer1->Add(license_button, 1, wxALL|wxALIGN_LEFT , 5);
-    sizer1->Add(cancel_button , 1, wxALL|wxALIGN_RIGHT, 5);
+    wxBoxSizer* sizer1 = new(wx) wxBoxSizer(wxHORIZONTAL);
+    sizer1->Add(license_button, 0, wxALL, 3);
+    sizer1->Add(cancel_button , 0, wxALL, 3);
 
-    wxFlexGridSizer* sizer0 = new wxFlexGridSizer(1);
-    sizer0->AddGrowableRow(0);
-    sizer0->Add(html_window, 1, wxALL, 10);
-    sizer0->Add(sizer1     , 1, wxALL, 10);
+    wxBoxSizer* sizer0 = new(wx) wxBoxSizer(wxVERTICAL);
+    sizer0->Add(html_window, 1, wxALL                , 0);
+    sizer0->Add(sizer1     , 0, wxALL | wxALIGN_RIGHT, 3);
 
-    SetAutoLayout(true);
-    SetSizer(sizer0);
-    sizer0->Fit(this);
+    SetSizerAndFit(sizer0);
     Center();
     return wxDialog::ShowModal();
 }
 
 void AboutDialog::UponReadLicense(wxCommandEvent&)
 {
-    wxDialog dialog(this, wxID_ANY, std::string("GNU General Public License"));
-    wxHtmlWindow* html_window = new wxHtmlWindow
+    wxDialog dialog
+        (this
+        ,wxID_ANY
+        ,std::string("GNU General Public License")
+        ,wxDefaultPosition
+        ,wxDefaultSize
+        ,wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMAXIMIZE_BOX
+        );
+    wxHtmlWindow* html_window = new(wx) wxHtmlWindow
         (&dialog
         ,wxID_ANY
         ,wxDefaultPosition
@@ -117,24 +119,21 @@ void AboutDialog::UponReadLicense(wxCommandEvent&)
         );
     html_window->SetBorders(0);
     html_window->SetPage(license_as_html());
-    html_window->GetInternalRepresentation()->Layout(1);
-    int width =
-            html_window->GetInternalRepresentation()->GetWidth()
-        +   wxSystemSettings::GetMetric(wxSYS_VSCROLL_X)
-        ;
-    int height = html_window->GetInternalRepresentation()->GetHeight();
-    html_window->SetSize(width, height);
 
-    wxButton* button = new wxButton(&dialog, wxID_CANCEL, "Close");
+    wxButton* button = new(wx) wxButton(&dialog, wxID_CANCEL, "Close");
     button->SetDefault();
 
-    wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
-    sizer->Add(html_window, 1, wxALL              , 10);
-    sizer->Add(button     , 0, wxALL|wxALIGN_RIGHT, 10);
+    wxBoxSizer* sizer = new(wx) wxBoxSizer(wxVERTICAL);
+    sizer->Add(html_window, 1, wxALL | wxEXPAND     , 0);
+    sizer->Add(button     , 0, wxALL | wxALIGN_RIGHT, 6);
+    dialog.SetSizerAndFit(sizer);
 
-    dialog.SetAutoLayout(true);
-    dialog.SetSizer(sizer);
-    sizer->Fit(&dialog);
+    wxRect r = wxDisplay(wxDisplay::GetFromWindow(this)).GetClientArea();
+    int const minimum_width  = 60 * dialog.GetCharWidth();
+    int const default_width  = r.GetWidth () * 4 / 5;
+    int const default_height = r.GetHeight() * 4 / 5;
+    dialog.SetInitialSize(wxSize(minimum_width, default_height));
+    dialog.SetSize       (wxSize(default_width, default_height));
     dialog.Center();
     dialog.ShowModal();
 }

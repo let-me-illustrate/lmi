@@ -2,7 +2,7 @@
 <!--
     Life insurance illustrations.
 
-    Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009 Gregory W. Chicares.
+    Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2 as
@@ -21,7 +21,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.75 2009-09-12 02:26:16 wboutin Exp $
+    $Id$
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -41,6 +41,9 @@
   </xsl:variable>
   <xsl:variable name="GroupCarveout">
     <xsl:call-template name="set_group_carveout"/>
+  </xsl:variable>
+  <xsl:variable name="FlexiblePremium">
+    <xsl:call-template name="set_flexible_premium"/>
   </xsl:variable>
 
   <xsl:template match="/">
@@ -204,44 +207,10 @@
                 representative.
               </fo:block>
             </xsl:if>
-            <fo:block padding-top="1em">
-              This is an illustration only. An illustration is not intended
-              to predict actual performance. Interest rates
-              <xsl:if test="$scalars/Participating='1'">, dividends,</xsl:if>
-              and values set forth in the illustration are not guaranteed.
-            </fo:block>
             <!-- Group Experience Rating Logic -->
             <fo:block padding-top="1em">
-              <xsl:choose>
-                <xsl:when test="$scalars/StatePostalAbbrev!='TX'">
-                  This illustration assumes that the currently illustrated
-                  non-guaranteed elements will continue unchanged
-                  for all years shown. This is not likely to occur
-                  and actual results may be more or less favorable than shown.
-                  The non-guaranteed benefits and values are not guaranteed
-                  and are based on assumptions such as interest credited
-                  and current monthly charges, which are subject to change by
-                  <xsl:value-of select="$scalars/InsCoName"/>.
-                </xsl:when>
-                <xsl:otherwise>
-                  This illustration is based on both non-guaranteed
-                  and guaranteed assumptions. Non-guaranteed assumptions
-                  include interest rates and monthly charges.
-                  This illustration assumes that the currently illustrated
-                  non-guaranteed elements will continue unchanged
-                  for all years shown. This is not likely to occur
-                  and actual results may be more or less favorable than shown.
-                  Factors that may affect future policy performance include
-                  the company's expectations for future mortality, investments,
-                  persistency, profits and expenses.
-                </xsl:otherwise>
-              </xsl:choose>
-            </fo:block>
-            <fo:block padding-top="1em">
-              <xsl:value-of select="$scalars/AvName"/> Values may be used
-              to pay monthly charges. Monthly charges are due during
-              the life of the insured, and depending on actual results,
-              the premium payor may need to continue or resume premium outlays.
+              <xsl:value-of select="$scalars/AvName"/>&nbsp;
+              <xsl:value-of select="$scalars/MonthlyChargesPaymentFootnote"/>
             </fo:block>
             <fo:block padding-top="1em">
               <xsl:choose>
@@ -355,6 +324,90 @@ to the xsl files first.
                 </xsl:otherwise>
               </xsl:choose>
             </fo:block>
+            <fo:block padding-top="1em">
+              This is an illustration only. An illustration is not intended
+              to predict actual performance. Interest rates
+              <xsl:if test="$scalars/Participating='1'">, dividends,</xsl:if>
+              and values set forth in the illustration are not guaranteed.
+            </fo:block>
+            <fo:block padding-top="1em">
+              <xsl:choose>
+                <xsl:when test="$scalars/IsInforce='1'">
+                  <xsl:if test="$SinglePremium='1'">
+                    <xsl:value-of select="$scalars/InforceNonGuaranteedFootnote0"/>
+                  </xsl:if>
+                  <xsl:if test="$FlexiblePremium='1'">
+                    <xsl:value-of select="$scalars/InforceNonGuaranteedFootnote0"/>
+                  </xsl:if>
+                  <xsl:if test="$SinglePremium!='1'">
+                    <xsl:if test="$FlexiblePremium!='1'">
+                      <fo:block>
+                        <xsl:choose>
+                          <xsl:when test="$scalars/StatePostalAbbrev!='TX'">
+                            This illustration assumes that the currently illustrated
+                            non-guaranteed elements will continue unchanged
+                            for all years shown. This is not likely to occur
+                            and actual results may be more or less favorable than shown.
+                            The non-guaranteed benefits and values are not guaranteed
+                            and are based on assumptions such as interest credited
+                            and current monthly charges, which are subject to change by
+                            <xsl:value-of select="$scalars/InsCoName"/>.
+                          </xsl:when>
+                          <xsl:otherwise>
+                            This illustration is based on both non-guaranteed
+                            and guaranteed assumptions. Non-guaranteed assumptions
+                            include interest rates and monthly charges.
+                            This illustration assumes that the currently illustrated
+                            non-guaranteed elements will continue unchanged
+                            for all years shown. This is not likely to occur
+                            and actual results may be more or less favorable than shown.
+                            Factors that may affect future policy performance include
+                            the company's expectations for future mortality, investments,
+                            persistency, profits and expenses.
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </fo:block>
+                    </xsl:if>
+                  </xsl:if>
+                </xsl:when>
+                <xsl:otherwise>
+                  <fo:block>
+                    <xsl:choose>
+                      <xsl:when test="$scalars/StatePostalAbbrev!='TX'">
+                        This illustration assumes that the currently illustrated
+                        non-guaranteed elements will continue unchanged
+                        for all years shown. This is not likely to occur
+                        and actual results may be more or less favorable than shown.
+                        The non-guaranteed benefits and values are not guaranteed
+                        and are based on assumptions such as interest credited
+                        and current monthly charges, which are subject to change by
+                        <xsl:value-of select="$scalars/InsCoName"/>.
+                      </xsl:when>
+                      <xsl:otherwise>
+                        This illustration is based on both non-guaranteed
+                        and guaranteed assumptions. Non-guaranteed assumptions
+                        include interest rates and monthly charges.
+                        This illustration assumes that the currently illustrated
+                        non-guaranteed elements will continue unchanged
+                        for all years shown. This is not likely to occur
+                        and actual results may be more or less favorable than shown.
+                        Factors that may affect future policy performance include
+                        the company's expectations for future mortality, investments,
+                        persistency, profits and expenses.
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </fo:block>
+                </xsl:otherwise>
+              </xsl:choose>
+            </fo:block>
+            <xsl:if test="$scalars/IsInforce='1'">
+              <fo:block font-weight="bold" font-style="italic" text-align="center" padding-top="10em">
+                <xsl:value-of select="$scalars/InforceNonGuaranteedFootnote1"/>
+              </fo:block>
+              <fo:block font-weight="bold" font-style="italic" padding-top="1em">
+                <xsl:value-of select="$scalars/InforceNonGuaranteedFootnote2"/>
+              </fo:block>
+            </xsl:if>
           </fo:block>
 
           <!-- Force Second Page -->
@@ -841,16 +894,21 @@ to the xsl files first.
         <!-- Define the contents of the footer. -->
         <xsl:call-template name="standardfooter">
           <xsl:with-param name="disclaimer">
-            The Non-Guaranteed Values depicted above reflect interest rates
-            described in the Tabular Detail, and current monthly charges.
-            These values are not guaranteed and depend upon company experience.
-            This illustration assumes that non-guaranteed elements will continue
-            unchanged for all years shown. This is not likely to occur
-            and actual results may be more or less favorable than shown.
-            Non-guaranteed elements are subject to change by the insurer.
-            Factors that may affect future policy performance include
-            the company's expectations for future mortality, investments,
-            persistency, profits and expenses.
+            <fo:block padding-top="1em">
+              <xsl:choose>
+                <xsl:when test="$scalars/IsInforce!='1'">
+                  <xsl:value-of select="$scalars/NonGuaranteedFootnote"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <fo:block>
+                    <xsl:value-of select="$scalars/InforceNonGuaranteedFootnote0"/>
+                  </fo:block>
+                  <fo:block font-weight="bold">
+                    <xsl:value-of select="$scalars/InforceNonGuaranteedFootnote3"/>
+                  </fo:block>
+                </xsl:otherwise>
+              </xsl:choose>
+            </fo:block>
           </xsl:with-param>
         </xsl:call-template>
 
@@ -915,16 +973,21 @@ to the xsl files first.
         <!-- Define the contents of the footer. -->
         <xsl:call-template name="standardfooter">
           <xsl:with-param name="disclaimer">
-            The Non-Guaranteed Values depicted above reflect interest rates
-            described in the Tabular Detail, and current monthly charges.
-            These values are not guaranteed and depend upon company experience.
-            This illustration assumes that non-guaranteed elements will continue
-            unchanged for all years shown. This is not likely to occur
-            and actual results may be more or less favorable than shown.
-            Non-guaranteed elements are subject to change by the insurer.
-            Factors that may affect future policy performance include
-            the company's expectations for future mortality, investments,
-            persistency, profits and expenses.
+            <fo:block padding-top="1em">
+              <xsl:choose>
+                <xsl:when test="$scalars/IsInforce!='1'">
+                  <xsl:value-of select="$scalars/NonGuaranteedFootnote"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <fo:block>
+                    <xsl:value-of select="$scalars/InforceNonGuaranteedFootnote0"/>
+                  </fo:block>
+                  <fo:block font-weight="bold">
+                    <xsl:value-of select="$scalars/InforceNonGuaranteedFootnote3"/>
+                  </fo:block>
+                </xsl:otherwise>
+              </xsl:choose>
+            </fo:block>
           </xsl:with-param>
         </xsl:call-template>
 
@@ -988,17 +1051,21 @@ to the xsl files first.
           <!-- Define the contents of the footer. -->
           <xsl:call-template name="standardfooter">
             <xsl:with-param name="disclaimer">
-              The Non-Guaranteed Values depicted above reflect an interest rate
-              scale described in the Tabular Detail,
-              and current scale monthly charges. These values are not guaranteed
-              and depend upon company experience.
-              This illustration assumes that non-guaranteed elements
-              will continue unchanged for all years shown. This is not likely
-              to occur and actual results may be more or less favorable
-              than shown. Non-guaranteed elements are subject to change
-              by the insurer. Factors that may affect future policy performance
-              include the company's expectations for future mortality,
-              investments, persistency, profits and expenses.
+            <fo:block padding-top="1em">
+              <xsl:choose>
+                <xsl:when test="$scalars/IsInforce!='1'">
+                  <xsl:value-of select="$scalars/NonGuaranteedFootnote"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <fo:block>
+                    <xsl:value-of select="$scalars/InforceNonGuaranteedFootnote0"/>
+                  </fo:block>
+                  <fo:block font-weight="bold">
+                    <xsl:value-of select="$scalars/InforceNonGuaranteedFootnote3"/>
+                  </fo:block>
+                </xsl:otherwise>
+              </xsl:choose>
+            </fo:block>
             </xsl:with-param>
           </xsl:call-template>
 
@@ -1688,6 +1755,10 @@ to the xsl files first.
 
   <xsl:template name="set_group_carveout">
     <xsl:value-of select="number($scalars/PolicyLegalName='Group Flexible Premium Adjustable Life Insurance Certificate')"/>
+  </xsl:template>
+
+  <xsl:template name="set_flexible_premium">
+    <xsl:value-of select="number($scalars/PolicyLegalName='Flexible Premium Adjustable Life Insurance')"/>
   </xsl:template>
 
 </xsl:stylesheet>

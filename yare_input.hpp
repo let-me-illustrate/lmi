@@ -1,6 +1,6 @@
 // Illustration input ready for use in calculations.
 //
-// Copyright (C) 2008, 2009 Gregory W. Chicares.
+// Copyright (C) 2008, 2009, 2010 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: yare_input.hpp,v 1.18 2009-06-24 20:05:14 wboutin Exp $
+// $Id$
 
 #ifndef yare_input_hpp
 #define yare_input_hpp

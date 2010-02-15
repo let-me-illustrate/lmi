@@ -1,6 +1,6 @@
 // Ordinary- and universal-life commutation functions--unit test.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: commutation_functions_test.cpp,v 1.32 2009-10-07 02:09:29 chicares Exp $
+// $Id$
 
 #include LMI_PCH_HEADER
 #ifdef __BORLANDC__
@@ -28,21 +28,19 @@
 
 #include "ihs_commfns.hpp"
 
+#include "et_vector.hpp"
 #include "math_functors.hpp"
-#include "miscellany.hpp" // ios_out_trunc_binary()
+#include "miscellany.hpp" // lmi_array_size()
 #include "test_tools.hpp"
 #include "timer.hpp"
 
 #include <boost/bind.hpp>
 
 #include <algorithm>
-#include <cmath>      // std::fabs()
-#include <fstream>
-#include <functional>
-#include <iomanip>    // std::setw() etc.
-#include <ios>        // ios_base::fixed()
-#include <iterator>   // std::back_inserter()
-#include <numeric>    // std::partial_sum()
+#include <cmath>          // std::fabs()
+#include <iomanip>        // std::setw() etc.
+#include <ios>            // std::ios_base::fixed()
+#include <numeric>        // std::partial_sum()
 #include <vector>
 
 namespace
@@ -69,33 +67,32 @@ std::vector<double> const& sample_q()
 }
 } // Unnamed namespace.
 
+void mete_olcf
+    (std::vector<double> const& q
+    ,std::vector<double> const& i
+    )
+{
+    OLCommFns(q, i);
+}
+
 void mete_ulcf
     (std::vector<double> const& q
     ,std::vector<double> const& ic
     ,std::vector<double> const& ig
     )
 {
-    ULCommFns
-        (q
-        ,ic
-        ,ig
-        ,mce_option1
-        ,mce_monthly
-        );
+    ULCommFns(q, ic, ig, mce_option1, mce_monthly);
 }
 
-void mete_corridor
+void mete_reserve
     (ULCommFns const&     ulcf
-    ,std::vector<double>& cvat_corridor
+    ,std::vector<double>& reserve
     )
 {
-    std::transform
-        (ulcf.aD().begin()
-        ,ulcf.aD().end() - 1
-        ,ulcf.kM().begin()
-        ,cvat_corridor.begin()
-        ,std::divides<double>()
-        );
+    double premium = (10.0 * ulcf.aDomega() + ulcf.kM()[0]) / ulcf.aN()[0];
+    assign(reserve, premium * ulcf.aD() - ulcf.kC());
+    std::partial_sum(reserve.begin(), reserve.end(), reserve.begin());
+    reserve /= ulcf.EaD();
 }
 
 /// Exactly reproduce Table 2 from Eckley's paper.
@@ -114,8 +111,6 @@ void mete_corridor
 /// demonstrates that every number in those four columns is reproduced
 /// within its tightest-possible tolerance.
 
-// To be refactored soon....
-#include "et_vector.hpp"
 void TestEckleyTable2()
 {
     static double const Ax[65] =
@@ -179,20 +174,18 @@ void TestEckleyTable2()
         );
 
     std::vector<double> nsp    (coi.size());
-    nsp     += (CF.aD().back() + CF.kM()) / CF.aD();
+    nsp     += (CF.aDomega() + CF.kM()) / CF.aD();
 
     std::vector<double> annuity(coi.size());
-    annuity += (                 CF.aN()) / CF.aD();
+    annuity += (               CF.aN()) / CF.aD();
 
     std::vector<double> premium(coi.size());
-    premium += (CF.aD().back() + CF.kM()) / CF.aN();
+    premium += (CF.aDomega() + CF.kM()) / CF.aN();
 
     std::vector<double> reserve(coi.size());
     reserve += premium[0] * CF.aD() - CF.kC();
     std::partial_sum(reserve.begin(), reserve.end(), reserve.begin());
-    std::vector<double> EaD(CF.aD());
-    EaD.erase(EaD.begin());
-    reserve /= EaD;
+    reserve /= CF.EaD();
 
     {
     double tolerance = 0.0000005;
@@ -316,14 +309,12 @@ void TestEckleyTables3and4()
         );
 
     std::vector<double> premium(coi.size());
-    premium += (2.0 * CF.aD().back() + CF.kM()) / CF.aN();
+    premium += (2.0 * CF.aDomega() + CF.kM()) / CF.aN();
 
     std::vector<double> reserve(coi.size());
     reserve += premium[0] * CF.aD() - CF.kC();
     std::partial_sum(reserve.begin(), reserve.end(), reserve.begin());
-    std::vector<double> EaD(CF.aD());
-    EaD.erase(EaD.begin());
-    reserve /= EaD;
+    reserve /= CF.EaD();
 
     double tolerance = 0.000005;
     double worst_discrepancy = 0.0;
@@ -470,128 +461,231 @@ void ULCommFnsTest()
     TestEckleyTable5();
 }
 
-void OLCommFnsTest()
-{
-    std::ofstream os("olcf.txt", ios_out_trunc_binary());
+/// Reproduce published 1954-1958 IET 3% functions almost perfectly.
+///
+/// The tabular data are from TSA XIII number 37 [1961], Exhibit 4,
+/// pages 474, 477-478. Note that N45 contains a typographical error:
+///   4767775.863 published
+///   4767175.863 intended
+/// Within 0.01 for a radix of 1000000, values of Dx, Nx, Cx, and Mx
+/// are reproduced. For Dx and Cx, it is further demonstrated that
+/// every value matches with a maximum difference of one unit in the
+/// last position shown in the table, where half of that difference
+/// would be the best achievable; it is no longer known exactly how
+/// actuaries performed such arithmetic in 1961, and the one-ulp
+/// discrepancy might be our own cumulative roundoff error, but it
+/// seems unnecessary to explore the matter further. The published
+/// Nx and Mx are demonstrably backward summations of the rounded
+/// Dx and Cx shown in the table, whereas ours use the unrounded
+/// values that we calculate.
 
-    static double const Q[100] =    // I think this is unisex unismoke ANB 80CSO
-        {
-        .00354,.00097,.00091,.00089,.00085,.00083,.00079,.00077,.00073,.00072,
-        .00071,.00072,.00078,.00087,.00097,.00110,.00121,.00131,.00139,.00144,
-        .00148,.00149,.00150,.00149,.00149,.00147,.00147,.00146,.00148,.00151,
-        .00154,.00158,.00164,.00170,.00179,.00188,.00200,.00214,.00231,.00251,
-        .00272,.00297,.00322,.00349,.00375,.00406,.00436,.00468,.00503,.00541,
-        .00583,.00630,.00682,.00742,.00807,.00877,.00950,.01023,.01099,.01181,
-        .01271,.01375,.01496,.01639,.01802,.01978,.02164,.02359,.02558,.02773,
-        .03016,.03296,.03629,.04020,.04466,.04955,.05480,.06031,.06606,.07223,
-        .07907,.08680,.09568,.10581,.11702,.12911,.14191,.15541,.16955,.18445,
-        .20023,.21723,.23591,.25743,.28381,.32074,.37793,.47661,.65644,1.0000,
+void Test_1954_1958_IET_3pct()
+{
+    static double const lx[100] =
+        {     1000000,       994890,       993477,       992583,       991839,       991214,       990679,       990213,       989797,       989411
+        ,      989035,       988639,       988204,       987720,       987177,       986555,       985855,       985076,       984219,       983294
+        ,      982311,       981280,       980210,       979122,       978025,       976920,       975797,       974655,       973485,       972278
+        ,      971014,       969684,       968278,       966787,       965192,       963474,       961605,       959566,       957330,       954860
+        ,      952139,       949130,       945808,       942148,       938116,       933679,       928815,       923493,       917684,       911361
+        ,      904480,       897018,       888936,       880198,       870762,       860591,       849644,       837885,       825266,       811748
+        ,      797291,       781847,       765373,       747831,       729188,       709427,       688534,       666542,       643453,       619291
+        ,      594098,       567922,       540838,       512931,       484284,       454990,       425156,       394902,       364380,       333765
+        ,      303269,       273133,       243616,       214996,       187567,       161619,       137421,       115203,        95132,        77311
+        ,       61768,        48464,        37300,        28076,        20419,        13999,         8677,         4531,         1744,          349
+        };
+    static double const Dx[100] =
+        {  970873.786,   937779.244,   909172.190,   881897.139,   855569.034,   830126.120,   805512.685,   781683.286,   758596.982,   736214.704
+        ,  714499.927,   693411.503,   672918.838,   652999.279,   633631.352,   614788.460,   596458.488,   578628.330,   561286.343,   544426.047
+        ,  528040.567,   512122.673,   496664.319,   481663.144,   467110.187,   452992.653,   439293.130,   425999.043,   413094.818,   400565.662
+        ,  388393.118,   376564.209,   365066.220,   353887.450,   343013.212,   332429.771,   322121.267,   312075.958,   302280.342,   292718.865
+        ,  283383.227,   274259.868,   265339.753,   256614.530,   248074.104,   239709.505,   231515.280,   223484.199,   215610.124,   207887.896
+        ,  200309.021,   192870.352,   185565.649,   178389.892,   171337.375,   164403.938,   157585.113,   150877.814,   144277.197,   137780.496
+        ,  131385.112,   125087.480,   118885.252,   112777.142,   106762.788,   100844.190,    95023.568,    89309.208,    83704.407,    78214.818
+        ,   72847.581,    67609.623,    62510.043,    57557.818,    52760.423,    48125.225,    43659.827,    39371.849,    35270.676,    31366.266
+        ,   27670.233,    24194.784,    20951.550,    17951.614,    15205.207,    12720.117,    10500.611,     8546.494,     6851.941,     5406.187
+        ,    4193.495,     3194.439,     2386.970,     1744.360,     1231.681,      819.829,      493.354,      250.119,       93.468,       18.159
+        };
+    static double const Nx[100] =
+        {28583343.586, 27612469.800, 26674690.556, 25765518.366, 24883621.227, 24028052.193, 23197926.073, 22392413.388, 21610730.102, 20852133.120
+        ,20115918.416, 19401418.489, 18708006.986, 18035088.148, 17382088.869, 16748457.517, 16133669.057, 15537210.569, 14958582.239, 14397295.896
+        ,13852869.849, 13324829.282, 12812706.609, 12316042.290, 11834379.146, 11367268.959, 10914276.306, 10474983.176, 10048984.133,  9635889.315
+        , 9235323.653,  8846930.535,  8470366.326,  8105300.106,  7751412.656,  7408399.444,  7075969.673,  6753848.406,  6441772.448,  6139492.106
+//      , 5846773.241,  5563390.014,  5289130.146,  5023790.393,  4767775.863,  4519101.759,  4279392.254,  4047876.974,  3824392.775,  3608782.651
+// Correction (see comment above):                                    ^
+        , 5846773.241,  5563390.014,  5289130.146,  5023790.393,  4767175.863,  4519101.759,  4279392.254,  4047876.974,  3824392.775,  3608782.651
+        , 3400894.755,  3200585.734,  3007715.382,  2822149.733,  2643759.841,  2472422.466,  2308018.528,  2150433.415,  1999555.601,  1855278.404
+        , 1717497.908,  1586112.796,  1461025.316,  1342140.064,  1229362.922,  1122600.134,  1021755.944,   926732.376,   837423.168,   753718.761
+        ,  675503.943,   602656.362,   535046.739,   472536.696,   414978.878,   362218.455,   314093.230,   270433.403,   231061.554,   195790.878
+        ,  164424.612,   136754.379,   112559.595,    91608.045,    73656.431,    58451.224,    45731.107,    35230.496,    26684.002,    19832.061
+        ,   14425.874,    10232.379,     7037.940,     4650.970,     2906.610,     1674.929,      855.100,      361.746,      111.627,       18.159
+        };
+    static double const Cx[100] =
+        {   4816.6651,    1293.0952,     794.3074,     641.7809,     523.4277,     435.0040,     367.8647,     318.8294,     287.2203,     271.6304
+        ,    277.7464,     296.2138,     319.9810,     348.5310,     387.6098,     423.5115,     457.5804,     488.7351,     512.1501,     528.4109
+        ,    538.0712,     542.1602,     535.2239,     523.9333,     512.3827,     505.5623,     499.1417,     496.4852,     497.2680,     505.5838
+        ,    516.4883,     530.0989,     545.7729,     566.8365,     592.7657,     626.0831,     663.1361,     706.0249,     757.1954,     809.8458
+        ,    869.4783,     931.9636,     996.8807,    1066.2165,    1139.1400,    1212.3946,    1287.9176,    1364.8262,    1442.3211,    1523.8882
+        ,   1604.4255,    1687.1199,    1770.9321,    1856.6950,    1943.0281,    2030.3612,    2117.4412,    2206.1177,    2294.4519,    2382.3605
+        ,   2470.8812,    2558.9035,    2645.4327,    2729.5823,    2809.0023,    2883.4123,    2946.6832,    3003.5621,    3051.5968,    3089.1353
+        ,   3116.1841,    3130.3680,    3131.5440,    3120.9535,    3098.4864,    3063.6926,    3016.3329,    2954.4200,    2877.1088,    2782.4520
+        ,   2669.5200,    2538.5315,    2389.6965,    2223.5447,    2042.2202,    1849.0171,    1648.2732,    1445.6262,    1246.1831,    1055.2307
+        ,    876.9151,     714.4271,     573.0865,     461.8727,     375.9772,     302.5966,     228.8660,     149.3660,      72.5858,      17.6305
+        };
+    static double const Mx[100] =
+        { 138349.2156,  133532.5505,  132239.4553,  131445.1479,  130803.3670,  130279.9393,  129844.9353,  129477.0706,  129158.2412,  128871.0209
+        , 128599.3905,  128321.6441,  128025.4303,  127705.4493,  127356.9183,  126969.3085,  126545.7970,  126088.2166,  125599.4815,  125087.3314
+        , 124558.9205,  124020.8493,  123478.6891,  122943.4652,  122419.5319,  121907.1492,  121401.5869,  120902.4452,  120405.9600,  119908.6920
+        , 119403.1082,  118886.6199,  118356.5210,  117810.7481,  117243.9116,  116651.1459,  116025.0628,  115361.9267,  114655.9018,  113898.7064
+        , 113088.8606,  112219.3823,  111287.4187,  110290.5380,  109224.3215,  108085.1815,  106872.7869,  105584.8693,  104220.0431,  102777.7220
+        , 101253.8338,   99649.4083,   97962.2884,   96191.3563,   94334.6613,   92391.6332,   90361.2720,   88243.8308,   86037.7131,   83743.2612
+        ,  81360.9007,   78890.0195,   76331.1160,   73685.6833,   70956.1010,   68147.0987,   65263.6864,   62317.0032,   59313.4411,   56261.8443
+        ,  53172.7090,   50056.5249,   46926.1569,   43794.6129,   40673.6594,   37575.1730,   34511.4804,   31495.1475,   28540.7275,   25663.6187
+        ,  22881.1667,   20211.6467,   17673.1152,   15283.4187,   13059.8740,   11017.6538,    9168.6367,    7520.3635,    6074.7373,    4828.5542
+        ,   3773.3235,    2896.4084,    2181.9813,    1608.8948,    1147.0221,     771.0449,     468.4483,     239.5823,      90.2163,      17.6305
         };
 
-    std::vector<double>q                (Q, Q + lmi_array_size(Q));
-    std::vector<double>i                (100, 0.04);
+    std::vector<double>   ell_ex(lx, lx + lmi_array_size(lx));
+    std::vector<double> E_ell_ex(ell_ex);
+    E_ell_ex.erase(E_ell_ex.begin());
+    E_ell_ex.push_back(0.0);
+    std::vector<double> q(ell_ex.size());
+    q += (ell_ex - E_ell_ex) / ell_ex;
+
+    std::vector<double> i(q.size(), 0.03);
 
     OLCommFns CF(q, i);
 
-    os << "Ordinary life commutation functions\n";
-    os
-        << std::setw( 3) << "yr"
-        << std::setw( 6) << "i"
-        << std::setw( 9) << "q"
-        << std::setw(13) << "c"
-        << std::setw(13) << "d"
-        << std::setw(13) << "m"
-        << std::setw(13) << "n"
-        << '\n'
-        ;
+    double tolerance = 0.01;
+    double worst_discrepancy = 0.0;
     for(unsigned int j = 0; j < q.size(); j++)
         {
-        os
-            << std::setw(3)  << j
-            << std::setiosflags(std::ios_base::fixed)
-            << std::setprecision(3)
-            << std::setw(6)  << i[j]
-            << std::setprecision(6)
-            << std::setw(9)  << q[j]
-            << std::setprecision(9)
-            << std::setw(13) << CF.C()[j]
-            << std::setw(13) << CF.D()[j]
-            << std::setw(13) << CF.M()[j]
-            << std::setw(13) << CF.N()[j]
-            << '\n'
-            ;
+        double d0 = fabs(Dx[0] * CF.D()[j] - Dx[j]);
+        double d1 = fabs(Dx[0] * CF.N()[j] - Nx[j]);
+        double d2 = fabs(Dx[0] * CF.C()[j] - Cx[j]);
+        double d3 = fabs(Dx[0] * CF.M()[j] - Mx[j]);
+        worst_discrepancy = std::max(worst_discrepancy, d0);
+        worst_discrepancy = std::max(worst_discrepancy, d1);
+        worst_discrepancy = std::max(worst_discrepancy, d2);
+        worst_discrepancy = std::max(worst_discrepancy, d3);
+        if
+            (  tolerance < d0
+            || tolerance < d1
+            || tolerance < d2
+            || tolerance < d3
+            // One ulp for Dx and Cx: see comment above.
+            || 0.001  < d0
+            || 0.0001 < d2
+            )
+            {
+            std::cerr
+                << "Failed to match published IET results at duration "
+                << j
+                << ".\n"
+                << "  differences: " << d0 << ' ' << d1 << ' ' << d2 << ' ' << d3 << '\n'
+                << "  values:\n"
+                << std::setiosflags(std::ios_base::fixed)
+                << std::setprecision(3) << std::setw(13) << "    Dx " << CF.D()[j] * Dx[0] << '\n'
+                << std::setprecision(3) << std::setw(13) << "    Nx " << CF.N()[j] * Dx[0] << '\n'
+                << std::setprecision(4) << std::setw(13) << "    Cx " << CF.C()[j] * Dx[0] << '\n'
+                << std::setprecision(4) << std::setw(13) << "    Mx " << CF.M()[j] * Dx[0] << '\n'
+                << std::endl
+                ;
+            }
         }
-    os << '\n';
+    BOOST_TEST_RELATION(worst_discrepancy,<,tolerance);
+    std::cout
+        << "1954-1958 IET 3%; Dx, Nx, Cx, and Mx:\n"
+        << std::setiosflags(std::ios_base::fixed)
+        << std::setprecision(9)
+        << "  " << std::setw(13) << tolerance         << " tolerance\n"
+        << "  " << std::setw(13) << worst_discrepancy << " worst_discrepancy\n"
+        << std::endl
+        ;
 }
 
-int test_main(int, char*[])
+void OLCommFnsTest()
 {
-    ULCommFnsTest();
-    OLCommFnsTest();
+    Test_1954_1958_IET_3pct();
+}
 
-    static double const corr[100] =
-        {11.5155941548, 11.5717444478, 11.2511618763, 10.9268748291, 10.6075226031
-        ,10.2913859926,  9.9771316152,  9.6663478955,  9.3579791433,  9.0542634126
-        , 8.7570239233,  8.4670610486,  8.1873962320,  7.9197656963,  7.6664702016
-        , 7.4272382833,  7.2017265978,  6.9886875525,  6.7862127605,  6.5915437072
-        , 6.4030929009,  6.2191988647,  6.0388071507,  5.8610637314,  5.6858418498
-        , 5.5130604894,  5.3426790343,  5.1751347261,  5.0109975486,  4.8505302398
-        , 4.6941151008,  4.5418746624,  4.3941942697,  4.2509217446,  4.1123070988
-        , 3.9782673353,  3.8488163906,  3.7239278744,  3.6036386979,  3.4878459075
-        , 3.3765099599,  3.2694800052,  3.1667376485,  3.0679625126,  2.9731079660
-        , 2.8819286367,  2.7943510758,  2.7101358062,  2.6291494842,  2.5512124160
-        , 2.4762652780,  2.4041581409,  2.3349362484,  2.2685404737,  2.2049454976
-        , 2.1441220539,  2.0859171152,  2.0302206075,  1.9768318802,  1.9256180648
-        , 1.8764615085,  1.8293199329,  1.7841597502,  1.7409791334,  1.6997842416
-        , 1.6605376641,  1.6231684568,  1.5875398191,  1.5535220010,  1.5209816139
-        , 1.4898379655,  1.4600928985,  1.4317807452,  1.4049711235,  1.3797420497
-        , 1.3560914847,  1.3339417967,  1.3131570687,  1.2935632913,  1.2749655961
-        , 1.2572407121,  1.2403529897,  1.2243171854,  1.2092127824,  1.1951291078
-        , 1.1820699720,  1.1699675267,  1.1586903305,  1.1480777621,  1.1379436131
-        , 1.1280806087,  1.1182600678,  1.1082179807,  1.0976491758,  1.0861908041
-        , 1.0735757756,  1.0596478210,  1.0443864169,  1.0276234532,  1.0065459325
+/// Comprehensive UL example with speed tests.
+///
+/// Calculate year-by-year option B account value for a no-load UL
+/// contract; compare to results imported from a spreadsheet, with
+/// a comparison tolerance of 1.0e-13 (see 'materially_equal.hpp').
+///
+/// This example calculates and uses a premium to endow for ten times
+/// the specified amount. It is worth pointing out that the 7702
+/// corridor (calculated using option A and four percent) would be
+/// entered (at ages 33 through 92 inclusive), and the actual account
+/// value would therefore differ. That's one important reason why UL
+/// commutation functions cannot replace a general monthiversary loop.
+///
+/// The monthly COI rate is limited to one-eleventh: one-twelfth
+/// divided by one minus itself, because deducting the COI charge at
+/// the beginning of the month increases the amount actually at risk:
+///   http://lists.nongnu.org/archive/html/lmi/2009-09/msg00001.html
+/// It is interesting to substitute a limit of unity and observe the
+/// effect on account value in the last few years before maturity;
+/// that exercise shows why a COI limit of unity is impractical.
+///
+/// A no-load account value is the same thing as a terminal reserve
+/// calculated on a monthly basis. The negative first value may seem
+/// surprising at first glance, but see Donald B. Warren's article
+/// "A Discussion of Negative Reserves" in _The Actuary_, Volume 2,
+/// Number 8, October 1968, page 4, which says negative reserves can
+/// occur "in the first policy year at age 0 on a whole life plan".
+
+void Test_1980_CSO_Male_ANB()
+{
+    static double const Vx[100] =
+        { -0.000473738046570238,  0.002247295730502500,  0.005241698768037170,  0.008456078393915220,  0.011926553664244400
+        ,  0.015691769467939000,  0.019761995744489900,  0.024179297721835100,  0.028947251189598200,  0.034069685539281000
+        ,  0.039561057270306300,  0.045395407505165400,  0.051555313767552100,  0.058001406638023400,  0.064732980666241200
+        ,  0.071749271581902600,  0.079070180589403500,  0.086737735362197100,  0.094828018387171400,  0.103401718256485000
+        ,  0.112534146880374000,  0.122295523126232000,  0.132760980422963000,  0.143990173553492000,  0.156046931411632000
+        ,  0.168999548728467000,  0.182900369141144000,  0.197795038675394000,  0.213742765788671000,  0.230796542052218000
+        ,  0.249023433690621000,  0.268474476756488000,  0.289235369742500000,  0.311366720949798000,  0.334954107313755000
+        ,  0.360078731819492000,  0.386827479699908000,  0.415282949068700000,  0.445543880422912000,  0.477705552320072000
+        ,  0.511880273535237000,  0.548167462221615000,  0.586714977324977000,  0.627639523709730000,  0.671097094012277000
+        ,  0.717223451381436000,  0.766194995364631000,  0.818179696136827000,  0.873367657041346000,  0.931931091773772000
+        ,  0.994075027674959000,  1.059956390662080000,  1.129763798156960000,  1.203678136735230000,  1.281882375519170000
+        ,  1.364613829788600000,  1.452105427192480000,  1.544648036036500000,  1.642521430146680000,  1.746014332704110000
+        ,  1.855383042188360000,  1.970880381760790000,  2.092734253416150000,  2.221156076811710000,  2.356381500538860000
+        ,  2.498672040708780000,  2.648359273853140000,  2.805786375699680000,  2.971319414972850000,  3.145274051622660000
+        ,  3.327846632421630000,  3.519146679140350000,  3.719167032899280000,  3.927805107918910000,  4.145027867087800000
+        ,  4.370910301296330000,  4.605645006036610000,  4.849530703628860000,  5.102948373912990000,  5.366096833315370000
+        ,  5.638870088173620000,  5.920892749892140000,  6.211406544675630000,  6.509423574587240000,  6.814138523878080000
+        ,  7.124963331396270000,  7.441556798621410000,  7.763670987547250000,  8.091088523083430000,  8.423497506567250000
+        ,  8.760319112455520000,  9.100519387440430000,  9.442178781312970000,  9.781775452586110000, 10.110922159784500000
+        , 10.411786134120300000, 10.645096296084700000, 10.716449549065400000, 10.370818742354000000, 10.000000000000000000
         };
 
-    // ET !! q = coi_rate_from_q(sample_q, 1.0);
-    std::vector<double> q;
-    std::transform
-        (sample_q().begin()
-        ,sample_q().end()
-        ,std::back_inserter(q)
-        ,std::bind2nd(coi_rate_from_q<double>(), 1.0)
-        );
+    std::vector<double> q(sample_q());
+    assign(q, apply_binary(coi_rate_from_q<double>(), q, 1.0 / 11.0));
 
-    std::vector<double>ic(q.size(), i_upper_12_over_12_from_i<double>()(0.04));
-    std::vector<double>ig(q.size(), i_upper_12_over_12_from_i<double>()(0.04));
+    std::vector<double>ic(q.size(), i_upper_12_over_12_from_i<double>()(0.07));
+    std::vector<double>ig(q.size(), i_upper_12_over_12_from_i<double>()(0.03));
 
     ULCommFns ulcf
         (q
         ,ic
         ,ig
-        ,mce_option1
+        ,mce_option2
         ,mce_monthly
         );
-    std::vector<double> cvat_corridor;
-    std::vector<double> denominator(ulcf.kM());
-    std::transform
-        (denominator.begin()
-        ,denominator.end()
-        ,denominator.begin()
-        ,std::bind1st(std::plus<double>(), ulcf.aD().back())
-        );
-    std::transform
-        (ulcf.aD().begin()
-        ,ulcf.aD().end() - 1
-        ,denominator.begin()
-        ,std::back_inserter(cvat_corridor)
-        ,std::divides<double>()
-        );
 
-    double tolerance = 0.00000000005;
+    double premium = (10.0 * ulcf.aDomega() + ulcf.kM()[0]) / ulcf.aN()[0];
+    std::vector<double> reserve(q.size());
+    assign(reserve, premium * ulcf.aD() - ulcf.kC());
+    std::partial_sum(reserve.begin(), reserve.end(), reserve.begin());
+    reserve /= ulcf.EaD();
+
+    double tolerance = 1.0e-13;
     double worst_discrepancy = 0.0;
     for(unsigned int j = 0; j < q.size(); j++)
         {
-        double d0 = fabs(cvat_corridor[j] - corr[j]);
+        double d0 = fabs(reserve[j] - Vx[j]);
         worst_discrepancy = std::max(worst_discrepancy, d0);
         if
             (  tolerance < d0
@@ -602,19 +696,31 @@ int test_main(int, char*[])
                 << j
                 << ".\n"
                 << "  difference: " << d0
-                << "\n  " << cvat_corridor[j] << " " << corr[j] << '\n'
+                << "\n  " << reserve[j] << " " << Vx[j] << '\n'
                 << std::endl
                 ;
             }
         }
     BOOST_TEST_RELATION(worst_discrepancy,<,tolerance);
     std::cout
-        << "CVAT corridor factor:\n"
+        << "Yearly account values:\n"
         << std::setiosflags(std::ios_base::fixed)
-        << std::setprecision(13)
-        << "  " << std::setw(17) << tolerance         << " tolerance\n"
-        << "  " << std::setw(17) << worst_discrepancy << " worst_discrepancy\n"
+        << std::setprecision(17)
+        << "  " << std::setw(21) << tolerance         << " tolerance\n"
+        << "  " << std::setw(21) << worst_discrepancy << " worst_discrepancy\n"
         << std::endl
+        ;
+
+    std::cout
+        << "  Speed test: generate ordinary-life commutation functions\n    "
+        << TimeAnAliquot
+            (boost::bind
+                (mete_olcf
+                ,q
+                ,ic
+                )
+            )
+        << '\n'
         ;
 
     std::cout
@@ -631,16 +737,37 @@ int test_main(int, char*[])
         ;
 
     std::cout
-        << "  Speed test: calculate CVAT corridor factors\n    "
+        << "  Speed test: calculate yearly account values\n    "
         << TimeAnAliquot
             (boost::bind
-                (mete_corridor
+                (mete_reserve
                 ,boost::ref(ulcf)
-                ,cvat_corridor
+                ,reserve
                 )
             )
         << '\n'
         ;
+}
+
+/// Test UL commutation functions in extreme cases.
+///
+/// For example, ic and ig can both be zero, and qc may round to zero
+/// for a Frasierized survivorship contract.
+
+void TestLimits()
+{
+    std::vector<double> zero(10, 0.0);
+    ULCommFns ulcf(zero, zero, zero, mce_option1, mce_monthly);
+    BOOST_TEST_EQUAL(1.0, ulcf.aDomega());
+    BOOST_TEST_EQUAL(0.0, ulcf.kC().back());
+}
+
+int test_main(int, char*[])
+{
+    ULCommFnsTest();
+    OLCommFnsTest();
+    Test_1980_CSO_Male_ANB();
+    TestLimits();
 
     return EXIT_SUCCESS;
 }

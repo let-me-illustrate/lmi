@@ -1,6 +1,6 @@
 // Product data.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_proddata.cpp,v 1.21 2009-02-18 22:12:11 wboutin Exp $
+// $Id$
 
 // This class contains names of files containing a product's tables as well
 // as strings that are the same for all instances of that product.
@@ -182,6 +182,12 @@ void TProductData::Read(std::string const& a_Filename)
     std::getline(is, CompositeTrackingNumber,       '\n');
     std::getline(is, InforceTrackingNumber,         '\n');
     std::getline(is, InforceCompositeTrackingNumber,'\n');
+    std::getline(is, InforceNonGuaranteedFootnote0, '\n');
+    std::getline(is, InforceNonGuaranteedFootnote1, '\n');
+    std::getline(is, InforceNonGuaranteedFootnote2, '\n');
+    std::getline(is, InforceNonGuaranteedFootnote3, '\n');
+    std::getline(is, NonGuaranteedFootnote,         '\n');
+    std::getline(is, MonthlyChargesPaymentFootnote, '\n');
 
     bool okay = is.good();
     if(!okay)
@@ -306,6 +312,12 @@ void TProductData::Write(std::string const& a_Filename) const
     os << CompositeTrackingNumber       << '\n';
     os << InforceTrackingNumber         << '\n';
     os << InforceCompositeTrackingNumber<< '\n';
+    os << InforceNonGuaranteedFootnote0 << '\n';
+    os << InforceNonGuaranteedFootnote1 << '\n';
+    os << InforceNonGuaranteedFootnote2 << '\n';
+    os << InforceNonGuaranteedFootnote3 << '\n';
+    os << NonGuaranteedFootnote         << '\n';
+    os << MonthlyChargesPaymentFootnote << '\n';
 
     if(!os.good())
         {
@@ -413,6 +425,12 @@ void TProductData::WritePolFiles()
     foo.CompositeTrackingNumber        = "";
     foo.InforceTrackingNumber          = "";
     foo.InforceCompositeTrackingNumber = "";
+    foo.InforceNonGuaranteedFootnote0  = "";
+    foo.InforceNonGuaranteedFootnote1  = "";
+    foo.InforceNonGuaranteedFootnote2  = "";
+    foo.InforceNonGuaranteedFootnote3  = "";
+    foo.NonGuaranteedFootnote          = "";
+    foo.MonthlyChargesPaymentFootnote  = "";
 
     foo.DatabaseFilename = "sample.db4";
     foo.FundFilename     = "sample.fnd";

@@ -1,6 +1,6 @@
 // Frontend for borland C++ linkers.
 //
-// Copyright (C) 2001, 2003, 2004, 2008, 2009 Gregory W. Chicares.
+// Copyright (C) 2001, 2003, 2004, 2008, 2009, 2010 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: bcc_ld.cpp,v 1.2 2008-12-27 02:56:37 chicares Exp $
+// $Id$
 
 // See my usenet messages sent to borland.public.whatever on
 // 2000-06-06T00:05:29 -0400 and 2000-08-28T21:24:18 -0400 for a rather

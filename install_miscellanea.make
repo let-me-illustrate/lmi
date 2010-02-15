@@ -1,6 +1,6 @@
 # Installer for sample databases and miscellaneous libraries.
 #
-# Copyright (C) 2007, 2008, 2009 Gregory W. Chicares.
+# Copyright (C) 2007, 2008, 2009, 2010 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_miscellanea.make,v 1.22 2009-05-21 15:46:27 chicares Exp $
+# $Id$
 
 # Configurable settings ########################################################
 
@@ -69,7 +69,7 @@ sample:               stem = data
 $(boost_archive)-url    := $(sf_mirror)/boost/$(boost_archive)
 $(cgicc_archive)-url    := ftp://ftp.gnu.org/pub/gnu/cgicc/$(cgicc_archive)
 $(fop_archive)-url      := http://archive.apache.org/dist/xmlgraphics/fop/binaries/$(fop_archive)
-$(md5sum_msw_exe)-url   := http://downloads.activestate.com/contrib/md5sum/Windows/md5sum.exe#!md5!eb574b236133e60c989c6f472f07827b
+$(md5sum_msw_exe)-url   := http://etree.org/cgi-bin/counter.cgi/software/md5sum.exe#!md5!eb574b236133e60c989c6f472f07827b
 $(sample_archive)-url   := http://download.savannah.gnu.org/releases/lmi/$(sample_archive)
 $(xmlwrapp_archive)-url := $(sf_mirror)/xmlwrapp/$(xmlwrapp_archive)
 
