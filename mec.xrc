@@ -5,7 +5,7 @@
 <!--
     wxWindows xml input-notebook resources for MEC testing.
 
-    Copyright (C) 2009 Gregory W. Chicares.
+    Copyright (C) 2009, 2010 Gregory W. Chicares.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2 as
@@ -24,7 +24,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: mec.xrc,v 1.3 2009-07-22 00:51:22 chicares Exp $
+    $Id$
 -->
 
 <object class="wxPanel" name="plan_mec_panel">

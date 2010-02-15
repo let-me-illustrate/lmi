@@ -1,6 +1,6 @@
 // Product-specific fund data.
 //
-// Copyright (C) 2001, 2005, 2006, 2007, 2008, 2009 Gregory W. Chicares.
+// Copyright (C) 2001, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: my_prod.cpp,v 1.11 2009-02-18 22:12:12 wboutin Exp $
+// $Id$
 
 // This file is a template for embedding product-specific data. Doing
 // that creates a derived work covered by the GPL. But you may prefer
@@ -143,6 +143,12 @@ void TProductData::WriteProprietaryPolFiles()
     foo.CompositeTrackingNumber        = "";
     foo.InforceTrackingNumber          = "";
     foo.InforceCompositeTrackingNumber = "";
+    foo.InforceNonGuaranteedFootnote0  = "";
+    foo.InforceNonGuaranteedFootnote1  = "";
+    foo.InforceNonGuaranteedFootnote2  = "";
+    foo.InforceNonGuaranteedFootnote3  = "";
+    foo.NonGuaranteedFootnote          = "";
+    foo.MonthlyChargesPaymentFootnote  = "";
 
     // Sample policy form.
     foo.DatabaseFilename  = "sample.db4";

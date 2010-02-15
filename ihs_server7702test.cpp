@@ -1,6 +1,6 @@
 // GPT server test.
 //
-// Copyright (C) 1998, 2001, 2002, 2005, 2006, 2007, 2008, 2009 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_server7702test.cpp,v 1.4 2008-12-27 02:56:44 chicares Exp $
+// $Id$
 
 #include LMI_PCH_HEADER
 #ifdef __BORLANDC__

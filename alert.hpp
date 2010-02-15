@@ -1,6 +1,6 @@
 // Alert messages.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert.hpp,v 1.24 2008-12-27 02:56:36 chicares Exp $
+// $Id$
 
 #ifndef alert_hpp
 #define alert_hpp
@@ -190,10 +190,12 @@ void safe_message_alert   (char const*);
 /// This function's actual return value doesn't matter, but it must
 /// exist because the implementation provided uses it to initialize a
 /// non-local object, thus ensuring that the pointers are initialized.
-/// TODO ?? See
-///   <news:1006352851.15484.0.nnrp-08.3e31d362@news.demon.co.uk>
-/// and Kanze's reply. The technique and its documentation could be
-/// improved as discussed here:
+/// TODO ?? See:
+///   http://groups.google.com/groups?selm=1006352851.15484.0.nnrp-08.3e31d362@news.demon.co.uk
+/// and Kanze's reply:
+///   http://groups.google.com/groups?selm=d6651fb6.0111221034.42e78b95@posting.google.com
+/// The technique and its documentation could be improved as discussed
+/// here:
 ///   http://lists.nongnu.org/archive/html/lmi/2005-11/msg00016.html
 
 bool LMI_SO set_alert_functions

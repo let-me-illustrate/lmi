@@ -1,6 +1,6 @@
 # Install msw-native wx with options suitable for lmi.
 #
-# Copyright (C) 2006, 2007, 2008, 2009 Gregory W. Chicares.
+# Copyright (C) 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_wx.make,v 1.20 2009-09-29 23:38:09 chicares Exp $
+# $Id$
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 

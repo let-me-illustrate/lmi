@@ -1,6 +1,6 @@
 // Configurable settings.
 //
-// Copyright (C) 2003, 2005, 2006, 2007, 2008, 2009 Gregory W. Chicares.
+// Copyright (C) 2003, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.hpp,v 1.24 2009-03-29 00:35:12 chicares Exp $
+// $Id$
 
 #ifndef configurable_settings_hpp
 #define configurable_settings_hpp

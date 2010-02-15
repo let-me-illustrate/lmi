@@ -1,6 +1,6 @@
 // Auxiliary functions for specific mc_enum types.
 //
-// Copyright (C) 2008, 2009 Gregory W. Chicares.
+// Copyright (C) 2008, 2009, 2010 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types_aux.hpp,v 1.10 2008-12-27 02:56:49 chicares Exp $
+// $Id$
 
 #ifndef mc_enum_types_aux_hpp
 #define mc_enum_types_aux_hpp

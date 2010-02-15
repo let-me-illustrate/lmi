@@ -1,6 +1,6 @@
 // MEC-testing server.
 //
-// Copyright (C) 2009 Gregory W. Chicares.
+// Copyright (C) 2009, 2010 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mec_server.cpp,v 1.6 2009-10-03 18:13:40 chicares Exp $
+// $Id$
 
 #include LMI_PCH_HEADER
 #ifdef __BORLANDC__
@@ -214,13 +214,13 @@ mec_state test_one_days_7702A_transactions
         );
 
     std::vector<double> analytic_Ax(input.years_to_maturity());
-    analytic_Ax += (commfns.kM() + commfns.aD().back()) / commfns.aD();
+    analytic_Ax += (commfns.aDomega() + commfns.kM()) / commfns.aD();
 
     std::vector<double> E7aN(commfns.aN());
     E7aN.insert(E7aN.end(), 7, 0.0);
     E7aN.erase(E7aN.begin(), 7 + E7aN.begin());
     std::vector<double> analytic_7Px(input.years_to_maturity());
-    analytic_7Px += (commfns.kM() + commfns.aD().back()) / (commfns.aN() - E7aN);
+    analytic_7Px += (commfns.aDomega() + commfns.kM()) / (commfns.aN() - E7aN);
 
     std::vector<double> const& chosen_Ax  = Use7702ATables ? tabular_Ax  : analytic_Ax ;
     std::vector<double> const& chosen_7Px = Use7702ATables ? tabular_7Px : analytic_7Px;
@@ -473,7 +473,7 @@ mec_state test_one_days_7702A_transactions
     ofs
         << input.years_to_maturity()
         << "\t\t\t\t"
-        << value_cast<std::string>(commfns.aD().back())
+        << value_cast<std::string>(commfns.aDomega())
         << "\t\t\t\t\t\t\t\t\t\t\t"
         << '\n'
         ;

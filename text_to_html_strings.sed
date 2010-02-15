@@ -6,7 +6,7 @@
 #   #include "output_of_this_script"
 #   ;
 
-# Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009 Gregory W. Chicares.
+# Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -25,7 +25,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: text_to_html_strings.sed,v 1.5 2008-12-27 02:56:57 chicares Exp $
+# $Id$
 
 # Replace certain special characters with html entities as required
 # for the output to be valid html. This script does not attempt to
@@ -35,10 +35,12 @@ s|&|\&amp;|g
 s|<|\&lt;|g
 s|>|\&gt;|g
 
-# Replace formfeed with CSS2 page break, closing and then reopening
-# the <pre> section that encloses the transformed input because <div>
-# cannot appear in a <pre> section.
-s|\f|<\/pre><div style="page-break-before:always"><\/div><pre>|
+# Expunge formfeeds; insert paragraph tags.
+s|\f||g
+s|^$|</p>\n\n<p>|
+
+# Don't pretend that '`' is &lsquo;.
+s|`|'|g
 
 # Add a generic html header and footer. Implementation notes:
 #
@@ -73,10 +75,10 @@ s|\f|<\/pre><div style="page-break-before:always"><\/div><pre>|
 1s|\a|\n<title></title>\a|
 1s|\a|\n</head>\a|
 1s|\a|\n<body>\a|
-1s|\a|\n<pre>\a|
+1s|\a|\n<p>\a|
 1s|\a|\n|
 # Add generic footer.
-$s|$|\n</pre>|
+$s|$|\n</p>|
 $s|$|\n</body>|
 $s|$|\n</html>|
 

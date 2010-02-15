@@ -1,6 +1,6 @@
 // Ledger data that do not vary by basis.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.70 2009-02-18 22:12:12 wboutin Exp $
+// $Id$
 
 #include LMI_PCH_HEADER
 #ifdef __BORLANDC__
@@ -261,6 +261,12 @@ void LedgerInvariant::Alloc(int len)
     Strings         ["CompositeTrackingNumber"       ] = &CompositeTrackingNumber        ;
     Strings         ["InforceTrackingNumber"         ] = &InforceTrackingNumber          ;
     Strings         ["InforceCompositeTrackingNumber"] = &InforceCompositeTrackingNumber ;
+    Strings         ["InforceNonGuaranteedFootnote0" ] = &InforceNonGuaranteedFootnote0  ;
+    Strings         ["InforceNonGuaranteedFootnote1" ] = &InforceNonGuaranteedFootnote1  ;
+    Strings         ["InforceNonGuaranteedFootnote2" ] = &InforceNonGuaranteedFootnote2  ;
+    Strings         ["InforceNonGuaranteedFootnote3" ] = &InforceNonGuaranteedFootnote3  ;
+    Strings         ["NonGuaranteedFootnote"         ] = &NonGuaranteedFootnote          ;
+    Strings         ["MonthlyChargesPaymentFootnote" ] = &MonthlyChargesPaymentFootnote  ;
 
     Strings         ["ProducerName"          ] = &ProducerName           ;
     Strings         ["ProducerStreet"        ] = &ProducerStreet         ;
@@ -652,6 +658,12 @@ void LedgerInvariant::Init(BasicValues* b)
         CompositeTrackingNumber        = b->ProductData_->GetCompositeTrackingNumber();
         InforceTrackingNumber          = b->ProductData_->GetInforceTrackingNumber();
         InforceCompositeTrackingNumber = b->ProductData_->GetInforceCompositeTrackingNumber();
+        InforceNonGuaranteedFootnote0  = b->ProductData_->GetInforceNonGuaranteedFootnote0();
+        InforceNonGuaranteedFootnote1  = b->ProductData_->GetInforceNonGuaranteedFootnote1();
+        InforceNonGuaranteedFootnote2  = b->ProductData_->GetInforceNonGuaranteedFootnote2();
+        InforceNonGuaranteedFootnote3  = b->ProductData_->GetInforceNonGuaranteedFootnote3();
+        NonGuaranteedFootnote          = b->ProductData_->GetNonGuaranteedFootnote();
+        MonthlyChargesPaymentFootnote  = b->ProductData_->GetMonthlyChargesPaymentFootnote();
         }
 
     ProducerName            = (*b->Input_)["AgentName"].str();
@@ -941,6 +953,12 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     CompositeTrackingNumber        = a_Addend.CompositeTrackingNumber;
     InforceTrackingNumber          = a_Addend.InforceTrackingNumber;
     InforceCompositeTrackingNumber = a_Addend.InforceCompositeTrackingNumber;
+    InforceNonGuaranteedFootnote0  = a_Addend.InforceNonGuaranteedFootnote0;
+    InforceNonGuaranteedFootnote1  = a_Addend.InforceNonGuaranteedFootnote1;
+    InforceNonGuaranteedFootnote2  = a_Addend.InforceNonGuaranteedFootnote2;
+    InforceNonGuaranteedFootnote3  = a_Addend.InforceNonGuaranteedFootnote3;
+    NonGuaranteedFootnote   = a_Addend.NonGuaranteedFootnote;
+    MonthlyChargesPaymentFootnote  = a_Addend.MonthlyChargesPaymentFootnote;
 
     Comments                    = a_Addend.Comments;
 

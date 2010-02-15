@@ -1,6 +1,6 @@
 // Product data.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_proddata.hpp,v 1.14 2009-02-18 22:12:12 wboutin Exp $
+// $Id$
 
 #ifndef ihs_proddata_hpp
 #define ihs_proddata_hpp
@@ -139,6 +139,12 @@ class LMI_SO TProductData
     std::string const& GetCompositeTrackingNumber       () const {return CompositeTrackingNumber;       }
     std::string const& GetInforceTrackingNumber         () const {return InforceTrackingNumber;         }
     std::string const& GetInforceCompositeTrackingNumber() const {return InforceCompositeTrackingNumber;}
+    std::string const& GetInforceNonGuaranteedFootnote0 () const {return InforceNonGuaranteedFootnote0 ;}
+    std::string const& GetInforceNonGuaranteedFootnote1 () const {return InforceNonGuaranteedFootnote1 ;}
+    std::string const& GetInforceNonGuaranteedFootnote2 () const {return InforceNonGuaranteedFootnote2 ;}
+    std::string const& GetInforceNonGuaranteedFootnote3 () const {return InforceNonGuaranteedFootnote3 ;}
+    std::string const& GetNonGuaranteedFootnote         () const {return NonGuaranteedFootnote         ;}
+    std::string const& GetMonthlyChargesPaymentFootnote () const {return MonthlyChargesPaymentFootnote ;}
 
   private:
     TProductData();
@@ -252,6 +258,12 @@ class LMI_SO TProductData
     std::string CompositeTrackingNumber;
     std::string InforceTrackingNumber;
     std::string InforceCompositeTrackingNumber;
+    std::string InforceNonGuaranteedFootnote0;
+    std::string InforceNonGuaranteedFootnote1;
+    std::string InforceNonGuaranteedFootnote2;
+    std::string InforceNonGuaranteedFootnote3;
+    std::string NonGuaranteedFootnote;
+    std::string MonthlyChargesPaymentFootnote;
 };
 
 #endif // ihs_proddata_hpp
