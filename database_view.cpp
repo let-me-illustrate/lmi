@@ -32,7 +32,6 @@
 #include "database_view_editor.hpp"
 #include "dbnames.hpp"
 #include "multidimgrid_any.hpp"
-#include "multidimgrid_safe.tpp"
 #include "multidimgrid_tools.hpp"
 #include "safely_dereference_as.hpp"
 #include "wx_new.hpp"

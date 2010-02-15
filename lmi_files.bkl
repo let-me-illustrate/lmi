@@ -21,7 +21,6 @@
     dbnames.cpp
     death_benefits.cpp
     emit_ledger.cpp
-    expm1.c
     facets.cpp
     fenv_guard.cpp
     fenv_lmi.cpp
@@ -96,6 +95,10 @@
     mc_enum_types.cpp
     mc_enum_types_aux.cpp
     md5.cpp
+    mec_input.cpp
+    mec_server.cpp
+    mec_state.cpp
+    mec_xml_document.cpp
     mortality_rates_fetch.cpp
     preferences_model.cpp
     stratified_algorithms.cpp
@@ -127,6 +130,8 @@
     illustration_view.cpp
     main_common.cpp
     main_wx.cpp
+    mec_document.cpp
+    mec_view.cpp
     msw_workarounds.cpp
     multidimgrid_any.cpp
     multidimgrid_tools.cpp

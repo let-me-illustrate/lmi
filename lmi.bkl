@@ -43,6 +43,26 @@
         <include>$(SRCDIR)</include>
         <warnings>max</warnings>
 
+        <!--
+            When using MSVC compiler we don't want to disable the warning 4996
+            about the use of deprecated functions as it can be useful for
+            noticing when deprecated functions of other libraries we use (e.g.
+            wxWidgets) are used in our code. But we do want to be able to
+            [continue to] use the standard C library functions without
+            warnings, so define _CRT_SECURE_NO_WARNINGS to suppress warnings
+            about the use of standard C/C++ library such as strcpy() or
+            vsnprintf() and _CRT_NONSTDC_NO_WARNINGS to suppress warnings about
+            POSIX functions such as close().
+
+            Notice that these definitions are only needed for MSVC 8 and
+            greater but they do no harm for MSVC 7 neither so just define them
+            always instead of adding more tests.
+         -->
+        <if cond="COMPILER=='vc'">
+            <define>_CRT_SECURE_NO_WARNINGS</define>
+            <define>_CRT_NONSTDC_NO_WARNINGS</define>
+        </if>
+
         <!-- for PCH support, LMI_PCH_HEADER must always be defined;
              let the default be the one for non-wx sources -->
         <set var="LMI_PCH_HEADER">pchfile.hpp</set>

@@ -52,6 +52,13 @@
 #   error Enable wxUSE_PRINTING_ARCHITECTURE in wx setup.
 #endif // !wxUSE_PRINTING_ARCHITECTURE
 
+// Disable all the checks below which, unlike the ones above, do not prevent
+// LMI from being compiled or from working but simply check that wxWidgets
+// build used by LMI is "optimized" for it. Disabling them allows us to use
+// standard, not modified, version of wxWidgets which would be impossible
+// otherwise.
+#if 0
+
 // Ensure that certain inappropriate options aren't used.
 
 // License not obviously compatible with GPL.
@@ -95,3 +102,4 @@
 #   error Disable wxUSE_THREADS in wx setup.
 #endif // wxUSE_THREADS
 
+#endif // 0

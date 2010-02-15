@@ -69,7 +69,7 @@
 // Disable several warnings which happen too many times (> 3000 in all) in LMI
 // code currently. This is, of course, not the right thing to do and most if
 // not all of these warnings should be reenabled after fixing the code.
-#pragma warning(disable: 4100 4127 4244 4267 4311 4312 4511 4512 4702 4800)
+#pragma warning(disable: 4100 4127 4244 4267 4311 4312 4407 4511 4512 4702 4800)
 
 #endif // config_msvc_hpp
 
