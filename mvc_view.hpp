@@ -1,6 +1,6 @@
 // MVC View base class.
 //
-// Copyright (C) 2006, 2007, 2008, 2009 Gregory W. Chicares.
+// Copyright (C) 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_view.hpp,v 1.5 2008-12-27 02:56:51 chicares Exp $
+// $Id$
 
 #ifndef mvc_view_hpp
 #define mvc_view_hpp

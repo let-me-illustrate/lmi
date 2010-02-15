@@ -1,6 +1,6 @@
 // Icon provider for wx interface.
 //
-// Copyright (C) 2008, 2009 Gregory W. Chicares.
+// Copyright (C) 2008, 2009, 2010 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: icon_monger.hpp,v 1.7 2009-03-19 10:19:23 chicares Exp $
+// $Id$
 
 #ifndef icon_monger_hpp
 #define icon_monger_hpp

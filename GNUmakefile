@@ -1,6 +1,6 @@
 # Top-level lmi makefile.
 #
-# Copyright (C) 2005, 2006, 2007, 2008, 2009 Gregory W. Chicares.
+# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.129 2008-12-27 02:56:35 chicares Exp $
+# $Id$
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -360,8 +360,12 @@ cvs_ready: source_clean
 
 # Update copyright notices.
 
-old_year := 2008
-new_year := 2009
+# Be sure to update these hardcoded dates. This target might be made
+# either in the last days of the old year or the first days of the
+# new, so they can't be derived dynamically from the current date.
+
+old_year := 2009
+new_year := 2010
 
 backup_directory := saved_$(old_year)
 

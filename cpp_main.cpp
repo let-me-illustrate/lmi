@@ -1,6 +1,6 @@
 // Unit-test framework based on Beman Dawes's boost library.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: cpp_main.cpp,v 1.11 2009-05-02 13:29:19 chicares Exp $
+// $Id$
 
 // This is a derived work based on Beman Dawes's boost test library
 // that bears the following copyright and license statement:

@@ -1,6 +1,6 @@
 # Main lmi makefile, invoked by 'GNUmakefile'.
 #
-# Copyright (C) 2005, 2006, 2007, 2008, 2009 Gregory W. Chicares.
+# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.152 2009-07-31 02:59:28 chicares Exp $
+# $Id$
 
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
@@ -290,6 +290,7 @@ all_source_directories := \
   $(src_dir) \
   /opt/lmi/third_party/src/boost/libs/filesystem/src \
   /opt/lmi/third_party/src/boost/libs/regex/src \
+  /opt/lmi/third_party/src/boost/libs/system/src \
   /opt/lmi/third_party/src/cgicc \
 
 vpath lib%.a          $(CURDIR)
@@ -670,6 +671,11 @@ REQUIRED_CXXFLAGS = \
 REQUIRED_ARFLAGS = \
   -rus
 
+# Boost filesystem library #includes additional file. Furthermore, there's
+# a warning while compiling it.
+$(boost_filesystem_objects): REQUIRED_CPPFLAGS += -I/opt/lmi/third_party/src/boost
+$(boost_filesystem_objects): REQUIRED_CXXFLAGS += -Wno-error
+
 # Prefer to invoke GNU 'ld' through the compiler frontends 'gcc' and
 # 'g++' because that takes care of linking the required libraries for
 # each language. Accordingly, pass GNU 'ld' options with '-Wl,'.
@@ -974,6 +980,7 @@ fardel_binaries := \
   $(bin_dir)/wx_new$(SHREXT) \
   $(wildcard $(prefix)/local/bin/*$(SHREXT)) \
   $(wildcard $(prefix)/local/lib/*$(SHREXT)) \
+  $(wildcard $(bin_dir)/product_files$(EXEEXT)) \
   $(extra_fardel_binaries) \
 
 fardel_files := \

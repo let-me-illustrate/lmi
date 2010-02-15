@@ -1,6 +1,6 @@
 # Install msw-native mpatrol with modifications suitable for lmi.
 #
-# Copyright (C) 2009 Gregory W. Chicares.
+# Copyright (C) 2009, 2010 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: install_mpatrol.make,v 1.1 2009-04-27 15:26:18 chicares Exp $
+# $Id$
 
 # Configurable settings ########################################################
 

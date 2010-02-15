@@ -1,6 +1,6 @@
 // Configuration for MinGW gcc-3.2.3 .
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config_ming323.hpp,v 1.12 2008-12-27 02:56:38 chicares Exp $
+// $Id$
 
 // Configuration header for compiler quirks--mingw gcc-3.2.3 .
 
@@ -43,17 +43,9 @@
 // Version numbers are in 'include/_mingw.h' here:
 //   http://cygwin.com/cgi-bin/cvsweb.cgi/src/winsup/mingw/?cvsroot=src
 
-#if 308 <= LMI_MINGW_VERSION
-#   define LMI_COMPILER_PROVIDES_EXPM1L
-#endif // 308 <= LMI_MINGW_VERSION
-
 #if 200 <= LMI_MINGW_VERSION
 #   define LMI_COMPILER_PROVIDES_ISNAN
 #endif // 200 <= LMI_MINGW_VERSION
-
-#if 202 <= LMI_MINGW_VERSION
-#   define LMI_COMPILER_PROVIDES_LOG1PL
-#endif // 202 <= LMI_MINGW_VERSION
 
 #if 200 <= LMI_MINGW_VERSION
 #   define LMI_COMPILER_PROVIDES_RINT
@@ -66,6 +58,25 @@
 #if 204 <= LMI_MINGW_VERSION
 #   define LMI_COMPILER_PROVIDES_STRTOLD
 #endif // 204 <= LMI_MINGW_VERSION
+
+// Configure Boost library for this compiler in cases where it lacks
+// features autodetection.
+
+#if defined BOOST_MATH_EXPM1_INCLUDED || defined BOOST_MATH_LOG1P_INCLUDED
+#   error config.hpp must be included before boost::math headers.
+#endif
+
+#if 308 <= LMI_MINGW_VERSION
+#   define BOOST_HAS_EXP1M
+#endif // 308 <= LMI_MINGW_VERSION
+
+#if 202 <= LMI_MINGW_VERSION
+#   define BOOST_HAS_LOG1P
+#endif // 202 <= LMI_MINGW_VERSION
+
+#ifndef BOOST_MATH_USE_C99
+#   define BOOST_MATH_USE_C99
+#endif
 
 #endif // config_ming323_hpp
 

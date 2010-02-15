@@ -1,6 +1,6 @@
 // Interest rates.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: interest_rates.cpp,v 1.28 2009-04-12 01:01:23 chicares Exp $
+// $Id$
 
 #include LMI_PCH_HEADER
 #ifdef __BORLANDC__
@@ -104,7 +104,7 @@ namespace
 // For the annual-effective method, transformation from annual to
 // daily and back again by naive methods would lose considerable
 // precision even when the spread and fee are zero, because i is
-// small relative to (1 + i). That is why expm1l() and log1pl() are
+// small relative to (1 + i). That is why expm1() and log1p() are
 // used instead of pow().
 //
 // If both spread and fee are zero, then the net rate should exactly
