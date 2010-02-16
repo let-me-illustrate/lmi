@@ -31,7 +31,8 @@
 
 extern enum_holiday const holiday_enums[3];
 extern char const*const holiday_strings[3];
-typedef mc_enum<enum_holiday, 3, &holiday_enums, &holiday_strings> e_holiday;
+MC_ENUM_TYPE_IMPL(enum_holiday, 3, holiday_enums, holiday_strings);
+typedef mc_enum<enum_holiday> e_holiday;
 
 #endif // mc_enum_test_aux_hpp
 
