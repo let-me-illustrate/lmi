@@ -104,19 +104,6 @@ namespace xml_serialize
             out = round_to<double>(decimals, style);
         }
     };
-
-    // TODO ?? Consider using mc_enum instead.
-    template<>
-    const enum_type_io_map<rounding_style>::MapEntry
-    enum_type_io_map<rounding_style>::map[] =
-        { {r_indeterminate, "indeterminate"}
-        , {r_toward_zero,   "toward-zero"}
-        , {r_to_nearest,    "to-nearest"}
-        , {r_upward,        "upward"}
-        , {r_downward,      "downward"}
-        , {r_current,       "current"}
-        , {r_not_at_all,    "not-at-all"}
-        };
 } // namespace xml_serialize
 
 //============================================================================

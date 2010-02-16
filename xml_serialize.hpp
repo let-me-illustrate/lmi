@@ -27,6 +27,7 @@
 #include "config.hpp"
 
 #include "xml_lmi.hpp"
+#include "mc_enum.hpp"
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/type_traits/is_enum.hpp>
@@ -102,55 +103,20 @@ namespace xml_serialize
     };
 
     template<typename T>
-    struct enum_type_io_map
-    {
-        struct MapEntry
-        {
-            T value;
-            const char *as_str;
-        };
-
-        static const char *to_str(T x)
-        {
-            for(size_t i = 0; i < sizeof(map)/sizeof(MapEntry); i++)
-                {
-                if(map[i].value == x)
-                    return map[i].as_str;
-                }
-
-            throw std::logic_error("invalid enum value");
-        }
-
-        static T from_str(const char *x)
-        {
-            for(size_t i = 0; i < sizeof(map)/sizeof(MapEntry); i++)
-                {
-                if(strcmp(map[i].as_str, x) == 0)
-                    return map[i].value;
-                }
-
-            std::string msg = "Invalid enum value '";
-            msg += x;
-            msg += "'.";
-            throw std::runtime_error(msg);
-        }
-
-    private:
-        // This array must be defined somewhere for every serialized enum type.
-        static const MapEntry map[];
-    };
-
-    template<typename T>
     struct enum_type_io
     {
+        typedef mc_enum<T> mce_type;
+
         static void to_xml(xml::node& out, T const& in)
         {
-            out.set_content(enum_type_io_map<T>::to_str(in));
+            type_io<mce_type>::to_xml(out, mc_enum<T>(in));
         }
 
         static void from_xml(T& out, xml::node const& in)
         {
-            out = enum_type_io_map<T>::from_str(xml_lmi::get_content(in).c_str());
+            mce_type x;
+            type_io<mce_type>::from_xml(x, in);
+            out = x.value();
         }
     };
 
