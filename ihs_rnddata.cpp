@@ -105,9 +105,6 @@ namespace xml_serialize
         }
     };
 
-    template<>
-    struct type_io<rounding_style> : public enum_type_io<rounding_style> {};
-
     // TODO ?? Consider using mc_enum instead.
     template<>
     const enum_type_io_map<rounding_style>::MapEntry

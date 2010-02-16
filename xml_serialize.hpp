@@ -29,6 +29,7 @@
 #include "xml_lmi.hpp"
 
 #include <boost/scoped_ptr.hpp>
+#include <boost/type_traits/is_enum.hpp>
 #include <boost/utility.hpp>
 
 #include <xmlwrapp/xmlwrapp.h>
@@ -166,6 +167,12 @@ namespace xml_serialize
     struct choose_type_io
     {
         typedef type_io<T> type;
+    };
+
+    template<typename T>
+    struct choose_type_io<T, typename boost::enable_if< boost::is_enum<T> >::type>
+    {
+        typedef enum_type_io<T> type;
     };
 
     /// Adds a property to given XML node (root).
