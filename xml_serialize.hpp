@@ -153,6 +153,20 @@ namespace xml_serialize
         }
     };
 
+    /// At first sight, this only adds another level of indirection.
+    /// But it actually is useful: it allows us to specialize type_io<> not
+    /// only for particular types, but for *groups* of types. In particular,
+    /// it makes it easy to use enum_type_io for all enum types.
+    ///
+    /// See http://www.boost.org/libs/utility/enable_if.html for explanation
+    /// of how this works.
+
+    template<typename T,
+             typename Enable = void /* for enable_if below */>
+    struct choose_type_io
+    {
+        typedef type_io<T> type;
+    };
 
     /// Adds a property to given XML node (root).
     /// A property is serialized as <property-name>value</property-name>.
@@ -166,7 +180,7 @@ namespace xml_serialize
         ,T const& value)
     {
         xml::element node(prop);
-        type_io<T>::to_xml(node, value);
+        choose_type_io<T>::type::to_xml(node, value);
         root.push_back(node);
     }
 
@@ -184,7 +198,7 @@ namespace xml_serialize
         xml::node::const_iterator n = root.find(prop);
         if(root.end() != n)
             {
-            type_io<T>::from_xml(value, *n);
+            choose_type_io<T>::type::from_xml(value, *n);
             return true;
             }
         else
@@ -211,7 +225,7 @@ namespace xml_serialize
                 msg += "' is missing.";
                 throw std::runtime_error(msg);
             }
-        type_io<T>::from_xml(value, *n);
+        choose_type_io<T>::type::from_xml(value, *n);
     }
 } // namespace xml_serialize
 
