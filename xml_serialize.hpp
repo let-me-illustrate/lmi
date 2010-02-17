@@ -44,6 +44,10 @@
 
 namespace xml_serialize
 {
+    // forward declarations
+    template<typename T> void to_xml(xml::node& out, T const& in);
+    template<typename T> void from_xml(T& out, xml::node const& in);
+
     /// Serialization and deserialization of a type to/from XML.
     ///
     /// This template must be specialized for all nontrivial types that
@@ -90,7 +94,7 @@ namespace xml_serialize
             for(xml::const_nodes_view::iterator i = items.begin(); i != items.end(); ++i)
                 {
                 element_type e;
-                type_io<element_type>::from_xml(e, *i);
+                ::xml_serialize::from_xml(e, *i);
                 out.push_back(e);
                 }
         }
@@ -109,13 +113,13 @@ namespace xml_serialize
 
         static void to_xml(xml::node& out, T const& in)
         {
-            type_io<mce_type>::to_xml(out, mc_enum<T>(in));
+            ::xml_serialize::to_xml(out, mc_enum<T>(in));
         }
 
         static void from_xml(T& out, xml::node const& in)
         {
             mce_type x;
-            type_io<mce_type>::from_xml(x, in);
+            ::xml_serialize::from_xml(x, in);
             out = x.value();
         }
     };
@@ -141,6 +145,22 @@ namespace xml_serialize
         typedef enum_type_io<T> type;
     };
 
+    /// Serializes 'value' into XML node 'node'.
+    /// This is convenience wrapper around type_io<>::to_xml().
+    template<typename T>
+    void to_xml(xml::node& out, T const& in)
+    {
+        choose_type_io<T>::type::to_xml(out, in);
+    }
+
+    /// Deserializes 'value' from XML node 'node'.
+    /// This is convenience wrapper around type_io<>::from_xml().
+    template<typename T>
+    void from_xml(T& out, xml::node const& in)
+    {
+        choose_type_io<T>::type::from_xml(out, in);
+    }
+
     /// Adds a property to given XML node (root).
     /// A property is serialized as <property-name>value</property-name>.
     /// Serialization format is defined by xml_serialize::type_io<T>;
@@ -153,7 +173,7 @@ namespace xml_serialize
         ,T const& value)
     {
         xml::element node(prop);
-        choose_type_io<T>::type::to_xml(node, value);
+        to_xml(node, value);
         root.push_back(node);
     }
 
@@ -171,7 +191,7 @@ namespace xml_serialize
         xml::node::const_iterator n = root.find(prop);
         if(root.end() != n)
             {
-            choose_type_io<T>::type::from_xml(value, *n);
+            from_xml(value, *n);
             return true;
             }
         else
@@ -198,7 +218,7 @@ namespace xml_serialize
                 msg += "' is missing.";
                 throw std::runtime_error(msg);
             }
-        choose_type_io<T>::type::from_xml(value, *n);
+        from_xml(value, *n);
     }
 } // namespace xml_serialize
 
