@@ -35,6 +35,7 @@
 
 #include <xmlwrapp/xmlwrapp.h>
 
+#include <stdexcept>
 #include <string>
 #include <sstream>
 #include <vector>
@@ -71,6 +72,10 @@ namespace xml_serialize
         {
             std::istringstream s(xml_lmi::get_content(in));
             s >> out;
+            if(s.fail() || s.bad())
+                throw std::runtime_error("Failure to read data from XML.");
+            if(!s.eof())
+                throw std::runtime_error("Unexpected extra data in XML.");
         }
     };
 
