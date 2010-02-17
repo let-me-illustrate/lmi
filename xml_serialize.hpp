@@ -79,6 +79,22 @@ namespace xml_serialize
         }
     };
 
+    // specialization for std::string is both more efficient and required for
+    // correct reading of strings with whitespace in them
+    template<>
+    struct type_io<std::string>
+    {
+        static void to_xml(xml::node& out, std::string const& in)
+        {
+            out.set_content(in.c_str());
+        }
+
+        static void from_xml(std::string& out, xml::node const& in)
+        {
+            out = xml_lmi::get_content(in);
+        }
+    };
+
     template<typename T>
     struct container_type_io
     {
