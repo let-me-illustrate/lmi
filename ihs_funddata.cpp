@@ -22,8 +22,6 @@
 // $Id$
 
 // This class describes funds: their names and investment mgmt fees.
-// TODO ?? An extension other than .fnd would be preferable: msw uses
-// .fnd for "find"
 
 #include LMI_PCH_HEADER
 #ifdef __BORLANDC__
@@ -36,6 +34,9 @@
 #include "assert_lmi.hpp"
 #include "data_directory.hpp"
 #include "platform_dependent.hpp" // access()
+#include "xml_serialize.hpp"
+
+#include <boost/filesystem/convenience.hpp>
 
 #include <fstream>
 
@@ -65,6 +66,33 @@ FundInfo::~FundInfo()
 }
 
 //============================================================================
+namespace xml_serialize
+{
+    template<>
+    struct type_io<FundInfo>
+    {
+        static void to_xml(xml::node& out, FundInfo const& in)
+        {
+            add_property(out, "scalar_imf", in.ScalarIMF());
+            add_property(out, "short_name", in.ShortName());
+            add_property(out, "long_name",  in.LongName());
+        }
+
+        static void from_xml(FundInfo& out, xml::node const& in)
+        {
+            double simf;
+            std::string sname, lname;
+
+            get_property(in, "scalar_imf", simf);
+            get_property(in, "short_name", sname);
+            get_property(in, "long_name",  lname);
+
+            out = FundInfo(simf, sname, lname);
+        }
+    };
+} // namespace xml_serialize
+
+//============================================================================
 FundData::FundData()
 {
 }
@@ -81,17 +109,8 @@ FundData::~FundData()
 }
 
 //============================================================================
-void FundData::Read(std::string const& a_Filename)
+void FundData::ReadLegacy(std::string const& a_Filename)
 {
-    if(access(a_Filename.c_str(), R_OK))
-        {
-        fatal_error()
-            << "File '"
-            << a_Filename
-            << "' is required but could not be found. Try reinstalling."
-            << LMI_FLUSH
-            ;
-        }
     std::ifstream is(a_Filename.c_str());
 
     LMI_ASSERT(0 == FundInfo_.size());
@@ -122,25 +141,36 @@ void FundData::Read(std::string const& a_Filename)
         }
 }
 
-//============================================================================
-void FundData::Write(std::string const& a_Filename)
+void FundData::Read(std::string const& a_Filename)
 {
-    std::ofstream os(a_Filename.c_str());
-
-    std::vector<FundInfo>::const_iterator i = FundInfo_.begin();
-    for(;i != FundInfo_.end(); i++)
+    if(access(a_Filename.c_str(), R_OK))
         {
-        os
-            << i->ScalarIMF_
-            << '\t'
-            << i->ShortName_
-            << '\t'
-            << i->LongName_
-            << '\n'
+        fatal_error()
+            << "File '"
+            << a_Filename
+            << "' is required but could not be found. Try reinstalling."
+            << LMI_FLUSH
             ;
         }
 
-    if(!os.good())
+    // We temporarily support reading both XML and the old file formats.
+    if(".fnd" == fs::extension(a_Filename))
+        {
+        ReadLegacy(a_Filename);
+        return;
+        }
+
+    xml_lmi::dom_parser doc(a_Filename);
+    xml_serialize::from_xml(FundInfo_, doc.root_node("fund_data"));
+}
+
+//============================================================================
+void FundData::Write(std::string const& a_Filename)
+{
+    xml::document doc("fund_data");
+    xml_serialize::to_xml(doc.get_root_node(), FundInfo_);
+
+    if(!doc.save_to_file(a_Filename.c_str()))
         {
         fatal_error()
             << "Unable to write fund file '"
@@ -162,6 +192,6 @@ void FundData::WriteFundFiles()
             ,"Money Market Fund"
             )
         );
-    foo.Write(AddDataDir("sample.fnd"));
+    foo.Write(AddDataDir("sample.xfnd"));
 }
 

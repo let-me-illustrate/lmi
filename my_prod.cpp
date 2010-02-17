@@ -152,7 +152,7 @@ void TProductData::WriteProprietaryPolFiles()
 
     // Sample policy form.
     foo.DatabaseFilename  = "sample.db4";
-    foo.FundFilename      = "sample.fnd";
+    foo.FundFilename      = "sample.xfnd";
     foo.RoundingFilename  = "sample.xrnd";
     foo.TierFilename      = "sample.xtir";
 

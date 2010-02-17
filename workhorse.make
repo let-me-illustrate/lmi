@@ -920,7 +920,7 @@ shared_data_files = \
   qx_ins.ndx \
   sample.dat \
   sample.db4 \
-  sample.fnd \
+  sample.xfnd \
   sample.ndx \
   sample.pol \
   sample.xrnd \
@@ -1008,7 +1008,7 @@ fardel_files := \
 # one file of each given type.
 
 fardel_checksummed_files = \
-  *.dat *.db4 *.fnd *.ndx *.pol *.xrnd *.xtir \
+  *.dat *.db4 *.xfnd *.ndx *.pol *.xrnd *.xtir \
   configurable_settings.xml \
   expiry \
   md5sum$(EXEEXT) \
