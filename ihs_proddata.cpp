@@ -42,6 +42,7 @@
 #include "assert_lmi.hpp"
 #include "data_directory.hpp"
 #include "platform_dependent.hpp" // access()
+#include "xml_serialize.hpp"
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/path.hpp>
@@ -70,22 +71,13 @@ void TProductData::Init(std::string const& a_Filename)
 {
     fs::path path(a_Filename);
     LMI_ASSERT(a_Filename == path.leaf());
-    path = fs::change_extension(path, ".pol");
+    path = fs::change_extension(path, ".xpol");
     Read(AddDataDir(path.string()));
 }
 
 //============================================================================
-void TProductData::Read(std::string const& a_Filename)
+void TProductData::ReadLegacy(std::string const& a_Filename)
 {
-    if(access(a_Filename.c_str(), R_OK))
-        {
-        fatal_error()
-            << "File '"
-            << a_Filename
-            << "' is required but could not be found. Try reinstalling."
-            << LMI_FLUSH
-            ;
-        }
     std::ifstream is(a_Filename.c_str());
 
     std::getline(is, DatabaseFilename,              '\n');
@@ -214,112 +206,246 @@ void TProductData::Read(std::string const& a_Filename)
 }
 
 //============================================================================
+void TProductData::Read(std::string const& a_Filename)
+{
+    if(access(a_Filename.c_str(), R_OK))
+        {
+        fatal_error()
+            << "File '"
+            << a_Filename
+            << "' is required but could not be found. Try reinstalling."
+            << LMI_FLUSH
+            ;
+        }
+
+    // We temporarily support reading both XML and the old file formats.
+    if(".pol" == fs::extension(a_Filename))
+        {
+        ReadLegacy(a_Filename);
+        return;
+        }
+
+    xml_lmi::dom_parser doc(a_Filename);
+    xml::element const& root = doc.root_node("product");
+
+    #define GET_PROP(name) xml_serialize::get_property(root, #name, name)
+
+    GET_PROP(DatabaseFilename);
+    GET_PROP(FundFilename);
+    GET_PROP(CorridorFilename);
+    GET_PROP(CurrCOIFilename);
+    GET_PROP(GuarCOIFilename);
+    GET_PROP(WPFilename);
+    GET_PROP(ADDFilename);
+    GET_PROP(ChildRiderFilename);
+    GET_PROP(CurrSpouseRiderFilename);
+    GET_PROP(GuarSpouseRiderFilename);
+    GET_PROP(CurrTermFilename);
+    GET_PROP(GuarTermFilename);
+    GET_PROP(TableYFilename);
+    GET_PROP(PremTaxFilename);
+    GET_PROP(TAMRA7PayFilename);
+    GET_PROP(TgtPremFilename);
+    GET_PROP(IRC7702Filename);
+    GET_PROP(Gam83Filename);
+    GET_PROP(SubstdTblMultFilename);
+    GET_PROP(CurrSpecAmtLoadFilename);
+    GET_PROP(GuarSpecAmtLoadFilename);
+    GET_PROP(RoundingFilename);
+    GET_PROP(TierFilename);
+    GET_PROP(PolicyForm);
+    GET_PROP(PolicyMktgName);
+    GET_PROP(PolicyLegalName);
+    GET_PROP(InsCoShortName);
+    GET_PROP(InsCoName);
+    GET_PROP(InsCoAddr);
+    GET_PROP(InsCoStreet);
+    GET_PROP(InsCoPhone);
+    GET_PROP(InsCoDomicile);
+    GET_PROP(MainUnderwriter);
+    GET_PROP(MainUnderwriterAddress);
+    GET_PROP(CoUnderwriter);
+    GET_PROP(CoUnderwriterAddress);
+    GET_PROP(AvName);
+    GET_PROP(CsvName);
+    GET_PROP(CsvHeaderName);
+    GET_PROP(NoLapseProvisionName);
+    GET_PROP(InterestDisclaimer);
+    GET_PROP(GuarMortalityFootnote);
+    GET_PROP(AccountValueFootnote);
+    GET_PROP(AttainedAgeFootnote);
+    GET_PROP(CashSurrValueFootnote);
+    GET_PROP(DeathBenefitFootnote);
+    GET_PROP(InitialPremiumFootnote);
+    GET_PROP(NetPremiumFootnote);
+    GET_PROP(OutlayFootnote);
+    GET_PROP(PolicyYearFootnote);
+    GET_PROP(ADDFootnote);
+    GET_PROP(ChildFootnote);
+    GET_PROP(SpouseFootnote);
+    GET_PROP(TermFootnote);
+    GET_PROP(WaiverFootnote);
+    GET_PROP(MinimumPremiumFootnote);
+    GET_PROP(PremAllocationFootnote);
+    GET_PROP(ProductDescription);
+    GET_PROP(StableValueFootnote);
+    GET_PROP(NoVanishPremiumFootnote);
+    GET_PROP(RejectPremiumFootnote);
+    GET_PROP(ExpRatingFootnote);
+    GET_PROP(MortalityBlendFootnote);
+    GET_PROP(HypotheticalRatesFootnote);
+    GET_PROP(SalesLoadRefundFootnote);
+    GET_PROP(NoLapseFootnote);
+    GET_PROP(MarketValueAdjFootnote);
+    GET_PROP(ExchangeChargeFootnote0);
+    GET_PROP(CurrentValuesFootnote);
+    GET_PROP(DBOption1Footnote);
+    GET_PROP(DBOption2Footnote);
+    GET_PROP(ExpRatRiskChargeFootnote);
+    GET_PROP(ExchangeChargeFootnote1);
+    GET_PROP(FlexiblePremiumFootnote);
+    GET_PROP(GuaranteedValuesFootnote);
+    GET_PROP(CreditingRateFootnote);
+    GET_PROP(MecFootnote);
+    GET_PROP(MidpointValuesFootnote);
+    GET_PROP(SinglePremiumFootnote);
+    GET_PROP(MonthlyChargesFootnote);
+    GET_PROP(UltCreditingRateFootnote);
+    GET_PROP(MaxNaarFootnote);
+    GET_PROP(PremTaxSurrChgFootnote);
+    GET_PROP(PolicyFeeFootnote);
+    GET_PROP(AssetChargeFootnote);
+    GET_PROP(InvestmentIncomeFootnote);
+    GET_PROP(IrrDbFootnote);
+    GET_PROP(IrrCsvFootnote);
+    GET_PROP(MortalityChargesFootnote);
+    GET_PROP(LoanAndWithdrawalFootnote);
+    GET_PROP(PresaleTrackingNumber);
+    GET_PROP(CompositeTrackingNumber);
+    GET_PROP(InforceTrackingNumber);
+    GET_PROP(InforceCompositeTrackingNumber);
+    GET_PROP(InforceNonGuaranteedFootnote0);
+    GET_PROP(InforceNonGuaranteedFootnote1);
+    GET_PROP(InforceNonGuaranteedFootnote2);
+    GET_PROP(InforceNonGuaranteedFootnote3);
+    GET_PROP(NonGuaranteedFootnote);
+    GET_PROP(MonthlyChargesPaymentFootnote);
+
+    #undef GET_PROP
+}
+
+//============================================================================
 void TProductData::Write(std::string const& a_Filename) const
 {
-    std::ofstream os(a_Filename.c_str());
+    xml::document doc("product");
+    xml::node& root = doc.get_root_node();
 
-    os << DatabaseFilename              << '\n';
-    os << FundFilename                  << '\n';
-    os << CorridorFilename              << '\n';
-    os << CurrCOIFilename               << '\n';
-    os << GuarCOIFilename               << '\n';
-    os << WPFilename                    << '\n';
-    os << ADDFilename                   << '\n';
-    os << ChildRiderFilename            << '\n';
-    os << CurrSpouseRiderFilename       << '\n';
-    os << GuarSpouseRiderFilename       << '\n';
-    os << CurrTermFilename              << '\n';
-    os << GuarTermFilename              << '\n';
-    os << TableYFilename                << '\n';
-    os << PremTaxFilename               << '\n';
-    os << TAMRA7PayFilename             << '\n';
-    os << TgtPremFilename               << '\n';
-    os << IRC7702Filename               << '\n';
-    os << Gam83Filename                 << '\n';
-    os << SubstdTblMultFilename         << '\n';
-    os << CurrSpecAmtLoadFilename       << '\n';
-    os << GuarSpecAmtLoadFilename       << '\n';
-    os << RoundingFilename              << '\n';
-    os << TierFilename                  << '\n';
-    os << PolicyForm                    << '\n';
-    os << PolicyMktgName                << '\n';
-    os << PolicyLegalName               << '\n';
-    os << InsCoShortName                << '\n';
-    os << InsCoName                     << '\n';
-    os << InsCoAddr                     << '\n';
-    os << InsCoStreet                   << '\n';
-    os << InsCoPhone                    << '\n';
-    os << InsCoDomicile                 << '\n';
-    os << MainUnderwriter               << '\n';
-    os << MainUnderwriterAddress        << '\n';
-    os << CoUnderwriter                 << '\n';
-    os << CoUnderwriterAddress          << '\n';
-    os << AvName                        << '\n';
-    os << CsvName                       << '\n';
-    os << CsvHeaderName                 << '\n';
-    os << NoLapseProvisionName          << '\n';
-    os << InterestDisclaimer            << '\n';
-    os << GuarMortalityFootnote         << '\n';
-    os << AccountValueFootnote          << '\n';
-    os << AttainedAgeFootnote           << '\n';
-    os << CashSurrValueFootnote         << '\n';
-    os << DeathBenefitFootnote          << '\n';
-    os << InitialPremiumFootnote        << '\n';
-    os << NetPremiumFootnote            << '\n';
-    os << OutlayFootnote                << '\n';
-    os << PolicyYearFootnote            << '\n';
-    os << ADDFootnote                   << '\n';
-    os << ChildFootnote                 << '\n';
-    os << SpouseFootnote                << '\n';
-    os << TermFootnote                  << '\n';
-    os << WaiverFootnote                << '\n';
-    os << MinimumPremiumFootnote        << '\n';
-    os << PremAllocationFootnote        << '\n';
-    os << ProductDescription            << '\n';
-    os << StableValueFootnote           << '\n';
-    os << NoVanishPremiumFootnote       << '\n';
-    os << RejectPremiumFootnote         << '\n';
-    os << ExpRatingFootnote             << '\n';
-    os << MortalityBlendFootnote        << '\n';
-    os << HypotheticalRatesFootnote     << '\n';
-    os << SalesLoadRefundFootnote       << '\n';
-    os << NoLapseFootnote               << '\n';
-    os << MarketValueAdjFootnote        << '\n';
-    os << ExchangeChargeFootnote0       << '\n';
-    os << CurrentValuesFootnote         << '\n';
-    os << DBOption1Footnote             << '\n';
-    os << DBOption2Footnote             << '\n';
-    os << ExpRatRiskChargeFootnote      << '\n';
-    os << ExchangeChargeFootnote1       << '\n';
-    os << FlexiblePremiumFootnote       << '\n';
-    os << GuaranteedValuesFootnote      << '\n';
-    os << CreditingRateFootnote         << '\n';
-    os << MecFootnote                   << '\n';
-    os << MidpointValuesFootnote        << '\n';
-    os << SinglePremiumFootnote         << '\n';
-    os << MonthlyChargesFootnote        << '\n';
-    os << UltCreditingRateFootnote      << '\n';
-    os << MaxNaarFootnote               << '\n';
-    os << PremTaxSurrChgFootnote        << '\n';
-    os << PolicyFeeFootnote             << '\n';
-    os << AssetChargeFootnote           << '\n';
-    os << InvestmentIncomeFootnote      << '\n';
-    os << IrrDbFootnote                 << '\n';
-    os << IrrCsvFootnote                << '\n';
-    os << MortalityChargesFootnote      << '\n';
-    os << LoanAndWithdrawalFootnote     << '\n';
-    os << PresaleTrackingNumber         << '\n';
-    os << CompositeTrackingNumber       << '\n';
-    os << InforceTrackingNumber         << '\n';
-    os << InforceCompositeTrackingNumber<< '\n';
-    os << InforceNonGuaranteedFootnote0 << '\n';
-    os << InforceNonGuaranteedFootnote1 << '\n';
-    os << InforceNonGuaranteedFootnote2 << '\n';
-    os << InforceNonGuaranteedFootnote3 << '\n';
-    os << NonGuaranteedFootnote         << '\n';
-    os << MonthlyChargesPaymentFootnote << '\n';
+    #define ADD_PROP(name) xml_serialize::add_property(root, #name, name)
 
-    if(!os.good())
+    ADD_PROP(DatabaseFilename);
+    ADD_PROP(FundFilename);
+    ADD_PROP(CorridorFilename);
+    ADD_PROP(CurrCOIFilename);
+    ADD_PROP(GuarCOIFilename);
+    ADD_PROP(WPFilename);
+    ADD_PROP(ADDFilename);
+    ADD_PROP(ChildRiderFilename);
+    ADD_PROP(CurrSpouseRiderFilename);
+    ADD_PROP(GuarSpouseRiderFilename);
+    ADD_PROP(CurrTermFilename);
+    ADD_PROP(GuarTermFilename);
+    ADD_PROP(TableYFilename);
+    ADD_PROP(PremTaxFilename);
+    ADD_PROP(TAMRA7PayFilename);
+    ADD_PROP(TgtPremFilename);
+    ADD_PROP(IRC7702Filename);
+    ADD_PROP(Gam83Filename);
+    ADD_PROP(SubstdTblMultFilename);
+    ADD_PROP(CurrSpecAmtLoadFilename);
+    ADD_PROP(GuarSpecAmtLoadFilename);
+    ADD_PROP(RoundingFilename);
+    ADD_PROP(TierFilename);
+    ADD_PROP(PolicyForm);
+    ADD_PROP(PolicyMktgName);
+    ADD_PROP(PolicyLegalName);
+    ADD_PROP(InsCoShortName);
+    ADD_PROP(InsCoName);
+    ADD_PROP(InsCoAddr);
+    ADD_PROP(InsCoStreet);
+    ADD_PROP(InsCoPhone);
+    ADD_PROP(InsCoDomicile);
+    ADD_PROP(MainUnderwriter);
+    ADD_PROP(MainUnderwriterAddress);
+    ADD_PROP(CoUnderwriter);
+    ADD_PROP(CoUnderwriterAddress);
+    ADD_PROP(AvName);
+    ADD_PROP(CsvName);
+    ADD_PROP(CsvHeaderName);
+    ADD_PROP(NoLapseProvisionName);
+    ADD_PROP(InterestDisclaimer);
+    ADD_PROP(GuarMortalityFootnote);
+    ADD_PROP(AccountValueFootnote);
+    ADD_PROP(AttainedAgeFootnote);
+    ADD_PROP(CashSurrValueFootnote);
+    ADD_PROP(DeathBenefitFootnote);
+    ADD_PROP(InitialPremiumFootnote);
+    ADD_PROP(NetPremiumFootnote);
+    ADD_PROP(OutlayFootnote);
+    ADD_PROP(PolicyYearFootnote);
+    ADD_PROP(ADDFootnote);
+    ADD_PROP(ChildFootnote);
+    ADD_PROP(SpouseFootnote);
+    ADD_PROP(TermFootnote);
+    ADD_PROP(WaiverFootnote);
+    ADD_PROP(MinimumPremiumFootnote);
+    ADD_PROP(PremAllocationFootnote);
+    ADD_PROP(ProductDescription);
+    ADD_PROP(StableValueFootnote);
+    ADD_PROP(NoVanishPremiumFootnote);
+    ADD_PROP(RejectPremiumFootnote);
+    ADD_PROP(ExpRatingFootnote);
+    ADD_PROP(MortalityBlendFootnote);
+    ADD_PROP(HypotheticalRatesFootnote);
+    ADD_PROP(SalesLoadRefundFootnote);
+    ADD_PROP(NoLapseFootnote);
+    ADD_PROP(MarketValueAdjFootnote);
+    ADD_PROP(ExchangeChargeFootnote0);
+    ADD_PROP(CurrentValuesFootnote);
+    ADD_PROP(DBOption1Footnote);
+    ADD_PROP(DBOption2Footnote);
+    ADD_PROP(ExpRatRiskChargeFootnote);
+    ADD_PROP(ExchangeChargeFootnote1);
+    ADD_PROP(FlexiblePremiumFootnote);
+    ADD_PROP(GuaranteedValuesFootnote);
+    ADD_PROP(CreditingRateFootnote);
+    ADD_PROP(MecFootnote);
+    ADD_PROP(MidpointValuesFootnote);
+    ADD_PROP(SinglePremiumFootnote);
+    ADD_PROP(MonthlyChargesFootnote);
+    ADD_PROP(UltCreditingRateFootnote);
+    ADD_PROP(MaxNaarFootnote);
+    ADD_PROP(PremTaxSurrChgFootnote);
+    ADD_PROP(PolicyFeeFootnote);
+    ADD_PROP(AssetChargeFootnote);
+    ADD_PROP(InvestmentIncomeFootnote);
+    ADD_PROP(IrrDbFootnote);
+    ADD_PROP(IrrCsvFootnote);
+    ADD_PROP(MortalityChargesFootnote);
+    ADD_PROP(LoanAndWithdrawalFootnote);
+    ADD_PROP(PresaleTrackingNumber);
+    ADD_PROP(CompositeTrackingNumber);
+    ADD_PROP(InforceTrackingNumber);
+    ADD_PROP(InforceCompositeTrackingNumber);
+    ADD_PROP(InforceNonGuaranteedFootnote0);
+    ADD_PROP(InforceNonGuaranteedFootnote1);
+    ADD_PROP(InforceNonGuaranteedFootnote2);
+    ADD_PROP(InforceNonGuaranteedFootnote3);
+    ADD_PROP(NonGuaranteedFootnote);
+    ADD_PROP(MonthlyChargesPaymentFootnote);
+
+    #undef ADD_PROP
+
+    if(!doc.save_to_file(a_Filename.c_str()))
         {
         fatal_error()
             << "Unable to write product data file '"
@@ -437,6 +563,6 @@ void TProductData::WritePolFiles()
     foo.RoundingFilename = "sample.xrnd";
     foo.TierFilename     = "sample.xtir";
 
-    foo.Write(AddDataDir("sample.pol"));
+    foo.Write(AddDataDir("sample.xpol"));
 }
 

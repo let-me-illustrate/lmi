@@ -42,8 +42,8 @@ enum DatabaseNames
         ,DB_AllowFullUW
         ,DB_AllowSimpUW
         ,DB_AllowGuarUW
-        ,DB_SmokeOrTobacco       // DATABASE !! Move to '.pol'
-        ,DB_PrefOrSelect         // DATABASE !! Move to '.pol'
+        ,DB_SmokeOrTobacco       // DATABASE !! Move to '.xpol'
+        ,DB_PrefOrSelect         // DATABASE !! Move to '.xpol'
         ,DB_AllowPreferredClass
         ,DB_AllowUltraPrefClass
 

@@ -922,7 +922,7 @@ shared_data_files = \
   sample.db4 \
   sample.xfnd \
   sample.ndx \
-  sample.pol \
+  sample.xpol \
   sample.xrnd \
   sample.xtir \
 
@@ -1008,7 +1008,7 @@ fardel_files := \
 # one file of each given type.
 
 fardel_checksummed_files = \
-  *.dat *.db4 *.xfnd *.ndx *.pol *.xrnd *.xtir \
+  *.dat *.db4 *.xfnd *.ndx *.xpol *.xrnd *.xtir \
   configurable_settings.xml \
   expiry \
   md5sum$(EXEEXT) \
@@ -1047,12 +1047,12 @@ wrap_fardel:
 .PHONY: test
 test: $(test_targets)
 
-# Some test targets require 'sample.pol' to exist even though they
+# Some test targets require 'sample.xpol' to exist even though they
 # don't actually read its contents.
 
-$(test_targets): sample.pol
+$(test_targets): sample.xpol
 
-sample.pol:
+sample.xpol:
 	@$(TOUCH) $@
 
 ################################################################################

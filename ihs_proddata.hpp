@@ -151,6 +151,7 @@ class LMI_SO TProductData
 
     void Init(std::string const& a_Filename);
     void Read(std::string const& a_Filename);
+    void ReadLegacy(std::string const& a_Filename);
     void Write(std::string const& a_Filename) const;
 
     std::string DatabaseFilename;

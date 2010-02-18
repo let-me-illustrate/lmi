@@ -156,7 +156,7 @@ void TProductData::WriteProprietaryPolFiles()
     foo.RoundingFilename  = "sample.xrnd";
     foo.TierFilename      = "sample.xtir";
 
-    foo.Write(AddDataDir("sample.pol"));
+    foo.Write(AddDataDir("sample.xpol"));
 
     // Another policy form....
 }
