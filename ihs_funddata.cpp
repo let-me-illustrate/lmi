@@ -109,6 +109,7 @@ FundData::~FundData()
 }
 
 //============================================================================
+#ifndef LMI_NO_LEGACY_FORMATS
 void FundData::ReadLegacy(std::string const& a_Filename)
 {
     std::ifstream is(a_Filename.c_str());
@@ -140,6 +141,7 @@ void FundData::ReadLegacy(std::string const& a_Filename)
         FundInfo_.push_back(f);
         }
 }
+#endif // !LMI_NO_LEGACY_FORMATS
 
 void FundData::Read(std::string const& a_Filename)
 {
@@ -153,12 +155,14 @@ void FundData::Read(std::string const& a_Filename)
             ;
         }
 
+#ifndef LMI_NO_LEGACY_FORMATS
     // We temporarily support reading both XML and the old file formats.
     if(".fnd" == fs::extension(a_Filename))
         {
         ReadLegacy(a_Filename);
         return;
         }
+#endif // !LMI_NO_LEGACY_FORMATS
 
     xml_lmi::dom_parser doc(a_Filename);
     xml_serialize::from_xml(FundInfo_, doc.root_node("fund_data"));

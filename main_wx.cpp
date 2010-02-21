@@ -374,7 +374,11 @@ void Skeleton::InitDocManager()
     new(wx) wxDocTemplate
         (doc_manager_
         ,"Policy"
+#ifdef LMI_NO_LEGACY_FORMATS
+        ,"*.xpol"
+#else
         ,"*.xpol;*.pol"
+#endif
         ,""
         ,"pol"
         ,"Policy document"
@@ -386,7 +390,11 @@ void Skeleton::InitDocManager()
     new(wx) wxDocTemplate
         (doc_manager_
         ,"Rounding"
+#ifdef LMI_NO_LEGACY_FORMATS
+        ,"*.xrnd"
+#else
         ,"*.xrnd;*.rnd"
+#endif
         ,""
         ,"xrnd"
         ,"Rounding document"
@@ -398,7 +406,11 @@ void Skeleton::InitDocManager()
     new(wx) wxDocTemplate
         (doc_manager_
         ,"Tier"
+#ifdef LMI_NO_LEGACY_FORMATS
+        ,"*.xtir"
+#else
         ,"*.xtir;*.tir"
+#endif
         ,""
         ,"xtir"
         ,"Tier document"

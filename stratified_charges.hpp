@@ -76,7 +76,9 @@ class LMI_SO stratified_entity
     ~stratified_entity();
 
     void read       (xml::element const& node);
+#ifndef LMI_NO_LEGACY_FORMATS
     void read_legacy(std::istream&);
+#endif
     void write      (xml::node&) const;
 
   private:
@@ -152,7 +154,9 @@ class LMI_SO stratified_charges
     void initialize_dictionary();
 
     void read        (std::string const& filename);
+#ifndef LMI_NO_LEGACY_FORMATS
     void read_legacy (std::string const& filename);
+#endif
     void write       (std::string const& filename) const;
     void read_entity (xml::element const& node, e_stratified);
     void write_entity(xml::element& node, e_stratified) const;

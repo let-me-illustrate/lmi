@@ -69,21 +69,6 @@ rounding_rules const& StreamableRoundingRules::get_rounding_rules()
     return dynamic_cast<rounding_rules&>(*this);
 }
 
-namespace
-{
-    // for legacy file format, see ReadLegacy() below
-    inline std::istream& operator>>(std::istream& is, round_to<double>& r)
-        {
-        int decimals;
-        is >> decimals;
-        int z;
-        is >> z;
-        rounding_style style = static_cast<rounding_style>(z);
-        r = round_to<double>(decimals, style);
-        return is;
-        }
-} // Unnamed namespace.
-
 namespace xml_serialize
 {
     template<>
@@ -105,6 +90,22 @@ namespace xml_serialize
         }
     };
 } // namespace xml_serialize
+
+#ifndef LMI_NO_LEGACY_FORMATS
+namespace
+{
+    // for legacy file format, see ReadLegacy() below
+    inline std::istream& operator>>(std::istream& is, round_to<double>& r)
+        {
+        int decimals;
+        is >> decimals;
+        int z;
+        is >> z;
+        rounding_style style = static_cast<rounding_style>(z);
+        r = round_to<double>(decimals, style);
+        return is;
+        }
+} // Unnamed namespace.
 
 //============================================================================
 void StreamableRoundingRules::ReadLegacy(std::string const& a_Filename)
@@ -149,6 +150,7 @@ void StreamableRoundingRules::ReadLegacy(std::string const& a_Filename)
             ;
         }
 }
+#endif // !LMI_NO_LEGACY_FORMATS
 
 //============================================================================
 void StreamableRoundingRules::Read(std::string const& a_Filename)
@@ -162,12 +164,14 @@ void StreamableRoundingRules::Read(std::string const& a_Filename)
             ;
         }
 
+#ifndef LMI_NO_LEGACY_FORMATS
     // We temporarily support reading both XML and the old file formats.
     if(".rnd" == fs::extension(a_Filename))
         {
         ReadLegacy(a_Filename);
         return;
         }
+#endif // !LMI_NO_LEGACY_FORMATS
 
     xml_lmi::dom_parser doc(a_Filename);
     xml::element const& root = doc.root_node("rounding");

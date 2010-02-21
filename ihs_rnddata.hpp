@@ -50,7 +50,9 @@ class LMI_SO StreamableRoundingRules
 
     void Init(std::string const& a_Filename);
     void Read(std::string const& a_Filename);
+#ifndef LMI_NO_LEGACY_FORMATS
     void ReadLegacy(std::string const& a_Filename);
+#endif
     void Write(std::string const& a_Filename);
 };
 

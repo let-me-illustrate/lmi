@@ -118,6 +118,7 @@ std::vector<double> const& stratified_entity::values() const
 }
 
 //============================================================================
+#ifndef LMI_NO_LEGACY_FORMATS
 void stratified_entity::read_legacy(std::istream& is)
 {
     std::vector<double>::size_type vector_size;
@@ -152,6 +153,7 @@ std::istream& operator>>(std::istream& is, stratified_entity& z)
     z.read_legacy(is);
     return is;
 }
+#endif // !LMI_NO_LEGACY_FORMATS
 
 //============================================================================
 void stratified_entity::read(xml::element const& node)
@@ -516,12 +518,14 @@ void stratified_charges::read(std::string const& filename)
             ;
         }
 
+#ifndef LMI_NO_LEGACY_FORMATS
     // We temporarily support reading both XML and the old file formats.
     if(".tir" == fs::extension(filename))
         {
         read_legacy(filename);
         return;
         }
+#endif // !LMI_NO_LEGACY_FORMATS
 
     xml_lmi::dom_parser doc(filename);
     xml::element const& root = doc.root_node("tier");
@@ -539,6 +543,7 @@ void stratified_charges::read(std::string const& filename)
     read_entity(root, e_tiered_sd_premium_tax                );
 }
 
+#ifndef LMI_NO_LEGACY_FORMATS
 void stratified_charges::read_legacy(std::string const& filename)
 {
     std::ifstream is(filename.c_str());
@@ -577,6 +582,7 @@ void stratified_charges::read_legacy(std::string const& filename)
             ;
         }
 }
+#endif // !LMI_NO_LEGACY_FORMATS
 
 //============================================================================
 void stratified_charges::write_entity(xml::element& node, e_stratified e) const

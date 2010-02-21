@@ -80,7 +80,9 @@ class LMI_SO FundData
     FundData(); // Private, but implemented.
 
     void Read (std::string const& a_Filename);
+#ifndef LMI_NO_LEGACY_FORMATS
     void ReadLegacy (std::string const& a_Filename);
+#endif
     void Write(std::string const& a_Filename);
 
     std::vector<FundInfo> FundInfo_;
