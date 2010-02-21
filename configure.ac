@@ -138,6 +138,20 @@ AC_ARG_ENABLE(pch,
              esac], lmi_use_pch=no)
 AM_CONDITIONAL(LMI_USE_PCH, [ test "x$lmi_use_pch" = "xyes" ])
 
+AC_ARG_ENABLE(legacy-formats,
+             [AC_HELP_STRING([--disable-legacy-formats],
+                             [don't build support for legacy file formats])],
+             [case "x${enableval}" in
+                   x) legacy_option=no ;;
+                xyes) legacy_option=yes ;;
+                 xno) legacy_option=no ;;
+                   *) AC_MSG_ERROR(bad value ${enableval} for --enable-legacy-formats) ;;
+             esac], [legacy_option=yes])
+
+if test "x$legacy_option" = "xno"; then
+    AC_DEFINE(LMI_NO_LEGACY_FORMATS, [1], [Define if you don't need support for legacy file formats])
+fi
+
 dnl Pass standard options to wx.
 WX_STANDARD_OPTIONS([debug,shared,toolkit,wxshared])
 
