@@ -26,6 +26,7 @@ AC_REVISION($Id$)dnl
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [gchicares@sbcglobal.net])
 AM_INIT_AUTOMAKE()
+AM_MAINTAINER_MODE
 
 AC_CONFIG_SRCDIR([lmi.png])
 AC_CONFIG_HEADER([config.h])
