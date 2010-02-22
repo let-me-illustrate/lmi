@@ -380,7 +380,7 @@ void Skeleton::InitDocManager()
         ,"*.xpol;*.pol"
 #endif
         ,""
-        ,"pol"
+        ,"xpol"
         ,"Policy document"
         ,"Policy view"
         ,CLASSINFO(PolicyDocument)
