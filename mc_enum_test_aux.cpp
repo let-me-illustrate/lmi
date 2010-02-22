@@ -32,7 +32,7 @@
 // Normally, one would prefer to instantiate all mc_enum templates
 // in a single file. Here, however, the point is to instantiate one
 // such template in a different translation unit than the unit-test
-// driver, in order to prove that explicit instantion works.
+// driver, in order to prove that explicit instantiation works.
 
 extern enum_holiday const holiday_enums[] =
     {h_Theophany
