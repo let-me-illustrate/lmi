@@ -173,8 +173,8 @@ void mc_enum_test::test()
     BOOST_TEST_EQUAL(holiday3, "Easter");
 
     // That which is inconceivable is not to be allowed.
-    // COMPILER !! Here, como catches std::range_error instead of
-    // std::out_of_range when at() throws; that seems incorrect.
+    // COMPILER !! Here, como catches std::range_error when at()
+    // throws, whereas 23.1.1/13 requires std::out_of_range.
     BOOST_TEST_THROW(holiday3.allow( 3, false), std::out_of_range, "");
     BOOST_TEST_THROW(holiday3.allow(17, false), std::out_of_range, "");
     BOOST_TEST_THROW(holiday3.allow(-1, false), std::out_of_range, "");
