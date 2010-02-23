@@ -52,6 +52,8 @@
 
 #include "ihs_fpios.hpp" // GWC arbitrarily changed .hh to .hpp
 
+#ifndef LMI_NO_LEGACY_FORMATS
+
 // Begin GWC mods
 // Neither of these is in the language standard
 //#include  <unistd.h>
@@ -341,3 +343,4 @@ JrPs_iofpstream::JrPs_iofpstream(const char* aname, int aflags, int amode)
 
 }   // namespace JOSHUA_ROWE_PERSISTENT_STREAMS
 
+#endif // !LMI_NO_LEGACY_FORMATS

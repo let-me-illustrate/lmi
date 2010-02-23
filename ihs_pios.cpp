@@ -49,6 +49,8 @@
 
 #include "ihs_pios.hpp" // GWC arbitrarily changed .hh to .hpp
 
+#ifndef LMI_NO_LEGACY_FORMATS
+
 #include <cstring>
 
 namespace JOSHUA_ROWE_PERSISTENT_STREAMS
@@ -615,3 +617,4 @@ void    JrPs_pstreambuf::error(int aerror)
 
 }   // namespace JOSHUA_ROWE_PERSISTENT_STREAMS
 
+#endif // !LMI_NO_LEGACY_FORMATS

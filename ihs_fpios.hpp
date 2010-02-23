@@ -47,6 +47,8 @@
 
 #include "config.hpp"
 
+#ifndef LMI_NO_LEGACY_FORMATS
+
 #include "ihs_pios.hpp" // GWC arbitrarily changed .hh to .hpp
 #include "so_attributes.hpp"
 
@@ -185,5 +187,8 @@ public:
 };
 
 }   // namespace JOSHUA_ROWE_PERSISTENT_STREAMS
+
+#endif // !LMI_NO_LEGACY_FORMATS
+
 #endif // ihs_fpios_hpp
 

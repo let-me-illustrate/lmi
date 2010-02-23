@@ -47,6 +47,8 @@
 
 #include "config.hpp"
 
+#ifndef LMI_NO_LEGACY_FORMATS
+
 #include "so_attributes.hpp"
 
 #include <cstddef> // std::size_t
@@ -290,6 +292,8 @@ public:
 (std::size_t((JOSHUA_ROWE_PERSISTENT_STREAMS::JrPs_pstreamable *)(d *)1) - 1)
 
 }   // namespace JOSHUA_ROWE_PERSISTENT_STREAMS
+
+#endif // !LMI_NO_LEGACY_FORMATS
 
 #endif // ihs_pios_hpp
 
