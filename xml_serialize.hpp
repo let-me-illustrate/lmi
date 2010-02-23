@@ -31,10 +31,12 @@
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/type_traits/is_enum.hpp>
+#include <boost/type_traits/is_floating_point.hpp>
 #include <boost/utility.hpp>
 
 #include <xmlwrapp/xmlwrapp.h>
 
+#include <limits>
 #include <stdexcept>
 #include <string>
 #include <sstream>
@@ -61,6 +63,18 @@ namespace xml_serialize
         static void to_xml(xml::node& out, T const& in)
         {
             std::ostringstream s;
+            if ( boost::is_floating_point<T>::value )
+                {
+                // Set maximum precision for floating points serialization.
+                // See http://stackoverflow.com/questions/1701055/what-is-the-maximum-length-in-chars-needed-to-represent-any-double-value/1701272#1701272
+                // for explanation of how this expression was arrived to.
+                s.precision(
+                      3
+                    + std::numeric_limits<T>::digits
+                    - std::numeric_limits<T>::min_exponent
+                );
+                }
+
             s << in;
             if(!s.good())
                 throw std::runtime_error("Failure to serialize data into XML.");
