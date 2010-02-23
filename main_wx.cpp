@@ -362,9 +362,13 @@ void Skeleton::InitDocManager()
     new(wx) wxDocTemplate
         (doc_manager_
         ,"Database"
-        ,"*.db4"
+#ifdef LMI_NO_LEGACY_FORMATS
+        ,"*.xdb4"
+#else
+        ,"*.xdb4;*.db4"
+#endif
         ,""
-        ,"db4"
+        ,"xdb4"
         ,"Database document"
         ,"Database view"
         ,CLASSINFO(DatabaseDocument)

@@ -562,7 +562,7 @@ void TProductData::WritePolFiles()
     foo.NonGuaranteedFootnote          = "";
     foo.MonthlyChargesPaymentFootnote  = "";
 
-    foo.DatabaseFilename = "sample.db4";
+    foo.DatabaseFilename = "sample.xdb4";
     foo.FundFilename     = "sample.xfnd";
     foo.RoundingFilename = "sample.xrnd";
     foo.TierFilename     = "sample.xtir";

@@ -42,6 +42,8 @@
 #include <numeric>
 #include <ostream>
 
+#ifndef LMI_NO_LEGACY_FORMATS
+
 #ifndef stlstrm_hpp
 #define stlstrm_hpp
 
@@ -87,6 +89,8 @@ JRPS::JrPs_opstream& operator<< (JRPS::JrPs_opstream& ops, std::vector<T> const&
 }
 
 #endif // stlstrm_hpp
+
+#endif // !LMI_NO_LEGACY_FORMATS
 
 static int const ScalarDims[TDBValue::e_number_of_axes] = {1, 1, 1, 1, 1, 1, 1};
 static int const MaxPossibleElements = std::numeric_limits<int>::max();
@@ -187,8 +191,12 @@ TDBValue::TDBValue
 
 //============================================================================
 TDBValue::TDBValue(TDBValue const& obj)
-    :JRPS::JrPs_pstreamable()
-    ,key(obj.key)
+    :
+#ifndef LMI_NO_LEGACY_FORMATS
+     JRPS::JrPs_pstreamable()
+    ,
+#endif
+     key(obj.key)
     ,axis_lengths(obj.axis_lengths)
     ,data_values(obj.data_values)
 {
@@ -692,7 +700,37 @@ std::ostream& operator<<(std::ostream& os, TDBValue const& z)
     return z.write(os);
 }
 
-// Streaming implementation
+// Serialization implementation
+
+void TDBValue::read(xml::node const& n)
+{
+    using namespace xml_serialize;
+
+    get_property(n, "key", key);
+    get_property(n, "axis_lengths", axis_lengths);
+    get_property(n, "extra_axes_values", extra_axes_values);
+    get_property(n, "extra_axes_names", extra_axes_names);
+    get_property(n, "data_values", data_values);
+
+    LMI_ASSERT(getndata() == static_cast<int>(data_values.size()));
+    LMI_ASSERT
+        (   0 < static_cast<int>(data_values.size())
+        &&      static_cast<int>(data_values.size()) < MaxPossibleElements
+        );
+}
+
+void TDBValue::write(xml::node& n) const
+{
+    using namespace xml_serialize;
+
+    add_property(n, "key", key);
+    add_property(n, "axis_lengths", axis_lengths);
+    add_property(n, "extra_axes_values", extra_axes_values);
+    add_property(n, "extra_axes_names", extra_axes_names);
+    add_property(n, "data_values", data_values);
+}
+
+#ifndef LMI_NO_LEGACY_FORMATS
 
 TDBValue::TDBValue(JRPS::JrPs_pstreamableInit)
     :key(0)
@@ -712,11 +750,6 @@ JRPS::JrPs_pstreamreg RegTDBValue
     );
 
 // TODO ?? Couldn't templates handle this?
-JRPS::JrPs_opstream& operator<< (JRPS::JrPs_opstream& os, TDBValue const* p)
-{
-    return os << (JRPS::JrPs_pstreamable const*)p;
-}
-
 JRPS::JrPs_ipstream& operator>> (JRPS::JrPs_ipstream& is, TDBValue*& p)
 {
     return is >> (void const*&)p;
@@ -753,22 +786,9 @@ void* TDBValue::read(JRPS::JrPs_ipstream& is)
     return this;
 }
 
-void TDBValue::write(JRPS::JrPs_opstream& os) const
+void TDBValue::write(JRPS::JrPs_opstream&) const
 {
-    os << StreamingVersion;
-
-    LMI_ASSERT(getndata() == static_cast<int>(data_values.size()));
-    LMI_ASSERT
-        (   0 < static_cast<int>(data_values.size())
-        &&      static_cast<int>(data_values.size()) < MaxPossibleElements
-        );
-    AreAllAxesOK();
-
-    os << key;
-    os << axis_lengths;
-    os << extra_axes_values;
-    os << extra_axes_names;
-    os << data_values;
+    fatal_error() << "TDBValue::write() not implemented." << LMI_FLUSH;
 }
 
 char const* TDBValue::streamableName() const
@@ -776,3 +796,4 @@ char const* TDBValue::streamableName() const
     return "TDBValue";
 }
 
+#endif // !LMI_NO_LEGACY_FORMATS

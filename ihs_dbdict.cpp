@@ -35,6 +35,7 @@
 #include "mc_enum_type_enums.hpp"
 #include "miscellany.hpp"
 #include "oecumenic_enumerations.hpp"
+#include "xml_serialize.hpp"
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/fstream.hpp>
@@ -66,6 +67,39 @@ DBDictionary::~DBDictionary()
 }
 
 //============================================================================
+namespace xml_serialize
+{
+
+// Specialize type_io<> for dict_map instead of using some generic std::map
+// serialization, because the key would be stored redundantly: it's already
+// part of TDBValue.
+template<>
+struct type_io<dict_map>
+{
+    static void to_xml(xml::node& out, dict_map const& in)
+    {
+        for(dict_map::const_iterator i = in.begin(); i != in.end(); ++i)
+            {
+            add_property(out, "value", i->second);
+            }
+    }
+
+    static void from_xml(dict_map& out, xml::node const& in)
+    {
+        out.clear();
+        xml::const_nodes_view items = in.elements("value");
+        for(xml::const_nodes_view::iterator i = items.begin(); i != items.end(); ++i)
+            {
+            TDBValue v;
+            xml_serialize::from_xml(v, *i);
+            out[v.GetKey()] = v;
+            }
+    }
+};
+
+} // namespace xml_serialize
+
+//============================================================================
 void DBDictionary::Init(std::string const& NewFilename)
 {
     // Perform the expensive operation of reading the dictionary from
@@ -90,6 +124,36 @@ void DBDictionary::Init(std::string const& NewFilename)
     CachedFilename = NewFilename;
     dictionary.erase(dictionary.begin(), dictionary.end());
 
+#ifndef LMI_NO_LEGACY_FORMATS
+    // We temporarily support reading both XML and the old file formats.
+    if(".db4" == fs::extension(NewFilename))
+        {
+            InitLegacy(NewFilename);
+            return;
+        }
+#endif
+
+    xml_lmi::dom_parser doc(NewFilename);
+    xml::element const& root = doc.root_node("database");
+
+    xml_serialize::get_property(root, "dictionary", dictionary);
+
+    if(NumberOfEntries != static_cast<int>(dictionary.size()))
+        {
+        std::ostringstream oss;
+        oss
+            << "is not up to date or is corrupted."
+            << " It should contain " << NumberOfEntries
+            << " elements, but it actually contains " << dictionary.size()
+            << " elements."
+            ;
+        BadFile(NewFilename, oss.str());
+        }
+}
+
+#ifndef LMI_NO_LEGACY_FORMATS
+void DBDictionary::InitLegacy(std::string const& NewFilename)
+{
     JRPS::JrPs_ifpstream ips
         (NewFilename.c_str()
         );
@@ -130,6 +194,7 @@ void DBDictionary::Init(std::string const& NewFilename)
         delete temp;
         }
 }
+#endif // !LMI_NO_LEGACY_FORMATS
 
 //============================================================================
 void DBDictionary::InvalidateCache()
@@ -161,17 +226,6 @@ void DBDictionary::BadFile(std::string const& Filename, std::string const& why)
 //============================================================================
 void DBDictionary::WriteDB(std::string const& filename)
 {
-    JRPS::JrPs_ofpstream ops
-        (filename.c_str()
-        ,JRPS::JrPs_pstream::xxtrunc | JRPS::JrPs_pstream::xxcreat
-        );
-    if(!ops)
-        {
-        fatal_error()
-            << "Cannot open database file '" << filename << "'."
-            << LMI_FLUSH
-            ;
-        }
     if(NumberOfEntries != static_cast<int>(dictionary.size()))
         {
         fatal_error()
@@ -189,10 +243,17 @@ void DBDictionary::WriteDB(std::string const& filename)
             }
         fatal_error() << LMI_FLUSH;
         }
-    ops << dictionary.size();
-    for(unsigned int j = 0; j < dictionary.size(); j++)
+
+    xml::document doc("database");
+    xml::node& root = doc.get_root_node();
+    xml_serialize::add_property(root, "dictionary", dictionary);
+
+    if(!doc.save_to_file(filename.c_str()))
         {
-        ops << &dictionary[j];
+        fatal_error()
+            << "Cannot open database file '" << filename << "'."
+            << LMI_FLUSH
+            ;
         }
 }
 
@@ -631,7 +692,7 @@ void DBDictionary::WriteSampleDBFile()
     Add(TDBValue(DB_ExpRatIBNRMult      , 6.0));
     Add(TDBValue(DB_ExpRatAmortPeriod   , 4.0));
 
-    WriteDB(AddDataDir("sample.db4"));
+    WriteDB(AddDataDir("sample.xdb4"));
 }
 
 //============================================================================
@@ -642,7 +703,7 @@ void print_databases()
     fs::directory_iterator end_i;
     for(; i != end_i; ++i)
         {
-        if(is_directory(*i) || ".db4" != fs::extension(*i))
+        if(is_directory(*i) || !(".xdb4" == fs::extension(*i) || ".db4" == fs::extension(*i)))
             {
             continue;
             }

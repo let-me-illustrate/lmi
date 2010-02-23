@@ -59,6 +59,9 @@ class LMI_SO DBDictionary
   private:
     DBDictionary();
 
+#ifndef LMI_NO_LEGACY_FORMATS
+    void InitLegacy(std::string const& NewFilename);
+#endif
     void WriteDB(std::string const& filename);
     void Add(TDBValue const& e);
     void BadFile(std::string const& Filename, std::string const& why);

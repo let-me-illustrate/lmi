@@ -151,7 +151,7 @@ void TProductData::WriteProprietaryPolFiles()
     foo.MonthlyChargesPaymentFootnote  = "";
 
     // Sample policy form.
-    foo.DatabaseFilename  = "sample.db4";
+    foo.DatabaseFilename  = "sample.xdb4";
     foo.FundFilename      = "sample.xfnd";
     foo.RoundingFilename  = "sample.xrnd";
     foo.TierFilename      = "sample.xtir";

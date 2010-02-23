@@ -32,9 +32,12 @@
 
 #include "dbindex.hpp"
 #include "so_attributes.hpp"
+#include "xml_serialize.hpp"
 
+#ifndef LMI_NO_LEGACY_FORMATS
 #include "ihs_fpios.hpp"
 namespace JRPS = JOSHUA_ROWE_PERSISTENT_STREAMS;
+#endif
 
 #include <iosfwd>
 #include <string>
@@ -50,10 +53,13 @@ enum e_IdxType
     };
 
 class LMI_SO TDBValue
+#ifndef LMI_NO_LEGACY_FORMATS
     :private JRPS::JrPs_pstreamable
+#endif
 {
     friend std::istream& operator>>(std::istream&, TDBValue&);
     friend std::ostream& operator<<(std::ostream&, TDBValue const&);
+    friend class xml_serialize::type_io<TDBValue>;
 
   public:
     // Separate enumerators here facilitate compile-time assertions
@@ -122,6 +128,8 @@ class LMI_SO TDBValue
     void ParanoidCheck()                      const;
     bool AreAllAxesOK()                       const;
     void FixupIndex(std::vector<double>& idx) const;
+    void read(xml::node const&);
+    void write(xml::node&) const;
 
     int  key;        // Database dictionary key
 
@@ -152,6 +160,7 @@ class LMI_SO TDBValue
     std::vector<double>      extra_axes_values;
     std::vector<e_IdxType>   extra_axes_types;
 
+#ifndef LMI_NO_LEGACY_FORMATS
 // The following sections don't follow the normal order for access
 // specifiers. Grouping them together here facilitates their
 // expunction as soon as we get rid of 'ihs_[f]pios.?pp'.
@@ -159,7 +168,6 @@ class LMI_SO TDBValue
   public:
     static JRPS::JrPs_pstreamable* jrps_build();
     friend JRPS::JrPs_ipstream& operator>> (JRPS::JrPs_ipstream&, TDBValue*&);
-    friend JRPS::JrPs_opstream& operator<< (JRPS::JrPs_opstream&, TDBValue const*);
 
   protected:
     virtual void*   read(JRPS::JrPs_ipstream&);
@@ -169,7 +177,20 @@ class LMI_SO TDBValue
     TDBValue(JRPS::JrPs_pstreamableInit);
     virtual char const* streamableName() const;
     enum {StreamingVersion = 1};
+#endif // !LMI_NO_LEGACY_FORMATS
 };
+
+namespace xml_serialize
+{
+
+template<>
+struct type_io<TDBValue>
+{
+    static void to_xml(xml::node& out, TDBValue const& in)   { in.write(out); }
+    static void from_xml(TDBValue& out, xml::node const& in) { out.read(in); }
+};
+
+} // namespace xml_serialize
 
 /*
 Database items should be allowed to vary across numerous axes, such as
