@@ -27,6 +27,7 @@ AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [gchicares@sbcglobal.net])
 AM_INIT_AUTOMAKE()
 AM_MAINTAINER_MODE
+m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 
 AC_CONFIG_SRCDIR([lmi.png])
 AC_CONFIG_HEADER([config.h])
