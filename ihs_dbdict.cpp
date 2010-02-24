@@ -703,10 +703,16 @@ void print_databases()
     fs::directory_iterator end_i;
     for(; i != end_i; ++i)
         {
-        if(is_directory(*i) || !(".xdb4" == fs::extension(*i) || ".db4" == fs::extension(*i)))
-            {
+        if(is_directory(*i))
             continue;
-            }
+
+#ifdef LMI_NO_LEGACY_FORMATS
+        if(".xdb4" != fs::extension(*i))
+            continue;
+#else
+        if(".xdb4" != fs::extension(*i) && ".db4" != fs::extension(*i))
+            continue;
+#endif
 
         DBDictionary::instance().Init(i->string());
         fs::path out_file = fs::change_extension(*i, ".dbt");
