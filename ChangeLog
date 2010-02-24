@@ -24353,3 +24353,8 @@ Correct a typo noticed by VS.
   mc_enum_test.cpp
 Improve documentation.
 
+ <gchicares@sbcglobal.net> [762]
+
+  version.hpp
+Mark release candidate.
+
