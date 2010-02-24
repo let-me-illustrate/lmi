@@ -255,6 +255,17 @@ namespace xml_serialize
             }
         from_xml(value, *n);
     }
+
+    /// Reads a property from given XML node (root) and returns it.
+    /// Throws if the property wasn't found.
+
+    template<typename T>
+    T get_property(xml::element const& root, const char* prop)
+    {
+        T value;
+        get_property(root, prop, value);
+        return value;
+    }
 } // namespace xml_serialize
 
 #endif // xml_serialize_hpp

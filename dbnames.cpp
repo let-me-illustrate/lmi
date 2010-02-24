@@ -33,6 +33,8 @@
 #include "assert_lmi.hpp"
 #include "miscellany.hpp"
 
+#include <map>
+
 namespace
 {
 bool check_order(std::vector<db_names> const& v)
@@ -93,3 +95,31 @@ std::vector<db_names> const& GetDBNames()
     return static_get_db_names();
 }
 
+int db_name_to_index(std::string const& short_name)
+{
+    typedef std::map<std::string, int> name_to_key_map;
+
+    static name_to_key_map static_mapping;
+
+    if(static_mapping.empty())
+        {
+        std::vector<db_names> const& names = GetDBNames();
+        for(int i = 0; i < DB_LAST; ++i)
+            {
+            static_mapping[names[i].ShortName] = i;
+            }
+        }
+
+    name_to_key_map::const_iterator i = static_mapping.find(short_name);
+    if(static_mapping.end() == i)
+        {
+        fatal_error()
+            << "Value '"
+            << short_name
+            << "' is invalid database name."
+            << LMI_FLUSH
+            ;
+        }
+
+    return i->second;
+}

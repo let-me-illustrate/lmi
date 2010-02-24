@@ -432,7 +432,9 @@ enum DatabaseNames
         ,DB_PrimaryHurdle
         ,DB_SecondaryHurdle
 
-    ,DB_LAST    // Adding a new item? Insert directly above *only*.
+    ,DB_LAST
+#ifndef LMI_NO_LEGACY_FORMATS
+    // Adding a new item? Insert directly above *only*.
     // That way, old databases remain compatible with new code, and any
     // error in using a new item will occur when the new item is used
     // instead of where a renumbered old item is used--that should make
@@ -440,6 +442,10 @@ enum DatabaseNames
     // additions into categories when preparing a major release.
     //
     // See 'dbnames.xpp' for the definition of each entity.
+    //
+    // TODO !! Once we get rid of read-only support for legacy .db4 files too,
+    //         we can remove this restriction on where to add new values.
+#endif // !LMI_NO_LEGACY_FORMATS
     };
 
 struct db_names
@@ -452,5 +458,11 @@ struct db_names
 
 std::vector<db_names> const& LMI_SO GetDBNames();
 
-#endif // dbnames_hpp
+inline char const* db_name_from_index(int key)
+{
+    return GetDBNames()[key].ShortName;
+}
 
+int db_name_to_index(std::string const& short_name);
+
+#endif // dbnames_hpp

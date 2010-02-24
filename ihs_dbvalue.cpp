@@ -706,7 +706,13 @@ void TDBValue::read(xml::node const& n)
 {
     using namespace xml_serialize;
 
-    get_property(n, "key", key);
+    // This is the only place DatabaseNames value is serialized. Adding
+    // "proper" support for it as type_io<> specialization would be
+    // complicated, because choose_type_io<> unconditionally chooses
+    // type_io<mc_enum>. It doesn't seem worth the extra complications in
+    // xml_serialize code, so we do the conversion manually instead, for other
+    // code's simplicity sake.
+    key = db_name_to_index(get_property<std::string>(n, "key"));
     get_property(n, "axis_lengths", axis_lengths);
     get_property(n, "extra_axes_values", extra_axes_values);
     get_property(n, "extra_axes_names", extra_axes_names);
@@ -723,7 +729,7 @@ void TDBValue::write(xml::node& n) const
 {
     using namespace xml_serialize;
 
-    add_property(n, "key", key);
+    add_property(n, "key", db_name_from_index(key));
     add_property(n, "axis_lengths", axis_lengths);
     add_property(n, "extra_axes_values", extra_axes_values);
     add_property(n, "extra_axes_names", extra_axes_names);
