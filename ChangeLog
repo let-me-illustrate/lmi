@@ -24353,8 +24353,24 @@ Correct a typo noticed by VS.
   mc_enum_test.cpp
 Improve documentation.
 
- <gchicares@sbcglobal.net> [762]
+20100224T0302Z <gchicares@sbcglobal.net> [762]
 
   version.hpp
 Mark release candidate.
+
+20100224T1904Z <gchicares@sbcglobal.net> [762]
+
+  mc_enum.hpp
+  mc_enum.tpp
+  mc_enum_aux.hpp
+  mc_enum_fwd.hpp
+  mc_enum_metadata.hpp [new file]
+  mc_enum_test.cpp
+  mc_enum_test_aux.cpp
+  mc_enum_test_aux.hpp
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+  mc_enum_types_aux.cpp
+  yare_input.cpp
+Refactor (VS).
 
