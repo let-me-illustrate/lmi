@@ -87,27 +87,20 @@ class LMI_SO mc_enum_base
     std::deque<bool> allowed_;
 };
 
-/// Metadata for mc_enum template.
+/// M C Enums: string-Mapped, value-Constrained Enumerations.
 ///
-/// For every type T used in mc_enum<T>, mc_enum_type_info<T> specialization
-/// must exist. Each specialization must provide the following:
+/// Encapsulate C++ enumerations in a class template that pairs them
+/// with symbolic names and constrains them to given values. The
+/// underlying enumeration must have a non-empty enumerator-list.
 ///
-///   static const std::size_t n;
-///   typedef T const (&enums_t)[n];
-///   typedef char const*const (&strings_t)[n];
-///   static enums_t enums();
-///   static strings_t strings();
+/// The implicitly-defined copy ctor and copy assignment operator do
+/// the right thing.
 ///
-/// A convenient way of achieving that is deriving it from
-/// mc_enum_type_info_impl<>.
-
-template<typename T>
-struct mc_enum_type_info
-{
-};
-
-/// Helper for implementing mc_enum_type_info<T>, with compile-time
-/// checking of enums() and strings() array sizes.
+/// It is contemplated that this class template will be instantiated
+/// to create numerous types in one translation unit for use in other
+/// translation units. Given that usage, it makes sense to instantiate
+/// those types explicitly in that one translation unit, in order to
+/// avoid bloat.
 ///
 /// Careful attention to detail enables compile-time checking of the
 /// sizes of the arrays used as non-type parameters. If too many
@@ -119,8 +112,7 @@ struct mc_enum_type_info
 /// Specific types require one translation unit (TU) for the
 /// instantiation and a header to make them available to other TUs.
 ///
-/// The header should have a mc_enum_type_info<T> specialization that
-/// derives from mc_enum_type_info_impl, which requires
+/// The header should have a typedef declaration, which requires
 /// declarations of the arrays used as non-type arguments. Those array
 /// declarations must specify bounds explicitly, because an array of
 /// unknown bound is an incomplete type that prevents instantiation of
@@ -146,49 +138,21 @@ struct mc_enum_type_info
 /// macro. This built-in approach is preferred because it avoids using
 /// the preprocessor and its compile-time checking is automatic.
 
-template<typename T, std::size_t sz, T const (*e)[sz], char const*const (*c)[sz]>
-struct mc_enum_type_info_impl
-{
-    static const std::size_t n = sz;
-
-    typedef T const (&enums_t)[n];
-    typedef char const*const (&strings_t)[n];
-
-    static enums_t enums() { return *e; }
-    static strings_t strings() {return *c; }
-};
-
-/// M C Enums: string-Mapped, value-Constrained Enumerations.
-///
-/// Encapsulate C++ enumerations in a class template that pairs them
-/// with symbolic names and constrains them to given values. The
-/// underlying enumeration must have a non-empty enumerator-list.
-///
-/// The implicitly-defined copy ctor and copy assignment operator do
-/// the right thing.
-///
-/// It is contemplated that this class template will be instantiated
-/// to create numerous types in one translation unit for use in other
-/// translation units. Given that usage, it makes sense to instantiate
-/// those types explicitly in that one translation unit, in order to
-/// avoid bloat.
-
-template<typename T>
+template<typename T, std::size_t n, T const (*e)[n], char const*const (*c)[n]>
 class mc_enum
     :public mc_enum_base
-    ,private boost::equality_comparable<mc_enum<T>, mc_enum<T> >
-    ,private boost::equality_comparable<mc_enum<T>, T>
-    ,private boost::equality_comparable<mc_enum<T>, std::string>
+    ,private boost::equality_comparable<mc_enum<T,n,e,c>, mc_enum<T,n,e,c> >
+    ,private boost::equality_comparable<mc_enum<T,n,e,c>, T>
+    ,private boost::equality_comparable<mc_enum<T,n,e,c>, std::string>
 {
-    typedef mc_enum_type_info<T> enum_info;
-
     BOOST_STATIC_ASSERT(boost::is_enum<T>::value);
-    // Note: some additional static asserts are in constructor in mc_enum.tpp.
+    BOOST_STATIC_ASSERT(0 < n);
 
     friend class mc_enum_test;
 
   public:
     typedef T enum_type;
+    enum{Cardinality = n};
 
     mc_enum();
     explicit mc_enum(T);
@@ -197,7 +161,7 @@ class mc_enum
     mc_enum& operator=(T);
     mc_enum& operator=(std::string const&);
 
-    bool operator==(mc_enum<T> const&) const;
+    bool operator==(mc_enum<T,n,e,c> const&) const;
     bool operator==(T) const;
     bool operator==(std::string const&) const;
 

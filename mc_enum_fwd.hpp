@@ -26,7 +26,9 @@
 
 #include "config.hpp"
 
-template<typename T>
+#include <cstddef> // std::size_t
+
+template<typename T, std::size_t n, T const (*e)[n], char const*const (*c)[n]>
 class mc_enum;
 
 #endif // mc_enum_fwd_hpp
