@@ -27,6 +27,7 @@
 #endif // __BORLANDC__
 
 #include "mc_enum.hpp"
+#include "mc_enum.tpp"
 #include "mc_enum_type_enums.hpp" // Plain enums.
 
 // Here write illustrative examples and anything that doesn't follow
@@ -142,6 +143,5 @@ MC_DEFINE(report_column)
 // time: this is the motivation for keeping class template mc_enum
 // and its metadata physically separate.
 
-#include "mc_enum.tpp"
 #include "mc_enum_types.hpp"
 
