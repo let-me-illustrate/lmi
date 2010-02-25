@@ -155,7 +155,7 @@ struct mc_enum_type_info_impl
     typedef char const*const (&strings_t)[n];
 
     static enums_t enums() { return *e; }
-    static strings_t strings() { return *c; }
+    static strings_t strings() {return *c; }
 };
 
 /// Helper macro that makes mc_enum_type_info_impl<>'s use simpler.
@@ -178,10 +178,7 @@ struct mc_enum_type_info<T> :public mc_enum_type_info_impl<T, n, &e, &c> \
 /// to create numerous types in one translation unit for use in other
 /// translation units. Given that usage, it makes sense to instantiate
 /// those types explicitly in that one translation unit, in order to
-/// avoid bloat. Explicit instantiation also allows us to use
-/// mc_enum<T> without having to declare mc_enum_type_info<T>
-/// specialization in a header included by every TU that uses mc_enum<T>,
-/// so that's what we do.
+/// avoid bloat.
 
 template<typename T>
 class mc_enum
