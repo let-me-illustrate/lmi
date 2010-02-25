@@ -35,13 +35,13 @@
 
 namespace
 {
-template<typename T, std::size_t n, T const (*e)[n], char const*const (*c)[n]>
+template<typename T>
 std::vector<T> convert_vector_type
-    (std::vector<mc_enum<T,n,e,c> > const& ve
+    (std::vector<mc_enum<T> > const& ve
     )
 {
     std::vector<T> z;
-    typename std::vector<mc_enum<T,n,e,c> >::const_iterator ve_i;
+    typename std::vector<mc_enum<T> >::const_iterator ve_i;
     for(ve_i = ve.begin(); ve_i != ve.end(); ++ve_i)
         {
         z.push_back(ve_i->value());

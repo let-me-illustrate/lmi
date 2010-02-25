@@ -26,7 +26,8 @@
 
 #include "config.hpp"
 
-#include "mc_enum_fwd.hpp"        // Template class forward declaration.
+#include "mc_enum_fwd.hpp"
+#include "mc_enum_metadata.hpp"
 #include "mc_enum_type_enums.hpp" // Plain enumerators.
 
 // Here write illustrative examples and anything that doesn't follow
@@ -34,18 +35,22 @@
 
 extern enum_option const option_enums[3];
 extern char const*const option_strings[3];
-typedef mc_enum<enum_option, 3, &option_enums, &option_strings> e_option;
+template<> struct mc_enum_key<enum_option>
+  :public mc_enum_data<enum_option, 3, option_enums, option_strings> {};
+typedef mc_enum<enum_option> e_option;
 
 extern mcenum_emission const emission_enums[11];
 extern char const*const emission_strings[11];
-typedef mc_enum<mcenum_emission, 11, &emission_enums, &emission_strings> e_emission;
-
-#include "mc_enum_types.xpp"
+template<> struct mc_enum_key<mcenum_emission>
+  :public mc_enum_data<mcenum_emission, 11, emission_enums, emission_strings> {};
+typedef mc_enum<mcenum_emission> e_emission;
 
 #define MC_DECLARE(TYPE,NUMBER) \
 extern mcenum_##TYPE const TYPE##_enums[NUMBER]; \
 extern char const*const TYPE##_strings[NUMBER]; \
-typedef mc_enum<mcenum_##TYPE, NUMBER, &TYPE##_enums, &TYPE##_strings> mce_##TYPE;
+template<> struct mc_enum_key<mcenum_##TYPE> \
+  :public mc_enum_data<mcenum_##TYPE, NUMBER, TYPE##_enums, TYPE##_strings> {}; \
+typedef mc_enum<mcenum_##TYPE> mce_##TYPE;
 
 MC_DECLARE(yes_or_no,2)
 MC_DECLARE(gender,3)
