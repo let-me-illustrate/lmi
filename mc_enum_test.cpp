@@ -27,7 +27,7 @@
 #endif // __BORLANDC__
 
 #include "mc_enum.hpp"
-#include "mc_enum.tpp" // Template class implementation.
+#include "mc_enum.tpp"
 #include "mc_enum_test_aux.hpp"
 
 #include "test_tools.hpp"
@@ -41,8 +41,10 @@
 enum enum_island {i_Easter = 37, i_Pago_Pago = -17, i_Ni_ihau = 13};
 extern enum_island const island_enums[] = {i_Easter, i_Pago_Pago, i_Ni_ihau};
 extern char const*const island_strings[] = {"Easter", "Pago Pago", "Ni_ihau"};
-template class mc_enum<enum_island, 3, island_enums, &island_strings>;
-typedef mc_enum<enum_island, 3, &island_enums, &island_strings> e_island;
+template<> struct mc_enum_key<enum_island>
+  :public mc_enum_data<enum_island, 3, island_enums, island_strings> {};
+template class mc_enum<enum_island>;
+typedef mc_enum<enum_island> e_island;
 
 // Enumerative type 'e_holiday' is explicitly instantiated in a
 // different translation unit.
@@ -174,8 +176,8 @@ void mc_enum_test::test()
     BOOST_TEST_EQUAL(holiday3, "Easter");
 
     // That which is inconceivable is not to be allowed.
-    // COMPILER !! Here, como catches std::range_error instead of
-    // std::out_of_range when at() throws; that seems incorrect.
+    // COMPILER !! Here, como catches std::range_error when at()
+    // throws, whereas 23.1.1/13 requires std::out_of_range.
     BOOST_TEST_THROW(holiday3.allow( 3, false), std::out_of_range, "");
     BOOST_TEST_THROW(holiday3.allow(17, false), std::out_of_range, "");
     BOOST_TEST_THROW(holiday3.allow(-1, false), std::out_of_range, "");

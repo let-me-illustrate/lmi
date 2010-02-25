@@ -21,18 +21,6 @@
 
 // $Id$
 
-// Acknowledgment
-//
-// The valuable idea of associating immutable arrays with this class
-// as non-type template parameters was taken from an article in
-// comp.lang.c++.moderated by Hyman Rosen <hymie@prolifics.com>,
-// archived at
-//   http://groups.google.com/groups?selm=t7aeqycnze.fsf%40calumny.jyacc.com
-// which bears no copyright notice, as is usual in usenet. This
-// implementation descends from work GWC did in 1998, which predates
-// that article; any defect here should not reflect on Hyman Rosen's
-// reputation.
-
 #ifndef mc_enum_hpp
 #define mc_enum_hpp
 
@@ -44,7 +32,7 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits.hpp>
 
-#include <cstddef>
+#include <cstddef> // std::size_t
 #include <deque>
 #include <string>
 #include <vector>
@@ -102,57 +90,22 @@ class LMI_SO mc_enum_base
 /// those types explicitly in that one translation unit, in order to
 /// avoid bloat.
 ///
-/// Careful attention to detail enables compile-time checking of the
-/// sizes of the arrays used as non-type parameters. If too many
-/// initializers are given, the compiler must emit a diagnostic
-/// [8.5.1/6]. Supplying too few is acceptable [8.5.1/7] to the
-/// language, but likely to cause run-time errors--which can be
-/// turned into compile-time errors by the technique presented here.
-///
-/// Specific types require one translation unit (TU) for the
-/// instantiation and a header to make them available to other TUs.
-///
-/// The header should have a typedef declaration, which requires
-/// declarations of the arrays used as non-type arguments. Those array
-/// declarations must specify bounds explicitly, because an array of
-/// unknown bound is an incomplete type that prevents instantiation of
-/// the class template--and initializers must not be specified in the
-/// header, because including it in two TUs would violate the ODR.
-///
-/// The instantiation TU, however, should omit the bound specifiers,
-/// causing the bounds to be 'calculated' [8.3.4/3]. Passing them as
-/// non-type arguments, as '(&array)[n]' rather than as 'array[n],
-/// then causes explicit instantiation to fail if the calculated
-/// bounds do not match the size explicitly specified as a template
-/// parameter. Limitation: this safeguard is ineffective for a TU
-/// other than the instantiation TU that includes both the header and
-/// the code in the accompanying '.tpp' file that implements the
-/// template class, because implicit instantiation would occur; but
-/// that is easily avoided in the physical design.
-///
-/// Because both the header and the instantiation TU require the
-/// definition of the underlying enum type, that type must be defined
-/// in a separate header that both these files include.
-///
-/// The same benefit could be realized through consistent use of a
-/// macro. This built-in approach is preferred because it avoids using
-/// the preprocessor and its compile-time checking is automatic.
+/// Metadata is deliberately excluded from this header, for reasons
+/// explained in the documentation for class mc_enum_data.
 
-template<typename T, std::size_t n, T const (*e)[n], char const*const (*c)[n]>
+template<typename T>
 class mc_enum
     :public mc_enum_base
-    ,private boost::equality_comparable<mc_enum<T,n,e,c>, mc_enum<T,n,e,c> >
-    ,private boost::equality_comparable<mc_enum<T,n,e,c>, T>
-    ,private boost::equality_comparable<mc_enum<T,n,e,c>, std::string>
+    ,private boost::equality_comparable<mc_enum<T>, mc_enum<T> >
+    ,private boost::equality_comparable<mc_enum<T>, T          >
+    ,private boost::equality_comparable<mc_enum<T>, std::string>
 {
     BOOST_STATIC_ASSERT(boost::is_enum<T>::value);
-    BOOST_STATIC_ASSERT(0 < n);
 
     friend class mc_enum_test;
 
   public:
     typedef T enum_type;
-    enum{Cardinality = n};
 
     mc_enum();
     explicit mc_enum(T);
@@ -161,8 +114,8 @@ class mc_enum
     mc_enum& operator=(T);
     mc_enum& operator=(std::string const&);
 
-    bool operator==(mc_enum<T,n,e,c> const&) const;
-    bool operator==(T) const;
+    bool operator==(mc_enum<T>  const&) const;
+    bool operator==(T                 ) const;
     bool operator==(std::string const&) const;
 
     static std::size_t ordinal(std::string const&);
@@ -178,6 +131,10 @@ class mc_enum
     static std::vector<std::string> const& all_strings();
 
   private:
+    static std::size_t        n();
+    static T    const*        e();
+    static char const* const* c();
+
     // datum_base required implementation.
     // TODO ?? Consider moving the implementation into the base class.
     virtual std::istream& read (std::istream&);

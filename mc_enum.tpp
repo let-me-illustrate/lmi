@@ -22,6 +22,7 @@
 // $Id$
 
 #include "mc_enum.hpp"
+#include "mc_enum_metadata.hpp"
 
 #include "alert.hpp"
 #include "facets.hpp"
@@ -30,55 +31,71 @@
 #include <algorithm> // std::find()
 #include <typeinfo>
 
-// TODO ?? Should there be a runtime check that all elements in 'e'
-// and in 'c' are unique? Can that be asserted at compile time?
+// TODO ?? Should there be a runtime check that all elements in
+// e() and in c() are unique? Can that be asserted at compile time?
 
-template<typename T, std::size_t n, T const (*e)[n], char const*const (*c)[n]>
-mc_enum<T,n,e,c>::mc_enum()
-    :mc_enum_base(n)
-    ,value_((*e)[0])
-{}
+template<typename T>
+std::size_t        mc_enum<T>::n() {return mc_enum_key<T>::n_;}
 
-template<typename T, std::size_t n, T const (*e)[n], char const*const (*c)[n]>
-mc_enum<T,n,e,c>::mc_enum(T t)
-    :mc_enum_base(n)
+template<typename T>
+T    const*        mc_enum<T>::e() {return mc_enum_key<T>::e();}
+
+template<typename T>
+char const* const* mc_enum<T>::c() {return mc_enum_key<T>::c();}
+
+/// The header that defines class mc_enum is by design unaware of its
+/// associated metadata, so static assertions that depend on metadata
+/// are written here.
+
+template<typename T>
+mc_enum<T>::mc_enum()
+    :mc_enum_base(n())
+    ,value_(e()[0])
+{
+    typedef mc_enum_key<T> metadata;
+    BOOST_STATIC_ASSERT(0 < metadata::n_);
+}
+
+template<typename T>
+mc_enum<T>::mc_enum(T t)
+    :mc_enum_base(n())
     ,value_(t)
 {}
 
-template<typename T, std::size_t n, T const (*e)[n], char const*const (*c)[n]>
-mc_enum<T,n,e,c>::mc_enum(std::string const& s)
-    :mc_enum_base(n)
-    ,value_((*e)[ordinal(s)])
+template<typename T>
+mc_enum<T>::mc_enum(std::string const& s)
+    :mc_enum_base(n())
+    ,value_(e()[ordinal(s)])
 {}
 
-template<typename T, std::size_t n, T const (*e)[n], char const*const (*c)[n]>
-mc_enum<T,n,e,c>& mc_enum<T,n,e,c>::operator=(T t)
+template<typename T>
+mc_enum<T>& mc_enum<T>::operator=(T t)
 {
     value_ = t;
     return *this;
 }
 
-template<typename T, std::size_t n, T const (*e)[n], char const*const (*c)[n]>
-mc_enum<T,n,e,c>& mc_enum<T,n,e,c>::operator=(std::string const& s)
+template<typename T>
+mc_enum<T>& mc_enum<T>::operator=(std::string const& s)
 {
-    value_ = (*e)[ordinal(s)];
+    value_ = e()[ordinal(s)];
     return *this;
 }
 
-template<typename T, std::size_t n, T const (*e)[n], char const*const (*c)[n]>
-bool mc_enum<T,n,e,c>::operator==(mc_enum<T,n,e,c> const& z) const
+template<typename T>
+bool mc_enum<T>::operator==(mc_enum<T> const& z) const
 {
     return z.value_ == value_;
 }
 
-template<typename T, std::size_t n, T const (*e)[n], char const*const (*c)[n]>
-bool mc_enum<T,n,e,c>::operator==(T t) const
+template<typename T>
+bool mc_enum<T>::operator==(T t) const
 {
     return t == value_;
 }
 
-template<typename T, std::size_t n, T const (*e)[n], char const*const (*c)[n]>
-bool mc_enum<T,n,e,c>::operator==(std::string const& s) const
+template<typename T>
+bool mc_enum<T>::operator==(std::string const& s) const
 {
     return s == str();
 }
@@ -108,43 +125,43 @@ std::string provide_for_backward_compatibility(std::string const& s)
 }
 } // Unnamed namespace.
 
-template<typename T, std::size_t n, T const (*e)[n], char const*const (*c)[n]>
-std::istream& mc_enum<T,n,e,c>::read(std::istream& is)
+template<typename T>
+std::istream& mc_enum<T>::read(std::istream& is)
 {
     std::locale old_locale = is.imbue(blank_is_not_whitespace_locale());
     std::string s;
     is >> s;
     is.imbue(old_locale);
 
-    std::size_t v = std::find(*c, *c + n, s) - *c;
-    if(n == v)
+    std::size_t v = std::find(c(), c() + n(), s) - c();
+    if(n() == v)
         {
-        v = std::find(*c, *c + n, provide_for_backward_compatibility(s)) - *c;
+        v = std::find(c(), c() + n(), provide_for_backward_compatibility(s)) - c();
         }
-    if(n == v)
+    if(n() == v)
         {
         ordinal(s); // Throws.
         throw "Unreachable.";
         }
-    value_ = (*e)[v];
+    value_ = e()[v];
 
     return is;
 }
 
-template<typename T, std::size_t n, T const (*e)[n], char const*const (*c)[n]>
-std::ostream& mc_enum<T,n,e,c>::write(std::ostream& os) const
+template<typename T>
+std::ostream& mc_enum<T>::write(std::ostream& os) const
 {
     return os << str();
 }
 
-template<typename T, std::size_t n, T const (*e)[n], char const*const (*c)[n]>
-std::size_t mc_enum<T,n,e,c>::cardinality() const
+template<typename T>
+std::size_t mc_enum<T>::cardinality() const
 {
-    return n;
+    return n();
 }
 
-template<typename T, std::size_t n, T const (*e)[n], char const*const (*c)[n]>
-void mc_enum<T,n,e,c>::enforce_proscription()
+template<typename T>
+void mc_enum<T>::enforce_proscription()
 {
     if(is_allowed(ordinal()))
         {
@@ -154,15 +171,15 @@ void mc_enum<T,n,e,c>::enforce_proscription()
     std::size_t z = first_allowed_ordinal();
     if(z < cardinality())
         {
-        value_ = (*e)[z];
+        value_ = e()[z];
         }
 }
 
-template<typename T, std::size_t n, T const (*e)[n], char const*const (*c)[n]>
-std::size_t mc_enum<T,n,e,c>::ordinal() const
+template<typename T>
+std::size_t mc_enum<T>::ordinal() const
 {
-    std::size_t i = std::find(*e, *e + n, value_) - *e;
-    if(i == n)
+    std::size_t i = std::find(e(), e() + n(), value_) - e();
+    if(i == n())
         {
         fatal_error()
             << "Value "
@@ -176,23 +193,23 @@ std::size_t mc_enum<T,n,e,c>::ordinal() const
     return i;
 }
 
-template<typename T, std::size_t n, T const (*e)[n], char const*const (*c)[n]>
-std::string mc_enum<T,n,e,c>::str(int j) const
+template<typename T>
+std::string mc_enum<T>::str(int j) const
 {
-    return (*c)[j];
+    return c()[j];
 }
 
-template<typename T, std::size_t n, T const (*e)[n], char const*const (*c)[n]>
-T mc_enum<T,n,e,c>::value() const
+template<typename T>
+T mc_enum<T>::value() const
 {
     return value_;
 }
 
-template<typename T, std::size_t n, T const (*e)[n], char const*const (*c)[n]>
-std::size_t mc_enum<T,n,e,c>::ordinal(std::string const& s)
+template<typename T>
+std::size_t mc_enum<T>::ordinal(std::string const& s)
 {
-    std::size_t v = std::find(*c, *c + n, s) - *c;
-    if(v == n)
+    std::size_t v = std::find(c(), c() + n(), s) - c();
+    if(v == n())
         {
         fatal_error()
             << "Value '"
@@ -206,16 +223,16 @@ std::size_t mc_enum<T,n,e,c>::ordinal(std::string const& s)
     return v;
 }
 
-template<typename T, std::size_t n, T const (*e)[n], char const*const (*c)[n]>
-std::string mc_enum<T,n,e,c>::str() const
+template<typename T>
+std::string mc_enum<T>::str() const
 {
-    return (*c)[ordinal()];
+    return c()[ordinal()];
 }
 
-template<typename T, std::size_t n, T const (*e)[n], char const*const (*c)[n]>
-std::vector<std::string> const& mc_enum<T,n,e,c>::all_strings()
+template<typename T>
+std::vector<std::string> const& mc_enum<T>::all_strings()
 {
-    static std::vector<std::string> const v(*c, *c + n);
+    static std::vector<std::string> const v(c(), c() + n());
     return v;
 }
 

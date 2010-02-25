@@ -24337,3 +24337,40 @@ Provide direct links to usenet articles.
   fenv_lmi_x86.hpp
 Improve documentation.
 
+20100221T1118Z <vslavik@fastmail.fm> [762]
+
+  fenv_lmi_x86.hpp
+Add --enable-maintainer-mode support to configure.
+
+20100222T0007Z <gchicares@sbcglobal.net> [762]
+
+  mc_enum_test_aux.cpp
+  tn_range_test_aux.cpp
+Correct a typo noticed by VS.
+
+20100222T0008Z <gchicares@sbcglobal.net> [762]
+
+  mc_enum_test.cpp
+Improve documentation.
+
+20100224T0302Z <gchicares@sbcglobal.net> [762]
+
+  version.hpp
+Mark release candidate.
+
+20100224T1904Z <gchicares@sbcglobal.net> [762]
+
+  mc_enum.hpp
+  mc_enum.tpp
+  mc_enum_aux.hpp
+  mc_enum_fwd.hpp
+  mc_enum_metadata.hpp [new file]
+  mc_enum_test.cpp
+  mc_enum_test_aux.cpp
+  mc_enum_test_aux.hpp
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+  mc_enum_types_aux.cpp
+  yare_input.cpp
+Refactor (VS).
+
