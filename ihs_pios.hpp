@@ -55,7 +55,7 @@
 #if 1
 #   include <string>
 //using std::string;
-#elif __BORLANDC__ < 0x0550
+#elif defined(__BORLANDC__) && __BORLANDC__ < 0x0550
 #   include <cstring.h>
     // This BC++5.02 class uses upper case NPOS, but
     // ISO std C++ uses lower case npos .
@@ -63,7 +63,7 @@
     // This would be preferable, but the borland class doesn't
     // have string::size_type :
     // static const size_type npos = static_cast<size_type>(-1);
-#elif 0x0550 <= __BORLANDC__
+#elif defined(__BORLANDC__) && 0x0550 <= __BORLANDC__
 #   include </bc5/include/cstring.h>
 #endif
 
