@@ -34,12 +34,20 @@
 
 extern enum_option const option_enums[3];
 extern char const*const option_strings[3];
-MC_ENUM_TYPE_IMPL(enum_option, 3, option_enums, option_strings);
+template<>
+struct mc_enum_type_info<enum_option>
+    :public mc_enum_type_info_impl<enum_option, 3, &option_enums, &option_strings>
+{
+};
 typedef mc_enum<enum_option> e_option;
 
 extern mcenum_emission const emission_enums[11];
 extern char const*const emission_strings[11];
-MC_ENUM_TYPE_IMPL(mcenum_emission, 11, emission_enums, emission_strings);
+template<>
+struct mc_enum_type_info<mcenum_emission>
+    :public mc_enum_type_info_impl<mcenum_emission, 11, &emission_enums, &emission_strings>
+{
+};
 typedef mc_enum<mcenum_emission> e_emission;
 
 extern rounding_style const rounding_style_enums[7];
@@ -50,7 +58,10 @@ typedef mc_enum<rounding_style> mce_rounding_style;
 #define MC_DECLARE(TYPE,NUMBER) \
 extern mcenum_##TYPE const TYPE##_enums[NUMBER]; \
 extern char const*const TYPE##_strings[NUMBER]; \
-MC_ENUM_TYPE_IMPL(mcenum_##TYPE, NUMBER, TYPE##_enums, TYPE##_strings); \
+template<> \
+struct mc_enum_type_info<mcenum_##TYPE> \
+    :public mc_enum_type_info_impl<mcenum_##TYPE, NUMBER, &TYPE##_enums, &TYPE##_strings> \
+{}; \
 typedef mc_enum<mcenum_##TYPE> mce_##TYPE;
 
 MC_DECLARE(yes_or_no,2)
