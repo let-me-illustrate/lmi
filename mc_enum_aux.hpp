@@ -31,13 +31,13 @@
 #include <string>
 #include <vector>
 
-template<typename T, std::size_t n, T const (*e)[n], char const*const (*c)[n]>
+template<typename T>
 std::vector<std::string> mc_e_vector_to_string_vector
-    (std::vector<mc_enum<T,n,e,c> > const& ve
+    (std::vector<mc_enum<T> > const& ve
     )
 {
     std::vector<std::string> vs;
-    typename std::vector<mc_enum<T,n,e,c> >::const_iterator ve_i;
+    typename std::vector<mc_enum<T> >::const_iterator ve_i;
     for(ve_i = ve.begin(); ve_i != ve.end(); ++ve_i)
         {
         vs.push_back(ve_i->str());

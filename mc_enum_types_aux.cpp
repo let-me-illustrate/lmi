@@ -34,9 +34,14 @@
 
 #include <boost/static_assert.hpp>
 
-BOOST_STATIC_ASSERT(mc_n_gen_bases    == static_cast<std::size_t>(mce_gen_basis  ::Cardinality));
-BOOST_STATIC_ASSERT(mc_n_sep_bases    == static_cast<std::size_t>(mce_sep_basis  ::Cardinality));
-BOOST_STATIC_ASSERT(mc_n_rate_periods == static_cast<std::size_t>(mce_rate_period::Cardinality));
+// The 'mc_n_' values could be initialized in the header with the
+// values they're tested against here, but that would complicate
+// the physical design. It's better to exclude heavyweight mc_enum
+// metadata from any header in which it's not indispensable.
+
+BOOST_STATIC_ASSERT(mc_n_gen_bases    == mc_enum_key<mcenum_gen_basis  >::n_);
+BOOST_STATIC_ASSERT(mc_n_sep_bases    == mc_enum_key<mcenum_sep_basis  >::n_);
+BOOST_STATIC_ASSERT(mc_n_rate_periods == mc_enum_key<mcenum_rate_period>::n_);
 
 std::vector<std::string> const& LMI_SO all_strings_gender   () {return mce_gender  ::all_strings();}
 std::vector<std::string> const& LMI_SO all_strings_class    () {return mce_class   ::all_strings();}
