@@ -24390,3 +24390,8 @@ Make new header known to autotools.
 Fix a gcc-4.x issue (VS). See:
   http://lists.nongnu.org/archive/html/lmi/2010-02/msg00004.html
 
+20100225T1749Z <gchicares@sbcglobal.net> [762]
+
+  mc_enum_test_aux.cpp
+Fix a presumptive gcc-4.x issue.
+
