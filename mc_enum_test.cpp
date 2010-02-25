@@ -41,15 +41,8 @@
 enum enum_island {i_Easter = 37, i_Pago_Pago = -17, i_Ni_ihau = 13};
 extern enum_island const island_enums[] = {i_Easter, i_Pago_Pago, i_Ni_ihau};
 extern char const*const island_strings[] = {"Easter", "Pago Pago", "Ni_ihau"};
-
-template<>
-struct mc_enum_type_info<enum_island>
-    :public mc_enum_type_info_impl<enum_island, 3, &island_enums, &island_strings>
-{
-};
-
-template class mc_enum<enum_island>;
-typedef mc_enum<enum_island> e_island;
+template class mc_enum<enum_island, 3, island_enums, &island_strings>;
+typedef mc_enum<enum_island, 3, &island_enums, &island_strings> e_island;
 
 // Enumerative type 'e_holiday' is explicitly instantiated in a
 // different translation unit.

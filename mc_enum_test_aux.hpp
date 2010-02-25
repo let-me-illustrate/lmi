@@ -31,12 +31,7 @@
 
 extern enum_holiday const holiday_enums[3];
 extern char const*const holiday_strings[3];
-template<>
-struct mc_enum_type_info<enum_holiday>
-    :public mc_enum_type_info_impl<enum_holiday, 3, &holiday_enums, &holiday_strings>
-{
-};
-typedef mc_enum<enum_holiday> e_holiday;
+typedef mc_enum<enum_holiday, 3, &holiday_enums, &holiday_strings> e_holiday;
 
 #endif // mc_enum_test_aux_hpp
 

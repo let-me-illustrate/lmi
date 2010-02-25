@@ -32,7 +32,7 @@
 // Normally, one would prefer to instantiate all mc_enum templates
 // in a single file. Here, however, the point is to instantiate one
 // such template in a different translation unit than the unit-test
-// driver, in order to prove that explicit instantiation works.
+// driver, in order to prove that explicit instantion works.
 
 extern enum_holiday const holiday_enums[] =
     {h_Theophany
@@ -44,9 +44,5 @@ extern char const*const holiday_strings[] =
     ,"Easter"
     ,"Pentecost"
     };
-template class mc_enum<enum_holiday>;
+template class mc_enum<enum_holiday, 3, &holiday_enums, &holiday_strings>;
 
-// This can only be included after definitions of the *_enums and *_strings
-// arrays in order for the compile-time bounds checks to work. On the other
-// hand, this file is required for the mc_enum<> instantiations to compile.
-#include "mc_enum_test_aux.hpp"
