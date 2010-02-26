@@ -54,6 +54,25 @@ enum mcenum_emission
     ,mce_emit_custom_0       =  512
     };
 
+/// Rounding styles.
+///
+/// 'r_to_nearest' means bankers rounding, which rounds halfway cases
+/// to even:
+///   x - (x REM 1.0)
+/// as in the C99 remainder() function [7.12.10.2/2], instead of
+/// rounding halfway cases away from zero, as the C99 round()
+/// function does [7.12.9.6/2].
+
+enum rounding_style
+    {r_indeterminate = -1
+    ,r_toward_zero   =  0
+    ,r_to_nearest    =  1
+    ,r_upward        =  2
+    ,r_downward      =  3
+    ,r_current       =  4
+    ,r_not_at_all    =  5
+    };
+
 /// Not yet implemented--used only to initialize an unimplemented
 /// database entity.
 

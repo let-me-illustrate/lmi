@@ -27,6 +27,7 @@
 #endif // __BORLANDC__
 
 #include "mc_enum.hpp"
+#include "mc_enum.tpp"
 #include "mc_enum_test_aux_enums.hpp" // Plain enums.
 
 // Normally, one would prefer to instantiate all mc_enum templates
@@ -57,6 +58,5 @@ template class mc_enum<enum_holiday>;
 // time: this is the motivation for keeping class template mc_enum
 // and its metadata physically separate.
 
-#include "mc_enum.tpp"
 #include "mc_enum_test_aux.hpp"
 

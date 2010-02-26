@@ -26,6 +26,8 @@
 
 #include "config.hpp"
 
+#include "mc_enum_type_enums.hpp"
+
 #if !defined __BORLANDC__
 #   include <boost/static_assert.hpp>
 #   include <boost/type_traits/arithmetic_traits.hpp>
@@ -191,24 +193,6 @@ inline RealType perform_floor(RealType r)
 
 #endif // not defined LMI_BROKEN_FLOAT_AND_LONG_DOUBLE_CMATH_FNS
 } // namespace detail
-
-// See HTML documentation.
-enum rounding_style
-    {r_indeterminate = -1
-    ,r_toward_zero   =  0
-    ,r_to_nearest    =  1 // See note below.
-    ,r_upward        =  2
-    ,r_downward      =  3
-    ,r_current       =  4
-    ,r_not_at_all    =  5
-
-    // Note: 'r_to_nearest' means bankers rounding, which
-    // rounds halfway cases to even:
-    //   x - (x REM 1.0)
-    // as in the C99 remainder() function [7.12.10.2/2], instead of
-    // rounding halfway cases away from zero, as the C99 round()
-    // function does [7.12.9.6/2]. See the HTML documentation.
-    };
 
 // See HTML documentation.
 inline rounding_style& default_rounding_style()

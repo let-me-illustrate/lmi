@@ -84,6 +84,26 @@ extern char const*const emission_strings[] =
     };
 template class mc_enum<mcenum_emission>;
 
+extern rounding_style const rounding_style_enums[] =
+    {r_indeterminate
+    ,r_toward_zero
+    ,r_to_nearest
+    ,r_upward
+    ,r_downward
+    ,r_current
+    ,r_not_at_all
+    };
+extern char const*const rounding_style_strings[] =
+    {"Indeterminate"
+    ,"Toward zero"
+    ,"To nearest"
+    ,"Upward"
+    ,"Downward"
+    ,"Current"
+    ,"Not at all"
+    };
+template class mc_enum<rounding_style>;
+
 #include "mc_enum_types.xpp"
 
 #define MC_DEFINE(TYPE) \
