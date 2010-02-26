@@ -45,11 +45,6 @@ template<> struct mc_enum_key<mcenum_emission>
   :public mc_enum_data<mcenum_emission, 11, emission_enums, emission_strings> {};
 typedef mc_enum<mcenum_emission> e_emission;
 
-extern rounding_style const rounding_style_enums[7];
-extern char const*const rounding_style_strings[7];
-MC_ENUM_TYPE_IMPL(rounding_style, 7, rounding_style_enums, rounding_style_strings);
-typedef mc_enum<rounding_style> mce_rounding_style;
-
 #define MC_DECLARE(TYPE,NUMBER) \
 extern mcenum_##TYPE const TYPE##_enums[NUMBER]; \
 extern char const*const TYPE##_strings[NUMBER]; \
