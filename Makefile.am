@@ -950,9 +950,10 @@ noinst_HEADERS = \
     materially_equal.hpp \
     math_functors.hpp \
     max_stream_precision.hpp \
-    mc_enum_fwd.hpp \
     mc_enum.hpp \
     mc_enum_aux.hpp \
+    mc_enum_fwd.hpp \
+    mc_enum_metadata.hpp \
     mc_enum_test_aux_enums.hpp \
     mc_enum_test_aux.hpp \
     mc_enum_type_enums.hpp \

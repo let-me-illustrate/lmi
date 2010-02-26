@@ -24374,3 +24374,32 @@ Mark release candidate.
   yare_input.cpp
 Refactor (VS).
 
+20100225T1616Z <vslavik@fastmail.fm> [762]
+
+  mc_enum_metadata.hpp
+Remove executable bit.
+
+20100225T1739Z <gchicares@sbcglobal.net> [762]
+
+  Makefile.am
+Make new header known to autotools.
+
+20100225T1744Z <gchicares@sbcglobal.net> [762]
+
+  mc_enum_types.cpp
+Fix a gcc-4.x issue (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2010-02/msg00004.html
+
+20100225T1749Z <gchicares@sbcglobal.net> [762]
+
+  mc_enum_test_aux.cpp
+Fix a presumptive gcc-4.x issue.
+
+20100226T0232Z <gchicares@sbcglobal.net> [762]
+
+  mc_enum_type_enums.hpp
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+  round_to.hpp
+Add mc_enum<rounding_style> (VS).
+
