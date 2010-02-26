@@ -24395,3 +24395,11 @@ Fix a gcc-4.x issue (VS). See:
   mc_enum_test_aux.cpp
 Fix a presumptive gcc-4.x issue.
 
+20100226T0232Z <gchicares@sbcglobal.net> [762]
+
+  mc_enum_type_enums.hpp
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+  round_to.hpp
+Add mc_enum<rounding_style> (VS).
+
