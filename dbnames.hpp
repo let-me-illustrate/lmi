@@ -28,6 +28,7 @@
 
 #include "so_attributes.hpp"
 
+#include <string>
 #include <vector>
 
 enum DatabaseNames
