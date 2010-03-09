@@ -78,7 +78,7 @@ namespace xml_serialize
             s << in;
             if(!s.good())
                 throw std::runtime_error("Failure to serialize data into XML.");
-            out.set_content(s.str().c_str());
+            out.push_back(xml::node(xml::node::text(s.str().c_str())));
         }
 
         // reads value from nodes under node 'in' into 'out'
@@ -100,7 +100,7 @@ namespace xml_serialize
     {
         static void to_xml(xml::node& out, std::string const& in)
         {
-            out.set_content(in.c_str());
+            out.push_back(xml::node(xml::node::text(in.c_str())));
         }
 
         static void from_xml(std::string& out, xml::node const& in)
