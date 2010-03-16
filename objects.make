@@ -503,6 +503,7 @@ unit_test_targets := \
   value_cast_test \
   vector_test \
   wx_new_test \
+  xml_serialize_test \
   zero_test \
 
 unit_test_targets := \
@@ -857,6 +858,14 @@ vector_test$(EXEEXT): \
 wx_new_test$(EXEEXT): \
   $(common_test_objects) \
   wx_new_test.o \
+
+xml_serialize_test$(EXEEXT): \
+  $(common_test_objects) \
+  $(xmlwrapp_objects) \
+  facets.o \
+  timer.o \
+  xml_lmi.o \
+  xml_serialize_test.o \
 
 zero_test$(EXEEXT): \
   $(common_test_objects) \
