@@ -143,6 +143,7 @@ excluded_unit_test_targets := \
   regex_test \
   round_test \
   tn_range_test \
+  xml_serialize_test \
 
 GNU_CPP := $(gcc3_bin_dir)/cpp
 GNU_CXX := $(gcc3_bin_dir)/g++
