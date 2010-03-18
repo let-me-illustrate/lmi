@@ -24403,3 +24403,29 @@ Fix a presumptive gcc-4.x issue.
   round_to.hpp
 Add mc_enum<rounding_style> (VS).
 
+20100316T0156Z <gchicares@sbcglobal.net> [762]
+
+  xml_lmi.cpp
+  xml_lmi.hpp
+Add some capabilities that will soon become useful.
+
+20100316T0157Z <gchicares@sbcglobal.net> [762]
+
+  objects.make
+  xml_serialize.hpp      [new file]
+  xml_serialize_test.cpp [new file]
+Support xml serialization (VS).
+
+20100316T0205Z <gchicares@sbcglobal.net> [762]
+
+  xml_serialize.hpp
+  xml_serialize_test.cpp
+Remove unintended svn:executable property.
+
+20100317T0137Z <gchicares@sbcglobal.net> [762]
+
+  bcc_5_5_1.make
+  como_4_3_3.make
+  Makefile.am
+Refine xml-serialization unit test for other toolchains.
+

@@ -190,6 +190,7 @@ LDFLAGS :=
 # program could accept gcc syntax.
 
 REQUIRED_LIBS := \
+  \\opt/lmi/local/lib/libexslt.dll.a \
   \\opt/lmi/local/lib/libxslt.dll.a \
   \\opt/lmi/local/lib/libxml2.dll.a \
 

@@ -31,11 +31,11 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/utility.hpp>
 
-#include <xmlwrapp/node.h> // xml::node::const_iterator
+#include <xmlwrapp/node.h> // (for xml::element)
 
+#include <cstddef>         // std::size_t
 #include <iosfwd>
 #include <string>
-#include <vector>
 
 /// Interface to xmlwrapp.
 
@@ -48,6 +48,7 @@ namespace xml_lmi
 
       public:
         dom_parser(std::string const& filename);
+        dom_parser(char const* data, std::size_t length);
         dom_parser(std::istream const&);
         ~dom_parser();
 
@@ -68,6 +69,8 @@ namespace xml_lmi
 
         Document const& document() const {return *document_;}
         xml::element& root_node();
+
+        void save(std::string const& filename);
         std::string str();
 
       private:
@@ -79,6 +82,13 @@ namespace xml_lmi
         (xml::element&
         ,std::string const& name
         ,std::string const& content
+        );
+
+    /// Find an element subnode by name, throwing if it is not found.
+
+    xml::node::const_iterator retrieve_element
+        (xml::element const& parent
+        ,std::string  const& name
         );
 
     /// Retrieve an xml element's full text-node contents.

@@ -82,6 +82,40 @@ xml_lmi::dom_parser::dom_parser(std::string const& filename)
 
 /// Parse an xml stream.
 ///
+/// Precondition: arguments describe an xml string.
+///
+/// Postconditions: member parser_ is a non-null pointer; the object
+/// it points to is valid in that its operator!() returns false.
+///
+/// Throws: std::runtime_error, via fatal_error(), if a precondition
+/// is violated, or if xml-library calls throw an exception derived
+/// from std::exception.
+
+xml_lmi::dom_parser::dom_parser(char const* data, std::size_t length)
+{
+    try
+        {
+        error_context_ = "Unable to parse xml data: ";
+        parser_.reset(new DomParser(data, length));
+        if(0 == parser_.get())
+            {
+            throw std::runtime_error("Parser not initialized.");
+            }
+        if(true == parser_->operator!())
+            {
+            throw std::runtime_error
+                ("Parser failed: " + parser_->get_error_message()
+                );
+            }
+        }
+    catch(std::exception const& e)
+        {
+        fatal_error() << error_context_ << e.what() << LMI_FLUSH;
+        }
+}
+
+/// Parse an xml stream.
+///
 /// XMLWRAPP !! xmlwrapp has no such ctor as
 ///   xml::tree_parser(std::istream&)
 /// Therefore, read the std::istream into a std::string with
@@ -207,6 +241,20 @@ xml::element& xml_lmi::xml_document::root_node()
     return document_->get_root_node();
 }
 
+void xml_lmi::xml_document::save(std::string const& filename)
+{
+    bool okay = document_->save_to_file(filename.c_str());
+    if(!okay)
+        {
+        fatal_error()
+            << "Unable to save file '"
+            << filename
+            << "'."
+            << LMI_FLUSH
+            ;
+        }
+}
+
 std::string xml_lmi::xml_document::str()
 {
     std::string s;
@@ -221,6 +269,24 @@ void add_node
     )
 {
     element.push_back(xml::element(name.c_str(), content.c_str()));
+}
+
+xml::node::const_iterator retrieve_element
+    (xml::element const& parent
+    ,std::string  const& name
+    )
+{
+    xml::node::const_iterator i = parent.find(name.c_str());
+    if(parent.end() == i)
+        {
+        fatal_error()
+            << "Required element '"
+            << name
+            << "' not found."
+            << LMI_FLUSH
+            ;
+        }
+    return i;
 }
 
 std::string get_content(xml::element const& element)
