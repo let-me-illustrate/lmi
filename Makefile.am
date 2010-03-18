@@ -165,6 +165,7 @@ TESTS = \
     test_value_cast \
     test_vector \
     test_wx_new \
+    test_xml_serialize \
     test_zero
 
 check_PROGRAMS = $(TESTS)
@@ -853,6 +854,15 @@ test_wx_new_SOURCES = \
   wx_new_test.cpp
 test_wx_new_CXXFLAGS = $(AM_CXXFLAGS)
 
+test_xml_serialize_SOURCES = \
+  $(common_test_objects) \
+  facets.cpp \
+  xml_lmi.cpp \
+  xml_serialize_test.cpp
+test_xml_serialize_CXXFLAGS = $(AM_CXXFLAGS)
+test_input_LDADD =    \
+  $(XMLWRAPP_LIBS)
+
 test_zero_SOURCES = \
   $(common_test_objects) \
   null_stream.cpp \
@@ -1031,5 +1041,6 @@ noinst_HEADERS = \
     wx_workarounds.hpp \
     xml_lmi_fwd.hpp \
     xml_lmi.hpp \
+    xml_serialize.hpp \
     yare_input.hpp \
     zero.hpp
