@@ -673,7 +673,7 @@ using namespace xml;
             );
         if(residuary_names.end() != current_member)
             {
-            operator[](node_tag) = RedintegrateExAnte
+            operator[](node_tag) = redintegrate_ex_ante
                 (file_version
                 ,node_tag
                 ,xml_lmi::get_content(*child)
@@ -696,7 +696,7 @@ using namespace xml;
             }
         }
 
-    RedintegrateExPost(file_version, detritus_map, residuary_names);
+    redintegrate_ex_post(file_version, detritus_map, residuary_names);
 
     Reconcile();
     RealizeAllSequenceInput(false);
@@ -737,7 +737,7 @@ std::string mec_input::xml_root_name() const
 
 /// Provide for backward compatibility before assigning values.
 
-std::string mec_input::RedintegrateExAnte
+std::string mec_input::redintegrate_ex_ante
     (int                file_version
     ,std::string const& // name
     ,std::string const& value
@@ -756,7 +756,7 @@ std::string mec_input::RedintegrateExAnte
 
 /// Provide for backward compatibility after assigning values.
 
-void mec_input::RedintegrateExPost
+void mec_input::redintegrate_ex_post
     (int                                file_version
     ,std::map<std::string, std::string> // detritus_map
     ,std::list<std::string>             // residuary_names
