@@ -76,12 +76,12 @@ class LMI_SO mec_state
     virtual std::string xml_root_name() const;
 
     // Backward compatibility.
-    std::string RedintegrateExAnte
+    std::string redintegrate_ex_ante
         (int                file_version
         ,std::string const& name
         ,std::string const& value
         ) const;
-    void        RedintegrateExPost
+    void        redintegrate_ex_post
         (int                                file_version
         ,std::map<std::string, std::string> detritus_map
         ,std::list<std::string>             residuary_names
