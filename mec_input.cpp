@@ -48,20 +48,6 @@
 
 namespace
 {
-/// Entities that were present in older versions and then removed
-/// are recognized and ignored. If they're resurrected in a later
-/// version, then they aren't ignored.
-
-bool is_detritus(std::string const& s)
-{
-    static std::string const a[] =
-        {"EffectiveDateToday"
-        ,"InforceSevenPayPremium"
-        };
-    static std::vector<std::string> const v(a, a + lmi_array_size(a));
-    return v.end() != std::find(v.begin(), v.end(), s);
-}
-
 template<typename T>
 std::string realize_sequence_string
     (mec_input           & input
@@ -733,6 +719,20 @@ int mec_input::class_version() const
 std::string mec_input::xml_root_name() const
 {
     return "mec";
+}
+
+/// Entities that were present in older versions and then removed
+/// are recognized and ignored. If they're resurrected in a later
+/// version, then they aren't ignored.
+
+bool mec_input::is_detritus(std::string const& s)
+{
+    static std::string const a[] =
+        {"EffectiveDateToday"
+        ,"InforceSevenPayPremium"
+        };
+    static std::vector<std::string> const v(a, a + lmi_array_size(a));
+    return v.end() != std::find(v.begin(), v.end(), s);
 }
 
 /// Provide for backward compatibility before assigning values.
