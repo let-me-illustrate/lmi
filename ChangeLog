@@ -24429,3 +24429,22 @@ Remove unintended svn:executable property.
   Makefile.am
 Refine xml-serialization unit test for other toolchains.
 
+20100318T2230Z <gchicares@sbcglobal.net> [762]
+
+  xml_serialize.hpp
+Forbid xml serialization of plain enums: mc_enum<> types should be
+used instead (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2010-03/msg00020.html
+
+20100318T2316Z <gchicares@sbcglobal.net> [762]
+
+  configure.ac
+Use '-std=c++0x' for gcc versions that understand it (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2010-03/msg00040.html
+
+20100319T0013Z <gchicares@sbcglobal.net> [762]
+
+  ledger.hpp
+  ledger_xml_io.cpp
+Break a misbegotten dependency.
+
