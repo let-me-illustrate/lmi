@@ -684,8 +684,7 @@ using namespace xml;
 
     redintegrate_ex_post(file_version, detritus_map, residuary_names);
 
-    Reconcile();
-    RealizeAllSequenceInput(false);
+    redintegrate_ad_terminum();
 }
 
 void mec_input::write(xml::element& x) const
@@ -770,6 +769,14 @@ void mec_input::redintegrate_ex_post
         {
         fatal_error() << "Incompatible file version." << LMI_FLUSH;
         }
+}
+
+/// Perform any required after-the-fact fixup.
+
+void mec_input::redintegrate_ad_terminum()
+{
+    Reconcile();
+    RealizeAllSequenceInput(false);
 }
 
 namespace
