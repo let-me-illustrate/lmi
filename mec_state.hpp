@@ -29,7 +29,7 @@
 #include "any_member.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
-#include "streamable.hpp"
+#include "xml_serializable.hpp"
 
 #include <boost/filesystem/path.hpp>
 #include <boost/operators.hpp>
@@ -49,7 +49,7 @@
 
 class LMI_SO mec_state
     :virtual private obstruct_slicing<mec_state>
-    ,virtual public streamable
+    ,virtual public xml_serializable
     ,public MemberSymbolTable<mec_state>
     ,private boost::equality_comparable<mec_state>
 {
@@ -69,7 +69,7 @@ class LMI_SO mec_state
   private:
     void AscribeMembers();
 
-    // Class 'streamable' required implementation.
+    // Class 'xml_serializable' required implementation.
     virtual void read (xml::element const&);
     virtual void write(xml::element&) const;
     virtual int class_version() const;
