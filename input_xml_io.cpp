@@ -142,10 +142,7 @@ using namespace xml;
 
     redintegrate_ex_post(file_version, detritus_map, residuary_names);
 
-    if(EffectiveDateToday.value() && !global_settings::instance().regression_testing())
-        {
-        EffectiveDate = calendar_date();
-        }
+    redintegrate_ad_terminum();
 }
 
 //============================================================================
@@ -493,6 +490,16 @@ void Input::redintegrate_ex_post
             ,InforceMonth .value() - InforceContractMonth.value()
             ,true
             );
+        }
+}
+
+/// Perform any required after-the-fact fixup.
+
+void Input::redintegrate_ad_terminum()
+{
+    if(EffectiveDateToday.value() && !global_settings::instance().regression_testing())
+        {
+        EffectiveDate = calendar_date();
         }
 }
 
