@@ -87,6 +87,7 @@ class LMI_SO mec_state
         ,std::map<std::string, std::string> detritus_map
         ,std::list<std::string>             residuary_names
         );
+    void        redintegrate_ad_terminum();
 
     int    B0_deduced_policy_year;
     int    B1_deduced_contract_year;

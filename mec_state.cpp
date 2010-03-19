@@ -460,6 +460,8 @@ using namespace xml;
         }
 
     redintegrate_ex_post(file_version, detritus_map, residuary_names);
+
+    redintegrate_ad_terminum();
 }
 
 void mec_state::write(xml::element& x) const
@@ -543,5 +545,11 @@ void mec_state::redintegrate_ex_post
         {
         fatal_error() << "Incompatible file version." << LMI_FLUSH;
         }
+}
+
+/// Perform any required after-the-fact fixup.
+
+void mec_state::redintegrate_ad_terminum()
+{
 }
 
