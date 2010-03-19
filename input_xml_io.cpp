@@ -42,40 +42,6 @@
 
 namespace
 {
-/// Entities that were present in older versions and then removed
-/// are recognized and ignored. If they're resurrected in a later
-/// version, then they aren't ignored.
-
-bool is_detritus(std::string const& s)
-{
-    static std::string const a[] =
-        {"AgentFirstName"                // Single name instead.
-        ,"AgentLastName"                 // Single name instead.
-        ,"AgentMiddleName"               // Single name instead.
-        ,"AssumedCaseNumberOfLives"      // Withdrawn.
-        ,"CaseAssumedAssets"             // Withdrawn.
-        ,"CorporationPremiumTableNumber" // Never implemented.
-        ,"CorporationTaxpayerId"         // Would violate privacy.
-        ,"CurrentCoiGrading"             // Withdrawn.
-        ,"FirstName"                     // Single name instead.
-        ,"InforceDcvDeathBenefit"        // Misbegotten.
-        ,"InforceExperienceReserve"      // Renamed before implementation.
-        ,"InsuredPremiumTableNumber"     // Never implemented.
-        ,"LastName"                      // Single name instead.
-        ,"MiddleName"                    // Single name instead.
-        ,"NetMortalityChargeHistory"     // Renamed before implementation.
-        ,"PartialMortalityTable"         // Never implemented.
-        ,"PayLoanInterestInCash"         // Never implemented.
-        ,"PolicyDate"                    // Never implemented.
-        ,"PolicyLevelFlatExtra"          // Never implemented; poor name.
-        ,"SocialSecurityNumber"          // Withdrawn: would violate privacy.
-        ,"TermProportion"                // 'TermRiderProportion' instead.
-        ,"YearsOfZeroDeaths"             // Withdrawn.
-        };
-    static std::vector<std::string> const v(a, a + lmi_array_size(a));
-    return v.end() != std::find(v.begin(), v.end(), s);
-}
-
 std::string full_name
     (std::string first_name
     ,std::string middle_name
@@ -225,6 +191,40 @@ int Input::class_version() const
 std::string Input::xml_root_name() const
 {
     return "cell";
+}
+
+/// Entities that were present in older versions and then removed
+/// are recognized and ignored. If they're resurrected in a later
+/// version, then they aren't ignored.
+
+bool Input::is_detritus(std::string const& s)
+{
+    static std::string const a[] =
+        {"AgentFirstName"                // Single name instead.
+        ,"AgentLastName"                 // Single name instead.
+        ,"AgentMiddleName"               // Single name instead.
+        ,"AssumedCaseNumberOfLives"      // Withdrawn.
+        ,"CaseAssumedAssets"             // Withdrawn.
+        ,"CorporationPremiumTableNumber" // Never implemented.
+        ,"CorporationTaxpayerId"         // Would violate privacy.
+        ,"CurrentCoiGrading"             // Withdrawn.
+        ,"FirstName"                     // Single name instead.
+        ,"InforceDcvDeathBenefit"        // Misbegotten.
+        ,"InforceExperienceReserve"      // Renamed before implementation.
+        ,"InsuredPremiumTableNumber"     // Never implemented.
+        ,"LastName"                      // Single name instead.
+        ,"MiddleName"                    // Single name instead.
+        ,"NetMortalityChargeHistory"     // Renamed before implementation.
+        ,"PartialMortalityTable"         // Never implemented.
+        ,"PayLoanInterestInCash"         // Never implemented.
+        ,"PolicyDate"                    // Never implemented.
+        ,"PolicyLevelFlatExtra"          // Never implemented; poor name.
+        ,"SocialSecurityNumber"          // Withdrawn: would violate privacy.
+        ,"TermProportion"                // 'TermRiderProportion' instead.
+        ,"YearsOfZeroDeaths"             // Withdrawn.
+        };
+    static std::vector<std::string> const v(a, a + lmi_array_size(a));
+    return v.end() != std::find(v.begin(), v.end(), s);
 }
 
 /// Provide for backward compatibility before assigning values.

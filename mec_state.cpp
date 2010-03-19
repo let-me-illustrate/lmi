@@ -43,22 +43,6 @@
 #include <sstream>
 #include <vector>
 
-namespace
-{
-/// Entities that were present in older versions and then removed
-/// are recognized and ignored. If they're resurrected in a later
-/// version, then they aren't ignored.
-
-bool is_detritus(std::string const& s)
-{
-    static std::string const a[] =
-        {"Remove this string when adding the first removed entity."
-        };
-    static std::vector<std::string> const v(a, a + lmi_array_size(a));
-    return v.end() != std::find(v.begin(), v.end(), s);
-}
-} // Unnamed namespace.
-
 /// Initialize all ascribed members to zero.
 
 mec_state::mec_state()
@@ -509,6 +493,19 @@ int mec_state::class_version() const
 std::string mec_state::xml_root_name() const
 {
     return "mec_state";
+}
+
+/// Entities that were present in older versions and then removed
+/// are recognized and ignored. If they're resurrected in a later
+/// version, then they aren't ignored.
+
+bool mec_state::is_detritus(std::string const& s)
+{
+    static std::string const a[] =
+        {"Remove this string when adding the first removed entity."
+        };
+    static std::vector<std::string> const v(a, a + lmi_array_size(a));
+    return v.end() != std::find(v.begin(), v.end(), s);
 }
 
 /// Provide for backward compatibility before assigning values.

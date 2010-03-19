@@ -110,6 +110,7 @@ class LMI_SO mec_input
     virtual std::string xml_root_name() const;
 
     // Backward compatibility.
+    bool is_detritus(std::string const&);
     std::string redintegrate_ex_ante
         (int                file_version
         ,std::string const& name
