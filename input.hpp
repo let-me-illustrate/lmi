@@ -187,6 +187,7 @@ class LMI_SO Input
         ,std::map<std::string, std::string> detritus_map
         ,std::list<std::string>             residuary_names
         );
+    void        redintegrate_ad_terminum();
 
     // MvcModel required implementation.
     virtual void DoAdaptExternalities();
