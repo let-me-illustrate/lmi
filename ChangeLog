@@ -24424,9 +24424,9 @@ Remove unintended svn:executable property.
 
 20100317T0137Z <gchicares@sbcglobal.net> [762]
 
+  Makefile.am
   bcc_5_5_1.make
   como_4_3_3.make
-  Makefile.am
 Refine xml-serialization unit test for other toolchains.
 
 20100318T2230Z <gchicares@sbcglobal.net> [762]
@@ -24447,4 +24447,21 @@ Use '-std=c++0x' for gcc versions that understand it (VS). See:
   ledger.hpp
   ledger_xml_io.cpp
 Break a misbegotten dependency.
+
+20100319T0158Z <gchicares@sbcglobal.net> [761]
+
+  Makefile.am
+  antediluvian_stubs.cpp
+  input.cpp
+  input.hpp
+  mec_input.cpp
+  mec_input.hpp
+  mec_state.cpp
+  mec_state.hpp
+  objects.make
+  streamable.cpp       [expunged]
+  streamable.hpp       [expunged]
+  xml_serializable.cpp [new file]
+  xml_serializable.hpp [new file]
+Rename 'streamable.?pp' to 'xml_serializable.?pp'.
 

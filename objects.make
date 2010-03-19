@@ -232,12 +232,12 @@ common_common_objects := \
   rounding_rules.o \
   sigfpe.o \
   single_cell_document.o \
-  streamable.o \
   surrchg_rates.o \
   system_command.o \
   timer.o \
   tn_range_types.o \
   xml_lmi.o \
+  xml_serializable.o \
   yare_input.o \
 
 ################################################################################
@@ -418,11 +418,11 @@ gpt_objects := \
   rounding_rules.o \
   stratified_algorithms.o \
   stratified_charges.o \
-  streamable.o \
   surrchg_rates.o \
   tn_range_types.o \
   timer.o \
   xml_lmi.o \
+  xml_serializable.o \
   yare_input.o \
 
 libgpt.a libgpt$(SHREXT): EXTRA_LDFLAGS =
@@ -669,10 +669,10 @@ input_test$(EXEEXT): \
   path_utility.o \
   product_names.o \
   single_cell_document.o \
-  streamable.o \
   timer.o \
   tn_range_types.o \
   xml_lmi.o \
+  xml_serializable.o \
   yare_input.o \
 
 irc7702a_test$(EXEEXT): \
@@ -684,8 +684,8 @@ irc7702a_test$(EXEEXT): \
   mec_state.o \
   miscellany.o \
   stratified_algorithms.o \
-  streamable.o \
   xml_lmi.o \
+  xml_serializable.o \
 
 istream_to_string_test$(EXEEXT): \
   $(common_test_objects) \

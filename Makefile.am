@@ -282,11 +282,11 @@ liblmi_common_sources = \
     rounding_rules.cpp \
     sigfpe.cpp \
     single_cell_document.cpp \
-    streamable.cpp \
     surrchg_rates.cpp \
     system_command.cpp \
     timer.cpp \
     xml_lmi.cpp \
+    xml_serializable.cpp \
     yare_input.cpp
 
 libmain_auxiliary_common_la_SOURCES = \
@@ -610,9 +610,9 @@ test_input_SOURCES =    \
   path_utility.cpp \
   product_names.cpp \
   single_cell_document.cpp \
-  streamable.cpp \
   tn_range_types.cpp \
   xml_lmi.cpp \
+  xml_serializable.cpp \
   yare_input.cpp
 
 test_input_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
@@ -980,7 +980,6 @@ noinst_HEADERS = \
     stl_extensions.hpp \
     stratified_algorithms.hpp \
     stratified_charges.hpp \
-    streamable.hpp \
     stream_cast.hpp \
     surrchg_rates.hpp \
     system_command.hpp \
@@ -1006,6 +1005,7 @@ noinst_HEADERS = \
     wx_workarounds.hpp \
     xml_lmi_fwd.hpp \
     xml_lmi.hpp \
+    xml_serializable.hpp \
     xml_serialize.hpp \
     yare_input.hpp \
     zero.hpp
