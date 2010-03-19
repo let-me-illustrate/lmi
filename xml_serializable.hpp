@@ -1,4 +1,4 @@
-// Mixin for xml streaming operators.
+// Mixin for xml serialization.
 //
 // Copyright (C) 2001, 2002, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
@@ -21,8 +21,8 @@
 
 // $Id$
 
-#ifndef streamable_hpp
-#define streamable_hpp
+#ifndef xml_serializable_hpp
+#define xml_serializable_hpp
 
 #include "config.hpp"
 
@@ -31,12 +31,12 @@
 
 #include <string>
 
-/// TODO ?? Is this mixin class actually useful enough to perpetuate?
+/// Derive from this mixin class to use its xml serialization.
 
-class LMI_SO streamable
+class LMI_SO xml_serializable
 {
   public:
-    virtual ~streamable() = 0;
+    virtual ~xml_serializable() = 0;
 
     virtual void read (xml::element const&) = 0;
     virtual void write(xml::element&) const = 0;
@@ -45,17 +45,17 @@ class LMI_SO streamable
     virtual std::string xml_root_name() const = 0;
 };
 
-inline xml::element const& operator>>(xml::element const& x, streamable& z)
+inline xml::element const& operator>>(xml::element const& x, xml_serializable& z)
 {
     z.read(x);
     return x;
 }
 
-inline xml::element& operator<<(xml::element& x, streamable const& z)
+inline xml::element& operator<<(xml::element& x, xml_serializable const& z)
 {
     z.write(x);
     return x;
 }
 
-#endif // streamable_hpp
+#endif // xml_serializable_hpp
 

@@ -1,4 +1,4 @@
-// Mixin for xml streaming operators.
+// Mixin for xml serialization.
 //
 // Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
@@ -26,9 +26,9 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "streamable.hpp"
+#include "xml_serializable.hpp"
 
-streamable::~streamable()
+xml_serializable::~xml_serializable()
 {
 }
 

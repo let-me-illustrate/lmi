@@ -73,7 +73,7 @@ mec_state::mec_state()
 
 mec_state::mec_state(mec_state const& z)
     :obstruct_slicing<mec_state>()
-    ,streamable()
+    ,xml_serializable()
     ,MemberSymbolTable<mec_state>()
 {
     AscribeMembers();

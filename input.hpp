@@ -36,9 +36,9 @@
 #include "mc_enum_types.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
-#include "streamable.hpp"
 #include "tn_range.hpp"
 #include "tn_range_types.hpp"
+#include "xml_serializable.hpp"
 
 class InputSequence;
 class TDatabase;
@@ -126,7 +126,7 @@ typedef datum_string datum_sequence;
 
 class LMI_SO Input
     :virtual private obstruct_slicing<Input>
-    ,virtual public streamable
+    ,virtual public xml_serializable
     ,public MvcModel
     ,public MemberSymbolTable<Input>
     ,private boost::equality_comparable<Input>
@@ -169,7 +169,7 @@ class LMI_SO Input
         (InputSequence const& s
         );
 
-    // Class 'streamable' required implementation.
+    // Class 'xml_serializable' required implementation.
     virtual void read (xml::element const&);
     virtual void write(xml::element&) const;
     virtual int class_version() const;

@@ -134,7 +134,7 @@ mec_input::mec_input()
 
 mec_input::mec_input(mec_input const& z)
     :obstruct_slicing<mec_input>()
-    ,streamable()
+    ,xml_serializable()
     ,MvcModel()
     ,MemberSymbolTable<mec_input>()
 {
