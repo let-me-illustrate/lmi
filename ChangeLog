@@ -24479,3 +24479,9 @@ Fix duplicate definition of test_input_LDADD.
 
   ihs_pios.hpp
 GCC 4.4 compilation fix.
+
+20100321T1110Z <vslavik@fastmail.fm> [761]
+
+  Makefile.am
+Include .[tx]pp files in noinst_HEADERS.
+
