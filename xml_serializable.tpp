@@ -28,7 +28,8 @@
 
 #include "xml_serializable.hpp"
 
-xml_serializable::~xml_serializable()
+template<typename T>
+xml_serializable<T>::~xml_serializable()
 {
 }
 
