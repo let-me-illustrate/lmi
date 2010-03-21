@@ -29,6 +29,8 @@
 #include "so_attributes.hpp"
 #include "xml_lmi_fwd.hpp"
 
+#include <list>
+#include <map>
 #include <string>
 
 /// Derive from this mixin class to use its xml serialization.
@@ -41,12 +43,24 @@ class LMI_SO xml_serializable
   public:
     virtual ~xml_serializable();
 
-    virtual void read (xml::element const&) = 0;
-    virtual void write(xml::element&) const = 0;
+    void read (xml::element const&);
+    void write(xml::element&) const;
 
   private:
-    virtual int class_version() const = 0;
+    virtual int         class_version() const = 0;
     virtual std::string xml_root_name() const = 0;
+    virtual bool        is_detritus(std::string const&) const = 0;
+    virtual std::string redintegrate_ex_ante
+        (int                file_version
+        ,std::string const& name
+        ,std::string const& value
+        ) const = 0;
+    virtual void        redintegrate_ex_post
+        (int                                file_version
+        ,std::map<std::string, std::string> detritus_map
+        ,std::list<std::string>             residuary_names
+        ) = 0;
+    virtual void        redintegrate_ad_terminum() = 0;
 };
 
 template<typename T>
