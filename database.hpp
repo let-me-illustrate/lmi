@@ -65,7 +65,7 @@ class LMI_SO TDatabase
 
     // Return scalar: use double because it's convertible to int, bool, etc.
     // We'd rather do something like
-    //   template<class T, class DBValue>
+    //   template<typename T, typename DBValue>
     //   void Query(T& dst, int k) const;
     // but bc++5.02 can't handle member template functions.
     double Query(int k) const;

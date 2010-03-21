@@ -24549,3 +24549,16 @@ Use CRTP, preferring nonvirtual inheritance. This requires renaming
   xml_serializable.tpp
 Refactor, moving read() and write() to the base class.
 
+20100321T2119Z <gchicares@sbcglobal.net> [761]
+
+  catch_exceptions.hpp
+  database.hpp
+  ihs_dbvalue.cpp
+  multidimgrid_safe.hpp
+  multidimgrid_safe.tpp
+  round_test.cpp
+  round_to_test.cpp
+Prefer 'typename' to 'class' in template type-parameters. There is no
+semantic difference between the two [14.1/2]. This convention had
+already been followed in almost every case.
+
