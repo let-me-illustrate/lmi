@@ -24465,3 +24465,8 @@ Break a misbegotten dependency.
   xml_serializable.hpp [new file]
 Rename 'streamable.?pp' to 'xml_serializable.?pp'.
 
+20100321T1056Z <vslavik@fastmail.fm> [761]
+
+  configure.ac
+Use AM_SILENT_RULES if available, for cleaner make output.
+
