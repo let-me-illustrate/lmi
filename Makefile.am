@@ -868,6 +868,7 @@ noinst_HEADERS = \
     dbdict.hpp \
     dbindex.hpp \
     dbnames.hpp \
+    dbnames.xpp \
     dbvalue.hpp \
     death_benefits.hpp \
     default_view.hpp \
@@ -924,6 +925,7 @@ noinst_HEADERS = \
     math_functors.hpp \
     max_stream_precision.hpp \
     mc_enum.hpp \
+    mc_enum.tpp \
     mc_enum_aux.hpp \
     mc_enum_fwd.hpp \
     mc_enum_metadata.hpp \
@@ -931,6 +933,7 @@ noinst_HEADERS = \
     mc_enum_test_aux.hpp \
     mc_enum_type_enums.hpp \
     mc_enum_types.hpp \
+    mc_enum_types.xpp \
     mc_enum_types_aux.hpp \
     md5.hpp \
     miscellany.hpp \
@@ -938,9 +941,11 @@ noinst_HEADERS = \
     msw_workarounds.hpp \
     multidimgrid_any.hpp \
     multidimgrid_safe.hpp \
+    multidimgrid_safe.tpp \
     multidimgrid_tools.hpp \
     multiple_cell_document.hpp \
     mvc_controller.hpp \
+    mvc_controller.tpp \
     mvc_model.hpp \
     mvc_view.hpp \
     name_value_pairs.hpp \
@@ -978,6 +983,7 @@ noinst_HEADERS = \
     stl_extensions.hpp \
     stratified_algorithms.hpp \
     stratified_charges.hpp \
+    stratified_charges.xpp \
     stream_cast.hpp \
     surrchg_rates.hpp \
     system_command.hpp \
@@ -990,6 +996,7 @@ noinst_HEADERS = \
     timer.hpp \
     tn_range_fwd.hpp \
     tn_range.hpp \
+    tn_range.tpp \
     tn_range_test_aux.hpp \
     tn_range_types.hpp \
     tn_range_type_trammels.hpp \
@@ -997,6 +1004,7 @@ noinst_HEADERS = \
     value_cast.hpp \
     version.hpp \
     view_ex.hpp \
+    view_ex.tpp \
     wx_checks.hpp \
     wx_new.hpp \
     wx_utility.hpp \
