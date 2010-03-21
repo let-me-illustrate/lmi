@@ -24470,3 +24470,8 @@ Rename 'streamable.?pp' to 'xml_serializable.?pp'.
   configure.ac
 Use AM_SILENT_RULES if available, for cleaner make output.
 
+20100321T1059Z <vslavik@fastmail.fm> [761]
+
+  Makefile.am
+Fix duplicate definition of test_input_LDADD.
+
