@@ -64,12 +64,6 @@ mec_state::mec_state(mec_state const&)
 mec_state::~mec_state()
 {}
 
-void mec_state::read(xml::element const&)
-{}
-
-void mec_state::write(xml::element&) const
-{}
-
 int mec_state::class_version() const
 {
     return 0;
@@ -80,4 +74,29 @@ std::string mec_state::xml_root_name() const
     static std::string const s("");
     return s;
 }
+
+bool mec_state::is_detritus(std::string const&) const
+{
+    return false;
+}
+
+std::string mec_state::redintegrate_ex_ante
+    (int
+    ,std::string const&
+    ,std::string const&
+    ) const
+{
+    static std::string const s("");
+    return s;
+}
+
+void mec_state::redintegrate_ex_post
+    (int
+    ,std::map<std::string, std::string>
+    ,std::list<std::string>
+    )
+{}
+
+void mec_state::redintegrate_ad_terminum()
+{}
 

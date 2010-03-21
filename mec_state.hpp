@@ -34,8 +34,6 @@
 #include <boost/filesystem/path.hpp>
 #include <boost/operators.hpp>
 
-#include <list>
-#include <map>
 #include <string>
 
 /// Transient state of MEC testing.
@@ -70,24 +68,20 @@ class LMI_SO mec_state
     void AscribeMembers();
 
     // Class 'xml_serializable' required implementation.
-    virtual void read (xml::element const&);
-    virtual void write(xml::element&) const;
-    virtual int class_version() const;
+    virtual int         class_version() const;
     virtual std::string xml_root_name() const;
-
-    // Backward compatibility.
-    bool is_detritus(std::string const&);
-    std::string redintegrate_ex_ante
+    virtual bool        is_detritus(std::string const&) const;
+    virtual std::string redintegrate_ex_ante
         (int                file_version
         ,std::string const& name
         ,std::string const& value
         ) const;
-    void        redintegrate_ex_post
+    virtual void        redintegrate_ex_post
         (int                                file_version
         ,std::map<std::string, std::string> detritus_map
         ,std::list<std::string>             residuary_names
         );
-    void        redintegrate_ad_terminum();
+    virtual void        redintegrate_ad_terminum();
 
     int    B0_deduced_policy_year;
     int    B1_deduced_contract_year;
