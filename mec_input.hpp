@@ -73,11 +73,11 @@ typedef datum_string datum_sequence;
 /// calculations are rewritten.
 
 class LMI_SO mec_input
-    :virtual private obstruct_slicing<mec_input>
-    ,virtual public xml_serializable
-    ,public MvcModel
-    ,public MemberSymbolTable<mec_input>
-    ,private boost::equality_comparable<mec_input>
+    :virtual private obstruct_slicing           <mec_input>
+    ,        public  xml_serializable           <mec_input>
+    ,        public  MvcModel
+    ,        public  MemberSymbolTable          <mec_input>
+    ,        private boost::equality_comparable <mec_input>
 {
   public:
     mec_input();

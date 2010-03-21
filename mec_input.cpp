@@ -27,6 +27,7 @@
 #endif // __BORLANDC__
 
 #include "mec_input.hpp"
+#include "xml_serializable.tpp"
 
 #include "alert.hpp"
 #include "database.hpp"
@@ -45,6 +46,8 @@
 #include <sstream>
 #include <string>
 #include <vector>
+
+template class xml_serializable<mec_input>;
 
 namespace
 {
@@ -119,10 +122,10 @@ mec_input::mec_input()
 }
 
 mec_input::mec_input(mec_input const& z)
-    :obstruct_slicing<mec_input>()
-    ,xml_serializable()
-    ,MvcModel()
-    ,MemberSymbolTable<mec_input>()
+    :obstruct_slicing  <mec_input>()
+    ,xml_serializable  <mec_input>()
+    ,MvcModel                     ()
+    ,MemberSymbolTable <mec_input>()
 {
     AscribeMembers();
     std::vector<std::string>::const_iterator i;

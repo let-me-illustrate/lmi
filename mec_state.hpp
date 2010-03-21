@@ -48,10 +48,10 @@
 /// 'A*_' is reserved in case it's wanted later--e.g., for arguments.
 
 class LMI_SO mec_state
-    :virtual private obstruct_slicing<mec_state>
-    ,virtual public xml_serializable
-    ,public MemberSymbolTable<mec_state>
-    ,private boost::equality_comparable<mec_state>
+    :virtual private obstruct_slicing           <mec_state>
+    ,        public  xml_serializable           <mec_state>
+    ,        public  MemberSymbolTable          <mec_state>
+    ,        private boost::equality_comparable <mec_state>
 {
     friend class Irc7702A;
 

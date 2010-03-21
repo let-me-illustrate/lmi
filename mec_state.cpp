@@ -27,6 +27,7 @@
 #endif // __BORLANDC__
 
 #include "mec_state.hpp"
+#include "xml_serializable.tpp"
 
 #include "alert.hpp"
 #include "miscellany.hpp" // htmlize(), lmi_array_size()
@@ -43,6 +44,8 @@
 #include <sstream>
 #include <vector>
 
+template class xml_serializable<mec_state>;
+
 /// Initialize all ascribed members to zero.
 
 mec_state::mec_state()
@@ -56,9 +59,9 @@ mec_state::mec_state()
 }
 
 mec_state::mec_state(mec_state const& z)
-    :obstruct_slicing<mec_state>()
-    ,xml_serializable()
-    ,MemberSymbolTable<mec_state>()
+    :obstruct_slicing  <mec_state>()
+    ,xml_serializable  <mec_state>()
+    ,MemberSymbolTable <mec_state>()
 {
     AscribeMembers();
     std::vector<std::string>::const_iterator i;
