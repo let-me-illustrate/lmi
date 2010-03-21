@@ -32,26 +32,32 @@
 #include <string>
 
 /// Derive from this mixin class to use its xml serialization.
+///
+/// Implicitly-declared special member functions do the right thing.
 
+template<typename T>
 class LMI_SO xml_serializable
 {
   public:
-    virtual ~xml_serializable() = 0;
+    virtual ~xml_serializable();
 
     virtual void read (xml::element const&) = 0;
     virtual void write(xml::element&) const = 0;
 
+  private:
     virtual int class_version() const = 0;
     virtual std::string xml_root_name() const = 0;
 };
 
-inline xml::element const& operator>>(xml::element const& x, xml_serializable& z)
+template<typename T>
+inline xml::element const& operator>>(xml::element const& x, xml_serializable<T>& z)
 {
     z.read(x);
     return x;
 }
 
-inline xml::element& operator<<(xml::element& x, xml_serializable const& z)
+template<typename T>
+inline xml::element& operator<<(xml::element& x, xml_serializable<T> const& z)
 {
     z.write(x);
     return x;

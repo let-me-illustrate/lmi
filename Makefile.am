@@ -286,7 +286,6 @@ liblmi_common_sources = \
     system_command.cpp \
     timer.cpp \
     xml_lmi.cpp \
-    xml_serializable.cpp \
     yare_input.cpp
 
 libmain_auxiliary_common_la_SOURCES = \
@@ -612,7 +611,6 @@ test_input_SOURCES =    \
   single_cell_document.cpp \
   tn_range_types.cpp \
   xml_lmi.cpp \
-  xml_serializable.cpp \
   yare_input.cpp
 
 test_input_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
@@ -1012,6 +1010,7 @@ noinst_HEADERS = \
     xml_lmi_fwd.hpp \
     xml_lmi.hpp \
     xml_serializable.hpp \
+    xml_serializable.tpp \
     xml_serialize.hpp \
     yare_input.hpp \
     zero.hpp

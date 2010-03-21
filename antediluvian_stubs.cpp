@@ -28,10 +28,10 @@
 
 #include "authenticity.hpp"
 #include "mec_server.hpp"
+#include "xml_serializable.tpp"
 
 void authenticate_system()
-{
-}
+{}
 
 std::string const& timestamp_of_production_release()
 {
@@ -40,40 +40,35 @@ std::string const& timestamp_of_production_release()
 }
 
 mec_server::mec_server(mcenum_emission)
-{
-}
+{}
 
 mec_server::~mec_server()
-{
-}
+{}
 
 bool mec_server::operator()(fs::path const&)
 {
     return false;
 }
 
+template class xml_serializable<mec_state>;
+
 mec_state::mec_state()
-{
-}
+{}
 
 mec_state::mec_state(mec_state const&)
-    :obstruct_slicing<mec_state>()
-    ,xml_serializable()
-    ,MemberSymbolTable<mec_state>()
-{
-}
+    :obstruct_slicing  <mec_state>()
+    ,xml_serializable  <mec_state>()
+    ,MemberSymbolTable <mec_state>()
+{}
 
 mec_state::~mec_state()
-{
-}
+{}
 
 void mec_state::read(xml::element const&)
-{
-}
+{}
 
 void mec_state::write(xml::element&) const
-{
-}
+{}
 
 int mec_state::class_version() const
 {
