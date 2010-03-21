@@ -27,6 +27,7 @@
 #endif // __BORLANDC__
 
 #include "input.hpp"
+#include "xml_serializable.tpp"
 
 #include "alert.hpp"
 #include "calendar_date.hpp"
@@ -39,6 +40,8 @@
 
 #include <algorithm> // std::find()
 #include <stdexcept>
+
+template class xml_serializable<Input>;
 
 namespace
 {

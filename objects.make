@@ -237,7 +237,6 @@ common_common_objects := \
   timer.o \
   tn_range_types.o \
   xml_lmi.o \
-  xml_serializable.o \
   yare_input.o \
 
 ################################################################################
@@ -422,7 +421,6 @@ gpt_objects := \
   tn_range_types.o \
   timer.o \
   xml_lmi.o \
-  xml_serializable.o \
   yare_input.o \
 
 libgpt.a libgpt$(SHREXT): EXTRA_LDFLAGS =
@@ -672,7 +670,6 @@ input_test$(EXEEXT): \
   timer.o \
   tn_range_types.o \
   xml_lmi.o \
-  xml_serializable.o \
   yare_input.o \
 
 irc7702a_test$(EXEEXT): \
@@ -685,7 +682,6 @@ irc7702a_test$(EXEEXT): \
   miscellany.o \
   stratified_algorithms.o \
   xml_lmi.o \
-  xml_serializable.o \
 
 istream_to_string_test$(EXEEXT): \
   $(common_test_objects) \

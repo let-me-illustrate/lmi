@@ -125,11 +125,11 @@ typedef datum_string datum_sequence;
 /// for them, readability overcomes the usual convention.
 
 class LMI_SO Input
-    :virtual private obstruct_slicing<Input>
-    ,virtual public xml_serializable
-    ,public MvcModel
-    ,public MemberSymbolTable<Input>
-    ,private boost::equality_comparable<Input>
+    :virtual private obstruct_slicing           <Input>
+    ,        public  xml_serializable           <Input>
+    ,        public  MvcModel
+    ,        public  MemberSymbolTable          <Input>
+    ,        private boost::equality_comparable <Input>
 {
     friend class input_test;
     friend class yare_input;
