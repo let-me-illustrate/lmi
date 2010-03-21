@@ -24475,3 +24475,7 @@ Use AM_SILENT_RULES if available, for cleaner make output.
   Makefile.am
 Fix duplicate definition of test_input_LDADD.
 
+20100321T1102Z <vslavik@fastmail.fm> [761]
+
+  ihs_pios.hpp
+GCC 4.4 compilation fix.
