@@ -483,6 +483,7 @@ unit_test_targets := \
   obstruct_slicing_test \
   path_utility_test \
   print_matrix_test \
+  product_file_test \
   progress_meter_test \
   quiet_nan_test \
   regex_test \
@@ -767,6 +768,27 @@ print_matrix_test$(EXEEXT): \
   $(common_test_objects) \
   facets.o \
   print_matrix_test.o \
+
+product_file_test$(EXEEXT): \
+  $(boost_filesystem_objects) \
+  $(common_test_objects) \
+  data_directory.o \
+  dbnames.o \
+  expm1.o \
+  global_settings.o \
+  ihs_dbdict.o \
+  ihs_dbvalue.o \
+  ihs_fpios.o \
+  ihs_funddata.o \
+  ihs_pios.o \
+  ihs_proddata.o \
+  ihs_rnddata.o \
+  miscellany.o \
+  path_utility.o \
+  product_file_test.o \
+  rounding_rules.o \
+  stratified_charges.o \
+  timer.o \
 
 progress_meter_test$(EXEEXT): \
   $(common_test_objects) \

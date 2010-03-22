@@ -24562,3 +24562,17 @@ Prefer 'typename' to 'class' in template type-parameters. There is no
 semantic difference between the two [14.1/2]. This convention had
 already been followed in almost every case.
 
+20100322T1317Z <gchicares@sbcglobal.net> [761]
+
+  progress_meter_test.cpp
+Refactor to eliminate redundant qualified-id.
+
+20100322T1326Z <gchicares@sbcglobal.net> [761]
+
+  Makefile.am
+  ihs_dbdict.hpp
+  objects.make
+  product_file_test.cpp [new file]
+Add a unit test to measure speed of reading product files, emulating
+'progress_meter_test.cpp'.
+
