@@ -29,7 +29,7 @@
 #include <string>
 #include <vector>
 
-/// Base names of policy ('.pol') files found in data directory.
+/// Base names of '.policy' files found in data directory.
 /// They are read only once and cached: see documentation for
 /// class ce_product_name.
 
