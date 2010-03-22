@@ -24576,3 +24576,14 @@ Refactor to eliminate redundant qualified-id.
 Add a unit test to measure speed of reading product files, emulating
 'progress_meter_test.cpp'.
 
+20100322T1626Z <gchicares@sbcglobal.net> [761]
+
+  ce_product_name.hpp
+  dbnames.hpp
+  ihs_basicval.cpp
+  my_db.cpp
+  my_fund.cpp
+  my_tier.cpp
+  product_names.hpp
+Anticipate new product-file names.
+
