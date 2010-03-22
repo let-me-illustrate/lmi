@@ -24587,3 +24587,8 @@ Add a unit test to measure speed of reading product files, emulating
   product_names.hpp
 Anticipate new product-file names.
 
+20100322T1728Z <gchicares@sbcglobal.net> [761]
+
+  workhorse.make
+Facilitate further fardel fitting.
+
