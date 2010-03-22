@@ -119,6 +119,7 @@ TESTS = \
     test_obstruct_slicing \
     test_path_utility \
     test_print_matrix \
+    test_product_file \
     test_progress_meter \
     test_quiet_nan \
     test_round \
@@ -719,6 +720,30 @@ test_print_matrix_SOURCES = \
   $(common_test_objects) \
   print_matrix_test.cpp
 test_print_matrix_CXXFLAGS = $(AM_CXXFLAGS)
+
+# 'expm1.cpp' is for como on msw
+test_product_file_SOURCES =   \
+  $(common_test_objects) \
+  data_directory.cpp \
+  dbnames.cpp \
+  expm1.cpp \
+  global_settings.cpp \
+  ihs_dbdict.cpp \
+  ihs_dbvalue.cpp \
+  ihs_fpios.cpp \
+  ihs_funddata.cpp \
+  ihs_pios.cpp \
+  ihs_proddata.cpp \
+  ihs_rnddata.cpp \
+  miscellany.cpp \
+  path_utility.cpp \
+  product_file_test.cpp \
+  rounding_rules.cpp \
+  stratified_charges.cpp \
+  timer.cpp
+test_product_file_CXXFLAGS = $(AM_CXXFLAGS)
+test_progress_meter_LDADD =   \
+  $(BOOST_LIBS)
 
 test_progress_meter_SOURCES =   \
   $(common_test_objects) \
