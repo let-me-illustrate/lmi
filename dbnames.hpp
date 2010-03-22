@@ -30,6 +30,8 @@
 
 #include <vector>
 
+/// See 'dbnames.xpp' for the definition of each entity.
+
 enum DatabaseNames
     {DB_FIRST
 
@@ -42,8 +44,8 @@ enum DatabaseNames
         ,DB_AllowFullUW
         ,DB_AllowSimpUW
         ,DB_AllowGuarUW
-        ,DB_SmokeOrTobacco       // DATABASE !! Move to '.pol'
-        ,DB_PrefOrSelect         // DATABASE !! Move to '.pol'
+        ,DB_SmokeOrTobacco       // DATABASE !! Move to '.policy'
+        ,DB_PrefOrSelect         // DATABASE !! Move to '.policy'
         ,DB_AllowPreferredClass
         ,DB_AllowUltraPrefClass
 
@@ -432,14 +434,7 @@ enum DatabaseNames
         ,DB_PrimaryHurdle
         ,DB_SecondaryHurdle
 
-    ,DB_LAST    // Adding a new item? Insert directly above *only*.
-    // That way, old databases remain compatible with new code, and any
-    // error in using a new item will occur when the new item is used
-    // instead of where a renumbered old item is used--that should make
-    // such errors much easier to track down and repair. We can re-sort
-    // additions into categories when preparing a major release.
-    //
-    // See 'dbnames.xpp' for the definition of each entity.
+    ,DB_LAST
     };
 
 struct db_names
