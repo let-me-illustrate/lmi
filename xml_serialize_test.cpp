@@ -77,16 +77,24 @@ void read()
     xml_serialize::get_element(root, "v", v1);
 }
 
+void write_erroneous()
+{
+    xml_lmi::xml_document document("eraseme");
+    xml::element& root = document.root_node();
+    xml_serialize::set_element(root, "d", d0);
+    xml_serialize::set_element(root, "d", d0); // Error: duplicate element.
+}
+
 void read_erroneous()
 {
-    float f1; // Erroneous because there's no <f> in the xml.
+    float f1;
 
     xml_lmi::dom_parser parser(dom_string.c_str(), dom_string.size());
     xml::element const& root = parser.root_node("eraseme");
     xml_serialize::get_element(root, "d", d1);
     xml_serialize::get_element(root, "s", s1);
     xml_serialize::get_element(root, "v", v1);
-    xml_serialize::get_element(root, "f", f1);
+    xml_serialize::get_element(root, "f", f1); // Error: no <f> element.
 }
 
 // These /mete_[write|read]/ functions are like write() and read()
@@ -117,6 +125,7 @@ void mete_s_write()
     xml::element& root = document.root_node();
     for(int j = 0; j < number_of_elements; ++j)
         {
+        root.erase("s");
         xml_serialize::set_element(root, "s", s0);
         }
     dom_string = document.str();
@@ -138,6 +147,7 @@ void mete_d_write()
     xml::element& root = document.root_node();
     for(int j = 0; j < number_of_elements; ++j)
         {
+        root.erase("d");
         xml_serialize::set_element(root, "d", d0);
         }
     dom_string = document.str();
@@ -159,6 +169,7 @@ void mete_v_write()
     xml::element& root = document.root_node();
     for(int j = 0; j < number_of_elements; ++j)
         {
+        root.erase("v");
         xml_serialize::set_element(root, "v", v0);
         }
     dom_string = document.str();
@@ -170,7 +181,6 @@ void mete_v_read()
     xml::element const& root = parser.root_node("eraseme");
     for(int j = 0; j < number_of_elements; ++j)
         {
-        v1.clear();
         xml_serialize::get_element(root, "v", v1);
         }
 }
@@ -191,14 +201,11 @@ int test_main(int, char*[])
     BOOST_TEST(v0 == v1);
     BOOST_TEST_EQUAL(v0.size(), v1.size());
 
-    // Reading into a nonempty vector is forbidden because it probably
-    // indicates an error.
-    std::string not_empty("Assertion 't.empty()' failed.");
-    BOOST_TEST_THROW(read(), std::runtime_error, not_empty);
-    v1.clear();
-    read();
+    std::string found
+        ("Assertion 'parent.end() == parent.find(name.c_str())' failed."
+        );
+    BOOST_TEST_THROW(write_erroneous(), std::runtime_error, found);
 
-    v1.clear();
     std::string not_found("Required element 'f' not found.");
     BOOST_TEST_THROW(read_erroneous(), std::runtime_error, not_found);
 
