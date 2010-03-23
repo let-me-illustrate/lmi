@@ -103,9 +103,6 @@
 /// of degenerate string capable of holding single-digit decimal
 /// integers as numerals.
 
-template<typename To, typename From>
-To numeric_io_cast(From, To = To());
-
 // A compile-time failure iff this template is ever instantiated is
 // desired, but the straightforward
 //   BOOST_STATIC_ASSERT(0);
@@ -352,7 +349,7 @@ struct numeric_converter<std::string, char const*>
 };
 
 template<typename To, typename From>
-To numeric_io_cast(From from, To)
+To numeric_io_cast(From from)
 {
     numeric_converter<To,From> converter;
     return converter.operator()(from);
