@@ -654,8 +654,7 @@ test_input_SOURCES =    \
 test_input_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
 test_input_LDADD =    \
   $(BOOST_LIBS) \
-  $(XMLWRAPP_LIBS) \
-  $(test_input_extra_libs)
+  $(XMLWRAPP_LIBS)
 
 test_irc7702a_SOURCES = \
   $(common_test_objects) \
