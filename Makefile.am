@@ -662,6 +662,10 @@ test_irc7702a_SOURCES = \
   irc7702a_test.cpp \
   stratified_algorithms.cpp
 test_irc7702a_CXXFLAGS = $(AM_CXXFLAGS)
+test_irc7702a_LDADD = \
+  liblmi.la \
+  $(BOOST_LIBS) \
+  $(XMLWRAPP_LIBS)
 
 test_istream_to_string_SOURCES = \
   $(common_test_objects) \
