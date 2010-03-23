@@ -24592,3 +24592,15 @@ Anticipate new product-file names.
   workhorse.make
 Facilitate further fardel fitting.
 
+20100323T1147Z <gchicares@sbcglobal.net> [761]
+
+  xml_serialize.hpp
+  xml_serialize_test.cpp
+Don't append duplicate xml elements (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2010-03/msg00035.html
+
+20100323T1209Z <gchicares@sbcglobal.net> [761]
+
+  version.hpp
+Mark failsafe release candidate.
+
