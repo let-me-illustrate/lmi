@@ -42,11 +42,11 @@
 #include "assert_lmi.hpp"
 #include "data_directory.hpp"
 #include "platform_dependent.hpp" // access()
+#include "xml_serialize.hpp"
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/path.hpp>
 
-#include <fstream>
 #include <string>
 
 //============================================================================
@@ -70,9 +70,17 @@ void TProductData::Init(std::string const& a_Filename)
 {
     fs::path path(a_Filename);
     LMI_ASSERT(a_Filename == path.leaf());
-    path = fs::change_extension(path, ".pol");
+    path = fs::change_extension(path, ".policy");
     Read(AddDataDir(path.string()));
 }
+
+namespace
+{
+std::string xml_root_name()
+{
+    return "policy";
+}
+} // Unnamed namespace.
 
 //============================================================================
 void TProductData::Read(std::string const& a_Filename)
@@ -86,9 +94,11 @@ void TProductData::Read(std::string const& a_Filename)
             << LMI_FLUSH
             ;
         }
-    std::ifstream is(a_Filename.c_str());
 
-#   define GET_ELEMENT(name) std::getline(is, name, '\n')
+    xml_lmi::dom_parser parser(a_Filename);
+    xml::element const& root = parser.root_node(xml_root_name());
+
+#   define GET_ELEMENT(name) xml_serialize::get_element(root, #name, name)
 
     GET_ELEMENT(DatabaseFilename              );
     GET_ELEMENT(FundFilename                  );
@@ -192,37 +202,17 @@ void TProductData::Read(std::string const& a_Filename)
     GET_ELEMENT(MonthlyChargesPaymentFootnote );
 
 #   undef GET_ELEMENT
-
-    bool okay = is.good();
-    if(!okay)
-        {
-        fatal_error()
-            << "Unexpected end of product data file '"
-            << a_Filename
-            << "'. Try reinstalling."
-            << LMI_FLUSH
-            ;
-        }
-    std::string dummy;
-    is >> dummy;
-    okay = is.eof();
-    if(!okay)
-        {
-        fatal_error()
-            << "Data past expected end of product data file '"
-            << a_Filename
-            << "'. Try reinstalling."
-            << LMI_FLUSH
-            ;
-        }
 }
 
 //============================================================================
 void TProductData::Write(std::string const& a_Filename) const
 {
-    std::ofstream os(a_Filename.c_str());
+    xml_lmi::xml_document document(xml_root_name());
+    xml::element& root = document.root_node();
 
-#   define SET_ELEMENT(name) os << name << '\n'
+    xml_lmi::set_attr(root, "version", "0");
+
+#   define SET_ELEMENT(name) xml_serialize::set_element(root, #name, name)
 
     SET_ELEMENT(DatabaseFilename              );
     SET_ELEMENT(FundFilename                  );
@@ -327,15 +317,13 @@ void TProductData::Write(std::string const& a_Filename) const
 
 #   undef SET_ELEMENT
 
-    if(!os.good())
-        {
-        fatal_error()
-            << "Unable to write product data file '"
-            << a_Filename
-            << "'."
-            << LMI_FLUSH
-            ;
-        }
+    // Instead of this:
+//    document.save(a_Filename);
+    // for the nonce, explicitly change the extension, in order to
+    // force external product-file code to use the new extension.
+    fs::path path(a_Filename, fs::native);
+    path = fs::change_extension(path, ".policy");
+    document.save(path.string());
 }
 
 //============================================================================
@@ -445,6 +433,6 @@ void TProductData::WritePolFiles()
     foo.RoundingFilename = "sample.rnd";
     foo.TierFilename     = "sample.tir";
 
-    foo.Write(AddDataDir("sample.pol"));
+    foo.Write(AddDataDir("sample.policy"));
 }
 
