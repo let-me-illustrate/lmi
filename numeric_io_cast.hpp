@@ -42,6 +42,9 @@
 #   define BOOST_STATIC_ASSERT(deliberately_ignored) class IgNoRe
 #endif // defined __BORLANDC__
 
+template<typename To, typename From>
+struct numeric_converter;
+
 /// Design notes for function template numeric_io_cast().
 ///
 /// Converts between arithmetic types and their std::string decimal
@@ -104,7 +107,11 @@
 /// integers as numerals.
 
 template<typename To, typename From>
-To numeric_io_cast(From, To = To());
+To numeric_io_cast(From from, To = To())
+{
+    numeric_converter<To,From> converter;
+    return converter.operator()(from);
+}
 
 // A compile-time failure iff this template is ever instantiated is
 // desired, but the straightforward
@@ -350,13 +357,6 @@ struct numeric_converter<std::string, char const*>
         return from;
         }
 };
-
-template<typename To, typename From>
-To numeric_io_cast(From from, To)
-{
-    numeric_converter<To,From> converter;
-    return converter.operator()(from);
-}
 
 #endif // numeric_io_cast_hpp
 
