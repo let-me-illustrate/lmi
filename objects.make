@@ -772,6 +772,7 @@ print_matrix_test$(EXEEXT): \
 product_file_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
+  $(xmlwrapp_objects) \
   data_directory.o \
   dbnames.o \
   expm1.o \
@@ -789,6 +790,7 @@ product_file_test$(EXEEXT): \
   rounding_rules.o \
   stratified_charges.o \
   timer.o \
+  xml_lmi.o \
 
 progress_meter_test$(EXEEXT): \
   $(common_test_objects) \
