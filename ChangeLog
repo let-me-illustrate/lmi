@@ -24604,3 +24604,22 @@ Don't append duplicate xml elements (VS). See:
   version.hpp
 Mark failsafe release candidate.
 
+20100323T1713Z <gchicares@sbcglobal.net> [761]
+
+  ihs_proddata.cpp
+Refactor (VS).
+
+20100324T0120Z <gchicares@sbcglobal.net> [761]
+
+  ihs_proddata.cpp
+  main_wx.cpp
+  my_prod.cpp
+  objects.make
+  product_names.cpp
+Reimplement 'policy' product files (VS).
+
+20100324T0124Z <gchicares@sbcglobal.net> [761]
+
+  version.hpp
+Mark release candidate.
+
