@@ -567,6 +567,7 @@ calendar_date_test$(EXEEXT): \
   $(common_test_objects) \
   calendar_date.o \
   calendar_date_test.o \
+  facets.o \
   null_stream.o \
   timer.o \
 
@@ -608,6 +609,7 @@ file_command_test$(EXEEXT): \
 
 financial_test$(EXEEXT): \
   $(common_test_objects) \
+  facets.o \
   financial_test.o \
   null_stream.o \
   stratified_algorithms.o \
@@ -889,6 +891,7 @@ xml_serialize_test$(EXEEXT): \
 
 zero_test$(EXEEXT): \
   $(common_test_objects) \
+  facets.o \
   null_stream.o \
   zero_test.o \
 
