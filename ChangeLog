@@ -24626,7 +24626,7 @@ Mark release candidate.
 20100324T1206Z <gchicares@sbcglobal.net> [761]
 
   fenv_lmi_test.cpp
-Include a required header, resolving a GNU/Linux issue. See:
+Include a required header, resolving a GNU/Linux issue (VZ). See:
   http://lists.nongnu.org/archive/html/lmi/2010-03/msg00061.html
 
 20100324T1207Z <gchicares@sbcglobal.net> [761]
@@ -24637,4 +24637,11 @@ Include a required header, resolving a GNU/Linux issue. See:
   objects.make
   obstruct_slicing_test.cpp
 Resolve unit-test build issues with an ancient compiler.
+
+20100324T2234Z <gchicares@sbcglobal.net> [761]
+
+  numeric_io_cast.hpp
+Work around an msvc defect (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2010-03/msg00060.html
+  http://lists.nongnu.org/archive/html/lmi/2010-03/msg00067.html
 
