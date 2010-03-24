@@ -24623,3 +24623,18 @@ Reimplement 'policy' product files (VS).
   version.hpp
 Mark release candidate.
 
+20100324T1206Z <gchicares@sbcglobal.net> [761]
+
+  fenv_lmi_test.cpp
+Include a required header, resolving a GNU/Linux issue. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-03/msg00061.html
+
+20100324T1207Z <gchicares@sbcglobal.net> [761]
+
+  bcc_5_5_1.make
+  callback.hpp
+  financial_test.cpp
+  objects.make
+  obstruct_slicing_test.cpp
+Resolve unit-test build issues with an ancient compiler.
+
