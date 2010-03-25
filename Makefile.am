@@ -848,6 +848,8 @@ test_xml_serialize_SOURCES = \
   xml_lmi.cpp \
   xml_serialize_test.cpp
 test_xml_serialize_CXXFLAGS = $(AM_CXXFLAGS)
+test_xml_serialize_LDADD =    \
+  $(XMLWRAPP_LIBS)
 
 test_zero_SOURCES = \
   $(common_test_objects) \
