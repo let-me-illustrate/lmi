@@ -56,7 +56,7 @@ void stratified_charges::write_proprietary_stratified_files()
     foo.raw_entity(e_curr_sepacct_load_tiered_by_assets   ).limits_.push_back(DBL_MAX);
 
 // Not necessary for 'sample' product only, because it's built in.
-//    foo.write(AddDataDir("sample.tir"));
+//    foo.write(AddDataDir("sample.strata"));
 
     // Another policy form....
 }

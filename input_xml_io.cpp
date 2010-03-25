@@ -27,26 +27,71 @@
 #endif // __BORLANDC__
 
 #include "input.hpp"
+#include "xml_serializable.tpp"
 
 #include "alert.hpp"
 #include "calendar_date.hpp"
 #include "global_settings.hpp"
-#include "miscellany.hpp"
-#include "value_cast.hpp"
-#include "xml_lmi.hpp"
+#include "miscellany.hpp" // lmi_array_size()
 
-#include <xmlwrapp/nodes_view.h>
-
-#include <algorithm> // std::find()
+#include <algorithm>      // std::find(), std::min()
 #include <stdexcept>
+
+template class xml_serializable<Input>;
 
 namespace
 {
+std::string full_name
+    (std::string first_name
+    ,std::string middle_name
+    ,std::string last_name
+    )
+{
+    std::string s(first_name);
+    if(!s.empty() && !middle_name.empty())
+        {
+        s += " ";
+        }
+    s += middle_name;
+    if(!s.empty() && !last_name.empty())
+        {
+        s += " ";
+        }
+    s += last_name;
+    return s;
+}
+} // Unnamed namespace.
+
+/// Serial number of this class's xml version.
+///
+/// version 0: [prior to the lmi epoch]
+/// version 1: 20050114T1947Z
+/// version 2: 20080813T0131Z
+/// version 3: 20090302T0509Z [see important note below]
+/// version 4: 20090330T0137Z
+/// version 5: 20090526T1331Z
+///
+/// Important note concerning version 3. On or about 20090311, some
+/// end users were given an off-cycle release that should have used
+/// code tagged 'lmi-20090223T2040Z', but erroneously used an untagged
+/// (and untested) version of HEAD.
+
+int Input::class_version() const
+{
+    return 5;
+}
+
+//============================================================================
+std::string Input::xml_root_name() const
+{
+    return "cell";
+}
+
 /// Entities that were present in older versions and then removed
 /// are recognized and ignored. If they're resurrected in a later
 /// version, then they aren't ignored.
 
-bool is_detritus(std::string const& s)
+bool Input::is_detritus(std::string const& s) const
 {
     static std::string const a[] =
         {"AgentFirstName"                // Single name instead.
@@ -76,160 +121,9 @@ bool is_detritus(std::string const& s)
     return v.end() != std::find(v.begin(), v.end(), s);
 }
 
-std::string full_name
-    (std::string first_name
-    ,std::string middle_name
-    ,std::string last_name
-    )
-{
-    std::string s(first_name);
-    if(!s.empty() && !middle_name.empty())
-        {
-        s += " ";
-        }
-    s += middle_name;
-    if(!s.empty() && !last_name.empty())
-        {
-        s += " ";
-        }
-    s += last_name;
-    return s;
-}
-} // Unnamed namespace.
-
-//============================================================================
-void Input::read(xml::element const& x)
-{
-    if(xml_root_name() != x.get_name())
-        {
-        fatal_error()
-            << "XML node name is '"
-            << x.get_name()
-            << "' but '"
-            << xml_root_name()
-            << "' was expected."
-            << LMI_FLUSH
-            ;
-        }
-
-    std::string file_version_string;
-    if(!xml_lmi::get_attr(x, "version", file_version_string))
-        {
-        fatal_error()
-            << "XML tag <"
-            << xml_root_name()
-            << "> lacks required version attribute."
-            << LMI_FLUSH
-            ;
-        }
-    int file_version = value_cast<int>(file_version_string);
-
-// COMPILER !! Borland doesn't find operator==() in ns xml.
-#ifdef __BORLANDC__
-using namespace xml;
-#endif // __BORLANDC__
-
-    std::map<std::string, std::string> detritus_map;
-
-    std::list<std::string> residuary_names;
-    std::copy
-        (member_names().begin()
-        ,member_names().end()
-        ,std::back_inserter(residuary_names)
-        );
-    std::list<std::string>::iterator current_member;
-
-    xml::const_nodes_view const elements(x.elements());
-    typedef xml::const_nodes_view::const_iterator cnvi;
-    for(cnvi child = elements.begin(); child != elements.end(); ++child)
-        {
-        std::string node_tag(child->get_name());
-        current_member = std::find
-            (residuary_names.begin()
-            ,residuary_names.end()
-            ,node_tag
-            );
-        if(residuary_names.end() != current_member)
-            {
-            operator[](node_tag) = RedintegrateExAnte
-                (file_version
-                ,node_tag
-                ,xml_lmi::get_content(*child)
-                );
-            residuary_names.erase(current_member);
-            }
-        else if(is_detritus(node_tag))
-            {
-            // Hold certain obsolete entities that must be translated.
-            detritus_map[node_tag] = xml_lmi::get_content(*child);
-            }
-        else
-            {
-            warning()
-                << "XML tag '"
-                << node_tag
-                << "' not recognized by this version of the program."
-                << LMI_FLUSH
-                ;
-            }
-        }
-
-    RedintegrateExPost(file_version, detritus_map, residuary_names);
-
-    if(EffectiveDateToday.value() && !global_settings::instance().regression_testing())
-        {
-        EffectiveDate = calendar_date();
-        }
-}
-
-//============================================================================
-void Input::write(xml::element& x) const
-{
-    xml::element root(xml_root_name().c_str());
-
-// XMLWRAPP !! There's no way to set an integer attribute.
-    std::string const version(value_cast<std::string>(class_version()));
-    xml_lmi::set_attr(root, "version", version.c_str());
-
-    std::vector<std::string>::const_iterator i;
-    for(i = member_names().begin(); i != member_names().end(); ++i)
-        {
-        std::string node_tag(*i);
-        std::string value = operator[](*i).str();
-        root.push_back(xml::element(node_tag.c_str(), value.c_str()));
-        }
-
-    x.push_back(root);
-}
-
-/// Serial number of this class's xml version.
-///
-/// version 0: [prior to the lmi epoch]
-/// version 1: 20050114T1947Z
-/// version 2: 20080813T0131Z
-/// version 3: 20090302T0509Z [see important note below]
-/// version 4: 20090330T0137Z
-/// version 5: 20090526T1331Z
-///
-/// Important note concerning version 3. On or about 20090311, some
-/// end users were given an off-cycle release that should have used
-/// code tagged 'lmi-20090223T2040Z', but erroneously used an untagged
-/// (and untested) version of HEAD.
-
-int Input::class_version() const
-{
-    return 5;
-}
-
-//============================================================================
-std::string Input::xml_root_name() const
-{
-    return "cell";
-}
-
 /// Provide for backward compatibility before assigning values.
 
-std::string Input::RedintegrateExAnte
+std::string Input::redintegrate_ex_ante
     (int                file_version
     ,std::string const& name
     ,std::string const& value
@@ -389,7 +283,7 @@ std::string Input::RedintegrateExAnte
 
 /// Provide for backward compatibility after assigning values.
 
-void Input::RedintegrateExPost
+void Input::redintegrate_ex_post
     (int                                file_version
     ,std::map<std::string, std::string> detritus_map
     ,std::list<std::string>             residuary_names
@@ -493,6 +387,16 @@ void Input::RedintegrateExPost
             ,InforceMonth .value() - InforceContractMonth.value()
             ,true
             );
+        }
+}
+
+/// Perform any required after-the-fact fixup.
+
+void Input::redintegrate_ad_terminum()
+{
+    if(EffectiveDateToday.value() && !global_settings::instance().regression_testing())
+        {
+        EffectiveDate = calendar_date();
         }
 }
 

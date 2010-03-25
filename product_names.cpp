@@ -49,7 +49,7 @@ std::vector<std::string> fetch_product_names()
     fs::directory_iterator end_i;
     for(; i != end_i; ++i)
         {
-        if(is_directory(*i) || ".pol" != fs::extension(*i))
+        if(is_directory(*i) || ".policy" != fs::extension(*i))
             {
             continue;
             }

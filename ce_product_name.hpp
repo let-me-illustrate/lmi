@@ -43,7 +43,7 @@
 /// Because there is no enum to map to, there is no 'm' for "Mapped"
 /// at the beginning of the class's or file's name.
 ///
-/// Valid values are the base names of policy ('.pol') files found
+/// Valid values are the base names of '.policy' product files found
 /// in the (configurable) data directory. They are read only once and
 /// cached, not because of any measured improvement in run time, but
 /// in order to keep the type from mutating with unknown consequences.

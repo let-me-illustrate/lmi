@@ -29,13 +29,11 @@
 #include "any_member.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
-#include "streamable.hpp"
+#include "xml_serializable.hpp"
 
 #include <boost/filesystem/path.hpp>
 #include <boost/operators.hpp>
 
-#include <list>
-#include <map>
 #include <string>
 
 /// Transient state of MEC testing.
@@ -48,10 +46,10 @@
 /// 'A*_' is reserved in case it's wanted later--e.g., for arguments.
 
 class LMI_SO mec_state
-    :virtual private obstruct_slicing<mec_state>
-    ,virtual public streamable
-    ,public MemberSymbolTable<mec_state>
-    ,private boost::equality_comparable<mec_state>
+    :virtual private obstruct_slicing           <mec_state>
+    ,        public  xml_serializable           <mec_state>
+    ,        public  MemberSymbolTable          <mec_state>
+    ,        private boost::equality_comparable <mec_state>
 {
     friend class Irc7702A;
 
@@ -69,23 +67,21 @@ class LMI_SO mec_state
   private:
     void AscribeMembers();
 
-    // Class 'streamable' required implementation.
-    virtual void read (xml::element const&);
-    virtual void write(xml::element&) const;
-    virtual int class_version() const;
+    // Class 'xml_serializable' required implementation.
+    virtual int         class_version() const;
     virtual std::string xml_root_name() const;
-
-    // Backward compatibility.
-    std::string RedintegrateExAnte
+    virtual bool        is_detritus(std::string const&) const;
+    virtual std::string redintegrate_ex_ante
         (int                file_version
         ,std::string const& name
         ,std::string const& value
         ) const;
-    void        RedintegrateExPost
+    virtual void        redintegrate_ex_post
         (int                                file_version
         ,std::map<std::string, std::string> detritus_map
         ,std::list<std::string>             residuary_names
         );
+    virtual void        redintegrate_ad_terminum();
 
     int    B0_deduced_policy_year;
     int    B1_deduced_contract_year;

@@ -50,14 +50,14 @@ void FundData::WriteProprietaryFundFiles()
     // Sample product.
     FundData foo;
 // Not necessary for 'sample' product only, because it's built in.
-//    foo->Write(AddDataDir("sample.fnd"));
+//    foo->Write(AddDataDir("sample.funds"));
     }
 #if 0 // Template for other products.
     {
     // Another product.
     FundData foo;
     foo.FundInfo_.push_back(FundInfo(70, "Short Name", "Long Fund Name"));
-    foo.Write(AddDataDir("another_product.fnd"));
+    foo.Write(AddDataDir("another_product.funds"));
     }
 #endif // 0
 }

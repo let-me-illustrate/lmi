@@ -397,7 +397,7 @@ double BasicValues::InvestmentManagementFee() const
             {
             // Allow hardcoded number of funds < Funds.GetNumberOfFunds
             // so an accurate fund average can be calculated (based
-            // on the funds in the *.fnd file), even though the inputs
+            // on the funds in the '.funds' file), even though the inputs
             // class may not accommodate that many funds. If j falls
             // outside the range of yare_input_.FundAllocations, use a
             // weight of zero.
@@ -409,11 +409,11 @@ double BasicValues::InvestmentManagementFee() const
         else if(j < static_cast<int>(yare_input_.FundAllocations.size()))
             {
             // TODO ?? Can this be correct? Shouldn't we be looking to
-            // the .fnd file rather than the input class?
+            // the '.funds' file rather than the input class?
             //
             // Allow hardcoded number of funds < Funds.GetNumberOfFunds
             // so an accurate fund average can be calculated (based
-            // on the funds in the *.fnd file), even though the inputs
+            // on the funds in the '.funds' file), even though the inputs
             // class may not accommodate that many funds. If j falls
             // outside the range of yare_input_.FundAllocations, use a
             // weight of zero.

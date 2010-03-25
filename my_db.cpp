@@ -53,7 +53,7 @@ void DBDictionary::WriteProprietaryDBFiles()
     Add(TDBValue(DB_GuarPolFee, 10.00));
     // etc.
 // Not necessary for 'sample' product only, because it's built in.
-//  WriteDB(AddDataDir("sample.db4"));
+//  WriteDB(AddDataDir("sample.database"));
   }
   // Another policy form....
 }

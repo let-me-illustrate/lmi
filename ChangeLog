@@ -24424,8 +24424,224 @@ Remove unintended svn:executable property.
 
 20100317T0137Z <gchicares@sbcglobal.net> [762]
 
+  Makefile.am
   bcc_5_5_1.make
   como_4_3_3.make
-  Makefile.am
 Refine xml-serialization unit test for other toolchains.
+
+20100318T2230Z <gchicares@sbcglobal.net> [762]
+
+  xml_serialize.hpp
+Forbid xml serialization of plain enums: mc_enum<> types should be
+used instead (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2010-03/msg00020.html
+
+20100318T2316Z <gchicares@sbcglobal.net> [762]
+
+  configure.ac
+Use '-std=c++0x' for gcc versions that understand it (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2010-03/msg00040.html
+
+20100319T0013Z <gchicares@sbcglobal.net> [762]
+
+  ledger.hpp
+  ledger_xml_io.cpp
+Break a misbegotten dependency.
+
+20100319T0158Z <gchicares@sbcglobal.net> [761]
+
+  Makefile.am
+  antediluvian_stubs.cpp
+  input.cpp
+  input.hpp
+  mec_input.cpp
+  mec_input.hpp
+  mec_state.cpp
+  mec_state.hpp
+  objects.make
+  streamable.cpp       [expunged]
+  streamable.hpp       [expunged]
+  xml_serializable.cpp [new file]
+  xml_serializable.hpp [new file]
+Rename 'streamable.?pp' to 'xml_serializable.?pp'.
+
+20100319T1243Z <gchicares@sbcglobal.net> [761]
+
+  input.hpp
+  input_xml_io.cpp
+  mec_input.cpp
+  mec_input.hpp
+  mec_state.cpp
+  mec_state.hpp
+Rename redintegration functions.
+
+20100319T1323Z <gchicares@sbcglobal.net> [761]
+
+  input.hpp
+  input_xml_io.cpp
+  mec_input.cpp
+  mec_input.hpp
+  mec_state.cpp
+  mec_state.hpp
+Make a free function a member. Usually, the opposite would be better,
+but soon this function will become virtual.
+
+20100319T1351Z <gchicares@sbcglobal.net> [761]
+
+  input.hpp
+  input_xml_io.cpp
+  mec_input.cpp
+  mec_input.hpp
+  mec_state.cpp
+  mec_state.hpp
+Refactor. The purpose is to make the implementations of read() and
+write() identical in all three classes, and thus to make refactoring
+them trivial.
+
+20100321T1133Z <vslavik@fastmail.fm> [761]
+
+  configure.ac
+Use AM_SILENT_RULES if available, for cleaner make output.
+
+20100321T1133Z <vslavik@fastmail.fm> [761]
+
+  Makefile.am
+Fix duplicate definition of test_input_LDADD.
+
+20100321T1133Z <vslavik@fastmail.fm> [761]
+
+  ihs_pios.hpp
+GCC 4.4 compilation fix.
+
+20100321T1133Z <vslavik@fastmail.fm> [761]
+
+  Makefile.am
+Include .[tx]pp files in noinst_HEADERS.
+
+20100321T1240Z <gchicares@sbcglobal.net> [761]
+
+  Makefile.am
+  antediluvian_stubs.cpp
+  input.cpp
+  input.hpp
+  input_xml_io.cpp
+  mec_input.cpp
+  mec_input.hpp
+  mec_state.cpp
+  mec_state.hpp
+  objects.make
+  xml_serializable.cpp [expunged]
+  xml_serializable.hpp
+  xml_serializable.tpp [new file]
+Use CRTP, preferring nonvirtual inheritance. This requires renaming
+'xml_serializable.cpp' to 'xml_serializable.tpp'.
+
+20100321T1342Z <gchicares@sbcglobal.net> [761]
+
+  antediluvian_stubs.cpp
+  input.hpp
+  input_xml_io.cpp
+  mec_input.cpp
+  mec_input.hpp
+  mec_state.cpp
+  mec_state.hpp
+  xml_serializable.hpp
+  xml_serializable.tpp
+Refactor, moving read() and write() to the base class.
+
+20100321T2119Z <gchicares@sbcglobal.net> [761]
+
+  catch_exceptions.hpp
+  database.hpp
+  ihs_dbvalue.cpp
+  multidimgrid_safe.hpp
+  multidimgrid_safe.tpp
+  round_test.cpp
+  round_to_test.cpp
+Prefer 'typename' to 'class' in template type-parameters. There is no
+semantic difference between the two [14.1/2]. This convention had
+already been followed in almost every case.
+
+20100322T1317Z <gchicares@sbcglobal.net> [761]
+
+  progress_meter_test.cpp
+Refactor to eliminate redundant qualified-id.
+
+20100322T1326Z <gchicares@sbcglobal.net> [761]
+
+  Makefile.am
+  ihs_dbdict.hpp
+  objects.make
+  product_file_test.cpp [new file]
+Add a unit test to measure speed of reading product files, emulating
+'progress_meter_test.cpp'.
+
+20100322T1626Z <gchicares@sbcglobal.net> [761]
+
+  ce_product_name.hpp
+  dbnames.hpp
+  ihs_basicval.cpp
+  my_db.cpp
+  my_fund.cpp
+  my_tier.cpp
+  product_names.hpp
+Anticipate new product-file names.
+
+20100322T1728Z <gchicares@sbcglobal.net> [761]
+
+  workhorse.make
+Facilitate further fardel fitting.
+
+20100323T1147Z <gchicares@sbcglobal.net> [761]
+
+  xml_serialize.hpp
+  xml_serialize_test.cpp
+Don't append duplicate xml elements (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2010-03/msg00035.html
+
+20100323T1209Z <gchicares@sbcglobal.net> [761]
+
+  version.hpp
+Mark failsafe release candidate.
+
+20100323T1713Z <gchicares@sbcglobal.net> [761]
+
+  ihs_proddata.cpp
+Refactor (VS).
+
+20100324T0120Z <gchicares@sbcglobal.net> [761]
+
+  ihs_proddata.cpp
+  main_wx.cpp
+  my_prod.cpp
+  objects.make
+  product_names.cpp
+Reimplement 'policy' product files (VS).
+
+20100324T0124Z <gchicares@sbcglobal.net> [761]
+
+  version.hpp
+Mark release candidate.
+
+20100324T1206Z <gchicares@sbcglobal.net> [761]
+
+  fenv_lmi_test.cpp
+Include a required header, resolving a GNU/Linux issue (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2010-03/msg00061.html
+
+20100324T1207Z <gchicares@sbcglobal.net> [761]
+
+  bcc_5_5_1.make
+  callback.hpp
+  financial_test.cpp
+  objects.make
+  obstruct_slicing_test.cpp
+Resolve unit-test build issues with an ancient compiler.
+
+20100324T2234Z <gchicares@sbcglobal.net> [761]
+
+  numeric_io_cast.hpp
+Work around an msvc defect (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2010-03/msg00060.html
+  http://lists.nongnu.org/archive/html/lmi/2010-03/msg00067.html
 

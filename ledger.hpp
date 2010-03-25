@@ -28,7 +28,7 @@
 
 #include "mc_enum_type_enums.hpp"
 #include "so_attributes.hpp"
-#include "streamable.hpp"
+#include "xml_lmi.hpp"
 
 #include <boost/shared_ptr.hpp>
 
@@ -63,7 +63,6 @@ class LedgerVariant;
 class ledger_map_holder;
 
 class LMI_SO Ledger
-    :virtual public streamable
 {
   public:
     // TODO ?? It's pretty weak to use 100 as a default max length.
@@ -108,11 +107,10 @@ class LMI_SO Ledger
     unsigned int CalculateCRC() const;
     void Spew(std::ostream& os) const;
 
-    // Class 'streamable' required implementation.
-    virtual void read (xml::element const&);
-    virtual void write(xml::element&) const;
-    virtual int class_version() const;
-    virtual std::string xml_root_name() const;
+    void read (xml::element const&);
+    void write(xml::element&) const;
+    int class_version() const;
+    std::string xml_root_name() const;
 
     void write       (std::ostream& os) const;
     void write_xsl_fo(std::ostream& os) const;

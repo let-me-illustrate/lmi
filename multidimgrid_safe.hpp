@@ -257,7 +257,7 @@ class MultiDimTable
 /// DoCreateAdjustControl().
 /// Do not override this method, override DoCreateAdjustControl instead.
 
-template<class AdjustControl, class BaseAxisType = MultiDimAxisAny>
+template<typename AdjustControl, typename BaseAxisType = MultiDimAxisAny>
 class MultiDimAdjustableAxis
     :public BaseAxisType
 {

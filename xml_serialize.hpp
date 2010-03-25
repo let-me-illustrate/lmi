@@ -30,6 +30,9 @@
 #include "value_cast.hpp"
 #include "xml_lmi.hpp"
 
+#include <boost/static_assert.hpp>
+#include <boost/type_traits/is_enum.hpp>
+
 #include <xmlwrapp/nodes_view.h>
 
 #include <string>
@@ -57,8 +60,12 @@ namespace xml_serialize
 template<typename T>
 struct xml_io
 {
+    BOOST_STATIC_ASSERT(!boost::is_enum<T>::value); // Prefer mc_enum.
+
     static void to_xml(xml::element& e, T const& t)
     {
+        // XMLWRAPP !! Add a clear() function.
+        e.erase(e.begin(), e.end());
         // XMLWRAPP !! Someday, this might be rewritten thus:
         //   e.set_content(value_cast<std::string>(t).c_str());
         // but for now that doesn't work with embedded ampersands.
@@ -87,12 +94,13 @@ struct xml_sequence_io
 
     static void to_xml(xml::element& e, T const& t)
     {
-        LMI_ASSERT(e.elements("item").empty());
+        // XMLWRAPP !! Add a clear() function.
+        e.erase(e.begin(), e.end());
         typedef typename T::const_iterator tci;
         for(tci i = t.begin(); i != t.end(); ++i)
             {
-            // This is equivalent to calling set_element();
-            // it's written out to avoid obscurity.
+            // This is not equivalent to calling set_element():
+            // multiple <item> elements are expressly permitted.
             xml::element z("item");
             xml_io<item_t>::to_xml(z, *i);
             e.push_back(z);
@@ -101,7 +109,7 @@ struct xml_sequence_io
 
     static void from_xml(xml::element const& e, T& t)
     {
-        LMI_ASSERT(t.empty());
+        t.clear();
         xml::const_nodes_view const items(e.elements("item"));
         typedef xml::const_nodes_view::const_iterator cnvi;
         for(cnvi i = items.begin(); i != items.end(); ++i)
@@ -120,20 +128,13 @@ struct xml_io<std::vector<T> >
 
 /// Serialize a datum into a subelement of the given xml element.
 ///
-/// Many elements should be unique: e.g.,
-///   <DateOfBirth>19990101</DateOfBirth>
-///   <DateOfBirth>19871230</DateOfBirth>
-/// is a semantic error because one's birthdate is single-valued;
-/// however, it's valid syntactically, and indeed class template
-/// xml_sequence_io must support multiple <item> elements. Therefore,
-///   parent.erase(name.c_str());
-/// would be incorrect here, and an assertion that it returns zero
-/// would fail. Semantic correctness is the responsibility of code
-/// that uses the present facility.
+/// Precondition: parent has no element with the given tagname.
+/// Throws, via assertion failure, upon precondition violation.
 
 template<typename T>
 void set_element(xml::element& parent, std::string const& name, T const& t)
 {
+    LMI_ASSERT(parent.end() == parent.find(name.c_str()));
     xml::element z(name.c_str());
     xml_io<T>::to_xml(z, t);
     parent.push_back(z);
@@ -141,7 +142,8 @@ void set_element(xml::element& parent, std::string const& name, T const& t)
 
 /// Deserialize a datum from a subelement of the given xml element.
 ///
-/// retrieve_element() throws if the element isn't found.
+/// Precondition: parent has an element with the given tagname.
+/// Throws, via retrieve_element(), upon precondition violation.
 
 template<typename T>
 void get_element(xml::element const& parent, std::string const& name, T& t)

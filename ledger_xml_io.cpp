@@ -60,11 +60,6 @@
 #include <string>
 #include <utility>
 
-void Ledger::read(xml::element const&)
-{
-    fatal_error() << "Not implemented." << LMI_FLUSH;
-}
-
 namespace
 {
 int const n = 7;
@@ -1012,7 +1007,7 @@ void Ledger::write(std::ostream& os) const
 {
     xml_lmi::xml_document document(xml_root_name());
     xml::element& root = document.root_node();
-    root << *this;
+    write(root);
     os << root;
 }
 
@@ -1033,7 +1028,7 @@ void Ledger::write_xsl_fo(std::ostream& os) const
         scaled_ledger.AutoScale();
 
         xml_lmi::xml_document d(xml_root_name());
-        d.root_node() << scaled_ledger;
+        scaled_ledger.write(d.root_node());
 
         xslt::stylesheet z(xsl_filepath(scaled_ledger).string().c_str());
         os << z.apply(d.document());

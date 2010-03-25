@@ -86,7 +86,7 @@ namespace lmi_test
   // catch_exceptions  ------------------------------------------------------//
 
     // A function object to run the 'main' function.
-    template<class Generator>
+    template<typename Generator>
     int catch_exceptions
         (Generator     function_object
         ,std::ostream& out
