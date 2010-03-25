@@ -586,13 +586,22 @@ if test "x$GCC" == "xyes"; then
 fi
 
 if test "x$GXX" == "xyes"; then
-    CXXFLAGS="$CXXFLAGS $CFLAGS_gcc_common -std=c++98 \
+    CXXFLAGS="$CXXFLAGS $CFLAGS_gcc_common \
         -Wctor-dtor-privacy \
         -Wdeprecated \
         -Wnon-template-friend \
         -Woverloaded-virtual \
         -Wpmf-conversions \
         -Wsynth"
+
+    dnl g++ 4.4 doesn't compile wxWidgets code that relies on use of empty
+    dnl macro arguments, because it's behavior undefined by the standard
+    dnl prior to C++0x or C99; if the compiler is too old to understand
+    dnl -std=c++0x, it's also too old to complain about this and so we can
+    dnl use -std=c++98
+    AX_CXX_CHECK_FLAG([-std=c++0x],[],[],
+                      [CXXFLAGS="$CXXFLAGS -std=c++0x"],
+                      [CXXFLAGS="$CXXFLAGS -std=c++98"])
 
     dnl we need to use this option with g++ 4.3 to prevent its complaints
     dnl about "-funit-at-a-time is required for inlining of functions that are

@@ -157,7 +157,7 @@ void set_hardware_rounding_mode(e_ieee754_rounding mode, bool synchronize)
  */
 // GWC modified the code as noted below, e.g. to print in byte-reversed
 // order as well, and made some trivial formatting changes.
-template<class T>
+template<typename T>
 void print_hex_val(T t, char const* name)
 {
   // GWC changed C cast to reinterpret_cast:

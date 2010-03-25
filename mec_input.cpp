@@ -27,6 +27,7 @@
 #endif // __BORLANDC__
 
 #include "mec_input.hpp"
+#include "xml_serializable.tpp"
 
 #include "alert.hpp"
 #include "database.hpp"
@@ -34,34 +35,16 @@
 #include "global_settings.hpp"
 #include "input_seq_helpers.hpp"
 #include "miscellany.hpp" // lmi_array_size()
-#include "xml_lmi.hpp"
 
-#include <xmlwrapp/nodes_view.h>
-
-#include <algorithm>
+#include <algorithm>      // std::find(), std::max()
 #include <limits>
-#include <list>
-#include <map>
 #include <sstream>
-#include <string>
-#include <vector>
+#include <utility>        // std::pair
+
+template class xml_serializable<mec_input>;
 
 namespace
 {
-/// Entities that were present in older versions and then removed
-/// are recognized and ignored. If they're resurrected in a later
-/// version, then they aren't ignored.
-
-bool is_detritus(std::string const& s)
-{
-    static std::string const a[] =
-        {"EffectiveDateToday"
-        ,"InforceSevenPayPremium"
-        };
-    static std::vector<std::string> const v(a, a + lmi_array_size(a));
-    return v.end() != std::find(v.begin(), v.end(), s);
-}
-
 template<typename T>
 std::string realize_sequence_string
     (mec_input           & input
@@ -133,10 +116,10 @@ mec_input::mec_input()
 }
 
 mec_input::mec_input(mec_input const& z)
-    :obstruct_slicing<mec_input>()
-    ,streamable()
-    ,MvcModel()
-    ,MemberSymbolTable<mec_input>()
+    :obstruct_slicing  <mec_input>()
+    ,xml_serializable  <mec_input>()
+    ,MvcModel                     ()
+    ,MemberSymbolTable <mec_input>()
 {
     AscribeMembers();
     std::vector<std::string>::const_iterator i;
@@ -620,107 +603,6 @@ std::string mec_input::RealizeBenefitHistory()
         );
 }
 
-void mec_input::read(xml::element const& x)
-{
-    if(xml_root_name() != x.get_name())
-        {
-        fatal_error()
-            << "XML node name is '"
-            << x.get_name()
-            << "' but '"
-            << xml_root_name()
-            << "' was expected."
-            << LMI_FLUSH
-            ;
-        }
-
-    std::string file_version_string;
-    if(!xml_lmi::get_attr(x, "version", file_version_string))
-        {
-        fatal_error()
-            << "XML tag <"
-            << xml_root_name()
-            << "> lacks required version attribute."
-            << LMI_FLUSH
-            ;
-        }
-    int file_version = value_cast<int>(file_version_string);
-
-// COMPILER !! Borland doesn't find operator==() in ns xml.
-#ifdef __BORLANDC__
-using namespace xml;
-#endif // __BORLANDC__
-
-    std::map<std::string, std::string> detritus_map;
-
-    std::list<std::string> residuary_names;
-    std::copy
-        (member_names().begin()
-        ,member_names().end()
-        ,std::back_inserter(residuary_names)
-        );
-    std::list<std::string>::iterator current_member;
-
-    xml::const_nodes_view const elements(x.elements());
-    typedef xml::const_nodes_view::const_iterator cnvi;
-    for(cnvi child = elements.begin(); child != elements.end(); ++child)
-        {
-        std::string node_tag(child->get_name());
-        current_member = std::find
-            (residuary_names.begin()
-            ,residuary_names.end()
-            ,node_tag
-            );
-        if(residuary_names.end() != current_member)
-            {
-            operator[](node_tag) = RedintegrateExAnte
-                (file_version
-                ,node_tag
-                ,xml_lmi::get_content(*child)
-                );
-            residuary_names.erase(current_member);
-            }
-        else if(is_detritus(node_tag))
-            {
-            // Hold certain obsolete entities that must be translated.
-            detritus_map[node_tag] = xml_lmi::get_content(*child);
-            }
-        else
-            {
-            warning()
-                << "XML tag '"
-                << node_tag
-                << "' not recognized by this version of the program."
-                << LMI_FLUSH
-                ;
-            }
-        }
-
-    RedintegrateExPost(file_version, detritus_map, residuary_names);
-
-    Reconcile();
-    RealizeAllSequenceInput(false);
-}
-
-void mec_input::write(xml::element& x) const
-{
-    xml::element root(xml_root_name().c_str());
-
-// XMLWRAPP !! There's no way to set an integer attribute.
-    std::string const version(value_cast<std::string>(class_version()));
-    xml_lmi::set_attr(root, "version", version.c_str());
-
-    std::vector<std::string>::const_iterator i;
-    for(i = member_names().begin(); i != member_names().end(); ++i)
-        {
-        std::string node_tag(*i);
-        std::string value = operator[](*i).str();
-        root.push_back(xml::element(node_tag.c_str(), value.c_str()));
-        }
-
-    x.push_back(root);
-}
-
 /// Serial number of this class's xml version.
 ///
 /// version 0: 20090627T2249Z
@@ -735,9 +617,23 @@ std::string mec_input::xml_root_name() const
     return "mec";
 }
 
+/// Entities that were present in older versions and then removed
+/// are recognized and ignored. If they're resurrected in a later
+/// version, then they aren't ignored.
+
+bool mec_input::is_detritus(std::string const& s) const
+{
+    static std::string const a[] =
+        {"EffectiveDateToday"
+        ,"InforceSevenPayPremium"
+        };
+    static std::vector<std::string> const v(a, a + lmi_array_size(a));
+    return v.end() != std::find(v.begin(), v.end(), s);
+}
+
 /// Provide for backward compatibility before assigning values.
 
-std::string mec_input::RedintegrateExAnte
+std::string mec_input::redintegrate_ex_ante
     (int                file_version
     ,std::string const& // name
     ,std::string const& value
@@ -756,7 +652,7 @@ std::string mec_input::RedintegrateExAnte
 
 /// Provide for backward compatibility after assigning values.
 
-void mec_input::RedintegrateExPost
+void mec_input::redintegrate_ex_post
     (int                                file_version
     ,std::map<std::string, std::string> // detritus_map
     ,std::list<std::string>             // residuary_names
@@ -770,6 +666,14 @@ void mec_input::RedintegrateExPost
         {
         fatal_error() << "Incompatible file version." << LMI_FLUSH;
         }
+}
+
+/// Perform any required after-the-fact fixup.
+
+void mec_input::redintegrate_ad_terminum()
+{
+    Reconcile();
+    RealizeAllSequenceInput(false);
 }
 
 namespace

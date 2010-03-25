@@ -252,10 +252,10 @@ Input::Input()
 }
 
 Input::Input(Input const& z)
-    :obstruct_slicing<Input>()
-    ,streamable()
-    ,MvcModel()
-    ,MemberSymbolTable<Input>()
+    :obstruct_slicing  <Input>()
+    ,xml_serializable  <Input>()
+    ,MvcModel                 ()
+    ,MemberSymbolTable <Input>()
 {
     AscribeMembers();
     std::vector<std::string>::const_iterator i;

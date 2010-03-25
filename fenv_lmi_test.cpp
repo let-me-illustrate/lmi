@@ -50,6 +50,7 @@
 // Specify '|| defined __MINGW32__' to test MinGW extensions like FE_PC64_ENV.
 #   include <fenv.h>
 #endif // defined LMI_IEC_559
+#include <math.h>  // C99 rint()
 #include <stdexcept>
 
 std::bitset<CHAR_BIT * sizeof(unsigned long int)> bits(unsigned long int i)

@@ -58,7 +58,7 @@ namespace JRPS = JOSHUA_ROWE_PERSISTENT_STREAMS;
 #include <string>
 #include <vector>
 
-template<class T>
+template<typename T>
 JRPS::JrPs_ipstream& operator>> (JRPS::JrPs_ipstream& ips, std::vector<T>& x)
 {
     x.erase(x.begin(), x.end());
@@ -75,7 +75,7 @@ JRPS::JrPs_ipstream& operator>> (JRPS::JrPs_ipstream& ips, std::vector<T>& x)
     return ips;
 }
 
-template<class T>
+template<typename T>
 JRPS::JrPs_opstream& operator<< (JRPS::JrPs_opstream& ops, std::vector<T> const& x)
 {
     ops << x.size();

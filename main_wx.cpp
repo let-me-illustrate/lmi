@@ -374,9 +374,9 @@ void Skeleton::InitDocManager()
     new(wx) wxDocTemplate
         (doc_manager_
         ,"Policy"
-        ,"*.pol"
+        ,"*.policy"
         ,""
-        ,"pol"
+        ,"policy"
         ,"Policy document"
         ,"Policy view"
         ,CLASSINFO(PolicyDocument)

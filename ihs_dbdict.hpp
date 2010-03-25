@@ -47,6 +47,7 @@ class LMI_SO DBDictionary
     ,virtual private obstruct_slicing<DBDictionary>
 {
     friend class DatabaseDocument;
+    friend class product_file_test;
 
   public:
     static DBDictionary& instance();

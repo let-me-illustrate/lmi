@@ -42,11 +42,11 @@
 #include "assert_lmi.hpp"
 #include "data_directory.hpp"
 #include "platform_dependent.hpp" // access()
+#include "xml_serialize.hpp"
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/path.hpp>
 
-#include <fstream>
 #include <string>
 
 //============================================================================
@@ -70,9 +70,17 @@ void TProductData::Init(std::string const& a_Filename)
 {
     fs::path path(a_Filename);
     LMI_ASSERT(a_Filename == path.leaf());
-    path = fs::change_extension(path, ".pol");
+    path = fs::change_extension(path, ".policy");
     Read(AddDataDir(path.string()));
 }
+
+namespace
+{
+std::string xml_root_name()
+{
+    return "policy";
+}
+} // Unnamed namespace.
 
 //============================================================================
 void TProductData::Read(std::string const& a_Filename)
@@ -86,248 +94,236 @@ void TProductData::Read(std::string const& a_Filename)
             << LMI_FLUSH
             ;
         }
-    std::ifstream is(a_Filename.c_str());
 
-    std::getline(is, DatabaseFilename,              '\n');
-    std::getline(is, FundFilename,                  '\n');
-    std::getline(is, CorridorFilename,              '\n');
-    std::getline(is, CurrCOIFilename,               '\n');
-    std::getline(is, GuarCOIFilename,               '\n');
-    std::getline(is, WPFilename,                    '\n');
-    std::getline(is, ADDFilename,                   '\n');
-    std::getline(is, ChildRiderFilename,            '\n');
-    std::getline(is, CurrSpouseRiderFilename,       '\n');
-    std::getline(is, GuarSpouseRiderFilename,       '\n');
-    std::getline(is, CurrTermFilename,              '\n');
-    std::getline(is, GuarTermFilename,              '\n');
-    std::getline(is, TableYFilename,                '\n');
-    std::getline(is, PremTaxFilename,               '\n');
-    std::getline(is, TAMRA7PayFilename,             '\n');
-    std::getline(is, TgtPremFilename,               '\n');
-    std::getline(is, IRC7702Filename,               '\n');
-    std::getline(is, Gam83Filename,                 '\n');
-    std::getline(is, SubstdTblMultFilename,         '\n');
-    std::getline(is, CurrSpecAmtLoadFilename,       '\n');
-    std::getline(is, GuarSpecAmtLoadFilename,       '\n');
-    std::getline(is, RoundingFilename,              '\n');
-    std::getline(is, TierFilename,                  '\n');
-    std::getline(is, PolicyForm,                    '\n');
-    std::getline(is, PolicyMktgName,                '\n');
-    std::getline(is, PolicyLegalName,               '\n');
-    std::getline(is, InsCoShortName,                '\n');
-    std::getline(is, InsCoName,                     '\n');
-    std::getline(is, InsCoAddr,                     '\n');
-    std::getline(is, InsCoStreet,                   '\n');
-    std::getline(is, InsCoPhone,                    '\n');
-    std::getline(is, InsCoDomicile,                 '\n');
-    std::getline(is, MainUnderwriter,               '\n');
-    std::getline(is, MainUnderwriterAddress,        '\n');
-    std::getline(is, CoUnderwriter,                 '\n');
-    std::getline(is, CoUnderwriterAddress,          '\n');
-    std::getline(is, AvName,                        '\n');
-    std::getline(is, CsvName,                       '\n');
-    std::getline(is, CsvHeaderName,                 '\n');
-    std::getline(is, NoLapseProvisionName,          '\n');
-    std::getline(is, InterestDisclaimer,            '\n');
-    std::getline(is, GuarMortalityFootnote,         '\n');
-    std::getline(is, AccountValueFootnote,          '\n');
-    std::getline(is, AttainedAgeFootnote,           '\n');
-    std::getline(is, CashSurrValueFootnote,         '\n');
-    std::getline(is, DeathBenefitFootnote,          '\n');
-    std::getline(is, InitialPremiumFootnote,        '\n');
-    std::getline(is, NetPremiumFootnote,            '\n');
-    std::getline(is, OutlayFootnote,                '\n');
-    std::getline(is, PolicyYearFootnote,            '\n');
-    std::getline(is, ADDFootnote,                   '\n');
-    std::getline(is, ChildFootnote,                 '\n');
-    std::getline(is, SpouseFootnote,                '\n');
-    std::getline(is, TermFootnote,                  '\n');
-    std::getline(is, WaiverFootnote,                '\n');
-    std::getline(is, MinimumPremiumFootnote,        '\n');
-    std::getline(is, PremAllocationFootnote,        '\n');
-    std::getline(is, ProductDescription,            '\n');
-    std::getline(is, StableValueFootnote,           '\n');
-    std::getline(is, NoVanishPremiumFootnote,       '\n');
-    std::getline(is, RejectPremiumFootnote,         '\n');
-    std::getline(is, ExpRatingFootnote,             '\n');
-    std::getline(is, MortalityBlendFootnote,        '\n');
-    std::getline(is, HypotheticalRatesFootnote,     '\n');
-    std::getline(is, SalesLoadRefundFootnote,       '\n');
-    std::getline(is, NoLapseFootnote,               '\n');
-    std::getline(is, MarketValueAdjFootnote,        '\n');
-    std::getline(is, ExchangeChargeFootnote0,       '\n');
-    std::getline(is, CurrentValuesFootnote,         '\n');
-    std::getline(is, DBOption1Footnote,             '\n');
-    std::getline(is, DBOption2Footnote,             '\n');
-    std::getline(is, ExpRatRiskChargeFootnote,      '\n');
-    std::getline(is, ExchangeChargeFootnote1,       '\n');
-    std::getline(is, FlexiblePremiumFootnote,       '\n');
-    std::getline(is, GuaranteedValuesFootnote,      '\n');
-    std::getline(is, CreditingRateFootnote,         '\n');
-    std::getline(is, MecFootnote,                   '\n');
-    std::getline(is, MidpointValuesFootnote,        '\n');
-    std::getline(is, SinglePremiumFootnote,         '\n');
-    std::getline(is, MonthlyChargesFootnote,        '\n');
-    std::getline(is, UltCreditingRateFootnote,      '\n');
-    std::getline(is, MaxNaarFootnote,               '\n');
-    std::getline(is, PremTaxSurrChgFootnote,        '\n');
-    std::getline(is, PolicyFeeFootnote,             '\n');
-    std::getline(is, AssetChargeFootnote,           '\n');
-    std::getline(is, InvestmentIncomeFootnote,      '\n');
-    std::getline(is, IrrDbFootnote,                 '\n');
-    std::getline(is, IrrCsvFootnote,                '\n');
-    std::getline(is, MortalityChargesFootnote,      '\n');
-    std::getline(is, LoanAndWithdrawalFootnote,     '\n');
-    std::getline(is, PresaleTrackingNumber,         '\n');
-    std::getline(is, CompositeTrackingNumber,       '\n');
-    std::getline(is, InforceTrackingNumber,         '\n');
-    std::getline(is, InforceCompositeTrackingNumber,'\n');
-    std::getline(is, InforceNonGuaranteedFootnote0, '\n');
-    std::getline(is, InforceNonGuaranteedFootnote1, '\n');
-    std::getline(is, InforceNonGuaranteedFootnote2, '\n');
-    std::getline(is, InforceNonGuaranteedFootnote3, '\n');
-    std::getline(is, NonGuaranteedFootnote,         '\n');
-    std::getline(is, MonthlyChargesPaymentFootnote, '\n');
+    xml_lmi::dom_parser parser(a_Filename);
+    xml::element const& root = parser.root_node(xml_root_name());
 
-    bool okay = is.good();
-    if(!okay)
-        {
-        fatal_error()
-            << "Unexpected end of product data file '"
-            << a_Filename
-            << "'. Try reinstalling."
-            << LMI_FLUSH
-            ;
-        }
-    std::string dummy;
-    is >> dummy;
-    okay = is.eof();
-    if(!okay)
-        {
-        fatal_error()
-            << "Data past expected end of product data file '"
-            << a_Filename
-            << "'. Try reinstalling."
-            << LMI_FLUSH
-            ;
-        }
+#   define GET_ELEMENT(name) xml_serialize::get_element(root, #name, name)
+
+    GET_ELEMENT(DatabaseFilename              );
+    GET_ELEMENT(FundFilename                  );
+    GET_ELEMENT(CorridorFilename              );
+    GET_ELEMENT(CurrCOIFilename               );
+    GET_ELEMENT(GuarCOIFilename               );
+    GET_ELEMENT(WPFilename                    );
+    GET_ELEMENT(ADDFilename                   );
+    GET_ELEMENT(ChildRiderFilename            );
+    GET_ELEMENT(CurrSpouseRiderFilename       );
+    GET_ELEMENT(GuarSpouseRiderFilename       );
+    GET_ELEMENT(CurrTermFilename              );
+    GET_ELEMENT(GuarTermFilename              );
+    GET_ELEMENT(TableYFilename                );
+    GET_ELEMENT(PremTaxFilename               );
+    GET_ELEMENT(TAMRA7PayFilename             );
+    GET_ELEMENT(TgtPremFilename               );
+    GET_ELEMENT(IRC7702Filename               );
+    GET_ELEMENT(Gam83Filename                 );
+    GET_ELEMENT(SubstdTblMultFilename         );
+    GET_ELEMENT(CurrSpecAmtLoadFilename       );
+    GET_ELEMENT(GuarSpecAmtLoadFilename       );
+    GET_ELEMENT(RoundingFilename              );
+    GET_ELEMENT(TierFilename                  );
+    GET_ELEMENT(PolicyForm                    );
+    GET_ELEMENT(PolicyMktgName                );
+    GET_ELEMENT(PolicyLegalName               );
+    GET_ELEMENT(InsCoShortName                );
+    GET_ELEMENT(InsCoName                     );
+    GET_ELEMENT(InsCoAddr                     );
+    GET_ELEMENT(InsCoStreet                   );
+    GET_ELEMENT(InsCoPhone                    );
+    GET_ELEMENT(InsCoDomicile                 );
+    GET_ELEMENT(MainUnderwriter               );
+    GET_ELEMENT(MainUnderwriterAddress        );
+    GET_ELEMENT(CoUnderwriter                 );
+    GET_ELEMENT(CoUnderwriterAddress          );
+    GET_ELEMENT(AvName                        );
+    GET_ELEMENT(CsvName                       );
+    GET_ELEMENT(CsvHeaderName                 );
+    GET_ELEMENT(NoLapseProvisionName          );
+    GET_ELEMENT(InterestDisclaimer            );
+    GET_ELEMENT(GuarMortalityFootnote         );
+    GET_ELEMENT(AccountValueFootnote          );
+    GET_ELEMENT(AttainedAgeFootnote           );
+    GET_ELEMENT(CashSurrValueFootnote         );
+    GET_ELEMENT(DeathBenefitFootnote          );
+    GET_ELEMENT(InitialPremiumFootnote        );
+    GET_ELEMENT(NetPremiumFootnote            );
+    GET_ELEMENT(OutlayFootnote                );
+    GET_ELEMENT(PolicyYearFootnote            );
+    GET_ELEMENT(ADDFootnote                   );
+    GET_ELEMENT(ChildFootnote                 );
+    GET_ELEMENT(SpouseFootnote                );
+    GET_ELEMENT(TermFootnote                  );
+    GET_ELEMENT(WaiverFootnote                );
+    GET_ELEMENT(MinimumPremiumFootnote        );
+    GET_ELEMENT(PremAllocationFootnote        );
+    GET_ELEMENT(ProductDescription            );
+    GET_ELEMENT(StableValueFootnote           );
+    GET_ELEMENT(NoVanishPremiumFootnote       );
+    GET_ELEMENT(RejectPremiumFootnote         );
+    GET_ELEMENT(ExpRatingFootnote             );
+    GET_ELEMENT(MortalityBlendFootnote        );
+    GET_ELEMENT(HypotheticalRatesFootnote     );
+    GET_ELEMENT(SalesLoadRefundFootnote       );
+    GET_ELEMENT(NoLapseFootnote               );
+    GET_ELEMENT(MarketValueAdjFootnote        );
+    GET_ELEMENT(ExchangeChargeFootnote0       );
+    GET_ELEMENT(CurrentValuesFootnote         );
+    GET_ELEMENT(DBOption1Footnote             );
+    GET_ELEMENT(DBOption2Footnote             );
+    GET_ELEMENT(ExpRatRiskChargeFootnote      );
+    GET_ELEMENT(ExchangeChargeFootnote1       );
+    GET_ELEMENT(FlexiblePremiumFootnote       );
+    GET_ELEMENT(GuaranteedValuesFootnote      );
+    GET_ELEMENT(CreditingRateFootnote         );
+    GET_ELEMENT(MecFootnote                   );
+    GET_ELEMENT(MidpointValuesFootnote        );
+    GET_ELEMENT(SinglePremiumFootnote         );
+    GET_ELEMENT(MonthlyChargesFootnote        );
+    GET_ELEMENT(UltCreditingRateFootnote      );
+    GET_ELEMENT(MaxNaarFootnote               );
+    GET_ELEMENT(PremTaxSurrChgFootnote        );
+    GET_ELEMENT(PolicyFeeFootnote             );
+    GET_ELEMENT(AssetChargeFootnote           );
+    GET_ELEMENT(InvestmentIncomeFootnote      );
+    GET_ELEMENT(IrrDbFootnote                 );
+    GET_ELEMENT(IrrCsvFootnote                );
+    GET_ELEMENT(MortalityChargesFootnote      );
+    GET_ELEMENT(LoanAndWithdrawalFootnote     );
+    GET_ELEMENT(PresaleTrackingNumber         );
+    GET_ELEMENT(CompositeTrackingNumber       );
+    GET_ELEMENT(InforceTrackingNumber         );
+    GET_ELEMENT(InforceCompositeTrackingNumber);
+    GET_ELEMENT(InforceNonGuaranteedFootnote0 );
+    GET_ELEMENT(InforceNonGuaranteedFootnote1 );
+    GET_ELEMENT(InforceNonGuaranteedFootnote2 );
+    GET_ELEMENT(InforceNonGuaranteedFootnote3 );
+    GET_ELEMENT(NonGuaranteedFootnote         );
+    GET_ELEMENT(MonthlyChargesPaymentFootnote );
+
+#   undef GET_ELEMENT
 }
 
 //============================================================================
 void TProductData::Write(std::string const& a_Filename) const
 {
-    std::ofstream os(a_Filename.c_str());
+    xml_lmi::xml_document document(xml_root_name());
+    xml::element& root = document.root_node();
 
-    os << DatabaseFilename              << '\n';
-    os << FundFilename                  << '\n';
-    os << CorridorFilename              << '\n';
-    os << CurrCOIFilename               << '\n';
-    os << GuarCOIFilename               << '\n';
-    os << WPFilename                    << '\n';
-    os << ADDFilename                   << '\n';
-    os << ChildRiderFilename            << '\n';
-    os << CurrSpouseRiderFilename       << '\n';
-    os << GuarSpouseRiderFilename       << '\n';
-    os << CurrTermFilename              << '\n';
-    os << GuarTermFilename              << '\n';
-    os << TableYFilename                << '\n';
-    os << PremTaxFilename               << '\n';
-    os << TAMRA7PayFilename             << '\n';
-    os << TgtPremFilename               << '\n';
-    os << IRC7702Filename               << '\n';
-    os << Gam83Filename                 << '\n';
-    os << SubstdTblMultFilename         << '\n';
-    os << CurrSpecAmtLoadFilename       << '\n';
-    os << GuarSpecAmtLoadFilename       << '\n';
-    os << RoundingFilename              << '\n';
-    os << TierFilename                  << '\n';
-    os << PolicyForm                    << '\n';
-    os << PolicyMktgName                << '\n';
-    os << PolicyLegalName               << '\n';
-    os << InsCoShortName                << '\n';
-    os << InsCoName                     << '\n';
-    os << InsCoAddr                     << '\n';
-    os << InsCoStreet                   << '\n';
-    os << InsCoPhone                    << '\n';
-    os << InsCoDomicile                 << '\n';
-    os << MainUnderwriter               << '\n';
-    os << MainUnderwriterAddress        << '\n';
-    os << CoUnderwriter                 << '\n';
-    os << CoUnderwriterAddress          << '\n';
-    os << AvName                        << '\n';
-    os << CsvName                       << '\n';
-    os << CsvHeaderName                 << '\n';
-    os << NoLapseProvisionName          << '\n';
-    os << InterestDisclaimer            << '\n';
-    os << GuarMortalityFootnote         << '\n';
-    os << AccountValueFootnote          << '\n';
-    os << AttainedAgeFootnote           << '\n';
-    os << CashSurrValueFootnote         << '\n';
-    os << DeathBenefitFootnote          << '\n';
-    os << InitialPremiumFootnote        << '\n';
-    os << NetPremiumFootnote            << '\n';
-    os << OutlayFootnote                << '\n';
-    os << PolicyYearFootnote            << '\n';
-    os << ADDFootnote                   << '\n';
-    os << ChildFootnote                 << '\n';
-    os << SpouseFootnote                << '\n';
-    os << TermFootnote                  << '\n';
-    os << WaiverFootnote                << '\n';
-    os << MinimumPremiumFootnote        << '\n';
-    os << PremAllocationFootnote        << '\n';
-    os << ProductDescription            << '\n';
-    os << StableValueFootnote           << '\n';
-    os << NoVanishPremiumFootnote       << '\n';
-    os << RejectPremiumFootnote         << '\n';
-    os << ExpRatingFootnote             << '\n';
-    os << MortalityBlendFootnote        << '\n';
-    os << HypotheticalRatesFootnote     << '\n';
-    os << SalesLoadRefundFootnote       << '\n';
-    os << NoLapseFootnote               << '\n';
-    os << MarketValueAdjFootnote        << '\n';
-    os << ExchangeChargeFootnote0       << '\n';
-    os << CurrentValuesFootnote         << '\n';
-    os << DBOption1Footnote             << '\n';
-    os << DBOption2Footnote             << '\n';
-    os << ExpRatRiskChargeFootnote      << '\n';
-    os << ExchangeChargeFootnote1       << '\n';
-    os << FlexiblePremiumFootnote       << '\n';
-    os << GuaranteedValuesFootnote      << '\n';
-    os << CreditingRateFootnote         << '\n';
-    os << MecFootnote                   << '\n';
-    os << MidpointValuesFootnote        << '\n';
-    os << SinglePremiumFootnote         << '\n';
-    os << MonthlyChargesFootnote        << '\n';
-    os << UltCreditingRateFootnote      << '\n';
-    os << MaxNaarFootnote               << '\n';
-    os << PremTaxSurrChgFootnote        << '\n';
-    os << PolicyFeeFootnote             << '\n';
-    os << AssetChargeFootnote           << '\n';
-    os << InvestmentIncomeFootnote      << '\n';
-    os << IrrDbFootnote                 << '\n';
-    os << IrrCsvFootnote                << '\n';
-    os << MortalityChargesFootnote      << '\n';
-    os << LoanAndWithdrawalFootnote     << '\n';
-    os << PresaleTrackingNumber         << '\n';
-    os << CompositeTrackingNumber       << '\n';
-    os << InforceTrackingNumber         << '\n';
-    os << InforceCompositeTrackingNumber<< '\n';
-    os << InforceNonGuaranteedFootnote0 << '\n';
-    os << InforceNonGuaranteedFootnote1 << '\n';
-    os << InforceNonGuaranteedFootnote2 << '\n';
-    os << InforceNonGuaranteedFootnote3 << '\n';
-    os << NonGuaranteedFootnote         << '\n';
-    os << MonthlyChargesPaymentFootnote << '\n';
+    xml_lmi::set_attr(root, "version", "0");
 
-    if(!os.good())
-        {
-        fatal_error()
-            << "Unable to write product data file '"
-            << a_Filename
-            << "'."
-            << LMI_FLUSH
-            ;
-        }
+#   define SET_ELEMENT(name) xml_serialize::set_element(root, #name, name)
+
+    SET_ELEMENT(DatabaseFilename              );
+    SET_ELEMENT(FundFilename                  );
+    SET_ELEMENT(CorridorFilename              );
+    SET_ELEMENT(CurrCOIFilename               );
+    SET_ELEMENT(GuarCOIFilename               );
+    SET_ELEMENT(WPFilename                    );
+    SET_ELEMENT(ADDFilename                   );
+    SET_ELEMENT(ChildRiderFilename            );
+    SET_ELEMENT(CurrSpouseRiderFilename       );
+    SET_ELEMENT(GuarSpouseRiderFilename       );
+    SET_ELEMENT(CurrTermFilename              );
+    SET_ELEMENT(GuarTermFilename              );
+    SET_ELEMENT(TableYFilename                );
+    SET_ELEMENT(PremTaxFilename               );
+    SET_ELEMENT(TAMRA7PayFilename             );
+    SET_ELEMENT(TgtPremFilename               );
+    SET_ELEMENT(IRC7702Filename               );
+    SET_ELEMENT(Gam83Filename                 );
+    SET_ELEMENT(SubstdTblMultFilename         );
+    SET_ELEMENT(CurrSpecAmtLoadFilename       );
+    SET_ELEMENT(GuarSpecAmtLoadFilename       );
+    SET_ELEMENT(RoundingFilename              );
+    SET_ELEMENT(TierFilename                  );
+    SET_ELEMENT(PolicyForm                    );
+    SET_ELEMENT(PolicyMktgName                );
+    SET_ELEMENT(PolicyLegalName               );
+    SET_ELEMENT(InsCoShortName                );
+    SET_ELEMENT(InsCoName                     );
+    SET_ELEMENT(InsCoAddr                     );
+    SET_ELEMENT(InsCoStreet                   );
+    SET_ELEMENT(InsCoPhone                    );
+    SET_ELEMENT(InsCoDomicile                 );
+    SET_ELEMENT(MainUnderwriter               );
+    SET_ELEMENT(MainUnderwriterAddress        );
+    SET_ELEMENT(CoUnderwriter                 );
+    SET_ELEMENT(CoUnderwriterAddress          );
+    SET_ELEMENT(AvName                        );
+    SET_ELEMENT(CsvName                       );
+    SET_ELEMENT(CsvHeaderName                 );
+    SET_ELEMENT(NoLapseProvisionName          );
+    SET_ELEMENT(InterestDisclaimer            );
+    SET_ELEMENT(GuarMortalityFootnote         );
+    SET_ELEMENT(AccountValueFootnote          );
+    SET_ELEMENT(AttainedAgeFootnote           );
+    SET_ELEMENT(CashSurrValueFootnote         );
+    SET_ELEMENT(DeathBenefitFootnote          );
+    SET_ELEMENT(InitialPremiumFootnote        );
+    SET_ELEMENT(NetPremiumFootnote            );
+    SET_ELEMENT(OutlayFootnote                );
+    SET_ELEMENT(PolicyYearFootnote            );
+    SET_ELEMENT(ADDFootnote                   );
+    SET_ELEMENT(ChildFootnote                 );
+    SET_ELEMENT(SpouseFootnote                );
+    SET_ELEMENT(TermFootnote                  );
+    SET_ELEMENT(WaiverFootnote                );
+    SET_ELEMENT(MinimumPremiumFootnote        );
+    SET_ELEMENT(PremAllocationFootnote        );
+    SET_ELEMENT(ProductDescription            );
+    SET_ELEMENT(StableValueFootnote           );
+    SET_ELEMENT(NoVanishPremiumFootnote       );
+    SET_ELEMENT(RejectPremiumFootnote         );
+    SET_ELEMENT(ExpRatingFootnote             );
+    SET_ELEMENT(MortalityBlendFootnote        );
+    SET_ELEMENT(HypotheticalRatesFootnote     );
+    SET_ELEMENT(SalesLoadRefundFootnote       );
+    SET_ELEMENT(NoLapseFootnote               );
+    SET_ELEMENT(MarketValueAdjFootnote        );
+    SET_ELEMENT(ExchangeChargeFootnote0       );
+    SET_ELEMENT(CurrentValuesFootnote         );
+    SET_ELEMENT(DBOption1Footnote             );
+    SET_ELEMENT(DBOption2Footnote             );
+    SET_ELEMENT(ExpRatRiskChargeFootnote      );
+    SET_ELEMENT(ExchangeChargeFootnote1       );
+    SET_ELEMENT(FlexiblePremiumFootnote       );
+    SET_ELEMENT(GuaranteedValuesFootnote      );
+    SET_ELEMENT(CreditingRateFootnote         );
+    SET_ELEMENT(MecFootnote                   );
+    SET_ELEMENT(MidpointValuesFootnote        );
+    SET_ELEMENT(SinglePremiumFootnote         );
+    SET_ELEMENT(MonthlyChargesFootnote        );
+    SET_ELEMENT(UltCreditingRateFootnote      );
+    SET_ELEMENT(MaxNaarFootnote               );
+    SET_ELEMENT(PremTaxSurrChgFootnote        );
+    SET_ELEMENT(PolicyFeeFootnote             );
+    SET_ELEMENT(AssetChargeFootnote           );
+    SET_ELEMENT(InvestmentIncomeFootnote      );
+    SET_ELEMENT(IrrDbFootnote                 );
+    SET_ELEMENT(IrrCsvFootnote                );
+    SET_ELEMENT(MortalityChargesFootnote      );
+    SET_ELEMENT(LoanAndWithdrawalFootnote     );
+    SET_ELEMENT(PresaleTrackingNumber         );
+    SET_ELEMENT(CompositeTrackingNumber       );
+    SET_ELEMENT(InforceTrackingNumber         );
+    SET_ELEMENT(InforceCompositeTrackingNumber);
+    SET_ELEMENT(InforceNonGuaranteedFootnote0 );
+    SET_ELEMENT(InforceNonGuaranteedFootnote1 );
+    SET_ELEMENT(InforceNonGuaranteedFootnote2 );
+    SET_ELEMENT(InforceNonGuaranteedFootnote3 );
+    SET_ELEMENT(NonGuaranteedFootnote         );
+    SET_ELEMENT(MonthlyChargesPaymentFootnote );
+
+#   undef SET_ELEMENT
+
+    // Instead of this:
+//    document.save(a_Filename);
+    // for the nonce, explicitly change the extension, in order to
+    // force external product-file code to use the new extension.
+    fs::path path(a_Filename, fs::native);
+    path = fs::change_extension(path, ".policy");
+    document.save(path.string());
 }
 
 //============================================================================
@@ -437,6 +433,6 @@ void TProductData::WritePolFiles()
     foo.RoundingFilename = "sample.rnd";
     foo.TierFilename     = "sample.tir";
 
-    foo.Write(AddDataDir("sample.pol"));
+    foo.Write(AddDataDir("sample.policy"));
 }
 

@@ -36,9 +36,9 @@
 #include "mc_enum_types.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
-#include "streamable.hpp"
 #include "tn_range.hpp"
 #include "tn_range_types.hpp"
+#include "xml_serializable.hpp"
 
 class InputSequence;
 class TDatabase;
@@ -46,7 +46,6 @@ class TDatabase;
 #include <boost/operators.hpp>
 #include <boost/scoped_ptr.hpp>
 
-#include <list>
 #include <map>
 #include <string>
 #include <vector>
@@ -125,11 +124,11 @@ typedef datum_string datum_sequence;
 /// for them, readability overcomes the usual convention.
 
 class LMI_SO Input
-    :virtual private obstruct_slicing<Input>
-    ,virtual public streamable
-    ,public MvcModel
-    ,public MemberSymbolTable<Input>
-    ,private boost::equality_comparable<Input>
+    :virtual private obstruct_slicing           <Input>
+    ,        public  xml_serializable           <Input>
+    ,        public  MvcModel
+    ,        public  MemberSymbolTable          <Input>
+    ,        private boost::equality_comparable <Input>
 {
     friend class input_test;
     friend class yare_input;
@@ -169,23 +168,21 @@ class LMI_SO Input
         (InputSequence const& s
         );
 
-    // Class 'streamable' required implementation.
-    virtual void read (xml::element const&);
-    virtual void write(xml::element&) const;
-    virtual int class_version() const;
+    // Class 'xml_serializable' required implementation.
+    virtual int         class_version() const;
     virtual std::string xml_root_name() const;
-
-    // Backward compatibility.
-    std::string RedintegrateExAnte
+    virtual bool        is_detritus(std::string const&) const;
+    virtual std::string redintegrate_ex_ante
         (int                file_version
         ,std::string const& name
         ,std::string const& value
         ) const;
-    void        RedintegrateExPost
+    virtual void        redintegrate_ex_post
         (int                                file_version
         ,std::map<std::string, std::string> detritus_map
         ,std::list<std::string>             residuary_names
         );
+    virtual void        redintegrate_ad_terminum();
 
     // MvcModel required implementation.
     virtual void DoAdaptExternalities();

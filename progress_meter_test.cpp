@@ -37,12 +37,12 @@ class progress_meter_test
   public:
     static void test()
         {
-        progress_meter_test::test_normal_usage();
-        progress_meter_test::test_quiet_display_mode();
-        progress_meter_test::test_distinct_metered_operations();
-        progress_meter_test::test_empty_title_and_zero_max_count();
-        progress_meter_test::test_invalid_display_mode();
-        progress_meter_test::test_postcondition_failure();
+        test_normal_usage();
+        test_quiet_display_mode();
+        test_distinct_metered_operations();
+        test_empty_title_and_zero_max_count();
+        test_invalid_display_mode();
+        test_postcondition_failure();
         }
 
   private:

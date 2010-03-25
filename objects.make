@@ -238,7 +238,6 @@ common_common_objects := \
   rounding_rules.o \
   sigfpe.o \
   single_cell_document.o \
-  streamable.o \
   surrchg_rates.o \
   system_command.o \
   timer.o \
@@ -423,7 +422,6 @@ gpt_objects := \
   rounding_rules.o \
   stratified_algorithms.o \
   stratified_charges.o \
-  streamable.o \
   surrchg_rates.o \
   tn_range_types.o \
   timer.o \
@@ -490,6 +488,7 @@ unit_test_targets := \
   obstruct_slicing_test \
   path_utility_test \
   print_matrix_test \
+  product_file_test \
   progress_meter_test \
   quiet_nan_test \
   regex_test \
@@ -573,6 +572,7 @@ calendar_date_test$(EXEEXT): \
   $(common_test_objects) \
   calendar_date.o \
   calendar_date_test.o \
+  facets.o \
   null_stream.o \
   timer.o \
 
@@ -613,6 +613,7 @@ file_command_test$(EXEEXT): \
 
 financial_test$(EXEEXT): \
   $(common_test_objects) \
+  facets.o \
   financial_test.o \
   null_stream.o \
   stratified_algorithms.o \
@@ -673,7 +674,6 @@ input_test$(EXEEXT): \
   path_utility.o \
   product_names.o \
   single_cell_document.o \
-  streamable.o \
   timer.o \
   tn_range_types.o \
   xml_lmi.o \
@@ -688,7 +688,6 @@ irc7702a_test$(EXEEXT): \
   mec_state.o \
   miscellany.o \
   stratified_algorithms.o \
-  streamable.o \
   xml_lmi.o \
 
 istream_to_string_test$(EXEEXT): \
@@ -773,6 +772,29 @@ print_matrix_test$(EXEEXT): \
   $(common_test_objects) \
   facets.o \
   print_matrix_test.o \
+
+product_file_test$(EXEEXT): \
+  $(boost_filesystem_objects) \
+  $(common_test_objects) \
+  $(xmlwrapp_objects) \
+  data_directory.o \
+  dbnames.o \
+  expm1.o \
+  global_settings.o \
+  ihs_dbdict.o \
+  ihs_dbvalue.o \
+  ihs_fpios.o \
+  ihs_funddata.o \
+  ihs_pios.o \
+  ihs_proddata.o \
+  ihs_rnddata.o \
+  miscellany.o \
+  path_utility.o \
+  product_file_test.o \
+  rounding_rules.o \
+  stratified_charges.o \
+  timer.o \
+  xml_lmi.o \
 
 progress_meter_test$(EXEEXT): \
   $(common_test_objects) \
@@ -871,6 +893,7 @@ xml_serialize_test$(EXEEXT): \
 
 zero_test$(EXEEXT): \
   $(common_test_objects) \
+  facets.o \
   null_stream.o \
   zero_test.o \
 

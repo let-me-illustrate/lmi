@@ -948,6 +948,7 @@ archive_shared_data_files:
 #  - fardel_date_script
 #  - extra_fardel_binaries
 #  - extra_fardel_files
+#  - extra_fardel_checksummed_files
 
 fardel_name := lmi-$(yyyymmddhhmm)
 fardel_dir  := $(prefix)/$(fardel_name)
@@ -1007,9 +1008,12 @@ fardel_files := \
 # expand to something, because $(shared_data_files) contains at least
 # one file of each given type.
 
-fardel_checksummed_files = \
-  *.dat *.db4 *.fnd *.ndx *.pol *.rnd *.tir \
+extra_fardel_checksummed_files = \
   configurable_settings.xml \
+
+fardel_checksummed_files = \
+  $(extra_fardel_checksummed_files) \
+  *.dat *.db4 *.fnd *.ndx *.pol *.rnd *.tir \
   expiry \
   md5sum$(EXEEXT) \
 
