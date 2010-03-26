@@ -30,22 +30,21 @@
 #include "mc_enum.tpp"
 #include "mc_enum_test_aux_enums.hpp" // Plain enums.
 
-// Normally, one would prefer to instantiate all mc_enum templates
-// in a single file. Here, however, the point is to instantiate one
-// such template in a different translation unit than the unit-test
-// driver, in order to prove that explicit instantiation works.
+// The mc_enum types used for unit testing are explicitly instantiated
+// here, and not in the unit-test driver. This deliberately follows
+// the recommended practice used throughout lmi, and is necessary for
+// proving that explicit instantiation works as intended.
 
-extern enum_holiday const holiday_enums[] =
-    {h_Theophany
-    ,h_Easter
-    ,h_Pentecost
-    };
-extern char const*const holiday_strings[] =
-    {"Theophany"
-    ,"Easter"
-    ,"Pentecost"
-    };
+extern enum_holiday const holiday_enums[] = {h_Theophany, h_Easter, h_Pentecost};
+extern char const*const holiday_strings[] = {"Theophany", "Easter", "Pentecost"};
 template class mc_enum<enum_holiday>;
+
+// Ni'ihau is deliberately (mis)spelled with an underbar instead of an
+// apostrophe, in order to test provide_for_backward_compatibility().
+
+extern enum_island const  island_enums[] = {i_Easter, i_Pago_Pago, i_Ni_ihau};
+extern char const*const island_strings[] = {"Easter", "Pago Pago", "Ni_ihau"};
+template class mc_enum<enum_island>;
 
 // Explicit instantiation of class mc_enum above does not require a
 // definition of mc_enum_key<T>, which does not appear in the class
