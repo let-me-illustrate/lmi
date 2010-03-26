@@ -2686,14 +2686,23 @@ void AccountValue::TxTakeWD()
     TaxBasis    -= NetWD;
     CumWD       += NetWD;
 
+    if(Solving || mce_run_gen_curr_sep_full == RunBasis_)
+        {
+        if(!SolvingForGuarPremium)
+            {
+            double fake_cum_pmt = 0.0; // TODO ?? Needs work.
+            // TODO ?? Should also use *gross* above in CumPmts etc.
+            double premiums_paid_increment = -GrossWD;
+            Irc7702_->ProcessGptPmt(Year, premiums_paid_increment, fake_cum_pmt);
+            }
+        }
+
 // This seems wrong. If we're changing something that's invariant among
 // bases, why do we change it for each basis?
 // TODO ?? Shouldn't this be moved to FinalizeMonth()?
     InvariantValues().NetWD[Year] = NetWD;
 
     ReduceSurrChg(Year, partial_surrchg);
-
-// TODO ?? Still need to reflect this in GPT premium limits.
 }
 
 //============================================================================
