@@ -24645,3 +24645,13 @@ Work around an msvc defect (VZ). See:
   http://lists.nongnu.org/archive/html/lmi/2010-03/msg00060.html
   http://lists.nongnu.org/archive/html/lmi/2010-03/msg00067.html
 
+20100326T1257Z <gchicares@sbcglobal.net> [762]
+
+  ihs_avmly.cpp
+Subtract gross withdrawal from 7702 'premiums paid'.
+
+20100326T1258Z <gchicares@sbcglobal.net> [761]
+
+  version.hpp
+Mark release candidate.
+
