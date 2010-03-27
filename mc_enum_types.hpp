@@ -27,75 +27,56 @@
 #include "config.hpp"
 
 #include "mc_enum_fwd.hpp"
-#include "mc_enum_metadata.hpp"
-#include "mc_enum_type_enums.hpp" // Plain enumerators.
+#include "mc_enum_type_enums.hpp"
 
 // Here write illustrative examples and anything that doesn't follow
 // the macro paradigm, such as enumerators with nonsuccessive values.
 
-extern enum_option const option_enums[3];
-extern char const*const option_strings[3];
-template<> struct mc_enum_key<enum_option>
-  :public mc_enum_data<enum_option, 3, option_enums, option_strings> {};
-typedef mc_enum<enum_option> e_option;
+typedef mc_enum<enum_option    > e_option          ;
+typedef mc_enum<mcenum_emission> e_emission        ;
+typedef mc_enum<rounding_style > mce_rounding_style;
 
-extern mcenum_emission const emission_enums[11];
-extern char const*const emission_strings[11];
-template<> struct mc_enum_key<mcenum_emission>
-  :public mc_enum_data<mcenum_emission, 11, emission_enums, emission_strings> {};
-typedef mc_enum<mcenum_emission> e_emission;
-
-extern rounding_style const rounding_style_enums[7];
-extern char const*const rounding_style_strings[7];
-template<> struct mc_enum_key<rounding_style>
-  :public mc_enum_data<rounding_style, 7, rounding_style_enums, rounding_style_strings> {};
-typedef mc_enum<rounding_style> mce_rounding_style;
-
-#define MC_DECLARE(TYPE,NUMBER) \
-extern mcenum_##TYPE const TYPE##_enums[NUMBER]; \
-extern char const*const TYPE##_strings[NUMBER]; \
-template<> struct mc_enum_key<mcenum_##TYPE> \
-  :public mc_enum_data<mcenum_##TYPE, NUMBER, TYPE##_enums, TYPE##_strings> {}; \
+#define MC_DECLARE(TYPE) \
 typedef mc_enum<mcenum_##TYPE> mce_##TYPE;
 
-MC_DECLARE(yes_or_no,2)
-MC_DECLARE(gender,3)
-MC_DECLARE(smoking,3)
-MC_DECLARE(class,4)
-MC_DECLARE(dbopt,3)
-MC_DECLARE(dbopt_7702,2)
-MC_DECLARE(mode,4)
-MC_DECLARE(gen_basis,3)
-MC_DECLARE(sep_basis,3)
-MC_DECLARE(rate_period,2)
-MC_DECLARE(run_basis,7)
-MC_DECLARE(ledger_type,8)
-MC_DECLARE(uw_basis,5)
-MC_DECLARE(table_rating,11)
-MC_DECLARE(solve_type,6)
-MC_DECLARE(solve_target,4)
-MC_DECLARE(pmt_strategy,8)
-MC_DECLARE(sa_strategy,8)
-MC_DECLARE(gen_acct_rate_type,2)
-MC_DECLARE(sep_acct_rate_type,2)
-MC_DECLARE(loan_rate_type,2)
-MC_DECLARE(fund_input_method,3)
-MC_DECLARE(run_order,2)
-MC_DECLARE(survival_limit,4)
-MC_DECLARE(term_adj_method,3)
-MC_DECLARE(state,53)
-MC_DECLARE(country,239)
-MC_DECLARE(defn_life_ins,3)
-MC_DECLARE(mec_avoid_method,2)
-MC_DECLARE(defn_material_change,5)
-MC_DECLARE(spread_method,2)
-MC_DECLARE(coi_rate_method,2)
-MC_DECLARE(anticipated_deduction,4)
-MC_DECLARE(part_mort_table,1)
-MC_DECLARE(premium_table,1)
-MC_DECLARE(from_point,4)
-MC_DECLARE(to_point,4)
-MC_DECLARE(report_column,56)
+MC_DECLARE(yes_or_no)
+MC_DECLARE(gender)
+MC_DECLARE(smoking)
+MC_DECLARE(class)
+MC_DECLARE(dbopt)
+MC_DECLARE(dbopt_7702)
+MC_DECLARE(mode)
+MC_DECLARE(gen_basis)
+MC_DECLARE(sep_basis)
+MC_DECLARE(rate_period)
+MC_DECLARE(run_basis)
+MC_DECLARE(ledger_type)
+MC_DECLARE(uw_basis)
+MC_DECLARE(table_rating)
+MC_DECLARE(solve_type)
+MC_DECLARE(solve_target)
+MC_DECLARE(pmt_strategy)
+MC_DECLARE(sa_strategy)
+MC_DECLARE(gen_acct_rate_type)
+MC_DECLARE(sep_acct_rate_type)
+MC_DECLARE(loan_rate_type)
+MC_DECLARE(fund_input_method)
+MC_DECLARE(run_order)
+MC_DECLARE(survival_limit)
+MC_DECLARE(term_adj_method)
+MC_DECLARE(state)
+MC_DECLARE(country)
+MC_DECLARE(defn_life_ins)
+MC_DECLARE(mec_avoid_method)
+MC_DECLARE(defn_material_change)
+MC_DECLARE(spread_method)
+MC_DECLARE(coi_rate_method)
+MC_DECLARE(anticipated_deduction)
+MC_DECLARE(part_mort_table)
+MC_DECLARE(premium_table)
+MC_DECLARE(from_point)
+MC_DECLARE(to_point)
+MC_DECLARE(report_column)
 
 #undef MC_DECLARE
 
