@@ -745,7 +745,7 @@ test_product_file_SOURCES =   \
   stratified_charges.cpp \
   timer.cpp
 test_product_file_CXXFLAGS = $(AM_CXXFLAGS)
-test_progress_meter_LDADD =   \
+test_product_file_LDADD =   \
   $(BOOST_LIBS)
 
 test_progress_meter_SOURCES =   \
