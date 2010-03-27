@@ -30,55 +30,51 @@
 #include "mc_enum_type_enums.hpp"
 
 // Here write illustrative examples and anything that doesn't follow
-// the macro paradigm, such as enumerators with nonsuccessive values.
+// the macro paradigm, such as enumerators with nonsuccessive values,
+// for parallelism with the corresponding TU.
 
 typedef mc_enum<enum_option    > e_option          ;
 typedef mc_enum<mcenum_emission> e_emission        ;
 typedef mc_enum<rounding_style > mce_rounding_style;
 
-#define MC_DECLARE(TYPE) \
-typedef mc_enum<mcenum_##TYPE> mce_##TYPE;
-
-MC_DECLARE(yes_or_no)
-MC_DECLARE(gender)
-MC_DECLARE(smoking)
-MC_DECLARE(class)
-MC_DECLARE(dbopt)
-MC_DECLARE(dbopt_7702)
-MC_DECLARE(mode)
-MC_DECLARE(gen_basis)
-MC_DECLARE(sep_basis)
-MC_DECLARE(rate_period)
-MC_DECLARE(run_basis)
-MC_DECLARE(ledger_type)
-MC_DECLARE(uw_basis)
-MC_DECLARE(table_rating)
-MC_DECLARE(solve_type)
-MC_DECLARE(solve_target)
-MC_DECLARE(pmt_strategy)
-MC_DECLARE(sa_strategy)
-MC_DECLARE(gen_acct_rate_type)
-MC_DECLARE(sep_acct_rate_type)
-MC_DECLARE(loan_rate_type)
-MC_DECLARE(fund_input_method)
-MC_DECLARE(run_order)
-MC_DECLARE(survival_limit)
-MC_DECLARE(term_adj_method)
-MC_DECLARE(state)
-MC_DECLARE(country)
-MC_DECLARE(defn_life_ins)
-MC_DECLARE(mec_avoid_method)
-MC_DECLARE(defn_material_change)
-MC_DECLARE(spread_method)
-MC_DECLARE(coi_rate_method)
-MC_DECLARE(anticipated_deduction)
-MC_DECLARE(part_mort_table)
-MC_DECLARE(premium_table)
-MC_DECLARE(from_point)
-MC_DECLARE(to_point)
-MC_DECLARE(report_column)
-
-#undef MC_DECLARE
+typedef mc_enum<mcenum_yes_or_no            > mce_yes_or_no            ;
+typedef mc_enum<mcenum_gender               > mce_gender               ;
+typedef mc_enum<mcenum_smoking              > mce_smoking              ;
+typedef mc_enum<mcenum_class                > mce_class                ;
+typedef mc_enum<mcenum_dbopt                > mce_dbopt                ;
+typedef mc_enum<mcenum_dbopt_7702           > mce_dbopt_7702           ;
+typedef mc_enum<mcenum_mode                 > mce_mode                 ;
+typedef mc_enum<mcenum_gen_basis            > mce_gen_basis            ;
+typedef mc_enum<mcenum_sep_basis            > mce_sep_basis            ;
+typedef mc_enum<mcenum_rate_period          > mce_rate_period          ;
+typedef mc_enum<mcenum_run_basis            > mce_run_basis            ;
+typedef mc_enum<mcenum_ledger_type          > mce_ledger_type          ;
+typedef mc_enum<mcenum_uw_basis             > mce_uw_basis             ;
+typedef mc_enum<mcenum_table_rating         > mce_table_rating         ;
+typedef mc_enum<mcenum_solve_type           > mce_solve_type           ;
+typedef mc_enum<mcenum_solve_target         > mce_solve_target         ;
+typedef mc_enum<mcenum_pmt_strategy         > mce_pmt_strategy         ;
+typedef mc_enum<mcenum_sa_strategy          > mce_sa_strategy          ;
+typedef mc_enum<mcenum_gen_acct_rate_type   > mce_gen_acct_rate_type   ;
+typedef mc_enum<mcenum_sep_acct_rate_type   > mce_sep_acct_rate_type   ;
+typedef mc_enum<mcenum_loan_rate_type       > mce_loan_rate_type       ;
+typedef mc_enum<mcenum_fund_input_method    > mce_fund_input_method    ;
+typedef mc_enum<mcenum_run_order            > mce_run_order            ;
+typedef mc_enum<mcenum_survival_limit       > mce_survival_limit       ;
+typedef mc_enum<mcenum_term_adj_method      > mce_term_adj_method      ;
+typedef mc_enum<mcenum_state                > mce_state                ;
+typedef mc_enum<mcenum_country              > mce_country              ;
+typedef mc_enum<mcenum_defn_life_ins        > mce_defn_life_ins        ;
+typedef mc_enum<mcenum_mec_avoid_method     > mce_mec_avoid_method     ;
+typedef mc_enum<mcenum_defn_material_change > mce_defn_material_change ;
+typedef mc_enum<mcenum_spread_method        > mce_spread_method        ;
+typedef mc_enum<mcenum_coi_rate_method      > mce_coi_rate_method      ;
+typedef mc_enum<mcenum_anticipated_deduction> mce_anticipated_deduction;
+typedef mc_enum<mcenum_part_mort_table      > mce_part_mort_table      ;
+typedef mc_enum<mcenum_premium_table        > mce_premium_table        ;
+typedef mc_enum<mcenum_from_point           > mce_from_point           ;
+typedef mc_enum<mcenum_to_point             > mce_to_point             ;
+typedef mc_enum<mcenum_report_column        > mce_report_column        ;
 
 #endif // mc_enum_types_hpp
 
