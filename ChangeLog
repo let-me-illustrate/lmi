@@ -24645,13 +24645,46 @@ Work around an msvc defect (VZ). See:
   http://lists.nongnu.org/archive/html/lmi/2010-03/msg00060.html
   http://lists.nongnu.org/archive/html/lmi/2010-03/msg00067.html
 
+20100325T2028Z <zeitlin> [761]
+
+  Makefile.am
+Fix autotools linking problems for various unit tests.
+
 20100326T1257Z <gchicares@sbcglobal.net> [762]
 
   ihs_avmly.cpp
 Subtract gross withdrawal from 7702 'premiums paid'.
 
-20100326T1258Z <gchicares@sbcglobal.net> [761]
+20100326T1258Z <gchicares@sbcglobal.net> [762]
 
   version.hpp
 Mark release candidate.
+
+20100326T2247Z <gchicares@sbcglobal.net> [762]
+
+  mc_enum_test.cpp
+  mc_enum_test_aux.cpp
+  mc_enum_test_aux.hpp
+  mc_enum_test_aux_enums.hpp
+Move 'e_island' out of the unit-test TU. Instantiating such types in
+the TU that uses them is valid, but is deliberately avoided everywhere
+else and need not be demonstrated by unit tests.
+
+20100327T0126Z <gchicares@sbcglobal.net> [762]
+
+  mc_enum_test_aux.cpp
+  mc_enum_test_aux.hpp
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+  mc_enum_types_aux.cpp
+Rearrange explicit instantiation. This refactoring obviates 'extern'
+declarations in the headers and the weird inclusion of headers at the
+end of TUs.
+
+20100327T0152Z <gchicares@sbcglobal.net> [762]
+
+  mc_enum_types.hpp
+Remove a needless macro. Making typedefs (e.g., 'mce_yes_or_no') easy
+to find seems more important than preserving a macro for parallelism
+with related files.
 

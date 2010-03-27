@@ -27,7 +27,6 @@
 #endif // __BORLANDC__
 
 #include "mc_enum.hpp"
-#include "mc_enum.tpp"
 #include "mc_enum_test_aux.hpp"
 
 #include "test_tools.hpp"
@@ -35,19 +34,8 @@
 #include <sstream>
 #include <stdexcept>
 
-// Ni'ihau is deliberately (mis)spelled with an underbar instead of an
-// apostrophe, in order to test provide_for_backward_compatibility().
-
-enum enum_island {i_Easter = 37, i_Pago_Pago = -17, i_Ni_ihau = 13};
-extern enum_island const island_enums[] = {i_Easter, i_Pago_Pago, i_Ni_ihau};
-extern char const*const island_strings[] = {"Easter", "Pago Pago", "Ni_ihau"};
-template<> struct mc_enum_key<enum_island>
-  :public mc_enum_data<enum_island, 3, island_enums, island_strings> {};
-template class mc_enum<enum_island>;
-typedef mc_enum<enum_island> e_island;
-
-// Enumerative type 'e_holiday' is explicitly instantiated in a
-// different translation unit.
+// Enumerative types 'e_holiday' and 'e_island' are explicitly
+// instantiated in a different translation unit.
 
 class mc_enum_test
 {
@@ -197,8 +185,8 @@ void mc_enum_test::test()
     ss >> holiday5;
     BOOST_TEST_EQUAL(Pentecost, holiday5);
 
-    // Test an enum class defined in this translation unit that has a
-    // std::string name that matches one in a different class.
+    // Test an enumerative class that has a std::string name that
+    // matches one in a different enumerative class.
     e_island island0;
     BOOST_TEST_EQUAL("Easter", island0);
     BOOST_TEST_EQUAL(i_Easter, island0);
