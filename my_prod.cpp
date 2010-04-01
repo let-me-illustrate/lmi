@@ -43,14 +43,14 @@
 
 #include "data_directory.hpp"
 
-// TODO ?? It would be better to call TProductData::WritePolFiles()
+// TODO ?? It would be better to call product_data::WritePolFiles()
 // here than to duplicate (more or less) its contents. However, it
 // would be better still to use xml for all product data files.
 
 //============================================================================
-void TProductData::WriteProprietaryPolFiles()
+void product_data::WriteProprietaryPolFiles()
 {
-    TProductData foo;
+    product_data foo;
 
     // Generic data.
     foo.CorridorFilename               = "sample";

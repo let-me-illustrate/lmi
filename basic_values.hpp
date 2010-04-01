@@ -59,9 +59,9 @@ class Loads;
 class MortalityRates;
 class SurrChgRates;
 class TDatabase;
-class TProductData;
 class death_benefits;
 class modal_outlay;
+class product_data;
 class rounding_rules;
 class stratified_charges;
 
@@ -117,7 +117,7 @@ class LMI_SO BasicValues
 
     boost::shared_ptr<Input const>        Input_;
     yare_input                            yare_input_;
-    boost::shared_ptr<TProductData>       ProductData_;
+    boost::shared_ptr<product_data>       ProductData_;
     boost::shared_ptr<TDatabase>          Database_;
     boost::shared_ptr<FundData>           FundData_;
     boost::shared_ptr<rounding_rules>     RoundingRules_;
