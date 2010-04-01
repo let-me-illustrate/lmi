@@ -38,7 +38,6 @@
 #include "et_vector.hpp"
 #include "ihs_commfns.hpp"
 #include "ihs_irc7702a.hpp"
-#include "ihs_proddata.hpp"
 #include "materially_equal.hpp"
 #include "math_functors.hpp"
 #include "mec_input.hpp"
@@ -46,6 +45,7 @@
 #include "miscellany.hpp"            // ios_out_trunc_binary()
 #include "oecumenic_enumerations.hpp"
 #include "path_utility.hpp"          // fs::path inserter
+#include "product_data.hpp"
 #include "round_to.hpp"
 #include "stratified_algorithms.hpp" // TieredGrossToNet()
 #include "stratified_charges.hpp"

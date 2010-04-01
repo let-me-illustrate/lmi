@@ -24688,3 +24688,29 @@ Remove a needless macro. Making typedefs (e.g., 'mce_yes_or_no') easy
 to find seems more important than preserving a macro for parallelism
 with related files.
 
+20100327T1834Z <zeitlin> [762]
+
+  Makefile.am
+Fix an incorrect variable name.
+
+20100401T0110Z <gchicares@sbcglobal.net> [762]
+
+  Makefile.am
+  generate_product_files.cpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+  ihs_database.cpp
+  ihs_proddata.cpp [expunged]
+  ihs_proddata.hpp [expunged]
+  input_realization.cpp
+  ledger_invariant.cpp
+  mec_server.cpp
+  my_prod.cpp
+  objects.make
+  policy_document.hpp
+  product_data.cpp [new file]
+  product_data.hpp [new file]
+  product_file_test.cpp
+Rename 'ihs_proddata.?pp' to 'product_data.?pp'.
+

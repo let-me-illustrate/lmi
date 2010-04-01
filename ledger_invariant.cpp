@@ -37,7 +37,6 @@
 #include "death_benefits.hpp"
 #include "financial.hpp"  // TODO ?? For IRRs--prolly don't blong here.
 #include "ihs_funddata.hpp"
-#include "ihs_proddata.hpp"
 #include "input.hpp"
 #include "interest_rates.hpp"
 #include "ledger.hpp" // TODO ?? For IRRs--prolly don't blong here.
@@ -46,6 +45,7 @@
 #include "mc_enum_aux.hpp" // mc_e_vector_to_string_vector()
 #include "miscellany.hpp"
 #include "outlay.hpp"
+#include "product_data.hpp"
 #include "rounding_rules.hpp"
 
 #include <algorithm>

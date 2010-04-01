@@ -39,7 +39,7 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "ihs_proddata.hpp"
+#include "product_data.hpp"
 
 #include "data_directory.hpp"
 

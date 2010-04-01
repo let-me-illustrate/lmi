@@ -28,7 +28,7 @@
 
 #include "product_editor.hpp"
 
-#include "ihs_proddata.hpp"
+#include "product_data.hpp"
 
 #include <map>
 #include <string>
