@@ -336,7 +336,6 @@ liblmi_la_SOURCES = \
     ihs_irc7702a.cpp \
     ihs_mortal.cpp \
     ihs_pios.cpp \
-    ihs_proddata.cpp \
     ihs_rnddata.cpp \
     mc_enum.cpp \
     mc_enum_types.cpp \
@@ -344,6 +343,7 @@ liblmi_la_SOURCES = \
     md5.cpp \
     mortality_rates_fetch.cpp \
     preferences_model.cpp \
+    product_data.cpp \
     stratified_algorithms.cpp \
     stratified_charges.cpp \
     tn_range_types.cpp \
@@ -736,10 +736,10 @@ test_product_file_SOURCES =   \
   ihs_fpios.cpp \
   ihs_funddata.cpp \
   ihs_pios.cpp \
-  ihs_proddata.cpp \
   ihs_rnddata.cpp \
   miscellany.cpp \
   path_utility.cpp \
+  product_data.cpp \
   product_file_test.cpp \
   rounding_rules.cpp \
   stratified_charges.cpp \
@@ -923,7 +923,6 @@ noinst_HEADERS = \
     ihs_irc7702a.hpp \
     ihs_irc7702.hpp \
     ihs_pios.hpp \
-    ihs_proddata.hpp \
     ihs_rnddata.hpp \
     ihs_server7702.hpp \
     ihs_server7702io.hpp \
@@ -993,6 +992,7 @@ noinst_HEADERS = \
     preferences_view.hpp \
     previewframe_ex.hpp \
     print_matrix.hpp \
+    product_data.hpp \
     product_editor.hpp \
     product_names.hpp \
     progress_meter.hpp \

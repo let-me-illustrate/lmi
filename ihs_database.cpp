@@ -37,8 +37,8 @@
 #include "dbnames.hpp"
 #include "ihs_dbdict.hpp"
 #include "ihs_dbvalue.hpp"
-#include "ihs_proddata.hpp"
 #include "oecumenic_enumerations.hpp"
+#include "product_data.hpp"
 #include "yare_input.hpp"
 
 #include <algorithm>

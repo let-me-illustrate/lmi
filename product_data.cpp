@@ -36,7 +36,7 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "ihs_proddata.hpp"
+#include "product_data.hpp"
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"

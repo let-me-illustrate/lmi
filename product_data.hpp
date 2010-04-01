@@ -21,8 +21,8 @@
 
 // $Id$
 
-#ifndef ihs_proddata_hpp
-#define ihs_proddata_hpp
+#ifndef product_data_hpp
+#define product_data_hpp
 
 #include "config.hpp"
 
@@ -266,5 +266,5 @@ class LMI_SO TProductData
     std::string MonthlyChargesPaymentFootnote;
 };
 
-#endif // ihs_proddata_hpp
+#endif // product_data_hpp
 

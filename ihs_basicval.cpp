@@ -41,7 +41,6 @@
 #include "ihs_funddata.hpp"
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
-#include "ihs_proddata.hpp"
 #include "ihs_rnddata.hpp"
 #include "ihs_x_type.hpp"
 #include "input.hpp"
@@ -50,6 +49,7 @@
 #include "math_functors.hpp"
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
+#include "product_data.hpp"
 #include "stratified_charges.hpp"
 #include "surrchg_rates.hpp"
 
