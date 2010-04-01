@@ -41,14 +41,14 @@ int try_main(int, char*[])
     std::cout << "Generating product files." << std::endl;
 
     DBDictionary::instance() .WriteSampleDBFile                  ();
-    TProductData            ::WritePolFiles                      ();
+    product_data            ::WritePolFiles                      ();
     FundData                ::WriteFundFiles                     ();
     StreamableRoundingRules ::WriteRndFiles                      ();
     stratified_charges      ::write_stratified_files             ();
 
     DBDictionary::instance() .WriteProprietaryDBFiles            ();
     FundData                ::WriteProprietaryFundFiles          ();
-    TProductData            ::WriteProprietaryPolFiles           ();
+    product_data            ::WriteProprietaryPolFiles           ();
     StreamableRoundingRules ::WriteProprietaryRndFiles           ();
     stratified_charges      ::write_proprietary_stratified_files ();
 

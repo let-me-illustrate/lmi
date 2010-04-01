@@ -169,7 +169,7 @@ BasicValues::~BasicValues()
 //============================================================================
 void BasicValues::Init()
 {
-    ProductData_.reset(new TProductData(yare_input_.ProductName));
+    ProductData_.reset(new product_data(yare_input_.ProductName));
     // bind to policy form
     //      one filename that brings in all the rest incl database?
     // controls as ctor arg?
@@ -285,7 +285,7 @@ void BasicValues::Init()
 // TODO ??  Not for general use--use for GPT server only, for now--refactor later
 void BasicValues::GPTServerInit()
 {
-    ProductData_.reset(new TProductData(yare_input_.ProductName));
+    ProductData_.reset(new product_data(yare_input_.ProductName));
     Database_.reset(new TDatabase(yare_input_));
 
     IssueAge = yare_input_.IssueAge;

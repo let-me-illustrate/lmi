@@ -53,7 +53,7 @@ class PolicyDocument
 
     PolicyView& PredominantView() const;
 
-    TProductData product_data_;
+    product_data product_data_;
 
     values_type values_;
 

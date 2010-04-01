@@ -50,23 +50,23 @@
 #include <string>
 
 //============================================================================
-TProductData::TProductData()
+product_data::product_data()
 {
 }
 
 //============================================================================
-TProductData::~TProductData()
+product_data::~product_data()
 {
 }
 
 //============================================================================
-TProductData::TProductData(std::string const& a_Filename)
+product_data::product_data(std::string const& a_Filename)
 {
     Init(a_Filename);
 }
 
 //============================================================================
-void TProductData::Init(std::string const& a_Filename)
+void product_data::Init(std::string const& a_Filename)
 {
     fs::path path(a_Filename);
     LMI_ASSERT(a_Filename == path.leaf());
@@ -83,7 +83,7 @@ std::string xml_root_name()
 } // Unnamed namespace.
 
 //============================================================================
-void TProductData::Read(std::string const& a_Filename)
+void product_data::Read(std::string const& a_Filename)
 {
     if(access(a_Filename.c_str(), R_OK))
         {
@@ -205,7 +205,7 @@ void TProductData::Read(std::string const& a_Filename)
 }
 
 //============================================================================
-void TProductData::Write(std::string const& a_Filename) const
+void product_data::Write(std::string const& a_Filename) const
 {
     xml_lmi::xml_document document(xml_root_name());
     xml::element& root = document.root_node();
@@ -327,9 +327,9 @@ void TProductData::Write(std::string const& a_Filename) const
 }
 
 //============================================================================
-void TProductData::WritePolFiles()
+void product_data::WritePolFiles()
 {
-    TProductData foo;
+    product_data foo;
 
     foo.CorridorFilename               = "sample";
     foo.CurrCOIFilename                = "qx_cso";

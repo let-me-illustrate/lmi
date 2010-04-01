@@ -993,7 +993,7 @@ std::string Input::RealizeSpecamtHistory()
 // #include "product_data.hpp"   // Product data, needed to access rounding rules.
 //
 //        term_spec_amt = StreamableRoundingRules
-//            (AddDataDir(TProductData(ProductName).GetRoundingFilename())
+//            (AddDataDir(product_data(ProductName).GetRoundingFilename())
 //            ).get_rounding_rules().round_specamt()(term_spec_amt)
 //            ;
 //

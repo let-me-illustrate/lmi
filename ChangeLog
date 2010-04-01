@@ -24714,3 +24714,18 @@ Fix an incorrect variable name.
   product_file_test.cpp
 Rename 'ihs_proddata.?pp' to 'product_data.?pp'.
 
+20100401T0300Z <gchicares@sbcglobal.net> [762]
+
+  basic_values.hpp
+  generate_product_files.cpp
+  ihs_basicval.cpp
+  ihs_database.cpp
+  input_realization.cpp
+  mec_server.cpp
+  my_prod.cpp
+  policy_document.hpp
+  product_data.cpp
+  product_data.hpp
+  product_file_test.cpp
+Rename class 'TProductData' to 'product_data'.
+

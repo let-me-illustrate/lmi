@@ -32,14 +32,14 @@
 
 // Filenames and other free-form offline data that vary by product.
 
-class LMI_SO TProductData
+class LMI_SO product_data
 {
     friend class PolicyDocument;
     friend class PolicyView;
 
   public:
-    explicit TProductData(std::string const& a_Filename);
-    ~TProductData();
+    explicit product_data(std::string const& a_Filename);
+    ~product_data();
 
     static void WritePolFiles();
     static void WriteProprietaryPolFiles();
@@ -147,7 +147,7 @@ class LMI_SO TProductData
     std::string const& GetMonthlyChargesPaymentFootnote () const {return MonthlyChargesPaymentFootnote ;}
 
   private:
-    TProductData();
+    product_data();
 
     void Init(std::string const& a_Filename);
     void Read(std::string const& a_Filename);
