@@ -29,6 +29,7 @@
 #include "ihs_dbdict.hpp"
 #include "ihs_funddata.hpp"
 #include "ihs_rnddata.hpp"
+#include "path_utility.hpp" // initialize_filesystem()
 #include "product_data.hpp"
 #include "stratified_charges.hpp"
 
@@ -42,6 +43,7 @@ class product_file_test
   public:
     static void test()
         {
+        initialize_filesystem();
         write_all_files();
         assay_speed();
         }

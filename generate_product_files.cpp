@@ -30,6 +30,7 @@
 #include "ihs_funddata.hpp"
 #include "ihs_rnddata.hpp"
 #include "main_common.hpp"
+#include "path_utility.hpp" // initialize_filesystem()
 #include "product_data.hpp"
 #include "stratified_charges.hpp"
 
@@ -38,6 +39,8 @@
 
 int try_main(int, char*[])
 {
+    initialize_filesystem();
+
     std::cout << "Generating product files." << std::endl;
 
     DBDictionary::instance() .WriteSampleDBFile                  ();

@@ -30,15 +30,12 @@
 
 #include "alert.hpp"
 #include "any_member.hpp" // MemberSymbolTable<>
+#include "platform_dependent.hpp" // access()
 #include "value_cast.hpp"
 #include "xml_lmi.hpp"
 
-#if !defined __BORLANDC__
-#   include <boost/static_assert.hpp>
-#   include <boost/type_traits.hpp>
-#else  // defined __BORLANDC__
-#   define BOOST_STATIC_ASSERT(deliberately_ignored) class IgNoRe
-#endif // defined __BORLANDC__
+#include <boost/static_assert.hpp>
+#include <boost/type_traits.hpp>
 
 #include <xmlwrapp/nodes_view.h>
 
@@ -59,6 +56,32 @@ xml_serializable<T>::~xml_serializable()
            boost::is_base_and_derived<xml_serializable <T>,T>::value
         && boost::is_base_and_derived<MemberSymbolTable<T>,T>::value
         ));
+}
+
+template<typename T>
+void xml_serializable<T>::load(fs::path const& path)
+{
+    if(access(path.string().c_str(), R_OK))
+        {
+        fatal_error()
+            << "File '"
+            << path.string()
+            << "' is required but could not be found. Try reinstalling."
+            << LMI_FLUSH
+            ;
+        }
+
+    xml_lmi::dom_parser parser(path.string());
+    xml::element const& root = parser.root_node(xml_root_name());
+    read(root);
+}
+
+template<typename T>
+void xml_serializable<T>::save(fs::path const& path) const
+{
+    xml_lmi::xml_document document(xml_root_name());
+    immit_members_into(document.root_node());
+    document.save(path.string());
 }
 
 template<typename T>
@@ -148,9 +171,15 @@ using namespace xml;
 template<typename T>
 void xml_serializable<T>::write(xml::element& x) const
 {
-    T const& t = static_cast<T const&>(*this);
-
     xml::element root(xml_root_name().c_str());
+    immit_members_into(root);
+    x.push_back(root);
+}
+
+template<typename T>
+void xml_serializable<T>::immit_members_into(xml::element& root) const
+{
+    T const& t = static_cast<T const&>(*this);
 
 // XMLWRAPP !! There's no way to set an integer attribute.
     std::string const version(value_cast<std::string>(class_version()));
@@ -163,7 +192,5 @@ void xml_serializable<T>::write(xml::element& x) const
         std::string value = t[node_tag].str();
         root.push_back(xml::element(node_tag.c_str(), value.c_str()));
         }
-
-    x.push_back(root);
 }
 
