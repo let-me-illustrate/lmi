@@ -80,10 +80,10 @@ void product_file_test::write_all_files()
 
     policy_filename_     = "sample";
     product_data p(policy_filename_);
-    database_filename_   = p.GetDatabaseFilename ();
-    fund_filename_       = p.GetFundFilename     ();
-    rounding_filename_   = p.GetRoundingFilename ();
-    stratified_filename_ = p.GetTierFilename     ();
+    database_filename_   = p["DatabaseFilename"].str();
+    fund_filename_       = p["FundFilename"    ].str();
+    rounding_filename_   = p["RoundingFilename"].str();
+    stratified_filename_ = p["TierFilename"    ].str();
 }
 
 void product_file_test::read_database_file()

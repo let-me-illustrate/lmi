@@ -24729,3 +24729,23 @@ Rename 'ihs_proddata.?pp' to 'product_data.?pp'.
   product_file_test.cpp
 Rename class 'TProductData' to 'product_data'.
 
+20100402T0154Z <gchicares@sbcglobal.net> [762]
+
+  generate_product_files.cpp
+  product_file_test.cpp
+  xml_serializable.hpp
+  xml_serializable.tpp
+Add file functions; set default name-check policy.
+
+20100402T1123Z <gchicares@sbcglobal.net> [762]
+
+  ihs_basicval.cpp
+  ihs_database.cpp
+  ledger_invariant.cpp
+  mec_server.cpp
+  policy_document.cpp
+  product_data.cpp
+  product_data.hpp
+  product_file_test.cpp
+Reimplement class product_data.
+
