@@ -117,7 +117,7 @@ mec_state test_one_days_7702A_transactions
         ,StateOfJurisdiction
         );
 
-    stratified_charges stratified(AddDataDir(product_filenames.GetTierFilename()));
+    stratified_charges stratified(AddDataDir(product_filenames["TierFilename"].str()));
 
     // SOMEDAY !! Ideally these would be in the GUI (or read from product files).
     round_to<double> const RoundNonMecPrem(2, r_downward);
@@ -129,7 +129,7 @@ mec_state test_one_days_7702A_transactions
     if(oe_modal_table == target_premium_type)
         {
         TargetPremiumRates = actuarial_table_rates
-            (AddDataDir(product_filenames.GetTgtPremFilename())
+            (AddDataDir(product_filenames["TgtPremFilename"].str())
             ,static_cast<long int>(database.Query(DB_TgtPremTable))
             ,input.issue_age()
             ,input.years_to_maturity()
@@ -141,7 +141,7 @@ mec_state test_one_days_7702A_transactions
         }
 
     std::vector<double> const CvatCorridorFactors = actuarial_table_rates
-        (AddDataDir(product_filenames.GetCorridorFilename())
+        (AddDataDir(product_filenames["CorridorFilename"].str())
         ,static_cast<long int>(database.Query(DB_CorridorTable))
         ,input.issue_age()
         ,input.years_to_maturity()
@@ -156,14 +156,14 @@ mec_state test_one_days_7702A_transactions
     tabular_Ax.push_back(1.0);
 
     std::vector<double> const tabular_7Px = actuarial_table_rates
-        (AddDataDir(product_filenames.GetTAMRA7PayFilename())
+        (AddDataDir(product_filenames["TAMRA7PayFilename"].str())
         ,static_cast<long int>(database.Query(DB_TAMRA7PayTable))
         ,input.issue_age()
         ,input.years_to_maturity()
         );
 
     std::vector<double> Mly7702qc = actuarial_table_rates
-        (AddDataDir(product_filenames.GetIRC7702Filename())
+        (AddDataDir(product_filenames["IRC7702Filename"].str())
         ,static_cast<long int>(database.Query(DB_IRC7702QTable))
         ,input.issue_age()
         ,input.years_to_maturity()

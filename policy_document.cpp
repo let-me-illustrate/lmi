@@ -98,7 +98,7 @@ PolicyView& PolicyDocument::PredominantView() const
 
 void PolicyDocument::ReadDocument(std::string const& filename)
 {
-    product_data_.Read(filename);
+    product_data_.load(filename);
     if(!GetViews().empty())
         {
         PolicyView& view = PredominantView();

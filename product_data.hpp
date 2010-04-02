@@ -1,4 +1,4 @@
-// Product data.
+// Product data representable as strings.
 //
 // Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
@@ -26,135 +26,70 @@
 
 #include "config.hpp"
 
+#include "any_member.hpp"
+#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
+#include "xml_serializable.hpp"
+
+#include <boost/utility.hpp>
 
 #include <string>
 
-// Filenames and other free-form offline data that vary by product.
+/// Product data representable as strings, including filenames.
+///
+/// This is the "master" product file: it includes the filenames of
+/// all other product files.
+///
+/// Implicitly-declared special member functions do the right thing.
 
 class LMI_SO product_data
+    :        private boost::noncopyable
+    ,virtual public  obstruct_slicing  <product_data>
+    ,        public  MemberSymbolTable <product_data>
+    ,        public  xml_serializable  <product_data>
 {
     friend class PolicyDocument;
-    friend class PolicyView;
 
   public:
-    explicit product_data(std::string const& a_Filename);
+    explicit product_data(std::string const& filename);
     ~product_data();
 
+    // Legacy functions to support creating product files programmatically.
     static void WritePolFiles();
     static void WriteProprietaryPolFiles();
-
-    std::string const& GetDatabaseFilename       () const {return DatabaseFilename;       }
-    std::string const& GetFundFilename           () const {return FundFilename;           }
-    std::string const& GetCorridorFilename       () const {return CorridorFilename;       }
-    std::string const& GetCurrCOIFilename        () const {return CurrCOIFilename;        }
-    std::string const& GetGuarCOIFilename        () const {return GuarCOIFilename;        }
-    std::string const& GetWPFilename             () const {return WPFilename;             }
-    std::string const& GetADDFilename            () const {return ADDFilename;            }
-    std::string const& GetChildRiderFilename     () const {return ChildRiderFilename;     }
-    std::string const& GetCurrSpouseRiderFilename() const {return CurrSpouseRiderFilename;}
-    std::string const& GetGuarSpouseRiderFilename() const {return GuarSpouseRiderFilename;}
-    std::string const& GetCurrTermFilename       () const {return CurrTermFilename;       }
-    std::string const& GetGuarTermFilename       () const {return GuarTermFilename;       }
-    std::string const& GetTableYFilename         () const {return TableYFilename;         }
-    std::string const& GetPremTaxFilename        () const {return PremTaxFilename;        }
-    std::string const& GetTAMRA7PayFilename      () const {return TAMRA7PayFilename;      }
-    std::string const& GetTgtPremFilename        () const {return TgtPremFilename;        }
-    std::string const& GetIRC7702Filename        () const {return IRC7702Filename;        }
-    std::string const& GetGam83Filename          () const {return Gam83Filename;          }
-    std::string const& GetSubstdTblMultFilename  () const {return SubstdTblMultFilename;  }
-    std::string const& GetCurrSpecAmtLoadFilename() const {return CurrSpecAmtLoadFilename;}
-    std::string const& GetGuarSpecAmtLoadFilename() const {return GuarSpecAmtLoadFilename;}
-    std::string const& GetRoundingFilename       () const {return RoundingFilename;       }
-    std::string const& GetTierFilename           () const {return TierFilename;           }
-
-    std::string const& GetPolicyForm                    () const {return PolicyForm;                    }
-    std::string const& GetPolicyMktgName                () const {return PolicyMktgName;                }
-    std::string const& GetPolicyLegalName               () const {return PolicyLegalName;               }
-    std::string const& GetInsCoShortName                () const {return InsCoShortName;                }
-    std::string const& GetInsCoName                     () const {return InsCoName;                     }
-    std::string const& GetInsCoAddr                     () const {return InsCoAddr;                     }
-    std::string const& GetInsCoStreet                   () const {return InsCoStreet;                   }
-    std::string const& GetInsCoPhone                    () const {return InsCoPhone;                    }
-    std::string const& GetInsCoDomicile                 () const {return InsCoDomicile;                 }
-    std::string const& GetMainUnderwriter               () const {return MainUnderwriter;               }
-    std::string const& GetMainUnderwriterAddress        () const {return MainUnderwriterAddress;        }
-    std::string const& GetCoUnderwriter                 () const {return CoUnderwriter;                 }
-    std::string const& GetCoUnderwriterAddress          () const {return CoUnderwriterAddress;          }
-    std::string const& GetAvName                        () const {return AvName;                        }
-    std::string const& GetCsvName                       () const {return CsvName;                       }
-    std::string const& GetCsvHeaderName                 () const {return CsvHeaderName;                 }
-    std::string const& GetNoLapseProvisionName          () const {return NoLapseProvisionName;          }
-    std::string const& GetInterestDisclaimer            () const {return InterestDisclaimer;            }
-    std::string const& GetGuarMortalityFootnote         () const {return GuarMortalityFootnote;         }
-    std::string const& GetAccountValueFootnote          () const {return AccountValueFootnote;          }
-    std::string const& GetAttainedAgeFootnote           () const {return AttainedAgeFootnote;           }
-    std::string const& GetCashSurrValueFootnote         () const {return CashSurrValueFootnote;         }
-    std::string const& GetDeathBenefitFootnote          () const {return DeathBenefitFootnote;          }
-    std::string const& GetInitialPremiumFootnote        () const {return InitialPremiumFootnote;        }
-    std::string const& GetNetPremiumFootnote            () const {return NetPremiumFootnote;            }
-    std::string const& GetOutlayFootnote                () const {return OutlayFootnote;                }
-    std::string const& GetPolicyYearFootnote            () const {return PolicyYearFootnote;            }
-    std::string const& GetADDFootnote                   () const {return ADDFootnote;                   }
-    std::string const& GetChildFootnote                 () const {return ChildFootnote;                 }
-    std::string const& GetSpouseFootnote                () const {return SpouseFootnote;                }
-    std::string const& GetTermFootnote                  () const {return TermFootnote;                  }
-    std::string const& GetWaiverFootnote                () const {return WaiverFootnote;                }
-    std::string const& GetMinimumPremiumFootnote        () const {return MinimumPremiumFootnote;        }
-    std::string const& GetPremAllocationFootnote        () const {return PremAllocationFootnote;        }
-    std::string const& GetProductDescription            () const {return ProductDescription;            }
-    std::string const& GetStableValueFootnote           () const {return StableValueFootnote;           }
-    std::string const& GetNoVanishPremiumFootnote       () const {return NoVanishPremiumFootnote;       }
-    std::string const& GetRejectPremiumFootnote         () const {return RejectPremiumFootnote;         }
-    std::string const& GetExpRatingFootnote             () const {return ExpRatingFootnote;             }
-    std::string const& GetMortalityBlendFootnote        () const {return MortalityBlendFootnote;        }
-    std::string const& GetHypotheticalRatesFootnote     () const {return HypotheticalRatesFootnote;     }
-    std::string const& GetSalesLoadRefundFootnote       () const {return SalesLoadRefundFootnote;       }
-    std::string const& GetNoLapseFootnote               () const {return NoLapseFootnote;               }
-    std::string const& GetMarketValueAdjFootnote        () const {return MarketValueAdjFootnote;        }
-    std::string const& GetExchangeChargeFootnote0       () const {return ExchangeChargeFootnote0;       }
-    std::string const& GetCurrentValuesFootnote         () const {return CurrentValuesFootnote;         }
-    std::string const& GetDBOption1Footnote             () const {return DBOption1Footnote;             }
-    std::string const& GetDBOption2Footnote             () const {return DBOption2Footnote;             }
-    std::string const& GetExpRatRiskChargeFootnote      () const {return ExpRatRiskChargeFootnote;      }
-    std::string const& GetExchangeChargeFootnote1       () const {return ExchangeChargeFootnote1;       }
-    std::string const& GetFlexiblePremiumFootnote       () const {return FlexiblePremiumFootnote;       }
-    std::string const& GetGuaranteedValuesFootnote      () const {return GuaranteedValuesFootnote;      }
-    std::string const& GetCreditingRateFootnote         () const {return CreditingRateFootnote;         }
-    std::string const& GetMecFootnote                   () const {return MecFootnote;                   }
-    std::string const& GetMidpointValuesFootnote        () const {return MidpointValuesFootnote;        }
-    std::string const& GetSinglePremiumFootnote         () const {return SinglePremiumFootnote;         }
-    std::string const& GetMonthlyChargesFootnote        () const {return MonthlyChargesFootnote;        }
-    std::string const& GetUltCreditingRateFootnote      () const {return UltCreditingRateFootnote;      }
-    std::string const& GetMaxNaarFootnote               () const {return MaxNaarFootnote;               }
-    std::string const& GetPremTaxSurrChgFootnote        () const {return PremTaxSurrChgFootnote;        }
-    std::string const& GetPolicyFeeFootnote             () const {return PolicyFeeFootnote;             }
-    std::string const& GetAssetChargeFootnote           () const {return AssetChargeFootnote;           }
-    std::string const& GetInvestmentIncomeFootnote      () const {return InvestmentIncomeFootnote;      }
-    std::string const& GetIrrDbFootnote                 () const {return IrrDbFootnote;                 }
-    std::string const& GetIrrCsvFootnote                () const {return IrrCsvFootnote;                }
-    std::string const& GetMortalityChargesFootnote      () const {return MortalityChargesFootnote;      }
-    std::string const& GetLoanAndWithdrawalFootnote     () const {return LoanAndWithdrawalFootnote;     }
-    std::string const& GetPresaleTrackingNumber         () const {return PresaleTrackingNumber;         }
-    std::string const& GetCompositeTrackingNumber       () const {return CompositeTrackingNumber;       }
-    std::string const& GetInforceTrackingNumber         () const {return InforceTrackingNumber;         }
-    std::string const& GetInforceCompositeTrackingNumber() const {return InforceCompositeTrackingNumber;}
-    std::string const& GetInforceNonGuaranteedFootnote0 () const {return InforceNonGuaranteedFootnote0 ;}
-    std::string const& GetInforceNonGuaranteedFootnote1 () const {return InforceNonGuaranteedFootnote1 ;}
-    std::string const& GetInforceNonGuaranteedFootnote2 () const {return InforceNonGuaranteedFootnote2 ;}
-    std::string const& GetInforceNonGuaranteedFootnote3 () const {return InforceNonGuaranteedFootnote3 ;}
-    std::string const& GetNonGuaranteedFootnote         () const {return NonGuaranteedFootnote         ;}
-    std::string const& GetMonthlyChargesPaymentFootnote () const {return MonthlyChargesPaymentFootnote ;}
 
   private:
     product_data();
 
-    void Init(std::string const& a_Filename);
-    void Read(std::string const& a_Filename);
-    void Write(std::string const& a_Filename) const;
+    void ascribe_members();
 
+    // Deprecated functions slated for elimination.
+    void Read(std::string const& filename);
+    void Write(std::string const& filename) const;
+
+    // xml_serializable required implementation.
+    virtual int         class_version() const;
+    virtual std::string xml_root_name() const;
+    virtual bool        is_detritus(std::string const&) const;
+    virtual std::string redintegrate_ex_ante
+        (int                file_version
+        ,std::string const& name
+        ,std::string const& value
+        ) const;
+    virtual void        redintegrate_ex_post
+        (int                                file_version
+        ,std::map<std::string, std::string> detritus_map
+        ,std::list<std::string>             residuary_names
+        );
+    virtual void        redintegrate_ad_terminum();
+
+    // Names of files that contain other product data.
     std::string DatabaseFilename;
     std::string FundFilename;
+    std::string RoundingFilename;
+    std::string TierFilename;
+
+    // Names of rate-table files.
     std::string CorridorFilename;
     std::string CurrCOIFilename;
     std::string GuarCOIFilename;
@@ -174,9 +109,8 @@ class LMI_SO product_data
     std::string SubstdTblMultFilename;
     std::string CurrSpecAmtLoadFilename;
     std::string GuarSpecAmtLoadFilename;
-    std::string RoundingFilename;
-    std::string TierFilename;
 
+    // Essential strings describing the policy and company.
     std::string PolicyForm;
     std::string PolicyMktgName;
     std::string PolicyLegalName;
@@ -191,16 +125,16 @@ class LMI_SO product_data
     std::string CoUnderwriter;
     std::string CoUnderwriterAddress;
 
-    // Illustration reg requires column headers to use names in
-    // contract, e.g. for account and surrender values.
+    // Terms defined in the contract, which must be used for column
+    // headers according to the illustration reg.
     std::string AvName;
     std::string CsvName;
     std::string CsvHeaderName;
     std::string NoLapseProvisionName;
-    std::string InterestDisclaimer;
-    std::string GuarMortalityFootnote;
 
-    // Ledger column definitions.
+    // Most of the following are missing from the GUI.
+
+    // Footnotes that describe various ledger columns.
     std::string AccountValueFootnote;
     std::string AttainedAgeFootnote;
     std::string CashSurrValueFootnote;
@@ -221,6 +155,9 @@ class LMI_SO product_data
     std::string MinimumPremiumFootnote;
     std::string PremAllocationFootnote;
 
+    // Miscellaneous other footnotes.
+    std::string InterestDisclaimer;
+    std::string GuarMortalityFootnote;
     std::string ProductDescription;
     std::string StableValueFootnote;
     std::string NoVanishPremiumFootnote;
