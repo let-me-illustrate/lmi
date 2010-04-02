@@ -29,6 +29,8 @@
 #include "so_attributes.hpp"
 #include "xml_lmi_fwd.hpp"
 
+#include <boost/filesystem/path.hpp>
+
 #include <list>
 #include <map>
 #include <string>
@@ -43,10 +45,15 @@ class LMI_SO xml_serializable
   public:
     virtual ~xml_serializable();
 
+    void load(fs::path const&);
+    void save(fs::path const&) const;
+
     void read (xml::element const&);
     void write(xml::element&) const;
 
   private:
+    void immit_members_into(xml::element&) const;
+
     virtual int         class_version() const = 0;
     virtual std::string xml_root_name() const = 0;
     virtual bool        is_detritus(std::string const&) const = 0;
