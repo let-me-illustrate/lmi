@@ -51,7 +51,7 @@ class LMI_SO product_data
     friend class PolicyDocument;
 
   public:
-    explicit product_data(std::string const& filename);
+    explicit product_data(std::string const& product_name);
     ~product_data();
 
     // Legacy functions to support creating product files programmatically.

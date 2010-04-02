@@ -24757,3 +24757,9 @@ Reimplement class product_data.
   product_data.hpp
 Remove deprecated member functions of class product_data.
 
+20100402T1503Z <gchicares@sbcglobal.net> [761]
+
+  product_data.cpp
+  product_data.hpp
+Improve documentation.
+
