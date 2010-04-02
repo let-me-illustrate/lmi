@@ -169,16 +169,6 @@ void product_data::ascribe_members()
     ascribe("MonthlyChargesPaymentFootnote" , &product_data::MonthlyChargesPaymentFootnote );
 }
 
-void product_data::Read(std::string const& filename)
-{
-    load(filename);
-}
-
-void product_data::Write(std::string const& filename) const
-{
-    save(filename);
-}
-
 /// Serial number of this class's xml version.
 ///
 /// version 0: 20100402T1123Z
@@ -290,6 +280,6 @@ void product_data::WritePolFiles()
     z.CsvHeaderName                  = "Cash Surr";
     z.NoLapseProvisionName           = "No-lapse Provision";
 
-    z.Write(AddDataDir("sample.policy"));
+    z.save(AddDataDir("sample.policy"));
 }
 

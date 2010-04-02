@@ -63,10 +63,6 @@ class LMI_SO product_data
 
     void ascribe_members();
 
-    // Deprecated functions slated for elimination.
-    void Read(std::string const& filename);
-    void Write(std::string const& filename) const;
-
     // xml_serializable required implementation.
     virtual int         class_version() const;
     virtual std::string xml_root_name() const;

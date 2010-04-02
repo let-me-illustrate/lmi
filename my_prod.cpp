@@ -1,4 +1,4 @@
-// Product-specific fund data.
+// Product-specific string data.
 //
 // Copyright (C) 2001, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
@@ -21,19 +21,6 @@
 
 // $Id$
 
-// This file is a template for embedding product-specific data. Doing
-// that creates a derived work covered by the GPL. But you may prefer
-// not to publish your data, for instance because it is proprietary.
-// In that case, the GPL does not permit you to distribute the derived
-// work at all. But read the second paragraph of section 0 of the GPL
-// carefully: it permits you to run your modified version of the
-// program--and to distribute its output, which is not a derived work
-// because it's merely your data, trivially cast in a format suitable
-// for use with lmi. You can therefore distribute the files created by
-// your modified version of this program, but not that program itself.
-// Those files are all you need: distributing the program itself isn't
-// necessary anyway.
-
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
@@ -41,123 +28,85 @@
 
 #include "product_data.hpp"
 
-#include "data_directory.hpp"
+#include "data_directory.hpp" // AddDataDir()
 
-// TODO ?? It would be better to call product_data::WritePolFiles()
-// here than to duplicate (more or less) its contents. However, it
-// would be better still to use xml for all product data files.
+/// Create string-data files for a particular product.
+///
+/// It is possible to maintain string data by writing code to create
+/// these xml files, but editing the xml directly is probably easier.
+///
+/// Using lmi code in a program that embodies proprietary data creates
+/// a derived work covered by the GNU General Public License (GPL). If
+/// you distribute such a program, the GPL requires you to provide its
+/// source code, which would disclose proprietary data. If you're not
+/// willing to disclose it, then you are not permitted to distribute
+/// the derived work at all.
+///
+/// However, read the second paragraph of GPL section 0 carefully. It
+/// permits you to run your modified version of the program--and to
+/// distribute its output, which is not a derived work because it's
+/// merely your data. Casting it in a format suitable for use with lmi
+/// does not subject it to the GPL. You can therefore distribute the
+/// files created by your modified version of this program, but not
+/// that program itself. Those files are all you need: distributing
+/// the program itself isn't necessary anyway.
+///
+/// This function is intentionally more or less a duplicate of
+/// product_data::WritePolFiles(), but this one is meant to be
+/// customized.
 
-//============================================================================
 void product_data::WriteProprietaryPolFiles()
 {
-    product_data foo;
+    product_data z;
 
-    // Generic data.
-    foo.CorridorFilename               = "sample";
-    foo.CurrCOIFilename                = "qx_cso";
-    foo.GuarCOIFilename                = "qx_cso";
-    foo.WPFilename                     = "sample";
-    foo.ADDFilename                    = "qx_ins";
-    foo.ChildRiderFilename             = "qx_ins";
-    foo.CurrSpouseRiderFilename        = "qx_ins";
-    foo.GuarSpouseRiderFilename        = "qx_ins";
-    foo.CurrTermFilename               = "qx_cso";
-    foo.GuarTermFilename               = "qx_cso";
-    foo.TableYFilename                 = "qx_ins";
-    foo.PremTaxFilename                = "sample";
-    foo.TAMRA7PayFilename              = "sample";
-    foo.TgtPremFilename                = "sample";
-    foo.IRC7702Filename                = "qx_cso";
-    foo.Gam83Filename                  = "qx_ann";
-    foo.SubstdTblMultFilename          = "sample";
-    foo.CurrSpecAmtLoadFilename        = "sample";
-    foo.GuarSpecAmtLoadFilename        = "sample";
-    foo.PolicyForm                     = "UL32768-NY";
-    foo.PolicyMktgName                 = "UL Supreme";
-    foo.PolicyLegalName = "Flexible Premium Adjustable Life Insurance Policy";
-    foo.InsCoShortName                 = "Superior Life";
-    foo.InsCoName                      = "Superior Life Insurance Company";
-    foo.InsCoAddr                      = "Superior, WI 12345";
-    foo.InsCoStreet                    = "246 Main Street";
-    foo.InsCoPhone                     = "(800) 555-1212";
-    foo.InsCoDomicile                  = "WI";
-    foo.MainUnderwriter                = "Superior Securities";
-    foo.MainUnderwriterAddress         = "246-M Main Street, Superior, WI 12345";
-    foo.CoUnderwriter                  = "Superior Investors";
-    foo.CoUnderwriterAddress           = "246-C Main Street, Superior, WI 12345";
-    foo.AvName                         = "Account";
-    foo.CsvName                        = "Cash Surrender";
-    foo.CsvHeaderName                  = "Cash Surr";
-    foo.NoLapseProvisionName           = "No-lapse Provision";
-    foo.InterestDisclaimer             = "";
-    foo.GuarMortalityFootnote          = "";
-    foo.AccountValueFootnote           = "";
-    foo.AttainedAgeFootnote            = "";
-    foo.CashSurrValueFootnote          = "";
-    foo.DeathBenefitFootnote           = "";
-    foo.InitialPremiumFootnote         = "";
-    foo.NetPremiumFootnote             = "";
-    foo.OutlayFootnote                 = "";
-    foo.PolicyYearFootnote             = "";
-    foo.ADDFootnote                    = "";
-    foo.ChildFootnote                  = "";
-    foo.SpouseFootnote                 = "";
-    foo.TermFootnote                   = "";
-    foo.WaiverFootnote                 = "";
-    foo.MinimumPremiumFootnote         = "";
-    foo.PremAllocationFootnote         = "";
-    foo.ProductDescription             = "";
-    foo.StableValueFootnote            = "";
-    foo.NoVanishPremiumFootnote        = "";
-    foo.RejectPremiumFootnote          = "";
-    foo.ExpRatingFootnote              = "";
-    foo.MortalityBlendFootnote         = "";
-    foo.HypotheticalRatesFootnote      = "";
-    foo.SalesLoadRefundFootnote        = "";
-    foo.NoLapseFootnote                = "";
-    foo.MarketValueAdjFootnote         = "";
-    foo.ExchangeChargeFootnote0        = "";
-    foo.CurrentValuesFootnote          = "";
-    foo.DBOption1Footnote              = "";
-    foo.DBOption2Footnote              = "";
-    foo.ExpRatRiskChargeFootnote       = "";
-    foo.ExchangeChargeFootnote1        = "";
-    foo.FlexiblePremiumFootnote        = "";
-    foo.GuaranteedValuesFootnote       = "";
-    foo.CreditingRateFootnote          = "";
-    foo.MecFootnote                    = "";
-    foo.MidpointValuesFootnote         = "";
-    foo.SinglePremiumFootnote          = "";
-    foo.MonthlyChargesFootnote         = "";
-    foo.UltCreditingRateFootnote       = "";
-    foo.MaxNaarFootnote                = "";
-    foo.PremTaxSurrChgFootnote         = "";
-    foo.PolicyFeeFootnote              = "";
-    foo.AssetChargeFootnote            = "";
-    foo.InvestmentIncomeFootnote       = "";
-    foo.IrrDbFootnote                  = "";
-    foo.IrrCsvFootnote                 = "";
-    foo.MortalityChargesFootnote       = "";
-    foo.LoanAndWithdrawalFootnote      = "";
-    foo.PresaleTrackingNumber          = "";
-    foo.CompositeTrackingNumber        = "";
-    foo.InforceTrackingNumber          = "";
-    foo.InforceCompositeTrackingNumber = "";
-    foo.InforceNonGuaranteedFootnote0  = "";
-    foo.InforceNonGuaranteedFootnote1  = "";
-    foo.InforceNonGuaranteedFootnote2  = "";
-    foo.InforceNonGuaranteedFootnote3  = "";
-    foo.NonGuaranteedFootnote          = "";
-    foo.MonthlyChargesPaymentFootnote  = "";
+    // Generic data for the 'sample' product.
 
-    // Sample policy form.
-    foo.DatabaseFilename  = "sample.db4";
-    foo.FundFilename      = "sample.fnd";
-    foo.RoundingFilename  = "sample.rnd";
-    foo.TierFilename      = "sample.tir";
+    z.DatabaseFilename               = "sample.db4";
+    z.FundFilename                   = "sample.fnd";
+    z.RoundingFilename               = "sample.rnd";
+    z.TierFilename                   = "sample.tir";
 
-    foo.Write(AddDataDir("sample.policy"));
+    z.CorridorFilename               = "sample";
+    z.CurrCOIFilename                = "qx_cso";
+    z.GuarCOIFilename                = "qx_cso";
+    z.WPFilename                     = "sample";
+    z.ADDFilename                    = "qx_ins";
+    z.ChildRiderFilename             = "qx_ins";
+    z.CurrSpouseRiderFilename        = "qx_ins";
+    z.GuarSpouseRiderFilename        = "qx_ins";
+    z.CurrTermFilename               = "qx_cso";
+    z.GuarTermFilename               = "qx_cso";
+    z.TableYFilename                 = "qx_ins";
+    z.PremTaxFilename                = "sample";
+    z.TAMRA7PayFilename              = "sample";
+    z.TgtPremFilename                = "sample";
+    z.IRC7702Filename                = "qx_cso";
+    z.Gam83Filename                  = "qx_ann";
+    z.SubstdTblMultFilename          = "sample";
+    z.CurrSpecAmtLoadFilename        = "sample";
+    z.GuarSpecAmtLoadFilename        = "sample";
+    z.PolicyForm                     = "UL32768-NY";
+    z.PolicyMktgName                 = "UL Supreme";
+    z.PolicyLegalName = "Flexible Premium Adjustable Life Insurance Policy";
+    z.InsCoShortName                 = "Superior Life";
+    z.InsCoName                      = "Superior Life Insurance Company";
+    z.InsCoAddr                      = "Superior, WI 12345";
+    z.InsCoStreet                    = "246 Main Street";
+    z.InsCoPhone                     = "(800) 555-1212";
+    z.InsCoDomicile                  = "WI";
+    z.MainUnderwriter                = "Superior Securities";
+    z.MainUnderwriterAddress         = "246-M Main Street, Superior, WI 12345";
+    z.CoUnderwriter                  = "Superior Investors";
+    z.CoUnderwriterAddress           = "246-C Main Street, Superior, WI 12345";
+    z.AvName                         = "Account";
+    z.CsvName                        = "Cash Surrender";
+    z.CsvHeaderName                  = "Cash Surr";
+    z.NoLapseProvisionName           = "No-lapse Provision";
 
-    // Another policy form....
+    z.save(AddDataDir("sample.policy"));
+
+    // Copy the template above for other policy forms, e.g.:
+//  z.DatabaseFilename               = "another.db4";
+//  ...
 }
 

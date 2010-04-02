@@ -24749,3 +24749,11 @@ Add file functions; set default name-check policy.
   product_file_test.cpp
 Reimplement class product_data.
 
+20100402T1330Z <gchicares@sbcglobal.net> [761]
+
+  my_prod.cpp
+  policy_document.cpp
+  product_data.cpp
+  product_data.hpp
+Remove deprecated member functions of class product_data.
+
