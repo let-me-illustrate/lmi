@@ -129,6 +129,6 @@ void PolicyDocument::WriteDocument(std::string const& filename)
             *it->second = view.controls()[it->first]->GetValue();
             }
         }
-    product_data_.Write(filename);
+    product_data_.save(filename);
 }
 
