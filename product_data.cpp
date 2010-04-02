@@ -51,12 +51,18 @@ product_data::product_data()
     ascribe_members();
 }
 
-product_data::product_data(std::string const& filename)
+/// Construct from product name.
+///
+/// The argument is a string (typically Input::ProductName) such as
+/// 'sample'. The appropriate extension and path are added here to
+/// produce a filepath.
+
+product_data::product_data(std::string const& product_name)
 {
     ascribe_members();
 
-    fs::path path(filename);
-    LMI_ASSERT(filename == path.leaf());
+    fs::path path(product_name);
+    LMI_ASSERT(product_name == path.leaf());
     path = fs::change_extension(path, ".policy");
     load(AddDataDir(path.string()));
 }
@@ -64,6 +70,8 @@ product_data::product_data(std::string const& filename)
 product_data::~product_data()
 {
 }
+
+/// Enregister certain data members for access via any_member<>[].
 
 void product_data::ascribe_members()
 {
@@ -232,7 +240,7 @@ void product_data::redintegrate_ad_terminum()
 /// Create a product file for the 'sample' product.
 ///
 /// Only the most crucial members are explicitly initialized. For the
-/// rest, default (empty) strings are good enough.
+/// rest, default (empty) strings are good enough for 'sample'.
 
 void product_data::WritePolFiles()
 {
