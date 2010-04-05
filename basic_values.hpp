@@ -142,6 +142,7 @@ class LMI_SO BasicValues
     std::vector<double> const& SpreadFor7702() const;
     std::vector<double> const& GetMly7702iGlp() const;
     std::vector<double> const& GetMly7702qc() const;
+    std::vector<double> const& GetMlyDcvqc() const;
 
     // COI and term rates are blended on the current basis, but not
     // the guaranteed basis. Midpoint rates reflect blending, as a
@@ -437,6 +438,7 @@ class LMI_SO BasicValues
     std::vector<double> Mly7702iGsp;
     std::vector<double> Mly7702ig;
     std::vector<double> Mly7702qc;
+    std::vector<double> MlyDcvqc;
     mutable std::vector<double> Non7702CompliantCorridor;
 };
 

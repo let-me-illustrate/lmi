@@ -510,7 +510,7 @@ class LMI_SO AccountValue
     double       YearsCoiRate0;
     double       YearsCoiRate1;
     double       YearsCoiRate2;
-    double       Years7702CoiRate;
+    double       YearsDcvCoiRate;
     double       YearsAdbRate;
     double       YearsTermRate;
     double       YearsWpRate;

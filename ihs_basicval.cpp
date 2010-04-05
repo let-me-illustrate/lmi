@@ -32,6 +32,7 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "calendar_date.hpp"
+#include "configurable_settings.hpp"
 #include "data_directory.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
@@ -47,18 +48,22 @@
 #include "interest_rates.hpp"
 #include "loads.hpp"
 #include "math_functors.hpp"
+#include "miscellany.hpp" // ios_out_trunc_binary()
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
 #include "product_data.hpp"
 #include "stratified_charges.hpp"
 #include "surrchg_rates.hpp"
+#include "value_cast.hpp"
 
 #include <algorithm>
-#include <cmath>        // std::pow()
-#include <cstring>      // std::strlen(), std::strncmp()
+#include <cmath>          // std::pow()
+#include <cstring>        // std::strlen(), std::strncmp()
+#include <fstream>
 #include <functional>
 #include <limits>
 #include <numeric>
+#include <sstream>
 #include <stdexcept>
 
 namespace
@@ -441,7 +446,27 @@ double BasicValues::InvestmentManagementFee() const
     return z;
 }
 
-//============================================================================
+// To be moved soon.
+
+template<typename T>
+std::string mce_string(T t)
+{
+    return mc_enum<T>(t).str();
+}
+
+/// Initialize 7702 object.
+///
+/// This function is called unconditionally, even for CVAT cases that
+/// read CVAT corridor factors from a table, for two reasons:
+///   - GLP and GSP premium and specamt strategies are always offered;
+///   - at least one known product uses GLP as a handy proxy for a
+///     minimum no-lapse premium, even when the GPT is not elected.
+///
+/// To conform to the practices of certain admin systems, DCV COI
+/// rates are stored in a rounded table, but calculations from first
+/// principles (GLP, GSP, 7PP, e.g.) use unrounded monthly rates;
+/// thus, necessary premium uses both. But this is immaterial.
+
 void BasicValues::Init7702()
 {
     Mly7702qc = GetIRC7702Rates();
@@ -455,6 +480,46 @@ void BasicValues::Init7702()
             ,Database_->Query(DB_MaxMonthlyCoiRate)
             )
         );
+
+    MlyDcvqc = Mly7702qc;
+    std::transform
+        (MlyDcvqc.begin()
+        ,MlyDcvqc.end()
+        ,MlyDcvqc.begin()
+        ,round_coi_rate
+        );
+    if(std::string::npos != yare_input_.Comments.find("idiosyncrasy_dcvq"))
+        {
+        std::ostringstream oss;
+        oss
+            << yare_input_.ProductName
+            << '_'
+            << mce_string(yare_input_.Gender)
+            << '_'
+            << mce_string(yare_input_.Smoking)
+            << ".dcvq"
+            << configurable_settings::instance().spreadsheet_file_extension()
+            ;
+        std::ofstream os(oss.str().c_str(), ios_out_trunc_binary());
+        int const minimum_age  = static_cast<int>(Database_->Query(DB_MinIssAge));
+        int const maturity_age = static_cast<int>(Database_->Query(DB_EndtAge  ));
+        if(minimum_age != yare_input_.IssueAge)
+            {
+            warning()
+                << "Issue age is "
+                << yare_input_.IssueAge
+                << ", but the minimum is "
+                << minimum_age
+                << ". Use the minimum instead."
+                << LMI_FLUSH
+                ;
+            }
+        for(int j = 0; j < maturity_age - minimum_age; ++j)
+            {
+            std::string s = value_cast<std::string>(MlyDcvqc[j]);
+            os << j + minimum_age << '\t' << s << '\n';
+            }
+        }
 
     // Monthly guar net int for 7702, with 4 or 6% min, is
     //   greater of {4%, 6%} and annual guar int rate
@@ -1949,6 +2014,11 @@ std::vector<double> const& BasicValues::GetMly7702iGlp() const
 std::vector<double> const& BasicValues::GetMly7702qc() const
 {
     return Mly7702qc;
+}
+
+std::vector<double> const& BasicValues::GetMlyDcvqc() const
+{
+    return MlyDcvqc;
 }
 
 // Only current (hence midpoint) COI and term rates are blended
