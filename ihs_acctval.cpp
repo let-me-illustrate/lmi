@@ -1512,7 +1512,7 @@ void AccountValue::SetAnnualInvariants()
     YearsCoiRate0           = MortalityRates_->MonthlyCoiRatesBand0(GenBasis_)[Year];
     YearsCoiRate1           = MortalityRates_->MonthlyCoiRatesBand1(GenBasis_)[Year];
     YearsCoiRate2           = MortalityRates_->MonthlyCoiRatesBand2(GenBasis_)[Year];
-    Years7702CoiRate        = GetMly7702qc                         ()         [Year];
+    YearsDcvCoiRate         = GetMlyDcvqc                          ()         [Year];
     YearsAdbRate            = MortalityRates_->AdbRates            ()         [Year];
     YearsTermRate           = MortalityRates_->MonthlyTermCoiRates (GenBasis_)[Year];
     YearsWpRate             = MortalityRates_->WpRates             ()         [Year];

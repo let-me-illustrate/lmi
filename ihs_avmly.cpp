@@ -1888,7 +1888,7 @@ void AccountValue::TxSetCoiCharge()
     YearsTotalCoiCharge += CoiCharge;
 
     // DCV need not be rounded.
-    DcvCoiCharge = DcvNaar * (Years7702CoiRate  + CoiRetentionRate);
+    DcvCoiCharge = DcvNaar * (YearsDcvCoiRate + CoiRetentionRate);
 }
 
 //============================================================================
@@ -1916,8 +1916,8 @@ void AccountValue::TxSetRiderDed()
     DcvTermCharge = 0.0;
     if(TermRiderActive && yare_input_.TermRider)
         {
-        TermCharge    = YearsTermRate    * TermDB * DBDiscountRate[Year];
-        DcvTermCharge = Years7702CoiRate * TermDB * DBDiscountRate[Year];
+        TermCharge    = YearsTermRate   * TermDB * DBDiscountRate[Year];
+        DcvTermCharge = YearsDcvCoiRate * TermDB * DBDiscountRate[Year];
         }
 
     WpCharge = 0.0;
