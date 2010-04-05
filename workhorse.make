@@ -874,7 +874,7 @@ shared_data_files = \
   sample.db4 \
   sample.fnd \
   sample.ndx \
-  sample.pol \
+  sample.policy \
   sample.rnd \
   sample.tir \
 
@@ -965,7 +965,7 @@ extra_fardel_checksummed_files = \
 
 fardel_checksummed_files = \
   $(extra_fardel_checksummed_files) \
-  *.dat *.db4 *.fnd *.ndx *.pol *.rnd *.tir \
+  *.dat *.db4 *.fnd *.ndx *.policy *.rnd *.tir \
   expiry \
   md5sum$(EXEEXT) \
 
@@ -1003,12 +1003,12 @@ wrap_fardel:
 .PHONY: test
 test: $(test_targets)
 
-# Some test targets require 'sample.pol' to exist even though they
+# Some test targets require 'sample.policy' to exist even though they
 # don't actually read its contents.
 
-$(test_targets): sample.pol
+$(test_targets): sample.policy
 
-sample.pol:
+sample.policy:
 	@$(TOUCH) $@
 
 ################################################################################
