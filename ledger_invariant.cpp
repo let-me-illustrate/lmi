@@ -43,6 +43,7 @@
 #include "ledger_variant.hpp" // TODO ?? For IRRs--prolly don't blong here.
 #include "loads.hpp"
 #include "mc_enum_aux.hpp" // mc_e_vector_to_string_vector()
+#include "mc_enum_types_aux.hpp" // mc_str()
 #include "miscellany.hpp"
 #include "outlay.hpp"
 #include "product_data.hpp"

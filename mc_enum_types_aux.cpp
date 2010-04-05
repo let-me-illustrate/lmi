@@ -99,24 +99,17 @@ bool is_three_rate_nasd(mcenum_ledger_type)
     return false;
 }
 
-std::string mc_str(mcenum_dbopt z)
+template<typename T>
+std::string mc_str(T t)
 {
-    return mce_dbopt(z).str();
+    return mc_enum<T>(t).str();
 }
 
-std::string mc_str(mcenum_run_basis z)
-{
-    return mce_run_basis(z).str();
-}
-  #include "alert.hpp"
-std::string mc_str(mcenum_state z)
-{
-//    return mce_state(z).str();
-
-try{
-    return mce_state(z).str();
-} catch(...) {fatal_error() << z << " !" << LMI_FLUSH; throw 0;}
-}
+template std::string mc_str(mcenum_dbopt    );
+template std::string mc_str(mcenum_gender   );
+template std::string mc_str(mcenum_run_basis);
+template std::string mc_str(mcenum_smoking  );
+template std::string mc_str(mcenum_state    );
 
 mcenum_state mc_state_from_string(std::string const& s)
 {
