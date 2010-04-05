@@ -48,7 +48,8 @@
 #include "interest_rates.hpp"
 #include "loads.hpp"
 #include "math_functors.hpp"
-#include "miscellany.hpp" // ios_out_trunc_binary()
+#include "mc_enum_types_aux.hpp" // mc_str()
+#include "miscellany.hpp"        // ios_out_trunc_binary()
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
 #include "product_data.hpp"
@@ -57,8 +58,8 @@
 #include "value_cast.hpp"
 
 #include <algorithm>
-#include <cmath>          // std::pow()
-#include <cstring>        // std::strlen(), std::strncmp()
+#include <cmath>                 // std::pow()
+#include <cstring>               // std::strlen(), std::strncmp()
 #include <fstream>
 #include <functional>
 #include <limits>
@@ -446,14 +447,6 @@ double BasicValues::InvestmentManagementFee() const
     return z;
 }
 
-// To be moved soon.
-
-template<typename T>
-std::string mce_string(T t)
-{
-    return mc_enum<T>(t).str();
-}
-
 /// Initialize 7702 object.
 ///
 /// This function is called unconditionally, even for CVAT cases that
@@ -494,9 +487,9 @@ void BasicValues::Init7702()
         oss
             << yare_input_.ProductName
             << '_'
-            << mce_string(yare_input_.Gender)
+            << mc_str(yare_input_.Gender)
             << '_'
-            << mce_string(yare_input_.Smoking)
+            << mc_str(yare_input_.Smoking)
             << ".dcvq"
             << configurable_settings::instance().spreadsheet_file_extension()
             ;

@@ -24792,3 +24792,15 @@ Reimplement 'strata' (formerly 'tir') product files (VS).
   ihs_basicval.cpp
 Round DCV COI rates; print them with 'idiosyncrasy_dcvq'.
 
+20100405T2345Z <gchicares@sbcglobal.net> [761]
+
+  group_values.cpp
+  ihs_avdebug.cpp
+  ihs_basicval.cpp
+  ledger.cpp
+  ledger_invariant.cpp
+  ledger_variant.cpp
+  mc_enum_types_aux.cpp
+  mc_enum_types_aux.hpp
+Replace overloaded mc_str() with a template (thanks to VS).
+
