@@ -249,7 +249,7 @@ void product_data::WritePolFiles()
     z.DatabaseFilename               = "sample.db4";
     z.FundFilename                   = "sample.fnd";
     z.RoundingFilename               = "sample.rnd";
-    z.TierFilename                   = "sample.tir";
+    z.TierFilename                   = "sample.strata";
 
     z.CorridorFilename               = "sample";
     z.CurrCOIFilename                = "qx_cso";

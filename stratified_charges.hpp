@@ -29,6 +29,7 @@
 #include "mc_enum_type_enums.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
+#include "xml_lmi_fwd.hpp"
 
 #include <iosfwd>
 #include <map>
@@ -74,8 +75,8 @@ class LMI_SO stratified_entity
         );
     ~stratified_entity();
 
-    void read (std::istream&);
-    void write(std::ostream&) const;
+    void read (xml::element const& node);
+    void write(xml::element&) const;
 
   private:
     void assert_validity() const;
