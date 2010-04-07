@@ -24818,3 +24818,8 @@ Replace overloaded mc_str() with a template (thanks to VS).
   xml_serialize.hpp
 Reimplement 'funds' and 'rounding' product files (VS).
 
+20100407T1206Z <gchicares@sbcglobal.net> [760]
+
+  workhorse.make
+Include new product files in fardels.
+

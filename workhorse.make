@@ -872,11 +872,11 @@ shared_data_files = \
   qx_ins.ndx \
   sample.dat \
   sample.db4 \
-  sample.fnd \
+  sample.funds \
   sample.ndx \
   sample.policy \
-  sample.rnd \
-  sample.tir \
+  sample.rounding \
+  sample.strata \
 
 .PHONY: archive_shared_data_files
 archive_shared_data_files:
@@ -965,7 +965,7 @@ extra_fardel_checksummed_files = \
 
 fardel_checksummed_files = \
   $(extra_fardel_checksummed_files) \
-  *.dat *.db4 *.fnd *.ndx *.policy *.rnd *.tir \
+  *.dat *.db4 *.funds *.ndx *.policy *.rounding *.strata \
   expiry \
   md5sum$(EXEEXT) \
 
