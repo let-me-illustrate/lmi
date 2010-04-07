@@ -1,4 +1,4 @@
-// Rounding data.
+// Rounding rules.
 //
 // Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
@@ -32,9 +32,35 @@
 
 #include "alert.hpp"
 #include "data_directory.hpp"
+#include "mc_enum.hpp"
+#include "mc_enum_types.hpp"
 #include "platform_dependent.hpp" // access()
+#include "xml_lmi.hpp"
+#include "xml_serialize.hpp"
 
-#include <fstream>
+#include <boost/filesystem/convenience.hpp>
+#include <boost/filesystem/path.hpp>
+
+namespace xml_serialize
+{
+template<> struct xml_io<round_to<double> >
+{
+    static void to_xml(xml::element& e, round_to<double> const& t)
+    {
+        set_element(e, "decimals",                    t.decimals() );
+        set_element(e, "style"   , mce_rounding_style(t.style   ()));
+    }
+
+    static void from_xml(xml::element const& e, round_to<double>& t)
+    {
+        int                decimals;
+        mce_rounding_style style   ;
+        get_element(e, "decimals", decimals);
+        get_element(e, "style"   , style   );
+        t = round_to<double>(decimals, style.value());
+    }
+};
+} // namespace xml_serialize
 
 //============================================================================
 StreamableRoundingRules::StreamableRoundingRules()
@@ -67,22 +93,10 @@ rounding_rules const& StreamableRoundingRules::get_rounding_rules()
 
 namespace
 {
-    inline std::istream& operator>>(std::istream& is, round_to<double>& r)
-        {
-        int decimals;
-        is >> decimals;
-        int z;
-        is >> z;
-        rounding_style style = static_cast<rounding_style>(z);
-        r = round_to<double>(decimals, style);
-        return is;
-        }
-    inline std::ostream& operator<<(std::ostream& os, round_to<double> const& r)
-        {
-        os << r.decimals() << '\n';
-        os << r.style() << '\n';
-        return os;
-        }
+std::string xml_root_name()
+{
+    return "rounding";
+}
 } // Unnamed namespace.
 
 //============================================================================
@@ -94,84 +108,73 @@ void StreamableRoundingRules::Read(std::string const& a_Filename)
             << "File '"
             << a_Filename
             << "' is required but could not be found. Try reinstalling."
-            ;
-        }
-    std::ifstream is(a_Filename.c_str());
-
-    is >> round_specamt_;
-    is >> round_death_benefit_;
-    is >> round_naar_;
-    is >> round_coi_rate_;
-    is >> round_coi_charge_;
-    is >> round_gross_premium_;
-    is >> round_net_premium_;
-    is >> round_interest_rate_;
-    is >> round_interest_credit_;
-    is >> round_withdrawal_;
-    is >> round_loan_;
-    is >> round_corridor_factor_;
-    is >> round_surrender_charge_;
-    is >> round_irr_;
-
-    bool okay = is.good();
-    if(!okay)
-        {
-        fatal_error()
-            << "Unexpected end of rounding file '"
-            << a_Filename
-            << "'. Try reinstalling."
             << LMI_FLUSH
             ;
         }
-    std::string dummy;
-    is >> dummy;
-    okay = is.eof();
-    if(!okay)
-        {
-        fatal_error()
-            << "Data past expected end of rounding file '"
-            << a_Filename
-            << "'. Try reinstalling."
-            << LMI_FLUSH
-            ;
-        }
+
+    xml_lmi::dom_parser parser(a_Filename);
+    xml::element const& root = parser.root_node(xml_root_name());
+
+#   define GET_ELEMENT(name) xml_serialize::get_element(root, #name, round_##name##_)
+
+    GET_ELEMENT(specamt         );
+    GET_ELEMENT(death_benefit   );
+    GET_ELEMENT(naar            );
+    GET_ELEMENT(coi_rate        );
+    GET_ELEMENT(coi_charge      );
+    GET_ELEMENT(gross_premium   );
+    GET_ELEMENT(net_premium     );
+    GET_ELEMENT(interest_rate   );
+    GET_ELEMENT(interest_credit );
+    GET_ELEMENT(withdrawal      );
+    GET_ELEMENT(loan            );
+    GET_ELEMENT(corridor_factor );
+    GET_ELEMENT(surrender_charge);
+    GET_ELEMENT(irr             );
+
+#   undef GET_ELEMENT
 }
 
 //============================================================================
-void StreamableRoundingRules::Write(std::string const& a_Filename)
+void StreamableRoundingRules::Write(std::string const& a_Filename) const
 {
-    std::ofstream os(a_Filename.c_str());
+    xml_lmi::xml_document document(xml_root_name());
+    xml::element& root = document.root_node();
 
-    os << round_specamt_;
-    os << round_death_benefit_;
-    os << round_naar_;
-    os << round_coi_rate_;
-    os << round_coi_charge_;
-    os << round_gross_premium_;
-    os << round_net_premium_;
-    os << round_interest_rate_;
-    os << round_interest_credit_;
-    os << round_withdrawal_;
-    os << round_loan_;
-    os << round_corridor_factor_;
-    os << round_surrender_charge_;
-    os << round_irr_;
+    xml_lmi::set_attr(root, "version", "0");
 
-    if(!os.good())
-        {
-        fatal_error()
-            << "Unable to write rounding file '"
-            << a_Filename
-            << "'."
-            << LMI_FLUSH
-            ;
-        }
+#   define SET_ELEMENT(name) xml_serialize::set_element(root, #name, round_##name##_)
+
+    SET_ELEMENT(specamt         );
+    SET_ELEMENT(death_benefit   );
+    SET_ELEMENT(naar            );
+    SET_ELEMENT(coi_rate        );
+    SET_ELEMENT(coi_charge      );
+    SET_ELEMENT(gross_premium   );
+    SET_ELEMENT(net_premium     );
+    SET_ELEMENT(interest_rate   );
+    SET_ELEMENT(interest_credit );
+    SET_ELEMENT(withdrawal      );
+    SET_ELEMENT(loan            );
+    SET_ELEMENT(corridor_factor );
+    SET_ELEMENT(surrender_charge);
+    SET_ELEMENT(irr             );
+
+#   undef SET_ELEMENT
+
+    // Instead of this:
+//    document.save(a_Filename);
+    // for the nonce, explicitly change the extension, in order to
+    // force external product-file code to use the new extension.
+    fs::path path(a_Filename, fs::native);
+    path = fs::change_extension(path, ".rounding");
+    document.save(path.string());
 }
 
 //============================================================================
 void StreamableRoundingRules::WriteRndFiles()
 {
     StreamableRoundingRules sample;
-    sample.Write(AddDataDir("sample.rnd"));
+    sample.Write(AddDataDir("sample.rounding"));
 }
 

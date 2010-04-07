@@ -68,7 +68,7 @@ void StreamableRoundingRules::WriteProprietaryRndFiles()
     sample.round_surrender_charge_= round_to<double>(2, r_to_nearest);
     sample.round_irr_             = round_to<double>(5, r_downward  );
 
-    sample.Write(AddDataDir("sample.rnd"));
+    sample.Write(AddDataDir("sample.rounding"));
 
     // Another policy form....
 }

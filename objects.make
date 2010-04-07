@@ -776,8 +776,10 @@ product_file_test$(EXEEXT): \
   $(common_test_objects) \
   $(xmlwrapp_objects) \
   data_directory.o \
+  datum_base.o \
   dbnames.o \
   expm1.o \
+  facets.o \
   global_settings.o \
   ihs_dbdict.o \
   ihs_dbvalue.o \
@@ -785,6 +787,8 @@ product_file_test$(EXEEXT): \
   ihs_funddata.o \
   ihs_pios.o \
   ihs_rnddata.o \
+  mc_enum.o \
+  mc_enum_types.o \
   miscellany.o \
   path_utility.o \
   product_data.o \
