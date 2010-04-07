@@ -247,8 +247,8 @@ void product_data::WritePolFiles()
     product_data z;
 
     z.DatabaseFilename               = "sample.db4";
-    z.FundFilename                   = "sample.fnd";
-    z.RoundingFilename               = "sample.rnd";
+    z.FundFilename                   = "sample.funds";
+    z.RoundingFilename               = "sample.rounding";
     z.TierFilename                   = "sample.strata";
 
     z.CorridorFilename               = "sample";

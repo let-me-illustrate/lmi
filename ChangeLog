@@ -24804,3 +24804,17 @@ Round DCV COI rates; print them with 'idiosyncrasy_dcvq'.
   mc_enum_types_aux.hpp
 Replace overloaded mc_str() with a template (thanks to VS).
 
+20100407T1144Z <gchicares@sbcglobal.net> [760]
+
+  ihs_funddata.cpp
+  ihs_funddata.hpp
+  ihs_rnddata.cpp
+  ihs_rnddata.hpp
+  main_wx.cpp
+  my_prod.cpp
+  my_rnd.cpp
+  objects.make
+  product_data.cpp
+  xml_serialize.hpp
+Reimplement 'funds' and 'rounding' product files (VS).
+

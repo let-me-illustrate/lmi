@@ -62,8 +62,8 @@ void product_data::WriteProprietaryPolFiles()
     // Generic data for the 'sample' product.
 
     z.DatabaseFilename               = "sample.db4";
-    z.FundFilename                   = "sample.fnd";
-    z.RoundingFilename               = "sample.rnd";
+    z.FundFilename                   = "sample.funds";
+    z.RoundingFilename               = "sample.rounding";
     z.TierFilename                   = "sample.strata";
 
     z.CorridorFilename               = "sample";
