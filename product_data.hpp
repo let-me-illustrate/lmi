@@ -54,6 +54,8 @@ class LMI_SO product_data
     explicit product_data(std::string const& product_name);
     ~product_data();
 
+    std::string const& datum(std::string const& name) const;
+
     // Legacy functions to support creating product files programmatically.
     static void WritePolFiles();
     static void WriteProprietaryPolFiles();
