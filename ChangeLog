@@ -24823,3 +24823,15 @@ Reimplement 'funds' and 'rounding' product files (VS).
   workhorse.make
 Include new product files in fardels.
 
+20100411T2037Z <gchicares@sbcglobal.net> [760]
+
+  antediluvian_stubs.cpp
+  ihs_basicval.cpp
+  ihs_database.cpp
+  ledger_invariant.cpp
+  mec_server.cpp
+  product_data.cpp
+  product_data.hpp
+  product_file_test.cpp
+Refactor read-only access to class product_data.
+

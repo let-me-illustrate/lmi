@@ -71,6 +71,13 @@ product_data::~product_data()
 {
 }
 
+/// Get string datum (without annotation) for named member.
+
+std::string const& product_data::datum(std::string const& name) const
+{
+    return *member_cast<std::string>(operator[](name));
+}
+
 /// Enregister certain data members for access via any_member<>[].
 
 void product_data::ascribe_members()
