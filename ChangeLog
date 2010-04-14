@@ -24835,3 +24835,17 @@ Include new product files in fardels.
   product_file_test.cpp
 Refactor read-only access to class product_data.
 
+20100414T1318Z <gchicares@sbcglobal.net> [760]
+
+  input_xml_io.cpp
+  mec_input.cpp
+  mec_state.cpp
+  xml_serializable.tpp
+Consolidate and expand documentation. For virtual functions, meaty
+documentation in the base class and nothing in derived classes is
+better than nothing in the base class and a one-liner cut and pasted
+in derived classes, especially since doxygen links derived-class
+implementations to the base-class documentation for each documented
+virtual. It does no harm to provide an empty implementation of a pure
+virtual merely as a hook upon which to hang documentation.
+
