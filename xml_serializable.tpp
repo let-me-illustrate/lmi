@@ -210,12 +210,26 @@ void xml_serializable<T>::immit_members_into(xml::element& root) const
 /// The element's text contents are given as a string argument; the
 /// transformed contents are returned as a string.
 
-std::string redintegrate_ex_ante
+template<typename T>
+std::string xml_serializable<T>::redintegrate_ex_ante
     (int                file_version
-    ,std::string const& name
+    ,std::string const& // name
     ,std::string const& value
     ) const
 {
+    if(class_version() == file_version)
+        {
+        return value;
+        }
+    else
+        {
+        fatal_error()
+            << "Incompatible file version."
+            << " An explicit override is necessary."
+            << LMI_FLUSH
+            ;
+        return value; // Stifle compiler warning.
+        }
 }
 
 /// Provide for backward compatibility after assigning values.
@@ -247,12 +261,25 @@ std::string redintegrate_ex_ante
 /// i.e., if they were used only in an earlier version. In the first
 /// example above, 'firstname' and 'lastname' would be "detritus".
 
-void redintegrate_ex_post
+template<typename T>
+void xml_serializable<T>::redintegrate_ex_post
     (int                                file_version
-    ,std::map<std::string, std::string> detritus_map
-    ,std::list<std::string>             residuary_names
+    ,std::map<std::string, std::string> // detritus_map
+    ,std::list<std::string>             // residuary_names
     )
 {
+    if(class_version() == file_version)
+        {
+        return;
+        }
+    else
+        {
+        fatal_error()
+            << "Incompatible file version."
+            << " An explicit override is necessary."
+            << LMI_FLUSH
+            ;
+        }
 }
 
 /// Perform any required after-the-fact fixup.
@@ -260,7 +287,8 @@ void redintegrate_ex_post
 /// Override this function to do anything that's necessary after all
 /// elements have been read, but doesn't fit anywhere else.
 
-void redintegrate_ad_terminum()
+template<typename T>
+void xml_serializable<T>::redintegrate_ad_terminum()
 {
 }
 

@@ -412,35 +412,22 @@ bool mec_state::is_detritus(std::string const& s) const
 
 std::string mec_state::redintegrate_ex_ante
     (int                file_version
-    ,std::string const& // name
+    ,std::string const& name
     ,std::string const& value
     ) const
 {
-    if(class_version() == file_version)
-        {
-        return value;
-        }
-    else
-        {
-        fatal_error() << "Incompatible file version." << LMI_FLUSH;
-        return value; // Stifle compiler warning.
-        }
+    typedef xml_serializable<mec_state> base;
+    return base::redintegrate_ex_ante(file_version, name, value);
 }
 
 void mec_state::redintegrate_ex_post
     (int                                file_version
-    ,std::map<std::string, std::string> // detritus_map
-    ,std::list<std::string>             // residuary_names
+    ,std::map<std::string, std::string> detritus_map
+    ,std::list<std::string>             residuary_names
     )
 {
-    if(class_version() == file_version)
-        {
-        return;
-        }
-    else
-        {
-        fatal_error() << "Incompatible file version." << LMI_FLUSH;
-        }
+    typedef xml_serializable<mec_state> base;
+    base::redintegrate_ex_post(file_version, detritus_map, residuary_names);
 }
 
 void mec_state::redintegrate_ad_terminum()
