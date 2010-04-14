@@ -84,13 +84,13 @@ bool mec_state::is_detritus(std::string const&) const
     return false;
 }
 
-std::string mec_state::redintegrate_ex_ante
+bool mec_state::redintegrate_ex_ante
     (int
     ,std::string const&
-    ,std::string const&
+    ,std::string      &
     ) const
 {
-    return empty_string;
+    return false;
 }
 
 void mec_state::redintegrate_ex_post

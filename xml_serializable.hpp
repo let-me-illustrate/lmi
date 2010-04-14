@@ -55,17 +55,17 @@ class LMI_SO xml_serializable
     virtual int         class_version() const = 0;
     virtual std::string xml_root_name() const = 0;
     virtual bool        is_detritus(std::string const&) const = 0;
-    virtual std::string redintegrate_ex_ante
+    virtual bool redintegrate_ex_ante
         (int                file_version
         ,std::string const& name
-        ,std::string const& value
+        ,std::string      & value
         ) const = 0;
-    virtual void        redintegrate_ex_post
+    virtual void redintegrate_ex_post
         (int                                file_version
         ,std::map<std::string, std::string> detritus_map
         ,std::list<std::string>             residuary_names
         ) = 0;
-    virtual void        redintegrate_ad_terminum() = 0;
+    virtual void redintegrate_ad_terminum() = 0;
 
   private:
     void immit_members_into(xml::element&) const;
