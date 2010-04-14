@@ -194,3 +194,73 @@ void xml_serializable<T>::immit_members_into(xml::element& root) const
         }
 }
 
+/// Provide for backward compatibility before assigning values.
+///
+/// Motivation: transform an old enumerative string to a contemporary
+/// equivalent, before assigning it to a variable of mc_enum type for
+/// which it would no longer be syntactically valid.
+///
+/// For example, if gender had formerly been stored as {M, F} but now
+/// {Male, Female} is used instead, then this function would be
+/// overridden to transform the old representation to the new:
+///   <gender>M</gender> --> <gender>Male</gender>
+/// This transformation avoids attempting to assign 'M' to a 'gender'
+/// enumeration, which would elicit a runtime error.
+///
+/// The element's text contents are given as a string argument; the
+/// transformed contents are returned as a string.
+
+std::string redintegrate_ex_ante
+    (int                file_version
+    ,std::string const& name
+    ,std::string const& value
+    ) const
+{
+}
+
+/// Provide for backward compatibility after assigning values.
+///
+/// Motivation: transform an old value that remains syntactically
+/// valid but is no longer semantically inappropriate due to changes
+/// in code that uses it; or assign an appropriate default for an
+/// element that was not present in earlier versions.
+///
+/// For example, if a person's first and last names had been stored
+/// separately but are now combined in a single element, then this
+/// function would be overridden to transform this:
+///   <firstname>John</firstname> <lastname>Brown</lastname>
+/// to this:
+///   <name>John Brown</name>
+///
+/// As another example, suppose issue and effective dates are now
+/// distinguished, whereas formerly only issue date had been stored.
+/// It would be reasonable to override this function to copy the
+/// issue-date value to a new effective date element.
+///
+/// The 'residuary_names' argument contains all element tags actually
+/// found in the xml being read that have not yet been processed. This
+/// is useful for verifying that an element expected not to be present
+/// is actually not specified.
+///
+/// The 'detritus_map' argument contains names and values of all tags
+/// that have already been processed if they were marked as detritus:
+/// i.e., if they were used only in an earlier version. In the first
+/// example above, 'firstname' and 'lastname' would be "detritus".
+
+void redintegrate_ex_post
+    (int                                file_version
+    ,std::map<std::string, std::string> detritus_map
+    ,std::list<std::string>             residuary_names
+    )
+{
+}
+
+/// Perform any required after-the-fact fixup.
+///
+/// Override this function to do anything that's necessary after all
+/// elements have been read, but doesn't fit anywhere else.
+
+void redintegrate_ad_terminum()
+{
+}
+

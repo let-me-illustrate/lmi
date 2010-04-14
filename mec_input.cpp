@@ -631,8 +631,6 @@ bool mec_input::is_detritus(std::string const& s) const
     return v.end() != std::find(v.begin(), v.end(), s);
 }
 
-/// Provide for backward compatibility before assigning values.
-
 std::string mec_input::redintegrate_ex_ante
     (int                file_version
     ,std::string const& // name
@@ -650,8 +648,6 @@ std::string mec_input::redintegrate_ex_ante
         }
 }
 
-/// Provide for backward compatibility after assigning values.
-
 void mec_input::redintegrate_ex_post
     (int                                file_version
     ,std::map<std::string, std::string> // detritus_map
@@ -667,8 +663,6 @@ void mec_input::redintegrate_ex_post
         fatal_error() << "Incompatible file version." << LMI_FLUSH;
         }
 }
-
-/// Perform any required after-the-fact fixup.
 
 void mec_input::redintegrate_ad_terminum()
 {
