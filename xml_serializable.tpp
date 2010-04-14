@@ -140,11 +140,10 @@ using namespace xml;
             );
         if(residuary_names.end() != current_member)
             {
-            t[node_tag] = redintegrate_ex_ante
-                (file_version
-                ,node_tag
-                ,xml_lmi::get_content(*child)
-                );
+            std::string s = xml_lmi::get_content(*child);
+            // Return value unused for the moment:
+            redintegrate_ex_ante(file_version, node_tag, s);
+            t[node_tag] = s;
             residuary_names.erase(current_member);
             }
         else if(is_detritus(node_tag))
@@ -208,18 +207,19 @@ void xml_serializable<T>::immit_members_into(xml::element& root) const
 /// enumeration, which would elicit a runtime error.
 ///
 /// The element's text contents are given as a string argument; the
-/// transformed contents are returned as a string.
+/// return value is 'true' if the string was modified, and 'false'
+/// otherwise.
 
 template<typename T>
-std::string xml_serializable<T>::redintegrate_ex_ante
+bool xml_serializable<T>::redintegrate_ex_ante
     (int                file_version
     ,std::string const& // name
-    ,std::string const& value
+    ,std::string      & // value
     ) const
 {
     if(class_version() == file_version)
         {
-        return value;
+        return false;
         }
     else
         {
@@ -228,7 +228,7 @@ std::string xml_serializable<T>::redintegrate_ex_ante
             << " An explicit override is necessary."
             << LMI_FLUSH
             ;
-        return value; // Stifle compiler warning.
+        return true; // Stifle compiler warning.
         }
 }
 

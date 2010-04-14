@@ -631,10 +631,10 @@ bool mec_input::is_detritus(std::string const& s) const
     return v.end() != std::find(v.begin(), v.end(), s);
 }
 
-std::string mec_input::redintegrate_ex_ante
+bool mec_input::redintegrate_ex_ante
     (int                file_version
     ,std::string const& name
-    ,std::string const& value
+    ,std::string      & value
     ) const
 {
     typedef xml_serializable<mec_input> base;

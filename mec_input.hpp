@@ -105,17 +105,17 @@ class LMI_SO mec_input
     virtual int         class_version() const;
     virtual std::string xml_root_name() const;
     virtual bool        is_detritus(std::string const&) const;
-    virtual std::string redintegrate_ex_ante
+    virtual bool redintegrate_ex_ante
         (int                file_version
         ,std::string const& name
-        ,std::string const& value
+        ,std::string      & value
         ) const;
-    virtual void        redintegrate_ex_post
+    virtual void redintegrate_ex_post
         (int                                file_version
         ,std::map<std::string, std::string> detritus_map
         ,std::list<std::string>             residuary_names
         );
-    virtual void        redintegrate_ad_terminum();
+    virtual void redintegrate_ad_terminum();
 
     // MvcModel required implementation.
     virtual void DoAdaptExternalities();

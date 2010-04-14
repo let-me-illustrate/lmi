@@ -121,18 +121,16 @@ bool Input::is_detritus(std::string const& s) const
     return v.end() != std::find(v.begin(), v.end(), s);
 }
 
-std::string Input::redintegrate_ex_ante
+bool Input::redintegrate_ex_ante
     (int                file_version
     ,std::string const& name
-    ,std::string const& value
+    ,std::string      & value
     ) const
 {
     if(class_version() == file_version)
         {
-        return value;
+        return false;
         }
-
-    std::string new_value(value);
 
     // Prior to version 3, 'SolveType' distinguished:
     //   mce_solve_wd           --> !WithdrawToBasisThenLoan
@@ -163,11 +161,11 @@ std::string Input::redintegrate_ex_ante
                     << LMI_FLUSH
                     ;
                 }
-            new_value = "Allow MEC";
+            value = "Allow MEC";
             }
         if("DeprecatedSolveTgtAtWhich" == name)
             {
-            new_value =
+            value =
                   ("TgtAtRetirement" == value) ? "Retirement"
                 : ("TgtAtYear"       == value) ? "Year"
                 : ("TgtAtAge"        == value) ? "Age"
@@ -177,7 +175,7 @@ std::string Input::redintegrate_ex_ante
             }
         if("DeprecatedSolveFromWhich" == name)
             {
-            new_value =
+            value =
                   ("FromIssue"      == value) ? "Issue"
                 : ("FromYear"       == value) ? "Year"
                 : ("FromAge"        == value) ? "Age"
@@ -187,7 +185,7 @@ std::string Input::redintegrate_ex_ante
             }
         if("DeprecatedSolveToWhich" == name)
             {
-            new_value =
+            value =
                   ("ToRetirement"    == value) ? "Retirement"
                 : ("ToYear"          == value) ? "Year"
                 : ("ToAge"           == value) ? "Age"
@@ -197,7 +195,7 @@ std::string Input::redintegrate_ex_ante
             }
         if("SolveBasis" == name)
             {
-            new_value =
+            value =
                   ("Current basis"    == value) ? "Current"
                 : ("Current_basis"    == value) ? "Current"
                 : ("Guaranteed basis" == value) ? "Guaranteed"
@@ -210,7 +208,7 @@ std::string Input::redintegrate_ex_ante
 
         if("SolveSeparateAccountBasis" == name)
             {
-            new_value =
+            value =
                   ("Input %"         == value) ? "Hypothetical"
                 : ("Input_%"         == value) ? "Hypothetical"
                 : ("Zero %"          == value) ? "Zero"
@@ -223,7 +221,7 @@ std::string Input::redintegrate_ex_ante
 
         if("SolveType" == name)
             {
-            new_value =
+            value =
                   ("SolveNone"       == value) ? "No solve"
                 : ("SolveSpecAmt"    == value) ? "Specified amount"
                 : ("SolveEePrem"     == value) ? "Employee premium"
@@ -237,7 +235,7 @@ std::string Input::redintegrate_ex_ante
 
         if("SolveTarget" == name)
             {
-            new_value =
+            value =
                   ("SolveForEndt"     == value) ? "Endowment"
                 : ("SolveForTarget"   == value) ? "Target CSV"
                 : ("SolveForTaxBasis" == value) ? "CSV = tax basis"
@@ -248,7 +246,7 @@ std::string Input::redintegrate_ex_ante
 
         if("GeneralAccountRateType" == name)
             {
-            new_value =
+            value =
                   ("CredRate"  == value) ? "Credited rate"
                 : ("NetRate"   == value) ? "Credited rate"
                 : ("GrossRate" == value) ? "Earned rate"
@@ -258,7 +256,7 @@ std::string Input::redintegrate_ex_ante
 
         if("SeparateAccountRateType" == name)
             {
-            new_value =
+            value =
                   ("CredRate"  == value) ? "Net rate"
                 : ("NetRate"   == value) ? "Net rate"
                 : ("GrossRate" == value) ? "Gross rate"
@@ -268,7 +266,7 @@ std::string Input::redintegrate_ex_ante
 
         if("LoanRateType" == name)
             {
-            new_value =
+            value =
                   ("Fixed" == value) ? "Fixed loan rate"
                 : ("VLR"   == value) ? "Variable loan rate"
                 : throw std::runtime_error(value + ": unexpected loan-rate type.")
@@ -276,7 +274,7 @@ std::string Input::redintegrate_ex_ante
             }
         }
 
-    return new_value;
+    return true;
 }
 
 void Input::redintegrate_ex_post
