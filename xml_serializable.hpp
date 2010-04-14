@@ -51,9 +51,7 @@ class LMI_SO xml_serializable
     void read (xml::element const&);
     void write(xml::element&) const;
 
-  private:
-    void immit_members_into(xml::element&) const;
-
+  protected: // Possibly-implemented pure virtuals.
     virtual int         class_version() const = 0;
     virtual std::string xml_root_name() const = 0;
     virtual bool        is_detritus(std::string const&) const = 0;
@@ -68,6 +66,9 @@ class LMI_SO xml_serializable
         ,std::list<std::string>             residuary_names
         ) = 0;
     virtual void        redintegrate_ad_terminum() = 0;
+
+  private:
+    void immit_members_into(xml::element&) const;
 };
 
 template<typename T>
