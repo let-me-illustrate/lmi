@@ -24858,3 +24858,23 @@ virtual merely as a hook upon which to hang documentation.
   xml_serializable.tpp
 Move default implementations into base class.
 
+20100414T1835Z <gchicares@sbcglobal.net> [760]
+
+  antediluvian_stubs.cpp
+  input.hpp
+  input_xml_io.cpp
+  mec_input.cpp
+  mec_input.hpp
+  mec_state.cpp
+  mec_state.hpp
+  product_data.cpp
+  product_data.hpp
+  xml_serializable.hpp
+  xml_serializable.tpp
+Refactor.
+
+20100416T2207Z <gchicares@sbcglobal.net> [760]
+
+  any_member.hpp
+Improve documentation.
+
