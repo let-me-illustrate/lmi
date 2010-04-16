@@ -62,7 +62,7 @@ std::string full_name
 }
 } // Unnamed namespace.
 
-/// Serial number of this class's xml version.
+/// Backward-compatibility serial number of this class's xml version.
 ///
 /// version 0: [prior to the lmi epoch]
 /// version 1: 20050114T1947Z
@@ -81,15 +81,10 @@ int Input::class_version() const
     return 5;
 }
 
-//============================================================================
 std::string Input::xml_root_name() const
 {
     return "cell";
 }
-
-/// Entities that were present in older versions and then removed
-/// are recognized and ignored. If they're resurrected in a later
-/// version, then they aren't ignored.
 
 bool Input::is_detritus(std::string const& s) const
 {

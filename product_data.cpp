@@ -184,7 +184,7 @@ void product_data::ascribe_members()
     ascribe("MonthlyChargesPaymentFootnote" , &product_data::MonthlyChargesPaymentFootnote );
 }
 
-/// Serial number of this class's xml version.
+/// Backward-compatibility serial number of this class's xml version.
 ///
 /// version 0: 20100402T1123Z
 
@@ -205,30 +205,6 @@ bool product_data::is_detritus(std::string const& s) const
         };
     static std::vector<std::string> const v(a, a + lmi_array_size(a));
     return v.end() != std::find(v.begin(), v.end(), s);
-}
-
-bool product_data::redintegrate_ex_ante
-    (int                file_version
-    ,std::string const& name
-    ,std::string      & value
-    ) const
-{
-    typedef xml_serializable<product_data> base;
-    return base::redintegrate_ex_ante(file_version, name, value);
-}
-
-void product_data::redintegrate_ex_post
-    (int                                file_version
-    ,std::map<std::string, std::string> detritus_map
-    ,std::list<std::string>             residuary_names
-    )
-{
-    typedef xml_serializable<product_data> base;
-    base::redintegrate_ex_post(file_version, detritus_map, residuary_names);
-}
-
-void product_data::redintegrate_ad_terminum()
-{
 }
 
 /// Create a product file for the 'sample' product.

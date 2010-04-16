@@ -193,6 +193,43 @@ void xml_serializable<T>::immit_members_into(xml::element& root) const
         }
 }
 
+/// Backward-compatibility serial number of class T's xml version.
+
+template<typename T>
+int xml_serializable<T>::class_version() const
+{
+    throw "Unreachable--silences a compiler diagnostic.";
+}
+
+/// Root tag (when T is saved as the root of a document).
+
+template<typename T>
+std::string xml_serializable<T>::xml_root_name() const
+{
+    throw "Unreachable--silences a compiler diagnostic.";
+}
+
+/// Ascertain whether an element-tag is obsolete.
+///
+/// Tags that were present in older versions and later removed are
+/// recognized and redintegrated with other tags (elsewhere). If
+/// they're subsequently resurrected, then they may resume their
+/// original or an enhanced function.
+
+template<typename T>
+bool xml_serializable<T>::is_detritus(std::string const&) const
+{
+    return false;
+    // Pastable specimen implementation for derived classes:
+#if 0
+    static std::string const a[] =
+        {"Remove this string when adding the first removed entity."
+        };
+    static std::vector<std::string> const v(a, a + lmi_array_size(a));
+    return v.end() != std::find(v.begin(), v.end(), s);
+#endif // 0
+}
+
 /// Provide for backward compatibility before assigning values.
 ///
 /// Motivation: transform an old enumerative string to a contemporary

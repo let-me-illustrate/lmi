@@ -168,10 +168,12 @@ class LMI_SO Input
         (InputSequence const& s
         );
 
-    // Class 'xml_serializable' required implementation.
+    // xml_serializable required implementation.
     virtual int         class_version() const;
     virtual std::string xml_root_name() const;
-    virtual bool        is_detritus(std::string const&) const;
+
+    // xml_serializable overrides.
+    virtual bool is_detritus(std::string const&) const;
     virtual bool redintegrate_ex_ante
         (int                file_version
         ,std::string const& name

@@ -383,7 +383,7 @@ void mec_state::AscribeMembers()
     ascribe("Q6_max_non_mec_prem"      , &mec_state::Q6_max_non_mec_prem      );
 }
 
-/// Serial number of this class's xml version.
+/// Backward-compatibility serial number of this class's xml version.
 ///
 /// version 0: 20090728T1324Z
 
@@ -397,10 +397,6 @@ std::string mec_state::xml_root_name() const
     return "mec_state";
 }
 
-/// Entities that were present in older versions and then removed
-/// are recognized and ignored. If they're resurrected in a later
-/// version, then they aren't ignored.
-
 bool mec_state::is_detritus(std::string const& s) const
 {
     static std::string const a[] =
@@ -408,29 +404,5 @@ bool mec_state::is_detritus(std::string const& s) const
         };
     static std::vector<std::string> const v(a, a + lmi_array_size(a));
     return v.end() != std::find(v.begin(), v.end(), s);
-}
-
-bool mec_state::redintegrate_ex_ante
-    (int                file_version
-    ,std::string const& name
-    ,std::string      & value
-    ) const
-{
-    typedef xml_serializable<mec_state> base;
-    return base::redintegrate_ex_ante(file_version, name, value);
-}
-
-void mec_state::redintegrate_ex_post
-    (int                                file_version
-    ,std::map<std::string, std::string> detritus_map
-    ,std::list<std::string>             residuary_names
-    )
-{
-    typedef xml_serializable<mec_state> base;
-    base::redintegrate_ex_post(file_version, detritus_map, residuary_names);
-}
-
-void mec_state::redintegrate_ad_terminum()
-{
 }
 

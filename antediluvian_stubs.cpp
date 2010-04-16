@@ -84,25 +84,6 @@ bool mec_state::is_detritus(std::string const&) const
     return false;
 }
 
-bool mec_state::redintegrate_ex_ante
-    (int
-    ,std::string const&
-    ,std::string      &
-    ) const
-{
-    return false;
-}
-
-void mec_state::redintegrate_ex_post
-    (int
-    ,std::map<std::string, std::string>
-    ,std::list<std::string>
-    )
-{}
-
-void mec_state::redintegrate_ad_terminum()
-{}
-
 std::string const& product_data::datum(std::string const&) const
 {
     return empty_string;
