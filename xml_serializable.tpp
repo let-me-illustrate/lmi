@@ -29,7 +29,7 @@
 #include "xml_serializable.hpp"
 
 #include "alert.hpp"
-#include "any_member.hpp" // MemberSymbolTable<>
+#include "any_member.hpp"         // MemberSymbolTable<>
 #include "platform_dependent.hpp" // access()
 #include "value_cast.hpp"
 #include "xml_lmi.hpp"
@@ -39,8 +39,8 @@
 
 #include <xmlwrapp/nodes_view.h>
 
-#include <algorithm>      // std::copy(), std::find()
-#include <iterator>       // std::back_inserter
+#include <algorithm>              // std::copy(), std::find()
+#include <iterator>               // std::back_inserter
 #include <vector>
 
 template<typename T>
@@ -140,10 +140,7 @@ using namespace xml;
             );
         if(residuary_names.end() != current_member)
             {
-            std::string s = xml_lmi::get_content(*child);
-            // Return value unused for the moment:
-            redintegrate_ex_ante(file_version, node_tag, s);
-            t[node_tag] = s;
+            read_element(x, node_tag, t, file_version);
             residuary_names.erase(current_member);
             }
         else if(is_detritus(node_tag))
@@ -187,9 +184,7 @@ void xml_serializable<T>::immit_members_into(xml::element& root) const
     std::vector<std::string>::const_iterator i;
     for(i = t.member_names().begin(); i != t.member_names().end(); ++i)
         {
-        std::string node_tag(*i);
-        std::string value = t[node_tag].str();
-        root.push_back(xml::element(node_tag.c_str(), value.c_str()));
+        write_element(root, *i, t);
         }
 }
 
@@ -207,6 +202,59 @@ template<typename T>
 std::string xml_serializable<T>::xml_root_name() const
 {
     throw "Unreachable--silences a compiler diagnostic.";
+}
+
+/// Read an xml element.
+///
+/// This default implementation is appropriate only for streamable
+/// types (for which any_member<T>::operator=(std::string const&) is
+/// valid). Override it wherever that precondition does not hold.
+///
+/// xml_serialize::get_element() does nearly the same thing, but in a
+/// type-dependent way; thus, it doesn't have the precondition above.
+/// However, the datum here has been subject to type erasure and its
+/// type is not readily unerased.
+///
+/// Calling retrieve_element() here imposes a speed penalty of
+/// seventeen percent (measured with the 'input_test' unit test), and
+/// is superfluous because the element is already available through
+/// an iterator in read().
+
+template<typename T>
+void xml_serializable<T>::read_element
+    (xml::element const& parent
+    ,std::string const&  name
+    ,T&                  t
+    ,int                 file_version
+    )
+{
+    xml::node::const_iterator i = xml_lmi::retrieve_element(parent, name);
+    std::string s = xml_lmi::get_content(*i);
+    redintegrate_ex_ante(file_version, name, s);
+    t[name] = s;
+}
+
+/// Write an xml element.
+///
+/// This default implementation is appropriate only for streamable
+/// types (for which any_member<T>::str() is valid). Override it
+/// wherever that precondition does not hold.
+///
+/// xml_serialize::set_element() does nearly the same thing, but it
+/// asserts a precondition that the parent has no element with the
+/// given tagname. Such an assertion here would impose a speed penalty
+/// of fourteen percent (measured with the 'input_test' unit test),
+/// yet would serve no purpose because immit_members_into() iterates
+/// across std::map keys, which are guaranteed to be unique.
+
+template<typename T>
+void xml_serializable<T>::write_element
+    (xml::element&        parent
+    ,std::string const&   name
+    ,T const&             t
+    ) const
+{
+    parent.push_back(xml::element(name.c_str(), t[name].str().c_str()));
 }
 
 /// Ascertain whether an element-tag is obsolete.

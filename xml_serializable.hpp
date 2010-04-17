@@ -59,6 +59,19 @@ class LMI_SO xml_serializable
     virtual int         class_version() const = 0;
     virtual std::string xml_root_name() const = 0;
 
+    // Reading and writing.
+    virtual void read_element
+        (xml::element const& parent
+        ,std::string const&  name
+        ,T&
+        ,int                 file_version
+        );
+    virtual void write_element
+        (xml::element&       parent
+        ,std::string const&  name
+        ,T const&
+        ) const;
+
     // Backward compatibility.
     virtual bool is_detritus(std::string const&) const;
     virtual bool redintegrate_ex_ante
