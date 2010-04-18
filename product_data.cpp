@@ -33,6 +33,7 @@
 #include "assert_lmi.hpp"
 #include "data_directory.hpp" // AddDataDir()
 #include "miscellany.hpp"     // lmi_array_size()
+#include "xml_serialize.hpp"
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/path.hpp>
@@ -41,6 +42,99 @@
 #include <vector>
 
 template class xml_serializable<product_data>;
+
+namespace xml_serialize
+{
+template<> struct xml_io<glossed_string>
+{
+    static void to_xml(xml::element& e, glossed_string const& t)
+    {
+        set_element(e, "datum", t.datum());
+        set_element(e, "gloss", t.gloss());
+    }
+
+    static void from_xml(xml::element const& e, glossed_string& t)
+    {
+        std::string datum;
+        std::string gloss;
+        get_element(e, "datum", datum);
+        get_element(e, "gloss", gloss);
+        t = glossed_string(datum, gloss);
+    }
+};
+} // namespace xml_serialize
+
+/// Specialize value_cast<>() to throw an exception.
+///
+/// This is required by
+///   any_member::str()
+/// which is not useful here.
+
+template<> std::string value_cast<std::string>(glossed_string const& z)
+{
+    fatal_error()
+        << "Invalid function call. Context:"
+        << '\n' << z.datum()
+        << '\n' << z.gloss()
+        << LMI_FLUSH
+        ;
+    throw "Unreachable--silences a compiler diagnostic.";
+}
+
+/// Specialize value_cast<>() to throw an exception.
+///
+/// This is required by
+///   any_member::operator=(std::string const&)
+/// which is not useful here.
+
+template<> glossed_string value_cast<glossed_string>(std::string const& z)
+{
+    fatal_error()
+        << "Invalid function call. Context:"
+        << '\n' << z
+        << LMI_FLUSH
+        ;
+    throw "Unreachable--silences a compiler diagnostic.";
+}
+
+/// Private default ctor, for friend class product_data.
+
+glossed_string::glossed_string()
+{}
+
+glossed_string::glossed_string
+    (std::string const& datum
+    ,std::string const& gloss
+    )
+    :datum_(datum)
+    ,gloss_(gloss)
+{}
+
+glossed_string::~glossed_string()
+{}
+
+/// Temporary private assignment operator for external 'my_prod.cpp'.
+
+glossed_string& glossed_string::operator=(std::string const& s)
+{
+    datum_ = s;
+    return *this;
+}
+
+bool glossed_string::operator==(glossed_string const& z) const
+{
+    return z.datum_ == datum_ && z.gloss_ == gloss_;
+}
+
+std::string const& glossed_string::datum() const
+{
+    return datum_;
+}
+
+std::string const& glossed_string::gloss() const
+{
+    return gloss_;
+}
 
 /// Private default ctor.
 ///
@@ -71,11 +165,11 @@ product_data::~product_data()
 {
 }
 
-/// Get string datum (without annotation) for named member.
+/// Principal string datum (without gloss) for named member.
 
 std::string const& product_data::datum(std::string const& name) const
 {
-    return *member_cast<std::string>(operator[](name));
+    return member_cast<glossed_string>(operator[](name))->datum();
 }
 
 /// Enregister certain data members for access via any_member<>[].
@@ -198,6 +292,31 @@ std::string product_data::xml_root_name() const
     return "policy";
 }
 
+/// This override doesn't call redintegrate_ex_ante(); that wouldn't
+/// make sense, because the underlying datatype is just a doublet of
+/// strings, and strings can legitimately contain anything.
+
+void product_data::read_element
+    (xml::element const& parent
+    ,std::string const&  name
+    ,product_data&       // t [actually superfluous]
+    ,int                 // file_version
+    )
+{
+    glossed_string& r = *member_cast<glossed_string>(operator[](name));
+    xml_serialize::get_element(parent, name, r);
+}
+
+void product_data::write_element
+    (xml::element&       parent
+    ,std::string const&  name
+    ,product_data const& // t [actually superfluous]
+    ) const
+{
+    glossed_string const& r = *member_cast<glossed_string>(operator[](name));
+    xml_serialize::set_element(parent, name, r);
+}
+
 bool product_data::is_detritus(std::string const& s) const
 {
     static std::string const a[] =
@@ -216,47 +335,47 @@ void product_data::WritePolFiles()
 {
     product_data z;
 
-    z.DatabaseFilename               = "sample.db4";
-    z.FundFilename                   = "sample.funds";
-    z.RoundingFilename               = "sample.rounding";
-    z.TierFilename                   = "sample.strata";
+    z.DatabaseFilename        = glossed_string("sample.db4");
+    z.FundFilename            = glossed_string("sample.funds");
+    z.RoundingFilename        = glossed_string("sample.rounding");
+    z.TierFilename            = glossed_string("sample.strata");
 
-    z.CorridorFilename               = "sample";
-    z.CurrCOIFilename                = "qx_cso";
-    z.GuarCOIFilename                = "qx_cso";
-    z.WPFilename                     = "sample";
-    z.ADDFilename                    = "qx_ins";
-    z.ChildRiderFilename             = "qx_ins";
-    z.CurrSpouseRiderFilename        = "qx_ins";
-    z.GuarSpouseRiderFilename        = "qx_ins";
-    z.CurrTermFilename               = "qx_cso";
-    z.GuarTermFilename               = "qx_cso";
-    z.TableYFilename                 = "qx_ins";
-    z.PremTaxFilename                = "sample";
-    z.TAMRA7PayFilename              = "sample";
-    z.TgtPremFilename                = "sample";
-    z.IRC7702Filename                = "qx_cso";
-    z.Gam83Filename                  = "qx_ann";
-    z.SubstdTblMultFilename          = "sample";
-    z.CurrSpecAmtLoadFilename        = "sample";
-    z.GuarSpecAmtLoadFilename        = "sample";
-    z.PolicyForm                     = "UL32768-NY";
-    z.PolicyMktgName                 = "UL Supreme";
-    z.PolicyLegalName = "Flexible Premium Adjustable Life Insurance Policy";
-    z.InsCoShortName                 = "Superior Life";
-    z.InsCoName                      = "Superior Life Insurance Company";
-    z.InsCoAddr                      = "Superior, WI 12345";
-    z.InsCoStreet                    = "246 Main Street";
-    z.InsCoPhone                     = "(800) 555-1212";
-    z.InsCoDomicile                  = "WI";
-    z.MainUnderwriter                = "Superior Securities";
-    z.MainUnderwriterAddress         = "246-M Main Street, Superior, WI 12345";
-    z.CoUnderwriter                  = "Superior Investors";
-    z.CoUnderwriterAddress           = "246-C Main Street, Superior, WI 12345";
-    z.AvName                         = "Account";
-    z.CsvName                        = "Cash Surrender";
-    z.CsvHeaderName                  = "Cash Surr";
-    z.NoLapseProvisionName           = "No-lapse Provision";
+    z.CorridorFilename        = glossed_string("sample");
+    z.CurrCOIFilename         = glossed_string("qx_cso");
+    z.GuarCOIFilename         = glossed_string("qx_cso");
+    z.WPFilename              = glossed_string("sample");
+    z.ADDFilename             = glossed_string("qx_ins", "Specimen gloss.");
+    z.ChildRiderFilename      = glossed_string("qx_ins");
+    z.CurrSpouseRiderFilename = glossed_string("qx_ins");
+    z.GuarSpouseRiderFilename = glossed_string("qx_ins");
+    z.CurrTermFilename        = glossed_string("qx_cso");
+    z.GuarTermFilename        = glossed_string("qx_cso");
+    z.TableYFilename          = glossed_string("qx_ins");
+    z.PremTaxFilename         = glossed_string("sample");
+    z.TAMRA7PayFilename       = glossed_string("sample");
+    z.TgtPremFilename         = glossed_string("sample");
+    z.IRC7702Filename         = glossed_string("qx_cso");
+    z.Gam83Filename           = glossed_string("qx_ann");
+    z.SubstdTblMultFilename   = glossed_string("sample");
+    z.CurrSpecAmtLoadFilename = glossed_string("sample");
+    z.GuarSpecAmtLoadFilename = glossed_string("sample");
+    z.PolicyForm              = glossed_string("UL32768-NY");
+    z.PolicyMktgName          = glossed_string("UL Supreme");
+    z.PolicyLegalName         = glossed_string("Flexible Premium Adjustable Life Insurance Policy");
+    z.InsCoShortName          = glossed_string("Superior Life");
+    z.InsCoName               = glossed_string("Superior Life Insurance Company");
+    z.InsCoAddr               = glossed_string("Superior, WI 12345");
+    z.InsCoStreet             = glossed_string("246 Main Street");
+    z.InsCoPhone              = glossed_string("(800) 555-1212");
+    z.InsCoDomicile           = glossed_string("WI");
+    z.MainUnderwriter         = glossed_string("Superior Securities");
+    z.MainUnderwriterAddress  = glossed_string("246-M Main Street, Superior, WI 12345");
+    z.CoUnderwriter           = glossed_string("Superior Investors");
+    z.CoUnderwriterAddress    = glossed_string("246-C Main Street, Superior, WI 12345");
+    z.AvName                  = glossed_string("Account");
+    z.CsvName                 = glossed_string("Cash Surrender");
+    z.CsvHeaderName           = glossed_string("Cash Surr");
+    z.NoLapseProvisionName    = glossed_string("No-lapse Provision");
 
     z.save(AddDataDir("sample.policy"));
 }

@@ -24899,3 +24899,12 @@ Refactor.
   xml_serializable.tpp
 Refactor.
 
+20100418T2119Z <gchicares@sbcglobal.net> [760]
+
+  my_prod.cpp
+  policy_document.cpp
+  product_data.cpp
+  product_data.hpp
+  workhorse.make
+Permit annotations in '.policy' files.
+
