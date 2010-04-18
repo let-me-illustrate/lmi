@@ -61,52 +61,52 @@ void product_data::WriteProprietaryPolFiles()
 
     // Generic data for the 'sample' product.
 
-    z.DatabaseFilename               = "sample.db4";
-    z.FundFilename                   = "sample.funds";
-    z.RoundingFilename               = "sample.rounding";
-    z.TierFilename                   = "sample.strata";
+    z.DatabaseFilename        = glossed_string("sample.db4");
+    z.FundFilename            = glossed_string("sample.funds");
+    z.RoundingFilename        = glossed_string("sample.rounding");
+    z.TierFilename            = glossed_string("sample.strata");
 
-    z.CorridorFilename               = "sample";
-    z.CurrCOIFilename                = "qx_cso";
-    z.GuarCOIFilename                = "qx_cso";
-    z.WPFilename                     = "sample";
-    z.ADDFilename                    = "qx_ins";
-    z.ChildRiderFilename             = "qx_ins";
-    z.CurrSpouseRiderFilename        = "qx_ins";
-    z.GuarSpouseRiderFilename        = "qx_ins";
-    z.CurrTermFilename               = "qx_cso";
-    z.GuarTermFilename               = "qx_cso";
-    z.TableYFilename                 = "qx_ins";
-    z.PremTaxFilename                = "sample";
-    z.TAMRA7PayFilename              = "sample";
-    z.TgtPremFilename                = "sample";
-    z.IRC7702Filename                = "qx_cso";
-    z.Gam83Filename                  = "qx_ann";
-    z.SubstdTblMultFilename          = "sample";
-    z.CurrSpecAmtLoadFilename        = "sample";
-    z.GuarSpecAmtLoadFilename        = "sample";
-    z.PolicyForm                     = "UL32768-NY";
-    z.PolicyMktgName                 = "UL Supreme";
-    z.PolicyLegalName = "Flexible Premium Adjustable Life Insurance Policy";
-    z.InsCoShortName                 = "Superior Life";
-    z.InsCoName                      = "Superior Life Insurance Company";
-    z.InsCoAddr                      = "Superior, WI 12345";
-    z.InsCoStreet                    = "246 Main Street";
-    z.InsCoPhone                     = "(800) 555-1212";
-    z.InsCoDomicile                  = "WI";
-    z.MainUnderwriter                = "Superior Securities";
-    z.MainUnderwriterAddress         = "246-M Main Street, Superior, WI 12345";
-    z.CoUnderwriter                  = "Superior Investors";
-    z.CoUnderwriterAddress           = "246-C Main Street, Superior, WI 12345";
-    z.AvName                         = "Account";
-    z.CsvName                        = "Cash Surrender";
-    z.CsvHeaderName                  = "Cash Surr";
-    z.NoLapseProvisionName           = "No-lapse Provision";
+    z.CorridorFilename        = glossed_string("sample");
+    z.CurrCOIFilename         = glossed_string("qx_cso");
+    z.GuarCOIFilename         = glossed_string("qx_cso");
+    z.WPFilename              = glossed_string("sample");
+    z.ADDFilename             = glossed_string("qx_ins", "Specimen gloss.");
+    z.ChildRiderFilename      = glossed_string("qx_ins");
+    z.CurrSpouseRiderFilename = glossed_string("qx_ins");
+    z.GuarSpouseRiderFilename = glossed_string("qx_ins");
+    z.CurrTermFilename        = glossed_string("qx_cso");
+    z.GuarTermFilename        = glossed_string("qx_cso");
+    z.TableYFilename          = glossed_string("qx_ins");
+    z.PremTaxFilename         = glossed_string("sample");
+    z.TAMRA7PayFilename       = glossed_string("sample");
+    z.TgtPremFilename         = glossed_string("sample");
+    z.IRC7702Filename         = glossed_string("qx_cso");
+    z.Gam83Filename           = glossed_string("qx_ann");
+    z.SubstdTblMultFilename   = glossed_string("sample");
+    z.CurrSpecAmtLoadFilename = glossed_string("sample");
+    z.GuarSpecAmtLoadFilename = glossed_string("sample");
+    z.PolicyForm              = glossed_string("UL32768-NY");
+    z.PolicyMktgName          = glossed_string("UL Supreme");
+    z.PolicyLegalName         = glossed_string("Flexible Premium Adjustable Life Insurance Policy");
+    z.InsCoShortName          = glossed_string("Superior Life");
+    z.InsCoName               = glossed_string("Superior Life Insurance Company");
+    z.InsCoAddr               = glossed_string("Superior, WI 12345");
+    z.InsCoStreet             = glossed_string("246 Main Street");
+    z.InsCoPhone              = glossed_string("(800) 555-1212");
+    z.InsCoDomicile           = glossed_string("WI");
+    z.MainUnderwriter         = glossed_string("Superior Securities");
+    z.MainUnderwriterAddress  = glossed_string("246-M Main Street, Superior, WI 12345");
+    z.CoUnderwriter           = glossed_string("Superior Investors");
+    z.CoUnderwriterAddress    = glossed_string("246-C Main Street, Superior, WI 12345");
+    z.AvName                  = glossed_string("Account");
+    z.CsvName                 = glossed_string("Cash Surrender");
+    z.CsvHeaderName           = glossed_string("Cash Surr");
+    z.NoLapseProvisionName    = glossed_string("No-lapse Provision");
 
     z.save(AddDataDir("sample.policy"));
 
     // Copy the template above for other policy forms, e.g.:
-//  z.DatabaseFilename               = "another.db4";
+//  z.DatabaseFilename        = glossed_string("another.db4");
 //  ...
 }
 

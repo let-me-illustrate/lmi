@@ -543,6 +543,18 @@ else
   endif
 endif
 
+# An overriding version of 'my_prod.cpp', which is used to create a
+# nondistributable binary, contains so many large strings that, after
+# consuming more than one CPU minute and 1 MiB of RAM, MinGW gcc-3.4.5
+# produces a diagnostic such as
+#   warning: NULL pointer checks disabled:
+#   39933 basic blocks and 167330 registers
+# Adding '-fno-delete-null-pointer-checks' to $(CPPFLAGS) might
+# suffice to suppress the diagnostic, but this file actually doesn't
+# need any optimization at all.
+
+my_prod.o: optimization_flag := -O0
+
 ################################################################################
 
 # Libraries and associated options.
