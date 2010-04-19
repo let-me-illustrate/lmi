@@ -63,7 +63,7 @@ class LMI_SO xml_serializable
 
     // Reading and writing.
     virtual void read_element
-        (xml::element const& parent
+        (xml::element const& e
         ,std::string const&  name
         ,int                 file_version
         );

@@ -24908,3 +24908,22 @@ Refactor.
   workhorse.make
 Permit annotations in '.policy' files.
 
+20100419T2044Z <gchicares@sbcglobal.net> [760]
+
+  input.hpp
+  input_xml_io.cpp
+  product_data.cpp
+  product_data.hpp
+  xml_serializable.hpp
+  xml_serializable.tpp
+Refactor, simplifying the xml_serializable API.
+
+20100419T2230Z <gchicares@sbcglobal.net> [760]
+
+  product_data.cpp
+  product_data.hpp
+  xml_serializable.hpp
+  xml_serializable.tpp
+Refactor, removing the speed penalty introduced 20100417T1245Z. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-04/msg00025.html
+

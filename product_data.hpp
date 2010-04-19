@@ -105,7 +105,7 @@ class LMI_SO product_data
 
     // xml_serializable overrides.
     virtual void read_element
-        (xml::element const& parent
+        (xml::element const& e
         ,std::string const&  name
         ,int                 file_version
         );
