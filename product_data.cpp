@@ -297,13 +297,13 @@ std::string product_data::xml_root_name() const
 /// strings, and strings can legitimately contain anything.
 
 void product_data::read_element
-    (xml::element const& parent
+    (xml::element const& e
     ,std::string const&  name
     ,int                 // file_version
     )
 {
     glossed_string& r = *member_cast<glossed_string>(operator[](name));
-    xml_serialize::get_element(parent, name, r);
+    xml_serialize::from_xml(e, r);
 }
 
 void product_data::write_element

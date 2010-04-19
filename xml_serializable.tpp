@@ -138,7 +138,7 @@ using namespace xml;
             );
         if(residuary_names.end() != current_member)
             {
-            read_element(x, node_tag, file_version);
+            read_element(*child, node_tag, file_version);
             residuary_names.erase(current_member);
             }
         else if(is_detritus(node_tag))
@@ -228,25 +228,22 @@ std::string xml_serializable<T>::xml_root_name() const
 /// types (for which any_member<T>::operator=(std::string const&) is
 /// valid). Override it wherever that precondition does not hold.
 ///
-/// xml_serialize::get_element() does nearly the same thing, but in a
+/// xml_serialize::from_xml() does nearly the same thing, but in a
 /// type-dependent way; thus, it doesn't have the precondition above.
 /// However, the datum here has been subject to type erasure and its
 /// type is not readily unerased.
 ///
-/// Calling retrieve_element() here imposes a speed penalty of
-/// seventeen percent (measured with the 'input_test' unit test), and
-/// is superfluous because the element is already available through
-/// an iterator in read().
+/// The xml::element argument is the element to be read, which is
+/// already available through an iterator in read().
 
 template<typename T>
 void xml_serializable<T>::read_element
-    (xml::element const& parent
+    (xml::element const& e
     ,std::string const&  name
     ,int                 file_version
     )
 {
-    xml::node::const_iterator i = xml_lmi::retrieve_element(parent, name);
-    std::string s = xml_lmi::get_content(*i);
+    std::string s = xml_lmi::get_content(e);
     redintegrate_ex_ante(file_version, name, s);
     t()[name] = s;
 }
@@ -263,6 +260,9 @@ void xml_serializable<T>::read_element
 /// of fourteen percent (measured with the 'input_test' unit test),
 /// yet would serve no purpose because immit_members_into() iterates
 /// across std::map keys, which are guaranteed to be unique.
+///
+/// The xml::element argument is the parent of the element to be
+/// written.
 
 template<typename T>
 void xml_serializable<T>::write_element
