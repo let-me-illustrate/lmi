@@ -47,8 +47,8 @@ template<typename T>
 xml_serializable<T>::~xml_serializable()
 {
     // Assert that static_cast<T cv&> doesn't engender undefined
-    // behavior, and that the base class provides the expected
-    // operator[]() and member_names() functions.
+    // behavior, and that class T provides the expected operator[]()
+    // and member_names() functions.
     //
     // Double parentheses: don't parse comma as a macro parameter separator.
     BOOST_STATIC_ASSERT
@@ -87,8 +87,6 @@ void xml_serializable<T>::save(fs::path const& path) const
 template<typename T>
 void xml_serializable<T>::read(xml::element const& x)
 {
-    T& t = static_cast<T&>(*this);
-
     if(xml_root_name() != x.get_name())
         {
         fatal_error()
@@ -122,8 +120,8 @@ using namespace xml;
 
     std::list<std::string> residuary_names;
     std::copy
-        (t.member_names().begin()
-        ,t.member_names().end()
+        (t().member_names().begin()
+        ,t().member_names().end()
         ,std::back_inserter(residuary_names)
         );
     std::list<std::string>::iterator current_member;
@@ -140,7 +138,7 @@ using namespace xml;
             );
         if(residuary_names.end() != current_member)
             {
-            read_element(x, node_tag, t, file_version);
+            read_element(x, node_tag, file_version);
             residuary_names.erase(current_member);
             }
         else if(is_detritus(node_tag))
@@ -172,19 +170,39 @@ void xml_serializable<T>::write(xml::element& x) const
     x.push_back(root);
 }
 
+/// The associated instance of class T.
+///
+/// This member function is 'inline' because it wouldn't make sense
+/// for any external file to call it.
+
+template<typename T>
+inline T& xml_serializable<T>::t()
+{
+    return static_cast<T&>(*this);
+}
+
+/// The associated instance of class T.
+///
+/// This member function is 'inline' because it wouldn't make sense
+/// for any external file to call it.
+
+template<typename T>
+inline T const& xml_serializable<T>::t() const
+{
+    return static_cast<T const&>(*this);
+}
+
 template<typename T>
 void xml_serializable<T>::immit_members_into(xml::element& root) const
 {
-    T const& t = static_cast<T const&>(*this);
-
 // XMLWRAPP !! There's no way to set an integer attribute.
     std::string const version(value_cast<std::string>(class_version()));
     xml_lmi::set_attr(root, "version", version.c_str());
 
     std::vector<std::string>::const_iterator i;
-    for(i = t.member_names().begin(); i != t.member_names().end(); ++i)
+    for(i = t().member_names().begin(); i != t().member_names().end(); ++i)
         {
-        write_element(root, *i, t);
+        write_element(root, *i);
         }
 }
 
@@ -224,14 +242,13 @@ template<typename T>
 void xml_serializable<T>::read_element
     (xml::element const& parent
     ,std::string const&  name
-    ,T&                  t
     ,int                 file_version
     )
 {
     xml::node::const_iterator i = xml_lmi::retrieve_element(parent, name);
     std::string s = xml_lmi::get_content(*i);
     redintegrate_ex_ante(file_version, name, s);
-    t[name] = s;
+    t()[name] = s;
 }
 
 /// Write an xml element.
@@ -251,10 +268,9 @@ template<typename T>
 void xml_serializable<T>::write_element
     (xml::element&        parent
     ,std::string const&   name
-    ,T const&             t
     ) const
 {
-    parent.push_back(xml::element(name.c_str(), t[name].str().c_str()));
+    parent.push_back(xml::element(name.c_str(), t()[name].str().c_str()));
 }
 
 /// Ascertain whether an element-tag is obsolete.
@@ -291,12 +307,10 @@ bool xml_serializable<T>::is_detritus(std::string const&) const
 /// This transformation avoids attempting to assign 'M' to a 'gender'
 /// enumeration, which would elicit a runtime error.
 ///
-/// The element's text contents are given as a string argument; the
-/// return value is 'true' if the string was modified, and 'false'
-/// otherwise.
+/// The element's text contents are given as a modifiable reference.
 
 template<typename T>
-bool xml_serializable<T>::redintegrate_ex_ante
+void xml_serializable<T>::redintegrate_ex_ante
     (int                file_version
     ,std::string const& // name
     ,std::string      & // value
@@ -304,17 +318,14 @@ bool xml_serializable<T>::redintegrate_ex_ante
 {
     if(class_version() == file_version)
         {
-        return false;
+        return;
         }
-    else
-        {
-        fatal_error()
-            << "Incompatible file version."
-            << " An explicit override is necessary."
-            << LMI_FLUSH
-            ;
-        return true; // Stifle compiler warning.
-        }
+
+    fatal_error()
+        << "Incompatible file version."
+        << " An explicit override is necessary."
+        << LMI_FLUSH
+        ;
 }
 
 /// Provide for backward compatibility after assigning values.
