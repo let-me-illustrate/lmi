@@ -116,7 +116,7 @@ bool Input::is_detritus(std::string const& s) const
     return v.end() != std::find(v.begin(), v.end(), s);
 }
 
-bool Input::redintegrate_ex_ante
+void Input::redintegrate_ex_ante
     (int                file_version
     ,std::string const& name
     ,std::string      & value
@@ -124,7 +124,7 @@ bool Input::redintegrate_ex_ante
 {
     if(class_version() == file_version)
         {
-        return false;
+        return;
         }
 
     // Prior to version 3, 'SolveType' distinguished:
@@ -268,8 +268,6 @@ bool Input::redintegrate_ex_ante
                 ;
             }
         }
-
-    return true;
 }
 
 void Input::redintegrate_ex_post

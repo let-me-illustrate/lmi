@@ -107,13 +107,11 @@ class LMI_SO product_data
     virtual void read_element
         (xml::element const& parent
         ,std::string const&  name
-        ,product_data&
         ,int                 file_version
         );
     virtual void write_element
         (xml::element&       parent
         ,std::string const&  name
-        ,product_data const&
         ) const;
     virtual bool is_detritus(std::string const&) const;
 

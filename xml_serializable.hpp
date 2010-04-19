@@ -53,6 +53,8 @@ class LMI_SO xml_serializable
 
   private:
     // Private non-virtuals.
+    T      & t()      ;
+    T const& t() const;
     void immit_members_into(xml::element&) const;
 
     // Class (T) identification.
@@ -63,18 +65,16 @@ class LMI_SO xml_serializable
     virtual void read_element
         (xml::element const& parent
         ,std::string const&  name
-        ,T&
         ,int                 file_version
         );
     virtual void write_element
         (xml::element&       parent
         ,std::string const&  name
-        ,T const&
         ) const;
 
     // Backward compatibility.
     virtual bool is_detritus(std::string const&) const;
-    virtual bool redintegrate_ex_ante
+    virtual void redintegrate_ex_ante
         (int                file_version
         ,std::string const& name
         ,std::string      & value

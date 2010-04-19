@@ -174,7 +174,7 @@ class LMI_SO Input
 
     // xml_serializable overrides.
     virtual bool is_detritus(std::string const&) const;
-    virtual bool redintegrate_ex_ante
+    virtual void redintegrate_ex_ante
         (int                file_version
         ,std::string const& name
         ,std::string      & value

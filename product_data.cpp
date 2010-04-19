@@ -299,7 +299,6 @@ std::string product_data::xml_root_name() const
 void product_data::read_element
     (xml::element const& parent
     ,std::string const&  name
-    ,product_data&       // t [actually superfluous]
     ,int                 // file_version
     )
 {
@@ -310,7 +309,6 @@ void product_data::read_element
 void product_data::write_element
     (xml::element&       parent
     ,std::string const&  name
-    ,product_data const& // t [actually superfluous]
     ) const
 {
     glossed_string const& r = *member_cast<glossed_string>(operator[](name));
