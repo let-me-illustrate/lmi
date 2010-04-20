@@ -24927,3 +24927,11 @@ Refactor, simplifying the xml_serializable API.
 Refactor, removing the speed penalty introduced 20100417T1245Z. See:
   http://lists.nongnu.org/archive/html/lmi/2010-04/msg00025.html
 
+20100420T1327Z <gchicares@sbcglobal.net> [760]
+
+  ihs_funddata.cpp
+  ihs_funddata.hpp
+  stratified_charges.cpp
+  stratified_charges.hpp
+Permit annotations in '.funds' and '.strata' files.
+

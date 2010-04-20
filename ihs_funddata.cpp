@@ -43,18 +43,21 @@ FundInfo::FundInfo()
     :ScalarIMF_(0.0)
     ,ShortName_("")
     ,LongName_ ("")
+    ,gloss_    ("")
 {
 }
 
 //============================================================================
 FundInfo::FundInfo
-    (double      ScalarIMF
-    ,std::string ShortName
-    ,std::string LongName
+    (double             ScalarIMF
+    ,std::string const& ShortName
+    ,std::string const& LongName
+    ,std::string const& gloss
     )
     :ScalarIMF_(ScalarIMF)
     ,ShortName_(ShortName)
     ,LongName_ (LongName)
+    ,gloss_    (gloss)
 {
 }
 
@@ -72,6 +75,7 @@ template<> struct xml_io<FundInfo>
         set_element(e, "scalar_imf", t.ScalarIMF());
         set_element(e, "short_name", t.ShortName());
         set_element(e, "long_name" , t.LongName ());
+        set_element(e, "gloss"     , t.gloss    ());
     }
 
     static void from_xml(xml::element const& e, FundInfo& t)
@@ -79,10 +83,12 @@ template<> struct xml_io<FundInfo>
         double      scalar_imf;
         std::string short_name;
         std::string long_name;
+        std::string gloss;
         get_element(e, "scalar_imf", scalar_imf);
         get_element(e, "short_name", short_name);
         get_element(e, "long_name" , long_name );
-        t = FundInfo(scalar_imf, short_name, long_name);
+        get_element(e, "gloss"     , gloss     );
+        t = FundInfo(scalar_imf, short_name, long_name, gloss);
     }
 };
 } // namespace xml_serialize
@@ -157,6 +163,7 @@ void FundData::WriteFundFiles()
             (50
             ,"Money Market"
             ,"Money Market Fund"
+            ,"Specimen gloss."
             )
         );
     foo.Write(AddDataDir("sample.funds"));
