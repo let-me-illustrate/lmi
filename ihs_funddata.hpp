@@ -46,20 +46,23 @@ class LMI_SO FundInfo
   public:
     FundInfo();
     FundInfo
-        (double      ScalarIMF
-        ,std::string ShortName
-        ,std::string LongName
+        (double             ScalarIMF
+        ,std::string const& ShortName
+        ,std::string const& LongName
+        ,std::string const& gloss = std::string()
         );
     ~FundInfo();
 
     double ScalarIMF() const;
     std::string const& ShortName() const;
     std::string const& LongName() const;
+    std::string const& gloss() const;
 
   private:
     double ScalarIMF_;
     std::string ShortName_;
     std::string LongName_;
+    std::string gloss_;
 };
 
 class LMI_SO FundData
@@ -98,6 +101,11 @@ inline std::string const& FundInfo::ShortName() const
 inline std::string const& FundInfo::LongName() const
 {
     return LongName_;
+}
+
+inline std::string const& FundInfo::gloss() const
+{
+    return gloss_;
 }
 
 inline FundInfo const& FundData::GetFundInfo(int j) const

@@ -72,9 +72,11 @@ stratified_entity::stratified_entity()
 stratified_entity::stratified_entity
     (std::vector<double> const& limits
     ,std::vector<double> const& values
+    ,std::string const&         gloss
     )
     :limits_(limits)
     ,values_(values)
+    ,gloss_ (gloss)
 {
     assert_validity();
 }
@@ -119,10 +121,17 @@ std::vector<double> const& stratified_entity::values() const
 }
 
 //============================================================================
+std::string const& stratified_entity::gloss() const
+{
+    return gloss_;
+}
+
+//============================================================================
 void stratified_entity::read(xml::element const& e)
 {
     xml_serialize::get_element(e, "values", values_);
     xml_serialize::get_element(e, "limits", limits_);
+    xml_serialize::get_element(e, "gloss" , gloss_ );
 
     assert_validity();
 }
@@ -134,6 +143,7 @@ void stratified_entity::write(xml::element& e) const
 
     xml_serialize::set_element(e, "values", values_);
     xml_serialize::set_element(e, "limits", limits_);
+    xml_serialize::set_element(e, "gloss" , gloss_ );
 }
 
 // Class stratified_charges implementation.
@@ -561,6 +571,7 @@ void stratified_charges::write_stratified_files()
     foo.raw_entity(e_tiered_ak_premium_tax                ).values_.push_back (0.00100);
     foo.raw_entity(e_tiered_ak_premium_tax                ).limits_.push_back(100000.0);
     foo.raw_entity(e_tiered_ak_premium_tax                ).limits_.push_back(DBL_MAX);
+    foo.raw_entity(e_tiered_ak_premium_tax).gloss_ = "AK 21.09.210(m)";
 
     // DE: not yet implemented.
     foo.raw_entity(e_tiered_de_premium_tax                ).values_.push_back (0.0);
@@ -570,6 +581,7 @@ void stratified_charges::write_stratified_files()
     foo.raw_entity(e_tiered_sd_premium_tax                ).values_.push_back (0.00080);
     foo.raw_entity(e_tiered_sd_premium_tax                ).limits_.push_back(100000.0);
     foo.raw_entity(e_tiered_sd_premium_tax                ).limits_.push_back(DBL_MAX);
+    foo.raw_entity(e_tiered_sd_premium_tax).gloss_ = "SD 10-4-22(2) (see also 58-6-70)";
 
     foo.write(AddDataDir("sample.strata"));
 }

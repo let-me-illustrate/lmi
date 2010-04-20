@@ -72,6 +72,7 @@ class LMI_SO stratified_entity
     stratified_entity
         (std::vector<double> const& limits
         ,std::vector<double> const& values
+        ,std::string const&         gloss = std::string()
         );
     ~stratified_entity();
 
@@ -83,9 +84,11 @@ class LMI_SO stratified_entity
 
     std::vector<double> const& limits() const;
     std::vector<double> const& values() const;
+    std::string const&         gloss () const;
 
     std::vector<double> limits_;
     std::vector<double> values_;
+    std::string         gloss_;
 };
 
 // Implicitly-declared special member functions do the right thing.
