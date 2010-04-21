@@ -211,7 +211,7 @@ double stratified_charges::stratified_sepacct_load
     ,double           assets
     ,double           premium
     ,double           special_limit
-    )
+    ) const
 {
     switch(basis)
         {
@@ -291,15 +291,47 @@ double stratified_charges::banded_guar_sepacct_load
         ;
 }
 
+double stratified_charges::tiered_m_and_e(mcenum_gen_basis basis, double assets) const
+{
+    switch(basis)
+        {
+        case mce_gen_curr:
+            {
+            return tiered_curr_m_and_e(assets);
+            }
+            break;
+        case mce_gen_guar:
+            {
+            return tiered_guar_m_and_e(assets);
+            }
+            break;
+        case mce_gen_mdpt:
+            {
+            fatal_error()
+                << "Dynamic separate-account M&E not supported with "
+                << "midpoint expense basis, because variable products "
+                << "are not subject to the illustration reg."
+                << LMI_FLUSH
+                ;
+            }
+            break;
+        default:
+            {
+            fatal_error() << "Case '" << basis << "' not found." << LMI_FLUSH;
+            }
+        }
+    throw "Unreachable--silences a compiler diagnostic.";
+}
+
 //============================================================================
-double stratified_charges::tiered_current_m_and_e(double assets) const
+double stratified_charges::tiered_curr_m_and_e(double assets) const
 {
     stratified_entity const& z = raw_entity(e_curr_m_and_e_tiered_by_assets);
     return tiered_rate<double>() (assets, z.limits(), z.values());
 }
 
 //============================================================================
-double stratified_charges::tiered_guaranteed_m_and_e(double assets) const
+double stratified_charges::tiered_guar_m_and_e(double assets) const
 {
     stratified_entity const& z = raw_entity(e_guar_m_and_e_tiered_by_assets);
     return tiered_rate<double>() (assets, z.limits(), z.values());
