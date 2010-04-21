@@ -2151,13 +2151,11 @@ void AccountValue::ApplyDynamicMandE(double assets)
             }
         }
 
-// TODO ?? Dynamic M&E should be different for guar vs. curr.
 // TODO ?? Implement tiered comp and tiered management fee.
 
     // Annual separate-account rates.
 
-//  double guar_m_and_e = StratifiedCharges_->tiered_guaranteed_m_and_e(assets);
-    double m_and_e_rate = StratifiedCharges_->tiered_current_m_and_e(assets);
+    double m_and_e_rate = StratifiedCharges_->tiered_m_and_e(GenBasis_, assets);
     double imf_rate = StratifiedCharges_->tiered_investment_management_fee(assets);
     if(0.0 != imf_rate)
         {
