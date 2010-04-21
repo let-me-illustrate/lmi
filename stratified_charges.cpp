@@ -485,7 +485,7 @@ namespace
         };
 
     BOOST_STATIC_ASSERT(sizeof s_stratified_nodes / sizeof(char const*) == 1 + e_stratified_last);
-} // anonymous namespace
+} // Unnamed namespace.
 
 namespace xml_serialize
 {
@@ -518,7 +518,7 @@ void stratified_charges::read(std::string const& filename)
         }
 
     xml_lmi::dom_parser parser(filename);
-    xml::element const& root = parser.root_node("tier");
+    xml::element const& root = parser.root_node("strata");
 
 #define READ(ELEMENT,ENTITY) xml_serialize::get_element(ELEMENT, s_stratified_nodes[ENTITY], raw_entity(ENTITY))
 
@@ -542,7 +542,7 @@ void stratified_charges::read(std::string const& filename)
 //============================================================================
 void stratified_charges::write(std::string const& filename) const
 {
-    xml_lmi::xml_document document("tier");
+    xml_lmi::xml_document document("strata");
     xml::element& root = document.root_node();
 
 #define WRITE(ELEMENT,ENTITY) xml_serialize::set_element(ELEMENT, s_stratified_nodes[ENTITY], raw_entity(ENTITY));
