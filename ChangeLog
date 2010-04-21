@@ -24935,3 +24935,10 @@ Refactor, removing the speed penalty introduced 20100417T1245Z. See:
   stratified_charges.hpp
 Permit annotations in '.funds' and '.strata' files.
 
+20100421T0028Z <gchicares@sbcglobal.net> [758]
+
+  stratified_charges.cpp
+  stratified_charges.hpp
+  stratified_charges.xpp
+Fix defect introduced 20070410T0149Z.
+

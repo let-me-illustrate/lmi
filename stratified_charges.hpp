@@ -43,6 +43,10 @@ enum e_stratified
     ,e_curr_sepacct_load_banded_by_premium
     ,e_guar_sepacct_load_banded_by_premium
 
+    ,e_topic_asset_banded
+    ,e_curr_sepacct_load_banded_by_assets
+    ,e_guar_sepacct_load_banded_by_assets
+
     ,e_topic_asset_tiered
     ,e_curr_m_and_e_tiered_by_assets
     ,e_guar_m_and_e_tiered_by_assets
