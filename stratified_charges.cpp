@@ -58,8 +58,6 @@
 // elsewhere; meanwhile, this module contains code to represent the
 // DE tiered rates, but ignores those rates and treats DE the same as
 // any other state.
-//
-// File representation should be xml.
 
 // Class stratified_entity implementation.
 
@@ -184,6 +182,7 @@ void stratified_charges::initialize_dictionary()
     // Dummy nodes: root and topic headers.
     dictionary[e_stratified_first                      ] = stratified_entity();
     dictionary[e_topic_premium_banded                  ] = stratified_entity();
+    dictionary[e_topic_asset_banded                    ] = stratified_entity();
     dictionary[e_topic_asset_tiered                    ] = stratified_entity();
     dictionary[e_topic_tiered_premium_tax              ] = stratified_entity();
 
@@ -191,6 +190,8 @@ void stratified_charges::initialize_dictionary()
 
     dictionary[e_curr_sepacct_load_banded_by_premium   ] = stratified_entity();
     dictionary[e_guar_sepacct_load_banded_by_premium   ] = stratified_entity();
+    dictionary[e_curr_sepacct_load_banded_by_assets    ] = stratified_entity();
+    dictionary[e_guar_sepacct_load_banded_by_assets    ] = stratified_entity();
     dictionary[e_curr_m_and_e_tiered_by_assets         ] = stratified_entity();
     dictionary[e_guar_m_and_e_tiered_by_assets         ] = stratified_entity();
     dictionary[e_asset_based_comp_tiered_by_assets     ] = stratified_entity();
@@ -204,6 +205,7 @@ void stratified_charges::initialize_dictionary()
 }
 
 //============================================================================
+// 'special_limit' is 'DB_DynSepAcctLoadLimit'.
 double stratified_charges::stratified_sepacct_load
     (mcenum_gen_basis basis
     ,double           assets
@@ -261,9 +263,7 @@ double stratified_charges::banded_curr_sepacct_load
         kx = std::min(assets, special_limit) / assets;
         }
     stratified_entity const& x = raw_entity(e_curr_sepacct_load_banded_by_premium);
-// TODO ?? DATABASE !! This is a goofy workaround until we can add a
-// new 'e_curr_sepacct_load_banded_by_assets' entity.
-    stratified_entity const& y = raw_entity(e_tiered_de_premium_tax);
+    stratified_entity const& y = raw_entity(e_curr_sepacct_load_banded_by_assets);
     return
             kx * banded_rate<double>() (premium, x.limits(), x.values())
         +   ky * banded_rate<double>() (assets , y.limits(), y.values())
@@ -284,14 +284,10 @@ double stratified_charges::banded_guar_sepacct_load
         kx = std::min(assets, special_limit) / assets;
         }
     stratified_entity const& x = raw_entity(e_guar_sepacct_load_banded_by_premium);
-// TODO ?? DATABASE !! This is a goofy workaround until we can add a
-// new 'e_guar_sepacct_load_banded_by_assets' entity. Until then,
-// '* 1.25' provides an arbitrary but plausible margin of conservatism
-// over the current-basis value.
-    stratified_entity const& y = raw_entity(e_tiered_de_premium_tax);
+    stratified_entity const& y = raw_entity(e_guar_sepacct_load_banded_by_assets);
     return
             kx * banded_rate<double>() (premium, x.limits(), x.values())
-        +   ky * banded_rate<double>() (assets , y.limits(), y.values()) * 0.0
+        +   ky * banded_rate<double>() (assets , y.limits(), y.values())
         ;
 }
 
@@ -436,6 +432,10 @@ namespace
         ,"curr_sepacct_load_banded_by_premium"
         ,"guar_sepacct_load_banded_by_premium"
 
+        ,"topic_asset_banded"
+        ,"curr_sepacct_load_banded_by_assets"
+        ,"guar_sepacct_load_banded_by_assets"
+
         ,"topic_asset_tiered"
         ,"curr_m_and_e_tiered_by_assets"
         ,"guar_m_and_e_tiered_by_assets"
@@ -492,6 +492,8 @@ void stratified_charges::read(std::string const& filename)
 
     READ(root, e_curr_sepacct_load_banded_by_premium  );
     READ(root, e_guar_sepacct_load_banded_by_premium  );
+    READ(root, e_curr_sepacct_load_banded_by_assets   );
+    READ(root, e_guar_sepacct_load_banded_by_assets   );
     READ(root, e_curr_m_and_e_tiered_by_assets        );
     READ(root, e_guar_m_and_e_tiered_by_assets        );
     READ(root, e_asset_based_comp_tiered_by_assets    );
@@ -515,6 +517,8 @@ void stratified_charges::write(std::string const& filename) const
 
     WRITE(root, e_curr_sepacct_load_banded_by_premium  );
     WRITE(root, e_guar_sepacct_load_banded_by_premium  );
+    WRITE(root, e_curr_sepacct_load_banded_by_assets   );
+    WRITE(root, e_guar_sepacct_load_banded_by_assets   );
     WRITE(root, e_curr_m_and_e_tiered_by_assets        );
     WRITE(root, e_guar_m_and_e_tiered_by_assets        );
     WRITE(root, e_asset_based_comp_tiered_by_assets    );
@@ -549,6 +553,10 @@ void stratified_charges::write_stratified_files()
     foo.raw_entity(e_curr_sepacct_load_banded_by_premium  ).limits_.push_back(DBL_MAX);
     foo.raw_entity(e_guar_sepacct_load_banded_by_premium  ).values_.push_back(0.0);
     foo.raw_entity(e_guar_sepacct_load_banded_by_premium  ).limits_.push_back(DBL_MAX);
+    foo.raw_entity(e_curr_sepacct_load_banded_by_assets   ).values_.push_back(0.0);
+    foo.raw_entity(e_curr_sepacct_load_banded_by_assets   ).limits_.push_back(DBL_MAX);
+    foo.raw_entity(e_guar_sepacct_load_banded_by_assets   ).values_.push_back(0.0);
+    foo.raw_entity(e_guar_sepacct_load_banded_by_assets   ).limits_.push_back(DBL_MAX);
 
     foo.raw_entity(e_curr_m_and_e_tiered_by_assets        ).values_.push_back(0.0);
     foo.raw_entity(e_curr_m_and_e_tiered_by_assets        ).limits_.push_back(DBL_MAX);
