@@ -24967,3 +24967,8 @@ already did so.)
 Prefer MixedCase for major element names; '.policy' files already do
 so, as will '.database' files.
 
+20100422T1458Z <gchicares@sbcglobal.net> [756]
+
+  version.hpp
+Mark release candidate.
+
