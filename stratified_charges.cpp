@@ -461,25 +461,25 @@ namespace
         {"stratified_first"
 
         ,"topic_premium_banded"
-        ,"curr_sepacct_load_banded_by_premium"
-        ,"guar_sepacct_load_banded_by_premium"
+        ,"CurrSepAcctLoadBandedByPrem"
+        ,"GuarSepAcctLoadBandedByPrem"
 
         ,"topic_asset_banded"
-        ,"curr_sepacct_load_banded_by_assets"
-        ,"guar_sepacct_load_banded_by_assets"
+        ,"CurrSepAcctLoadBandedByAssets"
+        ,"GuarSepAcctLoadBandedByAssets"
 
         ,"topic_asset_tiered"
-        ,"curr_m_and_e_tiered_by_assets"
-        ,"guar_m_and_e_tiered_by_assets"
-        ,"asset_based_comp_tiered_by_assets"
-        ,"investment_mgmt_fee_tiered_by_assets"
-        ,"curr_sepacct_load_tiered_by_assets"
-        ,"guar_sepacct_load_tiered_by_assets"
+        ,"CurrMandETieredByAssets"
+        ,"GuarMandETieredByAssets"
+        ,"AssetCompTieredByAssets"
+        ,"InvestmentMgmtFeeTieredByAssets"
+        ,"CurrSepAcctLoadTieredByAssets"
+        ,"GuarSepAcctLoadTieredByAssets"
 
         ,"topic_tiered_premium_tax"
-        ,"tiered_ak_premium_tax"
-        ,"tiered_de_premium_tax"
-        ,"tiered_sd_premium_tax"
+        ,"TieredAKPremTax"
+        ,"TieredDEPremTax"
+        ,"TieredSDPremTax"
 
         ,"stratified_last"
         };
