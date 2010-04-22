@@ -24954,3 +24954,16 @@ the lmi epoch. This happens to have no effect because of an early exit
             return;
 in 'ihs_avmly.cpp'; whether that is correct is a different question.
 
+20100421T2341Z <gchicares@sbcglobal.net> [756]
+
+  stratified_charges.cpp
+Name "root" element to match file extension. (Other product files
+already did so.)
+
+20100422T0002Z <gchicares@sbcglobal.net> [756]
+
+  ihs_rnddata.cpp
+  stratified_charges.cpp
+Prefer MixedCase for major element names; '.policy' files already do
+so, as will '.database' files.
+

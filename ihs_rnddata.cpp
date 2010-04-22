@@ -115,24 +115,20 @@ void StreamableRoundingRules::Read(std::string const& a_Filename)
     xml_lmi::dom_parser parser(a_Filename);
     xml::element const& root = parser.root_node(xml_root_name());
 
-#   define GET_ELEMENT(name) xml_serialize::get_element(root, #name, round_##name##_)
-
-    GET_ELEMENT(specamt         );
-    GET_ELEMENT(death_benefit   );
-    GET_ELEMENT(naar            );
-    GET_ELEMENT(coi_rate        );
-    GET_ELEMENT(coi_charge      );
-    GET_ELEMENT(gross_premium   );
-    GET_ELEMENT(net_premium     );
-    GET_ELEMENT(interest_rate   );
-    GET_ELEMENT(interest_credit );
-    GET_ELEMENT(withdrawal      );
-    GET_ELEMENT(loan            );
-    GET_ELEMENT(corridor_factor );
-    GET_ELEMENT(surrender_charge);
-    GET_ELEMENT(irr             );
-
-#   undef GET_ELEMENT
+    xml_serialize::get_element(root, "RoundSpecAmt"   , round_specamt_         );
+    xml_serialize::get_element(root, "RoundDeathBft"  , round_death_benefit_   );
+    xml_serialize::get_element(root, "RoundNaar"      , round_naar_            );
+    xml_serialize::get_element(root, "RoundCoiRate"   , round_coi_rate_        );
+    xml_serialize::get_element(root, "RoundCoiCharge" , round_coi_charge_      );
+    xml_serialize::get_element(root, "RoundGrossPrem" , round_gross_premium_   );
+    xml_serialize::get_element(root, "RoundNetPrem"   , round_net_premium_     );
+    xml_serialize::get_element(root, "RoundIntRate"   , round_interest_rate_   );
+    xml_serialize::get_element(root, "RoundIntCredit" , round_interest_credit_ );
+    xml_serialize::get_element(root, "RoundWithdrawal", round_withdrawal_      );
+    xml_serialize::get_element(root, "RoundLoan"      , round_loan_            );
+    xml_serialize::get_element(root, "RoundCorrFactor", round_corridor_factor_ );
+    xml_serialize::get_element(root, "RoundSurrCharge", round_surrender_charge_);
+    xml_serialize::get_element(root, "RoundIRR"       , round_irr_             );
 }
 
 //============================================================================
@@ -143,24 +139,20 @@ void StreamableRoundingRules::Write(std::string const& a_Filename) const
 
     xml_lmi::set_attr(root, "version", "0");
 
-#   define SET_ELEMENT(name) xml_serialize::set_element(root, #name, round_##name##_)
-
-    SET_ELEMENT(specamt         );
-    SET_ELEMENT(death_benefit   );
-    SET_ELEMENT(naar            );
-    SET_ELEMENT(coi_rate        );
-    SET_ELEMENT(coi_charge      );
-    SET_ELEMENT(gross_premium   );
-    SET_ELEMENT(net_premium     );
-    SET_ELEMENT(interest_rate   );
-    SET_ELEMENT(interest_credit );
-    SET_ELEMENT(withdrawal      );
-    SET_ELEMENT(loan            );
-    SET_ELEMENT(corridor_factor );
-    SET_ELEMENT(surrender_charge);
-    SET_ELEMENT(irr             );
-
-#   undef SET_ELEMENT
+    xml_serialize::set_element(root, "RoundSpecAmt"   , round_specamt_         );
+    xml_serialize::set_element(root, "RoundDeathBft"  , round_death_benefit_   );
+    xml_serialize::set_element(root, "RoundNaar"      , round_naar_            );
+    xml_serialize::set_element(root, "RoundCoiRate"   , round_coi_rate_        );
+    xml_serialize::set_element(root, "RoundCoiCharge" , round_coi_charge_      );
+    xml_serialize::set_element(root, "RoundGrossPrem" , round_gross_premium_   );
+    xml_serialize::set_element(root, "RoundNetPrem"   , round_net_premium_     );
+    xml_serialize::set_element(root, "RoundIntRate"   , round_interest_rate_   );
+    xml_serialize::set_element(root, "RoundIntCredit" , round_interest_credit_ );
+    xml_serialize::set_element(root, "RoundWithdrawal", round_withdrawal_      );
+    xml_serialize::set_element(root, "RoundLoan"      , round_loan_            );
+    xml_serialize::set_element(root, "RoundCorrFactor", round_corridor_factor_ );
+    xml_serialize::set_element(root, "RoundSurrCharge", round_surrender_charge_);
+    xml_serialize::set_element(root, "RoundIRR"       , round_irr_             );
 
     // Instead of this:
 //    document.save(a_Filename);
