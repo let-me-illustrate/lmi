@@ -1048,7 +1048,7 @@ void AccountValue::AddSurrChgLayer(int year, double delta_specamt)
         ,SurrChgRates_->SpecamtRateDurationalFactor().end() - year
         ,std::inserter(new_layer, new_layer.begin())
         ,boost::bind
-            (round_surrender_charge
+            (round_surrender_charge()
             ,boost::bind(std::multiplies<double>(), _1, z)
             )
         );
@@ -1081,7 +1081,7 @@ void AccountValue::ReduceSurrChg(int year, double partial_surrchg)
             ,       SurrChg_.end()
             ,year + SurrChg_.begin()
             ,boost::bind
-                (round_surrender_charge
+                (round_surrender_charge()
                 ,boost::bind(std::multiplies<double>(), _1, multiplier)
                 )
             );

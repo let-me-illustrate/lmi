@@ -162,7 +162,7 @@ void AccountValue::PerformSpecAmtStrategy()
     for
         (int j = 0; j < BasicValues::Length; ++j)
         {
-        double z = round_specamt(CalculateSpecAmtFromStrategy(j, 0));
+        double z = round_specamt()(CalculateSpecAmtFromStrategy(j, 0));
         DeathBfts_->set_specamt(z, j, 1 + j);
         }
 }
