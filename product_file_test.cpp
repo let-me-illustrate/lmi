@@ -28,9 +28,9 @@
 
 #include "ihs_dbdict.hpp"
 #include "ihs_funddata.hpp"
-#include "ihs_rnddata.hpp"
 #include "path_utility.hpp" // initialize_filesystem()
 #include "product_data.hpp"
+#include "rounding_rules.hpp"
 #include "stratified_charges.hpp"
 
 #include "test_tools.hpp"
@@ -75,7 +75,7 @@ void product_file_test::write_all_files()
     DBDictionary::instance() .WriteSampleDBFile      ();
     product_data            ::WritePolFiles          ();
     FundData                ::WriteFundFiles         ();
-    StreamableRoundingRules ::WriteRndFiles          ();
+    rounding_rules          ::write_rounding_files   ();
     stratified_charges      ::write_stratified_files ();
 
     policy_filename_     = "sample";
@@ -104,7 +104,7 @@ void product_file_test::read_policy_file()
 
 void product_file_test::read_rounding_file()
 {
-    StreamableRoundingRules r(rounding_filename_);
+    rounding_rules r(rounding_filename_);
 }
 
 void product_file_test::read_stratified_file()

@@ -280,7 +280,6 @@ liblmi_common_sources = \
     path_utility.cpp \
     product_names.cpp \
     progress_meter.cpp \
-    rounding_rules.cpp \
     sigfpe.cpp \
     single_cell_document.cpp \
     surrchg_rates.cpp \
@@ -336,7 +335,6 @@ liblmi_la_SOURCES = \
     ihs_irc7702a.cpp \
     ihs_mortal.cpp \
     ihs_pios.cpp \
-    ihs_rnddata.cpp \
     mc_enum.cpp \
     mc_enum_types.cpp \
     mc_enum_types_aux.cpp \
@@ -344,6 +342,7 @@ liblmi_la_SOURCES = \
     mortality_rates_fetch.cpp \
     preferences_model.cpp \
     product_data.cpp \
+    rounding_rules.cpp \
     stratified_algorithms.cpp \
     stratified_charges.cpp \
     tn_range_types.cpp \
@@ -736,7 +735,6 @@ test_product_file_SOURCES =   \
   ihs_fpios.cpp \
   ihs_funddata.cpp \
   ihs_pios.cpp \
-  ihs_rnddata.cpp \
   miscellany.cpp \
   path_utility.cpp \
   product_data.cpp \
@@ -923,7 +921,6 @@ noinst_HEADERS = \
     ihs_irc7702a.hpp \
     ihs_irc7702.hpp \
     ihs_pios.hpp \
-    ihs_rnddata.hpp \
     ihs_server7702.hpp \
     ihs_server7702io.hpp \
     ihs_x_type.hpp \

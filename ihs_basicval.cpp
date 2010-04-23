@@ -42,7 +42,6 @@
 #include "ihs_funddata.hpp"
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
-#include "ihs_rnddata.hpp"
 #include "ihs_x_type.hpp"
 #include "input.hpp"
 #include "interest_rates.hpp"
@@ -53,6 +52,7 @@
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
 #include "product_data.hpp"
+#include "rounding_rules.hpp"
 #include "stratified_charges.hpp"
 #include "surrchg_rates.hpp"
 #include "value_cast.hpp"
@@ -246,11 +246,7 @@ void BasicValues::Init()
         }
     FundData_.reset(new FundData(AddDataDir(ProductData_->datum("FundFilename"))));
     RoundingRules_.reset
-        (new rounding_rules
-            (StreamableRoundingRules
-                (AddDataDir(ProductData_->datum("RoundingFilename"))
-                ).get_rounding_rules()
-            )
+        (new rounding_rules(AddDataDir(ProductData_->datum("RoundingFilename")))
         );
     SetRoundingFunctors();
     StratifiedCharges_.reset
@@ -333,11 +329,7 @@ void BasicValues::GPTServerInit()
 //      (AddDataDir(ProductData_->datum("FundFilename"))
 //      );
     RoundingRules_.reset
-        (new rounding_rules
-            (StreamableRoundingRules
-                (AddDataDir(ProductData_->datum("RoundingFilename"))
-                ).get_rounding_rules()
-            )
+        (new rounding_rules(AddDataDir(ProductData_->datum("RoundingFilename")))
         );
     SetRoundingFunctors();
     StratifiedCharges_.reset
