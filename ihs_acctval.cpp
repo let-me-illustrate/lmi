@@ -36,7 +36,6 @@
 #include "death_benefits.hpp"
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
-#include "ihs_rnddata.hpp"
 #include "input.hpp" // Magic static function.
 #include "interest_rates.hpp"
 #include "ledger.hpp"
@@ -47,10 +46,8 @@
 #include "miscellany.hpp"
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
-#include "product_data.hpp"
 #include "stl_extensions.hpp"
 #include "stratified_algorithms.hpp"
-#include "stratified_charges.hpp"
 #include "surrchg_rates.hpp"
 
 #include <boost/bind.hpp>
