@@ -39,19 +39,18 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "ihs_rnddata.hpp"
+#include "rounding_rules.hpp"
 
 #include "data_directory.hpp"
 
-// TODO ?? It would be better to call StreamableRoundingRules::WriteRndFiles()
-// here than to duplicate what it does. However, it would be better still
-// to use xml for all product data files.
+// TODO ?? It would be better to call rounding_rules::write_rounding_files()
+// here than to duplicate what it does.
 
 //============================================================================
-void StreamableRoundingRules::WriteProprietaryRndFiles()
+void rounding_rules::write_proprietary_rounding_files()
 {
     // Sample policy form.
-    StreamableRoundingRules sample;
+    rounding_rules sample;
 
     sample.round_specamt_         = round_to<double>(0, r_upward    );
     sample.round_death_benefit_   = round_to<double>(2, r_to_nearest);
