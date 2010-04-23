@@ -353,33 +353,33 @@ double AccountValue::Solve
 //          upper_bound  = 1000000.0 * Outlay_->GetPmts()[0];
 // is not satisfactory; what would be better?
             solve_set_fn = &AccountValue::SolveSetSpecAmt;
-            decimals     = round_specamt.decimals();
+            decimals     = round_specamt().decimals();
             // TODO ?? Respect minimum specamt?
             }
             break;
         case mce_solve_ee_prem:
             {
             solve_set_fn = &AccountValue::SolveSetEePrem;
-            decimals     = round_gross_premium.decimals();
+            decimals     = round_gross_premium().decimals();
             }
             break;
         case mce_solve_er_prem:
             {
             solve_set_fn = &AccountValue::SolveSetErPrem;
-            decimals     = round_gross_premium.decimals();
+            decimals     = round_gross_premium().decimals();
             }
             break;
         case mce_solve_loan:
             {
             solve_set_fn = &AccountValue::SolveSetLoan;
-            decimals     = round_loan.decimals();
+            decimals     = round_loan().decimals();
             }
             break;
         case mce_solve_wd:
             {
             // TODO ?? Is minimum wd respected?
             solve_set_fn = &AccountValue::SolveSetWD;
-            decimals     = round_withdrawal.decimals();
+            decimals     = round_withdrawal().decimals();
             if(yare_input_.WithdrawToBasisThenLoan)
                 {
                 // Withdrawals and loans might be rounded differently.
@@ -387,8 +387,8 @@ double AccountValue::Solve
                 // withdrawals, both should be rounded to the less
                 // precise number of decimals normally used for either.
                 decimals = std::min
-                    (round_withdrawal.decimals()
-                    ,round_loan      .decimals()
+                    (round_withdrawal().decimals()
+                    ,round_loan      ().decimals()
                     );
                 }
             }

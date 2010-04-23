@@ -47,7 +47,6 @@
 #include "miscellany.hpp"
 #include "outlay.hpp"
 #include "product_data.hpp"
-#include "rounding_rules.hpp"
 
 #include <algorithm>
 #include <ostream>
@@ -398,7 +397,7 @@ void LedgerInvariant::Init(BasicValues* b)
     // Zero-initialize almost everything.
     Init();
 
-    irr_precision = b->GetRoundingRules().round_irr().decimals();
+    irr_precision = b->round_irr().decimals();
 
 // TODO ?? These names are confusing. EePmt and ErPmt are *input* values.
 // If they're entered as $1000 for all years, then they have that value

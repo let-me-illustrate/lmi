@@ -252,6 +252,7 @@ void BasicValues::Init()
                 ).get_rounding_rules()
             )
         );
+    SetRoundingFunctors();
     StratifiedCharges_.reset
         (new stratified_charges(AddDataDir(ProductData_->datum("TierFilename")))
         );
@@ -262,7 +263,7 @@ void BasicValues::Init()
 
     // Multilife contracts will need a vector of mortality-rate objects.
 
-    // Mortality and interest rates require database.
+    // Mortality and interest rates require database and rounding.
     // Interest rates require tiered data and 7702 spread.
     MortalityRates_.reset(new MortalityRates (*this));
     InterestRates_ .reset(new InterestRates  (*this));
@@ -338,6 +339,7 @@ void BasicValues::GPTServerInit()
                 ).get_rounding_rules()
             )
         );
+    SetRoundingFunctors();
     StratifiedCharges_.reset
         (new stratified_charges(AddDataDir(ProductData_->datum("TierFilename")))
         );
@@ -479,7 +481,7 @@ void BasicValues::Init7702()
         (MlyDcvqc.begin()
         ,MlyDcvqc.end()
         ,MlyDcvqc.begin()
-        ,round_coi_rate
+        ,round_coi_rate()
         );
     if(std::string::npos != yare_input_.Comments.find("idiosyncrasy_dcvq"))
         {
@@ -663,10 +665,10 @@ void BasicValues::Init7702()
             ,Loads_->target_premium_load_7702_excluding_premium_tax()
             ,Loads_->excess_premium_load_7702_excluding_premium_tax()
             ,InitialTargetPremium
-            ,round_min_premium
-            ,round_max_premium
-            ,round_min_specamt
-            ,round_max_specamt
+            ,round_min_premium()
+            ,round_max_premium()
+            ,round_min_specamt()
+            ,round_max_specamt()
             )
         );
 }
@@ -686,7 +688,7 @@ void BasicValues::Init7702A()
             ,true  // TODO ?? Use table for NSP: hardcoded for now.
             ,MortalityRates_->SevenPayRates()
             ,MortalityRates_->CvatNspRates()
-            ,round_max_premium
+            ,round_max_premium()
             )
         );
 }
@@ -843,27 +845,30 @@ void BasicValues::SetPermanentInvariants()
 
     Database_->Query(MinPremIntSpread_, DB_MinPremIntSpread);
 
-    round_specamt            = RoundingRules_->round_specamt           ();
-    round_death_benefit      = RoundingRules_->round_death_benefit     ();
-    round_naar               = RoundingRules_->round_naar              ();
-    round_coi_rate           = RoundingRules_->round_coi_rate          ();
-    round_coi_charge         = RoundingRules_->round_coi_charge        ();
-    round_gross_premium      = RoundingRules_->round_gross_premium     ();
-    round_net_premium        = RoundingRules_->round_net_premium       ();
-    round_interest_rate      = RoundingRules_->round_interest_rate     ();
-    round_interest_credit    = RoundingRules_->round_interest_credit   ();
-    round_withdrawal         = RoundingRules_->round_withdrawal        ();
-    round_loan               = RoundingRules_->round_loan              ();
-    round_corridor_factor    = RoundingRules_->round_corridor_factor   ();
-    round_surrender_charge   = RoundingRules_->round_surrender_charge  ();
-    round_irr                = RoundingRules_->round_irr               ();
-    round_min_specamt        = RoundingRules_->round_min_specamt       ();
-    round_max_specamt        = RoundingRules_->round_max_specamt       ();
-    round_min_premium        = RoundingRules_->round_min_premium       ();
-    round_max_premium        = RoundingRules_->round_max_premium       ();
-    round_interest_rate_7702 = RoundingRules_->round_interest_rate_7702();
-
     SetMaxSurvivalDur();
+}
+
+void BasicValues::SetRoundingFunctors()
+{
+    round_specamt_            = RoundingRules_->round_specamt           ();
+    round_death_benefit_      = RoundingRules_->round_death_benefit     ();
+    round_naar_               = RoundingRules_->round_naar              ();
+    round_coi_rate_           = RoundingRules_->round_coi_rate          ();
+    round_coi_charge_         = RoundingRules_->round_coi_charge        ();
+    round_gross_premium_      = RoundingRules_->round_gross_premium     ();
+    round_net_premium_        = RoundingRules_->round_net_premium       ();
+    round_interest_rate_      = RoundingRules_->round_interest_rate     ();
+    round_interest_credit_    = RoundingRules_->round_interest_credit   ();
+    round_withdrawal_         = RoundingRules_->round_withdrawal        ();
+    round_loan_               = RoundingRules_->round_loan              ();
+    round_corridor_factor_    = RoundingRules_->round_corridor_factor   ();
+    round_surrender_charge_   = RoundingRules_->round_surrender_charge  ();
+    round_irr_                = RoundingRules_->round_irr               ();
+    round_min_specamt_        = RoundingRules_->round_min_specamt       ();
+    round_max_specamt_        = RoundingRules_->round_max_specamt       ();
+    round_min_premium_        = RoundingRules_->round_min_premium       ();
+    round_max_premium_        = RoundingRules_->round_max_premium       ();
+    round_interest_rate_7702_ = RoundingRules_->round_interest_rate_7702();
 }
 
 //============================================================================
@@ -1150,7 +1155,7 @@ double BasicValues::GetModalPremMaxNonMec
     ) const
 {
     double temp = MortalityRates_->SevenPayRates()[0];
-    return round_max_premium(temp * epsilon_plus_one * a_specamt / a_mode);
+    return round_max_premium()(temp * epsilon_plus_one * a_specamt / a_mode);
 }
 
 /// Calculate premium using a target-premium ratio.
@@ -1165,7 +1170,7 @@ double BasicValues::GetModalPremTgtFromTable
     ,double      a_specamt
     ) const
 {
-    return round_max_premium
+    return round_max_premium()
         (
             (   Database_->Query(DB_TgtPremPolFee)
             +       a_specamt
@@ -1189,7 +1194,7 @@ double BasicValues::GetModalPremCorridor
     ) const
 {
     double temp = GetCorridorFactor()[0];
-    return round_max_premium((epsilon_plus_one * a_specamt / temp) / a_mode);
+    return round_max_premium()((epsilon_plus_one * a_specamt / temp) / a_mode);
 }
 
 //============================================================================
@@ -1213,7 +1218,7 @@ double BasicValues::GetModalPremGLP
 // term rider, dumpin
 
     z /= a_mode;
-    return round_max_premium(epsilon_plus_one * z);
+    return round_max_premium()(epsilon_plus_one * z);
 }
 
 //============================================================================
@@ -1236,7 +1241,7 @@ double BasicValues::GetModalPremGSP
 // term rider, dumpin
 
     z /= a_mode;
-    return round_max_premium(epsilon_plus_one * z);
+    return round_max_premium()(epsilon_plus_one * z);
 }
 
 /// Determine an approximate "pay as you go" modal premium.
@@ -1313,7 +1318,7 @@ double BasicValues::GetModalPremMlyDed
     z *= GetAnnuityValueMlyDed(a_year, a_mode);
     z += annual_charge;
 
-    return round_min_premium(z);
+    return round_min_premium()(z);
 }
 
 //============================================================================
@@ -1395,7 +1400,7 @@ double BasicValues::GetModalSpecAmt
         // seven-pay table, then this seems not to give the same
         // result as the seven-pay premium type.
         double annualized_pmt = a_ee_mode * a_ee_pmt + a_er_mode * a_er_pmt;
-        return round_min_specamt
+        return round_min_specamt()
             (annualized_pmt / GetModalPremTgtFromTable(0, a_ee_mode, 1)
             );
         }
@@ -1423,7 +1428,7 @@ double BasicValues::GetModalSpecAmtMinNonMec
     ) const
 {
     double annualized_pmt = a_ee_mode * a_ee_pmt + a_er_mode * a_er_pmt;
-    return round_min_specamt
+    return round_min_specamt()
         (annualized_pmt / MortalityRates_->SevenPayRates()[0]
         );
 }
@@ -1474,7 +1479,7 @@ double BasicValues::GetModalSpecAmtCorridor
 {
     double annualized_pmt = a_ee_mode * a_ee_pmt + a_er_mode * a_er_pmt;
     double rate = GetCorridorFactor()[0];
-    return round_min_specamt(annualized_pmt * rate);
+    return round_min_specamt()(annualized_pmt * rate);
 }
 
 /// In general, strategies linking specamt and premium commute. The
@@ -1553,7 +1558,7 @@ double BasicValues::GetModalSpecAmtMlyDed
         )[0]
         ;
 
-    return round_max_specamt(z);
+    return round_max_specamt()(z);
 }
 
 /// 'Unusual' banding is one particular approach we needed to model.

@@ -37,7 +37,6 @@
 #include "et_vector.hpp"
 #include "math_functors.hpp"
 #include "mc_enum_types_aux.hpp" // mc_n_ enumerators
-#include "rounding_rules.hpp"
 
 #include <algorithm>
 #include <functional>
@@ -63,7 +62,7 @@ Loads::Loads(BasicValues& V)
         ,V.Database_->Query(DB_PmTxAmortPeriod)
         ,V.Database_->Query(DB_AssetChargeType)
         ,V.IsSubjectToIllustrationReg()
-        ,V.GetRoundingRules().round_interest_rate()
+        ,V.round_interest_rate()
         ,V.yare_input_.ExtraCompensationOnPremium
         ,V.yare_input_.ExtraCompensationOnAssets
         ,V.yare_input_.ExtraMonthlyCustodialFee

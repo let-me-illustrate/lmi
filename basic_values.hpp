@@ -112,7 +112,6 @@ class LMI_SO BasicValues
     double                DomiciliaryPremiumTaxLoad()  const;
     bool                  IsPremiumTaxLoadTiered()     const;
     bool                  IsSubjectToIllustrationReg() const;
-    rounding_rules const& GetRoundingRules()           const;
     double                InvestmentManagementFee()    const;
 
     boost::shared_ptr<Input const>        Input_;
@@ -174,6 +173,26 @@ class LMI_SO BasicValues
     std::vector<double> GetSubstdTblMultTable()         const;
     std::vector<double> GetCurrSpecAmtLoadTable()       const;
     std::vector<double> GetGuarSpecAmtLoadTable()       const;
+
+    round_to<double> const& round_specamt           () const {return round_specamt_           ;}
+    round_to<double> const& round_death_benefit     () const {return round_death_benefit_     ;}
+    round_to<double> const& round_naar              () const {return round_naar_              ;}
+    round_to<double> const& round_coi_rate          () const {return round_coi_rate_          ;}
+    round_to<double> const& round_coi_charge        () const {return round_coi_charge_        ;}
+    round_to<double> const& round_gross_premium     () const {return round_gross_premium_     ;}
+    round_to<double> const& round_net_premium       () const {return round_net_premium_       ;}
+    round_to<double> const& round_interest_rate     () const {return round_interest_rate_     ;}
+    round_to<double> const& round_interest_credit   () const {return round_interest_credit_   ;}
+    round_to<double> const& round_withdrawal        () const {return round_withdrawal_        ;}
+    round_to<double> const& round_loan              () const {return round_loan_              ;}
+    round_to<double> const& round_corridor_factor   () const {return round_corridor_factor_   ;}
+    round_to<double> const& round_surrender_charge  () const {return round_surrender_charge_  ;}
+    round_to<double> const& round_irr               () const {return round_irr_               ;}
+    round_to<double> const& round_min_specamt       () const {return round_min_specamt_       ;}
+    round_to<double> const& round_max_specamt       () const {return round_max_specamt_       ;}
+    round_to<double> const& round_min_premium       () const {return round_min_premium_       ;}
+    round_to<double> const& round_max_premium       () const {return round_max_premium_       ;}
+    round_to<double> const& round_interest_rate_7702() const {return round_interest_rate_7702_;}
 
   protected:
     double GetModalMinPrem
@@ -354,26 +373,6 @@ class LMI_SO BasicValues
     bool                    PremiumTaxLoadIsTieredInStateOfDomicile;
     bool                    PremiumTaxLoadIsTieredInStateOfJurisdiction;
 
-    round_to<double>        round_specamt;
-    round_to<double>        round_death_benefit;
-    round_to<double>        round_naar;
-    round_to<double>        round_coi_rate;
-    round_to<double>        round_coi_charge;
-    round_to<double>        round_gross_premium;
-    round_to<double>        round_net_premium;
-    round_to<double>        round_interest_rate;
-    round_to<double>        round_interest_credit;
-    round_to<double>        round_withdrawal;
-    round_to<double>        round_loan;
-    round_to<double>        round_corridor_factor;
-    round_to<double>        round_surrender_charge;
-    round_to<double>        round_irr;
-    round_to<double>        round_min_specamt;
-    round_to<double>        round_max_specamt;
-    round_to<double>        round_min_premium;
-    round_to<double>        round_max_premium;
-    round_to<double>        round_interest_rate_7702;
-
   private:
     double GetModalPrem
         (int                   a_year
@@ -440,6 +439,27 @@ class LMI_SO BasicValues
     std::vector<double> Mly7702qc;
     std::vector<double> MlyDcvqc;
     mutable std::vector<double> Non7702CompliantCorridor;
+
+    void SetRoundingFunctors();
+    round_to<double> round_specamt_           ;
+    round_to<double> round_death_benefit_     ;
+    round_to<double> round_naar_              ;
+    round_to<double> round_coi_rate_          ;
+    round_to<double> round_coi_charge_        ;
+    round_to<double> round_gross_premium_     ;
+    round_to<double> round_net_premium_       ;
+    round_to<double> round_interest_rate_     ;
+    round_to<double> round_interest_credit_   ;
+    round_to<double> round_withdrawal_        ;
+    round_to<double> round_loan_              ;
+    round_to<double> round_corridor_factor_   ;
+    round_to<double> round_surrender_charge_  ;
+    round_to<double> round_irr_               ;
+    round_to<double> round_min_specamt_       ;
+    round_to<double> round_max_specamt_       ;
+    round_to<double> round_min_premium_       ;
+    round_to<double> round_max_premium_       ;
+    round_to<double> round_interest_rate_7702_;
 };
 
 inline int BasicValues::GetLength() const
@@ -495,11 +515,6 @@ inline bool BasicValues::IsPremiumTaxLoadTiered() const
 inline bool BasicValues::IsSubjectToIllustrationReg() const
 {
     return IsSubjectToIllustrationReg_;
-}
-
-inline rounding_rules const& BasicValues::GetRoundingRules() const
-{
-    return *RoundingRules_;
 }
 
 double lowest_premium_tax_load
