@@ -603,7 +603,11 @@ int test_main(int, char*[])
 
     // Test default constructor.
     round_to<double> const round_erroneously;
-    round_erroneously(2.7);
+    BOOST_TEST_THROW
+        (round_erroneously(2.7)
+        ,std::logic_error
+        ,"Erroneous rounding function."
+        );
 
     // Test copy constructor and copy assignment operator.
     round_to<double> const round0(2, r_to_nearest);
