@@ -103,7 +103,8 @@ void product_data::WriteProprietaryPolFiles()
     z.CsvHeaderName           = glossed_string("Cash Surr");
     z.NoLapseProvisionName    = glossed_string("No-lapse Provision");
 
-    z.save(AddDataDir("sample.policy"));
+// Not necessary for 'sample' product only, because it's built in.
+//    z.save(AddDataDir("sample.policy"));
 
     // Copy the template above for other policy forms, e.g.:
 //  z.DatabaseFilename        = glossed_string("another.db4");
