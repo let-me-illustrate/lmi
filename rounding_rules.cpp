@@ -29,6 +29,7 @@
 #include "rounding_rules.hpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "data_directory.hpp"
 #include "mc_enum.hpp"
 #include "mc_enum_types.hpp"
@@ -88,11 +89,11 @@ rounding_rules::rounding_rules()
 rounding_rules::rounding_rules(std::string const& filename)
 {
     Read(filename);
-    round_min_specamt_        = round_to<double>(round_specamt_      .decimals(), r_upward);
-    round_max_specamt_        = round_to<double>(round_specamt_      .decimals(), r_downward);
-    round_min_premium_        = round_to<double>(round_gross_premium_.decimals(), r_upward);
-    round_max_premium_        = round_to<double>(round_gross_premium_.decimals(), r_downward);
-    round_interest_rate_7702_ = round_to<double>(round_interest_rate_.decimals(), r_upward);
+    LMI_ASSERT(r_not_at_all == round_min_specamt_       .style() || r_upward   == round_min_specamt_       .style());
+    LMI_ASSERT(r_not_at_all == round_max_specamt_       .style() || r_downward == round_max_specamt_       .style());
+    LMI_ASSERT(r_not_at_all == round_min_premium_       .style() || r_upward   == round_min_premium_       .style());
+    LMI_ASSERT(r_not_at_all == round_max_premium_       .style() || r_downward == round_max_premium_       .style());
+    LMI_ASSERT(r_not_at_all == round_interest_rate_7702_.style() || r_upward   == round_interest_rate_7702_.style());
 }
 
 namespace
