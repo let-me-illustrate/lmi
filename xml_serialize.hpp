@@ -170,7 +170,7 @@ void to_xml(xml::element& e, T const& t)
 template<typename T>
 void from_xml(xml::element const& e, T& t)
 {
-    xml_io<T>::from_xml(t, e);
+    xml_io<T>::from_xml(e, t);
 }
 } // Namespace xml_serialize.
 

@@ -41,6 +41,11 @@
 // in 2004 and in any later year shown above; any defect in it should
 // not reflect on Kevlin Henney's reputation.
 
+// See
+//   http://www.artima.com/cppsource/type_erasure.html
+//   http://www.artima.com/cppsource/type_erasure2.html
+// for a discussion of extending boost::any.
+
 // Design notes--cast member templates
 //
 // Member template exact_cast() is safe, but limited: it casts only

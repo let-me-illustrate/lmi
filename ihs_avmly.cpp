@@ -35,8 +35,6 @@
 #include "death_benefits.hpp"
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
-#include "ihs_proddata.hpp"
-#include "ihs_rnddata.hpp"
 #include "interest_rates.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
@@ -639,7 +637,7 @@ void AccountValue::TxExch1035()
         // must be its value immediately after any 1035 exchange,
         // which by its nature occurs before a seven-pay premium
         // can be calculated.
-        InvariantValues().InitSevenPayPrem = round_max_premium
+        InvariantValues().InitSevenPayPrem = round_max_premium()
             (Irc7702A_->GetPresent7pp()
             );
         }
@@ -689,7 +687,7 @@ double AccountValue::InterestCredited
     ,double monthly_rate
     ) const
 {
-    return round_interest_credit(principal * ActualMonthlyRate(monthly_rate));
+    return round_interest_credit()(principal * ActualMonthlyRate(monthly_rate));
 }
 
 //============================================================================
@@ -779,7 +777,7 @@ void AccountValue::ChangeSpecAmtBy(double delta)
                     - ActualSpecAmt
                     ;
                 }
-            TermSpecAmt = round_specamt(TermSpecAmt);
+            TermSpecAmt = round_specamt()(TermSpecAmt);
             }
         }
     else
@@ -798,7 +796,7 @@ void AccountValue::ChangeSpecAmtBy(double delta)
 
     // If the minimum isn't met, then force it.
     ActualSpecAmt = std::max(ActualSpecAmt, MinSpecAmt);
-    ActualSpecAmt = round_specamt(ActualSpecAmt);
+    ActualSpecAmt = round_specamt()(ActualSpecAmt);
     AddSurrChgLayer(Year, std::max(0.0, ActualSpecAmt - prior_specamt));
 
     // Carry the new specamt forward into all future years.
@@ -1486,7 +1484,7 @@ double AccountValue::GetPremLoad
         ||  materially_equal(total_load, sum_of_separate_loads)
         );
 
-    return round_net_premium(sum_of_separate_loads);
+    return round_net_premium()(sum_of_separate_loads);
 }
 
 //============================================================================
@@ -1739,7 +1737,7 @@ void AccountValue::TxSetDeathBft(bool force_eoy_behavior)
         (DBIgnoringCorr
         ,YearsCorridorFactor * cash_value_for_corridor
         );
-    DBReflectingCorr = round_death_benefit(DBReflectingCorr);
+    DBReflectingCorr = round_death_benefit()(DBReflectingCorr);
     // This overrides the value assigned above. There's more than one
     // way to interpret 7702A "death benefit"; this is just one.
     DB7702A = DBReflectingCorr + TermDB;
@@ -1792,7 +1790,7 @@ void AccountValue::TxSetTermAmt()
         }
 
     TermDB = std::max(0.0, TermSpecAmt + DBIgnoringCorr - DBReflectingCorr);
-    TermDB = round_death_benefit(TermDB);
+    TermDB = round_death_benefit()(TermDB);
 }
 
 //============================================================================
@@ -1843,7 +1841,7 @@ void AccountValue::TxSetCoiCharge()
         (DBReflectingCorr * DBDiscountRate[Year]
         ,std::max(0.0, TotalAccountValue())
         );
-    NAAR = std::max(0.0, round_naar(NAAR));
+    NAAR = std::max(0.0, round_naar()(NAAR));
 
 // TODO ?? This doesn't work. We need to reconsider the basic transactions.
 //  double naar_forceout = std::max(0.0, NAAR - MaxNAAR);
@@ -1873,22 +1871,22 @@ void AccountValue::TxSetCoiCharge()
         &&  mce_gen_curr == GenBasis_
         )
         {
-        ActualCoiRate = round_coi_rate
+        ActualCoiRate = round_coi_rate()
             (std::min
                 (GetBandedCoiRates(mce_gen_guar, ActualSpecAmt)[Year]
                 ,coi_rate * (case_k_factor + CoiRetentionRate)
                 )
             );
-        double retention_rate = round_coi_rate(coi_rate * CoiRetentionRate);
-        retention_charge = round_coi_charge(NAAR * retention_rate);
+        double retention_rate = round_coi_rate()(coi_rate * CoiRetentionRate);
+        retention_charge = round_coi_charge()(NAAR * retention_rate);
         }
 
-    CoiCharge    = round_coi_charge(NAAR * ActualCoiRate);
+    CoiCharge    = round_coi_charge()(NAAR * ActualCoiRate);
     NetCoiCharge = CoiCharge - retention_charge;
     YearsTotalCoiCharge += CoiCharge;
 
     // DCV need not be rounded.
-    DcvCoiCharge = DcvNaar * (Years7702CoiRate  + CoiRetentionRate);
+    DcvCoiCharge = DcvNaar * (YearsDcvCoiRate + CoiRetentionRate);
 }
 
 //============================================================================
@@ -1916,8 +1914,8 @@ void AccountValue::TxSetRiderDed()
     DcvTermCharge = 0.0;
     if(TermRiderActive && yare_input_.TermRider)
         {
-        TermCharge    = YearsTermRate    * TermDB * DBDiscountRate[Year];
-        DcvTermCharge = Years7702CoiRate * TermDB * DBDiscountRate[Year];
+        TermCharge    = YearsTermRate   * TermDB * DBDiscountRate[Year];
+        DcvTermCharge = YearsDcvCoiRate * TermDB * DBDiscountRate[Year];
         }
 
     WpCharge = 0.0;
@@ -2099,7 +2097,7 @@ void AccountValue::TxTakeSepAcctLoad()
         YearsSepAcctLoadRate += stratified_load;
         YearsSepAcctLoadRate += tiered_comp;
         YearsSepAcctLoadRate = i_upper_12_over_12_from_i<double>()(YearsSepAcctLoadRate);
-        round_interest_rate(YearsSepAcctLoadRate);
+        round_interest_rate()(YearsSepAcctLoadRate);
         }
 
     SepAcctLoad = YearsSepAcctLoadRate * AVSepAcct;
@@ -2151,13 +2149,11 @@ void AccountValue::ApplyDynamicMandE(double assets)
             }
         }
 
-// TODO ?? Dynamic M&E should be different for guar vs. curr.
 // TODO ?? Implement tiered comp and tiered management fee.
 
     // Annual separate-account rates.
 
-//  double guar_m_and_e = StratifiedCharges_->tiered_guaranteed_m_and_e(assets);
-    double m_and_e_rate = StratifiedCharges_->tiered_current_m_and_e(assets);
+    double m_and_e_rate = StratifiedCharges_->tiered_m_and_e(GenBasis_, assets);
     double imf_rate = StratifiedCharges_->tiered_investment_management_fee(assets);
     if(0.0 != imf_rate)
         {
@@ -2226,7 +2222,7 @@ void AccountValue::TxCreditInt()
     double gross_sep_acct_rate = i_upper_12_over_12_from_i<double>()
         (InterestRates_->SepAcctGrossRate(SepBasis_)[Year]
         );
-    gross_sep_acct_rate = round_interest_rate(gross_sep_acct_rate);
+    gross_sep_acct_rate = round_interest_rate()(gross_sep_acct_rate);
     if(mce_gen_mdpt == GenBasis_)
         {
         gross_sep_acct_rate = 0.0;
@@ -2763,7 +2759,7 @@ void AccountValue::SetMaxLoan()
     //
     MaxLoan *= 1.0 - (reg_loan_factor) / (1.0 + reg_loan_factor);
 
-    MaxLoan = round_loan(MaxLoan);
+    MaxLoan = round_loan()(MaxLoan);
 
     // I do not think we want a MaxLoan < current level of indebtedness.
     MaxLoan = std::max((AVRegLn + AVPrfLn), MaxLoan);

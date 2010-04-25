@@ -24645,13 +24645,406 @@ Work around an msvc defect (VZ). See:
   http://lists.nongnu.org/archive/html/lmi/2010-03/msg00060.html
   http://lists.nongnu.org/archive/html/lmi/2010-03/msg00067.html
 
+20100325T2028Z <zeitlin> [761]
+
+  Makefile.am
+Fix autotools linking problems for various unit tests.
+
 20100326T1257Z <gchicares@sbcglobal.net> [762]
 
   ihs_avmly.cpp
 Subtract gross withdrawal from 7702 'premiums paid'.
 
-20100326T1258Z <gchicares@sbcglobal.net> [761]
+20100326T1258Z <gchicares@sbcglobal.net> [762]
 
   version.hpp
 Mark release candidate.
+
+20100326T2247Z <gchicares@sbcglobal.net> [762]
+
+  mc_enum_test.cpp
+  mc_enum_test_aux.cpp
+  mc_enum_test_aux.hpp
+  mc_enum_test_aux_enums.hpp
+Move 'e_island' out of the unit-test TU. Instantiating such types in
+the TU that uses them is valid, but is deliberately avoided everywhere
+else and need not be demonstrated by unit tests.
+
+20100327T0126Z <gchicares@sbcglobal.net> [762]
+
+  mc_enum_test_aux.cpp
+  mc_enum_test_aux.hpp
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+  mc_enum_types_aux.cpp
+Rearrange explicit instantiation. This refactoring obviates 'extern'
+declarations in the headers and the weird inclusion of headers at the
+end of TUs.
+
+20100327T0152Z <gchicares@sbcglobal.net> [762]
+
+  mc_enum_types.hpp
+Remove a needless macro. Making typedefs (e.g., 'mce_yes_or_no') easy
+to find seems more important than preserving a macro for parallelism
+with related files.
+
+20100327T1834Z <zeitlin> [762]
+
+  Makefile.am
+Fix an incorrect variable name.
+
+20100401T0110Z <gchicares@sbcglobal.net> [762]
+
+  Makefile.am
+  generate_product_files.cpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+  ihs_database.cpp
+  ihs_proddata.cpp [expunged]
+  ihs_proddata.hpp [expunged]
+  input_realization.cpp
+  ledger_invariant.cpp
+  mec_server.cpp
+  my_prod.cpp
+  objects.make
+  policy_document.hpp
+  product_data.cpp [new file]
+  product_data.hpp [new file]
+  product_file_test.cpp
+Rename 'ihs_proddata.?pp' to 'product_data.?pp'.
+
+20100401T0300Z <gchicares@sbcglobal.net> [762]
+
+  basic_values.hpp
+  generate_product_files.cpp
+  ihs_basicval.cpp
+  ihs_database.cpp
+  input_realization.cpp
+  mec_server.cpp
+  my_prod.cpp
+  policy_document.hpp
+  product_data.cpp
+  product_data.hpp
+  product_file_test.cpp
+Rename class 'TProductData' to 'product_data'.
+
+20100402T0154Z <gchicares@sbcglobal.net> [762]
+
+  generate_product_files.cpp
+  product_file_test.cpp
+  xml_serializable.hpp
+  xml_serializable.tpp
+Add file functions; set default name-check policy.
+
+20100402T1123Z <gchicares@sbcglobal.net> [762]
+
+  ihs_basicval.cpp
+  ihs_database.cpp
+  ledger_invariant.cpp
+  mec_server.cpp
+  policy_document.cpp
+  product_data.cpp
+  product_data.hpp
+  product_file_test.cpp
+Reimplement class product_data.
+
+20100402T1330Z <gchicares@sbcglobal.net> [761]
+
+  my_prod.cpp
+  policy_document.cpp
+  product_data.cpp
+  product_data.hpp
+Remove deprecated member functions of class product_data.
+
+20100402T1503Z <gchicares@sbcglobal.net> [761]
+
+  product_data.cpp
+  product_data.hpp
+Improve documentation.
+
+20100405T1936Z <gchicares@sbcglobal.net> [761]
+
+  workhorse.make
+Fix defect introduced 20100323T1713Z: the 'fardel' code wasn't updated
+to include the new '.policy' files.
+
+20100405T1937Z <gchicares@sbcglobal.net> [761]
+
+  ihs_rnddata.hpp
+Improve access control (VS).
+
+20100405T1939Z <gchicares@sbcglobal.net> [761]
+
+  main_wx.cpp
+  my_prod.cpp
+  product_data.cpp
+  stratified_charges.cpp
+  stratified_charges.hpp
+Reimplement 'strata' (formerly 'tir') product files (VS).
+
+20100405T1940Z <gchicares@sbcglobal.net> [761]
+
+  account_value.hpp
+  basic_values.hpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+Round DCV COI rates; print them with 'idiosyncrasy_dcvq'.
+
+20100405T2345Z <gchicares@sbcglobal.net> [761]
+
+  group_values.cpp
+  ihs_avdebug.cpp
+  ihs_basicval.cpp
+  ledger.cpp
+  ledger_invariant.cpp
+  ledger_variant.cpp
+  mc_enum_types_aux.cpp
+  mc_enum_types_aux.hpp
+Replace overloaded mc_str() with a template (thanks to VS).
+
+20100407T1144Z <gchicares@sbcglobal.net> [760]
+
+  ihs_funddata.cpp
+  ihs_funddata.hpp
+  ihs_rnddata.cpp
+  ihs_rnddata.hpp
+  main_wx.cpp
+  my_prod.cpp
+  my_rnd.cpp
+  objects.make
+  product_data.cpp
+  xml_serialize.hpp
+Reimplement 'funds' and 'rounding' product files (VS).
+
+20100407T1206Z <gchicares@sbcglobal.net> [760]
+
+  workhorse.make
+Include new product files in fardels.
+
+20100411T2037Z <gchicares@sbcglobal.net> [760]
+
+  antediluvian_stubs.cpp
+  ihs_basicval.cpp
+  ihs_database.cpp
+  ledger_invariant.cpp
+  mec_server.cpp
+  product_data.cpp
+  product_data.hpp
+  product_file_test.cpp
+Refactor read-only access to class product_data.
+
+20100414T1318Z <gchicares@sbcglobal.net> [760]
+
+  input_xml_io.cpp
+  mec_input.cpp
+  mec_state.cpp
+  xml_serializable.tpp
+Consolidate and expand documentation. For virtual functions, meaty
+documentation in the base class and nothing in derived classes is
+better than nothing in the base class and a one-liner cut and pasted
+in derived classes, especially since doxygen links derived-class
+implementations to the base-class documentation for each documented
+virtual. It does no harm to provide an empty implementation of a pure
+virtual merely as a hook upon which to hang documentation.
+
+20100414T1455Z <gchicares@sbcglobal.net> [760]
+
+  mec_input.cpp
+  mec_state.cpp
+  product_data.cpp
+  xml_serializable.hpp
+  xml_serializable.tpp
+Move default implementations into base class.
+
+20100414T1835Z <gchicares@sbcglobal.net> [760]
+
+  antediluvian_stubs.cpp
+  input.hpp
+  input_xml_io.cpp
+  mec_input.cpp
+  mec_input.hpp
+  mec_state.cpp
+  mec_state.hpp
+  product_data.cpp
+  product_data.hpp
+  xml_serializable.hpp
+  xml_serializable.tpp
+Refactor.
+
+20100416T2207Z <gchicares@sbcglobal.net> [760]
+
+  any_member.hpp
+Improve documentation.
+
+20100416T2343Z <gchicares@sbcglobal.net> [760]
+
+  antediluvian_stubs.cpp
+  input.hpp
+  input_xml_io.cpp
+  mec_input.cpp
+  mec_input.hpp
+  mec_state.cpp
+  mec_state.hpp
+  product_data.cpp
+  product_data.hpp
+  xml_serializable.hpp
+  xml_serializable.tpp
+Refactor.
+
+20100417T1245Z <gchicares@sbcglobal.net> [760]
+
+  xml_serializable.hpp
+  xml_serializable.tpp
+Refactor.
+
+20100418T2119Z <gchicares@sbcglobal.net> [760]
+
+  my_prod.cpp
+  policy_document.cpp
+  product_data.cpp
+  product_data.hpp
+  workhorse.make
+Permit annotations in '.policy' files.
+
+20100419T2044Z <gchicares@sbcglobal.net> [760]
+
+  input.hpp
+  input_xml_io.cpp
+  product_data.cpp
+  product_data.hpp
+  xml_serializable.hpp
+  xml_serializable.tpp
+Refactor, simplifying the xml_serializable API.
+
+20100419T2230Z <gchicares@sbcglobal.net> [760]
+
+  product_data.cpp
+  product_data.hpp
+  xml_serializable.hpp
+  xml_serializable.tpp
+Refactor, removing the speed penalty introduced 20100417T1245Z. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-04/msg00025.html
+
+20100420T1327Z <gchicares@sbcglobal.net> [760]
+
+  ihs_funddata.cpp
+  ihs_funddata.hpp
+  stratified_charges.cpp
+  stratified_charges.hpp
+Permit annotations in '.funds' and '.strata' files.
+
+20100421T0028Z <gchicares@sbcglobal.net> [758]
+
+  stratified_charges.cpp
+  stratified_charges.hpp
+  stratified_charges.xpp
+Fix defect introduced 20070410T0149Z.
+
+20100421T1127Z <gchicares@sbcglobal.net> [756]
+
+  ihs_avmly.cpp
+  stratified_charges.cpp
+  stratified_charges.hpp
+  stratified_charges.xpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch. This happens to have no effect because of an early exit
+            // guaranteed M&E is not dynamic
+            return;
+in 'ihs_avmly.cpp'; whether that is correct is a different question.
+
+20100421T2341Z <gchicares@sbcglobal.net> [756]
+
+  stratified_charges.cpp
+Name "root" element to match file extension. (Other product files
+already did so.)
+
+20100422T0002Z <gchicares@sbcglobal.net> [756]
+
+  ihs_rnddata.cpp
+  stratified_charges.cpp
+Prefer MixedCase for major element names; '.policy' files already do
+so, as will '.database' files.
+
+20100422T1458Z <gchicares@sbcglobal.net> [756]
+
+  version.hpp
+Mark release candidate.
+
+20100423T1401Z <gchicares@sbcglobal.net> [756]
+
+  round_to_test.cpp
+Demonstrate that dereferencing a null pointer cras
+
+20100423T1440Z <gchicares@sbcglobal.net> [756]
+
+  round_to.hpp
+  round_to_test.cpp
+Remove the anomaly demonstrated 20100423T1401Z.
+
+20100423T1540Z <gchicares@sbcglobal.net> [756]
+
+  accountvalue.cpp
+  basic_values.hpp
+  basicvalues.cpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ihs_avsolve.cpp
+  ihs_avstrtgy.cpp
+  ihs_basicval.cpp
+  interest_rates.cpp
+  ledger_invariant.cpp
+  loads.cpp
+  mortality_rates_fetch.cpp
+Refactor.
+
+20100423T2228Z <gchicares@sbcglobal.net> [756]
+
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ihs_avstrtgy.cpp
+  ihs_irc7702.cpp
+  ihs_server7702.cpp
+  input_realization.cpp
+Remove unneeded headers.
+
+20100423T2334Z <gchicares@sbcglobal.net> [756]
+
+  Makefile.am
+  generate_product_files.cpp
+  ihs_basicval.cpp
+  ihs_rnddata.cpp [expunged]
+  ihs_rnddata.hpp [expunged]
+  my_rnd.cpp
+  objects.make
+  product_file_test.cpp
+  rounding_document.hpp
+  rounding_rules.cpp
+  rounding_rules.hpp
+Refactor, merging two classes into one.
+
+20100424T0107Z <gchicares@sbcglobal.net> [755]
+
+  my_rnd.cpp
+Fix defect introduced 20050409T1620Z, from an original file predating
+the lmi epoch.
+
+20100424T0108Z <gchicares@sbcglobal.net> [755]
+
+  my_prod.cpp
+Make 'sample' files independent of proprietary products.
+
+20100424T2249Z <gchicares@sbcglobal.net> [755]
+
+  rounding_rules.cpp
+Fix defect introduced 20070221T0307Z. See (A) here:
+  http://lists.nongnu.org/archive/html/lmi/2010-04/msg00040.html
+
+20100424T2350Z <gchicares@sbcglobal.net> [755]
+
+  rounding_rules.cpp
+  rounding_rules.hpp
+Fix defect introduced 20070221T0307Z. See (B) here:
+  http://lists.nongnu.org/archive/html/lmi/2010-04/msg00040.html
 

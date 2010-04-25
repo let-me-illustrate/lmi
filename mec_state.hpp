@@ -67,21 +67,12 @@ class LMI_SO mec_state
   private:
     void AscribeMembers();
 
-    // Class 'xml_serializable' required implementation.
+    // xml_serializable required implementation.
     virtual int         class_version() const;
     virtual std::string xml_root_name() const;
-    virtual bool        is_detritus(std::string const&) const;
-    virtual std::string redintegrate_ex_ante
-        (int                file_version
-        ,std::string const& name
-        ,std::string const& value
-        ) const;
-    virtual void        redintegrate_ex_post
-        (int                                file_version
-        ,std::map<std::string, std::string> detritus_map
-        ,std::list<std::string>             residuary_names
-        );
-    virtual void        redintegrate_ad_terminum();
+
+    // xml_serializable overrides.
+    virtual bool is_detritus(std::string const&) const;
 
     int    B0_deduced_policy_year;
     int    B1_deduced_contract_year;

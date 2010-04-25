@@ -1,4 +1,4 @@
-// Fund data.
+// Fund names and investment-management fees.
 //
 // Copyright (C) 1998, 2001, 2002, 2003, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
@@ -46,20 +46,23 @@ class LMI_SO FundInfo
   public:
     FundInfo();
     FundInfo
-        (double      ScalarIMF
-        ,std::string ShortName
-        ,std::string LongName
+        (double             ScalarIMF
+        ,std::string const& ShortName
+        ,std::string const& LongName
+        ,std::string const& gloss = std::string()
         );
     ~FundInfo();
 
     double ScalarIMF() const;
     std::string const& ShortName() const;
     std::string const& LongName() const;
+    std::string const& gloss() const;
 
   private:
     double ScalarIMF_;
     std::string ShortName_;
     std::string LongName_;
+    std::string gloss_;
 };
 
 class LMI_SO FundData
@@ -80,7 +83,7 @@ class LMI_SO FundData
     FundData(); // Private, but implemented.
 
     void Read (std::string const& a_Filename);
-    void Write(std::string const& a_Filename);
+    void Write(std::string const& a_Filename) const;
 
     std::vector<FundInfo> FundInfo_;
 };
@@ -98,6 +101,11 @@ inline std::string const& FundInfo::ShortName() const
 inline std::string const& FundInfo::LongName() const
 {
     return LongName_;
+}
+
+inline std::string const& FundInfo::gloss() const
+{
+    return gloss_;
 }
 
 inline FundInfo const& FundData::GetFundInfo(int j) const

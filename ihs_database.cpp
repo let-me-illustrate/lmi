@@ -37,8 +37,8 @@
 #include "dbnames.hpp"
 #include "ihs_dbdict.hpp"
 #include "ihs_dbvalue.hpp"
-#include "ihs_proddata.hpp"
 #include "oecumenic_enumerations.hpp"
+#include "product_data.hpp"
 #include "yare_input.hpp"
 
 #include <algorithm>
@@ -58,10 +58,7 @@ TDatabase::TDatabase
     ,mcenum_uw_basis    a_UWBasis
     ,mcenum_state       a_State
     )
-    :Filename   (AddDataDir
-                    (TProductData(a_ProductName).GetDatabaseFilename()
-                    )
-                )
+    :Filename (AddDataDir(product_data(a_ProductName).datum("DatabaseFilename")))
     ,Gender   (a_Gender)
     ,Class    (a_Class)
     ,Smoker   (a_Smoker)
@@ -75,10 +72,7 @@ TDatabase::TDatabase
 
 //============================================================================
 TDatabase::TDatabase(yare_input const& input)
-    :Filename
-        (AddDataDir
-            (TProductData(input.ProductName).GetDatabaseFilename())
-        )
+    :Filename(AddDataDir(product_data(input.ProductName).datum("DatabaseFilename")))
 {
 // GET RID OF Gender, Class, Smoker, etc.
     Gender      = input.Gender;

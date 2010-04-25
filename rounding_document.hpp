@@ -28,7 +28,7 @@
 
 #include "product_editor.hpp"
 
-#include "ihs_rnddata.hpp"
+#include "rounding_rules.hpp"
 
 #include <map>
 #include <string>
@@ -53,7 +53,7 @@ class RoundingDocument
 
     RoundingView& PredominantView() const;
 
-    StreamableRoundingRules rounding_rules_;
+    rounding_rules rounding_rules_;
 
     values_type values_;
 

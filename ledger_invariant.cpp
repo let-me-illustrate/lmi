@@ -37,16 +37,16 @@
 #include "death_benefits.hpp"
 #include "financial.hpp"  // TODO ?? For IRRs--prolly don't blong here.
 #include "ihs_funddata.hpp"
-#include "ihs_proddata.hpp"
 #include "input.hpp"
 #include "interest_rates.hpp"
 #include "ledger.hpp" // TODO ?? For IRRs--prolly don't blong here.
 #include "ledger_variant.hpp" // TODO ?? For IRRs--prolly don't blong here.
 #include "loads.hpp"
 #include "mc_enum_aux.hpp" // mc_e_vector_to_string_vector()
+#include "mc_enum_types_aux.hpp" // mc_str()
 #include "miscellany.hpp"
 #include "outlay.hpp"
-#include "rounding_rules.hpp"
+#include "product_data.hpp"
 
 #include <algorithm>
 #include <ostream>
@@ -397,7 +397,7 @@ void LedgerInvariant::Init(BasicValues* b)
     // Zero-initialize almost everything.
     Init();
 
-    irr_precision = b->GetRoundingRules().round_irr().decimals();
+    irr_precision = b->round_irr().decimals();
 
 // TODO ?? These names are confusing. EePmt and ErPmt are *input* values.
 // If they're entered as $1000 for all years, then they have that value
@@ -583,87 +583,88 @@ void LedgerInvariant::Init(BasicValues* b)
     // The antediluvian branch has a null ProductData_ object.
     if(b->ProductData_)
         {
-        PolicyMktgName         = b->ProductData_->GetPolicyMktgName();
-        PolicyLegalName        = b->ProductData_->GetPolicyLegalName();
-        PolicyForm             = b->ProductData_->GetPolicyForm();
-        InsCoShortName         = b->ProductData_->GetInsCoShortName();
-        InsCoName              = b->ProductData_->GetInsCoName();
-        InsCoAddr              = b->ProductData_->GetInsCoAddr();
-        InsCoStreet            = b->ProductData_->GetInsCoStreet();
-        InsCoPhone             = b->ProductData_->GetInsCoPhone();
-        MainUnderwriter        = b->ProductData_->GetMainUnderwriter();
-        MainUnderwriterAddress = b->ProductData_->GetMainUnderwriterAddress();
-        CoUnderwriter          = b->ProductData_->GetCoUnderwriter();
-        CoUnderwriterAddress   = b->ProductData_->GetCoUnderwriterAddress();
+        product_data const& p = *b->ProductData_;
+        PolicyMktgName                 = p.datum("PolicyMktgName"                 );
+        PolicyLegalName                = p.datum("PolicyLegalName"                );
+        PolicyForm                     = p.datum("PolicyForm"                     );
+        InsCoShortName                 = p.datum("InsCoShortName"                 );
+        InsCoName                      = p.datum("InsCoName"                      );
+        InsCoAddr                      = p.datum("InsCoAddr"                      );
+        InsCoStreet                    = p.datum("InsCoStreet"                    );
+        InsCoPhone                     = p.datum("InsCoPhone"                     );
+        MainUnderwriter                = p.datum("MainUnderwriter"                );
+        MainUnderwriterAddress         = p.datum("MainUnderwriterAddress"         );
+        CoUnderwriter                  = p.datum("CoUnderwriter"                  );
+        CoUnderwriterAddress           = p.datum("CoUnderwriterAddress"           );
 
-        AvName                 = b->ProductData_->GetAvName();
-        CsvName                = b->ProductData_->GetCsvName();
-        CsvHeaderName          = b->ProductData_->GetCsvHeaderName();
-        NoLapseProvisionName   = b->ProductData_->GetNoLapseProvisionName();
-        InterestDisclaimer     = b->ProductData_->GetInterestDisclaimer();
-        GuarMortalityFootnote  = b->ProductData_->GetGuarMortalityFootnote();
+        AvName                         = p.datum("AvName"                         );
+        CsvName                        = p.datum("CsvName"                        );
+        CsvHeaderName                  = p.datum("CsvHeaderName"                  );
+        NoLapseProvisionName           = p.datum("NoLapseProvisionName"           );
+        InterestDisclaimer             = p.datum("InterestDisclaimer"             );
+        GuarMortalityFootnote          = p.datum("GuarMortalityFootnote"          );
 
-        AccountValueFootnote   = b->ProductData_->GetAccountValueFootnote();
-        AttainedAgeFootnote    = b->ProductData_->GetAttainedAgeFootnote();
-        CashSurrValueFootnote  = b->ProductData_->GetCashSurrValueFootnote();
-        DeathBenefitFootnote   = b->ProductData_->GetDeathBenefitFootnote();
-        InitialPremiumFootnote = b->ProductData_->GetInitialPremiumFootnote();
-        NetPremiumFootnote     = b->ProductData_->GetNetPremiumFootnote();
-        OutlayFootnote         = b->ProductData_->GetOutlayFootnote();
-        PolicyYearFootnote     = b->ProductData_->GetPolicyYearFootnote();
+        AccountValueFootnote           = p.datum("AccountValueFootnote"           );
+        AttainedAgeFootnote            = p.datum("AttainedAgeFootnote"            );
+        CashSurrValueFootnote          = p.datum("CashSurrValueFootnote"          );
+        DeathBenefitFootnote           = p.datum("DeathBenefitFootnote"           );
+        InitialPremiumFootnote         = p.datum("InitialPremiumFootnote"         );
+        NetPremiumFootnote             = p.datum("NetPremiumFootnote"             );
+        OutlayFootnote                 = p.datum("OutlayFootnote"                 );
+        PolicyYearFootnote             = p.datum("PolicyYearFootnote"             );
 
-        ADDFootnote            = b->ProductData_->GetADDFootnote();
-        ChildFootnote          = b->ProductData_->GetChildFootnote();
-        SpouseFootnote         = b->ProductData_->GetSpouseFootnote();
-        TermFootnote           = b->ProductData_->GetTermFootnote();
-        WaiverFootnote         = b->ProductData_->GetWaiverFootnote();
+        ADDFootnote                    = p.datum("ADDFootnote"                    );
+        ChildFootnote                  = p.datum("ChildFootnote"                  );
+        SpouseFootnote                 = p.datum("SpouseFootnote"                 );
+        TermFootnote                   = p.datum("TermFootnote"                   );
+        WaiverFootnote                 = p.datum("WaiverFootnote"                 );
 
-        MinimumPremiumFootnote = b->ProductData_->GetMinimumPremiumFootnote();
-        PremAllocationFootnote = b->ProductData_->GetPremAllocationFootnote();
+        MinimumPremiumFootnote         = p.datum("MinimumPremiumFootnote"         );
+        PremAllocationFootnote         = p.datum("PremAllocationFootnote"         );
 
-        ProductDescription             = b->ProductData_->GetProductDescription();
-        StableValueFootnote            = b->ProductData_->GetStableValueFootnote();
-        NoVanishPremiumFootnote        = b->ProductData_->GetNoVanishPremiumFootnote();
-        RejectPremiumFootnote          = b->ProductData_->GetRejectPremiumFootnote();
-        ExpRatingFootnote              = b->ProductData_->GetExpRatingFootnote();
-        MortalityBlendFootnote         = b->ProductData_->GetMortalityBlendFootnote();
-        HypotheticalRatesFootnote      = b->ProductData_->GetHypotheticalRatesFootnote();
-        SalesLoadRefundFootnote        = b->ProductData_->GetSalesLoadRefundFootnote();
-        NoLapseFootnote                = b->ProductData_->GetNoLapseFootnote();
-        MarketValueAdjFootnote         = b->ProductData_->GetMarketValueAdjFootnote();
-        ExchangeChargeFootnote0        = b->ProductData_->GetExchangeChargeFootnote0();
-        CurrentValuesFootnote          = b->ProductData_->GetCurrentValuesFootnote();
-        DBOption1Footnote              = b->ProductData_->GetDBOption1Footnote();
-        DBOption2Footnote              = b->ProductData_->GetDBOption2Footnote();
-        ExpRatRiskChargeFootnote       = b->ProductData_->GetExpRatRiskChargeFootnote();
-        ExchangeChargeFootnote1        = b->ProductData_->GetExchangeChargeFootnote1();
-        FlexiblePremiumFootnote        = b->ProductData_->GetFlexiblePremiumFootnote();
-        GuaranteedValuesFootnote       = b->ProductData_->GetGuaranteedValuesFootnote();
-        CreditingRateFootnote          = b->ProductData_->GetCreditingRateFootnote();
-        MecFootnote                    = b->ProductData_->GetMecFootnote();
-        MidpointValuesFootnote         = b->ProductData_->GetMidpointValuesFootnote();
-        SinglePremiumFootnote          = b->ProductData_->GetSinglePremiumFootnote();
-        MonthlyChargesFootnote         = b->ProductData_->GetMonthlyChargesFootnote();
-        UltCreditingRateFootnote       = b->ProductData_->GetUltCreditingRateFootnote();
-        MaxNaarFootnote                = b->ProductData_->GetMaxNaarFootnote();
-        PremTaxSurrChgFootnote         = b->ProductData_->GetPremTaxSurrChgFootnote();
-        PolicyFeeFootnote              = b->ProductData_->GetPolicyFeeFootnote();
-        AssetChargeFootnote            = b->ProductData_->GetAssetChargeFootnote();
-        InvestmentIncomeFootnote       = b->ProductData_->GetInvestmentIncomeFootnote();
-        IrrDbFootnote                  = b->ProductData_->GetIrrDbFootnote();
-        IrrCsvFootnote                 = b->ProductData_->GetIrrCsvFootnote();
-        MortalityChargesFootnote       = b->ProductData_->GetMortalityChargesFootnote();
-        LoanAndWithdrawalFootnote      = b->ProductData_->GetLoanAndWithdrawalFootnote();
-        PresaleTrackingNumber          = b->ProductData_->GetPresaleTrackingNumber();
-        CompositeTrackingNumber        = b->ProductData_->GetCompositeTrackingNumber();
-        InforceTrackingNumber          = b->ProductData_->GetInforceTrackingNumber();
-        InforceCompositeTrackingNumber = b->ProductData_->GetInforceCompositeTrackingNumber();
-        InforceNonGuaranteedFootnote0  = b->ProductData_->GetInforceNonGuaranteedFootnote0();
-        InforceNonGuaranteedFootnote1  = b->ProductData_->GetInforceNonGuaranteedFootnote1();
-        InforceNonGuaranteedFootnote2  = b->ProductData_->GetInforceNonGuaranteedFootnote2();
-        InforceNonGuaranteedFootnote3  = b->ProductData_->GetInforceNonGuaranteedFootnote3();
-        NonGuaranteedFootnote          = b->ProductData_->GetNonGuaranteedFootnote();
-        MonthlyChargesPaymentFootnote  = b->ProductData_->GetMonthlyChargesPaymentFootnote();
+        ProductDescription             = p.datum("ProductDescription"             );
+        StableValueFootnote            = p.datum("StableValueFootnote"            );
+        NoVanishPremiumFootnote        = p.datum("NoVanishPremiumFootnote"        );
+        RejectPremiumFootnote          = p.datum("RejectPremiumFootnote"          );
+        ExpRatingFootnote              = p.datum("ExpRatingFootnote"              );
+        MortalityBlendFootnote         = p.datum("MortalityBlendFootnote"         );
+        HypotheticalRatesFootnote      = p.datum("HypotheticalRatesFootnote"      );
+        SalesLoadRefundFootnote        = p.datum("SalesLoadRefundFootnote"        );
+        NoLapseFootnote                = p.datum("NoLapseFootnote"                );
+        MarketValueAdjFootnote         = p.datum("MarketValueAdjFootnote"         );
+        ExchangeChargeFootnote0        = p.datum("ExchangeChargeFootnote0"        );
+        CurrentValuesFootnote          = p.datum("CurrentValuesFootnote"          );
+        DBOption1Footnote              = p.datum("DBOption1Footnote"              );
+        DBOption2Footnote              = p.datum("DBOption2Footnote"              );
+        ExpRatRiskChargeFootnote       = p.datum("ExpRatRiskChargeFootnote"       );
+        ExchangeChargeFootnote1        = p.datum("ExchangeChargeFootnote1"        );
+        FlexiblePremiumFootnote        = p.datum("FlexiblePremiumFootnote"        );
+        GuaranteedValuesFootnote       = p.datum("GuaranteedValuesFootnote"       );
+        CreditingRateFootnote          = p.datum("CreditingRateFootnote"          );
+        MecFootnote                    = p.datum("MecFootnote"                    );
+        MidpointValuesFootnote         = p.datum("MidpointValuesFootnote"         );
+        SinglePremiumFootnote          = p.datum("SinglePremiumFootnote"          );
+        MonthlyChargesFootnote         = p.datum("MonthlyChargesFootnote"         );
+        UltCreditingRateFootnote       = p.datum("UltCreditingRateFootnote"       );
+        MaxNaarFootnote                = p.datum("MaxNaarFootnote"                );
+        PremTaxSurrChgFootnote         = p.datum("PremTaxSurrChgFootnote"         );
+        PolicyFeeFootnote              = p.datum("PolicyFeeFootnote"              );
+        AssetChargeFootnote            = p.datum("AssetChargeFootnote"            );
+        InvestmentIncomeFootnote       = p.datum("InvestmentIncomeFootnote"       );
+        IrrDbFootnote                  = p.datum("IrrDbFootnote"                  );
+        IrrCsvFootnote                 = p.datum("IrrCsvFootnote"                 );
+        MortalityChargesFootnote       = p.datum("MortalityChargesFootnote"       );
+        LoanAndWithdrawalFootnote      = p.datum("LoanAndWithdrawalFootnote"      );
+        PresaleTrackingNumber          = p.datum("PresaleTrackingNumber"          );
+        CompositeTrackingNumber        = p.datum("CompositeTrackingNumber"        );
+        InforceTrackingNumber          = p.datum("InforceTrackingNumber"          );
+        InforceCompositeTrackingNumber = p.datum("InforceCompositeTrackingNumber" );
+        InforceNonGuaranteedFootnote0  = p.datum("InforceNonGuaranteedFootnote0"  );
+        InforceNonGuaranteedFootnote1  = p.datum("InforceNonGuaranteedFootnote1"  );
+        InforceNonGuaranteedFootnote2  = p.datum("InforceNonGuaranteedFootnote2"  );
+        InforceNonGuaranteedFootnote3  = p.datum("InforceNonGuaranteedFootnote3"  );
+        NonGuaranteedFootnote          = p.datum("NonGuaranteedFootnote"          );
+        MonthlyChargesPaymentFootnote  = p.datum("MonthlyChargesPaymentFootnote"  );
         }
 
     ProducerName            = (*b->Input_)["AgentName"].str();

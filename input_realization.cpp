@@ -989,12 +989,12 @@ std::string Input::RealizeSpecamtHistory()
 // This would be preferable:
 //
 // #include "data_directory.hpp" // AddDataDir(), needed to access product data.
-// #include "ihs_proddata.hpp"   // Product data, needed to access rounding rules.
-// #include "ihs_rnddata.hpp"    // Rounding.
+// #include "product_data.hpp"   // Product data, needed to access rounding rules.
+// #include "rounding_rules.hpp" // Rounding.
 //
-//        term_spec_amt = StreamableRoundingRules
-//            (AddDataDir(TProductData(ProductName).GetRoundingFilename())
-//            ).get_rounding_rules().round_specamt()(term_spec_amt)
+//        term_spec_amt = rounding_rules
+//            (AddDataDir(product_data(ProductName).GetRoundingFilename())
+//            ).round_specamt()(term_spec_amt)
 //            ;
 //
 // except that it wouldn't work on the antediluvian branch.

@@ -28,7 +28,7 @@
 
 #include "product_editor.hpp"
 
-#include "ihs_proddata.hpp"
+#include "product_data.hpp"
 
 #include <map>
 #include <string>
@@ -53,7 +53,7 @@ class PolicyDocument
 
     PolicyView& PredominantView() const;
 
-    TProductData product_data_;
+    product_data product_data_;
 
     values_type values_;
 

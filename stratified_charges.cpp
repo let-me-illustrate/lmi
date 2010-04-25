@@ -34,6 +34,11 @@
 #include "miscellany.hpp"         // minmax<T>()
 #include "platform_dependent.hpp" // access()
 #include "stratified_algorithms.hpp"
+#include "xml_lmi.hpp"
+#include "xml_serialize.hpp"
+
+#include <boost/filesystem/convenience.hpp>
+#include <boost/static_assert.hpp>
 
 #include <algorithm>
 #include <cfloat>                 // DBL_MAX
@@ -53,8 +58,6 @@
 // elsewhere; meanwhile, this module contains code to represent the
 // DE tiered rates, but ignores those rates and treats DE the same as
 // any other state.
-//
-// File representation should be xml.
 
 // Class stratified_entity implementation.
 
@@ -67,9 +70,11 @@ stratified_entity::stratified_entity()
 stratified_entity::stratified_entity
     (std::vector<double> const& limits
     ,std::vector<double> const& values
+    ,std::string const&         gloss
     )
     :limits_(limits)
     ,values_(values)
+    ,gloss_ (gloss)
 {
     assert_validity();
 }
@@ -114,68 +119,29 @@ std::vector<double> const& stratified_entity::values() const
 }
 
 //============================================================================
-void stratified_entity::read(std::istream& is)
+std::string const& stratified_entity::gloss() const
 {
-    std::vector<double>::size_type vector_size;
-    std::vector<double>::value_type z;
+    return gloss_;
+}
 
-    values_.clear();
-    is >> vector_size;
-    values_.reserve(vector_size);
-    for(std::vector<double>::size_type j = 0; j < vector_size; ++j)
-        {
-        is >> z;
-        values_.push_back(z);
-        }
-    LMI_ASSERT(vector_size == values_.size());
-
-    limits_.clear();
-    is >> vector_size;
-    limits_.reserve(vector_size);
-    for(std::vector<double>::size_type j = 0; j < vector_size; ++j)
-        {
-        is >> z;
-        limits_.push_back(z);
-        }
-    LMI_ASSERT(vector_size == limits_.size());
+//============================================================================
+void stratified_entity::read(xml::element const& e)
+{
+    xml_serialize::get_element(e, "values", values_);
+    xml_serialize::get_element(e, "limits", limits_);
+    xml_serialize::get_element(e, "gloss" , gloss_ );
 
     assert_validity();
 }
 
 //============================================================================
-void stratified_entity::write(std::ostream& os) const
+void stratified_entity::write(xml::element& e) const
 {
     assert_validity();
 
-    typedef std::vector<double>::const_iterator svdci;
-
-    os << values_.size() << " ";
-    for(svdci i = values_.begin(); i < values_.end(); ++i)
-        {
-        os << (*i) << " ";
-        }
-    os << '\n';
-
-    os << limits_.size() << " ";
-    for(svdci i = limits_.begin(); i < limits_.end(); ++i)
-        {
-        os << (*i) << " ";
-        }
-    os << '\n';
-}
-
-//============================================================================
-std::istream& operator>>(std::istream& is, stratified_entity& z)
-{
-    z.read(is);
-    return is;
-}
-
-//============================================================================
-std::ostream& operator<<(std::ostream& os, stratified_entity const& z)
-{
-    z.write(os);
-    return os;
+    xml_serialize::set_element(e, "values", values_);
+    xml_serialize::set_element(e, "limits", limits_);
+    xml_serialize::set_element(e, "gloss" , gloss_ );
 }
 
 // Class stratified_charges implementation.
@@ -216,6 +182,7 @@ void stratified_charges::initialize_dictionary()
     // Dummy nodes: root and topic headers.
     dictionary[e_stratified_first                      ] = stratified_entity();
     dictionary[e_topic_premium_banded                  ] = stratified_entity();
+    dictionary[e_topic_asset_banded                    ] = stratified_entity();
     dictionary[e_topic_asset_tiered                    ] = stratified_entity();
     dictionary[e_topic_tiered_premium_tax              ] = stratified_entity();
 
@@ -223,6 +190,8 @@ void stratified_charges::initialize_dictionary()
 
     dictionary[e_curr_sepacct_load_banded_by_premium   ] = stratified_entity();
     dictionary[e_guar_sepacct_load_banded_by_premium   ] = stratified_entity();
+    dictionary[e_curr_sepacct_load_banded_by_assets    ] = stratified_entity();
+    dictionary[e_guar_sepacct_load_banded_by_assets    ] = stratified_entity();
     dictionary[e_curr_m_and_e_tiered_by_assets         ] = stratified_entity();
     dictionary[e_guar_m_and_e_tiered_by_assets         ] = stratified_entity();
     dictionary[e_asset_based_comp_tiered_by_assets     ] = stratified_entity();
@@ -236,12 +205,13 @@ void stratified_charges::initialize_dictionary()
 }
 
 //============================================================================
+// 'special_limit' is 'DB_DynSepAcctLoadLimit'.
 double stratified_charges::stratified_sepacct_load
     (mcenum_gen_basis basis
     ,double           assets
     ,double           premium
     ,double           special_limit
-    )
+    ) const
 {
     switch(basis)
         {
@@ -293,9 +263,7 @@ double stratified_charges::banded_curr_sepacct_load
         kx = std::min(assets, special_limit) / assets;
         }
     stratified_entity const& x = raw_entity(e_curr_sepacct_load_banded_by_premium);
-// TODO ?? DATABASE !! This is a goofy workaround until we can add a
-// new 'e_curr_sepacct_load_banded_by_assets' entity.
-    stratified_entity const& y = raw_entity(e_tiered_de_premium_tax);
+    stratified_entity const& y = raw_entity(e_curr_sepacct_load_banded_by_assets);
     return
             kx * banded_rate<double>() (premium, x.limits(), x.values())
         +   ky * banded_rate<double>() (assets , y.limits(), y.values())
@@ -316,26 +284,54 @@ double stratified_charges::banded_guar_sepacct_load
         kx = std::min(assets, special_limit) / assets;
         }
     stratified_entity const& x = raw_entity(e_guar_sepacct_load_banded_by_premium);
-// TODO ?? DATABASE !! This is a goofy workaround until we can add a
-// new 'e_guar_sepacct_load_banded_by_assets' entity. Until then,
-// '* 1.25' provides an arbitrary but plausible margin of conservatism
-// over the current-basis value.
-    stratified_entity const& y = raw_entity(e_tiered_de_premium_tax);
+    stratified_entity const& y = raw_entity(e_guar_sepacct_load_banded_by_assets);
     return
             kx * banded_rate<double>() (premium, x.limits(), x.values())
-        +   ky * banded_rate<double>() (assets , y.limits(), y.values()) * 0.0
+        +   ky * banded_rate<double>() (assets , y.limits(), y.values())
         ;
 }
 
+double stratified_charges::tiered_m_and_e(mcenum_gen_basis basis, double assets) const
+{
+    switch(basis)
+        {
+        case mce_gen_curr:
+            {
+            return tiered_curr_m_and_e(assets);
+            }
+            break;
+        case mce_gen_guar:
+            {
+            return tiered_guar_m_and_e(assets);
+            }
+            break;
+        case mce_gen_mdpt:
+            {
+            fatal_error()
+                << "Dynamic separate-account M&E not supported with "
+                << "midpoint expense basis, because variable products "
+                << "are not subject to the illustration reg."
+                << LMI_FLUSH
+                ;
+            }
+            break;
+        default:
+            {
+            fatal_error() << "Case '" << basis << "' not found." << LMI_FLUSH;
+            }
+        }
+    throw "Unreachable--silences a compiler diagnostic.";
+}
+
 //============================================================================
-double stratified_charges::tiered_current_m_and_e(double assets) const
+double stratified_charges::tiered_curr_m_and_e(double assets) const
 {
     stratified_entity const& z = raw_entity(e_curr_m_and_e_tiered_by_assets);
     return tiered_rate<double>() (assets, z.limits(), z.values());
 }
 
 //============================================================================
-double stratified_charges::tiered_guaranteed_m_and_e(double assets) const
+double stratified_charges::tiered_guar_m_and_e(double assets) const
 {
     stratified_entity const& z = raw_entity(e_guar_m_and_e_tiered_by_assets);
     return tiered_rate<double>() (assets, z.limits(), z.values());
@@ -459,6 +455,56 @@ double stratified_charges::minimum_tiered_premium_tax_rate(mcenum_state state) c
 }
 
 //============================================================================
+namespace
+{
+    char const* s_stratified_nodes[] =
+        {"stratified_first"
+
+        ,"topic_premium_banded"
+        ,"CurrSepAcctLoadBandedByPrem"
+        ,"GuarSepAcctLoadBandedByPrem"
+
+        ,"topic_asset_banded"
+        ,"CurrSepAcctLoadBandedByAssets"
+        ,"GuarSepAcctLoadBandedByAssets"
+
+        ,"topic_asset_tiered"
+        ,"CurrMandETieredByAssets"
+        ,"GuarMandETieredByAssets"
+        ,"AssetCompTieredByAssets"
+        ,"InvestmentMgmtFeeTieredByAssets"
+        ,"CurrSepAcctLoadTieredByAssets"
+        ,"GuarSepAcctLoadTieredByAssets"
+
+        ,"topic_tiered_premium_tax"
+        ,"TieredAKPremTax"
+        ,"TieredDEPremTax"
+        ,"TieredSDPremTax"
+
+        ,"stratified_last"
+        };
+
+    BOOST_STATIC_ASSERT(sizeof s_stratified_nodes / sizeof(char const*) == 1 + e_stratified_last);
+} // Unnamed namespace.
+
+namespace xml_serialize
+{
+    template<>
+    struct xml_io<stratified_entity>
+    {
+        static void to_xml(xml::element& e, stratified_entity const& t)
+        {
+            t.write(e);
+        }
+
+        static void from_xml(xml::element const& t, stratified_entity& e)
+        {
+            e.read(t);
+        }
+    };
+} // namespace xml_serialize
+
+//============================================================================
 void stratified_charges::read(std::string const& filename)
 {
     if(access(filename.c_str(), R_OK))
@@ -471,69 +517,59 @@ void stratified_charges::read(std::string const& filename)
             ;
         }
 
-    std::ifstream is(filename.c_str());
+    xml_lmi::dom_parser parser(filename);
+    xml::element const& root = parser.root_node("strata");
 
-    is >> raw_entity(e_curr_sepacct_load_banded_by_premium  );
-    is >> raw_entity(e_guar_sepacct_load_banded_by_premium  );
-    is >> raw_entity(e_curr_m_and_e_tiered_by_assets        );
-    is >> raw_entity(e_guar_m_and_e_tiered_by_assets        );
-    is >> raw_entity(e_asset_based_comp_tiered_by_assets    );
-    is >> raw_entity(e_investment_mgmt_fee_tiered_by_assets );
-    is >> raw_entity(e_curr_sepacct_load_tiered_by_assets   );
-    is >> raw_entity(e_guar_sepacct_load_tiered_by_assets   );
-    is >> raw_entity(e_tiered_ak_premium_tax                );
-    is >> raw_entity(e_tiered_de_premium_tax                );
-    is >> raw_entity(e_tiered_sd_premium_tax                );
+#define READ(ELEMENT,ENTITY) xml_serialize::get_element(ELEMENT, s_stratified_nodes[ENTITY], raw_entity(ENTITY))
 
-    if(!is.good())
-        {
-        fatal_error()
-            << "Unexpected end of stratified-data file '"
-            << filename
-            << "'. Try reinstalling."
-            << LMI_FLUSH
-            ;
-        }
+    READ(root, e_curr_sepacct_load_banded_by_premium  );
+    READ(root, e_guar_sepacct_load_banded_by_premium  );
+    READ(root, e_curr_sepacct_load_banded_by_assets   );
+    READ(root, e_guar_sepacct_load_banded_by_assets   );
+    READ(root, e_curr_m_and_e_tiered_by_assets        );
+    READ(root, e_guar_m_and_e_tiered_by_assets        );
+    READ(root, e_asset_based_comp_tiered_by_assets    );
+    READ(root, e_investment_mgmt_fee_tiered_by_assets );
+    READ(root, e_curr_sepacct_load_tiered_by_assets   );
+    READ(root, e_guar_sepacct_load_tiered_by_assets   );
+    READ(root, e_tiered_ak_premium_tax                );
+    READ(root, e_tiered_de_premium_tax                );
+    READ(root, e_tiered_sd_premium_tax                );
 
-    std::string dummy;
-    is >> dummy;
-    if(!is.eof())
-        {
-        fatal_error()
-            << "Data past expected end of stratified-data file '"
-            << filename
-            << "'. Try reinstalling."
-            << LMI_FLUSH
-            ;
-        }
+#undef READ
 }
 
 //============================================================================
 void stratified_charges::write(std::string const& filename) const
 {
-    std::ofstream os(filename.c_str());
+    xml_lmi::xml_document document("strata");
+    xml::element& root = document.root_node();
 
-    os << raw_entity(e_curr_sepacct_load_banded_by_premium  );
-    os << raw_entity(e_guar_sepacct_load_banded_by_premium  );
-    os << raw_entity(e_curr_m_and_e_tiered_by_assets        );
-    os << raw_entity(e_guar_m_and_e_tiered_by_assets        );
-    os << raw_entity(e_asset_based_comp_tiered_by_assets    );
-    os << raw_entity(e_investment_mgmt_fee_tiered_by_assets );
-    os << raw_entity(e_curr_sepacct_load_tiered_by_assets   );
-    os << raw_entity(e_guar_sepacct_load_tiered_by_assets   );
-    os << raw_entity(e_tiered_ak_premium_tax                );
-    os << raw_entity(e_tiered_de_premium_tax                );
-    os << raw_entity(e_tiered_sd_premium_tax                );
+#define WRITE(ELEMENT,ENTITY) xml_serialize::set_element(ELEMENT, s_stratified_nodes[ENTITY], raw_entity(ENTITY));
 
-    if(!os.good())
-        {
-        fatal_error()
-            << "Unable to write stratified-data file '"
-            << filename
-            << "'."
-            << LMI_FLUSH
-            ;
-        }
+    WRITE(root, e_curr_sepacct_load_banded_by_premium  );
+    WRITE(root, e_guar_sepacct_load_banded_by_premium  );
+    WRITE(root, e_curr_sepacct_load_banded_by_assets   );
+    WRITE(root, e_guar_sepacct_load_banded_by_assets   );
+    WRITE(root, e_curr_m_and_e_tiered_by_assets        );
+    WRITE(root, e_guar_m_and_e_tiered_by_assets        );
+    WRITE(root, e_asset_based_comp_tiered_by_assets    );
+    WRITE(root, e_investment_mgmt_fee_tiered_by_assets );
+    WRITE(root, e_curr_sepacct_load_tiered_by_assets   );
+    WRITE(root, e_guar_sepacct_load_tiered_by_assets   );
+    WRITE(root, e_tiered_ak_premium_tax                );
+    WRITE(root, e_tiered_de_premium_tax                );
+    WRITE(root, e_tiered_sd_premium_tax                );
+
+#undef WRITE
+
+    // Instead of this:
+//    document.save_to_file(filename.c_str());
+    // for the nonce, explicitly change the extension, in order to
+    // force external product-file code to use the new extension.
+    fs::path path(filename, fs::native);
+    path = fs::change_extension(path, ".strata");
+    document.save(path.string());
 }
 
 //============================================================================
@@ -549,6 +585,10 @@ void stratified_charges::write_stratified_files()
     foo.raw_entity(e_curr_sepacct_load_banded_by_premium  ).limits_.push_back(DBL_MAX);
     foo.raw_entity(e_guar_sepacct_load_banded_by_premium  ).values_.push_back(0.0);
     foo.raw_entity(e_guar_sepacct_load_banded_by_premium  ).limits_.push_back(DBL_MAX);
+    foo.raw_entity(e_curr_sepacct_load_banded_by_assets   ).values_.push_back(0.0);
+    foo.raw_entity(e_curr_sepacct_load_banded_by_assets   ).limits_.push_back(DBL_MAX);
+    foo.raw_entity(e_guar_sepacct_load_banded_by_assets   ).values_.push_back(0.0);
+    foo.raw_entity(e_guar_sepacct_load_banded_by_assets   ).limits_.push_back(DBL_MAX);
 
     foo.raw_entity(e_curr_m_and_e_tiered_by_assets        ).values_.push_back(0.0);
     foo.raw_entity(e_curr_m_and_e_tiered_by_assets        ).limits_.push_back(DBL_MAX);
@@ -571,6 +611,7 @@ void stratified_charges::write_stratified_files()
     foo.raw_entity(e_tiered_ak_premium_tax                ).values_.push_back (0.00100);
     foo.raw_entity(e_tiered_ak_premium_tax                ).limits_.push_back(100000.0);
     foo.raw_entity(e_tiered_ak_premium_tax                ).limits_.push_back(DBL_MAX);
+    foo.raw_entity(e_tiered_ak_premium_tax).gloss_ = "AK 21.09.210(m)";
 
     // DE: not yet implemented.
     foo.raw_entity(e_tiered_de_premium_tax                ).values_.push_back (0.0);
@@ -580,8 +621,9 @@ void stratified_charges::write_stratified_files()
     foo.raw_entity(e_tiered_sd_premium_tax                ).values_.push_back (0.00080);
     foo.raw_entity(e_tiered_sd_premium_tax                ).limits_.push_back(100000.0);
     foo.raw_entity(e_tiered_sd_premium_tax                ).limits_.push_back(DBL_MAX);
+    foo.raw_entity(e_tiered_sd_premium_tax).gloss_ = "SD 10-4-22(2) (see also 58-6-70)";
 
-    foo.write(AddDataDir("sample.tir"));
+    foo.write(AddDataDir("sample.strata"));
 }
 
 /// Determine whether a double is in effect the highest representable.

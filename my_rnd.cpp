@@ -39,37 +39,24 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "ihs_rnddata.hpp"
+#include "rounding_rules.hpp"
 
 #include "data_directory.hpp"
 
-// TODO ?? It would be better to call StreamableRoundingRules::WriteRndFiles()
-// here than to duplicate what it does. However, it would be better still
-// to use xml for all product data files.
-
-//============================================================================
-void StreamableRoundingRules::WriteProprietaryRndFiles()
+void rounding_rules::write_proprietary_rounding_files()
 {
-    // Sample policy form.
-    StreamableRoundingRules sample;
+    // Sample product.
+    rounding_rules sample;
+// Not necessary for 'sample' product only, because it's built in.
+//    sample.Write(AddDataDir("sample.rounding"));
 
-    sample.round_specamt_         = round_to<double>(0, r_upward    );
-    sample.round_death_benefit_   = round_to<double>(2, r_to_nearest);
-    sample.round_naar_            = round_to<double>(2, r_to_nearest);
-    sample.round_coi_rate_        = round_to<double>(8, r_downward  );
-    sample.round_coi_charge_      = round_to<double>(2, r_to_nearest);
-    sample.round_gross_premium_   = round_to<double>(2, r_to_nearest);
-    sample.round_net_premium_     = round_to<double>(2, r_to_nearest);
-    sample.round_interest_rate_   = round_to<double>(0, r_not_at_all);
-    sample.round_interest_credit_ = round_to<double>(2, r_to_nearest);
-    sample.round_withdrawal_      = round_to<double>(2, r_to_nearest);
-    sample.round_loan_            = round_to<double>(2, r_to_nearest);
-    sample.round_corridor_factor_ = round_to<double>(2, r_to_nearest);
-    sample.round_surrender_charge_= round_to<double>(2, r_to_nearest);
-    sample.round_irr_             = round_to<double>(5, r_downward  );
-
-    sample.Write(AddDataDir("sample.rnd"));
-
-    // Another policy form....
+#if 0
+    // Template for adding another policy form.
+    rounding_rules another;
+    another.round_specamt_         = round_to<double>(0, r_upward    );
+    another.round_death_benefit_   = round_to<double>(2, r_to_nearest);
+    // ...
+    another.Write(AddDataDir("another.rounding"));
+#endif // 0
 }
 

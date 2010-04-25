@@ -36,8 +36,6 @@
 #include "death_benefits.hpp"
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
-#include "ihs_rnddata.hpp"
-#include "ihs_proddata.hpp"
 #include "input.hpp" // Magic static function.
 #include "interest_rates.hpp"
 #include "ledger.hpp"
@@ -50,7 +48,6 @@
 #include "outlay.hpp"
 #include "stl_extensions.hpp"
 #include "stratified_algorithms.hpp"
-#include "stratified_charges.hpp"
 #include "surrchg_rates.hpp"
 
 #include <boost/bind.hpp>
@@ -1048,7 +1045,7 @@ void AccountValue::AddSurrChgLayer(int year, double delta_specamt)
         ,SurrChgRates_->SpecamtRateDurationalFactor().end() - year
         ,std::inserter(new_layer, new_layer.begin())
         ,boost::bind
-            (round_surrender_charge
+            (round_surrender_charge()
             ,boost::bind(std::multiplies<double>(), _1, z)
             )
         );
@@ -1081,7 +1078,7 @@ void AccountValue::ReduceSurrChg(int year, double partial_surrchg)
             ,       SurrChg_.end()
             ,year + SurrChg_.begin()
             ,boost::bind
-                (round_surrender_charge
+                (round_surrender_charge()
                 ,boost::bind(std::multiplies<double>(), _1, multiplier)
                 )
             );
@@ -1512,7 +1509,7 @@ void AccountValue::SetAnnualInvariants()
     YearsCoiRate0           = MortalityRates_->MonthlyCoiRatesBand0(GenBasis_)[Year];
     YearsCoiRate1           = MortalityRates_->MonthlyCoiRatesBand1(GenBasis_)[Year];
     YearsCoiRate2           = MortalityRates_->MonthlyCoiRatesBand2(GenBasis_)[Year];
-    Years7702CoiRate        = GetMly7702qc                         ()         [Year];
+    YearsDcvCoiRate         = GetMlyDcvqc                          ()         [Year];
     YearsAdbRate            = MortalityRates_->AdbRates            ()         [Year];
     YearsTermRate           = MortalityRates_->MonthlyTermCoiRates (GenBasis_)[Year];
     YearsWpRate             = MortalityRates_->WpRates             ()         [Year];

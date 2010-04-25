@@ -59,14 +59,13 @@ bool is_three_rate_nasd(mcenum_ledger_type);
 
 /// Transform a plain enumerator to its string equivalent.
 ///
-/// This is rarely useful, but it's beneficial where it's used--see:
+/// This message:
 ///   http://lists.nongnu.org/archive/html/lmi/2008-08/msg00022.html
-/// Of course, a more general facility could easily be created.
-/// Perhaps these should be written as a template anyway.
+/// explains why this template is explicitly instantiated in the
+/// accompanying TU, and not defined here.
 
-std::string mc_str(mcenum_dbopt);
-std::string mc_str(mcenum_run_basis);
-std::string mc_str(mcenum_state);
+template<typename T>
+std::string mc_str(T);
 
 mcenum_state mc_state_from_string(std::string const&);
 
