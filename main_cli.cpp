@@ -70,9 +70,16 @@
 // and incompatible headers.
 void LMI_SO print_databases();
 
-//============================================================================
-void RegressionTest()
+/// Run a suite of test cases.
+///
+/// Run every file with extension
+///   '.cns', '.ini', or '.mec'
+/// in a given system-testing directory, emitting data appropriate for
+/// automated comparison with previously-saved results.
+
+void system_test()
 {
+    Timer timer;
     global_settings::instance().set_regression_testing(true);
     fs::path test_dir(global_settings::instance().regression_test_directory());
     fs::directory_iterator i(test_dir);
@@ -112,6 +119,7 @@ void RegressionTest()
             report_exception();
             }
         }
+    std::cout << "system_test(): " << timer.stop().elapsed_msec_str() << std::endl;
 }
 
 /// Spot check and time some insurance calculations.
@@ -120,7 +128,7 @@ void RegressionTest()
 /// production system's, so no assertions are made about them; but the
 /// speed difference is interesting.
 
-void SelfTest()
+void self_test()
 {
     bool const antediluvian = timestamp_of_production_release().empty();
 
@@ -195,16 +203,16 @@ void SelfTest()
         ;
 }
 
-//============================================================================
-void Profile()
+/// Run self-test repeatedly (intended for use with 'gprof').
+
+void profile()
 {
     for(int j = 0; j < 10; ++j)
         {
-        SelfTest();
+        self_test();
         }
 }
 
-//============================================================================
 void process_command_line(int argc, char* argv[])
 {
     // TRICKY !! Some long options are aliased to unlikely octal values.
@@ -509,19 +517,19 @@ void process_command_line(int argc, char* argv[])
 
     if(run_selftest)
         {
-        SelfTest();
+        self_test();
         return;
         }
 
     if(run_regression_test)
         {
-        RegressionTest();
+        system_test();
         return;
         }
 
     if(run_profile)
         {
-        Profile();
+        profile();
         return;
         }
 
@@ -559,7 +567,6 @@ void process_command_line(int argc, char* argv[])
         }
 }
 
-//============================================================================
 int try_main(int argc, char* argv[])
 {
     initialize_filesystem();

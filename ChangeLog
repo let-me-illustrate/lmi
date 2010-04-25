@@ -25044,7 +25044,21 @@ Fix defect introduced 20070221T0307Z. See (A) here:
 20100424T2350Z <gchicares@sbcglobal.net> [755]
 
   rounding_rules.cpp
-  rounding_rules.hpp
 Fix defect introduced 20070221T0307Z. See (B) here:
   http://lists.nongnu.org/archive/html/lmi/2010-04/msg00040.html
+
+20100425T2129Z <gchicares@sbcglobal.net> [755]
+
+  rounding_rules.cpp
+Improve documentation.
+
+20100425T2130Z <gchicares@sbcglobal.net> [755]
+
+  workhorse.make
+Refine system-test analysis.
+
+20100425T2131Z <gchicares@sbcglobal.net> [755]
+
+  main_cli.cpp
+Report elapsed time for system test.
 
