@@ -383,7 +383,7 @@ void mec_state::AscribeMembers()
     ascribe("Q6_max_non_mec_prem"      , &mec_state::Q6_max_non_mec_prem      );
 }
 
-/// Serial number of this class's xml version.
+/// Backward-compatibility serial number of this class's xml version.
 ///
 /// version 0: 20090728T1324Z
 
@@ -397,10 +397,6 @@ std::string mec_state::xml_root_name() const
     return "mec_state";
 }
 
-/// Entities that were present in older versions and then removed
-/// are recognized and ignored. If they're resurrected in a later
-/// version, then they aren't ignored.
-
 bool mec_state::is_detritus(std::string const& s) const
 {
     static std::string const a[] =
@@ -408,48 +404,5 @@ bool mec_state::is_detritus(std::string const& s) const
         };
     static std::vector<std::string> const v(a, a + lmi_array_size(a));
     return v.end() != std::find(v.begin(), v.end(), s);
-}
-
-/// Provide for backward compatibility before assigning values.
-
-std::string mec_state::redintegrate_ex_ante
-    (int                file_version
-    ,std::string const& // name
-    ,std::string const& value
-    ) const
-{
-    if(class_version() == file_version)
-        {
-        return value;
-        }
-    else
-        {
-        fatal_error() << "Incompatible file version." << LMI_FLUSH;
-        return value; // Stifle compiler warning.
-        }
-}
-
-/// Provide for backward compatibility after assigning values.
-
-void mec_state::redintegrate_ex_post
-    (int                                file_version
-    ,std::map<std::string, std::string> // detritus_map
-    ,std::list<std::string>             // residuary_names
-    )
-{
-    if(class_version() == file_version)
-        {
-        return;
-        }
-    else
-        {
-        fatal_error() << "Incompatible file version." << LMI_FLUSH;
-        }
-}
-
-/// Perform any required after-the-fact fixup.
-
-void mec_state::redintegrate_ad_terminum()
-{
 }
 

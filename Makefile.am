@@ -316,7 +316,6 @@ liblmi_common_sources = \
     path_utility.cpp \
     product_names.cpp \
     progress_meter.cpp \
-    rounding_rules.cpp \
     sigfpe.cpp \
     single_cell_document.cpp \
     surrchg_rates.cpp \
@@ -372,14 +371,14 @@ liblmi_la_SOURCES = \
     ihs_irc7702a.cpp \
     ihs_mortal.cpp \
     ihs_pios.cpp \
-    ihs_proddata.cpp \
-    ihs_rnddata.cpp \
     mc_enum.cpp \
     mc_enum_types.cpp \
     mc_enum_types_aux.cpp \
     md5.cpp \
     mortality_rates_fetch.cpp \
     preferences_model.cpp \
+    product_data.cpp \
+    rounding_rules.cpp \
     stratified_algorithms.cpp \
     stratified_charges.cpp \
     tn_range_types.cpp \
@@ -771,16 +770,15 @@ test_product_file_SOURCES =   \
   ihs_fpios.cpp \
   ihs_funddata.cpp \
   ihs_pios.cpp \
-  ihs_proddata.cpp \
-  ihs_rnddata.cpp \
   miscellany.cpp \
   path_utility.cpp \
+  product_data.cpp \
   product_file_test.cpp \
   rounding_rules.cpp \
   stratified_charges.cpp \
   timer.cpp
 test_product_file_CXXFLAGS = $(AM_CXXFLAGS)
-test_progress_meter_LDADD =   \
+test_product_file_LDADD =   \
   $(BOOST_LIBS)
 
 test_progress_meter_SOURCES =   \
@@ -958,8 +956,6 @@ noinst_HEADERS = \
     ihs_irc7702a.hpp \
     ihs_irc7702.hpp \
     ihs_pios.hpp \
-    ihs_proddata.hpp \
-    ihs_rnddata.hpp \
     ihs_server7702.hpp \
     ihs_server7702io.hpp \
     ihs_x_type.hpp \
@@ -1028,6 +1024,7 @@ noinst_HEADERS = \
     preferences_view.hpp \
     previewframe_ex.hpp \
     print_matrix.hpp \
+    product_data.hpp \
     product_editor.hpp \
     product_names.hpp \
     progress_meter.hpp \

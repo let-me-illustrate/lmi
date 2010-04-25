@@ -29,19 +29,33 @@
 #include "mc_enum_types_aux.hpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "mc_enum.hpp"
 #include "mc_enum_types.hpp"
 
-#include <boost/static_assert.hpp>
+namespace
+{
+/// Validate mc_n_gen_bases, mc_n_sep_bases, and mc_n_rate_periods.
+///
+/// Each of these very useful constants must equal the cardinality of
+/// its corresponding mc_enum type. This cannot gracefully be affirmed
+/// by a static assertion, so it's asserted at run time here.
 
-// The 'mc_n_' values could be initialized in the header with the
-// values they're tested against here, but that would complicate
-// the physical design. It's better to exclude heavyweight mc_enum
-// metadata from any header in which it's not indispensable.
+bool validate_mc_n_values()
+{
+    LMI_ASSERT(mc_n_gen_bases    == mce_gen_basis  ::all_strings().size());
+    LMI_ASSERT(mc_n_sep_bases    == mce_sep_basis  ::all_strings().size());
+    LMI_ASSERT(mc_n_rate_periods == mce_rate_period::all_strings().size());
+    return true;
+}
 
-BOOST_STATIC_ASSERT(mc_n_gen_bases    == mc_enum_key<mcenum_gen_basis  >::n_);
-BOOST_STATIC_ASSERT(mc_n_sep_bases    == mc_enum_key<mcenum_sep_basis  >::n_);
-BOOST_STATIC_ASSERT(mc_n_rate_periods == mc_enum_key<mcenum_rate_period>::n_);
+/// See:
+///   http://groups.google.com/groups?selm=1006352851.15484.0.nnrp-08.3e31d362@news.demon.co.uk
+/// and Kanze's reply:
+///   http://groups.google.com/groups?selm=d6651fb6.0111221034.42e78b95@posting.google.com
+
+volatile bool ensure_setup = validate_mc_n_values();
+} // Unnamed namespace.
 
 std::vector<std::string> const& LMI_SO all_strings_gender   () {return mce_gender  ::all_strings();}
 std::vector<std::string> const& LMI_SO all_strings_class    () {return mce_class   ::all_strings();}
@@ -85,24 +99,17 @@ bool is_three_rate_nasd(mcenum_ledger_type)
     return false;
 }
 
-std::string mc_str(mcenum_dbopt z)
+template<typename T>
+std::string mc_str(T t)
 {
-    return mce_dbopt(z).str();
+    return mc_enum<T>(t).str();
 }
 
-std::string mc_str(mcenum_run_basis z)
-{
-    return mce_run_basis(z).str();
-}
-  #include "alert.hpp"
-std::string mc_str(mcenum_state z)
-{
-//    return mce_state(z).str();
-
-try{
-    return mce_state(z).str();
-} catch(...) {fatal_error() << z << " !" << LMI_FLUSH; throw 0;}
-}
+template std::string mc_str(mcenum_dbopt    );
+template std::string mc_str(mcenum_gender   );
+template std::string mc_str(mcenum_run_basis);
+template std::string mc_str(mcenum_smoking  );
+template std::string mc_str(mcenum_state    );
 
 mcenum_state mc_state_from_string(std::string const& s)
 {

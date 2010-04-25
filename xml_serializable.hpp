@@ -29,6 +29,8 @@
 #include "so_attributes.hpp"
 #include "xml_lmi_fwd.hpp"
 
+#include <boost/filesystem/path.hpp>
+
 #include <list>
 #include <map>
 #include <string>
@@ -43,24 +45,46 @@ class LMI_SO xml_serializable
   public:
     virtual ~xml_serializable();
 
+    void load(fs::path const&);
+    void save(fs::path const&) const;
+
     void read (xml::element const&);
     void write(xml::element&) const;
 
   private:
+    // Private non-virtuals.
+    T      & t()      ;
+    T const& t() const;
+    void immit_members_into(xml::element&) const;
+
+    // Class (T) identification.
     virtual int         class_version() const = 0;
     virtual std::string xml_root_name() const = 0;
-    virtual bool        is_detritus(std::string const&) const = 0;
-    virtual std::string redintegrate_ex_ante
+
+    // Reading and writing.
+    virtual void read_element
+        (xml::element const& e
+        ,std::string const&  name
+        ,int                 file_version
+        );
+    virtual void write_element
+        (xml::element&       parent
+        ,std::string const&  name
+        ) const;
+
+    // Backward compatibility.
+    virtual bool is_detritus(std::string const&) const;
+    virtual void redintegrate_ex_ante
         (int                file_version
         ,std::string const& name
-        ,std::string const& value
-        ) const = 0;
-    virtual void        redintegrate_ex_post
+        ,std::string      & value
+        ) const;
+    virtual void redintegrate_ex_post
         (int                                file_version
         ,std::map<std::string, std::string> detritus_map
         ,std::list<std::string>             residuary_names
-        ) = 0;
-    virtual void        redintegrate_ad_terminum() = 0;
+        );
+    virtual void redintegrate_ad_terminum();
 };
 
 template<typename T>

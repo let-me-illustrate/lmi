@@ -30,9 +30,7 @@
 
 #include "alert.hpp"
 #include "death_benefits.hpp"
-#include "ihs_rnddata.hpp"
 #include "ledger_invariant.hpp"
-#include "ledger_variant.hpp"
 #include "mortality_rates.hpp"
 
 #include <algorithm>
@@ -50,9 +48,6 @@
 //
 // There are two functions for specamt strategy; apparently only the one
 // called "Old" is used.
-//
-// Why is VariantValues used? Where it is used, wouldn't it be clearer
-// just to get the initial values from BasicValues or InputParms?
 
 //============================================================================
 double AccountValue::CalculateSpecAmtFromStrategy
@@ -162,7 +157,7 @@ void AccountValue::PerformSpecAmtStrategy()
     for
         (int j = 0; j < BasicValues::Length; ++j)
         {
-        double z = round_specamt(CalculateSpecAmtFromStrategy(j, 0));
+        double z = round_specamt()(CalculateSpecAmtFromStrategy(j, 0));
         DeathBfts_->set_specamt(z, j, 1 + j);
         }
 }

@@ -28,9 +28,10 @@
 
 #include "ihs_dbdict.hpp"
 #include "ihs_funddata.hpp"
-#include "ihs_proddata.hpp"
-#include "ihs_rnddata.hpp"
 #include "main_common.hpp"
+#include "path_utility.hpp" // initialize_filesystem()
+#include "product_data.hpp"
+#include "rounding_rules.hpp"
 #include "stratified_charges.hpp"
 
 #include <iostream>
@@ -38,18 +39,20 @@
 
 int try_main(int, char*[])
 {
+    initialize_filesystem();
+
     std::cout << "Generating product files." << std::endl;
 
     DBDictionary::instance() .WriteSampleDBFile                  ();
-    TProductData            ::WritePolFiles                      ();
+    product_data            ::WritePolFiles                      ();
     FundData                ::WriteFundFiles                     ();
-    StreamableRoundingRules ::WriteRndFiles                      ();
+    rounding_rules          ::write_rounding_files               ();
     stratified_charges      ::write_stratified_files             ();
 
     DBDictionary::instance() .WriteProprietaryDBFiles            ();
     FundData                ::WriteProprietaryFundFiles          ();
-    TProductData            ::WriteProprietaryPolFiles           ();
-    StreamableRoundingRules ::WriteProprietaryRndFiles           ();
+    product_data            ::WriteProprietaryPolFiles           ();
+    rounding_rules          ::write_proprietary_rounding_files   ();
     stratified_charges      ::write_proprietary_stratified_files ();
 
     std::cout << "\nAll product files written.\n" << std::endl;

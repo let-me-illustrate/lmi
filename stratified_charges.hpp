@@ -29,6 +29,7 @@
 #include "mc_enum_type_enums.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
+#include "xml_lmi_fwd.hpp"
 
 #include <iosfwd>
 #include <map>
@@ -41,6 +42,10 @@ enum e_stratified
     ,e_topic_premium_banded
     ,e_curr_sepacct_load_banded_by_premium
     ,e_guar_sepacct_load_banded_by_premium
+
+    ,e_topic_asset_banded
+    ,e_curr_sepacct_load_banded_by_assets
+    ,e_guar_sepacct_load_banded_by_assets
 
     ,e_topic_asset_tiered
     ,e_curr_m_and_e_tiered_by_assets
@@ -71,20 +76,23 @@ class LMI_SO stratified_entity
     stratified_entity
         (std::vector<double> const& limits
         ,std::vector<double> const& values
+        ,std::string const&         gloss = std::string()
         );
     ~stratified_entity();
 
-    void read (std::istream&);
-    void write(std::ostream&) const;
+    void read (xml::element const& node);
+    void write(xml::element&) const;
 
   private:
     void assert_validity() const;
 
     std::vector<double> const& limits() const;
     std::vector<double> const& values() const;
+    std::string const&         gloss () const;
 
     std::vector<double> limits_;
     std::vector<double> values_;
+    std::string         gloss_;
 };
 
 // Implicitly-declared special member functions do the right thing.
@@ -112,15 +120,9 @@ class LMI_SO stratified_charges
         ,double           assets
         ,double           premium
         ,double           special_limit
-        );
+        ) const;
 
-    // TODO ?? In the public interface, consider replacing these:
-    //   tiered_current_m_and_e()
-    //   tiered_guaranteed_m_and_e()
-    // with a single tiered_m_and_e(mcenum_gen_basis basis, double assets).
-
-    double tiered_current_m_and_e           (double assets) const;
-    double tiered_guaranteed_m_and_e        (double assets) const;
+    double tiered_m_and_e(mcenum_gen_basis basis, double assets) const;
     double tiered_asset_based_compensation  (double assets) const;
     double tiered_investment_management_fee (double assets) const;
 
@@ -166,6 +168,9 @@ class LMI_SO stratified_charges
 
     double tiered_curr_sepacct_load(double assets, double premium) const;
     double tiered_guar_sepacct_load(double assets, double premium) const;
+
+    double tiered_curr_m_and_e(double assets) const;
+    double tiered_guar_m_and_e(double assets) const;
 
     std::map<e_stratified, stratified_entity> dictionary;
 };

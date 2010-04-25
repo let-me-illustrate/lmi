@@ -28,8 +28,9 @@
 
 #include "ihs_dbdict.hpp"
 #include "ihs_funddata.hpp"
-#include "ihs_proddata.hpp"
-#include "ihs_rnddata.hpp"
+#include "path_utility.hpp" // initialize_filesystem()
+#include "product_data.hpp"
+#include "rounding_rules.hpp"
 #include "stratified_charges.hpp"
 
 #include "test_tools.hpp"
@@ -42,6 +43,7 @@ class product_file_test
   public:
     static void test()
         {
+        initialize_filesystem();
         write_all_files();
         assay_speed();
         }
@@ -71,17 +73,17 @@ std::string product_file_test::stratified_filename_ ;
 void product_file_test::write_all_files()
 {
     DBDictionary::instance() .WriteSampleDBFile      ();
-    TProductData            ::WritePolFiles          ();
+    product_data            ::WritePolFiles          ();
     FundData                ::WriteFundFiles         ();
-    StreamableRoundingRules ::WriteRndFiles          ();
+    rounding_rules          ::write_rounding_files   ();
     stratified_charges      ::write_stratified_files ();
 
     policy_filename_     = "sample";
-    TProductData p(policy_filename_);
-    database_filename_   = p.GetDatabaseFilename ();
-    fund_filename_       = p.GetFundFilename     ();
-    rounding_filename_   = p.GetRoundingFilename ();
-    stratified_filename_ = p.GetTierFilename     ();
+    product_data p(policy_filename_);
+    database_filename_   = p.datum("DatabaseFilename");
+    fund_filename_       = p.datum("FundFilename"    );
+    rounding_filename_   = p.datum("RoundingFilename");
+    stratified_filename_ = p.datum("TierFilename"    );
 }
 
 void product_file_test::read_database_file()
@@ -97,12 +99,12 @@ void product_file_test::read_fund_file()
 
 void product_file_test::read_policy_file()
 {
-    TProductData p(policy_filename_);
+    product_data p(policy_filename_);
 }
 
 void product_file_test::read_rounding_file()
 {
-    StreamableRoundingRules r(rounding_filename_);
+    rounding_rules r(rounding_filename_);
 }
 
 void product_file_test::read_stratified_file()

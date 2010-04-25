@@ -546,6 +546,18 @@ else
   endif
 endif
 
+# An overriding version of 'my_prod.cpp', which is used to create a
+# nondistributable binary, contains so many large strings that, after
+# consuming more than one CPU minute and 1 MiB of RAM, MinGW gcc-3.4.5
+# produces a diagnostic such as
+#   warning: NULL pointer checks disabled:
+#   39933 basic blocks and 167330 registers
+# Adding '-fno-delete-null-pointer-checks' to $(CPPFLAGS) might
+# suffice to suppress the diagnostic, but this file actually doesn't
+# need any optimization at all.
+
+my_prod.o: optimization_flag := -O0
+
 ################################################################################
 
 # Libraries and associated options.
@@ -920,11 +932,11 @@ shared_data_files = \
   qx_ins.ndx \
   sample.dat \
   sample.db4 \
-  sample.fnd \
+  sample.funds \
   sample.ndx \
-  sample.pol \
-  sample.rnd \
-  sample.tir \
+  sample.policy \
+  sample.rounding \
+  sample.strata \
 
 .PHONY: archive_shared_data_files
 archive_shared_data_files:
@@ -1013,7 +1025,7 @@ extra_fardel_checksummed_files = \
 
 fardel_checksummed_files = \
   $(extra_fardel_checksummed_files) \
-  *.dat *.db4 *.fnd *.ndx *.pol *.rnd *.tir \
+  *.dat *.db4 *.funds *.ndx *.policy *.rounding *.strata \
   expiry \
   md5sum$(EXEEXT) \
 
@@ -1051,12 +1063,12 @@ wrap_fardel:
 .PHONY: test
 test: $(test_targets)
 
-# Some test targets require 'sample.pol' to exist even though they
+# Some test targets require 'sample.policy' to exist even though they
 # don't actually read its contents.
 
-$(test_targets): sample.pol
+$(test_targets): sample.policy
 
-sample.pol:
+sample.policy:
 	@$(TOUCH) $@
 
 ################################################################################

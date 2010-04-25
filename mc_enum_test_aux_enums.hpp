@@ -31,6 +31,11 @@ enum enum_holiday
     ,h_Easter    = 20040411
     ,h_Pentecost = 20040530
     };
+enum enum_island
+    {i_Easter    =  37
+    ,i_Pago_Pago = -17
+    ,i_Ni_ihau   =  13
+    };
 
 #endif // mc_enum_test_aux_enums_hpp
 

@@ -41,7 +41,6 @@
 #include "loads.hpp"
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
-#include "rounding_rules.hpp"
 
 #include <algorithm> // std::max(), std::min()
 #include <cmath>     // std::pow()
@@ -495,7 +494,7 @@ void AccountValue::PerformSpecAmtStrategy()
             }
         }
 
-    SA = GetRoundingRules().round_specamt()(SA);
+    SA = round_specamt()(SA);
 
     for(int j = 0; j < BasicValues::GetLength(); j++)
         {
@@ -552,7 +551,7 @@ void AccountValue::TxOptionChange()
             fatal_error() << "Case " << YearsDBOpt << " not found." << LMI_FLUSH;
             }
         }
-    ActualSpecAmt = GetRoundingRules().round_specamt()(ActualSpecAmt);
+    ActualSpecAmt = round_specamt()(ActualSpecAmt);
 
     // Carry the new spec amt forward into all future years.
     for(int j = Year; j < BasicValues::GetLength(); j++)
@@ -701,7 +700,7 @@ void AccountValue::TxPmt()
 //            (DB-AV)/YearsCorridorFactor - AV
 
     // Subtract premium load from gross premium yielding net premium.
-    NetPmts[Month] = GetRoundingRules().round_net_premium()
+    NetPmts[Month] = round_net_premium()
         (GrossPmts[Month] * (1.0 - YearsPremLoadTgt)
         );
     // Should we instead do the following?
@@ -770,7 +769,7 @@ void AccountValue::TxSetDeathBft(bool)
             }
         }
 
-    deathbft = GetRoundingRules().round_death_benefit()(deathbft);
+    deathbft = round_death_benefit()(deathbft);
 
     // SOMEDAY !! Accumulate average death benefit for profit testing here.
 }
@@ -782,11 +781,9 @@ void AccountValue::TxSetCoiCharge()
     TxSetDeathBft();
 
     // Negative AV doesn't increase NAAR.
-    NAAR = GetRoundingRules().round_naar()
-        (deathbft * mlyguarv - (AVUnloaned + AVRegLn + AVPrfLn)
-        );
+    NAAR = round_naar()(deathbft * mlyguarv - (AVUnloaned + AVRegLn + AVPrfLn));
 
-    CoiCharge = GetRoundingRules().round_coi_charge()(NAAR * YearsCoiRate0);
+    CoiCharge = round_coi_charge()(NAAR * YearsCoiRate0);
 }
 
 //============================================================================
@@ -827,9 +824,7 @@ void AccountValue::TxCreditInt()
     if(0.0 < AVUnloaned)
         {
         // IHS !! Each interest increment is rounded separately in lmi.
-        double z = GetRoundingRules().round_interest_credit()
-            (AVUnloaned * YearsGenAcctIntRate
-            );
+        double z = round_interest_credit()(AVUnloaned * YearsGenAcctIntRate);
         AVUnloaned += z;
         }
     // Loaned account value cannot be negative.
@@ -848,22 +843,14 @@ void AccountValue::TxLoanInt()
 
     // We may want to display credited interest separately.
     // IHS !! Each interest increment is rounded separately in lmi.
-    RegLnIntCred = GetRoundingRules().round_interest_credit()
-        (AVRegLn * YearsRegLnIntCredRate
-        );
-    PrfLnIntCred = GetRoundingRules().round_interest_credit()
-        (AVPrfLn * YearsPrfLnIntCredRate
-        );
+    RegLnIntCred = round_interest_credit()(AVRegLn * YearsRegLnIntCredRate);
+    PrfLnIntCred = round_interest_credit()(AVPrfLn * YearsPrfLnIntCredRate);
 
     AVRegLn += RegLnIntCred;
     AVPrfLn += PrfLnIntCred;
 
-    double RegLnIntAccrued = GetRoundingRules().round_interest_credit()
-        (RegLnBal * YearsRegLnIntDueRate
-        );
-    double PrfLnIntAccrued = GetRoundingRules().round_interest_credit()
-        (PrfLnBal * YearsPrfLnIntDueRate
-        );
+    double RegLnIntAccrued = round_interest_credit()(RegLnBal * YearsRegLnIntDueRate);
+    double PrfLnIntAccrued = round_interest_credit()(PrfLnBal * YearsPrfLnIntDueRate);
 
     RegLnBal += RegLnIntAccrued;
     PrfLnBal += PrfLnIntAccrued;
@@ -927,7 +914,7 @@ void AccountValue::TxTakeWD()
 // TODO ??            ActualSpecAmt = std::min(ActualSpecAmt, deathbft - wd);
             ActualSpecAmt -= wd;
             ActualSpecAmt = std::max(ActualSpecAmt, MinSpecAmt);
-            ActualSpecAmt = GetRoundingRules().round_specamt()(ActualSpecAmt);
+            ActualSpecAmt = round_specamt()(ActualSpecAmt);
             // TODO ?? If WD causes AV < min AV, do we:
             //   reduce the WD?
             //   lapse the policy?
@@ -989,7 +976,7 @@ void AccountValue::TxTakeLoan()
     IntAdj = (IntAdj - 1.0) / IntAdj;
     MaxLoan *= 1.0 - IntAdj;
     MaxLoan = std::max(0.0, MaxLoan);
-    MaxLoan = GetRoundingRules().round_loan()(MaxLoan);
+    MaxLoan = round_loan()(MaxLoan);
 
     // IHS !! Preferred loan calculations would go here: implemented in lmi.
 

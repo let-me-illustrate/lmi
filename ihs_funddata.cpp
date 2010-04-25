@@ -1,4 +1,4 @@
-// Fund data.
+// Fund names and investment-management fees.
 //
 // Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
@@ -21,10 +21,6 @@
 
 // $Id$
 
-// This class describes funds: their names and investment mgmt fees.
-// TODO ?? An extension other than .fnd would be preferable: msw uses
-// .fnd for "find"
-
 #include LMI_PCH_HEADER
 #ifdef __BORLANDC__
 #   pragma hdrstop
@@ -36,26 +32,32 @@
 #include "assert_lmi.hpp"
 #include "data_directory.hpp"
 #include "platform_dependent.hpp" // access()
+#include "xml_lmi.hpp"
+#include "xml_serialize.hpp"
 
-#include <fstream>
+#include <boost/filesystem/convenience.hpp>
+#include <boost/filesystem/path.hpp>
 
 //============================================================================
 FundInfo::FundInfo()
     :ScalarIMF_(0.0)
     ,ShortName_("")
     ,LongName_ ("")
+    ,gloss_    ("")
 {
 }
 
 //============================================================================
 FundInfo::FundInfo
-    (double      ScalarIMF
-    ,std::string ShortName
-    ,std::string LongName
+    (double             ScalarIMF
+    ,std::string const& ShortName
+    ,std::string const& LongName
+    ,std::string const& gloss
     )
     :ScalarIMF_(ScalarIMF)
     ,ShortName_(ShortName)
     ,LongName_ (LongName)
+    ,gloss_    (gloss)
 {
 }
 
@@ -63,6 +65,33 @@ FundInfo::FundInfo
 FundInfo::~FundInfo()
 {
 }
+
+namespace xml_serialize
+{
+template<> struct xml_io<FundInfo>
+{
+    static void to_xml(xml::element& e, FundInfo const& t)
+    {
+        set_element(e, "scalar_imf", t.ScalarIMF());
+        set_element(e, "short_name", t.ShortName());
+        set_element(e, "long_name" , t.LongName ());
+        set_element(e, "gloss"     , t.gloss    ());
+    }
+
+    static void from_xml(xml::element const& e, FundInfo& t)
+    {
+        double      scalar_imf;
+        std::string short_name;
+        std::string long_name;
+        std::string gloss;
+        get_element(e, "scalar_imf", scalar_imf);
+        get_element(e, "short_name", short_name);
+        get_element(e, "long_name" , long_name );
+        get_element(e, "gloss"     , gloss     );
+        t = FundInfo(scalar_imf, short_name, long_name, gloss);
+    }
+};
+} // namespace xml_serialize
 
 //============================================================================
 FundData::FundData()
@@ -80,6 +109,14 @@ FundData::~FundData()
 {
 }
 
+namespace
+{
+std::string xml_root_name()
+{
+    return "funds";
+}
+} // Unnamed namespace.
+
 //============================================================================
 void FundData::Read(std::string const& a_Filename)
 {
@@ -92,63 +129,29 @@ void FundData::Read(std::string const& a_Filename)
             << LMI_FLUSH
             ;
         }
-    std::ifstream is(a_Filename.c_str());
 
-    LMI_ASSERT(0 == FundInfo_.size());
-    for(;;)
-        {
-        if(EOF == is.peek())
-            {
-            break;
-            }
+    xml_lmi::dom_parser parser(a_Filename);
+    xml::element const& root = parser.root_node(xml_root_name());
 
-        FundInfo f;
-        is >> f.ScalarIMF_;
-        // First, a dummy call to eat the tab after the double.
-        std::string sink;
-        std::getline(is, sink, '\t');
-        std::getline(is, f.ShortName_, '\t');
-        std::getline(is, f.LongName_, '\n');
-        if(!is.good())
-            {
-            fatal_error()
-                << "Error reading fund file '"
-                << a_Filename
-                << "'. Try reinstalling."
-                << LMI_FLUSH
-                ;
-            }
-        FundInfo_.push_back(f);
-        }
+    xml_serialize::from_xml(root, FundInfo_);
 }
 
 //============================================================================
-void FundData::Write(std::string const& a_Filename)
+void FundData::Write(std::string const& a_Filename) const
 {
-    std::ofstream os(a_Filename.c_str());
+    xml_lmi::xml_document document(xml_root_name());
+    xml::element& root = document.root_node();
 
-    std::vector<FundInfo>::const_iterator i = FundInfo_.begin();
-    for(;i != FundInfo_.end(); i++)
-        {
-        os
-            << i->ScalarIMF_
-            << '\t'
-            << i->ShortName_
-            << '\t'
-            << i->LongName_
-            << '\n'
-            ;
-        }
+    xml_lmi::set_attr(root, "version", "0");
+    xml_serialize::to_xml(root, FundInfo_);
 
-    if(!os.good())
-        {
-        fatal_error()
-            << "Unable to write fund file '"
-            << a_Filename
-            << "'."
-            << LMI_FLUSH
-            ;
-        }
+    // Instead of this:
+//    document.save(a_Filename);
+    // for the nonce, explicitly change the extension, in order to
+    // force external product-file code to use the new extension.
+    fs::path path(a_Filename, fs::native);
+    path = fs::change_extension(path, ".funds");
+    document.save(path.string());
 }
 
 //============================================================================
@@ -160,8 +163,9 @@ void FundData::WriteFundFiles()
             (50
             ,"Money Market"
             ,"Money Market Fund"
+            ,"Specimen gloss."
             )
         );
-    foo.Write(AddDataDir("sample.fnd"));
+    foo.Write(AddDataDir("sample.funds"));
 }
 

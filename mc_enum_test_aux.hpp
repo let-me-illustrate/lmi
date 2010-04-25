@@ -27,14 +27,10 @@
 #include "config.hpp"
 
 #include "mc_enum_fwd.hpp"
-#include "mc_enum_metadata.hpp"
 #include "mc_enum_test_aux_enums.hpp"
 
-extern enum_holiday const holiday_enums[3];
-extern char const*const holiday_strings[3];
-template<> struct mc_enum_key<enum_holiday>
-  :public mc_enum_data<enum_holiday, 3, holiday_enums, holiday_strings> {};
 typedef mc_enum<enum_holiday> e_holiday;
+typedef mc_enum<enum_island > e_island ;
 
 #endif // mc_enum_test_aux_hpp
 

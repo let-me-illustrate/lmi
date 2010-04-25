@@ -35,7 +35,6 @@
 #include "dbnames.hpp"
 #include "math_functors.hpp"
 #include "miscellany.hpp" // each_equal()
-#include "rounding_rules.hpp"
 #include "yare_input.hpp"
 
 #include <algorithm>
@@ -255,8 +254,8 @@ InterestRates::~InterestRates()
 
 InterestRates::InterestRates(BasicValues const& v)
     :Length_             (v.GetLength())
-    ,RoundIntRate_       (v.GetRoundingRules().round_interest_rate())
-    ,Round7702Rate_      (v.GetRoundingRules().round_interest_rate_7702())
+    ,RoundIntRate_       (v.round_interest_rate())
+    ,Round7702Rate_      (v.round_interest_rate_7702())
     ,Zero_               (Length_)
     ,NeedMidpointRates_  (v.IsSubjectToIllustrationReg())
     ,GenAcctRateType_    (v.yare_input_.GeneralAccountRateType)

@@ -33,19 +33,19 @@
 #include "assert_lmi.hpp"
 #include "emit_ledger.hpp"
 #include "fenv_guard.hpp"
-#include "illustrator.hpp" // assert_consistency()
+#include "illustrator.hpp"       // assert_consistency()
 #include "input.hpp"
 #include "ledger.hpp"
 #include "ledgervalues.hpp"
 #include "materially_equal.hpp"
-#include "mc_enum_types_aux.hpp"
+#include "mc_enum_types_aux.hpp" // mc_str()
 #include "path_utility.hpp"
 #include "progress_meter.hpp"
 #include "timer.hpp"
 #include "value_cast.hpp"
 
-#include <algorithm> // std::max()
-#include <iterator>  // std::back_inserter()
+#include <algorithm>             // std::max()
+#include <iterator>              // std::back_inserter()
 #include <string>
 
 namespace

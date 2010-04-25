@@ -28,15 +28,20 @@
 
 #include "authenticity.hpp"
 #include "mec_server.hpp"
+#include "product_data.hpp"
 #include "xml_serializable.tpp"
+
+namespace
+{
+    std::string const empty_string("");
+} // Unnamed namespace.
 
 void authenticate_system()
 {}
 
 std::string const& timestamp_of_production_release()
 {
-    static std::string const s("");
-    return s;
+    return empty_string;
 }
 
 mec_server::mec_server(mcenum_emission)
@@ -71,8 +76,7 @@ int mec_state::class_version() const
 
 std::string mec_state::xml_root_name() const
 {
-    static std::string const s("");
-    return s;
+    return empty_string;
 }
 
 bool mec_state::is_detritus(std::string const&) const
@@ -80,23 +84,8 @@ bool mec_state::is_detritus(std::string const&) const
     return false;
 }
 
-std::string mec_state::redintegrate_ex_ante
-    (int
-    ,std::string const&
-    ,std::string const&
-    ) const
+std::string const& product_data::datum(std::string const&) const
 {
-    static std::string const s("");
-    return s;
+    return empty_string;
 }
-
-void mec_state::redintegrate_ex_post
-    (int
-    ,std::map<std::string, std::string>
-    ,std::list<std::string>
-    )
-{}
-
-void mec_state::redintegrate_ad_terminum()
-{}
 

@@ -371,6 +371,8 @@ void Skeleton::InitDocManager()
         ,CLASSINFO(DatabaseView)
         );
 
+    // Apparently there's no way to edit a '.funds' file.
+
     new(wx) wxDocTemplate
         (doc_manager_
         ,"Policy"
@@ -386,9 +388,9 @@ void Skeleton::InitDocManager()
     new(wx) wxDocTemplate
         (doc_manager_
         ,"Rounding"
-        ,"*.rnd"
+        ,"*.rounding"
         ,""
-        ,"rnd"
+        ,"rounding"
         ,"Rounding document"
         ,"Rounding view"
         ,CLASSINFO(RoundingDocument)
@@ -397,10 +399,10 @@ void Skeleton::InitDocManager()
 
     new(wx) wxDocTemplate
         (doc_manager_
-        ,"Tier"
-        ,"*.tir"
+        ,"Strata"
+        ,"*.strata"
         ,""
-        ,"tir"
+        ,"strata"
         ,"Tier document"
         ,"Tier view"
         ,CLASSINFO(TierDocument)

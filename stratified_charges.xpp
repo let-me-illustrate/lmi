@@ -27,16 +27,19 @@
 
 #define LMI_TIERED_CHARGE_NAMES \
 {e_stratified_first,e_stratified_first,"dummy","dummy",}, \
-{e_topic_premium_banded,e_stratified_first,"Premium-banded charges","Experience rating items that vary by case size.",}, \
-{e_curr_sepacct_load_banded_by_premium,e_topic_premium_banded,"Curr sep acct load by premium","Current separate account load, banded by cumulative 'net' premium. Enter breakpoints as cumulative premium.",}, \
-{e_guar_sepacct_load_banded_by_premium,e_topic_premium_banded,"Guar sep acct load by premium","Guaranteed separate account load, banded by cumulative 'net' premium. Enter breakpoints as cumulative premium.",}, \
+{e_topic_premium_banded,e_stratified_first,"Premium-banded charges","Charges that are banded by premium.",}, \
+{e_curr_sepacct_load_banded_by_premium,e_topic_premium_banded,"Curr sep acct load banded by premium","Current separate-account load, banded by cumulative 'net' premium. Enter breakpoints as cumulative premium.",}, \
+{e_guar_sepacct_load_banded_by_premium,e_topic_premium_banded,"Guar sep acct load banded by premium","Guaranteed separate-account load, banded by cumulative 'net' premium. Enter breakpoints as cumulative premium.",}, \
+{e_topic_asset_banded,e_stratified_first,"Asset-banded charges","Charges that are banded by assets.",}, \
+{e_curr_sepacct_load_banded_by_assets,e_topic_asset_banded,"Curr sep acct load banded by assets","Current separate-account load, banded by present separate-account assets. Enter breakpoints as total separate-account assets.",}, \
+{e_guar_sepacct_load_banded_by_assets,e_topic_asset_banded,"Guar sep acct load banded by assets","Guaranteed separate-account load, banded by present separate-account assets. Enter breakpoints as total separate-account assets.",}, \
 {e_topic_asset_tiered,e_stratified_first,"Asset-tiered charges","Charges that are tiered by assets.",}, \
-{e_curr_m_and_e_tiered_by_assets,e_topic_asset_tiered,"Current M&E","Current M&&E, tiered by present assets. Enter breakpoints as increments, e.g. first 50,000,000, next 50,000,000, and so on.",}, \
-{e_guar_m_and_e_tiered_by_assets,e_topic_asset_tiered,"Guaranteed M&E","Guaranteed M&&E, tiered by present assets. Enter breakpoints as increments, e.g. first 50,000,000, next 50,000,000, and so on.",}, \
+{e_curr_m_and_e_tiered_by_assets,e_topic_asset_tiered,"Current M&E","Current M&&E, tiered by present separate-account assets. Enter breakpoints as increments, e.g. first 50,000,000, next 50,000,000, and so on.",}, \
+{e_guar_m_and_e_tiered_by_assets,e_topic_asset_tiered,"Guaranteed M&E","Guaranteed M&&E, tiered by present separate-account assets. Enter breakpoints as increments, e.g. first 50,000,000, next 50,000,000, and so on.",}, \
 {e_asset_based_comp_tiered_by_assets,e_topic_asset_tiered,"Compensation","Compensation, tiered by present assets. Enter breakpoints as increments, e.g. first 50,000,000, next 50,000,000, and so on.",}, \
 {e_investment_mgmt_fee_tiered_by_assets,e_topic_asset_tiered,"Investment management","Investment management, tiered by present assets. Enter breakpoints as increments, e.g. first 50,000,000, next 50,000,000, and so on.",}, \
-{e_curr_sepacct_load_tiered_by_assets,e_topic_asset_tiered,"Curr sep acct load by assets","Current separate account load, tiered by present separate account assets. Enter breakpoints as increments, e.g. first 50,000,000, next 50,000,000, and so on.",}, \
-{e_guar_sepacct_load_tiered_by_assets,e_topic_asset_tiered,"Guar sep acct load by assets","Guaranteed separate account load, tiered by present separate account assets. Enter breakpoints as increments, e.g. first 50,000,000, next 50,000,000, and so on.",}, \
+{e_curr_sepacct_load_tiered_by_assets,e_topic_asset_tiered,"Curr sep acct load tiered by assets","Current separate-account load, tiered by present separate-account assets. Enter breakpoints as increments, e.g. first 50,000,000, next 50,000,000, and so on.",}, \
+{e_guar_sepacct_load_tiered_by_assets,e_topic_asset_tiered,"Guar sep acct load tiered by assets","Guaranteed separate-account load, tiered by present separate-account assets. Enter breakpoints as increments, e.g. first 50,000,000, next 50,000,000, and so on.",}, \
 {e_topic_tiered_premium_tax,e_stratified_first,"Premium tax","Tiered premium tax.",}, \
 {e_tiered_ak_premium_tax,e_topic_tiered_premium_tax,"Alaska","Alaska premium tax, tiered by policy-year individual-contract premium. Enter breakpoints as increments, e.g. first 50,000,000, next 50,000,000, and so on.",}, \
 {e_tiered_de_premium_tax,e_topic_tiered_premium_tax,"Delaware","Delaware premium tax, tiered by calendar-year total-case premium (NOT YET IMPLEMENTED). Enter breakpoints as increments, e.g. first 50,000,000, next 50,000,000, and so on.",}, \

@@ -411,6 +411,12 @@ RealType round_near(RealType r)
         }
     return i_part;
 }
+
+template<typename RealType>
+RealType erroneous_rounding_function(RealType)
+{
+    throw std::logic_error("Erroneous rounding function.");
+}
 } // namespace detail
 
 // See HTML documentation.
@@ -450,15 +456,19 @@ class round_to
     rounding_function_t rounding_function;
 };
 
-// This default ctor only renders the class DefaultConstructible.
-// The object it creates is intentionally not usable.
+/// This default ctor only renders the class DefaultConstructible.
+/// The object it creates throws on use.
+///
+/// The cast to 'rounding_function_t' seems to be required by the
+/// ancient borland compiler.
+
 template<typename RealType>
 round_to<RealType>::round_to()
     :decimals_(0)
     ,style_(r_indeterminate)
     ,scale_fwd_(1.0)
     ,scale_back_(1.0)
-    ,rounding_function(0)
+    ,rounding_function((rounding_function_t)detail::erroneous_rounding_function)
 {
 }
 

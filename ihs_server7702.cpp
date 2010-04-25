@@ -33,12 +33,8 @@
 
 #include "assert_lmi.hpp"
 #include "basic_values.hpp"
-#include "calendar_date.hpp"
-#include "data_directory.hpp"
-#include "database.hpp"
 #include "fenv_lmi.hpp"
 #include "ihs_irc7702.hpp"
-#include "ihs_rnddata.hpp"
 #include "ihs_server7702io.hpp"
 #include "ihs_x_type.hpp"
 

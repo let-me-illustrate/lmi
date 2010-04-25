@@ -601,6 +601,14 @@ int test_main(int, char*[])
 {
     default_rounding_style() = r_indeterminate;
 
+    // Test default constructor.
+    round_to<double> const round_erroneously;
+    BOOST_TEST_THROW
+        (round_erroneously(2.7)
+        ,std::logic_error
+        ,"Erroneous rounding function."
+        );
+
     // Test copy constructor and copy assignment operator.
     round_to<double> const round0(2, r_to_nearest);
     BOOST_TEST(2 == round0.decimals());

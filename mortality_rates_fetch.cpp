@@ -31,7 +31,6 @@
 #include "basic_values.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
-#include "rounding_rules.hpp"
 #include "yare_input.hpp"
 
 #include <algorithm>
@@ -78,7 +77,7 @@ void MortalityRates::fetch_parameters(BasicValues const& basic_values)
     // TODO ?? Defectively, this data member is not yet used.
     PartialMortalityMultiplier_ = basic_values.yare_input_.PartialMortalityMultiplier;
 
-    round_coi_rate_ = basic_values.GetRoundingRules().round_coi_rate();
+    round_coi_rate_ = basic_values.round_coi_rate();
 
 // TODO ?? Rethink these "delicate" things. Should raw rates be stored
 // temporarily in some other manner, e.g. using a handle-body idiom?

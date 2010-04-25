@@ -235,7 +235,6 @@ common_common_objects := \
   path_utility.o \
   product_names.o \
   progress_meter.o \
-  rounding_rules.o \
   sigfpe.o \
   single_cell_document.o \
   surrchg_rates.o \
@@ -289,8 +288,6 @@ lmi_common_objects := \
   ihs_irc7702a.o \
   ihs_mortal.o \
   ihs_pios.o \
-  ihs_proddata.o \
-  ihs_rnddata.o \
   md5.o \
   mec_input.o \
   mec_server.o \
@@ -298,6 +295,8 @@ lmi_common_objects := \
   mec_xml_document.o \
   mortality_rates_fetch.o \
   preferences_model.o \
+  product_data.o \
+  rounding_rules.o \
   stratified_algorithms.o \
   stratified_charges.o \
 
@@ -399,8 +398,6 @@ gpt_objects := \
   ihs_funddata.o \
   ihs_mortal.o \
   ihs_pios.o \
-  ihs_proddata.o \
-  ihs_rnddata.o \
   input.o \
   input_harmonization.o \
   input_realization.o \
@@ -418,6 +415,7 @@ gpt_objects := \
   null_stream.o \
   outlay.o \
   path_utility.o \
+  product_data.o \
   product_names.o \
   rounding_rules.o \
   stratified_algorithms.o \
@@ -778,18 +776,21 @@ product_file_test$(EXEEXT): \
   $(common_test_objects) \
   $(xmlwrapp_objects) \
   data_directory.o \
+  datum_base.o \
   dbnames.o \
   expm1.o \
+  facets.o \
   global_settings.o \
   ihs_dbdict.o \
   ihs_dbvalue.o \
   ihs_fpios.o \
   ihs_funddata.o \
   ihs_pios.o \
-  ihs_proddata.o \
-  ihs_rnddata.o \
+  mc_enum.o \
+  mc_enum_types.o \
   miscellany.o \
   path_utility.o \
+  product_data.o \
   product_file_test.o \
   rounding_rules.o \
   stratified_charges.o \

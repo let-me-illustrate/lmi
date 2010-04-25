@@ -33,7 +33,7 @@
 #include "database.hpp" // Used only for initial loan rate.
 #include "dbnames.hpp"  // Used only for initial loan rate.
 #include "interest_rates.hpp"
-#include "mc_enum_types_aux.hpp"
+#include "mc_enum_types_aux.hpp" // mc_str()
 #include "outlay.hpp"
 
 #include <algorithm>
