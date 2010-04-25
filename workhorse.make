@@ -1186,7 +1186,7 @@ system_test: install
 	  for z in *.test; \
 	    do \
 	      $(bin_dir)/ihs_crc_comp$(EXEEXT) $$z $(touchstone_dir)/$$z \
-	      | $(SED) -e ';/Summary/!d' -e "s/^ /$$z/"; \
+	      | $(SED) -e ';/Summary.*max rel err/!d' -e "s/^ /$$z/"; \
 	    done > $(system_test_analysis);
 	@-< $(system_test_analysis) $(SED) \
 	  -e ';/rel err.*e-0*1[5-9]/d' \
