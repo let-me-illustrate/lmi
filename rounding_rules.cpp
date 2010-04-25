@@ -86,6 +86,15 @@ rounding_rules::rounding_rules()
 {
 }
 
+/// Construct from filename.
+///
+/// Postcondition: rounding direction is appropriate for every rule
+/// used in 7702 and 7702A calculations.
+///
+/// RoundingDocument::WriteDocument() may (defectively) write files
+/// that violate this precondition, but this ctor prevents them from
+/// being used to produce illustrations.
+
 rounding_rules::rounding_rules(std::string const& filename)
 {
     Read(filename);
