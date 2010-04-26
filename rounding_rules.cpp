@@ -27,18 +27,19 @@
 #endif // __BORLANDC__
 
 #include "rounding_rules.hpp"
+#include "xml_serializable.tpp"
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
-#include "data_directory.hpp"
+#include "data_directory.hpp" // AddDataDir()
 #include "mc_enum.hpp"
 #include "mc_enum_types.hpp"
-#include "platform_dependent.hpp" // access()
-#include "xml_lmi.hpp"
 #include "xml_serialize.hpp"
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/path.hpp>
+
+template class xml_serializable<rounding_rules>;
 
 namespace xml_serialize
 {
@@ -60,6 +61,30 @@ template<> struct xml_io<round_to<double> >
     }
 };
 } // namespace xml_serialize
+
+/// Specialize value_cast<>() to throw an exception.
+///
+/// This is required by
+///   any_member::str()
+/// which is not useful here.
+
+template<> std::string value_cast<std::string>(round_to<double> const&)
+{
+    fatal_error() << "Invalid function call." << LMI_FLUSH;
+    throw "Unreachable--silences a compiler diagnostic.";
+}
+
+/// Specialize value_cast<>() to throw an exception.
+///
+/// This is required by
+///   any_member::operator=(std::string const&)
+/// which is not useful here.
+
+template<> round_to<double> value_cast<round_to<double> >(std::string const&)
+{
+    fatal_error() << "Invalid function call." << LMI_FLUSH;
+    throw "Unreachable--silences a compiler diagnostic.";
+}
 
 /// Private default ctor.
 
@@ -84,6 +109,7 @@ rounding_rules::rounding_rules()
     ,round_max_premium_       (2, r_downward  )
     ,round_interest_rate_7702_(0, r_not_at_all)
 {
+    ascribe_members();
 }
 
 /// Construct from filename.
@@ -97,7 +123,10 @@ rounding_rules::rounding_rules()
 
 rounding_rules::rounding_rules(std::string const& filename)
 {
-    Read(filename);
+    ascribe_members();
+
+    load(filename);
+
     LMI_ASSERT(r_not_at_all == round_min_specamt_       .style() || r_upward   == round_min_specamt_       .style());
     LMI_ASSERT(r_not_at_all == round_max_specamt_       .style() || r_downward == round_max_specamt_       .style());
     LMI_ASSERT(r_not_at_all == round_min_premium_       .style() || r_upward   == round_min_premium_       .style());
@@ -105,89 +134,81 @@ rounding_rules::rounding_rules(std::string const& filename)
     LMI_ASSERT(r_not_at_all == round_interest_rate_7702_.style() || r_upward   == round_interest_rate_7702_.style());
 }
 
-namespace
+rounding_rules::~rounding_rules()
 {
-std::string xml_root_name()
+}
+
+/// Member datum nominated by the given name.
+
+round_to<double> const& rounding_rules::datum(std::string const& name)
+{
+    return *member_cast<round_to<double> >(operator[](name));
+}
+
+/// Enregister certain data members for access via any_member<>[].
+
+void rounding_rules::ascribe_members()
+{
+    ascribe("RoundSpecAmt"    , &rounding_rules::round_specamt_           );
+    ascribe("RoundDeathBft"   , &rounding_rules::round_death_benefit_     );
+    ascribe("RoundNaar"       , &rounding_rules::round_naar_              );
+    ascribe("RoundCoiRate"    , &rounding_rules::round_coi_rate_          );
+    ascribe("RoundCoiCharge"  , &rounding_rules::round_coi_charge_        );
+    ascribe("RoundGrossPrem"  , &rounding_rules::round_gross_premium_     );
+    ascribe("RoundNetPrem"    , &rounding_rules::round_net_premium_       );
+    ascribe("RoundIntRate"    , &rounding_rules::round_interest_rate_     );
+    ascribe("RoundIntCredit"  , &rounding_rules::round_interest_credit_   );
+    ascribe("RoundWithdrawal" , &rounding_rules::round_withdrawal_        );
+    ascribe("RoundLoan"       , &rounding_rules::round_loan_              );
+    ascribe("RoundCorrFactor" , &rounding_rules::round_corridor_factor_   );
+    ascribe("RoundSurrCharge" , &rounding_rules::round_surrender_charge_  );
+    ascribe("RoundIrr"        , &rounding_rules::round_irr_               );
+    ascribe("RoundMinSpecamt" , &rounding_rules::round_min_specamt_       );
+    ascribe("RoundMaxSpecamt" , &rounding_rules::round_max_specamt_       );
+    ascribe("RoundMinPrem"    , &rounding_rules::round_min_premium_       );
+    ascribe("RoundMaxPrem"    , &rounding_rules::round_max_premium_       );
+    ascribe("RoundIntRate7702", &rounding_rules::round_interest_rate_7702_);
+}
+
+/// Backward-compatibility serial number of this class's xml version.
+///
+/// version 0: 20100407T1144Z
+
+int rounding_rules::class_version() const
+{
+    return 0;
+}
+
+std::string rounding_rules::xml_root_name() const
 {
     return "rounding";
 }
-} // Unnamed namespace.
 
-void rounding_rules::Read(std::string const& filename)
+/// This override doesn't call redintegrate_ex_ante(); that wouldn't
+/// make sense, at least not for now.
+
+void rounding_rules::read_element
+    (xml::element const& e
+    ,std::string const&  name
+    ,int                 // file_version
+    )
 {
-    if(access(filename.c_str(), R_OK))
-        {
-        fatal_error()
-            << "File '"
-            << filename
-            << "' is required but could not be found. Try reinstalling."
-            << LMI_FLUSH
-            ;
-        }
-
-    xml_lmi::dom_parser parser(filename);
-    xml::element const& root = parser.root_node(xml_root_name());
-
-    xml_serialize::get_element(root, "RoundSpecAmt"    , round_specamt_           );
-    xml_serialize::get_element(root, "RoundDeathBft"   , round_death_benefit_     );
-    xml_serialize::get_element(root, "RoundNaar"       , round_naar_              );
-    xml_serialize::get_element(root, "RoundCoiRate"    , round_coi_rate_          );
-    xml_serialize::get_element(root, "RoundCoiCharge"  , round_coi_charge_        );
-    xml_serialize::get_element(root, "RoundGrossPrem"  , round_gross_premium_     );
-    xml_serialize::get_element(root, "RoundNetPrem"    , round_net_premium_       );
-    xml_serialize::get_element(root, "RoundIntRate"    , round_interest_rate_     );
-    xml_serialize::get_element(root, "RoundIntCredit"  , round_interest_credit_   );
-    xml_serialize::get_element(root, "RoundWithdrawal" , round_withdrawal_        );
-    xml_serialize::get_element(root, "RoundLoan"       , round_loan_              );
-    xml_serialize::get_element(root, "RoundCorrFactor" , round_corridor_factor_   );
-    xml_serialize::get_element(root, "RoundSurrCharge" , round_surrender_charge_  );
-    xml_serialize::get_element(root, "RoundIrr"        , round_irr_               );
-    xml_serialize::get_element(root, "RoundMinSpecamt" , round_min_specamt_       );
-    xml_serialize::get_element(root, "RoundMaxSpecamt" , round_max_specamt_       );
-    xml_serialize::get_element(root, "RoundMinPrem"    , round_min_premium_       );
-    xml_serialize::get_element(root, "RoundMaxPrem"    , round_max_premium_       );
-    xml_serialize::get_element(root, "RoundIntRate7702", round_interest_rate_7702_);
+    round_to<double>& r = *member_cast<round_to<double> >(operator[](name));
+    xml_serialize::from_xml(e, r);
 }
 
-void rounding_rules::Write(std::string const& filename) const
+void rounding_rules::write_element
+    (xml::element&       parent
+    ,std::string const&  name
+    ) const
 {
-    xml_lmi::xml_document document(xml_root_name());
-    xml::element& root = document.root_node();
-
-    xml_lmi::set_attr(root, "version", "0");
-
-    xml_serialize::set_element(root, "RoundSpecAmt"    , round_specamt_           );
-    xml_serialize::set_element(root, "RoundDeathBft"   , round_death_benefit_     );
-    xml_serialize::set_element(root, "RoundNaar"       , round_naar_              );
-    xml_serialize::set_element(root, "RoundCoiRate"    , round_coi_rate_          );
-    xml_serialize::set_element(root, "RoundCoiCharge"  , round_coi_charge_        );
-    xml_serialize::set_element(root, "RoundGrossPrem"  , round_gross_premium_     );
-    xml_serialize::set_element(root, "RoundNetPrem"    , round_net_premium_       );
-    xml_serialize::set_element(root, "RoundIntRate"    , round_interest_rate_     );
-    xml_serialize::set_element(root, "RoundIntCredit"  , round_interest_credit_   );
-    xml_serialize::set_element(root, "RoundWithdrawal" , round_withdrawal_        );
-    xml_serialize::set_element(root, "RoundLoan"       , round_loan_              );
-    xml_serialize::set_element(root, "RoundCorrFactor" , round_corridor_factor_   );
-    xml_serialize::set_element(root, "RoundSurrCharge" , round_surrender_charge_  );
-    xml_serialize::set_element(root, "RoundIrr"        , round_irr_               );
-    xml_serialize::set_element(root, "RoundMinSpecamt" , round_min_specamt_       );
-    xml_serialize::set_element(root, "RoundMaxSpecamt" , round_max_specamt_       );
-    xml_serialize::set_element(root, "RoundMinPrem"    , round_min_premium_       );
-    xml_serialize::set_element(root, "RoundMaxPrem"    , round_max_premium_       );
-    xml_serialize::set_element(root, "RoundIntRate7702", round_interest_rate_7702_);
-
-    // Instead of this:
-//    document.save(filename);
-    // for the nonce, explicitly change the extension, in order to
-    // force external product-file code to use the new extension.
-    fs::path path(filename, fs::native);
-    path = fs::change_extension(path, ".rounding");
-    document.save(path.string());
+    round_to<double> const& r = *member_cast<round_to<double> >(operator[](name));
+    xml_serialize::set_element(parent, name, r);
 }
 
 void rounding_rules::write_rounding_files()
 {
     rounding_rules sample;
-    sample.Write(AddDataDir("sample.rounding"));
+    sample.save(AddDataDir("sample.rounding"));
 }
 

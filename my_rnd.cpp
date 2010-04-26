@@ -48,7 +48,7 @@ void rounding_rules::write_proprietary_rounding_files()
     // Sample product.
     rounding_rules sample;
 // Not necessary for 'sample' product only, because it's built in.
-//    sample.Write(AddDataDir("sample.rounding"));
+//    sample.save(AddDataDir("sample.rounding"));
 
 #if 0
     // Template for adding another policy form.
@@ -56,7 +56,7 @@ void rounding_rules::write_proprietary_rounding_files()
     another.round_specamt_         = round_to<double>(0, r_upward    );
     another.round_death_benefit_   = round_to<double>(2, r_to_nearest);
     // ...
-    another.Write(AddDataDir("another.rounding"));
+    another.save(AddDataDir("another.rounding"));
 #endif // 0
 }
 

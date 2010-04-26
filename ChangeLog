@@ -25062,3 +25062,12 @@ Refine system-test analysis.
   main_cli.cpp
 Report elapsed time for system test.
 
+20100426T1240Z <gchicares@sbcglobal.net> [755]
+
+  ihs_basicval.cpp
+  my_rnd.cpp
+  rounding_document.cpp
+  rounding_rules.cpp
+  rounding_rules.hpp
+Mix class xml_serializable into class rounding_rules.
+

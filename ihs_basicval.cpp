@@ -842,25 +842,25 @@ void BasicValues::SetPermanentInvariants()
 
 void BasicValues::SetRoundingFunctors()
 {
-    round_specamt_            = RoundingRules_->round_specamt           ();
-    round_death_benefit_      = RoundingRules_->round_death_benefit     ();
-    round_naar_               = RoundingRules_->round_naar              ();
-    round_coi_rate_           = RoundingRules_->round_coi_rate          ();
-    round_coi_charge_         = RoundingRules_->round_coi_charge        ();
-    round_gross_premium_      = RoundingRules_->round_gross_premium     ();
-    round_net_premium_        = RoundingRules_->round_net_premium       ();
-    round_interest_rate_      = RoundingRules_->round_interest_rate     ();
-    round_interest_credit_    = RoundingRules_->round_interest_credit   ();
-    round_withdrawal_         = RoundingRules_->round_withdrawal        ();
-    round_loan_               = RoundingRules_->round_loan              ();
-    round_corridor_factor_    = RoundingRules_->round_corridor_factor   ();
-    round_surrender_charge_   = RoundingRules_->round_surrender_charge  ();
-    round_irr_                = RoundingRules_->round_irr               ();
-    round_min_specamt_        = RoundingRules_->round_min_specamt       ();
-    round_max_specamt_        = RoundingRules_->round_max_specamt       ();
-    round_min_premium_        = RoundingRules_->round_min_premium       ();
-    round_max_premium_        = RoundingRules_->round_max_premium       ();
-    round_interest_rate_7702_ = RoundingRules_->round_interest_rate_7702();
+    round_specamt_            = RoundingRules_->datum("RoundSpecAmt"    );
+    round_death_benefit_      = RoundingRules_->datum("RoundDeathBft"   );
+    round_naar_               = RoundingRules_->datum("RoundNaar"       );
+    round_coi_rate_           = RoundingRules_->datum("RoundCoiRate"    );
+    round_coi_charge_         = RoundingRules_->datum("RoundCoiCharge"  );
+    round_gross_premium_      = RoundingRules_->datum("RoundGrossPrem"  );
+    round_net_premium_        = RoundingRules_->datum("RoundNetPrem"    );
+    round_interest_rate_      = RoundingRules_->datum("RoundIntRate"    );
+    round_interest_credit_    = RoundingRules_->datum("RoundIntCredit"  );
+    round_withdrawal_         = RoundingRules_->datum("RoundWithdrawal" );
+    round_loan_               = RoundingRules_->datum("RoundLoan"       );
+    round_corridor_factor_    = RoundingRules_->datum("RoundCorrFactor" );
+    round_surrender_charge_   = RoundingRules_->datum("RoundSurrCharge" );
+    round_irr_                = RoundingRules_->datum("RoundIrr"        );
+    round_min_specamt_        = RoundingRules_->datum("RoundMinSpecamt" );
+    round_max_specamt_        = RoundingRules_->datum("RoundMaxSpecamt" );
+    round_min_premium_        = RoundingRules_->datum("RoundMinPrem"    );
+    round_max_premium_        = RoundingRules_->datum("RoundMaxPrem"    );
+    round_interest_rate_7702_ = RoundingRules_->datum("RoundIntRate7702");
 }
 
 //============================================================================

@@ -26,8 +26,13 @@
 
 #include "config.hpp"
 
+#include "any_member.hpp"
+#include "obstruct_slicing.hpp"
 #include "round_to.hpp"
 #include "so_attributes.hpp"
+#include "xml_serializable.hpp"
+
+#include <boost/utility.hpp>
 
 #include <string>
 
@@ -53,43 +58,42 @@
 /// The 7702 and 7702A interest rate must be rounded up, if at all.
 
 class LMI_SO rounding_rules
+    :        private boost::noncopyable
+    ,virtual private obstruct_slicing  <rounding_rules>
+    ,        public  xml_serializable  <rounding_rules>
+    ,        public  MemberSymbolTable <rounding_rules>
 {
     friend class RoundingDocument;
-    friend class RoundingView;
 
   public:
     explicit rounding_rules(std::string const& filename);
+    ~rounding_rules();
+
+    round_to<double> const& datum(std::string const& name);
 
     // Legacy functions to support creating product files programmatically.
     static void write_rounding_files();
     static void write_proprietary_rounding_files();
 
-    round_to<double> const& round_specamt           () const {return round_specamt_           ;}
-    round_to<double> const& round_death_benefit     () const {return round_death_benefit_     ;}
-    round_to<double> const& round_naar              () const {return round_naar_              ;}
-    round_to<double> const& round_coi_rate          () const {return round_coi_rate_          ;}
-    round_to<double> const& round_coi_charge        () const {return round_coi_charge_        ;}
-    round_to<double> const& round_gross_premium     () const {return round_gross_premium_     ;}
-    round_to<double> const& round_net_premium       () const {return round_net_premium_       ;}
-    round_to<double> const& round_interest_rate     () const {return round_interest_rate_     ;}
-    round_to<double> const& round_interest_credit   () const {return round_interest_credit_   ;}
-    round_to<double> const& round_withdrawal        () const {return round_withdrawal_        ;}
-    round_to<double> const& round_loan              () const {return round_loan_              ;}
-    round_to<double> const& round_corridor_factor   () const {return round_corridor_factor_   ;}
-    round_to<double> const& round_surrender_charge  () const {return round_surrender_charge_  ;}
-    round_to<double> const& round_irr               () const {return round_irr_               ;}
-    round_to<double> const& round_min_specamt       () const {return round_min_specamt_       ;}
-    round_to<double> const& round_max_specamt       () const {return round_max_specamt_       ;}
-    round_to<double> const& round_min_premium       () const {return round_min_premium_       ;}
-    round_to<double> const& round_max_premium       () const {return round_max_premium_       ;}
-    round_to<double> const& round_interest_rate_7702() const {return round_interest_rate_7702_;}
-
   private:
     rounding_rules();
 
-    // Legacy functions to be reimplemented soon.
-    void Read (std::string const& filename);
-    void Write(std::string const& filename) const;
+    void ascribe_members();
+
+    // xml_serializable required implementation.
+    virtual int         class_version() const;
+    virtual std::string xml_root_name() const;
+
+    // xml_serializable overrides.
+    virtual void read_element
+        (xml::element const& e
+        ,std::string const&  name
+        ,int                 file_version
+        );
+    virtual void write_element
+        (xml::element&       parent
+        ,std::string const&  name
+        ) const;
 
     round_to<double> round_specamt_           ;
     round_to<double> round_death_benefit_     ;
