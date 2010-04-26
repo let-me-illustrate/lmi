@@ -25071,3 +25071,9 @@ Report elapsed time for system test.
   rounding_rules.hpp
 Mix class xml_serializable into class rounding_rules.
 
+20100426T1342Z <gchicares@sbcglobal.net> [755]
+
+  snprintf_test.cpp
+  value_cast_test.cpp
+Work around a libc QoI issue.
+
