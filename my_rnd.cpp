@@ -53,8 +53,8 @@ void rounding_rules::write_proprietary_rounding_files()
 #if 0
     // Template for adding another policy form.
     rounding_rules another;
-    another.round_specamt_         = round_to<double>(0, r_upward    );
-    another.round_death_benefit_   = round_to<double>(2, r_to_nearest);
+    another.round_specamt_         = rounding_parameters(0, r_upward    , "");
+    another.round_death_benefit_   = rounding_parameters(2, r_to_nearest, "");
     // ...
     another.save(AddDataDir("another.rounding"));
 #endif // 0

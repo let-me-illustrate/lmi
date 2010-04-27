@@ -42,7 +42,7 @@ class RoundingDocument
     RoundingDocument();
     virtual ~RoundingDocument();
 
-    typedef std::map<std::string, round_to<double>*> values_type;
+    typedef std::map<std::string, rounding_parameters*> values_type;
     values_type&       values();
     values_type const& values() const;
 

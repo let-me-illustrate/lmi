@@ -287,16 +287,16 @@ void RoundingButtons::UponButtonClick( wxCommandEvent & event )
     SetStyle(style);
 }
 
-void RoundingButtons::SetValue(round_to<double> const& value)
+void RoundingButtons::SetValue(rounding_parameters const& value)
 {
     previous_value_ = value;
     SetNumber(value.decimals());
-    SetStyle(value.style());
+    SetStyle(value.style().value());
 }
 
-round_to<double> RoundingButtons::GetValue() const
+rounding_parameters RoundingButtons::GetValue() const
 {
-    return round_to<double>(GetNumber(), GetStyle());
+    return rounding_parameters(GetNumber(), GetStyle(), "");
 }
 
 void RoundingButtons::SetNumber(int number)

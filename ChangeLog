@@ -25077,3 +25077,14 @@ Mix class xml_serializable into class rounding_rules.
   value_cast_test.cpp
 Work around a libc QoI issue.
 
+20100427T1359Z <gchicares@sbcglobal.net> [755]
+
+  ihs_basicval.cpp
+  my_rnd.cpp
+  rounding_document.hpp
+  rounding_rules.cpp
+  rounding_rules.hpp
+  rounding_view_editor.cpp
+  rounding_view_editor.hpp
+Permit annotations in '.rounding' files.
+
