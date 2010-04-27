@@ -145,7 +145,7 @@ inline void DatabaseTableAdapter::SetModified(bool modified)
     modified_ = modified;
 }
 
-/// Class is the version of MultiDimGrid customized for db4 file data.
+/// Class is the version of MultiDimGrid customized for '.database' data.
 ///
 /// Grid edit the data that depends upon 7 axis described in ihs_dbvalue.hpp
 
