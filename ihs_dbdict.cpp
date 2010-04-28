@@ -222,8 +222,10 @@ void DBDictionary::InitDB()
     Add(TDBValue(DB_SurrChgSADurFactor  , 1.0));
     Add(TDBValue(DB_SurrChgAVDurFactor  , 1.0));
 
-    // Generally you would want a value such as 1/12 or 1/11 here.
-    Add(TDBValue(DB_MaxMonthlyCoiRate   , 1.0 / 12.0));
+    // Usually the maximum is a reciprocal, e.g., 1/11 or 1/12; for
+    // greatest precision, store the reciprocal of that reciprocal,
+    // e.g., 11 or 12.
+    Add(TDBValue(DB_MaxMonthlyCoiRate   , 12.0));
 
     Add(TDBValue(DB_GuarIntSpread       , bignum));
 
@@ -321,7 +323,7 @@ void DBDictionary::WriteSampleDBFile()
     Add(TDBValue(DB_CurrPrefLoanSpread  , 0.0));
     Add(TDBValue(DB_CurrRegLoanSpread   , 0.02));
     Add(TDBValue(DB_GuarInt             , 0.03));
-    Add(TDBValue(DB_NAARDiscount        , 1.0 / 1.00246627));
+    Add(TDBValue(DB_NAARDiscount        , 0.00246627));
     Add(TDBValue(DB_GuarIntSpread       , 0.03));
     Add(TDBValue(DB_GuarMandE           , 0.009));
     Add(TDBValue(DB_CurrIntSpread       , 0.01));
