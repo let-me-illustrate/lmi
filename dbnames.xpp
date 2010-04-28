@@ -73,7 +73,7 @@
 {DB_MCoiIsAnnual,DB_Topic_MortalityCharges,"MCoiIsAnnual","Midpoint cost of insurance table rates are: 0=monthly, 1=annual [not used--calculated as mean of current and guaranteed]",}, \
 {DB_COINYMinTable,DB_Topic_MortalityCharges,"COINYMinTable","New York minimum mortality table (index in mortality table database) [not yet implemented]",}, \
 {DB_UseNYCOIFloor,DB_Topic_MortalityCharges,"UseNYCOIFloor","Dynamically increase cost of insurance rates to COINYMinTable wherever they would otherwise be lower [not yet implemented]",}, \
-{DB_MaxMonthlyCoiRate,DB_Topic_MortalityCharges,"MaxMonthlyCoiRate","Maximum monthly COI rate per $1 of specified amount",}, \
+{DB_MaxMonthlyCoiRate,DB_Topic_MortalityCharges,"MaxMonthlyCoiRate","Reciprocal of maximum monthly COI rate per $1 of specified amount, e.g. 12.0 (typically the maximum is specified as a reciprocal such as 1/12)",}, \
 {DB_GuarCOICeiling,DB_Topic_MortalityCharges,"GuarCOICeiling","Dynamically decrease current cost of insurance rates to guaranteed wherever they would otherwise be higher [not yet implemented]",}, \
 {DB_COIGuarIsMin,DB_Topic_MortalityCharges,"COIGuarIsMin","[not used]",}, \
 {DB_SubstdTblMult,DB_Topic_MortalityCharges,"SubstdTblMult","Substandard table-rating multiplier applied to both guaranteed and current cost of insurance and term rider charges (also multiplied by 'SubstdTblMultTable')",}, \
@@ -84,10 +84,10 @@
 {DB_AllowMortBlendSmoke,DB_Topic_MortalityCharges,"AllowMortBlendSmoke","Mortality rating can be blended by smoking/tobacco use: 0=no, 1=yes",}, \
 {DB_Topic_Interest,DB_FIRST,"Interest","Interest rates, limits, spreads, and bonuses",}, \
 {DB_GuarInt,DB_Topic_Interest,"GuarInt","Guaranteed interest rate",}, \
-{DB_NAARDiscount,DB_Topic_Interest,"NAARDiscount","Net amount at risk discount rate e.g. 1.0 / 1.00246627 for 3% annual rate",}, \
-{DB_GuarIntSpread,DB_Topic_Interest,"GuarIntSpread","Guaranteed interest spread e.g. .02 = 200bp [not yet implemented]",}, \
+{DB_NAARDiscount,DB_Topic_Interest,"NAARDiscount","Monthly rate (i over i upper 12) for discounting net amount at risk, e.g. 0.00246627 for 3% annual rate (because that's how it's often specified in contracts)",}, \
+{DB_GuarIntSpread,DB_Topic_Interest,"GuarIntSpread","Guaranteed interest spread, e.g. .02 = 200bp [not yet implemented]",}, \
 {DB_GuarMandE,DB_Topic_Interest,"GuarMandE","Guaranteed M&&E charge",}, \
-{DB_CurrIntSpread,DB_Topic_Interest,"CurrIntSpread","Current interest spread e.g. .01 = 100bp",}, \
+{DB_CurrIntSpread,DB_Topic_Interest,"CurrIntSpread","Current interest spread, e.g. .01 = 100bp",}, \
 {DB_CurrMandE,DB_Topic_Interest,"CurrMandE","Current M&&E charge",}, \
 {DB_GAIntBonus,DB_Topic_Interest,"GAIntBonus","Interest bonus added to the general account rate",}, \
 {DB_BonusInt,DB_Topic_Interest,"BonusInt","Bonus interest [not yet implemented]",}, \
@@ -227,7 +227,7 @@
 {DB_AllowPrefLoan,DB_Topic_Loans,"AllowPrefLoan","Preferred loans permitted: 0=no, 1=yes [preferred loans not yet supported]",}, \
 {DB_AllowFixedLoan,DB_Topic_Loans,"AllowFixedLoan","Fixed-rate loans permitted: 0=no, 1=yes",}, \
 {DB_AllowVLR,DB_Topic_Loans,"AllowVLR","Variable-rate loans permitted: 0=no, 1=yes",}, \
-{DB_FixedLoanRate,DB_Topic_Loans,"FixedLoanRate","Fixed loan rate e.g. .06 = 6%",}, \
+{DB_FixedLoanRate,DB_Topic_Loans,"FixedLoanRate","Fixed loan rate, e.g. .06 = 6%",}, \
 {DB_MaxVLRRate,DB_Topic_Loans,"MaxVLRRate","Maximum variable loan rate [not yet implemented]",}, \
 {DB_MaxLoanAVMult,DB_Topic_Loans,"MaxLoanAVMult","Maximum loan as proportion of account value, e.g. 1=100%",}, \
 {DB_MaxLoanDed,DB_Topic_Loans,"MaxLoanDed","Monthiversary deductions reflected in maximum loan: 0=12 times most recent, 1=to next anniversary, 2=to next modal premium due date, 3=18 times most recent",}, \

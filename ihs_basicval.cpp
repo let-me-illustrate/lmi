@@ -37,6 +37,7 @@
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "death_benefits.hpp"
+#include "et_vector.hpp"
 #include "global_settings.hpp"
 #include "ihs_dbdict.hpp"
 #include "ihs_funddata.hpp"
@@ -61,7 +62,6 @@
 #include <cmath>                 // std::pow()
 #include <cstring>               // std::strlen(), std::strncmp()
 #include <fstream>
-#include <functional>
 #include <limits>
 #include <numeric>
 #include <sstream>
@@ -457,16 +457,10 @@ double BasicValues::InvestmentManagementFee() const
 void BasicValues::Init7702()
 {
     Mly7702qc = GetIRC7702Rates();
-    // ET !! Mly7702qc = coi_rate_from_q(Mly7702qc, Database_->Query(DB_MaxMonthlyCoiRate));
-    std::transform
-        (Mly7702qc.begin()
-        ,Mly7702qc.end()
-        ,Mly7702qc.begin()
-        ,std::bind2nd
-            (coi_rate_from_q<double>()
-            ,Database_->Query(DB_MaxMonthlyCoiRate)
-            )
-        );
+    double max_coi_rate = Database_->Query(DB_MaxMonthlyCoiRate);
+    LMI_ASSERT(0.0 != max_coi_rate);
+    max_coi_rate = 1.0 / max_coi_rate;
+    assign(Mly7702qc, apply_binary(coi_rate_from_q<double>(), Mly7702qc, max_coi_rate));
 
     MlyDcvqc = Mly7702qc;
     std::transform
@@ -614,14 +608,7 @@ void BasicValues::Init7702()
         ,i_upper_12_over_12_from_i<double>()
         );
 
-    // ET !! Mly7702ig = -1.0 + 1.0 / DBDiscountRate;
-    Mly7702ig = DBDiscountRate;
-    std::transform(Mly7702ig.begin(), Mly7702ig.end(), Mly7702ig.begin(),
-          std::bind1st(std::divides<double>(), 1.0)
-          );
-    std::transform(Mly7702ig.begin(), Mly7702ig.end(), Mly7702ig.begin(),
-          std::bind2nd(std::minus<double>(), 1.0)
-          );
+    Database_->Query(Mly7702ig, DB_NAARDiscount);
 
     // TODO ?? We should avoid reading the rate file again; but
     // the GPT server doesn't initialize a MortalityRates object
@@ -780,6 +767,12 @@ void BasicValues::SetPermanentInvariants()
     Database_->Query(FreeWDProportion, DB_FreeWDProportion);
 
     Database_->Query(DBDiscountRate, DB_NAARDiscount);
+    LMI_ASSERT(DBDiscountRate.end() == std::find(DBDiscountRate.begin(), DBDiscountRate.end(), -1.0));
+// This would be more natural:
+//    assign(DBDiscountRate, 1.0 / (1.0 + DBDiscountRate));
+// but we avoid it for the nonce because it causes slight regression errors.
+    assign(DBDiscountRate, 1.0 + DBDiscountRate);
+    assign(DBDiscountRate, 1.0 / DBDiscountRate);
 
     Database_->Query(AssetComp , DB_AssetComp);
     Database_->Query(CompTarget, DB_CompTarget);
