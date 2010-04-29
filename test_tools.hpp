@@ -271,7 +271,7 @@ namespace lmi_test
 
     void record_error();
     // Effect: increment test_tools_errors counter.
-} // Namespace lmi_test.
+} // namespace lmi_test
 
 // For convenience, include lower-level layers. The original boost
 // library did this only if BOOST_INCLUDE_MAIN had been defined; that

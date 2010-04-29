@@ -63,7 +63,7 @@
     using ::feof;
 #   undef ferror
     using ::ferror;
-    }
+    } // namespace std
 #include <cfloat>
     // COMPILER !! bc++5.5.1 got this wrong too.
     // See my post to borland.public.cppbuilder.language dated

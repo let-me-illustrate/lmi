@@ -70,7 +70,7 @@ inline swap_workaround_for_singleton::~swap_workaround_for_singleton()
     m1_.swap(m2_); // swap back
 }
 
-} // unnamed namespace
+} // Unnamed namespace.
 
 IMPLEMENT_DYNAMIC_CLASS(DatabaseDocument, ProductEditorDocument)
 

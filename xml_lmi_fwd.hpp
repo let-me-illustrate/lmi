@@ -38,7 +38,7 @@ namespace xml // This is xmlwrapp's namespace.
     /// nodes that are not elements; xmlwrapp doesn't make this
     /// distinction, but a future replacement might.
     typedef xml::node element;
-} // Namespace xml.
+} // namespace xml
 
 /// Interface to xmlwrapp.
 

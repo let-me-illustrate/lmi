@@ -42,7 +42,7 @@ namespace deprecated
         for(SIZE_T j = 0; j < n; j++)
             dest[j] = value[j];
     }
-}
+} // namespace deprecated
 
 //============================================================================
 TDBValue::TDBValue()

@@ -85,7 +85,7 @@ namespace lmi_test
       public:
         test_tools_exception() : std::runtime_error("fatal test error") {};
     };
-  } // Namespace test.
+  } // namespace test
 
     std::ostream& error_stream()
     {
@@ -101,7 +101,7 @@ namespace lmi_test
     {
         ++test::test_tools_successes;
     }
-} // Namespace lmi_test.
+} // namespace lmi_test
 
 // cpp_main()  --------------------------------------------------------------//
 
