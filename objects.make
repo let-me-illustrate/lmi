@@ -276,12 +276,10 @@ lmi_common_objects := \
   ihs_database.o \
   ihs_dbdict.o \
   ihs_dbvalue.o \
-  ihs_fpios.o \
   ihs_funddata.o \
   ihs_irc7702.o \
   ihs_irc7702a.o \
   ihs_mortal.o \
-  ihs_pios.o \
   md5.o \
   mec_input.o \
   mec_server.o \
@@ -389,10 +387,8 @@ gpt_objects := \
   ihs_database.o \
   ihs_dbdict.o \
   ihs_dbvalue.o \
-  ihs_fpios.o \
   ihs_funddata.o \
   ihs_mortal.o \
-  ihs_pios.o \
   input.o \
   input_harmonization.o \
   input_realization.o \
@@ -781,9 +777,7 @@ product_file_test$(EXEEXT): \
   global_settings.o \
   ihs_dbdict.o \
   ihs_dbvalue.o \
-  ihs_fpios.o \
   ihs_funddata.o \
-  ihs_pios.o \
   mc_enum.o \
   mc_enum_types.o \
   miscellany.o \
