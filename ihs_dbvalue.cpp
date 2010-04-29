@@ -31,62 +31,18 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "dbnames.hpp"
-#include "math_functors.hpp" // greater_of(), lesser_of
+#include "math_functors.hpp" // greater_of(), lesser_of()
 #include "print_matrix.hpp"
 #include "value_cast.hpp"
+#include "xml_serialize.hpp"
 
 #include <algorithm>
 #include <functional>
 #include <istream>
-#include <limits>       // numeric_limits<>
+#include <iterator>          // std::advance()
+#include <limits>            // std::numeric_limits
 #include <numeric>
 #include <ostream>
-
-#ifndef stlstrm_hpp
-#define stlstrm_hpp
-
-// This misbegotten thing used to be a distinct header, but now we've
-// extirpated it everywhere else. TODO ?? Stop using it here too.
-
-// Stream STL containers with Joshua Rowe's object streaming.
-
-#include "ihs_fpios.hpp"
-namespace JRPS = JOSHUA_ROWE_PERSISTENT_STREAMS;
-
-#include <cassert>
-#include <iostream>
-#include <string>
-#include <vector>
-
-template<typename T>
-JRPS::JrPs_ipstream& operator>> (JRPS::JrPs_ipstream& ips, std::vector<T>& x)
-{
-    x.erase(x.begin(), x.end());
-    typename std::vector<T>::size_type vector_size;
-    ips >> vector_size;
-    x.reserve(vector_size);
-    typename std::vector<T>::value_type z;
-    for(typename std::vector<T>::size_type j = 0; j < vector_size; j++)
-        {
-        ips >> z;
-        x.push_back(z);
-        }
-    assert(vector_size == x.size());
-    return ips;
-}
-
-template<typename T>
-JRPS::JrPs_opstream& operator<< (JRPS::JrPs_opstream& ops, std::vector<T> const& x)
-{
-    ops << x.size();
-    for(typename std::vector<T>::const_iterator i = x.begin(); i < x.end(); i++)
-        {
-        ops << *i;
-        }
-    return ops;
-}
-
-#endif // stlstrm_hpp
 
 static int const ScalarDims[TDBValue::e_number_of_axes] = {1, 1, 1, 1, 1, 1, 1};
 static int const MaxPossibleElements = std::numeric_limits<int>::max();
@@ -187,10 +143,9 @@ TDBValue::TDBValue
 
 //============================================================================
 TDBValue::TDBValue(TDBValue const& obj)
-    :JRPS::JrPs_pstreamable()
-    ,key(obj.key)
-    ,axis_lengths(obj.axis_lengths)
-    ,data_values(obj.data_values)
+    :key          (obj.key)
+    ,axis_lengths (obj.axis_lengths)
+    ,data_values  (obj.data_values)
 {
 }
 
@@ -692,70 +647,15 @@ std::ostream& operator<<(std::ostream& os, TDBValue const& z)
     return z.write(os);
 }
 
-// Streaming implementation
-
-TDBValue::TDBValue(JRPS::JrPs_pstreamableInit)
-    :key(0)
-    ,axis_lengths(e_number_of_axes)
+void TDBValue::read(xml::element const& e)
 {
-}
-
-JRPS::JrPs_pstreamable* TDBValue::jrps_build()
-{
-    return new TDBValue(JRPS::JrPs_pstreamableinit);
-}
-
-JRPS::JrPs_pstreamreg RegTDBValue
-    ("TDBValue"
-    ,TDBValue::jrps_build
-    ,JRPS_PSTREAM_DELTA(TDBValue)
-    );
-
-// TODO ?? Couldn't templates handle this?
-JRPS::JrPs_opstream& operator<< (JRPS::JrPs_opstream& os, TDBValue const* p)
-{
-    return os << (JRPS::JrPs_pstreamable const*)p;
-}
-
-JRPS::JrPs_ipstream& operator>> (JRPS::JrPs_ipstream& is, TDBValue*& p)
-{
-    return is >> (void const*&)p;
-}
-
-void* TDBValue::read(JRPS::JrPs_ipstream& is)
-{
-    int version;
-    is >> version;
-    if(version < StreamingVersion)
-        {
-        fatal_error()
-            << "Program supports input versions up to "
-            << StreamingVersion
-            << " but input file is version "
-            << version
-            << " ."
-            << LMI_FLUSH
-            ;
-        }
-
-    is >> key;
-    is >> axis_lengths;
-    is >> extra_axes_values;
-    is >> extra_axes_names;
-    is >> data_values;
-
-    LMI_ASSERT(getndata() == static_cast<int>(data_values.size()));
-    LMI_ASSERT
-        (   0 < static_cast<int>(data_values.size())
-        &&      static_cast<int>(data_values.size()) < MaxPossibleElements
-        );
-
-    return this;
-}
-
-void TDBValue::write(JRPS::JrPs_opstream& os) const
-{
-    os << StreamingVersion;
+    std::string short_name;
+    xml_serialize::get_element(e, "key"              , short_name       );
+    key = db_key_from_name(short_name);
+    xml_serialize::get_element(e, "axis_lengths"     , axis_lengths     );
+    xml_serialize::get_element(e, "extra_axes_values", extra_axes_values);
+    xml_serialize::get_element(e, "extra_axes_names" , extra_axes_names );
+    xml_serialize::get_element(e, "data_values"      , data_values      );
 
     LMI_ASSERT(getndata() == static_cast<int>(data_values.size()));
     LMI_ASSERT
@@ -763,16 +663,21 @@ void TDBValue::write(JRPS::JrPs_opstream& os) const
         &&      static_cast<int>(data_values.size()) < MaxPossibleElements
         );
     AreAllAxesOK();
-
-    os << key;
-    os << axis_lengths;
-    os << extra_axes_values;
-    os << extra_axes_names;
-    os << data_values;
 }
 
-char const* TDBValue::streamableName() const
+void TDBValue::write(xml::element& e) const
 {
-    return "TDBValue";
+    LMI_ASSERT(getndata() == static_cast<int>(data_values.size()));
+    LMI_ASSERT
+        (   0 < static_cast<int>(data_values.size())
+        &&      static_cast<int>(data_values.size()) < MaxPossibleElements
+        );
+    AreAllAxesOK();
+
+    xml_serialize::set_element(e, "key"              , db_name_from_key(key));
+    xml_serialize::set_element(e, "axis_lengths"     , axis_lengths     );
+    xml_serialize::set_element(e, "extra_axes_values", extra_axes_values);
+    xml_serialize::set_element(e, "extra_axes_names" , extra_axes_names );
+    xml_serialize::set_element(e, "data_values"      , data_values      );
 }
 

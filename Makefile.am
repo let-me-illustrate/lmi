@@ -329,12 +329,10 @@ liblmi_la_SOURCES = \
     ihs_database.cpp \
     ihs_dbdict.cpp \
     ihs_dbvalue.cpp \
-    ihs_fpios.cpp \
     ihs_funddata.cpp \
     ihs_irc7702.cpp \
     ihs_irc7702a.cpp \
     ihs_mortal.cpp \
-    ihs_pios.cpp \
     mc_enum.cpp \
     mc_enum_types.cpp \
     mc_enum_types_aux.cpp \
@@ -732,9 +730,7 @@ test_product_file_SOURCES =   \
   global_settings.cpp \
   ihs_dbdict.cpp \
   ihs_dbvalue.cpp \
-  ihs_fpios.cpp \
   ihs_funddata.cpp \
-  ihs_pios.cpp \
   miscellany.cpp \
   path_utility.cpp \
   product_data.cpp \
@@ -916,11 +912,9 @@ noinst_HEADERS = \
     ihs_commfns.hpp \
     ihs_dbdict.hpp \
     ihs_dbvalue.hpp \
-    ihs_fpios.hpp \
     ihs_funddata.hpp \
     ihs_irc7702a.hpp \
     ihs_irc7702.hpp \
-    ihs_pios.hpp \
     ihs_server7702.hpp \
     ihs_server7702io.hpp \
     ihs_x_type.hpp \

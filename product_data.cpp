@@ -333,7 +333,7 @@ void product_data::WritePolFiles()
 {
     product_data z;
 
-    z.DatabaseFilename        = glossed_string("sample.db4");
+    z.DatabaseFilename        = glossed_string("sample.database");
     z.FundFilename            = glossed_string("sample.funds");
     z.RoundingFilename        = glossed_string("sample.rounding");
     z.TierFilename            = glossed_string("sample.strata");

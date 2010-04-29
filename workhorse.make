@@ -883,7 +883,7 @@ shared_data_files = \
   qx_ins.dat \
   qx_ins.ndx \
   sample.dat \
-  sample.db4 \
+  sample.database \
   sample.funds \
   sample.ndx \
   sample.policy \
@@ -977,7 +977,7 @@ extra_fardel_checksummed_files = \
 
 fardel_checksummed_files = \
   $(extra_fardel_checksummed_files) \
-  *.dat *.db4 *.funds *.ndx *.policy *.rounding *.strata \
+  *.dat *.database *.funds *.ndx *.policy *.rounding *.strata \
   expiry \
   md5sum$(EXEEXT) \
 

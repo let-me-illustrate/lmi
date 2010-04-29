@@ -32,9 +32,7 @@
 
 #include "dbindex.hpp"
 #include "so_attributes.hpp"
-
-#include "ihs_fpios.hpp"
-namespace JRPS = JOSHUA_ROWE_PERSISTENT_STREAMS;
+#include "xml_lmi_fwd.hpp"
 
 #include <iosfwd>
 #include <string>
@@ -49,11 +47,13 @@ enum e_IdxType
     ,e_Incremental
     };
 
+namespace xml_serialize {template<typename T> struct xml_io;}
+
 class LMI_SO TDBValue
-    :private JRPS::JrPs_pstreamable
 {
     friend std::istream& operator>>(std::istream&, TDBValue&);
     friend std::ostream& operator<<(std::ostream&, TDBValue const&);
+    friend struct xml_serialize::xml_io<TDBValue>;
 
   public:
     // Separate enumerators here facilitate compile-time assertions
@@ -123,6 +123,9 @@ class LMI_SO TDBValue
     bool AreAllAxesOK()                       const;
     void FixupIndex(std::vector<double>& idx) const;
 
+    void read (xml::element const&);
+    void write(xml::element&) const;
+
     int  key;        // Database dictionary key
 
     // Each database item has a number of axes.
@@ -151,24 +154,6 @@ class LMI_SO TDBValue
     std::vector<std::string> extra_axes_names;
     std::vector<double>      extra_axes_values;
     std::vector<e_IdxType>   extra_axes_types;
-
-// The following sections don't follow the normal order for access
-// specifiers. Grouping them together here facilitates their
-// expunction as soon as we get rid of 'ihs_[f]pios.?pp'.
-
-  public:
-    static JRPS::JrPs_pstreamable* jrps_build();
-    friend JRPS::JrPs_ipstream& operator>> (JRPS::JrPs_ipstream&, TDBValue*&);
-    friend JRPS::JrPs_opstream& operator<< (JRPS::JrPs_opstream&, TDBValue const*);
-
-  protected:
-    virtual void*   read(JRPS::JrPs_ipstream&);
-    virtual void    write(JRPS::JrPs_opstream&) const;
-
-  private:
-    TDBValue(JRPS::JrPs_pstreamableInit);
-    virtual char const* streamableName() const;
-    enum {StreamingVersion = 1};
 };
 
 /*

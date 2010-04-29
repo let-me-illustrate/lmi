@@ -35,6 +35,8 @@
 #include "mc_enum_type_enums.hpp"
 #include "miscellany.hpp"
 #include "oecumenic_enumerations.hpp"
+#include "xml_lmi.hpp"
+#include "xml_serialize.hpp"
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/fstream.hpp>
@@ -65,6 +67,58 @@ DBDictionary::~DBDictionary()
 {
 }
 
+namespace xml_serialize
+{
+template<> struct xml_io<TDBValue>
+{
+    typedef TDBValue T;
+    static void   to_xml(xml::element& e, T const& t) {t.write(e);}
+    static void from_xml(xml::element const& e, T& t) {t.read (e);}
+};
+
+/// Specialize xml_io<> for dict_map rather than coding a generic
+/// xml_io<std::map>, because the key would be stored redundantly:
+/// it's already part of TDBValue.
+
+template<> struct xml_io<dict_map>
+{
+    static void to_xml(xml::element& e, dict_map const& t)
+    {
+        e.erase(e.begin(), e.end());
+        typedef dict_map::const_iterator tci;
+        for(tci i = t.begin(); i != t.end(); ++i)
+            {
+            // This is not equivalent to calling set_element():
+            // multiple <item> elements are expressly permitted.
+            xml::element z("item");
+            xml_serialize::to_xml(z, i->second);
+            e.push_back(z);
+            }
+    }
+
+    static void from_xml(xml::element const& e, dict_map& t)
+    {
+        t.clear();
+        xml::const_nodes_view const items(e.elements("item"));
+        typedef xml::const_nodes_view::const_iterator cnvi;
+        for(cnvi i = items.begin(); i != items.end(); ++i)
+            {
+            TDBValue z;
+            xml_serialize::from_xml(*i, z);
+            t[z.GetKey()] = z;
+            }
+    }
+};
+} // namespace xml_serialize
+
+namespace
+{
+std::string xml_root_name()
+{
+    return "database";
+}
+} // Unnamed namespace.
+
 //============================================================================
 void DBDictionary::Init(std::string const& NewFilename)
 {
@@ -88,46 +142,33 @@ void DBDictionary::Init(std::string const& NewFilename)
         }
 
     CachedFilename = NewFilename;
-    dictionary.erase(dictionary.begin(), dictionary.end());
 
-    JRPS::JrPs_ifpstream ips
-        (NewFilename.c_str()
-        );
-    if(!ips)
+    if(access(NewFilename.c_str(), R_OK))
         {
-        BadFile(NewFilename, "could not be found.");
+        BadFile(NewFilename, "could not be found."); // dubious
+        fatal_error()
+            << "File '"
+            << NewFilename
+            << "' is required but could not be found. Try reinstalling."
+            << LMI_FLUSH
+            ;
         }
-    int n;
-    ips >> n;
-    if(NumberOfEntries != n)
+
+    xml_lmi::dom_parser parser(NewFilename);
+    xml::element const& root = parser.root_node(xml_root_name());
+
+    xml_serialize::from_xml(root, dictionary);
+
+    if(NumberOfEntries != static_cast<int>(dictionary.size()))
         {
         std::ostringstream oss;
         oss
             << "is not up to date or is corrupted."
             << " It should contain " << NumberOfEntries
-            << " elements, but it actually contains " << n
+            << " elements, but it actually contains " << dictionary.size()
             << " elements."
             ;
         BadFile(NewFilename, oss.str());
-        }
-    for(int j = 0; j < n; j++)
-        {
-        TDBValue* temp;
-        ips >> temp;
-        if(0 == temp)
-            {
-            std::ostringstream oss;
-            oss
-                << "is not up to date or is corrupted."
-                << " Its element number " << j
-                << ", which is '" << GetDBNames()[j].ShortName
-                << "', cannot be read."
-                ;
-            BadFile(NewFilename, oss.str());
-            break;
-            }
-        dictionary[temp->GetKey()] = *temp;
-        delete temp;
         }
 }
 
@@ -161,17 +202,6 @@ void DBDictionary::BadFile(std::string const& Filename, std::string const& why)
 //============================================================================
 void DBDictionary::WriteDB(std::string const& filename)
 {
-    JRPS::JrPs_ofpstream ops
-        (filename.c_str()
-        ,JRPS::JrPs_pstream::xxtrunc | JRPS::JrPs_pstream::xxcreat
-        );
-    if(!ops)
-        {
-        fatal_error()
-            << "Cannot open database file '" << filename << "'."
-            << LMI_FLUSH
-            ;
-        }
     if(NumberOfEntries != static_cast<int>(dictionary.size()))
         {
         fatal_error()
@@ -189,11 +219,20 @@ void DBDictionary::WriteDB(std::string const& filename)
             }
         fatal_error() << LMI_FLUSH;
         }
-    ops << dictionary.size();
-    for(unsigned int j = 0; j < dictionary.size(); j++)
-        {
-        ops << &dictionary[j];
-        }
+
+    xml_lmi::xml_document document(xml_root_name());
+    xml::element& root = document.root_node();
+
+    xml_lmi::set_attr(root, "version", "0");
+    xml_serialize::to_xml(root, dictionary);
+
+    // Instead of this:
+//    document.save(filename);
+    // for the nonce, explicitly change the extension, in order to
+    // force external product-file code to use the new extension.
+    fs::path path(filename, fs::native);
+    path = fs::change_extension(path, ".database");
+    document.save(path.string());
 }
 
 //===========================================================================
@@ -633,7 +672,7 @@ void DBDictionary::WriteSampleDBFile()
     Add(TDBValue(DB_ExpRatIBNRMult      , 6.0));
     Add(TDBValue(DB_ExpRatAmortPeriod   , 4.0));
 
-    WriteDB(AddDataDir("sample.db4"));
+    WriteDB(AddDataDir("sample.database"));
 }
 
 //============================================================================
@@ -644,7 +683,7 @@ void print_databases()
     fs::directory_iterator end_i;
     for(; i != end_i; ++i)
         {
-        if(is_directory(*i) || ".db4" != fs::extension(*i))
+        if(is_directory(*i) || ".database" != fs::extension(*i))
             {
             continue;
             }

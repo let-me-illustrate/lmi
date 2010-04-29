@@ -25088,3 +25088,42 @@ Work around a libc QoI issue.
   rounding_view_editor.hpp
 Permit annotations in '.rounding' files.
 
+20100427T2340Z <gchicares@sbcglobal.net> [755]
+
+  database_view_editor.hpp
+Anticipate new database-file names.
+
+20100428T1231Z <gchicares@sbcglobal.net> [755]
+
+  dbnames.xpp
+  ihs_basicval.cpp
+  ihs_dbdict.cpp
+  mec_server.cpp
+  mortality_rates_fetch.cpp
+Redefine 'MaxMonthlyCoiRate' and 'NAARDiscount' as reciprocals. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-03/msg00000.html
+
+20100429T1910Z <gchicares@sbcglobal.net> [755]
+
+  dbnames.cpp
+  dbnames.hpp
+Commute between database name and key (VS).
+
+20100429T1913Z <gchicares@sbcglobal.net> [745]
+
+  Makefile.am
+  ihs_dbdict.cpp
+  ihs_dbvalue.cpp
+  ihs_dbvalue.hpp
+  ihs_fpios.cpp [expunged]
+  ihs_fpios.hpp [expunged]
+  ihs_pios.cpp  [expunged]
+  ihs_pios.hpp  [expunged]
+  main_wx.cpp
+  my_prod.cpp
+  objects.make
+  product_data.cpp
+  test_coding_rules.cpp
+  workhorse.make
+Reimplement 'database' (formerly 'db4') product files (VS).
+
