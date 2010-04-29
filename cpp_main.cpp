@@ -134,8 +134,8 @@ namespace lmi_test
         cpp_main_caller(int c, char** v) : argc(c), argv(v) {}
         int operator()() {return cpp_main(argc, argv);}
     };
-  }
-} // Namespace lmi_test.
+  } // namespace test
+} // namespace lmi_test
 
 int main(int argc, char* argv[])
 {

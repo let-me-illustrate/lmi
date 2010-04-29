@@ -25127,3 +25127,35 @@ Commute between database name and key (VS).
   workhorse.make
 Reimplement 'database' (formerly 'db4') product files (VS).
 
+20100429T2351Z <gchicares@sbcglobal.net> [745]
+
+  alert.cpp
+  callback_test.cpp
+  catch_exceptions.hpp
+  config_bc551.hpp
+  cpp_main.cpp
+  database_document.cpp
+  dbvalue.cpp
+  exit_codes.hpp
+  ihs_irc7702.cpp
+  multidimgrid_any.cpp
+  numeric_io_traits.hpp
+  rounding_view_editor.cpp
+  stl_extensions.hpp
+  test_main.cpp
+  test_tools.hpp
+  tier_view.cpp
+  xml_lmi_fwd.hpp
+  xml_serialize.hpp
+Improve concinnity. Write either:
+  namespace xyz
+  {
+  ...
+  } // namespace xyz
+so that grepping the opening leads to the closing; or:
+  namespace
+  {
+  ...
+  } // Unnamed namespace.
+which differs in that "Unnamed" is not the unnamed namespace's name.
+

@@ -202,7 +202,7 @@ void MultiDimGridGrid::UponKeyDown(wxKeyEvent& event)
         }
 }
 
-} // unnamed namespace
+} // Unnamed namespace.
 
 /// GridRefreshTableDataGuard: Table refresh guard class
 ///
@@ -283,7 +283,7 @@ inline unsigned int MDGridGetAxisAdjustRow(unsigned int n)
     return MDGRID_AXIS_ROW + n * 2 + 1;
 }
 
-} // unnamed namespace
+} // Unnamed namespace.
 
 void MultiDimGrid::Init()
 {

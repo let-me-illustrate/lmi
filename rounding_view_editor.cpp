@@ -142,7 +142,7 @@ void style_button(wxBitmapButton& button, rounding_style style, bool selected)
         ));
 }
 
-} // unnamed namespace
+} // Unnamed namespace.
 
 BEGIN_EVENT_TABLE(RoundingButtons, wxPanel)
     EVT_BUTTON(e_rbi_not_at_all, RoundingButtons::UponButtonClick)

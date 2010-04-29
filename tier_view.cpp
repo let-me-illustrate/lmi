@@ -94,7 +94,7 @@ tier_entity_info const& tier_tree_item_data::entity_info() const
     return entity_info_;
 }
 
-} // unnamed namespace
+} // Unnamed namespace.
 
 IMPLEMENT_DYNAMIC_CLASS(TierView, TreeGridViewBase)
 

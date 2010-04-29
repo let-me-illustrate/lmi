@@ -93,7 +93,7 @@ void report_catastrophe(char const* message)
         );
 #endif // defined LMI_MSW
 }
-} // Unnamed namespace
+} // Unnamed namespace.
 
 bool set_alert_functions
     (void(*status_alert_function_pointer        )(std::string const&)
