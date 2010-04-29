@@ -28,6 +28,7 @@
 
 #include "so_attributes.hpp"
 
+#include <string>
 #include <vector>
 
 /// See 'dbnames.xpp' for the definition of each entity.
@@ -446,6 +447,9 @@ struct db_names
 };
 
 std::vector<db_names> const& LMI_SO GetDBNames();
+
+int         db_key_from_name(std::string const&);
+std::string db_name_from_key(int);
 
 #endif // dbnames_hpp
 
