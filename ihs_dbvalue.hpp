@@ -31,6 +31,7 @@
 #include "config.hpp"
 
 #include "dbindex.hpp"
+#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 #include "xml_lmi_fwd.hpp"
 
@@ -43,9 +44,8 @@ namespace xml_serialize {template<typename T> struct xml_io;}
 /// Value of an entry in the database dictionary.
 
 class LMI_SO TDBValue
+    :virtual private obstruct_slicing<TDBValue>
 {
-    friend std::istream& operator>>(std::istream&, TDBValue&);
-    friend std::ostream& operator<<(std::ostream&, TDBValue const&);
     friend struct xml_serialize::xml_io<TDBValue>;
 
   public:
@@ -62,7 +62,6 @@ class LMI_SO TDBValue
     enum {e_max_dim_duration  = 100};
 
     TDBValue();
-// TODO ?? Deprecate this interface in favor of the one that takes vectors.
     TDBValue
         (int                a_key
         ,int                a_ndims
@@ -83,7 +82,10 @@ class LMI_SO TDBValue
         );
     TDBValue(TDBValue const&);
     TDBValue& operator=(TDBValue const&);
-    virtual ~TDBValue();
+    ~TDBValue();
+
+    double const* operator[](TDBIndex const& a_idx) const;
+    double&       operator[](std::vector<int> const& a_idx);
 
     int GetKey()              const;
     // TODO ?? Isn't the following function useless?
@@ -91,9 +93,6 @@ class LMI_SO TDBValue
     int GetLength()           const;
     int GetLength(int a_axis) const;
     std::vector<int> const& GetAxisLengths() const;
-
-    double const* operator[](TDBIndex const& a_idx) const;
-    double&       operator[](std::vector<int> const& a_idx);
 
     void Reshape(std::vector<int> const& a_dims);
 
