@@ -696,7 +696,7 @@ void print_databases()
         // nicely with std::map (a name-lookup issue).
         for(unsigned int j = 0; j < dictionary.size(); j++)
             {
-            os << dictionary[j];
+            dictionary[j].write(os);
             }
         }
 }

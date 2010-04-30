@@ -929,8 +929,6 @@ double lowest_premium_tax_load
             << "Premium-tax load varies by state, but differs"
             << " from premium-tax rates. Probably the database"
             << " is incorrect.\n"
-            << "premium_tax_loads:\n" << premium_tax_loads
-            << "premium_tax_rates:\n" << premium_tax_rates
             << LMI_FLUSH
             ;
         }

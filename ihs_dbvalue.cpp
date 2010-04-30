@@ -38,7 +38,6 @@
 
 #include <algorithm>
 #include <functional>
-#include <istream>
 #include <iterator>          // std::advance()
 #include <limits>            // std::numeric_limits
 #include <numeric>
@@ -82,7 +81,8 @@ TDBValue::TDBValue()
 {
 }
 
-//============================================================================
+/// Handy ctor for writing programs to generate '.database' files.
+
 TDBValue::TDBValue
     (int                a_key
     ,int                a_ndims
@@ -114,8 +114,8 @@ TDBValue::TDBValue
     ParanoidCheck();
 }
 
-//============================================================================
-// scalar only
+/// Handy ctor for scalar data.
+
 TDBValue::TDBValue
     (int                a_key
     ,double             a_datum
@@ -129,23 +129,24 @@ TDBValue::TDBValue
 }
 
 //============================================================================
-TDBValue::TDBValue(TDBValue const& obj)
-    :key          (obj.key)
-    ,axis_lengths (obj.axis_lengths)
-    ,data_values  (obj.data_values)
-    ,gloss_       (obj.gloss_)
+TDBValue::TDBValue(TDBValue const& z)
+    :obstruct_slicing<TDBValue>()
+    ,key          (z.key)
+    ,axis_lengths (z.axis_lengths)
+    ,data_values  (z.data_values)
+    ,gloss_       (z.gloss_)
 {
 }
 
 //============================================================================
-TDBValue& TDBValue::operator=(TDBValue const& obj)
+TDBValue& TDBValue::operator=(TDBValue const& z)
 {
-    if(this != &obj)
+    if(this != &z)
         {
-        key          = obj.key;
-        axis_lengths = obj.axis_lengths;
-        data_values  = obj.data_values;
-        gloss_       = obj.gloss_;
+        key          = z.key;
+        axis_lengths = z.axis_lengths;
+        data_values  = z.data_values;
+        gloss_       = z.gloss_;
         }
     return *this;
 }
@@ -541,23 +542,6 @@ Implementation
     bands on...each item?
     scalar marker?
 */
-
-//===========================================================================
-std::istream& operator>>(std::istream& is, TDBValue&)
-{
-    // SOMEDAY !! Someday we should implement this.
-    fatal_error()
-        << "operator>>(std::istream&, TDBValue&) not implemented."
-        << LMI_FLUSH
-        ;
-    return is;
-}
-
-//===========================================================================
-std::ostream& operator<<(std::ostream& os, TDBValue const& z)
-{
-    return z.write(os);
-}
 
 void TDBValue::read(xml::element const& e)
 {
