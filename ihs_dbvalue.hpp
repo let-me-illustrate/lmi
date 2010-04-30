@@ -64,19 +64,22 @@ class LMI_SO TDBValue
     TDBValue();
 // TODO ?? Deprecate this interface in favor of the one that takes vectors.
     TDBValue
-        (int           a_key
-        ,int           a_ndims
-        ,int const*    a_dims
-        ,double const* a_data
+        (int                a_key
+        ,int                a_ndims
+        ,int const*         a_dims
+        ,double const*      a_data
+        ,std::string const& a_gloss = std::string()
         );
     TDBValue
         (int                        a_key
         ,std::vector<int> const&    a_dims
         ,std::vector<double> const& a_data
+        ,std::string const&         a_gloss = std::string()
         );
     TDBValue
-        (int    a_key
-        ,double a_datum
+        (int                a_key
+        ,double             a_datum
+        ,std::string const& a_gloss = std::string()
         );
     TDBValue(TDBValue const&);
     TDBValue& operator=(TDBValue const&);
@@ -125,6 +128,7 @@ class LMI_SO TDBValue
     // consecutive durational elements in contiguous storage.
     std::vector<int>    axis_lengths;
     std::vector<double> data_values;
+    std::string         gloss_;
 };
 
 /*
