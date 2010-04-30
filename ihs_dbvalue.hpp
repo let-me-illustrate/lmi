@@ -38,16 +38,9 @@
 #include <string>
 #include <vector>
 
-// Value of an entry in the database dictionary.
-
-enum e_IdxType
-    {e_Offset
-    ,e_Discrete
-    ,e_LowBound
-    ,e_Incremental
-    };
-
 namespace xml_serialize {template<typename T> struct xml_io;}
+
+/// Value of an entry in the database dictionary.
 
 class LMI_SO TDBValue
 {
@@ -85,14 +78,6 @@ class LMI_SO TDBValue
         (int    a_key
         ,double a_datum
         );
-    TDBValue
-        (int                      a_key
-        ,int                      a_ndims
-        ,int const*               a_dims
-        ,double const*            a_data
-        ,std::vector<std::string> a_extra_axes_names
-        ,std::vector<double>      a_extra_axes_values
-        );
     TDBValue(TDBValue const&);
     TDBValue& operator=(TDBValue const&);
     virtual ~TDBValue();
@@ -113,15 +98,12 @@ class LMI_SO TDBValue
 
     static std::vector<int> const& maximum_dimensions();
     static bool Equivalent(TDBValue const&, TDBValue const&);
-    // TODO ?? Experimental. If this turns out to be a good idea,
-    // then parameterize it.
     static bool VariesByState(TDBValue const&);
 
   private:
     int  getndata()                           const;
     void ParanoidCheck()                      const;
     bool AreAllAxesOK()                       const;
-    void FixupIndex(std::vector<double>& idx) const;
 
     void read (xml::element const&);
     void write(xml::element&) const;
@@ -143,17 +125,6 @@ class LMI_SO TDBValue
     // consecutive durational elements in contiguous storage.
     std::vector<int>    axis_lengths;
     std::vector<double> data_values;
-
-    // For the first six axes, the allowable range of values is hardcoded;
-    // we know their names because they are fixed.
-    // We know the names of the first six axes because they are fixed,
-    // and we know their ranges of permissible values because they are
-    // hardcoded. For each custom axis, we need to specify its name and
-    // enumerate its of permissible values; its number of permissible
-    // values is in axis_lengths.
-    std::vector<std::string> extra_axes_names;
-    std::vector<double>      extra_axes_values;
-    std::vector<e_IdxType>   extra_axes_types;
 };
 
 /*

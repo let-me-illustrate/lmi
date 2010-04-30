@@ -123,25 +123,6 @@ TDBValue::TDBValue
 }
 
 //============================================================================
-TDBValue::TDBValue
-    (int                      a_key
-    ,int                      a_ndims
-    ,int const*               a_dims
-    ,double const*            a_data
-    ,std::vector<std::string> a_extra_axes_names
-    ,std::vector<double>      a_extra_axes_values
-    )
-    :key(a_key)
-    ,extra_axes_names(a_extra_axes_names)
-    ,extra_axes_values(a_extra_axes_values)
-{
-    axis_lengths    .assign(a_dims, a_dims + a_ndims);
-    data_values     .assign(a_data, a_data + getndata());
-
-    ParanoidCheck();
-}
-
-//============================================================================
 TDBValue::TDBValue(TDBValue const& obj)
     :key          (obj.key)
     ,axis_lengths (obj.axis_lengths)
@@ -264,7 +245,6 @@ double& TDBValue::operator[](std::vector<int> const& a_idx)
         if(1 != axis_lengths[j])
             {
             LMI_ASSERT(a_idx[j] < axis_lengths[j]);
-            // TODO ?? Here gcc warns of assignment to unsigned int from double.
             z = z * axis_lengths[j] + a_idx[j];
             }
         }
@@ -285,26 +265,7 @@ double& TDBValue::operator[](std::vector<int> const& a_idx)
 //============================================================================
 double const* TDBValue::operator[](TDBIndex const& a_idx) const
 {
-/*
-            tiered_product<double>()
-                (assets
-                ,TieredMEBands
-                ,TieredMECharges
-                )
-
-        std::vector<double>::difference_type dist(0);
-        distance(CSVBegin, CSVEnd, dist);
-
-    // The first six axes are fixed.
-    // Preprocess the others.
-    // TODO ?? use std::find(), lower_bound, tiered_product...
-
-    std::vector<double>     extra_axes_values;
-    std::vector<e_IdxType>  extra_axes_types;
-*/
-
     std::vector<double>idx(a_idx.GetIdx());
-// TODO ?? FixupIndex(idx); // Doesn't work.
 
     LMI_ASSERT(0 < axis_lengths.size());
     int z = 0;
@@ -474,68 +435,6 @@ std::ostream& TDBValue::write(std::ostream& os) const
 }
 
 //============================================================================
-void TDBValue::FixupIndex(std::vector<double>& idx) const
-{
-    std::vector<double>::iterator           i_idx = idx.begin();
-    // debugging
-    if(idx.size() <= e_number_of_axes)
-        {
-        return;
-        }
-    std::advance(i_idx, e_number_of_axes - 1);
-//  std::vector<double>::const_iterator     i_val = extra_axes_values.begin();
-    std::vector<e_IdxType>::const_iterator  i_typ = extra_axes_types.begin();
-    while(i_idx < idx.end())
-        {
-        switch(*i_typ)
-            {
-            case e_Offset:
-                {
-                // do nothing
-                }
-                break;
-            case e_Discrete:
-                {
-                std::vector<double>::const_iterator z = std::find
-                    (extra_axes_values.begin()
-                    ,extra_axes_values.end()
-                    ,*i_idx
-                    );
-                *i_idx = z - extra_axes_values.begin();
-                }
-                break;
-            case e_LowBound:
-                {
-                std::vector<double>::const_iterator z = std::lower_bound
-                    (extra_axes_values.begin()
-                    ,extra_axes_values.end()
-                    ,*i_idx
-                    );
-                *i_idx = z - extra_axes_values.begin();
-                }
-                break;
-
-            case e_Incremental:
-                {
-                // TODO ?? What to do here?
-                }
-                break;
-            default:
-                fatal_error()
-                    << "Unknown axis type "
-                    << *i_typ
-                    << '.'
-                    << LMI_FLUSH
-                    ;
-                break;
-            }
-        i_idx++;
-//      i_val++; // TODO ?? Need std::vector of vectors?
-        i_typ++;
-        }
-}
-
-//============================================================================
 // TODO ?? Combine this with ParanoidCheck()?
 bool TDBValue::AreAllAxesOK() const
 {
@@ -586,7 +485,6 @@ int TDBValue::GetKey() const
 }
 
 //============================================================================
-// TODO ?? Isn't the following function useless?
 int TDBValue::GetNDims() const
 {
     return axis_lengths.size();
@@ -653,8 +551,6 @@ void TDBValue::read(xml::element const& e)
     xml_serialize::get_element(e, "key"              , short_name       );
     key = db_key_from_name(short_name);
     xml_serialize::get_element(e, "axis_lengths"     , axis_lengths     );
-    xml_serialize::get_element(e, "extra_axes_values", extra_axes_values);
-    xml_serialize::get_element(e, "extra_axes_names" , extra_axes_names );
     xml_serialize::get_element(e, "data_values"      , data_values      );
 
     LMI_ASSERT(getndata() == static_cast<int>(data_values.size()));
@@ -676,8 +572,6 @@ void TDBValue::write(xml::element& e) const
 
     xml_serialize::set_element(e, "key"              , db_name_from_key(key));
     xml_serialize::set_element(e, "axis_lengths"     , axis_lengths     );
-    xml_serialize::set_element(e, "extra_axes_values", extra_axes_values);
-    xml_serialize::set_element(e, "extra_axes_names" , extra_axes_names );
     xml_serialize::set_element(e, "data_values"      , data_values      );
 }
 
