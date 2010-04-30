@@ -407,7 +407,7 @@ void DBDictionary::WriteSampleDBFile()
     Add(TDBValue(DB_CCoiIsAnnual        , true));
     Add(TDBValue(DB_GCoiIsAnnual        , true));
     Add(TDBValue(DB_MCoiIsAnnual        , true));
-    Add(TDBValue(DB_AgeLastOrNearest    , 0)); // ALB
+    Add(TDBValue(DB_AgeLastOrNearest    , 0, "0 = ALB")); // ALB
     Add(TDBValue(DB_AllowRetirees       , true));
     Add(TDBValue(DB_MinSpecAmt          , 100000.0));
     Add(TDBValue(DB_AllowSubstdTable    , true));
@@ -608,7 +608,7 @@ void DBDictionary::WriteSampleDBFile()
 
     // Use male rates for unisex--1983 GAM seems to have no unisex version.
     double T83Gam[3] = {825, 826, 826,};
-    Add(TDBValue(DB_83GamTable, TDBValue::e_number_of_axes, dims311, T83Gam));
+    Add(TDBValue(DB_83GamTable, TDBValue::e_number_of_axes, dims311, T83Gam, "Use male rates for unisex--1983 GAM seems to have no unisex version."));
 
     Add(TDBValue(DB_AllowWD             , true));
     Add(TDBValue(DB_AllowLoan           , true));

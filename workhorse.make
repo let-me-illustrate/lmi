@@ -552,8 +552,10 @@ endif
 # Adding '-fno-delete-null-pointer-checks' to $(CPPFLAGS) might
 # suffice to suppress the diagnostic, but this file actually doesn't
 # need any optimization at all.
+#
+# A similar problem was observed with 'my_db.cpp'.
 
-my_prod.o: optimization_flag := -O0
+my_db.o my_prod.o: optimization_flag := -O0
 
 ################################################################################
 

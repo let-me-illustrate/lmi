@@ -84,12 +84,14 @@ TDBValue::TDBValue()
 
 //============================================================================
 TDBValue::TDBValue
-    (int           a_key
-    ,int           a_ndims
-    ,int const*    a_dims
-    ,double const* a_data
+    (int                a_key
+    ,int                a_ndims
+    ,int const*         a_dims
+    ,double const*      a_data
+    ,std::string const& a_gloss
     )
-    :key(a_key)
+    :key          (a_key)
+    ,gloss_       (a_gloss)
 {
     axis_lengths    .assign(a_dims, a_dims + a_ndims);
     data_values     .assign(a_data, a_data + getndata());
@@ -102,10 +104,12 @@ TDBValue::TDBValue
     (int                        a_key
     ,std::vector<int> const&    a_dims
     ,std::vector<double> const& a_data
+    ,std::string const&         a_gloss
     )
-    :key(a_key)
-    ,axis_lengths(a_dims)
-    ,data_values(a_data)
+    :key          (a_key)
+    ,axis_lengths (a_dims)
+    ,data_values  (a_data)
+    ,gloss_       (a_gloss)
 {
     ParanoidCheck();
 }
@@ -113,10 +117,12 @@ TDBValue::TDBValue
 //============================================================================
 // scalar only
 TDBValue::TDBValue
-    (int    a_key
-    ,double a_datum
+    (int                a_key
+    ,double             a_datum
+    ,std::string const& a_gloss
     )
-    :key(a_key)
+    :key          (a_key)
+    ,gloss_       (a_gloss)
 {
     axis_lengths    .assign(ScalarDims, ScalarDims + e_number_of_axes);
     data_values     .push_back(a_datum);
@@ -127,6 +133,7 @@ TDBValue::TDBValue(TDBValue const& obj)
     :key          (obj.key)
     ,axis_lengths (obj.axis_lengths)
     ,data_values  (obj.data_values)
+    ,gloss_       (obj.gloss_)
 {
 }
 
@@ -135,9 +142,10 @@ TDBValue& TDBValue::operator=(TDBValue const& obj)
 {
     if(this != &obj)
         {
-        key             = obj.key;
-        axis_lengths    = obj.axis_lengths;
-        data_values     = obj.data_values;
+        key          = obj.key;
+        axis_lengths = obj.axis_lengths;
+        data_values  = obj.data_values;
+        gloss_       = obj.gloss_;
         }
     return *this;
 }
@@ -413,6 +421,11 @@ std::ostream& TDBValue::write(std::ostream& os) const
         << " key=" << key
         << '\n'
         ;
+    if(!gloss_.empty())
+        {
+        os << "  gloss: " << gloss_ << '\n';
+        }
+
     if(1 == getndata())
         {
         os << "  scalar";
@@ -428,6 +441,7 @@ std::ostream& TDBValue::write(std::ostream& os) const
         if(1 != axis_lengths[5]) os <<     " state[" << axis_lengths[5] << ']';
         if(1 != axis_lengths[6]) os <<  " duration[" << axis_lengths[6] << ']';
         }
+
     os << '\n';
     print_matrix(os, data_values, axis_lengths);
     os << '\n';
@@ -548,10 +562,11 @@ std::ostream& operator<<(std::ostream& os, TDBValue const& z)
 void TDBValue::read(xml::element const& e)
 {
     std::string short_name;
-    xml_serialize::get_element(e, "key"              , short_name       );
+    xml_serialize::get_element(e, "key"         , short_name       );
     key = db_key_from_name(short_name);
-    xml_serialize::get_element(e, "axis_lengths"     , axis_lengths     );
-    xml_serialize::get_element(e, "data_values"      , data_values      );
+    xml_serialize::get_element(e, "axis_lengths", axis_lengths     );
+    xml_serialize::get_element(e, "data_values" , data_values      );
+    xml_serialize::get_element(e, "gloss"       , gloss_           );
 
     LMI_ASSERT(getndata() == static_cast<int>(data_values.size()));
     LMI_ASSERT
@@ -570,8 +585,9 @@ void TDBValue::write(xml::element& e) const
         );
     AreAllAxesOK();
 
-    xml_serialize::set_element(e, "key"              , db_name_from_key(key));
-    xml_serialize::set_element(e, "axis_lengths"     , axis_lengths     );
-    xml_serialize::set_element(e, "data_values"      , data_values      );
+    xml_serialize::set_element(e, "key"         , db_name_from_key(key));
+    xml_serialize::set_element(e, "axis_lengths", axis_lengths     );
+    xml_serialize::set_element(e, "data_values" , data_values      );
+    xml_serialize::set_element(e, "gloss"       , gloss_           );
 }
 
