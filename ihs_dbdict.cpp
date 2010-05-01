@@ -1,4 +1,4 @@
-// Product database.
+// Product-database map.
 //
 // Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
@@ -157,15 +157,15 @@ void DBDictionary::Init(std::string const& NewFilename)
     xml_lmi::dom_parser parser(NewFilename);
     xml::element const& root = parser.root_node(xml_root_name());
 
-    xml_serialize::from_xml(root, dictionary);
+    xml_serialize::from_xml(root, dictionary_);
 
-    if(NumberOfEntries != static_cast<int>(dictionary.size()))
+    if(NumberOfEntries != static_cast<int>(dictionary_.size()))
         {
         std::ostringstream oss;
         oss
             << "is not up to date or is corrupted."
             << " It should contain " << NumberOfEntries
-            << " elements, but it actually contains " << dictionary.size()
+            << " elements, but it actually contains " << dictionary_.size()
             << " elements."
             ;
         BadFile(NewFilename, oss.str());
@@ -202,17 +202,17 @@ void DBDictionary::BadFile(std::string const& Filename, std::string const& why)
 //============================================================================
 void DBDictionary::WriteDB(std::string const& filename)
 {
-    if(NumberOfEntries != static_cast<int>(dictionary.size()))
+    if(NumberOfEntries != static_cast<int>(dictionary_.size()))
         {
         fatal_error()
             << "Error writing database '"
             << filename
-            << "': the database has " << dictionary.size()
+            << "': the database has " << dictionary_.size()
             << " entries, but should have " << NumberOfEntries << '.'
             ;
         for(int j = 0; j < NumberOfEntries; j++)
             {
-            if(!dictionary.count(j))
+            if(!dictionary_.count(j))
                 {
                 fatal_error() << " Key " << j << " not found.";
                 }
@@ -224,7 +224,7 @@ void DBDictionary::WriteDB(std::string const& filename)
     xml::element& root = document.root_node();
 
     xml_lmi::set_attr(root, "version", "0");
-    xml_serialize::to_xml(root, dictionary);
+    xml_serialize::to_xml(root, dictionary_);
 
     // Instead of this:
 //    document.save(filename);
@@ -238,8 +238,8 @@ void DBDictionary::WriteDB(std::string const& filename)
 //===========================================================================
 void DBDictionary::Add(TDBValue const& e)
 {
-    dictionary.erase(e.GetKey());
-    dictionary.insert(dict_map_val(e.GetKey(), e));
+    dictionary_.erase(e.GetKey());
+    dictionary_.insert(dict_map_val(e.GetKey(), e));
 }
 
 //============================================================================
@@ -248,7 +248,7 @@ void DBDictionary::InitDB()
 {
     static double const bignum = std::numeric_limits<double>::max();
 
-    dictionary.erase(dictionary.begin(), dictionary.end());
+    dictionary_.clear();
     for(int j = DB_FIRST; j < DB_LAST; ++j)
         {
         Add(TDBValue(j, 0.0));
@@ -691,12 +691,13 @@ void print_databases()
         DBDictionary::instance().Init(i->string());
         fs::path out_file = fs::change_extension(*i, ".dbt");
         fs::ofstream os(out_file, ios_out_trunc_binary());
-        dict_map& dictionary = DBDictionary::instance().GetDictionary();
+        dict_map const& dictionary = DBDictionary::instance().GetDictionary();
         // std::ostream_iterator not used because it doesn't work
         // nicely with std::map (a name-lookup issue).
-        for(unsigned int j = 0; j < dictionary.size(); j++)
+        typedef dict_map::const_iterator dmci;
+        for(dmci i = dictionary.begin(); i != dictionary.end(); ++i)
             {
-            dictionary[j].write(os);
+            i->second.write(os);
             }
         }
 }

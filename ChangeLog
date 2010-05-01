@@ -25276,3 +25276,18 @@ Rename 'ihs_commfns.?pp' to 'commutation_functions.?pp'.
   product_file_test.cpp
 Rename 'ihs_funddata.?pp' to 'fund_data.?pp'.
 
+20100501T1824Z <gchicares@sbcglobal.net> [732]
+
+  database.cpp
+  database_view_editor.hpp
+  dbdict.cpp
+  dbdict.hpp
+Remove some differences between 'dbdict.hpp' and 'ihs_dbdict.hpp'.
+
+20100501T2311Z <gchicares@sbcglobal.net> [732]
+
+  database_document.cpp
+  ihs_dbdict.cpp
+  ihs_dbdict.hpp
+Remove some differences between 'ihs_dbdict.hpp' and 'dbdict.hpp'.
+

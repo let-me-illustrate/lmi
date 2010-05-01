@@ -1,4 +1,4 @@
-// Database map.
+// Product-database map.
 //
 // Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
@@ -53,7 +53,7 @@ class LMI_SO DBDictionary
     static DBDictionary& instance();
     ~DBDictionary();
     void Init(std::string const& NewFilename);
-    dict_map& GetDictionary();
+    dict_map const& GetDictionary() const;
     void WriteSampleDBFile();
     void WriteProprietaryDBFiles();
 
@@ -68,11 +68,11 @@ class LMI_SO DBDictionary
     static void InvalidateCache();
 
     static std::string CachedFilename;
-    dict_map dictionary;
+    dict_map dictionary_;
 };
 
-inline dict_map& DBDictionary::GetDictionary()
-{return dictionary;}
+inline dict_map const& DBDictionary::GetDictionary() const
+{return dictionary_;}
 
 void LMI_SO print_databases();
 

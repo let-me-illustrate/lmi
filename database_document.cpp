@@ -81,7 +81,7 @@ DatabaseDocument::DatabaseDocument()
     // Initialize database dictionary
     DBDictionary& instance = DBDictionary::instance();
 
-    swap_workaround_for_singleton workaround(dict_, instance.GetDictionary());
+    swap_workaround_for_singleton workaround(dict_, instance.dictionary_);
 
     instance.InitDB();
 }
@@ -104,7 +104,7 @@ void DatabaseDocument::ReadDocument(std::string const& filename)
 {
     DBDictionary& instance = DBDictionary::instance();
 
-    swap_workaround_for_singleton workaround(dict_, instance.GetDictionary());
+    swap_workaround_for_singleton workaround(dict_, instance.dictionary_);
 
     DBDictionary::InvalidateCache();
     instance.Init(filename);
@@ -114,7 +114,7 @@ void DatabaseDocument::WriteDocument(std::string const& filename)
 {
     DBDictionary& instance = DBDictionary::instance();
 
-    swap_workaround_for_singleton workaround(dict_, instance.GetDictionary());
+    swap_workaround_for_singleton workaround(dict_, instance.dictionary_);
 
     instance.WriteDB(filename);
 }
