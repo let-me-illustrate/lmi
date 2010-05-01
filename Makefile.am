@@ -320,6 +320,7 @@ liblmi_la_SOURCES = \
     datum_base.cpp \
     datum_boolean.cpp \
     datum_string.cpp \
+    fund_data.cpp \
     ihs_acctval.cpp \
     ihs_avdebug.cpp \
     ihs_avmly.cpp \
@@ -328,7 +329,6 @@ liblmi_la_SOURCES = \
     ihs_basicval.cpp \
     ihs_database.cpp \
     ihs_dbdict.cpp \
-    ihs_funddata.cpp \
     ihs_irc7702.cpp \
     ihs_irc7702a.cpp \
     ihs_mortal.cpp \
@@ -727,9 +727,9 @@ test_product_file_SOURCES =   \
   dbnames.cpp \
   dbvalue.cpp \
   expm1.cpp \
+  fund_data.cpp \
   global_settings.cpp \
   ihs_dbdict.cpp \
-  ihs_funddata.cpp \
   miscellany.cpp \
   path_utility.cpp \
   product_data.cpp \
@@ -904,13 +904,13 @@ noinst_HEADERS = \
     fenv_lmi_x86.hpp \
     file_command.hpp \
     financial.hpp \
+    fund_data.hpp \
     getopt.hpp \
     global_settings.hpp \
     group_values.hpp \
     handle_exceptions.hpp \
     icon_monger.hpp \
     ihs_dbdict.hpp \
-    ihs_funddata.hpp \
     ihs_irc7702a.hpp \
     ihs_irc7702.hpp \
     ihs_server7702.hpp \

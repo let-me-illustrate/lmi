@@ -39,7 +39,7 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "ihs_funddata.hpp"
+#include "fund_data.hpp"
 
 #include "data_directory.hpp" // AddDataDir()
 
