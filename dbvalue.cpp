@@ -56,51 +56,51 @@ TDBValue::TDBValue()
 
 //============================================================================
 TDBValue::TDBValue
-    (int                inputkey
-    ,int                inputndims
-    ,int const*         inputdims
-    ,double const*      inputdata
+    (int                key
+    ,int                ndims
+    ,int const*         dims
+    ,double const*      data
     ,std::string const& gloss
     )
-    :key_   (inputkey)
-    ,ndims_ (inputndims)
+    :key_   (key)
+    ,ndims_ (ndims)
     ,gloss_ (gloss)
 {
     dims_ = new int[ndims_];
-    deprecated::dupmem(dims_, inputdims, ndims_);
+    deprecated::dupmem(dims_, dims, ndims_);
     ndata_ = getndata();
 
     data_ = new double[ndata_];
-    deprecated::dupmem(data_, inputdata, ndata_);
+    deprecated::dupmem(data_, data, ndata_);
 }
 
 //============================================================================
-TDBValue::TDBValue(TDBValue const& rhs)
+TDBValue::TDBValue(TDBValue const& z)
     :obstruct_slicing<TDBValue>()
-    ,key_   (rhs.key_)
-    ,ndims_ (rhs.ndims_)
-    ,ndata_ (rhs.ndata_)
+    ,key_   (z.key_  )
+    ,ndims_ (z.ndims_)
+    ,ndata_ (z.ndata_)
 {
     dims_ = new int[ndims_];
-    deprecated::dupmem(dims_, rhs.dims_, ndims_);
+    deprecated::dupmem(dims_, z.dims_, ndims_);
     data_ = new double[ndata_];
-    deprecated::dupmem(data_, rhs.data_, ndata_);
+    deprecated::dupmem(data_, z.data_, ndata_);
 }
 
 //============================================================================
-TDBValue& TDBValue::operator=(TDBValue const& rhs)
+TDBValue& TDBValue::operator=(TDBValue const& z)
 {
-    if(this != &rhs)
+    if(this != &z)
         {
-        key_   = rhs.key_;
-        ndata_ = rhs.ndata_;
-        ndims_ = rhs.ndims_;
+        key_   = z.key_;
+        ndata_ = z.ndata_;
+        ndims_ = z.ndims_;
         delete[]dims_;
         delete[]data_;
         dims_ = new int[ndims_];
-        deprecated::dupmem(dims_, rhs.dims_, ndims_);
+        deprecated::dupmem(dims_, z.dims_, ndims_);
         data_ = new double[ndata_];
-        deprecated::dupmem(data_, rhs.data_, ndata_);
+        deprecated::dupmem(data_, z.data_, ndata_);
         }
     return *this;
 }

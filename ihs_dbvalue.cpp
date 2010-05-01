@@ -84,32 +84,32 @@ TDBValue::TDBValue()
 /// Handy ctor for writing programs to generate '.database' files.
 
 TDBValue::TDBValue
-    (int                a_key
-    ,int                a_ndims
-    ,int const*         a_dims
-    ,double const*      a_data
-    ,std::string const& a_gloss
+    (int                key
+    ,int                ndims
+    ,int const*         dims
+    ,double const*      data
+    ,std::string const& gloss
     )
-    :key_          (a_key)
-    ,gloss_        (a_gloss)
+    :key_          (key)
+    ,gloss_        (gloss)
 {
-    axis_lengths_ .assign(a_dims, a_dims + a_ndims);
-    data_values_  .assign(a_data, a_data + getndata());
+    axis_lengths_ .assign(dims, dims + ndims);
+    data_values_  .assign(data, data + getndata());
 
     ParanoidCheck();
 }
 
 //============================================================================
 TDBValue::TDBValue
-    (int                        a_key
-    ,std::vector<int> const&    a_dims
-    ,std::vector<double> const& a_data
-    ,std::string const&         a_gloss
+    (int                        key
+    ,std::vector<int> const&    dims
+    ,std::vector<double> const& data
+    ,std::string const&         gloss
     )
-    :key_          (a_key)
-    ,axis_lengths_ (a_dims)
-    ,data_values_  (a_data)
-    ,gloss_        (a_gloss)
+    :key_          (key)
+    ,axis_lengths_ (dims)
+    ,data_values_  (data)
+    ,gloss_        (gloss)
 {
     ParanoidCheck();
 }
@@ -117,15 +117,15 @@ TDBValue::TDBValue
 /// Handy ctor for scalar data.
 
 TDBValue::TDBValue
-    (int                a_key
-    ,double             a_datum
-    ,std::string const& a_gloss
+    (int                key
+    ,double             datum
+    ,std::string const& gloss
     )
-    :key_          (a_key)
-    ,gloss_        (a_gloss)
+    :key_          (key)
+    ,gloss_        (gloss)
 {
     axis_lengths_ .assign(ScalarDims, ScalarDims + e_number_of_axes);
-    data_values_  .push_back(a_datum);
+    data_values_  .push_back(datum);
 }
 
 //============================================================================
@@ -230,9 +230,9 @@ int TDBValue::getndata() const
 }
 
 //============================================================================
-double& TDBValue::operator[](std::vector<int> const& a_idx)
+double& TDBValue::operator[](std::vector<int> const& idx)
 {
-    LMI_ASSERT(e_number_of_axes == a_idx.size());
+    LMI_ASSERT(e_number_of_axes == idx.size());
 
     if(e_number_of_axes != axis_lengths_.size())
         {
@@ -253,8 +253,8 @@ double& TDBValue::operator[](std::vector<int> const& a_idx)
         {
         if(1 != axis_lengths_[j])
             {
-            LMI_ASSERT(a_idx[j] < axis_lengths_[j]);
-            z = z * axis_lengths_[j] + a_idx[j];
+            LMI_ASSERT(idx[j] < axis_lengths_[j]);
+            z = z * axis_lengths_[j] + idx[j];
             }
         }
 // TODO ?? erase    z *= axis_lengths_.back();
@@ -272,9 +272,9 @@ double& TDBValue::operator[](std::vector<int> const& a_idx)
 }
 
 //============================================================================
-double const* TDBValue::operator[](TDBIndex const& a_idx) const
+double const* TDBValue::operator[](TDBIndex const& idx) const
 {
-    std::vector<double>idx(a_idx.GetIdx());
+    std::vector<double> index(idx.GetIdx());
 
     LMI_ASSERT(0 < axis_lengths_.size());
     int z = 0;
@@ -283,8 +283,8 @@ double const* TDBValue::operator[](TDBIndex const& a_idx) const
         {
         if(1 != axis_lengths_[j])
             {
-            LMI_ASSERT(idx[j] < axis_lengths_[j]);
-            z = z * axis_lengths_[j] + static_cast<int>(idx[j]);
+            LMI_ASSERT(index[j] < axis_lengths_[j]);
+            z = z * axis_lengths_[j] + static_cast<int>(index[j]);
             }
         }
     z *= axis_lengths_.back();
@@ -302,52 +302,52 @@ double const* TDBValue::operator[](TDBIndex const& a_idx) const
 }
 
 //============================================================================
-void TDBValue::Reshape(std::vector<int> const& a_dims)
+void TDBValue::Reshape(std::vector<int> const& dims)
 {
     // Create a new instance of this class having the same
     // key but the desired number of axes
     std::vector<double> new_data
         (
         std::accumulate
-            (a_dims.begin()
-            ,a_dims.end()
+            (dims.begin()
+            ,dims.end()
             ,1
             ,std::multiplies<int>()
             )
         );
     TDBValue new_object
         (GetKey()
-        ,a_dims
+        ,dims
         ,new_data
         );
 
-    // ET !! std::vector<int> max_dims_used = max(axis_lengths_, a_dims);
+    // ET !! std::vector<int> max_dims_used = max(axis_lengths_, dims);
     // ...and then expunge this comment:
     // greater length of src or dst along each axis
     std::vector<int> max_dims_used(e_number_of_axes);
     std::transform
         (axis_lengths_.begin()
         ,axis_lengths_.end()
-        ,a_dims.begin()
+        ,dims.begin()
         ,max_dims_used.begin()
         ,greater_of<int>()
         );
     // TODO ?? Oops--erase above std::transform() call--want only dst axes.
-    max_dims_used = a_dims;
+    max_dims_used = dims;
 
     // Number of times we'll go through the assignment loop.
-    // TODO ?? prolly should use max_dims_used instead of a_dims here (they're the same).
+    // TODO ?? prolly should use max_dims_used instead of dims here (they're the same).
     int n_iter = std::accumulate
-        (a_dims.begin()
-        ,a_dims.end()
+        (dims.begin()
+        ,dims.end()
         ,1
         ,std::multiplies<int>()
         );
 
-    // ET !! std::vector<int> dst_max_idx = a_dims - 1;
+    // ET !! std::vector<int> dst_max_idx = dims - 1;
     // ...and then expunge this comment:
     // max index of dst along each axis
-    std::vector<int> dst_max_idx(a_dims);
+    std::vector<int> dst_max_idx(dims);
     std::transform
         (dst_max_idx.begin()
         ,dst_max_idx.end()
@@ -408,7 +408,7 @@ void TDBValue::Reshape(std::vector<int> const& a_dims)
         }
 
 // erase    (*this) = new_object;
-    axis_lengths_ = a_dims;
+    axis_lengths_ = dims;
     data_values_ = new_object.data_values_;
 }
 
@@ -514,10 +514,10 @@ int TDBValue::GetLength() const
 }
 
 //============================================================================
-int TDBValue::GetLength(int a_axis) const
+int TDBValue::GetLength(int axis) const
 {
-    LMI_ASSERT(0 <= a_axis && a_axis < static_cast<int>(axis_lengths_.size()));
-    return axis_lengths_[a_axis];
+    LMI_ASSERT(0 <= axis && axis < static_cast<int>(axis_lengths_.size()));
+    return axis_lengths_[axis];
 }
 
 //============================================================================

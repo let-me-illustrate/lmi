@@ -78,38 +78,38 @@ class LMI_SO TDBValue
 
     TDBValue();
     TDBValue
-        (int                a_key
-        ,int                a_ndims
-        ,int const*         a_dims
-        ,double const*      a_data
-        ,std::string const& a_gloss = std::string()
+        (int                key
+        ,int                ndims
+        ,int const*         dims
+        ,double const*      data
+        ,std::string const& gloss = std::string()
         );
     TDBValue
-        (int                        a_key
-        ,std::vector<int> const&    a_dims
-        ,std::vector<double> const& a_data
-        ,std::string const&         a_gloss = std::string()
+        (int                        key
+        ,std::vector<int> const&    dims
+        ,std::vector<double> const& data
+        ,std::string const&         gloss = std::string()
         );
     TDBValue
-        (int                a_key
-        ,double             a_datum
-        ,std::string const& a_gloss = std::string()
+        (int                key
+        ,double             datum
+        ,std::string const& gloss = std::string()
         );
     TDBValue(TDBValue const&);
     TDBValue& operator=(TDBValue const&);
     ~TDBValue();
 
-    double const* operator[](TDBIndex const& a_idx) const;
-    double&       operator[](std::vector<int> const& a_idx);
+    double const* operator[](TDBIndex const& idx) const;
+    double&       operator[](std::vector<int> const& idx);
 
-    int GetKey()              const;
+    int GetKey()            const;
     // TODO ?? Isn't the following function useless?
-    int GetNDims()            const;
-    int GetLength()           const;
-    int GetLength(int a_axis) const;
+    int GetNDims()          const;
+    int GetLength()         const;
+    int GetLength(int axis) const;
     std::vector<int> const& GetAxisLengths() const;
 
-    void Reshape(std::vector<int> const& a_dims);
+    void Reshape(std::vector<int> const& dims);
 
     std::ostream& write(std::ostream&) const;
 
