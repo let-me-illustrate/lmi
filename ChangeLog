@@ -25227,3 +25227,28 @@ practically identical.
   ihs_dbvalue.hpp [expunged]
 Merge two headers.
 
+20100501T1131Z <gchicares@sbcglobal.net> [733]
+
+  dbvalue.cpp
+  dbvalue.hpp
+  ihs_dbvalue.cpp
+Consolidate and simplify documentation.
+
+20100501T1228Z <gchicares@sbcglobal.net> [733]
+
+  database.cpp
+Remove a gratuitous difference versus 'ihs_database.cpp'.
+
+20100501T1229Z <gchicares@sbcglobal.net> [733]
+
+  dbvalue.cpp
+Demonstrate that this file's contents are unneeded.
+
+20100501T1314Z <gchicares@sbcglobal.net> [732]
+
+  Makefile.am
+  dbvalue.cpp
+  ihs_dbvalue.cpp [expunged]
+  objects.make
+Merge two TUs, as if by renaming 'ihs_dbvalue.cpp' to 'dbvalue.cpp'.
+
