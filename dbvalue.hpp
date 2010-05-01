@@ -1,6 +1,6 @@
 // Product-database entity.
 //
-// Copyright (C) 1998, 2001, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -100,7 +100,7 @@ class LMI_SO TDBValue
     double const* operator[](int const* idx) const; // Antediluvian
 
     int GetKey()            const;
-    int GetNDims()          const;
+    int GetNDims()          const; // Antediluvian: detect default-contructed objects.
     int GetLength()         const;
     int GetLength(int axis) const;
     std::vector<int> const& GetAxisLengths() const;
@@ -136,7 +136,7 @@ Database items should be allowed to vary across numerous axes, such as
     gender
     underwriting class (e.g. preferred, standard, and various substd tables)
     smoker
-    issue age (TODO ?? or attained age as optional alternative?)
+    issue age (or attained age as an optional alternative?)
     medical/paramedical/nonmedical
     rate bands (see below)
 and maybe
