@@ -124,14 +124,14 @@ void TDatabase::Init()
 double TDatabase::Query(int k) const
 {
     ConstrainScalar(k); // TODO ?? Is the extra overhead acceptable?
-    return *GetEntry(k)[Index];
+    return *GetEntry(k)[Idx];
 }
 
 //===========================================================================
 void TDatabase::Query(std::vector<double>& dst, int k) const
 {
     TDBValue const& v = GetEntry(k);
-    double const*const z = v.operator[](Index);
+    double const*const z = v[Idx];
     dst.resize(length_);
     if(1 == v.GetNDims())
         {
