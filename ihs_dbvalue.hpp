@@ -1,4 +1,4 @@
-// Database entities.
+// Product-database entity.
 //
 // Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
@@ -41,7 +41,22 @@
 
 namespace xml_serialize {template<typename T> struct xml_io;}
 
-/// Value of an entry in the database dictionary.
+/// Product-database entity.
+///
+/// Each entity varies across zero or more of the following axes:
+///   - gender
+///   - underwriting class
+///   - smoker
+///   - issue age
+///   - underwriting basis
+///   - state
+///   - duration [i.e., number of years since issue]
+/// in that order.
+///
+/// The last index is duration; i.e., duration varies most rapidly of
+/// all axes. In a typical query, all other axes are single-valued,
+/// but all durations are wanted; this axis ordering puts consecutive
+/// durational values in contiguous storage for efficient retrieval.
 
 class LMI_SO TDBValue
     :virtual private obstruct_slicing<TDBValue>
@@ -103,28 +118,14 @@ class LMI_SO TDBValue
     static bool VariesByState(TDBValue const&);
 
   private:
-    int  getndata()                           const;
-    void ParanoidCheck()                      const;
-    bool AreAllAxesOK()                       const;
+    int  getndata()      const;
+    void ParanoidCheck() const;
+    bool AreAllAxesOK()  const;
 
     void read (xml::element const&);
     void write(xml::element&) const;
 
-    int  key;        // Database dictionary key
-
-    // Each database item has a number of axes.
-    // Every item has
-    //   gender
-    //   underwriting class
-    //   smoker
-    //   issue age
-    //   underwriting basis
-    //   state
-    // in that order as its first six axes.
-    // Any item can have any number of additional custom axes after those six.
-    // All items have duration as their last axis. Duration comes last
-    // so that a pointer calculated from all preceding axes points to
-    // consecutive durational elements in contiguous storage.
+    int                 key;
     std::vector<int>    axis_lengths;
     std::vector<double> data_values;
     std::string         gloss_;

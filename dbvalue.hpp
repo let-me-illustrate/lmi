@@ -1,4 +1,4 @@
-// Product database entity type.
+// Product-database entity.
 //
 // Copyright (C) 1998, 2001, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
@@ -28,42 +28,59 @@
 
 #include "dbindex.hpp"
 #include "obstruct_slicing.hpp"
+#include "so_attributes.hpp"
 
+#include <string>
 #include <vector>
 
-// Value of an entry in the database dictionary.
+/// Product-database entity.
+///
+/// Each entity varies across zero or more of the following axes:
+///   - gender
+///   - underwriting class
+///   - smoker
+///   - issue age
+///   - underwriting basis
+///   - state
+///   - duration [i.e., number of years since issue]
+/// in that order.
+///
+/// The last index is duration; i.e., duration varies most rapidly of
+/// all axes. In a typical query, all other axes are single-valued,
+/// but all durations are wanted; this axis ordering puts consecutive
+/// durational values in contiguous storage for efficient retrieval.
 
-class TDBValue
+class LMI_SO TDBValue
     :virtual private obstruct_slicing<TDBValue>
 {
   public:
     TDBValue();
     TDBValue
-        (int     key
-        ,int     ndims
-        ,int*    dims
-        ,double* data
+        (int                key
+        ,int                ndims
+        ,int const*         dims
+        ,double const*      data
+        ,std::string const& gloss = std::string()
         );
     TDBValue(TDBValue const&);
     TDBValue& operator=(TDBValue const&);
     ~TDBValue();
 
-    double* operator[](int const* idx) const;
+    double const* operator[](int const* idx) const;
     int GetKey()    const {return key;}
     int GetNDims()  const {return ndims;}
     int GetLength() const {return dims[TDBIndex::MaxIndex];}
 
   private:
-    int     getndata();
+    int  getndata()      const;
 
     int     key;        // Database dictionary key
     int     ndims;      // Number of dimensions
     int*    dims;       // Dimensions
     int     ndata;      // Number of data
     double* data;       // Data
+    std::string         gloss_;
 };
-
-#endif // dbvalue_hpp
 
 /*
 Database items should be allowed to vary across numerous axes, such as
@@ -113,4 +130,6 @@ option because not everyone will have it installed; for a build of this system
 that is limited to illustration applications, it may be desired not to use the
 SOA program for reasons of space.
 */
+
+#endif // dbvalue_hpp
 

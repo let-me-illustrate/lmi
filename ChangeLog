@@ -25159,3 +25159,33 @@ so that grepping the opening leads to the closing; or:
   } // Unnamed namespace.
 which differs in that "Unnamed" is not the unnamed namespace's name.
 
+20100430T0121Z <gchicares@sbcglobal.net> [738]
+
+  ihs_dbvalue.cpp
+  ihs_dbvalue.hpp
+Simplify.
+
+20100430T1429Z <gchicares@sbcglobal.net> [738]
+
+  ihs_dbdict.cpp
+  ihs_dbvalue.cpp
+  ihs_dbvalue.hpp
+  workhorse.make
+Permit annotations in '.database' files.
+
+20100430T1709Z <gchicares@sbcglobal.net> [737]
+
+  ihs_basicval.cpp
+  ihs_dbdict.cpp
+  ihs_dbvalue.cpp
+  ihs_dbvalue.hpp
+Simplify.
+
+20100501T0027Z <gchicares@sbcglobal.net> [737]
+
+  dbvalue.cpp
+  dbvalue.hpp
+  ihs_dbvalue.cpp
+  ihs_dbvalue.hpp
+Remove gratuitous dissimilarities.
+
