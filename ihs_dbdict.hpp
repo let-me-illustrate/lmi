@@ -30,7 +30,7 @@
 
 #include "config.hpp"
 
-#include "ihs_dbvalue.hpp" // Needed here for map declaration.
+#include "dbvalue.hpp" // Needed here for map declaration.
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 

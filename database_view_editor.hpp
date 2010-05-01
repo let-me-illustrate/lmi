@@ -34,11 +34,11 @@
 #include "multidimgrid_safe.hpp"
 #include "multidimgrid_tools.hpp"
 
-// EVGENIY !! I suspect that we can avoid including "ihs_dbvalue.hpp"
+// EVGENIY !! I suspect that we can avoid including "dbvalue.hpp"
 // here by reworking or moving code for which a forward declaration
 // doesn't work today.
 
-#include "ihs_dbvalue.hpp"
+#include "dbvalue.hpp"
 
 #include <boost/shared_ptr.hpp>
 
@@ -147,7 +147,7 @@ inline void DatabaseTableAdapter::SetModified(bool modified)
 
 /// Class is the version of MultiDimGrid customized for '.database' data.
 ///
-/// Grid edit the data that depends upon 7 axis described in ihs_dbvalue.hpp
+/// Grid edit the data that depends upon 7 axis described in 'dbvalue.hpp'
 
 class DatabaseEditorGrid
   :public MultiDimGrid

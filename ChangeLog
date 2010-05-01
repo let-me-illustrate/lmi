@@ -25189,3 +25189,41 @@ Simplify.
   ihs_dbvalue.hpp
 Remove gratuitous dissimilarities.
 
+20100501T0115Z <gchicares@sbcglobal.net> [737]
+
+  dbvalue.cpp
+  dbvalue.hpp
+  ihs_dbvalue.cpp
+  ihs_dbvalue.hpp
+Mark data members with a '_' suffix.
+
+20100501T0142Z <gchicares@sbcglobal.net> [737]
+
+  dbvalue.cpp
+  ihs_dbvalue.cpp
+  ihs_dbvalue.hpp
+Respell certain arguments.
+
+20100501T0236Z <gchicares@sbcglobal.net> [737]
+
+  dbvalue.cpp
+  dbvalue.hpp
+Remove gratuitous dissimilarities.
+
+20100501T0306Z <gchicares@sbcglobal.net> [735]
+
+  dbvalue.hpp
+  ihs_dbvalue.hpp
+Remove even more gratuitous dissimilarities, rendering two headers
+practically identical.
+
+20100501T1042Z <gchicares@sbcglobal.net> [735]
+
+  Makefile.am
+  database_view_editor.hpp
+  ihs_database.cpp
+  ihs_dbdict.hpp
+  ihs_dbvalue.cpp
+  ihs_dbvalue.hpp [expunged]
+Merge two headers.
+
