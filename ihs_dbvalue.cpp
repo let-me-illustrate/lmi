@@ -64,20 +64,20 @@ std::vector<int> const& TDBValue::maximum_dimensions()
 //============================================================================
 bool TDBValue::Equivalent(TDBValue const& a, TDBValue const& b)
 {
-    return(a.axis_lengths == b.axis_lengths && a.data_values == b.data_values);
+    return(a.axis_lengths_ == b.axis_lengths_ && a.data_values_ == b.data_values_);
 }
 
 //============================================================================
 bool TDBValue::VariesByState(TDBValue const& z)
 {
-    LMI_ASSERT(5 < z.axis_lengths.size());
-    return 1 != z.axis_lengths[5];
+    LMI_ASSERT(5 < z.axis_lengths_.size());
+    return 1 != z.axis_lengths_[5];
 }
 
 //============================================================================
 TDBValue::TDBValue()
-    :key(0)
-    ,axis_lengths(e_number_of_axes)
+    :key_          (0)
+    ,axis_lengths_ (e_number_of_axes)
 {
 }
 
@@ -90,11 +90,11 @@ TDBValue::TDBValue
     ,double const*      a_data
     ,std::string const& a_gloss
     )
-    :key          (a_key)
-    ,gloss_       (a_gloss)
+    :key_          (a_key)
+    ,gloss_        (a_gloss)
 {
-    axis_lengths    .assign(a_dims, a_dims + a_ndims);
-    data_values     .assign(a_data, a_data + getndata());
+    axis_lengths_ .assign(a_dims, a_dims + a_ndims);
+    data_values_  .assign(a_data, a_data + getndata());
 
     ParanoidCheck();
 }
@@ -106,10 +106,10 @@ TDBValue::TDBValue
     ,std::vector<double> const& a_data
     ,std::string const&         a_gloss
     )
-    :key          (a_key)
-    ,axis_lengths (a_dims)
-    ,data_values  (a_data)
-    ,gloss_       (a_gloss)
+    :key_          (a_key)
+    ,axis_lengths_ (a_dims)
+    ,data_values_  (a_data)
+    ,gloss_        (a_gloss)
 {
     ParanoidCheck();
 }
@@ -121,20 +121,20 @@ TDBValue::TDBValue
     ,double             a_datum
     ,std::string const& a_gloss
     )
-    :key          (a_key)
-    ,gloss_       (a_gloss)
+    :key_          (a_key)
+    ,gloss_        (a_gloss)
 {
-    axis_lengths    .assign(ScalarDims, ScalarDims + e_number_of_axes);
-    data_values     .push_back(a_datum);
+    axis_lengths_ .assign(ScalarDims, ScalarDims + e_number_of_axes);
+    data_values_  .push_back(a_datum);
 }
 
 //============================================================================
 TDBValue::TDBValue(TDBValue const& z)
     :obstruct_slicing<TDBValue>()
-    ,key          (z.key)
-    ,axis_lengths (z.axis_lengths)
-    ,data_values  (z.data_values)
-    ,gloss_       (z.gloss_)
+    ,key_          (z.key_)
+    ,axis_lengths_ (z.axis_lengths_)
+    ,data_values_  (z.data_values_)
+    ,gloss_        (z.gloss_)
 {
 }
 
@@ -143,10 +143,10 @@ TDBValue& TDBValue::operator=(TDBValue const& z)
 {
     if(this != &z)
         {
-        key          = z.key;
-        axis_lengths = z.axis_lengths;
-        data_values  = z.data_values;
-        gloss_       = z.gloss_;
+        key_          = z.key_;
+        axis_lengths_ = z.axis_lengths_;
+        data_values_  = z.data_values_;
+        gloss_        = z.gloss_;
         }
     return *this;
 }
@@ -161,41 +161,41 @@ void TDBValue::ParanoidCheck() const
 {
     if
         (
-            axis_lengths.end()
+            axis_lengths_.end()
         !=  std::find
-            (axis_lengths.begin()
-            ,axis_lengths.end()
+            (axis_lengths_.begin()
+            ,axis_lengths_.end()
             ,0
             )
         )
         {
         fatal_error()
             << "Database item '"
-            << GetDBNames()[key].ShortName
+            << GetDBNames()[key_].ShortName
             << "' with key "
-            << key
+            << key_
             << " has zero in at least one dimension."
             << LMI_FLUSH
             ;
         }
 
-    LMI_ASSERT(getndata() == static_cast<int>(data_values.size()));
-    LMI_ASSERT(DB_FIRST <= key && key < DB_LAST);
-    LMI_ASSERT(e_number_of_axes == axis_lengths.size());
+    LMI_ASSERT(getndata() == static_cast<int>(data_values_.size()));
+    LMI_ASSERT(DB_FIRST <= key_ && key_ < DB_LAST);
+    LMI_ASSERT(e_number_of_axes == axis_lengths_.size());
 }
 
 //============================================================================
 int TDBValue::getndata() const
 {
-    LMI_ASSERT(!axis_lengths.empty());
+    LMI_ASSERT(!axis_lengths_.empty());
 
     // Calculate number of elements required from lengths of axes.
     // Use a double for this purpose so that we can detect whether
     // the required number exceeds the maximum addressable number,
     // because a double has a wider range than an integer type.
     double n = std::accumulate
-        (axis_lengths.begin()
-        ,axis_lengths.end()
+        (axis_lengths_.begin()
+        ,axis_lengths_.end()
         ,1.0
         ,std::multiplies<double>()
         );
@@ -205,9 +205,9 @@ int TDBValue::getndata() const
         {
         fatal_error()
             << "Database item '"
-            << GetDBNames()[key].ShortName
+            << GetDBNames()[key_].ShortName
             << "' with key "
-            << key
+            << key_
             << " contains more than the maximum possible number of elements."
             << LMI_FLUSH
             ;
@@ -217,9 +217,9 @@ int TDBValue::getndata() const
         {
         fatal_error()
             << "Database item '"
-            << GetDBNames()[key].ShortName
+            << GetDBNames()[key_].ShortName
             << "' with key "
-            << key
+            << key_
             << " has no data."
             << LMI_FLUSH
             ;
@@ -234,14 +234,14 @@ double& TDBValue::operator[](std::vector<int> const& a_idx)
 {
     LMI_ASSERT(e_number_of_axes == a_idx.size());
 
-    if(e_number_of_axes != axis_lengths.size())
+    if(e_number_of_axes != axis_lengths_.size())
         {
         fatal_error()
             << "Trying to index database with key "
-            << key
+            << key_
             << ": "
             << "e_number_of_axes is " << e_number_of_axes
-            << ", and axis_lengths.size() is " << axis_lengths.size()
+            << ", and axis_lengths.size() is " << axis_lengths_.size()
             << ", but those quantities must be equal."
             << LMI_FLUSH
             ;
@@ -249,26 +249,26 @@ double& TDBValue::operator[](std::vector<int> const& a_idx)
 
     int z = 0;
     // TODO ?? Can we use an STL algorithm instead?
-    for(unsigned int j = 0; j < axis_lengths.size(); j++)
+    for(unsigned int j = 0; j < axis_lengths_.size(); j++)
         {
-        if(1 != axis_lengths[j])
+        if(1 != axis_lengths_[j])
             {
-            LMI_ASSERT(a_idx[j] < axis_lengths[j]);
-            z = z * axis_lengths[j] + a_idx[j];
+            LMI_ASSERT(a_idx[j] < axis_lengths_[j]);
+            z = z * axis_lengths_[j] + a_idx[j];
             }
         }
-// TODO ?? erase    z *= axis_lengths.back();
-    if(static_cast<int>(data_values.size()) <= z)
+// TODO ?? erase    z *= axis_lengths_.back();
+    if(static_cast<int>(data_values_.size()) <= z)
         {
         z = 0;
         fatal_error()
             << "Trying to index database item with key "
-            << key
+            << key_
             << " past end of data."
             << LMI_FLUSH
             ;
         }
-    return data_values[z];
+    return data_values_[z];
 }
 
 //============================================================================
@@ -276,29 +276,29 @@ double const* TDBValue::operator[](TDBIndex const& a_idx) const
 {
     std::vector<double>idx(a_idx.GetIdx());
 
-    LMI_ASSERT(0 < axis_lengths.size());
+    LMI_ASSERT(0 < axis_lengths_.size());
     int z = 0;
     // TODO ?? Can we use an STL algorithm instead?
-    for(unsigned int j = 0; j < axis_lengths.size() - 1; j++)
+    for(unsigned int j = 0; j < axis_lengths_.size() - 1; j++)
         {
-        if(1 != axis_lengths[j])
+        if(1 != axis_lengths_[j])
             {
-            LMI_ASSERT(idx[j] < axis_lengths[j]);
-            z = z * axis_lengths[j] + static_cast<int>(idx[j]);
+            LMI_ASSERT(idx[j] < axis_lengths_[j]);
+            z = z * axis_lengths_[j] + static_cast<int>(idx[j]);
             }
         }
-    z *= axis_lengths.back();
-    if(static_cast<int>(data_values.size()) <= z)
+    z *= axis_lengths_.back();
+    if(static_cast<int>(data_values_.size()) <= z)
         {
         z = 0;
         fatal_error()
             << "Trying to index database item with key "
-            << key
+            << key_
             << " past end of data."
             << LMI_FLUSH
             ;
         }
-    return &data_values[z];
+    return &data_values_[z];
 }
 
 //============================================================================
@@ -321,13 +321,13 @@ void TDBValue::Reshape(std::vector<int> const& a_dims)
         ,new_data
         );
 
-    // ET !! std::vector<int> max_dims_used = max(axis_lengths, a_dims);
+    // ET !! std::vector<int> max_dims_used = max(axis_lengths_, a_dims);
     // ...and then expunge this comment:
     // greater length of src or dst along each axis
     std::vector<int> max_dims_used(e_number_of_axes);
     std::transform
-        (axis_lengths.begin()
-        ,axis_lengths.end()
+        (axis_lengths_.begin()
+        ,axis_lengths_.end()
         ,a_dims.begin()
         ,max_dims_used.begin()
         ,greater_of<int>()
@@ -354,10 +354,10 @@ void TDBValue::Reshape(std::vector<int> const& a_dims)
         ,dst_max_idx.begin()
         ,std::bind2nd(std::minus<int>(), 1)
         );
-    // ET !! std::vector<int> src_max_idx = axis_lengths - 1;
+    // ET !! std::vector<int> src_max_idx = axis_lengths_ - 1;
     // ...and then expunge this comment:
     // max index of src along each axis
-    std::vector<int> src_max_idx(axis_lengths);
+    std::vector<int> src_max_idx(axis_lengths_);
     std::transform
         (src_max_idx.begin()
         ,src_max_idx.end()
@@ -408,18 +408,18 @@ void TDBValue::Reshape(std::vector<int> const& a_dims)
         }
 
 // erase    (*this) = new_object;
-    axis_lengths = a_dims;
-    data_values = new_object.data_values;
+    axis_lengths_ = a_dims;
+    data_values_ = new_object.data_values_;
 }
 
 //============================================================================
 std::ostream& TDBValue::write(std::ostream& os) const
 {
     os
-        << '"' << GetDBNames()[key].LongName << '"'
+        << '"' << GetDBNames()[key_].LongName << '"'
         << '\n'
-        << "  name='" << GetDBNames()[key].ShortName << "'"
-        << " key=" << key
+        << "  name='" << GetDBNames()[key_].ShortName << "'"
+        << " key=" << key_
         << '\n'
         ;
     if(!gloss_.empty())
@@ -434,17 +434,17 @@ std::ostream& TDBValue::write(std::ostream& os) const
     else
         {
         os << "  varies by:";
-        if(1 != axis_lengths[0]) os <<    " gender[" << axis_lengths[0] << ']';
-        if(1 != axis_lengths[1]) os <<  " uw_class[" << axis_lengths[1] << ']';
-        if(1 != axis_lengths[2]) os <<   " smoking[" << axis_lengths[2] << ']';
-        if(1 != axis_lengths[3]) os << " issue_age[" << axis_lengths[3] << ']';
-        if(1 != axis_lengths[4]) os <<  " uw_basis[" << axis_lengths[4] << ']';
-        if(1 != axis_lengths[5]) os <<     " state[" << axis_lengths[5] << ']';
-        if(1 != axis_lengths[6]) os <<  " duration[" << axis_lengths[6] << ']';
+        if(1 != axis_lengths_[0]) os <<    " gender[" << axis_lengths_[0] << ']';
+        if(1 != axis_lengths_[1]) os <<  " uw_class[" << axis_lengths_[1] << ']';
+        if(1 != axis_lengths_[2]) os <<   " smoking[" << axis_lengths_[2] << ']';
+        if(1 != axis_lengths_[3]) os << " issue_age[" << axis_lengths_[3] << ']';
+        if(1 != axis_lengths_[4]) os <<  " uw_basis[" << axis_lengths_[4] << ']';
+        if(1 != axis_lengths_[5]) os <<     " state[" << axis_lengths_[5] << ']';
+        if(1 != axis_lengths_[6]) os <<  " duration[" << axis_lengths_[6] << ']';
         }
 
     os << '\n';
-    print_matrix(os, data_values, axis_lengths);
+    print_matrix(os, data_values_, axis_lengths_);
     os << '\n';
     return os;
 }
@@ -455,19 +455,19 @@ bool TDBValue::AreAllAxesOK() const
 {
     bool rc = true;
     std::vector<int> const& max_dims(maximum_dimensions());
-    LMI_ASSERT(axis_lengths.size() == max_dims.size());
-    std::vector<int>::const_iterator ai = axis_lengths.begin();
+    LMI_ASSERT(axis_lengths_.size() == max_dims.size());
+    std::vector<int>::const_iterator ai = axis_lengths_.begin();
     std::vector<int>::const_iterator mi = max_dims.begin();
 
-    while(ai != axis_lengths.end()) // not duration!
+    while(ai != axis_lengths_.end()) // not duration!
         {
-        if(*ai != 1 && *ai != *mi && *ai != axis_lengths.back())
+        if(*ai != 1 && *ai != *mi && *ai != axis_lengths_.back())
             {
             warning()
                 << "Database item '"
-                << GetDBNames()[key].ShortName
+                << GetDBNames()[key_].ShortName
                 << "' with key "
-                << key
+                << key_
                 << " has invalid length in at least one dimension."
                 << LMI_FLUSH
                 ;
@@ -477,12 +477,13 @@ bool TDBValue::AreAllAxesOK() const
         mi++;
         }
 
-    if(max_dims.back() < axis_lengths.back())
+    if(max_dims.back() < axis_lengths_.back())
             {
             warning()
                 << "Database item '"
-                << GetDBNames()[key].ShortName
+                << GetDBNames()[key_].ShortName
                 << "' with key "
+                << key_
                 << " has invalid duration."
                 << LMI_FLUSH
                 ;
@@ -496,33 +497,33 @@ bool TDBValue::AreAllAxesOK() const
 //============================================================================
 int TDBValue::GetKey() const
 {
-    return key;
+    return key_;
 }
 
 //============================================================================
 int TDBValue::GetNDims() const
 {
-    return axis_lengths.size();
+    return axis_lengths_.size();
 }
 
 //============================================================================
 int TDBValue::GetLength() const
 {
-    LMI_ASSERT(0 < axis_lengths.size());
-    return axis_lengths.back();
+    LMI_ASSERT(0 < axis_lengths_.size());
+    return axis_lengths_.back();
 }
 
 //============================================================================
 int TDBValue::GetLength(int a_axis) const
 {
-    LMI_ASSERT(0 <= a_axis && a_axis < static_cast<int>(axis_lengths.size()));
-    return axis_lengths[a_axis];
+    LMI_ASSERT(0 <= a_axis && a_axis < static_cast<int>(axis_lengths_.size()));
+    return axis_lengths_[a_axis];
 }
 
 //============================================================================
 std::vector<int> const& TDBValue::GetAxisLengths() const
 {
-    return axis_lengths;
+    return axis_lengths_;
 }
 
 /*
@@ -546,32 +547,32 @@ Implementation
 void TDBValue::read(xml::element const& e)
 {
     std::string short_name;
-    xml_serialize::get_element(e, "key"         , short_name       );
-    key = db_key_from_name(short_name);
-    xml_serialize::get_element(e, "axis_lengths", axis_lengths     );
-    xml_serialize::get_element(e, "data_values" , data_values      );
-    xml_serialize::get_element(e, "gloss"       , gloss_           );
+    xml_serialize::get_element(e, "key"         , short_name   );
+    key_ = db_key_from_name(short_name);
+    xml_serialize::get_element(e, "axis_lengths", axis_lengths_);
+    xml_serialize::get_element(e, "data_values" , data_values_ );
+    xml_serialize::get_element(e, "gloss"       , gloss_       );
 
-    LMI_ASSERT(getndata() == static_cast<int>(data_values.size()));
+    LMI_ASSERT(getndata() == static_cast<int>(data_values_.size()));
     LMI_ASSERT
-        (   0 < static_cast<int>(data_values.size())
-        &&      static_cast<int>(data_values.size()) < MaxPossibleElements
+        (   0 < static_cast<int>(data_values_.size())
+        &&      static_cast<int>(data_values_.size()) < MaxPossibleElements
         );
     AreAllAxesOK();
 }
 
 void TDBValue::write(xml::element& e) const
 {
-    LMI_ASSERT(getndata() == static_cast<int>(data_values.size()));
+    LMI_ASSERT(getndata() == static_cast<int>(data_values_.size()));
     LMI_ASSERT
-        (   0 < static_cast<int>(data_values.size())
-        &&      static_cast<int>(data_values.size()) < MaxPossibleElements
+        (   0 < static_cast<int>(data_values_.size())
+        &&      static_cast<int>(data_values_.size()) < MaxPossibleElements
         );
     AreAllAxesOK();
 
-    xml_serialize::set_element(e, "key"         , db_name_from_key(key));
-    xml_serialize::set_element(e, "axis_lengths", axis_lengths     );
-    xml_serialize::set_element(e, "data_values" , data_values      );
-    xml_serialize::set_element(e, "gloss"       , gloss_           );
+    xml_serialize::set_element(e, "key"         , db_name_from_key(key_));
+    xml_serialize::set_element(e, "axis_lengths", axis_lengths_);
+    xml_serialize::set_element(e, "data_values" , data_values_ );
+    xml_serialize::set_element(e, "gloss"       , gloss_       );
 }
 

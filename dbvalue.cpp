@@ -46,11 +46,11 @@ namespace deprecated
 
 //============================================================================
 TDBValue::TDBValue()
-    :key(0)
-    ,ndims(0)
-    ,dims(0)
-    ,ndata(0)
-    ,data(0)
+    :key_  (0)
+    ,ndims_(0)
+    ,dims_ (0)
+    ,ndata_(0)
+    ,data_ (0)
 {
 }
 
@@ -62,29 +62,29 @@ TDBValue::TDBValue
     ,double const*      inputdata
     ,std::string const& gloss
     )
-    :key    (inputkey)
-    ,ndims  (inputndims)
+    :key_   (inputkey)
+    ,ndims_ (inputndims)
     ,gloss_ (gloss)
 {
-    dims = new int[ndims];
-    deprecated::dupmem(dims, inputdims, ndims);
-    ndata = getndata();
+    dims_ = new int[ndims_];
+    deprecated::dupmem(dims_, inputdims, ndims_);
+    ndata_ = getndata();
 
-    data = new double[ndata];
-    deprecated::dupmem(data, inputdata, ndata);
+    data_ = new double[ndata_];
+    deprecated::dupmem(data_, inputdata, ndata_);
 }
 
 //============================================================================
 TDBValue::TDBValue(TDBValue const& rhs)
     :obstruct_slicing<TDBValue>()
-    ,key   (rhs.key)
-    ,ndims (rhs.ndims)
-    ,ndata (rhs.ndata)
+    ,key_   (rhs.key_)
+    ,ndims_ (rhs.ndims_)
+    ,ndata_ (rhs.ndata_)
 {
-    dims = new int[ndims];
-    deprecated::dupmem(dims, rhs.dims, ndims);
-    data = new double[ndata];
-    deprecated::dupmem(data, rhs.data, ndata);
+    dims_ = new int[ndims_];
+    deprecated::dupmem(dims_, rhs.dims_, ndims_);
+    data_ = new double[ndata_];
+    deprecated::dupmem(data_, rhs.data_, ndata_);
 }
 
 //============================================================================
@@ -92,15 +92,15 @@ TDBValue& TDBValue::operator=(TDBValue const& rhs)
 {
     if(this != &rhs)
         {
-        key     = rhs.key;
-        ndata   = rhs.ndata;
-        ndims   = rhs.ndims;
-        delete[]dims;
-        delete[]data;
-        dims = new int[ndims];
-        deprecated::dupmem(dims, rhs.dims, ndims);
-        data = new double[ndata];
-        deprecated::dupmem(data, rhs.data, ndata);
+        key_   = rhs.key_;
+        ndata_ = rhs.ndata_;
+        ndims_ = rhs.ndims_;
+        delete[]dims_;
+        delete[]data_;
+        dims_ = new int[ndims_];
+        deprecated::dupmem(dims_, rhs.dims_, ndims_);
+        data_ = new double[ndata_];
+        deprecated::dupmem(data_, rhs.data_, ndata_);
         }
     return *this;
 }
@@ -108,23 +108,23 @@ TDBValue& TDBValue::operator=(TDBValue const& rhs)
 //============================================================================
 TDBValue::~TDBValue()
 {
-    delete[]dims;
-    delete[]data;
+    delete[]dims_;
+    delete[]data_;
 }
 
 //============================================================================
 int TDBValue::getndata() const
 {
-    if(0 == ndims)
+    if(0 == ndims_)
         {
         return 0;
         }
 
     long int n = 1L;
 
-    for(int j = 0; j < ndims; j++)
+    for(int j = 0; j < ndims_; j++)
         {
-        n *= dims[j];
+        n *= dims_[j];
         }
 
     if(std::numeric_limits<int>::max() < n)
@@ -138,20 +138,20 @@ int TDBValue::getndata() const
 double const* TDBValue::operator[](int const* idx) const
 {
     int z = 0;
-    for(int j = 0; j < ndims - 1; j++)
+    for(int j = 0; j < ndims_ - 1; j++)
         {
-        if(1 != dims[j])
+        if(1 != dims_[j])
             {
-            z = z * dims[j] + idx[j];
+            z = z * dims_[j] + idx[j];
             }
         }
-    if(ndata <= z)
+    if(ndata_ <= z)
         {
         throw std::runtime_error
             ("Trying to index database item past end of data."
             );
         }
-    return &data[z];
+    return &data_[z];
 }
 
 /*

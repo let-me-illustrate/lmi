@@ -67,18 +67,18 @@ class LMI_SO TDBValue
     ~TDBValue();
 
     double const* operator[](int const* idx) const;
-    int GetKey()    const {return key;}
-    int GetNDims()  const {return ndims;}
-    int GetLength() const {return dims[TDBIndex::MaxIndex];}
+    int GetKey()    const {return key_;}
+    int GetNDims()  const {return ndims_;}
+    int GetLength() const {return dims_[TDBIndex::MaxIndex];}
 
   private:
     int  getndata()      const;
 
-    int     key;        // Database dictionary key
-    int     ndims;      // Number of dimensions
-    int*    dims;       // Dimensions
-    int     ndata;      // Number of data
-    double* data;       // Data
+    int                 key_;
+    int                 ndims_; // Antediluvian: number of dimensions
+    int*                dims_;  // Antediluvian: dimensions
+    int                 ndata_; // Antediluvian: number of data
+    double*             data_;  // Antediluvian: data
     std::string         gloss_;
 };
 
