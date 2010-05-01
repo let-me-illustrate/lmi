@@ -21,8 +21,8 @@
 
 // $Id$
 
-#ifndef ihs_commfns_hpp
-#define ihs_commfns_hpp
+#ifndef commutation_functions_hpp
+#define commutation_functions_hpp
 
 #include "config.hpp"
 
@@ -125,5 +125,5 @@ class LMI_SO ULCommFns
     std::vector<double>  km;
 };
 
-#endif // ihs_commfns_hpp
+#endif // commutation_functions_hpp
 

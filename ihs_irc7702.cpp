@@ -30,7 +30,7 @@
 
 #include "alert.hpp"
 #include "basic_values.hpp" // For target-premium callback.
-#include "ihs_commfns.hpp"
+#include "commutation_functions.hpp"
 #include "materially_equal.hpp"
 #include "zero.hpp"
 

@@ -26,7 +26,7 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "ihs_commfns.hpp"
+#include "commutation_functions.hpp"
 
 #include "et_vector.hpp"
 #include "math_functors.hpp"

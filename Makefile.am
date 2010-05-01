@@ -316,6 +316,7 @@ libantediluvian_la_LIBADD = \
 liblmi_la_SOURCES = \
     authenticity.cpp \
     ce_product_name.cpp \
+    commutation_functions.cpp \
     datum_base.cpp \
     datum_boolean.cpp \
     datum_string.cpp \
@@ -325,7 +326,6 @@ liblmi_la_SOURCES = \
     ihs_avsolve.cpp \
     ihs_avstrtgy.cpp \
     ihs_basicval.cpp \
-    ihs_commfns.cpp \
     ihs_database.cpp \
     ihs_dbdict.cpp \
     ihs_funddata.cpp \
@@ -514,8 +514,8 @@ test_callback_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_commutation_functions_SOURCES =    \
   $(common_test_objects) \
-  commutation_functions_test.cpp \
-  ihs_commfns.cpp
+  commutation_functions.cpp \
+  commutation_functions_test.cpp
 test_commutation_functions_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_comma_punct_SOURCES =  \
@@ -871,6 +871,7 @@ noinst_HEADERS = \
     census_view.hpp \
     ce_product_name.hpp \
     comma_punct.hpp \
+    commutation_functions.hpp \
     config_bc551.hpp \
     config_como_mingw.hpp \
     config.hpp \
@@ -908,7 +909,6 @@ noinst_HEADERS = \
     group_values.hpp \
     handle_exceptions.hpp \
     icon_monger.hpp \
-    ihs_commfns.hpp \
     ihs_dbdict.hpp \
     ihs_funddata.hpp \
     ihs_irc7702a.hpp \
