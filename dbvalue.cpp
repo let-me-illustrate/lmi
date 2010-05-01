@@ -1,4 +1,4 @@
-// Product database entity type.
+// Product-database entity.
 //
 // Copyright (C) 1998, 2001, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
@@ -56,13 +56,15 @@ TDBValue::TDBValue()
 
 //============================================================================
 TDBValue::TDBValue
-    (int     inputkey
-    ,int     inputndims
-    ,int*    inputdims
-    ,double* inputdata
+    (int                inputkey
+    ,int                inputndims
+    ,int const*         inputdims
+    ,double const*      inputdata
+    ,std::string const& gloss
     )
-    :key   (inputkey)
-    ,ndims (inputndims)
+    :key    (inputkey)
+    ,ndims  (inputndims)
+    ,gloss_ (gloss)
 {
     dims = new int[ndims];
     deprecated::dupmem(dims, inputdims, ndims);
@@ -111,7 +113,7 @@ TDBValue::~TDBValue()
 }
 
 //============================================================================
-int TDBValue::getndata()
+int TDBValue::getndata() const
 {
     if(0 == ndims)
         {
@@ -133,7 +135,7 @@ int TDBValue::getndata()
 }
 
 //============================================================================
-double* TDBValue::operator[](int const* idx) const
+double const* TDBValue::operator[](int const* idx) const
 {
     int z = 0;
     for(int j = 0; j < ndims - 1; j++)
