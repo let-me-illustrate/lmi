@@ -154,23 +154,6 @@ double const* TDBValue::operator[](int const* idx) const
     return &data_[z];
 }
 
-/*
-Implementation
-    TODO ?? duration should be ***last*** axis
-        for a C array with dimensions d0, d1, d2
-            int a[d0][d1][d2]
-        index
-            a[i0][i1][i2]
-        is
-            *( ((int*)a) + ((((i0*d1)+i1)*s2)+i2) )
-        so we can do
-            int* p =( ((int*)a) + (((i0*d1)+i1)*s2) )
-            for(int j = length; 0 < j; j--)
-                *output++ = *p++;
-
-    TODO ?? must-be-scalar flag?
-*/
-
 int TDBValue::GetKey() const
 {
     return key_;
