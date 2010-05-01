@@ -101,10 +101,10 @@ class LMI_SO TDBValue
 
     double const* operator[](TDBIndex const& idx) const;
     double&       operator[](std::vector<int> const& idx);
+    double const* operator[](int const* idx) const; // Antediluvian
 
     int GetKey()            const;
-    // TODO ?? Isn't the following function useless?
-    int GetNDims()          const;
+    int GetNDims()          const; // Antediluvian: detect default-contructed objects.
     int GetLength()         const;
     int GetLength(int axis) const;
     std::vector<int> const& GetAxisLengths() const;
@@ -128,6 +128,10 @@ class LMI_SO TDBValue
     int                 key_;
     std::vector<int>    axis_lengths_;
     std::vector<double> data_values_;
+    int                 ndims_; // Antediluvian: number of dimensions
+    int*                dims_;  // Antediluvian: dimensions
+    int                 ndata_; // Antediluvian: number of data
+    double*             data_;  // Antediluvian: data
     std::string         gloss_;
 };
 
@@ -136,7 +140,7 @@ Database items should be allowed to vary across numerous axes, such as
     gender
     underwriting class (e.g. preferred, standard, and various substd tables)
     smoker
-    issue age (or attained age as optional alternative?)
+    issue age (or attained age as an optional alternative?)
     medical/paramedical/nonmedical
     rate bands (see below)
 and maybe
