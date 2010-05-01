@@ -32,12 +32,12 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "basic_values.hpp"          // lowest_premium_tax_load()
+#include "commutation_functions.hpp"
 #include "configurable_settings.hpp"
 #include "data_directory.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "et_vector.hpp"
-#include "ihs_commfns.hpp"
 #include "ihs_irc7702a.hpp"
 #include "materially_equal.hpp"
 #include "math_functors.hpp"

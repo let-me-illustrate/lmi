@@ -266,13 +266,13 @@ antediluvian_common_objects := \
 lmi_common_objects := \
   $(common_common_objects) \
   authenticity.o \
+  commutation_functions.o \
   ihs_acctval.o \
   ihs_avdebug.o \
   ihs_avmly.o \
   ihs_avsolve.o \
   ihs_avstrtgy.o \
   ihs_basicval.o \
-  ihs_commfns.o \
   ihs_database.o \
   ihs_dbdict.o \
   ihs_funddata.o \
@@ -370,6 +370,7 @@ gpt_objects := \
   alert_cli.o \
   calendar_date.o \
   ce_product_name.o \
+  commutation_functions.o \
   configurable_settings.o \
   crc32.o \
   data_directory.o \
@@ -383,7 +384,6 @@ gpt_objects := \
   fenv_lmi.o \
   global_settings.o \
   ihs_basicval.o \
-  ihs_commfns.o \
   ihs_database.o \
   ihs_dbdict.o \
   ihs_funddata.o \
@@ -448,8 +448,8 @@ unit_test_targets := \
   authenticity_test \
   calendar_date_test \
   callback_test \
-  commutation_functions_test \
   comma_punct_test \
+  commutation_functions_test \
   crc32_test \
   expression_template_0_test \
   fenv_lmi_test \
@@ -568,16 +568,16 @@ callback_test$(EXEEXT): \
   $(common_test_objects) \
   callback_test.o \
 
-commutation_functions_test$(EXEEXT): \
-  $(common_test_objects) \
-  commutation_functions_test.o \
-  expm1.o \
-  ihs_commfns.o \
-  timer.o \
-
 comma_punct_test$(EXEEXT): \
   $(common_test_objects) \
   comma_punct_test.o \
+
+commutation_functions_test$(EXEEXT): \
+  $(common_test_objects) \
+  commutation_functions.o \
+  commutation_functions_test.o \
+  expm1.o \
+  timer.o \
 
 crc32_test$(EXEEXT): \
   $(common_test_objects) \
