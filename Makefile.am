@@ -911,7 +911,6 @@ noinst_HEADERS = \
     icon_monger.hpp \
     ihs_commfns.hpp \
     ihs_dbdict.hpp \
-    ihs_dbvalue.hpp \
     ihs_funddata.hpp \
     ihs_irc7702a.hpp \
     ihs_irc7702.hpp \
