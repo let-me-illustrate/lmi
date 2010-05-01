@@ -154,8 +154,8 @@ void TDatabase::Query(std::vector<double>& dst, int k) const
 //===========================================================================
 TDBValue const& TDatabase::GetEntry(int k) const
 {
-    TDBDictionary const& d = DBDictionary::instance().GetDictionary();
-    TDBDictionary::const_iterator i = d.find(k);
+    dict_map const& d = DBDictionary::instance().GetDictionary();
+    dict_map::const_iterator i = d.find(k);
 
     if(i == d.end())
         {
