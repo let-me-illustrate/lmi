@@ -26,6 +26,9 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
+#include "ihs_dbvalue.cpp"
+#if 0
+
 #include "dbvalue.hpp"
 
 #include "alert.hpp"
@@ -168,4 +171,5 @@ int TDBValue::GetLength() const
 {
     return dims_[TDBIndex::MaxIndex];
 }
+#endif // 0
 
