@@ -29,9 +29,13 @@
 #include "dbindex.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
+#include "xml_lmi_fwd.hpp"
 
+#include <iosfwd>
 #include <string>
 #include <vector>
+
+namespace xml_serialize {template<typename T> struct xml_io;}
 
 /// Product-database entity.
 ///
@@ -53,7 +57,21 @@
 class LMI_SO TDBValue
     :virtual private obstruct_slicing<TDBValue>
 {
+    friend struct xml_serialize::xml_io<TDBValue>;
+
   public:
+    // Separate enumerators here facilitate compile-time assertions
+    // in the database GUI, q.v.--an array could not be indexed to
+    // produce an arithmetic constant expression [5.19/3].
+    enum {e_number_of_axes    = 1 + TDBIndex::MaxIndex};
+    enum {e_max_dim_gender    =   3};
+    enum {e_max_dim_class     =   4};
+    enum {e_max_dim_smoking   =   3};
+    enum {e_max_dim_issue_age = 100};
+    enum {e_max_dim_uw_basis  =   5};
+    enum {e_max_dim_state     =  53};
+    enum {e_max_dim_duration  = 100};
+
     TDBValue();
     TDBValue
         (int                key
@@ -62,19 +80,50 @@ class LMI_SO TDBValue
         ,double const*      data
         ,std::string const& gloss = std::string()
         );
+    TDBValue
+        (int                        key
+        ,std::vector<int> const&    dims
+        ,std::vector<double> const& data
+        ,std::string const&         gloss = std::string()
+        );
+    TDBValue
+        (int                key
+        ,double             datum
+        ,std::string const& gloss = std::string()
+        );
     TDBValue(TDBValue const&);
     TDBValue& operator=(TDBValue const&);
     ~TDBValue();
 
-    double const* operator[](int const* idx) const;
-    int GetKey()    const {return key_;}
-    int GetNDims()  const {return ndims_;}
-    int GetLength() const {return dims_[TDBIndex::MaxIndex];}
+    double const* operator[](TDBIndex const& idx) const;
+    double&       operator[](std::vector<int> const& idx);
+    double const* operator[](int const* idx) const; // Antediluvian
+
+    int GetKey()            const;
+    int GetNDims()          const;
+    int GetLength()         const;
+    int GetLength(int axis) const;
+    std::vector<int> const& GetAxisLengths() const;
+
+    void Reshape(std::vector<int> const& dims);
+
+    std::ostream& write(std::ostream&) const;
+
+    static std::vector<int> const& maximum_dimensions();
+    static bool Equivalent(TDBValue const&, TDBValue const&);
+    static bool VariesByState(TDBValue const&);
 
   private:
     int  getndata()      const;
+    void ParanoidCheck() const;
+    bool AreAllAxesOK()  const;
+
+    void read (xml::element const&);
+    void write(xml::element&) const;
 
     int                 key_;
+    std::vector<int>    axis_lengths_;
+    std::vector<double> data_values_;
     int                 ndims_; // Antediluvian: number of dimensions
     int*                dims_;  // Antediluvian: dimensions
     int                 ndata_; // Antediluvian: number of data
@@ -129,6 +178,25 @@ carefully checked tables that will probably be expanded in the future. It's an
 option because not everyone will have it installed; for a build of this system
 that is limited to illustration applications, it may be desired not to use the
 SOA program for reasons of space.
+
+Note however that the SOA program does not handle very large tables correctly
+without modification. And even with modification it handles such tables slowly.
+The CRC check is costly.
+
+Probably the best approach is to use the SOA program for the things it does
+well, and the database otherwise. What does the SOA program do well?
+  usable GUI; new spreadsheet interface
+    apparently an add-in written only for one non-free spreadsheet
+  many tables, independently checked, often updated
+It seems better to provide a utility to "compile" an SOA table to this database
+format, and then always use the database. One advantage is that it'll run a lot
+faster. Another is that the tables are less easily viewed or modified by people
+who shouldn't; protecting integrity of data is a public policy concern, and
+preventing fraud not inconsistent with open source software. Even though the
+database code is open source, the data files it reads are not. It would be
+simple enough to add a proprietary encryption layer as a plugin between the
+present software and any sensitive file, with a default implementation that
+performs no encryption.
 */
 
 #endif // dbvalue_hpp

@@ -171,3 +171,18 @@ Implementation
     TODO ?? must-be-scalar flag?
 */
 
+int TDBValue::GetKey() const
+{
+    return key_;
+}
+
+int TDBValue::GetNDims() const
+{
+    return ndims_;
+}
+
+int TDBValue::GetLength() const
+{
+    return dims_[TDBIndex::MaxIndex];
+}
+
