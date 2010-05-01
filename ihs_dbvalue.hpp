@@ -125,9 +125,9 @@ class LMI_SO TDBValue
     void read (xml::element const&);
     void write(xml::element&) const;
 
-    int                 key;
-    std::vector<int>    axis_lengths;
-    std::vector<double> data_values;
+    int                 key_;
+    std::vector<int>    axis_lengths_;
+    std::vector<double> data_values_;
     std::string         gloss_;
 };
 
