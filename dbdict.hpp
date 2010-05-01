@@ -1,4 +1,4 @@
-// Product database map.
+// Product-database map.
 //
 // Copyright (C) 1998, 2001, 2002, 2003, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
@@ -26,8 +26,7 @@
 
 #include "config.hpp"
 
-#include "database.hpp"
-#include "dbvalue.hpp"
+#include "dbvalue.hpp" // Needed here for map declaration.
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 
@@ -36,32 +35,44 @@
 #include <map>
 #include <string>
 
-typedef std::map<int, TDBValue, std::less<int> > TDBDictionary;
-typedef TDBDictionary::value_type TDBEntry;
+typedef std::map<int, TDBValue> dict_map;
+typedef dict_map::value_type dict_map_val;
 
-class DBDictionary
+class LMI_SO DBDictionary
     :private boost::noncopyable
     ,virtual private obstruct_slicing<DBDictionary>
 {
+    friend class DatabaseDocument;
+    friend class product_file_test;
+
   public:
     static DBDictionary& instance();
     ~DBDictionary();
     void Init(std::string const& NewFilename);
-    TDBEntry* Find(TDBEntry const& t);
-    TDBDictionary const& GetDictionary();
+    dict_map_val* Find(dict_map_val const& t);
+    dict_map const& GetDictionary();
+    void WriteSampleDBFile();
+    void WriteProprietaryDBFiles();
 
   private:
     DBDictionary();
 
+    void WriteDB(std::string const& filename);
+    void Add(TDBValue const& e);
+    void BadFile(std::string const& Filename, std::string const& why);
+    void InitDB();
+
+    static void InvalidateCache();
+
     static std::string CachedFilename;
     void Init();
 
-    void AddEntry(TDBEntry const& e);
+    void AddEntry(dict_map_val const& e);
 
-    TDBDictionary* dictionary;
+    dict_map* dictionary;
 };
 
-inline TDBDictionary const& DBDictionary::GetDictionary()
+inline dict_map const& DBDictionary::GetDictionary()
 {return *dictionary;}
 
 void LMI_SO print_databases();

@@ -1,4 +1,4 @@
-// Product database map.
+// Product-database map.
 //
 // Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
@@ -45,7 +45,7 @@ DBDictionary& DBDictionary::instance()
 //============================================================================
 DBDictionary::DBDictionary()
 {
-    dictionary = new TDBDictionary;
+    dictionary = new dict_map;
 }
 
 //============================================================================
@@ -84,10 +84,10 @@ void DBDictionary::Init(std::string const& NewFilename)
         {
         CachedFilename = NewFilename;
         delete dictionary;
-        dictionary = new TDBDictionary;
+        dictionary = new dict_map;
         // stream from file
 // TODO ?? HERE WE NEED TO ADD A STREAMING METHOD
-// TODO ?? CachedDBDictionary = Dictionary = new TDBDictionary(CachedFilename);
+// TODO ?? CachedDBDictionary = Dictionary = new dict_map(CachedFilename);
         Init(); // TODO ?? KLUDGE
         }
 }
@@ -106,26 +106,26 @@ void DBDictionary::Init()
     // database entities.
     for(int j = DB_FIRST; j < DB_LAST; ++j)
         {
-        AddEntry(TDBEntry(j, TDBValue(j, n, dims, zilch)));
+        AddEntry(dict_map_val(j, TDBValue(j, n, dims, zilch)));
         }
 
     double guar_int_rate[1] = {0.03};
-    AddEntry(TDBEntry(DB_GuarInt, TDBValue(DB_GuarInt, n, dims, guar_int_rate)));
+    AddEntry(dict_map_val(DB_GuarInt, TDBValue(DB_GuarInt, n, dims, guar_int_rate)));
 
     double fixed_loan_rate[1] = {0.06};
-    AddEntry(TDBEntry(DB_FixedLoanRate, TDBValue(DB_FixedLoanRate, n, dims, fixed_loan_rate)));
+    AddEntry(dict_map_val(DB_FixedLoanRate, TDBValue(DB_FixedLoanRate, n, dims, fixed_loan_rate)));
 
     double loan_spread[1] = {0.0};
 
-    AddEntry(TDBEntry(DB_GuarRegLoanSpread, TDBValue(DB_GuarRegLoanSpread, n, dims, loan_spread)));
-    AddEntry(TDBEntry(DB_CurrRegLoanSpread, TDBValue(DB_CurrRegLoanSpread, n, dims, loan_spread)));
-    AddEntry(TDBEntry(DB_GuarPrefLoanSpread, TDBValue(DB_GuarPrefLoanSpread, n, dims, loan_spread)));
-    AddEntry(TDBEntry(DB_CurrPrefLoanSpread, TDBValue(DB_CurrPrefLoanSpread, n, dims, loan_spread)));
+    AddEntry(dict_map_val(DB_GuarRegLoanSpread, TDBValue(DB_GuarRegLoanSpread, n, dims, loan_spread)));
+    AddEntry(dict_map_val(DB_CurrRegLoanSpread, TDBValue(DB_CurrRegLoanSpread, n, dims, loan_spread)));
+    AddEntry(dict_map_val(DB_GuarPrefLoanSpread, TDBValue(DB_GuarPrefLoanSpread, n, dims, loan_spread)));
+    AddEntry(dict_map_val(DB_CurrPrefLoanSpread, TDBValue(DB_CurrPrefLoanSpread, n, dims, loan_spread)));
 
     double affirmative[1] = {1.0};
 
-    AddEntry(TDBEntry(DB_AllowGenAcct, TDBValue(DB_AllowGenAcct, n, dims, affirmative)));
-    AddEntry(TDBEntry(DB_AllowPreferredClass, TDBValue(DB_AllowPreferredClass, n, dims, affirmative)));
+    AddEntry(dict_map_val(DB_AllowGenAcct, TDBValue(DB_AllowGenAcct, n, dims, affirmative)));
+    AddEntry(dict_map_val(DB_AllowPreferredClass, TDBValue(DB_AllowPreferredClass, n, dims, affirmative)));
 
     // premium loads
 
@@ -134,27 +134,27 @@ void DBDictionary::Init()
     double gfee[1] = {12.00};
     double zero[1] = {0.0};
 
-    AddEntry(TDBEntry(DB_GuarPolFee, TDBValue(DB_GuarPolFee, n, dims, gfee)));
-    AddEntry(TDBEntry(DB_GuarSpecAmtLoad, TDBValue(DB_GuarSpecAmtLoad, n, dims, zero)));
-    AddEntry(TDBEntry(DB_GuarPremLoadTgt, TDBValue(DB_GuarPremLoadTgt, n, dims, load)));
-    AddEntry(TDBEntry(DB_GuarPremLoadExc, TDBValue(DB_GuarPremLoadExc, n, dims, load)));
-    AddEntry(TDBEntry(DB_CurrPolFee, TDBValue(DB_CurrPolFee, n, dims, cfee)));
-    AddEntry(TDBEntry(DB_CurrSpecAmtLoad, TDBValue(DB_CurrSpecAmtLoad, n, dims, zero)));
-    AddEntry(TDBEntry(DB_CurrPremLoadTgt, TDBValue(DB_CurrPremLoadTgt, n, dims, load)));
-    AddEntry(TDBEntry(DB_CurrPremLoadExc, TDBValue(DB_CurrPremLoadExc, n, dims, load)));
+    AddEntry(dict_map_val(DB_GuarPolFee, TDBValue(DB_GuarPolFee, n, dims, gfee)));
+    AddEntry(dict_map_val(DB_GuarSpecAmtLoad, TDBValue(DB_GuarSpecAmtLoad, n, dims, zero)));
+    AddEntry(dict_map_val(DB_GuarPremLoadTgt, TDBValue(DB_GuarPremLoadTgt, n, dims, load)));
+    AddEntry(dict_map_val(DB_GuarPremLoadExc, TDBValue(DB_GuarPremLoadExc, n, dims, load)));
+    AddEntry(dict_map_val(DB_CurrPolFee, TDBValue(DB_CurrPolFee, n, dims, cfee)));
+    AddEntry(dict_map_val(DB_CurrSpecAmtLoad, TDBValue(DB_CurrSpecAmtLoad, n, dims, zero)));
+    AddEntry(dict_map_val(DB_CurrPremLoadTgt, TDBValue(DB_CurrPremLoadTgt, n, dims, load)));
+    AddEntry(dict_map_val(DB_CurrPremLoadExc, TDBValue(DB_CurrPremLoadExc, n, dims, load)));
 
     double minwd[1] = {100.0};
-    AddEntry(TDBEntry(DB_MinWD, TDBValue(DB_MinWD, n, dims, minwd)));
+    AddEntry(dict_map_val(DB_MinWD, TDBValue(DB_MinWD, n, dims, minwd)));
     double wdfee[1] = {5.0};
-    AddEntry(TDBEntry(DB_WDFee, TDBValue(DB_WDFee, n, dims, wdfee)));
+    AddEntry(dict_map_val(DB_WDFee, TDBValue(DB_WDFee, n, dims, wdfee)));
     double wdfeerate[1] = {0.01};
-    AddEntry(TDBEntry(DB_WDFeeRate, TDBValue(DB_WDFeeRate, n, dims, wdfeerate)));
+    AddEntry(dict_map_val(DB_WDFeeRate, TDBValue(DB_WDFeeRate, n, dims, wdfeerate)));
 
     int guar_coi_dims[n] = {1, 1, 3, 1, 1, 1, 1};
     // smoker, nonsmoker, unismoke
     double guar_coi_tables[] = {111, 109, 107};
     AddEntry
-        (TDBEntry
+        (dict_map_val
             (DB_GuarCOITable
             ,TDBValue(DB_GuarCOITable, n, guar_coi_dims, guar_coi_tables)
             )
@@ -170,82 +170,82 @@ void DBDictionary::Init()
         0, 0, 0, // ultra sm ns us
         };
     AddEntry
-        (TDBEntry
+        (dict_map_val
             (DB_CurrCOITable
             ,TDBValue(DB_CurrCOITable, n, curr_coi_dims, curr_coi_tables)
             )
         );
 
     double corr_table[1] = {7};
-    AddEntry(TDBEntry(DB_CorridorTable, TDBValue(DB_CorridorTable, n, dims, corr_table)));
+    AddEntry(dict_map_val(DB_CorridorTable, TDBValue(DB_CorridorTable, n, dims, corr_table)));
 
     double wp_table[1] = {8};
-    AddEntry(TDBEntry(DB_WPTable, TDBValue(DB_WPTable, n, dims, wp_table)));
+    AddEntry(dict_map_val(DB_WPTable, TDBValue(DB_WPTable, n, dims, wp_table)));
 
     double add_table[1] = {9};
-    AddEntry(TDBEntry(DB_ADDTable, TDBValue(DB_ADDTable, n, dims, add_table)));
+    AddEntry(dict_map_val(DB_ADDTable, TDBValue(DB_ADDTable, n, dims, add_table)));
 
     double endtage[1] = {100};
-    AddEntry(TDBEntry(DB_EndtAge, TDBValue(DB_EndtAge, n, dims, endtage)));
+    AddEntry(dict_map_val(DB_EndtAge, TDBValue(DB_EndtAge, n, dims, endtage)));
 
     double anb[1] = {1.0};
-    AddEntry(TDBEntry(DB_AgeLastOrNearest, TDBValue(DB_AgeLastOrNearest, n, dims, anb)));
+    AddEntry(dict_map_val(DB_AgeLastOrNearest, TDBValue(DB_AgeLastOrNearest, n, dims, anb)));
 
     double minspecamt[1] = {10000.0};
-    AddEntry(TDBEntry(DB_MinSpecAmt, TDBValue(DB_MinSpecAmt, n, dims, minspecamt)));
+    AddEntry(dict_map_val(DB_MinSpecAmt, TDBValue(DB_MinSpecAmt, n, dims, minspecamt)));
 
     double max_gen_acct_rate[1] = {0.12};
-    AddEntry(TDBEntry(DB_MaxGenAcctRate, TDBValue(DB_MaxGenAcctRate, n, dims, max_gen_acct_rate)));
+    AddEntry(dict_map_val(DB_MaxGenAcctRate, TDBValue(DB_MaxGenAcctRate, n, dims, max_gen_acct_rate)));
     double max_sep_acct_rate[1] = {0.12};
-    AddEntry(TDBEntry(DB_MaxSepAcctRate, TDBValue(DB_MaxSepAcctRate, n, dims, max_sep_acct_rate)));
+    AddEntry(dict_map_val(DB_MaxSepAcctRate, TDBValue(DB_MaxSepAcctRate, n, dims, max_sep_acct_rate)));
 
     double allow_loan[1] = {1.0};
-    AddEntry(TDBEntry(DB_AllowLoan, TDBValue(DB_AllowLoan, n, dims, allow_loan)));
+    AddEntry(dict_map_val(DB_AllowLoan, TDBValue(DB_AllowLoan, n, dims, allow_loan)));
     double allow_wd[1] = {1.0};
-    AddEntry(TDBEntry(DB_AllowWD, TDBValue(DB_AllowWD, n, dims, allow_wd)));
+    AddEntry(dict_map_val(DB_AllowWD, TDBValue(DB_AllowWD, n, dims, allow_wd)));
     double allow_flat_extras[1] = {1.0};
-    AddEntry(TDBEntry(DB_AllowFlatExtras, TDBValue(DB_AllowFlatExtras, n, dims, allow_flat_extras)));
+    AddEntry(dict_map_val(DB_AllowFlatExtras, TDBValue(DB_AllowFlatExtras, n, dims, allow_flat_extras)));
     double allow_change_to_dbo2[1] = {1.0};
-    AddEntry(TDBEntry(DB_AllowChangeToDBO2, TDBValue(DB_AllowChangeToDBO2, n, dims, allow_change_to_dbo2)));
+    AddEntry(dict_map_val(DB_AllowChangeToDBO2, TDBValue(DB_AllowChangeToDBO2, n, dims, allow_change_to_dbo2)));
     double allow_dbo3[1] = {1.0};
-    AddEntry(TDBEntry(DB_AllowDBO3, TDBValue(DB_AllowDBO3, n, dims, allow_dbo3)));
+    AddEntry(dict_map_val(DB_AllowDBO3, TDBValue(DB_AllowDBO3, n, dims, allow_dbo3)));
 
     double surrchg_prem_mult[1] = {0.0};
-    AddEntry(TDBEntry(DB_SurrChgPremMult, TDBValue(DB_SurrChgPremMult, n, dims, surrchg_prem_mult)));
+    AddEntry(dict_map_val(DB_SurrChgPremMult, TDBValue(DB_SurrChgPremMult, n, dims, surrchg_prem_mult)));
     double surrchg_av_mult[1] = {0.0};
-    AddEntry(TDBEntry(DB_SurrChgAVMult, TDBValue(DB_SurrChgAVMult, n, dims, surrchg_av_mult)));
+    AddEntry(dict_map_val(DB_SurrChgAVMult, TDBValue(DB_SurrChgAVMult, n, dims, surrchg_av_mult)));
     double surrchg_sa_mult[1] = {0.0};
-    AddEntry(TDBEntry(DB_SurrChgSAMult, TDBValue(DB_SurrChgSAMult, n, dims, surrchg_sa_mult)));
+    AddEntry(dict_map_val(DB_SurrChgSAMult, TDBValue(DB_SurrChgSAMult, n, dims, surrchg_sa_mult)));
     double surrchg_av_dur_factor[1] = {1.0};
-    AddEntry(TDBEntry(DB_SurrChgAVDurFactor, TDBValue(DB_SurrChgAVDurFactor, n, dims, surrchg_av_dur_factor)));
+    AddEntry(dict_map_val(DB_SurrChgAVDurFactor, TDBValue(DB_SurrChgAVDurFactor, n, dims, surrchg_av_dur_factor)));
     double surrchg_sa_dur_factor[1] = {1.0};
-    AddEntry(TDBEntry(DB_SurrChgSADurFactor, TDBValue(DB_SurrChgSADurFactor, n, dims, surrchg_sa_dur_factor)));
+    AddEntry(dict_map_val(DB_SurrChgSADurFactor, TDBValue(DB_SurrChgSADurFactor, n, dims, surrchg_sa_dur_factor)));
 
     double ledger_type[1] = {mce_ill_reg};
-    AddEntry(TDBEntry(DB_LedgerType, TDBValue(DB_LedgerType, n, dims, ledger_type)));
+    AddEntry(dict_map_val(DB_LedgerType, TDBValue(DB_LedgerType, n, dims, ledger_type)));
 
     double no_lapse_always_active[1] = {0.0};
-    AddEntry(TDBEntry(DB_NoLapseAlwaysActive, TDBValue(DB_NoLapseAlwaysActive, n, dims, no_lapse_always_active)));
+    AddEntry(dict_map_val(DB_NoLapseAlwaysActive, TDBValue(DB_NoLapseAlwaysActive, n, dims, no_lapse_always_active)));
     double no_lapse_min_dur[1] = {0.0};
-    AddEntry(TDBEntry(DB_NoLapseMinDur, TDBValue(DB_NoLapseMinDur, n, dims, no_lapse_min_dur)));
+    AddEntry(dict_map_val(DB_NoLapseMinDur, TDBValue(DB_NoLapseMinDur, n, dims, no_lapse_min_dur)));
     double no_lapse_min_age[1] = {0.0};
-    AddEntry(TDBEntry(DB_NoLapseMinAge, TDBValue(DB_NoLapseMinAge, n, dims, no_lapse_min_age)));
+    AddEntry(dict_map_val(DB_NoLapseMinAge, TDBValue(DB_NoLapseMinAge, n, dims, no_lapse_min_age)));
 
-    AddEntry(TDBEntry(DB_NominallyPar, TDBValue(DB_NominallyPar, n, dims, zero)));
-    AddEntry(TDBEntry(DB_Has1035ExchCharge, TDBValue(DB_Has1035ExchCharge, n, dims, zero)));
-    AddEntry(TDBEntry(DB_SmokeOrTobacco, TDBValue(DB_SmokeOrTobacco, n, dims, zero)));
-    AddEntry(TDBEntry(DB_DACTaxFundCharge, TDBValue(DB_DACTaxFundCharge, n, dims, zero)));
-    AddEntry(TDBEntry(DB_AllowWP, TDBValue(DB_AllowWP, n, dims, zero)));
-    AddEntry(TDBEntry(DB_AllowADD, TDBValue(DB_AllowADD, n, dims, zero)));
-    AddEntry(TDBEntry(DB_AllowSpouse, TDBValue(DB_AllowSpouse, n, dims, zero)));
-    AddEntry(TDBEntry(DB_AllowChild, TDBValue(DB_AllowChild, n, dims, zero)));
+    AddEntry(dict_map_val(DB_NominallyPar, TDBValue(DB_NominallyPar, n, dims, zero)));
+    AddEntry(dict_map_val(DB_Has1035ExchCharge, TDBValue(DB_Has1035ExchCharge, n, dims, zero)));
+    AddEntry(dict_map_val(DB_SmokeOrTobacco, TDBValue(DB_SmokeOrTobacco, n, dims, zero)));
+    AddEntry(dict_map_val(DB_DACTaxFundCharge, TDBValue(DB_DACTaxFundCharge, n, dims, zero)));
+    AddEntry(dict_map_val(DB_AllowWP, TDBValue(DB_AllowWP, n, dims, zero)));
+    AddEntry(dict_map_val(DB_AllowADD, TDBValue(DB_AllowADD, n, dims, zero)));
+    AddEntry(dict_map_val(DB_AllowSpouse, TDBValue(DB_AllowSpouse, n, dims, zero)));
+    AddEntry(dict_map_val(DB_AllowChild, TDBValue(DB_AllowChild, n, dims, zero)));
 
     double exp_rat_amort_period[1] = {4.0};
-    AddEntry(TDBEntry(DB_ExpRatAmortPeriod, TDBValue(DB_ExpRatAmortPeriod, n, dims, exp_rat_amort_period)));
+    AddEntry(dict_map_val(DB_ExpRatAmortPeriod, TDBValue(DB_ExpRatAmortPeriod, n, dims, exp_rat_amort_period)));
 }
 
 //===========================================================================
-void DBDictionary::AddEntry(TDBEntry const& e)
+void DBDictionary::AddEntry(dict_map_val const& e)
 {
     (*dictionary)[e.first] = e.second;
 }

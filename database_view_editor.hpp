@@ -50,7 +50,7 @@
 /// It does not really owns the TDBValue instance which is passed to it.
 /// The boost::shared_ptr does.
 /// Regarding the fact that all the instances of TDBValue are reside
-/// in the TDBDictionary object and owned by it, one could pass entity via
+/// in the dict_map object and owned by it, one could pass entity via
 /// boost::shared_ptr constructed with deallocator object that does nothing.
 
 class DatabaseTableAdapter
