@@ -267,6 +267,7 @@ lmi_common_objects := \
   $(common_common_objects) \
   authenticity.o \
   commutation_functions.o \
+  fund_data.o \
   ihs_acctval.o \
   ihs_avdebug.o \
   ihs_avmly.o \
@@ -275,7 +276,6 @@ lmi_common_objects := \
   ihs_basicval.o \
   ihs_database.o \
   ihs_dbdict.o \
-  ihs_funddata.o \
   ihs_irc7702.o \
   ihs_irc7702a.o \
   ihs_mortal.o \
@@ -382,11 +382,11 @@ gpt_objects := \
   expm1.o \
   facets.o \
   fenv_lmi.o \
+  fund_data.o \
   global_settings.o \
   ihs_basicval.o \
   ihs_database.o \
   ihs_dbdict.o \
-  ihs_funddata.o \
   ihs_mortal.o \
   input.o \
   input_harmonization.o \
@@ -774,9 +774,9 @@ product_file_test$(EXEEXT): \
   dbvalue.o \
   expm1.o \
   facets.o \
+  fund_data.o \
   global_settings.o \
   ihs_dbdict.o \
-  ihs_funddata.o \
   mc_enum.o \
   mc_enum_types.o \
   miscellany.o \

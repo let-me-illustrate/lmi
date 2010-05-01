@@ -25252,3 +25252,27 @@ Demonstrate that this file's contents are unneeded.
   objects.make
 Merge two TUs, as if by renaming 'ihs_dbvalue.cpp' to 'dbvalue.cpp'.
 
+20100501T1557Z <gchicares@sbcglobal.net> [732]
+
+  Makefile.am
+  commutation_functions_test.cpp
+  ihs_commfns.cpp [renamed to commutation_functions.cpp]
+  ihs_commfns.hpp [renamed to commutation_functions.hpp]
+  ihs_irc7702.cpp
+  mec_server.cpp
+  objects.make
+Rename 'ihs_commfns.?pp' to 'commutation_functions.?pp'.
+
+20100501T1631Z <gchicares@sbcglobal.net> [732]
+
+  Makefile.am
+  generate_product_files.cpp
+  ihs_basicval.cpp
+  ihs_funddata.cpp [renamed to fund_data.cpp]
+  ihs_funddata.hpp [renamed to fund_data.hpp]
+  ledger_invariant.cpp
+  my_fund.cpp
+  objects.make
+  product_file_test.cpp
+Rename 'ihs_funddata.?pp' to 'fund_data.?pp'.
+
