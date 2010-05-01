@@ -132,18 +132,16 @@ class LMI_SO TDBValue
 };
 
 /*
-Database items should be allowed to vary across numerous axes, such as
-    gender
-    underwriting class (e.g. preferred, standard, and various substd tables)
-    smoker
-    issue age (or attained age as an optional alternative?)
-    medical/paramedical/nonmedical
+Some data are scalar by nature--for example, maturity age (DB_EndtAge).
+Someday we might add a flag here to express that constraint; until then,
+it's enforced passim by using a scalar-only Query() function.
+
+Database items might include:
+    attained age as an optional alternative to issue age
     rate bands (see below)
-and maybe
+or even:
     months (e.g. lapse skewness)
     mode (e.g. for lapse rate or mode weighting)
-and last of all
-    duration
 
 Does it make sense to use one axis each for
     issue age--every year

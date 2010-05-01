@@ -492,57 +492,32 @@ bool TDBValue::AreAllAxesOK() const
     return rc;
 }
 
-// potential inlines
-
-//============================================================================
 int TDBValue::GetKey() const
 {
     return key_;
 }
 
-//============================================================================
 int TDBValue::GetNDims() const
 {
     return axis_lengths_.size();
 }
 
-//============================================================================
 int TDBValue::GetLength() const
 {
     LMI_ASSERT(0 < axis_lengths_.size());
     return axis_lengths_.back();
 }
 
-//============================================================================
 int TDBValue::GetLength(int axis) const
 {
     LMI_ASSERT(0 <= axis && axis < static_cast<int>(axis_lengths_.size()));
     return axis_lengths_[axis];
 }
 
-//============================================================================
 std::vector<int> const& TDBValue::GetAxisLengths() const
 {
     return axis_lengths_;
 }
-
-/*
-Implementation
-    duration should be ***last*** axis
-        for a C array with dimensions d0, d1, d2
-            int a[d0][d1][d2]
-        index
-            a[i0][i1][i2]
-        is
-            *( ((int*)a) + ((((i0*d1)+i1)*s2)+i2) )
-        so we can do
-            int* p =( ((int*)a) + (((i0*d1)+i1)*s2) )
-            for(int j = length; 0 < j; j--)
-                *output++ = *p++;
-
-    bands on...each item?
-    scalar marker?
-*/
 
 void TDBValue::read(xml::element const& e)
 {
