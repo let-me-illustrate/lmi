@@ -243,6 +243,7 @@ liblmi_common_sources = \
     custom_io_0.cpp \
     data_directory.cpp \
     dbnames.cpp \
+    dbvalue.cpp \
     death_benefits.cpp \
     emit_ledger.cpp \
     expm1.c \
@@ -303,7 +304,6 @@ libantediluvian_la_SOURCES = \
     basicvalues.cpp \
     database.cpp \
     dbdict.cpp \
-    dbvalue.cpp \
     mortality_rates.cpp \
     solve.cpp \
     $(liblmi_common_sources)
@@ -328,7 +328,6 @@ liblmi_la_SOURCES = \
     ihs_commfns.cpp \
     ihs_database.cpp \
     ihs_dbdict.cpp \
-    ihs_dbvalue.cpp \
     ihs_funddata.cpp \
     ihs_irc7702.cpp \
     ihs_irc7702a.cpp \
@@ -726,10 +725,10 @@ test_product_file_SOURCES =   \
   $(common_test_objects) \
   data_directory.cpp \
   dbnames.cpp \
+  dbvalue.cpp \
   expm1.cpp \
   global_settings.cpp \
   ihs_dbdict.cpp \
-  ihs_dbvalue.cpp \
   ihs_funddata.cpp \
   miscellany.cpp \
   path_utility.cpp \
