@@ -188,6 +188,7 @@ common_common_objects := \
   datum_base.o \
   datum_boolean.o \
   datum_string.o \
+  dbdict.o \
   dbnames.o \
   dbvalue.o \
   death_benefits.o \
@@ -255,7 +256,6 @@ antediluvian_common_objects := \
   antediluvian_stubs.o \
   basicvalues.o \
   database.o \
-  dbdict.o \
   mortality_rates.o \
   solve.o \
 
@@ -275,7 +275,6 @@ lmi_common_objects := \
   ihs_avstrtgy.o \
   ihs_basicval.o \
   ihs_database.o \
-  ihs_dbdict.o \
   ihs_irc7702.o \
   ihs_irc7702a.o \
   ihs_mortal.o \
@@ -376,6 +375,7 @@ gpt_objects := \
   data_directory.o \
   datum_base.o \
   datum_string.o \
+  dbdict.o \
   dbnames.o \
   dbvalue.o \
   death_benefits.o \
@@ -386,7 +386,6 @@ gpt_objects := \
   global_settings.o \
   ihs_basicval.o \
   ihs_database.o \
-  ihs_dbdict.o \
   ihs_mortal.o \
   input.o \
   input_harmonization.o \
@@ -770,13 +769,13 @@ product_file_test$(EXEEXT): \
   $(xmlwrapp_objects) \
   data_directory.o \
   datum_base.o \
+  dbdict.o \
   dbnames.o \
   dbvalue.o \
   expm1.o \
   facets.o \
   fund_data.o \
   global_settings.o \
-  ihs_dbdict.o \
   mc_enum.o \
   mc_enum_types.o \
   miscellany.o \
