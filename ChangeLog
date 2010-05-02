@@ -25319,3 +25319,23 @@ Make 'dbdict.hpp' equivalent to 'ihs_dbdict.hpp'.
   product_file_test.cpp
 Merge two headers, renaming 'ihs_dbdict.hpp' to 'dbdict.hpp'.
 
+20100502T1520Z <gchicares@sbcglobal.net> [730]
+
+  database.cpp
+  dbdict.hpp
+Refactor.
+
+20100502T1523Z <gchicares@sbcglobal.net> [730]
+
+  dbdict.cpp
+  ihs_dbdict.cpp
+Make 'dbdict.cpp' dispensable.
+
+20100502T1706Z <gchicares@sbcglobal.net> [726]
+
+  Makefile.am
+  dbdict.cpp     [overwritten by renamed 'ihs_dbdict.cpp']
+  ihs_dbdict.cpp [renamed to 'dbdict.cpp']
+  objects.make
+Merge two TUs, renaming 'ihs_dbdict.cpp' to 'dbdict.cpp'.
+

@@ -242,6 +242,7 @@ liblmi_common_sources = \
     crc32.cpp \
     custom_io_0.cpp \
     data_directory.cpp \
+    dbdict.cpp \
     dbnames.cpp \
     dbvalue.cpp \
     death_benefits.cpp \
@@ -303,7 +304,6 @@ libantediluvian_la_SOURCES = \
     antediluvian_stubs.cpp \
     basicvalues.cpp \
     database.cpp \
-    dbdict.cpp \
     mortality_rates.cpp \
     solve.cpp \
     $(liblmi_common_sources)
@@ -328,7 +328,6 @@ liblmi_la_SOURCES = \
     ihs_avstrtgy.cpp \
     ihs_basicval.cpp \
     ihs_database.cpp \
-    ihs_dbdict.cpp \
     ihs_irc7702.cpp \
     ihs_irc7702a.cpp \
     ihs_mortal.cpp \
@@ -724,12 +723,12 @@ test_print_matrix_CXXFLAGS = $(AM_CXXFLAGS)
 test_product_file_SOURCES =   \
   $(common_test_objects) \
   data_directory.cpp \
+  dbdict.cpp \
   dbnames.cpp \
   dbvalue.cpp \
   expm1.cpp \
   fund_data.cpp \
   global_settings.cpp \
-  ihs_dbdict.cpp \
   miscellany.cpp \
   path_utility.cpp \
   product_data.cpp \
