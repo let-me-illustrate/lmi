@@ -119,6 +119,11 @@ std::string xml_root_name()
 }
 } // Unnamed namespace.
 
+dict_map const& DBDictionary::GetDictionary() const
+{
+    return dictionary_;
+}
+
 //============================================================================
 void DBDictionary::Init(std::string const& NewFilename)
 {
