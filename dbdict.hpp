@@ -55,6 +55,8 @@ class LMI_SO DBDictionary
     void WriteSampleDBFile();
     void WriteProprietaryDBFiles();
 
+    void InitAntediluvian(); // Antediluvian
+
   private:
     DBDictionary();
 
@@ -62,8 +64,6 @@ class LMI_SO DBDictionary
     void Add(TDBValue const&);
     void BadFile(std::string const& Filename, std::string const& why);
     void InitDB();
-
-    void InitAntediluvian(); // Antediluvian
 
     static void InvalidateCache();
 
