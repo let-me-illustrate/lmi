@@ -26,7 +26,7 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "ihs_dbdict.hpp"
+#include "dbdict.hpp"
 
 #include "alert.hpp"
 #include "data_directory.hpp"

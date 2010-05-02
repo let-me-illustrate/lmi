@@ -28,8 +28,8 @@
 
 #include "product_editor.hpp"
 
+#include "dbdict.hpp"
 #include "dbnames.hpp"
-#include "ihs_dbdict.hpp"
 
 class LMI_SO TDBValue;
 
