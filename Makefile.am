@@ -910,7 +910,6 @@ noinst_HEADERS = \
     group_values.hpp \
     handle_exceptions.hpp \
     icon_monger.hpp \
-    ihs_dbdict.hpp \
     ihs_irc7702a.hpp \
     ihs_irc7702.hpp \
     ihs_server7702.hpp \
