@@ -1,6 +1,6 @@
 // Product-database map.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -48,7 +48,9 @@ class LMI_SO DBDictionary
   public:
     static DBDictionary& instance();
     ~DBDictionary();
+
     dict_map const& GetDictionary() const;
+
     void Init(std::string const& NewFilename);
     void WriteSampleDBFile();
     void WriteProprietaryDBFiles();
@@ -57,18 +59,20 @@ class LMI_SO DBDictionary
     DBDictionary();
 
     void WriteDB(std::string const& filename);
-    void Add(TDBValue const& e);
+    void Add(TDBValue const&);
     void BadFile(std::string const& Filename, std::string const& why);
     void InitDB();
+
+    void InitAntediluvian(); // Antediluvian
 
     static void InvalidateCache();
 
     static std::string CachedFilename;
-    void InitAntediluvian();
 
-    void AddEntry(dict_map_val const& e);
+    void AddEntry(dict_map_val const&); // Antediluvian
 
-    dict_map* dictionary;
+    dict_map dictionary_;
+    dict_map* dictionary; // Antediluvian
 };
 
 void LMI_SO print_databases();

@@ -52,8 +52,10 @@ class LMI_SO DBDictionary
   public:
     static DBDictionary& instance();
     ~DBDictionary();
-    void Init(std::string const& NewFilename);
+
     dict_map const& GetDictionary() const;
+
+    void Init(std::string const& NewFilename);
     void WriteSampleDBFile();
     void WriteProprietaryDBFiles();
 
@@ -61,18 +63,21 @@ class LMI_SO DBDictionary
     DBDictionary();
 
     void WriteDB(std::string const& filename);
-    void Add(TDBValue const& e);
+    void Add(TDBValue const&);
     void BadFile(std::string const& Filename, std::string const& why);
     void InitDB();
+
+    void InitAntediluvian(); // Antediluvian
 
     static void InvalidateCache();
 
     static std::string CachedFilename;
-    dict_map dictionary_;
-};
 
-inline dict_map const& DBDictionary::GetDictionary() const
-{return dictionary_;}
+    void AddEntry(dict_map_val const&); // Antediluvian
+
+    dict_map dictionary_;
+    dict_map* dictionary; // Antediluvian
+};
 
 void LMI_SO print_databases();
 
