@@ -56,6 +56,11 @@ DBDictionary::~DBDictionary()
     dictionary = 0;
 }
 
+dict_map const& DBDictionary::GetDictionary() const
+{
+    return *dictionary;
+}
+
 //============================================================================
 void DBDictionary::Init(std::string const& NewFilename)
 {
@@ -88,12 +93,12 @@ void DBDictionary::Init(std::string const& NewFilename)
         // stream from file
 // TODO ?? HERE WE NEED TO ADD A STREAMING METHOD
 // TODO ?? CachedDBDictionary = Dictionary = new dict_map(CachedFilename);
-        Init(); // TODO ?? KLUDGE
+        InitAntediluvian(); // TODO ?? KLUDGE
         }
 }
 
 //============================================================================
-void DBDictionary::Init()
+void DBDictionary::InitAntediluvian()
 {
     static int const n = 1 + TDBIndex::MaxIndex;
     int dims[n] = {1, 1, 1, 1, 1, 1, 1};
