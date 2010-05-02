@@ -26,6 +26,9 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
+#include "ihs_dbdict.cpp"
+
+#if 0
 #include "dbdict.hpp"
 
 #include "dbnames.hpp"
@@ -260,4 +263,5 @@ void DBDictionary::AddEntry(dict_map_val const& e)
 void print_databases()
 {
 }
+#endif // 0
 
