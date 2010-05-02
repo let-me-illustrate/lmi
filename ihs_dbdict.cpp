@@ -680,6 +680,103 @@ void DBDictionary::WriteSampleDBFile()
     WriteDB(AddDataDir("sample.database"));
 }
 
+/// Initialize the built-in database for the antediluvian branch.
+
+void DBDictionary::InitAntediluvian()
+{
+    dictionary_.clear();
+
+    // Zero is inappropriate for some entities ("DB_CCOIMultiplier",
+    // e.g.), but the antediluvian branch doesn't actually use most
+    // database entities.
+    for(int j = DB_FIRST; j < DB_LAST; ++j)
+        {
+        Add(TDBValue(j, 0.0));
+        }
+
+    Add(TDBValue(DB_GuarInt, 0.03));
+
+    Add(TDBValue(DB_FixedLoanRate, 0.06));
+
+    Add(TDBValue(DB_GuarRegLoanSpread, 0.0));
+    Add(TDBValue(DB_CurrRegLoanSpread, 0.0));
+    Add(TDBValue(DB_GuarPrefLoanSpread, 0.0));
+    Add(TDBValue(DB_CurrPrefLoanSpread, 0.0));
+
+    Add(TDBValue(DB_AllowGenAcct, 1.0));
+    Add(TDBValue(DB_AllowPreferredClass, 1.0));
+
+    // premium loads
+
+    Add(TDBValue(DB_GuarPolFee, 12.00));
+    Add(TDBValue(DB_GuarSpecAmtLoad, 0.0));
+    Add(TDBValue(DB_GuarPremLoadTgt, 0.025));
+    Add(TDBValue(DB_GuarPremLoadExc, 0.025));
+    Add(TDBValue(DB_CurrPolFee, 5.00));
+    Add(TDBValue(DB_CurrSpecAmtLoad, 0.0));
+    Add(TDBValue(DB_CurrPremLoadTgt, 0.025));
+    Add(TDBValue(DB_CurrPremLoadExc, 0.025));
+
+    Add(TDBValue(DB_MinWD, 100.0));
+    Add(TDBValue(DB_WDFee, 5.0));
+    Add(TDBValue(DB_WDFeeRate, 0.01));
+
+    int guar_coi_dims[TDBValue::e_number_of_axes] = {1, 1, 3, 1, 1, 1, 1};
+    // smoker, nonsmoker, unismoke
+    double guar_coi_tables[3] = {111, 109, 107};
+    Add(TDBValue(DB_GuarCOITable, TDBValue::e_number_of_axes, guar_coi_dims, guar_coi_tables));
+
+    int curr_coi_dims[TDBValue::e_number_of_axes] = {1, 4, 3, 1, 1, 1, 1};
+    // preferred, standard, rated, ultrapreferred by smoker, nonsmoker, unismoke
+    double curr_coi_tables[] =
+        {
+        2, 3, 1, // pref  sm ns us
+        5, 6, 4, // std   sm ns us
+        5, 6, 4, // rated sm ns us
+        0, 0, 0, // ultra sm ns us
+        };
+    Add(TDBValue(DB_CurrCOITable, TDBValue::e_number_of_axes, curr_coi_dims, curr_coi_tables));
+
+    Add(TDBValue(DB_CorridorTable, 7));
+    Add(TDBValue(DB_WPTable, 8));
+    Add(TDBValue(DB_ADDTable, 9));
+    Add(TDBValue(DB_EndtAge, 100));
+    Add(TDBValue(DB_AgeLastOrNearest, 1.0));
+    Add(TDBValue(DB_MinSpecAmt, 10000.0));
+
+    Add(TDBValue(DB_MaxGenAcctRate, 0.12));
+    Add(TDBValue(DB_MaxSepAcctRate, 0.12));
+
+    Add(TDBValue(DB_AllowLoan, 1.0));
+    Add(TDBValue(DB_AllowWD, 1.0));
+    Add(TDBValue(DB_AllowFlatExtras, 1.0));
+    Add(TDBValue(DB_AllowChangeToDBO2, 1.0));
+    Add(TDBValue(DB_AllowDBO3, 1.0));
+
+    Add(TDBValue(DB_SurrChgPremMult, 0.0));
+    Add(TDBValue(DB_SurrChgAVMult, 0.0));
+    Add(TDBValue(DB_SurrChgSAMult, 0.0));
+    Add(TDBValue(DB_SurrChgAVDurFactor, 1.0));
+    Add(TDBValue(DB_SurrChgSADurFactor, 1.0));
+
+    Add(TDBValue(DB_LedgerType, mce_ill_reg));
+
+    Add(TDBValue(DB_NoLapseAlwaysActive, 0.0));
+    Add(TDBValue(DB_NoLapseMinDur, 0.0));
+    Add(TDBValue(DB_NoLapseMinAge, 0.0));
+
+    Add(TDBValue(DB_NominallyPar, 0.0));
+    Add(TDBValue(DB_Has1035ExchCharge, 0.0));
+    Add(TDBValue(DB_SmokeOrTobacco, 0.0));
+    Add(TDBValue(DB_DACTaxFundCharge, 0.0));
+    Add(TDBValue(DB_AllowWP, 0.0));
+    Add(TDBValue(DB_AllowADD, 0.0));
+    Add(TDBValue(DB_AllowSpouse, 0.0));
+    Add(TDBValue(DB_AllowChild, 0.0));
+
+    Add(TDBValue(DB_ExpRatAmortPeriod, 4.0));
+}
+
 //============================================================================
 void print_databases()
 {
