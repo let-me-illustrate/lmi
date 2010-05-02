@@ -56,20 +56,12 @@ TDatabase::TDatabase
     ,UWBasis    (a_UWBasis)
     ,State      (a_State)
 {
-    DBDictionary::instance().Init(Filename);
+//    DBDictionary::instance().Init(Filename);
+    DBDictionary::instance().InitAntediluvian();
     Init();
-    length_ = 100 - IssueAge;
-// TODO ?? This is better...once we implement DB_EndtAge.
-//    length_ = static_cast<int>(Query(DB_EndtAge)) - IssueAge;
 }
 
 //============================================================================
-// TODO ?? This function is mostly copied and pasted from the production
-// branch's implementation, and duplicates its shortcomings. It would
-// seem better to factor out what's common between the two branches, but
-// eventually the two implementations must be completely merged--and
-// this expedient doesn't make that harder.
-//
 TDatabase::TDatabase(yare_input const& input)
     :Filename("Irrelevant in antediluvian branch for now")
 {
@@ -80,9 +72,9 @@ TDatabase::TDatabase(yare_input const& input)
     UWBasis     = input.GroupUnderwritingType;
     State       = input.State;
 
-    DBDictionary::instance().Init(Filename);
+//    DBDictionary::instance().Init(Filename);
+    DBDictionary::instance().InitAntediluvian();
     Init();
-    length_ = 100 - IssueAge;
 }
 
 //============================================================================
@@ -118,6 +110,8 @@ void TDatabase::Init()
     Idx.IssueAge    () = IssueAge   ;
     Idx.UWBasis     () = UWBasis    ;
     Idx.State       () = State      ;
+
+    length_ = static_cast<int>(*GetEntry(DB_EndtAge)[Idx]) - IssueAge;
 }
 
 //===========================================================================
