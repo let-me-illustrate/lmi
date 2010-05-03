@@ -249,9 +249,9 @@ double& TDBValue::operator[](std::vector<int> const& idx)
 }
 
 //============================================================================
-double const* TDBValue::operator[](TDBIndex const& idx) const
+double const* TDBValue::operator[](database_index const& idx) const
 {
-    std::vector<double> index(idx.GetIdx());
+    std::vector<int> const& index(idx.index_vector());
 
     LMI_ASSERT(0 < axis_lengths_.size());
     int z = 0;
@@ -261,7 +261,7 @@ double const* TDBValue::operator[](TDBIndex const& idx) const
         if(1 != axis_lengths_[j])
             {
             LMI_ASSERT(index[j] < axis_lengths_[j]);
-            z = z * axis_lengths_[j] + static_cast<int>(index[j]);
+            z = z * axis_lengths_[j] + index[j];
             }
         }
     z *= axis_lengths_.back();

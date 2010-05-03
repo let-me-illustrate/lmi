@@ -82,10 +82,10 @@ class LMI_SO TDatabase
     void Init();
     void Init(std::string const& NewFilename);
 
-    TDBIndex      Idx;
-    std::string   Filename;
+    database_index  index_;
+    std::string     Filename;
 
-    int           length_;
+    int             length_;
 
     mcenum_gender   Gender;     // gender
     mcenum_class    Class;      // underwriting class

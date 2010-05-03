@@ -118,7 +118,10 @@ TDatabase::TDatabase(yare_input const& input)
             break;
         }
 
-    Idx.State() = State;
+    // It may seem excessive to do this when only 'State' has changed,
+    // but it'll become unnecessary when we handle state of jurisdiction
+    // as an input field instead of trying to determine it here.
+    index_ = database_index(Gender, Class, Smoker, IssueAge, UWBasis, State);
 }
 
 //============================================================================
@@ -141,12 +144,7 @@ int TDatabase::length() const
 //============================================================================
 void TDatabase::Init()
 {
-    Idx.Gender      () = Gender     ;
-    Idx.Class       () = Class      ;
-    Idx.Smoker      () = Smoker     ;
-    Idx.IssueAge    () = IssueAge   ;
-    Idx.UWBasis     () = UWBasis    ;
-    Idx.State       () = State      ;
+    index_ = database_index(Gender, Class, Smoker, IssueAge, UWBasis, State);
 
 // New code added to Query(int) uses length_ to test
 // for validity. We can't go through that validity check when
@@ -154,7 +152,7 @@ void TDatabase::Init()
 // endowment age. But once we have length_, we can make sure
 // endowment age doesn't vary by duration.
 //  length_ = Query(DB_EndtAge) - IssueAge;
-    length_ = static_cast<int>(*GetEntry(DB_EndtAge)[Idx]) - IssueAge;
+    length_ = static_cast<int>(*GetEntry(DB_EndtAge)[index_]) - IssueAge;
     if(length_ <= 0)
         {
         fatal_error() << "Endowment age precedes issue age." << LMI_FLUSH;
@@ -166,14 +164,14 @@ void TDatabase::Init()
 double TDatabase::Query(int k) const
 {
     ConstrainScalar(k); // TODO ?? Is the extra overhead acceptable?
-    return *GetEntry(k)[Idx];
+    return *GetEntry(k)[index_];
 }
 
 //===========================================================================
 void TDatabase::Query(std::vector<double>& dst, int k) const
 {
     TDBValue const& v = GetEntry(k);
-    double const*const z = v[Idx];
+    double const*const z = v[index_];
     // TODO ?? Can this be right?
     if(1 == v.GetNDims())
         {
