@@ -61,7 +61,14 @@ std::vector<int> const& TDBValue::maximum_dimensions()
     return z;
 }
 
-//============================================================================
+/// Ascertain whether two database entities are equivalent.
+///
+/// Equivalence here means that the dimensions and data are identical.
+/// For example, these distinct entities:
+///  - DB_PremTaxRate (what the state charges the insurer)
+///  - DB_PremTaxLoad (what the insurer charges the customer)
+/// may be equivalent when premium tax is passed through as a load.
+
 bool TDBValue::Equivalent(TDBValue const& a, TDBValue const& b)
 {
     return(a.axis_lengths_ == b.axis_lengths_ && a.data_values_ == b.data_values_);
@@ -225,7 +232,6 @@ double& TDBValue::operator[](std::vector<int> const& idx)
         }
 
     int z = 0;
-    // TODO ?? Can we use an STL algorithm instead?
     for(unsigned int j = 0; j < axis_lengths_.size(); j++)
         {
         if(1 != axis_lengths_[j])
@@ -255,7 +261,6 @@ double const* TDBValue::operator[](database_index const& idx) const
 
     LMI_ASSERT(0 < axis_lengths_.size());
     int z = 0;
-    // TODO ?? Can we use an STL algorithm instead?
     for(unsigned int j = 0; j < axis_lengths_.size() - 1; j++)
         {
         if(1 != axis_lengths_[j])
