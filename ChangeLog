@@ -25358,3 +25358,13 @@ Prefer implicitly-defined special member functions [12/1].
   ihs_database.cpp
 Remove a disused member.
 
+20100503T2253Z <gchicares@sbcglobal.net> [723]
+
+  database.cpp
+  database.hpp
+  dbindex.hpp
+  dbvalue.cpp
+  dbvalue.hpp
+  ihs_database.cpp
+Revamp database-index class.
+

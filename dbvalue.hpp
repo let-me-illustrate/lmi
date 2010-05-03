@@ -65,7 +65,7 @@ class LMI_SO TDBValue
     // Separate enumerators here facilitate compile-time assertions
     // in the database GUI, q.v.--an array could not be indexed to
     // produce an arithmetic constant expression [5.19/3].
-    enum {e_number_of_axes    = 1 + TDBIndex::MaxIndex};
+    enum {e_number_of_axes    = 1 + database_index::number_of_indices};
     enum {e_max_dim_gender    =   3};
     enum {e_max_dim_class     =   4};
     enum {e_max_dim_smoking   =   3};
@@ -95,7 +95,7 @@ class LMI_SO TDBValue
         );
     ~TDBValue();
 
-    double const* operator[](TDBIndex const& idx) const;
+    double const* operator[](database_index const& idx) const;
     double&       operator[](std::vector<int> const& idx);
 
     int GetKey()            const;

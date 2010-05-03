@@ -97,28 +97,22 @@ int TDatabase::length() const
 //============================================================================
 void TDatabase::Init()
 {
-    Idx.Gender      () = Gender     ;
-    Idx.Class       () = Class      ;
-    Idx.Smoker      () = Smoker     ;
-    Idx.IssueAge    () = IssueAge   ;
-    Idx.UWBasis     () = UWBasis    ;
-    Idx.State       () = State      ;
-
-    length_ = static_cast<int>(*GetEntry(DB_EndtAge)[Idx]) - IssueAge;
+    index_ = database_index(Gender, Class, Smoker, IssueAge, UWBasis, State);
+    length_ = static_cast<int>(*GetEntry(DB_EndtAge)[index_]) - IssueAge;
 }
 
 //===========================================================================
 double TDatabase::Query(int k) const
 {
     ConstrainScalar(k); // TODO ?? Is the extra overhead acceptable?
-    return *GetEntry(k)[Idx];
+    return *GetEntry(k)[index_];
 }
 
 //===========================================================================
 void TDatabase::Query(std::vector<double>& dst, int k) const
 {
     TDBValue const& v = GetEntry(k);
-    double const*const z = v[Idx];
+    double const*const z = v[index_];
     dst.resize(length_);
     if(1 == v.GetNDims())
         {
