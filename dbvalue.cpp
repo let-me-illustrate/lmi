@@ -214,30 +214,18 @@ int TDBValue::getndata() const
 }
 
 //============================================================================
-double& TDBValue::operator[](std::vector<int> const& idx)
+double& TDBValue::operator[](std::vector<int> const& index)
 {
-    LMI_ASSERT(e_number_of_axes == idx.size());
-
-    if(e_number_of_axes != axis_lengths_.size())
-        {
-        fatal_error()
-            << "Trying to index database with key "
-            << key_
-            << ": "
-            << "e_number_of_axes is " << e_number_of_axes
-            << ", and axis_lengths.size() is " << axis_lengths_.size()
-            << ", but those quantities must be equal."
-            << LMI_FLUSH
-            ;
-        }
+    LMI_ASSERT(e_number_of_axes == index.size());
+    LMI_ASSERT(e_number_of_axes == axis_lengths_.size());
 
     int z = 0;
     for(unsigned int j = 0; j < axis_lengths_.size(); j++)
         {
         if(1 != axis_lengths_[j])
             {
-            LMI_ASSERT(idx[j] < axis_lengths_[j]);
-            z = z * axis_lengths_[j] + idx[j];
+            LMI_ASSERT(index[j] < axis_lengths_[j]);
+            z = z * axis_lengths_[j] + index[j];
             }
         }
 // TODO ?? erase    z *= axis_lengths_.back();
@@ -259,7 +247,8 @@ double const* TDBValue::operator[](database_index const& idx) const
 {
     std::vector<int> const& index(idx.index_vector());
 
-    LMI_ASSERT(0 < axis_lengths_.size());
+    LMI_ASSERT(e_number_of_axes == axis_lengths_.size());
+
     int z = 0;
     for(unsigned int j = 0; j < axis_lengths_.size() - 1; j++)
         {
