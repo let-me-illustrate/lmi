@@ -82,7 +82,6 @@ class LMI_SO TDatabase
     void Init();
     void Init(std::string const& NewFilename);
 
-    int           Index[TDBIndex::MaxIndex];
     TDBIndex      Idx;
     std::string   Filename;
 

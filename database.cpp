@@ -97,13 +97,6 @@ int TDatabase::length() const
 //============================================================================
 void TDatabase::Init()
 {
-    Index[0] = Gender;
-    Index[1] = static_cast<int>(Class   );
-    Index[2] = static_cast<unsigned int>(Smoker  );
-    Index[3] = static_cast<unsigned int>(IssueAge);
-    Index[4] = static_cast<unsigned int>(UWBasis );
-    Index[5] = static_cast<unsigned int>(State   );
-
     Idx.Gender      () = Gender     ;
     Idx.Class       () = Class      ;
     Idx.Smoker      () = Smoker     ;
