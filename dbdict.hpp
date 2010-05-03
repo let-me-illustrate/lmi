@@ -38,6 +38,8 @@
 typedef std::map<int, TDBValue> dict_map;
 typedef dict_map::value_type dict_map_val;
 
+/// Cached product database.
+
 class LMI_SO DBDictionary
     :private boost::noncopyable
     ,virtual private obstruct_slicing<DBDictionary>
@@ -55,7 +57,7 @@ class LMI_SO DBDictionary
     void WriteSampleDBFile();
     void WriteProprietaryDBFiles();
 
-    void InitAntediluvian(); // Antediluvian
+    void InitAntediluvian();
 
   private:
     DBDictionary();
@@ -69,10 +71,7 @@ class LMI_SO DBDictionary
 
     static std::string CachedFilename;
 
-    void AddEntry(dict_map_val const&); // Antediluvian
-
     dict_map dictionary_;
-    dict_map* dictionary; // Antediluvian
 };
 
 void LMI_SO print_databases();
