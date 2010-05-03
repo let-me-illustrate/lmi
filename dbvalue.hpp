@@ -53,6 +53,8 @@ namespace xml_serialize {template<typename T> struct xml_io;}
 /// all axes. In a typical query, all other axes are single-valued,
 /// but all durations are wanted; this axis ordering puts consecutive
 /// durational values in contiguous storage for efficient retrieval.
+///
+/// Implicitly-declared special member functions do the right thing.
 
 class LMI_SO TDBValue
     :virtual private obstruct_slicing<TDBValue>
@@ -91,8 +93,6 @@ class LMI_SO TDBValue
         ,double             datum
         ,std::string const& gloss = std::string()
         );
-    TDBValue(TDBValue const&);
-    TDBValue& operator=(TDBValue const&);
     ~TDBValue();
 
     double const* operator[](TDBIndex const& idx) const;
