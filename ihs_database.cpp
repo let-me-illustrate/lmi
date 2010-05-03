@@ -43,11 +43,6 @@
 
 #include <algorithm>
 
-// TODO ?? Things to improve:
-//
-// Can we dispense with Index? It's just an alias for a set of other
-//   members that are used as input parameters to one ctor.
-
 //============================================================================
 TDatabase::TDatabase
     (std::string const& a_ProductName
@@ -123,7 +118,6 @@ TDatabase::TDatabase(yare_input const& input)
             break;
         }
 
-    Index[5] = State;
     Idx.State() = State;
 }
 
@@ -147,13 +141,6 @@ int TDatabase::length() const
 //============================================================================
 void TDatabase::Init()
 {
-    Index[0] = Gender;
-    Index[1] = Class;
-    Index[2] = Smoker;
-    Index[3] = IssueAge;
-    Index[4] = UWBasis;
-    Index[5] = State;
-
     Idx.Gender      () = Gender     ;
     Idx.Class       () = Class      ;
     Idx.Smoker      () = Smoker     ;

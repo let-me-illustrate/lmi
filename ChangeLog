@@ -25339,3 +25339,22 @@ Make 'dbdict.cpp' dispensable.
   objects.make
 Merge two TUs, renaming 'ihs_dbdict.cpp' to 'dbdict.cpp'.
 
+20100503T1134Z <gchicares@sbcglobal.net> [726]
+
+  dbdict.hpp
+  dbvalue.hpp
+Remove declarations of disused members.
+
+20100503T1148Z <gchicares@sbcglobal.net> [726]
+
+  dbvalue.cpp
+  dbvalue.hpp
+Prefer implicitly-defined special member functions [12/1].
+
+20100503T1808Z <gchicares@sbcglobal.net> [725]
+
+  database.cpp
+  database.hpp
+  ihs_database.cpp
+Remove a disused member.
+
