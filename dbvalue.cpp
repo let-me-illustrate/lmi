@@ -129,29 +129,6 @@ TDBValue::TDBValue
 }
 
 //============================================================================
-TDBValue::TDBValue(TDBValue const& z)
-    :obstruct_slicing<TDBValue>()
-    ,key_          (z.key_)
-    ,axis_lengths_ (z.axis_lengths_)
-    ,data_values_  (z.data_values_)
-    ,gloss_        (z.gloss_)
-{
-}
-
-//============================================================================
-TDBValue& TDBValue::operator=(TDBValue const& z)
-{
-    if(this != &z)
-        {
-        key_          = z.key_;
-        axis_lengths_ = z.axis_lengths_;
-        data_values_  = z.data_values_;
-        gloss_        = z.gloss_;
-        }
-    return *this;
-}
-
-//============================================================================
 TDBValue::~TDBValue()
 {
 }
