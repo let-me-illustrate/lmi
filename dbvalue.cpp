@@ -213,7 +213,14 @@ int TDBValue::getndata() const
     return static_cast<int>(n);
 }
 
-//============================================================================
+/// Indexing operator for product editor only.
+///
+/// Two indexing operators are provided. This one's argument includes
+/// the number of durations--which, as far as the product editor is
+/// concerned, is much like the other axes. However, for illustration
+/// production, TDatabase::Query() handles the last (duration) axis,
+/// replicating the last value as required to extend to maturity.
+
 double& TDBValue::operator[](std::vector<int> const& index)
 {
     LMI_ASSERT(e_number_of_axes == index.size());
@@ -228,7 +235,6 @@ double& TDBValue::operator[](std::vector<int> const& index)
             z = z * axis_lengths_[j] + index[j];
             }
         }
-// TODO ?? erase    z *= axis_lengths_.back();
     if(static_cast<int>(data_values_.size()) <= z)
         {
         z = 0;
@@ -242,11 +248,12 @@ double& TDBValue::operator[](std::vector<int> const& index)
     return data_values_[z];
 }
 
-//============================================================================
+/// Indexing operator for illustration production.
+
 double const* TDBValue::operator[](database_index const& idx) const
 {
     std::vector<int> const& index(idx.index_vector());
-
+    LMI_ASSERT(e_number_of_axes == 1 + index.size());
     LMI_ASSERT(e_number_of_axes == axis_lengths_.size());
 
     int z = 0;
