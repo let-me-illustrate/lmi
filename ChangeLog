@@ -25368,3 +25368,19 @@ Remove a disused member.
   ihs_database.cpp
 Revamp database-index class.
 
+20100503T2314Z <gchicares@sbcglobal.net> [721]
+
+  dbvalue.cpp
+Improve documentation. (The standard library offers no algorithm for
+evaluating polynomials.)
+
+20100503T2344Z <gchicares@sbcglobal.net> [721]
+
+  dbvalue.cpp
+Render two operator[]() implementations nearly identical.
+
+20100504T0120Z <gchicares@sbcglobal.net> [720]
+
+  dbvalue.cpp
+Improve documentation.
+
