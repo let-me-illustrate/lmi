@@ -25384,3 +25384,9 @@ Render two operator[]() implementations nearly identical.
   dbvalue.cpp
 Improve documentation.
 
+20100505T1356Z <gchicares@sbcglobal.net> [718]
+
+  dbdict.cpp
+  dbdict.hpp
+Rework caching implementation.
+
