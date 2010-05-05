@@ -36,7 +36,6 @@
 #include <string>
 
 typedef std::map<int, TDBValue> dict_map;
-typedef dict_map::value_type dict_map_val;
 
 /// Cached product database.
 
