@@ -216,11 +216,11 @@ void DBDictionary::WriteDB(std::string const& filename)
     document.save(path.string());
 }
 
-//===========================================================================
+/// Add an entry to the dictionary.
+
 void DBDictionary::Add(TDBValue const& e)
 {
-    dictionary_.erase(e.GetKey());
-    dictionary_.insert(dict_map_val(e.GetKey(), e));
+    dictionary_[e.GetKey()] = e;
 }
 
 /// Initialize all database entities to not-necessarily-plausible values.

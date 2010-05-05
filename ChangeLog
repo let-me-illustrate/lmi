@@ -25390,3 +25390,9 @@ Improve documentation.
   dbdict.hpp
 Rework caching implementation.
 
+20100505T1427Z <gchicares@sbcglobal.net> [718]
+
+  dbdict.cpp
+  dbdict.hpp
+Replace a weird with a canonical idiom.
+
