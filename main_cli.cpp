@@ -29,6 +29,7 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "authenticity.hpp" // timestamp_of_production_release()
+#include "dbdict.hpp"       // print_databases()
 #include "getopt.hpp"
 #include "global_settings.hpp"
 #include "handle_exceptions.hpp"
@@ -64,11 +65,6 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
-
-// INELEGANT !! Prototype specified explicitly because the production
-// and antediluvian branches define it identically but in different
-// and incompatible headers.
-void LMI_SO print_databases();
 
 /// Run a suite of test cases.
 ///

@@ -25429,3 +25429,14 @@ Replace a weird with a canonical idiom.
   surrchg_rates.hpp
 Rename two classes.
 
+20100505T1720Z <gchicares@sbcglobal.net> [718]
+
+  database.cpp
+  ihs_database.cpp
+Remove gratuitous dissimilarities.
+
+20100505T1721Z <gchicares@sbcglobal.net> [718]
+
+  main_cli.cpp
+Reduce inelegance.
+
