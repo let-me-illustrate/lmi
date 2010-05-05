@@ -33,9 +33,8 @@
 #include "dbnames.hpp"
 #include "yare_input.hpp"
 
-#include <algorithm>    // std::min()
-#include <iterator>
-#include <ostream>
+#include <algorithm> // std::copy(), std::min()
+#include <iterator>  // ostream_iterator
 
 //============================================================================
 product_database::product_database
@@ -47,14 +46,14 @@ product_database::product_database
     ,mcenum_uw_basis    a_UWBasis
     ,mcenum_state       a_State
     )
-    :Filename   (a_ProductName)
-    ,length_    (0)
-    ,Gender     (a_Gender)
-    ,Class      (a_Class)
-    ,Smoker     (a_Smoker)
-    ,IssueAge   (a_IssueAge)
-    ,UWBasis    (a_UWBasis)
-    ,State      (a_State)
+    :Filename (a_ProductName)
+    ,length_  (0)
+    ,Gender   (a_Gender)
+    ,Class    (a_Class)
+    ,Smoker   (a_Smoker)
+    ,IssueAge (a_IssueAge)
+    ,UWBasis  (a_UWBasis)
+    ,State    (a_State)
 {
 //    DBDictionary::instance().Init(Filename);
     DBDictionary::instance().InitAntediluvian();
@@ -137,7 +136,6 @@ database_entity const& product_database::GetEntry(int k) const
 {
     dict_map const& d = DBDictionary::instance().GetDictionary();
     dict_map::const_iterator i = d.find(k);
-
     if(i == d.end())
         {
         fatal_error()

@@ -41,7 +41,8 @@
 #include "product_data.hpp"
 #include "yare_input.hpp"
 
-#include <algorithm>
+#include <algorithm> // std::copy(), std::max(), std::min()
+#include <iterator>  // ostream_iterator
 
 //============================================================================
 product_database::product_database
@@ -214,9 +215,9 @@ void product_database::Query(std::vector<double>& dst, int k) const
 //===========================================================================
 database_entity const& product_database::GetEntry(int k) const
 {
-    dict_map const& dict = DBDictionary::instance().GetDictionary();
-    dict_map::const_iterator p = dict.find(k);
-    if(p == dict.end())
+    dict_map const& d = DBDictionary::instance().GetDictionary();
+    dict_map::const_iterator i = d.find(k);
+    if(i == d.end())
         {
         std::string s("no name");
         if(0 <= k && static_cast<unsigned int>(k) < GetDBNames().size())
@@ -234,7 +235,7 @@ database_entity const& product_database::GetEntry(int k) const
         }
     else
         {
-        return (*p).second;
+        return (*i).second;
         }
 }
 
