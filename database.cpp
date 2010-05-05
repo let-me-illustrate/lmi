@@ -38,7 +38,7 @@
 #include <ostream>
 
 //============================================================================
-TDatabase::TDatabase
+product_database::product_database
     (std::string const& a_ProductName
     ,mcenum_gender      a_Gender
     ,mcenum_class       a_Class
@@ -62,7 +62,7 @@ TDatabase::TDatabase
 }
 
 //============================================================================
-TDatabase::TDatabase(yare_input const& input)
+product_database::product_database(yare_input const& input)
     :Filename("Irrelevant in antediluvian branch for now")
 {
     Gender      = input.Gender;
@@ -78,40 +78,40 @@ TDatabase::TDatabase(yare_input const& input)
 }
 
 //============================================================================
-TDatabase::~TDatabase()
+product_database::~product_database()
 {
 }
 
 //============================================================================
-mcenum_state TDatabase::GetStateOfJurisdiction() const
+mcenum_state product_database::GetStateOfJurisdiction() const
 {
     return State;
 }
 
 //============================================================================
-int TDatabase::length() const
+int product_database::length() const
 {
     return length_;
 }
 
 //============================================================================
-void TDatabase::Init()
+void product_database::Init()
 {
     index_ = database_index(Gender, Class, Smoker, IssueAge, UWBasis, State);
     length_ = static_cast<int>(*GetEntry(DB_EndtAge)[index_]) - IssueAge;
 }
 
 //===========================================================================
-double TDatabase::Query(int k) const
+double product_database::Query(int k) const
 {
     ConstrainScalar(k); // TODO ?? Is the extra overhead acceptable?
     return *GetEntry(k)[index_];
 }
 
 //===========================================================================
-void TDatabase::Query(std::vector<double>& dst, int k) const
+void product_database::Query(std::vector<double>& dst, int k) const
 {
-    TDBValue const& v = GetEntry(k);
+    database_entity const& v = GetEntry(k);
     double const*const z = v[index_];
     dst.resize(length_);
     if(1 == v.GetNDims())
@@ -133,7 +133,7 @@ void TDatabase::Query(std::vector<double>& dst, int k) const
 }
 
 //===========================================================================
-TDBValue const& TDatabase::GetEntry(int k) const
+database_entity const& product_database::GetEntry(int k) const
 {
     dict_map const& d = DBDictionary::instance().GetDictionary();
     dict_map::const_iterator i = d.find(k);
@@ -163,7 +163,7 @@ TDBValue const& TDatabase::GetEntry(int k) const
 /// invariant by duration. The database item may nonetheless vary
 /// across any axis except duration.
 
-void TDatabase::ConstrainScalar(int k) const
+void product_database::ConstrainScalar(int k) const
 {
     std::vector<double> z;
     Query(z, k);

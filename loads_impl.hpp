@@ -31,7 +31,7 @@
 #include <vector>
 
 class BasicValues;
-class TDatabase;
+class product_database;
 
 /// Declaration of struct load_details.
 ///

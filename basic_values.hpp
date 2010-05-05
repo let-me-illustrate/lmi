@@ -58,10 +58,10 @@ class Irc7702A;
 class Loads;
 class MortalityRates;
 class SurrChgRates;
-class TDatabase;
 class death_benefits;
 class modal_outlay;
 class product_data;
+class product_database;
 class rounding_rules;
 class stratified_charges;
 
@@ -117,7 +117,7 @@ class LMI_SO BasicValues
     boost::shared_ptr<Input const>        Input_;
     yare_input                            yare_input_;
     boost::shared_ptr<product_data>       ProductData_;
-    boost::shared_ptr<TDatabase>          Database_;
+    boost::shared_ptr<product_database>   Database_;
     boost::shared_ptr<FundData>           FundData_;
     boost::shared_ptr<rounding_rules>     RoundingRules_;
     boost::shared_ptr<stratified_charges> StratifiedCharges_;
@@ -518,7 +518,7 @@ inline bool BasicValues::IsSubjectToIllustrationReg() const
 }
 
 double lowest_premium_tax_load
-    (TDatabase          const& db
+    (product_database   const& db
     ,stratified_charges const& stratified
     ,mcenum_state              state_of_jurisdiction
     ,bool                      amortize_premium_load

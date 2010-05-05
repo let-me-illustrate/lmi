@@ -54,11 +54,11 @@ std::vector<double> BasicValues::GetCurrSpecAmtLoadTable() const {return dummy_v
 std::vector<double> BasicValues::GetGuarSpecAmtLoadTable() const {return dummy_vector;}
 
 #include "database.hpp"
-TDatabase::TDatabase(int length) :length_(length) {}
-TDatabase::~TDatabase() {}
-int TDatabase::length() const {return length_;}
-void TDatabase::Query(std::vector<double>& v, int) const {v.resize(length_);}
-double TDatabase::Query(int) const {return 0.0;}
+product_database::product_database(int length) :length_(length) {}
+product_database::~product_database() {}
+int product_database::length() const {return length_;}
+void product_database::Query(std::vector<double>& v, int) const {v.resize(length_);}
+double product_database::Query(int) const {return 0.0;}
 
 struct LoadsTest
 {
@@ -79,7 +79,7 @@ struct LoadsTest
     void TestCalculations (char const* file, int line);
 
     load_details details_;
-    TDatabase database_;
+    product_database database_;
     Loads loads_;
 };
 

@@ -95,7 +95,7 @@ class DatabaseDurationAxis
   :public AdjustableMaxBoundAxis<int>
 {
     typedef AdjustableMaxBoundAxis<int> BaseClass;
-    static const int max_bound_duration = TDBValue::e_max_dim_duration - 1;
+    static const int max_bound_duration = database_entity::e_max_dim_duration - 1;
 
   public:
     DatabaseDurationAxis()
@@ -103,7 +103,7 @@ class DatabaseDurationAxis
     {}
 };
 
-DatabaseTableAdapter::DatabaseTableAdapter(TDBValue* db_value)
+DatabaseTableAdapter::DatabaseTableAdapter(database_entity* db_value)
     :db_value_(db_value)
     ,modified_(false)
 {
@@ -211,7 +211,7 @@ void DatabaseTableAdapter::MakeVaryByDimension(unsigned int n, bool varies)
 
     std::vector<int> axis_lengths = db_value_->GetAxisLengths();
 
-    axis_lengths[n] = varies ? TDBValue::maximum_dimensions()[n] : 1;
+    axis_lengths[n] = varies ? database_entity::maximum_dimensions()[n] : 1;
 
     ReshapeTableData(axis_lengths, varies);
 }

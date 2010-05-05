@@ -43,10 +43,10 @@
 #include <numeric>
 #include <ostream>
 
-static int const ScalarDims[TDBValue::e_number_of_axes] = {1, 1, 1, 1, 1, 1, 1};
+static int const ScalarDims[database_entity::e_number_of_axes] = {1, 1, 1, 1, 1, 1, 1};
 static int const MaxPossibleElements = std::numeric_limits<int>::max();
 
-std::vector<int> const& TDBValue::maximum_dimensions()
+std::vector<int> const& database_entity::maximum_dimensions()
 {
     static int const d[e_number_of_axes] =
         {e_max_dim_gender
@@ -69,20 +69,20 @@ std::vector<int> const& TDBValue::maximum_dimensions()
 ///  - DB_PremTaxLoad (what the insurer charges the customer)
 /// may be equivalent when premium tax is passed through as a load.
 
-bool TDBValue::Equivalent(TDBValue const& a, TDBValue const& b)
+bool database_entity::Equivalent(database_entity const& a, database_entity const& b)
 {
     return(a.axis_lengths_ == b.axis_lengths_ && a.data_values_ == b.data_values_);
 }
 
 //============================================================================
-bool TDBValue::VariesByState(TDBValue const& z)
+bool database_entity::VariesByState(database_entity const& z)
 {
     LMI_ASSERT(5 < z.axis_lengths_.size());
     return 1 != z.axis_lengths_[5];
 }
 
 //============================================================================
-TDBValue::TDBValue()
+database_entity::database_entity()
     :key_          (0)
     ,axis_lengths_ (e_number_of_axes)
 {
@@ -90,7 +90,7 @@ TDBValue::TDBValue()
 
 /// Handy ctor for writing programs to generate '.database' files.
 
-TDBValue::TDBValue
+database_entity::database_entity
     (int                key
     ,int                ndims
     ,int const*         dims
@@ -107,7 +107,7 @@ TDBValue::TDBValue
 }
 
 //============================================================================
-TDBValue::TDBValue
+database_entity::database_entity
     (int                        key
     ,std::vector<int> const&    dims
     ,std::vector<double> const& data
@@ -123,7 +123,7 @@ TDBValue::TDBValue
 
 /// Handy ctor for scalar data.
 
-TDBValue::TDBValue
+database_entity::database_entity
     (int                key
     ,double             datum
     ,std::string const& gloss
@@ -136,12 +136,12 @@ TDBValue::TDBValue
 }
 
 //============================================================================
-TDBValue::~TDBValue()
+database_entity::~database_entity()
 {
 }
 
 //============================================================================
-void TDBValue::ParanoidCheck() const
+void database_entity::ParanoidCheck() const
 {
     if
         (
@@ -169,7 +169,7 @@ void TDBValue::ParanoidCheck() const
 }
 
 //============================================================================
-int TDBValue::getndata() const
+int database_entity::getndata() const
 {
     LMI_ASSERT(!axis_lengths_.empty());
 
@@ -218,10 +218,10 @@ int TDBValue::getndata() const
 /// Two indexing operators are provided. This one's argument includes
 /// the number of durations--which, as far as the product editor is
 /// concerned, is much like the other axes. However, for illustration
-/// production, TDatabase::Query() handles the last (duration) axis,
-/// replicating the last value as required to extend to maturity.
+/// production, product_database::Query() handles the last (duration)
+/// axis, replicating the last value as needed to extend to maturity.
 
-double& TDBValue::operator[](std::vector<int> const& index)
+double& database_entity::operator[](std::vector<int> const& index)
 {
     LMI_ASSERT(e_number_of_axes == index.size());
     LMI_ASSERT(e_number_of_axes == axis_lengths_.size());
@@ -250,7 +250,7 @@ double& TDBValue::operator[](std::vector<int> const& index)
 
 /// Indexing operator for illustration production.
 
-double const* TDBValue::operator[](database_index const& idx) const
+double const* database_entity::operator[](database_index const& idx) const
 {
     std::vector<int> const& index(idx.index_vector());
     LMI_ASSERT(e_number_of_axes == 1 + index.size());
@@ -280,7 +280,7 @@ double const* TDBValue::operator[](database_index const& idx) const
 }
 
 //============================================================================
-void TDBValue::Reshape(std::vector<int> const& dims)
+void database_entity::Reshape(std::vector<int> const& dims)
 {
     // Create a new instance of this class having the same
     // key but the desired number of axes
@@ -293,7 +293,7 @@ void TDBValue::Reshape(std::vector<int> const& dims)
             ,std::multiplies<int>()
             )
         );
-    TDBValue new_object
+    database_entity new_object
         (GetKey()
         ,dims
         ,new_data
@@ -391,7 +391,7 @@ void TDBValue::Reshape(std::vector<int> const& dims)
 }
 
 //============================================================================
-std::ostream& TDBValue::write(std::ostream& os) const
+std::ostream& database_entity::write(std::ostream& os) const
 {
     os
         << '"' << GetDBNames()[key_].LongName << '"'
@@ -429,7 +429,7 @@ std::ostream& TDBValue::write(std::ostream& os) const
 
 //============================================================================
 // TODO ?? Combine this with ParanoidCheck()?
-bool TDBValue::AreAllAxesOK() const
+bool database_entity::AreAllAxesOK() const
 {
     bool rc = true;
     std::vector<int> const& max_dims(maximum_dimensions());
@@ -470,34 +470,34 @@ bool TDBValue::AreAllAxesOK() const
     return rc;
 }
 
-int TDBValue::GetKey() const
+int database_entity::GetKey() const
 {
     return key_;
 }
 
-int TDBValue::GetNDims() const
+int database_entity::GetNDims() const
 {
     return axis_lengths_.size();
 }
 
-int TDBValue::GetLength() const
+int database_entity::GetLength() const
 {
     LMI_ASSERT(0 < axis_lengths_.size());
     return axis_lengths_.back();
 }
 
-int TDBValue::GetLength(int axis) const
+int database_entity::GetLength(int axis) const
 {
     LMI_ASSERT(0 <= axis && axis < static_cast<int>(axis_lengths_.size()));
     return axis_lengths_[axis];
 }
 
-std::vector<int> const& TDBValue::GetAxisLengths() const
+std::vector<int> const& database_entity::GetAxisLengths() const
 {
     return axis_lengths_;
 }
 
-void TDBValue::read(xml::element const& e)
+void database_entity::read(xml::element const& e)
 {
     std::string short_name;
     xml_serialize::get_element(e, "key"         , short_name   );
@@ -514,7 +514,7 @@ void TDBValue::read(xml::element const& e)
     AreAllAxesOK();
 }
 
-void TDBValue::write(xml::element& e) const
+void database_entity::write(xml::element& e) const
 {
     LMI_ASSERT(getndata() == static_cast<int>(data_values_.size()));
     LMI_ASSERT

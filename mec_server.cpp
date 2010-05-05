@@ -108,7 +108,7 @@ mec_state test_one_days_7702A_transactions
 
     product_data product_filenames(ProductName);
 
-    TDatabase database
+    product_database database
         (ProductName
         ,Gender
         ,UnderwritingClass

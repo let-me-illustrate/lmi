@@ -56,10 +56,10 @@ namespace xml_serialize {template<typename T> struct xml_io;}
 ///
 /// Implicitly-declared special member functions do the right thing.
 
-class LMI_SO TDBValue
-    :virtual private obstruct_slicing<TDBValue>
+class LMI_SO database_entity
+    :virtual private obstruct_slicing<database_entity>
 {
-    friend struct xml_serialize::xml_io<TDBValue>;
+    friend struct xml_serialize::xml_io<database_entity>;
 
   public:
     // Separate enumerators here facilitate compile-time assertions
@@ -74,26 +74,26 @@ class LMI_SO TDBValue
     enum {e_max_dim_state     =  53};
     enum {e_max_dim_duration  = 100};
 
-    TDBValue();
-    TDBValue
+    database_entity();
+    database_entity
         (int                key
         ,int                ndims
         ,int const*         dims
         ,double const*      data
         ,std::string const& gloss = std::string()
         );
-    TDBValue
+    database_entity
         (int                        key
         ,std::vector<int> const&    dims
         ,std::vector<double> const& data
         ,std::string const&         gloss = std::string()
         );
-    TDBValue
+    database_entity
         (int                key
         ,double             datum
         ,std::string const& gloss = std::string()
         );
-    ~TDBValue();
+    ~database_entity();
 
     double const* operator[](database_index const& idx) const;
     double&       operator[](std::vector<int> const& idx);
@@ -109,8 +109,8 @@ class LMI_SO TDBValue
     std::ostream& write(std::ostream&) const;
 
     static std::vector<int> const& maximum_dimensions();
-    static bool Equivalent(TDBValue const&, TDBValue const&);
-    static bool VariesByState(TDBValue const&);
+    static bool Equivalent(database_entity const&, database_entity const&);
+    static bool VariesByState(database_entity const&);
 
   private:
     int  getndata()      const;

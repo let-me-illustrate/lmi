@@ -189,10 +189,10 @@ void BasicValues::Init()
     // is used, then reset the database, then recalculate the age. If any
     // circularity
     // remains, it will be detected and an error message given when we look
-    // up the ALB/ANB switch using TDatabase::Query(int), which restricts
-    // looked-up values to scalars that vary across no database axis.
+    // up the ALB/ANB switch using product_database::Query(int), which
+    // restricts looked-up values to scalars that vary across no database axis.
 
-    Database_.reset(new TDatabase(yare_input_));
+    Database_.reset(new product_database(yare_input_));
 
     StateOfJurisdiction_ = Database_->GetStateOfJurisdiction();
 
@@ -289,7 +289,7 @@ void BasicValues::Init()
 void BasicValues::GPTServerInit()
 {
     ProductData_.reset(new product_data(yare_input_.ProductName));
-    Database_.reset(new TDatabase(yare_input_));
+    Database_.reset(new product_database(yare_input_));
 
     IssueAge = yare_input_.IssueAge;
     RetAge   = yare_input_.RetirementAge;
@@ -720,7 +720,7 @@ void BasicValues::SetPermanentInvariants()
     yare_input YI(*Input_);
     YI.State            = GetStateOfDomicile();
     YI.CorporationState = GetStateOfDomicile();
-    TDatabase TempDatabase(YI);
+    product_database TempDatabase(YI);
     DomiciliaryPremiumTaxLoad_ = 0.0;
     if(!yare_input_.AmortizePremiumLoad)
         {
@@ -880,7 +880,7 @@ void BasicValues::SetLowestPremiumTaxLoad()
 /// Lowest premium-tax load, for 7702 and 7702A purposes.
 
 double lowest_premium_tax_load
-    (TDatabase          const& db
+    (product_database   const& db
     ,stratified_charges const& stratified
     ,mcenum_state              state_of_jurisdiction
     ,bool                      amortize_premium_load
@@ -912,8 +912,8 @@ double lowest_premium_tax_load
 
     z = db.Query(DB_PremTaxLoad);
 
-    TDBValue const& premium_tax_loads = db.GetEntry(DB_PremTaxLoad);
-    if(!TDBValue::VariesByState(premium_tax_loads))
+    database_entity const& premium_tax_loads = db.GetEntry(DB_PremTaxLoad);
+    if(!database_entity::VariesByState(premium_tax_loads))
         {
         return z;
         }
@@ -922,8 +922,8 @@ double lowest_premium_tax_load
     // it equals premium-tax rate--i.e. that premium tax is passed
     // through exactly--and that therefore tiered tax rates determine
     // loads where applicable and implemented.
-    TDBValue const& premium_tax_rates = db.GetEntry(DB_PremTaxRate);
-    if(!TDBValue::Equivalent(premium_tax_loads, premium_tax_rates))
+    database_entity const& premium_tax_rates = db.GetEntry(DB_PremTaxRate);
+    if(!database_entity::Equivalent(premium_tax_loads, premium_tax_rates))
         {
         fatal_error()
             << "Premium-tax load varies by state, but differs"
@@ -968,8 +968,8 @@ void BasicValues::TestPremiumTaxLoadConsistency()
     // TODO ?? Don't override parameters--instead, only detect and
     // report inconsistencies.
     //
-    TDBValue const& premium_tax_loads = Database_->GetEntry(DB_PremTaxLoad);
-    if(!TDBValue::VariesByState(premium_tax_loads))
+    database_entity const& premium_tax_loads = Database_->GetEntry(DB_PremTaxLoad);
+    if(!database_entity::VariesByState(premium_tax_loads))
         {
         return;
         }
@@ -1691,7 +1691,7 @@ std::vector<double> BasicValues::GetUnblendedTable
     YI.Gender  = gender ;
     YI.Smoking = smoking;
 
-    TDatabase TempDatabase(YI);
+    product_database TempDatabase(YI);
 
     return GetActuarialTable
         (TableFile

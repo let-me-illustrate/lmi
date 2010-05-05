@@ -31,7 +31,8 @@
 #include <vector>
 
 class BasicValues;
-class TDatabase;
+class product_database;
+
 struct load_details;
 
 /// Declaration of class Loads.
@@ -42,7 +43,7 @@ class Loads
 
   public:
     Loads(BasicValues& values);
-    Loads(TDatabase const&, bool NeedMidpointRates); // Antediluvian branch.
+    Loads(product_database const&, bool NeedMidpointRates); // Antediluvian branch.
 
     // Accessors.
 
@@ -74,7 +75,7 @@ class Loads
     Loads(); // Ctor for unit testing.
 
     void Allocate(int length);
-    void Initialize(TDatabase const&);
+    void Initialize(product_database const&);
     void Calculate(load_details const&);
 
     void AmortizePremiumTax(load_details const& details);

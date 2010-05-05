@@ -35,7 +35,7 @@
 #include <map>
 #include <string>
 
-typedef std::map<int, TDBValue> dict_map;
+typedef std::map<int, database_entity> dict_map;
 
 /// Cached product database.
 
@@ -62,7 +62,7 @@ class LMI_SO DBDictionary
     DBDictionary();
 
     void WriteDB(std::string const& filename);
-    void Add(TDBValue const&);
+    void Add(database_entity const&);
     void InitDB();
 
     static void InvalidateCache();

@@ -31,7 +31,7 @@
 #include "dbdict.hpp"
 #include "dbnames.hpp"
 
-class LMI_SO TDBValue;
+class LMI_SO database_entity;
 
 class DatabaseDocument
     :public ProductEditorDocument
@@ -40,7 +40,7 @@ class DatabaseDocument
     DatabaseDocument();
     virtual ~DatabaseDocument();
 
-    TDBValue& GetTDBValue(DatabaseNames index);
+    database_entity& GetTDBValue(DatabaseNames index);
 
   private:
     // ProductEditorDocument overrides.

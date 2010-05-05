@@ -41,7 +41,7 @@
 #include "xml_serializable.hpp"
 
 class InputSequence;
-class TDatabase;
+class product_database;
 
 #include <boost/operators.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -126,7 +126,7 @@ class LMI_SO mec_input
     std::string RealizePaymentHistory();
     std::string RealizeBenefitHistory();
 
-    boost::scoped_ptr<TDatabase> database_;
+    boost::scoped_ptr<product_database> database_;
 
     // Database axes are independent variables; they're "cached" along
     // with the database, which is reset when any of them changes.
