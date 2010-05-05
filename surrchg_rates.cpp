@@ -32,13 +32,13 @@
 #include "dbnames.hpp"
 
 //============================================================================
-SurrChgRates::SurrChgRates(TDatabase const& database)
+SurrChgRates::SurrChgRates(product_database const& database)
 {
     Initialize(database);
 }
 
 //============================================================================
-void SurrChgRates::Initialize(TDatabase const& database)
+void SurrChgRates::Initialize(product_database const& database)
 {
     database.Query(RatePerDollarOfPremium_     , DB_SurrChgPremMult   );
     database.Query(RatePerDollarOfAcctval_     , DB_SurrChgAVMult     );

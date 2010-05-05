@@ -38,15 +38,15 @@
 
 // Database of product parameters
 
-class TDBValue;
+class database_entity;
 class yare_input;
 
-class LMI_SO TDatabase
+class LMI_SO product_database
     :private boost::noncopyable
-    ,virtual private obstruct_slicing<TDatabase>
+    ,virtual private obstruct_slicing<product_database>
 {
   public:
-    TDatabase
+    product_database
         (std::string const& a_ProductName
         ,mcenum_gender      a_Gender
         ,mcenum_class       a_Class
@@ -55,10 +55,10 @@ class LMI_SO TDatabase
         ,mcenum_uw_basis    a_UWBasis
         ,mcenum_state       a_State
         );
-    explicit TDatabase(yare_input const&);
+    explicit product_database(yare_input const&);
     // Ctor for unit-testing support.
-    explicit TDatabase(int length);
-    ~TDatabase();
+    explicit product_database(int length);
+    ~product_database();
 
     mcenum_state GetStateOfJurisdiction() const;
     int length() const;
@@ -74,10 +74,10 @@ class LMI_SO TDatabase
 
     void ConstrainScalar(int k) const;
 
-    TDBValue const& GetEntry(int k) const;
+    database_entity const& GetEntry(int k) const;
 
   private:
-    TDatabase();
+    product_database();
 
     void Init();
     void Init(std::string const& NewFilename);

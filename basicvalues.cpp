@@ -97,7 +97,7 @@ void BasicValues::Init()
     LMI_ASSERT(IssueAge <= RetAge);
 
     Database_.reset
-        (new TDatabase
+        (new product_database
             ("empty for now" // filename
             ,yare_input_.Gender
             ,yare_input_.UnderwritingClass

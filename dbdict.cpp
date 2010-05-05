@@ -69,16 +69,16 @@ DBDictionary::~DBDictionary()
 
 namespace xml_serialize
 {
-template<> struct xml_io<TDBValue>
+template<> struct xml_io<database_entity>
 {
-    typedef TDBValue T;
+    typedef database_entity T;
     static void   to_xml(xml::element& e, T const& t) {t.write(e);}
     static void from_xml(xml::element const& e, T& t) {t.read (e);}
 };
 
 /// Specialize xml_io<> for dict_map rather than coding a generic
 /// xml_io<std::map>, because the key would be stored redundantly:
-/// it's already part of TDBValue.
+/// it's already part of class database_entity.
 
 template<> struct xml_io<dict_map>
 {
@@ -103,7 +103,7 @@ template<> struct xml_io<dict_map>
         typedef xml::const_nodes_view::const_iterator cnvi;
         for(cnvi i = items.begin(); i != items.end(); ++i)
             {
-            TDBValue z;
+            database_entity z;
             xml_serialize::from_xml(*i, z);
             t[z.GetKey()] = z;
             }
@@ -218,7 +218,7 @@ void DBDictionary::WriteDB(std::string const& filename)
 
 /// Add an entry to the dictionary.
 
-void DBDictionary::Add(TDBValue const& e)
+void DBDictionary::Add(database_entity const& e)
 {
     dictionary_[e.GetKey()] = e;
 }
@@ -232,32 +232,32 @@ void DBDictionary::InitDB()
     dictionary_.clear();
     for(int j = DB_FIRST; j < DB_LAST; ++j)
         {
-        Add(TDBValue(j, 0.0));
+        Add(database_entity(j, 0.0));
         }
 
     // It would be dangerous to set these to zero.
-    Add(TDBValue(DB_CCOIMultiplier      , 1.0));
-    Add(TDBValue(DB_GCOIMultiplier      , 1.0));
-    Add(TDBValue(DB_SubstdTblMult       , 1.0));
-    Add(TDBValue(DB_SurrChgSADurFactor  , 1.0));
-    Add(TDBValue(DB_SurrChgAVDurFactor  , 1.0));
+    Add(database_entity(DB_CCOIMultiplier      , 1.0));
+    Add(database_entity(DB_GCOIMultiplier      , 1.0));
+    Add(database_entity(DB_SubstdTblMult       , 1.0));
+    Add(database_entity(DB_SurrChgSADurFactor  , 1.0));
+    Add(database_entity(DB_SurrChgAVDurFactor  , 1.0));
 
     // Usually the maximum is a reciprocal, e.g., 1/11 or 1/12; for
     // greatest precision, store the reciprocal of that reciprocal,
     // e.g., 11 or 12.
-    Add(TDBValue(DB_MaxMonthlyCoiRate   , 12.0));
+    Add(database_entity(DB_MaxMonthlyCoiRate   , 12.0));
 
-    Add(TDBValue(DB_GuarIntSpread       , bignum));
+    Add(database_entity(DB_GuarIntSpread       , bignum));
 
-    Add(TDBValue(DB_CurrCOITable0Limit  , bignum));
-    Add(TDBValue(DB_CurrCOITable1       , 999));
-    Add(TDBValue(DB_CurrCOITable1Limit  , bignum));
-    Add(TDBValue(DB_CurrCOITable2       , 999));
+    Add(database_entity(DB_CurrCOITable0Limit  , bignum));
+    Add(database_entity(DB_CurrCOITable1       , 999));
+    Add(database_entity(DB_CurrCOITable1Limit  , bignum));
+    Add(database_entity(DB_CurrCOITable2       , 999));
 
-    Add(TDBValue(DB_SpecAmtLoadLimit    , bignum));
-    Add(TDBValue(DB_DynSepAcctLoadLimit , bignum));
-    Add(TDBValue(DB_ADDLimit            , bignum));
-    Add(TDBValue(DB_ExpPerKLimit        , bignum));
+    Add(database_entity(DB_SpecAmtLoadLimit    , bignum));
+    Add(database_entity(DB_DynSepAcctLoadLimit , bignum));
+    Add(database_entity(DB_ADDLimit            , bignum));
+    Add(database_entity(DB_ExpPerKLimit        , bignum));
 
     // SD Chapter 260 (HB 1200), signed 2008-02-19, amended 58-6-70
     // by removing the former million-dollar threshold.
@@ -265,7 +265,7 @@ void DBDictionary::InitDB()
     // TODO ?? For now, only the threshold here is changed. Much
     // complex code elsewhere can be removed when time permits.
 
-    int premium_tax_dimensions[TDBValue::e_number_of_axes] = {1, 1, 1, 1, 1, 53, 1};
+    int premium_tax_dimensions[database_entity::e_number_of_axes] = {1, 1, 1, 1, 1, 53, 1};
     double premium_tax_retaliation_threshold[53] =
         {
     //  AL      AK      AZ      AR      CA      CO      CT
@@ -286,9 +286,9 @@ void DBDictionary::InitDB()
         bignum, bignum, bignum, bignum, bignum, bignum, 0.0   ,
         };
     Add
-        (TDBValue
+        (database_entity
             (DB_PremTaxRetalLimit
-            ,TDBValue::e_number_of_axes
+            ,database_entity::e_number_of_axes
             ,premium_tax_dimensions
             ,premium_tax_retaliation_threshold
             )
@@ -299,62 +299,62 @@ void DBDictionary::InitDB()
 void DBDictionary::WriteSampleDBFile()
 {
     InitDB();
-    Add(TDBValue(DB_GuarPolFee          , 8.00));
-    Add(TDBValue(DB_GuarSpecAmtLoad     , 0.0));
-    Add(TDBValue(DB_GuarIssueFee        , 0.0));
-    Add(TDBValue(DB_GuarFundAdminChg    , 0.0));
-    Add(TDBValue(DB_GuarPremLoadTgt     , 0.07));
-    Add(TDBValue(DB_GuarPremLoadExc     , 0.04));
-    Add(TDBValue(DB_GuarPremLoadTgtRfd  , 0.00));
-    Add(TDBValue(DB_GuarPremLoadExcRfd  , 0.00));
-    Add(TDBValue(DB_GuarAcctValLoadAMD  , 0.0));
-    Add(TDBValue(DB_CurrPolFee          , 5.00));
-    Add(TDBValue(DB_CurrSpecAmtLoad     , 0.0));
-    Add(TDBValue(DB_CurrIssueFee        , 0.0));
-    Add(TDBValue(DB_CurrFundAdminChg    , 0.0));
-    Add(TDBValue(DB_CurrPremLoadTgt     , 0.05));
-    Add(TDBValue(DB_CurrPremLoadExc     , 0.02));
-    Add(TDBValue(DB_CurrPremLoadTgtRfd  , 0.00));
-    Add(TDBValue(DB_CurrPremLoadExcRfd  , 0.00));
-    Add(TDBValue(DB_CurrAcctValLoadAMD  , 0.0));
-    Add(TDBValue(DB_DACTaxPremLoad      , 0.01));
-    Add(TDBValue(DB_FundCharge          , 0.0));
-    Add(TDBValue(DB_PremTaxFundCharge   , 0.0));
-    Add(TDBValue(DB_DACTaxFundCharge    , 0.0));
-    Add(TDBValue(DB_WaivePmTxInt1035    , true));
-    Add(TDBValue(DB_FirstWDYear         , 0.0));
-    Add(TDBValue(DB_MaxWDAVMult         , 1.0));
-    Add(TDBValue(DB_MaxWDDed            , mce_to_next_anniversary));
-    Add(TDBValue(DB_MinWD               , 100.0));
-    Add(TDBValue(DB_WDFee               , 25.0));
-    Add(TDBValue(DB_WDFeeRate           , 0.02));
-    Add(TDBValue(DB_WDCanDecrSADBO1     , true));
-    Add(TDBValue(DB_WDCanDecrSADBO2     , true));
-    Add(TDBValue(DB_WDCanDecrSADBO3     , true));
-    Add(TDBValue(DB_FirstLoanYear       , 0.0));
-    Add(TDBValue(DB_AllowPrefLoan       , false));
-    Add(TDBValue(DB_AllowFixedLoan      , true));
-    Add(TDBValue(DB_FixedLoanRate       , 0.06));
-    Add(TDBValue(DB_AllowVLR            , true));
-    Add(TDBValue(DB_MaxLoanAVMult       , 1.0));
-    Add(TDBValue(DB_MaxLoanDed          , mce_to_next_anniversary));
-    Add(TDBValue(DB_GuarPrefLoanSpread  , 0.0));
-    Add(TDBValue(DB_GuarRegLoanSpread   , 0.04));
-    Add(TDBValue(DB_CurrPrefLoanSpread  , 0.0));
-    Add(TDBValue(DB_CurrRegLoanSpread   , 0.02));
-    Add(TDBValue(DB_GuarInt             , 0.03));
-    Add(TDBValue(DB_NAARDiscount        , 0.00246627));
-    Add(TDBValue(DB_GuarIntSpread       , 0.03));
-    Add(TDBValue(DB_GuarMandE           , 0.009));
-    Add(TDBValue(DB_CurrIntSpread       , 0.01));
-    Add(TDBValue(DB_CurrMandE           , 0.009));
-    Add(TDBValue(DB_BonusInt            , 0.0));
-    Add(TDBValue(DB_IntFloor            , 0.0));
-    Add(TDBValue(DB_SepAcctSpreadMethod , mce_spread_is_effective_annual));
-    Add(TDBValue(DB_DynamicMandE        , false));
+    Add(database_entity(DB_GuarPolFee          , 8.00));
+    Add(database_entity(DB_GuarSpecAmtLoad     , 0.0));
+    Add(database_entity(DB_GuarIssueFee        , 0.0));
+    Add(database_entity(DB_GuarFundAdminChg    , 0.0));
+    Add(database_entity(DB_GuarPremLoadTgt     , 0.07));
+    Add(database_entity(DB_GuarPremLoadExc     , 0.04));
+    Add(database_entity(DB_GuarPremLoadTgtRfd  , 0.00));
+    Add(database_entity(DB_GuarPremLoadExcRfd  , 0.00));
+    Add(database_entity(DB_GuarAcctValLoadAMD  , 0.0));
+    Add(database_entity(DB_CurrPolFee          , 5.00));
+    Add(database_entity(DB_CurrSpecAmtLoad     , 0.0));
+    Add(database_entity(DB_CurrIssueFee        , 0.0));
+    Add(database_entity(DB_CurrFundAdminChg    , 0.0));
+    Add(database_entity(DB_CurrPremLoadTgt     , 0.05));
+    Add(database_entity(DB_CurrPremLoadExc     , 0.02));
+    Add(database_entity(DB_CurrPremLoadTgtRfd  , 0.00));
+    Add(database_entity(DB_CurrPremLoadExcRfd  , 0.00));
+    Add(database_entity(DB_CurrAcctValLoadAMD  , 0.0));
+    Add(database_entity(DB_DACTaxPremLoad      , 0.01));
+    Add(database_entity(DB_FundCharge          , 0.0));
+    Add(database_entity(DB_PremTaxFundCharge   , 0.0));
+    Add(database_entity(DB_DACTaxFundCharge    , 0.0));
+    Add(database_entity(DB_WaivePmTxInt1035    , true));
+    Add(database_entity(DB_FirstWDYear         , 0.0));
+    Add(database_entity(DB_MaxWDAVMult         , 1.0));
+    Add(database_entity(DB_MaxWDDed            , mce_to_next_anniversary));
+    Add(database_entity(DB_MinWD               , 100.0));
+    Add(database_entity(DB_WDFee               , 25.0));
+    Add(database_entity(DB_WDFeeRate           , 0.02));
+    Add(database_entity(DB_WDCanDecrSADBO1     , true));
+    Add(database_entity(DB_WDCanDecrSADBO2     , true));
+    Add(database_entity(DB_WDCanDecrSADBO3     , true));
+    Add(database_entity(DB_FirstLoanYear       , 0.0));
+    Add(database_entity(DB_AllowPrefLoan       , false));
+    Add(database_entity(DB_AllowFixedLoan      , true));
+    Add(database_entity(DB_FixedLoanRate       , 0.06));
+    Add(database_entity(DB_AllowVLR            , true));
+    Add(database_entity(DB_MaxLoanAVMult       , 1.0));
+    Add(database_entity(DB_MaxLoanDed          , mce_to_next_anniversary));
+    Add(database_entity(DB_GuarPrefLoanSpread  , 0.0));
+    Add(database_entity(DB_GuarRegLoanSpread   , 0.04));
+    Add(database_entity(DB_CurrPrefLoanSpread  , 0.0));
+    Add(database_entity(DB_CurrRegLoanSpread   , 0.02));
+    Add(database_entity(DB_GuarInt             , 0.03));
+    Add(database_entity(DB_NAARDiscount        , 0.00246627));
+    Add(database_entity(DB_GuarIntSpread       , 0.03));
+    Add(database_entity(DB_GuarMandE           , 0.009));
+    Add(database_entity(DB_CurrIntSpread       , 0.01));
+    Add(database_entity(DB_CurrMandE           , 0.009));
+    Add(database_entity(DB_BonusInt            , 0.0));
+    Add(database_entity(DB_IntFloor            , 0.0));
+    Add(database_entity(DB_SepAcctSpreadMethod , mce_spread_is_effective_annual));
+    Add(database_entity(DB_DynamicMandE        , false));
 
     // gender, smoker
-    int dims313[TDBValue::e_number_of_axes] = {3, 1, 3, 1, 1, 1, 1};
+    int dims313[database_entity::e_number_of_axes] = {3, 1, 3, 1, 1, 1, 1};
 
     // US 1980 CSO age last; unisex = table D.
     // Male uses table E, which is correct, as opposed to table F,
@@ -368,10 +368,10 @@ void DBDictionary::WriteSampleDBFile()
 
     // For now at least, just use (a multiple of) guaranteed COI rates
     // as current.
-    Add(TDBValue(DB_CurrCOITable, TDBValue::e_number_of_axes, dims313, TgCOI));
-    Add(TDBValue(DB_GuarCOITable, TDBValue::e_number_of_axes, dims313, TgCOI));
+    Add(database_entity(DB_CurrCOITable, database_entity::e_number_of_axes, dims313, TgCOI));
+    Add(database_entity(DB_GuarCOITable, database_entity::e_number_of_axes, dims313, TgCOI));
 
-    Add(TDBValue(DB_COINYMinTable       , 0.0));
+    Add(database_entity(DB_COINYMinTable       , 0.0));
 
     double coimult[9] =
         {
@@ -379,53 +379,53 @@ void DBDictionary::WriteSampleDBFile()
         0.60, 0.50, 0.55, // male:   sm ns us
         0.50, 0.40, 0.45, // unisex: sm ns us
         };
-    Add(TDBValue(DB_CCOIMultiplier, TDBValue::e_number_of_axes, dims313, coimult));
+    Add(database_entity(DB_CCOIMultiplier, database_entity::e_number_of_axes, dims313, coimult));
 
-    Add(TDBValue(DB_UseNYCOIFloor       , 0.0));
-    Add(TDBValue(DB_GuarCOICeiling      , 0.0));
-    Add(TDBValue(DB_COIGuarIsMin        , 0.0));
-    Add(TDBValue(DB_COINonforfIsGuar    , 0.0));
-    Add(TDBValue(DB_CCoiIsAnnual        , true));
-    Add(TDBValue(DB_GCoiIsAnnual        , true));
-    Add(TDBValue(DB_MCoiIsAnnual        , true));
-    Add(TDBValue(DB_AgeLastOrNearest    , 0, "0 = ALB")); // ALB
-    Add(TDBValue(DB_AllowRetirees       , true));
-    Add(TDBValue(DB_MinSpecAmt          , 100000.0));
-    Add(TDBValue(DB_AllowSubstdTable    , true));
-    Add(TDBValue(DB_AllowFlatExtras     , true));
-    Add(TDBValue(DB_MinIssAge           , 15));
-    Add(TDBValue(DB_MaxIssAge           , 70));
-    Add(TDBValue(DB_MinIssSpecAmt       , 0.0));
-    Add(TDBValue(DB_MaxIssSpecAmt       , 0.0));
-    Add(TDBValue(DB_MinRenlBaseSpecAmt  , 50000.0));
-    Add(TDBValue(DB_MinRenlSpecAmt      , 50000.0));
-    Add(TDBValue(DB_MaxRenlSpecAmt      , 0.0));
-    Add(TDBValue(DB_MinSpecAmtIncr      , 0.0));
-    Add(TDBValue(DB_MaxIncrAge          , 99));
-    Add(TDBValue(DB_MinPmt              , 0.0));
-    Add(TDBValue(DB_SmokeOrTobacco      , oe_tobacco_nontobacco));
-    Add(TDBValue(DB_AllowUnisex         , true));
-    Add(TDBValue(DB_AllowSexDistinct    , true));
-    Add(TDBValue(DB_AllowUnismoke       , true));
-    Add(TDBValue(DB_AllowSmokeDistinct  , true));
-    Add(TDBValue(DB_AllowFullUW         , true));
-    Add(TDBValue(DB_AllowSimpUW         , true));
-    Add(TDBValue(DB_AllowGuarUW         , true));
-    Add(TDBValue(DB_AllowMortBlendSex   , true));
-    Add(TDBValue(DB_AllowMortBlendSmoke , true));
-    Add(TDBValue(DB_AllowRatedWP        , true));
-    Add(TDBValue(DB_AllowRatedADD       , true));
-    Add(TDBValue(DB_AllowRatedTerm      , true));
-    Add(TDBValue(DB_Allowable           , true));
-    Add(TDBValue(DB_AllowPreferredClass , true));
-    Add(TDBValue(DB_AllowCVAT           , true));
-    Add(TDBValue(DB_AllowGPT            , true));
+    Add(database_entity(DB_UseNYCOIFloor       , 0.0));
+    Add(database_entity(DB_GuarCOICeiling      , 0.0));
+    Add(database_entity(DB_COIGuarIsMin        , 0.0));
+    Add(database_entity(DB_COINonforfIsGuar    , 0.0));
+    Add(database_entity(DB_CCoiIsAnnual        , true));
+    Add(database_entity(DB_GCoiIsAnnual        , true));
+    Add(database_entity(DB_MCoiIsAnnual        , true));
+    Add(database_entity(DB_AgeLastOrNearest    , 0, "0 = ALB")); // ALB
+    Add(database_entity(DB_AllowRetirees       , true));
+    Add(database_entity(DB_MinSpecAmt          , 100000.0));
+    Add(database_entity(DB_AllowSubstdTable    , true));
+    Add(database_entity(DB_AllowFlatExtras     , true));
+    Add(database_entity(DB_MinIssAge           , 15));
+    Add(database_entity(DB_MaxIssAge           , 70));
+    Add(database_entity(DB_MinIssSpecAmt       , 0.0));
+    Add(database_entity(DB_MaxIssSpecAmt       , 0.0));
+    Add(database_entity(DB_MinRenlBaseSpecAmt  , 50000.0));
+    Add(database_entity(DB_MinRenlSpecAmt      , 50000.0));
+    Add(database_entity(DB_MaxRenlSpecAmt      , 0.0));
+    Add(database_entity(DB_MinSpecAmtIncr      , 0.0));
+    Add(database_entity(DB_MaxIncrAge          , 99));
+    Add(database_entity(DB_MinPmt              , 0.0));
+    Add(database_entity(DB_SmokeOrTobacco      , oe_tobacco_nontobacco));
+    Add(database_entity(DB_AllowUnisex         , true));
+    Add(database_entity(DB_AllowSexDistinct    , true));
+    Add(database_entity(DB_AllowUnismoke       , true));
+    Add(database_entity(DB_AllowSmokeDistinct  , true));
+    Add(database_entity(DB_AllowFullUW         , true));
+    Add(database_entity(DB_AllowSimpUW         , true));
+    Add(database_entity(DB_AllowGuarUW         , true));
+    Add(database_entity(DB_AllowMortBlendSex   , true));
+    Add(database_entity(DB_AllowMortBlendSmoke , true));
+    Add(database_entity(DB_AllowRatedWP        , true));
+    Add(database_entity(DB_AllowRatedADD       , true));
+    Add(database_entity(DB_AllowRatedTerm      , true));
+    Add(database_entity(DB_Allowable           , true));
+    Add(database_entity(DB_AllowPreferredClass , true));
+    Add(database_entity(DB_AllowCVAT           , true));
+    Add(database_entity(DB_AllowGPT            , true));
 
     // This is just a sample product, so we make do with plausible
     // all-male seven-pay premiums, and use GPT corridor factors for
     // CVAT.
-    Add(TDBValue(DB_CorridorTable       , 7));
-    Add(TDBValue(DB_TAMRA7PayTable      , 10));
+    Add(database_entity(DB_CorridorTable       , 7));
+    Add(database_entity(DB_TAMRA7PayTable      , 10));
 
     // Following IRS Notice 88-128, use only the male and female
     // tables with no smoker distinction, and a unisex table where
@@ -434,25 +434,25 @@ void DBDictionary::WriteSampleDBFile()
     // US 1980 CSO age last, not smoker distinct. Unisex = table D.
     // Male uses table E, which is correct, as opposed to table F,
     // which contains a numerical error but was adopted by NAIC.
-    int dims311[TDBValue::e_number_of_axes] = {3, 1, 1, 1, 1, 1, 1}; // gender
+    int dims311[database_entity::e_number_of_axes] = {3, 1, 1, 1, 1, 1, 1}; // gender
     double T7702q[9] = {35, 41, 107,}; // Female, male, unisex.
-    Add(TDBValue(DB_IRC7702QTable, TDBValue::e_number_of_axes, dims311, T7702q));
+    Add(database_entity(DB_IRC7702QTable, database_entity::e_number_of_axes, dims311, T7702q));
 
-    Add(TDBValue(DB_PremLoad7702        , 0.02));
-    Add(TDBValue(DB_AllowDBO1           , true));
-    Add(TDBValue(DB_AllowDBO2           , true));
-    Add(TDBValue(DB_AllowDBO3           , true));
-    Add(TDBValue(DB_OptChgCanIncrSA     , true));
-    Add(TDBValue(DB_OptChgCanDecrSA     , true));
-    Add(TDBValue(DB_NonforfQTable       , 0.0));
-    Add(TDBValue(DB_SurrChgByFormula    , 0.0));
-    Add(TDBValue(DB_SurrChgPeriod       , 0.0));
-    Add(TDBValue(DB_SurrChgZeroDur      , 0.0));
-    Add(TDBValue(DB_SurrChgNLPMult      , 0.0));
-    Add(TDBValue(DB_SurrChgNLPMax       , 0.0));
-    Add(TDBValue(DB_SurrChgEAMax        , 0.0));
-    Add(TDBValue(DB_SurrChgPremMult     , 0.0));
-    Add(TDBValue(DB_SurrChgIsMly        , 0.0));
+    Add(database_entity(DB_PremLoad7702        , 0.02));
+    Add(database_entity(DB_AllowDBO1           , true));
+    Add(database_entity(DB_AllowDBO2           , true));
+    Add(database_entity(DB_AllowDBO3           , true));
+    Add(database_entity(DB_OptChgCanIncrSA     , true));
+    Add(database_entity(DB_OptChgCanDecrSA     , true));
+    Add(database_entity(DB_NonforfQTable       , 0.0));
+    Add(database_entity(DB_SurrChgByFormula    , 0.0));
+    Add(database_entity(DB_SurrChgPeriod       , 0.0));
+    Add(database_entity(DB_SurrChgZeroDur      , 0.0));
+    Add(database_entity(DB_SurrChgNLPMult      , 0.0));
+    Add(database_entity(DB_SurrChgNLPMax       , 0.0));
+    Add(database_entity(DB_SurrChgEAMax        , 0.0));
+    Add(database_entity(DB_SurrChgPremMult     , 0.0));
+    Add(database_entity(DB_SurrChgIsMly        , 0.0));
 
     // These aren't actual premium tax rates. Actual rates change
     // often, and depend on the insurer's domicile because of
@@ -464,7 +464,7 @@ void DBDictionary::WriteSampleDBFile()
     // be used where no premium tax applies, as for offshore business.
     // DE has a tiered premium tax that this program cannot yet
     // handle, so we punt and use two percent in DE.
-    int premium_tax_dimensions[TDBValue::e_number_of_axes] = {1, 1, 1, 1, 1, 53, 1};
+    int premium_tax_dimensions[database_entity::e_number_of_axes] = {1, 1, 1, 1, 1, 53, 1};
     double const tiered = 0.0;
     double premium_tax_rates[53] =
         {
@@ -486,91 +486,91 @@ void DBDictionary::WriteSampleDBFile()
         0.0200, 0.0200, 0.0200, 0.0200, 0.0200, 0.0200, 0.0000,
         };
     Add
-        (TDBValue
+        (database_entity
             (DB_PremTaxRate
-            ,TDBValue::e_number_of_axes
+            ,database_entity::e_number_of_axes
             ,premium_tax_dimensions
             ,premium_tax_rates
             )
         );
 
-    Add(TDBValue(DB_PremTaxState        , oe_ee_state));
-    Add(TDBValue(DB_EndtAge             , 100));
-    Add(TDBValue(DB_AllowExtEndt        , true));
-    Add(TDBValue(DB_AllowGenAcct        , true));
-    Add(TDBValue(DB_AllowSepAcct        , true));
-    Add(TDBValue(DB_MinPremType         , oe_monthly_deduction));
-    Add(TDBValue(DB_TgtPremType         , oe_modal_nonmec));
-    Add(TDBValue(DB_TgtPmFixedAtIssue   , false));
-    Add(TDBValue(DB_TgtPmIgnoreSubstd   , true));
-    Add(TDBValue(DB_NoLapseMinDur       , 0.0));
-    Add(TDBValue(DB_NoLapseMinAge       , 0.0));
-    Add(TDBValue(DB_NoLapseUnratedOnly  , false));
-    Add(TDBValue(DB_NoLapseOpt1Only     , false));
-    Add(TDBValue(DB_PremRefund          , 0.0));
+    Add(database_entity(DB_PremTaxState        , oe_ee_state));
+    Add(database_entity(DB_EndtAge             , 100));
+    Add(database_entity(DB_AllowExtEndt        , true));
+    Add(database_entity(DB_AllowGenAcct        , true));
+    Add(database_entity(DB_AllowSepAcct        , true));
+    Add(database_entity(DB_MinPremType         , oe_monthly_deduction));
+    Add(database_entity(DB_TgtPremType         , oe_modal_nonmec));
+    Add(database_entity(DB_TgtPmFixedAtIssue   , false));
+    Add(database_entity(DB_TgtPmIgnoreSubstd   , true));
+    Add(database_entity(DB_NoLapseMinDur       , 0.0));
+    Add(database_entity(DB_NoLapseMinAge       , 0.0));
+    Add(database_entity(DB_NoLapseUnratedOnly  , false));
+    Add(database_entity(DB_NoLapseOpt1Only     , false));
+    Add(database_entity(DB_PremRefund          , 0.0));
     // Reuse current COI rates as current and guaranteed term rates.
-    Add(TDBValue(DB_TermTable, TDBValue::e_number_of_axes, dims313, TgCOI));
-    Add(TDBValue(DB_GuarTermTable, TDBValue::e_number_of_axes, dims313, TgCOI));
-    Add(TDBValue(DB_AllowTerm           , true));
-    Add(TDBValue(DB_TermMinIssAge       , 0.0));
-    Add(TDBValue(DB_TermMaxIssAge       , 0.0));
-    Add(TDBValue(DB_TermForcedConvAge   , 0.0));
-    Add(TDBValue(DB_MaxTermProportion   , 0.0));
-    Add(TDBValue(DB_TermCOIRate         , 0.0));
-    Add(TDBValue(DB_TermPremRate        , 0.0));
-    Add(TDBValue(DB_WPTable             , 8));
-    Add(TDBValue(DB_AllowWP             , true));
-    Add(TDBValue(DB_WPMinIssAge         , 0.0));
-    Add(TDBValue(DB_WPMaxIssAge         , 0.0));
-    Add(TDBValue(DB_WPMax               , 0.0));
-    Add(TDBValue(DB_WPCOIRate           , 0.0));
-    Add(TDBValue(DB_WPPremRate          , 0.0));
+    Add(database_entity(DB_TermTable, database_entity::e_number_of_axes, dims313, TgCOI));
+    Add(database_entity(DB_GuarTermTable, database_entity::e_number_of_axes, dims313, TgCOI));
+    Add(database_entity(DB_AllowTerm           , true));
+    Add(database_entity(DB_TermMinIssAge       , 0.0));
+    Add(database_entity(DB_TermMaxIssAge       , 0.0));
+    Add(database_entity(DB_TermForcedConvAge   , 0.0));
+    Add(database_entity(DB_MaxTermProportion   , 0.0));
+    Add(database_entity(DB_TermCOIRate         , 0.0));
+    Add(database_entity(DB_TermPremRate        , 0.0));
+    Add(database_entity(DB_WPTable             , 8));
+    Add(database_entity(DB_AllowWP             , true));
+    Add(database_entity(DB_WPMinIssAge         , 0.0));
+    Add(database_entity(DB_WPMaxIssAge         , 0.0));
+    Add(database_entity(DB_WPMax               , 0.0));
+    Add(database_entity(DB_WPCOIRate           , 0.0));
+    Add(database_entity(DB_WPPremRate          , 0.0));
     // SOA qx_ins table 708 is 70-75 US ADB experience.
-    Add(TDBValue(DB_ADDTable            , 708));
-    Add(TDBValue(DB_AllowADD            , true));
-    Add(TDBValue(DB_ADDMinIssAge        , 0.0));
-    Add(TDBValue(DB_ADDMaxIssAge        , 0.0));
-    Add(TDBValue(DB_ADDLimit            , 1000000.0));
-    Add(TDBValue(DB_ADDCOIRate          , 0.0));
-    Add(TDBValue(DB_ADDPremRate         , 0.0));
-    Add(TDBValue(DB_WeightClass         , 0.0));
-    Add(TDBValue(DB_WeightGender        , 0.0));
-    Add(TDBValue(DB_WeightSmoking       , 0.0));
-    Add(TDBValue(DB_WeightAge           , 0.0));
-    Add(TDBValue(DB_WeightSpecAmt       , 0.0));
-    Add(TDBValue(DB_WeightState         , 0.0));
-    Add(TDBValue(DB_FullExpPol          , 0.0));
-    Add(TDBValue(DB_FullExpPrem         , 0.0));
-    Add(TDBValue(DB_FullExpDumpin       , 0.0));
-    Add(TDBValue(DB_FullExpPerK         , 0.0));
-    Add(TDBValue(DB_VarExpPol           , 0.0));
-    Add(TDBValue(DB_VarExpPrem          , 0.0));
-    Add(TDBValue(DB_VarExpDumpin        , 0.0));
-    Add(TDBValue(DB_VarExpPerK          , 0.0));
-    Add(TDBValue(DB_MedicalProportion   , 0.0));
-    Add(TDBValue(DB_UWTestCost          , 0.0));
-    Add(TDBValue(DB_VxBasicQTable       , 0.0));
-    Add(TDBValue(DB_VxDeficQTable       , 0.0));
-    Add(TDBValue(DB_VxTaxQTable         , 0.0));
-    Add(TDBValue(DB_StatVxInt           , 0.0));
-    Add(TDBValue(DB_TaxVxInt            , 0.0));
-    Add(TDBValue(DB_StatVxQ             , 0.0));
-    Add(TDBValue(DB_TaxVxQ              , 0.0));
-    Add(TDBValue(DB_DefVxQ              , 0.0));
-    Add(TDBValue(DB_NonforfQ            , 0.0));
-    Add(TDBValue(DB_CompTarget          , 0.0));
-    Add(TDBValue(DB_CompExcess          , 0.0));
-    Add(TDBValue(DB_CompChargeBack      , 0.0));
-    Add(TDBValue(DB_LapseRate           , 0.0));
-    Add(TDBValue(DB_ReqSurpNAAR         , 0.0));
-    Add(TDBValue(DB_ReqSurpVx           , 0.0));
-    Add(TDBValue(DB_LICFitRate          , 0.0));
-    Add(TDBValue(DB_LicDacTaxRate       , 0.0));
-    Add(TDBValue(DB_GDBVxMethod         , 0.0));
-    Add(TDBValue(DB_PrimaryHurdle       , 0.0));
-    Add(TDBValue(DB_SecondaryHurdle     , 0.0));
-    Add(TDBValue(DB_LedgerType          , mce_ill_reg));
-    Add(TDBValue(DB_AllowExpRating      , false));
+    Add(database_entity(DB_ADDTable            , 708));
+    Add(database_entity(DB_AllowADD            , true));
+    Add(database_entity(DB_ADDMinIssAge        , 0.0));
+    Add(database_entity(DB_ADDMaxIssAge        , 0.0));
+    Add(database_entity(DB_ADDLimit            , 1000000.0));
+    Add(database_entity(DB_ADDCOIRate          , 0.0));
+    Add(database_entity(DB_ADDPremRate         , 0.0));
+    Add(database_entity(DB_WeightClass         , 0.0));
+    Add(database_entity(DB_WeightGender        , 0.0));
+    Add(database_entity(DB_WeightSmoking       , 0.0));
+    Add(database_entity(DB_WeightAge           , 0.0));
+    Add(database_entity(DB_WeightSpecAmt       , 0.0));
+    Add(database_entity(DB_WeightState         , 0.0));
+    Add(database_entity(DB_FullExpPol          , 0.0));
+    Add(database_entity(DB_FullExpPrem         , 0.0));
+    Add(database_entity(DB_FullExpDumpin       , 0.0));
+    Add(database_entity(DB_FullExpPerK         , 0.0));
+    Add(database_entity(DB_VarExpPol           , 0.0));
+    Add(database_entity(DB_VarExpPrem          , 0.0));
+    Add(database_entity(DB_VarExpDumpin        , 0.0));
+    Add(database_entity(DB_VarExpPerK          , 0.0));
+    Add(database_entity(DB_MedicalProportion   , 0.0));
+    Add(database_entity(DB_UWTestCost          , 0.0));
+    Add(database_entity(DB_VxBasicQTable       , 0.0));
+    Add(database_entity(DB_VxDeficQTable       , 0.0));
+    Add(database_entity(DB_VxTaxQTable         , 0.0));
+    Add(database_entity(DB_StatVxInt           , 0.0));
+    Add(database_entity(DB_TaxVxInt            , 0.0));
+    Add(database_entity(DB_StatVxQ             , 0.0));
+    Add(database_entity(DB_TaxVxQ              , 0.0));
+    Add(database_entity(DB_DefVxQ              , 0.0));
+    Add(database_entity(DB_NonforfQ            , 0.0));
+    Add(database_entity(DB_CompTarget          , 0.0));
+    Add(database_entity(DB_CompExcess          , 0.0));
+    Add(database_entity(DB_CompChargeBack      , 0.0));
+    Add(database_entity(DB_LapseRate           , 0.0));
+    Add(database_entity(DB_ReqSurpNAAR         , 0.0));
+    Add(database_entity(DB_ReqSurpVx           , 0.0));
+    Add(database_entity(DB_LICFitRate          , 0.0));
+    Add(database_entity(DB_LicDacTaxRate       , 0.0));
+    Add(database_entity(DB_GDBVxMethod         , 0.0));
+    Add(database_entity(DB_PrimaryHurdle       , 0.0));
+    Add(database_entity(DB_SecondaryHurdle     , 0.0));
+    Add(database_entity(DB_LedgerType          , mce_ill_reg));
+    Add(database_entity(DB_AllowExpRating      , false));
 
     // These aren't really NY Table Y group rates--in fact, they're
     // US 65-70 male ALB. Though NY Table Y is occasionally
@@ -585,73 +585,73 @@ void DBDictionary::WriteSampleDBFile()
     // this support request:
     //   http://savannah.nongnu.org/support/?105593
     // would offer a choice and make that database entity unnecessary.
-    Add(TDBValue(DB_TableYTable         , 358));
+    Add(database_entity(DB_TableYTable         , 358));
 
     // Use male rates for unisex--1983 GAM seems to have no unisex version.
     double T83Gam[3] = {825, 826, 826,};
-    Add(TDBValue(DB_83GamTable, TDBValue::e_number_of_axes, dims311, T83Gam, "Use male rates for unisex--1983 GAM seems to have no unisex version."));
+    Add(database_entity(DB_83GamTable, database_entity::e_number_of_axes, dims311, T83Gam, "Use male rates for unisex--1983 GAM seems to have no unisex version."));
 
-    Add(TDBValue(DB_AllowWD             , true));
-    Add(TDBValue(DB_AllowLoan           , true));
-    Add(TDBValue(DB_AllowChangeToDBO2   , true));
-    Add(TDBValue(DB_AllowSAIncr         , true));
-    Add(TDBValue(DB_NoLapseAlwaysActive , false));
-    Add(TDBValue(DB_PrefOrSelect        , oe_called_select));
-    Add(TDBValue(DB_ExpRatStdDevMult    , 0.0));
-    Add(TDBValue(DB_ExpRatIBNRMult      , 0.0));
-    Add(TDBValue(DB_ExpRatCOIRetention  , 0.0));
-    Add(TDBValue(DB_StableValFundCharge , 0.0));
-    Add(TDBValue(DB_AmortPmLdFundCharge , 0.0030));
-    Add(TDBValue(DB_AllowAmortPremLoad  , false));
-    Add(TDBValue(DB_PmTxAmortPeriod     , 0));
-    Add(TDBValue(DB_PmTxAmortIntRate    , 0.0));
+    Add(database_entity(DB_AllowWD             , true));
+    Add(database_entity(DB_AllowLoan           , true));
+    Add(database_entity(DB_AllowChangeToDBO2   , true));
+    Add(database_entity(DB_AllowSAIncr         , true));
+    Add(database_entity(DB_NoLapseAlwaysActive , false));
+    Add(database_entity(DB_PrefOrSelect        , oe_called_select));
+    Add(database_entity(DB_ExpRatStdDevMult    , 0.0));
+    Add(database_entity(DB_ExpRatIBNRMult      , 0.0));
+    Add(database_entity(DB_ExpRatCOIRetention  , 0.0));
+    Add(database_entity(DB_StableValFundCharge , 0.0));
+    Add(database_entity(DB_AmortPmLdFundCharge , 0.0030));
+    Add(database_entity(DB_AllowAmortPremLoad  , false));
+    Add(database_entity(DB_PmTxAmortPeriod     , 0));
+    Add(database_entity(DB_PmTxAmortIntRate    , 0.0));
     // Pass through premium tax.
     Add
-        (TDBValue
+        (database_entity
             (DB_PremTaxLoad
-            ,TDBValue::e_number_of_axes
+            ,database_entity::e_number_of_axes
             ,premium_tax_dimensions
             ,premium_tax_rates
             )
         );
-    Add(TDBValue(DB_AllowHoneymoon      , true));
+    Add(database_entity(DB_AllowHoneymoon      , true));
     // Set target equal to seven-pay premium.
-    Add(TDBValue(DB_TgtPremTable        , 10));
-    Add(TDBValue(DB_TgtPremPolFee       , 0.0));
-    Add(TDBValue(DB_AllowExtraAssetComp , true));
-    Add(TDBValue(DB_AllowExtraPremComp  , true));
-    Add(TDBValue(DB_AssetChargeType     , oe_asset_charge_spread));
-    Add(TDBValue(DB_AllowUltraPrefClass , false));
-    Add(TDBValue(DB_MaxGenAcctRate      , 0.06));
-    Add(TDBValue(DB_MaxSepAcctRate      , 0.12));
-    Add(TDBValue(DB_MaxVLRRate          , 0.18));
-    Add(TDBValue(DB_SurrChgAVMult       , 0.0));
-    Add(TDBValue(DB_IntSpreadFreq       , mce_spread_daily));
-    Add(TDBValue(DB_StateApproved       , true));
-    Add(TDBValue(DB_AllowStateXX        , true));
-    Add(TDBValue(DB_AllowForeign        , true));
-    Add(TDBValue(DB_AllowCustomFund     , false));
-    Add(TDBValue(DB_AllowNo7702         , false));
-    Add(TDBValue(DB_EnforceNAARLimit    , true));
-    Add(TDBValue(DB_DynamicSepAcctLoad  , false));
-    Add(TDBValue(DB_SpecAmtLoadLimit    , 10000000.0));
-    Add(TDBValue(DB_Equiv7702DBO3       , 0));
-    Add(TDBValue(DB_ExpRatRiskCOIMult   , 0));
-    Add(TDBValue(DB_SurrChgSAMult       , 0.0));
-    Add(TDBValue(DB_AllowSpouse         , false));
-    Add(TDBValue(DB_AllowChild          , false));
+    Add(database_entity(DB_TgtPremTable        , 10));
+    Add(database_entity(DB_TgtPremPolFee       , 0.0));
+    Add(database_entity(DB_AllowExtraAssetComp , true));
+    Add(database_entity(DB_AllowExtraPremComp  , true));
+    Add(database_entity(DB_AssetChargeType     , oe_asset_charge_spread));
+    Add(database_entity(DB_AllowUltraPrefClass , false));
+    Add(database_entity(DB_MaxGenAcctRate      , 0.06));
+    Add(database_entity(DB_MaxSepAcctRate      , 0.12));
+    Add(database_entity(DB_MaxVLRRate          , 0.18));
+    Add(database_entity(DB_SurrChgAVMult       , 0.0));
+    Add(database_entity(DB_IntSpreadFreq       , mce_spread_daily));
+    Add(database_entity(DB_StateApproved       , true));
+    Add(database_entity(DB_AllowStateXX        , true));
+    Add(database_entity(DB_AllowForeign        , true));
+    Add(database_entity(DB_AllowCustomFund     , false));
+    Add(database_entity(DB_AllowNo7702         , false));
+    Add(database_entity(DB_EnforceNAARLimit    , true));
+    Add(database_entity(DB_DynamicSepAcctLoad  , false));
+    Add(database_entity(DB_SpecAmtLoadLimit    , 10000000.0));
+    Add(database_entity(DB_Equiv7702DBO3       , 0));
+    Add(database_entity(DB_ExpRatRiskCOIMult   , 0));
+    Add(database_entity(DB_SurrChgSAMult       , 0.0));
+    Add(database_entity(DB_AllowSpouse         , false));
+    Add(database_entity(DB_AllowChild          , false));
 
     // Spouse and child riders unavailable, so it doesn't matter
     // what table we specify.
-    Add(TDBValue(DB_SpouseRiderTable    , 708));
-    Add(TDBValue(DB_ChildRiderTable     , 708));
+    Add(database_entity(DB_SpouseRiderTable    , 708));
+    Add(database_entity(DB_ChildRiderTable     , 708));
 
-    Add(TDBValue(DB_GAIntBonus          , 0.0));
+    Add(database_entity(DB_GAIntBonus          , 0.0));
 
     // Allow experience rating.
-    Add(TDBValue(DB_AllowExpRating      , 1.0));
-    Add(TDBValue(DB_ExpRatIBNRMult      , 6.0));
-    Add(TDBValue(DB_ExpRatAmortPeriod   , 4.0));
+    Add(database_entity(DB_AllowExpRating      , 1.0));
+    Add(database_entity(DB_ExpRatIBNRMult      , 6.0));
+    Add(database_entity(DB_ExpRatAmortPeriod   , 4.0));
 
     WriteDB(AddDataDir("sample.database"));
 }
@@ -667,42 +667,42 @@ void DBDictionary::InitAntediluvian()
     // database entities.
     for(int j = DB_FIRST; j < DB_LAST; ++j)
         {
-        Add(TDBValue(j, 0.0));
+        Add(database_entity(j, 0.0));
         }
 
-    Add(TDBValue(DB_GuarInt, 0.03));
+    Add(database_entity(DB_GuarInt, 0.03));
 
-    Add(TDBValue(DB_FixedLoanRate, 0.06));
+    Add(database_entity(DB_FixedLoanRate, 0.06));
 
-    Add(TDBValue(DB_GuarRegLoanSpread, 0.0));
-    Add(TDBValue(DB_CurrRegLoanSpread, 0.0));
-    Add(TDBValue(DB_GuarPrefLoanSpread, 0.0));
-    Add(TDBValue(DB_CurrPrefLoanSpread, 0.0));
+    Add(database_entity(DB_GuarRegLoanSpread, 0.0));
+    Add(database_entity(DB_CurrRegLoanSpread, 0.0));
+    Add(database_entity(DB_GuarPrefLoanSpread, 0.0));
+    Add(database_entity(DB_CurrPrefLoanSpread, 0.0));
 
-    Add(TDBValue(DB_AllowGenAcct, 1.0));
-    Add(TDBValue(DB_AllowPreferredClass, 1.0));
+    Add(database_entity(DB_AllowGenAcct, 1.0));
+    Add(database_entity(DB_AllowPreferredClass, 1.0));
 
     // premium loads
 
-    Add(TDBValue(DB_GuarPolFee, 12.00));
-    Add(TDBValue(DB_GuarSpecAmtLoad, 0.0));
-    Add(TDBValue(DB_GuarPremLoadTgt, 0.025));
-    Add(TDBValue(DB_GuarPremLoadExc, 0.025));
-    Add(TDBValue(DB_CurrPolFee, 5.00));
-    Add(TDBValue(DB_CurrSpecAmtLoad, 0.0));
-    Add(TDBValue(DB_CurrPremLoadTgt, 0.025));
-    Add(TDBValue(DB_CurrPremLoadExc, 0.025));
+    Add(database_entity(DB_GuarPolFee, 12.00));
+    Add(database_entity(DB_GuarSpecAmtLoad, 0.0));
+    Add(database_entity(DB_GuarPremLoadTgt, 0.025));
+    Add(database_entity(DB_GuarPremLoadExc, 0.025));
+    Add(database_entity(DB_CurrPolFee, 5.00));
+    Add(database_entity(DB_CurrSpecAmtLoad, 0.0));
+    Add(database_entity(DB_CurrPremLoadTgt, 0.025));
+    Add(database_entity(DB_CurrPremLoadExc, 0.025));
 
-    Add(TDBValue(DB_MinWD, 100.0));
-    Add(TDBValue(DB_WDFee, 5.0));
-    Add(TDBValue(DB_WDFeeRate, 0.01));
+    Add(database_entity(DB_MinWD, 100.0));
+    Add(database_entity(DB_WDFee, 5.0));
+    Add(database_entity(DB_WDFeeRate, 0.01));
 
-    int guar_coi_dims[TDBValue::e_number_of_axes] = {1, 1, 3, 1, 1, 1, 1};
+    int guar_coi_dims[database_entity::e_number_of_axes] = {1, 1, 3, 1, 1, 1, 1};
     // smoker, nonsmoker, unismoke
     double guar_coi_tables[3] = {111, 109, 107};
-    Add(TDBValue(DB_GuarCOITable, TDBValue::e_number_of_axes, guar_coi_dims, guar_coi_tables));
+    Add(database_entity(DB_GuarCOITable, database_entity::e_number_of_axes, guar_coi_dims, guar_coi_tables));
 
-    int curr_coi_dims[TDBValue::e_number_of_axes] = {1, 4, 3, 1, 1, 1, 1};
+    int curr_coi_dims[database_entity::e_number_of_axes] = {1, 4, 3, 1, 1, 1, 1};
     // preferred, standard, rated, ultrapreferred by smoker, nonsmoker, unismoke
     double curr_coi_tables[] =
         {
@@ -711,46 +711,46 @@ void DBDictionary::InitAntediluvian()
         5, 6, 4, // rated sm ns us
         0, 0, 0, // ultra sm ns us
         };
-    Add(TDBValue(DB_CurrCOITable, TDBValue::e_number_of_axes, curr_coi_dims, curr_coi_tables));
+    Add(database_entity(DB_CurrCOITable, database_entity::e_number_of_axes, curr_coi_dims, curr_coi_tables));
 
-    Add(TDBValue(DB_CorridorTable, 7));
-    Add(TDBValue(DB_WPTable, 8));
-    Add(TDBValue(DB_ADDTable, 9));
-    Add(TDBValue(DB_EndtAge, 100));
-    Add(TDBValue(DB_AgeLastOrNearest, 1.0));
-    Add(TDBValue(DB_MinSpecAmt, 10000.0));
+    Add(database_entity(DB_CorridorTable, 7));
+    Add(database_entity(DB_WPTable, 8));
+    Add(database_entity(DB_ADDTable, 9));
+    Add(database_entity(DB_EndtAge, 100));
+    Add(database_entity(DB_AgeLastOrNearest, 1.0));
+    Add(database_entity(DB_MinSpecAmt, 10000.0));
 
-    Add(TDBValue(DB_MaxGenAcctRate, 0.12));
-    Add(TDBValue(DB_MaxSepAcctRate, 0.12));
+    Add(database_entity(DB_MaxGenAcctRate, 0.12));
+    Add(database_entity(DB_MaxSepAcctRate, 0.12));
 
-    Add(TDBValue(DB_AllowLoan, 1.0));
-    Add(TDBValue(DB_AllowWD, 1.0));
-    Add(TDBValue(DB_AllowFlatExtras, 1.0));
-    Add(TDBValue(DB_AllowChangeToDBO2, 1.0));
-    Add(TDBValue(DB_AllowDBO3, 1.0));
+    Add(database_entity(DB_AllowLoan, 1.0));
+    Add(database_entity(DB_AllowWD, 1.0));
+    Add(database_entity(DB_AllowFlatExtras, 1.0));
+    Add(database_entity(DB_AllowChangeToDBO2, 1.0));
+    Add(database_entity(DB_AllowDBO3, 1.0));
 
-    Add(TDBValue(DB_SurrChgPremMult, 0.0));
-    Add(TDBValue(DB_SurrChgAVMult, 0.0));
-    Add(TDBValue(DB_SurrChgSAMult, 0.0));
-    Add(TDBValue(DB_SurrChgAVDurFactor, 1.0));
-    Add(TDBValue(DB_SurrChgSADurFactor, 1.0));
+    Add(database_entity(DB_SurrChgPremMult, 0.0));
+    Add(database_entity(DB_SurrChgAVMult, 0.0));
+    Add(database_entity(DB_SurrChgSAMult, 0.0));
+    Add(database_entity(DB_SurrChgAVDurFactor, 1.0));
+    Add(database_entity(DB_SurrChgSADurFactor, 1.0));
 
-    Add(TDBValue(DB_LedgerType, mce_ill_reg));
+    Add(database_entity(DB_LedgerType, mce_ill_reg));
 
-    Add(TDBValue(DB_NoLapseAlwaysActive, 0.0));
-    Add(TDBValue(DB_NoLapseMinDur, 0.0));
-    Add(TDBValue(DB_NoLapseMinAge, 0.0));
+    Add(database_entity(DB_NoLapseAlwaysActive, 0.0));
+    Add(database_entity(DB_NoLapseMinDur, 0.0));
+    Add(database_entity(DB_NoLapseMinAge, 0.0));
 
-    Add(TDBValue(DB_NominallyPar, 0.0));
-    Add(TDBValue(DB_Has1035ExchCharge, 0.0));
-    Add(TDBValue(DB_SmokeOrTobacco, 0.0));
-    Add(TDBValue(DB_DACTaxFundCharge, 0.0));
-    Add(TDBValue(DB_AllowWP, 0.0));
-    Add(TDBValue(DB_AllowADD, 0.0));
-    Add(TDBValue(DB_AllowSpouse, 0.0));
-    Add(TDBValue(DB_AllowChild, 0.0));
+    Add(database_entity(DB_NominallyPar, 0.0));
+    Add(database_entity(DB_Has1035ExchCharge, 0.0));
+    Add(database_entity(DB_SmokeOrTobacco, 0.0));
+    Add(database_entity(DB_DACTaxFundCharge, 0.0));
+    Add(database_entity(DB_AllowWP, 0.0));
+    Add(database_entity(DB_AllowADD, 0.0));
+    Add(database_entity(DB_AllowSpouse, 0.0));
+    Add(database_entity(DB_AllowChild, 0.0));
 
-    Add(TDBValue(DB_ExpRatAmortPeriod, 4.0));
+    Add(database_entity(DB_ExpRatAmortPeriod, 4.0));
 }
 
 /// Print databases to file in an alternative text format.

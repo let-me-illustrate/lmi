@@ -44,7 +44,7 @@
 #include <algorithm>
 
 //============================================================================
-TDatabase::TDatabase
+product_database::product_database
     (std::string const& a_ProductName
     ,mcenum_gender      a_Gender
     ,mcenum_class       a_Class
@@ -66,7 +66,7 @@ TDatabase::TDatabase
 }
 
 //============================================================================
-TDatabase::TDatabase(yare_input const& input)
+product_database::product_database(yare_input const& input)
     :Filename(AddDataDir(product_data(input.ProductName).datum("DatabaseFilename")))
 {
 // GET RID OF Gender, Class, Smoker, etc.
@@ -86,7 +86,7 @@ TDatabase::TDatabase(yare_input const& input)
     // of the database object.
 
     // State of jurisdiction must not depend on itself
-    TDBValue const& StateEntry = GetEntry(DB_PremTaxState);
+    database_entity const& StateEntry = GetEntry(DB_PremTaxState);
     if(1 != StateEntry.GetLength(5))
         {
         fatal_error()
@@ -125,24 +125,24 @@ TDatabase::TDatabase(yare_input const& input)
 }
 
 //============================================================================
-TDatabase::~TDatabase()
+product_database::~product_database()
 {
 }
 
 //============================================================================
-mcenum_state TDatabase::GetStateOfJurisdiction() const
+mcenum_state product_database::GetStateOfJurisdiction() const
 {
     return State;
 }
 
 //============================================================================
-int TDatabase::length() const
+int product_database::length() const
 {
     return length_;
 }
 
 //============================================================================
-void TDatabase::Init()
+void product_database::Init()
 {
     index_ = database_index(Gender, Class, Smoker, IssueAge, UWBasis, State);
 
@@ -161,16 +161,16 @@ void TDatabase::Init()
 }
 
 //===========================================================================
-double TDatabase::Query(int k) const
+double product_database::Query(int k) const
 {
     ConstrainScalar(k); // TODO ?? Is the extra overhead acceptable?
     return *GetEntry(k)[index_];
 }
 
 //===========================================================================
-void TDatabase::Query(std::vector<double>& dst, int k) const
+void product_database::Query(std::vector<double>& dst, int k) const
 {
-    TDBValue const& v = GetEntry(k);
+    database_entity const& v = GetEntry(k);
     double const*const z = v[index_];
     // TODO ?? Can this be right?
     if(1 == v.GetNDims())
@@ -212,7 +212,7 @@ void TDatabase::Query(std::vector<double>& dst, int k) const
 }
 
 //===========================================================================
-TDBValue const& TDatabase::GetEntry(int k) const
+database_entity const& product_database::GetEntry(int k) const
 {
     dict_map const& dict = DBDictionary::instance().GetDictionary();
     dict_map::const_iterator p = dict.find(k);
@@ -230,7 +230,7 @@ TDBValue const& TDatabase::GetEntry(int k) const
             << " not found."
             << LMI_FLUSH
             ;
-        return *new TDBValue;
+        return *new database_entity;
         }
     else
         {
@@ -243,7 +243,7 @@ TDBValue const& TDatabase::GetEntry(int k) const
 /// invariant by duration. The database item may nonetheless vary
 /// across any axis except duration.
 
-void TDatabase::ConstrainScalar(int k) const
+void product_database::ConstrainScalar(int k) const
 {
     std::vector<double> z;
     Query(z, k);

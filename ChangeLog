@@ -25396,3 +25396,36 @@ Rework caching implementation.
   dbdict.hpp
 Replace a weird with a canonical idiom.
 
+20100505T1612Z <gchicares@sbcglobal.net> [718]
+
+  basic_values.hpp
+  basicvalues.cpp
+  custom_io_0.cpp
+  database.cpp
+  database.hpp
+  database_document.cpp
+  database_document.hpp
+  database_view.cpp
+  database_view_editor.cpp
+  database_view_editor.hpp
+  dbdict.cpp
+  dbdict.hpp
+  dbvalue.cpp
+  dbvalue.hpp
+  ihs_basicval.cpp
+  ihs_database.cpp
+  input.hpp
+  input_harmonization.cpp
+  interest_rates.cpp
+  loads.cpp
+  loads.hpp
+  loads_impl.hpp
+  loads_test.cpp
+  mec_input.cpp
+  mec_input.hpp
+  mec_server.cpp
+  my_db.cpp
+  surrchg_rates.cpp
+  surrchg_rates.hpp
+Rename two classes.
+
