@@ -29,6 +29,7 @@
 #include "dbdict.hpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "data_directory.hpp"
 #include "dbnames.hpp"
 #include "global_settings.hpp"
@@ -44,9 +45,8 @@
 #include <boost/filesystem/path.hpp>
 
 #include <limits>
-#include <sstream>
 
-std::string DBDictionary::CachedFilename;
+std::string DBDictionary::cached_filename_;
 
 int const NumberOfEntries = DB_LAST;
 
@@ -124,89 +124,65 @@ dict_map const& DBDictionary::GetDictionary() const
     return dictionary_;
 }
 
-//============================================================================
-void DBDictionary::Init(std::string const& NewFilename)
-{
-    // Perform the expensive operation of reading the dictionary from
-    // file only if the cached file name doesn't match the new file
-    // name, or if the cached file name is an empty string--which
-    // means either that no dictionary has yet been read, or that the
-    // cached file name was deliberately set to an empty string in
-    // order to invalidate the cached database.
-    //
-    // TODO ?? We ought to address the problem that someone might have
-    // modified that file in the meantime.
+/// Read and cache a database file.
+///
+/// Perform the expensive operation of reading the dictionary from
+/// file only if the cached file name doesn't match the new filename.
 
-    if
-        (
-           ""          != CachedFilename
-        && NewFilename == CachedFilename
-        )
+void DBDictionary::Init(std::string const& filename)
+{
+    LMI_ASSERT(!filename.empty());
+    if(filename == cached_filename_)
         {
         return;
         }
 
-    CachedFilename = NewFilename;
+    cached_filename_ = filename;
 
-    if(access(NewFilename.c_str(), R_OK))
+    if(access(filename.c_str(), R_OK))
         {
-        BadFile(NewFilename, "could not be found."); // dubious
+        InvalidateCache();
         fatal_error()
             << "File '"
-            << NewFilename
+            << filename
             << "' is required but could not be found. Try reinstalling."
             << LMI_FLUSH
             ;
         }
 
-    xml_lmi::dom_parser parser(NewFilename);
+    xml_lmi::dom_parser parser(filename);
     xml::element const& root = parser.root_node(xml_root_name());
 
     xml_serialize::from_xml(root, dictionary_);
 
     if(NumberOfEntries != static_cast<int>(dictionary_.size()))
         {
-        std::ostringstream oss;
-        oss
+        InvalidateCache();
+        fatal_error()
             << "is not up to date or is corrupted."
             << " It should contain " << NumberOfEntries
             << " elements, but it actually contains " << dictionary_.size()
             << " elements."
+            << LMI_FLUSH
             ;
-        BadFile(NewFilename, oss.str());
         }
 }
 
-//============================================================================
+/// Cause next Init() call to read from file instead of using cache.
+///
+/// The implementation simply sets the cached filename to an empty
+/// string, which is its initial value upon (static) construction and
+/// cannot validly name any file.
+
 void DBDictionary::InvalidateCache()
 {
-    CachedFilename = "";
-}
-
-//============================================================================
-// TODO ?? Does this function make the code clearer, or less clear?
-void DBDictionary::BadFile(std::string const& Filename, std::string const& why)
-{
-    InvalidateCache();
-
-    std::string s = ", which is required for the product selected, ";
-    s += why;
-    s += " Try reinstalling. Other products might work in the meantime.";
-
-    // It's generally pointless to proceed.
-    if(global_settings::instance().mellon())
-        {
-        hobsons_choice() << "File '" << Filename << "'" << s << LMI_FLUSH;
-        }
-    else
-        {
-        fatal_error() << "File '" << Filename << "'" << s << LMI_FLUSH;
-        }
+    cached_filename_.clear();
 }
 
 //============================================================================
 void DBDictionary::WriteDB(std::string const& filename)
 {
+    InvalidateCache();
     if(NumberOfEntries != static_cast<int>(dictionary_.size()))
         {
         fatal_error()
@@ -247,8 +223,8 @@ void DBDictionary::Add(TDBValue const& e)
     dictionary_.insert(dict_map_val(e.GetKey(), e));
 }
 
-//============================================================================
-// Initialize all database entities to not-necessarily-plausible values.
+/// Initialize all database entities to not-necessarily-plausible values.
+
 void DBDictionary::InitDB()
 {
     static double const bignum = std::numeric_limits<double>::max();
@@ -777,7 +753,15 @@ void DBDictionary::InitAntediluvian()
     Add(TDBValue(DB_ExpRatAmortPeriod, 4.0));
 }
 
-//============================================================================
+/// Print databases to file in an alternative text format.
+///
+/// Unlike xml, the alternative shows multidimensional data in an
+/// array format reminiscent of APL, interleaved with definitions
+/// that good xml practice would put in a schema.
+///
+/// Every database file in the data directory is written in the
+/// alternative format, with a distinct file extension.
+
 void print_databases()
 {
     fs::path path(global_settings::instance().data_directory());

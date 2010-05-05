@@ -53,7 +53,7 @@ class LMI_SO DBDictionary
 
     dict_map const& GetDictionary() const;
 
-    void Init(std::string const& NewFilename);
+    void Init(std::string const& filename);
     void WriteSampleDBFile();
     void WriteProprietaryDBFiles();
 
@@ -64,12 +64,11 @@ class LMI_SO DBDictionary
 
     void WriteDB(std::string const& filename);
     void Add(TDBValue const&);
-    void BadFile(std::string const& Filename, std::string const& why);
     void InitDB();
 
     static void InvalidateCache();
 
-    static std::string CachedFilename;
+    static std::string cached_filename_;
 
     dict_map dictionary_;
 };
