@@ -216,27 +216,22 @@ void product_database::Query(std::vector<double>& dst, int k) const
 database_entity const& product_database::GetEntry(int k) const
 {
     dict_map const& d = DBDictionary::instance().GetDictionary();
+    LMI_ASSERT(d.size() == GetDBNames().size());
+    LMI_ASSERT(d.size() == DB_LAST);
+    LMI_ASSERT(0 == DB_FIRST);
+    LMI_ASSERT(DB_FIRST <= k && k < DB_LAST);
     dict_map::const_iterator i = d.find(k);
     if(i == d.end())
         {
-        std::string s("no name");
-        if(0 <= k && static_cast<unsigned int>(k) < GetDBNames().size())
-            {
-            s = GetDBNames()[k].ShortName;
-            }
         fatal_error()
-            << "Database element "
-            << k
-            << " ('" << s << "')"
-            << " not found."
+            << "Database entity '"
+            << GetDBNames()[k].ShortName
+            << "' not found."
             << LMI_FLUSH
             ;
-        return *new database_entity;
         }
-    else
-        {
-        return (*i).second;
-        }
+
+    return (*i).second;
 }
 
 /// Constrain the value extracted from the database to be scalar--i.e.,

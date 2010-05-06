@@ -29,6 +29,7 @@
 #include "database.hpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "dbdict.hpp"
 #include "dbnames.hpp"
 #include "yare_input.hpp"
@@ -133,24 +134,21 @@ void product_database::Query(std::vector<double>& dst, int k) const
 database_entity const& product_database::GetEntry(int k) const
 {
     dict_map const& d = DBDictionary::instance().GetDictionary();
+    LMI_ASSERT(d.size() == GetDBNames().size());
+    LMI_ASSERT(d.size() == DB_LAST);
+    LMI_ASSERT(0 == DB_FIRST);
+    LMI_ASSERT(DB_FIRST <= k && k < DB_LAST);
     dict_map::const_iterator i = d.find(k);
     if(i == d.end())
         {
         fatal_error()
-            << "Key "
+            << "Database entity '"
             << GetDBNames()[k].ShortName
-            << " not found. These keys were found:"
+            << "' not found."
+            << LMI_FLUSH
             ;
-        for(i = d.begin(); i != d.end(); ++i)
-            {
-            fatal_error() << " " << GetDBNames()[(*i).first].ShortName;
-            }
-        if(d.empty())
-            {
-            fatal_error() << " [none]. Dictionary is empty." << (*i).first;
-            }
-        fatal_error() << LMI_FLUSH;
         }
+
     return (*i).second;
 }
 
