@@ -74,19 +74,17 @@ class LMI_SO product_database
 
     void Query(std::vector<double>& dst, int k) const;
 
-    void ConstrainScalar(int k) const;
-
     database_entity const& GetEntry(int k) const;
 
   private:
     product_database();
 
-    void Init();
-    void Init(std::string const& NewFilename);
+    void initialize();
+    void initialize(std::string const& NewFilename);
+
+    void constrain_scalar(int k) const;
 
     database_index  index_;
-    std::string     Filename;
-
     int             length_;
 
     mcenum_gender   Gender;     // gender

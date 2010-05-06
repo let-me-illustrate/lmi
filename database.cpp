@@ -38,7 +38,7 @@
 
 //============================================================================
 product_database::product_database
-    (std::string const& a_ProductName
+    (std::string const& // a_ProductName
     ,mcenum_gender      a_Gender
     ,mcenum_class       a_Class
     ,mcenum_smoking     a_Smoker
@@ -46,8 +46,7 @@ product_database::product_database
     ,mcenum_uw_basis    a_UWBasis
     ,mcenum_state       a_State
     )
-    :Filename (a_ProductName)
-    ,length_  (0)
+    :length_  (0)
     ,Gender   (a_Gender)
     ,Class    (a_Class)
     ,Smoker   (a_Smoker)
@@ -55,14 +54,13 @@ product_database::product_database
     ,UWBasis  (a_UWBasis)
     ,State    (a_State)
 {
-//    DBDictionary::instance().Init(Filename);
+//    DBDictionary::instance().Init(a_ProductName);
     DBDictionary::instance().InitAntediluvian();
-    Init();
+    initialize();
 }
 
 //============================================================================
 product_database::product_database(yare_input const& input)
-    :Filename("Irrelevant in antediluvian branch for now")
 {
     Gender      = input.Gender;
     Class       = input.UnderwritingClass;
@@ -71,9 +69,9 @@ product_database::product_database(yare_input const& input)
     UWBasis     = input.GroupUnderwritingType;
     State       = input.State;
 
-//    DBDictionary::instance().Init(Filename);
+//    DBDictionary::instance().Init("Irrelevant in antediluvian branch.");
     DBDictionary::instance().InitAntediluvian();
-    Init();
+    initialize();
 }
 
 //============================================================================
@@ -94,7 +92,7 @@ int product_database::length() const
 }
 
 //============================================================================
-void product_database::Init()
+void product_database::initialize()
 {
     index_ = database_index(Gender, Class, Smoker, IssueAge, UWBasis, State);
     length_ = static_cast<int>(*GetEntry(DB_EndtAge)[index_]) - IssueAge;
@@ -103,7 +101,7 @@ void product_database::Init()
 //===========================================================================
 double product_database::Query(int k) const
 {
-    ConstrainScalar(k); // TODO ?? Is the extra overhead acceptable?
+    constrain_scalar(k); // TODO ?? Is the extra overhead acceptable?
     return *GetEntry(k)[index_];
 }
 
@@ -156,12 +154,11 @@ database_entity const& product_database::GetEntry(int k) const
     return (*i).second;
 }
 
-//===========================================================================
 /// Constrain the value extracted from the database to be scalar--i.e.,
 /// invariant by duration. The database item may nonetheless vary
 /// across any axis except duration.
 
-void product_database::ConstrainScalar(int k) const
+void product_database::constrain_scalar(int k) const
 {
     std::vector<double> z;
     Query(z, k);
