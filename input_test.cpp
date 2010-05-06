@@ -27,6 +27,9 @@
 #endif // __BORLANDC__
 
 // Facilities offered by all of these headers are tested here.
+// Class product_database might appear not to belong, but it's
+// intimately entwined with input.
+#include "database.hpp"
 #include "input.hpp"
 #include "multiple_cell_document.hpp"
 #include "single_cell_document.hpp"
@@ -34,6 +37,7 @@
 // End of headers tested here.
 
 #include "assert_lmi.hpp"
+#include "dbnames.hpp"
 #include "miscellany.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
@@ -57,12 +61,14 @@ class input_test
   public:
     static void test()
         {
+        test_product_database();
         test_input_class();
         test_document_classes();
         assay_speed();
         }
 
   private:
+    static void test_product_database();
     static void test_input_class();
     static void test_document_classes();
     static void assay_speed();
@@ -82,6 +88,23 @@ class input_test
     static void mete_cns_io();
     static void mete_ill_io();
 };
+
+void input_test::test_product_database()
+{
+    Input input;
+    yare_input yi(input);
+    product_database db(yi);
+    std::vector<double> v;
+
+    std::cout
+        << "\n  Database speed tests..."
+        << "\n  Init()           : " << TimeAnAliquot(boost::bind(&product_database::Init,            &db))
+        << "\n  ConstrainScalar(): " << TimeAnAliquot(boost::bind(&product_database::ConstrainScalar, &db, DB_EndtAge))
+        << "\n  Query(vector)    : " << TimeAnAliquot(boost::bind(&product_database::Query,           &db, v, DB_EndtAge))
+        << "\n  Query(scalar)    : " << TimeAnAliquot(boost::bind(&product_database::Query,           &db, DB_EndtAge))
+        << '\n'
+        ;
+}
 
 void input_test::test_input_class()
 {
@@ -223,12 +246,13 @@ void input_test::assay_speed()
     xml::element const& e = *i;
 
     std::cout
-        << "  Speed tests...\n"
-        << "  Overhead: " << TimeAnAliquot(mete_overhead            ) << '\n'
-        << "  Read    : " << TimeAnAliquot(boost::bind(mete_read, e)) << '\n'
-        << "  Write   : " << TimeAnAliquot(mete_write               ) << '\n'
-        << "  'cns' io: " << TimeAnAliquot(mete_cns_io              ) << '\n'
-        << "  'ill' io: " << TimeAnAliquot(mete_ill_io              ) << '\n'
+        << "\n  Input speed tests..."
+        << "\n  Overhead: " << TimeAnAliquot(mete_overhead            )
+        << "\n  Read    : " << TimeAnAliquot(boost::bind(mete_read, e))
+        << "\n  Write   : " << TimeAnAliquot(mete_write               )
+        << "\n  'cns' io: " << TimeAnAliquot(mete_cns_io              )
+        << "\n  'ill' io: " << TimeAnAliquot(mete_ill_io              )
+        << '\n'
         ;
 }
 
