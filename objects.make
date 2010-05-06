@@ -644,6 +644,7 @@ input_test$(EXEEXT): \
   dbdict.o \
   dbnames.o \
   dbvalue.o \
+  expm1.o \
   facets.o \
   global_settings.o \
   input.o \
