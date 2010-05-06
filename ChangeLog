@@ -25468,3 +25468,10 @@ solid. This command
 shows eleven marked defects, which is excessive. A glance at the code
 shows that the oft-called product_database::Query(int) is inefficient.
 
+20100506T0252Z <gchicares@sbcglobal.net> [718]
+
+  input_test.cpp
+Demonstrate a problem. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-05/msg00004.html
+or thereabouts.
+
