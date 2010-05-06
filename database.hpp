@@ -45,6 +45,8 @@ class LMI_SO product_database
     :private boost::noncopyable
     ,virtual private obstruct_slicing<product_database>
 {
+    friend class input_test;
+
   public:
     product_database
         (std::string const& a_ProductName
