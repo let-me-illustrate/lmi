@@ -37,6 +37,7 @@
 // End of headers tested here.
 
 #include "assert_lmi.hpp"
+#include "dbdict.hpp"
 #include "dbnames.hpp"
 #include "miscellany.hpp"
 #include "test_tools.hpp"
@@ -96,12 +97,6 @@ void input_test::test_product_database()
     product_database db(yi);
     std::vector<double> v;
 
-    BOOST_TEST_THROW
-        (db.GetEntry(-1)
-        ,std::runtime_error
-        ,"Assertion 'DB_FIRST <= k && k < DB_LAST' failed."
-        );
-
     std::cout
         << "\n  Database speed tests..."
         << "\n  initialize()      : " << TimeAnAliquot(boost::bind(&product_database::initialize,       &db))
@@ -111,6 +106,24 @@ void input_test::test_product_database()
         << "\n  GetEntry()        : " << TimeAnAliquot(boost::bind(&product_database::GetEntry,         &db, DB_EndtAge))
         << '\n'
         ;
+
+    BOOST_TEST_THROW
+        (db.GetEntry(-1)
+        ,std::runtime_error
+        ,"Assertion 'DB_FIRST <= k && k < DB_LAST' failed."
+        );
+
+    // It is so difficult to contrive a testcase that produces this
+    // diagnostic that the diagnostic seems to have little value:
+    // a simple assertion would probably be better.
+    database_entity const e = db.GetEntry(DB_EndtAge);
+    DBDictionary::instance().dictionary_[1 + DB_LAST] = e;
+    DBDictionary::instance().dictionary_.erase(DB_EndtAge);
+    BOOST_TEST_THROW
+        (db.GetEntry(DB_EndtAge)
+        ,std::runtime_error
+        ,"Database entity 'EndtAge' not found."
+        );
 }
 
 void input_test::test_input_class()
