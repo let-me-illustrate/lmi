@@ -221,17 +221,8 @@ database_entity const& product_database::GetEntry(int k) const
     LMI_ASSERT(0 == DB_FIRST);
     LMI_ASSERT(DB_FIRST <= k && k < DB_LAST);
     dict_map::const_iterator i = d.find(k);
-    if(i == d.end())
-        {
-        fatal_error()
-            << "Database entity '"
-            << GetDBNames()[k].ShortName
-            << "' not found."
-            << LMI_FLUSH
-            ;
-        }
-
-    return (*i).second;
+    LMI_ASSERT(i != d.end());
+    return i->second;
 }
 
 /// Constrain the value extracted from the database to be scalar--i.e.,
