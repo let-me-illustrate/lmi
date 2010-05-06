@@ -96,15 +96,19 @@ void input_test::test_product_database()
     product_database db(yi);
     std::vector<double> v;
 
-    db.GetEntry(-1);
+    BOOST_TEST_THROW
+        (db.GetEntry(-1)
+        ,std::runtime_error
+        ,"Assertion 'DB_FIRST <= k && k < DB_LAST' failed."
+        );
 
     std::cout
         << "\n  Database speed tests..."
-        << "\n  Init()           : " << TimeAnAliquot(boost::bind(&product_database::Init,            &db))
-        << "\n  ConstrainScalar(): " << TimeAnAliquot(boost::bind(&product_database::ConstrainScalar, &db, DB_EndtAge))
-        << "\n  Query(vector)    : " << TimeAnAliquot(boost::bind(&product_database::Query,           &db, v, DB_EndtAge))
-        << "\n  Query(scalar)    : " << TimeAnAliquot(boost::bind(&product_database::Query,           &db, DB_EndtAge))
-        << "\n  GetEntry()       : " << TimeAnAliquot(boost::bind(&product_database::GetEntry,        &db, DB_EndtAge))
+        << "\n  initialize()      : " << TimeAnAliquot(boost::bind(&product_database::initialize,       &db))
+        << "\n  constrain_scalar(): " << TimeAnAliquot(boost::bind(&product_database::constrain_scalar, &db, DB_EndtAge))
+        << "\n  Query(vector)     : " << TimeAnAliquot(boost::bind(&product_database::Query,            &db, v, DB_EndtAge))
+        << "\n  Query(scalar)     : " << TimeAnAliquot(boost::bind(&product_database::Query,            &db, DB_EndtAge))
+        << "\n  GetEntry()        : " << TimeAnAliquot(boost::bind(&product_database::GetEntry,         &db, DB_EndtAge))
         << '\n'
         ;
 }

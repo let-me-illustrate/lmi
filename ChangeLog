@@ -25475,3 +25475,17 @@ Demonstrate a problem. See:
   http://lists.nongnu.org/archive/html/lmi/2010-05/msg00004.html
 or thereabouts.
 
+20100506T1324Z <gchicares@sbcglobal.net> [718]
+
+  database.cpp
+  database.hpp
+  ihs_database.cpp
+Improve encapsulation; rename private members.
+
+20100506T1351Z <gchicares@sbcglobal.net> [718]
+
+  database.cpp
+  ihs_database.cpp
+  input_test.cpp
+Reimplement product_database::GetEntry().
+
