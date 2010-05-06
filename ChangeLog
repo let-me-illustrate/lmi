@@ -25473,7 +25473,6 @@ shows that the oft-called product_database::Query(int) is inefficient.
   input_test.cpp
 Demonstrate a problem. See:
   http://lists.nongnu.org/archive/html/lmi/2010-05/msg00004.html
-or thereabouts.
 
 20100506T1324Z <gchicares@sbcglobal.net> [718]
 
@@ -25501,4 +25500,19 @@ Further test product_database::GetEntry().
   ihs_database.cpp
   input_test.cpp
 Simplify.
+
+20100506T1821Z <gchicares@sbcglobal.net> [718]
+
+  objects.make
+  tn_range.hpp
+Make 'input_test' compile with como.
+
+20100506T2111Z <gchicares@sbcglobal.net> [718]
+
+  config.hpp
+Make 'input_test' succeed with como. The msvc workaround added on
+20090226T1557Z and discussed here:
+  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00074.html
+unintentionally applied to como as well, presumably because como
+defines the macro used to identify msvc.
 
