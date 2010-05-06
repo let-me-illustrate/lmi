@@ -337,6 +337,7 @@ liblmi_la_SOURCES = \
     ihs_irc7702.cpp \
     ihs_irc7702a.cpp \
     ihs_mortal.cpp \
+    lmi.cpp \
     md5.cpp \
     mec_input.cpp \
     mec_server.cpp \
@@ -938,6 +939,7 @@ noinst_HEADERS = \
     ledger_xsl.hpp \
     ledgervalues.hpp \
     license.hpp \
+    lmi.hpp \
     loads.hpp \
     loads_impl.hpp \
     main_common.hpp \

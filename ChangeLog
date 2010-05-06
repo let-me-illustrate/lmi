@@ -25440,3 +25440,20 @@ Remove gratuitous dissimilarities.
   main_cli.cpp
 Reduce inelegance.
 
+20100505T2345Z <gchicares@sbcglobal.net> [718]
+
+  Makefile.am
+Fix apparent defects. For example, all 'mec_*' files were missing.
+
+20100506T0025Z <gchicares@sbcglobal.net> [718]
+
+  Makefile.am
+  antediluvian_stubs.cpp
+  authenticity.cpp
+  authenticity.hpp
+  lmi.cpp [new file]
+  lmi.hpp [new file]
+  main_cli.cpp
+  objects.make
+Cleanly distinguish production from the antediluvian fork.
+
