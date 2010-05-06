@@ -25489,3 +25489,16 @@ Improve encapsulation; rename private members.
   input_test.cpp
 Reimplement product_database::GetEntry().
 
+20100506T1438Z <gchicares@sbcglobal.net> [718]
+
+  dbdict.hpp
+  input_test.cpp
+Further test product_database::GetEntry().
+
+20100506T1531Z <gchicares@sbcglobal.net> [718]
+
+  database.cpp
+  ihs_database.cpp
+  input_test.cpp
+Simplify.
+
