@@ -26,7 +26,7 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "authenticity.hpp"
+#include "lmi.hpp"          // is_antediluvian_fork()
 #include "mec_server.hpp"
 #include "product_data.hpp"
 #include "xml_serializable.tpp"
@@ -39,9 +39,9 @@ namespace
 void authenticate_system()
 {}
 
-std::string const& timestamp_of_production_release()
+bool is_antediluvian_fork()
 {
-    return empty_string;
+    return true;
 }
 
 mec_server::mec_server(mcenum_emission)

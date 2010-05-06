@@ -28,7 +28,6 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
-#include "authenticity.hpp" // timestamp_of_production_release()
 #include "dbdict.hpp"       // print_databases()
 #include "getopt.hpp"
 #include "global_settings.hpp"
@@ -39,6 +38,7 @@
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
 #include "license.hpp"
+#include "lmi.hpp"          // is_antediluvian_fork()
 #include "main_common.hpp"
 #include "mc_enum.hpp"
 #include "mc_enum_types.hpp"
@@ -126,7 +126,7 @@ void system_test()
 
 void self_test()
 {
-    bool const antediluvian = timestamp_of_production_release().empty();
+    bool const antediluvian = is_antediluvian_fork();
 
     illustrator z(mce_emit_nothing);
 
