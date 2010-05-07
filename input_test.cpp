@@ -96,6 +96,45 @@ void input_test::test_product_database()
     yare_input yi(input);
     product_database db(yi);
     std::vector<double> v;
+    std::vector<double> w;
+
+    // This vector's last element must be replicated.
+    int dims_stat[database_entity::e_number_of_axes] = {1, 1, 1, 1, 1, 1, 10};
+    double stat[10] = {0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.05};
+    DBDictionary::instance().dictionary_[DB_StatVxQ] = database_entity
+        (DB_StatVxQ
+        ,database_entity::e_number_of_axes
+        ,dims_stat
+        ,stat
+        );
+    db.Query(v, DB_StatVxQ);
+    w.assign(stat, stat + 10);
+    w.insert(w.end(), db.length() - w.size(), w.back());
+    BOOST_TEST(v == w);
+
+    // This vector must be truncated.
+    int dims_tax[database_entity::e_number_of_axes] = {1, 1, 1, 1, 1, 1, 100};
+    double tax[100] =
+        {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+        ,0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1
+        ,0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2
+        ,0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3
+        ,0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4
+        ,0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5
+        ,0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6
+        ,0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7
+        ,0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8
+        ,0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9
+        };
+    DBDictionary::instance().dictionary_[DB_TaxVxQ] = database_entity
+        (DB_TaxVxQ
+        ,database_entity::e_number_of_axes
+        ,dims_tax
+        ,tax
+        );
+    db.Query(v, DB_TaxVxQ);
+    w.assign(tax, tax + db.length());
+    BOOST_TEST(v == w);
 
     std::cout
         << "\n  Database speed tests..."
