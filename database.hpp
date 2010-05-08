@@ -82,8 +82,6 @@ class LMI_SO product_database
     void initialize();
     void initialize(std::string const& NewFilename);
 
-    void constrain_scalar(int k) const;
-
     database_index  index_;
     int             length_;
 

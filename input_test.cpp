@@ -146,7 +146,6 @@ void input_test::test_product_database()
     std::cout
         << "\n  Database speed tests..."
         << "\n  initialize()      : " << TimeAnAliquot(boost::bind(&product_database::initialize,       &db))
-        << "\n  constrain_scalar(): " << TimeAnAliquot(boost::bind(&product_database::constrain_scalar, &db, DB_EndtAge))
         << "\n  Query(vector)     : " << TimeAnAliquot(boost::bind(&product_database::Query,            &db, v, DB_EndtAge))
         << "\n  Query(scalar)     : " << TimeAnAliquot(boost::bind(&product_database::Query,            &db, DB_EndtAge))
         << "\n  GetEntry()        : " << TimeAnAliquot(boost::bind(&product_database::GetEntry,         &db, DB_EndtAge))
