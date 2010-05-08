@@ -185,7 +185,11 @@ void database_entity::assert_invariants() const
                 << GetDBNames()[key_].ShortName
                 << "' with key "
                 << key_
-                << " has invalid length in at least one dimension."
+                << " has invalid length "
+                << *ai
+                << " in a dimension where "
+                << *mi
+                << " was expected."
                 << LMI_FLUSH
                 ;
             }
