@@ -25581,3 +25581,12 @@ Refactor.
   ihs_database.cpp
 Assert another postcondition.
 
+20100508T1516Z <gchicares@sbcglobal.net> [712]
+
+  database.cpp
+  ihs_database.cpp
+  input_test.cpp
+Reimplement product_database::constrain_scalar(), resolving a defect
+noted 20100506T0226Z by making product_database::Query(int) several
+times faster.
+
