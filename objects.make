@@ -185,6 +185,7 @@ common_common_objects := \
   crc32.o \
   custom_io_0.o \
   data_directory.o \
+  database.o \
   datum_base.o \
   datum_boolean.o \
   datum_string.o \
@@ -255,7 +256,6 @@ antediluvian_common_objects := \
   accountvalue.o \
   antediluvian_stubs.o \
   basicvalues.o \
-  database.o \
   mortality_rates.o \
   solve.o \
 
@@ -274,7 +274,6 @@ lmi_common_objects := \
   ihs_avsolve.o \
   ihs_avstrtgy.o \
   ihs_basicval.o \
-  ihs_database.o \
   ihs_irc7702.o \
   ihs_irc7702a.o \
   ihs_mortal.o \
@@ -374,6 +373,7 @@ gpt_objects := \
   configurable_settings.o \
   crc32.o \
   data_directory.o \
+  database.o \
   datum_base.o \
   datum_string.o \
   dbdict.o \
@@ -386,7 +386,6 @@ gpt_objects := \
   fund_data.o \
   global_settings.o \
   ihs_basicval.o \
-  ihs_database.o \
   ihs_mortal.o \
   input.o \
   input_harmonization.o \

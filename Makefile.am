@@ -245,6 +245,7 @@ liblmi_common_sources = \
     crc32.cpp \
     custom_io_0.cpp \
     data_directory.cpp \
+    database.cpp \
     datum_base.cpp \
     datum_boolean.cpp \
     datum_string.cpp \
@@ -313,7 +314,6 @@ libantediluvian_la_SOURCES = \
     accountvalue.cpp \
     antediluvian_stubs.cpp \
     basicvalues.cpp \
-    database.cpp \
     mortality_rates.cpp \
     solve.cpp \
     $(liblmi_common_sources)
@@ -333,7 +333,6 @@ liblmi_la_SOURCES = \
     ihs_avsolve.cpp \
     ihs_avstrtgy.cpp \
     ihs_basicval.cpp \
-    ihs_database.cpp \
     ihs_irc7702.cpp \
     ihs_irc7702a.cpp \
     ihs_mortal.cpp \
