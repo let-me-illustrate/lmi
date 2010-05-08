@@ -136,6 +136,13 @@ void input_test::test_product_database()
     w.assign(tax, tax + db.length());
     BOOST_TEST(v == w);
 
+    // Scalar access is forbidden when entity varies by duration.
+    BOOST_TEST_THROW
+        (db.Query(DB_StatVxQ)
+        ,std::runtime_error
+        ,"Assertion '1 == v.GetLength()' failed."
+        );
+
     std::cout
         << "\n  Database speed tests..."
         << "\n  initialize()      : " << TimeAnAliquot(boost::bind(&product_database::initialize,       &db))
@@ -152,8 +159,23 @@ void input_test::test_product_database()
         ,"Assertion 'DB_FIRST <= k && k < DB_LAST' failed."
         );
 
-    database_entity const e = db.GetEntry(DB_EndtAge);
-    DBDictionary::instance().dictionary_[1 + DB_LAST] = e;
+    database_entity const maturity = db.GetEntry(DB_EndtAge);
+
+    // Maturity age must not vary by duration.
+    DBDictionary::instance().dictionary_[DB_EndtAge] = database_entity
+        (DB_StatVxQ
+        ,database_entity::e_number_of_axes
+        ,dims_stat
+        ,stat
+        );
+    BOOST_TEST_THROW
+        (db.initialize();
+        ,std::runtime_error
+        ,"Assertion '1 == v.GetLength()' failed."
+        );
+    DBDictionary::instance().dictionary_[DB_EndtAge] = maturity;
+
+    DBDictionary::instance().dictionary_[1 + DB_LAST] = maturity;
     DBDictionary::instance().dictionary_.erase(DB_EndtAge);
     BOOST_TEST_THROW
         (db.GetEntry(DB_EndtAge)

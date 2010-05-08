@@ -36,8 +36,7 @@
 #include "oecumenic_enumerations.hpp" // methuselah
 #include "yare_input.hpp"
 
-#include <algorithm> // std::copy(), std::min()
-#include <iterator>  // ostream_iterator
+#include <algorithm> // std::min()
 
 //============================================================================
 product_database::product_database
@@ -98,6 +97,7 @@ int product_database::length() const
 void product_database::initialize()
 {
     index_ = database_index(Gender, Class, Smoker, IssueAge, UWBasis, State);
+    constrain_scalar(DB_EndtAge);
     length_ = static_cast<int>(*GetEntry(DB_EndtAge)[index_]) - IssueAge;
     LMI_ASSERT(0 < length_ && length_ <= methuselah);
 }
@@ -145,30 +145,7 @@ database_entity const& product_database::GetEntry(int k) const
 
 void product_database::constrain_scalar(int k) const
 {
-    std::vector<double> z;
-    Query(z, k);
-    if
-        (
-            (0 != z.size())
-        &&  (z == std::vector<double>(z.size(), z[0]))
-        )
-        {
-        return;
-        }
-    else
-        {
-        fatal_error()
-            << "Database element "
-            << GetDBNames()[k].ShortName
-            << " varies by duration, but it must not. "
-            << "Values by duration: "
-            ;
-        std::copy
-            (z.begin()
-            ,z.end()
-            ,std::ostream_iterator<double>(fatal_error(), " ")
-            );
-        fatal_error() << LMI_FLUSH;
-        }
+    database_entity const& v = GetEntry(k);
+    LMI_ASSERT(1 == v.GetLength());
 }
 
