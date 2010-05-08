@@ -37,11 +37,11 @@
 #include "dbdict.hpp"
 #include "dbnames.hpp"
 #include "dbvalue.hpp"
-#include "oecumenic_enumerations.hpp"
+#include "oecumenic_enumerations.hpp" // methuselah
 #include "product_data.hpp"
 #include "yare_input.hpp"
 
-#include <algorithm> // std::copy(), std::max(), std::min()
+#include <algorithm> // std::copy(), std::min()
 #include <iterator>  // ostream_iterator
 
 //============================================================================
@@ -154,10 +154,7 @@ void product_database::initialize()
 // endowment age doesn't vary by duration.
 //  length_ = Query(DB_EndtAge) - IssueAge;
     length_ = static_cast<int>(*GetEntry(DB_EndtAge)[index_]) - IssueAge;
-    if(length_ <= 0)
-        {
-        fatal_error() << "Maturity age precedes issue age." << LMI_FLUSH;
-        }
+    LMI_ASSERT(0 < length_ && length_ <= methuselah);
     constrain_scalar(DB_EndtAge);
 }
 

@@ -25558,3 +25558,26 @@ unreachable because its condition was incorrect.
   dbvalue.hpp
 Remove a disused member function.
 
+20100508T1343Z <gchicares@sbcglobal.net> [712]
+
+  database.cpp
+  ihs_database.cpp
+Reimplement product_database::Query(vector).
+
+20100508T1346Z <gchicares@sbcglobal.net> [712]
+
+  dbvalue.cpp
+Improve a diagnostic.
+
+20100508T1347Z <gchicares@sbcglobal.net> [712]
+
+  actuarial_table.cpp
+  oecumenic_enumerations.hpp
+Refactor.
+
+20100508T1400Z <gchicares@sbcglobal.net> [712]
+
+  database.cpp
+  ihs_database.cpp
+Assert another postcondition.
+

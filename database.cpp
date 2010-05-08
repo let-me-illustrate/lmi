@@ -32,6 +32,8 @@
 #include "assert_lmi.hpp"
 #include "dbdict.hpp"
 #include "dbnames.hpp"
+#include "dbvalue.hpp"
+#include "oecumenic_enumerations.hpp" // methuselah
 #include "yare_input.hpp"
 
 #include <algorithm> // std::copy(), std::min()
@@ -97,10 +99,7 @@ void product_database::initialize()
 {
     index_ = database_index(Gender, Class, Smoker, IssueAge, UWBasis, State);
     length_ = static_cast<int>(*GetEntry(DB_EndtAge)[index_]) - IssueAge;
-    if(length_ <= 0)
-        {
-        fatal_error() << "Maturity age precedes issue age." << LMI_FLUSH;
-        }
+    LMI_ASSERT(0 < length_ && length_ <= methuselah);
 }
 
 //===========================================================================
