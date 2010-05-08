@@ -99,7 +99,6 @@ class LMI_SO database_entity
     double&       operator[](std::vector<int> const& idx);
 
     int GetKey()            const;
-    int GetNDims()          const; // Antediluvian: detect default-contructed objects.
     int GetLength()         const;
     int GetLength(int axis) const;
     std::vector<int> const& GetAxisLengths() const;

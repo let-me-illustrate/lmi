@@ -466,13 +466,6 @@ int database_entity::GetKey() const
     return key_;
 }
 
-// Deprecated.
-
-int database_entity::GetNDims() const
-{
-    return e_number_of_axes;
-}
-
 int database_entity::GetLength() const
 {
     return axis_lengths_.at(6);
