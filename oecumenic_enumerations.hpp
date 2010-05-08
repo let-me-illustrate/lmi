@@ -26,6 +26,10 @@
 
 #include "config.hpp"
 
+/// Genesis 5:27.
+
+enum {methuselah = 969};
+
 enum oenum_allocation_method
     {oe_input_allocation
     ,oe_override_allocation
