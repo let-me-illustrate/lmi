@@ -25516,3 +25516,24 @@ Make 'input_test' succeed with como. The msvc workaround added on
 unintentionally applied to como as well, presumably because como
 defines the macro used to identify msvc.
 
+20100507T1845Z <gchicares@sbcglobal.net> [718]
+
+  input_test.cpp
+Expand unit test.
+
+20100508T0021Z <gchicares@sbcglobal.net> [718]
+
+  dbvalue.cpp
+Improve documentation.
+
+20100508T0049Z <gchicares@sbcglobal.net> [717]
+
+  dbvalue.cpp
+  dbvalue.hpp
+Merge two member functions.
+
+20100508T0153Z <gchicares@sbcglobal.net> [717]
+
+  dbvalue.cpp
+Make default ctor establish invariants.
+
