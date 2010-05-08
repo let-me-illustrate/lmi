@@ -78,8 +78,7 @@ bool database_entity::Equivalent(database_entity const& a, database_entity const
 
 bool database_entity::VariesByState(database_entity const& z)
 {
-    LMI_ASSERT(5 < z.axis_lengths_.size());
-    return 1 != z.axis_lengths_[5];
+    return 1 != z.axis_lengths_.at(5);
 }
 
 /// Default ctor.
@@ -135,6 +134,7 @@ database_entity::database_entity
 {
     axis_lengths_ .assign(ScalarDims, ScalarDims + e_number_of_axes);
     data_values_  .push_back(datum);
+    assert_invariants();
 }
 
 database_entity::~database_entity()
@@ -172,7 +172,7 @@ void database_entity::assert_invariants() const
     LMI_ASSERT(e_number_of_axes == axis_lengths_.size());
 
     std::vector<int> const& max_dims(maximum_dimensions());
-    LMI_ASSERT(axis_lengths_.size() == max_dims.size());
+    LMI_ASSERT(e_number_of_axes == max_dims.size());
     std::vector<int>::const_iterator ai = axis_lengths_.begin();
     std::vector<int>::const_iterator mi = max_dims.begin();
 
@@ -210,8 +210,6 @@ void database_entity::assert_invariants() const
 
 int database_entity::getndata() const
 {
-    LMI_ASSERT(!axis_lengths_.empty());
-
     // Use a double for this purpose so that we can detect whether
     // the required number exceeds the maximum addressable number,
     // because a double has a wider range than an integer type.
@@ -261,11 +259,11 @@ int database_entity::getndata() const
 
 double& database_entity::operator[](std::vector<int> const& index)
 {
+    assert_invariants();
     LMI_ASSERT(e_number_of_axes == index.size());
-    LMI_ASSERT(e_number_of_axes == axis_lengths_.size());
 
     int z = 0;
-    for(unsigned int j = 0; j < axis_lengths_.size(); j++)
+    for(unsigned int j = 0; j < e_number_of_axes; j++)
         {
         if(1 != axis_lengths_[j])
             {
@@ -292,10 +290,9 @@ double const* database_entity::operator[](database_index const& idx) const
 {
     std::vector<int> const& index(idx.index_vector());
     LMI_ASSERT(e_number_of_axes == 1 + index.size());
-    LMI_ASSERT(e_number_of_axes == axis_lengths_.size());
 
     int z = 0;
-    for(unsigned int j = 0; j < axis_lengths_.size() - 1; j++)
+    for(unsigned int j = 0; j < e_number_of_axes - 1; j++)
         {
         if(1 != axis_lengths_[j])
             {
@@ -319,6 +316,7 @@ double const* database_entity::operator[](database_index const& idx) const
 
 void database_entity::Reshape(std::vector<int> const& dims)
 {
+    LMI_ASSERT(e_number_of_axes == dims.size());
     // Create a new instance of this class having the same
     // key but the desired dimensions.
     std::vector<double> new_data
@@ -468,21 +466,22 @@ int database_entity::GetKey() const
     return key_;
 }
 
+// Deprecated.
+
 int database_entity::GetNDims() const
 {
-    return axis_lengths_.size();
+    return e_number_of_axes;
 }
 
 int database_entity::GetLength() const
 {
-    LMI_ASSERT(0 < axis_lengths_.size());
-    return axis_lengths_.back();
+    return axis_lengths_.at(6);
 }
 
 int database_entity::GetLength(int axis) const
 {
-    LMI_ASSERT(0 <= axis && axis < static_cast<int>(axis_lengths_.size()));
-    return axis_lengths_[axis];
+    LMI_ASSERT(0 <= axis && axis < e_number_of_axes);
+    return axis_lengths_.at(axis);
 }
 
 std::vector<int> const& database_entity::GetAxisLengths() const
