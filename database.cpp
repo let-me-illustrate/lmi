@@ -1,6 +1,10 @@
+#include "ihs_database.cpp"
+#if 0
 // Product database.
 //
 // Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
+// [merged file will inherit 'ihs_database.cpp' copyright:]
+// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -48,7 +52,7 @@ product_database::product_database
     ,mcenum_uw_basis    a_UWBasis
     ,mcenum_state       a_State
     )
-    :length_  (0)
+    :length_  (0) // Undesirable: set to a nonzero value by initialize().
     ,Gender   (a_Gender)
     ,Class    (a_Class)
     ,Smoker   (a_Smoker)
@@ -138,4 +142,5 @@ database_entity const& product_database::GetEntry(int k) const
     LMI_ASSERT(i != d.end());
     return i->second;
 }
+#endif // 0
 

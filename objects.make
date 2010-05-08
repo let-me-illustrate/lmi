@@ -395,6 +395,7 @@ gpt_objects := \
   input_sequence.o \
   input_xml_io.o \
   interest_rates.o \
+  lmi.o \
   loads.o \
   mc_enum.o \
   mc_enum_types.o \
@@ -634,6 +635,7 @@ input_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
   $(xmlwrapp_objects) \
+  antediluvian_stubs.o \
   calendar_date.o \
   ce_product_name.o \
   configurable_settings.o \
