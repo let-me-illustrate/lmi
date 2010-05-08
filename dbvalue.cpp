@@ -74,14 +74,14 @@ bool database_entity::Equivalent(database_entity const& a, database_entity const
     return(a.axis_lengths_ == b.axis_lengths_ && a.data_values_ == b.data_values_);
 }
 
-//============================================================================
+/// Ascertain whether this entity varies by state.
+
 bool database_entity::VariesByState(database_entity const& z)
 {
     LMI_ASSERT(5 < z.axis_lengths_.size());
     return 1 != z.axis_lengths_[5];
 }
 
-//============================================================================
 database_entity::database_entity()
     :key_          (0)
     ,axis_lengths_ (e_number_of_axes)
@@ -106,7 +106,6 @@ database_entity::database_entity
     ParanoidCheck();
 }
 
-//============================================================================
 database_entity::database_entity
     (int                        key
     ,std::vector<int> const&    dims
@@ -135,12 +134,10 @@ database_entity::database_entity
     data_values_  .push_back(datum);
 }
 
-//============================================================================
 database_entity::~database_entity()
 {
 }
 
-//============================================================================
 void database_entity::ParanoidCheck() const
 {
     if
@@ -168,12 +165,12 @@ void database_entity::ParanoidCheck() const
     LMI_ASSERT(e_number_of_axes == axis_lengths_.size());
 }
 
-//============================================================================
+/// Calculate number of data required by lengths of axes.
+
 int database_entity::getndata() const
 {
     LMI_ASSERT(!axis_lengths_.empty());
 
-    // Calculate number of elements required from lengths of axes.
     // Use a double for this purpose so that we can detect whether
     // the required number exceeds the maximum addressable number,
     // because a double has a wider range than an integer type.
@@ -279,11 +276,10 @@ double const* database_entity::operator[](database_index const& idx) const
     return &data_values_[z];
 }
 
-//============================================================================
 void database_entity::Reshape(std::vector<int> const& dims)
 {
     // Create a new instance of this class having the same
-    // key but the desired number of axes
+    // key but the desired dimensions.
     std::vector<double> new_data
         (
         std::accumulate
@@ -390,7 +386,6 @@ void database_entity::Reshape(std::vector<int> const& dims)
     data_values_ = new_object.data_values_;
 }
 
-//============================================================================
 std::ostream& database_entity::write(std::ostream& os) const
 {
     os
@@ -427,7 +422,6 @@ std::ostream& database_entity::write(std::ostream& os) const
     return os;
 }
 
-//============================================================================
 // TODO ?? Combine this with ParanoidCheck()?
 bool database_entity::AreAllAxesOK() const
 {
