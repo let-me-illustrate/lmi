@@ -156,7 +156,7 @@ void product_database::initialize()
     length_ = static_cast<int>(*GetEntry(DB_EndtAge)[index_]) - IssueAge;
     if(length_ <= 0)
         {
-        fatal_error() << "Endowment age precedes issue age." << LMI_FLUSH;
+        fatal_error() << "Maturity age precedes issue age." << LMI_FLUSH;
         }
     constrain_scalar(DB_EndtAge);
 }
@@ -179,33 +179,9 @@ void product_database::Query(std::vector<double>& dst, int k) const
         }
     else
         {
-        LMI_ASSERT(0 <= length_);       // TODO ?? KLUDGE
-        LMI_ASSERT(0 <= v.GetLength()); // TODO ?? KLUDGE
-        int s = std::min(length_, v.GetLength());
-//      int t = std::max(0, length_ - v.GetLength());
-        int t = std::max(0, length_ - s);
-        dst.resize(0);
-
-        for(int j = 0; j < s; j++)
-            {
-            dst.push_back(z[j]);
-            }
-
-        if(0 == t)
-            {
-            return;
-            }
-        for(int j = 0; j < t; j++)
-            {
-            dst.push_back(z[s - 1]);
-            }
-
-/*
-//      dst.assign(s, *z);
-//      copy_n(z, v.GetLength(), dst);
-//      copy(&z[0], &z[v.GetLength()], dst.begin());
-//      fill(dst.begin() + v.GetLength(), dst.end(), z[v.GetLength() - 1]);
-*/
+        dst.reserve(length_);
+        dst.assign(z, z + std::min(length_, v.GetLength()));
+        dst.resize(length_, dst.back());
         }
 }
 

@@ -97,6 +97,10 @@ void product_database::initialize()
 {
     index_ = database_index(Gender, Class, Smoker, IssueAge, UWBasis, State);
     length_ = static_cast<int>(*GetEntry(DB_EndtAge)[index_]) - IssueAge;
+    if(length_ <= 0)
+        {
+        fatal_error() << "Maturity age precedes issue age." << LMI_FLUSH;
+        }
 }
 
 //===========================================================================
@@ -117,16 +121,9 @@ void product_database::Query(std::vector<double>& dst, int k) const
         }
     else
         {
-        dst.resize(length_);
-        int s = std::min(length_, v.GetLength());
-        for(int j = 0; j < s; ++j)
-            {
-            dst[j] = z[j];
-            }
-        for(int j = s; j < length_; ++j)
-            {
-            dst[j] = z[s - 1];
-            }
+        dst.reserve(length_);
+        dst.assign(z, z + std::min(length_, v.GetLength()));
+        dst.resize(length_, dst.back());
         }
 }
 
