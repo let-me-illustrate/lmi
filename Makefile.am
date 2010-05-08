@@ -583,6 +583,7 @@ test_input_seq_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_input_SOURCES =    \
   $(common_test_objects) \
+  antediluvian_stubs.cpp \
   calendar_date.cpp \
   ce_product_name.cpp \
   configurable_settings.cpp \
