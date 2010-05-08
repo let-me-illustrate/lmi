@@ -113,9 +113,8 @@ class LMI_SO database_entity
     static bool VariesByState(database_entity const&);
 
   private:
-    int  getndata()      const;
-    void ParanoidCheck() const;
-    bool AreAllAxesOK()  const;
+    int getndata() const;
+    void assert_invariants() const;
 
     void read (xml::element const&);
     void write(xml::element&) const;

@@ -102,8 +102,7 @@ database_entity::database_entity
 {
     axis_lengths_ .assign(dims, dims + ndims);
     data_values_  .assign(data, data + getndata());
-
-    ParanoidCheck();
+    assert_invariants();
 }
 
 database_entity::database_entity
@@ -117,7 +116,7 @@ database_entity::database_entity
     ,data_values_  (data)
     ,gloss_        (gloss)
 {
-    ParanoidCheck();
+    assert_invariants();
 }
 
 /// Handy ctor for scalar data.
@@ -138,7 +137,7 @@ database_entity::~database_entity()
 {
 }
 
-void database_entity::ParanoidCheck() const
+void database_entity::assert_invariants() const
 {
     if
         (
@@ -161,8 +160,46 @@ void database_entity::ParanoidCheck() const
         }
 
     LMI_ASSERT(getndata() == static_cast<int>(data_values_.size()));
+    LMI_ASSERT
+        (   0 < static_cast<int>(data_values_.size())
+        &&      static_cast<int>(data_values_.size()) < MaxPossibleElements
+        );
     LMI_ASSERT(DB_FIRST <= key_ && key_ < DB_LAST);
     LMI_ASSERT(e_number_of_axes == axis_lengths_.size());
+
+    std::vector<int> const& max_dims(maximum_dimensions());
+    LMI_ASSERT(axis_lengths_.size() == max_dims.size());
+    std::vector<int>::const_iterator ai = axis_lengths_.begin();
+    std::vector<int>::const_iterator mi = max_dims.begin();
+
+    while(ai != axis_lengths_.end()) // not duration!
+        {
+        if(*ai != 1 && *ai != *mi && *ai != axis_lengths_.back())
+            {
+            fatal_error()
+                << "Database item '"
+                << GetDBNames()[key_].ShortName
+                << "' with key "
+                << key_
+                << " has invalid length in at least one dimension."
+                << LMI_FLUSH
+                ;
+            }
+        ai++;
+        mi++;
+        }
+
+    if(max_dims.back() < axis_lengths_.back())
+            {
+            fatal_error()
+                << "Database item '"
+                << GetDBNames()[key_].ShortName
+                << "' with key "
+                << key_
+                << " has invalid duration."
+                << LMI_FLUSH
+                ;
+            }
 }
 
 /// Calculate number of data required by lengths of axes.
@@ -422,48 +459,6 @@ std::ostream& database_entity::write(std::ostream& os) const
     return os;
 }
 
-// TODO ?? Combine this with ParanoidCheck()?
-bool database_entity::AreAllAxesOK() const
-{
-    bool rc = true;
-    std::vector<int> const& max_dims(maximum_dimensions());
-    LMI_ASSERT(axis_lengths_.size() == max_dims.size());
-    std::vector<int>::const_iterator ai = axis_lengths_.begin();
-    std::vector<int>::const_iterator mi = max_dims.begin();
-
-    while(ai != axis_lengths_.end()) // not duration!
-        {
-        if(*ai != 1 && *ai != *mi && *ai != axis_lengths_.back())
-            {
-            warning()
-                << "Database item '"
-                << GetDBNames()[key_].ShortName
-                << "' with key "
-                << key_
-                << " has invalid length in at least one dimension."
-                << LMI_FLUSH
-                ;
-            rc = false;
-            }
-        ai++;
-        mi++;
-        }
-
-    if(max_dims.back() < axis_lengths_.back())
-            {
-            warning()
-                << "Database item '"
-                << GetDBNames()[key_].ShortName
-                << "' with key "
-                << key_
-                << " has invalid duration."
-                << LMI_FLUSH
-                ;
-            rc = false;
-            }
-    return rc;
-}
-
 int database_entity::GetKey() const
 {
     return key_;
@@ -500,22 +495,12 @@ void database_entity::read(xml::element const& e)
     xml_serialize::get_element(e, "data_values" , data_values_ );
     xml_serialize::get_element(e, "gloss"       , gloss_       );
 
-    LMI_ASSERT(getndata() == static_cast<int>(data_values_.size()));
-    LMI_ASSERT
-        (   0 < static_cast<int>(data_values_.size())
-        &&      static_cast<int>(data_values_.size()) < MaxPossibleElements
-        );
-    AreAllAxesOK();
+    assert_invariants();
 }
 
 void database_entity::write(xml::element& e) const
 {
-    LMI_ASSERT(getndata() == static_cast<int>(data_values_.size()));
-    LMI_ASSERT
-        (   0 < static_cast<int>(data_values_.size())
-        &&      static_cast<int>(data_values_.size()) < MaxPossibleElements
-        );
-    AreAllAxesOK();
+    assert_invariants();
 
     xml_serialize::set_element(e, "key"         , db_name_from_key(key_));
     xml_serialize::set_element(e, "axis_lengths", axis_lengths_);
