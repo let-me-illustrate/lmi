@@ -82,10 +82,14 @@ bool database_entity::VariesByState(database_entity const& z)
     return 1 != z.axis_lengths_[5];
 }
 
+/// Default ctor.
+
 database_entity::database_entity()
     :key_          (0)
-    ,axis_lengths_ (e_number_of_axes)
+    ,axis_lengths_ (e_number_of_axes, 1)
+    ,data_values_  (1)
 {
+    assert_invariants();
 }
 
 /// Handy ctor for writing programs to generate '.database' files.
