@@ -111,13 +111,13 @@ void product_database::Query(std::vector<double>& dst, int k) const
 {
     database_entity const& v = GetEntry(k);
     double const*const z = v[index_];
-    dst.resize(length_);
-    if(1 == v.GetNDims())
+    if(1 == v.GetLength())
         {
         dst.assign(length_, *z);
         }
     else
         {
+        dst.resize(length_);
         int s = std::min(length_, v.GetLength());
         for(int j = 0; j < s; ++j)
             {

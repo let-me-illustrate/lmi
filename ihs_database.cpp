@@ -173,12 +173,9 @@ void product_database::Query(std::vector<double>& dst, int k) const
 {
     database_entity const& v = GetEntry(k);
     double const*const z = v[index_];
-    // TODO ?? Can this be right?
-    if(1 == v.GetNDims())
+    if(1 == v.GetLength())
         {
-        // TODO ?? Can this be right? Seems unreachable.
-        int len = length_;   // TODO ?? First arg of assign not const?
-        dst.assign(len, *z);
+        dst.assign(length_, *z);
         }
     else
         {
