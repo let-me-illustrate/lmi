@@ -25590,3 +25590,13 @@ Reimplement product_database::constrain_scalar(), resolving a defect
 noted 20100506T0226Z by making product_database::Query(int) several
 times faster.
 
+20100508T1927Z <gchicares@sbcglobal.net> [710]
+
+  database.cpp
+  database.hpp
+  ihs_database.cpp
+  input_test.cpp
+Replace product_database::constrain_scalar() with inline code. It is
+faster to avoid calling GetEntry() repeatedly, especially now that
+GetEntry() dominates the time spent in Query().
+

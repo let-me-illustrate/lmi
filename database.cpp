@@ -97,16 +97,16 @@ int product_database::length() const
 void product_database::initialize()
 {
     index_ = database_index(Gender, Class, Smoker, IssueAge, UWBasis, State);
-    constrain_scalar(DB_EndtAge);
-    length_ = static_cast<int>(*GetEntry(DB_EndtAge)[index_]) - IssueAge;
+    length_ = static_cast<int>(Query(DB_EndtAge)) - IssueAge;
     LMI_ASSERT(0 < length_ && length_ <= methuselah);
 }
 
 //===========================================================================
 double product_database::Query(int k) const
 {
-    constrain_scalar(k); // TODO ?? Is the extra overhead acceptable?
-    return *GetEntry(k)[index_];
+    database_entity const& v = GetEntry(k);
+    LMI_ASSERT(1 == v.GetLength());
+    return *v[index_];
 }
 
 //===========================================================================
@@ -137,15 +137,5 @@ database_entity const& product_database::GetEntry(int k) const
     dict_map::const_iterator i = d.find(k);
     LMI_ASSERT(i != d.end());
     return i->second;
-}
-
-/// Constrain the value extracted from the database to be scalar--i.e.,
-/// invariant by duration. The database item may nonetheless vary
-/// across any axis except duration.
-
-void product_database::constrain_scalar(int k) const
-{
-    database_entity const& v = GetEntry(k);
-    LMI_ASSERT(1 == v.GetLength());
 }
 
