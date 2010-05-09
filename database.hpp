@@ -36,10 +36,10 @@
 #include <string>
 #include <vector>
 
-// Database of product parameters
-
 class database_entity;
 class yare_input;
+
+/// Database of product parameters.
 
 class LMI_SO product_database
     :private boost::noncopyable
@@ -58,7 +58,7 @@ class LMI_SO product_database
         ,mcenum_state       a_State
         );
     explicit product_database(yare_input const&);
-    // Ctor for unit-testing support.
+    // Special ctor implemented only in a unit-test TU.
     explicit product_database(int length);
     ~product_database();
 
@@ -66,10 +66,9 @@ class LMI_SO product_database
     int length() const;
 
     // Return scalar: use double because it's convertible to int, bool, etc.
-    // We'd rather do something like
+    // Someday, consider doing something like:
     //   template<typename T, typename DBValue>
     //   void Query(T& dst, int k) const;
-    // but bc++5.02 can't handle member template functions.
     double Query(int k) const;
 
     void Query(std::vector<double>& dst, int k) const;
@@ -77,20 +76,17 @@ class LMI_SO product_database
     database_entity const& GetEntry(int k) const;
 
   private:
-    product_database();
-
     void initialize();
-    void initialize(std::string const& NewFilename);
 
     database_index  index_;
     int             length_;
 
-    mcenum_gender   Gender;     // gender
-    mcenum_class    Class;      // underwriting class
-    mcenum_smoking  Smoker;     // smoker class
-    int             IssueAge;   // issue age
-    mcenum_uw_basis UWBasis;    // underwriting basis
-    mcenum_state    State;      // state of jurisdiction
+    mcenum_gender   Gender;   // gender
+    mcenum_class    Class;    // underwriting class
+    mcenum_smoking  Smoker;   // smoker class
+    int             IssueAge; // issue age
+    mcenum_uw_basis UWBasis;  // underwriting basis
+    mcenum_state    State;    // state of jurisdiction
 };
 
 #endif // database_hpp
