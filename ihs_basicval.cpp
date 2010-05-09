@@ -36,7 +36,6 @@
 #include "data_directory.hpp"
 #include "database.hpp"
 #include "dbdict.hpp"
-#include "dbnames.hpp"
 #include "death_benefits.hpp"
 #include "et_vector.hpp"
 #include "fund_data.hpp"
@@ -1634,7 +1633,7 @@ double BasicValues::GetAnnuityValueMlyDed
 
 std::vector<double> BasicValues::GetActuarialTable
     (std::string const& TableFile
-    ,long int           TableID
+    ,e_database_key     TableID
     ,long int           TableNumber
     ) const
 {
@@ -1669,7 +1668,7 @@ std::vector<double> BasicValues::GetActuarialTable
 //============================================================================
 std::vector<double> BasicValues::GetUnblendedTable
     (std::string const& TableFile
-    ,long int           TableID
+    ,e_database_key     TableID
     ) const
 {
     return GetActuarialTable
@@ -1682,7 +1681,7 @@ std::vector<double> BasicValues::GetUnblendedTable
 //============================================================================
 std::vector<double> BasicValues::GetUnblendedTable
     (std::string const& TableFile
-    ,long int           TableID
+    ,e_database_key     TableID
     ,mcenum_gender      gender
     ,mcenum_smoking     smoking
     ) const
@@ -1722,7 +1721,7 @@ std::vector<double> BasicValues::GetUnblendedTable
 // The order of blending in the unisex unismoke case makes no difference.
 std::vector<double> BasicValues::GetTable
     (std::string const& TableFile
-    ,long int    const& TableID
+    ,e_database_key     TableID
     ,bool               IsTableValid
     ,EBlend      const& CanBlendSmoking
     ,EBlend      const& CanBlendGender

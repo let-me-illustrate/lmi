@@ -25638,3 +25638,21 @@ Improve documentation.
   database.cpp
 Prefer map_lookup() for map lookups.
 
+20100509T1403Z <gchicares@sbcglobal.net> [706]
+
+  database_document.cpp
+  database_document.hpp
+  database_view.cpp
+  dbnames.hpp
+Rename an enum to improve concinnity.
+
+20100509T1405Z <gchicares@sbcglobal.net> [706]
+
+  basic_values.hpp
+  database.cpp
+  database.hpp
+  ihs_basicval.cpp
+  input_test.cpp
+  loads_test.cpp
+Strengthen typing.
+

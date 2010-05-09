@@ -26,6 +26,7 @@
 
 #include "config.hpp"
 
+#include "dbnames.hpp" // e_database_key
 #include "mc_enum_type_enums.hpp"
 #include "oecumenic_enumerations.hpp"
 #include "round_to.hpp"
@@ -282,7 +283,7 @@ class LMI_SO BasicValues
         ) const;
     std::vector<double> GetTable
         (std::string const& TableFile
-        ,long int    const& TableID
+        ,e_database_key     TableID
         ,bool               IsTableValid    = true
         ,EBlend      const& CanBlendSmoking = CannotBlend
         ,EBlend      const& CanBlendGender  = CannotBlend
@@ -405,18 +406,18 @@ class LMI_SO BasicValues
 
     std::vector<double> GetActuarialTable
         (std::string const& TableFile
-        ,long int           TableID
+        ,e_database_key     TableID
         ,long int           TableNumber
         ) const;
 
     std::vector<double> GetUnblendedTable
         (std::string const& TableFile
-        ,long int           TableID
+        ,e_database_key     TableID
         ) const;
 
     std::vector<double> GetUnblendedTable
         (std::string const& TableFile
-        ,long int           TableID
+        ,e_database_key     TableID
         ,mcenum_gender      gender
         ,mcenum_smoking     smoking
         ) const;
