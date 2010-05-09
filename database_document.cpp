@@ -90,7 +90,7 @@ DatabaseDocument::~DatabaseDocument()
 {
 }
 
-database_entity& DatabaseDocument::GetTDBValue(DatabaseNames index)
+database_entity& DatabaseDocument::GetTDBValue(e_database_key index)
 {
     if(dict_.find(index) == dict_.end())
         {
