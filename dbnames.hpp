@@ -33,7 +33,7 @@
 
 /// See 'dbnames.xpp' for the definition of each entity.
 
-enum DatabaseNames
+enum e_database_key
     {DB_FIRST
 
     ,DB_Topic_Underwriting
@@ -440,8 +440,8 @@ enum DatabaseNames
 
 struct db_names
 {
-    DatabaseNames       Idx;
-    DatabaseNames       ParentIdx;
+    e_database_key      Idx;
+    e_database_key      ParentIdx;
     char const*         ShortName;
     char const*         LongName;
 };

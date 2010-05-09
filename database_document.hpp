@@ -40,7 +40,7 @@ class DatabaseDocument
     DatabaseDocument();
     virtual ~DatabaseDocument();
 
-    database_entity& GetTDBValue(DatabaseNames index);
+    database_entity& GetTDBValue(e_database_key index);
 
   private:
     // ProductEditorDocument overrides.
