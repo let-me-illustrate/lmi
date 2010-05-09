@@ -32,7 +32,6 @@
 #include "assert_lmi.hpp"
 #include "data_directory.hpp"
 #include "dbdict.hpp"
-#include "dbnames.hpp"
 #include "dbvalue.hpp"
 #include "lmi.hpp"                    // is_antediluvian_fork()
 #include "map_lookup.hpp"
@@ -181,14 +180,14 @@ void product_database::initialize()
     LMI_ASSERT(0 < length_ && length_ <= methuselah);
 }
 
-double product_database::Query(int k) const
+double product_database::Query(e_database_key k) const
 {
     database_entity const& v = GetEntry(k);
     LMI_ASSERT(1 == v.GetLength());
     return *v[index_];
 }
 
-void product_database::Query(std::vector<double>& dst, int k) const
+void product_database::Query(std::vector<double>& dst, e_database_key k) const
 {
     database_entity const& v = GetEntry(k);
     double const*const z = v[index_];
@@ -204,12 +203,8 @@ void product_database::Query(std::vector<double>& dst, int k) const
         }
 }
 
-database_entity const& product_database::GetEntry(int k) const
+database_entity const& product_database::GetEntry(e_database_key k) const
 {
-    dict_map const& d = DBDictionary::instance().GetDictionary();
-    LMI_ASSERT(d.size() == DB_LAST);
-    LMI_ASSERT(0 == DB_FIRST);
-    LMI_ASSERT(DB_FIRST <= k && k < DB_LAST);
-    return map_lookup(d, k);
+    return map_lookup(DBDictionary::instance().GetDictionary(), k);
 }
 

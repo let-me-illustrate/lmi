@@ -27,6 +27,7 @@
 #include "config.hpp"
 
 #include "dbindex.hpp"
+#include "dbnames.hpp" // e_database_key
 #include "mc_enum_type_enums.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
@@ -68,12 +69,12 @@ class LMI_SO product_database
     // Return scalar: use double because it's convertible to int, bool, etc.
     // Someday, consider doing something like:
     //   template<typename T, typename DBValue>
-    //   void Query(T& dst, int k) const;
-    double Query(int k) const;
+    //   void Query(T& dst, e_database_key k) const;
+    double Query(e_database_key k) const;
 
-    void Query(std::vector<double>& dst, int k) const;
+    void Query(std::vector<double>& dst, e_database_key k) const;
 
-    database_entity const& GetEntry(int k) const;
+    database_entity const& GetEntry(e_database_key k) const;
 
   private:
     void initialize();

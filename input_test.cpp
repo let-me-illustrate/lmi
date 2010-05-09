@@ -152,12 +152,6 @@ void input_test::test_product_database()
         << '\n'
         ;
 
-    BOOST_TEST_THROW
-        (db.GetEntry(-1)
-        ,std::runtime_error
-        ,"Assertion 'DB_FIRST <= k && k < DB_LAST' failed."
-        );
-
     database_entity const maturity = db.GetEntry(DB_EndtAge);
 
     // Maturity age must not vary by duration.
@@ -179,7 +173,7 @@ void input_test::test_product_database()
     BOOST_TEST_THROW
         (db.GetEntry(DB_EndtAge)
         ,std::runtime_error
-        ,"Assertion 'i != d.end()' failed."
+        ,"map_lookup: key '258' not found."
         );
 }
 
