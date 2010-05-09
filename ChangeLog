@@ -25623,3 +25623,18 @@ achieves the goal announced 20100506T0226Z.
   database.cpp
 Remove old markup and questions answered in merge.
 
+20100509T1035Z <gchicares@sbcglobal.net> [706]
+
+  database.hpp
+Remove two disused member declarations.
+
+20100509T1221Z <gchicares@sbcglobal.net> [706]
+
+  map_lookup.hpp
+Improve documentation.
+
+20100509T1222Z <gchicares@sbcglobal.net> [706]
+
+  database.cpp
+Prefer map_lookup() for map lookups.
+

@@ -35,6 +35,7 @@
 #include "dbnames.hpp"
 #include "dbvalue.hpp"
 #include "lmi.hpp"                    // is_antediluvian_fork()
+#include "map_lookup.hpp"
 #include "oecumenic_enumerations.hpp" // methuselah
 #include "product_data.hpp"
 #include "yare_input.hpp"
@@ -206,12 +207,9 @@ void product_database::Query(std::vector<double>& dst, int k) const
 database_entity const& product_database::GetEntry(int k) const
 {
     dict_map const& d = DBDictionary::instance().GetDictionary();
-    LMI_ASSERT(d.size() == GetDBNames().size());
     LMI_ASSERT(d.size() == DB_LAST);
     LMI_ASSERT(0 == DB_FIRST);
     LMI_ASSERT(DB_FIRST <= k && k < DB_LAST);
-    dict_map::const_iterator i = d.find(k);
-    LMI_ASSERT(i != d.end());
-    return i->second;
+    return map_lookup(d, k);
 }
 
