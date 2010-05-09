@@ -21,10 +21,6 @@
 
 // $Id$
 
-// Should length_ be dynamically reset when IssueAge is?
-// Should State be dynamically reset?
-// Answer: 'no' to both. Axes are set upon construction and are immutable.
-
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
@@ -125,7 +121,7 @@ product_database::product_database(yare_input const& input)
         }
     initialize();
 
-    // State of jurisdiction must not depend on itself
+    // State of jurisdiction must not depend on itself.
     database_entity const& StateEntry = GetEntry(DB_PremTaxState);
     if(1 != StateEntry.GetLength(5))
         {
@@ -134,8 +130,6 @@ product_database::product_database(yare_input const& input)
             << " State of jurisdiction depends on itself."
             << LMI_FLUSH
             ;
-        // Should we test this in write()?
-        // Answer: 'no'. This code will soon be expunged.
         }
     switch(static_cast<int>(Query(DB_PremTaxState)))
         {
@@ -165,24 +159,20 @@ product_database::product_database(yare_input const& input)
     index_ = database_index(Gender, Class, Smoker, IssueAge, UWBasis, State);
 }
 
-//============================================================================
 product_database::~product_database()
 {
 }
 
-//============================================================================
 mcenum_state product_database::GetStateOfJurisdiction() const
 {
     return State;
 }
 
-//============================================================================
 int product_database::length() const
 {
     return length_;
 }
 
-//============================================================================
 void product_database::initialize()
 {
     index_ = database_index(Gender, Class, Smoker, IssueAge, UWBasis, State);
@@ -190,7 +180,6 @@ void product_database::initialize()
     LMI_ASSERT(0 < length_ && length_ <= methuselah);
 }
 
-//===========================================================================
 double product_database::Query(int k) const
 {
     database_entity const& v = GetEntry(k);
@@ -198,7 +187,6 @@ double product_database::Query(int k) const
     return *v[index_];
 }
 
-//===========================================================================
 void product_database::Query(std::vector<double>& dst, int k) const
 {
     database_entity const& v = GetEntry(k);
@@ -215,7 +203,6 @@ void product_database::Query(std::vector<double>& dst, int k) const
         }
 }
 
-//===========================================================================
 database_entity const& product_database::GetEntry(int k) const
 {
     dict_map const& d = DBDictionary::instance().GetDictionary();

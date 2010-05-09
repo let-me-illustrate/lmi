@@ -25600,3 +25600,26 @@ Replace product_database::constrain_scalar() with inline code. It is
 faster to avoid calling GetEntry() repeatedly, especially now that
 GetEntry() dominates the time spent in Query().
 
+20100508T2300Z <gchicares@sbcglobal.net> [706]
+
+  Makefile.am
+  antediluvian_stubs.cpp
+  database.cpp
+  ihs_database.cpp
+  objects.make
+Document preparations for merging '*database.cpp'.
+
+20100508T2328Z <gchicares@sbcglobal.net> [706]
+
+  Makefile.am
+  database.cpp     [overwritten by renamed 'ihs_database.cpp']
+  ihs_database.cpp [renamed to 'database.cpp']
+  objects.make
+Merge two TUs, renaming 'ihs_database.cpp' to 'database.cpp'. This
+achieves the goal announced 20100506T0226Z.
+
+20100509T0021Z <gchicares@sbcglobal.net> [706]
+
+  database.cpp
+Remove old markup and questions answered in merge.
+
