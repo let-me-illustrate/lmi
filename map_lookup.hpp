@@ -30,9 +30,11 @@
 #include <sstream>
 #include <stdexcept>
 
-// The reason why this isn't called 'operator[]() const' is discussed
-// in the thread beginning here:
-//   http://groups.google.com/group/comp.std.c++/msg/c1df492f65f29c5a
+/// Retrieve a value from a std::map; throw if key not found.
+///
+/// The reason why this isn't called 'operator[]() const' is discussed
+/// in the thread beginning here:
+///   http://groups.google.com/group/comp.std.c++/msg/c1df492f65f29c5a
 
 template<typename map_t>
 typename map_t::mapped_type const& map_lookup
@@ -51,6 +53,7 @@ typename map_t::mapped_type const& map_lookup
             ;
         throw std::runtime_error(oss.str());
         }
+
     return i->second;
 }
 
