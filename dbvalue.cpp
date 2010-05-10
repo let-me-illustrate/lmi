@@ -43,7 +43,7 @@
 #include <numeric>
 #include <ostream>
 
-static int const ScalarDims[database_entity::e_number_of_axes] = {1, 1, 1, 1, 1, 1, 1};
+static int const ScalarDims[e_number_of_axes] = {1, 1, 1, 1, 1, 1, 1};
 static int const MaxPossibleElements = std::numeric_limits<int>::max();
 
 /// Ascertain whether two database entities are equivalent.
