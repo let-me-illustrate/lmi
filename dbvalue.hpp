@@ -114,9 +114,9 @@ class LMI_SO database_entity
     double&       operator[](std::vector<int> const& idx);
 
     int key() const;
-    int GetLength()         const;
-    int GetLength(int axis) const;
-    std::vector<int> const& axis_lengths() const;
+    int extent() const;
+    std::vector<int>    const& axis_lengths() const;
+    std::vector<double> const& data_values () const;
 
     std::ostream& write(std::ostream&) const;
 
