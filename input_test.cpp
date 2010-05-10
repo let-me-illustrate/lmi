@@ -99,11 +99,11 @@ void input_test::test_product_database()
     std::vector<double> w;
 
     // This vector's last element must be replicated.
-    int dims_stat[database_entity::e_number_of_axes] = {1, 1, 1, 1, 1, 1, 10};
+    int dims_stat[e_number_of_axes] = {1, 1, 1, 1, 1, 1, 10};
     double stat[10] = {0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.05};
     DBDictionary::instance().dictionary_[DB_StatVxQ] = database_entity
         (DB_StatVxQ
-        ,database_entity::e_number_of_axes
+        ,e_number_of_axes
         ,dims_stat
         ,stat
         );
@@ -113,7 +113,7 @@ void input_test::test_product_database()
     BOOST_TEST(v == w);
 
     // This vector must be truncated.
-    int dims_tax[database_entity::e_number_of_axes] = {1, 1, 1, 1, 1, 1, 100};
+    int dims_tax[e_number_of_axes] = {1, 1, 1, 1, 1, 1, 100};
     double tax[100] =
         {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
         ,0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1
@@ -128,7 +128,7 @@ void input_test::test_product_database()
         };
     DBDictionary::instance().dictionary_[DB_TaxVxQ] = database_entity
         (DB_TaxVxQ
-        ,database_entity::e_number_of_axes
+        ,e_number_of_axes
         ,dims_tax
         ,tax
         );
@@ -157,7 +157,7 @@ void input_test::test_product_database()
     // Maturity age must not vary by duration.
     DBDictionary::instance().dictionary_[DB_EndtAge] = database_entity
         (DB_StatVxQ
-        ,database_entity::e_number_of_axes
+        ,e_number_of_axes
         ,dims_stat
         ,stat
         );

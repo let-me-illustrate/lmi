@@ -69,7 +69,7 @@ class DatabaseTableAdapter
     BOOST_STATIC_ASSERT
         (
            static_cast<int>(DatabaseTableAdapter::eda_max)
-        == static_cast<int>(database_entity::e_number_of_axes)
+        == static_cast<int>(e_number_of_axes)
         );
   public:
     DatabaseTableAdapter(database_entity* db_value = NULL);

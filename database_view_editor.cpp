@@ -95,7 +95,7 @@ class DatabaseDurationAxis
   :public AdjustableMaxBoundAxis<int>
 {
     typedef AdjustableMaxBoundAxis<int> BaseClass;
-    static const int max_bound_duration = database_entity::e_max_dim_duration - 1;
+    static const int max_bound_duration = e_max_dim_duration - 1;
 
   public:
     DatabaseDurationAxis()

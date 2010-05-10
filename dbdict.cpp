@@ -265,7 +265,7 @@ void DBDictionary::InitDB()
     // TODO ?? For now, only the threshold here is changed. Much
     // complex code elsewhere can be removed when time permits.
 
-    int premium_tax_dimensions[database_entity::e_number_of_axes] = {1, 1, 1, 1, 1, 53, 1};
+    int premium_tax_dimensions[e_number_of_axes] = {1, 1, 1, 1, 1, 53, 1};
     double premium_tax_retaliation_threshold[53] =
         {
     //  AL      AK      AZ      AR      CA      CO      CT
@@ -288,7 +288,7 @@ void DBDictionary::InitDB()
     Add
         (database_entity
             (DB_PremTaxRetalLimit
-            ,database_entity::e_number_of_axes
+            ,e_number_of_axes
             ,premium_tax_dimensions
             ,premium_tax_retaliation_threshold
             )
@@ -354,7 +354,7 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_DynamicMandE        , false));
 
     // gender, smoker
-    int dims313[database_entity::e_number_of_axes] = {3, 1, 3, 1, 1, 1, 1};
+    int dims313[e_number_of_axes] = {3, 1, 3, 1, 1, 1, 1};
 
     // US 1980 CSO age last; unisex = table D.
     // Male uses table E, which is correct, as opposed to table F,
@@ -368,8 +368,8 @@ void DBDictionary::WriteSampleDBFile()
 
     // For now at least, just use (a multiple of) guaranteed COI rates
     // as current.
-    Add(database_entity(DB_CurrCOITable, database_entity::e_number_of_axes, dims313, TgCOI));
-    Add(database_entity(DB_GuarCOITable, database_entity::e_number_of_axes, dims313, TgCOI));
+    Add(database_entity(DB_CurrCOITable, e_number_of_axes, dims313, TgCOI));
+    Add(database_entity(DB_GuarCOITable, e_number_of_axes, dims313, TgCOI));
 
     Add(database_entity(DB_COINYMinTable       , 0.0));
 
@@ -379,7 +379,7 @@ void DBDictionary::WriteSampleDBFile()
         0.60, 0.50, 0.55, // male:   sm ns us
         0.50, 0.40, 0.45, // unisex: sm ns us
         };
-    Add(database_entity(DB_CCOIMultiplier, database_entity::e_number_of_axes, dims313, coimult));
+    Add(database_entity(DB_CCOIMultiplier, e_number_of_axes, dims313, coimult));
 
     Add(database_entity(DB_UseNYCOIFloor       , 0.0));
     Add(database_entity(DB_GuarCOICeiling      , 0.0));
@@ -434,9 +434,9 @@ void DBDictionary::WriteSampleDBFile()
     // US 1980 CSO age last, not smoker distinct. Unisex = table D.
     // Male uses table E, which is correct, as opposed to table F,
     // which contains a numerical error but was adopted by NAIC.
-    int dims311[database_entity::e_number_of_axes] = {3, 1, 1, 1, 1, 1, 1}; // gender
+    int dims311[e_number_of_axes] = {3, 1, 1, 1, 1, 1, 1}; // gender
     double T7702q[9] = {35, 41, 107,}; // Female, male, unisex.
-    Add(database_entity(DB_IRC7702QTable, database_entity::e_number_of_axes, dims311, T7702q));
+    Add(database_entity(DB_IRC7702QTable, e_number_of_axes, dims311, T7702q));
 
     Add(database_entity(DB_PremLoad7702        , 0.02));
     Add(database_entity(DB_AllowDBO1           , true));
@@ -464,7 +464,7 @@ void DBDictionary::WriteSampleDBFile()
     // be used where no premium tax applies, as for offshore business.
     // DE has a tiered premium tax that this program cannot yet
     // handle, so we punt and use two percent in DE.
-    int premium_tax_dimensions[database_entity::e_number_of_axes] = {1, 1, 1, 1, 1, 53, 1};
+    int premium_tax_dimensions[e_number_of_axes] = {1, 1, 1, 1, 1, 53, 1};
     double const tiered = 0.0;
     double premium_tax_rates[53] =
         {
@@ -488,7 +488,7 @@ void DBDictionary::WriteSampleDBFile()
     Add
         (database_entity
             (DB_PremTaxRate
-            ,database_entity::e_number_of_axes
+            ,e_number_of_axes
             ,premium_tax_dimensions
             ,premium_tax_rates
             )
@@ -509,8 +509,8 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_NoLapseOpt1Only     , false));
     Add(database_entity(DB_PremRefund          , 0.0));
     // Reuse current COI rates as current and guaranteed term rates.
-    Add(database_entity(DB_TermTable, database_entity::e_number_of_axes, dims313, TgCOI));
-    Add(database_entity(DB_GuarTermTable, database_entity::e_number_of_axes, dims313, TgCOI));
+    Add(database_entity(DB_TermTable, e_number_of_axes, dims313, TgCOI));
+    Add(database_entity(DB_GuarTermTable, e_number_of_axes, dims313, TgCOI));
     Add(database_entity(DB_AllowTerm           , true));
     Add(database_entity(DB_TermMinIssAge       , 0.0));
     Add(database_entity(DB_TermMaxIssAge       , 0.0));
@@ -589,7 +589,7 @@ void DBDictionary::WriteSampleDBFile()
 
     // Use male rates for unisex--1983 GAM seems to have no unisex version.
     double T83Gam[3] = {825, 826, 826,};
-    Add(database_entity(DB_83GamTable, database_entity::e_number_of_axes, dims311, T83Gam, "Use male rates for unisex--1983 GAM seems to have no unisex version."));
+    Add(database_entity(DB_83GamTable, e_number_of_axes, dims311, T83Gam, "Use male rates for unisex--1983 GAM seems to have no unisex version."));
 
     Add(database_entity(DB_AllowWD             , true));
     Add(database_entity(DB_AllowLoan           , true));
@@ -609,7 +609,7 @@ void DBDictionary::WriteSampleDBFile()
     Add
         (database_entity
             (DB_PremTaxLoad
-            ,database_entity::e_number_of_axes
+            ,e_number_of_axes
             ,premium_tax_dimensions
             ,premium_tax_rates
             )
@@ -697,12 +697,12 @@ void DBDictionary::InitAntediluvian()
     Add(database_entity(DB_WDFee, 5.0));
     Add(database_entity(DB_WDFeeRate, 0.01));
 
-    int guar_coi_dims[database_entity::e_number_of_axes] = {1, 1, 3, 1, 1, 1, 1};
+    int guar_coi_dims[e_number_of_axes] = {1, 1, 3, 1, 1, 1, 1};
     // smoker, nonsmoker, unismoke
     double guar_coi_tables[3] = {111, 109, 107};
-    Add(database_entity(DB_GuarCOITable, database_entity::e_number_of_axes, guar_coi_dims, guar_coi_tables));
+    Add(database_entity(DB_GuarCOITable, e_number_of_axes, guar_coi_dims, guar_coi_tables));
 
-    int curr_coi_dims[database_entity::e_number_of_axes] = {1, 4, 3, 1, 1, 1, 1};
+    int curr_coi_dims[e_number_of_axes] = {1, 4, 3, 1, 1, 1, 1};
     // preferred, standard, rated, ultrapreferred by smoker, nonsmoker, unismoke
     double curr_coi_tables[] =
         {
@@ -711,7 +711,7 @@ void DBDictionary::InitAntediluvian()
         5, 6, 4, // rated sm ns us
         0, 0, 0, // ultra sm ns us
         };
-    Add(database_entity(DB_CurrCOITable, database_entity::e_number_of_axes, curr_coi_dims, curr_coi_tables));
+    Add(database_entity(DB_CurrCOITable, e_number_of_axes, curr_coi_dims, curr_coi_tables));
 
     Add(database_entity(DB_CorridorTable, 7));
     Add(database_entity(DB_WPTable, 8));
