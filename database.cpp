@@ -173,13 +173,6 @@ int product_database::length() const
     return length_;
 }
 
-void product_database::initialize()
-{
-    index_ = database_index(Gender, Class, Smoker, IssueAge, UWBasis, State);
-    length_ = static_cast<int>(Query(DB_EndtAge)) - IssueAge;
-    LMI_ASSERT(0 < length_ && length_ <= methuselah);
-}
-
 double product_database::Query(e_database_key k) const
 {
     database_entity const& v = GetEntry(k);
@@ -201,6 +194,13 @@ void product_database::Query(std::vector<double>& dst, e_database_key k) const
         dst.assign(z, z + std::min(length_, v.GetLength()));
         dst.resize(length_, dst.back());
         }
+}
+
+void product_database::initialize()
+{
+    index_ = database_index(Gender, Class, Smoker, IssueAge, UWBasis, State);
+    length_ = static_cast<int>(Query(DB_EndtAge)) - IssueAge;
+    LMI_ASSERT(0 < length_ && length_ <= methuselah);
 }
 
 database_entity const& product_database::GetEntry(e_database_key k) const
