@@ -25656,3 +25656,57 @@ Rename an enum to improve concinnity.
   loads_test.cpp
 Strengthen typing.
 
+20100510T0048Z <gchicares@sbcglobal.net> [706]
+
+  database.cpp
+  database.hpp
+  dbvalue.cpp
+  dbvalue.hpp
+Rearrange functions in logical order.
+
+20100510T0117Z <gchicares@sbcglobal.net> [706]
+
+  database_view_editor.cpp
+  database_view_editor.hpp
+  dbdict.cpp
+  dbvalue.cpp
+  dbvalue.hpp
+  input_test.cpp
+Augment and relocate enumerations.
+
+20100510T0135Z <gchicares@sbcglobal.net> [706]
+
+  database_view_editor.cpp
+  dbvalue.cpp
+  dbvalue.hpp
+Replace a static member with a free function.
+
+20100510T0201Z <gchicares@sbcglobal.net> [706]
+
+  database.cpp
+  database.hpp
+  database_view_editor.cpp
+  dbdict.cpp
+  dbvalue.cpp
+  dbvalue.hpp
+  ihs_basicval.cpp
+  input_test.cpp
+Rename certain member functions.
+
+20100510T0243Z <gchicares@sbcglobal.net> [706]
+
+  database.cpp
+  dbvalue.cpp
+  dbvalue.hpp
+  input_test.cpp
+Rework accessors in class database_entity.
+
+20100510T0322Z <gchicares@sbcglobal.net> [706]
+
+  database.cpp
+  database.hpp
+  dbvalue.cpp
+  dbvalue.hpp
+  ihs_basicval.cpp
+Refactor.
+

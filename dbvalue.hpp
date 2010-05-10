@@ -120,9 +120,6 @@ class LMI_SO database_entity
 
     std::ostream& write(std::ostream&) const;
 
-    static bool Equivalent(database_entity const&, database_entity const&);
-    static bool VariesByState(database_entity const&);
-
   private:
     void assert_invariants() const;
     int getndata() const;
