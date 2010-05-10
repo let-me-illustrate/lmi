@@ -73,12 +73,13 @@ class LMI_SO product_database
     double Query(e_database_key) const;
     void Query(std::vector<double>&, e_database_key) const;
 
+    bool are_equivalent(e_database_key, e_database_key) const;
+    bool varies_by_state(e_database_key) const;
+
   private:
     void initialize();
 
-  public:  // for the nonce...
     database_entity const& entity_from_key(e_database_key) const;
-  private: // ...for the nonce
 
     database_index  index_;
     int             length_;

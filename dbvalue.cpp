@@ -49,26 +49,6 @@ int const ScalarDims[e_number_of_axes] = {1, 1, 1, 1, 1, 1, 1};
 int const MaxPossibleElements = std::numeric_limits<int>::max();
 } // Unnamed namespace.
 
-/// Ascertain whether two database entities are equivalent.
-///
-/// Equivalence here means that the dimensions and data are identical.
-/// For example, these distinct entities:
-///  - DB_PremTaxRate (what the state charges the insurer)
-///  - DB_PremTaxLoad (what the insurer charges the customer)
-/// may be equivalent when premium tax is passed through as a load.
-
-bool database_entity::Equivalent(database_entity const& a, database_entity const& b)
-{
-    return(a.axis_lengths_ == b.axis_lengths_ && a.data_values_ == b.data_values_);
-}
-
-/// Ascertain whether this entity varies by state.
-
-bool database_entity::VariesByState(database_entity const& z)
-{
-    return 1 != z.axis_lengths_.at(5);
-}
-
 /// Default ctor.
 
 database_entity::database_entity()

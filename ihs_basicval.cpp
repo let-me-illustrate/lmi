@@ -35,7 +35,6 @@
 #include "configurable_settings.hpp"
 #include "data_directory.hpp"
 #include "database.hpp"
-#include "dbdict.hpp"
 #include "death_benefits.hpp"
 #include "et_vector.hpp"
 #include "fund_data.hpp"
@@ -911,8 +910,7 @@ double lowest_premium_tax_load
 
     z = db.Query(DB_PremTaxLoad);
 
-    database_entity const& premium_tax_loads = db.entity_from_key(DB_PremTaxLoad);
-    if(!database_entity::VariesByState(premium_tax_loads))
+    if(!db.varies_by_state(DB_PremTaxLoad))
         {
         return z;
         }
@@ -921,8 +919,7 @@ double lowest_premium_tax_load
     // it equals premium-tax rate--i.e. that premium tax is passed
     // through exactly--and that therefore tiered tax rates determine
     // loads where applicable and implemented.
-    database_entity const& premium_tax_rates = db.entity_from_key(DB_PremTaxRate);
-    if(!database_entity::Equivalent(premium_tax_loads, premium_tax_rates))
+    if(!db.are_equivalent(DB_PremTaxLoad, DB_PremTaxRate))
         {
         fatal_error()
             << "Premium-tax load varies by state, but differs"
@@ -967,8 +964,7 @@ void BasicValues::TestPremiumTaxLoadConsistency()
     // TODO ?? Don't override parameters--instead, only detect and
     // report inconsistencies.
     //
-    database_entity const& premium_tax_loads = Database_->entity_from_key(DB_PremTaxLoad);
-    if(!database_entity::VariesByState(premium_tax_loads))
+    if(!Database_->varies_by_state(DB_PremTaxLoad))
         {
         return;
         }

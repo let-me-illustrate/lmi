@@ -122,7 +122,7 @@ product_database::product_database(yare_input const& input)
     initialize();
 
     // State of jurisdiction must not depend on itself.
-    if(1 != entity_from_key(DB_PremTaxState).axis_lengths()[e_axis_state])
+    if(varies_by_state(DB_PremTaxState))
         {
         fatal_error()
             << "Database invalid: circular dependency."
@@ -194,6 +194,31 @@ void product_database::Query(std::vector<double>& dst, e_database_key k) const
         dst.assign(z, z + std::min(length_, v.extent()));
         dst.resize(length_, dst.back());
         }
+}
+
+/// Ascertain whether two database entities are equivalent.
+///
+/// Equivalence here means that the dimensions and data are identical.
+/// For example, these distinct entities:
+///  - DB_PremTaxRate (what the state charges the insurer)
+///  - DB_PremTaxLoad (what the insurer charges the customer)
+/// may be equivalent when premium tax is passed through as a load.
+
+bool product_database::are_equivalent(e_database_key k0, e_database_key k1) const
+{
+    database_entity const& e0 = entity_from_key(k0);
+    database_entity const& e1 = entity_from_key(k1);
+    return
+           e0.axis_lengths() == e1.axis_lengths()
+        && e0.data_values () == e1.data_values ()
+        ;
+}
+
+/// Ascertain whether a database entity varies by state.
+
+bool product_database::varies_by_state(e_database_key k) const
+{
+    return 1 != entity_from_key(k).axis_lengths().at(e_axis_state);
 }
 
 void product_database::initialize()
