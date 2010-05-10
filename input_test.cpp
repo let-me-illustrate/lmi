@@ -145,14 +145,14 @@ void input_test::test_product_database()
 
     std::cout
         << "\n  Database speed tests..."
-        << "\n  initialize()      : " << TimeAnAliquot(boost::bind(&product_database::initialize,       &db))
-        << "\n  Query(vector)     : " << TimeAnAliquot(boost::bind(&product_database::Query,            &db, v, DB_EndtAge))
-        << "\n  Query(scalar)     : " << TimeAnAliquot(boost::bind(&product_database::Query,            &db, DB_EndtAge))
-        << "\n  GetEntry()        : " << TimeAnAliquot(boost::bind(&product_database::GetEntry,         &db, DB_EndtAge))
+        << "\n  initialize()      : " << TimeAnAliquot(boost::bind(&product_database::initialize,      &db))
+        << "\n  Query(vector)     : " << TimeAnAliquot(boost::bind(&product_database::Query,           &db, v, DB_EndtAge))
+        << "\n  Query(scalar)     : " << TimeAnAliquot(boost::bind(&product_database::Query,           &db, DB_EndtAge))
+        << "\n  entity_from_key() : " << TimeAnAliquot(boost::bind(&product_database::entity_from_key, &db, DB_EndtAge))
         << '\n'
         ;
 
-    database_entity const maturity = db.GetEntry(DB_EndtAge);
+    database_entity const maturity = db.entity_from_key(DB_EndtAge);
 
     // Maturity age must not vary by duration.
     DBDictionary::instance().dictionary_[DB_EndtAge] = database_entity
@@ -171,7 +171,7 @@ void input_test::test_product_database()
     DBDictionary::instance().dictionary_[1 + DB_LAST] = maturity;
     DBDictionary::instance().dictionary_.erase(DB_EndtAge);
     BOOST_TEST_THROW
-        (db.GetEntry(DB_EndtAge)
+        (db.entity_from_key(DB_EndtAge)
         ,std::runtime_error
         ,"map_lookup: key '258' not found."
         );

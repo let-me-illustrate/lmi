@@ -105,7 +105,7 @@ template<> struct xml_io<dict_map>
             {
             database_entity z;
             xml_serialize::from_xml(*i, z);
-            t[z.GetKey()] = z;
+            t[z.key()] = z;
             }
     }
 };
@@ -220,7 +220,7 @@ void DBDictionary::WriteDB(std::string const& filename)
 
 void DBDictionary::Add(database_entity const& e)
 {
-    dictionary_[e.GetKey()] = e;
+    dictionary_[e.key()] = e;
 }
 
 /// Initialize all database entities to not-necessarily-plausible values.

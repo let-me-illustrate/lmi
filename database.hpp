@@ -77,7 +77,7 @@ class LMI_SO product_database
     void initialize();
 
   public:  // for the nonce...
-    database_entity const& GetEntry(e_database_key) const;
+    database_entity const& entity_from_key(e_database_key) const;
   private: // ...for the nonce
 
     database_index  index_;

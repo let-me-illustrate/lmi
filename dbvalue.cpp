@@ -126,7 +126,7 @@ database_entity::~database_entity()
 {
 }
 
-void database_entity::Reshape(std::vector<int> const& dims)
+void database_entity::reshape(std::vector<int> const& dims)
 {
     LMI_ASSERT(e_number_of_axes == dims.size());
     // Create a new instance of this class having the same
@@ -141,7 +141,7 @@ void database_entity::Reshape(std::vector<int> const& dims)
             )
         );
     database_entity new_object
-        (GetKey()
+        (key()
         ,dims
         ,new_data
         );
@@ -302,7 +302,7 @@ double const* database_entity::operator[](database_index const& idx) const
     return &data_values_[z];
 }
 
-int database_entity::GetKey() const
+int database_entity::key() const
 {
     return key_;
 }
@@ -318,7 +318,7 @@ int database_entity::GetLength(int axis) const
     return axis_lengths_.at(axis);
 }
 
-std::vector<int> const& database_entity::GetAxisLengths() const
+std::vector<int> const& database_entity::axis_lengths() const
 {
     return axis_lengths_;
 }
