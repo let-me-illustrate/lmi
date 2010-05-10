@@ -78,7 +78,7 @@ struct LoadsTest
     void TestVectorLengths(char const* file, int line);
     void TestCalculations (char const* file, int line);
 
-    load_details details_;
+    load_details const& details_;
     product_database database_;
     Loads loads_;
 };

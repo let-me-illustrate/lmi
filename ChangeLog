@@ -25710,3 +25710,10 @@ Rework accessors in class database_entity.
   ihs_basicval.cpp
 Refactor.
 
+20100510T1715Z <gchicares@sbcglobal.net> [706]
+
+  loads_impl.hpp
+  loads_test.cpp
+  multidimgrid_tools.hpp
+Prevent copying classes with reference data members.
+
