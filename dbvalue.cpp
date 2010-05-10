@@ -389,7 +389,7 @@ void database_entity::assert_invariants() const
     LMI_ASSERT(DB_FIRST <= key_ && key_ < DB_LAST);
     LMI_ASSERT(e_number_of_axes == axis_lengths_.size());
 
-    std::vector<int> const& max_dims(maximum_dimensions());
+    std::vector<int> const& max_dims(maximum_database_dimensions());
     LMI_ASSERT(e_number_of_axes == max_dims.size());
     std::vector<int>::const_iterator ai = axis_lengths_.begin();
     std::vector<int>::const_iterator mi = max_dims.begin();
@@ -493,7 +493,7 @@ void database_entity::write(xml::element& e) const
     xml_serialize::set_element(e, "gloss"       , gloss_       );
 }
 
-std::vector<int> const& database_entity::maximum_dimensions()
+std::vector<int> const& maximum_database_dimensions()
 {
     static int const d[e_number_of_axes] =
         {e_max_dim_gender

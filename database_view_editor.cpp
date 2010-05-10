@@ -211,7 +211,7 @@ void DatabaseTableAdapter::MakeVaryByDimension(unsigned int n, bool varies)
 
     std::vector<int> axis_lengths = db_value_->GetAxisLengths();
 
-    axis_lengths[n] = varies ? database_entity::maximum_dimensions()[n] : 1;
+    axis_lengths[n] = varies ? maximum_database_dimensions()[n] : 1;
 
     ReshapeTableData(axis_lengths, varies);
 }
