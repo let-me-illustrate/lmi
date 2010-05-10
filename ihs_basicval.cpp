@@ -911,7 +911,7 @@ double lowest_premium_tax_load
 
     z = db.Query(DB_PremTaxLoad);
 
-    database_entity const& premium_tax_loads = db.GetEntry(DB_PremTaxLoad);
+    database_entity const& premium_tax_loads = db.entity_from_key(DB_PremTaxLoad);
     if(!database_entity::VariesByState(premium_tax_loads))
         {
         return z;
@@ -921,7 +921,7 @@ double lowest_premium_tax_load
     // it equals premium-tax rate--i.e. that premium tax is passed
     // through exactly--and that therefore tiered tax rates determine
     // loads where applicable and implemented.
-    database_entity const& premium_tax_rates = db.GetEntry(DB_PremTaxRate);
+    database_entity const& premium_tax_rates = db.entity_from_key(DB_PremTaxRate);
     if(!database_entity::Equivalent(premium_tax_loads, premium_tax_rates))
         {
         fatal_error()
@@ -967,7 +967,7 @@ void BasicValues::TestPremiumTaxLoadConsistency()
     // TODO ?? Don't override parameters--instead, only detect and
     // report inconsistencies.
     //
-    database_entity const& premium_tax_loads = Database_->GetEntry(DB_PremTaxLoad);
+    database_entity const& premium_tax_loads = Database_->entity_from_key(DB_PremTaxLoad);
     if(!database_entity::VariesByState(premium_tax_loads))
         {
         return;

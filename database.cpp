@@ -122,7 +122,7 @@ product_database::product_database(yare_input const& input)
     initialize();
 
     // State of jurisdiction must not depend on itself.
-    database_entity const& StateEntry = GetEntry(DB_PremTaxState);
+    database_entity const& StateEntry = entity_from_key(DB_PremTaxState);
     if(1 != StateEntry.GetLength(5))
         {
         fatal_error()
@@ -175,14 +175,14 @@ int product_database::length() const
 
 double product_database::Query(e_database_key k) const
 {
-    database_entity const& v = GetEntry(k);
+    database_entity const& v = entity_from_key(k);
     LMI_ASSERT(1 == v.GetLength());
     return *v[index_];
 }
 
 void product_database::Query(std::vector<double>& dst, e_database_key k) const
 {
-    database_entity const& v = GetEntry(k);
+    database_entity const& v = entity_from_key(k);
     double const*const z = v[index_];
     if(1 == v.GetLength())
         {
@@ -203,7 +203,7 @@ void product_database::initialize()
     LMI_ASSERT(0 < length_ && length_ <= methuselah);
 }
 
-database_entity const& product_database::GetEntry(e_database_key k) const
+database_entity const& product_database::entity_from_key(e_database_key k) const
 {
     return map_lookup(DBDictionary::instance().GetDictionary(), k);
 }

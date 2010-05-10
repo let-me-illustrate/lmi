@@ -108,15 +108,15 @@ class LMI_SO database_entity
         );
     ~database_entity();
 
-    void Reshape(std::vector<int> const& dims);
+    void reshape(std::vector<int> const& dims);
 
     double const* operator[](database_index const& idx) const;
     double&       operator[](std::vector<int> const& idx);
 
-    int GetKey()            const;
+    int key() const;
     int GetLength()         const;
     int GetLength(int axis) const;
-    std::vector<int> const& GetAxisLengths() const;
+    std::vector<int> const& axis_lengths() const;
 
     std::ostream& write(std::ostream&) const;
 
