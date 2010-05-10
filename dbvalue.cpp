@@ -46,21 +46,6 @@
 static int const ScalarDims[database_entity::e_number_of_axes] = {1, 1, 1, 1, 1, 1, 1};
 static int const MaxPossibleElements = std::numeric_limits<int>::max();
 
-std::vector<int> const& database_entity::maximum_dimensions()
-{
-    static int const d[e_number_of_axes] =
-        {e_max_dim_gender
-        ,e_max_dim_class
-        ,e_max_dim_smoking
-        ,e_max_dim_issue_age
-        ,e_max_dim_uw_basis
-        ,e_max_dim_state
-        ,e_max_dim_duration
-        };
-    static std::vector<int> const z(d, d + e_number_of_axes);
-    return z;
-}
-
 /// Ascertain whether two database entities are equivalent.
 ///
 /// Equivalence here means that the dimensions and data are identical.
@@ -139,6 +124,239 @@ database_entity::database_entity
 
 database_entity::~database_entity()
 {
+}
+
+void database_entity::Reshape(std::vector<int> const& dims)
+{
+    LMI_ASSERT(e_number_of_axes == dims.size());
+    // Create a new instance of this class having the same
+    // key but the desired dimensions.
+    std::vector<double> new_data
+        (
+        std::accumulate
+            (dims.begin()
+            ,dims.end()
+            ,1
+            ,std::multiplies<int>()
+            )
+        );
+    database_entity new_object
+        (GetKey()
+        ,dims
+        ,new_data
+        );
+
+    // ET !! std::vector<int> max_dims_used = max(axis_lengths_, dims);
+    // ...and then expunge this comment:
+    // greater length of src or dst along each axis
+    std::vector<int> max_dims_used(e_number_of_axes);
+    std::transform
+        (axis_lengths_.begin()
+        ,axis_lengths_.end()
+        ,dims.begin()
+        ,max_dims_used.begin()
+        ,greater_of<int>()
+        );
+    // TODO ?? Oops--erase above std::transform() call--want only dst axes.
+    max_dims_used = dims;
+
+    // Number of times we'll go through the assignment loop.
+    // TODO ?? prolly should use max_dims_used instead of dims here (they're the same).
+    int n_iter = std::accumulate
+        (dims.begin()
+        ,dims.end()
+        ,1
+        ,std::multiplies<int>()
+        );
+
+    // ET !! std::vector<int> dst_max_idx = dims - 1;
+    // ...and then expunge this comment:
+    // max index of dst along each axis
+    std::vector<int> dst_max_idx(dims);
+    std::transform
+        (dst_max_idx.begin()
+        ,dst_max_idx.end()
+        ,dst_max_idx.begin()
+        ,std::bind2nd(std::minus<int>(), 1)
+        );
+    // ET !! std::vector<int> src_max_idx = axis_lengths_ - 1;
+    // ...and then expunge this comment:
+    // max index of src along each axis
+    std::vector<int> src_max_idx(axis_lengths_);
+    std::transform
+        (src_max_idx.begin()
+        ,src_max_idx.end()
+        ,src_max_idx.begin()
+        ,std::bind2nd(std::minus<int>(), 1)
+        );
+
+    // indexes new_object
+    std::vector<int> dst_idx(e_number_of_axes);
+    // indexes '*this'
+    std::vector<int> src_idx(e_number_of_axes);
+
+    std::vector<int> working_idx(e_number_of_axes);
+    for(int j = 0; j < n_iter; j++)
+        {
+        int z = j;
+        std::vector<int>::const_iterator i = max_dims_used.begin();
+        std::vector<int>::iterator w = working_idx.begin();
+        while(i != max_dims_used.end())
+            {
+            LMI_ASSERT(0 != *i);
+            *w = z % *i;
+            z /= *i;
+            i++;
+            w++;
+            }
+        LMI_ASSERT(0 == z);
+
+        // ET !! dst_idx = min(working_idx, dst_max_idx)
+        // ET !! src_idx = min(working_idx, src_max_idx)
+        // ...and then expunge this comment:
+        // limit dst and source indexes to those that actually vary
+        std::transform
+            (working_idx.begin()
+            ,working_idx.end()
+            ,dst_max_idx.begin()
+            ,dst_idx.begin()
+            ,lesser_of<int>()
+            );
+        std::transform
+            (working_idx.begin()
+            ,working_idx.end()
+            ,src_max_idx.begin()
+            ,src_idx.begin()
+            ,lesser_of<int>()
+            );
+        new_object[dst_idx] = operator[](src_idx);
+        }
+
+// erase    (*this) = new_object;
+    axis_lengths_ = dims;
+    data_values_ = new_object.data_values_;
+}
+
+/// Indexing operator for product editor only.
+///
+/// Two indexing operators are provided. This one's argument includes
+/// the number of durations--which, as far as the product editor is
+/// concerned, is much like the other axes. However, for illustration
+/// production, product_database::Query() handles the last (duration)
+/// axis, replicating the last value as needed to extend to maturity.
+
+double& database_entity::operator[](std::vector<int> const& index)
+{
+    assert_invariants();
+    LMI_ASSERT(e_number_of_axes == index.size());
+
+    int z = 0;
+    for(unsigned int j = 0; j < e_number_of_axes; j++)
+        {
+        if(1 != axis_lengths_[j])
+            {
+            LMI_ASSERT(index[j] < axis_lengths_[j]);
+            z = z * axis_lengths_[j] + index[j];
+            }
+        }
+    if(static_cast<int>(data_values_.size()) <= z)
+        {
+        z = 0;
+        fatal_error()
+            << "Trying to index database item with key "
+            << key_
+            << " past end of data."
+            << LMI_FLUSH
+            ;
+        }
+    return data_values_[z];
+}
+
+/// Indexing operator for illustration production.
+
+double const* database_entity::operator[](database_index const& idx) const
+{
+    std::vector<int> const& index(idx.index_vector());
+    LMI_ASSERT(e_number_of_axes == 1 + index.size());
+
+    int z = 0;
+    for(unsigned int j = 0; j < e_number_of_axes - 1; j++)
+        {
+        if(1 != axis_lengths_[j])
+            {
+            LMI_ASSERT(index[j] < axis_lengths_[j]);
+            z = z * axis_lengths_[j] + index[j];
+            }
+        }
+    z *= axis_lengths_.back();
+    if(static_cast<int>(data_values_.size()) <= z)
+        {
+        z = 0;
+        fatal_error()
+            << "Trying to index database item with key "
+            << key_
+            << " past end of data."
+            << LMI_FLUSH
+            ;
+        }
+    return &data_values_[z];
+}
+
+int database_entity::GetKey() const
+{
+    return key_;
+}
+
+int database_entity::GetLength() const
+{
+    return axis_lengths_.at(6);
+}
+
+int database_entity::GetLength(int axis) const
+{
+    LMI_ASSERT(0 <= axis && axis < e_number_of_axes);
+    return axis_lengths_.at(axis);
+}
+
+std::vector<int> const& database_entity::GetAxisLengths() const
+{
+    return axis_lengths_;
+}
+
+std::ostream& database_entity::write(std::ostream& os) const
+{
+    os
+        << '"' << GetDBNames()[key_].LongName << '"'
+        << '\n'
+        << "  name='" << GetDBNames()[key_].ShortName << "'"
+        << " key=" << key_
+        << '\n'
+        ;
+    if(!gloss_.empty())
+        {
+        os << "  gloss: " << gloss_ << '\n';
+        }
+
+    if(1 == getndata())
+        {
+        os << "  scalar";
+        }
+    else
+        {
+        os << "  varies by:";
+        if(1 != axis_lengths_[0]) os <<    " gender[" << axis_lengths_[0] << ']';
+        if(1 != axis_lengths_[1]) os <<  " uw_class[" << axis_lengths_[1] << ']';
+        if(1 != axis_lengths_[2]) os <<   " smoking[" << axis_lengths_[2] << ']';
+        if(1 != axis_lengths_[3]) os << " issue_age[" << axis_lengths_[3] << ']';
+        if(1 != axis_lengths_[4]) os <<  " uw_basis[" << axis_lengths_[4] << ']';
+        if(1 != axis_lengths_[5]) os <<     " state[" << axis_lengths_[5] << ']';
+        if(1 != axis_lengths_[6]) os <<  " duration[" << axis_lengths_[6] << ']';
+        }
+
+    os << '\n';
+    print_matrix(os, data_values_, axis_lengths_);
+    os << '\n';
+    return os;
 }
 
 void database_entity::assert_invariants() const
@@ -253,239 +471,6 @@ int database_entity::getndata() const
     return static_cast<int>(n);
 }
 
-/// Indexing operator for product editor only.
-///
-/// Two indexing operators are provided. This one's argument includes
-/// the number of durations--which, as far as the product editor is
-/// concerned, is much like the other axes. However, for illustration
-/// production, product_database::Query() handles the last (duration)
-/// axis, replicating the last value as needed to extend to maturity.
-
-double& database_entity::operator[](std::vector<int> const& index)
-{
-    assert_invariants();
-    LMI_ASSERT(e_number_of_axes == index.size());
-
-    int z = 0;
-    for(unsigned int j = 0; j < e_number_of_axes; j++)
-        {
-        if(1 != axis_lengths_[j])
-            {
-            LMI_ASSERT(index[j] < axis_lengths_[j]);
-            z = z * axis_lengths_[j] + index[j];
-            }
-        }
-    if(static_cast<int>(data_values_.size()) <= z)
-        {
-        z = 0;
-        fatal_error()
-            << "Trying to index database item with key "
-            << key_
-            << " past end of data."
-            << LMI_FLUSH
-            ;
-        }
-    return data_values_[z];
-}
-
-/// Indexing operator for illustration production.
-
-double const* database_entity::operator[](database_index const& idx) const
-{
-    std::vector<int> const& index(idx.index_vector());
-    LMI_ASSERT(e_number_of_axes == 1 + index.size());
-
-    int z = 0;
-    for(unsigned int j = 0; j < e_number_of_axes - 1; j++)
-        {
-        if(1 != axis_lengths_[j])
-            {
-            LMI_ASSERT(index[j] < axis_lengths_[j]);
-            z = z * axis_lengths_[j] + index[j];
-            }
-        }
-    z *= axis_lengths_.back();
-    if(static_cast<int>(data_values_.size()) <= z)
-        {
-        z = 0;
-        fatal_error()
-            << "Trying to index database item with key "
-            << key_
-            << " past end of data."
-            << LMI_FLUSH
-            ;
-        }
-    return &data_values_[z];
-}
-
-void database_entity::Reshape(std::vector<int> const& dims)
-{
-    LMI_ASSERT(e_number_of_axes == dims.size());
-    // Create a new instance of this class having the same
-    // key but the desired dimensions.
-    std::vector<double> new_data
-        (
-        std::accumulate
-            (dims.begin()
-            ,dims.end()
-            ,1
-            ,std::multiplies<int>()
-            )
-        );
-    database_entity new_object
-        (GetKey()
-        ,dims
-        ,new_data
-        );
-
-    // ET !! std::vector<int> max_dims_used = max(axis_lengths_, dims);
-    // ...and then expunge this comment:
-    // greater length of src or dst along each axis
-    std::vector<int> max_dims_used(e_number_of_axes);
-    std::transform
-        (axis_lengths_.begin()
-        ,axis_lengths_.end()
-        ,dims.begin()
-        ,max_dims_used.begin()
-        ,greater_of<int>()
-        );
-    // TODO ?? Oops--erase above std::transform() call--want only dst axes.
-    max_dims_used = dims;
-
-    // Number of times we'll go through the assignment loop.
-    // TODO ?? prolly should use max_dims_used instead of dims here (they're the same).
-    int n_iter = std::accumulate
-        (dims.begin()
-        ,dims.end()
-        ,1
-        ,std::multiplies<int>()
-        );
-
-    // ET !! std::vector<int> dst_max_idx = dims - 1;
-    // ...and then expunge this comment:
-    // max index of dst along each axis
-    std::vector<int> dst_max_idx(dims);
-    std::transform
-        (dst_max_idx.begin()
-        ,dst_max_idx.end()
-        ,dst_max_idx.begin()
-        ,std::bind2nd(std::minus<int>(), 1)
-        );
-    // ET !! std::vector<int> src_max_idx = axis_lengths_ - 1;
-    // ...and then expunge this comment:
-    // max index of src along each axis
-    std::vector<int> src_max_idx(axis_lengths_);
-    std::transform
-        (src_max_idx.begin()
-        ,src_max_idx.end()
-        ,src_max_idx.begin()
-        ,std::bind2nd(std::minus<int>(), 1)
-        );
-
-    // indexes new_object
-    std::vector<int> dst_idx(e_number_of_axes);
-    // indexes '*this'
-    std::vector<int> src_idx(e_number_of_axes);
-
-    std::vector<int> working_idx(e_number_of_axes);
-    for(int j = 0; j < n_iter; j++)
-        {
-        int z = j;
-        std::vector<int>::const_iterator i = max_dims_used.begin();
-        std::vector<int>::iterator w = working_idx.begin();
-        while(i != max_dims_used.end())
-            {
-            LMI_ASSERT(0 != *i);
-            *w = z % *i;
-            z /= *i;
-            i++;
-            w++;
-            }
-        LMI_ASSERT(0 == z);
-
-        // ET !! dst_idx = min(working_idx, dst_max_idx)
-        // ET !! src_idx = min(working_idx, src_max_idx)
-        // ...and then expunge this comment:
-        // limit dst and source indexes to those that actually vary
-        std::transform
-            (working_idx.begin()
-            ,working_idx.end()
-            ,dst_max_idx.begin()
-            ,dst_idx.begin()
-            ,lesser_of<int>()
-            );
-        std::transform
-            (working_idx.begin()
-            ,working_idx.end()
-            ,src_max_idx.begin()
-            ,src_idx.begin()
-            ,lesser_of<int>()
-            );
-        new_object[dst_idx] = operator[](src_idx);
-        }
-
-// erase    (*this) = new_object;
-    axis_lengths_ = dims;
-    data_values_ = new_object.data_values_;
-}
-
-std::ostream& database_entity::write(std::ostream& os) const
-{
-    os
-        << '"' << GetDBNames()[key_].LongName << '"'
-        << '\n'
-        << "  name='" << GetDBNames()[key_].ShortName << "'"
-        << " key=" << key_
-        << '\n'
-        ;
-    if(!gloss_.empty())
-        {
-        os << "  gloss: " << gloss_ << '\n';
-        }
-
-    if(1 == getndata())
-        {
-        os << "  scalar";
-        }
-    else
-        {
-        os << "  varies by:";
-        if(1 != axis_lengths_[0]) os <<    " gender[" << axis_lengths_[0] << ']';
-        if(1 != axis_lengths_[1]) os <<  " uw_class[" << axis_lengths_[1] << ']';
-        if(1 != axis_lengths_[2]) os <<   " smoking[" << axis_lengths_[2] << ']';
-        if(1 != axis_lengths_[3]) os << " issue_age[" << axis_lengths_[3] << ']';
-        if(1 != axis_lengths_[4]) os <<  " uw_basis[" << axis_lengths_[4] << ']';
-        if(1 != axis_lengths_[5]) os <<     " state[" << axis_lengths_[5] << ']';
-        if(1 != axis_lengths_[6]) os <<  " duration[" << axis_lengths_[6] << ']';
-        }
-
-    os << '\n';
-    print_matrix(os, data_values_, axis_lengths_);
-    os << '\n';
-    return os;
-}
-
-int database_entity::GetKey() const
-{
-    return key_;
-}
-
-int database_entity::GetLength() const
-{
-    return axis_lengths_.at(6);
-}
-
-int database_entity::GetLength(int axis) const
-{
-    LMI_ASSERT(0 <= axis && axis < e_number_of_axes);
-    return axis_lengths_.at(axis);
-}
-
-std::vector<int> const& database_entity::GetAxisLengths() const
-{
-    return axis_lengths_;
-}
-
 void database_entity::read(xml::element const& e)
 {
     std::string short_name;
@@ -506,5 +491,20 @@ void database_entity::write(xml::element& e) const
     xml_serialize::set_element(e, "axis_lengths", axis_lengths_);
     xml_serialize::set_element(e, "data_values" , data_values_ );
     xml_serialize::set_element(e, "gloss"       , gloss_       );
+}
+
+std::vector<int> const& database_entity::maximum_dimensions()
+{
+    static int const d[e_number_of_axes] =
+        {e_max_dim_gender
+        ,e_max_dim_class
+        ,e_max_dim_smoking
+        ,e_max_dim_issue_age
+        ,e_max_dim_uw_basis
+        ,e_max_dim_state
+        ,e_max_dim_duration
+        };
+    static std::vector<int> const z(d, d + e_number_of_axes);
+    return z;
 }
 

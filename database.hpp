@@ -69,15 +69,16 @@ class LMI_SO product_database
     // Return scalar: use double because it's convertible to int, bool, etc.
     // Someday, consider doing something like:
     //   template<typename T, typename DBValue>
-    //   void Query(T& dst, e_database_key k) const;
-    double Query(e_database_key k) const;
-
-    void Query(std::vector<double>& dst, e_database_key k) const;
-
-    database_entity const& GetEntry(e_database_key k) const;
+    //   void Query(T&, e_database_key) const;
+    double Query(e_database_key) const;
+    void Query(std::vector<double>&, e_database_key) const;
 
   private:
     void initialize();
+
+  public:  // for the nonce...
+    database_entity const& GetEntry(e_database_key) const;
+  private: // ...for the nonce
 
     database_index  index_;
     int             length_;

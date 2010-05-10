@@ -95,6 +95,8 @@ class LMI_SO database_entity
         );
     ~database_entity();
 
+    void Reshape(std::vector<int> const& dims);
+
     double const* operator[](database_index const& idx) const;
     double&       operator[](std::vector<int> const& idx);
 
@@ -103,17 +105,14 @@ class LMI_SO database_entity
     int GetLength(int axis) const;
     std::vector<int> const& GetAxisLengths() const;
 
-    void Reshape(std::vector<int> const& dims);
-
     std::ostream& write(std::ostream&) const;
 
-    static std::vector<int> const& maximum_dimensions();
     static bool Equivalent(database_entity const&, database_entity const&);
     static bool VariesByState(database_entity const&);
 
   private:
-    int getndata() const;
     void assert_invariants() const;
+    int getndata() const;
 
     void read (xml::element const&);
     void write(xml::element&) const;
@@ -122,6 +121,9 @@ class LMI_SO database_entity
     std::vector<int>    axis_lengths_;
     std::vector<double> data_values_;
     std::string         gloss_;
+
+  public: // for the nonce...
+    static std::vector<int> const& maximum_dimensions();
 };
 
 /*
