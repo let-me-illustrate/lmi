@@ -43,8 +43,11 @@
 #include <numeric>
 #include <ostream>
 
-static int const ScalarDims[e_number_of_axes] = {1, 1, 1, 1, 1, 1, 1};
-static int const MaxPossibleElements = std::numeric_limits<int>::max();
+namespace
+{
+int const ScalarDims[e_number_of_axes] = {1, 1, 1, 1, 1, 1, 1};
+int const MaxPossibleElements = std::numeric_limits<int>::max();
+} // Unnamed namespace.
 
 /// Ascertain whether two database entities are equivalent.
 ///
@@ -307,20 +310,22 @@ int database_entity::key() const
     return key_;
 }
 
-int database_entity::GetLength() const
-{
-    return axis_lengths_.at(6);
-}
+/// Dimension along the duration axis.
 
-int database_entity::GetLength(int axis) const
+int database_entity::extent() const
 {
-    LMI_ASSERT(0 <= axis && axis < e_number_of_axes);
-    return axis_lengths_.at(axis);
+    return axis_lengths_.at(e_axis_duration);
 }
 
 std::vector<int> const& database_entity::axis_lengths() const
 {
+    LMI_ASSERT(e_number_of_axes == axis_lengths_.size());
     return axis_lengths_;
+}
+
+std::vector<double> const& database_entity::data_values() const
+{
+    return data_values_;
 }
 
 std::ostream& database_entity::write(std::ostream& os) const

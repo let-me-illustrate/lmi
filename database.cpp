@@ -122,8 +122,7 @@ product_database::product_database(yare_input const& input)
     initialize();
 
     // State of jurisdiction must not depend on itself.
-    database_entity const& StateEntry = entity_from_key(DB_PremTaxState);
-    if(1 != StateEntry.GetLength(5))
+    if(1 != entity_from_key(DB_PremTaxState).axis_lengths()[e_axis_state])
         {
         fatal_error()
             << "Database invalid: circular dependency."
@@ -131,6 +130,7 @@ product_database::product_database(yare_input const& input)
             << LMI_FLUSH
             ;
         }
+
     switch(static_cast<int>(Query(DB_PremTaxState)))
         {
         case oe_ee_state:
@@ -176,7 +176,7 @@ int product_database::length() const
 double product_database::Query(e_database_key k) const
 {
     database_entity const& v = entity_from_key(k);
-    LMI_ASSERT(1 == v.GetLength());
+    LMI_ASSERT(1 == v.extent());
     return *v[index_];
 }
 
@@ -184,14 +184,14 @@ void product_database::Query(std::vector<double>& dst, e_database_key k) const
 {
     database_entity const& v = entity_from_key(k);
     double const*const z = v[index_];
-    if(1 == v.GetLength())
+    if(1 == v.extent())
         {
         dst.assign(length_, *z);
         }
     else
         {
         dst.reserve(length_);
-        dst.assign(z, z + std::min(length_, v.GetLength()));
+        dst.assign(z, z + std::min(length_, v.extent()));
         dst.resize(length_, dst.back());
         }
 }

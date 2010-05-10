@@ -140,7 +140,7 @@ void input_test::test_product_database()
     BOOST_TEST_THROW
         (db.Query(DB_StatVxQ)
         ,std::runtime_error
-        ,"Assertion '1 == v.GetLength()' failed."
+        ,"Assertion '1 == v.extent()' failed."
         );
 
     std::cout
@@ -164,7 +164,7 @@ void input_test::test_product_database()
     BOOST_TEST_THROW
         (db.initialize();
         ,std::runtime_error
-        ,"Assertion '1 == v.GetLength()' failed."
+        ,"Assertion '1 == v.extent()' failed."
         );
     DBDictionary::instance().dictionary_[DB_EndtAge] = maturity;
 
