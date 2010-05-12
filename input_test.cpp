@@ -27,6 +27,9 @@
 #endif // __BORLANDC__
 
 // Facilities offered by all of these headers are tested here.
+// Class product_database might appear not to belong, but it's
+// intimately entwined with input.
+#include "database.hpp"
 #include "input.hpp"
 #include "multiple_cell_document.hpp"
 #include "single_cell_document.hpp"
@@ -34,6 +37,8 @@
 // End of headers tested here.
 
 #include "assert_lmi.hpp"
+#include "dbdict.hpp"
+#include "dbnames.hpp"
 #include "miscellany.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
@@ -57,12 +62,14 @@ class input_test
   public:
     static void test()
         {
+        test_product_database();
         test_input_class();
         test_document_classes();
         assay_speed();
         }
 
   private:
+    static void test_product_database();
     static void test_input_class();
     static void test_document_classes();
     static void assay_speed();
@@ -82,6 +89,93 @@ class input_test
     static void mete_cns_io();
     static void mete_ill_io();
 };
+
+void input_test::test_product_database()
+{
+    Input input;
+    yare_input yi(input);
+    product_database db(yi);
+    std::vector<double> v;
+    std::vector<double> w;
+
+    // This vector's last element must be replicated.
+    int dims_stat[e_number_of_axes] = {1, 1, 1, 1, 1, 1, 10};
+    double stat[10] = {0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.05};
+    DBDictionary::instance().dictionary_[DB_StatVxQ] = database_entity
+        (DB_StatVxQ
+        ,e_number_of_axes
+        ,dims_stat
+        ,stat
+        );
+    db.Query(v, DB_StatVxQ);
+    w.assign(stat, stat + 10);
+    w.insert(w.end(), db.length() - w.size(), w.back());
+    BOOST_TEST(v == w);
+
+    // This vector must be truncated.
+    int dims_tax[e_number_of_axes] = {1, 1, 1, 1, 1, 1, 100};
+    double tax[100] =
+        {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+        ,0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1
+        ,0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2
+        ,0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3
+        ,0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4
+        ,0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5
+        ,0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6
+        ,0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7
+        ,0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8
+        ,0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9
+        };
+    DBDictionary::instance().dictionary_[DB_TaxVxQ] = database_entity
+        (DB_TaxVxQ
+        ,e_number_of_axes
+        ,dims_tax
+        ,tax
+        );
+    db.Query(v, DB_TaxVxQ);
+    w.assign(tax, tax + db.length());
+    BOOST_TEST(v == w);
+
+    // Scalar access is forbidden when entity varies by duration.
+    BOOST_TEST_THROW
+        (db.Query(DB_StatVxQ)
+        ,std::runtime_error
+        ,"Assertion '1 == v.extent()' failed."
+        );
+
+    std::cout
+        << "\n  Database speed tests..."
+        << "\n  initialize()      : " << TimeAnAliquot(boost::bind(&product_database::initialize,      &db))
+        << "\n  Query(vector)     : " << TimeAnAliquot(boost::bind(&product_database::Query,           &db, v, DB_EndtAge))
+        << "\n  Query(scalar)     : " << TimeAnAliquot(boost::bind(&product_database::Query,           &db, DB_EndtAge))
+        << "\n  entity_from_key() : " << TimeAnAliquot(boost::bind(&product_database::entity_from_key, &db, DB_EndtAge))
+        << '\n'
+        ;
+
+    database_entity const maturity = db.entity_from_key(DB_EndtAge);
+
+    // Maturity age must not vary by duration.
+    DBDictionary::instance().dictionary_[DB_EndtAge] = database_entity
+        (DB_StatVxQ
+        ,e_number_of_axes
+        ,dims_stat
+        ,stat
+        );
+    BOOST_TEST_THROW
+        (db.initialize();
+        ,std::runtime_error
+        ,"Assertion '1 == v.extent()' failed."
+        );
+    DBDictionary::instance().dictionary_[DB_EndtAge] = maturity;
+
+    DBDictionary::instance().dictionary_[1 + DB_LAST] = maturity;
+    DBDictionary::instance().dictionary_.erase(DB_EndtAge);
+    BOOST_TEST_THROW
+        (db.entity_from_key(DB_EndtAge)
+        ,std::runtime_error
+        ,"map_lookup: key '258' not found."
+        );
+}
 
 void input_test::test_input_class()
 {
@@ -223,12 +317,13 @@ void input_test::assay_speed()
     xml::element const& e = *i;
 
     std::cout
-        << "  Speed tests...\n"
-        << "  Overhead: " << TimeAnAliquot(mete_overhead            ) << '\n'
-        << "  Read    : " << TimeAnAliquot(boost::bind(mete_read, e)) << '\n'
-        << "  Write   : " << TimeAnAliquot(mete_write               ) << '\n'
-        << "  'cns' io: " << TimeAnAliquot(mete_cns_io              ) << '\n'
-        << "  'ill' io: " << TimeAnAliquot(mete_ill_io              ) << '\n'
+        << "\n  Input speed tests..."
+        << "\n  Overhead: " << TimeAnAliquot(mete_overhead            )
+        << "\n  Read    : " << TimeAnAliquot(boost::bind(mete_read, e))
+        << "\n  Write   : " << TimeAnAliquot(mete_write               )
+        << "\n  'cns' io: " << TimeAnAliquot(mete_cns_io              )
+        << "\n  'ill' io: " << TimeAnAliquot(mete_ill_io              )
+        << '\n'
         ;
 }
 

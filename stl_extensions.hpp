@@ -119,7 +119,7 @@ bool is_sorted
 
     return true;
 }
-} // Unnamed namespace.
+} // namespace nonstd
 
 #endif // stl_extensions_hpp
 

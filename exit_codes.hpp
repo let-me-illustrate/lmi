@@ -81,7 +81,7 @@ namespace lmi_test
     int const exit_exception_failure = 200; // otherwise uncaught exception
     int const exit_test_failure = 201;      // report_error or
                                             // report_critical_error called.
-} // Namespace lmi_test.
+} // namespace lmi_test
 
 #endif // exit_codes_hpp
 

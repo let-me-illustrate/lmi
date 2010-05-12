@@ -123,9 +123,9 @@ namespace fs = boost::filesystem;
 // Give this toolchain its own lmi-specific macro. Rationale:
 //   http://boost.cvs.sf.net/boost/boost/boost/config.hpp?annotate=1.1
 //   Many other "compilers define _MSC_VER. Thus BOOST_MSVC."
-#if defined _MSC_VER
+#if defined _MSC_VER && !defined LMI_GCC_VERSION && !defined LMI_COMO_WITH_MINGW
 #    define LMI_MSC
-#endif // defined _MSC_VER
+#endif // defined _MSC_VER && !defined LMI_GCC_VERSION && !defined LMI_COMO_WITH_MINGW
 
 #if defined HAVE_CONFIG_H // Using autoconf.
 #   include "config.h"

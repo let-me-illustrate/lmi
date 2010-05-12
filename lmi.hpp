@@ -1,6 +1,6 @@
-// Interface to xmlwrapp: forward declarations.
+// Production versus the antediluvian fork.
 //
-// Copyright (C) 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
+// Copyright (C) 2010 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -21,35 +21,22 @@
 
 // $Id$
 
-#ifndef xml_lmi_fwd_hpp
-#define xml_lmi_fwd_hpp
+#ifndef lmi_hpp
+#define lmi_hpp
 
 #include "config.hpp"
 
-namespace xml // This is xmlwrapp's namespace.
-{
-    class attributes;
-    class document;
-    class init;
-    class node;
-    class tree_parser;
+#include "so_attributes.hpp"
 
-    /// XMLWRAPP !! It is useful to distinguish elements from DOM
-    /// nodes that are not elements; xmlwrapp doesn't make this
-    /// distinction, but a future replacement might.
-    typedef xml::node element;
-} // namespace xml
+#include <string>
 
-/// Interface to xmlwrapp.
+/// Distinguish the antediluvian fork from production.
 
-namespace xml_lmi
-{
-    class dom_parser;
-    class xml_document;
+bool LMI_SO is_antediluvian_fork();
 
-    typedef xml::attributes Attribute;
-    typedef xml::document   Document;
-} // namespace xml_lmi
+/// Timestamp of production release.
 
-#endif // xml_lmi_fwd_hpp
+std::string const& LMI_SO timestamp_of_production_release();
+
+#endif // lmi_hpp
 

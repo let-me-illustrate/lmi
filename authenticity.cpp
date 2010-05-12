@@ -37,7 +37,6 @@
 #include "path_utility.hpp"       // fs::path inserter
 #include "platform_dependent.hpp" // chdir()
 #include "system_command.hpp"
-#include "version.hpp"
 
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
@@ -303,11 +302,5 @@ std::string md5_hex_string(std::vector<unsigned char> const& vuc)
             ;
         }
     return oss.str();
-}
-
-std::string const& timestamp_of_production_release()
-{
-    static std::string const s(LMI_VERSION);
-    return s;
 }
 

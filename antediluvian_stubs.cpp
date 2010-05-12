@@ -26,9 +26,10 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "authenticity.hpp"
+#include "lmi.hpp"          // is_antediluvian_fork()
 #include "mec_server.hpp"
 #include "product_data.hpp"
+#include "xml_lmi.hpp"
 #include "xml_serializable.tpp"
 
 namespace
@@ -39,9 +40,15 @@ namespace
 void authenticate_system()
 {}
 
-std::string const& timestamp_of_production_release()
+glossed_string::glossed_string()
+{}
+
+glossed_string::~glossed_string()
+{}
+
+bool is_antediluvian_fork()
 {
-    return empty_string;
+    return true;
 }
 
 mec_server::mec_server(mcenum_emission)
@@ -80,6 +87,40 @@ std::string mec_state::xml_root_name() const
 }
 
 bool mec_state::is_detritus(std::string const&) const
+{
+    return false;
+}
+
+product_data::product_data(std::string const&)
+{}
+
+product_data::~product_data()
+{}
+
+int product_data::class_version() const
+{
+    return 0;
+}
+
+std::string product_data::xml_root_name() const
+{
+    return empty_string;
+}
+
+void product_data::read_element
+    (xml::element const&
+    ,std::string const&
+    ,int
+    )
+{}
+
+void product_data::write_element
+    (xml::element&
+    ,std::string const&
+    ) const
+{}
+
+bool product_data::is_detritus(std::string const&) const
 {
     return false;
 }

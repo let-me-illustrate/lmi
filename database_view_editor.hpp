@@ -34,23 +34,23 @@
 #include "multidimgrid_safe.hpp"
 #include "multidimgrid_tools.hpp"
 
-// EVGENIY !! I suspect that we can avoid including "ihs_dbvalue.hpp"
+// EVGENIY !! I suspect that we can avoid including "dbvalue.hpp"
 // here by reworking or moving code for which a forward declaration
 // doesn't work today.
 
-#include "ihs_dbvalue.hpp"
+#include "dbvalue.hpp"
 
 #include <boost/shared_ptr.hpp>
 
 #include <string>
 
-/// Database dictionary adapter for TDBValue class
+/// Database dictionary adapter for database_entity class
 ///
 /// One could mention Adaptor pattern.
-/// It does not really owns the TDBValue instance which is passed to it.
+/// It does not really owns the database_entity instance which is passed to it.
 /// The boost::shared_ptr does.
-/// Regarding the fact that all the instances of TDBValue are reside
-/// in the TDBDictionary object and owned by it, one could pass entity via
+/// Regarding the fact that all the instances of database_entity are reside
+/// in the dict_map object and owned by it, one could pass entity via
 /// boost::shared_ptr constructed with deallocator object that does nothing.
 
 class DatabaseTableAdapter
@@ -69,16 +69,16 @@ class DatabaseTableAdapter
     BOOST_STATIC_ASSERT
         (
            static_cast<int>(DatabaseTableAdapter::eda_max)
-        == static_cast<int>(TDBValue::e_number_of_axes)
+        == static_cast<int>(e_number_of_axes)
         );
   public:
-    DatabaseTableAdapter(TDBValue* db_value = NULL);
+    DatabaseTableAdapter(database_entity* db_value = NULL);
 
     virtual ~DatabaseTableAdapter();
 
     /// Decorated object accessors
-    TDBValue* GetTDBValue() const;
-    void SetTDBValue(TDBValue* db_value);
+    database_entity* GetTDBValue() const;
+    void SetTDBValue(database_entity* db_value);
 
     /// Return true if the object data is modified since the last save
     bool IsModified() const;
@@ -114,7 +114,7 @@ class DatabaseTableAdapter
         );
 
     /// Pointer to decorated object
-    TDBValue* db_value_;
+    database_entity* db_value_;
 
     /// Modification flag (dirty flag)
     bool modified_;
@@ -125,12 +125,12 @@ class DatabaseTableAdapter
     DECLARE_NO_COPY_CLASS(DatabaseTableAdapter)
 };
 
-inline TDBValue* DatabaseTableAdapter::GetTDBValue() const
+inline database_entity* DatabaseTableAdapter::GetTDBValue() const
 {
     return db_value_;
 }
 
-inline void DatabaseTableAdapter::SetTDBValue(TDBValue* db_value)
+inline void DatabaseTableAdapter::SetTDBValue(database_entity* db_value)
 {
     db_value_ = db_value;
 }
@@ -145,9 +145,9 @@ inline void DatabaseTableAdapter::SetModified(bool modified)
     modified_ = modified;
 }
 
-/// Class is the version of MultiDimGrid customized for db4 file data.
+/// Class is the version of MultiDimGrid customized for '.database' data.
 ///
-/// Grid edit the data that depends upon 7 axis described in ihs_dbvalue.hpp
+/// Grid edit the data that depends upon 7 axis described in 'dbvalue.hpp'
 
 class DatabaseEditorGrid
   :public MultiDimGrid

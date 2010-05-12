@@ -1,6 +1,6 @@
-// Life insurance illustrations: surrender charge rates.
+// Production versus the antediluvian fork.
 //
-// Copyright (C) 2003, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
+// Copyright (C) 2010 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -26,24 +26,18 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "surrchg_rates.hpp"
+#include "lmi.hpp"
 
-#include "database.hpp"
-#include "dbnames.hpp"
+#include "version.hpp"
 
-//============================================================================
-SurrChgRates::SurrChgRates(product_database const& database)
+bool is_antediluvian_fork()
 {
-    Initialize(database);
+    return false;
 }
 
-//============================================================================
-void SurrChgRates::Initialize(product_database const& database)
+std::string const& timestamp_of_production_release()
 {
-    database.Query(RatePerDollarOfPremium_     , DB_SurrChgPremMult   );
-    database.Query(RatePerDollarOfAcctval_     , DB_SurrChgAVMult     );
-    database.Query(RatePerDollarOfSpecamt_     , DB_SurrChgSAMult     );
-    database.Query(AcctvalRateDurationalFactor_, DB_SurrChgAVDurFactor);
-    database.Query(SpecamtRateDurationalFactor_, DB_SurrChgSADurFactor);
+    static std::string const s(LMI_VERSION);
+    return s;
 }
 

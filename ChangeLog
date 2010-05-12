@@ -25044,7 +25044,676 @@ Fix defect introduced 20070221T0307Z. See (A) here:
 20100424T2350Z <gchicares@sbcglobal.net> [755]
 
   rounding_rules.cpp
-  rounding_rules.hpp
 Fix defect introduced 20070221T0307Z. See (B) here:
   http://lists.nongnu.org/archive/html/lmi/2010-04/msg00040.html
+
+20100425T2129Z <gchicares@sbcglobal.net> [755]
+
+  rounding_rules.cpp
+Improve documentation.
+
+20100425T2130Z <gchicares@sbcglobal.net> [755]
+
+  workhorse.make
+Refine system-test analysis.
+
+20100425T2131Z <gchicares@sbcglobal.net> [755]
+
+  main_cli.cpp
+Report elapsed time for system test.
+
+20100426T1240Z <gchicares@sbcglobal.net> [755]
+
+  ihs_basicval.cpp
+  my_rnd.cpp
+  rounding_document.cpp
+  rounding_rules.cpp
+  rounding_rules.hpp
+Mix class xml_serializable into class rounding_rules.
+
+20100426T1342Z <gchicares@sbcglobal.net> [755]
+
+  snprintf_test.cpp
+  value_cast_test.cpp
+Work around a libc QoI issue.
+
+20100427T1359Z <gchicares@sbcglobal.net> [755]
+
+  ihs_basicval.cpp
+  my_rnd.cpp
+  rounding_document.hpp
+  rounding_rules.cpp
+  rounding_rules.hpp
+  rounding_view_editor.cpp
+  rounding_view_editor.hpp
+Permit annotations in '.rounding' files.
+
+20100427T2340Z <gchicares@sbcglobal.net> [755]
+
+  database_view_editor.hpp
+Anticipate new database-file names.
+
+20100428T1231Z <gchicares@sbcglobal.net> [755]
+
+  dbnames.xpp
+  ihs_basicval.cpp
+  ihs_dbdict.cpp
+  mec_server.cpp
+  mortality_rates_fetch.cpp
+Redefine 'MaxMonthlyCoiRate' and 'NAARDiscount' as reciprocals. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-03/msg00000.html
+
+20100429T1910Z <gchicares@sbcglobal.net> [755]
+
+  dbnames.cpp
+  dbnames.hpp
+Commute between database name and key (VS).
+
+20100429T1913Z <gchicares@sbcglobal.net> [745]
+
+  Makefile.am
+  ihs_dbdict.cpp
+  ihs_dbvalue.cpp
+  ihs_dbvalue.hpp
+  ihs_fpios.cpp [expunged]
+  ihs_fpios.hpp [expunged]
+  ihs_pios.cpp  [expunged]
+  ihs_pios.hpp  [expunged]
+  main_wx.cpp
+  my_prod.cpp
+  objects.make
+  product_data.cpp
+  test_coding_rules.cpp
+  workhorse.make
+Reimplement 'database' (formerly 'db4') product files (VS).
+
+20100429T2351Z <gchicares@sbcglobal.net> [745]
+
+  alert.cpp
+  callback_test.cpp
+  catch_exceptions.hpp
+  config_bc551.hpp
+  cpp_main.cpp
+  database_document.cpp
+  dbvalue.cpp
+  exit_codes.hpp
+  ihs_irc7702.cpp
+  multidimgrid_any.cpp
+  numeric_io_traits.hpp
+  rounding_view_editor.cpp
+  stl_extensions.hpp
+  test_main.cpp
+  test_tools.hpp
+  tier_view.cpp
+  xml_lmi_fwd.hpp
+  xml_serialize.hpp
+Improve concinnity. Write either:
+  namespace xyz
+  {
+  ...
+  } // namespace xyz
+so that grepping the opening leads to the closing; or:
+  namespace
+  {
+  ...
+  } // Unnamed namespace.
+which differs in that "Unnamed" is not the unnamed namespace's name.
+
+20100430T0121Z <gchicares@sbcglobal.net> [738]
+
+  ihs_dbvalue.cpp
+  ihs_dbvalue.hpp
+Simplify.
+
+20100430T1429Z <gchicares@sbcglobal.net> [738]
+
+  ihs_dbdict.cpp
+  ihs_dbvalue.cpp
+  ihs_dbvalue.hpp
+  workhorse.make
+Permit annotations in '.database' files.
+
+20100430T1709Z <gchicares@sbcglobal.net> [737]
+
+  ihs_basicval.cpp
+  ihs_dbdict.cpp
+  ihs_dbvalue.cpp
+  ihs_dbvalue.hpp
+Simplify.
+
+20100501T0027Z <gchicares@sbcglobal.net> [737]
+
+  dbvalue.cpp
+  dbvalue.hpp
+  ihs_dbvalue.cpp
+  ihs_dbvalue.hpp
+Remove gratuitous dissimilarities.
+
+20100501T0115Z <gchicares@sbcglobal.net> [737]
+
+  dbvalue.cpp
+  dbvalue.hpp
+  ihs_dbvalue.cpp
+  ihs_dbvalue.hpp
+Mark data members with a '_' suffix.
+
+20100501T0142Z <gchicares@sbcglobal.net> [737]
+
+  dbvalue.cpp
+  ihs_dbvalue.cpp
+  ihs_dbvalue.hpp
+Respell certain arguments.
+
+20100501T0236Z <gchicares@sbcglobal.net> [737]
+
+  dbvalue.cpp
+  dbvalue.hpp
+Remove gratuitous dissimilarities.
+
+20100501T0306Z <gchicares@sbcglobal.net> [735]
+
+  dbvalue.hpp
+  ihs_dbvalue.hpp
+Remove even more gratuitous dissimilarities, rendering two headers
+practically identical.
+
+20100501T1042Z <gchicares@sbcglobal.net> [735]
+
+  Makefile.am
+  database_view_editor.hpp
+  ihs_database.cpp
+  ihs_dbdict.hpp
+  ihs_dbvalue.cpp
+  ihs_dbvalue.hpp [expunged]
+Merge two headers.
+
+20100501T1131Z <gchicares@sbcglobal.net> [733]
+
+  dbvalue.cpp
+  dbvalue.hpp
+  ihs_dbvalue.cpp
+Consolidate and simplify documentation.
+
+20100501T1228Z <gchicares@sbcglobal.net> [733]
+
+  database.cpp
+Remove a gratuitous difference versus 'ihs_database.cpp'.
+
+20100501T1229Z <gchicares@sbcglobal.net> [733]
+
+  dbvalue.cpp
+Demonstrate that this file's contents are unneeded.
+
+20100501T1314Z <gchicares@sbcglobal.net> [732]
+
+  Makefile.am
+  dbvalue.cpp
+  ihs_dbvalue.cpp [expunged]
+  objects.make
+Merge two TUs, as if by renaming 'ihs_dbvalue.cpp' to 'dbvalue.cpp'.
+
+20100501T1557Z <gchicares@sbcglobal.net> [732]
+
+  Makefile.am
+  commutation_functions_test.cpp
+  ihs_commfns.cpp [renamed to commutation_functions.cpp]
+  ihs_commfns.hpp [renamed to commutation_functions.hpp]
+  ihs_irc7702.cpp
+  mec_server.cpp
+  objects.make
+Rename 'ihs_commfns.?pp' to 'commutation_functions.?pp'.
+
+20100501T1631Z <gchicares@sbcglobal.net> [732]
+
+  Makefile.am
+  generate_product_files.cpp
+  ihs_basicval.cpp
+  ihs_funddata.cpp [renamed to fund_data.cpp]
+  ihs_funddata.hpp [renamed to fund_data.hpp]
+  ledger_invariant.cpp
+  my_fund.cpp
+  objects.make
+  product_file_test.cpp
+Rename 'ihs_funddata.?pp' to 'fund_data.?pp'.
+
+20100501T1824Z <gchicares@sbcglobal.net> [732]
+
+  database.cpp
+  database_view_editor.hpp
+  dbdict.cpp
+  dbdict.hpp
+Remove some differences between 'dbdict.hpp' and 'ihs_dbdict.hpp'.
+
+20100501T2311Z <gchicares@sbcglobal.net> [732]
+
+  database_document.cpp
+  ihs_dbdict.cpp
+  ihs_dbdict.hpp
+Remove some differences between 'ihs_dbdict.hpp' and 'dbdict.hpp'.
+
+20100502T0120Z <gchicares@sbcglobal.net> [732]
+
+  dbdict.cpp
+  dbdict.hpp
+Remove some differences between 'dbdict.hpp' and 'ihs_dbdict.hpp'.
+
+20100502T0229Z <gchicares@sbcglobal.net> [732]
+
+  dbdict.hpp
+  ihs_dbdict.cpp
+  ihs_dbdict.hpp
+Make 'dbdict.hpp' equivalent to 'ihs_dbdict.hpp'.
+
+20100502T0305Z <gchicares@sbcglobal.net> [732]
+
+  Makefile.am
+  database_document.hpp
+  dbdict.hpp     [overwritten by renamed 'ihs_dbdict.hpp']
+  generate_product_files.cpp
+  ihs_basicval.cpp
+  ihs_database.cpp
+  ihs_dbdict.cpp
+  ihs_dbdict.hpp [renamed to 'dbdict.hpp']
+  main_wx.cpp
+  my_db.cpp
+  product_file_test.cpp
+Merge two headers, renaming 'ihs_dbdict.hpp' to 'dbdict.hpp'.
+
+20100502T1520Z <gchicares@sbcglobal.net> [730]
+
+  database.cpp
+  dbdict.hpp
+Refactor.
+
+20100502T1523Z <gchicares@sbcglobal.net> [730]
+
+  dbdict.cpp
+  ihs_dbdict.cpp
+Make 'dbdict.cpp' dispensable.
+
+20100502T1706Z <gchicares@sbcglobal.net> [726]
+
+  Makefile.am
+  dbdict.cpp     [overwritten by renamed 'ihs_dbdict.cpp']
+  ihs_dbdict.cpp [renamed to 'dbdict.cpp']
+  objects.make
+Merge two TUs, renaming 'ihs_dbdict.cpp' to 'dbdict.cpp'.
+
+20100503T1134Z <gchicares@sbcglobal.net> [726]
+
+  dbdict.hpp
+  dbvalue.hpp
+Remove declarations of disused members.
+
+20100503T1148Z <gchicares@sbcglobal.net> [726]
+
+  dbvalue.cpp
+  dbvalue.hpp
+Prefer implicitly-defined special member functions [12/1].
+
+20100503T1808Z <gchicares@sbcglobal.net> [725]
+
+  database.cpp
+  database.hpp
+  ihs_database.cpp
+Remove a disused member.
+
+20100503T2253Z <gchicares@sbcglobal.net> [723]
+
+  database.cpp
+  database.hpp
+  dbindex.hpp
+  dbvalue.cpp
+  dbvalue.hpp
+  ihs_database.cpp
+Revamp database-index class.
+
+20100503T2314Z <gchicares@sbcglobal.net> [721]
+
+  dbvalue.cpp
+Improve documentation. (The standard library offers no algorithm for
+evaluating polynomials.)
+
+20100503T2344Z <gchicares@sbcglobal.net> [721]
+
+  dbvalue.cpp
+Render two operator[]() implementations nearly identical.
+
+20100504T0120Z <gchicares@sbcglobal.net> [720]
+
+  dbvalue.cpp
+Improve documentation.
+
+20100505T1356Z <gchicares@sbcglobal.net> [718]
+
+  dbdict.cpp
+  dbdict.hpp
+Rework caching implementation.
+
+20100505T1427Z <gchicares@sbcglobal.net> [718]
+
+  dbdict.cpp
+  dbdict.hpp
+Replace a weird with a canonical idiom.
+
+20100505T1612Z <gchicares@sbcglobal.net> [718]
+
+  basic_values.hpp
+  basicvalues.cpp
+  custom_io_0.cpp
+  database.cpp
+  database.hpp
+  database_document.cpp
+  database_document.hpp
+  database_view.cpp
+  database_view_editor.cpp
+  database_view_editor.hpp
+  dbdict.cpp
+  dbdict.hpp
+  dbvalue.cpp
+  dbvalue.hpp
+  ihs_basicval.cpp
+  ihs_database.cpp
+  input.hpp
+  input_harmonization.cpp
+  interest_rates.cpp
+  loads.cpp
+  loads.hpp
+  loads_impl.hpp
+  loads_test.cpp
+  mec_input.cpp
+  mec_input.hpp
+  mec_server.cpp
+  my_db.cpp
+  surrchg_rates.cpp
+  surrchg_rates.hpp
+Rename two classes.
+
+20100505T1720Z <gchicares@sbcglobal.net> [718]
+
+  database.cpp
+  ihs_database.cpp
+Remove gratuitous dissimilarities.
+
+20100505T1721Z <gchicares@sbcglobal.net> [718]
+
+  main_cli.cpp
+Reduce inelegance.
+
+20100505T2345Z <gchicares@sbcglobal.net> [718]
+
+  Makefile.am
+Fix apparent defects. For example, all 'mec_*' files were missing.
+
+20100506T0025Z <gchicares@sbcglobal.net> [718]
+
+  Makefile.am
+  antediluvian_stubs.cpp
+  authenticity.cpp
+  authenticity.hpp
+  lmi.cpp [new file]
+  lmi.hpp [new file]
+  main_cli.cpp
+  objects.make
+Cleanly distinguish production from the antediluvian fork.
+
+20100506T0226Z <gchicares@sbcglobal.net> [718]
+
+  database.hpp
+  input_test.cpp
+Begin to add product-database unit tests. The goal is to replace
+divergent files 'database.cpp' and 'ihs_database.cpp' with something
+solid. This command
+  grep \?\? *database*
+shows eleven marked defects, which is excessive. A glance at the code
+shows that the oft-called product_database::Query(int) is inefficient.
+
+20100506T0252Z <gchicares@sbcglobal.net> [718]
+
+  input_test.cpp
+Demonstrate a problem. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-05/msg00004.html
+
+20100506T1324Z <gchicares@sbcglobal.net> [718]
+
+  database.cpp
+  database.hpp
+  ihs_database.cpp
+Improve encapsulation; rename private members.
+
+20100506T1351Z <gchicares@sbcglobal.net> [718]
+
+  database.cpp
+  ihs_database.cpp
+  input_test.cpp
+Reimplement product_database::GetEntry().
+
+20100506T1438Z <gchicares@sbcglobal.net> [718]
+
+  dbdict.hpp
+  input_test.cpp
+Further test product_database::GetEntry().
+
+20100506T1531Z <gchicares@sbcglobal.net> [718]
+
+  database.cpp
+  ihs_database.cpp
+  input_test.cpp
+Simplify.
+
+20100506T1821Z <gchicares@sbcglobal.net> [718]
+
+  objects.make
+  tn_range.hpp
+Make 'input_test' compile with como.
+
+20100506T2111Z <gchicares@sbcglobal.net> [718]
+
+  config.hpp
+Make 'input_test' succeed with como. The msvc workaround added on
+20090226T1557Z and discussed here:
+  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00074.html
+unintentionally applied to como as well, presumably because como
+defines the macro used to identify msvc.
+
+20100507T1845Z <gchicares@sbcglobal.net> [718]
+
+  input_test.cpp
+Expand unit test.
+
+20100508T0021Z <gchicares@sbcglobal.net> [718]
+
+  dbvalue.cpp
+Improve documentation.
+
+20100508T0049Z <gchicares@sbcglobal.net> [717]
+
+  dbvalue.cpp
+  dbvalue.hpp
+Merge two member functions.
+
+20100508T0153Z <gchicares@sbcglobal.net> [717]
+
+  dbvalue.cpp
+Make default ctor establish invariants.
+
+20100508T0253Z <gchicares@sbcglobal.net> [717]
+
+  dbvalue.cpp
+Regularize invariants and assertions.
+
+20100508T1204Z <gchicares@sbcglobal.net> [714]
+
+  database.cpp
+  ihs_database.cpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch. In practice, very few product-database entities vary by
+duration, so handling those that do not in the simplest manner is an
+important speed optimization; however, the simple code branch was
+unreachable because its condition was incorrect.
+
+20100508T1205Z <gchicares@sbcglobal.net> [714]
+
+  dbvalue.cpp
+  dbvalue.hpp
+Remove a disused member function.
+
+20100508T1343Z <gchicares@sbcglobal.net> [712]
+
+  database.cpp
+  ihs_database.cpp
+Reimplement product_database::Query(vector).
+
+20100508T1346Z <gchicares@sbcglobal.net> [712]
+
+  dbvalue.cpp
+Improve a diagnostic.
+
+20100508T1347Z <gchicares@sbcglobal.net> [712]
+
+  actuarial_table.cpp
+  oecumenic_enumerations.hpp
+Refactor.
+
+20100508T1400Z <gchicares@sbcglobal.net> [712]
+
+  database.cpp
+  ihs_database.cpp
+Assert another postcondition.
+
+20100508T1516Z <gchicares@sbcglobal.net> [712]
+
+  database.cpp
+  ihs_database.cpp
+  input_test.cpp
+Reimplement product_database::constrain_scalar(), resolving a defect
+noted 20100506T0226Z by making product_database::Query(int) several
+times faster.
+
+20100508T1927Z <gchicares@sbcglobal.net> [710]
+
+  database.cpp
+  database.hpp
+  ihs_database.cpp
+  input_test.cpp
+Replace product_database::constrain_scalar() with inline code. It is
+faster to avoid calling GetEntry() repeatedly, especially now that
+GetEntry() dominates the time spent in Query().
+
+20100508T2300Z <gchicares@sbcglobal.net> [706]
+
+  Makefile.am
+  antediluvian_stubs.cpp
+  database.cpp
+  ihs_database.cpp
+  objects.make
+Document preparations for merging '*database.cpp'.
+
+20100508T2328Z <gchicares@sbcglobal.net> [706]
+
+  Makefile.am
+  database.cpp     [overwritten by renamed 'ihs_database.cpp']
+  ihs_database.cpp [renamed to 'database.cpp']
+  objects.make
+Merge two TUs, renaming 'ihs_database.cpp' to 'database.cpp'. This
+achieves the goal announced 20100506T0226Z.
+
+20100509T0021Z <gchicares@sbcglobal.net> [706]
+
+  database.cpp
+Remove old markup and questions answered in merge.
+
+20100509T1035Z <gchicares@sbcglobal.net> [706]
+
+  database.hpp
+Remove two disused member declarations.
+
+20100509T1221Z <gchicares@sbcglobal.net> [706]
+
+  map_lookup.hpp
+Improve documentation.
+
+20100509T1222Z <gchicares@sbcglobal.net> [706]
+
+  database.cpp
+Prefer map_lookup() for map lookups.
+
+20100509T1403Z <gchicares@sbcglobal.net> [706]
+
+  database_document.cpp
+  database_document.hpp
+  database_view.cpp
+  dbnames.hpp
+Rename an enum to improve concinnity.
+
+20100509T1405Z <gchicares@sbcglobal.net> [706]
+
+  basic_values.hpp
+  database.cpp
+  database.hpp
+  ihs_basicval.cpp
+  input_test.cpp
+  loads_test.cpp
+Strengthen typing.
+
+20100510T0048Z <gchicares@sbcglobal.net> [706]
+
+  database.cpp
+  database.hpp
+  dbvalue.cpp
+  dbvalue.hpp
+Rearrange functions in logical order.
+
+20100510T0117Z <gchicares@sbcglobal.net> [706]
+
+  database_view_editor.cpp
+  database_view_editor.hpp
+  dbdict.cpp
+  dbvalue.cpp
+  dbvalue.hpp
+  input_test.cpp
+Augment and relocate enumerations.
+
+20100510T0135Z <gchicares@sbcglobal.net> [706]
+
+  database_view_editor.cpp
+  dbvalue.cpp
+  dbvalue.hpp
+Replace a static member with a free function.
+
+20100510T0201Z <gchicares@sbcglobal.net> [706]
+
+  database.cpp
+  database.hpp
+  database_view_editor.cpp
+  dbdict.cpp
+  dbvalue.cpp
+  dbvalue.hpp
+  ihs_basicval.cpp
+  input_test.cpp
+Rename certain member functions.
+
+20100510T0243Z <gchicares@sbcglobal.net> [706]
+
+  database.cpp
+  dbvalue.cpp
+  dbvalue.hpp
+  input_test.cpp
+Rework accessors in class database_entity.
+
+20100510T0322Z <gchicares@sbcglobal.net> [706]
+
+  database.cpp
+  database.hpp
+  dbvalue.cpp
+  dbvalue.hpp
+  ihs_basicval.cpp
+Refactor.
+
+20100510T1715Z <gchicares@sbcglobal.net> [706]
+
+  loads_impl.hpp
+  loads_test.cpp
+  multidimgrid_tools.hpp
+Prevent copying classes with reference data members.
 

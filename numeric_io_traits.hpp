@@ -47,7 +47,7 @@ namespace boost
     {
         return static_cast<T>(u);
     }
-}
+} // namespace boost
 #endif // defined __BORLANDC__
 
 // Number of exact decimal digits to the right of the decimal point.

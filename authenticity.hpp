@@ -88,12 +88,5 @@ std::string md5_hex_string(std::vector<unsigned char> const&);
 
 inline char const* md5sum_file() {return "validated.md5";}
 
-/// Timestamp of production release.
-///
-/// Deliberately return an empty string for the antediluvian fork,
-/// providing a means to distinguish it from production.
-
-std::string const& LMI_SO timestamp_of_production_release();
-
 #endif // authenticity_hpp
 

@@ -121,7 +121,7 @@ void Loads::Allocate(int length)
 
 /// Set various data members from product database.
 
-void Loads::Initialize(TDatabase const& database)
+void Loads::Initialize(product_database const& database)
 {
     database.Query(refundable_sales_load_proportion_, DB_PremRefund    );
     database.Query(premium_tax_load_                , DB_PremTaxLoad   );
@@ -341,7 +341,7 @@ void Loads::AmortizePremiumTax(load_details const&)
 
 /// Ctor for antediluvian branch.
 
-Loads::Loads(TDatabase const& database, bool NeedMidpointRates)
+Loads::Loads(product_database const& database, bool NeedMidpointRates)
 {
     monthly_policy_fee_   .resize(mc_n_gen_bases);
     target_premium_load_  .resize(mc_n_gen_bases);

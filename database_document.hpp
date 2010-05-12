@@ -28,10 +28,10 @@
 
 #include "product_editor.hpp"
 
+#include "dbdict.hpp"
 #include "dbnames.hpp"
-#include "ihs_dbdict.hpp"
 
-class LMI_SO TDBValue;
+class LMI_SO database_entity;
 
 class DatabaseDocument
     :public ProductEditorDocument
@@ -40,7 +40,7 @@ class DatabaseDocument
     DatabaseDocument();
     virtual ~DatabaseDocument();
 
-    TDBValue& GetTDBValue(DatabaseNames index);
+    database_entity& GetTDBValue(e_database_key index);
 
   private:
     // ProductEditorDocument overrides.

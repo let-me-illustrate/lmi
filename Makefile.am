@@ -86,6 +86,7 @@ EXTRA_PROGRAMS = \
     antediluvian_cgi \
     gpt_server
 #    gpt_server - does not contain main() function, bug?..
+#      answer: its main() is in 'ihs_server7702.cpp'
 #    lmi_cgi - restore the target in the future
 
 # libtool libraries installed in lib
@@ -187,7 +188,6 @@ lmi_wx_SOURCES = \
     default_view.cpp \
     docmanager_ex.cpp \
     docmdichildframe_ex.cpp \
-    facets.cpp \
     file_command_wx.cpp \
     icon_monger.cpp \
     illustration_document.cpp \
@@ -271,11 +271,18 @@ liblmi_common_sources = \
     actuarial_table.cpp \
     alert.cpp \
     calendar_date.cpp \
+    ce_product_name.cpp \
     configurable_settings.cpp \
     crc32.cpp \
     custom_io_0.cpp \
     data_directory.cpp \
+    database.cpp \
+    datum_base.cpp \
+    datum_boolean.cpp \
+    datum_string.cpp \
+    dbdict.cpp \
     dbnames.cpp \
+    dbvalue.cpp \
     death_benefits.cpp \
     emit_ledger.cpp \
     facets.cpp \
@@ -303,10 +310,9 @@ liblmi_common_sources = \
     ledgervalues.cpp \
     license.cpp \
     loads.cpp \
-    mec_input.cpp \
-    mec_server.cpp \
-    mec_state.cpp \
-    mec_xml_document.cpp \
+    mc_enum.cpp \
+    mc_enum_types.cpp \
+    mc_enum_types_aux.cpp \
     miscellany.cpp \
     multiple_cell_document.cpp \
     mvc_model.cpp \
@@ -321,6 +327,7 @@ liblmi_common_sources = \
     surrchg_rates.cpp \
     system_command.cpp \
     timer.cpp \
+    tn_range_types.cpp \
     xml_lmi.cpp \
     yare_input.cpp
 
@@ -337,9 +344,6 @@ libantediluvian_la_SOURCES = \
     accountvalue.cpp \
     antediluvian_stubs.cpp \
     basicvalues.cpp \
-    database.cpp \
-    dbdict.cpp \
-    dbvalue.cpp \
     mortality_rates.cpp \
     solve.cpp \
     $(liblmi_common_sources)
@@ -351,37 +355,29 @@ libantediluvian_la_LIBADD = \
 
 liblmi_la_SOURCES = \
     authenticity.cpp \
-    ce_product_name.cpp \
-    datum_base.cpp \
-    datum_boolean.cpp \
-    datum_string.cpp \
+    commutation_functions.cpp \
+    fund_data.cpp \
     ihs_acctval.cpp \
     ihs_avdebug.cpp \
     ihs_avmly.cpp \
     ihs_avsolve.cpp \
     ihs_avstrtgy.cpp \
     ihs_basicval.cpp \
-    ihs_commfns.cpp \
-    ihs_database.cpp \
-    ihs_dbdict.cpp \
-    ihs_dbvalue.cpp \
-    ihs_fpios.cpp \
-    ihs_funddata.cpp \
     ihs_irc7702.cpp \
     ihs_irc7702a.cpp \
     ihs_mortal.cpp \
-    ihs_pios.cpp \
-    mc_enum.cpp \
-    mc_enum_types.cpp \
-    mc_enum_types_aux.cpp \
+    lmi.cpp \
     md5.cpp \
+    mec_input.cpp \
+    mec_server.cpp \
+    mec_state.cpp \
+    mec_xml_document.cpp \
     mortality_rates_fetch.cpp \
     preferences_model.cpp \
     product_data.cpp \
     rounding_rules.cpp \
     stratified_algorithms.cpp \
     stratified_charges.cpp \
-    tn_range_types.cpp \
     $(liblmi_common_sources)
 liblmi_la_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
 liblmi_la_CFLAGS = $(AM_CFLAGS)
@@ -553,8 +549,8 @@ test_callback_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_commutation_functions_SOURCES =    \
   $(common_test_objects) \
-  commutation_functions_test.cpp \
-  ihs_commfns.cpp
+  commutation_functions.cpp \
+  commutation_functions_test.cpp
 test_commutation_functions_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_comma_punct_SOURCES =  \
@@ -616,6 +612,7 @@ test_input_seq_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_input_SOURCES =    \
   $(common_test_objects) \
+  antediluvian_stubs.cpp \
   calendar_date.cpp \
   ce_product_name.cpp \
   configurable_settings.cpp \
@@ -758,18 +755,14 @@ test_print_matrix_SOURCES = \
   print_matrix_test.cpp
 test_print_matrix_CXXFLAGS = $(AM_CXXFLAGS)
 
-# 'expm1.cpp' is for como on msw
 test_product_file_SOURCES =   \
   $(common_test_objects) \
   data_directory.cpp \
+  dbdict.cpp \
   dbnames.cpp \
-  expm1.cpp \
+  dbvalue.cpp \
+  fund_data.cpp \
   global_settings.cpp \
-  ihs_dbdict.cpp \
-  ihs_dbvalue.cpp \
-  ihs_fpios.cpp \
-  ihs_funddata.cpp \
-  ihs_pios.cpp \
   miscellany.cpp \
   path_utility.cpp \
   product_data.cpp \
@@ -894,6 +887,7 @@ test_zero_SOURCES = \
 test_zero_CXXFLAGS = $(AM_CXXFLAGS)
 
 # headers: we need to include them or they wouldn't appear in the distribution
+# this list should contain everything in `ls *.h *.hpp *.tpp *.xpp`
 noinst_HEADERS = \
     about_dialog.hpp \
     account_value.hpp \
@@ -907,22 +901,23 @@ noinst_HEADERS = \
     calendar_date.hpp \
     callback.hpp \
     catch_exceptions.hpp \
+    ce_product_name.hpp \
     census_document.hpp \
     census_view.hpp \
-    ce_product_name.hpp \
     comma_punct.hpp \
+    commutation_functions.hpp \
+    config.hpp \
     config_bc551.hpp \
     config_como_mingw.hpp \
-    config.hpp \
     config_ming323.hpp \
     configurable_settings.hpp \
     crc32.hpp \
     custom_io_0.hpp \
-    database_document.hpp \
-    database.hpp \
-    database_view_editor.hpp \
-    database_view.hpp \
     data_directory.hpp \
+    database.hpp \
+    database_document.hpp \
+    database_view.hpp \
+    database_view_editor.hpp \
     datum_base.hpp \
     datum_boolean.hpp \
     datum_string.hpp \
@@ -943,19 +938,14 @@ noinst_HEADERS = \
     fenv_lmi_x86.hpp \
     file_command.hpp \
     financial.hpp \
+    fund_data.hpp \
     getopt.hpp \
     global_settings.hpp \
     group_values.hpp \
     handle_exceptions.hpp \
     icon_monger.hpp \
-    ihs_commfns.hpp \
-    ihs_dbdict.hpp \
-    ihs_dbvalue.hpp \
-    ihs_fpios.hpp \
-    ihs_funddata.hpp \
-    ihs_irc7702a.hpp \
     ihs_irc7702.hpp \
-    ihs_pios.hpp \
+    ihs_irc7702a.hpp \
     ihs_server7702.hpp \
     ihs_server7702io.hpp \
     ihs_x_type.hpp \
@@ -967,14 +957,15 @@ noinst_HEADERS = \
     input_sequence.hpp \
     interest_rates.hpp \
     istream_to_string.hpp \
-    ledger_base.hpp \
     ledger.hpp \
+    ledger_base.hpp \
     ledger_invariant.hpp \
     ledger_text_formats.hpp \
-    ledgervalues.hpp \
     ledger_variant.hpp \
     ledger_xsl.hpp \
+    ledgervalues.hpp \
     license.hpp \
+    lmi.hpp \
     loads.hpp \
     loads_impl.hpp \
     main_common.hpp \
@@ -988,13 +979,19 @@ noinst_HEADERS = \
     mc_enum_aux.hpp \
     mc_enum_fwd.hpp \
     mc_enum_metadata.hpp \
-    mc_enum_test_aux_enums.hpp \
     mc_enum_test_aux.hpp \
+    mc_enum_test_aux_enums.hpp \
     mc_enum_type_enums.hpp \
     mc_enum_types.hpp \
     mc_enum_types.xpp \
     mc_enum_types_aux.hpp \
     md5.hpp \
+    mec_document.hpp \
+    mec_input.hpp \
+    mec_server.hpp \
+    mec_state.hpp \
+    mec_view.hpp \
+    mec_xml_document.hpp \
     miscellany.hpp \
     mortality_rates.hpp \
     msw_workarounds.hpp \
@@ -1029,11 +1026,11 @@ noinst_HEADERS = \
     product_names.hpp \
     progress_meter.hpp \
     quiet_nan.hpp \
+    round_to.hpp \
     rounding_document.hpp \
     rounding_rules.hpp \
-    rounding_view_editor.hpp \
     rounding_view.hpp \
-    round_to.hpp \
+    rounding_view_editor.hpp \
     rtti_lmi.hpp \
     safely_dereference_as.hpp \
     sigfpe.hpp \
@@ -1051,15 +1048,15 @@ noinst_HEADERS = \
     text_doc.hpp \
     text_view.hpp \
     tier_document.hpp \
-    tier_view_editor.hpp \
     tier_view.hpp \
+    tier_view_editor.hpp \
     timer.hpp \
-    tn_range_fwd.hpp \
     tn_range.hpp \
     tn_range.tpp \
+    tn_range_fwd.hpp \
     tn_range_test_aux.hpp \
-    tn_range_types.hpp \
     tn_range_type_trammels.hpp \
+    tn_range_types.hpp \
     transferor.hpp \
     value_cast.hpp \
     version.hpp \
@@ -1069,8 +1066,8 @@ noinst_HEADERS = \
     wx_new.hpp \
     wx_utility.hpp \
     wx_workarounds.hpp \
-    xml_lmi_fwd.hpp \
     xml_lmi.hpp \
+    xml_lmi_fwd.hpp \
     xml_serializable.hpp \
     xml_serializable.tpp \
     xml_serialize.hpp \

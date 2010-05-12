@@ -75,7 +75,7 @@ inline swap_workaround_for_singleton::~swap_workaround_for_singleton()
     m1_.swap(m2_); // swap back
 }
 
-} // unnamed namespace
+} // Unnamed namespace.
 
 IMPLEMENT_DYNAMIC_CLASS(DatabaseDocument, ProductEditorDocument)
 
@@ -86,7 +86,7 @@ DatabaseDocument::DatabaseDocument()
     // Initialize database dictionary
     DBDictionary& instance = DBDictionary::instance();
 
-    swap_workaround_for_singleton workaround(dict_, instance.GetDictionary());
+    swap_workaround_for_singleton workaround(dict_, instance.dictionary_);
 
     instance.InitDB();
 }
@@ -95,7 +95,7 @@ DatabaseDocument::~DatabaseDocument()
 {
 }
 
-TDBValue& DatabaseDocument::GetTDBValue(DatabaseNames index)
+database_entity& DatabaseDocument::GetTDBValue(e_database_key index)
 {
     if(dict_.find(index) == dict_.end())
         {
@@ -109,7 +109,7 @@ void DatabaseDocument::ReadDocument(std::string const& filename)
 {
     DBDictionary& instance = DBDictionary::instance();
 
-    swap_workaround_for_singleton workaround(dict_, instance.GetDictionary());
+    swap_workaround_for_singleton workaround(dict_, instance.dictionary_);
 
     DBDictionary::InvalidateCache();
     instance.Init(filename);
@@ -119,7 +119,7 @@ void DatabaseDocument::WriteDocument(std::string const& filename)
 {
     DBDictionary& instance = DBDictionary::instance();
 
-    swap_workaround_for_singleton workaround(dict_, instance.GetDictionary());
+    swap_workaround_for_singleton workaround(dict_, instance.dictionary_);
 
     instance.WriteDB(filename);
 }

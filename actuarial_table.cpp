@@ -31,6 +31,7 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "miscellany.hpp"
+#include "oecumenic_enumerations.hpp" // methuselah
 #include "path_utility.hpp" // fs::path inserter
 
 #include <boost/cstdint.hpp>
@@ -62,9 +63,6 @@ namespace
     int const soa_table_length_max =
         std::numeric_limits<soa_table_length_type>::max()
         ;
-
-    /// Genesis 5:27.
-    int const methuselah = 969;
 
     /// Use the value -1 as an initializer because it is invalid for
     /// all integral data fields, then assert that it doesn't equal

@@ -1,6 +1,6 @@
 // Product database.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -29,16 +29,21 @@
 #include "database.hpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
+#include "data_directory.hpp"
 #include "dbdict.hpp"
-#include "dbnames.hpp"
+#include "dbvalue.hpp"
+#include "lmi.hpp"                    // is_antediluvian_fork()
+#include "map_lookup.hpp"
+#include "oecumenic_enumerations.hpp" // methuselah
+#include "product_data.hpp"
 #include "yare_input.hpp"
 
-#include <algorithm>    // std::min()
-#include <iterator>
-#include <ostream>
+#include <algorithm> // std::min()
 
-//============================================================================
-TDatabase::TDatabase
+/// Construct from essential input (product and axes).
+
+product_database::product_database
     (std::string const& a_ProductName
     ,mcenum_gender      a_Gender
     ,mcenum_class       a_Class
@@ -47,167 +52,184 @@ TDatabase::TDatabase
     ,mcenum_uw_basis    a_UWBasis
     ,mcenum_state       a_State
     )
-    :Filename   (a_ProductName)
-    ,length_    (0)
-    ,Gender     (a_Gender)
-    ,Class      (a_Class)
-    ,Smoker     (a_Smoker)
-    ,IssueAge   (a_IssueAge)
-    ,UWBasis    (a_UWBasis)
-    ,State      (a_State)
+    :Gender   (a_Gender)
+    ,Class    (a_Class)
+    ,Smoker   (a_Smoker)
+    ,IssueAge (a_IssueAge)
+    ,UWBasis  (a_UWBasis)
+    ,State    (a_State)
 {
-    DBDictionary::instance().Init(Filename);
-    Init();
-    length_ = 100 - IssueAge;
-// TODO ?? This is better...once we implement DB_EndtAge.
-//    length_ = static_cast<int>(Query(DB_EndtAge)) - IssueAge;
+    if(is_antediluvian_fork())
+        {
+        DBDictionary::instance().InitAntediluvian();
+        }
+    else
+        {
+        std::string filename(product_data(a_ProductName).datum("DatabaseFilename"));
+        DBDictionary::instance().Init(AddDataDir(filename));
+        }
+    initialize();
 }
 
-//============================================================================
-// TODO ?? This function is mostly copied and pasted from the production
-// branch's implementation, and duplicates its shortcomings. It would
-// seem better to factor out what's common between the two branches, but
-// eventually the two implementations must be completely merged--and
-// this expedient doesn't make that harder.
-//
-TDatabase::TDatabase(yare_input const& input)
-    :Filename("Irrelevant in antediluvian branch for now")
+/// Construct from normal illustration input.
+///
+/// For the nonce, this ctor determines "state of jurisdiction"
+/// dynamically, and other code uses that state for multiple purposes.
+/// That is a mistake--two states are required:
+///   - FilingApprovalState: the state that must approve a policy-form
+///     filing (whether affirmatively or by deemer) before a contract
+///     can be written; and
+///   - PremiumTaxState: the state to which premium tax must be paid,
+///     which is crucial for products that pass premium tax through as
+///     a load.
+/// Those two states can differ, e.g. on cases with more than five
+/// hundred lives with a common (employer) issue state: the employer's
+/// state approves the policy form, but premium tax follows employee
+/// residence. See:
+///   http://www.naic.org/documents/frs_summit_presentations_03.pdf
+///   http://www.naic.org/documents/committees_e_app_blanks_adopted_2007-42BWG_Modified.pdf
+///
+/// Soon, both states will be input fields, and these members will be
+/// expunged:
+///   GetStateOfJurisdiction()
+///   Gender
+///   Class
+///   Smoker
+///   IssueAge
+///   UWBasis
+///   State
+/// Database entity DB_PremTaxState will become obsolete, but must be
+/// retained (with a different name) for backward compatibility.
+
+product_database::product_database(yare_input const& input)
 {
     Gender      = input.Gender;
     Class       = input.UnderwritingClass;
     Smoker      = input.Smoking;
     IssueAge    = input.IssueAge;
     UWBasis     = input.GroupUnderwritingType;
-    State       = input.State;
+    State       = mce_s_CT; // Dummy initialization.
 
-    DBDictionary::instance().Init(Filename);
-    Init();
-    length_ = 100 - IssueAge;
+    if(is_antediluvian_fork())
+        {
+        DBDictionary::instance().InitAntediluvian();
+        }
+    else
+        {
+        std::string filename(product_data(input.ProductName).datum("DatabaseFilename"));
+        DBDictionary::instance().Init(AddDataDir(filename));
+        }
+    initialize();
+
+    // State of jurisdiction must not depend on itself.
+    if(varies_by_state(DB_PremTaxState))
+        {
+        fatal_error()
+            << "Database invalid: circular dependency."
+            << " State of jurisdiction depends on itself."
+            << LMI_FLUSH
+            ;
+        }
+
+    switch(static_cast<int>(Query(DB_PremTaxState)))
+        {
+        case oe_ee_state:
+            {
+            State = input.State;
+            }
+            break;
+        case oe_er_state:
+            {
+            State = input.CorporationState;
+            }
+            break;
+        default:
+            {
+            fatal_error()
+                << "Cannot determine state of jurisdiction."
+                << LMI_FLUSH
+                ;
+            }
+            break;
+        }
+
+    // It may seem excessive to do this when only 'State' has changed,
+    // but it'll become unnecessary when we handle state of jurisdiction
+    // as an input field instead of trying to determine it here.
+    index_ = database_index(Gender, Class, Smoker, IssueAge, UWBasis, State);
 }
 
-//============================================================================
-TDatabase::~TDatabase()
+product_database::~product_database()
 {
 }
 
-//============================================================================
-mcenum_state TDatabase::GetStateOfJurisdiction() const
+mcenum_state product_database::GetStateOfJurisdiction() const
 {
     return State;
 }
 
-//============================================================================
-int TDatabase::length() const
+int product_database::length() const
 {
     return length_;
 }
 
-//============================================================================
-void TDatabase::Init()
+double product_database::Query(e_database_key k) const
 {
-    Index[0] = Gender;
-    Index[1] = static_cast<int>(Class   );
-    Index[2] = static_cast<unsigned int>(Smoker  );
-    Index[3] = static_cast<unsigned int>(IssueAge);
-    Index[4] = static_cast<unsigned int>(UWBasis );
-    Index[5] = static_cast<unsigned int>(State   );
-
-    Idx.Gender      () = Gender     ;
-    Idx.Class       () = Class      ;
-    Idx.Smoker      () = Smoker     ;
-    Idx.IssueAge    () = IssueAge   ;
-    Idx.UWBasis     () = UWBasis    ;
-    Idx.State       () = State      ;
+    database_entity const& v = entity_from_key(k);
+    LMI_ASSERT(1 == v.extent());
+    return *v[index_];
 }
 
-//===========================================================================
-double TDatabase::Query(int k) const
+void product_database::Query(std::vector<double>& dst, e_database_key k) const
 {
-    ConstrainScalar(k); // TODO ?? Is the extra overhead acceptable?
-    return *GetEntry(k)[Index];
-}
-
-//===========================================================================
-void TDatabase::Query(std::vector<double>& dst, int k) const
-{
-    TDBValue const& v = GetEntry(k);
-    double const*const z = v.operator[](Index);
-    dst.resize(length_);
-    if(1 == v.GetNDims())
+    database_entity const& v = entity_from_key(k);
+    double const*const z = v[index_];
+    if(1 == v.extent())
         {
         dst.assign(length_, *z);
         }
     else
         {
-        int s = std::min(length_, v.GetLength());
-        for(int j = 0; j < s; ++j)
-            {
-            dst[j] = z[j];
-            }
-        for(int j = s; j < length_; ++j)
-            {
-            dst[j] = z[s - 1];
-            }
+        dst.reserve(length_);
+        dst.assign(z, z + std::min(length_, v.extent()));
+        dst.resize(length_, dst.back());
         }
 }
 
-//===========================================================================
-TDBValue const& TDatabase::GetEntry(int k) const
-{
-    TDBDictionary const& d = DBDictionary::instance().GetDictionary();
-    TDBDictionary::const_iterator i = d.find(k);
+/// Ascertain whether two database entities are equivalent.
+///
+/// Equivalence here means that the dimensions and data are identical.
+/// For example, these distinct entities:
+///  - DB_PremTaxRate (what the state charges the insurer)
+///  - DB_PremTaxLoad (what the insurer charges the customer)
+/// may be equivalent when premium tax is passed through as a load.
 
-    if(i == d.end())
-        {
-        fatal_error()
-            << "Key "
-            << GetDBNames()[k].ShortName
-            << " not found. These keys were found:"
-            ;
-        for(i = d.begin(); i != d.end(); ++i)
-            {
-            fatal_error() << " " << GetDBNames()[(*i).first].ShortName;
-            }
-        if(d.empty())
-            {
-            fatal_error() << " [none]. Dictionary is empty." << (*i).first;
-            }
-        fatal_error() << LMI_FLUSH;
-        }
-    return (*i).second;
+bool product_database::are_equivalent(e_database_key k0, e_database_key k1) const
+{
+    database_entity const& e0 = entity_from_key(k0);
+    database_entity const& e1 = entity_from_key(k1);
+    return
+           e0.axis_lengths() == e1.axis_lengths()
+        && e0.data_values () == e1.data_values ()
+        ;
 }
 
-//===========================================================================
-/// Constrain the value extracted from the database to be scalar--i.e.,
-/// invariant by duration. The database item may nonetheless vary
-/// across any axis except duration.
+/// Ascertain whether a database entity varies by state.
 
-void TDatabase::ConstrainScalar(int k) const
+bool product_database::varies_by_state(e_database_key k) const
 {
-    std::vector<double> z;
-    Query(z, k);
-    if
-        (
-            (0 != z.size())
-        &&  (z == std::vector<double>(z.size(), z[0]))
-        )
-        {
-        return;
-        }
-    else
-        {
-        fatal_error()
-            << "Database element "
-            << GetDBNames()[k].ShortName
-            << " varies by duration, but it must not. "
-            << "Values by duration: "
-            ;
-        std::copy
-            (z.begin()
-            ,z.end()
-            ,std::ostream_iterator<double>(fatal_error(), " ")
-            );
-        fatal_error() << LMI_FLUSH;
-        }
+    return 1 != entity_from_key(k).axis_lengths().at(e_axis_state);
+}
+
+void product_database::initialize()
+{
+    index_ = database_index(Gender, Class, Smoker, IssueAge, UWBasis, State);
+    length_ = static_cast<int>(Query(DB_EndtAge)) - IssueAge;
+    LMI_ASSERT(0 < length_ && length_ <= methuselah);
+}
+
+database_entity const& product_database::entity_from_key(e_database_key k) const
+{
+    return map_lookup(DBDictionary::instance().GetDictionary(), k);
 }
 

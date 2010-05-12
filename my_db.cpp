@@ -39,7 +39,7 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "ihs_dbdict.hpp"
+#include "dbdict.hpp"
 
 #include "data_directory.hpp"
 #include "dbnames.hpp"
@@ -50,7 +50,7 @@ void DBDictionary::WriteProprietaryDBFiles()
   // Sample policy form.
   {
     InitDB();
-    Add(TDBValue(DB_GuarPolFee, 10.00));
+    Add(database_entity(DB_GuarPolFee, 10.00));
     // etc.
 // Not necessary for 'sample' product only, because it's built in.
 //  WriteDB(AddDataDir("sample.database"));

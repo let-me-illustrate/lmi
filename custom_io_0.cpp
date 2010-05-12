@@ -412,7 +412,7 @@ bool custom_io_0_read(Input& z, std::string const& filename)
     z["UseCurrentDeclaredRate"] = "No";
 
     yare_input const yip(z);
-    TDatabase database(yip);
+    product_database database(yip);
 
     double first_year_general_account_rate =
             0.01

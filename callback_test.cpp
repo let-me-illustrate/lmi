@@ -62,7 +62,7 @@ namespace shared_library
             return adder_callback()(x,y,z);
             }
     };
-}
+} // namespace shared_library
 
 typedef shared_library::adder_fp_type FunctionPointer;
 template<> FunctionPointer callback<FunctionPointer>::function_pointer_ = 0;
@@ -83,7 +83,7 @@ namespace application
         adder_initialize(concrete_adder);
     }
 
-} // Unnamed namespace.
+} // namespace application
 
 int test_main(int, char*[])
 {

@@ -30,13 +30,14 @@
 
 #include "actuarial_table.hpp"
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "basic_values.hpp"          // lowest_premium_tax_load()
+#include "commutation_functions.hpp"
 #include "configurable_settings.hpp"
 #include "data_directory.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "et_vector.hpp"
-#include "ihs_commfns.hpp"
 #include "ihs_irc7702a.hpp"
 #include "materially_equal.hpp"
 #include "math_functors.hpp"
@@ -107,7 +108,7 @@ mec_state test_one_days_7702A_transactions
 
     product_data product_filenames(ProductName);
 
-    TDatabase database
+    product_database database
         (ProductName
         ,Gender
         ,UnderwritingClass
@@ -168,8 +169,9 @@ mec_state test_one_days_7702A_transactions
         ,input.issue_age()
         ,input.years_to_maturity()
         );
-    double const max_coi_rate = database.Query(DB_MaxMonthlyCoiRate);
-    // ET !! Mly7702qc = coi_rate_from_q(Mly7702qc, Database_->Query(DB_MaxMonthlyCoiRate));
+    double max_coi_rate = database.Query(DB_MaxMonthlyCoiRate);
+    LMI_ASSERT(0.0 != max_coi_rate);
+    max_coi_rate = 1.0 / max_coi_rate;
     assign(Mly7702qc, apply_binary(coi_rate_from_q<double>(), Mly7702qc, max_coi_rate));
 
     std::vector<double> guar_int;
@@ -190,11 +192,11 @@ mec_state test_one_days_7702A_transactions
             )
         );
 
-    std::vector<double> DBDiscountRate;
-    database.Query(DBDiscountRate, DB_NAARDiscount);
-    // ET !! Mly7702ig = -1.0 + 1.0 / DBDiscountRate;
-    std::vector<double> Mly7702ig(input.years_to_maturity());
-    assign(Mly7702ig, -1.0 + 1.0 / DBDiscountRate);
+    std::vector<double> Mly7702ig;
+    database.Query(Mly7702ig, DB_NAARDiscount);
+    LMI_ASSERT(Mly7702ig.end() == std::find(Mly7702ig.begin(), Mly7702ig.end(), -1.0));
+    std::vector<double> DBDiscountRate(input.years_to_maturity());
+    assign(DBDiscountRate, 1.0 / (1.0 + Mly7702ig));
 
     // Use zero if that's the guaranteed rate; else use the statutory rate.
     // ET !! Use each_equal() here because PETE seems to interfere with

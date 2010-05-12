@@ -28,12 +28,12 @@
 
 #include <vector>
 
-class TDatabase;
+class product_database;
 
 class SurrChgRates
 {
   public:
-    SurrChgRates(TDatabase const&);
+    SurrChgRates(product_database const&);
 
     std::vector<double> const& RatePerDollarOfPremium() const;
     std::vector<double> const& RatePerDollarOfAcctval() const;
@@ -48,7 +48,7 @@ class SurrChgRates
 
     // Ultimately, we'll want a pointer to a mortality-rate object
     // too, that we can do SNFL calculations.
-    void Initialize(TDatabase const&);
+    void Initialize(product_database const&);
 
     std::vector<double> RatePerDollarOfPremium_;
     std::vector<double> RatePerDollarOfAcctval_;
