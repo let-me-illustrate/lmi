@@ -31,7 +31,10 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "map_lookup.hpp"
 #include "miscellany.hpp"
+
+#include <map>
 
 namespace
 {
@@ -86,10 +89,36 @@ std::vector<db_names> const& static_get_db_names()
 
     return v;
 }
+
+std::map<std::string,int> static_get_short_names()
+{
+    std::map<std::string,int> m;
+    static std::vector<db_names> const names = static_get_db_names();
+    typedef std::vector<db_names>::const_iterator vdbnci;
+    for(vdbnci i = names.begin(); i != names.end(); ++i)
+        {
+        m[i->ShortName] = i->Idx;
+        }
+    return m;
+}
+
 } // Unnamed namespace.
 
 std::vector<db_names> const& GetDBNames()
 {
     return static_get_db_names();
+}
+
+int db_key_from_name(std::string const& name)
+{
+    static std::map<std::string,int> const m = static_get_short_names();
+    return map_lookup(m, name);
+}
+
+std::string db_name_from_key(int key)
+{
+    static std::vector<db_names> const names = static_get_db_names();
+    LMI_ASSERT(0 <= key && key < DB_LAST);
+    return names[key].ShortName;
 }
 

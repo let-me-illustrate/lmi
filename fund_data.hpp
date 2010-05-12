@@ -21,8 +21,8 @@
 
 // $Id$
 
-#ifndef ihs_funddata_hpp
-#define ihs_funddata_hpp
+#ifndef fund_data_hpp
+#define fund_data_hpp
 
 #include "config.hpp"
 
@@ -118,5 +118,5 @@ inline int FundData::GetNumberOfFunds() const
     return FundInfo_.size();
 }
 
-#endif // ihs_funddata_hpp
+#endif // fund_data_hpp
 

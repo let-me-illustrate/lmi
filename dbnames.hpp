@@ -28,11 +28,12 @@
 
 #include "so_attributes.hpp"
 
+#include <string>
 #include <vector>
 
 /// See 'dbnames.xpp' for the definition of each entity.
 
-enum DatabaseNames
+enum e_database_key
     {DB_FIRST
 
     ,DB_Topic_Underwriting
@@ -439,13 +440,16 @@ enum DatabaseNames
 
 struct db_names
 {
-    DatabaseNames       Idx;
-    DatabaseNames       ParentIdx;
+    e_database_key      Idx;
+    e_database_key      ParentIdx;
     char const*         ShortName;
     char const*         LongName;
 };
 
 std::vector<db_names> const& LMI_SO GetDBNames();
+
+int         db_key_from_name(std::string const&);
+std::string db_name_from_key(int);
 
 #endif // dbnames_hpp
 

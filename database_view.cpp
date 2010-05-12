@@ -53,17 +53,17 @@ namespace
 ///  - Rename 'id' to something like 'database_key' (and 'id_'
 ///    similarly).
 ///
-///  - Change the type of 'id_' to (enum) DatabaseNames.
+///  - Change the type of 'id_' to (enum) e_database_key.
 ///
 /// However, shouldn't we rewrite this class completely instead?
 ///
 /// Its purpose is to represent the information in struct db_names,
 /// while deriving from class wxTreeItemData. Yet it contains only two
 /// of that struct's four members--these:
-///    DatabaseNames       Idx;
+///    e_database_key      Idx;
 ///    char const*         LongName;
 /// but not these:
-///    DatabaseNames       ParentIdx;
+///    e_database_key      ParentIdx;
 ///    char const*         ShortName;
 /// The fields not included are of course accessed by indexing a
 /// db_names object from the vector returned by this function:
@@ -80,7 +80,7 @@ namespace
 ///
 /// I see two other designs to consider:
 ///
-/// (1) This class holds only a DatabaseNames enum. That's enough to
+/// (1) This class holds only an e_database_key enum. That's enough to
 /// find the corresponding struct db_names in the vector returned by
 ///   std::vector<db_names> const& LMI_SO GetDBNames();
 /// and we can then access that struct's members directly. And we
@@ -180,7 +180,7 @@ MultiDimGrid* DatabaseView::CreateGridCtrl(wxWindow* parent)
 void DatabaseView::SetupControls()
 {
     std::vector<db_names> const& names = GetDBNames();
-    std::map<DatabaseNames, wxTreeItemId> name_to_id;
+    std::map<e_database_key, wxTreeItemId> name_to_id;
 
     wxTreeCtrl& tree_ctrl = tree();
 

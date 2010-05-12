@@ -555,8 +555,10 @@ endif
 # Adding '-fno-delete-null-pointer-checks' to $(CPPFLAGS) might
 # suffice to suppress the diagnostic, but this file actually doesn't
 # need any optimization at all.
+#
+# A similar problem was observed with 'my_db.cpp'.
 
-my_prod.o: optimization_flag := -O0
+my_db.o my_prod.o: optimization_flag := -O0
 
 ################################################################################
 
@@ -931,7 +933,7 @@ shared_data_files = \
   qx_ins.dat \
   qx_ins.ndx \
   sample.dat \
-  sample.db4 \
+  sample.database \
   sample.funds \
   sample.ndx \
   sample.policy \
@@ -1025,7 +1027,7 @@ extra_fardel_checksummed_files = \
 
 fardel_checksummed_files = \
   $(extra_fardel_checksummed_files) \
-  *.dat *.db4 *.funds *.ndx *.policy *.rounding *.strata \
+  *.dat *.database *.funds *.ndx *.policy *.rounding *.strata \
   expiry \
   md5sum$(EXEEXT) \
 
@@ -1234,7 +1236,7 @@ system_test: install
 	  for z in *.test; \
 	    do \
 	      $(bin_dir)/ihs_crc_comp$(EXEEXT) $$z $(touchstone_dir)/$$z \
-	      | $(SED) -e ';/Summary/!d' -e "s/^ /$$z/"; \
+	      | $(SED) -e ';/Summary.*max rel err/!d' -e "s/^ /$$z/"; \
 	    done > $(system_test_analysis);
 	@-< $(system_test_analysis) $(SED) \
 	  -e ';/rel err.*e-0*1[5-9]/d' \

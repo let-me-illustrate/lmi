@@ -76,7 +76,7 @@ RoundingDocument::~RoundingDocument()
 
 void RoundingDocument::ReadDocument(std::string const& filename)
 {
-    rounding_rules_.Read(filename);
+    rounding_rules_.load(filename);
     if(!GetViews().empty())
         {
         RoundingView& view = PredominantView();
@@ -107,7 +107,7 @@ void RoundingDocument::WriteDocument(std::string const& filename)
             *it->second = view.controls()[it->first]->GetValue();
             }
         }
-    rounding_rules_.Write(filename);
+    rounding_rules_.save(filename);
 }
 
 RoundingView& RoundingDocument::PredominantView() const

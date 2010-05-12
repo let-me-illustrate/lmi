@@ -35,11 +35,10 @@
 #include "configurable_settings.hpp"
 #include "data_directory.hpp"
 #include "database.hpp"
-#include "dbnames.hpp"
 #include "death_benefits.hpp"
+#include "et_vector.hpp"
+#include "fund_data.hpp"
 #include "global_settings.hpp"
-#include "ihs_dbdict.hpp"
-#include "ihs_funddata.hpp"
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
 #include "ihs_x_type.hpp"
@@ -61,7 +60,6 @@
 #include <cmath>                 // std::pow()
 #include <cstring>               // std::strlen(), std::strncmp()
 #include <fstream>
-#include <functional>
 #include <limits>
 #include <numeric>
 #include <sstream>
@@ -189,10 +187,10 @@ void BasicValues::Init()
     // is used, then reset the database, then recalculate the age. If any
     // circularity
     // remains, it will be detected and an error message given when we look
-    // up the ALB/ANB switch using TDatabase::Query(int), which restricts
-    // looked-up values to scalars that vary across no database axis.
+    // up the ALB/ANB switch using product_database::Query(int), which
+    // restricts looked-up values to scalars that vary across no database axis.
 
-    Database_.reset(new TDatabase(yare_input_));
+    Database_.reset(new product_database(yare_input_));
 
     StateOfJurisdiction_ = Database_->GetStateOfJurisdiction();
 
@@ -289,7 +287,7 @@ void BasicValues::Init()
 void BasicValues::GPTServerInit()
 {
     ProductData_.reset(new product_data(yare_input_.ProductName));
-    Database_.reset(new TDatabase(yare_input_));
+    Database_.reset(new product_database(yare_input_));
 
     IssueAge = yare_input_.IssueAge;
     RetAge   = yare_input_.RetirementAge;
@@ -457,16 +455,10 @@ double BasicValues::InvestmentManagementFee() const
 void BasicValues::Init7702()
 {
     Mly7702qc = GetIRC7702Rates();
-    // ET !! Mly7702qc = coi_rate_from_q(Mly7702qc, Database_->Query(DB_MaxMonthlyCoiRate));
-    std::transform
-        (Mly7702qc.begin()
-        ,Mly7702qc.end()
-        ,Mly7702qc.begin()
-        ,std::bind2nd
-            (coi_rate_from_q<double>()
-            ,Database_->Query(DB_MaxMonthlyCoiRate)
-            )
-        );
+    double max_coi_rate = Database_->Query(DB_MaxMonthlyCoiRate);
+    LMI_ASSERT(0.0 != max_coi_rate);
+    max_coi_rate = 1.0 / max_coi_rate;
+    assign(Mly7702qc, apply_binary(coi_rate_from_q<double>(), Mly7702qc, max_coi_rate));
 
     MlyDcvqc = Mly7702qc;
     std::transform
@@ -614,14 +606,7 @@ void BasicValues::Init7702()
         ,i_upper_12_over_12_from_i<double>()
         );
 
-    // ET !! Mly7702ig = -1.0 + 1.0 / DBDiscountRate;
-    Mly7702ig = DBDiscountRate;
-    std::transform(Mly7702ig.begin(), Mly7702ig.end(), Mly7702ig.begin(),
-          std::bind1st(std::divides<double>(), 1.0)
-          );
-    std::transform(Mly7702ig.begin(), Mly7702ig.end(), Mly7702ig.begin(),
-          std::bind2nd(std::minus<double>(), 1.0)
-          );
+    Database_->Query(Mly7702ig, DB_NAARDiscount);
 
     // TODO ?? We should avoid reading the rate file again; but
     // the GPT server doesn't initialize a MortalityRates object
@@ -733,7 +718,7 @@ void BasicValues::SetPermanentInvariants()
     yare_input YI(*Input_);
     YI.State            = GetStateOfDomicile();
     YI.CorporationState = GetStateOfDomicile();
-    TDatabase TempDatabase(YI);
+    product_database TempDatabase(YI);
     DomiciliaryPremiumTaxLoad_ = 0.0;
     if(!yare_input_.AmortizePremiumLoad)
         {
@@ -780,6 +765,12 @@ void BasicValues::SetPermanentInvariants()
     Database_->Query(FreeWDProportion, DB_FreeWDProportion);
 
     Database_->Query(DBDiscountRate, DB_NAARDiscount);
+    LMI_ASSERT(DBDiscountRate.end() == std::find(DBDiscountRate.begin(), DBDiscountRate.end(), -1.0));
+// This would be more natural:
+//    assign(DBDiscountRate, 1.0 / (1.0 + DBDiscountRate));
+// but we avoid it for the nonce because it causes slight regression errors.
+    assign(DBDiscountRate, 1.0 + DBDiscountRate);
+    assign(DBDiscountRate, 1.0 / DBDiscountRate);
 
     Database_->Query(AssetComp , DB_AssetComp);
     Database_->Query(CompTarget, DB_CompTarget);
@@ -840,27 +831,35 @@ void BasicValues::SetPermanentInvariants()
     SetMaxSurvivalDur();
 }
 
+namespace
+{
+void set_rounding_rule(round_to<double>& functor, rounding_parameters const& z)
+{
+    functor = round_to<double>(z.decimals(), z.style().value());
+}
+} // Unnamed namespace.
+
 void BasicValues::SetRoundingFunctors()
 {
-    round_specamt_            = RoundingRules_->round_specamt           ();
-    round_death_benefit_      = RoundingRules_->round_death_benefit     ();
-    round_naar_               = RoundingRules_->round_naar              ();
-    round_coi_rate_           = RoundingRules_->round_coi_rate          ();
-    round_coi_charge_         = RoundingRules_->round_coi_charge        ();
-    round_gross_premium_      = RoundingRules_->round_gross_premium     ();
-    round_net_premium_        = RoundingRules_->round_net_premium       ();
-    round_interest_rate_      = RoundingRules_->round_interest_rate     ();
-    round_interest_credit_    = RoundingRules_->round_interest_credit   ();
-    round_withdrawal_         = RoundingRules_->round_withdrawal        ();
-    round_loan_               = RoundingRules_->round_loan              ();
-    round_corridor_factor_    = RoundingRules_->round_corridor_factor   ();
-    round_surrender_charge_   = RoundingRules_->round_surrender_charge  ();
-    round_irr_                = RoundingRules_->round_irr               ();
-    round_min_specamt_        = RoundingRules_->round_min_specamt       ();
-    round_max_specamt_        = RoundingRules_->round_max_specamt       ();
-    round_min_premium_        = RoundingRules_->round_min_premium       ();
-    round_max_premium_        = RoundingRules_->round_max_premium       ();
-    round_interest_rate_7702_ = RoundingRules_->round_interest_rate_7702();
+    set_rounding_rule(round_specamt_           , RoundingRules_->datum("RoundSpecAmt"    ));
+    set_rounding_rule(round_death_benefit_     , RoundingRules_->datum("RoundDeathBft"   ));
+    set_rounding_rule(round_naar_              , RoundingRules_->datum("RoundNaar"       ));
+    set_rounding_rule(round_coi_rate_          , RoundingRules_->datum("RoundCoiRate"    ));
+    set_rounding_rule(round_coi_charge_        , RoundingRules_->datum("RoundCoiCharge"  ));
+    set_rounding_rule(round_gross_premium_     , RoundingRules_->datum("RoundGrossPrem"  ));
+    set_rounding_rule(round_net_premium_       , RoundingRules_->datum("RoundNetPrem"    ));
+    set_rounding_rule(round_interest_rate_     , RoundingRules_->datum("RoundIntRate"    ));
+    set_rounding_rule(round_interest_credit_   , RoundingRules_->datum("RoundIntCredit"  ));
+    set_rounding_rule(round_withdrawal_        , RoundingRules_->datum("RoundWithdrawal" ));
+    set_rounding_rule(round_loan_              , RoundingRules_->datum("RoundLoan"       ));
+    set_rounding_rule(round_corridor_factor_   , RoundingRules_->datum("RoundCorrFactor" ));
+    set_rounding_rule(round_surrender_charge_  , RoundingRules_->datum("RoundSurrCharge" ));
+    set_rounding_rule(round_irr_               , RoundingRules_->datum("RoundIrr"        ));
+    set_rounding_rule(round_min_specamt_       , RoundingRules_->datum("RoundMinSpecamt" ));
+    set_rounding_rule(round_max_specamt_       , RoundingRules_->datum("RoundMaxSpecamt" ));
+    set_rounding_rule(round_min_premium_       , RoundingRules_->datum("RoundMinPrem"    ));
+    set_rounding_rule(round_max_premium_       , RoundingRules_->datum("RoundMaxPrem"    ));
+    set_rounding_rule(round_interest_rate_7702_, RoundingRules_->datum("RoundIntRate7702"));
 }
 
 //============================================================================
@@ -879,7 +878,7 @@ void BasicValues::SetLowestPremiumTaxLoad()
 /// Lowest premium-tax load, for 7702 and 7702A purposes.
 
 double lowest_premium_tax_load
-    (TDatabase          const& db
+    (product_database   const& db
     ,stratified_charges const& stratified
     ,mcenum_state              state_of_jurisdiction
     ,bool                      amortize_premium_load
@@ -911,8 +910,7 @@ double lowest_premium_tax_load
 
     z = db.Query(DB_PremTaxLoad);
 
-    TDBValue const& premium_tax_loads = db.GetEntry(DB_PremTaxLoad);
-    if(!TDBValue::VariesByState(premium_tax_loads))
+    if(!db.varies_by_state(DB_PremTaxLoad))
         {
         return z;
         }
@@ -921,15 +919,12 @@ double lowest_premium_tax_load
     // it equals premium-tax rate--i.e. that premium tax is passed
     // through exactly--and that therefore tiered tax rates determine
     // loads where applicable and implemented.
-    TDBValue const& premium_tax_rates = db.GetEntry(DB_PremTaxRate);
-    if(!TDBValue::Equivalent(premium_tax_loads, premium_tax_rates))
+    if(!db.are_equivalent(DB_PremTaxLoad, DB_PremTaxRate))
         {
         fatal_error()
             << "Premium-tax load varies by state, but differs"
             << " from premium-tax rates. Probably the database"
             << " is incorrect.\n"
-            << "premium_tax_loads:\n" << premium_tax_loads
-            << "premium_tax_rates:\n" << premium_tax_rates
             << LMI_FLUSH
             ;
         }
@@ -969,8 +964,7 @@ void BasicValues::TestPremiumTaxLoadConsistency()
     // TODO ?? Don't override parameters--instead, only detect and
     // report inconsistencies.
     //
-    TDBValue const& premium_tax_loads = Database_->GetEntry(DB_PremTaxLoad);
-    if(!TDBValue::VariesByState(premium_tax_loads))
+    if(!Database_->varies_by_state(DB_PremTaxLoad))
         {
         return;
         }
@@ -1635,7 +1629,7 @@ double BasicValues::GetAnnuityValueMlyDed
 
 std::vector<double> BasicValues::GetActuarialTable
     (std::string const& TableFile
-    ,long int           TableID
+    ,e_database_key     TableID
     ,long int           TableNumber
     ) const
 {
@@ -1670,7 +1664,7 @@ std::vector<double> BasicValues::GetActuarialTable
 //============================================================================
 std::vector<double> BasicValues::GetUnblendedTable
     (std::string const& TableFile
-    ,long int           TableID
+    ,e_database_key     TableID
     ) const
 {
     return GetActuarialTable
@@ -1683,7 +1677,7 @@ std::vector<double> BasicValues::GetUnblendedTable
 //============================================================================
 std::vector<double> BasicValues::GetUnblendedTable
     (std::string const& TableFile
-    ,long int           TableID
+    ,e_database_key     TableID
     ,mcenum_gender      gender
     ,mcenum_smoking     smoking
     ) const
@@ -1692,7 +1686,7 @@ std::vector<double> BasicValues::GetUnblendedTable
     YI.Gender  = gender ;
     YI.Smoking = smoking;
 
-    TDatabase TempDatabase(YI);
+    product_database TempDatabase(YI);
 
     return GetActuarialTable
         (TableFile
@@ -1723,7 +1717,7 @@ std::vector<double> BasicValues::GetUnblendedTable
 // The order of blending in the unisex unismoke case makes no difference.
 std::vector<double> BasicValues::GetTable
     (std::string const& TableFile
-    ,long int    const& TableID
+    ,e_database_key     TableID
     ,bool               IsTableValid
     ,EBlend      const& CanBlendSmoking
     ,EBlend      const& CanBlendGender

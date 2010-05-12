@@ -26,10 +26,47 @@
 
 #include "config.hpp"
 
-#include "round_to.hpp"
+#include "any_member.hpp"
+#include "mc_enum.hpp"
+#include "mc_enum_types.hpp"
+#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
+#include "xml_serializable.hpp"
+
+#include <boost/utility.hpp>
 
 #include <string>
+
+/// Parameters of a rounding rule.
+///
+/// Implicitly-declared special member functions do the right thing.
+
+class rounding_parameters
+    :virtual private obstruct_slicing<rounding_parameters>
+{
+    friend class rounding_rules;
+
+  public:
+    rounding_parameters
+        (int                decimals
+        ,rounding_style     style
+        ,std::string const& gloss = std::string()
+        );
+    ~rounding_parameters();
+
+    bool operator==(rounding_parameters const&) const;
+
+    int                       decimals() const;
+    mce_rounding_style const& style   () const;
+    std::string const&        gloss   () const;
+
+  private:
+    rounding_parameters();
+
+    int                decimals_;
+    mce_rounding_style style_   ;
+    std::string        gloss_   ;
+};
 
 /// Product rounding rules.
 ///
@@ -39,6 +76,8 @@
 /// gratuitous differences between systems should be avoided. Thus,
 /// rounding is a property of the transaction, and not of the variable
 /// it ultimately affects.
+///
+/// Implicitly-declared special member functions do the right thing.
 ///
 /// Notes on particular rounding functors.
 ///
@@ -53,63 +92,62 @@
 /// The 7702 and 7702A interest rate must be rounded up, if at all.
 
 class LMI_SO rounding_rules
+    :        private boost::noncopyable
+    ,virtual private obstruct_slicing  <rounding_rules>
+    ,        public  xml_serializable  <rounding_rules>
+    ,        public  MemberSymbolTable <rounding_rules>
 {
     friend class RoundingDocument;
-    friend class RoundingView;
 
   public:
     explicit rounding_rules(std::string const& filename);
+    ~rounding_rules();
+
+    rounding_parameters const& datum(std::string const& name);
 
     // Legacy functions to support creating product files programmatically.
     static void write_rounding_files();
     static void write_proprietary_rounding_files();
 
-    round_to<double> const& round_specamt           () const {return round_specamt_           ;}
-    round_to<double> const& round_death_benefit     () const {return round_death_benefit_     ;}
-    round_to<double> const& round_naar              () const {return round_naar_              ;}
-    round_to<double> const& round_coi_rate          () const {return round_coi_rate_          ;}
-    round_to<double> const& round_coi_charge        () const {return round_coi_charge_        ;}
-    round_to<double> const& round_gross_premium     () const {return round_gross_premium_     ;}
-    round_to<double> const& round_net_premium       () const {return round_net_premium_       ;}
-    round_to<double> const& round_interest_rate     () const {return round_interest_rate_     ;}
-    round_to<double> const& round_interest_credit   () const {return round_interest_credit_   ;}
-    round_to<double> const& round_withdrawal        () const {return round_withdrawal_        ;}
-    round_to<double> const& round_loan              () const {return round_loan_              ;}
-    round_to<double> const& round_corridor_factor   () const {return round_corridor_factor_   ;}
-    round_to<double> const& round_surrender_charge  () const {return round_surrender_charge_  ;}
-    round_to<double> const& round_irr               () const {return round_irr_               ;}
-    round_to<double> const& round_min_specamt       () const {return round_min_specamt_       ;}
-    round_to<double> const& round_max_specamt       () const {return round_max_specamt_       ;}
-    round_to<double> const& round_min_premium       () const {return round_min_premium_       ;}
-    round_to<double> const& round_max_premium       () const {return round_max_premium_       ;}
-    round_to<double> const& round_interest_rate_7702() const {return round_interest_rate_7702_;}
-
   private:
     rounding_rules();
 
-    // Legacy functions to be reimplemented soon.
-    void Read (std::string const& filename);
-    void Write(std::string const& filename) const;
+    void ascribe_members();
 
-    round_to<double> round_specamt_           ;
-    round_to<double> round_death_benefit_     ;
-    round_to<double> round_naar_              ;
-    round_to<double> round_coi_rate_          ;
-    round_to<double> round_coi_charge_        ;
-    round_to<double> round_gross_premium_     ;
-    round_to<double> round_net_premium_       ;
-    round_to<double> round_interest_rate_     ;
-    round_to<double> round_interest_credit_   ;
-    round_to<double> round_withdrawal_        ;
-    round_to<double> round_loan_              ;
-    round_to<double> round_corridor_factor_   ;
-    round_to<double> round_surrender_charge_  ;
-    round_to<double> round_irr_               ;
-    round_to<double> round_min_specamt_       ;
-    round_to<double> round_max_specamt_       ;
-    round_to<double> round_min_premium_       ;
-    round_to<double> round_max_premium_       ;
-    round_to<double> round_interest_rate_7702_;
+    // xml_serializable required implementation.
+    virtual int         class_version() const;
+    virtual std::string xml_root_name() const;
+
+    // xml_serializable overrides.
+    virtual void read_element
+        (xml::element const& e
+        ,std::string const&  name
+        ,int                 file_version
+        );
+    virtual void write_element
+        (xml::element&       parent
+        ,std::string const&  name
+        ) const;
+
+    rounding_parameters round_specamt_           ;
+    rounding_parameters round_death_benefit_     ;
+    rounding_parameters round_naar_              ;
+    rounding_parameters round_coi_rate_          ;
+    rounding_parameters round_coi_charge_        ;
+    rounding_parameters round_gross_premium_     ;
+    rounding_parameters round_net_premium_       ;
+    rounding_parameters round_interest_rate_     ;
+    rounding_parameters round_interest_credit_   ;
+    rounding_parameters round_withdrawal_        ;
+    rounding_parameters round_loan_              ;
+    rounding_parameters round_corridor_factor_   ;
+    rounding_parameters round_surrender_charge_  ;
+    rounding_parameters round_irr_               ;
+    rounding_parameters round_min_specamt_       ;
+    rounding_parameters round_max_specamt_       ;
+    rounding_parameters round_min_premium_       ;
+    rounding_parameters round_max_premium_       ;
+    rounding_parameters round_interest_rate_7702_;
 };
 
 #endif // rounding_rules_hpp

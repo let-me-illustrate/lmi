@@ -32,6 +32,8 @@
 #include "safely_dereference_as.hpp"
 #include "value_cast.hpp"
 
+#include <boost/utility.hpp>
+
 #include <wx/choice.h>
 #include <wx/treectrl.h>
 
@@ -89,6 +91,7 @@ class AxisMaxBoundAdjusterBase
 template<typename Integral>
 class AxisMaxBoundAdjuster
   :public AxisMaxBoundAdjusterBase
+  ,private boost::noncopyable
 {
   public:
     AxisMaxBoundAdjuster

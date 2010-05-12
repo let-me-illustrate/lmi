@@ -27,6 +27,7 @@
 #include "config.hpp"
 
 #include "dbindex.hpp"
+#include "dbnames.hpp" // e_database_key
 #include "mc_enum_type_enums.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
@@ -36,17 +37,19 @@
 #include <string>
 #include <vector>
 
-// Database of product parameters
-
-class TDBValue;
+class database_entity;
 class yare_input;
 
-class LMI_SO TDatabase
+/// Database of product parameters.
+
+class LMI_SO product_database
     :private boost::noncopyable
-    ,virtual private obstruct_slicing<TDatabase>
+    ,virtual private obstruct_slicing<product_database>
 {
+    friend class input_test;
+
   public:
-    TDatabase
+    product_database
         (std::string const& a_ProductName
         ,mcenum_gender      a_Gender
         ,mcenum_class       a_Class
@@ -55,45 +58,38 @@ class LMI_SO TDatabase
         ,mcenum_uw_basis    a_UWBasis
         ,mcenum_state       a_State
         );
-    explicit TDatabase(yare_input const&);
-    // Ctor for unit-testing support.
-    explicit TDatabase(int length);
-    ~TDatabase();
+    explicit product_database(yare_input const&);
+    // Special ctor implemented only in a unit-test TU.
+    explicit product_database(int length);
+    ~product_database();
 
     mcenum_state GetStateOfJurisdiction() const;
     int length() const;
 
     // Return scalar: use double because it's convertible to int, bool, etc.
-    // We'd rather do something like
+    // Someday, consider doing something like:
     //   template<typename T, typename DBValue>
-    //   void Query(T& dst, int k) const;
-    // but bc++5.02 can't handle member template functions.
-    double Query(int k) const;
+    //   void Query(T&, e_database_key) const;
+    double Query(e_database_key) const;
+    void Query(std::vector<double>&, e_database_key) const;
 
-    void Query(std::vector<double>& dst, int k) const;
-
-    void ConstrainScalar(int k) const;
-
-    TDBValue const& GetEntry(int k) const;
+    bool are_equivalent(e_database_key, e_database_key) const;
+    bool varies_by_state(e_database_key) const;
 
   private:
-    TDatabase();
+    void initialize();
 
-    void Init();
-    void Init(std::string const& NewFilename);
+    database_entity const& entity_from_key(e_database_key) const;
 
-    int           Index[TDBIndex::MaxIndex];
-    TDBIndex      Idx;
-    std::string   Filename;
+    database_index  index_;
+    int             length_;
 
-    int           length_;
-
-    mcenum_gender   Gender;     // gender
-    mcenum_class    Class;      // underwriting class
-    mcenum_smoking  Smoker;     // smoker class
-    int             IssueAge;   // issue age
-    mcenum_uw_basis UWBasis;    // underwriting basis
-    mcenum_state    State;      // state of jurisdiction
+    mcenum_gender   Gender;   // gender
+    mcenum_class    Class;    // underwriting class
+    mcenum_smoking  Smoker;   // smoker class
+    int             IssueAge; // issue age
+    mcenum_uw_basis UWBasis;  // underwriting basis
+    mcenum_state    State;    // state of jurisdiction
 };
 
 #endif // database_hpp

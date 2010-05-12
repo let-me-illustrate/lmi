@@ -100,7 +100,9 @@ int test_main(int, char*[])
         "00000000000"
         ".0000000000000000"
         );
-    BOOST_TEST_EQUAL(e, buf);
+    // http://lists.nongnu.org/archive/html/lmi/2010-04/msg00042.html
+    int const number_of_digits = 16;
+    BOOST_TEST(0 == e.compare(0, number_of_digits, buf, 0, number_of_digits));
 
     return 0;
 }

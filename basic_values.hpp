@@ -26,6 +26,7 @@
 
 #include "config.hpp"
 
+#include "dbnames.hpp" // e_database_key
 #include "mc_enum_type_enums.hpp"
 #include "oecumenic_enumerations.hpp"
 #include "round_to.hpp"
@@ -58,10 +59,10 @@ class Irc7702A;
 class Loads;
 class MortalityRates;
 class SurrChgRates;
-class TDatabase;
 class death_benefits;
 class modal_outlay;
 class product_data;
+class product_database;
 class rounding_rules;
 class stratified_charges;
 
@@ -117,7 +118,7 @@ class LMI_SO BasicValues
     boost::shared_ptr<Input const>        Input_;
     yare_input                            yare_input_;
     boost::shared_ptr<product_data>       ProductData_;
-    boost::shared_ptr<TDatabase>          Database_;
+    boost::shared_ptr<product_database>   Database_;
     boost::shared_ptr<FundData>           FundData_;
     boost::shared_ptr<rounding_rules>     RoundingRules_;
     boost::shared_ptr<stratified_charges> StratifiedCharges_;
@@ -282,7 +283,7 @@ class LMI_SO BasicValues
         ) const;
     std::vector<double> GetTable
         (std::string const& TableFile
-        ,long int    const& TableID
+        ,e_database_key     TableID
         ,bool               IsTableValid    = true
         ,EBlend      const& CanBlendSmoking = CannotBlend
         ,EBlend      const& CanBlendGender  = CannotBlend
@@ -405,18 +406,18 @@ class LMI_SO BasicValues
 
     std::vector<double> GetActuarialTable
         (std::string const& TableFile
-        ,long int           TableID
+        ,e_database_key     TableID
         ,long int           TableNumber
         ) const;
 
     std::vector<double> GetUnblendedTable
         (std::string const& TableFile
-        ,long int           TableID
+        ,e_database_key     TableID
         ) const;
 
     std::vector<double> GetUnblendedTable
         (std::string const& TableFile
-        ,long int           TableID
+        ,e_database_key     TableID
         ,mcenum_gender      gender
         ,mcenum_smoking     smoking
         ) const;
@@ -518,7 +519,7 @@ inline bool BasicValues::IsSubjectToIllustrationReg() const
 }
 
 double lowest_premium_tax_load
-    (TDatabase          const& db
+    (product_database   const& db
     ,stratified_charges const& stratified
     ,mcenum_state              state_of_jurisdiction
     ,bool                      amortize_premium_load

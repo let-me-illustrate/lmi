@@ -45,7 +45,7 @@
 
 namespace
 {
-    std::string current_credited_rate(TDatabase const& database)
+    std::string current_credited_rate(product_database const& database)
         {
         std::vector<double> z;
         database.Query(z, DB_MaxGenAcctRate);
@@ -86,7 +86,7 @@ void Input::DoAdaptExternalities()
     CachedStateOfJurisdiction_   = StateOfJurisdiction  .value();
 
     database_.reset
-        (new TDatabase
+        (new product_database
             (CachedProductName_
             ,CachedGender_
             ,CachedUnderwritingClass_

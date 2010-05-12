@@ -299,7 +299,7 @@ void InterestRates::Initialize(BasicValues const& v)
     v.Database_->Query(general_account_interest_bonus, DB_GAIntBonus);
     // ET !! GenAcctGrossRate_ += general_account_interest_bonus;
     // ...and this might be further simplified by implementing e.g.
-    //   std::vector<double> TDatabase::QueryVector(int k) const;
+    //   std::vector<double> product_database::QueryVector(int k) const;
     // and replacing 'general_account_interest_bonus' with a
     // temporary:
     //   GenAcctGrossRate_ += v.Database_->QueryVector(DB_GAIntBonus);

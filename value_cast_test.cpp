@@ -336,7 +336,9 @@ int extra_tests0()
         "00000000000000000000000000000000000000000000000000"
         "00000000000"
         );
-    BOOST_TEST_EQUAL(e, a);
+    // http://lists.nongnu.org/archive/html/lmi/2010-04/msg00042.html
+    int const number_of_digits = 16;
+    BOOST_TEST(0 == e.compare(0, number_of_digits, a, 0, number_of_digits));
 
     // An empty string should be convertible to string without error.
     std::string s;

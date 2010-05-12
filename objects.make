@@ -192,10 +192,13 @@ common_common_objects := \
   crc32.o \
   custom_io_0.o \
   data_directory.o \
+  database.o \
   datum_base.o \
   datum_boolean.o \
   datum_string.o \
+  dbdict.o \
   dbnames.o \
+  dbvalue.o \
   death_benefits.o \
   emit_ledger.o \
   facets.o \
@@ -259,9 +262,6 @@ antediluvian_common_objects := \
   accountvalue.o \
   antediluvian_stubs.o \
   basicvalues.o \
-  database.o \
-  dbdict.o \
-  dbvalue.o \
   mortality_rates.o \
   solve.o \
 
@@ -272,22 +272,18 @@ antediluvian_common_objects := \
 lmi_common_objects := \
   $(common_common_objects) \
   authenticity.o \
+  commutation_functions.o \
+  fund_data.o \
   ihs_acctval.o \
   ihs_avdebug.o \
   ihs_avmly.o \
   ihs_avsolve.o \
   ihs_avstrtgy.o \
   ihs_basicval.o \
-  ihs_commfns.o \
-  ihs_database.o \
-  ihs_dbdict.o \
-  ihs_dbvalue.o \
-  ihs_fpios.o \
-  ihs_funddata.o \
   ihs_irc7702.o \
   ihs_irc7702a.o \
   ihs_mortal.o \
-  ihs_pios.o \
+  lmi.o \
   md5.o \
   mec_input.o \
   mec_server.o \
@@ -379,25 +375,23 @@ gpt_objects := \
   alert_cli.o \
   calendar_date.o \
   ce_product_name.o \
+  commutation_functions.o \
   configurable_settings.o \
   crc32.o \
   data_directory.o \
+  database.o \
   datum_base.o \
   datum_string.o \
+  dbdict.o \
   dbnames.o \
+  dbvalue.o \
   death_benefits.o \
   facets.o \
   fenv_lmi.o \
+  fund_data.o \
   global_settings.o \
   ihs_basicval.o \
-  ihs_commfns.o \
-  ihs_database.o \
-  ihs_dbdict.o \
-  ihs_dbvalue.o \
-  ihs_fpios.o \
-  ihs_funddata.o \
   ihs_mortal.o \
-  ihs_pios.o \
   input.o \
   input_harmonization.o \
   input_realization.o \
@@ -405,6 +399,7 @@ gpt_objects := \
   input_sequence.o \
   input_xml_io.o \
   interest_rates.o \
+  lmi.o \
   loads.o \
   mc_enum.o \
   mc_enum_types.o \
@@ -458,8 +453,8 @@ unit_test_targets := \
   authenticity_test \
   calendar_date_test \
   callback_test \
-  commutation_functions_test \
   comma_punct_test \
+  commutation_functions_test \
   crc32_test \
   expression_template_0_test \
   fenv_lmi_test \
@@ -578,15 +573,15 @@ callback_test$(EXEEXT): \
   $(common_test_objects) \
   callback_test.o \
 
-commutation_functions_test$(EXEEXT): \
-  $(common_test_objects) \
-  commutation_functions_test.o \
-  ihs_commfns.o \
-  timer.o \
-
 comma_punct_test$(EXEEXT): \
   $(common_test_objects) \
   comma_punct_test.o \
+
+commutation_functions_test$(EXEEXT): \
+  $(common_test_objects) \
+  commutation_functions.o \
+  commutation_functions_test.o \
+  timer.o \
 
 crc32_test$(EXEEXT): \
   $(common_test_objects) \
@@ -643,6 +638,7 @@ input_test$(EXEEXT): \
   $(boost_common_objects) \
   $(common_test_objects) \
   $(xmlwrapp_objects) \
+  antediluvian_stubs.o \
   calendar_date.o \
   ce_product_name.o \
   configurable_settings.o \
@@ -653,6 +649,7 @@ input_test$(EXEEXT): \
   dbdict.o \
   dbnames.o \
   dbvalue.o \
+  expm1.o \
   facets.o \
   global_settings.o \
   input.o \
@@ -777,15 +774,13 @@ product_file_test$(EXEEXT): \
   $(xmlwrapp_objects) \
   data_directory.o \
   datum_base.o \
+  dbdict.o \
   dbnames.o \
+  dbvalue.o \
   expm1.o \
   facets.o \
+  fund_data.o \
   global_settings.o \
-  ihs_dbdict.o \
-  ihs_dbvalue.o \
-  ihs_fpios.o \
-  ihs_funddata.o \
-  ihs_pios.o \
   mc_enum.o \
   mc_enum_types.o \
   miscellany.o \

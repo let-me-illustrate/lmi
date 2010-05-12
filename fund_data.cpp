@@ -26,7 +26,7 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "ihs_funddata.hpp"
+#include "fund_data.hpp"
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"

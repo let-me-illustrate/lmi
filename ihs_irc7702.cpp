@@ -30,7 +30,7 @@
 
 #include "alert.hpp"
 #include "basic_values.hpp" // For target-premium callback.
-#include "ihs_commfns.hpp"
+#include "commutation_functions.hpp"
 #include "materially_equal.hpp"
 #include "zero.hpp"
 
@@ -76,13 +76,10 @@ namespace
         static std::vector<double> const v(d, d + n);
         return v;
         }
-}
 
-namespace
-{
     // Use 7702 int rate for DB discount in NAAR
     bool g_UseIcForIg = true;
-}
+} // Unnamed namespace.
 
 // General concerns
 //
@@ -1043,7 +1040,7 @@ double Irc7702::CalculateGSPSpecAmt
             return SpecAmt;
             }
     };
-//}
+//} // Unnamed namespace.
 
 //============================================================================
 // CalculatePremium() implements an analytic solution, while CalculateSpecAmt()

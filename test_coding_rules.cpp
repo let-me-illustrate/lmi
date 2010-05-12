@@ -437,12 +437,6 @@ void check_copyright(file const& f)
 
 void check_cxx(file const& f)
 {
-    // Remove this once these hopeless files have been expunged.
-    if(f.phyloanalyze("^ihs_f?pios.[ch]pp$"))
-        {
-        return;
-        }
-
     // Remove this once these files have been rewritten.
     if(f.phyloanalyze("^md5.[ch]pp$"))
         {
@@ -594,12 +588,6 @@ void check_include_guards(file const& f)
 
 void check_label_indentation(file const& f)
 {
-    // Remove this once these hopeless files have been expunged.
-    if(f.phyloanalyze("^ihs_f?pios.hpp$"))
-        {
-        return;
-        }
-
     if(!f.is_of_phylum(e_c_or_cxx))
         {
         return;

@@ -147,7 +147,7 @@ void style_button(wxBitmapButton& button, rounding_style style, bool selected)
         ));
 }
 
-} // unnamed namespace
+} // Unnamed namespace.
 
 BEGIN_EVENT_TABLE(RoundingButtons, wxPanel)
     EVT_BUTTON(e_rbi_not_at_all, RoundingButtons::UponButtonClick)
@@ -292,16 +292,16 @@ void RoundingButtons::UponButtonClick( wxCommandEvent & event )
     SetStyle(style);
 }
 
-void RoundingButtons::SetValue(round_to<double> const& value)
+void RoundingButtons::SetValue(rounding_parameters const& value)
 {
     previous_value_ = value;
     SetNumber(value.decimals());
-    SetStyle(value.style());
+    SetStyle(value.style().value());
 }
 
-round_to<double> RoundingButtons::GetValue() const
+rounding_parameters RoundingButtons::GetValue() const
 {
-    return round_to<double>(GetNumber(), GetStyle());
+    return rounding_parameters(GetNumber(), GetStyle(), "");
 }
 
 void RoundingButtons::SetNumber(int number)

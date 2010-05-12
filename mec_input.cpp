@@ -234,7 +234,7 @@ void mec_input::DoAdaptExternalities()
     CachedStateOfJurisdiction_   = StateOfJurisdiction  .value();
 
     database_.reset
-        (new TDatabase
+        (new product_database
             (CachedProductName_
             ,CachedGender_
             ,CachedUnderwritingClass_

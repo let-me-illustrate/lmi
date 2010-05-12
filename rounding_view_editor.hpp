@@ -26,7 +26,7 @@
 
 #include "config.hpp"
 
-#include "round_to.hpp"
+#include "rounding_rules.hpp"
 
 #include <wx/panel.h>
 #include <wx/xrc/xmlres.h>
@@ -65,8 +65,8 @@ class RoundingButtons
     void Modify(bool modified = true);
     void DiscardEdits();
 
-    void             SetValue(round_to<double> const& value);
-    round_to<double> GetValue() const;
+    void                SetValue(rounding_parameters const& value);
+    rounding_parameters GetValue() const;
 
   private:
     void SetNumber(int number);
@@ -90,7 +90,7 @@ class RoundingButtons
 
     // initial or last saved value (IsModified() returns true iff current
     // value is different from this)
-    round_to<double> previous_value_;
+    rounding_parameters previous_value_;
 
     rounding_style style_;
     wxBitmapButton* button_not_at_all_;

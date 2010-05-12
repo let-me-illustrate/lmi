@@ -172,7 +172,7 @@ void from_xml(xml::element const& e, T& t)
 {
     xml_io<T>::from_xml(e, t);
 }
-} // Namespace xml_serialize.
+} // namespace xml_serialize
 
 #endif // xml_serialize_hpp
 

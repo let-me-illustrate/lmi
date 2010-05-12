@@ -28,10 +28,12 @@
 
 #include "round_to.hpp"
 
+#include <boost/utility.hpp>
+
 #include <vector>
 
 class BasicValues;
-class TDatabase;
+class product_database;
 
 /// Declaration of struct load_details.
 ///
@@ -75,6 +77,7 @@ class TDatabase;
 /// implemented.
 
 struct load_details
+    :private boost::noncopyable
 {
     load_details
         (int                        length

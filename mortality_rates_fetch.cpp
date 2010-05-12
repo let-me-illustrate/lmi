@@ -28,6 +28,7 @@
 
 #include "mortality_rates.hpp"
 
+#include "assert_lmi.hpp"
 #include "basic_values.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
@@ -61,7 +62,10 @@ void MortalityRates::fetch_parameters(BasicValues const& basic_values)
         oe_modal_table == basic_values.Database_->Query(DB_TgtPremType)
         ;
 
-    MaxMonthlyCoiRate_ = basic_values.Database_->Query(DB_MaxMonthlyCoiRate);
+    double max_coi_rate = basic_values.Database_->Query(DB_MaxMonthlyCoiRate);
+    LMI_ASSERT(0.0 != max_coi_rate);
+    max_coi_rate = 1.0 / max_coi_rate;
+    MaxMonthlyCoiRate_ = max_coi_rate;
 
     basic_values.Database_->Query(GCoiMultiplier_, DB_GCOIMultiplier);
     basic_values.Database_->Query(CCoiMultiplier_, DB_CCOIMultiplier);

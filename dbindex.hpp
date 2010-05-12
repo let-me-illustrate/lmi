@@ -1,4 +1,4 @@
-// Product database lookup index.
+// Product-database lookup index.
 //
 // Copyright (C) 1998, 1999, 2000, 2001, 2002, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
@@ -26,47 +26,45 @@
 
 #include "config.hpp"
 
+#include "mc_enum_type_enums.hpp"
+
 #include <vector>
 
-// Database lookup index
+/// Product-database lookup index.
+///
+/// Implicitly-declared special member functions do the right thing.
 
-class TDBIndex
+class database_index
 {
   public:
-    enum{MaxIndex = 6};
+    enum{number_of_indices = 6};
 
-    TDBIndex()
-        :idx(6)
-        {
-        }
+    database_index()
+        :idx_(number_of_indices)
+    {}
 
-/*
-    TDBIndex
-        (mcenum_gender       a_Gender    // gender
-        ,mcenum_class        a_Class     // underwriting class
-        ,mcenum_smoking      a_Smoker    // smoker class
-        ,int                 a_IssueAge  // issue age
-        ,mcenum_uw_basis     a_UWBasis   // underwriting basis
-        ,mcenum_state        a_State     // state of jurisdiction
-        );
-*/
+    database_index
+        (mcenum_gender   gender
+        ,mcenum_class    uw_class
+        ,mcenum_smoking  smoker
+        ,int             issue_age
+        ,mcenum_uw_basis uw_basis
+        ,mcenum_state    state
+        )
+        :idx_(number_of_indices)
+    {
+        idx_[0] = gender   ;
+        idx_[1] = uw_class ;
+        idx_[2] = smoker   ;
+        idx_[3] = issue_age;
+        idx_[4] = uw_basis ;
+        idx_[5] = state    ;
+    }
 
-// TODO ?? These data aren't very well encapsulated.
-    double& Gender  () {return idx[0];}
-    double& Class   () {return idx[1];}
-    double& Smoker  () {return idx[2];}
-    double& IssueAge() {return idx[3];}
-    double& UWBasis () {return idx[4];}
-    double& State   () {return idx[5];}
-
-    std::vector<double> const& GetIdx() const {return idx;}
+    std::vector<int> const& index_vector() const {return idx_;}
 
   private:
-// TODO ?? Erase these?
-    TDBIndex(TDBIndex const&);
-    TDBIndex& operator=(TDBIndex const&);
-
-    std::vector<double> idx;
+    std::vector<int> idx_;
 };
 
 #endif // dbindex_hpp

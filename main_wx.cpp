@@ -48,6 +48,7 @@
 #include "data_directory.hpp"
 #include "database_document.hpp"
 #include "database_view.hpp"
+#include "dbdict.hpp"               // print_databases()
 #include "default_view.hpp"
 #include "docmanager_ex.hpp"
 #include "docmdichildframe_ex.hpp"
@@ -57,7 +58,6 @@
 #include "global_settings.hpp"
 #include "handle_exceptions.hpp"
 #include "icon_monger.hpp"
-#include "ihs_dbdict.hpp"           // print_databases()
 #include "illustration_document.hpp"
 #include "illustration_view.hpp"
 #include "license.hpp"
@@ -362,9 +362,9 @@ void Skeleton::InitDocManager()
     new(wx) wxDocTemplate
         (doc_manager_
         ,"Database"
-        ,"*.db4"
+        ,"*.database"
         ,""
-        ,"db4"
+        ,"database"
         ,"Database document"
         ,"Database view"
         ,CLASSINFO(DatabaseDocument)

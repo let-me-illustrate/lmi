@@ -81,7 +81,7 @@ namespace lmi_test
         ,char const*   info
         )
       {os << "\n** uncaught exception: " << name << " " << info << std::endl;}
-  }
+  } // namespace detail
 
   // catch_exceptions  ------------------------------------------------------//
 
@@ -185,7 +185,7 @@ namespace lmi_test
         return result;
     } // catch_exceptions()
 
-} // Namespace lmi_test.
+} // namespace lmi_test
 
 #endif // catch_exceptions_hpp
 

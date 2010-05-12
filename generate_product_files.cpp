@@ -26,8 +26,8 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "ihs_dbdict.hpp"
-#include "ihs_funddata.hpp"
+#include "dbdict.hpp"
+#include "fund_data.hpp"
 #include "main_common.hpp"
 #include "path_utility.hpp" // initialize_filesystem()
 #include "product_data.hpp"

@@ -100,7 +100,7 @@ class DatabaseDurationAxis
   :public AdjustableMaxBoundAxis<int>
 {
     typedef AdjustableMaxBoundAxis<int> BaseClass;
-    static const int max_bound_duration = TDBValue::e_max_dim_duration - 1;
+    static const int max_bound_duration = e_max_dim_duration - 1;
 
   public:
     DatabaseDurationAxis()
@@ -108,7 +108,7 @@ class DatabaseDurationAxis
     {}
 };
 
-DatabaseTableAdapter::DatabaseTableAdapter(TDBValue* db_value)
+DatabaseTableAdapter::DatabaseTableAdapter(database_entity* db_value)
     :db_value_(db_value)
     ,modified_(false)
 {
@@ -180,7 +180,7 @@ bool DatabaseTableAdapter::VariesByDimension(unsigned int n) const
         return false;
         }
 
-    std::vector<int> const& axis_lengths = db_value_->GetAxisLengths();
+    std::vector<int> const& axis_lengths = db_value_->axis_lengths();
     return n < axis_lengths.size() && 1 < axis_lengths[n];
 }
 
@@ -214,9 +214,9 @@ void DatabaseTableAdapter::MakeVaryByDimension(unsigned int n, bool varies)
         return;
         }
 
-    std::vector<int> axis_lengths = db_value_->GetAxisLengths();
+    std::vector<int> axis_lengths = db_value_->axis_lengths();
 
-    axis_lengths[n] = varies ? TDBValue::maximum_dimensions()[n] : 1;
+    axis_lengths[n] = varies ? maximum_database_dimensions()[n] : 1;
 
     ReshapeTableData(axis_lengths, varies);
 }
@@ -228,7 +228,7 @@ void DatabaseTableAdapter::SetDurationMaxBound(unsigned int n)
         return;
         }
 
-    std::vector<int> axis_lengths = db_value_->GetAxisLengths();
+    std::vector<int> axis_lengths = db_value_->axis_lengths();
 
     axis_lengths[eda_duration] = n;
 
@@ -251,7 +251,7 @@ void DatabaseTableAdapter::ReshapeTableData
         {
         wxBusyCursor busy;
 
-        db_value_->Reshape(axis_lengths);
+        db_value_->reshape(axis_lengths);
         SetModified();
         }
 }
@@ -263,7 +263,7 @@ unsigned int DatabaseTableAdapter::GetDurationMaxBound() const
         return 1U;
         }
 
-    return db_value_->GetAxisLengths()[eda_duration];
+    return db_value_->axis_lengths()[eda_duration];
 }
 
 bool DatabaseTableAdapter::CanChangeVariationWith(unsigned int n) const
@@ -273,7 +273,7 @@ bool DatabaseTableAdapter::CanChangeVariationWith(unsigned int n) const
         return false;
         }
 
-    return n < db_value_->GetAxisLengths().size();
+    return n < db_value_->axis_lengths().size();
 }
 
 void DatabaseTableAdapter::ConvertValue

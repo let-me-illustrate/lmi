@@ -61,7 +61,7 @@ void product_data::WriteProprietaryPolFiles()
 
     // Generic data for the 'sample' product.
 
-    z.DatabaseFilename        = glossed_string("sample.db4");
+    z.DatabaseFilename        = glossed_string("sample.database");
     z.FundFilename            = glossed_string("sample.funds");
     z.RoundingFilename        = glossed_string("sample.rounding");
     z.TierFilename            = glossed_string("sample.strata");
@@ -107,7 +107,7 @@ void product_data::WriteProprietaryPolFiles()
 //    z.save(AddDataDir("sample.policy"));
 
     // Copy the template above for other policy forms, e.g.:
-//  z.DatabaseFilename        = glossed_string("another.db4");
+//  z.DatabaseFilename        = glossed_string("another.database");
 //  ...
 }
 
