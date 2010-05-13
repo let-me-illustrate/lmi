@@ -93,8 +93,9 @@ TESTS = \
     test_authenticity \
     test_calendar_date \
     test_callback \
-    test_commutation_functions \
     test_comma_punct \
+    test_commutation_functions \
+    test_contains \
     test_crc32 \
     test_expression_template_0 \
     test_fenv_lmi \
@@ -517,16 +518,21 @@ test_callback_SOURCES = \
   callback_test.cpp
 test_callback_CXXFLAGS = $(AM_CXXFLAGS)
 
+test_comma_punct_SOURCES =  \
+  $(common_test_objects) \
+  comma_punct_test.cpp
+test_comma_punct_CXXFLAGS = $(AM_CXXFLAGS)
+
 test_commutation_functions_SOURCES =    \
   $(common_test_objects) \
   commutation_functions.cpp \
   commutation_functions_test.cpp
 test_commutation_functions_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_comma_punct_SOURCES =  \
+test_contains_SOURCES =    \
   $(common_test_objects) \
-  comma_punct_test.cpp
-test_comma_punct_CXXFLAGS = $(AM_CXXFLAGS)
+  contains_test.cpp
+test_crc32_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_crc32_SOURCES =    \
   $(common_test_objects) \
@@ -884,6 +890,7 @@ noinst_HEADERS = \
     config_como_mingw.hpp \
     config_ming323.hpp \
     configurable_settings.hpp \
+    contains.hpp \
     crc32.hpp \
     custom_io_0.hpp \
     data_directory.hpp \

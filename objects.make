@@ -450,6 +450,7 @@ unit_test_targets := \
   callback_test \
   comma_punct_test \
   commutation_functions_test \
+  contains_test \
   crc32_test \
   expression_template_0_test \
   fenv_lmi_test \
@@ -578,6 +579,10 @@ commutation_functions_test$(EXEEXT): \
   commutation_functions_test.o \
   expm1.o \
   timer.o \
+
+contains_test$(EXEEXT): \
+  $(common_test_objects) \
+  contains_test.o \
 
 crc32_test$(EXEEXT): \
   $(common_test_objects) \
