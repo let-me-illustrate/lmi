@@ -89,6 +89,8 @@ namespace fs = boost::filesystem;
 #endif // __GNUC__
 
 #if defined __COMO__
+#   define LMI_COMO_VERSION __COMO_VERSION__
+#   define LMI_EDG_VERSION  __EDG_VERSION__
 //  09 Oct 2004 17:04:46 -0700 email from <comeau@comeaucomputing.com>
 //  suggests this method to detect whether MinGW is the underlying C
 //  compiler. Because it requires including some standard header
