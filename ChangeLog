@@ -25733,3 +25733,9 @@ Begin designing a generic contains() function template (VZ and GWC).
 See:
   http://lists.nongnu.org/archive/html/lmi/2010-05/msg00008.html
 
+20100513T2240Z <gchicares@sbcglobal.net> [706]
+
+  contains.hpp
+  contains_test.cpp
+Improve discrimination among containers.
+

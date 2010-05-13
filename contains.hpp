@@ -26,6 +26,8 @@
 
 #include "config.hpp"
 
+#include <boost/utility/enable_if.hpp>
+
 #include <algorithm> // std::find()
 
 #if defined __BORLANDC__ || defined __COMO_VERSION__ && __COMO_VERSION__ <= 4303
@@ -65,15 +67,19 @@ struct has_member_find
 
 /// Ascertain whether a "container" includes a given element.
 ///
-/// Here, consider std::basic_string is considered a "container",
+/// Here, std::basic_string is considered a "container", this:
 ///   http://www.comeaucomputing.com/iso/lwg-active.html#718
 ///   "basic_string is not a sequence"
 ///  notwithstanding.
 ///
-/// This overload is for "containers" that aren't handled specially.
+/// This overload is for "containers" that have no find() member.
 
 template<typename T>
-bool contains(T const& t, typename T::value_type const& element)
+bool contains
+    (T const& t
+    ,typename T::value_type const& element
+    ,typename boost::disable_if<has_member_find<T> >::type* = 0
+    )
 {
     return t.end() != std::find(t.begin(), t.end(), element);
 }
@@ -85,7 +91,11 @@ bool contains(T const& t, typename T::value_type const& element)
 /// This overload is for std::basic_string::find(std::basic_string).
 
 template<typename T>
-bool contains(T const& t, T const& element, typename T::traits_type::char_type const* = 0)
+bool contains
+    (T const& t
+    ,T const& element
+    ,typename T::traits_type::char_type const* = 0
+    )
 {
     return T::npos != t.find(element);
 }
@@ -97,7 +107,10 @@ bool contains(T const& t, T const& element, typename T::traits_type::char_type c
 /// This overload is for std::basic_string::find(traits_type::char_type const*).
 
 template<typename T>
-bool contains(T const& t, typename T::traits_type::char_type const* element)
+bool contains
+    (T const& t
+    ,typename T::traits_type::char_type const* element
+    )
 {
     return T::npos != t.find(element);
 }
@@ -107,7 +120,10 @@ bool contains(T const& t, typename T::traits_type::char_type const* element)
 /// If T has 'key_type', assume it behaves like an associative container.
 
 template<typename T>
-bool contains(T const& t, typename T::key_type const& element)
+bool contains
+    (T const& t
+    ,typename T::key_type const& element
+    )
 {
     return t.end() != t.find(element);
 }

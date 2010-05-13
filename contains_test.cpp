@@ -28,13 +28,17 @@
 
 #include "contains.hpp"
 
+#include "miscellany.hpp" // lmi_array_size()
 #include "test_tools.hpp"
 
 #include <boost/static_assert.hpp>
 
+#include <deque>
+#include <list>
 #include <map>
 #include <set>
 #include <string>
+#include <utility>        // std::pair
 #include <vector>
 
 struct HasFind   {void find();};
@@ -54,29 +58,49 @@ void test_has_member_find()
 #endif // !defined LMI_NO_SFINAE
 }
 
+/// Test standard "containers" for which find() makes sense.
+///
+/// std::queue and std::stack are not traversable; std::bitset has
+/// any() and none() already.
+
 void test_contains()
 {
-    std::string const s("etaoin shrdlu");
-    std::string const t("lorem ipsum");
-    BOOST_TEST( contains(s, s));
-    BOOST_TEST(!contains(s, t));
-    BOOST_TEST( contains(s, "eta"));
-    BOOST_TEST(!contains(s, "zeta"));
+    std::string const w("etaoin shrdlu");
+    std::string const x("lorem ipsum");
+    std::string const y[] = {"O Sibili", "si ergo", "fortibus es", "in ero"};
+    std::pair<std::string,std::string> const z[] =
+        {std::make_pair<std::string,std::string>("O Nobili", "demis trux")
+        ,std::make_pair<std::string,std::string>("uatis inem", "causendux")
+        };
 
-#if 0 // This is where has_member_find<> will help.
-    std::set<std::string> u;
-    u.insert("one");
-    BOOST_TEST( contains(u, "one"));
-    BOOST_TEST(!contains(u, "two"));
-#endif // 0
+    // Strings.
 
-    std::map<std::string, int> m;
-    m["one"] = 1;
-    BOOST_TEST( contains(m, "one"));
-    BOOST_TEST(!contains(m, "two"));
+    BOOST_TEST( contains(w, w));
+    BOOST_TEST(!contains(w, x));
+    BOOST_TEST( contains(w, "eta"));
+    BOOST_TEST(!contains(w, "zeta"));
 
-    std::vector<double> v;
-    v.push_back(3.14);
+    // Associative containers.
+
+    std::map<std::string,std::string> const m(z, z + lmi_array_size(z));
+    BOOST_TEST( contains(m, "uatis inem"));
+    BOOST_TEST(!contains(m, "cows and ducks"));
+
+    std::set<std::string> const s(y, y + lmi_array_size(y));
+    BOOST_TEST( contains(s, "si ergo"));
+    BOOST_TEST(!contains(s, "fortibus"));
+
+    // Sequences.
+
+    std::deque<double> const d(1, 3.14);
+    BOOST_TEST( contains(d, 3.14));
+    BOOST_TEST(!contains(d, 0.00));
+
+    std::list<double> const t(1, 3.14);
+    BOOST_TEST( contains(t, 3.14));
+    BOOST_TEST(!contains(t, 0.00));
+
+    std::vector<double> const v(1, 3.14);
     BOOST_TEST( contains(v, 3.14));
     BOOST_TEST(!contains(v, 0.00));
 }
