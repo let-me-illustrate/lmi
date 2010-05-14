@@ -69,8 +69,8 @@ void test_contains()
     std::string const x("lorem ipsum");
     std::string const y[] = {"O Sibili", "si ergo", "fortibus es", "in ero"};
     std::pair<std::string,std::string> const z[] =
-        {std::make_pair<std::string,std::string>("O Nobili", "demis trux")
-        ,std::make_pair<std::string,std::string>("uatis inem", "causendux")
+        {std::pair<std::string,std::string>("O Nobili", "demis trux")
+        ,std::pair<std::string,std::string>("uatis inem", "causendux")
         };
 
     // Strings.
@@ -82,12 +82,20 @@ void test_contains()
 
     // Associative containers.
 
+#if !defined __BORLANDC__
     std::map<std::string,std::string> const m(z, z + lmi_array_size(z));
-    BOOST_TEST( contains(m, "uatis inem"));
+#else  // defined __BORLANDC__
+    std::map<std::string,std::string> const m(z, z + 2);
+#endif // defined __BORLANDC__
+    BOOST_TEST( contains(m, "uatis inem"    ));
     BOOST_TEST(!contains(m, "cows and ducks"));
 
+#if !defined __BORLANDC__
     std::set<std::string> const s(y, y + lmi_array_size(y));
-    BOOST_TEST( contains(s, "si ergo"));
+#else  // defined __BORLANDC__
+    std::set<std::string> const s(y, y + 4);
+#endif // defined __BORLANDC__
+    BOOST_TEST( contains(s, "si ergo" ));
     BOOST_TEST(!contains(s, "fortibus"));
 
     // Sequences.

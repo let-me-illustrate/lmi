@@ -25739,3 +25739,9 @@ See:
   contains_test.cpp
 Improve discrimination among containers.
 
+20100514T0039Z <gchicares@sbcglobal.net> [706]
+
+  contains.hpp
+  contains_test.cpp
+Support outmoded compilers.
+
