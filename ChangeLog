@@ -25717,3 +25717,31 @@ Refactor.
   multidimgrid_tools.hpp
 Prevent copying classes with reference data members.
 
+20100513T0108Z <gchicares@sbcglobal.net> [706]
+
+  config.hpp
+  test_coding_rules.cpp
+Recognize version macros for EDG compilers.
+
+20100513T0109Z <gchicares@sbcglobal.net> [706]
+
+  Makefile.am
+  contains.hpp      [new file]
+  contains_test.cpp [new file]
+  objects.make
+Begin designing a generic contains() function template (VZ and GWC).
+See:
+  http://lists.nongnu.org/archive/html/lmi/2010-05/msg00008.html
+
+20100513T2240Z <gchicares@sbcglobal.net> [706]
+
+  contains.hpp
+  contains_test.cpp
+Improve discrimination among containers.
+
+20100514T0039Z <gchicares@sbcglobal.net> [706]
+
+  contains.hpp
+  contains_test.cpp
+Support outmoded compilers.
+

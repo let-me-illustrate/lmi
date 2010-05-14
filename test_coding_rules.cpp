@@ -767,8 +767,10 @@ bool check_reserved_name_exception(std::string const& s)
         ,"_LIBC"
         ,"__BIG_ENDIAN"
         ,"__BYTE_ORDER"
-    // Compiler specific: como.
+    // Compiler specific: como including EDG.
         ,"__COMO__"
+        ,"__COMO_VERSION__"
+        ,"__EDG_VERSION__"
     // Compiler specific: borland.
         ,"_CatcherPTR"
         ,"__BORLANDC__"
