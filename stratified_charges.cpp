@@ -31,6 +31,7 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "data_directory.hpp"
+#include "map_lookup.hpp"
 #include "miscellany.hpp"         // minmax<T>()
 #include "platform_dependent.hpp" // access()
 #include "stratified_algorithms.hpp"
@@ -167,13 +168,16 @@ stratified_charges::~stratified_charges()
 //============================================================================
 stratified_entity& stratified_charges::raw_entity(e_stratified e)
 {
-    return (*dictionary.find(e)).second;
+    typedef std::map<e_stratified, stratified_entity>::iterator mi;
+    mi i = dictionary.find(e);
+    LMI_ASSERT(dictionary.end() != i);
+    return i->second;
 }
 
 //============================================================================
 stratified_entity const& stratified_charges::raw_entity(e_stratified e) const
 {
-    return (*dictionary.find(e)).second;
+    return map_lookup(dictionary, e);
 }
 
 //============================================================================

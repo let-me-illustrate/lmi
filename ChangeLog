@@ -25745,3 +25745,51 @@ Improve discrimination among containers.
   contains_test.cpp
 Support outmoded compilers.
 
+20100514T1554Z <zeitlin> [706]
+
+  Makefile.am
+Fix defect introduced 20100513T0109Z.
+
+20100514T1957Z <gchicares@sbcglobal.net> [706]
+
+  contains.hpp
+  contains_test.cpp
+Determine whether a string contains a given character.
+
+20100514T2140Z <gchicares@sbcglobal.net> [706]
+
+  authenticity_test.cpp
+  census_view.cpp
+  configurable_settings.cpp
+  dbvalue.cpp
+  group_values.cpp
+  icon_monger.cpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ihs_avsolve.cpp
+  ihs_basicval.cpp
+  ihs_crc_comp.cpp
+  input_harmonization.cpp
+  input_realization.cpp
+  input_sequence.cpp
+  input_xml_io.cpp
+  ledger.cpp
+  ledger_text_formats.cpp
+  ledger_xml_io.cpp
+  ledger_xsl.cpp
+  main_cli.cpp
+  main_wx.cpp
+  mec_input.cpp
+  mec_server.cpp
+  mec_state.cpp
+  product_data.cpp
+  product_names.cpp
+  regex_test.cpp
+  rounding_view_editor.cpp
+  stratified_charges.cpp
+  test_coding_rules.cpp
+  timer_test.cpp
+  wx_utility.cpp
+  xml_serializable.tpp
+Prefer contains() and map_lookup() to std::find().
+

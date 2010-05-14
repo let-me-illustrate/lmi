@@ -28,6 +28,7 @@
 #include "calendar_date.hpp"
 #include "comma_punct.hpp"
 #include "configurable_settings.hpp"
+#include "contains.hpp"
 #include "global_settings.hpp"
 #include "handle_exceptions.hpp"
 #include "ledger_base.hpp"
@@ -151,7 +152,7 @@ bool format_exists
     ,format_map_t const& m
     )
 {
-    if(m.end() != m.find(s))
+    if(contains(m, s))
         {
         return true;
         }
@@ -938,7 +939,7 @@ void Ledger::write(xml::element& x) const
 
     if
         (   GetIsComposite()
-        &&  std::string::npos != ledger_invariant_->Comments.find("idiosyncrasy_spreadsheet")
+        &&  contains(ledger_invariant_->Comments, "idiosyncrasy_spreadsheet")
         )
         {
         configurable_settings const& z = configurable_settings::instance();

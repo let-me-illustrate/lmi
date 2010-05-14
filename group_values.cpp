@@ -31,6 +31,7 @@
 #include "account_value.hpp"
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "contains.hpp"
 #include "emit_ledger.hpp"
 #include "fenv_guard.hpp"
 #include "illustrator.hpp"       // assert_consistency()
@@ -257,7 +258,7 @@ census_run_result run_census_in_parallel::operator()
 
             cell_values.push_back(av);
 
-            if(std::string::npos != av->yare_input_.Comments.find("idiosyncrasyZ"))
+            if(contains(av->yare_input_.Comments, "idiosyncrasyZ"))
                 {
                 av->Debugging = true;
                 av->DebugPrintInit();

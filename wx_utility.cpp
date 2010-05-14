@@ -31,6 +31,7 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "calendar_date.hpp"
+#include "contains.hpp"
 #include "wx_new.hpp"
 
 #include <wx/app.h>                     // wxTheApp
@@ -41,7 +42,6 @@
 #include <wx/utils.h>                   // wxSafeYield()
 #include <wx/window.h>
 
-#include <algorithm>                    // std::find()
 #include <cstddef>                      // std::size_t
 #include <sstream>
 
@@ -216,7 +216,7 @@ std::vector<std::string> EnumerateBookPageNames(wxBookCtrlBase const& book)
     for(std::size_t j = 0; j < book.GetPageCount(); ++j)
         {
         std::string name(book.GetPageText(j));
-        LMI_ASSERT(z.end() == std::find(z.begin(), z.end(), name));
+        LMI_ASSERT(!contains(z, name));
         z.push_back(name);
         }
     return z;

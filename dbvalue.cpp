@@ -30,6 +30,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "contains.hpp"
 #include "dbnames.hpp"
 #include "math_functors.hpp" // greater_of(), lesser_of()
 #include "print_matrix.hpp"
@@ -346,26 +347,7 @@ std::ostream& database_entity::write(std::ostream& os) const
 
 void database_entity::assert_invariants() const
 {
-    if
-        (
-            axis_lengths_.end()
-        !=  std::find
-            (axis_lengths_.begin()
-            ,axis_lengths_.end()
-            ,0
-            )
-        )
-        {
-        fatal_error()
-            << "Database item '"
-            << GetDBNames()[key_].ShortName
-            << "' with key "
-            << key_
-            << " has zero in at least one dimension."
-            << LMI_FLUSH
-            ;
-        }
-
+    LMI_ASSERT(!contains(axis_lengths_, 0));
     LMI_ASSERT(getndata() == static_cast<int>(data_values_.size()));
     LMI_ASSERT
         (   0 < static_cast<int>(data_values_.size())

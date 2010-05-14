@@ -29,6 +29,7 @@
 #include "authenticity.hpp"
 
 #include "assert_lmi.hpp"
+#include "contains.hpp"
 #include "md5.hpp"
 #include "miscellany.hpp"
 #include "system_command.hpp"
@@ -308,7 +309,7 @@ void PasskeyTest::TestFromAfar() const
     catch(std::exception const& e)
         {
         std::string s(e.what());
-        if(std::string::npos != s.find("boost::filesystem::is_directory"))
+        if(contains(s, "boost::filesystem::is_directory"))
             {
             BOOST_TEST(false);
             goto done;

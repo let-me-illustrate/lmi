@@ -31,6 +31,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "contains.hpp"
 #include "data_directory.hpp" // AddDataDir()
 #include "miscellany.hpp"     // lmi_array_size()
 #include "xml_serialize.hpp"
@@ -38,7 +39,6 @@
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/path.hpp>
 
-#include <algorithm>          // std::find()
 #include <vector>
 
 template class xml_serializable<product_data>;
@@ -321,7 +321,7 @@ bool product_data::is_detritus(std::string const& s) const
         {"Remove this string when adding the first removed entity."
         };
     static std::vector<std::string> const v(a, a + lmi_array_size(a));
-    return v.end() != std::find(v.begin(), v.end(), s);
+    return contains(v, s);
 }
 
 /// Create a product file for the 'sample' product.
