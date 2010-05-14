@@ -28,6 +28,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "contains.hpp"
 #include "dbdict.hpp"       // print_databases()
 #include "getopt.hpp"
 #include "global_settings.hpp"
@@ -455,7 +456,7 @@ void process_command_line(int argc, char* argv[])
             case 'x':
                 {
                 global_settings::instance().set_pyx(getopt_long.optarg);
-                if(std::string::npos != global_settings::instance().pyx().find("system_testing"))
+                if(contains(global_settings::instance().pyx(), "system_testing"))
                     {
                     global_settings::instance().set_regression_testing(true);
                     }

@@ -30,6 +30,7 @@
 
 #include "alert.hpp"
 #include "configurable_settings.hpp"
+#include "contains.hpp"
 #include "global_settings.hpp"
 #include "ledger.hpp"
 #include "miscellany.hpp"
@@ -107,7 +108,7 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
     fs::path real_filepath(orthodox_filename(filepath.leaf()));
     LMI_ASSERT(fs::portable_name(real_filepath.string()));
 
-    if(std::string::npos != global_settings::instance().pyx().find("xml"))
+    if(contains(global_settings::instance().pyx(), "xml"))
         {
         fs::path xml_file = unique_filepath(print_dir / real_filepath, ".xml");
 

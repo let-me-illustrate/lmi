@@ -31,6 +31,7 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "calendar_date.hpp"
+#include "contains.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "global_settings.hpp"
@@ -304,7 +305,7 @@ void Input::DoHarmonize()
     InforceContractMonth    .enable(non_mec);
     InforceLeastDeathBenefit.enable(non_mec);
 
-    if(std::string::npos != global_settings::instance().pyx().find("old_inforce"))
+    if(contains(global_settings::instance().pyx(), "old_inforce"))
         {
         // These fields have no effect for now. They're suppressed to
         // avoid confusion.
@@ -988,7 +989,7 @@ void Input::DoTransmogrify()
         DoHarmonize();
         }
 
-    if(std::string::npos != global_settings::instance().pyx().find("old_inforce"))
+    if(contains(global_settings::instance().pyx(), "old_inforce"))
         {
         InforceAsOfDate = add_years_and_months
             (EffectiveDate.value()

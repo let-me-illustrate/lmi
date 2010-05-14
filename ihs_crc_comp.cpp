@@ -24,6 +24,7 @@
 // Sample command line to compile:
 // /gcc-2.95.2-1/bin/g++ -Iming29521 ihs_crc_comp.cpp
 
+#include "contains.hpp"
 #include "main_common.hpp"
 #include "miscellany.hpp"
 #include "value_cast.hpp"
@@ -159,11 +160,11 @@ line_type get_type(std::string const& line)
         {
         return final;
         }
-    else if(std::string::npos != line.find("\t"))
+    else if(contains(line, "\t"))
         {
         return crc;
         }
-    else if(std::string::npos != line.find("=="))
+    else if(contains(line, "=="))
         {
         return scalar;
         }
@@ -175,13 +176,7 @@ line_type get_type(std::string const& line)
         {
         return yearly;
         }
-    else if
-        (get_special_type_3_not_2().end() != std::find
-            (get_special_type_3_not_2().begin()
-            ,get_special_type_3_not_2().end()
-            ,line
-            )
-        )
+    else if(contains(get_special_type_3_not_2(), line))
         {
         return yearly;
         }
@@ -237,7 +232,7 @@ void f_2(std::string const& line1, std::string const& line2)
     if
         (   line1 != line2
 // TODO ?? Fix this kludge, which strives to ignore fund names.
-        &&  std::string::npos != line1.find(" ")
+        &&  contains(line1, " ")
         )
         {
         return;

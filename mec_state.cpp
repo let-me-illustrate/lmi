@@ -30,13 +30,13 @@
 #include "xml_serializable.tpp"
 
 #include "alert.hpp"
+#include "contains.hpp"
 #include "miscellany.hpp" // htmlize(), lmi_array_size()
 #include "value_cast.hpp"
 #include "xml_lmi.hpp"
 
 #include <boost/filesystem/fstream.hpp>
 
-#include <algorithm>      // std::find()
 #include <limits>
 #include <sstream>
 #include <vector>
@@ -403,6 +403,6 @@ bool mec_state::is_detritus(std::string const& s) const
         {"Remove this string when adding the first removed entity."
         };
     static std::vector<std::string> const v(a, a + lmi_array_size(a));
-    return v.end() != std::find(v.begin(), v.end(), s);
+    return contains(v, s);
 }
 
