@@ -123,6 +123,21 @@ bool contains
 
 /// Ascertain whether a "container" includes a given element.
 ///
+/// If T has 'traits_type::char_type', assume it behaves like std::basic_string.
+///
+/// This overload is for std::basic_string::find(traits_type::char_type).
+
+template<typename T>
+bool contains
+    (T const& t
+    ,typename T::traits_type::char_type element
+    )
+{
+    return T::npos != t.find(element);
+}
+
+/// Ascertain whether a "container" includes a given element.
+///
 /// If T has 'key_type', assume it behaves like an associative container.
 
 template<typename T>
@@ -145,6 +160,11 @@ bool contains(std::string const& t, std::string const& element)
 }
 
 bool contains(std::string const& t, char const* element)
+{
+    return std::string::npos != t.find(element);
+}
+
+bool contains(std::string const& t, char element)
 {
     return std::string::npos != t.find(element);
 }
