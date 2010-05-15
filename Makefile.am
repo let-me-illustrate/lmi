@@ -562,7 +562,7 @@ test_commutation_functions_CXXFLAGS = $(AM_CXXFLAGS)
 test_contains_SOURCES =    \
   $(common_test_objects) \
   contains_test.cpp
-test_crc32_CXXFLAGS = $(AM_CXXFLAGS)
+test_contains_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_crc32_SOURCES =    \
   $(common_test_objects) \
