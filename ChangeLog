@@ -25793,3 +25793,15 @@ Determine whether a string contains a given character.
   xml_serializable.tpp
 Prefer contains() and map_lookup() to std::find().
 
+20100515T2041Z <gchicares@sbcglobal.net> [706]
+
+  census_document.cpp
+  illustration_document.cpp
+  mec_document.cpp
+  wx_utility.cpp
+  wx_utility.hpp
+Forbid multibyte characters in filenames. See:
+  http://lists.nongnu.org/archive/html/lmi/2009-12/msg00004.html
+  http://lists.nongnu.org/archive/html/lmi/2010-05/msg00023.html
+et seqq.
+

@@ -32,6 +32,7 @@
 #include <boost/type_traits.hpp>
 
 #include <wx/event.h>
+#include <wx/string.h>
 
 #include <stdexcept>
 #include <string>
@@ -137,6 +138,8 @@ std::string NameLabelId(wxWindow const*);
 
 wxApp& TheApp();
 wxWindow& TopWindow();
+
+std::string ValidateAndConvertFilename(wxString const&);
 
 #endif // wx_utility_hpp
 
