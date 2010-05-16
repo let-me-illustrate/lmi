@@ -32,6 +32,7 @@
 #include "assert_lmi.hpp"
 #include "contains.hpp"
 #include "dbnames.hpp"
+#include "handle_exceptions.hpp"
 #include "math_functors.hpp" // greater_of(), lesser_of()
 #include "print_matrix.hpp"
 #include "value_cast.hpp"
@@ -221,7 +222,7 @@ void database_entity::reshape(std::vector<int> const& dims)
     data_values_ = new_object.data_values_;
 }
 
-/// Indexing operator for product editor only.
+/// Indexing operator for reshape() and product editor only.
 ///
 /// Two indexing operators are provided. This one's argument includes
 /// the number of durations--which, as far as the product editor is
@@ -395,46 +396,60 @@ void database_entity::assert_invariants() const
             }
 }
 
-/// Calculate number of data required by lengths of axes.
+/// Calculate number of data required by lengths of object's axes.
 
 int database_entity::getndata() const
 {
-    // Use a double for this purpose so that we can detect whether
-    // the required number exceeds the maximum addressable number,
-    // because a double has a wider range than an integer type.
-    double n = std::accumulate
-        (axis_lengths_.begin()
-        ,axis_lengths_.end()
-        ,1.0
-        ,std::multiplies<double>()
-        );
+    try
+        {
+        return getndata(axis_lengths_);
+        }
+    catch(...)
+        {
+        report_exception();
+        fatal_error()
+            << "Database item '"
+            << GetDBNames()[key_].ShortName
+            << "' with key "
+            << key_
+            << " has invalid dimensions."
+            << LMI_FLUSH
+            ;
+        }
+    throw "Unreachable--silences a compiler diagnostic.";
+}
 
-    // Meaningful iff a long int is bigger than an int.
+/// Calculate number of data required by lengths of given axes.
+///
+/// Use a double-precision accumulator internally to avoid overflow.
+///
+/// Throw if the result equals zero or exceeds MaxPossibleElements.
+///
+/// Otherwise, return the result, cast to int. The enforced range
+/// contraints guarantee that the cast preserves value.
+
+int database_entity::getndata(std::vector<int> const& z)
+{
+    double n = std::accumulate(z.begin(), z.end(), 1.0, std::multiplies<double>());
+
     if(MaxPossibleElements < n)
         {
         fatal_error()
-            << "Database item '"
-            << GetDBNames()[key_].ShortName
-            << "' with key "
-            << key_
-            << " contains more than the maximum possible number of elements."
+            << "There are " << n
+            << " data, but at most " << MaxPossibleElements
+            << " are permitted."
             << LMI_FLUSH
             ;
         }
 
-    if(0 == n)
+    if(n <= 0)
         {
-        fatal_error()
-            << "Database item '"
-            << GetDBNames()[key_].ShortName
-            << "' with key "
-            << key_
-            << " has no data."
-            << LMI_FLUSH
-            ;
+        fatal_error() << "Number of data must exceed zero." << LMI_FLUSH;
         }
 
-    // Because MaxPossibleElements < n, this cast cannot lose information.
+    LMI_ASSERT(MaxPossibleElements <= std::numeric_limits<int>::max());
+    // Redundant but cheap guarantee that the cast preserves value:
+    LMI_ASSERT(1.0 <= n && n <= MaxPossibleElements);
     return static_cast<int>(n);
 }
 

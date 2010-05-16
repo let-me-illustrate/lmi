@@ -123,6 +123,7 @@ class LMI_SO database_entity
   private:
     void assert_invariants() const;
     int getndata() const;
+    static int getndata(std::vector<int> const&);
 
     void read (xml::element const&);
     void write(xml::element&) const;
