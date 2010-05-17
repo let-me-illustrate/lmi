@@ -25805,3 +25805,14 @@ Forbid multibyte characters in filenames. See:
   http://lists.nongnu.org/archive/html/lmi/2010-05/msg00023.html
 et seqq.
 
+20100516T2125Z <gchicares@sbcglobal.net> [706]
+
+  dbvalue.cpp
+  dbvalue.hpp
+Refactor.
+
+20100517T1652Z <gchicares@sbcglobal.net> [704]
+
+  dbvalue.cpp
+Rewrite reshape().
+
