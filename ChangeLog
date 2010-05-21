@@ -19061,7 +19061,7 @@ in certain testdecks used with 'make system_test'.
   input_harmonization.cpp
 Defectively work around defects in proprietary testdecks. System tests
 fail without these broken workarounds, e.g., because they contain
-preferred lives with with table ratings.
+preferred lives with table ratings.
 
 20080811T0043Z <gchicares@sbcglobal.net> [1087]
 
@@ -25815,4 +25815,13 @@ Refactor.
 
   dbvalue.cpp
 Rewrite reshape().
+
+20100521T1401Z <wboutin@charter.net> [704]
+
+  illustration_reg.xsl
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  product_data.cpp
+  product_data.hpp
+Add new footnotes.
 
