@@ -233,6 +233,10 @@ class LMI_SO product_data
     glossed_string InforceNonGuaranteedFootnote3;
     glossed_string NonGuaranteedFootnote;
     glossed_string MonthlyChargesPaymentFootnote;
+    glossed_string SurrenderFootnote;
+    glossed_string FundRateFootnote;
+    glossed_string FundRateFootnote0;
+    glossed_string FundRateFootnote1;
 };
 
 #endif // product_data_hpp

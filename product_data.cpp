@@ -276,6 +276,10 @@ void product_data::ascribe_members()
     ascribe("InforceNonGuaranteedFootnote3" , &product_data::InforceNonGuaranteedFootnote3 );
     ascribe("NonGuaranteedFootnote"         , &product_data::NonGuaranteedFootnote         );
     ascribe("MonthlyChargesPaymentFootnote" , &product_data::MonthlyChargesPaymentFootnote );
+    ascribe("SurrenderFootnote"             , &product_data::SurrenderFootnote             );
+    ascribe("FundRateFootnote"              , &product_data::FundRateFootnote              );
+    ascribe("FundRateFootnote0"             , &product_data::FundRateFootnote0             );
+    ascribe("FundRateFootnote1"             , &product_data::FundRateFootnote1             );
 }
 
 /// Backward-compatibility serial number of this class's xml version.
