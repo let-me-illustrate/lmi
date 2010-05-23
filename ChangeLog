@@ -25825,3 +25825,16 @@ Rewrite reshape().
   product_data.hpp
 Add new footnotes.
 
+20100523T2017Z <gchicares@sbcglobal.net> [704]
+
+  rounding_rules.cpp
+  rounding_rules.hpp
+Improve const-correctness.
+
+20100523T2158Z <gchicares@sbcglobal.net> [704]
+
+  math_functors.hpp
+  math_functors_test.cpp
+Improve treatment of extreme or invalid arguments. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-05/msg00038.html
+
