@@ -137,6 +137,16 @@ struct i_upper_n_over_n_from_i
     BOOST_STATIC_ASSERT(0 < n);
     T operator()(T const& i) const
         {
+        if(i < -1.0)
+            {
+            throw std::domain_error("i is less than -100%.");
+            }
+
+        if(-1.0 == i)
+            {
+            return -1.0;
+            }
+
         static long double const reciprocal_n = 1.0L / n;
         // naively:    (1+i)^(1/n) - 1
         // substitute: (1+i)^n - 1 <-> expm1l(log1pl(i) * n)
@@ -190,6 +200,16 @@ struct d_upper_n_from_i
     BOOST_STATIC_ASSERT(0 < n);
     T operator()(T const& i) const
         {
+        if(i < -1.0)
+            {
+            throw std::domain_error("i is less than -100%.");
+            }
+
+        if(-1.0 == i)
+            {
+            throw std::range_error("i equals -100%.");
+            }
+
         static long double const reciprocal_n = 1.0L / n;
         // naively:    n * (1 - (1+i)^(-1/n))
         // substitute: (1+i)^n - 1 <-> expm1l(log1pl(i) * n)
@@ -279,7 +299,7 @@ struct coi_rate_from_q
 
         if(q < 0.0)
             {
-            throw std::runtime_error("q is negative.");
+            throw std::domain_error("q is negative.");
             }
 
         if(0.0 == q)
