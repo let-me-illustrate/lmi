@@ -25816,7 +25816,7 @@ Refactor.
   dbvalue.cpp
 Rewrite reshape().
 
-20100521T1401Z <wboutin@charter.net> [704]
+20100521T1402Z <wboutin@charter.net> [704]
 
   illustration_reg.xsl
   ledger_invariant.cpp
