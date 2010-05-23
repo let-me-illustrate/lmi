@@ -103,7 +103,7 @@ class LMI_SO rounding_rules
     explicit rounding_rules(std::string const& filename);
     ~rounding_rules();
 
-    rounding_parameters const& datum(std::string const& name);
+    rounding_parameters const& datum(std::string const& name) const;
 
     // Legacy functions to support creating product files programmatically.
     static void write_rounding_files();
