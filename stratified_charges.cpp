@@ -47,27 +47,12 @@
 #include <fstream>
 #include <ostream>
 
-// TODO ?? Shortcomings:
-//
-// Actual tax-accounting practice may use a simple approximation for
-// AK and SD premium tax.
-//
-// DE tiered premium tax not used. Premium tax is tiered in AK and SD
-// by policy-year premium for each contract separately, but in DE
-// by calendar-year premium for all contracts owned by the same
-// corporation combined. Those complications we'll eventually address
-// elsewhere; meanwhile, this module contains code to represent the
-// DE tiered rates, but ignores those rates and treats DE the same as
-// any other state.
-
 // Class stratified_entity implementation.
 
-//============================================================================
 stratified_entity::stratified_entity()
 {
 }
 
-//============================================================================
 stratified_entity::stratified_entity
     (std::vector<double> const& limits
     ,std::vector<double> const& values
@@ -80,7 +65,6 @@ stratified_entity::stratified_entity
     assert_validity();
 }
 
-//============================================================================
 stratified_entity::~stratified_entity()
 {
 }
@@ -107,25 +91,21 @@ void stratified_entity::assert_validity() const
     LMI_ASSERT(0.0 <  extrema.maximum());
 }
 
-//============================================================================
 std::vector<double> const& stratified_entity::limits() const
 {
     return limits_;
 }
 
-//============================================================================
 std::vector<double> const& stratified_entity::values() const
 {
     return values_;
 }
 
-//============================================================================
 std::string const& stratified_entity::gloss() const
 {
     return gloss_;
 }
 
-//============================================================================
 void stratified_entity::read(xml::element const& e)
 {
     xml_serialize::get_element(e, "values", values_);
@@ -135,7 +115,6 @@ void stratified_entity::read(xml::element const& e)
     assert_validity();
 }
 
-//============================================================================
 void stratified_entity::write(xml::element& e) const
 {
     assert_validity();
@@ -147,25 +126,21 @@ void stratified_entity::write(xml::element& e) const
 
 // Class stratified_charges implementation.
 
-//============================================================================
 stratified_charges::stratified_charges()
 {
     initialize_dictionary();
 }
 
-//============================================================================
 stratified_charges::stratified_charges(std::string const& filename)
 {
     initialize_dictionary();
     read(filename);
 }
 
-//============================================================================
 stratified_charges::~stratified_charges()
 {
 }
 
-//============================================================================
 stratified_entity& stratified_charges::raw_entity(e_stratified e)
 {
     typedef std::map<e_stratified, stratified_entity>::iterator mi;
@@ -174,13 +149,11 @@ stratified_entity& stratified_charges::raw_entity(e_stratified e)
     return i->second;
 }
 
-//============================================================================
 stratified_entity const& stratified_charges::raw_entity(e_stratified e) const
 {
     return map_lookup(dictionary, e);
 }
 
-//============================================================================
 void stratified_charges::initialize_dictionary()
 {
     // Dummy nodes: root and topic headers.
@@ -208,7 +181,6 @@ void stratified_charges::initialize_dictionary()
     dictionary[e_tiered_sd_premium_tax                 ] = stratified_entity();
 }
 
-//============================================================================
 // 'special_limit' is 'DB_DynSepAcctLoadLimit'.
 double stratified_charges::stratified_sepacct_load
     (mcenum_gen_basis basis
@@ -253,7 +225,6 @@ double stratified_charges::stratified_sepacct_load
     throw "Unreachable--silences a compiler diagnostic.";
 }
 
-//============================================================================
 double stratified_charges::banded_curr_sepacct_load
     (double assets
     ,double premium
@@ -274,7 +245,6 @@ double stratified_charges::banded_curr_sepacct_load
         ;
 }
 
-//============================================================================
 double stratified_charges::banded_guar_sepacct_load
     (double assets
     ,double premium
@@ -327,57 +297,56 @@ double stratified_charges::tiered_m_and_e(mcenum_gen_basis basis, double assets)
     throw "Unreachable--silences a compiler diagnostic.";
 }
 
-//============================================================================
 double stratified_charges::tiered_curr_m_and_e(double assets) const
 {
     stratified_entity const& z = raw_entity(e_curr_m_and_e_tiered_by_assets);
     return tiered_rate<double>() (assets, z.limits(), z.values());
 }
 
-//============================================================================
 double stratified_charges::tiered_guar_m_and_e(double assets) const
 {
     stratified_entity const& z = raw_entity(e_guar_m_and_e_tiered_by_assets);
     return tiered_rate<double>() (assets, z.limits(), z.values());
 }
 
-//============================================================================
 double stratified_charges::tiered_asset_based_compensation(double assets) const
 {
     stratified_entity const& z = raw_entity(e_asset_based_comp_tiered_by_assets);
     return tiered_rate<double>() (assets, z.limits(), z.values());
 }
 
-//============================================================================
 double stratified_charges::tiered_investment_management_fee(double assets) const
 {
     stratified_entity const& z = raw_entity(e_investment_mgmt_fee_tiered_by_assets);
     return tiered_rate<double>() (assets, z.limits(), z.values());
 }
 
-//============================================================================
 double stratified_charges::tiered_curr_sepacct_load(double assets, double /* premium */) const
 {
     stratified_entity const& z = raw_entity(e_curr_sepacct_load_tiered_by_assets);
     return tiered_rate<double>() (assets, z.limits(), z.values());
 }
 
-//============================================================================
 double stratified_charges::tiered_guar_sepacct_load(double assets, double /* premium */) const
 {
     stratified_entity const& z = raw_entity(e_guar_sepacct_load_tiered_by_assets);
     return tiered_rate<double>() (assets, z.limits(), z.values());
 }
 
-//============================================================================
-// Tiered compensation is not reflected here in order to forestall
-// an adjustment event if compensation decreases in the future.
-// Although producers may generally be expected to resist decreases,
-// it is conceivable that the incidence of compensation might be
-// changed on a block of business to produce a more front-loaded
-// pattern in general, with the inadvertent effect of reducing future
-// compensation on a particular contract.
-//
+/// Lowest tiered separate-account load.
+///
+/// Tiered compensation is not reflected here in order to forestall
+/// an adjustment event if compensation decreases in the future.
+/// Although producers may generally be expected to resist decreases,
+/// it is conceivable that the incidence of compensation might be
+/// changed on a block of business to produce a more front-loaded
+/// pattern in general, with the inadvertent effect of reducing future
+/// compensation on a particular contract.
+///
+/// TODO ?? Missing:
+///   - "CurrSepAcctLoadBandedByPrem"
+///   - "CurrSepAcctLoadBandedByAssets"
+
 double stratified_charges::minimum_tiered_spread_for_7702() const
 {
     stratified_entity const& z = raw_entity(e_curr_sepacct_load_tiered_by_assets);
@@ -387,32 +356,44 @@ double stratified_charges::minimum_tiered_spread_for_7702() const
 
 namespace
 {
-    e_stratified premium_tax_table(mcenum_state state)
+e_stratified premium_tax_table(mcenum_state state)
+{
+    if(mce_s_AK == state)
         {
-        if(mce_s_AK == state)
-            {
-            return e_tiered_ak_premium_tax;
-            }
-        else if(mce_s_DE == state)
-            {
-            // TRICKY !! We'll eventually implement DE like this:
-            //   return e_tiered_de_premium_tax;
-            // But we haven't implemented DE's tiered premium tax yet,
-            // so we treat it as any other state for now:
-            return e_stratified_last;
-            }
-        else if(mce_s_SD == state)
-            {
-            return e_tiered_sd_premium_tax;
-            }
-        else
-            {
-            return e_stratified_last;
-            }
+        return e_tiered_ak_premium_tax;
         }
+    else if(mce_s_DE == state)
+        {
+        // TRICKY !! We'll eventually implement DE like this:
+        //   return e_tiered_de_premium_tax;
+        // But we haven't implemented DE's tiered premium tax yet,
+        // so we treat it as any other state for now:
+        return e_stratified_last;
+        }
+    else if(mce_s_SD == state)
+        {
+        return e_tiered_sd_premium_tax;
+        }
+    else
+        {
+        return e_stratified_last;
+        }
+}
 } // Unnamed namespace.
 
-//============================================================================
+/// Tiered premium tax.
+///
+/// Actual tax-accounting practice may use a simple approximation for
+/// AK and SD premium tax; this implementation follows the statutes.
+///
+/// DE tiered premium tax is not yet implemented. Premium tax in
+/// AK and SD is tiered by policy-year premium for each contract
+/// separately, but in DE by calendar-year premium for all contracts
+/// owned by the same corporation, combined. Those complications might
+/// eventually be addressed elsewhere; meanwhile, this module contains
+/// code to represent the DE tiered rates, but ignores those rates and
+/// treats DE the same as any other state except AK and SD.
+
 double stratified_charges::tiered_premium_tax
     (mcenum_state state
     ,double       payment
@@ -436,13 +417,11 @@ double stratified_charges::tiered_premium_tax
         }
 }
 
-//============================================================================
 bool stratified_charges::premium_tax_is_tiered(mcenum_state state) const
 {
     return e_stratified_last != premium_tax_table(state);
 }
 
-//============================================================================
 double stratified_charges::minimum_tiered_premium_tax_rate(mcenum_state state) const
 {
     e_stratified table = premium_tax_table(state);
@@ -458,7 +437,6 @@ double stratified_charges::minimum_tiered_premium_tax_rate(mcenum_state state) c
         }
 }
 
-//============================================================================
 namespace
 {
     char const* s_stratified_nodes[] =
@@ -508,7 +486,6 @@ namespace xml_serialize
     };
 } // namespace xml_serialize
 
-//============================================================================
 void stratified_charges::read(std::string const& filename)
 {
     if(access(filename.c_str(), R_OK))
@@ -543,7 +520,6 @@ void stratified_charges::read(std::string const& filename)
 #undef READ
 }
 
-//============================================================================
 void stratified_charges::write(std::string const& filename) const
 {
     xml_lmi::xml_document document("strata");
@@ -576,7 +552,6 @@ void stratified_charges::write(std::string const& filename) const
     document.save(path.string());
 }
 
-//============================================================================
 void stratified_charges::write_stratified_files()
 {
     // Guard against recurrence of the problem described here:
