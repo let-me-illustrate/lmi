@@ -95,7 +95,9 @@ class LMI_SO stratified_entity
     std::string         gloss_;
 };
 
-// Implicitly-declared special member functions do the right thing.
+/// Rates that depend upon the amount they're multiplied by.
+///
+/// Implicitly-declared special member functions do the right thing.
 
 class LMI_SO stratified_charges
     :virtual private obstruct_slicing<stratified_charges>
@@ -107,7 +109,7 @@ class LMI_SO stratified_charges
     stratified_charges(std::string const& filename);
     ~stratified_charges();
 
-    // TODO ?? These things are not implemented implemented correctly:
+    // TODO ?? These things are not implemented correctly:
     //
     // - tiered_asset_based_compensation, tiered_investment_management_fee:
     // setting these to any nonzero value produces a runtime error in
