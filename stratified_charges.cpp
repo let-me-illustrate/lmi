@@ -44,6 +44,23 @@
 #include <algorithm>
 #include <cfloat>                 // DBL_MAX
 
+namespace xml_serialize
+{
+    template<>
+    struct xml_io<stratified_entity>
+    {
+        static void to_xml(xml::element& e, stratified_entity const& t)
+        {
+            t.write(e);
+        }
+
+        static void from_xml(xml::element const& t, stratified_entity& e)
+        {
+            e.read(t);
+        }
+    };
+} // namespace xml_serialize
+
 /// Specialize value_cast<>() to throw an exception.
 ///
 /// This is required by
@@ -513,23 +530,6 @@ double stratified_charges::minimum_tiered_premium_tax_rate(mcenum_state state) c
         return *std::min_element(z.values().begin(), z.values().end());
         }
 }
-
-namespace xml_serialize
-{
-    template<>
-    struct xml_io<stratified_entity>
-    {
-        static void to_xml(xml::element& e, stratified_entity const& t)
-        {
-            t.write(e);
-        }
-
-        static void from_xml(xml::element const& t, stratified_entity& e)
-        {
-            e.read(t);
-        }
-    };
-} // namespace xml_serialize
 
 void stratified_charges::read(std::string const& filename)
 {
