@@ -27,22 +27,23 @@
 #endif // __BORLANDC__
 
 #include "stratified_charges.hpp"
+#include "xml_serializable.tpp"
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "contains.hpp"
 #include "data_directory.hpp"
 #include "miscellany.hpp"         // minmax<T>()
-#include "platform_dependent.hpp" // access()
 #include "stratified_algorithms.hpp"
 #include "xml_lmi.hpp"
 #include "xml_serialize.hpp"
 
-#include <boost/filesystem/convenience.hpp>
 #include <boost/static_assert.hpp>
 
 #include <algorithm>
 #include <cfloat>                 // DBL_MAX
+
+template class xml_serializable<stratified_charges>;
 
 namespace xml_serialize
 {
@@ -181,11 +182,12 @@ stratified_charges::stratified_charges()
 stratified_charges::stratified_charges(std::string const& filename)
 {
     ascribe_members();
-    read(filename);
+    load(filename);
 }
 
 stratified_charges::stratified_charges(stratified_charges const& z)
     :obstruct_slicing  <stratified_charges>()
+    ,xml_serializable  <stratified_charges>()
     ,MemberSymbolTable <stratified_charges>()
 {
     ascribe_members();
@@ -531,44 +533,38 @@ double stratified_charges::minimum_tiered_premium_tax_rate(mcenum_state state) c
         }
 }
 
-void stratified_charges::read(std::string const& filename)
-{
-    if(access(filename.c_str(), R_OK))
-        {
-        fatal_error()
-            << "File '"
-            << filename
-            << "' is required but could not be found. Try reinstalling."
-            << LMI_FLUSH
-            ;
-        }
+/// Backward-compatibility serial number of this class's xml version.
+///
+/// version 0: 20100525T2154Z
 
-    xml_lmi::dom_parser parser(filename);
-    xml::element const& root = parser.root_node("strata");
-    typedef std::vector<std::string>::const_iterator svci;
-    for(svci i = member_names().begin(); i != member_names().end(); ++i)
-        {
-        xml_serialize::get_element(root, *i, datum(*i));
-        }
+int stratified_charges::class_version() const
+{
+    return 0;
 }
 
-void stratified_charges::write(std::string const& filename) const
+std::string stratified_charges::xml_root_name() const
 {
-    xml_lmi::xml_document document("strata");
-    xml::element& root = document.root_node();
-    typedef std::vector<std::string>::const_iterator svci;
-    for(svci i = member_names().begin(); i != member_names().end(); ++i)
-        {
-        xml_serialize::set_element(root, *i, datum(*i));
-        }
+    return "strata";
+}
 
-    // Instead of this:
-//    document.save_to_file(filename.c_str());
-    // for the nonce, explicitly change the extension, in order to
-    // force external product-file code to use the new extension.
-    fs::path path(filename, fs::native);
-    path = fs::change_extension(path, ".strata");
-    document.save(path.string());
+/// This override doesn't call redintegrate_ex_ante(); that wouldn't
+/// make sense, at least not for now.
+
+void stratified_charges::read_element
+    (xml::element const& e
+    ,std::string const&  name
+    ,int                 // file_version
+    )
+{
+    xml_serialize::from_xml(e, datum(name));
+}
+
+void stratified_charges::write_element
+    (xml::element&       parent
+    ,std::string const&  name
+    ) const
+{
+    xml_serialize::set_element(parent, name, datum(name));
 }
 
 void stratified_charges::write_stratified_files()
@@ -621,7 +617,7 @@ void stratified_charges::write_stratified_files()
     foo.datum("TieredSDPremTax").limits_.push_back(DBL_MAX);
     foo.datum("TieredSDPremTax").gloss_ = "SD 10-4-22(2) (see also 58-6-70)";
 
-    foo.write(AddDataDir("sample.strata"));
+    foo.save(AddDataDir("sample.strata"));
 }
 
 /// Determine whether a double is in effect the highest representable.

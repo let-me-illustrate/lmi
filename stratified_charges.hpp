@@ -31,6 +31,7 @@
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 #include "xml_lmi_fwd.hpp"
+#include "xml_serializable.hpp"
 
 #include <string>
 #include <vector>
@@ -100,6 +101,7 @@ class LMI_SO stratified_entity
 
 class LMI_SO stratified_charges
     :virtual private obstruct_slicing  <stratified_charges>
+    ,        public  xml_serializable  <stratified_charges>
     ,        public  MemberSymbolTable <stratified_charges>
 {
     friend class TierDocument;
@@ -159,8 +161,20 @@ class LMI_SO stratified_charges
     // Deprecated: for backward compatibility only. Prefer datum().
     stratified_entity& raw_entity(e_stratified);
 
-    void read (std::string const& filename);
-    void write(std::string const& filename) const;
+    // xml_serializable required implementation.
+    virtual int         class_version() const;
+    virtual std::string xml_root_name() const;
+
+    // xml_serializable overrides.
+    virtual void read_element
+        (xml::element const& e
+        ,std::string const&  name
+        ,int                 file_version
+        );
+    virtual void write_element
+        (xml::element&       parent
+        ,std::string const&  name
+        ) const;
 
     double banded_curr_sepacct_load
         (double assets
