@@ -25844,3 +25844,10 @@ Improve treatment of extreme or invalid arguments. See:
   stratified_charges.hpp
 Improve documentation; remove old markup.
 
+20100525T1444Z <gchicares@sbcglobal.net> [704]
+
+  stratified_charges.cpp
+  stratified_charges.hpp
+  tier_document.cpp
+Refactor, using symbolic member names in class stratified_charges.
+

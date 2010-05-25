@@ -26,13 +26,12 @@
 
 #include "config.hpp"
 
+#include "any_member.hpp"
 #include "mc_enum_type_enums.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 #include "xml_lmi_fwd.hpp"
 
-#include <iosfwd>
-#include <map>
 #include <string>
 #include <vector>
 
@@ -80,6 +79,8 @@ class LMI_SO stratified_entity
         );
     ~stratified_entity();
 
+    bool operator==(stratified_entity const&);
+
     void read (xml::element const& node);
     void write(xml::element&) const;
 
@@ -96,18 +97,21 @@ class LMI_SO stratified_entity
 };
 
 /// Rates that depend upon the amount they're multiplied by.
-///
-/// Implicitly-declared special member functions do the right thing.
 
 class LMI_SO stratified_charges
-    :virtual private obstruct_slicing<stratified_charges>
+    :virtual private obstruct_slicing  <stratified_charges>
+    ,        public  MemberSymbolTable <stratified_charges>
 {
     friend class TierDocument;
-    friend class TierView;
 
   public:
     stratified_charges(std::string const& filename);
+    stratified_charges(stratified_charges const&);
     ~stratified_charges();
+
+    stratified_charges& operator=(stratified_charges const&);
+
+    stratified_entity const& datum(std::string const& name) const;
 
     // TODO ?? These things are not implemented correctly:
     //
@@ -148,10 +152,12 @@ class LMI_SO stratified_charges
   private:
     stratified_charges(); // Private, but implemented for friends' use.
 
-    stratified_entity&       raw_entity(e_stratified);
-    stratified_entity const& raw_entity(e_stratified) const;
+    void ascribe_members();
 
-    void initialize_dictionary();
+    stratified_entity& datum(std::string const& name);
+
+    // Deprecated: for backward compatibility only. Prefer datum().
+    stratified_entity& raw_entity(e_stratified);
 
     void read (std::string const& filename);
     void write(std::string const& filename) const;
@@ -174,7 +180,19 @@ class LMI_SO stratified_charges
     double tiered_curr_m_and_e(double assets) const;
     double tiered_guar_m_and_e(double assets) const;
 
-    std::map<e_stratified, stratified_entity> dictionary;
+    stratified_entity CurrSepAcctLoadBandedByPrem;
+    stratified_entity GuarSepAcctLoadBandedByPrem;
+    stratified_entity CurrSepAcctLoadBandedByAssets;
+    stratified_entity GuarSepAcctLoadBandedByAssets;
+    stratified_entity CurrMandETieredByAssets;
+    stratified_entity GuarMandETieredByAssets;
+    stratified_entity AssetCompTieredByAssets;
+    stratified_entity InvestmentMgmtFeeTieredByAssets;
+    stratified_entity CurrSepAcctLoadTieredByAssets;
+    stratified_entity GuarSepAcctLoadTieredByAssets;
+    stratified_entity TieredAKPremTax;
+    stratified_entity TieredDEPremTax;
+    stratified_entity TieredSDPremTax;
 };
 
 bool LMI_SO is_highest_representable_double(double);
