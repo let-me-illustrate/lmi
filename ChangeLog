@@ -25851,3 +25851,15 @@ Improve documentation; remove old markup.
   tier_document.cpp
 Refactor, using symbolic member names in class stratified_charges.
 
+20100525T2117Z <gchicares@sbcglobal.net> [704]
+
+  stratified_charges.cpp
+Rearrange.
+
+20100525T2154Z <gchicares@sbcglobal.net> [704]
+
+  stratified_charges.cpp
+  stratified_charges.hpp
+  tier_document.cpp
+Refactor, deriving stratified_charges from xml_serializable.
+

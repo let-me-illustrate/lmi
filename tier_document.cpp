@@ -67,12 +67,12 @@ void TierDocument::initialize_charges()
 
 void TierDocument::ReadDocument(std::string const& filename)
 {
-    charges_.read(filename);
+    charges_.load(filename);
 }
 
 void TierDocument::WriteDocument(std::string const& filename)
 {
-    charges_.write(filename);
+    charges_.save(filename);
 }
 
 stratified_entity& TierDocument::get_stratified_entity(e_stratified index)
