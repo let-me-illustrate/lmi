@@ -33,6 +33,9 @@
   <xsl:variable name="ModifiedSinglePremium">
     <xsl:call-template name="set_modified_single_premium"/>
   </xsl:variable>
+  <xsl:variable name="ModifiedSinglePremium0">
+    <xsl:call-template name="set_modified_single_premium0"/>
+  </xsl:variable>
   <xsl:variable name="SinglePremium">
     <xsl:call-template name="set_single_premium"/>
   </xsl:variable>
@@ -182,7 +185,7 @@
                   It features accumulating account values, adjustable benefits,
                   and flexible premiums.
                 </xsl:when>
-                <xsl:when test="$ModifiedSinglePremium='1'">
+                <xsl:when test="$ModifiedSinglePremium='1' or $ModifiedSinglePremium0='1'">
                   <xsl:value-of select="$scalars/PolicyMktgName"/>
                   is a modified single premium adjustable life
                   insurance contract. It features accumulating
@@ -795,7 +798,7 @@ to the xsl files first.
               </fo:block>
             </xsl:if>
             <!-- Single Premium Logic -->
-            <xsl:if test="$ModifiedSinglePremium='1'">
+            <xsl:if test="$ModifiedSinglePremium='1' or $ModifiedSinglePremium0='1'">
               <fo:block padding-top="1em">
                 <fo:inline font-weight="bold">
                   Modified Single Premium:
@@ -823,7 +826,7 @@ to the xsl files first.
               or other premium payor.
             </fo:block>
             <!-- Single Premium Logic -->
-            <xsl:if test="$SinglePremium='1' and $ModifiedSinglePremium!='1'">
+            <xsl:if test="$SinglePremium='1' and $ModifiedSinglePremium0='0' and $ModifiedSinglePremium='0'">
               <fo:block padding-top="1em">
                 <fo:inline font-weight="bold">
                   Single Premium:
@@ -840,7 +843,7 @@ to the xsl files first.
                 <fo:inline font-weight="bold">
                   Ultimate Illustrated Crediting Rate:
                 </fo:inline>
-                  <xsl:value-of select="$scalars/UltCreditingRateFootnote"/>.
+                  <xsl:value-of select="$scalars/UltCreditingRateFootnote"/>
               </fo:block>
             </xsl:if>
           </fo:block>
@@ -1243,7 +1246,14 @@ to the xsl files first.
                 <!-- Single Premium Logic -->
                 <fo:block>
                   Ultimate Illustrated Crediting Rate:
-                  <xsl:value-of select="$vectors[@name='AnnGAIntRate_Current']/duration[6]/@column_value"/>
+                <xsl:choose>
+                  <xsl:when test="$ModifiedSinglePremium0='1'">
+                    <xsl:value-of select="$vectors[@name='AnnGAIntRate_Current']/duration[11]/@column_value"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                     <xsl:value-of select="$vectors[@name='AnnGAIntRate_Current']/duration[6]/@column_value"/>
+                  </xsl:otherwise>
+                </xsl:choose>
                 </fo:block>
               </xsl:if>
               <!-- Update with "FriendlyUWType" - Get From Greg -->
@@ -1733,7 +1743,7 @@ to the xsl files first.
 
   <xsl:template name="set_single_premium">
     <xsl:variable name="A" select="string-length($scalars/PolicyMktgName) &gt; 5"/>
-    <xsl:variable name="B" select="substring($scalars/PolicyLegalName, 1, 6) = 'Single'"/>
+    <xsl:variable name="B" select="substring($scalars/PolicyLegalName, 1, 6) = 'Single' or substring($scalars/PolicyLegalName, 1, 8) = 'Modified'"/>
     <xsl:value-of select="number($A and $B)"/>
   </xsl:template>
 
@@ -1742,6 +1752,12 @@ to the xsl files first.
     <xsl:variable name="B" select="substring($scalars/PolicyLegalName, 1, 6) = 'Single'"/>
     <xsl:variable name="C" select="$scalars/StatePostalAbbrev = 'MA'"/>
     <xsl:value-of select="number($A and $B and $C)"/>
+  </xsl:template>
+
+  <xsl:template name="set_modified_single_premium0">
+    <xsl:variable name="A" select="string-length($scalars/PolicyMktgName) &gt; 5"/>
+    <xsl:variable name="B" select="substring($scalars/PolicyLegalName, 1, 8) = 'Modified'"/>
+    <xsl:value-of select="number($A and $B)"/>
   </xsl:template>
 
   <xsl:template name="set_group_experience_rating">
