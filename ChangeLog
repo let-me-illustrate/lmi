@@ -25863,8 +25863,13 @@ Rearrange.
   tier_document.cpp
 Refactor, deriving stratified_charges from xml_serializable.
 
-20100527T0152Z <wboutin@charter.net> [704]
+20100527T0153Z <wboutin@charter.net> [704]
 
   illustration_reg.xsl
 Add a modified single premium nuance.
+
+20100527T0158Z <wboutin@charter.net> [704]
+
+  version.hpp
+Mark release candidate.
 
