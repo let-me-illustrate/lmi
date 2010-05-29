@@ -32,6 +32,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "contains.hpp"
 #include "data_directory.hpp" // AddDataDir()
 #include "miscellany.hpp"     // lmi_array_size()
 #include "xml_serialize.hpp"
@@ -39,7 +40,6 @@
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/path.hpp>
 
-#include <algorithm>          // std::find()
 #include <vector>
 
 template class xml_serializable<product_data>;
@@ -277,6 +277,10 @@ void product_data::ascribe_members()
     ascribe("InforceNonGuaranteedFootnote3" , &product_data::InforceNonGuaranteedFootnote3 );
     ascribe("NonGuaranteedFootnote"         , &product_data::NonGuaranteedFootnote         );
     ascribe("MonthlyChargesPaymentFootnote" , &product_data::MonthlyChargesPaymentFootnote );
+    ascribe("SurrenderFootnote"             , &product_data::SurrenderFootnote             );
+    ascribe("FundRateFootnote"              , &product_data::FundRateFootnote              );
+    ascribe("FundRateFootnote0"             , &product_data::FundRateFootnote0             );
+    ascribe("FundRateFootnote1"             , &product_data::FundRateFootnote1             );
 }
 
 /// Backward-compatibility serial number of this class's xml version.
@@ -322,7 +326,7 @@ bool product_data::is_detritus(std::string const& s) const
         {"Remove this string when adding the first removed entity."
         };
     static std::vector<std::string> const v(a, a + lmi_array_size(a));
-    return v.end() != std::find(v.begin(), v.end(), s);
+    return contains(v, s);
 }
 
 /// Create a product file for the 'sample' product.

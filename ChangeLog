@@ -19061,7 +19061,7 @@ in certain testdecks used with 'make system_test'.
   input_harmonization.cpp
 Defectively work around defects in proprietary testdecks. System tests
 fail without these broken workarounds, e.g., because they contain
-preferred lives with with table ratings.
+preferred lives with table ratings.
 
 20080811T0043Z <gchicares@sbcglobal.net> [1087]
 
@@ -25744,4 +25744,132 @@ Improve discrimination among containers.
   contains.hpp
   contains_test.cpp
 Support outmoded compilers.
+
+20100514T1554Z <zeitlin> [706]
+
+  Makefile.am
+Fix defect introduced 20100513T0109Z.
+
+20100514T1957Z <gchicares@sbcglobal.net> [706]
+
+  contains.hpp
+  contains_test.cpp
+Determine whether a string contains a given character.
+
+20100514T2140Z <gchicares@sbcglobal.net> [706]
+
+  authenticity_test.cpp
+  census_view.cpp
+  configurable_settings.cpp
+  dbvalue.cpp
+  group_values.cpp
+  icon_monger.cpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ihs_avsolve.cpp
+  ihs_basicval.cpp
+  ihs_crc_comp.cpp
+  input_harmonization.cpp
+  input_realization.cpp
+  input_sequence.cpp
+  input_xml_io.cpp
+  ledger.cpp
+  ledger_text_formats.cpp
+  ledger_xml_io.cpp
+  ledger_xsl.cpp
+  main_cli.cpp
+  main_wx.cpp
+  mec_input.cpp
+  mec_server.cpp
+  mec_state.cpp
+  product_data.cpp
+  product_names.cpp
+  regex_test.cpp
+  rounding_view_editor.cpp
+  stratified_charges.cpp
+  test_coding_rules.cpp
+  timer_test.cpp
+  wx_utility.cpp
+  xml_serializable.tpp
+Prefer contains() and map_lookup() to std::find().
+
+20100515T2041Z <gchicares@sbcglobal.net> [706]
+
+  census_document.cpp
+  illustration_document.cpp
+  mec_document.cpp
+  wx_utility.cpp
+  wx_utility.hpp
+Forbid multibyte characters in filenames. See:
+  http://lists.nongnu.org/archive/html/lmi/2009-12/msg00004.html
+  http://lists.nongnu.org/archive/html/lmi/2010-05/msg00023.html
+et seqq.
+
+20100516T2125Z <gchicares@sbcglobal.net> [706]
+
+  dbvalue.cpp
+  dbvalue.hpp
+Refactor.
+
+20100517T1652Z <gchicares@sbcglobal.net> [704]
+
+  dbvalue.cpp
+Rewrite reshape().
+
+20100521T1402Z <wboutin@charter.net> [704]
+
+  illustration_reg.xsl
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  product_data.cpp
+  product_data.hpp
+Add new footnotes.
+
+20100523T2017Z <gchicares@sbcglobal.net> [704]
+
+  rounding_rules.cpp
+  rounding_rules.hpp
+Improve const-correctness.
+
+20100523T2158Z <gchicares@sbcglobal.net> [704]
+
+  math_functors.hpp
+  math_functors_test.cpp
+Improve treatment of extreme or invalid arguments. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-05/msg00038.html
+
+20100524T1154Z <gchicares@sbcglobal.net> [704]
+
+  stratified_charges.cpp
+  stratified_charges.hpp
+Improve documentation; remove old markup.
+
+20100525T1444Z <gchicares@sbcglobal.net> [704]
+
+  stratified_charges.cpp
+  stratified_charges.hpp
+  tier_document.cpp
+Refactor, using symbolic member names in class stratified_charges.
+
+20100525T2117Z <gchicares@sbcglobal.net> [704]
+
+  stratified_charges.cpp
+Rearrange.
+
+20100525T2154Z <gchicares@sbcglobal.net> [704]
+
+  stratified_charges.cpp
+  stratified_charges.hpp
+  tier_document.cpp
+Refactor, deriving stratified_charges from xml_serializable.
+
+20100527T0153Z <wboutin@charter.net> [704]
+
+  illustration_reg.xsl
+Add a modified single premium nuance.
+
+20100527T0158Z <wboutin@charter.net> [704]
+
+  version.hpp
+Mark release candidate.
 

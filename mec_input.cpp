@@ -30,13 +30,14 @@
 #include "xml_serializable.tpp"
 
 #include "alert.hpp"
+#include "contains.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "global_settings.hpp"
 #include "input_seq_helpers.hpp"
 #include "miscellany.hpp" // lmi_array_size()
 
-#include <algorithm>      // std::find(), std::max()
+#include <algorithm>      // std::max()
 #include <limits>
 #include <sstream>
 #include <utility>        // std::pair
@@ -624,7 +625,7 @@ bool mec_input::is_detritus(std::string const& s) const
         ,"InforceSevenPayPremium"
         };
     static std::vector<std::string> const v(a, a + lmi_array_size(a));
-    return v.end() != std::find(v.begin(), v.end(), s);
+    return contains(v, s);
 }
 
 void mec_input::redintegrate_ad_terminum()

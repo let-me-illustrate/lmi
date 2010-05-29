@@ -32,6 +32,7 @@
 #include "assert_lmi.hpp"
 #include "census_document.hpp"
 #include "configurable_settings.hpp"
+#include "contains.hpp"
 #include "default_view.hpp"
 #include "illustration_view.hpp"
 #include "illustrator.hpp"
@@ -982,7 +983,7 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
 
     for(unsigned int j = 0; j < cell_parms().size(); ++j)
         {
-        if(erasures.end() == std::find(erasures.begin(), erasures.end(), j))
+        if(!contains(erasures, j))
             {
             expurgated_cell_parms.push_back(cell_parms()[j]);
             }

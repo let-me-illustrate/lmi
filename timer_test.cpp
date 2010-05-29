@@ -28,6 +28,7 @@
 
 #include "timer.hpp"
 
+#include "contains.hpp"
 #include "test_tools.hpp"
 
 #if !defined __BORLANDC__
@@ -158,7 +159,7 @@ void TimerTest::TestAliquotTimer()
 #endif // !defined __BORLANDC__
 
     std::string takes_too_long = TimeAnAliquot(WaitTenMsec, 0.0099999).str();
-    BOOST_TEST(std::string::npos != takes_too_long.find("took longer"));
+    BOOST_TEST(contains(takes_too_long, "took longer"));
     std::cout << "  " << takes_too_long << '\n';
 
     std::cout << "  " << TimeAnAliquot(WaitTenMsec, 0.099) << '\n';

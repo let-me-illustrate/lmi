@@ -34,6 +34,7 @@
 #include "calendar_date.hpp"
 #include "comma_punct.hpp"
 #include "configurable_settings.hpp"
+#include "contains.hpp"
 #include "financial.hpp"
 #include "global_settings.hpp"
 #include "input_sequence.hpp"
@@ -190,10 +191,10 @@ calculation_summary_formatter::calculation_summary_formatter
         // TODO ?? This const_cast is safe, but it's still unclean.
         LedgerInvariant& unclean = const_cast<LedgerInvariant&>(invar_);
         bool want_any_irr =
-               columns_.end() != std::find(columns_.begin(), columns_.end(), "IrrCsv_Current"   )
-            || columns_.end() != std::find(columns_.begin(), columns_.end(), "IrrCsv_Guaranteed")
-            || columns_.end() != std::find(columns_.begin(), columns_.end(), "IrrDb_Current"    )
-            || columns_.end() != std::find(columns_.begin(), columns_.end(), "IrrDb_Guaranteed" )
+               contains(columns_, "IrrCsv_Current"   )
+            || contains(columns_, "IrrCsv_Guaranteed")
+            || contains(columns_, "IrrDb_Current"    )
+            || contains(columns_, "IrrDb_Guaranteed" )
             ;
         if(want_any_irr && !invar_.IsInforce)
             {
@@ -648,10 +649,7 @@ void PrintFormTabDelimited
         // Show experience-rating columns for current-expense, zero-
         // interest basis if used, to support testing.
         std::vector<mcenum_run_basis> const& bases(ledger_values.GetRunBases());
-        if
-            (   bases.end()
-            !=  std::find(bases.begin(), bases.end(), mce_run_gen_curr_sep_zero)
-            )
+        if(contains(bases, mce_run_gen_curr_sep_zero))
             {
             LedgerVariant const& Curr0 = ledger_values.GetCurrZero();
             os << Curr0.value_str("NetCOICharge"          ,j) << '\t';
@@ -669,10 +667,7 @@ void PrintFormTabDelimited
             os << "0\t";
             }
 
-        if
-            (   bases.end()
-            !=  std::find(bases.begin(), bases.end(), mce_run_gen_curr_sep_half)
-            )
+        if(contains(bases, mce_run_gen_curr_sep_half))
             {
             fatal_error()
                 << "Three-rate illustrations not supported."

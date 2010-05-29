@@ -45,6 +45,7 @@
 #include "census_document.hpp"
 #include "census_view.hpp"
 #include "configurable_settings.hpp"
+#include "contains.hpp"
 #include "data_directory.hpp"
 #include "database_document.hpp"
 #include "database_view.hpp"
@@ -1246,7 +1247,7 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
             case 'x':
                 {
                 global_settings::instance().set_pyx(getopt_long.optarg);
-                if(std::string::npos != global_settings::instance().pyx().find("system_testing"))
+                if(contains(global_settings::instance().pyx(), "system_testing"))
                     {
                     global_settings::instance().set_regression_testing(true);
                     }

@@ -34,6 +34,7 @@
 #include "census_view.hpp"
 #include "illustrator.hpp"
 #include "miscellany.hpp"
+#include "wx_utility.hpp"
 
 #include <fstream>
 
@@ -70,7 +71,8 @@ bool CensusDocument::OnCreate(wxString const& filename, long int flags)
         }
     else
         {
-        std::ifstream ifs(filename.mb_str());
+        std::string f = ValidateAndConvertFilename(filename);
+        std::ifstream ifs(f.c_str());
         if(!ifs)
             {
             warning()
@@ -117,7 +119,8 @@ bool CensusDocument::DoOpenDocument(wxString const& filename)
 
 bool CensusDocument::DoSaveDocument(wxString const& filename)
 {
-    std::ofstream ofs(filename.mb_str(), ios_out_trunc_binary());
+    std::string f = ValidateAndConvertFilename(filename);
+    std::ofstream ofs(f.c_str(), ios_out_trunc_binary());
     doc_.write(ofs);
     if(!ofs)
         {

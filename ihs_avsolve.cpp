@@ -37,6 +37,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "contains.hpp"
 #include "death_benefits.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
@@ -406,7 +407,7 @@ double AccountValue::Solve
 
     std::ostream os_trace(status().rdbuf());
     std::ofstream ofs_trace;
-    if(std::string::npos != yare_input_.Comments.find("idiosyncrasyT") && !SolvingForGuarPremium)
+    if(contains(yare_input_.Comments, "idiosyncrasyT") && !SolvingForGuarPremium)
         {
         ofs_trace.open("trace.txt", ios_out_app_binary());
         os_trace.rdbuf(ofs_trace.rdbuf());

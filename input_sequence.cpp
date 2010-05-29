@@ -30,6 +30,7 @@
 #include "input_sequence.hpp"
 
 #include "alert.hpp"
+#include "contains.hpp"
 #include "miscellany.hpp"
 #include "value_cast.hpp"
 
@@ -713,12 +714,7 @@ void InputSequence::value()
                 mark_diagnostic_context();
                 break;
                 }
-            std::vector<std::string>::const_iterator i = std::find
-                (extra_keywords.begin()
-                ,extra_keywords.end()
-                ,current_keyword
-                );
-            if(i != extra_keywords.end())
+            if(contains(extra_keywords, current_keyword))
                 {
                 current_interval.value_keyword = current_keyword;
                 match(current_token_type);

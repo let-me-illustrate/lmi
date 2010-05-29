@@ -34,6 +34,7 @@
 #include "basic_values.hpp"          // lowest_premium_tax_load()
 #include "commutation_functions.hpp"
 #include "configurable_settings.hpp"
+#include "contains.hpp"
 #include "data_directory.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
@@ -194,7 +195,7 @@ mec_state test_one_days_7702A_transactions
 
     std::vector<double> Mly7702ig;
     database.Query(Mly7702ig, DB_NAARDiscount);
-    LMI_ASSERT(Mly7702ig.end() == std::find(Mly7702ig.begin(), Mly7702ig.end(), -1.0));
+    LMI_ASSERT(!contains(Mly7702ig, -1.0));
     std::vector<double> DBDiscountRate(input.years_to_maturity());
     assign(DBDiscountRate, 1.0 / (1.0 + Mly7702ig));
 

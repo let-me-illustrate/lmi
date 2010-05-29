@@ -31,6 +31,7 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "calendar_date.hpp"
+#include "contains.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "death_benefits.hpp"
@@ -201,7 +202,7 @@ Then run other bases.
         it should also be possible to solve on a midpt basis as well
 */
 
-    if(std::string::npos != yare_input_.Comments.find("idiosyncrasyZ"))
+    if(contains(yare_input_.Comments, "idiosyncrasyZ"))
         {
         Debugging = true;
         DebugPrintInit();
@@ -210,7 +211,7 @@ Then run other bases.
     double z = RunAllApplicableBases();
 
     FinalizeLifeAllBases();
-    if(std::string::npos != yare_input_.Comments.find("idiosyncrasy_spew"))
+    if(contains(yare_input_.Comments, "idiosyncrasy_spew"))
         {
         std::ofstream os("raw_output", ios_out_trunc_binary());
         ledger_->Spew(os);
@@ -559,10 +560,10 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         ,bfts_7702a
         );
 
-    daily_interest_accounting =
-            std::string::npos
-        !=  yare_input_.Comments.find("idiosyncrasy_daily_interest_accounting")
-        ;
+    daily_interest_accounting = contains
+        (yare_input_.Comments
+        ,"idiosyncrasy_daily_interest_accounting"
+        );
 
 /* TODO expunge?
     PerformSpecAmtStrategy();

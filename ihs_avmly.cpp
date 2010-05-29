@@ -30,6 +30,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "contains.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "death_benefits.hpp"
@@ -1713,7 +1714,7 @@ void AccountValue::TxSetDeathBft(bool force_eoy_behavior)
 
     if
         (   force_eoy_behavior
-        ||  std::string::npos != yare_input_.Comments.find("idiosyncrasyV")
+        ||  contains(yare_input_.Comments, "idiosyncrasyV")
         )
         {
         // The corridor death benefit ought always to reflect the

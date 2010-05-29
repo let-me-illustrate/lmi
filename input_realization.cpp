@@ -30,6 +30,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "contains.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "global_settings.hpp"
@@ -621,11 +622,7 @@ std::string Input::RealizeDeathBenefitOption()
 
     if
         (   !database_->Query(DB_AllowDBO3)
-        &&  DeathBenefitOptionRealized_.end() != std::find
-                (DeathBenefitOptionRealized_.begin()
-                ,DeathBenefitOptionRealized_.end()
-                ,mce_dbopt("ROP")
-                )
+        &&  contains(DeathBenefitOptionRealized_, mce_dbopt("ROP"))
         )
         {
         return

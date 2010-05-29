@@ -27,6 +27,7 @@
 #endif // __BORLANDC__
 
 #include "assert_lmi.hpp"
+#include "contains.hpp"
 #include "handle_exceptions.hpp"
 #include "istream_to_string.hpp"
 #include "main_common.hpp"
@@ -313,8 +314,8 @@ void taboo
 void assay_whitespace(file const& f)
 {
     if
-        (   std::string::npos != f.data().find('\r')
-        ||  std::string::npos != f.data().find('\v')
+        (   contains(f.data(), '\r')
+        ||  contains(f.data(), '\v')
         )
         {
         throw std::runtime_error("File contains '\\r' or '\\v'.");
@@ -323,7 +324,7 @@ void assay_whitespace(file const& f)
     if
         (   !f.is_of_phylum(e_gpl)
         &&  !f.is_of_phylum(e_touchstone)
-        &&  std::string::npos != f.data().find('\f')
+        &&  contains(f.data(), '\f')
         )
         {
         throw std::runtime_error("File contains '\\f'.");
@@ -333,7 +334,7 @@ void assay_whitespace(file const& f)
         (   !f.is_of_phylum(e_gpl)
         &&  !f.is_of_phylum(e_make)
         &&  !f.is_of_phylum(e_patch)
-        &&  std::string::npos != f.data().find('\t')
+        &&  contains(f.data(), '\t')
         )
         {
         throw std::runtime_error("File contains '\\t'.");
@@ -348,7 +349,7 @@ void assay_whitespace(file const& f)
     if
         (   !f.is_of_phylum(e_gpl)
         &&  !f.is_of_phylum(e_touchstone)
-        &&  std::string::npos != f.data().find("\n\n\n")
+        &&  contains(f.data(), "\n\n\n")
         )
         {
         complain(f, "contains '\\n\\n\\n'.");
@@ -356,7 +357,7 @@ void assay_whitespace(file const& f)
 
     if
         (   !f.is_of_phylum(e_patch)
-        &&  std::string::npos != f.data().find(" \n")
+        &&  contains(f.data(), " \n")
         )
         {
         complain(f, "contains ' \\n'.");
@@ -803,7 +804,7 @@ bool check_reserved_name_exception(std::string const& s)
         };
     static int const n = lmi_array_size(y);
     static std::set<std::string> const z(y, y + n);
-    return z.end() != z.find(s);
+    return contains(z, s);
 }
 
 /// Check names reserved by C++2003 [17.4.3.1.2].

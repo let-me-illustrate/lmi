@@ -31,6 +31,7 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "calendar_date.hpp"
+#include "contains.hpp"
 #include "wx_new.hpp"
 
 #include <wx/app.h>                     // wxTheApp
@@ -38,10 +39,10 @@
 #include <wx/clipbrd.h>
 #include <wx/dataobj.h>
 #include <wx/datetime.h>
+#include <wx/msgdlg.h>
 #include <wx/utils.h>                   // wxSafeYield()
 #include <wx/window.h>
 
-#include <algorithm>                    // std::find()
 #include <cstddef>                      // std::size_t
 #include <sstream>
 
@@ -216,7 +217,7 @@ std::vector<std::string> EnumerateBookPageNames(wxBookCtrlBase const& book)
     for(std::size_t j = 0; j < book.GetPageCount(); ++j)
         {
         std::string name(book.GetPageText(j));
-        LMI_ASSERT(z.end() == std::find(z.begin(), z.end(), name));
+        LMI_ASSERT(!contains(z, name));
         z.push_back(name);
         }
     return z;
@@ -290,5 +291,35 @@ wxWindow& TopWindow()
         throw 0;
         }
     return *w;
+}
+
+/// Convert a filename to an NTBS std::string, throwing upon failure.
+///
+/// An operating system might hand an NTMBS or an NTWCS to wx.
+/// When wx hands that in turn to lmi in a context where a
+/// std::basic_fstream is wanted, data loss may occur because
+/// std::basic_fstream requires an NTBS argument--see:
+///   http://lists.nongnu.org/archive/html/lmi/2010-05/msg00023.html
+/// This function throws if that problem would occur.
+
+std::string ValidateAndConvertFilename(wxString const& w)
+{
+    if(w.IsEmpty())
+        {
+        fatal_error() << "Filename is empty." << LMI_FLUSH;
+        }
+    std::string s(w.mb_str());
+    if(s.empty())
+        {
+        wxString x =
+              "Filename '"
+            + w
+            + "' contains multi-byte characters, but only"
+            + " single-byte characters are supported."
+            ;
+        wxMessageBox(x, "Problematic filename");
+        throw hobsons_choice_exception();
+        }
+    return s;
 }
 

@@ -204,7 +204,7 @@ rounding_rules::~rounding_rules()
 
 /// Member datum nominated by the given name.
 
-rounding_parameters const& rounding_rules::datum(std::string const& name)
+rounding_parameters const& rounding_rules::datum(std::string const& name) const
 {
     return *member_cast<rounding_parameters>(operator[](name));
 }

@@ -26,13 +26,13 @@
 
 #include "config.hpp"
 
+#include "any_member.hpp"
 #include "mc_enum_type_enums.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 #include "xml_lmi_fwd.hpp"
+#include "xml_serializable.hpp"
 
-#include <iosfwd>
-#include <map>
 #include <string>
 #include <vector>
 
@@ -80,6 +80,8 @@ class LMI_SO stratified_entity
         );
     ~stratified_entity();
 
+    bool operator==(stratified_entity const&);
+
     void read (xml::element const& node);
     void write(xml::element&) const;
 
@@ -95,19 +97,25 @@ class LMI_SO stratified_entity
     std::string         gloss_;
 };
 
-// Implicitly-declared special member functions do the right thing.
+/// Rates that depend upon the amount they're multiplied by.
 
 class LMI_SO stratified_charges
-    :virtual private obstruct_slicing<stratified_charges>
+    :virtual private obstruct_slicing  <stratified_charges>
+    ,        public  xml_serializable  <stratified_charges>
+    ,        public  MemberSymbolTable <stratified_charges>
 {
     friend class TierDocument;
-    friend class TierView;
 
   public:
     stratified_charges(std::string const& filename);
+    stratified_charges(stratified_charges const&);
     ~stratified_charges();
 
-    // TODO ?? These things are not implemented implemented correctly:
+    stratified_charges& operator=(stratified_charges const&);
+
+    stratified_entity const& datum(std::string const& name) const;
+
+    // TODO ?? These things are not implemented correctly:
     //
     // - tiered_asset_based_compensation, tiered_investment_management_fee:
     // setting these to any nonzero value produces a runtime error in
@@ -146,13 +154,27 @@ class LMI_SO stratified_charges
   private:
     stratified_charges(); // Private, but implemented for friends' use.
 
-    stratified_entity&       raw_entity(e_stratified);
-    stratified_entity const& raw_entity(e_stratified) const;
+    void ascribe_members();
 
-    void initialize_dictionary();
+    stratified_entity& datum(std::string const& name);
 
-    void read (std::string const& filename);
-    void write(std::string const& filename) const;
+    // Deprecated: for backward compatibility only. Prefer datum().
+    stratified_entity& raw_entity(e_stratified);
+
+    // xml_serializable required implementation.
+    virtual int         class_version() const;
+    virtual std::string xml_root_name() const;
+
+    // xml_serializable overrides.
+    virtual void read_element
+        (xml::element const& e
+        ,std::string const&  name
+        ,int                 file_version
+        );
+    virtual void write_element
+        (xml::element&       parent
+        ,std::string const&  name
+        ) const;
 
     double banded_curr_sepacct_load
         (double assets
@@ -172,7 +194,19 @@ class LMI_SO stratified_charges
     double tiered_curr_m_and_e(double assets) const;
     double tiered_guar_m_and_e(double assets) const;
 
-    std::map<e_stratified, stratified_entity> dictionary;
+    stratified_entity CurrSepAcctLoadBandedByPrem;
+    stratified_entity GuarSepAcctLoadBandedByPrem;
+    stratified_entity CurrSepAcctLoadBandedByAssets;
+    stratified_entity GuarSepAcctLoadBandedByAssets;
+    stratified_entity CurrMandETieredByAssets;
+    stratified_entity GuarMandETieredByAssets;
+    stratified_entity AssetCompTieredByAssets;
+    stratified_entity InvestmentMgmtFeeTieredByAssets;
+    stratified_entity CurrSepAcctLoadTieredByAssets;
+    stratified_entity GuarSepAcctLoadTieredByAssets;
+    stratified_entity TieredAKPremTax;
+    stratified_entity TieredDEPremTax;
+    stratified_entity TieredSDPremTax;
 };
 
 bool LMI_SO is_highest_representable_double(double);

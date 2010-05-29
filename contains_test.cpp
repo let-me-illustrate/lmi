@@ -79,6 +79,8 @@ void test_contains()
     BOOST_TEST(!contains(w, x));
     BOOST_TEST( contains(w, "eta"));
     BOOST_TEST(!contains(w, "zeta"));
+    BOOST_TEST( contains(w, 'e'));
+    BOOST_TEST(!contains(w, 'q'));
 
     // Associative containers.
 
