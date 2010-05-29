@@ -30,8 +30,11 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "contains.hpp"
 #include "dbnames.hpp"
-#include "math_functors.hpp" // greater_of(), lesser_of()
+#include "et_vector.hpp"
+#include "handle_exceptions.hpp"
+#include "math_functors.hpp" // lesser_of()
 #include "print_matrix.hpp"
 #include "value_cast.hpp"
 #include "xml_serialize.hpp"
@@ -109,82 +112,50 @@ database_entity::~database_entity()
 {
 }
 
-void database_entity::reshape(std::vector<int> const& dims)
-{
-    LMI_ASSERT(e_number_of_axes == dims.size());
-    // Create a new instance of this class having the same
-    // key but the desired dimensions.
-    std::vector<double> new_data
-        (
-        std::accumulate
-            (dims.begin()
-            ,dims.end()
-            ,1
-            ,std::multiplies<int>()
-            )
-        );
-    database_entity new_object
-        (key()
-        ,dims
-        ,new_data
-        );
+/// Change dimensions.
+///
+/// Preconditions:
+///   - argument specifies the expected number of axes;
+///   - each axis in the argument has a permissible value;
+///   - data size would not be excessive.
+///
+/// Postconditions: all ctor postconditions are satisfied.
 
-    // ET !! std::vector<int> max_dims_used = max(axis_lengths_, dims);
-    // ...and then expunge this comment:
-    // greater length of src or dst along each axis
-    std::vector<int> max_dims_used(e_number_of_axes);
-    std::transform
-        (axis_lengths_.begin()
-        ,axis_lengths_.end()
-        ,dims.begin()
-        ,max_dims_used.begin()
-        ,greater_of<int>()
-        );
-    // TODO ?? Oops--erase above std::transform() call--want only dst axes.
-    max_dims_used = dims;
+void database_entity::reshape(std::vector<int> const& new_dims)
+{
+    LMI_ASSERT(e_number_of_axes == new_dims.size());
+    LMI_ASSERT(1 == new_dims[0] || e_max_dim_gender    == new_dims[0]);
+    LMI_ASSERT(1 == new_dims[1] || e_max_dim_class     == new_dims[1]);
+    LMI_ASSERT(1 == new_dims[2] || e_max_dim_smoking   == new_dims[2]);
+    LMI_ASSERT(1 == new_dims[3] || e_max_dim_issue_age == new_dims[3]);
+    LMI_ASSERT(1 == new_dims[4] || e_max_dim_uw_basis  == new_dims[4]);
+    LMI_ASSERT(1 == new_dims[5] || e_max_dim_state     == new_dims[5]);
+    LMI_ASSERT(1 <= new_dims[6] && new_dims[6] <= e_max_dim_duration);
 
     // Number of times we'll go through the assignment loop.
-    // TODO ?? prolly should use max_dims_used instead of dims here (they're the same).
-    int n_iter = std::accumulate
-        (dims.begin()
-        ,dims.end()
-        ,1
-        ,std::multiplies<int>()
-        );
+    int n_iter = getndata(new_dims);
 
-    // ET !! std::vector<int> dst_max_idx = dims - 1;
-    // ...and then expunge this comment:
-    // max index of dst along each axis
-    std::vector<int> dst_max_idx(dims);
-    std::transform
-        (dst_max_idx.begin()
-        ,dst_max_idx.end()
-        ,dst_max_idx.begin()
-        ,std::bind2nd(std::minus<int>(), 1)
-        );
-    // ET !! std::vector<int> src_max_idx = axis_lengths_ - 1;
-    // ...and then expunge this comment:
-    // max index of src along each axis
-    std::vector<int> src_max_idx(axis_lengths_);
-    std::transform
-        (src_max_idx.begin()
-        ,src_max_idx.end()
-        ,src_max_idx.begin()
-        ,std::bind2nd(std::minus<int>(), 1)
-        );
+    // Create a new instance of this class having the same key but the
+    // desired dimensions, for convenient use of operator[]().
+    std::vector<double> new_data(n_iter);
+    database_entity new_object(key(), new_dims, new_data);
 
-    // indexes new_object
-    std::vector<int> dst_idx(e_number_of_axes);
-    // indexes '*this'
-    std::vector<int> src_idx(e_number_of_axes);
+    std::vector<int> dst_max_idx(e_number_of_axes);
+    assign(dst_max_idx, new_dims - 1);
+
+    std::vector<int> src_max_idx(e_number_of_axes);
+    assign(src_max_idx, axis_lengths_ - 1);
+
+    std::vector<int> dst_idx(e_number_of_axes); // indexes new_object
+    std::vector<int> src_idx(e_number_of_axes); // indexes '*this'
 
     std::vector<int> working_idx(e_number_of_axes);
     for(int j = 0; j < n_iter; j++)
         {
         int z = j;
-        std::vector<int>::const_iterator i = max_dims_used.begin();
+        std::vector<int>::const_iterator i = new_dims.begin();
         std::vector<int>::iterator w = working_idx.begin();
-        while(i != max_dims_used.end())
+        while(i != new_dims.end())
             {
             LMI_ASSERT(0 != *i);
             *w = z % *i;
@@ -194,33 +165,18 @@ void database_entity::reshape(std::vector<int> const& dims)
             }
         LMI_ASSERT(0 == z);
 
-        // ET !! dst_idx = min(working_idx, dst_max_idx)
-        // ET !! src_idx = min(working_idx, src_max_idx)
-        // ...and then expunge this comment:
         // limit dst and source indexes to those that actually vary
-        std::transform
-            (working_idx.begin()
-            ,working_idx.end()
-            ,dst_max_idx.begin()
-            ,dst_idx.begin()
-            ,lesser_of<int>()
-            );
-        std::transform
-            (working_idx.begin()
-            ,working_idx.end()
-            ,src_max_idx.begin()
-            ,src_idx.begin()
-            ,lesser_of<int>()
-            );
+        assign(dst_idx, apply_binary(lesser_of<int>(), working_idx, dst_max_idx));
+        assign(src_idx, apply_binary(lesser_of<int>(), working_idx, src_max_idx));
         new_object[dst_idx] = operator[](src_idx);
         }
 
-// erase    (*this) = new_object;
-    axis_lengths_ = dims;
-    data_values_ = new_object.data_values_;
+    axis_lengths_ = new_dims;
+    data_values_  = new_object.data_values_;
+    assert_invariants();
 }
 
-/// Indexing operator for product editor only.
+/// Indexing operator for reshape() and product editor only.
 ///
 /// Two indexing operators are provided. This one's argument includes
 /// the number of durations--which, as far as the product editor is
@@ -346,26 +302,7 @@ std::ostream& database_entity::write(std::ostream& os) const
 
 void database_entity::assert_invariants() const
 {
-    if
-        (
-            axis_lengths_.end()
-        !=  std::find
-            (axis_lengths_.begin()
-            ,axis_lengths_.end()
-            ,0
-            )
-        )
-        {
-        fatal_error()
-            << "Database item '"
-            << GetDBNames()[key_].ShortName
-            << "' with key "
-            << key_
-            << " has zero in at least one dimension."
-            << LMI_FLUSH
-            ;
-        }
-
+    LMI_ASSERT(!contains(axis_lengths_, 0));
     LMI_ASSERT(getndata() == static_cast<int>(data_values_.size()));
     LMI_ASSERT
         (   0 < static_cast<int>(data_values_.size())
@@ -413,46 +350,60 @@ void database_entity::assert_invariants() const
             }
 }
 
-/// Calculate number of data required by lengths of axes.
+/// Calculate number of data required by lengths of object's axes.
 
 int database_entity::getndata() const
 {
-    // Use a double for this purpose so that we can detect whether
-    // the required number exceeds the maximum addressable number,
-    // because a double has a wider range than an integer type.
-    double n = std::accumulate
-        (axis_lengths_.begin()
-        ,axis_lengths_.end()
-        ,1.0
-        ,std::multiplies<double>()
-        );
+    try
+        {
+        return getndata(axis_lengths_);
+        }
+    catch(...)
+        {
+        report_exception();
+        fatal_error()
+            << "Database item '"
+            << GetDBNames()[key_].ShortName
+            << "' with key "
+            << key_
+            << " has invalid dimensions."
+            << LMI_FLUSH
+            ;
+        }
+    throw "Unreachable--silences a compiler diagnostic.";
+}
 
-    // Meaningful iff a long int is bigger than an int.
+/// Calculate number of data required by lengths of given axes.
+///
+/// Use a double-precision accumulator internally to avoid overflow.
+///
+/// Throw if the result equals zero or exceeds MaxPossibleElements.
+///
+/// Otherwise, return the result, cast to int. The enforced range
+/// contraints guarantee that the cast preserves value.
+
+int database_entity::getndata(std::vector<int> const& z)
+{
+    double n = std::accumulate(z.begin(), z.end(), 1.0, std::multiplies<double>());
+
     if(MaxPossibleElements < n)
         {
         fatal_error()
-            << "Database item '"
-            << GetDBNames()[key_].ShortName
-            << "' with key "
-            << key_
-            << " contains more than the maximum possible number of elements."
+            << "There are " << n
+            << " data, but at most " << MaxPossibleElements
+            << " are permitted."
             << LMI_FLUSH
             ;
         }
 
-    if(0 == n)
+    if(n <= 0)
         {
-        fatal_error()
-            << "Database item '"
-            << GetDBNames()[key_].ShortName
-            << "' with key "
-            << key_
-            << " has no data."
-            << LMI_FLUSH
-            ;
+        fatal_error() << "Number of data must exceed zero." << LMI_FLUSH;
         }
 
-    // Because MaxPossibleElements < n, this cast cannot lose information.
+    LMI_ASSERT(MaxPossibleElements <= std::numeric_limits<int>::max());
+    // Redundant but cheap guarantee that the cast preserves value:
+    LMI_ASSERT(1.0 <= n && n <= MaxPossibleElements);
     return static_cast<int>(n);
 }
 

@@ -33,6 +33,9 @@
   <xsl:variable name="ModifiedSinglePremium">
     <xsl:call-template name="set_modified_single_premium"/>
   </xsl:variable>
+  <xsl:variable name="ModifiedSinglePremium0">
+    <xsl:call-template name="set_modified_single_premium0"/>
+  </xsl:variable>
   <xsl:variable name="SinglePremium">
     <xsl:call-template name="set_single_premium"/>
   </xsl:variable>
@@ -182,7 +185,7 @@
                   It features accumulating account values, adjustable benefits,
                   and flexible premiums.
                 </xsl:when>
-                <xsl:when test="$ModifiedSinglePremium='1'">
+                <xsl:when test="$ModifiedSinglePremium='1' or $ModifiedSinglePremium0='1'">
                   <xsl:value-of select="$scalars/PolicyMktgName"/>
                   is a modified single premium adjustable life
                   insurance contract. It features accumulating
@@ -543,9 +546,9 @@ to the xsl files first.
                     are intended to be applied to an insurance policy
                     or certificate issued in conjunction with an intent
                     to qualify the exchange as a tax free exchange
-                    under Section 1035 of the Internal Revenue Code,
-                    we may assess an Exchange Charge. The Exchange Charge
-                    will potentially reduce the surrender proceeds,
+                    under Section 1035 of the Internal Revenue Code (1035
+                    Exchange), we may assess an Exchange Charge. The Exchange
+                    Charge will potentially reduce the surrender proceeds,
                     but will never increase the surrender proceeds.
                     Please refer to your contract for details.
                   </fo:block>
@@ -571,6 +574,19 @@ to the xsl files first.
                 and a detailed schedule of charges.
               </fo:block>
             </xsl:if>
+            <fo:block padding-top="1em">
+              <xsl:value-of select="$scalars/SurrenderFootnote"/>
+            </fo:block>
+            <fo:block padding-top="1em">
+             <xsl:value-of select="$scalars/FundRateFootnote"/>
+            </fo:block>
+            <fo:block>
+              &nbsp;&nbsp;<xsl:value-of select="$scalars/FundRateFootnote0"/>
+            </fo:block>
+            <fo:block>
+              &nbsp;&nbsp;<xsl:value-of select="$scalars/FundRateFootnote1"/>
+            </fo:block>
+
             <fo:block font-weight="bold" text-align="center" padding-top="1em">
               IMPORTANT TAX DISCLOSURE
             </fo:block>
@@ -649,14 +665,17 @@ to the xsl files first.
               </fo:inline>
               <xsl:value-of select="$scalars/AvName"/> Value less policy debt.
               <xsl:if test="$scalars/Has1035ExchCharge='1'">
-                The <xsl:value-of select="$scalars/CsvName"/> Value
-                does not reflect an Exchange Charge, which may be assessed
-                under the policy where surrender proceeds are intended
-                to be applied to an insurance policy or certificate issued
-                with an intent to qualify the exchange as a tax free exchange
-                under Section 1035 of the Internal Revenue Code.
+                <xsl:value-of select="$scalars/CashSurrValueFootnote"/>
               </xsl:if>
             </fo:block>
+            <xsl:if test="$scalars/IsInforce!='1'">
+              <fo:block padding-top="1em">
+                <fo:inline font-weight="bold">
+                  Current Illustrated Crediting Rate:
+                </fo:inline>
+                  <xsl:value-of select="$scalars/CreditingRateFootnote"/>
+              </fo:block>
+            </xsl:if>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">
                 Current Values:
@@ -729,13 +748,7 @@ to the xsl files first.
                   <fo:inline font-weight="bold">
                     Exchange Charge:
                   </fo:inline>
-                  Where surrender proceeds are intended to be applied
-                  to an insurance policy or certificate issued with an intent
-                  to qualify the exchange as a tax free exchange
-                  under Section 1035 of the Internal Revenue Code,
-                  there is a potential reduction in surrender proceeds.
-                  Please see the contract endorsement for a detailed description
-                  of the Exchange Charge.
+                    <xsl:value-of select="$scalars/ExchangeChargeFootnote1"/>
                 </fo:block>
               </xsl:if>
             </xsl:if>
@@ -758,16 +771,6 @@ to the xsl files first.
               and the guaranteed maximum monthly charges. These values
               are based on the assumption that premium is paid as illustrated.
             </fo:block>
-            <xsl:if test="$scalars/IsInforce!='1'">
-              <fo:block padding-top="1em">
-                <fo:inline font-weight="bold">
-                  Illustrated Crediting Rate:
-                </fo:inline>
-                The current interest rate illustrated.
-                This rate is not guaranteed and is subject
-                to change by <xsl:value-of select="$scalars/InsCoName"/>.
-              </fo:block>
-            </xsl:if>
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">
                 MEC:
@@ -795,7 +798,7 @@ to the xsl files first.
               </fo:block>
             </xsl:if>
             <!-- Single Premium Logic -->
-            <xsl:if test="$ModifiedSinglePremium='1'">
+            <xsl:if test="$ModifiedSinglePremium='1' or $ModifiedSinglePremium0='1'">
               <fo:block padding-top="1em">
                 <fo:inline font-weight="bold">
                   Modified Single Premium:
@@ -823,7 +826,7 @@ to the xsl files first.
               or other premium payor.
             </fo:block>
             <!-- Single Premium Logic -->
-            <xsl:if test="$SinglePremium='1' and $ModifiedSinglePremium!='1'">
+            <xsl:if test="$SinglePremium='1' and $ModifiedSinglePremium0='0' and $ModifiedSinglePremium='0'">
               <fo:block padding-top="1em">
                 <fo:inline font-weight="bold">
                   Single Premium:
@@ -840,12 +843,7 @@ to the xsl files first.
                 <fo:inline font-weight="bold">
                   Ultimate Illustrated Crediting Rate:
                 </fo:inline>
-                The current interest rate illustrated for policy years
-                6 and later. The illustrated crediting rates for policy years
-                2 through 5 are based on a blend of the Initial
-                and Ultimate Illustrated Crediting Rates.
-                These rates are not guaranteed and are subject
-                to change by <xsl:value-of select="$scalars/InsCoName"/>.
+                  <xsl:value-of select="$scalars/UltCreditingRateFootnote"/>
               </fo:block>
             </xsl:if>
           </fo:block>
@@ -1248,7 +1246,14 @@ to the xsl files first.
                 <!-- Single Premium Logic -->
                 <fo:block>
                   Ultimate Illustrated Crediting Rate:
-                  <xsl:value-of select="$vectors[@name='AnnGAIntRate_Current']/duration[6]/@column_value"/>
+                <xsl:choose>
+                  <xsl:when test="$ModifiedSinglePremium0='1'">
+                    <xsl:value-of select="$vectors[@name='AnnGAIntRate_Current']/duration[11]/@column_value"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                     <xsl:value-of select="$vectors[@name='AnnGAIntRate_Current']/duration[6]/@column_value"/>
+                  </xsl:otherwise>
+                </xsl:choose>
                 </fo:block>
               </xsl:if>
               <!-- Update with "FriendlyUWType" - Get From Greg -->
@@ -1738,7 +1743,7 @@ to the xsl files first.
 
   <xsl:template name="set_single_premium">
     <xsl:variable name="A" select="string-length($scalars/PolicyMktgName) &gt; 5"/>
-    <xsl:variable name="B" select="substring($scalars/PolicyLegalName, 1, 6) = 'Single'"/>
+    <xsl:variable name="B" select="substring($scalars/PolicyLegalName, 1, 6) = 'Single' or substring($scalars/PolicyLegalName, 1, 8) = 'Modified'"/>
     <xsl:value-of select="number($A and $B)"/>
   </xsl:template>
 
@@ -1747,6 +1752,12 @@ to the xsl files first.
     <xsl:variable name="B" select="substring($scalars/PolicyLegalName, 1, 6) = 'Single'"/>
     <xsl:variable name="C" select="$scalars/StatePostalAbbrev = 'MA'"/>
     <xsl:value-of select="number($A and $B and $C)"/>
+  </xsl:template>
+
+  <xsl:template name="set_modified_single_premium0">
+    <xsl:variable name="A" select="string-length($scalars/PolicyMktgName) &gt; 5"/>
+    <xsl:variable name="B" select="substring($scalars/PolicyLegalName, 1, 8) = 'Modified'"/>
+    <xsl:value-of select="number($A and $B)"/>
   </xsl:template>
 
   <xsl:template name="set_group_experience_rating">

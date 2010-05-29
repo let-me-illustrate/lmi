@@ -30,6 +30,7 @@
 
 #include "alert.hpp"
 #include "any_member.hpp"         // MemberSymbolTable<>
+#include "contains.hpp"
 #include "platform_dependent.hpp" // access()
 #include "value_cast.hpp"
 #include "xml_lmi.hpp"
@@ -290,7 +291,7 @@ bool xml_serializable<T>::is_detritus(std::string const&) const
         {"Remove this string when adding the first removed entity."
         };
     static std::vector<std::string> const v(a, a + lmi_array_size(a));
-    return v.end() != std::find(v.begin(), v.end(), s);
+    return contains(v, s);
 #endif // 0
 }
 

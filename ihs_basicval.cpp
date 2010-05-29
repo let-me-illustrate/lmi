@@ -33,6 +33,7 @@
 #include "assert_lmi.hpp"
 #include "calendar_date.hpp"
 #include "configurable_settings.hpp"
+#include "contains.hpp"
 #include "data_directory.hpp"
 #include "database.hpp"
 #include "death_benefits.hpp"
@@ -467,7 +468,7 @@ void BasicValues::Init7702()
         ,MlyDcvqc.begin()
         ,round_coi_rate()
         );
-    if(std::string::npos != yare_input_.Comments.find("idiosyncrasy_dcvq"))
+    if(contains(yare_input_.Comments, "idiosyncrasy_dcvq"))
         {
         std::ostringstream oss;
         oss
@@ -765,7 +766,7 @@ void BasicValues::SetPermanentInvariants()
     Database_->Query(FreeWDProportion, DB_FreeWDProportion);
 
     Database_->Query(DBDiscountRate, DB_NAARDiscount);
-    LMI_ASSERT(DBDiscountRate.end() == std::find(DBDiscountRate.begin(), DBDiscountRate.end(), -1.0));
+    LMI_ASSERT(!contains(DBDiscountRate, -1.0));
 // This would be more natural:
 //    assign(DBDiscountRate, 1.0 / (1.0 + DBDiscountRate));
 // but we avoid it for the nonce because it causes slight regression errors.

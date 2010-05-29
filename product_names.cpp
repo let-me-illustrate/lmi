@@ -29,6 +29,7 @@
 #include "product_names.hpp"
 
 #include "alert.hpp"
+#include "contains.hpp"
 #include "global_settings.hpp"
 #include "miscellany.hpp"
 #include "path_utility.hpp" // fs::path inserter
@@ -86,9 +87,7 @@ std::vector<std::string> const& product_names()
 std::string const& default_product_name()
 {
     static std::string const default_name =
-        (   product_names().end()
-        !=  std::find(product_names().begin(), product_names().end(), "sample")
-        )
+        contains(product_names(), "sample")
         ? std::string("sample")
         : product_names().front()
         ;

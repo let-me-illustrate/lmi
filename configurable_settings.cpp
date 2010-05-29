@@ -29,6 +29,7 @@
 #include "configurable_settings.hpp"
 
 #include "alert.hpp"
+#include "contains.hpp"
 #include "data_directory.hpp"     // AddDataDir()
 #include "handle_exceptions.hpp"
 #include "miscellany.hpp"
@@ -42,7 +43,7 @@
 
 #include <xmlwrapp/nodes_view.h>
 
-#include <algorithm> // std::find()
+#include <algorithm> // std::copy()
 #include <iterator>
 #include <sstream>
 
@@ -127,7 +128,7 @@ bool is_detritus(std::string const& s)
         ,"xslt_tab_delimited_filename"       // Withdrawn.
         };
     static std::vector<std::string> const v(a, a + lmi_array_size(a));
-    return v.end() != std::find(v.begin(), v.end(), s);
+    return contains(v, s);
 }
 
 std::string const& xml_root_name()
@@ -222,10 +223,7 @@ void configurable_settings::load()
     for(cnvi i = elements.begin(); i != elements.end(); ++i)
         {
         std::string name = i->get_name();
-        if
-            (   member_names().end()
-            !=  std::find(member_names().begin(), member_names().end(), name)
-            )
+        if(contains(member_names(), name))
             {
             operator[](i->get_name()) = xml_lmi::get_content(*i);
             }

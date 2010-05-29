@@ -256,11 +256,25 @@ int test_main(int, char*[])
 
     BOOST_TEST_EQUAL(-1.0 , i_upper_12_over_12_from_i_naive<double>()(-1.0));
     BOOST_TEST_EQUAL(-1.0 , i_upper_12_over_12_from_i      <double>()(-1.0));
+    BOOST_TEST_THROW
+        (d_upper_12_from_i        <double>()(-1.0)
+        ,std::range_error
+        ,"i equals -100%."
+        );
 
     // Test nonsensical interest rate of -101%.
 
     BOOST_TEST(lmi_isnan(i_upper_12_over_12_from_i_naive<double>()(-1.01)));
-    BOOST_TEST(lmi_isnan(i_upper_12_over_12_from_i<double>()      (-1.01)));
+    BOOST_TEST_THROW
+        (i_upper_12_over_12_from_i<double>()(-1.01)
+        ,std::domain_error
+        ,"i is less than -100%."
+        );
+    BOOST_TEST_THROW
+        (d_upper_12_from_i        <double>()(-1.01)
+        ,std::domain_error
+        ,"i is less than -100%."
+        );
 
     // Gross should equal net if decrements are both zero.
 

@@ -26,6 +26,7 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
+#include "contains.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
 
@@ -104,7 +105,7 @@ std::vector<std::string> vectorize(std::string const& s)
 
 bool contains_regex0(std::string const& regex)
 {
-    return std::string::npos != text.find(regex);
+    return contains(text, regex);
 }
 
 /// Match a regex line by line.

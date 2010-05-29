@@ -31,10 +31,11 @@
 
 #include "alert.hpp"
 #include "calendar_date.hpp"
+#include "contains.hpp"
 #include "global_settings.hpp"
 #include "miscellany.hpp" // lmi_array_size()
 
-#include <algorithm>      // std::find(), std::min()
+#include <algorithm>      // std::min()
 #include <stdexcept>
 
 template class xml_serializable<Input>;
@@ -113,7 +114,7 @@ bool Input::is_detritus(std::string const& s) const
         ,"YearsOfZeroDeaths"             // Withdrawn.
         };
     static std::vector<std::string> const v(a, a + lmi_array_size(a));
-    return v.end() != std::find(v.begin(), v.end(), s);
+    return contains(v, s);
 }
 
 void Input::redintegrate_ex_ante
@@ -286,13 +287,7 @@ void Input::redintegrate_ex_post
         // An older version with no distinct 'file_version' didn't
         // have 'DefinitionOfMaterialChange', whose default value is
         // unacceptable for GPT.
-        if
-            (residuary_names.end() != std::find
-                (residuary_names.begin()
-                ,residuary_names.end()
-                ,std::string("DefinitionOfMaterialChange")
-                )
-            )
+        if(contains(residuary_names, "DefinitionOfMaterialChange"))
             {
             DefinitionOfMaterialChange =
                 mce_gpt == DefinitionOfLifeInsurance
@@ -317,13 +312,7 @@ void Input::redintegrate_ex_post
         {
         // 'UseCurrentDeclaredRate' was introduced 20071017T1454Z; its
         // default value of "Yes" would break backward compatibility.
-        if
-            (residuary_names.end() != std::find
-                (residuary_names.begin()
-                ,residuary_names.end()
-                ,std::string("UseCurrentDeclaredRate")
-                )
-            )
+        if(contains(residuary_names, "UseCurrentDeclaredRate"))
             {
             UseCurrentDeclaredRate = "No";
             }

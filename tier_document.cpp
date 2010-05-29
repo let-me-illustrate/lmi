@@ -53,34 +53,26 @@ TierDocument::~TierDocument()
 
 void TierDocument::initialize_charges()
 {
-    typedef std::map<e_stratified, stratified_entity> dictionary_t;
-
-    charges_.initialize_dictionary();
-
-    stratified_entity dummy_entity
+    static stratified_entity const dummy_entity
         (std::vector<double>(1, DBL_MAX) // limits
         ,std::vector<double>(1, 0)       // values
         );
-
-    for
-        (dictionary_t::iterator it = charges_.dictionary.begin()
-        ,                       end = charges_.dictionary.end()
-        ;it != end
-        ;++it
-        )
+    std::vector<std::string> const& v = charges_.member_names();
+    typedef std::vector<std::string>::const_iterator svci;
+    for(svci i = v.begin(); i != v.end(); ++i)
         {
-        it->second = dummy_entity;
+        charges_.datum(*i) = dummy_entity;
         }
 }
 
 void TierDocument::ReadDocument(std::string const& filename)
 {
-    charges_.read(filename);
+    charges_.load(filename);
 }
 
 void TierDocument::WriteDocument(std::string const& filename)
 {
-    charges_.write(filename);
+    charges_.save(filename);
 }
 
 stratified_entity& TierDocument::get_stratified_entity(e_stratified index)

@@ -29,6 +29,7 @@
 #include "icon_monger.hpp"
 
 #include "alert.hpp"
+#include "contains.hpp"
 #include "data_directory.hpp"
 #include "map_lookup.hpp"
 #include "path_utility.hpp" // fs::path inserter
@@ -39,19 +40,6 @@
 #include <wx/image.h>
 
 #include <sstream>
-
-namespace
-{
-// SOMEDAY !! Write a "contains.hpp" header that implements this
-// function for every standard container as well as std::string.
-// Rationale: this usage represents half of our find() calls, and
-// the idiom is verbose.
-template<typename Key, typename Compare, typename Allocator>
-bool contains(std::set<Key,Compare,Allocator> const& c, Key const& k)
-{
-    return c.end() != c.find(k);
-}
-} // Unnamed namespace.
 
 /// Enumerate lmi icon names; map 'wxART_' id's to icon names.
 ///

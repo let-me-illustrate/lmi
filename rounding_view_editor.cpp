@@ -29,6 +29,7 @@
 #include "rounding_view_editor.hpp"
 
 #include "alert.hpp"
+#include "map_lookup.hpp"
 #include "wx_new.hpp"
 
 #include <wx/bitmap.h>
@@ -40,6 +41,7 @@
 #include <wx/window.h>
 
 #include <map>
+#include <ostream>
 #include <sstream>
 #include <utility>
 
@@ -113,20 +115,23 @@ button_bitmaps const& all_button_bitmaps()
     return bitmaps;
 }
 
+/// Streaming operator to support map_lookup().
+
+std::ostream& operator<<
+    (std::ostream& os
+    ,std::pair<rounding_style,enum_bitmap_button_state> const& b
+    )
+{
+    return os << "style " << b.first << " state " << b.second;
+}
+
 // return the bitmap corrsponding to the 'button' in the 'state'
 wxBitmap const& get_button_bitmap
     (rounding_style button
     ,enum_bitmap_button_state state
     )
 {
-    button_bitmaps const& bitmaps = all_button_bitmaps();
-    button_bitmaps::const_iterator it =
-        bitmaps.find(std::make_pair(button, state));
-    if(it == bitmaps.end())
-        {
-        fatal_error() << "Unknown or missing button bitmap" << LMI_FLUSH;
-        }
-    return it->second;
+    return map_lookup(all_button_bitmaps(), std::make_pair(button, state));
 }
 
 void style_button(wxBitmapButton& button, rounding_style style, bool selected)

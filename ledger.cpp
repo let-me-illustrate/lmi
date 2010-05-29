@@ -406,12 +406,7 @@ bool Ledger::GetIsComposite() const
 //============================================================================
 LedgerVariant const& Ledger::GetOneVariantLedger(mcenum_run_basis b) const
 {
-    ledger_map_t::const_iterator i(GetLedgerMap().held().find(b));
-    if(i == GetLedgerMap().held().end())
-        {
-        fatal_error() << "No values for basis '" << mc_str(b) << "'" << LMI_FLUSH;
-        }
-    return i->second;
+    return map_lookup(GetLedgerMap().held(), b);
 }
 
 //============================================================================

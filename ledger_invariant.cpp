@@ -267,6 +267,10 @@ void LedgerInvariant::Alloc(int len)
     Strings         ["InforceNonGuaranteedFootnote3" ] = &InforceNonGuaranteedFootnote3  ;
     Strings         ["NonGuaranteedFootnote"         ] = &NonGuaranteedFootnote          ;
     Strings         ["MonthlyChargesPaymentFootnote" ] = &MonthlyChargesPaymentFootnote  ;
+    Strings         ["SurrenderFootnote"             ] = &SurrenderFootnote              ;
+    Strings         ["FundRateFootnote"              ] = &FundRateFootnote               ;
+    Strings         ["FundRateFootnote0"             ] = &FundRateFootnote0              ;
+    Strings         ["FundRateFootnote1"             ] = &FundRateFootnote1              ;
 
     Strings         ["ProducerName"          ] = &ProducerName           ;
     Strings         ["ProducerStreet"        ] = &ProducerStreet         ;
@@ -665,6 +669,10 @@ void LedgerInvariant::Init(BasicValues* b)
         InforceNonGuaranteedFootnote3  = p.datum("InforceNonGuaranteedFootnote3"  );
         NonGuaranteedFootnote          = p.datum("NonGuaranteedFootnote"          );
         MonthlyChargesPaymentFootnote  = p.datum("MonthlyChargesPaymentFootnote"  );
+        SurrenderFootnote              = p.datum("SurrenderFootnote"              );
+        FundRateFootnote               = p.datum("FundRateFootnote"               );
+        FundRateFootnote0              = p.datum("FundRateFootnote0"              );
+        FundRateFootnote1              = p.datum("FundRateFootnote1"              );
         }
 
     ProducerName            = (*b->Input_)["AgentName"].str();
@@ -958,8 +966,12 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     InforceNonGuaranteedFootnote1  = a_Addend.InforceNonGuaranteedFootnote1;
     InforceNonGuaranteedFootnote2  = a_Addend.InforceNonGuaranteedFootnote2;
     InforceNonGuaranteedFootnote3  = a_Addend.InforceNonGuaranteedFootnote3;
-    NonGuaranteedFootnote   = a_Addend.NonGuaranteedFootnote;
+    NonGuaranteedFootnote          = a_Addend.NonGuaranteedFootnote;
     MonthlyChargesPaymentFootnote  = a_Addend.MonthlyChargesPaymentFootnote;
+    SurrenderFootnote              = a_Addend.SurrenderFootnote;
+    FundRateFootnote               = a_Addend.FundRateFootnote;
+    FundRateFootnote0              = a_Addend.FundRateFootnote0;
+    FundRateFootnote1              = a_Addend.FundRateFootnote1;
 
     Comments                    = a_Addend.Comments;
 
