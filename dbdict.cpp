@@ -33,6 +33,7 @@
 #include "data_directory.hpp"
 #include "dbnames.hpp"
 #include "global_settings.hpp"
+#include "handle_exceptions.hpp"
 #include "mc_enum_type_enums.hpp"
 #include "miscellany.hpp"
 #include "oecumenic_enumerations.hpp"
@@ -159,7 +160,9 @@ void DBDictionary::Init(std::string const& filename)
         {
         InvalidateCache();
         fatal_error()
-            << "is not up to date or is corrupted."
+            << "File '"
+            << filename
+            << "' is not up to date or is corrupted."
             << " It should contain " << NumberOfEntries
             << " elements, but it actually contains " << dictionary_.size()
             << " elements."
@@ -773,8 +776,15 @@ void print_databases()
             {
             continue;
             }
-
-        DBDictionary::instance().Init(i->string());
+        try
+            {
+            DBDictionary::instance().Init(i->string());
+            }
+        catch(...)
+            {
+            report_exception();
+            continue;
+            }
         fs::path out_file = fs::change_extension(*i, ".dbt");
         fs::ofstream os(out_file, ios_out_trunc_binary());
         dict_map const& dictionary = DBDictionary::instance().GetDictionary();
