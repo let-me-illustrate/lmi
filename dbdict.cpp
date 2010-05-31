@@ -86,8 +86,20 @@ template<> struct xml_io<dict_map>
     static void to_xml(xml::element& e, dict_map const& t)
     {
         e.erase(e.begin(), e.end());
+        // Eventually the map key will be a string, not an integer.
+        // Anticipatorily sort output in the eventual order.
+        std::map<std::string,database_entity> m;
         typedef dict_map::const_iterator tci;
         for(tci i = t.begin(); i != t.end(); ++i)
+            {
+            db_names const& n = GetDBNames()[i->first];
+            LMI_ASSERT(i->first == n.Idx);
+            LMI_ASSERT(i->first == i->second.key());
+            LMI_ASSERT(n.ShortName == db_name_from_key(i->first));
+            m[n.ShortName] = i->second;
+            }
+        typedef std::map<std::string,database_entity>::const_iterator mci;
+        for(mci i = m.begin(); i != m.end(); ++i)
             {
             // This is not equivalent to calling set_element():
             // multiple <item> elements are expressly permitted.
