@@ -25873,3 +25873,19 @@ Add a modified single premium nuance.
   version.hpp
 Mark release candidate.
 
+20100530T2243Z <gchicares@sbcglobal.net> [704]
+
+  dbdict.cpp
+Improve robustness. Formerly, '--print_db' halted at the first error.
+Now, it reports all errors, and writes all the '.dbt' files it can.
+
+20100531T0002Z <gchicares@sbcglobal.net> [704]
+
+  dbdict.cpp
+Write '.database' elements in name order.
+
+20100531T1309Z <gchicares@sbcglobal.net> [704]
+
+  dbdict.cpp
+Write only leaf elements to xml, excluding GUI topic nodes.
+
