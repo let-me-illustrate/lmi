@@ -55,23 +55,6 @@ std::string DBDictionary::cached_filename_;
 unsigned int const NumberOfEntries = DB_LAST;
 unsigned int const NumberOfLeaves  = DB_LAST - 23;
 
-//============================================================================
-DBDictionary& DBDictionary::instance()
-{
-    static DBDictionary z;
-    return z;
-}
-
-//============================================================================
-DBDictionary::DBDictionary()
-{
-}
-
-//============================================================================
-DBDictionary::~DBDictionary()
-{
-}
-
 namespace xml_serialize
 {
 template<> struct xml_io<database_entity>
@@ -133,6 +116,20 @@ template<> struct xml_io<dict_map>
     }
 };
 } // namespace xml_serialize
+
+DBDictionary& DBDictionary::instance()
+{
+    static DBDictionary z;
+    return z;
+}
+
+DBDictionary::DBDictionary()
+{
+}
+
+DBDictionary::~DBDictionary()
+{
+}
 
 namespace
 {
@@ -204,7 +201,6 @@ void DBDictionary::InvalidateCache()
     cached_filename_.clear();
 }
 
-//============================================================================
 void DBDictionary::WriteDB(std::string const& filename)
 {
     InvalidateCache();
@@ -322,7 +318,6 @@ void DBDictionary::InitDB()
         );
 }
 
-//============================================================================
 void DBDictionary::WriteSampleDBFile()
 {
     InitDB();
