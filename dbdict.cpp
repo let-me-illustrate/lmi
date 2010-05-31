@@ -49,7 +49,11 @@
 
 std::string DBDictionary::cached_filename_;
 
-int const NumberOfEntries = DB_LAST;
+// '23' is the number of non-leaf entities. Soon it will become
+// unnecessary, so there's no point in deriving it in a more
+// robust way.
+unsigned int const NumberOfEntries = DB_LAST;
+unsigned int const NumberOfLeaves  = DB_LAST - 23;
 
 //============================================================================
 DBDictionary& DBDictionary::instance()
@@ -96,8 +100,14 @@ template<> struct xml_io<dict_map>
             LMI_ASSERT(i->first == n.Idx);
             LMI_ASSERT(i->first == i->second.key());
             LMI_ASSERT(n.ShortName == db_name_from_key(i->first));
+            // Only leaf entities are wanted.
+            if(DB_FIRST == n.ParentIdx)
+                {
+                continue;
+                }
             m[n.ShortName] = i->second;
             }
+        LMI_ASSERT(NumberOfLeaves == m.size());
         typedef std::map<std::string,database_entity>::const_iterator mci;
         for(mci i = m.begin(); i != m.end(); ++i)
             {
@@ -168,14 +178,14 @@ void DBDictionary::Init(std::string const& filename)
 
     xml_serialize::from_xml(root, dictionary_);
 
-    if(NumberOfEntries != static_cast<int>(dictionary_.size()))
+    if(NumberOfLeaves != dictionary_.size())
         {
         InvalidateCache();
         fatal_error()
             << "File '"
             << filename
             << "' is not up to date or is corrupted."
-            << " It should contain " << NumberOfEntries
+            << " It should contain " << NumberOfLeaves
             << " elements, but it actually contains " << dictionary_.size()
             << " elements."
             << LMI_FLUSH
@@ -198,7 +208,7 @@ void DBDictionary::InvalidateCache()
 void DBDictionary::WriteDB(std::string const& filename)
 {
     InvalidateCache();
-    if(NumberOfEntries != static_cast<int>(dictionary_.size()))
+    if(NumberOfEntries != dictionary_.size())
         {
         fatal_error()
             << "Error writing database '"
@@ -206,7 +216,7 @@ void DBDictionary::WriteDB(std::string const& filename)
             << "': the database has " << dictionary_.size()
             << " entries, but should have " << NumberOfEntries << '.'
             ;
-        for(int j = 0; j < NumberOfEntries; j++)
+        for(unsigned int j = 0; j < NumberOfEntries; j++)
             {
             if(!dictionary_.count(j))
                 {
