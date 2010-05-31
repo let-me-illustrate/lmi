@@ -208,7 +208,9 @@ void DBDictionary::InvalidateCache()
 void DBDictionary::WriteDB(std::string const& filename)
 {
     InvalidateCache();
-    if(NumberOfEntries != dictionary_.size())
+    // When the GUI product editor loads a file and later saves it,
+    // its database contains only leaf entries.
+    if(NumberOfLeaves != dictionary_.size() && NumberOfEntries != dictionary_.size())
         {
         fatal_error()
             << "Error writing database '"
