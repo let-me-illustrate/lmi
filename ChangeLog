@@ -25889,3 +25889,24 @@ Write '.database' elements in name order.
   dbdict.cpp
 Write only leaf elements to xml, excluding GUI topic nodes.
 
+20100531T1605Z <gchicares@sbcglobal.net> [704]
+
+  dbdict.cpp
+Accommodate GUI product editor.
+
+20100531T2342Z <gchicares@sbcglobal.net> [704]
+
+  dbdict.cpp
+Remove old markup; rearrange.
+
+20100601T2004Z <gchicares@sbcglobal.net> [704]
+
+  authenticity.cpp
+Clarify diagnostics.
+
+20100601T2005Z <gchicares@sbcglobal.net> [704]
+
+  workhorse.make
+Fix date calculations. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-06/msg00001.html
+
