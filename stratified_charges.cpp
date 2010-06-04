@@ -108,7 +108,7 @@ stratified_entity::~stratified_entity()
 {
 }
 
-bool stratified_entity::operator==(stratified_entity const& z)
+bool stratified_entity::operator==(stratified_entity const& z) const
 {
     return
            limits_ == z.limits_
