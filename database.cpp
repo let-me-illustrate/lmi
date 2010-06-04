@@ -224,7 +224,7 @@ bool product_database::varies_by_state(e_database_key k) const
 void product_database::initialize()
 {
     index_ = database_index(Gender, Class, Smoker, IssueAge, UWBasis, State);
-    length_ = static_cast<int>(Query(DB_EndtAge)) - IssueAge;
+    length_ = static_cast<int>(Query(DB_MaturityAge)) - IssueAge;
     LMI_ASSERT(0 < length_ && length_ <= methuselah);
 }
 

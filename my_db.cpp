@@ -50,7 +50,7 @@ void DBDictionary::WriteProprietaryDBFiles()
   // Sample policy form.
   {
     InitDB();
-    Add(database_entity(DB_GuarPolFee, 10.00));
+    Add(database_entity(DB_GuarMonthlyPolFee, 10.00));
     // etc.
 // Not necessary for 'sample' product only, because it's built in.
 //  WriteDB(AddDataDir("sample.database"));
