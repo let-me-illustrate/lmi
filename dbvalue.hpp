@@ -108,6 +108,8 @@ class LMI_SO database_entity
         );
     ~database_entity();
 
+    bool operator==(database_entity const&) const;
+
     void reshape(std::vector<int> const& dims);
 
     double const* operator[](database_index const& idx) const;
