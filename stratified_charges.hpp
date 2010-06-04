@@ -80,7 +80,7 @@ class LMI_SO stratified_entity
         );
     ~stratified_entity();
 
-    bool operator==(stratified_entity const&);
+    bool operator==(stratified_entity const&) const;
 
     void read (xml::element const& node);
     void write(xml::element&) const;
