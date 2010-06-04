@@ -25940,3 +25940,15 @@ Update unit test to reflect diagnostics changed 20100601T2004Z.
   surrchg_rates.cpp
 Rename numerous database entities to improve concinnity.
 
+20100604T2220Z <gchicares@sbcglobal.net> [704]
+
+  stratified_charges.cpp
+  stratified_charges.hpp
+Improve const-correctness.
+
+20100604T2221Z <gchicares@sbcglobal.net> [704]
+
+  dbvalue.cpp
+  dbvalue.hpp
+Add operator==().
+
