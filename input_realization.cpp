@@ -603,7 +603,7 @@ std::string Input::RealizeDeathBenefitOption()
         }
 
     if
-        (   !database_->Query(DB_AllowChangeToDBO2)
+        (   !database_->Query(DB_AllowChangeToDbo2)
         &&  !nonstd::is_sorted
                 (DeathBenefitOptionRealized_.begin()
                 ,DeathBenefitOptionRealized_.end()
@@ -621,7 +621,7 @@ std::string Input::RealizeDeathBenefitOption()
         }
 
     if
-        (   !database_->Query(DB_AllowDBO3)
+        (   !database_->Query(DB_AllowDbo3)
         &&  contains(DeathBenefitOptionRealized_, mce_dbopt("ROP"))
         )
         {
@@ -890,7 +890,7 @@ std::string Input::RealizeWithdrawal()
         return s;
         }
 
-    if(!database_->Query(DB_AllowWD))
+    if(!database_->Query(DB_AllowWd))
         {
         if(!each_equal(WithdrawalRealized_.begin(), WithdrawalRealized_.end(), 0.0))
             {
@@ -899,7 +899,7 @@ std::string Input::RealizeWithdrawal()
         }
     else
         {
-        double lowest_allowed_withdrawal = database_->Query(DB_MinWD);
+        double lowest_allowed_withdrawal = database_->Query(DB_MinWd);
         for
             (std::vector<tnr_unrestricted_double>::iterator i = WithdrawalRealized_.begin()
             ;i < WithdrawalRealized_.end()

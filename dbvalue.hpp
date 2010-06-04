@@ -137,7 +137,7 @@ class LMI_SO database_entity
 std::vector<int> const& maximum_database_dimensions();
 
 /*
-Some data are scalar by nature--for example, maturity age (DB_EndtAge).
+Some data are scalar by nature--for example, DB_MaturityAge.
 Someday we might add a flag here to express that constraint; until then,
 it's enforced passim by using a scalar-only Query() function.
 
