@@ -967,18 +967,15 @@ archive_shared_data_files:
 fardel_name := lmi-$(yyyymmddhhmm)
 fardel_dir  := $(prefix)/$(fardel_name)
 
-# The first value assigned to 'd1' shows one possibility for the
-# beginning date. It's deliberately overridden with another that sets
-# the beginning date to the current date. The obvious y2038 problem is
-# ignored because any breakage it causes will be obvious.
+# The obvious y2038 problem is ignored because any breakage it causes
+# will be, well, obvious.
 
 fardel_date_script := \
   d0=`$(DATE) +%Y-%m-01`; \
-  d1=`$(DATE) --utc --date="$$d0 + 1 month         " +%s`; \
-  d1=`$(DATE) --utc +%s`; \
-  d2=`$(DATE) --utc --date="$$d0 + 2 months - 1 day" +%s`; \
-  j1=`expr 2440587 + $$d1 / 86400`; \
-  j2=`expr 2440587 + $$d2 / 86400`; \
+  d1=`$(DATE) --utc --date="$$d0 + 1 month " +%s`; \
+  d2=`$(DATE) --utc --date="$$d0 + 2 months" +%s`; \
+  j1=`expr 2440588 + $$d1 / 86400`; \
+  j2=`expr 2440588 + $$d2 / 86400`; \
   echo -n "$$j1 $$j2" >expiry; \
 
 # Several shared libraries are required by lmi, but there seems to be

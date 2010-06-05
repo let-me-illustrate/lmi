@@ -694,7 +694,7 @@ void AccountValue::SetInitialValues()
     ItLapsed                    = false;
     VariantValues().LapseMonth  = 11;
     VariantValues().LapseYear   = BasicValues::GetLength();
-// TODO ?? Length should be Database_->Query(DB_EndtAge);
+// TODO ?? Length should be Database_->Query(DB_MaturityAge);
 
     InvariantValues().IsMec     = false;
     InvariantValues().MecMonth  = 11;
@@ -729,9 +729,9 @@ void AccountValue::SetInitialValues()
     MlyDed                      = 0.0;
     CumulativeSalesLoad         = 0.0; // INFORCE !! Add to inforce input.
 
-    CoiRetentionRate                  = Database_->Query(DB_ExpRatCOIRetention);
+    CoiRetentionRate                  = Database_->Query(DB_ExpRatCoiRetention);
     ExperienceRatingAmortizationYears = Database_->Query(DB_ExpRatAmortPeriod);
-    IbnrAsMonthsOfMortalityCharges    = Database_->Query(DB_ExpRatIBNRMult);
+    IbnrAsMonthsOfMortalityCharges    = Database_->Query(DB_ExpRatIbnrMult);
 
     Dumpin             = Outlay_->dumpin();
     External1035Amount = Outlay_->external_1035_amount();
@@ -964,7 +964,7 @@ void AccountValue::InitializeSpecAmt()
     TermSpecAmt         = InvariantValues().TermSpecAmt[Year];
 
     int target_year = Year;
-    if(Database_->Query(DB_TgtPmFixedAtIssue))
+    if(Database_->Query(DB_TgtPremFixedAtIssue))
         {
         target_year = 0;
         }
@@ -985,7 +985,7 @@ void AccountValue::InitializeSpecAmt()
 //
 // Motivation for GetTgtPrem(): encapsulate calculations that need to
 // return the exact target premium, respecting all arcana such as
-// 'DB_TgtPmFixedAtIssue'.
+// 'DB_TgtPremFixedAtIssue'.
 //
 // Defect in its implementation: specamt is passed as an argument, and
 // it's easy to get that wrong, as it is here. Real encapsulation
@@ -1036,7 +1036,7 @@ void AccountValue::AddSurrChgLayer(int year, double delta_specamt)
         }
 
 // TODO ?? It should be something like this:
-//    rate = delta_specamt * TempDatabase.Query(DB_SurrChgSAMult);
+//    rate = delta_specamt * TempDatabase.Query(DB_SurrChgSpecAmtMult);
 // but for the moment we resort to this kludge:
     double z = delta_specamt * MortalityRates_->TargetPremiumRates()[year];
 

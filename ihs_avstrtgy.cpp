@@ -210,7 +210,7 @@ double AccountValue::DoPerformPmtStrategy
 //   InitialTargetPremium
 //   AnnualTargetPrem
 // be used instead, at least in the
-//       if(Database_->Query(DB_TgtPmFixedAtIssue))
+//       if(Database_->Query(DB_TgtPremFixedAtIssue))
 // case?
             return GetModalTgtPrem
                 (Year

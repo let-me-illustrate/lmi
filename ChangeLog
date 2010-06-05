@@ -25873,3 +25873,82 @@ Add a modified single premium nuance.
   version.hpp
 Mark release candidate.
 
+20100530T2243Z <gchicares@sbcglobal.net> [704]
+
+  dbdict.cpp
+Improve robustness. Formerly, '--print_db' halted at the first error.
+Now, it reports all errors, and writes all the '.dbt' files it can.
+
+20100531T0002Z <gchicares@sbcglobal.net> [704]
+
+  dbdict.cpp
+Write '.database' elements in name order.
+
+20100531T1309Z <gchicares@sbcglobal.net> [704]
+
+  dbdict.cpp
+Write only leaf elements to xml, excluding GUI topic nodes.
+
+20100531T1605Z <gchicares@sbcglobal.net> [704]
+
+  dbdict.cpp
+Accommodate GUI product editor.
+
+20100531T2342Z <gchicares@sbcglobal.net> [704]
+
+  dbdict.cpp
+Remove old markup; rearrange.
+
+20100601T2004Z <gchicares@sbcglobal.net> [704]
+
+  authenticity.cpp
+Clarify diagnostics.
+
+20100601T2005Z <gchicares@sbcglobal.net> [704]
+
+  workhorse.make
+Fix date calculations. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-06/msg00001.html
+
+20100604T1620Z <gchicares@sbcglobal.net> [704]
+
+  authenticity_test.cpp
+Update unit test to reflect diagnostics changed 20100601T2004Z.
+
+20100604T2021Z <gchicares@sbcglobal.net> [704]
+
+  basicvalues.cpp
+  database.cpp
+  dbdict.cpp
+  dbnames.hpp
+  dbnames.xpp
+  dbvalue.hpp
+  ihs_acctval.cpp
+  ihs_avstrtgy.cpp
+  ihs_basicval.cpp
+  input_harmonization.cpp
+  input_realization.cpp
+  input_test.cpp
+  interest_rates.cpp
+  ledger_invariant.cpp
+  loads.cpp
+  mec_input.cpp
+  mec_server.cpp
+  mortality_rates.cpp
+  mortality_rates_fetch.cpp
+  my_db.cpp
+  surrchg_rates.cpp
+Rename numerous database entities to improve concinnity.
+
+20100604T2220Z <gchicares@sbcglobal.net> [704]
+
+  stratified_charges.cpp
+  stratified_charges.hpp
+Improve const-correctness.
+
+20100604T2221Z <gchicares@sbcglobal.net> [704]
+
+  dbvalue.cpp
+  dbvalue.hpp
+Add operator==().
+
