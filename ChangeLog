@@ -25952,3 +25952,14 @@ Improve const-correctness.
   dbvalue.hpp
 Add operator==().
 
+20100606T2321Z <gchicares@sbcglobal.net> [704]
+
+  database.cpp
+  database_document.cpp
+  database_document.hpp
+  database_view_editor.hpp
+  dbdict.cpp
+  dbdict.hpp
+  input_test.cpp
+Refactor, using symbolic member names in class DBDictionary.
+

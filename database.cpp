@@ -34,7 +34,6 @@
 #include "dbdict.hpp"
 #include "dbvalue.hpp"
 #include "lmi.hpp"                    // is_antediluvian_fork()
-#include "map_lookup.hpp"
 #include "oecumenic_enumerations.hpp" // methuselah
 #include "product_data.hpp"
 #include "yare_input.hpp"
@@ -230,6 +229,7 @@ void product_database::initialize()
 
 database_entity const& product_database::entity_from_key(e_database_key k) const
 {
-    return map_lookup(DBDictionary::instance().GetDictionary(), k);
+    DBDictionary const& db = DBDictionary::instance();
+    return db.datum(db_name_from_key(k));
 }
 
