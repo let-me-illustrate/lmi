@@ -49,12 +49,6 @@
 
 std::string DBDictionary::cached_filename_;
 
-// '23' is the number of non-leaf entities. Soon it will become
-// unnecessary, so there's no point in deriving it in a more
-// robust way.
-unsigned int const NumberOfEntries = DB_LAST;
-unsigned int const NumberOfLeaves  = DB_LAST - 23;
-
 namespace xml_serialize
 {
 template<> struct xml_io<database_entity>
@@ -63,59 +57,31 @@ template<> struct xml_io<database_entity>
     static void   to_xml(xml::element& e, T const& t) {t.write(e);}
     static void from_xml(xml::element const& e, T& t) {t.read (e);}
 };
-
-/// Specialize xml_io<> for dict_map rather than coding a generic
-/// xml_io<std::map>, because the key would be stored redundantly:
-/// it's already part of class database_entity.
-
-template<> struct xml_io<dict_map>
-{
-    static void to_xml(xml::element& e, dict_map const& t)
-    {
-        e.erase(e.begin(), e.end());
-        // Eventually the map key will be a string, not an integer.
-        // Anticipatorily sort output in the eventual order.
-        std::map<std::string,database_entity> m;
-        typedef dict_map::const_iterator tci;
-        for(tci i = t.begin(); i != t.end(); ++i)
-            {
-            db_names const& n = GetDBNames()[i->first];
-            LMI_ASSERT(i->first == n.Idx);
-            LMI_ASSERT(i->first == i->second.key());
-            LMI_ASSERT(n.ShortName == db_name_from_key(i->first));
-            // Only leaf entities are wanted.
-            if(DB_FIRST == n.ParentIdx)
-                {
-                continue;
-                }
-            m[n.ShortName] = i->second;
-            }
-        LMI_ASSERT(NumberOfLeaves == m.size());
-        typedef std::map<std::string,database_entity>::const_iterator mci;
-        for(mci i = m.begin(); i != m.end(); ++i)
-            {
-            // This is not equivalent to calling set_element():
-            // multiple <item> elements are expressly permitted.
-            xml::element z("item");
-            xml_serialize::to_xml(z, i->second);
-            e.push_back(z);
-            }
-    }
-
-    static void from_xml(xml::element const& e, dict_map& t)
-    {
-        t.clear();
-        xml::const_nodes_view const items(e.elements("item"));
-        typedef xml::const_nodes_view::const_iterator cnvi;
-        for(cnvi i = items.begin(); i != items.end(); ++i)
-            {
-            database_entity z;
-            xml_serialize::from_xml(*i, z);
-            t[z.key()] = z;
-            }
-    }
-};
 } // namespace xml_serialize
+
+/// Specialize value_cast<>() to throw an exception.
+///
+/// This is required by
+///   any_member::str()
+/// which is not useful here.
+
+template<> std::string value_cast<std::string>(database_entity const&)
+{
+    fatal_error() << "Invalid function call." << LMI_FLUSH;
+    throw "Unreachable--silences a compiler diagnostic.";
+}
+
+/// Specialize value_cast<>() to throw an exception.
+///
+/// This is required by
+///   any_member::operator=(std::string const&)
+/// which is not useful here.
+
+template<> database_entity value_cast<database_entity>(std::string const&)
+{
+    fatal_error() << "Invalid function call." << LMI_FLUSH;
+    throw "Unreachable--silences a compiler diagnostic.";
+}
 
 DBDictionary& DBDictionary::instance()
 {
@@ -125,10 +91,304 @@ DBDictionary& DBDictionary::instance()
 
 DBDictionary::DBDictionary()
 {
+    ascribe_members();
 }
 
 DBDictionary::~DBDictionary()
 {
+}
+
+database_entity const& DBDictionary::datum(std::string const& name) const
+{
+    return *member_cast<database_entity>(operator[](name));
+}
+
+database_entity& DBDictionary::datum(std::string const& name)
+{
+    return *member_cast<database_entity>(operator[](name));
+}
+
+void DBDictionary::ascribe_members()
+{
+    ascribe("MinIssAge"           , &DBDictionary::MinIssAge           );
+    ascribe("MaxIssAge"           , &DBDictionary::MaxIssAge           );
+    ascribe("MaxIncrAge"          , &DBDictionary::MaxIncrAge          );
+    ascribe("AllowFullUw"         , &DBDictionary::AllowFullUw         );
+    ascribe("AllowSimpUw"         , &DBDictionary::AllowSimpUw         );
+    ascribe("AllowGuarUw"         , &DBDictionary::AllowGuarUw         );
+    ascribe("SmokeOrTobacco"      , &DBDictionary::SmokeOrTobacco      );
+    ascribe("PrefOrSelect"        , &DBDictionary::PrefOrSelect        );
+    ascribe("AllowPreferredClass" , &DBDictionary::AllowPreferredClass );
+    ascribe("AllowUltraPrefClass" , &DBDictionary::AllowUltraPrefClass );
+    ascribe("AllowSubstdTable"    , &DBDictionary::AllowSubstdTable    );
+    ascribe("AllowFlatExtras"     , &DBDictionary::AllowFlatExtras     );
+    ascribe("AllowRatedWp"        , &DBDictionary::AllowRatedWp        );
+    ascribe("AllowRatedAdb"       , &DBDictionary::AllowRatedAdb       );
+    ascribe("AllowRatedTerm"      , &DBDictionary::AllowRatedTerm      );
+    ascribe("AllowRetirees"       , &DBDictionary::AllowRetirees       );
+    ascribe("AllowUnisex"         , &DBDictionary::AllowUnisex         );
+    ascribe("AllowSexDistinct"    , &DBDictionary::AllowSexDistinct    );
+    ascribe("AllowUnismoke"       , &DBDictionary::AllowUnismoke       );
+    ascribe("AllowSmokeDistinct"  , &DBDictionary::AllowSmokeDistinct  );
+    ascribe("StateApproved"       , &DBDictionary::StateApproved       );
+    ascribe("AllowStateXX"        , &DBDictionary::AllowStateXX        );
+    ascribe("AllowForeign"        , &DBDictionary::AllowForeign        );
+    ascribe("Allowable"           , &DBDictionary::Allowable           );
+    ascribe("AllowCvat"           , &DBDictionary::AllowCvat           );
+    ascribe("AllowGpt"            , &DBDictionary::AllowGpt            );
+    ascribe("AllowNo7702"         , &DBDictionary::AllowNo7702         );
+    ascribe("CorridorTable"       , &DBDictionary::CorridorTable       );
+    ascribe("SevenPayTable"       , &DBDictionary::SevenPayTable       );
+    ascribe("Irc7702QTable"       , &DBDictionary::Irc7702QTable       );
+    ascribe("PremLoad7702"        , &DBDictionary::PremLoad7702        );
+    ascribe("Equiv7702Dbo3"       , &DBDictionary::Equiv7702Dbo3       );
+    ascribe("GuarCoiTable"        , &DBDictionary::GuarCoiTable        );
+    ascribe("GuarCoiIsAnnual"     , &DBDictionary::GuarCoiIsAnnual     );
+    ascribe("GuarCoiMultiplier"   , &DBDictionary::GuarCoiMultiplier   );
+    ascribe("CurrCoiTable"        , &DBDictionary::CurrCoiTable        );
+    ascribe("CurrCoiIsAnnual"     , &DBDictionary::CurrCoiIsAnnual     );
+    ascribe("CurrCoiMultiplier"   , &DBDictionary::CurrCoiMultiplier   );
+    ascribe("UnusualCoiBanding"   , &DBDictionary::UnusualCoiBanding   );
+    ascribe("CurrCoiTable0Limit"  , &DBDictionary::CurrCoiTable0Limit  );
+    ascribe("CurrCoiTable1"       , &DBDictionary::CurrCoiTable1       );
+    ascribe("CurrCoiTable1Limit"  , &DBDictionary::CurrCoiTable1Limit  );
+    ascribe("CurrCoiTable2"       , &DBDictionary::CurrCoiTable2       );
+    ascribe("MdptCoiTable"        , &DBDictionary::MdptCoiTable        );
+    ascribe("MdptCoiIsAnnual"     , &DBDictionary::MdptCoiIsAnnual     );
+    ascribe("CoiNyMinTable"       , &DBDictionary::CoiNyMinTable       );
+    ascribe("UseNyCoiFloor"       , &DBDictionary::UseNyCoiFloor       );
+    ascribe("MaxMonthlyCoiRate"   , &DBDictionary::MaxMonthlyCoiRate   );
+    ascribe("GuarCoiCeiling"      , &DBDictionary::GuarCoiCeiling      );
+    ascribe("CoiGuarIsMin"        , &DBDictionary::CoiGuarIsMin        );
+    ascribe("SubstdTableMult"     , &DBDictionary::SubstdTableMult     );
+    ascribe("SubstdTableMultTable", &DBDictionary::SubstdTableMultTable);
+    ascribe("CoiUpper12Method"    , &DBDictionary::CoiUpper12Method    );
+    ascribe("CoiInforceReentry"   , &DBDictionary::CoiInforceReentry   );
+    ascribe("AllowMortBlendSex"   , &DBDictionary::AllowMortBlendSex   );
+    ascribe("AllowMortBlendSmoke" , &DBDictionary::AllowMortBlendSmoke );
+    ascribe("GuarInt"             , &DBDictionary::GuarInt             );
+    ascribe("NaarDiscount"        , &DBDictionary::NaarDiscount        );
+    ascribe("GuarIntSpread"       , &DBDictionary::GuarIntSpread       );
+    ascribe("GuarMandE"           , &DBDictionary::GuarMandE           );
+    ascribe("CurrIntSpread"       , &DBDictionary::CurrIntSpread       );
+    ascribe("CurrMandE"           , &DBDictionary::CurrMandE           );
+    ascribe("GenAcctIntBonus"     , &DBDictionary::GenAcctIntBonus     );
+    ascribe("BonusInt"            , &DBDictionary::BonusInt            );
+    ascribe("IntFloor"            , &DBDictionary::IntFloor            );
+    ascribe("MaxGenAcctRate"      , &DBDictionary::MaxGenAcctRate      );
+    ascribe("MaxSepAcctRate"      , &DBDictionary::MaxSepAcctRate      );
+    ascribe("SepAcctSpreadMethod" , &DBDictionary::SepAcctSpreadMethod );
+    ascribe("IntSpreadMode"       , &DBDictionary::IntSpreadMode       );
+    ascribe("DynamicMandE"        , &DBDictionary::DynamicMandE        );
+    ascribe("AllowAmortPremLoad"  , &DBDictionary::AllowAmortPremLoad  );
+    ascribe("LoadAmortFundCharge" , &DBDictionary::LoadAmortFundCharge );
+    ascribe("AllowImfOverride"    , &DBDictionary::AllowImfOverride    );
+    ascribe("AssetChargeType"     , &DBDictionary::AssetChargeType     );
+    ascribe("StableValFundCharge" , &DBDictionary::StableValFundCharge );
+    ascribe("GuarFundAdminChg"    , &DBDictionary::GuarFundAdminChg    );
+    ascribe("CurrFundAdminChg"    , &DBDictionary::CurrFundAdminChg    );
+    ascribe("FundCharge"          , &DBDictionary::FundCharge          );
+    ascribe("GuarMonthlyPolFee"   , &DBDictionary::GuarMonthlyPolFee   );
+    ascribe("GuarAnnualPolFee"    , &DBDictionary::GuarAnnualPolFee    );
+    ascribe("GuarPremLoadTgt"     , &DBDictionary::GuarPremLoadTgt     );
+    ascribe("GuarPremLoadExc"     , &DBDictionary::GuarPremLoadExc     );
+    ascribe("GuarPremLoadTgtRfd"  , &DBDictionary::GuarPremLoadTgtRfd  );
+    ascribe("GuarPremLoadExcRfd"  , &DBDictionary::GuarPremLoadExcRfd  );
+    ascribe("GuarSpecAmtLoad"     , &DBDictionary::GuarSpecAmtLoad     );
+    ascribe("GuarSpecAmtLoadTable", &DBDictionary::GuarSpecAmtLoadTable);
+    ascribe("GuarAcctValLoad"     , &DBDictionary::GuarAcctValLoad     );
+    ascribe("CurrMonthlyPolFee"   , &DBDictionary::CurrMonthlyPolFee   );
+    ascribe("CurrAnnualPolFee"    , &DBDictionary::CurrAnnualPolFee    );
+    ascribe("CurrPremLoadTgt"     , &DBDictionary::CurrPremLoadTgt     );
+    ascribe("CurrPremLoadExc"     , &DBDictionary::CurrPremLoadExc     );
+    ascribe("CurrPremLoadTgtRfd"  , &DBDictionary::CurrPremLoadTgtRfd  );
+    ascribe("CurrPremLoadExcRfd"  , &DBDictionary::CurrPremLoadExcRfd  );
+    ascribe("CurrSpecAmtLoad"     , &DBDictionary::CurrSpecAmtLoad     );
+    ascribe("CurrSpecAmtLoadTable", &DBDictionary::CurrSpecAmtLoadTable);
+    ascribe("CurrAcctValLoad"     , &DBDictionary::CurrAcctValLoad     );
+    ascribe("TgtPremMonthlyPolFee", &DBDictionary::TgtPremMonthlyPolFee);
+    ascribe("LoadRfdProportion"   , &DBDictionary::LoadRfdProportion   );
+    ascribe("SpecAmtLoadLimit"    , &DBDictionary::SpecAmtLoadLimit    );
+    ascribe("DynamicSepAcctLoad"  , &DBDictionary::DynamicSepAcctLoad  );
+    ascribe("DynSepAcctLoadLimit" , &DBDictionary::DynSepAcctLoadLimit );
+    ascribe("DacTaxFundCharge"    , &DBDictionary::DacTaxFundCharge    );
+    ascribe("DacTaxPremLoad"      , &DBDictionary::DacTaxPremLoad      );
+    ascribe("PremTaxFundCharge"   , &DBDictionary::PremTaxFundCharge   );
+    ascribe("PremTaxLoad"         , &DBDictionary::PremTaxLoad         );
+    ascribe("WaivePremTaxInt1035" , &DBDictionary::WaivePremTaxInt1035 );
+    ascribe("PremTaxRetalLimit"   , &DBDictionary::PremTaxRetalLimit   );
+    ascribe("PremTaxTierGroup"    , &DBDictionary::PremTaxTierGroup    );
+    ascribe("PremTaxTierPeriod"   , &DBDictionary::PremTaxTierPeriod   );
+    ascribe("PremTaxTierNonDecr"  , &DBDictionary::PremTaxTierNonDecr  );
+    ascribe("PremTaxAmortPeriod"  , &DBDictionary::PremTaxAmortPeriod  );
+    ascribe("PremTaxAmortIntRate" , &DBDictionary::PremTaxAmortIntRate );
+    ascribe("PremTaxRate"         , &DBDictionary::PremTaxRate         );
+    ascribe("PremTaxState"        , &DBDictionary::PremTaxState        );
+    ascribe("PremTaxTable"        , &DBDictionary::PremTaxTable        );
+    ascribe("SurrChgAcctValMult"  , &DBDictionary::SurrChgAcctValMult  );
+    ascribe("SurrChgAcctValSlope" , &DBDictionary::SurrChgAcctValSlope );
+    ascribe("SurrChgSpecAmtMult"  , &DBDictionary::SurrChgSpecAmtMult  );
+    ascribe("SurrChgSpecAmtSlope" , &DBDictionary::SurrChgSpecAmtSlope );
+    ascribe("SurrChgPremMult"     , &DBDictionary::SurrChgPremMult     );
+    ascribe("SurrChgOnIncr"       , &DBDictionary::SurrChgOnIncr       );
+    ascribe("SurrChgOnDecr"       , &DBDictionary::SurrChgOnDecr       );
+    ascribe("Has1035ExchCharge"   , &DBDictionary::Has1035ExchCharge   );
+    ascribe("SnflQTable"          , &DBDictionary::SnflQTable          );
+    ascribe("CoiSnflIsGuar"       , &DBDictionary::CoiSnflIsGuar       );
+    ascribe("SurrChgByFormula"    , &DBDictionary::SurrChgByFormula    );
+    ascribe("SurrChgPeriod"       , &DBDictionary::SurrChgPeriod       );
+    ascribe("SurrChgZeroDur"      , &DBDictionary::SurrChgZeroDur      );
+    ascribe("SurrChgNlpMult"      , &DBDictionary::SurrChgNlpMult      );
+    ascribe("SurrChgNlpMax"       , &DBDictionary::SurrChgNlpMax       );
+    ascribe("SurrChgEaMax"        , &DBDictionary::SurrChgEaMax        );
+    ascribe("SurrChgAmort"        , &DBDictionary::SurrChgAmort        );
+    ascribe("AllowSpecAmtIncr"    , &DBDictionary::AllowSpecAmtIncr    );
+    ascribe("MinSpecAmtIncr"      , &DBDictionary::MinSpecAmtIncr      );
+    ascribe("EnforceNaarLimit"    , &DBDictionary::EnforceNaarLimit    );
+    ascribe("MinSpecAmt"          , &DBDictionary::MinSpecAmt          );
+    ascribe("MinIssSpecAmt"       , &DBDictionary::MinIssSpecAmt       );
+    ascribe("MinRenlSpecAmt"      , &DBDictionary::MinRenlSpecAmt      );
+    ascribe("MinRenlBaseSpecAmt"  , &DBDictionary::MinRenlBaseSpecAmt  );
+    ascribe("MaxIssSpecAmt"       , &DBDictionary::MaxIssSpecAmt       );
+    ascribe("MaxRenlSpecAmt"      , &DBDictionary::MaxRenlSpecAmt      );
+    ascribe("AllowDbo1"           , &DBDictionary::AllowDbo1           );
+    ascribe("AllowDbo2"           , &DBDictionary::AllowDbo2           );
+    ascribe("AllowDbo3"           , &DBDictionary::AllowDbo3           );
+    ascribe("AllowChangeToDbo2"   , &DBDictionary::AllowChangeToDbo2   );
+    ascribe("DboChgCanIncrSpecAmt", &DBDictionary::DboChgCanIncrSpecAmt);
+    ascribe("DboChgCanDecrSpecAmt", &DBDictionary::DboChgCanDecrSpecAmt);
+    ascribe("AllowExtEndt"        , &DBDictionary::AllowExtEndt        );
+    ascribe("AllowTerm"           , &DBDictionary::AllowTerm           );
+    ascribe("GuarTermTable"       , &DBDictionary::GuarTermTable       );
+    ascribe("TermTable"           , &DBDictionary::TermTable           );
+    ascribe("TermMinIssAge"       , &DBDictionary::TermMinIssAge       );
+    ascribe("TermMaxIssAge"       , &DBDictionary::TermMaxIssAge       );
+    ascribe("TermForcedConvAge"   , &DBDictionary::TermForcedConvAge   );
+    ascribe("MaxTermProportion"   , &DBDictionary::MaxTermProportion   );
+    ascribe("TermCoiRate"         , &DBDictionary::TermCoiRate         );
+    ascribe("TermPremRate"        , &DBDictionary::TermPremRate        );
+    ascribe("AllowWp"             , &DBDictionary::AllowWp             );
+    ascribe("WpTable"             , &DBDictionary::WpTable             );
+    ascribe("WpMinIssAge"         , &DBDictionary::WpMinIssAge         );
+    ascribe("WpMaxIssAge"         , &DBDictionary::WpMaxIssAge         );
+    ascribe("WpMax"               , &DBDictionary::WpMax               );
+    ascribe("WpCoiRate"           , &DBDictionary::WpCoiRate           );
+    ascribe("WpPremRate"          , &DBDictionary::WpPremRate          );
+    ascribe("WpChargeMethod"      , &DBDictionary::WpChargeMethod      );
+    ascribe("AllowAdb"            , &DBDictionary::AllowAdb            );
+    ascribe("AdbTable"            , &DBDictionary::AdbTable            );
+    ascribe("AdbMinIssAge"        , &DBDictionary::AdbMinIssAge        );
+    ascribe("AdbMaxIssAge"        , &DBDictionary::AdbMaxIssAge        );
+    ascribe("AdbLimit"            , &DBDictionary::AdbLimit            );
+    ascribe("AdbCoiRate"          , &DBDictionary::AdbCoiRate          );
+    ascribe("AdbPremRate"         , &DBDictionary::AdbPremRate         );
+    ascribe("AllowSpouseRider"    , &DBDictionary::AllowSpouseRider    );
+    ascribe("SpouseRiderGuarTable", &DBDictionary::SpouseRiderGuarTable);
+    ascribe("SpouseRiderTable"    , &DBDictionary::SpouseRiderTable    );
+    ascribe("AllowChildRider"     , &DBDictionary::AllowChildRider     );
+    ascribe("ChildRiderTable"     , &DBDictionary::ChildRiderTable     );
+    ascribe("AllowWd"             , &DBDictionary::AllowWd             );
+    ascribe("WdFee"               , &DBDictionary::WdFee               );
+    ascribe("WdFeeRate"           , &DBDictionary::WdFeeRate           );
+    ascribe("FreeWdProportion"    , &DBDictionary::FreeWdProportion    );
+    ascribe("MinWd"               , &DBDictionary::MinWd               );
+    ascribe("MaxWdAcctValMult"    , &DBDictionary::MaxWdAcctValMult    );
+    ascribe("MaxWdDed"            , &DBDictionary::MaxWdDed            );
+    ascribe("WdCanDecrSpecAmtDbo1", &DBDictionary::WdCanDecrSpecAmtDbo1);
+    ascribe("WdCanDecrSpecAmtDbo2", &DBDictionary::WdCanDecrSpecAmtDbo2);
+    ascribe("WdCanDecrSpecAmtDbo3", &DBDictionary::WdCanDecrSpecAmtDbo3);
+    ascribe("FirstWdYear"         , &DBDictionary::FirstWdYear         );
+    ascribe("AllowLoan"           , &DBDictionary::AllowLoan           );
+    ascribe("AllowPrefLoan"       , &DBDictionary::AllowPrefLoan       );
+    ascribe("AllowFixedLoan"      , &DBDictionary::AllowFixedLoan      );
+    ascribe("AllowVlr"            , &DBDictionary::AllowVlr            );
+    ascribe("FixedLoanRate"       , &DBDictionary::FixedLoanRate       );
+    ascribe("MaxVlrRate"          , &DBDictionary::MaxVlrRate          );
+    ascribe("MaxLoanAcctValMult"  , &DBDictionary::MaxLoanAcctValMult  );
+    ascribe("MaxLoanDed"          , &DBDictionary::MaxLoanDed          );
+    ascribe("GuarPrefLoanSpread"  , &DBDictionary::GuarPrefLoanSpread  );
+    ascribe("GuarRegLoanSpread"   , &DBDictionary::GuarRegLoanSpread   );
+    ascribe("CurrPrefLoanSpread"  , &DBDictionary::CurrPrefLoanSpread  );
+    ascribe("CurrRegLoanSpread"   , &DBDictionary::CurrRegLoanSpread   );
+    ascribe("FirstLoanYear"       , &DBDictionary::FirstLoanYear       );
+    ascribe("MinPremType"         , &DBDictionary::MinPremType         );
+    ascribe("MinPremIntSpread"    , &DBDictionary::MinPremIntSpread    );
+    ascribe("TgtPremType"         , &DBDictionary::TgtPremType         );
+    ascribe("TgtPremTable"        , &DBDictionary::TgtPremTable        );
+    ascribe("TgtPremFixedAtIssue" , &DBDictionary::TgtPremFixedAtIssue );
+    ascribe("TgtPremIgnoreSubstd" , &DBDictionary::TgtPremIgnoreSubstd );
+    ascribe("MinPmt"              , &DBDictionary::MinPmt              );
+    ascribe("NoLapseMinDur"       , &DBDictionary::NoLapseMinDur       );
+    ascribe("NoLapseMinAge"       , &DBDictionary::NoLapseMinAge       );
+    ascribe("NoLapseUnratedOnly"  , &DBDictionary::NoLapseUnratedOnly  );
+    ascribe("NoLapseDbo1Only"     , &DBDictionary::NoLapseDbo1Only     );
+    ascribe("NoLapseAlwaysActive" , &DBDictionary::NoLapseAlwaysActive );
+    ascribe("AllowHoneymoon"      , &DBDictionary::AllowHoneymoon      );
+    ascribe("AllowGenAcct"        , &DBDictionary::AllowGenAcct        );
+    ascribe("AllowSepAcct"        , &DBDictionary::AllowSepAcct        );
+    ascribe("DeductionMethod"     , &DBDictionary::DeductionMethod     );
+    ascribe("DeductionAcct"       , &DBDictionary::DeductionAcct       );
+    ascribe("DistributionMethod"  , &DBDictionary::DistributionMethod  );
+    ascribe("DistributionAcct"    , &DBDictionary::DistributionAcct    );
+    ascribe("EePremMethod"        , &DBDictionary::EePremMethod        );
+    ascribe("EePremAcct"          , &DBDictionary::EePremAcct          );
+    ascribe("ErPremMethod"        , &DBDictionary::ErPremMethod        );
+    ascribe("ErPremAcct"          , &DBDictionary::ErPremAcct          );
+    ascribe("CompTarget"          , &DBDictionary::CompTarget          );
+    ascribe("CompExcess"          , &DBDictionary::CompExcess          );
+    ascribe("CompChargeBack"      , &DBDictionary::CompChargeBack      );
+    ascribe("AssetComp"           , &DBDictionary::AssetComp           );
+    ascribe("AllowExtraAssetComp" , &DBDictionary::AllowExtraAssetComp );
+    ascribe("AllowExtraPremComp"  , &DBDictionary::AllowExtraPremComp  );
+    ascribe("AllowExpRating"      , &DBDictionary::AllowExpRating      );
+    ascribe("ExpRatStdDevMult"    , &DBDictionary::ExpRatStdDevMult    );
+    ascribe("ExpRatIbnrMult"      , &DBDictionary::ExpRatIbnrMult      );
+    ascribe("ExpRatCoiRetention"  , &DBDictionary::ExpRatCoiRetention  );
+    ascribe("ExpRatRiskCoiMult"   , &DBDictionary::ExpRatRiskCoiMult   );
+    ascribe("ExpRatAmortPeriod"   , &DBDictionary::ExpRatAmortPeriod   );
+    ascribe("LedgerType"          , &DBDictionary::LedgerType          );
+    ascribe("AgeLastOrNearest"    , &DBDictionary::AgeLastOrNearest    );
+    ascribe("MaxIllusAge"         , &DBDictionary::MaxIllusAge         );
+    ascribe("MaturityAge"         , &DBDictionary::MaturityAge         );
+    ascribe("LapseIgnoresSurrChg" , &DBDictionary::LapseIgnoresSurrChg );
+    ascribe("DefaultProcessOrder" , &DBDictionary::DefaultProcessOrder );
+    ascribe("NominallyPar"        , &DBDictionary::NominallyPar        );
+    ascribe("TableYTable"         , &DBDictionary::TableYTable         );
+    ascribe("Gam83Table"          , &DBDictionary::Gam83Table          );
+    ascribe("WeightClass"         , &DBDictionary::WeightClass         );
+    ascribe("WeightGender"        , &DBDictionary::WeightGender        );
+    ascribe("WeightSmoking"       , &DBDictionary::WeightSmoking       );
+    ascribe("WeightAge"           , &DBDictionary::WeightAge           );
+    ascribe("WeightSpecAmt"       , &DBDictionary::WeightSpecAmt       );
+    ascribe("WeightState"         , &DBDictionary::WeightState         );
+    ascribe("FullExpPol"          , &DBDictionary::FullExpPol          );
+    ascribe("FullExpPrem"         , &DBDictionary::FullExpPrem         );
+    ascribe("FullExpDumpin"       , &DBDictionary::FullExpDumpin       );
+    ascribe("FullExpSpecAmt"      , &DBDictionary::FullExpSpecAmt      );
+    ascribe("VarExpPol"           , &DBDictionary::VarExpPol           );
+    ascribe("VarExpPrem"          , &DBDictionary::VarExpPrem          );
+    ascribe("VarExpDumpin"        , &DBDictionary::VarExpDumpin        );
+    ascribe("VarExpSpecAmt"       , &DBDictionary::VarExpSpecAmt       );
+    ascribe("ExpSpecAmtLimit"     , &DBDictionary::ExpSpecAmtLimit     );
+    ascribe("MedicalProportion"   , &DBDictionary::MedicalProportion   );
+    ascribe("UwTestCost"          , &DBDictionary::UwTestCost          );
+    ascribe("VxBasicQTable"       , &DBDictionary::VxBasicQTable       );
+    ascribe("VxDeficQTable"       , &DBDictionary::VxDeficQTable       );
+    ascribe("VxTaxQTable"         , &DBDictionary::VxTaxQTable         );
+    ascribe("StatVxInt"           , &DBDictionary::StatVxInt           );
+    ascribe("TaxVxInt"            , &DBDictionary::TaxVxInt            );
+    ascribe("StatVxQ"             , &DBDictionary::StatVxQ             );
+    ascribe("TaxVxQ"              , &DBDictionary::TaxVxQ              );
+    ascribe("DefVxQ"              , &DBDictionary::DefVxQ              );
+    ascribe("SnflQ"               , &DBDictionary::SnflQ               );
+    ascribe("LapseRate"           , &DBDictionary::LapseRate           );
+    ascribe("ReqSurpNaar"         , &DBDictionary::ReqSurpNaar         );
+    ascribe("ReqSurpVx"           , &DBDictionary::ReqSurpVx           );
+    ascribe("LicFitRate"          , &DBDictionary::LicFitRate          );
+    ascribe("LicDacTaxRate"       , &DBDictionary::LicDacTaxRate       );
+    ascribe("GdbVxMethod"         , &DBDictionary::GdbVxMethod         );
+    ascribe("PrimaryHurdle"       , &DBDictionary::PrimaryHurdle       );
+    ascribe("SecondaryHurdle"     , &DBDictionary::SecondaryHurdle     );
 }
 
 namespace
@@ -138,11 +398,6 @@ std::string xml_root_name()
     return "database";
 }
 } // Unnamed namespace.
-
-dict_map const& DBDictionary::GetDictionary() const
-{
-    return dictionary_;
-}
 
 /// Read and cache a database file.
 ///
@@ -172,21 +427,10 @@ void DBDictionary::Init(std::string const& filename)
 
     xml_lmi::dom_parser parser(filename);
     xml::element const& root = parser.root_node(xml_root_name());
-
-    xml_serialize::from_xml(root, dictionary_);
-
-    if(NumberOfLeaves != dictionary_.size())
+    typedef std::vector<std::string>::const_iterator svci;
+    for(svci i = member_names().begin(); i != member_names().end(); ++i)
         {
-        InvalidateCache();
-        fatal_error()
-            << "File '"
-            << filename
-            << "' is not up to date or is corrupted."
-            << " It should contain " << NumberOfLeaves
-            << " elements, but it actually contains " << dictionary_.size()
-            << " elements."
-            << LMI_FLUSH
-            ;
+        xml_serialize::get_element(root, *i, datum(*i));
         }
 }
 
@@ -204,31 +448,16 @@ void DBDictionary::InvalidateCache()
 void DBDictionary::WriteDB(std::string const& filename)
 {
     InvalidateCache();
-    // When the GUI product editor loads a file and later saves it,
-    // its database contains only leaf entries.
-    if(NumberOfLeaves != dictionary_.size() && NumberOfEntries != dictionary_.size())
-        {
-        fatal_error()
-            << "Error writing database '"
-            << filename
-            << "': the database has " << dictionary_.size()
-            << " entries, but should have " << NumberOfEntries << '.'
-            ;
-        for(unsigned int j = 0; j < NumberOfEntries; j++)
-            {
-            if(!dictionary_.count(j))
-                {
-                fatal_error() << " Key " << j << " not found.";
-                }
-            }
-        fatal_error() << LMI_FLUSH;
-        }
 
     xml_lmi::xml_document document(xml_root_name());
     xml::element& root = document.root_node();
 
     xml_lmi::set_attr(root, "version", "0");
-    xml_serialize::to_xml(root, dictionary_);
+    typedef std::vector<std::string>::const_iterator svci;
+    for(svci i = member_names().begin(); i != member_names().end(); ++i)
+        {
+        xml_serialize::set_element(root, *i, datum(*i));
+        }
 
     // Instead of this:
 //    document.save(filename);
@@ -239,11 +468,11 @@ void DBDictionary::WriteDB(std::string const& filename)
     document.save(path.string());
 }
 
-/// Add an entry to the dictionary.
+/// Set a value. (The historical name "Add" is now misleading.)
 
 void DBDictionary::Add(database_entity const& e)
 {
-    dictionary_[e.key()] = e;
+    datum(db_name_from_key(e.key())) = e;
 }
 
 /// Initialize all database entities to not-necessarily-plausible values.
@@ -252,10 +481,10 @@ void DBDictionary::InitDB()
 {
     static double const bignum = std::numeric_limits<double>::max();
 
-    dictionary_.clear();
-    for(int j = DB_FIRST; j < DB_LAST; ++j)
+    typedef std::vector<std::string>::const_iterator svci;
+    for(svci i = member_names().begin(); i != member_names().end(); ++i)
         {
-        Add(database_entity(j, 0.0));
+        Add(database_entity(db_key_from_name(*i), 0.0));
         }
 
     // It would be dangerous to set these to zero.
@@ -682,14 +911,13 @@ void DBDictionary::WriteSampleDBFile()
 
 void DBDictionary::InitAntediluvian()
 {
-    dictionary_.clear();
-
     // Zero is inappropriate for some entities ("DB_CurrCoiMultiplier",
     // e.g.), but the antediluvian branch doesn't actually use most
     // database entities.
-    for(int j = DB_FIRST; j < DB_LAST; ++j)
+    typedef std::vector<std::string>::const_iterator svci;
+    for(svci i = member_names().begin(); i != member_names().end(); ++i)
         {
-        Add(database_entity(j, 0.0));
+        Add(database_entity(db_key_from_name(*i), 0.0));
         }
 
     Add(database_entity(DB_GuarInt, 0.03));
@@ -806,13 +1034,11 @@ void print_databases()
             }
         fs::path out_file = fs::change_extension(*i, ".dbt");
         fs::ofstream os(out_file, ios_out_trunc_binary());
-        dict_map const& dictionary = DBDictionary::instance().GetDictionary();
-        // std::ostream_iterator not used because it doesn't work
-        // nicely with std::map (a name-lookup issue).
-        typedef dict_map::const_iterator dmci;
-        for(dmci i = dictionary.begin(); i != dictionary.end(); ++i)
+        DBDictionary const& z = DBDictionary::instance();
+        typedef std::vector<std::string>::const_iterator svci;
+        for(svci i = z.member_names().begin(); i != z.member_names().end(); ++i)
             {
-            i->second.write(os);
+            z.datum(*i).write(os);
             }
         }
 }
