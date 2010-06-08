@@ -30,6 +30,7 @@
 #include "dbvalue.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
+#include "xml_serializable.hpp"
 
 #include <boost/utility.hpp>
 
@@ -40,6 +41,7 @@
 class LMI_SO DBDictionary
     :        private boost::noncopyable
     ,virtual private obstruct_slicing  <DBDictionary>
+    ,        public  xml_serializable  <DBDictionary>
     ,        public  MemberSymbolTable <DBDictionary>
 {
     friend class DatabaseDocument;
@@ -65,11 +67,26 @@ class LMI_SO DBDictionary
 
     database_entity& datum(std::string const&);
 
-    void WriteDB(std::string const& filename);
+    void WriteDB(std::string const& filename) const;
     void Add(database_entity const&);
     void InitDB();
 
     static void InvalidateCache();
+
+    // xml_serializable required implementation.
+    virtual int         class_version() const;
+    virtual std::string xml_root_name() const;
+
+    // xml_serializable overrides.
+    virtual void read_element
+        (xml::element const& e
+        ,std::string const&  name
+        ,int                 file_version
+        );
+    virtual void write_element
+        (xml::element&       parent
+        ,std::string const&  name
+        ) const;
 
     static std::string cached_filename_;
 
