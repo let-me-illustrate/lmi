@@ -27,6 +27,7 @@
 #endif // __BORLANDC__
 
 #include "dbdict.hpp"
+#include "xml_serializable.tpp"
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
@@ -46,6 +47,8 @@
 #include <boost/filesystem/path.hpp>
 
 #include <limits>
+
+template class xml_serializable<DBDictionary>;
 
 std::string DBDictionary::cached_filename_;
 
@@ -391,14 +394,6 @@ void DBDictionary::ascribe_members()
     ascribe("SecondaryHurdle"     , &DBDictionary::SecondaryHurdle     );
 }
 
-namespace
-{
-std::string xml_root_name()
-{
-    return "database";
-}
-} // Unnamed namespace.
-
 /// Read and cache a database file.
 ///
 /// Perform the expensive operation of reading the dictionary from
@@ -412,25 +407,15 @@ void DBDictionary::Init(std::string const& filename)
         return;
         }
 
-    cached_filename_ = filename;
-
-    if(access(filename.c_str(), R_OK))
+    try
+        {
+        cached_filename_ = filename;
+        load(filename);
+        }
+    catch(...)
         {
         InvalidateCache();
-        fatal_error()
-            << "File '"
-            << filename
-            << "' is required but could not be found. Try reinstalling."
-            << LMI_FLUSH
-            ;
-        }
-
-    xml_lmi::dom_parser parser(filename);
-    xml::element const& root = parser.root_node(xml_root_name());
-    typedef std::vector<std::string>::const_iterator svci;
-    for(svci i = member_names().begin(); i != member_names().end(); ++i)
-        {
-        xml_serialize::get_element(root, *i, datum(*i));
+        report_exception();
         }
 }
 
@@ -445,27 +430,51 @@ void DBDictionary::InvalidateCache()
     cached_filename_.clear();
 }
 
-void DBDictionary::WriteDB(std::string const& filename)
+/// Save file, invalidating the cache.
+///
+/// If data are modified (by the GUI product editor) and saved under a
+/// new name, the cache must be invalidated. Otherwise, calling Init()
+/// with the name of the intact original file would fail to reload the
+/// unmodified data.
+
+void DBDictionary::WriteDB(std::string const& filename) const
 {
     InvalidateCache();
+    save(filename);
+}
 
-    xml_lmi::xml_document document(xml_root_name());
-    xml::element& root = document.root_node();
+/// Backward-compatibility serial number of this class's xml version.
+///
+/// version 0: 20100608T1241Z
 
-    xml_lmi::set_attr(root, "version", "0");
-    typedef std::vector<std::string>::const_iterator svci;
-    for(svci i = member_names().begin(); i != member_names().end(); ++i)
-        {
-        xml_serialize::set_element(root, *i, datum(*i));
-        }
+int DBDictionary::class_version() const
+{
+    return 0;
+}
 
-    // Instead of this:
-//    document.save(filename);
-    // for the nonce, explicitly change the extension, in order to
-    // force external product-file code to use the new extension.
-    fs::path path(filename, fs::native);
-    path = fs::change_extension(path, ".database");
-    document.save(path.string());
+std::string DBDictionary::xml_root_name() const
+{
+    return "database";
+}
+
+/// This override doesn't call redintegrate_ex_ante(); that wouldn't
+/// make sense, at least not for now.
+
+void DBDictionary::read_element
+    (xml::element const& e
+    ,std::string const&  name
+    ,int                 // file_version
+    )
+{
+    xml_serialize::from_xml(e, datum(name));
+}
+
+void DBDictionary::write_element
+    (xml::element&       parent
+    ,std::string const&  name
+    ) const
+{
+    xml_serialize::set_element(parent, name, datum(name));
 }
 
 /// Set a value. (The historical name "Add" is now misleading.)
