@@ -428,9 +428,7 @@ int database_entity::getndata(std::vector<int> const& z)
 
 void database_entity::read(xml::element const& e)
 {
-    std::string short_name;
-    xml_serialize::get_element(e, "key"         , short_name   );
-    key_ = db_key_from_name(short_name);
+    key_ = db_key_from_name(e.get_name());
     xml_serialize::get_element(e, "axis_lengths", axis_lengths_);
     xml_serialize::get_element(e, "data_values" , data_values_ );
     xml_serialize::get_element(e, "gloss"       , gloss_       );
@@ -442,7 +440,6 @@ void database_entity::write(xml::element& e) const
 {
     assert_invariants();
 
-    xml_serialize::set_element(e, "key"         , db_name_from_key(key_));
     xml_serialize::set_element(e, "axis_lengths", axis_lengths_);
     xml_serialize::set_element(e, "data_values" , data_values_ );
     xml_serialize::set_element(e, "gloss"       , gloss_       );
