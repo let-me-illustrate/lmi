@@ -25974,3 +25974,8 @@ Refactor, deriving stratified_charges from xml_serializable.
   fund_data.cpp
 Require '.funds' extension.
 
+20100608T1708Z <gchicares@sbcglobal.net> [704]
+
+  dbvalue.cpp
+Eliminate gratuitous redundancy.
+
