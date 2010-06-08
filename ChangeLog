@@ -25963,3 +25963,14 @@ Add operator==().
   input_test.cpp
 Refactor, using symbolic member names in class DBDictionary.
 
+20100608T1241Z <gchicares@sbcglobal.net> [704]
+
+  dbdict.cpp
+  dbdict.hpp
+Refactor, deriving stratified_charges from xml_serializable.
+
+20100608T1242Z <gchicares@sbcglobal.net> [704]
+
+  fund_data.cpp
+Require '.funds' extension.
+
