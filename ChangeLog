@@ -25979,3 +25979,8 @@ Require '.funds' extension.
   dbvalue.cpp
 Eliminate gratuitous redundancy.
 
+20100609T0015Z <gchicares@sbcglobal.net> [704]
+
+  dbvalue.cpp
+Eliminate even more gratuitous redundancy.
+
