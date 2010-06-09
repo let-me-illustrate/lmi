@@ -221,9 +221,9 @@ double& database_entity::operator[](std::vector<int> const& index)
         {
         z = 0;
         fatal_error()
-            << "Trying to index database item with key "
-            << key_
-            << " past end of data."
+            << "Trying to index database item '"
+            << GetDBNames()[key_].ShortName
+            << "' past end of data."
             << LMI_FLUSH
             ;
         }
@@ -251,9 +251,9 @@ double const* database_entity::operator[](database_index const& idx) const
         {
         z = 0;
         fatal_error()
-            << "Trying to index database item with key "
-            << key_
-            << " past end of data."
+            << "Trying to index database item '"
+            << GetDBNames()[key_].ShortName
+            << "' past end of data."
             << LMI_FLUSH
             ;
         }
@@ -289,7 +289,6 @@ std::ostream& database_entity::write(std::ostream& os) const
         << '"' << GetDBNames()[key_].LongName << '"'
         << '\n'
         << "  name='" << GetDBNames()[key_].ShortName << "'"
-        << " key=" << key_
         << '\n'
         ;
     if(!gloss_.empty())
@@ -342,9 +341,7 @@ void database_entity::assert_invariants() const
             fatal_error()
                 << "Database item '"
                 << GetDBNames()[key_].ShortName
-                << "' with key "
-                << key_
-                << " has invalid length "
+                << "' has invalid length "
                 << *ai
                 << " in a dimension where "
                 << *mi
@@ -361,9 +358,7 @@ void database_entity::assert_invariants() const
             fatal_error()
                 << "Database item '"
                 << GetDBNames()[key_].ShortName
-                << "' with key "
-                << key_
-                << " has invalid duration."
+                << "' has invalid duration."
                 << LMI_FLUSH
                 ;
             }
@@ -383,9 +378,7 @@ int database_entity::getndata() const
         fatal_error()
             << "Database item '"
             << GetDBNames()[key_].ShortName
-            << "' with key "
-            << key_
-            << " has invalid dimensions."
+            << "' has invalid dimensions."
             << LMI_FLUSH
             ;
         }
