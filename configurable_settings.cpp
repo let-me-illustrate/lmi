@@ -268,6 +268,11 @@ void configurable_settings::save() const
 }
 
 // TODO ?? CALCULATION_SUMMARY Address the validation issue:
+
+/// A whitespace-delimited list of columns to be shown on the
+/// calculation summary, unless overridden by
+/// use_builtin_calculation_summary(true).
+///
 /// Precondition: Argument is semantically valid; ultimately this will
 /// be validated elsewhere.
 
@@ -276,65 +281,106 @@ void configurable_settings::calculation_summary_columns(std::string const& s)
     calculation_summary_columns_ = s;
 }
 
+/// If true, then use built-in default calculation-summary columns;
+/// otherwise, use calculation_summary_columns().
+
 void configurable_settings::use_builtin_calculation_summary(bool b)
 {
     use_builtin_calculation_summary_ = b;
 }
+
+/// A whitespace-delimited list of columns to be shown on the
+/// calculation summary, unless overridden by
+/// use_builtin_calculation_summary(true).
 
 std::string const& configurable_settings::calculation_summary_columns() const
 {
     return calculation_summary_columns_;
 }
 
+/// Name of log file used for cgicc's debugging facility.
+
 std::string const& configurable_settings::cgi_bin_log_filename() const
 {
     return cgi_bin_log_filename_;
 }
+
+/// Static name of custom input file.
 
 std::string const& configurable_settings::custom_input_filename() const
 {
     return custom_input_filename_;
 }
 
+/// Static name of custom output file.
+
 std::string const& configurable_settings::custom_output_filename() const
 {
     return custom_output_filename_;
 }
+
+/// Name of '.ill' file containing default input values for new '.ill'
+/// and '.cns' files.
 
 std::string const& configurable_settings::default_input_filename() const
 {
     return default_input_filename_;
 }
 
+/// Names of any libraries to be preloaded. Used to work around a
+/// defect of msw.
+
 std::string const& configurable_settings::libraries_to_preload() const
 {
     return libraries_to_preload_;
 }
+
+/// Unsafely allow users the option to bypass error conditions if
+/// 'true'. Setting this to 'false' prevents the system from asking
+/// whether to bypass problems; that is the default, and changing it
+/// may have no effect with non-GUI interfaces. Eventually this option
+/// may be removed altogether.
 
 bool configurable_settings::offer_hobsons_choice() const
 {
     return offer_hobsons_choice_;
 }
 
+/// Directory to which xsl-fo input and output are written.
+
 std::string const& configurable_settings::print_directory() const
 {
     return print_directory_;
 }
+
+/// Name of '.xrc' interface skin.
 
 std::string const& configurable_settings::skin_filename() const
 {
     return skin_filename_;
 }
 
+/// File extension (beginning with a dot) typical for the user's
+/// preferred spreadsheet program. Used to determine mimetype or msw
+/// 'file association'.
+
 std::string const& configurable_settings::spreadsheet_file_extension() const
 {
     return spreadsheet_file_extension_;
 }
 
+/// If true, then use built-in default calculation-summary columns;
+/// otherwise, use calculation_summary_columns().
+
 bool configurable_settings::use_builtin_calculation_summary() const
 {
     return use_builtin_calculation_summary_;
 }
+
+/// Command to execute xsl-fo processor. Making this an external
+/// command permits using a program with a free but not GPL-compatible
+/// license, such as apache fop, which cannot be linked with a GPL
+/// version 2 program.
 
 std::string const& configurable_settings::xsl_fo_command() const
 {
