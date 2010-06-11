@@ -203,9 +203,6 @@ void configurable_settings::ascribe_members()
     ascribe("xsl_fo_command"                   ,&configurable_settings::xsl_fo_command_                   );
 }
 
-// TODO ?? CALCULATION_SUMMARY Class template any_member should expose
-// a has_element() function.
-
 void configurable_settings::load()
 {
     std::ostringstream oss;
