@@ -42,6 +42,7 @@
 
 #include <algorithm>              // std::copy(), std::find()
 #include <iterator>               // std::back_inserter
+#include <sstream>
 #include <vector>
 
 template<typename T>
@@ -117,6 +118,8 @@ void xml_serializable<T>::read(xml::element const& x)
 using namespace xml;
 #endif // __BORLANDC__
 
+    std::ostringstream oss;
+
     std::map<std::string, std::string> detritus_map;
 
     std::list<std::string> residuary_names;
@@ -149,13 +152,12 @@ using namespace xml;
             }
         else
             {
-            warning()
-                << "XML tag '"
-                << node_tag
-                << "' not recognized by this version of the program."
-                << LMI_FLUSH
-                ;
+            oss << "  '" << node_tag << "'\n";
             }
+        }
+    if(!oss.str().empty())
+        {
+        warning() << "Unrecognized XML tags:\n" << oss.str() << LMI_FLUSH;
         }
 
     redintegrate_ex_post(file_version, detritus_map, residuary_names);
