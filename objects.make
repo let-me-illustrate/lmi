@@ -450,6 +450,7 @@ unit_test_targets := \
   callback_test \
   comma_punct_test \
   commutation_functions_test \
+  configurable_settings_test \
   contains_test \
   crc32_test \
   expression_template_0_test \
@@ -579,6 +580,18 @@ commutation_functions_test$(EXEEXT): \
   commutation_functions_test.o \
   expm1.o \
   timer.o \
+
+configurable_settings_test$(EXEEXT): \
+  $(boost_filesystem_objects) \
+  $(common_test_objects) \
+  $(xmlwrapp_objects) \
+  configurable_settings.o \
+  configurable_settings_test.o \
+  data_directory.o \
+  global_settings.o \
+  miscellany.o \
+  path_utility.o \
+  xml_lmi.o \
 
 contains_test$(EXEEXT): \
   $(common_test_objects) \
