@@ -392,9 +392,10 @@ int mec_state::class_version() const
     return 0;
 }
 
-std::string mec_state::xml_root_name() const
+std::string const& mec_state::xml_root_name() const
 {
-    return "mec_state";
+    static std::string const s("mec_state");
+    return s;
 }
 
 bool mec_state::is_detritus(std::string const& s) const

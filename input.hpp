@@ -169,8 +169,8 @@ class LMI_SO Input
         );
 
     // xml_serializable required implementation.
-    virtual int         class_version() const;
-    virtual std::string xml_root_name() const;
+    virtual int                class_version() const;
+    virtual std::string const& xml_root_name() const;
 
     // xml_serializable overrides.
     virtual bool is_detritus(std::string const&) const;
@@ -180,9 +180,9 @@ class LMI_SO Input
         ,std::string      & value
         ) const;
     virtual void redintegrate_ex_post
-        (int                                file_version
-        ,std::map<std::string, std::string> detritus_map
-        ,std::list<std::string>             residuary_names
+        (int                                       file_version
+        ,std::map<std::string, std::string> const& detritus_map
+        ,std::list<std::string>             const& residuary_names
         );
     virtual void redintegrate_ad_terminum();
 

@@ -81,7 +81,7 @@ int mec_state::class_version() const
     return 0;
 }
 
-std::string mec_state::xml_root_name() const
+std::string const& mec_state::xml_root_name() const
 {
     return empty_string;
 }
@@ -102,7 +102,7 @@ int product_data::class_version() const
     return 0;
 }
 
-std::string product_data::xml_root_name() const
+std::string const& product_data::xml_root_name() const
 {
     return empty_string;
 }

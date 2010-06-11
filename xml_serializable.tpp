@@ -218,7 +218,7 @@ int xml_serializable<T>::class_version() const
 /// Root tag (when T is saved as the root of a document).
 
 template<typename T>
-std::string xml_serializable<T>::xml_root_name() const
+std::string const& xml_serializable<T>::xml_root_name() const
 {
     throw "Unreachable--silences a compiler diagnostic.";
 }
@@ -360,9 +360,9 @@ void xml_serializable<T>::redintegrate_ex_ante
 
 template<typename T>
 void xml_serializable<T>::redintegrate_ex_post
-    (int                                file_version
-    ,std::map<std::string, std::string> // detritus_map
-    ,std::list<std::string>             // residuary_names
+    (int                                       file_version
+    ,std::map<std::string, std::string> const& // detritus_map
+    ,std::list<std::string>             const& // residuary_names
     )
 {
     if(class_version() == file_version)

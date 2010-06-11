@@ -58,8 +58,8 @@ class LMI_SO xml_serializable
     void immit_members_into(xml::element&) const;
 
     // Class (T) identification.
-    virtual int         class_version() const = 0;
-    virtual std::string xml_root_name() const = 0;
+    virtual int                class_version() const = 0;
+    virtual std::string const& xml_root_name() const = 0;
 
     // Reading and writing.
     virtual void read_element
@@ -80,9 +80,9 @@ class LMI_SO xml_serializable
         ,std::string      & value
         ) const;
     virtual void redintegrate_ex_post
-        (int                                file_version
-        ,std::map<std::string, std::string> detritus_map
-        ,std::list<std::string>             residuary_names
+        (int                                       file_version
+        ,std::map<std::string, std::string> const& detritus_map
+        ,std::list<std::string>             const& residuary_names
         );
     virtual void redintegrate_ad_terminum();
 };

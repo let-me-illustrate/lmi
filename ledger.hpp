@@ -109,8 +109,8 @@ class LMI_SO Ledger
 
     void read (xml::element const&);
     void write(xml::element&) const;
-    int class_version() const;
-    std::string xml_root_name() const;
+    int                class_version() const;
+    std::string const& xml_root_name() const;
 
     void write       (std::ostream& os) const;
     void write_xsl_fo(std::ostream& os) const;

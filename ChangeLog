@@ -25984,3 +25984,40 @@ Eliminate gratuitous redundancy.
   dbvalue.cpp
 Eliminate even more gratuitous redundancy.
 
+20100610T1710Z <gchicares@sbcglobal.net> [704]
+
+  configurable_settings.cpp
+  configurable_settings.hpp
+Move documentation from header to implementation.
+
+20100611T1437Z <gchicares@sbcglobal.net> [704]
+
+  antediluvian_stubs.cpp
+  configurable_settings.cpp
+  dbdict.cpp
+  dbdict.hpp
+  fund_data.cpp
+  input.hpp
+  input_xml_io.cpp
+  ledger.hpp
+  ledger_xml_io.cpp
+  mec_input.cpp
+  mec_input.hpp
+  mec_state.cpp
+  mec_state.hpp
+  mec_xml_document.cpp
+  mec_xml_document.hpp
+  multiple_cell_document.cpp
+  multiple_cell_document.hpp
+  product_data.cpp
+  product_data.hpp
+  rounding_rules.cpp
+  rounding_rules.hpp
+  single_cell_document.cpp
+  single_cell_document.hpp
+  stratified_charges.cpp
+  stratified_charges.hpp
+  xml_serializable.hpp
+  xml_serializable.tpp
+Improve const-correctness.
+
