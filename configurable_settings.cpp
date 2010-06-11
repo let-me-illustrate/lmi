@@ -47,8 +47,6 @@
 #include <iterator>
 #include <sstream>
 
-// TODO ?? Need unit tests.
-
 namespace
 {
 std::string const& configuration_filename()

@@ -95,6 +95,7 @@ TESTS = \
     test_callback \
     test_comma_punct \
     test_commutation_functions \
+    test_configurable_settings \
     test_contains \
     test_crc32 \
     test_expression_template_0 \
@@ -523,11 +524,25 @@ test_comma_punct_SOURCES =  \
   comma_punct_test.cpp
 test_comma_punct_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_commutation_functions_SOURCES =    \
+test_commutation_functions_SOURCES = \
   $(common_test_objects) \
   commutation_functions.cpp \
   commutation_functions_test.cpp
 test_commutation_functions_CXXFLAGS = $(AM_CXXFLAGS)
+
+test_configurable_settings_SOURCES = \
+  $(common_test_objects) \
+  configurable_settings.cpp \
+  configurable_settings_test.cpp \
+  data_directory.cpp \
+  global_settings.cpp \
+  miscellany.cpp \
+  path_utility.cpp \
+  xml_lmi.cpp
+test_configurable_settings_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
+test_configurable_settings_LDADD = \
+  $(BOOST_LIBS) \
+  $(XMLWRAPP_LIBS)
 
 test_contains_SOURCES =    \
   $(common_test_objects) \
