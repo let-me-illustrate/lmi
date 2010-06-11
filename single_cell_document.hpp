@@ -58,7 +58,7 @@ class LMI_SO single_cell_document
 
   private:
     void parse(xml::element const&);
-    std::string xml_root_name() const;
+    std::string const& xml_root_name() const;
 
     boost::scoped_ptr<Input> const input_data_;
 };

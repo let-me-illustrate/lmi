@@ -74,8 +74,8 @@ class LMI_SO DBDictionary
     static void InvalidateCache();
 
     // xml_serializable required implementation.
-    virtual int         class_version() const;
-    virtual std::string xml_root_name() const;
+    virtual int                class_version() const;
+    virtual std::string const& xml_root_name() const;
 
     // xml_serializable overrides.
     virtual void read_element

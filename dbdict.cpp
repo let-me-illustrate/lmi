@@ -452,9 +452,10 @@ int DBDictionary::class_version() const
     return 0;
 }
 
-std::string DBDictionary::xml_root_name() const
+std::string const& DBDictionary::xml_root_name() const
 {
-    return "database";
+    static std::string const s("database");
+    return s;
 }
 
 /// This override doesn't call redintegrate_ex_ante(); that wouldn't

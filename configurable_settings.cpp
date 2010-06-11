@@ -126,7 +126,7 @@ bool is_detritus(std::string const& s)
 
 std::string const& xml_root_name()
 {
-    static std::string s("configurable_settings");
+    static std::string const s("configurable_settings");
     return s;
 }
 } // Unnamed namespace.

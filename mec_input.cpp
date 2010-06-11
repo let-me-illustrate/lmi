@@ -613,9 +613,10 @@ int mec_input::class_version() const
     return 0;
 }
 
-std::string mec_input::xml_root_name() const
+std::string const& mec_input::xml_root_name() const
 {
-    return "mec";
+    static std::string const s("mec");
+    return s;
 }
 
 bool mec_input::is_detritus(std::string const& s) const

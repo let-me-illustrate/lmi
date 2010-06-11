@@ -108,9 +108,10 @@ FundData::~FundData()
 
 namespace
 {
-std::string xml_root_name()
+std::string const& xml_root_name()
 {
-    return "funds";
+    static std::string const s("funds");
+    return s;
 }
 } // Unnamed namespace.
 
