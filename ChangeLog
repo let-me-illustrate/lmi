@@ -26021,3 +26021,13 @@ Move documentation from header to implementation.
   xml_serializable.tpp
 Improve const-correctness.
 
+20100611T1523Z <gchicares@sbcglobal.net> [704]
+
+  xml_serializable.tpp
+Buffer certain diagnostics.
+
+20100611T1524Z <gchicares@sbcglobal.net> [703]
+
+  configurable_settings.cpp
+Remove a defect marker for an issue resolved 20100514T2140Z.
+
