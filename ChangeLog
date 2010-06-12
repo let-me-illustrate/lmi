@@ -26031,3 +26031,22 @@ Buffer certain diagnostics.
   configurable_settings.cpp
 Remove a defect marker for an issue resolved 20100514T2140Z.
 
+20100611T2356Z <gchicares@sbcglobal.net> [702]
+
+  Makefile.am
+  configurable_settings.cpp
+  configurable_settings_test.cpp [new file]
+  objects.make
+Add an inchoate unit test.
+
+20100612T0117Z <gchicares@sbcglobal.net> [702]
+
+  configurable_settings.cpp
+Rearrange to make an imminent refactoring clearer.
+
+20100612T0139Z <gchicares@sbcglobal.net> [702]
+
+  configurable_settings.cpp
+  configurable_settings.hpp
+Refactor, deriving configurable_settings from xml_serializable.
+
