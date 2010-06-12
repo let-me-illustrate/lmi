@@ -49,6 +49,10 @@
 
 namespace
 {
+// Forward declarations that will soon become unnecessary.
+std::string const& xml_root_name();
+bool is_detritus(std::string const&);
+
 std::string const& configuration_filename()
 {
     static std::string s("configurable_settings.xml");
@@ -101,30 +105,6 @@ std::string const& default_calculation_summary_columns()
         " CSVNet_Current"
         " EOYDeathBft_Current"
         );
-    return s;
-}
-
-/// Entities that were present in older versions and then removed
-/// are recognized and ignored. If they're resurrected in a later
-/// version, then they aren't ignored.
-
-bool is_detritus(std::string const& s)
-{
-    static std::string const a[] =
-        {"xml_schema_filename"               // Withdrawn.
-        ,"xsl_directory"                     // Withdrawn.
-        ,"xslt_format_xml_filename"          // Withdrawn.
-        ,"xslt_html_filename"                // Withdrawn.
-        ,"xslt_light_tab_delimited_filename" // Withdrawn.
-        ,"xslt_tab_delimited_filename"       // Withdrawn.
-        };
-    static std::vector<std::string> const v(a, a + lmi_array_size(a));
-    return contains(v, s);
-}
-
-std::string const& xml_root_name()
-{
-    static std::string const s("configurable_settings");
     return s;
 }
 } // Unnamed namespace.
@@ -261,6 +241,33 @@ void configurable_settings::save() const
             ;
         }
 }
+
+namespace
+{
+std::string const& xml_root_name()
+{
+    static std::string const s("configurable_settings");
+    return s;
+}
+
+/// Entities that were present in older versions and then removed
+/// are recognized and ignored. If they're resurrected in a later
+/// version, then they aren't ignored.
+
+bool is_detritus(std::string const& s)
+{
+    static std::string const a[] =
+        {"xml_schema_filename"               // Withdrawn.
+        ,"xsl_directory"                     // Withdrawn.
+        ,"xslt_format_xml_filename"          // Withdrawn.
+        ,"xslt_html_filename"                // Withdrawn.
+        ,"xslt_light_tab_delimited_filename" // Withdrawn.
+        ,"xslt_tab_delimited_filename"       // Withdrawn.
+        };
+    static std::vector<std::string> const v(a, a + lmi_array_size(a));
+    return contains(v, s);
+}
+} // Unnamed namespace.
 
 // TODO ?? CALCULATION_SUMMARY Address the validation issue:
 
