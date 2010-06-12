@@ -33,16 +33,13 @@
 #include "contains.hpp"
 #include "data_directory.hpp"     // AddDataDir()
 #include "handle_exceptions.hpp"
-#include "miscellany.hpp"
-#include "path_utility.hpp"
+#include "miscellany.hpp"         // lmi_array_size()
+#include "path_utility.hpp"       // validate_directory(), validate_filepath()
 #include "platform_dependent.hpp" // access()
-#include "xml_lmi.hpp"
 
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
-
-#include <xmlwrapp/nodes_view.h>
 
 #include <algorithm> // std::copy()
 #include <iterator>
@@ -62,12 +59,26 @@ std::string const& configuration_filename()
 /// it's non-complete--as is typical msw usage.
 ///
 /// Look for the configuration file first where FHS would have it.
-/// To support non-FHS platforms, if it's not found there, then
+/// To support non-FHS platforms, if it's not readable there, then
 /// look in the data directory.
 ///
-/// TODO ?? CALCULATION_SUMMARY Should write access be checked
-/// here? What if the first file found is read-only, but the
-/// second is read-write?
+/// Throws if the file is not readable.
+///
+/// A warning is given at initialization if the file is readable but
+/// not writable. It could conceivably be readable in both locations,
+/// but writable only in the second:
+///   -r--r--r-- ... /etc/opt/lmi/configurable_settings.xml
+///   -rw-rw-rw- ... /opt/lmi/data/configurable_settings.xml
+/// In that particular case, it might at first seem better to choose
+/// the second file. However, in the most plausible case--an archival
+/// copy of the system stored on a read-only medium, including coeval
+/// data files--it would be better to mount that medium as the data
+/// directory, e.g.:
+///   -rw-rw-rw- ... /etc/opt/lmi/configurable_settings.xml
+///   -r--r--r-- ... /dev/cdrom/configurable_settings.xml
+/// and the file in /etc/opt/lmi/ would be chosen by default, as seems
+/// most appropriate. (A knowledgeable user could of course move it
+/// aside if it is desired to use the file on the read-only medium.)
 
 fs::path const& configuration_filepath()
 {
@@ -78,10 +89,10 @@ fs::path const& configuration_filepath()
         }
 
     std::string filename = "/etc/opt/lmi/" + configuration_filename();
-    if(access(filename.c_str(), R_OK))
+    if(0 != access(filename.c_str(), R_OK))
         {
         filename = AddDataDir(configuration_filename());
-        if(access(filename.c_str(), R_OK))
+        if(0 != access(filename.c_str(), R_OK))
             {
             fatal_error()
                 << "No readable file '"
@@ -91,6 +102,18 @@ fs::path const& configuration_filepath()
                 ;
             }
         }
+
+    if(0 != access(filename.c_str(), W_OK))
+        {
+        warning()
+            << "Configurable-settings file '"
+            << filename
+            << "' can be read but not written."
+            << " No configuration changes can be saved."
+            << LMI_FLUSH
+            ;
+        }
+
     validate_filepath(filename, "Configurable-settings file");
     complete_path = fs::system_complete(filename);
     return complete_path;

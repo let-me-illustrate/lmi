@@ -37,13 +37,15 @@ class configurable_settings_test
     static void test()
         {
         test_normal_usage();
-        test_something_else();
+        test_writability();
         }
 
   private:
     static void test_normal_usage();
-    static void test_something_else();
+    static void test_writability();
 };
+
+/// Test for gross failure upon instantiation.
 
 void configurable_settings_test::test_normal_usage()
 {
@@ -51,9 +53,14 @@ void configurable_settings_test::test_normal_usage()
     BOOST_TEST(!c.skin_filename().empty());
 }
 
-void configurable_settings_test::test_something_else()
+/// Save a copy of the file multiple times (because users might).
+
+void configurable_settings_test::test_writability()
 {
-    // Nothing here yet.
+    configurable_settings const& c = configurable_settings::instance();
+    std::string const filename("eraseme");
+    c.xml_serializable<configurable_settings>::save(filename);
+    c.xml_serializable<configurable_settings>::save(filename);
 }
 
 int test_main(int, char*[])
