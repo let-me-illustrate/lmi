@@ -29,6 +29,7 @@
 #include "any_member.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
+#include "xml_serializable.hpp"
 
 #include <boost/utility.hpp>
 
@@ -46,9 +47,10 @@
 /// Data members are documented in their accessors' implementations.
 
 class LMI_SO configurable_settings
-    :public MemberSymbolTable<configurable_settings>
-    ,private boost::noncopyable
-    ,virtual private obstruct_slicing<configurable_settings>
+    :        private boost::noncopyable
+    ,virtual private obstruct_slicing  <configurable_settings>
+    ,        public  xml_serializable  <configurable_settings>
+    ,        public  MemberSymbolTable <configurable_settings>
 {
   public:
     static configurable_settings& instance();
@@ -76,6 +78,13 @@ class LMI_SO configurable_settings
 
     void ascribe_members();
     void load();
+
+    // xml_serializable required implementation.
+    virtual int                class_version() const;
+    virtual std::string const& xml_root_name() const;
+
+    // xml_serializable overrides.
+    virtual bool is_detritus(std::string const&) const;
 
     std::string calculation_summary_columns_;
     std::string cgi_bin_log_filename_;

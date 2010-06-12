@@ -27,6 +27,7 @@
 #endif // __BORLANDC__
 
 #include "configurable_settings.hpp"
+#include "xml_serializable.tpp"
 
 #include "alert.hpp"
 #include "contains.hpp"
@@ -47,12 +48,10 @@
 #include <iterator>
 #include <sstream>
 
+template class xml_serializable<configurable_settings>;
+
 namespace
 {
-// Forward declarations that will soon become unnecessary.
-std::string const& xml_root_name();
-bool is_detritus(std::string const&);
-
 std::string const& configuration_filename()
 {
     static std::string s("configurable_settings.xml");
@@ -183,68 +182,24 @@ void configurable_settings::ascribe_members()
 
 void configurable_settings::load()
 {
-    std::ostringstream oss;
-    xml_lmi::dom_parser parser(configuration_filepath().string());
-    xml::element const& root = parser.root_node(xml_root_name());
-    xml::const_nodes_view const elements(root.elements());
-    typedef xml::const_nodes_view::const_iterator cnvi;
-    for(cnvi i = elements.begin(); i != elements.end(); ++i)
-        {
-        std::string name = i->get_name();
-        if(contains(member_names(), name))
-            {
-            operator[](i->get_name()) = xml_lmi::get_content(*i);
-            }
-        else if(is_detritus(name))
-            {
-            // Hold certain obsolete entities that must be translated.
-            // For now, there are none.
-            }
-        else
-            {
-            oss << "  '" << name << "'\n";
-            }
-        }
-    if(!oss.str().empty())
-        {
-        warning()
-            << "Configurable-settings file '"
-            << configuration_filepath()
-            << "':\n"
-            << oss.str()
-            << "not recognized."
-            << LMI_FLUSH
-            ;
-        }
+    xml_serializable<configurable_settings>::load(configuration_filepath());
 }
 
 void configurable_settings::save() const
 {
-    xml_lmi::xml_document document(xml_root_name());
-    xml::element& root = document.root_node();
-
-    std::vector<std::string>::const_iterator i;
-    for(i = member_names().begin(); i != member_names().end(); ++i)
-        {
-        xml_lmi::add_node(root, *i, operator[](*i).str());
-        }
-
-    fs::ofstream ofs(configuration_filepath(), ios_out_trunc_binary());
-    ofs << document;
-    if(!ofs)
-        {
-        fatal_error()
-            << "Configurable-settings file '"
-            << configuration_filepath()
-            << "' is not writeable."
-            << LMI_FLUSH
-            ;
-        }
+    xml_serializable<configurable_settings>::save(configuration_filepath());
 }
 
-namespace
+/// Backward-compatibility serial number of this class's xml version.
+///
+/// version 0: 20100612T0139Z
+
+int configurable_settings::class_version() const
 {
-std::string const& xml_root_name()
+    return 0;
+}
+
+std::string const& configurable_settings::xml_root_name() const
 {
     static std::string const s("configurable_settings");
     return s;
@@ -254,7 +209,7 @@ std::string const& xml_root_name()
 /// are recognized and ignored. If they're resurrected in a later
 /// version, then they aren't ignored.
 
-bool is_detritus(std::string const& s)
+bool configurable_settings::is_detritus(std::string const& s) const
 {
     static std::string const a[] =
         {"xml_schema_filename"               // Withdrawn.
@@ -267,7 +222,6 @@ bool is_detritus(std::string const& s)
     static std::vector<std::string> const v(a, a + lmi_array_size(a));
     return contains(v, s);
 }
-} // Unnamed namespace.
 
 // TODO ?? CALCULATION_SUMMARY Address the validation issue:
 
