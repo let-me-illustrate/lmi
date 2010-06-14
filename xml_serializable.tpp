@@ -104,12 +104,8 @@ void xml_serializable<T>::read(xml::element const& x)
     std::string file_version_string;
     if(!xml_lmi::get_attr(x, "version", file_version_string))
         {
-        fatal_error()
-            << "XML tag <"
-            << xml_root_name()
-            << "> lacks required version attribute."
-            << LMI_FLUSH
-            ;
+        handle_missing_version_attribute();
+        file_version_string = "0";
         }
     int file_version = value_cast<int>(file_version_string);
 
@@ -274,6 +270,25 @@ void xml_serializable<T>::write_element
     ) const
 {
     parent.push_back(xml::element(name.c_str(), t()[name].str().c_str()));
+}
+
+/// React to absence of required 'version' attribute.
+///
+/// This default implementation throws an informative exception.
+///
+/// A derived class may override this with a do-nothing implementation
+/// if it is necessary to extend backward compatibility to historical
+/// xml files that originally had no such attribute.
+
+template<typename T>
+void xml_serializable<T>::handle_missing_version_attribute() const
+{
+    fatal_error()
+        << "XML tag <"
+        << xml_root_name()
+        << "> lacks required version attribute."
+        << LMI_FLUSH
+        ;
 }
 
 /// Ascertain whether an element-tag is obsolete.
