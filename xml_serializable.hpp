@@ -73,6 +73,7 @@ class LMI_SO xml_serializable
         ) const;
 
     // Backward compatibility.
+    virtual void handle_missing_version_attribute() const;
     virtual bool is_detritus(std::string const&) const;
     virtual void redintegrate_ex_ante
         (int                file_version
