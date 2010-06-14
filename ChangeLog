@@ -26050,3 +26050,29 @@ Rearrange to make an imminent refactoring clearer.
   configurable_settings.hpp
 Refactor, deriving configurable_settings from xml_serializable.
 
+20100612T2157Z <gchicares@sbcglobal.net> [701]
+
+  configurable_settings.cpp
+  configurable_settings_test.cpp
+Fix defect introduced 20061110T1628Z by warning at startup if settings
+cannot be saved.
+
+20100614T1129Z <gchicares@sbcglobal.net> [701]
+
+  xml_serializable.tpp
+Refactor to improve concinnity. The redintegrate_ex* implementations
+were equivalent; now they're identical.
+
+20100614T1145Z <gchicares@sbcglobal.net> [701]
+
+  xml_serializable.hpp
+  xml_serializable.tpp
+Optionally override missing-version error message.
+
+20100614T1259Z <gchicares@sbcglobal.net> [701]
+
+  configurable_settings.cpp
+  configurable_settings.hpp
+  configurable_settings_test.cpp
+Extend backward compatibility to encompass the 20080218T1743Z change.
+

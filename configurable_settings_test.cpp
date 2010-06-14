@@ -28,8 +28,12 @@
 
 #include "configurable_settings.hpp"
 
+#include "miscellany.hpp"   // ios_out_trunc_binary()
 #include "path_utility.hpp" // initialize_filesystem()
 #include "test_tools.hpp"
+
+#include <boost/filesystem/fstream.hpp>
+#include <boost/filesystem/path.hpp>
 
 class configurable_settings_test
 {
@@ -38,11 +42,13 @@ class configurable_settings_test
         {
         test_normal_usage();
         test_writability();
+        test_backward_compatibility();
         }
 
   private:
     static void test_normal_usage();
     static void test_writability();
+    static void test_backward_compatibility();
 };
 
 /// Test for gross failure upon instantiation.
@@ -61,6 +67,30 @@ void configurable_settings_test::test_writability()
     std::string const filename("eraseme");
     c.xml_serializable<configurable_settings>::save(filename);
     c.xml_serializable<configurable_settings>::save(filename);
+}
+
+/// Test each aspect of backward compatibility:
+///  - missing 'version' attribute
+///  - missing elements
+///  - a withdrawn element
+///  - an obsolete skin name
+
+void configurable_settings_test::test_backward_compatibility()
+{
+    fs::path const filename("eraseme");
+    fs::ofstream ofs(filename, ios_out_trunc_binary());
+    ofs
+        << "<?xml version=\"1.0\"?>\n"
+        << "<configurable_settings>\n"
+        << "<xml_schema_filename>[withdrawn]</xml_schema_filename>\n"
+        << "<skin_filename>xml_notebook_private_placement.xrc</skin_filename>\n"
+        << "</configurable_settings>\n"
+        ;
+    ofs.close();
+
+    configurable_settings& c = configurable_settings::instance();
+    c.xml_serializable<configurable_settings>::load(filename);
+    BOOST_TEST_EQUAL("skin_reg_d.xrc", c.skin_filename());
 }
 
 int test_main(int, char*[])

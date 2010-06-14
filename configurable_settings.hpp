@@ -84,7 +84,18 @@ class LMI_SO configurable_settings
     virtual std::string const& xml_root_name() const;
 
     // xml_serializable overrides.
+    virtual void handle_missing_version_attribute() const;
     virtual bool is_detritus(std::string const&) const;
+    virtual void redintegrate_ex_ante
+        (int                file_version
+        ,std::string const& name
+        ,std::string      & value
+        ) const;
+    virtual void redintegrate_ex_post
+        (int                                       file_version
+        ,std::map<std::string, std::string> const& detritus_map
+        ,std::list<std::string>             const& residuary_names
+        );
 
     std::string calculation_summary_columns_;
     std::string cgi_bin_log_filename_;

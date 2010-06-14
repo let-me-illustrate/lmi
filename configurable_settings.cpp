@@ -44,6 +44,7 @@
 #include <algorithm> // std::copy()
 #include <iterator>
 #include <sstream>
+#include <stdexcept>
 
 template class xml_serializable<configurable_settings>;
 
@@ -215,17 +216,22 @@ void configurable_settings::save() const
 
 /// Backward-compatibility serial number of this class's xml version.
 ///
-/// version 0: 20100612T0139Z
+/// version 0: [prior to the lmi epoch]
+/// version 1: 20100612T0139Z
 
 int configurable_settings::class_version() const
 {
-    return 0;
+    return 1;
 }
 
 std::string const& configurable_settings::xml_root_name() const
 {
     static std::string const s("configurable_settings");
     return s;
+}
+
+void configurable_settings::handle_missing_version_attribute() const
+{
 }
 
 /// Entities that were present in older versions and then removed
@@ -244,6 +250,50 @@ bool configurable_settings::is_detritus(std::string const& s) const
         };
     static std::vector<std::string> const v(a, a + lmi_array_size(a));
     return contains(v, s);
+}
+
+void configurable_settings::redintegrate_ex_ante
+    (int                file_version
+    ,std::string const& name
+    ,std::string      & value
+    ) const
+{
+    if(class_version() == file_version)
+        {
+        return;
+        }
+
+    if(0 == file_version)
+        {
+        // Skin names differed prior to the 20080218T1743Z change,
+        // which predated the 'version' attribute.
+        if("skin_filename" == name && contains(value, "xml_notebook"))
+            {
+            value =
+                  "xml_notebook.xrc"                   == value ? "skin.xrc"
+                : "xml_notebook_coli_boli.xrc"         == value ? "skin_coli_boli.xrc"
+                : "xml_notebook_group_carveout.xrc"    == value ? "skin_group_carveout.xrc"
+                : "xml_notebook_private_placement.xrc" == value ? "skin_reg_d.xrc"
+                : "xml_notebook_single_premium.xrc"    == value ? "skin_single_premium.xrc"
+                : "xml_notebook_variable_annuity.xrc"  == value ? "skin_variable_annuity.xrc"
+                : throw std::runtime_error(value + ": unexpected skin filename.")
+                ;
+            }
+        }
+}
+
+void configurable_settings::redintegrate_ex_post
+    (int                                       file_version
+    ,std::map<std::string, std::string> const& // detritus_map
+    ,std::list<std::string>             const& // residuary_names
+    )
+{
+    if(class_version() == file_version)
+        {
+        return;
+        }
+
+    // Nothing to do for now.
 }
 
 // TODO ?? CALCULATION_SUMMARY Address the validation issue:
