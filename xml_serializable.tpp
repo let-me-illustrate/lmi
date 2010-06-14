@@ -371,14 +371,12 @@ void xml_serializable<T>::redintegrate_ex_post
         {
         return;
         }
-    else
-        {
-        fatal_error()
-            << "Incompatible file version."
-            << " An explicit override is necessary."
-            << LMI_FLUSH
-            ;
-        }
+
+    fatal_error()
+        << "Incompatible file version."
+        << " An explicit override is necessary."
+        << LMI_FLUSH
+        ;
 }
 
 /// Perform any required after-the-fact fixup.
