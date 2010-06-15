@@ -715,36 +715,32 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_SurrChgPremMult     , 0.0));
     Add(database_entity(DB_SurrChgAmort        , 0.0));
 
-    // These aren't actual premium tax rates. Actual rates change
-    // often, and depend on the insurer's domicile because of
-    // retaliation. Instead of giving rates that appear to be 'right'
-    // but could be valid only on a certain date in a certain
-    // domicile, we use two percent in every state except AK and SD
-    // because those two states have a tiered premium tax that this
-    // program can handle, and except fictitious state XX, which may
-    // be used where no premium tax applies, as for offshore business.
-    // DE has a tiered premium tax that this program cannot yet
-    // handle, so we punt and use two percent in DE.
+    // These premium-tax rates aren't necessarily accurate or current.
+    // They resemble 2010 effective rates with a retaliatory floor of
+    // two percent. Actual rates change from time to time, and depend
+    // on the insurer's domicile because of retaliation. AK and SD
+    // have a tiered premium tax that lmi handles; DE has one that it
+    // does not. Fictitious state XX may be used where no premium tax
+    // applies, as for offshore business.
     int premium_tax_dimensions[e_number_of_axes] = {1, 1, 1, 1, 1, 53, 1};
     double const tiered = 0.0;
     double premium_tax_rates[53] =
-        {
-    //  AL      AK      AZ      AR      CA      CO      CT
-        0.0200, tiered, 0.0200, 0.0200, 0.0200, 0.0200, 0.0200,
-    //  DE      DC      FL      GA      HI      ID
-        0.0200, 0.0200, 0.0200, 0.0200, 0.0200, 0.0200,
-    //  IL      IN      IA      KS      KY      LA      ME
-        0.0200, 0.0200, 0.0200, 0.0200, 0.0200, 0.0200, 0.0200,
-    //  MD      MA      MI      MN      MS      MO
-        0.0200, 0.0200, 0.0200, 0.0200, 0.0200, 0.0200,
-    //  MT      NE      NV      NH      NJ      NM      NY
-        0.0200, 0.0200, 0.0200, 0.0200, 0.0200, 0.0200, 0.0200,
-    //  NC      ND      OH      OK      OR      PA
-        0.0200, 0.0200, 0.0200, 0.0200, 0.0200, 0.0200,
-    //  PR      RI      SC      SD      TN      TX      UT
-        0.0200, 0.0200, 0.0200, tiered, 0.0200, 0.0200, 0.0200,
-    //  VT      VA      WA      WV      WI      WY      XX
-        0.0200, 0.0200, 0.0200, 0.0200, 0.0200, 0.0200, 0.0000,
+        //   AL       AK       AZ       AR       CA       CO       CT
+        {0.0230,  tiered,  0.0200,  0.0250,  0.0235,  0.0200,  0.0200
+        //   DE       DC       FL       GA       HI       ID
+        ,0.0200,  0.0200,  0.0200,  0.0225,  0.0275,  0.0200
+        //   IL       IN       IA       KS       KY       LA       ME
+        ,0.0200,  0.0200,  0.0200,  0.0200,  0.0200,  0.0225,  0.0200
+        //   MD       MA       MI       MN       MS       MO
+        ,0.0200,  0.0200,  0.0200,  0.0200,  0.0300,  0.0200
+        //   MT       NE       NV       NH       NJ       NM       NY
+        ,0.0275,  0.0200,  0.0350,  0.0200,  0.0200,  0.03003, 0.0200
+        //   NC       ND       OH       OK       OR       PA
+        ,0.0200,  0.0200,  0.0200,  0.0225,  0.0200,  0.0200
+        //   PR       RI       SC       SD       TN       TX       UT
+        ,0.0400,  0.0200,  0.0200,  tiered,  0.0200,  0.0200,  0.0225
+        //   VT       VA       WA       WV       WI       WY       XX
+        ,0.0200,  0.0225,  0.0200,  0.0300,  0.0200,  0.0200,  0.0000
         };
     Add
         (database_entity

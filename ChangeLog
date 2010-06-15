@@ -26076,3 +26076,18 @@ Optionally override missing-version error message.
   configurable_settings_test.cpp
 Extend backward compatibility to encompass the 20080218T1743Z change.
 
+20100615T2138Z <gchicares@sbcglobal.net> [701]
+
+  mc_enum_types.xpp
+Remove a formatting anomaly.
+
+20100615T2139Z <gchicares@sbcglobal.net> [701]
+
+  main_cli.cpp
+Permit single-life testdecks.
+
+20100615T2140Z <gchicares@sbcglobal.net> [701]
+
+  dbdict.cpp
+Use more realistic premium-tax rates.
+
