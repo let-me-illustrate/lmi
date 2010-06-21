@@ -26101,3 +26101,22 @@ Add a missing field.
   version.hpp
 Mark release candidate.
 
+20100621T1428Z <gchicares@sbcglobal.net> [700]
+
+  ihs_acctval.cpp
+Refactor, indigitating a defect.
+
+20100621T1546Z <gchicares@sbcglobal.net> [700]
+
+  ihs_acctval.cpp
+  yare_input.cpp
+  yare_input.hpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch. For 7702A, specified-amount history prior to the last
+material change is irrelevant.
+
+20100621T1549Z <gchicares@sbcglobal.net> [700]
+
+  version.hpp
+Mark release candidate.
+
