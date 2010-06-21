@@ -533,8 +533,11 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
             ,length_7702a
             ,std::back_inserter(pmts_7702a)
             );
-        // Specamt history starts at policy year zero.
-        int const offset = yare_input_.InforceContractYear; // Incorrect.
+        // Specamt history starts at policy year zero and must be offset.
+        int const offset = duration_ceiling
+            (yare_input_.EffectiveDate
+            ,yare_input_.LastMaterialChangeDate
+            );
         nonstd::copy_n
             (yare_input_.SpecamtHistory.begin() + offset
             ,length_7702a
