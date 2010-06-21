@@ -278,6 +278,9 @@ void Irc7702A::Initialize7702A
         Pmts[j * months_per_year] = a_Pmts[j];
         }
     HOPEFULLY(a_Bfts.size() <= max_years);
+// UpdateBft7702A() updates this, thus:
+//    Bfts[TestPeriodDur] = current_bft;
+// so should we make sure Bfts[TestPeriodDur] is zero here?
     for(unsigned int j = 0; j < a_Bfts.size(); ++j)
         {
         for(int k = 0; k < months_per_year; ++k)
@@ -291,12 +294,13 @@ void Irc7702A::Initialize7702A
     AssumedBft      = a_LowestBft; // TODO ?? Is this needed? Is it not always Bfts[0]?
     LowestBft       = a_LowestBft;
 
-    HOPEFULLY
-        (   static_cast<unsigned int>(PolicyYear - a_ContractYear)
-        <   SevenPPRateVec.size()
-        );
-    Saved7PPRate       = SevenPPRateVec[std::max(0, PolicyYear - a_ContractYear)];
-    state_.B2_deduced_px7_rate = SevenPPRateVec[std::max(0, PolicyYear - a_ContractYear)];
+    // This is wrong, because we don't know whether the last MC
+    // occurred before or after the anniversary:
+    unsigned int duration_of_last_mc = PolicyYear - a_ContractYear;
+    HOPEFULLY(duration_of_last_mc < SevenPPRateVec.size());
+    duration_of_last_mc = std::max(0U, duration_of_last_mc);
+    Saved7PPRate    = SevenPPRateVec[duration_of_last_mc];
+    state_.B2_deduced_px7_rate = SevenPPRateVec[duration_of_last_mc];
     SavedNecPrem    = 0.0;
     UnnecPrem       = 0.0;
     SavedNSP        = NSPVec[PolicyYear]; // TODO ?? Ignores interpolation.
@@ -1333,6 +1337,7 @@ double Irc7702A::DetermineLowestBft() const
         ,Bfts.begin() + std::min(TestPeriodLen, TestPeriodDur)
         );
     LMI_ASSERT(Bfts.begin() <= last_bft_in_test_period);
+// This is harmful for inforce if inforce history is unreliable:
     LowestBft = *std::min_element(Bfts.begin(), last_bft_in_test_period);
     return LowestBft;
 }
