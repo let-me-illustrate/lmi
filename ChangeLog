@@ -26091,3 +26091,13 @@ Permit single-life testdecks.
   dbdict.cpp
 Use more realistic premium-tax rates.
 
+20100621T1400Z <gchicares@sbcglobal.net> [700]
+
+  skin.xrc
+Add a missing field.
+
+20100621T1403Z <gchicares@sbcglobal.net> [700]
+
+  version.hpp
+Mark release candidate.
+
