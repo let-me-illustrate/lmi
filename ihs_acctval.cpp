@@ -515,7 +515,6 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         }
     std::vector<double> pmts_7702a;
     std::vector<double> bfts_7702a;
-    int length_7702a = std::min(7, BasicValues::GetLength());
     if(0 == InforceYear && 0 == InforceMonth)
         {
         // No need to initialize 'pmts_7702a' in this case.
@@ -527,6 +526,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         }
     else
         {
+        int length_7702a = std::min(7, BasicValues::GetLength());
         // Premium history starts at contract year zero.
         nonstd::copy_n
             (yare_input_.PremiumHistory.begin()
@@ -534,8 +534,9 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
             ,std::back_inserter(pmts_7702a)
             );
         // Specamt history starts at policy year zero.
+        int const offset = yare_input_.InforceContractYear; // Incorrect.
         nonstd::copy_n
-            (yare_input_.SpecamtHistory.begin() + yare_input_.InforceContractYear
+            (yare_input_.SpecamtHistory.begin() + offset
             ,length_7702a
             ,std::back_inserter(bfts_7702a)
             );
