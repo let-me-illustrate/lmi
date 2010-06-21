@@ -294,11 +294,14 @@ void Irc7702A::Initialize7702A
     AssumedBft      = a_LowestBft; // TODO ?? Is this needed? Is it not always Bfts[0]?
     LowestBft       = a_LowestBft;
 
-    // This is wrong, because we don't know whether the last MC
-    // occurred before or after the anniversary:
-    unsigned int duration_of_last_mc = PolicyYear - a_ContractYear;
-    HOPEFULLY(duration_of_last_mc < SevenPPRateVec.size());
-    duration_of_last_mc = std::max(0U, duration_of_last_mc);
+    // For now, make do with the data available. Ultimately, pass
+    // duration of last material change as an argument.
+    double const z = std::floor
+        ( (    PolicyYear +     PolicyMonth / 12.0)
+        - (a_ContractYear + a_ContractMonth / 12.0)
+        );
+    unsigned int const duration_of_last_mc = static_cast<unsigned int>(z);
+    LMI_ASSERT(duration_of_last_mc < SevenPPRateVec.size());
     Saved7PPRate    = SevenPPRateVec[duration_of_last_mc];
     state_.B2_deduced_px7_rate = SevenPPRateVec[duration_of_last_mc];
     SavedNecPrem    = 0.0;
