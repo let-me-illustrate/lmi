@@ -26,6 +26,8 @@
 
 #include "config.hpp"
 
+#include "ieee754.hpp" // is_infinite<>()
+
 #include <algorithm>   // std::max()
 #include <cmath>       // C99 functions fabsl(), log10l(), strtold()
 #include <cstdlib>     // std::strto*()
@@ -78,8 +80,8 @@ template<typename T>
 inline int floating_point_decimals(T t)
 {
     BOOST_STATIC_ASSERT(boost::is_float<T>::value);
-    // Avoid taking zero's logarithm.
-    if(0 == t)
+    // Avoid taking the logarithm of zero or infinity.
+    if(0 == t || is_infinite(t))
         {
         return 0;
         }

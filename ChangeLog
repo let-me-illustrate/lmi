@@ -26162,3 +26162,19 @@ Support infinities.
   ihs_basicval.cpp
 Refactor.
 
+20100622T1522Z <gchicares@sbcglobal.net> [699]
+
+  numeric_io_traits.hpp
+Reformat documentation.
+
+20100622T1523Z <gchicares@sbcglobal.net> [698]
+
+  numeric_io_test.cpp
+Refactor.
+
+20100622T1709Z <gchicares@sbcglobal.net> [698]
+
+  numeric_io_test.cpp
+  numeric_io_traits.hpp
+Support infinities.
+
