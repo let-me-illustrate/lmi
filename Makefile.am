@@ -104,6 +104,7 @@ TESTS = \
     test_financial \
     test_global_settings \
     test_handle_exceptions \
+    test_ieee754 \
     test_input_seq \
     test_input \
     test_irc7702a \
@@ -124,7 +125,6 @@ TESTS = \
     test_print_matrix \
     test_product_file \
     test_progress_meter \
-    test_quiet_nan \
     test_round \
     test_round_to \
     test_rtti_lmi \
@@ -595,6 +595,11 @@ test_handle_exceptions_SOURCES = \
   handle_exceptions_test.cpp
 test_handle_exceptions_CXXFLAGS = $(AM_CXXFLAGS)
 
+test_ieee754_SOURCES =    \
+  $(common_test_objects) \
+  ieee754_test.cpp
+test_ieee754_CXXFLAGS = $(AM_CXXFLAGS)
+
 test_input_seq_SOURCES =    \
   $(common_test_objects) \
   input_seq_test.cpp \
@@ -778,11 +783,6 @@ test_progress_meter_CXXFLAGS = $(AM_CXXFLAGS)
 test_progress_meter_LDADD =   \
   liblmi.la
 
-test_quiet_nan_SOURCES =    \
-  $(common_test_objects) \
-  quiet_nan_test.cpp
-test_quiet_nan_CXXFLAGS = $(AM_CXXFLAGS)
-
 test_round_SOURCES = \
   $(common_test_objects) \
   round_test.cpp
@@ -940,6 +940,7 @@ noinst_HEADERS = \
     group_values.hpp \
     handle_exceptions.hpp \
     icon_monger.hpp \
+    ieee754.hpp \
     ihs_irc7702.hpp \
     ihs_irc7702a.hpp \
     ihs_server7702.hpp \
@@ -1021,7 +1022,6 @@ noinst_HEADERS = \
     product_editor.hpp \
     product_names.hpp \
     progress_meter.hpp \
-    quiet_nan.hpp \
     round_to.hpp \
     rounding_document.hpp \
     rounding_rules.hpp \
