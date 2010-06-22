@@ -40,6 +40,7 @@
 #include "et_vector.hpp"
 #include "fund_data.hpp"
 #include "global_settings.hpp"
+#include "ieee754.hpp"           // ldbl_eps_plus_one()
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
 #include "ihs_x_type.hpp"
@@ -65,27 +66,6 @@
 #include <numeric>
 #include <sstream>
 #include <stdexcept>
-
-namespace
-{
-    // TODO ?? This is a kludge.
-    //
-    // Floating-point numbers that represent integers scaled by
-    // negative powers of ten are inexact. For example, a premium
-    // rate of $2.40 per $1000 is notionally 0.0024, but to the
-    // hardware it may look like
-    //   0.0023999999999999998 [0x3ff69d495182a9930800]
-    // Multiplying that number by a million dollars and rounding
-    // down to cents yields 2399.99, where 2400.00 is wanted.
-    //
-    // The best way to handle this is to store integers. Until we
-    // have time to consider that, multiplying by 1 + LDBL_EPSILON
-    // avoids this embarrassment while introducing an error that
-    // shouldn't matter.
-    long double const epsilon_plus_one =
-        1.0L + std::numeric_limits<long double>::epsilon()
-        ;
-} // Unnamed namespace.
 
 //============================================================================
 BasicValues::BasicValues(Input const& input)
@@ -1142,7 +1122,7 @@ double BasicValues::GetModalPremMaxNonMec
     ) const
 {
     double temp = MortalityRates_->SevenPayRates()[0];
-    return round_max_premium()(temp * epsilon_plus_one * a_specamt / a_mode);
+    return round_max_premium()(temp * ldbl_eps_plus_one() * a_specamt / a_mode);
 }
 
 /// Calculate premium using a target-premium ratio.
@@ -1161,7 +1141,7 @@ double BasicValues::GetModalPremTgtFromTable
         (
             (   Database_->Query(DB_TgtPremMonthlyPolFee)
             +       a_specamt
-                *   epsilon_plus_one
+                *   ldbl_eps_plus_one()
                 *   MortalityRates_->TargetPremiumRates()[0]
             )
         /   a_mode
@@ -1181,7 +1161,7 @@ double BasicValues::GetModalPremCorridor
     ) const
 {
     double temp = GetCorridorFactor()[0];
-    return round_max_premium()((epsilon_plus_one * a_specamt / temp) / a_mode);
+    return round_max_premium()((ldbl_eps_plus_one() * a_specamt / temp) / a_mode);
 }
 
 //============================================================================
@@ -1205,7 +1185,7 @@ double BasicValues::GetModalPremGLP
 // term rider, dumpin
 
     z /= a_mode;
-    return round_max_premium()(epsilon_plus_one * z);
+    return round_max_premium()(ldbl_eps_plus_one() * z);
 }
 
 //============================================================================
@@ -1228,7 +1208,7 @@ double BasicValues::GetModalPremGSP
 // term rider, dumpin
 
     z /= a_mode;
-    return round_max_premium()(epsilon_plus_one * z);
+    return round_max_premium()(ldbl_eps_plus_one() * z);
 }
 
 /// Determine an approximate "pay as you go" modal premium.

@@ -26150,3 +26150,15 @@ Rename 'quiet_nan*.?pp' to 'ieee754*.?pp'.
   ncnnnpnn_test.cpp
 Improve documentation.
 
+20100622T1342Z <gchicares@sbcglobal.net> [700]
+
+  ieee754.hpp
+  ieee754_test.cpp
+Support infinities.
+
+20100622T1412Z <gchicares@sbcglobal.net> [699]
+
+  ieee754.hpp
+  ihs_basicval.cpp
+Refactor.
+
