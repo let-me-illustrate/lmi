@@ -36,7 +36,11 @@
 #   include <boost/lexical_cast.hpp>
 #endif // ! defined __BORLANDC__
 
-#include <cmath>
+#include <cmath> // std::exp()
+#include <limits>
+#include <sstream>
+#include <stdexcept>
+#include <string>
 
 template<typename T>
 void test_interconvertibility
@@ -72,6 +76,22 @@ void test_interconvertibility
 
     std::string const s0 = s;
     INVOKE_BOOST_TEST_EQUAL(v, numeric_io_cast(s0, t), file, line);
+}
+
+void mete_two_thirds()
+{
+    std::string s = numeric_io_cast<std::string>(2.0 / 3.0);
+    double d = numeric_io_cast<double>(s);
+    stifle_warning_for_unused_value(d);
+}
+
+void mete_two_thirds_boost()
+{
+#if !defined __BORLANDC__
+    std::string s = boost::lexical_cast<std::string>(2.0 / 3.0);
+    double d = boost::lexical_cast<double>(s);
+    stifle_warning_for_unused_value(d);
+#endif // ! defined __BORLANDC__
 }
 
 // These tests generally assume IEC 60559 floating point. Hardware
@@ -134,32 +154,12 @@ int test_main(int, char*[])
 
     double volatile d;
 
-// TODO ?? Use TimeAnAliquot() instead.
-    Timer timer;
-    int iterations = 100000;
-    for(int j = 0; j < iterations; ++j)
-        {
-        std::string s = numeric_io_cast<std::string>(2.0 / 3.0);
-        d = numeric_io_cast<double>(s);
-        }
     std::cout
-        << (1e6 * timer.stop().elapsed_usec() / iterations)
-        << " usec per iteration for numeric_io_cast().\n"
+        << "Conversions:"
+        << "\n  2/3, lmi  : " << TimeAnAliquot(mete_two_thirds      )
+        << "\n  2/3, boost: " << TimeAnAliquot(mete_two_thirds_boost)
+        << std::endl
         ;
-
-#if !defined __BORLANDC__
-    timer.restart();
-    iterations = 1000;
-    for(int j = 0; j < iterations; ++j)
-        {
-        std::string s = boost::lexical_cast<std::string>(2.0 / 3.0);
-        d = boost::lexical_cast<double>(s);
-        }
-    std::cout
-        << (1e6 * timer.stop().elapsed_usec() / iterations)
-        << " usec per iteration for boost::lexical_cast()."
-        ;
-#endif // ! defined __BORLANDC__
 
     std::cout << std::endl;
     stifle_warning_for_unused_value(d);
