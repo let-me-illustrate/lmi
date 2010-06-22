@@ -26137,3 +26137,16 @@ place is not simply current policy year minus current contract year.
   version.hpp
 Mark release candidate.
 
+20100622T0011Z <gchicares@sbcglobal.net> [700]
+
+  Makefile.am
+  objects.make
+  quiet_nan.hpp      [renamed to ieee754.hpp     ]
+  quiet_nan_test.cpp [renamed to ieee754_test.cpp]
+Rename 'quiet_nan*.?pp' to 'ieee754*.?pp'.
+
+20100622T0107Z <gchicares@sbcglobal.net> [700]
+
+  ncnnnpnn_test.cpp
+Improve documentation.
+
