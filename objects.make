@@ -460,6 +460,7 @@ unit_test_targets := \
   getopt_test \
   global_settings_test \
   handle_exceptions_test \
+  ieee754_test \
   input_seq_test \
   input_test \
   irc7702a_test \
@@ -480,7 +481,6 @@ unit_test_targets := \
   print_matrix_test \
   product_file_test \
   progress_meter_test \
-  quiet_nan_test \
   regex_test \
   round_test \
   round_to_test \
@@ -642,6 +642,10 @@ global_settings_test$(EXEEXT): \
 handle_exceptions_test$(EXEEXT): \
   $(common_test_objects) \
   handle_exceptions_test.o \
+
+ieee754_test$(EXEEXT): \
+  $(common_test_objects) \
+  ieee754_test.o \
 
 input_seq_test$(EXEEXT): \
   $(common_test_objects) \
@@ -814,10 +818,6 @@ progress_meter_test$(EXEEXT): \
   progress_meter.o \
   progress_meter_cli.o \
   progress_meter_test.o \
-
-quiet_nan_test$(EXEEXT): \
-  $(common_test_objects) \
-  quiet_nan_test.o \
 
 regex_test$(EXEEXT): EXTRA_LDFLAGS = -Wl,--allow-multiple-definition
 regex_test$(EXEEXT): \
