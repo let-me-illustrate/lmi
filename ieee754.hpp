@@ -35,8 +35,7 @@
 
 #include <limits>
 
-/// Quiet NaN on IEC559-conforming implementations; otherwise, an
-/// implausible value, optionally specified.
+/// Quiet NaN if available; else a slightly less implausible value.
 ///
 /// It is sometimes profitable to initialize a floating-point variable
 /// to a recognizably implausible value. A quiet NaN is generally the
@@ -72,6 +71,61 @@ T implausible_value(T const& t = -9.99999e35)
         return t;
         }
 #endif // !defined __BORLANDC__
+}
+
+/// Return positive infinity.
+///
+/// Preconditions: T is a floating-point type that has an infinity.
+///
+/// Throws if any precondition is violated.
+///
+/// Rationale: std::numeric_limits<T>::infinity() silently returns
+/// zero if T has no infinity [18.2.1.5/1]; this function throws in
+/// that case to prevent surprises.
+///
+/// Static variables are volatile if initializing them might trigger a
+/// hardware exception.
+
+template<typename T>
+inline T infinity()
+{
+    BOOST_STATIC_ASSERT(::boost::is_float<T>::value);
+    BOOST_STATIC_ASSERT(std::numeric_limits<T>::has_infinity);
+    static T const volatile z = std::numeric_limits<T>::infinity();
+    return z;
+}
+
+/// Ascertain whether argument is infinite.
+///
+/// Preconditions: T is a floating-point type. (It need not have an
+/// infinity.)
+///
+/// Throws if any precondition is violated.
+///
+/// Eventually, the C++ standard library will provide std::isinf<T>(),
+/// which might replace this implementation when compilers support it.
+///
+/// Static variables are volatile if initializing them might trigger a
+/// hardware exception.
+///
+/// The present implementation compares the argument to positive and
+/// negative infinity, if infinity is available: it doesn't seem too
+/// outrageous to presume that infinity is negatable and that its
+/// positive and negative representations are unique. Alternatively,
+/// these conditions might be tested:
+///               std::numeric_limits<T>::max() < argument
+///   argument < -std::numeric_limits<T>::max()
+/// but it doesn't seem any safer to assume that would work better on
+/// a machine that doesn't conform to IEEE 754.
+
+template<typename T>
+inline bool is_infinite(T t)
+{
+    BOOST_STATIC_ASSERT(::boost::is_float<T>::value);
+    static T const volatile pos_inf =  std::numeric_limits<T>::infinity();
+    static T const volatile neg_inf = -std::numeric_limits<T>::infinity();
+    static bool const has_inf = std::numeric_limits<T>::has_infinity;
+    return has_inf && (pos_inf == t || neg_inf == t);
 }
 
 #endif // ieee754_hpp
