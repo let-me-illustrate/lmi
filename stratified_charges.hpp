@@ -209,7 +209,5 @@ class LMI_SO stratified_charges
     stratified_entity TieredSDPremTax;
 };
 
-bool LMI_SO is_highest_representable_double(double);
-
 #endif // stratified_charges_hpp
 
