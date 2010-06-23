@@ -35,6 +35,7 @@
 #include "dbnames.hpp"
 #include "global_settings.hpp"
 #include "handle_exceptions.hpp"
+#include "ieee754.hpp"            // infinity<>()
 #include "mc_enum_type_enums.hpp"
 #include "miscellany.hpp"
 #include "oecumenic_enumerations.hpp"
@@ -45,8 +46,6 @@
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
-
-#include <limits>
 
 template class xml_serializable<DBDictionary>;
 
@@ -489,7 +488,7 @@ void DBDictionary::Add(database_entity const& e)
 
 void DBDictionary::InitDB()
 {
-    static double const bignum = std::numeric_limits<double>::max();
+    static double const dbl_inf = infinity<double>();
 
     typedef std::vector<std::string>::const_iterator svci;
     for(svci i = member_names().begin(); i != member_names().end(); ++i)
@@ -509,17 +508,17 @@ void DBDictionary::InitDB()
     // e.g., 11 or 12.
     Add(database_entity(DB_MaxMonthlyCoiRate   , 12.0));
 
-    Add(database_entity(DB_GuarIntSpread       , bignum));
+    Add(database_entity(DB_GuarIntSpread       , dbl_inf));
 
-    Add(database_entity(DB_CurrCoiTable0Limit  , bignum));
+    Add(database_entity(DB_CurrCoiTable0Limit  , dbl_inf));
     Add(database_entity(DB_CurrCoiTable1       , 999));
-    Add(database_entity(DB_CurrCoiTable1Limit  , bignum));
+    Add(database_entity(DB_CurrCoiTable1Limit  , dbl_inf));
     Add(database_entity(DB_CurrCoiTable2       , 999));
 
-    Add(database_entity(DB_SpecAmtLoadLimit    , bignum));
-    Add(database_entity(DB_DynSepAcctLoadLimit , bignum));
-    Add(database_entity(DB_AdbLimit            , bignum));
-    Add(database_entity(DB_ExpSpecAmtLimit     , bignum));
+    Add(database_entity(DB_SpecAmtLoadLimit    , dbl_inf));
+    Add(database_entity(DB_DynSepAcctLoadLimit , dbl_inf));
+    Add(database_entity(DB_AdbLimit            , dbl_inf));
+    Add(database_entity(DB_ExpSpecAmtLimit     , dbl_inf));
 
     // SD Chapter 260 (HB 1200), signed 2008-02-19, amended 58-6-70
     // by removing the former million-dollar threshold.
@@ -529,23 +528,22 @@ void DBDictionary::InitDB()
 
     int premium_tax_dimensions[e_number_of_axes] = {1, 1, 1, 1, 1, 53, 1};
     double premium_tax_retaliation_threshold[53] =
-        {
-    //  AL      AK      AZ      AR      CA      CO      CT
-        bignum, 0.0   , bignum, bignum, bignum, bignum, bignum,
-    //  DE      DC      FL      GA      HI      ID
-        bignum, bignum, bignum, bignum, bignum, bignum,
-    //  IL      IN      IA      KS      KY      LA      ME
-        bignum, bignum, bignum, bignum, bignum, bignum, bignum,
-    //  MD      MA      MI      MN      MS      MO
-        bignum, bignum, bignum, bignum, bignum, bignum,
-    //  MT      NE      NV      NH      NJ      NM      NY
-        bignum, bignum, bignum, bignum, bignum, bignum, bignum,
-    //  NC      ND      OH      OK      OR      PA
-        bignum, bignum, bignum, bignum, bignum, bignum,
-    //  PR      RI      SC      SD      TN      TX      UT
-        bignum, bignum, bignum, 0.0   , bignum, bignum, bignum,
-    //  VT      VA      WA      WV      WI      WY      XX
-        bignum, bignum, bignum, bignum, bignum, bignum, 0.0   ,
+        //    AL       AK       AZ       AR       CA       CO       CT
+        {dbl_inf,     0.0, dbl_inf, dbl_inf, dbl_inf, dbl_inf, dbl_inf
+        //    DE       DC       FL       GA       HI       ID
+        ,dbl_inf, dbl_inf, dbl_inf, dbl_inf, dbl_inf, dbl_inf
+        //    IL       IN       IA       KS       KY       LA       ME
+        ,dbl_inf, dbl_inf, dbl_inf, dbl_inf, dbl_inf, dbl_inf, dbl_inf
+        //    MD       MA       MI       MN       MS       MO
+        ,dbl_inf, dbl_inf, dbl_inf, dbl_inf, dbl_inf, dbl_inf
+        //    MT       NE       NV       NH       NJ       NM       NY
+        ,dbl_inf, dbl_inf, dbl_inf, dbl_inf, dbl_inf, dbl_inf, dbl_inf
+        //    NC       ND       OH       OK       OR       PA
+        ,dbl_inf, dbl_inf, dbl_inf, dbl_inf, dbl_inf, dbl_inf
+        //    PR       RI       SC       SD       TN       TX       UT
+        ,dbl_inf, dbl_inf, dbl_inf,     0.0, dbl_inf, dbl_inf, dbl_inf
+        //    VT       VA       WA       WV       WI       WY       XX
+        ,dbl_inf, dbl_inf, dbl_inf, dbl_inf, dbl_inf, dbl_inf,     0.0
         };
     Add
         (database_entity

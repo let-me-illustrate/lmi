@@ -193,8 +193,6 @@ MultiDimTableAny::AxesAny TierTableAdapter::DoGetAxesAny()
 // TierEditorGrid implementation
 // ---------------------------
 
-std::string TierEditorGrid::highest_representable_label_("MAXIMUM");
-
 TierEditorGrid::TierEditorGrid()
 {
 }
@@ -314,19 +312,11 @@ TierEditorGrid::GetDoublePairValue(int band) const
 
 std::string TierEditorGrid::DoubleToString(double value)
 {
-    if(is_highest_representable_double(value))
-        {
-        return highest_representable_label_;
-        }
     return value_cast<std::string>(value);
 }
 
 double TierEditorGrid::StringToDouble(std::string const& text)
 {
-    if(text == highest_representable_label_)
-        {
-        return DBL_MAX;
-        }
     return value_cast<double>(text);
 }
 
