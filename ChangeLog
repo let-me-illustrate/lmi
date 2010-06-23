@@ -26178,3 +26178,19 @@ Refactor.
   numeric_io_traits.hpp
 Support infinities.
 
+20100623T0053Z <gchicares@sbcglobal.net> [697]
+
+  dbdict.cpp
+  print_matrix.hpp
+  stratified_algorithms.hpp
+  stratified_charges.cpp
+  stratified_charges.hpp
+  tier_view_editor.cpp
+  tier_view_editor.hpp
+Use infinity in product files.
+
+20100623T0158Z <gchicares@sbcglobal.net> [697]
+
+  version.hpp
+Mark release candidate.
+
