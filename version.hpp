@@ -24,7 +24,7 @@
 
 #include "config.hpp"
 
-#define LMI_VERSION "20100623T0158Z"
+#define LMI_VERSION "20100624T0245Z"
 
 #endif // version_hpp
 
