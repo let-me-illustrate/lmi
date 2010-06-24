@@ -148,12 +148,14 @@ using namespace xml;
             }
         else
             {
-            oss << "  '" << node_tag << "'\n";
+            bool b = contains(t().member_names(), node_tag);
+            std::string s = b ? "[duplicate]" : "[unrecognized]";
+            oss << "  '" << node_tag << "' " << s << "\n";
             }
         }
     if(!oss.str().empty())
         {
-        warning() << "Unrecognized XML tags:\n" << oss.str() << LMI_FLUSH;
+        warning() << "Discarded XML elements:\n" << oss.str() << LMI_FLUSH;
         }
 
     redintegrate_ex_post(file_version, detritus_map, residuary_names);
