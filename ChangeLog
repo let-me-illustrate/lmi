@@ -26194,3 +26194,18 @@ Use infinity in product files.
   version.hpp
 Mark release candidate.
 
+20100624T0243Z <gchicares@sbcglobal.net> [697]
+
+  xml_serializable.tpp
+Distinguish unrecognized from duplicate elements.
+
+20100624T0244Z <gchicares@sbcglobal.net> [697]
+
+  configurable_settings.cpp
+Extend backward compatibility to encompass an extraneous file.
+
+20100624T0245Z <gchicares@sbcglobal.net> [697]
+
+  version.hpp
+Mark release candidate.
+
