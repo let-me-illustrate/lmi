@@ -24,11 +24,10 @@
 #include "tier_view_editor.hpp"
 
 #include "assert_lmi.hpp"
+#include "ieee754.hpp" // infinity<>()
 #include "multidimgrid_safe.tpp"
 #include "stratified_charges.hpp"
 #include "value_cast.hpp"
-
-#include <cfloat> // DBL_MAX
 
 void tier_entity_adapter::ensure_not_void() const
 {
@@ -75,12 +74,11 @@ void tier_entity_adapter::set_bands_count(unsigned int n)
         return;
         }
 
-    static double const max_double = std::numeric_limits<double>::max();
-
     if(limits().empty())
         {
-        limits().push_back(max_double);
-        values().push_back(0);
+        // This is conjectured to be unreachable.
+        limits().push_back(infinity<double>());
+        values().push_back(0.0);
         }
 
     unsigned int const size = limits().size();

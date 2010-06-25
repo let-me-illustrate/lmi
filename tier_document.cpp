@@ -28,6 +28,8 @@
 
 #include "tier_document.hpp"
 
+#include "ieee754.hpp" // infinity<>()
+
 // EVGENIY !! Doesn't it seem strange that this wx header appears
 // to be needed here? I don't see it included in similar files.
 // I tried omitting it, but wasn't able to figure out what the
@@ -35,7 +37,6 @@
 
 #include <wx/defs.h>
 
-#include <cfloat> // DBL_MAX
 #include <vector>
 
 IMPLEMENT_DYNAMIC_CLASS(TierDocument, ProductEditorDocument)
@@ -54,8 +55,8 @@ TierDocument::~TierDocument()
 void TierDocument::initialize_charges()
 {
     static stratified_entity const dummy_entity
-        (std::vector<double>(1, DBL_MAX) // limits
-        ,std::vector<double>(1, 0)       // values
+        (std::vector<double>(1, infinity<double>()) // limits
+        ,std::vector<double>(1,                0.0) // values
         );
     std::vector<std::string> const& v = charges_.member_names();
     typedef std::vector<std::string>::const_iterator svci;
