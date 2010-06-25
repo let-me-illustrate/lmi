@@ -26209,3 +26209,15 @@ Extend backward compatibility to encompass an extraneous file.
   version.hpp
 Mark release candidate.
 
+20100625T0130Z <gchicares@sbcglobal.net> [697]
+
+  my_tier.cpp
+  tier_document.cpp
+  tier_view_editor.cpp
+Fix defect introduced 20100623T0053Z: cannot load valid file in GUI.
+
+20100625T0131Z <gchicares@sbcglobal.net> [697]
+
+  version.hpp
+Mark release candidate.
+
