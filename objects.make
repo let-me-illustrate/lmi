@@ -188,6 +188,7 @@ common_common_objects := \
   database.o \
   datum_base.o \
   datum_boolean.o \
+  datum_sequence.o \
   datum_string.o \
   dbdict.o \
   dbnames.o \
@@ -306,6 +307,7 @@ lmi_wx_objects := \
   icon_monger.o \
   illustration_document.o \
   illustration_view.o \
+  input_sequence_entry.o \
   main_common.o \
   main_wx.o \
   mec_document.o \
@@ -375,6 +377,7 @@ gpt_objects := \
   data_directory.o \
   database.o \
   datum_base.o \
+  datum_sequence.o \
   datum_string.o \
   dbdict.o \
   dbnames.o \
@@ -663,6 +666,7 @@ input_test$(EXEEXT): \
   data_directory.o \
   database.o \
   datum_base.o \
+  datum_sequence.o \
   datum_string.o \
   dbdict.o \
   dbnames.o \

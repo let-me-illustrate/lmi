@@ -165,6 +165,7 @@ lmi_wx_SOURCES = \
     icon_monger.cpp \
     illustration_document.cpp \
     illustration_view.cpp \
+    input_sequence_entry.cpp \
     main_common.cpp \
     main_wx.cpp \
     mec_document.cpp \
@@ -250,6 +251,7 @@ liblmi_common_sources = \
     database.cpp \
     datum_base.cpp \
     datum_boolean.cpp \
+    datum_sequence.cpp \
     datum_string.cpp \
     dbdict.cpp \
     dbnames.cpp \
@@ -615,6 +617,7 @@ test_input_SOURCES =    \
   data_directory.cpp \
   database.cpp \
   datum_base.cpp \
+  datum_sequence.cpp \
   datum_string.cpp \
   dbdict.cpp \
   dbnames.cpp \
@@ -915,6 +918,7 @@ noinst_HEADERS = \
     database_view_editor.hpp \
     datum_base.hpp \
     datum_boolean.hpp \
+    datum_sequence.hpp \
     datum_string.hpp \
     dbdict.hpp \
     dbindex.hpp \
@@ -952,6 +956,7 @@ noinst_HEADERS = \
     input.hpp \
     input_seq_helpers.hpp \
     input_sequence.hpp \
+    input_sequence_entry.hpp \
     interest_rates.hpp \
     istream_to_string.hpp \
     ledger.hpp \
