@@ -26237,3 +26237,10 @@ Add embryonic input-sequence editor.
   datum_sequence.hpp
 Implement base class for MVC input sequences.
 
+20100703T1542Z <gchicares@sbcglobal.net> [697]
+
+  datum_sequence.cpp
+  datum_sequence.hpp
+Implement two specimen derived classes. For the moment, only a dummy
+implementation of allowed_keywords() is provided.
+

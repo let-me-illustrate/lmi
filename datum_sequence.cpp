@@ -144,3 +144,49 @@ bool operator==(datum_sequence const& lhs, datum_sequence const& rhs)
     return lhs.equals(rhs);
 }
 
+// Payments.
+
+payment_sequence& payment_sequence::operator=(std::string const& s)
+{
+    datum_sequence::operator=(s);
+    return *this;
+}
+
+std::map<std::string,std::string> const payment_sequence::allowed_keywords() const
+{
+    static std::map<std::string,std::string> all_keywords;
+    if(all_keywords.empty())
+        {
+        all_keywords["dummy"] = "DummyValue";
+        }
+    return all_keywords;
+}
+
+bool operator==(payment_sequence const& lhs, payment_sequence const& rhs)
+{
+    return lhs.equals(rhs);
+}
+
+// Payment modes.
+
+mode_sequence& mode_sequence::operator=(std::string const& s)
+{
+    datum_sequence::operator=(s);
+    return *this;
+}
+
+std::map<std::string,std::string> const mode_sequence::allowed_keywords() const
+{
+    static std::map<std::string,std::string> all_keywords;
+    if(all_keywords.empty())
+        {
+        all_keywords["dummy"] = "DummyValue";
+        }
+    return all_keywords;
+}
+
+bool operator==(mode_sequence const& lhs, mode_sequence const& rhs)
+{
+    return lhs.equals(rhs);
+}
+

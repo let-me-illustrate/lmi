@@ -91,16 +91,72 @@ class datum_sequence
 
 bool operator==(datum_sequence const&, datum_sequence const&);
 
-template<>
-inline datum_sequence value_cast<datum_sequence,std::string>
+template<> inline datum_sequence value_cast<datum_sequence,std::string>
     (std::string const& from)
 {
     return datum_sequence(from);
 }
 
-template<>
-inline std::string value_cast<std::string,datum_sequence>
+template<> inline std::string value_cast<std::string,datum_sequence>
     (datum_sequence const& from)
+{
+    return from.value();
+}
+
+class payment_sequence
+    :public datum_sequence
+    ,private boost::equality_comparable<payment_sequence,payment_sequence>
+{
+  public:
+    payment_sequence() {}
+    explicit payment_sequence(std::string const& s) : datum_sequence(s) {}
+
+    payment_sequence& operator=(std::string const&);
+
+    virtual bool numeric_values_are_allowable() const {return true;}
+    virtual bool keyword_values_are_allowable() const {return true;}
+    virtual std::map<std::string,std::string> const allowed_keywords() const;
+};
+
+bool operator==(payment_sequence const&, payment_sequence const&);
+
+template<> inline payment_sequence value_cast<payment_sequence,std::string>
+    (std::string const& from)
+{
+    return payment_sequence(from);
+}
+
+template<> inline std::string value_cast<std::string,payment_sequence>
+    (payment_sequence const& from)
+{
+    return from.value();
+}
+
+class mode_sequence
+    :public datum_sequence
+    ,private boost::equality_comparable<mode_sequence,mode_sequence>
+{
+  public:
+    mode_sequence() {}
+    explicit mode_sequence(std::string const& s) : datum_sequence(s) {}
+
+    mode_sequence& operator=(std::string const&);
+
+    virtual bool numeric_values_are_allowable() const {return false;}
+    virtual bool keyword_values_are_allowable() const {return true;}
+    virtual std::map<std::string,std::string> const allowed_keywords() const;
+};
+
+bool operator==(mode_sequence const&, mode_sequence const&);
+
+template<> inline mode_sequence value_cast<mode_sequence,std::string>
+    (std::string const& from)
+{
+    return mode_sequence(from);
+}
+
+template<> inline std::string value_cast<std::string,mode_sequence>
+    (mode_sequence const& from)
 {
     return from.value();
 }
