@@ -21,26 +21,48 @@
 
 // $Id$
 
-// The remainder of this initial version is just a copy of
-// 'datum_string.hpp' with 's/datum_string/datum_sequence/g'.
-
 #ifndef datum_sequence_hpp
 #define datum_sequence_hpp
 
 #include "config.hpp"
 
-#include "datum_base.hpp"
+#include "datum_string.hpp"
 
 #include "value_cast.hpp"
 
 #include <boost/operators.hpp>
 
+#include <map>
 #include <string>
 
-// Implicitly-declared special member functions do the right thing.
+/// Base class for MVC input sequences.
+///
+/// Sequences are formed of values and intervals. Intervals may always
+/// be specified by numbers, keywords, or a combination of both. Each
+/// sequence's semantics determines whether its allowable values may
+/// be numbers, or keywords, or both; that's a fixed property of each
+/// derived class. Keyword values may be blocked in context even if
+/// they would be allowed in general; that's a runtime property of
+/// each derived-class instance.
+///
+/// For some sequences, no keywords are defined, and therefore none
+/// are ever permitted. It is difficult, e.g., to conceive of a
+/// keyword that would be useful for 7702A amounts-paid history.
+///
+/// For others, only keywords can be used, and numbers are never
+/// permitted. Payment mode, e.g., is chosen from an enumerated list,
+/// and numbers would at best be ambiguous synonyms:
+///  -  1=annual, 12=monthly // payments per least-frequent mode
+///  - 12=annual,  1=monthly // payments per  most-frequent mode
+///  -  1=A, 2=S, 3=Q, 4=M   // order in which they might be listed
+///
+/// Still others permit both numbers and keywords. Specified amount,
+/// e.g., must accommodate numeric entry.
+///
+/// Implicitly-declared special member functions do the right thing.
 
 class datum_sequence
-    :public datum_base
+    :public datum_string
     ,private boost::equality_comparable<datum_sequence,datum_sequence>
 {
   public:
@@ -50,14 +72,21 @@ class datum_sequence
 
     datum_sequence& operator=(std::string const&);
 
-    std::string const& value() const;
+    void block_keyword_values(bool);
 
-    // datum_base required implementation.
-    virtual std::istream& read (std::istream&);
-    virtual std::ostream& write(std::ostream&) const;
+    // For the nonce, this class is used concretely. These three
+    // functions will become pure virtual once a full complement of
+    // derived classes has been written.
+    //
+    virtual bool numeric_values_are_allowable() const;
+    virtual bool keyword_values_are_allowable() const;
+    virtual std::map<std::string,std::string> const allowed_keywords() const;
+
+    bool equals(datum_sequence const&) const;
+    void assert_sanity() const;
 
   private:
-    std::string value_;
+    bool keyword_values_are_blocked_;
 };
 
 bool operator==(datum_sequence const&, datum_sequence const&);
