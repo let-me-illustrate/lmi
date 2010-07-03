@@ -122,6 +122,19 @@ bool datum_sequence::equals(datum_sequence const& z) const
     return z.keyword_values_are_blocked_ == keyword_values_are_blocked_;
 }
 
+/// Determine whether keywords are blocked.
+///
+/// Rationale: to support allowed_keywords() in derived classes.
+///
+/// It would be simple to provide a public accessor for the member
+/// datum, but maintaining strong encapsulation reduces the temptation
+/// for one component of MVC to inspect another's internals.
+
+bool datum_sequence::keyword_values_are_blocked() const
+{
+    return keyword_values_are_blocked_;
+}
+
 /// Ensure that input is possible; throw otherwise.
 ///
 /// Input is possible iff either
@@ -154,12 +167,40 @@ payment_sequence& payment_sequence::operator=(std::string const& s)
 
 std::map<std::string,std::string> const payment_sequence::allowed_keywords() const
 {
+    if(keyword_values_are_blocked())
+        {
+        return std::map<std::string,std::string>();
+        }
+
     static std::map<std::string,std::string> all_keywords;
     if(all_keywords.empty())
         {
-        all_keywords["dummy"] = "DummyValue";
+        all_keywords["minimum" ] = "PmtMinimum"      ;
+        all_keywords["target"  ] = "PmtTarget"       ;
+        all_keywords["sevenpay"] = "PmtMEP"          ;
+        all_keywords["glp"     ] = "PmtGLP"          ;
+        all_keywords["gsp"     ] = "PmtGSP"          ;
+        all_keywords["corridor"] = "PmtCorridor"     ;
+        all_keywords["table"   ] = "PmtTable"        ;
+        all_keywords["none"    ] = "PmtInputScalar"  ;
         }
-    return all_keywords;
+    std::map<std::string,std::string> permissible_keywords = all_keywords;
+    permissible_keywords.erase("none");
+
+    bool payment_indeterminate =
+        (
+        false
+    // TODO ?? Further conditions to disallow improper input:
+    // need to compare corresponding years.
+    //  || specamt strategy is neither 'none' nor 'salary-based'
+        );
+
+    if(payment_indeterminate)
+        {
+        permissible_keywords.clear();
+        }
+
+    return permissible_keywords;
 }
 
 bool operator==(payment_sequence const& lhs, payment_sequence const& rhs)
@@ -177,12 +218,17 @@ mode_sequence& mode_sequence::operator=(std::string const& s)
 
 std::map<std::string,std::string> const mode_sequence::allowed_keywords() const
 {
+    LMI_ASSERT(!keyword_values_are_blocked());
     static std::map<std::string,std::string> all_keywords;
     if(all_keywords.empty())
         {
-        all_keywords["dummy"] = "DummyValue";
+        all_keywords["annual"    ] = "Annual";
+        all_keywords["semiannual"] = "Semiannual";
+        all_keywords["quarterly" ] = "Quarterly";
+        all_keywords["monthly"   ] = "Monthly";
         }
-    return all_keywords;
+    std::map<std::string,std::string> permissible_keywords = all_keywords;
+    return permissible_keywords;
 }
 
 bool operator==(mode_sequence const& lhs, mode_sequence const& rhs)
