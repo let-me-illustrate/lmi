@@ -83,9 +83,13 @@ class datum_sequence
     virtual std::map<std::string,std::string> const allowed_keywords() const;
 
     bool equals(datum_sequence const&) const;
-    void assert_sanity() const;
+
+  protected:
+    bool keyword_values_are_blocked() const;
 
   private:
+    void assert_sanity() const;
+
     bool keyword_values_are_blocked_;
 };
 

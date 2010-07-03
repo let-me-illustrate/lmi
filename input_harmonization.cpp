@@ -593,8 +593,10 @@ false // Silly workaround for now.
 // no such scalar control was ported. For payment strategy, lmi offers
 // only input sequences that are enabled by default.
 
-    Payment           .enable(mce_solve_ee_prem != SolveType);
-    CorporationPayment.enable(mce_solve_er_prem != SolveType);
+    Payment           .enable              (mce_solve_ee_prem != SolveType);
+    Payment           .block_keyword_values(mce_solve_ee_prem == SolveType);
+    CorporationPayment.enable              (mce_solve_er_prem != SolveType);
+    CorporationPayment.block_keyword_values(mce_solve_er_prem == SolveType);
 
     IndividualPaymentMode.allow_all(true);
     // TODO ?? Should the following be permitted? If so, then either

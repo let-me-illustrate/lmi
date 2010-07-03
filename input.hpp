@@ -31,6 +31,7 @@
 #include "any_member.hpp"
 #include "ce_product_name.hpp"
 #include "datum_boolean.hpp"
+#include "datum_sequence.hpp"
 #include "datum_string.hpp"
 #include "mc_enum.hpp"
 #include "mc_enum_types.hpp"
@@ -49,11 +50,6 @@ class product_database;
 #include <map>
 #include <string>
 #include <vector>
-
-/// Eventually it may become important to distinguish strings that
-/// represent input sequences, for interactive validation.
-
-typedef datum_string datum_sequence;
 
 /// Design notes for class input.
 ///
@@ -203,8 +199,6 @@ class LMI_SO Input
 
     std::map<std::string,std::string> const permissible_specified_amount_strategy_keywords();
     std::map<std::string,std::string> const permissible_death_benefit_option_keywords();
-    std::map<std::string,std::string> const permissible_payment_strategy_keywords();
-    std::map<std::string,std::string> const permissible_payment_mode_keywords();
 
     std::string RealizeExtraMonthlyCustodialFee   ();
     std::string RealizeExtraCompensationOnAssets  ();
@@ -396,10 +390,10 @@ class LMI_SO Input
     datum_sequence           ProjectedSalary                 ;
     datum_sequence           SpecifiedAmount                 ;
     datum_sequence           DeathBenefitOption              ;
-    datum_sequence           Payment                         ;
-    datum_sequence           PaymentMode                     ;
-    datum_sequence           CorporationPayment              ;
-    datum_sequence           CorporationPaymentMode          ;
+    payment_sequence         Payment                         ;
+    mode_sequence            PaymentMode                     ;
+    payment_sequence         CorporationPayment              ;
+    mode_sequence            CorporationPaymentMode          ;
     datum_sequence           GeneralAccountRate              ;
     datum_sequence           SeparateAccountRate             ;
     datum_sequence           NewLoan                         ;
@@ -505,6 +499,11 @@ template<> struct reconstitutor<datum_base, Input>
         DesiredType* z = 0;
         z = exact_cast<ce_product_name         >(m); if(z) return z;
         z = exact_cast<datum_string            >(m); if(z) return z;
+        // Sequences.
+        z = exact_cast<datum_sequence          >(m); if(z) return z;
+        z = exact_cast<mode_sequence           >(m); if(z) return z;
+        z = exact_cast<payment_sequence        >(m); if(z) return z;
+        // mc- types.
         z = exact_cast<mce_gen_basis           >(m); if(z) return z;
         z = exact_cast<mce_class               >(m); if(z) return z;
         z = exact_cast<mce_country             >(m); if(z) return z;
@@ -536,6 +535,7 @@ template<> struct reconstitutor<datum_base, Input>
         z = exact_cast<mce_to_point            >(m); if(z) return z;
         z = exact_cast<mce_uw_basis            >(m); if(z) return z;
         z = exact_cast<mce_yes_or_no           >(m); if(z) return z;
+        // tnr- types.
         z = exact_cast<tnr_attained_age        >(m); if(z) return z;
         z = exact_cast<tnr_corridor_factor     >(m); if(z) return z;
         z = exact_cast<tnr_date                >(m); if(z) return z;
