@@ -550,5 +550,20 @@ template<> struct reconstitutor<datum_base, Input>
         }
 };
 
+/// Specialization of struct template reconstitutor for this Model
+/// and the base class that all its input sequences share.
+
+template<> struct reconstitutor<datum_sequence, Input>
+{
+    typedef datum_sequence DesiredType;
+    static DesiredType* reconstitute(any_member<Input>& m)
+        {
+        DesiredType* z = 0;
+        z = exact_cast<mode_sequence           >(m); if(z) return z;
+        z = exact_cast<payment_sequence        >(m); if(z) return z;
+        return z;
+        }
+};
+
 #endif // input_hpp
 

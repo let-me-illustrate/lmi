@@ -2381,7 +2381,8 @@ the other is perforce ignored.
                 </object>
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
-                    <object class="wxTextCtrl" name="Payment">
+                    <object class="InputSequenceEntry" name="Payment">
+                        <title>Individual payment</title>
                         <help>Individual payment amount, or corridor, glp, gsp, minimum, sevenpay, table, target</help>
                         <size>180,-1</size>
                     </object>
@@ -2395,7 +2396,8 @@ the other is perforce ignored.
                 </object>
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
-                    <object class="wxTextCtrl" name="PaymentMode">
+                    <object class="InputSequenceEntry" name="PaymentMode">
+                        <title>Individual payment mode</title>
                         <help>Individual payment mode: annual, semiannual, quarterly, or monthly</help>
                         <size>180,-1</size>
                     </object>
