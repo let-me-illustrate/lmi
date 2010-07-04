@@ -544,6 +544,11 @@ void MvcController::TestModelViewConsistency() const
     warning() << std::flush;
 }
 
+MvcModel const& MvcController::Model() const
+{
+    return model_;
+}
+
 void MvcController::UpdateCircumscription
     (wxWindow&          control
     ,std::string const& name

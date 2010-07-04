@@ -26,5 +26,46 @@
 
 #include "config.hpp"
 
+#include "input_sequence.hpp"
+
+#include <wx/panel.h>
+#include <wx/xrc/xmlres.h>
+
+class WXDLLIMPEXP_FWD_CORE wxButton;
+class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
+
+class InputSequenceEntry
+    :public wxPanel
+{
+  public:
+    InputSequenceEntry();
+    InputSequenceEntry(wxWindow* parent, wxWindowID id, wxString const& name);
+    bool Create(wxWindow* parent, wxWindowID id, wxString const& name);
+
+    wxTextCtrl& text_ctrl() {return *text_;}
+
+    void set_popup_title(wxString const& title) {title_ = title;}
+
+  private:
+    void UponOpenEditor(wxCommandEvent&);
+
+    wxTextCtrl* text_;
+    wxButton*   button_;
+    wxString    title_;
+};
+
+class InputSequenceEntryXmlHandler
+    :public wxXmlResourceHandler
+{
+  public:
+    InputSequenceEntryXmlHandler();
+
+  private:
+    virtual wxObject* DoCreateResource();
+    virtual bool CanHandle(wxXmlNode* node);
+
+    DECLARE_DYNAMIC_CLASS(InputSequenceEntryXmlHandler)
+};
+
 #endif // input_sequence_entry_hpp
 
