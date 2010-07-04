@@ -592,11 +592,24 @@ false // Silly workaround for now.
 // 'mce_pmt_table' strategy was selected in a scalar control--but
 // no such scalar control was ported. For payment strategy, lmi offers
 // only input sequences that are enabled by default.
+//
+// TODO ?? 'Payment' and 'CorporationPayment' should have certain payment
+// strategies conditionally blocked. See 'inhibit_premium_based_strategies'
+// and 'prem_indeterminate' above for possible conditions; an old note
+// suggested
+//   || specamt strategy is neither 'none' nor 'salary-based'
+// Ideally, some or all strategy keywords would be blocked, or
+// corresponding parts of the input-sequence editor would be disabled,
+// only at durations that exhibit an actual conflict: e.g., a premium
+// solve for the first ten years only shouldn't inhibit anything after
+// the tenth year.
+//
+// At any rate, keywords should not be blocked when the control is
+// disabled: see
+//   http://lists.nongnu.org/archive/html/lmi/2010-07/msg00006.html
 
-    Payment           .enable              (mce_solve_ee_prem != SolveType);
-    Payment           .block_keyword_values(mce_solve_ee_prem == SolveType);
-    CorporationPayment.enable              (mce_solve_er_prem != SolveType);
-    CorporationPayment.block_keyword_values(mce_solve_er_prem == SolveType);
+    Payment           .enable(mce_solve_ee_prem != SolveType);
+    CorporationPayment.enable(mce_solve_er_prem != SolveType);
 
     IndividualPaymentMode.allow_all(true);
     // TODO ?? Should the following be permitted? If so, then either
