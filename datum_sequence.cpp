@@ -187,19 +187,6 @@ std::map<std::string,std::string> const payment_sequence::allowed_keywords() con
     std::map<std::string,std::string> permissible_keywords = all_keywords;
     permissible_keywords.erase("none");
 
-    bool payment_indeterminate =
-        (
-        false
-    // TODO ?? Further conditions to disallow improper input:
-    // need to compare corresponding years.
-    //  || specamt strategy is neither 'none' nor 'salary-based'
-        );
-
-    if(payment_indeterminate)
-        {
-        permissible_keywords.clear();
-        }
-
     return permissible_keywords;
 }
 
