@@ -75,9 +75,7 @@ class CensusView
     void UponColumnWidthVarying     (wxCommandEvent&);
     void UponColumnWidthFixed       (wxCommandEvent&);
     void UponPasteCensus            (wxCommandEvent&);
-    void UponRightClick0            (wxCommandEvent&);
-    void UponRightClick1            (wxMouseEvent&);
-    void UponRightClick2            (wxContextMenuEvent&);
+    void UponRightClick             (wxContextMenuEvent&);
     void UponPrintCase              (wxCommandEvent&);
     void UponPrintCaseToDisk        (wxCommandEvent&);
     void UponRunCell                (wxCommandEvent&);
