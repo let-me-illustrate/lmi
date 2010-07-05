@@ -55,9 +55,10 @@ mec_xml_document::~mec_xml_document()
 }
 
 //============================================================================
-std::string mec_xml_document::xml_root_name() const
+std::string const& mec_xml_document::xml_root_name() const
 {
-    return "mec_xml_document";
+    static std::string const s("mec_xml_document");
+    return s;
 }
 
 //============================================================================

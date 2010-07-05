@@ -40,6 +40,7 @@
 #include "et_vector.hpp"
 #include "fund_data.hpp"
 #include "global_settings.hpp"
+#include "ieee754.hpp"           // ldbl_eps_plus_one()
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
 #include "ihs_x_type.hpp"
@@ -65,27 +66,6 @@
 #include <numeric>
 #include <sstream>
 #include <stdexcept>
-
-namespace
-{
-    // TODO ?? This is a kludge.
-    //
-    // Floating-point numbers that represent integers scaled by
-    // negative powers of ten are inexact. For example, a premium
-    // rate of $2.40 per $1000 is notionally 0.0024, but to the
-    // hardware it may look like
-    //   0.0023999999999999998 [0x3ff69d495182a9930800]
-    // Multiplying that number by a million dollars and rounding
-    // down to cents yields 2399.99, where 2400.00 is wanted.
-    //
-    // The best way to handle this is to store integers. Until we
-    // have time to consider that, multiplying by 1 + LDBL_EPSILON
-    // avoids this embarrassment while introducing an error that
-    // shouldn't matter.
-    long double const epsilon_plus_one =
-        1.0L + std::numeric_limits<long double>::epsilon()
-        ;
-} // Unnamed namespace.
 
 //============================================================================
 BasicValues::BasicValues(Input const& input)
@@ -217,8 +197,8 @@ void BasicValues::Init()
     HOPEFULLY(RetAge <= 100);
     HOPEFULLY(yare_input_.RetireesCanEnroll || IssueAge <= RetAge);
 
-    // The database class constrains endowment age to be scalar.
-    EndtAge = static_cast<int>(Database_->Query(DB_EndtAge));
+    // The database class constrains maturity age to be scalar.
+    EndtAge = static_cast<int>(Database_->Query(DB_MaturityAge));
     Length = EndtAge - IssueAge;
 
     LedgerType_ =
@@ -298,8 +278,8 @@ void BasicValues::GPTServerInit()
 
     StateOfJurisdiction_ = Database_->GetStateOfJurisdiction();
 
-    // The database class constrains endowment age to be scalar.
-    EndtAge = static_cast<int>(Database_->Query(DB_EndtAge));
+    // The database class constrains maturity age to be scalar.
+    EndtAge = static_cast<int>(Database_->Query(DB_MaturityAge));
     Length = EndtAge - IssueAge;
 
     LedgerType_ =
@@ -481,8 +461,8 @@ void BasicValues::Init7702()
             << configurable_settings::instance().spreadsheet_file_extension()
             ;
         std::ofstream os(oss.str().c_str(), ios_out_trunc_binary());
-        int const minimum_age  = static_cast<int>(Database_->Query(DB_MinIssAge));
-        int const maturity_age = static_cast<int>(Database_->Query(DB_EndtAge  ));
+        int const minimum_age  = static_cast<int>(Database_->Query(DB_MinIssAge  ));
+        int const maturity_age = static_cast<int>(Database_->Query(DB_MaturityAge));
         if(minimum_age != yare_input_.IssueAge)
             {
             warning()
@@ -607,7 +587,7 @@ void BasicValues::Init7702()
         ,i_upper_12_over_12_from_i<double>()
         );
 
-    Database_->Query(Mly7702ig, DB_NAARDiscount);
+    Database_->Query(Mly7702ig, DB_NaarDiscount);
 
     // TODO ?? We should avoid reading the rate file again; but
     // the GPT server doesn't initialize a MortalityRates object
@@ -681,7 +661,7 @@ double BasicValues::GetTgtPrem
     ,mcenum_mode  a_mode
     ) const
 {
-    if(Database_->Query(DB_TgtPmFixedAtIssue))
+    if(Database_->Query(DB_TgtPremFixedAtIssue))
         {
         if(0 == a_year)
             {
@@ -730,42 +710,42 @@ void BasicValues::SetPermanentInvariants()
 
     MinRenlBaseFace     = Database_->Query(DB_MinRenlBaseSpecAmt   );
     MinRenlFace         = Database_->Query(DB_MinRenlSpecAmt       );
-    NoLapseOpt1Only     = Database_->Query(DB_NoLapseOpt1Only      );
+    NoLapseOpt1Only     = Database_->Query(DB_NoLapseDbo1Only      );
     NoLapseUnratedOnly  = Database_->Query(DB_NoLapseUnratedOnly   );
-    OptChgCanIncrSA     = Database_->Query(DB_OptChgCanIncrSA      );
-    OptChgCanDecrSA     = Database_->Query(DB_OptChgCanDecrSA      );
-    WDCanDecrSADBO1     = Database_->Query(DB_WDCanDecrSADBO1      );
-    WDCanDecrSADBO2     = Database_->Query(DB_WDCanDecrSADBO2      );
-    WDCanDecrSADBO3     = Database_->Query(DB_WDCanDecrSADBO3      );
+    OptChgCanIncrSA     = Database_->Query(DB_DboChgCanIncrSpecAmt );
+    OptChgCanDecrSA     = Database_->Query(DB_DboChgCanDecrSpecAmt );
+    WDCanDecrSADBO1     = Database_->Query(DB_WdCanDecrSpecAmtDbo1 );
+    WDCanDecrSADBO2     = Database_->Query(DB_WdCanDecrSpecAmtDbo2 );
+    WDCanDecrSADBO3     = Database_->Query(DB_WdCanDecrSpecAmtDbo3 );
     MaxIncrAge          = static_cast<int>(Database_->Query(DB_MaxIncrAge));
-    WaivePmTxInt1035    = Database_->Query(DB_WaivePmTxInt1035     );
+    WaivePmTxInt1035    = Database_->Query(DB_WaivePremTaxInt1035  );
     AllowTerm           = Database_->Query(DB_AllowTerm            );
-    ExpPerKLimit        = Database_->Query(DB_ExpPerKLimit         );
-    MaxWDDed_           = static_cast<mcenum_anticipated_deduction>(static_cast<int>(Database_->Query(DB_MaxWDDed)));
-    MaxWDAVMult         = Database_->Query(DB_MaxWDAVMult          );
+    ExpPerKLimit        = Database_->Query(DB_ExpSpecAmtLimit      );
+    MaxWDDed_           = static_cast<mcenum_anticipated_deduction>(static_cast<int>(Database_->Query(DB_MaxWdDed)));
+    MaxWDAVMult         = Database_->Query(DB_MaxWdAcctValMult     );
     MaxLoanDed_         = static_cast<mcenum_anticipated_deduction>(static_cast<int>(Database_->Query(DB_MaxLoanDed)));
-    MaxLoanAVMult       = Database_->Query(DB_MaxLoanAVMult        );
+    MaxLoanAVMult       = Database_->Query(DB_MaxLoanAcctValMult   );
     NoLapseMinDur       = static_cast<int>(Database_->Query(DB_NoLapseMinDur));
     NoLapseMinAge       = static_cast<int>(Database_->Query(DB_NoLapseMinAge));
     MinSpecAmt          = Database_->Query(DB_MinSpecAmt           );
-    AdbLimit            = Database_->Query(DB_ADDLimit             );
-    WpLimit             = Database_->Query(DB_WPMax                );
+    AdbLimit            = Database_->Query(DB_AdbLimit             );
+    WpLimit             = Database_->Query(DB_WpMax                );
     SpecAmtLoadLimit    = Database_->Query(DB_SpecAmtLoadLimit     );
-    MinWD               = Database_->Query(DB_MinWD                );
-    WDFee               = Database_->Query(DB_WDFee                );
-    WDFeeRate           = Database_->Query(DB_WDFeeRate            );
-    AllowChangeToDBO2   = Database_->Query(DB_AllowChangeToDBO2    );
-    AllowSAIncr         = Database_->Query(DB_AllowSAIncr          );
+    MinWD               = Database_->Query(DB_MinWd                );
+    WDFee               = Database_->Query(DB_WdFee                );
+    WDFeeRate           = Database_->Query(DB_WdFeeRate            );
+    AllowChangeToDBO2   = Database_->Query(DB_AllowChangeToDbo2    );
+    AllowSAIncr         = Database_->Query(DB_AllowSpecAmtIncr     );
     NoLapseAlwaysActive = Database_->Query(DB_NoLapseAlwaysActive  );
-    WaiverChargeMethod  = static_cast<oenum_waiver_charge_method>(static_cast<int>(Database_->Query(DB_WPChargeMethod)));
+    WaiverChargeMethod  = static_cast<oenum_waiver_charge_method>(static_cast<int>(Database_->Query(DB_WpChargeMethod)));
     LapseIgnoresSurrChg = Database_->Query(DB_LapseIgnoresSurrChg  );
     SurrChgOnIncr       = Database_->Query(DB_SurrChgOnIncr        );
     SurrChgOnDecr       = Database_->Query(DB_SurrChgOnDecr        );
     HOPEFULLY(!SurrChgOnDecr); // Surrchg change on decrease not supported.
 
-    Database_->Query(FreeWDProportion, DB_FreeWDProportion);
+    Database_->Query(FreeWDProportion, DB_FreeWdProportion);
 
-    Database_->Query(DBDiscountRate, DB_NAARDiscount);
+    Database_->Query(DBDiscountRate, DB_NaarDiscount);
     LMI_ASSERT(!contains(DBDiscountRate, -1.0));
 // This would be more natural:
 //    assign(DBDiscountRate, 1.0 / (1.0 + DBDiscountRate));
@@ -779,10 +759,10 @@ void BasicValues::SetPermanentInvariants()
 
     FirstYearPremiumRetaliationLimit = Database_->Query(DB_PremTaxRetalLimit);
 
-    MandEIsDynamic      = Database_->Query(DB_DynamicMandE           );
-    SepAcctLoadIsDynamic= Database_->Query(DB_DynamicSepAcctLoad     );
+    MandEIsDynamic      = Database_->Query(DB_DynamicMandE         );
+    SepAcctLoadIsDynamic= Database_->Query(DB_DynamicSepAcctLoad   );
 
-    UseUnusualCOIBanding= Database_->Query(DB_UnusualCOIBanding      );
+    UseUnusualCOIBanding= Database_->Query(DB_UnusualCoiBanding    );
 
     // 'Unusual' COI banding accommodates a particular idiosyncratic
     // product which has no term rider and doesn't permit experience
@@ -824,7 +804,7 @@ void BasicValues::SetPermanentInvariants()
 
     DefnLifeIns_        = yare_input_.DefinitionOfLifeInsurance;
     DefnMaterialChange_ = yare_input_.DefinitionOfMaterialChange;
-    Equiv7702DBO3       = static_cast<mcenum_dbopt_7702>(static_cast<int>(Database_->Query(DB_Equiv7702DBO3)));
+    Equiv7702DBO3       = static_cast<mcenum_dbopt_7702>(static_cast<int>(Database_->Query(DB_Equiv7702Dbo3)));
     MaxNAAR             = yare_input_.MaximumNaar;
 
     Database_->Query(MinPremIntSpread_, DB_MinPremIntSpread);
@@ -1142,7 +1122,7 @@ double BasicValues::GetModalPremMaxNonMec
     ) const
 {
     double temp = MortalityRates_->SevenPayRates()[0];
-    return round_max_premium()(temp * epsilon_plus_one * a_specamt / a_mode);
+    return round_max_premium()(temp * ldbl_eps_plus_one() * a_specamt / a_mode);
 }
 
 /// Calculate premium using a target-premium ratio.
@@ -1159,9 +1139,9 @@ double BasicValues::GetModalPremTgtFromTable
 {
     return round_max_premium()
         (
-            (   Database_->Query(DB_TgtPremPolFee)
+            (   Database_->Query(DB_TgtPremMonthlyPolFee)
             +       a_specamt
-                *   epsilon_plus_one
+                *   ldbl_eps_plus_one()
                 *   MortalityRates_->TargetPremiumRates()[0]
             )
         /   a_mode
@@ -1181,7 +1161,7 @@ double BasicValues::GetModalPremCorridor
     ) const
 {
     double temp = GetCorridorFactor()[0];
-    return round_max_premium()((epsilon_plus_one * a_specamt / temp) / a_mode);
+    return round_max_premium()((ldbl_eps_plus_one() * a_specamt / temp) / a_mode);
 }
 
 //============================================================================
@@ -1205,7 +1185,7 @@ double BasicValues::GetModalPremGLP
 // term rider, dumpin
 
     z /= a_mode;
-    return round_max_premium()(epsilon_plus_one * z);
+    return round_max_premium()(ldbl_eps_plus_one() * z);
 }
 
 //============================================================================
@@ -1228,7 +1208,7 @@ double BasicValues::GetModalPremGSP
 // term rider, dumpin
 
     z /= a_mode;
-    return round_max_premium()(epsilon_plus_one * z);
+    return round_max_premium()(ldbl_eps_plus_one() * z);
 }
 
 /// Determine an approximate "pay as you go" modal premium.
@@ -1505,7 +1485,7 @@ double BasicValues::GetModalSpecAmtMlyDed
     double wp_rate = 0.0;
     if(yare_input_.WaiverOfPremiumBenefit)
         {
-        // For simplicity, ignore Database_->Query(DB_WPMax)
+        // For simplicity, ignore Database_->Query(DB_WpMax)
         wp_rate = MortalityRates_->WpRates()[0];
         if(0.0 != 1.0 + wp_rate)
             {
@@ -1524,13 +1504,13 @@ double BasicValues::GetModalSpecAmtMlyDed
     // DEFECT Is this correct now?
     if(yare_input_.WaiverOfPremiumBenefit && 0.0 != 1.0 + wp_rate)
         {
-        // For simplicity, ignore Database_->Query(DB_WPMax)
+        // For simplicity, ignore Database_->Query(DB_WpMax)
         z /= (1.0 + wp_rate);
         }
 
     if(yare_input_.AccidentalDeathBenefit)
         {
-        // DEFECT For simplicity, ignore Database_->Query(DB_ADDMax)
+        // DEFECT For simplicity, ignore Database_->Query(DB_AdbLimit)
         z -= MortalityRates_->AdbRates()[0];
         }
     // DEFECT Other riders should be considered here.
@@ -1561,8 +1541,8 @@ std::vector<double> const& BasicValues::GetBandedCoiRates
 {
     if(UseUnusualCOIBanding && mce_gen_guar != rate_basis)
         {
-        double band_0_limit = Database_->Query(DB_CurrCOITable0Limit);
-        double band_1_limit = Database_->Query(DB_CurrCOITable1Limit);
+        double band_0_limit = Database_->Query(DB_CurrCoiTable0Limit);
+        double band_1_limit = Database_->Query(DB_CurrCoiTable1Limit);
         LMI_ASSERT(0.0 <= band_0_limit);
         LMI_ASSERT(band_0_limit <= band_1_limit);
         if(band_0_limit <= a_specamt && a_specamt < band_1_limit)
@@ -1639,7 +1619,7 @@ std::vector<double> BasicValues::GetActuarialTable
             (static_cast<int>(Database_->Query(DB_CoiInforceReentry))
             );
 
-    if(DB_CurrCOITable == TableID && e_reenter_never != method)
+    if(DB_CurrCoiTable == TableID && e_reenter_never != method)
         {
         return actuarial_table_rates_elaborated
             (TableFile
@@ -2019,7 +1999,7 @@ std::vector<double> BasicValues::GetCurrCOIRates0() const
 {
     return GetTable
         (ProductData_->datum("CurrCOIFilename")
-        ,DB_CurrCOITable
+        ,DB_CurrCoiTable
         ,true
         ,CanBlend
         ,CanBlend
@@ -2028,13 +2008,13 @@ std::vector<double> BasicValues::GetCurrCOIRates0() const
 std::vector<double> BasicValues::GetCurrCOIRates1() const
 {
     if
-        ( Database_->Query(DB_CurrCOITable0Limit)
+        ( Database_->Query(DB_CurrCoiTable0Limit)
         < std::numeric_limits<double>::max()
         )
         {
         return GetTable
             (ProductData_->datum("CurrCOIFilename")
-            ,DB_CurrCOITable1
+            ,DB_CurrCoiTable1
             ,true
             ,CanBlend
             ,CanBlend
@@ -2048,13 +2028,13 @@ std::vector<double> BasicValues::GetCurrCOIRates1() const
 std::vector<double> BasicValues::GetCurrCOIRates2() const
 {
     if
-        ( Database_->Query(DB_CurrCOITable1Limit)
+        ( Database_->Query(DB_CurrCoiTable1Limit)
         < std::numeric_limits<double>::max()
         )
         {
         return GetTable
             (ProductData_->datum("CurrCOIFilename")
-            ,DB_CurrCOITable2
+            ,DB_CurrCoiTable2
             ,true
             ,CanBlend
             ,CanBlend
@@ -2069,14 +2049,14 @@ std::vector<double> BasicValues::GetGuarCOIRates() const
 {
     return GetTable
         (ProductData_->datum("GuarCOIFilename")
-        ,DB_GuarCOITable
+        ,DB_GuarCoiTable
         );
 }
 std::vector<double> BasicValues::GetSmokerBlendedGuarCOIRates() const
 {
     return GetTable
         (ProductData_->datum("GuarCOIFilename")
-        ,DB_GuarCOITable
+        ,DB_GuarCoiTable
         ,true
         ,CanBlend
         ,CanBlend
@@ -2086,16 +2066,16 @@ std::vector<double> BasicValues::GetWpRates() const
 {
     return GetTable
         (ProductData_->datum("WPFilename")
-        ,DB_WPTable
-        ,Database_->Query(DB_AllowWP)
+        ,DB_WpTable
+        ,Database_->Query(DB_AllowWp)
         );
 }
 std::vector<double> BasicValues::GetAdbRates() const
 {
     return GetTable
         (ProductData_->datum("ADDFilename")
-        ,DB_ADDTable
-        ,Database_->Query(DB_AllowADD)
+        ,DB_AdbTable
+        ,Database_->Query(DB_AllowAdb)
         );
 }
 std::vector<double> BasicValues::GetChildRiderRates() const
@@ -2103,12 +2083,12 @@ std::vector<double> BasicValues::GetChildRiderRates() const
     return GetTable
         (ProductData_->datum("ChildRiderFilename")
         ,DB_ChildRiderTable
-        ,Database_->Query(DB_AllowChild)
+        ,Database_->Query(DB_AllowChildRider)
         );
 }
 std::vector<double> BasicValues::GetCurrentSpouseRiderRates() const
 {
-    if(!Database_->Query(DB_AllowSpouse))
+    if(!Database_->Query(DB_AllowSpouseRider))
         {
         return std::vector<double>(GetLength());
         }
@@ -2124,7 +2104,7 @@ std::vector<double> BasicValues::GetCurrentSpouseRiderRates() const
 }
 std::vector<double> BasicValues::GetGuaranteedSpouseRiderRates() const
 {
-    if(!Database_->Query(DB_AllowSpouse))
+    if(!Database_->Query(DB_AllowSpouseRider))
         {
         return std::vector<double>(GetLength());
         }
@@ -2169,7 +2149,7 @@ std::vector<double> BasicValues::GetTAMRA7PayRates() const
 {
     return GetTable
         (ProductData_->datum("TAMRA7PayFilename")
-        ,DB_TAMRA7PayTable
+        ,DB_SevenPayTable
         );
 }
 std::vector<double> BasicValues::GetTgtPremRates() const
@@ -2184,14 +2164,14 @@ std::vector<double> BasicValues::GetIRC7702Rates() const
 {
     return GetTable
         (ProductData_->datum("IRC7702Filename")
-        ,DB_IRC7702QTable
+        ,DB_Irc7702QTable
         );
 }
 std::vector<double> BasicValues::Get83GamRates() const
 {
     return GetTable
         (ProductData_->datum("Gam83Filename")
-        ,DB_83GamTable
+        ,DB_Gam83Table
         ,true
         ,CannotBlend
         ,CanBlend
@@ -2199,14 +2179,14 @@ std::vector<double> BasicValues::Get83GamRates() const
 }
 std::vector<double> BasicValues::GetSubstdTblMultTable() const
 {
-    if(0 == Database_->Query(DB_SubstdTblMultTable))
+    if(0 == Database_->Query(DB_SubstdTableMultTable))
         {
         return std::vector<double>(GetLength(), 1.0);
         }
 
     return GetTable
         (ProductData_->datum("SubstdTblMultFilename")
-        ,DB_SubstdTblMultTable
+        ,DB_SubstdTableMultTable
         );
 }
 std::vector<double> BasicValues::GetCurrSpecAmtLoadTable() const

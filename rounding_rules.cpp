@@ -243,9 +243,10 @@ int rounding_rules::class_version() const
     return 0;
 }
 
-std::string rounding_rules::xml_root_name() const
+std::string const& rounding_rules::xml_root_name() const
 {
-    return "rounding";
+    static std::string const s("rounding");
+    return s;
 }
 
 /// This override doesn't call redintegrate_ex_ante(); that wouldn't

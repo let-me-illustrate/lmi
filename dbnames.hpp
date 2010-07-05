@@ -32,6 +32,70 @@
 #include <vector>
 
 /// See 'dbnames.xpp' for the definition of each entity.
+///
+/// Partial lexicon:
+///  - Adb   Accidental death benefit
+///  - Acct  Account
+///  - Amort Amortization
+///  - Amt   Amount
+///  - Chg   Charge
+///  - Coi   Cost of insurance
+///  - Comp  Compensation
+///  - Conv  Conversion
+///  - Curr  Current
+///  - Dac   Deferred acquisition cost
+///  - Dbo   Death benefit option
+///  - Decr  Decrease
+///  - Ded   Deduction
+///  - Dur   Duration
+///  - Dyn   Dynamic
+///  - Ea    Expense allowance (SNFL)
+///  - Ee    Employee
+///  - Endt  Endowment
+///  - Er    Employer
+///  - Exc   Excess (over target)
+///  - Exch  Exchange
+///  - Exp   Expense or experience
+///  - Ext   Extended (as in 'extended endowment')
+///  - Fit   Federal income tax
+///  - Gdb   Guaranteed death benefit
+///  - Gen   General (as in 'general account')
+///  - Guar  Guaranteed
+///  - Ibnr  Incurred but not reported (reserve)
+///  - Imf   Investment management fee
+///  - Incr  Increase
+///  - Int   Interest; more rarely, internal
+///  - Irc   Internal revenue code
+///  - Iss   Issue
+///  - Lic   Life insurance company
+///  - MandE Mortality and expense charge
+///  - Max   Maximum
+///  - Mdpt  Midpoint
+///  - Min   Minimum
+///  - Mort  Mortality
+///  - Mult  Multiplier
+///  - Naar  Net amount at risk
+///  - Nlp   Net level premium
+///  - Ny    New York
+///  - Pmt   Payment
+///  - Pol   Policy
+///  - Pref  Preferred
+///  - Prem  Premium
+///  - Q     Death rate
+///  - Reg   Regular or regulation
+///  - Renl  Renewal
+///  - Retal Retaliation
+///  - Rfd   Refund or refundable
+///  - Sep   Separate (as in 'separate account')
+///  - Snfl  Standard nonforfeiture law
+///  - Spec  Specified (as in 'specified amount')
+///  - Tgt   Target
+///  - Uw    Underwriting
+///  - Val   Value
+///  - Vlr   Variable loan rate
+///  - Vx    Reserve
+///  - Wd    Withdrawal
+///  - Wp    Waiver of premium
 
 enum e_database_key
     {DB_FIRST
@@ -42,9 +106,9 @@ enum e_database_key
         ,DB_MaxIssAge
         ,DB_MaxIncrAge
 
-        ,DB_AllowFullUW
-        ,DB_AllowSimpUW
-        ,DB_AllowGuarUW
+        ,DB_AllowFullUw
+        ,DB_AllowSimpUw
+        ,DB_AllowGuarUw
         ,DB_SmokeOrTobacco       // DATABASE !! Move to '.policy'
         ,DB_PrefOrSelect         // DATABASE !! Move to '.policy'
         ,DB_AllowPreferredClass
@@ -52,8 +116,8 @@ enum e_database_key
 
         ,DB_AllowSubstdTable
         ,DB_AllowFlatExtras
-        ,DB_AllowRatedWP
-        ,DB_AllowRatedADD
+        ,DB_AllowRatedWp
+        ,DB_AllowRatedAdb
         ,DB_AllowRatedTerm
         ,DB_AllowRetirees
 
@@ -70,43 +134,43 @@ enum e_database_key
 
     ,DB_Topic_7702And7702A
 
-        ,DB_AllowCVAT
-        ,DB_AllowGPT
+        ,DB_AllowCvat
+        ,DB_AllowGpt
         ,DB_AllowNo7702
 
         ,DB_CorridorTable
-        ,DB_TAMRA7PayTable
-        ,DB_IRC7702QTable
+        ,DB_SevenPayTable
+        ,DB_Irc7702QTable
 
         ,DB_PremLoad7702
-        ,DB_Equiv7702DBO3
+        ,DB_Equiv7702Dbo3
 
     ,DB_Topic_MortalityCharges
 
-        ,DB_GuarCOITable         // DATABASE !! s/COI/Coi/ (passim)
-        ,DB_GCoiIsAnnual
-        ,DB_GCOIMultiplier
+        ,DB_GuarCoiTable
+        ,DB_GuarCoiIsAnnual
+        ,DB_GuarCoiMultiplier
 
-        ,DB_CurrCOITable
-        ,DB_CCoiIsAnnual
-        ,DB_CCOIMultiplier
-        ,DB_UnusualCOIBanding
-        ,DB_CurrCOITable0Limit
-        ,DB_CurrCOITable1
-        ,DB_CurrCOITable1Limit
-        ,DB_CurrCOITable2
+        ,DB_CurrCoiTable
+        ,DB_CurrCoiIsAnnual
+        ,DB_CurrCoiMultiplier
+        ,DB_UnusualCoiBanding
+        ,DB_CurrCoiTable0Limit
+        ,DB_CurrCoiTable1
+        ,DB_CurrCoiTable1Limit
+        ,DB_CurrCoiTable2
 
-        ,DB_MdptCOITable
-        ,DB_MCoiIsAnnual
+        ,DB_MdptCoiTable
+        ,DB_MdptCoiIsAnnual
 
-        ,DB_COINYMinTable
-        ,DB_UseNYCOIFloor
+        ,DB_CoiNyMinTable
+        ,DB_UseNyCoiFloor
         ,DB_MaxMonthlyCoiRate
-        ,DB_GuarCOICeiling
-        ,DB_COIGuarIsMin
+        ,DB_GuarCoiCeiling
+        ,DB_CoiGuarIsMin
 
-        ,DB_SubstdTblMult
-        ,DB_SubstdTblMultTable
+        ,DB_SubstdTableMult
+        ,DB_SubstdTableMultTable
 
         ,DB_CoiUpper12Method
         ,DB_CoiInforceReentry
@@ -117,7 +181,7 @@ enum e_database_key
     ,DB_Topic_Interest
 
         ,DB_GuarInt
-        ,DB_NAARDiscount
+        ,DB_NaarDiscount
 
         ,DB_GuarIntSpread
         ,DB_GuarMandE
@@ -125,22 +189,22 @@ enum e_database_key
         ,DB_CurrIntSpread
         ,DB_CurrMandE
 
-        ,DB_GAIntBonus
+        ,DB_GenAcctIntBonus
         ,DB_BonusInt
         ,DB_IntFloor
         ,DB_MaxGenAcctRate
         ,DB_MaxSepAcctRate
 
         ,DB_SepAcctSpreadMethod
-        ,DB_IntSpreadFreq
+        ,DB_IntSpreadMode
         ,DB_DynamicMandE
 
     ,DB_Topic_AssetCharges
 
         ,DB_AllowAmortPremLoad
-        ,DB_AmortPmLdFundCharge
+        ,DB_LoadAmortFundCharge
 
-        ,DB_AllowCustomFund      // DATABASE !! DB_AllowImfOverride
+        ,DB_AllowImfOverride
         ,DB_AssetChargeType
         ,DB_StableValFundCharge
 
@@ -150,8 +214,8 @@ enum e_database_key
 
     ,DB_Topic_Loads
 
-        ,DB_GuarPolFee           // DATABASE !! DB_GuarMonthlyPolFee
-        ,DB_GuarIssueFee         // DATABASE !! DB_GuarAnnualPolFee
+        ,DB_GuarMonthlyPolFee
+        ,DB_GuarAnnualPolFee
 
         ,DB_GuarPremLoadTgt
         ,DB_GuarPremLoadExc
@@ -161,10 +225,10 @@ enum e_database_key
         ,DB_GuarSpecAmtLoad
         ,DB_GuarSpecAmtLoadTable
 
-        ,DB_GuarAcctValLoadAMD   // DATABASE !! Lose the "AMD" suffix.
+        ,DB_GuarAcctValLoad
 
-        ,DB_CurrPolFee           // DATABASE !! DB_CurrMonthlyPolFee
-        ,DB_CurrIssueFee         // DATABASE !! DB_CurrAnnualPolFee
+        ,DB_CurrMonthlyPolFee
+        ,DB_CurrAnnualPolFee
 
         ,DB_CurrPremLoadTgt
         ,DB_CurrPremLoadExc
@@ -174,29 +238,29 @@ enum e_database_key
         ,DB_CurrSpecAmtLoad
         ,DB_CurrSpecAmtLoadTable
 
-        ,DB_CurrAcctValLoadAMD   // DATABASE !! Lose the "AMD" suffix.
+        ,DB_CurrAcctValLoad
 
-        ,DB_TgtPremPolFee
-        ,DB_PremRefund           // DATABASE !! DB_RefundablePremLoad
+        ,DB_TgtPremMonthlyPolFee
+        ,DB_LoadRfdProportion
         ,DB_SpecAmtLoadLimit
         ,DB_DynamicSepAcctLoad
         ,DB_DynSepAcctLoadLimit
 
     ,DB_Topic_DacAndPremiumTax
 
-        ,DB_DACTaxFundCharge
-        ,DB_DACTaxPremLoad
+        ,DB_DacTaxFundCharge
+        ,DB_DacTaxPremLoad
 
         ,DB_PremTaxFundCharge
         ,DB_PremTaxLoad
-        ,DB_WaivePmTxInt1035
+        ,DB_WaivePremTaxInt1035
         ,DB_PremTaxRetalLimit
         ,DB_PremTaxTierGroup
         ,DB_PremTaxTierPeriod
         ,DB_PremTaxTierNonDecr
 
-        ,DB_PmTxAmortPeriod
-        ,DB_PmTxAmortIntRate
+        ,DB_PremTaxAmortPeriod
+        ,DB_PremTaxAmortIntRate
 
         ,DB_PremTaxRate
         ,DB_PremTaxState
@@ -204,30 +268,30 @@ enum e_database_key
 
     ,DB_Topic_SurrenderCharges
 
-        ,DB_SurrChgAVMult
-        ,DB_SurrChgAVDurFactor
-        ,DB_SurrChgSAMult
-        ,DB_SurrChgSADurFactor
+        ,DB_SurrChgAcctValMult
+        ,DB_SurrChgAcctValSlope
+        ,DB_SurrChgSpecAmtMult
+        ,DB_SurrChgSpecAmtSlope
         ,DB_SurrChgPremMult
         ,DB_SurrChgOnIncr
         ,DB_SurrChgOnDecr
-        ,DB_Has1035ExchCharge    // DATABASE !! DB_1035ExchCharge
+        ,DB_Has1035ExchCharge
 
-        ,DB_NonforfQTable        // DATABASE !! s/Nonforf/Snfl/ (passim)
-        ,DB_COINonforfIsGuar
+        ,DB_SnflQTable
+        ,DB_CoiSnflIsGuar
         ,DB_SurrChgByFormula
         ,DB_SurrChgPeriod
         ,DB_SurrChgZeroDur
-        ,DB_SurrChgNLPMult
-        ,DB_SurrChgNLPMax
-        ,DB_SurrChgEAMax
-        ,DB_SurrChgIsMly
+        ,DB_SurrChgNlpMult
+        ,DB_SurrChgNlpMax
+        ,DB_SurrChgEaMax
+        ,DB_SurrChgAmort
 
     ,DB_Topic_DeathBenefits
 
-        ,DB_AllowSAIncr
+        ,DB_AllowSpecAmtIncr
         ,DB_MinSpecAmtIncr
-        ,DB_EnforceNAARLimit
+        ,DB_EnforceNaarLimit
 
         ,DB_MinSpecAmt
         ,DB_MinIssSpecAmt
@@ -236,14 +300,14 @@ enum e_database_key
         ,DB_MaxIssSpecAmt
         ,DB_MaxRenlSpecAmt
 
-        ,DB_AllowDBO1
-        ,DB_AllowDBO2
-        ,DB_AllowDBO3
-        ,DB_AllowChangeToDBO2
-        ,DB_OptChgCanIncrSA
-        ,DB_OptChgCanDecrSA
+        ,DB_AllowDbo1
+        ,DB_AllowDbo2
+        ,DB_AllowDbo3
+        ,DB_AllowChangeToDbo2
+        ,DB_DboChgCanIncrSpecAmt
+        ,DB_DboChgCanDecrSpecAmt
 
-        ,DB_AllowExtEndt         // DATABASE !! DB_CovgBeyondMaturity
+        ,DB_AllowExtEndt
 
     ,DB_Topic_Riders
 
@@ -254,60 +318,60 @@ enum e_database_key
         ,DB_TermMaxIssAge
         ,DB_TermForcedConvAge
         ,DB_MaxTermProportion
-        ,DB_TermCOIRate
+        ,DB_TermCoiRate
         ,DB_TermPremRate
 
-        ,DB_AllowWP
-        ,DB_WPTable
-        ,DB_WPMinIssAge
-        ,DB_WPMaxIssAge
-        ,DB_WPMax
-        ,DB_WPCOIRate
-        ,DB_WPPremRate
-        ,DB_WPChargeMethod
+        ,DB_AllowWp
+        ,DB_WpTable
+        ,DB_WpMinIssAge
+        ,DB_WpMaxIssAge
+        ,DB_WpMax
+        ,DB_WpCoiRate
+        ,DB_WpPremRate
+        ,DB_WpChargeMethod
 
-        ,DB_AllowADD
-        ,DB_ADDTable
-        ,DB_ADDMinIssAge
-        ,DB_ADDMaxIssAge
-        ,DB_ADDLimit
-        ,DB_ADDCOIRate
-        ,DB_ADDPremRate
+        ,DB_AllowAdb
+        ,DB_AdbTable
+        ,DB_AdbMinIssAge
+        ,DB_AdbMaxIssAge
+        ,DB_AdbLimit
+        ,DB_AdbCoiRate
+        ,DB_AdbPremRate
 
-        ,DB_AllowSpouse
+        ,DB_AllowSpouseRider
         ,DB_SpouseRiderGuarTable
         ,DB_SpouseRiderTable
 
-        ,DB_AllowChild
+        ,DB_AllowChildRider
         ,DB_ChildRiderTable
 
     ,DB_Topic_Withdrawals
 
-        ,DB_AllowWD
-        ,DB_WDFee
-        ,DB_WDFeeRate
+        ,DB_AllowWd
+        ,DB_WdFee
+        ,DB_WdFeeRate
 
-        ,DB_FreeWDProportion
-        ,DB_MinWD
-        ,DB_MaxWDAVMult
-        ,DB_MaxWDDed
+        ,DB_FreeWdProportion
+        ,DB_MinWd
+        ,DB_MaxWdAcctValMult
+        ,DB_MaxWdDed
 
-        ,DB_WDCanDecrSADBO1
-        ,DB_WDCanDecrSADBO2
-        ,DB_WDCanDecrSADBO3
+        ,DB_WdCanDecrSpecAmtDbo1
+        ,DB_WdCanDecrSpecAmtDbo2
+        ,DB_WdCanDecrSpecAmtDbo3
 
-        ,DB_FirstWDYear
+        ,DB_FirstWdYear
 
     ,DB_Topic_Loans
 
         ,DB_AllowLoan
         ,DB_AllowPrefLoan
         ,DB_AllowFixedLoan
-        ,DB_AllowVLR
+        ,DB_AllowVlr
         ,DB_FixedLoanRate
-        ,DB_MaxVLRRate
+        ,DB_MaxVlrRate
 
-        ,DB_MaxLoanAVMult
+        ,DB_MaxLoanAcctValMult
         ,DB_MaxLoanDed
 
         ,DB_GuarPrefLoanSpread
@@ -324,8 +388,8 @@ enum e_database_key
         ,DB_MinPremIntSpread
         ,DB_TgtPremType
         ,DB_TgtPremTable
-        ,DB_TgtPmFixedAtIssue
-        ,DB_TgtPmIgnoreSubstd
+        ,DB_TgtPremFixedAtIssue
+        ,DB_TgtPremIgnoreSubstd
         ,DB_MinPmt
 
     ,DB_Topic_SecondaryGuarantees
@@ -333,7 +397,7 @@ enum e_database_key
         ,DB_NoLapseMinDur
         ,DB_NoLapseMinAge
         ,DB_NoLapseUnratedOnly
-        ,DB_NoLapseOpt1Only
+        ,DB_NoLapseDbo1Only
         ,DB_NoLapseAlwaysActive
 
         ,DB_AllowHoneymoon
@@ -364,9 +428,9 @@ enum e_database_key
 
         ,DB_AllowExpRating
         ,DB_ExpRatStdDevMult
-        ,DB_ExpRatIBNRMult
-        ,DB_ExpRatCOIRetention
-        ,DB_ExpRatRiskCOIMult
+        ,DB_ExpRatIbnrMult
+        ,DB_ExpRatCoiRetention
+        ,DB_ExpRatRiskCoiMult
         ,DB_ExpRatAmortPeriod
 
     ,DB_Topic_Miscellanea
@@ -375,14 +439,14 @@ enum e_database_key
 
         ,DB_AgeLastOrNearest     // DATABASE !! Add more options...
         ,DB_MaxIllusAge
-        ,DB_EndtAge              // DATABASE !! DB_MaturityAge
+        ,DB_MaturityAge
 
         ,DB_LapseIgnoresSurrChg
         ,DB_DefaultProcessOrder
         ,DB_NominallyPar         // DATABASE !! Use a footnote instead.
 
         ,DB_TableYTable
-        ,DB_83GamTable
+        ,DB_Gam83Table
 
     ,DB_Topic_Weights
 
@@ -398,17 +462,17 @@ enum e_database_key
         ,DB_FullExpPol
         ,DB_FullExpPrem
         ,DB_FullExpDumpin
-        ,DB_FullExpPerK
+        ,DB_FullExpSpecAmt
 
         ,DB_VarExpPol
         ,DB_VarExpPrem
         ,DB_VarExpDumpin
-        ,DB_VarExpPerK
+        ,DB_VarExpSpecAmt
 
-        ,DB_ExpPerKLimit
+        ,DB_ExpSpecAmtLimit
 
         ,DB_MedicalProportion
-        ,DB_UWTestCost
+        ,DB_UwTestCost
 
     ,DB_Topic_Reserves
 
@@ -422,16 +486,16 @@ enum e_database_key
         ,DB_StatVxQ
         ,DB_TaxVxQ
         ,DB_DefVxQ
-        ,DB_NonforfQ
+        ,DB_SnflQ
 
     ,DB_Topic_OtherAssumptions
 
         ,DB_LapseRate
-        ,DB_ReqSurpNAAR
+        ,DB_ReqSurpNaar
         ,DB_ReqSurpVx
-        ,DB_LICFitRate
+        ,DB_LicFitRate
         ,DB_LicDacTaxRate
-        ,DB_GDBVxMethod
+        ,DB_GdbVxMethod
         ,DB_PrimaryHurdle
         ,DB_SecondaryHurdle
 

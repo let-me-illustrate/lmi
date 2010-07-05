@@ -25873,3 +25873,404 @@ Add a modified single premium nuance.
   version.hpp
 Mark release candidate.
 
+20100530T2243Z <gchicares@sbcglobal.net> [704]
+
+  dbdict.cpp
+Improve robustness. Formerly, '--print_db' halted at the first error.
+Now, it reports all errors, and writes all the '.dbt' files it can.
+
+20100531T0002Z <gchicares@sbcglobal.net> [704]
+
+  dbdict.cpp
+Write '.database' elements in name order.
+
+20100531T1309Z <gchicares@sbcglobal.net> [704]
+
+  dbdict.cpp
+Write only leaf elements to xml, excluding GUI topic nodes.
+
+20100531T1605Z <gchicares@sbcglobal.net> [704]
+
+  dbdict.cpp
+Accommodate GUI product editor.
+
+20100531T2342Z <gchicares@sbcglobal.net> [704]
+
+  dbdict.cpp
+Remove old markup; rearrange.
+
+20100601T2004Z <gchicares@sbcglobal.net> [704]
+
+  authenticity.cpp
+Clarify diagnostics.
+
+20100601T2005Z <gchicares@sbcglobal.net> [704]
+
+  workhorse.make
+Fix date calculations. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-06/msg00001.html
+
+20100604T1620Z <gchicares@sbcglobal.net> [704]
+
+  authenticity_test.cpp
+Update unit test to reflect diagnostics changed 20100601T2004Z.
+
+20100604T2021Z <gchicares@sbcglobal.net> [704]
+
+  basicvalues.cpp
+  database.cpp
+  dbdict.cpp
+  dbnames.hpp
+  dbnames.xpp
+  dbvalue.hpp
+  ihs_acctval.cpp
+  ihs_avstrtgy.cpp
+  ihs_basicval.cpp
+  input_harmonization.cpp
+  input_realization.cpp
+  input_test.cpp
+  interest_rates.cpp
+  ledger_invariant.cpp
+  loads.cpp
+  mec_input.cpp
+  mec_server.cpp
+  mortality_rates.cpp
+  mortality_rates_fetch.cpp
+  my_db.cpp
+  surrchg_rates.cpp
+Rename numerous database entities to improve concinnity.
+
+20100604T2220Z <gchicares@sbcglobal.net> [704]
+
+  stratified_charges.cpp
+  stratified_charges.hpp
+Improve const-correctness.
+
+20100604T2221Z <gchicares@sbcglobal.net> [704]
+
+  dbvalue.cpp
+  dbvalue.hpp
+Add operator==().
+
+20100606T2321Z <gchicares@sbcglobal.net> [704]
+
+  database.cpp
+  database_document.cpp
+  database_document.hpp
+  database_view_editor.hpp
+  dbdict.cpp
+  dbdict.hpp
+  input_test.cpp
+Refactor, using symbolic member names in class DBDictionary.
+
+20100608T1241Z <gchicares@sbcglobal.net> [704]
+
+  dbdict.cpp
+  dbdict.hpp
+Refactor, deriving stratified_charges from xml_serializable.
+
+20100608T1242Z <gchicares@sbcglobal.net> [704]
+
+  fund_data.cpp
+Require '.funds' extension.
+
+20100608T1708Z <gchicares@sbcglobal.net> [704]
+
+  dbvalue.cpp
+Eliminate gratuitous redundancy.
+
+20100609T0015Z <gchicares@sbcglobal.net> [704]
+
+  dbvalue.cpp
+Eliminate even more gratuitous redundancy.
+
+20100610T1710Z <gchicares@sbcglobal.net> [704]
+
+  configurable_settings.cpp
+  configurable_settings.hpp
+Move documentation from header to implementation.
+
+20100611T1437Z <gchicares@sbcglobal.net> [704]
+
+  antediluvian_stubs.cpp
+  configurable_settings.cpp
+  dbdict.cpp
+  dbdict.hpp
+  fund_data.cpp
+  input.hpp
+  input_xml_io.cpp
+  ledger.hpp
+  ledger_xml_io.cpp
+  mec_input.cpp
+  mec_input.hpp
+  mec_state.cpp
+  mec_state.hpp
+  mec_xml_document.cpp
+  mec_xml_document.hpp
+  multiple_cell_document.cpp
+  multiple_cell_document.hpp
+  product_data.cpp
+  product_data.hpp
+  rounding_rules.cpp
+  rounding_rules.hpp
+  single_cell_document.cpp
+  single_cell_document.hpp
+  stratified_charges.cpp
+  stratified_charges.hpp
+  xml_serializable.hpp
+  xml_serializable.tpp
+Improve const-correctness.
+
+20100611T1523Z <gchicares@sbcglobal.net> [704]
+
+  xml_serializable.tpp
+Buffer certain diagnostics.
+
+20100611T1524Z <gchicares@sbcglobal.net> [703]
+
+  configurable_settings.cpp
+Remove a defect marker for an issue resolved 20100514T2140Z.
+
+20100611T2356Z <gchicares@sbcglobal.net> [702]
+
+  Makefile.am
+  configurable_settings.cpp
+  configurable_settings_test.cpp [new file]
+  objects.make
+Add an inchoate unit test.
+
+20100612T0117Z <gchicares@sbcglobal.net> [702]
+
+  configurable_settings.cpp
+Rearrange to make an imminent refactoring clearer.
+
+20100612T0139Z <gchicares@sbcglobal.net> [702]
+
+  configurable_settings.cpp
+  configurable_settings.hpp
+Refactor, deriving configurable_settings from xml_serializable.
+
+20100612T2157Z <gchicares@sbcglobal.net> [701]
+
+  configurable_settings.cpp
+  configurable_settings_test.cpp
+Fix defect introduced 20061110T1628Z by warning at startup if settings
+cannot be saved.
+
+20100614T1129Z <gchicares@sbcglobal.net> [701]
+
+  xml_serializable.tpp
+Refactor to improve concinnity. The redintegrate_ex* implementations
+were equivalent; now they're identical.
+
+20100614T1145Z <gchicares@sbcglobal.net> [701]
+
+  xml_serializable.hpp
+  xml_serializable.tpp
+Optionally override missing-version error message.
+
+20100614T1259Z <gchicares@sbcglobal.net> [701]
+
+  configurable_settings.cpp
+  configurable_settings.hpp
+  configurable_settings_test.cpp
+Extend backward compatibility to encompass the 20080218T1743Z change.
+
+20100615T2138Z <gchicares@sbcglobal.net> [701]
+
+  mc_enum_types.xpp
+Remove a formatting anomaly.
+
+20100615T2139Z <gchicares@sbcglobal.net> [701]
+
+  main_cli.cpp
+Permit single-life testdecks.
+
+20100615T2140Z <gchicares@sbcglobal.net> [701]
+
+  dbdict.cpp
+Use more realistic premium-tax rates.
+
+20100621T1400Z <gchicares@sbcglobal.net> [700]
+
+  skin.xrc
+Add a missing field.
+
+20100621T1403Z <gchicares@sbcglobal.net> [700]
+
+  version.hpp
+Mark release candidate.
+
+20100621T1428Z <gchicares@sbcglobal.net> [700]
+
+  ihs_acctval.cpp
+Refactor, indigitating a defect.
+
+20100621T1546Z <gchicares@sbcglobal.net> [700]
+
+  ihs_acctval.cpp
+  yare_input.cpp
+  yare_input.hpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch. For 7702A, specified-amount history prior to the last
+material change is irrelevant.
+
+20100621T1549Z <gchicares@sbcglobal.net> [700]
+
+  version.hpp
+Mark release candidate.
+
+20100621T1721Z <gchicares@sbcglobal.net> [700]
+
+  ihs_irc7702a.cpp
+Refactor, indigitating a defect.
+
+20100621T2050Z <gchicares@sbcglobal.net> [700]
+
+  ihs_irc7702a.cpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch. The policy year in which the last material change took
+place is not simply current policy year minus current contract year.
+
+20100621T2051Z <gchicares@sbcglobal.net> [700]
+
+  version.hpp
+Mark release candidate.
+
+20100622T0011Z <gchicares@sbcglobal.net> [700]
+
+  Makefile.am
+  objects.make
+  quiet_nan.hpp      [renamed to ieee754.hpp     ]
+  quiet_nan_test.cpp [renamed to ieee754_test.cpp]
+Rename 'quiet_nan*.?pp' to 'ieee754*.?pp'.
+
+20100622T0107Z <gchicares@sbcglobal.net> [700]
+
+  ncnnnpnn_test.cpp
+Improve documentation.
+
+20100622T1342Z <gchicares@sbcglobal.net> [700]
+
+  ieee754.hpp
+  ieee754_test.cpp
+Support infinities.
+
+20100622T1412Z <gchicares@sbcglobal.net> [699]
+
+  ieee754.hpp
+  ihs_basicval.cpp
+Refactor.
+
+20100622T1522Z <gchicares@sbcglobal.net> [699]
+
+  numeric_io_traits.hpp
+Reformat documentation.
+
+20100622T1523Z <gchicares@sbcglobal.net> [698]
+
+  numeric_io_test.cpp
+Refactor.
+
+20100622T1709Z <gchicares@sbcglobal.net> [698]
+
+  numeric_io_test.cpp
+  numeric_io_traits.hpp
+Support infinities.
+
+20100623T0053Z <gchicares@sbcglobal.net> [697]
+
+  dbdict.cpp
+  print_matrix.hpp
+  stratified_algorithms.hpp
+  stratified_charges.cpp
+  stratified_charges.hpp
+  tier_view_editor.cpp
+  tier_view_editor.hpp
+Use infinity in product files.
+
+20100623T0158Z <gchicares@sbcglobal.net> [697]
+
+  version.hpp
+Mark release candidate.
+
+20100624T0243Z <gchicares@sbcglobal.net> [697]
+
+  xml_serializable.tpp
+Distinguish unrecognized from duplicate elements.
+
+20100624T0244Z <gchicares@sbcglobal.net> [697]
+
+  configurable_settings.cpp
+Extend backward compatibility to encompass an extraneous file.
+
+20100624T0245Z <gchicares@sbcglobal.net> [697]
+
+  version.hpp
+Mark release candidate.
+
+20100625T0130Z <gchicares@sbcglobal.net> [697]
+
+  my_tier.cpp
+  tier_document.cpp
+  tier_view_editor.cpp
+Fix defect introduced 20100623T0053Z: cannot load valid file in GUI.
+
+20100625T0131Z <gchicares@sbcglobal.net> [697]
+
+  version.hpp
+Mark release candidate.
+
+20100701T1731Z <gchicares@sbcglobal.net> [697]
+
+  Makefile.am
+  datum_sequence.cpp       [new file]
+  datum_sequence.hpp       [new file]
+  input_sequence_entry.cpp [new file]
+  input_sequence_entry.hpp [new file]
+  objects.make
+Add embryonic input-sequence editor.
+
+20100703T0055Z <gchicares@sbcglobal.net> [697]
+
+  datum_sequence.cpp
+  datum_sequence.hpp
+Implement base class for MVC input sequences.
+
+20100703T1542Z <gchicares@sbcglobal.net> [697]
+
+  datum_sequence.cpp
+  datum_sequence.hpp
+Implement two specimen derived classes. For the moment, only a dummy
+implementation of allowed_keywords() is provided.
+
+20100703T2251Z <gchicares@sbcglobal.net> [697]
+
+  datum_sequence.cpp
+  datum_sequence.hpp
+  input.hpp
+  input_harmonization.cpp
+  input_realization.cpp
+  mec_input.hpp
+Refactor, exposing an ancient defect. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-07/msg00006.html
+
+20100704T1201Z <gchicares@sbcglobal.net> [697]
+
+  datum_sequence.cpp
+  input_harmonization.cpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch, and noted 20100703T2251Z.
+
+20100704T1645Z <gchicares@sbcglobal.net> [697]
+
+  input.hpp
+  input_sequence_entry.cpp
+  input_sequence_entry.hpp
+  main_wx.cpp
+  mvc_controller.cpp
+  mvc_controller.hpp
+  skin.xrc
+  transferor.cpp
+Expose pop-up input-sequence handler for testing only.
+

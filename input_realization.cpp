@@ -193,57 +193,6 @@ Input::permissible_death_benefit_option_keywords()
 }
 
 //============================================================================
-std::map<std::string,std::string> const
-Input::permissible_payment_strategy_keywords()
-{
-    static std::map<std::string,std::string> all_keywords;
-    if(all_keywords.empty())
-        {
-        all_keywords["minimum" ] = "PmtMinimum"      ;
-        all_keywords["target"  ] = "PmtTarget"       ;
-        all_keywords["sevenpay"] = "PmtMEP"          ;
-        all_keywords["glp"     ] = "PmtGLP"          ;
-        all_keywords["gsp"     ] = "PmtGSP"          ;
-        all_keywords["corridor"] = "PmtCorridor"     ;
-        all_keywords["table"   ] = "PmtTable"        ;
-        all_keywords["none"    ] = "PmtInputScalar"  ;
-        }
-    std::map<std::string,std::string> permissible_keywords = all_keywords;
-    permissible_keywords.erase("none");
-
-    bool payment_indeterminate =
-        (
-        false
-    // TODO ?? Further conditions to disallow improper input:
-    // need to compare corresponding years.
-    //  || specamt strategy is neither 'none' nor 'salary-based'
-        );
-
-    if(payment_indeterminate)
-        {
-        permissible_keywords.clear();
-        }
-
-    return permissible_keywords;
-}
-
-//============================================================================
-std::map<std::string,std::string> const
-Input::permissible_payment_mode_keywords()
-{
-    static std::map<std::string,std::string> all_keywords;
-    if(all_keywords.empty())
-        {
-        all_keywords["annual"    ] = "Annual";
-        all_keywords["semiannual"] = "Semiannual";
-        all_keywords["quarterly" ] = "Quarterly";
-        all_keywords["monthly"   ] = "Monthly";
-        }
-    std::map<std::string,std::string> permissible_keywords = all_keywords;
-    return permissible_keywords;
-}
-
-//============================================================================
 std::vector<std::string> Input::RealizeAllSequenceInput(bool report_errors)
 {
     LMI_ASSERT(years_to_maturity() == database_->length());
@@ -603,7 +552,7 @@ std::string Input::RealizeDeathBenefitOption()
         }
 
     if
-        (   !database_->Query(DB_AllowChangeToDBO2)
+        (   !database_->Query(DB_AllowChangeToDbo2)
         &&  !nonstd::is_sorted
                 (DeathBenefitOptionRealized_.begin()
                 ,DeathBenefitOptionRealized_.end()
@@ -621,7 +570,7 @@ std::string Input::RealizeDeathBenefitOption()
         }
 
     if
-        (   !database_->Query(DB_AllowDBO3)
+        (   !database_->Query(DB_AllowDbo3)
         &&  contains(DeathBenefitOptionRealized_, mce_dbopt("ROP"))
         )
         {
@@ -636,17 +585,12 @@ std::string Input::RealizeDeathBenefitOption()
 //============================================================================
 std::string Input::RealizePayment()
 {
-    std::map<std::string,std::string> z = permissible_payment_strategy_keywords();
-    if(mce_solve_ee_prem == SolveType)
-        {
-        z.clear();
-        }
     return realize_sequence_string
         (*this
         ,PaymentRealized_
         ,PaymentStrategyRealized_
         ,Payment
-        ,z
+        ,Payment.allowed_keywords()
         ,std::string("none")
         );
 }
@@ -662,7 +606,7 @@ std::string Input::RealizePaymentMode()
         (*this
         ,PaymentModeRealized_
         ,PaymentMode
-        ,permissible_payment_mode_keywords()
+        ,PaymentMode.allowed_keywords()
         ,std::string("annual")
         );
 }
@@ -670,18 +614,12 @@ std::string Input::RealizePaymentMode()
 //============================================================================
 std::string Input::RealizeCorporationPayment()
 {
-    std::map<std::string,std::string> z = permissible_payment_strategy_keywords();
-    if(mce_solve_er_prem == SolveType)
-        {
-        z.clear();
-        }
-
     return realize_sequence_string
         (*this
         ,CorporationPaymentRealized_
         ,CorporationPaymentStrategyRealized_
         ,CorporationPayment
-        ,z
+        ,CorporationPayment.allowed_keywords()
         ,std::string("none")
         );
 }
@@ -697,7 +635,7 @@ std::string Input::RealizeCorporationPaymentMode()
         (*this
         ,CorporationPaymentModeRealized_
         ,CorporationPaymentMode
-        ,permissible_payment_mode_keywords()
+        ,CorporationPaymentMode.allowed_keywords()
         ,std::string("annual")
         );
 }
@@ -890,7 +828,7 @@ std::string Input::RealizeWithdrawal()
         return s;
         }
 
-    if(!database_->Query(DB_AllowWD))
+    if(!database_->Query(DB_AllowWd))
         {
         if(!each_equal(WithdrawalRealized_.begin(), WithdrawalRealized_.end(), 0.0))
             {
@@ -899,7 +837,7 @@ std::string Input::RealizeWithdrawal()
         }
     else
         {
-        double lowest_allowed_withdrawal = database_->Query(DB_MinWD);
+        double lowest_allowed_withdrawal = database_->Query(DB_MinWd);
         for
             (std::vector<tnr_unrestricted_double>::iterator i = WithdrawalRealized_.begin()
             ;i < WithdrawalRealized_.end()

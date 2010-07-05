@@ -186,7 +186,7 @@ class yare_input
 //    double                            InforceGsp                      ;
 //    double                            InforceSevenPayPremium          ;
     bool                              InforceIsMec                    ;
-//    calendar_date                     LastMaterialChangeDate          ;
+    calendar_date                     LastMaterialChangeDate          ;
     double                            InforceDcv                      ;
     double                            InforceAvBeforeLastMc           ;
     int                               InforceContractYear             ;

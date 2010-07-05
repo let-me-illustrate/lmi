@@ -581,7 +581,7 @@ void LedgerInvariant::Init(BasicValues* b)
     SpouseIssueAge          = b->yare_input_.SpouseIssueAge;
 
     HasHoneymoon            = b->yare_input_.HoneymoonEndorsement;
-    AllowDbo3               = b->Database_->Query(DB_AllowDBO3);
+    AllowDbo3               = b->Database_->Query(DB_AllowDbo3);
     PostHoneymoonSpread     = b->yare_input_.PostHoneymoonSpread;
 
     // The antediluvian branch has a null ProductData_ object.
@@ -785,7 +785,7 @@ void LedgerInvariant::Init(BasicValues* b)
     // it seems that output forms assume that the DAC tax premium load
     // represents the entire DAC tax charge, so they're incorrect if
     // the DAC tax fund charge isn't zero.
-    LMI_ASSERT(0.0 == b->Database_->Query(DB_DACTaxFundCharge));
+    LMI_ASSERT(0.0 == b->Database_->Query(DB_DacTaxFundCharge));
 
     InitAnnLoanDueRate      = b->InterestRates_->RegLnDueRate
         (mce_gen_curr

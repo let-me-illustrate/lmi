@@ -124,6 +124,7 @@ TESTS = \
     test_callback \
     test_comma_punct \
     test_commutation_functions \
+    test_configurable_settings \
     test_contains \
     test_crc32 \
     test_expression_template_0 \
@@ -132,6 +133,7 @@ TESTS = \
     test_financial \
     test_global_settings \
     test_handle_exceptions \
+    test_ieee754 \
     test_input_seq \
     test_input \
     test_irc7702a \
@@ -152,7 +154,6 @@ TESTS = \
     test_print_matrix \
     test_product_file \
     test_progress_meter \
-    test_quiet_nan \
     test_round \
     test_round_to \
     test_rtti_lmi \
@@ -193,6 +194,7 @@ lmi_wx_SOURCES = \
     icon_monger.cpp \
     illustration_document.cpp \
     illustration_view.cpp \
+    input_sequence_entry.cpp \
     main_common.cpp \
     main_wx.cpp \
     mec_document.cpp \
@@ -280,6 +282,7 @@ liblmi_common_sources = \
     database.cpp \
     datum_base.cpp \
     datum_boolean.cpp \
+    datum_sequence.cpp \
     datum_string.cpp \
     dbdict.cpp \
     dbnames.cpp \
@@ -553,11 +556,25 @@ test_comma_punct_SOURCES =  \
   comma_punct_test.cpp
 test_comma_punct_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_commutation_functions_SOURCES =    \
+test_commutation_functions_SOURCES = \
   $(common_test_objects) \
   commutation_functions.cpp \
   commutation_functions_test.cpp
 test_commutation_functions_CXXFLAGS = $(AM_CXXFLAGS)
+
+test_configurable_settings_SOURCES = \
+  $(common_test_objects) \
+  configurable_settings.cpp \
+  configurable_settings_test.cpp \
+  data_directory.cpp \
+  global_settings.cpp \
+  miscellany.cpp \
+  path_utility.cpp \
+  xml_lmi.cpp
+test_configurable_settings_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
+test_configurable_settings_LDADD = \
+  $(BOOST_LIBS) \
+  $(XMLWRAPP_LIBS)
 
 test_contains_SOURCES =    \
   $(common_test_objects) \
@@ -610,6 +627,11 @@ test_handle_exceptions_SOURCES = \
   handle_exceptions_test.cpp
 test_handle_exceptions_CXXFLAGS = $(AM_CXXFLAGS)
 
+test_ieee754_SOURCES =    \
+  $(common_test_objects) \
+  ieee754_test.cpp
+test_ieee754_CXXFLAGS = $(AM_CXXFLAGS)
+
 test_input_seq_SOURCES =    \
   $(common_test_objects) \
   input_seq_test.cpp \
@@ -625,6 +647,7 @@ test_input_SOURCES =    \
   data_directory.cpp \
   database.cpp \
   datum_base.cpp \
+  datum_sequence.cpp \
   datum_string.cpp \
   dbdict.cpp \
   dbnames.cpp \
@@ -790,11 +813,6 @@ test_progress_meter_CXXFLAGS = $(AM_CXXFLAGS)
 test_progress_meter_LDADD =   \
   liblmi.la
 
-test_quiet_nan_SOURCES =    \
-  $(common_test_objects) \
-  quiet_nan_test.cpp
-test_quiet_nan_CXXFLAGS = $(AM_CXXFLAGS)
-
 test_round_SOURCES = \
   $(common_test_objects) \
   round_test.cpp
@@ -927,6 +945,7 @@ noinst_HEADERS = \
     database_view_editor.hpp \
     datum_base.hpp \
     datum_boolean.hpp \
+    datum_sequence.hpp \
     datum_string.hpp \
     dbdict.hpp \
     dbindex.hpp \
@@ -951,6 +970,7 @@ noinst_HEADERS = \
     group_values.hpp \
     handle_exceptions.hpp \
     icon_monger.hpp \
+    ieee754.hpp \
     ihs_irc7702.hpp \
     ihs_irc7702a.hpp \
     ihs_server7702.hpp \
@@ -962,6 +982,7 @@ noinst_HEADERS = \
     input.hpp \
     input_seq_helpers.hpp \
     input_sequence.hpp \
+    input_sequence_entry.hpp \
     interest_rates.hpp \
     istream_to_string.hpp \
     ledger.hpp \
@@ -1032,7 +1053,6 @@ noinst_HEADERS = \
     product_editor.hpp \
     product_names.hpp \
     progress_meter.hpp \
-    quiet_nan.hpp \
     round_to.hpp \
     rounding_document.hpp \
     rounding_rules.hpp \

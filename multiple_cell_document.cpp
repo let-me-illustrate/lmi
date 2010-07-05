@@ -59,9 +59,10 @@ multiple_cell_document::~multiple_cell_document()
 }
 
 //============================================================================
-std::string multiple_cell_document::xml_root_name() const
+std::string const& multiple_cell_document::xml_root_name() const
 {
-    return "multiple_cell_document";
+    static std::string const s("multiple_cell_document");
+    return s;
 }
 
 //============================================================================

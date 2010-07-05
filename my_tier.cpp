@@ -42,8 +42,7 @@
 #include "stratified_charges.hpp"
 
 #include "data_directory.hpp"
-
-#include <cfloat> // DBL_MAX
+#include "ieee754.hpp" // infinity<>()
 
 //============================================================================
 void stratified_charges::write_proprietary_stratified_files()
@@ -53,7 +52,7 @@ void stratified_charges::write_proprietary_stratified_files()
 
     // Example only.
     foo.raw_entity(e_curr_sepacct_load_tiered_by_assets   ).values_.push_back(0.0);
-    foo.raw_entity(e_curr_sepacct_load_tiered_by_assets   ).limits_.push_back(DBL_MAX);
+    foo.raw_entity(e_curr_sepacct_load_tiered_by_assets   ).limits_.push_back(infinity<double>());
 
 // Not necessary for 'sample' product only, because it's built in.
 //    foo.write(AddDataDir("sample.strata"));

@@ -64,9 +64,10 @@ single_cell_document::~single_cell_document()
 }
 
 //============================================================================
-std::string single_cell_document::xml_root_name() const
+std::string const& single_cell_document::xml_root_name() const
 {
-    return "single_cell_document";
+    static std::string const s("single_cell_document");
+    return s;
 }
 
 //============================================================================

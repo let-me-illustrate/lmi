@@ -246,7 +246,7 @@ void mec_input::DoAdaptExternalities()
             )
         );
 
-    GleanedMaturityAge_ = static_cast<int>(database_->Query(DB_EndtAge));
+    GleanedMaturityAge_ = static_cast<int>(database_->Query(DB_MaturityAge));
 }
 
 datum_base const* mec_input::DoBaseDatumPointer
@@ -309,8 +309,8 @@ void mec_input::DoHarmonize()
 {
     bool anything_goes    = global_settings::instance().ash_nazg();
 
-    DefinitionOfLifeInsurance.allow(mce_gpt , database_->Query(DB_AllowGPT ));
-    DefinitionOfLifeInsurance.allow(mce_cvat, database_->Query(DB_AllowCVAT));
+    DefinitionOfLifeInsurance.allow(mce_gpt , database_->Query(DB_AllowGpt ));
+    DefinitionOfLifeInsurance.allow(mce_cvat, database_->Query(DB_AllowCvat));
     DefinitionOfLifeInsurance.allow(mce_noncompliant, false);
 
     DefinitionOfMaterialChange.enable(mce_noncompliant != DefinitionOfLifeInsurance);
@@ -345,11 +345,11 @@ void mec_input::DoHarmonize()
     // DATABASE !! There should be flags in the database to allow or
     // forbid paramedical and nonmedical underwriting; arbitrarily,
     // until they are added, those options are always inhibited.
-    GroupUnderwritingType.allow(mce_medical, database_->Query(DB_AllowFullUW));
+    GroupUnderwritingType.allow(mce_medical, database_->Query(DB_AllowFullUw));
     GroupUnderwritingType.allow(mce_paramedical, false);
     GroupUnderwritingType.allow(mce_nonmedical, false);
-    GroupUnderwritingType.allow(mce_simplified_issue, database_->Query(DB_AllowSimpUW));
-    GroupUnderwritingType.allow(mce_guaranteed_issue, database_->Query(DB_AllowGuarUW));
+    GroupUnderwritingType.allow(mce_simplified_issue, database_->Query(DB_AllowSimpUw));
+    GroupUnderwritingType.allow(mce_guaranteed_issue, database_->Query(DB_AllowGuarUw));
 
     IssueAge        .enable(mce_no  == DeprecatedUseDOB);
     DateOfBirth     .enable(mce_yes == DeprecatedUseDOB);
@@ -383,7 +383,7 @@ void mec_input::DoHarmonize()
         ,maximum_birthdate(IssueAge.minimum(), EffectiveDate.value(), use_anb)
         );
 
-    int max_age = static_cast<int>(database_->Query(DB_EndtAge));
+    int max_age = static_cast<int>(database_->Query(DB_MaturityAge));
     InforceAsOfDate.minimum_and_maximum
         (EffectiveDate.value()
         ,add_years_and_months
@@ -613,9 +613,10 @@ int mec_input::class_version() const
     return 0;
 }
 
-std::string mec_input::xml_root_name() const
+std::string const& mec_input::xml_root_name() const
 {
-    return "mec";
+    static std::string const s("mec");
+    return s;
 }
 
 bool mec_input::is_detritus(std::string const& s) const

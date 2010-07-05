@@ -156,6 +156,7 @@ yare_input::yare_input(Input const& z)
     SpouseIssueAge                  = z.SpouseIssueAge                 .value();
     InforceTaxBasis                 = z.InforceTaxBasis                .value();
     InforceIsMec                    = z.InforceIsMec                   .value();
+    LastMaterialChangeDate          = z.LastMaterialChangeDate         .value();
     InforceDcv                      = z.InforceDcv                     .value();
     InforceAvBeforeLastMc           = z.InforceAvBeforeLastMc          .value();
     InforceContractYear             = z.InforceContractYear            .value();

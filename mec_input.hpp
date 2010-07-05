@@ -31,6 +31,7 @@
 #include "any_member.hpp"
 #include "ce_product_name.hpp"
 #include "datum_boolean.hpp"
+#include "datum_sequence.hpp"
 #include "datum_string.hpp"
 #include "mc_enum.hpp"
 #include "mc_enum_types.hpp"
@@ -48,11 +49,6 @@ class product_database;
 
 #include <string>
 #include <vector>
-
-/// Eventually it may become important to distinguish strings that
-/// represent input sequences, for interactive validation.
-
-typedef datum_string datum_sequence;
 
 /// This class is the Model of the MVC framework for MEC testing.
 ///
@@ -102,8 +98,8 @@ class LMI_SO mec_input
     void AscribeMembers();
 
     // xml_serializable required implementation.
-    virtual int         class_version() const;
-    virtual std::string xml_root_name() const;
+    virtual int                class_version() const;
+    virtual std::string const& xml_root_name() const;
 
     // xml_serializable overrides.
     virtual bool is_detritus(std::string const&) const;
@@ -194,6 +190,9 @@ template<> struct reconstitutor<datum_base, mec_input>
         DesiredType* z = 0;
         z = exact_cast<ce_product_name         >(m); if(z) return z;
         z = exact_cast<datum_string            >(m); if(z) return z;
+        // Sequences.
+        z = exact_cast<datum_sequence          >(m); if(z) return z;
+        // mc- types.
         z = exact_cast<mce_class               >(m); if(z) return z;
         z = exact_cast<mce_defn_life_ins       >(m); if(z) return z;
         z = exact_cast<mce_defn_material_change>(m); if(z) return z;
@@ -203,6 +202,7 @@ template<> struct reconstitutor<datum_base, mec_input>
         z = exact_cast<mce_table_rating        >(m); if(z) return z;
         z = exact_cast<mce_uw_basis            >(m); if(z) return z;
         z = exact_cast<mce_yes_or_no           >(m); if(z) return z;
+        // tnr- types.
         z = exact_cast<tnr_date                >(m); if(z) return z;
         z = exact_cast<tnr_duration            >(m); if(z) return z;
         z = exact_cast<tnr_issue_age           >(m); if(z) return z;

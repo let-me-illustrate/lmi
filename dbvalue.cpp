@@ -112,6 +112,25 @@ database_entity::~database_entity()
 {
 }
 
+bool database_entity::operator==(database_entity const& z) const
+{
+#if 0
+// PETE causes an 'ambiguous overload' error for vector 'v0==v1'.
+    return
+           key_          == z.key_
+        && axis_lengths_ == z.axis_lengths_
+        && data_values_  == z.data_values_
+        && gloss_        == z.gloss_
+        ;
+#endif // 0
+    return
+           key_          == z.key_
+        && std::operator==(axis_lengths_, z.axis_lengths_)
+        && std::operator==(data_values_ , z.data_values_ )
+        && gloss_        == z.gloss_
+        ;
+}
+
 /// Change dimensions.
 ///
 /// Preconditions:
@@ -202,9 +221,9 @@ double& database_entity::operator[](std::vector<int> const& index)
         {
         z = 0;
         fatal_error()
-            << "Trying to index database item with key "
-            << key_
-            << " past end of data."
+            << "Trying to index database item '"
+            << GetDBNames()[key_].ShortName
+            << "' past end of data."
             << LMI_FLUSH
             ;
         }
@@ -232,9 +251,9 @@ double const* database_entity::operator[](database_index const& idx) const
         {
         z = 0;
         fatal_error()
-            << "Trying to index database item with key "
-            << key_
-            << " past end of data."
+            << "Trying to index database item '"
+            << GetDBNames()[key_].ShortName
+            << "' past end of data."
             << LMI_FLUSH
             ;
         }
@@ -270,7 +289,6 @@ std::ostream& database_entity::write(std::ostream& os) const
         << '"' << GetDBNames()[key_].LongName << '"'
         << '\n'
         << "  name='" << GetDBNames()[key_].ShortName << "'"
-        << " key=" << key_
         << '\n'
         ;
     if(!gloss_.empty())
@@ -323,9 +341,7 @@ void database_entity::assert_invariants() const
             fatal_error()
                 << "Database item '"
                 << GetDBNames()[key_].ShortName
-                << "' with key "
-                << key_
-                << " has invalid length "
+                << "' has invalid length "
                 << *ai
                 << " in a dimension where "
                 << *mi
@@ -342,9 +358,7 @@ void database_entity::assert_invariants() const
             fatal_error()
                 << "Database item '"
                 << GetDBNames()[key_].ShortName
-                << "' with key "
-                << key_
-                << " has invalid duration."
+                << "' has invalid duration."
                 << LMI_FLUSH
                 ;
             }
@@ -364,9 +378,7 @@ int database_entity::getndata() const
         fatal_error()
             << "Database item '"
             << GetDBNames()[key_].ShortName
-            << "' with key "
-            << key_
-            << " has invalid dimensions."
+            << "' has invalid dimensions."
             << LMI_FLUSH
             ;
         }
@@ -409,9 +421,7 @@ int database_entity::getndata(std::vector<int> const& z)
 
 void database_entity::read(xml::element const& e)
 {
-    std::string short_name;
-    xml_serialize::get_element(e, "key"         , short_name   );
-    key_ = db_key_from_name(short_name);
+    key_ = db_key_from_name(e.get_name());
     xml_serialize::get_element(e, "axis_lengths", axis_lengths_);
     xml_serialize::get_element(e, "data_values" , data_values_ );
     xml_serialize::get_element(e, "gloss"       , gloss_       );
@@ -423,7 +433,6 @@ void database_entity::write(xml::element& e) const
 {
     assert_invariants();
 
-    xml_serialize::set_element(e, "key"         , db_name_from_key(key_));
     xml_serialize::set_element(e, "axis_lengths", axis_lengths_);
     xml_serialize::set_element(e, "data_values" , data_values_ );
     xml_serialize::set_element(e, "gloss"       , gloss_       );
