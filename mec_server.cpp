@@ -159,14 +159,14 @@ mec_state test_one_days_7702A_transactions
 
     std::vector<double> const tabular_7Px = actuarial_table_rates
         (AddDataDir(product_filenames.datum("TAMRA7PayFilename"))
-        ,static_cast<long int>(database.Query(DB_TAMRA7PayTable))
+        ,static_cast<long int>(database.Query(DB_SevenPayTable))
         ,input.issue_age()
         ,input.years_to_maturity()
         );
 
     std::vector<double> Mly7702qc = actuarial_table_rates
         (AddDataDir(product_filenames.datum("IRC7702Filename"))
-        ,static_cast<long int>(database.Query(DB_IRC7702QTable))
+        ,static_cast<long int>(database.Query(DB_Irc7702QTable))
         ,input.issue_age()
         ,input.years_to_maturity()
         );
@@ -194,7 +194,7 @@ mec_state test_one_days_7702A_transactions
         );
 
     std::vector<double> Mly7702ig;
-    database.Query(Mly7702ig, DB_NAARDiscount);
+    database.Query(Mly7702ig, DB_NaarDiscount);
     LMI_ASSERT(!contains(Mly7702ig, -1.0));
     std::vector<double> DBDiscountRate(input.years_to_maturity());
     assign(DBDiscountRate, 1.0 / (1.0 + Mly7702ig));
@@ -265,7 +265,7 @@ mec_state test_one_days_7702A_transactions
 
     double AnnualTargetPrem = 1000000000.0; // No higher premium is anticipated.
     int const target_year =
-          database.Query(DB_TgtPmFixedAtIssue)
+          database.Query(DB_TgtPremFixedAtIssue)
         ? 0
         : input.inforce_year()
         ;
@@ -277,7 +277,7 @@ mec_state test_one_days_7702A_transactions
         {
         // When 7Px is calculated from first principles, presumably
         // the target premium should be the same as for oe_modal_table
-        // with a 7Px table and a DB_TgtPremPolFee of zero.
+        // with a 7Px table and a DB_TgtPremMonthlyPolFee of zero.
         AnnualTargetPrem = round_max_premium
             (   InforceTargetSpecifiedAmount
             *   epsilon_plus_one
@@ -287,7 +287,7 @@ mec_state test_one_days_7702A_transactions
     else if(oe_modal_table == target_premium_type)
         {
         AnnualTargetPrem = round_max_premium
-            (   database.Query(DB_TgtPremPolFee)
+            (   database.Query(DB_TgtPremMonthlyPolFee)
             +       InforceTargetSpecifiedAmount
                 *   epsilon_plus_one
                 *   TargetPremiumRates[target_year]
@@ -318,7 +318,7 @@ mec_state test_one_days_7702A_transactions
     database.Query(excess_sales_load  , DB_CurrPremLoadExcRfd);
     database.Query(target_premium_load, DB_CurrPremLoadTgt);
     database.Query(excess_premium_load, DB_CurrPremLoadExc);
-    database.Query(dac_tax_load       , DB_DACTaxPremLoad);
+    database.Query(dac_tax_load       , DB_DacTaxPremLoad);
 
     double const LoadTarget = target_sales_load[InforceYear] + target_premium_load[InforceYear] + dac_tax_load[InforceYear] + premium_tax_load;
     double const LoadExcess = excess_sales_load[InforceYear] + excess_premium_load[InforceYear] + dac_tax_load[InforceYear] + premium_tax_load;

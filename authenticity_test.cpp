@@ -350,20 +350,20 @@ void PasskeyTest::TestDate() const
     BOOST_TEST_EQUAL("cached"   , Authenticity::Assay(last_date, Pwd_));
 
     BOOST_TEST_EQUAL
-        ("Current date '2000-12-31' is invalid:"
-        " this system cannot be used before '2001-01-01'."
+        ("Current date 2000-12-31 is invalid:"
+        " this system cannot be used before 2001-01-01."
         " Contact the home office."
         ,Authenticity::Assay(BeginDate_ - 1, Pwd_)
         );
     BOOST_TEST_EQUAL
-        ("Current date '2001-01-03' is invalid:"
-        " this system expired on '2001-01-03'."
+        ("Current date 2001-01-03 is invalid:"
+        " this system cannot be used after 2001-01-02."
         " Contact the home office."
         ,Authenticity::Assay(EndDate_, Pwd_)
         );
     BOOST_TEST_EQUAL
-        ("Current date '2001-01-13' is invalid:"
-        " this system expired on '2001-01-03'."
+        ("Current date 2001-01-13 is invalid:"
+        " this system cannot be used after 2001-01-02."
         " Contact the home office."
         ,Authenticity::Assay(EndDate_ + 10, Pwd_)
         );

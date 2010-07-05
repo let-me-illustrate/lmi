@@ -89,7 +89,7 @@ void system_test()
                 {
                 continue;
                 }
-            else if(".cns" == fs::extension(*i))
+            else if(".cns" == fs::extension(*i) || ".ill" == fs::extension(*i))
                 {
                 std::cout << "Regression testing: " << i->string() << std::endl;
                 (illustrator(mce_emit_test_data))(*i);

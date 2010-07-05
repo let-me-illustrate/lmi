@@ -101,7 +101,7 @@ void input_test::test_product_database()
     // This vector's last element must be replicated.
     int dims_stat[e_number_of_axes] = {1, 1, 1, 1, 1, 1, 10};
     double stat[10] = {0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.05};
-    DBDictionary::instance().dictionary_[DB_StatVxQ] = database_entity
+    DBDictionary::instance().datum("StatVxQ") = database_entity
         (DB_StatVxQ
         ,e_number_of_axes
         ,dims_stat
@@ -126,7 +126,7 @@ void input_test::test_product_database()
         ,0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8
         ,0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9
         };
-    DBDictionary::instance().dictionary_[DB_TaxVxQ] = database_entity
+    DBDictionary::instance().datum("TaxVxQ") = database_entity
         (DB_TaxVxQ
         ,e_number_of_axes
         ,dims_tax
@@ -146,16 +146,16 @@ void input_test::test_product_database()
     std::cout
         << "\n  Database speed tests..."
         << "\n  initialize()      : " << TimeAnAliquot(boost::bind(&product_database::initialize,      &db))
-        << "\n  Query(vector)     : " << TimeAnAliquot(boost::bind(&product_database::Query,           &db, v, DB_EndtAge))
-        << "\n  Query(scalar)     : " << TimeAnAliquot(boost::bind(&product_database::Query,           &db, DB_EndtAge))
-        << "\n  entity_from_key() : " << TimeAnAliquot(boost::bind(&product_database::entity_from_key, &db, DB_EndtAge))
+        << "\n  Query(vector)     : " << TimeAnAliquot(boost::bind(&product_database::Query,           &db, v, DB_MaturityAge))
+        << "\n  Query(scalar)     : " << TimeAnAliquot(boost::bind(&product_database::Query,           &db,    DB_MaturityAge))
+        << "\n  entity_from_key() : " << TimeAnAliquot(boost::bind(&product_database::entity_from_key, &db,    DB_MaturityAge))
         << '\n'
         ;
 
-    database_entity const maturity = db.entity_from_key(DB_EndtAge);
+    database_entity const maturity = db.entity_from_key(DB_MaturityAge);
 
     // Maturity age must not vary by duration.
-    DBDictionary::instance().dictionary_[DB_EndtAge] = database_entity
+    DBDictionary::instance().datum("MaturityAge") = database_entity
         (DB_StatVxQ
         ,e_number_of_axes
         ,dims_stat
@@ -166,15 +166,7 @@ void input_test::test_product_database()
         ,std::runtime_error
         ,"Assertion '1 == v.extent()' failed."
         );
-    DBDictionary::instance().dictionary_[DB_EndtAge] = maturity;
-
-    DBDictionary::instance().dictionary_[1 + DB_LAST] = maturity;
-    DBDictionary::instance().dictionary_.erase(DB_EndtAge);
-    BOOST_TEST_THROW
-        (db.entity_from_key(DB_EndtAge)
-        ,std::runtime_error
-        ,"map_lookup: key '258' not found."
-        );
+    DBDictionary::instance().datum("MaturityAge") = maturity;
 }
 
 void input_test::test_input_class()

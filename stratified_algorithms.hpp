@@ -51,8 +51,7 @@
 ///
 /// Limits are constrained to be positive and nondecreasing. The first
 /// bracket extends from zero (implicitly) to the first limit. The last
-/// limit must have no finite upper bound in the real number system; in
-/// computer floating point, it's specified as DBL_MAX.
+/// limit must be positive infinity.
 ///
 /// It is convenient to characterize brackets by their upper limits.
 /// Brackets may also be characterized in terms of incremental rather
@@ -128,9 +127,9 @@ double TieredNetToGross
 /// Brackets are specified by incremental (not cumulative) limits.
 ///
 /// TODO ?? This should be done implicitly:
-/// Use std::numeric_limits<T>::max() as the last element of
-/// 'incremental_limits' in order to apply the last element of 'rates'
-/// to any excess over the penultimate element of 'incremental_limits'.
+/// Use positive infinity as the last element of 'incremental_limits'
+/// in order to apply the last element of 'rates' to any excess over
+/// the penultimate element of 'incremental_limits'.
 
 template<typename T>
 struct tiered_product
@@ -306,11 +305,7 @@ T banded_rate<T>::operator()
     std::vector<T> const& z(cumulative_limits);
     LMI_ASSERT(nonstd::is_sorted(z.begin(), z.end()));
 
-    // TODO ?? This is ghastly. As designed, the last limit must
-    // exist, and it must equal std::numeric_limits<T>::max(); but
-    // comparing that value to a stored copy for exact equality has
-    // an indeterminate result. As a temporary workaround here, the
-    // last value is ignored.
+    // Ignore the last limit. It's asserted elsewhere to be infinity.
     std::vector<double>::const_iterator band = std::upper_bound
         (cumulative_limits.begin()
         ,cumulative_limits.end() - 1

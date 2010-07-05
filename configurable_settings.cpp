@@ -27,25 +27,24 @@
 #endif // __BORLANDC__
 
 #include "configurable_settings.hpp"
+#include "xml_serializable.tpp"
 
 #include "alert.hpp"
 #include "contains.hpp"
 #include "data_directory.hpp"     // AddDataDir()
 #include "handle_exceptions.hpp"
-#include "miscellany.hpp"
-#include "path_utility.hpp"
+#include "miscellany.hpp"         // lmi_array_size()
+#include "path_utility.hpp"       // validate_directory(), validate_filepath()
 #include "platform_dependent.hpp" // access()
-#include "xml_lmi.hpp"
 
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 
-#include <xmlwrapp/nodes_view.h>
-
 #include <algorithm> // std::copy()
 #include <iterator>
 #include <sstream>
+#include <stdexcept>
 
 // This symbol is defined by configure when it is used. If we don't use
 // configure, fall back to the default installation location which is "/"
@@ -53,7 +52,7 @@
     #define LMI_INSTALL_PREFIX ""
 #endif
 
-// TODO ?? Need unit tests.
+template class xml_serializable<configurable_settings>;
 
 namespace
 {
@@ -67,12 +66,26 @@ std::string const& configuration_filename()
 /// it's non-complete--as is typical msw usage.
 ///
 /// Look for the configuration file first where FHS would have it.
-/// To support non-FHS platforms, if it's not found there, then
+/// To support non-FHS platforms, if it's not readable there, then
 /// look in the data directory.
 ///
-/// TODO ?? CALCULATION_SUMMARY Should write access be checked
-/// here? What if the first file found is read-only, but the
-/// second is read-write?
+/// Throws if the file is not readable.
+///
+/// A warning is given at initialization if the file is readable but
+/// not writable. It could conceivably be readable in both locations,
+/// but writable only in the second:
+///   -r--r--r-- ... /etc/opt/lmi/configurable_settings.xml
+///   -rw-rw-rw- ... /opt/lmi/data/configurable_settings.xml
+/// In that particular case, it might at first seem better to choose
+/// the second file. However, in the most plausible case--an archival
+/// copy of the system stored on a read-only medium, including coeval
+/// data files--it would be better to mount that medium as the data
+/// directory, e.g.:
+///   -rw-rw-rw- ... /etc/opt/lmi/configurable_settings.xml
+///   -r--r--r-- ... /dev/cdrom/configurable_settings.xml
+/// and the file in /etc/opt/lmi/ would be chosen by default, as seems
+/// most appropriate. (A knowledgeable user could of course move it
+/// aside if it is desired to use the file on the read-only medium.)
 
 fs::path const& configuration_filepath()
 {
@@ -84,10 +97,10 @@ fs::path const& configuration_filepath()
 
     std::string filename = LMI_INSTALL_PREFIX "/etc/opt/lmi/"
                             + configuration_filename();
-    if(access(filename.c_str(), R_OK))
+    if(0 != access(filename.c_str(), R_OK))
         {
         filename = AddDataDir(configuration_filename());
-        if(access(filename.c_str(), R_OK))
+        if(0 != access(filename.c_str(), R_OK))
             {
             fatal_error()
                 << "No readable file '"
@@ -97,6 +110,18 @@ fs::path const& configuration_filepath()
                 ;
             }
         }
+
+    if(0 != access(filename.c_str(), W_OK))
+        {
+        warning()
+            << "Configurable-settings file '"
+            << filename
+            << "' can be read but not written."
+            << " No configuration changes can be saved."
+            << LMI_FLUSH
+            ;
+        }
+
     validate_filepath(filename, "Configurable-settings file");
     complete_path = fs::system_complete(filename);
     return complete_path;
@@ -110,30 +135,6 @@ std::string const& default_calculation_summary_columns()
         " CSVNet_Current"
         " EOYDeathBft_Current"
         );
-    return s;
-}
-
-/// Entities that were present in older versions and then removed
-/// are recognized and ignored. If they're resurrected in a later
-/// version, then they aren't ignored.
-
-bool is_detritus(std::string const& s)
-{
-    static std::string const a[] =
-        {"xml_schema_filename"               // Withdrawn.
-        ,"xsl_directory"                     // Withdrawn.
-        ,"xslt_format_xml_filename"          // Withdrawn.
-        ,"xslt_html_filename"                // Withdrawn.
-        ,"xslt_light_tab_delimited_filename" // Withdrawn.
-        ,"xslt_tab_delimited_filename"       // Withdrawn.
-        };
-    static std::vector<std::string> const v(a, a + lmi_array_size(a));
-    return contains(v, s);
-}
-
-std::string const& xml_root_name()
-{
-    static std::string s("configurable_settings");
     return s;
 }
 } // Unnamed namespace.
@@ -210,71 +211,105 @@ void configurable_settings::ascribe_members()
     ascribe("xsl_fo_command"                   ,&configurable_settings::xsl_fo_command_                   );
 }
 
-// TODO ?? CALCULATION_SUMMARY Class template any_member should expose
-// a has_element() function.
-
 void configurable_settings::load()
 {
-    std::ostringstream oss;
-    xml_lmi::dom_parser parser(configuration_filepath().string());
-    xml::element const& root = parser.root_node(xml_root_name());
-    xml::const_nodes_view const elements(root.elements());
-    typedef xml::const_nodes_view::const_iterator cnvi;
-    for(cnvi i = elements.begin(); i != elements.end(); ++i)
-        {
-        std::string name = i->get_name();
-        if(contains(member_names(), name))
-            {
-            operator[](i->get_name()) = xml_lmi::get_content(*i);
-            }
-        else if(is_detritus(name))
-            {
-            // Hold certain obsolete entities that must be translated.
-            // For now, there are none.
-            }
-        else
-            {
-            oss << "  '" << name << "'\n";
-            }
-        }
-    if(!oss.str().empty())
-        {
-        warning()
-            << "Configurable-settings file '"
-            << configuration_filepath()
-            << "':\n"
-            << oss.str()
-            << "not recognized."
-            << LMI_FLUSH
-            ;
-        }
+    xml_serializable<configurable_settings>::load(configuration_filepath());
 }
 
 void configurable_settings::save() const
 {
-    xml_lmi::xml_document document(xml_root_name());
-    xml::element& root = document.root_node();
+    xml_serializable<configurable_settings>::save(configuration_filepath());
+}
 
-    std::vector<std::string>::const_iterator i;
-    for(i = member_names().begin(); i != member_names().end(); ++i)
+/// Backward-compatibility serial number of this class's xml version.
+///
+/// version 0: [prior to the lmi epoch]
+/// version 1: 20100612T0139Z
+
+int configurable_settings::class_version() const
+{
+    return 1;
+}
+
+std::string const& configurable_settings::xml_root_name() const
+{
+    static std::string const s("configurable_settings");
+    return s;
+}
+
+void configurable_settings::handle_missing_version_attribute() const
+{
+}
+
+/// Entities that were present in older versions and then removed
+/// are recognized and ignored. If they're resurrected in a later
+/// version, then they aren't ignored.
+
+bool configurable_settings::is_detritus(std::string const& s) const
+{
+    static std::string const a[] =
+        {"xml_schema_filename"               // Withdrawn.
+        ,"xsl_directory"                     // Withdrawn.
+        ,"xslt_format_xml_filename"          // Withdrawn.
+        ,"xslt_html_filename"                // Withdrawn.
+        ,"xslt_light_tab_delimited_filename" // Withdrawn.
+        ,"xslt_tab_delimited_filename"       // Withdrawn.
+        };
+    static std::vector<std::string> const v(a, a + lmi_array_size(a));
+    return contains(v, s);
+}
+
+void configurable_settings::redintegrate_ex_ante
+    (int                file_version
+    ,std::string const& name
+    ,std::string      & value
+    ) const
+{
+    if(class_version() == file_version)
         {
-        xml_lmi::add_node(root, *i, operator[](*i).str());
+        return;
         }
 
-    fs::ofstream ofs(configuration_filepath(), ios_out_trunc_binary());
-    ofs << document;
-    if(!ofs)
+    if(0 == file_version)
         {
-        fatal_error()
-            << "Configurable-settings file '"
-            << configuration_filepath()
-            << "' is not writeable."
-            << LMI_FLUSH
-            ;
+        // Skin names differed prior to the 20080218T1743Z change,
+        // which predated the 'version' attribute.
+        if("skin_filename" == name && contains(value, "xml_notebook"))
+            {
+            value =
+                  "xml_notebook.xrc"                   == value ? "skin.xrc"
+                : "xml_notebook_coli_boli.xrc"         == value ? "skin_coli_boli.xrc"
+                : "xml_notebook_group_carveout.xrc"    == value ? "skin_group_carveout.xrc"
+                : "xml_notebook_group_carveout2.xrc"   == value ? "skin_group_carveout2.xrc"
+                : "xml_notebook_private_placement.xrc" == value ? "skin_reg_d.xrc"
+                : "xml_notebook_single_premium.xrc"    == value ? "skin_single_premium.xrc"
+                : "xml_notebook_variable_annuity.xrc"  == value ? "skin_variable_annuity.xrc"
+                : throw std::runtime_error(value + ": unexpected skin filename.")
+                ;
+            }
         }
 }
 
+void configurable_settings::redintegrate_ex_post
+    (int                                       file_version
+    ,std::map<std::string, std::string> const& // detritus_map
+    ,std::list<std::string>             const& // residuary_names
+    )
+{
+    if(class_version() == file_version)
+        {
+        return;
+        }
+
+    // Nothing to do for now.
+}
+
 // TODO ?? CALCULATION_SUMMARY Address the validation issue:
+
+/// A whitespace-delimited list of columns to be shown on the
+/// calculation summary, unless overridden by
+/// use_builtin_calculation_summary(true).
+///
 /// Precondition: Argument is semantically valid; ultimately this will
 /// be validated elsewhere.
 
@@ -283,65 +318,106 @@ void configurable_settings::calculation_summary_columns(std::string const& s)
     calculation_summary_columns_ = s;
 }
 
+/// If true, then use built-in default calculation-summary columns;
+/// otherwise, use calculation_summary_columns().
+
 void configurable_settings::use_builtin_calculation_summary(bool b)
 {
     use_builtin_calculation_summary_ = b;
 }
+
+/// A whitespace-delimited list of columns to be shown on the
+/// calculation summary, unless overridden by
+/// use_builtin_calculation_summary(true).
 
 std::string const& configurable_settings::calculation_summary_columns() const
 {
     return calculation_summary_columns_;
 }
 
+/// Name of log file used for cgicc's debugging facility.
+
 std::string const& configurable_settings::cgi_bin_log_filename() const
 {
     return cgi_bin_log_filename_;
 }
+
+/// Static name of custom input file.
 
 std::string const& configurable_settings::custom_input_filename() const
 {
     return custom_input_filename_;
 }
 
+/// Static name of custom output file.
+
 std::string const& configurable_settings::custom_output_filename() const
 {
     return custom_output_filename_;
 }
+
+/// Name of '.ill' file containing default input values for new '.ill'
+/// and '.cns' files.
 
 std::string const& configurable_settings::default_input_filename() const
 {
     return default_input_filename_;
 }
 
+/// Names of any libraries to be preloaded. Used to work around a
+/// defect of msw.
+
 std::string const& configurable_settings::libraries_to_preload() const
 {
     return libraries_to_preload_;
 }
+
+/// Unsafely allow users the option to bypass error conditions if
+/// 'true'. Setting this to 'false' prevents the system from asking
+/// whether to bypass problems; that is the default, and changing it
+/// may have no effect with non-GUI interfaces. Eventually this option
+/// may be removed altogether.
 
 bool configurable_settings::offer_hobsons_choice() const
 {
     return offer_hobsons_choice_;
 }
 
+/// Directory to which xsl-fo input and output are written.
+
 std::string const& configurable_settings::print_directory() const
 {
     return print_directory_;
 }
+
+/// Name of '.xrc' interface skin.
 
 std::string const& configurable_settings::skin_filename() const
 {
     return skin_filename_;
 }
 
+/// File extension (beginning with a dot) typical for the user's
+/// preferred spreadsheet program. Used to determine mimetype or msw
+/// 'file association'.
+
 std::string const& configurable_settings::spreadsheet_file_extension() const
 {
     return spreadsheet_file_extension_;
 }
 
+/// If true, then use built-in default calculation-summary columns;
+/// otherwise, use calculation_summary_columns().
+
 bool configurable_settings::use_builtin_calculation_summary() const
 {
     return use_builtin_calculation_summary_;
 }
+
+/// Command to execute xsl-fo processor. Making this an external
+/// command permits using a program with a free but not GPL-compatible
+/// license, such as apache fop, which cannot be linked with a GPL
+/// version 2 program.
 
 std::string const& configurable_settings::xsl_fo_command() const
 {

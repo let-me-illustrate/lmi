@@ -377,9 +377,6 @@ class TierEditorGrid
 
     static std::string DoubleToString(double);
     static double      StringToDouble(std::string const&);
-
-    // Label used in the editor for the highest representable number - DBL_MAX.
-    static std::string highest_representable_label_;
 };
 
 #endif // tier_view_editor_hpp

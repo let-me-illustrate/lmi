@@ -51,14 +51,14 @@ void MortalityRates::Init(BasicValues const& basic_values)
 
     MonthlyCurrentCoiRatesBand0_ = actuarial_table_rates
         (CurrentTableFile()
-        ,static_cast<long int>(basic_values.Database_->Query(DB_CurrCOITable))
+        ,static_cast<long int>(basic_values.Database_->Query(DB_CurrCoiTable))
         ,issue_age
         ,length
         );
 
     MonthlyGuaranteedCoiRates_ = actuarial_table_rates
         (GuaranteedTableFile()
-        ,static_cast<long int>(basic_values.Database_->Query(DB_GuarCOITable))
+        ,static_cast<long int>(basic_values.Database_->Query(DB_GuarCoiTable))
         ,issue_age
         ,length
         );
@@ -94,14 +94,14 @@ void MortalityRates::Init(BasicValues const& basic_values)
 
     AdbRates_ = actuarial_table_rates
         (CurrentTableFile()
-        ,static_cast<long int>(basic_values.Database_->Query(DB_ADDTable))
+        ,static_cast<long int>(basic_values.Database_->Query(DB_AdbTable))
         ,issue_age
         ,length
         );
 
     WpRates_ = actuarial_table_rates
         (CurrentTableFile()
-        ,static_cast<long int>(basic_values.Database_->Query(DB_WPTable))
+        ,static_cast<long int>(basic_values.Database_->Query(DB_WpTable))
         ,issue_age
         ,length
         );

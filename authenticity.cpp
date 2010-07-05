@@ -183,22 +183,22 @@ std::string Authenticity::Assay
     if(candidate < begin)
         {
         oss
-            << "Current date '"
+            << "Current date "
             << candidate.str()
-            << "' is invalid: this system cannot be used before '"
+            << " is invalid: this system cannot be used before "
             << begin.str()
-            << "'. Contact the home office."
+            << ". Contact the home office."
             ;
         return oss.str();
         }
     if(end <= candidate)
         {
         oss
-            << "Current date '"
+            << "Current date "
             << candidate.str()
-            << "' is invalid: this system expired on '"
-            << end.str()
-            << "'. Contact the home office."
+            << " is invalid: this system cannot be used after "
+            << (-1 + end).str()
+            << ". Contact the home office."
             ;
         return oss.str();
         }

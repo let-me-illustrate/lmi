@@ -38,6 +38,7 @@
 
 #include "alert.hpp"
 #include "calendar_date.hpp"
+#include "input_sequence_entry.hpp"
 #include "numeric_io_cast.hpp"
 #include "wx_utility.hpp"
 
@@ -81,6 +82,8 @@ namespace
     bool Transfer(transfer_direction, std::string&, wxSpinCtrl&       );
     bool Transfer(transfer_direction, std::string&, wxStaticText&     );
     bool Transfer(transfer_direction, std::string&, wxTextCtrl&       );
+    // Custom controls.
+    bool Transfer(transfer_direction, std::string&, InputSequenceEntry& );
 } // Unnamed namespace.
 
 Transferor::Transferor(std::string& data, std::string const& name)
@@ -157,6 +160,8 @@ bool Transferor::PerformTransfer(transfer_direction td)
     wxSpinCtrl       * spinctrl     ;
     wxStaticText     * statictext   ;
     wxTextCtrl       * textctrl     ;
+    // Custom controls.
+    InputSequenceEntry * sequence   ;
 
     if     (0 != (button       = dynamic_cast<wxButton         *>(control)))
         return Transfer(td, data_,             *button      );
@@ -190,6 +195,9 @@ bool Transferor::PerformTransfer(transfer_direction td)
         return Transfer(td, data_,             *statictext  );
     else if(0 != (textctrl     = dynamic_cast<wxTextCtrl       *>(control)))
         return Transfer(td, data_,             *textctrl    );
+    // Custom controls.
+    else if(0 != (sequence     = dynamic_cast<InputSequenceEntry *>(control)))
+        return Transfer(td, data_,             *sequence    );
     else
         {
         fatal_error()
@@ -448,6 +456,11 @@ namespace
             data = control.GetValue();
             }
         return true;
+    }
+
+    bool Transfer(transfer_direction td, std::string& data, InputSequenceEntry& control)
+    {
+        return Transfer(td, data, control.text_ctrl());
     }
 } // Unnamed namespace.
 

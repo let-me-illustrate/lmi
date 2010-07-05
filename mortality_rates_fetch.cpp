@@ -49,15 +49,15 @@ void MortalityRates::fetch_parameters(BasicValues const& basic_values)
     // Some of these data members seem useless for now, but they will
     // become useful when mortality-table access is moved hither from
     // class BasicValues.
-    AllowAdb_          = basic_values.Database_->Query(DB_AllowADD         );
-    AllowChild_        = basic_values.Database_->Query(DB_AllowChild       );
+    AllowAdb_          = basic_values.Database_->Query(DB_AllowAdb         );
+    AllowChild_        = basic_values.Database_->Query(DB_AllowChildRider  );
     AllowFlatExtras_   = basic_values.Database_->Query(DB_AllowFlatExtras  );
-    AllowSpouse_       = basic_values.Database_->Query(DB_AllowSpouse      );
+    AllowSpouse_       = basic_values.Database_->Query(DB_AllowSpouseRider );
     AllowSubstdTable_  = basic_values.Database_->Query(DB_AllowSubstdTable );
     AllowTerm_         = basic_values.Database_->Query(DB_AllowTerm        );
-    AllowWp_           = basic_values.Database_->Query(DB_AllowWP          );
-    CCoiIsAnnual_      = basic_values.Database_->Query(DB_CCoiIsAnnual     );
-    GCoiIsAnnual_      = basic_values.Database_->Query(DB_GCoiIsAnnual     );
+    AllowWp_           = basic_values.Database_->Query(DB_AllowWp          );
+    CCoiIsAnnual_      = basic_values.Database_->Query(DB_CurrCoiIsAnnual  );
+    GCoiIsAnnual_      = basic_values.Database_->Query(DB_GuarCoiIsAnnual  );
     IsTgtPremTabular_ =
         oe_modal_table == basic_values.Database_->Query(DB_TgtPremType)
         ;
@@ -67,9 +67,9 @@ void MortalityRates::fetch_parameters(BasicValues const& basic_values)
     max_coi_rate = 1.0 / max_coi_rate;
     MaxMonthlyCoiRate_ = max_coi_rate;
 
-    basic_values.Database_->Query(GCoiMultiplier_, DB_GCOIMultiplier);
-    basic_values.Database_->Query(CCoiMultiplier_, DB_CCOIMultiplier);
-    basic_values.Database_->Query(SubstdTblMult_ , DB_SubstdTblMult );
+    basic_values.Database_->Query(GCoiMultiplier_, DB_GuarCoiMultiplier);
+    basic_values.Database_->Query(CCoiMultiplier_, DB_CurrCoiMultiplier);
+    basic_values.Database_->Query(SubstdTblMult_ , DB_SubstdTableMult  );
 
     CountryCoiMultiplier_ = basic_values.yare_input_.CountryCoiMultiplier;
     IsPolicyRated_        = is_policy_rated(basic_values.yare_input_);

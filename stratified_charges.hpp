@@ -80,7 +80,7 @@ class LMI_SO stratified_entity
         );
     ~stratified_entity();
 
-    bool operator==(stratified_entity const&);
+    bool operator==(stratified_entity const&) const;
 
     void read (xml::element const& node);
     void write(xml::element&) const;
@@ -162,8 +162,8 @@ class LMI_SO stratified_charges
     stratified_entity& raw_entity(e_stratified);
 
     // xml_serializable required implementation.
-    virtual int         class_version() const;
-    virtual std::string xml_root_name() const;
+    virtual int                class_version() const;
+    virtual std::string const& xml_root_name() const;
 
     // xml_serializable overrides.
     virtual void read_element
@@ -208,8 +208,6 @@ class LMI_SO stratified_charges
     stratified_entity TieredDEPremTax;
     stratified_entity TieredSDPremTax;
 };
-
-bool LMI_SO is_highest_representable_double(double);
 
 #endif // stratified_charges_hpp
 

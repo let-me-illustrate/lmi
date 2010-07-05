@@ -35,9 +35,6 @@
 #include "xml_lmi.hpp"
 #include "xml_serialize.hpp"
 
-#include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/path.hpp>
-
 //============================================================================
 FundInfo::FundInfo()
     :ScalarIMF_(0.0)
@@ -111,9 +108,10 @@ FundData::~FundData()
 
 namespace
 {
-std::string xml_root_name()
+std::string const& xml_root_name()
 {
-    return "funds";
+    static std::string const s("funds");
+    return s;
 }
 } // Unnamed namespace.
 
@@ -145,13 +143,7 @@ void FundData::Write(std::string const& a_Filename) const
     xml_lmi::set_attr(root, "version", "0");
     xml_serialize::to_xml(root, FundInfo_);
 
-    // Instead of this:
-//    document.save(a_Filename);
-    // for the nonce, explicitly change the extension, in order to
-    // force external product-file code to use the new extension.
-    fs::path path(a_Filename, fs::native);
-    path = fs::change_extension(path, ".funds");
-    document.save(path.string());
+    document.save(a_Filename);
 }
 
 //============================================================================

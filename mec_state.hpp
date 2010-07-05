@@ -68,8 +68,8 @@ class LMI_SO mec_state
     void AscribeMembers();
 
     // xml_serializable required implementation.
-    virtual int         class_version() const;
-    virtual std::string xml_root_name() const;
+    virtual int                class_version() const;
+    virtual std::string const& xml_root_name() const;
 
     // xml_serializable overrides.
     virtual bool is_detritus(std::string const&) const;

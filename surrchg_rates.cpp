@@ -40,10 +40,10 @@ SurrChgRates::SurrChgRates(product_database const& database)
 //============================================================================
 void SurrChgRates::Initialize(product_database const& database)
 {
-    database.Query(RatePerDollarOfPremium_     , DB_SurrChgPremMult   );
-    database.Query(RatePerDollarOfAcctval_     , DB_SurrChgAVMult     );
-    database.Query(RatePerDollarOfSpecamt_     , DB_SurrChgSAMult     );
-    database.Query(AcctvalRateDurationalFactor_, DB_SurrChgAVDurFactor);
-    database.Query(SpecamtRateDurationalFactor_, DB_SurrChgSADurFactor);
+    database.Query(RatePerDollarOfPremium_     , DB_SurrChgPremMult    );
+    database.Query(RatePerDollarOfAcctval_     , DB_SurrChgAcctValMult );
+    database.Query(RatePerDollarOfSpecamt_     , DB_SurrChgSpecAmtMult );
+    database.Query(AcctvalRateDurationalFactor_, DB_SurrChgAcctValSlope);
+    database.Query(SpecamtRateDurationalFactor_, DB_SurrChgSpecAmtSlope);
 }
 

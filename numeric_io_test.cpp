@@ -28,6 +28,8 @@
 
 #include "numeric_io_cast.hpp"
 
+#include "handle_exceptions.hpp"
+#include "ieee754.hpp" // infinity<>()
 #include "miscellany.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
@@ -36,7 +38,11 @@
 #   include <boost/lexical_cast.hpp>
 #endif // ! defined __BORLANDC__
 
-#include <cmath>
+#include <cmath>       // std::exp()
+#include <limits>
+#include <sstream>
+#include <stdexcept>
+#include <string>
 
 template<typename T>
 void test_interconvertibility
@@ -74,6 +80,29 @@ void test_interconvertibility
     INVOKE_BOOST_TEST_EQUAL(v, numeric_io_cast(s0, t), file, line);
 }
 
+void mete_two_thirds()
+{
+    std::string s = numeric_io_cast<std::string>(2.0 / 3.0);
+    double d = numeric_io_cast<double>(s);
+    stifle_warning_for_unused_value(d);
+}
+
+void mete_two_thirds_boost()
+{
+#if !defined __BORLANDC__
+    std::string s = boost::lexical_cast<std::string>(2.0 / 3.0);
+    double d = boost::lexical_cast<double>(s);
+    stifle_warning_for_unused_value(d);
+#endif // ! defined __BORLANDC__
+}
+
+void mete_infinity()
+{
+    std::string s = numeric_io_cast<std::string>(infinity<double>());
+    double d = numeric_io_cast<double>(s);
+    stifle_warning_for_unused_value(d);
+}
+
 // These tests generally assume IEC 60559 floating point. Hardware
 // that deviates from that standard is probably so rare that it can
 // reasonably be ignored, with an appropriate runtime message.
@@ -103,6 +132,8 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL( 3, floating_point_decimals(-1000.0f));
     BOOST_TEST_EQUAL(15, floating_point_decimals(-1000.0L));
 
+    BOOST_TEST_EQUAL( 0, floating_point_decimals(infinity<double>()));
+
     // Consider the number of exact decimal digits in the neighborhood
     // of epsilon's reciprocal for type double, which is approximately
     // 0.450359962737049596e16 .
@@ -131,38 +162,42 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL(      "0", simplify_floating_point(      "0."));
     BOOST_TEST_EQUAL(     "-0", simplify_floating_point(     "-0."));
     BOOST_TEST_EQUAL(    "nan", simplify_floating_point(     "nan"));
+    BOOST_TEST_EQUAL(    "inf", simplify_floating_point(     "inf"));
+    BOOST_TEST_EQUAL(   "-inf", simplify_floating_point(    "-inf"));
 
-    double volatile d;
-
-// TODO ?? Use TimeAnAliquot() instead.
-    Timer timer;
-    int iterations = 100000;
-    for(int j = 0; j < iterations; ++j)
-        {
-        std::string s = numeric_io_cast<std::string>(2.0 / 3.0);
-        d = numeric_io_cast<double>(s);
-        }
     std::cout
-        << (1e6 * timer.stop().elapsed_usec() / iterations)
-        << " usec per iteration for numeric_io_cast().\n"
+        << "Conversions:"
+        << "\n  2/3, lmi  : " << TimeAnAliquot(mete_two_thirds      )
+        << "\n  2/3, boost: " << TimeAnAliquot(mete_two_thirds_boost)
+        << "\n  inf, lmi  : " << TimeAnAliquot(mete_infinity        )
+        << std::endl
         ;
 
-#if !defined __BORLANDC__
-    timer.restart();
-    iterations = 1000;
-    for(int j = 0; j < iterations; ++j)
-        {
-        std::string s = boost::lexical_cast<std::string>(2.0 / 3.0);
-        d = boost::lexical_cast<double>(s);
-        }
-    std::cout
-        << (1e6 * timer.stop().elapsed_usec() / iterations)
-        << " usec per iteration for boost::lexical_cast()."
-        ;
-#endif // ! defined __BORLANDC__
+    // Infinities.
 
-    std::cout << std::endl;
-    stifle_warning_for_unused_value(d);
+    double volatile const inf_dbl = std::numeric_limits<double>::infinity();
+    std::string     const inf_str = numeric_io_cast<std::string>(inf_dbl);
+
+    // This test fails for como with msvcrt, because the latter
+    // defectively prints infinity as "1.#INF". Distressingly,
+    // that converts to '1.0'.
+    BOOST_TEST_EQUAL(inf_dbl, numeric_io_cast<double>(inf_str));
+
+    // These conversions fail for como with msvcrt, because the latter
+    // defectively prints infinity as "1.#INF"; and for borland
+    // (FWIW), which prints infinity as "+INF".
+    try
+        {
+        BOOST_TEST_EQUAL(inf_dbl, numeric_io_cast<double>("inf"));
+        BOOST_TEST_EQUAL(inf_dbl, numeric_io_cast<double>("INF"));
+        BOOST_TEST_EQUAL(inf_dbl, numeric_io_cast<double>("infinity"));
+        BOOST_TEST_EQUAL(inf_dbl, numeric_io_cast<double>("INFINITY"));
+        }
+    catch(...)
+        {
+        report_exception();
+        BOOST_TEST(false);
+        }
 
     // Interpreted as decimal, not as octal.
     BOOST_TEST_EQUAL(77, numeric_io_cast<int>( "077"));

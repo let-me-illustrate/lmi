@@ -26,9 +26,11 @@
 
 #include "config.hpp"
 
-#include <algorithm> // std::max()
-#include <cmath>     // C99 functions fabsl(), log10l(), strtold()
-#include <cstdlib>   // std::strto*()
+#include "ieee754.hpp" // is_infinite<>()
+
+#include <algorithm>   // std::max()
+#include <cmath>       // C99 functions fabsl(), log10l(), strtold()
+#include <cstdlib>     // std::strto*()
 #include <limits>
 #include <stdexcept>
 #include <string>
@@ -50,36 +52,36 @@ namespace boost
 } // namespace boost
 #endif // defined __BORLANDC__
 
-// Number of exact decimal digits to the right of the decimal point.
-//
-// Returns the maximum number of fractional decimal digits, q, such
-// that a particular decimal number with q fractional decimal digits
-// can be rounded into a particular floating-point type and back again
-// without change to any of its digits. The value zero is here defined
-// to have no fractional digits.
-//
-// The result differs from std::numeric_limits<T>::digits10 in two
-// ways. For numbers all of whose digits are fractional, it returns
-// either std::numeric_limits<T>::digits10 or one plus that quantity.
-// For other numbers, it counts fractional digits instead of all
-// digits.
-//
-// Notes: Truncation by static_cast<int> is appropriate because the
-// result is constrained to be nonnegative. If negative results were
-// wanted, it would be necessary to round toward negative infinity.
-//
-// Because many compilers in 2004 still don't implement C++98 26.5/6
-// correctly, C99 functions fabsl() and log10l() are used here. It is
-// less likely that these are incorrect than that the C++ overloads
-// are missing, which would cause std::fabs() and std::log10() to be
-// invoked for type long double.
-//
+/// Number of exact decimal digits to the right of the decimal point.
+///
+/// Returns the maximum number of fractional decimal digits, q, such
+/// that a particular decimal number with q fractional decimal digits
+/// can be rounded into a particular floating-point type and back again
+/// without change to any of its digits. The value zero is here defined
+/// to have no fractional digits.
+///
+/// The result differs from std::numeric_limits<T>::digits10 in two
+/// ways. For numbers all of whose digits are fractional, it returns
+/// either std::numeric_limits<T>::digits10 or one plus that quantity.
+/// For other numbers, it counts fractional digits instead of all
+/// digits.
+///
+/// Notes: Truncation by static_cast<int> is appropriate because the
+/// result is constrained to be nonnegative. If negative results were
+/// wanted, it would be necessary to round toward negative infinity.
+///
+/// Because many compilers in 2004 still don't implement C++98 26.5/6
+/// correctly, C99 functions fabsl() and log10l() are used here. It is
+/// less likely that these are incorrect than that the C++ overloads
+/// are missing, which would cause std::fabs() and std::log10() to be
+/// invoked for type long double.
+
 template<typename T>
 inline int floating_point_decimals(T t)
 {
     BOOST_STATIC_ASSERT(boost::is_float<T>::value);
-    // Avoid taking zero's logarithm.
-    if(0 == t)
+    // Avoid taking the logarithm of zero or infinity.
+    if(0 == t || is_infinite(t))
         {
         return 0;
         }
@@ -100,18 +102,18 @@ inline int floating_point_decimals(T t)
 #endif // defined __CYGWIN__
 }
 
-// Simplify a formatted floating-point number.
-//
-// Precondition: 's' is a floating-point number formatted as if by
-// snprintf() with format "%#.*f" or "%#.*Lf".
-//
-// Returns: 's' without any insignificant characters (trailing zeros
-// after the decimal point, and the decimal point itself if followed
-// by no nonzero digits).
-//
-// Note: The '#' flag ensures the presence of a decimal point in the
-// argument, which this algorithm uses as a sentinel.
-//
+/// Simplify a formatted floating-point number.
+///
+/// Precondition: 's' is a floating-point number formatted as if by
+/// snprintf() with format "%#.*f" or "%#.*Lf".
+///
+/// Returns: 's' without any insignificant characters (trailing zeros
+/// after the decimal point, and the decimal point itself if followed
+/// by no nonzero digits).
+///
+/// Note: The '#' flag ensures the presence of a decimal point in the
+/// argument, which this algorithm uses as a sentinel.
+
 inline std::string simplify_floating_point(std::string const& s)
 {
     std::string::const_reverse_iterator ri = s.rbegin();
@@ -125,7 +127,27 @@ inline std::string simplify_floating_point(std::string const& s)
     return std::string(s.begin(), ri.base());
 }
 
-// Template class numeric_conversion_traits.
+/// Traits for conversion between arithmetic types and strings.
+///
+/// Converting an int to string this way:
+///   static_cast<T>(std::strtol(nptr, endptr, 10));
+/// seems distasteful because of the narrowing conversion. But there is
+/// no strtoi() in the C standard: C99 7.20.1.2 says that atoi() is
+/// equivalent to
+///   (int)strtol(nptr, endptr, 10)
+/// except for the treatment of errors. Therefore, template function
+/// boost::numeric_cast() is used to detect narrowing conversions and
+/// throw an exception whenever they occur.
+///
+/// It would seem nicer to choose a string-to-number conversion just by
+/// writing a function name: "std::strtoul", "std::strtod", etc. Here,
+/// however, the full implementation of
+///   static T strtoT(char const*, char**);
+/// is supplied, mainly because the standard functions don't have the
+/// same number of arguments. It is probably unimportant that this
+/// tedious approach avoids the slight overhead of calling the
+/// conversion function through a pointer and guarding against actual
+/// narrowing conversions.
 
 template<typename T>
 struct numeric_conversion_traits
@@ -136,30 +158,10 @@ struct numeric_conversion_traits
     static T strtoT(char const*, char**);
 };
 
-// Converting an int to string this way:
-//   static_cast<T>(std::strtol(nptr, endptr, 10));
-// seems distasteful because of the narrowing conversion. But there is
-// no strtoi() in the C standard: C99 7.20.1.2 says that atoi() is
-// equivalent to
-//   (int)strtol(nptr, endptr, 10)
-// except for the treatment of errors. Therefore, template function
-// boost::numeric_cast() is used to detect narrowing conversions and
-// throw an exception whenever they occur.
-//
-// It would seem nicer to choose a string-to-number conversion just by
-// writing a function name: "std::strtoul", "std::strtod", etc. Here,
-// however, the full implementation of
-//   static T strtoT(char const*, char**);
-// is supplied, mainly because the standard functions don't have the
-// same number of arguments. It is probably unimportant that this
-// tedious approach avoids the slight overhead of calling the
-// conversion function through a pointer and guarding against actual
-// narrowing conversions.
+/// Return C99 7.19.6.1/8 default precision for integral types.
+/// Calling snprintf() with a precision of zero and a value of
+/// zero would return no characters.
 
-// Return C99 7.19.6.1/8 default precision for integral types.
-// Calling snprintf() with a precision of zero and a value of
-// zero would return no characters.
-//
 struct Integral{};
 template<> struct numeric_conversion_traits<Integral>
 {
@@ -187,7 +189,8 @@ template<> struct numeric_conversion_traits<char>
         }
 };
 
-// C99's "%.*hhi" might be used instead if it gets added to C++.
+/// C99's "%.*hhi" might be used instead if it gets added to C++.
+
 template<> struct numeric_conversion_traits<signed char>
     :public numeric_conversion_traits<Integral>
 {
@@ -197,7 +200,8 @@ template<> struct numeric_conversion_traits<signed char>
         {return boost::numeric_cast<T>(std::strtol(nptr, endptr, 10));}
 };
 
-// C99's "%.*hhi" might be used instead if it gets added to C++.
+/// C99's "%.*hhi" might be used instead if it gets added to C++.
+
 template<> struct numeric_conversion_traits<unsigned char>
     :public numeric_conversion_traits<Integral>
 {

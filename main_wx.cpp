@@ -61,6 +61,7 @@
 #include "icon_monger.hpp"
 #include "illustration_document.hpp"
 #include "illustration_view.hpp"
+#include "input_sequence_entry.hpp" // InputSequenceEntryXmlHandler
 #include "license.hpp"
 #include "main_common.hpp"
 #include "mec_document.hpp"
@@ -646,6 +647,7 @@ bool Skeleton::OnInit()
         // TODO ?? Should not it be moved directly into rounding_view.hpp
         // or rounding_view_editor.hpp?
         xml_resources.AddHandler(new(wx) RoundingButtonsXmlHandler);
+        xml_resources.AddHandler(new(wx) InputSequenceEntryXmlHandler);
 
         DefaultView const v0;
 #if wxCHECK_VERSION(2,9,0)

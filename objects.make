@@ -195,6 +195,7 @@ common_common_objects := \
   database.o \
   datum_base.o \
   datum_boolean.o \
+  datum_sequence.o \
   datum_string.o \
   dbdict.o \
   dbnames.o \
@@ -312,6 +313,7 @@ lmi_wx_objects := \
   icon_monger.o \
   illustration_document.o \
   illustration_view.o \
+  input_sequence_entry.o \
   main_common.o \
   main_wx.o \
   mec_document.o \
@@ -381,6 +383,7 @@ gpt_objects := \
   data_directory.o \
   database.o \
   datum_base.o \
+  datum_sequence.o \
   datum_string.o \
   dbdict.o \
   dbnames.o \
@@ -455,6 +458,7 @@ unit_test_targets := \
   callback_test \
   comma_punct_test \
   commutation_functions_test \
+  configurable_settings_test \
   contains_test \
   crc32_test \
   expression_template_0_test \
@@ -464,6 +468,7 @@ unit_test_targets := \
   getopt_test \
   global_settings_test \
   handle_exceptions_test \
+  ieee754_test \
   input_seq_test \
   input_test \
   irc7702a_test \
@@ -484,7 +489,6 @@ unit_test_targets := \
   print_matrix_test \
   product_file_test \
   progress_meter_test \
-  quiet_nan_test \
   regex_test \
   round_test \
   round_to_test \
@@ -584,6 +588,18 @@ commutation_functions_test$(EXEEXT): \
   commutation_functions_test.o \
   timer.o \
 
+configurable_settings_test$(EXEEXT): \
+  $(boost_filesystem_objects) \
+  $(common_test_objects) \
+  $(xmlwrapp_objects) \
+  configurable_settings.o \
+  configurable_settings_test.o \
+  data_directory.o \
+  global_settings.o \
+  miscellany.o \
+  path_utility.o \
+  xml_lmi.o \
+
 contains_test$(EXEEXT): \
   $(common_test_objects) \
   contains_test.o \
@@ -634,6 +650,10 @@ handle_exceptions_test$(EXEEXT): \
   $(common_test_objects) \
   handle_exceptions_test.o \
 
+ieee754_test$(EXEEXT): \
+  $(common_test_objects) \
+  ieee754_test.o \
+
 input_seq_test$(EXEEXT): \
   $(common_test_objects) \
   input_seq_test.o \
@@ -650,6 +670,7 @@ input_test$(EXEEXT): \
   data_directory.o \
   database.o \
   datum_base.o \
+  datum_sequence.o \
   datum_string.o \
   dbdict.o \
   dbnames.o \
@@ -803,10 +824,6 @@ progress_meter_test$(EXEEXT): \
   progress_meter.o \
   progress_meter_cli.o \
   progress_meter_test.o \
-
-quiet_nan_test$(EXEEXT): \
-  $(common_test_objects) \
-  quiet_nan_test.o \
 
 regex_test$(EXEEXT): EXTRA_LDFLAGS = -Wl,--allow-multiple-definition
 regex_test$(EXEEXT): \

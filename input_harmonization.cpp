@@ -98,7 +98,7 @@ void Input::DoAdaptExternalities()
             )
         );
 
-    GleanedMaturityAge_ = static_cast<int>(database_->Query(DB_EndtAge));
+    GleanedMaturityAge_ = static_cast<int>(database_->Query(DB_MaturityAge));
 
     GleanedLedgerType_ =
         static_cast<mcenum_ledger_type>
@@ -128,12 +128,12 @@ void Input::DoHarmonize()
     bool sepacct_only = allow_sep_acct && !allow_gen_acct;
     bool genacct_only = allow_gen_acct && !allow_sep_acct;
 
-    bool wd_allowed = database_->Query(DB_AllowWD);
+    bool wd_allowed = database_->Query(DB_AllowWd);
     bool loan_allowed = database_->Query(DB_AllowLoan);
     bool pref_loan_allowed = loan_allowed && database_->Query(DB_AllowPrefLoan);
 
-    DefinitionOfLifeInsurance.allow(mce_gpt, database_->Query(DB_AllowGPT));
-    DefinitionOfLifeInsurance.allow(mce_cvat, database_->Query(DB_AllowCVAT));
+    DefinitionOfLifeInsurance.allow(mce_gpt, database_->Query(DB_AllowGpt));
+    DefinitionOfLifeInsurance.allow(mce_cvat, database_->Query(DB_AllowCvat));
     DefinitionOfLifeInsurance.allow(mce_noncompliant, database_->Query(DB_AllowNo7702));
 
     DefinitionOfMaterialChange.enable(mce_noncompliant != DefinitionOfLifeInsurance);
@@ -177,11 +177,11 @@ void Input::DoHarmonize()
     // TODO ?? There should be flags in the database to allow or
     // forbid paramedical and nonmedical underwriting; arbitrarily,
     // until they are added, those options are always inhibited.
-    GroupUnderwritingType.allow(mce_medical, database_->Query(DB_AllowFullUW));
+    GroupUnderwritingType.allow(mce_medical, database_->Query(DB_AllowFullUw));
     GroupUnderwritingType.allow(mce_paramedical, false);
     GroupUnderwritingType.allow(mce_nonmedical, false);
-    GroupUnderwritingType.allow(mce_simplified_issue, database_->Query(DB_AllowSimpUW));
-    GroupUnderwritingType.allow(mce_guaranteed_issue, database_->Query(DB_AllowGuarUW));
+    GroupUnderwritingType.allow(mce_simplified_issue, database_->Query(DB_AllowSimpUw));
+    GroupUnderwritingType.allow(mce_guaranteed_issue, database_->Query(DB_AllowGuarUw));
 
     bool part_mort_used = mce_yes == UsePartialMortality;
 
@@ -270,9 +270,8 @@ void Input::DoHarmonize()
     DateOfRetirement.enable(mce_yes == DeprecatedUseDOR);
 
     // DATABASE !! Maximum illustrated age should be distinguished
-    // from maturity age (which shouldn't be called 'EndtAge' because
-    // the contract needn't endow).
-    int max_age = static_cast<int>(database_->Query(DB_EndtAge));
+    // from maturity age.
+    int max_age = static_cast<int>(database_->Query(DB_MaturityAge));
     InforceAsOfDate.minimum_and_maximum
         (EffectiveDate.value()
         ,add_years_and_months
@@ -472,7 +471,7 @@ true // Silly workaround for now.
     bool inhibit_sequence = specamt_solve || specamt_from_term_proportion;
     SpecifiedAmount.enable(!inhibit_sequence);
 
-    bool never_retire = database_->Query(DB_EndtAge) <= RetirementAge.value();
+    bool never_retire = database_->Query(DB_MaturityAge) <= RetirementAge.value();
 /*
 // TODO ?? WX PORT !! Figure out how to handle the next line:
     if(!is_specamt_simply_representable)
@@ -528,10 +527,10 @@ true // Silly workaround for now.
 
     DeathBenefitOptionFromRetirement.allow(mce_option1, is_dbopt_simply_representable);
     DeathBenefitOptionFromRetirement.allow(mce_option2, is_dbopt_simply_representable);
-    DeathBenefitOptionFromRetirement.allow(mce_rop    , is_dbopt_simply_representable && database_->Query(DB_AllowDBO3));
+    DeathBenefitOptionFromRetirement.allow(mce_rop    , is_dbopt_simply_representable && database_->Query(DB_AllowDbo3));
     DeathBenefitOptionFromIssue     .allow(mce_option1, is_dbopt_simply_representable && !never_retire);
-    DeathBenefitOptionFromIssue     .allow(mce_option2, is_dbopt_simply_representable && !never_retire && (database_->Query(DB_AllowChangeToDBO2) || mce_option2 == DeathBenefitOptionFromRetirement));
-    DeathBenefitOptionFromIssue     .allow(mce_rop    , is_dbopt_simply_representable && !never_retire && database_->Query(DB_AllowDBO3));
+    DeathBenefitOptionFromIssue     .allow(mce_option2, is_dbopt_simply_representable && !never_retire && (database_->Query(DB_AllowChangeToDbo2) || mce_option2 == DeathBenefitOptionFromRetirement));
+    DeathBenefitOptionFromIssue     .allow(mce_rop    , is_dbopt_simply_representable && !never_retire && database_->Query(DB_AllowDbo3));
 
 /*
     // TODO ?? WX PORT !! Figure out how to do this properly.
@@ -593,6 +592,21 @@ false // Silly workaround for now.
 // 'mce_pmt_table' strategy was selected in a scalar control--but
 // no such scalar control was ported. For payment strategy, lmi offers
 // only input sequences that are enabled by default.
+//
+// TODO ?? 'Payment' and 'CorporationPayment' should have certain payment
+// strategies conditionally blocked. See 'inhibit_premium_based_strategies'
+// and 'prem_indeterminate' above for possible conditions; an old note
+// suggested
+//   || specamt strategy is neither 'none' nor 'salary-based'
+// Ideally, some or all strategy keywords would be blocked, or
+// corresponding parts of the input-sequence editor would be disabled,
+// only at durations that exhibit an actual conflict: e.g., a premium
+// solve for the first ten years only shouldn't inhibit anything after
+// the tenth year.
+//
+// At any rate, keywords should not be blocked when the control is
+// disabled: see
+//   http://lists.nongnu.org/archive/html/lmi/2010-07/msg00006.html
 
     Payment           .enable(mce_solve_ee_prem != SolveType);
     CorporationPayment.enable(mce_solve_er_prem != SolveType);
@@ -650,7 +664,7 @@ false // Silly workaround for now.
     // TODO ?? VLR not yet implemented.
     bool allow_vlr =
         (   loan_allowed
-        &&  (   database_->Query(DB_AllowVLR)
+        &&  (   database_->Query(DB_AllowVlr)
             ||  anything_goes
             )
         );
@@ -660,7 +674,7 @@ false // Silly workaround for now.
     UseAverageOfAllFunds.enable(!genacct_only);
     bool enable_custom_fund =
             !genacct_only
-        &&  (   database_->Query(DB_AllowCustomFund)
+        &&  (   database_->Query(DB_AllowImfOverride)
             ||  home_office_only
             )
         ;
@@ -786,16 +800,16 @@ false // Silly workaround for now.
     TermAdjustmentMethod.allow(mce_adjust_term, enable_term);
     TermAdjustmentMethod.allow(mce_adjust_both, enable_term);
 
-    WaiverOfPremiumBenefit.enable(        database_->Query(DB_AllowWP));
-    WaiverOfPremiumBenefit.allow(mce_yes, database_->Query(DB_AllowWP));
-    AccidentalDeathBenefit.enable(        database_->Query(DB_AllowADD));
-    AccidentalDeathBenefit.allow(mce_yes, database_->Query(DB_AllowADD));
+    WaiverOfPremiumBenefit.enable(        database_->Query(DB_AllowWp));
+    WaiverOfPremiumBenefit.allow(mce_yes, database_->Query(DB_AllowWp));
+    AccidentalDeathBenefit.enable(        database_->Query(DB_AllowAdb));
+    AccidentalDeathBenefit.allow(mce_yes, database_->Query(DB_AllowAdb));
 
-    ChildRider       .enable(        database_->Query(DB_AllowChild));
-    ChildRider       .allow(mce_yes, database_->Query(DB_AllowChild));
+    ChildRider       .enable(        database_->Query(DB_AllowChildRider));
+    ChildRider       .allow(mce_yes, database_->Query(DB_AllowChildRider));
     ChildRiderAmount .enable(mce_yes == ChildRider);
-    SpouseRider      .enable(        database_->Query(DB_AllowSpouse));
-    SpouseRider      .allow(mce_yes, database_->Query(DB_AllowSpouse));
+    SpouseRider      .enable(        database_->Query(DB_AllowSpouseRider));
+    SpouseRider      .allow(mce_yes, database_->Query(DB_AllowSpouseRider));
     SpouseRiderAmount.enable(mce_yes == SpouseRider);
     SpouseIssueAge   .enable(mce_yes == SpouseRider);
 #if 0
@@ -1268,7 +1282,7 @@ void Input::TransferWithdrawalSimpleControlsToInputSequence()
         case enumerator_fromret:
             {
             if(IssueAge < RetirementAge)
-// TODO ??            RetirementAge < database_->Query(DB_EndtAge)
+// TODO ??            RetirementAge < database_->Query(DB_MaturityAge)
                 {
                 s += "0, retirement";
                 s += "; ";
@@ -1278,7 +1292,7 @@ void Input::TransferWithdrawalSimpleControlsToInputSequence()
         case enumerator_fromage:
             {
             if(IssueAge < local_rep->WDBegTime)
-// TODO ??            local_rep->WDBegTime < database_->Query(DB_EndtAge)
+// TODO ??            local_rep->WDBegTime < database_->Query(DB_MaturityAge)
                 {
                 s += "0, @" + value_cast<std::string>(local_rep->WDBegTime);
                 s += "; ";
@@ -1289,7 +1303,7 @@ void Input::TransferWithdrawalSimpleControlsToInputSequence()
             {
             if(0 < local_rep->WDBegTime)
 // TODO ??                ( IssueAge + local_rep->WDBegTime
-// TODO ??                < database_->Query(DB_EndtAge)
+// TODO ??                < database_->Query(DB_MaturityAge)
 // TODO ??                )
                 {
                 s += "0, " + value_cast<std::string>(local_rep->WDBegTime);
@@ -1322,7 +1336,7 @@ void Input::TransferWithdrawalSimpleControlsToInputSequence()
         {
         case enumerator_toret:
             {
-            if(RetirementAge < database_->Query(DB_EndtAge))
+            if(RetirementAge < database_->Query(DB_MaturityAge))
                 {
                 s += ", retirement";
                 s += "; 0";
@@ -1331,7 +1345,7 @@ void Input::TransferWithdrawalSimpleControlsToInputSequence()
             break;
         case enumerator_toage:
             {
-            if(local_rep->WDEndTime < database_->Query(DB_EndtAge))
+            if(local_rep->WDEndTime < database_->Query(DB_MaturityAge))
                 {
                 s += ", @" + value_cast<std::string>(local_rep->WDEndTime);
                 s += "; 0";
@@ -1342,7 +1356,7 @@ void Input::TransferWithdrawalSimpleControlsToInputSequence()
             {
             if
                 ( IssueAge + local_rep->WDEndTime
-                < database_->Query(DB_EndtAge)
+                < database_->Query(DB_MaturityAge)
                 )
                 {
                 s += ", " + value_cast<std::string>(local_rep->WDEndTime);

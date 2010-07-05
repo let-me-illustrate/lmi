@@ -296,13 +296,13 @@ void InterestRates::Initialize(BasicValues const& v)
     // almost certainly quoted as an APR. It is assumed that the
     // interest bonus is not guaranteed.
     std::vector<double> general_account_interest_bonus;
-    v.Database_->Query(general_account_interest_bonus, DB_GAIntBonus);
+    v.Database_->Query(general_account_interest_bonus, DB_GenAcctIntBonus);
     // ET !! GenAcctGrossRate_ += general_account_interest_bonus;
     // ...and this might be further simplified by implementing e.g.
     //   std::vector<double> product_database::QueryVector(int k) const;
     // and replacing 'general_account_interest_bonus' with a
     // temporary:
-    //   GenAcctGrossRate_ += v.Database_->QueryVector(DB_GAIntBonus);
+    //   GenAcctGrossRate_ += v.Database_->QueryVector(DB_GenAcctIntBonus);
     std::transform
         (GenAcctGrossRate_[mce_gen_curr].begin()
         ,GenAcctGrossRate_[mce_gen_curr].end()
@@ -360,7 +360,7 @@ void InterestRates::Initialize(BasicValues const& v)
 
     if(v.yare_input_.AmortizePremiumLoad)
         {
-        v.Database_->Query(AmortLoad_, DB_AmortPmLdFundCharge);
+        v.Database_->Query(AmortLoad_, DB_LoadAmortFundCharge);
         }
 
     // TODO ?? This was once initialized with 'DB_MgmtFeeFundCharge',

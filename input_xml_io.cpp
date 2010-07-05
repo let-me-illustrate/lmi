@@ -33,6 +33,7 @@
 #include "calendar_date.hpp"
 #include "contains.hpp"
 #include "global_settings.hpp"
+#include "map_lookup.hpp"
 #include "miscellany.hpp" // lmi_array_size()
 
 #include <algorithm>      // std::min()
@@ -82,9 +83,10 @@ int Input::class_version() const
     return 5;
 }
 
-std::string Input::xml_root_name() const
+std::string const& Input::xml_root_name() const
 {
-    return "cell";
+    static std::string const s("cell");
+    return s;
 }
 
 bool Input::is_detritus(std::string const& s) const
@@ -272,9 +274,9 @@ void Input::redintegrate_ex_ante
 }
 
 void Input::redintegrate_ex_post
-    (int                                file_version
-    ,std::map<std::string, std::string> detritus_map
-    ,std::list<std::string>             residuary_names
+    (int                                       file_version
+    ,std::map<std::string, std::string> const& detritus_map
+    ,std::list<std::string>             const& residuary_names
     )
 {
     if(class_version() == file_version)
@@ -297,14 +299,14 @@ void Input::redintegrate_ex_post
             }
 
         operator[]("AgentName"  ) = full_name
-            (detritus_map["AgentFirstName" ]
-            ,detritus_map["AgentMiddleName"]
-            ,detritus_map["AgentLastName"  ]
+            (map_lookup(detritus_map, "AgentFirstName" )
+            ,map_lookup(detritus_map, "AgentMiddleName")
+            ,map_lookup(detritus_map, "AgentLastName"  )
             );
         operator[]("InsuredName") = full_name
-            (detritus_map["FirstName"      ]
-            ,detritus_map["MiddleName"     ]
-            ,detritus_map["LastName"       ]
+            (map_lookup(detritus_map, "FirstName"      )
+            ,map_lookup(detritus_map, "MiddleName"     )
+            ,map_lookup(detritus_map, "LastName"       )
             );
         }
 

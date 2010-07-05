@@ -999,9 +999,10 @@ int Ledger::class_version() const
     return 0;
 }
 
-std::string Ledger::xml_root_name() const
+std::string const& Ledger::xml_root_name() const
 {
-    return "illustration";
+    static std::string const s("illustration");
+    return s;
 }
 
 void Ledger::write(std::ostream& os) const

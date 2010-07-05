@@ -29,7 +29,6 @@
 #include "single_choice_popup_menu.hpp"
 
 #include <wx/gdicmn.h> // wxDefaultPosition, wxSize
-#include <wx/utils.h>  // wxGetMousePosition()
 
 SingleChoicePopupMenu::SingleChoicePopupMenu
     (wxArrayString const& choices
@@ -73,7 +72,7 @@ SingleChoicePopupMenu::~SingleChoicePopupMenu()
 // WX !! Can't be const because PopupMenu() isn't.
 int SingleChoicePopupMenu::Choose()
 {
-    PopupMenu(&menu_, ScreenToClient(wxGetMousePosition()));
+    PopupMenu(&menu_);
     return selection_index_;
 }
 

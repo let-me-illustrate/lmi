@@ -33,7 +33,8 @@
 #include "assert_lmi.hpp"
 #include "contains.hpp"
 #include "data_directory.hpp"
-#include "miscellany.hpp"         // minmax<T>()
+#include "ieee754.hpp"            // infinity<>()
+#include "miscellany.hpp"         // minmax<>()
 #include "stratified_algorithms.hpp"
 #include "xml_lmi.hpp"
 #include "xml_serialize.hpp"
@@ -41,7 +42,6 @@
 #include <boost/static_assert.hpp>
 
 #include <algorithm>
-#include <cfloat>                 // DBL_MAX
 
 template class xml_serializable<stratified_charges>;
 
@@ -108,7 +108,7 @@ stratified_entity::~stratified_entity()
 {
 }
 
-bool stratified_entity::operator==(stratified_entity const& z)
+bool stratified_entity::operator==(stratified_entity const& z) const
 {
     return
            limits_ == z.limits_
@@ -133,7 +133,7 @@ void stratified_entity::assert_validity() const
     LMI_ASSERT(!values_.empty());
     LMI_ASSERT(!limits_.empty());
     LMI_ASSERT(values_.size() == limits_.size());
-    LMI_ASSERT(is_highest_representable_double(limits_.back()));
+    LMI_ASSERT(infinity<double>() == limits_.back());
     minmax<double> extrema(limits_);
     LMI_ASSERT(0.0 <= extrema.minimum());
     LMI_ASSERT(0.0 <  extrema.maximum());
@@ -542,9 +542,10 @@ int stratified_charges::class_version() const
     return 0;
 }
 
-std::string stratified_charges::xml_root_name() const
+std::string const& stratified_charges::xml_root_name() const
 {
-    return "strata";
+    static std::string const s("strata");
+    return s;
 }
 
 /// This override doesn't call redintegrate_ex_ante(); that wouldn't
@@ -573,29 +574,31 @@ void stratified_charges::write_stratified_files()
     //   http://lists.nongnu.org/archive/html/lmi/2008-02/msg00024.html
     status() << "This line does nothing, but must not fail." << std::flush;
 
+    static double const dbl_inf = infinity<double>();
+
     stratified_charges foo;
 
     foo.datum("CurrSepAcctLoadBandedByPrem"    ).values_.push_back(0.0);
-    foo.datum("CurrSepAcctLoadBandedByPrem"    ).limits_.push_back(DBL_MAX);
+    foo.datum("CurrSepAcctLoadBandedByPrem"    ).limits_.push_back(dbl_inf);
     foo.datum("GuarSepAcctLoadBandedByPrem"    ).values_.push_back(0.0);
-    foo.datum("GuarSepAcctLoadBandedByPrem"    ).limits_.push_back(DBL_MAX);
+    foo.datum("GuarSepAcctLoadBandedByPrem"    ).limits_.push_back(dbl_inf);
     foo.datum("CurrSepAcctLoadBandedByAssets"  ).values_.push_back(0.0);
-    foo.datum("CurrSepAcctLoadBandedByAssets"  ).limits_.push_back(DBL_MAX);
+    foo.datum("CurrSepAcctLoadBandedByAssets"  ).limits_.push_back(dbl_inf);
     foo.datum("GuarSepAcctLoadBandedByAssets"  ).values_.push_back(0.0);
-    foo.datum("GuarSepAcctLoadBandedByAssets"  ).limits_.push_back(DBL_MAX);
+    foo.datum("GuarSepAcctLoadBandedByAssets"  ).limits_.push_back(dbl_inf);
 
     foo.datum("CurrMandETieredByAssets"        ).values_.push_back(0.0);
-    foo.datum("CurrMandETieredByAssets"        ).limits_.push_back(DBL_MAX);
+    foo.datum("CurrMandETieredByAssets"        ).limits_.push_back(dbl_inf);
     foo.datum("GuarMandETieredByAssets"        ).values_.push_back(0.0);
-    foo.datum("GuarMandETieredByAssets"        ).limits_.push_back(DBL_MAX);
+    foo.datum("GuarMandETieredByAssets"        ).limits_.push_back(dbl_inf);
     foo.datum("AssetCompTieredByAssets"        ).values_.push_back(0.0);
-    foo.datum("AssetCompTieredByAssets"        ).limits_.push_back(DBL_MAX);
+    foo.datum("AssetCompTieredByAssets"        ).limits_.push_back(dbl_inf);
     foo.datum("InvestmentMgmtFeeTieredByAssets").values_.push_back(0.0);
-    foo.datum("InvestmentMgmtFeeTieredByAssets").limits_.push_back(DBL_MAX);
+    foo.datum("InvestmentMgmtFeeTieredByAssets").limits_.push_back(dbl_inf);
     foo.datum("CurrSepAcctLoadTieredByAssets"  ).values_.push_back(0.0);
-    foo.datum("CurrSepAcctLoadTieredByAssets"  ).limits_.push_back(DBL_MAX);
+    foo.datum("CurrSepAcctLoadTieredByAssets"  ).limits_.push_back(dbl_inf);
     foo.datum("GuarSepAcctLoadTieredByAssets"  ).values_.push_back(0.0);
-    foo.datum("GuarSepAcctLoadTieredByAssets"  ).limits_.push_back(DBL_MAX);
+    foo.datum("GuarSepAcctLoadTieredByAssets"  ).limits_.push_back(dbl_inf);
 
     // For AK and SD, these are the actual rates as of 2003-09-09. Statutes:
     // AK 21.09.210(m)
@@ -604,36 +607,19 @@ void stratified_charges::write_stratified_files()
     foo.datum("TieredAKPremTax").values_.push_back (0.02700);
     foo.datum("TieredAKPremTax").values_.push_back (0.00100);
     foo.datum("TieredAKPremTax").limits_.push_back(100000.0);
-    foo.datum("TieredAKPremTax").limits_.push_back(DBL_MAX);
+    foo.datum("TieredAKPremTax").limits_.push_back(dbl_inf);
     foo.datum("TieredAKPremTax").gloss_ = "AK 21.09.210(m)";
 
     // DE: not yet implemented.
     foo.datum("TieredDEPremTax").values_.push_back (0.0);
-    foo.datum("TieredDEPremTax").limits_.push_back(DBL_MAX);
+    foo.datum("TieredDEPremTax").limits_.push_back(dbl_inf);
 
     foo.datum("TieredSDPremTax").values_.push_back (0.02500);
     foo.datum("TieredSDPremTax").values_.push_back (0.00080);
     foo.datum("TieredSDPremTax").limits_.push_back(100000.0);
-    foo.datum("TieredSDPremTax").limits_.push_back(DBL_MAX);
+    foo.datum("TieredSDPremTax").limits_.push_back(dbl_inf);
     foo.datum("TieredSDPremTax").gloss_ = "SD 10-4-22(2) (see also 58-6-70)";
 
     foo.save(AddDataDir("sample.strata"));
-}
-
-/// Determine whether a double is in effect the highest representable.
-///
-/// Don't assert exact equality with DBL_MAX, which is especially
-/// unlikely to obtain with values written to a file and then read
-/// back.
-///
-/// SOMEDAY !! Strive to obviate this function. It's used only to
-/// determine whether the top bracket's limit is effectively infinite.
-/// However, the top bracket's limit should never have any other
-/// value, so perhaps it should be treated as such implicitly, and not
-/// actually expressed.
-
-bool is_highest_representable_double(double z)
-{
-    return (.999 * DBL_MAX) < z;
 }
 

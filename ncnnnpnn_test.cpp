@@ -151,8 +151,8 @@ int test_main(int, char*[])
         // TODO ?? Try to find a way to make this rogue compiler behave.
         //
         // COMPILER !! Problem with borland compiler: see
-        // http://groups.yahoo.com/group/boost/message/12079
-        // http://groups.yahoo.com/group/boost/message/12111
+        // http://lists.boost.org/Archives/boost/2001/05/12046.php
+        // http://lists.boost.org/Archives/boost/2001/05/12078.php
         // We choose to avoid the hardware exception here,
         // so that all our tests can run to completion
         // unattended; but it is a failure, so:

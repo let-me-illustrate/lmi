@@ -65,12 +65,9 @@
 /// N modulo that vector. I have an expression of this in just a few
 /// APL characters, which this character set is too small to contain.
 ///
-/// Future directions: Remove the suppression of axes of length one,
-/// which is specific to the product database. Make at least some
-/// effort to align data regularly. Consider adding labels for each
-/// hyperplane. Consider returning a string instead of writing
-/// directly to a std::ostream. Consider how to treat special values
-/// like DBL_MAX.
+/// Future directions: Consider adding labels for each hyperplane.
+/// Consider returning a string instead of writing directly to a
+/// std::ostream.
 
 template<typename T>
 void print_matrix

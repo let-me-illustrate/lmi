@@ -108,8 +108,8 @@ void BasicValues::Init()
             )
         );
 
-    // The database class constrains endowment age to be scalar.
-    EndtAge = static_cast<int>(Database_->Query(DB_EndtAge));
+    // The database class constrains maturity age to be scalar.
+    EndtAge = static_cast<int>(Database_->Query(DB_MaturityAge));
     Length = EndtAge - IssueAge;
 
     LedgerType_ =
@@ -134,9 +134,9 @@ void BasicValues::Init()
     PremiumTaxRate_ = Database_->Query(DB_PremTaxRate);
 
     MinSpecAmt = Database_->Query(DB_MinSpecAmt);
-    MinWD      = Database_->Query(DB_MinWD     );
-    WDFee      = Database_->Query(DB_WDFee     );
-    WDFeeRate  = Database_->Query(DB_WDFeeRate );
+    MinWD      = Database_->Query(DB_MinWd     );
+    WDFee      = Database_->Query(DB_WdFee     );
+    WDFeeRate  = Database_->Query(DB_WdFeeRate );
 
 // The antediluvian branch leaves FundData_, StratifiedCharges_, and
 // ProductData initialized to null pointers.

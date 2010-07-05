@@ -50,7 +50,7 @@
 /// It does not really owns the database_entity instance which is passed to it.
 /// The boost::shared_ptr does.
 /// Regarding the fact that all the instances of database_entity are reside
-/// in the dict_map object and owned by it, one could pass entity via
+/// in the DBDictionary object and owned by it, one could pass entity via
 /// boost::shared_ptr constructed with deallocator object that does nothing.
 
 class DatabaseTableAdapter

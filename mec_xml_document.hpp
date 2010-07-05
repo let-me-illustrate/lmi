@@ -57,7 +57,7 @@ class LMI_SO mec_xml_document
 
   private:
     void parse(xml::element const&);
-    std::string xml_root_name() const;
+    std::string const& xml_root_name() const;
 
     boost::scoped_ptr<mec_input> const input_data_;
 };

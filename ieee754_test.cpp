@@ -1,4 +1,4 @@
-// Quiet NaN--unit test.
+// IEEE 754 esoterica--unit test.
 //
 // Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 //
@@ -26,7 +26,7 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "quiet_nan.hpp"
+#include "ieee754.hpp"
 
 #include "test_tools.hpp"
 
@@ -34,6 +34,24 @@
 
 int test_main(int, char*[])
 {
+    BOOST_TEST(is_infinite(infinity<float      >()));
+    BOOST_TEST(is_infinite(infinity<double     >()));
+    BOOST_TEST(is_infinite(infinity<long double>()));
+
+    BOOST_TEST(is_infinite<float      >(-infinity<float      >()));
+    BOOST_TEST(is_infinite<float      >(-infinity<double     >()));
+    BOOST_TEST(is_infinite<float      >(-infinity<long double>()));
+    BOOST_TEST(is_infinite<double     >(-infinity<float      >()));
+    BOOST_TEST(is_infinite<double     >(-infinity<double     >()));
+    BOOST_TEST(is_infinite<double     >(-infinity<long double>()));
+    BOOST_TEST(is_infinite<long double>(-infinity<float      >()));
+    BOOST_TEST(is_infinite<long double>(-infinity<double     >()));
+    BOOST_TEST(is_infinite<long double>(-infinity<long double>()));
+
+    BOOST_TEST(!is_infinite(0.0));
+    BOOST_TEST(!is_infinite( std::numeric_limits<double>::max()));
+    BOOST_TEST(!is_infinite(-std::numeric_limits<double>::max()));
+
     if(std::numeric_limits<double>::has_quiet_NaN)
         {
         std::cerr << "has quiet NaN" << std::endl;

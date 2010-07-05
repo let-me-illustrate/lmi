@@ -421,6 +421,8 @@ class MvcController
 
     void TestModelViewConsistency() const;
 
+    MvcModel const& Model() const;
+
   private:
     void Assimilate(std::string const& name_to_ignore);
     void Bind(std::string const& name, std::string& data) const;

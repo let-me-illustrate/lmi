@@ -292,9 +292,10 @@ int product_data::class_version() const
     return 0;
 }
 
-std::string product_data::xml_root_name() const
+std::string const& product_data::xml_root_name() const
 {
-    return "policy";
+    static std::string const s("policy");
+    return s;
 }
 
 /// This override doesn't call redintegrate_ex_ante(); that wouldn't

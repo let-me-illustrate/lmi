@@ -87,11 +87,7 @@ namespace
 IMPLEMENT_DYNAMIC_CLASS(CensusView, ViewEx)
 
 BEGIN_EVENT_TABLE(CensusView, ViewEx)
-// TODO ?? Experimental: (Ask Vadim whether wxGTK supports this.)
-//    EVT_COMMAND_RIGHT_CLICK(ID_LISTWINDOW   ,CensusView::UponRightClick0)
-// TODO ?? No effect--dunno why; but prolly wanted for gtk:
-//    EVT_RIGHT_UP(                            CensusView::UponRightClick1)
-    EVT_CONTEXT_MENU(                        CensusView::UponRightClick2)
+    EVT_CONTEXT_MENU(                        CensusView::UponRightClick)
     EVT_MENU(XRCID("edit_cell"             ),CensusView::UponEditCell )
     EVT_MENU(XRCID("edit_class"            ),CensusView::UponEditClass)
     EVT_MENU(XRCID("edit_case"             ),CensusView::UponEditCase )
@@ -719,50 +715,7 @@ void CensusView::UponColumnWidthFixed(wxCommandEvent&)
         }
 }
 
-// TODO ?? Right-click handlers: pick one approach, and remove failed experiments.
-
-void CensusView::UponRightClick0(wxCommandEvent&)
-{
-    status() << "UponRightClick0()" << LMI_FLUSH;
-    wxMenuBar* menu_bar = MenuBar();
-    if(menu_bar)
-        {
-        int census_menu_index = menu_bar->FindMenu("Census");
-        if(wxNOT_FOUND != census_menu_index)
-            {
-            status() << "Menu found." << LMI_FLUSH;
-            wxMenu* census_menu = menu_bar->GetMenu(census_menu_index);
-            list_window_->PopupMenu(census_menu, list_window_->GetPosition());
-            }
-        else
-            {
-            status() << "Menu not found." << LMI_FLUSH;
-            }
-        }
-}
-
-void CensusView::UponRightClick1(wxMouseEvent& e)
-{
-    status() << "UponRightClick1()" << LMI_FLUSH;
-    wxMenuBar* menu_bar = MenuBar();
-    if(menu_bar)
-        {
-        int census_menu_index = menu_bar->FindMenu("Census");
-        if(wxNOT_FOUND != census_menu_index)
-            {
-            status() << "Menu found." << LMI_FLUSH;
-            wxMenu* census_menu = menu_bar->GetMenu(census_menu_index);
-            wxPoint* point = new wxPoint(e.m_x, e.m_y);
-            list_window_->PopupMenu(census_menu, *point);
-            }
-        else
-            {
-            status() << "Menu not found." << LMI_FLUSH;
-            }
-        }
-}
-
-void CensusView::UponRightClick2(wxContextMenuEvent& e)
+void CensusView::UponRightClick(wxContextMenuEvent&)
 {
     wxMenuBar* menu_bar = MenuBar();
     if(menu_bar)
@@ -771,7 +724,7 @@ void CensusView::UponRightClick2(wxContextMenuEvent& e)
         if(wxNOT_FOUND != census_menu_index)
             {
             wxMenu* census_menu = menu_bar->GetMenu(census_menu_index);
-            list_window_->PopupMenu(census_menu, GetFrame()->ScreenToClient(e.GetPosition()));
+            list_window_->PopupMenu(census_menu);
             }
         else
             {

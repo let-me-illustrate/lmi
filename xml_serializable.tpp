@@ -42,6 +42,7 @@
 
 #include <algorithm>              // std::copy(), std::find()
 #include <iterator>               // std::back_inserter
+#include <sstream>
 #include <vector>
 
 template<typename T>
@@ -103,12 +104,8 @@ void xml_serializable<T>::read(xml::element const& x)
     std::string file_version_string;
     if(!xml_lmi::get_attr(x, "version", file_version_string))
         {
-        fatal_error()
-            << "XML tag <"
-            << xml_root_name()
-            << "> lacks required version attribute."
-            << LMI_FLUSH
-            ;
+        handle_missing_version_attribute();
+        file_version_string = "0";
         }
     int file_version = value_cast<int>(file_version_string);
 
@@ -116,6 +113,8 @@ void xml_serializable<T>::read(xml::element const& x)
 #ifdef __BORLANDC__
 using namespace xml;
 #endif // __BORLANDC__
+
+    std::ostringstream oss;
 
     std::map<std::string, std::string> detritus_map;
 
@@ -149,13 +148,14 @@ using namespace xml;
             }
         else
             {
-            warning()
-                << "XML tag '"
-                << node_tag
-                << "' not recognized by this version of the program."
-                << LMI_FLUSH
-                ;
+            bool b = contains(t().member_names(), node_tag);
+            std::string s = b ? "[duplicate]" : "[unrecognized]";
+            oss << "  '" << node_tag << "' " << s << "\n";
             }
+        }
+    if(!oss.str().empty())
+        {
+        warning() << "Discarded XML elements:\n" << oss.str() << LMI_FLUSH;
         }
 
     redintegrate_ex_post(file_version, detritus_map, residuary_names);
@@ -218,7 +218,7 @@ int xml_serializable<T>::class_version() const
 /// Root tag (when T is saved as the root of a document).
 
 template<typename T>
-std::string xml_serializable<T>::xml_root_name() const
+std::string const& xml_serializable<T>::xml_root_name() const
 {
     throw "Unreachable--silences a compiler diagnostic.";
 }
@@ -272,6 +272,25 @@ void xml_serializable<T>::write_element
     ) const
 {
     parent.push_back(xml::element(name.c_str(), t()[name].str().c_str()));
+}
+
+/// React to absence of required 'version' attribute.
+///
+/// This default implementation throws an informative exception.
+///
+/// A derived class may override this with a do-nothing implementation
+/// if it is necessary to extend backward compatibility to historical
+/// xml files that originally had no such attribute.
+
+template<typename T>
+void xml_serializable<T>::handle_missing_version_attribute() const
+{
+    fatal_error()
+        << "XML tag <"
+        << xml_root_name()
+        << "> lacks required version attribute."
+        << LMI_FLUSH
+        ;
 }
 
 /// Ascertain whether an element-tag is obsolete.
@@ -360,23 +379,21 @@ void xml_serializable<T>::redintegrate_ex_ante
 
 template<typename T>
 void xml_serializable<T>::redintegrate_ex_post
-    (int                                file_version
-    ,std::map<std::string, std::string> // detritus_map
-    ,std::list<std::string>             // residuary_names
+    (int                                       file_version
+    ,std::map<std::string, std::string> const& // detritus_map
+    ,std::list<std::string>             const& // residuary_names
     )
 {
     if(class_version() == file_version)
         {
         return;
         }
-    else
-        {
-        fatal_error()
-            << "Incompatible file version."
-            << " An explicit override is necessary."
-            << LMI_FLUSH
-            ;
-        }
+
+    fatal_error()
+        << "Incompatible file version."
+        << " An explicit override is necessary."
+        << LMI_FLUSH
+        ;
 }
 
 /// Perform any required after-the-fact fixup.

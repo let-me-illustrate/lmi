@@ -34,7 +34,6 @@
 #include "dbdict.hpp"
 #include "dbvalue.hpp"
 #include "lmi.hpp"                    // is_antediluvian_fork()
-#include "map_lookup.hpp"
 #include "oecumenic_enumerations.hpp" // methuselah
 #include "product_data.hpp"
 #include "yare_input.hpp"
@@ -224,12 +223,13 @@ bool product_database::varies_by_state(e_database_key k) const
 void product_database::initialize()
 {
     index_ = database_index(Gender, Class, Smoker, IssueAge, UWBasis, State);
-    length_ = static_cast<int>(Query(DB_EndtAge)) - IssueAge;
+    length_ = static_cast<int>(Query(DB_MaturityAge)) - IssueAge;
     LMI_ASSERT(0 < length_ && length_ <= methuselah);
 }
 
 database_entity const& product_database::entity_from_key(e_database_key k) const
 {
-    return map_lookup(DBDictionary::instance().GetDictionary(), k);
+    DBDictionary const& db = DBDictionary::instance();
+    return db.datum(db_name_from_key(k));
 }
 

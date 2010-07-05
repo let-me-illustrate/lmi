@@ -37,6 +37,8 @@
 
 #include <wx/defs.h>
 
+#include <algorithm> // std::swap()
+
 namespace
 {
 
@@ -53,41 +55,54 @@ namespace
 class swap_workaround_for_singleton
 {
   public:
-    swap_workaround_for_singleton(dict_map& m1, dict_map& m2);
+    swap_workaround_for_singleton
+        (std::map<std::string,database_entity>&
+        ,DBDictionary&
+        );
     ~swap_workaround_for_singleton();
 
   private:
-    dict_map& m1_;
-    dict_map& m2_;
+    std::map<std::string,database_entity>& m1_;
+    DBDictionary&                          m2_;
 };
 
 inline swap_workaround_for_singleton::swap_workaround_for_singleton
-    (dict_map& m1
-    ,dict_map& m2
+    (std::map<std::string,database_entity>& m1
+    ,DBDictionary&                          m2
     )
     :m1_(m1)
     ,m2_(m2)
 {
-    m1_.swap(m2_); // initially swap
+    DatabaseDocument::swap_kludge(m1_, m2_);
 }
+
 inline swap_workaround_for_singleton::~swap_workaround_for_singleton()
 {
-    m1_.swap(m2_); // swap back
+    DatabaseDocument::swap_kludge(m1_, m2_);
 }
 
 } // Unnamed namespace.
 
 IMPLEMENT_DYNAMIC_CLASS(DatabaseDocument, ProductEditorDocument)
 
+void DatabaseDocument::swap_kludge
+    (std::map<std::string,database_entity>& m
+    ,DBDictionary&                          d
+    )
+{
+    typedef std::vector<std::string>::const_iterator svci;
+    for(svci i = d.member_names().begin(); i != d.member_names().end(); ++i)
+        {
+        std::swap(m[*i], d.datum(*i));
+        }
+}
+
 DatabaseDocument::DatabaseDocument()
     :ProductEditorDocument()
     ,dict_()
 {
-    // Initialize database dictionary
     DBDictionary& instance = DBDictionary::instance();
-
-    swap_workaround_for_singleton workaround(dict_, instance.dictionary_);
-
+    swap_workaround_for_singleton workaround(dict_, instance);
     instance.InitDB();
 }
 
@@ -97,20 +112,23 @@ DatabaseDocument::~DatabaseDocument()
 
 database_entity& DatabaseDocument::GetTDBValue(e_database_key index)
 {
-    if(dict_.find(index) == dict_.end())
+    std::string const& s = db_name_from_key(index);
+    if(dict_.find(s) == dict_.end())
         {
-        fatal_error() << "Index out of bounds." << LMI_FLUSH;
+        // A dummy entity ought to be good enough for non-leaf treenodes.
+        static database_entity dummy;
+        return dummy;
         }
-
-    return dict_[index];
+    else
+        {
+        return dict_[s];
+        }
 }
 
 void DatabaseDocument::ReadDocument(std::string const& filename)
 {
     DBDictionary& instance = DBDictionary::instance();
-
-    swap_workaround_for_singleton workaround(dict_, instance.dictionary_);
-
+    swap_workaround_for_singleton workaround(dict_, instance);
     DBDictionary::InvalidateCache();
     instance.Init(filename);
 }
@@ -118,9 +136,7 @@ void DatabaseDocument::ReadDocument(std::string const& filename)
 void DatabaseDocument::WriteDocument(std::string const& filename)
 {
     DBDictionary& instance = DBDictionary::instance();
-
-    swap_workaround_for_singleton workaround(dict_, instance.dictionary_);
-
+    swap_workaround_for_singleton workaround(dict_, instance);
     instance.WriteDB(filename);
 }
 

@@ -30,11 +30,6 @@
     the system offers, in a way that suits the main developer's tastes.
 -->
 
-<!-- TODO ??
-    Find and fix illegitimate names. Many match the pattern
-      name=".*_[^p][^a][^n][^e][^l]
--->
-
 <object class="wxPanel" name="plan_panel">
     <object class="wxFlexGridSizer">
         <cols>2</cols>
@@ -840,6 +835,7 @@ demonstrate a defect in the wx library. See
                                 <help>Corporation ZIP code</help>
                             </object>
                         </object>
+<!-- There is no corresponding member of class Input.
                         <object class="sizeritem">
                             <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <object class="wxStaticText">
@@ -848,11 +844,12 @@ demonstrate a defect in the wx library. See
                         </object>
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
-                            <object class="wxComboBox" name="corporation_country">
+                            <object class="wxComboBox" name="NO CORRESPONDING MEMBER EXISTS">
                                 <help>Corporation country (ISO 3166-1-Alpha-2 code)</help>
                                 <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                             </object>
                         </object>
+-->
                     </object>
                 </object>
             </object>
@@ -945,6 +942,7 @@ demonstrate a defect in the wx library. See
                                 <help>Agent ZIP code</help>
                             </object>
                         </object>
+<!-- There is no corresponding member of class Input.
                         <object class="sizeritem">
                             <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <object class="wxStaticText">
@@ -953,11 +951,12 @@ demonstrate a defect in the wx library. See
                         </object>
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
-                            <object class="wxComboBox" name="agent_country">
+                            <object class="wxComboBox" name="NO CORRESPONDING MEMBER EXISTS">
                                 <help>Agent country (ISO 3166-1-Alpha-2 code)</help>
                                 <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                             </object>
                         </object>
+-->
                     </object>
                 </object>
             </object>
@@ -1292,6 +1291,36 @@ demonstrate a defect in the wx library. See
                                         <max>11</max>
                                     </object>
                                 </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Contract year</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxSpinCtrl" name="InforceContractYear">
+                                        <help>Years elapsed since beginning of most recent seven-pay period</help>
+                                        <size>80,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Contract month</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxSpinCtrl" name="InforceContractMonth">
+                                        <help>Months elapsed since beginning of most recent seven-pay period</help>
+                                        <size>80,-1</size>
+                                        <min>0</min>
+                                        <max>11</max>
+                                    </object>
+                                </object>
                             </object>
                         </object>
                     </object>
@@ -1599,30 +1628,15 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
-                                        <label>Contract year</label>
+                                        <label>AV before last MC</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <object class="wxSpinCtrl" name="InforceContractYear">
-                                        <help>Years elapsed since beginning of most recent seven-pay period</help>
+                                    <object class="wxTextCtrl" name="InforceAvBeforeLastMc">
+                                        <help>Inforce account value immediately before last material change</help>
                                         <size>80,-1</size>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <border>4</border>
-                                    <object class="wxStaticText">
-                                        <label>Contract month</label>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <object class="wxSpinCtrl" name="InforceContractMonth">
-                                        <help>Months elapsed since beginning of most recent seven-pay period</help>
-                                        <size>80,-1</size>
-                                        <min>0</min>
-                                        <max>11</max>
+                                        <value>0</value>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -1632,7 +1646,6 @@ here, but it looks weird if we don't make this look like its siblings.
                                         <label>DCV</label>
                                     </object>
                                 </object>
-<!-- Missing 'InforceAvBeforeLastMc'. -->
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxTextCtrl" name="InforceDcv">
@@ -2023,7 +2036,7 @@ here, but it looks weird if we don't make this look like its siblings.
     </object>
 </object>
 
-<object class="wxPanel" name="specified_amount_panel">
+<object class="wxPanel" name="specamt_panel">
     <object class="wxFlexGridSizer">
         <cols>1</cols>
         <growablecols>0</growablecols>
@@ -2368,7 +2381,8 @@ the other is perforce ignored.
                 </object>
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
-                    <object class="wxTextCtrl" name="Payment">
+                    <object class="InputSequenceEntry" name="Payment">
+                        <title>Individual payment</title>
                         <help>Individual payment amount, or corridor, glp, gsp, minimum, sevenpay, table, target</help>
                         <size>180,-1</size>
                     </object>
@@ -2382,7 +2396,8 @@ the other is perforce ignored.
                 </object>
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
-                    <object class="wxTextCtrl" name="PaymentMode">
+                    <object class="InputSequenceEntry" name="PaymentMode">
+                        <title>Individual payment mode</title>
                         <help>Individual payment mode: annual, semiannual, quarterly, or monthly</help>
                         <size>180,-1</size>
                     </object>
@@ -3267,7 +3282,7 @@ the other is perforce ignored.
                 </object>
                 <object class="notebookpage">
                     <label>Face</label>
-                    <object_ref ref="specified_amount_panel"/>
+                    <object_ref ref="specamt_panel"/>
                 </object>
                 <object class="notebookpage">
                     <label>Payments</label>

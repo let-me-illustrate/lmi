@@ -29,66 +29,28 @@
 #include "any_member.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
+#include "xml_serializable.hpp"
 
 #include <boost/utility.hpp>
 
 #include <string>
 #include <vector>
 
-/// Design notes for class configurable_settings.
+/// Make user-configurable settings available to other modules.
 ///
-/// This class reads user-configurable settings from an xml file and
-/// makes them available to other modules.
+/// The settings reside in 'configurable_settings.xml'; that file's
+/// name is not configurable.
 ///
-/// It is implemented as a simple Meyers singleton, with the expected
+/// This is a simple Meyers singleton, with the expected
 /// dead-reference and threading issues.
 ///
-/// Configurable data members:
-///
-/// calculation_summary_columns_: Whitespace-delimited list of columns
-/// to be shown on the calculation summary, unless overridden by
-/// use_builtin_calculation_summary_.
-///
-/// cgi_bin_log_filename_: Name of log file used for cgicc's debugging
-/// facility.
-///
-/// custom_input_filename_: Static name of custom input file.
-///
-/// custom_output_filename_: Static name of custom output file.
-///
-/// default_input_filename_: Name of '.ill' file containing default
-/// input values for new '.ill' and '.cns' files.
-///
-/// libraries_to_preload_: Names of any libraries to be preloaded.
-/// Used to work around a defect of msw.
-///
-/// offer_hobsons_choice_: Unsafely allow users the option to bypass
-/// error conditions. Setting this to 'false' prevents the system from
-/// asking whether to bypass problems; that is the default, and
-/// changing it may have no effect with non-GUI interfaces. Eventually
-/// this option may be removed altogether.
-///
-/// print_directory_: Directory to which xsl-fo input and output are
-/// written.
-///
-/// skin_filename_: Name of '.xrc' interface skin.
-///
-/// spreadsheet_file_extension_: File extension (beginning with a dot)
-/// typical for the user's preferred spreadsheet program, used to
-/// determine mimetype or msw 'file association'.
-///
-/// use_builtin_calculation_summary_: If true, then use built-in
-/// defaults instead of calculation_summary_columns_.
-///
-/// xsl_fo_command_: Command to execute xsl 'formatting objects'
-/// processor. Making this an external command permits using a program
-/// with a free but not GPL-compatible license, such as apache fop,
-/// which cannot be linked with a GPL version 2 program.
+/// Data members are documented in their accessors' implementations.
 
 class LMI_SO configurable_settings
-    :public MemberSymbolTable<configurable_settings>
-    ,private boost::noncopyable
-    ,virtual private obstruct_slicing<configurable_settings>
+    :        private boost::noncopyable
+    ,virtual private obstruct_slicing  <configurable_settings>
+    ,        public  xml_serializable  <configurable_settings>
+    ,        public  MemberSymbolTable <configurable_settings>
 {
   public:
     static configurable_settings& instance();
@@ -116,6 +78,24 @@ class LMI_SO configurable_settings
 
     void ascribe_members();
     void load();
+
+    // xml_serializable required implementation.
+    virtual int                class_version() const;
+    virtual std::string const& xml_root_name() const;
+
+    // xml_serializable overrides.
+    virtual void handle_missing_version_attribute() const;
+    virtual bool is_detritus(std::string const&) const;
+    virtual void redintegrate_ex_ante
+        (int                file_version
+        ,std::string const& name
+        ,std::string      & value
+        ) const;
+    virtual void redintegrate_ex_post
+        (int                                       file_version
+        ,std::map<std::string, std::string> const& detritus_map
+        ,std::list<std::string>             const& residuary_names
+        );
 
     std::string calculation_summary_columns_;
     std::string cgi_bin_log_filename_;
