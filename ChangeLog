@@ -26289,11 +26289,8 @@ Improve pop-up menu handling (VS). See:
 Improve pop-up menu handling (VS). See:
   http://lists.nongnu.org/archive/html/lmi/2010-07/msg00010.html
 
- <gchicares@sbcglobal.net> [694]
+20100706T1623Z <gchicares@sbcglobal.net> [694]
 
-  i
-  dbnames.xpp
-  input.hpp
   skin.xrc
-.
+Add new state fields.
 
