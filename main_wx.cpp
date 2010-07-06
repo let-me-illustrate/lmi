@@ -643,9 +643,6 @@ bool Skeleton::OnInit()
         wxXmlResource& xml_resources = *wxXmlResource::Get();
 
         xml_resources.InitAllHandlers();
-
-        // TODO ?? Should not it be moved directly into rounding_view.hpp
-        // or rounding_view_editor.hpp?
         xml_resources.AddHandler(new(wx) RoundingButtonsXmlHandler);
         xml_resources.AddHandler(new(wx) InputSequenceEntryXmlHandler);
 
