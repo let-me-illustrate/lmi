@@ -26294,3 +26294,9 @@ Improve pop-up menu handling (VS). See:
   skin.xrc
 Add new state fields.
 
+20100706T1656Z <gchicares@sbcglobal.net> [693]
+
+  main_wx.cpp
+Remove a defunct defect marker. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-07/msg00013.html
+
