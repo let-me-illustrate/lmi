@@ -144,7 +144,7 @@ demonstrate a defect in the wx library. See
                             <object class="wxFlexGridSizer">
                                 <cols>1</cols>
                                 <growablecols>0</growablecols>
-                                <growablerows>0,1,2,3</growablerows>
+                                <growablerows>0,1,2,3,4</growablerows>
                                 <object class="sizeritem">
                                     <flag>wxGROW|wxALL</flag>
                                     <object class="wxFlexGridSizer">
@@ -164,14 +164,6 @@ demonstrate a defect in the wx library. See
                                                 <size>10,-1</size>
                                             </object>
                                         </object>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_LEFT|wxALL</flag>
-                                    <border>4</border>
-                                    <object class="wxCheckBox" name="AmortizePremiumLoad">
-                                        <help>Amortize all premium load components; charge an extra interest spread instead</help>
-                                        <label>Amortize premium load</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -199,6 +191,50 @@ demonstrate a defect in the wx library. See
                                             <object class="wxDatePickerCtrl" name="EffectiveDate">
                                                 <help>Effective date</help>
                                                 <size>80,-1</size>
+                                            </object>
+                                        </object>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxGROW|wxALL</flag>
+                                    <object class="wxFlexGridSizer">
+                                        <rows>1</rows>
+                                        <growablecols>0</growablecols>
+                                        <object class="sizeritem">
+                                            <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
+                                            <border>4</border>
+                                            <object class="wxStaticText">
+                                                <label>Filing approval state</label>
+                                            </object>
+                                        </object>
+                                        <object class="sizeritem">
+                                            <flag>wxGROW</flag>
+                                            <object class="wxComboBox" name="FilingApprovalState">
+                                                <help>State that must approve the policy-form filing before a contract is issued</help>
+                                                <size>40,-1</size>
+                                                <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                                            </object>
+                                        </object>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxGROW|wxALL</flag>
+                                    <object class="wxFlexGridSizer">
+                                        <rows>1</rows>
+                                        <growablecols>0</growablecols>
+                                        <object class="sizeritem">
+                                            <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
+                                            <border>4</border>
+                                            <object class="wxStaticText">
+                                                <label>Premium tax state</label>
+                                            </object>
+                                        </object>
+                                        <object class="sizeritem">
+                                            <flag>wxGROW</flag>
+                                            <object class="wxComboBox" name="PremiumTaxState">
+                                                <help>State to which premium tax is paid--affects premium load if the tax is passed through</help>
+                                                <size>40,-1</size>
+                                                <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                                             </object>
                                         </object>
                                     </object>
@@ -365,7 +401,7 @@ demonstrate a defect in the wx library. See
                     <object class="wxFlexGridSizer">
                         <cols>1</cols>
                         <growablecols>0</growablecols>
-                        <growablerows>0,1,2,3,4,5,6,7,8,9</growablerows>
+                        <growablerows>0,1,2,3,4,5,6,7,8,9,10</growablerows>
         <!-- Misaligned; is there nothing we can do to fix that other than
              putting each item in a sizer?
         -->
@@ -421,6 +457,13 @@ demonstrate a defect in the wx library. See
                             <object class="wxCheckBox" name="RetireesCanEnroll">
                                 <help>Let individuals enroll after their retirement</help>
                                 <label>Retirees eligible to enroll</label>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxGROW|wxALL</flag>
+                            <object class="wxCheckBox" name="AmortizePremiumLoad">
+                                <help>Amortize all premium load components; charge an extra interest spread instead</help>
+                                <label>Amortize premium load</label>
                             </object>
                         </object>
                         <object class="sizeritem">

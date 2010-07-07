@@ -717,20 +717,10 @@ void CensusView::UponColumnWidthFixed(wxCommandEvent&)
 
 void CensusView::UponRightClick(wxContextMenuEvent&)
 {
-    wxMenuBar* menu_bar = MenuBar();
-    if(menu_bar)
-        {
-        int census_menu_index = menu_bar->FindMenu("Census");
-        if(wxNOT_FOUND != census_menu_index)
-            {
-            wxMenu* census_menu = menu_bar->GetMenu(census_menu_index);
-            list_window_->PopupMenu(census_menu);
-            }
-        else
-            {
-            status() << "Menu not found." << LMI_FLUSH;
-            }
-        }
+    wxMenu* census_menu = wxXmlResource::Get()->LoadMenu("census_menu_ref");
+    LMI_ASSERT(census_menu);
+    list_window_->PopupMenu(census_menu);
+    delete census_menu;
 }
 
 void CensusView::UponUpdateApplicable(wxUpdateUIEvent& e)

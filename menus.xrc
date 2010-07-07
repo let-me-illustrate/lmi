@@ -294,88 +294,90 @@
 
 <object class="wxIcon" name="census_view_icon">census_view.png</object>
 
+<object class="wxMenu" name="census_menu_ref">
+    <label>_Census</label>
+    <object class="wxMenuItem" name="edit_cell">
+        <label>_Edit cell\tCtrl-E</label>
+        <bitmap stock_id="edit-cell"/>
+        <help>Edit selected cell</help>
+    </object>
+    <object class="wxMenuItem" name="edit_class">
+        <label>Edit class defaults\tCtrl-Alt-E</label>
+        <bitmap stock_id="edit-class"/>
+        <help>Edit selected cell's class defaults</help>
+    </object>
+    <object class="wxMenuItem" name="edit_case">
+        <label>Edit case defaults\tCtrl-Shift-E</label>
+        <bitmap stock_id="edit-case"/>
+        <help>Edit case defaults</help>
+    </object>
+    <object class="separator"/>
+    <object class="wxMenuItem" name="run_cell">
+        <label>_Run selected cell\tCtrl-R</label>
+        <bitmap stock_id="run-cell"/>
+        <help>Run selected cell</help>
+    </object>
+<!-- SOMEDAY !! This may be useful for large cases.
+    <object class="wxMenuItem" name="run_class">
+        <label>Run class of selected cell\tCtrl-Alt-R</label>
+        <bitmap stock_id="run-class"/>
+        <help>Run all cells in selected cell's class</help>
+    </object>
+-->
+    <object class="wxMenuItem" name="run_case">
+        <label>Run case\tCtrl-Shift-R</label>
+        <bitmap stock_id="run-case"/>
+        <help>Run all cells</help>
+    </object>
+    <object class="separator"/>
+    <object class="wxMenuItem" name="print_case">
+        <label>Print case\tCtrl-Shift-P</label>
+        <bitmap stock_id="print-case"/>
+        <help>Run and print all cells</help>
+    </object>
+    <object class="wxMenuItem" name="print_case_to_disk">
+        <label>Print case to dis_k\tCtrl-Shift-K</label>
+        <bitmap stock_id="save-pdf"/>
+        <help>Run and print all cells to disk rather than to printer</help>
+    </object>
+    <object class="wxMenuItem" name="print_spreadsheet">
+        <label>Print case to spreads_heet\tCtrl-Shift-H</label>
+        <bitmap stock_id="write-spreadsheet"/>
+        <help>Run and print all cells to a spreadsheet file</help>
+    </object>
+    <object class="separator"/>
+    <object class="wxMenuItem" name="paste_census">
+        <label>Pa_ste census data\tCtrl-Shift-S</label>
+        <bitmap stock_id="paste-case"/>
+        <help>Paste census data from clipboard</help>
+    </object>
+    <object class="wxMenuItem" name="add_cell">
+        <label>_Add cell\tCtrl-+</label>
+        <bitmap stock_id="insert-rows"/>
+        <help>Add a new cell with case default parameters</help>
+    </object>
+    <object class="wxMenuItem" name="delete_cells">
+        <label>_Delete cell(s)\tCtrl--</label>
+        <bitmap stock_id="delete-row"/>
+        <help>Delete selected cell(s)</help>
+    </object>
+    <object class="separator"/>
+    <object class="wxMenuItem" name="column_width_varying">
+        <label>_Varying column width\tCtrl-]</label>
+        <bitmap stock_id="varying-width"/>
+        <help>Vary each column's width to show its entire contents</help>
+    </object>
+    <object class="wxMenuItem" name="column_width_fixed">
+        <label>Fixed col_umn width\tCtrl-[</label>
+        <bitmap stock_id="fixed-width"/>
+        <help>Display all columns with the same fixed width</help>
+    </object>
+</object>
+
 <object class="wxMenuBar" name="census_view_menu">
 <style>wxMB_DOCKABLE</style>
     <object_ref name="file_menu" ref="file_menu_with_print_ref"/>
-    <object class="wxMenu" name="census_menu">
-        <label>_Census</label>
-        <object class="wxMenuItem" name="edit_cell">
-            <label>_Edit cell\tCtrl-E</label>
-            <bitmap stock_id="edit-cell"/>
-            <help>Edit selected cell</help>
-        </object>
-        <object class="wxMenuItem" name="edit_class">
-            <label>Edit class defaults\tCtrl-Alt-E</label>
-            <bitmap stock_id="edit-class"/>
-            <help>Edit selected cell's class defaults</help>
-        </object>
-        <object class="wxMenuItem" name="edit_case">
-            <label>Edit case defaults\tCtrl-Shift-E</label>
-            <bitmap stock_id="edit-case"/>
-            <help>Edit case defaults</help>
-        </object>
-        <object class="separator"/>
-        <object class="wxMenuItem" name="run_cell">
-            <label>_Run selected cell\tCtrl-R</label>
-            <bitmap stock_id="run-cell"/>
-            <help>Run selected cell</help>
-        </object>
-<!-- SOMEDAY !! This may be useful for large cases.
-        <object class="wxMenuItem" name="run_class">
-            <label>Run class of selected cell\tCtrl-Alt-R</label>
-            <bitmap stock_id="run-class"/>
-            <help>Run all cells in selected cell's class</help>
-        </object>
--->
-        <object class="wxMenuItem" name="run_case">
-            <label>Run case\tCtrl-Shift-R</label>
-            <bitmap stock_id="run-case"/>
-            <help>Run all cells</help>
-        </object>
-        <object class="separator"/>
-        <object class="wxMenuItem" name="print_case">
-            <label>Print case\tCtrl-Shift-P</label>
-            <bitmap stock_id="print-case"/>
-            <help>Run and print all cells</help>
-        </object>
-        <object class="wxMenuItem" name="print_case_to_disk">
-            <label>Print case to dis_k\tCtrl-Shift-K</label>
-            <bitmap stock_id="save-pdf"/>
-            <help>Run and print all cells to disk rather than to printer</help>
-        </object>
-        <object class="wxMenuItem" name="print_spreadsheet">
-            <label>Print case to spreads_heet\tCtrl-Shift-H</label>
-            <bitmap stock_id="write-spreadsheet"/>
-            <help>Run and print all cells to a spreadsheet file</help>
-        </object>
-        <object class="separator"/>
-        <object class="wxMenuItem" name="paste_census">
-            <label>Pa_ste census data\tCtrl-Shift-S</label>
-            <bitmap stock_id="paste-case"/>
-            <help>Paste census data from clipboard</help>
-        </object>
-        <object class="wxMenuItem" name="add_cell">
-            <label>_Add cell\tCtrl-+</label>
-            <bitmap stock_id="insert-rows"/>
-            <help>Add a new cell with case default parameters</help>
-        </object>
-        <object class="wxMenuItem" name="delete_cells">
-            <label>_Delete cell(s)\tCtrl--</label>
-            <bitmap stock_id="delete-row"/>
-            <help>Delete selected cell(s)</help>
-        </object>
-        <object class="separator"/>
-        <object class="wxMenuItem" name="column_width_varying">
-            <label>_Varying column width\tCtrl-]</label>
-            <bitmap stock_id="varying-width"/>
-            <help>Vary each column's width to show its entire contents</help>
-        </object>
-        <object class="wxMenuItem" name="column_width_fixed">
-            <label>Fixed col_umn width\tCtrl-[</label>
-            <bitmap stock_id="fixed-width"/>
-            <help>Display all columns with the same fixed width</help>
-        </object>
-    </object>
+    <object_ref name="census_menu" ref="census_menu_ref"/>
     <object_ref name="test_menu" ref="test_menu_ref"/>
     <object_ref name="window_menu" ref="window_menu_ref"/>
     <object_ref name="wxID_HELP" ref="help_menu_ref"/>
