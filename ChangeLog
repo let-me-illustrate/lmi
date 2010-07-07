@@ -26274,3 +26274,29 @@ the lmi epoch, and noted 20100703T2251Z.
   transferor.cpp
 Expose pop-up input-sequence handler for testing only.
 
+20100705T1551Z <gchicares@sbcglobal.net> [694]
+
+  census_view.cpp
+  census_view.hpp
+  single_choice_popup_menu.cpp
+Improve pop-up menu handling (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2010-07/msg00009.html
+
+20100706T1427Z <gchicares@sbcglobal.net> [694]
+
+  census_view.cpp
+  menus.xrc
+Improve pop-up menu handling (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2010-07/msg00010.html
+
+20100706T1623Z <gchicares@sbcglobal.net> [694]
+
+  skin.xrc
+Add new state fields.
+
+20100706T1656Z <gchicares@sbcglobal.net> [693]
+
+  main_wx.cpp
+Remove a defunct defect marker. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-07/msg00013.html
+
