@@ -30,6 +30,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "contains.hpp"
 #include "data_directory.hpp"
 #include "dbdict.hpp"
 #include "dbvalue.hpp"
@@ -130,16 +131,17 @@ product_database::product_database(yare_input const& input)
             ;
         }
 
+    bool swap = contains(input.Comments, "idiosyncrasy_swap_old_tax_state");
     switch(static_cast<int>(Query(DB_PremTaxState)))
         {
         case oe_ee_state:
             {
-            State = input.State;
+            State = swap ? input.CorporationState : input.State;
             }
             break;
         case oe_er_state:
             {
-            State = input.CorporationState;
+            State = swap ? input.State : input.CorporationState;
             }
             break;
         default:
