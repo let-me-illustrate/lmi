@@ -26305,3 +26305,21 @@ Remove a defunct defect marker. See:
   database.cpp
 Optionally reverse the meaning of 'DB_PremTaxState', for testing.
 
+20100711T1420Z <gchicares@sbcglobal.net> [693]
+
+  input_sequence_entry.cpp
+Fix defect introduced 20100704T1645Z. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-07/msg00015.html
+
+20100711T1421Z <gchicares@sbcglobal.net> [693]
+
+  input_sequence_entry.cpp
+Fix defect introduced 20100704T1645Z. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-07/msg00016.html
+
+20100711T1422Z <gchicares@sbcglobal.net> [693]
+
+  input_sequence_entry.cpp
+Fix defect introduced 20100704T1645Z. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-07/msg00017.html
+
