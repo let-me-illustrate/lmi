@@ -448,12 +448,11 @@ void InputSequenceEditor::add_row()
     insert_row(rows_count_);
 }
 
-void InputSequenceEditor::insert_row(int row)
+void InputSequenceEditor::insert_row(int new_row)
 {
-    int insert_pos = Col_Max * row;
+    int const prev_row = new_row - 1;
 
-    int const prev_row = rows_count_ - 1;
-    int const new_row =  rows_count_;
+    int insert_pos = Col_Max * new_row;
 
     //  Employee payment:
     //    [   0]  from issue date until [year] [ 5], then
@@ -513,14 +512,21 @@ void InputSequenceEditor::insert_row(int row)
 #undef LARGEST_FROM_TEXT
 #undef LARGEST_THEN_TEXT
 
+    // Note: We can't use wxID_REMOVE/wxID_ADD for these buttons, because
+    // there's more than one of them and the ID is used to distinguish between
+    // them. Consequently, we have to add stock graphics manually under wxGTK.
     wxButton* remove = new(wx) wxButton
         (this
-        ,wxID_REMOVE
+        ,wxID_ANY
         ,"Remove"
         ,wxDefaultPosition
         ,wxDefaultSize
         ,wxBU_AUTODRAW | wxBU_EXACTFIT | wxBORDER_NONE
         );
+#ifdef __WXGTK__
+    wxBitmap removeBmp = wxArtProvider::GetBitmap("gtk-remove", wxART_BUTTON);
+    remove->SetBitmap(removeBmp);
+#endif
 
     remove->SetToolTip("Remove this row");
     remove->MoveBeforeInTabOrder(last_button_);
@@ -534,12 +540,16 @@ void InputSequenceEditor::insert_row(int row)
 
     wxButton* add = new(wx) wxButton
         (this
-        ,wxID_ADD
+        ,wxID_ANY
         ,"Add"
         ,wxDefaultPosition
         ,wxDefaultSize
         ,wxBU_AUTODRAW | wxBU_EXACTFIT | wxBORDER_NONE
         );
+#ifdef __WXGTK__
+    wxBitmap addBmp = wxArtProvider::GetBitmap("gtk-add", wxART_BUTTON);
+    add->SetBitmap(addBmp);
+#endif
 
     add->SetToolTip("Insert a new row after this one");
     add->MoveBeforeInTabOrder(last_button_);
@@ -551,7 +561,17 @@ void InputSequenceEditor::insert_row(int row)
         );
     sizer_->wxSizer::Insert(insert_pos++, add, wxSizerFlags(flags).Border(wxLEFT, 0).Right());
 
-    // keep track of which windows belong to which rows
+    // update id_to_row_ mapping:
+    for(id_to_row_map::iterator i = id_to_row_.begin(); i != id_to_row_.end(); ++i)
+        {
+        if(i->second >= new_row)
+            {
+            i->second = i->second + 1;
+            }
+        }
+
+    // and add newly created windows to it to keep track of which windows
+    // belong to which row
     for(int i = 0; i < Col_Max; ++i)
         {
         id_to_row_[get_field<wxWindow>(i, new_row).GetId()] = new_row;
@@ -593,12 +613,24 @@ void InputSequenceEditor::remove_row(int row)
     redo_layout();
 
     // update id_to_row_ mapping:
+    std::vector<wxWindowID> to_remove;
     for(id_to_row_map::iterator i = id_to_row_.begin(); i != id_to_row_.end(); ++i)
         {
-        if(row < i->second)
+        if(i->second == row)
+            {
+            to_remove.push_back(i->first);
+            }
+        else if(i->second > row)
             {
             i->second = i->second - 1;
             }
+        }
+    LMI_ASSERT(!to_remove.empty());
+    for(std::vector<wxWindowID>::const_iterator rm = to_remove.begin()
+        ;rm != to_remove.end()
+        ;++rm)
+        {
+        id_to_row_.erase(*rm);
         }
 
     // update the row following the one we just removed and the one before it,
