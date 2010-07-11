@@ -113,6 +113,19 @@ void DurationModeChoice::allow_maturity(bool allow)
         }
     else
         {
+        if(e_maturity == value())
+            {
+            // "until maturity" is selected, but it's no longer allowed.
+            // Replace it with arbitrary other value temporarily; we pick
+            // e_retirement, because it (like e_maturity) doesn't have numeric
+            // argument.
+            //
+            // This is done only to preserve the invariant that
+            // DurationModeChoice always has a value selected; if this happens,
+            // it will be replaced by a more appropriate choice by other UI
+            // code (see UponAddRow).
+            value(e_retirement);
+            }
         Delete(duration_mode_choices - 1);
         }
 }
