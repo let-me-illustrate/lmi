@@ -194,6 +194,7 @@ class InputSequenceEditor
     void remove_row(int row);
     void update_row(int row);
     void redo_layout();
+    void set_tab_order();
     wxString format_from_text(int row);
 
     enum Col
@@ -250,6 +251,7 @@ class InputSequenceEditor
 
     template<typename T>
     T& get_field(int col, int row);
+    wxWindow* get_field_win(int col, int row);
 
     int compute_duration_scalar(int row);
     void adjust_duration_num(int row);
@@ -265,7 +267,8 @@ class InputSequenceEditor
 
     int rows_count_;
     wxFlexGridSizer* sizer_;
-    wxButton* last_button_;
+    wxButton* ok_button_;
+    wxButton* cancel_button_;
     typedef std::map<wxWindowID, int> id_to_row_map;
     id_to_row_map id_to_row_;
 
@@ -293,8 +296,8 @@ InputSequenceEditor::InputSequenceEditor(wxWindow* parent, wxString const& title
     top->Add(sizer_, wxSizerFlags(1).Expand().DoubleBorder());
 
     wxStdDialogButtonSizer* buttons = new(wx) wxStdDialogButtonSizer();
-    buttons->AddButton(new(wx) wxButton(this, wxID_OK));
-    buttons->AddButton(last_button_ = new(wx) wxButton(this, wxID_CANCEL));
+    buttons->AddButton(ok_button_ = new(wx) wxButton(this, wxID_OK));
+    buttons->AddButton(cancel_button_ = new(wx) wxButton(this, wxID_CANCEL));
     buttons->Realize();
 
     top->Add(buttons, wxSizerFlags().Expand().Border());
@@ -542,7 +545,6 @@ void InputSequenceEditor::insert_row(int new_row)
 #endif
 
     remove->SetToolTip("Remove this row");
-    remove->MoveBeforeInTabOrder(last_button_);
     remove->Connect
         (wxEVT_COMMAND_BUTTON_CLICKED
         ,wxCommandEventHandler(InputSequenceEditor::UponRemoveRow)
@@ -565,7 +567,6 @@ void InputSequenceEditor::insert_row(int new_row)
 #endif
 
     add->SetToolTip("Insert a new row after this one");
-    add->MoveBeforeInTabOrder(last_button_);
     add->Connect
         (wxEVT_COMMAND_BUTTON_CLICKED
         ,wxCommandEventHandler(InputSequenceEditor::UponAddRow)
@@ -587,7 +588,7 @@ void InputSequenceEditor::insert_row(int new_row)
     // belong to which row
     for(int i = 0; i < Col_Max; ++i)
         {
-        id_to_row_[get_field<wxWindow>(i, new_row).GetId()] = new_row;
+        id_to_row_[get_field_win(i, new_row)->GetId()] = new_row;
         }
 
     if(0 == rows_count_)
@@ -598,6 +599,8 @@ void InputSequenceEditor::insert_row(int new_row)
     rows_count_++;
     duration_scalars_.insert(duration_scalars_.begin() + new_row, -1);
 
+    set_tab_order();
+
     // update state of controls on the two rows affected by addition of
     // a new row
     if(prev_row != -1)
@@ -607,6 +610,44 @@ void InputSequenceEditor::insert_row(int new_row)
     update_row(new_row);
 
     redo_layout();
+}
+
+void InputSequenceEditor::set_tab_order()
+{
+    // The desired tab order is as follows:
+    // 1. data entry fields from left to right, top to bottom:
+    //      Col_Value
+    //      Col_From
+    //      Col_DurationMode
+    //      Col_DurationNum
+    //      Col_Then
+    // 2. dialog's OK button
+    // 3. then Remove and Add buttons, top to bottom
+    //      Col_Remove
+    //      Col_Add
+    // 4. dialog's Cancel button
+
+    if(0 == rows_count_)
+        return;
+
+    std::vector<wxWindow*> order;
+    for(int row = 0; row < rows_count_; ++row)
+        {
+        for (int col = Col_Value; col <= Col_Then; ++col)
+            order.push_back(get_field_win(col, row));
+        }
+    order.push_back(ok_button_);
+    for(int row = 0; row < rows_count_; ++row)
+        {
+        order.push_back(get_field_win(Col_Remove, row));
+        order.push_back(get_field_win(Col_Add, row));
+        }
+    order.push_back(cancel_button_);
+
+    for(size_t i = 1; i < order.size(); ++i)
+        {
+        order[i]->MoveAfterInTabOrder(order[i - 1]);
+        }
 }
 
 void InputSequenceEditor::remove_row(int row)
@@ -771,8 +812,7 @@ wxString InputSequenceEditor::format_from_text(int row)
     throw "Unreachable--silences a compiler diagnostic.";
 }
 
-template<typename T>
-T& InputSequenceEditor::get_field(int col, int row)
+wxWindow* InputSequenceEditor::get_field_win(int col, int row)
 {
     wxSizerItem* i = sizer_->GetItem(col + Col_Max * row);
     LMI_ASSERT(i);
@@ -780,7 +820,13 @@ T& InputSequenceEditor::get_field(int col, int row)
     wxWindow* w = i->GetWindow();
     LMI_ASSERT(w);
 
-    T* t = dynamic_cast<T*>(w);
+    return w;
+}
+
+template<typename T>
+T& InputSequenceEditor::get_field(int col, int row)
+{
+    T* t = dynamic_cast<T*>(get_field_win(col, row));
     LMI_ASSERT(t);
 
     return *t;
