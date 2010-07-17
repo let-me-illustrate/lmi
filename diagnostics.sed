@@ -79,7 +79,7 @@
 /^Turbo Incremental Link/d
 /^\\[/A-Za-z0-9_]*.cpp:$/d
   # Delete expected output from regression test.
-/^Regression testing:.*\.\(cns\|ini\|mec\)$/d
+/^Regression testing:.*\.\(cns\|ill\|ini\|mec\)$/d
 /^Initializing all cells\.*$/d
 /^curr charges and genacct int, full sepacct int\.*$/d
 /^guar charges and genacct int, full sepacct int\.*$/d
