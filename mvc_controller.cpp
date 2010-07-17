@@ -328,7 +328,7 @@ void MvcController::ConditionallyEnableItems
             {
             radiobox->Enable(j, radiobox_enabled && datum->is_allowed(j));
             }
-        // TODO ?? Appparently the next line is not actually necessary.
+        // TODO ?? Apparently the next line is not actually necessary.
         radiobox->SetSelection(datum->ordinal());
         }
     else if(itembox)
