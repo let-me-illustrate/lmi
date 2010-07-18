@@ -367,10 +367,10 @@ void xml_serializable<T>::redintegrate_ex_ante
 /// It would be reasonable to override this function to copy the
 /// issue-date value to a new effective date element.
 ///
-/// The 'residuary_names' argument contains all element tags actually
-/// found in the xml being read that have not yet been processed. This
-/// is useful for verifying that an element expected not to be present
-/// is actually not specified.
+/// The 'residuary_names' argument contains all "ascribed" class
+/// member names that did not occur as element tags in the xml file
+/// being read. This is useful for verifying that an element expected
+/// to be absent actually was absent.
 ///
 /// The 'detritus_map' argument contains names and values of all tags
 /// that have already been processed if they were marked as detritus:
