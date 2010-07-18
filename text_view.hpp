@@ -49,8 +49,8 @@ class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 /// or perilous" features. There's no intention to make lmi a general-
 /// purpose text editor.
 ///
-/// It's left in cvs, though, because it might be a valuable model for
-/// some other feature someday.
+/// It's left in the repository, though, because it might be a useful
+/// model for some other feature someday.
 
 class TextEditView
     :public ViewEx

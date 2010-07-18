@@ -83,12 +83,6 @@ MAKEFLAGS := \
 
 src_dir := $(CURDIR)
 
-# Make sure a temporary directory exists.
-
-TMPDIR ?= /tmp
-$(TMPDIR):
-	+@[ -d $@ ] || $(MKDIR) --parents $@
-
 ################################################################################
 
 # Other makefiles included; makefiles not to be remade.
@@ -192,10 +186,12 @@ date:
 
 ################################################################################
 
-# Mark release candidate.
+# Designate a release candidate.
 
-# Update the version-datestamp header before committing any release
-# candidate to cvs. Release candidates are named 'lmi-YYYYMMDDTHHMM'.
+# A release candidate is a revision with an updated version-datestamp
+# header. It is merely a designated svn revision: svn offers no real
+# equivalent of 'cvs rtag', and the closest substitute, 'svn copy',
+# makes an unwanted copy.
 
 .PHONY: release_candidate
 release_candidate:
@@ -210,9 +206,8 @@ release_candidate:
 	  | $(TR) --delete '\r' \
 	  > version.hpp
 	@$(ECHO) Version is "'$(yyyymmddhhmm)'".
-	@$(ECHO) "  Tag a release this way:"
-	@$(ECHO) "cvs commit -m\"Mark release candidate\" version.hpp ChangeLog"
-	@$(ECHO) "cvs rtag lmi-$(yyyymmddhhmm) lmi"
+	@$(ECHO) "  To designate a release candidate:"
+	@$(ECHO) "svn commit -m\"Designate release candidate\" version.hpp ChangeLog"
 
 ################################################################################
 
@@ -275,8 +270,8 @@ gpl_notices := \
 # which should be updated only if lmi's owner changes the license; and
 #   version.hpp
 # which should be updated by making target 'release_candidate' as
-# needed (these required files are all in cvs; no 'clean' rule deletes
-# them because they should never be deleted).
+# needed (these required files are all in the repository; no 'clean'
+# rule deletes them because they should never be deleted).
 
 expungible_files := $(wildcard *~ *.bak *eraseme*)
 
@@ -342,19 +337,6 @@ check_concinnity: source_clean custom_tools
 	  done;
 	@$(ECHO) "  Miscellaneous problems:"
 	@-$(TEST_CODING_RULES) *
-
-################################################################################
-
-# Prepare to commit to cvs.
-
-.PHONY: cvs_ready
-cvs_ready: source_clean
-	-$(MAKE) check_concinnity
-	-$(MAKE) check_physical_closure
-	-$(MAKE) all test
-	-$(MAKE) all test build_type=mpatrol
-	-$(MAKE) test build_type=safestdlib
-	-$(MAKE) lmi_wx_shared$(EXEEXT) build_type=so_test USE_SO_ATTRIBUTES=1
 
 ################################################################################
 
@@ -435,7 +417,8 @@ happy_new_year: source_clean
 # TODO ?? This is an evolving experiment. Possible enhancements include:
 #   - Add other tests, particularly system tests.
 #       Consider using ../products/src if it exists.
-#       Also consider using cvs only, and using testdecks from cvs or ftp.
+#       Also consider using the repository only, with testdecks stored
+#         either there or in ftp.
 #   - Test skeleton branch, too.
 #   - Gather statistics, e.g., elapsed time and total size of binaries.
 #   - Filter logs e.g. as 'fancy.make' does.
@@ -443,25 +426,30 @@ happy_new_year: source_clean
 #       Can a simple binary measure {success, failure} be devised?
 #   - Set this up as a 'cron' job (or equivalent on other platforms).
 #   - Devise a simple way to test changes to this target without
-#       requiring 5 Mb of downloading and 10 minutes of crunching.
+#       requiring a large download and an hour of crunching.
 
-CVS_RSH := ssh
-CVSROOT := :pserver:anonymous@cvs.sv.nongnu.org:/sources/lmi
-
-nychthemeral_directory := $(TMPDIR)/lmi-nychthemeral-$(yyyymmddhhmm)
+nychthemeral_directory := /opt/lmi/lmi-nychthemeral-$(yyyymmddhhmm)
 nychthemeral_log := log-lmi-nychthemeral-$(yyyymmddhhmm)
 
 .PHONY: checkout
 checkout:
 	$(MKDIR) --parents $(nychthemeral_directory); \
 	cd $(nychthemeral_directory); \
-	export CVS_RSH='$(CVS_RSH)'; \
-	export CVSROOT='$(CVSROOT)'; \
-	cvs -z3 co skeleton lmi; \
+	svn co svn://svn.savannah.nongnu.org/lmi/lmi/trunk lmi; \
+	svn co svn://svn.savannah.nongnu.org/lmi/skeleton/trunk skeleton; \
+
+.PHONY: test_various_build_types
+test_various_build_types: source_clean
+	-$(MAKE) check_concinnity
+	-$(MAKE) check_physical_closure
+	-$(MAKE) all test
+	-$(MAKE) all test build_type=mpatrol
+	-$(MAKE) test build_type=safestdlib
+	-$(MAKE) lmi_wx_shared$(EXEEXT) build_type=so_test USE_SO_ATTRIBUTES=1
 
 .PHONY: nychthemeral_test
 nychthemeral_test: checkout
-	-$(MAKE) --directory=$(nychthemeral_directory)/lmi cvs_ready \
+	-$(MAKE) --directory=$(nychthemeral_directory)/lmi test_various_build_types \
 	  >../$(nychthemeral_log)
 
 ################################################################################
