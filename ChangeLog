@@ -26333,8 +26333,25 @@ Filter expected output from single-life testdecks.
   mvc_controller.cpp
 Correct a typographical error in a comment.
 
- <gchicares@sbcglobal.net> [693]
+20100717T0838Z <gchicares@sbcglobal.net> [693]
 
   version.hpp
 Mark release candidate.
+
+20100718T1459Z <gchicares@sbcglobal.net> [693]
+
+  GNUmakefile
+  README.auto
+  main_cgi.cpp
+  my_test_coding_rules.cpp
+  objects.make
+  test_coding_rules_test.sh
+  text_view.hpp
+Reflect conversion from cvs to svn.
+
+20100718T1627Z <gchicares@sbcglobal.net> [693]
+
+  dbnames.xpp
+  xml_serializable.tpp
+Improve documentation.
 
