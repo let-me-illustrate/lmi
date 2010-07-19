@@ -204,13 +204,13 @@ demonstrate a defect in the wx library. See
                                             <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                                             <border>4</border>
                                             <object class="wxStaticText">
-                                                <label>Filing approval state</label>
+                                                <label>State of jurisdiction</label>
                                             </object>
                                         </object>
                                         <object class="sizeritem">
                                             <flag>wxGROW</flag>
-                                            <object class="wxComboBox" name="FilingApprovalState">
-                                                <help>State that must approve the policy-form filing before a contract is issued</help>
+                                            <object class="wxComboBox" name="StateOfJurisdiction">
+                                                <help>State that approves policy form and rate filing, and governs everything else except premium tax</help>
                                                 <size>40,-1</size>
                                                 <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                                             </object>
