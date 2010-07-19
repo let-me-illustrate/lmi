@@ -372,6 +372,7 @@ class LMI_SO Input
     tnr_month                InforceContractMonth            ;
     tnr_nonnegative_double   InforceLeastDeathBenefit        ;
     mce_state                StateOfJurisdiction             ;
+    mce_state                PremiumTaxState                 ;
     tnr_nonnegative_double   SalarySpecifiedAmountFactor     ;
     tnr_nonnegative_double   SalarySpecifiedAmountCap        ;
     tnr_nonnegative_double   SalarySpecifiedAmountOffset     ;

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <single_cell_document>
-  <cell version="5">
+  <cell version="6">
     <AccidentalDeathBenefit>No</AccidentalDeathBenefit>
     <Address/>
     <AgentAddress>*** REQUIRED FIELD MISSING ***</AgentAddress>
@@ -132,6 +132,7 @@
     <PolicyNumber/>
     <PostHoneymoonSpread>0</PostHoneymoonSpread>
     <PremiumHistory>0</PremiumHistory>
+    <PremiumTaxState>CT</PremiumTaxState>
     <ProductName>sample</ProductName>
     <ProjectedSalary>100000</ProjectedSalary>
     <RetireesCanEnroll>No</RetireesCanEnroll>

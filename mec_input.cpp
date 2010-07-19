@@ -30,6 +30,7 @@
 #include "xml_serializable.tpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "contains.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
@@ -104,6 +105,7 @@ mec_input::mec_input()
 //    ,InforceContractMonth             ("")
     ,InforceLeastDeathBenefit         ("1000000")
     ,StateOfJurisdiction              ("CT")
+    ,PremiumTaxState                  ("CT")
     ,FlatExtra                        ("0")
     ,PaymentHistory                   ("0")
     ,BenefitHistory                   ("1000000")
@@ -196,6 +198,7 @@ void mec_input::AscribeMembers()
     ascribe("InforceContractMonth"                  , &mec_input::InforceContractMonth                  );
     ascribe("InforceLeastDeathBenefit"              , &mec_input::InforceLeastDeathBenefit              );
     ascribe("StateOfJurisdiction"                   , &mec_input::StateOfJurisdiction                   );
+    ascribe("PremiumTaxState"                       , &mec_input::PremiumTaxState                       );
     ascribe("FlatExtra"                             , &mec_input::FlatExtra                             );
     ascribe("PaymentHistory"                        , &mec_input::PaymentHistory                        );
     ascribe("BenefitHistory"                        , &mec_input::BenefitHistory                        );
@@ -607,10 +610,11 @@ std::string mec_input::RealizeBenefitHistory()
 /// Backward-compatibility serial number of this class's xml version.
 ///
 /// version 0: 20090627T2249Z
+/// version 1: 201007DDTHHMMZ
 
 int mec_input::class_version() const
 {
-    return 0;
+    return 1;
 }
 
 std::string const& mec_input::xml_root_name() const
@@ -627,6 +631,38 @@ bool mec_input::is_detritus(std::string const& s) const
         };
     static std::vector<std::string> const v(a, a + lmi_array_size(a));
     return contains(v, s);
+}
+
+void mec_input::redintegrate_ex_ante
+    (int                file_version
+    ,std::string const& // name
+    ,std::string      & // value
+    ) const
+{
+    if(class_version() == file_version)
+        {
+        return;
+        }
+
+    // Nothing to do for now.
+}
+
+void mec_input::redintegrate_ex_post
+    (int                                       file_version
+    ,std::map<std::string, std::string> const& // detritus_map
+    ,std::list<std::string>             const& residuary_names
+    )
+{
+    if(class_version() == file_version)
+        {
+        return;
+        }
+
+    if(file_version < 1)
+        {
+        LMI_ASSERT(contains(residuary_names, "PremiumTaxState"));
+        PremiumTaxState = StateOfJurisdiction;
+        }
 }
 
 void mec_input::redintegrate_ad_terminum()

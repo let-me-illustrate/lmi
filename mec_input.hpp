@@ -103,6 +103,16 @@ class LMI_SO mec_input
 
     // xml_serializable overrides.
     virtual bool is_detritus(std::string const&) const;
+    virtual void redintegrate_ex_ante
+        (int                file_version
+        ,std::string const& name
+        ,std::string      & value
+        ) const;
+    virtual void redintegrate_ex_post
+        (int                                       file_version
+        ,std::map<std::string, std::string> const& detritus_map
+        ,std::list<std::string>             const& residuary_names
+        );
     virtual void redintegrate_ad_terminum();
 
     // MvcModel required implementation.
@@ -167,6 +177,7 @@ class LMI_SO mec_input
     tnr_month                InforceContractMonth            ;
     tnr_nonnegative_double   InforceLeastDeathBenefit        ;
     mce_state                StateOfJurisdiction             ;
+    mce_state                PremiumTaxState                 ;
     datum_sequence           FlatExtra                       ;
     datum_sequence           PaymentHistory                  ;
     datum_sequence           BenefitHistory                  ;

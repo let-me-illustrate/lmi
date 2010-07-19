@@ -168,6 +168,7 @@ Input::Input()
 //    ,InforceContractMonth             ("")
 //    ,InforceLeastDeathBenefit         ("")
     ,StateOfJurisdiction              ("CT")
+    ,PremiumTaxState                  ("CT")
     ,SalarySpecifiedAmountFactor      ("1")
     ,SalarySpecifiedAmountCap         ("100000")
     ,SalarySpecifiedAmountOffset      ("50000")
@@ -468,6 +469,7 @@ void Input::AscribeMembers()
     ascribe("InforceContractMonth"                  , &Input::InforceContractMonth                  );
     ascribe("InforceLeastDeathBenefit"              , &Input::InforceLeastDeathBenefit              );
     ascribe("StateOfJurisdiction"                   , &Input::StateOfJurisdiction                   );
+    ascribe("PremiumTaxState"                       , &Input::PremiumTaxState                       );
     ascribe("SalarySpecifiedAmountFactor"           , &Input::SalarySpecifiedAmountFactor           );
     ascribe("SalarySpecifiedAmountCap"              , &Input::SalarySpecifiedAmountCap              );
     ascribe("SalarySpecifiedAmountOffset"           , &Input::SalarySpecifiedAmountOffset           );
