@@ -72,6 +72,7 @@ std::string full_name
 /// version 3: 20090302T0509Z [see important note below]
 /// version 4: 20090330T0137Z
 /// version 5: 20090526T1331Z
+/// version 6: 201007DDTHHMMZ
 ///
 /// Important note concerning version 3. On or about 20090311, some
 /// end users were given an off-cycle release that should have used
@@ -80,7 +81,7 @@ std::string full_name
 
 int Input::class_version() const
 {
-    return 5;
+    return 6;
 }
 
 std::string const& Input::xml_root_name() const
@@ -365,6 +366,12 @@ void Input::redintegrate_ex_post
             ,InforceMonth .value() - InforceContractMonth.value()
             ,true
             );
+        }
+
+    if(file_version < 6)
+        {
+        LMI_ASSERT(contains(residuary_names, "PremiumTaxState"));
+        PremiumTaxState = StateOfJurisdiction;
         }
 }
 

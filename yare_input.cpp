@@ -163,6 +163,7 @@ yare_input::yare_input(Input const& z)
     InforceContractMonth            = z.InforceContractMonth           .value();
     InforceLeastDeathBenefit        = z.InforceLeastDeathBenefit       .value();
     StateOfJurisdiction             = z.StateOfJurisdiction            .value();
+    PremiumTaxState                 = z.PremiumTaxState                .value();
     SalarySpecifiedAmountFactor     = z.SalarySpecifiedAmountFactor    .value();
     SalarySpecifiedAmountCap        = z.SalarySpecifiedAmountCap       .value();
     SalarySpecifiedAmountOffset     = z.SalarySpecifiedAmountOffset    .value();

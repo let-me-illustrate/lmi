@@ -193,6 +193,7 @@ class yare_input
     int                               InforceContractMonth            ;
     double                            InforceLeastDeathBenefit        ;
     mcenum_state                      StateOfJurisdiction             ;
+    mcenum_state                      PremiumTaxState                 ;
     double                            SalarySpecifiedAmountFactor     ;
     double                            SalarySpecifiedAmountCap        ;
     double                            SalarySpecifiedAmountOffset     ;

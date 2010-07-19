@@ -26355,3 +26355,24 @@ Reflect conversion from cvs to svn.
   xml_serializable.tpp
 Improve documentation.
 
+20100719T1347Z <gchicares@sbcglobal.net> [693]
+
+  skin.xrc
+Reserve 'FilingApprovalState' for use only in admin-system extracts.
+Elsewhere, 'StateOfJurisdiction' is already in widespread use and need
+not be changed.
+
+20100719T1349Z <gchicares@sbcglobal.net> [693]
+
+  input.cpp
+  input.hpp
+  input_xml_io.cpp
+  mec.xrc
+  mec_input.cpp
+  mec_input.hpp
+  sample.cns
+  sample.ill
+  yare_input.cpp
+  yare_input.hpp
+Add a premium-tax-state field.
+
