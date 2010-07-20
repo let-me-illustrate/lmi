@@ -737,12 +737,6 @@ void LedgerInvariant::Init(BasicValues* b)
         {
         Smoker = (*b->Input_)["Smoking"].str();
         }
-    // TODO ?? Use a switch-statement instead. The original version of
-    // this code was just if...else, and silently deemed the convention
-    // to be smoker/nonsmoker if it wasn't specified as tobacco/nontobacco;
-    // but if it were neither, that was silently 'fixed' in a way that's
-    // not likely to be correct. If we later added 'cigarette/noncigarette',
-    // which some companies use, then we would have gotten smoker/nonsmoker!
     else
         {
         throw std::logic_error("Unknown oe_smoker_nonsmoker convention.");
@@ -760,8 +754,8 @@ void LedgerInvariant::Init(BasicValues* b)
     StatePostalAbbrev       = mc_str(b->GetStateOfJurisdiction());
 
     StatePremTaxRate        = b->PremiumTaxRate();
-    // TODO ?? Output forms presuppose that the premium tax load is a
-    // scalar unless it is tiered.
+    // SOMEDAY !! No output form uses this as of 2010-07; for now at
+    // least, it's assumed to be a scalar unless it is tiered.
     StatePremTaxLoad        = b->Loads_->premium_tax_load()[0];
     LMI_ASSERT
         (PremiumTaxLoadIsTiered || each_equal
@@ -771,20 +765,18 @@ void LedgerInvariant::Init(BasicValues* b)
             )
         );
     DacTaxPremLoadRate      = b->Loads_->dac_tax_load()[0];
-    // TODO ?? Output forms presuppose that the DAC tax load is scalar;
-    // and it seems odd that the DAC-tax load would have much to do
-    // with whether the premium-tax is tiered.
+    // SOMEDAY !! No output form uses this as of 2010-07; for now at
+    // least, it's assumed to be scalar.
     LMI_ASSERT
-        (PremiumTaxLoadIsTiered || each_equal
+        (each_equal
             (b->Loads_->dac_tax_load().begin()
             ,b->Loads_->dac_tax_load().end()
             ,b->Loads_->dac_tax_load().front()
             )
         );
-    // TODO ?? The database allows a distinct DAC tax fund charge, but
-    // it seems that output forms assume that the DAC tax premium load
-    // represents the entire DAC tax charge, so they're incorrect if
-    // the DAC tax fund charge isn't zero.
+    // SOMEDAY !! The database allows a distinct DAC tax fund charge,
+    // but it's not supported yet. Output forms must not assume that
+    // the DAC tax premium load represents the entire DAC tax charge.
     LMI_ASSERT(0.0 == b->Database_->Query(DB_DacTaxFundCharge));
 
     InitAnnLoanDueRate      = b->InterestRates_->RegLnDueRate

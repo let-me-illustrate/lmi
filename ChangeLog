@@ -26390,3 +26390,16 @@ Remove unintended svn:executable property.
   mec_input.cpp
 Update version timestamps in comments.
 
+20100720T1922Z <gchicares@sbcglobal.net> [693]
+
+  loads.cpp
+Terminate if untested premium-load amortization is used.
+
+20100720T1923Z <gchicares@sbcglobal.net> [689]
+
+  ledger_invariant.cpp
+Resolve several marked defects. DAC-tax load no longer depends on
+whether premium tax is tiered. One can follow Kernighan and Plauger's
+"Avoid THEN-IF and null ELSE" advice in TEoPS with any type of
+selection-statement.
+
