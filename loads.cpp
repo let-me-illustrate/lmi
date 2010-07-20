@@ -53,6 +53,7 @@ Loads::Loads(BasicValues& V)
 {
     int length = V.GetLength();
     LMI_ASSERT(length == V.Database_->length());
+    LMI_ASSERT(!V.yare_input_.AmortizePremiumLoad); // Amortization is untested.
     load_details details
         (length
         ,V.yare_input_.AmortizePremiumLoad
