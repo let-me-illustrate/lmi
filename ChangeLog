@@ -26376,3 +26376,17 @@ not be changed.
   yare_input.hpp
 Add a premium-tax-state field.
 
+20100719T1357Z <gchicares@sbcglobal.net> [693]
+
+  datum_sequence.cpp
+  datum_sequence.hpp
+  input_sequence_entry.cpp
+  input_sequence_entry.hpp
+Remove unintended svn:executable property.
+
+20100720T0021Z <gchicares@sbcglobal.net> [693]
+
+  input_xml_io.cpp
+  mec_input.cpp
+Update version timestamps in comments.
+
