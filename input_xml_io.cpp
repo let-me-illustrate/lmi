@@ -72,7 +72,7 @@ std::string full_name
 /// version 3: 20090302T0509Z [see important note below]
 /// version 4: 20090330T0137Z
 /// version 5: 20090526T1331Z
-/// version 6: 201007DDTHHMMZ
+/// version 6: 20100719T1349Z
 ///
 /// Important note concerning version 3. On or about 20090311, some
 /// end users were given an off-cycle release that should have used

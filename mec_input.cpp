@@ -610,7 +610,7 @@ std::string mec_input::RealizeBenefitHistory()
 /// Backward-compatibility serial number of this class's xml version.
 ///
 /// version 0: 20090627T2249Z
-/// version 1: 201007DDTHHMMZ
+/// version 1: 20100719T1349Z
 
 int mec_input::class_version() const
 {
