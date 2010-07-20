@@ -936,20 +936,6 @@ double lowest_premium_tax_load
 //============================================================================
 void BasicValues::TestPremiumTaxLoadConsistency()
 {
-    // If premium-tax load doesn't vary by duration or state, then
-    // assume that the intention is to override tiering even in
-    // states that have tiered premium-tax rates. For instance, if
-    // a flat two percent is coded for every state, then it is
-    // probably desired to ignore all state variations and nuances.
-    //
-    // TODO ?? Don't override parameters--instead, only detect and
-    // report inconsistencies.
-    //
-    if(!Database_->varies_by_state(DB_PremTaxLoad))
-        {
-        return;
-        }
-
     if(StratifiedCharges_->premium_tax_is_tiered(GetStateOfJurisdiction()))
         {
         PremiumTaxLoadIsTieredInStateOfJurisdiction = true;

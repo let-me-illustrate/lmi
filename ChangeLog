@@ -26403,3 +26403,9 @@ whether premium tax is tiered. One can follow Kernighan and Plauger's
 "Avoid THEN-IF and null ELSE" advice in TEoPS with any type of
 selection-statement.
 
+20100720T2351Z <gchicares@sbcglobal.net> [688]
+
+  ihs_basicval.cpp
+Remove a DWIM exception to consistency testing, inducing a regression
+in system testing that must be analyzed.
+
