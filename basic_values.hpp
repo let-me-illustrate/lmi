@@ -302,7 +302,6 @@ class LMI_SO BasicValues
 
     // Invariant data.
     void                         SetPermanentInvariants();
-    void                         SetLowestPremiumTaxLoad();
     void                         TestPremiumTaxLoadConsistency();
     void                         SetMaxSurvivalDur();
     double                       MaxSurvivalDur;
@@ -375,6 +374,8 @@ class LMI_SO BasicValues
     bool                    PremiumTaxLoadIsTieredInPremiumTaxState_;
 
   private:
+    void SetPremiumTaxParameters();
+
     double GetModalPrem
         (int                   a_year
         ,mcenum_mode           a_mode

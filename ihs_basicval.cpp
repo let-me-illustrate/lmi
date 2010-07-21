@@ -247,7 +247,7 @@ void BasicValues::Init()
     DeathBfts_     .reset(new death_benefits (GetLength(), yare_input_));
     // Outlay requires only input; it might someday use interest rates.
     Outlay_        .reset(new modal_outlay   (yare_input_));
-    SetLowestPremiumTaxLoad();
+    SetPremiumTaxParameters();
     Loads_         .reset(new Loads          (*this));
 
     // The target premium can't be ascertained yet if specamt is
@@ -323,7 +323,7 @@ void BasicValues::GPTServerInit()
 //  DeathBfts_     .reset(new death_benefits (GetLength(), yare_input_));
     // Outlay requires only input; it might someday use interest rates.
 //  Outlay_        .reset(new modal_outlay   (yare_input_));
-    SetLowestPremiumTaxLoad();
+    SetPremiumTaxParameters();
     Loads_         .reset(new Loads          (*this));
 
     SetPermanentInvariants();
@@ -843,8 +843,11 @@ void BasicValues::SetRoundingFunctors()
     set_rounding_rule(round_interest_rate_7702_, RoundingRules_->datum("RoundIntRate7702"));
 }
 
-//============================================================================
-void BasicValues::SetLowestPremiumTaxLoad()
+/// Set all parameters that depend on premium-tax state.
+///
+/// (For the nonce, state of jurisdiction is used instead.)
+
+void BasicValues::SetPremiumTaxParameters()
 {
     LMI_ASSERT(Database_         .get());
     LMI_ASSERT(StratifiedCharges_.get());
