@@ -26409,3 +26409,9 @@ selection-statement.
 Remove a DWIM exception to consistency testing, inducing a regression
 in system testing that must be analyzed.
 
+20100721T1142Z <gchicares@sbcglobal.net> [688]
+
+  ihs_avmly.cpp
+Refactor. This depends on the 20100720T2351Z change, without which the
+data member now used would not necessarily have been set correctly.
+

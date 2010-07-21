@@ -1481,7 +1481,7 @@ double AccountValue::GetPremLoad
         ;
     HOPEFULLY(0.0 <= sum_of_separate_loads);
     LMI_ASSERT
-        (   StratifiedCharges_->premium_tax_is_tiered(GetStateOfJurisdiction())
+        (   PremiumTaxLoadIsTieredInStateOfJurisdiction
         ||  materially_equal(total_load, sum_of_separate_loads)
         );
 
