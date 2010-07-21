@@ -111,7 +111,7 @@ class LMI_SO BasicValues
     double                PremiumTaxRate()             const;
     double                LowestPremiumTaxLoad()       const;
     double                DomiciliaryPremiumTaxLoad()  const;
-    bool                  IsPremiumTaxLoadTiered()     const;
+    bool                  PremiumTaxLoadIsTiered()     const;
     bool                  IsSubjectToIllustrationReg() const;
     double                InvestmentManagementFee()    const;
 
@@ -370,9 +370,9 @@ class LMI_SO BasicValues
     std::vector<double>     TieredMEBands;
     std::vector<double>     TieredMECharges;
 
-    double                  FirstYearPremiumRetaliationLimit;
-    bool                    PremiumTaxLoadIsTieredInStateOfDomicile;
-    bool                    PremiumTaxLoadIsTieredInStateOfJurisdiction;
+    double                  FirstYearPremiumRetaliationLimit_;
+    bool                    PremiumTaxLoadIsTieredInStateOfDomicile_;
+    bool                    PremiumTaxLoadIsTieredInPremiumTaxState_;
 
   private:
     double GetModalPrem
@@ -508,9 +508,9 @@ inline double BasicValues::DomiciliaryPremiumTaxLoad() const
     return DomiciliaryPremiumTaxLoad_;
 }
 
-inline bool BasicValues::IsPremiumTaxLoadTiered() const
+inline bool BasicValues::PremiumTaxLoadIsTiered() const
 {
-    return PremiumTaxLoadIsTieredInStateOfJurisdiction;
+    return PremiumTaxLoadIsTieredInPremiumTaxState_;
 }
 
 inline bool BasicValues::IsSubjectToIllustrationReg() const
@@ -521,12 +521,12 @@ inline bool BasicValues::IsSubjectToIllustrationReg() const
 double lowest_premium_tax_load
     (product_database   const& db
     ,stratified_charges const& stratified
-    ,mcenum_state              state_of_jurisdiction
+    ,mcenum_state              premium_tax_state
     ,bool                      amortize_premium_load
     );
 
 // TODO ?? Use a configuration file instead. These deprecated
-// functions are used only by the lmi branch.
+// functions are used only by the antediluvian branch.
 char const* CurrentTableFile();
 char const* GuaranteedTableFile();
 

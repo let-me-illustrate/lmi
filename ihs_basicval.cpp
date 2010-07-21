@@ -254,8 +254,8 @@ void BasicValues::Init()
     // determined by a strategy.
     InitialTargetPremium = 0.0;
 
-    PremiumTaxLoadIsTieredInStateOfDomicile     = false;
-    PremiumTaxLoadIsTieredInStateOfJurisdiction = false;
+    PremiumTaxLoadIsTieredInStateOfDomicile_ = false;
+    PremiumTaxLoadIsTieredInPremiumTaxState_ = false;
 
     SetPermanentInvariants();
 
@@ -757,7 +757,7 @@ void BasicValues::SetPermanentInvariants()
     Database_->Query(CompTarget, DB_CompTarget);
     Database_->Query(CompExcess, DB_CompExcess);
 
-    FirstYearPremiumRetaliationLimit = Database_->Query(DB_PremTaxRetalLimit);
+    FirstYearPremiumRetaliationLimit_ = Database_->Query(DB_PremTaxRetalLimit);
 
     MandEIsDynamic      = Database_->Query(DB_DynamicMandE         );
     SepAcctLoadIsDynamic= Database_->Query(DB_DynamicSepAcctLoad   );
@@ -861,7 +861,7 @@ void BasicValues::SetLowestPremiumTaxLoad()
 double lowest_premium_tax_load
     (product_database   const& db
     ,stratified_charges const& stratified
-    ,mcenum_state              state_of_jurisdiction
+    ,mcenum_state              premium_tax_state
     ,bool                      amortize_premium_load
     )
 {
@@ -910,7 +910,7 @@ double lowest_premium_tax_load
             ;
         }
 
-    if(stratified.premium_tax_is_tiered(state_of_jurisdiction))
+    if(stratified.premium_tax_is_tiered(premium_tax_state))
         {
         // TODO ?? TestPremiumTaxLoadConsistency() repeats this test.
         // Probably all the consistency testing should be moved to
@@ -919,7 +919,7 @@ double lowest_premium_tax_load
             {
             fatal_error()
                 << "Premium-tax rate is tiered in state "
-                << mc_str(state_of_jurisdiction)
+                << mc_str(premium_tax_state)
                 << ", but the product database specifies a scalar load of "
                 << z
                 << " instead of zero as expected. Probably the database"
@@ -927,7 +927,7 @@ double lowest_premium_tax_load
                 << LMI_FLUSH
                 ;
             }
-        z = stratified.minimum_tiered_premium_tax_rate(state_of_jurisdiction);
+        z = stratified.minimum_tiered_premium_tax_rate(premium_tax_state);
         }
 
     return z;
@@ -938,7 +938,7 @@ void BasicValues::TestPremiumTaxLoadConsistency()
 {
     if(StratifiedCharges_->premium_tax_is_tiered(GetStateOfJurisdiction()))
         {
-        PremiumTaxLoadIsTieredInStateOfJurisdiction = true;
+        PremiumTaxLoadIsTieredInPremiumTaxState_ = true;
         if(0.0 != Database_->Query(DB_PremTaxLoad))
             {
             fatal_error()
@@ -955,7 +955,7 @@ void BasicValues::TestPremiumTaxLoadConsistency()
 
     if(StratifiedCharges_->premium_tax_is_tiered(GetStateOfDomicile()))
         {
-        PremiumTaxLoadIsTieredInStateOfDomicile = true;
+        PremiumTaxLoadIsTieredInStateOfDomicile_ = true;
         if(0.0 != DomiciliaryPremiumTaxLoad())
             {
             fatal_error()

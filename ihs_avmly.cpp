@@ -1481,7 +1481,7 @@ double AccountValue::GetPremLoad
         ;
     HOPEFULLY(0.0 <= sum_of_separate_loads);
     LMI_ASSERT
-        (   PremiumTaxLoadIsTieredInStateOfJurisdiction
+        (   PremiumTaxLoadIsTieredInPremiumTaxState_
         ||  materially_equal(total_load, sum_of_separate_loads)
         );
 
@@ -1503,7 +1503,7 @@ double AccountValue::GetPremLoad
 double AccountValue::GetPremTaxLoad(double payment)
 {
     double tax_in_state_of_jurisdiction = YearsPremTaxLoadRate * payment;
-    if(PremiumTaxLoadIsTieredInStateOfJurisdiction)
+    if(PremiumTaxLoadIsTieredInPremiumTaxState_)
         {
         LMI_ASSERT(0.0 == tax_in_state_of_jurisdiction);
         tax_in_state_of_jurisdiction = StratifiedCharges_->tiered_premium_tax
@@ -1518,7 +1518,7 @@ double AccountValue::GetPremTaxLoad(double payment)
     if(!FirstYearPremiumExceedsRetaliationLimit)
         {
         tax_in_state_of_domicile = DomiciliaryPremiumTaxLoad() * payment;
-        if(PremiumTaxLoadIsTieredInStateOfDomicile)
+        if(PremiumTaxLoadIsTieredInStateOfDomicile_)
             {
             LMI_ASSERT(0.0 == tax_in_state_of_domicile);
             tax_in_state_of_domicile = StratifiedCharges_->tiered_premium_tax
@@ -1543,8 +1543,8 @@ double AccountValue::GetPremTaxLoad(double payment)
     if
         (   !FirstYearPremiumExceedsRetaliationLimit
         &&
-            (  PremiumTaxLoadIsTieredInStateOfJurisdiction
-            || PremiumTaxLoadIsTieredInStateOfDomicile
+            (  PremiumTaxLoadIsTieredInPremiumTaxState_
+            || PremiumTaxLoadIsTieredInStateOfDomicile_
             )
         )
         {
