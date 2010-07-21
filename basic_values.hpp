@@ -302,7 +302,6 @@ class LMI_SO BasicValues
 
     // Invariant data.
     void                         SetPermanentInvariants();
-    void                         TestPremiumTaxLoadConsistency();
     void                         SetMaxSurvivalDur();
     double                       MaxSurvivalDur;
     mcenum_defn_life_ins         DefnLifeIns_;
@@ -375,6 +374,7 @@ class LMI_SO BasicValues
 
   private:
     void SetPremiumTaxParameters();
+    void TestPremiumTaxLoadConsistency() const;
 
     double GetModalPrem
         (int                   a_year

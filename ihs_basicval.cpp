@@ -822,8 +822,8 @@ void BasicValues::SetRoundingFunctors()
 
 void BasicValues::SetPremiumTaxParameters()
 {
-    PremiumTaxLoadIsTieredInStateOfDomicile_ = false;
-    PremiumTaxLoadIsTieredInPremiumTaxState_ = false;
+    PremiumTaxLoadIsTieredInStateOfDomicile_ = StratifiedCharges_->premium_tax_is_tiered(GetStateOfDomicile());
+    PremiumTaxLoadIsTieredInPremiumTaxState_ = StratifiedCharges_->premium_tax_is_tiered(GetStateOfJurisdiction());
 
     LMI_ASSERT(Database_         .get());
     LMI_ASSERT(StratifiedCharges_.get());
@@ -915,13 +915,10 @@ double lowest_premium_tax_load
 
     if(stratified.premium_tax_is_tiered(premium_tax_state))
         {
-        // TODO ?? TestPremiumTaxLoadConsistency() repeats this test.
-        // Probably all the consistency testing should be moved to
-        // the database class.
         if(0.0 != z)
             {
             fatal_error()
-                << "Premium-tax rate is tiered in state "
+                << "Premium-tax load is tiered in state "
                 << mc_str(premium_tax_state)
                 << ", but the product database specifies a scalar load of "
                 << z
@@ -936,16 +933,31 @@ double lowest_premium_tax_load
     return z;
 }
 
-//============================================================================
-void BasicValues::TestPremiumTaxLoadConsistency()
+/// Test consistency of premium-tax loads.
+///
+/// In particular, if the tiered premium-tax load isn't zero, then the
+/// corresponding non-tiered load must be zero.
+///
+/// Premium-tax pass-through for AK, DE, and SD insurers is not
+/// supported. If the state of domicile has a tiered rate, then most
+/// likely the premium-tax state does not, and retaliation would often
+/// override the tiering. When those two states are the same, then no
+/// retaliation occurs, and calculations would presumably be correct.
+/// When both states have tiered rates, but they are different states,
+/// then the calculation could be complicated; but DE tiering is not
+/// supported at all yet, and AK (SD) companies probably write few
+/// contracts in SD (AK), so these exotic cases haven't commanded any
+/// attention. If premium tax is not passed through as a load, then
+/// there's no problem at all.
+
+void BasicValues::TestPremiumTaxLoadConsistency() const
 {
-    if(StratifiedCharges_->premium_tax_is_tiered(GetStateOfJurisdiction()))
+    if(PremiumTaxLoadIsTieredInPremiumTaxState_)
         {
-        PremiumTaxLoadIsTieredInPremiumTaxState_ = true;
         if(0.0 != Database_->Query(DB_PremTaxLoad))
             {
             fatal_error()
-                << "Premium-tax rate is tiered in state of jurisdiction "
+                << "Premium-tax load is tiered in state of jurisdiction "
                 << mc_str(GetStateOfJurisdiction())
                 << ", but the product database specifies a scalar load of "
                 << Database_->Query(DB_PremTaxLoad)
@@ -956,13 +968,12 @@ void BasicValues::TestPremiumTaxLoadConsistency()
             }
         }
 
-    if(StratifiedCharges_->premium_tax_is_tiered(GetStateOfDomicile()))
+    if(PremiumTaxLoadIsTieredInStateOfDomicile_)
         {
-        PremiumTaxLoadIsTieredInStateOfDomicile_ = true;
         if(0.0 != DomiciliaryPremiumTaxLoad())
             {
             fatal_error()
-                << "Premium-tax rate is tiered in state of domicile "
+                << "Premium-tax load is tiered in state of domicile "
                 << mc_str(GetStateOfDomicile())
                 << ", but the product database specifies a scalar load of "
                 << DomiciliaryPremiumTaxLoad()
@@ -971,12 +982,10 @@ void BasicValues::TestPremiumTaxLoadConsistency()
                 << LMI_FLUSH
                 ;
             }
-        // TODO ?? Code not tested if state of domicile has tiered rate.
         fatal_error()
-            << "Premium-tax rate is tiered in state of domicile "
+            << "Premium-tax load is tiered in state of domicile "
             << mc_str(GetStateOfDomicile())
-            << ", but this program has not been tested for that case."
-            << " Please test it carefully before using it."
+            << ", but that case is not supported."
             << LMI_FLUSH
             ;
         }
