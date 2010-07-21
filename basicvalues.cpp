@@ -88,7 +88,7 @@ BasicValues::~BasicValues()
 //============================================================================
 void BasicValues::Init()
 {
-    PremiumTaxLoadIsTieredInStateOfJurisdiction = false;
+    PremiumTaxLoadIsTieredInPremiumTaxState_ = false;
 
     // Bind to input and database representing policy form.
 

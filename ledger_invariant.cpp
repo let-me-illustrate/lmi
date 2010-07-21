@@ -522,7 +522,7 @@ void LedgerInvariant::Init(BasicValues* b)
 
     GenAcctAllocation = 1.0 - premium_allocation_to_sepacct(b->yare_input_);
 
-    PremiumTaxLoadIsTiered  = b->IsPremiumTaxLoadTiered();
+    PremiumTaxLoadIsTiered  = b->PremiumTaxLoadIsTiered();
 
     NoLapseAlwaysActive     = b->Database_->Query(DB_NoLapseAlwaysActive);
     NoLapseMinDur           = b->Database_->Query(DB_NoLapseMinDur);
