@@ -254,9 +254,6 @@ void BasicValues::Init()
     // determined by a strategy.
     InitialTargetPremium = 0.0;
 
-    PremiumTaxLoadIsTieredInStateOfDomicile_ = false;
-    PremiumTaxLoadIsTieredInPremiumTaxState_ = false;
-
     SetPermanentInvariants();
 
     Init7702();
@@ -686,28 +683,6 @@ double BasicValues::GetTgtPrem
 //============================================================================
 void BasicValues::SetPermanentInvariants()
 {
-    // TODO ?? It would be better not to constrain so many things
-    // not to vary by duration by using Query(enumerator).
-    StateOfDomicile_    = mc_state_from_string(ProductData_->datum("InsCoDomicile"));
-
-    // TODO ?? Perhaps we want the premium-tax load instead of the
-    // premium-tax rate here; or maybe we want neither as a member
-    // variable, since the premium-tax load is in the loads class.
-    PremiumTaxRate_     = Database_->Query(DB_PremTaxRate);
-
-    {
-    yare_input YI(*Input_);
-    YI.State            = GetStateOfDomicile();
-    YI.CorporationState = GetStateOfDomicile();
-    product_database TempDatabase(YI);
-    DomiciliaryPremiumTaxLoad_ = 0.0;
-    if(!yare_input_.AmortizePremiumLoad)
-        {
-        DomiciliaryPremiumTaxLoad_ = TempDatabase.Query(DB_PremTaxLoad);
-        }
-    }
-    TestPremiumTaxLoadConsistency();
-
     MinRenlBaseFace     = Database_->Query(DB_MinRenlBaseSpecAmt   );
     MinRenlFace         = Database_->Query(DB_MinRenlSpecAmt       );
     NoLapseOpt1Only     = Database_->Query(DB_NoLapseDbo1Only      );
@@ -756,8 +731,6 @@ void BasicValues::SetPermanentInvariants()
     Database_->Query(AssetComp , DB_AssetComp);
     Database_->Query(CompTarget, DB_CompTarget);
     Database_->Query(CompExcess, DB_CompExcess);
-
-    FirstYearPremiumRetaliationLimit_ = Database_->Query(DB_PremTaxRetalLimit);
 
     MandEIsDynamic      = Database_->Query(DB_DynamicMandE         );
     SepAcctLoadIsDynamic= Database_->Query(DB_DynamicSepAcctLoad   );
@@ -849,6 +822,9 @@ void BasicValues::SetRoundingFunctors()
 
 void BasicValues::SetPremiumTaxParameters()
 {
+    PremiumTaxLoadIsTieredInStateOfDomicile_ = false;
+    PremiumTaxLoadIsTieredInPremiumTaxState_ = false;
+
     LMI_ASSERT(Database_         .get());
     LMI_ASSERT(StratifiedCharges_.get());
     LowestPremiumTaxLoad_ = lowest_premium_tax_load
@@ -857,6 +833,30 @@ void BasicValues::SetPremiumTaxParameters()
         ,StateOfJurisdiction_
         ,yare_input_.AmortizePremiumLoad
         );
+
+    // TODO ?? It would be better not to constrain so many things
+    // not to vary by duration by using Query(enumerator).
+    StateOfDomicile_    = mc_state_from_string(ProductData_->datum("InsCoDomicile"));
+
+    // TODO ?? Perhaps we want the premium-tax load instead of the
+    // premium-tax rate here; or maybe we want neither as a member
+    // variable, since the premium-tax load is in the loads class.
+    PremiumTaxRate_     = Database_->Query(DB_PremTaxRate);
+
+    {
+    yare_input YI(*Input_);
+    YI.State            = GetStateOfDomicile();
+    YI.CorporationState = GetStateOfDomicile();
+    product_database TempDatabase(YI);
+    DomiciliaryPremiumTaxLoad_ = 0.0;
+    if(!yare_input_.AmortizePremiumLoad)
+        {
+        DomiciliaryPremiumTaxLoad_ = TempDatabase.Query(DB_PremTaxLoad);
+        }
+    }
+    TestPremiumTaxLoadConsistency();
+
+    FirstYearPremiumRetaliationLimit_ = Database_->Query(DB_PremTaxRetalLimit);
 }
 
 /// Lowest premium-tax load, for 7702 and 7702A purposes.
