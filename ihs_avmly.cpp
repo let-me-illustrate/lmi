@@ -1488,22 +1488,24 @@ double AccountValue::GetPremLoad
     return round_net_premium()(sum_of_separate_loads);
 }
 
-//============================================================================
 /// Calculate premium-tax load.
 ///
 /// The premium-tax load and the actual premium tax payable by an
 /// insurer are distinct concepts. They may have equal values when
 /// premium tax is passed through as a load.
 ///
-/// Where tiering is considered, the actual premium tax is used as a
-/// load here, because in practice tiering is used only when the
-/// actual tax is passed through.
+/// DATABASE !! The '.strata' files ought to differentiate tiered
+/// premium-tax load paid by customer from rate paid by insurer.
+///
+/// An assertion ensures that either tiered or non-tiered premium-tax
+/// load is zero.
 
 double AccountValue::GetPremTaxLoad(double payment)
 {
     double tax_in_state_of_jurisdiction = YearsPremTaxLoadRate * payment;
     if(PremiumTaxLoadIsTieredInStateOfJurisdiction)
         {
+        LMI_ASSERT(0.0 == tax_in_state_of_jurisdiction);
         tax_in_state_of_jurisdiction = StratifiedCharges_->tiered_premium_tax
             (GetStateOfJurisdiction()
             ,payment
@@ -1518,6 +1520,7 @@ double AccountValue::GetPremTaxLoad(double payment)
         tax_in_state_of_domicile = DomiciliaryPremiumTaxLoad() * payment;
         if(PremiumTaxLoadIsTieredInStateOfDomicile)
             {
+            LMI_ASSERT(0.0 == tax_in_state_of_domicile);
             tax_in_state_of_domicile = StratifiedCharges_->tiered_premium_tax
                 (GetStateOfDomicile()
                 ,payment
@@ -2056,7 +2059,6 @@ void AccountValue::TxTestHoneymoonForExpiration()
         }
 }
 
-//============================================================================
 /// Subtract separate account load after monthly deductions: it is not
 /// regarded as part of monthly deductions per se.
 ///
