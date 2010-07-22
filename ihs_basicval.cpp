@@ -78,6 +78,7 @@ BasicValues::BasicValues(Input const& input)
     ,MaxLoanDed_         (mce_twelve_times_last)
     ,StateOfJurisdiction_(mce_s_CT)
     ,StateOfDomicile_    (mce_s_CT)
+    ,PremiumTaxState_    (mce_s_CT)
 {
     Init();
 }
@@ -107,6 +108,7 @@ BasicValues::BasicValues
     ,MaxLoanDed_         (mce_twelve_times_last)
     ,StateOfJurisdiction_(mce_s_CT)
     ,StateOfDomicile_    (mce_s_CT)
+    ,PremiumTaxState_    (mce_s_CT)
     ,InitialTargetPremium(a_TargetPremium)
 {
     Input* kludge_input = new Input;

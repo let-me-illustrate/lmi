@@ -108,7 +108,9 @@ class LMI_SO BasicValues
     mcenum_ledger_type    GetLedgerType()              const;
     mcenum_state          GetStateOfJurisdiction()     const;
     mcenum_state          GetStateOfDomicile()         const;
+    mcenum_state          GetPremiumTaxState()         const;
     double                PremiumTaxRate()             const;
+    double                PremiumTaxLoad()             const;
     double                LowestPremiumTaxLoad()       const;
     double                DomiciliaryPremiumTaxLoad()  const;
     bool                  PremiumTaxLoadIsTiered()     const;
@@ -427,7 +429,9 @@ class LMI_SO BasicValues
     bool                IsSubjectToIllustrationReg_;
     mcenum_state        StateOfJurisdiction_;
     mcenum_state        StateOfDomicile_;
+    mcenum_state        PremiumTaxState_;
     double              PremiumTaxRate_;
+    double              PremiumTaxLoad_;
     double              LowestPremiumTaxLoad_;
     double              DomiciliaryPremiumTaxLoad_;
     mutable double      InitialTargetPremium;
@@ -494,9 +498,19 @@ inline mcenum_state BasicValues::GetStateOfDomicile() const
     return StateOfDomicile_;
 }
 
+inline mcenum_state BasicValues::GetPremiumTaxState() const
+{
+    return PremiumTaxState_;
+}
+
 inline double BasicValues::PremiumTaxRate() const
 {
     return PremiumTaxRate_;
+}
+
+inline double BasicValues::PremiumTaxLoad() const
+{
+    return PremiumTaxLoad_;
 }
 
 inline double BasicValues::LowestPremiumTaxLoad() const
