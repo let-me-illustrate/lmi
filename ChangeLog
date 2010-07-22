@@ -26441,3 +26441,15 @@ Rename a function in anticipation of refactoring.
   ihs_basicval.cpp
 Refactor.
 
+20100721T2315Z <gchicares@sbcglobal.net> [686]
+
+  basic_values.hpp
+  ihs_basicval.cpp
+Refactor.
+
+20100722T2254Z <gchicares@sbcglobal.net> [685]
+
+  ihs_avmly.cpp
+Remove an obsolete defect marker. Code that attempted to avoid a MEC
+by increasing specified amount was removed long ago.
+

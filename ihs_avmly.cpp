@@ -569,11 +569,6 @@ void AccountValue::TxExch1035()
         // exceeding the guideline limit. This is what the customer would
         // normally want, because an internal exchange might be free of
         // premium tax.
-        //
-        // TODO ?? The specamt was already increased if necessary to avoid
-        // MEC assuming the full input 1035 amounts would be paid. Now, in
-        // retrospect, that increase may be more than necessary.
-        //
         progressively_limit(External1035Amount, Internal1035Amount, GrossPmts[Month]);
 
         OverridingExternal1035Amount = External1035Amount;
