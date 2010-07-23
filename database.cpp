@@ -28,9 +28,7 @@
 
 #include "database.hpp"
 
-#include "alert.hpp"
 #include "assert_lmi.hpp"
-#include "contains.hpp"
 #include "data_directory.hpp"
 #include "dbdict.hpp"
 #include "dbvalue.hpp"
@@ -73,24 +71,7 @@ product_database::product_database
 
 /// Construct from normal illustration input.
 ///
-/// For the nonce, this ctor determines "state of jurisdiction"
-/// dynamically, and other code uses that state for multiple purposes.
-/// That is a mistake--two states are required:
-///   - FilingApprovalState: the state that must approve a policy-form
-///     filing (whether affirmatively or by deemer) before a contract
-///     can be written; and
-///   - PremiumTaxState: the state to which premium tax must be paid,
-///     which is crucial for products that pass premium tax through as
-///     a load.
-/// Those two states can differ, e.g. on cases with more than five
-/// hundred lives with a common (employer) issue state: the employer's
-/// state approves the policy form, but premium tax follows employee
-/// residence. See:
-///   http://www.naic.org/documents/frs_summit_presentations_03.pdf
-///   http://www.naic.org/documents/committees_e_app_blanks_adopted_2007-42BWG_Modified.pdf
-///
-/// Soon, both states will be input fields, and these members will be
-/// expunged:
+/// Soon, these members will be expunged:
 ///   GetStateOfJurisdiction()
 ///   Gender
 ///   Class
@@ -98,8 +79,6 @@ product_database::product_database
 ///   IssueAge
 ///   UWBasis
 ///   State
-/// Database entity DB_PremTaxState will become obsolete, but must be
-/// retained (with a different name) for backward compatibility.
 
 product_database::product_database(yare_input const& input)
 {
@@ -108,7 +87,7 @@ product_database::product_database(yare_input const& input)
     Smoker      = input.Smoking;
     IssueAge    = input.IssueAge;
     UWBasis     = input.GroupUnderwritingType;
-    State       = mce_s_CT; // Dummy initialization.
+    State       = input.StateOfJurisdiction;
 
     if(is_antediluvian_fork())
         {
@@ -120,44 +99,6 @@ product_database::product_database(yare_input const& input)
         DBDictionary::instance().Init(AddDataDir(filename));
         }
     initialize();
-
-    // State of jurisdiction must not depend on itself.
-    if(varies_by_state(DB_PremTaxState))
-        {
-        fatal_error()
-            << "Database invalid: circular dependency."
-            << " State of jurisdiction depends on itself."
-            << LMI_FLUSH
-            ;
-        }
-
-    bool swap = contains(input.Comments, "idiosyncrasy_swap_old_tax_state");
-    switch(static_cast<int>(Query(DB_PremTaxState)))
-        {
-        case oe_ee_state:
-            {
-            State = swap ? input.CorporationState : input.State;
-            }
-            break;
-        case oe_er_state:
-            {
-            State = swap ? input.State : input.CorporationState;
-            }
-            break;
-        default:
-            {
-            fatal_error()
-                << "Cannot determine state of jurisdiction."
-                << LMI_FLUSH
-                ;
-            }
-            break;
-        }
-
-    // It may seem excessive to do this when only 'State' has changed,
-    // but it'll become unnecessary when we handle state of jurisdiction
-    // as an input field instead of trying to determine it here.
-    index_ = database_index(Gender, Class, Smoker, IssueAge, UWBasis, State);
 }
 
 product_database::~product_database()
