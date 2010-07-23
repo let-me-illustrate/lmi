@@ -753,17 +753,13 @@ void LedgerInvariant::Init(BasicValues* b)
     PartMortTableName       = "1983 GAM"; // TODO ?? Hardcoded.
     StatePostalAbbrev       = mc_str(b->GetStateOfJurisdiction());
 
+    // SOMEDAY !! No output form uses these as of 2010-07; for now at
+    // least, they're assumed to be scalars.
+    // TODO ?? Some states have tiered rates, which probably shouldn't
+    // be represented as single scalars. Should these variables simply
+    // be removed?
     StatePremTaxRate        = b->PremiumTaxRate();
-    // SOMEDAY !! No output form uses this as of 2010-07; for now at
-    // least, it's assumed to be a scalar unless it is tiered.
-    StatePremTaxLoad        = b->Loads_->premium_tax_load()[0];
-    LMI_ASSERT
-        (PremiumTaxLoadIsTiered || each_equal
-            (b->Loads_->premium_tax_load().begin()
-            ,b->Loads_->premium_tax_load().end()
-            ,b->Loads_->premium_tax_load().front()
-            )
-        );
+    StatePremTaxLoad        = b->PremiumTaxLoad();
     DacTaxPremLoadRate      = b->Loads_->dac_tax_load()[0];
     // SOMEDAY !! No output form uses this as of 2010-07; for now at
     // least, it's assumed to be scalar.
