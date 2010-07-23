@@ -26453,3 +26453,19 @@ Refactor.
 Remove an obsolete defect marker. Code that attempted to avoid a MEC
 by increasing specified amount was removed long ago.
 
+20100722T2255Z <gchicares@sbcglobal.net> [685]
+
+  basic_values.hpp
+  basicvalues.cpp
+  ihs_basicval.cpp
+Add members that will soon become useful for premium-tax calculations.
+
+20100723T1029Z <gchicares@sbcglobal.net> [685]
+
+  ihs_basicval.cpp
+  ledger_invariant.cpp
+  loads.cpp
+  loads_impl.hpp
+  loads_test.cpp
+Move premium-tax database lookup out of class Loads.
+

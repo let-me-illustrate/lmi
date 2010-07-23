@@ -821,6 +821,22 @@ void BasicValues::SetRoundingFunctors()
 /// Set all parameters that depend on premium-tax state.
 ///
 /// (For the nonce, state of jurisdiction is used instead.)
+///
+/// These database entities should be looked up by tax state:
+///  - DB_PremTaxLoad
+///  - DB_PremTaxRate
+///  - DB_PremTaxRetalLimit
+/// These probably (for inchoate amortization) shouldn't:
+///  - DB_PremTaxAmortPeriod
+///  - DB_PremTaxAmortIntRate
+/// This definitely shouldn't be:
+///  - DB_PremTaxState
+/// These aren't used anywhere yet:
+///  - DB_PremTaxFundCharge
+///  - DB_PremTaxTable
+///  - DB_PremTaxTierGroup
+///  - DB_PremTaxTierPeriod
+///  - DB_PremTaxTierNonDecr
 
 void BasicValues::SetPremiumTaxParameters()
 {
@@ -838,13 +854,11 @@ void BasicValues::SetPremiumTaxParameters()
 
     // TODO ?? It would be better not to constrain so many things
     // not to vary by duration by using Query(enumerator).
-    StateOfDomicile_    = mc_state_from_string(ProductData_->datum("InsCoDomicile"));
 
-    // TODO ?? Perhaps we want the premium-tax load instead of the
-    // premium-tax rate here; or maybe we want neither as a member
-    // variable, since the premium-tax load is in the loads class.
-    PremiumTaxRate_     = Database_->Query(DB_PremTaxRate);
+    PremiumTaxRate_ = Database_->Query(DB_PremTaxRate);
+    PremiumTaxLoad_ = Database_->Query(DB_PremTaxLoad);
 
+    StateOfDomicile_ = mc_state_from_string(ProductData_->datum("InsCoDomicile"));
     {
     yare_input YI(*Input_);
     YI.State            = GetStateOfDomicile();
@@ -856,6 +870,7 @@ void BasicValues::SetPremiumTaxParameters()
         DomiciliaryPremiumTaxLoad_ = TempDatabase.Query(DB_PremTaxLoad);
         }
     }
+
     TestPremiumTaxLoadConsistency();
 
     FirstYearPremiumRetaliationLimit_ = Database_->Query(DB_PremTaxRetalLimit);

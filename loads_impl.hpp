@@ -45,6 +45,9 @@ class product_database;
 ///
 /// length_: Number of elements in any vector of loads.
 ///
+/// premium_tax_load_: Rate of passed-through premium tax, assumed to
+/// be a scalar.
+///
 /// LowestPremiumTaxLoadRate_: The lowest rate of premium tax, which
 /// products that pass through premium tax need for 7702 calculations.
 /// The actual rate may vary if it is tiered.
@@ -82,6 +85,7 @@ struct load_details
     load_details
         (int                        length
         ,bool                       AmortizePremLoad
+        ,double                     premium_tax_load
         ,double                     LowestPremiumTaxLoadRate
         ,double                     premium_tax_rate
         ,double                     premium_tax_amortization_rate
@@ -97,6 +101,7 @@ struct load_details
         )
         :length_                          (length)
         ,AmortizePremLoad_                (AmortizePremLoad)
+        ,premium_tax_load_                (premium_tax_load)
         ,LowestPremiumTaxLoadRate_        (LowestPremiumTaxLoadRate)
         ,premium_tax_rate_                (premium_tax_rate)
         ,premium_tax_amortization_rate_   (premium_tax_amortization_rate)
@@ -113,6 +118,7 @@ struct load_details
 
     int                        length_;
     bool                       AmortizePremLoad_;
+    double                     premium_tax_load_;
     double                     LowestPremiumTaxLoadRate_;
     double                     premium_tax_rate_;
     double                     premium_tax_amortization_rate_;
