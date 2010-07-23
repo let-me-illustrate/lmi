@@ -63,7 +63,6 @@ class LMI_SO product_database
     explicit product_database(int length);
     ~product_database();
 
-    mcenum_state GetStateOfJurisdiction() const;
     int length() const;
 
     // Return scalar: use double because it's convertible to int, bool, etc.
@@ -77,19 +76,10 @@ class LMI_SO product_database
     bool varies_by_state(e_database_key) const;
 
   private:
-    void initialize();
-
     database_entity const& entity_from_key(e_database_key) const;
 
     database_index  index_;
     int             length_;
-
-    mcenum_gender   Gender;   // gender
-    mcenum_class    Class;    // underwriting class
-    mcenum_smoking  Smoker;   // smoker class
-    int             IssueAge; // issue age
-    mcenum_uw_basis UWBasis;  // underwriting basis
-    mcenum_state    State;    // state of jurisdiction
 };
 
 #endif // database_hpp

@@ -50,12 +50,6 @@ product_database::product_database
     ,mcenum_uw_basis    a_UWBasis
     ,mcenum_state       a_State
     )
-    :Gender   (a_Gender)
-    ,Class    (a_Class)
-    ,Smoker   (a_Smoker)
-    ,IssueAge (a_IssueAge)
-    ,UWBasis  (a_UWBasis)
-    ,State    (a_State)
 {
     if(is_antediluvian_fork())
         {
@@ -66,29 +60,22 @@ product_database::product_database
         std::string filename(product_data(a_ProductName).datum("DatabaseFilename"));
         DBDictionary::instance().Init(AddDataDir(filename));
         }
-    initialize();
+    index_ = database_index
+        (a_Gender
+        ,a_Class
+        ,a_Smoker
+        ,a_IssueAge
+        ,a_UWBasis
+        ,a_State
+        );
+    length_ = static_cast<int>(Query(DB_MaturityAge)) - a_IssueAge;
+    LMI_ASSERT(0 < length_ && length_ <= methuselah);
 }
 
 /// Construct from normal illustration input.
-///
-/// Soon, these members will be expunged:
-///   GetStateOfJurisdiction()
-///   Gender
-///   Class
-///   Smoker
-///   IssueAge
-///   UWBasis
-///   State
 
 product_database::product_database(yare_input const& input)
 {
-    Gender      = input.Gender;
-    Class       = input.UnderwritingClass;
-    Smoker      = input.Smoking;
-    IssueAge    = input.IssueAge;
-    UWBasis     = input.GroupUnderwritingType;
-    State       = input.StateOfJurisdiction;
-
     if(is_antediluvian_fork())
         {
         DBDictionary::instance().InitAntediluvian();
@@ -98,16 +85,20 @@ product_database::product_database(yare_input const& input)
         std::string filename(product_data(input.ProductName).datum("DatabaseFilename"));
         DBDictionary::instance().Init(AddDataDir(filename));
         }
-    initialize();
+    index_ = database_index
+        (input.Gender
+        ,input.UnderwritingClass
+        ,input.Smoking
+        ,input.IssueAge
+        ,input.GroupUnderwritingType
+        ,input.StateOfJurisdiction
+        );
+    length_ = static_cast<int>(Query(DB_MaturityAge)) - input.IssueAge;
+    LMI_ASSERT(0 < length_ && length_ <= methuselah);
 }
 
 product_database::~product_database()
 {
-}
-
-mcenum_state product_database::GetStateOfJurisdiction() const
-{
-    return State;
 }
 
 int product_database::length() const
@@ -161,13 +152,6 @@ bool product_database::are_equivalent(e_database_key k0, e_database_key k1) cons
 bool product_database::varies_by_state(e_database_key k) const
 {
     return 1 != entity_from_key(k).axis_lengths().at(e_axis_state);
-}
-
-void product_database::initialize()
-{
-    index_ = database_index(Gender, Class, Smoker, IssueAge, UWBasis, State);
-    length_ = static_cast<int>(Query(DB_MaturityAge)) - IssueAge;
-    LMI_ASSERT(0 < length_ && length_ <= methuselah);
 }
 
 database_entity const& product_database::entity_from_key(e_database_key k) const
