@@ -175,7 +175,7 @@ void BasicValues::Init()
 
     Database_.reset(new product_database(yare_input_));
 
-    StateOfJurisdiction_ = Database_->GetStateOfJurisdiction();
+    StateOfJurisdiction_ = yare_input_.StateOfJurisdiction;
 
     if
         (   !Database_->Query(DB_StateApproved)
@@ -187,7 +187,7 @@ void BasicValues::Init()
             << "Product "
             << yare_input_.ProductName
             << " not approved in state "
-            << mc_str(GetStateOfJurisdiction())
+            << mc_str(StateOfJurisdiction_)
             << "."
             << LMI_FLUSH
             ;
@@ -275,7 +275,7 @@ void BasicValues::GPTServerInit()
     HOPEFULLY(RetAge <= 100);
     HOPEFULLY(yare_input_.RetireesCanEnroll || IssueAge <= RetAge);
 
-    StateOfJurisdiction_ = Database_->GetStateOfJurisdiction();
+    StateOfJurisdiction_ = yare_input_.StateOfJurisdiction;
 
     // The database class constrains maturity age to be scalar.
     EndtAge = static_cast<int>(Database_->Query(DB_MaturityAge));
