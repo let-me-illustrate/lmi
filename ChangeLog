@@ -26469,3 +26469,10 @@ Add members that will soon become useful for premium-tax calculations.
   loads_test.cpp
 Move premium-tax database lookup out of class Loads.
 
+20100723T1808Z <gchicares@sbcglobal.net> [685]
+
+  database.cpp
+  input_xml_io.cpp
+Move old state determination out of class product_database, inducing a
+regression in system testing that must be analyzed.
+

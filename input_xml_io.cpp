@@ -32,9 +32,11 @@
 #include "alert.hpp"
 #include "calendar_date.hpp"
 #include "contains.hpp"
+#include "database.hpp"
 #include "global_settings.hpp"
 #include "map_lookup.hpp"
 #include "miscellany.hpp" // lmi_array_size()
+#include "oecumenic_enumerations.hpp"
 
 #include <algorithm>      // std::min()
 #include <stdexcept>
@@ -90,6 +92,13 @@ std::string const& Input::xml_root_name() const
     return s;
 }
 
+/// See this function's general documentation in the base class.
+///
+/// No xml file written by lmi ever contained 'FilingApprovalState'.
+/// It appears only in certain admin-system extracts, as an alias for
+/// 'StateOfJurisdiction'. That alias was chosen to favor unambiguity
+/// over clarity.
+
 bool Input::is_detritus(std::string const& s) const
 {
     static std::string const a[] =
@@ -101,6 +110,7 @@ bool Input::is_detritus(std::string const& s) const
         ,"CorporationPremiumTableNumber" // Never implemented.
         ,"CorporationTaxpayerId"         // Would violate privacy.
         ,"CurrentCoiGrading"             // Withdrawn.
+        ,"FilingApprovalState"           // Alias for 'StateOfJurisdiction'.
         ,"FirstName"                     // Single name instead.
         ,"InforceDcvDeathBenefit"        // Misbegotten.
         ,"InforceExperienceReserve"      // Renamed before implementation.
@@ -368,10 +378,79 @@ void Input::redintegrate_ex_post
             );
         }
 
+    // One state governs everything except premium tax, which may be
+    // paid to a different state, e.g. on cases with more than five
+    // hundred lives with a common (employer) issue state; see:
+    //   http://www.naic.org/documents/frs_summit_presentations_03.pdf
+    //   http://www.naic.org/documents/committees_e_app_blanks_adopted_2007-42BWG_Modified.pdf
+    // Prior to version 6, a single state was used for all purposes,
+    // and it was determined as either employee or employer state,
+    // depending on the value of DB_PremTaxState. The determination is
+    // complex (what if a case was issued with 498 lives and then
+    // grew to 502?), and starting with version 6 both states are
+    // input fields.
+    //
+    // 'FilingApprovalState' and 'PremiumTaxState' were unknown before
+    // version 6, and would not ordinarily occur in older versions.
+    // However, certain admin-system extracts that are always marked
+    // as version 5 have been modified to add these two fields.
     if(file_version < 6)
         {
-        LMI_ASSERT(contains(residuary_names, "PremiumTaxState"));
-        PremiumTaxState = StateOfJurisdiction;
+        bool const b0 = contains(detritus_map, "FilingApprovalState");
+        bool const b1 = !contains(residuary_names, "PremiumTaxState");
+        if(b0 || b1)
+            {
+            LMI_ASSERT(b0 && b1 && 5 == file_version);
+            StateOfJurisdiction = map_lookup(detritus_map, "FilingApprovalState");
+            }
+        else
+            {
+            product_database db
+                (ProductName          .value()
+                ,Gender               .value()
+                ,UnderwritingClass    .value()
+                ,Smoking              .value()
+                ,IssueAge             .value()
+                ,GroupUnderwritingType.value()
+                ,mce_s_CT // Dummy initialization.
+                );
+
+            // Deemed state must not depend on itself.
+            if(db.varies_by_state(DB_PremTaxState))
+                {
+                fatal_error()
+                    << "Database invalid: circular dependency."
+                    << " State of jurisdiction depends on itself."
+                    << LMI_FLUSH
+                    ;
+                }
+
+            bool swap = contains(Comments.value(), "idiosyncrasy_swap_old_tax_state");
+            mce_state state;
+            switch(static_cast<int>(db.Query(DB_PremTaxState)))
+                {
+                case oe_ee_state:
+                    {
+                    state = swap ? CorporationState : State;
+                    }
+                    break;
+                case oe_er_state:
+                    {
+                    state = swap ? State : CorporationState;
+                    }
+                    break;
+                default:
+                    {
+                    fatal_error()
+                        << "Cannot determine state of jurisdiction."
+                        << LMI_FLUSH
+                        ;
+                    }
+                    break;
+                }
+            StateOfJurisdiction = state;
+            PremiumTaxState     = state;
+            }
         }
 }
 
