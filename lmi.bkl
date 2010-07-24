@@ -88,7 +88,6 @@
         <precomp-headers-gen>global_settings.cpp</precomp-headers-gen>
 
         <precomp-headers-exclude>
-            expm1.c
             md5.cpp
         </precomp-headers-exclude>
     </lib>
