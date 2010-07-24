@@ -26496,3 +26496,19 @@ Refactor, simplifying class product_database.
   mec_server.cpp
 Use input state of jurisdiction and premium-tax state appropriately.
 
+20100724T1214Z <gchicares@sbcglobal.net> [685]
+
+  yare_input.cpp
+  yare_input.hpp
+Hide disused state fields.
+
+20100724T1215Z <gchicares@sbcglobal.net> [685]
+
+  ihs_basicval.cpp
+Set premium-tax state for GPT server.
+
+20100724T1216Z <gchicares@sbcglobal.net> [685]
+
+  ieee754_test.cpp
+Prefer cout to cerr for normal output.
+
