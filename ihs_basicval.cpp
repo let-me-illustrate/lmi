@@ -128,8 +128,7 @@ BasicValues::BasicValues
         }
     (*kludge_input)["GroupUnderwritingType"     ] = value_cast<std::string>(a_UnderwritingBasis);
     (*kludge_input)["ProductName"               ] = a_ProductName;
-    (*kludge_input)["State"                     ] = mc_str(a_StateOfJurisdiction);
-    (*kludge_input)["CorporationState"          ] = mc_str(a_StateOfJurisdiction);
+    (*kludge_input)["PremiumTaxState"           ] = mc_str(a_StateOfJurisdiction);
     (*kludge_input)["DefinitionOfLifeInsurance" ] = "GPT";
     (*kludge_input)["DefinitionOfMaterialChange"] = "GPT adjustment event";
 
