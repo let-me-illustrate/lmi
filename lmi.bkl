@@ -135,5 +135,6 @@
         <sources>$(PRODUCT_FILES_SOURCES)</sources>
         <library>lmi</library>
         <sys-lib>xmlwrapp$(WX3RDPARTYLIBPOSTFIX)</sys-lib>
+        <sys-lib>libxml2</sys-lib>
     </exe>
 </makefile>
