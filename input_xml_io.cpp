@@ -390,6 +390,9 @@ void Input::redintegrate_ex_post
     // grew to 502?), and starting with version 6 both states are
     // input fields.
     //
+    // 'StateOfJurisdiction' has always been in lmi, but was never
+    // meaningfully used prior to version 6.
+    //
     // 'FilingApprovalState' and 'PremiumTaxState' were unknown before
     // version 6, and would not ordinarily occur in older versions.
     // However, certain admin-system extracts that are always marked

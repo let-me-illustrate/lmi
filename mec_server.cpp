@@ -100,6 +100,7 @@ mec_state test_one_days_7702A_transactions
     int                         InforceContractMonth         = exact_cast<tnr_month               >(input["InforceContractMonth"        ])->value();
     double                      InforceLeastDeathBenefit     = exact_cast<tnr_nonnegative_double  >(input["InforceLeastDeathBenefit"    ])->value();
     mcenum_state                StateOfJurisdiction          = exact_cast<mce_state               >(input["StateOfJurisdiction"         ])->value();
+    mcenum_state                PremiumTaxState              = exact_cast<mce_state               >(input["PremiumTaxState"             ])->value();
 //  std::string                 FlatExtra                    = exact_cast<datum_sequence          >(input["FlatExtra"                   ])->value();
 //  std::string                 PaymentHistory               = exact_cast<datum_sequence          >(input["PaymentHistory"              ])->value();
 //  std::string                 BenefitHistory               = exact_cast<datum_sequence          >(input["BenefitHistory"              ])->value();
@@ -301,10 +302,19 @@ mec_state test_one_days_7702A_transactions
             ;
         }
 
+    product_database db_premtax
+        (ProductName
+        ,Gender
+        ,UnderwritingClass
+        ,Smoking
+        ,input.issue_age()
+        ,GroupUnderwritingType
+        ,PremiumTaxState
+        );
     double const premium_tax_load = lowest_premium_tax_load
-        (database
+        (db_premtax
         ,stratified
-        ,StateOfJurisdiction
+        ,PremiumTaxState
         ,false
         );
 
