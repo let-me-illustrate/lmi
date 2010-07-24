@@ -931,7 +931,7 @@ void AccountValue::InitializeYear()
     YearsTotalPolicyFee         = 0.0;
     YearsTotalPremTaxLoad       = 0.0;
     YearsTotalPremTaxLoadInStateOfDomicile = 0.0;
-    YearsTotalPremTaxLoadInStateOfJurisdiction = 0.0;
+    YearsTotalPremTaxLoadInPremiumTaxState = 0.0;
     YearsTotalDacTaxLoad        = 0.0;
     YearsTotalSpecAmtLoad       = 0.0;
     YearsTotalSepAcctLoad       = 0.0;

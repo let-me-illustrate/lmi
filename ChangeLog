@@ -26476,3 +26476,23 @@ Move premium-tax database lookup out of class Loads.
 Move old state determination out of class product_database, inducing a
 regression in system testing that must be analyzed.
 
+20100723T2339Z <gchicares@sbcglobal.net> [685]
+
+  database.cpp
+  database.hpp
+  ihs_basicval.cpp
+  input_test.cpp
+Refactor, simplifying class product_database.
+
+20100724T0340Z <gchicares@sbcglobal.net> [685]
+
+  account_value.hpp
+  basicvalues.cpp
+  custom_io_0.cpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+  input_xml_io.cpp
+  mec_server.cpp
+Use input state of jurisdiction and premium-tax state appropriately.
+

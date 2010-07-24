@@ -97,6 +97,8 @@ void BasicValues::Init()
     RetAge   = yare_input_.RetirementAge;
     LMI_ASSERT(IssueAge <= RetAge);
 
+    StateOfJurisdiction_ = yare_input_.StateOfJurisdiction;
+    PremiumTaxState_     = yare_input_.PremiumTaxState    ;
     Database_.reset
         (new product_database
             ("empty for now" // filename
@@ -105,7 +107,7 @@ void BasicValues::Init()
             ,yare_input_.Smoking
             ,yare_input_.IssueAge
             ,yare_input_.GroupUnderwritingType
-            ,yare_input_.State
+            ,yare_input_.StateOfJurisdiction
             )
         );
 
@@ -132,7 +134,12 @@ void BasicValues::Init()
     Outlay_        .reset(new modal_outlay   (yare_input_));
     Loads_         .reset(new Loads(*Database_, IsSubjectToIllustrationReg()));
 
-    PremiumTaxRate_ = Database_->Query(DB_PremTaxRate);
+    {
+    yare_input yi_premtax(*Input_);
+    yi_premtax.StateOfJurisdiction = GetPremiumTaxState();
+    product_database db_premtax(yi_premtax);
+    PremiumTaxRate_ = db_premtax.Query(DB_PremTaxRate);
+    }
 
     MinSpecAmt = Database_->Query(DB_MinSpecAmt);
     MinWD      = Database_->Query(DB_MinWd     );

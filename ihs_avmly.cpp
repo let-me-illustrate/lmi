@@ -1497,17 +1497,17 @@ double AccountValue::GetPremLoad
 
 double AccountValue::GetPremTaxLoad(double payment)
 {
-    double tax_in_state_of_jurisdiction = YearsPremTaxLoadRate * payment;
+    double tax_in_premium_tax_state = YearsPremTaxLoadRate * payment;
     if(PremiumTaxLoadIsTieredInPremiumTaxState_)
         {
-        LMI_ASSERT(0.0 == tax_in_state_of_jurisdiction);
-        tax_in_state_of_jurisdiction = StratifiedCharges_->tiered_premium_tax
-            (GetStateOfJurisdiction()
+        LMI_ASSERT(0.0 == tax_in_premium_tax_state);
+        tax_in_premium_tax_state = StratifiedCharges_->tiered_premium_tax
+            (GetPremiumTaxState()
             ,payment
             ,PolicyYearRunningTotalPremiumSubjectToPremiumTax
             );
         }
-    YearsTotalPremTaxLoadInStateOfJurisdiction += tax_in_state_of_jurisdiction;
+    YearsTotalPremTaxLoadInPremiumTaxState += tax_in_premium_tax_state;
 
     double tax_in_state_of_domicile = 0.0;
     if(!FirstYearPremiumExceedsRetaliationLimit)
@@ -1544,18 +1544,17 @@ double AccountValue::GetPremTaxLoad(double payment)
         )
         {
         double ytd_premium_tax_reflecting_retaliation = std::max
-            (YearsTotalPremTaxLoadInStateOfJurisdiction
+            (YearsTotalPremTaxLoadInPremiumTaxState
             ,YearsTotalPremTaxLoadInStateOfDomicile
             );
         return std::max
             (0.0
-            , ytd_premium_tax_reflecting_retaliation
-            - YearsTotalPremTaxLoad
+            ,ytd_premium_tax_reflecting_retaliation - YearsTotalPremTaxLoad
             );
         }
     else
         {
-        return std::max(tax_in_state_of_jurisdiction, tax_in_state_of_domicile);
+        return std::max(tax_in_premium_tax_state, tax_in_state_of_domicile);
         }
 }
 
