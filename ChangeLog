@@ -26512,3 +26512,9 @@ Set premium-tax state for GPT server.
   ieee754_test.cpp
 Prefer cout to cerr for normal output.
 
+20100724T1259Z <gchicares@sbcglobal.net> [685]
+
+  alert_test.cpp
+  handle_exceptions_test.cpp
+Mark expected stderr output.
+
