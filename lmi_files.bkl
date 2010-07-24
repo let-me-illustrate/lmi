@@ -19,6 +19,7 @@
     custom_io_0.cpp
     data_directory.cpp
     dbnames.cpp
+    dbvalue.cpp
     death_benefits.cpp
     emit_ledger.cpp
     facets.cpp
@@ -58,7 +59,6 @@
     rounding_rules.cpp
     sigfpe.cpp
     single_cell_document.cpp
-    streamable.cpp
     surrchg_rates.cpp
     system_command.cpp
     timer.cpp
@@ -70,27 +70,24 @@
 <set var="LIBLMI_COMMON_SOURCES" hint="files">
     authenticity.cpp
     ce_product_name.cpp
+    commutation_functions.cpp
+    database.cpp
     datum_base.cpp
     datum_boolean.cpp
+    datum_sequence.cpp
     datum_string.cpp
+    dbdict.cpp
+    fund_data.cpp
     ihs_acctval.cpp
     ihs_avdebug.cpp
     ihs_avmly.cpp
     ihs_avsolve.cpp
     ihs_avstrtgy.cpp
     ihs_basicval.cpp
-    ihs_commfns.cpp
-    ihs_database.cpp
-    ihs_dbdict.cpp
-    ihs_dbvalue.cpp
-    ihs_fpios.cpp
-    ihs_funddata.cpp
     ihs_irc7702.cpp
     ihs_irc7702a.cpp
     ihs_mortal.cpp
-    ihs_pios.cpp
-    ihs_proddata.cpp
-    ihs_rnddata.cpp
+    lmi.cpp
     mc_enum.cpp
     mc_enum_types.cpp
     mc_enum_types_aux.cpp
@@ -101,6 +98,7 @@
     mec_xml_document.cpp
     mortality_rates_fetch.cpp
     preferences_model.cpp
+    product_data.cpp
     stratified_algorithms.cpp
     stratified_charges.cpp
     tn_range_types.cpp
@@ -128,6 +126,7 @@
     icon_monger.cpp
     illustration_document.cpp
     illustration_view.cpp
+    input_sequence_entry.cpp
     main_common.cpp
     main_wx.cpp
     mec_document.cpp
