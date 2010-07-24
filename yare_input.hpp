@@ -120,13 +120,13 @@ class yare_input
 //    std::string                       InsuredName                     ;
 //    std::string                       Address                         ;
 //    std::string                       City                            ;
-    mcenum_state                      State                           ;
+//    mcenum_state                      State                           ;
 //    std::string                       ZipCode                         ;
 //    std::string                       EmployeeClass                   ;
 //    std::string                       CorporationName                 ;
 //    std::string                       CorporationAddress              ;
 //    std::string                       CorporationCity                 ;
-    mcenum_state                      CorporationState                ;
+//    mcenum_state                      CorporationState                ;
 //    std::string                       CorporationZipCode              ;
 //    std::string                       AgentName                       ;
 //    std::string                       AgentAddress                    ;
