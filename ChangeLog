@@ -26518,3 +26518,21 @@ Prefer cout to cerr for normal output.
   handle_exceptions_test.cpp
 Mark expected stderr output.
 
+20100725T1858Z <gchicares@sbcglobal.net> [685]
+
+  oecumenic_enumerations.hpp
+Improve documentation.
+
+20100725T1859Z <gchicares@sbcglobal.net> [685]
+
+  dbindex.hpp
+  dbvalue.hpp
+Move an enumeration.
+
+20100725T1900Z <gchicares@sbcglobal.net> [685]
+
+  database.cpp
+  database.hpp
+  input_test.cpp
+Refactor.
+
