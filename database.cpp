@@ -42,49 +42,30 @@
 /// Construct from essential input (product and axes).
 
 product_database::product_database
-    (std::string const& a_ProductName
-    ,mcenum_gender      a_Gender
-    ,mcenum_class       a_Class
-    ,mcenum_smoking     a_Smoker
-    ,int                a_IssueAge
-    ,mcenum_uw_basis    a_UWBasis
-    ,mcenum_state       a_State
+    (std::string const& ProductName
+    ,mcenum_gender      Gender
+    ,mcenum_class       UnderwritingClass
+    ,mcenum_smoking     Smoking
+    ,int                IssueAge
+    ,mcenum_uw_basis    GroupUnderwritingType
+    ,mcenum_state       StateOfJurisdiction
     )
 {
-    if(is_antediluvian_fork())
-        {
-        DBDictionary::instance().InitAntediluvian();
-        }
-    else
-        {
-        std::string filename(product_data(a_ProductName).datum("DatabaseFilename"));
-        DBDictionary::instance().Init(AddDataDir(filename));
-        }
     index_ = database_index
-        (a_Gender
-        ,a_Class
-        ,a_Smoker
-        ,a_IssueAge
-        ,a_UWBasis
-        ,a_State
+        (Gender
+        ,UnderwritingClass
+        ,Smoking
+        ,IssueAge
+        ,GroupUnderwritingType
+        ,StateOfJurisdiction
         );
-    length_ = static_cast<int>(Query(DB_MaturityAge)) - a_IssueAge;
-    LMI_ASSERT(0 < length_ && length_ <= methuselah);
+    initialize(ProductName);
 }
 
 /// Construct from normal illustration input.
 
 product_database::product_database(yare_input const& input)
 {
-    if(is_antediluvian_fork())
-        {
-        DBDictionary::instance().InitAntediluvian();
-        }
-    else
-        {
-        std::string filename(product_data(input.ProductName).datum("DatabaseFilename"));
-        DBDictionary::instance().Init(AddDataDir(filename));
-        }
     index_ = database_index
         (input.Gender
         ,input.UnderwritingClass
@@ -93,8 +74,7 @@ product_database::product_database(yare_input const& input)
         ,input.GroupUnderwritingType
         ,input.StateOfJurisdiction
         );
-    length_ = static_cast<int>(Query(DB_MaturityAge)) - input.IssueAge;
-    LMI_ASSERT(0 < length_ && length_ <= methuselah);
+    initialize(input.ProductName);
 }
 
 product_database::~product_database()
@@ -152,6 +132,22 @@ bool product_database::are_equivalent(e_database_key k0, e_database_key k1) cons
 bool product_database::varies_by_state(e_database_key k) const
 {
     return 1 != entity_from_key(k).axis_lengths().at(e_axis_state);
+}
+
+void product_database::initialize(std::string const& product_name)
+{
+    if(is_antediluvian_fork())
+        {
+        DBDictionary::instance().InitAntediluvian();
+        }
+    else
+        {
+        std::string filename(product_data(product_name).datum("DatabaseFilename"));
+        DBDictionary::instance().Init(AddDataDir(filename));
+        }
+    int const maturity_age = static_cast<int>(Query(DB_MaturityAge));
+    length_ = maturity_age - index_.index_vector()[e_axis_issue_age];
+    LMI_ASSERT(0 < length_ && length_ <= methuselah);
 }
 
 database_entity const& product_database::entity_from_key(e_database_key k) const
