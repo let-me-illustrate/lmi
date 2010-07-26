@@ -26536,3 +26536,18 @@ Move an enumeration.
   input_test.cpp
 Refactor.
 
+20100726T2147Z <gchicares@sbcglobal.net> [685]
+
+  database.cpp
+Refactor.
+
+20100726T2148Z <gchicares@sbcglobal.net> [681]
+
+  input.hpp
+Resolve several marked defects. The present UDTs need not be further
+specialized. For trammeled numeric range types in particular, using
+such functions as
+  tn_range::minimum_and_maximum()
+  tn_range_base::universal_minimum()
+in Input::DoHarmonize() fills all needs for run-time customization.
+

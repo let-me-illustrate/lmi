@@ -318,7 +318,7 @@ class LMI_SO Input
     tnr_nonnegative_double   InsuredPremiumTableFactor       ;
     mce_premium_table        CorporationPremiumTableNumber   ;
     tnr_nonnegative_double   CorporationPremiumTableFactor   ;
-    tnr_date                 EffectiveDate                   ; // TODO ?? Should date types be *essentially* different?
+    tnr_date                 EffectiveDate                   ;
     mce_defn_life_ins        DefinitionOfLifeInsurance       ;
     mce_defn_material_change DefinitionOfMaterialChange      ;
     mce_mec_avoid_method     AvoidMecMethod                  ;
@@ -352,10 +352,10 @@ class LMI_SO Input
     tnr_nonnegative_double   MaximumNaar                     ;
     tnr_corridor_factor      UseOffshoreCorridorFactor       ; // INPUT !! Obsolete, and apparently wrong type.
     mce_yes_or_no            ChildRider                      ;
-    tnr_nonnegative_double   ChildRiderAmount                ; // TODO ?? Specialize?
+    tnr_nonnegative_double   ChildRiderAmount                ;
     mce_yes_or_no            SpouseRider                     ;
-    tnr_nonnegative_double   SpouseRiderAmount               ; // TODO ?? Specialize?
-    tnr_issue_age            SpouseIssueAge                  ; // TODO ?? Specialize?
+    tnr_nonnegative_double   SpouseRiderAmount               ;
+    tnr_issue_age            SpouseIssueAge                  ;
     datum_string             Franchise                       ;
     datum_string             PolicyNumber                    ;
     tnr_date                 InforceAsOfDate                 ;
