@@ -26551,3 +26551,18 @@ such functions as
   tn_range_base::universal_minimum()
 in Input::DoHarmonize() fills all needs for run-time customization.
 
+20100726T2153Z <gchicares@sbcglobal.net> [679]
+
+  input.hpp
+Resolve several marked defects.
+
+20100726T2159Z <gchicares@sbcglobal.net> [678]
+
+  input.hpp
+Improve documentation.
+
+20100726T2319Z <gchicares@sbcglobal.net> [671]
+
+  input.cpp
+Resolve several marked defects. Yet-unused members aren't harmful.
+
