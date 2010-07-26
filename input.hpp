@@ -407,7 +407,7 @@ class LMI_SO Input
     datum_sequence           HoneymoonValueSpread            ;
     datum_sequence           PremiumHistory                  ;
     datum_sequence           SpecamtHistory                  ;
-    datum_sequence           FundAllocations                 ; // TODO ?? Needs work.
+    datum_sequence           FundAllocations                 ; // INPUT !! http://savannah.nongnu.org/support/?104481
     datum_sequence           CashValueEnhancementRate        ;
     mce_yes_or_no            CreateSupplementalReport        ;
     mce_report_column        SupplementalReportColumn00      ;
