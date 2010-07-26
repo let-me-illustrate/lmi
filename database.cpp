@@ -50,30 +50,30 @@ product_database::product_database
     ,mcenum_uw_basis    GroupUnderwritingType
     ,mcenum_state       StateOfJurisdiction
     )
-{
-    index_ = database_index
+    :index_
         (Gender
         ,UnderwritingClass
         ,Smoking
         ,IssueAge
         ,GroupUnderwritingType
         ,StateOfJurisdiction
-        );
+        )
+{
     initialize(ProductName);
 }
 
 /// Construct from normal illustration input.
 
 product_database::product_database(yare_input const& input)
-{
-    index_ = database_index
+    :index_
         (input.Gender
         ,input.UnderwritingClass
         ,input.Smoking
         ,input.IssueAge
         ,input.GroupUnderwritingType
         ,input.StateOfJurisdiction
-        );
+        )
+{
     initialize(input.ProductName);
 }
 
