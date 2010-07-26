@@ -156,7 +156,10 @@ class LMI_SO Input
   private:
     void AscribeMembers();
 
-    // TODO ?? Dubious stuff to support scalar alternative controls.
+    // INPUT !! Obsolete support for scalar alternative controls,
+    // replaced by input sequences. Specimens of the obsolete code
+    // are retained only as a source of ideas for input-sequence
+    // validation.
     void WithdrawalChanged();
     void EnableTransferToSequenceControls(bool enable);
     void TransferWithdrawalSimpleControlsToInputSequence();
@@ -429,7 +432,7 @@ class LMI_SO Input
     mce_dbopt                DeathBenefitOptionFromIssue     ;
     tnr_nonnegative_double   SpecifiedAmountFromRetirement   ;
     tnr_nonnegative_double   SpecifiedAmountFromIssue        ;
-//    mce_                     SpecifiedAmountStrategyFromRetirement; // TODO ?? Rethink this.
+//    mce_                     SpecifiedAmountStrategyFromRetirement; // INPUT !! Obsolete scalar alternative controls.
     mce_sa_strategy          SpecifiedAmountStrategyFromIssue;
     mce_mode                 IndividualPaymentMode           ;
     mce_to_point             IndividualPaymentToAlternative  ;
