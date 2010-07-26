@@ -246,7 +246,11 @@ void Input::DoHarmonize()
 
 #if 0
 // TODO ?? Temporarily suppress this while exploring automatic-
-// enforcement options in the skeleton trunk.
+// enforcement options in the skeleton trunk. Certain limits are
+// interdependent:
+//    issue_age      [0, omega - 1] (taken as an independent variable)
+//    attained_age   [x, omega - 1]
+//    duration       [0, omega-x-1]
     IssueAge.minimum_and_maximum
         (static_cast<int>(database_->Query(DB_MinIssAge))
         ,static_cast<int>(database_->Query(DB_MaxIssAge))

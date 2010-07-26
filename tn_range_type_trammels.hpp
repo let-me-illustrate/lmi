@@ -80,13 +80,6 @@ class nonnegative_trammel
     T nominal_maximum() const {return std::numeric_limits<T>::max();}
 };
 
-// TODO ?? These three
-//    issue_age      [0, omega - 1]
-//    attained_age   [x, omega - 1]
-//    duration       [0, omega-x-1]
-// are identical for now; they're distinguished so that the
-// limit semantics above can be added later.
-
 template<typename T>
 class issue_age_trammel
     :public trammel_base<T>
