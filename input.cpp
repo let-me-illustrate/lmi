@@ -336,7 +336,6 @@ std::string Input::differing_fields(Input const& z) const
     return oss.str();
 }
 
-// TODO ?? Decide what to do about commented-out members.
 void Input::AscribeMembers()
 {
     ascribe("IssueAge"                              , &Input::IssueAge                              );
@@ -354,7 +353,7 @@ void Input::AscribeMembers()
     ascribe("DateOfBirth"                           , &Input::DateOfBirth                           );
     ascribe("DateOfRetirement"                      , &Input::DateOfRetirement                      );
     ascribe("SubstandardTable"                      , &Input::SubstandardTable                      );
-    ascribe("ProductName"                           , &Input::ProductName                           ); // TODO ?? Required.
+    ascribe("ProductName"                           , &Input::ProductName                           );
     ascribe("Dumpin"                                , &Input::Dumpin                                );
     ascribe("External1035ExchangeAmount"            , &Input::External1035ExchangeAmount            );
     ascribe("External1035ExchangeBasis"             , &Input::External1035ExchangeBasis             );
@@ -392,7 +391,7 @@ void Input::AscribeMembers()
     ascribe("NumberOfIdenticalLives"                , &Input::NumberOfIdenticalLives                );
     ascribe("UseExperienceRating"                   , &Input::UseExperienceRating                   );
     ascribe("UsePartialMortality"                   , &Input::UsePartialMortality                   );
-////    ascribe("PartialMortalityTable"                 , &Input::PartialMortalityTable                 ); // TODO ?? Not implemented.
+////    ascribe("PartialMortalityTable"                 , &Input::PartialMortalityTable                 ); // INPUT !! Not yet implemented.
     ascribe("InsuredName"                           , &Input::InsuredName                           );
     ascribe("Address"                               , &Input::Address                               );
     ascribe("City"                                  , &Input::City                                  );
@@ -411,9 +410,9 @@ void Input::AscribeMembers()
     ascribe("AgentZipCode"                          , &Input::AgentZipCode                          );
     ascribe("AgentPhone"                            , &Input::AgentPhone                            );
     ascribe("AgentId"                               , &Input::AgentId                               );
-//    ascribe("InsuredPremiumTableNumber"             , &Input::InsuredPremiumTableNumber             ); // TODO ?? Not implemented.
+//    ascribe("InsuredPremiumTableNumber"             , &Input::InsuredPremiumTableNumber             ); // INPUT !! Not yet implemented.
     ascribe("InsuredPremiumTableFactor"             , &Input::InsuredPremiumTableFactor             );
-//    ascribe("CorporationPremiumTableNumber"         , &Input::CorporationPremiumTableNumber         ); // TODO ?? Not implemented.
+//    ascribe("CorporationPremiumTableNumber"         , &Input::CorporationPremiumTableNumber         ); // INPUT !! Not yet implemented.
     ascribe("CorporationPremiumTableFactor"         , &Input::CorporationPremiumTableFactor         );
     ascribe("EffectiveDate"                         , &Input::EffectiveDate                         );
     ascribe("DefinitionOfLifeInsurance"             , &Input::DefinitionOfLifeInsurance             );
@@ -497,7 +496,7 @@ void Input::AscribeMembers()
     ascribe("NewLoan"                               , &Input::NewLoan                               );
     ascribe("Withdrawal"                            , &Input::Withdrawal                            );
     ascribe("FlatExtra"                             , &Input::FlatExtra                             );
-//    ascribe("PolicyLevelFlatExtra"                  , &Input::PolicyLevelFlatExtra                  ); // TODO ?? Not implemented.
+//    ascribe("PolicyLevelFlatExtra"                  , &Input::PolicyLevelFlatExtra                  ); // INPUT !! Not yet implemented.
     ascribe("HoneymoonValueSpread"                  , &Input::HoneymoonValueSpread                  );
     ascribe("PremiumHistory"                        , &Input::PremiumHistory                        );
     ascribe("SpecamtHistory"                        , &Input::SpecamtHistory                        );
@@ -529,7 +528,7 @@ void Input::AscribeMembers()
     ascribe("DeathBenefitOptionFromIssue"           , &Input::DeathBenefitOptionFromIssue           );
     ascribe("SpecifiedAmountFromRetirement"         , &Input::SpecifiedAmountFromRetirement         );
     ascribe("SpecifiedAmountFromIssue"              , &Input::SpecifiedAmountFromIssue              );
-//    ascribe("SpecifiedAmountStrategyFromRetirement" , &Input::SpecifiedAmountStrategyFromRetirement ); // TODO ?? Not implemented.
+//    ascribe("SpecifiedAmountStrategyFromRetirement" , &Input::SpecifiedAmountStrategyFromRetirement ); // INPUT !! Obsolete scalar alternative controls.
     ascribe("SpecifiedAmountStrategyFromIssue"      , &Input::SpecifiedAmountStrategyFromIssue      );
     ascribe("IndividualPaymentMode"                 , &Input::IndividualPaymentMode                 );
     ascribe("IndividualPaymentToAlternative"        , &Input::IndividualPaymentToAlternative        );
