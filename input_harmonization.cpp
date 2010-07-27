@@ -232,8 +232,8 @@ void Input::DoHarmonize()
 
     EffectiveDate.enable(mce_no == EffectiveDateToday);
 
-    IssueAge        .enable(mce_no  == DeprecatedUseDOB);
-    DateOfBirth     .enable(mce_yes == DeprecatedUseDOB);
+    IssueAge        .enable(mce_no  == UseDOB);
+    DateOfBirth     .enable(mce_yes == UseDOB);
 
     // The ranges of both EffectiveDate and IssueAge are treated as
     // independent, to prevent one's value from affecting the other's
@@ -852,27 +852,27 @@ false // Silly workaround for now.
 
     bool actually_solving = solves_allowed && mce_solve_none != SolveType;
 
-    DeprecatedSolveFromWhich  .allow(mce_from_issue     , actually_solving);
-    DeprecatedSolveFromWhich  .allow(mce_from_year      , actually_solving);
-    DeprecatedSolveFromWhich  .allow(mce_from_age       , actually_solving);
-    DeprecatedSolveFromWhich  .allow(mce_from_retirement, actually_solving);
-    DeprecatedSolveFromWhich  .enable(actually_solving);
+    SolveFromWhich  .allow(mce_from_issue     , actually_solving);
+    SolveFromWhich  .allow(mce_from_year      , actually_solving);
+    SolveFromWhich  .allow(mce_from_age       , actually_solving);
+    SolveFromWhich  .allow(mce_from_retirement, actually_solving);
+    SolveFromWhich  .enable(actually_solving);
 
-    DeprecatedSolveToWhich    .allow(mce_to_retirement  , actually_solving);
-    DeprecatedSolveToWhich    .allow(mce_to_year        , actually_solving);
-    DeprecatedSolveToWhich    .allow(mce_to_age         , actually_solving);
-    DeprecatedSolveToWhich    .allow(mce_to_maturity    , actually_solving);
-    DeprecatedSolveToWhich    .enable(actually_solving);
+    SolveToWhich    .allow(mce_to_retirement  , actually_solving);
+    SolveToWhich    .allow(mce_to_year        , actually_solving);
+    SolveToWhich    .allow(mce_to_age         , actually_solving);
+    SolveToWhich    .allow(mce_to_maturity    , actually_solving);
+    SolveToWhich    .enable(actually_solving);
 
-    DeprecatedSolveTgtAtWhich .allow(mce_to_retirement  , actually_solving);
-    DeprecatedSolveTgtAtWhich .allow(mce_to_year        , actually_solving);
-    DeprecatedSolveTgtAtWhich .allow(mce_to_age         , actually_solving);
-    DeprecatedSolveTgtAtWhich .allow(mce_to_maturity    , actually_solving);
-    DeprecatedSolveTgtAtWhich .enable(actually_solving && mce_solve_for_non_mec != SolveTarget);
+    SolveTgtAtWhich .allow(mce_to_retirement  , actually_solving);
+    SolveTgtAtWhich .allow(mce_to_year        , actually_solving);
+    SolveTgtAtWhich .allow(mce_to_age         , actually_solving);
+    SolveTgtAtWhich .allow(mce_to_maturity    , actually_solving);
+    SolveTgtAtWhich .enable(actually_solving && mce_solve_for_non_mec != SolveTarget);
 
-    SolveBeginYear .enable(actually_solving && mce_from_year == DeprecatedSolveFromWhich);
-    SolveEndYear   .enable(actually_solving && mce_to_year   == DeprecatedSolveToWhich);
-    SolveTargetYear.enable(actually_solving && mce_to_year   == DeprecatedSolveTgtAtWhich && mce_solve_for_non_mec != SolveTarget);
+    SolveBeginYear .enable(actually_solving && mce_from_year == SolveFromWhich);
+    SolveEndYear   .enable(actually_solving && mce_to_year   == SolveToWhich);
+    SolveTargetYear.enable(actually_solving && mce_to_year   == SolveTgtAtWhich && mce_solve_for_non_mec != SolveTarget);
 
     SolveTargetYear.minimum(1);
     // INPUT !! The minimum 'SolveEndYear' and 'SolveTargetYear' set
@@ -886,9 +886,9 @@ false // Silly workaround for now.
 
     // INPUT !! Temporarily, existing -'Time' names are used where
     // -'Age' names would be clearer.
-    SolveBeginTime .enable(actually_solving && mce_from_age == DeprecatedSolveFromWhich);
-    SolveEndTime   .enable(actually_solving && mce_to_age   == DeprecatedSolveToWhich);
-    SolveTargetTime.enable(actually_solving && mce_to_age   == DeprecatedSolveTgtAtWhich && mce_solve_for_non_mec != SolveTarget);
+    SolveBeginTime .enable(actually_solving && mce_from_age == SolveFromWhich);
+    SolveEndTime   .enable(actually_solving && mce_to_age   == SolveToWhich);
+    SolveTargetTime.enable(actually_solving && mce_to_age   == SolveTgtAtWhich && mce_solve_for_non_mec != SolveTarget);
 
 #if 0 // http://lists.nongnu.org/archive/html/lmi/2008-08/msg00036.html
     SolveBeginTime .minimum_and_maximum(issue_age()           , maturity_age());
@@ -1049,7 +1049,7 @@ void Input::DoTransmogrify()
         ,EffectiveDate.value()
         ,use_anb
         );
-    if(mce_no == DeprecatedUseDOB)
+    if(mce_no == UseDOB)
         {
         // If no DOB is supplied, assume a birthday occurs on the
         // issue date--as good an assumption as any, and the simplest.
@@ -1088,7 +1088,7 @@ if(!egregious_kludge)
 
 void Input::SetSolveDurations()
 {
-    switch(DeprecatedSolveTgtAtWhich.value())
+    switch(SolveTgtAtWhich.value())
         {
         case mce_to_year:
             {
@@ -1114,14 +1114,14 @@ void Input::SetSolveDurations()
             {
             fatal_error()
                 << "Case '"
-                << DeprecatedSolveTgtAtWhich.value()
+                << SolveTgtAtWhich.value()
                 << "' not found."
                 << LMI_FLUSH
                 ;
             }
         }
 
-    switch(DeprecatedSolveFromWhich.value())
+    switch(SolveFromWhich.value())
         {
         case mce_from_year:
             {
@@ -1147,14 +1147,14 @@ void Input::SetSolveDurations()
             {
             fatal_error()
                 << "Case '"
-                << DeprecatedSolveFromWhich.value()
+                << SolveFromWhich.value()
                 << "' not found."
                 << LMI_FLUSH
                 ;
             }
         }
 
-    switch(DeprecatedSolveToWhich.value())
+    switch(SolveToWhich.value())
         {
         case mce_to_year:
             {
@@ -1180,7 +1180,7 @@ void Input::SetSolveDurations()
             {
             fatal_error()
                 << "Case '"
-                << DeprecatedSolveToWhich.value()
+                << SolveToWhich.value()
                 << "' not found."
                 << LMI_FLUSH
                 ;

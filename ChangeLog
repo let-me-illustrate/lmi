@@ -26587,3 +26587,63 @@ Avoid macros.
   tn_range_types.hpp
 Merge two identical types. Rationale: vide supra at 20100726T2148Z.
 
+20100727T1052Z <gchicares@sbcglobal.net> [667]
+
+  input.cpp
+  input.hpp
+  input_harmonization.cpp
+  input_xml_io.cpp
+  sample.cns
+  sample.ill
+  yare_input.hpp
+Remove undesirable input members.
+
+20100727T1332Z <gchicares@sbcglobal.net> [666]
+
+  input_realization.cpp
+Remove a duplicative defect marker.
+
+20100727T1333Z <gchicares@sbcglobal.net> [662]
+
+  input_harmonization.cpp
+Remove duplicative defect markers.
+
+20100727T1338Z <gchicares@sbcglobal.net> [661]
+
+  input_harmonization.cpp
+Remove a marker for a defect already resolved.
+
+20100727T1341Z <gchicares@sbcglobal.net> [659]
+
+  input_harmonization.cpp
+Remove duplicative defect markers.
+
+20100727T2356Z <gchicares@sbcglobal.net> [659]
+
+  xml_serializable.tpp
+Extend redintegrative value-translation to obsolete elements.
+
+20100727T2357Z <gchicares@sbcglobal.net> [659]
+
+  input.cpp
+  input.hpp
+  input_harmonization.cpp
+  input_xml_io.cpp
+  main_cgi.cpp
+  main_cli.cpp
+  mec.xrc
+  mec_input.cpp
+  mec_input.hpp
+  mec_server.cpp
+  sample.cns
+  sample.ill
+  skin.xrc
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_group_carveout2.xrc
+  skin_reg_d.xrc
+  skin_single_premium.xrc
+  skin_variable_annuity.xrc
+  yare_input.hpp
+Rectify names.
+

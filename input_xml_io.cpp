@@ -111,6 +111,10 @@ bool Input::is_detritus(std::string const& s) const
         ,"CorporationTaxpayerId"         // Would violate privacy.
         ,"CurrentCoiGrading"             // Withdrawn.
         ,"DateOfRetirement"              // Withdrawn.
+        ,"DeprecatedSolveFromWhich"      // Renamed (without 'Deprecated'-).
+        ,"DeprecatedSolveTgtAtWhich"     // Renamed (without 'Deprecated'-).
+        ,"DeprecatedSolveToWhich"        // Renamed (without 'Deprecated'-).
+        ,"DeprecatedUseDOB"              // Renamed (without 'Deprecated'-).
         ,"DeprecatedUseDOR"              // Withdrawn.
         ,"FilingApprovalState"           // Alias for 'StateOfJurisdiction'.
         ,"FirstName"                     // Single name instead.
@@ -458,6 +462,18 @@ void Input::redintegrate_ex_post
             StateOfJurisdiction = state;
             PremiumTaxState     = state;
             }
+        }
+
+    if(file_version < 6)
+        {
+        LMI_ASSERT(contains(residuary_names, "SolveFromWhich"));
+        LMI_ASSERT(contains(residuary_names, "SolveTgtAtWhich"));
+        LMI_ASSERT(contains(residuary_names, "SolveToWhich"));
+        LMI_ASSERT(contains(residuary_names, "UseDOB"));
+        SolveFromWhich  = map_lookup(detritus_map, "DeprecatedSolveFromWhich");
+        SolveTgtAtWhich = map_lookup(detritus_map, "DeprecatedSolveTgtAtWhich");
+        SolveToWhich    = map_lookup(detritus_map, "DeprecatedSolveToWhich");
+        UseDOB          = map_lookup(detritus_map, "DeprecatedUseDOB");
         }
 }
 

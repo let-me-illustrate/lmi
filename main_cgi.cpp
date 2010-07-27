@@ -487,8 +487,8 @@ void ShowOutput(cgicc::Cgicc const& data)
     input["UnderwritingClass"]             = "Preferred";
     input["WaiverOfPremiumBenefit"]        = "No";
     input["AccidentalDeathBenefit"]        = "No";
-    input["DeprecatedSolveTgtAtWhich"]     = "Year";
-    input["DeprecatedSolveToWhich"]        = "Year";
+    input["SolveTgtAtWhich"]               = "Year";
+    input["SolveToWhich"]                  = "Year";
     input["UseCurrentDeclaredRate"]        = "No";
 
     input["ProductName"]                   = GetValue(data, "ProductName" );

@@ -238,10 +238,10 @@ class yare_input
 //    mcenum_report_column              SupplementalReportColumn10      ;
 //    mcenum_report_column              SupplementalReportColumn11      ;
 //
-//    mcenum_to_point                   DeprecatedSolveTgtAtWhich       ;
-//    mcenum_from_point                 DeprecatedSolveFromWhich        ;
-//    mcenum_to_point                   DeprecatedSolveToWhich          ;
-//    bool                              DeprecatedUseDOB                ;
+//    mcenum_to_point                   SolveTgtAtWhich                 ;
+//    mcenum_from_point                 SolveFromWhich                  ;
+//    mcenum_to_point                   SolveToWhich                    ;
+//    bool                              UseDOB                          ;
 //    bool                              EffectiveDateToday              ;
 //    mcenum_dbopt                      DeathBenefitOptionFromRetirement;
 //    mcenum_dbopt                      DeathBenefitOptionFromIssue     ;

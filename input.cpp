@@ -211,10 +211,10 @@ Input::Input()
 //    ,SupplementalReportColumn09       ("")
 //    ,SupplementalReportColumn10       ("")
 //    ,SupplementalReportColumn11       ("")
-    ,DeprecatedSolveTgtAtWhich        ("Maturity")
-    ,DeprecatedSolveFromWhich         ("Issue")
-    ,DeprecatedSolveToWhich           ("Retirement")
-//    ,DeprecatedUseDOB                 ("")
+    ,SolveTgtAtWhich                  ("Maturity")
+    ,SolveFromWhich                   ("Issue")
+    ,SolveToWhich                     ("Retirement")
+//    ,UseDOB                           ("")
 //    ,EffectiveDateToday               ("")
 //    ,DeathBenefitOptionFromRetirement ("")
 //    ,DeathBenefitOptionFromIssue      ("")
@@ -508,10 +508,10 @@ void Input::AscribeMembers()
     ascribe("SupplementalReportColumn10"            , &Input::SupplementalReportColumn10            );
     ascribe("SupplementalReportColumn11"            , &Input::SupplementalReportColumn11            );
 
-    ascribe("DeprecatedSolveTgtAtWhich"             , &Input::DeprecatedSolveTgtAtWhich             );
-    ascribe("DeprecatedSolveFromWhich"              , &Input::DeprecatedSolveFromWhich              );
-    ascribe("DeprecatedSolveToWhich"                , &Input::DeprecatedSolveToWhich                );
-    ascribe("DeprecatedUseDOB"                      , &Input::DeprecatedUseDOB                      );
+    ascribe("SolveTgtAtWhich"                       , &Input::SolveTgtAtWhich                       );
+    ascribe("SolveFromWhich"                        , &Input::SolveFromWhich                        );
+    ascribe("SolveToWhich"                          , &Input::SolveToWhich                          );
+    ascribe("UseDOB"                                , &Input::UseDOB                                );
     ascribe("EffectiveDateToday"                    , &Input::EffectiveDateToday                    );
 
     ascribe("DeathBenefitOptionFromRetirement"      , &Input::DeathBenefitOptionFromRetirement      );

@@ -58,7 +58,7 @@ class product_database;
 ///   InforceContractYear
 ///   InforceYear
 /// are dependent, but useful. These:
-///   DeprecatedUseDOB
+///   UseDOB
 ///   IssueAge
 /// are superfluous, but convenient. These:
 ///   InforceContractMonth
@@ -181,7 +181,7 @@ class LMI_SO mec_input
     datum_sequence           FlatExtra                       ;
     datum_sequence           PaymentHistory                  ;
     datum_sequence           BenefitHistory                  ;
-    mce_yes_or_no            DeprecatedUseDOB                ;
+    mce_yes_or_no            UseDOB                          ;
     tnr_nonnegative_double   Payment                         ;
     tnr_nonnegative_double   BenefitAmount                   ;
 

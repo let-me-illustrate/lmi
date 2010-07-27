@@ -752,7 +752,7 @@
                                         <object class="sizeritem">
                                             <flag>wxALIGN_LEFT|wxGROW|wxLEFT|wxBOTTOM</flag>
                                             <border>2</border>
-                                            <object class="wxRadioBox" name="DeprecatedUseDOB">
+                                            <object class="wxRadioBox" name="UseDOB">
                                                 <help>Calculate issue age based on date of birth and effective date, automatically reflecting changes in effective date</help>
                                                 <style>wxRA_SPECIFY_COLS</style>
                                                 <label>Use date</label>

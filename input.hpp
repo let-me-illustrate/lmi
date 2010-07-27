@@ -418,10 +418,10 @@ class LMI_SO Input
     mce_report_column        SupplementalReportColumn09      ;
     mce_report_column        SupplementalReportColumn10      ;
     mce_report_column        SupplementalReportColumn11      ;
-    mce_to_point             DeprecatedSolveTgtAtWhich       ;
-    mce_from_point           DeprecatedSolveFromWhich        ;
-    mce_to_point             DeprecatedSolveToWhich          ;
-    mce_yes_or_no            DeprecatedUseDOB                ;
+    mce_to_point             SolveTgtAtWhich                 ;
+    mce_from_point           SolveFromWhich                  ;
+    mce_to_point             SolveToWhich                    ;
+    mce_yes_or_no            UseDOB                          ;
     mce_yes_or_no            EffectiveDateToday              ;
     mce_dbopt                DeathBenefitOptionFromRetirement;
     mce_dbopt                DeathBenefitOptionFromIssue     ;
