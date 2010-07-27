@@ -144,7 +144,9 @@ using namespace xml;
         else if(is_detritus(node_tag))
             {
             // Hold certain obsolete entities that must be translated.
-            detritus_map[node_tag] = xml_lmi::get_content(*child);
+            std::string s = xml_lmi::get_content(*child);
+            redintegrate_ex_ante(file_version, node_tag, s);
+            detritus_map[node_tag] = s;
             }
         else
             {
