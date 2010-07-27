@@ -110,6 +110,8 @@ bool Input::is_detritus(std::string const& s) const
         ,"CorporationPremiumTableNumber" // Never implemented.
         ,"CorporationTaxpayerId"         // Would violate privacy.
         ,"CurrentCoiGrading"             // Withdrawn.
+        ,"DateOfRetirement"              // Withdrawn.
+        ,"DeprecatedUseDOR"              // Withdrawn.
         ,"FilingApprovalState"           // Alias for 'StateOfJurisdiction'.
         ,"FirstName"                     // Single name instead.
         ,"InforceDcvDeathBenefit"        // Misbegotten.
@@ -118,12 +120,14 @@ bool Input::is_detritus(std::string const& s) const
         ,"LastName"                      // Single name instead.
         ,"MiddleName"                    // Single name instead.
         ,"NetMortalityChargeHistory"     // Renamed before implementation.
+        ,"OffshoreCorridorFactor"        // Withdrawn.
         ,"PartialMortalityTable"         // Never implemented.
         ,"PayLoanInterestInCash"         // Never implemented.
         ,"PolicyDate"                    // Never implemented.
         ,"PolicyLevelFlatExtra"          // Never implemented; poor name.
         ,"SocialSecurityNumber"          // Withdrawn: would violate privacy.
         ,"TermProportion"                // 'TermRiderProportion' instead.
+        ,"UseOffshoreCorridorFactor"     // Withdrawn.
         ,"YearsOfZeroDeaths"             // Withdrawn.
         };
     static std::vector<std::string> const v(a, a + lmi_array_size(a));

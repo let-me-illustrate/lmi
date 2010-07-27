@@ -258,7 +258,6 @@ class LMI_SO Input
     tnr_proportion           TermRiderProportion             ;
     mce_yes_or_no            TermRiderUseProportion          ;
     tnr_date                 DateOfBirth                     ;
-    tnr_date                 DateOfRetirement                ; // TODO ?? Expunge this everywhere.
     mce_table_rating         SubstandardTable                ;
     ce_product_name          ProductName                     ;
     tnr_nonnegative_double   Dumpin                          ;
@@ -353,7 +352,6 @@ class LMI_SO Input
     tnr_duration             SurviveToYear                   ;
     tnr_age                  SurviveToAge                    ;
     tnr_nonnegative_double   MaximumNaar                     ;
-    tnr_corridor_factor      UseOffshoreCorridorFactor       ; // INPUT !! Obsolete, and apparently wrong type.
     mce_yes_or_no            ChildRider                      ;
     tnr_nonnegative_double   ChildRiderAmount                ;
     mce_yes_or_no            SpouseRider                     ;
@@ -385,10 +383,8 @@ class LMI_SO Input
     datum_sequence           ExtraMonthlyCustodialFee        ;
     datum_sequence           ExtraCompensationOnAssets       ;
     datum_sequence           ExtraCompensationOnPremium      ;
-    datum_sequence           OffshoreCorridorFactor          ; // INPUT !! Obsolete.
     datum_sequence           PartialMortalityMultiplier      ;
     datum_sequence           CurrentCoiMultiplier            ;
-    datum_sequence           CurrentCoiGrading               ; // TODO ?? Obsolete: expunge.
     datum_sequence           CorporationTaxBracket           ;
     datum_sequence           TaxBracket                      ;
     datum_sequence           ProjectedSalary                 ;
@@ -426,7 +422,6 @@ class LMI_SO Input
     mce_from_point           DeprecatedSolveFromWhich        ;
     mce_to_point             DeprecatedSolveToWhich          ;
     mce_yes_or_no            DeprecatedUseDOB                ;
-    mce_yes_or_no            DeprecatedUseDOR                ;
     mce_yes_or_no            EffectiveDateToday              ;
     mce_dbopt                DeathBenefitOptionFromRetirement;
     mce_dbopt                DeathBenefitOptionFromIssue     ;
