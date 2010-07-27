@@ -50,9 +50,6 @@ class percentage_trammel
     T nominal_maximum() const {return 100;}
 };
 
-// TODO ?? Consider generating these with macros, e.g.
-//   TRAMMEL(1,0,0)
-
 template<typename T>
 class proportion_trammel
     :public trammel_base<T>
