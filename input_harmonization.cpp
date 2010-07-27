@@ -720,7 +720,6 @@ false // Silly workaround for now.
 
     bool wd_solve = (mce_solve_wd == SolveType);
     bool wd_forbidden = !wd_allowed;
-    // TODO ?? Also need to inhibit affected solves.
 
     Withdrawal.enable(!wd_forbidden && !wd_solve);
 
