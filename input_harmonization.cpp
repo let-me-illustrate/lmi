@@ -725,7 +725,7 @@ false // Silly workaround for now.
 
     bool wd_inhibit = wd_solve || wd_forbidden;
 // TODO ?? WX PORT !! Figure out how to do this properly:
-    bool wd_inhibit_simple = wd_inhibit; // TODO ?? || !is_wd_simply_representable;
+    bool wd_inhibit_simple = wd_inhibit; // || !is_wd_simply_representable;
 
     WithdrawalFromAlternative.allow(mce_from_issue     , !wd_inhibit_simple);
     WithdrawalFromAlternative.allow(mce_from_year      , !wd_inhibit_simple);
@@ -752,7 +752,7 @@ false // Silly workaround for now.
 
     bool loan_inhibit = loan_solve || loan_forbidden;
 // TODO ?? WX PORT !! Figure out how to do this properly:
-    bool loan_inhibit_simple = loan_inhibit; // TODO ?? || !is_loan_simply_representable;
+    bool loan_inhibit_simple = loan_inhibit; // !is_loan_simply_representable;
 
     NewLoan.enable(!loan_inhibit);
 
