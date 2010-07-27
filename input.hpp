@@ -245,8 +245,8 @@ class LMI_SO Input
     int                      GleanedMaturityAge_         ;
     mcenum_ledger_type       GleanedLedgerType_          ;
 
-    tnr_issue_age            IssueAge                        ;
-    tnr_attained_age         RetirementAge                   ;
+    tnr_age                  IssueAge                        ;
+    tnr_age                  RetirementAge                   ;
     mce_gender               Gender                          ;
     mce_smoking              Smoking                         ;
     mce_class                UnderwritingClass               ;
@@ -351,14 +351,14 @@ class LMI_SO Input
     tnr_nonnegative_double   CountryCoiMultiplier            ;
     mce_survival_limit       SurviveToType                   ;
     tnr_duration             SurviveToYear                   ;
-    tnr_attained_age         SurviveToAge                    ;
+    tnr_age                  SurviveToAge                    ;
     tnr_nonnegative_double   MaximumNaar                     ;
     tnr_corridor_factor      UseOffshoreCorridorFactor       ; // INPUT !! Obsolete, and apparently wrong type.
     mce_yes_or_no            ChildRider                      ;
     tnr_nonnegative_double   ChildRiderAmount                ;
     mce_yes_or_no            SpouseRider                     ;
     tnr_nonnegative_double   SpouseRiderAmount               ;
-    tnr_issue_age            SpouseIssueAge                  ;
+    tnr_age                  SpouseIssueAge                  ;
     datum_string             Franchise                       ;
     datum_string             PolicyNumber                    ;
     tnr_date                 InforceAsOfDate                 ;
@@ -436,22 +436,22 @@ class LMI_SO Input
     mce_sa_strategy          SpecifiedAmountStrategyFromIssue;
     mce_mode                 IndividualPaymentMode           ;
     mce_to_point             IndividualPaymentToAlternative  ;
-    tnr_attained_age         IndividualPaymentToAge          ;
+    tnr_age                  IndividualPaymentToAge          ;
     tnr_duration             IndividualPaymentToDuration     ;
     tnr_nonnegative_double   IndividualPaymentAmount         ;
     mce_pmt_strategy         IndividualPaymentStrategy       ;
     tnr_nonnegative_double   LoanAmount                      ;
-    tnr_attained_age         LoanFromAge                     ;
+    tnr_age                  LoanFromAge                     ;
     mce_from_point           LoanFromAlternative             ;
     tnr_duration             LoanFromDuration                ;
-    tnr_attained_age         LoanToAge                       ;
+    tnr_age                  LoanToAge                       ;
     mce_to_point             LoanToAlternative               ;
     tnr_duration             LoanToDuration                  ;
     tnr_nonnegative_double   WithdrawalAmount                ;
-    tnr_attained_age         WithdrawalFromAge               ;
+    tnr_age                  WithdrawalFromAge               ;
     mce_from_point           WithdrawalFromAlternative       ;
     tnr_duration             WithdrawalFromDuration          ;
-    tnr_attained_age         WithdrawalToAge                 ;
+    tnr_age                  WithdrawalToAge                 ;
     mce_to_point             WithdrawalToAlternative         ;
     tnr_duration             WithdrawalToDuration            ;
 
@@ -540,11 +540,10 @@ template<> struct reconstitutor<datum_base, Input>
         z = exact_cast<mce_uw_basis            >(m); if(z) return z;
         z = exact_cast<mce_yes_or_no           >(m); if(z) return z;
         // tnr- types.
-        z = exact_cast<tnr_attained_age        >(m); if(z) return z;
+        z = exact_cast<tnr_age                 >(m); if(z) return z;
         z = exact_cast<tnr_corridor_factor     >(m); if(z) return z;
         z = exact_cast<tnr_date                >(m); if(z) return z;
         z = exact_cast<tnr_duration            >(m); if(z) return z;
-        z = exact_cast<tnr_issue_age           >(m); if(z) return z;
         z = exact_cast<tnr_month               >(m); if(z) return z;
         z = exact_cast<tnr_nonnegative_double  >(m); if(z) return z;
         z = exact_cast<tnr_nonnegative_integer >(m); if(z) return z;

@@ -78,16 +78,7 @@ class nonnegative_trammel
 };
 
 template<typename T>
-class issue_age_trammel
-    :public trammel_base<T>
-{
-    T nominal_minimum() const {return  0;}
-    T default_value()   const {return  0;}
-    T nominal_maximum() const {return 99;}
-};
-
-template<typename T>
-class attained_age_trammel
+class age_trammel
     :public trammel_base<T>
 {
     T nominal_minimum() const {return  0;}

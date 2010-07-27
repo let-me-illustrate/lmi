@@ -148,7 +148,7 @@ class LMI_SO mec_input
     int                      GleanedMaturityAge_         ;
 
     mce_yes_or_no            Use7702ATables                  ;
-    tnr_issue_age            IssueAge                        ;
+    tnr_age                  IssueAge                        ;
     mce_gender               Gender                          ;
     mce_smoking              Smoking                         ;
     mce_class                UnderwritingClass               ;
@@ -214,9 +214,9 @@ template<> struct reconstitutor<datum_base, mec_input>
         z = exact_cast<mce_uw_basis            >(m); if(z) return z;
         z = exact_cast<mce_yes_or_no           >(m); if(z) return z;
         // tnr- types.
+        z = exact_cast<tnr_age                 >(m); if(z) return z;
         z = exact_cast<tnr_date                >(m); if(z) return z;
         z = exact_cast<tnr_duration            >(m); if(z) return z;
-        z = exact_cast<tnr_issue_age           >(m); if(z) return z;
         z = exact_cast<tnr_month               >(m); if(z) return z;
         z = exact_cast<tnr_nonnegative_double  >(m); if(z) return z;
         z = exact_cast<tnr_unrestricted_double >(m); if(z) return z;
