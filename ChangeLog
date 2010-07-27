@@ -26566,3 +26566,24 @@ Improve documentation.
   input.cpp
 Resolve several marked defects. Yet-unused members aren't harmful.
 
+20100726T2353Z <gchicares@sbcglobal.net> [670]
+
+  input_harmonization.cpp
+  tn_range_type_trammels.hpp
+Move a comment, merging two defect markers.
+
+20100727T0004Z <gchicares@sbcglobal.net> [669]
+
+  tn_range_type_trammels.hpp
+Avoid macros.
+
+20100727T0945Z <gchicares@sbcglobal.net> [669]
+
+  input.hpp
+  mec_input.hpp
+  mec_server.cpp
+  tn_range_type_trammels.hpp
+  tn_range_types.cpp
+  tn_range_types.hpp
+Merge two identical types. Rationale: vide supra at 20100726T2148Z.
+

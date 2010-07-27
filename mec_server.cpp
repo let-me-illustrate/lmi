@@ -71,7 +71,7 @@ mec_state test_one_days_7702A_transactions
     )
 {
     bool                        Use7702ATables               = exact_cast<mce_yes_or_no           >(input["Use7702ATables"              ])->value();
-//  int                         IssueAge                     = exact_cast<tnr_issue_age           >(input["IssueAge"                    ])->value();
+//  int                         IssueAge                     = exact_cast<tnr_age                 >(input["IssueAge"                    ])->value();
     mcenum_gender               Gender                       = exact_cast<mce_gender              >(input["Gender"                      ])->value();
     mcenum_smoking              Smoking                      = exact_cast<mce_smoking             >(input["Smoking"                     ])->value();
     mcenum_class                UnderwritingClass            = exact_cast<mce_class               >(input["UnderwritingClass"           ])->value();
