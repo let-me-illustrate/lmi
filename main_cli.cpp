@@ -159,7 +159,7 @@ void self_test()
             ;
         }
 
-    IP["DeprecatedSolveToWhich"] = "Maturity";
+    IP["SolveToWhich"] = "Maturity";
 
     IP["SolveType"] = "Specified amount";
     expected_value = 1879139.14;

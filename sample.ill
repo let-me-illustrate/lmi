@@ -38,10 +38,6 @@
     <DeathBenefitOptionFromRetirement>A</DeathBenefitOptionFromRetirement>
     <DefinitionOfLifeInsurance>CVAT</DefinitionOfLifeInsurance>
     <DefinitionOfMaterialChange>Earlier of increase or unnecessary premium</DefinitionOfMaterialChange>
-    <DeprecatedSolveFromWhich>Issue</DeprecatedSolveFromWhich>
-    <DeprecatedSolveTgtAtWhich>Maturity</DeprecatedSolveTgtAtWhich>
-    <DeprecatedSolveToWhich>Retirement</DeprecatedSolveToWhich>
-    <DeprecatedUseDOB>No</DeprecatedUseDOB>
     <Dumpin>0</Dumpin>
     <EffectiveDate>2454040</EffectiveDate>
     <EffectiveDateToday>No</EffectiveDateToday>
@@ -145,11 +141,14 @@
     <SolveBeginYear>0</SolveBeginYear>
     <SolveEndTime>65</SolveEndTime>
     <SolveEndYear>20</SolveEndYear>
+    <SolveFromWhich>Issue</SolveFromWhich>
     <SolveSeparateAccountBasis>Hypothetical</SolveSeparateAccountBasis>
     <SolveTarget>Endowment</SolveTarget>
     <SolveTargetCashSurrenderValue>0</SolveTargetCashSurrenderValue>
     <SolveTargetTime>100</SolveTargetTime>
     <SolveTargetYear>55</SolveTargetYear>
+    <SolveTgtAtWhich>Maturity</SolveTgtAtWhich>
+    <SolveToWhich>Retirement</SolveToWhich>
     <SolveType>No solve</SolveType>
     <SpecamtHistory>0</SpecamtHistory>
     <SpecifiedAmount>1000000</SpecifiedAmount>
@@ -187,6 +186,7 @@
     <UnderwritingClass>Standard</UnderwritingClass>
     <UseAverageOfAllFunds>No</UseAverageOfAllFunds>
     <UseCurrentDeclaredRate>No</UseCurrentDeclaredRate>
+    <UseDOB>No</UseDOB>
     <UseExperienceRating>No</UseExperienceRating>
     <UsePartialMortality>No</UsePartialMortality>
     <WaiverOfPremiumBenefit>No</WaiverOfPremiumBenefit>

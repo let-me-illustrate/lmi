@@ -36,6 +36,7 @@
 #include "dbnames.hpp"
 #include "global_settings.hpp"
 #include "input_seq_helpers.hpp"
+#include "map_lookup.hpp"
 #include "miscellany.hpp" // lmi_array_size()
 
 #include <algorithm>      // std::max()
@@ -109,7 +110,7 @@ mec_input::mec_input()
     ,FlatExtra                        ("0")
     ,PaymentHistory                   ("0")
     ,BenefitHistory                   ("1000000")
-//    ,DeprecatedUseDOB                 ("")
+//    ,UseDOB                           ("")
     ,Payment                          ("0")
     ,BenefitAmount                    ("1000000")
 {
@@ -202,7 +203,7 @@ void mec_input::AscribeMembers()
     ascribe("FlatExtra"                             , &mec_input::FlatExtra                             );
     ascribe("PaymentHistory"                        , &mec_input::PaymentHistory                        );
     ascribe("BenefitHistory"                        , &mec_input::BenefitHistory                        );
-    ascribe("DeprecatedUseDOB"                      , &mec_input::DeprecatedUseDOB                      );
+    ascribe("UseDOB"                                , &mec_input::UseDOB                                );
     ascribe("Payment"                               , &mec_input::Payment                               );
     ascribe("BenefitAmount"                         , &mec_input::BenefitAmount                         );
 }
@@ -354,8 +355,8 @@ void mec_input::DoHarmonize()
     GroupUnderwritingType.allow(mce_simplified_issue, database_->Query(DB_AllowSimpUw));
     GroupUnderwritingType.allow(mce_guaranteed_issue, database_->Query(DB_AllowGuarUw));
 
-    IssueAge        .enable(mce_no  == DeprecatedUseDOB);
-    DateOfBirth     .enable(mce_yes == DeprecatedUseDOB);
+    IssueAge        .enable(mce_no  == UseDOB);
+    DateOfBirth     .enable(mce_yes == UseDOB);
 
     // The ranges of both EffectiveDate and IssueAge are treated as
     // independent, to prevent one's value from affecting the other's
@@ -506,7 +507,7 @@ void mec_input::DoTransmogrify()
         ,EffectiveDate.value()
         ,use_anb
         );
-    if(mce_no == DeprecatedUseDOB)
+    if(mce_no == UseDOB)
         {
         // If no DOB is supplied, assume a birthday occurs on the
         // issue date--as good an assumption as any, and the simplest.
@@ -626,8 +627,9 @@ std::string const& mec_input::xml_root_name() const
 bool mec_input::is_detritus(std::string const& s) const
 {
     static std::string const a[] =
-        {"EffectiveDateToday"
-        ,"InforceSevenPayPremium"
+        {"DeprecatedUseDOB"              // Renamed (without 'Deprecated'-).
+        ,"EffectiveDateToday"            // Withdrawn.
+        ,"InforceSevenPayPremium"        // Withdrawn.
         };
     static std::vector<std::string> const v(a, a + lmi_array_size(a));
     return contains(v, s);
@@ -649,7 +651,7 @@ void mec_input::redintegrate_ex_ante
 
 void mec_input::redintegrate_ex_post
     (int                                       file_version
-    ,std::map<std::string, std::string> const& // detritus_map
+    ,std::map<std::string, std::string> const& detritus_map
     ,std::list<std::string>             const& residuary_names
     )
 {
@@ -662,6 +664,8 @@ void mec_input::redintegrate_ex_post
         {
         LMI_ASSERT(contains(residuary_names, "PremiumTaxState"));
         PremiumTaxState = StateOfJurisdiction;
+        LMI_ASSERT(contains(residuary_names, "UseDOB"));
+        UseDOB = map_lookup(detritus_map, "DeprecatedUseDOB");
         }
 }
 
