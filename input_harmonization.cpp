@@ -173,7 +173,7 @@ void Input::DoHarmonize()
 
     RetireesCanEnroll.enable(database_->Query(DB_AllowRetirees));
 
-    // TODO ?? There should be flags in the database to allow or
+    // TODO ?? DATABASE !! There should be flags in the database to allow or
     // forbid paramedical and nonmedical underwriting; arbitrarily,
     // until they are added, those options are always inhibited.
     GroupUnderwritingType.allow(mce_medical, database_->Query(DB_AllowFullUw));
@@ -586,7 +586,7 @@ false // Silly workaround for now.
     IndividualPaymentToAge     .enable(mce_to_age  == IndividualPaymentToAlternative);
     IndividualPaymentToDuration.enable(mce_to_year == IndividualPaymentToAlternative);
 
-//    InsuredPremiumTableNumber.enable(mce_pmt_table == IndividualPaymentStrategy); // TODO ?? Not yet implemented.
+//    InsuredPremiumTableNumber.enable(mce_pmt_table == IndividualPaymentStrategy); // // INPUT !! Obsolete scalar alternative control.
 // In the legacy system, that control, 'InsuredPremiumTableFactor',
 // and their 'Corporation'- congeners were enabled iff a
 // 'mce_pmt_table' strategy was selected in a scalar control--but
@@ -682,7 +682,7 @@ false // Silly workaround for now.
 
     InputFundManagementFee.enable(mce_yes == OverrideFundManagementFee || mce_fund_override == FundChoiceType);
 
-// TODO ?? WX PORT !! There seems to be some confusion here. We seem to have
+// TODO ?? WX PORT !! There seems to be some confusion here. We have
 // checkboxes 'OverrideFundManagementFee' and 'UseAverageOfAllFunds'
 // that duplicate enumerative control 'FundChoiceType'.
 //
@@ -834,7 +834,7 @@ false // Silly workaround for now.
         &&  (
                 mce_pmt_input_scalar == IndividualPaymentStrategy
             )
-// TODO ?? WX PORT !! There is no employer payment strategy.
+// INPUT !! Obsolete scalar alternative control.
 //        &&  (
 //                mce_pmt_input_scalar == ErPmtStrategy
 //            )
@@ -1303,8 +1303,8 @@ void Input::TransferWithdrawalSimpleControlsToInputSequence()
             {
             if(0 < local_rep->WDBegTime)
 // TODO ??                ( IssueAge + local_rep->WDBegTime
-// TODO ??                < database_->Query(DB_MaturityAge)
-// TODO ??                )
+//                        < database_->Query(DB_MaturityAge)
+//                        )
                 {
                 s += "0, " + value_cast<std::string>(local_rep->WDBegTime);
                 s += "; ";
