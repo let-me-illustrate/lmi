@@ -31,10 +31,8 @@
     <Country>US</Country>
     <CountryCoiMultiplier>1</CountryCoiMultiplier>
     <CreateSupplementalReport>No</CreateSupplementalReport>
-    <CurrentCoiGrading>0</CurrentCoiGrading>
     <CurrentCoiMultiplier>1</CurrentCoiMultiplier>
     <DateOfBirth>2437604</DateOfBirth>
-    <DateOfRetirement>2461345</DateOfRetirement>
     <DeathBenefitOption>a</DeathBenefitOption>
     <DeathBenefitOptionFromIssue>A</DeathBenefitOptionFromIssue>
     <DeathBenefitOptionFromRetirement>A</DeathBenefitOptionFromRetirement>
@@ -44,7 +42,6 @@
     <DeprecatedSolveTgtAtWhich>Maturity</DeprecatedSolveTgtAtWhich>
     <DeprecatedSolveToWhich>Retirement</DeprecatedSolveToWhich>
     <DeprecatedUseDOB>No</DeprecatedUseDOB>
-    <DeprecatedUseDOR>No</DeprecatedUseDOR>
     <Dumpin>0</Dumpin>
     <EffectiveDate>2454040</EffectiveDate>
     <EffectiveDateToday>No</EffectiveDateToday>
@@ -122,7 +119,6 @@
     <NewLoan>0</NewLoan>
     <NonsmokerProportion>1</NonsmokerProportion>
     <NumberOfIdenticalLives>1</NumberOfIdenticalLives>
-    <OffshoreCorridorFactor>1</OffshoreCorridorFactor>
     <OverrideCoiMultiplier>No</OverrideCoiMultiplier>
     <OverrideExperienceReserveRate>Yes</OverrideExperienceReserveRate>
     <OverrideFundManagementFee>No</OverrideFundManagementFee>
@@ -192,7 +188,6 @@
     <UseAverageOfAllFunds>No</UseAverageOfAllFunds>
     <UseCurrentDeclaredRate>No</UseCurrentDeclaredRate>
     <UseExperienceRating>No</UseExperienceRating>
-    <UseOffshoreCorridorFactor>1</UseOffshoreCorridorFactor>
     <UsePartialMortality>No</UsePartialMortality>
     <WaiverOfPremiumBenefit>No</WaiverOfPremiumBenefit>
     <WithdrawToBasisThenLoan>No</WithdrawToBasisThenLoan>
@@ -238,10 +233,8 @@
     <Country>US</Country>
     <CountryCoiMultiplier>1</CountryCoiMultiplier>
     <CreateSupplementalReport>No</CreateSupplementalReport>
-    <CurrentCoiGrading>0</CurrentCoiGrading>
     <CurrentCoiMultiplier>1</CurrentCoiMultiplier>
     <DateOfBirth>2437604</DateOfBirth>
-    <DateOfRetirement>2461345</DateOfRetirement>
     <DeathBenefitOption>a</DeathBenefitOption>
     <DeathBenefitOptionFromIssue>A</DeathBenefitOptionFromIssue>
     <DeathBenefitOptionFromRetirement>A</DeathBenefitOptionFromRetirement>
@@ -251,7 +244,6 @@
     <DeprecatedSolveTgtAtWhich>Maturity</DeprecatedSolveTgtAtWhich>
     <DeprecatedSolveToWhich>Retirement</DeprecatedSolveToWhich>
     <DeprecatedUseDOB>No</DeprecatedUseDOB>
-    <DeprecatedUseDOR>No</DeprecatedUseDOR>
     <Dumpin>0</Dumpin>
     <EffectiveDate>2454040</EffectiveDate>
     <EffectiveDateToday>No</EffectiveDateToday>
@@ -329,7 +321,6 @@
     <NewLoan>0</NewLoan>
     <NonsmokerProportion>1</NonsmokerProportion>
     <NumberOfIdenticalLives>1</NumberOfIdenticalLives>
-    <OffshoreCorridorFactor>1</OffshoreCorridorFactor>
     <OverrideCoiMultiplier>No</OverrideCoiMultiplier>
     <OverrideExperienceReserveRate>Yes</OverrideExperienceReserveRate>
     <OverrideFundManagementFee>No</OverrideFundManagementFee>
@@ -399,7 +390,6 @@
     <UseAverageOfAllFunds>No</UseAverageOfAllFunds>
     <UseCurrentDeclaredRate>No</UseCurrentDeclaredRate>
     <UseExperienceRating>No</UseExperienceRating>
-    <UseOffshoreCorridorFactor>1</UseOffshoreCorridorFactor>
     <UsePartialMortality>No</UsePartialMortality>
     <WaiverOfPremiumBenefit>No</WaiverOfPremiumBenefit>
     <WithdrawToBasisThenLoan>No</WithdrawToBasisThenLoan>
@@ -445,10 +435,8 @@
     <Country>US</Country>
     <CountryCoiMultiplier>1</CountryCoiMultiplier>
     <CreateSupplementalReport>No</CreateSupplementalReport>
-    <CurrentCoiGrading>0</CurrentCoiGrading>
     <CurrentCoiMultiplier>1</CurrentCoiMultiplier>
     <DateOfBirth>2437604</DateOfBirth>
-    <DateOfRetirement>2461345</DateOfRetirement>
     <DeathBenefitOption>a</DeathBenefitOption>
     <DeathBenefitOptionFromIssue>A</DeathBenefitOptionFromIssue>
     <DeathBenefitOptionFromRetirement>A</DeathBenefitOptionFromRetirement>
@@ -458,7 +446,6 @@
     <DeprecatedSolveTgtAtWhich>Maturity</DeprecatedSolveTgtAtWhich>
     <DeprecatedSolveToWhich>Retirement</DeprecatedSolveToWhich>
     <DeprecatedUseDOB>No</DeprecatedUseDOB>
-    <DeprecatedUseDOR>No</DeprecatedUseDOR>
     <Dumpin>0</Dumpin>
     <EffectiveDate>2454040</EffectiveDate>
     <EffectiveDateToday>No</EffectiveDateToday>
@@ -536,7 +523,6 @@
     <NewLoan>0</NewLoan>
     <NonsmokerProportion>1</NonsmokerProportion>
     <NumberOfIdenticalLives>1</NumberOfIdenticalLives>
-    <OffshoreCorridorFactor>1</OffshoreCorridorFactor>
     <OverrideCoiMultiplier>No</OverrideCoiMultiplier>
     <OverrideExperienceReserveRate>Yes</OverrideExperienceReserveRate>
     <OverrideFundManagementFee>No</OverrideFundManagementFee>
@@ -606,7 +592,6 @@
     <UseAverageOfAllFunds>No</UseAverageOfAllFunds>
     <UseCurrentDeclaredRate>No</UseCurrentDeclaredRate>
     <UseExperienceRating>No</UseExperienceRating>
-    <UseOffshoreCorridorFactor>1</UseOffshoreCorridorFactor>
     <UsePartialMortality>No</UsePartialMortality>
     <WaiverOfPremiumBenefit>No</WaiverOfPremiumBenefit>
     <WithdrawToBasisThenLoan>No</WithdrawToBasisThenLoan>

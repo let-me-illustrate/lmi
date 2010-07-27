@@ -76,7 +76,6 @@ class yare_input
 //    double                            TermRiderProportion             ;
 //    bool                              TermRiderUseProportion          ;
 //    calendar_date                     DateOfBirth                     ;
-//    calendar_date                     DateOfRetirement                ;
     mcenum_table_rating               SubstandardTable                ;
     std::string                       ProductName                     ;
     double                            Dumpin                          ;
@@ -171,7 +170,6 @@ class yare_input
     int                               SurviveToYear                   ;
     int                               SurviveToAge                    ;
     double                            MaximumNaar                     ;
-//    tnr_corridor_factor               UseOffshoreCorridorFactor       ;
     bool                              ChildRider                      ;
     double                            ChildRiderAmount                ;
     bool                              SpouseRider                     ;
@@ -203,10 +201,8 @@ class yare_input
     std::vector<double>               ExtraMonthlyCustodialFee        ;
     std::vector<double>               ExtraCompensationOnAssets       ;
     std::vector<double>               ExtraCompensationOnPremium      ;
-//    std::vector<double>               OffshoreCorridorFactor          ;
     std::vector<double>               PartialMortalityMultiplier      ;
     std::vector<double>               CurrentCoiMultiplier            ;
-//    std::vector<double>               CurrentCoiGrading               ;
     std::vector<double>               CorporationTaxBracket           ;
     std::vector<double>               TaxBracket                      ;
     std::vector<double>               ProjectedSalary                 ;
@@ -246,7 +242,6 @@ class yare_input
 //    mcenum_from_point                 DeprecatedSolveFromWhich        ;
 //    mcenum_to_point                   DeprecatedSolveToWhich          ;
 //    bool                              DeprecatedUseDOB                ;
-//    bool                              DeprecatedUseDOR                ;
 //    bool                              EffectiveDateToday              ;
 //    mcenum_dbopt                      DeathBenefitOptionFromRetirement;
 //    mcenum_dbopt                      DeathBenefitOptionFromIssue     ;

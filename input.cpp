@@ -51,7 +51,6 @@ Input::Input()
 //    ,TermRiderProportion              ("")
 //    ,TermRiderUseProportion           ("")
 //    ,DateOfBirth                      ("")
-//    ,DateOfRetirement                 ("")
 //    ,SubstandardTable                 ("")
 //    ,ProductName                      ("")
 //    ,Dumpin                           ("")
@@ -146,7 +145,6 @@ Input::Input()
     ,SurviveToYear                    ("100")
     ,SurviveToAge                     ("99")
     ,MaximumNaar                      ("10000000")
-//    ,UseOffshoreCorridorFactor        ("")
 //    ,ChildRider                       ("")
 //    ,ChildRiderAmount                 ("")
 //    ,SpouseRider                      ("")
@@ -178,10 +176,8 @@ Input::Input()
     ,ExtraMonthlyCustodialFee         ("0")
     ,ExtraCompensationOnAssets        ("0")
     ,ExtraCompensationOnPremium       ("0")
-    ,OffshoreCorridorFactor           ("1")
     ,PartialMortalityMultiplier       ("1")
     ,CurrentCoiMultiplier             ("1")
-    ,CurrentCoiGrading                ("0")
 //    ,CorporationTaxBracket            ("")
 //    ,TaxBracket                       ("")
     ,ProjectedSalary                  ("100000")
@@ -219,7 +215,6 @@ Input::Input()
     ,DeprecatedSolveFromWhich         ("Issue")
     ,DeprecatedSolveToWhich           ("Retirement")
 //    ,DeprecatedUseDOB                 ("")
-//    ,DeprecatedUseDOR                 ("")
 //    ,EffectiveDateToday               ("")
 //    ,DeathBenefitOptionFromRetirement ("")
 //    ,DeathBenefitOptionFromIssue      ("")
@@ -351,7 +346,6 @@ void Input::AscribeMembers()
     ascribe("TermRiderProportion"                   , &Input::TermRiderProportion                   );
     ascribe("TermRiderUseProportion"                , &Input::TermRiderUseProportion                );
     ascribe("DateOfBirth"                           , &Input::DateOfBirth                           );
-    ascribe("DateOfRetirement"                      , &Input::DateOfRetirement                      );
     ascribe("SubstandardTable"                      , &Input::SubstandardTable                      );
     ascribe("ProductName"                           , &Input::ProductName                           );
     ascribe("Dumpin"                                , &Input::Dumpin                                );
@@ -446,7 +440,6 @@ void Input::AscribeMembers()
     ascribe("SurviveToYear"                         , &Input::SurviveToYear                         );
     ascribe("SurviveToAge"                          , &Input::SurviveToAge                          );
     ascribe("MaximumNaar"                           , &Input::MaximumNaar                           );
-    ascribe("UseOffshoreCorridorFactor"             , &Input::UseOffshoreCorridorFactor             );
     ascribe("ChildRider"                            , &Input::ChildRider                            );
     ascribe("ChildRiderAmount"                      , &Input::ChildRiderAmount                      );
     ascribe("SpouseRider"                           , &Input::SpouseRider                           );
@@ -478,10 +471,8 @@ void Input::AscribeMembers()
     ascribe("ExtraMonthlyCustodialFee"              , &Input::ExtraMonthlyCustodialFee              );
     ascribe("ExtraCompensationOnAssets"             , &Input::ExtraCompensationOnAssets             );
     ascribe("ExtraCompensationOnPremium"            , &Input::ExtraCompensationOnPremium            );
-    ascribe("OffshoreCorridorFactor"                , &Input::OffshoreCorridorFactor                );
     ascribe("PartialMortalityMultiplier"            , &Input::PartialMortalityMultiplier            );
     ascribe("CurrentCoiMultiplier"                  , &Input::CurrentCoiMultiplier                  );
-    ascribe("CurrentCoiGrading"                     , &Input::CurrentCoiGrading                     );
     ascribe("CorporationTaxBracket"                 , &Input::CorporationTaxBracket                 );
     ascribe("TaxBracket"                            , &Input::TaxBracket                            );
     ascribe("ProjectedSalary"                       , &Input::ProjectedSalary                       );
@@ -521,7 +512,6 @@ void Input::AscribeMembers()
     ascribe("DeprecatedSolveFromWhich"              , &Input::DeprecatedSolveFromWhich              );
     ascribe("DeprecatedSolveToWhich"                , &Input::DeprecatedSolveToWhich                );
     ascribe("DeprecatedUseDOB"                      , &Input::DeprecatedUseDOB                      );
-    ascribe("DeprecatedUseDOR"                      , &Input::DeprecatedUseDOR                      );
     ascribe("EffectiveDateToday"                    , &Input::EffectiveDateToday                    );
 
     ascribe("DeathBenefitOptionFromRetirement"      , &Input::DeathBenefitOptionFromRetirement      );

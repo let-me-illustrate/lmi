@@ -170,7 +170,6 @@ void Input::DoHarmonize()
     AmortizePremiumLoad.enable(database_->Query(DB_AllowAmortPremLoad));
     ExtraCompensationOnAssets .enable(database_->Query(DB_AllowExtraAssetComp));
     ExtraCompensationOnPremium.enable(database_->Query(DB_AllowExtraPremComp));
-    OffshoreCorridorFactor.enable(mce_noncompliant == DefinitionOfLifeInsurance);
 
     RetireesCanEnroll.enable(database_->Query(DB_AllowRetirees));
 
@@ -188,7 +187,6 @@ void Input::DoHarmonize()
     PartialMortalityTable     .enable(part_mort_used);
     PartialMortalityMultiplier.enable(part_mort_used);
 
-    CurrentCoiGrading         .enable(part_mort_used && home_office_only);
     CashValueEnhancementRate  .enable(home_office_only);
 
     SurviveToType             .allow(mce_no_survival_limit    , part_mort_used);
@@ -255,6 +253,7 @@ void Input::DoHarmonize()
         (static_cast<int>(database_->Query(DB_MinIssAge))
         ,static_cast<int>(database_->Query(DB_MaxIssAge))
         );
+//    RetirementAge.minimum_and_maximum(...
 #endif // 0
 
     EffectiveDate.minimum
@@ -269,9 +268,6 @@ void Input::DoHarmonize()
         (minimum_birthdate(IssueAge.maximum(), EffectiveDate.value(), use_anb)
         ,maximum_birthdate(IssueAge.minimum(), EffectiveDate.value(), use_anb)
         );
-
-    RetirementAge   .enable(mce_no  == DeprecatedUseDOR);
-    DateOfRetirement.enable(mce_yes == DeprecatedUseDOR);
 
     // DATABASE !! Maximum illustrated age should be distinguished
     // from maturity age.
