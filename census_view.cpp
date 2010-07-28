@@ -223,7 +223,7 @@ Input* CensusView::class_parms_from_class_name(std::string const& class_name)
     // would not all be identical--i.e. because at least one cell or one
     // class default differs from the case default wrt that column.
 bool CensusView::column_value_varies_across_cells
-    (std::string const&                  header
+    (std::string        const& header
     ,std::vector<Input> const& cells
     ) const
 {
@@ -955,8 +955,6 @@ void CensusView::UponRunCaseToSpreadsheet(wxCommandEvent&)
 
 void CensusView::UponPasteCensus(wxCommandEvent&)
 {
-// TODO ?? expunge debugging code in this function.
-
     // A brand-new census contains one default cell, which doesn't
     // represent user input, so we should erase it before pasting
     // new cells from the clipboard.
@@ -994,13 +992,11 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
     std::vector<Input> cells;
 
     std::istringstream iss_census(census_data);
-// warning() << census_data << "entire clipboard text" << LMI_FLUSH;
     std::string line;
 
     // Get header line; parse into field names.
     if(std::getline(iss_census, line, '\n'))
         {
-// warning() << "'" << line << "'" << "header line" << LMI_FLUSH;
         iss_census >> std::ws;
 
         std::istringstream iss_line(line);
@@ -1008,16 +1004,12 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
 
         while(std::getline(iss_line, token, '\t'))
             {
-// warning() << "'" << token << "'" << "push_back header" << LMI_FLUSH;
             headers.push_back(token);
             }
         }
     else
         {
-        warning()
-            << "Error pasting census data: no header line."
-            << LMI_FLUSH
-            ;
+        warning() << "Error pasting census data: no header line." << LMI_FLUSH;
         return;
         }
 
@@ -1025,7 +1017,6 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
     int current_line = 0;
     while(std::getline(iss_census, line, '\n'))
         {
-// warning() << "'" << line << "'" << "processing data line" << LMI_FLUSH;
         ++current_line;
 
         iss_census >> std::ws;
@@ -1054,7 +1045,6 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
 // a limit on exception size that should be tested here?
                 fatal_error() << "Invalid input." << LMI_FLUSH;
                 }
-// warning() << "'" << token << "'" << "push_back value" << LMI_FLUSH;
             values.push_back(token);
             }
 
@@ -1072,16 +1062,11 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
 
         for(unsigned int j = 0; j < headers.size(); ++j)
             {
-// warning() << "'" << headers[j] << "'" << " setting variable..." << LMI_FLUSH;
-// warning() << "'" << values[j] << "'" << " to value..." << LMI_FLUSH;
             current_cell[headers[j]] = values[j];
-// warning() << "OK...next value..." << LMI_FLUSH;
             }
         current_cell.Reconcile();
-// warning() << "diagnosing sequence string problems..." << LMI_FLUSH;
         current_cell.RealizeAllSequenceInput();
         cells.push_back(current_cell);
-// warning() << "Life added." << LMI_FLUSH;
 
         status() << "Added cell number " << cells.size() << '.' << std::flush;
         wxSafeYield();
