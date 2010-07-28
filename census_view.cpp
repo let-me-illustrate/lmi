@@ -951,26 +951,24 @@ void CensusView::UponRunCaseToSpreadsheet(wxCommandEvent&)
     DoAllCells(mce_emit_spreadsheet);
 }
 
-// TODO ?? Add unit tests for this function.
-
-/// A brand-new census contains one default cell, which doesn't
-/// represent user input, so we should erase it before pasting
-/// new cells from the clipboard.
+/// Paste a census from the clipboard.
 ///
-/// But if the census contains any user input, we shouldn't
-/// erase it. User input is present if either the document has
-/// been modified (this covers the case where the default cell
-/// in a new census has been changed) or the document was loaded
-/// from a file (even if it was saved with only an unmodified
-/// default cell, we assume that the contents of any explicitly-
-/// saved file represent user intention). In this case, users
-/// say they want to append pasted data to the cells that are
-/// already present.
+/// See unit tests in Skeleton::UponTestPasting().
 ///
-/// We do all of this as soon as we know that the user wants to
-/// paste census data. If pasting fails, the user is left with a
-/// census that contains no cells, but that's OK; in this event,
-/// they're likely to correct the data and repaste it.
+/// A newly-created census contains one default cell, which doesn't
+/// represent user input, so it is erased before pasting new cells
+/// from the clipboard. It is erased as soon as the paste command is
+/// given. If pasting fails, the census is left with no cells, but
+/// that's okay; in that event, the user is likely to correct the
+/// data and repaste it.
+///
+/// But if the census contains any user input, it shouldn't be erased.
+/// User input is present if either the document has been modified
+/// (e.g., if the default cell in a new census has been changed) or
+/// the document was loaded from a file (even if it was saved with
+/// only an unmodified default cell, because the contents of any saved
+/// file are assumed to represent user intention). In this case,
+/// pasted data is appended to the cells that were already present.
 
 void CensusView::UponPasteCensus(wxCommandEvent&)
 {
