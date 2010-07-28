@@ -953,27 +953,27 @@ void CensusView::UponRunCaseToSpreadsheet(wxCommandEvent&)
 
 // TODO ?? Add unit tests for this function.
 
+/// A brand-new census contains one default cell, which doesn't
+/// represent user input, so we should erase it before pasting
+/// new cells from the clipboard.
+///
+/// But if the census contains any user input, we shouldn't
+/// erase it. User input is present if either the document has
+/// been modified (this covers the case where the default cell
+/// in a new census has been changed) or the document was loaded
+/// from a file (even if it was saved with only an unmodified
+/// default cell, we assume that the contents of any explicitly-
+/// saved file represent user intention). In this case, users
+/// say they want to append pasted data to the cells that are
+/// already present.
+///
+/// We do all of this as soon as we know that the user wants to
+/// paste census data. If pasting fails, the user is left with a
+/// census that contains no cells, but that's OK; in this event,
+/// they're likely to correct the data and repaste it.
+
 void CensusView::UponPasteCensus(wxCommandEvent&)
 {
-    // A brand-new census contains one default cell, which doesn't
-    // represent user input, so we should erase it before pasting
-    // new cells from the clipboard.
-    //
-    // But if the census contains any user input, we shouldn't
-    // erase it. User input is present if either the document has
-    // been modified (this covers the case where the default cell
-    // in a new census has been changed) or the document was loaded
-    // from a file (even if it was saved with only an unmodified
-    // default cell, we assume that the contents of any explicitly-
-    // saved file represent user intention). In this case, users
-    // say they want to append pasted data to the cells that are
-    // already present.
-    //
-    // We do all of this as soon as we know that the user wants to
-    // paste census data. If pasting fails, the user is left with a
-    // census that contains no cells, but that's OK; in this event,
-    // they're likely to correct the data and repaste it.
-    //
     // In the solution domain:
     //   document modified <--> dirty flag set
     //   loaded from file  <--> document path not null
