@@ -957,10 +957,8 @@ void CensusView::UponRunCaseToSpreadsheet(wxCommandEvent&)
 ///
 /// A newly-created census contains one default cell, which doesn't
 /// represent user input, so it is erased before pasting new cells
-/// from the clipboard. It is erased as soon as the paste command is
-/// given. If pasting fails, the census is left with no cells, but
-/// that's okay; in that event, the user is likely to correct the
-/// data and repaste it.
+/// from the clipboard. The clipboard contents are validated before
+/// this erasure, so the document is not changed if pasting failed.
 ///
 /// But if the census contains any user input, it shouldn't be erased.
 /// User input is present if either the document has been modified
@@ -972,13 +970,6 @@ void CensusView::UponRunCaseToSpreadsheet(wxCommandEvent&)
 
 void CensusView::UponPasteCensus(wxCommandEvent&)
 {
-    if(!document().IsModified() && !document().GetDocumentSaved())
-        {
-        cell_parms().clear();
-        class_parms().clear();
-        class_parms().push_back(case_parms()[0]);
-        }
-
     std::string const census_data = ClipboardEx::GetText();
 
     std::vector<std::string> headers;
@@ -1071,11 +1062,14 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
         return;
         }
 
-    std::back_insert_iterator<std::vector<Input> > iip
-        (cell_parms()
-        );
+    if(!document().IsModified() && !document().GetDocumentSaved())
+        {
+        cell_parms().clear();
+        class_parms().clear();
+        class_parms().push_back(case_parms()[0]);
+        }
+    std::back_insert_iterator<std::vector<Input> > iip(cell_parms());
     std::copy(cells.begin(), cells.end(), iip);
-
     document().Modify(true);
 
     Update();
