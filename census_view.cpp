@@ -972,12 +972,7 @@ void CensusView::UponRunCaseToSpreadsheet(wxCommandEvent&)
 
 void CensusView::UponPasteCensus(wxCommandEvent&)
 {
-    // In the solution domain:
-    //   document modified <--> dirty flag set
-    //   loaded from file  <--> document path not null
-// TODO ?? WX PORT !! How to do this with wx?
-//    if(!document().IsModified() && 0 == document().GetDocPath())
-//    if(!document().IsModified())
+    if(!document().IsModified() && !document().GetDocumentSaved())
         {
         cell_parms().clear();
         class_parms().clear();
