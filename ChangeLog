@@ -26653,3 +26653,29 @@ Rectify names.
 Fix defect introduced 20100703T0055Z. See:
   http://lists.nongnu.org/archive/html/lmi/2010-07/msg00035.html
 
+20100728T1947Z <gchicares@sbcglobal.net> [658]
+
+  census_view.cpp
+Expunge disused diagnostic code.
+
+20100728T1951Z <gchicares@sbcglobal.net> [658]
+
+  census_view.cpp
+Rearrange.
+
+20100728T1956Z <gchicares@sbcglobal.net> [657]
+
+  census_view.cpp
+Improve documentation.
+
+20100728T2012Z <gchicares@sbcglobal.net> [656]
+
+  census_view.cpp
+Resurrect documented behavior.
+
+20100728T2042Z <gchicares@sbcglobal.net> [656]
+
+  census_view.cpp
+Improve error handling. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-07/msg00036.html
+
