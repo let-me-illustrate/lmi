@@ -26679,3 +26679,9 @@ Resurrect documented behavior.
 Improve error handling. See:
   http://lists.nongnu.org/archive/html/lmi/2010-07/msg00036.html
 
+20100729T0212Z <gchicares@sbcglobal.net> [656]
+
+  census_view.cpp
+Explicitly assert certain postconditions. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-07/msg00037.html
+

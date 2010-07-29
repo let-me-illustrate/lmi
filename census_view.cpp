@@ -1068,12 +1068,15 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
         class_parms().clear();
         class_parms().push_back(case_parms()[0]);
         }
+
     std::back_insert_iterator<std::vector<Input> > iip(cell_parms());
     std::copy(cells.begin(), cells.end(), iip);
     document().Modify(true);
-
     Update();
-
     status() << std::flush;
+
+    LMI_ASSERT(!case_parms ().empty());
+    LMI_ASSERT(!cell_parms ().empty());
+    LMI_ASSERT(!class_parms().empty());
 }
 
