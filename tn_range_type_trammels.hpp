@@ -50,9 +50,6 @@ class percentage_trammel
     T nominal_maximum() const {return 100;}
 };
 
-// TODO ?? Consider generating these with macros, e.g.
-//   TRAMMEL(1,0,0)
-
 template<typename T>
 class proportion_trammel
     :public trammel_base<T>
@@ -80,24 +77,8 @@ class nonnegative_trammel
     T nominal_maximum() const {return std::numeric_limits<T>::max();}
 };
 
-// TODO ?? These three
-//    issue_age      [0, omega - 1]
-//    attained_age   [x, omega - 1]
-//    duration       [0, omega-x-1]
-// are identical for now; they're distinguished so that the
-// limit semantics above can be added later.
-
 template<typename T>
-class issue_age_trammel
-    :public trammel_base<T>
-{
-    T nominal_minimum() const {return  0;}
-    T default_value()   const {return  0;}
-    T nominal_maximum() const {return 99;}
-};
-
-template<typename T>
-class attained_age_trammel
+class age_trammel
     :public trammel_base<T>
 {
     T nominal_minimum() const {return  0;}

@@ -38,8 +38,7 @@ typedef tn_range<double       , unrestricted_trammel   <double       > > tnr_unr
 typedef tn_range<double       , proportion_trammel     <double       > > tnr_proportion;
 typedef tn_range<double       , nonnegative_trammel    <double       > > tnr_nonnegative_double;
 typedef tn_range<int          , nonnegative_trammel    <int          > > tnr_nonnegative_integer;
-typedef tn_range<int          , issue_age_trammel      <int          > > tnr_issue_age;
-typedef tn_range<int          , attained_age_trammel   <int          > > tnr_attained_age;
+typedef tn_range<int          , age_trammel            <int          > > tnr_age;
 typedef tn_range<int          , duration_trammel       <int          > > tnr_duration;
 typedef tn_range<int          , month_trammel          <int          > > tnr_month;
 typedef tn_range<double       , corridor_factor_trammel<double       > > tnr_corridor_factor;

@@ -28,8 +28,8 @@
 //
 // Gregory W. Chicares modified it in the years shown above to adapt
 // it to the life-insurance-illustrations problem domain, and for
-// other reasons evident in cvs or explained in 'ChangeLog'. Any
-// defect should not reflect on Stephen F. Booth's reputation.
+// other reasons evident in the repository or explained in 'ChangeLog'.
+// Any defect should not reflect on Stephen F. Booth's reputation.
 
 // $Id$
 
@@ -487,8 +487,8 @@ void ShowOutput(cgicc::Cgicc const& data)
     input["UnderwritingClass"]             = "Preferred";
     input["WaiverOfPremiumBenefit"]        = "No";
     input["AccidentalDeathBenefit"]        = "No";
-    input["DeprecatedSolveTgtAtWhich"]     = "Year";
-    input["DeprecatedSolveToWhich"]        = "Year";
+    input["SolveTgtAtWhich"]               = "Year";
+    input["SolveToWhich"]                  = "Year";
     input["UseCurrentDeclaredRate"]        = "No";
 
     input["ProductName"]                   = GetValue(data, "ProductName" );

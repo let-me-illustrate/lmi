@@ -54,11 +54,11 @@ int test_main(int, char*[])
 
     if(std::numeric_limits<double>::has_quiet_NaN)
         {
-        std::cerr << "has quiet NaN" << std::endl;
+        std::cout << "has quiet NaN" << std::endl;
         }
     else
         {
-        std::cerr << "lacks quiet NaN" << std::endl;
+        std::cout << "lacks quiet NaN" << std::endl;
         }
 
     float       x = implausible_value<float>      ();

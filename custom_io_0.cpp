@@ -284,21 +284,8 @@ bool custom_io_0_read(Input& z, std::string const& filename)
             ;
         }
 
-    z["State"]                     = n_v_pairs.string_value("ApplicantState");
-    z["CorporationState"]          = z["State"];
-    // TRICKY !! This is probably unnecessary, but if so, it's because
-    // of some kludge that works around the problem. 'State' and
-    // 'CorporationState' should not exist; only 'StateOfJurisdiction'
-    // should. Therefore, when that felicitous state of affairs is
-    // brought about, the following line (which is perhaps redundant
-    // today) will do the right thing, and the preceding two lines
-    // can be deleted. The customer's name 'ApplicantState' would seem
-    // to correspond to correspond better to lmi's 'State', but
-    // that's a red herring: the customer gives only two states, one
-    // for "Applicant" and one for "Agent", but none for "Corporation"
-    // that would correspond to 'CorporationState', and our intention
-    // is to make lmi correspond to that paradigm anyway, someday.
-    z["StateOfJurisdiction"]       = z["State"];
+    z["StateOfJurisdiction"]       = n_v_pairs.string_value("ApplicantState");
+    z["PremiumTaxState"]           = n_v_pairs.string_value("ApplicantState");
 
 // Not yet used, but might be wanted someday:
 // PaymentsPerYear=1

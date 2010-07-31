@@ -32,8 +32,8 @@
 /// Public dummy for private taboo regexen.
 ///
 /// Copy this file to '../products/src' and edit the copy to express
-/// private taboos--anything that shouldn't be uttered in cvs, even to
-/// forbid it, such as a client's name.
+/// private taboos--anything that shouldn't be uttered in the
+/// repository, even to forbid it, such as a client's name.
 
 std::map<std::string, bool> my_taboos()
 {

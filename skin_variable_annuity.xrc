@@ -164,7 +164,7 @@ useful in the future.
                         <object class="sizeritem">
                             <flag>wxGROW|wxALL</flag>
                             <border>2</border>
-                            <object class="wxCheckBox" name="DeprecatedUseDOB">
+                            <object class="wxCheckBox" name="UseDOB">
                                 <help>Calculate issue age based on date of birth and effective date, automatically reflecting changes in effective date</help>
                                 <label>Birthdate overrides issue age </label>
                             </object>

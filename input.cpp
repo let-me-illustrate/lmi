@@ -51,7 +51,6 @@ Input::Input()
 //    ,TermRiderProportion              ("")
 //    ,TermRiderUseProportion           ("")
 //    ,DateOfBirth                      ("")
-//    ,DateOfRetirement                 ("")
 //    ,SubstandardTable                 ("")
 //    ,ProductName                      ("")
 //    ,Dumpin                           ("")
@@ -146,7 +145,6 @@ Input::Input()
     ,SurviveToYear                    ("100")
     ,SurviveToAge                     ("99")
     ,MaximumNaar                      ("10000000")
-//    ,UseOffshoreCorridorFactor        ("")
 //    ,ChildRider                       ("")
 //    ,ChildRiderAmount                 ("")
 //    ,SpouseRider                      ("")
@@ -168,6 +166,7 @@ Input::Input()
 //    ,InforceContractMonth             ("")
 //    ,InforceLeastDeathBenefit         ("")
     ,StateOfJurisdiction              ("CT")
+    ,PremiumTaxState                  ("CT")
     ,SalarySpecifiedAmountFactor      ("1")
     ,SalarySpecifiedAmountCap         ("100000")
     ,SalarySpecifiedAmountOffset      ("50000")
@@ -177,10 +176,8 @@ Input::Input()
     ,ExtraMonthlyCustodialFee         ("0")
     ,ExtraCompensationOnAssets        ("0")
     ,ExtraCompensationOnPremium       ("0")
-    ,OffshoreCorridorFactor           ("1")
     ,PartialMortalityMultiplier       ("1")
     ,CurrentCoiMultiplier             ("1")
-    ,CurrentCoiGrading                ("0")
 //    ,CorporationTaxBracket            ("")
 //    ,TaxBracket                       ("")
     ,ProjectedSalary                  ("100000")
@@ -214,11 +211,10 @@ Input::Input()
 //    ,SupplementalReportColumn09       ("")
 //    ,SupplementalReportColumn10       ("")
 //    ,SupplementalReportColumn11       ("")
-    ,DeprecatedSolveTgtAtWhich        ("Maturity")
-    ,DeprecatedSolveFromWhich         ("Issue")
-    ,DeprecatedSolveToWhich           ("Retirement")
-//    ,DeprecatedUseDOB                 ("")
-//    ,DeprecatedUseDOR                 ("")
+    ,SolveTgtAtWhich                  ("Maturity")
+    ,SolveFromWhich                   ("Issue")
+    ,SolveToWhich                     ("Retirement")
+//    ,UseDOB                           ("")
 //    ,EffectiveDateToday               ("")
 //    ,DeathBenefitOptionFromRetirement ("")
 //    ,DeathBenefitOptionFromIssue      ("")
@@ -335,7 +331,6 @@ std::string Input::differing_fields(Input const& z) const
     return oss.str();
 }
 
-// TODO ?? Decide what to do about commented-out members.
 void Input::AscribeMembers()
 {
     ascribe("IssueAge"                              , &Input::IssueAge                              );
@@ -351,9 +346,8 @@ void Input::AscribeMembers()
     ascribe("TermRiderProportion"                   , &Input::TermRiderProportion                   );
     ascribe("TermRiderUseProportion"                , &Input::TermRiderUseProportion                );
     ascribe("DateOfBirth"                           , &Input::DateOfBirth                           );
-    ascribe("DateOfRetirement"                      , &Input::DateOfRetirement                      );
     ascribe("SubstandardTable"                      , &Input::SubstandardTable                      );
-    ascribe("ProductName"                           , &Input::ProductName                           ); // TODO ?? Required.
+    ascribe("ProductName"                           , &Input::ProductName                           );
     ascribe("Dumpin"                                , &Input::Dumpin                                );
     ascribe("External1035ExchangeAmount"            , &Input::External1035ExchangeAmount            );
     ascribe("External1035ExchangeBasis"             , &Input::External1035ExchangeBasis             );
@@ -391,7 +385,7 @@ void Input::AscribeMembers()
     ascribe("NumberOfIdenticalLives"                , &Input::NumberOfIdenticalLives                );
     ascribe("UseExperienceRating"                   , &Input::UseExperienceRating                   );
     ascribe("UsePartialMortality"                   , &Input::UsePartialMortality                   );
-////    ascribe("PartialMortalityTable"                 , &Input::PartialMortalityTable                 ); // TODO ?? Not implemented.
+////    ascribe("PartialMortalityTable"                 , &Input::PartialMortalityTable                 ); // INPUT !! Not yet implemented.
     ascribe("InsuredName"                           , &Input::InsuredName                           );
     ascribe("Address"                               , &Input::Address                               );
     ascribe("City"                                  , &Input::City                                  );
@@ -410,9 +404,9 @@ void Input::AscribeMembers()
     ascribe("AgentZipCode"                          , &Input::AgentZipCode                          );
     ascribe("AgentPhone"                            , &Input::AgentPhone                            );
     ascribe("AgentId"                               , &Input::AgentId                               );
-//    ascribe("InsuredPremiumTableNumber"             , &Input::InsuredPremiumTableNumber             ); // TODO ?? Not implemented.
+//    ascribe("InsuredPremiumTableNumber"             , &Input::InsuredPremiumTableNumber             ); // INPUT !! Not yet implemented.
     ascribe("InsuredPremiumTableFactor"             , &Input::InsuredPremiumTableFactor             );
-//    ascribe("CorporationPremiumTableNumber"         , &Input::CorporationPremiumTableNumber         ); // TODO ?? Not implemented.
+//    ascribe("CorporationPremiumTableNumber"         , &Input::CorporationPremiumTableNumber         ); // INPUT !! Not yet implemented.
     ascribe("CorporationPremiumTableFactor"         , &Input::CorporationPremiumTableFactor         );
     ascribe("EffectiveDate"                         , &Input::EffectiveDate                         );
     ascribe("DefinitionOfLifeInsurance"             , &Input::DefinitionOfLifeInsurance             );
@@ -446,7 +440,6 @@ void Input::AscribeMembers()
     ascribe("SurviveToYear"                         , &Input::SurviveToYear                         );
     ascribe("SurviveToAge"                          , &Input::SurviveToAge                          );
     ascribe("MaximumNaar"                           , &Input::MaximumNaar                           );
-    ascribe("UseOffshoreCorridorFactor"             , &Input::UseOffshoreCorridorFactor             );
     ascribe("ChildRider"                            , &Input::ChildRider                            );
     ascribe("ChildRiderAmount"                      , &Input::ChildRiderAmount                      );
     ascribe("SpouseRider"                           , &Input::SpouseRider                           );
@@ -468,6 +461,7 @@ void Input::AscribeMembers()
     ascribe("InforceContractMonth"                  , &Input::InforceContractMonth                  );
     ascribe("InforceLeastDeathBenefit"              , &Input::InforceLeastDeathBenefit              );
     ascribe("StateOfJurisdiction"                   , &Input::StateOfJurisdiction                   );
+    ascribe("PremiumTaxState"                       , &Input::PremiumTaxState                       );
     ascribe("SalarySpecifiedAmountFactor"           , &Input::SalarySpecifiedAmountFactor           );
     ascribe("SalarySpecifiedAmountCap"              , &Input::SalarySpecifiedAmountCap              );
     ascribe("SalarySpecifiedAmountOffset"           , &Input::SalarySpecifiedAmountOffset           );
@@ -477,10 +471,8 @@ void Input::AscribeMembers()
     ascribe("ExtraMonthlyCustodialFee"              , &Input::ExtraMonthlyCustodialFee              );
     ascribe("ExtraCompensationOnAssets"             , &Input::ExtraCompensationOnAssets             );
     ascribe("ExtraCompensationOnPremium"            , &Input::ExtraCompensationOnPremium            );
-    ascribe("OffshoreCorridorFactor"                , &Input::OffshoreCorridorFactor                );
     ascribe("PartialMortalityMultiplier"            , &Input::PartialMortalityMultiplier            );
     ascribe("CurrentCoiMultiplier"                  , &Input::CurrentCoiMultiplier                  );
-    ascribe("CurrentCoiGrading"                     , &Input::CurrentCoiGrading                     );
     ascribe("CorporationTaxBracket"                 , &Input::CorporationTaxBracket                 );
     ascribe("TaxBracket"                            , &Input::TaxBracket                            );
     ascribe("ProjectedSalary"                       , &Input::ProjectedSalary                       );
@@ -495,7 +487,7 @@ void Input::AscribeMembers()
     ascribe("NewLoan"                               , &Input::NewLoan                               );
     ascribe("Withdrawal"                            , &Input::Withdrawal                            );
     ascribe("FlatExtra"                             , &Input::FlatExtra                             );
-//    ascribe("PolicyLevelFlatExtra"                  , &Input::PolicyLevelFlatExtra                  ); // TODO ?? Not implemented.
+//    ascribe("PolicyLevelFlatExtra"                  , &Input::PolicyLevelFlatExtra                  ); // INPUT !! Not yet implemented.
     ascribe("HoneymoonValueSpread"                  , &Input::HoneymoonValueSpread                  );
     ascribe("PremiumHistory"                        , &Input::PremiumHistory                        );
     ascribe("SpecamtHistory"                        , &Input::SpecamtHistory                        );
@@ -516,18 +508,17 @@ void Input::AscribeMembers()
     ascribe("SupplementalReportColumn10"            , &Input::SupplementalReportColumn10            );
     ascribe("SupplementalReportColumn11"            , &Input::SupplementalReportColumn11            );
 
-    ascribe("DeprecatedSolveTgtAtWhich"             , &Input::DeprecatedSolveTgtAtWhich             );
-    ascribe("DeprecatedSolveFromWhich"              , &Input::DeprecatedSolveFromWhich              );
-    ascribe("DeprecatedSolveToWhich"                , &Input::DeprecatedSolveToWhich                );
-    ascribe("DeprecatedUseDOB"                      , &Input::DeprecatedUseDOB                      );
-    ascribe("DeprecatedUseDOR"                      , &Input::DeprecatedUseDOR                      );
+    ascribe("SolveTgtAtWhich"                       , &Input::SolveTgtAtWhich                       );
+    ascribe("SolveFromWhich"                        , &Input::SolveFromWhich                        );
+    ascribe("SolveToWhich"                          , &Input::SolveToWhich                          );
+    ascribe("UseDOB"                                , &Input::UseDOB                                );
     ascribe("EffectiveDateToday"                    , &Input::EffectiveDateToday                    );
 
     ascribe("DeathBenefitOptionFromRetirement"      , &Input::DeathBenefitOptionFromRetirement      );
     ascribe("DeathBenefitOptionFromIssue"           , &Input::DeathBenefitOptionFromIssue           );
     ascribe("SpecifiedAmountFromRetirement"         , &Input::SpecifiedAmountFromRetirement         );
     ascribe("SpecifiedAmountFromIssue"              , &Input::SpecifiedAmountFromIssue              );
-//    ascribe("SpecifiedAmountStrategyFromRetirement" , &Input::SpecifiedAmountStrategyFromRetirement ); // TODO ?? Not implemented.
+//    ascribe("SpecifiedAmountStrategyFromRetirement" , &Input::SpecifiedAmountStrategyFromRetirement ); // INPUT !! Obsolete scalar alternative controls.
     ascribe("SpecifiedAmountStrategyFromIssue"      , &Input::SpecifiedAmountStrategyFromIssue      );
     ascribe("IndividualPaymentMode"                 , &Input::IndividualPaymentMode                 );
     ascribe("IndividualPaymentToAlternative"        , &Input::IndividualPaymentToAlternative        );

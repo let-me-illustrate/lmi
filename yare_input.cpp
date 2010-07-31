@@ -115,8 +115,6 @@ yare_input::yare_input(Input const& z)
     NumberOfIdenticalLives          = z.NumberOfIdenticalLives         .value();
     UseExperienceRating             = z.UseExperienceRating            .value();
     UsePartialMortality             = z.UsePartialMortality            .value();
-    State                           = z.State                          .value();
-    CorporationState                = z.CorporationState               .value();
     InsuredPremiumTableFactor       = z.InsuredPremiumTableFactor      .value();
     CorporationPremiumTableFactor   = z.CorporationPremiumTableFactor  .value();
     EffectiveDate                   = z.EffectiveDate                  .value();
@@ -163,6 +161,7 @@ yare_input::yare_input(Input const& z)
     InforceContractMonth            = z.InforceContractMonth           .value();
     InforceLeastDeathBenefit        = z.InforceLeastDeathBenefit       .value();
     StateOfJurisdiction             = z.StateOfJurisdiction            .value();
+    PremiumTaxState                 = z.PremiumTaxState                .value();
     SalarySpecifiedAmountFactor     = z.SalarySpecifiedAmountFactor    .value();
     SalarySpecifiedAmountCap        = z.SalarySpecifiedAmountCap       .value();
     SalarySpecifiedAmountOffset     = z.SalarySpecifiedAmountOffset    .value();

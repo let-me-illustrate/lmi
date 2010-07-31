@@ -253,8 +253,8 @@ common_common_objects := \
 # Illustrations: the antediluvian branch. This code is fairly simple
 # and clean, but less powerful than the production branch. For
 # historical reasons, these 'branches' aren't maintained in separate
-# cvs branches; instead, all their source code resides in the same
-# place, and conflicts are prevented by prepending 'ihs_' to the
+# repository branches; instead, all their source code resides in the
+# same place, and conflicts are prevented by prepending 'ihs_' to the
 # names of many files in the production branch. Gradually the
 # differences are being eliminated.
 

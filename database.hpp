@@ -50,20 +50,19 @@ class LMI_SO product_database
 
   public:
     product_database
-        (std::string const& a_ProductName
-        ,mcenum_gender      a_Gender
-        ,mcenum_class       a_Class
-        ,mcenum_smoking     a_Smoker
-        ,int                a_IssueAge
-        ,mcenum_uw_basis    a_UWBasis
-        ,mcenum_state       a_State
+        (std::string const& ProductName
+        ,mcenum_gender      Gender
+        ,mcenum_class       UnderwritingClass
+        ,mcenum_smoking     Smoking
+        ,int                IssueAge
+        ,mcenum_uw_basis    GroupUnderwritingType
+        ,mcenum_state       StateOfJurisdiction
         );
     explicit product_database(yare_input const&);
     // Special ctor implemented only in a unit-test TU.
     explicit product_database(int length);
     ~product_database();
 
-    mcenum_state GetStateOfJurisdiction() const;
     int length() const;
 
     // Return scalar: use double because it's convertible to int, bool, etc.
@@ -77,19 +76,12 @@ class LMI_SO product_database
     bool varies_by_state(e_database_key) const;
 
   private:
-    void initialize();
+    void initialize(std::string const& product_name);
 
     database_entity const& entity_from_key(e_database_key) const;
 
     database_index  index_;
     int             length_;
-
-    mcenum_gender   Gender;   // gender
-    mcenum_class    Class;    // underwriting class
-    mcenum_smoking  Smoker;   // smoker class
-    int             IssueAge; // issue age
-    mcenum_uw_basis UWBasis;  // underwriting basis
-    mcenum_state    State;    // state of jurisdiction
 };
 
 #endif // database_hpp

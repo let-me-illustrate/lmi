@@ -170,11 +170,10 @@ void Input::DoHarmonize()
     AmortizePremiumLoad.enable(database_->Query(DB_AllowAmortPremLoad));
     ExtraCompensationOnAssets .enable(database_->Query(DB_AllowExtraAssetComp));
     ExtraCompensationOnPremium.enable(database_->Query(DB_AllowExtraPremComp));
-    OffshoreCorridorFactor.enable(mce_noncompliant == DefinitionOfLifeInsurance);
 
     RetireesCanEnroll.enable(database_->Query(DB_AllowRetirees));
 
-    // TODO ?? There should be flags in the database to allow or
+    // TODO ?? DATABASE !! There should be flags in the database to allow or
     // forbid paramedical and nonmedical underwriting; arbitrarily,
     // until they are added, those options are always inhibited.
     GroupUnderwritingType.allow(mce_medical, database_->Query(DB_AllowFullUw));
@@ -188,7 +187,6 @@ void Input::DoHarmonize()
     PartialMortalityTable     .enable(part_mort_used);
     PartialMortalityMultiplier.enable(part_mort_used);
 
-    CurrentCoiGrading         .enable(part_mort_used && home_office_only);
     CashValueEnhancementRate  .enable(home_office_only);
 
     SurviveToType             .allow(mce_no_survival_limit    , part_mort_used);
@@ -234,8 +232,8 @@ void Input::DoHarmonize()
 
     EffectiveDate.enable(mce_no == EffectiveDateToday);
 
-    IssueAge        .enable(mce_no  == DeprecatedUseDOB);
-    DateOfBirth     .enable(mce_yes == DeprecatedUseDOB);
+    IssueAge        .enable(mce_no  == UseDOB);
+    DateOfBirth     .enable(mce_yes == UseDOB);
 
     // The ranges of both EffectiveDate and IssueAge are treated as
     // independent, to prevent one's value from affecting the other's
@@ -246,11 +244,16 @@ void Input::DoHarmonize()
 
 #if 0
 // TODO ?? Temporarily suppress this while exploring automatic-
-// enforcement options in the skeleton trunk.
+// enforcement options in the skeleton trunk. Certain limits are
+// interdependent:
+//    issue_age      [0, omega - 1] (taken as an independent variable)
+//    attained_age   [x, omega - 1]
+//    duration       [0, omega-x-1]
     IssueAge.minimum_and_maximum
         (static_cast<int>(database_->Query(DB_MinIssAge))
         ,static_cast<int>(database_->Query(DB_MaxIssAge))
         );
+//    RetirementAge.minimum_and_maximum(...
 #endif // 0
 
     EffectiveDate.minimum
@@ -265,9 +268,6 @@ void Input::DoHarmonize()
         (minimum_birthdate(IssueAge.maximum(), EffectiveDate.value(), use_anb)
         ,maximum_birthdate(IssueAge.minimum(), EffectiveDate.value(), use_anb)
         );
-
-    RetirementAge   .enable(mce_no  == DeprecatedUseDOR);
-    DateOfRetirement.enable(mce_yes == DeprecatedUseDOR);
 
     // DATABASE !! Maximum illustrated age should be distinguished
     // from maturity age.
@@ -586,7 +586,7 @@ false // Silly workaround for now.
     IndividualPaymentToAge     .enable(mce_to_age  == IndividualPaymentToAlternative);
     IndividualPaymentToDuration.enable(mce_to_year == IndividualPaymentToAlternative);
 
-//    InsuredPremiumTableNumber.enable(mce_pmt_table == IndividualPaymentStrategy); // TODO ?? Not yet implemented.
+//    InsuredPremiumTableNumber.enable(mce_pmt_table == IndividualPaymentStrategy); // // INPUT !! Obsolete scalar alternative control.
 // In the legacy system, that control, 'InsuredPremiumTableFactor',
 // and their 'Corporation'- congeners were enabled iff a
 // 'mce_pmt_table' strategy was selected in a scalar control--but
@@ -682,7 +682,7 @@ false // Silly workaround for now.
 
     InputFundManagementFee.enable(mce_yes == OverrideFundManagementFee || mce_fund_override == FundChoiceType);
 
-// TODO ?? WX PORT !! There seems to be some confusion here. We seem to have
+// TODO ?? WX PORT !! There seems to be some confusion here. We have
 // checkboxes 'OverrideFundManagementFee' and 'UseAverageOfAllFunds'
 // that duplicate enumerative control 'FundChoiceType'.
 //
@@ -720,13 +720,12 @@ false // Silly workaround for now.
 
     bool wd_solve = (mce_solve_wd == SolveType);
     bool wd_forbidden = !wd_allowed;
-    // TODO ?? Also need to inhibit affected solves.
 
     Withdrawal.enable(!wd_forbidden && !wd_solve);
 
     bool wd_inhibit = wd_solve || wd_forbidden;
 // TODO ?? WX PORT !! Figure out how to do this properly:
-    bool wd_inhibit_simple = wd_inhibit; // TODO ?? || !is_wd_simply_representable;
+    bool wd_inhibit_simple = wd_inhibit; // || !is_wd_simply_representable;
 
     WithdrawalFromAlternative.allow(mce_from_issue     , !wd_inhibit_simple);
     WithdrawalFromAlternative.allow(mce_from_year      , !wd_inhibit_simple);
@@ -753,7 +752,7 @@ false // Silly workaround for now.
 
     bool loan_inhibit = loan_solve || loan_forbidden;
 // TODO ?? WX PORT !! Figure out how to do this properly:
-    bool loan_inhibit_simple = loan_inhibit; // TODO ?? || !is_loan_simply_representable;
+    bool loan_inhibit_simple = loan_inhibit; // !is_loan_simply_representable;
 
     NewLoan.enable(!loan_inhibit);
 
@@ -834,7 +833,7 @@ false // Silly workaround for now.
         &&  (
                 mce_pmt_input_scalar == IndividualPaymentStrategy
             )
-// TODO ?? WX PORT !! There is no employer payment strategy.
+// INPUT !! Obsolete scalar alternative control.
 //        &&  (
 //                mce_pmt_input_scalar == ErPmtStrategy
 //            )
@@ -853,27 +852,27 @@ false // Silly workaround for now.
 
     bool actually_solving = solves_allowed && mce_solve_none != SolveType;
 
-    DeprecatedSolveFromWhich  .allow(mce_from_issue     , actually_solving);
-    DeprecatedSolveFromWhich  .allow(mce_from_year      , actually_solving);
-    DeprecatedSolveFromWhich  .allow(mce_from_age       , actually_solving);
-    DeprecatedSolveFromWhich  .allow(mce_from_retirement, actually_solving);
-    DeprecatedSolveFromWhich  .enable(actually_solving);
+    SolveFromWhich  .allow(mce_from_issue     , actually_solving);
+    SolveFromWhich  .allow(mce_from_year      , actually_solving);
+    SolveFromWhich  .allow(mce_from_age       , actually_solving);
+    SolveFromWhich  .allow(mce_from_retirement, actually_solving);
+    SolveFromWhich  .enable(actually_solving);
 
-    DeprecatedSolveToWhich    .allow(mce_to_retirement  , actually_solving);
-    DeprecatedSolveToWhich    .allow(mce_to_year        , actually_solving);
-    DeprecatedSolveToWhich    .allow(mce_to_age         , actually_solving);
-    DeprecatedSolveToWhich    .allow(mce_to_maturity    , actually_solving);
-    DeprecatedSolveToWhich    .enable(actually_solving);
+    SolveToWhich    .allow(mce_to_retirement  , actually_solving);
+    SolveToWhich    .allow(mce_to_year        , actually_solving);
+    SolveToWhich    .allow(mce_to_age         , actually_solving);
+    SolveToWhich    .allow(mce_to_maturity    , actually_solving);
+    SolveToWhich    .enable(actually_solving);
 
-    DeprecatedSolveTgtAtWhich .allow(mce_to_retirement  , actually_solving);
-    DeprecatedSolveTgtAtWhich .allow(mce_to_year        , actually_solving);
-    DeprecatedSolveTgtAtWhich .allow(mce_to_age         , actually_solving);
-    DeprecatedSolveTgtAtWhich .allow(mce_to_maturity    , actually_solving);
-    DeprecatedSolveTgtAtWhich .enable(actually_solving && mce_solve_for_non_mec != SolveTarget);
+    SolveTgtAtWhich .allow(mce_to_retirement  , actually_solving);
+    SolveTgtAtWhich .allow(mce_to_year        , actually_solving);
+    SolveTgtAtWhich .allow(mce_to_age         , actually_solving);
+    SolveTgtAtWhich .allow(mce_to_maturity    , actually_solving);
+    SolveTgtAtWhich .enable(actually_solving && mce_solve_for_non_mec != SolveTarget);
 
-    SolveBeginYear .enable(actually_solving && mce_from_year == DeprecatedSolveFromWhich);
-    SolveEndYear   .enable(actually_solving && mce_to_year   == DeprecatedSolveToWhich);
-    SolveTargetYear.enable(actually_solving && mce_to_year   == DeprecatedSolveTgtAtWhich && mce_solve_for_non_mec != SolveTarget);
+    SolveBeginYear .enable(actually_solving && mce_from_year == SolveFromWhich);
+    SolveEndYear   .enable(actually_solving && mce_to_year   == SolveToWhich);
+    SolveTargetYear.enable(actually_solving && mce_to_year   == SolveTgtAtWhich && mce_solve_for_non_mec != SolveTarget);
 
     SolveTargetYear.minimum(1);
     // INPUT !! The minimum 'SolveEndYear' and 'SolveTargetYear' set
@@ -887,9 +886,9 @@ false // Silly workaround for now.
 
     // INPUT !! Temporarily, existing -'Time' names are used where
     // -'Age' names would be clearer.
-    SolveBeginTime .enable(actually_solving && mce_from_age == DeprecatedSolveFromWhich);
-    SolveEndTime   .enable(actually_solving && mce_to_age   == DeprecatedSolveToWhich);
-    SolveTargetTime.enable(actually_solving && mce_to_age   == DeprecatedSolveTgtAtWhich && mce_solve_for_non_mec != SolveTarget);
+    SolveBeginTime .enable(actually_solving && mce_from_age == SolveFromWhich);
+    SolveEndTime   .enable(actually_solving && mce_to_age   == SolveToWhich);
+    SolveTargetTime.enable(actually_solving && mce_to_age   == SolveTgtAtWhich && mce_solve_for_non_mec != SolveTarget);
 
 #if 0 // http://lists.nongnu.org/archive/html/lmi/2008-08/msg00036.html
     SolveBeginTime .minimum_and_maximum(issue_age()           , maturity_age());
@@ -1050,7 +1049,7 @@ void Input::DoTransmogrify()
         ,EffectiveDate.value()
         ,use_anb
         );
-    if(mce_no == DeprecatedUseDOB)
+    if(mce_no == UseDOB)
         {
         // If no DOB is supplied, assume a birthday occurs on the
         // issue date--as good an assumption as any, and the simplest.
@@ -1089,7 +1088,7 @@ if(!egregious_kludge)
 
 void Input::SetSolveDurations()
 {
-    switch(DeprecatedSolveTgtAtWhich.value())
+    switch(SolveTgtAtWhich.value())
         {
         case mce_to_year:
             {
@@ -1115,14 +1114,14 @@ void Input::SetSolveDurations()
             {
             fatal_error()
                 << "Case '"
-                << DeprecatedSolveTgtAtWhich.value()
+                << SolveTgtAtWhich.value()
                 << "' not found."
                 << LMI_FLUSH
                 ;
             }
         }
 
-    switch(DeprecatedSolveFromWhich.value())
+    switch(SolveFromWhich.value())
         {
         case mce_from_year:
             {
@@ -1148,14 +1147,14 @@ void Input::SetSolveDurations()
             {
             fatal_error()
                 << "Case '"
-                << DeprecatedSolveFromWhich.value()
+                << SolveFromWhich.value()
                 << "' not found."
                 << LMI_FLUSH
                 ;
             }
         }
 
-    switch(DeprecatedSolveToWhich.value())
+    switch(SolveToWhich.value())
         {
         case mce_to_year:
             {
@@ -1181,7 +1180,7 @@ void Input::SetSolveDurations()
             {
             fatal_error()
                 << "Case '"
-                << DeprecatedSolveToWhich.value()
+                << SolveToWhich.value()
                 << "' not found."
                 << LMI_FLUSH
                 ;
@@ -1303,8 +1302,8 @@ void Input::TransferWithdrawalSimpleControlsToInputSequence()
             {
             if(0 < local_rep->WDBegTime)
 // TODO ??                ( IssueAge + local_rep->WDBegTime
-// TODO ??                < database_->Query(DB_MaturityAge)
-// TODO ??                )
+//                        < database_->Query(DB_MaturityAge)
+//                        )
                 {
                 s += "0, " + value_cast<std::string>(local_rep->WDBegTime);
                 s += "; ";

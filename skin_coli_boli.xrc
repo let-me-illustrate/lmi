@@ -890,7 +890,7 @@ useful in the future.
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxGROW|wxLEFT|wxBOTTOM</flag>
                                     <border>4</border>
-                                    <object class="wxRadioBox" name="DeprecatedUseDOB">
+                                    <object class="wxRadioBox" name="UseDOB">
                                         <help>Calculate issue age based on date of birth and effective date, automatically reflecting changes in effective date</help>
                                         <style>wxRA_SPECIFY_COLS</style>
                                         <label>Use date</label>
@@ -1821,7 +1821,7 @@ useful in the future.
                         <object class="sizeritem">
                             <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>4</border>
-                            <object class="wxRadioBox" name="DeprecatedSolveFromWhich">
+                            <object class="wxRadioBox" name="SolveFromWhich">
                                 <help>Beginning of solve period (inclusive)</help>
                                 <label>From</label>
                                 <style>wxRA_SPECIFY_COLS</style>
@@ -1900,7 +1900,7 @@ useful in the future.
                         <object class="sizeritem">
                             <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>4</border>
-                            <object class="wxRadioBox" name="DeprecatedSolveToWhich">
+                            <object class="wxRadioBox" name="SolveToWhich">
                                 <help>End of solve period (exclusive)</help>
                                 <label>To</label>
                                 <style>wxRA_SPECIFY_COLS</style>
@@ -2036,7 +2036,7 @@ useful in the future.
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                     <border>2</border>
-                                    <object class="wxRadioBox" name="DeprecatedSolveTgtAtWhich">
+                                    <object class="wxRadioBox" name="SolveTgtAtWhich">
                                         <help>When solve target is to be achieved</help>
                                         <label>At</label>
                                         <style>wxRA_SPECIFY_COLS</style>

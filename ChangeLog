@@ -26323,3 +26323,365 @@ Fix defect introduced 20100704T1645Z. See:
 Fix defect introduced 20100704T1645Z. See:
   http://lists.nongnu.org/archive/html/lmi/2010-07/msg00017.html
 
+20100717T0644Z <gchicares@sbcglobal.net> [693]
+
+  diagnostics.sed
+Filter expected output from single-life testdecks.
+
+20100717T0658Z <gchicares@sbcglobal.net> [693]
+
+  mvc_controller.cpp
+Correct a typographical error in a comment.
+
+20100717T0838Z <gchicares@sbcglobal.net> [693]
+
+  version.hpp
+Mark release candidate.
+
+20100718T1459Z <gchicares@sbcglobal.net> [693]
+
+  GNUmakefile
+  README.auto
+  main_cgi.cpp
+  my_test_coding_rules.cpp
+  objects.make
+  test_coding_rules_test.sh
+  text_view.hpp
+Reflect conversion from cvs to svn.
+
+20100718T1627Z <gchicares@sbcglobal.net> [693]
+
+  dbnames.xpp
+  xml_serializable.tpp
+Improve documentation.
+
+20100719T1347Z <gchicares@sbcglobal.net> [693]
+
+  skin.xrc
+Reserve 'FilingApprovalState' for use only in admin-system extracts.
+Elsewhere, 'StateOfJurisdiction' is already in widespread use and need
+not be changed.
+
+20100719T1349Z <gchicares@sbcglobal.net> [693]
+
+  input.cpp
+  input.hpp
+  input_xml_io.cpp
+  mec.xrc
+  mec_input.cpp
+  mec_input.hpp
+  sample.cns
+  sample.ill
+  yare_input.cpp
+  yare_input.hpp
+Add a premium-tax-state field.
+
+20100719T1357Z <gchicares@sbcglobal.net> [693]
+
+  datum_sequence.cpp
+  datum_sequence.hpp
+  input_sequence_entry.cpp
+  input_sequence_entry.hpp
+Remove unintended svn:executable property.
+
+20100720T0021Z <gchicares@sbcglobal.net> [693]
+
+  input_xml_io.cpp
+  mec_input.cpp
+Update version timestamps in comments.
+
+20100720T1922Z <gchicares@sbcglobal.net> [693]
+
+  loads.cpp
+Terminate if untested premium-load amortization is used.
+
+20100720T1923Z <gchicares@sbcglobal.net> [689]
+
+  ledger_invariant.cpp
+Resolve several marked defects. DAC-tax load no longer depends on
+whether premium tax is tiered. One can follow Kernighan and Plauger's
+"Avoid THEN-IF and null ELSE" advice in TEoPS with any type of
+selection-statement.
+
+20100720T2351Z <gchicares@sbcglobal.net> [688]
+
+  ihs_basicval.cpp
+Remove a DWIM exception to consistency testing, inducing a regression
+in system testing that must be analyzed.
+
+20100721T1142Z <gchicares@sbcglobal.net> [688]
+
+  ihs_avmly.cpp
+Refactor. This depends on the 20100720T2351Z change, without which the
+data member now used would not necessarily have been set correctly.
+
+20100721T1209Z <gchicares@sbcglobal.net> [688]
+
+  ihs_avmly.cpp
+Assert formerly-tacit assumptions; improve documentation.
+
+20100721T1402Z <gchicares@sbcglobal.net> [688]
+
+  basic_values.hpp
+  basicvalues.cpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+  ledger_invariant.cpp
+Rectify names, anticipating changes in the meanings of some.
+
+20100721T1612Z <gchicares@sbcglobal.net> [688]
+
+  basic_values.hpp
+  ihs_basicval.cpp
+Rename a function in anticipation of refactoring.
+
+20100721T2129Z <gchicares@sbcglobal.net> [688]
+
+  ihs_basicval.cpp
+Refactor.
+
+20100721T2315Z <gchicares@sbcglobal.net> [686]
+
+  basic_values.hpp
+  ihs_basicval.cpp
+Refactor.
+
+20100722T2254Z <gchicares@sbcglobal.net> [685]
+
+  ihs_avmly.cpp
+Remove an obsolete defect marker. Code that attempted to avoid a MEC
+by increasing specified amount was removed long ago.
+
+20100722T2255Z <gchicares@sbcglobal.net> [685]
+
+  basic_values.hpp
+  basicvalues.cpp
+  ihs_basicval.cpp
+Add members that will soon become useful for premium-tax calculations.
+
+20100723T1029Z <gchicares@sbcglobal.net> [685]
+
+  ihs_basicval.cpp
+  ledger_invariant.cpp
+  loads.cpp
+  loads_impl.hpp
+  loads_test.cpp
+Move premium-tax database lookup out of class Loads.
+
+20100723T1808Z <gchicares@sbcglobal.net> [685]
+
+  database.cpp
+  input_xml_io.cpp
+Move old state determination out of class product_database, inducing a
+regression in system testing that must be analyzed.
+
+20100723T2339Z <gchicares@sbcglobal.net> [685]
+
+  database.cpp
+  database.hpp
+  ihs_basicval.cpp
+  input_test.cpp
+Refactor, simplifying class product_database.
+
+20100724T0340Z <gchicares@sbcglobal.net> [685]
+
+  account_value.hpp
+  basicvalues.cpp
+  custom_io_0.cpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+  input_xml_io.cpp
+  mec_server.cpp
+Use input state of jurisdiction and premium-tax state appropriately.
+
+20100724T1214Z <gchicares@sbcglobal.net> [685]
+
+  yare_input.cpp
+  yare_input.hpp
+Hide disused state fields.
+
+20100724T1215Z <gchicares@sbcglobal.net> [685]
+
+  ihs_basicval.cpp
+Set premium-tax state for GPT server.
+
+20100724T1216Z <gchicares@sbcglobal.net> [685]
+
+  ieee754_test.cpp
+Prefer cout to cerr for normal output.
+
+20100724T1259Z <gchicares@sbcglobal.net> [685]
+
+  alert_test.cpp
+  handle_exceptions_test.cpp
+Mark expected stderr output.
+
+20100725T1858Z <gchicares@sbcglobal.net> [685]
+
+  oecumenic_enumerations.hpp
+Improve documentation.
+
+20100725T1859Z <gchicares@sbcglobal.net> [685]
+
+  dbindex.hpp
+  dbvalue.hpp
+Move an enumeration.
+
+20100725T1900Z <gchicares@sbcglobal.net> [685]
+
+  database.cpp
+  database.hpp
+  input_test.cpp
+Refactor.
+
+20100726T2147Z <gchicares@sbcglobal.net> [685]
+
+  database.cpp
+Refactor.
+
+20100726T2148Z <gchicares@sbcglobal.net> [681]
+
+  input.hpp
+Resolve several marked defects. The present UDTs need not be further
+specialized. For trammeled numeric range types in particular, using
+such functions as
+  tn_range::minimum_and_maximum()
+  tn_range_base::universal_minimum()
+in Input::DoHarmonize() fills all needs for run-time customization.
+
+20100726T2153Z <gchicares@sbcglobal.net> [679]
+
+  input.hpp
+Resolve several marked defects.
+
+20100726T2159Z <gchicares@sbcglobal.net> [678]
+
+  input.hpp
+Improve documentation.
+
+20100726T2319Z <gchicares@sbcglobal.net> [671]
+
+  input.cpp
+Resolve several marked defects. Yet-unused members aren't harmful.
+
+20100726T2353Z <gchicares@sbcglobal.net> [670]
+
+  input_harmonization.cpp
+  tn_range_type_trammels.hpp
+Move a comment, merging two defect markers.
+
+20100727T0004Z <gchicares@sbcglobal.net> [669]
+
+  tn_range_type_trammels.hpp
+Avoid macros.
+
+20100727T0945Z <gchicares@sbcglobal.net> [669]
+
+  input.hpp
+  mec_input.hpp
+  mec_server.cpp
+  tn_range_type_trammels.hpp
+  tn_range_types.cpp
+  tn_range_types.hpp
+Merge two identical types. Rationale: vide supra at 20100726T2148Z.
+
+20100727T1052Z <gchicares@sbcglobal.net> [667]
+
+  input.cpp
+  input.hpp
+  input_harmonization.cpp
+  input_xml_io.cpp
+  sample.cns
+  sample.ill
+  yare_input.hpp
+Remove undesirable input members.
+
+20100727T1332Z <gchicares@sbcglobal.net> [666]
+
+  input_realization.cpp
+Remove a duplicative defect marker.
+
+20100727T1333Z <gchicares@sbcglobal.net> [662]
+
+  input_harmonization.cpp
+Remove duplicative defect markers.
+
+20100727T1338Z <gchicares@sbcglobal.net> [661]
+
+  input_harmonization.cpp
+Remove a marker for a defect already resolved.
+
+20100727T1341Z <gchicares@sbcglobal.net> [659]
+
+  input_harmonization.cpp
+Remove duplicative defect markers.
+
+20100727T2356Z <gchicares@sbcglobal.net> [659]
+
+  xml_serializable.tpp
+Extend redintegrative value-translation to obsolete elements.
+
+20100727T2357Z <gchicares@sbcglobal.net> [659]
+
+  input.cpp
+  input.hpp
+  input_harmonization.cpp
+  input_xml_io.cpp
+  main_cgi.cpp
+  main_cli.cpp
+  mec.xrc
+  mec_input.cpp
+  mec_input.hpp
+  mec_server.cpp
+  sample.cns
+  sample.ill
+  skin.xrc
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_group_carveout2.xrc
+  skin_reg_d.xrc
+  skin_single_premium.xrc
+  skin_variable_annuity.xrc
+  yare_input.hpp
+Rectify names.
+
+20100728T1935Z <gchicares@sbcglobal.net> [659]
+
+  datum_sequence.cpp
+Fix defect introduced 20100703T0055Z. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-07/msg00035.html
+
+20100728T1947Z <gchicares@sbcglobal.net> [658]
+
+  census_view.cpp
+Expunge disused diagnostic code.
+
+20100728T1951Z <gchicares@sbcglobal.net> [658]
+
+  census_view.cpp
+Rearrange.
+
+20100728T1956Z <gchicares@sbcglobal.net> [657]
+
+  census_view.cpp
+Improve documentation.
+
+20100728T2012Z <gchicares@sbcglobal.net> [656]
+
+  census_view.cpp
+Resurrect documented behavior.
+
+20100728T2042Z <gchicares@sbcglobal.net> [656]
+
+  census_view.cpp
+Improve error handling. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-07/msg00036.html
+
+20100729T0212Z <gchicares@sbcglobal.net> [656]
+
+  census_view.cpp
+Explicitly assert certain postconditions. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-07/msg00037.html
+

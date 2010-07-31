@@ -32,7 +32,7 @@ rm --force eraseme*
 good_copyright="...Copyright (C)...`date -u +'%Y'`..."
 
 # Dollar signs must be escaped with '\' in here-documents; writing
-# them on different lines prevents RCS substitution on cvs checkin.
+# them on different lines prevents RCS substitution here.
 
 good_rcsid="...\$\
 Id:...\$..."

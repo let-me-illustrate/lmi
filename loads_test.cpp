@@ -86,7 +86,6 @@ struct LoadsTest
 void LoadsTest::Reinitialize()
 {
     loads_.refundable_sales_load_proportion_    = std::vector<double>(length, 0.50000);
-    loads_.premium_tax_load_                    = std::vector<double>(length, 0.02100);
     loads_.dac_tax_load_                        = std::vector<double>(length, 0.00500);
 
     loads_.monthly_policy_fee_   [mce_gen_guar] = std::vector<double>(length, 8.00000);
@@ -200,6 +199,7 @@ int test_main(int, char*[])
     load_details details
         (length                 // length_
         ,false                  // AmortizePremLoad_
+        ,0.021                  // premium_tax_load_
         ,0.02                   // LowestPremiumTaxLoadRate_
         ,999.999                // premium_tax_rate_                [unused]
         ,999.999                // premium_tax_amortization_rate_   [unused]

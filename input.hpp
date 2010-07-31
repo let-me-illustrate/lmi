@@ -156,7 +156,10 @@ class LMI_SO Input
   private:
     void AscribeMembers();
 
-    // TODO ?? Dubious stuff to support scalar alternative controls.
+    // INPUT !! Obsolete support for scalar alternative controls,
+    // replaced by input sequences. Specimens of the obsolete code
+    // are retained only as a source of ideas for input-sequence
+    // validation.
     void WithdrawalChanged();
     void EnableTransferToSequenceControls(bool enable);
     void TransferWithdrawalSimpleControlsToInputSequence();
@@ -242,8 +245,8 @@ class LMI_SO Input
     int                      GleanedMaturityAge_         ;
     mcenum_ledger_type       GleanedLedgerType_          ;
 
-    tnr_issue_age            IssueAge                        ;
-    tnr_attained_age         RetirementAge                   ;
+    tnr_age                  IssueAge                        ;
+    tnr_age                  RetirementAge                   ;
     mce_gender               Gender                          ;
     mce_smoking              Smoking                         ;
     mce_class                UnderwritingClass               ;
@@ -255,7 +258,6 @@ class LMI_SO Input
     tnr_proportion           TermRiderProportion             ;
     mce_yes_or_no            TermRiderUseProportion          ;
     tnr_date                 DateOfBirth                     ;
-    tnr_date                 DateOfRetirement                ; // TODO ?? Expunge this everywhere.
     mce_table_rating         SubstandardTable                ;
     ce_product_name          ProductName                     ;
     tnr_nonnegative_double   Dumpin                          ;
@@ -318,7 +320,7 @@ class LMI_SO Input
     tnr_nonnegative_double   InsuredPremiumTableFactor       ;
     mce_premium_table        CorporationPremiumTableNumber   ;
     tnr_nonnegative_double   CorporationPremiumTableFactor   ;
-    tnr_date                 EffectiveDate                   ; // TODO ?? Should date types be *essentially* different?
+    tnr_date                 EffectiveDate                   ;
     mce_defn_life_ins        DefinitionOfLifeInsurance       ;
     mce_defn_material_change DefinitionOfMaterialChange      ;
     mce_mec_avoid_method     AvoidMecMethod                  ;
@@ -348,14 +350,13 @@ class LMI_SO Input
     tnr_nonnegative_double   CountryCoiMultiplier            ;
     mce_survival_limit       SurviveToType                   ;
     tnr_duration             SurviveToYear                   ;
-    tnr_attained_age         SurviveToAge                    ;
+    tnr_age                  SurviveToAge                    ;
     tnr_nonnegative_double   MaximumNaar                     ;
-    tnr_corridor_factor      UseOffshoreCorridorFactor       ; // INPUT !! Obsolete, and apparently wrong type.
     mce_yes_or_no            ChildRider                      ;
-    tnr_nonnegative_double   ChildRiderAmount                ; // TODO ?? Specialize?
+    tnr_nonnegative_double   ChildRiderAmount                ;
     mce_yes_or_no            SpouseRider                     ;
-    tnr_nonnegative_double   SpouseRiderAmount               ; // TODO ?? Specialize?
-    tnr_issue_age            SpouseIssueAge                  ; // TODO ?? Specialize?
+    tnr_nonnegative_double   SpouseRiderAmount               ;
+    tnr_age                  SpouseIssueAge                  ;
     datum_string             Franchise                       ;
     datum_string             PolicyNumber                    ;
     tnr_date                 InforceAsOfDate                 ;
@@ -372,6 +373,7 @@ class LMI_SO Input
     tnr_month                InforceContractMonth            ;
     tnr_nonnegative_double   InforceLeastDeathBenefit        ;
     mce_state                StateOfJurisdiction             ;
+    mce_state                PremiumTaxState                 ;
     tnr_nonnegative_double   SalarySpecifiedAmountFactor     ;
     tnr_nonnegative_double   SalarySpecifiedAmountCap        ;
     tnr_nonnegative_double   SalarySpecifiedAmountOffset     ;
@@ -381,10 +383,8 @@ class LMI_SO Input
     datum_sequence           ExtraMonthlyCustodialFee        ;
     datum_sequence           ExtraCompensationOnAssets       ;
     datum_sequence           ExtraCompensationOnPremium      ;
-    datum_sequence           OffshoreCorridorFactor          ; // INPUT !! Obsolete.
     datum_sequence           PartialMortalityMultiplier      ;
     datum_sequence           CurrentCoiMultiplier            ;
-    datum_sequence           CurrentCoiGrading               ; // TODO ?? Obsolete: expunge.
     datum_sequence           CorporationTaxBracket           ;
     datum_sequence           TaxBracket                      ;
     datum_sequence           ProjectedSalary                 ;
@@ -403,7 +403,7 @@ class LMI_SO Input
     datum_sequence           HoneymoonValueSpread            ;
     datum_sequence           PremiumHistory                  ;
     datum_sequence           SpecamtHistory                  ;
-    datum_sequence           FundAllocations                 ; // TODO ?? Needs work.
+    datum_sequence           FundAllocations                 ; // INPUT !! http://savannah.nongnu.org/support/?104481
     datum_sequence           CashValueEnhancementRate        ;
     mce_yes_or_no            CreateSupplementalReport        ;
     mce_report_column        SupplementalReportColumn00      ;
@@ -418,36 +418,35 @@ class LMI_SO Input
     mce_report_column        SupplementalReportColumn09      ;
     mce_report_column        SupplementalReportColumn10      ;
     mce_report_column        SupplementalReportColumn11      ;
-    mce_to_point             DeprecatedSolveTgtAtWhich       ;
-    mce_from_point           DeprecatedSolveFromWhich        ;
-    mce_to_point             DeprecatedSolveToWhich          ;
-    mce_yes_or_no            DeprecatedUseDOB                ;
-    mce_yes_or_no            DeprecatedUseDOR                ;
+    mce_to_point             SolveTgtAtWhich                 ;
+    mce_from_point           SolveFromWhich                  ;
+    mce_to_point             SolveToWhich                    ;
+    mce_yes_or_no            UseDOB                          ;
     mce_yes_or_no            EffectiveDateToday              ;
     mce_dbopt                DeathBenefitOptionFromRetirement;
     mce_dbopt                DeathBenefitOptionFromIssue     ;
     tnr_nonnegative_double   SpecifiedAmountFromRetirement   ;
     tnr_nonnegative_double   SpecifiedAmountFromIssue        ;
-//    mce_                     SpecifiedAmountStrategyFromRetirement; // TODO ?? Rethink this.
+//    mce_                     SpecifiedAmountStrategyFromRetirement; // INPUT !! Obsolete scalar alternative controls.
     mce_sa_strategy          SpecifiedAmountStrategyFromIssue;
     mce_mode                 IndividualPaymentMode           ;
     mce_to_point             IndividualPaymentToAlternative  ;
-    tnr_attained_age         IndividualPaymentToAge          ;
+    tnr_age                  IndividualPaymentToAge          ;
     tnr_duration             IndividualPaymentToDuration     ;
     tnr_nonnegative_double   IndividualPaymentAmount         ;
     mce_pmt_strategy         IndividualPaymentStrategy       ;
     tnr_nonnegative_double   LoanAmount                      ;
-    tnr_attained_age         LoanFromAge                     ;
+    tnr_age                  LoanFromAge                     ;
     mce_from_point           LoanFromAlternative             ;
     tnr_duration             LoanFromDuration                ;
-    tnr_attained_age         LoanToAge                       ;
+    tnr_age                  LoanToAge                       ;
     mce_to_point             LoanToAlternative               ;
     tnr_duration             LoanToDuration                  ;
     tnr_nonnegative_double   WithdrawalAmount                ;
-    tnr_attained_age         WithdrawalFromAge               ;
+    tnr_age                  WithdrawalFromAge               ;
     mce_from_point           WithdrawalFromAlternative       ;
     tnr_duration             WithdrawalFromDuration          ;
-    tnr_attained_age         WithdrawalToAge                 ;
+    tnr_age                  WithdrawalToAge                 ;
     mce_to_point             WithdrawalToAlternative         ;
     tnr_duration             WithdrawalToDuration            ;
 
@@ -536,11 +535,10 @@ template<> struct reconstitutor<datum_base, Input>
         z = exact_cast<mce_uw_basis            >(m); if(z) return z;
         z = exact_cast<mce_yes_or_no           >(m); if(z) return z;
         // tnr- types.
-        z = exact_cast<tnr_attained_age        >(m); if(z) return z;
+        z = exact_cast<tnr_age                 >(m); if(z) return z;
         z = exact_cast<tnr_corridor_factor     >(m); if(z) return z;
         z = exact_cast<tnr_date                >(m); if(z) return z;
         z = exact_cast<tnr_duration            >(m); if(z) return z;
-        z = exact_cast<tnr_issue_age           >(m); if(z) return z;
         z = exact_cast<tnr_month               >(m); if(z) return z;
         z = exact_cast<tnr_nonnegative_double  >(m); if(z) return z;
         z = exact_cast<tnr_nonnegative_integer >(m); if(z) return z;

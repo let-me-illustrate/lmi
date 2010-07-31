@@ -587,7 +587,7 @@ class LMI_SO AccountValue
     double  YearsTotalPolicyFee;
     double  YearsTotalPremTaxLoad;
     double  YearsTotalPremTaxLoadInStateOfDomicile;
-    double  YearsTotalPremTaxLoadInStateOfJurisdiction;
+    double  YearsTotalPremTaxLoadInPremiumTaxState;
     double  YearsTotalDacTaxLoad;
     double  YearsTotalSpecAmtLoad;
     double  YearsTotalSepAcctLoad;

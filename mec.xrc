@@ -327,7 +327,7 @@ demonstrate a defect in the wx library. See
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <object class="wxCheckBox" name="DeprecatedUseDOB">
+                                    <object class="wxCheckBox" name="UseDOB">
                                         <help>Calculate issue age based on date of birth and effective date, automatically reflecting changes in effective date</help>
 <!--
 It's unusual to place a checkbox's "label" on the left, as is simulated
@@ -375,7 +375,22 @@ here, but it looks weird if we don't make this look like its siblings.
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxComboBox" name="StateOfJurisdiction">
-                                        <help>State of jurisdiction</help>
+                                        <help>State that approves policy form and rate filing, and governs everything else except premium tax</help>
+                                        <size>80,-1</size>
+                                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Premium tax state</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxComboBox" name="PremiumTaxState">
+                                        <help>State to which premium tax is paid--affects premium load if the tax is passed through</help>
                                         <size>80,-1</size>
                                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                                     </object>

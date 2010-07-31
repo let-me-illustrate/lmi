@@ -81,8 +81,8 @@ b) boost: static boost_filesystem library is available as a standard cygwin
 2. Build system setup
 ---------------------
 
-After a fresh cvs checkout you need to run autogen.sh once. For it to work,
-you need the following utilities:
+After a fresh checkout from the repository, you need to run autogen.sh once.
+For it to work, you need the following utilities:
 
 a) GNU autoconf >= 2.56 (2.56 under mingw and 2.59 under cygwin are known to work)
 b) GNU automake >= 1.5 (at least; 1.7.9 and 1.9.6 known to work)

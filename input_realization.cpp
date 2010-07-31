@@ -197,8 +197,8 @@ std::vector<std::string> Input::RealizeAllSequenceInput(bool report_errors)
 {
     LMI_ASSERT(years_to_maturity() == database_->length());
 
-    // TODO ?? This doesn't really belong here; it's going to be
-    // reimplemented soon, anyway.
+    // INPUT !! http://savannah.nongnu.org/support/?104481
+    // This needs to be reimplemented.
     {
     enum{NumberOfFunds = 30}; // DEPRECATED
     std::istringstream iss(FundAllocations.value());

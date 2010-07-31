@@ -53,11 +53,13 @@ Loads::Loads(BasicValues& V)
 {
     int length = V.GetLength();
     LMI_ASSERT(length == V.Database_->length());
+    LMI_ASSERT(!V.yare_input_.AmortizePremiumLoad); // Amortization is untested.
     load_details details
         (length
         ,V.yare_input_.AmortizePremiumLoad
+        ,V.PremiumTaxLoad()
         ,V.LowestPremiumTaxLoad()
-        ,V.Database_->Query(DB_PremTaxRate)
+        ,V.PremiumTaxRate()
         ,V.Database_->Query(DB_PremTaxAmortIntRate)
         ,V.Database_->Query(DB_PremTaxAmortPeriod)
         ,V.Database_->Query(DB_AssetChargeType)
@@ -124,7 +126,6 @@ void Loads::Allocate(int length)
 void Loads::Initialize(product_database const& database)
 {
     database.Query(refundable_sales_load_proportion_   , DB_LoadRfdProportion );
-    database.Query(premium_tax_load_                   , DB_PremTaxLoad       );
     database.Query(dac_tax_load_                       , DB_DacTaxPremLoad    );
 
     database.Query(monthly_policy_fee_   [mce_gen_guar], DB_GuarMonthlyPolFee );
@@ -150,6 +151,8 @@ void Loads::Initialize(product_database const& database)
 
 void Loads::Calculate(load_details const& details)
 {
+    premium_tax_load_.assign(details.length_, details.premium_tax_load_);
+
     for(int j = mce_gen_curr; j != mc_n_gen_bases; j++)
         {
         // ET !! PETE could support an apply-and-assign operation, e.g.:
