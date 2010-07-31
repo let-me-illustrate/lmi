@@ -58,7 +58,7 @@ class product_database;
 ///   InforceContractYear
 ///   InforceYear
 /// are dependent, but useful. These:
-///   DeprecatedUseDOB
+///   UseDOB
 ///   IssueAge
 /// are superfluous, but convenient. These:
 ///   InforceContractMonth
@@ -103,6 +103,16 @@ class LMI_SO mec_input
 
     // xml_serializable overrides.
     virtual bool is_detritus(std::string const&) const;
+    virtual void redintegrate_ex_ante
+        (int                file_version
+        ,std::string const& name
+        ,std::string      & value
+        ) const;
+    virtual void redintegrate_ex_post
+        (int                                       file_version
+        ,std::map<std::string, std::string> const& detritus_map
+        ,std::list<std::string>             const& residuary_names
+        );
     virtual void redintegrate_ad_terminum();
 
     // MvcModel required implementation.
@@ -138,7 +148,7 @@ class LMI_SO mec_input
     int                      GleanedMaturityAge_         ;
 
     mce_yes_or_no            Use7702ATables                  ;
-    tnr_issue_age            IssueAge                        ;
+    tnr_age                  IssueAge                        ;
     mce_gender               Gender                          ;
     mce_smoking              Smoking                         ;
     mce_class                UnderwritingClass               ;
@@ -167,10 +177,11 @@ class LMI_SO mec_input
     tnr_month                InforceContractMonth            ;
     tnr_nonnegative_double   InforceLeastDeathBenefit        ;
     mce_state                StateOfJurisdiction             ;
+    mce_state                PremiumTaxState                 ;
     datum_sequence           FlatExtra                       ;
     datum_sequence           PaymentHistory                  ;
     datum_sequence           BenefitHistory                  ;
-    mce_yes_or_no            DeprecatedUseDOB                ;
+    mce_yes_or_no            UseDOB                          ;
     tnr_nonnegative_double   Payment                         ;
     tnr_nonnegative_double   BenefitAmount                   ;
 
@@ -203,9 +214,9 @@ template<> struct reconstitutor<datum_base, mec_input>
         z = exact_cast<mce_uw_basis            >(m); if(z) return z;
         z = exact_cast<mce_yes_or_no           >(m); if(z) return z;
         // tnr- types.
+        z = exact_cast<tnr_age                 >(m); if(z) return z;
         z = exact_cast<tnr_date                >(m); if(z) return z;
         z = exact_cast<tnr_duration            >(m); if(z) return z;
-        z = exact_cast<tnr_issue_age           >(m); if(z) return z;
         z = exact_cast<tnr_month               >(m); if(z) return z;
         z = exact_cast<tnr_nonnegative_double  >(m); if(z) return z;
         z = exact_cast<tnr_unrestricted_double >(m); if(z) return z;

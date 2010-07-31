@@ -137,13 +137,13 @@
 {DB_PremTaxLoad,DB_Topic_DacAndPremiumTax,"PremTaxLoad","Scalar premium load due to premium tax",}, \
 {DB_WaivePremTaxInt1035,DB_Topic_DacAndPremiumTax,"WaivePremTaxInt1035","Waive premium tax charge on internal 1035 exchanges: 0=no, 1=yes",}, \
 {DB_PremTaxRetalLimit,DB_Topic_DacAndPremiumTax,"PremTaxRetalLimit","Premium tax: first-year premium threshold to waive retaliation",}, \
-{DB_PremTaxTierGroup,DB_Topic_DacAndPremiumTax,"PremTaxTierGroup","Apply tiered premium tax to all contracts in a group aggregated together: 0=no, 1=yes",}, \
-{DB_PremTaxTierPeriod,DB_Topic_DacAndPremiumTax,"PremTaxTierPeriod","Apply tiered premium tax to premiums aggregated by: 0=policy year, 1=calendar year",}, \
-{DB_PremTaxTierNonDecr,DB_Topic_DacAndPremiumTax,"PremTaxTierNonDecr","Tiered premium tax effective rate constrained not to decrease from one year to the next: 0=no, 1=yes",}, \
+{DB_PremTaxTierGroup,DB_Topic_DacAndPremiumTax,"PremTaxTierGroup","Apply tiered premium tax to all contracts in a group aggregated together: 0=no, 1=yes [not supported yet]",}, \
+{DB_PremTaxTierPeriod,DB_Topic_DacAndPremiumTax,"PremTaxTierPeriod","Apply tiered premium tax to premiums aggregated by: 0=policy year, 1=calendar year [not supported yet]",}, \
+{DB_PremTaxTierNonDecr,DB_Topic_DacAndPremiumTax,"PremTaxTierNonDecr","Tiered premium tax effective rate constrained not to decrease from one year to the next: 0=no, 1=yes [not supported yet]",}, \
 {DB_PremTaxAmortPeriod,DB_Topic_DacAndPremiumTax,"PremTaxAmortPeriod","Premium tax amortization period in years",}, \
 {DB_PremTaxAmortIntRate,DB_Topic_DacAndPremiumTax,"PremTaxAmortIntRate","Premium tax amortization annual effective interest rate",}, \
 {DB_PremTaxRate,DB_Topic_DacAndPremiumTax,"PremTaxRate","Scalar premium tax rate paid by insurance company--distinct from premium load due to premium tax",}, \
-{DB_PremTaxState,DB_Topic_DacAndPremiumTax,"PremTaxState","State that determines premium tax rate: 0=insured state, 1=corporation state",}, \
+{DB_PremTaxState,DB_Topic_DacAndPremiumTax,"PremTaxState","[Obsolete--included only for backward compatibility] State that formerly determined premium tax rate: 0=insured state, 1=corporation state",}, \
 {DB_PremTaxTable,DB_Topic_DacAndPremiumTax,"PremTaxTable","[not yet implemented--use PremTaxLoad instead]",}, \
 {DB_Topic_SurrenderCharges,DB_FIRST,"Surrender charges","Surrender-charge rates and parameters",}, \
 {DB_SurrChgAcctValMult,DB_Topic_SurrenderCharges,"SurrChgAcctValMult","Multiple of account value for formulaic surrender charges",}, \

@@ -71,7 +71,7 @@ mec_state test_one_days_7702A_transactions
     )
 {
     bool                        Use7702ATables               = exact_cast<mce_yes_or_no           >(input["Use7702ATables"              ])->value();
-//  int                         IssueAge                     = exact_cast<tnr_issue_age           >(input["IssueAge"                    ])->value();
+//  int                         IssueAge                     = exact_cast<tnr_age                 >(input["IssueAge"                    ])->value();
     mcenum_gender               Gender                       = exact_cast<mce_gender              >(input["Gender"                      ])->value();
     mcenum_smoking              Smoking                      = exact_cast<mce_smoking             >(input["Smoking"                     ])->value();
     mcenum_class                UnderwritingClass            = exact_cast<mce_class               >(input["UnderwritingClass"           ])->value();
@@ -100,10 +100,11 @@ mec_state test_one_days_7702A_transactions
     int                         InforceContractMonth         = exact_cast<tnr_month               >(input["InforceContractMonth"        ])->value();
     double                      InforceLeastDeathBenefit     = exact_cast<tnr_nonnegative_double  >(input["InforceLeastDeathBenefit"    ])->value();
     mcenum_state                StateOfJurisdiction          = exact_cast<mce_state               >(input["StateOfJurisdiction"         ])->value();
+    mcenum_state                PremiumTaxState              = exact_cast<mce_state               >(input["PremiumTaxState"             ])->value();
 //  std::string                 FlatExtra                    = exact_cast<datum_sequence          >(input["FlatExtra"                   ])->value();
 //  std::string                 PaymentHistory               = exact_cast<datum_sequence          >(input["PaymentHistory"              ])->value();
 //  std::string                 BenefitHistory               = exact_cast<datum_sequence          >(input["BenefitHistory"              ])->value();
-//  bool                        DeprecatedUseDOB             = exact_cast<mce_yes_or_no           >(input["DeprecatedUseDOB"            ])->value();
+//  bool                        UseDOB                       = exact_cast<mce_yes_or_no           >(input["UseDOB"                      ])->value();
     double                      Payment                      = exact_cast<tnr_nonnegative_double  >(input["Payment"                     ])->value();
     double                      BenefitAmount                = exact_cast<tnr_nonnegative_double  >(input["BenefitAmount"               ])->value();
 
@@ -301,10 +302,19 @@ mec_state test_one_days_7702A_transactions
             ;
         }
 
+    product_database db_premtax
+        (ProductName
+        ,Gender
+        ,UnderwritingClass
+        ,Smoking
+        ,input.issue_age()
+        ,GroupUnderwritingType
+        ,PremiumTaxState
+        );
     double const premium_tax_load = lowest_premium_tax_load
-        (database
+        (db_premtax
         ,stratified
-        ,StateOfJurisdiction
+        ,PremiumTaxState
         ,false
         );
 

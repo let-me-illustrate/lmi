@@ -569,11 +569,6 @@ void AccountValue::TxExch1035()
         // exceeding the guideline limit. This is what the customer would
         // normally want, because an internal exchange might be free of
         // premium tax.
-        //
-        // TODO ?? The specamt was already increased if necessary to avoid
-        // MEC assuming the full input 1035 amounts would be paid. Now, in
-        // retrospect, that increase may be more than necessary.
-        //
         progressively_limit(External1035Amount, Internal1035Amount, GrossPmts[Month]);
 
         OverridingExternal1035Amount = External1035Amount;
@@ -1481,43 +1476,46 @@ double AccountValue::GetPremLoad
         ;
     HOPEFULLY(0.0 <= sum_of_separate_loads);
     LMI_ASSERT
-        (   StratifiedCharges_->premium_tax_is_tiered(GetStateOfJurisdiction())
+        (   PremiumTaxLoadIsTieredInPremiumTaxState_
         ||  materially_equal(total_load, sum_of_separate_loads)
         );
 
     return round_net_premium()(sum_of_separate_loads);
 }
 
-//============================================================================
 /// Calculate premium-tax load.
 ///
 /// The premium-tax load and the actual premium tax payable by an
 /// insurer are distinct concepts. They may have equal values when
 /// premium tax is passed through as a load.
 ///
-/// Where tiering is considered, the actual premium tax is used as a
-/// load here, because in practice tiering is used only when the
-/// actual tax is passed through.
+/// DATABASE !! The '.strata' files ought to differentiate tiered
+/// premium-tax load paid by customer from rate paid by insurer.
+///
+/// An assertion ensures that either tiered or non-tiered premium-tax
+/// load is zero.
 
 double AccountValue::GetPremTaxLoad(double payment)
 {
-    double tax_in_state_of_jurisdiction = YearsPremTaxLoadRate * payment;
-    if(PremiumTaxLoadIsTieredInStateOfJurisdiction)
+    double tax_in_premium_tax_state = YearsPremTaxLoadRate * payment;
+    if(PremiumTaxLoadIsTieredInPremiumTaxState_)
         {
-        tax_in_state_of_jurisdiction = StratifiedCharges_->tiered_premium_tax
-            (GetStateOfJurisdiction()
+        LMI_ASSERT(0.0 == tax_in_premium_tax_state);
+        tax_in_premium_tax_state = StratifiedCharges_->tiered_premium_tax
+            (GetPremiumTaxState()
             ,payment
             ,PolicyYearRunningTotalPremiumSubjectToPremiumTax
             );
         }
-    YearsTotalPremTaxLoadInStateOfJurisdiction += tax_in_state_of_jurisdiction;
+    YearsTotalPremTaxLoadInPremiumTaxState += tax_in_premium_tax_state;
 
     double tax_in_state_of_domicile = 0.0;
     if(!FirstYearPremiumExceedsRetaliationLimit)
         {
         tax_in_state_of_domicile = DomiciliaryPremiumTaxLoad() * payment;
-        if(PremiumTaxLoadIsTieredInStateOfDomicile)
+        if(PremiumTaxLoadIsTieredInStateOfDomicile_)
             {
+            LMI_ASSERT(0.0 == tax_in_state_of_domicile);
             tax_in_state_of_domicile = StratifiedCharges_->tiered_premium_tax
                 (GetStateOfDomicile()
                 ,payment
@@ -1540,24 +1538,23 @@ double AccountValue::GetPremTaxLoad(double payment)
     if
         (   !FirstYearPremiumExceedsRetaliationLimit
         &&
-            (  PremiumTaxLoadIsTieredInStateOfJurisdiction
-            || PremiumTaxLoadIsTieredInStateOfDomicile
+            (  PremiumTaxLoadIsTieredInPremiumTaxState_
+            || PremiumTaxLoadIsTieredInStateOfDomicile_
             )
         )
         {
         double ytd_premium_tax_reflecting_retaliation = std::max
-            (YearsTotalPremTaxLoadInStateOfJurisdiction
+            (YearsTotalPremTaxLoadInPremiumTaxState
             ,YearsTotalPremTaxLoadInStateOfDomicile
             );
         return std::max
             (0.0
-            , ytd_premium_tax_reflecting_retaliation
-            - YearsTotalPremTaxLoad
+            ,ytd_premium_tax_reflecting_retaliation - YearsTotalPremTaxLoad
             );
         }
     else
         {
-        return std::max(tax_in_state_of_jurisdiction, tax_in_state_of_domicile);
+        return std::max(tax_in_premium_tax_state, tax_in_state_of_domicile);
         }
 }
 
@@ -2056,7 +2053,6 @@ void AccountValue::TxTestHoneymoonForExpiration()
         }
 }
 
-//============================================================================
 /// Subtract separate account load after monthly deductions: it is not
 /// regarded as part of monthly deductions per se.
 ///

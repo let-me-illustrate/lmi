@@ -223,7 +223,7 @@ Input* CensusView::class_parms_from_class_name(std::string const& class_name)
     // would not all be identical--i.e. because at least one cell or one
     // class default differs from the case default wrt that column.
 bool CensusView::column_value_varies_across_cells
-    (std::string const&                  header
+    (std::string        const& header
     ,std::vector<Input> const& cells
     ) const
 {
@@ -951,56 +951,36 @@ void CensusView::UponRunCaseToSpreadsheet(wxCommandEvent&)
     DoAllCells(mce_emit_spreadsheet);
 }
 
-// TODO ?? Add unit tests for this function.
+/// Paste a census from the clipboard.
+///
+/// See unit tests in Skeleton::UponTestPasting().
+///
+/// A newly-created census contains one default cell, which doesn't
+/// represent user input, so it is erased before pasting new cells
+/// from the clipboard. The clipboard contents are validated before
+/// this erasure, so the document is not changed if pasting failed.
+///
+/// But if the census contains any user input, it shouldn't be erased.
+/// User input is present if either the document has been modified
+/// (e.g., if the default cell in a new census has been changed) or
+/// the document was loaded from a file (even if it was saved with
+/// only an unmodified default cell, because the contents of any saved
+/// file are assumed to represent user intention). In this case,
+/// pasted data is appended to the cells that were already present.
 
 void CensusView::UponPasteCensus(wxCommandEvent&)
 {
-// TODO ?? expunge debugging code in this function.
-
-    // A brand-new census contains one default cell, which doesn't
-    // represent user input, so we should erase it before pasting
-    // new cells from the clipboard.
-    //
-    // But if the census contains any user input, we shouldn't
-    // erase it. User input is present if either the document has
-    // been modified (this covers the case where the default cell
-    // in a new census has been changed) or the document was loaded
-    // from a file (even if it was saved with only an unmodified
-    // default cell, we assume that the contents of any explicitly-
-    // saved file represent user intention). In this case, users
-    // say they want to append pasted data to the cells that are
-    // already present.
-    //
-    // We do all of this as soon as we know that the user wants to
-    // paste census data. If pasting fails, the user is left with a
-    // census that contains no cells, but that's OK; in this event,
-    // they're likely to correct the data and repaste it.
-    //
-    // In the solution domain:
-    //   document modified <--> dirty flag set
-    //   loaded from file  <--> document path not null
-// TODO ?? WX PORT !! How to do this with wx?
-//    if(!document().IsModified() && 0 == document().GetDocPath())
-//    if(!document().IsModified())
-        {
-        cell_parms().clear();
-        class_parms().clear();
-        class_parms().push_back(case_parms()[0]);
-        }
-
     std::string const census_data = ClipboardEx::GetText();
 
     std::vector<std::string> headers;
     std::vector<Input> cells;
 
     std::istringstream iss_census(census_data);
-// warning() << census_data << "entire clipboard text" << LMI_FLUSH;
     std::string line;
 
     // Get header line; parse into field names.
     if(std::getline(iss_census, line, '\n'))
         {
-// warning() << "'" << line << "'" << "header line" << LMI_FLUSH;
         iss_census >> std::ws;
 
         std::istringstream iss_line(line);
@@ -1008,16 +988,12 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
 
         while(std::getline(iss_line, token, '\t'))
             {
-// warning() << "'" << token << "'" << "push_back header" << LMI_FLUSH;
             headers.push_back(token);
             }
         }
     else
         {
-        warning()
-            << "Error pasting census data: no header line."
-            << LMI_FLUSH
-            ;
+        warning() << "Error pasting census data: no header line." << LMI_FLUSH;
         return;
         }
 
@@ -1025,7 +1001,6 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
     int current_line = 0;
     while(std::getline(iss_census, line, '\n'))
         {
-// warning() << "'" << line << "'" << "processing data line" << LMI_FLUSH;
         ++current_line;
 
         iss_census >> std::ws;
@@ -1054,7 +1029,6 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
 // a limit on exception size that should be tested here?
                 fatal_error() << "Invalid input." << LMI_FLUSH;
                 }
-// warning() << "'" << token << "'" << "push_back value" << LMI_FLUSH;
             values.push_back(token);
             }
 
@@ -1072,16 +1046,11 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
 
         for(unsigned int j = 0; j < headers.size(); ++j)
             {
-// warning() << "'" << headers[j] << "'" << " setting variable..." << LMI_FLUSH;
-// warning() << "'" << values[j] << "'" << " to value..." << LMI_FLUSH;
             current_cell[headers[j]] = values[j];
-// warning() << "OK...next value..." << LMI_FLUSH;
             }
         current_cell.Reconcile();
-// warning() << "diagnosing sequence string problems..." << LMI_FLUSH;
         current_cell.RealizeAllSequenceInput();
         cells.push_back(current_cell);
-// warning() << "Life added." << LMI_FLUSH;
 
         status() << "Added cell number " << cells.size() << '.' << std::flush;
         wxSafeYield();
@@ -1093,15 +1062,21 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
         return;
         }
 
-    std::back_insert_iterator<std::vector<Input> > iip
-        (cell_parms()
-        );
+    if(!document().IsModified() && !document().GetDocumentSaved())
+        {
+        cell_parms().clear();
+        class_parms().clear();
+        class_parms().push_back(case_parms()[0]);
+        }
+
+    std::back_insert_iterator<std::vector<Input> > iip(cell_parms());
     std::copy(cells.begin(), cells.end(), iip);
-
     document().Modify(true);
-
     Update();
-
     status() << std::flush;
+
+    LMI_ASSERT(!case_parms ().empty());
+    LMI_ASSERT(!cell_parms ().empty());
+    LMI_ASSERT(!class_parms().empty());
 }
 

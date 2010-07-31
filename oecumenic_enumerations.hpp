@@ -66,7 +66,9 @@ enum oenum_preferred_class_name
     ,oe_called_select
     };
 
-/// Deprecated: state of jurisdiction should be an input field.
+/// Used only for backward compatibility with old versions that didn't
+/// distinguish state of jurisdiction from premium-tax state.
+
 enum oenum_premium_tax_state
     {oe_ee_state
     ,oe_er_state

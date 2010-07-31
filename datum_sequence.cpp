@@ -119,7 +119,10 @@ std::map<std::string,std::string> const datum_sequence::allowed_keywords() const
 
 bool datum_sequence::equals(datum_sequence const& z) const
 {
-    return z.keyword_values_are_blocked_ == keyword_values_are_blocked_;
+    return
+           z.value()                     == value()
+        && z.keyword_values_are_blocked_ == keyword_values_are_blocked_
+        ;
 }
 
 /// Determine whether keywords are blocked.

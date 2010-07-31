@@ -30,11 +30,13 @@
 #include "xml_serializable.tpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "contains.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "global_settings.hpp"
 #include "input_seq_helpers.hpp"
+#include "map_lookup.hpp"
 #include "miscellany.hpp" // lmi_array_size()
 
 #include <algorithm>      // std::max()
@@ -104,10 +106,11 @@ mec_input::mec_input()
 //    ,InforceContractMonth             ("")
     ,InforceLeastDeathBenefit         ("1000000")
     ,StateOfJurisdiction              ("CT")
+    ,PremiumTaxState                  ("CT")
     ,FlatExtra                        ("0")
     ,PaymentHistory                   ("0")
     ,BenefitHistory                   ("1000000")
-//    ,DeprecatedUseDOB                 ("")
+//    ,UseDOB                           ("")
     ,Payment                          ("0")
     ,BenefitAmount                    ("1000000")
 {
@@ -196,10 +199,11 @@ void mec_input::AscribeMembers()
     ascribe("InforceContractMonth"                  , &mec_input::InforceContractMonth                  );
     ascribe("InforceLeastDeathBenefit"              , &mec_input::InforceLeastDeathBenefit              );
     ascribe("StateOfJurisdiction"                   , &mec_input::StateOfJurisdiction                   );
+    ascribe("PremiumTaxState"                       , &mec_input::PremiumTaxState                       );
     ascribe("FlatExtra"                             , &mec_input::FlatExtra                             );
     ascribe("PaymentHistory"                        , &mec_input::PaymentHistory                        );
     ascribe("BenefitHistory"                        , &mec_input::BenefitHistory                        );
-    ascribe("DeprecatedUseDOB"                      , &mec_input::DeprecatedUseDOB                      );
+    ascribe("UseDOB"                                , &mec_input::UseDOB                                );
     ascribe("Payment"                               , &mec_input::Payment                               );
     ascribe("BenefitAmount"                         , &mec_input::BenefitAmount                         );
 }
@@ -351,8 +355,8 @@ void mec_input::DoHarmonize()
     GroupUnderwritingType.allow(mce_simplified_issue, database_->Query(DB_AllowSimpUw));
     GroupUnderwritingType.allow(mce_guaranteed_issue, database_->Query(DB_AllowGuarUw));
 
-    IssueAge        .enable(mce_no  == DeprecatedUseDOB);
-    DateOfBirth     .enable(mce_yes == DeprecatedUseDOB);
+    IssueAge        .enable(mce_no  == UseDOB);
+    DateOfBirth     .enable(mce_yes == UseDOB);
 
     // The ranges of both EffectiveDate and IssueAge are treated as
     // independent, to prevent one's value from affecting the other's
@@ -503,7 +507,7 @@ void mec_input::DoTransmogrify()
         ,EffectiveDate.value()
         ,use_anb
         );
-    if(mce_no == DeprecatedUseDOB)
+    if(mce_no == UseDOB)
         {
         // If no DOB is supplied, assume a birthday occurs on the
         // issue date--as good an assumption as any, and the simplest.
@@ -607,10 +611,11 @@ std::string mec_input::RealizeBenefitHistory()
 /// Backward-compatibility serial number of this class's xml version.
 ///
 /// version 0: 20090627T2249Z
+/// version 1: 20100719T1349Z
 
 int mec_input::class_version() const
 {
-    return 0;
+    return 1;
 }
 
 std::string const& mec_input::xml_root_name() const
@@ -622,11 +627,46 @@ std::string const& mec_input::xml_root_name() const
 bool mec_input::is_detritus(std::string const& s) const
 {
     static std::string const a[] =
-        {"EffectiveDateToday"
-        ,"InforceSevenPayPremium"
+        {"DeprecatedUseDOB"              // Renamed (without 'Deprecated'-).
+        ,"EffectiveDateToday"            // Withdrawn.
+        ,"InforceSevenPayPremium"        // Withdrawn.
         };
     static std::vector<std::string> const v(a, a + lmi_array_size(a));
     return contains(v, s);
+}
+
+void mec_input::redintegrate_ex_ante
+    (int                file_version
+    ,std::string const& // name
+    ,std::string      & // value
+    ) const
+{
+    if(class_version() == file_version)
+        {
+        return;
+        }
+
+    // Nothing to do for now.
+}
+
+void mec_input::redintegrate_ex_post
+    (int                                       file_version
+    ,std::map<std::string, std::string> const& detritus_map
+    ,std::list<std::string>             const& residuary_names
+    )
+{
+    if(class_version() == file_version)
+        {
+        return;
+        }
+
+    if(file_version < 1)
+        {
+        LMI_ASSERT(contains(residuary_names, "PremiumTaxState"));
+        PremiumTaxState = StateOfJurisdiction;
+        LMI_ASSERT(contains(residuary_names, "UseDOB"));
+        UseDOB = map_lookup(detritus_map, "DeprecatedUseDOB");
+        }
 }
 
 void mec_input::redintegrate_ad_terminum()

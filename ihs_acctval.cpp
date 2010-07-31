@@ -931,7 +931,7 @@ void AccountValue::InitializeYear()
     YearsTotalPolicyFee         = 0.0;
     YearsTotalPremTaxLoad       = 0.0;
     YearsTotalPremTaxLoadInStateOfDomicile = 0.0;
-    YearsTotalPremTaxLoadInStateOfJurisdiction = 0.0;
+    YearsTotalPremTaxLoadInPremiumTaxState = 0.0;
     YearsTotalDacTaxLoad        = 0.0;
     YearsTotalSpecAmtLoad       = 0.0;
     YearsTotalSepAcctLoad       = 0.0;
@@ -1586,7 +1586,7 @@ void AccountValue::GuessWhetherFirstYearPremiumExceedsRetaliationLimit()
     Month = yare_input_.InforceMonth;
     CoordinateCounters();
     FirstYearPremiumExceedsRetaliationLimit =
-           FirstYearPremiumRetaliationLimit
+           FirstYearPremiumRetaliationLimit_
         <= TaxableFirstYearPlannedPremium()
         ;
 }
@@ -1597,7 +1597,7 @@ bool AccountValue::TestWhetherFirstYearPremiumExceededRetaliationLimit()
     if
         (  0 == Year
         && FirstYearPremiumExceedsRetaliationLimit
-        && CumPmts < FirstYearPremiumRetaliationLimit
+        && CumPmts < FirstYearPremiumRetaliationLimit_
         )
         {
         FirstYearPremiumExceedsRetaliationLimit = false;

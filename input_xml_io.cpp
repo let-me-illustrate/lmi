@@ -32,9 +32,11 @@
 #include "alert.hpp"
 #include "calendar_date.hpp"
 #include "contains.hpp"
+#include "database.hpp"
 #include "global_settings.hpp"
 #include "map_lookup.hpp"
 #include "miscellany.hpp" // lmi_array_size()
+#include "oecumenic_enumerations.hpp"
 
 #include <algorithm>      // std::min()
 #include <stdexcept>
@@ -72,6 +74,7 @@ std::string full_name
 /// version 3: 20090302T0509Z [see important note below]
 /// version 4: 20090330T0137Z
 /// version 5: 20090526T1331Z
+/// version 6: 20100719T1349Z
 ///
 /// Important note concerning version 3. On or about 20090311, some
 /// end users were given an off-cycle release that should have used
@@ -80,7 +83,7 @@ std::string full_name
 
 int Input::class_version() const
 {
-    return 5;
+    return 6;
 }
 
 std::string const& Input::xml_root_name() const
@@ -88,6 +91,13 @@ std::string const& Input::xml_root_name() const
     static std::string const s("cell");
     return s;
 }
+
+/// See this function's general documentation in the base class.
+///
+/// No xml file written by lmi ever contained 'FilingApprovalState'.
+/// It appears only in certain admin-system extracts, as an alias for
+/// 'StateOfJurisdiction'. That alias was chosen to favor unambiguity
+/// over clarity.
 
 bool Input::is_detritus(std::string const& s) const
 {
@@ -100,6 +110,13 @@ bool Input::is_detritus(std::string const& s) const
         ,"CorporationPremiumTableNumber" // Never implemented.
         ,"CorporationTaxpayerId"         // Would violate privacy.
         ,"CurrentCoiGrading"             // Withdrawn.
+        ,"DateOfRetirement"              // Withdrawn.
+        ,"DeprecatedSolveFromWhich"      // Renamed (without 'Deprecated'-).
+        ,"DeprecatedSolveTgtAtWhich"     // Renamed (without 'Deprecated'-).
+        ,"DeprecatedSolveToWhich"        // Renamed (without 'Deprecated'-).
+        ,"DeprecatedUseDOB"              // Renamed (without 'Deprecated'-).
+        ,"DeprecatedUseDOR"              // Withdrawn.
+        ,"FilingApprovalState"           // Alias for 'StateOfJurisdiction'.
         ,"FirstName"                     // Single name instead.
         ,"InforceDcvDeathBenefit"        // Misbegotten.
         ,"InforceExperienceReserve"      // Renamed before implementation.
@@ -107,12 +124,14 @@ bool Input::is_detritus(std::string const& s) const
         ,"LastName"                      // Single name instead.
         ,"MiddleName"                    // Single name instead.
         ,"NetMortalityChargeHistory"     // Renamed before implementation.
+        ,"OffshoreCorridorFactor"        // Withdrawn.
         ,"PartialMortalityTable"         // Never implemented.
         ,"PayLoanInterestInCash"         // Never implemented.
         ,"PolicyDate"                    // Never implemented.
         ,"PolicyLevelFlatExtra"          // Never implemented; poor name.
         ,"SocialSecurityNumber"          // Withdrawn: would violate privacy.
         ,"TermProportion"                // 'TermRiderProportion' instead.
+        ,"UseOffshoreCorridorFactor"     // Withdrawn.
         ,"YearsOfZeroDeaths"             // Withdrawn.
         };
     static std::vector<std::string> const v(a, a + lmi_array_size(a));
@@ -365,6 +384,96 @@ void Input::redintegrate_ex_post
             ,InforceMonth .value() - InforceContractMonth.value()
             ,true
             );
+        }
+
+    // One state governs everything except premium tax, which may be
+    // paid to a different state, e.g. on cases with more than five
+    // hundred lives with a common (employer) issue state; see:
+    //   http://www.naic.org/documents/frs_summit_presentations_03.pdf
+    //   http://www.naic.org/documents/committees_e_app_blanks_adopted_2007-42BWG_Modified.pdf
+    // Prior to version 6, a single state was used for all purposes,
+    // and it was determined as either employee or employer state,
+    // depending on the value of DB_PremTaxState. The determination is
+    // complex (what if a case was issued with 498 lives and then
+    // grew to 502?), and starting with version 6 both states are
+    // input fields.
+    //
+    // 'StateOfJurisdiction' has always been in lmi, but was never
+    // meaningfully used prior to version 6.
+    //
+    // 'FilingApprovalState' and 'PremiumTaxState' were unknown before
+    // version 6, and would not ordinarily occur in older versions.
+    // However, certain admin-system extracts that are always marked
+    // as version 5 have been modified to add these two fields.
+    if(file_version < 6)
+        {
+        bool const b0 = contains(detritus_map, "FilingApprovalState");
+        bool const b1 = !contains(residuary_names, "PremiumTaxState");
+        if(b0 || b1)
+            {
+            LMI_ASSERT(b0 && b1 && 5 == file_version);
+            StateOfJurisdiction = map_lookup(detritus_map, "FilingApprovalState");
+            }
+        else
+            {
+            product_database db
+                (ProductName          .value()
+                ,Gender               .value()
+                ,UnderwritingClass    .value()
+                ,Smoking              .value()
+                ,IssueAge             .value()
+                ,GroupUnderwritingType.value()
+                ,mce_s_CT // Dummy initialization.
+                );
+
+            // Deemed state must not depend on itself.
+            if(db.varies_by_state(DB_PremTaxState))
+                {
+                fatal_error()
+                    << "Database invalid: circular dependency."
+                    << " State of jurisdiction depends on itself."
+                    << LMI_FLUSH
+                    ;
+                }
+
+            bool swap = contains(Comments.value(), "idiosyncrasy_swap_old_tax_state");
+            mce_state state;
+            switch(static_cast<int>(db.Query(DB_PremTaxState)))
+                {
+                case oe_ee_state:
+                    {
+                    state = swap ? CorporationState : State;
+                    }
+                    break;
+                case oe_er_state:
+                    {
+                    state = swap ? State : CorporationState;
+                    }
+                    break;
+                default:
+                    {
+                    fatal_error()
+                        << "Cannot determine state of jurisdiction."
+                        << LMI_FLUSH
+                        ;
+                    }
+                    break;
+                }
+            StateOfJurisdiction = state;
+            PremiumTaxState     = state;
+            }
+        }
+
+    if(file_version < 6)
+        {
+        LMI_ASSERT(contains(residuary_names, "SolveFromWhich"));
+        LMI_ASSERT(contains(residuary_names, "SolveTgtAtWhich"));
+        LMI_ASSERT(contains(residuary_names, "SolveToWhich"));
+        LMI_ASSERT(contains(residuary_names, "UseDOB"));
+        SolveFromWhich  = map_lookup(detritus_map, "DeprecatedSolveFromWhich");
+        SolveTgtAtWhich = map_lookup(detritus_map, "DeprecatedSolveTgtAtWhich");
+        SolveToWhich    = map_lookup(detritus_map, "DeprecatedSolveToWhich");
+        UseDOB          = map_lookup(detritus_map, "DeprecatedUseDOB");
         }
 }
 

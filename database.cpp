@@ -28,9 +28,7 @@
 
 #include "database.hpp"
 
-#include "alert.hpp"
 #include "assert_lmi.hpp"
-#include "contains.hpp"
 #include "data_directory.hpp"
 #include "dbdict.hpp"
 #include "dbvalue.hpp"
@@ -44,129 +42,43 @@
 /// Construct from essential input (product and axes).
 
 product_database::product_database
-    (std::string const& a_ProductName
-    ,mcenum_gender      a_Gender
-    ,mcenum_class       a_Class
-    ,mcenum_smoking     a_Smoker
-    ,int                a_IssueAge
-    ,mcenum_uw_basis    a_UWBasis
-    ,mcenum_state       a_State
+    (std::string const& ProductName
+    ,mcenum_gender      Gender
+    ,mcenum_class       UnderwritingClass
+    ,mcenum_smoking     Smoking
+    ,int                IssueAge
+    ,mcenum_uw_basis    GroupUnderwritingType
+    ,mcenum_state       StateOfJurisdiction
     )
-    :Gender   (a_Gender)
-    ,Class    (a_Class)
-    ,Smoker   (a_Smoker)
-    ,IssueAge (a_IssueAge)
-    ,UWBasis  (a_UWBasis)
-    ,State    (a_State)
+    :index_
+        (Gender
+        ,UnderwritingClass
+        ,Smoking
+        ,IssueAge
+        ,GroupUnderwritingType
+        ,StateOfJurisdiction
+        )
 {
-    if(is_antediluvian_fork())
-        {
-        DBDictionary::instance().InitAntediluvian();
-        }
-    else
-        {
-        std::string filename(product_data(a_ProductName).datum("DatabaseFilename"));
-        DBDictionary::instance().Init(AddDataDir(filename));
-        }
-    initialize();
+    initialize(ProductName);
 }
 
 /// Construct from normal illustration input.
-///
-/// For the nonce, this ctor determines "state of jurisdiction"
-/// dynamically, and other code uses that state for multiple purposes.
-/// That is a mistake--two states are required:
-///   - FilingApprovalState: the state that must approve a policy-form
-///     filing (whether affirmatively or by deemer) before a contract
-///     can be written; and
-///   - PremiumTaxState: the state to which premium tax must be paid,
-///     which is crucial for products that pass premium tax through as
-///     a load.
-/// Those two states can differ, e.g. on cases with more than five
-/// hundred lives with a common (employer) issue state: the employer's
-/// state approves the policy form, but premium tax follows employee
-/// residence. See:
-///   http://www.naic.org/documents/frs_summit_presentations_03.pdf
-///   http://www.naic.org/documents/committees_e_app_blanks_adopted_2007-42BWG_Modified.pdf
-///
-/// Soon, both states will be input fields, and these members will be
-/// expunged:
-///   GetStateOfJurisdiction()
-///   Gender
-///   Class
-///   Smoker
-///   IssueAge
-///   UWBasis
-///   State
-/// Database entity DB_PremTaxState will become obsolete, but must be
-/// retained (with a different name) for backward compatibility.
 
 product_database::product_database(yare_input const& input)
+    :index_
+        (input.Gender
+        ,input.UnderwritingClass
+        ,input.Smoking
+        ,input.IssueAge
+        ,input.GroupUnderwritingType
+        ,input.StateOfJurisdiction
+        )
 {
-    Gender      = input.Gender;
-    Class       = input.UnderwritingClass;
-    Smoker      = input.Smoking;
-    IssueAge    = input.IssueAge;
-    UWBasis     = input.GroupUnderwritingType;
-    State       = mce_s_CT; // Dummy initialization.
-
-    if(is_antediluvian_fork())
-        {
-        DBDictionary::instance().InitAntediluvian();
-        }
-    else
-        {
-        std::string filename(product_data(input.ProductName).datum("DatabaseFilename"));
-        DBDictionary::instance().Init(AddDataDir(filename));
-        }
-    initialize();
-
-    // State of jurisdiction must not depend on itself.
-    if(varies_by_state(DB_PremTaxState))
-        {
-        fatal_error()
-            << "Database invalid: circular dependency."
-            << " State of jurisdiction depends on itself."
-            << LMI_FLUSH
-            ;
-        }
-
-    bool swap = contains(input.Comments, "idiosyncrasy_swap_old_tax_state");
-    switch(static_cast<int>(Query(DB_PremTaxState)))
-        {
-        case oe_ee_state:
-            {
-            State = swap ? input.CorporationState : input.State;
-            }
-            break;
-        case oe_er_state:
-            {
-            State = swap ? input.State : input.CorporationState;
-            }
-            break;
-        default:
-            {
-            fatal_error()
-                << "Cannot determine state of jurisdiction."
-                << LMI_FLUSH
-                ;
-            }
-            break;
-        }
-
-    // It may seem excessive to do this when only 'State' has changed,
-    // but it'll become unnecessary when we handle state of jurisdiction
-    // as an input field instead of trying to determine it here.
-    index_ = database_index(Gender, Class, Smoker, IssueAge, UWBasis, State);
+    initialize(input.ProductName);
 }
 
 product_database::~product_database()
 {
-}
-
-mcenum_state product_database::GetStateOfJurisdiction() const
-{
-    return State;
 }
 
 int product_database::length() const
@@ -222,10 +134,19 @@ bool product_database::varies_by_state(e_database_key k) const
     return 1 != entity_from_key(k).axis_lengths().at(e_axis_state);
 }
 
-void product_database::initialize()
+void product_database::initialize(std::string const& product_name)
 {
-    index_ = database_index(Gender, Class, Smoker, IssueAge, UWBasis, State);
-    length_ = static_cast<int>(Query(DB_MaturityAge)) - IssueAge;
+    if(is_antediluvian_fork())
+        {
+        DBDictionary::instance().InitAntediluvian();
+        }
+    else
+        {
+        std::string filename(product_data(product_name).datum("DatabaseFilename"));
+        DBDictionary::instance().Init(AddDataDir(filename));
+        }
+    int const maturity_age = static_cast<int>(Query(DB_MaturityAge));
+    length_ = maturity_age - index_.index_vector()[e_axis_issue_age];
     LMI_ASSERT(0 < length_ && length_ <= methuselah);
 }
 

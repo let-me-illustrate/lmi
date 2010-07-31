@@ -37,7 +37,7 @@
 
 int test_main(int, char*[])
 {
-    safely_show_message("This message should be shown.");
+    safely_show_message("  This message should appear on stderr.");
 
     status()
         << "This should have no effect, because the handler for"
