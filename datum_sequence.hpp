@@ -80,6 +80,7 @@ class datum_sequence
     //
     virtual bool numeric_values_are_allowable() const;
     virtual bool keyword_values_are_allowable() const;
+    virtual std::string const default_keyword() const;
     virtual std::map<std::string,std::string> const allowed_keywords() const;
 
     bool equals(datum_sequence const&) const;
@@ -148,6 +149,7 @@ class mode_sequence
 
     virtual bool numeric_values_are_allowable() const {return false;}
     virtual bool keyword_values_are_allowable() const {return true;}
+    virtual std::string const default_keyword() const;
     virtual std::map<std::string,std::string> const allowed_keywords() const;
 };
 

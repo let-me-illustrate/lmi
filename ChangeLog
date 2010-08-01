@@ -26710,3 +26710,12 @@ Permit querying product database with nondefault index.
   mec_server.cpp
 Query product database with nondefault index pro re nata.
 
+20100801T2209Z <gchicares@sbcglobal.net> [656]
+
+  datum_sequence.cpp
+  datum_sequence.hpp
+  input_realization.cpp
+  input_sequence_entry.cpp
+Fix defect introduced 20100704T1645Z. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-08/msg00000.html
+
