@@ -86,17 +86,52 @@ int product_database::length() const
     return length_;
 }
 
+database_index product_database::index() const
+{
+    return index_;
+}
+
+/// Query database, using default index; return a scalar.
+///
+/// Throw if the database entity is not scalar.
+
 double product_database::Query(e_database_key k) const
+{
+    return Query(k, index_);
+}
+
+/// Query database; return a scalar.
+///
+/// Throw if the database entity is not scalar.
+///
+/// Return a double because it is convertible to the most common
+/// arithmetic types.
+///
+/// An idea like this:
+///   template<typename T, typename DBValue>
+///   void Query(T&, e_database_key) const;
+/// might prove useful someday.
+
+double product_database::Query(e_database_key k, database_index const& i) const
 {
     database_entity const& v = entity_from_key(k);
     LMI_ASSERT(1 == v.extent());
-    return *v[index_];
+    return *v[i];
 }
+
+/// Query database, using default index; write result into vector argument.
 
 void product_database::Query(std::vector<double>& dst, e_database_key k) const
 {
+    return Query(dst, k, index_);
+}
+
+/// Query database; write result into vector argument.
+
+void product_database::Query(std::vector<double>& dst, e_database_key k, database_index const& i) const
+{
     database_entity const& v = entity_from_key(k);
-    double const*const z = v[index_];
+    double const*const z = v[i];
     if(1 == v.extent())
         {
         dst.assign(length_, *z);
