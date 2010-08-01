@@ -92,6 +92,13 @@ class database_index
         idx_[5] = state    ;
     }
 
+    database_index& gender   (mcenum_gender   z) {idx_[0] = z; return *this;}
+    database_index& uw_class (mcenum_class    z) {idx_[1] = z; return *this;}
+    database_index& smoking  (mcenum_smoking  z) {idx_[2] = z; return *this;}
+    database_index& issue_age(int             z) {idx_[3] = z; return *this;}
+    database_index& uw_basis (mcenum_uw_basis z) {idx_[4] = z; return *this;}
+    database_index& state    (mcenum_state    z) {idx_[5] = z; return *this;}
+
     std::vector<int> const& index_vector() const {return idx_;}
 
   private:
