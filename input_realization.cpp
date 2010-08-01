@@ -607,7 +607,7 @@ std::string Input::RealizePaymentMode()
         ,PaymentModeRealized_
         ,PaymentMode
         ,PaymentMode.allowed_keywords()
-        ,std::string("annual")
+        ,PaymentMode.default_keyword()
         );
 }
 
@@ -636,7 +636,7 @@ std::string Input::RealizeCorporationPaymentMode()
         ,CorporationPaymentModeRealized_
         ,CorporationPaymentMode
         ,CorporationPaymentMode.allowed_keywords()
-        ,std::string("annual")
+        ,CorporationPaymentMode.default_keyword()
         );
 }
 
