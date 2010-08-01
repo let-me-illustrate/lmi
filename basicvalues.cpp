@@ -134,12 +134,8 @@ void BasicValues::Init()
     Outlay_        .reset(new modal_outlay   (yare_input_));
     Loads_         .reset(new Loads(*Database_, IsSubjectToIllustrationReg()));
 
-    {
-    yare_input yi_premtax(*Input_);
-    yi_premtax.StateOfJurisdiction = GetPremiumTaxState();
-    product_database db_premtax(yi_premtax);
-    PremiumTaxRate_ = db_premtax.Query(DB_PremTaxRate);
-    }
+    database_index index = Database_->index().state(GetPremiumTaxState());
+    PremiumTaxRate_ = Database_->Query(DB_PremTaxRate, index);
 
     MinSpecAmt = Database_->Query(DB_MinSpecAmt);
     MinWD      = Database_->Query(DB_MinWd     );

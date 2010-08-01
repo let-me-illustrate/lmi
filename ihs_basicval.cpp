@@ -842,12 +842,8 @@ void BasicValues::SetPremiumTaxParameters()
     PremiumTaxLoadIsTieredInStateOfDomicile_ = StratifiedCharges_->premium_tax_is_tiered(GetStateOfDomicile());
     PremiumTaxLoadIsTieredInPremiumTaxState_ = StratifiedCharges_->premium_tax_is_tiered(GetPremiumTaxState());
 
-    yare_input yi_premtax(*Input_);
-    yi_premtax.StateOfJurisdiction = GetPremiumTaxState();
-    product_database db_premtax(yi_premtax);
-
     LowestPremiumTaxLoad_ = lowest_premium_tax_load
-        (db_premtax
+        (*Database_
         ,*StratifiedCharges_
         ,GetPremiumTaxState()
         ,yare_input_.AmortizePremiumLoad
@@ -856,24 +852,22 @@ void BasicValues::SetPremiumTaxParameters()
     // TODO ?? It would be better not to constrain so many things
     // not to vary by duration by using Query(enumerator).
 
-    PremiumTaxRate_ = db_premtax.Query(DB_PremTaxRate);
-    PremiumTaxLoad_ = db_premtax.Query(DB_PremTaxLoad);
+    database_index index = Database_->index().state(GetPremiumTaxState());
+    PremiumTaxRate_                   = Database_->Query(DB_PremTaxRate      , index);
+    PremiumTaxLoad_                   = Database_->Query(DB_PremTaxLoad      , index);
+    FirstYearPremiumRetaliationLimit_ = Database_->Query(DB_PremTaxRetalLimit, index);
 
     StateOfDomicile_ = mc_state_from_string(ProductData_->datum("InsCoDomicile"));
     {
-    yare_input yi_domicile(*Input_);
-    yi_domicile.StateOfJurisdiction = GetStateOfDomicile();
-    product_database db_domicile(yi_domicile);
+    database_index index = Database_->index().state(GetStateOfDomicile());
     DomiciliaryPremiumTaxLoad_ = 0.0;
     if(!yare_input_.AmortizePremiumLoad)
         {
-        DomiciliaryPremiumTaxLoad_ = db_domicile.Query(DB_PremTaxLoad);
+        DomiciliaryPremiumTaxLoad_ = Database_->Query(DB_PremTaxLoad, index);
         }
     }
 
     TestPremiumTaxLoadConsistency();
-
-    FirstYearPremiumRetaliationLimit_ = db_premtax.Query(DB_PremTaxRetalLimit);
 }
 
 /// Lowest premium-tax load, for 7702 and 7702A purposes.
@@ -909,7 +903,8 @@ double lowest_premium_tax_load
         return z;
         }
 
-    z = db.Query(DB_PremTaxLoad);
+    database_index index = db.index().state(premium_tax_state);
+    z = db.Query(DB_PremTaxLoad, index);
 
     if(!db.varies_by_state(DB_PremTaxLoad))
         {
@@ -1678,16 +1673,11 @@ std::vector<double> BasicValues::GetUnblendedTable
     ,mcenum_smoking     smoking
     ) const
 {
-    yare_input YI(*Input_);
-    YI.Gender  = gender ;
-    YI.Smoking = smoking;
-
-    product_database TempDatabase(YI);
-
+    database_index index = Database_->index().gender(gender).smoking(smoking);
     return GetActuarialTable
         (TableFile
         ,TableID
-        ,static_cast<long int>(TempDatabase.Query(TableID))
+        ,static_cast<long int>(Database_->Query(TableID, index))
         );
 }
 
