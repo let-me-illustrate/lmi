@@ -26685,3 +26685,28 @@ Improve error handling. See:
 Explicitly assert certain postconditions. See:
   http://lists.nongnu.org/archive/html/lmi/2010-07/msg00037.html
 
+20100801T1217Z <gchicares@sbcglobal.net> [656]
+
+  dbindex.hpp
+  dbvalue.cpp
+Rectify names.
+
+20100801T1513Z <gchicares@sbcglobal.net> [656]
+
+  dbindex.hpp
+Offer the "named parameter idiom".
+
+20100801T1514Z <gchicares@sbcglobal.net> [656]
+
+  database.cpp
+  database.hpp
+  input_test.cpp
+Permit querying product database with nondefault index.
+
+20100801T1515Z <gchicares@sbcglobal.net> [656]
+
+  basicvalues.cpp
+  ihs_basicval.cpp
+  mec_server.cpp
+Query product database with nondefault index pro re nata.
+

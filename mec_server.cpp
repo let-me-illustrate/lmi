@@ -302,17 +302,8 @@ mec_state test_one_days_7702A_transactions
             ;
         }
 
-    product_database db_premtax
-        (ProductName
-        ,Gender
-        ,UnderwritingClass
-        ,Smoking
-        ,input.issue_age()
-        ,GroupUnderwritingType
-        ,PremiumTaxState
-        );
     double const premium_tax_load = lowest_premium_tax_load
-        (db_premtax
+        (database
         ,stratified
         ,PremiumTaxState
         ,false
