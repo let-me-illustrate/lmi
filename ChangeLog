@@ -26719,3 +26719,30 @@ Query product database with nondefault index pro re nata.
 Fix defect introduced 20100704T1645Z. See:
   http://lists.nongnu.org/archive/html/lmi/2010-08/msg00000.html
 
+20100806T0943Z <gchicares@sbcglobal.net> [656]
+
+  ihs_basicval.cpp
+Improve layout; expunge obsolete documentation.
+
+20100806T0945Z <gchicares@sbcglobal.net> [656]
+
+  input_test.cpp
+Demonstrate a latent problem.
+
+20100806T1312Z <gchicares@sbcglobal.net> [656]
+
+  database.cpp
+  database.hpp
+Remove the problem identified 20100806T0945Z.
+
+20100806T1314Z <gchicares@sbcglobal.net> [656]
+
+  input_test.cpp
+Demonstrate a latent problem.
+
+20100806T1402Z <gchicares@sbcglobal.net> [656]
+
+  dbindex.hpp
+  input_test.cpp
+Remove the problem identified 20100806T1314Z.
+

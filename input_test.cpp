@@ -191,13 +191,39 @@ void input_test::test_product_database()
     BOOST_TEST_EQUAL(55, db.length());
     BOOST_TEST_EQUAL(71, v.size());
 
-    // Test presumptive bounds on issue-age index.
-std::cout << v.size() << "...should be rejected, but isn't.\n";
-    index.issue_age(-1);
+    // Test presumptive issue-age bounds in class database_index.
+    BOOST_TEST_THROW
+        (index.issue_age(100)
+        ,std::runtime_error
+        ,"Assertion '0 <= z && z < e_max_dim_issue_age' failed."
+        );
+    BOOST_TEST_THROW
+        (index.issue_age(-1)
+        ,std::runtime_error
+        ,"Assertion '0 <= z && z < e_max_dim_issue_age' failed."
+        );
+
+    index.issue_age(99);
     db.Query(v, DB_SnflQ, index);
-std::cout << v.size() << "...should be rejected, and is.\n";
-    index.issue_age(100);
+    BOOST_TEST_EQUAL( 1, v.size());
+
+    // Force the product to mature at 98.
+    db.maturity_age_ = 98;
+    index.issue_age(98);
+    db.Query(DB_MaturityAge, index); // Accepted because maturity age is scalar.
+    BOOST_TEST_THROW
+        (db.Query(v, DB_SnflQ, index)
+        ,std::runtime_error
+        ,"Assertion '0 < local_length && local_length <= methuselah' failed."
+        );
+
+    index.issue_age(97);
     db.Query(v, DB_SnflQ, index);
+    BOOST_TEST_EQUAL( 1, v.size());
+
+    index.issue_age(0);
+    db.Query(v, DB_SnflQ, index);
+    BOOST_TEST_EQUAL(98, v.size());
 }
 
 void input_test::test_input_class()

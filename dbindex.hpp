@@ -26,6 +26,7 @@
 
 #include "config.hpp"
 
+#include "assert_lmi.hpp"
 #include "mc_enum_type_enums.hpp"
 
 #include <vector>
@@ -95,13 +96,16 @@ class database_index
     database_index& gender   (mcenum_gender   z) {idx_[0] = z; return *this;}
     database_index& uw_class (mcenum_class    z) {idx_[1] = z; return *this;}
     database_index& smoking  (mcenum_smoking  z) {idx_[2] = z; return *this;}
-    database_index& issue_age(int             z) {idx_[3] = z; return *this;}
+    database_index& issue_age(int             z) {check_issue_age(z);
+                                                  idx_[3] = z; return *this;}
     database_index& uw_basis (mcenum_uw_basis z) {idx_[4] = z; return *this;}
     database_index& state    (mcenum_state    z) {idx_[5] = z; return *this;}
 
     std::vector<int> const& index_vector() const {return idx_;}
 
   private:
+    void check_issue_age(int z) {LMI_ASSERT(0 <= z && z < e_max_dim_issue_age);}
+
     std::vector<int> idx_;
 };
 
