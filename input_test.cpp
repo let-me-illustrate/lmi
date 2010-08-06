@@ -173,6 +173,23 @@ void input_test::test_product_database()
         ,"Assertion '1 == v.extent()' failed."
         );
     DBDictionary::instance().datum("MaturityAge") = maturity;
+
+    // A nondefault lookup index with a different issue age changes
+    // the length of a queried vector.
+    int dims_snflq[e_number_of_axes] = {1, 1, 1, e_max_dim_issue_age, 1, 1, 1};
+    DBDictionary::instance().datum("SnflQ") = database_entity
+        (DB_SnflQ
+        ,e_number_of_axes
+        ,dims_snflq
+        ,tax
+        );
+    db.Query(v, DB_SnflQ);
+    BOOST_TEST_EQUAL(55, db.length());
+    BOOST_TEST_EQUAL(55, v.size());
+    database_index index = db.index().issue_age(29);
+    db.Query(v, DB_SnflQ, index);
+    BOOST_TEST_EQUAL(55, db.length());
+    BOOST_TEST_EQUAL(71, v.size());
 }
 
 void input_test::test_input_class()
