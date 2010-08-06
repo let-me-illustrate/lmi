@@ -156,22 +156,6 @@ BasicValues::~BasicValues()
 void BasicValues::Init()
 {
     ProductData_.reset(new product_data(yare_input_.ProductName));
-    // bind to policy form
-    //      one filename that brings in all the rest incl database?
-    // controls as ctor arg?
-    // validate input in context of this policy form
-
-    // TRICKY !! We need the database to look up whether ALB or ANB should
-    // be used, in case we need to determine issue age from DOB. But issue
-    // age is a database lookup key, so it can change what we looked up in
-    // the database. To resolve this circularity, we first set the database
-    // assuming that the age is correct, then ascertain whether ALB or ANB
-    // is used, then reset the database, then recalculate the age. If any
-    // circularity
-    // remains, it will be detected and an error message given when we look
-    // up the ALB/ANB switch using product_database::Query(int), which
-    // restricts looked-up values to scalars that vary across no database axis.
-
     Database_.reset(new product_database(yare_input_));
 
     StateOfJurisdiction_ = yare_input_.StateOfJurisdiction;
@@ -199,7 +183,6 @@ void BasicValues::Init()
     HOPEFULLY(RetAge <= 100);
     HOPEFULLY(yare_input_.RetireesCanEnroll || IssueAge <= RetAge);
 
-    // The database class constrains maturity age to be scalar.
     EndtAge = static_cast<int>(Database_->Query(DB_MaturityAge));
     Length = EndtAge - IssueAge;
 
@@ -278,7 +261,6 @@ void BasicValues::GPTServerInit()
     StateOfJurisdiction_ = yare_input_.StateOfJurisdiction;
     PremiumTaxState_     = yare_input_.PremiumTaxState    ;
 
-    // The database class constrains maturity age to be scalar.
     EndtAge = static_cast<int>(Database_->Query(DB_MaturityAge));
     Length = EndtAge - IssueAge;
 
@@ -1991,8 +1973,6 @@ std::vector<double> const& BasicValues::GetMlyDcvqc() const
     return MlyDcvqc;
 }
 
-// Only current (hence midpoint) COI and term rates are blended
-
 std::vector<double> BasicValues::GetCvatCorridorFactors() const
 {
     return GetTable
@@ -2000,6 +1980,9 @@ std::vector<double> BasicValues::GetCvatCorridorFactors() const
         ,DB_CorridorTable
         );
 }
+
+// Only current (hence midpoint) COI and term rates are blended.
+
 std::vector<double> BasicValues::GetCurrCOIRates0() const
 {
     return GetTable
@@ -2010,6 +1993,7 @@ std::vector<double> BasicValues::GetCurrCOIRates0() const
         ,CanBlend
         );
 }
+
 std::vector<double> BasicValues::GetCurrCOIRates1() const
 {
     if
@@ -2030,6 +2014,7 @@ std::vector<double> BasicValues::GetCurrCOIRates1() const
         return std::vector<double>(Length);
         }
 }
+
 std::vector<double> BasicValues::GetCurrCOIRates2() const
 {
     if
@@ -2050,6 +2035,7 @@ std::vector<double> BasicValues::GetCurrCOIRates2() const
         return std::vector<double>(Length);
         }
 }
+
 std::vector<double> BasicValues::GetGuarCOIRates() const
 {
     return GetTable
@@ -2057,6 +2043,7 @@ std::vector<double> BasicValues::GetGuarCOIRates() const
         ,DB_GuarCoiTable
         );
 }
+
 std::vector<double> BasicValues::GetSmokerBlendedGuarCOIRates() const
 {
     return GetTable
@@ -2067,6 +2054,7 @@ std::vector<double> BasicValues::GetSmokerBlendedGuarCOIRates() const
         ,CanBlend
         );
 }
+
 std::vector<double> BasicValues::GetWpRates() const
 {
     return GetTable
@@ -2075,6 +2063,7 @@ std::vector<double> BasicValues::GetWpRates() const
         ,Database_->Query(DB_AllowWp)
         );
 }
+
 std::vector<double> BasicValues::GetAdbRates() const
 {
     return GetTable
@@ -2083,6 +2072,7 @@ std::vector<double> BasicValues::GetAdbRates() const
         ,Database_->Query(DB_AllowAdb)
         );
 }
+
 std::vector<double> BasicValues::GetChildRiderRates() const
 {
     return GetTable
@@ -2091,6 +2081,7 @@ std::vector<double> BasicValues::GetChildRiderRates() const
         ,Database_->Query(DB_AllowChildRider)
         );
 }
+
 std::vector<double> BasicValues::GetCurrentSpouseRiderRates() const
 {
     if(!Database_->Query(DB_AllowSpouseRider))
@@ -2107,6 +2098,7 @@ std::vector<double> BasicValues::GetCurrentSpouseRiderRates() const
     z.resize(Length);
     return z;
 }
+
 std::vector<double> BasicValues::GetGuaranteedSpouseRiderRates() const
 {
     if(!Database_->Query(DB_AllowSpouseRider))
@@ -2123,6 +2115,7 @@ std::vector<double> BasicValues::GetGuaranteedSpouseRiderRates() const
     z.resize(Length);
     return z;
 }
+
 std::vector<double> BasicValues::GetCurrentTermRates() const
 {
     return GetTable
@@ -2133,6 +2126,7 @@ std::vector<double> BasicValues::GetCurrentTermRates() const
         ,CanBlend
         );
 }
+
 std::vector<double> BasicValues::GetGuaranteedTermRates() const
 {
     return GetTable
@@ -2143,6 +2137,7 @@ std::vector<double> BasicValues::GetGuaranteedTermRates() const
         ,CanBlend
         );
 }
+
 std::vector<double> BasicValues::GetTableYRates() const
 {
     return GetTable
@@ -2150,6 +2145,7 @@ std::vector<double> BasicValues::GetTableYRates() const
         ,DB_TableYTable
         );
 }
+
 std::vector<double> BasicValues::GetTAMRA7PayRates() const
 {
     return GetTable
@@ -2157,6 +2153,7 @@ std::vector<double> BasicValues::GetTAMRA7PayRates() const
         ,DB_SevenPayTable
         );
 }
+
 std::vector<double> BasicValues::GetTgtPremRates() const
 {
     return GetTable
@@ -2165,6 +2162,7 @@ std::vector<double> BasicValues::GetTgtPremRates() const
         ,oe_modal_table == Database_->Query(DB_TgtPremType)
         );
 }
+
 std::vector<double> BasicValues::GetIRC7702Rates() const
 {
     return GetTable
@@ -2172,6 +2170,7 @@ std::vector<double> BasicValues::GetIRC7702Rates() const
         ,DB_Irc7702QTable
         );
 }
+
 std::vector<double> BasicValues::Get83GamRates() const
 {
     return GetTable
@@ -2182,6 +2181,7 @@ std::vector<double> BasicValues::Get83GamRates() const
         ,CanBlend
         );
 }
+
 std::vector<double> BasicValues::GetSubstdTblMultTable() const
 {
     if(0 == Database_->Query(DB_SubstdTableMultTable))
@@ -2194,6 +2194,7 @@ std::vector<double> BasicValues::GetSubstdTblMultTable() const
         ,DB_SubstdTableMultTable
         );
 }
+
 std::vector<double> BasicValues::GetCurrSpecAmtLoadTable() const
 {
     if(0 == Database_->Query(DB_CurrSpecAmtLoadTable))
@@ -2206,6 +2207,7 @@ std::vector<double> BasicValues::GetCurrSpecAmtLoadTable() const
         ,DB_CurrSpecAmtLoadTable
         );
 }
+
 std::vector<double> BasicValues::GetGuarSpecAmtLoadTable() const
 {
     if(0 == Database_->Query(DB_GuarSpecAmtLoadTable))
