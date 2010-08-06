@@ -81,6 +81,7 @@ class LMI_SO product_database
 
     database_index  index_;
     int             length_;
+    int             maturity_age_;
 };
 
 #endif // database_hpp
