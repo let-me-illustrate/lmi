@@ -190,6 +190,14 @@ void input_test::test_product_database()
     db.Query(v, DB_SnflQ, index);
     BOOST_TEST_EQUAL(55, db.length());
     BOOST_TEST_EQUAL(71, v.size());
+
+    // Test presumptive bounds on issue-age index.
+std::cout << v.size() << "...should be rejected, but isn't.\n";
+    index.issue_age(-1);
+    db.Query(v, DB_SnflQ, index);
+std::cout << v.size() << "...should be rejected, and is.\n";
+    index.issue_age(100);
+    db.Query(v, DB_SnflQ, index);
 }
 
 void input_test::test_input_class()
