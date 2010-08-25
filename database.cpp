@@ -81,31 +81,77 @@ product_database::~product_database()
 {
 }
 
+/// Number of years to maturity for default lookup index.
+///
+/// Almost all database queries use the default index, so caching this
+/// value improves performance. For a query with an overridden index
+/// that modifies issue age, the cached value is incorrect, so Query()
+/// never relies on it.
+
 int product_database::length() const
 {
     return length_;
 }
 
+/// Default lookup index for database queries.
+
+database_index product_database::index() const
+{
+    return index_;
+}
+
+/// Query database, using default index; return a scalar.
+///
+/// Throw if the database entity is not scalar.
+
 double product_database::Query(e_database_key k) const
+{
+    return Query(k, index_);
+}
+
+/// Query database; return a scalar.
+///
+/// Throw if the database entity is not scalar.
+///
+/// Return a double because it is convertible to the most common
+/// arithmetic types.
+///
+/// An idea like this:
+///   template<typename T, typename DBValue>
+///   void Query(T&, e_database_key) const;
+/// might prove useful someday.
+
+double product_database::Query(e_database_key k, database_index const& i) const
 {
     database_entity const& v = entity_from_key(k);
     LMI_ASSERT(1 == v.extent());
-    return *v[index_];
+    return *v[i];
 }
+
+/// Query database, using default index; write result into vector argument.
 
 void product_database::Query(std::vector<double>& dst, e_database_key k) const
 {
+    return Query(dst, k, index_);
+}
+
+/// Query database; write result into vector argument.
+
+void product_database::Query(std::vector<double>& dst, e_database_key k, database_index const& i) const
+{
+    int const local_length = maturity_age_ - i.index_vector()[e_axis_issue_age];
+    LMI_ASSERT(0 < local_length && local_length <= methuselah);
     database_entity const& v = entity_from_key(k);
-    double const*const z = v[index_];
+    double const*const z = v[i];
     if(1 == v.extent())
         {
-        dst.assign(length_, *z);
+        dst.assign(local_length, *z);
         }
     else
         {
-        dst.reserve(length_);
-        dst.assign(z, z + std::min(length_, v.extent()));
-        dst.resize(length_, dst.back());
+        dst.reserve(local_length);
+        dst.assign(z, z + std::min(local_length, v.extent()));
+        dst.resize(local_length, dst.back());
         }
 }
 
@@ -134,6 +180,10 @@ bool product_database::varies_by_state(e_database_key k) const
     return 1 != entity_from_key(k).axis_lengths().at(e_axis_state);
 }
 
+/// Initialize upon construction.
+///
+/// Set maturity age and default length (number of years to maturity).
+
 void product_database::initialize(std::string const& product_name)
 {
     if(is_antediluvian_fork())
@@ -145,10 +195,12 @@ void product_database::initialize(std::string const& product_name)
         std::string filename(product_data(product_name).datum("DatabaseFilename"));
         DBDictionary::instance().Init(AddDataDir(filename));
         }
-    int const maturity_age = static_cast<int>(Query(DB_MaturityAge));
-    length_ = maturity_age - index_.index_vector()[e_axis_issue_age];
+    maturity_age_ = static_cast<int>(Query(DB_MaturityAge));
+    length_ = maturity_age_ - index_.index_vector()[e_axis_issue_age];
     LMI_ASSERT(0 < length_ && length_ <= methuselah);
 }
+
+/// Database entity corresponding to the given key.
 
 database_entity const& product_database::entity_from_key(e_database_key k) const
 {

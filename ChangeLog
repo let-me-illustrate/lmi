@@ -26685,3 +26685,64 @@ Improve error handling. See:
 Explicitly assert certain postconditions. See:
   http://lists.nongnu.org/archive/html/lmi/2010-07/msg00037.html
 
+20100801T1217Z <gchicares@sbcglobal.net> [656]
+
+  dbindex.hpp
+  dbvalue.cpp
+Rectify names.
+
+20100801T1513Z <gchicares@sbcglobal.net> [656]
+
+  dbindex.hpp
+Offer the "named parameter idiom".
+
+20100801T1514Z <gchicares@sbcglobal.net> [656]
+
+  database.cpp
+  database.hpp
+  input_test.cpp
+Permit querying product database with nondefault index.
+
+20100801T1515Z <gchicares@sbcglobal.net> [656]
+
+  basicvalues.cpp
+  ihs_basicval.cpp
+  mec_server.cpp
+Query product database with nondefault index pro re nata.
+
+20100801T2209Z <gchicares@sbcglobal.net> [656]
+
+  datum_sequence.cpp
+  datum_sequence.hpp
+  input_realization.cpp
+  input_sequence_entry.cpp
+Fix defect introduced 20100704T1645Z. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-08/msg00000.html
+
+20100806T0943Z <gchicares@sbcglobal.net> [656]
+
+  ihs_basicval.cpp
+Improve layout; expunge obsolete documentation.
+
+20100806T0945Z <gchicares@sbcglobal.net> [656]
+
+  input_test.cpp
+Demonstrate a latent problem.
+
+20100806T1312Z <gchicares@sbcglobal.net> [656]
+
+  database.cpp
+  database.hpp
+Remove the problem identified 20100806T0945Z.
+
+20100806T1314Z <gchicares@sbcglobal.net> [656]
+
+  input_test.cpp
+Demonstrate a latent problem.
+
+20100806T1402Z <gchicares@sbcglobal.net> [656]
+
+  dbindex.hpp
+  input_test.cpp
+Remove the problem identified 20100806T1314Z.
+
