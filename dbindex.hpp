@@ -26,6 +26,7 @@
 
 #include "config.hpp"
 
+#include "assert_lmi.hpp"
 #include "mc_enum_type_enums.hpp"
 
 #include <vector>
@@ -40,7 +41,7 @@ enum
 
 enum
     {e_axis_gender    = 0
-    ,e_axis_class     = 1
+    ,e_axis_uw_class  = 1
     ,e_axis_smoking   = 2
     ,e_axis_issue_age = 3
     ,e_axis_uw_basis  = 4
@@ -55,7 +56,7 @@ enum
 enum enum_database_dimensions
     {e_number_of_axes    = 1 + number_of_indices
     ,e_max_dim_gender    =   3
-    ,e_max_dim_class     =   4
+    ,e_max_dim_uw_class  =   4
     ,e_max_dim_smoking   =   3
     ,e_max_dim_issue_age = 100
     ,e_max_dim_uw_basis  =   5
@@ -77,7 +78,7 @@ class database_index
     database_index
         (mcenum_gender   gender
         ,mcenum_class    uw_class
-        ,mcenum_smoking  smoker
+        ,mcenum_smoking  smoking
         ,int             issue_age
         ,mcenum_uw_basis uw_basis
         ,mcenum_state    state
@@ -86,15 +87,25 @@ class database_index
     {
         idx_[0] = gender   ;
         idx_[1] = uw_class ;
-        idx_[2] = smoker   ;
+        idx_[2] = smoking  ;
         idx_[3] = issue_age;
         idx_[4] = uw_basis ;
         idx_[5] = state    ;
     }
 
+    database_index& gender   (mcenum_gender   z) {idx_[0] = z; return *this;}
+    database_index& uw_class (mcenum_class    z) {idx_[1] = z; return *this;}
+    database_index& smoking  (mcenum_smoking  z) {idx_[2] = z; return *this;}
+    database_index& issue_age(int             z) {check_issue_age(z);
+                                                  idx_[3] = z; return *this;}
+    database_index& uw_basis (mcenum_uw_basis z) {idx_[4] = z; return *this;}
+    database_index& state    (mcenum_state    z) {idx_[5] = z; return *this;}
+
     std::vector<int> const& index_vector() const {return idx_;}
 
   private:
+    void check_issue_age(int z) {LMI_ASSERT(0 <= z && z < e_max_dim_issue_age);}
+
     std::vector<int> idx_;
 };
 

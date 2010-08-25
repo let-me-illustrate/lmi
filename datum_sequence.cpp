@@ -89,6 +89,15 @@ bool datum_sequence::keyword_values_are_allowable() const
     return false;
 }
 
+/// Return default keyword in current context.
+///
+/// Return empty string if there's no default keyword.
+
+std::string const datum_sequence::default_keyword() const
+{
+    return std::string();
+}
+
 /// Ascertain which keywords are allowed in the current context.
 ///
 /// The return value is a map: keyword --> mc_enum string. Rationale:
@@ -204,6 +213,11 @@ mode_sequence& mode_sequence::operator=(std::string const& s)
 {
     datum_sequence::operator=(s);
     return *this;
+}
+
+std::string const mode_sequence::default_keyword() const
+{
+    return "annual";
 }
 
 std::map<std::string,std::string> const mode_sequence::allowed_keywords() const

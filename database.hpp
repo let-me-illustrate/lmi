@@ -64,13 +64,12 @@ class LMI_SO product_database
     ~product_database();
 
     int length() const;
+    database_index index() const;
 
-    // Return scalar: use double because it's convertible to int, bool, etc.
-    // Someday, consider doing something like:
-    //   template<typename T, typename DBValue>
-    //   void Query(T&, e_database_key) const;
     double Query(e_database_key) const;
+    double Query(e_database_key, database_index const&) const;
     void Query(std::vector<double>&, e_database_key) const;
+    void Query(std::vector<double>&, e_database_key, database_index const&) const;
 
     bool are_equivalent(e_database_key, e_database_key) const;
     bool varies_by_state(e_database_key) const;
@@ -82,6 +81,7 @@ class LMI_SO product_database
 
     database_index  index_;
     int             length_;
+    int             maturity_age_;
 };
 
 #endif // database_hpp

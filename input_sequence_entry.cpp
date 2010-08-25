@@ -179,10 +179,15 @@ class InputSequenceEditor
   public:
     InputSequenceEditor(wxWindow* parent, wxString const& title, Input const& input);
 
-    void set_keywords(std::vector<std::string> const& keywords, bool only)
+    void set_keywords
+        (std::vector<std::string> const& keywords
+        ,bool                            keywords_only
+        ,std::string const&              default_keyword
+        )
     {
-        keywords_ = keywords;
-        keywords_only_ = only;
+        keywords_        = keywords;
+        keywords_only_   = keywords_only;
+        default_keyword_ = default_keyword;
     }
 
     void sequence(InputSequence const& s);
@@ -264,6 +269,7 @@ class InputSequenceEditor
     Input const& input_;
     std::vector<std::string> keywords_;
     bool keywords_only_;
+    std::string default_keyword_;
 
     int rows_count_;
     wxFlexGridSizer* sizer_;
@@ -499,6 +505,12 @@ void InputSequenceEditor::insert_row(int new_row)
         wxArrayString kw;
         std::copy(keywords_.begin(), keywords_.end(), std::back_inserter(kw));
         combo->Append(kw);
+
+        if(keywords_only_)
+            {
+            LMI_ASSERT(!default_keyword_.empty());
+            combo->SetValue(default_keyword_.c_str());
+            }
 
         if(!keywords_only_)
             {
@@ -1075,7 +1087,7 @@ void InputSequenceEntry::UponOpenEditor(wxCommandEvent&)
             && !ds.numeric_values_are_allowable()
             ;
         LMI_ASSERT(!(keywords_only && keywords.empty()));
-        editor.set_keywords(keywords, keywords_only);
+        editor.set_keywords(keywords, keywords_only, ds.default_keyword());
 
         InputSequence sequence
             (sequence_string

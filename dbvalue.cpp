@@ -144,7 +144,7 @@ void database_entity::reshape(std::vector<int> const& new_dims)
 {
     LMI_ASSERT(e_number_of_axes == new_dims.size());
     LMI_ASSERT(1 == new_dims[0] || e_max_dim_gender    == new_dims[0]);
-    LMI_ASSERT(1 == new_dims[1] || e_max_dim_class     == new_dims[1]);
+    LMI_ASSERT(1 == new_dims[1] || e_max_dim_uw_class  == new_dims[1]);
     LMI_ASSERT(1 == new_dims[2] || e_max_dim_smoking   == new_dims[2]);
     LMI_ASSERT(1 == new_dims[3] || e_max_dim_issue_age == new_dims[3]);
     LMI_ASSERT(1 == new_dims[4] || e_max_dim_uw_basis  == new_dims[4]);
@@ -442,7 +442,7 @@ std::vector<int> const& maximum_database_dimensions()
 {
     static int const d[e_number_of_axes] =
         {e_max_dim_gender
-        ,e_max_dim_class
+        ,e_max_dim_uw_class
         ,e_max_dim_smoking
         ,e_max_dim_issue_age
         ,e_max_dim_uw_basis
