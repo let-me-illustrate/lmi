@@ -519,8 +519,17 @@
                                         <growablecols>2</growablecols>
                                         <object class="sizeritem">
                                             <flag>wxGROW</flag>
+<!-- This skin's users doesn't need to change their state inputs
+in order to continue their usual practice. This input was formerly
+used to determine filing approval status, but now we have a more
+appropriate input.
                                             <object class="wxComboBox" name="CorporationState">
                                                 <help>Corporation state</help>
+                                                <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                                            </object>
+-->
+                                            <object class="wxComboBox" name="StateOfJurisdiction">
+                                                <help>State that approves policy form and rate filing, and governs everything else except premium tax</help>
                                                 <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                                             </object>
                                         </object>
