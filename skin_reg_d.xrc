@@ -501,7 +501,7 @@
                         <cols>1</cols>
                         <rows>0</rows>
                         <growablecols>0</growablecols>
-                        <growablerows>0,1,2</growablerows>
+                        <growablerows>0,2,3</growablerows>
                         <object class="sizeritem">
                             <flag>wxRIGHT|wxTOP|wxBOTTOM</flag>
                             <border>4</border>
@@ -536,56 +536,46 @@
                                 </object>
                             </object>
                         </object>
-<!--
-This doesn't actually do anything today, but it'll probably be
-useful in the future.
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                            <border>4</border>
+                            <flag>wxGROW|wxALL</flag>
                             <object class="wxFlexGridSizer">
-                                <cols>0</cols>
                                 <rows>1</rows>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxLEFT|wxTOP|wxBOTTOM</flag>
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
                                         <label>State of jurisdiction</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxLEFT|wxRIGHT</flag>
-                                    <border>4</border>
+                                    <flag>wxGROW|wxALL</flag>
+                                    <border>2</border>
                                     <object class="wxComboBox" name="StateOfJurisdiction">
-                                        <size>50,20</size>
-                                        <style>wxCB_READONLY</style>
+                                        <help>State that approves policy form and rate filing, and governs everything else except premium tax</help>
+                                        <size>40,-1</size>
+                                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                                     </object>
                                 </object>
                             </object>
                         </object>
--->
-<!-- Users want this field masked to avoid input confusion until
-the real 'StateOfJurisdiction' is implemented.
--->
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                            <border>4</border>
+                            <flag>wxGROW|wxALL</flag>
                             <object class="wxFlexGridSizer">
-                                <cols>0</cols>
                                 <rows>1</rows>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxLEFT|wxTOP|wxBOTTOM</flag>
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
-                                        <label>State of jurisdiction</label>
+                                        <label>Premium tax state</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxLEFT|wxRIGHT</flag>
+                                    <flag>wxGROW|wxLEFT</flag>
                                     <border>4</border>
-                                    <object class="wxComboBox" name="State">
-                                        <help>Insured state</help>
-                                        <size>50,20</size>
-                                        <style>wxCB_READONLY</style>
+                                    <object class="wxComboBox" name="PremiumTaxState">
+                                        <help>State to which premium tax is paid--affects premium load if the tax is passed through</help>
+                                        <size>40,-1</size>
+                                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                                     </object>
                                 </object>
                             </object>
