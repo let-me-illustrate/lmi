@@ -26756,3 +26756,8 @@ Remove the problem identified 20100806T1314Z.
   skin_variable_annuity.xrc
 Add new state fields.
 
+20100916T0039Z <gchicares@sbcglobal.net> [656]
+
+  input_xml_io.cpp
+Accommodate deficient admin-system extracts.
+
