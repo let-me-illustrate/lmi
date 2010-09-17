@@ -1026,19 +1026,34 @@ sample.policy:
 
 # Test data.
 
-sample.cns: $(addprefix $(src_dir)/,sample.cns)
-sample.ill: $(addprefix $(src_dir)/,sample.ill)
-
 test_data := \
   sample.cns \
   sample.ill \
 
 $(test_data):
-	@$(CP) --preserve --update $(addprefix $(src_dir)/,$@) .
+	@$(CP) --preserve --update $(src_dir)/$@ .
+
+################################################################################
+
+# Configurable settings.
+
+# If this file:
+#   /etc/opt/lmi/configurable_settings.xml
+# exists, it overrides files with the same name in other directories.
+# Developers may have reason to prefer that it not exist; therefore,
+# local copies are provided for as needed.
+
+configurable_settings.xml:
+	@$(CP) --preserve --update $(bin_dir)/$@ .
+
+$(data_dir)/configurable_settings.xml:
+	@$(CP) --preserve --update $(bin_dir)/$(notdir $@) $(data_dir)/.
 
 ################################################################################
 
 # Unit tests.
+
+$(unit_test_targets): configurable_settings.xml
 
 .PHONY: unit_tests
 unit_tests: $(test_data) $(unit_test_targets) run_unit_tests
@@ -1076,8 +1091,12 @@ mpatrol.log:
 
 # Test command-line interface.
 
+cli_subtargets := cli_tests_init cli_selftest $(addprefix cli_test-,$(test_data))
+
+$(cli_subtargets): $(data_dir)/configurable_settings.xml
+
 .PHONY: cli_tests
-cli_tests: cli_tests_init cli_selftest $(addprefix cli_test-,$(test_data))
+cli_tests: $(cli_subtargets)
 
 .PHONY: cli_tests_init
 cli_tests_init:
@@ -1133,6 +1152,8 @@ cli_test-%: $(test_data) lmi_cli_shared$(EXEEXT)
 # MSYS !! The initial ';' in several $(SED) commands works around a
 # problem caused by MSYS.
 
+antediluvian_cgi$(EXEEXT): configurable_settings.xml
+
 .PHONY: cgi_tests
 cgi_tests: $(test_data) antediluvian_cgi$(EXEEXT)
 	@$(ECHO) Test common gateway interface:
@@ -1170,7 +1191,7 @@ system_test_diffs    := $(test_dir)/diffs-$(yyyymmddhhmm)
 system_test_md5sums  := $(test_dir)/md5sums-$(yyyymmddhhmm)
 
 .PHONY: system_test
-system_test: install
+system_test: $(data_dir)/configurable_settings.xml install
 	@$(ECHO) System test:
 	@-cd $(test_dir); \
 	  $(foreach z, $(addprefix *., $(test_result_suffixes)), $(RM) --force $z;)
