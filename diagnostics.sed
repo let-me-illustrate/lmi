@@ -45,6 +45,7 @@
 /not remade because of errors\./d
 /^These files are more recent than/d
 /Built [0-9].*T[0-9].*Z\.$/d
+/^make.*\[[0-9]*\]: warning: -jN forced in submake: disabling jobserver mode.$/d
 /^make.*\[[0-9]*\]: \*\*\* \[.*\] Error [0-9]*$/d
 /^make.*\[[0-9]*\]: \[.*\] Error [0-9]* (ignored)$/d
   # Delete expected output from gnu cpp.

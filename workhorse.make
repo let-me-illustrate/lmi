@@ -1053,10 +1053,18 @@ $(data_dir)/configurable_settings.xml:
 
 # Unit tests.
 
-$(unit_test_targets): configurable_settings.xml
+# Use '--jobs=1' to force tests to run in series: running them in
+# parallel would scramble their output.
+#
+# Ignore the "disabling jobserver mode" warning.
 
 .PHONY: unit_tests
-unit_tests: $(test_data) $(unit_test_targets) run_unit_tests
+unit_tests: $(test_data)
+	@-$(MAKE) --file=$(this_makefile) build_unit_tests
+	@ $(MAKE) --file=$(this_makefile) --jobs=1 run_unit_tests
+
+.PHONY: build_unit_tests
+build_unit_tests: configurable_settings.xml $(unit_test_targets)
 
 .PHONY: unit_tests_not_built
 unit_tests_not_built:
@@ -1095,8 +1103,14 @@ cli_subtargets := cli_tests_init cli_selftest $(addprefix cli_test-,$(test_data)
 
 $(cli_subtargets): $(data_dir)/configurable_settings.xml
 
+# Use '--jobs=1' to force tests to run in series: running them in
+# parallel would scramble their output.
+#
+# Ignore the "disabling jobserver mode" warning.
+
 .PHONY: cli_tests
-cli_tests: $(cli_subtargets)
+cli_tests: $(test_data) antediluvian_cli$(EXEEXT) lmi_cli_shared$(EXEEXT)
+	@$(MAKE) --file=$(this_makefile) --jobs=1 $(cli_subtargets)
 
 .PHONY: cli_tests_init
 cli_tests_init:
@@ -1108,7 +1122,7 @@ cli_tests_init:
 self_test_options := --accept --data_path=$(data_dir) --selftest
 
 .PHONY: cli_selftest
-cli_selftest: antediluvian_cli$(EXEEXT) lmi_cli_shared$(EXEEXT)
+cli_selftest:
 	@./antediluvian_cli$(EXEEXT) $(self_test_options) > /dev/null
 	@./antediluvian_cli$(EXEEXT) $(self_test_options)
 	@./lmi_cli_shared$(EXEEXT) $(self_test_options) > /dev/null
@@ -1121,7 +1135,7 @@ cli_test-sample.ill: special_emission :=
 cli_test-sample.cns: special_emission := emit_composite_only
 
 .PHONY: cli_test-%
-cli_test-%: $(test_data) lmi_cli_shared$(EXEEXT)
+cli_test-%:
 	@$(ECHO) Test $*:
 	@./lmi_cli_shared$(EXEEXT) \
 	  --accept \
@@ -1152,10 +1166,8 @@ cli_test-%: $(test_data) lmi_cli_shared$(EXEEXT)
 # MSYS !! The initial ';' in several $(SED) commands works around a
 # problem caused by MSYS.
 
-antediluvian_cgi$(EXEEXT): configurable_settings.xml
-
 .PHONY: cgi_tests
-cgi_tests: $(test_data) antediluvian_cgi$(EXEEXT)
+cgi_tests: $(test_data) configurable_settings.xml antediluvian_cgi$(EXEEXT)
 	@$(ECHO) Test common gateway interface:
 	@./antediluvian_cgi$(EXEEXT) --write_content_string > /dev/null
 	@./antediluvian_cgi$(EXEEXT) --enable_test <cgi.test.in >cgi.touchstone

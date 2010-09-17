@@ -26761,8 +26761,14 @@ Add new state fields.
   input_xml_io.cpp
 Accommodate deficient admin-system extracts.
 
-20100917T1502Z <gchicares@sbcglobal.net> [656]
+20100917T1503Z <gchicares@sbcglobal.net> [656]
 
   workhorse.make
 Specify missing prerequisites of 'test' targets.
+
+20100917T2055Z <gchicares@sbcglobal.net> [656]
+
+  diagnostics.sed
+  workhorse.make
+Run tests seriatim iff they write to stdout.
 
