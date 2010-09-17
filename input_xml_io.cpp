@@ -386,6 +386,12 @@ void Input::redintegrate_ex_post
             );
         }
 
+    // Defectively, some admin-system extracts lack various elements.
+    // All deficient extracts happen to lack <AgentPhone>: they don't
+    // even have an empty <AgentPhone/>; but that field is present in
+    // every input file ever saved by any version of lmi.
+    bool const deficient_extract = contains(residuary_names, "AgentPhone");
+
     // One state governs everything except premium tax, which may be
     // paid to a different state, e.g. on cases with more than five
     // hundred lives with a common (employer) issue state; see:
@@ -404,13 +410,15 @@ void Input::redintegrate_ex_post
     // 'FilingApprovalState' and 'PremiumTaxState' were unknown before
     // version 6, and would not ordinarily occur in older versions.
     // However, certain admin-system extracts that are always marked
-    // as version 5 have been modified to add these two fields.
+    // as version 5 were to have been modified to add these two fields
+    // (yet were not so modified).
     if(file_version < 6)
         {
         bool const b0 = contains(detritus_map, "FilingApprovalState");
         bool const b1 = !contains(residuary_names, "PremiumTaxState");
         if(b0 || b1)
             {
+            fatal_error() << "Unexpected 'state' fields." << LMI_FLUSH; // deficient_extract
             LMI_ASSERT(b0 && b1 && 5 == file_version);
             StateOfJurisdiction = map_lookup(detritus_map, "FilingApprovalState");
             }
@@ -464,7 +472,8 @@ void Input::redintegrate_ex_post
             }
         }
 
-    if(file_version < 6)
+    // For "deficient" extracts, these required elements are missing.
+    if(file_version < 6 && !deficient_extract)
         {
         LMI_ASSERT(contains(residuary_names, "SolveFromWhich"));
         LMI_ASSERT(contains(residuary_names, "SolveTgtAtWhich"));

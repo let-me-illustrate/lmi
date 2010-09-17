@@ -26746,3 +26746,18 @@ Demonstrate a latent problem.
   input_test.cpp
 Remove the problem identified 20100806T1314Z.
 
+20100903T1446Z <wboutin@massmutual.com> [656]
+
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_group_carveout2.xrc
+  skin_reg_d.xrc
+  skin_single_premium.xrc
+  skin_variable_annuity.xrc
+Add new state fields.
+
+20100916T0039Z <gchicares@sbcglobal.net> [656]
+
+  input_xml_io.cpp
+Accommodate deficient admin-system extracts.
+

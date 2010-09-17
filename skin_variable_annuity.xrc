@@ -109,8 +109,7 @@ useful in the future.
                             <flag>wxGROW|wxALL</flag>
                             <border>2</border>
                             <object class="wxFlexGridSizer">
-                                <rows>1</rows>
-                                <growablecols>1</growablecols>
+                                <rows>2</rows>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                     <border>2</border>
@@ -118,14 +117,27 @@ useful in the future.
                                         <label>State of jurisdiction</label>
                                     </object>
                                 </object>
-<!-- Users want this field masked to avoid input confusion until the real
-'StateOfJurisdiction' is implemented.
--->
                                 <object class="sizeritem">
                                     <flag>wxGROW|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                     <border>2</border>
-                                    <object class="wxComboBox" name="State">
-                                        <help>Insured state</help>
+                                    <object class="wxComboBox" name="StateOfJurisdiction">
+                                        <help>State that approves policy form and rate filing, and governs everything else except premium tax</help>
+                                        <size>50,20</size>
+                                        <style>wxCB_READONLY</style>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                    <border>2</border>
+                                    <object class="wxStaticText">
+                                        <label>Premium tax state</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxGROW|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                    <border>2</border>
+                                    <object class="wxComboBox" name="PremiumTaxState">
+                                        <help>State to which premium tax is paid--affects premium load if the tax is passed through</help>
                                         <size>50,20</size>
                                         <style>wxCB_READONLY</style>
                                     </object>
