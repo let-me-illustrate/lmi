@@ -32,7 +32,6 @@
 #include "dbdict.hpp"       // print_databases()
 #include "getopt.hpp"
 #include "global_settings.hpp"
-#include "handle_exceptions.hpp"
 #include "illustrator.hpp"
 #include "input.hpp"
 #include "ledger.hpp"
@@ -51,9 +50,6 @@
 #include "value_cast.hpp"
 
 #include <boost/bind.hpp>
-#include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <algorithm>
 #include <cmath>
@@ -66,58 +62,6 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
-
-/// Run a suite of test cases.
-///
-/// Run every file with extension
-///   '.cns', '.ini', or '.mec'
-/// in a given system-testing directory, emitting data appropriate for
-/// automated comparison with previously-saved results.
-
-void system_test()
-{
-    Timer timer;
-    global_settings::instance().set_regression_testing(true);
-    fs::path test_dir(global_settings::instance().regression_test_directory());
-    fs::directory_iterator i(test_dir);
-    fs::directory_iterator end_i;
-    for(; i != end_i; ++i)
-        {
-        try
-            {
-            if(is_directory(*i))
-                {
-                continue;
-                }
-            else if(".cns" == fs::extension(*i) || ".ill" == fs::extension(*i))
-                {
-                std::cout << "Regression testing: " << i->string() << std::endl;
-                (illustrator(mce_emit_test_data))(*i);
-                }
-            else if(".ini" == fs::extension(*i))
-                {
-                std::cout << "Regression testing: " << i->string() << std::endl;
-                (illustrator(mce_emit_custom_0 ))(*i);
-                }
-            else if(".mec" == fs::extension(*i))
-                {
-                std::cout << "Regression testing: " << i->string() << std::endl;
-                (mec_server (mce_emit_test_data))(*i);
-                }
-            else
-                {
-                // Do nothing. The test directory typically contains
-                // many files of other types that are deliberately
-                // ignored.
-                }
-            }
-        catch(...)
-            {
-            report_exception();
-            }
-        }
-    std::cout << "system_test(): " << timer.stop().elapsed_msec_str() << std::endl;
-}
 
 /// Spot check and time some insurance calculations.
 ///
@@ -230,31 +174,23 @@ void process_command_line(int argc, char* argv[])
         {"profile"   ,NO_ARG   ,0 ,'o' ,0 ,"set up for profiling and exit"},
         {"emit"      ,REQD_ARG ,0 ,'e' ,0 ,"choose what output to emit"},
         {"illfile"   ,REQD_ARG ,0 ,'i' ,0 ,"run illustration"},
+        {"inifile"   ,REQD_ARG ,0 ,'n' ,0 ,"run custom .ini file"},
         {"cnsfile"   ,REQD_ARG ,0 ,'c' ,0 ,"run census"},
 //      {"gptfile"   ,REQD_ARG ,0 ,'g' ,0 ,"test GPT"}, // Reserved for future use.
         {"mecfile"   ,REQD_ARG ,0 ,'m' ,0 ,"test MEC testing"},
         {"data_path" ,REQD_ARG ,0 ,'d' ,0 ,"path to data files"},
-        {"print_db"  ,NO_ARG   ,0 ,'p', 0, "print product databases"},
-        {"regress"   ,NO_ARG   ,0 ,'r' ,0 ,"run regression test"},
-        {"test_path" ,REQD_ARG ,0 ,'t' ,0 ,"path to test files"},
-//        {"list"    ,LIST_ARG, 0,   0, 0    , "list"},
-//        {"opt"     ,OPT_ARG,  0,   0, 0    , "optional"},
-//        {"alt"     ,ALT_ARG,  0,   0, 0    , "alternative"},
-//        {"vfile"   ,REQD_ARG, 0,   0, vfile, "file type"},
-//        {"vlist"   ,LIST_ARG, 0,   0, vlist, "list type"},
-//        {"vopt"    ,OPT_ARG,  0,   0, vopt , "optional"},
-//        {"valt"    ,ALT_ARG,  0,   0, vopt , "alternative"},
-        {0         ,NO_ARG,   0,   0, 0    , ""}
+        {"print_db"  ,NO_ARG   ,0 ,'p' ,0 ,"print product databases"},
+        {0           ,NO_ARG   ,0 ,0   ,0 ,""}
       };
 
     bool license_accepted    = false;
     bool show_license        = false;
     bool show_help           = false;
-    bool run_regression_test = false;
     bool run_selftest        = false;
     bool run_profile         = false;
     bool print_all_databases = false;
     bool run_illustration    = false;
+    bool run_ini             = false;
     bool run_census          = false;
     bool run_mec_test        = false;
 
@@ -262,9 +198,9 @@ void process_command_line(int argc, char* argv[])
     // Suppress enumerators for options not fully implemented.
     emission.allow(emission.ordinal("emit_pdf_to_printer"), false);
     emission.allow(emission.ordinal("emit_pdf_to_viewer" ), false);
-    emission.allow(emission.ordinal("emit_custom_0"      ), false);
 
     std::vector<std::string> ill_names;
+    std::vector<std::string> ini_names;
     std::vector<std::string> cns_names;
     std::vector<std::string> mec_names;
 
@@ -421,6 +357,13 @@ void process_command_line(int argc, char* argv[])
                 }
                 break;
 
+            case 'n':
+                {
+                run_ini = true;
+                ini_names.push_back(getopt_long.optarg);
+                }
+                break;
+
             case 'o':
                 {
                 run_profile = true;
@@ -433,23 +376,9 @@ void process_command_line(int argc, char* argv[])
                 }
                 break;
 
-            case 'r':
-                {
-                run_regression_test = true;
-                }
-                break;
-
             case 's':
                 {
                 run_selftest = true;
-                }
-                break;
-
-            case 't':
-                {
-                global_settings::instance().set_regression_test_directory
-                    (getopt_long.optarg
-                    );
                 }
                 break;
 
@@ -518,12 +447,6 @@ void process_command_line(int argc, char* argv[])
         return;
         }
 
-    if(run_regression_test)
-        {
-        system_test();
-        return;
-        }
-
     if(run_profile)
         {
         profile();
@@ -541,6 +464,15 @@ void process_command_line(int argc, char* argv[])
         std::for_each
             (ill_names.begin()
             ,ill_names.end()
+            ,illustrator(emission.value())
+            );
+        }
+
+    if(run_ini)
+        {
+        std::for_each
+            (ini_names.begin()
+            ,ini_names.end()
             ,illustrator(emission.value())
             );
         }

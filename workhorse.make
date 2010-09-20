@@ -1128,9 +1128,6 @@ cli_selftest:
 	@./lmi_cli_shared$(EXEEXT) $(self_test_options) > /dev/null
 	@./lmi_cli_shared$(EXEEXT) $(self_test_options)
 
-cli_test-sample.ill: file_option := --illfile
-cli_test-sample.cns: file_option := --cnsfile
-
 cli_test-sample.ill: special_emission :=
 cli_test-sample.cns: special_emission := emit_composite_only
 
@@ -1196,30 +1193,65 @@ cgi_tests: $(test_data) configurable_settings.xml antediluvian_cgi$(EXEEXT)
 # shown that the discrepancies thus ignored are never material, but
 # larger discrepancies may be.
 
-test_result_suffixes     := test test0 monthly_trace.* mec.xml
+testdeck_suffixes    := cns ill ini mec
+test_result_suffixes := test test0 monthly_trace.* mec.xml
 
 system_test_analysis := $(test_dir)/analysis-$(yyyymmddhhmm)
 system_test_diffs    := $(test_dir)/diffs-$(yyyymmddhhmm)
 system_test_md5sums  := $(test_dir)/md5sums-$(yyyymmddhhmm)
 
+%.cns: file_option := --cnsfile
+%.ill: file_option := --illfile
+%.ini: file_option := --inifile
+%.mec: file_option := --mecfile
+
+%.cns: test_emission := emit_quietly,emit_test_data
+%.ill: test_emission := emit_quietly,emit_test_data
+%.ini: test_emission := emit_quietly,emit_custom_0
+%.mec: test_emission := emit_quietly,emit_test_data
+
+dot_test_files =
+%.cns: dot_test_files = $(basename $(notdir $@)).*test
+%.ill: dot_test_files = $(basename $(notdir $@)).*test
+
+# Sort input files iff $(LS) supports '--sort=size'; otherwise, use
+# them unsorted. Parallel runs are slightly faster when the biggest
+# jobs are started first.
+
+testdecks := \
+  $(shell \
+       $(LS) --sort=size $(addprefix $(test_dir)/*., $(testdeck_suffixes)) \
+    || $(LS)             $(addprefix $(test_dir)/*., $(testdeck_suffixes)) \
+  )
+
+# Naming the output files would be more natural, but that's infeasible
+# because $(test_emission) can be overridden implicitly in ways that a
+# makefile cannot readily discern.
+
+.PHONY: $(testdecks)
+$(testdecks):
+	@-$(bin_dir)/lmi_cli_shared$(EXEEXT) \
+	  --accept \
+	  --ash_nazg \
+	  --data_path=$(data_dir) \
+	  --emit=$(test_emission) \
+	  --pyx=system_testing \
+	  $(file_option)=$@
+	@$(MD5SUM) $(basename $(notdir $@)).* >> $(system_test_md5sums)
+	@for z in $(dot_test_files); \
+	  do \
+	    $(bin_dir)/ihs_crc_comp$(EXEEXT) $$z $(touchstone_dir)/$$z \
+	    | $(SED) -e ';/Summary.*max rel err/!d' -e "s/^ /$$z/" \
+	    >> $(system_test_analysis); \
+	  done
+
 .PHONY: system_test
 system_test: $(data_dir)/configurable_settings.xml install
 	@$(ECHO) System test:
-	@-cd $(test_dir); \
-	  $(foreach z, $(addprefix *., $(test_result_suffixes)), $(RM) --force $z;)
-	@cd $(test_dir); \
-	  $(bin_dir)/lmi_cli_shared$(EXEEXT) \
-	    --ash_nazg --accept --regress \
-	    --data_path=$(data_dir) \
-	    --test_path=$(test_dir); \
-	  $(MD5SUM) \
-	    $(addprefix *.,$(test_result_suffixes)) \
-	    >$(system_test_md5sums); \
-	  for z in *.test; \
-	    do \
-	      $(bin_dir)/ihs_crc_comp$(EXEEXT) $$z $(touchstone_dir)/$$z \
-	      | $(SED) -e ';/Summary.*max rel err/!d' -e "s/^ /$$z/"; \
-	    done > $(system_test_analysis);
+	@$(RM) --force $(addprefix $(test_dir)/*., $(test_result_suffixes))
+	@$(MAKE) --file=$(this_makefile) --directory=$(test_dir) $(testdecks)
+	@$(SORT) --key=2 $(system_test_md5sums) --output=$(system_test_md5sums)
+	@$(SORT) $(system_test_analysis) --output=$(system_test_analysis)
 	@-< $(system_test_analysis) $(SED) \
 	  -e ';/rel err.*e-0*1[5-9]/d' \
 	  -e ';/abs.*0\.00.*rel/d' \

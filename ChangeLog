@@ -26772,3 +26772,14 @@ Specify missing prerequisites of 'test' targets.
   workhorse.make
 Run tests seriatim iff they write to stdout.
 
+20100920T1232Z <gchicares@sbcglobal.net> [656]
+
+  diagnostics.sed
+  global_settings.cpp
+  global_settings.hpp
+  global_settings_test.cpp
+  main_cli.cpp
+  main_wx.cpp
+  workhorse.make
+Run system tests in parallel.
+
