@@ -1263,32 +1263,28 @@ system_test: $(data_dir)/configurable_settings.xml install
 	    $(touchstone_dir) \
 	    > $(system_test_diffs) \
 	  || true
-	@$(ECHO) Summarizing test results
+	@$(ECHO) Summarizing test results...
 	@-<$(system_test_diffs) \
 	  $(SED) \
 	    -e ';/^Only in/d' \
 	  | $(WC) -l \
-	  | $(SED) -e 's/^/  /' \
-	  | $(SED) -e 's/$$/ system-test files compared/'
+	  | $(SED) -e 's/^\(.*\)$$/  \1 system-test files compared/'
 	@-<$(system_test_diffs) \
 	  $(SED) \
 	    -e ';/^Files.*are identical$$/!d' \
 	  | $(WC) -l \
-	  | $(SED) -e 's/^/  /' \
-	  | $(SED) -e 's/$$/ system-test files match/'
+	  | $(SED) -e 's/^\(.*\)$$/  \1 system-test files match/'
 	@-<$(system_test_diffs) \
 	  $(SED) \
 	    -e ';/^Files.*are identical$$/d' \
 	    -e ';/^Only in /d' \
 	  | $(WC) -l \
-	  | $(SED) -e 's/^/  /' \
-	  | $(SED) -e 's/$$/ system-test nonmatching files/'
+	  | $(SED) -e 's/^\(.*\)$$/  \1 system-test nonmatching files/'
 	@-<$(system_test_diffs) \
 	  $(SED) \
 	    -e ';/^Only in.*test\/touchstone/!d' \
 	  | $(WC) -l \
-	  | $(SED) -e 's/^/  /' \
-	  | $(SED) -e 's/$$/ system-test missing files/'
+	  | $(SED) -e 's/^\(.*\)$$/  \1 system-test missing files/'
 	@$(ECHO) ...system test completed.
 
 ################################################################################

@@ -26783,3 +26783,13 @@ Run tests seriatim iff they write to stdout.
   workhorse.make
 Run system tests in parallel.
 
+20100921T0044Z <gchicares@sbcglobal.net> [656]
+
+  GNUmakefile
+Make build directory more unmistakable.
+
+20100921T0152Z <gchicares@sbcglobal.net> [656]
+
+  workhorse.make
+Refactor.
+
