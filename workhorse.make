@@ -1282,7 +1282,7 @@ system_test: $(data_dir)/configurable_settings.xml install
 	  | $(SED) -e 's/^\(.*\)$$/  \1 system-test nonmatching files/'
 	@-<$(system_test_diffs) \
 	  $(SED) \
-	    -e ';/^Only in.*test\/touchstone/!d' \
+	    -e ';/^Only in.*touchstone:/!d' \
 	  | $(WC) -l \
 	  | $(SED) -e 's/^\(.*\)$$/  \1 system-test missing files/'
 	@$(ECHO) ...system test completed.
