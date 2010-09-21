@@ -137,7 +137,7 @@ $(src_dir)/local_options.make:: ;
 build_type ?= ship
 toolset ?= gcc
 build_directory := \
-  ../build/$(notdir $(src_dir))/$(uname)/$(toolset)/$(build_type)
+  $(src_dir)/../build/$(notdir $(src_dir))/$(uname)/$(toolset)/$(build_type)
 
 gpl_files := \
   COPYING \
@@ -288,7 +288,7 @@ distclean mostlyclean maintainer-clean: clean
 
 .PHONY: clobber
 clobber: source_clean
-	@-$(RM) --force --recursive ../build
+	@-$(RM) --force --recursive $(src_dir)/../build
 
 ################################################################################
 
@@ -416,7 +416,7 @@ happy_new_year: source_clean
 
 # TODO ?? This is an evolving experiment. Possible enhancements include:
 #   - Add other tests, particularly system tests.
-#       Consider using ../products/src if it exists.
+#       Consider using $(src_dir)/../products/src if it exists.
 #       Also consider using the repository only, with testdecks stored
 #         either there or in ftp.
 #   - Test skeleton branch, too.
