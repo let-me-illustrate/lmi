@@ -1193,6 +1193,14 @@ cgi_tests: $(test_data) configurable_settings.xml antediluvian_cgi$(EXEEXT)
 # shown that the discrepancies thus ignored are never material, but
 # larger discrepancies may be.
 
+touchstone_md5sums := $(touchstone_dir)/md5sums
+
+touchstone_files := \
+  $(filter-out $(touchstone_md5sums),$(wildcard $(touchstone_dir)/*))
+
+$(touchstone_md5sums): $(touchstone_files)
+	@cd $(touchstone_dir) && $(MD5SUM) $(notdir $^) > $@
+
 testdeck_suffixes    := cns ill ini mec
 test_result_suffixes := test test0 monthly_trace.* mec.xml
 
@@ -1246,7 +1254,7 @@ $(testdecks):
 	  done
 
 .PHONY: system_test
-system_test: $(data_dir)/configurable_settings.xml install
+system_test: $(data_dir)/configurable_settings.xml $(touchstone_md5sums) install
 	@$(ECHO) System test:
 	@$(RM) --force $(addprefix $(test_dir)/*., $(test_result_suffixes))
 	@$(MAKE) --file=$(this_makefile) --directory=$(test_dir) $(testdecks)
@@ -1256,6 +1264,13 @@ system_test: $(data_dir)/configurable_settings.xml install
 	  -e ';/rel err.*e-0*1[5-9]/d' \
 	  -e ';/abs.*0\.00.*rel/d' \
 	  -e ';/abs diff: 0 /d'
+	@$(DIFF) --brief $(system_test_md5sums) $(touchstone_md5sums) \
+	  && $(ECHO) "All `<$(touchstone_md5sums) $(WC) -l` files match." \
+	  || $(MAKE) --file=$(this_makefile) system_test_discrepancies
+
+.PHONY: system_test_discrepancies
+system_test_discrepancies:
+	@$(ECHO) "*** System test failed ***"
 	@-$(DIFF) \
 	    --brief \
 	    --report-identical-files \
@@ -1263,7 +1278,6 @@ system_test: $(data_dir)/configurable_settings.xml install
 	    $(touchstone_dir) \
 	    > $(system_test_diffs) \
 	  || true
-	@$(ECHO) Summarizing test results...
 	@-<$(system_test_diffs) \
 	  $(SED) \
 	    -e ';/^Only in/d' \
@@ -1277,14 +1291,15 @@ system_test: $(data_dir)/configurable_settings.xml install
 	@-<$(system_test_diffs) \
 	  $(SED) \
 	    -e ';/^Files.*are identical$$/d' \
-	    -e ';/^Only in /d' \
+	    -e ';/^Only in/d' \
 	  | $(WC) -l \
-	  | $(SED) -e 's/^\(.*\)$$/  \1 system-test nonmatching files/'
+	  | $(SED) -e 's/^\(.*\)$$/  \1 system-test files differ/'
 	@-<$(system_test_diffs) \
 	  $(SED) \
 	    -e ';/^Only in.*touchstone:/!d' \
+	    -e ';/md5sums$$/d' \
 	  | $(WC) -l \
-	  | $(SED) -e 's/^\(.*\)$$/  \1 system-test missing files/'
+	  | $(SED) -e 's/^\(.*\)$$/  \1 system-test files missing/'
 	@$(ECHO) ...system test completed.
 
 ################################################################################
