@@ -26804,3 +26804,8 @@ the regex /test\/touchstone/.
   workhorse.make
 Don't spend time analyzing system-test discrepancies if none exist.
 
+20100923T0020Z <gchicares@sbcglobal.net> [656]
+
+  version.hpp
+Designate release candidate.
+
