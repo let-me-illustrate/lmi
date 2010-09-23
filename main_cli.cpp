@@ -50,11 +50,13 @@
 #include "value_cast.hpp"
 
 #include <boost/bind.hpp>
+#include <boost/filesystem/convenience.hpp>
+#include <boost/filesystem/path.hpp>
 
 #include <algorithm>
 #include <cmath>
 #include <cstddef> // NULL, std::size_t
-#include <cstdio>  // std::printf(), std::remove()
+#include <cstdio>  // std::printf()
 #include <ios>
 #include <iostream>
 #include <iterator>
@@ -157,9 +159,6 @@ void profile()
 void process_command_line(int argc, char* argv[])
 {
     // TRICKY !! Some long options are aliased to unlikely octal values.
-//    static char const* vfile[] = {"file", "archive", 0};
-//    static char const* vlist[] = {"one", "two", "three", 0};
-//    static char const* vopt[] = {"optional", "alternative", 0};
     static Option long_options[] =
       {
         {"ash_nazg"  ,NO_ARG   ,0 ,001 ,0 ,"ash nazg durbatulûk"},
@@ -173,13 +172,9 @@ void process_command_line(int argc, char* argv[])
         {"selftest"  ,NO_ARG   ,0 ,'s' ,0 ,"perform self test and exit"},
         {"profile"   ,NO_ARG   ,0 ,'o' ,0 ,"set up for profiling and exit"},
         {"emit"      ,REQD_ARG ,0 ,'e' ,0 ,"choose what output to emit"},
-        {"illfile"   ,REQD_ARG ,0 ,'i' ,0 ,"run illustration"},
-        {"inifile"   ,REQD_ARG ,0 ,'n' ,0 ,"run custom .ini file"},
-        {"cnsfile"   ,REQD_ARG ,0 ,'c' ,0 ,"run census"},
-//      {"gptfile"   ,REQD_ARG ,0 ,'g' ,0 ,"test GPT"}, // Reserved for future use.
-        {"mecfile"   ,REQD_ARG ,0 ,'m' ,0 ,"test MEC testing"},
+        {"file"      ,REQD_ARG ,0 ,'f' ,0 ,"input file to run"},
         {"data_path" ,REQD_ARG ,0 ,'d' ,0 ,"path to data files"},
-        {"print_db"  ,NO_ARG   ,0 ,'p' ,0 ,"print product databases"},
+        {"print_db"  ,NO_ARG   ,0 ,'p' ,0 ,"print product databases and exit"},
         {0           ,NO_ARG   ,0 ,0   ,0 ,""}
       };
 
@@ -189,20 +184,14 @@ void process_command_line(int argc, char* argv[])
     bool run_selftest        = false;
     bool run_profile         = false;
     bool print_all_databases = false;
-    bool run_illustration    = false;
-    bool run_ini             = false;
-    bool run_census          = false;
-    bool run_mec_test        = false;
 
     e_emission emission(mce_emit_nothing);
     // Suppress enumerators for options not fully implemented.
     emission.allow(emission.ordinal("emit_pdf_to_printer"), false);
     emission.allow(emission.ordinal("emit_pdf_to_viewer" ), false);
 
-    std::vector<std::string> ill_names;
-    std::vector<std::string> ini_names;
-    std::vector<std::string> cns_names;
-    std::vector<std::string> mec_names;
+    std::vector<std::string> illustrator_names;
+    std::vector<std::string> mec_server_names;
 
     int digit_optind = 0;
     int this_option_optind = 1;
@@ -277,13 +266,6 @@ void process_command_line(int argc, char* argv[])
                 }
                 break;
 
-            case 'c':
-                {
-                run_census = true;
-                cns_names.push_back(getopt_long.optarg);
-                }
-                break;
-
             case 'd':
                 {
                 global_settings::instance().set_data_directory
@@ -329,7 +311,30 @@ void process_command_line(int argc, char* argv[])
                 }
                 break;
 
-//          case 'g': // Reserved for future use.
+            case 'f':
+                {
+                LMI_ASSERT(NULL != getopt_long.optarg);
+                std::string const s(getopt_long.optarg);
+                std::string const e = fs::extension(s);
+                if(".cns" == e || ".ill" == e || ".ini" == e)
+                    {
+                    illustrator_names.push_back(getopt_long.optarg);
+                    }
+                else if(".mec" == e)
+                    {
+                    mec_server_names.push_back(getopt_long.optarg);
+                    }
+                else
+                    {
+                    warning()
+                        << "'"
+                        << s
+                        << "': unrecognized file extension."
+                        << LMI_FLUSH
+                        ;
+                    }
+                }
+                break;
 
             case 'h':
                 {
@@ -337,30 +342,9 @@ void process_command_line(int argc, char* argv[])
                 }
                 break;
 
-            case 'i':
-                {
-                run_illustration = true;
-                ill_names.push_back(getopt_long.optarg);
-                }
-                break;
-
             case 'l':
                 {
                 show_license = true;
-                }
-                break;
-
-            case 'm':
-                {
-                run_mec_test = true;
-                mec_names.push_back(getopt_long.optarg);
-                }
-                break;
-
-            case 'n':
-                {
-                run_ini = true;
-                ini_names.push_back(getopt_long.optarg);
                 }
                 break;
 
@@ -428,7 +412,6 @@ void process_command_line(int argc, char* argv[])
     if(show_help)
         {
         getopt_long.usage();
-
         std::cout << "Suboptions for '--emit':\n";
         for(std::size_t j = 0; j < emission.cardinality(); ++j)
             {
@@ -437,7 +420,6 @@ void process_command_line(int argc, char* argv[])
                 std::cout << "  " << emission.str(j) << '\n';
                 }
             }
-
         return;
         }
 
@@ -459,41 +441,17 @@ void process_command_line(int argc, char* argv[])
         return;
         }
 
-    if(run_illustration)
-        {
-        std::for_each
-            (ill_names.begin()
-            ,ill_names.end()
-            ,illustrator(emission.value())
-            );
-        }
+    std::for_each
+        (illustrator_names.begin()
+        ,illustrator_names.end()
+        ,illustrator(emission.value())
+        );
 
-    if(run_ini)
-        {
-        std::for_each
-            (ini_names.begin()
-            ,ini_names.end()
-            ,illustrator(emission.value())
-            );
-        }
-
-    if(run_census)
-        {
-        std::for_each
-            (cns_names.begin()
-            ,cns_names.end()
-            ,illustrator(emission.value())
-            );
-        }
-
-    if(run_mec_test)
-        {
-        std::for_each
-            (mec_names.begin()
-            ,mec_names.end()
-            ,mec_server(emission.value())
-            );
-        }
+    std::for_each
+        (mec_server_names.begin()
+        ,mec_server_names.end()
+        ,mec_server(emission.value())
+        );
 }
 
 int try_main(int argc, char* argv[])
