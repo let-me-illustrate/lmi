@@ -26815,3 +26815,9 @@ Designate release candidate.
   workhorse.make
 Refactor for simplicity.
 
+20100923T2332Z <gchicares@sbcglobal.net> [656]
+
+  GNUmakefile
+Check execute permission. This would detect the defects removed
+20100225T1616Z, 20100316T0205Z, and 20100719T1357Z.
+

@@ -304,6 +304,17 @@ custom_tools:
 ################################################################################
 
 # Check conformity to certain formatting rules; count lines and defects.
+#
+# The tests in $(build_directory) identify object ('.o') files with no
+# corresponding autodependency ('.d') file, and zero-byte '.d' files.
+# Either of these suggests a build failure that may render dependency
+# files invalid; 'make clean' should provide symptomatic relief.
+#
+# The '$(LS) --classify' test somewhat loosely identifies source files
+# whose executable bit is improperly set. It is properly set iff the
+# file starts with a hash-bang; to avoid the cost of opening every
+# file, a simple heuristic is used, '*.sh *.sed' being the only files
+# permitted (though not required) to be executable.
 
 xml_files := $(wildcard *.cns *.ill *.xml *.xrc *.xsd *.xsl)
 
@@ -323,6 +334,9 @@ check_concinnity: source_clean custom_tools
 	@$(RM) --force BOY
 	@for z in $(build_directory)/*.d; do [ -s $$z ]         || echo $$z; done;
 	@for z in $(build_directory)/*.o; do [ -f $${z%%.o}.d ] || echo $$z; done;
+	@$(LS) --classify ./* \
+	  | $(SED) -e'/\*$$/!d' -e'/^\.\//!d' -e'/.sh\*$$/d' -e'/.sed\*$$/d' \
+	  | $(SED) -e's/^/Improperly executable: /'
 	@$(ECHO) "  Problems detected by xmllint:"
 	@for z in $(xml_files); \
 	  do \
