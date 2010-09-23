@@ -1138,13 +1138,13 @@ cli_test-%:
 	  --accept \
 	  --data_path=$(data_dir) \
 	  --emit=$(special_emission),emit_text_stream,emit_quietly,emit_timings \
-	  $(file_option)=$* \
+	  --file=$* \
 	  | $(SED) -e '/milliseconds/!d'
 	@./lmi_cli_shared$(EXEEXT) \
 	  --accept \
 	  --data_path=$(data_dir) \
 	  --emit=$(special_emission),emit_text_stream,emit_quietly \
-	  $(file_option)=$* \
+	  --file=$* \
 	  >$*.touchstone
 	@<$*.touchstone \
 	  $(DIFF) \
@@ -1208,11 +1208,6 @@ system_test_analysis := $(test_dir)/analysis-$(yyyymmddhhmm)
 system_test_diffs    := $(test_dir)/diffs-$(yyyymmddhhmm)
 system_test_md5sums  := $(test_dir)/md5sums-$(yyyymmddhhmm)
 
-%.cns: file_option := --cnsfile
-%.ill: file_option := --illfile
-%.ini: file_option := --inifile
-%.mec: file_option := --mecfile
-
 %.cns: test_emission := emit_quietly,emit_test_data
 %.ill: test_emission := emit_quietly,emit_test_data
 %.ini: test_emission := emit_quietly,emit_custom_0
@@ -1244,7 +1239,7 @@ $(testdecks):
 	  --data_path=$(data_dir) \
 	  --emit=$(test_emission) \
 	  --pyx=system_testing \
-	  $(file_option)=$@
+	  --file=$@
 	@$(MD5SUM) $(basename $(notdir $@)).* >> $(system_test_md5sums)
 	@for z in $(dot_test_files); \
 	  do \
