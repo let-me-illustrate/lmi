@@ -26821,3 +26821,12 @@ Refactor for simplicity.
 Check execute permission. This would detect the defects removed
 20100225T1616Z, 20100316T0205Z, and 20100719T1357Z.
 
+20100924T1639Z <gchicares@sbcglobal.net> [656]
+
+  Makefile.am
+  authenticity_test.cpp
+  name_value_pairs_test.cpp
+  objects.make
+  path_utility_test.cpp
+Don't assume /tmp exists.
+
