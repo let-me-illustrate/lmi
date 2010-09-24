@@ -31,11 +31,17 @@
 #include "miscellany.hpp"
 #include "test_tools.hpp"
 
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/path.hpp>
+
 #include <cstdio> // std::remove()
 #include <fstream>
 
 int test_main(int, char*[])
 {
+    fs::path const tmpdir(fs::complete("/tmp"));
+    fs::create_directory(tmpdir);
+
     std::string filename0("/tmp/eraseme");
 
     {

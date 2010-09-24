@@ -760,6 +760,7 @@ mpatrol_patch_test$(EXEEXT): \
   mpatrol_patch_test.o \
 
 name_value_pairs_test$(EXEEXT): \
+  $(boost_filesystem_objects) \
   $(common_test_objects) \
   facets.o \
   name_value_pairs.o \
