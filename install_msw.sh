@@ -27,7 +27,7 @@ set -v
 
 # To get the latest version of this script:
 #
-# wget -N 'http://cvs.savannah.gnu.org/viewvc/*checkout*/lmi/lmi/install_msw.sh'
+# wget -N 'http://svn.sv.nongnu.org/svn/lmi/lmi/trunk/install_msw.sh'
 
 # To remove lmi prior to reinstalling with this script:
 #
@@ -99,11 +99,15 @@ ps -ef | grep --quiet ssh-agent \
 
 echo $CVSROOT
 cd /opt/lmi/src
-cvs -z3 checkout -P lmi
+# Prefer http to svn's own protocol because it works better from
+# behind corporate firewalls.
+#svn checkout svn://svn.sv.nongnu.org/lmi/lmi/trunk lmi
+svn checkout http://svn.sv.nongnu.org/svn/lmi/lmi/trunk lmi
 
 export CVSROOT=${CVSROOT%%/sources/lmi}/web/lmi
 echo $CVSROOT
 cd /opt/lmi/share/doc
+# Not yet available via svn...
 cvs -z3 checkout -P lmi
 
 cd /opt/lmi/src/lmi

@@ -26830,3 +26830,26 @@ Check execute permission. This would detect the defects removed
   path_utility_test.cpp
 Don't assume /tmp exists.
 
+20101101T2147Z <gchicares@sbcglobal.net> [656]
+
+  account_value.hpp
+  stratified_charges.cpp
+Correct a statutory reference.
+
+20101101T2148Z <gchicares@sbcglobal.net> [656]
+
+  GNUmakefile
+  install_cygwin.bat [new file]
+  test_coding_rules.cpp
+Add a facility for installing Cygwin.
+
+20101101T2149Z <gchicares@sbcglobal.net> [656]
+
+  install_msw.sh
+Use a more appropriate default spreadsheet file extension.
+
+20101101T2204Z <gchicares@sbcglobal.net> [656]
+
+  install_msw.sh
+Prefer svn to cvs.
+
