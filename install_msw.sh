@@ -39,7 +39,7 @@ set -v
 date -u +'%Y%m%dT%H%MZ'
 
 md5sum $0
-find /tmp/lmi_cache -type f |xargs md5sum
+find /tmp/lmi_cache -type f | xargs md5sum
 
 # Establish mounts carefully.
 #
@@ -52,7 +52,7 @@ find /tmp/lmi_cache -type f |xargs md5sum
 # programs may want to use it. Furthermore, if it were removed, then
 # shell completion, e.g., '/op' [tab], wouldn't work.
 
-restore_opt_mount=`mount --mount-commands |grep '"/opt"'`
+restore_opt_mount=`mount --mount-commands | grep '"/opt"'`
 
 umount "/opt"
 umount "/opt/lmi"
@@ -67,7 +67,7 @@ mount --force "C:/opt/lmi" "/opt/lmi"
 
 mkdir --parents /tmp/lmi_cache
 
-cygcheck -s -v -r
+cygcheck -s -v -r | tr --delete '\r'
 
 java -version
 
@@ -113,9 +113,9 @@ cd /opt/lmi/src/lmi
 # It seems quite unlikely that anyone who's building lmi would have
 # any other need for a mount with that name.
 
-restore_MinGW_mount=`mount --mount-commands |grep '"/MinGW_"'`
+restore_MinGW_mount=`mount --mount-commands | grep '"/MinGW_"'`
 [ -z "$restore_MinGW_mount" ] \
-  || echo $restore_MinGW_mount |grep --silent '"C:/opt/lmi/MinGW-20090203"' \
+  || echo $restore_MinGW_mount | grep --silent '"C:/opt/lmi/MinGW-20090203"' \
   || echo -e "Replacing former MinGW_ mount:\n  $restore_MinGW_mount" >/dev/tty
 mount --force "C:/opt/lmi/MinGW-20090203" "/MinGW_"
 rm --force --recursive scratch
@@ -129,7 +129,7 @@ make -f install_libxml2_libxslt.make
 
 make -f install_wx.make
 
-find /tmp/lmi_cache -type f |xargs md5sum
+find /tmp/lmi_cache -type f | xargs md5sum
 
 export         PATH=/opt/lmi/local/bin:/opt/lmi/local/lib:$PATH
 export minimal_path=/opt/lmi/local/bin:/opt/lmi/local/lib:/usr/bin:/bin:/usr/sbin:/sbin
@@ -141,7 +141,7 @@ make PATH=$minimal_path install
 # No lmi binary should depend on any Cygwin library.
 
 for z in /opt/lmi/bin/*; \
-  do cygcheck $z 2>&1 |grep --silent cygwin \
+  do cygcheck $z 2>&1 | grep --silent cygwin \
     && echo -e "\ncygcheck $z" && cygcheck $z; \
   done
 
@@ -161,7 +161,7 @@ cat >/opt/lmi/bin/configurable_settings.xml <<EOF
   <offer_hobsons_choice>0</offer_hobsons_choice>
   <print_directory>.</print_directory>
   <skin_filename>skin.xrc</skin_filename>
-  <spreadsheet_file_extension>.dif</spreadsheet_file_extension>
+  <spreadsheet_file_extension>.tsv</spreadsheet_file_extension>
   <use_builtin_calculation_summary>1</use_builtin_calculation_summary>
   <xsl_fo_command>CMD /c /opt/lmi/third_party/fop-0.20.5/fop</xsl_fo_command>
 </configurable_settings>
