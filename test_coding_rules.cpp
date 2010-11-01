@@ -199,6 +199,7 @@ file::file(std::string const& file_path)
         : ".md5sums"    == extension() ? e_md5
         : ".patch"      == extension() ? e_patch
         : ".ac"         == extension() ? e_script
+        : ".bat"        == extension() ? e_script
         : ".m4"         == extension() ? e_script
         : ".rc"         == extension() ? e_script
         : ".sed"        == extension() ? e_script
@@ -875,7 +876,6 @@ void enforce_taboos(file const& f)
     taboo(f, "Microsoft");
     taboo(f, "Visual [A-Z]");
     taboo(f, "\\bWIN\\b");
-    taboo(f, "\\bBAT\\b", boost::regex::icase);
     taboo(f, "\\bExcel\\b");
     taboo(f, "xls|xl4", boost::regex::icase);
     // Insinuated by certain msw tools.

@@ -314,7 +314,9 @@ custom_tools:
 # whose executable bit is improperly set. It is properly set iff the
 # file starts with a hash-bang; to avoid the cost of opening every
 # file, a simple heuristic is used, '*.sh *.sed' being the only files
-# permitted (though not required) to be executable.
+# permitted (though not required) to be executable. No exception need
+# be made for msw '.bat' files, which normally should not be run in a
+# *nix shell.
 
 xml_files := $(wildcard *.cns *.ill *.xml *.xrc *.xsd *.xsl)
 
