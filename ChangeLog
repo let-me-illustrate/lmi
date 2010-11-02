@@ -26853,3 +26853,9 @@ Use a more appropriate default spreadsheet file extension.
   install_msw.sh
 Prefer svn to cvs.
 
+20101102T0150Z <gchicares@sbcglobal.net> [656]
+
+  INSTALL
+  test_coding_rules.cpp
+Improve documentation.
+
