@@ -25,7 +25,7 @@
 
 prefix    := /opt/lmi
 
-cache_dir := /tmp/lmi_cache
+cache_dir := /cache_for_lmi/downloads
 
 # In the past, it seemed necessary to specify a mirror, e.g.:
 #  mirror := http://easynews.dl.sourceforge.net/sourceforge
