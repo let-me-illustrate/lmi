@@ -33,13 +33,13 @@ set -v
 #
 # rm --force --recursive /opt/lmi
 #
-# Downloaded archives are left in /tmp/lmi_cache because they are
-# costly to download and some host might be temporarily unavailable.
+# Downloaded archives are kept in /cache_for_lmi/downloads/ because
+# they are costly to download and some host might be temporarily
+# unavailable.
 
 date -u +'%Y%m%dT%H%MZ'
 
-md5sum $0
-find /tmp/lmi_cache -type f | xargs md5sum
+mkdir --parents /cache_for_lmi/downloads
 
 # Establish mounts carefully.
 #
@@ -64,8 +64,6 @@ umount "/opt"
 mount --force "C:/opt/lmi" "/opt/lmi"
 
 [ -z "$restore_opt_mount" ] || sh -c $restore_opt_mount
-
-mkdir --parents /tmp/lmi_cache
 
 cygcheck -s -v -r | tr --delete '\r'
 
@@ -112,19 +110,29 @@ cvs -z3 checkout -P lmi
 
 cd /opt/lmi/src/lmi
 
-# A "Replacing former MinGW_ mount:" message probably means that this
+# A "Replacing former [...] mount:" message probably means that this
 # mount was set by an earlier lmi installation; that can be ignored.
 # It seems quite unlikely that anyone who's building lmi would have
-# any other need for a mount with that name.
+# any other need for mounts with the names used here.
 
 restore_MinGW_mount=`mount --mount-commands | grep '"/MinGW_"'`
 [ -z "$restore_MinGW_mount" ] \
   || echo $restore_MinGW_mount | grep --silent '"C:/opt/lmi/MinGW-20090203"' \
-  || echo -e "Replacing former MinGW_ mount:\n  $restore_MinGW_mount" >/dev/tty
+  || echo -e "Replacing former MinGW_ mount:\n $restore_MinGW_mount" >/dev/tty
 mount --force "C:/opt/lmi/MinGW-20090203" "/MinGW_"
+
+restore_cache_mount=`mount --mount-commands | grep '"/cache_for_lmi"'`
+[ -z "$restore_cache_mount" ] \
+  || echo $restore_cache_mount | grep --silent '"C:/cache_for_lmi"' \
+  || echo -e "Replacing former cache mount:\n  $restore_cache_mount" >/dev/tty
+mount --force "C:/cache_for_lmi" "/cache_for_lmi"
+
+md5sum $0
+find /cache_for_lmi/downloads -type f | xargs md5sum
+
 rm --force --recursive scratch
 rm --force --recursive /MinGW_
-make prefix=/MinGW_ cache_dir=/tmp/lmi_cache -f install_mingw.make
+make prefix=/MinGW_ cache_dir=/cache_for_lmi/downloads -f install_mingw.make
 
 make -f install_miscellanea.make clobber
 make -f install_miscellanea.make
@@ -133,7 +141,7 @@ make -f install_libxml2_libxslt.make
 
 make -f install_wx.make
 
-find /tmp/lmi_cache -type f | xargs md5sum
+find /cache_for_lmi/downloads -type f | xargs md5sum
 
 export         PATH=/opt/lmi/local/bin:/opt/lmi/local/lib:$PATH
 export minimal_path=/opt/lmi/local/bin:/opt/lmi/local/lib:/usr/bin:/bin:/usr/sbin:/sbin
