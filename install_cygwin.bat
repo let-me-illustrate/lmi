@@ -71,6 +71,12 @@ START "Installing Cygwin-1.7" /WAIT setup ^
   --site ftp://mirror.mcs.anl.gov/pub/cygwin/ ^
   --root C:/cygwin-1_7 --packages ^
   cvs,doxygen,gdb,libtool,make,openssh,patch,rsync,subversion,wget,zsh
+cd C:\cygwin-1_7\etc
+echo # >> fstab
+echo C:/opt/lmi/MinGW-20090203 /MinGW_  lmi_specific binary,user 0 0 >> fstab
+echo C:/opt/lmi                /opt/lmi lmi_specific binary,user 0 0 >> fstab
+echo C:/lmi                    /lmi     lmi_specific binary,user 0 0 >> fstab
+cd C:\cache_for_lmi
 echo Cygwin-1.7 installation seems to have succeeded
 GOTO End
 

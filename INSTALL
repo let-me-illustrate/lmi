@@ -75,7 +75,7 @@ You should see something like this:
 
 Close the "Command prompt" window.
 
-(2) Configure Cygwin
+(2) Install lmi
 
 Start 'bash', and enable pasting:
 
@@ -85,22 +85,6 @@ Start 'bash', and enable pasting:
   OK
   select "Modify shortcut that started this window"
   OK
-
-Copy and paste the following lines into 'bash':
-
-  cd /etc
-  echo '#' >> fstab
-  echo 'C:/opt/lmi/MinGW-20090203 /MinGW_  lmi_specific binary,user 0 0' >> fstab
-  echo 'C:/opt/lmi                /opt/lmi lmi_specific binary,user 0 0' >> fstab
-  echo 'C:/lmi                    /lmi     lmi_specific binary,user 0 0' >> fstab
-
-Close the 'bash' window to make these settings take effect.
-
-(3) Install lmi
-
-Start 'bash':
-
-  Start | Programs | Cygwin | Cygwin Bash Shell
 
 Copy and paste the following into 'bash':
 
