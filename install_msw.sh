@@ -41,6 +41,8 @@ date -u +'%Y%m%dT%H%MZ'
 
 mkdir --parents /cache_for_lmi/downloads
 
+mount
+
 # Establish mounts carefully.
 #
 # A command such as
@@ -52,7 +54,27 @@ mkdir --parents /cache_for_lmi/downloads
 # programs may want to use it. Furthermore, if it were removed, then
 # shell completion, e.g., '/op' [tab], wouldn't work.
 
-restore_opt_mount=`mount --mount-commands | grep '"/opt"'`
+# The 'mount' command differs greatly between Cygwin versions.
+#
+# Cygwin-1.5 stores all mounts in the msw registry:
+#   HKLM for 'system' mounts
+#   HKCU for 'user' mounts
+# 'mount' adds 'system' mounts by default.
+# 'mount --mount-commands' gives commands to replicate all mounts.
+#
+# Cygwin-1.7 stores all permanent mounts in files:
+#   /etc/fstab for 'system' mounts
+#   /etc/fstab.d/[user-name] for 'user' mounts
+# 'mount' adds temporary mounts that vanish when the session ends; it
+#   does not affect 'system' mounts (unless 'override' is specified,
+#   which is never done here).
+# 'mount --mount-commands' is invalid; errors resulting from this
+#   obsolete option are discarded here.
+#
+# Regardless of version, only system mounts are wanted here, and they
+# are never overridden.
+
+restore_opt_mount=`mount --mount-commands 2>/dev/null | grep '"/opt"'`
 
 umount "/opt"
 umount "/opt/lmi"
@@ -115,17 +137,19 @@ cd /opt/lmi/src/lmi
 # It seems quite unlikely that anyone who's building lmi would have
 # any other need for mounts with the names used here.
 
-restore_MinGW_mount=`mount --mount-commands | grep '"/MinGW_"'`
+restore_MinGW_mount=`mount --mount-commands 2>/dev/null | grep '"/MinGW_"'`
 [ -z "$restore_MinGW_mount" ] \
   || echo $restore_MinGW_mount | grep --silent '"C:/opt/lmi/MinGW-20090203"' \
   || echo -e "Replacing former MinGW_ mount:\n $restore_MinGW_mount" >/dev/tty
 mount --force "C:/opt/lmi/MinGW-20090203" "/MinGW_"
 
-restore_cache_mount=`mount --mount-commands | grep '"/cache_for_lmi"'`
+restore_cache_mount=`mount --mount-commands 2>/dev/null | grep '"/cache_for_lmi"'`
 [ -z "$restore_cache_mount" ] \
   || echo $restore_cache_mount | grep --silent '"C:/cache_for_lmi"' \
   || echo -e "Replacing former cache mount:\n  $restore_cache_mount" >/dev/tty
 mount --force "C:/cache_for_lmi" "/cache_for_lmi"
+
+mount
 
 md5sum $0
 find /cache_for_lmi/downloads -type f | xargs md5sum
