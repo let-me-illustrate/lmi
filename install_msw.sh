@@ -154,25 +154,28 @@ mount
 md5sum $0
 find /cache_for_lmi/downloads -type f | xargs md5sum
 
+# $coefficiency is intended for passing a '--jobs' option, e.g.
+#   export coefficiency='--jobs=12'
+
 rm --force --recursive scratch
 rm --force --recursive /MinGW_
-make prefix=/MinGW_ cache_dir=/cache_for_lmi/downloads -f install_mingw.make
+make $coefficiency prefix=/MinGW_ cache_dir=/cache_for_lmi/downloads -f install_mingw.make
 
-make -f install_miscellanea.make clobber
-make -f install_miscellanea.make
+make $coefficiency -f install_miscellanea.make clobber
+make $coefficiency -f install_miscellanea.make
 
-make -f install_libxml2_libxslt.make
+make $coefficiency -f install_libxml2_libxslt.make
 
-make -f install_wx.make
+make $coefficiency -f install_wx.make
 
 find /cache_for_lmi/downloads -type f | xargs md5sum
 
 export         PATH=/opt/lmi/local/bin:/opt/lmi/local/lib:$PATH
 export minimal_path=/opt/lmi/local/bin:/opt/lmi/local/lib:/usr/bin:/bin:/usr/sbin:/sbin
 
-make PATH=$minimal_path wx_config_check
-make PATH=$minimal_path show_flags
-make PATH=$minimal_path install
+make $coefficiency PATH=$minimal_path wx_config_check
+make $coefficiency PATH=$minimal_path show_flags
+make $coefficiency PATH=$minimal_path install
 
 # No lmi binary should depend on any Cygwin library.
 

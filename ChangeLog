@@ -26859,3 +26859,34 @@ Prefer svn to cvs.
   test_coding_rules.cpp
 Improve documentation.
 
+20101104T0037Z <gchicares@sbcglobal.net> [656]
+
+  install_cygwin.bat
+Do nothing if already installed.
+
+20101104T0049Z <gchicares@sbcglobal.net> [656]
+
+  INSTALL
+  install_cygwin.bat
+Move 'fstab' customization.
+
+20101104T0131Z <gchicares@sbcglobal.net> [656]
+
+  install_cygwin.bat
+  install_libxml2_libxslt.make
+  install_miscellanea.make
+  install_mpatrol.make
+  install_msw.sh
+  install_wx.make
+Share download cache across Cygwin versions.
+
+20101105T0251Z <gchicares@sbcglobal.net> [656]
+
+  install_msw.sh
+Accommodate 'mount' differences between Cygwin versions.
+
+20101105T0315Z <gchicares@sbcglobal.net> [656]
+
+  install_msw.sh
+Support parallel builds.
+
