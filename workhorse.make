@@ -1195,8 +1195,10 @@ cgi_tests: $(test_data) configurable_settings.xml antediluvian_cgi$(EXEEXT)
 
 touchstone_md5sums := $(touchstone_dir)/md5sums
 
+touchstone_exclusions := $(touchstone_md5sums) $(touchstone_dir)/ChangeLog
+
 touchstone_files := \
-  $(filter-out $(touchstone_md5sums),$(wildcard $(touchstone_dir)/*))
+  $(filter-out $(touchstone_exclusions),$(wildcard $(touchstone_dir)/*))
 
 $(touchstone_md5sums): $(touchstone_files)
 	@cd $(touchstone_dir) && $(MD5SUM) $(notdir $^) > $@
