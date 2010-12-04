@@ -26890,3 +26890,13 @@ Accommodate 'mount' differences between Cygwin versions.
   install_msw.sh
 Support parallel builds.
 
+20101203T1824Z <gchicares@sbcglobal.net> [656]
+
+  workhorse.make
+Exclude testdeck change log from system testing.
+
+20101204T1619Z <gchicares@sbcglobal.net> [656]
+
+  workhorse.make
+Handle missing testdecks more gracefully.
+
