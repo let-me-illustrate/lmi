@@ -1204,7 +1204,7 @@ $(touchstone_md5sums): $(touchstone_files)
 	@cd $(touchstone_dir) && $(MD5SUM) $(notdir $^) > $@
 
 testdeck_suffixes    := cns ill ini mec
-test_result_suffixes := test test0 monthly_trace.* mec.xml
+test_result_suffixes := test test0 monthly_trace.* mec.tsv mec.xml
 
 system_test_analysis := $(test_dir)/analysis-$(yyyymmddhhmm)
 system_test_diffs    := $(test_dir)/diffs-$(yyyymmddhhmm)
@@ -1219,15 +1219,17 @@ dot_test_files =
 %.cns: dot_test_files = $(basename $(notdir $@)).*test
 %.ill: dot_test_files = $(basename $(notdir $@)).*test
 
-# Sort input files iff $(LS) supports '--sort=size'; otherwise, use
-# them unsorted. Parallel runs are slightly faster when the biggest
+# This must be a 'make' variable so that the targets it contains can
+# be made PHONY.
+#
+# Use $(wildcard) here because its convenient 'nullglob' semantics are
+# not portably available in the bourne shell.
+#
+# In the 'system_test' target, sort its contents iff $(LS) supports
+# '--sort=size': parallel runs are slightly faster when the biggest
 # jobs are started first.
 
-testdecks := \
-  $(shell \
-       $(LS) --sort=size $(addprefix $(test_dir)/*., $(testdeck_suffixes)) \
-    || $(LS)             $(addprefix $(test_dir)/*., $(testdeck_suffixes)) \
-  )
+testdecks := $(wildcard $(addprefix $(test_dir)/*., $(testdeck_suffixes)))
 
 # Naming the output files would be more natural, but that's infeasible
 # because $(test_emission) can be overridden implicitly in ways that a
@@ -1254,7 +1256,9 @@ $(testdecks):
 system_test: $(data_dir)/configurable_settings.xml $(touchstone_md5sums) install
 	@$(ECHO) System test:
 	@$(RM) --force $(addprefix $(test_dir)/*., $(test_result_suffixes))
-	@$(MAKE) --file=$(this_makefile) --directory=$(test_dir) $(testdecks)
+	@[ "$(strip $(testdecks))" != "" ] || ( $(ECHO) No testdecks. && false )
+	@testdecks=`$(LS) --sort=size $(testdecks) || $(ECHO) $(testdecks)` \
+	  && $(MAKE) --file=$(this_makefile) --directory=$(test_dir) $$testdecks
 	@$(SORT) --key=2 $(system_test_md5sums) --output=$(system_test_md5sums)
 	@$(SORT) $(system_test_analysis) --output=$(system_test_analysis)
 	@-< $(system_test_analysis) $(SED) \
