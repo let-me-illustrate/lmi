@@ -26900,3 +26900,11 @@ Exclude testdeck change log from system testing.
   workhorse.make
 Handle missing testdecks more gracefully.
 
+20101213T2020Z <gchicares@sbcglobal.net> [656]
+
+  como_4_3_3.make [renamed to 'como.make']
+  install_como.sh [new file]
+  test_coding_rules.cpp
+Upgrade Comeau compiler from 4.3.3 (20040505) to 4.3.10.1 (current).
+The older version couldn't handle the SFINAE code in 'contains.hpp'.
+
