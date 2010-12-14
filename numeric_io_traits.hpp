@@ -38,7 +38,7 @@
 #if !defined __BORLANDC__
 #   include <boost/cast.hpp>
 #   include <boost/static_assert.hpp>
-#   include <boost/type_traits.hpp>
+#   include <boost/type_traits/is_float.hpp>
 #else  // defined __BORLANDC__
 // COMPILER !! Workarounds for defective borland compiler.
 #   define BOOST_STATIC_ASSERT(deliberately_ignored) class IgNoRe

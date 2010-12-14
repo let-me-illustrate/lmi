@@ -29,7 +29,9 @@
 #include "rtti_lmi.hpp"
 
 #include <boost/static_assert.hpp>
-#include <boost/type_traits.hpp>
+#include <boost/type_traits/is_base_and_derived.hpp>
+#include <boost/type_traits/is_pointer.hpp>
+#include <boost/type_traits/is_same.hpp>
 
 #include <wx/window.h>
 #include <wx/xrc/xmlres.h>
