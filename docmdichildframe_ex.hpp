@@ -66,13 +66,13 @@
 
 #include "config.hpp"
 
-#include <boost/utility.hpp>
+#include "uncopyable_lmi.hpp"
 
 #include <wx/docmdi.h>
 
 class DocMDIChildFrameEx
     :public wxDocMDIChildFrame
-    ,private boost::noncopyable
+    ,private lmi::uncopyable
 {
   public:
     DocMDIChildFrameEx

@@ -28,6 +28,7 @@
 
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
+#include "uncopyable_lmi.hpp"
 
 #if !defined __BORLANDC__
 #   include <boost/static_assert.hpp>
@@ -35,8 +36,6 @@
 #   include <boost/type_traits/is_pointer.hpp>
 #   include <boost/type_traits/remove_pointer.hpp>
 #endif // !defined __BORLANDC__
-
-#include <boost/utility.hpp>
 
 #include <stdexcept>
 
@@ -89,7 +88,7 @@
 /// pointer to a nonmember function. Probably it would be easy to
 /// permit a pointer to member function as well.
 ///
-/// This class is noncopyable and cannot be derived from, not because
+/// This class is uncopyable and cannot be derived from, not because
 /// it would be difficult to allow those things, but because they seem
 /// pointless.
 ///
@@ -106,7 +105,7 @@
 
 template<typename FunctionPointer>
 class LMI_SO callback
-    :private boost::noncopyable
+    :        private lmi::uncopyable
     ,virtual private obstruct_slicing<callback<FunctionPointer> >
 {
 #if !defined __BORLANDC__

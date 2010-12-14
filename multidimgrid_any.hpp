@@ -92,10 +92,10 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "uncopyable_lmi.hpp"
 
 #include <boost/any.hpp>
 #include <boost/shared_ptr.hpp>
-#include <boost/utility.hpp>
 
 #include <wx/grid.h>
 #include <wx/choice.h>
@@ -191,7 +191,7 @@ class WXDLLIMPEXP_FWD_CORE wxGridBagSizer;
 /// was up-to-date.
 
 class MultiDimAxisAny
-  :private boost::noncopyable
+  :private lmi::uncopyable
 {
   public:
     MultiDimAxisAny(std::string const& name);
@@ -472,7 +472,7 @@ inline void MultiDimTableAny::SetValueAny
 class MultiDimGrid
   :public wxPanel
   ,private wxGridTableBase
-  ,private boost::noncopyable
+  ,private lmi::uncopyable
 {
     friend class GridRefreshTableDataGuard;
 
@@ -758,7 +758,7 @@ inline bool MultiDimGrid::RefreshAxisAdjustment(std::string const& name)
 
 class MultiDimAxisAnyChoice
   :public wxChoice
-  ,private boost::noncopyable
+  ,private lmi::uncopyable
 {
     friend class MultiDimAxisAny;
 

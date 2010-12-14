@@ -79,7 +79,7 @@
 
 #include "config.hpp"
 
-#include <boost/utility.hpp>
+#include "uncopyable_lmi.hpp"
 
 #include <wx/docview.h>
 
@@ -110,7 +110,7 @@ class WXDLLIMPEXP_FWD_CORE wxMenuBar;
 
 class ViewEx
     :public wxView
-    ,virtual private boost::noncopyable
+    ,virtual private lmi::uncopyable
 {
   public:
     ViewEx();

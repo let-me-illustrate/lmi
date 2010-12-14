@@ -67,6 +67,7 @@
 #include "assert_lmi.hpp"
 #include "obstruct_slicing.hpp"
 #include "rtti_lmi.hpp"
+#include "uncopyable_lmi.hpp"
 #include "value_cast.hpp"
 
 #if !defined __BORLANDC__
@@ -76,8 +77,6 @@
 #else  // defined __BORLANDC__
 #   define BOOST_STATIC_ASSERT(deliberately_ignored) class IgNoRe
 #endif // defined __BORLANDC__
-
-#include <boost/utility.hpp>
 
 #include <algorithm> // std::lower_bound(), std::swap()
 #include <map>
@@ -122,7 +121,7 @@ inline placeholder::~placeholder()
 template<typename ClassType, typename ValueType>
 class holder
     :public placeholder
-    ,private boost::noncopyable
+    ,private lmi::uncopyable
 {
     // Friendship is extended to class any_member only to support its
     // cast operations.
@@ -518,11 +517,11 @@ MemberType const* member_cast(any_member<ClassType> const& member)
 
 // Definition of class MemberSymbolTable.
 
-// By its nature, this class is Noncopyable: it holds a map of
+// By its nature, this class is uncopyable: it holds a map of
 // pointers to member, which need to be initialized instead of copied
-// when a derived class is copied. Its Noncopyability is implemented
-// natively: deriving from boost::noncopyable would prevent class C
-// from deriving from MemberSymbolTable<C> and boost::noncopyable.
+// when a derived class is copied. Its uncopyability is implemented
+// natively: deriving from lmi::uncopyable would prevent class C
+// from deriving from MemberSymbolTable<C> and lmi::uncopyable.
 //
 // A do-nothing constructor is specified in order to prevent compilers
 // from warning of its absence. It's protected because this class

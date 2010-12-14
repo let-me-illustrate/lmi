@@ -37,8 +37,7 @@
 #include "view_ex.hpp"
 
 #include "obstruct_slicing.hpp"
-
-#include <boost/utility.hpp>
+#include "uncopyable_lmi.hpp"
 
 #include <wx/defs.h> // wx shared-library 'attributes'
 
@@ -54,7 +53,7 @@ class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 
 class TextEditView
     :public ViewEx
-    ,virtual private boost::noncopyable
+    ,virtual private lmi::uncopyable
     ,virtual private obstruct_slicing<TextEditView>
 {
     friend class TextEditDocument;
