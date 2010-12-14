@@ -26,7 +26,7 @@
 
 #include "config.hpp"
 
-#include <boost/utility.hpp>
+#include "uncopyable_lmi.hpp"
 
 #include <wx/dialog.h>
 
@@ -54,7 +54,7 @@
 
 class AboutDialog
     :public wxDialog
-    ,private boost::noncopyable
+    ,private lmi::uncopyable
 {
   public:
     AboutDialog(wxWindow* parent);

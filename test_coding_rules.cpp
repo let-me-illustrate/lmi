@@ -33,13 +33,13 @@
 #include "main_common.hpp"
 #include "miscellany.hpp" // lmi_array_size()
 #include "obstruct_slicing.hpp"
+#include "uncopyable_lmi.hpp"
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/regex.hpp>
-#include <boost/utility.hpp>
 
 #include <cstddef>        // std::size_t
 #include <ctime>
@@ -109,7 +109,7 @@ enum enum_kingdom
     };
 
 class file
-    :private boost::noncopyable
+    :        private lmi::uncopyable
     ,virtual private obstruct_slicing<file>
 {
   public:

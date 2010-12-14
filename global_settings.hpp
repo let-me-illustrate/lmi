@@ -28,9 +28,9 @@
 
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
+#include "uncopyable_lmi.hpp"
 
 #include <boost/filesystem/path.hpp>
-#include <boost/utility.hpp>
 
 #include <string>
 
@@ -68,7 +68,7 @@
 /// functions to validate their arguments.
 
 class LMI_SO global_settings
-    :private boost::noncopyable
+    :        private lmi::uncopyable
     ,virtual private obstruct_slicing<global_settings>
 {
   public:

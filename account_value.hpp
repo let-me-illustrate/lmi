@@ -29,9 +29,9 @@
 #include "basic_values.hpp"
 #include "oecumenic_enumerations.hpp"
 #include "so_attributes.hpp"
+#include "uncopyable_lmi.hpp"
 
 #include <boost/shared_ptr.hpp>
-#include <boost/utility.hpp>
 
 #include <iosfwd>
 #include <fstream>
@@ -51,7 +51,7 @@ class LedgerVariant;
 
 class LMI_SO AccountValue
     :protected BasicValues
-    ,virtual private boost::noncopyable
+    ,virtual private lmi::uncopyable
 {
     friend class SolveHelper;
     friend class run_census_in_parallel;

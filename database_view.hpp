@@ -29,9 +29,9 @@
 #include "product_editor.hpp"
 
 #include "obstruct_slicing.hpp"
+#include "uncopyable_lmi.hpp"
 
 #include <boost/shared_ptr.hpp>
-#include <boost/utility.hpp>
 
 class DatabaseDocument;
 class DatabaseTableAdapter;
@@ -39,7 +39,7 @@ class WXDLLIMPEXP_FWD_CORE wxTreeEvent;
 
 class DatabaseView
     :public TreeGridViewBase
-    ,virtual private boost::noncopyable
+    ,virtual private lmi::uncopyable
     ,virtual private obstruct_slicing<DatabaseView>
 {
   public:

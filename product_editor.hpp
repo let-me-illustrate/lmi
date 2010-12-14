@@ -28,7 +28,7 @@
 
 #include "view_ex.hpp"
 
-#include <boost/utility.hpp>
+#include "uncopyable_lmi.hpp"
 
 #include <wx/docview.h>
 
@@ -47,7 +47,7 @@ class WXDLLIMPEXP_FWD_CORE wxWindow;
 
 class ProductEditorDocument
     :public wxDocument
-    ,private boost::noncopyable
+    ,private lmi::uncopyable
 {
   public:
     ProductEditorDocument();
@@ -71,7 +71,7 @@ class ProductEditorDocument
 
 class ProductEditorView
     :public ViewEx
-    ,virtual private boost::noncopyable
+    ,virtual private lmi::uncopyable
 {
     friend class ProductEditorDocument;
 
@@ -89,7 +89,7 @@ class ProductEditorView
 
 class TreeGridViewBase
     :public ProductEditorView
-    ,virtual private boost::noncopyable
+    ,virtual private lmi::uncopyable
 {
   public:
     TreeGridViewBase();

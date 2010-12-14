@@ -37,9 +37,9 @@
 #include "view_ex.hpp"
 
 #include "obstruct_slicing.hpp"
+#include "uncopyable_lmi.hpp"
 
 #include <boost/shared_ptr.hpp>
-#include <boost/utility.hpp>
 
 #include <wx/event.h>
 
@@ -53,7 +53,7 @@ class WXDLLIMPEXP_FWD_CORE wxHtmlWindow;
 
 class IllustrationView
     :public ViewEx
-    ,virtual private boost::noncopyable
+    ,virtual private lmi::uncopyable
     ,virtual private obstruct_slicing<IllustrationView>
 {
     friend class IllustrationDocument;

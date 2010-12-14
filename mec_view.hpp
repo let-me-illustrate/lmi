@@ -30,8 +30,7 @@
 #include "view_ex.hpp"
 
 #include "obstruct_slicing.hpp"
-
-#include <boost/utility.hpp>
+#include "uncopyable_lmi.hpp"
 
 #include <wx/event.h>
 
@@ -64,7 +63,7 @@ class mec_mvc_view
 
 class mec_view
     :public ViewEx
-    ,virtual private boost::noncopyable
+    ,virtual private lmi::uncopyable
     ,virtual private obstruct_slicing<mec_view>
 {
     friend class mec_document;

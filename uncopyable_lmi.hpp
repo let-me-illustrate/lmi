@@ -1,6 +1,4 @@
-// Icon provider for wx interface.
-//
-// Copyright (C) 2008, 2009, 2010 Gregory W. Chicares.
+// Copyright (C) 2010 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -21,40 +19,24 @@
 
 // $Id$
 
-#ifndef icon_monger_hpp
-#define icon_monger_hpp
+#ifndef uncopyable_lmi_hpp
+#define uncopyable_lmi_hpp
 
 #include "config.hpp"
 
-#include "uncopyable_lmi.hpp"
-
-#include <wx/artprov.h>
-
-#include <map>
-#include <set>
-#include <string>
-
-/// Icon provider for wx interface.
-
-class icon_monger
-    :public wxArtProvider
-    ,private lmi::uncopyable
+namespace lmi
 {
-  public:
-    icon_monger();
-    virtual ~icon_monger();
+class uncopyable
+{
+  protected:
+    uncopyable() {}
+    ~uncopyable() {}
 
   private:
-    // wxArtProvider required implementation.
-    virtual wxBitmap CreateBitmap
-        (wxArtID const&
-        ,wxArtClient const&
-        ,wxSize const&
-        );
-
-    std::map<wxArtID,std::string> icon_names_by_wx_id_;
-    std::set<std::string>         lmi_specific_icon_names_;
+    uncopyable(uncopyable const&);
+    uncopyable& operator=(uncopyable const&);
 };
+} // namespace lmi
 
-#endif // icon_monger_hpp
+#endif // uncopyable_lmi_hpp
 
