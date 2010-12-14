@@ -32,7 +32,9 @@
 #if !defined __BORLANDC__
 
 #include <boost/cast.hpp>
-#include <boost/type_traits.hpp>
+#include <boost/type_traits/is_arithmetic.hpp>
+#include <boost/type_traits/is_convertible.hpp>
+#include <boost/type_traits/is_pointer.hpp>
 
 #include <sstream>
 #include <stdexcept>

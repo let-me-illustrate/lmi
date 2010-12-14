@@ -28,7 +28,7 @@
 
 #if !defined __BORLANDC__
 #   include <boost/static_assert.hpp>
-#   include <boost/type_traits/arithmetic_traits.hpp>
+#   include <boost/type_traits/is_float.hpp>
 #else  // Defined __BORLANDC__ .
 #   define BOOST_STATIC_ASSERT(deliberately_ignored) class IgNoRe
 #endif // Defined __BORLANDC__ .

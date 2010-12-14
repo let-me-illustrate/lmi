@@ -35,7 +35,8 @@
 
 #include <boost/any.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/type_traits.hpp>
+#include <boost/type_traits/is_base_of.hpp>
+#include <boost/type_traits/is_same.hpp>
 
 /// MultiDim* type-safe classes
 /// ---------------------------
