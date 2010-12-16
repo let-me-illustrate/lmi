@@ -38,8 +38,8 @@ class DatabaseTableAdapter;
 class WXDLLIMPEXP_FWD_CORE wxTreeEvent;
 
 class DatabaseView
-    :public TreeGridViewBase
-    ,virtual private lmi::uncopyable
+    :        public  TreeGridViewBase
+    ,        private lmi::uncopyable <DatabaseView>
     ,virtual private obstruct_slicing<DatabaseView>
 {
   public:

@@ -37,8 +37,8 @@ class RoundingButtons;
 class RoundingDocument;
 
 class RoundingView
-    :public ProductEditorView
-    ,virtual private lmi::uncopyable
+    :        public  ProductEditorView
+    ,        private lmi::uncopyable <RoundingView>
     ,virtual private obstruct_slicing<RoundingView>
 {
   public:

@@ -120,8 +120,8 @@ inline placeholder::~placeholder()
 
 template<typename ClassType, typename ValueType>
 class holder
-    :public placeholder
-    ,private lmi::uncopyable
+    :public  placeholder
+    ,private lmi::uncopyable<holder<ClassType,ValueType> >
 {
     // Friendship is extended to class any_member only to support its
     // cast operations.
@@ -519,9 +519,7 @@ MemberType const* member_cast(any_member<ClassType> const& member)
 
 // By its nature, this class is uncopyable: it holds a map of
 // pointers to member, which need to be initialized instead of copied
-// when a derived class is copied. Its uncopyability is implemented
-// natively: deriving from lmi::uncopyable would prevent class C
-// from deriving from MemberSymbolTable<C> and lmi::uncopyable.
+// when a derived class is copied.
 //
 // A do-nothing constructor is specified in order to prevent compilers
 // from warning of its absence. It's protected because this class
@@ -529,6 +527,7 @@ MemberType const* member_cast(any_member<ClassType> const& member)
 
 template<typename ClassType>
 class MemberSymbolTable
+    :private lmi::uncopyable<MemberSymbolTable<ClassType> >
 {
     typedef std::map<std::string, any_member<ClassType> > member_map_type;
     typedef typename member_map_type::value_type member_pair_type;
@@ -566,9 +565,6 @@ class MemberSymbolTable
 #endif // defined __BORLANDC__
 
   private:
-    MemberSymbolTable(MemberSymbolTable const&);
-    MemberSymbolTable& operator=(MemberSymbolTable const&);
-
     void complain_that_no_such_member_is_ascribed(std::string const&) const;
 
     member_map_type map_;

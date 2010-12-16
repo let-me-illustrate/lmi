@@ -55,7 +55,7 @@ class Input;
 /// (mc_enum and tn_range classes) designed for interactive input.
 
 class yare_input
-    :        private lmi::uncopyable
+    :        private lmi::uncopyable <yare_input>
     ,virtual private obstruct_slicing<yare_input>
 {
   public:

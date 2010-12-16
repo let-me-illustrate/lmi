@@ -51,7 +51,7 @@ class LedgerVariant;
 
 class LMI_SO AccountValue
     :protected BasicValues
-    ,virtual private lmi::uncopyable
+    ,private   lmi::uncopyable<AccountValue>
 {
     friend class SolveHelper;
     friend class run_census_in_parallel;

@@ -37,7 +37,7 @@
 #include <vector>
 
 class LMI_SO multiple_cell_document
-    :        private lmi::uncopyable
+    :        private lmi::uncopyable <multiple_cell_document>
     ,virtual private obstruct_slicing<multiple_cell_document>
 {
 // TODO ?? Avoid long-distance friendship...in single-cell class, too.

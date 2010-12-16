@@ -56,7 +56,7 @@ class ULCommFns;
 // values are especially needed for the iterative specamt calculation.
 
 class Irc7702
-    :        private lmi::uncopyable
+    :        private lmi::uncopyable <Irc7702>
     ,virtual private obstruct_slicing<Irc7702>
 {
     friend class FindSpecAmt;

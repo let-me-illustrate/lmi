@@ -38,7 +38,7 @@
 /// Cached product database.
 
 class LMI_SO DBDictionary
-    :        private lmi::uncopyable
+    :        private lmi::uncopyable   <DBDictionary>
     ,virtual private obstruct_slicing  <DBDictionary>
     ,        public  xml_serializable  <DBDictionary>
     ,        public  MemberSymbolTable <DBDictionary>

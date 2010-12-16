@@ -131,7 +131,7 @@ enum e_actuarial_table_method
 /// compatibility.
 
 class actuarial_table
-    :        private lmi::uncopyable
+    :        private lmi::uncopyable <actuarial_table>
     ,virtual private obstruct_slicing<actuarial_table>
 {
   public:

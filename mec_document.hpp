@@ -36,8 +36,8 @@ class mec_view;
 class WXDLLIMPEXP_FWD_CORE wxHtmlWindow;
 
 class mec_document
-    :public wxDocument
-    ,private lmi::uncopyable
+    :public  wxDocument
+    ,private lmi::uncopyable<mec_document>
 {
     friend class mec_view;
 

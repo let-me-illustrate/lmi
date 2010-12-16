@@ -42,7 +42,7 @@ class yare_input;
 /// Database of product parameters.
 
 class LMI_SO product_database
-    :        private lmi::uncopyable
+    :        private lmi::uncopyable <product_database>
     ,virtual private obstruct_slicing<product_database>
 {
     friend class input_test;

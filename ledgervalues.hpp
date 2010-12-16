@@ -42,7 +42,7 @@ class Ledger;
 /// This class encapsulates a frequently-used series of operations.
 
 class IllusVal
-    :        private lmi::uncopyable
+    :        private lmi::uncopyable <IllusVal>
     ,virtual private obstruct_slicing<IllusVal>
 {
   public:

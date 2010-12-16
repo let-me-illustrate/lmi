@@ -46,7 +46,7 @@
 /// Data members are documented in their accessors' implementations.
 
 class LMI_SO configurable_settings
-    :        private lmi::uncopyable
+    :        private lmi::uncopyable   <configurable_settings>
     ,virtual private obstruct_slicing  <configurable_settings>
     ,        public  xml_serializable  <configurable_settings>
     ,        public  MemberSymbolTable <configurable_settings>

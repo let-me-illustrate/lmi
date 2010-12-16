@@ -68,7 +68,7 @@
 /// functions to validate their arguments.
 
 class LMI_SO global_settings
-    :        private lmi::uncopyable
+    :        private lmi::uncopyable <global_settings>
     ,virtual private obstruct_slicing<global_settings>
 {
   public:

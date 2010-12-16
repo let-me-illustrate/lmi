@@ -50,7 +50,7 @@
 /// in order to let this reversal be expressed more cleanly.
 
 class MswDllPreloader
-    :        private lmi::uncopyable
+    :        private lmi::uncopyable <MswDllPreloader>
     ,virtual private obstruct_slicing<MswDllPreloader>
 {
   public:

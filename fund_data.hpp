@@ -65,7 +65,7 @@ class LMI_SO FundInfo
 };
 
 class LMI_SO FundData
-    :        private lmi::uncopyable
+    :        private lmi::uncopyable <FundData>
     ,virtual private obstruct_slicing<FundData>
 {
   public:

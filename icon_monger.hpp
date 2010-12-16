@@ -37,8 +37,8 @@
 /// Icon provider for wx interface.
 
 class icon_monger
-    :public wxArtProvider
-    ,private lmi::uncopyable
+    :public  wxArtProvider
+    ,private lmi::uncopyable<icon_monger>
 {
   public:
     icon_monger();

@@ -39,7 +39,7 @@
 class Input;
 
 class LMI_SO single_cell_document
-    :        private lmi::uncopyable
+    :        private lmi::uncopyable <single_cell_document>
     ,virtual private obstruct_slicing<single_cell_document>
 {
     friend class IllustrationDocument;

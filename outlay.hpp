@@ -35,7 +35,7 @@
 class yare_input;
 
 class modal_outlay
-    :        private lmi::uncopyable
+    :        private lmi::uncopyable <modal_outlay>
     ,virtual private obstruct_slicing<modal_outlay>
 {
     friend class AccountValue;

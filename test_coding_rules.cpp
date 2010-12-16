@@ -109,7 +109,7 @@ enum enum_kingdom
     };
 
 class file
-    :        private lmi::uncopyable
+    :        private lmi::uncopyable <file>
     ,virtual private obstruct_slicing<file>
 {
   public:

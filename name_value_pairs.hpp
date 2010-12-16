@@ -84,7 +84,7 @@
 /// extra checks can easily be added if they become desirable.
 
 class name_value_pairs
-    :        private lmi::uncopyable
+    :        private lmi::uncopyable <name_value_pairs>
     ,virtual private obstruct_slicing<name_value_pairs>
 {
     friend int test_main(int, char*[]);

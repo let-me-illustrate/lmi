@@ -46,8 +46,8 @@ class WXDLLIMPEXP_FWD_CORE wxWindow;
 /// by the view portion of the document/view classes pair.
 
 class ProductEditorDocument
-    :public wxDocument
-    ,private lmi::uncopyable
+    :public  wxDocument
+    ,private lmi::uncopyable<ProductEditorDocument>
 {
   public:
     ProductEditorDocument();
@@ -70,8 +70,8 @@ class ProductEditorDocument
 /// Common base for all product editor view classes.
 
 class ProductEditorView
-    :public ViewEx
-    ,virtual private lmi::uncopyable
+    :public  ViewEx
+    ,private lmi::uncopyable<ProductEditorView>
 {
     friend class ProductEditorDocument;
 
@@ -88,8 +88,8 @@ class ProductEditorView
 /// It contains and lays out common widgets.
 
 class TreeGridViewBase
-    :public ProductEditorView
-    ,virtual private lmi::uncopyable
+    :public  ProductEditorView
+    ,private lmi::uncopyable<TreeGridViewBase>
 {
   public:
     TreeGridViewBase();

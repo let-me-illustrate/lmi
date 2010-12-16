@@ -62,8 +62,8 @@ class mec_mvc_view
 };
 
 class mec_view
-    :public ViewEx
-    ,virtual private lmi::uncopyable
+    :        public  ViewEx
+    ,        private lmi::uncopyable <mec_view>
     ,virtual private obstruct_slicing<mec_view>
 {
     friend class mec_document;

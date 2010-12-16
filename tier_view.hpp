@@ -38,8 +38,8 @@ class TierTableAdapter;
 class WXDLLIMPEXP_FWD_CORE wxTreeEvent;
 
 class TierView
-    :public TreeGridViewBase
-    ,virtual private lmi::uncopyable
+    :        public  TreeGridViewBase
+    ,        private lmi::uncopyable <TierView>
     ,virtual private obstruct_slicing<TierView>
 {
   public:

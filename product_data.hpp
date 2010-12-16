@@ -76,7 +76,7 @@ class glossed_string
 /// Implicitly-declared special member functions do the right thing.
 
 class LMI_SO product_data
-    :        private lmi::uncopyable
+    :        private lmi::uncopyable   <product_data>
     ,virtual private obstruct_slicing  <product_data>
     ,        public  xml_serializable  <product_data>
     ,        public  MemberSymbolTable <product_data>

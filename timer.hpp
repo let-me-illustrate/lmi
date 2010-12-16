@@ -74,7 +74,7 @@
 /// elapsed_msec_str(), elapsed_usec(), stop(), restart(): nomen est omen.
 
 class LMI_SO Timer
-    :private lmi::uncopyable
+    :private lmi::uncopyable<Timer>
 {
     friend class TimerTest;
     template<typename F> friend class AliquotTimer;

@@ -35,8 +35,8 @@
 class WXDLLIMPEXP_FWD_CORE wxListView;
 
 class CensusDocument
-    :public wxDocument
-    ,private lmi::uncopyable
+    :public  wxDocument
+    ,private lmi::uncopyable<CensusDocument>
 {
     friend class CensusView;
 

@@ -191,7 +191,7 @@ class WXDLLIMPEXP_FWD_CORE wxGridBagSizer;
 /// was up-to-date.
 
 class MultiDimAxisAny
-  :private lmi::uncopyable
+    :private lmi::uncopyable<MultiDimAxisAny>
 {
   public:
     MultiDimAxisAny(std::string const& name);
@@ -470,9 +470,9 @@ inline void MultiDimTableAny::SetValueAny
 ///   - return   axis index
 
 class MultiDimGrid
-  :public wxPanel
-  ,private wxGridTableBase
-  ,private lmi::uncopyable
+    :public  wxPanel
+    ,private wxGridTableBase
+    ,private lmi::uncopyable<MultiDimGrid>
 {
     friend class GridRefreshTableDataGuard;
 
@@ -757,8 +757,8 @@ inline bool MultiDimGrid::RefreshAxisAdjustment(std::string const& name)
 /// PopulateChoiceList(): Fill the control with axis value labels
 
 class MultiDimAxisAnyChoice
-  :public wxChoice
-  ,private lmi::uncopyable
+    :public  wxChoice
+    ,private lmi::uncopyable<MultiDimAxisAnyChoice>
 {
     friend class MultiDimAxisAny;
 
