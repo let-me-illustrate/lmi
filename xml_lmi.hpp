@@ -42,7 +42,7 @@
 namespace xml_lmi
 {
     class dom_parser
-        :private lmi::uncopyable
+        :private lmi::uncopyable<dom_parser>
     {
         typedef xml::tree_parser DomParser;
 
@@ -61,7 +61,7 @@ namespace xml_lmi
     };
 
     class xml_document
-        :private lmi::uncopyable
+        :private lmi::uncopyable<xml_document>
     {
       public:
         xml_document(std::string const& root_node_name);

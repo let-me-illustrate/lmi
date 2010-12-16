@@ -42,7 +42,7 @@
 /// floating-point calculations that presume the invariant.
 
 class LMI_SO fenv_guard
-    :        private lmi::uncopyable
+    :        private lmi::uncopyable <fenv_guard>
     ,virtual private obstruct_slicing<fenv_guard>
 {
   public:

@@ -53,8 +53,8 @@
 /// for consistency, so does the first.
 
 class AboutDialog
-    :public wxDialog
-    ,private lmi::uncopyable
+    :public  wxDialog
+    ,private lmi::uncopyable<AboutDialog>
 {
   public:
     AboutDialog(wxWindow* parent);

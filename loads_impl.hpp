@@ -79,7 +79,7 @@ class product_database;
 /// implemented.
 
 struct load_details
-    :private lmi::uncopyable
+    :private lmi::uncopyable<load_details>
 {
     load_details
         (int                        length

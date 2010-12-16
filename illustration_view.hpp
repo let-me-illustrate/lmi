@@ -52,8 +52,8 @@ class WXDLLIMPEXP_FWD_CORE wxHtmlWindow;
 // only for edit and run; in the census view class, it's used widely.
 
 class IllustrationView
-    :public ViewEx
-    ,virtual private lmi::uncopyable
+    :        public  ViewEx
+    ,        private lmi::uncopyable <IllustrationView>
     ,virtual private obstruct_slicing<IllustrationView>
 {
     friend class IllustrationDocument;

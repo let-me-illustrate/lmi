@@ -45,8 +45,8 @@
 
 template<typename CharType, typename traits = std::char_traits<CharType> >
 class dev_null_stream_buffer
-    :public std::streambuf
-    ,private lmi::uncopyable
+    :public  std::streambuf
+    ,private lmi::uncopyable<dev_null_stream_buffer<CharType,traits> >
 {
   public:
     dev_null_stream_buffer()

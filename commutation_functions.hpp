@@ -36,7 +36,7 @@
 /// Ordinary-life commutation functions.
 
 class LMI_SO OLCommFns
-    :        private lmi::uncopyable
+    :        private lmi::uncopyable <OLCommFns>
     ,virtual private obstruct_slicing<OLCommFns>
 {
   public:
@@ -83,7 +83,7 @@ class LMI_SO OLCommFns
 /// for "modal", but would too easily be taken as connoting "monthly".
 
 class LMI_SO ULCommFns
-    :        private lmi::uncopyable
+    :        private lmi::uncopyable <ULCommFns>
     ,virtual private obstruct_slicing<ULCommFns>
 {
   public:

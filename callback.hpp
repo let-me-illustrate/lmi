@@ -105,7 +105,7 @@
 
 template<typename FunctionPointer>
 class LMI_SO callback
-    :        private lmi::uncopyable
+    :        private lmi::uncopyable <callback<FunctionPointer> >
     ,virtual private obstruct_slicing<callback<FunctionPointer> >
 {
 #if !defined __BORLANDC__

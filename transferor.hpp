@@ -116,8 +116,8 @@ enum transfer_direction
 /// overridden here to return true instead.
 
 class Transferor
-    :public wxValidator
-    ,private lmi::uncopyable
+    :public  wxValidator
+    ,private lmi::uncopyable<Transferor>
 {
   public:
     Transferor(std::string& data, std::string const& name);

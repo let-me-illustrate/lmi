@@ -26997,3 +26997,65 @@ Include boost headers less promiscuously. The latest version of Comeau
 rejects 'base_from_member.hpp'; lmi has no need of it, but it was
 haphazardly included by 'utility.hpp'.
 
+20101216T1259Z <gchicares@sbcglobal.net> [656]
+
+  about_dialog.hpp
+  account_value.hpp
+  actuarial_table.hpp
+  any_member.hpp
+  authenticity.hpp
+  basic_values.hpp
+  callback.hpp
+  census_document.hpp
+  census_view.hpp
+  commutation_functions.hpp
+  configurable_settings.hpp
+  database.hpp
+  database_view.hpp
+  dbdict.hpp
+  death_benefits.hpp
+  docmanager_ex.hpp
+  docmdichildframe_ex.hpp
+  fenv_guard.hpp
+  file_command.hpp
+  fund_data.hpp
+  global_settings.hpp
+  icon_monger.hpp
+  ihs_irc7702.hpp
+  illustration_document.hpp
+  illustration_view.hpp
+  input_sequence.hpp
+  ledger_text_formats.cpp
+  ledgervalues.hpp
+  loads_impl.hpp
+  main_wx.hpp
+  mec_document.hpp
+  mec_view.hpp
+  mec_xml_document.hpp
+  msw_workarounds.hpp
+  multidimgrid_any.cpp
+  multidimgrid_any.hpp
+  multidimgrid_tools.hpp
+  multiple_cell_document.hpp
+  mvc_controller.hpp
+  name_value_pairs.hpp
+  null_stream.cpp
+  outlay.hpp
+  policy_view.hpp
+  product_data.hpp
+  product_editor.hpp
+  progress_meter.hpp
+  rounding_rules.hpp
+  rounding_view.hpp
+  single_cell_document.hpp
+  test_coding_rules.cpp
+  text_view.hpp
+  tier_view.hpp
+  timer.hpp
+  transferor.hpp
+  uncopyable_lmi.hpp
+  view_ex.hpp
+  xml_lmi.hpp
+  yare_input.hpp
+Improve class uncopyable.
+

@@ -53,7 +53,7 @@ class WXDLLIMPEXP_FWD_CORE wxMenuBar;
 
 class Skeleton
     :        public  wxApp
-    ,        private lmi::uncopyable
+    ,        private lmi::uncopyable <Skeleton>
     ,virtual private obstruct_slicing<Skeleton>
 {
   public:

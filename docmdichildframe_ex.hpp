@@ -71,8 +71,8 @@
 #include <wx/docmdi.h>
 
 class DocMDIChildFrameEx
-    :public wxDocMDIChildFrame
-    ,private lmi::uncopyable
+    :public  wxDocMDIChildFrame
+    ,private lmi::uncopyable<DocMDIChildFrameEx>
 {
   public:
     DocMDIChildFrameEx

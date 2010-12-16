@@ -408,8 +408,8 @@ namespace model_view_controller{} // doxygen workaround.
 /// Controller.
 
 class MvcController
-    :        public wxDialog
-    ,        private lmi::uncopyable
+    :        public  wxDialog
+    ,        private lmi::uncopyable <MvcController>
     ,virtual private obstruct_slicing<MvcController>
 {
     friend class MvcTest;

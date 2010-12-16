@@ -37,8 +37,8 @@ class WXDLLIMPEXP_FWD_CORE wxPageSetupDialogData;
 class WXDLLIMPEXP_FWD_CORE wxPrintData;
 
 class DocManagerEx
-    :public wxDocManager
-    ,private lmi::uncopyable
+    :public  wxDocManager
+    ,private lmi::uncopyable<DocManagerEx>
 {
   public:
     explicit DocManagerEx

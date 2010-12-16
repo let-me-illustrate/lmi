@@ -35,7 +35,7 @@
 class yare_input;
 
 class death_benefits
-    :        private lmi::uncopyable
+    :        private lmi::uncopyable <death_benefits>
     ,virtual private obstruct_slicing<death_benefits>
 {
   public:

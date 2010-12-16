@@ -49,8 +49,8 @@ class IllustrationView;
 class WXDLLIMPEXP_FWD_CORE wxHtmlWindow;
 
 class IllustrationDocument
-    :public wxDocument
-    ,private lmi::uncopyable
+    :public  wxDocument
+    ,private lmi::uncopyable<IllustrationDocument>
 {
     friend class IllustrationView;
 

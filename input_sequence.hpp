@@ -238,7 +238,7 @@ struct ValueInterval
 };
 
 class InputSequence
-    :        private lmi::uncopyable
+    :        private lmi::uncopyable <InputSequence>
     ,virtual private obstruct_slicing<InputSequence>
 {
   public:

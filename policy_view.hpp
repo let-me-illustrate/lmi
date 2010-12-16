@@ -38,8 +38,8 @@ class PolicyDocument;
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 
 class PolicyView
-    :public ProductEditorView
-    ,virtual private lmi::uncopyable
+    :        public  ProductEditorView
+    ,        private lmi::uncopyable <PolicyView>
     ,virtual private obstruct_slicing<PolicyView>
 {
   public:

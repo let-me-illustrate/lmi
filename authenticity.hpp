@@ -52,7 +52,7 @@ enum {md5len = 128 / CHAR_BIT};
 /// peremptorily-invalid default value of JDN zero.
 
 class Authenticity
-    :        private lmi::uncopyable
+    :        private lmi::uncopyable <Authenticity>
     ,virtual private obstruct_slicing<Authenticity>
 {
     friend class PasskeyTest;

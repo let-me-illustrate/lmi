@@ -46,8 +46,8 @@ class WXDLLIMPEXP_FWD_CORE wxListEvent;
 class WXDLLIMPEXP_FWD_CORE wxListView;
 
 class CensusView
-    :public ViewEx
-    ,virtual private lmi::uncopyable
+    :        public  ViewEx
+    ,        private lmi::uncopyable <CensusView>
     ,virtual private obstruct_slicing<CensusView>
 {
     friend class CensusDocument;

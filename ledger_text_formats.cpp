@@ -142,7 +142,7 @@ std::map<std::string,ledger_metadata> const& ledger_metadata_map()
 }
 
 class calculation_summary_formatter
-    :        private lmi::uncopyable
+    :        private lmi::uncopyable <calculation_summary_formatter>
     ,virtual private obstruct_slicing<calculation_summary_formatter>
 {
   public:
@@ -682,7 +682,7 @@ void PrintFormTabDelimited
 }
 
 class FlatTextLedgerPrinter
-    :        private lmi::uncopyable
+    :        private lmi::uncopyable <FlatTextLedgerPrinter>
     ,virtual private obstruct_slicing<FlatTextLedgerPrinter>
 {
   public:

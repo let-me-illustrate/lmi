@@ -80,7 +80,7 @@ enum EBlend
     };
 
 class LMI_SO BasicValues
-    :virtual private lmi::uncopyable
+    :private lmi::uncopyable<BasicValues>
 {
   public:
     BasicValues(Input const& input);

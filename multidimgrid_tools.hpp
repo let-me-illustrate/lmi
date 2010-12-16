@@ -89,8 +89,8 @@ class AxisMaxBoundAdjusterBase
 
 template<typename Integral>
 class AxisMaxBoundAdjuster
-    :public AxisMaxBoundAdjusterBase
-    ,private lmi::uncopyable
+    :public  AxisMaxBoundAdjusterBase
+    ,private lmi::uncopyable<AxisMaxBoundAdjuster<Integral> >
 {
   public:
     AxisMaxBoundAdjuster

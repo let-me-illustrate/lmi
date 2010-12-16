@@ -52,8 +52,8 @@ class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 /// model for some other feature someday.
 
 class TextEditView
-    :public ViewEx
-    ,virtual private lmi::uncopyable
+    :        public  ViewEx
+    ,        private lmi::uncopyable <TextEditView>
     ,virtual private obstruct_slicing<TextEditView>
 {
     friend class TextEditDocument;
