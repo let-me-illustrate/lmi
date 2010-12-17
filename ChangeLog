@@ -27059,3 +27059,9 @@ haphazardly included by 'utility.hpp'.
   yare_input.hpp
 Improve class uncopyable.
 
+20101217T0111Z <gchicares@sbcglobal.net> [656]
+
+  bcc_5_5_1.make
+  name_value_pairs_test.cpp
+Resolve unit-test build issues with an ancient compiler.
+
