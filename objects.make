@@ -752,6 +752,7 @@ miscellany_test$(EXEEXT): \
 
 mortality_rates_test$(EXEEXT): \
   $(common_test_objects) \
+  expm1.o \
   ihs_mortal.o \
   mortality_rates_test.o \
 
