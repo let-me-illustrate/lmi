@@ -27065,3 +27065,19 @@ Improve class uncopyable.
   name_value_pairs_test.cpp
 Resolve unit-test build issues with an ancient compiler.
 
+20101218T1707Z <gchicares@sbcglobal.net> [656]
+
+  math_functors.hpp
+  objects.make
+Resolve defects identified with Comeau.
+
+20101218T1708Z <gchicares@sbcglobal.net> [656]
+
+  ncnnnpnn.hpp
+Remove a feckless workaround.
+
+20101218T1709Z <gchicares@sbcglobal.net> [655]
+
+  ncnnnpnn_test.cpp
+Improve diagnosis of failing tests and treatment of borland issues.
+
