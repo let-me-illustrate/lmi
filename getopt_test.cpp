@@ -210,27 +210,24 @@ int test_main(int, char*[])
     char arg1[] = {"--verbose"};
     char arg2[] = {"xyz"};
     char* test_argv[] = {arg0, arg1, arg2, 0};
-    int test_argc = -1 + lmi_array_size(test_argv);
+    int test_argc = -1 + static_cast<int>(lmi_array_size(test_argv));
     std::string s = getopt_test::test(test_argc, test_argv);
     BOOST_TEST_EQUAL(s, "option verbose\nnon-option ARGV-elements: xyz\n");
     }
 
-#if 0
-// TODO ?? The standard permits 'argc' to be zero. However, this segfaults.
     {
     char* test_argv[] = {0};
-    int test_argc = -1 + lmi_array_size(test_argv);
+    int test_argc = -1 + static_cast<int>(lmi_array_size(test_argv));
     std::string s = getopt_test::test(test_argc, test_argv);
     BOOST_TEST_EQUAL(s, "");
     }
-#endif // 0
 
     {
     char arg0[] = {""};
     char arg1[] = {"-o"};
     char arg2[] = {"-d1,2,3"};
     char* test_argv[] = {arg0, arg1, arg2, 0};
-    int test_argc = -1 + lmi_array_size(test_argv);
+    int test_argc = -1 + static_cast<int>(lmi_array_size(test_argv));
     std::string s = getopt_test::test(test_argc, test_argv);
     BOOST_TEST_EQUAL(s, "option o\noption d with value '1,2,3'\n");
     }
