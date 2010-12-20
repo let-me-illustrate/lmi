@@ -27081,3 +27081,16 @@ Remove a feckless workaround.
   ncnnnpnn_test.cpp
 Improve diagnosis of failing tests and treatment of borland issues.
 
+20101220T2313Z <gchicares@sbcglobal.net> [655]
+
+  getopt.cpp
+  getopt.hpp
+  getopt_test.cpp
+Remove a defunct URL.
+
+20101220T2355Z <gchicares@sbcglobal.net> [654]
+
+  getopt.cpp
+  getopt_test.cpp
+Resolve an ancient defect.
+

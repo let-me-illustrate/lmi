@@ -355,6 +355,11 @@ GetOpt::operator()()
 {
   optopt = 0;
 
+  // Without this early exit, a segfault occurs if 'nargc' is zero,
+  // as the unit test demonstrates.
+  if (0 == nargc)
+      return EOF;
+
   // We are processing a LIST_ARG or ALT_ARG,
   // now we try to see if the next argument is a current option value
   // or is another option.
