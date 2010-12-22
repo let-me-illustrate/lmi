@@ -30,6 +30,7 @@
 #include "uncopyable_lmi.hpp"
 
 #include <map>
+#include <string>
 
 /// Design notes for class name_value_pairs.
 ///
