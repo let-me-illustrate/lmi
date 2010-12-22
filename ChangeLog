@@ -27094,3 +27094,10 @@ Remove a defunct URL.
   getopt_test.cpp
 Resolve an ancient defect.
 
+20101222T0416Z <gchicares@sbcglobal.net> [654]
+
+  name_value_pairs.hpp
+  wx_utility.cpp
+  yare_input.cpp
+Resolve issues discovered with libstdc++ debug mode.
+
