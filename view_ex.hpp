@@ -79,7 +79,7 @@
 
 #include "config.hpp"
 
-#include <boost/utility.hpp>
+#include "uncopyable_lmi.hpp"
 
 #include <wx/docview.h>
 
@@ -91,26 +91,9 @@ class WXDLLIMPEXP_FWD_CORE wxDC;
 class WXDLLIMPEXP_FWD_CORE wxIcon;
 class WXDLLIMPEXP_FWD_CORE wxMenuBar;
 
-// INELEGANT !! If both a base and a derived class derive nonvirtually
-// from boost::noncopyable
-//    ,private boost::noncopyable
-// then gcc will complain
-//   warning: direct base `boost::noncopyable' inaccessible in
-//   [derived classes] due to ambiguity
-// Cacciola's noncopyable<T> solution here
-//   http://lists.boost.org/MailArchives/boost/msg17485.php
-//   http://lists.boost.org/MailArchives/boost/msg17012.php
-// is best; no good reason for dismissing it was given on the boost
-// mailing list, but presumably they didn't want to require typing
-// the template argument. The workaround used here is rightfully
-// criticized by Cacciola:
-//   http://lists.boost.org/MailArchives/boost/msg17491.php
-// That criticism matters little in this particular case, but perhaps
-// it would be better to use Cacciola's idea instead of boost's.
-
 class ViewEx
-    :public wxView
-    ,virtual private boost::noncopyable
+    :public  wxView
+    ,private lmi::uncopyable<ViewEx>
 {
   public:
     ViewEx();

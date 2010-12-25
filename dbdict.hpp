@@ -30,16 +30,15 @@
 #include "dbvalue.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
+#include "uncopyable_lmi.hpp"
 #include "xml_serializable.hpp"
-
-#include <boost/utility.hpp>
 
 #include <string>
 
 /// Cached product database.
 
 class LMI_SO DBDictionary
-    :        private boost::noncopyable
+    :        private lmi::uncopyable   <DBDictionary>
     ,virtual private obstruct_slicing  <DBDictionary>
     ,        public  xml_serializable  <DBDictionary>
     ,        public  MemberSymbolTable <DBDictionary>

@@ -29,8 +29,7 @@
 #include "product_editor.hpp"
 
 #include "obstruct_slicing.hpp"
-
-#include <boost/utility.hpp>
+#include "uncopyable_lmi.hpp"
 
 #include <map>
 
@@ -38,8 +37,8 @@ class RoundingButtons;
 class RoundingDocument;
 
 class RoundingView
-    :public ProductEditorView
-    ,virtual private boost::noncopyable
+    :        public  ProductEditorView
+    ,        private lmi::uncopyable <RoundingView>
     ,virtual private obstruct_slicing<RoundingView>
 {
   public:

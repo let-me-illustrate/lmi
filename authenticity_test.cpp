@@ -37,6 +37,7 @@
 
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/path.hpp>
 
 #include <cstddef> // std::size_t
 #include <cstdio>
@@ -274,20 +275,21 @@ void PasskeyTest::CheckNominal(char const* file, int line) const
 /// Authenticate also from the root directory on a different drive, on
 /// a multiple-root system. This is perforce platform specific; msw is
 /// used because it happens to be common. This test assumes that an
-/// 'E:' drive exists and is not the "current" drive.
+/// 'F:' drive exists and is not the "current" drive.
 ///
 /// BOOST !! This test traps an exception that boost-1.33.1 can throw
-/// if exists("E:/") returns true but ::GetFileAttributesA() fails.
+/// if exists("F:/") returns true but ::GetFileAttributesA() fails.
 /// That's supposed to be impossible because the is_directory()
 /// documentation says:
 ///   "Throws: if !exists(ph)"
-/// but it can be reproduced by placing an unformatted disk in "E:".
+/// but it can be reproduced by placing an unformatted disk in "F:".
 
 void PasskeyTest::TestFromAfar() const
 {
     CheckNominal(__FILE__, __LINE__);
 
     fs::path const remote_dir_0(fs::complete("/tmp"));
+    fs::create_directory(remote_dir_0);
     BOOST_TEST(fs::exists(remote_dir_0) && fs::is_directory(remote_dir_0));
     BOOST_TEST_EQUAL(0, chdir(remote_dir_0.string().c_str()));
     BOOST_TEST_EQUAL(remote_dir_0.string(), fs::current_path().string());
@@ -300,7 +302,7 @@ void PasskeyTest::TestFromAfar() const
 #if defined LMI_MSW
     CheckNominal(__FILE__, __LINE__);
 
-    fs::path const remote_dir_1(fs::complete(fs::path("E:/", fs::native)));
+    fs::path const remote_dir_1(fs::complete(fs::path("F:/", fs::native)));
     BOOST_TEST(fs::exists(remote_dir_1));
     try
         {

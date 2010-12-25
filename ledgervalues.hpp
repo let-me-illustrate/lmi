@@ -28,9 +28,9 @@
 
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
+#include "uncopyable_lmi.hpp"
 
 #include <boost/shared_ptr.hpp>
-#include <boost/utility.hpp>
 
 #include <string>
 
@@ -42,7 +42,7 @@ class Ledger;
 /// This class encapsulates a frequently-used series of operations.
 
 class IllusVal
-    :private boost::noncopyable
+    :        private lmi::uncopyable <IllusVal>
     ,virtual private obstruct_slicing<IllusVal>
 {
   public:

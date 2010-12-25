@@ -201,8 +201,7 @@
 #include "config.hpp"
 
 #include "obstruct_slicing.hpp"
-
-#include <boost/utility.hpp>
+#include "uncopyable_lmi.hpp"
 
 #include <iosfwd>
 #include <string>
@@ -239,7 +238,7 @@ struct ValueInterval
 };
 
 class InputSequence
-    :private boost::noncopyable
+    :        private lmi::uncopyable <InputSequence>
     ,virtual private obstruct_slicing<InputSequence>
 {
   public:

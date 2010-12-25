@@ -213,7 +213,7 @@ void MultiDimGridGrid::UponKeyDown(wxKeyEvent& event)
 /// an update and it is the place to do it once for all the calls.
 
 class GridRefreshTableDataGuard
-  :private boost::noncopyable
+    :private lmi::uncopyable<GridRefreshTableDataGuard>
 {
   public:
     /// Construct guard for the counter, and use releaser at last exit

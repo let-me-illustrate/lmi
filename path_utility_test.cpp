@@ -34,6 +34,8 @@
 
 #include <boost/filesystem/exception.hpp>
 #include <boost/filesystem/fstream.hpp>
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/path.hpp>
 
 #include <cstdio> // std::remove()
 #include <fstream>
@@ -139,14 +141,14 @@ void test_serial_file_path()
 
 void test_unique_filepath_with_normal_filenames()
 {
+    fs::path const tmpdir(fs::complete("/tmp"));
+    fs::create_directory(tmpdir);
+
     // These tests would fail if read-only files with the following
     // names already exist.
 
     char const* p = "/tmp/eraseme.0";
     char const* q = "/tmp/eraseme.xyzzy";
-
-    // Assume directory /tmp/ exists: the makefile provided ensures
-    // that, even on platforms that don't always provide it.
 
     // Don't test the return codes here. These files probably don't
     // exist, in which case C99 7.19.4.1 doesn't clearly prescribe

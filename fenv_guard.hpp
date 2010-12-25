@@ -28,8 +28,7 @@
 
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
-
-#include <boost/utility.hpp>
+#include "uncopyable_lmi.hpp"
 
 /// Guard class for critical floating-point calculations.
 ///
@@ -43,7 +42,7 @@
 /// floating-point calculations that presume the invariant.
 
 class LMI_SO fenv_guard
-    :private boost::noncopyable
+    :        private lmi::uncopyable <fenv_guard>
     ,virtual private obstruct_slicing<fenv_guard>
 {
   public:

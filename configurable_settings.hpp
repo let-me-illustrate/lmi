@@ -29,9 +29,8 @@
 #include "any_member.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
+#include "uncopyable_lmi.hpp"
 #include "xml_serializable.hpp"
-
-#include <boost/utility.hpp>
 
 #include <string>
 #include <vector>
@@ -47,7 +46,7 @@
 /// Data members are documented in their accessors' implementations.
 
 class LMI_SO configurable_settings
-    :        private boost::noncopyable
+    :        private lmi::uncopyable   <configurable_settings>
     ,virtual private obstruct_slicing  <configurable_settings>
     ,        public  xml_serializable  <configurable_settings>
     ,        public  MemberSymbolTable <configurable_settings>

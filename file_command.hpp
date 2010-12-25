@@ -27,8 +27,7 @@
 #include "config.hpp"
 
 #include "so_attributes.hpp"
-
-#include <boost/utility.hpp>
+#include "uncopyable_lmi.hpp"
 
 #include <string>
 
@@ -50,7 +49,7 @@ bool LMI_SO file_command_initialize(file_command_fp_type);
 /// wx, if that ever becomes necessary.
 
 struct LMI_SO file_command
-    :private boost::noncopyable
+    :private lmi::uncopyable<file_command>
 {
     void operator()(std::string const&, std::string const&) const;
 };

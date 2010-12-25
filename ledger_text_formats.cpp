@@ -45,9 +45,8 @@
 #include "mc_enum_types_aux.hpp" // is_subject_to_ill_reg()
 #include "miscellany.hpp"
 #include "obstruct_slicing.hpp"
+#include "uncopyable_lmi.hpp"
 #include "value_cast.hpp"
-
-#include <boost/utility.hpp>
 
 #include <algorithm>
 #include <fstream>
@@ -143,7 +142,7 @@ std::map<std::string,ledger_metadata> const& ledger_metadata_map()
 }
 
 class calculation_summary_formatter
-    :private boost::noncopyable
+    :        private lmi::uncopyable <calculation_summary_formatter>
     ,virtual private obstruct_slicing<calculation_summary_formatter>
 {
   public:
@@ -683,7 +682,7 @@ void PrintFormTabDelimited
 }
 
 class FlatTextLedgerPrinter
-    :private boost::noncopyable
+    :        private lmi::uncopyable <FlatTextLedgerPrinter>
     ,virtual private obstruct_slicing<FlatTextLedgerPrinter>
 {
   public:

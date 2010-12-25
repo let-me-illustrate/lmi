@@ -174,9 +174,9 @@
 #include "config.hpp"
 
 #include "so_attributes.hpp"
+#include "uncopyable_lmi.hpp"
 
 #include <boost/shared_ptr.hpp>
-#include <boost/utility.hpp>
 
 #include <iosfwd>
 #include <string>
@@ -184,7 +184,7 @@
 std::ostringstream& progress_meter_unit_test_stream();
 
 class LMI_SO progress_meter
-    :private boost::noncopyable
+    :private lmi::uncopyable<progress_meter>
 {
   public:
     enum enum_display_mode

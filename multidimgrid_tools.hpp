@@ -30,9 +30,8 @@
 
 #include "alert.hpp"
 #include "safely_dereference_as.hpp"
+#include "uncopyable_lmi.hpp"
 #include "value_cast.hpp"
-
-#include <boost/utility.hpp>
 
 #include <wx/choice.h>
 #include <wx/treectrl.h>
@@ -90,8 +89,8 @@ class AxisMaxBoundAdjusterBase
 
 template<typename Integral>
 class AxisMaxBoundAdjuster
-  :public AxisMaxBoundAdjusterBase
-  ,private boost::noncopyable
+    :public  AxisMaxBoundAdjusterBase
+    ,private lmi::uncopyable<AxisMaxBoundAdjuster<Integral> >
 {
   public:
     AxisMaxBoundAdjuster

@@ -27,8 +27,7 @@
 #endif // __BORLANDC__
 
 #include "null_stream.hpp"
-
-#include <boost/utility.hpp>
+#include "uncopyable_lmi.hpp"
 
 #include <ostream>
 #include <streambuf>
@@ -46,8 +45,8 @@
 
 template<typename CharType, typename traits = std::char_traits<CharType> >
 class dev_null_stream_buffer
-    :public std::streambuf
-    ,private boost::noncopyable
+    :public  std::streambuf
+    ,private lmi::uncopyable<dev_null_stream_buffer<CharType,traits> >
 {
   public:
     dev_null_stream_buffer()

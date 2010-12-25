@@ -130,6 +130,11 @@ MPATROL_LIBS :=
 
 platform_wx_libraries :=
 
+# The borland compiler can't handle the boost filesystem code, but it
+# can limp through some tests by pretending that code doesn't exist.
+
+boost_filesystem_objects :=
+
 # The borland compiler rejects some conforming code, generating many
 # spurious and distracting diagnostics; it fails utterly to build
 # these tests:
@@ -138,6 +143,7 @@ excluded_unit_test_targets := \
   actuarial_table_test \
   authenticity_test \
   commutation_functions_test \
+  configurable_settings_test \
   global_settings_test \
   input_test \
   irc7702a_test \
@@ -222,11 +228,16 @@ cxx_c_library_headers := \
   cwchar     \
   cwctype    \
 
-# This dummy target prevents this makefile from being the default
-# target. It mustn't be PHONY.
-all:
+MAKECMDGOALS ?= unit_tests
+
+# Default target.
+$(MAKECMDGOALS):
 
 bcc_5_5_1.make:: ;
+
+# Use '--jobs=1' to prevent 'make' parallelism, which appears to be
+# incompatible with borland C++. Ignore any "disabling jobserver mode"
+# warning that this engenders.
 
 %: force
 	+@[ -d $(shadow_header_directory) ] || mkdir $(shadow_header_directory)
@@ -236,7 +247,8 @@ bcc_5_5_1.make:: ;
 	    $(cxx_library_headers) $(cxx_c_library_headers) \
 	    )
 	@-$(MAKE) \
-	  -f $(src_dir)/GNUmakefile \
+	  --file=$(src_dir)/GNUmakefile \
+	  --jobs=1 \
 	                            src_dir='$(src_dir)' \
 	                            toolset='$(toolset)' \
 	                        gcc_version='$(gcc_version)' \
@@ -254,12 +266,13 @@ bcc_5_5_1.make:: ;
 	                            LDFLAGS='$(LDFLAGS)' \
 	                       MPATROL_LIBS='$(MPATROL_LIBS)' \
 	              platform_wx_libraries='$(platform_wx_libraries)' \
+	           boost_filesystem_objects='$(boost_filesystem_objects)' \
 	         excluded_unit_test_targets='$(excluded_unit_test_targets)' \
 	                            GNU_CPP='$(GNU_CPP)' \
 	                            GNU_CXX='$(GNU_CXX)' \
 	                   MAKEDEPEND_FLAGS='$(MAKEDEPEND_FLAGS)' \
 	                 MAKEDEPEND_COMMAND='$(MAKEDEPEND_COMMAND)' \
-	  unit_tests \
+	  $(MAKECMDGOALS); \
 
 force: ;
 

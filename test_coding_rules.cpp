@@ -33,13 +33,13 @@
 #include "main_common.hpp"
 #include "miscellany.hpp" // lmi_array_size()
 #include "obstruct_slicing.hpp"
+#include "uncopyable_lmi.hpp"
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/regex.hpp>
-#include <boost/utility.hpp>
 
 #include <cstddef>        // std::size_t
 #include <ctime>
@@ -109,7 +109,7 @@ enum enum_kingdom
     };
 
 class file
-    :private boost::noncopyable
+    :        private lmi::uncopyable <file>
     ,virtual private obstruct_slicing<file>
 {
   public:
@@ -199,6 +199,7 @@ file::file(std::string const& file_path)
         : ".md5sums"    == extension() ? e_md5
         : ".patch"      == extension() ? e_patch
         : ".ac"         == extension() ? e_script
+        : ".bat"        == extension() ? e_script
         : ".m4"         == extension() ? e_script
         : ".rc"         == extension() ? e_script
         : ".sed"        == extension() ? e_script
@@ -334,6 +335,7 @@ void assay_whitespace(file const& f)
         (   !f.is_of_phylum(e_gpl)
         &&  !f.is_of_phylum(e_make)
         &&  !f.is_of_phylum(e_patch)
+        &&  !f.is_of_phylum(e_script)
         &&  contains(f.data(), '\t')
         )
         {
@@ -768,10 +770,13 @@ bool check_reserved_name_exception(std::string const& s)
         ,"_LIBC"
         ,"__BIG_ENDIAN"
         ,"__BYTE_ORDER"
-    // Compiler specific: como including EDG.
+    // Compiler specific: EDG; hence, como, and also libcomo.
+        ,"__asm"
         ,"__COMO__"
         ,"__COMO_VERSION__"
         ,"__EDG_VERSION__"
+        ,"__inline"
+        ,"__MWERKS__"
     // Compiler specific: borland.
         ,"_CatcherPTR"
         ,"__BORLANDC__"
@@ -875,7 +880,6 @@ void enforce_taboos(file const& f)
     taboo(f, "Microsoft");
     taboo(f, "Visual [A-Z]");
     taboo(f, "\\bWIN\\b");
-    taboo(f, "\\bBAT\\b", boost::regex::icase);
     taboo(f, "\\bExcel\\b");
     taboo(f, "xls|xl4", boost::regex::icase);
     // Insinuated by certain msw tools.
@@ -895,6 +899,7 @@ void enforce_taboos(file const& f)
     if
         (   !f.is_of_phylum(e_log)
         &&  !f.is_of_phylum(e_make)
+        &&  !f.is_of_phylum(e_synopsis)
         )
         {
         taboo(f, "\\bexe\\b", boost::regex::icase);

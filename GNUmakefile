@@ -137,7 +137,7 @@ $(src_dir)/local_options.make:: ;
 build_type ?= ship
 toolset ?= gcc
 build_directory := \
-  ../build/$(notdir $(src_dir))/$(uname)/$(toolset)/$(build_type)
+  $(src_dir)/../build/$(notdir $(src_dir))/$(uname)/$(toolset)/$(build_type)
 
 gpl_files := \
   COPYING \
@@ -288,7 +288,7 @@ distclean mostlyclean maintainer-clean: clean
 
 .PHONY: clobber
 clobber: source_clean
-	@-$(RM) --force --recursive ../build
+	@-$(RM) --force --recursive $(src_dir)/../build
 
 ################################################################################
 
@@ -304,6 +304,19 @@ custom_tools:
 ################################################################################
 
 # Check conformity to certain formatting rules; count lines and defects.
+#
+# The tests in $(build_directory) identify object ('.o') files with no
+# corresponding autodependency ('.d') file, and zero-byte '.d' files.
+# Either of these suggests a build failure that may render dependency
+# files invalid; 'make clean' should provide symptomatic relief.
+#
+# The '$(LS) --classify' test somewhat loosely identifies source files
+# whose executable bit is improperly set. It is properly set iff the
+# file starts with a hash-bang; to avoid the cost of opening every
+# file, a simple heuristic is used, '*.sh *.sed' being the only files
+# permitted (though not required) to be executable. No exception need
+# be made for msw '.bat' files, which normally should not be run in a
+# *nix shell.
 
 xml_files := $(wildcard *.cns *.ill *.xml *.xrc *.xsd *.xsl)
 
@@ -323,6 +336,9 @@ check_concinnity: source_clean custom_tools
 	@$(RM) --force BOY
 	@for z in $(build_directory)/*.d; do [ -s $$z ]         || echo $$z; done;
 	@for z in $(build_directory)/*.o; do [ -f $${z%%.o}.d ] || echo $$z; done;
+	@$(LS) --classify ./* \
+	  | $(SED) -e'/\*$$/!d' -e'/^\.\//!d' -e'/.sh\*$$/d' -e'/.sed\*$$/d' \
+	  | $(SED) -e's/^/Improperly executable: /'
 	@$(ECHO) "  Problems detected by xmllint:"
 	@for z in $(xml_files); \
 	  do \
@@ -416,7 +432,7 @@ happy_new_year: source_clean
 
 # TODO ?? This is an evolving experiment. Possible enhancements include:
 #   - Add other tests, particularly system tests.
-#       Consider using ../products/src if it exists.
+#       Consider using $(src_dir)/../products/src if it exists.
 #       Also consider using the repository only, with testdecks stored
 #         either there or in ftp.
 #   - Test skeleton branch, too.

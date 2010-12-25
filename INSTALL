@@ -21,13 +21,96 @@
 
 // $Id$
 
-* Platform: GNU/Linux
-
-See:
+[Just go here:
   http://lists.nongnu.org/archive/html/lmi/2008-05/msg00001.html
+if you're not running ms windows.]
 
-* Platform: msw
+(1) Install Cygwin
 
-See:
-  http://lists.nongnu.org/archive/html/lmi/2007-12/msg00002.html
+Open a "Command Prompt" window, and enable pasting into it:
+
+  Start | Programs | Accessories | Command Prompt
+  alt-Spacebar | Properties | Options
+  check both "QuickEdit Mode" and "Insert Mode"
+  OK
+  select "Modify shortcut that started this window"
+  OK
+
+Copy and paste the following lines into the "Command Prompt" window:
+
+  C:
+  mkdir C:\cache_for_lmi
+
+Save the following three files into the 'C:\cache_for_lmi' directory:
+
+  http://www.cygwin.com/setup-legacy.exe
+  http://www.cygwin.com/setup.exe
+  http://svn.sv.nongnu.org/svn/lmi/lmi/trunk/install_cygwin.bat
+
+Copy and paste the following lines into the "Command prompt" window:
+
+  cd C:\cache_for_lmi
+  install_cygwin >installed.txt
+
+A messagebox warns:
+
+  Attempt to install legacy version of Cygwin
+  ---------------------------
+  You are attempting to install a legacy version of Cygwin
+  on a modern version of Windows.  Press "OK" if this is
+  really want you want to do.  Otherwise press "Cancel".
+  See http://cygwin.com/ for more information.
+
+It may appear several times; press "OK" each time. When it finishes,
+copy and paste the following line into the "Command prompt" window:
+
+  type installed.txt
+
+You should see something like this:
+
+  "Anomalous 'C:\cygwin' directory present after iteration" 1
+  "Anomalous 'C:\cygwin' directory present after iteration" 2
+  "Cygwin 1.5 installation seems to have succeeded on iteration" 3
+  "Cygwin 1.7 installation seems to have succeeded"
+
+Close the "Command prompt" window.
+
+(2) Install lmi
+
+Start 'bash', and enable pasting:
+
+  Start | Programs | Cygwin | Cygwin Bash Shell
+  alt-Spacebar | Properties | Options
+  check both "QuickEdit Mode" and "Insert Mode"
+  OK
+  select "Modify shortcut that started this window"
+  OK
+
+Copy and paste the following into 'bash':
+
+  mkdir -p /tmp
+  export TMP=/tmp
+  install_script='http://svn.sv.nongnu.org/svn/lmi/lmi/trunk/install_msw.sh'
+  cd /tmp
+  wget -N $install_script
+  chmod +x install_msw.sh
+  logfile=log-`date -u +'%Y%m%dT%H%MZ'`; echo "Log file is '$logfile.tar.bz2'."
+  ./install_msw.sh >$logfile 2>&1; tar -cjf $logfile.tar.bz2 $logfile
+
+Installation proceeds silently for about an hour. When you see
+"Finished building lmi", copy and paste these lines into 'bash':
+
+  export PATH=/opt/lmi/local/bin:/opt/lmi/local/lib:$PATH
+  cd /opt/lmi/bin; ./lmi_wx_shared --data_path=/opt/lmi/data
+
+You should see lmi's GUI. Try "File | New | Illustration", then press
+"OK"; you should see values. Then try "File | Print preview". You
+should see an illustration in your 'pdf' viewer. But if you see
+  'java' is not recognized as an internal or external command,
+  operable program or batch file
+then (for printing only) you need 'java'. You can get a version
+that's been tested with lmi here:
+  http://java.sun.com/products/archive/j2se/1.4.2_06/index.html
+Click "Download J2RE", then download and run this file:
+  j2re-1_4_2_06-windows-i586-p.exe
 

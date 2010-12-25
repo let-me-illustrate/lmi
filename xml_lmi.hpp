@@ -26,10 +26,10 @@
 
 #include "config.hpp"
 
+#include "uncopyable_lmi.hpp"
 #include "xml_lmi_fwd.hpp"
 
 #include <boost/scoped_ptr.hpp>
-#include <boost/utility.hpp>
 
 #include <xmlwrapp/node.h> // (for xml::element)
 
@@ -42,7 +42,7 @@
 namespace xml_lmi
 {
     class dom_parser
-        :private boost::noncopyable
+        :private lmi::uncopyable<dom_parser>
     {
         typedef xml::tree_parser DomParser;
 
@@ -61,7 +61,7 @@ namespace xml_lmi
     };
 
     class xml_document
-        :private boost::noncopyable
+        :private lmi::uncopyable<xml_document>
     {
       public:
         xml_document(std::string const& root_node_name);

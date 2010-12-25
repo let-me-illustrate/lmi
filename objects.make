@@ -754,6 +754,7 @@ miscellany_test$(EXEEXT): \
 
 mortality_rates_test$(EXEEXT): \
   $(common_test_objects) \
+  expm1.o \
   ihs_mortal.o \
   mortality_rates_test.o \
 
@@ -762,6 +763,7 @@ mpatrol_patch_test$(EXEEXT): \
   mpatrol_patch_test.o \
 
 name_value_pairs_test$(EXEEXT): \
+  $(boost_filesystem_objects) \
   $(common_test_objects) \
   facets.o \
   name_value_pairs.o \

@@ -29,8 +29,7 @@
 #include "product_editor.hpp"
 
 #include "obstruct_slicing.hpp"
-
-#include <boost/utility.hpp>
+#include "uncopyable_lmi.hpp"
 
 #include <map>
 #include <string>
@@ -39,8 +38,8 @@ class PolicyDocument;
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 
 class PolicyView
-    :public ProductEditorView
-    ,virtual private boost::noncopyable
+    :        public  ProductEditorView
+    ,        private lmi::uncopyable <PolicyView>
     ,virtual private obstruct_slicing<PolicyView>
 {
   public:

@@ -33,7 +33,7 @@ mingw_dir       := /MinGW_
 
 prefix          := $(mingw_dir)
 
-cache_dir       := /tmp/lmi_cache
+cache_dir       := /cache_for_lmi/downloads
 
 mpatrol_dir     := /opt/lmi/mpatrol-scratch
 

@@ -35,7 +35,7 @@ mingw_dir     := /MinGW_
 
 prefix        := /opt/lmi/local
 
-cache_dir     := /tmp/lmi_cache
+cache_dir     := /cache_for_lmi/downloads
 
 xml_dir       := /opt/lmi/xml-scratch
 
