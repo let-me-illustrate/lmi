@@ -29,15 +29,14 @@
 #include "mc_enum_type_enums.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
-
-#include <boost/utility.hpp>
+#include "uncopyable_lmi.hpp"
 
 #include <vector>
 
 /// Ordinary-life commutation functions.
 
 class LMI_SO OLCommFns
-    :private boost::noncopyable
+    :        private lmi::uncopyable <OLCommFns>
     ,virtual private obstruct_slicing<OLCommFns>
 {
   public:
@@ -84,7 +83,7 @@ class LMI_SO OLCommFns
 /// for "modal", but would too easily be taken as connoting "monthly".
 
 class LMI_SO ULCommFns
-    :private boost::noncopyable
+    :        private lmi::uncopyable <ULCommFns>
     ,virtual private obstruct_slicing<ULCommFns>
 {
   public:

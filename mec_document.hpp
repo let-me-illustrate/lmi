@@ -28,8 +28,7 @@
 
 #include "mec_input.hpp"
 #include "mec_xml_document.hpp"
-
-#include <boost/utility.hpp>
+#include "uncopyable_lmi.hpp"
 
 #include <wx/docview.h>
 
@@ -37,8 +36,8 @@ class mec_view;
 class WXDLLIMPEXP_FWD_CORE wxHtmlWindow;
 
 class mec_document
-    :public wxDocument
-    ,private boost::noncopyable
+    :public  wxDocument
+    ,private lmi::uncopyable<mec_document>
 {
     friend class mec_view;
 

@@ -26761,3 +26761,343 @@ Add new state fields.
   input_xml_io.cpp
 Accommodate deficient admin-system extracts.
 
+20100917T1503Z <gchicares@sbcglobal.net> [656]
+
+  workhorse.make
+Specify missing prerequisites of 'test' targets.
+
+20100917T2055Z <gchicares@sbcglobal.net> [656]
+
+  diagnostics.sed
+  workhorse.make
+Run tests seriatim iff they write to stdout.
+
+20100920T1232Z <gchicares@sbcglobal.net> [656]
+
+  diagnostics.sed
+  global_settings.cpp
+  global_settings.hpp
+  global_settings_test.cpp
+  main_cli.cpp
+  main_wx.cpp
+  workhorse.make
+Run system tests in parallel.
+
+20100921T0044Z <gchicares@sbcglobal.net> [656]
+
+  GNUmakefile
+Make build directory more unmistakable.
+
+20100921T0152Z <gchicares@sbcglobal.net> [656]
+
+  workhorse.make
+Refactor.
+
+20100921T2032Z <gchicares@sbcglobal.net> [656]
+
+  workhorse.make
+Fix defect introduced 20050522T1404Z. No test output should ever match
+the regex /test\/touchstone/.
+
+20100921T2149Z <gchicares@sbcglobal.net> [656]
+
+  workhorse.make
+Don't spend time analyzing system-test discrepancies if none exist.
+
+20100923T0020Z <gchicares@sbcglobal.net> [656]
+
+  version.hpp
+Designate release candidate.
+
+20100923T0052Z <gchicares@sbcglobal.net> [656]
+
+  main_cli.cpp
+  workhorse.make
+Refactor for simplicity.
+
+20100923T2332Z <gchicares@sbcglobal.net> [656]
+
+  GNUmakefile
+Check execute permission. This would detect the defects removed
+20100225T1616Z, 20100316T0205Z, and 20100719T1357Z.
+
+20100924T1639Z <gchicares@sbcglobal.net> [656]
+
+  Makefile.am
+  authenticity_test.cpp
+  name_value_pairs_test.cpp
+  objects.make
+  path_utility_test.cpp
+Don't assume /tmp exists.
+
+20101101T2147Z <gchicares@sbcglobal.net> [656]
+
+  account_value.hpp
+  stratified_charges.cpp
+Correct a statutory reference.
+
+20101101T2148Z <gchicares@sbcglobal.net> [656]
+
+  GNUmakefile
+  install_cygwin.bat [new file]
+  test_coding_rules.cpp
+Add a facility for installing Cygwin.
+
+20101101T2149Z <gchicares@sbcglobal.net> [656]
+
+  install_msw.sh
+Use a more appropriate default spreadsheet file extension.
+
+20101101T2204Z <gchicares@sbcglobal.net> [656]
+
+  install_msw.sh
+Prefer svn to cvs.
+
+20101102T0150Z <gchicares@sbcglobal.net> [656]
+
+  INSTALL
+  test_coding_rules.cpp
+Improve documentation.
+
+20101104T0037Z <gchicares@sbcglobal.net> [656]
+
+  install_cygwin.bat
+Do nothing if already installed.
+
+20101104T0049Z <gchicares@sbcglobal.net> [656]
+
+  INSTALL
+  install_cygwin.bat
+Move 'fstab' customization.
+
+20101104T0131Z <gchicares@sbcglobal.net> [656]
+
+  install_cygwin.bat
+  install_libxml2_libxslt.make
+  install_miscellanea.make
+  install_mpatrol.make
+  install_msw.sh
+  install_wx.make
+Share download cache across Cygwin versions.
+
+20101105T0251Z <gchicares@sbcglobal.net> [656]
+
+  install_msw.sh
+Accommodate 'mount' differences between Cygwin versions.
+
+20101105T0315Z <gchicares@sbcglobal.net> [656]
+
+  install_msw.sh
+Support parallel builds.
+
+20101203T1824Z <gchicares@sbcglobal.net> [656]
+
+  workhorse.make
+Exclude testdeck change log from system testing.
+
+20101204T1619Z <gchicares@sbcglobal.net> [656]
+
+  workhorse.make
+Handle missing testdecks more gracefully.
+
+20101213T2020Z <gchicares@sbcglobal.net> [656]
+
+  como_4_3_3.make [renamed to 'como.make']
+  install_como.sh [new file]
+  test_coding_rules.cpp
+Upgrade Comeau compiler from 4.3.3 (20040505) to 4.3.10.1 (current).
+The older version couldn't handle the SFINAE code in 'contains.hpp'.
+
+20101214T0153Z <gchicares@sbcglobal.net> [656]
+
+  alert.cpp
+  any_member.hpp
+  callback.hpp
+  ieee754.hpp
+  math_functors.hpp
+  mc_enum.hpp
+  multidimgrid_safe.hpp
+  mvc_controller.tpp
+  numeric_io_cast.hpp
+  numeric_io_traits.hpp
+  round_to.hpp
+  safely_dereference_as.hpp
+  stream_cast.hpp
+  tn_range.hpp
+  tn_range_type_trammels.hpp
+  value_cast.hpp
+  view_ex.tpp
+  wx_utility.hpp
+  xml_serializable.tpp
+Include boost headers less promiscuously. The latest version of Comeau
+rejects 'type_with_alignment.hpp'; lmi has no need of it, but it was
+haphazardly included by 'type_traits.hpp'.
+
+20101214T2039Z <gchicares@sbcglobal.net> [656]
+
+  about_dialog.hpp
+  account_value.hpp
+  actuarial_table.hpp
+  any_member.hpp
+  authenticity.hpp
+  basic_values.hpp
+  callback.hpp
+  census_document.hpp
+  census_view.hpp
+  commutation_functions.hpp
+  configurable_settings.hpp
+  database.hpp
+  database_view.hpp
+  dbdict.hpp
+  death_benefits.hpp
+  docmanager_ex.hpp
+  docmdichildframe_ex.hpp
+  fenv_guard.hpp
+  file_command.hpp
+  fund_data.hpp
+  global_settings.hpp
+  icon_monger.hpp
+  ihs_irc7702.hpp
+  illustration_document.hpp
+  illustration_view.hpp
+  input_sequence.hpp
+  ledger_text_formats.cpp
+  ledgervalues.hpp
+  loads_impl.hpp
+  main_wx.hpp
+  mec_document.hpp
+  mec_view.hpp
+  mec_xml_document.hpp
+  msw_workarounds.hpp
+  multidimgrid_any.cpp
+  multidimgrid_any.hpp
+  multidimgrid_tools.hpp
+  multiple_cell_document.hpp
+  mvc_controller.hpp
+  name_value_pairs.hpp
+  null_stream.cpp
+  outlay.hpp
+  policy_view.hpp
+  product_data.hpp
+  product_editor.hpp
+  progress_meter.hpp
+  rounding_rules.hpp
+  rounding_view.hpp
+  single_cell_document.hpp
+  test_coding_rules.cpp
+  text_view.hpp
+  tier_view.hpp
+  timer.hpp
+  transferor.hpp
+  uncopyable_lmi.hpp [new file]
+  view_ex.hpp
+  xml_lmi.hpp
+  yare_input.hpp
+Include boost headers less promiscuously. The latest version of Comeau
+rejects 'base_from_member.hpp'; lmi has no need of it, but it was
+haphazardly included by 'utility.hpp'.
+
+20101216T1259Z <gchicares@sbcglobal.net> [656]
+
+  about_dialog.hpp
+  account_value.hpp
+  actuarial_table.hpp
+  any_member.hpp
+  authenticity.hpp
+  basic_values.hpp
+  callback.hpp
+  census_document.hpp
+  census_view.hpp
+  commutation_functions.hpp
+  configurable_settings.hpp
+  database.hpp
+  database_view.hpp
+  dbdict.hpp
+  death_benefits.hpp
+  docmanager_ex.hpp
+  docmdichildframe_ex.hpp
+  fenv_guard.hpp
+  file_command.hpp
+  fund_data.hpp
+  global_settings.hpp
+  icon_monger.hpp
+  ihs_irc7702.hpp
+  illustration_document.hpp
+  illustration_view.hpp
+  input_sequence.hpp
+  ledger_text_formats.cpp
+  ledgervalues.hpp
+  loads_impl.hpp
+  main_wx.hpp
+  mec_document.hpp
+  mec_view.hpp
+  mec_xml_document.hpp
+  msw_workarounds.hpp
+  multidimgrid_any.cpp
+  multidimgrid_any.hpp
+  multidimgrid_tools.hpp
+  multiple_cell_document.hpp
+  mvc_controller.hpp
+  name_value_pairs.hpp
+  null_stream.cpp
+  outlay.hpp
+  policy_view.hpp
+  product_data.hpp
+  product_editor.hpp
+  progress_meter.hpp
+  rounding_rules.hpp
+  rounding_view.hpp
+  single_cell_document.hpp
+  test_coding_rules.cpp
+  text_view.hpp
+  tier_view.hpp
+  timer.hpp
+  transferor.hpp
+  uncopyable_lmi.hpp
+  view_ex.hpp
+  xml_lmi.hpp
+  yare_input.hpp
+Improve class uncopyable.
+
+20101217T0111Z <gchicares@sbcglobal.net> [656]
+
+  bcc_5_5_1.make
+  name_value_pairs_test.cpp
+Resolve unit-test build issues with an ancient compiler.
+
+20101218T1707Z <gchicares@sbcglobal.net> [656]
+
+  math_functors.hpp
+  objects.make
+Resolve defects identified with Comeau.
+
+20101218T1708Z <gchicares@sbcglobal.net> [656]
+
+  ncnnnpnn.hpp
+Remove a feckless workaround.
+
+20101218T1709Z <gchicares@sbcglobal.net> [655]
+
+  ncnnnpnn_test.cpp
+Improve diagnosis of failing tests and treatment of borland issues.
+
+20101220T2313Z <gchicares@sbcglobal.net> [655]
+
+  getopt.cpp
+  getopt.hpp
+  getopt_test.cpp
+Remove a defunct URL.
+
+20101220T2355Z <gchicares@sbcglobal.net> [654]
+
+  getopt.cpp
+  getopt_test.cpp
+Resolve an ancient defect.
+
+20101222T0416Z <gchicares@sbcglobal.net> [654]
+
+  name_value_pairs.hpp
+  wx_utility.cpp
+  yare_input.cpp
+Resolve issues discovered with libstdc++ debug mode.
+

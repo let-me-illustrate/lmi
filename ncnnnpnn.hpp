@@ -71,7 +71,6 @@ inline std::string ncnnnpnn(long double value)
 
     switch(z % 3)
         {
-        throw "Unreachable--silences a compiler diagnostic.";
                 do
                     {
                     if('.' == *sin_it) break;

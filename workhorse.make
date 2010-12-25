@@ -1074,22 +1074,45 @@ sample.policy:
 
 # Test data.
 
-sample.cns: $(addprefix $(src_dir)/,sample.cns)
-sample.ill: $(addprefix $(src_dir)/,sample.ill)
-
 test_data := \
   sample.cns \
   sample.ill \
 
 $(test_data):
-	@$(CP) --preserve --update $(addprefix $(src_dir)/,$@) .
+	@$(CP) --preserve --update $(src_dir)/$@ .
+
+################################################################################
+
+# Configurable settings.
+
+# If this file:
+#   /etc/opt/lmi/configurable_settings.xml
+# exists, it overrides files with the same name in other directories.
+# Developers may have reason to prefer that it not exist; therefore,
+# local copies are provided for as needed.
+
+configurable_settings.xml:
+	@$(CP) --preserve --update $(bin_dir)/$@ .
+
+$(data_dir)/configurable_settings.xml:
+	@$(CP) --preserve --update $(bin_dir)/$(notdir $@) $(data_dir)/.
 
 ################################################################################
 
 # Unit tests.
 
+# Use '--jobs=1' to force tests to run in series: running them in
+# parallel would scramble their output.
+#
+# Ignore the "disabling jobserver mode" warning.
+
 .PHONY: unit_tests
-unit_tests: $(test_data) $(unit_test_targets) run_unit_tests
+unit_tests: $(test_data)
+	@-$(MAKE) --file=$(this_makefile) build_unit_tests
+	@ $(MAKE) --file=$(this_makefile) --jobs=1 run_unit_tests
+
+.PHONY: build_unit_tests
+build_unit_tests: configurable_settings.xml $(unit_test_targets)
 
 .PHONY: unit_tests_not_built
 unit_tests_not_built:
@@ -1124,8 +1147,18 @@ mpatrol.log:
 
 # Test command-line interface.
 
+cli_subtargets := cli_tests_init cli_selftest $(addprefix cli_test-,$(test_data))
+
+$(cli_subtargets): $(data_dir)/configurable_settings.xml
+
+# Use '--jobs=1' to force tests to run in series: running them in
+# parallel would scramble their output.
+#
+# Ignore the "disabling jobserver mode" warning.
+
 .PHONY: cli_tests
-cli_tests: cli_tests_init cli_selftest $(addprefix cli_test-,$(test_data))
+cli_tests: $(test_data) antediluvian_cli$(EXEEXT) lmi_cli_shared$(EXEEXT)
+	@$(MAKE) --file=$(this_makefile) --jobs=1 $(cli_subtargets)
 
 .PHONY: cli_tests_init
 cli_tests_init:
@@ -1137,32 +1170,29 @@ cli_tests_init:
 self_test_options := --accept --data_path=$(data_dir) --selftest
 
 .PHONY: cli_selftest
-cli_selftest: antediluvian_cli$(EXEEXT) lmi_cli_shared$(EXEEXT)
+cli_selftest:
 	@./antediluvian_cli$(EXEEXT) $(self_test_options) > /dev/null
 	@./antediluvian_cli$(EXEEXT) $(self_test_options)
 	@./lmi_cli_shared$(EXEEXT) $(self_test_options) > /dev/null
 	@./lmi_cli_shared$(EXEEXT) $(self_test_options)
 
-cli_test-sample.ill: file_option := --illfile
-cli_test-sample.cns: file_option := --cnsfile
-
 cli_test-sample.ill: special_emission :=
 cli_test-sample.cns: special_emission := emit_composite_only
 
 .PHONY: cli_test-%
-cli_test-%: $(test_data) lmi_cli_shared$(EXEEXT)
+cli_test-%:
 	@$(ECHO) Test $*:
 	@./lmi_cli_shared$(EXEEXT) \
 	  --accept \
 	  --data_path=$(data_dir) \
 	  --emit=$(special_emission),emit_text_stream,emit_quietly,emit_timings \
-	  $(file_option)=$* \
+	  --file=$* \
 	  | $(SED) -e '/milliseconds/!d'
 	@./lmi_cli_shared$(EXEEXT) \
 	  --accept \
 	  --data_path=$(data_dir) \
 	  --emit=$(special_emission),emit_text_stream,emit_quietly \
-	  $(file_option)=$* \
+	  --file=$* \
 	  >$*.touchstone
 	@<$*.touchstone \
 	  $(DIFF) \
@@ -1182,7 +1212,7 @@ cli_test-%: $(test_data) lmi_cli_shared$(EXEEXT)
 # problem caused by MSYS.
 
 .PHONY: cgi_tests
-cgi_tests: $(test_data) antediluvian_cgi$(EXEEXT)
+cgi_tests: $(test_data) configurable_settings.xml antediluvian_cgi$(EXEEXT)
 	@$(ECHO) Test common gateway interface:
 	@./antediluvian_cgi$(EXEEXT) --write_content_string > /dev/null
 	@./antediluvian_cgi$(EXEEXT) --enable_test <cgi.test.in >cgi.touchstone
@@ -1211,34 +1241,85 @@ cgi_tests: $(test_data) antediluvian_cgi$(EXEEXT)
 # shown that the discrepancies thus ignored are never material, but
 # larger discrepancies may be.
 
-test_result_suffixes     := test test0 monthly_trace.* mec.xml
+touchstone_md5sums := $(touchstone_dir)/md5sums
+
+touchstone_exclusions := $(touchstone_md5sums) $(touchstone_dir)/ChangeLog
+
+touchstone_files := \
+  $(filter-out $(touchstone_exclusions),$(wildcard $(touchstone_dir)/*))
+
+$(touchstone_md5sums): $(touchstone_files)
+	@cd $(touchstone_dir) && $(MD5SUM) $(notdir $^) > $@
+
+testdeck_suffixes    := cns ill ini mec
+test_result_suffixes := test test0 monthly_trace.* mec.tsv mec.xml
 
 system_test_analysis := $(test_dir)/analysis-$(yyyymmddhhmm)
 system_test_diffs    := $(test_dir)/diffs-$(yyyymmddhhmm)
 system_test_md5sums  := $(test_dir)/md5sums-$(yyyymmddhhmm)
 
+%.cns: test_emission := emit_quietly,emit_test_data
+%.ill: test_emission := emit_quietly,emit_test_data
+%.ini: test_emission := emit_quietly,emit_custom_0
+%.mec: test_emission := emit_quietly,emit_test_data
+
+dot_test_files =
+%.cns: dot_test_files = $(basename $(notdir $@)).*test
+%.ill: dot_test_files = $(basename $(notdir $@)).*test
+
+# This must be a 'make' variable so that the targets it contains can
+# be made PHONY.
+#
+# Use $(wildcard) here because its convenient 'nullglob' semantics are
+# not portably available in the bourne shell.
+#
+# In the 'system_test' target, sort its contents iff $(LS) supports
+# '--sort=size': parallel runs are slightly faster when the biggest
+# jobs are started first.
+
+testdecks := $(wildcard $(addprefix $(test_dir)/*., $(testdeck_suffixes)))
+
+# Naming the output files would be more natural, but that's infeasible
+# because $(test_emission) can be overridden implicitly in ways that a
+# makefile cannot readily discern.
+
+.PHONY: $(testdecks)
+$(testdecks):
+	@-$(bin_dir)/lmi_cli_shared$(EXEEXT) \
+	  --accept \
+	  --ash_nazg \
+	  --data_path=$(data_dir) \
+	  --emit=$(test_emission) \
+	  --pyx=system_testing \
+	  --file=$@
+	@$(MD5SUM) $(basename $(notdir $@)).* >> $(system_test_md5sums)
+	@for z in $(dot_test_files); \
+	  do \
+	    $(bin_dir)/ihs_crc_comp$(EXEEXT) $$z $(touchstone_dir)/$$z \
+	    | $(SED) -e ';/Summary.*max rel err/!d' -e "s/^ /$$z/" \
+	    >> $(system_test_analysis); \
+	  done
+
 .PHONY: system_test
-system_test: install
+system_test: $(data_dir)/configurable_settings.xml $(touchstone_md5sums) install
 	@$(ECHO) System test:
-	@-cd $(test_dir); \
-	  $(foreach z, $(addprefix *., $(test_result_suffixes)), $(RM) --force $z;)
-	@cd $(test_dir); \
-	  $(bin_dir)/lmi_cli_shared$(EXEEXT) \
-	    --ash_nazg --accept --regress \
-	    --data_path=$(data_dir) \
-	    --test_path=$(test_dir); \
-	  $(MD5SUM) \
-	    $(addprefix *.,$(test_result_suffixes)) \
-	    >$(system_test_md5sums); \
-	  for z in *.test; \
-	    do \
-	      $(bin_dir)/ihs_crc_comp$(EXEEXT) $$z $(touchstone_dir)/$$z \
-	      | $(SED) -e ';/Summary.*max rel err/!d' -e "s/^ /$$z/"; \
-	    done > $(system_test_analysis);
+	@$(RM) --force $(addprefix $(test_dir)/*., $(test_result_suffixes))
+	@[ "$(strip $(testdecks))" != "" ] || ( $(ECHO) No testdecks. && false )
+	@testdecks=`$(LS) --sort=size $(testdecks) || $(ECHO) $(testdecks)` \
+	  && $(MAKE) --file=$(this_makefile) --directory=$(test_dir) $$testdecks
+	@$(SORT) --key=2 $(system_test_md5sums) --output=$(system_test_md5sums)
+	@$(SORT) $(system_test_analysis) --output=$(system_test_analysis)
 	@-< $(system_test_analysis) $(SED) \
 	  -e ';/rel err.*e-0*1[5-9]/d' \
 	  -e ';/abs.*0\.00.*rel/d' \
 	  -e ';/abs diff: 0 /d'
+	@$(DIFF) --brief $(system_test_md5sums) $(touchstone_md5sums) \
+	  && $(ECHO) "All `<$(touchstone_md5sums) $(WC) -l` files match." \
+	  || $(MAKE) --file=$(this_makefile) system_test_discrepancies
+
+.PHONY: system_test_discrepancies
+system_test_discrepancies:
+	@$(ECHO) "*** System test failed ***"
 	@-$(DIFF) \
 	    --brief \
 	    --report-identical-files \
@@ -1246,32 +1327,28 @@ system_test: install
 	    $(touchstone_dir) \
 	    > $(system_test_diffs) \
 	  || true
-	@$(ECHO) Summarizing test results
 	@-<$(system_test_diffs) \
 	  $(SED) \
 	    -e ';/^Only in/d' \
 	  | $(WC) -l \
-	  | $(SED) -e 's/^/  /' \
-	  | $(SED) -e 's/$$/ system-test files compared/'
+	  | $(SED) -e 's/^\(.*\)$$/  \1 system-test files compared/'
 	@-<$(system_test_diffs) \
 	  $(SED) \
 	    -e ';/^Files.*are identical$$/!d' \
 	  | $(WC) -l \
-	  | $(SED) -e 's/^/  /' \
-	  | $(SED) -e 's/$$/ system-test files match/'
+	  | $(SED) -e 's/^\(.*\)$$/  \1 system-test files match/'
 	@-<$(system_test_diffs) \
 	  $(SED) \
 	    -e ';/^Files.*are identical$$/d' \
-	    -e ';/^Only in /d' \
+	    -e ';/^Only in/d' \
 	  | $(WC) -l \
-	  | $(SED) -e 's/^/  /' \
-	  | $(SED) -e 's/$$/ system-test nonmatching files/'
+	  | $(SED) -e 's/^\(.*\)$$/  \1 system-test files differ/'
 	@-<$(system_test_diffs) \
 	  $(SED) \
-	    -e ';/^Only in.*test\/touchstone/!d' \
+	    -e ';/^Only in.*touchstone:/!d' \
+	    -e ';/md5sums$$/d' \
 	  | $(WC) -l \
-	  | $(SED) -e 's/^/  /' \
-	  | $(SED) -e 's/$$/ system-test missing files/'
+	  | $(SED) -e 's/^\(.*\)$$/  \1 system-test files missing/'
 	@$(ECHO) ...system test completed.
 
 ################################################################################

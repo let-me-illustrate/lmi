@@ -26,7 +26,7 @@
 
 #include "config.hpp"
 
-#include <boost/utility.hpp>
+#include "uncopyable_lmi.hpp"
 
 #include <wx/artprov.h>
 
@@ -37,8 +37,8 @@
 /// Icon provider for wx interface.
 
 class icon_monger
-    :public wxArtProvider
-    ,private boost::noncopyable
+    :public  wxArtProvider
+    ,private lmi::uncopyable<icon_monger>
 {
   public:
     icon_monger();

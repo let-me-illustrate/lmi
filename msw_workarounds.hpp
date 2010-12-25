@@ -27,8 +27,7 @@
 #include "config.hpp"
 
 #include "obstruct_slicing.hpp"
-
-#include <boost/utility.hpp>
+#include "uncopyable_lmi.hpp"
 
 #include <deque>
 #include <string>
@@ -51,7 +50,7 @@
 /// in order to let this reversal be expressed more cleanly.
 
 class MswDllPreloader
-    :private boost::noncopyable
+    :        private lmi::uncopyable <MswDllPreloader>
     ,virtual private obstruct_slicing<MswDllPreloader>
 {
   public:

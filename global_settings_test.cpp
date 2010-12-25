@@ -54,13 +54,6 @@ void test_directory_exceptions()
         ,""
         );
 
-    // "Regression-test directory must not be empty."
-    BOOST_TEST_THROW
-        (global_settings::instance().set_regression_test_directory("")
-        ,std::runtime_error
-        ,""
-        );
-
     // Such string values must be validly-formed paths.
 
     BOOST_TEST_THROW

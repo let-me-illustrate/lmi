@@ -45,6 +45,7 @@
 /not remade because of errors\./d
 /^These files are more recent than/d
 /Built [0-9].*T[0-9].*Z\.$/d
+/^make.*\[[0-9]*\]: warning: -jN forced in submake: disabling jobserver mode.$/d
 /^make.*\[[0-9]*\]: \*\*\* \[.*\] Error [0-9]*$/d
 /^make.*\[[0-9]*\]: \[.*\] Error [0-9]* (ignored)$/d
   # Delete expected output from gnu cpp.
@@ -78,18 +79,6 @@
 /^[^ ]*bcc_ld --accept/d
 /^Turbo Incremental Link/d
 /^\\[/A-Za-z0-9_]*.cpp:$/d
-  # Delete expected output from regression test.
-/^Regression testing:.*\.\(cns\|ill\|ini\|mec\)$/d
-/^Initializing all cells\.*$/d
-/^curr charges and genacct int, full sepacct int\.*$/d
-/^guar charges and genacct int, full sepacct int\.*$/d
-/^mdpt charges and genacct int, no sepacct\.*$/d
-/^curr charges and genacct int, zero sepacct int\.*$/d
-/^guar charges and genacct int, zero sepacct int\.*$/d
-/^curr charges and genacct int, half sepacct int\.*$/d
-/^guar charges and genacct int, half sepacct int\.*$/d
-/^Calculating all cells\.*$/d
-/^no errors detected/d
   # Delete multiple blank lines.
 /./,/^$/!d
 

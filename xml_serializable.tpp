@@ -36,7 +36,7 @@
 #include "xml_lmi.hpp"
 
 #include <boost/static_assert.hpp>
-#include <boost/type_traits.hpp>
+#include <boost/type_traits/is_base_and_derived.hpp>
 
 #include <xmlwrapp/nodes_view.h>
 

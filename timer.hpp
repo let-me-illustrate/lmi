@@ -27,6 +27,7 @@
 #include "config.hpp"
 
 #include "so_attributes.hpp"
+#include "uncopyable_lmi.hpp"
 
 #if defined LMI_POSIX
 #   include <sys/time.h> // gettimeofday()
@@ -48,8 +49,6 @@
 #   include <ctime>
     typedef std::clock_t elapsed_t;
 #endif // Unknown platform.
-
-#include <boost/utility.hpp>
 
 #include <iomanip>
 #include <ios>
@@ -75,7 +74,7 @@
 /// elapsed_msec_str(), elapsed_usec(), stop(), restart(): nomen est omen.
 
 class LMI_SO Timer
-    :private boost::noncopyable
+    :private lmi::uncopyable<Timer>
 {
     friend class TimerTest;
     template<typename F> friend class AliquotTimer;

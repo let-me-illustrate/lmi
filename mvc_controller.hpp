@@ -27,8 +27,7 @@
 #include "config.hpp"
 
 #include "obstruct_slicing.hpp"
-
-#include <boost/utility.hpp>
+#include "uncopyable_lmi.hpp"
 
 #include <wx/bookctrl.h> // wxBookCtrlBase, wxBookCtrlBaseEvent
 #include <wx/dialog.h>
@@ -409,8 +408,8 @@ namespace model_view_controller{} // doxygen workaround.
 /// Controller.
 
 class MvcController
-    :public wxDialog
-    ,private boost::noncopyable
+    :        public  wxDialog
+    ,        private lmi::uncopyable <MvcController>
     ,virtual private obstruct_slicing<MvcController>
 {
     friend class MvcTest;

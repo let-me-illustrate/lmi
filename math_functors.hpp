@@ -28,7 +28,7 @@
 
 #if !defined __BORLANDC__
 #   include <boost/static_assert.hpp>
-#   include <boost/type_traits.hpp>
+#   include <boost/type_traits/is_float.hpp>
 #else  // Defined __BORLANDC__ .
 #   define BOOST_STATIC_ASSERT(deliberately_ignored) class IgNoRe
 #endif // Defined __BORLANDC__ .
@@ -39,6 +39,28 @@
 #include <algorithm>
 #include <functional>
 #include <stdexcept>
+
+// For Comeau, implement expm1l() and log1pl() using type double, not
+// long double, because of an apparent incompatibility in the way
+// Comeau and MinGW pass long doubles.
+
+#if !defined LMI_COMPILER_PROVIDES_EXPM1L
+#   if defined LMI_COMO_WITH_MINGW
+extern "C" double expm1(double);
+inline double expm1l(double x) {return expm1(x);}
+#   else  // !defined LMI_COMO_WITH_MINGW
+extern "C" long double expm1l(long double);
+#   endif // !defined LMI_COMO_WITH_MINGW
+#endif // !defined LMI_COMPILER_PROVIDES_EXPM1L
+
+#if !defined LMI_COMPILER_PROVIDES_LOG1PL
+#   if defined LMI_COMO_WITH_MINGW
+extern "C" double log1p(double);
+inline double log1pl(double x) {return log1p(x);}
+#   else  // !defined LMI_COMO_WITH_MINGW
+extern "C" long double log1pl(long double);
+#   endif // !defined LMI_COMO_WITH_MINGW
+#endif // !defined LMI_COMPILER_PROVIDES_LOG1PL
 
 // TODO ?? Write functors here for other refactorable uses of
 // std::pow() found throughout the program.

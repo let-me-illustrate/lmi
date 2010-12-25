@@ -36,8 +36,10 @@
 
 #include <wx/app.h>                     // wxTheApp
 #include <wx/bookctrl.h>
-#include <wx/clipbrd.h>
+// Include <wx/dataobj.h> before <wx/clipbrd.h> as explained here:
+//   http://lists.nongnu.org/archive/html/lmi/2010-12/msg00002.html
 #include <wx/dataobj.h>
+#include <wx/clipbrd.h>
 #include <wx/datetime.h>
 #include <wx/msgdlg.h>
 #include <wx/utils.h>                   // wxSafeYield()

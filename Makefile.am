@@ -753,6 +753,8 @@ test_name_value_pairs_SOURCES = \
   name_value_pairs.cpp \
   name_value_pairs_test.cpp
 test_name_value_pairs_CXXFLAGS = $(AM_CXXFLAGS)
+test_name_value_pairs_LDADD = \
+  $(BOOST_LIBS)
 
 test_ncnnnpnn_SOURCES = \
   $(common_test_objects) \

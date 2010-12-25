@@ -55,7 +55,6 @@ global_settings::global_settings()
     ,custom_io_0_               (false)
     ,regression_testing_        (false)
     ,data_directory_            (fs::system_complete("."))
-    ,regression_test_directory_ (fs::system_complete("."))
 {}
 
 global_settings::~global_settings()
@@ -112,12 +111,6 @@ void global_settings::set_data_directory(std::string const& s)
     data_directory_ = fs::system_complete(s);
 }
 
-void global_settings::set_regression_test_directory(std::string const& s)
-{
-    validate_directory(s, "Regression-test directory");
-    regression_test_directory_ = fs::system_complete(s);
-}
-
 bool global_settings::mellon() const
 {
     return mellon_;
@@ -146,10 +139,5 @@ bool global_settings::regression_testing() const
 fs::path const& global_settings::data_directory() const
 {
     return data_directory_;
-}
-
-fs::path const& global_settings::regression_test_directory() const
-{
-    return regression_test_directory_;
 }
 

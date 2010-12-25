@@ -28,8 +28,7 @@
 
 #include "input.hpp"
 #include "single_cell_document.hpp"
-
-#include <boost/utility.hpp>
+#include "uncopyable_lmi.hpp"
 
 #include <wx/docview.h>
 
@@ -50,8 +49,8 @@ class IllustrationView;
 class WXDLLIMPEXP_FWD_CORE wxHtmlWindow;
 
 class IllustrationDocument
-    :public wxDocument
-    ,private boost::noncopyable
+    :public  wxDocument
+    ,private lmi::uncopyable<IllustrationDocument>
 {
     friend class IllustrationView;
 

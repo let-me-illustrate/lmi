@@ -9,11 +9,8 @@
 //   (formatting, style, standardization) not so marked, to reduce
 //   clutter.)
 //
-// Get the original Latorre sources here:
-// http://groups.google.com/groups?selm=9502241613.AA06287%40moon.cpqd.br
-// http://www.geocrawler.com/archives/3/364/1995/2/0/2053420/
-// [Both URLs should work, but the second seemed to lack the full
-// contents when I revisited it later.]
+// Latorre's original is here:
+//   http://groups.google.com/groups?selm=9502241613.AA06287%40moon.cpqd.br
 //
 // This is a derived work. Any defect in it should not reflect on
 // the reputations of Douglas C. Schmidt or Vinicius J. Latorre.

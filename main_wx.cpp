@@ -1181,7 +1181,6 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
         {"mello"     ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
         {"pyx"       ,REQD_ARG ,0 ,'x' ,0 ,"for docimasy"},
         {"data_path" ,REQD_ARG ,0 ,'d' ,0 ,"path to data files"},
-        {"test_path" ,REQD_ARG ,0 ,'t' ,0 ,"path to test files"},
         {"print_db"  ,NO_ARG   ,0 ,'p' ,0 ,"print product databases"},
         {0           ,NO_ARG   ,0 ,0   ,0 ,""}
       };
@@ -1232,14 +1231,6 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
             case 'p':
                 {
                 print_databases();
-                }
-                break;
-
-            case 't':
-                {
-                global_settings::instance().set_regression_test_directory
-                    (getopt_long.optarg
-                    );
                 }
                 break;
 

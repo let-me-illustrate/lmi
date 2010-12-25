@@ -67,16 +67,16 @@
 #include "assert_lmi.hpp"
 #include "obstruct_slicing.hpp"
 #include "rtti_lmi.hpp"
+#include "uncopyable_lmi.hpp"
 #include "value_cast.hpp"
 
 #if !defined __BORLANDC__
 #   include <boost/static_assert.hpp>
-#   include <boost/type_traits.hpp>
+#   include <boost/type_traits/is_base_and_derived.hpp>
+#   include <boost/type_traits/is_same.hpp>
 #else  // defined __BORLANDC__
 #   define BOOST_STATIC_ASSERT(deliberately_ignored) class IgNoRe
 #endif // defined __BORLANDC__
-
-#include <boost/utility.hpp>
 
 #include <algorithm> // std::lower_bound(), std::swap()
 #include <map>
@@ -120,8 +120,8 @@ inline placeholder::~placeholder()
 
 template<typename ClassType, typename ValueType>
 class holder
-    :public placeholder
-    ,private boost::noncopyable
+    :public  placeholder
+    ,private lmi::uncopyable<holder<ClassType,ValueType> >
 {
     // Friendship is extended to class any_member only to support its
     // cast operations.
@@ -517,11 +517,9 @@ MemberType const* member_cast(any_member<ClassType> const& member)
 
 // Definition of class MemberSymbolTable.
 
-// By its nature, this class is Noncopyable: it holds a map of
+// By its nature, this class is uncopyable: it holds a map of
 // pointers to member, which need to be initialized instead of copied
-// when a derived class is copied. Its Noncopyability is implemented
-// natively: deriving from boost::noncopyable would prevent class C
-// from deriving from MemberSymbolTable<C> and boost::noncopyable.
+// when a derived class is copied.
 //
 // A do-nothing constructor is specified in order to prevent compilers
 // from warning of its absence. It's protected because this class
@@ -529,6 +527,7 @@ MemberType const* member_cast(any_member<ClassType> const& member)
 
 template<typename ClassType>
 class MemberSymbolTable
+    :private lmi::uncopyable<MemberSymbolTable<ClassType> >
 {
     typedef std::map<std::string, any_member<ClassType> > member_map_type;
     typedef typename member_map_type::value_type member_pair_type;
@@ -566,9 +565,6 @@ class MemberSymbolTable
 #endif // defined __BORLANDC__
 
   private:
-    MemberSymbolTable(MemberSymbolTable const&);
-    MemberSymbolTable& operator=(MemberSymbolTable const&);
-
     void complain_that_no_such_member_is_ascribed(std::string const&) const;
 
     member_map_type map_;

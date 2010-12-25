@@ -31,6 +31,9 @@
 #include "input.hpp"
 #include "miscellany.hpp" // each_equal()
 
+#include <boost/type_traits/is_enum.hpp>
+#include <boost/utility/enable_if.hpp>
+
 #include <numeric>        // std::accumulate()
 
 namespace
@@ -38,6 +41,7 @@ namespace
 template<typename T>
 std::vector<T> convert_vector_type
     (std::vector<mc_enum<T> > const& ve
+    ,typename boost::enable_if<boost::is_enum<T> >::type* = 0
     )
 {
     std::vector<T> z;

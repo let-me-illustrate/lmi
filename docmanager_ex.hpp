@@ -26,8 +26,9 @@
 
 #include "config.hpp"
 
+#include "uncopyable_lmi.hpp"
+
 #include <boost/scoped_ptr.hpp>
-#include <boost/utility.hpp>
 
 #include <wx/docview.h>
 
@@ -36,8 +37,8 @@ class WXDLLIMPEXP_FWD_CORE wxPageSetupDialogData;
 class WXDLLIMPEXP_FWD_CORE wxPrintData;
 
 class DocManagerEx
-    :public wxDocManager
-    ,private boost::noncopyable
+    :public  wxDocManager
+    ,private lmi::uncopyable<DocManagerEx>
 {
   public:
     explicit DocManagerEx

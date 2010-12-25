@@ -27,10 +27,10 @@
 #include "config.hpp"
 
 #include "obstruct_slicing.hpp"
-
-#include <boost/utility.hpp>
+#include "uncopyable_lmi.hpp"
 
 #include <map>
+#include <string>
 
 /// Design notes for class name_value_pairs.
 ///
@@ -85,7 +85,7 @@
 /// extra checks can easily be added if they become desirable.
 
 class name_value_pairs
-    :private boost::noncopyable
+    :        private lmi::uncopyable <name_value_pairs>
     ,virtual private obstruct_slicing<name_value_pairs>
 {
     friend int test_main(int, char*[]);

@@ -28,9 +28,9 @@
 
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
+#include "uncopyable_lmi.hpp"
 
 #include <boost/filesystem/path.hpp>
-#include <boost/utility.hpp>
 
 #include <string>
 
@@ -60,9 +60,6 @@
 ///
 /// data_directory_: Path to data files.
 ///
-/// regression_test_directory_: Path for regression-testing input and
-/// output.
-///
 /// Directory members, whose names end in 'directory_', are stored as
 /// filesystem path objects because that is their nature. They are
 /// accessed as such in order to make misuse more difficult. But they
@@ -71,7 +68,7 @@
 /// functions to validate their arguments.
 
 class LMI_SO global_settings
-    :private boost::noncopyable
+    :        private lmi::uncopyable <global_settings>
     ,virtual private obstruct_slicing<global_settings>
 {
   public:
@@ -83,7 +80,6 @@ class LMI_SO global_settings
     void set_custom_io_0              (bool);
     void set_regression_testing       (bool);
     void set_data_directory           (std::string const&);
-    void set_regression_test_directory(std::string const&);
 
     bool               mellon                   () const;
     bool               ash_nazg                 () const;
@@ -91,7 +87,6 @@ class LMI_SO global_settings
     bool               custom_io_0              () const;
     bool               regression_testing       () const;
     fs::path const&    data_directory           () const;
-    fs::path const&    regression_test_directory() const;
 
   private:
     global_settings();
@@ -102,7 +97,6 @@ class LMI_SO global_settings
     bool custom_io_0_;
     bool regression_testing_;
     fs::path data_directory_;
-    fs::path regression_test_directory_;
 
 #ifdef __BORLANDC__
 // COMPILER !! Borland compilers defectively [11/5] require a public dtor; see:

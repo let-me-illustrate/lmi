@@ -31,7 +31,7 @@ mingw_dir     := /MinGW_
 
 prefix        := /opt/lmi/local
 
-cache_dir     := /tmp/lmi_cache
+cache_dir     := /cache_for_lmi/downloads
 
 wx_dir        := /opt/lmi/wx-scratch
 

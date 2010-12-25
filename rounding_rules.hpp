@@ -31,9 +31,8 @@
 #include "mc_enum_types.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
+#include "uncopyable_lmi.hpp"
 #include "xml_serializable.hpp"
-
-#include <boost/utility.hpp>
 
 #include <string>
 
@@ -92,7 +91,7 @@ class rounding_parameters
 /// The 7702 and 7702A interest rate must be rounded up, if at all.
 
 class LMI_SO rounding_rules
-    :        private boost::noncopyable
+    :        private lmi::uncopyable   <rounding_rules>
     ,virtual private obstruct_slicing  <rounding_rules>
     ,        public  xml_serializable  <rounding_rules>
     ,        public  MemberSymbolTable <rounding_rules>

@@ -1,4 +1,4 @@
-# Limited support for a particular non-free compiler under msw only.
+# Limited support for Comeau C++ 4.3.x under msw only.
 
 # Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
 #
@@ -21,21 +21,13 @@
 
 # $Id$
 
-# Limited workarounds for Comeau C++ version 4.3.3, using gcc as the
-# underlying C compiler, with a Cygwin shell. Comeau C++ is useful
+# Limited support for Comeau C++ version 4.3.10.1, using MinGW gcc as
+# the underlying C compiler, with a Cygwin shell. Comeau C++ is useful
 # because it conforms to the standard in some ways that gcc does not,
-# so using it at least for unit tests may reveal defects not found
-# with gcc alone.
+# so it may reveal defects not found with gcc alone.
 
-# SOMEDAY !! Address these shortcomings:
-#
-# Comeau C++ builds are not idempotent. This command
-#   make -f como_4_3_3.make unit_tests
-# succeeds when the build directory is empty, but reissuing exactly
-# the same command produces linker errors.
-#
-# Apparently those errors are due to template-instantiation conflicts.
-# Untested ideas:
+# SOMEDAY !! Errors may arise from template-instantiation conflicts,
+# e.g., when many targets are built in the same directory. Ideas:
 #  - use '-T'
 #  - routinely delete '.ii' files
 #  - use a monolithic library for all code shared by unit tests
@@ -53,26 +45,21 @@ prefix       := /opt/lmi
 exec_prefix  := $(prefix)
 lmi_bin_dir  := $(exec_prefix)/bin
 
-system_root  := /cygdrive/c
-msw_root     := c:
-
-como_dir     := $(system_root)/como433
+como_dir     := $(prefix)/como
 como_bin_dir := $(como_dir)/bin
 
-# Comeau C++ requires an underlying C compiler. On msw, with gcc as
-# the underlying compiler, it needs MinGW gcc-2.95.3-5; other versions
-# or other msw ports of gcc won't do. Comeau's website mentions both
-# gcc-2.95.3-5 and gcc-2.95.3-6, but the latter doesn't exist.
+# Comeau C++ requires an underlying C compiler--here, a particular
+# version of MinGW gcc-2.95.3-5, as discussed in 'install_como.sh'.
 
-mingw_gcc2   := mingw-2.95.3-5
+mingw_gcc2   := mingw_for_como
 
-gcc2_dir     := $(system_root)/$(mingw_gcc2)
+gcc2_dir     := $(como_dir)/$(mingw_gcc2)
 gcc2_bin_dir := $(gcc2_dir)/bin
 
-# Comeau C++ for msw requires $COMO_MIN_INCLUDE to contain an msw path
-# to the underlying C compiler's include directory.
+# Comeau C++ for msw requires $COMO_MIN_INCLUDE to specify the
+# underlying C compiler's include directory.
 
-gcc2_inc_dir := $(msw_root)/$(mingw_gcc2)/include
+gcc2_inc_dir := $(gcc2_dir)/include
 
 # Use gcc-3.x for autodependencies and physical-closure testing.
 
@@ -97,9 +84,10 @@ gcc3_bin_dir := $(gcc3_dir)/bin
 # Comeau C++ for msw requires both its own bin/ directory and the
 # underlying C compiler's bin/ directory to be on the path. They must
 # precede Cygwin's system directories because Cygwin puts its own gcc
-# in /usr/bin/ . Comeau C++ requires an msw build of gcc-2.x that
+# in /usr/bin/ . Comeau C++ suggests a MinGW gcc-2.95.3 tarball that
 # unfortunately comes bundled with its own obsolete 'make', which must
-# be removed or renamed to keep it from clashing with Cygwin's 'make'.
+# be removed or renamed to keep it from clashing with Cygwin's 'make'
+# (though this doesn't matter if 'install_como.sh' is used).
 
 insidious_make := $(gcc2_bin_dir)/make.exe
 
@@ -132,7 +120,7 @@ CXX_EXTRA_WARNINGS :=
 # useful for choosing diagnostics to suppress for code that is not
 # 'strictly conforming'.
 #
-# Diagnostic 161: unrecognized pragma: frequent in wx.
+# Diagnostic 161: unrecognized pragma: occurs frequently in wx.
 #
 # Diagnostic 654: supposed 'declspec' incompatibility: there seems to
 # be no way to avoid such a warning here:
@@ -207,13 +195,12 @@ GNU_CXX := $(gcc3_bin_dir)/g++
 MAKEDEPEND_FLAGS   :=
 MAKEDEPEND_COMMAND := MAKEDEPEND_NON_GCC_COMMAND
 
-# This dummy target prevents this makefile from being the default
-# target. It mustn't be PHONY.
-all:
+MAKECMDGOALS ?= lmi_cli_monolithic.exe
+
+# Default target.
+$(MAKECMDGOALS):
 
 como_4_3_3.make:: ;
-
-MAKECMDGOALS ?= lmi_cli_monolithic.exe
 
 # SOMEDAY !! Comeau C++ should have its own wrapper. For now, the
 # borland wrapper works.
@@ -227,12 +214,17 @@ CXX := \
 # msw path to the underlying C compiler's include directory to be
 # given in another environment variable. Specify environment changes
 # explicitly here, before invoking $(MAKE).
+#
+# Use '--jobs=1' to prevent 'make' parallelism, which appears to be
+# incompatible with Comeau C++. Ignore any "disabling jobserver mode"
+# warning that this engenders.
 
 %: force
 	@export PATH=$(como_bin_dir):$(gcc2_bin_dir):$$PATH; \
 	export COMO_MIN_INCLUDE=$(gcc2_inc_dir); \
 	$(MAKE) \
-	  -f $(src_dir)/GNUmakefile \
+	  --file=$(src_dir)/GNUmakefile \
+	  --jobs=1 \
 	                        gcc_version='$(gcc_version)' \
 	                            src_dir='$(src_dir)' \
 	                            toolset='$(toolset)' \

@@ -31,8 +31,7 @@
 #include "mc_enum_type_enums.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
-
-#include <boost/utility.hpp>
+#include "uncopyable_lmi.hpp"
 
 #include <string>
 #include <vector>
@@ -43,7 +42,7 @@ class yare_input;
 /// Database of product parameters.
 
 class LMI_SO product_database
-    :private boost::noncopyable
+    :        private lmi::uncopyable <product_database>
     ,virtual private obstruct_slicing<product_database>
 {
     friend class input_test;

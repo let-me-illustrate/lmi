@@ -37,8 +37,7 @@
 #include "config.hpp"
 
 #include "obstruct_slicing.hpp"
-
-#include <boost/utility.hpp>
+#include "uncopyable_lmi.hpp"
 
 #include <wx/app.h>
 #include <wx/timer.h>
@@ -53,8 +52,8 @@ class WXDLLIMPEXP_FWD_CORE wxMDIChildFrame;
 class WXDLLIMPEXP_FWD_CORE wxMenuBar;
 
 class Skeleton
-    :public wxApp
-    ,private boost::noncopyable
+    :        public  wxApp
+    ,        private lmi::uncopyable <Skeleton>
     ,virtual private obstruct_slicing<Skeleton>
 {
   public:

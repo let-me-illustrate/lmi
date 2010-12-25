@@ -28,16 +28,15 @@
 
 #include "input.hpp"
 #include "multiple_cell_document.hpp"
-
-#include <boost/utility.hpp>
+#include "uncopyable_lmi.hpp"
 
 #include <wx/docview.h>
 
 class WXDLLIMPEXP_FWD_CORE wxListView;
 
 class CensusDocument
-    :public wxDocument
-    ,private boost::noncopyable
+    :public  wxDocument
+    ,private lmi::uncopyable<CensusDocument>
 {
     friend class CensusView;
 

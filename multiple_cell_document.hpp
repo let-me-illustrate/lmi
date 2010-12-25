@@ -29,16 +29,15 @@
 #include "input.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
+#include "uncopyable_lmi.hpp"
 #include "xml_lmi_fwd.hpp"
-
-#include <boost/utility.hpp>
 
 #include <iosfwd>
 #include <string>
 #include <vector>
 
 class LMI_SO multiple_cell_document
-    :private boost::noncopyable
+    :        private lmi::uncopyable <multiple_cell_document>
     ,virtual private obstruct_slicing<multiple_cell_document>
 {
 // TODO ?? Avoid long-distance friendship...in single-cell class, too.

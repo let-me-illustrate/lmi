@@ -29,9 +29,9 @@
 #include "basic_values.hpp"
 #include "oecumenic_enumerations.hpp"
 #include "so_attributes.hpp"
+#include "uncopyable_lmi.hpp"
 
 #include <boost/shared_ptr.hpp>
-#include <boost/utility.hpp>
 
 #include <iosfwd>
 #include <fstream>
@@ -51,7 +51,7 @@ class LedgerVariant;
 
 class LMI_SO AccountValue
     :protected BasicValues
-    ,virtual private boost::noncopyable
+    ,private   lmi::uncopyable<AccountValue>
 {
     friend class SolveHelper;
     friend class run_census_in_parallel;
@@ -314,7 +314,7 @@ class LMI_SO AccountValue
     // reduce the premium below the threshold, so it's useful only as
     // a hint. Premium exempt from premium tax (e.g. internal 1035
     // exchanges when the database makes them so exempt) is excluded.
-    // SOMEDAY !! Expunge this because SD 10-4-22(2) repealed it.
+    // SOMEDAY !! Expunge this because SD 10-44-2(2) repealed it.
     double TaxableFirstYearPlannedPremium() const;
 
     // Detailed monthly trace.

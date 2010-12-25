@@ -28,15 +28,14 @@
 
 #include "mc_enum_type_enums.hpp"
 #include "obstruct_slicing.hpp"
-
-#include <boost/utility.hpp>
+#include "uncopyable_lmi.hpp"
 
 #include <vector>
 
 class yare_input;
 
 class modal_outlay
-    :private boost::noncopyable
+    :        private lmi::uncopyable <modal_outlay>
     ,virtual private obstruct_slicing<modal_outlay>
 {
     friend class AccountValue;

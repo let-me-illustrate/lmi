@@ -31,10 +31,10 @@
 #include "oecumenic_enumerations.hpp"
 #include "round_to.hpp"
 #include "so_attributes.hpp"
+#include "uncopyable_lmi.hpp"
 #include "yare_input.hpp"
 
 #include <boost/shared_ptr.hpp>
-#include <boost/utility.hpp>
 
 #include <string>
 #include <vector>
@@ -80,7 +80,7 @@ enum EBlend
     };
 
 class LMI_SO BasicValues
-    :virtual private boost::noncopyable
+    :private lmi::uncopyable<BasicValues>
 {
   public:
     BasicValues(Input const& input);

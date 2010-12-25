@@ -27,8 +27,7 @@
 #include "config.hpp"
 
 #include "obstruct_slicing.hpp"
-
-#include <boost/utility.hpp>
+#include "uncopyable_lmi.hpp"
 
 #include <iosfwd>
 #include <string>
@@ -132,7 +131,7 @@ enum e_actuarial_table_method
 /// compatibility.
 
 class actuarial_table
-    :private boost::noncopyable
+    :        private lmi::uncopyable <actuarial_table>
     ,virtual private obstruct_slicing<actuarial_table>
 {
   public:

@@ -29,8 +29,7 @@
 #include "calendar_date.hpp"
 #include "mc_enum_type_enums.hpp"
 #include "obstruct_slicing.hpp"
-
-#include <boost/utility.hpp>
+#include "uncopyable_lmi.hpp"
 
 #include <string>
 #include <vector>
@@ -56,7 +55,7 @@ class Input;
 /// (mc_enum and tn_range classes) designed for interactive input.
 
 class yare_input
-    :private boost::noncopyable
+    :        private lmi::uncopyable <yare_input>
     ,virtual private obstruct_slicing<yare_input>
 {
   public:

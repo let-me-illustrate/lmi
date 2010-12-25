@@ -34,7 +34,7 @@
 
 #include "config.hpp"
 
-#include <boost/utility.hpp>
+#include "uncopyable_lmi.hpp"
 
 #include <wx/validate.h>
 
@@ -105,7 +105,7 @@ enum transfer_direction
 ///
 /// The wx documentation says "All validator classes must implement the
 /// Clone function, which returns an identical copy of itself." The
-/// base class is Noncopyable, although it has a nonvirtual Copy()
+/// base class is uncopyable, although it has a nonvirtual Copy()
 /// function that it is apparently safe to ignore here.
 ///
 /// Boost coding guideline 15.5 warns that reference members preclude
@@ -116,8 +116,8 @@ enum transfer_direction
 /// overridden here to return true instead.
 
 class Transferor
-    :public wxValidator
-    ,private boost::noncopyable
+    :public  wxValidator
+    ,private lmi::uncopyable<Transferor>
 {
   public:
     Transferor(std::string& data, std::string const& name);
