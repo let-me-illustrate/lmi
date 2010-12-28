@@ -294,7 +294,7 @@ double stratified_charges::stratified_sepacct_load
                 +   tiered_curr_sepacct_load(assets, premium)
                 ;
             }
-            break;
+            // break;
         case mce_gen_guar:
             {
             return
@@ -302,7 +302,7 @@ double stratified_charges::stratified_sepacct_load
                 +   tiered_guar_sepacct_load(assets, premium)
                 ;
             }
-            break;
+            // break;
         case mce_gen_mdpt:
             {
             fatal_error()
@@ -369,12 +369,12 @@ double stratified_charges::tiered_m_and_e(mcenum_gen_basis basis, double assets)
             {
             return tiered_curr_m_and_e(assets);
             }
-            break;
+            // break;
         case mce_gen_guar:
             {
             return tiered_guar_m_and_e(assets);
             }
-            break;
+            // break;
         case mce_gen_mdpt:
             {
             fatal_error()

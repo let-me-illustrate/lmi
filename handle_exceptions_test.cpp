@@ -38,7 +38,6 @@ int test_main(int, char*[])
         {
         BOOST_TEST(true);
         throw std::runtime_error("  This message should appear on stderr.");
-        BOOST_TEST(false); // Shouldn't be reached.
         }
     catch(...)
         {

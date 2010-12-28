@@ -158,7 +158,7 @@ std::vector<double> actuarial_table::values_elaborated
             v.insert(v.begin(), delta, 0.0);
             return v;
             }
-            break;
+            // break;
         case e_reenter_upon_rate_reset:
             {
             int const age_setback_limit = issue_age - min_age_;
@@ -177,7 +177,7 @@ std::vector<double> actuarial_table::values_elaborated
                 }
             return v;
             }
-            break;
+            // break;
         case e_reenter_never: // Fall through.
         default:
             {
