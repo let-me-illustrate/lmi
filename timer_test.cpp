@@ -29,6 +29,7 @@
 #include "timer.hpp"
 
 #include "contains.hpp"
+#include "miscellany.hpp"
 #include "test_tools.hpp"
 
 #if !defined __BORLANDC__
@@ -49,6 +50,7 @@ void foo()
     for(unsigned int j = 0; j < 100; ++j)
         {
         d = std::log10(1U + j * j);
+        stifle_warning_for_unused_value(d);
         }
 }
 
