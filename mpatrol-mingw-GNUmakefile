@@ -119,8 +119,8 @@ ARCHIVE_MPTOOLS = lib$(MPTOOLS).a
 all: $(ARCHIVE_MPATROL) $(SHARED_MPATROL) $(ARCHTS_MPATROL) $(SHARTS_MPATROL) \
 	$(ARCHIVE_MPALLOC) $(SHARED_MPALLOC) $(ARCHIVE_MPTOOLS) \
 	mpatrol.exe mprof.exe mptrace.exe mleak.exe
-  ifeq ($(CXX),g++)
-	@echo 'g++ version: $(shell $(CC) -dumpversion)'
+  ifeq ($(CC),gcc)
+	@echo 'gcc version: $(shell $(CC) -dumpversion)'
   else
 	@echo 'compiler: $(CC)'
   endif
