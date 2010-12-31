@@ -27101,3 +27101,26 @@ Resolve an ancient defect.
   yare_input.cpp
 Resolve issues discovered with libstdc++ debug mode.
 
+20101228T1902Z <gchicares@sbcglobal.net> [654]
+
+  actuarial_table.cpp
+  handle_exceptions_test.cpp
+  stratified_charges.cpp
+  timer_test.cpp
+Resolve issues discovered with compilers other than gcc.
+
+20101230T0017Z <gchicares@sbcglobal.net> [654]
+
+  mpatrol-mingw-GNUmakefile
+Fix defect introduced 20030424: $(CXX) was used but not defined.
+
+20101230T0018Z <gchicares@sbcglobal.net> [654]
+
+  install_mpatrol.make
+Pass $(PATH) to subshells more reliably; prevent parallelism.
+
+20101231T1057Z <gchicares@sbcglobal.net> [654]
+
+  install_msw.sh
+Install mpatrol right after MinGW gcc.
+
