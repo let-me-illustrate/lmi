@@ -2,7 +2,7 @@
 
 # Install como C++ on msw, with MinGW gcc-2.95.3-5 as its C compiler.
 
-# Copyright (C) 2010 Gregory W. Chicares.
+# Copyright (C) 2010, 2011 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
