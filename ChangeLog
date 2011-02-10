@@ -27606,3 +27606,14 @@ Install mpatrol right after MinGW gcc.
   zero_test.cpp
 Update copyright notices.
 
+20110210T2218Z <gchicares@sbcglobal.net> [654]
+
+  GNUmakefile
+  workhorse.make
+Temporarily work around problems with nondefault 'build_type'.
+
+20110210T2219Z <gchicares@sbcglobal.net> [654]
+
+  mpatrol-mingw-GNUmakefile
+Accommodate recent MinGW gcc releases.
+
