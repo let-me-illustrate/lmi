@@ -89,11 +89,20 @@ default_targets := \
   libantediluvian$(SHREXT) \
   liblmi$(SHREXT) \
   lmi_cli_shared$(EXEEXT) \
-  lmi_wx_shared$(EXEEXT) \
-  wx_new$(SHREXT) \
+
+# For targets that depend on wx, build type 'safestdlib' requires a
+# compatible wx build, which is not yet available.
+
+ifneq (safestdlib,$(findstring safestdlib,$(build_type)))
+  default_targets += \
+    lmi_wx_shared$(EXEEXT) \
+    wx_new$(SHREXT) \
+
+endif
 
 # The product_files target doesn't build with shared-library
-# 'attributes'. That matters little because that target is deprecated.
+# 'attributes'. It can be built with mpatrol, but the resulting binary
+# segfaults. This matters little because that target is deprecated.
 #
 # TODO ?? The gpt server, however, is important; it needs work anyway.
 # The other binaries should be reconsidered. The antediluvian $(EXEEXT)
@@ -112,8 +121,12 @@ ifeq (,$(USE_SO_ATTRIBUTES))
     gpt_server$(EXEEXT) \
     gpt_so_test$(EXEEXT) \
     ihs_crc_comp$(EXEEXT) \
-    product_files$(EXEEXT) \
 
+  ifneq (mpatrol,$(findstring mpatrol,$(build_type)))
+    default_targets += \
+      product_files$(EXEEXT) \
+
+  endif
 endif
 
 .PHONY: effective_default_target

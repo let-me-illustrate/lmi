@@ -456,17 +456,17 @@ checkout:
 
 .PHONY: test_various_build_types
 test_various_build_types: source_clean
-	-$(MAKE) check_concinnity
-	-$(MAKE) check_physical_closure
-	-$(MAKE) all test
 	-$(MAKE) all test build_type=mpatrol
 	-$(MAKE) test build_type=safestdlib
 	-$(MAKE) lmi_wx_shared$(EXEEXT) build_type=so_test USE_SO_ATTRIBUTES=1
+	-$(MAKE) check_concinnity
+	-$(MAKE) check_physical_closure
+	-$(MAKE) all test
 
 .PHONY: nychthemeral_test
 nychthemeral_test: checkout
 	-$(MAKE) --directory=$(nychthemeral_directory)/lmi test_various_build_types \
-	  >../$(nychthemeral_log)
+	  >../$(nychthemeral_log) 2>&1
 
 ################################################################################
 
