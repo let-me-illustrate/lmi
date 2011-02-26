@@ -19,6 +19,9 @@
         <description>Use DLL build of wx library?</description>
     </option>
 
+    <!-- wx-2.9 is now required and its default build is Unicode one -->
+    <set var="WX_UNICODE">1</set>
+
     <!--
         Predefining WX_PORT gets rid of unwanted wxUniversal build
         configurations in MSVC projects. Similarly, predefining WX_MONOLITHIC
