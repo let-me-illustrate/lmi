@@ -62,7 +62,6 @@ class LMI_SO mec_state
     bool operator==(mec_state const&) const;
 
     std::string format_as_html(std::string const& heading) const;
-    void save(fs::path const&) const;
 
   private:
     void AscribeMembers();
