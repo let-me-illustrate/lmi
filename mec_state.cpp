@@ -303,19 +303,6 @@ std::string mec_state::format_as_html(std::string const& heading) const
     return oss.str();
 }
 
-void mec_state::save(fs::path const& filepath) const
-{
-    fs::ofstream ofs(filepath, ios_out_trunc_binary());
-    xml_lmi::xml_document document(xml_root_name() + "_document");
-    xml::element& root = document.root_node();
-    root << *this;
-    ofs << document;
-    if(!ofs)
-        {
-        warning() << "Unable to save '" << filepath.string() << "'." << LMI_FLUSH;
-        }
-}
-
 void mec_state::AscribeMembers()
 {
     ascribe("B0_deduced_policy_year"   , &mec_state::B0_deduced_policy_year   );

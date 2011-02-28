@@ -27617,3 +27617,10 @@ Temporarily work around problems with nondefault 'build_type'.
   mpatrol-mingw-GNUmakefile
 Accommodate recent MinGW gcc releases.
 
+20110228T0347Z <gchicares@sbcglobal.net> [654]
+
+  mec_state.cpp
+  mec_state.hpp
+Remove a needless override. The concomitant change in '.mec.xml'
+output is not material.
+
