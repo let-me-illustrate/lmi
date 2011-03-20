@@ -40,7 +40,7 @@
 ///
 /// Implicitly-declared special member functions do the right thing.
 
-class rounding_parameters
+class LMI_SO rounding_parameters
     :virtual private obstruct_slicing<rounding_parameters>
 {
     friend class rounding_rules;

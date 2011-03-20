@@ -181,7 +181,7 @@
 #include <iosfwd>
 #include <string>
 
-std::ostringstream& progress_meter_unit_test_stream();
+std::ostringstream& LMI_SO progress_meter_unit_test_stream();
 
 class LMI_SO progress_meter
     :private lmi::uncopyable<progress_meter>
