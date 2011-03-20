@@ -98,7 +98,7 @@ PolicyView& PolicyDocument::PredominantView() const
 
 void PolicyDocument::ReadDocument(std::string const& filename)
 {
-    product_data_.load(filename);
+    load(product_data_, filename);
     if(!GetViews().empty())
         {
         PolicyView& view = PredominantView();
@@ -129,6 +129,6 @@ void PolicyDocument::WriteDocument(std::string const& filename)
             *it->second = view.controls()[it->first]->GetValue();
             }
         }
-    product_data_.save(filename);
+    save(product_data_, filename);
 }
 

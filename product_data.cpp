@@ -383,3 +383,21 @@ void product_data::WritePolFiles()
     z.save(AddDataDir("sample.policy"));
 }
 
+/// Load from file. This free function can be invoked across dll
+/// boundaries, even though xml_serializable<> is instantiated only
+/// in the present TU.
+
+void load(product_data& z, fs::path const& path)
+{
+    z.xml_serializable<product_data>::load(path);
+}
+
+/// Save to file. This free function can be invoked across dll
+/// boundaries, even though xml_serializable<> is instantiated only
+/// in the present TU.
+
+void save(product_data const& z, fs::path const& path)
+{
+    z.xml_serializable<product_data>::save(path);
+}
+

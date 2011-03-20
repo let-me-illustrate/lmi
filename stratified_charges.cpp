@@ -626,3 +626,21 @@ void stratified_charges::write_stratified_files()
     foo.save(AddDataDir("sample.strata"));
 }
 
+/// Load from file. This free function can be invoked across dll
+/// boundaries, even though xml_serializable<> is instantiated only
+/// in the present TU.
+
+void load(stratified_charges& z, fs::path const& path)
+{
+    z.xml_serializable<stratified_charges>::load(path);
+}
+
+/// Save to file. This free function can be invoked across dll
+/// boundaries, even though xml_serializable<> is instantiated only
+/// in the present TU.
+
+void save(stratified_charges const& z, fs::path const& path)
+{
+    z.xml_serializable<stratified_charges>::save(path);
+}
+

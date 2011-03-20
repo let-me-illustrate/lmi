@@ -151,5 +151,8 @@ class LMI_SO rounding_rules
     rounding_parameters round_interest_rate_7702_;
 };
 
+void LMI_SO load(rounding_rules      &, fs::path const&);
+void LMI_SO save(rounding_rules const&, fs::path const&);
+
 #endif // rounding_rules_hpp
 
