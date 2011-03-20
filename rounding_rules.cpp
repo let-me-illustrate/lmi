@@ -138,6 +138,11 @@ std::string const& rounding_parameters::gloss() const
     return gloss_;
 }
 
+rounding_style rounding_parameters::raw_style() const
+{
+    return style_.value();
+}
+
 /// Private default ctor.
 
 rounding_rules::rounding_rules()

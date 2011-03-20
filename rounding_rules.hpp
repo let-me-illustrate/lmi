@@ -59,6 +59,8 @@ class LMI_SO rounding_parameters
     mce_rounding_style const& style   () const;
     std::string const&        gloss   () const;
 
+    rounding_style            raw_style() const;
+
   private:
     rounding_parameters();
 
