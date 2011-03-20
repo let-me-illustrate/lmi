@@ -209,5 +209,8 @@ class LMI_SO stratified_charges
     stratified_entity TieredSDPremTax;
 };
 
+void LMI_SO load(stratified_charges      &, fs::path const&);
+void LMI_SO save(stratified_charges const&, fs::path const&);
+
 #endif // stratified_charges_hpp
 

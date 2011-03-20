@@ -27634,3 +27634,40 @@ Write member functions out of line. Inline implementations failed to
 link across an msw dll boundary with declspec decorations due to local
 instantiation of base class template xml_serializable<>.
 
+20110320T1622Z <gchicares@sbcglobal.net> [654]
+
+  dbnames.hpp
+  dbvalue.hpp
+  input_seq_helpers.hpp
+  input_sequence.hpp
+Add missing declspec decorations.
+
+20110320T1636Z <gchicares@sbcglobal.net> [654]
+
+  progress_meter.hpp
+  rounding_rules.hpp
+Add missing declspec decorations.
+
+20110320T1832Z <gchicares@sbcglobal.net> [654]
+
+  rounding_rules.cpp
+  rounding_rules.hpp
+  rounding_view_editor.cpp
+Reduce physical dependency by fixing 'build_type=so_test' erosion.
+
+20110320T1914Z <gchicares@sbcglobal.net> [654]
+
+  policy_document.cpp
+  product_data.cpp
+  product_data.hpp
+  rounding_document.cpp
+  rounding_rules.cpp
+  rounding_rules.hpp
+  stratified_charges.cpp
+  stratified_charges.hpp
+  tier_document.cpp
+Reduce physical dependency by fixing 'build_type=so_test' erosion.
+Inherited implementations of load() and save() are not available
+across an msw dll boundary with declspec decorations due to local
+instantiation of base class template xml_serializable<>.
+

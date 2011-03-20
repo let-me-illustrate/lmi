@@ -282,3 +282,21 @@ void rounding_rules::write_rounding_files()
     sample.save(AddDataDir("sample.rounding"));
 }
 
+/// Load from file. This free function can be invoked across dll
+/// boundaries, even though xml_serializable<> is instantiated only
+/// in the present TU.
+
+void load(rounding_rules& z, fs::path const& path)
+{
+    z.xml_serializable<rounding_rules>::load(path);
+}
+
+/// Save to file. This free function can be invoked across dll
+/// boundaries, even though xml_serializable<> is instantiated only
+/// in the present TU.
+
+void save(rounding_rules const& z, fs::path const& path)
+{
+    z.xml_serializable<rounding_rules>::save(path);
+}
+
