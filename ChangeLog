@@ -27624,3 +27624,13 @@ Accommodate recent MinGW gcc releases.
 Remove a needless override. The concomitant change in '.mec.xml'
 output is not material.
 
+20110320T1600Z <gchicares@sbcglobal.net> [654]
+
+  input.cpp
+  input.hpp
+  mec_input.cpp
+  mec_input.hpp
+Write member functions out of line. Inline implementations failed to
+link across an msw dll boundary with declspec decorations due to local
+instantiation of base class template xml_serializable<>.
+
