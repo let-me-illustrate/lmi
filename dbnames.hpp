@@ -512,8 +512,8 @@ struct db_names
 
 std::vector<db_names> const& LMI_SO GetDBNames();
 
-int         db_key_from_name(std::string const&);
-std::string db_name_from_key(int);
+int         LMI_SO db_key_from_name(std::string const&);
+std::string LMI_SO db_name_from_key(int);
 
 #endif // dbnames_hpp
 
