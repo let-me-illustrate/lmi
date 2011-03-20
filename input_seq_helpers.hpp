@@ -28,6 +28,7 @@
 
 #include "alert.hpp"
 #include "input_sequence.hpp"
+#include "so_attributes.hpp"
 
 #include <map>
 #include <string>
@@ -47,7 +48,7 @@ namespace detail
 
     stringmap invert_map(stringmap const& sm);
 
-    std::vector<std::string> extract_keys_from_string_map
+    std::vector<std::string> LMI_SO extract_keys_from_string_map
         (stringmap const& keyword_dictionary
         );
 

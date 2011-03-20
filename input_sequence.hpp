@@ -201,6 +201,7 @@
 #include "config.hpp"
 
 #include "obstruct_slicing.hpp"
+#include "so_attributes.hpp"
 #include "uncopyable_lmi.hpp"
 
 #include <iosfwd>
@@ -237,7 +238,7 @@ struct ValueInterval
     bool          insane;
 };
 
-class InputSequence
+class LMI_SO InputSequence
     :        private lmi::uncopyable <InputSequence>
     ,virtual private obstruct_slicing<InputSequence>
 {
