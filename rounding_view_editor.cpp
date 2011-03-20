@@ -296,7 +296,7 @@ void RoundingButtons::SetValue(rounding_parameters const& value)
 {
     previous_value_ = value;
     SetNumber(value.decimals());
-    SetStyle(value.style().value());
+    SetStyle(value.raw_style());
 }
 
 rounding_parameters RoundingButtons::GetValue() const
