@@ -307,6 +307,16 @@ bool Input::operator==(Input const& z) const
     return true;
 }
 
+mcenum_ledger_type Input::ledger_type () const {return GleanedLedgerType_;}
+int                Input::maturity_age() const {return GleanedMaturityAge_;}
+
+int Input::years_to_retirement() const {return retirement_age() - issue_age();}
+int Input::years_to_maturity  () const {return maturity_age() - issue_age();}
+int Input::issue_age          () const {return IssueAge     .value();}
+int Input::retirement_age     () const {return RetirementAge.value();}
+int Input::inforce_year       () const {return InforceYear  .value();}
+int Input::effective_year     () const {return EffectiveDate.value().year();}
+
 std::string Input::differing_fields(Input const& z) const
 {
     std::ostringstream oss;

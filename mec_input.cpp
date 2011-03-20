@@ -167,6 +167,13 @@ bool mec_input::operator==(mec_input const& z) const
     return true;
 }
 
+int mec_input::maturity_age() const {return GleanedMaturityAge_;}
+
+int mec_input::years_to_maturity  () const {return maturity_age() - issue_age();}
+int mec_input::issue_age          () const {return IssueAge     .value();}
+int mec_input::inforce_year       () const {return InforceYear  .value();}
+int mec_input::effective_year     () const {return EffectiveDate.value().year();}
+
 void mec_input::AscribeMembers()
 {
     ascribe("Use7702ATables"                        , &mec_input::Use7702ATables                        );

@@ -137,19 +137,19 @@ class LMI_SO Input
     Input& operator=(Input const&);
     bool operator==(Input const&) const;
 
+    mcenum_ledger_type ledger_type () const;
+    int                maturity_age() const;
+
+    int years_to_retirement() const;
+    int years_to_maturity  () const;
+    int issue_age          () const;
+    int retirement_age     () const;
+    int inforce_year       () const;
+    int effective_year     () const;
+
     std::vector<std::string> RealizeAllSequenceInput(bool report_errors = true);
 
     std::string differing_fields(Input const&) const;
-
-    mcenum_ledger_type ledger_type () const {return GleanedLedgerType_;}
-    int                maturity_age() const {return GleanedMaturityAge_;}
-
-    int years_to_retirement() const {return retirement_age() - issue_age();}
-    int years_to_maturity  () const {return maturity_age() - issue_age();}
-    int issue_age          () const {return IssueAge     .value();}
-    int retirement_age     () const {return RetirementAge.value();}
-    int inforce_year       () const {return InforceYear  .value();}
-    int effective_year     () const {return EffectiveDate.value().year();}
 
     static Input magically_rectify(Input const&);
 
