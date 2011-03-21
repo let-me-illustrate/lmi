@@ -27694,3 +27694,13 @@ Make a casual workaround somewhat less bad.
   input_harmonization.cpp
 Permit "weird" columns when needed, with no password.
 
+20110321T0609Z <gchicares@sbcglobal.net> [655]
+
+  GNUmakefile
+Augment 'build_type=so_test' testing.
+
+20110321T0610Z <gchicares@sbcglobal.net> [655]
+
+  workhorse.make
+Remove obsolete commentary.
+
