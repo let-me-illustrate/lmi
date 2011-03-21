@@ -105,10 +105,6 @@ endif
 # segfaults. This matters little because that target is deprecated.
 #
 # TODO ?? The gpt server, however, is important; it needs work anyway.
-# The other binaries should be reconsidered. The antediluvian $(EXEEXT)
-# targets wouldn't build with $(USE_SO_ATTRIBUTES) because of known
-# problems with 'calculate.hpp', which however has been expunged, so
-# perhaps they can now be removed from this list.
 
 ifeq (,$(USE_SO_ATTRIBUTES))
   default_targets += \
