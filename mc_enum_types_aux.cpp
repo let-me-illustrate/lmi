@@ -68,11 +68,11 @@ bool validate_mc_n_values()
 volatile bool ensure_setup = validate_mc_n_values();
 } // Unnamed namespace.
 
-std::vector<std::string> const& LMI_SO all_strings_gender   () {return mce_gender  ::all_strings();}
-std::vector<std::string> const& LMI_SO all_strings_class    () {return mce_class   ::all_strings();}
-std::vector<std::string> const& LMI_SO all_strings_smoking  () {return mce_smoking ::all_strings();}
-std::vector<std::string> const& LMI_SO all_strings_uw_basis () {return mce_uw_basis::all_strings();}
-std::vector<std::string> const& LMI_SO all_strings_state    () {return mce_state   ::all_strings();}
+std::vector<std::string> const& all_strings_gender   () {return mce_gender  ::all_strings();}
+std::vector<std::string> const& all_strings_class    () {return mce_class   ::all_strings();}
+std::vector<std::string> const& all_strings_smoking  () {return mce_smoking ::all_strings();}
+std::vector<std::string> const& all_strings_uw_basis () {return mce_uw_basis::all_strings();}
+std::vector<std::string> const& all_strings_state    () {return mce_state   ::all_strings();}
 
 std::vector<std::string> allowed_strings_emission()
 {
