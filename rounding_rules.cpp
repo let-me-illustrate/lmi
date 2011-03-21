@@ -1,6 +1,6 @@
 // Rounding rules.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -136,6 +136,11 @@ mce_rounding_style const& rounding_parameters::style() const
 std::string const& rounding_parameters::gloss() const
 {
     return gloss_;
+}
+
+rounding_style rounding_parameters::raw_style() const
+{
+    return style_.value();
 }
 
 /// Private default ctor.
@@ -275,5 +280,23 @@ void rounding_rules::write_rounding_files()
 {
     rounding_rules sample;
     sample.save(AddDataDir("sample.rounding"));
+}
+
+/// Load from file. This free function can be invoked across dll
+/// boundaries, even though xml_serializable<> is instantiated only
+/// in the present TU.
+
+void load(rounding_rules& z, fs::path const& path)
+{
+    z.xml_serializable<rounding_rules>::load(path);
+}
+
+/// Save to file. This free function can be invoked across dll
+/// boundaries, even though xml_serializable<> is instantiated only
+/// in the present TU.
+
+void save(rounding_rules const& z, fs::path const& path)
+{
+    z.xml_serializable<rounding_rules>::save(path);
 }
 

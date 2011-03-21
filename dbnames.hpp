@@ -1,6 +1,6 @@
 // Product database entity names.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -512,8 +512,8 @@ struct db_names
 
 std::vector<db_names> const& LMI_SO GetDBNames();
 
-int         db_key_from_name(std::string const&);
-std::string db_name_from_key(int);
+int         LMI_SO db_key_from_name(std::string const&);
+std::string LMI_SO db_name_from_key(int);
 
 #endif // dbnames_hpp
 

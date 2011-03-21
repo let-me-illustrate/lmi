@@ -1,6 +1,6 @@
 // Transient state of MEC testing.
 //
-// Copyright (C) 2009, 2010 Gregory W. Chicares.
+// Copyright (C) 2009, 2010, 2011 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -62,7 +62,6 @@ class LMI_SO mec_state
     bool operator==(mec_state const&) const;
 
     std::string format_as_html(std::string const& heading) const;
-    void save(fs::path const&) const;
 
   private:
     void AscribeMembers();

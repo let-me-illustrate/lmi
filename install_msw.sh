@@ -2,7 +2,7 @@
 
 # For msw, download and build lmi and required libraries.
 
-# Copyright (C) 2007, 2008, 2009, 2010 Gregory W. Chicares.
+# Copyright (C) 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -160,6 +160,7 @@ find /cache_for_lmi/downloads -type f | xargs md5sum
 rm --force --recursive scratch
 rm --force --recursive /MinGW_
 make $coefficiency prefix=/MinGW_ cache_dir=/cache_for_lmi/downloads -f install_mingw.make
+make $coefficiency -f install_mpatrol.make
 
 make $coefficiency -f install_miscellanea.make clobber
 make $coefficiency -f install_miscellanea.make

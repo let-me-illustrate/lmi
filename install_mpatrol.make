@@ -1,6 +1,6 @@
 # Install msw-native mpatrol with modifications suitable for lmi.
 #
-# Copyright (C) 2009, 2010 Gregory W. Chicares.
+# Copyright (C) 2009, 2010, 2011 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -105,7 +105,7 @@ patchset        := mpatrol_$(mpatrol_version).patch
 all: clobber $(source_archives)
 	-[ -e $(patchset) ] && $(PATCH) --directory=$(mpatrol_dir) --strip=1 <$(patchset)
 	$(CP) --preserve $(mpatrol_makefile) $(build_dir)
-	$(MAKE) --file=$(mpatrol_makefile) --directory=$(build_dir) PATH=$(mingw_bin_dir):$$PATH prefix=$(prefix) all install
+	export PATH=$(mingw_bin_dir):$$PATH ; $(MAKE) --file=$(mpatrol_makefile) --directory=$(build_dir) --jobs=1 prefix=$(prefix) all install
 
 # Simulated order-only prerequisites.
 $(source_archives): initial_setup

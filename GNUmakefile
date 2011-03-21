@@ -1,6 +1,6 @@
 # Top-level lmi makefile.
 #
-# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
+# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -362,8 +362,8 @@ check_concinnity: source_clean custom_tools
 # either in the last days of the old year or the first days of the
 # new, so they can't be derived dynamically from the current date.
 
-old_year := 2009
-new_year := 2010
+old_year := 2010
+new_year := 2011
 
 backup_directory := saved_$(old_year)
 
@@ -411,7 +411,7 @@ happy_new_year: source_clean
 	    -e '/$(unutterable) Jens Maurer 2000/d' \
 	    -e '/$(unutterable) Kevlin Henney, 2000, 2001. All rights reserved./d' \
 	    -e '/$(unutterable) Kevlin Henney, 2000-2003. All rights reserved./d' \
-	    -e '/$(unutterable) Terje Sletteb.* and Kevlin Henney, 2005./d' \
+	    -e '/$(unutterable) Terje Sletteb/d' \
 	    -e '/Portions marked.*$(unutterable).*Gregory W. Chicares/d' \
 	    -e '/oss << "$(unutterable).*" << 1900 + t1->tm_year;/d' \
 	    -e '/$(unutterable) (C) 1994$$/d' \
@@ -456,17 +456,17 @@ checkout:
 
 .PHONY: test_various_build_types
 test_various_build_types: source_clean
+	-$(MAKE) all test build_type=mpatrol
+	-$(MAKE) test build_type=safestdlib
+	-$(MAKE) all cgi_tests cli_tests build_type=so_test USE_SO_ATTRIBUTES=1
 	-$(MAKE) check_concinnity
 	-$(MAKE) check_physical_closure
 	-$(MAKE) all test
-	-$(MAKE) all test build_type=mpatrol
-	-$(MAKE) test build_type=safestdlib
-	-$(MAKE) lmi_wx_shared$(EXEEXT) build_type=so_test USE_SO_ATTRIBUTES=1
 
 .PHONY: nychthemeral_test
 nychthemeral_test: checkout
 	-$(MAKE) --directory=$(nychthemeral_directory)/lmi test_various_build_types \
-	  >../$(nychthemeral_log)
+	  >../$(nychthemeral_log) 2>&1
 
 ################################################################################
 

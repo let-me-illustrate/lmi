@@ -1,6 +1,6 @@
 // Product data representable as strings.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -237,6 +237,9 @@ class LMI_SO product_data
     glossed_string FundRateFootnote0;
     glossed_string FundRateFootnote1;
 };
+
+void LMI_SO load(product_data      &, fs::path const&);
+void LMI_SO save(product_data const&, fs::path const&);
 
 #endif // product_data_hpp
 

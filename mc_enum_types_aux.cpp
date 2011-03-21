@@ -1,6 +1,6 @@
 // Auxiliary functions for specific mc_enum types.
 //
-// Copyright (C) 2008, 2009, 2010 Gregory W. Chicares.
+// Copyright (C) 2008, 2009, 2010, 2011 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -33,8 +33,19 @@
 #include "mc_enum.hpp"
 #include "mc_enum_types.hpp"
 
+#include <cstddef> // std::size_t
+#include <stdexcept>
+
 namespace
 {
+/// Suppress enumerators for emission options not fully implemented.
+
+void constrain_values(e_emission& z)
+{
+    z.allow(z.ordinal("emit_pdf_to_printer"), false);
+    z.allow(z.ordinal("emit_pdf_to_viewer" ), false);
+}
+
 /// Validate mc_n_gen_bases, mc_n_sep_bases, and mc_n_rate_periods.
 ///
 /// Each of these very useful constants must equal the cardinality of
@@ -57,11 +68,26 @@ bool validate_mc_n_values()
 volatile bool ensure_setup = validate_mc_n_values();
 } // Unnamed namespace.
 
-std::vector<std::string> const& LMI_SO all_strings_gender   () {return mce_gender  ::all_strings();}
-std::vector<std::string> const& LMI_SO all_strings_class    () {return mce_class   ::all_strings();}
-std::vector<std::string> const& LMI_SO all_strings_smoking  () {return mce_smoking ::all_strings();}
-std::vector<std::string> const& LMI_SO all_strings_uw_basis () {return mce_uw_basis::all_strings();}
-std::vector<std::string> const& LMI_SO all_strings_state    () {return mce_state   ::all_strings();}
+std::vector<std::string> const& all_strings_gender   () {return mce_gender  ::all_strings();}
+std::vector<std::string> const& all_strings_class    () {return mce_class   ::all_strings();}
+std::vector<std::string> const& all_strings_smoking  () {return mce_smoking ::all_strings();}
+std::vector<std::string> const& all_strings_uw_basis () {return mce_uw_basis::all_strings();}
+std::vector<std::string> const& all_strings_state    () {return mce_state   ::all_strings();}
+
+std::vector<std::string> allowed_strings_emission()
+{
+    e_emission emission;
+    constrain_values(emission);
+    std::vector<std::string> z;
+    for(std::size_t j = 0; j < emission.cardinality(); ++j)
+        {
+        if(emission.is_allowed(j))
+            {
+            z.push_back(emission.str(j));
+            }
+        }
+    return z;
+}
 
 /// GPT recognizes death benefit options A and B only. A contract
 /// might have a death benefit option other than that usual pair,
@@ -110,6 +136,17 @@ template std::string mc_str(mcenum_gender   );
 template std::string mc_str(mcenum_run_basis);
 template std::string mc_str(mcenum_smoking  );
 template std::string mc_str(mcenum_state    );
+
+mcenum_emission mc_emission_from_string(std::string const& s)
+{
+    e_emission z(s);
+    constrain_values(z);
+    if(!z.is_allowed(z.ordinal(s)))
+        {
+        throw std::runtime_error(s);
+        }
+    return z.value();
+}
 
 mcenum_state mc_state_from_string(std::string const& s)
 {

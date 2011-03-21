@@ -1,6 +1,6 @@
 # Makefile: object lists.
 #
-# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
+# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -69,10 +69,12 @@ boost_common_objects := \
 # These object files are used in both an application and a shared
 # library that it links to, only for builds that use shared-library
 # 'attributes'. This workaround is used merely because we don't yet
-# build these objects as a library.
+# build these objects as a library. TODO ?? The duplication is not
+# correct: it validates linking, but the linked applications don't
+# run correctly.
 
 ifneq (,$(USE_SO_ATTRIBUTES))
-  duplicated_objects = $(boost_common_objects) $(boost_regex_objects)
+  duplicated_objects = $(boost_common_objects) $(xmlwrapp_objects)
 endif
 
 # GNU cgicc.

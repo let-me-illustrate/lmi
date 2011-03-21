@@ -29,7 +29,7 @@
 # For subsequent GWC modifications, see 'ChangeLog'.
 #
 # GWC modifications
-#   Copyright (C) 2003, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares
+#   Copyright (C) 2003, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares
 # and released under the same terms as Graeme S. Roy's original.
 #
 # http://savannah.nongnu.org/projects/lmi
@@ -106,6 +106,16 @@ OBJECT_MPALLOC  = lib$(MPALLOC).o
 
 ARCHIVE_MPTOOLS = lib$(MPTOOLS).a
 
+ifeq ($(CC),gcc)
+  gcc_version := $(shell $(CC) -dumpversion)
+endif
+
+# libiberty requires libintl for at least some MinGW gcc-4.x releases.
+
+ifneq (,$(findstring x4,x$(gcc_version)))
+  libiberty_requirements := -lintl
+endif
+
 # Rules
 
 .SUFFIXES: .c .o .ts.o
@@ -119,11 +129,7 @@ ARCHIVE_MPTOOLS = lib$(MPTOOLS).a
 all: $(ARCHIVE_MPATROL) $(SHARED_MPATROL) $(ARCHTS_MPATROL) $(SHARTS_MPATROL) \
 	$(ARCHIVE_MPALLOC) $(SHARED_MPALLOC) $(ARCHIVE_MPTOOLS) \
 	mpatrol.exe mprof.exe mptrace.exe mleak.exe
-  ifeq ($(CXX),g++)
-	@echo 'g++ version: $(shell $(CC) -dumpversion)'
-  else
-	@echo 'compiler: $(CC)'
-  endif
+	@echo 'compiler: $(CC); gcc version: $(gcc_version)'
 
 $(ARCHIVE_MPATROL): $(ARCHIVE_MPTOBJS)
 	$(AR) $(ARFLAGS) $@ $(ARCHIVE_MPTOBJS)
@@ -134,7 +140,7 @@ $(SHARED_MPATROL): $(SHARED_MPTOBJS)
 	  -Wl,--out-implib=$(IMPLIB_MPATROL) \
 	  -Wl,--allow-multiple-definition \
 	  -o$@ $(SHARED_MPTOBJS) \
-	  -lbfd -liberty -limagehlp
+	  -lbfd -liberty $(libiberty_requirements) -limagehlp
 
 $(OBJECT_MPATROL): $(SOURCE)/library.c
 	$(CC) $(CFLAGS) $(OFLAGS) -c -o$@ $<
@@ -148,7 +154,7 @@ $(SHARTS_MPATROL): $(SHARTS_MPTOBJS) $(MPATROL)mt.def
 	  -Wl,--out-implib=$(IMPLTS_MPATROL) \
 	  -Wl,--allow-multiple-definition \
 	  -o$@ $(SHARTS_MPTOBJS) \
-	  -lbfd -liberty -limagehlp
+	  -lbfd -liberty $(libiberty_requirements) -limagehlp
 
 $(OBJTS_MPATROL): $(SOURCE)/library.c
 	$(CC) $(CFLAGS) $(OFLAGS) $(TFLAGS) -c -o$@ $<

@@ -1,6 +1,6 @@
 // Path utilities.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -127,7 +127,7 @@ void initialize_filesystem()
 /// cf. std::isalnum(), std::numeric_limits::is_signed(), and even
 /// boost::filesystem::is_complete().
 
-std::string LMI_SO orthodox_filename(std::string const& original_filename)
+std::string orthodox_filename(std::string const& original_filename)
 {
     LMI_ASSERT(!original_filename.empty());
     std::string s(original_filename);

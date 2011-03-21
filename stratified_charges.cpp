@@ -1,6 +1,6 @@
 // Rates that depend on the amount they're muliplied by.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -294,7 +294,7 @@ double stratified_charges::stratified_sepacct_load
                 +   tiered_curr_sepacct_load(assets, premium)
                 ;
             }
-            break;
+            // break;
         case mce_gen_guar:
             {
             return
@@ -302,7 +302,7 @@ double stratified_charges::stratified_sepacct_load
                 +   tiered_guar_sepacct_load(assets, premium)
                 ;
             }
-            break;
+            // break;
         case mce_gen_mdpt:
             {
             fatal_error()
@@ -369,12 +369,12 @@ double stratified_charges::tiered_m_and_e(mcenum_gen_basis basis, double assets)
             {
             return tiered_curr_m_and_e(assets);
             }
-            break;
+            // break;
         case mce_gen_guar:
             {
             return tiered_guar_m_and_e(assets);
             }
-            break;
+            // break;
         case mce_gen_mdpt:
             {
             fatal_error()
@@ -624,5 +624,23 @@ void stratified_charges::write_stratified_files()
     foo.datum("TieredSDPremTax").gloss_ = "SD 10-44-2(2) (see also 58-6-70)";
 
     foo.save(AddDataDir("sample.strata"));
+}
+
+/// Load from file. This free function can be invoked across dll
+/// boundaries, even though xml_serializable<> is instantiated only
+/// in the present TU.
+
+void load(stratified_charges& z, fs::path const& path)
+{
+    z.xml_serializable<stratified_charges>::load(path);
+}
+
+/// Save to file. This free function can be invoked across dll
+/// boundaries, even though xml_serializable<> is instantiated only
+/// in the present TU.
+
+void save(stratified_charges const& z, fs::path const& path)
+{
+    z.xml_serializable<stratified_charges>::save(path);
 }
 

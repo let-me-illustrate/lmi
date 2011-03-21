@@ -1,6 +1,6 @@
 // Transient state of MEC testing.
 //
-// Copyright (C) 2009, 2010 Gregory W. Chicares.
+// Copyright (C) 2009, 2010, 2011 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -301,19 +301,6 @@ std::string mec_state::format_as_html(std::string const& heading) const
         ;
 
     return oss.str();
-}
-
-void mec_state::save(fs::path const& filepath) const
-{
-    fs::ofstream ofs(filepath, ios_out_trunc_binary());
-    xml_lmi::xml_document document(xml_root_name() + "_document");
-    xml::element& root = document.root_node();
-    root << *this;
-    ofs << document;
-    if(!ofs)
-        {
-        warning() << "Unable to save '" << filepath.string() << "'." << LMI_FLUSH;
-        }
 }
 
 void mec_state::AscribeMembers()

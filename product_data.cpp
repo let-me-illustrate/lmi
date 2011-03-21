@@ -1,6 +1,6 @@
 // Product data representable as strings.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -382,5 +382,23 @@ void product_data::WritePolFiles()
     z.NoLapseProvisionName    = glossed_string("No-lapse Provision");
 
     z.save(AddDataDir("sample.policy"));
+}
+
+/// Load from file. This free function can be invoked across dll
+/// boundaries, even though xml_serializable<> is instantiated only
+/// in the present TU.
+
+void load(product_data& z, fs::path const& path)
+{
+    z.xml_serializable<product_data>::load(path);
+}
+
+/// Save to file. This free function can be invoked across dll
+/// boundaries, even though xml_serializable<> is instantiated only
+/// in the present TU.
+
+void save(product_data const& z, fs::path const& path)
+{
+    z.xml_serializable<product_data>::save(path);
 }
 

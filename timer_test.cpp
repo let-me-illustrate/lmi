@@ -1,6 +1,6 @@
 // Measure elapsed time to high resolution--unit test.
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -29,6 +29,7 @@
 #include "timer.hpp"
 
 #include "contains.hpp"
+#include "miscellany.hpp"
 #include "test_tools.hpp"
 
 #if !defined __BORLANDC__
@@ -49,6 +50,7 @@ void foo()
     for(unsigned int j = 0; j < 100; ++j)
         {
         d = std::log10(1U + j * j);
+        stifle_warning_for_unused_value(d);
         }
 }
 
