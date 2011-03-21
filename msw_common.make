@@ -44,9 +44,9 @@ platform_defines := \
 platform_gui_ldflags := -mwindows
 
 platform_gnome_xml_libraries := \
-  -lexslt.dll \
-  -lxslt.dll \
-  -lxml2.dll \
+  -lexslt \
+  -lxslt \
+  -lxml2 \
 
 platform_mpatrol_libraries := \
   -limagehlp \

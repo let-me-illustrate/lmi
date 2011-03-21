@@ -27704,3 +27704,8 @@ Augment 'build_type=so_test' testing.
   workhorse.make
 Remove obsolete commentary.
 
+20110321T0711Z <gchicares@sbcglobal.net> [655]
+
+  msw_common.make
+Simplify: default linker order needn't be specified explicitly.
+
