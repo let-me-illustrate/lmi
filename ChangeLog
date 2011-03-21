@@ -27671,3 +27671,26 @@ Inherited implementations of load() and save() are not available
 across an msw dll boundary with declspec decorations due to local
 instantiation of base class template xml_serializable<>.
 
+20110320T2106Z <gchicares@sbcglobal.net> [654]
+
+  main_cli.cpp
+  mc_enum_types_aux.cpp
+  mc_enum_types_aux.hpp
+Reduce physical dependency by fixing 'build_type=so_test' erosion.
+
+20110321T0024Z <gchicares@sbcglobal.net> [654]
+
+  mc_enum_types_aux.cpp
+  path_utility.cpp
+Remove unnecessary declspec decorations.
+
+20110321T0025Z <gchicares@sbcglobal.net> [655]
+
+  objects.make
+Make a casual workaround somewhat less bad.
+
+20110321T0047Z <gchicares@sbcglobal.net> [655]
+
+  input_harmonization.cpp
+Permit "weird" columns when needed, with no password.
+
