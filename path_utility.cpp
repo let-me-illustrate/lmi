@@ -127,7 +127,7 @@ void initialize_filesystem()
 /// cf. std::isalnum(), std::numeric_limits::is_signed(), and even
 /// boost::filesystem::is_complete().
 
-std::string LMI_SO orthodox_filename(std::string const& original_filename)
+std::string orthodox_filename(std::string const& original_filename)
 {
     LMI_ASSERT(!original_filename.empty());
     std::string s(original_filename);
