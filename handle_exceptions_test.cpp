@@ -1,6 +1,6 @@
 // Handlers for exceptional situations--unit test.
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -38,7 +38,6 @@ int test_main(int, char*[])
         {
         BOOST_TEST(true);
         throw std::runtime_error("  This message should appear on stderr.");
-        BOOST_TEST(false); // Shouldn't be reached.
         }
     catch(...)
         {

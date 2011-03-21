@@ -1,6 +1,6 @@
 // Life insurance illustrations: command-line interface.
 //
-// Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
+// Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -29,7 +29,7 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "contains.hpp"
-#include "dbdict.hpp"       // print_databases()
+#include "dbdict.hpp"            // print_databases()
 #include "getopt.hpp"
 #include "global_settings.hpp"
 #include "illustrator.hpp"
@@ -38,10 +38,11 @@
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
 #include "license.hpp"
-#include "lmi.hpp"          // is_antediluvian_fork()
+#include "lmi.hpp"               // is_antediluvian_fork()
 #include "main_common.hpp"
 #include "mc_enum.hpp"
 #include "mc_enum_types.hpp"
+#include "mc_enum_types_aux.hpp" // allowed_strings_emission(), mc_emission_from_string()
 #include "mec_server.hpp"
 #include "miscellany.hpp"
 #include "path_utility.hpp"
@@ -55,8 +56,8 @@
 
 #include <algorithm>
 #include <cmath>
-#include <cstddef> // NULL, std::size_t
-#include <cstdio>  // std::printf()
+#include <cstddef>               // NULL
+#include <cstdio>                // std::printf()
 #include <ios>
 #include <iostream>
 #include <iterator>
@@ -185,10 +186,7 @@ void process_command_line(int argc, char* argv[])
     bool run_profile         = false;
     bool print_all_databases = false;
 
-    e_emission emission(mce_emit_nothing);
-    // Suppress enumerators for options not fully implemented.
-    emission.allow(emission.ordinal("emit_pdf_to_printer"), false);
-    emission.allow(emission.ordinal("emit_pdf_to_viewer" ), false);
+    mcenum_emission emission(mce_emit_nothing);
 
     std::vector<std::string> illustrator_names;
     std::vector<std::string> mec_server_names;
@@ -276,8 +274,6 @@ void process_command_line(int argc, char* argv[])
 
             case 'e':
                 {
-                int emission_suboptions = mce_emit_nothing;
-
                 LMI_ASSERT(NULL != getopt_long.optarg);
                 std::string const s(getopt_long.optarg);
                 std::istringstream iss(s);
@@ -289,12 +285,10 @@ void process_command_line(int argc, char* argv[])
                         {
                         try
                             {
-                            e_emission z(token);
-                            if(!emission.is_allowed(emission.ordinal(token)))
-                                {
-                                throw std::runtime_error(token);
-                                }
-                            emission_suboptions |= z.value();
+                            emission = mcenum_emission
+                                ( emission
+                                | mc_emission_from_string(token)
+                                );
                             }
                         catch(std::runtime_error const&)
                             {
@@ -307,7 +301,6 @@ void process_command_line(int argc, char* argv[])
                             }
                         }
                     }
-                emission = mcenum_emission(emission_suboptions);
                 }
                 break;
 
@@ -413,12 +406,11 @@ void process_command_line(int argc, char* argv[])
         {
         getopt_long.usage();
         std::cout << "Suboptions for '--emit':\n";
-        for(std::size_t j = 0; j < emission.cardinality(); ++j)
+        std::vector<std::string> const& v = allowed_strings_emission();
+        typedef std::vector<std::string>::const_iterator vsi;
+        for(vsi i = v.begin(); i != v.end(); ++i)
             {
-            if(emission.is_allowed(j))
-                {
-                std::cout << "  " << emission.str(j) << '\n';
-                }
+            std::cout << "  " << *i << '\n';
             }
         return;
         }
@@ -444,13 +436,13 @@ void process_command_line(int argc, char* argv[])
     std::for_each
         (illustrator_names.begin()
         ,illustrator_names.end()
-        ,illustrator(emission.value())
+        ,illustrator(emission)
         );
 
     std::for_each
         (mec_server_names.begin()
         ,mec_server_names.end()
-        ,mec_server(emission.value())
+        ,mec_server(emission)
         );
 }
 

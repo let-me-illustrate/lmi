@@ -1,6 +1,6 @@
 // Document class for Rounding rules.
 //
-// Copyright (C) 2007, 2008, 2009, 2010 Gregory W. Chicares.
+// Copyright (C) 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -76,7 +76,7 @@ RoundingDocument::~RoundingDocument()
 
 void RoundingDocument::ReadDocument(std::string const& filename)
 {
-    rounding_rules_.load(filename);
+    load(rounding_rules_, filename);
     if(!GetViews().empty())
         {
         RoundingView& view = PredominantView();
@@ -107,7 +107,7 @@ void RoundingDocument::WriteDocument(std::string const& filename)
             *it->second = view.controls()[it->first]->GetValue();
             }
         }
-    rounding_rules_.save(filename);
+    save(rounding_rules_, filename);
 }
 
 RoundingView& RoundingDocument::PredominantView() const

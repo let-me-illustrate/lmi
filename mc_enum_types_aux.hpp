@@ -1,6 +1,6 @@
 // Auxiliary functions for specific mc_enum types.
 //
-// Copyright (C) 2008, 2009, 2010 Gregory W. Chicares.
+// Copyright (C) 2008, 2009, 2010, 2011 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -48,6 +48,8 @@ std::vector<std::string> const& LMI_SO all_strings_smoking  ();
 std::vector<std::string> const& LMI_SO all_strings_uw_basis ();
 std::vector<std::string> const& LMI_SO all_strings_state    ();
 
+std::vector<std::string> LMI_SO allowed_strings_emission();
+
 mcenum_dbopt_7702 effective_dbopt_7702
     (mcenum_dbopt      actual_dbopt
     ,mcenum_dbopt_7702 rop_equivalent
@@ -66,6 +68,8 @@ bool is_three_rate_nasd(mcenum_ledger_type);
 
 template<typename T>
 std::string mc_str(T);
+
+mcenum_emission LMI_SO mc_emission_from_string(std::string const&);
 
 mcenum_state mc_state_from_string(std::string const&);
 

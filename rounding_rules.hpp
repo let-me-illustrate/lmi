@@ -1,6 +1,6 @@
 // Rounding rules.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -40,7 +40,7 @@
 ///
 /// Implicitly-declared special member functions do the right thing.
 
-class rounding_parameters
+class LMI_SO rounding_parameters
     :virtual private obstruct_slicing<rounding_parameters>
 {
     friend class rounding_rules;
@@ -58,6 +58,8 @@ class rounding_parameters
     int                       decimals() const;
     mce_rounding_style const& style   () const;
     std::string const&        gloss   () const;
+
+    rounding_style            raw_style() const;
 
   private:
     rounding_parameters();
@@ -148,6 +150,9 @@ class LMI_SO rounding_rules
     rounding_parameters round_max_premium_       ;
     rounding_parameters round_interest_rate_7702_;
 };
+
+void LMI_SO load(rounding_rules      &, fs::path const&);
+void LMI_SO save(rounding_rules const&, fs::path const&);
 
 #endif // rounding_rules_hpp
 

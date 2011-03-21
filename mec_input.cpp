@@ -1,6 +1,6 @@
 // MVC Model for MEC testing.
 //
-// Copyright (C) 2009, 2010 Gregory W. Chicares.
+// Copyright (C) 2009, 2010, 2011 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -166,6 +166,13 @@ bool mec_input::operator==(mec_input const& z) const
         }
     return true;
 }
+
+int mec_input::maturity_age() const {return GleanedMaturityAge_;}
+
+int mec_input::years_to_maturity  () const {return maturity_age() - issue_age();}
+int mec_input::issue_age          () const {return IssueAge     .value();}
+int mec_input::inforce_year       () const {return InforceYear  .value();}
+int mec_input::effective_year     () const {return EffectiveDate.value().year();}
 
 void mec_input::AscribeMembers()
 {

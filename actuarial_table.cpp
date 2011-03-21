@@ -1,6 +1,6 @@
 // Actuarial tables from SOA database.
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -158,7 +158,7 @@ std::vector<double> actuarial_table::values_elaborated
             v.insert(v.begin(), delta, 0.0);
             return v;
             }
-            break;
+            // break;
         case e_reenter_upon_rate_reset:
             {
             int const age_setback_limit = issue_age - min_age_;
@@ -177,7 +177,7 @@ std::vector<double> actuarial_table::values_elaborated
                 }
             return v;
             }
-            break;
+            // break;
         case e_reenter_never: // Fall through.
         default:
             {

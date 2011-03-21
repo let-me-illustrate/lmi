@@ -1,6 +1,6 @@
 # Main lmi makefile, invoked by 'GNUmakefile'.
 #
-# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
+# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -89,17 +89,22 @@ default_targets := \
   libantediluvian$(SHREXT) \
   liblmi$(SHREXT) \
   lmi_cli_shared$(EXEEXT) \
-  lmi_wx_shared$(EXEEXT) \
-  wx_new$(SHREXT) \
+
+# For targets that depend on wx, build type 'safestdlib' requires a
+# compatible wx build, which is not yet available.
+
+ifneq (safestdlib,$(findstring safestdlib,$(build_type)))
+  default_targets += \
+    lmi_wx_shared$(EXEEXT) \
+    wx_new$(SHREXT) \
+
+endif
 
 # The product_files target doesn't build with shared-library
-# 'attributes'. That matters little because that target is deprecated.
+# 'attributes'. It can be built with mpatrol, but the resulting binary
+# segfaults. This matters little because that target is deprecated.
 #
 # TODO ?? The gpt server, however, is important; it needs work anyway.
-# The other binaries should be reconsidered. The antediluvian $(EXEEXT)
-# targets wouldn't build with $(USE_SO_ATTRIBUTES) because of known
-# problems with 'calculate.hpp', which however has been expunged, so
-# perhaps they can now be removed from this list.
 
 ifeq (,$(USE_SO_ATTRIBUTES))
   default_targets += \
@@ -112,8 +117,12 @@ ifeq (,$(USE_SO_ATTRIBUTES))
     gpt_server$(EXEEXT) \
     gpt_so_test$(EXEEXT) \
     ihs_crc_comp$(EXEEXT) \
-    product_files$(EXEEXT) \
 
+  ifneq (mpatrol,$(findstring mpatrol,$(build_type)))
+    default_targets += \
+      product_files$(EXEEXT) \
+
+  endif
 endif
 
 .PHONY: effective_default_target

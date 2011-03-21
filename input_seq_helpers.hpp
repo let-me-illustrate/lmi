@@ -1,6 +1,6 @@
 // Interpret sequence strings.
 //
-// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
+// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -28,6 +28,7 @@
 
 #include "alert.hpp"
 #include "input_sequence.hpp"
+#include "so_attributes.hpp"
 
 #include <map>
 #include <string>
@@ -47,7 +48,7 @@ namespace detail
 
     stringmap invert_map(stringmap const& sm);
 
-    std::vector<std::string> extract_keys_from_string_map
+    std::vector<std::string> LMI_SO extract_keys_from_string_map
         (stringmap const& keyword_dictionary
         );
 

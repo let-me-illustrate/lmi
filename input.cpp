@@ -1,6 +1,6 @@
 // MVC Model for life-insurance illustrations.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -306,6 +306,16 @@ bool Input::operator==(Input const& z) const
         }
     return true;
 }
+
+mcenum_ledger_type Input::ledger_type () const {return GleanedLedgerType_;}
+int                Input::maturity_age() const {return GleanedMaturityAge_;}
+
+int Input::years_to_retirement() const {return retirement_age() - issue_age();}
+int Input::years_to_maturity  () const {return maturity_age() - issue_age();}
+int Input::issue_age          () const {return IssueAge     .value();}
+int Input::retirement_age     () const {return RetirementAge.value();}
+int Input::inforce_year       () const {return InforceYear  .value();}
+int Input::effective_year     () const {return EffectiveDate.value().year();}
 
 std::string Input::differing_fields(Input const& z) const
 {

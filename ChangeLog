@@ -1,6 +1,6 @@
 // ChangeLog for "Let me illustrate...". See 'MAINTENANCE' after license.
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -27100,4 +27100,617 @@ Resolve an ancient defect.
   wx_utility.cpp
   yare_input.cpp
 Resolve issues discovered with libstdc++ debug mode.
+
+20101228T1902Z <gchicares@sbcglobal.net> [654]
+
+  actuarial_table.cpp
+  handle_exceptions_test.cpp
+  stratified_charges.cpp
+  timer_test.cpp
+Resolve issues discovered with compilers other than gcc.
+
+20101230T0017Z <gchicares@sbcglobal.net> [654]
+
+  mpatrol-mingw-GNUmakefile
+Fix defect introduced 20030424: $(CXX) was used but not defined.
+
+20101230T0018Z <gchicares@sbcglobal.net> [654]
+
+  install_mpatrol.make
+Pass $(PATH) to subshells more reliably; prevent parallelism.
+
+20101231T1057Z <gchicares@sbcglobal.net> [654]
+
+  install_msw.sh
+Install mpatrol right after MinGW gcc.
+
+20110105T2122Z <gchicares@sbcglobal.net> [654]
+
+  ChangeLog
+  DefectLog
+  GNUmakefile
+  INSTALL
+  Makefile.am
+  README
+  README.auto
+  about_dialog.cpp
+  about_dialog.hpp
+  account_value.hpp
+  account_value_test.cpp
+  accountvalue.cpp
+  acinclude.m4
+  actuarial_table.cpp
+  actuarial_table.hpp
+  actuarial_table_test.cpp
+  alert.cpp
+  alert.hpp
+  alert_cgi.cpp
+  alert_cli.cpp
+  alert_test.cpp
+  alert_wx.cpp
+  antediluvian_stubs.cpp
+  any_entity.hpp
+  any_member.hpp
+  any_member_test.cpp
+  assert_lmi.hpp
+  assert_lmi_test.cpp
+  authenticity.cpp
+  authenticity.hpp
+  authenticity_test.cpp
+  autodependency.make
+  autogen.sh
+  basic_values.hpp
+  basicvalues.cpp
+  bcc_5_5_1.make
+  bcc_ar.cpp
+  bcc_cc.cpp
+  bcc_ld.cpp
+  bcc_rc.cpp
+  calendar_date.cpp
+  calendar_date.hpp
+  calendar_date_test.cpp
+  callback.hpp
+  callback_test.cpp
+  catch_exceptions.hpp
+  ce_product_name.cpp
+  ce_product_name.hpp
+  census_document.cpp
+  census_document.hpp
+  census_view.cpp
+  census_view.hpp
+  check_std_names.sed
+  comma_punct.hpp
+  comma_punct_test.cpp
+  commutation_functions.cpp
+  commutation_functions.hpp
+  commutation_functions_test.cpp
+  como.make
+  config.hpp
+  config_bc551.hpp
+  config_como_mingw.hpp
+  config_ming323.hpp
+  configurable_settings.cpp
+  configurable_settings.hpp
+  configurable_settings_test.cpp
+  configuration.make
+  configure.ac
+  contains.hpp
+  contains_test.cpp
+  cpp_main.cpp
+  crc32.cpp
+  crc32.hpp
+  crc32_test.cpp
+  custom_io_0.cpp
+  custom_io_0.hpp
+  data_directory.cpp
+  data_directory.hpp
+  database.cpp
+  database.hpp
+  database_document.cpp
+  database_document.hpp
+  database_view.cpp
+  database_view.hpp
+  database_view_editor.cpp
+  database_view_editor.hpp
+  datum_base.cpp
+  datum_base.hpp
+  datum_boolean.cpp
+  datum_boolean.hpp
+  datum_sequence.cpp
+  datum_sequence.hpp
+  datum_string.cpp
+  datum_string.hpp
+  dbdict.cpp
+  dbdict.hpp
+  dbindex.hpp
+  dbnames.cpp
+  dbnames.hpp
+  dbnames.xpp
+  dbvalue.cpp
+  dbvalue.hpp
+  death_benefits.cpp
+  death_benefits.hpp
+  default_view.cpp
+  default_view.hpp
+  diagnostics.sed
+  docmanager_ex.cpp
+  docmanager_ex.hpp
+  docmdichildframe_ex.cpp
+  docmdichildframe_ex.hpp
+  elapsed_time.cpp
+  emit_ledger.cpp
+  emit_ledger.hpp
+  errors.sed
+  exit_codes.hpp
+  expm1.c
+  expm1.h
+  expression_template_0_test.cpp
+  facets.cpp
+  facets.hpp
+  fancy.make
+  fenv_guard.cpp
+  fenv_guard.hpp
+  fenv_lmi.cpp
+  fenv_lmi.hpp
+  fenv_lmi_test.cpp
+  fenv_lmi_x86.hpp
+  file_command.cpp
+  file_command.hpp
+  file_command_cgi.cpp
+  file_command_cli.cpp
+  file_command_test.cpp
+  file_command_wx.cpp
+  financial.hpp
+  financial_test.cpp
+  fo_common.xsl
+  fund_data.cpp
+  fund_data.hpp
+  generate_passkey.cpp
+  generate_product_files.cpp
+  getopt.cpp
+  getopt.hpp
+  getopt_test.cpp
+  global_settings.cpp
+  global_settings.hpp
+  global_settings_test.cpp
+  group_values.cpp
+  group_values.hpp
+  handle_exceptions.hpp
+  handle_exceptions_test.cpp
+  icon_monger.cpp
+  icon_monger.hpp
+  ieee754.hpp
+  ieee754_test.cpp
+  ihs_acctval.cpp
+  ihs_avdebug.cpp
+  ihs_avmly.cpp
+  ihs_avsolve.cpp
+  ihs_avstrtgy.cpp
+  ihs_basicval.cpp
+  ihs_crc_comp.cpp
+  ihs_irc7702.cpp
+  ihs_irc7702.hpp
+  ihs_irc7702a.cpp
+  ihs_irc7702a.hpp
+  ihs_mortal.cpp
+  ihs_server7702.cpp
+  ihs_server7702.hpp
+  ihs_server7702io.cpp
+  ihs_server7702io.hpp
+  ihs_server7702test.cpp
+  ihs_x_type.hpp
+  illustration_document.cpp
+  illustration_document.hpp
+  illustration_reg.xsl
+  illustration_view.cpp
+  illustration_view.hpp
+  illustrator.cpp
+  illustrator.hpp
+  input.cpp
+  input.hpp
+  input_harmonization.cpp
+  input_realization.cpp
+  input_seq_helpers.cpp
+  input_seq_helpers.hpp
+  input_seq_test.cpp
+  input_sequence.cpp
+  input_sequence.hpp
+  input_sequence_entry.cpp
+  input_sequence_entry.hpp
+  input_test.cpp
+  input_xml_io.cpp
+  install_como.sh
+  install_cygwin.bat
+  install_libxml2_libxslt.make
+  install_mingw.make
+  install_miscellanea.make
+  install_mpatrol.make
+  install_msw.sh
+  install_wx.make
+  interest_rates.cpp
+  interest_rates.hpp
+  irc7702a_test.cpp
+  istream_to_string.hpp
+  istream_to_string_test.cpp
+  ledger.cpp
+  ledger.hpp
+  ledger_base.cpp
+  ledger_base.hpp
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  ledger_text_formats.cpp
+  ledger_text_formats.hpp
+  ledger_variant.cpp
+  ledger_variant.hpp
+  ledger_xml_io.cpp
+  ledger_xsl.cpp
+  ledger_xsl.hpp
+  ledgervalues.cpp
+  ledgervalues.hpp
+  license.cpp
+  license.hpp
+  lmi.cpp
+  lmi.hpp
+  lmi.rc
+  loads.cpp
+  loads.hpp
+  loads_impl.hpp
+  loads_test.cpp
+  local_options.sh
+  main_cgi.cpp
+  main_cli.cpp
+  main_common.cpp
+  main_common.hpp
+  main_common_non_wx.cpp
+  main_wx.cpp
+  main_wx.hpp
+  map_lookup.hpp
+  map_lookup_test.cpp
+  materially_equal.hpp
+  materially_equal_test.cpp
+  math_functors.hpp
+  math_functors_test.cpp
+  max_stream_precision.hpp
+  mc_enum.cpp
+  mc_enum.hpp
+  mc_enum.tpp
+  mc_enum_aux.hpp
+  mc_enum_fwd.hpp
+  mc_enum_metadata.hpp
+  mc_enum_test.cpp
+  mc_enum_test_aux.cpp
+  mc_enum_test_aux.hpp
+  mc_enum_test_aux_enums.hpp
+  mc_enum_type_enums.hpp
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+  mc_enum_types.xpp
+  mc_enum_types_aux.cpp
+  mc_enum_types_aux.hpp
+  md5.cpp
+  md5.hpp
+  mec.xrc
+  mec_document.cpp
+  mec_document.hpp
+  mec_input.cpp
+  mec_input.hpp
+  mec_server.cpp
+  mec_server.hpp
+  mec_state.cpp
+  mec_state.hpp
+  mec_view.cpp
+  mec_view.hpp
+  mec_xml_document.cpp
+  mec_xml_document.hpp
+  menus.xrc
+  miscellany.cpp
+  miscellany.hpp
+  miscellany_test.cpp
+  mortality_rates.cpp
+  mortality_rates.hpp
+  mortality_rates_fetch.cpp
+  mortality_rates_test.cpp
+  mpatrol-mingw-GNUmakefile
+  mpatrol_patch_test.cpp
+  msw_common.make
+  msw_cygwin.make
+  msw_generic.make
+  msw_msys.make
+  msw_workarounds.cpp
+  msw_workarounds.hpp
+  multidimgrid_any.cpp
+  multidimgrid_any.hpp
+  multidimgrid_safe.hpp
+  multidimgrid_safe.tpp
+  multidimgrid_tools.cpp
+  multidimgrid_tools.hpp
+  multiple_cell_document.cpp
+  multiple_cell_document.hpp
+  mvc_controller.cpp
+  mvc_controller.hpp
+  mvc_controller.tpp
+  mvc_model.cpp
+  mvc_model.hpp
+  mvc_view.cpp
+  mvc_view.hpp
+  my_db.cpp
+  my_fund.cpp
+  my_prod.cpp
+  my_rnd.cpp
+  my_test_coding_rules.cpp
+  my_tier.cpp
+  name_value_pairs.cpp
+  name_value_pairs.hpp
+  name_value_pairs_test.cpp
+  nasd.xsl
+  ncnnnpnn.hpp
+  ncnnnpnn_test.cpp
+  null_stream.cpp
+  null_stream.hpp
+  numeric_io_cast.hpp
+  numeric_io_test.cpp
+  numeric_io_traits.hpp
+  objects.make
+  obstruct_slicing.hpp
+  obstruct_slicing_test.cpp
+  oecumenic_enumerations.hpp
+  outlay.cpp
+  outlay.hpp
+  path_utility.cpp
+  path_utility.hpp
+  path_utility_test.cpp
+  pchfile.hpp
+  platform_dependent.hpp
+  policy_document.cpp
+  policy_document.hpp
+  policy_view.cpp
+  policy_view.hpp
+  policy_view.xrc
+  posix_fhs.make
+  preferences_model.cpp
+  preferences_model.hpp
+  preferences_view.cpp
+  preferences_view.hpp
+  preferences_view.xrc
+  previewframe_ex.cpp
+  previewframe_ex.hpp
+  print_matrix.hpp
+  print_matrix_test.cpp
+  product_data.cpp
+  product_data.hpp
+  product_editor.cpp
+  product_editor.hpp
+  product_file_test.cpp
+  product_names.cpp
+  product_names.hpp
+  progress_meter.cpp
+  progress_meter.hpp
+  progress_meter_cgi.cpp
+  progress_meter_cli.cpp
+  progress_meter_test.cpp
+  progress_meter_wx.cpp
+  reg_d_group.xsl
+  reg_d_individual.xsl
+  reg_d_offshore.xsl
+  regex_test.cpp
+  round_test.cpp
+  round_to.hpp
+  round_to_test.cpp
+  rounding_document.cpp
+  rounding_document.hpp
+  rounding_rules.cpp
+  rounding_rules.hpp
+  rounding_view.cpp
+  rounding_view.hpp
+  rounding_view.xrc
+  rounding_view_editor.cpp
+  rounding_view_editor.hpp
+  rtti_lmi.hpp
+  rtti_lmi_test.cpp
+  safely_dereference_as.hpp
+  safely_dereference_as_test.cpp
+  sandbox_test.cpp
+  sigfpe.cpp
+  sigfpe.hpp
+  single_cell_document.cpp
+  single_cell_document.hpp
+  single_choice_popup_menu.cpp
+  single_choice_popup_menu.hpp
+  skin.xrc
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_group_carveout2.xrc
+  skin_reg_d.xrc
+  skin_single_premium.xrc
+  skin_variable_annuity.xrc
+  snprintf_test.cpp
+  so_attributes.hpp
+  solve.cpp
+  stl_extensions.hpp
+  stratified_algorithms.cpp
+  stratified_algorithms.hpp
+  stratified_algorithms_test.cpp
+  stratified_charges.cpp
+  stratified_charges.hpp
+  stratified_charges.xpp
+  stream_cast.hpp
+  stream_cast_test.cpp
+  surrchg_rates.cpp
+  surrchg_rates.hpp
+  system_command.cpp
+  system_command.hpp
+  system_command_non_wx.cpp
+  system_command_test.cpp
+  system_command_wx.cpp
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+  test_main.cpp
+  test_tools.hpp
+  test_tools_test.cpp
+  text_doc.cpp
+  text_doc.hpp
+  text_to_html_strings.sed
+  text_to_strings.sed
+  text_view.cpp
+  text_view.hpp
+  tier_document.cpp
+  tier_document.hpp
+  tier_view.cpp
+  tier_view.hpp
+  tier_view_editor.cpp
+  tier_view_editor.hpp
+  timer.cpp
+  timer.hpp
+  timer_test.cpp
+  tn_range.hpp
+  tn_range.tpp
+  tn_range_fwd.hpp
+  tn_range_test.cpp
+  tn_range_test_aux.cpp
+  tn_range_test_aux.hpp
+  tn_range_type_trammels.hpp
+  tn_range_types.cpp
+  tn_range_types.hpp
+  toolbar.xrc
+  transferor.cpp
+  transferor.hpp
+  uncopyable_lmi.hpp
+  value_cast.hpp
+  value_cast_test.cpp
+  variable_annuity.xsl
+  vector_test.cpp
+  version.hpp
+  view_ex.cpp
+  view_ex.hpp
+  view_ex.tpp
+  workhorse.make
+  wx_checks.cpp
+  wx_checks.hpp
+  wx_new.cpp
+  wx_new.hpp
+  wx_new_test.cpp
+  wx_utility.cpp
+  wx_utility.hpp
+  wx_workarounds.hpp
+  xml_lmi.cpp
+  xml_lmi.hpp
+  xml_lmi_fwd.hpp
+  xml_serializable.hpp
+  xml_serializable.tpp
+  xml_serialize.hpp
+  xml_serialize_test.cpp
+  xml_xslt_wrapp.cpp
+  yare_input.cpp
+  yare_input.hpp
+  zero.hpp
+  zero_test.cpp
+Update copyright notices.
+
+20110210T2218Z <gchicares@sbcglobal.net> [654]
+
+  GNUmakefile
+  workhorse.make
+Temporarily work around problems with nondefault 'build_type'.
+
+20110210T2219Z <gchicares@sbcglobal.net> [654]
+
+  mpatrol-mingw-GNUmakefile
+Accommodate recent MinGW gcc releases.
+
+20110228T0347Z <gchicares@sbcglobal.net> [654]
+
+  mec_state.cpp
+  mec_state.hpp
+Remove a needless override. The concomitant change in '.mec.xml'
+output is not material.
+
+20110320T1600Z <gchicares@sbcglobal.net> [654]
+
+  input.cpp
+  input.hpp
+  mec_input.cpp
+  mec_input.hpp
+Write member functions out of line. Inline implementations failed to
+link across an msw dll boundary with declspec decorations due to local
+instantiation of base class template xml_serializable<>.
+
+20110320T1622Z <gchicares@sbcglobal.net> [654]
+
+  dbnames.hpp
+  dbvalue.hpp
+  input_seq_helpers.hpp
+  input_sequence.hpp
+Add missing declspec decorations.
+
+20110320T1636Z <gchicares@sbcglobal.net> [654]
+
+  progress_meter.hpp
+  rounding_rules.hpp
+Add missing declspec decorations.
+
+20110320T1832Z <gchicares@sbcglobal.net> [654]
+
+  rounding_rules.cpp
+  rounding_rules.hpp
+  rounding_view_editor.cpp
+Reduce physical dependency by fixing 'build_type=so_test' erosion.
+
+20110320T1914Z <gchicares@sbcglobal.net> [654]
+
+  policy_document.cpp
+  product_data.cpp
+  product_data.hpp
+  rounding_document.cpp
+  rounding_rules.cpp
+  rounding_rules.hpp
+  stratified_charges.cpp
+  stratified_charges.hpp
+  tier_document.cpp
+Reduce physical dependency by fixing 'build_type=so_test' erosion.
+Inherited implementations of load() and save() are not available
+across an msw dll boundary with declspec decorations due to local
+instantiation of base class template xml_serializable<>.
+
+20110320T2106Z <gchicares@sbcglobal.net> [654]
+
+  main_cli.cpp
+  mc_enum_types_aux.cpp
+  mc_enum_types_aux.hpp
+Reduce physical dependency by fixing 'build_type=so_test' erosion.
+
+20110321T0024Z <gchicares@sbcglobal.net> [654]
+
+  mc_enum_types_aux.cpp
+  path_utility.cpp
+Remove unnecessary declspec decorations.
+
+20110321T0025Z <gchicares@sbcglobal.net> [655]
+
+  objects.make
+Make a casual workaround somewhat less bad.
+
+20110321T0047Z <gchicares@sbcglobal.net> [655]
+
+  input_harmonization.cpp
+Permit "weird" columns when needed, with no password.
+
+20110321T0609Z <gchicares@sbcglobal.net> [655]
+
+  GNUmakefile
+Augment 'build_type=so_test' testing.
+
+20110321T0610Z <gchicares@sbcglobal.net> [655]
+
+  workhorse.make
+Remove obsolete commentary.
+
+20110321T0711Z <gchicares@sbcglobal.net> [655]
+
+  msw_common.make
+Simplify: default linker order needn't be specified explicitly.
+
+20110321T0716Z <gchicares@sbcglobal.net> [655]
+
+  version.hpp
+Designate release candidate.
 

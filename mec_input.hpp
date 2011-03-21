@@ -1,6 +1,6 @@
 // MVC Model for MEC testing.
 //
-// Copyright (C) 2009, 2010 Gregory W. Chicares.
+// Copyright (C) 2009, 2010, 2011 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -81,14 +81,14 @@ class LMI_SO mec_input
     mec_input& operator=(mec_input const&);
     bool operator==(mec_input const&) const;
 
+    int                maturity_age() const;
+
+    int years_to_maturity  () const;
+    int issue_age          () const;
+    int inforce_year       () const;
+    int effective_year     () const;
+
     std::vector<std::string> RealizeAllSequenceInput(bool report_errors = true);
-
-    int                maturity_age() const {return GleanedMaturityAge_;}
-
-    int years_to_maturity  () const {return maturity_age() - issue_age();}
-    int issue_age          () const {return IssueAge     .value();}
-    int inforce_year       () const {return InforceYear  .value();}
-    int effective_year     () const {return EffectiveDate.value().year();}
 
     std::vector<double> FlatExtraRealized     () const;
     std::vector<double> PaymentHistoryRealized() const;

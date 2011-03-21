@@ -1,6 +1,6 @@
 // Document class for product data.
 //
-// Copyright (C) 2007, 2008, 2009, 2010 Gregory W. Chicares.
+// Copyright (C) 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -98,7 +98,7 @@ PolicyView& PolicyDocument::PredominantView() const
 
 void PolicyDocument::ReadDocument(std::string const& filename)
 {
-    product_data_.load(filename);
+    load(product_data_, filename);
     if(!GetViews().empty())
         {
         PolicyView& view = PredominantView();
@@ -129,6 +129,6 @@ void PolicyDocument::WriteDocument(std::string const& filename)
             *it->second = view.controls()[it->first]->GetValue();
             }
         }
-    product_data_.save(filename);
+    save(product_data_, filename);
 }
 

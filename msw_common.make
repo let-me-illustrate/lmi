@@ -1,6 +1,6 @@
 # Platform specifics: msw, shared by all subplatforms.
 #
-# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
+# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -44,9 +44,9 @@ platform_defines := \
 platform_gui_ldflags := -mwindows
 
 platform_gnome_xml_libraries := \
-  -lexslt.dll \
-  -lxslt.dll \
-  -lxml2.dll \
+  -lexslt \
+  -lxslt \
+  -lxml2 \
 
 platform_mpatrol_libraries := \
   -limagehlp \

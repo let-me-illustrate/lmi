@@ -1,6 +1,6 @@
 // Show progress on lengthy operations, optionally letting users cancel them.
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -181,7 +181,7 @@
 #include <iosfwd>
 #include <string>
 
-std::ostringstream& progress_meter_unit_test_stream();
+std::ostringstream& LMI_SO progress_meter_unit_test_stream();
 
 class LMI_SO progress_meter
     :private lmi::uncopyable<progress_meter>
