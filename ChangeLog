@@ -27709,3 +27709,8 @@ Remove obsolete commentary.
   msw_common.make
 Simplify: default linker order needn't be specified explicitly.
 
+20110321T0716Z <gchicares@sbcglobal.net> [655]
+
+  version.hpp
+Designate release candidate.
+
