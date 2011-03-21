@@ -934,7 +934,8 @@ false // Silly workaround for now.
     SupplementalReportColumn10.enable(create_supplemental_report);
     SupplementalReportColumn11.enable(create_supplemental_report);
 
-    // TODO ?? EGREGIOUS_DEFECT: instead, don't offer these columns at all.
+    // TODO ?? EGREGIOUS_DEFECT: instead, don't offer these columns at all. See:
+    //   http://lists.nongnu.org/archive/html/lmi/2009-09/msg00012.html
     std::vector<mcenum_report_column> weird_report_columns;
     weird_report_columns.push_back(mce_current_0_account_value_general_account    );
     weird_report_columns.push_back(mce_guaranteed_0_account_value_general_account );
@@ -945,21 +946,26 @@ false // Silly workaround for now.
     weird_report_columns.push_back(mce_current_0_cash_surrender_value             );
     weird_report_columns.push_back(mce_guaranteed_0_cash_surrender_value          );
 
+    bool enable_weirdness =
+           0.0 < InforceGeneralAccountValue .value()
+        && 0.0 < InforceSeparateAccountValue.value()
+        ;
+
     typedef std::vector<mcenum_report_column>::const_iterator vrci;
     for(vrci i = weird_report_columns.begin(); i != weird_report_columns.end(); ++i)
         {
-        SupplementalReportColumn00.allow(*i, home_office_only);
-        SupplementalReportColumn01.allow(*i, home_office_only);
-        SupplementalReportColumn02.allow(*i, home_office_only);
-        SupplementalReportColumn03.allow(*i, home_office_only);
-        SupplementalReportColumn04.allow(*i, home_office_only);
-        SupplementalReportColumn05.allow(*i, home_office_only);
-        SupplementalReportColumn06.allow(*i, home_office_only);
-        SupplementalReportColumn07.allow(*i, home_office_only);
-        SupplementalReportColumn08.allow(*i, home_office_only);
-        SupplementalReportColumn09.allow(*i, home_office_only);
-        SupplementalReportColumn10.allow(*i, home_office_only);
-        SupplementalReportColumn11.allow(*i, home_office_only);
+        SupplementalReportColumn00.allow(*i, enable_weirdness);
+        SupplementalReportColumn01.allow(*i, enable_weirdness);
+        SupplementalReportColumn02.allow(*i, enable_weirdness);
+        SupplementalReportColumn03.allow(*i, enable_weirdness);
+        SupplementalReportColumn04.allow(*i, enable_weirdness);
+        SupplementalReportColumn05.allow(*i, enable_weirdness);
+        SupplementalReportColumn06.allow(*i, enable_weirdness);
+        SupplementalReportColumn07.allow(*i, enable_weirdness);
+        SupplementalReportColumn08.allow(*i, enable_weirdness);
+        SupplementalReportColumn09.allow(*i, enable_weirdness);
+        SupplementalReportColumn10.allow(*i, enable_weirdness);
+        SupplementalReportColumn11.allow(*i, enable_weirdness);
         }
 }
 
