@@ -27719,12 +27719,12 @@ Designate release candidate.
   license.cpp
 Fix defect introduced 20110105T2122Z.
 
-20110323T1523Z <gchicares@sbcglobal.net> [655]
+20110323T1521Z <gchicares@sbcglobal.net> [655]
 
   GNUmakefile
 Guard against recurrence of defect introduced 20110105T2122Z.
 
- <gchicares@sbcglobal.net> [655]
+20110323T1523Z <gchicares@sbcglobal.net> [655]
 
   version.hpp
 Designate release candidate.
