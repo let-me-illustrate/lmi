@@ -59,7 +59,7 @@ char const notices_text[] =
     "'Let me illustrate...' creates life insurance illustrations.\n"
     "\n"
     "Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,\n"
-    "2006, 2007, 2008, 2009, 2010 Gregory W. Chicares.\n"
+    "2006, 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.\n"
     "\n"
     "This program is free software; you can redistribute it and/or\n"
     "modify it under the terms of the GNU General Public License\n"
