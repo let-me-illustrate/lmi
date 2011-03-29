@@ -388,6 +388,11 @@ happy_new_year: source_clean
 	@$(GREP) '$(old_year)[, ]*$(old_year)' * || true
 	@$(GREP) '$(new_year)[, ]*$(old_year)' * || true
 	@$(GREP) '$(new_year)[, ]*$(new_year)' * || true
+	@$(GREP) '$(old_year)' *.?pp \
+	  | $(SED) \
+	    -e '/$(old_year)[, ]*$(new_year)/d' \
+	    -e '/[[:alnum:]_.]*: *\/\//d' \
+	  || true
 	@$(GREP) $(unutterable) * \
 	  | $(SED) \
 	    -e '/$(unutterable).*$(new_year) Gregory W. Chicares/d' \
