@@ -27714,3 +27714,18 @@ Simplify: default linker order needn't be specified explicitly.
   version.hpp
 Designate release candidate.
 
+20110323T1518Z <gchicares@sbcglobal.net> [655]
+
+  license.cpp
+Fix defect introduced 20110105T2122Z.
+
+20110323T1521Z <gchicares@sbcglobal.net> [655]
+
+  GNUmakefile
+Guard against recurrence of defect introduced 20110105T2122Z.
+
+20110323T1523Z <gchicares@sbcglobal.net> [655]
+
+  version.hpp
+Designate release candidate.
+
