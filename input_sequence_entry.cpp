@@ -1073,46 +1073,43 @@ void InputSequenceEntry::UponOpenEditor(wxCommandEvent&)
     editor.CentreOnParent();
 
     std::string sequence_string = std::string(text_->GetValue());
-    if(!sequence_string.empty())
+    std::string const name(GetName().c_str());
+    datum_sequence const& ds = *member_cast<datum_sequence>(input->operator[](name));
+
+    std::map<std::string,std::string> const kwmap = ds.allowed_keywords();
+    std::vector<std::string> const keywords =
+        detail::extract_keys_from_string_map(kwmap);
+
+    bool keywords_only =
+            ds.keyword_values_are_allowable()
+        && !ds.numeric_values_are_allowable()
+        ;
+    LMI_ASSERT(!(keywords_only && keywords.empty()));
+    editor.set_keywords(keywords, keywords_only, ds.default_keyword());
+
+    InputSequence sequence
+        (sequence_string
+        ,input->years_to_maturity()
+        ,input->issue_age        ()
+        ,input->retirement_age   ()
+        ,input->inforce_year     ()
+        ,input->effective_year   ()
+        ,0
+        ,keywords
+        );
+
+    std::string const diagnostics = sequence.formatted_diagnostics();
+    if(!diagnostics.empty())
         {
-        std::string const name(GetName().c_str());
-        datum_sequence const& ds = *member_cast<datum_sequence>(input->operator[](name));
-
-        std::map<std::string,std::string> const kwmap = ds.allowed_keywords();
-        std::vector<std::string> const keywords =
-            detail::extract_keys_from_string_map(kwmap);
-
-        bool keywords_only =
-                ds.keyword_values_are_allowable()
-            && !ds.numeric_values_are_allowable()
+        warning()
+            << "The sequence is invalid and cannot be edited visually.\n"
+            << diagnostics
+            << LMI_FLUSH
             ;
-        LMI_ASSERT(!(keywords_only && keywords.empty()));
-        editor.set_keywords(keywords, keywords_only, ds.default_keyword());
-
-        InputSequence sequence
-            (sequence_string
-            ,input->years_to_maturity()
-            ,input->issue_age        ()
-            ,input->retirement_age   ()
-            ,input->inforce_year     ()
-            ,input->effective_year   ()
-            ,0
-            ,keywords
-            );
-
-        std::string const diagnostics = sequence.formatted_diagnostics();
-        if(!diagnostics.empty())
-            {
-            warning()
-                << "The sequence is invalid and cannot be edited visually.\n"
-                << diagnostics
-                << LMI_FLUSH
-                ;
-            return;
-            }
-
-        editor.sequence(sequence);
+        return;
         }
+
+    editor.sequence(sequence);
 
     if(wxID_OK == editor.ShowModal())
         {

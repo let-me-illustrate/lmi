@@ -27729,3 +27729,9 @@ Guard against recurrence of defect introduced 20110105T2122Z.
   version.hpp
 Designate release candidate.
 
+20110406T1613Z <gchicares@sbcglobal.net> [655]
+
+  input_sequence_entry.cpp
+Fix defect introduced 20100704T1645Z. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-08/msg00018.html
+
