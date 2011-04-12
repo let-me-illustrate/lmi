@@ -64,6 +64,9 @@
         <if cond="COMPILER=='vc'">
             <define>_CRT_SECURE_NO_WARNINGS</define>
             <define>_CRT_NONSTDC_NO_WARNINGS</define>
+
+            <!-- PCH size is too large for VC++ 2008 without this: -->
+            <cxxflags>/Zm125</cxxflags>
         </if>
 
         <!-- for PCH support, LMI_PCH_HEADER must always be defined;
