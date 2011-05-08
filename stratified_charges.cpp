@@ -600,12 +600,15 @@ void stratified_charges::write_stratified_files()
     foo.datum("GuarSepAcctLoadTieredByAssets"  ).values_.push_back(0.0);
     foo.datum("GuarSepAcctLoadTieredByAssets"  ).limits_.push_back(dbl_inf);
 
-    // For AK and SD, these are the actual rates as of 2003-09-09. Statutes:
-    // AK 21.09.210(m)
+    // AK and SD parameters and citations as of 2011-05.
+    // AK 21.09.210(m):
     //   http://www.legis.state.ak.us/basis/folioproxy.asp?url=http://www.legis.state.ak.us/cgi-bin/folioisa.dll/stattx06/query=*/doc/%7Bt9250%7D?
-    // SD 10-44-2(2) (see also 58-6-70)
+    // SD 10-44-2(2) and 58-6-70:
     //   http://legis.state.sd.us/statutes/DisplayStatute.aspx?Type=Statute&Statute=10-44-2
     //   http://legis.state.sd.us/statutes/DisplayStatute.aspx?Statute=58-6&Type=Statute
+    // SD Chapter 260 (HB 1200), signed 2008-02-19, amended 58-6-70 by
+    // removing the former million-dollar first-year-premium threshold:
+    //   http://legis.state.sd.us/sessions/2008/SessionLaws/DisplayChapter.aspx?Chapter=260
 
     foo.datum("TieredAKPremTax").values_.push_back (0.02700);
     foo.datum("TieredAKPremTax").values_.push_back (0.00100);
@@ -621,7 +624,7 @@ void stratified_charges::write_stratified_files()
     foo.datum("TieredSDPremTax").values_.push_back (0.00080);
     foo.datum("TieredSDPremTax").limits_.push_back(100000.0);
     foo.datum("TieredSDPremTax").limits_.push_back(dbl_inf);
-    foo.datum("TieredSDPremTax").gloss_ = "SD 10-44-2(2) (see also 58-6-70)";
+    foo.datum("TieredSDPremTax").gloss_ = "SD 10-44-2(2) and 58-6-70";
 
     foo.save(AddDataDir("sample.strata"));
 }
