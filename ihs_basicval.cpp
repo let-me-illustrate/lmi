@@ -821,6 +821,7 @@ void BasicValues::SetRoundingFunctors()
 
 void BasicValues::SetPremiumTaxParameters()
 {
+    StateOfDomicile_ = mc_state_from_string(ProductData_->datum("InsCoDomicile"));
     PremiumTaxLoadIsTieredInStateOfDomicile_ = StratifiedCharges_->premium_tax_is_tiered(GetStateOfDomicile());
     PremiumTaxLoadIsTieredInPremiumTaxState_ = StratifiedCharges_->premium_tax_is_tiered(GetPremiumTaxState());
 
@@ -839,7 +840,6 @@ void BasicValues::SetPremiumTaxParameters()
     PremiumTaxLoad_                   = Database_->Query(DB_PremTaxLoad      , index);
     FirstYearPremiumRetaliationLimit_ = Database_->Query(DB_PremTaxRetalLimit, index);
 
-    StateOfDomicile_ = mc_state_from_string(ProductData_->datum("InsCoDomicile"));
     {
     database_index index = Database_->index().state(GetStateOfDomicile());
     DomiciliaryPremiumTaxLoad_ = 0.0;
