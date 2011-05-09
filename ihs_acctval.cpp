@@ -1572,10 +1572,6 @@ double AccountValue::TaxableFirstYearPlannedPremium() const
 //============================================================================
 void AccountValue::GuessWhetherFirstYearPremiumExceedsRetaliationLimit()
 {
-    // TODO ?? Probably we should make PerformE[er]PmtStrategy() take
-    // 'Year' as an argument. Until then, we need a dummy initial
-    // value here.
-    //
     // TODO ?? For inforce, we really need the admin system to say
     //   - whether the first-year retaliation limit was exceeded; and
     //   - how much premium has already been paid for inforce
