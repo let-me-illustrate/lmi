@@ -1382,6 +1382,8 @@ void AccountValue::TxAcceptPayment(double a_pmt)
         }
 
     HOPEFULLY(0.0 <= a_pmt);
+    // Internal 1035 exchanges may be exempt from premium tax; they're
+    // handled elsewhere, so here the exempt amount is always zero.
     double actual_load = GetPremLoad(a_pmt, 0.0);
     double net_pmt = a_pmt - actual_load;
     HOPEFULLY(0.0 <= net_pmt);

@@ -1556,7 +1556,6 @@ void AccountValue::SetAnnualInvariants()
 //============================================================================
 double AccountValue::TaxableFirstYearPlannedPremium() const
 {
-// TODO ?? 'WaivePmTxInt1035' is not respected elsewhere, but should be.
     double z =
           PerformEePmtStrategy() * InvariantValues().EeMode[0].value()
         + PerformErPmtStrategy() * InvariantValues().ErMode[0].value()
