@@ -489,6 +489,12 @@ std::string premium_tax_table(mcenum_state state)
 /// eventually be addressed elsewhere; meanwhile, this module contains
 /// code to represent the DE tiered rates, but ignores those rates and
 /// treats DE the same as any other state except AK and SD.
+///
+/// UT tiered premium tax is not yet implemented. It applies only to
+/// VLI premiums paid by a corporation or a corporate trust. How it's
+/// affected by retaliation is unclear. Relevant citations:
+///   http://le.utah.gov/~code/TITLE59/htm/59_09_010100.htm
+///   http://le.utah.gov/~code/TITLE31A/htm/31A03_040100.htm
 
 double stratified_charges::tiered_premium_tax
     (mcenum_state state
