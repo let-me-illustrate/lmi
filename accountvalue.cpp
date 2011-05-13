@@ -1040,8 +1040,6 @@ void   AccountValue::DebugPrint()
     {return;}
 void   AccountValue::DebugPrintInit()
     {return;}
-void   AccountValue::DebugRestart(std::string const&)
-    {return;}
 void   AccountValue::FinalizeLife(mcenum_run_basis)
     {return;}
 void   AccountValue::FinalizeLifeAllBases()
@@ -1054,8 +1052,6 @@ double AccountValue::GetProjectedCoiChargeInforce() const
     {return 0.0;}
 double AccountValue::GetSepAcctAssetsInforce() const
     {return 0.0;}
-void   AccountValue::GuessWhetherFirstYearPremiumExceedsRetaliationLimit()
-    {return;}
 double AccountValue::IncrementBOM(int, int, double)
     {return 0.0;}
 void   AccountValue::IncrementEOM(int, int, double, double)
@@ -1076,6 +1072,4 @@ void   AccountValue::SetClaims()
     {return;}
 void   AccountValue::SetProjectedCoiCharge()
     {return;}
-bool   AccountValue::TestWhetherFirstYearPremiumExceededRetaliationLimit()
-    {return false;}
 

@@ -519,40 +519,6 @@ void DBDictionary::InitDB()
     Add(database_entity(DB_DynSepAcctLoadLimit , dbl_inf));
     Add(database_entity(DB_AdbLimit            , dbl_inf));
     Add(database_entity(DB_ExpSpecAmtLimit     , dbl_inf));
-
-    // SD Chapter 260 (HB 1200), signed 2008-02-19, amended 58-6-70
-    // by removing the former million-dollar threshold.
-    //
-    // TODO ?? For now, only the threshold here is changed. Much
-    // complex code elsewhere can be removed when time permits.
-
-    int premium_tax_dimensions[e_number_of_axes] = {1, 1, 1, 1, 1, 53, 1};
-    double premium_tax_retaliation_threshold[53] =
-        //    AL       AK       AZ       AR       CA       CO       CT
-        {dbl_inf,     0.0, dbl_inf, dbl_inf, dbl_inf, dbl_inf, dbl_inf
-        //    DE       DC       FL       GA       HI       ID
-        ,dbl_inf, dbl_inf, dbl_inf, dbl_inf, dbl_inf, dbl_inf
-        //    IL       IN       IA       KS       KY       LA       ME
-        ,dbl_inf, dbl_inf, dbl_inf, dbl_inf, dbl_inf, dbl_inf, dbl_inf
-        //    MD       MA       MI       MN       MS       MO
-        ,dbl_inf, dbl_inf, dbl_inf, dbl_inf, dbl_inf, dbl_inf
-        //    MT       NE       NV       NH       NJ       NM       NY
-        ,dbl_inf, dbl_inf, dbl_inf, dbl_inf, dbl_inf, dbl_inf, dbl_inf
-        //    NC       ND       OH       OK       OR       PA
-        ,dbl_inf, dbl_inf, dbl_inf, dbl_inf, dbl_inf, dbl_inf
-        //    PR       RI       SC       SD       TN       TX       UT
-        ,dbl_inf, dbl_inf, dbl_inf,     0.0, dbl_inf, dbl_inf, dbl_inf
-        //    VT       VA       WA       WV       WI       WY       XX
-        ,dbl_inf, dbl_inf, dbl_inf, dbl_inf, dbl_inf, dbl_inf,     0.0
-        };
-    Add
-        (database_entity
-            (DB_PremTaxRetalLimit
-            ,e_number_of_axes
-            ,premium_tax_dimensions
-            ,premium_tax_retaliation_threshold
-            )
-        );
 }
 
 void DBDictionary::WriteSampleDBFile()

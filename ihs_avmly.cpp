@@ -1524,17 +1524,12 @@ double AccountValue::GetPremTaxLoad(double payment)
         &&  contains(reciprocal_nonretaliation_states, GetPremiumTaxState())
         ;
 
-    // Override this unconditionally for the moment. This is the value
-    // it must have as long as 'PremTaxRetalLimit' is never overridden.
-    bool fyperl =
+    // Obviously this determination should be made only once, and not here.
+    bool FirstYearPremiumExceedsRetaliationLimit =
             mce_s_AK == GetPremiumTaxState()
         ||  mce_s_SD == GetPremiumTaxState()
         ||  mce_s_XX == GetPremiumTaxState()
         ;
-    // Temporarily assert equivalence to obsolete SD calculation,
-    // before removing it, to make assurance doubly sure.
-    LMI_ASSERT(FirstYearPremiumExceedsRetaliationLimit == fyperl);
-    FirstYearPremiumExceedsRetaliationLimit = fyperl;
 
     double tax_in_state_of_domicile = 0.0;
     if(!FirstYearPremiumExceedsRetaliationLimit && !forbear_retaliation)
