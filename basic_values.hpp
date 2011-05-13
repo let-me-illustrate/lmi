@@ -370,7 +370,6 @@ class LMI_SO BasicValues
     std::vector<double>     TieredMEBands;
     std::vector<double>     TieredMECharges;
 
-    double                  FirstYearPremiumRetaliationLimit_;
     bool                    PremiumTaxLoadIsTieredInStateOfDomicile_;
     bool                    PremiumTaxLoadIsTieredInPremiumTaxState_;
 

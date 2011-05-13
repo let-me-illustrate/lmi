@@ -295,16 +295,6 @@ void AccountValue::DebugEndBasis()
 }
 
 //============================================================================
-void AccountValue::DebugRestart(std::string const& reason)
-{
-    if(!Debugging || Solving || SolvingForGuarPremium)
-        {
-        return;
-        }
-    DebugStream << reason << '\n';
-}
-
-//============================================================================
 // To add a new column, see ihs_dbughdr.hpp .
 void AccountValue::DebugPrint()
 {

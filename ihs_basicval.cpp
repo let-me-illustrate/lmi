@@ -806,7 +806,6 @@ void BasicValues::SetRoundingFunctors()
 /// These database entities should be looked up by tax state:
 ///  - DB_PremTaxLoad
 ///  - DB_PremTaxRate
-///  - DB_PremTaxRetalLimit
 /// These probably (for inchoate amortization) shouldn't:
 ///  - DB_PremTaxAmortPeriod
 ///  - DB_PremTaxAmortIntRate
@@ -838,7 +837,6 @@ void BasicValues::SetPremiumTaxParameters()
     database_index index = Database_->index().state(GetPremiumTaxState());
     PremiumTaxRate_                   = Database_->Query(DB_PremTaxRate      , index);
     PremiumTaxLoad_                   = Database_->Query(DB_PremTaxLoad      , index);
-    FirstYearPremiumRetaliationLimit_ = Database_->Query(DB_PremTaxRetalLimit, index);
 
     {
     database_index index = Database_->index().state(GetStateOfDomicile());

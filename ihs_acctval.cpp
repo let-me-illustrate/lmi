@@ -107,7 +107,6 @@ AccountValue::AccountValue(Input const& input)
     ,SepBasis_             (mce_sep_full)
     ,OldDBOpt              (mce_option1)
     ,YearsDBOpt            (mce_option1)
-    ,FirstYearPremiumExceedsRetaliationLimit(true)
 {
     InvariantValues().Init(this);
 // TODO ?? What are the values of the last two arguments here?
@@ -336,8 +335,6 @@ double AccountValue::RunAllApplicableBases()
 
 double AccountValue::RunOneCell(mcenum_run_basis a_Basis)
 {
-    GuessWhetherFirstYearPremiumExceedsRetaliationLimit();
-  restart:
     InitializeLife(a_Basis);
 
     for(int year = InforceYear; year < BasicValues::GetLength(); ++year)
@@ -365,17 +362,6 @@ double AccountValue::RunOneCell(mcenum_run_basis a_Basis)
                 ,SepAcctValueAfterDeduction * InforceLivesBoy()
                 ,CumPmts
                 );
-            }
-
-        if(!TestWhetherFirstYearPremiumExceededRetaliationLimit())
-            {
-            // We could do this instead:
-            //   InitializeLife(a_Basis);
-            //   --year;
-            // to satisfy the popular 'zero-tolerance' attitude toward
-            // the goto statement, but that would be more unnatural.
-            DebugRestart("First-year premium did not meet retaliation limit.");
-            goto restart;
             }
 
         SetClaims();
@@ -1551,57 +1537,6 @@ void AccountValue::SetAnnualInvariants()
     YearsSalesLoadRefundRate= Loads_->refundable_sales_load_proportion()[Year];
     YearsPremTaxLoadRate    = Loads_->premium_tax_load                ()[Year];
     YearsDacTaxLoadRate     = Loads_->dac_tax_load                    ()[Year];
-}
-
-//============================================================================
-double AccountValue::TaxableFirstYearPlannedPremium() const
-{
-    double z =
-          PerformEePmtStrategy() * InvariantValues().EeMode[0].value()
-        + PerformErPmtStrategy() * InvariantValues().ErMode[0].value()
-        + Outlay_->dumpin()
-        + Outlay_->external_1035_amount()
-        ;
-    if(!WaivePmTxInt1035)
-        {
-        z += Outlay_->internal_1035_amount();
-        }
-    return z;
-}
-
-//============================================================================
-void AccountValue::GuessWhetherFirstYearPremiumExceedsRetaliationLimit()
-{
-    // TODO ?? For inforce, we really need the admin system to say
-    //   - whether the first-year retaliation limit was exceeded; and
-    //   - how much premium has already been paid for inforce
-    //       contracts that are still in the first policy year.
-
-    Year  = yare_input_.InforceYear;
-    Month = yare_input_.InforceMonth;
-    CoordinateCounters();
-    FirstYearPremiumExceedsRetaliationLimit =
-           FirstYearPremiumRetaliationLimit_
-        <= TaxableFirstYearPlannedPremium()
-        ;
-}
-
-//============================================================================
-bool AccountValue::TestWhetherFirstYearPremiumExceededRetaliationLimit()
-{
-    if
-        (  0 == Year
-        && FirstYearPremiumExceedsRetaliationLimit
-        && CumPmts < FirstYearPremiumRetaliationLimit_
-        )
-        {
-        FirstYearPremiumExceedsRetaliationLimit = false;
-        return false;
-        }
-    else
-        {
-        return true;
-        }
 }
 
 //============================================================================

@@ -27746,3 +27746,43 @@ Improve documentation.
 Fix defect introduced 20100721T2315Z: StateOfDomicile_ was used before
 its value was set in the proper context.
 
+20110509T1252Z <gchicares@sbcglobal.net> [654]
+
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+Remove a marker for a defect already resolved.
+
+20110509T1257Z <gchicares@sbcglobal.net> [653]
+
+  ihs_acctval.cpp
+Remove a marker for a defect already resolved.
+
+20110512T2026Z <gchicares@sbcglobal.net> [653]
+
+  stratified_charges.cpp
+Document tiered UT premium tax.
+
+20110513T1045Z <gchicares@sbcglobal.net> [653]
+
+  ihs_avmly.cpp
+Recognize reciprocal premium-tax nonretaliation.
+
+20110513T1613Z <gchicares@sbcglobal.net> [653]
+
+  ihs_avmly.cpp
+Prepare to simplify.
+
+20110513T1701Z <gchicares@sbcglobal.net> [651]
+
+  account_value.hpp
+  accountvalue.cpp
+  basic_values.hpp
+  dbdict.cpp
+  dbnames.xpp
+  group_values.cpp
+  ihs_acctval.cpp
+  ihs_avdebug.cpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+Eradicate a SD premium-tax calculation superseded 2008-02-19.
+
