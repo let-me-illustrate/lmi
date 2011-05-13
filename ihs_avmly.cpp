@@ -1511,8 +1511,21 @@ double AccountValue::GetPremTaxLoad(double payment)
         }
     YearsTotalPremTaxLoadInPremiumTaxState += tax_in_premium_tax_state;
 
+    // Obviously this determination should be made only once, and not here.
+    // http://leg2.state.va.us/dls/h&sdocs.nsf/fc86c2b17a1cf388852570f9006f1299/461afa310d4d3d528525646500562282/$FILE/HD78_1997.pdf
+    std::vector<mcenum_state> reciprocal_nonretaliation_states;
+    reciprocal_nonretaliation_states.push_back(mce_s_HI);
+    reciprocal_nonretaliation_states.push_back(mce_s_MA);
+    reciprocal_nonretaliation_states.push_back(mce_s_MN);
+    reciprocal_nonretaliation_states.push_back(mce_s_NY);
+    reciprocal_nonretaliation_states.push_back(mce_s_RI);
+    bool forbear_retaliation =
+            contains(reciprocal_nonretaliation_states, GetStateOfDomicile())
+        &&  contains(reciprocal_nonretaliation_states, GetPremiumTaxState())
+        ;
+
     double tax_in_state_of_domicile = 0.0;
-    if(!FirstYearPremiumExceedsRetaliationLimit)
+    if(!FirstYearPremiumExceedsRetaliationLimit && !forbear_retaliation)
         {
         tax_in_state_of_domicile = DomiciliaryPremiumTaxLoad() * payment;
         if(PremiumTaxLoadIsTieredInStateOfDomicile_)
