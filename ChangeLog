@@ -27786,3 +27786,17 @@ Prepare to simplify.
   ihs_basicval.cpp
 Eradicate a SD premium-tax calculation superseded 2008-02-19.
 
+20110518T2017Z <gchicares@sbcglobal.net> [650]
+
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  ledger_xml_io.cpp
+Fix ancient defect noted 20100723T1029Z: remove dangerous scalars.
+
+20110519T1047Z <gchicares@sbcglobal.net> [650]
+
+  account_value.hpp
+  ihs_avdebug.cpp
+  ihs_avmly.cpp
+Rive premium-based loads in monthly trace file to make testing easier.
+
