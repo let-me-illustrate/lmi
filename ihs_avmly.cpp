@@ -869,7 +869,11 @@ void AccountValue::InitializeMonth()
     we need to figure out why.
 */
 
-    GptForceout = 0.0;
+    GptForceout       = 0.0;
+    premium_load_     = 0.0;
+    sales_load_       = 0.0;
+    premium_tax_load_ = 0.0;
+    dac_tax_load_     = 0.0;
     OldSA = ActualSpecAmt + TermSpecAmt;
     OldDB = DBReflectingCorr + TermDB;
 
@@ -1441,17 +1445,17 @@ double AccountValue::GetPremLoad
         }
     double target_portion = a_pmt - excess_portion;
 
-    double prem_load =
+    premium_load_ =
             target_portion * YearsPremLoadTgt
         +   excess_portion * YearsPremLoadExc
         ;
 
-    double sales_load =
+    sales_load_ =
             target_portion * YearsSalesLoadTgt
         +   excess_portion * YearsSalesLoadExc
         ;
-    CumulativeSalesLoad += sales_load;
-    HOPEFULLY(0.0 <= sales_load);
+    LMI_ASSERT(0.0 <= sales_load_);
+    CumulativeSalesLoad += sales_load_;
 
     // TODO ?? This variable and the variables it depends on probably
     // are no longer needed and should be expunged.
@@ -1461,20 +1465,20 @@ double AccountValue::GetPremLoad
         - a_portion_exempt_from_premium_tax * YearsPremTaxLoadRate
         ;
 
-    double prem_tax_load = GetPremTaxLoad
+    premium_tax_load_ = GetPremTaxLoad
         ( a_pmt
         - a_portion_exempt_from_premium_tax
         );
-    YearsTotalPremTaxLoad += prem_tax_load;
+    YearsTotalPremTaxLoad += premium_tax_load_;
 
-    double dac_tax_load = YearsDacTaxLoadRate * a_pmt;
-    YearsTotalDacTaxLoad += dac_tax_load;
+    dac_tax_load_ = YearsDacTaxLoadRate * a_pmt;
+    YearsTotalDacTaxLoad += dac_tax_load_;
 
     double sum_of_separate_loads =
-          prem_load
-        + sales_load
-        + prem_tax_load
-        + dac_tax_load
+          premium_load_
+        + sales_load_
+        + premium_tax_load_
+        + dac_tax_load_
         ;
     HOPEFULLY(0.0 <= sum_of_separate_loads);
     LMI_ASSERT

@@ -516,6 +516,10 @@ class LMI_SO AccountValue
 
     double  MonthsPolicyFees;
     double  SpecAmtLoad;
+    double  premium_load_;
+    double  sales_load_;
+    double  premium_tax_load_;
+    double  dac_tax_load_;
 
     // Stratified loads are determined by assets and cumulative
     // payments immediately after the monthly deduction. Both are
