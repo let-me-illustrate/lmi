@@ -1561,14 +1561,24 @@ double AccountValue::GetPremTaxLoad(double payment)
     // that some test cases gave anomalous results--e.g., a 2% load
     // on a 100000 annual premium (split into necessary and
     // unnecessary pieces) came out to 1999.99 .
+    //
+    // The comment above is misleading. The first calculation isn't
+    // reachable unless premium tax is tiered in the state of domicile
+    // but not in the premium-tax state--which is weird. It made more
+    // sense when SD had a first-year-premium threshold for tiering,
+    // but that was repealed in 2008. Although the condition is now
+    // dubious, the code is valuable: the first calculation is more
+    // robust than the second, though more prone to roundoff error,
+    // so it should be preferred wherever the two materially disagree.
     if
-        (   !FirstYearPremiumExceedsRetaliationLimit
+        (   !FirstYearPremiumExceedsRetaliationLimit    // not {AK, SD, XX}
         &&
-            (  PremiumTaxLoadIsTieredInPremiumTaxState_
+            (  PremiumTaxLoadIsTieredInPremiumTaxState_ // {AK, SD}
             || PremiumTaxLoadIsTieredInStateOfDomicile_
             )
         )
         {
+        fatal_error() << "Practically unreachable." << LMI_FLUSH;
         double ytd_premium_tax_reflecting_retaliation = std::max
             (YearsTotalPremTaxLoadInPremiumTaxState
             ,YearsTotalPremTaxLoadInStateOfDomicile
