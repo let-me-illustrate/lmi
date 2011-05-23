@@ -42,6 +42,7 @@
 #include "ihs_irc7702a.hpp"
 #include "materially_equal.hpp"
 #include "math_functors.hpp"
+#include "mc_enum_types_aux.hpp"     // mc_state_from_string()
 #include "mec_input.hpp"
 #include "mec_xml_document.hpp"
 #include "miscellany.hpp"            // ios_out_trunc_binary()
@@ -306,6 +307,7 @@ mec_state test_one_days_7702A_transactions
         (database
         ,stratified
         ,PremiumTaxState
+        ,mc_state_from_string(product_filenames.datum("InsCoDomicile"))
         ,false
         );
 

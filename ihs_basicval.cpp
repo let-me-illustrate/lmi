@@ -833,6 +833,7 @@ void BasicValues::SetPremiumTaxParameters()
         (*Database_
         ,*StratifiedCharges_
         ,GetPremiumTaxState()
+        ,GetStateOfDomicile()
         ,yare_input_.AmortizePremiumLoad
         );
 
@@ -848,7 +849,13 @@ void BasicValues::SetPremiumTaxParameters()
     DomiciliaryPremiumTaxLoad_ = 0.0;
     if(!yare_input_.AmortizePremiumLoad)
         {
-        DomiciliaryPremiumTaxLoad_ = Database_->Query(DB_PremTaxLoad, index);
+        double domiciliary_premium_tax_rate = Database_->Query(DB_PremTaxRate, index);
+        DomiciliaryPremiumTaxLoad_          = Database_->Query(DB_PremTaxLoad, index);
+        if(premium_tax_is_retaliatory_)
+            {
+            PremiumTaxRate_ = std::max(PremiumTaxRate_, domiciliary_premium_tax_rate);
+            PremiumTaxLoad_ = std::max(PremiumTaxLoad_, DomiciliaryPremiumTaxLoad_  );
+            }
         }
     }
 
@@ -895,6 +902,7 @@ double lowest_premium_tax_load
     (product_database   const& db
     ,stratified_charges const& stratified
     ,mcenum_state              premium_tax_state
+    ,mcenum_state              state_of_domicile
     ,bool                      amortize_premium_load
     )
 {
@@ -924,6 +932,12 @@ double lowest_premium_tax_load
 
     database_index index = db.index().state(premium_tax_state);
     z = db.Query(DB_PremTaxLoad, index);
+
+    if(premium_tax_is_retaliatory(premium_tax_state, state_of_domicile))
+        {
+        index = db.index().state(state_of_domicile);
+        z = std::max(z, db.Query(DB_PremTaxLoad, index));
+        }
 
     if(!db.varies_by_state(DB_PremTaxLoad))
         {
