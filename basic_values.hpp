@@ -542,6 +542,7 @@ double lowest_premium_tax_load
     (product_database   const& db
     ,stratified_charges const& stratified
     ,mcenum_state              premium_tax_state
+    ,mcenum_state              state_of_domicile
     ,bool                      amortize_premium_load
     );
 
