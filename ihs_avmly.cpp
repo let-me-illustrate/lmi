@@ -1553,45 +1553,18 @@ double AccountValue::GetPremTaxLoad(double payment)
 
     PolicyYearRunningTotalPremiumSubjectToPremiumTax += payment;
 
-    // If there's retaliation involving at least one tiered rate,
-    // then the calculation is complicated. Otherwise, a simple
-    // calculation is accurate, and preferable because it is less
-    // prone to tiny, annoying numerical problems. We tried using
-    // the more general calculation in both situations, but found
-    // that some test cases gave anomalous results--e.g., a 2% load
-    // on a 100000 annual premium (split into necessary and
-    // unnecessary pieces) came out to 1999.99 .
-    //
-    // The comment above is misleading. The first calculation isn't
-    // reachable unless premium tax is tiered in the state of domicile
-    // but not in the premium-tax state--which is weird. It made more
-    // sense when SD had a first-year-premium threshold for tiering,
-    // but that was repealed in 2008. Although the condition is now
-    // dubious, the code is valuable: the first calculation is more
-    // robust than the second, though more prone to roundoff error,
-    // so it should be preferred wherever the two materially disagree.
-    if
-        (   !FirstYearPremiumExceedsRetaliationLimit    // not {AK, SD, XX}
-        &&
-            (  PremiumTaxLoadIsTieredInPremiumTaxState_ // {AK, SD}
-            || PremiumTaxLoadIsTieredInStateOfDomicile_
-            )
-        )
-        {
-        fatal_error() << "Practically unreachable." << LMI_FLUSH;
-        double ytd_premium_tax_reflecting_retaliation = std::max
-            (YearsTotalPremTaxLoadInPremiumTaxState
-            ,YearsTotalPremTaxLoadInStateOfDomicile
-            );
-        return std::max
-            (0.0
-            ,ytd_premium_tax_reflecting_retaliation - YearsTotalPremTaxLoad
-            );
-        }
-    else
-        {
-        return std::max(tax_in_premium_tax_state, tax_in_state_of_domicile);
-        }
+    // 'x' is more robust, though more prone to roundoff error than
+    // 'y', so 'y' is preferred iff they're materially equal.
+    double ytd_premium_tax_reflecting_retaliation = std::max
+        (YearsTotalPremTaxLoadInPremiumTaxState
+        ,YearsTotalPremTaxLoadInStateOfDomicile
+        );
+    double x = std::max
+        (0.0
+        ,ytd_premium_tax_reflecting_retaliation - YearsTotalPremTaxLoad
+        );
+    double y = std::max(tax_in_premium_tax_state, tax_in_state_of_domicile);
+    return materially_equal(x, y) ? y : x;
 }
 
 //============================================================================
