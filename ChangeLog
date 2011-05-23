@@ -27800,3 +27800,8 @@ Fix ancient defect noted 20100723T1029Z: remove dangerous scalars.
   ihs_avmly.cpp
 Rive premium-based loads in monthly trace file to make testing easier.
 
+20110523T0053Z <gchicares@sbcglobal.net> [650]
+
+  version.hpp
+Designate release candidate.
+
