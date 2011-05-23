@@ -824,6 +824,11 @@ void BasicValues::SetPremiumTaxParameters()
     PremiumTaxLoadIsTieredInStateOfDomicile_ = StratifiedCharges_->premium_tax_is_tiered(GetStateOfDomicile());
     PremiumTaxLoadIsTieredInPremiumTaxState_ = StratifiedCharges_->premium_tax_is_tiered(GetPremiumTaxState());
 
+    premium_tax_is_retaliatory_ = premium_tax_is_retaliatory
+        (GetPremiumTaxState()
+        ,GetStateOfDomicile()
+        );
+
     LowestPremiumTaxLoad_ = lowest_premium_tax_load
         (*Database_
         ,*StratifiedCharges_
@@ -848,6 +853,40 @@ void BasicValues::SetPremiumTaxParameters()
     }
 
     TestPremiumTaxLoadConsistency();
+}
+
+/// Determine whether premium tax is retaliatory.
+///
+/// Here's a general discussion:
+///   http://leg2.state.va.us/dls/h&sdocs.nsf/fc86c2b17a1cf388852570f9006f1299/461afa310d4d3d528525646500562282/$FILE/HD78_1997.pdf
+///
+/// Premium tax is retaliatory in most states. Exceptions:
+///   - MA, MN, NY, and RI are mutually nonretaliatory.
+///   - HI never retaliates; neither does fictitious state XX.
+///   - AK and SD retaliate only on the bottom tier; this is best
+///     implemented by adjusting that tier's rate and treating them
+///     as otherwise nonretaliatory.
+
+bool premium_tax_is_retaliatory
+    (mcenum_state premium_tax_state
+    ,mcenum_state state_of_domicile
+    )
+{
+    static int const n = 4;
+    static mcenum_state const d[n] = {mce_s_MA, mce_s_MN, mce_s_NY, mce_s_RI};
+    static std::vector<mcenum_state> const reciprocal_nonretaliation_states(d, d + n);
+    bool const reciprocally_nonretaliatory =
+            contains(reciprocal_nonretaliation_states, state_of_domicile)
+        &&  contains(reciprocal_nonretaliation_states, premium_tax_state)
+        ;
+    bool const nonretaliatory =
+            reciprocally_nonretaliatory
+        ||  mce_s_HI == premium_tax_state
+        ||  mce_s_XX == premium_tax_state
+        ||  mce_s_AK == premium_tax_state
+        ||  mce_s_SD == premium_tax_state
+        ;
+    return !nonretaliatory;
 }
 
 /// Lowest premium-tax load, for 7702 and 7702A purposes.

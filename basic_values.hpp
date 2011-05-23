@@ -372,6 +372,7 @@ class LMI_SO BasicValues
 
     bool                    PremiumTaxLoadIsTieredInStateOfDomicile_;
     bool                    PremiumTaxLoadIsTieredInPremiumTaxState_;
+    bool                    premium_tax_is_retaliatory_;
 
   private:
     void SetPremiumTaxParameters();
@@ -531,6 +532,11 @@ inline bool BasicValues::IsSubjectToIllustrationReg() const
 {
     return IsSubjectToIllustrationReg_;
 }
+
+bool premium_tax_is_retaliatory
+    (mcenum_state premium_tax_state
+    ,mcenum_state state_of_domicile
+    );
 
 double lowest_premium_tax_load
     (product_database   const& db
