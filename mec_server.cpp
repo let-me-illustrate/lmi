@@ -304,11 +304,11 @@ mec_state test_one_days_7702A_transactions
         }
 
     double const premium_tax_load = lowest_premium_tax_load
-        (database
-        ,stratified
-        ,PremiumTaxState
+        (PremiumTaxState
         ,mc_state_from_string(product_filenames.datum("InsCoDomicile"))
-        ,false
+        ,false // Assume load is not amortized.
+        ,database
+        ,stratified
         );
 
     std::vector<double> target_sales_load  ;
