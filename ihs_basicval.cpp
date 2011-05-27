@@ -830,11 +830,11 @@ void BasicValues::SetPremiumTaxParameters()
         );
 
     LowestPremiumTaxLoad_ = lowest_premium_tax_load
-        (*Database_
-        ,*StratifiedCharges_
-        ,GetPremiumTaxState()
+        (GetPremiumTaxState()
         ,GetStateOfDomicile()
         ,yare_input_.AmortizePremiumLoad
+        ,*Database_
+        ,*StratifiedCharges_
         );
 
     // TODO ?? It would be better not to constrain so many things
@@ -899,11 +899,11 @@ bool premium_tax_is_retaliatory
 /// Lowest premium-tax load, for 7702 and 7702A purposes.
 
 double lowest_premium_tax_load
-    (product_database   const& db
-    ,stratified_charges const& stratified
-    ,mcenum_state              premium_tax_state
+    (mcenum_state              premium_tax_state
     ,mcenum_state              state_of_domicile
     ,bool                      amortize_premium_load
+    ,product_database   const& db
+    ,stratified_charges const& stratified
     )
 {
     // TRICKY !! Here, we use 'DB_PremTaxLoad', not 'DB_PremTaxRate',

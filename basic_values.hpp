@@ -539,11 +539,11 @@ bool premium_tax_is_retaliatory
     );
 
 double lowest_premium_tax_load
-    (product_database   const& db
-    ,stratified_charges const& stratified
-    ,mcenum_state              premium_tax_state
+    (mcenum_state              premium_tax_state
     ,mcenum_state              state_of_domicile
     ,bool                      amortize_premium_load
+    ,product_database   const& db
+    ,stratified_charges const& stratified
     );
 
 // TODO ?? Use a configuration file instead. These deprecated
