@@ -27839,3 +27839,40 @@ Store actual premium-tax rates, reflecting no presumptive retaliation.
   version.hpp
 Designate release candidate.
 
+20110527T2217Z <gchicares@sbcglobal.net> [650]
+
+  basic_values.hpp
+  ihs_basicval.cpp
+  mec_server.cpp
+Change order of a free function's arguments.
+
+20110528T1124Z <gchicares@sbcglobal.net> [650]
+
+  Makefile.am
+  objects.make
+  premium_tax.cpp      [new file]
+  premium_tax.hpp      [new file]
+  premium_tax_test.cpp [new file]
+Add inchoate premium-tax class with unit test.
+
+20110528T1129Z <gchicares@sbcglobal.net> [650]
+
+  Makefile.am
+Remove extraneous whitespace.
+
+20110528T1327Z <gchicares@sbcglobal.net> [650]
+
+  Makefile.am
+  basic_values.hpp
+  ihs_basicval.cpp
+  mec_server.cpp
+  objects.make
+  premium_tax.cpp
+  premium_tax.hpp
+Move free functions.
+
+20110528T1341Z <gchicares@sbcglobal.net> [650]
+
+  ihs_basicval.cpp
+Set state of domicile with other 'state' members.
+
