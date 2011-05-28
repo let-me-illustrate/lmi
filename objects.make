@@ -483,6 +483,7 @@ unit_test_targets := \
   numeric_io_test \
   obstruct_slicing_test \
   path_utility_test \
+  premium_tax_test \
   print_matrix_test \
   product_file_test \
   progress_meter_test \
@@ -790,6 +791,15 @@ path_utility_test$(EXEEXT): \
   miscellany.o \
   path_utility.o \
   path_utility_test.o \
+
+premium_tax_test$(EXEEXT): \
+  $(boost_filesystem_objects) \
+  $(common_test_objects) \
+  global_settings.o \
+  miscellany.o \
+  path_utility.o \
+  premium_tax.o \
+  premium_tax_test.o \
 
 print_matrix_test$(EXEEXT): \
   $(common_test_objects) \

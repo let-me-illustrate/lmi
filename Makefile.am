@@ -122,6 +122,7 @@ TESTS = \
     test_numeric_io \
     test_obstruct_slicing \
     test_path_utility \
+    test_premium_tax \
     test_print_matrix \
     test_product_file \
     test_progress_meter \
@@ -644,7 +645,6 @@ test_input_SOURCES =    \
   tn_range_types.cpp \
   xml_lmi.cpp \
   yare_input.cpp
-
 test_input_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
 test_input_LDADD =    \
   $(BOOST_LIBS) \
@@ -750,6 +750,17 @@ test_path_utility_SOURCES = \
   path_utility_test.cpp
 test_path_utility_CXXFLAGS = $(AM_CXXFLAGS)
 test_path_utility_LDADD = \
+  $(BOOST_LIBS)
+
+test_premium_tax_SOURCES = \
+  $(common_test_objects) \
+  global_settings.cpp \
+  miscellany.cpp \
+  path_utility.cpp \
+  premium_tax.cpp \
+  premium_tax_test.cpp
+test_premium_tax_CXXFLAGS = $(AM_CXXFLAGS)
+test_premium_tax_LDADD = \
   $(BOOST_LIBS)
 
 test_print_matrix_SOURCES = \
@@ -1023,6 +1034,7 @@ noinst_HEADERS = \
     policy_view.hpp \
     preferences_model.hpp \
     preferences_view.hpp \
+    premium_tax.hpp \
     previewframe_ex.hpp \
     print_matrix.hpp \
     product_data.hpp \
