@@ -234,6 +234,7 @@ void BasicValues::Init()
     DeathBfts_     .reset(new death_benefits (GetLength(), yare_input_));
     // Outlay requires only input; it might someday use interest rates.
     Outlay_        .reset(new modal_outlay   (yare_input_));
+    PremiumTax_    .reset(new premium_tax    (PremiumTaxState_, StateOfDomicile_, yare_input_.AmortizePremiumLoad, *Database_, *StratifiedCharges_));
     SetPremiumTaxParameters();
     Loads_         .reset(new Loads          (*this));
 
@@ -308,6 +309,7 @@ void BasicValues::GPTServerInit()
 //  DeathBfts_     .reset(new death_benefits (GetLength(), yare_input_));
     // Outlay requires only input; it might someday use interest rates.
 //  Outlay_        .reset(new modal_outlay   (yare_input_));
+    PremiumTax_    .reset(new premium_tax    (PremiumTaxState_, StateOfDomicile_, yare_input_.AmortizePremiumLoad, *Database_, *StratifiedCharges_));
     SetPremiumTaxParameters();
     Loads_         .reset(new Loads          (*this));
 

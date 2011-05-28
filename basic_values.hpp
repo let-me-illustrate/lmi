@@ -61,6 +61,7 @@ class MortalityRates;
 class SurrChgRates;
 class death_benefits;
 class modal_outlay;
+class premium_tax;
 class product_data;
 class product_database;
 class rounding_rules;
@@ -129,6 +130,7 @@ class LMI_SO BasicValues
     boost::shared_ptr<SurrChgRates>       SurrChgRates_;
     boost::shared_ptr<death_benefits>     DeathBfts_;
     boost::shared_ptr<modal_outlay>       Outlay_;
+    boost::shared_ptr<premium_tax>        PremiumTax_;
     boost::shared_ptr<Loads>              Loads_;
     boost::shared_ptr<Irc7702>            Irc7702_;
     boost::shared_ptr<Irc7702A>           Irc7702A_;
