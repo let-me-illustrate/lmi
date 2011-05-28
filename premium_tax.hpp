@@ -47,7 +47,23 @@ class premium_tax
         );
     ~premium_tax();
 
+    double                PremiumTaxRate()             const; ////
+    double                PremiumTaxLoad()             const; ////
+    double                LowestPremiumTaxLoad()       const; ////
+    double                DomiciliaryPremiumTaxLoad()  const; ////
+    bool                  PremiumTaxLoadIsTiered()     const; ////
+
   private:
+    void SetPremiumTaxParameters(); ////
+    void TestPremiumTaxLoadConsistency() const; ////
+
+    double              PremiumTaxRate_; ////
+    double              PremiumTaxLoad_; ////
+    double              LowestPremiumTaxLoad_; ////
+    double              DomiciliaryPremiumTaxLoad_; ////
+    bool                    PremiumTaxLoadIsTieredInStateOfDomicile_; ////
+    bool                    PremiumTaxLoadIsTieredInPremiumTaxState_; ////
+    bool                    premium_tax_is_retaliatory_; ////
 };
 
 bool premium_tax_is_retaliatory
@@ -62,6 +78,31 @@ double lowest_premium_tax_load
     ,product_database   const& db
     ,stratified_charges const& stratified
     );
+
+inline double premium_tax::PremiumTaxRate() const ////
+{
+    return PremiumTaxRate_;
+}
+
+inline double premium_tax::PremiumTaxLoad() const ////
+{
+    return PremiumTaxLoad_;
+}
+
+inline double premium_tax::LowestPremiumTaxLoad() const ////
+{
+    return LowestPremiumTaxLoad_;
+}
+
+inline double premium_tax::DomiciliaryPremiumTaxLoad() const ////
+{
+    return DomiciliaryPremiumTaxLoad_;
+}
+
+inline bool premium_tax::PremiumTaxLoadIsTiered() const ////
+{
+    return PremiumTaxLoadIsTieredInPremiumTaxState_;
+}
 
 #endif // premium_tax_hpp
 
