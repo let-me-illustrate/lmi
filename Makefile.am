@@ -349,6 +349,7 @@ liblmi_la_SOURCES = \
     mec_xml_document.cpp \
     mortality_rates_fetch.cpp \
     preferences_model.cpp \
+    premium_tax.cpp \
     product_data.cpp \
     rounding_rules.cpp \
     stratified_algorithms.cpp \
@@ -655,7 +656,7 @@ test_irc7702a_SOURCES = \
   ihs_irc7702a.cpp \
   irc7702a_test.cpp \
   stratified_algorithms.cpp
-test_irc7702a_CXXFLAGS = $(AM_CXXFLAGS)
+test_irc7702a_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
 test_irc7702a_LDADD = \
   liblmi.la \
   $(BOOST_LIBS) \
@@ -754,14 +755,29 @@ test_path_utility_LDADD = \
 
 test_premium_tax_SOURCES = \
   $(common_test_objects) \
+  data_directory.cpp \
+  database.cpp \
+  datum_base.cpp \
+  dbdict.cpp \
+  dbnames.cpp \
+  dbvalue.cpp \
+  facets.cpp \
   global_settings.cpp \
+  lmi.cpp \
+  mc_enum.cpp \
+  mc_enum_types.cpp \
+  mc_enum_types_aux.cpp \
   miscellany.cpp \
   path_utility.cpp \
   premium_tax.cpp \
-  premium_tax_test.cpp
-test_premium_tax_CXXFLAGS = $(AM_CXXFLAGS)
+  premium_tax_test.cpp \
+  product_data.cpp \
+  stratified_charges.cpp \
+  xml_lmi.cpp
+test_premium_tax_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
 test_premium_tax_LDADD = \
-  $(BOOST_LIBS)
+  $(BOOST_LIBS) \
+  $(XMLWRAPP_LIBS)
 
 test_print_matrix_SOURCES = \
   $(common_test_objects) \
@@ -886,7 +902,7 @@ test_xml_serialize_SOURCES = \
   facets.cpp \
   xml_lmi.cpp \
   xml_serialize_test.cpp
-test_xml_serialize_CXXFLAGS = $(AM_CXXFLAGS)
+test_xml_serialize_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
 test_xml_serialize_LDADD = \
   $(XMLWRAPP_LIBS)
 
