@@ -31,7 +31,6 @@
 #include "actuarial_table.hpp"
 #include "alert.hpp"
 #include "assert_lmi.hpp"
-#include "basic_values.hpp"          // lowest_premium_tax_load()
 #include "commutation_functions.hpp"
 #include "configurable_settings.hpp"
 #include "contains.hpp"
@@ -48,6 +47,7 @@
 #include "miscellany.hpp"            // ios_out_trunc_binary()
 #include "oecumenic_enumerations.hpp"
 #include "path_utility.hpp"          // fs::path inserter
+#include "premium_tax.hpp"           // lowest_premium_tax_load()
 #include "product_data.hpp"
 #include "round_to.hpp"
 #include "stratified_algorithms.hpp" // TieredGrossToNet()

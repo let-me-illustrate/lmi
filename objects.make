@@ -288,6 +288,7 @@ lmi_common_objects := \
   mec_xml_document.o \
   mortality_rates_fetch.o \
   preferences_model.o \
+  premium_tax.o \
   product_data.o \
   rounding_rules.o \
   stratified_algorithms.o \
@@ -410,6 +411,7 @@ gpt_objects := \
   null_stream.o \
   outlay.o \
   path_utility.o \
+  premium_tax.o \
   product_data.o \
   product_names.o \
   rounding_rules.o \
@@ -795,11 +797,26 @@ path_utility_test$(EXEEXT): \
 premium_tax_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
+  $(xmlwrapp_objects) \
+  data_directory.o \
+  database.o \
+  datum_base.o \
+  dbdict.o \
+  dbnames.o \
+  dbvalue.o \
+  facets.o \
   global_settings.o \
+  lmi.o \
+  mc_enum.o \
+  mc_enum_types.o \
+  mc_enum_types_aux.o \
   miscellany.o \
   path_utility.o \
   premium_tax.o \
   premium_tax_test.o \
+  product_data.o \
+  stratified_charges.o \
+  xml_lmi.o \
 
 print_matrix_test$(EXEEXT): \
   $(common_test_objects) \
