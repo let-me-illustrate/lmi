@@ -159,6 +159,7 @@ void BasicValues::Init()
     ProductData_.reset(new product_data(yare_input_.ProductName));
     Database_.reset(new product_database(yare_input_));
 
+    StateOfDomicile_ = mc_state_from_string(ProductData_->datum("InsCoDomicile"));
     StateOfJurisdiction_ = yare_input_.StateOfJurisdiction;
     PremiumTaxState_     = yare_input_.PremiumTaxState    ;
 
@@ -259,6 +260,7 @@ void BasicValues::GPTServerInit()
     HOPEFULLY(RetAge <= 100);
     HOPEFULLY(yare_input_.RetireesCanEnroll || IssueAge <= RetAge);
 
+    StateOfDomicile_ = mc_state_from_string(ProductData_->datum("InsCoDomicile"));
     StateOfJurisdiction_ = yare_input_.StateOfJurisdiction;
     PremiumTaxState_     = yare_input_.PremiumTaxState    ;
 
@@ -821,7 +823,6 @@ void BasicValues::SetRoundingFunctors()
 
 void BasicValues::SetPremiumTaxParameters()
 {
-    StateOfDomicile_ = mc_state_from_string(ProductData_->datum("InsCoDomicile"));
     PremiumTaxLoadIsTieredInStateOfDomicile_ = StratifiedCharges_->premium_tax_is_tiered(GetStateOfDomicile());
     PremiumTaxLoadIsTieredInPremiumTaxState_ = StratifiedCharges_->premium_tax_is_tiered(GetPremiumTaxState());
 
