@@ -45,12 +45,132 @@ premium_tax::premium_tax
     ,state_of_domicile_     (state_of_domicile)
     ,amortize_premium_load_ (amortize_premium_load)
 {
-(void)database;
-(void)strata;
+    SetPremiumTaxParameters(database, strata);
 }
 
 premium_tax::~premium_tax()
 {}
+
+/// Set all parameters that depend on premium-tax state.
+///
+/// These database entities should be looked up by tax state:
+///  - DB_PremTaxLoad
+///  - DB_PremTaxRate
+/// These probably (for inchoate amortization) shouldn't:
+///  - DB_PremTaxAmortPeriod
+///  - DB_PremTaxAmortIntRate
+/// This definitely shouldn't be:
+///  - DB_PremTaxState
+/// These aren't used anywhere yet:
+///  - DB_PremTaxFundCharge
+///  - DB_PremTaxTable
+///  - DB_PremTaxTierGroup
+///  - DB_PremTaxTierPeriod
+///  - DB_PremTaxTierNonDecr
+
+void premium_tax::SetPremiumTaxParameters
+    (product_database   const& Database_
+    ,stratified_charges const& StratifiedCharges_
+    )
+{
+    PremiumTaxLoadIsTieredInStateOfDomicile_ = StratifiedCharges_.premium_tax_is_tiered(state_of_domicile_);
+    PremiumTaxLoadIsTieredInPremiumTaxState_ = StratifiedCharges_.premium_tax_is_tiered(premium_tax_state_);
+
+    premium_tax_is_retaliatory_ = ::premium_tax_is_retaliatory
+        (premium_tax_state_
+        ,state_of_domicile_
+        );
+
+    LowestPremiumTaxLoad_ = lowest_premium_tax_load
+        (premium_tax_state_
+        ,state_of_domicile_
+        ,amortize_premium_load_
+        ,Database_
+        ,StratifiedCharges_
+        );
+
+    // TODO ?? It would be better not to constrain so many things
+    // not to vary by duration by using Query(enumerator).
+
+    database_index index = Database_.index().state(premium_tax_state_);
+    PremiumTaxRate_                   = Database_.Query(DB_PremTaxRate      , index);
+    PremiumTaxLoad_                   = Database_.Query(DB_PremTaxLoad      , index);
+
+    {
+    database_index index = Database_.index().state(state_of_domicile_);
+    DomiciliaryPremiumTaxLoad_ = 0.0;
+    if(!amortize_premium_load_)
+        {
+        double domiciliary_premium_tax_rate = Database_.Query(DB_PremTaxRate, index);
+        DomiciliaryPremiumTaxLoad_          = Database_.Query(DB_PremTaxLoad, index);
+        if(premium_tax_is_retaliatory_)
+            {
+            PremiumTaxRate_ = std::max(PremiumTaxRate_, domiciliary_premium_tax_rate);
+            PremiumTaxLoad_ = std::max(PremiumTaxLoad_, DomiciliaryPremiumTaxLoad_  );
+            }
+        }
+    }
+
+    TestPremiumTaxLoadConsistency();
+}
+
+/// Test consistency of premium-tax loads.
+///
+/// In particular, if the tiered premium-tax load isn't zero, then the
+/// corresponding non-tiered load must be zero.
+///
+/// Premium-tax pass-through for AK, DE, and SD insurers is not
+/// supported. If the state of domicile has a tiered rate, then most
+/// likely the premium-tax state does not, and retaliation would often
+/// override the tiering. When those two states are the same, then no
+/// retaliation occurs, and calculations would presumably be correct.
+/// When both states have tiered rates, but they are different states,
+/// then the calculation could be complicated; but DE tiering is not
+/// supported at all yet, and AK (SD) companies probably write few
+/// contracts in SD (AK), so these exotic cases haven't commanded any
+/// attention. If premium tax is not passed through as a load, then
+/// there's no problem at all.
+
+void premium_tax::TestPremiumTaxLoadConsistency() const
+{
+    if(PremiumTaxLoadIsTieredInPremiumTaxState_)
+        {
+        if(0.0 != PremiumTaxLoad())
+            {
+            fatal_error()
+                << "Premium-tax load is tiered in premium-tax state "
+                << mc_str(premium_tax_state_)
+                << ", but the product database specifies a scalar load of "
+                << PremiumTaxLoad()
+                << " instead of zero as expected. Probably the database"
+                << " is incorrect."
+                << LMI_FLUSH
+                ;
+            }
+        }
+
+    if(PremiumTaxLoadIsTieredInStateOfDomicile_)
+        {
+        if(0.0 != DomiciliaryPremiumTaxLoad())
+            {
+            fatal_error()
+                << "Premium-tax load is tiered in state of domicile "
+                << mc_str(state_of_domicile_)
+                << ", but the product database specifies a scalar load of "
+                << DomiciliaryPremiumTaxLoad()
+                << " instead of zero as expected. Probably the database"
+                << " is incorrect."
+                << LMI_FLUSH
+                ;
+            }
+        fatal_error()
+            << "Premium-tax load is tiered in state of domicile "
+            << mc_str(state_of_domicile_)
+            << ", but that case is not supported."
+            << LMI_FLUSH
+            ;
+        }
+}
 
 /// Determine whether premium tax is retaliatory.
 ///

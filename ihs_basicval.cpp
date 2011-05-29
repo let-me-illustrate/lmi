@@ -841,7 +841,8 @@ void BasicValues::SetPremiumTaxParameters()
         ,*StratifiedCharges_
         );
 
-    // TODO ?? It would be better not to constrain so many things
+    // [Marked as a defect in class premium_tax.]
+    // It would be better not to constrain so many things
     // not to vary by duration by using Query(enumerator).
 
     database_index index = Database_->index().state(GetPremiumTaxState());
@@ -863,65 +864,13 @@ void BasicValues::SetPremiumTaxParameters()
         }
     }
 
-    TestPremiumTaxLoadConsistency();
-}
-
-/// Test consistency of premium-tax loads.
-///
-/// In particular, if the tiered premium-tax load isn't zero, then the
-/// corresponding non-tiered load must be zero.
-///
-/// Premium-tax pass-through for AK, DE, and SD insurers is not
-/// supported. If the state of domicile has a tiered rate, then most
-/// likely the premium-tax state does not, and retaliation would often
-/// override the tiering. When those two states are the same, then no
-/// retaliation occurs, and calculations would presumably be correct.
-/// When both states have tiered rates, but they are different states,
-/// then the calculation could be complicated; but DE tiering is not
-/// supported at all yet, and AK (SD) companies probably write few
-/// contracts in SD (AK), so these exotic cases haven't commanded any
-/// attention. If premium tax is not passed through as a load, then
-/// there's no problem at all.
-
-void BasicValues::TestPremiumTaxLoadConsistency() const
-{
-    if(PremiumTaxLoadIsTieredInPremiumTaxState_)
-        {
-        if(0.0 != PremiumTaxLoad())
-            {
-            fatal_error()
-                << "Premium-tax load is tiered in premium-tax state "
-                << mc_str(GetPremiumTaxState())
-                << ", but the product database specifies a scalar load of "
-                << PremiumTaxLoad()
-                << " instead of zero as expected. Probably the database"
-                << " is incorrect."
-                << LMI_FLUSH
-                ;
-            }
-        }
-
-    if(PremiumTaxLoadIsTieredInStateOfDomicile_)
-        {
-        if(0.0 != DomiciliaryPremiumTaxLoad())
-            {
-            fatal_error()
-                << "Premium-tax load is tiered in state of domicile "
-                << mc_str(GetStateOfDomicile())
-                << ", but the product database specifies a scalar load of "
-                << DomiciliaryPremiumTaxLoad()
-                << " instead of zero as expected. Probably the database"
-                << " is incorrect."
-                << LMI_FLUSH
-                ;
-            }
-        fatal_error()
-            << "Premium-tax load is tiered in state of domicile "
-            << mc_str(GetStateOfDomicile())
-            << ", but that case is not supported."
-            << LMI_FLUSH
-            ;
-        }
+    LMI_ASSERT(PremiumTaxLoadIsTieredInPremiumTaxState_ == PremiumTax_->PremiumTaxLoadIsTieredInPremiumTaxState());
+    LMI_ASSERT(PremiumTaxLoadIsTieredInStateOfDomicile_ == PremiumTax_->PremiumTaxLoadIsTieredInStateOfDomicile());
+    LMI_ASSERT(premium_tax_is_retaliatory_              == PremiumTax_->premium_tax_is_retaliatory());
+    LMI_ASSERT(LowestPremiumTaxLoad_                    == PremiumTax_->LowestPremiumTaxLoad());
+    LMI_ASSERT(PremiumTaxRate_                          == PremiumTax_->PremiumTaxRate());
+    LMI_ASSERT(PremiumTaxLoad_                          == PremiumTax_->PremiumTaxLoad());
+    LMI_ASSERT(DomiciliaryPremiumTaxLoad_               == PremiumTax_->DomiciliaryPremiumTaxLoad());
 }
 
 //============================================================================

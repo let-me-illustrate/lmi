@@ -378,7 +378,6 @@ class LMI_SO BasicValues
 
   private:
     void SetPremiumTaxParameters(); ////
-    void TestPremiumTaxLoadConsistency() const; ////
 
     double GetModalPrem
         (int                   a_year
