@@ -41,10 +41,10 @@ premium_tax::premium_tax
     ,product_database   const& database
     ,stratified_charges const& strata
     )
+    :premium_tax_state_     (premium_tax_state)
+    ,state_of_domicile_     (state_of_domicile)
+    ,amortize_premium_load_ (amortize_premium_load)
 {
-(void)premium_tax_state;
-(void)state_of_domicile;
-(void)amortize_premium_load;
 (void)database;
 (void)strata;
 }

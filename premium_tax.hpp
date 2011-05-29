@@ -57,13 +57,18 @@ class premium_tax
     void SetPremiumTaxParameters(); ////
     void TestPremiumTaxLoadConsistency() const; ////
 
+    // Ctor value-arguments.
+    mcenum_state premium_tax_state_;
+    mcenum_state state_of_domicile_;
+    bool         amortize_premium_load_;
+
     double              PremiumTaxRate_; ////
     double              PremiumTaxLoad_; ////
     double              LowestPremiumTaxLoad_; ////
     double              DomiciliaryPremiumTaxLoad_; ////
-    bool                    PremiumTaxLoadIsTieredInStateOfDomicile_; ////
-    bool                    PremiumTaxLoadIsTieredInPremiumTaxState_; ////
-    bool                    premium_tax_is_retaliatory_; ////
+    bool                PremiumTaxLoadIsTieredInStateOfDomicile_; ////
+    bool                PremiumTaxLoadIsTieredInPremiumTaxState_; ////
+    bool                premium_tax_is_retaliatory_; ////
 };
 
 bool premium_tax_is_retaliatory
