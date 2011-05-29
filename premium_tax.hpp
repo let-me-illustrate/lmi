@@ -52,9 +52,15 @@ class premium_tax
     double                LowestPremiumTaxLoad()       const; ////
     double                DomiciliaryPremiumTaxLoad()  const; ////
     bool                  PremiumTaxLoadIsTiered()     const; ////
+    bool                  PremiumTaxLoadIsTieredInPremiumTaxState() const;
+    bool                  PremiumTaxLoadIsTieredInStateOfDomicile() const;
+    bool                  premium_tax_is_retaliatory() const;
 
   private:
-    void SetPremiumTaxParameters(); ////
+    void SetPremiumTaxParameters
+        (product_database   const&
+        ,stratified_charges const&
+        ); ////
     void TestPremiumTaxLoadConsistency() const; ////
 
     // Ctor value-arguments.
@@ -104,9 +110,25 @@ inline double premium_tax::DomiciliaryPremiumTaxLoad() const ////
     return DomiciliaryPremiumTaxLoad_;
 }
 
+//// Identical to the more-appropriately-named PremiumTaxLoadIsTieredInPremiumTaxState().
 inline bool premium_tax::PremiumTaxLoadIsTiered() const ////
 {
     return PremiumTaxLoadIsTieredInPremiumTaxState_;
+}
+
+inline bool premium_tax::PremiumTaxLoadIsTieredInPremiumTaxState() const
+{
+    return PremiumTaxLoadIsTieredInPremiumTaxState_;
+}
+
+inline bool premium_tax::PremiumTaxLoadIsTieredInStateOfDomicile() const
+{
+    return PremiumTaxLoadIsTieredInStateOfDomicile_;
+}
+
+inline bool premium_tax::premium_tax_is_retaliatory() const
+{
+    return premium_tax_is_retaliatory_;
 }
 
 #endif // premium_tax_hpp
