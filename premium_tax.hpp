@@ -47,34 +47,34 @@ class premium_tax
         );
     ~premium_tax();
 
-    double                PremiumTaxRate()             const; ////
-    double                PremiumTaxLoad()             const; ////
-    double                LowestPremiumTaxLoad()       const; ////
-    double                DomiciliaryPremiumTaxLoad()  const; ////
-    bool                  PremiumTaxLoadIsTiered()     const; ////
-    bool                  PremiumTaxLoadIsTieredInPremiumTaxState() const;
-    bool                  PremiumTaxLoadIsTieredInStateOfDomicile() const;
-    bool                  premium_tax_is_retaliatory() const;
+    double levy_rate                          () const;
+    double load_rate                          () const;
+    double least_load_rate                    () const;
+    double domiciliary_load_rate              () const;
+    bool   PremiumTaxLoadIsTiered() const; ////
+    bool   load_is_tiered_in_premium_tax_state() const;
+    bool   load_is_tiered_in_state_of_domicile() const;
+    bool   premium_tax_is_retaliatory         () const;
 
   private:
-    void SetPremiumTaxParameters
+    void set_parameters
         (product_database   const&
         ,stratified_charges const&
-        ); ////
-    void TestPremiumTaxLoadConsistency() const; ////
+        );
+    void test_consistency() const;
 
     // Ctor value-arguments.
     mcenum_state premium_tax_state_;
     mcenum_state state_of_domicile_;
     bool         amortize_premium_load_;
 
-    double              PremiumTaxRate_; ////
-    double              PremiumTaxLoad_; ////
-    double              LowestPremiumTaxLoad_; ////
-    double              DomiciliaryPremiumTaxLoad_; ////
-    bool                PremiumTaxLoadIsTieredInStateOfDomicile_; ////
-    bool                PremiumTaxLoadIsTieredInPremiumTaxState_; ////
-    bool                premium_tax_is_retaliatory_; ////
+    double levy_rate_;
+    double load_rate_;
+    double least_load_rate_;
+    double domiciliary_load_rate_;
+    bool   load_is_tiered_in_premium_tax_state_;
+    bool   load_is_tiered_in_state_of_domicile_;
+    bool   premium_tax_is_retaliatory_;
 };
 
 bool premium_tax_is_retaliatory
@@ -90,40 +90,40 @@ double lowest_premium_tax_load
     ,stratified_charges const& stratified
     );
 
-inline double premium_tax::PremiumTaxRate() const ////
+inline double premium_tax::levy_rate() const
 {
-    return PremiumTaxRate_;
+    return levy_rate_;
 }
 
-inline double premium_tax::PremiumTaxLoad() const ////
+inline double premium_tax::load_rate() const
 {
-    return PremiumTaxLoad_;
+    return load_rate_;
 }
 
-inline double premium_tax::LowestPremiumTaxLoad() const ////
+inline double premium_tax::least_load_rate() const
 {
-    return LowestPremiumTaxLoad_;
+    return least_load_rate_;
 }
 
-inline double premium_tax::DomiciliaryPremiumTaxLoad() const ////
+inline double premium_tax::domiciliary_load_rate() const
 {
-    return DomiciliaryPremiumTaxLoad_;
+    return domiciliary_load_rate_;
 }
 
-//// Identical to the more-appropriately-named PremiumTaxLoadIsTieredInPremiumTaxState().
+//// Identical to the more-appropriately-named load_is_tiered_in_premium_tax_state().
 inline bool premium_tax::PremiumTaxLoadIsTiered() const ////
 {
-    return PremiumTaxLoadIsTieredInPremiumTaxState_;
+    return load_is_tiered_in_premium_tax_state_;
 }
 
-inline bool premium_tax::PremiumTaxLoadIsTieredInPremiumTaxState() const
+inline bool premium_tax::load_is_tiered_in_premium_tax_state() const
 {
-    return PremiumTaxLoadIsTieredInPremiumTaxState_;
+    return load_is_tiered_in_premium_tax_state_;
 }
 
-inline bool premium_tax::PremiumTaxLoadIsTieredInStateOfDomicile() const
+inline bool premium_tax::load_is_tiered_in_state_of_domicile() const
 {
-    return PremiumTaxLoadIsTieredInStateOfDomicile_;
+    return load_is_tiered_in_state_of_domicile_;
 }
 
 inline bool premium_tax::premium_tax_is_retaliatory() const

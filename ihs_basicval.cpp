@@ -810,13 +810,13 @@ void BasicValues::SetRoundingFunctors()
 
 void BasicValues::SetPremiumTaxParameters()
 {
-    PremiumTaxLoadIsTieredInPremiumTaxState_ = PremiumTax_->PremiumTaxLoadIsTieredInPremiumTaxState();
-    PremiumTaxLoadIsTieredInStateOfDomicile_ = PremiumTax_->PremiumTaxLoadIsTieredInStateOfDomicile();
-    premium_tax_is_retaliatory_              = PremiumTax_->premium_tax_is_retaliatory();
-    LowestPremiumTaxLoad_                    = PremiumTax_->LowestPremiumTaxLoad();
-    PremiumTaxRate_                          = PremiumTax_->PremiumTaxRate();
-    PremiumTaxLoad_                          = PremiumTax_->PremiumTaxLoad();
-    DomiciliaryPremiumTaxLoad_               = PremiumTax_->DomiciliaryPremiumTaxLoad();
+    PremiumTaxLoadIsTieredInPremiumTaxState_ = PremiumTax_->load_is_tiered_in_premium_tax_state();
+    PremiumTaxLoadIsTieredInStateOfDomicile_ = PremiumTax_->load_is_tiered_in_state_of_domicile();
+    premium_tax_is_retaliatory_              = PremiumTax_->premium_tax_is_retaliatory         ();
+    PremiumTaxRate_                          = PremiumTax_->levy_rate                          ();
+    PremiumTaxLoad_                          = PremiumTax_->load_rate                          ();
+    LowestPremiumTaxLoad_                    = PremiumTax_->least_load_rate                    ();
+    DomiciliaryPremiumTaxLoad_               = PremiumTax_->domiciliary_load_rate              ();
 }
 
 //============================================================================
