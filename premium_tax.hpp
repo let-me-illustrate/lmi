@@ -90,46 +90,5 @@ double lowest_premium_tax_load
     ,stratified_charges const& stratified
     );
 
-inline double premium_tax::levy_rate() const
-{
-    return levy_rate_;
-}
-
-inline double premium_tax::load_rate() const
-{
-    return load_rate_;
-}
-
-inline double premium_tax::least_load_rate() const
-{
-    return least_load_rate_;
-}
-
-inline double premium_tax::domiciliary_load_rate() const
-{
-    return domiciliary_load_rate_;
-}
-
-//// Identical to the more-appropriately-named load_is_tiered_in_premium_tax_state().
-inline bool premium_tax::PremiumTaxLoadIsTiered() const ////
-{
-    return load_is_tiered_in_premium_tax_state_;
-}
-
-inline bool premium_tax::load_is_tiered_in_premium_tax_state() const
-{
-    return load_is_tiered_in_premium_tax_state_;
-}
-
-inline bool premium_tax::load_is_tiered_in_state_of_domicile() const
-{
-    return load_is_tiered_in_state_of_domicile_;
-}
-
-inline bool premium_tax::premium_tax_is_retaliatory() const
-{
-    return premium_tax_is_retaliatory_;
-}
-
 #endif // premium_tax_hpp
 
