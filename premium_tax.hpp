@@ -51,7 +51,6 @@ class premium_tax
     double load_rate                          () const;
     double least_load_rate                    () const;
     double domiciliary_load_rate              () const;
-    bool   PremiumTaxLoadIsTiered() const; ////
     bool   load_is_tiered_in_premium_tax_state() const;
     bool   load_is_tiered_in_state_of_domicile() const;
     bool   premium_tax_is_retaliatory         () const;

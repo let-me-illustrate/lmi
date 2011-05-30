@@ -308,12 +308,6 @@ double premium_tax::domiciliary_load_rate() const
     return domiciliary_load_rate_;
 }
 
-//// Identical to the more-appropriately-named load_is_tiered_in_premium_tax_state().
-bool premium_tax::PremiumTaxLoadIsTiered() const ////
-{
-    return load_is_tiered_in_premium_tax_state_;
-}
-
 bool premium_tax::load_is_tiered_in_premium_tax_state() const
 {
     return load_is_tiered_in_premium_tax_state_;

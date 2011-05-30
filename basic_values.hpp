@@ -114,7 +114,6 @@ class LMI_SO BasicValues
     double                PremiumTaxLoad()             const; ////
     double                LowestPremiumTaxLoad()       const; ////
     double                DomiciliaryPremiumTaxLoad()  const; ////
-    bool                  PremiumTaxLoadIsTiered()     const; ////
     bool                  IsSubjectToIllustrationReg() const;
     double                InvestmentManagementFee()    const;
 
@@ -522,11 +521,6 @@ inline double BasicValues::LowestPremiumTaxLoad() const ////
 inline double BasicValues::DomiciliaryPremiumTaxLoad() const ////
 {
     return DomiciliaryPremiumTaxLoad_;
-}
-
-inline bool BasicValues::PremiumTaxLoadIsTiered() const ////
-{
-    return PremiumTaxLoadIsTieredInPremiumTaxState_;
 }
 
 inline bool BasicValues::IsSubjectToIllustrationReg() const

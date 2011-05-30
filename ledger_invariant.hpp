@@ -187,7 +187,6 @@ class LMI_SO LedgerInvariant
     double          AllowDbo3;
     double          IsInforce;
     double          CountryCOIMultiplier;
-    double          PremiumTaxLoadIsTiered;
     double          NoLapseAlwaysActive;
     double          NoLapseMinDur;
     double          NoLapseMinAge;
