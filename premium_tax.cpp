@@ -288,3 +288,44 @@ double lowest_premium_tax_load
     return z;
 }
 
+double premium_tax::levy_rate() const
+{
+    return levy_rate_;
+}
+
+double premium_tax::load_rate() const
+{
+    return load_rate_;
+}
+
+double premium_tax::least_load_rate() const
+{
+    return least_load_rate_;
+}
+
+double premium_tax::domiciliary_load_rate() const
+{
+    return domiciliary_load_rate_;
+}
+
+//// Identical to the more-appropriately-named load_is_tiered_in_premium_tax_state().
+bool premium_tax::PremiumTaxLoadIsTiered() const ////
+{
+    return load_is_tiered_in_premium_tax_state_;
+}
+
+bool premium_tax::load_is_tiered_in_premium_tax_state() const
+{
+    return load_is_tiered_in_premium_tax_state_;
+}
+
+bool premium_tax::load_is_tiered_in_state_of_domicile() const
+{
+    return load_is_tiered_in_state_of_domicile_;
+}
+
+bool premium_tax::premium_tax_is_retaliatory() const
+{
+    return premium_tax_is_retaliatory_;
+}
+
