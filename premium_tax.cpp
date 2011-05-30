@@ -34,6 +34,42 @@
 #include "mc_enum_types_aux.hpp" // mc_str()
 #include "stratified_charges.hpp"
 
+namespace {
+/// Determine whether premium tax is retaliatory.
+///
+/// Here's a general discussion:
+///   http://leg2.state.va.us/dls/h&sdocs.nsf/fc86c2b17a1cf388852570f9006f1299/461afa310d4d3d528525646500562282/$FILE/HD78_1997.pdf
+///
+/// Premium tax is retaliatory in most states. Exceptions:
+///   - MA, MN, NY, and RI are mutually nonretaliatory.
+///   - HI never retaliates; neither does fictitious state XX.
+///   - AK and SD retaliate only on the bottom tier; this is best
+///     implemented by adjusting that tier's rate and treating them
+///     as otherwise nonretaliatory.
+
+bool ascertain_whether_premium_tax_is_retaliatory
+    (mcenum_state premium_tax_state
+    ,mcenum_state state_of_domicile
+    )
+{
+    static int const n = 4;
+    static mcenum_state const d[n] = {mce_s_MA, mce_s_MN, mce_s_NY, mce_s_RI};
+    static std::vector<mcenum_state> const reciprocal_nonretaliation_states(d, d + n);
+    bool const reciprocally_nonretaliatory =
+            contains(reciprocal_nonretaliation_states, premium_tax_state)
+        &&  contains(reciprocal_nonretaliation_states, state_of_domicile)
+        ;
+    bool const nonretaliatory =
+            reciprocally_nonretaliatory
+        ||  mce_s_HI == premium_tax_state
+        ||  mce_s_XX == premium_tax_state
+        ||  mce_s_AK == premium_tax_state
+        ||  mce_s_SD == premium_tax_state
+        ;
+    return !nonretaliatory;
+}
+} // Unnamed namespace.
+
 premium_tax::premium_tax
     (mcenum_state              premium_tax_state
     ,mcenum_state              state_of_domicile
@@ -76,7 +112,7 @@ void premium_tax::set_parameters
     load_is_tiered_in_premium_tax_state_ = strata.premium_tax_is_tiered(premium_tax_state_);
     load_is_tiered_in_state_of_domicile_ = strata.premium_tax_is_tiered(state_of_domicile_);
 
-    premium_tax_is_retaliatory_ = ::premium_tax_is_retaliatory
+    premium_tax_is_retaliatory_ = ascertain_whether_premium_tax_is_retaliatory
         (premium_tax_state_
         ,state_of_domicile_
         );
@@ -133,7 +169,7 @@ void premium_tax::set_parameters
 
 void premium_tax::test_consistency() const
 {
-    if(load_is_tiered_in_premium_tax_state_)
+    if(load_is_tiered_in_premium_tax_state())
         {
         if(0.0 != load_rate())
             {
@@ -149,7 +185,7 @@ void premium_tax::test_consistency() const
             }
         }
 
-    if(load_is_tiered_in_state_of_domicile_)
+    if(load_is_tiered_in_state_of_domicile())
         {
         if(0.0 != domiciliary_load_rate())
             {
@@ -170,40 +206,6 @@ void premium_tax::test_consistency() const
             << LMI_FLUSH
             ;
         }
-}
-
-/// Determine whether premium tax is retaliatory.
-///
-/// Here's a general discussion:
-///   http://leg2.state.va.us/dls/h&sdocs.nsf/fc86c2b17a1cf388852570f9006f1299/461afa310d4d3d528525646500562282/$FILE/HD78_1997.pdf
-///
-/// Premium tax is retaliatory in most states. Exceptions:
-///   - MA, MN, NY, and RI are mutually nonretaliatory.
-///   - HI never retaliates; neither does fictitious state XX.
-///   - AK and SD retaliate only on the bottom tier; this is best
-///     implemented by adjusting that tier's rate and treating them
-///     as otherwise nonretaliatory.
-
-bool premium_tax_is_retaliatory
-    (mcenum_state premium_tax_state
-    ,mcenum_state state_of_domicile
-    )
-{
-    static int const n = 4;
-    static mcenum_state const d[n] = {mce_s_MA, mce_s_MN, mce_s_NY, mce_s_RI};
-    static std::vector<mcenum_state> const reciprocal_nonretaliation_states(d, d + n);
-    bool const reciprocally_nonretaliatory =
-            contains(reciprocal_nonretaliation_states, premium_tax_state)
-        &&  contains(reciprocal_nonretaliation_states, state_of_domicile)
-        ;
-    bool const nonretaliatory =
-            reciprocally_nonretaliatory
-        ||  mce_s_HI == premium_tax_state
-        ||  mce_s_XX == premium_tax_state
-        ||  mce_s_AK == premium_tax_state
-        ||  mce_s_SD == premium_tax_state
-        ;
-    return !nonretaliatory;
 }
 
 /// Lowest premium-tax load, for 7702 and 7702A purposes.
@@ -243,7 +245,7 @@ double lowest_premium_tax_load
     database_index index = db.index().state(premium_tax_state);
     z = db.Query(DB_PremTaxLoad, index);
 
-    if(premium_tax_is_retaliatory(premium_tax_state, state_of_domicile))
+    if(ascertain_whether_premium_tax_is_retaliatory(premium_tax_state, state_of_domicile))
         {
         index = db.index().state(state_of_domicile);
         z = std::max(z, db.Query(DB_PremTaxLoad, index));
