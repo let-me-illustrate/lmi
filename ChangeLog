@@ -27876,3 +27876,59 @@ Move free functions.
   ihs_basicval.cpp
 Set state of domicile with other 'state' members.
 
+20110528T1636Z <gchicares@sbcglobal.net> [650]
+
+  basic_values.hpp
+  premium_tax.hpp
+Annotate and copy members to be moved.
+
+20110528T1657Z <gchicares@sbcglobal.net> [650]
+
+  basic_values.hpp
+  ihs_basicval.cpp
+Instantiate premium-tax class.
+
+20110529T1429Z <gchicares@sbcglobal.net> [650]
+
+  premium_tax.cpp
+  premium_tax.hpp
+Store ctor value-arguments as members.
+
+20110529T1521Z <gchicares@sbcglobal.net> [650]
+
+  basic_values.hpp
+  ihs_basicval.cpp
+  premium_tax.cpp
+  premium_tax.hpp
+Move premium-tax implementation.
+
+20110530T1208Z <gchicares@sbcglobal.net> [650]
+
+  ihs_basicval.cpp
+Remove code made redundant 20110529T1521Z.
+
+20110530T1254Z <gchicares@sbcglobal.net> [650]
+
+  ihs_basicval.cpp
+  premium_tax.cpp
+  premium_tax.hpp
+Rectify names.
+
+20110530T1323Z <gchicares@sbcglobal.net> [650]
+
+  premium_tax.cpp
+  premium_tax.hpp
+Refactor. Triviality is not sufficient reason to write functions
+inline in a header.
+
+20110530T1447Z <gchicares@sbcglobal.net> [650]
+
+  basic_values.hpp
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  ledger_xml_io.cpp
+  premium_tax.cpp
+  premium_tax.hpp
+Remove a misbegotten ledger variable that no xsl template uses. Any
+potential use in pdf output is probably more trouble than it's worth.
+

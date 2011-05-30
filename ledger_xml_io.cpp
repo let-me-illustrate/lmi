@@ -437,7 +437,6 @@ void Ledger::write(xml::element& x) const
     format_map["NoLapseMinAge"                     ] = f1;
     format_map["NoLapseMinDur"                     ] = f1;
     format_map["NominallyPar"                      ] = f1;
-    format_map["PremiumTaxLoadIsTiered"            ] = f1;
     format_map["RetAge"                            ] = f1;
     format_map["SmokerBlended"                     ] = f1;
     format_map["SmokerDistinct"                    ] = f1;
