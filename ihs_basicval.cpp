@@ -806,71 +806,17 @@ void BasicValues::SetRoundingFunctors()
     set_rounding_rule(round_interest_rate_7702_, RoundingRules_->datum("RoundIntRate7702"));
 }
 
-/// Set all parameters that depend on premium-tax state.
-///
-/// These database entities should be looked up by tax state:
-///  - DB_PremTaxLoad
-///  - DB_PremTaxRate
-/// These probably (for inchoate amortization) shouldn't:
-///  - DB_PremTaxAmortPeriod
-///  - DB_PremTaxAmortIntRate
-/// This definitely shouldn't be:
-///  - DB_PremTaxState
-/// These aren't used anywhere yet:
-///  - DB_PremTaxFundCharge
-///  - DB_PremTaxTable
-///  - DB_PremTaxTierGroup
-///  - DB_PremTaxTierPeriod
-///  - DB_PremTaxTierNonDecr
+// Soon to be removed.
 
 void BasicValues::SetPremiumTaxParameters()
 {
-    PremiumTaxLoadIsTieredInStateOfDomicile_ = StratifiedCharges_->premium_tax_is_tiered(GetStateOfDomicile());
-    PremiumTaxLoadIsTieredInPremiumTaxState_ = StratifiedCharges_->premium_tax_is_tiered(GetPremiumTaxState());
-
-    premium_tax_is_retaliatory_ = premium_tax_is_retaliatory
-        (GetPremiumTaxState()
-        ,GetStateOfDomicile()
-        );
-
-    LowestPremiumTaxLoad_ = lowest_premium_tax_load
-        (GetPremiumTaxState()
-        ,GetStateOfDomicile()
-        ,yare_input_.AmortizePremiumLoad
-        ,*Database_
-        ,*StratifiedCharges_
-        );
-
-    // [Marked as a defect in class premium_tax.]
-    // It would be better not to constrain so many things
-    // not to vary by duration by using Query(enumerator).
-
-    database_index index = Database_->index().state(GetPremiumTaxState());
-    PremiumTaxRate_                   = Database_->Query(DB_PremTaxRate      , index);
-    PremiumTaxLoad_                   = Database_->Query(DB_PremTaxLoad      , index);
-
-    {
-    database_index index = Database_->index().state(GetStateOfDomicile());
-    DomiciliaryPremiumTaxLoad_ = 0.0;
-    if(!yare_input_.AmortizePremiumLoad)
-        {
-        double domiciliary_premium_tax_rate = Database_->Query(DB_PremTaxRate, index);
-        DomiciliaryPremiumTaxLoad_          = Database_->Query(DB_PremTaxLoad, index);
-        if(premium_tax_is_retaliatory_)
-            {
-            PremiumTaxRate_ = std::max(PremiumTaxRate_, domiciliary_premium_tax_rate);
-            PremiumTaxLoad_ = std::max(PremiumTaxLoad_, DomiciliaryPremiumTaxLoad_  );
-            }
-        }
-    }
-
-    LMI_ASSERT(PremiumTaxLoadIsTieredInPremiumTaxState_ == PremiumTax_->PremiumTaxLoadIsTieredInPremiumTaxState());
-    LMI_ASSERT(PremiumTaxLoadIsTieredInStateOfDomicile_ == PremiumTax_->PremiumTaxLoadIsTieredInStateOfDomicile());
-    LMI_ASSERT(premium_tax_is_retaliatory_              == PremiumTax_->premium_tax_is_retaliatory());
-    LMI_ASSERT(LowestPremiumTaxLoad_                    == PremiumTax_->LowestPremiumTaxLoad());
-    LMI_ASSERT(PremiumTaxRate_                          == PremiumTax_->PremiumTaxRate());
-    LMI_ASSERT(PremiumTaxLoad_                          == PremiumTax_->PremiumTaxLoad());
-    LMI_ASSERT(DomiciliaryPremiumTaxLoad_               == PremiumTax_->DomiciliaryPremiumTaxLoad());
+    PremiumTaxLoadIsTieredInPremiumTaxState_ = PremiumTax_->PremiumTaxLoadIsTieredInPremiumTaxState();
+    PremiumTaxLoadIsTieredInStateOfDomicile_ = PremiumTax_->PremiumTaxLoadIsTieredInStateOfDomicile();
+    premium_tax_is_retaliatory_              = PremiumTax_->premium_tax_is_retaliatory();
+    LowestPremiumTaxLoad_                    = PremiumTax_->LowestPremiumTaxLoad();
+    PremiumTaxRate_                          = PremiumTax_->PremiumTaxRate();
+    PremiumTaxLoad_                          = PremiumTax_->PremiumTaxLoad();
+    DomiciliaryPremiumTaxLoad_               = PremiumTax_->DomiciliaryPremiumTaxLoad();
 }
 
 //============================================================================
