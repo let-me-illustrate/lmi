@@ -76,11 +76,6 @@ class premium_tax
     bool   premium_tax_is_retaliatory_;
 };
 
-bool premium_tax_is_retaliatory
-    (mcenum_state premium_tax_state
-    ,mcenum_state state_of_domicile
-    );
-
 double lowest_premium_tax_load
     (mcenum_state              premium_tax_state
     ,mcenum_state              state_of_domicile
