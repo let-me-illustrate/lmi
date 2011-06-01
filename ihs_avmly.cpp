@@ -45,6 +45,7 @@
 #include "miscellany.hpp"
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
+#include "premium_tax.hpp"
 #include "stratified_algorithms.hpp"
 #include "stratified_charges.hpp"
 
@@ -1482,7 +1483,7 @@ double AccountValue::GetPremLoad
         ;
     HOPEFULLY(0.0 <= sum_of_separate_loads);
     LMI_ASSERT
-        (   PremiumTaxLoadIsTieredInPremiumTaxState_
+        (   PremiumTax_->load_is_tiered_in_premium_tax_state()
         ||  materially_equal(total_load, sum_of_separate_loads)
         );
 
@@ -1504,7 +1505,7 @@ double AccountValue::GetPremLoad
 double AccountValue::GetPremTaxLoad(double payment)
 {
     double tax_in_premium_tax_state = YearsPremTaxLoadRate * payment;
-    if(PremiumTaxLoadIsTieredInPremiumTaxState_)
+    if(PremiumTax_->load_is_tiered_in_premium_tax_state())
         {
         LMI_ASSERT(0.0 == tax_in_premium_tax_state);
         tax_in_premium_tax_state = StratifiedCharges_->tiered_premium_tax
@@ -1516,10 +1517,10 @@ double AccountValue::GetPremTaxLoad(double payment)
     YearsTotalPremTaxLoadInPremiumTaxState += tax_in_premium_tax_state;
 
     double tax_in_state_of_domicile = 0.0;
-    if(premium_tax_is_retaliatory_)
+    if(PremiumTax_->premium_tax_is_retaliatory())
         {
-        tax_in_state_of_domicile = DomiciliaryPremiumTaxLoad() * payment;
-        if(PremiumTaxLoadIsTieredInStateOfDomicile_)
+        tax_in_state_of_domicile = PremiumTax_->domiciliary_load_rate() * payment;
+        if(PremiumTax_->load_is_tiered_in_state_of_domicile())
             {
             LMI_ASSERT(0.0 == tax_in_state_of_domicile);
             tax_in_state_of_domicile = StratifiedCharges_->tiered_premium_tax

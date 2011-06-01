@@ -27932,3 +27932,40 @@ inline in a header.
 Remove a misbegotten ledger variable that no xsl template uses. Any
 potential use in pdf output is probably more trouble than it's worth.
 
+20110530T1601Z <gchicares@sbcglobal.net> [650]
+
+  premium_tax.cpp
+  premium_tax.hpp
+Refactor.
+
+20110601T1132Z <gchicares@sbcglobal.net> [650]
+
+  premium_tax.cpp
+  premium_tax.hpp
+Regularize argument names.
+
+20110601T1142Z <gchicares@sbcglobal.net> [650]
+
+  premium_tax.cpp
+  premium_tax.hpp
+Refactor.
+
+20110601T1207Z <gchicares@sbcglobal.net> [650]
+
+  Makefile.am
+  antediluvian_stubs.cpp
+  basicvalues.cpp
+  objects.make
+  premium_tax.cpp
+  premium_tax.hpp
+Use premium-tax class in antediluvian fork.
+
+20110601T2000Z <gchicares@sbcglobal.net> [650]
+
+  basic_values.hpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+  loads.cpp
+  loads_test.cpp
+Improve premium-tax encapsulation.
+

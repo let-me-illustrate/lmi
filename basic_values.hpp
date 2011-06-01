@@ -110,10 +110,6 @@ class LMI_SO BasicValues
     mcenum_state          GetStateOfJurisdiction()     const;
     mcenum_state          GetStateOfDomicile()         const;
     mcenum_state          GetPremiumTaxState()         const;
-    double                PremiumTaxRate()             const; ////
-    double                PremiumTaxLoad()             const; ////
-    double                LowestPremiumTaxLoad()       const; ////
-    double                DomiciliaryPremiumTaxLoad()  const; ////
     bool                  IsSubjectToIllustrationReg() const;
     double                InvestmentManagementFee()    const;
 
@@ -371,13 +367,7 @@ class LMI_SO BasicValues
     std::vector<double>     TieredMEBands;
     std::vector<double>     TieredMECharges;
 
-    bool                    PremiumTaxLoadIsTieredInStateOfDomicile_; ////
-    bool                    PremiumTaxLoadIsTieredInPremiumTaxState_; ////
-    bool                    premium_tax_is_retaliatory_; ////
-
   private:
-    void SetPremiumTaxParameters(); ////
-
     double GetModalPrem
         (int                   a_year
         ,mcenum_mode           a_mode
@@ -430,10 +420,6 @@ class LMI_SO BasicValues
     mcenum_state        StateOfJurisdiction_;
     mcenum_state        StateOfDomicile_;
     mcenum_state        PremiumTaxState_;
-    double              PremiumTaxRate_; ////
-    double              PremiumTaxLoad_; ////
-    double              LowestPremiumTaxLoad_; ////
-    double              DomiciliaryPremiumTaxLoad_; ////
     mutable double      InitialTargetPremium;
 
     void                Init7702();
@@ -501,26 +487,6 @@ inline mcenum_state BasicValues::GetStateOfDomicile() const
 inline mcenum_state BasicValues::GetPremiumTaxState() const
 {
     return PremiumTaxState_;
-}
-
-inline double BasicValues::PremiumTaxRate() const ////
-{
-    return PremiumTaxRate_;
-}
-
-inline double BasicValues::PremiumTaxLoad() const ////
-{
-    return PremiumTaxLoad_;
-}
-
-inline double BasicValues::LowestPremiumTaxLoad() const ////
-{
-    return LowestPremiumTaxLoad_;
-}
-
-inline double BasicValues::DomiciliaryPremiumTaxLoad() const ////
-{
-    return DomiciliaryPremiumTaxLoad_;
 }
 
 inline bool BasicValues::IsSubjectToIllustrationReg() const

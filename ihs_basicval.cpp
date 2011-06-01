@@ -235,7 +235,6 @@ void BasicValues::Init()
     // Outlay requires only input; it might someday use interest rates.
     Outlay_        .reset(new modal_outlay   (yare_input_));
     PremiumTax_    .reset(new premium_tax    (PremiumTaxState_, StateOfDomicile_, yare_input_.AmortizePremiumLoad, *Database_, *StratifiedCharges_));
-    SetPremiumTaxParameters();
     Loads_         .reset(new Loads          (*this));
 
     // The target premium can't be ascertained yet if specamt is
@@ -310,7 +309,6 @@ void BasicValues::GPTServerInit()
     // Outlay requires only input; it might someday use interest rates.
 //  Outlay_        .reset(new modal_outlay   (yare_input_));
     PremiumTax_    .reset(new premium_tax    (PremiumTaxState_, StateOfDomicile_, yare_input_.AmortizePremiumLoad, *Database_, *StratifiedCharges_));
-    SetPremiumTaxParameters();
     Loads_         .reset(new Loads          (*this));
 
     SetPermanentInvariants();
@@ -804,19 +802,6 @@ void BasicValues::SetRoundingFunctors()
     set_rounding_rule(round_min_premium_       , RoundingRules_->datum("RoundMinPrem"    ));
     set_rounding_rule(round_max_premium_       , RoundingRules_->datum("RoundMaxPrem"    ));
     set_rounding_rule(round_interest_rate_7702_, RoundingRules_->datum("RoundIntRate7702"));
-}
-
-// Soon to be removed.
-
-void BasicValues::SetPremiumTaxParameters()
-{
-    PremiumTaxLoadIsTieredInPremiumTaxState_ = PremiumTax_->load_is_tiered_in_premium_tax_state();
-    PremiumTaxLoadIsTieredInStateOfDomicile_ = PremiumTax_->load_is_tiered_in_state_of_domicile();
-    premium_tax_is_retaliatory_              = PremiumTax_->premium_tax_is_retaliatory         ();
-    PremiumTaxRate_                          = PremiumTax_->levy_rate                          ();
-    PremiumTaxLoad_                          = PremiumTax_->load_rate                          ();
-    LowestPremiumTaxLoad_                    = PremiumTax_->least_load_rate                    ();
-    DomiciliaryPremiumTaxLoad_               = PremiumTax_->domiciliary_load_rate              ();
 }
 
 //============================================================================
