@@ -139,6 +139,27 @@ premium_tax::premium_tax
     test_consistency();
 }
 
+/// Antediluvian ctor.
+
+premium_tax::premium_tax
+    (mcenum_state            premium_tax_state
+    ,product_database const& db
+    )
+    :premium_tax_state_                   (premium_tax_state)
+    ,state_of_domicile_                   (mce_s_XX) // Doesn't matter.
+    ,amortize_premium_load_               (false)
+    ,levy_rate_                           (0.0) // Reset below.
+    ,load_rate_                           (0.0)
+    ,least_load_rate_                     (0.0)
+    ,domiciliary_load_rate_               (0.0)
+    ,load_is_tiered_in_premium_tax_state_ (false)
+    ,load_is_tiered_in_state_of_domicile_ (false)
+    ,premium_tax_is_retaliatory_          (false)
+{
+    database_index index = db.index().state(premium_tax_state_);
+    levy_rate_ = db.Query(DB_PremTaxRate, index);
+}
+
 premium_tax::~premium_tax()
 {}
 
