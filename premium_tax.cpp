@@ -70,26 +70,9 @@ bool ascertain_whether_premium_tax_is_retaliatory
 }
 } // Unnamed namespace.
 
-premium_tax::premium_tax
-    (mcenum_state              premium_tax_state
-    ,mcenum_state              state_of_domicile
-    ,bool                      amortize_premium_load
-    ,product_database   const& db
-    ,stratified_charges const& strata
-    )
-    :premium_tax_state_     (premium_tax_state)
-    ,state_of_domicile_     (state_of_domicile)
-    ,amortize_premium_load_ (amortize_premium_load)
-{
-    set_parameters(db, strata);
-}
-
-premium_tax::~premium_tax()
-{}
-
-/// Set all parameters that depend on premium-tax state.
+/// Production ctor.
 ///
-/// These database entities should be looked up by tax state:
+/// These database entities should be looked up by premium-tax state:
 ///  - DB_PremTaxLoad
 ///  - DB_PremTaxRate
 /// These probably (for inchoate amortization) shouldn't:
@@ -104,10 +87,16 @@ premium_tax::~premium_tax()
 ///  - DB_PremTaxTierPeriod
 ///  - DB_PremTaxTierNonDecr
 
-void premium_tax::set_parameters
-    (product_database   const& db
+premium_tax::premium_tax
+    (mcenum_state              premium_tax_state
+    ,mcenum_state              state_of_domicile
+    ,bool                      amortize_premium_load
+    ,product_database   const& db
     ,stratified_charges const& strata
     )
+    :premium_tax_state_     (premium_tax_state)
+    ,state_of_domicile_     (state_of_domicile)
+    ,amortize_premium_load_ (amortize_premium_load)
 {
     load_is_tiered_in_premium_tax_state_ = strata.premium_tax_is_tiered(premium_tax_state_);
     load_is_tiered_in_state_of_domicile_ = strata.premium_tax_is_tiered(state_of_domicile_);
@@ -149,6 +138,9 @@ void premium_tax::set_parameters
 
     test_consistency();
 }
+
+premium_tax::~premium_tax()
+{}
 
 /// Test consistency of premium-tax loads.
 ///

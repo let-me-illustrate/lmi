@@ -56,10 +56,6 @@ class premium_tax
     bool   premium_tax_is_retaliatory         () const;
 
   private:
-    void set_parameters
-        (product_database   const&
-        ,stratified_charges const&
-        );
     void test_consistency() const;
 
     // Ctor value-arguments.
