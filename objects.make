@@ -233,6 +233,7 @@ common_common_objects := \
   null_stream.o \
   outlay.o \
   path_utility.o \
+  premium_tax.o \
   product_names.o \
   progress_meter.o \
   sigfpe.o \
@@ -288,7 +289,6 @@ lmi_common_objects := \
   mec_xml_document.o \
   mortality_rates_fetch.o \
   preferences_model.o \
-  premium_tax.o \
   product_data.o \
   rounding_rules.o \
   stratified_algorithms.o \

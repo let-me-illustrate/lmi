@@ -45,6 +45,10 @@ class premium_tax
         ,product_database   const& db
         ,stratified_charges const& strata
         );
+    premium_tax
+        (mcenum_state              premium_tax_state
+        ,product_database   const& db
+        );
     ~premium_tax();
 
     double levy_rate                          () const;

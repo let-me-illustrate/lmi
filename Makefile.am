@@ -295,6 +295,7 @@ liblmi_common_sources = \
     null_stream.cpp \
     outlay.cpp \
     path_utility.cpp \
+    premium_tax.cpp \
     product_names.cpp \
     progress_meter.cpp \
     sigfpe.cpp \
@@ -349,7 +350,6 @@ liblmi_la_SOURCES = \
     mec_xml_document.cpp \
     mortality_rates_fetch.cpp \
     preferences_model.cpp \
-    premium_tax.cpp \
     product_data.cpp \
     rounding_rules.cpp \
     stratified_algorithms.cpp \
