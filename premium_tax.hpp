@@ -42,7 +42,7 @@ class premium_tax
         (mcenum_state              premium_tax_state
         ,mcenum_state              state_of_domicile
         ,bool                      amortize_premium_load
-        ,product_database   const& database
+        ,product_database   const& db
         ,stratified_charges const& strata
         );
     ~premium_tax();
@@ -81,7 +81,7 @@ double lowest_premium_tax_load
     ,mcenum_state              state_of_domicile
     ,bool                      amortize_premium_load
     ,product_database   const& db
-    ,stratified_charges const& stratified
+    ,stratified_charges const& strata
     );
 
 #endif // premium_tax_hpp

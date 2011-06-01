@@ -74,14 +74,14 @@ premium_tax::premium_tax
     (mcenum_state              premium_tax_state
     ,mcenum_state              state_of_domicile
     ,bool                      amortize_premium_load
-    ,product_database   const& database
+    ,product_database   const& db
     ,stratified_charges const& strata
     )
     :premium_tax_state_     (premium_tax_state)
     ,state_of_domicile_     (state_of_domicile)
     ,amortize_premium_load_ (amortize_premium_load)
 {
-    set_parameters(database, strata);
+    set_parameters(db, strata);
 }
 
 premium_tax::~premium_tax()
@@ -105,7 +105,7 @@ premium_tax::~premium_tax()
 ///  - DB_PremTaxTierNonDecr
 
 void premium_tax::set_parameters
-    (product_database   const& database
+    (product_database   const& db
     ,stratified_charges const& strata
     )
 {
@@ -121,24 +121,24 @@ void premium_tax::set_parameters
         (premium_tax_state_
         ,state_of_domicile_
         ,amortize_premium_load_
-        ,database
+        ,db
         ,strata
         );
 
     // TODO ?? It would be better not to constrain so many things
     // not to vary by duration by using Query(enumerator).
 
-    database_index index = database.index().state(premium_tax_state_);
-    levy_rate_ = database.Query(DB_PremTaxRate, index);
-    load_rate_ = database.Query(DB_PremTaxLoad, index);
+    database_index index = db.index().state(premium_tax_state_);
+    levy_rate_ = db.Query(DB_PremTaxRate, index);
+    load_rate_ = db.Query(DB_PremTaxLoad, index);
 
     {
-    database_index index = database.index().state(state_of_domicile_);
+    database_index index = db.index().state(state_of_domicile_);
     domiciliary_load_rate_ = 0.0;
     if(!amortize_premium_load_)
         {
-        double domiciliary_levy_rate = database.Query(DB_PremTaxRate, index);
-        domiciliary_load_rate_       = database.Query(DB_PremTaxLoad, index);
+        double domiciliary_levy_rate = db.Query(DB_PremTaxRate, index);
+        domiciliary_load_rate_       = db.Query(DB_PremTaxLoad, index);
         if(premium_tax_is_retaliatory_)
             {
             levy_rate_ = std::max(levy_rate_, domiciliary_levy_rate );
@@ -215,7 +215,7 @@ double lowest_premium_tax_load
     ,mcenum_state              state_of_domicile
     ,bool                      amortize_premium_load
     ,product_database   const& db
-    ,stratified_charges const& stratified
+    ,stratified_charges const& strata
     )
 {
     // TRICKY !! Here, we use 'DB_PremTaxLoad', not 'DB_PremTaxRate',
@@ -270,7 +270,7 @@ double lowest_premium_tax_load
             ;
         }
 
-    if(stratified.premium_tax_is_tiered(premium_tax_state))
+    if(strata.premium_tax_is_tiered(premium_tax_state))
         {
         if(0.0 != z)
             {
@@ -284,7 +284,7 @@ double lowest_premium_tax_load
                 << LMI_FLUSH
                 ;
             }
-        z = stratified.minimum_tiered_premium_tax_rate(premium_tax_state);
+        z = strata.minimum_tiered_premium_tax_rate(premium_tax_state);
         }
 
     return z;
