@@ -47,7 +47,7 @@ namespace {
 ///     implemented by adjusting that tier's rate and treating them
 ///     as otherwise nonretaliatory.
 
-bool ascertain_whether_premium_tax_is_retaliatory
+bool premium_tax_is_retaliatory
     (mcenum_state premium_tax_state
     ,mcenum_state state_of_domicile
     )
@@ -101,7 +101,7 @@ premium_tax::premium_tax
     load_is_tiered_in_premium_tax_state_ = strata.premium_tax_is_tiered(premium_tax_state_);
     load_is_tiered_in_state_of_domicile_ = strata.premium_tax_is_tiered(state_of_domicile_);
 
-    premium_tax_is_retaliatory_ = ascertain_whether_premium_tax_is_retaliatory
+    is_retaliatory_ = premium_tax_is_retaliatory
         (premium_tax_state_
         ,state_of_domicile_
         );
@@ -128,7 +128,7 @@ premium_tax::premium_tax
         {
         double domiciliary_levy_rate = db.Query(DB_PremTaxRate, index);
         domiciliary_load_rate_       = db.Query(DB_PremTaxLoad, index);
-        if(premium_tax_is_retaliatory_)
+        if(is_retaliatory_)
             {
             levy_rate_ = std::max(levy_rate_, domiciliary_levy_rate );
             load_rate_ = std::max(load_rate_, domiciliary_load_rate_);
@@ -154,7 +154,7 @@ premium_tax::premium_tax
     ,domiciliary_load_rate_               (0.0)
     ,load_is_tiered_in_premium_tax_state_ (false)
     ,load_is_tiered_in_state_of_domicile_ (false)
-    ,premium_tax_is_retaliatory_          (false)
+    ,is_retaliatory_                      (false)
 {
     database_index index = db.index().state(premium_tax_state_);
     levy_rate_ = db.Query(DB_PremTaxRate, index);
@@ -258,7 +258,7 @@ double lowest_premium_tax_load
     database_index index = db.index().state(premium_tax_state);
     z = db.Query(DB_PremTaxLoad, index);
 
-    if(ascertain_whether_premium_tax_is_retaliatory(premium_tax_state, state_of_domicile))
+    if(premium_tax_is_retaliatory(premium_tax_state, state_of_domicile))
         {
         index = db.index().state(state_of_domicile);
         z = std::max(z, db.Query(DB_PremTaxLoad, index));
@@ -333,8 +333,8 @@ bool premium_tax::load_is_tiered_in_state_of_domicile() const
     return load_is_tiered_in_state_of_domicile_;
 }
 
-bool premium_tax::premium_tax_is_retaliatory() const
+bool premium_tax::is_retaliatory() const
 {
-    return premium_tax_is_retaliatory_;
+    return is_retaliatory_;
 }
 

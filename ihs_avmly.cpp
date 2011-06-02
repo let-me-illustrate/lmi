@@ -1517,7 +1517,7 @@ double AccountValue::GetPremTaxLoad(double payment)
     YearsTotalPremTaxLoadInPremiumTaxState += tax_in_premium_tax_state;
 
     double tax_in_state_of_domicile = 0.0;
-    if(PremiumTax_->premium_tax_is_retaliatory())
+    if(PremiumTax_->is_retaliatory())
         {
         tax_in_state_of_domicile = PremiumTax_->domiciliary_load_rate() * payment;
         if(PremiumTax_->load_is_tiered_in_state_of_domicile())
