@@ -47,6 +47,7 @@
 #include "miscellany.hpp"
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
+#include "premium_tax.hpp"
 #include "stl_extensions.hpp"
 #include "stratified_algorithms.hpp"
 #include "surrchg_rates.hpp"
@@ -897,6 +898,8 @@ void AccountValue::InitializeYear()
 // TODO ?? Solve...() should reset not inputs but...something else?
     SetAnnualInvariants();
 
+    PremiumTax_->start_new_year();
+
     MonthsPolicyFees            = 0.0;
     SpecAmtLoad                 = 0.0;
 
@@ -915,17 +918,12 @@ void AccountValue::InitializeYear()
     YearsTotalLoanIntAccrued    = 0.0;
     YearsTotalNetCoiCharge      = 0.0;
     YearsTotalPolicyFee         = 0.0;
-    YearsTotalPremTaxLoad       = 0.0;
-    YearsTotalPremTaxLoadInStateOfDomicile = 0.0;
-    YearsTotalPremTaxLoadInPremiumTaxState = 0.0;
     YearsTotalDacTaxLoad        = 0.0;
     YearsTotalSpecAmtLoad       = 0.0;
     YearsTotalSepAcctLoad       = 0.0;
     YearsTotalGptForceout       = 0.0;
 
     NextYearsProjectedCoiCharge = 0.0;
-
-    PolicyYearRunningTotalPremiumSubjectToPremiumTax = 0.0;
 
     DacTaxRsv                   = 0.0;
 
@@ -1321,9 +1319,9 @@ void AccountValue::FinalizeYear()
     VariantValues().LoanIntAccrued    [Year] = YearsTotalLoanIntAccrued   ;
     VariantValues().NetCOICharge      [Year] = YearsTotalNetCoiCharge     ;
     VariantValues().PolicyFee         [Year] = YearsTotalPolicyFee        ;
-    VariantValues().PremTaxLoad       [Year] = YearsTotalPremTaxLoad      ;
     VariantValues().DacTaxLoad        [Year] = YearsTotalDacTaxLoad       ;
     VariantValues().SpecAmtLoad       [Year] = YearsTotalSpecAmtLoad      ;
+    VariantValues().PremTaxLoad       [Year] = PremiumTax_->ytd_load();
 
     double notional_sep_acct_charge =
           YearsTotalSepAcctLoad
@@ -1535,7 +1533,6 @@ void AccountValue::SetAnnualInvariants()
     YearsSpecAmtLoadRate    = Loads_->specified_amount_load (GenBasis_)[Year];
     YearsSepAcctLoadRate    = Loads_->separate_account_load (GenBasis_)[Year];
     YearsSalesLoadRefundRate= Loads_->refundable_sales_load_proportion()[Year];
-    YearsPremTaxLoadRate    = Loads_->premium_tax_load                ()[Year];
     YearsDacTaxLoadRate     = Loads_->dac_tax_load                    ()[Year];
 }
 

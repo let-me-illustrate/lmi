@@ -29,10 +29,15 @@
 #include "premium_tax.hpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "contains.hpp"
 #include "database.hpp"
+#include "materially_equal.hpp"
 #include "mc_enum_types_aux.hpp" // mc_str()
 #include "stratified_charges.hpp"
+
+#include <algorithm>             // std::max()
+#include <vector>
 
 namespace {
 /// Determine whether premium tax is retaliatory.
@@ -94,9 +99,20 @@ premium_tax::premium_tax
     ,product_database   const& db
     ,stratified_charges const& strata
     )
-    :premium_tax_state_     (premium_tax_state)
-    ,state_of_domicile_     (state_of_domicile)
-    ,amortize_premium_load_ (amortize_premium_load)
+    :premium_tax_state_                   (premium_tax_state)
+    ,state_of_domicile_                   (state_of_domicile)
+    ,amortize_premium_load_               (amortize_premium_load)
+    ,levy_rate_                           (0.0)   // Reset below.
+    ,load_rate_                           (0.0)   // Reset below.
+    ,least_load_rate_                     (0.0)   // Reset below.
+    ,domiciliary_load_rate_               (0.0)   // Reset below.
+    ,load_is_tiered_in_premium_tax_state_ (false) // Reset below.
+    ,load_is_tiered_in_state_of_domicile_ (false) // Reset below.
+    ,is_retaliatory_                      (false) // Reset below.
+    ,PolicyYearRunningTotalPremiumSubjectToPremiumTax(0.0)
+    ,YearsTotalPremTaxLoad                  (0.0)
+    ,YearsTotalPremTaxLoadInStateOfDomicile (0.0)
+    ,YearsTotalPremTaxLoadInPremiumTaxState (0.0)
 {
     load_is_tiered_in_premium_tax_state_ = strata.premium_tax_is_tiered(premium_tax_state_);
     load_is_tiered_in_state_of_domicile_ = strata.premium_tax_is_tiered(state_of_domicile_);
@@ -155,6 +171,10 @@ premium_tax::premium_tax
     ,load_is_tiered_in_premium_tax_state_ (false)
     ,load_is_tiered_in_state_of_domicile_ (false)
     ,is_retaliatory_                      (false)
+    ,PolicyYearRunningTotalPremiumSubjectToPremiumTax(0.0)
+    ,YearsTotalPremTaxLoad                  (0.0)
+    ,YearsTotalPremTaxLoadInStateOfDomicile (0.0)
+    ,YearsTotalPremTaxLoadInPremiumTaxState (0.0)
 {
     database_index index = db.index().state(premium_tax_state_);
     levy_rate_ = db.Query(DB_PremTaxRate, index);
@@ -219,6 +239,74 @@ void premium_tax::test_consistency() const
             << LMI_FLUSH
             ;
         }
+}
+
+void premium_tax::start_new_year()
+{
+    PolicyYearRunningTotalPremiumSubjectToPremiumTax = 0.0;
+    YearsTotalPremTaxLoad                  = 0.0;
+    YearsTotalPremTaxLoadInStateOfDomicile = 0.0;
+    YearsTotalPremTaxLoadInPremiumTaxState = 0.0;
+}
+
+/// Calculate premium-tax load.
+///
+/// The premium-tax load and the actual premium tax payable by an
+/// insurer are distinct concepts. They may have equal values when
+/// premium tax is passed through as a load.
+///
+/// DATABASE !! The '.strata' files ought to differentiate tiered
+/// premium-tax load paid by customer from rate paid by insurer.
+///
+/// An assertion ensures that either tiered or non-tiered premium-tax
+/// load is zero.
+
+double premium_tax::GetPremTaxLoad(double payment, stratified_charges const& strata)
+{
+    double tax_in_premium_tax_state = load_rate() * payment;
+    if(load_is_tiered_in_premium_tax_state())
+        {
+        LMI_ASSERT(0.0 == tax_in_premium_tax_state);
+        tax_in_premium_tax_state = strata.tiered_premium_tax
+            (premium_tax_state_
+            ,payment
+            ,PolicyYearRunningTotalPremiumSubjectToPremiumTax
+            );
+        }
+    YearsTotalPremTaxLoadInPremiumTaxState += tax_in_premium_tax_state;
+
+    double tax_in_state_of_domicile = 0.0;
+    if(is_retaliatory())
+        {
+        tax_in_state_of_domicile = domiciliary_load_rate() * payment;
+        if(load_is_tiered_in_state_of_domicile())
+            {
+            LMI_ASSERT(0.0 == tax_in_state_of_domicile);
+            tax_in_state_of_domicile = strata.tiered_premium_tax
+                (state_of_domicile_
+                ,payment
+                ,PolicyYearRunningTotalPremiumSubjectToPremiumTax
+                );
+            }
+        YearsTotalPremTaxLoadInStateOfDomicile += tax_in_state_of_domicile;
+        }
+
+    PolicyYearRunningTotalPremiumSubjectToPremiumTax += payment;
+
+    // 'x' is more robust, though more prone to roundoff error than
+    // 'y', so 'y' is preferred iff they're materially equal.
+    double ytd_premium_tax_reflecting_retaliation = std::max
+        (YearsTotalPremTaxLoadInPremiumTaxState
+        ,YearsTotalPremTaxLoadInStateOfDomicile
+        );
+    double x = std::max
+        (0.0
+        ,ytd_premium_tax_reflecting_retaliation - YearsTotalPremTaxLoad
+        );
+    double y = std::max(tax_in_premium_tax_state, tax_in_state_of_domicile);
+    double z = materially_equal(x, y) ? y : x;
+    YearsTotalPremTaxLoad += z;
+    return z;
 }
 
 /// Lowest premium-tax load, for 7702 and 7702A purposes.
@@ -301,6 +389,11 @@ double lowest_premium_tax_load
         }
 
     return z;
+}
+
+double premium_tax::ytd_load() const
+{
+    return YearsTotalPremTaxLoad;
 }
 
 double premium_tax::levy_rate() const
