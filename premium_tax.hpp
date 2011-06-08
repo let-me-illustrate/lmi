@@ -51,6 +51,10 @@ class premium_tax
         );
     ~premium_tax();
 
+    void   start_new_year();
+    double GetPremTaxLoad(double payment, stratified_charges const& strata);
+    double ytd_load                           () const;
+
     double levy_rate                          () const;
     double load_rate                          () const;
     double least_load_rate                    () const;
@@ -74,6 +78,11 @@ class premium_tax
     bool   load_is_tiered_in_premium_tax_state_;
     bool   load_is_tiered_in_state_of_domicile_;
     bool   is_retaliatory_;
+
+    double PolicyYearRunningTotalPremiumSubjectToPremiumTax;
+    double YearsTotalPremTaxLoad;
+    double YearsTotalPremTaxLoadInStateOfDomicile;
+    double YearsTotalPremTaxLoadInPremiumTaxState;
 };
 
 double lowest_premium_tax_load

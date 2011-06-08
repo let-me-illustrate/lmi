@@ -245,7 +245,6 @@ class LMI_SO AccountValue
         (double a_pmt
         ,double a_portion_exempt_from_premium_tax
         );
-    double GetPremTaxLoad(double payment);
     void TxLoanRepay             ();
 
     void TxSetBOMAV              ();
@@ -455,7 +454,6 @@ class LMI_SO AccountValue
     double  MaxLoan;
     double  UnusedTargetPrem;
     double  AnnualTargetPrem;
-    double  PolicyYearRunningTotalPremiumSubjectToPremiumTax;
     double  MaxWD;
     double  GrossWD;
     double  NetWD;
@@ -511,7 +509,6 @@ class LMI_SO AccountValue
     double       YearsSpecAmtLoadRate;
     double       YearsSepAcctLoadRate;
     double       YearsSalesLoadRefundRate;
-    double       YearsPremTaxLoadRate;
     double       YearsDacTaxLoadRate;
 
     double  MonthsPolicyFees;
@@ -573,9 +570,6 @@ class LMI_SO AccountValue
     double  YearsTotalGrossIntCredited;
     double  YearsTotalLoanIntAccrued;
     double  YearsTotalPolicyFee;
-    double  YearsTotalPremTaxLoad;
-    double  YearsTotalPremTaxLoadInStateOfDomicile;
-    double  YearsTotalPremTaxLoadInPremiumTaxState;
     double  YearsTotalDacTaxLoad;
     double  YearsTotalSpecAmtLoad;
     double  YearsTotalSepAcctLoad;

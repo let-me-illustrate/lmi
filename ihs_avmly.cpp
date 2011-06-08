@@ -1463,14 +1463,13 @@ double AccountValue::GetPremLoad
     double total_load =
           target_portion * YearsTotLoadTgt
         + excess_portion * YearsTotLoadExc
-        - a_portion_exempt_from_premium_tax * YearsPremTaxLoadRate
+        - a_portion_exempt_from_premium_tax * PremiumTax_->load_rate()
         ;
 
-    premium_tax_load_ = GetPremTaxLoad
-        ( a_pmt
-        - a_portion_exempt_from_premium_tax
+    premium_tax_load_ = PremiumTax_->GetPremTaxLoad
+        (a_pmt - a_portion_exempt_from_premium_tax
+        ,*StratifiedCharges_
         );
-    YearsTotalPremTaxLoad += premium_tax_load_;
 
     dac_tax_load_ = YearsDacTaxLoadRate * a_pmt;
     YearsTotalDacTaxLoad += dac_tax_load_;
@@ -1488,64 +1487,6 @@ double AccountValue::GetPremLoad
         );
 
     return round_net_premium()(sum_of_separate_loads);
-}
-
-/// Calculate premium-tax load.
-///
-/// The premium-tax load and the actual premium tax payable by an
-/// insurer are distinct concepts. They may have equal values when
-/// premium tax is passed through as a load.
-///
-/// DATABASE !! The '.strata' files ought to differentiate tiered
-/// premium-tax load paid by customer from rate paid by insurer.
-///
-/// An assertion ensures that either tiered or non-tiered premium-tax
-/// load is zero.
-
-double AccountValue::GetPremTaxLoad(double payment)
-{
-    double tax_in_premium_tax_state = YearsPremTaxLoadRate * payment;
-    if(PremiumTax_->load_is_tiered_in_premium_tax_state())
-        {
-        LMI_ASSERT(0.0 == tax_in_premium_tax_state);
-        tax_in_premium_tax_state = StratifiedCharges_->tiered_premium_tax
-            (GetPremiumTaxState()
-            ,payment
-            ,PolicyYearRunningTotalPremiumSubjectToPremiumTax
-            );
-        }
-    YearsTotalPremTaxLoadInPremiumTaxState += tax_in_premium_tax_state;
-
-    double tax_in_state_of_domicile = 0.0;
-    if(PremiumTax_->is_retaliatory())
-        {
-        tax_in_state_of_domicile = PremiumTax_->domiciliary_load_rate() * payment;
-        if(PremiumTax_->load_is_tiered_in_state_of_domicile())
-            {
-            LMI_ASSERT(0.0 == tax_in_state_of_domicile);
-            tax_in_state_of_domicile = StratifiedCharges_->tiered_premium_tax
-                (GetStateOfDomicile()
-                ,payment
-                ,PolicyYearRunningTotalPremiumSubjectToPremiumTax
-                );
-            }
-        YearsTotalPremTaxLoadInStateOfDomicile += tax_in_state_of_domicile;
-        }
-
-    PolicyYearRunningTotalPremiumSubjectToPremiumTax += payment;
-
-    // 'x' is more robust, though more prone to roundoff error than
-    // 'y', so 'y' is preferred iff they're materially equal.
-    double ytd_premium_tax_reflecting_retaliation = std::max
-        (YearsTotalPremTaxLoadInPremiumTaxState
-        ,YearsTotalPremTaxLoadInStateOfDomicile
-        );
-    double x = std::max
-        (0.0
-        ,ytd_premium_tax_reflecting_retaliation - YearsTotalPremTaxLoad
-        );
-    double y = std::max(tax_in_premium_tax_state, tax_in_state_of_domicile);
-    return materially_equal(x, y) ? y : x;
 }
 
 //============================================================================

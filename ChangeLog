@@ -27969,3 +27969,19 @@ Use premium-tax class in antediluvian fork.
   loads_test.cpp
 Improve premium-tax encapsulation.
 
+20110602T1030Z <gchicares@sbcglobal.net> [650]
+
+  ihs_avmly.cpp
+  premium_tax.cpp
+  premium_tax.hpp
+Improve certain member names.
+
+20110608T1543Z <gchicares@sbcglobal.net> [650]
+
+  account_value.hpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  premium_tax.cpp
+  premium_tax.hpp
+Improve premium-tax encapsulation.
+
