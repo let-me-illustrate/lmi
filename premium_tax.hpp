@@ -39,55 +39,55 @@ class premium_tax
 {
   public:
     premium_tax
-        (mcenum_state              premium_tax_state
-        ,mcenum_state              state_of_domicile
+        (mcenum_state              tax_state
+        ,mcenum_state              domicile
         ,bool                      amortize_premium_load
         ,product_database   const& db
         ,stratified_charges const& strata
         );
     premium_tax
-        (mcenum_state              premium_tax_state
+        (mcenum_state              tax_state
         ,product_database   const& db
         );
     ~premium_tax();
 
     void   start_new_year();
-    double GetPremTaxLoad(double payment, stratified_charges const& strata);
-    double ytd_load                           () const;
+    double calculate_load(double payment, stratified_charges const& strata);
+    double ytd_load               () const;
 
-    double levy_rate                          () const;
-    double load_rate                          () const;
-    double least_load_rate                    () const;
-    double domiciliary_load_rate              () const;
-    bool   load_is_tiered_in_premium_tax_state() const;
-    bool   load_is_tiered_in_state_of_domicile() const;
-    bool   is_retaliatory                     () const;
+    double levy_rate              () const;
+    double load_rate              () const;
+    double least_load_rate        () const;
+    double domiciliary_load_rate  () const;
+    bool   is_tiered_in_tax_state () const;
+    bool   is_tiered_in_domicile  () const;
+    bool   is_retaliatory         () const;
 
   private:
     void test_consistency() const;
 
     // Ctor value-arguments.
-    mcenum_state premium_tax_state_;
-    mcenum_state state_of_domicile_;
+    mcenum_state tax_state_;
+    mcenum_state domicile_;
     bool         amortize_premium_load_;
 
     double levy_rate_;
     double load_rate_;
     double least_load_rate_;
     double domiciliary_load_rate_;
-    bool   load_is_tiered_in_premium_tax_state_;
-    bool   load_is_tiered_in_state_of_domicile_;
+    bool   is_tiered_in_tax_state_;
+    bool   is_tiered_in_domicile_;
     bool   is_retaliatory_;
 
-    double PolicyYearRunningTotalPremiumSubjectToPremiumTax;
-    double YearsTotalPremTaxLoad;
-    double YearsTotalPremTaxLoadInStateOfDomicile;
-    double YearsTotalPremTaxLoadInPremiumTaxState;
+    double ytd_taxable_premium_;
+    double ytd_load_;
+    double ytd_load_in_tax_state_;
+    double ytd_load_in_domicile_;
 };
 
 double lowest_premium_tax_load
-    (mcenum_state              premium_tax_state
-    ,mcenum_state              state_of_domicile
+    (mcenum_state              tax_state
+    ,mcenum_state              domicile
     ,bool                      amortize_premium_load
     ,product_database   const& db
     ,stratified_charges const& strata
