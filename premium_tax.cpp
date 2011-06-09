@@ -52,24 +52,21 @@ namespace {
 ///     implemented by adjusting that tier's rate and treating them
 ///     as otherwise nonretaliatory.
 
-bool premium_tax_is_retaliatory
-    (mcenum_state premium_tax_state
-    ,mcenum_state state_of_domicile
-    )
+bool premium_tax_is_retaliatory(mcenum_state tax_state, mcenum_state domicile)
 {
     static int const n = 4;
     static mcenum_state const d[n] = {mce_s_MA, mce_s_MN, mce_s_NY, mce_s_RI};
     static std::vector<mcenum_state> const reciprocal_nonretaliation_states(d, d + n);
     bool const reciprocally_nonretaliatory =
-            contains(reciprocal_nonretaliation_states, premium_tax_state)
-        &&  contains(reciprocal_nonretaliation_states, state_of_domicile)
+            contains(reciprocal_nonretaliation_states, tax_state)
+        &&  contains(reciprocal_nonretaliation_states, domicile)
         ;
     bool const nonretaliatory =
             reciprocally_nonretaliatory
-        ||  mce_s_HI == premium_tax_state
-        ||  mce_s_XX == premium_tax_state
-        ||  mce_s_AK == premium_tax_state
-        ||  mce_s_SD == premium_tax_state
+        ||  mce_s_HI == tax_state
+        ||  mce_s_XX == tax_state
+        ||  mce_s_AK == tax_state
+        ||  mce_s_SD == tax_state
         ;
     return !nonretaliatory;
 }
@@ -93,38 +90,35 @@ bool premium_tax_is_retaliatory
 ///  - DB_PremTaxTierNonDecr
 
 premium_tax::premium_tax
-    (mcenum_state              premium_tax_state
-    ,mcenum_state              state_of_domicile
+    (mcenum_state              tax_state
+    ,mcenum_state              domicile
     ,bool                      amortize_premium_load
     ,product_database   const& db
     ,stratified_charges const& strata
     )
-    :premium_tax_state_                   (premium_tax_state)
-    ,state_of_domicile_                   (state_of_domicile)
-    ,amortize_premium_load_               (amortize_premium_load)
-    ,levy_rate_                           (0.0)   // Reset below.
-    ,load_rate_                           (0.0)   // Reset below.
-    ,least_load_rate_                     (0.0)   // Reset below.
-    ,domiciliary_load_rate_               (0.0)   // Reset below.
-    ,load_is_tiered_in_premium_tax_state_ (false) // Reset below.
-    ,load_is_tiered_in_state_of_domicile_ (false) // Reset below.
-    ,is_retaliatory_                      (false) // Reset below.
-    ,PolicyYearRunningTotalPremiumSubjectToPremiumTax(0.0)
-    ,YearsTotalPremTaxLoad                  (0.0)
-    ,YearsTotalPremTaxLoadInStateOfDomicile (0.0)
-    ,YearsTotalPremTaxLoadInPremiumTaxState (0.0)
+    :tax_state_              (tax_state)
+    ,domicile_               (domicile)
+    ,amortize_premium_load_  (amortize_premium_load)
+    ,levy_rate_              (0.0)   // Reset below.
+    ,load_rate_              (0.0)   // Reset below.
+    ,least_load_rate_        (0.0)   // Reset below.
+    ,domiciliary_load_rate_  (0.0)   // Reset below.
+    ,is_tiered_in_tax_state_ (false) // Reset below.
+    ,is_tiered_in_domicile_  (false) // Reset below.
+    ,is_retaliatory_         (false) // Reset below.
+    ,ytd_taxable_premium_    (0.0)
+    ,ytd_load_               (0.0)
+    ,ytd_load_in_tax_state_  (0.0)
+    ,ytd_load_in_domicile_   (0.0)
 {
-    load_is_tiered_in_premium_tax_state_ = strata.premium_tax_is_tiered(premium_tax_state_);
-    load_is_tiered_in_state_of_domicile_ = strata.premium_tax_is_tiered(state_of_domicile_);
+    is_tiered_in_tax_state_ = strata.premium_tax_is_tiered(tax_state_);
+    is_tiered_in_domicile_  = strata.premium_tax_is_tiered(domicile_ );
 
-    is_retaliatory_ = premium_tax_is_retaliatory
-        (premium_tax_state_
-        ,state_of_domicile_
-        );
+    is_retaliatory_ = premium_tax_is_retaliatory(tax_state_, domicile_);
 
     least_load_rate_ = lowest_premium_tax_load
-        (premium_tax_state_
-        ,state_of_domicile_
+        (tax_state_
+        ,domicile_
         ,amortize_premium_load_
         ,db
         ,strata
@@ -133,12 +127,12 @@ premium_tax::premium_tax
     // TODO ?? It would be better not to constrain so many things
     // not to vary by duration by using Query(enumerator).
 
-    database_index index = db.index().state(premium_tax_state_);
+    database_index index = db.index().state(tax_state_);
     levy_rate_ = db.Query(DB_PremTaxRate, index);
     load_rate_ = db.Query(DB_PremTaxLoad, index);
 
     {
-    database_index index = db.index().state(state_of_domicile_);
+    database_index index = db.index().state(domicile_);
     domiciliary_load_rate_ = 0.0;
     if(!amortize_premium_load_)
         {
@@ -158,25 +152,25 @@ premium_tax::premium_tax
 /// Antediluvian ctor.
 
 premium_tax::premium_tax
-    (mcenum_state            premium_tax_state
+    (mcenum_state            tax_state
     ,product_database const& db
     )
-    :premium_tax_state_                   (premium_tax_state)
-    ,state_of_domicile_                   (mce_s_XX) // Doesn't matter.
-    ,amortize_premium_load_               (false)
-    ,levy_rate_                           (0.0) // Reset below.
-    ,load_rate_                           (0.0)
-    ,least_load_rate_                     (0.0)
-    ,domiciliary_load_rate_               (0.0)
-    ,load_is_tiered_in_premium_tax_state_ (false)
-    ,load_is_tiered_in_state_of_domicile_ (false)
-    ,is_retaliatory_                      (false)
-    ,PolicyYearRunningTotalPremiumSubjectToPremiumTax(0.0)
-    ,YearsTotalPremTaxLoad                  (0.0)
-    ,YearsTotalPremTaxLoadInStateOfDomicile (0.0)
-    ,YearsTotalPremTaxLoadInPremiumTaxState (0.0)
+    :tax_state_              (tax_state)
+    ,domicile_               (mce_s_XX) // Doesn't matter.
+    ,amortize_premium_load_  (false)
+    ,levy_rate_              (0.0) // Reset below.
+    ,load_rate_              (0.0)
+    ,least_load_rate_        (0.0)
+    ,domiciliary_load_rate_  (0.0)
+    ,is_tiered_in_tax_state_ (false)
+    ,is_tiered_in_domicile_  (false)
+    ,is_retaliatory_         (false)
+    ,ytd_taxable_premium_    (0.0)
+    ,ytd_load_               (0.0)
+    ,ytd_load_in_tax_state_  (0.0)
+    ,ytd_load_in_domicile_   (0.0)
 {
-    database_index index = db.index().state(premium_tax_state_);
+    database_index index = db.index().state(tax_state_);
     levy_rate_ = db.Query(DB_PremTaxRate, index);
 }
 
@@ -202,13 +196,13 @@ premium_tax::~premium_tax()
 
 void premium_tax::test_consistency() const
 {
-    if(load_is_tiered_in_premium_tax_state())
+    if(is_tiered_in_tax_state())
         {
         if(0.0 != load_rate())
             {
             fatal_error()
                 << "Premium-tax load is tiered in premium-tax state "
-                << mc_str(premium_tax_state_)
+                << mc_str(tax_state_)
                 << ", but the product database specifies a scalar load of "
                 << load_rate()
                 << " instead of zero as expected. Probably the database"
@@ -218,13 +212,13 @@ void premium_tax::test_consistency() const
             }
         }
 
-    if(load_is_tiered_in_state_of_domicile())
+    if(is_tiered_in_domicile())
         {
         if(0.0 != domiciliary_load_rate())
             {
             fatal_error()
                 << "Premium-tax load is tiered in state of domicile "
-                << mc_str(state_of_domicile_)
+                << mc_str(domicile_)
                 << ", but the product database specifies a scalar load of "
                 << domiciliary_load_rate()
                 << " instead of zero as expected. Probably the database"
@@ -234,7 +228,7 @@ void premium_tax::test_consistency() const
             }
         fatal_error()
             << "Premium-tax load is tiered in state of domicile "
-            << mc_str(state_of_domicile_)
+            << mc_str(domicile_)
             << ", but that case is not supported."
             << LMI_FLUSH
             ;
@@ -243,10 +237,10 @@ void premium_tax::test_consistency() const
 
 void premium_tax::start_new_year()
 {
-    PolicyYearRunningTotalPremiumSubjectToPremiumTax = 0.0;
-    YearsTotalPremTaxLoad                  = 0.0;
-    YearsTotalPremTaxLoadInStateOfDomicile = 0.0;
-    YearsTotalPremTaxLoadInPremiumTaxState = 0.0;
+    ytd_taxable_premium_   = 0.0;
+    ytd_load_              = 0.0;
+    ytd_load_in_tax_state_ = 0.0;
+    ytd_load_in_domicile_  = 0.0;
 }
 
 /// Calculate premium-tax load.
@@ -261,59 +255,56 @@ void premium_tax::start_new_year()
 /// An assertion ensures that either tiered or non-tiered premium-tax
 /// load is zero.
 
-double premium_tax::GetPremTaxLoad(double payment, stratified_charges const& strata)
+double premium_tax::calculate_load(double payment, stratified_charges const& strata)
 {
-    double tax_in_premium_tax_state = load_rate() * payment;
-    if(load_is_tiered_in_premium_tax_state())
+    double tax_in_tax_state = load_rate() * payment;
+    if(is_tiered_in_tax_state())
         {
-        LMI_ASSERT(0.0 == tax_in_premium_tax_state);
-        tax_in_premium_tax_state = strata.tiered_premium_tax
-            (premium_tax_state_
+        LMI_ASSERT(0.0 == tax_in_tax_state);
+        tax_in_tax_state = strata.tiered_premium_tax
+            (tax_state_
             ,payment
-            ,PolicyYearRunningTotalPremiumSubjectToPremiumTax
+            ,ytd_taxable_premium_
             );
         }
-    YearsTotalPremTaxLoadInPremiumTaxState += tax_in_premium_tax_state;
+    ytd_load_in_tax_state_ += tax_in_tax_state;
 
-    double tax_in_state_of_domicile = 0.0;
+    double tax_in_domicile = 0.0;
     if(is_retaliatory())
         {
-        tax_in_state_of_domicile = domiciliary_load_rate() * payment;
-        if(load_is_tiered_in_state_of_domicile())
+        tax_in_domicile = domiciliary_load_rate() * payment;
+        if(is_tiered_in_domicile())
             {
-            LMI_ASSERT(0.0 == tax_in_state_of_domicile);
-            tax_in_state_of_domicile = strata.tiered_premium_tax
-                (state_of_domicile_
+            LMI_ASSERT(0.0 == tax_in_domicile);
+            tax_in_domicile = strata.tiered_premium_tax
+                (domicile_
                 ,payment
-                ,PolicyYearRunningTotalPremiumSubjectToPremiumTax
+                ,ytd_taxable_premium_
                 );
             }
-        YearsTotalPremTaxLoadInStateOfDomicile += tax_in_state_of_domicile;
+        ytd_load_in_domicile_ += tax_in_domicile;
         }
 
-    PolicyYearRunningTotalPremiumSubjectToPremiumTax += payment;
+    ytd_taxable_premium_ += payment;
 
     // 'x' is more robust, though more prone to roundoff error than
     // 'y', so 'y' is preferred iff they're materially equal.
-    double ytd_premium_tax_reflecting_retaliation = std::max
-        (YearsTotalPremTaxLoadInPremiumTaxState
-        ,YearsTotalPremTaxLoadInStateOfDomicile
+    double ytd_tax_reflecting_retaliation = std::max
+        (ytd_load_in_tax_state_
+        ,ytd_load_in_domicile_
         );
-    double x = std::max
-        (0.0
-        ,ytd_premium_tax_reflecting_retaliation - YearsTotalPremTaxLoad
-        );
-    double y = std::max(tax_in_premium_tax_state, tax_in_state_of_domicile);
+    double x = std::max(0.0, ytd_tax_reflecting_retaliation - ytd_load_);
+    double y = std::max(tax_in_tax_state, tax_in_domicile);
     double z = materially_equal(x, y) ? y : x;
-    YearsTotalPremTaxLoad += z;
+    ytd_load_ += z;
     return z;
 }
 
 /// Lowest premium-tax load, for 7702 and 7702A purposes.
 
 double lowest_premium_tax_load
-    (mcenum_state              premium_tax_state
-    ,mcenum_state              state_of_domicile
+    (mcenum_state              tax_state
+    ,mcenum_state              domicile
     ,bool                      amortize_premium_load
     ,product_database   const& db
     ,stratified_charges const& strata
@@ -343,12 +334,12 @@ double lowest_premium_tax_load
         return z;
         }
 
-    database_index index = db.index().state(premium_tax_state);
+    database_index index = db.index().state(tax_state);
     z = db.Query(DB_PremTaxLoad, index);
 
-    if(premium_tax_is_retaliatory(premium_tax_state, state_of_domicile))
+    if(premium_tax_is_retaliatory(tax_state, domicile))
         {
-        index = db.index().state(state_of_domicile);
+        index = db.index().state(domicile);
         z = std::max(z, db.Query(DB_PremTaxLoad, index));
         }
 
@@ -371,13 +362,13 @@ double lowest_premium_tax_load
             ;
         }
 
-    if(strata.premium_tax_is_tiered(premium_tax_state))
+    if(strata.premium_tax_is_tiered(tax_state))
         {
         if(0.0 != z)
             {
             fatal_error()
                 << "Premium-tax load is tiered in state "
-                << mc_str(premium_tax_state)
+                << mc_str(tax_state)
                 << ", but the product database specifies a scalar load of "
                 << z
                 << " instead of zero as expected. Probably the database"
@@ -385,7 +376,7 @@ double lowest_premium_tax_load
                 << LMI_FLUSH
                 ;
             }
-        z = strata.minimum_tiered_premium_tax_rate(premium_tax_state);
+        z = strata.minimum_tiered_premium_tax_rate(tax_state);
         }
 
     return z;
@@ -393,7 +384,7 @@ double lowest_premium_tax_load
 
 double premium_tax::ytd_load() const
 {
-    return YearsTotalPremTaxLoad;
+    return ytd_load_;
 }
 
 double premium_tax::levy_rate() const
@@ -416,14 +407,14 @@ double premium_tax::domiciliary_load_rate() const
     return domiciliary_load_rate_;
 }
 
-bool premium_tax::load_is_tiered_in_premium_tax_state() const
+bool premium_tax::is_tiered_in_tax_state() const
 {
-    return load_is_tiered_in_premium_tax_state_;
+    return is_tiered_in_tax_state_;
 }
 
-bool premium_tax::load_is_tiered_in_state_of_domicile() const
+bool premium_tax::is_tiered_in_domicile() const
 {
-    return load_is_tiered_in_state_of_domicile_;
+    return is_tiered_in_domicile_;
 }
 
 bool premium_tax::is_retaliatory() const

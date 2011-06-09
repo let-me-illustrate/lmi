@@ -1466,7 +1466,7 @@ double AccountValue::GetPremLoad
         - a_portion_exempt_from_premium_tax * PremiumTax_->load_rate()
         ;
 
-    premium_tax_load_ = PremiumTax_->GetPremTaxLoad
+    premium_tax_load_ = PremiumTax_->calculate_load
         (a_pmt - a_portion_exempt_from_premium_tax
         ,*StratifiedCharges_
         );
@@ -1482,7 +1482,7 @@ double AccountValue::GetPremLoad
         ;
     HOPEFULLY(0.0 <= sum_of_separate_loads);
     LMI_ASSERT
-        (   PremiumTax_->load_is_tiered_in_premium_tax_state()
+        (   PremiumTax_->is_tiered_in_tax_state()
         ||  materially_equal(total_load, sum_of_separate_loads)
         );
 
