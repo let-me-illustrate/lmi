@@ -58,10 +58,7 @@ class premium_tax
     double levy_rate              () const;
     double load_rate              () const;
     double least_load_rate        () const;
-    double domiciliary_load_rate  () const;
-    bool   is_tiered_in_tax_state () const;
-    bool   is_tiered_in_domicile  () const;
-    bool   is_retaliatory         () const;
+    bool   is_tiered              () const;
 
   private:
     void test_consistency() const;

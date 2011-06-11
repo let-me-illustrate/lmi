@@ -1480,9 +1480,9 @@ double AccountValue::GetPremLoad
         + premium_tax_load_
         + dac_tax_load_
         ;
-    HOPEFULLY(0.0 <= sum_of_separate_loads);
+    LMI_ASSERT(0.0 <= sum_of_separate_loads);
     LMI_ASSERT
-        (   PremiumTax_->is_tiered_in_tax_state()
+        (   PremiumTax_->is_tiered()
         ||  materially_equal(total_load, sum_of_separate_loads)
         );
 
