@@ -27985,3 +27985,17 @@ Improve certain member names.
   premium_tax.hpp
 Improve premium-tax encapsulation.
 
+20110609T1206Z <gchicares@sbcglobal.net> [650]
+
+  ihs_avmly.cpp
+  premium_tax.cpp
+  premium_tax.hpp
+Rectify names.
+
+20110611T1426Z <gchicares@sbcglobal.net> [650]
+
+  ihs_avmly.cpp
+  premium_tax.cpp
+  premium_tax.hpp
+Remove trivial accessors recently rendered needless.
+

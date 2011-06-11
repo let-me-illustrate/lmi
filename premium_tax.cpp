@@ -196,7 +196,7 @@ premium_tax::~premium_tax()
 
 void premium_tax::test_consistency() const
 {
-    if(is_tiered_in_tax_state())
+    if(is_tiered_in_tax_state_)
         {
         if(0.0 != load_rate())
             {
@@ -212,15 +212,15 @@ void premium_tax::test_consistency() const
             }
         }
 
-    if(is_tiered_in_domicile())
+    if(is_tiered_in_domicile_)
         {
-        if(0.0 != domiciliary_load_rate())
+        if(0.0 != domiciliary_load_rate_)
             {
             fatal_error()
                 << "Premium-tax load is tiered in state of domicile "
                 << mc_str(domicile_)
                 << ", but the product database specifies a scalar load of "
-                << domiciliary_load_rate()
+                << domiciliary_load_rate_
                 << " instead of zero as expected. Probably the database"
                 << " is incorrect."
                 << LMI_FLUSH
@@ -258,7 +258,7 @@ void premium_tax::start_new_year()
 double premium_tax::calculate_load(double payment, stratified_charges const& strata)
 {
     double tax_in_tax_state = load_rate() * payment;
-    if(is_tiered_in_tax_state())
+    if(is_tiered_in_tax_state_)
         {
         LMI_ASSERT(0.0 == tax_in_tax_state);
         tax_in_tax_state = strata.tiered_premium_tax
@@ -270,10 +270,10 @@ double premium_tax::calculate_load(double payment, stratified_charges const& str
     ytd_load_in_tax_state_ += tax_in_tax_state;
 
     double tax_in_domicile = 0.0;
-    if(is_retaliatory())
+    if(is_retaliatory_)
         {
-        tax_in_domicile = domiciliary_load_rate() * payment;
-        if(is_tiered_in_domicile())
+        tax_in_domicile = domiciliary_load_rate_ * payment;
+        if(is_tiered_in_domicile_)
             {
             LMI_ASSERT(0.0 == tax_in_domicile);
             tax_in_domicile = strata.tiered_premium_tax
@@ -402,23 +402,8 @@ double premium_tax::least_load_rate() const
     return least_load_rate_;
 }
 
-double premium_tax::domiciliary_load_rate() const
+bool premium_tax::is_tiered() const
 {
-    return domiciliary_load_rate_;
-}
-
-bool premium_tax::is_tiered_in_tax_state() const
-{
-    return is_tiered_in_tax_state_;
-}
-
-bool premium_tax::is_tiered_in_domicile() const
-{
-    return is_tiered_in_domicile_;
-}
-
-bool premium_tax::is_retaliatory() const
-{
-    return is_retaliatory_;
+    return is_tiered_in_tax_state_ || is_tiered_in_domicile_;
 }
 
