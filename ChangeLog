@@ -27999,3 +27999,14 @@ Rectify names.
   premium_tax.hpp
 Remove trivial accessors recently rendered needless.
 
+20110612T1252Z <gchicares@sbcglobal.net> [649]
+
+  ihs_avmly.cpp
+Resolve a marked defect.
+
+20110612T1313Z <gchicares@sbcglobal.net> [648]
+
+  ihs_avmly.cpp
+Resolve a marked defect. Extending TieredNetToGross() to keep track of
+unused target premium would not make this code more maintainable.
+

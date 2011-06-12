@@ -1443,7 +1443,6 @@ double AccountValue::GetPremLoad
     ,double a_portion_exempt_from_premium_tax
     )
 {
-    // TODO ?? Perhaps TieredNetToGross() could be generalized for use here?
     double excess_portion;
     // All excess.
     if(0.0 == UnusedTargetPrem)
