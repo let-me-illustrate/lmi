@@ -1419,7 +1419,25 @@ void AccountValue::TxAcceptPayment(double a_pmt)
     // call them EeTaxBasis and ErTaxBasis.
 }
 
-//============================================================================
+/// Determine premium load.
+///
+/// The total load has several components:
+///  - nonrefundable premium load
+///  - refundable sales load
+///  - premium-tax load
+///  - DAC-tax load
+/// which are applied separately (with due regard to variation by
+/// target versus excess), added together, and then rounded.
+///
+/// Alternatively, the load factors may be totalled, and their sum
+/// applied to the target and excess portions of the payment. This may
+/// yield a slightly different result due to intermediate rounding,
+/// which could be important for matching a particular admin system.
+/// Therefore, both calculations are performed, and their results are
+/// asserted to be materially equal--but only when the alternative
+/// calculation doesn't require too many adjustments, in particular
+/// when tiered premium tax is passed through as a load.
+
 double AccountValue::GetPremLoad
     (double a_pmt
     ,double a_portion_exempt_from_premium_tax
@@ -1458,14 +1476,6 @@ double AccountValue::GetPremLoad
     LMI_ASSERT(0.0 <= sales_load_);
     CumulativeSalesLoad += sales_load_;
 
-    // TODO ?? This variable and the variables it depends on probably
-    // are no longer needed and should be expunged.
-    double total_load =
-          target_portion * YearsTotLoadTgt
-        + excess_portion * YearsTotLoadExc
-        - a_portion_exempt_from_premium_tax * PremiumTax_->load_rate()
-        ;
-
     premium_tax_load_ = PremiumTax_->calculate_load
         (a_pmt - a_portion_exempt_from_premium_tax
         ,*StratifiedCharges_
@@ -1481,6 +1491,12 @@ double AccountValue::GetPremLoad
         + dac_tax_load_
         ;
     LMI_ASSERT(0.0 <= sum_of_separate_loads);
+
+    double total_load =
+          target_portion * YearsTotLoadTgt
+        + excess_portion * YearsTotLoadExc
+        - a_portion_exempt_from_premium_tax * PremiumTax_->load_rate()
+        ;
     LMI_ASSERT
         (   PremiumTax_->is_tiered()
         ||  materially_equal(total_load, sum_of_separate_loads)
