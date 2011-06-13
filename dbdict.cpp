@@ -679,13 +679,18 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_SurrChgPremMult     , 0.0));
     Add(database_entity(DB_SurrChgAmort        , 0.0));
 
-    // These premium-tax rates aren't necessarily accurate or current.
-    // They resemble 2010 effective rates with a retaliatory floor of
-    // two percent. Actual rates change from time to time, and depend
-    // on the insurer's domicile because of retaliation. AK and SD
-    // have a tiered premium tax that lmi handles; DE has one that it
-    // does not. Fictitious state XX may be used where no premium tax
-    // applies, as for offshore business.
+/// Premium-tax rates as of 2011-05 (retaliation performed elsewhere).
+///
+/// Exact values are a matter of interpretation, because some states
+/// impose various assessments in addition to their nominal tax rates.
+///
+/// AK and SD have a tiered premium tax that lmi handles; DE has one
+/// that it does not. As elsewhere in lmi, tiered and non-tiered
+/// charges are calculated separately and added together; therefore,
+/// the AK and SD values in this table are zero.
+///
+/// Fictitious state XX may be used where no premium tax applies, as
+/// for offshore business.
     int premium_tax_dimensions[e_number_of_axes] = {1, 1, 1, 1, 1, 53, 1};
     double const tiered = 0.0;
     double premium_tax_rates[53] =
