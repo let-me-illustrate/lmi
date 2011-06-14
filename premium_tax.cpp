@@ -234,6 +234,21 @@ void premium_tax::test_consistency() const
         }
 }
 
+/// Reinitialize YTD state variables.
+///
+/// Except for initialization to zero, these variables are used only
+/// by calculate_load() and the trivial const accessor ytd_load(), in
+/// combination with which (and the present function) they may be
+/// thought of as constituting a stateful function subobject.
+///
+/// TODO ?? This is incorrect for inforce. Suppose the tax state has
+/// a tiered rate with a breakpoint that has already been met for an
+/// off-anniversary inforce illustration. Any further payment in the
+/// same year should be taxed at a lower rate. INPUT !! YTD taxable
+/// premium needs to be passed from the admin system; it is not
+/// necessary to pass the other variables, because they can be
+/// calculated here.
+
 void premium_tax::start_new_year()
 {
     ytd_taxable_premium_   = 0.0;
@@ -303,9 +318,6 @@ double premium_tax::calculate_load(double payment, stratified_charges const& str
 ///
 /// A single table suffices for every domicile, because retaliation is
 /// explicitly performed elsewhere.
-///
-/// Exact values are a matter of interpretation, because some states
-/// impose various assessments in addition to their nominal tax rates.
 ///
 /// AK and SD have a tiered premium tax that lmi handles; DE has one
 /// that it does not. As elsewhere in lmi, tiered and non-tiered

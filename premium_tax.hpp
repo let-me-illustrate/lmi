@@ -35,6 +35,43 @@
 class product_database;
 class stratified_charges;
 
+/// Calculate premium tax, particularly when passed through as a load.
+///
+/// Scalar and tiered rates are deliberately maintained in the product
+/// files so that they can be readily examined, transferred to other
+/// systems, and overridden if desired. The values hardcoded here are
+/// generally appropriate, but subject to interpretation because some
+/// states impose assessments in addition to their nominal tax rates.
+///
+/// Known shortcomings.
+///
+/// Default values and brackets for tiered rates should be moved here
+/// from 'stratified_charges.cpp', in order to keep all premium-tax
+/// information in one place.
+///
+/// The physical complexity should be reduced by adding a new ctor
+/// that takes as arguments the actual values and brackets read from
+/// the '.strata' and '.database' files, and implementing the existing
+/// ctors in a TU of their own. This would probably suggest physical
+/// improvements to classes Loads and load_details.
+///
+/// Once actual values and brackets read from '.strata' files have
+/// been copied here, and portions of 'stratified_charges.cpp' moved
+/// here, retaliation can be made more correct in "tiered" states.
+/// AK and SD retaliate with respect to their initial bands only, but
+/// such retaliation is for now presumed not to occur.
+///
+/// A greatest-premium-tax-load function is wanted for the approximate
+/// "pay as you go" modal premium (BasicValues::GetModalPremMlyDed()).
+/// At present, that premium is insufficient to prevent instant lapse
+/// in AK and SD when premium tax is passed through as a load.
+///
+/// start_new_year() should be improved as noted in its documentation.
+///
+/// premium_tax_rates_for_annuities() should be implemented.
+///
+/// DATABASE !! 'DB_PremTaxTable' should be eradicated.
+
 class premium_tax
   :        private lmi::uncopyable <premium_tax>
   ,virtual private obstruct_slicing<premium_tax>
