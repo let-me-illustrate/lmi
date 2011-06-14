@@ -28010,3 +28010,23 @@ Resolve a marked defect.
 Resolve a marked defect. Extending TieredNetToGross() to keep track of
 unused target premium would not make this code more maintainable.
 
+20110613T1344Z <gchicares@sbcglobal.net> [648]
+
+  dbdict.cpp
+Improve documentation.
+
+20110614T1214Z <gchicares@sbcglobal.net> [648]
+
+  Makefile.am
+  dbdict.cpp
+  objects.make
+  premium_tax.cpp
+  premium_tax.hpp
+Move premium-tax rates to a more appropriate place.
+
+20110614T1652Z <gchicares@sbcglobal.net> [649]
+
+  premium_tax.cpp
+  premium_tax.hpp
+Improve documentation.
+
