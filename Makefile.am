@@ -84,6 +84,7 @@ if LMI_WITH_CGI
 endif
 
 # tests
+# SOMEDAY !! The 'getopt' and 'regex' tests in 'objects.make' are missing here.
 TESTS = \
     test_account_value \
     test_actuarial_table \
@@ -641,6 +642,7 @@ test_input_SOURCES = \
   mvc_model.cpp \
   null_stream.cpp \
   path_utility.cpp \
+  premium_tax.cpp \
   product_names.cpp \
   single_cell_document.cpp \
   tn_range_types.cpp \
@@ -788,19 +790,28 @@ test_print_matrix_CXXFLAGS = $(AM_CXXFLAGS)
 test_product_file_SOURCES = \
   $(common_test_objects) \
   data_directory.cpp \
+  database.cpp \
+  datum_base.cpp \
   dbdict.cpp \
   dbnames.cpp \
   dbvalue.cpp \
   expm1.cpp \
+  facets.cpp \
   fund_data.cpp \
   global_settings.cpp \
+  lmi.cpp \
+  mc_enum.cpp \
+  mc_enum_types.cpp \
+  mc_enum_types_aux.cpp \
   miscellany.cpp \
   path_utility.cpp \
+  premium_tax.cpp \
   product_data.cpp \
   product_file_test.cpp \
   rounding_rules.cpp \
   stratified_charges.cpp \
-  timer.cpp
+  timer.cpp \
+  xml_lmi.cpp
 test_product_file_CXXFLAGS = $(AM_CXXFLAGS)
 test_product_file_LDADD = \
   $(BOOST_LIBS)

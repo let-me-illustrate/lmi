@@ -694,6 +694,7 @@ input_test$(EXEEXT): \
   mvc_model.o \
   null_stream.o \
   path_utility.o \
+  premium_tax.o \
   product_names.o \
   single_cell_document.o \
   timer.o \
@@ -828,6 +829,7 @@ product_file_test$(EXEEXT): \
   $(common_test_objects) \
   $(xmlwrapp_objects) \
   data_directory.o \
+  database.o \
   datum_base.o \
   dbdict.o \
   dbnames.o \
@@ -836,10 +838,13 @@ product_file_test$(EXEEXT): \
   facets.o \
   fund_data.o \
   global_settings.o \
+  lmi.o \
   mc_enum.o \
   mc_enum_types.o \
+  mc_enum_types_aux.o \
   miscellany.o \
   path_utility.o \
+  premium_tax.o \
   product_data.o \
   product_file_test.o \
   rounding_rules.o \
