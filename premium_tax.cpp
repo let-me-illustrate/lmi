@@ -37,7 +37,6 @@
 #include "stratified_charges.hpp"
 
 #include <algorithm>             // std::max()
-#include <vector>
 
 namespace {
 /// Determine whether premium tax is retaliatory.
@@ -299,6 +298,78 @@ double premium_tax::calculate_load(double payment, stratified_charges const& str
     ytd_load_ += z;
     return z;
 }
+
+/// Premium-tax rates for life insurance without retaliation.
+///
+/// A single table suffices for every domicile, because retaliation is
+/// explicitly performed elsewhere.
+///
+/// Exact values are a matter of interpretation, because some states
+/// impose various assessments in addition to their nominal tax rates.
+///
+/// AK and SD have a tiered premium tax that lmi handles; DE has one
+/// that it does not. As elsewhere in lmi, tiered and non-tiered
+/// charges are calculated separately and added together; therefore,
+/// the AK and SD values in this table are zero.
+///
+/// Fictitious state XX may be used where no premium tax applies, as
+/// for offshore business.
+
+std::vector<double> const& premium_tax_rates_for_life_insurance()
+{
+    static double const tiered = 0.0;
+    static int const n = 53;
+    static double const d[n] =
+        //   AL       AK       AZ       AR       CA       CO       CT
+        {0.0230,  tiered,  0.0200,  0.0250,  0.0235,  0.0200,  0.0175
+        //   DE       DC       FL       GA       HI       ID
+        ,0.0200,  0.0200,  0.0175,  0.0225,  0.0275,  0.0150
+        //   IL       IN       IA       KS       KY       LA       ME
+        ,0.0050,  0.0130,  0.0100,  0.0200,  0.0150,  0.0225,  0.0200
+        //   MD       MA       MI       MN       MS       MO
+        ,0.0200,  0.0200,  0.0125,  0.0150,  0.0300,  0.0200
+        //   MT       NE       NV       NH       NJ       NM       NY
+        ,0.0275,  0.0100,  0.0350,  0.0125,  0.0210,  0.03003, 0.0150
+        //   NC       ND       OH       OK       OR       PA
+        ,0.0190,  0.0200,  0.0140,  0.0225,  0.0002,  0.0200
+        //   PR       RI       SC       SD       TN       TX       UT
+        ,0.0400,  0.0200,  0.0075,  tiered,  0.0175,  0.0175,  0.0225
+        //   VT       VA       WA       WV       WI       WY       XX
+        ,0.0200,  0.0225,  0.0200,  0.0300,  0.0200,  0.0075,  0.0000
+        };
+    static std::vector<double> const v(d, d + n);
+    return v;
+}
+
+// Placeholder for annuity rates--for now, just a commented-out copy
+// of the life-insurance implementation.
+#if 0
+std::vector<double> const& premium_tax_rates_for_annuities()
+{
+    static double const tiered = 0.0;
+    static int const n = 53;
+    static double const d[n] =
+        //   AL       AK       AZ       AR       CA       CO       CT
+        {0.0230,  tiered,  0.0200,  0.0250,  0.0235,  0.0200,  0.0175
+        //   DE       DC       FL       GA       HI       ID
+        ,0.0200,  0.0200,  0.0175,  0.0225,  0.0275,  0.0150
+        //   IL       IN       IA       KS       KY       LA       ME
+        ,0.0050,  0.0130,  0.0100,  0.0200,  0.0150,  0.0225,  0.0200
+        //   MD       MA       MI       MN       MS       MO
+        ,0.0200,  0.0200,  0.0125,  0.0150,  0.0300,  0.0200
+        //   MT       NE       NV       NH       NJ       NM       NY
+        ,0.0275,  0.0100,  0.0350,  0.0125,  0.0210,  0.03003, 0.0150
+        //   NC       ND       OH       OK       OR       PA
+        ,0.0190,  0.0200,  0.0140,  0.0225,  0.0002,  0.0200
+        //   PR       RI       SC       SD       TN       TX       UT
+        ,0.0400,  0.0200,  0.0075,  tiered,  0.0175,  0.0175,  0.0225
+        //   VT       VA       WA       WV       WI       WY       XX
+        ,0.0200,  0.0225,  0.0200,  0.0300,  0.0200,  0.0075,  0.0000
+        };
+    static std::vector<double> const v(d, d + n);
+    return v;
+}
+#endif // 0
 
 /// Lowest premium-tax load, for 7702 and 7702A purposes.
 

@@ -39,6 +39,7 @@
 #include "mc_enum_type_enums.hpp"
 #include "miscellany.hpp"
 #include "oecumenic_enumerations.hpp"
+#include "premium_tax.hpp"        // premium_tax_rates_for_life_insurance()
 #include "xml_lmi.hpp"
 #include "xml_serialize.hpp"
 
@@ -46,6 +47,8 @@
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
+
+#include <vector>
 
 template class xml_serializable<DBDictionary>;
 
@@ -679,44 +682,13 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_SurrChgPremMult     , 0.0));
     Add(database_entity(DB_SurrChgAmort        , 0.0));
 
-/// Premium-tax rates as of 2011-05 (retaliation performed elsewhere).
-///
-/// Exact values are a matter of interpretation, because some states
-/// impose various assessments in addition to their nominal tax rates.
-///
-/// AK and SD have a tiered premium tax that lmi handles; DE has one
-/// that it does not. As elsewhere in lmi, tiered and non-tiered
-/// charges are calculated separately and added together; therefore,
-/// the AK and SD values in this table are zero.
-///
-/// Fictitious state XX may be used where no premium tax applies, as
-/// for offshore business.
-    int premium_tax_dimensions[e_number_of_axes] = {1, 1, 1, 1, 1, 53, 1};
-    double const tiered = 0.0;
-    double premium_tax_rates[53] =
-        //   AL       AK       AZ       AR       CA       CO       CT
-        {0.0230,  tiered,  0.0200,  0.0250,  0.0235,  0.0200,  0.0175
-        //   DE       DC       FL       GA       HI       ID
-        ,0.0200,  0.0200,  0.0175,  0.0225,  0.0275,  0.0150
-        //   IL       IN       IA       KS       KY       LA       ME
-        ,0.0050,  0.0130,  0.0100,  0.0200,  0.0150,  0.0225,  0.0200
-        //   MD       MA       MI       MN       MS       MO
-        ,0.0200,  0.0200,  0.0125,  0.0150,  0.0300,  0.0200
-        //   MT       NE       NV       NH       NJ       NM       NY
-        ,0.0275,  0.0100,  0.0350,  0.0125,  0.0210,  0.03003, 0.0150
-        //   NC       ND       OH       OK       OR       PA
-        ,0.0190,  0.0200,  0.0140,  0.0225,  0.0002,  0.0200
-        //   PR       RI       SC       SD       TN       TX       UT
-        ,0.0400,  0.0200,  0.0075,  tiered,  0.0175,  0.0175,  0.0225
-        //   VT       VA       WA       WV       WI       WY       XX
-        ,0.0200,  0.0225,  0.0200,  0.0300,  0.0200,  0.0075,  0.0000
-        };
+    int ptd[e_number_of_axes] = {1, 1, 1, 1, 1, 53, 1};
+    std::vector<int> premium_tax_dimensions(ptd, ptd + e_number_of_axes);
     Add
         (database_entity
             (DB_PremTaxRate
-            ,e_number_of_axes
             ,premium_tax_dimensions
-            ,premium_tax_rates
+            ,premium_tax_rates_for_life_insurance()
             )
         );
 
@@ -835,9 +807,8 @@ void DBDictionary::WriteSampleDBFile()
     Add
         (database_entity
             (DB_PremTaxLoad
-            ,e_number_of_axes
             ,premium_tax_dimensions
-            ,premium_tax_rates
+            ,premium_tax_rates_for_life_insurance()
             )
         );
     Add(database_entity(DB_AllowHoneymoon      , true));

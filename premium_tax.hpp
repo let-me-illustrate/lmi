@@ -30,6 +30,8 @@
 #include "obstruct_slicing.hpp"
 #include "uncopyable_lmi.hpp"
 
+#include <vector>
+
 class product_database;
 class stratified_charges;
 
@@ -81,6 +83,10 @@ class premium_tax
     double ytd_load_in_tax_state_;
     double ytd_load_in_domicile_;
 };
+
+std::vector<double> const& premium_tax_rates_for_life_insurance();
+
+std::vector<double> const& premium_tax_rates_for_annuities();
 
 double lowest_premium_tax_load
     (mcenum_state              tax_state
