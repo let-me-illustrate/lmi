@@ -29,6 +29,7 @@
 #include "lmi.hpp"          // is_antediluvian_fork()
 #include "mec_server.hpp"
 #include "product_data.hpp"
+#include "stratified_charges.hpp"
 #include "xml_lmi.hpp"
 #include "xml_serializable.tpp"
 
@@ -128,5 +129,20 @@ bool product_data::is_detritus(std::string const&) const
 std::string const& product_data::datum(std::string const&) const
 {
     return empty_string;
+}
+
+double stratified_charges::minimum_tiered_premium_tax_rate(mcenum_state) const
+{
+    return 0.0;
+}
+
+bool stratified_charges::premium_tax_is_tiered(mcenum_state) const
+{
+    return false;
+}
+
+double stratified_charges::tiered_premium_tax(mcenum_state, double, double) const
+{
+    return 0.0;
 }
 

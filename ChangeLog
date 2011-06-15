@@ -27735,3 +27735,298 @@ Designate release candidate.
 Fix defect introduced 20100704T1645Z. See:
   http://lists.nongnu.org/archive/html/lmi/2010-08/msg00018.html
 
+20110508T1832Z <gchicares@sbcglobal.net> [655]
+
+  stratified_charges.cpp
+Improve documentation.
+
+20110508T1833Z <gchicares@sbcglobal.net> [655]
+
+  ihs_basicval.cpp
+Fix defect introduced 20100721T2315Z: StateOfDomicile_ was used before
+its value was set in the proper context.
+
+20110509T1252Z <gchicares@sbcglobal.net> [654]
+
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+Remove a marker for a defect already resolved.
+
+20110509T1257Z <gchicares@sbcglobal.net> [653]
+
+  ihs_acctval.cpp
+Remove a marker for a defect already resolved.
+
+20110512T2026Z <gchicares@sbcglobal.net> [653]
+
+  stratified_charges.cpp
+Document tiered UT premium tax.
+
+20110513T1045Z <gchicares@sbcglobal.net> [653]
+
+  ihs_avmly.cpp
+Recognize reciprocal premium-tax nonretaliation.
+
+20110513T1613Z <gchicares@sbcglobal.net> [653]
+
+  ihs_avmly.cpp
+Prepare to simplify.
+
+20110513T1701Z <gchicares@sbcglobal.net> [651]
+
+  account_value.hpp
+  accountvalue.cpp
+  basic_values.hpp
+  dbdict.cpp
+  dbnames.xpp
+  group_values.cpp
+  ihs_acctval.cpp
+  ihs_avdebug.cpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+Eradicate a SD premium-tax calculation superseded 2008-02-19.
+
+20110518T2017Z <gchicares@sbcglobal.net> [650]
+
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  ledger_xml_io.cpp
+Fix ancient defect noted 20100723T1029Z: remove dangerous scalars.
+
+20110519T1047Z <gchicares@sbcglobal.net> [650]
+
+  account_value.hpp
+  ihs_avdebug.cpp
+  ihs_avmly.cpp
+Rive premium-based loads in monthly trace file to make testing easier.
+
+20110523T0053Z <gchicares@sbcglobal.net> [650]
+
+  version.hpp
+Designate release candidate.
+
+20110523T1040Z <gchicares@sbcglobal.net> [650]
+
+  ihs_avmly.cpp
+Demonstrate and explain a problem.
+
+20110523T1058Z <gchicares@sbcglobal.net> [650]
+
+  ihs_avmly.cpp
+Resolve the problem demonstrated 20110523T1040Z.
+
+20110523T1311Z <gchicares@sbcglobal.net> [650]
+
+  basic_values.hpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+Refine and move retaliation criteria.
+
+20110523T1346Z <gchicares@sbcglobal.net> [650]
+
+  basic_values.hpp
+  ihs_basicval.cpp
+  mec_server.cpp
+Retaliate wherever appropriate--not just in monthiversary processing.
+
+20110523T1452Z <gchicares@sbcglobal.net> [650]
+
+  dbdict.cpp
+Store actual premium-tax rates, reflecting no presumptive retaliation.
+
+20110523T1454Z <gchicares@sbcglobal.net> [650]
+
+  version.hpp
+Designate release candidate.
+
+20110527T2217Z <gchicares@sbcglobal.net> [650]
+
+  basic_values.hpp
+  ihs_basicval.cpp
+  mec_server.cpp
+Change order of a free function's arguments.
+
+20110528T1124Z <gchicares@sbcglobal.net> [650]
+
+  Makefile.am
+  objects.make
+  premium_tax.cpp      [new file]
+  premium_tax.hpp      [new file]
+  premium_tax_test.cpp [new file]
+Add inchoate premium-tax class with unit test.
+
+20110528T1129Z <gchicares@sbcglobal.net> [650]
+
+  Makefile.am
+Remove extraneous whitespace.
+
+20110528T1327Z <gchicares@sbcglobal.net> [650]
+
+  Makefile.am
+  basic_values.hpp
+  ihs_basicval.cpp
+  mec_server.cpp
+  objects.make
+  premium_tax.cpp
+  premium_tax.hpp
+Move free functions.
+
+20110528T1341Z <gchicares@sbcglobal.net> [650]
+
+  ihs_basicval.cpp
+Set state of domicile with other 'state' members.
+
+20110528T1636Z <gchicares@sbcglobal.net> [650]
+
+  basic_values.hpp
+  premium_tax.hpp
+Annotate and copy members to be moved.
+
+20110528T1657Z <gchicares@sbcglobal.net> [650]
+
+  basic_values.hpp
+  ihs_basicval.cpp
+Instantiate premium-tax class.
+
+20110529T1429Z <gchicares@sbcglobal.net> [650]
+
+  premium_tax.cpp
+  premium_tax.hpp
+Store ctor value-arguments as members.
+
+20110529T1521Z <gchicares@sbcglobal.net> [650]
+
+  basic_values.hpp
+  ihs_basicval.cpp
+  premium_tax.cpp
+  premium_tax.hpp
+Move premium-tax implementation.
+
+20110530T1208Z <gchicares@sbcglobal.net> [650]
+
+  ihs_basicval.cpp
+Remove code made redundant 20110529T1521Z.
+
+20110530T1254Z <gchicares@sbcglobal.net> [650]
+
+  ihs_basicval.cpp
+  premium_tax.cpp
+  premium_tax.hpp
+Rectify names.
+
+20110530T1323Z <gchicares@sbcglobal.net> [650]
+
+  premium_tax.cpp
+  premium_tax.hpp
+Refactor. Triviality is not sufficient reason to write functions
+inline in a header.
+
+20110530T1447Z <gchicares@sbcglobal.net> [650]
+
+  basic_values.hpp
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  ledger_xml_io.cpp
+  premium_tax.cpp
+  premium_tax.hpp
+Remove a misbegotten ledger variable that no xsl template uses. Any
+potential use in pdf output is probably more trouble than it's worth.
+
+20110530T1601Z <gchicares@sbcglobal.net> [650]
+
+  premium_tax.cpp
+  premium_tax.hpp
+Refactor.
+
+20110601T1132Z <gchicares@sbcglobal.net> [650]
+
+  premium_tax.cpp
+  premium_tax.hpp
+Regularize argument names.
+
+20110601T1142Z <gchicares@sbcglobal.net> [650]
+
+  premium_tax.cpp
+  premium_tax.hpp
+Refactor.
+
+20110601T1207Z <gchicares@sbcglobal.net> [650]
+
+  Makefile.am
+  antediluvian_stubs.cpp
+  basicvalues.cpp
+  objects.make
+  premium_tax.cpp
+  premium_tax.hpp
+Use premium-tax class in antediluvian fork.
+
+20110601T2000Z <gchicares@sbcglobal.net> [650]
+
+  basic_values.hpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+  loads.cpp
+  loads_test.cpp
+Improve premium-tax encapsulation.
+
+20110602T1030Z <gchicares@sbcglobal.net> [650]
+
+  ihs_avmly.cpp
+  premium_tax.cpp
+  premium_tax.hpp
+Improve certain member names.
+
+20110608T1543Z <gchicares@sbcglobal.net> [650]
+
+  account_value.hpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  premium_tax.cpp
+  premium_tax.hpp
+Improve premium-tax encapsulation.
+
+20110609T1206Z <gchicares@sbcglobal.net> [650]
+
+  ihs_avmly.cpp
+  premium_tax.cpp
+  premium_tax.hpp
+Rectify names.
+
+20110611T1426Z <gchicares@sbcglobal.net> [650]
+
+  ihs_avmly.cpp
+  premium_tax.cpp
+  premium_tax.hpp
+Remove trivial accessors recently rendered needless.
+
+20110612T1252Z <gchicares@sbcglobal.net> [649]
+
+  ihs_avmly.cpp
+Resolve a marked defect.
+
+20110612T1313Z <gchicares@sbcglobal.net> [648]
+
+  ihs_avmly.cpp
+Resolve a marked defect. Extending TieredNetToGross() to keep track of
+unused target premium would not make this code more maintainable.
+
+20110613T1344Z <gchicares@sbcglobal.net> [648]
+
+  dbdict.cpp
+Improve documentation.
+
+20110614T1214Z <gchicares@sbcglobal.net> [648]
+
+  Makefile.am
+  dbdict.cpp
+  objects.make
+  premium_tax.cpp
+  premium_tax.hpp
+Move premium-tax rates to a more appropriate place.
+
+20110614T1652Z <gchicares@sbcglobal.net> [649]
+
+  premium_tax.cpp
+  premium_tax.hpp
+Improve documentation.
+

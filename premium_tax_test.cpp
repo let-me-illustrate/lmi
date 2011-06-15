@@ -1,3 +1,5 @@
+// Premium tax--unit test.
+//
 // Copyright (C) 2011 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
@@ -19,12 +21,41 @@
 
 // $Id$
 
-#ifndef version_hpp
-#define version_hpp
+#ifdef __BORLANDC__
+#   include "pchfile.hpp"
+#   pragma hdrstop
+#endif // __BORLANDC__
 
-#include "config.hpp"
+#include "premium_tax.hpp"
 
-#define LMI_VERSION "20110523T1454Z"
+#include "path_utility.hpp" // initialize_filesystem()
+#include "test_tools.hpp"
 
-#endif // version_hpp
+class premium_tax_test
+{
+  public:
+    static void test()
+        {
+        test_something();
+        }
+
+  private:
+    static void test_something();
+};
+
+/// Placeholder.
+
+void premium_tax_test::test_something()
+{
+}
+
+int test_main(int, char*[])
+{
+    // Absolute paths require "native" name-checking policy for msw.
+    initialize_filesystem();
+
+    premium_tax_test::test();
+
+    return EXIT_SUCCESS;
+}
 

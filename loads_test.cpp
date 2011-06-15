@@ -60,6 +60,11 @@ int product_database::length() const {return length_;}
 void product_database::Query(std::vector<double>& v, e_database_key) const {v.resize(length_);}
 double product_database::Query(e_database_key) const {return 0.0;}
 
+#include "premium_tax.hpp"
+double premium_tax::levy_rate      () const {return 0.0;}
+double premium_tax::load_rate      () const {return 0.0;}
+double premium_tax::least_load_rate() const {return 0.0;}
+
 struct LoadsTest
 {
     LoadsTest(load_details const& details)

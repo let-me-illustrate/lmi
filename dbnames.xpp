@@ -136,7 +136,7 @@
 {DB_PremTaxFundCharge,DB_Topic_DacAndPremiumTax,"PremTaxFundCharge","Premium tax fund charge [not supported yet]",}, \
 {DB_PremTaxLoad,DB_Topic_DacAndPremiumTax,"PremTaxLoad","Scalar premium load due to premium tax",}, \
 {DB_WaivePremTaxInt1035,DB_Topic_DacAndPremiumTax,"WaivePremTaxInt1035","Waive premium tax charge on internal 1035 exchanges: 0=no, 1=yes",}, \
-{DB_PremTaxRetalLimit,DB_Topic_DacAndPremiumTax,"PremTaxRetalLimit","Premium tax: first-year premium threshold to waive retaliation",}, \
+{DB_PremTaxRetalLimit,DB_Topic_DacAndPremiumTax,"PremTaxRetalLimit","[Obsolete]",}, \
 {DB_PremTaxTierGroup,DB_Topic_DacAndPremiumTax,"PremTaxTierGroup","Apply tiered premium tax to all contracts in a group aggregated together: 0=no, 1=yes [not supported yet]",}, \
 {DB_PremTaxTierPeriod,DB_Topic_DacAndPremiumTax,"PremTaxTierPeriod","Apply tiered premium tax to premiums aggregated by: 0=policy year, 1=calendar year [not supported yet]",}, \
 {DB_PremTaxTierNonDecr,DB_Topic_DacAndPremiumTax,"PremTaxTierNonDecr","Tiered premium tax effective rate constrained not to decrease from one year to the next: 0=no, 1=yes [not supported yet]",}, \

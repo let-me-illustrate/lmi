@@ -155,7 +155,6 @@ class LMI_SO AccountValue
     void   SolveSetWD           (double a_CandidateValue);
 
     void   DebugPrint           ();
-    void   DebugRestart         (std::string const& reason);
 
     void   SetClaims();
     double GetCurtateNetClaimsInforce    () const;
@@ -167,9 +166,6 @@ class LMI_SO AccountValue
         );
     double experience_rating_amortization_years() const;
     double ibnr_as_months_of_mortality_charges() const;
-
-    void GuessWhetherFirstYearPremiumExceedsRetaliationLimit();
-    bool TestWhetherFirstYearPremiumExceededRetaliationLimit();
 
     // To support the notion of an M&E charge that depends on total case
     // assets, we provide these functions, which are designed to be
@@ -249,7 +245,6 @@ class LMI_SO AccountValue
         (double a_pmt
         ,double a_portion_exempt_from_premium_tax
         );
-    double GetPremTaxLoad(double payment);
     void TxLoanRepay             ();
 
     void TxSetBOMAV              ();
@@ -304,18 +299,6 @@ class LMI_SO AccountValue
     void   EndTermRider();
 
     void   CoordinateCounters();
-
-    // First-year premium determines whether SD waives premium tax
-    // retaliation, although SD isn't hardcoded anywhere and this
-    // is a generic rule expressed in data files. This function tells
-    // us up front whether the minimum premium for tiering may be met.
-    // Used with 'FirstYearPremiumExceedsRetaliationLimit'. This
-    // is a naive lookahead: GPT limitations or MEC avoidance may
-    // reduce the premium below the threshold, so it's useful only as
-    // a hint. Premium exempt from premium tax (e.g. internal 1035
-    // exchanges when the database makes them so exempt) is excluded.
-    // SOMEDAY !! Expunge this because SD 10-44-2(2) repealed it.
-    double TaxableFirstYearPlannedPremium() const;
 
     // Detailed monthly trace.
     std::string     DebugFilename;
@@ -471,7 +454,6 @@ class LMI_SO AccountValue
     double  MaxLoan;
     double  UnusedTargetPrem;
     double  AnnualTargetPrem;
-    double  PolicyYearRunningTotalPremiumSubjectToPremiumTax;
     double  MaxWD;
     double  GrossWD;
     double  NetWD;
@@ -527,11 +509,14 @@ class LMI_SO AccountValue
     double       YearsSpecAmtLoadRate;
     double       YearsSepAcctLoadRate;
     double       YearsSalesLoadRefundRate;
-    double       YearsPremTaxLoadRate;
     double       YearsDacTaxLoadRate;
 
     double  MonthsPolicyFees;
     double  SpecAmtLoad;
+    double  premium_load_;
+    double  sales_load_;
+    double  premium_tax_load_;
+    double  dac_tax_load_;
 
     // Stratified loads are determined by assets and cumulative
     // payments immediately after the monthly deduction. Both are
@@ -585,9 +570,6 @@ class LMI_SO AccountValue
     double  YearsTotalGrossIntCredited;
     double  YearsTotalLoanIntAccrued;
     double  YearsTotalPolicyFee;
-    double  YearsTotalPremTaxLoad;
-    double  YearsTotalPremTaxLoadInStateOfDomicile;
-    double  YearsTotalPremTaxLoadInPremiumTaxState;
     double  YearsTotalDacTaxLoad;
     double  YearsTotalSpecAmtLoad;
     double  YearsTotalSepAcctLoad;
@@ -602,7 +584,6 @@ class LMI_SO AccountValue
     double  YearsTotalNetCoiCharge;
 
     double  CumulativeSalesLoad;
-    bool    FirstYearPremiumExceedsRetaliationLimit;
 
     // Illustrated outlay must be the same for current, guaranteed,
     // and all other bases. Outlay components are set on whichever

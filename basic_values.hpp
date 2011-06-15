@@ -61,6 +61,7 @@ class MortalityRates;
 class SurrChgRates;
 class death_benefits;
 class modal_outlay;
+class premium_tax;
 class product_data;
 class product_database;
 class rounding_rules;
@@ -109,11 +110,6 @@ class LMI_SO BasicValues
     mcenum_state          GetStateOfJurisdiction()     const;
     mcenum_state          GetStateOfDomicile()         const;
     mcenum_state          GetPremiumTaxState()         const;
-    double                PremiumTaxRate()             const;
-    double                PremiumTaxLoad()             const;
-    double                LowestPremiumTaxLoad()       const;
-    double                DomiciliaryPremiumTaxLoad()  const;
-    bool                  PremiumTaxLoadIsTiered()     const;
     bool                  IsSubjectToIllustrationReg() const;
     double                InvestmentManagementFee()    const;
 
@@ -129,6 +125,7 @@ class LMI_SO BasicValues
     boost::shared_ptr<SurrChgRates>       SurrChgRates_;
     boost::shared_ptr<death_benefits>     DeathBfts_;
     boost::shared_ptr<modal_outlay>       Outlay_;
+    boost::shared_ptr<premium_tax>        PremiumTax_;
     boost::shared_ptr<Loads>              Loads_;
     boost::shared_ptr<Irc7702>            Irc7702_;
     boost::shared_ptr<Irc7702A>           Irc7702A_;
@@ -370,14 +367,7 @@ class LMI_SO BasicValues
     std::vector<double>     TieredMEBands;
     std::vector<double>     TieredMECharges;
 
-    double                  FirstYearPremiumRetaliationLimit_;
-    bool                    PremiumTaxLoadIsTieredInStateOfDomicile_;
-    bool                    PremiumTaxLoadIsTieredInPremiumTaxState_;
-
   private:
-    void SetPremiumTaxParameters();
-    void TestPremiumTaxLoadConsistency() const;
-
     double GetModalPrem
         (int                   a_year
         ,mcenum_mode           a_mode
@@ -430,10 +420,6 @@ class LMI_SO BasicValues
     mcenum_state        StateOfJurisdiction_;
     mcenum_state        StateOfDomicile_;
     mcenum_state        PremiumTaxState_;
-    double              PremiumTaxRate_;
-    double              PremiumTaxLoad_;
-    double              LowestPremiumTaxLoad_;
-    double              DomiciliaryPremiumTaxLoad_;
     mutable double      InitialTargetPremium;
 
     void                Init7702();
@@ -503,42 +489,10 @@ inline mcenum_state BasicValues::GetPremiumTaxState() const
     return PremiumTaxState_;
 }
 
-inline double BasicValues::PremiumTaxRate() const
-{
-    return PremiumTaxRate_;
-}
-
-inline double BasicValues::PremiumTaxLoad() const
-{
-    return PremiumTaxLoad_;
-}
-
-inline double BasicValues::LowestPremiumTaxLoad() const
-{
-    return LowestPremiumTaxLoad_;
-}
-
-inline double BasicValues::DomiciliaryPremiumTaxLoad() const
-{
-    return DomiciliaryPremiumTaxLoad_;
-}
-
-inline bool BasicValues::PremiumTaxLoadIsTiered() const
-{
-    return PremiumTaxLoadIsTieredInPremiumTaxState_;
-}
-
 inline bool BasicValues::IsSubjectToIllustrationReg() const
 {
     return IsSubjectToIllustrationReg_;
 }
-
-double lowest_premium_tax_load
-    (product_database   const& db
-    ,stratified_charges const& stratified
-    ,mcenum_state              premium_tax_state
-    ,bool                      amortize_premium_load
-    );
 
 // TODO ?? Use a configuration file instead. These deprecated
 // functions are used only by the antediluvian branch.

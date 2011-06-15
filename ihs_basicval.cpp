@@ -52,6 +52,7 @@
 #include "miscellany.hpp"        // ios_out_trunc_binary()
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
+#include "premium_tax.hpp"
 #include "product_data.hpp"
 #include "rounding_rules.hpp"
 #include "stratified_charges.hpp"
@@ -158,6 +159,7 @@ void BasicValues::Init()
     ProductData_.reset(new product_data(yare_input_.ProductName));
     Database_.reset(new product_database(yare_input_));
 
+    StateOfDomicile_ = mc_state_from_string(ProductData_->datum("InsCoDomicile"));
     StateOfJurisdiction_ = yare_input_.StateOfJurisdiction;
     PremiumTaxState_     = yare_input_.PremiumTaxState    ;
 
@@ -232,7 +234,7 @@ void BasicValues::Init()
     DeathBfts_     .reset(new death_benefits (GetLength(), yare_input_));
     // Outlay requires only input; it might someday use interest rates.
     Outlay_        .reset(new modal_outlay   (yare_input_));
-    SetPremiumTaxParameters();
+    PremiumTax_    .reset(new premium_tax    (PremiumTaxState_, StateOfDomicile_, yare_input_.AmortizePremiumLoad, *Database_, *StratifiedCharges_));
     Loads_         .reset(new Loads          (*this));
 
     // The target premium can't be ascertained yet if specamt is
@@ -258,6 +260,7 @@ void BasicValues::GPTServerInit()
     HOPEFULLY(RetAge <= 100);
     HOPEFULLY(yare_input_.RetireesCanEnroll || IssueAge <= RetAge);
 
+    StateOfDomicile_ = mc_state_from_string(ProductData_->datum("InsCoDomicile"));
     StateOfJurisdiction_ = yare_input_.StateOfJurisdiction;
     PremiumTaxState_     = yare_input_.PremiumTaxState    ;
 
@@ -305,7 +308,7 @@ void BasicValues::GPTServerInit()
 //  DeathBfts_     .reset(new death_benefits (GetLength(), yare_input_));
     // Outlay requires only input; it might someday use interest rates.
 //  Outlay_        .reset(new modal_outlay   (yare_input_));
-    SetPremiumTaxParameters();
+    PremiumTax_    .reset(new premium_tax    (PremiumTaxState_, StateOfDomicile_, yare_input_.AmortizePremiumLoad, *Database_, *StratifiedCharges_));
     Loads_         .reset(new Loads          (*this));
 
     SetPermanentInvariants();
@@ -799,190 +802,6 @@ void BasicValues::SetRoundingFunctors()
     set_rounding_rule(round_min_premium_       , RoundingRules_->datum("RoundMinPrem"    ));
     set_rounding_rule(round_max_premium_       , RoundingRules_->datum("RoundMaxPrem"    ));
     set_rounding_rule(round_interest_rate_7702_, RoundingRules_->datum("RoundIntRate7702"));
-}
-
-/// Set all parameters that depend on premium-tax state.
-///
-/// These database entities should be looked up by tax state:
-///  - DB_PremTaxLoad
-///  - DB_PremTaxRate
-///  - DB_PremTaxRetalLimit
-/// These probably (for inchoate amortization) shouldn't:
-///  - DB_PremTaxAmortPeriod
-///  - DB_PremTaxAmortIntRate
-/// This definitely shouldn't be:
-///  - DB_PremTaxState
-/// These aren't used anywhere yet:
-///  - DB_PremTaxFundCharge
-///  - DB_PremTaxTable
-///  - DB_PremTaxTierGroup
-///  - DB_PremTaxTierPeriod
-///  - DB_PremTaxTierNonDecr
-
-void BasicValues::SetPremiumTaxParameters()
-{
-    PremiumTaxLoadIsTieredInStateOfDomicile_ = StratifiedCharges_->premium_tax_is_tiered(GetStateOfDomicile());
-    PremiumTaxLoadIsTieredInPremiumTaxState_ = StratifiedCharges_->premium_tax_is_tiered(GetPremiumTaxState());
-
-    LowestPremiumTaxLoad_ = lowest_premium_tax_load
-        (*Database_
-        ,*StratifiedCharges_
-        ,GetPremiumTaxState()
-        ,yare_input_.AmortizePremiumLoad
-        );
-
-    // TODO ?? It would be better not to constrain so many things
-    // not to vary by duration by using Query(enumerator).
-
-    database_index index = Database_->index().state(GetPremiumTaxState());
-    PremiumTaxRate_                   = Database_->Query(DB_PremTaxRate      , index);
-    PremiumTaxLoad_                   = Database_->Query(DB_PremTaxLoad      , index);
-    FirstYearPremiumRetaliationLimit_ = Database_->Query(DB_PremTaxRetalLimit, index);
-
-    StateOfDomicile_ = mc_state_from_string(ProductData_->datum("InsCoDomicile"));
-    {
-    database_index index = Database_->index().state(GetStateOfDomicile());
-    DomiciliaryPremiumTaxLoad_ = 0.0;
-    if(!yare_input_.AmortizePremiumLoad)
-        {
-        DomiciliaryPremiumTaxLoad_ = Database_->Query(DB_PremTaxLoad, index);
-        }
-    }
-
-    TestPremiumTaxLoadConsistency();
-}
-
-/// Lowest premium-tax load, for 7702 and 7702A purposes.
-
-double lowest_premium_tax_load
-    (product_database   const& db
-    ,stratified_charges const& stratified
-    ,mcenum_state              premium_tax_state
-    ,bool                      amortize_premium_load
-    )
-{
-    // TRICKY !! Here, we use 'DB_PremTaxLoad', not 'DB_PremTaxRate',
-    // to determine the lowest premium-tax load. Premium-tax loads
-    // (charged by the insurer to the contract) and rates (charged by
-    // the state to the insurer) really shouldn't be mixed. The
-    // intention is to support products that pass actual premium tax
-    // through as a load, taking into account retaliation and tiered
-    // premium-tax rates.
-    //
-    // While a more complicated model would be more aesthetically
-    // satisfying, this gives the right answer in practice for the
-    // two cases we believe will arise in practice. In the first case,
-    // premium-tax load doesn't vary by state--perhaps a flat load
-    // such as two percent might be used, or maybe zero percent with
-    // premium-tax expense covered elsewhere in pricing--and tiering
-    // is ignored, so this implementation just returns the flat load.
-    // In the second case, the exact premium tax is passed through,
-    // so the tax rate equals the tax load.
-
-    double z = 0.0;
-    if(amortize_premium_load)
-        {
-        return z;
-        }
-
-    database_index index = db.index().state(premium_tax_state);
-    z = db.Query(DB_PremTaxLoad, index);
-
-    if(!db.varies_by_state(DB_PremTaxLoad))
-        {
-        return z;
-        }
-
-    // If premium-tax load varies by state, we're assuming that
-    // it equals premium-tax rate--i.e. that premium tax is passed
-    // through exactly--and that therefore tiered tax rates determine
-    // loads where applicable and implemented.
-    if(!db.are_equivalent(DB_PremTaxLoad, DB_PremTaxRate))
-        {
-        fatal_error()
-            << "Premium-tax load varies by state, but differs"
-            << " from premium-tax rates. Probably the database"
-            << " is incorrect.\n"
-            << LMI_FLUSH
-            ;
-        }
-
-    if(stratified.premium_tax_is_tiered(premium_tax_state))
-        {
-        if(0.0 != z)
-            {
-            fatal_error()
-                << "Premium-tax load is tiered in state "
-                << mc_str(premium_tax_state)
-                << ", but the product database specifies a scalar load of "
-                << z
-                << " instead of zero as expected. Probably the database"
-                << " is incorrect."
-                << LMI_FLUSH
-                ;
-            }
-        z = stratified.minimum_tiered_premium_tax_rate(premium_tax_state);
-        }
-
-    return z;
-}
-
-/// Test consistency of premium-tax loads.
-///
-/// In particular, if the tiered premium-tax load isn't zero, then the
-/// corresponding non-tiered load must be zero.
-///
-/// Premium-tax pass-through for AK, DE, and SD insurers is not
-/// supported. If the state of domicile has a tiered rate, then most
-/// likely the premium-tax state does not, and retaliation would often
-/// override the tiering. When those two states are the same, then no
-/// retaliation occurs, and calculations would presumably be correct.
-/// When both states have tiered rates, but they are different states,
-/// then the calculation could be complicated; but DE tiering is not
-/// supported at all yet, and AK (SD) companies probably write few
-/// contracts in SD (AK), so these exotic cases haven't commanded any
-/// attention. If premium tax is not passed through as a load, then
-/// there's no problem at all.
-
-void BasicValues::TestPremiumTaxLoadConsistency() const
-{
-    if(PremiumTaxLoadIsTieredInPremiumTaxState_)
-        {
-        if(0.0 != PremiumTaxLoad())
-            {
-            fatal_error()
-                << "Premium-tax load is tiered in premium-tax state "
-                << mc_str(GetPremiumTaxState())
-                << ", but the product database specifies a scalar load of "
-                << PremiumTaxLoad()
-                << " instead of zero as expected. Probably the database"
-                << " is incorrect."
-                << LMI_FLUSH
-                ;
-            }
-        }
-
-    if(PremiumTaxLoadIsTieredInStateOfDomicile_)
-        {
-        if(0.0 != DomiciliaryPremiumTaxLoad())
-            {
-            fatal_error()
-                << "Premium-tax load is tiered in state of domicile "
-                << mc_str(GetStateOfDomicile())
-                << ", but the product database specifies a scalar load of "
-                << DomiciliaryPremiumTaxLoad()
-                << " instead of zero as expected. Probably the database"
-                << " is incorrect."
-                << LMI_FLUSH
-                ;
-            }
-        fatal_error()
-            << "Premium-tax load is tiered in state of domicile "
-            << mc_str(GetStateOfDomicile())
-            << ", but that case is not supported."
-            << LMI_FLUSH
-            ;
-        }
 }
 
 //============================================================================

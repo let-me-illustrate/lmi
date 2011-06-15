@@ -38,6 +38,7 @@
 #include "loads.hpp"
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
+#include "premium_tax.hpp"
 #include "surrchg_rates.hpp"
 
 #include <algorithm> // std::max()
@@ -89,8 +90,6 @@ BasicValues::~BasicValues()
 //============================================================================
 void BasicValues::Init()
 {
-    PremiumTaxLoadIsTieredInPremiumTaxState_ = false;
-
     // Bind to input and database representing policy form.
 
     IssueAge = yare_input_.IssueAge;
@@ -132,10 +131,8 @@ void BasicValues::Init()
     SurrChgRates_  .reset(new SurrChgRates   (*Database_));
     DeathBfts_     .reset(new death_benefits (GetLength(), yare_input_));
     Outlay_        .reset(new modal_outlay   (yare_input_));
+    PremiumTax_    .reset(new premium_tax    (PremiumTaxState_, *Database_));
     Loads_         .reset(new Loads(*Database_, IsSubjectToIllustrationReg()));
-
-    database_index index = Database_->index().state(GetPremiumTaxState());
-    PremiumTaxRate_ = Database_->Query(DB_PremTaxRate, index);
 
     MinSpecAmt = Database_->Query(DB_MinSpecAmt);
     MinWD      = Database_->Query(DB_MinWd     );

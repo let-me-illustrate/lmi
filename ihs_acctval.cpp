@@ -47,6 +47,7 @@
 #include "miscellany.hpp"
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
+#include "premium_tax.hpp"
 #include "stl_extensions.hpp"
 #include "stratified_algorithms.hpp"
 #include "surrchg_rates.hpp"
@@ -107,7 +108,6 @@ AccountValue::AccountValue(Input const& input)
     ,SepBasis_             (mce_sep_full)
     ,OldDBOpt              (mce_option1)
     ,YearsDBOpt            (mce_option1)
-    ,FirstYearPremiumExceedsRetaliationLimit(true)
 {
     InvariantValues().Init(this);
 // TODO ?? What are the values of the last two arguments here?
@@ -336,8 +336,6 @@ double AccountValue::RunAllApplicableBases()
 
 double AccountValue::RunOneCell(mcenum_run_basis a_Basis)
 {
-    GuessWhetherFirstYearPremiumExceedsRetaliationLimit();
-  restart:
     InitializeLife(a_Basis);
 
     for(int year = InforceYear; year < BasicValues::GetLength(); ++year)
@@ -365,17 +363,6 @@ double AccountValue::RunOneCell(mcenum_run_basis a_Basis)
                 ,SepAcctValueAfterDeduction * InforceLivesBoy()
                 ,CumPmts
                 );
-            }
-
-        if(!TestWhetherFirstYearPremiumExceededRetaliationLimit())
-            {
-            // We could do this instead:
-            //   InitializeLife(a_Basis);
-            //   --year;
-            // to satisfy the popular 'zero-tolerance' attitude toward
-            // the goto statement, but that would be more unnatural.
-            DebugRestart("First-year premium did not meet retaliation limit.");
-            goto restart;
             }
 
         SetClaims();
@@ -911,6 +898,8 @@ void AccountValue::InitializeYear()
 // TODO ?? Solve...() should reset not inputs but...something else?
     SetAnnualInvariants();
 
+    PremiumTax_->start_new_year();
+
     MonthsPolicyFees            = 0.0;
     SpecAmtLoad                 = 0.0;
 
@@ -929,17 +918,12 @@ void AccountValue::InitializeYear()
     YearsTotalLoanIntAccrued    = 0.0;
     YearsTotalNetCoiCharge      = 0.0;
     YearsTotalPolicyFee         = 0.0;
-    YearsTotalPremTaxLoad       = 0.0;
-    YearsTotalPremTaxLoadInStateOfDomicile = 0.0;
-    YearsTotalPremTaxLoadInPremiumTaxState = 0.0;
     YearsTotalDacTaxLoad        = 0.0;
     YearsTotalSpecAmtLoad       = 0.0;
     YearsTotalSepAcctLoad       = 0.0;
     YearsTotalGptForceout       = 0.0;
 
     NextYearsProjectedCoiCharge = 0.0;
-
-    PolicyYearRunningTotalPremiumSubjectToPremiumTax = 0.0;
 
     DacTaxRsv                   = 0.0;
 
@@ -1335,9 +1319,9 @@ void AccountValue::FinalizeYear()
     VariantValues().LoanIntAccrued    [Year] = YearsTotalLoanIntAccrued   ;
     VariantValues().NetCOICharge      [Year] = YearsTotalNetCoiCharge     ;
     VariantValues().PolicyFee         [Year] = YearsTotalPolicyFee        ;
-    VariantValues().PremTaxLoad       [Year] = YearsTotalPremTaxLoad      ;
     VariantValues().DacTaxLoad        [Year] = YearsTotalDacTaxLoad       ;
     VariantValues().SpecAmtLoad       [Year] = YearsTotalSpecAmtLoad      ;
+    VariantValues().PremTaxLoad       [Year] = PremiumTax_->ytd_load();
 
     double notional_sep_acct_charge =
           YearsTotalSepAcctLoad
@@ -1549,64 +1533,7 @@ void AccountValue::SetAnnualInvariants()
     YearsSpecAmtLoadRate    = Loads_->specified_amount_load (GenBasis_)[Year];
     YearsSepAcctLoadRate    = Loads_->separate_account_load (GenBasis_)[Year];
     YearsSalesLoadRefundRate= Loads_->refundable_sales_load_proportion()[Year];
-    YearsPremTaxLoadRate    = Loads_->premium_tax_load                ()[Year];
     YearsDacTaxLoadRate     = Loads_->dac_tax_load                    ()[Year];
-}
-
-//============================================================================
-double AccountValue::TaxableFirstYearPlannedPremium() const
-{
-// TODO ?? 'WaivePmTxInt1035' is not respected elsewhere, but should be.
-    double z =
-          PerformEePmtStrategy() * InvariantValues().EeMode[0].value()
-        + PerformErPmtStrategy() * InvariantValues().ErMode[0].value()
-        + Outlay_->dumpin()
-        + Outlay_->external_1035_amount()
-        ;
-    if(!WaivePmTxInt1035)
-        {
-        z += Outlay_->internal_1035_amount();
-        }
-    return z;
-}
-
-//============================================================================
-void AccountValue::GuessWhetherFirstYearPremiumExceedsRetaliationLimit()
-{
-    // TODO ?? Probably we should make PerformE[er]PmtStrategy() take
-    // 'Year' as an argument. Until then, we need a dummy initial
-    // value here.
-    //
-    // TODO ?? For inforce, we really need the admin system to say
-    //   - whether the first-year retaliation limit was exceeded; and
-    //   - how much premium has already been paid for inforce
-    //       contracts that are still in the first policy year.
-
-    Year  = yare_input_.InforceYear;
-    Month = yare_input_.InforceMonth;
-    CoordinateCounters();
-    FirstYearPremiumExceedsRetaliationLimit =
-           FirstYearPremiumRetaliationLimit_
-        <= TaxableFirstYearPlannedPremium()
-        ;
-}
-
-//============================================================================
-bool AccountValue::TestWhetherFirstYearPremiumExceededRetaliationLimit()
-{
-    if
-        (  0 == Year
-        && FirstYearPremiumExceedsRetaliationLimit
-        && CumPmts < FirstYearPremiumRetaliationLimit_
-        )
-        {
-        FirstYearPremiumExceedsRetaliationLimit = false;
-        return false;
-        }
-    else
-        {
-        return true;
-        }
 }
 
 //============================================================================
