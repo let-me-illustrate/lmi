@@ -31,7 +31,6 @@
 #include "actuarial_table.hpp"
 #include "alert.hpp"
 #include "assert_lmi.hpp"
-#include "basic_values.hpp"          // lowest_premium_tax_load()
 #include "commutation_functions.hpp"
 #include "configurable_settings.hpp"
 #include "contains.hpp"
@@ -42,11 +41,13 @@
 #include "ihs_irc7702a.hpp"
 #include "materially_equal.hpp"
 #include "math_functors.hpp"
+#include "mc_enum_types_aux.hpp"     // mc_state_from_string()
 #include "mec_input.hpp"
 #include "mec_xml_document.hpp"
 #include "miscellany.hpp"            // ios_out_trunc_binary()
 #include "oecumenic_enumerations.hpp"
 #include "path_utility.hpp"          // fs::path inserter
+#include "premium_tax.hpp"           // lowest_premium_tax_load()
 #include "product_data.hpp"
 #include "round_to.hpp"
 #include "stratified_algorithms.hpp" // TieredGrossToNet()
@@ -303,10 +304,11 @@ mec_state test_one_days_7702A_transactions
         }
 
     double const premium_tax_load = lowest_premium_tax_load
-        (database
+        (PremiumTaxState
+        ,mc_state_from_string(product_filenames.datum("InsCoDomicile"))
+        ,false // Assume load is not amortized.
+        ,database
         ,stratified
-        ,PremiumTaxState
-        ,false
         );
 
     std::vector<double> target_sales_load  ;

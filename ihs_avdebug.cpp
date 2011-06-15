@@ -79,7 +79,10 @@ namespace
         ,eErPrem
         ,eTotalPrem
         ,eTargetPrem
-        ,ePremLoad
+        ,ePremiumLoad
+        ,eSalesLoad
+        ,ePremiumTaxLoad
+        ,eDacTaxLoad
         ,eNetPrem
         ,ePolicyFees
         ,eSpecAmtLoad
@@ -171,7 +174,10 @@ namespace
         v[eErPrem]              = "Er prem";
         v[eTotalPrem]           = "Total prem";
         v[eTargetPrem]          = "Target prem";
-        v[ePremLoad]            = "Prem load";
+        v[ePremiumLoad]         = "Prem load";
+        v[eSalesLoad]           = "Sales load";
+        v[ePremiumTaxLoad]      = "Prem tax load";
+        v[eDacTaxLoad]          = "DAC tax load";
         v[eNetPrem]             = "Net prem";
         v[ePolicyFees]          = "Policy fees";
         v[eSpecAmtLoad]         = "Spec amt load";
@@ -295,16 +301,6 @@ void AccountValue::DebugEndBasis()
 }
 
 //============================================================================
-void AccountValue::DebugRestart(std::string const& reason)
-{
-    if(!Debugging || Solving || SolvingForGuarPremium)
-        {
-        return;
-        }
-    DebugStream << reason << '\n';
-}
-
-//============================================================================
 // To add a new column, see ihs_dbughdr.hpp .
 void AccountValue::DebugPrint()
 {
@@ -360,7 +356,10 @@ void AccountValue::DebugPrint()
     SetMonthlyDetail(eErPrem             ,ErGrossPmts[Month]               );
     SetMonthlyDetail(eTotalPrem          ,GrossPmts[Month]                 );
     SetMonthlyDetail(eTargetPrem         ,AnnualTargetPrem                 );
-    SetMonthlyDetail(ePremLoad           ,GrossPmts[Month] - NetPmts[Month]);
+    SetMonthlyDetail(ePremiumLoad        ,premium_load_                    );
+    SetMonthlyDetail(eSalesLoad          ,sales_load_                      );
+    SetMonthlyDetail(ePremiumTaxLoad     ,premium_tax_load_                );
+    SetMonthlyDetail(eDacTaxLoad         ,dac_tax_load_                    );
     SetMonthlyDetail(eNetPrem            ,NetPmts[Month]                   );
     SetMonthlyDetail(ePolicyFees         ,MonthsPolicyFees                 );
     SetMonthlyDetail(eSpecAmtLoad        ,SpecAmtLoad                      );

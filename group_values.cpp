@@ -318,11 +318,6 @@ census_run_result run_census_in_parallel::operator()
         // progress meter used earlier in this function.
         { // Begin fenv_guard scope.
         fenv_guard fg;
-        for(i = cell_values.begin(); i != cell_values.end(); ++i)
-            {
-            (*i)->GuessWhetherFirstYearPremiumExceedsRetaliationLimit();
-            }
-  restart:
         mcenum_gen_basis expense_and_general_account_basis;
         mcenum_sep_basis separate_account_basis;
         set_cloven_bases_from_run_basis
@@ -434,30 +429,6 @@ census_run_result run_census_in_parallel::operator()
                         }
                     (*i)->IncrementEOM(year, month, assets, (*i)->CumPmts);
                     }
-                }
-
-            bool need_to_restart = false;
-            for(i = cell_values.begin(); i != cell_values.end(); ++i)
-                {
-                if(!(*i)->TestWhetherFirstYearPremiumExceededRetaliationLimit())
-                    {
-                    need_to_restart = true;
-                    }
-                }
-            if(need_to_restart)
-                {
-                // To satisfy the popular 'zero-tolerance' attitude toward
-                // the goto statement, we could instead reinitialize
-                // everything explicitly and decrement the loop counter,
-                // but that would be more unnatural.
-                for(i = cell_values.begin(); i != cell_values.end(); ++i)
-                    {
-                    (*i)->DebugRestart
-                        ("First-year premium did not meet retaliation limit"
-                        " for at least one cell in the group."
-                        );
-                    }
-                goto restart;
                 }
 
             // Perform end of year calculations.

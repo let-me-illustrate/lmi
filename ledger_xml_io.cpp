@@ -382,7 +382,6 @@ void Ledger::write(xml::element& x) const
     format_map["PostHoneymoonSpread"               ] = f4;
     format_map["Preferred"                         ] = f4;
     format_map["PremTaxRate"                       ] = f4;
-    format_map["StatePremTaxRate"                  ] = f4;
 
 // F3: scaled by 100, zero decimals, with '%' at end:
 // > Format as percentage with no decimal places (##0%)
@@ -443,12 +442,10 @@ void Ledger::write(xml::element& x) const
     format_map["NoLapseMinAge"                     ] = f1;
     format_map["NoLapseMinDur"                     ] = f1;
     format_map["NominallyPar"                      ] = f1;
-    format_map["PremiumTaxLoadIsTiered"            ] = f1;
     format_map["RetAge"                            ] = f1;
     format_map["SmokerBlended"                     ] = f1;
     format_map["SmokerDistinct"                    ] = f1;
     format_map["SpouseIssueAge"                    ] = f1;
-    format_map["StatePremTaxLoad"                  ] = f1;
     format_map["SupplementalReport"                ] = f1;
     format_map["UseExperienceRating"               ] = f1;
     format_map["UsePartialMort"                    ] = f1;
@@ -477,7 +474,6 @@ void Ledger::write(xml::element& x) const
     format_map["CashFlowIRR"                       ] = f4;
     format_map["CorpTaxBracket"                    ] = f4;
     format_map["CurrMandE"                         ] = f4;
-    format_map["DacTaxPremLoadRate"                ] = f4;
     format_map["HoneymoonValueSpread"              ] = f4;
     format_map["IndvTaxBracket"                    ] = f4;
     format_map["InforceHMVector"                   ] = f4;

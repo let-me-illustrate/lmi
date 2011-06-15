@@ -37,6 +37,7 @@
 #include "et_vector.hpp"
 #include "math_functors.hpp"
 #include "mc_enum_types_aux.hpp" // mc_n_ enumerators
+#include "premium_tax.hpp"
 
 #include <algorithm>
 #include <functional>
@@ -57,9 +58,9 @@ Loads::Loads(BasicValues& V)
     load_details details
         (length
         ,V.yare_input_.AmortizePremiumLoad
-        ,V.PremiumTaxLoad()
-        ,V.LowestPremiumTaxLoad()
-        ,V.PremiumTaxRate()
+        ,V.PremiumTax_->load_rate()
+        ,V.PremiumTax_->least_load_rate()
+        ,V.PremiumTax_->levy_rate()
         ,V.Database_->Query(DB_PremTaxAmortIntRate)
         ,V.Database_->Query(DB_PremTaxAmortPeriod)
         ,V.Database_->Query(DB_AssetChargeType)
@@ -237,9 +238,9 @@ void Loads::Calculate(load_details const& details)
 
     // Total load excludes monthly_policy_fee_, annual_policy_fee_,
     // amortized_premium_tax_load_, and specified_amount_load_ because
-    // they are charges rather than loads (despite the last one's
-    // name): they're always deducted whether or not any payment is
-    // made.
+    // they are charges rather than loads (despite the names of the
+    // last two): they're always deducted whether or not any payment
+    // is made.
 
     for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
         {

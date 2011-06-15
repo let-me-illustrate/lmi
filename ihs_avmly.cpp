@@ -45,6 +45,7 @@
 #include "miscellany.hpp"
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
+#include "premium_tax.hpp"
 #include "stratified_algorithms.hpp"
 #include "stratified_charges.hpp"
 
@@ -869,7 +870,11 @@ void AccountValue::InitializeMonth()
     we need to figure out why.
 */
 
-    GptForceout = 0.0;
+    GptForceout       = 0.0;
+    premium_load_     = 0.0;
+    sales_load_       = 0.0;
+    premium_tax_load_ = 0.0;
+    dac_tax_load_     = 0.0;
     OldSA = ActualSpecAmt + TermSpecAmt;
     OldDB = DBReflectingCorr + TermDB;
 
@@ -1382,6 +1387,8 @@ void AccountValue::TxAcceptPayment(double a_pmt)
         }
 
     HOPEFULLY(0.0 <= a_pmt);
+    // Internal 1035 exchanges may be exempt from premium tax; they're
+    // handled elsewhere, so here the exempt amount is always zero.
     double actual_load = GetPremLoad(a_pmt, 0.0);
     double net_pmt = a_pmt - actual_load;
     HOPEFULLY(0.0 <= net_pmt);
@@ -1412,13 +1419,30 @@ void AccountValue::TxAcceptPayment(double a_pmt)
     // call them EeTaxBasis and ErTaxBasis.
 }
 
-//============================================================================
+/// Determine premium load.
+///
+/// The total load has several components:
+///  - nonrefundable premium load
+///  - refundable sales load
+///  - premium-tax load
+///  - DAC-tax load
+/// which are applied separately (with due regard to variation by
+/// target versus excess), added together, and then rounded.
+///
+/// Alternatively, the load factors may be totalled, and their sum
+/// applied to the target and excess portions of the payment. This may
+/// yield a slightly different result due to intermediate rounding,
+/// which could be important for matching a particular admin system.
+/// Therefore, both calculations are performed, and their results are
+/// asserted to be materially equal--but only when the alternative
+/// calculation doesn't require too many adjustments, in particular
+/// when tiered premium tax is passed through as a load.
+
 double AccountValue::GetPremLoad
     (double a_pmt
     ,double a_portion_exempt_from_premium_tax
     )
 {
-    // TODO ?? Perhaps TieredNetToGross() could be generalized for use here?
     double excess_portion;
     // All excess.
     if(0.0 == UnusedTargetPrem)
@@ -1439,123 +1463,45 @@ double AccountValue::GetPremLoad
         }
     double target_portion = a_pmt - excess_portion;
 
-    double prem_load =
+    premium_load_ =
             target_portion * YearsPremLoadTgt
         +   excess_portion * YearsPremLoadExc
         ;
 
-    double sales_load =
+    sales_load_ =
             target_portion * YearsSalesLoadTgt
         +   excess_portion * YearsSalesLoadExc
         ;
-    CumulativeSalesLoad += sales_load;
-    HOPEFULLY(0.0 <= sales_load);
+    LMI_ASSERT(0.0 <= sales_load_);
+    CumulativeSalesLoad += sales_load_;
 
-    // TODO ?? This variable and the variables it depends on probably
-    // are no longer needed and should be expunged.
+    premium_tax_load_ = PremiumTax_->calculate_load
+        (a_pmt - a_portion_exempt_from_premium_tax
+        ,*StratifiedCharges_
+        );
+
+    dac_tax_load_ = YearsDacTaxLoadRate * a_pmt;
+    YearsTotalDacTaxLoad += dac_tax_load_;
+
+    double sum_of_separate_loads =
+          premium_load_
+        + sales_load_
+        + premium_tax_load_
+        + dac_tax_load_
+        ;
+    LMI_ASSERT(0.0 <= sum_of_separate_loads);
+
     double total_load =
           target_portion * YearsTotLoadTgt
         + excess_portion * YearsTotLoadExc
-        - a_portion_exempt_from_premium_tax * YearsPremTaxLoadRate
+        - a_portion_exempt_from_premium_tax * PremiumTax_->load_rate()
         ;
-
-    double prem_tax_load = GetPremTaxLoad
-        ( a_pmt
-        - a_portion_exempt_from_premium_tax
-        );
-    YearsTotalPremTaxLoad += prem_tax_load;
-
-    double dac_tax_load = YearsDacTaxLoadRate * a_pmt;
-    YearsTotalDacTaxLoad += dac_tax_load;
-
-    double sum_of_separate_loads =
-          prem_load
-        + sales_load
-        + prem_tax_load
-        + dac_tax_load
-        ;
-    HOPEFULLY(0.0 <= sum_of_separate_loads);
     LMI_ASSERT
-        (   PremiumTaxLoadIsTieredInPremiumTaxState_
+        (   PremiumTax_->is_tiered()
         ||  materially_equal(total_load, sum_of_separate_loads)
         );
 
     return round_net_premium()(sum_of_separate_loads);
-}
-
-/// Calculate premium-tax load.
-///
-/// The premium-tax load and the actual premium tax payable by an
-/// insurer are distinct concepts. They may have equal values when
-/// premium tax is passed through as a load.
-///
-/// DATABASE !! The '.strata' files ought to differentiate tiered
-/// premium-tax load paid by customer from rate paid by insurer.
-///
-/// An assertion ensures that either tiered or non-tiered premium-tax
-/// load is zero.
-
-double AccountValue::GetPremTaxLoad(double payment)
-{
-    double tax_in_premium_tax_state = YearsPremTaxLoadRate * payment;
-    if(PremiumTaxLoadIsTieredInPremiumTaxState_)
-        {
-        LMI_ASSERT(0.0 == tax_in_premium_tax_state);
-        tax_in_premium_tax_state = StratifiedCharges_->tiered_premium_tax
-            (GetPremiumTaxState()
-            ,payment
-            ,PolicyYearRunningTotalPremiumSubjectToPremiumTax
-            );
-        }
-    YearsTotalPremTaxLoadInPremiumTaxState += tax_in_premium_tax_state;
-
-    double tax_in_state_of_domicile = 0.0;
-    if(!FirstYearPremiumExceedsRetaliationLimit)
-        {
-        tax_in_state_of_domicile = DomiciliaryPremiumTaxLoad() * payment;
-        if(PremiumTaxLoadIsTieredInStateOfDomicile_)
-            {
-            LMI_ASSERT(0.0 == tax_in_state_of_domicile);
-            tax_in_state_of_domicile = StratifiedCharges_->tiered_premium_tax
-                (GetStateOfDomicile()
-                ,payment
-                ,PolicyYearRunningTotalPremiumSubjectToPremiumTax
-                );
-            }
-        YearsTotalPremTaxLoadInStateOfDomicile += tax_in_state_of_domicile;
-        }
-
-    PolicyYearRunningTotalPremiumSubjectToPremiumTax += payment;
-
-    // If there's retaliation involving at least one tiered rate,
-    // then the calculation is complicated. Otherwise, a simple
-    // calculation is accurate, and preferable because it is less
-    // prone to tiny, annoying numerical problems. We tried using
-    // the more general calculation in both situations, but found
-    // that some test cases gave anomalous results--e.g., a 2% load
-    // on a 100000 annual premium (split into necessary and
-    // unnecessary pieces) came out to 1999.99 .
-    if
-        (   !FirstYearPremiumExceedsRetaliationLimit
-        &&
-            (  PremiumTaxLoadIsTieredInPremiumTaxState_
-            || PremiumTaxLoadIsTieredInStateOfDomicile_
-            )
-        )
-        {
-        double ytd_premium_tax_reflecting_retaliation = std::max
-            (YearsTotalPremTaxLoadInPremiumTaxState
-            ,YearsTotalPremTaxLoadInStateOfDomicile
-            );
-        return std::max
-            (0.0
-            ,ytd_premium_tax_reflecting_retaliation - YearsTotalPremTaxLoad
-            );
-        }
-    else
-        {
-        return std::max(tax_in_premium_tax_state, tax_in_state_of_domicile);
-        }
 }
 
 //============================================================================

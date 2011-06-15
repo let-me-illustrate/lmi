@@ -62,9 +62,6 @@ class LMI_SO LedgerInvariant
     std::vector<double> const&   GetInforceLives()       const;
     double                       GetInitAnnLoanDueRate() const;
     std::string const&           GetStatePostalAbbrev()  const;
-    double const&                GetStatePremTaxLoad()   const;
-    double const&                GetStatePremTaxRate()   const;
-    double const&                GetDacTaxPremLoadRate() const;
 
     // TODO ?? Does this really belong here?
     // Yes: it keeps the ledger object small; otherwise, numerous IRR
@@ -190,7 +187,6 @@ class LMI_SO LedgerInvariant
     double          AllowDbo3;
     double          IsInforce;
     double          CountryCOIMultiplier;
-    double          PremiumTaxLoadIsTiered;
     double          NoLapseAlwaysActive;
     double          NoLapseMinDur;
     double          NoLapseMinAge;
@@ -336,11 +332,9 @@ class LMI_SO LedgerInvariant
     void Init();
 
     std::string     StatePostalAbbrev;
+    std::string     PremiumTaxState;
 
     // Nonscalable scalars.
-    double          StatePremTaxLoad;
-    double          StatePremTaxRate;
-    double          DacTaxPremLoadRate;
     double          InitAnnLoanDueRate;
 
     // Special cases.
@@ -371,21 +365,6 @@ inline double LedgerInvariant::GetInitAnnLoanDueRate() const
 inline std::string const& LedgerInvariant::GetStatePostalAbbrev() const
 {
     return StatePostalAbbrev;
-}
-
-inline double const& LedgerInvariant::GetStatePremTaxLoad() const
-{
-    return StatePremTaxLoad;
-}
-
-inline double const& LedgerInvariant::GetStatePremTaxRate() const
-{
-    return StatePremTaxRate;
-}
-
-inline double const& LedgerInvariant::GetDacTaxPremLoadRate() const
-{
-    return DacTaxPremLoadRate;
 }
 
 #endif // ledger_invariant_hpp

@@ -171,13 +171,9 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["SpouseIssueAge"        ] = &SpouseIssueAge         ;
     OtherScalars    ["HasHoneymoon"          ] = &HasHoneymoon           ;
     OtherScalars    ["AllowDbo3"             ] = &AllowDbo3              ;
-    OtherScalars    ["StatePremTaxLoad"      ] = &StatePremTaxLoad       ;
-    OtherScalars    ["StatePremTaxRate"      ] = &StatePremTaxRate       ;
-    OtherScalars    ["DacTaxPremLoadRate"    ] = &DacTaxPremLoadRate     ;
     OtherScalars    ["InitAnnLoanDueRate"    ] = &InitAnnLoanDueRate     ;
     OtherScalars    ["IsInforce"             ] = &IsInforce              ;
     OtherScalars    ["CountryCOIMultiplier"  ] = &CountryCOIMultiplier   ;
-    OtherScalars    ["PremiumTaxLoadIsTiered"] = &PremiumTaxLoadIsTiered ;
     OtherScalars    ["NoLapseAlwaysActive"   ] = &NoLapseAlwaysActive    ;
     OtherScalars    ["NoLapseMinDur"         ] = &NoLapseMinDur          ;
     OtherScalars    ["NoLapseMinAge"         ] = &NoLapseMinAge          ;
@@ -289,6 +285,7 @@ void LedgerInvariant::Alloc(int len)
     Strings         ["AvoidMec"              ] = &AvoidMec               ;
     Strings         ["PartMortTableName"     ] = &PartMortTableName      ;
     Strings         ["StatePostalAbbrev"     ] = &StatePostalAbbrev      ;
+    Strings         ["PremiumTaxState"       ] = &PremiumTaxState        ;
     Strings         ["CountryIso3166Abbrev"  ] = &CountryIso3166Abbrev   ;
     Strings         ["Comments"              ] = &Comments               ;
 
@@ -522,8 +519,6 @@ void LedgerInvariant::Init(BasicValues* b)
 
     GenAcctAllocation = 1.0 - premium_allocation_to_sepacct(b->yare_input_);
 
-    PremiumTaxLoadIsTiered  = b->PremiumTaxLoadIsTiered();
-
     NoLapseAlwaysActive     = b->Database_->Query(DB_NoLapseAlwaysActive);
     NoLapseMinDur           = b->Database_->Query(DB_NoLapseMinDur);
     NoLapseMinAge           = b->Database_->Query(DB_NoLapseMinAge);
@@ -752,28 +747,7 @@ void LedgerInvariant::Init(BasicValues* b)
     AvoidMec                = (*b->Input_)["AvoidMecMethod"].str();
     PartMortTableName       = "1983 GAM"; // TODO ?? Hardcoded.
     StatePostalAbbrev       = mc_str(b->GetStateOfJurisdiction());
-
-    // SOMEDAY !! No output form uses these as of 2010-07; for now at
-    // least, they're assumed to be scalars.
-    // TODO ?? Some states have tiered rates, which probably shouldn't
-    // be represented as single scalars. Should these variables simply
-    // be removed?
-    StatePremTaxRate        = b->PremiumTaxRate();
-    StatePremTaxLoad        = b->PremiumTaxLoad();
-    DacTaxPremLoadRate      = b->Loads_->dac_tax_load()[0];
-    // SOMEDAY !! No output form uses this as of 2010-07; for now at
-    // least, it's assumed to be scalar.
-    LMI_ASSERT
-        (each_equal
-            (b->Loads_->dac_tax_load().begin()
-            ,b->Loads_->dac_tax_load().end()
-            ,b->Loads_->dac_tax_load().front()
-            )
-        );
-    // SOMEDAY !! The database allows a distinct DAC tax fund charge,
-    // but it's not supported yet. Output forms must not assume that
-    // the DAC tax premium load represents the entire DAC tax charge.
-    LMI_ASSERT(0.0 == b->Database_->Query(DB_DacTaxFundCharge));
+    PremiumTaxState         = mc_str(b->GetPremiumTaxState());
 
     InitAnnLoanDueRate      = b->InterestRates_->RegLnDueRate
         (mce_gen_curr
@@ -964,9 +938,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     Comments                    = a_Addend.Comments;
 
     StatePostalAbbrev           = a_Addend.StatePostalAbbrev;
-    StatePremTaxLoad            = a_Addend.StatePremTaxLoad;
-    StatePremTaxRate            = a_Addend.StatePremTaxRate;
-    DacTaxPremLoadRate          = a_Addend.DacTaxPremLoadRate;
+    PremiumTaxState             = a_Addend.PremiumTaxState;
     InitAnnLoanDueRate          = a_Addend.InitAnnLoanDueRate;
     UseExperienceRating         = a_Addend.UseExperienceRating;
     UsePartialMort              = a_Addend.UsePartialMort;
@@ -1029,11 +1001,6 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 
     HasHoneymoon = HasHoneymoon || a_Addend.HasHoneymoon ;
     AllowDbo3    = AllowDbo3    || a_Addend.AllowDbo3    ;
-
-    PremiumTaxLoadIsTiered =
-            a_Addend.PremiumTaxLoadIsTiered
-        ||  PremiumTaxLoadIsTiered
-        ;
 
     NoLapseMinDur      = std::min(a_Addend.NoLapseMinDur, NoLapseMinDur);
     NoLapseMinAge      = std::min(a_Addend.NoLapseMinAge, NoLapseMinAge);

@@ -239,6 +239,7 @@ common_common_objects := \
   null_stream.o \
   outlay.o \
   path_utility.o \
+  premium_tax.o \
   product_names.o \
   progress_meter.o \
   sigfpe.o \
@@ -415,6 +416,7 @@ gpt_objects := \
   null_stream.o \
   outlay.o \
   path_utility.o \
+  premium_tax.o \
   product_data.o \
   product_names.o \
   rounding_rules.o \
@@ -488,6 +490,7 @@ unit_test_targets := \
   numeric_io_test \
   obstruct_slicing_test \
   path_utility_test \
+  premium_tax_test \
   print_matrix_test \
   product_file_test \
   progress_meter_test \
@@ -695,6 +698,7 @@ input_test$(EXEEXT): \
   mvc_model.o \
   null_stream.o \
   path_utility.o \
+  premium_tax.o \
   product_names.o \
   single_cell_document.o \
   timer.o \
@@ -793,6 +797,30 @@ path_utility_test$(EXEEXT): \
   path_utility.o \
   path_utility_test.o \
 
+premium_tax_test$(EXEEXT): \
+  $(boost_filesystem_objects) \
+  $(common_test_objects) \
+  $(xmlwrapp_objects) \
+  data_directory.o \
+  database.o \
+  datum_base.o \
+  dbdict.o \
+  dbnames.o \
+  dbvalue.o \
+  facets.o \
+  global_settings.o \
+  lmi.o \
+  mc_enum.o \
+  mc_enum_types.o \
+  mc_enum_types_aux.o \
+  miscellany.o \
+  path_utility.o \
+  premium_tax.o \
+  premium_tax_test.o \
+  product_data.o \
+  stratified_charges.o \
+  xml_lmi.o \
+
 print_matrix_test$(EXEEXT): \
   $(common_test_objects) \
   facets.o \
@@ -803,6 +831,7 @@ product_file_test$(EXEEXT): \
   $(common_test_objects) \
   $(xmlwrapp_objects) \
   data_directory.o \
+  database.o \
   datum_base.o \
   dbdict.o \
   dbnames.o \
@@ -811,10 +840,13 @@ product_file_test$(EXEEXT): \
   facets.o \
   fund_data.o \
   global_settings.o \
+  lmi.o \
   mc_enum.o \
   mc_enum_types.o \
+  mc_enum_types_aux.o \
   miscellany.o \
   path_utility.o \
+  premium_tax.o \
   product_data.o \
   product_file_test.o \
   rounding_rules.o \
