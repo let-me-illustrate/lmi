@@ -9,9 +9,11 @@ aclocal.m4
 config.sub
 config.guess
 config.h.in
+config.h.in~
 configure
 depcomp
 install-sh
 ltmain.sh
 missing
+mkinstalldirs
 tags
