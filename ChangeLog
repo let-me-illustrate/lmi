@@ -28036,3 +28036,9 @@ Improve documentation.
 Use 2010-11-06 wx-2.9.2 snapshot. See:
   http://lists.nongnu.org/archive/html/lmi/2011-03/msg00008.html
 
+20110621T2141Z <gchicares@sbcglobal.net> [649]
+
+  install_libxml2_libxslt.make
+Document a latent issue. See:
+  http://lists.nongnu.org/archive/html/lmi/2011-06/msg00025.html
+
