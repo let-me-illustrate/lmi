@@ -60,6 +60,16 @@ vendor        := $(subst .,,$(compiler))-$(wx_md5)
 
 build_dir     := $(wx_dir)/wxWidgets-$(wx_version)/$(vendor)
 
+# Begin ad-hockery. See:
+#   http://lists.nongnu.org/archive/html/lmi/2011-03/msg00008.html
+wx_version    := 2.9.2
+wx_archive        := wx-all-2010-11-06.tar.gz
+$(wx_archive)-url := ftp://ftp.wxwidgets.org/pub/Daily_HEAD/files/$(wx_archive)
+$(wx_archive)-md5 := 64a19bee54e78f62593d55b431305e6a
+wx_md5            := 64a19bee54e78f62593d55b431305e6a
+build_dir     := $(wx_dir)/wxWidgets/$(vendor)
+# End ad-hockery.
+
 # Configuration reference:
 #   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00001.html
 # SOMEDAY !! But see the last paragraph of
@@ -73,6 +83,7 @@ config_options = \
   --host=i686-pc-mingw32 \
   --disable-apple_ieee \
   --disable-compat24 \
+  --disable-fswatcher \
   --disable-gif \
   --disable-threads \
   --disable-vararg_macros \

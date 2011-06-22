@@ -136,6 +136,12 @@ TARFLAGS := --keep-old-files
 	  $(GREP) $(notdir $@) $(notdir $*).md5sum | $(MD5SUM) --check --status -
 	$(TAR) --extract $(TARFLAGS) --directory=$(xml_dir) --file=$(cache_dir)/$@
 
+# Someday it may be necessary to add these variables to this recipe:
+#   export lt_cv_to_tool_file_cmd=func_convert_file_cygwin_to_w32
+#   export PATH="/path/to/MinGW/bin:${PATH}"
+# but that's not necessary for now. See:
+#   http://lists.nongnu.org/archive/html/lmi/2011-06/msg00025.html
+
 .PHONY: $(libraries)
 $(libraries):
 	cd $(xml_dir)/$(notdir $@) \
