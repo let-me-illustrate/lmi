@@ -28048,3 +28048,9 @@ Document a latent issue. See:
 No longer follow documented advice that turned out to be wrong. See:
   http://lists.nongnu.org/archive/html/lmi/2011-06/msg00040.html
 
+20110622T1910Z <gchicares@sbcglobal.net> [649]
+
+  cpp_main.cpp
+No longer follow documented advice that turned out to be wrong. See:
+  http://lists.nongnu.org/archive/html/lmi/2011-06/msg00040.html
+
