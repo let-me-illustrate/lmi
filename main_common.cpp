@@ -42,8 +42,10 @@
 ///   many more digits as necessary to represent the exponent."
 /// See:
 ///   http://article.gmane.org/gmane.comp.gnu.mingw.user/28747
+/// For the (corrected) return type, see:
+///   http://lists.nongnu.org/archive/html/lmi/2011-06/msg00040.html
 
-extern "C" int _get_output_format(void) {return 1;}
+extern "C" unsigned int _get_output_format(void) {return 1;}
 #endif // defined __MINGW32__
 
 /// Common application initialization.
