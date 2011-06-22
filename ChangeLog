@@ -28042,3 +28042,9 @@ Use 2010-11-06 wx-2.9.2 snapshot. See:
 Document a latent issue. See:
   http://lists.nongnu.org/archive/html/lmi/2011-06/msg00025.html
 
+20110622T1736Z <gchicares@sbcglobal.net> [649]
+
+  main_common.cpp
+No longer follow documented advice that turned out to be wrong. See:
+  http://lists.nongnu.org/archive/html/lmi/2011-06/msg00040.html
+
