@@ -342,7 +342,7 @@ lmi_wx_objects := \
   wx_utility.o \
 
 ifneq (,$(RC))
-  lmi_wx_objects += lmi.rc.o
+  lmi_wx_objects += lmi_msw_res.o
 endif
 
 ################################################################################

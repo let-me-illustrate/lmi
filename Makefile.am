@@ -207,7 +207,7 @@ if LMI_MSW
 .rc.o:
 	$(WINDRES) -I $(top_srcdir) $(WX_CPPFLAGS) $< $@
 
-    lmi_wx_SOURCES += lmi.rc
+    lmi_wx_SOURCES += lmi_msw_res.rc
     lmi_wx_CXXFLAGS += -mwindows
 endif
 lmi_wx_LDADD = \
@@ -218,7 +218,7 @@ lmi_wx_LDADD = \
     $(BOOST_LIBS) \
     $(WX_LIBS)
 if LMI_MSW
-    lmi_wx_SOURCES += lmi.rc
+    lmi_wx_SOURCES += lmi_msw_res.rc
     lmi_wx_CXXFLAGS += -mwindows
 endif
 
