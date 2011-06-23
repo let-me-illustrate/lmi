@@ -206,9 +206,6 @@ if LMI_MSW
 ## recognizes the old style rules
 .rc.o:
 	$(WINDRES) -I $(top_srcdir) $(WX_CPPFLAGS) $< $@
-
-    lmi_wx_SOURCES += lmi_msw_res.rc
-    lmi_wx_CXXFLAGS += -mwindows
 endif
 lmi_wx_LDADD = \
     liblmi.la \
