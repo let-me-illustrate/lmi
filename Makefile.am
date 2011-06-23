@@ -45,7 +45,7 @@ AM_CXXFLAGS = -DLMI_PCH_HEADER="<pchfile.hpp>"
 
 if LMI_USE_PCH
 
-AM_CXXFLAGS += -fPIC -DLMI_COMPILER_USES_PCH
+AM_CXXFLAGS += -DLMI_COMPILER_USES_PCH
 
 PCH_FILES = pchfile.hpp.gch pchfile_wx.hpp.gch
 
