@@ -28054,3 +28054,12 @@ No longer follow documented advice that turned out to be wrong. See:
 No longer follow documented advice that turned out to be wrong. See:
   http://lists.nongnu.org/archive/html/lmi/2011-06/msg00040.html
 
+20110623T1036Z <gchicares@sbcglobal.net> [649]
+
+  Makefile.am
+  lmi.rc [renamed to 'lmi_msw_res.rc']
+  objects.make
+  workhorse.make
+Rename msw resource file. See:
+  http://lists.nongnu.org/archive/html/lmi/2011-06/msg00036.html
+
