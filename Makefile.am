@@ -807,11 +807,11 @@ test_product_file_SOURCES = \
   product_file_test.cpp \
   rounding_rules.cpp \
   stratified_charges.cpp \
-  timer.cpp \
   xml_lmi.cpp
 test_product_file_CXXFLAGS = $(AM_CXXFLAGS)
 test_product_file_LDADD = \
-  $(BOOST_LIBS)
+  $(BOOST_LIBS) \
+  $(XMLWRAPP_LIBS)
 
 test_progress_meter_SOURCES = \
   $(common_test_objects) \
