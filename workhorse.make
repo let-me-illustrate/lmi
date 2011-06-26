@@ -789,7 +789,7 @@ ALL_RCFLAGS  = $(REQUIRED_RCFLAGS)  $(RCFLAGS)
 	$(CXX) $(MAKEDEPEND_FLAGS) -c $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) $< -o$@
 	$($(MAKEDEPEND_COMMAND))
 
-%.rc.o: %.rc
+%.o: %.rc
 	$(RC) -o $@ $(ALL_RCFLAGS) -i $<
 	$(MAKEDEPEND_NON_GCC_COMMAND)
 
@@ -877,7 +877,7 @@ wx_new$(SHREXT): wx_new.o
 # TODO ?? This needs a corresponding test target.
 lmi_cgi$(EXEEXT): $(cgi_objects) $(lmi_common_objects)
 
-lmi.rc.o: lmi.ico
+lmi_msw_res.o: lmi.ico
 
 ################################################################################
 
