@@ -32,19 +32,6 @@
 
 #include <wx/docview.h>
 
-/// WX !! The wx document-view implementation has no notion of 'child'
-/// documents, but sometimes lmi creates a document that logically is
-/// a 'child' of a parent CensusDocument: it corresponds to no actual,
-/// distinct document, can't be opened or saved separately, and should
-/// be closed, along with all its views, when its parent closes; and,
-/// accordingly, it should never be added to any wxFileHistory. This
-/// set of behaviors is implemented here by implicitly defining a new
-/// document-creation flag, appropriating an unused bit in the flags
-/// word. This is brittle, but then again it seems unlikely that
-/// anyone will change this aspect of wx.
-
-enum {LMI_WX_CHILD_DOCUMENT = 8};
-
 class IllustrationView;
 class WXDLLIMPEXP_FWD_CORE wxHtmlWindow;
 
@@ -55,7 +42,7 @@ class IllustrationDocument
     friend class IllustrationView;
 
   public:
-    IllustrationDocument();
+    IllustrationDocument(wxDocument* parent_document = NULL);
     virtual ~IllustrationDocument();
 
     IllustrationView& PredominantView() const;
@@ -72,8 +59,6 @@ class IllustrationDocument
     virtual bool DoSaveDocument(wxString const& filename);
 
     single_cell_document doc_;
-
-    bool is_phony_;
 
     DECLARE_DYNAMIC_CLASS(IllustrationDocument)
 };

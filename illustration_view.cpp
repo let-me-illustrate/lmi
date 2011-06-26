@@ -76,8 +76,6 @@ BEGIN_EVENT_TABLE(IllustrationView, ViewEx)
     EVT_MENU(XRCID("edit_cell"             ),IllustrationView::UponProperties)
     EVT_MENU(XRCID("copy_summary"          ),IllustrationView::UponCopySummary)
     EVT_MENU(wxID_COPY                      ,IllustrationView::UponCopyFull)
-    EVT_UPDATE_UI(wxID_SAVE                 ,IllustrationView::UponUpdateFileSave)
-    EVT_UPDATE_UI(wxID_SAVEAS               ,IllustrationView::UponUpdateFileSaveAs)
     EVT_UPDATE_UI(XRCID("edit_cell"        ),IllustrationView::UponUpdateProperties)
 
 // There has to be a better way to inhibit these inapplicable ids.
@@ -100,7 +98,6 @@ END_EVENT_TABLE()
 IllustrationView::IllustrationView()
     :ViewEx                  ()
     ,html_window_            (0)
-    ,is_phony_               (false)
 {
 }
 
@@ -125,7 +122,7 @@ wxWindow* IllustrationView::CreateChildWindow()
 
 int IllustrationView::EditProperties()
 {
-    if(is_phony_)
+    if(GetDocument()->IsChildDocument())
         {
 warning() << "That command should have been disabled." << LMI_FLUSH;
         return wxID_CANCEL;
@@ -174,9 +171,8 @@ wxMenuBar* IllustrationView::MenuBar() const
 
 bool IllustrationView::OnCreate(wxDocument* doc, long int flags)
 {
-    if(flags & LMI_WX_CHILD_DOCUMENT)
+    if(doc->IsChildDocument())
         {
-        is_phony_ = true;
         return ViewEx::OnCreate(doc, flags);
         }
 
@@ -244,32 +240,10 @@ void IllustrationView::UponPrintPdf(wxCommandEvent&)
 
 void IllustrationView::UponProperties(wxCommandEvent&)
 {
-// may have to check is_phony_ here--but that's bogus
-    if(is_phony_)
-        {
-//        return;
-        }
-
     if(wxID_OK == EditProperties())
         {
         Run();
         }
-}
-
-/// This complete replacement for wxDocManager::OnUpdateFileSave()
-/// should not call Skip().
-
-void IllustrationView::UponUpdateFileSave(wxUpdateUIEvent& e)
-{
-    e.Enable(!is_phony_ && document().IsModified());
-}
-
-/// This complete replacement for wxDocManager::OnUpdateFileSaveAs()
-/// should not call Skip().
-
-void IllustrationView::UponUpdateFileSaveAs(wxUpdateUIEvent& e)
-{
-    e.Enable(!is_phony_);
 }
 
 void IllustrationView::UponUpdateInapplicable(wxUpdateUIEvent& e)
@@ -279,7 +253,7 @@ void IllustrationView::UponUpdateInapplicable(wxUpdateUIEvent& e)
 
 void IllustrationView::UponUpdateProperties(wxUpdateUIEvent& e)
 {
-    e.Enable(!is_phony_);
+    e.Enable(!GetDocument()->IsChildDocument());
 }
 
 void IllustrationView::Run(Input* overriding_input)
@@ -309,8 +283,6 @@ void IllustrationView::Run(Input* overriding_input)
 /// CensusView::ViewComposite() calls MakeNewIllustrationDocAndView()
 /// to view a composite whose values are not conveniently calculated
 /// in this TU, so they're passed via this function.
-///
-/// custom_io_0_run_if_file_exists() uses this function similarly.
 
 void IllustrationView::SetLedger(boost::shared_ptr<Ledger const> ledger)
 {
@@ -324,28 +296,27 @@ void IllustrationView::SetLedger(boost::shared_ptr<Ledger const> ledger)
 /// becomes useful.
 
 IllustrationView& MakeNewIllustrationDocAndView
-    (wxDocManager* dm
-    ,char const*   filename
+    (wxDocument& parent_document
+    ,char const* filename
     )
 {
-    LMI_ASSERT(0 != dm);
     LMI_ASSERT(0 != filename);
 
-    wxDocTemplate* dt = dm->FindTemplateForPath(filename);
-    LMI_ASSERT(0 != dt);
-
-    wxDocument* new_document = dt->CreateDocument
-        (filename
-        ,wxDOC_SILENT | LMI_WX_CHILD_DOCUMENT
+    // Child documents cannot be created using document templates so do it
+    // manually.
+    IllustrationDocument* const new_document = new IllustrationDocument
+        (&parent_document
         );
 
-    IllustrationDocument& illdoc =
-        safely_dereference_as<IllustrationDocument>(new_document)
-        ;
-    illdoc.SetFilename(filename, true);
-    illdoc.Modify(false);
-    illdoc.SetDocumentSaved(true);
-    return illdoc.PredominantView();
+    new_document->SetFilename(filename, true);
+
+    // As we don't use the template, we also need to manually create the
+    // associated view as well.
+    wxView* const view = new IllustrationView();
+    view->SetDocument(new_document);
+    view->OnCreate(new_document, wxDOC_SILENT);
+
+    return new_document->PredominantView();
 }
 
 /// Run an illustration from "custom" input.
@@ -378,10 +349,25 @@ bool custom_io_0_run_if_file_exists(wxDocManager* dm)
             else
                 {
                 LMI_ASSERT(0 != dm);
-                IllustrationView& illview = MakeNewIllustrationDocAndView
-                    (dm
-                    ,(c.custom_output_filename() + ".ill").c_str()
+
+                std::string const filename(c.custom_output_filename() + ".ill");
+
+                wxDocTemplate* dt = dm->FindTemplateForPath(filename);
+                LMI_ASSERT(0 != dt);
+
+                wxDocument* new_document = dt->CreateDocument
+                    (filename
+                    ,wxDOC_SILENT
                     );
+
+                IllustrationDocument& illdoc =
+                    safely_dereference_as<IllustrationDocument>(new_document)
+                    ;
+                illdoc.SetFilename(filename, true);
+                illdoc.Modify(false);
+                illdoc.SetDocumentSaved(true);
+
+                IllustrationView& illview = illdoc.PredominantView();
                 illview.SetLedger(z.principal_ledger());
                 illview.DisplaySelectedValuesAsHtml();
                 safely_dereference_as<wxFrame>(illview.GetFrame()).Maximize();

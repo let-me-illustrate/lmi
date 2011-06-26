@@ -809,7 +809,7 @@ void CensusView::ViewOneCell(int index)
 {
     std::string const name(cell_parms()[index]["InsuredName"].str());
     IllustrationView& illview = MakeNewIllustrationDocAndView
-        (document().GetDocumentManager()
+        (document()
         ,serial_file_path(base_filename(), name, index, "ill").string().c_str()
         );
     illview.Run(&cell_parms()[index]);
@@ -830,7 +830,7 @@ void CensusView::ViewComposite()
         {
         std::string const name("composite");
         IllustrationView& illview = MakeNewIllustrationDocAndView
-            (document().GetDocumentManager()
+            (document()
             ,serial_file_path(base_filename(), name, -1, "ill").string().c_str()
             );
 

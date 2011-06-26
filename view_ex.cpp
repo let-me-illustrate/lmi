@@ -129,7 +129,10 @@ bool ViewEx::OnClose(bool delete_window)
         return false;
         }
 
-    DocManager().DissociateFileHistoryFromFileMenu(FrameWindow().GetMenuBar());
+    if (!GetDocument()->IsChildDocument())
+        {
+        DocManager().DissociateFileHistoryFromFileMenu(FrameWindow().GetMenuBar());
+        }
 
     Activate(false);
 
@@ -153,7 +156,10 @@ bool ViewEx::OnClose(bool delete_window)
 bool ViewEx::OnCreate(wxDocument* doc, long int)
 {
     wxGetApp().CreateChildFrame(doc, this);
-    DocManager().AssociateFileHistoryWithFileMenu(FrameWindow().GetMenuBar());
+    if (!doc->IsChildDocument())
+        {
+        DocManager().AssociateFileHistoryWithFileMenu(FrameWindow().GetMenuBar());
+        }
     GetFrame()->SetLabel("Loading document...");
 
     wxWindow* child = CreateChildWindow();

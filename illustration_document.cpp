@@ -39,8 +39,8 @@
 
 IMPLEMENT_DYNAMIC_CLASS(IllustrationDocument, wxDocument)
 
-IllustrationDocument::IllustrationDocument()
-    :is_phony_(false)
+IllustrationDocument::IllustrationDocument(wxDocument* parent_document)
+    : wxDocument(parent_document)
 {
 }
 
@@ -89,11 +89,7 @@ wxHtmlWindow& IllustrationDocument::PredominantViewWindow() const
 
 bool IllustrationDocument::OnCreate(wxString const& filename, long int flags)
 {
-    if(LMI_WX_CHILD_DOCUMENT & flags)
-        {
-        is_phony_ = true;
-        }
-    else if(wxDOC_NEW & flags)
+    if(wxDOC_NEW & flags)
         {
         *doc_.input_data_ = default_cell();
         }
@@ -171,12 +167,6 @@ bool IllustrationDocument::DoOpenDocument(wxString const& filename)
 
 bool IllustrationDocument::DoSaveDocument(wxString const& filename)
 {
-    if(is_phony_)
-        {
-        warning() << "Impossible to save '" << filename << "'." << LMI_FLUSH;
-        return false;
-        }
-
     std::string f = ValidateAndConvertFilename(filename);
     std::ofstream ofs(f.c_str(), ios_out_trunc_binary());
     doc_.write(ofs);

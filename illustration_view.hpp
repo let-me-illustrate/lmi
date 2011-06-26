@@ -88,15 +88,12 @@ class IllustrationView
     void UponPreviewPdf        (wxCommandEvent&);
     void UponPrintPdf          (wxCommandEvent&);
     void UponProperties        (wxCommandEvent&);
-    void UponUpdateFileSave    (wxUpdateUIEvent&);
-    void UponUpdateFileSaveAs  (wxUpdateUIEvent&);
     void UponUpdateInapplicable(wxUpdateUIEvent&);
     void UponUpdateProperties  (wxUpdateUIEvent&);
 
     Input& input_data();
 
     wxHtmlWindow* html_window_;
-    bool is_phony_;
     boost::shared_ptr<Ledger const> ledger_values_;
 
     DECLARE_DYNAMIC_CLASS(IllustrationView)
@@ -104,8 +101,8 @@ class IllustrationView
 };
 
 IllustrationView& MakeNewIllustrationDocAndView
-    (wxDocManager* dm
-    ,char const*   filename
+    (wxDocument& parent_document
+    ,char const* filename
     );
 
 bool custom_io_0_run_if_file_exists(wxDocManager*);
