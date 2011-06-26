@@ -237,9 +237,6 @@ if LMI_MSW
 ## recognizes the old style rules
 .rc.o:
 	$(WINDRES) -I $(top_srcdir) $(WX_CPPFLAGS) $< $@
-
-    lmi_wx_SOURCES += lmi.rc
-    lmi_wx_CXXFLAGS += -mwindows
 endif
 lmi_wx_LDADD = \
     liblmi.la \
@@ -249,7 +246,7 @@ lmi_wx_LDADD = \
     $(BOOST_LIBS) \
     $(WX_LIBS)
 if LMI_MSW
-    lmi_wx_SOURCES += lmi.rc
+    lmi_wx_SOURCES += lmi_msw_res.rc
     lmi_wx_CXXFLAGS += -mwindows
 endif
 
@@ -837,11 +834,11 @@ test_product_file_SOURCES = \
   product_file_test.cpp \
   rounding_rules.cpp \
   stratified_charges.cpp \
-  timer.cpp \
   xml_lmi.cpp
 test_product_file_CXXFLAGS = $(AM_CXXFLAGS)
 test_product_file_LDADD = \
-  $(BOOST_LIBS)
+  $(BOOST_LIBS) \
+  $(XMLWRAPP_LIBS)
 
 test_progress_meter_SOURCES = \
   $(common_test_objects) \

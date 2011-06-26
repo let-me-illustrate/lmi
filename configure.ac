@@ -480,19 +480,27 @@ if test "$USE_LINUX" = "1"; then
     PKG_CHECK_MODULES(GTK, gtk+-2.0)
     PKG_CHECK_MODULES(XMLWRAPP, xmlwrapp >= 0.6.0 xsltwrapp)
 else
-    dnl --- XMLWRAPP (required) -------------------
-    AC_CHECK_PROG(lmi_xmlwrapp_config, xmlwrapp-config, yes, no)
-    if test "x$lmi_xmlwrapp_config" != "xyes"; then
-        AC_MSG_ERROR([Unable to find xmlwrapp configuration program xmlwrapp-config in the path.])
+    if test -z "$XMLWRAPP_CFLAGS" -o -z "$XMLWRAPP_LIBS"; then
+        dnl --- XMLWRAPP (required) -------------------
+        AC_CHECK_PROG(lmi_xmlwrapp_config, xmlwrapp-config, yes, no)
+        if test "x$lmi_xmlwrapp_config" != "xyes"; then
+            AC_MSG_ERROR([Unable to find xmlwrapp configuration program xmlwrapp-config in the path.])
+        fi
+
+        dnl make sure xmlwrapp was compiled with XSLT support:
+        if xmlwrapp-config --libs | grep -v -q xslt; then
+            AC_MSG_ERROR([xmlwrapp with XSLT support is required.])
+        fi
     fi
 
-    dnl make sure xmlwrapp was compiled with XSLT support:
-    if xmlwrapp-config --libs | grep -v -q xslt; then
-        AC_MSG_ERROR([xmlwrapp with XSLT support is required.])
+    if test -z "$XMLWRAPP_CFLAGS"; then
+        XMLWRAPP_CFLAGS=`xmlwrapp-config --cxxflags`
     fi
 
-    XMLWRAPP_CFLAGS=`xmlwrapp-config --cxxflags`
-    XMLWRAPP_LIBS=`xmlwrapp-config --libs`
+    if test -z "$XMLWRAPP_LIBS"; then
+        XMLWRAPP_LIBS=`xmlwrapp-config --libs`
+    fi
+
     AC_SUBST(XMLWRAPP_CFLAGS)
     AC_SUBST(XMLWRAPP_LIBS)
 fi

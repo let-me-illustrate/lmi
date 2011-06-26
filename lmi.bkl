@@ -115,7 +115,7 @@
               -->
             $(LIBWX_NEW_SOURCES)
         </sources>
-        <win32-res>lmi.rc</win32-res>
+        <win32-res>lmi_msw_res.rc</win32-res>
 
         <precomp-headers>on</precomp-headers>
         <set var="LMI_PCH_HEADER">pchfile_wx.hpp</set>
