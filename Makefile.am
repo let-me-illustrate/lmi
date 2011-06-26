@@ -783,7 +783,6 @@ test_print_matrix_SOURCES = \
   print_matrix_test.cpp
 test_print_matrix_CXXFLAGS = $(AM_CXXFLAGS)
 
-# 'expm1.cpp' is for como on msw
 test_product_file_SOURCES = \
   $(common_test_objects) \
   data_directory.cpp \
@@ -792,7 +791,7 @@ test_product_file_SOURCES = \
   dbdict.cpp \
   dbnames.cpp \
   dbvalue.cpp \
-  expm1.cpp \
+  expm1.c \
   facets.cpp \
   fund_data.cpp \
   global_settings.cpp \
