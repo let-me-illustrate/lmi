@@ -28063,3 +28063,28 @@ No longer follow documented advice that turned out to be wrong. See:
 Rename msw resource file. See:
   http://lists.nongnu.org/archive/html/lmi/2011-06/msg00036.html
 
+20110623T2147Z <zeitlin> [649]
+
+  Makefile.am
+Remove duplicated lines from Makefile.am.
+
+20110623T2147Z <zeitlin> [649]
+
+  configure.ac
+Honour XMLWRAPP_{CFLAGS,LIB} variables when not using pkg-config too.
+
+20110623T2224Z <zeitlin> [649]
+
+  Makefile.am
+Fix build of test_product_file with autotools.
+
+20110626T1758Z <zeitlin> [649]
+
+  Makefile.am
+Fix defect introduced 20100322T1326Z.
+
+20110704T1759Z <gchicares@sbcglobal.net> [649]
+
+  install_wx.make
+Use 2011-07-04 wx-2.9.2 snapshot.
+

@@ -63,10 +63,11 @@ build_dir     := $(wx_dir)/wxWidgets-$(wx_version)/$(vendor)
 # Begin ad-hockery. See:
 #   http://lists.nongnu.org/archive/html/lmi/2011-03/msg00008.html
 wx_version    := 2.9.2
-wx_archive        := wx-all-2010-11-06.tar.gz
+wx_archive        := wxWidgets-2011-07-04.tar.gz
 $(wx_archive)-url := ftp://ftp.wxwidgets.org/pub/Daily_HEAD/files/$(wx_archive)
-$(wx_archive)-md5 := 64a19bee54e78f62593d55b431305e6a
-wx_md5            := 64a19bee54e78f62593d55b431305e6a
+$(wx_archive)-md5 := 89c33b326afe557eb47345e8e335886c
+wx_md5            := 89c33b326afe557eb47345e8e335886c
+vendor        := $(subst .,,$(compiler))-$(wx_md5)
 build_dir     := $(wx_dir)/wxWidgets/$(vendor)
 # End ad-hockery.
 
