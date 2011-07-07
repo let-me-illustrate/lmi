@@ -28088,3 +28088,8 @@ Fix defect introduced 20100322T1326Z.
   install_wx.make
 Use 2011-07-04 wx-2.9.2 snapshot.
 
+20110707T2138Z <gchicares@sbcglobal.net> [649]
+
+  install_wx.make
+Upgrade to wx-2.9.2 .
+
