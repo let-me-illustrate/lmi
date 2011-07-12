@@ -1067,10 +1067,10 @@ wxString InputSequenceEditor::get_diagnostics_message()
         {
         wxString const value = value_field(row).GetValue();
         if(value.empty())
-            return wxString::Format("Missing value on row %d.", row);
+            return wxString::Format("Missing value on row %d.", row + 1);
 
         if(!is_valid_value(value))
-            return wxString::Format("Invalid keyword \"%s\" on row %d.", value.c_str(), row);
+            return wxString::Format("Invalid keyword \"%s\" on row %d.", value.c_str(), row + 1);
         }
 
     // As fallback, parse the sequence and check the diagnostics. This may be
