@@ -56,6 +56,17 @@
 #include <map>
 #include <vector>
 
+// In wxWidgets up to and including 2.9.2 the "Return" key erroneously worked
+// as TAB in a dialog when the default button was disabled. Work around this
+// problem by completely avoiding wxWidgets keyboard navigation for the input
+// sequence entry dialog by clearing wxTAB_TRAVERSAL style for it and calling
+// MSW native IsDialogMessage() function instead.
+#if defined(__WXMSW__) && !wxCHECK_VERSION(2, 9, 3)
+    #define USE_MSW_RETURN_KEY_WORKAROUND
+
+    #include <wx/msw/private.h>
+#endif // wxMSW <= 2.9.3
+
 namespace
 {
 class DurationModeChoice
@@ -204,6 +215,11 @@ class InputSequenceEditor
 
     virtual void EndModal(int retCode);
 
+#ifdef USE_MSW_RETURN_KEY_WORKAROUND
+  protected:
+    virtual bool MSWProcessMessage(WXMSG* pMsg);
+#endif // USE_MSW_RETURN_KEY_WORKAROUND
+
   private:
     void add_row();
     void insert_row(int row);
@@ -337,6 +353,12 @@ InputSequenceEditor::InputSequenceEditor(wxWindow* parent, wxString const& title
     add_row();
 
     value_field_ctrl(0).SetFocus();
+
+#ifdef USE_MSW_RETURN_KEY_WORKAROUND
+    // Turn off wx support for keyboard navigation as we use our own version in
+    // the overridden MSWProcessMessage().
+    ToggleWindowStyle(wxTAB_TRAVERSAL);
+#endif // USE_MSW_RETURN_KEY_WORKAROUND
 }
 
 void InputSequenceEditor::sequence(InputSequence const& s)
@@ -551,6 +573,16 @@ void InputSequenceEditor::insert_row(int new_row)
     wxStaticText* then_label = new(wx) wxStaticText(this, wxID_ANY, LARGEST_THEN_TEXT);
     sizer_->wxSizer::Insert(insert_pos++, then_label, flags);
     SizeWinForText(then_label, LARGEST_THEN_TEXT);
+
+#ifdef USE_MSW_RETURN_KEY_WORKAROUND
+    // wxMSW (mistakenly, but it's too late to change this for 2.9.2 which is
+    // the only release for which we use this workaround anyhow) uses WS_TABSTOP
+    // style for the spin button part of spin control and this prevents the
+    // native TAB navigation from working, so forcefully reset this style.
+    LONG msw_style = ::GetWindowLong(GetHwndOf(duration_num), GWL_STYLE);
+    msw_style &= ~WS_TABSTOP;
+    ::SetWindowLong(GetHwndOf(duration_num), GWL_STYLE, msw_style);
+#endif // USE_MSW_RETURN_KEY_WORKAROUND
 
 #undef LARGEST_FROM_TEXT
 #undef LARGEST_THEN_TEXT
@@ -1174,6 +1206,20 @@ void InputSequenceEditor::EndModal(int retCode)
 
     wxDialog::EndModal(retCode);
 }
+
+#ifdef USE_MSW_RETURN_KEY_WORKAROUND
+
+bool InputSequenceEditor::MSWProcessMessage(WXMSG* pMsg)
+{
+    if(::IsDialogMessage(GetHwnd(), pMsg))
+        {
+        return true;
+        }
+
+    return wxDialog::MSWProcessMessage(pMsg);
+}
+
+#endif // USE_MSW_RETURN_KEY_WORKAROUND
 
 class InputSequenceTextCtrl
     :public wxTextCtrl
