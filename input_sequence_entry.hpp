@@ -37,6 +37,8 @@ class Input;
 class WXDLLIMPEXP_FWD_CORE wxButton;
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 
+class Input;
+
 class InputSequenceEntry
     :public wxPanel
 {
