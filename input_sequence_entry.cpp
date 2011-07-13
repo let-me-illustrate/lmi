@@ -202,7 +202,7 @@ class InputSequenceEditor
     void sequence(InputSequence const& s);
     std::string sequence_string();
 
-    virtual void EndModal(int retCode);
+    virtual bool TransferDataFromWindow();
 
   private:
     void add_row();
@@ -1165,14 +1165,17 @@ void InputSequenceEditor::UponAddRow(wxCommandEvent& event)
     update_diagnostics();
 }
 
-void InputSequenceEditor::EndModal(int retCode)
+bool InputSequenceEditor::TransferDataFromWindow()
 {
+    if(!wxDialog::TransferDataFromWindow())
+        return false;
+
     // We need to set the value as soon as possible -- when used in wxDataViewCtrl, the value
     // is read from editor control as soon as focus changes, which is before ShowModal() returns.
-    if(associated_text_ctrl_ && retCode == wxID_OK)
+    if(associated_text_ctrl_)
         associated_text_ctrl_->SetValue(sequence_string());
 
-    wxDialog::EndModal(retCode);
+    return true;
 }
 
 class InputSequenceTextCtrl
