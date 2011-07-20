@@ -28093,3 +28093,8 @@ Use 2011-07-04 wx-2.9.2 snapshot.
   install_wx.make
 Upgrade to wx-2.9.2 .
 
+20110720T2231Z <gchicares@sbcglobal.net> [649]
+
+  premium_tax.cpp
+Fix defect introduced 20110523T1058Z (while fixing another defect).
+
