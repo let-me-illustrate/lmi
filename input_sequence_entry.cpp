@@ -261,6 +261,11 @@ class InputSequenceEditor
     int compute_duration_scalar(int row);
     void adjust_duration_num(int row);
 
+    void update_diagnostics();
+    bool is_valid_value(wxString const& s);
+    wxString get_diagnostics_message();
+
+    void UponValueChange(wxCommandEvent& event);
     void UponDurationModeChange(wxCommandEvent& event);
     void UponDurationNumChange(wxCommandEvent& event);
     void UponRemoveRow(wxCommandEvent& event);
@@ -275,6 +280,7 @@ class InputSequenceEditor
     wxFlexGridSizer* sizer_;
     wxButton* ok_button_;
     wxButton* cancel_button_;
+    wxStaticText* diagnostics_;
     typedef std::map<wxWindowID, int> id_to_row_map;
     id_to_row_map id_to_row_;
 
@@ -301,6 +307,9 @@ InputSequenceEditor::InputSequenceEditor(wxWindow* parent, wxString const& title
     sizer_ = new(wx) wxFlexGridSizer(Col_Max, 5, 5);
     top->Add(sizer_, wxSizerFlags(1).Expand().DoubleBorder());
 
+    diagnostics_ = new(wx) wxStaticText(this, wxID_ANY, "");
+    top->Add(diagnostics_, wxSizerFlags().Expand().DoubleBorder(wxLEFT|wxRIGHT));
+
     wxStdDialogButtonSizer* buttons = new(wx) wxStdDialogButtonSizer();
     buttons->AddButton(ok_button_ = new(wx) wxButton(this, wxID_OK));
     buttons->AddButton(cancel_button_ = new(wx) wxButton(this, wxID_CANCEL));
@@ -313,17 +322,6 @@ InputSequenceEditor::InputSequenceEditor(wxWindow* parent, wxString const& title
     add_row();
 
     value_field_ctrl(0).SetFocus();
-
-    ::Connect
-        (this
-        ,wxEVT_COMMAND_CHOICE_SELECTED
-        ,&InputSequenceEditor::UponDurationModeChange
-        );
-    ::Connect
-        (this
-        ,wxEVT_COMMAND_TEXT_UPDATED
-        ,&InputSequenceEditor::UponDurationNumChange
-        );
 }
 
 void InputSequenceEditor::sequence(InputSequence const& s)
@@ -398,6 +396,8 @@ void InputSequenceEditor::sequence(InputSequence const& s)
 
     // move focus to a reasonable place
     value_field_ctrl(0).SetFocus();
+
+    update_diagnostics();
 }
 
 std::string InputSequenceEditor::sequence_string()
@@ -528,7 +528,8 @@ void InputSequenceEditor::insert_row(int new_row)
     wxStaticText* from_label = new(wx) wxStaticText(this, wxID_ANY, LARGEST_FROM_TEXT);
     SizeWinForText(from_label, LARGEST_FROM_TEXT);
     sizer_->wxSizer::Insert(insert_pos++, from_label, flags);
-    sizer_->wxSizer::Insert(insert_pos++, new(wx) DurationModeChoice(this), flags);
+    wxChoice* duration_mode = new(wx) DurationModeChoice(this);
+    sizer_->wxSizer::Insert(insert_pos++, duration_mode, flags);
     wxTextCtrl* duration_num = new(wx) wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_RIGHT);
     duration_num->SetValidator(wxTextValidator(wxFILTER_DIGITS));
     sizer_->wxSizer::Insert(insert_pos++, duration_num, flags);
@@ -612,6 +613,29 @@ void InputSequenceEditor::insert_row(int new_row)
     duration_scalars_.insert(duration_scalars_.begin() + new_row, -1);
 
     set_tab_order();
+
+    // connect event handlers
+    ::Connect
+        (value_ctrl
+        ,wxEVT_COMMAND_TEXT_UPDATED
+        ,&InputSequenceEditor::UponValueChange
+        ,wxID_ANY
+        ,this
+        );
+    ::Connect
+        (duration_mode
+        ,wxEVT_COMMAND_CHOICE_SELECTED
+        ,&InputSequenceEditor::UponDurationModeChange
+        ,wxID_ANY
+        ,this
+        );
+    ::Connect
+        (duration_num
+        ,wxEVT_COMMAND_TEXT_UPDATED
+        ,&InputSequenceEditor::UponDurationNumChange
+        ,wxID_ANY
+        ,this
+        );
 
     // update state of controls on the two rows affected by addition of
     // a new row
@@ -942,6 +966,74 @@ void InputSequenceEditor::adjust_duration_num(int row)
     duration_num_field(row).SetValue(wxString::Format("%d", num));
 }
 
+void InputSequenceEditor::update_diagnostics()
+{
+    // Validate the sequence and if it's not valid, show an error
+    // and disable the OK button.
+
+    wxString msg = get_diagnostics_message();
+
+    if(diagnostics_->GetLabel() != msg)
+        {
+        diagnostics_->SetLabel(msg);
+        redo_layout();
+        }
+
+    ok_button_->Enable(msg.empty());
+}
+
+bool InputSequenceEditor::is_valid_value(wxString const& s)
+{
+    for(std::vector<std::string>::const_iterator k = keywords_.begin()
+       ;k != keywords_.end()
+       ;++k)
+        {
+        if(s == *k)
+            return true;
+        }
+
+    if(!keywords_only_)
+        return s.IsNumber();
+
+    return false;
+}
+
+wxString InputSequenceEditor::get_diagnostics_message()
+{
+    // Check some common problems and issue nice error messages for them:
+    for(int row = 0; row < rows_count_; ++row)
+        {
+        wxString const value = value_field(row).GetValue();
+        if(value.empty())
+            return wxString::Format("Missing value on row %d.", row);
+
+        if(!is_valid_value(value))
+            return wxString::Format("Invalid keyword \"%s\" on row %d.", value.c_str(), row);
+
+        if(duration_mode_field(row).needs_number() && duration_num_field(row).GetValue().empty())
+            return wxString::Format("Duration not entered on row %d.", row);
+        }
+
+    // As fallback, parse the sequence and check the diagnostics. This may be
+    // less human-readable, but it's better than nothing at all:
+    InputSequence const sequence
+        (sequence_string()
+        ,input_.years_to_maturity()
+        ,input_.issue_age        ()
+        ,input_.retirement_age   ()
+        ,input_.inforce_year     ()
+        ,input_.effective_year   ()
+        ,0
+        ,keywords_
+        );
+    return sequence.formatted_diagnostics().c_str();
+}
+
+void InputSequenceEditor::UponValueChange(wxCommandEvent&)
+{
+    update_diagnostics();
+}
+
 void InputSequenceEditor::UponDurationModeChange(wxCommandEvent& event)
 {
     int row = id_to_row_[event.GetId()];
@@ -964,6 +1056,8 @@ void InputSequenceEditor::UponDurationModeChange(wxCommandEvent& event)
             update_row(i); // for "from ..." text
             }
         }
+
+    update_diagnostics();
 }
 
 void InputSequenceEditor::UponDurationNumChange(wxCommandEvent& event)
@@ -974,12 +1068,16 @@ void InputSequenceEditor::UponDurationNumChange(wxCommandEvent& event)
         {
         update_row(i); // for "from ..." text and duration_scalars_
         }
+
+    update_diagnostics();
 }
 
 void InputSequenceEditor::UponRemoveRow(wxCommandEvent& event)
 {
     int row = id_to_row_[event.GetId()];
     remove_row(row);
+
+    update_diagnostics();
 }
 
 void InputSequenceEditor::UponAddRow(wxCommandEvent& event)
@@ -1001,6 +1099,8 @@ void InputSequenceEditor::UponAddRow(wxCommandEvent& event)
         }
 
     duration_num_field(new_row).SetFocus();
+
+    update_diagnostics();
 }
 } // Unnamed namespace.
 
