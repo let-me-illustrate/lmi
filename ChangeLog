@@ -28110,3 +28110,12 @@ Designate release candidate.
 Show diagnostics in input-sequence editor (VS). See:
   http://lists.nongnu.org/archive/html/lmi/2010-09/msg00000.html
 
+20110802T1517Z <gchicares@sbcglobal.net> [637]
+
+  census_document.cpp
+  census_document.hpp
+  census_view.cpp
+  census_view.hpp
+Replace wxListView with wxDataViewCtrl (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2011-02/msg00000.html
+

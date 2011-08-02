@@ -42,8 +42,10 @@
 #include <vector>
 
 class CensusDocument;
-class WXDLLIMPEXP_FWD_CORE wxListEvent;
-class WXDLLIMPEXP_FWD_CORE wxListView;
+class CensusViewDataViewModel;
+
+class WXDLLIMPEXP_FWD_ADV wxDataViewEvent;
+class WXDLLIMPEXP_FWD_ADV wxDataViewCtrl;
 
 class CensusView
     :        public  ViewEx
@@ -51,13 +53,14 @@ class CensusView
     ,virtual private obstruct_slicing<CensusView>
 {
     friend class CensusDocument;
+    friend class CensusViewDataViewModel;
 
   public:
     CensusView();
     virtual ~CensusView();
 
   private:
-    void DisplayAllVaryingData();
+    void update_visible_columns();
 
     CensusDocument& document() const;
 
@@ -67,7 +70,6 @@ class CensusView
     virtual wxMenuBar* MenuBar() const;
 
     void UponAddCell                (wxCommandEvent&);
-    void UponBeginLabelEdit         (wxListEvent&); // TODO ?? Expunge.
     void UponDeleteCells            (wxCommandEvent&);
     void UponEditCell               (wxCommandEvent&);
     void UponEditClass              (wxCommandEvent&);
@@ -75,18 +77,18 @@ class CensusView
     void UponColumnWidthVarying     (wxCommandEvent&);
     void UponColumnWidthFixed       (wxCommandEvent&);
     void UponPasteCensus            (wxCommandEvent&);
-    void UponRightClick             (wxContextMenuEvent&);
+    void UponRightClick             (wxDataViewEvent&);
     void UponPrintCase              (wxCommandEvent&);
     void UponPrintCaseToDisk        (wxCommandEvent&);
     void UponRunCell                (wxCommandEvent&);
     void UponRunCase                (wxCommandEvent&);
     void UponRunCaseToSpreadsheet   (wxCommandEvent&);
     void UponUpdateApplicable       (wxUpdateUIEvent&);
+    void UponUpdateSingleItemActions(wxUpdateUIEvent&);
 
     bool DoAllCells(mcenum_emission);
 
     void Update();
-    void UpdatePreservingSelection();
     void ViewOneCell(int);
     void ViewComposite();
 
@@ -118,8 +120,6 @@ class CensusView
         ,std::string const& name
         );
 
-    void identify_varying_columns();
-
     bool is_invalid();
 
     int selected_column();
@@ -129,15 +129,16 @@ class CensusView
 
     bool all_changes_have_been_validated_;
 
+    bool autosize_columns_;
+
     bool composite_is_available_;
 
     boost::shared_ptr<Ledger const> composite_ledger_;
 
-    std::vector<std::string> headers_of_varying_parameters_;
-
     bool was_cancelled_;
 
-    wxListView* list_window_;
+    wxDataViewCtrl* list_window_;
+    CensusViewDataViewModel* list_model_;
 
     DECLARE_DYNAMIC_CLASS(CensusView)
     DECLARE_EVENT_TABLE()
