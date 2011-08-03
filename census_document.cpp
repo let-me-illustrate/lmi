@@ -49,9 +49,9 @@ CensusDocument::~CensusDocument()
 {
 }
 
-wxListView& CensusDocument::PredominantViewWindow() const
+wxDataViewCtrl& CensusDocument::PredominantViewWindow() const
 {
-    return ::PredominantViewWindow<CensusView,wxListView>
+    return ::PredominantViewWindow<CensusView,wxDataViewCtrl>
         (*this
         ,&CensusView::list_window_
         );

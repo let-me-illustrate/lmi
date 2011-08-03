@@ -28063,3 +28063,65 @@ No longer follow documented advice that turned out to be wrong. See:
 Rename msw resource file. See:
   http://lists.nongnu.org/archive/html/lmi/2011-06/msg00036.html
 
+20110623T2147Z <zeitlin> [649]
+
+  Makefile.am
+Remove duplicated lines from Makefile.am.
+
+20110623T2147Z <zeitlin> [649]
+
+  configure.ac
+Honour XMLWRAPP_{CFLAGS,LIB} variables when not using pkg-config too.
+
+20110623T2224Z <zeitlin> [649]
+
+  Makefile.am
+Fix build of test_product_file with autotools.
+
+20110626T1758Z <zeitlin> [649]
+
+  Makefile.am
+Fix defect introduced 20100322T1326Z.
+
+20110704T1759Z <gchicares@sbcglobal.net> [649]
+
+  install_wx.make
+Use 2011-07-04 wx-2.9.2 snapshot.
+
+20110707T2138Z <gchicares@sbcglobal.net> [649]
+
+  install_wx.make
+Upgrade to wx-2.9.2 .
+
+20110720T2231Z <gchicares@sbcglobal.net> [649]
+
+  premium_tax.cpp
+Fix defect introduced 20110523T1058Z (while fixing another defect).
+
+20110721T1201Z <gchicares@sbcglobal.net> [649]
+
+  version.hpp
+Designate release candidate.
+
+20110801T2357Z <gchicares@sbcglobal.net> [649]
+
+  input_sequence_entry.cpp
+  wx_utility.hpp
+Show diagnostics in input-sequence editor (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2010-09/msg00000.html
+
+20110802T1517Z <gchicares@sbcglobal.net> [637]
+
+  census_document.cpp
+  census_document.hpp
+  census_view.cpp
+  census_view.hpp
+Replace wxListView with wxDataViewCtrl (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2011-02/msg00000.html
+
+20110802T1541Z <gchicares@sbcglobal.net> [637]
+
+  input_sequence_entry.cpp
+Use spincontrols for durations (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2011-03/msg00002.html
+

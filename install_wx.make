@@ -25,7 +25,7 @@ this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
 # Configurable settings ########################################################
 
-wx_version    := 2.9.0
+wx_version    := 2.9.2
 
 mingw_dir     := /MinGW_
 
@@ -42,14 +42,15 @@ wx-2.8.7-md5  := e3455083afdf6404a569a8bf0701cf13
 wx-2.8.9-md5  := b0b2d0f6915a21ca6f33896ee8f50387
 wx-2.8.10-md5 := 0461c2085ac1ad7e648aa84c4ba51dd1
 wx-2.9.0-md5  := 09058928eeb72853142c062bdec056ce
+wx-2.9.2-md5  := d6cec5bd331ba90b74c1e2fcb0563620
+
+wx_md5            := $(wx-$(wx_version)-md5)
 
 wx_archive        := wxWidgets-$(wx_version).tar.bz2
 
+$(wx_archive)-md5 := $(wx_md5)
+
 $(wx_archive)-url := ftp://ftp.wxwidgets.org/pub/$(wx_version)/$(wx_archive)
-
-$(wx_archive)-md5 := $(wx-$(wx_version)-md5)
-
-wx_md5            := $(wx-$(wx_version)-md5)
 
 # Variables that normally should be left alone #################################
 
@@ -59,16 +60,6 @@ compiler      := gcc-$(shell $(mingw_bin_dir)/gcc -dumpversion)
 vendor        := $(subst .,,$(compiler))-$(wx_md5)
 
 build_dir     := $(wx_dir)/wxWidgets-$(wx_version)/$(vendor)
-
-# Begin ad-hockery. See:
-#   http://lists.nongnu.org/archive/html/lmi/2011-03/msg00008.html
-wx_version    := 2.9.2
-wx_archive        := wx-all-2010-11-06.tar.gz
-$(wx_archive)-url := ftp://ftp.wxwidgets.org/pub/Daily_HEAD/files/$(wx_archive)
-$(wx_archive)-md5 := 64a19bee54e78f62593d55b431305e6a
-wx_md5            := 64a19bee54e78f62593d55b431305e6a
-build_dir     := $(wx_dir)/wxWidgets/$(vendor)
-# End ad-hockery.
 
 # Configuration reference:
 #   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00001.html

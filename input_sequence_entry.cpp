@@ -43,6 +43,7 @@
 #include <wx/combobox.h>
 #include <wx/dialog.h>
 #include <wx/sizer.h>
+#include <wx/spinctrl.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/valtext.h>
@@ -234,9 +235,9 @@ class InputSequenceEditor
         return get_field<DurationModeChoice>(Col_DurationMode, row);
     }
 
-    wxTextCtrl& duration_num_field(int row)
+    wxSpinCtrl& duration_num_field(int row)
     {
-        return get_field<wxTextCtrl>(Col_DurationNum, row);
+        return get_field<wxSpinCtrl>(Col_DurationNum, row);
     }
 
     wxStaticText& then_field(int row)
@@ -260,7 +261,13 @@ class InputSequenceEditor
 
     int compute_duration_scalar(int row);
     void adjust_duration_num(int row);
+    void adjust_duration_num_range(int row);
 
+    void update_diagnostics();
+    bool is_valid_value(wxString const& s);
+    wxString get_diagnostics_message();
+
+    void UponValueChange(wxCommandEvent& event);
     void UponDurationModeChange(wxCommandEvent& event);
     void UponDurationNumChange(wxCommandEvent& event);
     void UponRemoveRow(wxCommandEvent& event);
@@ -275,6 +282,7 @@ class InputSequenceEditor
     wxFlexGridSizer* sizer_;
     wxButton* ok_button_;
     wxButton* cancel_button_;
+    wxStaticText* diagnostics_;
     typedef std::map<wxWindowID, int> id_to_row_map;
     id_to_row_map id_to_row_;
 
@@ -301,6 +309,9 @@ InputSequenceEditor::InputSequenceEditor(wxWindow* parent, wxString const& title
     sizer_ = new(wx) wxFlexGridSizer(Col_Max, 5, 5);
     top->Add(sizer_, wxSizerFlags(1).Expand().DoubleBorder());
 
+    diagnostics_ = new(wx) wxStaticText(this, wxID_ANY, "");
+    top->Add(diagnostics_, wxSizerFlags().Expand().DoubleBorder(wxLEFT|wxRIGHT));
+
     wxStdDialogButtonSizer* buttons = new(wx) wxStdDialogButtonSizer();
     buttons->AddButton(ok_button_ = new(wx) wxButton(this, wxID_OK));
     buttons->AddButton(cancel_button_ = new(wx) wxButton(this, wxID_CANCEL));
@@ -313,17 +324,6 @@ InputSequenceEditor::InputSequenceEditor(wxWindow* parent, wxString const& title
     add_row();
 
     value_field_ctrl(0).SetFocus();
-
-    ::Connect
-        (this
-        ,wxEVT_COMMAND_CHOICE_SELECTED
-        ,&InputSequenceEditor::UponDurationModeChange
-        );
-    ::Connect
-        (this
-        ,wxEVT_COMMAND_TEXT_UPDATED
-        ,&InputSequenceEditor::UponDurationNumChange
-        );
 }
 
 void InputSequenceEditor::sequence(InputSequence const& s)
@@ -359,7 +359,7 @@ void InputSequenceEditor::sequence(InputSequence const& s)
 
         duration_mode_field(i).value(data.end_mode);
 
-        int dur_num;
+        int dur_num = 0;
         switch(data.end_mode)
             {
             case e_number_of_years:
@@ -384,7 +384,7 @@ void InputSequenceEditor::sequence(InputSequence const& s)
                 }
             }
 
-        duration_num_field(i).SetValue(value_cast<std::string>(dur_num).c_str());
+        duration_num_field(i).SetValue(dur_num);
 
         if(data.value_is_keyword)
             {
@@ -398,6 +398,8 @@ void InputSequenceEditor::sequence(InputSequence const& s)
 
     // move focus to a reasonable place
     value_field_ctrl(0).SetFocus();
+
+    update_diagnostics();
 }
 
 std::string InputSequenceEditor::sequence_string()
@@ -423,19 +425,19 @@ std::string InputSequenceEditor::sequence_string()
             case e_attained_age:
                 {
                 s.append(" @");
-                s.append(duration_num_field(i).GetValue().c_str());
+                s.append(value_cast<std::string>(duration_num_field(i).GetValue()));
                 break;
                 }
             case e_duration:
                 {
                 s.append(" ");
-                s.append(duration_num_field(i).GetValue().c_str());
+                s.append(value_cast<std::string>(duration_num_field(i).GetValue()));
                 break;
                 }
             case e_number_of_years:
                 {
                 s.append(" #");
-                s.append(duration_num_field(i).GetValue().c_str());
+                s.append(value_cast<std::string>(duration_num_field(i).GetValue()));
                 break;
                 }
             case e_maturity:
@@ -528,11 +530,11 @@ void InputSequenceEditor::insert_row(int new_row)
     wxStaticText* from_label = new(wx) wxStaticText(this, wxID_ANY, LARGEST_FROM_TEXT);
     SizeWinForText(from_label, LARGEST_FROM_TEXT);
     sizer_->wxSizer::Insert(insert_pos++, from_label, flags);
-    sizer_->wxSizer::Insert(insert_pos++, new(wx) DurationModeChoice(this), flags);
-    wxTextCtrl* duration_num = new(wx) wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_RIGHT);
-    duration_num->SetValidator(wxTextValidator(wxFILTER_DIGITS));
+    wxChoice* duration_mode = new(wx) DurationModeChoice(this);
+    sizer_->wxSizer::Insert(insert_pos++, duration_mode, flags);
+    wxSpinCtrl* duration_num = new(wx) wxSpinCtrl(this, wxID_ANY, "");
     sizer_->wxSizer::Insert(insert_pos++, duration_num, flags);
-    SizeWinForText(duration_num, "999", 20);
+    SizeWinForText(duration_num, "9999", 20);
     wxStaticText* then_label = new(wx) wxStaticText(this, wxID_ANY, LARGEST_THEN_TEXT);
     sizer_->wxSizer::Insert(insert_pos++, then_label, flags);
     SizeWinForText(then_label, LARGEST_THEN_TEXT);
@@ -612,6 +614,29 @@ void InputSequenceEditor::insert_row(int new_row)
     duration_scalars_.insert(duration_scalars_.begin() + new_row, -1);
 
     set_tab_order();
+
+    // connect event handlers
+    ::Connect
+        (value_ctrl
+        ,wxEVT_COMMAND_TEXT_UPDATED
+        ,&InputSequenceEditor::UponValueChange
+        ,wxID_ANY
+        ,this
+        );
+    ::Connect
+        (duration_mode
+        ,wxEVT_COMMAND_CHOICE_SELECTED
+        ,&InputSequenceEditor::UponDurationModeChange
+        ,wxID_ANY
+        ,this
+        );
+    ::Connect
+        (duration_num
+        ,wxEVT_COMMAND_SPINCTRL_UPDATED
+        ,&InputSequenceEditor::UponDurationNumChange
+        ,wxID_ANY
+        ,this
+        );
 
     // update state of controls on the two rows affected by addition of
     // a new row
@@ -721,8 +746,9 @@ void InputSequenceEditor::update_row(int row)
     // "maturity" should be an option only on the last row:
     duration_mode_field(row).allow_maturity(is_last_row);
 
-    // duration number visibility:
+    // duration number visibility and range:
     duration_num_field(row).Show(duration_mode_field(row).needs_number());
+    adjust_duration_num_range(row);
 
     if(duration_mode_field(row).value() == e_number_of_years)
         {
@@ -772,13 +798,10 @@ wxString InputSequenceEditor::format_from_text(int row)
         }
 
     duration_mode mode = duration_mode_field(row - 1).value();
-    long num = 0;
+    int num = 0;
     if(duration_mode_field(row - 1).needs_number())
         {
-        if(!duration_num_field(row - 1).GetValue().ToLong(&num))
-            {
-            return "";
-            }
+        num = duration_num_field(row - 1).GetValue();
         }
 
     switch(mode)
@@ -789,25 +812,24 @@ wxString InputSequenceEditor::format_from_text(int row)
             }
         case e_attained_age:
             {
-            return wxString::Format("from age %ld", num);
+            return wxString::Format("from age %d", num);
             }
         case e_duration:
             {
-            return wxString::Format("from duration %ld", num);
+            return wxString::Format("from duration %d", num);
             }
         case e_number_of_years:
             {
-            long yrs = 0;
+            int yrs = 0;
             int i = row - 1;
             while(0 <= i && duration_mode_field(i).value() == e_number_of_years)
                 {
-                long num_i = 0;
-                duration_num_field(i).GetValue().ToLong(&num_i);
+                int num_i = duration_num_field(i).GetValue();
                 yrs += num_i;
                 i--;
                 }
             return wxString::Format
-                ("%s + %ld years",
+                ("%s + %d years",
                 format_from_text(i + 1).c_str(),
                 yrs
                 );
@@ -846,17 +868,7 @@ T& InputSequenceEditor::get_field(int col, int row)
 
 int InputSequenceEditor::compute_duration_scalar(int row)
 {
-    long duration_num = -1;
-    wxString const duration_num_str = duration_num_field(row).GetValue();
-    if(duration_num_str.empty())
-        {
-        duration_num = 0;
-        }
-    else
-        {
-        duration_num_str.ToLong(&duration_num);
-        }
-    LMI_ASSERT(-1 != duration_num);
+    int duration_num = duration_num_field(row).GetValue();
 
     switch(duration_mode_field(row).value())
         {
@@ -899,6 +911,43 @@ int InputSequenceEditor::compute_duration_scalar(int row)
     throw "Unreachable--silences a compiler diagnostic.";
 }
 
+void InputSequenceEditor::adjust_duration_num_range(int row)
+{
+    if(!duration_mode_field(row).needs_number())
+        return;
+
+    int const prev_duration = (row > 0) ? duration_scalars_[row - 1] : 0;
+    wxSpinCtrl& duration = duration_num_field(row);
+
+    switch(duration_mode_field(row).value())
+        {
+        case e_attained_age:
+            {
+            duration.SetRange(input_.issue_age() + 1 + prev_duration, input_.maturity_age() - 1);
+            break;
+            }
+        case e_duration:
+            {
+            duration.SetRange(1 + prev_duration, input_.years_to_maturity() - 1);
+            break;
+            }
+        case e_number_of_years:
+            {
+            duration.SetRange(1, input_.years_to_maturity() - prev_duration - 1);
+            break;
+            }
+        case e_maturity:
+        case e_retirement:
+        case e_invalid_mode:
+        case e_inception:
+        case e_inforce:
+            {
+            fatal_error() << "unexpected duration_mode value" << LMI_FLUSH;
+            break;
+            }
+        }
+}
+
 void InputSequenceEditor::adjust_duration_num(int row)
 {
     int const scalar = duration_scalars_[row];
@@ -939,7 +988,77 @@ void InputSequenceEditor::adjust_duration_num(int row)
             }
         }
 
-    duration_num_field(row).SetValue(wxString::Format("%d", num));
+    adjust_duration_num_range(row);
+
+    duration_num_field(row).SetValue(num);
+}
+
+void InputSequenceEditor::update_diagnostics()
+{
+    // Validate the sequence and if it's not valid, show an error
+    // and disable the OK button.
+
+    wxString msg = get_diagnostics_message();
+
+    if(diagnostics_->GetLabel() != msg)
+        {
+        diagnostics_->SetLabel(msg);
+        redo_layout();
+        }
+
+    ok_button_->Enable(msg.empty());
+}
+
+bool InputSequenceEditor::is_valid_value(wxString const& s)
+{
+    for(std::vector<std::string>::const_iterator k = keywords_.begin()
+       ;k != keywords_.end()
+       ;++k)
+        {
+        if(s == *k)
+            return true;
+        }
+
+    if(!keywords_only_)
+        return s.IsNumber();
+
+    return false;
+}
+
+wxString InputSequenceEditor::get_diagnostics_message()
+{
+    // Check some common problems and issue nice error messages for them:
+    for(int row = 0; row < rows_count_; ++row)
+        {
+        wxString const value = value_field(row).GetValue();
+        if(value.empty())
+            return wxString::Format("Missing value on row %d.", row);
+
+        if(!is_valid_value(value))
+            return wxString::Format("Invalid keyword \"%s\" on row %d.", value.c_str(), row);
+        }
+
+    // As fallback, parse the sequence and check the diagnostics. This may be
+    // less human-readable, but it's better than nothing at all:
+    InputSequence const sequence
+        (sequence_string()
+        ,input_.years_to_maturity()
+        ,input_.issue_age        ()
+        ,input_.retirement_age   ()
+        ,input_.inforce_year     ()
+        ,input_.effective_year   ()
+        ,0
+        ,keywords_
+        );
+    wxString msg = sequence.formatted_diagnostics().c_str();
+    // formatted_diagnostics() returns newline-terminated string, fix it:
+    msg.Trim();
+    return msg;
+}
+
+void InputSequenceEditor::UponValueChange(wxCommandEvent&)
+{
+    update_diagnostics();
 }
 
 void InputSequenceEditor::UponDurationModeChange(wxCommandEvent& event)
@@ -964,6 +1083,8 @@ void InputSequenceEditor::UponDurationModeChange(wxCommandEvent& event)
             update_row(i); // for "from ..." text
             }
         }
+
+    update_diagnostics();
 }
 
 void InputSequenceEditor::UponDurationNumChange(wxCommandEvent& event)
@@ -974,12 +1095,16 @@ void InputSequenceEditor::UponDurationNumChange(wxCommandEvent& event)
         {
         update_row(i); // for "from ..." text and duration_scalars_
         }
+
+    update_diagnostics();
 }
 
 void InputSequenceEditor::UponRemoveRow(wxCommandEvent& event)
 {
     int row = id_to_row_[event.GetId()];
     remove_row(row);
+
+    update_diagnostics();
 }
 
 void InputSequenceEditor::UponAddRow(wxCommandEvent& event)
@@ -1001,6 +1126,8 @@ void InputSequenceEditor::UponAddRow(wxCommandEvent& event)
         }
 
     duration_num_field(new_row).SetFocus();
+
+    update_diagnostics();
 }
 } // Unnamed namespace.
 
