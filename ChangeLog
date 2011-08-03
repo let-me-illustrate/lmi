@@ -28125,3 +28125,9 @@ Replace wxListView with wxDataViewCtrl (VS). See:
 Use spincontrols for durations (VS). See:
   http://lists.nongnu.org/archive/html/lmi/2011-03/msg00002.html
 
+20110803T2340Z <gchicares@sbcglobal.net> [637]
+
+  census_view.cpp
+When a cell is added, select it (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2011-08/msg00003.html
+
