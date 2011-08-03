@@ -32,7 +32,7 @@
 
 #include <wx/docview.h>
 
-class WXDLLIMPEXP_FWD_CORE wxListView;
+class WXDLLIMPEXP_FWD_ADV wxDataViewCtrl;
 
 class CensusDocument
     :public  wxDocument
@@ -45,7 +45,7 @@ class CensusDocument
     virtual ~CensusDocument();
 
   private:
-    wxListView& PredominantViewWindow() const;
+    wxDataViewCtrl& PredominantViewWindow() const;
 
     // wxDocument overrides.
     virtual bool OnCreate(wxString const& filename, long int flags);

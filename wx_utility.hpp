@@ -36,6 +36,7 @@
 #include <wx/event.h>
 #include <wx/string.h>
 
+#include <cstddef>   // NULL
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -81,6 +82,7 @@ void Connect
     ,wxEventType     event
     ,Return (Class::*handler)(Argument)
     ,int             id = wxID_ANY
+    ,wxEvtHandler*   event_sink = NULL
     )
 {
     // Double parentheses: don't parse comma as a macro parameter separator.
@@ -100,7 +102,13 @@ void Connect
 
     typedef void (wxEvtHandler::*t0)(Argument);
     typedef wxObjectEventFunction t1;
-    object->Connect(id, event, c_cast<t1>(static_cast<t0>(handler)));
+    object->Connect
+        (id
+        ,event
+        ,c_cast<t1>(static_cast<t0>(handler))
+        ,NULL
+        ,event_sink
+        );
 }
 
 calendar_date ConvertDateFromWx(wxDateTime const&);

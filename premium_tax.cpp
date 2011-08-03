@@ -266,8 +266,26 @@ void premium_tax::start_new_year()
 /// DATABASE !! The '.strata' files ought to differentiate tiered
 /// premium-tax load paid by customer from rate paid by insurer.
 ///
-/// An assertion ensures that either tiered or non-tiered premium-tax
+/// Assertions ensure that either tiered or non-tiered premium-tax
 /// load is zero.
+///
+/// Tiered premium tax is always greatest on the first dollar. In the
+/// case of modal premiums, the incidence of taxation is therefore
+/// front loaded in the general case; this must be reflected because
+/// to do otherwise would overstate account value.
+///
+/// Tax is calculated separately for the premium-tax state and the
+/// state of domicile, and the greater amount usually applies because
+/// of retaliation. If the rate is tiered in either state, then the
+/// incremental tax on any modal premium is the difference between
+/// year-to-date tax after and before the payment, with due regard to
+/// retaliation; no simpler formula can be correct in the general
+/// case. However, catastrophic cancellation occurs all too easily
+/// with this formula--for example, when a MEC is avoided by reducing
+/// one modal premium to an amount orders of magnitude lower than the
+/// year-to-date premium--so it is to be avoided where demonstrably
+/// unnecessary. A simple scalar calculation that disregards history,
+/// iff correct, is more accurate.
 
 double premium_tax::calculate_load(double payment, stratified_charges const& strata)
 {
@@ -301,15 +319,20 @@ double premium_tax::calculate_load(double payment, stratified_charges const& str
 
     ytd_taxable_premium_ += payment;
 
-    // 'x' is more robust, though more prone to roundoff error than
-    // 'y', so 'y' is preferred iff they're materially equal.
     double ytd_tax_reflecting_retaliation = std::max
         (ytd_load_in_tax_state_
         ,ytd_load_in_domicile_
         );
     double x = std::max(0.0, ytd_tax_reflecting_retaliation - ytd_load_);
     double y = std::max(tax_in_tax_state, tax_in_domicile);
-    double z = materially_equal(x, y) ? y : x;
+    bool no_tiering = !is_tiered_in_tax_state_ && !is_tiered_in_domicile_;
+    // SOMEDAY !! Perhaps something like
+    //   double k = 10.0; // Some number somewhat greater than unity.
+    //   double t = k * DBL_EPSILON * ytd_taxable_premium_ / payment;
+    //   double z = no_tiering || materially_equal(x, y, t) ? y : x;
+    // would achieve better accuracy; but that must not be attempted
+    // without thorough unit testing.
+    double z = no_tiering || materially_equal(x, y) ? y : x;
     ytd_load_ += z;
     return z;
 }

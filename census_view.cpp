@@ -46,8 +46,8 @@
 #include "wx_new.hpp"
 #include "wx_utility.hpp" // class ClipboardEx
 
+#include <wx/dataview.h>
 #include <wx/icon.h>
-#include <wx/listctrl.h>
 #include <wx/menu.h>
 #include <wx/msgdlg.h>
 #include <wx/xrc/xmlres.h>
@@ -82,12 +82,66 @@ namespace
             }
         return r;
     }
-}
+} // Unnamed namespace.
+
+/// Interface to the data for wxDataViewCtrl.
+
+class CensusViewDataViewModel : public wxDataViewIndexListModel
+{
+  public:
+    static unsigned int const Col_CellNum = 0;
+
+    CensusViewDataViewModel(CensusView& view)
+        :view_(view)
+    {
+    }
+
+    virtual void GetValueByRow
+        (wxVariant& variant
+        ,unsigned int row
+        ,unsigned int col
+        ) const
+    {
+        if(col == Col_CellNum)
+            {
+            variant = wxString::Format("%d", 1 + row);
+            }
+        else
+            {
+            std::string s = view_.cell_parms()[row][all_headers()[col - 1]].str();
+            variant = s;
+            }
+    }
+
+    virtual bool SetValueByRow(wxVariant const&, unsigned int, unsigned int)
+    {
+        // in-place editing not yet implemented
+        return false;
+    }
+
+    virtual unsigned int GetColumnCount() const
+    {
+        return all_headers().size() + 1;
+    }
+
+    virtual wxString GetColumnType(unsigned int) const
+    {
+        return "string";
+    }
+
+  private:
+    std::vector<std::string> const& all_headers() const
+    {
+        return view_.case_parms()[0].member_names();
+    }
+
+    CensusView& view_;
+};
 
 IMPLEMENT_DYNAMIC_CLASS(CensusView, ViewEx)
 
 BEGIN_EVENT_TABLE(CensusView, ViewEx)
-    EVT_CONTEXT_MENU(                        CensusView::UponRightClick)
+    EVT_DATAVIEW_ITEM_CONTEXT_MENU(ID_LISTWINDOW, CensusView::UponRightClick)
     EVT_MENU(XRCID("edit_cell"             ),CensusView::UponEditCell )
     EVT_MENU(XRCID("edit_class"            ),CensusView::UponEditClass)
     EVT_MENU(XRCID("edit_case"             ),CensusView::UponEditCase )
@@ -104,10 +158,10 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
     EVT_MENU(XRCID("column_width_fixed"    ),CensusView::UponColumnWidthFixed)
 
 // TODO ?? There has to be a better way than this.
-    EVT_UPDATE_UI(XRCID("edit_cell"            ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("edit_class"           ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("edit_cell"            ),CensusView::UponUpdateSingleItemActions)
+    EVT_UPDATE_UI(XRCID("edit_class"           ),CensusView::UponUpdateSingleItemActions)
     EVT_UPDATE_UI(XRCID("edit_case"            ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("run_cell"             ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("run_cell"             ),CensusView::UponUpdateSingleItemActions)
     EVT_UPDATE_UI(XRCID("run_class"            ),CensusView::UponUpdateApplicable)
     EVT_UPDATE_UI(XRCID("run_case"             ),CensusView::UponUpdateApplicable)
     EVT_UPDATE_UI(XRCID("print_case"           ),CensusView::UponUpdateApplicable)
@@ -118,23 +172,22 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
     EVT_UPDATE_UI(XRCID("delete_cells"         ),CensusView::UponUpdateApplicable)
     EVT_UPDATE_UI(XRCID("column_width_varying" ),CensusView::UponUpdateApplicable)
     EVT_UPDATE_UI(XRCID("column_width_fixed"   ),CensusView::UponUpdateApplicable)
-// TODO ?? Not label-edit.
-//    EVT_LIST_BEGIN_LABEL_EDIT(ID_LISTWINDOW,CensusView::UponBeginLabelEdit)
-// Don't do this either--it's triggered by spacebar.
-//    EVT_LIST_ITEM_ACTIVATED(ID_LISTWINDOW  ,CensusView::UponBeginLabelEdit)
 END_EVENT_TABLE()
 
 CensusView::CensusView()
     :ViewEx                          ()
     ,all_changes_have_been_validated_(true)
+    ,autosize_columns_               (true)
     ,composite_is_available_         (false)
     ,was_cancelled_                  (false)
     ,list_window_                    (0)
+    ,list_model_                     (new(wx) CensusViewDataViewModel(*this))
 {
 }
 
 CensusView::~CensusView()
 {
+    list_model_->DecRef();
 }
 
 inline std::vector<Input>& CensusView::case_parms()
@@ -240,14 +293,19 @@ bool CensusView::column_value_varies_across_cells
 
 wxWindow* CensusView::CreateChildWindow()
 {
-    list_window_ = new(wx) wxListView
+    list_window_ = new(wx) wxDataViewCtrl
         (GetFrame()
         ,ID_LISTWINDOW
+        ,wxDefaultPosition
+        ,wxDefaultSize
+        ,wxDV_ROW_LINES | wxDV_MULTIPLE
         );
+    list_window_->AssociateModel(list_model_);
 
     // Show headers.
-    Update();
     document().Modify(false);
+    list_model_->Reset(cell_parms().size());
+    Update();
 
     status() << std::flush;
 
@@ -257,33 +315,6 @@ wxWindow* CensusView::CreateChildWindow()
 CensusDocument& CensusView::document() const
 {
     return safely_dereference_as<CensusDocument>(GetDocument());
-}
-
-    // Display exactly those columns whose rows aren't all identical. For
-    // this purpose, consider as "rows" the individual cells--and also the
-    // case and class defaults, even though they aren't displayed in rows.
-    // Reason: although the case and class defaults are hidden, they're
-    // still information--so if the user made them different from any cell
-    // wrt some column, we respect that conscious decision.
-//
-// Only DisplayAllVaryingData() uses the data member this assigns,
-// so move the logic into that function (if that remains true).
-//
-void CensusView::identify_varying_columns()
-{
-    headers_of_varying_parameters_.clear();
-    std::vector<std::string> const& all_headers(case_parms()[0].member_names());
-    std::vector<std::string>::const_iterator i;
-    for(i = all_headers.begin(); i != all_headers.end(); ++i)
-        {
-        if
-            (  column_value_varies_across_cells(*i, class_parms())
-            || column_value_varies_across_cells(*i, cell_parms ())
-            )
-            {
-            headers_of_varying_parameters_.push_back(*i);
-            }
-        }
 }
 
 int CensusView::edit_parameters
@@ -340,20 +371,8 @@ int CensusView::selected_column()
 
 int CensusView::selected_row()
 {
-// TODO ?? Lossy type conversion: GetFirstSelected() returns a long
-// int, here and elsewhere in this file.
-    int row = list_window_->GetFirstSelected();
-    if(row < 0)
-        {
-        row = 0;
-// TODO ?? Reserve for grid implementation.
-//        fatal_error() << "No row selected." << LMI_FLUSH;
-        }
-    if(static_cast<int>(cell_parms().size()) <= row)
-        {
-// TODO ?? OK if about to delete?
-//        fatal_error() << "Invalid row selected." << LMI_FLUSH;
-        }
+    int row = list_model_->GetRow(list_window_->GetSelection());
+    LMI_ASSERT(0 <= row && static_cast<unsigned int>(row) < list_model_->GetCount());
     return row;
 }
 
@@ -540,34 +559,50 @@ void CensusView::apply_changes
     composite_is_available_ = false;
 }
 
-void CensusView::DisplayAllVaryingData()
+void CensusView::update_visible_columns()
 {
+    int width = autosize_columns_ ? wxCOL_WIDTH_AUTOSIZE : wxCOL_WIDTH_DEFAULT;
+
+    list_window_->ClearColumns();
+
     // Column zero (cell serial number) is always shown.
-    list_window_->InsertColumn(0, "Cell");
-    for(unsigned int column = 0; column < headers_of_varying_parameters_.size(); ++column)
-        {
-        list_window_->InsertColumn
-            (1 + column
-            ,insert_spaces_between_words(headers_of_varying_parameters_[column])
-            );
-        }
-    for(unsigned int row = 0; row < cell_parms().size(); ++row)
-        {
-        list_window_->InsertItem
-            (row
-            ,value_cast<std::string>(row)
-            ,0
-            );
-        // TODO ?? Necessary? Move to subfunction?
-//        long index = ?
-//        list_window_->SetItemData(index, row);
+    list_window_->AppendColumn
+        (new(wx) wxDataViewColumn
+            ("Cell"
+            ,new(wx) wxDataViewTextRenderer("string", wxDATAVIEW_CELL_INERT)
+            ,CensusViewDataViewModel::Col_CellNum
+            ,width
+            ,wxALIGN_NOT
+            ,wxDATAVIEW_COL_RESIZABLE
+            )
+        );
 
-        list_window_->SetItem(row, 0, value_cast<std::string>(1 + row));
-
-        for(unsigned int column = 0; column < headers_of_varying_parameters_.size(); ++column)
+    // Display exactly those columns whose rows aren't all identical. For
+    // this purpose, consider as "rows" the individual cells--and also the
+    // case and class defaults, even though they aren't displayed in rows.
+    // Reason: although the case and class defaults are hidden, they're
+    // still information--so if the user made them different from any cell
+    // wrt some column, we respect that conscious decision.
+    std::vector<std::string> const& all_headers(case_parms()[0].member_names());
+    std::vector<std::string>::const_iterator i;
+    unsigned int column;
+    for(i = all_headers.begin(), column = 0; i != all_headers.end(); ++i, ++column)
+        {
+        if
+            (  column_value_varies_across_cells(*i, class_parms())
+            || column_value_varies_across_cells(*i, cell_parms ())
+            )
             {
-            std::string s = cell_parms()[row][headers_of_varying_parameters_[column]].str();
-            list_window_->SetItem(row, 1 + column, s);
+            list_window_->AppendColumn
+                (new(wx) wxDataViewColumn
+                    (insert_spaces_between_words(*i)
+                    ,new(wx) wxDataViewTextRenderer("string", wxDATAVIEW_CELL_INERT)
+                    ,1 + column
+                    ,width
+                    ,wxALIGN_NOT
+                    ,wxDATAVIEW_COL_RESIZABLE
+                    )
+                );
             }
         }
 }
@@ -581,31 +616,6 @@ wxMenuBar* CensusView::MenuBar() const
 {
     return MenuBarFromXmlResource("census_view_menu");
 }
-
-///* TODO expunge?
-// Double-click handler.
-// Factor out code: exact duplicate of CensusView::UponEditCell().
-void CensusView::UponBeginLabelEdit(wxListEvent& event)
-{
-    int cell_number = selected_row();
-    Input& original_parms = cell_parms()[cell_number];
-    Input temp_parms(original_parms);
-
-    if(wxID_OK != edit_parameters(temp_parms, cell_title(cell_number)))
-        {
-        return;
-        }
-
-    // TODO ?? Wouldn't it be better just to have edit_parameters()
-    // say whether it changed anything?
-    if(temp_parms != original_parms)
-        {
-        original_parms = temp_parms;
-        UpdatePreservingSelection();
-        document().Modify(true);
-        }
-}
-//*/
 
 void CensusView::UponEditCell(wxCommandEvent&)
 {
@@ -623,7 +633,7 @@ void CensusView::UponEditCell(wxCommandEvent&)
     if(temp_parms != original_parms)
         {
         original_parms = temp_parms;
-        UpdatePreservingSelection();
+        Update();
         document().Modify(true);
         }
 }
@@ -652,7 +662,7 @@ void CensusView::UponEditClass(wxCommandEvent&)
             apply_changes(temp_parms, original_parms, true);
             }
         original_parms = temp_parms;
-        UpdatePreservingSelection();
+        Update();
         document().Modify(true);
         }
 }
@@ -678,7 +688,7 @@ void CensusView::UponEditCase(wxCommandEvent&)
             apply_changes(temp_parms, original_parms, false);
             }
         original_parms = temp_parms;
-        UpdatePreservingSelection();
+        Update();
         document().Modify(true);
         }
 }
@@ -686,36 +696,30 @@ void CensusView::UponEditCase(wxCommandEvent&)
 // Make each nonfrozen column wide enough to display its widest entry,
 // ignoring column headers.
 //
-// VZ note from sample program (is this true?):
-// "note that under MSW for SetColumnWidth() to work we need to create the
-// items with images initially even if we specify dummy image id"
-//
-// TODO ?? Offer both ways of autosizing.
-//
 void CensusView::UponColumnWidthVarying(wxCommandEvent&)
 {
+    autosize_columns_ = true;
+
     wxWindowUpdateLocker u(list_window_);
-    for(int j = 0; j < list_window_->GetColumnCount(); ++j)
+    for(unsigned int j = 0; j < list_window_->GetColumnCount(); ++j)
         {
-// TODO ?? Pick one, and remove the other?
-//        list_window_->SetColumnWidth(j, wxLIST_AUTOSIZE);
-        list_window_->SetColumnWidth(j, wxLIST_AUTOSIZE_USEHEADER);
+        list_window_->GetColumn(j)->SetWidth(wxCOL_WIDTH_AUTOSIZE);
         }
 }
 
 // Shrink all nonfrozen columns to default width.
 void CensusView::UponColumnWidthFixed(wxCommandEvent&)
 {
+    autosize_columns_ = false;
+
     wxWindowUpdateLocker u(list_window_);
-    for(int j = 0; j < list_window_->GetColumnCount(); ++j)
+    for(unsigned int j = 0; j < list_window_->GetColumnCount(); ++j)
         {
-        // WX !! Sad to hardcode '80', but that's the undocumented wx default.
-        // TODO ?? If it's a default, then why must it be specified?
-        list_window_->SetColumnWidth(j, 80);
+        list_window_->GetColumn(j)->SetWidth(wxCOL_WIDTH_DEFAULT);
         }
 }
 
-void CensusView::UponRightClick(wxContextMenuEvent&)
+void CensusView::UponRightClick(wxDataViewEvent&)
 {
     wxMenu* census_menu = wxXmlResource::Get()->LoadMenu("census_menu_ref");
     LMI_ASSERT(census_menu);
@@ -728,50 +732,32 @@ void CensusView::UponUpdateApplicable(wxUpdateUIEvent& e)
     e.Enable(true);
 }
 
-// Update the spreadsheet display.
-// If a parameter was formerly the same for all cells but now differs due
-//  to editing, then display its column for all cells.
-// If a column was previously displayed but is now the same for all cells
-//  due to editing, then display it no longer.
-// Similarly, if an old employee class is no longer used, remove it; and
-//  if a new one comes into use, display it.
+void CensusView::UponUpdateSingleItemActions(wxUpdateUIEvent& e)
+{
+    bool const is_single_sel = list_window_->GetSelection().IsOk();
+    e.Enable(is_single_sel);
+}
+
+/// Update the dataview display.
+///
+/// If a parameter was formerly the same for all cells but now differs due
+///  to editing, then display its column for all cells.
+/// If a column was previously displayed but is now the same for all cells
+///  due to editing, then display it no longer.
+/// Similarly, if an old employee class is no longer used, remove it; and
+///  if a new one comes into use, display it.
+
 void CensusView::Update()
 {
+    LMI_ASSERT(list_model_->GetCount() == cell_parms().size());
+
     wxWindowUpdateLocker u(list_window_);
 
-    list_window_->ClearAll();
-
     update_class_names();
-    identify_varying_columns();
-    DisplayAllVaryingData();
+    update_visible_columns();
 
     // All displayed data is valid when this function ends.
     all_changes_have_been_validated_ = true;
-}
-
-void CensusView::UpdatePreservingSelection()
-{
-    wxWindowUpdateLocker u(list_window_);
-
-    // Save active cell.
-    int selection = selected_row();
-    int top_row = list_window_->GetTopItem();
-// TODO ?? Reserve for grid implementation.
-//    int c = selected_column();
-
-    Update();
-
-    // Restore active cell.
-    // TODO ?? Better would be to restore to previously active col and row
-    // as determined by col hdr and cell #.
-    //
-    // This is kind of nasty. There's no SetTopItem(). Maybe it can be
-    // faked by 'ensuring' that the last row is visible first.
-    selection = std::min(selection, list_window_->GetItemCount());
-    list_window_->Select(selection);
-    list_window_->EnsureVisible(list_window_->GetItemCount());
-    list_window_->EnsureVisible(top_row);
-    list_window_->EnsureVisible(selection);
 }
 
 void CensusView::UponPrintCase(wxCommandEvent&)
@@ -863,7 +849,9 @@ void CensusView::UponAddCell(wxCommandEvent&)
         }
 
     cell_parms().push_back(case_parms()[0]);
-    UpdatePreservingSelection();
+    list_model_->RowAppended();
+
+    Update();
     document().Modify(true);
 }
 
@@ -874,8 +862,10 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
         return;
         }
 
-    unsigned int n_items = list_window_->GetItemCount();
-    unsigned int n_sel_items = list_window_->GetSelectedItemCount();
+    unsigned int n_items = list_model_->GetCount();
+    wxDataViewItemArray selection;
+    unsigned int n_sel_items = list_window_->GetSelections(selection);
+    LMI_ASSERT(n_sel_items == selection.size());
 
     if(n_items == n_sel_items)
         {
@@ -907,14 +897,12 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
         return;
         }
 
-    std::vector<unsigned int> erasures;
-    int index = list_window_->GetFirstSelected();
-    while(-1 != index)
+    std::vector<int> erasures;
+    typedef wxDataViewItemArray::const_iterator dvci;
+    for(dvci i = selection.begin(); i != selection.end(); ++i)
         {
-        erasures.push_back(index);
-        index = list_window_->GetNextSelected(index);
+        erasures.push_back(list_model_->GetRow(*i));
         }
-
     std::sort(erasures.begin(), erasures.end());
 
     LMI_ASSERT(cell_parms().size() == n_items);
@@ -926,7 +914,11 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
 
     for(unsigned int j = 0; j < cell_parms().size(); ++j)
         {
-        if(!contains(erasures, j))
+        if(contains(erasures, j))
+            {
+            list_model_->RowDeleted(j);
+            }
+        else
             {
             expurgated_cell_parms.push_back(cell_parms()[j]);
             }
@@ -1072,6 +1064,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
     std::back_insert_iterator<std::vector<Input> > iip(cell_parms());
     std::copy(cells.begin(), cells.end(), iip);
     document().Modify(true);
+    list_model_->Reset(cell_parms().size());
     Update();
     status() << std::flush;
 
