@@ -853,6 +853,11 @@ void CensusView::UponAddCell(wxCommandEvent&)
 
     Update();
     document().Modify(true);
+
+    wxDataViewItem const& z = list_model_->GetItem(list_model_->GetCount() - 1);
+    list_window_->UnselectAll();
+    list_window_->Select(z);
+    list_window_->EnsureVisible(z);
 }
 
 void CensusView::UponDeleteCells(wxCommandEvent&)
