@@ -488,21 +488,29 @@ class LMI_SO Input
 };
 
 /// Specialization of struct template reconstitutor for this Model
-/// and the base class that all its UDTs share.
+/// and the base class that all its input sequences share.
 
-template<> struct reconstitutor<datum_base, Input>
+template<> struct reconstitutor<datum_sequence, Input>
 {
-    typedef datum_base DesiredType;
+    typedef datum_sequence DesiredType;
     static DesiredType* reconstitute(any_member<Input>& m)
         {
         DesiredType* z = 0;
-        z = exact_cast<ce_product_name         >(m); if(z) return z;
-        z = exact_cast<datum_string            >(m); if(z) return z;
-        // Sequences.
-        z = exact_cast<datum_sequence          >(m); if(z) return z;
         z = exact_cast<mode_sequence           >(m); if(z) return z;
         z = exact_cast<payment_sequence        >(m); if(z) return z;
-        // mc- types.
+        return z;
+        }
+};
+
+/// Specialization of struct template reconstitutor for this Model
+/// and the base class that all its mc_enum types share.
+
+template<> struct reconstitutor<mc_enum_base, Input>
+{
+    typedef mc_enum_base DesiredType;
+    static DesiredType* reconstitute(any_member<Input>& m)
+        {
+        DesiredType* z = 0;
         z = exact_cast<mce_gen_basis           >(m); if(z) return z;
         z = exact_cast<mce_class               >(m); if(z) return z;
         z = exact_cast<mce_country             >(m); if(z) return z;
@@ -534,7 +542,19 @@ template<> struct reconstitutor<datum_base, Input>
         z = exact_cast<mce_to_point            >(m); if(z) return z;
         z = exact_cast<mce_uw_basis            >(m); if(z) return z;
         z = exact_cast<mce_yes_or_no           >(m); if(z) return z;
-        // tnr- types.
+        return z;
+        }
+};
+
+/// Specialization of struct template reconstitutor for this Model
+/// and the base class that all its tn_range types share.
+
+template<> struct reconstitutor<tn_range_base, Input>
+{
+    typedef tn_range_base DesiredType;
+    static DesiredType* reconstitute(any_member<Input>& m)
+        {
+        DesiredType* z = 0;
         z = exact_cast<tnr_age                 >(m); if(z) return z;
         z = exact_cast<tnr_corridor_factor     >(m); if(z) return z;
         z = exact_cast<tnr_date                >(m); if(z) return z;
@@ -549,16 +569,23 @@ template<> struct reconstitutor<datum_base, Input>
 };
 
 /// Specialization of struct template reconstitutor for this Model
-/// and the base class that all its input sequences share.
+/// and the base class that all its UDTs share.
 
-template<> struct reconstitutor<datum_sequence, Input>
+template<> struct reconstitutor<datum_base, Input>
 {
-    typedef datum_sequence DesiredType;
+    typedef datum_base DesiredType;
     static DesiredType* reconstitute(any_member<Input>& m)
         {
         DesiredType* z = 0;
-        z = exact_cast<mode_sequence           >(m); if(z) return z;
-        z = exact_cast<payment_sequence        >(m); if(z) return z;
+        z = exact_cast<ce_product_name         >(m); if(z) return z;
+        z = exact_cast<datum_string            >(m); if(z) return z;
+        // As long as type datum_sequence is used directly (and not
+        // only as a base class), the following line is necessary,
+        // even though datum_sequence's reconstitutor is called.
+        z = exact_cast<datum_sequence          >(m); if(z) return z;
+        z = reconstitutor<datum_sequence,Input>::reconstitute(m); if(z) return z;
+        z = reconstitutor<mc_enum_base  ,Input>::reconstitute(m); if(z) return z;
+        z = reconstitutor<tn_range_base ,Input>::reconstitute(m); if(z) return z;
         return z;
         }
 };

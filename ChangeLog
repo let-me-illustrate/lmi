@@ -28131,3 +28131,9 @@ Use spincontrols for durations (VS). See:
 When a cell is added, select it (VS). See:
   http://lists.nongnu.org/archive/html/lmi/2011-08/msg00003.html
 
+20110805T0028Z <gchicares@sbcglobal.net> [637]
+
+  input.hpp
+Specialize reconstitutors more finely (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2011-03/msg00005.html
+
