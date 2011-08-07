@@ -28136,4 +28136,18 @@ When a cell is added, select it (VS). See:
   input.hpp
 Specialize reconstitutors more finely (VS). See:
   http://lists.nongnu.org/archive/html/lmi/2011-03/msg00005.html
+  http://lists.nongnu.org/archive/html/lmi/2011-04/msg00002.html
+
+20110807T1202Z <gchicares@sbcglobal.net> [637]
+
+  input_sequence_entry.cpp
+  input_sequence_entry.hpp
+Prepare to embed InputSequenceEntry in wxDVC (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2011-07/msg00005.html
+
+20110807T1215Z <gchicares@sbcglobal.net> [637]
+
+  input_sequence_entry.cpp
+Make "..." button less obtrusive (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2011-06/msg00057.html
 
