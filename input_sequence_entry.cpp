@@ -1208,6 +1208,11 @@ InputSequenceButton::InputSequenceButton(wxWindow* parent, wxWindowID id)
             );
 
     SetToolTip("Open sequence editor");
+
+    // Set vertical size to 1px - it's ridiculously small, but the sizers will make it as
+    // tall as the text control. Use text extent of "..." for width, because standard
+    // buttons use more padding.
+    SetMinSize(wxSize(8 + GetTextExtent(GetLabel()).x, 1));
 }
 
 void InputSequenceButton::UponKillFocus(wxFocusEvent& event)
