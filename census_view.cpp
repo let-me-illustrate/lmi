@@ -300,6 +300,12 @@ wxWindow* CensusView::CreateChildWindow()
         ,wxDefaultSize
         ,wxDV_ROW_LINES | wxDV_MULTIPLE
         );
+
+    // Use same row height as used by wxListCtrl without icons. By default,
+    // wxDataViewCtrl uses slightly larger spacing, but we prefer to fit more
+    // on the screen over slightly improved readability.
+    list_window_->SetRowHeight(list_window_->GetCharHeight() + 1);
+
     list_window_->AssociateModel(list_model_);
 
     // Show headers.
