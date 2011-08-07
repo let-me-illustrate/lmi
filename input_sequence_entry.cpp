@@ -326,6 +326,7 @@ InputSequenceEditor::InputSequenceEditor(wxWindow* parent, wxString const& title
     buttons->AddButton(ok_button_ = new(wx) wxButton(this, wxID_OK));
     buttons->AddButton(cancel_button_ = new(wx) wxButton(this, wxID_CANCEL));
     buttons->Realize();
+    ok_button_->SetDefault();
 
     top->Add(buttons, wxSizerFlags().Expand().Border());
 
