@@ -28169,3 +28169,15 @@ Set default pushbutton to improve keyboard navigation. See:
 Improve documentation (VS). See:
   http://lists.nongnu.org/archive/html/lmi/2011-07/msg00030.html
 
+20110807T2144Z <gchicares@sbcglobal.net> [637]
+
+  census_view.cpp
+Adjust wxDVC row height (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2011-07/msg00041.html
+
+20110807T2217Z <gchicares@sbcglobal.net> [637]
+
+  census_view.cpp
+Select first cell upon view creation. See:
+  http://lists.nongnu.org/archive/html/lmi/2011-08/msg00009.html
+
