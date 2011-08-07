@@ -1192,6 +1192,8 @@ InputSequenceTextCtrl::InputSequenceTextCtrl(wxWindow* parent, wxWindowID id)
 
 void InputSequenceTextCtrl::UponKillFocus(wxFocusEvent& event)
 {
+    // Don't notify the parent (and thus wxDataViewCtrl) of focus change if
+    // it's within this InputSequenceEntry composite control.
     if(0 == event.GetWindow() || event.GetWindow()->GetParent() != GetParent())
         GetParent()->ProcessWindowEvent(event);
     event.Skip();
