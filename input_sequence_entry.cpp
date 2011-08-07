@@ -42,6 +42,7 @@
 #include <wx/choice.h>
 #include <wx/combobox.h>
 #include <wx/dialog.h>
+#include <wx/display.h>
 #include <wx/sizer.h>
 #include <wx/spinctrl.h>
 #include <wx/stattext.h>
@@ -797,6 +798,19 @@ void InputSequenceEditor::redo_layout()
     sizer->Layout();
     sizer->Fit(this);
     sizer->SetSizeHints(this);
+
+    // Make sure the editor is still fully visible and doesn't extend
+    // off-screen after being resized:
+    int display = wxDisplay::GetFromWindow(this);
+    wxDisplay dpy(display == wxNOT_FOUND ? 0 : display);
+    wxRect rect_display(dpy.GetClientArea());
+    wxRect rect_win(GetRect());
+
+    if(!rect_display.Contains(rect_win.GetBottomRight()))
+        {
+        rect_win.Offset(0, rect_display.GetBottom() - rect_win.GetBottom());
+        SetSize(rect_win);
+        }
 }
 
 wxString InputSequenceEditor::format_from_text(int row)
@@ -1334,7 +1348,6 @@ void InputSequenceEntry::UponOpenEditor(wxCommandEvent&)
     // Center the window on the [...] button for best locality -- it will be
     // close to user's point of attention and the mouse cursor.
     InputSequenceEditor editor(button_, title_, in);
-    editor.CentreOnParent();
 
     std::string sequence_string = std::string(text_->GetValue());
     datum_sequence const& ds = *member_cast<datum_sequence>(in[field_name()]);
@@ -1375,6 +1388,8 @@ void InputSequenceEntry::UponOpenEditor(wxCommandEvent&)
     editor.sequence(sequence);
 
     editor.associate_text_ctrl(text_);
+    editor.CentreOnParent();
+
     editor.ShowModal();
 }
 
