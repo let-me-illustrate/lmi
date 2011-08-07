@@ -313,6 +313,8 @@ wxWindow* CensusView::CreateChildWindow()
     list_model_->Reset(cell_parms().size());
     Update();
 
+    list_window_->Select(list_model_->GetItem(0));
+
     status() << std::flush;
 
     return list_window_;
