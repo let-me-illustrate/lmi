@@ -28163,3 +28163,9 @@ Improve pop-up dialog placement (VS). See:
 Set default pushbutton to improve keyboard navigation. See:
   http://lists.nongnu.org/archive/html/lmi/2011-07/msg00013.html
 
+20110807T2129Z <gchicares@sbcglobal.net> [637]
+
+  input_sequence_entry.cpp
+Improve documentation (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2011-07/msg00030.html
+
