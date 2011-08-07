@@ -28157,3 +28157,9 @@ Make "..." button less obtrusive (VS). See:
 Improve pop-up dialog placement (VS). See:
   http://lists.nongnu.org/archive/html/lmi/2011-07/msg00017.html
 
+20110807T1618Z <gchicares@sbcglobal.net> [637]
+
+  input_sequence_entry.cpp
+Set default pushbutton to improve keyboard navigation. See:
+  http://lists.nongnu.org/archive/html/lmi/2011-07/msg00013.html
+
