@@ -177,7 +177,7 @@ END_EVENT_TABLE()
 CensusView::CensusView()
     :ViewEx                          ()
     ,all_changes_have_been_validated_(true)
-    ,autosize_columns_               (true)
+    ,autosize_columns_               (false)
     ,composite_is_available_         (false)
     ,was_cancelled_                  (false)
     ,list_window_                    (0)
@@ -300,12 +300,20 @@ wxWindow* CensusView::CreateChildWindow()
         ,wxDefaultSize
         ,wxDV_ROW_LINES | wxDV_MULTIPLE
         );
+
+    // Use same row height as used by wxListCtrl without icons. By default,
+    // wxDataViewCtrl uses slightly larger spacing, but we prefer to fit more
+    // on the screen over slightly improved readability.
+    list_window_->SetRowHeight(list_window_->GetCharHeight() + 1);
+
     list_window_->AssociateModel(list_model_);
 
     // Show headers.
     document().Modify(false);
     list_model_->Reset(cell_parms().size());
     Update();
+
+    list_window_->Select(list_model_->GetItem(0));
 
     status() << std::flush;
 

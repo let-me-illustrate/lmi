@@ -28131,3 +28131,59 @@ Use spincontrols for durations (VS). See:
 When a cell is added, select it (VS). See:
   http://lists.nongnu.org/archive/html/lmi/2011-08/msg00003.html
 
+20110805T0028Z <gchicares@sbcglobal.net> [637]
+
+  input.hpp
+Specialize reconstitutors more finely (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2011-03/msg00005.html
+  http://lists.nongnu.org/archive/html/lmi/2011-04/msg00002.html
+
+20110807T1202Z <gchicares@sbcglobal.net> [637]
+
+  input_sequence_entry.cpp
+  input_sequence_entry.hpp
+Prepare to embed InputSequenceEntry in wxDVC (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2011-07/msg00005.html
+
+20110807T1215Z <gchicares@sbcglobal.net> [637]
+
+  input_sequence_entry.cpp
+Make "..." button less obtrusive (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2011-06/msg00057.html
+
+20110807T1609Z <gchicares@sbcglobal.net> [637]
+
+  input_sequence_entry.cpp
+Improve pop-up dialog placement (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2011-07/msg00017.html
+
+20110807T1618Z <gchicares@sbcglobal.net> [637]
+
+  input_sequence_entry.cpp
+Set default pushbutton to improve keyboard navigation. See:
+  http://lists.nongnu.org/archive/html/lmi/2011-07/msg00013.html
+
+20110807T2129Z <gchicares@sbcglobal.net> [637]
+
+  input_sequence_entry.cpp
+Improve documentation (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2011-07/msg00030.html
+
+20110807T2144Z <gchicares@sbcglobal.net> [637]
+
+  census_view.cpp
+Adjust wxDVC row height (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2011-07/msg00041.html
+
+20110807T2217Z <gchicares@sbcglobal.net> [637]
+
+  census_view.cpp
+Select first cell upon view creation. See:
+  http://lists.nongnu.org/archive/html/lmi/2011-08/msg00009.html
+
+20110808T1204Z <gchicares@sbcglobal.net> [637]
+
+  census_view.cpp
+Use fixed column width by default. See:
+  http://lists.nongnu.org/archive/html/lmi/2011-07/msg00029.html
+
