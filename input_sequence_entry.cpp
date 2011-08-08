@@ -42,13 +42,14 @@
 #include <wx/choice.h>
 #include <wx/combobox.h>
 #include <wx/dialog.h>
+#include <wx/display.h>
 #include <wx/sizer.h>
 #include <wx/spinctrl.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/valtext.h>
 
-#include <algorithm>              // std::copy(), std::find()
+#include <algorithm>              // std::copy()
 #include <iterator>               // std::back_inserter
 #include <map>
 #include <vector>
@@ -191,8 +192,15 @@ class InputSequenceEditor
         default_keyword_ = default_keyword;
     }
 
+    void associate_text_ctrl(wxTextCtrl* t)
+    {
+        associated_text_ctrl_ = t;
+    }
+
     void sequence(InputSequence const& s);
     std::string sequence_string();
+
+    virtual void EndModal(int retCode);
 
   private:
     void add_row();
@@ -289,6 +297,8 @@ class InputSequenceEditor
     // scalar absolute values for end durations; this is used to recompute
     // duration number for certain duration modes
     std::vector<int> duration_scalars_;
+
+    wxTextCtrl* associated_text_ctrl_;
 };
 
 InputSequenceEditor::InputSequenceEditor(wxWindow* parent, wxString const& title, Input const& input)
@@ -316,6 +326,7 @@ InputSequenceEditor::InputSequenceEditor(wxWindow* parent, wxString const& title
     buttons->AddButton(ok_button_ = new(wx) wxButton(this, wxID_OK));
     buttons->AddButton(cancel_button_ = new(wx) wxButton(this, wxID_CANCEL));
     buttons->Realize();
+    ok_button_->SetDefault();
 
     top->Add(buttons, wxSizerFlags().Expand().Border());
 
@@ -788,6 +799,19 @@ void InputSequenceEditor::redo_layout()
     sizer->Layout();
     sizer->Fit(this);
     sizer->SetSizeHints(this);
+
+    // Make sure the editor is still fully visible and doesn't extend
+    // off-screen after being resized:
+    int display = wxDisplay::GetFromWindow(this);
+    wxDisplay dpy(display == wxNOT_FOUND ? 0 : display);
+    wxRect rect_display(dpy.GetClientArea());
+    wxRect rect_win(GetRect());
+
+    if(!rect_display.Contains(rect_win.GetBottomRight()))
+        {
+        rect_win.Offset(0, rect_display.GetBottom() - rect_win.GetBottom());
+        SetSize(rect_win);
+        }
 }
 
 wxString InputSequenceEditor::format_from_text(int row)
@@ -1129,9 +1153,102 @@ void InputSequenceEditor::UponAddRow(wxCommandEvent& event)
 
     update_diagnostics();
 }
+
+void InputSequenceEditor::EndModal(int retCode)
+{
+    // We need to set the value as soon as possible -- when used in wxDataViewCtrl, the value
+    // is read from editor control as soon as focus changes, which is before ShowModal() returns.
+    if(associated_text_ctrl_ && retCode == wxID_OK)
+        associated_text_ctrl_->SetValue(sequence_string());
+
+    wxDialog::EndModal(retCode);
+}
+
+class InputSequenceTextCtrl
+    :public wxTextCtrl
+{
+  public:
+    InputSequenceTextCtrl(wxWindow* parent, wxWindowID id);
+
+  private:
+    void UponKillFocus(wxFocusEvent& event);
+    void UponChar(wxKeyEvent& event);
+};
+
+InputSequenceTextCtrl::InputSequenceTextCtrl(wxWindow* parent, wxWindowID id)
+    :wxTextCtrl(parent, id)
+{
+    ::Connect
+            (this
+            ,wxEVT_KILL_FOCUS
+            ,&InputSequenceTextCtrl::UponKillFocus
+            );
+    ::Connect
+            (this
+            ,wxEVT_CHAR
+            ,&InputSequenceTextCtrl::UponChar
+            );
+}
+
+void InputSequenceTextCtrl::UponKillFocus(wxFocusEvent& event)
+{
+    // Don't notify the parent (and thus wxDataViewCtrl) of focus change if
+    // it's within this InputSequenceEntry composite control.
+    if(0 == event.GetWindow() || event.GetWindow()->GetParent() != GetParent())
+        GetParent()->ProcessWindowEvent(event);
+    event.Skip();
+}
+
+void InputSequenceTextCtrl::UponChar(wxKeyEvent& event)
+{
+    if(!GetParent()->ProcessWindowEvent(event))
+        event.Skip();
+}
+
+class InputSequenceButton
+    :public wxButton
+{
+  public:
+    InputSequenceButton(wxWindow* parent, wxWindowID id);
+
+  private:
+    void UponKillFocus(wxFocusEvent& event);
+};
+
+InputSequenceButton::InputSequenceButton(wxWindow* parent, wxWindowID id)
+    :wxButton(parent, id, "...", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT)
+{
+    ::Connect
+            (this
+            ,wxEVT_KILL_FOCUS
+            ,&InputSequenceButton::UponKillFocus
+            );
+
+    SetToolTip("Open sequence editor");
+
+    // Set vertical size to 1px - it's ridiculously small, but the sizers will make it as
+    // tall as the text control. Use text extent of "..." for width, because standard
+    // buttons use more padding.
+    SetMinSize(wxSize(8 + GetTextExtent(GetLabel()).x, 1));
+}
+
+void InputSequenceButton::UponKillFocus(wxFocusEvent& event)
+{
+    // Don't notify the parent (and thus wxDataViewCtrl) of focus change if its within this
+    // InputSequenceEntry composite control or a InputSequenceEditor window opened from it.
+    if(0 == event.GetWindow() ||
+       (event.GetWindow()->GetParent() != GetParent() &&
+        wxGetTopLevelParent(event.GetWindow())->GetParent() != this))
+        {
+        GetParent()->ProcessWindowEvent(event);
+        }
+    event.Skip();
+}
+
 } // Unnamed namespace.
 
 InputSequenceEntry::InputSequenceEntry()
+    :input_(0)
 {
 }
 
@@ -1140,6 +1257,7 @@ InputSequenceEntry::InputSequenceEntry
     ,wxWindowID         id
     ,wxString const&    name
     )
+    :input_(0)
 {
     Create(parent, id, name);
 }
@@ -1161,16 +1279,8 @@ bool InputSequenceEntry::Create
 
     wxSizer* sizer = new(wx) wxBoxSizer(wxHORIZONTAL);
 
-    text_ = new(wx) wxTextCtrl(this, wxID_ANY);
-    button_ = new(wx) wxButton
-        (this
-        ,wxID_ANY
-        ,"..."
-        ,wxDefaultPosition
-        ,wxDefaultSize
-        ,wxBU_EXACTFIT
-        );
-    button_->SetToolTip("Open sequence editor");
+    text_ = new(wx) InputSequenceTextCtrl(this, wxID_ANY);
+    button_ = new(wx) InputSequenceButton(this, wxID_ANY);
 
     sizer->Add(text_, wxSizerFlags(1).Expand());
     sizer->Add(button_, wxSizerFlags().Expand().Border(wxLEFT, 1));
@@ -1187,21 +1297,63 @@ bool InputSequenceEntry::Create
     return true;
 }
 
+void InputSequenceEntry::input(Input const& input)
+{
+    input_ = &input;
+}
+
+Input const& InputSequenceEntry::input() const
+{
+    if(input_)
+        {
+        return *input_;
+        }
+    else
+        {
+        // MvcController's design uses editor controls that only have local
+        // knowledge of the value they directly edit. This isn't an
+        // unreasonable assumption and e.g. wxDataViewCtrl does the same.
+        // Unfortunately, it doesn't fit InputSequenceEditor, which needs
+        // additional information about the Input instance the sequence is used
+        // in. Hence this hack -- it gets the Input from the parent
+        // MvcController if used inside one.
+        MvcController const* tlw = dynamic_cast<MvcController const*>(wxGetTopLevelParent(const_cast<InputSequenceEntry*>(this)));
+        LMI_ASSERT(tlw);
+        Input const* input = dynamic_cast<Input const*>(&tlw->Model());
+        LMI_ASSERT(input);
+
+        return *input;
+        }
+}
+
+void InputSequenceEntry::field_name(std::string const& name)
+{
+    field_name_ = name;
+}
+
+std::string InputSequenceEntry::field_name() const
+{
+    if(!field_name_.empty())
+        {
+        return field_name_;
+        }
+    else
+        {
+        // see the explanation in input()
+        return std::string(GetName().c_str());
+        }
+}
+
 void InputSequenceEntry::UponOpenEditor(wxCommandEvent&)
 {
-    MvcController const* tlw = dynamic_cast<MvcController const*>(wxGetTopLevelParent(this));
-    LMI_ASSERT(tlw);
-    Input const* input = dynamic_cast<Input const*>(&tlw->Model());
-    LMI_ASSERT(input);
+    Input const& in = input();
 
     // Center the window on the [...] button for best locality -- it will be
     // close to user's point of attention and the mouse cursor.
-    InputSequenceEditor editor(button_, title_, *input);
-    editor.CentreOnParent();
+    InputSequenceEditor editor(button_, title_, in);
 
     std::string sequence_string = std::string(text_->GetValue());
-    std::string const name(GetName().c_str());
-    datum_sequence const& ds = *member_cast<datum_sequence>(input->operator[](name));
+    datum_sequence const& ds = *member_cast<datum_sequence>(in[field_name()]);
 
     std::map<std::string,std::string> const kwmap = ds.allowed_keywords();
     std::vector<std::string> const keywords =
@@ -1216,11 +1368,11 @@ void InputSequenceEntry::UponOpenEditor(wxCommandEvent&)
 
     InputSequence sequence
         (sequence_string
-        ,input->years_to_maturity()
-        ,input->issue_age        ()
-        ,input->retirement_age   ()
-        ,input->inforce_year     ()
-        ,input->effective_year   ()
+        ,in.years_to_maturity()
+        ,in.issue_age        ()
+        ,in.retirement_age   ()
+        ,in.inforce_year     ()
+        ,in.effective_year   ()
         ,0
         ,keywords
         );
@@ -1238,10 +1390,10 @@ void InputSequenceEntry::UponOpenEditor(wxCommandEvent&)
 
     editor.sequence(sequence);
 
-    if(wxID_OK == editor.ShowModal())
-        {
-        text_->SetValue(editor.sequence_string());
-        }
+    editor.associate_text_ctrl(text_);
+    editor.CentreOnParent();
+
+    editor.ShowModal();
 }
 
 IMPLEMENT_DYNAMIC_CLASS(InputSequenceEntryXmlHandler, wxXmlResourceHandler)

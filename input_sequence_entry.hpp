@@ -31,6 +31,9 @@
 #include <wx/panel.h>
 #include <wx/xrc/xmlres.h>
 
+#include <string>
+
+class Input;
 class WXDLLIMPEXP_FWD_CORE wxButton;
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 
@@ -42,12 +45,21 @@ class InputSequenceEntry
     InputSequenceEntry(wxWindow* parent, wxWindowID id, wxString const& name);
     bool Create(wxWindow* parent, wxWindowID id, wxString const& name);
 
+    void input(Input const& input);
+    Input const& input() const;
+
+    void field_name(std::string const& name);
+    std::string field_name() const;
+
     wxTextCtrl& text_ctrl() {return *text_;}
 
     void set_popup_title(wxString const& title) {title_ = title;}
 
   private:
     void UponOpenEditor(wxCommandEvent&);
+
+    Input const* input_;
+    std::string field_name_;
 
     wxTextCtrl* text_;
     wxButton*   button_;
