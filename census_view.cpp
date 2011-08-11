@@ -157,7 +157,6 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
     EVT_MENU(XRCID("column_width_varying"  ),CensusView::UponColumnWidthVarying)
     EVT_MENU(XRCID("column_width_fixed"    ),CensusView::UponColumnWidthFixed)
 
-// TODO ?? There has to be a better way than this.
     EVT_UPDATE_UI(XRCID("edit_cell"            ),CensusView::UponUpdateSingleSelection)
     EVT_UPDATE_UI(XRCID("edit_class"           ),CensusView::UponUpdateSingleSelection)
     EVT_UPDATE_UI(XRCID("edit_case"            ),CensusView::UponUpdateAlwaysEnabled)
@@ -220,7 +219,6 @@ inline std::vector<Input> const& CensusView::class_parms() const
     return document().doc_.class_parms_;
 }
 
-// TODO ?? Is this abstraction actually useful?
 std::string CensusView::cell_title(int index)
 {
     std::string full_name(cell_parms()[index]["InsuredName"].str());
@@ -233,7 +231,6 @@ std::string CensusView::cell_title(int index)
     return title.str();
 }
 
-// TODO ?? Is this abstraction actually useful?
 std::string CensusView::class_title(int index)
 {
     std::string class_name = class_name_from_cell_number(index);
@@ -251,7 +248,6 @@ std::string CensusView::class_title(int index)
     return title.str();
 }
 
-// TODO ?? Is this abstraction actually useful?
 std::string CensusView::class_name_from_cell_number(int cell_number) const
 {
     return cell_parms()[cell_number]["EmployeeClass"].str();
@@ -438,7 +434,6 @@ void CensusView::update_class_names()
             // insert its parameters into the rebuilt vector.
             std::vector<Input>::const_iterator j = cell_parms().begin();
             bool found = false;
-            // TODO ?? There has to be a nicer way to do this with STL.
             while(j != cell_parms().end())
                 {
                 if(*n == (*j)["EmployeeClass"].str())
