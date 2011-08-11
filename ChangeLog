@@ -28187,3 +28187,28 @@ Select first cell upon view creation. See:
 Use fixed column width by default. See:
   http://lists.nongnu.org/archive/html/lmi/2011-07/msg00029.html
 
+20110811T0936Z <gchicares@sbcglobal.net> [637]
+
+  census_view.cpp
+Fix model notifications in CensusView::UponDeleteCells() (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2011-08/msg00039.html
+
+20110811T0953Z <gchicares@sbcglobal.net> [637]
+
+  census_view.cpp
+After deletion, select one cell (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2011-08/msg00041.html
+
+20110811T1222Z <gchicares@sbcglobal.net> [637]
+
+  census_view.cpp
+After deletion, ensure selected cell is visible. See:
+  http://lists.nongnu.org/archive/html/lmi/2011-08/msg00044.html
+
+20110811T1238Z <gchicares@sbcglobal.net> [637]
+
+  census_view.cpp
+  census_view.hpp
+Disable deletion if no cell is selected. See:
+  http://lists.nongnu.org/archive/html/lmi/2011-08/msg00044.html
+
