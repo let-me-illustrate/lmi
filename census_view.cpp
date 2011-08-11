@@ -944,6 +944,12 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
     for(unsigned int j = erasures.front(); j < cell_parms().size(); ++j)
         list_model_->RowValueChanged(j, CensusViewDataViewModel::Col_CellNum);
 
+    unsigned int const newsel = std::min
+        (static_cast<unsigned int>(erasures.front())
+        ,cell_parms().size() - 1
+        );
+    list_window_->Select(list_model_->GetItem(newsel));
+
     Update();
     document().Modify(true);
 }
