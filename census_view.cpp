@@ -948,7 +948,9 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
         (static_cast<unsigned int>(erasures.front())
         ,cell_parms().size() - 1
         );
-    list_window_->Select(list_model_->GetItem(newsel));
+    wxDataViewItem const& y = list_model_->GetItem(newsel);
+    list_window_->Select(y);
+    list_window_->EnsureVisible(y);
 
     Update();
     document().Modify(true);
