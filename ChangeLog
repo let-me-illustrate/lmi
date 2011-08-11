@@ -28212,3 +28212,20 @@ After deletion, ensure selected cell is visible. See:
 Disable deletion if no cell is selected. See:
   http://lists.nongnu.org/archive/html/lmi/2011-08/msg00044.html
 
+20110811T2203Z <gchicares@sbcglobal.net> [637]
+
+  census_view.cpp
+Enable "class" items consistently. This change affects only a command
+that is not presently offered, so it has no user-observable effect.
+
+20110811T2208Z <gchicares@sbcglobal.net> [637]
+
+  census_view.cpp
+  census_view.hpp
+Rename enablement functions for clarity.
+
+20110811T2216Z <gchicares@sbcglobal.net> [632]
+
+  census_view.cpp
+Remove several defect markers that are now recognized as jejune.
+
