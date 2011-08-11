@@ -158,20 +158,20 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
     EVT_MENU(XRCID("column_width_fixed"    ),CensusView::UponColumnWidthFixed)
 
 // TODO ?? There has to be a better way than this.
-    EVT_UPDATE_UI(XRCID("edit_cell"            ),CensusView::UponUpdateSingleItemActions)
-    EVT_UPDATE_UI(XRCID("edit_class"           ),CensusView::UponUpdateSingleItemActions)
-    EVT_UPDATE_UI(XRCID("edit_case"            ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("run_cell"             ),CensusView::UponUpdateSingleItemActions)
-    EVT_UPDATE_UI(XRCID("run_class"            ),CensusView::UponUpdateSingleItemActions)
-    EVT_UPDATE_UI(XRCID("run_case"             ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("print_case"           ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("print_case_to_disk"   ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("print_spreadsheet"    ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("paste_census"         ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("add_cell"             ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("edit_cell"            ),CensusView::UponUpdateSingleSelection)
+    EVT_UPDATE_UI(XRCID("edit_class"           ),CensusView::UponUpdateSingleSelection)
+    EVT_UPDATE_UI(XRCID("edit_case"            ),CensusView::UponUpdateAlwaysEnabled)
+    EVT_UPDATE_UI(XRCID("run_cell"             ),CensusView::UponUpdateSingleSelection)
+    EVT_UPDATE_UI(XRCID("run_class"            ),CensusView::UponUpdateSingleSelection)
+    EVT_UPDATE_UI(XRCID("run_case"             ),CensusView::UponUpdateAlwaysEnabled)
+    EVT_UPDATE_UI(XRCID("print_case"           ),CensusView::UponUpdateAlwaysEnabled)
+    EVT_UPDATE_UI(XRCID("print_case_to_disk"   ),CensusView::UponUpdateAlwaysEnabled)
+    EVT_UPDATE_UI(XRCID("print_spreadsheet"    ),CensusView::UponUpdateAlwaysEnabled)
+    EVT_UPDATE_UI(XRCID("paste_census"         ),CensusView::UponUpdateAlwaysEnabled)
+    EVT_UPDATE_UI(XRCID("add_cell"             ),CensusView::UponUpdateAlwaysEnabled)
     EVT_UPDATE_UI(XRCID("delete_cells"         ),CensusView::UponUpdateNonemptySelection)
-    EVT_UPDATE_UI(XRCID("column_width_varying" ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("column_width_fixed"   ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("column_width_varying" ),CensusView::UponUpdateAlwaysEnabled)
+    EVT_UPDATE_UI(XRCID("column_width_fixed"   ),CensusView::UponUpdateAlwaysEnabled)
 END_EVENT_TABLE()
 
 CensusView::CensusView()
@@ -735,12 +735,12 @@ void CensusView::UponRightClick(wxDataViewEvent&)
     delete census_menu;
 }
 
-void CensusView::UponUpdateApplicable(wxUpdateUIEvent& e)
+void CensusView::UponUpdateAlwaysEnabled(wxUpdateUIEvent& e)
 {
     e.Enable(true);
 }
 
-void CensusView::UponUpdateSingleItemActions(wxUpdateUIEvent& e)
+void CensusView::UponUpdateSingleSelection(wxUpdateUIEvent& e)
 {
     bool const is_single_sel = list_window_->GetSelection().IsOk();
     e.Enable(is_single_sel);
