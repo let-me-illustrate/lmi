@@ -85,6 +85,7 @@ class CensusView
     void UponRunCaseToSpreadsheet   (wxCommandEvent&);
     void UponUpdateApplicable       (wxUpdateUIEvent&);
     void UponUpdateSingleItemActions(wxUpdateUIEvent&);
+    void UponUpdateNonemptySelection(wxUpdateUIEvent&);
 
     bool DoAllCells(mcenum_emission);
 

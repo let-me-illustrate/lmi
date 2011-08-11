@@ -169,7 +169,7 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
     EVT_UPDATE_UI(XRCID("print_spreadsheet"    ),CensusView::UponUpdateApplicable)
     EVT_UPDATE_UI(XRCID("paste_census"         ),CensusView::UponUpdateApplicable)
     EVT_UPDATE_UI(XRCID("add_cell"             ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("delete_cells"         ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("delete_cells"         ),CensusView::UponUpdateNonemptySelection)
     EVT_UPDATE_UI(XRCID("column_width_varying" ),CensusView::UponUpdateApplicable)
     EVT_UPDATE_UI(XRCID("column_width_fixed"   ),CensusView::UponUpdateApplicable)
 END_EVENT_TABLE()
@@ -746,6 +746,13 @@ void CensusView::UponUpdateSingleItemActions(wxUpdateUIEvent& e)
     e.Enable(is_single_sel);
 }
 
+void CensusView::UponUpdateNonemptySelection(wxUpdateUIEvent& e)
+{
+    wxDataViewItemArray selection;
+    unsigned int n_sel_items = list_window_->GetSelections(selection);
+    e.Enable(0 < n_sel_items);
+}
+
 /// Update the dataview display.
 ///
 /// If a parameter was formerly the same for all cells but now differs due
@@ -879,6 +886,8 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
     wxDataViewItemArray selection;
     unsigned int n_sel_items = list_window_->GetSelections(selection);
     LMI_ASSERT(n_sel_items == selection.size());
+    // This handler should have been disabled if no cell is selected.
+    LMI_ASSERT(0 < n_sel_items);
 
     if(n_items == n_sel_items)
         {
