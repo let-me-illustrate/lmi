@@ -83,8 +83,8 @@ class CensusView
     void UponRunCell                (wxCommandEvent&);
     void UponRunCase                (wxCommandEvent&);
     void UponRunCaseToSpreadsheet   (wxCommandEvent&);
-    void UponUpdateApplicable       (wxUpdateUIEvent&);
-    void UponUpdateSingleItemActions(wxUpdateUIEvent&);
+    void UponUpdateAlwaysEnabled    (wxUpdateUIEvent&);
+    void UponUpdateSingleSelection  (wxUpdateUIEvent&);
     void UponUpdateNonemptySelection(wxUpdateUIEvent&);
 
     bool DoAllCells(mcenum_emission);
