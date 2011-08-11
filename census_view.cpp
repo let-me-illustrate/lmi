@@ -910,7 +910,7 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
         return;
         }
 
-    std::vector<int> erasures;
+    wxArrayInt erasures;
     typedef wxDataViewItemArray::const_iterator dvci;
     for(dvci i = selection.begin(); i != selection.end(); ++i)
         {
@@ -927,11 +927,7 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
 
     for(unsigned int j = 0; j < cell_parms().size(); ++j)
         {
-        if(contains(erasures, j))
-            {
-            list_model_->RowDeleted(j);
-            }
-        else
+        if(!contains(erasures, j))
             {
             expurgated_cell_parms.push_back(cell_parms()[j]);
             }
@@ -940,6 +936,13 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
 
 //    cell_parms().swap(expurgated_cell_parms); // TODO ?? Would this be better?
     cell_parms() = expurgated_cell_parms;
+
+    // Send notifications about changes to the wxDataViewCtrl model. Two things
+    // changed: some rows were deleted and cell number of some rows shifted
+    // accordingly.
+    list_model_->RowsDeleted(erasures);
+    for(unsigned int j = erasures.front(); j < cell_parms().size(); ++j)
+        list_model_->RowValueChanged(j, CensusViewDataViewModel::Col_CellNum);
 
     Update();
     document().Modify(true);
