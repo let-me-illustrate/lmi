@@ -172,7 +172,7 @@ bool IllustrationView::OnCreate(wxDocument* doc, long int flags)
     bool has_view_been_created = false;
     try
         {
-        if(wxID_OK != EditProperties())
+        if(wxID_CANCEL == EditProperties())
             {
             return has_view_been_created;
             }
