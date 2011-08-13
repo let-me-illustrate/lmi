@@ -118,7 +118,7 @@ class CensusView
 
     int edit_parameters
         (Input&             parameters
-        ,std::string const& name
+        ,std::string const& title
         );
 
     bool is_invalid();

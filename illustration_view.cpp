@@ -43,6 +43,7 @@
 #include "configurable_settings.hpp"
 #include "custom_io_0.hpp"
 #include "default_view.hpp"
+#include "edit_mvc_docview_parameters.hpp"
 #include "emit_ledger.hpp"
 #include "handle_exceptions.hpp"
 #include "illustration_document.hpp"
@@ -51,7 +52,6 @@
 #include "istream_to_string.hpp"
 #include "ledger.hpp"
 #include "ledger_text_formats.hpp"
-#include "mvc_controller.hpp"
 #include "safely_dereference_as.hpp"
 #include "timer.hpp"
 #include "wx_new.hpp"
@@ -131,22 +131,11 @@ warning() << "That command should have been disabled." << LMI_FLUSH;
         return wxID_CANCEL;
         }
 
-    bool dirty = document().IsModified();
-
-    Input edited_lmi_input = input_data();
-    DefaultView const default_view;
-    MvcController controller(GetFrame(), edited_lmi_input, default_view);
-    int rc = controller.ShowModal();
-    if(wxID_OK == rc)
-        {
-        if(edited_lmi_input != input_data())
-            {
-            input_data() = edited_lmi_input;
-            dirty = true;
-            }
-        document().Modify(dirty);
-        }
-    return rc;
+    return edit_mvc_docview_parameters<DefaultView>
+        (input_data()
+        ,document()
+        ,GetFrame()
+        );
 }
 
 void IllustrationView::DisplaySelectedValuesAsHtml()

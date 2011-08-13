@@ -28,11 +28,11 @@
 
 #include "mec_view.hpp"
 
+#include "edit_mvc_docview_parameters.hpp"
 #include "handle_exceptions.hpp"
 #include "mec_document.hpp"
 #include "mec_input.hpp"
 #include "mec_server.hpp"
-#include "mvc_controller.hpp"
 #include "safely_dereference_as.hpp"
 #include "wx_new.hpp"
 
@@ -118,21 +118,11 @@ wxWindow* mec_view::CreateChildWindow()
 
 int mec_view::EditProperties()
 {
-    bool dirty = document().IsModified();
-    mec_input edited_input = input_data();
-    mec_mvc_view const v;
-    MvcController controller(GetFrame(), edited_input, v);
-    int rc = controller.ShowModal();
-    if(wxID_OK == rc)
-        {
-        if(edited_input != input_data())
-            {
-            input_data() = edited_input;
-            dirty = true;
-            }
-        document().Modify(dirty);
-        }
-    return rc;
+    return edit_mvc_docview_parameters<mec_mvc_view>
+        (input_data()
+        ,document()
+        ,GetFrame()
+        );
 }
 
 wxIcon mec_view::Icon() const

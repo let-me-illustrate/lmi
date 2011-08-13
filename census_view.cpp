@@ -34,13 +34,13 @@
 #include "configurable_settings.hpp"
 #include "contains.hpp"
 #include "default_view.hpp"
+#include "edit_mvc_docview_parameters.hpp"
 #include "illustration_view.hpp"
 #include "illustrator.hpp"
 #include "input.hpp"
 #include "ledger.hpp"
 #include "ledger_text_formats.hpp"
 #include "miscellany.hpp" // is_ok_for_cctype()
-#include "mvc_controller.hpp"
 #include "path_utility.hpp"
 #include "safely_dereference_as.hpp"
 #include "wx_new.hpp"
@@ -322,8 +322,8 @@ CensusDocument& CensusView::document() const
 }
 
 int CensusView::edit_parameters
-    (Input&             lmi_input
-    ,std::string const& name
+    (Input&             parameters
+    ,std::string const& title
     )
 {
     if(is_invalid())
@@ -331,23 +331,12 @@ int CensusView::edit_parameters
         return false;
         }
 
-    bool dirty = document().IsModified();
-
-    Input edited_lmi_input = lmi_input;
-    DefaultView const default_view;
-    MvcController controller(GetFrame(), edited_lmi_input, default_view);
-    controller.SetTitle(name);
-    int rc = controller.ShowModal();
-    if(wxID_OK == rc)
-        {
-        if(lmi_input != edited_lmi_input)
-            {
-            lmi_input = edited_lmi_input;
-            dirty = true;
-            }
-        document().Modify(dirty);
-        }
-    return rc;
+    return edit_mvc_docview_parameters<DefaultView>
+        (parameters
+        ,document()
+        ,GetFrame()
+        ,title
+        );
 }
 
 bool CensusView::is_invalid()
