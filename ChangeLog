@@ -28229,3 +28229,27 @@ Rename enablement functions for clarity.
   census_view.cpp
 Remove several defect markers that are now recognized as jejune.
 
+20110813T2104Z <gchicares@sbcglobal.net> [632]
+
+  Makefile.am
+  census_view.cpp
+  census_view.hpp
+  edit_mvc_docview_parameters.hpp [new file]
+  illustration_view.cpp
+  mec_view.cpp
+Unify duplicates.
+
+20110813T2138Z <gchicares@sbcglobal.net> [632]
+
+  census_view.cpp
+  illustration_view.cpp
+  mec_view.cpp
+Don't assume that x != wxID_OK implies x == wxID_CANCEL.
+
+20110813T2307Z <gchicares@sbcglobal.net> [632]
+
+  illustration_view.cpp
+  mec_view.cpp
+Improve exception safety and documentation. EditProperties() was not
+the only possible source of an exception.
+
