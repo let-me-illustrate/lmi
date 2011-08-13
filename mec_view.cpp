@@ -137,9 +137,8 @@ wxMenuBar* mec_view::MenuBar() const
 
 /// This virtual function calls its base-class namesake explicitly.
 ///
-/// Trap any exception thrown by EditProperties() to ensure that this
-/// function returns 'false' on failure, lest wx's doc-view framework
-/// create a zombie view. See:
+/// Trap exceptions to ensure that this function returns 'false' on
+/// failure, lest wx's doc-view framework create a zombie view. See:
 ///   http://lists.nongnu.org/archive/html/lmi/2008-12/msg00017.html
 
 bool mec_view::OnCreate(wxDocument* doc, long int flags)

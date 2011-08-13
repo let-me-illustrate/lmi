@@ -156,22 +156,23 @@ wxMenuBar* IllustrationView::MenuBar() const
 
 /// This virtual function calls its base-class namesake explicitly.
 ///
-/// Trap any exception thrown by EditProperties() to ensure that this
-/// function returns 'false' on failure, lest wx's doc-view framework
-/// create a zombie view. See:
+/// Trap exceptions to ensure that this function returns 'false' on
+/// failure, lest wx's doc-view framework create a zombie view. See:
 ///   http://lists.nongnu.org/archive/html/lmi/2008-12/msg00017.html
 
 bool IllustrationView::OnCreate(wxDocument* doc, long int flags)
 {
-    if(flags & LMI_WX_CHILD_DOCUMENT)
-        {
-        is_phony_ = true;
-        return ViewEx::OnCreate(doc, flags);
-        }
-
     bool has_view_been_created = false;
+
     try
         {
+        if(flags & LMI_WX_CHILD_DOCUMENT)
+            {
+            is_phony_ = true;
+            has_view_been_created = ViewEx::OnCreate(doc, flags);
+            return has_view_been_created;
+            }
+
         if(wxID_CANCEL == EditProperties())
             {
             return has_view_been_created;
