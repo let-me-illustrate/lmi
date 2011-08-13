@@ -615,7 +615,7 @@ void CensusView::UponEditCell(wxCommandEvent&)
     Input& original_parms = cell_parms()[cell_number];
     Input temp_parms(original_parms);
 
-    if(wxID_OK != edit_parameters(temp_parms, cell_title(cell_number)))
+    if(wxID_CANCEL == edit_parameters(temp_parms, cell_title(cell_number)))
         {
         return;
         }
@@ -637,7 +637,7 @@ void CensusView::UponEditClass(wxCommandEvent&)
     Input& original_parms = *class_parms_from_class_name(class_name);
     Input temp_parms(original_parms);
 
-    if(wxID_OK != edit_parameters(temp_parms, class_title(cell_number)))
+    if(wxID_CANCEL == edit_parameters(temp_parms, class_title(cell_number)))
         {
         return;
         }
@@ -663,7 +663,7 @@ void CensusView::UponEditCase(wxCommandEvent&)
 {
     Input& original_parms = case_parms()[0];
     Input temp_parms(original_parms);
-    if(wxID_OK != edit_parameters(temp_parms, "Default parameters for case"))
+    if(wxID_CANCEL == edit_parameters(temp_parms, "Default parameters for case"))
         {
         return;
         }
