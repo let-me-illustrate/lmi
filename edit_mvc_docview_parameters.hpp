@@ -1,4 +1,4 @@
-// Edit parameters of a wx docview class using lmi's MVC framework.
+// Edit input parameters using lmi's MVC framework with wx docview.
 //
 // Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
 //
@@ -27,16 +27,18 @@
 #include "config.hpp"
 
 #include "mvc_controller.hpp"
+#include "oecumenic_enumerations.hpp"
 
 #include <wx/docview.h>
 #include <wx/window.h>
 
+#include <stdexcept>
 #include <string>
 
-/// Edit parameters of a wx docview class using lmi's MVC framework.
+/// Edit input parameters using lmi's MVC framework with wx docview.
 
 template<typename ViewT, typename ModelT>
-int edit_mvc_docview_parameters
+oenum_mvc_dv_rc edit_mvc_docview_parameters
     (ModelT&            parameters
     ,wxDocument&        document
     ,wxWindow*          frame
@@ -48,11 +50,17 @@ int edit_mvc_docview_parameters
     ViewT const view;
     MvcController controller(frame, edited_parameters, view);
     controller.SetTitle(title);
-    int rc = controller.ShowModal();
-    if(wxID_OK == rc)
+    int const z = controller.ShowModal();
+    oenum_mvc_dv_rc rc =
+          (wxID_CANCEL == z) ? oe_mvc_dv_cancelled
+        : (wxID_OK     == z) ? oe_mvc_dv_unchanged
+        : throw std::logic_error("Unexpected ShowModal() return code.")
+        ;
+    if(wxID_OK == z)
         {
         if(parameters != edited_parameters)
             {
+            rc = oe_mvc_dv_changed;
             parameters = edited_parameters;
             dirty = true;
             }

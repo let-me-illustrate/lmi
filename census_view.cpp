@@ -321,14 +321,14 @@ CensusDocument& CensusView::document() const
     return safely_dereference_as<CensusDocument>(GetDocument());
 }
 
-int CensusView::edit_parameters
+oenum_mvc_dv_rc CensusView::edit_parameters
     (Input&             parameters
     ,std::string const& title
     )
 {
     if(is_invalid())
         {
-        return wxID_CANCEL;
+        return oe_mvc_dv_cancelled;
         }
 
     return edit_mvc_docview_parameters<DefaultView>
@@ -615,7 +615,7 @@ void CensusView::UponEditCell(wxCommandEvent&)
     Input& original_parms = cell_parms()[cell_number];
     Input temp_parms(original_parms);
 
-    if(wxID_CANCEL == edit_parameters(temp_parms, cell_title(cell_number)))
+    if(oe_mvc_dv_cancelled == edit_parameters(temp_parms, cell_title(cell_number)))
         {
         return;
         }
@@ -637,7 +637,7 @@ void CensusView::UponEditClass(wxCommandEvent&)
     Input& original_parms = *class_parms_from_class_name(class_name);
     Input temp_parms(original_parms);
 
-    if(wxID_CANCEL == edit_parameters(temp_parms, class_title(cell_number)))
+    if(oe_mvc_dv_cancelled == edit_parameters(temp_parms, class_title(cell_number)))
         {
         return;
         }
@@ -663,7 +663,8 @@ void CensusView::UponEditCase(wxCommandEvent&)
 {
     Input& original_parms = case_parms()[0];
     Input temp_parms(original_parms);
-    if(wxID_CANCEL == edit_parameters(temp_parms, "Default parameters for case"))
+
+    if(oe_mvc_dv_cancelled == edit_parameters(temp_parms, "Default parameters for case"))
         {
         return;
         }

@@ -116,7 +116,7 @@ wxWindow* mec_view::CreateChildWindow()
     return html_window_ = new(wx) wxHtmlWindow(GetFrame());
 }
 
-int mec_view::EditProperties()
+oenum_mvc_dv_rc mec_view::edit_parameters()
 {
     return edit_mvc_docview_parameters<mec_mvc_view>
         (input_data()
@@ -146,7 +146,7 @@ bool mec_view::OnCreate(wxDocument* doc, long int flags)
     bool has_view_been_created = false;
     try
         {
-        if(wxID_CANCEL == EditProperties())
+        if(oe_mvc_dv_cancelled == edit_parameters())
             {
             return has_view_been_created;
             }
@@ -176,7 +176,7 @@ wxPrintout* mec_view::OnCreatePrintout()
 
 void mec_view::UponProperties(wxCommandEvent&)
 {
-    if(wxID_OK == EditProperties())
+    if(oe_mvc_dv_changed == edit_parameters())
         {
         Run();
         }

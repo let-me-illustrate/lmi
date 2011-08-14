@@ -123,12 +123,12 @@ wxWindow* IllustrationView::CreateChildWindow()
     return html_window_ = new(wx) wxHtmlWindow(GetFrame());
 }
 
-int IllustrationView::EditProperties()
+oenum_mvc_dv_rc IllustrationView::edit_parameters()
 {
     if(is_phony_)
         {
 warning() << "That command should have been disabled." << LMI_FLUSH;
-        return wxID_CANCEL;
+        return oe_mvc_dv_cancelled;
         }
 
     return edit_mvc_docview_parameters<DefaultView>
@@ -173,7 +173,7 @@ bool IllustrationView::OnCreate(wxDocument* doc, long int flags)
             return has_view_been_created;
             }
 
-        if(wxID_CANCEL == EditProperties())
+        if(oe_mvc_dv_cancelled == edit_parameters())
             {
             return has_view_been_created;
             }
@@ -240,7 +240,7 @@ void IllustrationView::UponProperties(wxCommandEvent&)
 //        return;
         }
 
-    if(wxID_OK == EditProperties())
+    if(oe_mvc_dv_changed == edit_parameters())
         {
         Run();
         }
