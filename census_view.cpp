@@ -612,19 +612,11 @@ wxMenuBar* CensusView::MenuBar() const
 void CensusView::UponEditCell(wxCommandEvent&)
 {
     int cell_number = selected_row();
-    Input& original_parms = cell_parms()[cell_number];
-    Input temp_parms(original_parms);
+    Input& modifiable_parms = cell_parms()[cell_number];
+    std::string const title = cell_title(cell_number);
 
-    if(oe_mvc_dv_cancelled == edit_parameters(temp_parms, cell_title(cell_number)))
+    if(oe_mvc_dv_changed == edit_parameters(modifiable_parms, title))
         {
-        return;
-        }
-
-    // TODO ?? Wouldn't it be better just to have edit_parameters()
-    // say whether it changed anything?
-    if(temp_parms != original_parms)
-        {
-        original_parms = temp_parms;
         Update();
         document().Modify(true);
         }
@@ -634,15 +626,11 @@ void CensusView::UponEditClass(wxCommandEvent&)
 {
     int cell_number = selected_row();
     std::string class_name = class_name_from_cell_number(cell_number);
-    Input& original_parms = *class_parms_from_class_name(class_name);
-    Input temp_parms(original_parms);
+    Input& modifiable_parms = *class_parms_from_class_name(class_name);
+    Input const unmodified_parms(modifiable_parms);
+    std::string const title = class_title(cell_number);
 
-    if(oe_mvc_dv_cancelled == edit_parameters(temp_parms, class_title(cell_number)))
-        {
-        return;
-        }
-
-    if(!(temp_parms == original_parms))
+    if(oe_mvc_dv_changed == edit_parameters(modifiable_parms, title))
         {
         int z = wxMessageBox
             ("Apply all changes to every cell in this class?"
@@ -651,9 +639,8 @@ void CensusView::UponEditClass(wxCommandEvent&)
             );
         if(wxYES == z)
             {
-            apply_changes(temp_parms, original_parms, true);
+            apply_changes(modifiable_parms, unmodified_parms, true);
             }
-        original_parms = temp_parms;
         Update();
         document().Modify(true);
         }
@@ -661,15 +648,11 @@ void CensusView::UponEditClass(wxCommandEvent&)
 
 void CensusView::UponEditCase(wxCommandEvent&)
 {
-    Input& original_parms = case_parms()[0];
-    Input temp_parms(original_parms);
+    Input& modifiable_parms = case_parms()[0];
+    Input const unmodified_parms(modifiable_parms);
+    std::string const title = "Default parameters for case";
 
-    if(oe_mvc_dv_cancelled == edit_parameters(temp_parms, "Default parameters for case"))
-        {
-        return;
-        }
-
-    if(!(temp_parms == original_parms))
+    if(oe_mvc_dv_changed == edit_parameters(modifiable_parms, title))
         {
         int z = wxMessageBox
             ("Apply all changes to every cell?"
@@ -678,9 +661,8 @@ void CensusView::UponEditCase(wxCommandEvent&)
             );
         if(wxYES == z)
             {
-            apply_changes(temp_parms, original_parms, false);
+            apply_changes(modifiable_parms, unmodified_parms, false);
             }
-        original_parms = temp_parms;
         Update();
         document().Modify(true);
         }
