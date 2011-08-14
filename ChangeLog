@@ -28259,3 +28259,22 @@ the only possible source of an exception.
 Fix defect introduced 20050312T0301Z, from an original file predating
 the lmi epoch: wxID_CANCEL != false.
 
+20110814T1416Z <gchicares@sbcglobal.net> [632]
+
+  census_view.cpp
+  census_view.hpp
+  edit_mvc_docview_parameters.hpp
+  illustration_view.cpp
+  illustration_view.hpp
+  mec_view.cpp
+  mec_view.hpp
+  oecumenic_enumerations.hpp
+Prefer an enumerative return code.
+
+20110814T2332Z <gchicares@sbcglobal.net> [631]
+
+  census_view.cpp
+Fix defect introduced 20050312T0301Z, from an original file predating
+the lmi epoch: it's wasteful and confusing to test twice whether input
+changed.
+
