@@ -328,7 +328,7 @@ int CensusView::edit_parameters
 {
     if(is_invalid())
         {
-        return false;
+        return wxID_CANCEL;
         }
 
     return edit_mvc_docview_parameters<DefaultView>
