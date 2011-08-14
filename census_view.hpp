@@ -30,13 +30,14 @@
 
 #include "input.hpp"
 #include "ledger.hpp"
-#include "mc_enum_type_enums.hpp" // enum mcenum_emission
+#include "mc_enum_type_enums.hpp"       // enum mcenum_emission
 #include "obstruct_slicing.hpp"
+#include "oecumenic_enumerations.hpp"
 #include "uncopyable_lmi.hpp"
 
 #include <boost/shared_ptr.hpp>
 
-#include <wx/defs.h> // wx shared-library 'attributes'
+#include <wx/defs.h>                    // WXDLLIMPEXP*
 
 #include <string>
 #include <vector>
@@ -116,7 +117,7 @@ class CensusView
         ,std::vector<Input> const& cells
         ) const;
 
-    int edit_parameters
+    oenum_mvc_dv_rc edit_parameters
         (Input&             parameters
         ,std::string const& title
         );

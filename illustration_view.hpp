@@ -37,6 +37,7 @@
 #include "view_ex.hpp"
 
 #include "obstruct_slicing.hpp"
+#include "oecumenic_enumerations.hpp"
 #include "uncopyable_lmi.hpp"
 
 #include <boost/shared_ptr.hpp>
@@ -73,7 +74,7 @@ class IllustrationView
   private:
     IllustrationDocument& document() const;
 
-    int EditProperties();
+    oenum_mvc_dv_rc edit_parameters();
 
     // ViewEx required implementation.
     virtual wxWindow* CreateChildWindow();
