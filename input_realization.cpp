@@ -151,7 +151,6 @@ Input::permissible_specified_amount_strategy_keywords()
         all_keywords["gsp"     ] = "SAGSP"           ;
         all_keywords["corridor"] = "SACorridor"      ;
         all_keywords["salary"  ] = "SASalary"        ;
-        all_keywords["none"    ] = "SAInputScalar"   ;
         }
 //    std::map<std::string,std::string> permissible_keywords = all_keywords;
     std::map<std::string,std::string> permissible_keywords;
@@ -161,7 +160,6 @@ Input::permissible_specified_amount_strategy_keywords()
         {
         permissible_keywords.insert(*i);
         }
-    permissible_keywords.erase("none");
 
     bool specified_amount_indeterminate =
            mce_solve_specamt == SolveType
@@ -532,7 +530,7 @@ std::string Input::RealizeSpecifiedAmount()
         ,SpecifiedAmountStrategyRealized_
         ,SpecifiedAmount
         ,permissible_specified_amount_strategy_keywords()
-        ,std::string("none")
+        ,std::string("")
         );
 }
 
@@ -591,7 +589,7 @@ std::string Input::RealizePayment()
         ,PaymentStrategyRealized_
         ,Payment
         ,Payment.allowed_keywords()
-        ,std::string("none")
+        ,Payment.default_keyword()
         );
 }
 
@@ -620,7 +618,7 @@ std::string Input::RealizeCorporationPayment()
         ,CorporationPaymentStrategyRealized_
         ,CorporationPayment
         ,CorporationPayment.allowed_keywords()
-        ,std::string("none")
+        ,CorporationPayment.default_keyword()
         );
 }
 
