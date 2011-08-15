@@ -28278,3 +28278,9 @@ Fix defect introduced 20050312T0301Z, from an original file predating
 the lmi epoch: it's wasteful and confusing to test twice whether input
 changed.
 
+20110815T0022Z <gchicares@sbcglobal.net> [631]
+
+  mvc_controller.cpp
+Display busy cursor while preparing to edit input. See:
+  http://lists.nongnu.org/archive/html/lmi/2011-08/msg00047.html
+

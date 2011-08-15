@@ -43,18 +43,19 @@
 #include "wx_utility.hpp"
 #include "wx_workarounds.hpp"
 
-#include <wx/app.h> // wxApp::IsActive()
+#include <wx/app.h>                     // wxApp::IsActive()
 #include <wx/checkbox.h>
 #include <wx/ctrlsub.h>
 #include <wx/datectrl.h>
 #include <wx/radiobox.h>
 #include <wx/spinctrl.h>
 #include <wx/textctrl.h>
+#include <wx/utils.h>                   // wxBusyCursor
 #include <wx/xrc/xmlres.h>
 #include <wx/wupdlock.h>
 
-#include <cstddef>  // std::size_t
-#include <cstring>  // std::strlen()
+#include <cstddef>                      // std::size_t
+#include <cstring>                      // std::strlen()
 
 namespace
 {
@@ -95,6 +96,15 @@ MvcController::MvcController
     ,unit_test_under_way_                 (false)
 {
     model_.TestInitialConsistency();
+
+    // Show busy cursor only after TestInitialConsistency() returns,
+    // because that function may pop up a messagebox in reasonable
+    // circumstances: if that happens, it's too confusing to leave
+    // the busy cursor alone, and too complicated to remove it; and
+    // that function is normally quite fast. Messageboxes are not
+    // expected to appear in the rest of this ctor unless something
+    // is gravely wrong.
+    wxBusyCursor wait;
 
     char const* resource_file_name = view_.ResourceFileName();
     LMI_ASSERT(0 != resource_file_name && 0 != std::strlen(resource_file_name));
