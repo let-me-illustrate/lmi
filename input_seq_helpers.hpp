@@ -46,8 +46,6 @@ namespace detail
         stringmap_iterator
         ;
 
-    stringmap invert_map(stringmap const& sm);
-
     std::vector<std::string> LMI_SO extract_keys_from_string_map
         (stringmap const& keyword_dictionary
         );
@@ -104,21 +102,6 @@ namespace detail
             }
     }
 } // namespace detail
-
-// Input-sequence fields use their own keywords, which might differ from
-// xenum strings.
-//
-// TODO ?? Perhaps we should just use the same strings.
-//
-// TODO ?? Perhaps we should move this elsewhere.
-//
-// We return a map by value so that we can modify it, e.g. by removing
-// a death benefit option not available with a certain policy form.
-
-std::map<std::string, std::string, std::less<std::string> > dbo_map();
-std::map<std::string, std::string, std::less<std::string> > mode_map();
-std::map<std::string, std::string, std::less<std::string> > sastrategy_map();
-std::map<std::string, std::string, std::less<std::string> > pmtstrategy_map();
 
 #endif // input_seq_helpers_hpp
 
