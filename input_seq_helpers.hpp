@@ -28,7 +28,12 @@
 
 #include "alert.hpp"
 #include "input_sequence.hpp"
+#include "mc_enum.hpp"
 #include "so_attributes.hpp"
+#include "tn_range.hpp"
+
+#include <boost/type_traits/is_enum.hpp>
+#include <boost/utility/enable_if.hpp>
 
 #include <map>
 #include <string>
@@ -102,6 +107,35 @@ namespace detail
             }
     }
 } // namespace detail
+
+template<typename T>
+std::vector<T> convert_vector_type
+    (std::vector<mc_enum<T> > const& ve
+    ,typename boost::enable_if<boost::is_enum<T> >::type* = 0
+    )
+{
+    std::vector<T> z;
+    typename std::vector<mc_enum<T> >::const_iterator ve_i;
+    for(ve_i = ve.begin(); ve_i != ve.end(); ++ve_i)
+        {
+        z.push_back(ve_i->value());
+        }
+    return z;
+}
+
+template<typename Number, typename Trammel>
+std::vector<Number> convert_vector_type
+    (std::vector<tn_range<Number,Trammel> > const& vr
+    )
+{
+    std::vector<Number> z;
+    typename std::vector<tn_range<Number,Trammel> >::const_iterator vr_i;
+    for(vr_i = vr.begin(); vr_i != vr.end(); ++vr_i)
+        {
+        z.push_back(vr_i->value());
+        }
+    return z;
+}
 
 #endif // input_seq_helpers_hpp
 
