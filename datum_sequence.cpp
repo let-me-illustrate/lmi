@@ -194,10 +194,8 @@ std::map<std::string,std::string> const payment_sequence::allowed_keywords() con
         all_keywords["gsp"     ] = "PmtGSP"          ;
         all_keywords["corridor"] = "PmtCorridor"     ;
         all_keywords["table"   ] = "PmtTable"        ;
-        all_keywords["none"    ] = "PmtInputScalar"  ;
         }
     std::map<std::string,std::string> permissible_keywords = all_keywords;
-    permissible_keywords.erase("none");
 
     return permissible_keywords;
 }

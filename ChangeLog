@@ -28284,3 +28284,23 @@ changed.
 Display busy cursor while preparing to edit input. See:
   http://lists.nongnu.org/archive/html/lmi/2011-08/msg00047.html
 
+20110815T0049Z <gchicares@sbcglobal.net> [623]
+
+  input_seq_helpers.cpp
+  input_seq_helpers.hpp
+Remove dead code.
+
+20110815T0118Z <gchicares@sbcglobal.net> [623]
+
+  input_seq_helpers.hpp
+  mec_input.cpp
+  yare_input.cpp
+Move convert_vector_type().
+
+20110815T0150Z <gchicares@sbcglobal.net> [623]
+
+  datum_sequence.cpp
+  input_realization.cpp
+  mc_enum_types.xpp
+Mark "scalar" strategies as obsolete; remove them where warranted.
+
