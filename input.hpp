@@ -200,8 +200,7 @@ class LMI_SO Input
 
     void SetSolveDurations();
 
-    std::map<std::string,std::string> const permissible_specified_amount_strategy_keywords();
-    std::map<std::string,std::string> const permissible_death_benefit_option_keywords();
+    std::map<std::string,std::string> const permissible_specified_amount_strategy_keywords(); // Obsolete.
 
     std::string RealizeExtraMonthlyCustodialFee   ();
     std::string RealizeExtraCompensationOnAssets  ();
@@ -388,8 +387,8 @@ class LMI_SO Input
     numeric_sequence         CorporationTaxBracket           ;
     numeric_sequence         TaxBracket                      ;
     numeric_sequence         ProjectedSalary                 ;
-    datum_sequence           SpecifiedAmount                 ;
-    datum_sequence           DeathBenefitOption              ;
+    specamt_sequence         SpecifiedAmount                 ;
+    dbo_sequence             DeathBenefitOption              ;
     payment_sequence         Payment                         ;
     mode_sequence            PaymentMode                     ;
     payment_sequence         CorporationPayment              ;
@@ -496,9 +495,11 @@ template<> struct reconstitutor<datum_sequence, Input>
     static DesiredType* reconstitute(any_member<Input>& m)
         {
         DesiredType* z = 0;
+        z = exact_cast<dbo_sequence            >(m); if(z) return z;
         z = exact_cast<mode_sequence           >(m); if(z) return z;
         z = exact_cast<numeric_sequence        >(m); if(z) return z;
         z = exact_cast<payment_sequence        >(m); if(z) return z;
+        z = exact_cast<specamt_sequence        >(m); if(z) return z;
         return z;
         }
 };
