@@ -108,6 +108,39 @@ template<> inline std::string value_cast<std::string,datum_sequence>
     return from.value();
 }
 
+/// Numeric MVC input sequence.
+
+class numeric_sequence
+    :public datum_sequence
+    ,private boost::equality_comparable<numeric_sequence,numeric_sequence>
+{
+  public:
+    numeric_sequence() {}
+    explicit numeric_sequence(std::string const& s) : datum_sequence(s) {}
+
+    numeric_sequence& operator=(std::string const&);
+
+    virtual bool numeric_values_are_allowable() const {return true;}
+    virtual bool keyword_values_are_allowable() const {return false;}
+    virtual std::map<std::string,std::string> const allowed_keywords() const;
+};
+
+bool operator==(numeric_sequence const&, numeric_sequence const&);
+
+template<> inline numeric_sequence value_cast<numeric_sequence,std::string>
+    (std::string const& from)
+{
+    return numeric_sequence(from);
+}
+
+template<> inline std::string value_cast<std::string,numeric_sequence>
+    (numeric_sequence const& from)
+{
+    return from.value();
+}
+
+/// MVC input sequence for payments.
+
 class payment_sequence
     :public datum_sequence
     ,private boost::equality_comparable<payment_sequence,payment_sequence>
@@ -136,6 +169,8 @@ template<> inline std::string value_cast<std::string,payment_sequence>
 {
     return from.value();
 }
+
+/// MVC input sequence for payment mode.
 
 class mode_sequence
     :public datum_sequence
