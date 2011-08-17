@@ -380,31 +380,31 @@ class LMI_SO Input
     mce_yes_or_no            HoneymoonEndorsement            ;
     tnr_proportion           PostHoneymoonSpread             ;
     tnr_nonnegative_double   InforceHoneymoonValue           ;
-    datum_sequence           ExtraMonthlyCustodialFee        ;
-    datum_sequence           ExtraCompensationOnAssets       ;
-    datum_sequence           ExtraCompensationOnPremium      ;
-    datum_sequence           PartialMortalityMultiplier      ;
-    datum_sequence           CurrentCoiMultiplier            ;
-    datum_sequence           CorporationTaxBracket           ;
-    datum_sequence           TaxBracket                      ;
-    datum_sequence           ProjectedSalary                 ;
+    numeric_sequence         ExtraMonthlyCustodialFee        ;
+    numeric_sequence         ExtraCompensationOnAssets       ;
+    numeric_sequence         ExtraCompensationOnPremium      ;
+    numeric_sequence         PartialMortalityMultiplier      ;
+    numeric_sequence         CurrentCoiMultiplier            ;
+    numeric_sequence         CorporationTaxBracket           ;
+    numeric_sequence         TaxBracket                      ;
+    numeric_sequence         ProjectedSalary                 ;
     datum_sequence           SpecifiedAmount                 ;
     datum_sequence           DeathBenefitOption              ;
     payment_sequence         Payment                         ;
     mode_sequence            PaymentMode                     ;
     payment_sequence         CorporationPayment              ;
     mode_sequence            CorporationPaymentMode          ;
-    datum_sequence           GeneralAccountRate              ;
-    datum_sequence           SeparateAccountRate             ;
-    datum_sequence           NewLoan                         ;
-    datum_sequence           Withdrawal                      ;
-    datum_sequence           FlatExtra                       ;
-    datum_sequence           PolicyLevelFlatExtra            ;
-    datum_sequence           HoneymoonValueSpread            ;
-    datum_sequence           PremiumHistory                  ;
-    datum_sequence           SpecamtHistory                  ;
-    datum_sequence           FundAllocations                 ; // INPUT !! http://savannah.nongnu.org/support/?104481
-    datum_sequence           CashValueEnhancementRate        ;
+    numeric_sequence         GeneralAccountRate              ;
+    numeric_sequence         SeparateAccountRate             ;
+    numeric_sequence         NewLoan                         ;
+    numeric_sequence         Withdrawal                      ;
+    numeric_sequence         FlatExtra                       ;
+    numeric_sequence         PolicyLevelFlatExtra            ;
+    numeric_sequence         HoneymoonValueSpread            ;
+    numeric_sequence         PremiumHistory                  ;
+    numeric_sequence         SpecamtHistory                  ;
+    numeric_sequence         FundAllocations                 ; // INPUT !! http://savannah.nongnu.org/support/?104481
+    numeric_sequence         CashValueEnhancementRate        ;
     mce_yes_or_no            CreateSupplementalReport        ;
     mce_report_column        SupplementalReportColumn00      ;
     mce_report_column        SupplementalReportColumn01      ;
@@ -497,6 +497,7 @@ template<> struct reconstitutor<datum_sequence, Input>
         {
         DesiredType* z = 0;
         z = exact_cast<mode_sequence           >(m); if(z) return z;
+        z = exact_cast<numeric_sequence        >(m); if(z) return z;
         z = exact_cast<payment_sequence        >(m); if(z) return z;
         return z;
         }
