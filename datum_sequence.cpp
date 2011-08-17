@@ -169,7 +169,25 @@ bool operator==(datum_sequence const& lhs, datum_sequence const& rhs)
     return lhs.equals(rhs);
 }
 
-// Payments.
+// Numeric MVC input sequence.
+
+numeric_sequence& numeric_sequence::operator=(std::string const& s)
+{
+    datum_sequence::operator=(s);
+    return *this;
+}
+
+std::map<std::string,std::string> const numeric_sequence::allowed_keywords() const
+{
+    return datum_sequence::allowed_keywords();
+}
+
+bool operator==(numeric_sequence const& lhs, numeric_sequence const& rhs)
+{
+    return lhs.equals(rhs);
+}
+
+// MVC input sequence for payments.
 
 payment_sequence& payment_sequence::operator=(std::string const& s)
 {
@@ -205,7 +223,7 @@ bool operator==(payment_sequence const& lhs, payment_sequence const& rhs)
     return lhs.equals(rhs);
 }
 
-// Payment modes.
+// MVC input sequence for payment mode.
 
 mode_sequence& mode_sequence::operator=(std::string const& s)
 {
