@@ -202,5 +202,68 @@ template<> inline std::string value_cast<std::string,mode_sequence>
     return from.value();
 }
 
+/// MVC input sequence for specified amount.
+
+class specamt_sequence
+    :public datum_sequence
+    ,private boost::equality_comparable<specamt_sequence,specamt_sequence>
+{
+  public:
+    specamt_sequence() {}
+    explicit specamt_sequence(std::string const& s) : datum_sequence(s) {}
+
+    specamt_sequence& operator=(std::string const&);
+
+    virtual bool numeric_values_are_allowable() const {return true;}
+    virtual bool keyword_values_are_allowable() const {return true;}
+    virtual std::map<std::string,std::string> const allowed_keywords() const;
+};
+
+bool operator==(specamt_sequence const&, specamt_sequence const&);
+
+template<> inline specamt_sequence value_cast<specamt_sequence,std::string>
+    (std::string const& from)
+{
+    return specamt_sequence(from);
+}
+
+template<> inline std::string value_cast<std::string,specamt_sequence>
+    (specamt_sequence const& from)
+{
+    return from.value();
+}
+
+/// MVC input sequence for death benefit option.
+
+class dbo_sequence
+    :public datum_sequence
+    ,private boost::equality_comparable<dbo_sequence,dbo_sequence>
+{
+  public:
+    dbo_sequence() {}
+    explicit dbo_sequence(std::string const& s) : datum_sequence(s) {}
+
+    dbo_sequence& operator=(std::string const&);
+
+    virtual bool numeric_values_are_allowable() const {return false;}
+    virtual bool keyword_values_are_allowable() const {return true;}
+    virtual std::string const default_keyword() const;
+    virtual std::map<std::string,std::string> const allowed_keywords() const;
+};
+
+bool operator==(dbo_sequence const&, dbo_sequence const&);
+
+template<> inline dbo_sequence value_cast<dbo_sequence,std::string>
+    (std::string const& from)
+{
+    return dbo_sequence(from);
+}
+
+template<> inline std::string value_cast<std::string,dbo_sequence>
+    (dbo_sequence const& from)
+{
+    return from.value();
+}
+
 #endif // datum_sequence_hpp
 
