@@ -28304,3 +28304,16 @@ Move convert_vector_type().
   mc_enum_types.xpp
 Mark "scalar" strategies as obsolete; remove them where warranted.
 
+20110817T1457Z <gchicares@sbcglobal.net> [623]
+
+  datum_sequence.cpp
+  datum_sequence.hpp
+Add a general numeric input-sequence type.
+
+20110817T1843Z <gchicares@sbcglobal.net> [623]
+
+  input.hpp
+  mec_input.hpp
+  mec_server.cpp
+Use the general numeric input-sequence type added 20110817T1457Z.
+
