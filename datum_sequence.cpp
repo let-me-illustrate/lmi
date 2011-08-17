@@ -264,6 +264,11 @@ specamt_sequence& specamt_sequence::operator=(std::string const& s)
     return *this;
 }
 
+// Cf. Input::permissible_specified_amount_strategy_keywords(), which
+// is marked as obsolete but may turn out to be necessary. The crucial
+// issue is how to restrict keywords in context. If they are somehow
+// restricted here, then perhaps the map shouldn't be static.
+
 std::map<std::string,std::string> const specamt_sequence::allowed_keywords() const
 {
     if(keyword_values_are_blocked())
