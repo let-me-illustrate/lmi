@@ -28317,3 +28317,17 @@ Add a general numeric input-sequence type.
   mec_server.cpp
 Use the general numeric input-sequence type added 20110817T1457Z.
 
+20110817T2009Z <gchicares@sbcglobal.net> [623]
+
+  datum_sequence.cpp
+  datum_sequence.hpp
+Add input-sequence benefit types.
+
+20110817T2055Z <gchicares@sbcglobal.net> [622]
+
+  datum_sequence.cpp
+  input.hpp
+  input_realization.cpp
+  skin.xrc
+Use the input-sequence benefit types added 20110817T2009Z.
+
