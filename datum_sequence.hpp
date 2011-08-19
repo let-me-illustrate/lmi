@@ -59,6 +59,12 @@
 /// Still others permit both numbers and keywords. Specified amount,
 /// e.g., must accommodate numeric entry.
 ///
+/// The dtor is pure because this class should not be instantiated.
+/// Most of the other virtuals would normally be overridden in any
+/// derived class, but aren't pure because that requirement is obvious
+/// and it's convenient to invoke them in assert_sanity() to validate
+/// ctor postconditions.
+///
 /// Implicitly-declared special member functions do the right thing.
 
 class datum_sequence
@@ -68,16 +74,12 @@ class datum_sequence
   public:
     datum_sequence();
     explicit datum_sequence(std::string const&);
-    virtual ~datum_sequence();
+    virtual ~datum_sequence() = 0;
 
     datum_sequence& operator=(std::string const&);
 
     void block_keyword_values(bool);
 
-    // For the nonce, this class is used concretely. These three
-    // functions will become pure virtual once a full complement of
-    // derived classes has been written.
-    //
     virtual bool numeric_values_are_allowable() const;
     virtual bool keyword_values_are_allowable() const;
     virtual std::string const default_keyword() const;
@@ -96,17 +98,19 @@ class datum_sequence
 
 bool operator==(datum_sequence const&, datum_sequence const&);
 
-template<> inline datum_sequence value_cast<datum_sequence,std::string>
-    (std::string const& from)
-{
-    return datum_sequence(from);
-}
-
-template<> inline std::string value_cast<std::string,datum_sequence>
-    (datum_sequence const& from)
-{
-    return from.value();
-}
+// Specialize value_cast<> for each derived class, e.g., as follows:
+//
+// template<> inline datum_sequence value_cast<datum_sequence,std::string>
+//     (std::string const& from)
+// {
+//     return datum_sequence(from);
+// }
+//
+// template<> inline std::string value_cast<std::string,datum_sequence>
+//     (datum_sequence const& from)
+// {
+//     return from.value();
+// }
 
 /// Numeric MVC input sequence.
 

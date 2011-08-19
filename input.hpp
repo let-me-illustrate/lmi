@@ -581,10 +581,6 @@ template<> struct reconstitutor<datum_base, Input>
         DesiredType* z = 0;
         z = exact_cast<ce_product_name         >(m); if(z) return z;
         z = exact_cast<datum_string            >(m); if(z) return z;
-        // As long as type datum_sequence is used directly (and not
-        // only as a base class), the following line is necessary,
-        // even though datum_sequence's reconstitutor is called.
-        z = exact_cast<datum_sequence          >(m); if(z) return z;
         z = reconstitutor<datum_sequence,Input>::reconstitute(m); if(z) return z;
         z = reconstitutor<mc_enum_base  ,Input>::reconstitute(m); if(z) return z;
         z = reconstitutor<tn_range_base ,Input>::reconstitute(m); if(z) return z;
