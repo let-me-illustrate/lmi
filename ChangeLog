@@ -28342,3 +28342,8 @@ Make class datum_sequence abstract.
   input_sequence_entry.cpp
 Permit floating-point numbers in input-sequence editor.
 
+20110819T1150Z <gchicares@sbcglobal.net> [622]
+
+  input_sequence_entry.cpp
+Show only first line of formatted_diagnostics().
+

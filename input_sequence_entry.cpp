@@ -1085,7 +1085,7 @@ wxString InputSequenceEditor::get_diagnostics_message()
         ,0
         ,keywords_
         );
-    wxString msg = sequence.formatted_diagnostics().c_str();
+    wxString msg = sequence.formatted_diagnostics(true).c_str();
     // formatted_diagnostics() returns newline-terminated string, fix it:
     msg.Trim();
     return msg;
@@ -1388,7 +1388,7 @@ void InputSequenceEntry::UponOpenEditor(wxCommandEvent&)
         ,keywords
         );
 
-    std::string const diagnostics = sequence.formatted_diagnostics();
+    std::string const diagnostics = sequence.formatted_diagnostics(true);
     if(!diagnostics.empty())
         {
         warning()
