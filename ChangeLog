@@ -28347,3 +28347,13 @@ Permit floating-point numbers in input-sequence editor.
   input_sequence_entry.cpp
 Show only first line of formatted_diagnostics().
 
+20110819T1650Z <wboutin@charter.net> [622]
+
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_group_carveout2.xrc
+  skin_reg_d.xrc
+  skin_single_premium.xrc
+  skin_variable_annuity.xrc
+Use the input-sequence benefit types added 20110817T2009Z.
+
