@@ -28331,3 +28331,14 @@ Add input-sequence benefit types.
   skin.xrc
 Use the input-sequence benefit types added 20110817T2009Z.
 
+20110819T0029Z <gchicares@sbcglobal.net> [622]
+
+  datum_sequence.hpp
+  input.hpp
+Make class datum_sequence abstract.
+
+20110819T1131Z <gchicares@sbcglobal.net> [622]
+
+  input_sequence_entry.cpp
+Permit floating-point numbers in input-sequence editor.
+
