@@ -34,13 +34,13 @@
 #include "configurable_settings.hpp"
 #include "contains.hpp"
 #include "default_view.hpp"
+#include "edit_mvc_docview_parameters.hpp"
 #include "illustration_view.hpp"
 #include "illustrator.hpp"
 #include "input.hpp"
 #include "ledger.hpp"
 #include "ledger_text_formats.hpp"
 #include "miscellany.hpp" // is_ok_for_cctype()
-#include "mvc_controller.hpp"
 #include "path_utility.hpp"
 #include "safely_dereference_as.hpp"
 #include "wx_new.hpp"
@@ -157,21 +157,20 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
     EVT_MENU(XRCID("column_width_varying"  ),CensusView::UponColumnWidthVarying)
     EVT_MENU(XRCID("column_width_fixed"    ),CensusView::UponColumnWidthFixed)
 
-// TODO ?? There has to be a better way than this.
-    EVT_UPDATE_UI(XRCID("edit_cell"            ),CensusView::UponUpdateSingleItemActions)
-    EVT_UPDATE_UI(XRCID("edit_class"           ),CensusView::UponUpdateSingleItemActions)
-    EVT_UPDATE_UI(XRCID("edit_case"            ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("run_cell"             ),CensusView::UponUpdateSingleItemActions)
-    EVT_UPDATE_UI(XRCID("run_class"            ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("run_case"             ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("print_case"           ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("print_case_to_disk"   ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("print_spreadsheet"    ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("paste_census"         ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("add_cell"             ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("delete_cells"         ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("column_width_varying" ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("column_width_fixed"   ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("edit_cell"            ),CensusView::UponUpdateSingleSelection)
+    EVT_UPDATE_UI(XRCID("edit_class"           ),CensusView::UponUpdateSingleSelection)
+    EVT_UPDATE_UI(XRCID("edit_case"            ),CensusView::UponUpdateAlwaysEnabled)
+    EVT_UPDATE_UI(XRCID("run_cell"             ),CensusView::UponUpdateSingleSelection)
+    EVT_UPDATE_UI(XRCID("run_class"            ),CensusView::UponUpdateSingleSelection)
+    EVT_UPDATE_UI(XRCID("run_case"             ),CensusView::UponUpdateAlwaysEnabled)
+    EVT_UPDATE_UI(XRCID("print_case"           ),CensusView::UponUpdateAlwaysEnabled)
+    EVT_UPDATE_UI(XRCID("print_case_to_disk"   ),CensusView::UponUpdateAlwaysEnabled)
+    EVT_UPDATE_UI(XRCID("print_spreadsheet"    ),CensusView::UponUpdateAlwaysEnabled)
+    EVT_UPDATE_UI(XRCID("paste_census"         ),CensusView::UponUpdateAlwaysEnabled)
+    EVT_UPDATE_UI(XRCID("add_cell"             ),CensusView::UponUpdateAlwaysEnabled)
+    EVT_UPDATE_UI(XRCID("delete_cells"         ),CensusView::UponUpdateNonemptySelection)
+    EVT_UPDATE_UI(XRCID("column_width_varying" ),CensusView::UponUpdateAlwaysEnabled)
+    EVT_UPDATE_UI(XRCID("column_width_fixed"   ),CensusView::UponUpdateAlwaysEnabled)
 END_EVENT_TABLE()
 
 CensusView::CensusView()
@@ -220,7 +219,6 @@ inline std::vector<Input> const& CensusView::class_parms() const
     return document().doc_.class_parms_;
 }
 
-// TODO ?? Is this abstraction actually useful?
 std::string CensusView::cell_title(int index)
 {
     std::string full_name(cell_parms()[index]["InsuredName"].str());
@@ -233,7 +231,6 @@ std::string CensusView::cell_title(int index)
     return title.str();
 }
 
-// TODO ?? Is this abstraction actually useful?
 std::string CensusView::class_title(int index)
 {
     std::string class_name = class_name_from_cell_number(index);
@@ -251,7 +248,6 @@ std::string CensusView::class_title(int index)
     return title.str();
 }
 
-// TODO ?? Is this abstraction actually useful?
 std::string CensusView::class_name_from_cell_number(int cell_number) const
 {
     return cell_parms()[cell_number]["EmployeeClass"].str();
@@ -325,33 +321,22 @@ CensusDocument& CensusView::document() const
     return safely_dereference_as<CensusDocument>(GetDocument());
 }
 
-int CensusView::edit_parameters
-    (Input&             lmi_input
-    ,std::string const& name
+oenum_mvc_dv_rc CensusView::edit_parameters
+    (Input&             parameters
+    ,std::string const& title
     )
 {
     if(is_invalid())
         {
-        return false;
+        return oe_mvc_dv_cancelled;
         }
 
-    bool dirty = document().IsModified();
-
-    Input edited_lmi_input = lmi_input;
-    DefaultView const default_view;
-    MvcController controller(GetFrame(), edited_lmi_input, default_view);
-    controller.SetTitle(name);
-    int rc = controller.ShowModal();
-    if(wxID_OK == rc)
-        {
-        if(lmi_input != edited_lmi_input)
-            {
-            lmi_input = edited_lmi_input;
-            dirty = true;
-            }
-        document().Modify(dirty);
-        }
-    return rc;
+    return edit_mvc_docview_parameters<DefaultView>
+        (parameters
+        ,document()
+        ,GetFrame()
+        ,title
+        );
 }
 
 bool CensusView::is_invalid()
@@ -438,7 +423,6 @@ void CensusView::update_class_names()
             // insert its parameters into the rebuilt vector.
             std::vector<Input>::const_iterator j = cell_parms().begin();
             bool found = false;
-            // TODO ?? There has to be a nicer way to do this with STL.
             while(j != cell_parms().end())
                 {
                 if(*n == (*j)["EmployeeClass"].str())
@@ -628,19 +612,11 @@ wxMenuBar* CensusView::MenuBar() const
 void CensusView::UponEditCell(wxCommandEvent&)
 {
     int cell_number = selected_row();
-    Input& original_parms = cell_parms()[cell_number];
-    Input temp_parms(original_parms);
+    Input& modifiable_parms = cell_parms()[cell_number];
+    std::string const title = cell_title(cell_number);
 
-    if(wxID_OK != edit_parameters(temp_parms, cell_title(cell_number)))
+    if(oe_mvc_dv_changed == edit_parameters(modifiable_parms, title))
         {
-        return;
-        }
-
-    // TODO ?? Wouldn't it be better just to have edit_parameters()
-    // say whether it changed anything?
-    if(temp_parms != original_parms)
-        {
-        original_parms = temp_parms;
         Update();
         document().Modify(true);
         }
@@ -650,15 +626,11 @@ void CensusView::UponEditClass(wxCommandEvent&)
 {
     int cell_number = selected_row();
     std::string class_name = class_name_from_cell_number(cell_number);
-    Input& original_parms = *class_parms_from_class_name(class_name);
-    Input temp_parms(original_parms);
+    Input& modifiable_parms = *class_parms_from_class_name(class_name);
+    Input const unmodified_parms(modifiable_parms);
+    std::string const title = class_title(cell_number);
 
-    if(wxID_OK != edit_parameters(temp_parms, class_title(cell_number)))
-        {
-        return;
-        }
-
-    if(!(temp_parms == original_parms))
+    if(oe_mvc_dv_changed == edit_parameters(modifiable_parms, title))
         {
         int z = wxMessageBox
             ("Apply all changes to every cell in this class?"
@@ -667,9 +639,8 @@ void CensusView::UponEditClass(wxCommandEvent&)
             );
         if(wxYES == z)
             {
-            apply_changes(temp_parms, original_parms, true);
+            apply_changes(modifiable_parms, unmodified_parms, true);
             }
-        original_parms = temp_parms;
         Update();
         document().Modify(true);
         }
@@ -677,14 +648,11 @@ void CensusView::UponEditClass(wxCommandEvent&)
 
 void CensusView::UponEditCase(wxCommandEvent&)
 {
-    Input& original_parms = case_parms()[0];
-    Input temp_parms(original_parms);
-    if(wxID_OK != edit_parameters(temp_parms, "Default parameters for case"))
-        {
-        return;
-        }
+    Input& modifiable_parms = case_parms()[0];
+    Input const unmodified_parms(modifiable_parms);
+    std::string const title = "Default parameters for case";
 
-    if(!(temp_parms == original_parms))
+    if(oe_mvc_dv_changed == edit_parameters(modifiable_parms, title))
         {
         int z = wxMessageBox
             ("Apply all changes to every cell?"
@@ -693,9 +661,8 @@ void CensusView::UponEditCase(wxCommandEvent&)
             );
         if(wxYES == z)
             {
-            apply_changes(temp_parms, original_parms, false);
+            apply_changes(modifiable_parms, unmodified_parms, false);
             }
-        original_parms = temp_parms;
         Update();
         document().Modify(true);
         }
@@ -735,15 +702,22 @@ void CensusView::UponRightClick(wxDataViewEvent&)
     delete census_menu;
 }
 
-void CensusView::UponUpdateApplicable(wxUpdateUIEvent& e)
+void CensusView::UponUpdateAlwaysEnabled(wxUpdateUIEvent& e)
 {
     e.Enable(true);
 }
 
-void CensusView::UponUpdateSingleItemActions(wxUpdateUIEvent& e)
+void CensusView::UponUpdateSingleSelection(wxUpdateUIEvent& e)
 {
     bool const is_single_sel = list_window_->GetSelection().IsOk();
     e.Enable(is_single_sel);
+}
+
+void CensusView::UponUpdateNonemptySelection(wxUpdateUIEvent& e)
+{
+    wxDataViewItemArray selection;
+    unsigned int n_sel_items = list_window_->GetSelections(selection);
+    e.Enable(0 < n_sel_items);
 }
 
 /// Update the dataview display.
@@ -879,6 +853,8 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
     wxDataViewItemArray selection;
     unsigned int n_sel_items = list_window_->GetSelections(selection);
     LMI_ASSERT(n_sel_items == selection.size());
+    // This handler should have been disabled if no cell is selected.
+    LMI_ASSERT(0 < n_sel_items);
 
     if(n_items == n_sel_items)
         {
@@ -910,7 +886,7 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
         return;
         }
 
-    std::vector<int> erasures;
+    wxArrayInt erasures;
     typedef wxDataViewItemArray::const_iterator dvci;
     for(dvci i = selection.begin(); i != selection.end(); ++i)
         {
@@ -927,11 +903,7 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
 
     for(unsigned int j = 0; j < cell_parms().size(); ++j)
         {
-        if(contains(erasures, j))
-            {
-            list_model_->RowDeleted(j);
-            }
-        else
+        if(!contains(erasures, j))
             {
             expurgated_cell_parms.push_back(cell_parms()[j]);
             }
@@ -940,6 +912,21 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
 
 //    cell_parms().swap(expurgated_cell_parms); // TODO ?? Would this be better?
     cell_parms() = expurgated_cell_parms;
+
+    // Send notifications about changes to the wxDataViewCtrl model. Two things
+    // changed: some rows were deleted and cell number of some rows shifted
+    // accordingly.
+    list_model_->RowsDeleted(erasures);
+    for(unsigned int j = erasures.front(); j < cell_parms().size(); ++j)
+        list_model_->RowValueChanged(j, CensusViewDataViewModel::Col_CellNum);
+
+    unsigned int const newsel = std::min
+        (static_cast<unsigned int>(erasures.front())
+        ,cell_parms().size() - 1
+        );
+    wxDataViewItem const& y = list_model_->GetItem(newsel);
+    list_window_->Select(y);
+    list_window_->EnsureVisible(y);
 
     Update();
     document().Modify(true);

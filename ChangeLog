@@ -28187,3 +28187,163 @@ Select first cell upon view creation. See:
 Use fixed column width by default. See:
   http://lists.nongnu.org/archive/html/lmi/2011-07/msg00029.html
 
+20110811T0936Z <gchicares@sbcglobal.net> [637]
+
+  census_view.cpp
+Fix model notifications in CensusView::UponDeleteCells() (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2011-08/msg00039.html
+
+20110811T0953Z <gchicares@sbcglobal.net> [637]
+
+  census_view.cpp
+After deletion, select one cell (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2011-08/msg00041.html
+
+20110811T1222Z <gchicares@sbcglobal.net> [637]
+
+  census_view.cpp
+After deletion, ensure selected cell is visible. See:
+  http://lists.nongnu.org/archive/html/lmi/2011-08/msg00044.html
+
+20110811T1238Z <gchicares@sbcglobal.net> [637]
+
+  census_view.cpp
+  census_view.hpp
+Disable deletion if no cell is selected. See:
+  http://lists.nongnu.org/archive/html/lmi/2011-08/msg00044.html
+
+20110811T2203Z <gchicares@sbcglobal.net> [637]
+
+  census_view.cpp
+Enable "class" items consistently. This change affects only a command
+that is not presently offered, so it has no user-observable effect.
+
+20110811T2208Z <gchicares@sbcglobal.net> [637]
+
+  census_view.cpp
+  census_view.hpp
+Rename enablement functions for clarity.
+
+20110811T2216Z <gchicares@sbcglobal.net> [632]
+
+  census_view.cpp
+Remove several defect markers that are now recognized as jejune.
+
+20110813T2104Z <gchicares@sbcglobal.net> [632]
+
+  Makefile.am
+  census_view.cpp
+  census_view.hpp
+  edit_mvc_docview_parameters.hpp [new file]
+  illustration_view.cpp
+  mec_view.cpp
+Unify duplicates.
+
+20110813T2138Z <gchicares@sbcglobal.net> [632]
+
+  census_view.cpp
+  illustration_view.cpp
+  mec_view.cpp
+Don't assume that x != wxID_OK implies x == wxID_CANCEL.
+
+20110813T2307Z <gchicares@sbcglobal.net> [632]
+
+  illustration_view.cpp
+  mec_view.cpp
+Improve exception safety and documentation. EditProperties() was not
+the only possible source of an exception.
+
+20110814T1340Z <gchicares@sbcglobal.net> [632]
+
+  census_view.cpp
+Fix defect introduced 20050312T0301Z, from an original file predating
+the lmi epoch: wxID_CANCEL != false.
+
+20110814T1416Z <gchicares@sbcglobal.net> [632]
+
+  census_view.cpp
+  census_view.hpp
+  edit_mvc_docview_parameters.hpp
+  illustration_view.cpp
+  illustration_view.hpp
+  mec_view.cpp
+  mec_view.hpp
+  oecumenic_enumerations.hpp
+Prefer an enumerative return code.
+
+20110814T2332Z <gchicares@sbcglobal.net> [631]
+
+  census_view.cpp
+Fix defect introduced 20050312T0301Z, from an original file predating
+the lmi epoch: it's wasteful and confusing to test twice whether input
+changed.
+
+20110815T0022Z <gchicares@sbcglobal.net> [631]
+
+  mvc_controller.cpp
+Display busy cursor while preparing to edit input. See:
+  http://lists.nongnu.org/archive/html/lmi/2011-08/msg00047.html
+
+20110815T0049Z <gchicares@sbcglobal.net> [623]
+
+  input_seq_helpers.cpp
+  input_seq_helpers.hpp
+Remove dead code.
+
+20110815T0118Z <gchicares@sbcglobal.net> [623]
+
+  input_seq_helpers.hpp
+  mec_input.cpp
+  yare_input.cpp
+Move convert_vector_type().
+
+20110815T0150Z <gchicares@sbcglobal.net> [623]
+
+  datum_sequence.cpp
+  input_realization.cpp
+  mc_enum_types.xpp
+Mark "scalar" strategies as obsolete; remove them where warranted.
+
+20110817T1457Z <gchicares@sbcglobal.net> [623]
+
+  datum_sequence.cpp
+  datum_sequence.hpp
+Add a general numeric input-sequence type.
+
+20110817T1843Z <gchicares@sbcglobal.net> [623]
+
+  input.hpp
+  mec_input.hpp
+  mec_server.cpp
+Use the general numeric input-sequence type added 20110817T1457Z.
+
+20110817T2009Z <gchicares@sbcglobal.net> [623]
+
+  datum_sequence.cpp
+  datum_sequence.hpp
+Add input-sequence benefit types.
+
+20110817T2055Z <gchicares@sbcglobal.net> [622]
+
+  datum_sequence.cpp
+  input.hpp
+  input_realization.cpp
+  skin.xrc
+Use the input-sequence benefit types added 20110817T2009Z.
+
+20110819T0029Z <gchicares@sbcglobal.net> [622]
+
+  datum_sequence.hpp
+  input.hpp
+Make class datum_sequence abstract.
+
+20110819T1131Z <gchicares@sbcglobal.net> [622]
+
+  input_sequence_entry.cpp
+Permit floating-point numbers in input-sequence editor.
+
+20110819T1150Z <gchicares@sbcglobal.net> [622]
+
+  input_sequence_entry.cpp
+Show only first line of formatted_diagnostics().
+

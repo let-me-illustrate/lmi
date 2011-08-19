@@ -28,11 +28,11 @@
 
 #include "mec_view.hpp"
 
+#include "edit_mvc_docview_parameters.hpp"
 #include "handle_exceptions.hpp"
 #include "mec_document.hpp"
 #include "mec_input.hpp"
 #include "mec_server.hpp"
-#include "mvc_controller.hpp"
 #include "safely_dereference_as.hpp"
 #include "wx_new.hpp"
 
@@ -116,23 +116,13 @@ wxWindow* mec_view::CreateChildWindow()
     return html_window_ = new(wx) wxHtmlWindow(GetFrame());
 }
 
-int mec_view::EditProperties()
+oenum_mvc_dv_rc mec_view::edit_parameters()
 {
-    bool dirty = document().IsModified();
-    mec_input edited_input = input_data();
-    mec_mvc_view const v;
-    MvcController controller(GetFrame(), edited_input, v);
-    int rc = controller.ShowModal();
-    if(wxID_OK == rc)
-        {
-        if(edited_input != input_data())
-            {
-            input_data() = edited_input;
-            dirty = true;
-            }
-        document().Modify(dirty);
-        }
-    return rc;
+    return edit_mvc_docview_parameters<mec_mvc_view>
+        (input_data()
+        ,document()
+        ,GetFrame()
+        );
 }
 
 wxIcon mec_view::Icon() const
@@ -147,9 +137,8 @@ wxMenuBar* mec_view::MenuBar() const
 
 /// This virtual function calls its base-class namesake explicitly.
 ///
-/// Trap any exception thrown by EditProperties() to ensure that this
-/// function returns 'false' on failure, lest wx's doc-view framework
-/// create a zombie view. See:
+/// Trap exceptions to ensure that this function returns 'false' on
+/// failure, lest wx's doc-view framework create a zombie view. See:
 ///   http://lists.nongnu.org/archive/html/lmi/2008-12/msg00017.html
 
 bool mec_view::OnCreate(wxDocument* doc, long int flags)
@@ -157,7 +146,7 @@ bool mec_view::OnCreate(wxDocument* doc, long int flags)
     bool has_view_been_created = false;
     try
         {
-        if(wxID_OK != EditProperties())
+        if(oe_mvc_dv_cancelled == edit_parameters())
             {
             return has_view_been_created;
             }
@@ -187,7 +176,7 @@ wxPrintout* mec_view::OnCreatePrintout()
 
 void mec_view::UponProperties(wxCommandEvent&)
 {
-    if(wxID_OK == EditProperties())
+    if(oe_mvc_dv_changed == edit_parameters())
         {
         Run();
         }

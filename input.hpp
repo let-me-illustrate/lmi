@@ -200,8 +200,7 @@ class LMI_SO Input
 
     void SetSolveDurations();
 
-    std::map<std::string,std::string> const permissible_specified_amount_strategy_keywords();
-    std::map<std::string,std::string> const permissible_death_benefit_option_keywords();
+    std::map<std::string,std::string> const permissible_specified_amount_strategy_keywords(); // Obsolete.
 
     std::string RealizeExtraMonthlyCustodialFee   ();
     std::string RealizeExtraCompensationOnAssets  ();
@@ -380,31 +379,31 @@ class LMI_SO Input
     mce_yes_or_no            HoneymoonEndorsement            ;
     tnr_proportion           PostHoneymoonSpread             ;
     tnr_nonnegative_double   InforceHoneymoonValue           ;
-    datum_sequence           ExtraMonthlyCustodialFee        ;
-    datum_sequence           ExtraCompensationOnAssets       ;
-    datum_sequence           ExtraCompensationOnPremium      ;
-    datum_sequence           PartialMortalityMultiplier      ;
-    datum_sequence           CurrentCoiMultiplier            ;
-    datum_sequence           CorporationTaxBracket           ;
-    datum_sequence           TaxBracket                      ;
-    datum_sequence           ProjectedSalary                 ;
-    datum_sequence           SpecifiedAmount                 ;
-    datum_sequence           DeathBenefitOption              ;
+    numeric_sequence         ExtraMonthlyCustodialFee        ;
+    numeric_sequence         ExtraCompensationOnAssets       ;
+    numeric_sequence         ExtraCompensationOnPremium      ;
+    numeric_sequence         PartialMortalityMultiplier      ;
+    numeric_sequence         CurrentCoiMultiplier            ;
+    numeric_sequence         CorporationTaxBracket           ;
+    numeric_sequence         TaxBracket                      ;
+    numeric_sequence         ProjectedSalary                 ;
+    specamt_sequence         SpecifiedAmount                 ;
+    dbo_sequence             DeathBenefitOption              ;
     payment_sequence         Payment                         ;
     mode_sequence            PaymentMode                     ;
     payment_sequence         CorporationPayment              ;
     mode_sequence            CorporationPaymentMode          ;
-    datum_sequence           GeneralAccountRate              ;
-    datum_sequence           SeparateAccountRate             ;
-    datum_sequence           NewLoan                         ;
-    datum_sequence           Withdrawal                      ;
-    datum_sequence           FlatExtra                       ;
-    datum_sequence           PolicyLevelFlatExtra            ;
-    datum_sequence           HoneymoonValueSpread            ;
-    datum_sequence           PremiumHistory                  ;
-    datum_sequence           SpecamtHistory                  ;
-    datum_sequence           FundAllocations                 ; // INPUT !! http://savannah.nongnu.org/support/?104481
-    datum_sequence           CashValueEnhancementRate        ;
+    numeric_sequence         GeneralAccountRate              ;
+    numeric_sequence         SeparateAccountRate             ;
+    numeric_sequence         NewLoan                         ;
+    numeric_sequence         Withdrawal                      ;
+    numeric_sequence         FlatExtra                       ;
+    numeric_sequence         PolicyLevelFlatExtra            ;
+    numeric_sequence         HoneymoonValueSpread            ;
+    numeric_sequence         PremiumHistory                  ;
+    numeric_sequence         SpecamtHistory                  ;
+    numeric_sequence         FundAllocations                 ; // INPUT !! http://savannah.nongnu.org/support/?104481
+    numeric_sequence         CashValueEnhancementRate        ;
     mce_yes_or_no            CreateSupplementalReport        ;
     mce_report_column        SupplementalReportColumn00      ;
     mce_report_column        SupplementalReportColumn01      ;
@@ -496,8 +495,11 @@ template<> struct reconstitutor<datum_sequence, Input>
     static DesiredType* reconstitute(any_member<Input>& m)
         {
         DesiredType* z = 0;
+        z = exact_cast<dbo_sequence            >(m); if(z) return z;
         z = exact_cast<mode_sequence           >(m); if(z) return z;
+        z = exact_cast<numeric_sequence        >(m); if(z) return z;
         z = exact_cast<payment_sequence        >(m); if(z) return z;
+        z = exact_cast<specamt_sequence        >(m); if(z) return z;
         return z;
         }
 };
@@ -579,10 +581,6 @@ template<> struct reconstitutor<datum_base, Input>
         DesiredType* z = 0;
         z = exact_cast<ce_product_name         >(m); if(z) return z;
         z = exact_cast<datum_string            >(m); if(z) return z;
-        // As long as type datum_sequence is used directly (and not
-        // only as a base class), the following line is necessary,
-        // even though datum_sequence's reconstitutor is called.
-        z = exact_cast<datum_sequence          >(m); if(z) return z;
         z = reconstitutor<datum_sequence,Input>::reconstitute(m); if(z) return z;
         z = reconstitutor<mc_enum_base  ,Input>::reconstitute(m); if(z) return z;
         z = reconstitutor<tn_range_base ,Input>::reconstitute(m); if(z) return z;

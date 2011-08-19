@@ -30,6 +30,7 @@
 #include "view_ex.hpp"
 
 #include "obstruct_slicing.hpp"
+#include "oecumenic_enumerations.hpp"
 #include "uncopyable_lmi.hpp"
 
 #include <wx/event.h>
@@ -75,7 +76,7 @@ class mec_view
   private:
     mec_document& document() const;
 
-    int EditProperties();
+    oenum_mvc_dv_rc edit_parameters();
     void Run();
 
     // ViewEx required implementation.

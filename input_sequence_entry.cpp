@@ -30,10 +30,12 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "contains.hpp"
 #include "input.hpp"
 #include "input_seq_helpers.hpp"
 #include "input_sequence.hpp"
 #include "mvc_controller.hpp"
+#include "numeric_io_cast.hpp"
 #include "value_cast.hpp"
 #include "wx_new.hpp"
 #include "wx_utility.hpp"
@@ -272,7 +274,7 @@ class InputSequenceEditor
     void adjust_duration_num_range(int row);
 
     void update_diagnostics();
-    bool is_valid_value(wxString const& s);
+    bool is_valid_value(wxString const&);
     wxString get_diagnostics_message();
 
     void UponValueChange(wxCommandEvent& event);
@@ -1033,20 +1035,29 @@ void InputSequenceEditor::update_diagnostics()
     ok_button_->Enable(msg.empty());
 }
 
-bool InputSequenceEditor::is_valid_value(wxString const& s)
+bool InputSequenceEditor::is_valid_value(wxString const& w)
 {
-    for(std::vector<std::string>::const_iterator k = keywords_.begin()
-       ;k != keywords_.end()
-       ;++k)
+    std::string const s(w.c_str());
+
+    if(contains(keywords_, s))
         {
-        if(s == *k)
-            return true;
+        return true;
         }
 
-    if(!keywords_only_)
-        return s.IsNumber();
+    if(keywords_only_)
+        {
+        return false;
+        }
 
-    return false;
+    try
+        {
+        numeric_io_cast<double>(s);
+        return true;
+        }
+    catch(...)
+        {
+        return false;
+        }
 }
 
 wxString InputSequenceEditor::get_diagnostics_message()
@@ -1074,7 +1085,7 @@ wxString InputSequenceEditor::get_diagnostics_message()
         ,0
         ,keywords_
         );
-    wxString msg = sequence.formatted_diagnostics().c_str();
+    wxString msg = sequence.formatted_diagnostics(true).c_str();
     // formatted_diagnostics() returns newline-terminated string, fix it:
     msg.Trim();
     return msg;
@@ -1377,7 +1388,7 @@ void InputSequenceEntry::UponOpenEditor(wxCommandEvent&)
         ,keywords
         );
 
-    std::string const diagnostics = sequence.formatted_diagnostics();
+    std::string const diagnostics = sequence.formatted_diagnostics(true);
     if(!diagnostics.empty())
         {
         warning()

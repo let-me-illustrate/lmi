@@ -169,7 +169,25 @@ bool operator==(datum_sequence const& lhs, datum_sequence const& rhs)
     return lhs.equals(rhs);
 }
 
-// Payments.
+// Numeric MVC input sequence.
+
+numeric_sequence& numeric_sequence::operator=(std::string const& s)
+{
+    datum_sequence::operator=(s);
+    return *this;
+}
+
+std::map<std::string,std::string> const numeric_sequence::allowed_keywords() const
+{
+    return datum_sequence::allowed_keywords();
+}
+
+bool operator==(numeric_sequence const& lhs, numeric_sequence const& rhs)
+{
+    return lhs.equals(rhs);
+}
+
+// MVC input sequence for payments.
 
 payment_sequence& payment_sequence::operator=(std::string const& s)
 {
@@ -187,17 +205,15 @@ std::map<std::string,std::string> const payment_sequence::allowed_keywords() con
     static std::map<std::string,std::string> all_keywords;
     if(all_keywords.empty())
         {
-        all_keywords["minimum" ] = "PmtMinimum"      ;
-        all_keywords["target"  ] = "PmtTarget"       ;
-        all_keywords["sevenpay"] = "PmtMEP"          ;
-        all_keywords["glp"     ] = "PmtGLP"          ;
-        all_keywords["gsp"     ] = "PmtGSP"          ;
-        all_keywords["corridor"] = "PmtCorridor"     ;
-        all_keywords["table"   ] = "PmtTable"        ;
-        all_keywords["none"    ] = "PmtInputScalar"  ;
+        all_keywords["minimum" ] = "PmtMinimum" ;
+        all_keywords["target"  ] = "PmtTarget"  ;
+        all_keywords["sevenpay"] = "PmtMEP"     ;
+        all_keywords["glp"     ] = "PmtGLP"     ;
+        all_keywords["gsp"     ] = "PmtGSP"     ;
+        all_keywords["corridor"] = "PmtCorridor";
+        all_keywords["table"   ] = "PmtTable"   ;
         }
     std::map<std::string,std::string> permissible_keywords = all_keywords;
-    permissible_keywords.erase("none");
 
     return permissible_keywords;
 }
@@ -207,7 +223,7 @@ bool operator==(payment_sequence const& lhs, payment_sequence const& rhs)
     return lhs.equals(rhs);
 }
 
-// Payment modes.
+// MVC input sequence for payment mode.
 
 mode_sequence& mode_sequence::operator=(std::string const& s)
 {
@@ -226,16 +242,89 @@ std::map<std::string,std::string> const mode_sequence::allowed_keywords() const
     static std::map<std::string,std::string> all_keywords;
     if(all_keywords.empty())
         {
-        all_keywords["annual"    ] = "Annual";
+        all_keywords["annual"    ] = "Annual"    ;
         all_keywords["semiannual"] = "Semiannual";
-        all_keywords["quarterly" ] = "Quarterly";
-        all_keywords["monthly"   ] = "Monthly";
+        all_keywords["quarterly" ] = "Quarterly" ;
+        all_keywords["monthly"   ] = "Monthly"   ;
         }
     std::map<std::string,std::string> permissible_keywords = all_keywords;
     return permissible_keywords;
 }
 
 bool operator==(mode_sequence const& lhs, mode_sequence const& rhs)
+{
+    return lhs.equals(rhs);
+}
+
+// MVC input sequence for specified amount.
+
+specamt_sequence& specamt_sequence::operator=(std::string const& s)
+{
+    datum_sequence::operator=(s);
+    return *this;
+}
+
+// Cf. Input::permissible_specified_amount_strategy_keywords(), which
+// is marked as obsolete but may turn out to be necessary. The crucial
+// issue is how to restrict keywords in context. If they are somehow
+// restricted here, then perhaps the map shouldn't be static.
+
+std::map<std::string,std::string> const specamt_sequence::allowed_keywords() const
+{
+    if(keyword_values_are_blocked())
+        {
+        return std::map<std::string,std::string>();
+        }
+
+    static std::map<std::string,std::string> all_keywords;
+    if(all_keywords.empty())
+        {
+        all_keywords["maximum" ] = "SAMaximum" ;
+        all_keywords["target"  ] = "SATarget"  ;
+        all_keywords["sevenpay"] = "SAMEP"     ;
+        all_keywords["glp"     ] = "SAGLP"     ;
+        all_keywords["gsp"     ] = "SAGSP"     ;
+        all_keywords["corridor"] = "SACorridor";
+        all_keywords["salary"  ] = "SASalary"  ;
+        }
+    std::map<std::string,std::string> permissible_keywords = all_keywords;
+
+    return permissible_keywords;
+}
+
+bool operator==(specamt_sequence const& lhs, specamt_sequence const& rhs)
+{
+    return lhs.equals(rhs);
+}
+
+// MVC input sequence for death benefit option.
+
+dbo_sequence& dbo_sequence::operator=(std::string const& s)
+{
+    datum_sequence::operator=(s);
+    return *this;
+}
+
+std::string const dbo_sequence::default_keyword() const
+{
+    return "a";
+}
+
+std::map<std::string,std::string> const dbo_sequence::allowed_keywords() const
+{
+    LMI_ASSERT(!keyword_values_are_blocked());
+    static std::map<std::string,std::string> all_keywords;
+    if(all_keywords.empty())
+        {
+        all_keywords["a"  ] = "A"  ;
+        all_keywords["b"  ] = "B"  ;
+        all_keywords["rop"] = "ROP";
+        }
+    std::map<std::string,std::string> permissible_keywords = all_keywords;
+    return permissible_keywords;
+}
+
+bool operator==(dbo_sequence const& lhs, dbo_sequence const& rhs)
 {
     return lhs.equals(rhs);
 }

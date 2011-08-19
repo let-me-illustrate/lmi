@@ -102,9 +102,9 @@ mec_state test_one_days_7702A_transactions
     double                      InforceLeastDeathBenefit     = exact_cast<tnr_nonnegative_double  >(input["InforceLeastDeathBenefit"    ])->value();
     mcenum_state                StateOfJurisdiction          = exact_cast<mce_state               >(input["StateOfJurisdiction"         ])->value();
     mcenum_state                PremiumTaxState              = exact_cast<mce_state               >(input["PremiumTaxState"             ])->value();
-//  std::string                 FlatExtra                    = exact_cast<datum_sequence          >(input["FlatExtra"                   ])->value();
-//  std::string                 PaymentHistory               = exact_cast<datum_sequence          >(input["PaymentHistory"              ])->value();
-//  std::string                 BenefitHistory               = exact_cast<datum_sequence          >(input["BenefitHistory"              ])->value();
+//  std::string                 FlatExtra                    = exact_cast<numeric_sequence        >(input["FlatExtra"                   ])->value();
+//  std::string                 PaymentHistory               = exact_cast<numeric_sequence        >(input["PaymentHistory"              ])->value();
+//  std::string                 BenefitHistory               = exact_cast<numeric_sequence        >(input["BenefitHistory"              ])->value();
 //  bool                        UseDOB                       = exact_cast<mce_yes_or_no           >(input["UseDOB"                      ])->value();
     double                      Payment                      = exact_cast<tnr_nonnegative_double  >(input["Payment"                     ])->value();
     double                      BenefitAmount                = exact_cast<tnr_nonnegative_double  >(input["BenefitAmount"               ])->value();

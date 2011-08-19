@@ -178,9 +178,9 @@ class LMI_SO mec_input
     tnr_nonnegative_double   InforceLeastDeathBenefit        ;
     mce_state                StateOfJurisdiction             ;
     mce_state                PremiumTaxState                 ;
-    datum_sequence           FlatExtra                       ;
-    datum_sequence           PaymentHistory                  ;
-    datum_sequence           BenefitHistory                  ;
+    numeric_sequence         FlatExtra                       ;
+    numeric_sequence         PaymentHistory                  ;
+    numeric_sequence         BenefitHistory                  ;
     mce_yes_or_no            UseDOB                          ;
     tnr_nonnegative_double   Payment                         ;
     tnr_nonnegative_double   BenefitAmount                   ;
@@ -202,7 +202,7 @@ template<> struct reconstitutor<datum_base, mec_input>
         z = exact_cast<ce_product_name         >(m); if(z) return z;
         z = exact_cast<datum_string            >(m); if(z) return z;
         // Sequences.
-        z = exact_cast<datum_sequence          >(m); if(z) return z;
+        z = exact_cast<numeric_sequence        >(m); if(z) return z;
         // mc- types.
         z = exact_cast<mce_class               >(m); if(z) return z;
         z = exact_cast<mce_defn_life_ins       >(m); if(z) return z;
