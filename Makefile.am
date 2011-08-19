@@ -993,6 +993,7 @@ noinst_HEADERS = \
     default_view.hpp \
     docmanager_ex.hpp \
     docmdichildframe_ex.hpp \
+    edit_mvc_docview_parameters.hpp \
     emit_ledger.hpp \
     exit_codes.hpp \
     facets.hpp \

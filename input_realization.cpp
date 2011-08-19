@@ -137,7 +137,14 @@ std::string realize_sequence_string
     return s.formatted_diagnostics(true);
 }
 
-//============================================================================
+// SpecifiedAmount.allowed_keywords() does more or less the same
+// thing, but without the 'specified_amount_indeterminate' test.
+// That test isn't actually correct: it's okay to use 'sevenpay'
+// for seven years, then solve on the interval [7, maturity).
+// However, other restrictions might be applied: e.g., if payment
+// strategy is 'sevenpay', then specamt strategy must not also be
+// 'sevenpay' in the same year.
+
 std::map<std::string,std::string> const
 Input::permissible_specified_amount_strategy_keywords()
 {
@@ -151,7 +158,6 @@ Input::permissible_specified_amount_strategy_keywords()
         all_keywords["gsp"     ] = "SAGSP"           ;
         all_keywords["corridor"] = "SACorridor"      ;
         all_keywords["salary"  ] = "SASalary"        ;
-        all_keywords["none"    ] = "SAInputScalar"   ;
         }
 //    std::map<std::string,std::string> permissible_keywords = all_keywords;
     std::map<std::string,std::string> permissible_keywords;
@@ -161,34 +167,13 @@ Input::permissible_specified_amount_strategy_keywords()
         {
         permissible_keywords.insert(*i);
         }
-    permissible_keywords.erase("none");
 
-    bool specified_amount_indeterminate =
-           mce_solve_specamt == SolveType
-    // TODO ?? Further conditions to disallow improper input:
-    // need to compare corresponding years.
-    //  || payment strategy is anything but 'none'
-        ;
+    bool specified_amount_indeterminate = mce_solve_specamt == SolveType;
     if(specified_amount_indeterminate)
         {
         permissible_keywords.clear();
         }
 
-    return permissible_keywords;
-}
-
-//============================================================================
-std::map<std::string,std::string> const
-Input::permissible_death_benefit_option_keywords()
-{
-    static std::map<std::string,std::string> all_keywords;
-    if(all_keywords.empty())
-        {
-        all_keywords["a"  ] = "A"  ;
-        all_keywords["b"  ] = "B"  ;
-        all_keywords["rop"] = "ROP";
-        }
-    std::map<std::string,std::string> permissible_keywords = all_keywords;
     return permissible_keywords;
 }
 
@@ -531,8 +516,8 @@ std::string Input::RealizeSpecifiedAmount()
         ,SpecifiedAmountRealized_
         ,SpecifiedAmountStrategyRealized_
         ,SpecifiedAmount
-        ,permissible_specified_amount_strategy_keywords()
-        ,std::string("none")
+        ,SpecifiedAmount.allowed_keywords()
+        ,SpecifiedAmount.default_keyword()
         );
 }
 
@@ -543,8 +528,8 @@ std::string Input::RealizeDeathBenefitOption()
         (*this
         ,DeathBenefitOptionRealized_
         ,DeathBenefitOption
-        ,permissible_death_benefit_option_keywords()
-        ,std::string("a")
+        ,DeathBenefitOption.allowed_keywords()
+        ,DeathBenefitOption.default_keyword()
         );
     if(s.size())
         {
@@ -591,7 +576,7 @@ std::string Input::RealizePayment()
         ,PaymentStrategyRealized_
         ,Payment
         ,Payment.allowed_keywords()
-        ,std::string("none")
+        ,Payment.default_keyword()
         );
 }
 
@@ -620,7 +605,7 @@ std::string Input::RealizeCorporationPayment()
         ,CorporationPaymentStrategyRealized_
         ,CorporationPayment
         ,CorporationPayment.allowed_keywords()
-        ,std::string("none")
+        ,CorporationPayment.default_keyword()
         );
 }
 

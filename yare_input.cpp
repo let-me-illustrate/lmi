@@ -29,44 +29,10 @@
 #include "yare_input.hpp"
 
 #include "input.hpp"
-#include "miscellany.hpp" // each_equal()
+#include "input_seq_helpers.hpp"        // convert_vector_type()
+#include "miscellany.hpp"               // each_equal()
 
-#include <boost/type_traits/is_enum.hpp>
-#include <boost/utility/enable_if.hpp>
-
-#include <numeric>        // std::accumulate()
-
-namespace
-{
-template<typename T>
-std::vector<T> convert_vector_type
-    (std::vector<mc_enum<T> > const& ve
-    ,typename boost::enable_if<boost::is_enum<T> >::type* = 0
-    )
-{
-    std::vector<T> z;
-    typename std::vector<mc_enum<T> >::const_iterator ve_i;
-    for(ve_i = ve.begin(); ve_i != ve.end(); ++ve_i)
-        {
-        z.push_back(ve_i->value());
-        }
-    return z;
-}
-
-template<typename Number, typename Trammel>
-std::vector<Number> convert_vector_type
-    (std::vector<tn_range<Number,Trammel> > const& vr
-    )
-{
-    std::vector<Number> z;
-    typename std::vector<tn_range<Number,Trammel> >::const_iterator vr_i;
-    for(vr_i = vr.begin(); vr_i != vr.end(); ++vr_i)
-        {
-        z.push_back(vr_i->value());
-        }
-    return z;
-}
-} // Unnamed namespace.
+#include <numeric>                      // std::accumulate()
 
 yare_input::yare_input(Input const& z)
 {

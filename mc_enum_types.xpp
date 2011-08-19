@@ -241,6 +241,8 @@
     ,"Avoid MEC" \
     };
 
+// "scalar" is obsolete.
+
 #define pmt_strategy_VALUES \
     {mce_pmt_input_scalar \
     ,mce_pmt_minimum \
@@ -261,6 +263,8 @@
     ,"PmtCorridor" \
     ,"PmtTable" \
     };
+
+// "scalar" is obsolete.
 
 #define sa_strategy_VALUES \
     {mce_sa_input_scalar \

@@ -35,14 +35,14 @@
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "global_settings.hpp"
-#include "input_seq_helpers.hpp"
+#include "input_seq_helpers.hpp"        // convert_vector(), convert_vector_type()
 #include "map_lookup.hpp"
-#include "miscellany.hpp" // lmi_array_size()
+#include "miscellany.hpp"               // lmi_array_size()
 
-#include <algorithm>      // std::max()
+#include <algorithm>                    // std::max()
 #include <limits>
 #include <sstream>
-#include <utility>        // std::pair
+#include <utility>                      // std::pair
 
 template class xml_serializable<mec_input>;
 
@@ -681,23 +681,6 @@ void mec_input::redintegrate_ad_terminum()
     Reconcile();
     RealizeAllSequenceInput(false);
 }
-
-namespace
-{
-template<typename Number, typename Trammel>
-std::vector<Number> convert_vector_type
-    (std::vector<tn_range<Number,Trammel> > const& vr
-    )
-{
-    std::vector<Number> z;
-    typename std::vector<tn_range<Number,Trammel> >::const_iterator vr_i;
-    for(vr_i = vr.begin(); vr_i != vr.end(); ++vr_i)
-        {
-        z.push_back(vr_i->value());
-        }
-    return z;
-}
-} // Unnamed namespace.
 
 std::vector<double> mec_input::FlatExtraRealized() const
 {

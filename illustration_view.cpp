@@ -43,6 +43,7 @@
 #include "configurable_settings.hpp"
 #include "custom_io_0.hpp"
 #include "default_view.hpp"
+#include "edit_mvc_docview_parameters.hpp"
 #include "emit_ledger.hpp"
 #include "handle_exceptions.hpp"
 #include "illustration_document.hpp"
@@ -51,7 +52,6 @@
 #include "istream_to_string.hpp"
 #include "ledger.hpp"
 #include "ledger_text_formats.hpp"
-#include "mvc_controller.hpp"
 #include "safely_dereference_as.hpp"
 #include "timer.hpp"
 #include "wx_new.hpp"
@@ -123,30 +123,19 @@ wxWindow* IllustrationView::CreateChildWindow()
     return html_window_ = new(wx) wxHtmlWindow(GetFrame());
 }
 
-int IllustrationView::EditProperties()
+oenum_mvc_dv_rc IllustrationView::edit_parameters()
 {
     if(is_phony_)
         {
 warning() << "That command should have been disabled." << LMI_FLUSH;
-        return wxID_CANCEL;
+        return oe_mvc_dv_cancelled;
         }
 
-    bool dirty = document().IsModified();
-
-    Input edited_lmi_input = input_data();
-    DefaultView const default_view;
-    MvcController controller(GetFrame(), edited_lmi_input, default_view);
-    int rc = controller.ShowModal();
-    if(wxID_OK == rc)
-        {
-        if(edited_lmi_input != input_data())
-            {
-            input_data() = edited_lmi_input;
-            dirty = true;
-            }
-        document().Modify(dirty);
-        }
-    return rc;
+    return edit_mvc_docview_parameters<DefaultView>
+        (input_data()
+        ,document()
+        ,GetFrame()
+        );
 }
 
 void IllustrationView::DisplaySelectedValuesAsHtml()
@@ -167,23 +156,24 @@ wxMenuBar* IllustrationView::MenuBar() const
 
 /// This virtual function calls its base-class namesake explicitly.
 ///
-/// Trap any exception thrown by EditProperties() to ensure that this
-/// function returns 'false' on failure, lest wx's doc-view framework
-/// create a zombie view. See:
+/// Trap exceptions to ensure that this function returns 'false' on
+/// failure, lest wx's doc-view framework create a zombie view. See:
 ///   http://lists.nongnu.org/archive/html/lmi/2008-12/msg00017.html
 
 bool IllustrationView::OnCreate(wxDocument* doc, long int flags)
 {
-    if(flags & LMI_WX_CHILD_DOCUMENT)
-        {
-        is_phony_ = true;
-        return ViewEx::OnCreate(doc, flags);
-        }
-
     bool has_view_been_created = false;
+
     try
         {
-        if(wxID_OK != EditProperties())
+        if(flags & LMI_WX_CHILD_DOCUMENT)
+            {
+            is_phony_ = true;
+            has_view_been_created = ViewEx::OnCreate(doc, flags);
+            return has_view_been_created;
+            }
+
+        if(oe_mvc_dv_cancelled == edit_parameters())
             {
             return has_view_been_created;
             }
@@ -250,7 +240,7 @@ void IllustrationView::UponProperties(wxCommandEvent&)
 //        return;
         }
 
-    if(wxID_OK == EditProperties())
+    if(oe_mvc_dv_changed == edit_parameters())
         {
         Run();
         }

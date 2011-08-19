@@ -61,6 +61,14 @@ enum oenum_modal_prem_type
     ,oe_modal_table
     };
 
+/// Return code for MVC-docview editing.
+
+enum oenum_mvc_dv_rc
+    {oe_mvc_dv_cancelled
+    ,oe_mvc_dv_unchanged
+    ,oe_mvc_dv_changed
+    };
+
 enum oenum_preferred_class_name
     {oe_called_preferred
     ,oe_called_select
