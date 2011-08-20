@@ -2541,6 +2541,28 @@ the other is perforce ignored.
             </object>
         </object>
         <object class="sizeritem">
+            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxTOP</flag>
+            <border>4</border>
+            <object class="wxFlexGridSizer">
+                <rows>1</rows>
+                <growablecols>1</growablecols>
+                <object class="sizeritem">
+                    <flag>wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Cash-value enhancement rate</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+                    <object class="InputSequenceEntry" name="CashValueEnhancementRate">
+                        <title>Cash-value enhancement rate</title>
+                        <help>Cash-value enhancement rate (negative surrender charge)</help>
+                    </object>
+                </object>
+            </object>
+        </object>
+        <object class="sizeritem">
             <flag>wxALIGN_LEFT|wxALIGN_BOTTOM</flag>
             <object class="wxStaticText">
                 <label>Rates by account</label>

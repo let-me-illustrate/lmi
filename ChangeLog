@@ -28370,3 +28370,8 @@ to the default keyword. Now, it's diagnosed as "xyz" would be.
 Work around a wx-2.9.2 defect (VS). See:
   http://lists.nongnu.org/archive/html/lmi/2011-08/msg00052.html
 
+20110820T2031Z <gchicares@sbcglobal.net> [622]
+
+  skin.xrc
+Add a missing input field.
+
