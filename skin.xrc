@@ -2051,7 +2051,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <object class="wxRadioBox" name="SolveBasis">
                                         <help>Expense, mortality, and general-account basis for solve</help>
                                         <style>wxRA_SPECIFY_COLS</style>
-                                        <label>General basis</label>
+                                        <label>Deductions and general account</label>
                                         <dimension>1</dimension>
                                         <selection>0</selection>
                                         <content>
@@ -2066,7 +2066,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <object class="wxRadioBox" name="SolveSeparateAccountBasis">
                                         <help>Separate-account basis for solve</help>
                                         <style>wxRA_SPECIFY_COLS</style>
-                                        <label>Separate-account basis</label>
+                                        <label>Separate account</label>
                                         <dimension>1</dimension>
                                         <selection>0</selection>
                                         <content>
