@@ -274,7 +274,7 @@
         <object class="sizeritem">
             <flag>wxGROW</flag>
             <border>4</border>
-            <object class="wxTextCtrl" name="ExtraMonthlyCustodialFee">
+            <object class="InputSequenceEntry" name="ExtraMonthlyCustodialFee">
                 <help>Additional monthly policy fee (e.g., for fund custodian charges)</help>
                 <size>180,-1</size>
             </object>
@@ -289,7 +289,7 @@
         <object class="sizeritem">
             <flag>wxGROW</flag>
             <border>4</border>
-            <object class="wxTextCtrl" name="ExtraCompensationOnAssets">
+            <object class="InputSequenceEntry" name="ExtraCompensationOnAssets">
                 <help>Additional separate-account asset charge (e.g., for negotiated asset-based compensation)</help>
                 <size>180,-1</size>
             </object>
@@ -304,7 +304,7 @@
         <object class="sizeritem">
             <flag>wxGROW</flag>
             <border>4</border>
-            <object class="wxTextCtrl" name="ExtraCompensationOnPremium">
+            <object class="InputSequenceEntry" name="ExtraCompensationOnPremium">
                 <help>Additional premium load (e.g., for negotiated premium-based compensation)</help>
                 <size>180,-1</size>
             </object>
@@ -696,7 +696,7 @@
                 <object class="sizeritem">
                     <flag>wxGROW|wxALL</flag>
                     <border>2</border>
-                    <object class="wxTextCtrl" name="CurrentCoiMultiplier">
+                    <object class="InputSequenceEntry" name="CurrentCoiMultiplier">
                         <help>Multiplier for current COI rates</help>
                     </object>
                 </object>
@@ -710,7 +710,7 @@
                 <object class="sizeritem">
                     <flag>wxGROW|wxALL</flag>
                     <border>2</border>
-                    <object class="wxTextCtrl" name="PartialMortalityMultiplier">
+                    <object class="InputSequenceEntry" name="PartialMortalityMultiplier">
                         <help>Multiplier for partial mortality table</help>
                     </object>
                 </object>
@@ -1090,7 +1090,7 @@
                 <object class="sizeritem">
                     <flag>wxGROW|wxALL</flag>
                     <border>2</border>
-                    <object class="wxTextCtrl" name="ProjectedSalary">
+                    <object class="InputSequenceEntry" name="ProjectedSalary">
                         <help>Projected annual salary</help>
                     </object>
                 </object>
@@ -1104,7 +1104,7 @@
                 <object class="sizeritem">
                     <flag>wxGROW|wxALL</flag>
                     <border>2</border>
-                    <object class="wxTextCtrl" name="FlatExtra">
+                    <object class="InputSequenceEntry" name="FlatExtra">
                         <help>Flat extra: annual amount per thousand</help>
                     </object>
                 </object>
@@ -1780,7 +1780,7 @@
                 <object class="sizeritem">
                     <flag>wxGROW|wxBOTTOM</flag>
                     <border>2</border>
-                    <object class="wxTextCtrl" name="PremiumHistory">
+                    <object class="InputSequenceEntry" name="PremiumHistory">
                         <help>"Amounts paid" for each year since beginning of last seven-pay period--zero if not in a seven-pay period</help>
                     </object>
                 </object>
@@ -1794,7 +1794,7 @@
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <border>2</border>
-                    <object class="wxTextCtrl" name="SpecamtHistory">
+                    <object class="InputSequenceEntry" name="SpecamtHistory">
                         <help>Specified amount for each year since issue (needed for certain surrender charges)</help>
                     </object>
                 </object>
@@ -1991,7 +1991,6 @@
                 </object>
             </object>
         </object>
-
         <object class="sizeritem">
             <flag>wxGROW|wxALL</flag>
             <border>4</border>
@@ -2015,7 +2014,6 @@
                         </content>
                     </object>
                 </object>
-
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <border>2</border>
@@ -2125,7 +2123,6 @@
                                 </object>
                             </object>
                         </object>
-
                         <object class="sizeritem">
                             <flag>wxGROW|wxBOTTOM</flag>
                             <border>2</border>
@@ -2194,7 +2191,7 @@
                 <object class="sizeritem">
                     <flag>wxGROW|wxBOTTOM</flag>
                     <border>2</border>
-                    <object class="wxTextCtrl" name="SpecifiedAmount">
+                    <object class="InputSequenceEntry" name="SpecifiedAmount">
                         <help>Specified amount, or corridor, glp, gsp, maximum, salary, sevenpay, target</help>
                     </object>
                 </object>
@@ -2208,7 +2205,7 @@
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <border>2</border>
-                    <object class="wxTextCtrl" name="DeathBenefitOption">
+                    <object class="InputSequenceEntry" name="DeathBenefitOption">
                         <help>Death benefit option: a (level), b (increasing), or rop (return of premium)</help>
                     </object>
                 </object>
@@ -2369,7 +2366,7 @@
                 <object class="sizeritem">
                     <flag>wxGROW|wxBOTTOM</flag>
                     <border>2</border>
-                    <object class="wxTextCtrl" name="Payment">
+                    <object class="InputSequenceEntry" name="Payment">
                         <help>Individual payment amount, or corridor, glp, gsp, minimum, sevenpay, table, target</help>
                     </object>
                 </object>
@@ -2383,7 +2380,7 @@
                 <object class="sizeritem">
                     <flag>wxGROW|wxBOTTOM</flag>
                     <border>2</border>
-                    <object class="wxTextCtrl" name="PaymentMode">
+                    <object class="InputSequenceEntry" name="PaymentMode">
                         <help>Individual payment mode: annual, semiannual, quarterly, or monthly</help>
                     </object>
                 </object>
@@ -2397,7 +2394,7 @@
                 <object class="sizeritem">
                     <flag>wxGROW|wxBOTTOM</flag>
                     <border>2</border>
-                    <object class="wxTextCtrl" name="CorporationPayment">
+                    <object class="InputSequenceEntry" name="CorporationPayment">
                         <help>Corporation payment amount, or corridor, glp, gsp, minimum, sevenpay, table, target</help>
                     </object>
                 </object>
@@ -2411,7 +2408,7 @@
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <border>2</border>
-                    <object class="wxTextCtrl" name="CorporationPaymentMode">
+                    <object class="InputSequenceEntry" name="CorporationPaymentMode">
                         <help>Corporation payment mode: annual, semiannual, quarterly, or monthly</help>
                     </object>
                 </object>
@@ -2615,7 +2612,7 @@
                                 <object class="sizeritem">
                                     <flag>wxGROW|wxALIGN_BOTTOM|wxTOP|wxBOTTOM</flag>
                                     <border>4</border>
-                                    <object class="wxTextCtrl" name="GeneralAccountRate">
+                                    <object class="InputSequenceEntry" name="GeneralAccountRate">
                                         <help>General-account (non-loaned) interest rate</help>
                                         <size>-1,22</size>
                                         <style>wxTE_LEFT</style>
@@ -2631,7 +2628,7 @@
                                 <object class="sizeritem">
                                     <flag>wxGROW|wxTOP|wxBOTTOM</flag>
                                     <border>4</border>
-                                    <object class="wxTextCtrl" name="SeparateAccountRate">
+                                    <object class="InputSequenceEntry" name="SeparateAccountRate">
                                         <help>Separate-account interest rate</help>
                                         <size>-1,22</size>
                                         <style>wxTE_LEFT</style>
@@ -2697,7 +2694,7 @@
                 <object class="sizeritem">
                     <flag>wxGROW|wxALL</flag>
                     <border>2</border>
-                    <object class="wxTextCtrl" name="CashValueEnhancementRate">
+                    <object class="InputSequenceEntry" name="CashValueEnhancementRate">
                         <help>Multiplier for cash value</help>
                     </object>
                 </object>
@@ -2739,7 +2736,7 @@
                 <object class="sizeritem">
                     <flag>wxGROW|wxBOTTOM</flag>
                     <border>2</border>
-                    <object class="wxTextCtrl" name="Withdrawal">
+                    <object class="InputSequenceEntry" name="Withdrawal">
                         <help>Withdrawal amount</help>
                     </object>
                 </object>
@@ -2753,7 +2750,7 @@
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <border>2</border>
-                    <object class="wxTextCtrl" name="NewLoan">
+                    <object class="InputSequenceEntry" name="NewLoan">
                         <help>Loan amount</help>
                     </object>
                 </object>

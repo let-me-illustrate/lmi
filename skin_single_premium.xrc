@@ -307,7 +307,7 @@
                 </object>
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
-                    <object class="wxTextCtrl" name="PartialMortalityMultiplier">
+                    <object class="InputSequenceEntry" name="PartialMortalityMultiplier">
                         <help>Multiplier for partial mortality table</help>
                         <size>180,-1</size>
                     </object>
@@ -845,7 +845,7 @@ appropriate input.
                 <object class="sizeritem">
                     <flag>wxGROW|wxALIGN_RIGHT|wxALL</flag>
                     <border>2</border>
-                    <object class="wxTextCtrl" name="FlatExtra">
+                    <object class="InputSequenceEntry" name="FlatExtra">
                         <help>Flat extra: annual amount per thousand</help>
                         <size>10,-1</size>
                     </object>
@@ -994,7 +994,7 @@ appropriate input.
                 </object>
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
-                    <object class="wxTextCtrl" name="Payment">
+                    <object class="InputSequenceEntry" name="Payment">
                         <help>Individual payment amount, or corridor, glp, gsp, minimum, sevenpay, table, target</help>
                         <size>180,-1</size>
                     </object>
@@ -1008,7 +1008,7 @@ appropriate input.
                 </object>
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
-                    <object class="wxTextCtrl" name="SpecifiedAmount">
+                    <object class="InputSequenceEntry" name="SpecifiedAmount">
                         <help>Specified amount, or corridor, glp, gsp, maximum, salary, sevenpay, target</help>
                         <size>180,-1</size>
                     </object>
@@ -1022,7 +1022,7 @@ appropriate input.
                 </object>
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
-                    <object class="wxTextCtrl" name="DeathBenefitOption">
+                    <object class="InputSequenceEntry" name="DeathBenefitOption">
                         <help>Death benefit option: a (level), b (increasing), or rop (return of premium)</help>
                         <size>180,-1</size>
                     </object>
@@ -1036,7 +1036,7 @@ appropriate input.
                 </object>
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
-                    <object class="wxTextCtrl" name="GeneralAccountRate">
+                    <object class="InputSequenceEntry" name="GeneralAccountRate">
                         <help>General-account (non-loaned) interest rate</help>
                         <size>180,-1</size>
                     </object>

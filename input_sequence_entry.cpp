@@ -1386,6 +1386,8 @@ void InputSequenceEntry::UponOpenEditor(wxCommandEvent&)
         ,in.effective_year   ()
         ,0
         ,keywords
+        ,ds.default_keyword()
+        ,keywords_only
         );
 
     std::string const diagnostics = sequence.formatted_diagnostics(true);

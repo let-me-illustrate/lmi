@@ -361,7 +361,7 @@ useful in the future.
                         <object class="sizeritem">
                             <flag>wxGROW|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
-                            <object class="wxTextCtrl" name="Payment">
+                            <object class="InputSequenceEntry" name="Payment">
                                 <help>Individual payment amount, or corridor, glp, gsp, minimum, sevenpay, table, target</help>
                             </object>
                         </object>
@@ -375,7 +375,7 @@ useful in the future.
                         <object class="sizeritem">
                             <flag>wxGROW|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
-                            <object class="wxTextCtrl" name="PaymentMode">
+                            <object class="InputSequenceEntry" name="PaymentMode">
                                 <help>Individual payment mode: annual, semiannual, quarterly, or monthly</help>
                             </object>
                         </object>
@@ -404,7 +404,7 @@ useful in the future.
                         <object class="sizeritem">
                             <flag>wxGROW|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
-                            <object class="wxTextCtrl" name="ExtraCompensationOnPremium">
+                            <object class="InputSequenceEntry" name="ExtraCompensationOnPremium">
                                 <help>Additional premium load (e.g., for negotiated premium-based compensation)</help>
                             </object>
                         </object>
@@ -418,7 +418,7 @@ useful in the future.
                         <object class="sizeritem">
                             <flag>wxGROW|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
-                            <object class="wxTextCtrl" name="ExtraCompensationOnAssets">
+                            <object class="InputSequenceEntry" name="ExtraCompensationOnAssets">
                                 <help>Additional separate-account asset charge (e.g., for negotiated asset-based compensation)</help>
                             </object>
                         </object>
@@ -446,7 +446,7 @@ useful in the future.
                         <object class="sizeritem">
                             <flag>wxGROW|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
-                            <object class="wxTextCtrl" name="SeparateAccountRate">
+                            <object class="InputSequenceEntry" name="SeparateAccountRate">
                                 <help>Separate-account interest rate</help>
                             </object>
                         </object>
@@ -460,7 +460,7 @@ useful in the future.
                         <object class="sizeritem">
                             <flag>wxGROW|wxALIGN_RIGHT|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
-                            <object class="wxTextCtrl" name="Withdrawal">
+                            <object class="InputSequenceEntry" name="Withdrawal">
                                 <help>Withdrawal amount</help>
                             </object>
                         </object>

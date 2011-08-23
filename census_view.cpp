@@ -913,6 +913,12 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
 //    cell_parms().swap(expurgated_cell_parms); // TODO ?? Would this be better?
     cell_parms() = expurgated_cell_parms;
 
+#if !wxCHECK_VERSION(2,9,3)
+    // Remove selection to work around wx-2.9.2 bug in GetSelections()
+    // (we'll set it again below).
+    list_window_->UnselectAll();
+#endif
+
     // Send notifications about changes to the wxDataViewCtrl model. Two things
     // changed: some rows were deleted and cell number of some rows shifted
     // accordingly.

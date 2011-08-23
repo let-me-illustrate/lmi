@@ -28347,3 +28347,31 @@ Permit floating-point numbers in input-sequence editor.
   input_sequence_entry.cpp
 Show only first line of formatted_diagnostics().
 
+20110819T1650Z <wboutin@charter.net> [622]
+
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_group_carveout2.xrc
+  skin_reg_d.xrc
+  skin_single_premium.xrc
+  skin_variable_annuity.xrc
+Use the input-sequence benefit types added 20110817T2009Z.
+
+20110819T2145Z <gchicares@sbcglobal.net> [622]
+
+  input_sequence_entry.cpp
+Diagnose more input problems in UponOpenEditor(). Previously, "345"
+in a keywords-only sequence went undiagnosed, and was silently changed
+to the default keyword. Now, it's diagnosed as "xyz" would be.
+
+20110819T2157Z <gchicares@sbcglobal.net> [622]
+
+  census_view.cpp
+Work around a wx-2.9.2 defect (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2011-08/msg00052.html
+
+20110820T2031Z <gchicares@sbcglobal.net> [622]
+
+  skin.xrc
+Add a missing input field.
+
