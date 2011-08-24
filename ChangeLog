@@ -28375,3 +28375,35 @@ Work around a wx-2.9.2 defect (VS). See:
   skin.xrc
 Add a missing input field.
 
+20110823T1220Z <gchicares@sbcglobal.net> [622]
+
+  skin.xrc
+Clarify solve-basis radiobox labels.
+
+20110824T1639Z <gchicares@sbcglobal.net> [622]
+
+  ledger_text_formats.cpp
+Remove unneeded headers.
+
+20110824T1645Z <gchicares@sbcglobal.net> [617]
+
+  input_harmonization.cpp
+Expunge unused legacy code.
+
+20110824T1649Z <gchicares@sbcglobal.net> [617]
+
+  input.hpp
+  mec_input.hpp
+Expunge disused declarations.
+
+20110824T1659Z <gchicares@sbcglobal.net> [617]
+
+  ihs_avstrtgy.cpp
+Fix defect introduced 20080720T2217Z: don't apply a specamt strategy
+when solving for specamt.
+
+20110824T1706Z <gchicares@sbcglobal.net> [615]
+
+  ihs_avstrtgy.cpp
+Improve layout and documentation.
+

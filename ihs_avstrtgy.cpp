@@ -36,20 +36,27 @@
 #include <algorithm>
 #include <utility>
 
-// Set premium or spec amount according to fixed relationships
-// e.g. if prem is target for given spec amt, then given either
-// we can determine for the other.
-
-// TODO ?? Known defects
-//
-// Premium and specamt are either literal dollar amounts, or enums indicating
-// strategy, encoded by multiplying the enum value by 1.0E100. This is most
-// regrettable. Bugs probably lurk here.
-//
-// There are two functions for specamt strategy; apparently only the one
-// called "Old" is used.
-
 /// Set specamt according to selected strategy in a non-solve year.
+///
+/// Argument 'actual_year' is policy year.
+///
+/// Argument 'reference_year' specifies which year's premium is the
+/// basis for the calculated specamt. Most often, the first-year
+/// premium is used: it is usually undesirable to change specamt
+/// frequently, and specamt strategies often begin in the first year.
+/// The salary-based strategy, however, tracks salary changes: yearly
+/// increases are common on such plans, and there's no other reason to
+/// enter a non-scalar salary.
+///
+/// Specamt strategies ignore dumpins and 1035 exchanges. An argument
+/// could be made for making adjustments for such extra premiums, but
+/// the benefit doesn't seem to justify the extra complexity. The
+/// argument is strongest for 7702- and 7702A-based strategies, but
+/// there are other and better ways to avoid MECs and GPT problems.
+/// The argument is weaker for the target strategy, for which it often
+/// makes sense to ignore such extra payments; and accepting the
+/// argument for some strategies but not for others would introduce
+/// inconsistency in addition to complexity.
 
 double AccountValue::CalculateSpecAmtFromStrategy
     (int actual_year
@@ -72,9 +79,10 @@ double AccountValue::CalculateSpecAmtFromStrategy
         {
         case mce_sa_salary:
             {
-            // This ignores yearly-varying salary.
-            double y;
-            y = yare_input_.ProjectedSalary[actual_year] * yare_input_.SalarySpecifiedAmountFactor;
+            double y =
+                  yare_input_.ProjectedSalary[actual_year]
+                * yare_input_.SalarySpecifiedAmountFactor
+                ;
             if(0.0 != yare_input_.SalarySpecifiedAmountCap)
                 {
                 y = std::min(y, yare_input_.SalarySpecifiedAmountCap);
@@ -108,7 +116,6 @@ double AccountValue::CalculateSpecAmtFromStrategy
                 );
             }
             break;
-// TODO ?? The following strategies (at least) should recognize dumpins.
         case mce_sa_mep:
             {
             z = GetModalSpecAmtMinNonMec
@@ -166,8 +173,7 @@ double AccountValue::CalculateSpecAmtFromStrategy
 
 void AccountValue::PerformSpecAmtStrategy()
 {
-    for
-        (int j = 0; j < BasicValues::Length; ++j)
+    for(int j = 0; j < BasicValues::Length; ++j)
         {
         double z = round_specamt()(CalculateSpecAmtFromStrategy(j, 0));
         DeathBfts_->set_specamt(z, j, 1 + j);
