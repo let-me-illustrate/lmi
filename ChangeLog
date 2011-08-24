@@ -28407,3 +28407,13 @@ when solving for specamt.
   ihs_avstrtgy.cpp
 Improve layout and documentation.
 
+20110824T1950Z <wboutin@charter.net> [615]
+
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_group_carveout2.xrc
+  skin_reg_d.xrc
+  skin_single_premium.xrc
+  skin_variable_annuity.xrc
+Add titles to sequence editor dialog.
+
