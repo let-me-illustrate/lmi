@@ -49,12 +49,24 @@
 // There are two functions for specamt strategy; apparently only the one
 // called "Old" is used.
 
-//============================================================================
+/// Set specamt according to selected strategy in a non-solve year.
+
 double AccountValue::CalculateSpecAmtFromStrategy
     (int actual_year
     ,int reference_year
     ) const
 {
+    // Don't override a specamt that's being solved for.
+    if
+        (
+            mce_solve_specamt == yare_input_.SolveType
+        &&  yare_input_.SolveBeginYear <= actual_year
+        &&  actual_year < std::min(yare_input_.SolveEndYear, BasicValues::Length)
+        )
+        {
+        return DeathBfts_->specamt()[actual_year];
+        }
+
     double z = 0.0;
     switch(yare_input_.SpecifiedAmountStrategy[actual_year])
         {
@@ -150,7 +162,7 @@ double AccountValue::CalculateSpecAmtFromStrategy
     return z;
 }
 
-/// Set spec amt according to selected strategy, in every year.
+/// Set specamt according to selected strategy.
 
 void AccountValue::PerformSpecAmtStrategy()
 {
@@ -162,8 +174,8 @@ void AccountValue::PerformSpecAmtStrategy()
         }
 }
 
-//============================================================================
-// Sets payment according to selected strategy, in each non-solve year
+/// Set payment according to selected strategy in a non-solve year.
+
 double AccountValue::DoPerformPmtStrategy
     (mcenum_solve_type                       a_SolveForWhichPrem
     ,mcenum_mode                             a_CurrentMode
@@ -179,7 +191,7 @@ double AccountValue::DoPerformPmtStrategy
         return a_PmtVector[Year];
         }
 
-    // Don't override premium during premium solve period.
+    // Don't override a premium that's being solved for.
     if
         (
             a_SolveForWhichPrem == yare_input_.SolveType
@@ -280,7 +292,8 @@ double AccountValue::DoPerformPmtStrategy
         }
 }
 
-//============================================================================
+/// Set employee payment according to selected strategy.
+
 double AccountValue::PerformEePmtStrategy() const
 {
     return DoPerformPmtStrategy
@@ -293,7 +306,8 @@ double AccountValue::PerformEePmtStrategy() const
         );
 }
 
-//============================================================================
+/// Set employer payment according to selected strategy.
+
 double AccountValue::PerformErPmtStrategy() const
 {
     return DoPerformPmtStrategy
