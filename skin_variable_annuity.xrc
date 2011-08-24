@@ -362,6 +362,7 @@ useful in the future.
                             <flag>wxGROW|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
                             <object class="InputSequenceEntry" name="Payment">
+                                <title>Individual payment amount</title>
                                 <help>Individual payment amount, or corridor, glp, gsp, minimum, sevenpay, table, target</help>
                             </object>
                         </object>
@@ -376,6 +377,7 @@ useful in the future.
                             <flag>wxGROW|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
                             <object class="InputSequenceEntry" name="PaymentMode">
+                                <title>Individual payment mode</title>
                                 <help>Individual payment mode: annual, semiannual, quarterly, or monthly</help>
                             </object>
                         </object>
@@ -405,6 +407,7 @@ useful in the future.
                             <flag>wxGROW|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
                             <object class="InputSequenceEntry" name="ExtraCompensationOnPremium">
+                                <title>Additional premium load</title>
                                 <help>Additional premium load (e.g., for negotiated premium-based compensation)</help>
                             </object>
                         </object>
@@ -419,6 +422,7 @@ useful in the future.
                             <flag>wxGROW|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
                             <object class="InputSequenceEntry" name="ExtraCompensationOnAssets">
+                                <title>Additional separate-account asset charge</title>
                                 <help>Additional separate-account asset charge (e.g., for negotiated asset-based compensation)</help>
                             </object>
                         </object>
@@ -447,6 +451,7 @@ useful in the future.
                             <flag>wxGROW|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
                             <object class="InputSequenceEntry" name="SeparateAccountRate">
+                                <title>Separate-account interest rate</title>
                                 <help>Separate-account interest rate</help>
                             </object>
                         </object>
@@ -461,6 +466,7 @@ useful in the future.
                             <flag>wxGROW|wxALIGN_RIGHT|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
                             <object class="InputSequenceEntry" name="Withdrawal">
+                                <title>Withdrawal amount</title>
                                 <help>Withdrawal amount</help>
                             </object>
                         </object>
