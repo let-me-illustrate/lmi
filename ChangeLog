@@ -28417,3 +28417,8 @@ Improve layout and documentation.
   skin_variable_annuity.xrc
 Add titles to sequence editor dialog.
 
+20110825T1432Z <gchicares@sbcglobal.net> [615]
+
+  ihs_avstrtgy.cpp
+Constrain salary-based specamt as newly documented.
+
