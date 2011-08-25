@@ -275,7 +275,7 @@
             <flag>wxGROW</flag>
             <border>4</border>
             <object class="InputSequenceEntry" name="ExtraMonthlyCustodialFee">
-              <title>Additional monthly policy fee</title>
+                <title>Additional monthly policy fee</title>
                 <help>Additional monthly policy fee (e.g., for fund custodian charges)</help>
                 <size>180,-1</size>
             </object>

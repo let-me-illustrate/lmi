@@ -247,7 +247,7 @@
                     <flag>wxGROW</flag>
                     <border>4</border>
                     <object class="InputSequenceEntry" name="CurrentCoiMultiplier">
-                        <title>Mutliplier for current COI rates</title>
+                        <title>Multiplier for current COI rates</title>
                         <help>Multiplier for current COI rates</help>
                     </object>
                 </object>

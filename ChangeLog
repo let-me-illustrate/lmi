@@ -28422,3 +28422,10 @@ Add titles to sequence editor dialog.
   ihs_avstrtgy.cpp
 Constrain salary-based specamt as newly documented.
 
+20110825T1700Z <wboutin@charter.net> [615]
+
+  skin_coli_boli.xrc
+  skin_group_carveout2.xrc
+  skin_reg_d.xrc
+Correct misalignment and typos.
+
