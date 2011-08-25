@@ -57,6 +57,21 @@
 /// makes sense to ignore such extra payments; and accepting the
 /// argument for some strategies but not for others would introduce
 /// inconsistency in addition to complexity.
+///
+/// The result of a salary-based strategy is constrained to be
+/// nonnegative, because if 'SalarySpecifiedAmountOffset' is
+/// sufficiently large, then specamt would be negative, which cannot
+/// make any sense. Other than that, no minimum is imposed. A case
+/// could be made for enforcing limits chosen from:
+///   DB_MinIssSpecAmt
+///   DB_MinRenlSpecAmt
+///   DB_MinRenlBaseSpecAmt
+///   DB_MaxIssSpecAmt
+///   DB_MaxRenlSpecAmt
+/// but that should be done unconditionally elsewhere; furthermore,
+/// either 'DB_MinRenlSpecAmt' or 'DB_MinRenlBaseSpecAmt' might apply,
+/// depending on whether the term rider remains in force--which can be
+/// ascertained only during monthiversary processing.
 
 double AccountValue::CalculateSpecAmtFromStrategy
     (int actual_year
@@ -88,7 +103,7 @@ double AccountValue::CalculateSpecAmtFromStrategy
                 y = std::min(y, yare_input_.SalarySpecifiedAmountCap);
                 }
             y -= yare_input_.SalarySpecifiedAmountOffset;
-            z = y;
+            z = std::max(0.0, y);
             }
             break;
         case mce_sa_input_scalar:
