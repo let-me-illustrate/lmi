@@ -1929,7 +1929,7 @@
                     <flag>wxGROW</flag>
                     <border>2</border>
                     <object class="InputSequenceEntry" name="SpecamtHistory">
-                        <title>Sepcified-amount history</title>
+                        <title>Specified-amount history</title>
                         <help>Specified amount for each year since issue (needed for certain surrender charges)</help>
                     </object>
                </object>
