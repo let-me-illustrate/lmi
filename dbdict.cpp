@@ -180,6 +180,8 @@ void DBDictionary::ascribe_members()
     ascribe("GenAcctIntBonus"     , &DBDictionary::GenAcctIntBonus     );
     ascribe("BonusInt"            , &DBDictionary::BonusInt            );
     ascribe("IntFloor"            , &DBDictionary::IntFloor            );
+    ascribe("AllowGenAcct"        , &DBDictionary::AllowGenAcct        );
+    ascribe("AllowSepAcct"        , &DBDictionary::AllowSepAcct        );
     ascribe("MaxGenAcctRate"      , &DBDictionary::MaxGenAcctRate      );
     ascribe("MaxSepAcctRate"      , &DBDictionary::MaxSepAcctRate      );
     ascribe("SepAcctSpreadMethod" , &DBDictionary::SepAcctSpreadMethod );
@@ -329,8 +331,6 @@ void DBDictionary::ascribe_members()
     ascribe("NoLapseDbo1Only"     , &DBDictionary::NoLapseDbo1Only     );
     ascribe("NoLapseAlwaysActive" , &DBDictionary::NoLapseAlwaysActive );
     ascribe("AllowHoneymoon"      , &DBDictionary::AllowHoneymoon      );
-    ascribe("AllowGenAcct"        , &DBDictionary::AllowGenAcct        );
-    ascribe("AllowSepAcct"        , &DBDictionary::AllowSepAcct        );
     ascribe("DeductionMethod"     , &DBDictionary::DeductionMethod     );
     ascribe("DeductionAcct"       , &DBDictionary::DeductionAcct       );
     ascribe("DistributionMethod"  , &DBDictionary::DistributionMethod  );

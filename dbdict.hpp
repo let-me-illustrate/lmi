@@ -154,6 +154,8 @@ class LMI_SO DBDictionary
     database_entity GenAcctIntBonus     ;
     database_entity BonusInt            ;
     database_entity IntFloor            ;
+    database_entity AllowGenAcct        ;
+    database_entity AllowSepAcct        ;
     database_entity MaxGenAcctRate      ;
     database_entity MaxSepAcctRate      ;
     database_entity SepAcctSpreadMethod ;
@@ -303,8 +305,6 @@ class LMI_SO DBDictionary
     database_entity NoLapseDbo1Only     ;
     database_entity NoLapseAlwaysActive ;
     database_entity AllowHoneymoon      ;
-    database_entity AllowGenAcct        ;
-    database_entity AllowSepAcct        ;
     database_entity DeductionMethod     ;
     database_entity DeductionAcct       ;
     database_entity DistributionMethod  ;
