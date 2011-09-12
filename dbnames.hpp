@@ -192,6 +192,8 @@ enum e_database_key
         ,DB_GenAcctIntBonus
         ,DB_BonusInt
         ,DB_IntFloor
+        ,DB_AllowGenAcct
+        ,DB_AllowSepAcct
         ,DB_MaxGenAcctRate
         ,DB_MaxSepAcctRate
 
@@ -404,8 +406,6 @@ enum e_database_key
 
     ,DB_Topic_Allocations
 
-        ,DB_AllowGenAcct
-        ,DB_AllowSepAcct
         ,DB_DeductionMethod
         ,DB_DeductionAcct
         ,DB_DistributionMethod

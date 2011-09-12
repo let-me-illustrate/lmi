@@ -92,6 +92,8 @@
 {DB_GenAcctIntBonus,DB_Topic_Interest,"GenAcctIntBonus","Interest bonus added to the general account rate",}, \
 {DB_BonusInt,DB_Topic_Interest,"BonusInt","Bonus interest [not yet implemented]",}, \
 {DB_IntFloor,DB_Topic_Interest,"IntFloor","[not used]",}, \
+{DB_AllowGenAcct,DB_Topic_Interest,"AllowGenAcct","Allow investment in general account",}, \
+{DB_AllowSepAcct,DB_Topic_Interest,"AllowSepAcct","Allow investment in separate account",}, \
 {DB_MaxGenAcctRate,DB_Topic_Interest,"MaxGenAcctRate","Maximum general account interest rate",}, \
 {DB_MaxSepAcctRate,DB_Topic_Interest,"MaxSepAcctRate","Maximum separate account interest rate",}, \
 {DB_SepAcctSpreadMethod,DB_Topic_Interest,"SepAcctSpreadMethod","Separate-account spread and fee subtraction: 0=annual (effective), 1=daily (nominal)",}, \
@@ -252,8 +254,6 @@
 {DB_NoLapseAlwaysActive,DB_Topic_SecondaryGuarantees,"NoLapseAlwaysActive","No-lapse guarantee requirements are always met by contract or issue rules: 0=no, 1=yes",}, \
 {DB_AllowHoneymoon,DB_Topic_SecondaryGuarantees,"AllowHoneymoon","Honeymoon allowed: 0=no, 1=yes",}, \
 {DB_Topic_Allocations,DB_FIRST,"Allocations","Allocations between general and separate account",}, \
-{DB_AllowGenAcct,DB_Topic_Allocations,"AllowGenAcct","Allow investment in general account",}, \
-{DB_AllowSepAcct,DB_Topic_Allocations,"AllowSepAcct","Allow investment in separate account",}, \
 {DB_DeductionMethod,DB_Topic_Allocations,"DeductionMethod","Apportionment of deductions between general and separate accounts: 0=in proportion to assets, 1=debit 'preferred' account first",}, \
 {DB_DeductionAcct,DB_Topic_Allocations,"DeductionAcct","Preferred account for non-proportional deductions: 0=general account, 1=separate account",}, \
 {DB_DistributionMethod,DB_Topic_Allocations,"DistributionMethod","Apportionment of distributions between general and separate accounts: 0=in proportion to assets, 1=debit 'preferred' account first",}, \
