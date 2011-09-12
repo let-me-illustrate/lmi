@@ -28422,10 +28422,35 @@ Add titles to sequence editor dialog.
   ihs_avstrtgy.cpp
 Constrain salary-based specamt as newly documented.
 
-20110825T1700Z <wboutin@charter.net> [615]
+20110825T1701Z <wboutin@charter.net> [615]
 
   skin_coli_boli.xrc
   skin_group_carveout2.xrc
   skin_reg_d.xrc
 Correct misalignment and typos.
+
+20110912T1729Z <gchicares@sbcglobal.net> [615]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+Move certain database entities.
+
+20110912T1917Z <gchicares@sbcglobal.net> [615]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+  premium_tax.cpp
+  premium_tax.hpp
+Remove an obsolete database entity; add several new ones.
+
+20110912T1933Z <gchicares@sbcglobal.net> [614]
+
+  input_harmonization.cpp
+  input_realization.cpp
+  mec_input.cpp
+Use certain database entities added 20110912T1917Z.
 
