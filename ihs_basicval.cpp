@@ -671,6 +671,8 @@ double BasicValues::GetTgtPrem
 //============================================================================
 void BasicValues::SetPermanentInvariants()
 {
+    MinIssSpecAmt       = Database_->Query(DB_MinIssSpecAmt        );
+    MinIssBaseSpecAmt   = Database_->Query(DB_MinIssBaseSpecAmt    );
     MinRenlSpecAmt      = Database_->Query(DB_MinRenlSpecAmt       );
     MinRenlBaseSpecAmt  = Database_->Query(DB_MinRenlBaseSpecAmt   );
     NoLapseOpt1Only     = Database_->Query(DB_NoLapseDbo1Only      );
@@ -683,6 +685,8 @@ void BasicValues::SetPermanentInvariants()
     MaxIncrAge          = static_cast<int>(Database_->Query(DB_MaxIncrAge));
     WaivePmTxInt1035    = Database_->Query(DB_WaivePremTaxInt1035  );
     AllowTerm           = Database_->Query(DB_AllowTerm            );
+    TermIsDbFor7702     = Database_->Query(DB_TermIsDbFor7702      );
+    TermIsDbFor7702A    = Database_->Query(DB_TermIsDbFor7702A     );
     ExpPerKLimit        = Database_->Query(DB_ExpSpecAmtLimit      );
     MaxWDDed_           = static_cast<mcenum_anticipated_deduction>(static_cast<int>(Database_->Query(DB_MaxWdDed)));
     MaxWDAVMult         = Database_->Query(DB_MaxWdAcctValMult     );
