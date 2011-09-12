@@ -308,6 +308,8 @@ class LMI_SO BasicValues
     mcenum_dbopt_7702            Equiv7702DBO3;
     double                       MaxNAAR;
     int                          EndtAge;
+    double                       MinIssSpecAmt;
+    double                       MinIssBaseSpecAmt;
     double                       MinRenlSpecAmt;
     double                       MinRenlBaseSpecAmt;
     bool                         NoLapseOpt1Only;
@@ -320,6 +322,8 @@ class LMI_SO BasicValues
     int                          MaxIncrAge;
     bool                         WaivePmTxInt1035;
     bool                         AllowTerm;
+    bool                         TermIsDbFor7702;
+    bool                         TermIsDbFor7702A;
     double                       ExpPerKLimit;
     mcenum_anticipated_deduction MaxWDDed_;
     double                       MaxWDAVMult;
