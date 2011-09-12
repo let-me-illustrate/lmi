@@ -107,6 +107,8 @@ enum e_database_key
         ,DB_MaxIncrAge
 
         ,DB_AllowFullUw
+        ,DB_AllowParamedUw
+        ,DB_AllowNonmedUw
         ,DB_AllowSimpUw
         ,DB_AllowGuarUw
         ,DB_SmokeOrTobacco       // DATABASE !! Move to '.policy'
@@ -153,6 +155,7 @@ enum e_database_key
 
         ,DB_CurrCoiTable
         ,DB_CurrCoiIsAnnual
+        ,DB_MinInputCoiMult
         ,DB_CurrCoiMultiplier
         ,DB_UnusualCoiBanding
         ,DB_CurrCoiTable0Limit
@@ -194,6 +197,8 @@ enum e_database_key
         ,DB_IntFloor
         ,DB_AllowGenAcct
         ,DB_AllowSepAcct
+        ,DB_AllowGenAcctEarnRate
+        ,DB_AllowSepAcctNetRate
         ,DB_MaxGenAcctRate
         ,DB_MaxSepAcctRate
 
@@ -266,7 +271,6 @@ enum e_database_key
 
         ,DB_PremTaxRate
         ,DB_PremTaxState
-        ,DB_PremTaxTable
 
     ,DB_Topic_SurrenderCharges
 
@@ -297,6 +301,7 @@ enum e_database_key
 
         ,DB_MinSpecAmt
         ,DB_MinIssSpecAmt
+        ,DB_MinIssBaseSpecAmt
         ,DB_MinRenlSpecAmt
         ,DB_MinRenlBaseSpecAmt
         ,DB_MaxIssSpecAmt
@@ -322,6 +327,8 @@ enum e_database_key
         ,DB_MaxTermProportion
         ,DB_TermCoiRate
         ,DB_TermPremRate
+        ,DB_TermIsDbFor7702
+        ,DB_TermIsDbFor7702A
 
         ,DB_AllowWp
         ,DB_WpTable
