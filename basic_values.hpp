@@ -308,8 +308,8 @@ class LMI_SO BasicValues
     mcenum_dbopt_7702            Equiv7702DBO3;
     double                       MaxNAAR;
     int                          EndtAge;
-    double                       MinRenlBaseFace;
-    double                       MinRenlFace;
+    double                       MinRenlSpecAmt;
+    double                       MinRenlBaseSpecAmt;
     bool                         NoLapseOpt1Only;
     bool                         NoLapseUnratedOnly;
     bool                         OptChgCanIncrSA;

@@ -770,7 +770,7 @@ void AccountValue::ChangeSpecAmtBy(double delta)
             if(TermRiderActive)
                 {
                 TermSpecAmt =
-                    std::max(TermSpecAmt + ActualSpecAmt, MinRenlFace)
+                      std::max(TermSpecAmt + ActualSpecAmt, MinRenlSpecAmt)
                     - ActualSpecAmt
                     ;
                 }
@@ -784,11 +784,11 @@ void AccountValue::ChangeSpecAmtBy(double delta)
 
     if(TermRiderActive)
         {
-        MinSpecAmt = MinRenlBaseFace;
+        MinSpecAmt = MinRenlBaseSpecAmt;
         }
     else
         {
-        MinSpecAmt = MinRenlFace;
+        MinSpecAmt = MinRenlSpecAmt;
         }
 
     // If the minimum isn't met, then force it.

@@ -671,8 +671,8 @@ double BasicValues::GetTgtPrem
 //============================================================================
 void BasicValues::SetPermanentInvariants()
 {
-    MinRenlBaseFace     = Database_->Query(DB_MinRenlBaseSpecAmt   );
-    MinRenlFace         = Database_->Query(DB_MinRenlSpecAmt       );
+    MinRenlSpecAmt      = Database_->Query(DB_MinRenlSpecAmt       );
+    MinRenlBaseSpecAmt  = Database_->Query(DB_MinRenlBaseSpecAmt   );
     NoLapseOpt1Only     = Database_->Query(DB_NoLapseDbo1Only      );
     NoLapseUnratedOnly  = Database_->Query(DB_NoLapseUnratedOnly   );
     OptChgCanIncrSA     = Database_->Query(DB_DboChgCanIncrSpecAmt );
