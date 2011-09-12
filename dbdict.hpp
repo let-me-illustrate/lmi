@@ -93,6 +93,8 @@ class LMI_SO DBDictionary
     database_entity MaxIssAge           ;
     database_entity MaxIncrAge          ;
     database_entity AllowFullUw         ;
+    database_entity AllowParamedUw      ;
+    database_entity AllowNonmedUw       ;
     database_entity AllowSimpUw         ;
     database_entity AllowGuarUw         ;
     database_entity SmokeOrTobacco      ;
@@ -126,6 +128,7 @@ class LMI_SO DBDictionary
     database_entity GuarCoiMultiplier   ;
     database_entity CurrCoiTable        ;
     database_entity CurrCoiIsAnnual     ;
+    database_entity MinInputCoiMult     ;
     database_entity CurrCoiMultiplier   ;
     database_entity UnusualCoiBanding   ;
     database_entity CurrCoiTable0Limit  ;
@@ -156,6 +159,8 @@ class LMI_SO DBDictionary
     database_entity IntFloor            ;
     database_entity AllowGenAcct        ;
     database_entity AllowSepAcct        ;
+    database_entity AllowGenAcctEarnRate;
+    database_entity AllowSepAcctNetRate ;
     database_entity MaxGenAcctRate      ;
     database_entity MaxSepAcctRate      ;
     database_entity SepAcctSpreadMethod ;
@@ -205,7 +210,6 @@ class LMI_SO DBDictionary
     database_entity PremTaxAmortIntRate ;
     database_entity PremTaxRate         ;
     database_entity PremTaxState        ;
-    database_entity PremTaxTable        ;
     database_entity SurrChgAcctValMult  ;
     database_entity SurrChgAcctValSlope ;
     database_entity SurrChgSpecAmtMult  ;
@@ -228,6 +232,7 @@ class LMI_SO DBDictionary
     database_entity EnforceNaarLimit    ;
     database_entity MinSpecAmt          ;
     database_entity MinIssSpecAmt       ;
+    database_entity MinIssBaseSpecAmt   ;
     database_entity MinRenlSpecAmt      ;
     database_entity MinRenlBaseSpecAmt  ;
     database_entity MaxIssSpecAmt       ;
@@ -248,6 +253,8 @@ class LMI_SO DBDictionary
     database_entity MaxTermProportion   ;
     database_entity TermCoiRate         ;
     database_entity TermPremRate        ;
+    database_entity TermIsDbFor7702     ;
+    database_entity TermIsDbFor7702A    ;
     database_entity AllowWp             ;
     database_entity WpTable             ;
     database_entity WpMinIssAge         ;
