@@ -353,14 +353,11 @@ void mec_input::DoHarmonize()
             ;
         }
 
-    // DATABASE !! There should be flags in the database to allow or
-    // forbid paramedical and nonmedical underwriting; arbitrarily,
-    // until they are added, those options are always inhibited.
-    GroupUnderwritingType.allow(mce_medical, database_->Query(DB_AllowFullUw));
-    GroupUnderwritingType.allow(mce_paramedical, false);
-    GroupUnderwritingType.allow(mce_nonmedical, false);
-    GroupUnderwritingType.allow(mce_simplified_issue, database_->Query(DB_AllowSimpUw));
-    GroupUnderwritingType.allow(mce_guaranteed_issue, database_->Query(DB_AllowGuarUw));
+    GroupUnderwritingType.allow(mce_medical         , database_->Query(DB_AllowFullUw   ));
+    GroupUnderwritingType.allow(mce_paramedical     , database_->Query(DB_AllowParamedUw));
+    GroupUnderwritingType.allow(mce_nonmedical      , database_->Query(DB_AllowNonmedUw ));
+    GroupUnderwritingType.allow(mce_simplified_issue, database_->Query(DB_AllowSimpUw   ));
+    GroupUnderwritingType.allow(mce_guaranteed_issue, database_->Query(DB_AllowGuarUw   ));
 
     IssueAge        .enable(mce_no  == UseDOB);
     DateOfBirth     .enable(mce_yes == UseDOB);

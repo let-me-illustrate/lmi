@@ -173,14 +173,11 @@ void Input::DoHarmonize()
 
     RetireesCanEnroll.enable(database_->Query(DB_AllowRetirees));
 
-    // TODO ?? DATABASE !! There should be flags in the database to allow or
-    // forbid paramedical and nonmedical underwriting; arbitrarily,
-    // until they are added, those options are always inhibited.
-    GroupUnderwritingType.allow(mce_medical, database_->Query(DB_AllowFullUw));
-    GroupUnderwritingType.allow(mce_paramedical, false);
-    GroupUnderwritingType.allow(mce_nonmedical, false);
-    GroupUnderwritingType.allow(mce_simplified_issue, database_->Query(DB_AllowSimpUw));
-    GroupUnderwritingType.allow(mce_guaranteed_issue, database_->Query(DB_AllowGuarUw));
+    GroupUnderwritingType.allow(mce_medical         , database_->Query(DB_AllowFullUw   ));
+    GroupUnderwritingType.allow(mce_paramedical     , database_->Query(DB_AllowParamedUw));
+    GroupUnderwritingType.allow(mce_nonmedical      , database_->Query(DB_AllowNonmedUw ));
+    GroupUnderwritingType.allow(mce_simplified_issue, database_->Query(DB_AllowSimpUw   ));
+    GroupUnderwritingType.allow(mce_guaranteed_issue, database_->Query(DB_AllowGuarUw   ));
 
     bool part_mort_used = mce_yes == UsePartialMortality;
 
@@ -639,17 +636,11 @@ false // Silly workaround for now.
         }
 */
 
-// genacct: earned is suppressed for "compliance" reasons
-// sepacct: net is suppressed for "compliance" reasons
-//
-// The "compliance" reasons don't seem sensible, but that's another
-// matter. DATABASE !! Control that in the product database.
-
     GeneralAccountRateType .allow(mce_credited_rate , true);
-    GeneralAccountRateType .allow(mce_earned_rate, anything_goes && mce_no == UseCurrentDeclaredRate);
+    GeneralAccountRateType .allow(mce_earned_rate, mce_no == UseCurrentDeclaredRate && (anything_goes || database_->Query(DB_AllowGenAcctEarnRate)));
 
     SeparateAccountRateType.allow(mce_gross_rate, true);
-    SeparateAccountRateType.allow(mce_net_rate  , anything_goes);
+    SeparateAccountRateType.allow(mce_net_rate  , anything_goes || database_->Query(DB_AllowSepAcctNetRate));
 
     bool curr_int_rate_solve = false; // May be useful someday.
     UseCurrentDeclaredRate .enable(!curr_int_rate_solve && allow_gen_acct);
