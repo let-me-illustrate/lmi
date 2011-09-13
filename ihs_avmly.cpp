@@ -760,13 +760,7 @@ void AccountValue::ChangeSpecAmtBy(double delta)
             // correctly. More care must be given to rounding and to
             // minimums, and the order of adjustment (and term-rider
             // removal) in Input::make_term_rider_consistent() as well
-            // as here. DATABASE !! Are these parameters:
-            //   DB_MinSpecAmt
-            //   DB_MinIssSpecAmt
-            //   DB_MinRenlSpecAmt
-            //   DB_MinRenlBaseSpecAmt
-            // sufficient, or might there also be a minimum total
-            // specified amount for base and term combined?
+            // as here.
             if(TermRiderActive)
                 {
                 TermSpecAmt =
@@ -782,17 +776,18 @@ void AccountValue::ChangeSpecAmtBy(double delta)
         ActualSpecAmt += delta;
         }
 
+    double min_spec_amt = 0.0;
     if(TermRiderActive)
         {
-        MinSpecAmt = MinRenlBaseSpecAmt;
+        min_spec_amt = MinRenlBaseSpecAmt;
         }
     else
         {
-        MinSpecAmt = MinRenlSpecAmt;
+        min_spec_amt = MinRenlSpecAmt;
         }
 
     // If the minimum isn't met, then force it.
-    ActualSpecAmt = std::max(ActualSpecAmt, MinSpecAmt);
+    ActualSpecAmt = std::max(ActualSpecAmt, min_spec_amt);
     ActualSpecAmt = round_specamt()(ActualSpecAmt);
     AddSurrChgLayer(Year, std::max(0.0, ActualSpecAmt - prior_specamt));
 

@@ -694,7 +694,6 @@ void BasicValues::SetPermanentInvariants()
     MaxLoanAVMult       = Database_->Query(DB_MaxLoanAcctValMult   );
     NoLapseMinDur       = static_cast<int>(Database_->Query(DB_NoLapseMinDur));
     NoLapseMinAge       = static_cast<int>(Database_->Query(DB_NoLapseMinAge));
-    MinSpecAmt          = Database_->Query(DB_MinSpecAmt           );
     AdbLimit            = Database_->Query(DB_AdbLimit             );
     WpLimit             = Database_->Query(DB_WpMax                );
     SpecAmtLoadLimit    = Database_->Query(DB_SpecAmtLoadLimit     );

@@ -308,6 +308,7 @@ class LMI_SO BasicValues
     mcenum_dbopt_7702            Equiv7702DBO3;
     double                       MaxNAAR;
     int                          EndtAge;
+    double                       MinSpecAmt; // Antediluvian.
     double                       MinIssSpecAmt;
     double                       MinIssBaseSpecAmt;
     double                       MinRenlSpecAmt;
@@ -337,7 +338,6 @@ class LMI_SO BasicValues
     bool                         SurrChgOnDecr;
     std::vector<double>          FreeWDProportion;
 
-    double                  MinSpecAmt;
     double                  AdbLimit;
     double                  WpLimit;
     double                  SpecAmtLoadLimit;
