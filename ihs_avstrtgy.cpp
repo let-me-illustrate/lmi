@@ -78,6 +78,8 @@ double AccountValue::CalculateSpecAmtFromStrategy
     ,int reference_year
     ) const
 {
+    double z = DeathBfts_->specamt()[actual_year];
+
     // Don't override a specamt that's being solved for.
     if
         (
@@ -86,15 +88,14 @@ double AccountValue::CalculateSpecAmtFromStrategy
         &&  actual_year < std::min(yare_input_.SolveEndYear, BasicValues::Length)
         )
         {
-        return DeathBfts_->specamt()[actual_year];
+        return z;
         }
 
-    double z = 0.0;
     switch(yare_input_.SpecifiedAmountStrategy[actual_year])
         {
         case mce_sa_input_scalar:
             {
-            z = DeathBfts_->specamt()[actual_year];
+            // Do nothing: initial value of 'z' is appropriate.
             }
             break;
         case mce_sa_maximum:
@@ -231,11 +232,8 @@ double AccountValue::DoPerformPmtStrategy
             }
         case mce_pmt_minimum:
             {
-            return GetModalMinPrem
-                (Year
-                ,a_CurrentMode
-                ,ActualSpecAmt + TermSpecAmt
-                );
+            double sa = ActualSpecAmt + TermSpecAmt;
+            return GetModalMinPrem(Year, a_CurrentMode, sa);
             }
         case mce_pmt_target:
             {
@@ -245,52 +243,43 @@ double AccountValue::DoPerformPmtStrategy
 // be used instead, at least in the
 //       if(Database_->Query(DB_TgtPremFixedAtIssue))
 // case?
-            return GetModalTgtPrem
-                (Year
-                ,a_CurrentMode
-                ,ActualSpecAmt
-                );
+            return GetModalTgtPrem(Year, a_CurrentMode, ActualSpecAmt);
             }
         case mce_pmt_mep:
             {
 // TODO ?? This assumes that the term rider continues to at least age 95.
 // We ought to have a database flag for that.
-            return GetModalPremMaxNonMec
-                (0
-                ,a_InitialMode
-                ,InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
-                );
+            double sa =
+                  InvariantValues().SpecAmt[0]
+                + InvariantValues().TermSpecAmt[0]
+                ;
+            return GetModalPremMaxNonMec(0, a_InitialMode, sa);
             }
         case mce_pmt_glp:
             {
-            return GetModalPremGLP
-                (0
-                ,a_InitialMode
-                ,InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
-                ,InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
-                );
+            double sa =
+                  InvariantValues().SpecAmt[0]
+                + InvariantValues().TermSpecAmt[0]
+                ;
+            return GetModalPremGLP(0, a_InitialMode, sa, sa);
             }
         case mce_pmt_gsp:
             {
-            return GetModalPremGSP
-                (0
-                ,a_InitialMode
-                ,InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
-                ,InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
-                );
+            double sa =
+                  InvariantValues().SpecAmt[0]
+                + InvariantValues().TermSpecAmt[0]
+                ;
+            return GetModalPremGSP(0, a_InitialMode, sa, sa);
             }
         case mce_pmt_corridor:
             {
 // TODO ?? This assumes that the term rider continues to at least age 95.
 // We ought to have a database flag for that.
-            return GetModalPremCorridor
-                (0
-                ,a_InitialMode
 // TODO ?? Shouldn't this be initial specified amount?
-                ,ActualSpecAmt
+            double sa = ActualSpecAmt;
 // TODO ?? This may be wanted for an 'integrated' term rider.
 //                ,ActualSpecAmt + TermSpecAmt
-                );
+            return GetModalPremCorridor(0, a_InitialMode, sa);
             }
         case mce_pmt_table:
             {
