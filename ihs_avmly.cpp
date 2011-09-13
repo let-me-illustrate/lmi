@@ -801,12 +801,11 @@ void AccountValue::ChangeSpecAmtBy(double delta)
 // probably be write-only instead.
         InvariantValues().SpecAmt[j] = ActualSpecAmt;
         InvariantValues().TermSpecAmt[j] = TermSpecAmt;
-// We have term specamt in the input classes. It's scalar now:
+// Term specamt is a vector in class LedgerInvariant, but a scalar in
+// the input classes, e.g.:
 //   yare_input_.TermRiderAmount
-// TODO ?? Should it be a std::vector?
-// Probably this term rider deserves special treatment:
-//   maybe even a class of its own (7702-integrated term).
-// Anyway, we have a place for vector values already in LedgerVariant for now.
+// as is appropriate for a 7702-integrated term rider. Another sort of
+// term rider might call for vector input.
         }
     // Reset DB whenever SA changes.
     TxSetDeathBft();
@@ -1564,13 +1563,12 @@ void AccountValue::TxSetBOMAV()
             }
         else
             {
-            // USER !! User documentation should explain that this is
-            // the total specified amount, including term rider. This
-            // assumes that term riders are generally designed to
-            // qualify for death-benefit tax treatment. Some products
-            // have loads that depend on the initial specified amount,
-            // which probably includes term; if it doesn't, then a new
-            // input field would need to be added.
+            // USER !! User documentation should explain that this
+            // includes any 7702-integrated term rider.
+            //
+            // Some products have loads that depend on the initial
+            // specified amount, which probably includes term; if it
+            // doesn't, then a new input field would need to be added.
             z = yare_input_.SpecamtHistory.front();
             }
         SpecAmtLoadBase = std::max(z, NetPmts[Month] * YearsCorridorFactor);
