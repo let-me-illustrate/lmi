@@ -61,17 +61,10 @@
 /// The result of a salary-based strategy is constrained to be
 /// nonnegative, because if 'SalarySpecifiedAmountOffset' is
 /// sufficiently large, then specamt would be negative, which cannot
-/// make any sense. Other than that, no minimum is imposed. A case
-/// could be made for enforcing limits chosen from:
-///   DB_MinIssSpecAmt
-///   DB_MinRenlSpecAmt
-///   DB_MinRenlBaseSpecAmt
-///   DB_MaxIssSpecAmt
-///   DB_MaxRenlSpecAmt
-/// but that should be done unconditionally elsewhere; furthermore,
-/// either 'DB_MinRenlSpecAmt' or 'DB_MinRenlBaseSpecAmt' might apply,
-/// depending on whether the term rider remains in force--which can be
-/// ascertained only during monthiversary processing.
+/// make any sense. Other than that, no minimum is imposed here. The
+/// actual minimum, set elsewhere, is ascertainable only during
+/// monthiversary processing because, e.g., it may depend on whether
+/// cash value is sufficient to keep a term rider in force.
 
 double AccountValue::CalculateSpecAmtFromStrategy
     (int actual_year
@@ -247,38 +240,32 @@ double AccountValue::DoPerformPmtStrategy
             }
         case mce_pmt_mep:
             {
-// TODO ?? This assumes that the term rider continues to at least age 95.
-// We ought to have a database flag for that.
             double sa =
-                  InvariantValues().SpecAmt[0]
-                + InvariantValues().TermSpecAmt[0]
+                                      InvariantValues().SpecAmt    [0]
+                + (TermIsDbFor7702A ? InvariantValues().TermSpecAmt[0] : 0.0)
                 ;
             return GetModalPremMaxNonMec(0, a_InitialMode, sa);
             }
         case mce_pmt_glp:
             {
             double sa =
-                  InvariantValues().SpecAmt[0]
-                + InvariantValues().TermSpecAmt[0]
+                                     InvariantValues().SpecAmt    [0]
+                + (TermIsDbFor7702 ? InvariantValues().TermSpecAmt[0] : 0.0)
                 ;
             return GetModalPremGLP(0, a_InitialMode, sa, sa);
             }
         case mce_pmt_gsp:
             {
             double sa =
-                  InvariantValues().SpecAmt[0]
-                + InvariantValues().TermSpecAmt[0]
+                                     InvariantValues().SpecAmt    [0]
+                + (TermIsDbFor7702 ? InvariantValues().TermSpecAmt[0] : 0.0)
                 ;
             return GetModalPremGSP(0, a_InitialMode, sa, sa);
             }
         case mce_pmt_corridor:
             {
-// TODO ?? This assumes that the term rider continues to at least age 95.
-// We ought to have a database flag for that.
 // TODO ?? Shouldn't this be initial specified amount?
-            double sa = ActualSpecAmt;
-// TODO ?? This may be wanted for an 'integrated' term rider.
-//                ,ActualSpecAmt + TermSpecAmt
+            double sa = ActualSpecAmt + (TermIsDbFor7702 ? TermSpecAmt : 0.0);
             return GetModalPremCorridor(0, a_InitialMode, sa);
             }
         case mce_pmt_table:
