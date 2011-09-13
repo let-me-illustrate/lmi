@@ -28467,3 +28467,12 @@ Rename certain member variables.
   ihs_basicval.cpp
 Cache values of certain database entities added 20110912T1917Z.
 
+20110913T1016Z <gchicares@sbcglobal.net> [614]
+
+  basic_values.hpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+Restrict a data member to the antediluvian fork. In production,
+confusingly, 'MinSpecAmt' was initialized with a value that was
+overridden before each use.
+
