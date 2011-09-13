@@ -92,20 +92,6 @@ double AccountValue::CalculateSpecAmtFromStrategy
     double z = 0.0;
     switch(yare_input_.SpecifiedAmountStrategy[actual_year])
         {
-        case mce_sa_salary:
-            {
-            double y =
-                  yare_input_.ProjectedSalary[actual_year]
-                * yare_input_.SalarySpecifiedAmountFactor
-                ;
-            if(0.0 != yare_input_.SalarySpecifiedAmountCap)
-                {
-                y = std::min(y, yare_input_.SalarySpecifiedAmountCap);
-                }
-            y -= yare_input_.SalarySpecifiedAmountOffset;
-            z = std::max(0.0, y);
-            }
-            break;
         case mce_sa_input_scalar:
             {
             z = DeathBfts_->specamt()[actual_year];
@@ -141,16 +127,6 @@ double AccountValue::CalculateSpecAmtFromStrategy
                 );
             }
             break;
-        case mce_sa_corridor:
-            {
-            z = GetModalSpecAmtCorridor
-                (InvariantValues().EeMode[reference_year].value()
-                ,InvariantValues().EePmt [reference_year]
-                ,InvariantValues().ErMode[reference_year].value()
-                ,InvariantValues().ErPmt [reference_year]
-                );
-            }
-            break;
         case mce_sa_glp:
             {
             z = GetModalSpecAmtGLP
@@ -169,6 +145,30 @@ double AccountValue::CalculateSpecAmtFromStrategy
                 ,InvariantValues().ErMode[reference_year].value()
                 ,InvariantValues().ErPmt [reference_year]
                 );
+            }
+            break;
+        case mce_sa_corridor:
+            {
+            z = GetModalSpecAmtCorridor
+                (InvariantValues().EeMode[reference_year].value()
+                ,InvariantValues().EePmt [reference_year]
+                ,InvariantValues().ErMode[reference_year].value()
+                ,InvariantValues().ErPmt [reference_year]
+                );
+            }
+            break;
+        case mce_sa_salary:
+            {
+            double y =
+                  yare_input_.ProjectedSalary[actual_year]
+                * yare_input_.SalarySpecifiedAmountFactor
+                ;
+            if(0.0 != yare_input_.SalarySpecifiedAmountCap)
+                {
+                y = std::min(y, yare_input_.SalarySpecifiedAmountCap);
+                }
+            y -= yare_input_.SalarySpecifiedAmountOffset;
+            z = std::max(0.0, y);
             }
             break;
         default:
@@ -279,14 +279,6 @@ double AccountValue::DoPerformPmtStrategy
                 ,InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
                 );
             }
-        case mce_pmt_table:
-            {
-            return
-                ActualSpecAmt
-                * MortalityRates_->TableYRates()[Year]
-                * (12.0 / a_CurrentMode)
-                * a_TblMult;
-            }
         case mce_pmt_corridor:
             {
 // TODO ?? This assumes that the term rider continues to at least age 95.
@@ -299,6 +291,15 @@ double AccountValue::DoPerformPmtStrategy
 // TODO ?? This may be wanted for an 'integrated' term rider.
 //                ,ActualSpecAmt + TermSpecAmt
                 );
+            }
+        case mce_pmt_table:
+            {
+            return
+                  ActualSpecAmt
+                * MortalityRates_->TableYRates()[Year]
+                * (12.0 / a_CurrentMode)
+                * a_TblMult
+                ;
             }
         default:
             {
