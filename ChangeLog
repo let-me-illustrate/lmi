@@ -28476,3 +28476,23 @@ Restrict a data member to the antediluvian fork. In production,
 confusingly, 'MinSpecAmt' was initialized with a value that was
 overridden before each use.
 
+20110913T1119Z <gchicares@sbcglobal.net> [613]
+
+  ihs_avmly.cpp
+Improve documentation.
+
+20110913T1139Z <gchicares@sbcglobal.net> [613]
+
+  ihs_avstrtgy.cpp
+Marshal switch-statement cases in enum-declaration order.
+
+20110913T1219Z <gchicares@sbcglobal.net> [613]
+
+  ihs_avstrtgy.cpp
+Refactor.
+
+20110913T1444Z <gchicares@sbcglobal.net> [610]
+
+  ihs_avstrtgy.cpp
+Reflect 7702 and 7702A treatment of term rider in payment strategies.
+
