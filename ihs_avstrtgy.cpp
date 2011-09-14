@@ -71,7 +71,7 @@ double AccountValue::CalculateSpecAmtFromStrategy
     ,int reference_year
     ) const
 {
-    double z = DeathBfts_->specamt()[actual_year];
+    double r = DeathBfts_->specamt()[actual_year];
 
     // Don't override a specamt that's being solved for.
     if
@@ -81,90 +81,82 @@ double AccountValue::CalculateSpecAmtFromStrategy
         &&  actual_year < std::min(yare_input_.SolveEndYear, BasicValues::Length)
         )
         {
-        return z;
+        return r;
         }
 
     switch(yare_input_.SpecifiedAmountStrategy[actual_year])
         {
         case mce_sa_input_scalar:
             {
-            // Do nothing: initial value of 'z' is appropriate.
+            return r;
             }
-            break;
         case mce_sa_maximum:
             {
-            z = GetModalSpecAmtMax
+            return GetModalSpecAmtMax
                 (InvariantValues().EeMode[reference_year].value()
                 ,InvariantValues().EePmt [reference_year]
                 ,InvariantValues().ErMode[reference_year].value()
                 ,InvariantValues().ErPmt [reference_year]
                 );
             }
-            break;
         case mce_sa_target:
             {
-            z = GetModalSpecAmtTgt
+            return GetModalSpecAmtTgt
                 (InvariantValues().EeMode[reference_year].value()
                 ,InvariantValues().EePmt [reference_year]
                 ,InvariantValues().ErMode[reference_year].value()
                 ,InvariantValues().ErPmt [reference_year]
                 );
             }
-            break;
         case mce_sa_mep:
             {
-            z = GetModalSpecAmtMinNonMec
+            return GetModalSpecAmtMinNonMec
                 (InvariantValues().EeMode[reference_year].value()
                 ,InvariantValues().EePmt [reference_year]
                 ,InvariantValues().ErMode[reference_year].value()
                 ,InvariantValues().ErPmt [reference_year]
                 );
             }
-            break;
         case mce_sa_glp:
             {
-            z = GetModalSpecAmtGLP
+            return GetModalSpecAmtGLP
                 (InvariantValues().EeMode[reference_year].value()
                 ,InvariantValues().EePmt [reference_year]
                 ,InvariantValues().ErMode[reference_year].value()
                 ,InvariantValues().ErPmt [reference_year]
                 );
             }
-            break;
         case mce_sa_gsp:
             {
-            z = GetModalSpecAmtGSP
+            return GetModalSpecAmtGSP
                 (InvariantValues().EeMode[reference_year].value()
                 ,InvariantValues().EePmt [reference_year]
                 ,InvariantValues().ErMode[reference_year].value()
                 ,InvariantValues().ErPmt [reference_year]
                 );
             }
-            break;
         case mce_sa_corridor:
             {
-            z = GetModalSpecAmtCorridor
+            return GetModalSpecAmtCorridor
                 (InvariantValues().EeMode[reference_year].value()
                 ,InvariantValues().EePmt [reference_year]
                 ,InvariantValues().ErMode[reference_year].value()
                 ,InvariantValues().ErPmt [reference_year]
                 );
             }
-            break;
         case mce_sa_salary:
             {
-            double y =
+            double z =
                   yare_input_.ProjectedSalary[actual_year]
                 * yare_input_.SalarySpecifiedAmountFactor
                 ;
             if(0.0 != yare_input_.SalarySpecifiedAmountCap)
                 {
-                y = std::min(y, yare_input_.SalarySpecifiedAmountCap);
+                z = std::min(z, yare_input_.SalarySpecifiedAmountCap);
                 }
-            y -= yare_input_.SalarySpecifiedAmountOffset;
-            z = std::max(0.0, y);
+            z -= yare_input_.SalarySpecifiedAmountOffset;
+            return std::max(0.0, z);
             }
-            break;
         default:
             {
             fatal_error()
@@ -173,9 +165,9 @@ double AccountValue::CalculateSpecAmtFromStrategy
                 << " not found."
                 << LMI_FLUSH
                 ;
+            throw "Unreachable--silences a compiler diagnostic.";
             }
         }
-    return z;
 }
 
 /// Set specamt according to selected strategy.
