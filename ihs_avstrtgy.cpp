@@ -192,7 +192,6 @@ double AccountValue::DoPerformPmtStrategy
     ,std::vector<mcenum_pmt_strategy> const& a_StrategyVector
     ) const
 {
-    // TODO ?? What happens if a corporation payment is specified?
     if(SolvingForGuarPremium)
         {
         return a_PmtVector[Year];
