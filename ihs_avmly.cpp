@@ -701,6 +701,21 @@ int AccountValue::MonthsToNextModalPmtDate() const
     return 1 + (11 - Month) % (12 / InvariantValues().EeMode[Year].value());
 }
 
+/// Determine instantaneous base-policy minimum specified amount.
+///
+/// Argument 'issuing_now' indicates whether the policy is being
+/// issued at the present moment: i.e., this is the first month of the
+/// first policy year (and therefore the policy is not in force yet).
+///
+/// Argument 'term_rider' indicates whether a term rider is to be
+/// taken into account, as that affects the base-policy minimum.
+
+double AccountValue::minimum_specified_amount(bool issuing_now, bool term_rider) const
+{
+(void)&issuing_now; // This argument hasn't been used yet, but should be.
+    return term_rider ? MinRenlBaseSpecAmt : MinRenlSpecAmt;
+}
+
 //============================================================================
 // All changes to SA must be handled here.
 // Proportionately reduce base and term SA if term rider present.
@@ -776,18 +791,11 @@ void AccountValue::ChangeSpecAmtBy(double delta)
         ActualSpecAmt += delta;
         }
 
-    double min_spec_amt = 0.0;
-    if(TermRiderActive)
-        {
-        min_spec_amt = MinRenlBaseSpecAmt;
-        }
-    else
-        {
-        min_spec_amt = MinRenlSpecAmt;
-        }
-
     // If the minimum isn't met, then force it.
-    ActualSpecAmt = std::max(ActualSpecAmt, min_spec_amt);
+    ActualSpecAmt = std::max
+        (ActualSpecAmt
+        ,minimum_specified_amount(0 == Year && 0 == Month, TermRiderActive)
+        );
     ActualSpecAmt = round_specamt()(ActualSpecAmt);
     AddSurrChgLayer(Year, std::max(0.0, ActualSpecAmt - prior_specamt));
 
@@ -1013,7 +1021,6 @@ void AccountValue::TxSpecAmtChange()
     double const old_specamt = DeathBfts_->specamt()[Year - 1];
 
     // Nothing to do if no increase or decrease requested.
-    // TODO ?? Minimum specified amount not completely enforced.
     // TODO ?? YearsSpecAmt != ActualSpecAmt; the latter should be used.
     if(YearsSpecAmt == old_specamt)
         {
