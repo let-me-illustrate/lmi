@@ -712,8 +712,11 @@ int AccountValue::MonthsToNextModalPmtDate() const
 
 double AccountValue::minimum_specified_amount(bool issuing_now, bool term_rider) const
 {
-(void)&issuing_now; // This argument hasn't been used yet, but should be.
-    return term_rider ? MinRenlBaseSpecAmt : MinRenlSpecAmt;
+    return
+          issuing_now
+        ? (term_rider ? MinIssBaseSpecAmt  : MinIssSpecAmt )
+        : (term_rider ? MinRenlBaseSpecAmt : MinRenlSpecAmt)
+        ;
 }
 
 //============================================================================
