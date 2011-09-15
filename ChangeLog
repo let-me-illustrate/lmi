@@ -28496,3 +28496,27 @@ Refactor.
   ihs_avstrtgy.cpp
 Reflect 7702 and 7702A treatment of term rider in payment strategies.
 
+20110914T0017Z <gchicares@sbcglobal.net> [610]
+
+  ihs_avstrtgy.cpp
+Refactor.
+
+20110914T0053Z <gchicares@sbcglobal.net> [609]
+
+  ihs_avstrtgy.cpp
+Remove a marker for a defect already resolved: employer premium is
+zeroed out in AccountValue::SolveGuarPremium().
+
+20110915T1025Z <gchicares@sbcglobal.net> [608]
+
+  account_value.hpp
+  ihs_avmly.cpp
+Refactor.
+
+20110915T1059Z <gchicares@sbcglobal.net> [608]
+
+  ihs_avmly.cpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch. The database differentiates initial and post-initial
+minimum specamt, but only the latter was used.
+
