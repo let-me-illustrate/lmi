@@ -61,10 +61,8 @@
 /// The result of a salary-based strategy is constrained to be
 /// nonnegative, because if 'SalarySpecifiedAmountOffset' is
 /// sufficiently large, then specamt would be negative, which cannot
-/// make any sense. Other than that, no minimum is imposed here. The
-/// actual minimum, set elsewhere, is ascertainable only during
-/// monthiversary processing because, e.g., it may depend on whether
-/// cash value is sufficient to keep a term rider in force.
+/// make any sense. Other than that, no minimum is imposed here; see
+/// PerformSpecAmtStrategy().
 
 double AccountValue::CalculateSpecAmtFromStrategy
     (int actual_year
@@ -170,14 +168,20 @@ double AccountValue::CalculateSpecAmtFromStrategy
         }
 }
 
-/// Set specamt according to selected strategy.
+/// Set specamt according to selected strategy, respecting minimum.
+///
+/// The actual minimum, set elsewhere, is ascertainable only during
+/// monthiversary processing because, e.g., it may depend on whether
+/// cash value is sufficient to keep a term rider in force.
 
 void AccountValue::PerformSpecAmtStrategy()
 {
     for(int j = 0; j < BasicValues::Length; ++j)
         {
-        double z = round_specamt()(CalculateSpecAmtFromStrategy(j, 0));
-        DeathBfts_->set_specamt(z, j, 1 + j);
+        bool t = yare_input_.TermRider && 0.0 != yare_input_.TermRiderAmount;
+        double m = minimum_specified_amount(0 == j, t);
+        double z = CalculateSpecAmtFromStrategy(j, 0);
+        DeathBfts_->set_specamt(round_specamt()(std::max(m, z)), j, 1 + j);
         }
 }
 
