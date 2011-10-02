@@ -964,10 +964,13 @@ false // Silly workaround for now.
 /// date, the checkbox can be checked and then unchecked, producing
 /// the same behavior as a pushbutton. This creates a relationship
 /// between the checkbox and the date control that requires resetting
-/// the latter's value as well as the ranges of other controls that
-/// depend on it; that's not just Transmogrification or Harmonization,
-/// but a different relationship that partakes of both, and should
-/// perhaps be handled separately from both.
+/// the latter's value as well as the ranges (and therefore, perhaps,
+/// the values) of other controls that depend on it. That's not just
+/// Transmogrification or Harmonization, but a different relationship
+/// that partakes of both; to handle it properly, this function exits
+/// early whenever 'EffectiveDate' is forced to change, causing
+/// MvcModel::Reconcile() to propagate the change--in effect, as
+/// though the user changed it directly in the GUI.
 ///
 /// A default-constructed instance of this class initially has date of
 /// birth set to the current date, which of course needs adjustment.
@@ -981,12 +984,10 @@ false // Silly workaround for now.
 
 void Input::DoTransmogrify()
 {
-    if(mce_yes == EffectiveDateToday)
+    if(mce_yes == EffectiveDateToday && calendar_date() != EffectiveDate)
         {
         EffectiveDate = calendar_date();
-        // TODO ?? Consider factoring out date calculations and making
-        // them conditional, if justified by measurement of their cost.
-        DoHarmonize();
+        return;
         }
 
     std::pair<int,int> ym0 = years_and_months_since

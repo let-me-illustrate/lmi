@@ -28525,3 +28525,20 @@ minimum specamt, but only the latter was used.
   ihs_avstrtgy.cpp
 Enforce minimum specamt.
 
+20111001T1421Z <gchicares@sbcglobal.net> [608]
+
+  input_harmonization.cpp
+Improve documentation.
+
+20111001T1429Z <gchicares@sbcglobal.net> [608]
+
+  input_harmonization.cpp
+Revert temporary change committed 20090613T1757Z.
+
+20111002T0958Z <gchicares@sbcglobal.net> [607]
+
+  input_harmonization.cpp
+Fix defect introduced 20060924T1428Z. Calling DoHarmonize() explicitly
+was wrong: limits were reset without calling enforce_circumscription()
+for (e.g.) 'LastMaterialChangeDate'.
+
