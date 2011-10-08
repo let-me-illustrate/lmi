@@ -55,16 +55,6 @@ bool ce_product_name::operator==(std::string const& s) const
     return s == str();
 }
 
-std::size_t ce_product_name::cardinality() const
-{
-    return product_names().size();
-}
-
-std::size_t ce_product_name::ordinal() const
-{
-    return ordinal(value_);
-}
-
 std::size_t ce_product_name::ordinal(std::string const& s)
 {
     std::size_t v =
@@ -87,6 +77,21 @@ std::size_t ce_product_name::ordinal(std::string const& s)
             ;
         }
     return v;
+}
+
+std::size_t ce_product_name::cardinality() const
+{
+    return product_names().size();
+}
+
+/// No product is ever proscribed.
+
+void ce_product_name::enforce_proscription()
+{}
+
+std::size_t ce_product_name::ordinal() const
+{
+    return ordinal(value_);
 }
 
 std::string ce_product_name::str(int j) const
@@ -123,9 +128,4 @@ std::ostream& ce_product_name::write(std::ostream& os) const
 {
     return os << str();
 }
-
-/// No product is ever proscribed.
-
-void ce_product_name::enforce_proscription()
-{}
 

@@ -118,11 +118,11 @@ namespace
             }
         else if(0 < t)
             {
-            return  1;
+            return 1;
             }
         else
             {
-            return  0;
+            return 0;
             }
     }
 
@@ -202,10 +202,10 @@ namespace
                 );
             long int z1 = std::numeric_limits<long int>::max();
             return
-                    -z0 < t
-                &&        t < z0
-                &&  -z1 < t
-                &&        t < z1
+                   -z0 < t
+                &&       t < z0
+                && -z1 < t
+                &&       t < z1
                 && t == static_cast<long int>(t);
             }
     };
@@ -230,10 +230,10 @@ namespace
         // Here, '0 -' avoids a compiler warning about negating an
         // unsigned value.
         if
-            (       std::numeric_limits<T>::max()      == t
-            ||  0 - std::numeric_limits<T>::max()      == t
-            ||      std::numeric_limits<T>::infinity() == t
-            ||  0 - std::numeric_limits<T>::infinity() == t
+            (      std::numeric_limits<T>::max()      == t
+            || 0 - std::numeric_limits<T>::max()      == t
+            ||     std::numeric_limits<T>::infinity() == t
+            || 0 - std::numeric_limits<T>::infinity() == t
             )
             {
             return t;
@@ -346,15 +346,15 @@ void trammel_base<T>::assert_sanity() const
 }
 
 template<typename T>
-T trammel_base<T>::default_initializer() const
-{
-    return default_value();
-}
-
-template<typename T>
 T trammel_base<T>::minimum_minimorum() const
 {
     return adjust_minimum(nominal_minimum());
+}
+
+template<typename T>
+T trammel_base<T>::default_initializer() const
+{
+    return default_value();
 }
 
 template<typename T>
