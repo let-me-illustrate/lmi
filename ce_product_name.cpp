@@ -79,6 +79,11 @@ std::size_t ce_product_name::ordinal(std::string const& s)
     return v;
 }
 
+std::vector<std::string> const& ce_product_name::all_strings() const
+{
+    return product_names();
+}
+
 std::size_t ce_product_name::cardinality() const
 {
     return product_names().size();
