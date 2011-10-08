@@ -119,16 +119,16 @@ class mc_enum
     bool operator==(std::string const&) const;
 
     static std::size_t ordinal(std::string const&);
+    static std::vector<std::string> const& all_strings();
 
     // mc_enum_base required implementation.
     virtual std::size_t cardinality() const;
+    virtual void enforce_proscription();
     virtual std::size_t ordinal() const;
     virtual std::string str(int) const;
 
     std::string str() const;
     T value() const;
-
-    static std::vector<std::string> const& all_strings();
 
   private:
     static std::size_t        n();
@@ -139,9 +139,6 @@ class mc_enum
     // TODO ?? Consider moving the implementation into the base class.
     virtual std::istream& read (std::istream&);
     virtual std::ostream& write(std::ostream&) const;
-
-    // mc_enum_base required implementation.
-    virtual void enforce_proscription();
 
     T value_;
 };
