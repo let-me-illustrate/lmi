@@ -147,6 +147,7 @@ class LMI_SO tn_range_base
     virtual std::string diagnose_invalidity(std::string const&) const = 0;
     virtual void enforce_circumscription() = 0;
     virtual bool equal_to(std::string const&) const = 0;
+    virtual std::string str() const = 0;
     virtual double universal_minimum() const = 0;
     virtual double universal_maximum() const = 0;
 };
@@ -280,7 +281,6 @@ class tn_range
     Number curb(Number) const;
     std::string format_limits_for_error_message() const;
     bool is_valid(Number) const;
-    std::string str() const;
 
     // datum_base required implementation.
     virtual std::istream& read (std::istream&);
@@ -290,6 +290,7 @@ class tn_range
     virtual std::string diagnose_invalidity(std::string const&) const;
     virtual void enforce_circumscription();
     virtual bool equal_to(std::string const&) const;
+    virtual std::string str() const;
     virtual double universal_minimum() const;
     virtual double universal_maximum() const;
 

@@ -644,12 +644,6 @@ bool tn_range<Number,Trammel>::is_valid(Number n) const
 }
 
 template<typename Number, typename Trammel>
-std::string tn_range<Number,Trammel>::str() const
-{
-    return value_cast<std::string>(value_);
-}
-
-template<typename Number, typename Trammel>
 std::istream& tn_range<Number,Trammel>::read(std::istream& is)
 {
     std::string s;
@@ -731,6 +725,12 @@ template<typename Number, typename Trammel>
 bool tn_range<Number,Trammel>::equal_to(std::string const& s) const
 {
     return operator==(s);
+}
+
+template<typename Number, typename Trammel>
+std::string tn_range<Number,Trammel>::str() const
+{
+    return value_cast<std::string>(value_);
 }
 
 template<typename Number, typename Trammel>

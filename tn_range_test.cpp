@@ -393,10 +393,9 @@ void tn_range_test::test()
     // *** Explicit conversions.
 
     // Explicit conversion to std::string.
-    // Not tested because it's private.
-//    BOOST_TEST_EQUAL(range1.str(), "3.14159");
+    BOOST_TEST_EQUAL(range1.str(), "3.14159");
 
-    // Explicit conversion to enumerator.
+    // Explicit conversion to number.
     BOOST_TEST_EQUAL(range1.value(), 3.14159);
 
     // *** Limits.
