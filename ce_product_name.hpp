@@ -82,6 +82,7 @@ class ce_product_name
     static std::size_t ordinal(std::string const&);
 
     // mc_enum_base required implementation.
+    virtual std::vector<std::string> const& all_strings() const;
     virtual std::size_t cardinality() const;
     virtual void enforce_proscription();
     virtual std::size_t ordinal() const;

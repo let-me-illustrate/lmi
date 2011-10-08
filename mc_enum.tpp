@@ -107,10 +107,9 @@ std::size_t mc_enum<T>::ordinal(std::string const& s)
 }
 
 template<typename T>
-std::vector<std::string> const& mc_enum<T>::all_strings()
+std::vector<std::string> const& mc_enum<T>::all_strings() const
 {
-    static std::vector<std::string> const v(c(), c() + n());
-    return v;
+    return s();
 }
 
 template<typename T>
@@ -181,6 +180,13 @@ T    const*        mc_enum<T>::e() {return mc_enum_key<T>::e();}
 
 template<typename T>
 char const* const* mc_enum<T>::c() {return mc_enum_key<T>::c();}
+
+template<typename T>
+std::vector<std::string> const& mc_enum<T>::s()
+{
+    static std::vector<std::string> const v(c(), c() + n());
+    return v;
+}
 
 namespace
 {
