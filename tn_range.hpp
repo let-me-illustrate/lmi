@@ -38,6 +38,7 @@
 #endif // Defined __BORLANDC__ .
 
 #include <string>
+#include <typeinfo>
 
 /// Design notes for class template trammel_base.
 ///
@@ -150,6 +151,7 @@ class LMI_SO tn_range_base
     virtual std::string str() const = 0;
     virtual double universal_minimum() const = 0;
     virtual double universal_maximum() const = 0;
+    virtual std::type_info const& value_type() const = 0;
 };
 
 /// Design notes for class template tn_range.
@@ -293,6 +295,7 @@ class tn_range
     virtual std::string str() const;
     virtual double universal_minimum() const;
     virtual double universal_maximum() const;
+    virtual std::type_info const& value_type() const;
 
     Trammel trammel_;
 
