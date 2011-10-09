@@ -28542,3 +28542,43 @@ Fix defect introduced 20060924T1428Z. Calling DoHarmonize() explicitly
 was wrong: limits were reset without calling enforce_circumscription()
 for (e.g.) 'LastMaterialChangeDate'.
 
+20111008T1002Z <gchicares@sbcglobal.net> [607]
+
+  ce_product_name.cpp
+  ce_product_name.hpp
+  mc_enum.hpp
+  mc_enum.tpp
+  tn_range.tpp
+Rearrange; improve layout.
+
+20111008T1026Z <gchicares@sbcglobal.net> [607]
+
+  tn_range.hpp
+  tn_range.tpp
+  tn_range_test.cpp
+Make str() virtual.
+
+20111008T1129Z <gchicares@sbcglobal.net> [607]
+
+  ce_product_name.cpp
+  ce_product_name.hpp
+  mc_enum.hpp
+  mc_enum.tpp
+  mc_enum_test.cpp
+  mc_enum_types_aux.cpp
+Refactor; make all_strings() virtual.
+
+20111009T1317Z <gchicares@sbcglobal.net> [607]
+
+  tn_range.hpp
+  tn_range.tpp
+  tn_range_test.cpp
+Add a virtual RTTI function.
+
+20111009T1501Z <gchicares@sbcglobal.net> [607]
+
+  census_view.cpp
+  census_view.hpp
+Allow direct drill-down editing in census manager (VS). See:
+  http://savannah.nongnu.org/support/?105977
+
