@@ -38,6 +38,7 @@
 #include "illustration_view.hpp"
 #include "illustrator.hpp"
 #include "input.hpp"
+#include "input_sequence_entry.hpp"
 #include "ledger.hpp"
 #include "ledger_text_formats.hpp"
 #include "miscellany.hpp" // is_ok_for_cctype()
@@ -47,9 +48,11 @@
 #include "wx_utility.hpp" // class ClipboardEx
 
 #include <wx/dataview.h>
+#include <wx/datectrl.h>
 #include <wx/icon.h>
 #include <wx/menu.h>
 #include <wx/msgdlg.h>
+#include <wx/spinctrl.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/wupdlock.h>
 
@@ -65,23 +68,621 @@
 
 namespace
 {
-    // TODO ?? Add description and unit tests; consider relocating,
-    // and include "miscellany.hpp" only in ultimate location.
-    std::string insert_spaces_between_words(std::string const& s)
-    {
-        std::string r;
-        std::insert_iterator<std::string> j(r, r.begin());
-        std::string::const_iterator i;
-        for(i = s.begin(); i != s.end(); ++i)
+// TODO ?? Add description and unit tests; consider relocating,
+// and include "miscellany.hpp" only in ultimate location.
+std::string insert_spaces_between_words(std::string const& s)
+{
+    std::string r;
+    std::insert_iterator<std::string> j(r, r.begin());
+    std::string::const_iterator i;
+    for(i = s.begin(); i != s.end(); ++i)
+        {
+        if(is_ok_for_cctype(*i) && std::isupper(*i) && !r.empty())
             {
-            if(is_ok_for_cctype(*i) && std::isupper(*i) && !r.empty())
-                {
-                *j++ = ' ';
-                }
-            *j++ = *i;
+            *j++ = ' ';
             }
-        return r;
+        *j++ = *i;
+        }
+    return r;
+}
+
+/// Data needed to create UI for tn_range<> types.
+
+struct tn_range_variant_data
+    :public wxVariantData
+{
+    tn_range_variant_data(std::string const& value_, double min_, double max_)
+        :value(value_), min(min_), max(max_)
+    {
     }
+
+    tn_range_variant_data(tn_range_base const& r)
+        :value(r.str()), min(r.universal_minimum()), max(r.universal_maximum())
+    {
+    }
+
+    virtual bool Eq(wxVariantData& data) const
+    {
+        tn_range_variant_data* d = dynamic_cast<tn_range_variant_data*>(&data);
+        if(!d)
+            return false;
+        return value == d->value && min == d->min && max == d->max;
+    }
+
+    virtual wxString GetType() const { return typeid(tn_range_variant_data).name(); }
+
+    virtual wxVariantData* Clone() const
+    {
+        return new(wx) tn_range_variant_data(value, min, max);
+    }
+
+    std::string value;
+    double min, max;
+};
+
+// class RangeTypeRenderer
+
+class RangeTypeRenderer
+    :public wxDataViewCustomRenderer
+{
+  protected:
+    RangeTypeRenderer();
+
+  public:
+    virtual bool HasEditorCtrl() const { return true; }
+    virtual wxWindow* CreateEditorCtrl(wxWindow* parent, wxRect labelRect, wxVariant const& value);
+    virtual bool GetValueFromEditorCtrl(wxWindow* editor, wxVariant& value);
+    virtual bool Render(wxRect rect, wxDC* dc, int state);
+    virtual wxSize GetSize() const;
+    virtual bool SetValue(wxVariant const& value);
+    virtual bool GetValue(wxVariant& value) const;
+
+  protected:
+    virtual wxWindow* DoCreateEditor(wxWindow* parent, wxRect const& rect, tn_range_variant_data const& data) = 0;
+    virtual std::string DoGetValueFromEditor(wxWindow* editor) = 0;
+
+    std::string m_value;
+    double m_min, m_max;
+};
+
+RangeTypeRenderer::RangeTypeRenderer()
+    :wxDataViewCustomRenderer
+    (typeid(tn_range_variant_data).name()
+    ,wxDATAVIEW_CELL_EDITABLE
+    ,wxDVR_DEFAULT_ALIGNMENT)
+{
+}
+
+wxWindow* RangeTypeRenderer::CreateEditorCtrl(wxWindow* parent, wxRect labelRect, wxVariant const& value)
+{
+    tn_range_variant_data const* data = dynamic_cast<tn_range_variant_data*>(value.GetData());
+    LMI_ASSERT(data);
+
+    // Always use default height for editor controls
+    wxRect rect(labelRect);
+    rect.height = -1;
+
+    return DoCreateEditor(parent, rect, *data);
+}
+
+bool RangeTypeRenderer::GetValueFromEditorCtrl(wxWindow* editor, wxVariant& value)
+{
+    std::string const val = DoGetValueFromEditor(editor);
+    value = new(wx) tn_range_variant_data(val, m_min, m_max);
+    return true;
+}
+
+bool RangeTypeRenderer::Render(wxRect rect, wxDC* dc, int state)
+{
+    RenderText(m_value, 0, rect, dc, state);
+    return true;
+}
+
+wxSize RangeTypeRenderer::GetSize() const
+{
+    wxSize sz = GetTextExtent(m_value);
+
+    // Allow some space for the spin button, which is approximately the size of
+    // a scrollbar (and getting pixel-exact value would be complicated). Also
+    // add some whitespace between the text and the button:
+    sz.x += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+    sz.x += GetTextExtent("M").x;
+
+    return sz;
+}
+
+bool RangeTypeRenderer::SetValue(wxVariant const& value)
+{
+    tn_range_variant_data const* data = dynamic_cast<tn_range_variant_data*>(value.GetData());
+    LMI_ASSERT(data);
+
+    m_value = data->value;
+    m_min = data->min;
+    m_max = data->max;
+    return true;
+}
+
+bool RangeTypeRenderer::GetValue(wxVariant& value) const
+{
+    value = new(wx) tn_range_variant_data(m_value, m_min, m_max);
+    return true;
+}
+
+// class IntSpinRenderer
+
+class IntSpinRenderer
+    :public RangeTypeRenderer
+{
+  public:
+    IntSpinRenderer() : RangeTypeRenderer() {}
+
+  protected:
+    virtual wxWindow* DoCreateEditor(wxWindow* parent, wxRect const& rect, tn_range_variant_data const& data);
+    virtual std::string DoGetValueFromEditor(wxWindow* editor);
+};
+
+wxWindow* IntSpinRenderer::DoCreateEditor
+    (wxWindow* parent
+     ,wxRect const& rect
+     ,tn_range_variant_data const& data)
+{
+    return new(wx) wxSpinCtrl
+        (parent
+        ,wxID_ANY
+        ,data.value
+        ,rect.GetTopLeft()
+        ,rect.GetSize()
+        ,wxSP_ARROW_KEYS | wxTE_PROCESS_ENTER
+        ,static_cast<long>(data.min)
+        ,static_cast<long>(data.max)
+        ,value_cast<long>(data.value));
+}
+
+std::string IntSpinRenderer::DoGetValueFromEditor(wxWindow* editor)
+{
+    wxSpinCtrl* spin = dynamic_cast<wxSpinCtrl*>(editor);
+    LMI_ASSERT(spin);
+
+    return value_cast<std::string>(spin->GetValue());
+}
+
+// class DoubleSpinRenderer
+
+class DoubleSpinRenderer
+    :public RangeTypeRenderer
+{
+  public:
+    DoubleSpinRenderer() : RangeTypeRenderer() {}
+
+  protected:
+    virtual wxWindow* DoCreateEditor(wxWindow* parent, wxRect const& rect, tn_range_variant_data const& data);
+    virtual std::string DoGetValueFromEditor(wxWindow* editor);
+};
+
+wxWindow* DoubleSpinRenderer::DoCreateEditor
+    (wxWindow* parent
+     ,wxRect const& rect
+     ,tn_range_variant_data const& data)
+{
+    return new(wx) wxSpinCtrlDouble
+        (parent
+        ,wxID_ANY
+        ,data.value
+        ,rect.GetTopLeft()
+        ,rect.GetSize()
+        ,wxSP_ARROW_KEYS | wxTE_PROCESS_ENTER
+        ,data.min
+        ,data.max
+        ,value_cast<double>(data.value));
+}
+
+std::string DoubleSpinRenderer::DoGetValueFromEditor(wxWindow* editor)
+{
+    wxSpinCtrlDouble* spin = dynamic_cast<wxSpinCtrlDouble*>(editor);
+    LMI_ASSERT(spin);
+
+    return value_cast<std::string>(spin->GetValue());
+}
+
+// class DateRenderer
+
+class DateRenderer
+    :public RangeTypeRenderer
+{
+  public:
+    DateRenderer() : RangeTypeRenderer() {}
+    virtual bool Render(wxRect rect, wxDC* dc, int state);
+
+  protected:
+    virtual wxWindow* DoCreateEditor(wxWindow* parent, wxRect const& rect, tn_range_variant_data const& data);
+    virtual std::string DoGetValueFromEditor(wxWindow* editor);
+};
+
+wxWindow* DateRenderer::DoCreateEditor
+    (wxWindow* parent
+     ,wxRect const& rect
+     ,tn_range_variant_data const& data)
+{
+    wxDatePickerCtrl* ctrl = new(wx) wxDatePickerCtrl
+        (parent
+        ,wxID_ANY
+        ,ConvertDateToWx(value_cast<calendar_date>(data.value))
+        ,rect.GetTopLeft()
+        ,rect.GetSize());
+
+    ctrl->SetRange
+        (ConvertDateToWx(jdn_t(static_cast<int>(data.min)))
+        ,ConvertDateToWx(jdn_t(static_cast<int>(data.max)))
+        );
+
+    return ctrl;
+}
+
+bool DateRenderer::Render(wxRect rect, wxDC* dc, int state)
+{
+    // Use wx for date formatting so that it is identical to the way wxDatePickerCtrl does it.
+    wxDateTime const date = ConvertDateToWx(value_cast<calendar_date>(m_value));
+    RenderText(date.FormatDate(), 0, rect, dc, state);
+    return true;
+}
+
+std::string DateRenderer::DoGetValueFromEditor(wxWindow* editor)
+{
+    wxDatePickerCtrl* ctrl = dynamic_cast<wxDatePickerCtrl*>(editor);
+    LMI_ASSERT(ctrl);
+
+    return value_cast<std::string>(ConvertDateFromWx(ctrl->GetValue()));
+}
+
+/// Data needed to create UI for input sequences.
+
+struct input_sequence_variant_data
+    :public wxVariantData
+{
+    input_sequence_variant_data(std::string const& value_, Input const* input_, std::string const& field_)
+        :value(value_), input(input_), field(field_)
+    {
+    }
+
+    virtual bool Eq(wxVariantData& data) const
+    {
+        input_sequence_variant_data* d = dynamic_cast<input_sequence_variant_data*>(&data);
+        if(!d)
+            return false;
+        return value == d->value;
+    }
+
+    virtual wxString GetType() const { return typeid(input_sequence_variant_data).name(); }
+
+    virtual wxVariantData* Clone() const
+    {
+        return new(wx) input_sequence_variant_data(value, input, field);
+    }
+
+    std::string value;
+    Input const* input;
+    std::string field;
+};
+
+class DatumSequenceRenderer
+    :public wxDataViewCustomRenderer
+{
+  public:
+    DatumSequenceRenderer();
+    virtual bool HasEditorCtrl() const { return true; }
+    virtual wxWindow* CreateEditorCtrl(wxWindow* parent, wxRect labelRect, wxVariant const& value);
+    virtual bool GetValueFromEditorCtrl(wxWindow* editor, wxVariant& value);
+    virtual bool Render(wxRect rect, wxDC* dc, int state);
+    virtual wxSize GetSize() const;
+    virtual bool SetValue(wxVariant const& value);
+    virtual bool GetValue(wxVariant& value) const;
+
+    std::string  m_value;
+    Input const* m_input;
+    std::string  m_field;
+};
+
+DatumSequenceRenderer::DatumSequenceRenderer()
+    :wxDataViewCustomRenderer(typeid(input_sequence_variant_data).name(), wxDATAVIEW_CELL_EDITABLE, wxDVR_DEFAULT_ALIGNMENT)
+    ,m_input(0)
+{
+}
+
+wxWindow* DatumSequenceRenderer::CreateEditorCtrl(wxWindow* parent, wxRect labelRect, wxVariant const& value)
+{
+    input_sequence_variant_data const* data = dynamic_cast<input_sequence_variant_data*>(value.GetData());
+    LMI_ASSERT(data);
+    LMI_ASSERT(data->input);
+
+    InputSequenceEntry* ctrl = new(wx) InputSequenceEntry(parent, wxID_ANY, "sequence_editor");
+
+    ctrl->text_ctrl().SetValue(data->value.c_str());
+    ctrl->input(*data->input);
+    ctrl->field_name(data->field);
+
+    // Always use default height for editor controls
+    wxRect rect(labelRect);
+    rect.height = -1;
+
+    ctrl->SetSize(rect);
+
+    return ctrl;
+}
+
+bool DatumSequenceRenderer::GetValueFromEditorCtrl(wxWindow* editor, wxVariant& value)
+{
+    InputSequenceEntry* ctrl = dynamic_cast<InputSequenceEntry*>(editor);
+    LMI_ASSERT(ctrl);
+
+    value = new(wx) input_sequence_variant_data
+        (ctrl->text_ctrl().GetValue().ToStdString()
+        ,&ctrl->input()
+        ,ctrl->field_name());
+    return true;
+}
+
+bool DatumSequenceRenderer::Render(wxRect rect, wxDC* dc, int state)
+{
+    RenderText(m_value, 0, rect, dc, state);
+    return true;
+}
+
+wxSize DatumSequenceRenderer::GetSize() const
+{
+    wxSize sz = GetTextExtent(m_value);
+
+    // Add size of the "..." button. We assume it will use the same font that this renderer
+    // uses and add some extra whitespace in addition to InputSequenceButton's 8px padding.
+    sz.x += 16 + GetTextExtent("...").x;
+
+    return sz;
+}
+
+bool DatumSequenceRenderer::SetValue(wxVariant const& value)
+{
+    input_sequence_variant_data const* data = dynamic_cast<input_sequence_variant_data*>(value.GetData());
+    LMI_ASSERT(data);
+
+    m_value = data->value;
+    m_input = data->input;
+    m_field = data->field;
+    return true;
+}
+
+bool DatumSequenceRenderer::GetValue(wxVariant& value) const
+{
+    value = new(wx) input_sequence_variant_data(m_value, m_input, m_field);
+    return true;
+}
+
+// This class is used to implement conversion to and from wxVariant for use by
+// wxDVC renderers in a single place.
+
+class renderer_type_convertor
+{
+  public:
+    virtual wxVariant to_variant(any_member<Input> const& x, Input const& row, std::string const& col) const = 0;
+    virtual std::string from_variant(wxVariant const& x) const = 0;
+    virtual char const* variant_type() const = 0;
+    virtual wxDataViewRenderer* create_renderer(any_member<Input> const& representative_value) const = 0;
+
+    static renderer_type_convertor const& get(any_member<Input> const& value);
+
+  private:
+    template<typename T>
+    static renderer_type_convertor const& get_impl();
+};
+
+// class renderer_bool_convertor
+
+class renderer_bool_convertor : public renderer_type_convertor
+{
+    virtual wxVariant to_variant(any_member<Input> const& x, Input const&, std::string const&) const
+    {
+        std::string const s(x.str());
+        return
+              "Yes" == s ? true
+            : "No"  == s ? false
+            : throw "Invalid boolean value."
+            ;
+    }
+
+    virtual std::string from_variant(wxVariant const& x) const
+    {
+        return x.GetBool() ? "Yes" : "No";
+    }
+
+    virtual char const* variant_type() const
+    {
+        return "bool";
+    }
+
+    virtual wxDataViewRenderer* create_renderer(any_member<Input> const&) const
+    {
+        return new(wx) wxDataViewToggleRenderer("bool", wxDATAVIEW_CELL_ACTIVATABLE, wxALIGN_CENTER);
+    }
+};
+
+// class renderer_enum_convertor
+
+class renderer_enum_convertor : public renderer_type_convertor
+{
+    virtual wxVariant to_variant(any_member<Input> const& x, Input const&, std::string const&) const
+    {
+        return wxString(x.str());
+    }
+
+    virtual std::string from_variant(wxVariant const& x) const
+    {
+        return x.GetString().ToStdString();
+    }
+
+    virtual char const* variant_type() const
+    {
+        return "string";
+    }
+
+    virtual wxDataViewRenderer* create_renderer(any_member<Input> const& representative_value) const
+    {
+        mc_enum_base const* as_enum = member_cast<mc_enum_base>(representative_value);
+
+        std::vector<std::string> const& all_strings = as_enum->all_strings();
+        wxArrayString choices;
+        choices.assign(all_strings.begin(), all_strings.end());
+        return new(wx) wxDataViewChoiceRenderer(choices, wxDATAVIEW_CELL_EDITABLE);
+    }
+};
+
+// class renderer_sequence_convertor
+
+class renderer_sequence_convertor : public renderer_type_convertor
+{
+  public:
+    virtual wxVariant to_variant(any_member<Input> const& x, Input const& row, std::string const& col) const
+    {
+        return new(wx) input_sequence_variant_data(x.str(), &row, col);
+    }
+
+    virtual std::string from_variant(wxVariant const& x) const
+    {
+        input_sequence_variant_data const* data = dynamic_cast<input_sequence_variant_data*>(x.GetData());
+        LMI_ASSERT(data);
+        return data->value;
+    }
+
+    virtual char const* variant_type() const
+    {
+        return typeid(input_sequence_variant_data).name();
+    }
+
+    virtual wxDataViewRenderer* create_renderer(any_member<Input> const&) const
+    {
+        return new(wx) DatumSequenceRenderer();
+    }
+};
+
+// class renderer_range_convertor
+
+class renderer_range_convertor : public renderer_type_convertor
+{
+  public:
+    virtual wxVariant to_variant(any_member<Input> const& x, Input const&, std::string const&) const
+    {
+        tn_range_base const* as_range = member_cast<tn_range_base>(x);
+        LMI_ASSERT(as_range);
+        return new(wx) tn_range_variant_data(*as_range);
+    }
+
+    virtual std::string from_variant(wxVariant const& x) const
+    {
+        tn_range_variant_data const* data = dynamic_cast<tn_range_variant_data*>(x.GetData());
+        LMI_ASSERT(data);
+        return data->value;
+    }
+
+    virtual char const* variant_type() const
+    {
+        return typeid(tn_range_variant_data).name();
+    }
+};
+
+class renderer_int_range_convertor : public renderer_range_convertor
+{
+  public:
+    virtual wxDataViewRenderer* create_renderer(any_member<Input> const&) const
+    {
+        return new(wx) IntSpinRenderer();
+    }
+};
+
+class renderer_double_range_convertor : public renderer_range_convertor
+{
+  public:
+    virtual wxDataViewRenderer* create_renderer(any_member<Input> const&) const
+    {
+        return new(wx) DoubleSpinRenderer();
+    }
+};
+
+class renderer_date_convertor : public renderer_range_convertor
+{
+  public:
+    virtual wxDataViewRenderer* create_renderer(any_member<Input> const&) const
+    {
+        return new(wx) DateRenderer();
+    }
+};
+
+// class renderer_fallback_convertor
+
+class renderer_fallback_convertor : public renderer_type_convertor
+{
+  public:
+    virtual wxVariant to_variant(any_member<Input> const& x, Input const&, std::string const&) const
+    {
+        return wxString(x.str());
+    }
+
+    virtual std::string from_variant(wxVariant const& x) const
+    {
+        return x.GetString().ToStdString();
+    }
+
+    virtual char const* variant_type() const
+    {
+        return "string";
+    }
+
+    virtual wxDataViewRenderer* create_renderer(any_member<Input> const&) const
+    {
+        return new(wx) wxDataViewTextRenderer("string", wxDATAVIEW_CELL_EDITABLE);
+    }
+};
+
+renderer_type_convertor const& renderer_type_convertor::get(any_member<Input> const& value)
+{
+    mc_enum_base const* as_enum = NULL;
+    datum_sequence const* as_sequence = NULL;
+    tn_range_base const* as_range = NULL;
+
+    any_member<Input>& nonconst_value = const_cast<any_member<Input>&>(value);
+
+    if(typeid(mce_yes_or_no Input::*) == value.type())
+        {
+        return get_impl<renderer_bool_convertor>();
+        }
+    else if(0 != reconstitutor<mc_enum_base  ,Input>::reconstitute(nonconst_value))
+        {
+        as_enum = member_cast<mc_enum_base>(value);
+        return get_impl<renderer_enum_convertor>();
+        }
+    else if(0 != reconstitutor<datum_sequence,Input>::reconstitute(nonconst_value))
+        {
+        as_sequence = member_cast<datum_sequence>(value);
+        return get_impl<renderer_sequence_convertor>();
+        }
+    else if(0 != reconstitutor<tn_range_base ,Input>::reconstitute(nonconst_value))
+        {
+        as_range = member_cast<tn_range_base>(value);
+        if(typeid(int) == as_range->value_type())
+            return get_impl<renderer_int_range_convertor>();
+        else if(typeid(double) == as_range->value_type())
+            return get_impl<renderer_double_range_convertor>();
+        else if(typeid(calendar_date) == as_range->value_type())
+            return get_impl<renderer_date_convertor>();
+        // else: fall through
+        }
+
+    return get_impl<renderer_fallback_convertor>();
+}
+
+template<typename T>
+renderer_type_convertor const& renderer_type_convertor::get_impl()
+{
+    static const T singleton;
+    return singleton;
+}
+
 } // Unnamed namespace.
 
 /// Interface to the data for wxDataViewCtrl.
@@ -96,47 +697,101 @@ class CensusViewDataViewModel : public wxDataViewIndexListModel
     {
     }
 
-    virtual void GetValueByRow
-        (wxVariant& variant
-        ,unsigned int row
-        ,unsigned int col
-        ) const
-    {
-        if(col == Col_CellNum)
-            {
-            variant = wxString::Format("%d", 1 + row);
-            }
-        else
-            {
-            std::string s = view_.cell_parms()[row][all_headers()[col - 1]].str();
-            variant = s;
-            }
-    }
+    virtual void GetValueByRow(wxVariant& variant, unsigned int row, unsigned int col) const;
+    virtual bool SetValueByRow(wxVariant const&, unsigned int, unsigned int);
 
-    virtual bool SetValueByRow(wxVariant const&, unsigned int, unsigned int)
-    {
-        // in-place editing not yet implemented
-        return false;
-    }
+    virtual unsigned int GetColumnCount() const;
 
-    virtual unsigned int GetColumnCount() const
-    {
-        return all_headers().size() + 1;
-    }
+    virtual wxString GetColumnType(unsigned int col) const;
 
-    virtual wxString GetColumnType(unsigned int) const
-    {
-        return "string";
-    }
+    std::string const& col_name(unsigned col) const;
+    any_member<Input>& cell_at(unsigned row, unsigned col);
+    any_member<Input> const& cell_at(unsigned row, unsigned col) const;
 
   private:
-    std::vector<std::string> const& all_headers() const
-    {
-        return view_.case_parms()[0].member_names();
-    }
+    std::vector<std::string> const& all_headers() const;
 
     CensusView& view_;
 };
+
+void CensusViewDataViewModel::GetValueByRow(wxVariant& variant, unsigned row, unsigned col) const
+{
+    if(col == Col_CellNum)
+        {
+        variant = static_cast<long>(1 + row);
+        }
+    else
+        {
+        any_member<Input> const& cell = cell_at(row, col);
+        renderer_type_convertor const& conv = renderer_type_convertor::get(cell);
+        Input const& row_data = view_.cell_parms()[row];
+
+        variant = conv.to_variant(cell, row_data, col_name(col));
+        }
+}
+
+bool CensusViewDataViewModel::SetValueByRow(wxVariant const& variant, unsigned row, unsigned col)
+{
+    LMI_ASSERT(col != Col_CellNum);
+
+    any_member<Input>& cell = cell_at(row, col);
+    renderer_type_convertor const& conv = renderer_type_convertor::get(cell);
+
+    std::string const prev_val = cell.str();
+    std::string new_val = conv.from_variant(variant);
+
+    if(prev_val == new_val)
+        return false;
+
+    cell = new_val;
+
+    view_.document().Modify(true);
+
+    return true;
+}
+
+unsigned int CensusViewDataViewModel::GetColumnCount() const
+{
+    return all_headers().size() + 1;
+}
+
+wxString CensusViewDataViewModel::GetColumnType(unsigned int col) const
+{
+    if(col == Col_CellNum)
+        {
+        return "long";
+        }
+    else
+        {
+        any_member<Input> const& representative_value = cell_at(0, col);
+        renderer_type_convertor const& conv = renderer_type_convertor::get(representative_value);
+
+        return conv.variant_type();
+        }
+}
+
+std::string const& CensusViewDataViewModel::col_name(unsigned col) const
+{
+    LMI_ASSERT(col > 0);
+    return all_headers()[col - 1];
+}
+
+inline any_member<Input>& CensusViewDataViewModel::cell_at(unsigned row, unsigned col)
+{
+    return view_.cell_parms()[row][col_name(col)];
+}
+
+inline any_member<Input> const& CensusViewDataViewModel::cell_at(unsigned row, unsigned col) const
+{
+    return view_.cell_parms()[row][col_name(col)];
+}
+
+inline std::vector<std::string> const& CensusViewDataViewModel::all_headers() const
+{
+    return view_.case_parms()[0].member_names();
+}
+
+// class CensusView
 
 IMPLEMENT_DYNAMIC_CLASS(CensusView, ViewEx)
 
@@ -182,11 +837,6 @@ CensusView::CensusView()
     ,list_window_                    (0)
     ,list_model_                     (new(wx) CensusViewDataViewModel(*this))
 {
-}
-
-CensusView::~CensusView()
-{
-    list_model_->DecRef();
 }
 
 inline std::vector<Input>& CensusView::case_parms()
@@ -268,9 +918,10 @@ Input* CensusView::class_parms_from_class_name(std::string const& class_name)
     return 0;
 }
 
-    // Determine which columns need to be displayed because their rows
-    // would not all be identical--i.e. because at least one cell or one
-    // class default differs from the case default wrt that column.
+/// Determine which columns need to be displayed because their rows
+/// would not all be identical--i.e. because at least one cell or one
+/// class default differs from the case default wrt that column.
+
 bool CensusView::column_value_varies_across_cells
     (std::string        const& header
     ,std::vector<Input> const& cells
@@ -302,7 +953,7 @@ wxWindow* CensusView::CreateChildWindow()
     // on the screen over slightly improved readability.
     list_window_->SetRowHeight(list_window_->GetCharHeight() + 1);
 
-    list_window_->AssociateModel(list_model_);
+    list_window_->AssociateModel(list_model_.get());
 
     // Show headers.
     document().Modify(false);
@@ -369,10 +1020,11 @@ int CensusView::selected_row()
     return row;
 }
 
-// Make a vector of all class names used by any individual, from
-// scratch; and update the vector of class default parameters,
-// adding any new classes, and purging any that are no longer in use
-// by any cell.
+/// Make a vector of all class names used by any individual, from
+/// scratch; and update the vector of class default parameters,
+/// adding any new classes, and purging any that are no longer in use
+/// by any cell.
+
 void CensusView::update_class_names()
 {
     // Extract names and add them even if they might be duplicates.
@@ -564,7 +1216,7 @@ void CensusView::update_visible_columns()
             ,new(wx) wxDataViewTextRenderer("string", wxDATAVIEW_CELL_INERT)
             ,CensusViewDataViewModel::Col_CellNum
             ,width
-            ,wxALIGN_NOT
+            ,wxALIGN_LEFT
             ,wxDATAVIEW_COL_RESIZABLE
             )
         );
@@ -585,13 +1237,18 @@ void CensusView::update_visible_columns()
             || column_value_varies_across_cells(*i, cell_parms ())
             )
             {
+            any_member<Input> const& representative_value = list_model_->cell_at(0, 1 + column);
+
+            wxDataViewRenderer* renderer = renderer_type_convertor::get(representative_value).create_renderer(representative_value);
+            LMI_ASSERT(renderer);
+
             list_window_->AppendColumn
                 (new(wx) wxDataViewColumn
                     (insert_spaces_between_words(*i)
-                    ,new(wx) wxDataViewTextRenderer("string", wxDATAVIEW_CELL_INERT)
+                    ,renderer
                     ,1 + column
                     ,width
-                    ,wxALIGN_NOT
+                    ,wxALIGN_LEFT
                     ,wxDATAVIEW_COL_RESIZABLE
                     )
                 );
@@ -668,9 +1325,9 @@ void CensusView::UponEditCase(wxCommandEvent&)
         }
 }
 
-// Make each nonfrozen column wide enough to display its widest entry,
-// ignoring column headers.
-//
+/// Make each nonfrozen column wide enough to display its widest entry,
+/// ignoring column headers.
+
 void CensusView::UponColumnWidthVarying(wxCommandEvent&)
 {
     autosize_columns_ = true;
@@ -682,7 +1339,8 @@ void CensusView::UponColumnWidthVarying(wxCommandEvent&)
         }
 }
 
-// Shrink all nonfrozen columns to default width.
+/// Shrink all nonfrozen columns to default width.
+
 void CensusView::UponColumnWidthFixed(wxCommandEvent&)
 {
     autosize_columns_ = false;
@@ -938,7 +1596,8 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
     document().Modify(true);
 }
 
-// Print tab-delimited output to file loadable in spreadsheet programs.
+/// Print tab-delimited output to file loadable in spreadsheet programs.
+
 void CensusView::UponRunCaseToSpreadsheet(wxCommandEvent&)
 {
     std::string spreadsheet_filename =
