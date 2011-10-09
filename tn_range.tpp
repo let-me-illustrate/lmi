@@ -745,3 +745,9 @@ double tn_range<Number,Trammel>::universal_maximum() const
     return value_cast<double>(maximum_);
 }
 
+template<typename Number, typename Trammel>
+std::type_info const& tn_range<Number,Trammel>::value_type() const
+{
+    return typeid(Number);
+}
+

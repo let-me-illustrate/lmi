@@ -398,6 +398,9 @@ void tn_range_test::test()
     // Explicit conversion to number.
     BOOST_TEST_EQUAL(range1.value(), 3.14159);
 
+    // *** Type identification.
+    BOOST_TEST(typeid(double) == range1.value_type());
+
     // *** Limits.
 
     // Floating-point limits having an exact binary representation.
