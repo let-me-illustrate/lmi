@@ -34,9 +34,11 @@
 #include "assert_lmi.hpp"
 #include "basic_values.hpp"
 #include "fenv_lmi.hpp"
+#include "handle_exceptions.hpp"
 #include "ihs_irc7702.hpp"
 #include "ihs_server7702io.hpp"
 #include "ihs_x_type.hpp"
+#include "path_utility.hpp" // initialize_filesystem()
 
 #if defined LMI_MSW
 #   include <windows.h> // HINSTANCE etc.
@@ -51,10 +53,20 @@
 //============================================================================
 int main()
 {
-    InitializeServer7702();
-    // Read from std input, process, and write to std output
-    return RunServer7702();
+    std::set_terminate(lmi_terminate_handler);
+    try
+        {
+        // Absolute paths require "native" name-checking policy for msw.
+        initialize_filesystem();
+        InitializeServer7702();
+        // Read from std input, process, and write to std output
+        return RunServer7702();
 // TODO ?? NEED DECISION What should this return?
+        }
+    catch(...)
+        {
+        report_exception();
+        }
 }
 
 //============================================================================
