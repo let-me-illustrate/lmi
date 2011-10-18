@@ -28,6 +28,8 @@
 
 #include "ihs_server7702.hpp"
 
+#include "handle_exceptions.hpp"
+#include "path_utility.hpp" // initialize_filesystem()
 #include "so_attributes.hpp"
 
 #if defined LMI_POSIX
@@ -188,7 +190,7 @@ int main()
         );
 */
     char c[] =
-        "1 1 0 0 10000 0 " "sample" "\nMedical\n .02 0 1000000 0 0 0"
+        "1 1 0 0 10000 0 " "sample" "\nMedical\n .02 0 1000000 0 0"
         " 45 45\nMale\nMale\nNonsmoker\nNonsmoker\nPreferred\nPreferred\nCT\nCT\nA\nA\n"
         " 1000000 1000000 1000000 1000000 0 0 0 0 0 0"
         "\nA=+25%\nA=+25%\n0 0\nNone\nNone\nP=+400%\nP=+400%\n"
@@ -199,6 +201,12 @@ int main()
 1 0 0 19643.11999999999898136593 213777.04000000000814907253 19643.1199999999989
 8136593 213777.04000000000814907253 0.00000000000000000000 0.0000000000000000000
 0 0.00000000000000000000 0.00000000000000000000 1000000.00000000000000000000
+
+but now it is:
+1 0 0 22110.68343118850680184551 239162.50350465354858897626 22110.6834311885068
+0184551 239162.50350465354858897626 0.00000000000000000000 0.0000000000000000000
+0 0.00000000000000000000 0.00000000000000000000
+
 */
 
     char o[16384];
@@ -208,20 +216,30 @@ int main()
     int j; for(j = 0; j < 1000; j++)
 */
 
+    std::set_terminate(lmi_terminate_handler);
+    try
+        {
+        // Absolute paths require "native" name-checking policy for msw.
+        initialize_filesystem();
 #if defined LMI_POSIX
-    dlopen("gpt_server.so", RTLD_LAZY | RTLD_GLOBAL);
+        dlopen("gpt_server.so", RTLD_LAZY | RTLD_GLOBAL);
 #elif defined LMI_MSW
-    LoadLibrary("gpt_server.dll");
+        LoadLibrary("gpt_server.dll");
 #else // Unknown platform.
 #   error "Unknown platform. Consider contributing support."
 #endif // Unknown platform.
 
-    InitializeServer7702();
-    RunServer7702FromString(c, o);
-    std::fprintf
-        (stdout
-        ,"%s\n"
-        ,o
-        );
+        InitializeServer7702();
+        RunServer7702FromString(c, o);
+        std::fprintf
+            (stdout
+            ,"%s\n"
+            ,o
+            );
+        }
+    catch(...)
+        {
+        report_exception();
+        }
 }
 

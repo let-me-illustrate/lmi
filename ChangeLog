@@ -28582,3 +28582,11 @@ Add a virtual RTTI function.
 Allow direct drill-down editing in census manager (VS). See:
   http://savannah.nongnu.org/support/?105977
 
+20111018T1638Z <gchicares@sbcglobal.net> [607]
+
+  ihs_basicval.cpp
+  ihs_server7702.cpp
+  ihs_server7702io.cpp
+  ihs_server7702test.cpp
+Resolve runtime errors in guideline-premium server.
+

@@ -84,6 +84,16 @@ BasicValues::BasicValues(Input const& input)
     Init();
 }
 
+// Temporary kludge for ancient GPT server.
+template<typename T>
+std::string mc_str(T t)
+{
+    return mc_enum<T>(t).str();
+}
+
+template std::string mc_str(mcenum_class   );
+template std::string mc_str(mcenum_uw_basis);
+
 //============================================================================
 // TODO ?? Not for general use--use for GPT server only. This is bad design.
 BasicValues::BasicValues
@@ -114,20 +124,20 @@ BasicValues::BasicValues
 {
     Input* kludge_input = new Input;
 
-    (*kludge_input)["IssueAge"         ] = value_cast<std::string>(a_IssueAge)         ;
-    (*kludge_input)["RetirementAge"    ] = value_cast<std::string>(a_IssueAge)         ;
-    (*kludge_input)["Gender"           ] = value_cast<std::string>(a_Gender)           ;
-    (*kludge_input)["Smoking"          ] = value_cast<std::string>(a_Smoker)           ;
-    (*kludge_input)["UnderwritingClass"] = value_cast<std::string>(a_UnderwritingClass);
+    (*kludge_input)["IssueAge"         ] = value_cast<std::string>(a_IssueAge);
+    (*kludge_input)["RetirementAge"    ] = value_cast<std::string>(a_IssueAge);
+    (*kludge_input)["Gender"           ] = mc_str(a_Gender)                   ;
+    (*kludge_input)["Smoking"          ] = mc_str(a_Smoker)                   ;
+    (*kludge_input)["UnderwritingClass"] = mc_str(a_UnderwritingClass)        ;
     if(a_AdbInForce)
         {
-        (*kludge_input)["Status[0].HasADD"] = "Yes";
+        (*kludge_input)["AccidentalDeathBenefit"] = "Yes";
         }
     else
         {
-        (*kludge_input)["Status[0].HasADD"] = "No";
+        (*kludge_input)["AccidentalDeathBenefit"] = "No";
         }
-    (*kludge_input)["GroupUnderwritingType"     ] = value_cast<std::string>(a_UnderwritingBasis);
+    (*kludge_input)["GroupUnderwritingType"     ] = mc_str(a_UnderwritingBasis);
     (*kludge_input)["ProductName"               ] = a_ProductName;
     (*kludge_input)["PremiumTaxState"           ] = mc_str(a_StateOfJurisdiction);
     (*kludge_input)["DefinitionOfLifeInsurance" ] = "GPT";
@@ -267,6 +277,14 @@ void BasicValues::GPTServerInit()
     EndtAge = static_cast<int>(Database_->Query(DB_MaturityAge));
     Length = EndtAge - IssueAge;
 
+    yare_input_.ExtraMonthlyCustodialFee  .resize(Length);
+    yare_input_.ExtraCompensationOnAssets .resize(Length);
+    yare_input_.ExtraCompensationOnPremium.resize(Length);
+    yare_input_.CurrentCoiMultiplier      .resize(Length);
+    yare_input_.SpecifiedAmount           .resize(Length);
+    yare_input_.DeathBenefitOption        .resize(Length);
+    yare_input_.FlatExtra                 .resize(Length);
+
     LedgerType_ =
         static_cast<mcenum_ledger_type>
             (static_cast<int>
@@ -299,9 +317,13 @@ void BasicValues::GPTServerInit()
     StratifiedCharges_.reset
         (new stratified_charges(AddDataDir(ProductData_->datum("TierFilename")))
         );
+    SpreadFor7702_.assign
+        (Length
+        ,StratifiedCharges_->minimum_tiered_spread_for_7702()
+        );
 
     // Requires database.
-//  MortalityRates_.reset(new MortalityRates (*this));
+    MortalityRates_.reset(new MortalityRates (*this)); // Used by certain target-premium calculations.
 //  InterestRates_ .reset(new InterestRates  (*this));
     // Will require mortality rates eventually.
 //  SurrChgRates_  .reset(new SurrChgRates   (Database_));
