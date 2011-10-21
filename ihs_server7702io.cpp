@@ -124,6 +124,7 @@ std::istream& operator>> (std::istream& is, Server7702Input& z)
     is >> z.OldTemporaryFlatDuration1;
     is >> z.NewTemporaryFlatDuration2;
     is >> z.OldTemporaryFlatDuration2;
+
     is >> z.TargetPremium; // Apparently this came at the end long ago.
 
     return is;
@@ -145,7 +146,6 @@ std::ostream& operator<< (std::ostream& os, Server7702Input const& z)
     os << ' ' << z.PremTaxLoadRate;
     os << ' ' << z.TieredAssetChargeRate;
     os << ' ' << z.LeastBenefitAmountEver;
-    os << ' ' << z.TargetPremium;
     os << ' ' << z.OldGuidelineLevelPremium;
     os << ' ' << z.OldGuidelineSinglePremium;
     os << ' ' << z.NewIssueAge;
@@ -201,6 +201,8 @@ std::ostream& operator<< (std::ostream& os, Server7702Input const& z)
     os << ' ' << z.OldTemporaryFlatDuration1;
     os << ' ' << z.NewTemporaryFlatDuration2;
     os << ' ' << z.OldTemporaryFlatDuration2;
+
+    os << ' ' << z.TargetPremium;
 
     os << std::endl;
     return os;
