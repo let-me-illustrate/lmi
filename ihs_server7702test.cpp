@@ -140,26 +140,28 @@ int main()
     s.Premium                       = 10000;
     s.DecreaseRequiredByContract    = 0.0;
     s.ProductName                   = "sample";
-    s.UnderwritingBasis             = 0;
+    s.UnderwritingBasis             = "Medical";
     s.PremTaxLoadRate               = .02;
     s.TieredAssetChargeRate         = 0.0;
-    s.LastFaceAmount                = 1000000.0;
+//    s.LastFaceAmount                = 1000000.0; // Apparently long obsolete.
     s.LeastFaceAmountEver           = 1000000.0;
     s.OldGuidelineLevelPremium      = 0.0;
     s.OldGuidelineSinglePremium     = 0.0;
-    s.OldDeathBenefit               = 1000000.0;
+//    s.OldDeathBenefit               = 1000000.0; // Apparently long obsolete.
     s.NewIssueAge                   = 45;
     s.OldIssueAge                   = 45;
-    s.NewGender                     = 1;
-    s.OldGender                     = 1;
-    s.NewSmoker                     = 1;
-    s.OldSmoker                     = 1;
-    s.NewUnderwritingClass          = 0;
-    s.OldUnderwritingClass          = 0;
-    s.NewStateOfJurisdiction        = 6;
-    s.OldStateOfJurisdiction        = 6;
-    s.NewDeathBenefitOption         = 0;
-    s.OldDeathBenefitOption         = 0;
+    s.NewGender                     = "Male";
+    s.OldGender                     = "Male";
+    s.NewSmoker                     = "Nonsmoker";
+    s.OldSmoker                     = "Nonsmoker";
+    s.NewUnderwritingClass          = "Preferred";
+    s.OldUnderwritingClass          = "Preferred";
+    s.NewStateOfJurisdiction        = "CT";
+    s.OldStateOfJurisdiction        = "CT";
+    s.NewDeathBenefitOption         = "A";
+    s.OldDeathBenefitOption         = "A";
+    s.NewBenefitAmount              = 1000000.0;
+    s.OldBenefitAmount              = 1000000.0;
     s.NewSpecifiedAmount            = 1000000.0;
     s.OldSpecifiedAmount            = 1000000.0;
     s.NewTermAmount                 = 0.0;
@@ -168,14 +170,14 @@ int main()
     s.OldWaiverOfPremiumInForce     = 0;
     s.NewPremiumsWaived             = 0;
     s.OldPremiumsWaived             = 0;
-    s.NewWaiverOfPremiumRating      = 1;
-    s.OldWaiverOfPremiumRating      = 1;
+    s.NewWaiverOfPremiumRating      = "None";
+    s.OldWaiverOfPremiumRating      = "None";
     s.NewAccidentalDeathInForce     = 0;
     s.OldAccidentalDeathInForce     = 0;
-    s.NewAccidentalDeathRating      = 0;
-    s.OldAccidentalDeathRating      = 0;
-    s.NewTableRating                = 10;
-    s.OldTableRating                = 10;
+    s.NewAccidentalDeathRating      = "None";
+    s.OldAccidentalDeathRating      = "None";
+    s.NewTableRating                = "None";
+    s.OldTableRating                = "None";
     s.NewPermanentFlatAmount0       = 0.0;
     s.OldPermanentFlatAmount0       = 0.0;
     s.NewTemporaryFlatAmount0       = 0.0;
@@ -197,12 +199,14 @@ int main()
         " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 51640"
         ;
 
-/* output should be: [NOT!]
+/* output should be:
+
+Ancient results, now suspected always to have been incorrect:
 1 0 0 19643.11999999999898136593 213777.04000000000814907253 19643.1199999999989
 8136593 213777.04000000000814907253 0.00000000000000000000 0.0000000000000000000
 0 0.00000000000000000000 0.00000000000000000000 1000000.00000000000000000000
 
-but now it is:
+as of revision 5299:
 1 0 0 22110.68343118850680184551 239162.50350465354858897626 22110.6834311885068
 0184551 239162.50350465354858897626 0.00000000000000000000 0.0000000000000000000
 0 0.00000000000000000000 0.00000000000000000000
