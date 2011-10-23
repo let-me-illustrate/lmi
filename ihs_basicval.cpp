@@ -124,33 +124,33 @@ BasicValues::BasicValues
 {
     Input* kludge_input = new Input;
 
-    (*kludge_input)["IssueAge"         ] = value_cast<std::string>(a_IssueAge);
-    (*kludge_input)["RetirementAge"    ] = value_cast<std::string>(a_IssueAge);
-    (*kludge_input)["Gender"           ] = mc_str(a_Gender)                   ;
-    (*kludge_input)["Smoking"          ] = mc_str(a_Smoker)                   ;
-    (*kludge_input)["UnderwritingClass"] = mc_str(a_UnderwritingClass)        ;
+    (*kludge_input)["IssueAge"         ] = value_cast<std::string>(a_IssueAge);    yare_input_.IssueAge                   = a_IssueAge           ;
+    (*kludge_input)["RetirementAge"    ] = value_cast<std::string>(a_IssueAge);    yare_input_.RetirementAge              = a_IssueAge           ;
+    (*kludge_input)["Gender"           ] = mc_str(a_Gender)                   ;    yare_input_.Gender                     = a_Gender             ;
+    (*kludge_input)["Smoking"          ] = mc_str(a_Smoker)                   ;    yare_input_.Smoking                    = a_Smoker             ;
+    (*kludge_input)["UnderwritingClass"] = mc_str(a_UnderwritingClass)        ;    yare_input_.UnderwritingClass          = a_UnderwritingClass  ;
     if(a_AdbInForce)
         {
-        (*kludge_input)["AccidentalDeathBenefit"] = "Yes";
+        (*kludge_input)["AccidentalDeathBenefit"] = "Yes";                         yare_input_.AccidentalDeathBenefit     = mce_yes              ;
         }
     else
         {
-        (*kludge_input)["AccidentalDeathBenefit"] = "No";
+        (*kludge_input)["AccidentalDeathBenefit"] = "No";                          yare_input_.AccidentalDeathBenefit     = mce_no               ;
         }
-    (*kludge_input)["GroupUnderwritingType"     ] = mc_str(a_UnderwritingBasis);
-    (*kludge_input)["ProductName"               ] = a_ProductName;
-    (*kludge_input)["PremiumTaxState"           ] = mc_str(a_StateOfJurisdiction);
-    (*kludge_input)["DefinitionOfLifeInsurance" ] = "GPT";
-    (*kludge_input)["DefinitionOfMaterialChange"] = "GPT adjustment event";
+    (*kludge_input)["GroupUnderwritingType"     ] = mc_str(a_UnderwritingBasis);   yare_input_.GroupUnderwritingType      = a_UnderwritingBasis  ;
+    (*kludge_input)["ProductName"               ] = a_ProductName;                 yare_input_.ProductName                = a_ProductName        ;
+    (*kludge_input)["PremiumTaxState"           ] = mc_str(a_StateOfJurisdiction); yare_input_.PremiumTaxState            = a_StateOfJurisdiction;
+    (*kludge_input)["DefinitionOfLifeInsurance" ] = "GPT";                         yare_input_.DefinitionOfLifeInsurance  = mce_gpt              ;
+    (*kludge_input)["DefinitionOfMaterialChange"] = "GPT adjustment event";        yare_input_.DefinitionOfMaterialChange = mce_adjustment_event ;
 
-    (*kludge_input)["SpecifiedAmount"   ] = value_cast<std::string>(a_FaceAmount);
+    (*kludge_input)["SpecifiedAmount"   ] = value_cast<std::string>(a_FaceAmount); yare_input_.SpecifiedAmount            .assign(1, a_FaceAmount);
 
     mce_dbopt const z
         (mce_option1_for_7702 == a_DBOptFor7702 ? mce_option1
         :mce_option2_for_7702 == a_DBOptFor7702 ? mce_option2
         :throw std::runtime_error("Unexpected DB option.")
         );
-    (*kludge_input)["DeathBenefitOption"] = mce_dbopt(z).str();
+    (*kludge_input)["DeathBenefitOption"] = mce_dbopt(z).str();                    yare_input_.DeathBenefitOption         .assign(1, z.value());
 
     // TODO ?? EGREGIOUS_DEFECT Redesign this function instead.
     const_cast<Input&>(*Input_) = *kludge_input;
@@ -280,9 +280,9 @@ void BasicValues::GPTServerInit()
     yare_input_.ExtraMonthlyCustodialFee  .resize(Length);
     yare_input_.ExtraCompensationOnAssets .resize(Length);
     yare_input_.ExtraCompensationOnPremium.resize(Length);
-    yare_input_.CurrentCoiMultiplier      .resize(Length);
-    yare_input_.SpecifiedAmount           .resize(Length);
-    yare_input_.DeathBenefitOption        .resize(Length);
+    yare_input_.CurrentCoiMultiplier      .assign(Length, 1.0);
+    yare_input_.SpecifiedAmount           .assign(Length, yare_input_.SpecifiedAmount   [0]);
+    yare_input_.DeathBenefitOption        .assign(Length, yare_input_.DeathBenefitOption[0]);
     yare_input_.FlatExtra                 .resize(Length);
 
     LedgerType_ =
