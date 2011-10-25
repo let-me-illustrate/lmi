@@ -2712,8 +2712,8 @@
                     <flag>wxGROW|wxALL</flag>
                     <border>2</border>
                     <object class="InputSequenceEntry" name="CashValueEnhancementRate">
-                        <title>Multiplier for case value</title>
-                        <help>Multiplier for cash value</help>
+                        <title>Cash-value enhancement rate</title>
+                        <help>Cash-value enhancement rate</help>
                     </object>
                 </object>
             </object>

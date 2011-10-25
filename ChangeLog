@@ -28606,3 +28606,8 @@ Move a field to reflect an ancient change.
   ihs_basicval.cpp
 Propagate certain input changes in obsolescent code.
 
+20111025T1509Z <wboutin@massmutual.com> [607]
+
+  skin_coli_coli.xrc
+Improve consistency.
+
