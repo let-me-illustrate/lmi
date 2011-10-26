@@ -30,23 +30,20 @@
 
 #include "input.hpp"
 #include "ledger.hpp"
-#include "mc_enum_type_enums.hpp"       // enum mcenum_emission
+#include "mc_enum_type_enums.hpp" // enum mcenum_emission
 #include "obstruct_slicing.hpp"
-#include "oecumenic_enumerations.hpp"
 #include "uncopyable_lmi.hpp"
 
 #include <boost/shared_ptr.hpp>
 
-#include <wx/object.h>                  // wxObjectDataPtr
+#include <wx/defs.h> // wx shared-library 'attributes'
 
 #include <string>
 #include <vector>
 
 class CensusDocument;
-class CensusViewDataViewModel;
-
-class WXDLLIMPEXP_FWD_ADV wxDataViewEvent;
-class WXDLLIMPEXP_FWD_ADV wxDataViewCtrl;
+class WXDLLIMPEXP_FWD_CORE wxListEvent;
+class WXDLLIMPEXP_FWD_CORE wxListView;
 
 class CensusView
     :        public  ViewEx
@@ -54,13 +51,13 @@ class CensusView
     ,virtual private obstruct_slicing<CensusView>
 {
     friend class CensusDocument;
-    friend class CensusViewDataViewModel;
 
   public:
     CensusView();
+    virtual ~CensusView();
 
   private:
-    void update_visible_columns();
+    void DisplayAllVaryingData();
 
     CensusDocument& document() const;
 
@@ -70,6 +67,7 @@ class CensusView
     virtual wxMenuBar* MenuBar() const;
 
     void UponAddCell                (wxCommandEvent&);
+    void UponBeginLabelEdit         (wxListEvent&); // TODO ?? Expunge.
     void UponDeleteCells            (wxCommandEvent&);
     void UponEditCell               (wxCommandEvent&);
     void UponEditClass              (wxCommandEvent&);
@@ -77,19 +75,18 @@ class CensusView
     void UponColumnWidthVarying     (wxCommandEvent&);
     void UponColumnWidthFixed       (wxCommandEvent&);
     void UponPasteCensus            (wxCommandEvent&);
-    void UponRightClick             (wxDataViewEvent&);
+    void UponRightClick             (wxContextMenuEvent&);
     void UponPrintCase              (wxCommandEvent&);
     void UponPrintCaseToDisk        (wxCommandEvent&);
     void UponRunCell                (wxCommandEvent&);
     void UponRunCase                (wxCommandEvent&);
     void UponRunCaseToSpreadsheet   (wxCommandEvent&);
-    void UponUpdateAlwaysEnabled    (wxUpdateUIEvent&);
-    void UponUpdateSingleSelection  (wxUpdateUIEvent&);
-    void UponUpdateNonemptySelection(wxUpdateUIEvent&);
+    void UponUpdateApplicable       (wxUpdateUIEvent&);
 
     bool DoAllCells(mcenum_emission);
 
     void Update();
+    void UpdatePreservingSelection();
     void ViewOneCell(int);
     void ViewComposite();
 
@@ -116,10 +113,12 @@ class CensusView
         ,std::vector<Input> const& cells
         ) const;
 
-    oenum_mvc_dv_rc edit_parameters
+    int edit_parameters
         (Input&             parameters
-        ,std::string const& title
+        ,std::string const& name
         );
+
+    void identify_varying_columns();
 
     bool is_invalid();
 
@@ -130,16 +129,15 @@ class CensusView
 
     bool all_changes_have_been_validated_;
 
-    bool autosize_columns_;
-
     bool composite_is_available_;
 
     boost::shared_ptr<Ledger const> composite_ledger_;
 
+    std::vector<std::string> headers_of_varying_parameters_;
+
     bool was_cancelled_;
 
-    wxDataViewCtrl* list_window_;
-    wxObjectDataPtr<CensusViewDataViewModel> list_model_;
+    wxListView* list_window_;
 
     DECLARE_DYNAMIC_CLASS(CensusView)
     DECLARE_EVENT_TABLE()

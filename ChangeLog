@@ -28611,3 +28611,12 @@ Propagate certain input changes in obsolescent code.
   skin_coli_coli.xrc
 Improve consistency.
 
+20111026T1342Z <gchicares@sbcglobal.net> [625]
+
+  census_document.cpp
+  census_document.hpp
+  census_view.cpp
+  census_view.hpp
+Temporarily revert wxDVC census manager, in order to release only the
+input-sequence editor this month.
+
