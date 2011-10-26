@@ -28620,3 +28620,8 @@ Improve consistency.
 Temporarily revert wxDVC census manager, in order to release only the
 input-sequence editor this month.
 
+20111026T1419Z <gchicares@sbcglobal.net> [625]
+
+  version.hpp
+Designate release candidate.
+
