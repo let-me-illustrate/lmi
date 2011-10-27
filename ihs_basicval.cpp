@@ -678,7 +678,7 @@ double BasicValues::GetTgtPrem
                 ,a_specamt
                 );
             }
-            return InitialTargetPremium;
+        return InitialTargetPremium;
         }
     else
         {
