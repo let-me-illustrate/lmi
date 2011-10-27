@@ -28625,3 +28625,8 @@ input-sequence editor this month.
   version.hpp
 Designate release candidate.
 
+20111027T0958Z <gchicares@sbcglobal.net> [625]
+
+  ihs_basicval.cpp
+Fix defect introduced 20080714T1122Z: misleading indentation.
+
