@@ -54,9 +54,9 @@ void constrain_values(e_emission& z)
 
 bool validate_mc_n_values()
 {
-    LMI_ASSERT(mc_n_gen_bases    == mce_gen_basis  ::all_strings().size());
-    LMI_ASSERT(mc_n_sep_bases    == mce_sep_basis  ::all_strings().size());
-    LMI_ASSERT(mc_n_rate_periods == mce_rate_period::all_strings().size());
+    LMI_ASSERT(mc_n_gen_bases    == all_strings<mcenum_gen_basis  >().size());
+    LMI_ASSERT(mc_n_sep_bases    == all_strings<mcenum_sep_basis  >().size());
+    LMI_ASSERT(mc_n_rate_periods == all_strings<mcenum_rate_period>().size());
     return true;
 }
 
@@ -68,11 +68,11 @@ bool validate_mc_n_values()
 volatile bool ensure_setup = validate_mc_n_values();
 } // Unnamed namespace.
 
-std::vector<std::string> const& all_strings_gender   () {return mce_gender  ::all_strings();}
-std::vector<std::string> const& all_strings_class    () {return mce_class   ::all_strings();}
-std::vector<std::string> const& all_strings_smoking  () {return mce_smoking ::all_strings();}
-std::vector<std::string> const& all_strings_uw_basis () {return mce_uw_basis::all_strings();}
-std::vector<std::string> const& all_strings_state    () {return mce_state   ::all_strings();}
+std::vector<std::string> const& all_strings_gender   () {return all_strings<mcenum_gender  >();}
+std::vector<std::string> const& all_strings_class    () {return all_strings<mcenum_class   >();}
+std::vector<std::string> const& all_strings_smoking  () {return all_strings<mcenum_smoking >();}
+std::vector<std::string> const& all_strings_uw_basis () {return all_strings<mcenum_uw_basis>();}
+std::vector<std::string> const& all_strings_state    () {return all_strings<mcenum_state   >();}
 
 std::vector<std::string> allowed_strings_emission()
 {

@@ -69,8 +69,6 @@ class stratified_charges;
 /// start_new_year() should be improved as noted in its documentation.
 ///
 /// premium_tax_rates_for_annuities() should be implemented.
-///
-/// DATABASE !! 'DB_PremTaxTable' should be eradicated.
 
 class premium_tax
   :        private lmi::uncopyable <premium_tax>

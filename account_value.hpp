@@ -279,6 +279,7 @@ class LMI_SO AccountValue
     int    MonthsToNextModalPmtDate() const;
     double anticipated_deduction   (mcenum_anticipated_deduction);
 
+    double minimum_specified_amount(bool issuing_now, bool term_rider) const;
     void   ChangeSpecAmtBy         (double delta);
     void   ChangeSurrChgSpecAmtBy  (double delta);
     void   AddSurrChgLayer         (int year, double delta_specamt);

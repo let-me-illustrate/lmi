@@ -701,6 +701,24 @@ int AccountValue::MonthsToNextModalPmtDate() const
     return 1 + (11 - Month) % (12 / InvariantValues().EeMode[Year].value());
 }
 
+/// Determine instantaneous base-policy minimum specified amount.
+///
+/// Argument 'issuing_now' indicates whether the policy is being
+/// issued at the present moment: i.e., this is the first month of the
+/// first policy year (and therefore the policy is not in force yet).
+///
+/// Argument 'term_rider' indicates whether a term rider is to be
+/// taken into account, as that affects the base-policy minimum.
+
+double AccountValue::minimum_specified_amount(bool issuing_now, bool term_rider) const
+{
+    return
+          issuing_now
+        ? (term_rider ? MinIssBaseSpecAmt  : MinIssSpecAmt )
+        : (term_rider ? MinRenlBaseSpecAmt : MinRenlSpecAmt)
+        ;
+}
+
 //============================================================================
 // All changes to SA must be handled here.
 // Proportionately reduce base and term SA if term rider present.
@@ -760,17 +778,11 @@ void AccountValue::ChangeSpecAmtBy(double delta)
             // correctly. More care must be given to rounding and to
             // minimums, and the order of adjustment (and term-rider
             // removal) in Input::make_term_rider_consistent() as well
-            // as here. DATABASE !! Are these parameters:
-            //   DB_MinSpecAmt
-            //   DB_MinIssSpecAmt
-            //   DB_MinRenlSpecAmt
-            //   DB_MinRenlBaseSpecAmt
-            // sufficient, or might there also be a minimum total
-            // specified amount for base and term combined?
+            // as here.
             if(TermRiderActive)
                 {
                 TermSpecAmt =
-                    std::max(TermSpecAmt + ActualSpecAmt, MinRenlFace)
+                      std::max(TermSpecAmt + ActualSpecAmt, MinRenlSpecAmt)
                     - ActualSpecAmt
                     ;
                 }
@@ -782,17 +794,11 @@ void AccountValue::ChangeSpecAmtBy(double delta)
         ActualSpecAmt += delta;
         }
 
-    if(TermRiderActive)
-        {
-        MinSpecAmt = MinRenlBaseFace;
-        }
-    else
-        {
-        MinSpecAmt = MinRenlFace;
-        }
-
     // If the minimum isn't met, then force it.
-    ActualSpecAmt = std::max(ActualSpecAmt, MinSpecAmt);
+    ActualSpecAmt = std::max
+        (ActualSpecAmt
+        ,minimum_specified_amount(0 == Year && 0 == Month, TermRiderActive)
+        );
     ActualSpecAmt = round_specamt()(ActualSpecAmt);
     AddSurrChgLayer(Year, std::max(0.0, ActualSpecAmt - prior_specamt));
 
@@ -806,12 +812,11 @@ void AccountValue::ChangeSpecAmtBy(double delta)
 // probably be write-only instead.
         InvariantValues().SpecAmt[j] = ActualSpecAmt;
         InvariantValues().TermSpecAmt[j] = TermSpecAmt;
-// We have term specamt in the input classes. It's scalar now:
+// Term specamt is a vector in class LedgerInvariant, but a scalar in
+// the input classes, e.g.:
 //   yare_input_.TermRiderAmount
-// TODO ?? Should it be a std::vector?
-// Probably this term rider deserves special treatment:
-//   maybe even a class of its own (7702-integrated term).
-// Anyway, we have a place for vector values already in LedgerVariant for now.
+// as is appropriate for a 7702-integrated term rider. Another sort of
+// term rider might call for vector input.
         }
     // Reset DB whenever SA changes.
     TxSetDeathBft();
@@ -1019,7 +1024,6 @@ void AccountValue::TxSpecAmtChange()
     double const old_specamt = DeathBfts_->specamt()[Year - 1];
 
     // Nothing to do if no increase or decrease requested.
-    // TODO ?? Minimum specified amount not completely enforced.
     // TODO ?? YearsSpecAmt != ActualSpecAmt; the latter should be used.
     if(YearsSpecAmt == old_specamt)
         {
@@ -1569,13 +1573,12 @@ void AccountValue::TxSetBOMAV()
             }
         else
             {
-            // USER !! User documentation should explain that this is
-            // the total specified amount, including term rider. This
-            // assumes that term riders are generally designed to
-            // qualify for death-benefit tax treatment. Some products
-            // have loads that depend on the initial specified amount,
-            // which probably includes term; if it doesn't, then a new
-            // input field would need to be added.
+            // USER !! User documentation should explain that this
+            // includes any 7702-integrated term rider.
+            //
+            // Some products have loads that depend on the initial
+            // specified amount, which probably includes term; if it
+            // doesn't, then a new input field would need to be added.
             z = yare_input_.SpecamtHistory.front();
             }
         SpecAmtLoadBase = std::max(z, NetPmts[Month] * YearsCorridorFactor);

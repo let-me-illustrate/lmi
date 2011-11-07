@@ -119,6 +119,8 @@ void DBDictionary::ascribe_members()
     ascribe("MaxIssAge"           , &DBDictionary::MaxIssAge           );
     ascribe("MaxIncrAge"          , &DBDictionary::MaxIncrAge          );
     ascribe("AllowFullUw"         , &DBDictionary::AllowFullUw         );
+    ascribe("AllowParamedUw"      , &DBDictionary::AllowParamedUw      );
+    ascribe("AllowNonmedUw"       , &DBDictionary::AllowNonmedUw       );
     ascribe("AllowSimpUw"         , &DBDictionary::AllowSimpUw         );
     ascribe("AllowGuarUw"         , &DBDictionary::AllowGuarUw         );
     ascribe("SmokeOrTobacco"      , &DBDictionary::SmokeOrTobacco      );
@@ -152,6 +154,7 @@ void DBDictionary::ascribe_members()
     ascribe("GuarCoiMultiplier"   , &DBDictionary::GuarCoiMultiplier   );
     ascribe("CurrCoiTable"        , &DBDictionary::CurrCoiTable        );
     ascribe("CurrCoiIsAnnual"     , &DBDictionary::CurrCoiIsAnnual     );
+    ascribe("MinInputCoiMult"     , &DBDictionary::MinInputCoiMult     );
     ascribe("CurrCoiMultiplier"   , &DBDictionary::CurrCoiMultiplier   );
     ascribe("UnusualCoiBanding"   , &DBDictionary::UnusualCoiBanding   );
     ascribe("CurrCoiTable0Limit"  , &DBDictionary::CurrCoiTable0Limit  );
@@ -180,6 +183,10 @@ void DBDictionary::ascribe_members()
     ascribe("GenAcctIntBonus"     , &DBDictionary::GenAcctIntBonus     );
     ascribe("BonusInt"            , &DBDictionary::BonusInt            );
     ascribe("IntFloor"            , &DBDictionary::IntFloor            );
+    ascribe("AllowGenAcct"        , &DBDictionary::AllowGenAcct        );
+    ascribe("AllowSepAcct"        , &DBDictionary::AllowSepAcct        );
+    ascribe("AllowGenAcctEarnRate", &DBDictionary::AllowGenAcctEarnRate);
+    ascribe("AllowSepAcctNetRate" , &DBDictionary::AllowSepAcctNetRate );
     ascribe("MaxGenAcctRate"      , &DBDictionary::MaxGenAcctRate      );
     ascribe("MaxSepAcctRate"      , &DBDictionary::MaxSepAcctRate      );
     ascribe("SepAcctSpreadMethod" , &DBDictionary::SepAcctSpreadMethod );
@@ -229,7 +236,6 @@ void DBDictionary::ascribe_members()
     ascribe("PremTaxAmortIntRate" , &DBDictionary::PremTaxAmortIntRate );
     ascribe("PremTaxRate"         , &DBDictionary::PremTaxRate         );
     ascribe("PremTaxState"        , &DBDictionary::PremTaxState        );
-    ascribe("PremTaxTable"        , &DBDictionary::PremTaxTable        );
     ascribe("SurrChgAcctValMult"  , &DBDictionary::SurrChgAcctValMult  );
     ascribe("SurrChgAcctValSlope" , &DBDictionary::SurrChgAcctValSlope );
     ascribe("SurrChgSpecAmtMult"  , &DBDictionary::SurrChgSpecAmtMult  );
@@ -252,6 +258,7 @@ void DBDictionary::ascribe_members()
     ascribe("EnforceNaarLimit"    , &DBDictionary::EnforceNaarLimit    );
     ascribe("MinSpecAmt"          , &DBDictionary::MinSpecAmt          );
     ascribe("MinIssSpecAmt"       , &DBDictionary::MinIssSpecAmt       );
+    ascribe("MinIssBaseSpecAmt"   , &DBDictionary::MinIssBaseSpecAmt   );
     ascribe("MinRenlSpecAmt"      , &DBDictionary::MinRenlSpecAmt      );
     ascribe("MinRenlBaseSpecAmt"  , &DBDictionary::MinRenlBaseSpecAmt  );
     ascribe("MaxIssSpecAmt"       , &DBDictionary::MaxIssSpecAmt       );
@@ -272,6 +279,8 @@ void DBDictionary::ascribe_members()
     ascribe("MaxTermProportion"   , &DBDictionary::MaxTermProportion   );
     ascribe("TermCoiRate"         , &DBDictionary::TermCoiRate         );
     ascribe("TermPremRate"        , &DBDictionary::TermPremRate        );
+    ascribe("TermIsDbFor7702"     , &DBDictionary::TermIsDbFor7702     );
+    ascribe("TermIsDbFor7702A"    , &DBDictionary::TermIsDbFor7702A    );
     ascribe("AllowWp"             , &DBDictionary::AllowWp             );
     ascribe("WpTable"             , &DBDictionary::WpTable             );
     ascribe("WpMinIssAge"         , &DBDictionary::WpMinIssAge         );
@@ -329,8 +338,6 @@ void DBDictionary::ascribe_members()
     ascribe("NoLapseDbo1Only"     , &DBDictionary::NoLapseDbo1Only     );
     ascribe("NoLapseAlwaysActive" , &DBDictionary::NoLapseAlwaysActive );
     ascribe("AllowHoneymoon"      , &DBDictionary::AllowHoneymoon      );
-    ascribe("AllowGenAcct"        , &DBDictionary::AllowGenAcct        );
-    ascribe("AllowSepAcct"        , &DBDictionary::AllowSepAcct        );
     ascribe("DeductionMethod"     , &DBDictionary::DeductionMethod     );
     ascribe("DeductionAcct"       , &DBDictionary::DeductionAcct       );
     ascribe("DistributionMethod"  , &DBDictionary::DistributionMethod  );
@@ -500,6 +507,7 @@ void DBDictionary::InitDB()
         }
 
     // It would be dangerous to set these to zero.
+    Add(database_entity(DB_MinInputCoiMult     , 1.0));
     Add(database_entity(DB_CurrCoiMultiplier   , 1.0));
     Add(database_entity(DB_GuarCoiMultiplier   , 1.0));
     Add(database_entity(DB_SubstdTableMult     , 1.0));
@@ -623,11 +631,12 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_AllowFlatExtras     , true));
     Add(database_entity(DB_MinIssAge           , 15));
     Add(database_entity(DB_MaxIssAge           , 70));
-    Add(database_entity(DB_MinIssSpecAmt       , 0.0));
-    Add(database_entity(DB_MaxIssSpecAmt       , 0.0));
-    Add(database_entity(DB_MinRenlBaseSpecAmt  , 50000.0));
+    Add(database_entity(DB_MinIssSpecAmt       , 50000.0));
+    Add(database_entity(DB_MinIssBaseSpecAmt   , 50000.0));
+    Add(database_entity(DB_MaxIssSpecAmt       , 10000000.0));
     Add(database_entity(DB_MinRenlSpecAmt      , 50000.0));
-    Add(database_entity(DB_MaxRenlSpecAmt      , 0.0));
+    Add(database_entity(DB_MinRenlBaseSpecAmt  , 50000.0));
+    Add(database_entity(DB_MaxRenlSpecAmt      , 10000000.0));
     Add(database_entity(DB_MinSpecAmtIncr      , 0.0));
     Add(database_entity(DB_MaxIncrAge          , 99));
     Add(database_entity(DB_MinPmt              , 0.0));
@@ -637,6 +646,8 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_AllowUnismoke       , true));
     Add(database_entity(DB_AllowSmokeDistinct  , true));
     Add(database_entity(DB_AllowFullUw         , true));
+    Add(database_entity(DB_AllowParamedUw      , true));
+    Add(database_entity(DB_AllowNonmedUw       , true));
     Add(database_entity(DB_AllowSimpUw         , true));
     Add(database_entity(DB_AllowGuarUw         , true));
     Add(database_entity(DB_AllowMortBlendSex   , true));
@@ -695,8 +706,6 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_PremTaxState        , oe_ee_state));
     Add(database_entity(DB_MaturityAge         , 100));
     Add(database_entity(DB_AllowExtEndt        , true));
-    Add(database_entity(DB_AllowGenAcct        , true));
-    Add(database_entity(DB_AllowSepAcct        , true));
     Add(database_entity(DB_MinPremType         , oe_monthly_deduction));
     Add(database_entity(DB_TgtPremType         , oe_modal_nonmec));
     Add(database_entity(DB_TgtPremFixedAtIssue , false));
@@ -716,6 +725,8 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_MaxTermProportion   , 0.0));
     Add(database_entity(DB_TermCoiRate         , 0.0));
     Add(database_entity(DB_TermPremRate        , 0.0));
+    Add(database_entity(DB_TermIsDbFor7702     , true));
+    Add(database_entity(DB_TermIsDbFor7702A    , true));
     Add(database_entity(DB_WpTable             , 8));
     Add(database_entity(DB_AllowWp             , true));
     Add(database_entity(DB_WpMinIssAge         , 0.0));
@@ -819,6 +830,10 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_AllowExtraPremComp  , true));
     Add(database_entity(DB_AssetChargeType     , oe_asset_charge_spread));
     Add(database_entity(DB_AllowUltraPrefClass , false));
+    Add(database_entity(DB_AllowGenAcct        , true));
+    Add(database_entity(DB_AllowSepAcct        , true));
+    Add(database_entity(DB_AllowGenAcctEarnRate, true));
+    Add(database_entity(DB_AllowSepAcctNetRate , true));
     Add(database_entity(DB_MaxGenAcctRate      , 0.06));
     Add(database_entity(DB_MaxSepAcctRate      , 0.12));
     Add(database_entity(DB_MaxVlrRate          , 0.18));
@@ -875,7 +890,6 @@ void DBDictionary::InitAntediluvian()
     Add(database_entity(DB_GuarPrefLoanSpread, 0.0));
     Add(database_entity(DB_CurrPrefLoanSpread, 0.0));
 
-    Add(database_entity(DB_AllowGenAcct, 1.0));
     Add(database_entity(DB_AllowPreferredClass, 1.0));
 
     // premium loads
@@ -916,6 +930,7 @@ void DBDictionary::InitAntediluvian()
     Add(database_entity(DB_AgeLastOrNearest, 1.0));
     Add(database_entity(DB_MinSpecAmt, 10000.0));
 
+    Add(database_entity(DB_AllowGenAcct, 1.0));
     Add(database_entity(DB_MaxGenAcctRate, 0.12));
     Add(database_entity(DB_MaxSepAcctRate, 0.12));
 

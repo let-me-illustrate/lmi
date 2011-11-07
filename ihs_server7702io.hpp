@@ -45,7 +45,6 @@ struct Server7702Input
     double           PremTaxLoadRate; // the rate actually charged as a premium load. Example: 0.02 means a 2% load. Used to determine whether any load reflected in §7702 calculations has changed.
     double           TieredAssetChargeRate; // the tiered rate actually charged against assets, reflecting the current tier. Example: 0.0050 means fifty basis points. Used to determine whether any load reflected in §7702 calculations has changed.
     double           LeastBenefitAmountEver; // the lowest face amount ever used in §7702 calculations since the contract was issued; equal at issue to DB. The server will always calculate this but never store it. The client will always store it but never calculate it, except to set it equal to DB at issue.
-    double           TargetPremium; // the target premium. The client will always calculate and store it.
 
     // The names of the next several parameters begin with the prefix "Old" to indicate that they are evaluated before the day's transactions. Should an adjustable event occur, they describe the state of the contract before any transaction that might have caused the adjustable event. At issue, "Old" values are the contract's issue parameters.
     double           OldGuidelineLevelPremium; // as previously calculated by the server; 0.0 at issue.
@@ -109,6 +108,8 @@ struct Server7702Input
     int              OldTemporaryFlatDuration1;
     int              NewTemporaryFlatDuration2;
     int              OldTemporaryFlatDuration2;
+
+    double           TargetPremium; // the target premium. The client will always calculate and store it.
 };
 
 std::istream& operator>> (std::istream& is, Server7702Input& z);

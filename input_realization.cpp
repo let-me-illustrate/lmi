@@ -375,7 +375,7 @@ std::string Input::RealizeCurrentCoiMultiplier()
         return s;
         }
 
-    double z = 0.9; // DATABASE !! This belongs in the product database.
+    double const z = database_->Query(DB_MinInputCoiMult);
     double lowest = std::min_element
         (CurrentCoiMultiplierRealized_.begin()
         ,CurrentCoiMultiplierRealized_.end()

@@ -232,6 +232,7 @@
                     <flag>wxGROW</flag>
                     <border>4</border>
                     <object class="InputSequenceEntry" name="ExtraMonthlyCustodialFee">
+                        <title>Additional monthly policy fee</title>
                         <help>Additional monthly policy fee (e.g., for fund custodian charges)</help>
                     </object>
                 </object>
@@ -246,6 +247,7 @@
                     <flag>wxGROW</flag>
                     <border>4</border>
                     <object class="InputSequenceEntry" name="CurrentCoiMultiplier">
+                        <title>Multiplier for current COI rates</title>
                         <help>Multiplier for current COI rates</help>
                     </object>
                 </object>
@@ -454,7 +456,8 @@
                     <flag>wxGROW|wxALL</flag>
                     <border>2</border>
                     <object class="InputSequenceEntry" name="FlatExtra">
-                        <help>Flat extra: annual amount per thousand</help>
+                        <title>Annual flat extra per thousand</title>
+                        <help>Annual flat extra per thousand</help>
                     </object>
                 </object>
             </object>
@@ -1110,6 +1113,7 @@
                     <flag>wxGROW|wxBOTTOM</flag>
                     <border>2</border>
                     <object class="InputSequenceEntry" name="Payment">
+                        <title>Individual payment amount</title>
                         <help>Individual payment amount, or corridor, glp, gsp, minimum, sevenpay, table, target</help>
                     </object>
                 </object>
@@ -1124,6 +1128,7 @@
                     <flag>wxGROW|wxBOTTOM</flag>
                     <border>2</border>
                     <object class="InputSequenceEntry" name="PaymentMode">
+                        <title>Individual payment mode</title>
                         <help>Individual payment mode: annual, semiannual, quarterly, or monthly</help>
                     </object>
                 </object>
@@ -1138,6 +1143,7 @@
                     <flag>wxGROW|wxBOTTOM</flag>
                     <border>2</border>
                     <object class="InputSequenceEntry" name="CorporationPayment">
+                        <title>Corporation payment amount</title>
                         <help>Corporation payment amount, or corridor, glp, gsp, minimum, sevenpay, table, target</help>
                     </object>
                 </object>
@@ -1152,6 +1158,7 @@
                     <flag>wxGROW|wxBOTTOM</flag>
                     <border>2</border>
                     <object class="InputSequenceEntry" name="CorporationPaymentMode">
+                        <title>Corporation payment mode</title>
                         <help>Corporation payment mode: annual, semiannual, quarterly, or monthly</help>
                     </object>
                 </object>
@@ -1166,6 +1173,7 @@
                     <flag>wxGROW|wxBOTTOM</flag>
                     <border>2</border>
                     <object class="InputSequenceEntry" name="ProjectedSalary">
+                        <title>Projected annual salary</title>
                         <help>Projected annual salary</help>
                     </object>
                 </object>
@@ -1180,6 +1188,7 @@
                     <flag>wxGROW|wxBOTTOM</flag>
                     <border>2</border>
                     <object class="InputSequenceEntry" name="SpecifiedAmount">
+                        <title>Specified amount</title>
                         <help>Specified amount, or corridor, glp, gsp, maximum, salary, sevenpay, target</help>
                     </object>
                 </object>
@@ -1194,6 +1203,7 @@
                     <flag>wxGROW</flag>
                     <border>2</border>
                     <object class="InputSequenceEntry" name="DeathBenefitOption">
+                        <title>Death benefit option</title>
                         <help>Death benefit option: a (level), b (increasing), or rop (return of premium)</help>
                     </object>
                 </object>
@@ -1398,6 +1408,7 @@
                                     <flag>wxGROW|wxALIGN_BOTTOM|wxALL</flag>
                                     <border>2</border>
                                     <object class="InputSequenceEntry" name="GeneralAccountRate">
+                                        <title>General-account interest rate</title>
                                         <help>General-account (non-loaned) interest rate</help>
                                         <size>-1,22</size>
                                         <style>wxTE_LEFT</style>
@@ -1414,6 +1425,7 @@
                                     <flag>wxGROW|wxTOP|wxALL</flag>
                                     <border>2</border>
                                     <object class="InputSequenceEntry" name="SeparateAccountRate">
+                                        <title>Separate-account interest rate</title>
                                         <help>Separate-account interest rate</help>
                                         <size>-1,22</size>
                                         <style>wxTE_LEFT</style>
@@ -1462,6 +1474,7 @@
                     <flag>wxGROW|wxBOTTOM</flag>
                     <border>2</border>
                     <object class="InputSequenceEntry" name="Withdrawal">
+                        <title>Withdrawal amount</title>
                         <help>Withdrawal amount</help>
                     </object>
                 </object>
@@ -1476,6 +1489,7 @@
                     <flag>wxGROW</flag>
                     <border>2</border>
                     <object class="InputSequenceEntry" name="NewLoan">
+                        <title>Loan amount</title>
                         <help>Loan amount</help>
                     </object>
                 </object>

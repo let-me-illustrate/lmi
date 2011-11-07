@@ -37,7 +37,7 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include <wx/defs.h>                    // WXDLLIMPEXP*
+#include <wx/object.h>                  // wxObjectDataPtr
 
 #include <string>
 #include <vector>
@@ -58,7 +58,6 @@ class CensusView
 
   public:
     CensusView();
-    virtual ~CensusView();
 
   private:
     void update_visible_columns();
@@ -140,7 +139,7 @@ class CensusView
     bool was_cancelled_;
 
     wxDataViewCtrl* list_window_;
-    CensusViewDataViewModel* list_model_;
+    wxObjectDataPtr<CensusViewDataViewModel> list_model_;
 
     DECLARE_DYNAMIC_CLASS(CensusView)
     DECLARE_EVENT_TABLE()

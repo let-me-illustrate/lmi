@@ -33,16 +33,14 @@
 #include "authenticity.hpp"
 #include "calendar_date.hpp"
 #include "comma_punct.hpp"
-#include "configurable_settings.hpp"
+#include "configurable_settings.hpp"    // effective_calculation_summary_columns()
 #include "contains.hpp"
-#include "financial.hpp"
 #include "global_settings.hpp"
-#include "input_sequence.hpp"
 #include "ledger.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
 #include "map_lookup.hpp"
-#include "mc_enum_types_aux.hpp" // is_subject_to_ill_reg()
+#include "mc_enum_types_aux.hpp"        // is_subject_to_ill_reg()
 #include "miscellany.hpp"
 #include "obstruct_slicing.hpp"
 #include "uncopyable_lmi.hpp"
@@ -50,7 +48,6 @@
 
 #include <algorithm>
 #include <fstream>
-#include <functional>
 #include <iomanip>
 #include <ios>
 #include <iterator>

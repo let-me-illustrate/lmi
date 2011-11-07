@@ -82,7 +82,9 @@ class ce_product_name
     static std::size_t ordinal(std::string const&);
 
     // mc_enum_base required implementation.
+    virtual std::vector<std::string> const& all_strings() const;
     virtual std::size_t cardinality() const;
+    virtual void enforce_proscription();
     virtual std::size_t ordinal() const;
     virtual std::string str(int) const;
 
@@ -96,9 +98,6 @@ class ce_product_name
     // TODO ?? Consider moving the implementation into the base class.
     virtual std::istream& read (std::istream&);
     virtual std::ostream& write(std::ostream&) const;
-
-    // mc_enum_base required implementation.
-    virtual void enforce_proscription();
 
     std::string value_;
 };

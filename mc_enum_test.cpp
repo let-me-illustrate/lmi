@@ -138,7 +138,8 @@ void mc_enum_test::test()
     v.push_back(holiday4.str(0));
     v.push_back(holiday4.str(1));
     v.push_back(holiday4.str(2));
-    BOOST_TEST(v == e_holiday::all_strings());
+    BOOST_TEST(v == all_strings<enum_holiday>());
+    BOOST_TEST(v == holiday4.all_strings());
 
     // Forced validity.
     holiday3.enforce_proscription();

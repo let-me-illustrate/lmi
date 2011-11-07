@@ -308,8 +308,11 @@ class LMI_SO BasicValues
     mcenum_dbopt_7702            Equiv7702DBO3;
     double                       MaxNAAR;
     int                          EndtAge;
-    double                       MinRenlBaseFace;
-    double                       MinRenlFace;
+    double                       MinSpecAmt; // Antediluvian.
+    double                       MinIssSpecAmt;
+    double                       MinIssBaseSpecAmt;
+    double                       MinRenlSpecAmt;
+    double                       MinRenlBaseSpecAmt;
     bool                         NoLapseOpt1Only;
     bool                         NoLapseUnratedOnly;
     bool                         OptChgCanIncrSA;
@@ -320,6 +323,8 @@ class LMI_SO BasicValues
     int                          MaxIncrAge;
     bool                         WaivePmTxInt1035;
     bool                         AllowTerm;
+    bool                         TermIsDbFor7702;
+    bool                         TermIsDbFor7702A;
     double                       ExpPerKLimit;
     mcenum_anticipated_deduction MaxWDDed_;
     double                       MaxWDAVMult;
@@ -333,7 +338,6 @@ class LMI_SO BasicValues
     bool                         SurrChgOnDecr;
     std::vector<double>          FreeWDProportion;
 
-    double                  MinSpecAmt;
     double                  AdbLimit;
     double                  WpLimit;
     double                  SpecAmtLoadLimit;

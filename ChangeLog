@@ -28375,3 +28375,258 @@ Work around a wx-2.9.2 defect (VS). See:
   skin.xrc
 Add a missing input field.
 
+20110823T1220Z <gchicares@sbcglobal.net> [622]
+
+  skin.xrc
+Clarify solve-basis radiobox labels.
+
+20110824T1639Z <gchicares@sbcglobal.net> [622]
+
+  ledger_text_formats.cpp
+Remove unneeded headers.
+
+20110824T1645Z <gchicares@sbcglobal.net> [617]
+
+  input_harmonization.cpp
+Expunge unused legacy code.
+
+20110824T1649Z <gchicares@sbcglobal.net> [617]
+
+  input.hpp
+  mec_input.hpp
+Expunge disused declarations.
+
+20110824T1659Z <gchicares@sbcglobal.net> [617]
+
+  ihs_avstrtgy.cpp
+Fix defect introduced 20080720T2217Z: don't apply a specamt strategy
+when solving for specamt.
+
+20110824T1706Z <gchicares@sbcglobal.net> [615]
+
+  ihs_avstrtgy.cpp
+Improve layout and documentation.
+
+20110824T1950Z <wboutin@charter.net> [615]
+
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_group_carveout2.xrc
+  skin_reg_d.xrc
+  skin_single_premium.xrc
+  skin_variable_annuity.xrc
+Add titles to sequence editor dialog.
+
+20110825T1432Z <gchicares@sbcglobal.net> [615]
+
+  ihs_avstrtgy.cpp
+Constrain salary-based specamt as newly documented.
+
+20110825T1701Z <wboutin@charter.net> [615]
+
+  skin_coli_boli.xrc
+  skin_group_carveout2.xrc
+  skin_reg_d.xrc
+Correct misalignment and typos.
+
+20110912T1729Z <gchicares@sbcglobal.net> [615]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+Move certain database entities.
+
+20110912T1917Z <gchicares@sbcglobal.net> [615]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+  premium_tax.cpp
+  premium_tax.hpp
+Remove an obsolete database entity; add several new ones.
+
+20110912T1933Z <gchicares@sbcglobal.net> [614]
+
+  input_harmonization.cpp
+  input_realization.cpp
+  mec_input.cpp
+Use certain database entities added 20110912T1917Z.
+
+20110912T2009Z <gchicares@sbcglobal.net> [614]
+
+  basic_values.hpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+Rename certain member variables.
+
+20110912T2028Z <gchicares@sbcglobal.net> [614]
+
+  basic_values.hpp
+  ihs_basicval.cpp
+Cache values of certain database entities added 20110912T1917Z.
+
+20110913T1016Z <gchicares@sbcglobal.net> [614]
+
+  basic_values.hpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+Restrict a data member to the antediluvian fork. In production,
+confusingly, 'MinSpecAmt' was initialized with a value that was
+overridden before each use.
+
+20110913T1119Z <gchicares@sbcglobal.net> [613]
+
+  ihs_avmly.cpp
+Improve documentation.
+
+20110913T1139Z <gchicares@sbcglobal.net> [613]
+
+  ihs_avstrtgy.cpp
+Marshal switch-statement cases in enum-declaration order.
+
+20110913T1219Z <gchicares@sbcglobal.net> [613]
+
+  ihs_avstrtgy.cpp
+Refactor.
+
+20110913T1444Z <gchicares@sbcglobal.net> [610]
+
+  ihs_avstrtgy.cpp
+Reflect 7702 and 7702A treatment of term rider in payment strategies.
+
+20110914T0017Z <gchicares@sbcglobal.net> [610]
+
+  ihs_avstrtgy.cpp
+Refactor.
+
+20110914T0053Z <gchicares@sbcglobal.net> [609]
+
+  ihs_avstrtgy.cpp
+Remove a marker for a defect already resolved: employer premium is
+zeroed out in AccountValue::SolveGuarPremium().
+
+20110915T1025Z <gchicares@sbcglobal.net> [608]
+
+  account_value.hpp
+  ihs_avmly.cpp
+Refactor.
+
+20110915T1059Z <gchicares@sbcglobal.net> [608]
+
+  ihs_avmly.cpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch. The database differentiates initial and post-initial
+minimum specamt, but only the latter was used.
+
+20110916T1318Z <gchicares@sbcglobal.net> [608]
+
+  ihs_avstrtgy.cpp
+Enforce minimum specamt.
+
+20111001T1421Z <gchicares@sbcglobal.net> [608]
+
+  input_harmonization.cpp
+Improve documentation.
+
+20111001T1429Z <gchicares@sbcglobal.net> [608]
+
+  input_harmonization.cpp
+Revert temporary change committed 20090613T1757Z.
+
+20111002T0958Z <gchicares@sbcglobal.net> [607]
+
+  input_harmonization.cpp
+Fix defect introduced 20060924T1428Z. Calling DoHarmonize() explicitly
+was wrong: limits were reset without calling enforce_circumscription()
+for (e.g.) 'LastMaterialChangeDate'.
+
+20111008T1002Z <gchicares@sbcglobal.net> [607]
+
+  ce_product_name.cpp
+  ce_product_name.hpp
+  mc_enum.hpp
+  mc_enum.tpp
+  tn_range.tpp
+Rearrange; improve layout.
+
+20111008T1026Z <gchicares@sbcglobal.net> [607]
+
+  tn_range.hpp
+  tn_range.tpp
+  tn_range_test.cpp
+Make str() virtual.
+
+20111008T1129Z <gchicares@sbcglobal.net> [607]
+
+  ce_product_name.cpp
+  ce_product_name.hpp
+  mc_enum.hpp
+  mc_enum.tpp
+  mc_enum_test.cpp
+  mc_enum_types_aux.cpp
+Refactor; make all_strings() virtual.
+
+20111009T1317Z <gchicares@sbcglobal.net> [607]
+
+  tn_range.hpp
+  tn_range.tpp
+  tn_range_test.cpp
+Add a virtual RTTI function.
+
+20111009T1501Z <gchicares@sbcglobal.net> [607]
+
+  census_view.cpp
+  census_view.hpp
+Allow direct drill-down editing in census manager (VS). See:
+  http://savannah.nongnu.org/support/?105977
+
+20111018T1638Z <gchicares@sbcglobal.net> [607]
+
+  ihs_basicval.cpp
+  ihs_server7702.cpp
+  ihs_server7702io.cpp
+  ihs_server7702test.cpp
+Resolve runtime errors in guideline-premium server.
+
+20111021T1650Z <gchicares@sbcglobal.net> [607]
+
+  ihs_server7702test.cpp
+Improve documentation.
+
+20111021T1651Z <gchicares@sbcglobal.net> [607]
+
+  ihs_server7702io.cpp
+  ihs_server7702io.hpp
+Move a field to reflect an ancient change.
+
+20111023T1701Z <gchicares@sbcglobal.net> [607]
+
+  ihs_basicval.cpp
+Propagate certain input changes in obsolescent code.
+
+20111025T1509Z <wboutin@massmutual.com> [607]
+
+  skin_coli_coli.xrc
+Improve consistency.
+
+20111026T1342Z <gchicares@sbcglobal.net> [625]
+
+  census_document.cpp
+  census_document.hpp
+  census_view.cpp
+  census_view.hpp
+Temporarily revert wxDVC census manager, in order to release only the
+input-sequence editor this month.
+
+20111026T1419Z <gchicares@sbcglobal.net> [625]
+
+  version.hpp
+Designate release candidate.
+
+20111027T0958Z <gchicares@sbcglobal.net> [625]
+
+  ihs_basicval.cpp
+Fix defect introduced 20080714T1122Z: misleading indentation.
+

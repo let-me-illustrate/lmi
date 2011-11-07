@@ -36,107 +36,125 @@
 #include <algorithm>
 #include <utility>
 
-// Set premium or spec amount according to fixed relationships
-// e.g. if prem is target for given spec amt, then given either
-// we can determine for the other.
+/// Set specamt according to selected strategy in a non-solve year.
+///
+/// Argument 'actual_year' is policy year.
+///
+/// Argument 'reference_year' specifies which year's premium is the
+/// basis for the calculated specamt. Most often, the first-year
+/// premium is used: it is usually undesirable to change specamt
+/// frequently, and specamt strategies often begin in the first year.
+/// The salary-based strategy, however, tracks salary changes: yearly
+/// increases are common on such plans, and there's no other reason to
+/// enter a non-scalar salary.
+///
+/// Specamt strategies ignore dumpins and 1035 exchanges. An argument
+/// could be made for making adjustments for such extra premiums, but
+/// the benefit doesn't seem to justify the extra complexity. The
+/// argument is strongest for 7702- and 7702A-based strategies, but
+/// there are other and better ways to avoid MECs and GPT problems.
+/// The argument is weaker for the target strategy, for which it often
+/// makes sense to ignore such extra payments; and accepting the
+/// argument for some strategies but not for others would introduce
+/// inconsistency in addition to complexity.
+///
+/// The result of a salary-based strategy is constrained to be
+/// nonnegative, because if 'SalarySpecifiedAmountOffset' is
+/// sufficiently large, then specamt would be negative, which cannot
+/// make any sense. Other than that, no minimum is imposed here; see
+/// PerformSpecAmtStrategy().
 
-// TODO ?? Known defects
-//
-// Premium and specamt are either literal dollar amounts, or enums indicating
-// strategy, encoded by multiplying the enum value by 1.0E100. This is most
-// regrettable. Bugs probably lurk here.
-//
-// There are two functions for specamt strategy; apparently only the one
-// called "Old" is used.
-
-//============================================================================
 double AccountValue::CalculateSpecAmtFromStrategy
     (int actual_year
     ,int reference_year
     ) const
 {
-    double z = 0.0;
+    double r = DeathBfts_->specamt()[actual_year];
+
+    // Don't override a specamt that's being solved for.
+    if
+        (
+            mce_solve_specamt == yare_input_.SolveType
+        &&  yare_input_.SolveBeginYear <= actual_year
+        &&  actual_year < std::min(yare_input_.SolveEndYear, BasicValues::Length)
+        )
+        {
+        return r;
+        }
+
     switch(yare_input_.SpecifiedAmountStrategy[actual_year])
         {
-        case mce_sa_salary:
-            {
-            // This ignores yearly-varying salary.
-            double y;
-            y = yare_input_.ProjectedSalary[actual_year] * yare_input_.SalarySpecifiedAmountFactor;
-            if(0.0 != yare_input_.SalarySpecifiedAmountCap)
-                {
-                y = std::min(y, yare_input_.SalarySpecifiedAmountCap);
-                }
-            y -= yare_input_.SalarySpecifiedAmountOffset;
-            z = y;
-            }
-            break;
         case mce_sa_input_scalar:
             {
-            z = DeathBfts_->specamt()[actual_year];
+            return r;
             }
-            break;
         case mce_sa_maximum:
             {
-            z = GetModalSpecAmtMax
+            return GetModalSpecAmtMax
                 (InvariantValues().EeMode[reference_year].value()
                 ,InvariantValues().EePmt [reference_year]
                 ,InvariantValues().ErMode[reference_year].value()
                 ,InvariantValues().ErPmt [reference_year]
                 );
             }
-            break;
         case mce_sa_target:
             {
-            z = GetModalSpecAmtTgt
+            return GetModalSpecAmtTgt
                 (InvariantValues().EeMode[reference_year].value()
                 ,InvariantValues().EePmt [reference_year]
                 ,InvariantValues().ErMode[reference_year].value()
                 ,InvariantValues().ErPmt [reference_year]
                 );
             }
-            break;
-// TODO ?? The following strategies (at least) should recognize dumpins.
         case mce_sa_mep:
             {
-            z = GetModalSpecAmtMinNonMec
+            return GetModalSpecAmtMinNonMec
                 (InvariantValues().EeMode[reference_year].value()
                 ,InvariantValues().EePmt [reference_year]
                 ,InvariantValues().ErMode[reference_year].value()
                 ,InvariantValues().ErPmt [reference_year]
                 );
             }
-            break;
-        case mce_sa_corridor:
-            {
-            z = GetModalSpecAmtCorridor
-                (InvariantValues().EeMode[reference_year].value()
-                ,InvariantValues().EePmt [reference_year]
-                ,InvariantValues().ErMode[reference_year].value()
-                ,InvariantValues().ErPmt [reference_year]
-                );
-            }
-            break;
         case mce_sa_glp:
             {
-            z = GetModalSpecAmtGLP
+            return GetModalSpecAmtGLP
                 (InvariantValues().EeMode[reference_year].value()
                 ,InvariantValues().EePmt [reference_year]
                 ,InvariantValues().ErMode[reference_year].value()
                 ,InvariantValues().ErPmt [reference_year]
                 );
             }
-            break;
         case mce_sa_gsp:
             {
-            z = GetModalSpecAmtGSP
+            return GetModalSpecAmtGSP
                 (InvariantValues().EeMode[reference_year].value()
                 ,InvariantValues().EePmt [reference_year]
                 ,InvariantValues().ErMode[reference_year].value()
                 ,InvariantValues().ErPmt [reference_year]
                 );
             }
-            break;
+        case mce_sa_corridor:
+            {
+            return GetModalSpecAmtCorridor
+                (InvariantValues().EeMode[reference_year].value()
+                ,InvariantValues().EePmt [reference_year]
+                ,InvariantValues().ErMode[reference_year].value()
+                ,InvariantValues().ErPmt [reference_year]
+                );
+            }
+        case mce_sa_salary:
+            {
+            double z =
+                  yare_input_.ProjectedSalary[actual_year]
+                * yare_input_.SalarySpecifiedAmountFactor
+                ;
+            if(0.0 != yare_input_.SalarySpecifiedAmountCap)
+                {
+                z = std::min(z, yare_input_.SalarySpecifiedAmountCap);
+                }
+            z -= yare_input_.SalarySpecifiedAmountOffset;
+            return std::max(0.0, z);
+            }
         default:
             {
             fatal_error()
@@ -145,25 +163,30 @@ double AccountValue::CalculateSpecAmtFromStrategy
                 << " not found."
                 << LMI_FLUSH
                 ;
+            throw "Unreachable--silences a compiler diagnostic.";
             }
         }
-    return z;
 }
 
-/// Set spec amt according to selected strategy, in every year.
+/// Set specamt according to selected strategy, respecting minimum.
+///
+/// The actual minimum, set elsewhere, is ascertainable only during
+/// monthiversary processing because, e.g., it may depend on whether
+/// cash value is sufficient to keep a term rider in force.
 
 void AccountValue::PerformSpecAmtStrategy()
 {
-    for
-        (int j = 0; j < BasicValues::Length; ++j)
+    for(int j = 0; j < BasicValues::Length; ++j)
         {
-        double z = round_specamt()(CalculateSpecAmtFromStrategy(j, 0));
-        DeathBfts_->set_specamt(z, j, 1 + j);
+        bool t = yare_input_.TermRider && 0.0 != yare_input_.TermRiderAmount;
+        double m = minimum_specified_amount(0 == j, t);
+        double z = CalculateSpecAmtFromStrategy(j, 0);
+        DeathBfts_->set_specamt(round_specamt()(std::max(m, z)), j, 1 + j);
         }
 }
 
-//============================================================================
-// Sets payment according to selected strategy, in each non-solve year
+/// Set payment according to selected strategy in a non-solve year.
+
 double AccountValue::DoPerformPmtStrategy
     (mcenum_solve_type                       a_SolveForWhichPrem
     ,mcenum_mode                             a_CurrentMode
@@ -173,13 +196,12 @@ double AccountValue::DoPerformPmtStrategy
     ,std::vector<mcenum_pmt_strategy> const& a_StrategyVector
     ) const
 {
-    // TODO ?? What happens if a corporation payment is specified?
     if(SolvingForGuarPremium)
         {
         return a_PmtVector[Year];
         }
 
-    // Don't override premium during premium solve period.
+    // Don't override a premium that's being solved for.
     if
         (
             a_SolveForWhichPrem == yare_input_.SolveType
@@ -198,11 +220,8 @@ double AccountValue::DoPerformPmtStrategy
             }
         case mce_pmt_minimum:
             {
-            return GetModalMinPrem
-                (Year
-                ,a_CurrentMode
-                ,ActualSpecAmt + TermSpecAmt
-                );
+            double sa = ActualSpecAmt + TermSpecAmt;
+            return GetModalMinPrem(Year, a_CurrentMode, sa);
             }
         case mce_pmt_target:
             {
@@ -212,60 +231,46 @@ double AccountValue::DoPerformPmtStrategy
 // be used instead, at least in the
 //       if(Database_->Query(DB_TgtPremFixedAtIssue))
 // case?
-            return GetModalTgtPrem
-                (Year
-                ,a_CurrentMode
-                ,ActualSpecAmt
-                );
+            return GetModalTgtPrem(Year, a_CurrentMode, ActualSpecAmt);
             }
         case mce_pmt_mep:
             {
-// TODO ?? This assumes that the term rider continues to at least age 95.
-// We ought to have a database flag for that.
-            return GetModalPremMaxNonMec
-                (0
-                ,a_InitialMode
-                ,InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
-                );
+            double sa =
+                                      InvariantValues().SpecAmt    [0]
+                + (TermIsDbFor7702A ? InvariantValues().TermSpecAmt[0] : 0.0)
+                ;
+            return GetModalPremMaxNonMec(0, a_InitialMode, sa);
             }
         case mce_pmt_glp:
             {
-            return GetModalPremGLP
-                (0
-                ,a_InitialMode
-                ,InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
-                ,InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
-                );
+            double sa =
+                                     InvariantValues().SpecAmt    [0]
+                + (TermIsDbFor7702 ? InvariantValues().TermSpecAmt[0] : 0.0)
+                ;
+            return GetModalPremGLP(0, a_InitialMode, sa, sa);
             }
         case mce_pmt_gsp:
             {
-            return GetModalPremGSP
-                (0
-                ,a_InitialMode
-                ,InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
-                ,InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
-                );
+            double sa =
+                                     InvariantValues().SpecAmt    [0]
+                + (TermIsDbFor7702 ? InvariantValues().TermSpecAmt[0] : 0.0)
+                ;
+            return GetModalPremGSP(0, a_InitialMode, sa, sa);
+            }
+        case mce_pmt_corridor:
+            {
+// TODO ?? Shouldn't this be initial specified amount?
+            double sa = ActualSpecAmt + (TermIsDbFor7702 ? TermSpecAmt : 0.0);
+            return GetModalPremCorridor(0, a_InitialMode, sa);
             }
         case mce_pmt_table:
             {
             return
-                ActualSpecAmt
+                  ActualSpecAmt
                 * MortalityRates_->TableYRates()[Year]
                 * (12.0 / a_CurrentMode)
-                * a_TblMult;
-            }
-        case mce_pmt_corridor:
-            {
-// TODO ?? This assumes that the term rider continues to at least age 95.
-// We ought to have a database flag for that.
-            return GetModalPremCorridor
-                (0
-                ,a_InitialMode
-// TODO ?? Shouldn't this be initial specified amount?
-                ,ActualSpecAmt
-// TODO ?? This may be wanted for an 'integrated' term rider.
-//                ,ActualSpecAmt + TermSpecAmt
-                );
+                * a_TblMult
+                ;
             }
         default:
             {
@@ -280,7 +285,8 @@ double AccountValue::DoPerformPmtStrategy
         }
 }
 
-//============================================================================
+/// Set employee payment according to selected strategy.
+
 double AccountValue::PerformEePmtStrategy() const
 {
     return DoPerformPmtStrategy
@@ -293,7 +299,8 @@ double AccountValue::PerformEePmtStrategy() const
         );
 }
 
-//============================================================================
+/// Set employer payment according to selected strategy.
+
 double AccountValue::PerformErPmtStrategy() const
 {
     return DoPerformPmtStrategy

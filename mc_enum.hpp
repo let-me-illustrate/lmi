@@ -66,6 +66,7 @@ class LMI_SO mc_enum_base
     std::size_t first_allowed_ordinal() const;
     bool is_allowed(int) const;
 
+    virtual std::vector<std::string> const& all_strings() const = 0;
     virtual std::size_t cardinality() const = 0;
     virtual void enforce_proscription() = 0;
     virtual std::size_t ordinal() const = 0;
@@ -103,6 +104,7 @@ class mc_enum
     BOOST_STATIC_ASSERT(boost::is_enum<T>::value);
 
     friend class mc_enum_test;
+    template<typename U> friend std::vector<std::string> const& all_strings();
 
   public:
     typedef T enum_type;
@@ -121,30 +123,34 @@ class mc_enum
     static std::size_t ordinal(std::string const&);
 
     // mc_enum_base required implementation.
+    virtual std::vector<std::string> const& all_strings() const;
     virtual std::size_t cardinality() const;
+    virtual void enforce_proscription();
     virtual std::size_t ordinal() const;
     virtual std::string str(int) const;
 
     std::string str() const;
     T value() const;
 
-    static std::vector<std::string> const& all_strings();
-
   private:
     static std::size_t        n();
     static T    const*        e();
     static char const* const* c();
+    static std::vector<std::string> const& s();
 
     // datum_base required implementation.
     // TODO ?? Consider moving the implementation into the base class.
     virtual std::istream& read (std::istream&);
     virtual std::ostream& write(std::ostream&) const;
 
-    // mc_enum_base required implementation.
-    virtual void enforce_proscription();
-
     T value_;
 };
+
+template<typename U>
+std::vector<std::string> const& all_strings()
+{
+    return mc_enum<U>::s();
+}
 
 #endif // mc_enum_hpp
 

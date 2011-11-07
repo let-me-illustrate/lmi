@@ -41,7 +41,6 @@
 #include "tn_range_types.hpp"
 #include "xml_serializable.hpp"
 
-class InputSequence;
 class product_database;
 
 #include <boost/operators.hpp>

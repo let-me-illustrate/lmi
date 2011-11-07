@@ -84,6 +84,16 @@ BasicValues::BasicValues(Input const& input)
     Init();
 }
 
+// Temporary kludge for ancient GPT server.
+template<typename T>
+std::string mc_str(T t)
+{
+    return mc_enum<T>(t).str();
+}
+
+template std::string mc_str(mcenum_class   );
+template std::string mc_str(mcenum_uw_basis);
+
 //============================================================================
 // TODO ?? Not for general use--use for GPT server only. This is bad design.
 BasicValues::BasicValues
@@ -114,33 +124,33 @@ BasicValues::BasicValues
 {
     Input* kludge_input = new Input;
 
-    (*kludge_input)["IssueAge"         ] = value_cast<std::string>(a_IssueAge)         ;
-    (*kludge_input)["RetirementAge"    ] = value_cast<std::string>(a_IssueAge)         ;
-    (*kludge_input)["Gender"           ] = value_cast<std::string>(a_Gender)           ;
-    (*kludge_input)["Smoking"          ] = value_cast<std::string>(a_Smoker)           ;
-    (*kludge_input)["UnderwritingClass"] = value_cast<std::string>(a_UnderwritingClass);
+    (*kludge_input)["IssueAge"         ] = value_cast<std::string>(a_IssueAge);    yare_input_.IssueAge                   = a_IssueAge           ;
+    (*kludge_input)["RetirementAge"    ] = value_cast<std::string>(a_IssueAge);    yare_input_.RetirementAge              = a_IssueAge           ;
+    (*kludge_input)["Gender"           ] = mc_str(a_Gender)                   ;    yare_input_.Gender                     = a_Gender             ;
+    (*kludge_input)["Smoking"          ] = mc_str(a_Smoker)                   ;    yare_input_.Smoking                    = a_Smoker             ;
+    (*kludge_input)["UnderwritingClass"] = mc_str(a_UnderwritingClass)        ;    yare_input_.UnderwritingClass          = a_UnderwritingClass  ;
     if(a_AdbInForce)
         {
-        (*kludge_input)["Status[0].HasADD"] = "Yes";
+        (*kludge_input)["AccidentalDeathBenefit"] = "Yes";                         yare_input_.AccidentalDeathBenefit     = mce_yes              ;
         }
     else
         {
-        (*kludge_input)["Status[0].HasADD"] = "No";
+        (*kludge_input)["AccidentalDeathBenefit"] = "No";                          yare_input_.AccidentalDeathBenefit     = mce_no               ;
         }
-    (*kludge_input)["GroupUnderwritingType"     ] = value_cast<std::string>(a_UnderwritingBasis);
-    (*kludge_input)["ProductName"               ] = a_ProductName;
-    (*kludge_input)["PremiumTaxState"           ] = mc_str(a_StateOfJurisdiction);
-    (*kludge_input)["DefinitionOfLifeInsurance" ] = "GPT";
-    (*kludge_input)["DefinitionOfMaterialChange"] = "GPT adjustment event";
+    (*kludge_input)["GroupUnderwritingType"     ] = mc_str(a_UnderwritingBasis);   yare_input_.GroupUnderwritingType      = a_UnderwritingBasis  ;
+    (*kludge_input)["ProductName"               ] = a_ProductName;                 yare_input_.ProductName                = a_ProductName        ;
+    (*kludge_input)["PremiumTaxState"           ] = mc_str(a_StateOfJurisdiction); yare_input_.PremiumTaxState            = a_StateOfJurisdiction;
+    (*kludge_input)["DefinitionOfLifeInsurance" ] = "GPT";                         yare_input_.DefinitionOfLifeInsurance  = mce_gpt              ;
+    (*kludge_input)["DefinitionOfMaterialChange"] = "GPT adjustment event";        yare_input_.DefinitionOfMaterialChange = mce_adjustment_event ;
 
-    (*kludge_input)["SpecifiedAmount"   ] = value_cast<std::string>(a_FaceAmount);
+    (*kludge_input)["SpecifiedAmount"   ] = value_cast<std::string>(a_FaceAmount); yare_input_.SpecifiedAmount            .assign(1, a_FaceAmount);
 
     mce_dbopt const z
         (mce_option1_for_7702 == a_DBOptFor7702 ? mce_option1
         :mce_option2_for_7702 == a_DBOptFor7702 ? mce_option2
         :throw std::runtime_error("Unexpected DB option.")
         );
-    (*kludge_input)["DeathBenefitOption"] = mce_dbopt(z).str();
+    (*kludge_input)["DeathBenefitOption"] = mce_dbopt(z).str();                    yare_input_.DeathBenefitOption         .assign(1, z.value());
 
     // TODO ?? EGREGIOUS_DEFECT Redesign this function instead.
     const_cast<Input&>(*Input_) = *kludge_input;
@@ -267,6 +277,14 @@ void BasicValues::GPTServerInit()
     EndtAge = static_cast<int>(Database_->Query(DB_MaturityAge));
     Length = EndtAge - IssueAge;
 
+    yare_input_.ExtraMonthlyCustodialFee  .resize(Length);
+    yare_input_.ExtraCompensationOnAssets .resize(Length);
+    yare_input_.ExtraCompensationOnPremium.resize(Length);
+    yare_input_.CurrentCoiMultiplier      .assign(Length, 1.0);
+    yare_input_.SpecifiedAmount           .assign(Length, yare_input_.SpecifiedAmount   [0]);
+    yare_input_.DeathBenefitOption        .assign(Length, yare_input_.DeathBenefitOption[0]);
+    yare_input_.FlatExtra                 .resize(Length);
+
     LedgerType_ =
         static_cast<mcenum_ledger_type>
             (static_cast<int>
@@ -299,9 +317,13 @@ void BasicValues::GPTServerInit()
     StratifiedCharges_.reset
         (new stratified_charges(AddDataDir(ProductData_->datum("TierFilename")))
         );
+    SpreadFor7702_.assign
+        (Length
+        ,StratifiedCharges_->minimum_tiered_spread_for_7702()
+        );
 
     // Requires database.
-//  MortalityRates_.reset(new MortalityRates (*this));
+    MortalityRates_.reset(new MortalityRates (*this)); // Used by certain target-premium calculations.
 //  InterestRates_ .reset(new InterestRates  (*this));
     // Will require mortality rates eventually.
 //  SurrChgRates_  .reset(new SurrChgRates   (Database_));
@@ -656,7 +678,7 @@ double BasicValues::GetTgtPrem
                 ,a_specamt
                 );
             }
-            return InitialTargetPremium;
+        return InitialTargetPremium;
         }
     else
         {
@@ -671,8 +693,10 @@ double BasicValues::GetTgtPrem
 //============================================================================
 void BasicValues::SetPermanentInvariants()
 {
-    MinRenlBaseFace     = Database_->Query(DB_MinRenlBaseSpecAmt   );
-    MinRenlFace         = Database_->Query(DB_MinRenlSpecAmt       );
+    MinIssSpecAmt       = Database_->Query(DB_MinIssSpecAmt        );
+    MinIssBaseSpecAmt   = Database_->Query(DB_MinIssBaseSpecAmt    );
+    MinRenlSpecAmt      = Database_->Query(DB_MinRenlSpecAmt       );
+    MinRenlBaseSpecAmt  = Database_->Query(DB_MinRenlBaseSpecAmt   );
     NoLapseOpt1Only     = Database_->Query(DB_NoLapseDbo1Only      );
     NoLapseUnratedOnly  = Database_->Query(DB_NoLapseUnratedOnly   );
     OptChgCanIncrSA     = Database_->Query(DB_DboChgCanIncrSpecAmt );
@@ -683,6 +707,8 @@ void BasicValues::SetPermanentInvariants()
     MaxIncrAge          = static_cast<int>(Database_->Query(DB_MaxIncrAge));
     WaivePmTxInt1035    = Database_->Query(DB_WaivePremTaxInt1035  );
     AllowTerm           = Database_->Query(DB_AllowTerm            );
+    TermIsDbFor7702     = Database_->Query(DB_TermIsDbFor7702      );
+    TermIsDbFor7702A    = Database_->Query(DB_TermIsDbFor7702A     );
     ExpPerKLimit        = Database_->Query(DB_ExpSpecAmtLimit      );
     MaxWDDed_           = static_cast<mcenum_anticipated_deduction>(static_cast<int>(Database_->Query(DB_MaxWdDed)));
     MaxWDAVMult         = Database_->Query(DB_MaxWdAcctValMult     );
@@ -690,7 +716,6 @@ void BasicValues::SetPermanentInvariants()
     MaxLoanAVMult       = Database_->Query(DB_MaxLoanAcctValMult   );
     NoLapseMinDur       = static_cast<int>(Database_->Query(DB_NoLapseMinDur));
     NoLapseMinAge       = static_cast<int>(Database_->Query(DB_NoLapseMinAge));
-    MinSpecAmt          = Database_->Query(DB_MinSpecAmt           );
     AdbLimit            = Database_->Query(DB_AdbLimit             );
     WpLimit             = Database_->Query(DB_WpMax                );
     SpecAmtLoadLimit    = Database_->Query(DB_SpecAmtLoadLimit     );
