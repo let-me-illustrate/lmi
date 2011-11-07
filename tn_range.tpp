@@ -118,11 +118,11 @@ namespace
             }
         else if(0 < t)
             {
-            return  1;
+            return 1;
             }
         else
             {
-            return  0;
+            return 0;
             }
     }
 
@@ -202,10 +202,10 @@ namespace
                 );
             long int z1 = std::numeric_limits<long int>::max();
             return
-                    -z0 < t
-                &&        t < z0
-                &&  -z1 < t
-                &&        t < z1
+                   -z0 < t
+                &&       t < z0
+                && -z1 < t
+                &&       t < z1
                 && t == static_cast<long int>(t);
             }
     };
@@ -230,10 +230,10 @@ namespace
         // Here, '0 -' avoids a compiler warning about negating an
         // unsigned value.
         if
-            (       std::numeric_limits<T>::max()      == t
-            ||  0 - std::numeric_limits<T>::max()      == t
-            ||      std::numeric_limits<T>::infinity() == t
-            ||  0 - std::numeric_limits<T>::infinity() == t
+            (      std::numeric_limits<T>::max()      == t
+            || 0 - std::numeric_limits<T>::max()      == t
+            ||     std::numeric_limits<T>::infinity() == t
+            || 0 - std::numeric_limits<T>::infinity() == t
             )
             {
             return t;
@@ -346,15 +346,15 @@ void trammel_base<T>::assert_sanity() const
 }
 
 template<typename T>
-T trammel_base<T>::default_initializer() const
-{
-    return default_value();
-}
-
-template<typename T>
 T trammel_base<T>::minimum_minimorum() const
 {
     return adjust_minimum(nominal_minimum());
+}
+
+template<typename T>
+T trammel_base<T>::default_initializer() const
+{
+    return default_value();
 }
 
 template<typename T>
@@ -644,12 +644,6 @@ bool tn_range<Number,Trammel>::is_valid(Number n) const
 }
 
 template<typename Number, typename Trammel>
-std::string tn_range<Number,Trammel>::str() const
-{
-    return value_cast<std::string>(value_);
-}
-
-template<typename Number, typename Trammel>
 std::istream& tn_range<Number,Trammel>::read(std::istream& is)
 {
     std::string s;
@@ -734,6 +728,12 @@ bool tn_range<Number,Trammel>::equal_to(std::string const& s) const
 }
 
 template<typename Number, typename Trammel>
+std::string tn_range<Number,Trammel>::str() const
+{
+    return value_cast<std::string>(value_);
+}
+
+template<typename Number, typename Trammel>
 double tn_range<Number,Trammel>::universal_minimum() const
 {
     return value_cast<double>(minimum_);
@@ -743,5 +743,11 @@ template<typename Number, typename Trammel>
 double tn_range<Number,Trammel>::universal_maximum() const
 {
     return value_cast<double>(maximum_);
+}
+
+template<typename Number, typename Trammel>
+std::type_info const& tn_range<Number,Trammel>::value_type() const
+{
+    return typeid(Number);
 }
 

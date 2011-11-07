@@ -41,7 +41,6 @@
 #include "tn_range_types.hpp"
 #include "xml_serializable.hpp"
 
-class InputSequence;
 class product_database;
 
 #include <boost/operators.hpp>
@@ -155,17 +154,6 @@ class LMI_SO Input
 
   private:
     void AscribeMembers();
-
-    // INPUT !! Obsolete support for scalar alternative controls,
-    // replaced by input sequences. Specimens of the obsolete code
-    // are retained only as a source of ideas for input-sequence
-    // validation.
-    void WithdrawalChanged();
-    void EnableTransferToSequenceControls(bool enable);
-    void TransferWithdrawalSimpleControlsToInputSequence();
-    void TransferWithdrawalInputSequenceToSimpleControls
-        (InputSequence const& s
-        );
 
     // xml_serializable required implementation.
     virtual int                class_version() const;

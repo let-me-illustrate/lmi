@@ -173,14 +173,11 @@ void Input::DoHarmonize()
 
     RetireesCanEnroll.enable(database_->Query(DB_AllowRetirees));
 
-    // TODO ?? DATABASE !! There should be flags in the database to allow or
-    // forbid paramedical and nonmedical underwriting; arbitrarily,
-    // until they are added, those options are always inhibited.
-    GroupUnderwritingType.allow(mce_medical, database_->Query(DB_AllowFullUw));
-    GroupUnderwritingType.allow(mce_paramedical, false);
-    GroupUnderwritingType.allow(mce_nonmedical, false);
-    GroupUnderwritingType.allow(mce_simplified_issue, database_->Query(DB_AllowSimpUw));
-    GroupUnderwritingType.allow(mce_guaranteed_issue, database_->Query(DB_AllowGuarUw));
+    GroupUnderwritingType.allow(mce_medical         , database_->Query(DB_AllowFullUw   ));
+    GroupUnderwritingType.allow(mce_paramedical     , database_->Query(DB_AllowParamedUw));
+    GroupUnderwritingType.allow(mce_nonmedical      , database_->Query(DB_AllowNonmedUw ));
+    GroupUnderwritingType.allow(mce_simplified_issue, database_->Query(DB_AllowSimpUw   ));
+    GroupUnderwritingType.allow(mce_guaranteed_issue, database_->Query(DB_AllowGuarUw   ));
 
     bool part_mort_used = mce_yes == UsePartialMortality;
 
@@ -269,8 +266,10 @@ void Input::DoHarmonize()
         ,maximum_birthdate(IssueAge.minimum(), EffectiveDate.value(), use_anb)
         );
 
-    // DATABASE !! Maximum illustrated age should be distinguished
-    // from maturity age.
+    // DATABASE !! DB_MaxIllusAge might be more appropriate here than
+    // DB_MaturityAge, but it's not yet implemented, and perhaps there
+    // is no good reason for it even to exist--aren't DB_MaturityAge
+    // and DB_MaxIssAge sufficient?
     int max_age = static_cast<int>(database_->Query(DB_MaturityAge));
     InforceAsOfDate.minimum_and_maximum
         (EffectiveDate.value()
@@ -300,25 +299,13 @@ void Input::DoHarmonize()
     LastMaterialChangeDate  .enable(non_mec);
     InforceDcv              .enable(non_mec && mce_cvat == DefinitionOfLifeInsurance);
     InforceAvBeforeLastMc   .enable(non_mec);
-    InforceContractYear     .enable(non_mec);
-    InforceContractMonth    .enable(non_mec);
     InforceLeastDeathBenefit.enable(non_mec);
 
-    if(contains(global_settings::instance().pyx(), "old_inforce"))
-        {
-        // These fields have no effect for now. They're suppressed to
-        // avoid confusion.
-        InforceAsOfDate.enable(false);
-        LastMaterialChangeDate.enable(false);
-        }
-    else
-        {
-        // These will soon be removed from the GUI:
-        InforceYear         .enable(false);
-        InforceMonth        .enable(false);
-        InforceContractYear .enable(false);
-        InforceContractMonth.enable(false);
-        }
+    // These will soon be removed from the GUI:
+    InforceYear         .enable(false);
+    InforceMonth        .enable(false);
+    InforceContractYear .enable(false);
+    InforceContractMonth.enable(false);
 
 // TODO ?? Nomen est omen.
 if(!egregious_kludge)
@@ -639,17 +626,11 @@ false // Silly workaround for now.
         }
 */
 
-// genacct: earned is suppressed for "compliance" reasons
-// sepacct: net is suppressed for "compliance" reasons
-//
-// The "compliance" reasons don't seem sensible, but that's another
-// matter. DATABASE !! Control that in the product database.
-
     GeneralAccountRateType .allow(mce_credited_rate , true);
-    GeneralAccountRateType .allow(mce_earned_rate, anything_goes && mce_no == UseCurrentDeclaredRate);
+    GeneralAccountRateType .allow(mce_earned_rate, mce_no == UseCurrentDeclaredRate && (anything_goes || database_->Query(DB_AllowGenAcctEarnRate)));
 
     SeparateAccountRateType.allow(mce_gross_rate, true);
-    SeparateAccountRateType.allow(mce_net_rate  , anything_goes);
+    SeparateAccountRateType.allow(mce_net_rate  , anything_goes || database_->Query(DB_AllowSepAcctNetRate));
 
     bool curr_int_rate_solve = false; // May be useful someday.
     UseCurrentDeclaredRate .enable(!curr_int_rate_solve && allow_gen_acct);
@@ -983,10 +964,13 @@ false // Silly workaround for now.
 /// date, the checkbox can be checked and then unchecked, producing
 /// the same behavior as a pushbutton. This creates a relationship
 /// between the checkbox and the date control that requires resetting
-/// the latter's value as well as the ranges of other controls that
-/// depend on it; that's not just Transmogrification or Harmonization,
-/// but a different relationship that partakes of both, and should
-/// perhaps be handled separately from both.
+/// the latter's value as well as the ranges (and therefore, perhaps,
+/// the values) of other controls that depend on it. That's not just
+/// Transmogrification or Harmonization, but a different relationship
+/// that partakes of both; to handle it properly, this function exits
+/// early whenever 'EffectiveDate' is forced to change, causing
+/// MvcModel::Reconcile() to propagate the change--in effect, as
+/// though the user changed it directly in the GUI.
 ///
 /// A default-constructed instance of this class initially has date of
 /// birth set to the current date, which of course needs adjustment.
@@ -1000,45 +984,25 @@ false // Silly workaround for now.
 
 void Input::DoTransmogrify()
 {
-    if(mce_yes == EffectiveDateToday)
+    if(mce_yes == EffectiveDateToday && calendar_date() != EffectiveDate)
         {
         EffectiveDate = calendar_date();
-        // TODO ?? Consider factoring out date calculations and making
-        // them conditional, if justified by measurement of their cost.
-        DoHarmonize();
+        return;
         }
 
-    if(contains(global_settings::instance().pyx(), "old_inforce"))
-        {
-        InforceAsOfDate = add_years_and_months
-            (EffectiveDate.value()
-            ,InforceYear  .value()
-            ,InforceMonth .value()
-            ,true
-            );
-        LastMaterialChangeDate = add_years_and_months
-            (EffectiveDate.value()
-            ,InforceYear  .value() - InforceContractYear .value()
-            ,InforceMonth .value() - InforceContractMonth.value()
-            ,true
-            );
-        }
-    else
-        {
-        std::pair<int,int> ym0 = years_and_months_since
-            (EffectiveDate  .value()
-            ,InforceAsOfDate.value()
-            );
-        InforceYear  = ym0.first;
-        InforceMonth = ym0.second;
+    std::pair<int,int> ym0 = years_and_months_since
+        (EffectiveDate  .value()
+        ,InforceAsOfDate.value()
+        );
+    InforceYear  = ym0.first;
+    InforceMonth = ym0.second;
 
-        std::pair<int,int> ym1 = years_and_months_since
-            (LastMaterialChangeDate.value()
-            ,InforceAsOfDate       .value()
-            );
-        InforceContractYear  = ym1.first;
-        InforceContractMonth = ym1.second;
-        }
+    std::pair<int,int> ym1 = years_and_months_since
+        (LastMaterialChangeDate.value()
+        ,InforceAsOfDate       .value()
+        );
+    InforceContractYear  = ym1.first;
+    InforceContractMonth = ym1.second;
 
     // USER !! This is the credited rate as of the database date,
     // regardless of the date of illustration, because the database
@@ -1203,375 +1167,4 @@ void Input::SetSolveDurations()
     SolveBeginTime  = issue_age() + SolveBeginYear .value();
     SolveEndTime    = issue_age() + SolveEndYear   .value();
 }
-
-#if 0
-
-// What follows is a reimplementation of parts of the legacy system
-// whose sole author is GWC.
-
-// TODO ?? Much more work is needed here. Lines that seem unnecessary
-// or haven't been tested are marked with four slashes.
-
-void Input::WithdrawalChanged()
-{
-////    if(!IsFlagSet(wfFullyCreated))
-////        {
-////        return;
-////        }
-////    Changed();
-
-    // Reinitialize vectors to bland defaults. Otherwise, since these
-    // are always of length 100, values past the maturity year could
-    // cause problems, because elsewhere we replicate the maturity-year
-    // value through element 100 after setting the vectors from sequence
-    // strings at certain times. For instance, setting death benefit
-    // option "b" gives us 100 occurrences of "b"; if we change that to
-    // "a" here, then a change from B to A is detected before the elements
-    // after maturity are reset, and some policy forms don't allow such
-    // a change. Obviously this is just a workaround for a bad design
-    // that should be fixed eventually.
-////    WD.assign(KludgeLength, r_wd(0.0));
-
-////    transfer_mft_string
-////        (WD
-////        ,*DIAGNOSTICS
-////        ,*WITHDRAWAL
-////        ,Withdrawal
-////        ,years_to_maturity()
-////        ,static_cast<int>(IssueAge)
-////        ,static_cast<int>(RetirementAge)
-////        ,static_cast<int>(InforceYear)
-////        ,calendar_date(EffDate).year()
-////        ,false
-////        );
-////
-////    if(0 == DIAGNOSTICS->GetTextLen())
-////        {
-////        std::string s;
-////        s = realize_sequence_string_for_withdrawal();
-////        if(s.empty())
-////            {
-////            return;
-////            }
-////        DIAGNOSTICS->SetText(s);
-////        set_validity(*WITHDRAWAL, false);
-////        return;
-////        }
-
-    InputSequence s
-        (Withdrawal
-        ,years_to_maturity()
-        ,static_cast<int>(IssueAge)
-        ,static_cast<int>(RetirementAge)
-        ,static_cast<int>(InforceYear)
-        ,calendar_date(EffDate).year()
-        ,0
-        );
-    TransferWithdrawalInputSequenceToSimpleControls(s);
-}
-
-void Input::TransferWithdrawalSimpleControlsToInputSequence()
-{
-////    if(!IsFlagSet(wfFullyCreated))
-////        {
-////        return;
-////        }
-////
-////    ClearFlag(wfFullyCreated);
-////    TXferPropertyPage::TransferData(tdGetData);
-
-    std::string s;
-
-    switch(local_rep->WDFromWhich)
-        {
-        case enumerator_fromret:
-            {
-            if(IssueAge < RetirementAge)
-// TODO ??            RetirementAge < database_->Query(DB_MaturityAge)
-                {
-                s += "0, retirement";
-                s += "; ";
-                }
-            }
-            break;
-        case enumerator_fromage:
-            {
-            if(IssueAge < local_rep->WDBegTime)
-// TODO ??            local_rep->WDBegTime < database_->Query(DB_MaturityAge)
-                {
-                s += "0, @" + value_cast<std::string>(local_rep->WDBegTime);
-                s += "; ";
-                }
-            }
-            break;
-        case enumerator_fromyear:
-            {
-            if(0 < local_rep->WDBegTime)
-// TODO ??                ( IssueAge + local_rep->WDBegTime
-//                        < database_->Query(DB_MaturityAge)
-//                        )
-                {
-                s += "0, " + value_cast<std::string>(local_rep->WDBegTime);
-                s += "; ";
-                }
-            }
-            break;
-        case enumerator_fromissue:
-            {
-            // Do nothing.
-            }
-            break;
-        default:
-            {
-            fatal_error()
-                << "Case '"
-                << local_rep->WDFromWhich
-                << "' not found."
-                << LMI_FLUSH
-                ;
-            }
-        }
-
-    static const int n = 1000;
-    char z[n];
-    WD_AMT->GetText(z, n);
-    s += z;
-
-    switch(local_rep->WDToWhich)
-        {
-        case enumerator_toret:
-            {
-            if(RetirementAge < database_->Query(DB_MaturityAge))
-                {
-                s += ", retirement";
-                s += "; 0";
-                }
-            }
-            break;
-        case enumerator_toage:
-            {
-            if(local_rep->WDEndTime < database_->Query(DB_MaturityAge))
-                {
-                s += ", @" + value_cast<std::string>(local_rep->WDEndTime);
-                s += "; 0";
-                }
-            }
-            break;
-        case enumerator_toyear:
-            {
-            if
-                ( IssueAge + local_rep->WDEndTime
-                < database_->Query(DB_MaturityAge)
-                )
-                {
-                s += ", " + value_cast<std::string>(local_rep->WDEndTime);
-                s += "; 0";
-                }
-            }
-            break;
-        case enumerator_toend:
-            {
-            // Do nothing.
-            }
-            break;
-        default:
-            {
-            fatal_error()
-                << "Case '"
-                << local_rep->WDToWhich
-                << "' not found."
-                << LMI_FLUSH
-                ;
-            }
-        }
-
-    // Simplify the input sequence if WD is zero.
-    if("0" == std::string(z))
-        {
-        s = "0";
-        }
-
-    WITHDRAWAL->SetText(s);
-////    wxSafeYield();
-////    SetFlag(wfFullyCreated);
-}
-
-void Input::TransferWithdrawalInputSequenceToSimpleControls
-    (InputSequence const& s
-    )
-{
-//////    if(!IsFlagSet(wfFullyCreated))
-//////        {
-//////        return;
-//////        }
-
-    bool is_valid = s.formatted_diagnostics().empty(); // && WITHDRAWAL->IsWindowEnabled(); // TODO ?? Kludge.
-    std::vector<ValueInterval> const& intervals = s.interval_representation();
-    bool is_simple =
-            0 == intervals.size()
-        ||  (
-                (   1 == intervals.size()
-                &&  0 == intervals[0].begin_duration
-                )
-            ||  (   2 == intervals.size()
-                &&  (   0.0 == intervals[0].value_number
-                    ||  0.0 == intervals[1].value_number
-                    )
-                )
-            ||  (   3   == intervals.size()
-                &&  0.0 == intervals[0].value_number
-                &&  0.0 == intervals[2].value_number
-                )
-            )
-        ;
-    is_wd_simply_representable = is_valid && is_simple;
-    if(!is_wd_simply_representable || 0 == intervals.size())
-        {
-        Enabler(); // Enablement of simple controls.
-
-        ClearFlag(wfFullyCreated);
-        WD_AMT->SetText("0");
-        wxSafeYield();
-        SetFlag(wfFullyCreated);
-
-        return;
-        }
-
-    local_rep->sWD = WD[0];
-
-    bool wd_in_second_interval =
-            0.0 == WD[0]
-        &&  2 <= intervals.size()
-        ;
-    int wd_interval;
-    if(wd_in_second_interval)
-        {
-        local_rep->sWD = WD[intervals[1].begin_duration];
-        wd_interval = 1;
-        }
-    else
-        {
-        local_rep->sWD = WD[0];
-        wd_interval = 0;
-        }
-
-    switch(intervals[wd_interval].begin_mode)
-        {
-        case e_number_of_years:
-            {
-            local_rep->WDFromWhich = enumerator_fromyear;
-            local_rep->WDBegTime = intervals[wd_interval].begin_duration;
-            }
-            break;
-        case e_duration:
-            {
-            local_rep->WDFromWhich = enumerator_fromyear;
-            local_rep->WDBegTime = intervals[wd_interval].begin_duration;
-            }
-            break;
-        case e_attained_age:
-            {
-            local_rep->WDFromWhich = enumerator_fromage;
-            local_rep->WDBegTime =
-                  intervals[wd_interval].begin_duration
-                + IssueAge
-                ;
-            }
-            break;
-        case e_inception:
-            {
-            local_rep->WDFromWhich = enumerator_fromyear;
-            local_rep->WDBegTime = 0;
-            }
-            break;
-        case e_retirement:
-            {
-            local_rep->WDFromWhich = enumerator_fromret;
-            }
-            break;
-        case e_inforce:  // Fall through: not implemented.
-        case e_maturity: // Fall through: illogical.
-        default:
-            {
-            fatal_error()
-                << "Case '"
-                << intervals[wd_interval].begin_mode
-                << "' not found."
-                << LMI_FLUSH
-                ;
-            }
-        }
-
-    switch(intervals[wd_interval].end_mode)
-        {
-        case e_number_of_years:
-            // Fall through. In this special case, number of years
-            // and duration are the same, because the interval
-            // must begin at duration zero.
-        case e_duration:
-            {
-            local_rep->WDToWhich = enumerator_toyear;
-            local_rep->WDEndTime = intervals[wd_interval].end_duration;
-            }
-            break;
-        case e_attained_age:
-            {
-            local_rep->WDToWhich = enumerator_toage;
-            local_rep->WDEndTime =
-                intervals[wd_interval].end_duration + IssueAge
-                ;
-            }
-            break;
-        case e_retirement:
-            {
-            local_rep->WDToWhich = enumerator_toret;
-            }
-            break;
-        case e_maturity:
-            {
-            local_rep->WDToWhich = enumerator_toend;
-            }
-            break;
-        case e_inception: // Fall through: illogical.
-        case e_inforce:   // Fall through: not implemented.
-        default:
-            {
-            fatal_error()
-                << "Case '"
-                << intervals[wd_interval].end_mode
-                << "' not found."
-                << LMI_FLUSH
-                ;
-            }
-        }
-
-////    ClearFlag(wfFullyCreated);
-////    Enabler();
-////    EnableTransferToSequenceControls(false);
-////    TXferPropertyPage::TransferData(tdSetData);
-////    wxSafeYield();
-////    EnableTransferToSequenceControls(true);
-////    Enabler();
-////    SetFlag(wfFullyCreated);
-}
-
-// TRICKY !! Use this with caution. It works only if all affected
-// controls come last in the transfer struct. The legacy GUI library
-// was not smart enough to skip through the transfer struct based on
-// dynamic transfer enablement.
-void Input::EnableTransferToSequenceControls(bool enable)
-{
-////    if(enable)
-////        {
-////        NEWLOAN        ->EnableTransfer();
-////        WITHDRAWAL     ->EnableTransfer();
-////        }
-////    else
-////        {
-////        NEWLOAN        ->DisableTransfer();
-////        WITHDRAWAL     ->DisableTransfer();
-////        }
-}
-
-#endif // 0
 

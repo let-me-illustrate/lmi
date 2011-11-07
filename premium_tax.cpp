@@ -83,7 +83,6 @@ bool premium_tax_is_retaliatory(mcenum_state tax_state, mcenum_state domicile)
 ///  - DB_PremTaxState
 /// These aren't used anywhere yet:
 ///  - DB_PremTaxFundCharge
-///  - DB_PremTaxTable
 ///  - DB_PremTaxTierGroup
 ///  - DB_PremTaxTierPeriod
 ///  - DB_PremTaxTierNonDecr

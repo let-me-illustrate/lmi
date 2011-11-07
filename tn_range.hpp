@@ -38,6 +38,7 @@
 #endif // Defined __BORLANDC__ .
 
 #include <string>
+#include <typeinfo>
 
 /// Design notes for class template trammel_base.
 ///
@@ -147,8 +148,10 @@ class LMI_SO tn_range_base
     virtual std::string diagnose_invalidity(std::string const&) const = 0;
     virtual void enforce_circumscription() = 0;
     virtual bool equal_to(std::string const&) const = 0;
+    virtual std::string str() const = 0;
     virtual double universal_minimum() const = 0;
     virtual double universal_maximum() const = 0;
+    virtual std::type_info const& value_type() const = 0;
 };
 
 /// Design notes for class template tn_range.
@@ -280,7 +283,6 @@ class tn_range
     Number curb(Number) const;
     std::string format_limits_for_error_message() const;
     bool is_valid(Number) const;
-    std::string str() const;
 
     // datum_base required implementation.
     virtual std::istream& read (std::istream&);
@@ -290,8 +292,10 @@ class tn_range
     virtual std::string diagnose_invalidity(std::string const&) const;
     virtual void enforce_circumscription();
     virtual bool equal_to(std::string const&) const;
+    virtual std::string str() const;
     virtual double universal_minimum() const;
     virtual double universal_maximum() const;
+    virtual std::type_info const& value_type() const;
 
     Trammel trammel_;
 

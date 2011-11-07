@@ -32,6 +32,7 @@
 #include <ios>
 #include <istream>
 #include <ostream>
+#include <sstream>
 #include <string>
 
 // TODO ?? NEED DECISION on i/o representation.
@@ -51,6 +52,11 @@ namespace
 //============================================================================
 std::istream& operator>> (std::istream& is, Server7702Input& z)
 {
+    // Use of std::stringstream here is a kludge. That doesn't matter
+    // because this obsolescent code will soon be removed.
+    std::string s;
+    std::stringstream ss;
+
     is >> z.UniqueIdentifier;
     is >> z.IsIssuedToday;
     is >> z.Duration;
@@ -58,25 +64,25 @@ std::istream& operator>> (std::istream& is, Server7702Input& z)
     is >> z.Premium;
     is >> z.DecreaseRequiredByContract;
     is >> z.ProductName;
-    is >> z.UnderwritingBasis;
+    s.clear(); ss.clear(); ss.str(""); is >> std::ws; is >> s; ss << s; ss >> z.UnderwritingBasis;
     is >> z.PremTaxLoadRate;
     is >> z.TieredAssetChargeRate;
     is >> z.LeastBenefitAmountEver;
-    is >> z.TargetPremium;
+//    is >> z.TargetPremium; // Apparently this came at the end long ago.
     is >> z.OldGuidelineLevelPremium;
     is >> z.OldGuidelineSinglePremium;
     is >> z.NewIssueAge;
     is >> z.OldIssueAge;
-    is >> z.NewGender;
-    is >> z.OldGender;
-    is >> z.NewSmoker;
-    is >> z.OldSmoker;
-    is >> z.NewUnderwritingClass;
-    is >> z.OldUnderwritingClass;
-    is >> z.NewStateOfJurisdiction;
-    is >> z.OldStateOfJurisdiction;
-    is >> z.NewDeathBenefitOption;
-    is >> z.OldDeathBenefitOption;
+    s.clear(); ss.clear(); ss.str(""); is >> std::ws; is >> s; ss << s; ss >> z.NewGender;
+    s.clear(); ss.clear(); ss.str(""); is >> std::ws; is >> s; ss << s; ss >> z.OldGender;
+    s.clear(); ss.clear(); ss.str(""); is >> std::ws; is >> s; ss << s; ss >> z.NewSmoker;
+    s.clear(); ss.clear(); ss.str(""); is >> std::ws; is >> s; ss << s; ss >> z.OldSmoker;
+    s.clear(); ss.clear(); ss.str(""); is >> std::ws; is >> s; ss << s; ss >> z.NewUnderwritingClass;
+    s.clear(); ss.clear(); ss.str(""); is >> std::ws; is >> s; ss << s; ss >> z.OldUnderwritingClass;
+    s.clear(); ss.clear(); ss.str(""); is >> std::ws; is >> s; ss << s; ss >> z.NewStateOfJurisdiction;
+    s.clear(); ss.clear(); ss.str(""); is >> std::ws; is >> s; ss << s; ss >> z.OldStateOfJurisdiction;
+    s.clear(); ss.clear(); ss.str(""); is >> std::ws; is >> s; ss << s; ss >> z.NewDeathBenefitOption;
+    s.clear(); ss.clear(); ss.str(""); is >> std::ws; is >> s; ss << s; ss >> z.OldDeathBenefitOption;
     is >> z.NewBenefitAmount;
     is >> z.OldBenefitAmount;
     is >> z.NewSpecifiedAmount;
@@ -87,14 +93,14 @@ std::istream& operator>> (std::istream& is, Server7702Input& z)
     is >> z.OldWaiverOfPremiumInForce;
     is >> z.NewPremiumsWaived;
     is >> z.OldPremiumsWaived;
-    is >> z.NewWaiverOfPremiumRating;
-    is >> z.OldWaiverOfPremiumRating;
+    s.clear(); ss.clear(); ss.str(""); is >> std::ws; is >> s; ss << s; ss >> z.NewWaiverOfPremiumRating;
+    s.clear(); ss.clear(); ss.str(""); is >> std::ws; is >> s; ss << s; ss >> z.OldWaiverOfPremiumRating;
     is >> z.NewAccidentalDeathInForce;
     is >> z.OldAccidentalDeathInForce;
-    is >> z.NewAccidentalDeathRating;
-    is >> z.OldAccidentalDeathRating;
-    is >> z.NewTableRating;
-    is >> z.OldTableRating;
+    s.clear(); ss.clear(); ss.str(""); is >> std::ws; is >> s; ss << s; ss >> z.NewAccidentalDeathRating;
+    s.clear(); ss.clear(); ss.str(""); is >> std::ws; is >> s; ss << s; ss >> z.OldAccidentalDeathRating;
+    s.clear(); ss.clear(); ss.str(""); is >> std::ws; is >> s; ss << s; ss >> z.NewTableRating;
+    s.clear(); ss.clear(); ss.str(""); is >> std::ws; is >> s; ss << s; ss >> z.OldTableRating;
 
     // I give the names with a suffix "0" here,
     // but they need to be repeated with "1", "2",
@@ -119,6 +125,8 @@ std::istream& operator>> (std::istream& is, Server7702Input& z)
     is >> z.NewTemporaryFlatDuration2;
     is >> z.OldTemporaryFlatDuration2;
 
+    is >> z.TargetPremium; // Apparently this came at the end long ago.
+
     return is;
 }
 
@@ -138,7 +146,6 @@ std::ostream& operator<< (std::ostream& os, Server7702Input const& z)
     os << ' ' << z.PremTaxLoadRate;
     os << ' ' << z.TieredAssetChargeRate;
     os << ' ' << z.LeastBenefitAmountEver;
-    os << ' ' << z.TargetPremium;
     os << ' ' << z.OldGuidelineLevelPremium;
     os << ' ' << z.OldGuidelineSinglePremium;
     os << ' ' << z.NewIssueAge;
@@ -194,6 +201,8 @@ std::ostream& operator<< (std::ostream& os, Server7702Input const& z)
     os << ' ' << z.OldTemporaryFlatDuration1;
     os << ' ' << z.NewTemporaryFlatDuration2;
     os << ' ' << z.OldTemporaryFlatDuration2;
+
+    os << ' ' << z.TargetPremium;
 
     os << std::endl;
     return os;

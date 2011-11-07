@@ -27,7 +27,9 @@
 {DB_MinIssAge,DB_Topic_Underwriting,"MinIssAge","Minimum issue age",}, \
 {DB_MaxIssAge,DB_Topic_Underwriting,"MaxIssAge","Maximum issue age",}, \
 {DB_MaxIncrAge,DB_Topic_Underwriting,"MaxIncrAge","Maximum age at which specified amount increases are permitted",}, \
-{DB_AllowFullUw,DB_Topic_Underwriting,"AllowFullUw","Allow full underwriting: 0=no, 1=yes",}, \
+{DB_AllowFullUw,DB_Topic_Underwriting,"AllowFullUw","Allow full medical underwriting: 0=no, 1=yes",}, \
+{DB_AllowParamedUw,DB_Topic_Underwriting,"AllowParamedUw","Allow paramedical underwriting: 0=no, 1=yes",}, \
+{DB_AllowNonmedUw,DB_Topic_Underwriting,"AllowNonmedUw","Allow nonmedical underwriting: 0=no, 1=yes",}, \
 {DB_AllowSimpUw,DB_Topic_Underwriting,"AllowSimpUw","Allow simplified underwriting: 0=no, 1=yes",}, \
 {DB_AllowGuarUw,DB_Topic_Underwriting,"AllowGuarUw","Allow guaranteed underwriting: 0=no, 1=yes",}, \
 {DB_SmokeOrTobacco,DB_Topic_Underwriting,"SmokeOrTobacco","Distinguish mortality by: 0=smoking, 1=tobacco use",}, \
@@ -63,6 +65,7 @@
 {DB_GuarCoiMultiplier,DB_Topic_MortalityCharges,"GuarCoiMultiplier","Multiplier applied to guaranteed cost of insurance charges",}, \
 {DB_CurrCoiTable,DB_Topic_MortalityCharges,"CurrCoiTable","Current mortality charge table (index in mortality table database)",}, \
 {DB_CurrCoiIsAnnual,DB_Topic_MortalityCharges,"CurrCoiIsAnnual","Current cost of insurance table rates are: 0=monthly, 1=annual",}, \
+{DB_MinInputCoiMult,DB_Topic_MortalityCharges,"MinInputCoiMult","Lowest allowed input multiplier for current cost of insurance charges",}, \
 {DB_CurrCoiMultiplier,DB_Topic_MortalityCharges,"CurrCoiMultiplier","Multiplier applied to current cost of insurance charges",}, \
 {DB_UnusualCoiBanding,DB_Topic_MortalityCharges,"UnusualCoiBanding","Use idiosyncratic COI banding (read the source): 0=no, 1=yes",}, \
 {DB_CurrCoiTable0Limit,DB_Topic_MortalityCharges,"CurrCoiTable0Limit","Idiosyncratic banding: breakpoint between first and second bands, included in second band",}, \
@@ -92,6 +95,10 @@
 {DB_GenAcctIntBonus,DB_Topic_Interest,"GenAcctIntBonus","Interest bonus added to the general account rate",}, \
 {DB_BonusInt,DB_Topic_Interest,"BonusInt","Bonus interest [not yet implemented]",}, \
 {DB_IntFloor,DB_Topic_Interest,"IntFloor","[not used]",}, \
+{DB_AllowGenAcct,DB_Topic_Interest,"AllowGenAcct","Allow investment in general account",}, \
+{DB_AllowSepAcct,DB_Topic_Interest,"AllowSepAcct","Allow investment in separate account",}, \
+{DB_AllowGenAcctEarnRate,DB_Topic_Interest,"AllowGenAcctEarnRate","Allow entry of general-account earned rate",}, \
+{DB_AllowSepAcctNetRate,DB_Topic_Interest,"AllowSepAcctNetRate","Allow entry of separate-account net rate",}, \
 {DB_MaxGenAcctRate,DB_Topic_Interest,"MaxGenAcctRate","Maximum general account interest rate",}, \
 {DB_MaxSepAcctRate,DB_Topic_Interest,"MaxSepAcctRate","Maximum separate account interest rate",}, \
 {DB_SepAcctSpreadMethod,DB_Topic_Interest,"SepAcctSpreadMethod","Separate-account spread and fee subtraction: 0=annual (effective), 1=daily (nominal)",}, \
@@ -143,8 +150,7 @@
 {DB_PremTaxAmortPeriod,DB_Topic_DacAndPremiumTax,"PremTaxAmortPeriod","Premium tax amortization period in years",}, \
 {DB_PremTaxAmortIntRate,DB_Topic_DacAndPremiumTax,"PremTaxAmortIntRate","Premium tax amortization annual effective interest rate",}, \
 {DB_PremTaxRate,DB_Topic_DacAndPremiumTax,"PremTaxRate","Scalar premium tax rate paid by insurance company--distinct from premium load due to premium tax",}, \
-{DB_PremTaxState,DB_Topic_DacAndPremiumTax,"PremTaxState","[Obsolete--included only for backward compatibility] State that formerly determined premium tax rate: 0=insured state, 1=corporation state",}, \
-{DB_PremTaxTable,DB_Topic_DacAndPremiumTax,"PremTaxTable","[not yet implemented--use PremTaxLoad instead]",}, \
+{DB_PremTaxState,DB_Topic_DacAndPremiumTax,"PremTaxState","[Obsolete--retained only for backward compatibility] State that formerly determined premium tax rate: 0=insured state, 1=corporation state",}, \
 {DB_Topic_SurrenderCharges,DB_FIRST,"Surrender charges","Surrender-charge rates and parameters",}, \
 {DB_SurrChgAcctValMult,DB_Topic_SurrenderCharges,"SurrChgAcctValMult","Multiple of account value for formulaic surrender charges",}, \
 {DB_SurrChgAcctValSlope,DB_Topic_SurrenderCharges,"SurrChgAcctValSlope","Durational factor applied to multiple-of-account-value surrender charge",}, \
@@ -167,12 +173,13 @@
 {DB_AllowSpecAmtIncr,DB_Topic_DeathBenefits,"AllowSpecAmtIncr","Allow increases in specified amount: 0=no, 1=yes",}, \
 {DB_MinSpecAmtIncr,DB_Topic_DeathBenefits,"MinSpecAmtIncr","Minimum specified-amount increase [not yet implemented]",}, \
 {DB_EnforceNaarLimit,DB_Topic_DeathBenefits,"EnforceNaarLimit","Enforce input limit on net amount at risk: 0=no, 1=yes [not yet implemented]",}, \
-{DB_MinSpecAmt,DB_Topic_DeathBenefits,"MinSpecAmt","Minimum specified amount [interaction with similar entities not yet documented]",}, \
-{DB_MinIssSpecAmt,DB_Topic_DeathBenefits,"MinIssSpecAmt","Minimum specified amount allowed at issue",}, \
+{DB_MinSpecAmt,DB_Topic_DeathBenefits,"MinSpecAmt","Minimum specified amount [legacy--not used in production]",}, \
+{DB_MinIssSpecAmt,DB_Topic_DeathBenefits,"MinIssSpecAmt","Minimum specified amount allowed at issue for base policy including any term rider",}, \
+{DB_MinIssBaseSpecAmt,DB_Topic_DeathBenefits,"MinIssBaseSpecAmt","Minimum specified amount allowed at issue for base policy only, ignoring any term rider",}, \
 {DB_MinRenlSpecAmt,DB_Topic_DeathBenefits,"MinRenlSpecAmt","Minimum specified amount after issue for base policy including any term rider",}, \
 {DB_MinRenlBaseSpecAmt,DB_Topic_DeathBenefits,"MinRenlBaseSpecAmt","Minimum specified amount after issue for base policy only, ignoring any term rider",}, \
-{DB_MaxIssSpecAmt,DB_Topic_DeathBenefits,"MaxIssSpecAmt","Maximum specified amount allowed at issue",}, \
-{DB_MaxRenlSpecAmt,DB_Topic_DeathBenefits,"MaxRenlSpecAmt","Maximum specified amount after issue for base policy only, ignoring any term rider",}, \
+{DB_MaxIssSpecAmt,DB_Topic_DeathBenefits,"MaxIssSpecAmt","Maximum specified amount allowed at issue [not yet implemented]",}, \
+{DB_MaxRenlSpecAmt,DB_Topic_DeathBenefits,"MaxRenlSpecAmt","Maximum specified amount after issue [not yet implemented]",}, \
 {DB_AllowDbo1,DB_Topic_DeathBenefits,"AllowDbo1","Allow level death benefit option",}, \
 {DB_AllowDbo2,DB_Topic_DeathBenefits,"AllowDbo2","Allow increasing death benefit option",}, \
 {DB_AllowDbo3,DB_Topic_DeathBenefits,"AllowDbo3","Allow return of premium death benefit option",}, \
@@ -187,9 +194,11 @@
 {DB_TermMinIssAge,DB_Topic_Riders,"TermMinIssAge","Term rider minimum issue age",}, \
 {DB_TermMaxIssAge,DB_Topic_Riders,"TermMaxIssAge","Term rider maximum issue age",}, \
 {DB_TermForcedConvAge,DB_Topic_Riders,"TermForcedConvAge","Age at which term rider converts to base policy with no positive election required",}, \
-{DB_MaxTermProportion,DB_Topic_Riders,"MaxTermProportion","Term rider as maximum proportion of total coverage",}, \
+{DB_MaxTermProportion,DB_Topic_Riders,"MaxTermProportion","Term rider as maximum proportion of total coverage [not yet implemented]",}, \
 {DB_TermCoiRate,DB_Topic_Riders,"TermCoiRate","[not yet implemented--use external table instead]",}, \
 {DB_TermPremRate,DB_Topic_Riders,"TermPremRate","[not yet implemented--use external table instead]",}, \
+{DB_TermIsDbFor7702,DB_Topic_Riders,"TermIsDbFor7702","Term rider qualifies as death benefit for 7702: 0=no, 1=yes",}, \
+{DB_TermIsDbFor7702A,DB_Topic_Riders,"TermIsDbFor7702A","Term rider qualifies as death benefit for 7702A: 0=no, 1=yes",}, \
 {DB_AllowWp,DB_Topic_Riders,"AllowWp","Allow waiver benefit: 0=no, 1=yes",}, \
 {DB_WpTable,DB_Topic_Riders,"WpTable","Waiver benefit charge (index in mortality table database)",}, \
 {DB_WpMinIssAge,DB_Topic_Riders,"WpMinIssAge","Waiver benefit minimum issue age",}, \
@@ -252,8 +261,6 @@
 {DB_NoLapseAlwaysActive,DB_Topic_SecondaryGuarantees,"NoLapseAlwaysActive","No-lapse guarantee requirements are always met by contract or issue rules: 0=no, 1=yes",}, \
 {DB_AllowHoneymoon,DB_Topic_SecondaryGuarantees,"AllowHoneymoon","Honeymoon allowed: 0=no, 1=yes",}, \
 {DB_Topic_Allocations,DB_FIRST,"Allocations","Allocations between general and separate account",}, \
-{DB_AllowGenAcct,DB_Topic_Allocations,"AllowGenAcct","Allow investment in general account",}, \
-{DB_AllowSepAcct,DB_Topic_Allocations,"AllowSepAcct","Allow investment in separate account",}, \
 {DB_DeductionMethod,DB_Topic_Allocations,"DeductionMethod","Apportionment of deductions between general and separate accounts: 0=in proportion to assets, 1=debit 'preferred' account first",}, \
 {DB_DeductionAcct,DB_Topic_Allocations,"DeductionAcct","Preferred account for non-proportional deductions: 0=general account, 1=separate account",}, \
 {DB_DistributionMethod,DB_Topic_Allocations,"DistributionMethod","Apportionment of distributions between general and separate accounts: 0=in proportion to assets, 1=debit 'preferred' account first",}, \

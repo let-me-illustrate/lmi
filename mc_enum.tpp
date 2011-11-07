@@ -31,18 +31,6 @@
 #include <algorithm> // std::find()
 #include <typeinfo>
 
-// TODO ?? Should there be a runtime check that all elements in
-// e() and in c() are unique? Can that be asserted at compile time?
-
-template<typename T>
-std::size_t        mc_enum<T>::n() {return mc_enum_key<T>::n_;}
-
-template<typename T>
-T    const*        mc_enum<T>::e() {return mc_enum_key<T>::e();}
-
-template<typename T>
-char const* const* mc_enum<T>::c() {return mc_enum_key<T>::c();}
-
 /// The header that defines class mc_enum is by design unaware of its
 /// associated metadata, so static assertions that depend on metadata
 /// are written here.
@@ -100,6 +88,106 @@ bool mc_enum<T>::operator==(std::string const& s) const
     return s == str();
 }
 
+template<typename T>
+std::size_t mc_enum<T>::ordinal(std::string const& s)
+{
+    std::size_t v = std::find(c(), c() + n(), s) - c();
+    if(v == n())
+        {
+        fatal_error()
+            << "Value '"
+            << s
+            << "' invalid for type '"
+            << lmi::TypeInfo(typeid(T))
+            << "'."
+            << LMI_FLUSH
+            ;
+        }
+    return v;
+}
+
+template<typename T>
+std::vector<std::string> const& mc_enum<T>::all_strings() const
+{
+    return s();
+}
+
+template<typename T>
+std::size_t mc_enum<T>::cardinality() const
+{
+    return n();
+}
+
+template<typename T>
+void mc_enum<T>::enforce_proscription()
+{
+    if(is_allowed(ordinal()))
+        {
+        return;
+        }
+
+    std::size_t z = first_allowed_ordinal();
+    if(z < cardinality())
+        {
+        value_ = e()[z];
+        }
+}
+
+template<typename T>
+std::size_t mc_enum<T>::ordinal() const
+{
+    std::size_t i = std::find(e(), e() + n(), value_) - e();
+    if(i == n())
+        {
+        fatal_error()
+            << "Value "
+            << value_
+            << " invalid for type '"
+            << lmi::TypeInfo(typeid(T))
+            << "'."
+            << LMI_FLUSH
+            ;
+        }
+    return i;
+}
+
+template<typename T>
+std::string mc_enum<T>::str(int j) const
+{
+    return c()[j];
+}
+
+template<typename T>
+std::string mc_enum<T>::str() const
+{
+    return c()[ordinal()];
+}
+
+template<typename T>
+T mc_enum<T>::value() const
+{
+    return value_;
+}
+
+// TODO ?? Should there be a runtime check that all elements in
+// e() and in c() are unique? Can that be asserted at compile time?
+
+template<typename T>
+std::size_t        mc_enum<T>::n() {return mc_enum_key<T>::n_;}
+
+template<typename T>
+T    const*        mc_enum<T>::e() {return mc_enum_key<T>::e();}
+
+template<typename T>
+char const* const* mc_enum<T>::c() {return mc_enum_key<T>::c();}
+
+template<typename T>
+std::vector<std::string> const& mc_enum<T>::s()
+{
+    static std::vector<std::string> const v(c(), c() + n());
+    return v;
+}
+
 namespace
 {
 /// A whilom version of a vetust class substituted underbars for
@@ -152,87 +240,5 @@ template<typename T>
 std::ostream& mc_enum<T>::write(std::ostream& os) const
 {
     return os << str();
-}
-
-template<typename T>
-std::size_t mc_enum<T>::cardinality() const
-{
-    return n();
-}
-
-template<typename T>
-void mc_enum<T>::enforce_proscription()
-{
-    if(is_allowed(ordinal()))
-        {
-        return;
-        }
-
-    std::size_t z = first_allowed_ordinal();
-    if(z < cardinality())
-        {
-        value_ = e()[z];
-        }
-}
-
-template<typename T>
-std::size_t mc_enum<T>::ordinal() const
-{
-    std::size_t i = std::find(e(), e() + n(), value_) - e();
-    if(i == n())
-        {
-        fatal_error()
-            << "Value "
-            << value_
-            << " invalid for type '"
-            << lmi::TypeInfo(typeid(T))
-            << "'."
-            << LMI_FLUSH
-            ;
-        }
-    return i;
-}
-
-template<typename T>
-std::string mc_enum<T>::str(int j) const
-{
-    return c()[j];
-}
-
-template<typename T>
-T mc_enum<T>::value() const
-{
-    return value_;
-}
-
-template<typename T>
-std::size_t mc_enum<T>::ordinal(std::string const& s)
-{
-    std::size_t v = std::find(c(), c() + n(), s) - c();
-    if(v == n())
-        {
-        fatal_error()
-            << "Value '"
-            << s
-            << "' invalid for type '"
-            << lmi::TypeInfo(typeid(T))
-            << "'."
-            << LMI_FLUSH
-            ;
-        }
-    return v;
-}
-
-template<typename T>
-std::string mc_enum<T>::str() const
-{
-    return c()[ordinal()];
-}
-
-template<typename T>
-std::vector<std::string> const& mc_enum<T>::all_strings()
-{
-    static std::vector<std::string> const v(c(), c() + n());
-    return v;
 }
 

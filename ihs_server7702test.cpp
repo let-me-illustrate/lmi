@@ -28,6 +28,8 @@
 
 #include "ihs_server7702.hpp"
 
+#include "handle_exceptions.hpp"
+#include "path_utility.hpp" // initialize_filesystem()
 #include "so_attributes.hpp"
 
 #if defined LMI_POSIX
@@ -138,26 +140,28 @@ int main()
     s.Premium                       = 10000;
     s.DecreaseRequiredByContract    = 0.0;
     s.ProductName                   = "sample";
-    s.UnderwritingBasis             = 0;
+    s.UnderwritingBasis             = "Medical";
     s.PremTaxLoadRate               = .02;
     s.TieredAssetChargeRate         = 0.0;
-    s.LastFaceAmount                = 1000000.0;
+//    s.LastFaceAmount                = 1000000.0; // Apparently long obsolete.
     s.LeastFaceAmountEver           = 1000000.0;
     s.OldGuidelineLevelPremium      = 0.0;
     s.OldGuidelineSinglePremium     = 0.0;
-    s.OldDeathBenefit               = 1000000.0;
+//    s.OldDeathBenefit               = 1000000.0; // Apparently long obsolete.
     s.NewIssueAge                   = 45;
     s.OldIssueAge                   = 45;
-    s.NewGender                     = 1;
-    s.OldGender                     = 1;
-    s.NewSmoker                     = 1;
-    s.OldSmoker                     = 1;
-    s.NewUnderwritingClass          = 0;
-    s.OldUnderwritingClass          = 0;
-    s.NewStateOfJurisdiction        = 6;
-    s.OldStateOfJurisdiction        = 6;
-    s.NewDeathBenefitOption         = 0;
-    s.OldDeathBenefitOption         = 0;
+    s.NewGender                     = "Male";
+    s.OldGender                     = "Male";
+    s.NewSmoker                     = "Nonsmoker";
+    s.OldSmoker                     = "Nonsmoker";
+    s.NewUnderwritingClass          = "Preferred";
+    s.OldUnderwritingClass          = "Preferred";
+    s.NewStateOfJurisdiction        = "CT";
+    s.OldStateOfJurisdiction        = "CT";
+    s.NewDeathBenefitOption         = "A";
+    s.OldDeathBenefitOption         = "A";
+    s.NewBenefitAmount              = 1000000.0;
+    s.OldBenefitAmount              = 1000000.0;
     s.NewSpecifiedAmount            = 1000000.0;
     s.OldSpecifiedAmount            = 1000000.0;
     s.NewTermAmount                 = 0.0;
@@ -166,14 +170,14 @@ int main()
     s.OldWaiverOfPremiumInForce     = 0;
     s.NewPremiumsWaived             = 0;
     s.OldPremiumsWaived             = 0;
-    s.NewWaiverOfPremiumRating      = 1;
-    s.OldWaiverOfPremiumRating      = 1;
+    s.NewWaiverOfPremiumRating      = "None";
+    s.OldWaiverOfPremiumRating      = "None";
     s.NewAccidentalDeathInForce     = 0;
     s.OldAccidentalDeathInForce     = 0;
-    s.NewAccidentalDeathRating      = 0;
-    s.OldAccidentalDeathRating      = 0;
-    s.NewTableRating                = 10;
-    s.OldTableRating                = 10;
+    s.NewAccidentalDeathRating      = "None";
+    s.OldAccidentalDeathRating      = "None";
+    s.NewTableRating                = "None";
+    s.OldTableRating                = "None";
     s.NewPermanentFlatAmount0       = 0.0;
     s.OldPermanentFlatAmount0       = 0.0;
     s.NewTemporaryFlatAmount0       = 0.0;
@@ -188,17 +192,25 @@ int main()
         );
 */
     char c[] =
-        "1 1 0 0 10000 0 " "sample" "\nMedical\n .02 0 1000000 0 0 0"
+        "1 1 0 0 10000 0 " "sample" "\nMedical\n .02 0 1000000 0 0"
         " 45 45\nMale\nMale\nNonsmoker\nNonsmoker\nPreferred\nPreferred\nCT\nCT\nA\nA\n"
         " 1000000 1000000 1000000 1000000 0 0 0 0 0 0"
         "\nA=+25%\nA=+25%\n0 0\nNone\nNone\nP=+400%\nP=+400%\n"
         " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 51640"
         ;
 
-/* output should be: [NOT!]
+/* output should be:
+
+Ancient results, now suspected always to have been incorrect:
 1 0 0 19643.11999999999898136593 213777.04000000000814907253 19643.1199999999989
 8136593 213777.04000000000814907253 0.00000000000000000000 0.0000000000000000000
 0 0.00000000000000000000 0.00000000000000000000 1000000.00000000000000000000
+
+as of revision 5299:
+1 0 0 22110.68343118850680184551 239162.50350465354858897626 22110.6834311885068
+0184551 239162.50350465354858897626 0.00000000000000000000 0.0000000000000000000
+0 0.00000000000000000000 0.00000000000000000000
+
 */
 
     char o[16384];
@@ -208,20 +220,30 @@ int main()
     int j; for(j = 0; j < 1000; j++)
 */
 
+    std::set_terminate(lmi_terminate_handler);
+    try
+        {
+        // Absolute paths require "native" name-checking policy for msw.
+        initialize_filesystem();
 #if defined LMI_POSIX
-    dlopen("gpt_server.so", RTLD_LAZY | RTLD_GLOBAL);
+        dlopen("gpt_server.so", RTLD_LAZY | RTLD_GLOBAL);
 #elif defined LMI_MSW
-    LoadLibrary("gpt_server.dll");
+        LoadLibrary("gpt_server.dll");
 #else // Unknown platform.
 #   error "Unknown platform. Consider contributing support."
 #endif // Unknown platform.
 
-    InitializeServer7702();
-    RunServer7702FromString(c, o);
-    std::fprintf
-        (stdout
-        ,"%s\n"
-        ,o
-        );
+        InitializeServer7702();
+        RunServer7702FromString(c, o);
+        std::fprintf
+            (stdout
+            ,"%s\n"
+            ,o
+            );
+        }
+    catch(...)
+        {
+        report_exception();
+        }
 }
 
