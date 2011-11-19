@@ -891,7 +891,7 @@ double Irc7702::CalculatePremium
     //
     // TODO ?? It's also correct only if the supplied target premium
     // is correct.
-#if 0
+#if 1
     double target = TargetPremium;
 #else // About to be removed:
     double target = Values.GetTgtPrem
