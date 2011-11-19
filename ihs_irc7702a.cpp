@@ -124,7 +124,7 @@ Irc7702A::Irc7702A
         {
         case mce_unnecessary_premium:
             {
-            HOPEFULLY(mce_cvat == DefnLifeIns);
+            LMI_ASSERT(mce_cvat == DefnLifeIns);
             UnnecPremIsMatChg    = true;
             ElectiveIncrIsMatChg = false;
             DBDefn = e_specamt_7702A;
@@ -132,7 +132,7 @@ Irc7702A::Irc7702A
             break;
         case mce_benefit_increase:
             {
-            HOPEFULLY(mce_cvat == DefnLifeIns);
+            LMI_ASSERT(mce_cvat == DefnLifeIns);
             UnnecPremIsMatChg    = false;
             ElectiveIncrIsMatChg = true;
             DBDefn = e_death_benefit_7702A;
@@ -145,7 +145,7 @@ Irc7702A::Irc7702A
                 << "mce_later_of_increase_or_unnecessary_premium not implemented."
                 << LMI_FLUSH
                 ;
-            HOPEFULLY(mce_cvat == DefnLifeIns);
+            LMI_ASSERT(mce_cvat == DefnLifeIns);
             UnnecPremIsMatChg    = true;
             ElectiveIncrIsMatChg = true;
             DBDefn = e_specamt_7702A;
@@ -153,7 +153,7 @@ Irc7702A::Irc7702A
             break;
         case mce_earlier_of_increase_or_unnecessary_premium:
             {
-            HOPEFULLY(mce_cvat == DefnLifeIns);
+            LMI_ASSERT(mce_cvat == DefnLifeIns);
             UnnecPremIsMatChg    = true;
             ElectiveIncrIsMatChg = true;
             DBDefn = e_specamt_7702A;
@@ -161,7 +161,7 @@ Irc7702A::Irc7702A
             break;
         case mce_adjustment_event:
             {
-            HOPEFULLY(mce_gpt == DefnLifeIns);
+            LMI_ASSERT(mce_gpt == DefnLifeIns);
             UnnecPremIsMatChg    = false;
             ElectiveIncrIsMatChg = false;
             DBDefn = e_death_benefit_7702A;
@@ -215,7 +215,7 @@ void Irc7702A::Initialize7702A
     LMI_ASSERT(0 < a_Bfts.size());
     double lowest_bft = *std::min_element(a_Bfts.begin(), a_Bfts.end());
     // Allow Bfts to be zero for solves.
-    HOPEFULLY(0.0 <= lowest_bft);
+    LMI_ASSERT(0.0 <= lowest_bft);
     // TODO ?? Should we assert that this equals 'a_LowestBft'?
     // If we can, then we don't need the latter as an argument.
 
@@ -271,13 +271,13 @@ void Irc7702A::Initialize7702A
     Pmts.assign(max_dur, 0.0);
     Bfts.assign(max_dur, 0.0);
 
-    HOPEFULLY(a_Pmts.size() <= max_years);
+    LMI_ASSERT(a_Pmts.size() <= max_years);
     for(unsigned int j = 0; j < a_Pmts.size(); ++j)
         {
         // TODO ?? OK to treat premium history as annual?
         Pmts[j * months_per_year] = a_Pmts[j];
         }
-    HOPEFULLY(a_Bfts.size() <= max_years);
+    LMI_ASSERT(a_Bfts.size() <= max_years);
 // UpdateBft7702A() updates this, thus:
 //    Bfts[TestPeriodDur] = current_bft;
 // so should we make sure Bfts[TestPeriodDur] is zero here?
@@ -357,7 +357,7 @@ void Irc7702A::UpdateBOY7702A(int a_PolicyYear)
     PolicyYear = a_PolicyYear;
 
     // A negative policy year makes no sense
-    HOPEFULLY(0 <= PolicyYear);
+    LMI_ASSERT(0 <= PolicyYear);
 
     // Update cumulative 7pp
     if(TestPeriodDur < TestPeriodLen)
@@ -402,8 +402,8 @@ void Irc7702A::UpdateBOY7702A(int a_PolicyYear)
         // of times, then
         //   lo_val should equal zero minus lo_decrement, and
         //   hi_val should equal the next year's NSP plus hi_increment
-        HOPEFULLY(materially_equal(lo_val, (-lo_decrement)));
-        HOPEFULLY(materially_equal(hi_val, (NSPEnd + hi_increment)));
+        LMI_ASSERT(materially_equal(lo_val, (-lo_decrement)));
+        LMI_ASSERT(materially_equal(hi_val, (NSPEnd + hi_increment)));
         // The average of the interpolated values should equal the average
         // of the endpoints
         double avg_interp =
@@ -412,7 +412,7 @@ void Irc7702A::UpdateBOY7702A(int a_PolicyYear)
         double avg_endpts =
             (NSPBeg + NSPEnd)
             /   2.0;
-        HOPEFULLY(materially_equal(avg_interp, avg_endpts));
+        LMI_ASSERT(materially_equal(avg_interp, avg_endpts));
         // We do not assert that NSP increases by duration. That might not be
         // true in the case of a high substandard rating that is "forgiven"
         // after some period of time.
@@ -436,7 +436,7 @@ void Irc7702A::UpdateBOM7702A(int a_PolicyMonth)
     IsMatChg = false;
     PolicyMonth = a_PolicyMonth;
     // A negative policy month makes no sense
-    HOPEFULLY(0 <= PolicyMonth);
+    LMI_ASSERT(0 <= PolicyMonth);
 }
 
 //============================================================================
@@ -460,7 +460,7 @@ void Irc7702A::Update1035Exch7702A
     ,double  a_Bft
     )
 {
-    HOPEFULLY(0.0 <= a_Net1035Amount);
+    LMI_ASSERT(0.0 <= a_Net1035Amount);
     a_DeemedCashValue = a_Net1035Amount;
 
     if(Ignore)
@@ -616,7 +616,7 @@ double Irc7702A::MaxNonMecPremium
         {
         if(TestPeriodDur < TestPeriodLen)
             {
-            HOPEFULLY(CumPmts <= CumSevenPP);
+            LMI_ASSERT(CumPmts <= CumSevenPP);
             state_.Q6_max_non_mec_prem = RoundNonMecPrem(CumSevenPP - CumPmts);
             return state_.Q6_max_non_mec_prem;
             }
@@ -687,9 +687,9 @@ double Irc7702A::MaxNecessaryPremium
     DetermineLowestBft();
     double nsp = MlyInterpNSP[PolicyMonth] * LowestBft;
 
-    HOPEFULLY(0.0 <= a_DeemedCashValue);
+    LMI_ASSERT(0.0 <= a_DeemedCashValue);
     // We don't assert
-    //  HOPEFULLY(0.0 <= a_CashValue);
+    //  LMI_ASSERT(0.0 <= a_CashValue);
     // because allowing account (hence cash) value to be negative
     // makes solves easier.
 
@@ -729,7 +729,7 @@ double Irc7702A::UpdatePmt7702A
         }
 
 // TODO ?? Not necessarily true if we net out WD?
-//  HOPEFULLY(0.0 <= a_Payment);
+//  LMI_ASSERT(0.0 <= a_Payment);
 
     // As long as we're MEC testing, this function should be called whenever a
     // payment is set, and no more than once each month. Therefore, when it's
@@ -739,7 +739,7 @@ double Irc7702A::UpdatePmt7702A
     // TODO ?? But then how will we handle a WD? Separate function?
     //
     // Changed anyway: called twice a month when there's a material change.
-//    HOPEFULLY(0.0 == Pmts[TestPeriodDur]);
+//    LMI_ASSERT(0.0 == Pmts[TestPeriodDur]);
 
     // During the test period (only), we accumulate premiums and compare
     // to the seven-pay limit. We store premium history for this period(or longer?)
@@ -904,15 +904,15 @@ double Irc7702A::UpdateBft7702A
         }
 
     // Allow Bfts to be zero for solves.
-    HOPEFULLY(0.0 <= a_NewDB);
-    HOPEFULLY(0.0 <= a_OldDB);
-    HOPEFULLY(0.0 <= a_NewSA);
-    HOPEFULLY(0.0 <= a_OldSA);
+    LMI_ASSERT(0.0 <= a_NewDB);
+    LMI_ASSERT(0.0 <= a_OldDB);
+    LMI_ASSERT(0.0 <= a_NewSA);
+    LMI_ASSERT(0.0 <= a_OldSA);
 
     // I believe that the death benefit, unlike the premium, can be set more
     // than once per month in the present code. I do not know whether or not
     // this can be avoided. TODO ?? Figure this out.
-    HOPEFULLY(TestPeriodDur < static_cast<int>(Bfts.size()));
+    LMI_ASSERT(TestPeriodDur < static_cast<int>(Bfts.size()));
 
     double current_bft = 0.0;
     if(e_death_benefit_7702A == DBDefn)
@@ -1036,7 +1036,7 @@ void Irc7702A::TestBftDecrease(double a_NewBft)
     // If the new (reduced) Bft is not lower than the Bft assumed in
     // calculating the last 7pp, then there's no need to retest. If
     // that was the case, we shouldn't have gotten here.
-    HOPEFULLY(a_NewBft < LowestBft);
+    LMI_ASSERT(a_NewBft < LowestBft);
     LowestBft = std::min(LowestBft, a_NewBft);
 
     // Recalculate 7pp to reflect lower death benefit.
@@ -1219,7 +1219,7 @@ void Irc7702A::Determine7PP
     // TODO ?? NO LONGER TRUE.
     if(a_TriggeredByUnnecPrem)
         {
-        HOPEFULLY(a_TriggeredByMatChg);
+        LMI_ASSERT(a_TriggeredByMatChg);
         }
 
     AssumedBft = a_Bft;
@@ -1253,7 +1253,7 @@ void Irc7702A::Determine7PP
         // No material change--either we're initializing, or processing
         // a Bfts decrease. NO...could be an inforce case.
 // TODO ?? expunge
-//        HOPEFULLY
+//        LMI_ASSERT
 //            (   a_TriggeredByBftDecrease
 //            ||  (0 == PolicyYear && 0 == PolicyMonth)
 //            );
@@ -1264,7 +1264,7 @@ void Irc7702A::Determine7PP
         // should have their proper initial values.
         if(0 == PolicyYear && 0 == PolicyMonth)
             {
-//          HOPEFULLY(0.0                == SavedAVBeforeMatChg);
+//          LMI_ASSERT(0.0                == SavedAVBeforeMatChg);
 // SavedAVBeforeMatChg should be zero unless there was a 1035, in
 // which case it should be the net 1035 amount. I'm not sure we should
 // either rely on 'SavedDCV' (which was added for monthly trace only) or
@@ -1272,13 +1272,13 @@ void Irc7702A::Determine7PP
 // that 'SavedDCV', because of its limited purpose, isn't reliably
 // initialized; I'm not sure we should promote that variable to a
 // first-class citizen by initializing it carefully.
-            HOPEFULLY
+            LMI_ASSERT
                 (   0.0                 == SavedAVBeforeMatChg
                 ||  materially_equal(SavedDCV, SavedAVBeforeMatChg)
                 );
-            HOPEFULLY(0.0                == SavedNecPrem);
-            HOPEFULLY(materially_equal(SevenPPRateVec[0], Saved7PPRate));
-            HOPEFULLY(materially_equal(NSPVec[0], SavedNSP));
+            LMI_ASSERT(0.0                == SavedNecPrem);
+            LMI_ASSERT(materially_equal(SevenPPRateVec[0], Saved7PPRate));
+            LMI_ASSERT(materially_equal(NSPVec[0], SavedNSP));
             }
 /* TODO ?? Expunge this perhaps. Not sure what we should do if someone
 tries running an inforce case as of month 0, year 0.
@@ -1290,8 +1290,8 @@ tries running an inforce case as of month 0, year 0.
 //            ||  (0 == PolicyYear && 0 == PolicyMonth)
 //            )
 //            {
-//            HOPEFULLY(0.0 == a_AVBeforeMatChg);
-//            HOPEFULLY(0.0 == a_NecPrem);
+//            LMI_ASSERT(0.0 == a_AVBeforeMatChg);
+//            LMI_ASSERT(0.0 == a_NecPrem);
 //            }
 */
         }
