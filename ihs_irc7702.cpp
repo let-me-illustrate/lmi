@@ -179,6 +179,7 @@ Irc7702::Irc7702
 {
     LMI_ASSERT(a_PresentSpecAmt <= a_PresentBftAmt);
     LMI_ASSERT(a_PriorSpecAmt <= a_PriorBftAmt);
+    LMI_ASSERT(0.0 <= a_TargetPremium);
     // TODO ?? Instead put these in initializer-list and write assertions?
     if(0 == InforceDuration)
         {
@@ -275,6 +276,7 @@ void Irc7702::ProcessAdjustableEvent
     ,double            a_PriorSpecAmt
     ,mcenum_dbopt_7702 a_NewDBOpt
     ,mcenum_dbopt_7702 a_PriorDBOpt
+    ,double            a_TargetPremium
     )
 {
     LMI_ASSERT(a_PriorSpecAmt <= a_PriorBftAmt);
@@ -285,6 +287,7 @@ void Irc7702::ProcessAdjustableEvent
 // as DB as of the last adjustment event.
     LMI_ASSERT(materially_equal(PresentSpecAmt, a_PriorSpecAmt));
     LMI_ASSERT(PresentDBOpt == a_PriorDBOpt);
+    LMI_ASSERT(0.0 <= a_TargetPremium);
     // Should be called only when something actually changed: either
     //   dbopt changed; or
     //   specamt changed, causing an actual change in bftamt.
@@ -302,13 +305,14 @@ void Irc7702::ProcessAdjustableEvent
         ;
     LMI_ASSERT(adj_event);
 
-    // Post BftAmt, SpecAmt, DBOpt changes to local state.
+    // Post target and {BftAmt, SpecAmt, DBOpt} changes to local state.
     PriorBftAmt     = PresentBftAmt;
     PresentBftAmt   = a_NewBftAmt;
     PriorSpecAmt    = PresentSpecAmt;
     PresentSpecAmt  = a_NewSpecAmt;
     PriorDBOpt      = PresentDBOpt;
     PresentDBOpt    = a_NewDBOpt;
+    TargetPremium   = a_TargetPremium;
 
     // Apply A + B - C method for both GLP and GSP.
 
@@ -711,15 +715,18 @@ void Irc7702::Initialize7702
     (double            a_BftAmt
     ,double            a_SpecAmt
     ,mcenum_dbopt_7702 a_DBOpt
+    ,double            a_TargetPremium
     )
 {
     LMI_ASSERT(a_SpecAmt <= a_BftAmt);
+    LMI_ASSERT(0.0 <= a_TargetPremium);
     PresentDBOpt        = a_DBOpt;
     PriorDBOpt          = PresentDBOpt;
     Initialize7702(a_SpecAmt);
     PresentBftAmt       = a_BftAmt;
     PriorBftAmt         = PresentBftAmt;
-    LeastBftAmtEver     = PresentBftAmt;
+    LeastBftAmtEver     = PresentBftAmt; // was set to PresentSpecAmt by Initialize7702(a_SpecAmt); what if DB != SA?
+    TargetPremium       = a_TargetPremium;
     PresentGLP = CalculateGLP
         (InforceDuration    // TODO ?? a_Duration...what if inforce?
         ,PresentBftAmt
@@ -884,15 +891,16 @@ double Irc7702::CalculatePremium
     //
     // TODO ?? It's also correct only if the supplied target premium
     // is correct.
-//    double target = TargetPremium;
-
+#if 0
+    double target = TargetPremium;
+#else // About to be removed:
     double target = Values.GetTgtPrem
         (a_Duration
         ,a_SpecAmt
-        ,mce_option1 // TODO ?? Should pass dbopt.
+        ,mce_option1 // Should pass dbopt [marked as a defect below].
         ,mce_annual
         );
-
+#endif
     double z =
         (   DEndt[a_EIOBasis] * a_LeastBftAmtEver
         +   PvChgPol[a_EIOBasis][a_Duration]
@@ -1023,6 +1031,12 @@ double Irc7702::CalculateGSPSpecAmt
             {
             SpecAmt = a_Trial;
             Irc7702_.Initialize7702(a_Trial);
+            const_cast<double&>(Irc7702_.TargetPremium) = Irc7702_.Values.GetTgtPrem
+                (Duration
+                ,SpecAmt
+                ,mce_option1 // TODO ?? Should pass dbopt.
+                ,mce_annual
+                );
             return
                     Irc7702_.CalculatePremium
                         (EIOBasis_
