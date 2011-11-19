@@ -28644,3 +28644,25 @@ Revert 20111026T1342Z reversion of wxDVC census manager.
 Set IMF to average if separate account offered but unused. Formerly,
 it was zero in this case; the arithmetic mean is more reasonable.
 
+20111119T1329Z <gchicares@sbcglobal.net> [607]
+
+  custom_io_0.cpp
+  ihs_irc7702.cpp
+  ihs_irc7702a.cpp
+Replace deprecated HOPEFULLY macro in various files.
+
+20111119T2005Z <gchicares@sbcglobal.net> [607]
+
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ihs_irc7702.cpp
+  ihs_irc7702.hpp
+Pass target premium to 7702 object prn, but don't use it yet.
+
+20111119T2016Z <gchicares@sbcglobal.net> [607]
+
+  ihs_irc7702.cpp
+Use target premium passed 20111119T2005Z. For GPT, formerly, term
+specamt incorrectly affected target, and duration affected target even
+for contracts that set target immutably at issue.
+
