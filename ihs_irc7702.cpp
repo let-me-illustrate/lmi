@@ -885,22 +885,8 @@ double Irc7702::CalculatePremium
     LMI_ASSERT(0.0 != a_NetPmtFactorExc);
 
     // TODO ?? This implementation is correct only if TargetPremium
-    // is fixed forever at issue; otherwise, we need either a
-    // callback function or separately passed target premiums for
-    // each of the quantities A, B, and C.
-    //
-    // TODO ?? It's also correct only if the supplied target premium
-    // is correct.
-#if 1
-    double target = TargetPremium;
-#else // About to be removed:
-    double target = Values.GetTgtPrem
-        (a_Duration
-        ,a_SpecAmt
-        ,mce_option1 // Should pass dbopt [marked as a defect below].
-        ,mce_annual
-        );
-#endif
+    // is fixed forever at issue; otherwise, distinct target premiums
+    // must be passed for each of the quantities A, B, and C.
     double z =
         (   DEndt[a_EIOBasis] * a_LeastBftAmtEver
         +   PvChgPol[a_EIOBasis][a_Duration]
@@ -911,7 +897,7 @@ double Irc7702::CalculatePremium
         /
         a_NetPmtFactorTgt
         ;
-    if(z <= target)
+    if(z <= TargetPremium)
         {
         return z;
         }
@@ -922,7 +908,7 @@ double Irc7702::CalculatePremium
         +   std::min(SpecAmtLoadLimit, a_SpecAmt) * PvChgSpecAmt[a_EIOBasis][a_Duration]
         +   std::min(ADDLimit, a_SpecAmt) * PvChgADD[a_EIOBasis][a_Duration]
         +   a_BftAmt * PvChgMort[a_EIOBasis][a_Duration]
-        +       target
+        +       TargetPremium
             *   (a_NetPmtFactorExc - a_NetPmtFactorTgt)
         )
         /
