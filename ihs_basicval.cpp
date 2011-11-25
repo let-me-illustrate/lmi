@@ -364,8 +364,12 @@ double BasicValues::InvestmentManagementFee() const
         // disregard "custom" funds--that is, set their weights to
         // zero. Custom funds are those whose name begins with "Custom".
         // Reason: "average" means average of the normally-available
-        // funds only.
-        if(yare_input_.UseAverageOfAllFunds)
+        // funds only. Use the average not only if explicitly chosen
+        // in input, but also if all payments are allocated to the
+        // general account: in the latter case, some separate-account
+        // fee or rate may nonetheless be wanted on output, and the
+        // arithmetic mean is more reasonable than zero.
+        if(yare_input_.UseAverageOfAllFunds || 0.0 == premium_allocation_to_sepacct(yare_input_))
             {
             char const s[] = "Custom";
             std::size_t n = std::strlen(s);
