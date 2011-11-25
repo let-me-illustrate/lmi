@@ -105,6 +105,7 @@ class Irc7702
         (double                     a_BftAmt
         ,double                     a_SpecAmt
         ,mcenum_dbopt_7702          a_DBOpt
+        ,double                     a_TargetPremium
         );
     void UpdateBOY7702();
     void ProcessGptPmt
@@ -121,6 +122,7 @@ class Irc7702
         ,double                     a_PriorSpecAmt
         ,mcenum_dbopt_7702          a_NewDBOpt
         ,mcenum_dbopt_7702          a_PriorDBOpt
+        ,double                     a_TargetPremium
         );
     double Forceout();
 
@@ -220,7 +222,7 @@ class Irc7702
 
     std::vector<double> const& LoadTgt;    // Premium load up to target
     std::vector<double> const& LoadExc;    // Premium load on excess over target
-    double const               TargetPremium;
+    double                     TargetPremium;
 
     round_to<double>           round_min_premium;
     round_to<double>           round_max_premium;

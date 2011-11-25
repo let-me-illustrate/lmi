@@ -1145,6 +1145,7 @@ but position could be reversed for variable policy with bad curr performance
             ,OldSA
             ,new_dbopt
             ,old_dbopt
+            ,AnnualTargetPrem
             );
         }
 

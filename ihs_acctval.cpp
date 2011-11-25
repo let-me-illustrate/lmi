@@ -454,10 +454,16 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     // TODO ?? We need to reconsider where the Irc7702 object gets created.
     // Perhaps it should be when initial DB is first known? No, needed for
     // solves. Then maybe we only need to move the call to Initialize7702?
+    double annual_target_premium = GetModalTgtPrem
+        (0
+        ,mce_annual
+        ,InvariantValues().SpecAmt[0]
+        );
     Irc7702_->Initialize7702
         (InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
         ,InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
         ,effective_dbopt_7702(InvariantValues().DBOpt[0].value(), Equiv7702DBO3)
+        ,annual_target_premium
         );
 
     // JOE--Try this instead of your second change to ldginvar.cpp

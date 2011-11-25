@@ -29,6 +29,7 @@
 #include "custom_io_0.hpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "configurable_settings.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
@@ -120,7 +121,7 @@ std::string adjust_interest_rates
     // and the current declared rate is used. It is expected that
     // this will not be acceptable for long.
 
-    HOPEFULLY(!declared_rate.empty());
+    LMI_ASSERT(!declared_rate.empty());
     std::vector<double> general_account_rate(declared_rate);
 
     if(credited_rates_fit_customer_paradigm)
