@@ -28,6 +28,7 @@
 
 #include "input_sequence.hpp"
 
+#include <wx/compositewin.h>
 #include <wx/panel.h>
 #include <wx/xrc/xmlres.h>
 
@@ -38,7 +39,7 @@ class WXDLLIMPEXP_FWD_CORE wxButton;
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 
 class InputSequenceEntry
-    :public wxPanel
+    :public wxCompositeWindow<wxPanel>
 {
   public:
     InputSequenceEntry();
@@ -54,6 +55,9 @@ class InputSequenceEntry
     wxTextCtrl& text_ctrl() {return *text_;}
 
     void set_popup_title(wxString const& title) {title_ = title;}
+
+  protected:
+    virtual wxWindowList GetCompositeWindowParts() const;
 
   private:
     void UponOpenEditor(wxCommandEvent&);

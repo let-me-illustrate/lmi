@@ -1189,16 +1189,6 @@ class InputSequenceTextCtrl
 InputSequenceTextCtrl::InputSequenceTextCtrl(wxWindow* parent, wxWindowID id)
     :wxTextCtrl(parent, id)
 {
-    ::Connect
-            (this
-            ,wxEVT_KILL_FOCUS
-            ,&InputSequenceTextCtrl::UponKillFocus
-            );
-    ::Connect
-            (this
-            ,wxEVT_CHAR
-            ,&InputSequenceTextCtrl::UponChar
-            );
 }
 
 void InputSequenceTextCtrl::UponKillFocus(wxFocusEvent& event)
@@ -1229,12 +1219,6 @@ class InputSequenceButton
 InputSequenceButton::InputSequenceButton(wxWindow* parent, wxWindowID id)
     :wxButton(parent, id, "...", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT)
 {
-    ::Connect
-            (this
-            ,wxEVT_KILL_FOCUS
-            ,&InputSequenceButton::UponKillFocus
-            );
-
     SetToolTip("Open sequence editor");
 
     // Set vertical size to 1px - it's ridiculously small, but the sizers will make it as
@@ -1260,6 +1244,8 @@ void InputSequenceButton::UponKillFocus(wxFocusEvent& event)
 
 InputSequenceEntry::InputSequenceEntry()
     :input_(0)
+    ,text_(0)
+    ,button_(0)
 {
 }
 
@@ -1269,6 +1255,8 @@ InputSequenceEntry::InputSequenceEntry
     ,wxString const&    name
     )
     :input_(0)
+    ,text_(0)
+    ,button_(0)
 {
     Create(parent, id, name);
 }
@@ -1307,6 +1295,15 @@ bool InputSequenceEntry::Create
 
     return true;
 }
+
+wxWindowList InputSequenceEntry::GetCompositeWindowParts() const
+{
+    wxWindowList parts;
+    parts.push_back(text_);
+    parts.push_back(button_);
+    return parts;
+}
+
 
 void InputSequenceEntry::input(Input const& input)
 {
