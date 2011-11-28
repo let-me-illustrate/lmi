@@ -962,7 +962,7 @@ void AccountValue::InitializeSpecAmt()
         {
         target_year = 0;
         }
-    MlyNoLapsePrem = GetModalTgtPrem
+    MlyNoLapsePrem = GetModalMinPrem
         (target_year
         ,mce_monthly
         ,InvariantValues().SpecAmt[target_year]
