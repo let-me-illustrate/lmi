@@ -28666,3 +28666,13 @@ Use target premium passed 20111119T2005Z. For GPT, formerly, term
 specamt incorrectly affected target, and duration affected target even
 for contracts that set target immutably at issue.
 
+20111121T1705Z <gchicares@sbcglobal.net> [606]
+
+  ihs_irc7702.cpp
+Simplify, resolving a marked defect.
+
+20111128T1029Z <gchicares@sbcglobal.net> [606]
+
+  version.hpp
+Designate release candidate.
+
