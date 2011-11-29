@@ -984,11 +984,6 @@ void AccountValue::InitializeSpecAmt()
 // Defect in its implementation: specamt is passed as an argument, and
 // it's easy to get that wrong, as it is here. Real encapsulation
 // shouldn't need arguments.
-//
-// Problems this might cause elsewhere: apparently GPT calculations
-// use this function with the then-current specamt. That might be
-// correct, though, because the B and C contracts in the A+B-C
-// formula are deemed to have current issue dates.
 
     MlyNoLapsePrem = GetTgtPrem
         (Year
