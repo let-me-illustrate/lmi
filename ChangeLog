@@ -28676,3 +28676,25 @@ Simplify, resolving a marked defect.
   version.hpp
 Designate release candidate.
 
+20111128T1214Z <gchicares@sbcglobal.net> [606]
+
+  ihs_acctval.cpp
+Distinguish target from minimum no-lapse premium.
+
+20111129T1207Z <gchicares@sbcglobal.net> [606]
+
+  ihs_acctval.cpp
+  ihs_irc7702.cpp
+Move and update certain documentation.
+
+20111129T1511Z <gchicares@sbcglobal.net> [606]
+
+  ihs_acctval.cpp
+Improve documentation, describing some planned changes.
+
+20111129T1524Z <gchicares@sbcglobal.net> [605]
+
+  ihs_acctval.cpp
+  ihs_irc7702a.hpp
+Move and update certain documentation.
+

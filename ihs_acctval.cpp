@@ -454,10 +454,6 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
 // The following two comment blocks will soon be expunged.
 //  - Irc7702_ and Irc7702A_ are appropriately initialized together
 //    here, soon after PerformSpecAmtStrategy() is called.
-//  - GLP and GSP seem to be correct when specamt is determined by a
-//    strategy or a solve.
-//  - Perhaps the 7702A class should have accessors like RoundedGLP();
-//    that would better be noted in that class.
 
     // TODO ?? We need to reconsider where the Irc7702 object gets created.
     // Perhaps it should be when initial DB is first known? No, needed for
@@ -474,16 +470,8 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         ,annual_target_premium
         );
 
-    // JOE--Try this instead of your second change to ldginvar.cpp
-    // and particularly your change to basicval.hpp . It is always better
-    // to add a const accessor than to publish a private member. Besides,
-    // this avoids recalculating GLP and GSP. And does your code calculate
-    // guideline premiums correctly if specified amount is determined by
-    // a strategy or a solve?
     InvariantValues().InitGLP = Irc7702_->RoundedGLP();
     InvariantValues().InitGSP = Irc7702_->RoundedGSP();
-    // TODO ?? JOE--If you accept this modification, would you do the same sort
-    // of thing for the initial seven-pay premium as well please?
 
     // This is notionally called once per *current*-basis run
     // and actually called once per run, with calculations suppressed
