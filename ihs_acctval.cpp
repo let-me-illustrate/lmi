@@ -451,6 +451,14 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
             }
         }
 
+// The following two comment blocks will soon be expunged.
+//  - Irc7702_ and Irc7702A_ are appropriately initialized together
+//    here, soon after PerformSpecAmtStrategy() is called.
+//  - GLP and GSP seem to be correct when specamt is determined by a
+//    strategy or a solve.
+//  - Perhaps the 7702A class should have accessors like RoundedGLP();
+//    that would better be noted in that class.
+
     // TODO ?? We need to reconsider where the Irc7702 object gets created.
     // Perhaps it should be when initial DB is first known? No, needed for
     // solves. Then maybe we only need to move the call to Initialize7702?
@@ -957,6 +965,17 @@ void AccountValue::InitializeSpecAmt()
     ActualSpecAmt       = InvariantValues().SpecAmt[Year];
     TermSpecAmt         = InvariantValues().TermSpecAmt[Year];
 
+    // Target premium is annual only. Using a different mode seems
+    // conceivable, but if the ee and er both pay, and on different
+    // modes, then it would be unclear which mode to choose.
+    //
+    // SOMEDAY !! DATABASE !! Add code to recalculate minimum and
+    // target premiums as needed--e.g., after specamt increases,
+    // specamt decreases, withdrawals, and DBO changes--and database
+    // rules to govern which such events trigger recalculation. Until
+    // that's done, such changes affect these premiums only at the
+    // next anniversary. Minimum no-lapse premium is likely to require
+    // recalculation even if target is set immutably at issue.
     int target_year = Year;
     if(Database_->Query(DB_TgtPremFixedAtIssue))
         {
@@ -973,6 +992,12 @@ void AccountValue::InitializeSpecAmt()
         ,InvariantValues().SpecAmt[target_year]
         );
     AnnualTargetPrem = UnusedTargetPrem;
+
+// The following comment block will soon be expunged. At present,
+// BasicValues::GetTgtPrem() is used only by FindSpecAmt::operator().
+// Forgoing the specamt argument to GetTgtPrem() would require moving
+// it into class AccountValue, which would make it unsuitable for its
+// sole present purpose.
 
 /*
 // TODO ?? This code might be preferable if it worked correctly.
@@ -992,9 +1017,6 @@ void AccountValue::InitializeSpecAmt()
         ,mce_monthly
         );
 
-    // Target premium is annual mode. Using a different mode seems
-    // conceivable, but if the ee and er both pay, and on different
-    // modes, then it would be unclear which mode to choose.
     UnusedTargetPrem = GetTgtPrem
         (Year
         ,InvariantValues().SpecAmt[Year]
