@@ -886,7 +886,11 @@ double Irc7702::CalculatePremium
 
     // TODO ?? This implementation is correct only if TargetPremium
     // is fixed forever at issue; otherwise, distinct target premiums
-    // must be passed for each of the quantities A, B, and C.
+    // must be passed for each of the quantities A, B, and C. Should
+    // those targets be calculated for status x+[t], or x+t? (The
+    // latter is okay if the B and C contracts in the A+B-C formula
+    // are deemed to have current issue dates, but the former is more
+    // consistent with the way durational loads are treated here.)
     double z =
         (   DEndt[a_EIOBasis] * a_LeastBftAmtEver
         +   PvChgPol[a_EIOBasis][a_Duration]
