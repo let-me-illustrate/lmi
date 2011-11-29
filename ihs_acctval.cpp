@@ -451,13 +451,6 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
             }
         }
 
-// The following two comment blocks will soon be expunged.
-//  - Irc7702_ and Irc7702A_ are appropriately initialized together
-//    here, soon after PerformSpecAmtStrategy() is called.
-
-    // TODO ?? We need to reconsider where the Irc7702 object gets created.
-    // Perhaps it should be when initial DB is first known? No, needed for
-    // solves. Then maybe we only need to move the call to Initialize7702?
     double annual_target_premium = GetModalTgtPrem
         (0
         ,mce_annual
@@ -557,10 +550,6 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         (yare_input_.Comments
         ,"idiosyncrasy_daily_interest_accounting"
         );
-
-/* TODO expunge?
-    PerformSpecAmtStrategy();
-*/
 }
 
 //============================================================================
@@ -980,39 +969,6 @@ void AccountValue::InitializeSpecAmt()
         ,InvariantValues().SpecAmt[target_year]
         );
     AnnualTargetPrem = UnusedTargetPrem;
-
-// The following comment block will soon be expunged. At present,
-// BasicValues::GetTgtPrem() is used only by FindSpecAmt::operator().
-// Forgoing the specamt argument to GetTgtPrem() would require moving
-// it into class AccountValue, which would make it unsuitable for its
-// sole present purpose.
-
-/*
-// TODO ?? This code might be preferable if it worked correctly.
-//
-// Motivation for GetTgtPrem(): encapsulate calculations that need to
-// return the exact target premium, respecting all arcana such as
-// 'DB_TgtPremFixedAtIssue'.
-//
-// Defect in its implementation: specamt is passed as an argument, and
-// it's easy to get that wrong, as it is here. Real encapsulation
-// shouldn't need arguments.
-
-    MlyNoLapsePrem = GetTgtPrem
-        (Year
-        ,InvariantValues().SpecAmt[Year]
-        ,InvariantValues().DBOpt[Year].value()
-        ,mce_monthly
-        );
-
-    UnusedTargetPrem = GetTgtPrem
-        (Year
-        ,InvariantValues().SpecAmt[Year]
-        ,InvariantValues().DBOpt[Year].value()
-        ,mce_annual
-        );
-    AnnualTargetPrem = UnusedTargetPrem;
-*/
 
     if(0 == Year)
         {
