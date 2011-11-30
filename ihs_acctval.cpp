@@ -400,6 +400,8 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     // TODO ?? This is a nasty workaround. It seems that some or all strategies
     // should be performed at a much higher level, say in Run*(). Without
     // the conditional here, guar prem is wrong for 7-pay spec amt strategy.
+    // It's wasteful to call PerformSpecAmtStrategy() once per basis,
+    // but the result is always the same (because the premium is).
     if(!SolvingForGuarPremium)
         {
         // TODO ?? There's some code in FinalizeYear() below that
