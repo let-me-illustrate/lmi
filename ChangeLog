@@ -28698,3 +28698,24 @@ Improve documentation, describing some planned changes.
   ihs_irc7702a.hpp
 Move and update certain documentation.
 
+20111129T1539Z <gchicares@sbcglobal.net> [603]
+
+  ihs_acctval.cpp
+Remove markers for defects already resolved.
+
+20111130T0959Z <gchicares@sbcglobal.net> [603]
+
+  ihs_acctval.cpp
+Improve documentation.
+
+20111201T0352Z <gchicares@sbcglobal.net> [603]
+
+  Makefile.am
+  gpt_specamt.cpp [new file]
+  gpt_specamt.hpp [new file]
+  ihs_basicval.cpp
+  ihs_irc7702.cpp
+  ihs_irc7702.hpp
+  objects.make
+Refactor.
+
