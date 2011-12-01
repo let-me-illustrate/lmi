@@ -35,7 +35,6 @@
 
 #include <vector>
 
-class BasicValues;
 class ULCommFns;
 
 // Specified amount (specamt) is carefully distinguished from benefit
@@ -60,11 +59,11 @@ class Irc7702
     ,virtual private obstruct_slicing<Irc7702>
 {
     friend class FindSpecAmt;
+    friend class gpt_specamt;
 
   public:
     Irc7702
-        (BasicValues         const& a_Values
-        ,mcenum_defn_life_ins       a_Test7702
+        (mcenum_defn_life_ins       a_Test7702
         ,int                        a_IssueAge
         ,int                        a_EndtAge
         ,std::vector<double> const& a_Qc
@@ -141,15 +140,6 @@ class Irc7702
         ,double                     a_SpecAmt
         ,double                     a_LeastBftAmtEver
         ) const;
-    double CalculateGLPSpecAmt
-        (int                        a_Duration
-        ,double                     a_Premium
-        ,mcenum_dbopt_7702          a_DBOpt
-        ) const;
-    double CalculateGSPSpecAmt
-        (int                        a_Duration
-        ,double                     a_Premium
-        ) const;
     void Initialize7702
         (double                     a_SpecAmt
         ) const;
@@ -180,21 +170,10 @@ class Irc7702
         ,double                     a_NetPmtFactorTgt
         ,double                     a_NetPmtFactorExc
         ) const;
-    // Return value is both specamt and bftamt; we name it 'specamt'
-    // because it is typically used to set an input parameter, and
-    // specamt is such a parameter whereas DB is not.
-    double CalculateSpecAmt
-        (EIOBasis const&            a_EIOBasis
-        ,int                        a_Duration
-        ,double                     a_Premium
-        ,double                     a_NetPmtFactorTgt
-        ,double                     a_NetPmtFactorExc
-        ) const;
-    EIOBasis Get4PctBasis
+    static EIOBasis Get4PctBasis
         (mcenum_dbopt_7702          a_DBOpt
-        ) const;
+        );
 
-    BasicValues const&         Values;     // needed for target premium callback
     mcenum_defn_life_ins const Test7702;   // 7702 test: CVAT or GPT
     int const                  IssueAge;   // Issue age
     int const                  EndtAge;    // Endowment age

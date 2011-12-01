@@ -40,6 +40,7 @@
 #include "et_vector.hpp"
 #include "fund_data.hpp"
 #include "global_settings.hpp"
+#include "gpt_specamt.hpp"
 #include "ieee754.hpp"           // ldbl_eps_plus_one()
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
@@ -611,8 +612,7 @@ void BasicValues::Init7702()
 
     Irc7702_.reset
         (new Irc7702
-            (*this
-            ,yare_input_.DefinitionOfLifeInsurance
+            (yare_input_.DefinitionOfLifeInsurance
             ,yare_input_.IssueAge
             ,EndtAge
             ,Mly7702qc
@@ -1249,8 +1249,9 @@ double BasicValues::GetModalSpecAmtGLP
     ) const
 {
     double annualized_pmt = a_ee_mode * a_ee_pmt + a_er_mode * a_er_pmt;
-    return Irc7702_->CalculateGLPSpecAmt
-        (0
+    return gpt_specamt::CalculateGLPSpecAmt
+        (*this
+        ,0
         ,annualized_pmt
         ,effective_dbopt_7702(DeathBfts_->dbopt()[0], Equiv7702DBO3)
         );
@@ -1265,8 +1266,9 @@ double BasicValues::GetModalSpecAmtGSP
     ) const
 {
     double annualized_pmt = a_ee_mode * a_ee_pmt + a_er_mode * a_er_pmt;
-    return Irc7702_->CalculateGSPSpecAmt
-        (0
+    return gpt_specamt::CalculateGSPSpecAmt
+        (*this
+        ,0
         ,annualized_pmt
         );
 }
