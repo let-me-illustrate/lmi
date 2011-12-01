@@ -663,6 +663,14 @@ void BasicValues::Init7702A()
 }
 
 //============================================================================
+// [This comment block will soon be expunged. This function is called
+// only by FindSpecAmt::operator(), but that GPT calculation could
+// just as well call GetModalTgtPrem() directly. No product design
+// currently supported has a target premium that varies by dbopt,
+// so at most a "SOMEDAY" marker is warranted. The caching of
+// InitialTargetPremium is unreliable if this function isn't first
+// called with an a_year of zero; it's meaningless anyway, because
+// the function happens to be called only with an a_year of zero.]
 // Needed for guideline premium.
 // TODO ?? a_dbopt is ignored for now, but some product designs will need it.
 double BasicValues::GetTgtPrem
@@ -672,6 +680,7 @@ double BasicValues::GetTgtPrem
     ,mcenum_mode  a_mode
     ) const
 {
+LMI_ASSERT(0 == a_year); // As noted above.
     if(Database_->Query(DB_TgtPremFixedAtIssue))
         {
         if(0 == a_year)
