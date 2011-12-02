@@ -30,10 +30,8 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
-#include "basic_values.hpp" // For target-premium callback.
 #include "commutation_functions.hpp"
 #include "materially_equal.hpp"
-#include "zero.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -112,8 +110,7 @@ namespace
 
 //============================================================================
 Irc7702::Irc7702
-    (BasicValues         const& a_Values
-    ,mcenum_defn_life_ins       a_Test7702
+    (mcenum_defn_life_ins       a_Test7702
     ,int                        a_IssueAge
     ,int                        a_EndtAge
     ,std::vector<double> const& a_Qc
@@ -145,8 +142,7 @@ Irc7702::Irc7702
     ,double                     a_LeastBftAmtEver
     ,mcenum_dbopt_7702          a_PriorDBOpt
     )
-    :Values             (a_Values)
-    ,Test7702           (a_Test7702)
+    :Test7702           (a_Test7702)
     ,IssueAge           (a_IssueAge)
     ,EndtAge            (a_EndtAge)
     ,Qc                 (a_Qc)
@@ -803,7 +799,7 @@ std::vector<double> const& Irc7702::Corridor() const
 //============================================================================
 Irc7702::EIOBasis Irc7702::Get4PctBasis
     (mcenum_dbopt_7702 a_DBOpt
-    ) const
+    )
 {
     switch(a_DBOpt)
         {
@@ -886,7 +882,11 @@ double Irc7702::CalculatePremium
 
     // TODO ?? This implementation is correct only if TargetPremium
     // is fixed forever at issue; otherwise, distinct target premiums
-    // must be passed for each of the quantities A, B, and C.
+    // must be passed for each of the quantities A, B, and C. Should
+    // those targets be calculated for status x+[t], or x+t? (The
+    // latter is okay if the B and C contracts in the A+B-C formula
+    // are deemed to have current issue dates, but the former is more
+    // consistent with the way durational loads are treated here.)
     double z =
         (   DEndt[a_EIOBasis] * a_LeastBftAmtEver
         +   PvChgPol[a_EIOBasis][a_Duration]
@@ -950,141 +950,6 @@ void Irc7702::InitSevenPayPrem()
         }
 }
 */
-
-//============================================================================
-double Irc7702::CalculateGLPSpecAmt
-    (int               a_Duration
-    ,double            a_Premium
-    ,mcenum_dbopt_7702 a_DBOpt
-    ) const
-{
-    return CalculateSpecAmt
-        (Get4PctBasis(a_DBOpt)
-        ,a_Duration
-        ,a_Premium
-        ,PvNpfLvlTgt[Get4PctBasis(a_DBOpt)][a_Duration]
-        ,PvNpfLvlExc[Get4PctBasis(a_DBOpt)][a_Duration]
-        );
-}
-
-//============================================================================
-double Irc7702::CalculateGSPSpecAmt
-    (int    a_Duration
-    ,double a_Premium
-    ) const
-{
-    return CalculateSpecAmt
-        (Opt1Int6Pct
-        ,a_Duration
-        ,a_Premium
-        ,PvNpfSglTgt[Opt1Int6Pct][a_Duration]
-        ,PvNpfSglExc[Opt1Int6Pct][a_Duration]
-        );
-}
-
-//namespace
-//{
-    class FindSpecAmt
-    {
-        typedef Irc7702::EIOBasis EIOBasis;
-        Irc7702 const&  Irc7702_;
-        EIOBasis const& EIOBasis_;
-        int const       Duration;
-        double const    Premium;
-        double const    NetPmtFactorTgt;
-        double const    NetPmtFactorExc;
-        double          SpecAmt;
-
-      public:
-        FindSpecAmt
-            (Irc7702 const&  a_IRC7702
-            ,EIOBasis const& a_EIOBasis
-            ,int             a_Duration
-            ,double          a_Premium
-            ,double          a_NetPmtFactorTgt
-            ,double          a_NetPmtFactorExc
-            )
-            :Irc7702_        (a_IRC7702)
-            ,EIOBasis_       (a_EIOBasis)
-            ,Duration        (a_Duration)
-            ,Premium         (a_Premium)
-            ,NetPmtFactorTgt (a_NetPmtFactorTgt)
-            ,NetPmtFactorExc (a_NetPmtFactorExc)
-            ,SpecAmt         (0.0)
-            {
-            }
-        double operator()(double a_Trial)
-            {
-            SpecAmt = a_Trial;
-            Irc7702_.Initialize7702(a_Trial);
-            const_cast<double&>(Irc7702_.TargetPremium) = Irc7702_.Values.GetTgtPrem
-                (Duration
-                ,SpecAmt
-                ,mce_option1 // TODO ?? Should pass dbopt.
-                ,mce_annual
-                );
-            return
-                    Irc7702_.CalculatePremium
-                        (EIOBasis_
-                        ,Duration
-                        ,a_Trial
-                        ,a_Trial
-                        ,a_Trial
-                        ,NetPmtFactorTgt
-                        ,NetPmtFactorExc
-                        )
-                -   Premium
-                ;
-            }
-        double Get()
-            {
-            return SpecAmt;
-            }
-    };
-//} // Unnamed namespace.
-
-//============================================================================
-// CalculatePremium() implements an analytic solution, while CalculateSpecAmt()
-// uses iteration. Reason: we anticipate that no parameter depends on premium
-// except load (up to target vs. excess), so the direct solution isn't too
-// complicated. But when SpecAmt is unknown, we cannot know either the actual
-// specified-amount (underwriting) or ADD charge if they apply only up to some
-// maximum, or the target. So here we have eight special cases rather than
-// two, and adding another QAB like ADD could double the eight cases.
-double Irc7702::CalculateSpecAmt
-    (EIOBasis const& a_EIOBasis
-    ,int             a_Duration
-    ,double          a_Premium
-    ,double          a_NetPmtFactorTgt
-    ,double          a_NetPmtFactorExc
-    ) const
-{
-    LMI_ASSERT(0.0 != a_Premium);
-    LMI_ASSERT(0.0 != a_NetPmtFactorTgt);
-    LMI_ASSERT(0.0 != a_NetPmtFactorExc);
-
-    FindSpecAmt fsa
-        (*this
-        ,a_EIOBasis
-        ,a_Duration
-        ,a_Premium
-        ,a_NetPmtFactorTgt
-        ,a_NetPmtFactorExc
-        );
-
-    // TODO ?? The upper bound ideally wouldn't be hard coded; but if
-    // it must be, then it can't plausibly reach one billion dollars.
-    decimal_root
-        (0.0
-        ,999999999.99
-        ,bias_higher
-        ,round_min_specamt.decimals()
-        ,fsa
-        ,true
-        );
-
-    return fsa.Get();
-}
 
 //============================================================================
 double Irc7702::GetLeastBftAmtEver() const

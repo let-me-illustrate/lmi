@@ -28666,3 +28666,56 @@ Use target premium passed 20111119T2005Z. For GPT, formerly, term
 specamt incorrectly affected target, and duration affected target even
 for contracts that set target immutably at issue.
 
+20111121T1705Z <gchicares@sbcglobal.net> [606]
+
+  ihs_irc7702.cpp
+Simplify, resolving a marked defect.
+
+20111128T1029Z <gchicares@sbcglobal.net> [606]
+
+  version.hpp
+Designate release candidate.
+
+20111128T1214Z <gchicares@sbcglobal.net> [606]
+
+  ihs_acctval.cpp
+Distinguish target from minimum no-lapse premium.
+
+20111129T1207Z <gchicares@sbcglobal.net> [606]
+
+  ihs_acctval.cpp
+  ihs_irc7702.cpp
+Move and update certain documentation.
+
+20111129T1511Z <gchicares@sbcglobal.net> [606]
+
+  ihs_acctval.cpp
+Improve documentation, describing some planned changes.
+
+20111129T1524Z <gchicares@sbcglobal.net> [605]
+
+  ihs_acctval.cpp
+  ihs_irc7702a.hpp
+Move and update certain documentation.
+
+20111129T1539Z <gchicares@sbcglobal.net> [603]
+
+  ihs_acctval.cpp
+Remove markers for defects already resolved.
+
+20111130T0959Z <gchicares@sbcglobal.net> [603]
+
+  ihs_acctval.cpp
+Improve documentation.
+
+20111201T0352Z <gchicares@sbcglobal.net> [603]
+
+  Makefile.am
+  gpt_specamt.cpp [new file]
+  gpt_specamt.hpp [new file]
+  ihs_basicval.cpp
+  ihs_irc7702.cpp
+  ihs_irc7702.hpp
+  objects.make
+Refactor.
+

@@ -361,6 +361,7 @@ liblmi_la_SOURCES = \
     authenticity.cpp \
     commutation_functions.cpp \
     fund_data.cpp \
+    gpt_specamt.cpp \
     ihs_acctval.cpp \
     ihs_avdebug.cpp \
     ihs_avmly.cpp \
@@ -1005,6 +1006,7 @@ noinst_HEADERS = \
     fund_data.hpp \
     getopt.hpp \
     global_settings.hpp \
+    gpt_specamt.hpp \
     group_values.hpp \
     handle_exceptions.hpp \
     icon_monger.hpp \

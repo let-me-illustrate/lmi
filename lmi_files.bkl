@@ -79,6 +79,7 @@
     datum_string.cpp
     dbdict.cpp
     fund_data.cpp
+    gpt_specamt.cpp
     ihs_acctval.cpp
     ihs_avdebug.cpp
     ihs_avmly.cpp

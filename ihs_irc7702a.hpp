@@ -157,6 +157,8 @@ class Irc7702A
         ,double a_LoadExcess
         ,double a_CashValue
         ) const;
+    // SOMEDAY !! Consider using accessors like Irc7702::RoundedGLP()
+    // to encapsulate rounding within this class.
     double GetPresent7pp() const        {return SevenPP;}
     bool IsMecAlready() const           {return IsMec;}
 
