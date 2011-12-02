@@ -40,6 +40,7 @@
 #include "et_vector.hpp"
 #include "fund_data.hpp"
 #include "global_settings.hpp"
+#include "gpt_specamt.hpp"
 #include "ieee754.hpp"           // ldbl_eps_plus_one()
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
@@ -611,8 +612,7 @@ void BasicValues::Init7702()
 
     Irc7702_.reset
         (new Irc7702
-            (*this
-            ,yare_input_.DefinitionOfLifeInsurance
+            (yare_input_.DefinitionOfLifeInsurance
             ,yare_input_.IssueAge
             ,EndtAge
             ,Mly7702qc
@@ -663,6 +663,14 @@ void BasicValues::Init7702A()
 }
 
 //============================================================================
+// [This comment block will soon be expunged. This function is called
+// only by FindSpecAmt::operator(), but that GPT calculation could
+// just as well call GetModalTgtPrem() directly. No product design
+// currently supported has a target premium that varies by dbopt,
+// so at most a "SOMEDAY" marker is warranted. The caching of
+// InitialTargetPremium is unreliable if this function isn't first
+// called with an a_year of zero; it's meaningless anyway, because
+// the function happens to be called only with an a_year of zero.]
 // Needed for guideline premium.
 // TODO ?? a_dbopt is ignored for now, but some product designs will need it.
 double BasicValues::GetTgtPrem
@@ -672,6 +680,7 @@ double BasicValues::GetTgtPrem
     ,mcenum_mode  a_mode
     ) const
 {
+LMI_ASSERT(0 == a_year); // As noted above.
     if(Database_->Query(DB_TgtPremFixedAtIssue))
         {
         if(0 == a_year)
@@ -1249,8 +1258,9 @@ double BasicValues::GetModalSpecAmtGLP
     ) const
 {
     double annualized_pmt = a_ee_mode * a_ee_pmt + a_er_mode * a_er_pmt;
-    return Irc7702_->CalculateGLPSpecAmt
-        (0
+    return gpt_specamt::CalculateGLPSpecAmt
+        (*this
+        ,0
         ,annualized_pmt
         ,effective_dbopt_7702(DeathBfts_->dbopt()[0], Equiv7702DBO3)
         );
@@ -1265,8 +1275,9 @@ double BasicValues::GetModalSpecAmtGSP
     ) const
 {
     double annualized_pmt = a_ee_mode * a_ee_pmt + a_er_mode * a_er_pmt;
-    return Irc7702_->CalculateGSPSpecAmt
-        (0
+    return gpt_specamt::CalculateGSPSpecAmt
+        (*this
+        ,0
         ,annualized_pmt
         );
 }

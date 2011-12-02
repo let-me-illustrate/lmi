@@ -400,6 +400,8 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     // TODO ?? This is a nasty workaround. It seems that some or all strategies
     // should be performed at a much higher level, say in Run*(). Without
     // the conditional here, guar prem is wrong for 7-pay spec amt strategy.
+    // It's wasteful to call PerformSpecAmtStrategy() once per basis,
+    // but the result is always the same (because the premium is).
     if(!SolvingForGuarPremium)
         {
         // TODO ?? There's some code in FinalizeYear() below that
@@ -451,9 +453,6 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
             }
         }
 
-    // TODO ?? We need to reconsider where the Irc7702 object gets created.
-    // Perhaps it should be when initial DB is first known? No, needed for
-    // solves. Then maybe we only need to move the call to Initialize7702?
     double annual_target_premium = GetModalTgtPrem
         (0
         ,mce_annual
@@ -466,16 +465,8 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         ,annual_target_premium
         );
 
-    // JOE--Try this instead of your second change to ldginvar.cpp
-    // and particularly your change to basicval.hpp . It is always better
-    // to add a const accessor than to publish a private member. Besides,
-    // this avoids recalculating GLP and GSP. And does your code calculate
-    // guideline premiums correctly if specified amount is determined by
-    // a strategy or a solve?
     InvariantValues().InitGLP = Irc7702_->RoundedGLP();
     InvariantValues().InitGSP = Irc7702_->RoundedGSP();
-    // TODO ?? JOE--If you accept this modification, would you do the same sort
-    // of thing for the initial seven-pay premium as well please?
 
     // This is notionally called once per *current*-basis run
     // and actually called once per run, with calculations suppressed
@@ -561,10 +552,6 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         (yare_input_.Comments
         ,"idiosyncrasy_daily_interest_accounting"
         );
-
-/* TODO expunge?
-    PerformSpecAmtStrategy();
-*/
 }
 
 //============================================================================
@@ -957,12 +944,23 @@ void AccountValue::InitializeSpecAmt()
     ActualSpecAmt       = InvariantValues().SpecAmt[Year];
     TermSpecAmt         = InvariantValues().TermSpecAmt[Year];
 
+    // Target premium is annual only. Using a different mode seems
+    // conceivable, but if the ee and er both pay, and on different
+    // modes, then it would be unclear which mode to choose.
+    //
+    // SOMEDAY !! DATABASE !! Add code to recalculate minimum and
+    // target premiums as needed--e.g., after specamt increases,
+    // specamt decreases, withdrawals, and DBO changes--and database
+    // rules to govern which such events trigger recalculation. Until
+    // that's done, such changes affect these premiums only at the
+    // next anniversary. Minimum no-lapse premium is likely to require
+    // recalculation even if target is set immutably at issue.
     int target_year = Year;
     if(Database_->Query(DB_TgtPremFixedAtIssue))
         {
         target_year = 0;
         }
-    MlyNoLapsePrem = GetModalTgtPrem
+    MlyNoLapsePrem = GetModalMinPrem
         (target_year
         ,mce_monthly
         ,InvariantValues().SpecAmt[target_year]
@@ -973,41 +971,6 @@ void AccountValue::InitializeSpecAmt()
         ,InvariantValues().SpecAmt[target_year]
         );
     AnnualTargetPrem = UnusedTargetPrem;
-
-/*
-// TODO ?? This code might be preferable if it worked correctly.
-//
-// Motivation for GetTgtPrem(): encapsulate calculations that need to
-// return the exact target premium, respecting all arcana such as
-// 'DB_TgtPremFixedAtIssue'.
-//
-// Defect in its implementation: specamt is passed as an argument, and
-// it's easy to get that wrong, as it is here. Real encapsulation
-// shouldn't need arguments.
-//
-// Problems this might cause elsewhere: apparently GPT calculations
-// use this function with the then-current specamt. That might be
-// correct, though, because the B and C contracts in the A+B-C
-// formula are deemed to have current issue dates.
-
-    MlyNoLapsePrem = GetTgtPrem
-        (Year
-        ,InvariantValues().SpecAmt[Year]
-        ,InvariantValues().DBOpt[Year].value()
-        ,mce_monthly
-        );
-
-    // Target premium is annual mode. Using a different mode seems
-    // conceivable, but if the ee and er both pay, and on different
-    // modes, then it would be unclear which mode to choose.
-    UnusedTargetPrem = GetTgtPrem
-        (Year
-        ,InvariantValues().SpecAmt[Year]
-        ,InvariantValues().DBOpt[Year].value()
-        ,mce_annual
-        );
-    AnnualTargetPrem = UnusedTargetPrem;
-*/
 
     if(0 == Year)
         {

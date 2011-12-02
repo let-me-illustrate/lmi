@@ -278,6 +278,7 @@ lmi_common_objects := \
   authenticity.o \
   commutation_functions.o \
   fund_data.o \
+  gpt_specamt.o \
   ihs_acctval.o \
   ihs_avdebug.o \
   ihs_avmly.o \
@@ -396,6 +397,7 @@ gpt_objects := \
   fenv_lmi.o \
   fund_data.o \
   global_settings.o \
+  gpt_specamt.o \
   ihs_basicval.o \
   ihs_mortal.o \
   input.o \
