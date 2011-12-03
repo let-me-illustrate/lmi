@@ -955,11 +955,7 @@ void AccountValue::InitializeSpecAmt()
     // that's done, such changes affect these premiums only at the
     // next anniversary. Minimum no-lapse premium is likely to require
     // recalculation even if target is set immutably at issue.
-    int target_year = Year;
-    if(Database_->Query(DB_TgtPremFixedAtIssue))
-        {
-        target_year = 0;
-        }
+    int const target_year = TgtPremFixedAtIssue ? 0 : Year;
     MlyNoLapsePrem = GetModalMinPrem
         (target_year
         ,mce_monthly

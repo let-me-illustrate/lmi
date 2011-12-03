@@ -26,7 +26,8 @@
 
 #include "config.hpp"
 
-#include "dbnames.hpp" // e_database_key
+#include "actuarial_table.hpp"          // e_actuarial_table_method
+#include "dbnames.hpp"                  // e_database_key
 #include "mc_enum_type_enums.hpp"
 #include "oecumenic_enumerations.hpp"
 #include "round_to.hpp"
@@ -326,6 +327,13 @@ class LMI_SO BasicValues
     bool                         TermIsDbFor7702;
     bool                         TermIsDbFor7702A;
     double                       ExpPerKLimit;
+    oenum_modal_prem_type        MinPremType;
+    oenum_modal_prem_type        TgtPremType;
+    bool                         TgtPremFixedAtIssue;
+    double                       TgtPremMonthlyPolFee;
+    double                       CurrCoiTable0Limit;
+    double                       CurrCoiTable1Limit;
+    e_actuarial_table_method     CoiInforceReentry;
     mcenum_anticipated_deduction MaxWDDed_;
     double                       MaxWDAVMult;
     mcenum_anticipated_deduction MaxLoanDed_;

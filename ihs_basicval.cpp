@@ -28,7 +28,6 @@
 
 #include "basic_values.hpp"
 
-#include "actuarial_table.hpp"
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "calendar_date.hpp"
@@ -685,7 +684,7 @@ double BasicValues::GetTgtPrem
     ) const
 {
 LMI_ASSERT(0 == a_year); // As noted above.
-    if(Database_->Query(DB_TgtPremFixedAtIssue))
+    if(TgtPremFixedAtIssue)
         {
         if(0 == a_year)
             {
@@ -732,6 +731,15 @@ void BasicValues::SetPermanentInvariants()
     TermIsDbFor7702     = Database_->Query(DB_TermIsDbFor7702      );
     TermIsDbFor7702A    = Database_->Query(DB_TermIsDbFor7702A     );
     ExpPerKLimit        = Database_->Query(DB_ExpSpecAmtLimit      );
+    MinPremType         = static_cast<oenum_modal_prem_type>(static_cast<int>(Database_->Query(DB_MinPremType)));
+    TgtPremType         = static_cast<oenum_modal_prem_type>(static_cast<int>(Database_->Query(DB_TgtPremType)));
+    TgtPremFixedAtIssue = Database_->Query(DB_TgtPremFixedAtIssue  );
+    TgtPremMonthlyPolFee= Database_->Query(DB_TgtPremMonthlyPolFee );
+    CurrCoiTable0Limit  = Database_->Query(DB_CurrCoiTable0Limit   );
+    CurrCoiTable1Limit  = Database_->Query(DB_CurrCoiTable1Limit   );
+    LMI_ASSERT(0.0                <= CurrCoiTable0Limit);
+    LMI_ASSERT(CurrCoiTable0Limit <= CurrCoiTable1Limit);
+    CoiInforceReentry   = static_cast<e_actuarial_table_method>(static_cast<int>(Database_->Query(DB_CoiInforceReentry)));
     MaxWDDed_           = static_cast<mcenum_anticipated_deduction>(static_cast<int>(Database_->Query(DB_MaxWdDed)));
     MaxWDAVMult         = Database_->Query(DB_MaxWdAcctValMult     );
     MaxLoanDed_         = static_cast<mcenum_anticipated_deduction>(static_cast<int>(Database_->Query(DB_MaxLoanDed)));
@@ -910,9 +918,7 @@ double BasicValues::GetModalMinPrem
     ,double      a_specamt
     ) const
 {
-    oenum_modal_prem_type const PremType =
-        static_cast<oenum_modal_prem_type>(static_cast<int>(Database_->Query(DB_MinPremType)));
-    return GetModalPrem(a_year, a_mode, a_specamt, PremType);
+    return GetModalPrem(a_year, a_mode, a_specamt, MinPremType);
 }
 
 //============================================================================
@@ -922,9 +928,7 @@ double BasicValues::GetModalTgtPrem
     ,double      a_specamt
     ) const
 {
-    oenum_modal_prem_type const PremType =
-        static_cast<oenum_modal_prem_type>(static_cast<int>(Database_->Query(DB_TgtPremType)));
-    double modal_prem = GetModalPrem(a_year, a_mode, a_specamt, PremType);
+    double modal_prem = GetModalPrem(a_year, a_mode, a_specamt, TgtPremType);
 
     // TODO ?? Probably this should reflect policy fee. Some products
     // define only an annual target premium, and don't specify how to
@@ -998,7 +1002,7 @@ double BasicValues::GetModalPremTgtFromTable
 {
     return round_max_premium()
         (
-            (   Database_->Query(DB_TgtPremMonthlyPolFee)
+            (   TgtPremMonthlyPolFee
             +       a_specamt
                 *   ldbl_eps_plus_one()
                 *   MortalityRates_->TargetPremiumRates()[0]
@@ -1155,15 +1159,12 @@ double BasicValues::GetModalSpecAmtMax
     ,double      a_er_pmt
     ) const
 {
-    oenum_modal_prem_type const prem_type = static_cast<oenum_modal_prem_type>
-        (static_cast<int>(Database_->Query(DB_MinPremType))
-        );
     return GetModalSpecAmt
             (a_ee_mode
             ,a_ee_pmt
             ,a_er_mode
             ,a_er_pmt
-            ,prem_type
+            ,MinPremType
             );
 }
 
@@ -1175,15 +1176,12 @@ double BasicValues::GetModalSpecAmtTgt
     ,double      a_er_pmt
     ) const
 {
-    oenum_modal_prem_type const prem_type = static_cast<oenum_modal_prem_type>
-        (static_cast<int>(Database_->Query(DB_TgtPremType))
-        );
     return GetModalSpecAmt
             (a_ee_mode
             ,a_ee_pmt
             ,a_er_mode
             ,a_er_pmt
-            ,prem_type
+            ,TgtPremType
             );
 }
 
@@ -1402,15 +1400,11 @@ std::vector<double> const& BasicValues::GetBandedCoiRates
 {
     if(UseUnusualCOIBanding && mce_gen_guar != rate_basis)
         {
-        double band_0_limit = Database_->Query(DB_CurrCoiTable0Limit);
-        double band_1_limit = Database_->Query(DB_CurrCoiTable1Limit);
-        LMI_ASSERT(0.0 <= band_0_limit);
-        LMI_ASSERT(band_0_limit <= band_1_limit);
-        if(band_0_limit <= a_specamt && a_specamt < band_1_limit)
+        if(CurrCoiTable0Limit <= a_specamt && a_specamt < CurrCoiTable1Limit)
             {
             return MortalityRates_->MonthlyCoiRatesBand1(rate_basis);
             }
-        else if(band_1_limit <= a_specamt)
+        else if(CurrCoiTable1Limit <= a_specamt)
             {
             return MortalityRates_->MonthlyCoiRatesBand2(rate_basis);
             }
@@ -1475,19 +1469,14 @@ std::vector<double> BasicValues::GetActuarialTable
     ,long int           TableNumber
     ) const
 {
-    e_actuarial_table_method const method =
-        static_cast<e_actuarial_table_method>
-            (static_cast<int>(Database_->Query(DB_CoiInforceReentry))
-            );
-
-    if(DB_CurrCoiTable == TableID && e_reenter_never != method)
+    if(DB_CurrCoiTable == TableID && e_reenter_never != CoiInforceReentry)
         {
         return actuarial_table_rates_elaborated
             (TableFile
             ,TableNumber
             ,GetIssueAge()
             ,GetLength()
-            ,method
+            ,CoiInforceReentry
             ,yare_input_.InforceYear
             ,duration_ceiling(yare_input_.EffectiveDate, yare_input_.LastCoiReentryDate)
             );
@@ -1865,10 +1854,7 @@ std::vector<double> BasicValues::GetCurrCOIRates0() const
 
 std::vector<double> BasicValues::GetCurrCOIRates1() const
 {
-    if
-        ( Database_->Query(DB_CurrCoiTable0Limit)
-        < std::numeric_limits<double>::max()
-        )
+    if(CurrCoiTable0Limit < std::numeric_limits<double>::max())
         {
         return GetTable
             (ProductData_->datum("CurrCOIFilename")
@@ -1886,10 +1872,7 @@ std::vector<double> BasicValues::GetCurrCOIRates1() const
 
 std::vector<double> BasicValues::GetCurrCOIRates2() const
 {
-    if
-        ( Database_->Query(DB_CurrCoiTable1Limit)
-        < std::numeric_limits<double>::max()
-        )
+    if(CurrCoiTable1Limit < std::numeric_limits<double>::max())
         {
         return GetTable
             (ProductData_->datum("CurrCOIFilename")
@@ -2028,7 +2011,7 @@ std::vector<double> BasicValues::GetTgtPremRates() const
     return GetTable
         (ProductData_->datum("TgtPremFilename")
         ,DB_TgtPremTable
-        ,oe_modal_table == Database_->Query(DB_TgtPremType)
+        ,oe_modal_table == TgtPremType
         );
 }
 

@@ -228,9 +228,7 @@ double AccountValue::DoPerformPmtStrategy
 // TODO ?? Shouldn't a modalized version of something like
 //   InitialTargetPremium
 //   AnnualTargetPrem
-// be used instead, at least in the
-//       if(Database_->Query(DB_TgtPremFixedAtIssue))
-// case?
+// be used instead, at least in the 'TgtPremFixedAtIssue' case?
             return GetModalTgtPrem(Year, a_CurrentMode, ActualSpecAmt);
             }
         case mce_pmt_mep:
