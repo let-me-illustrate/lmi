@@ -170,6 +170,8 @@ void BasicValues::Init()
     ProductData_.reset(new product_data(yare_input_.ProductName));
     Database_.reset(new product_database(yare_input_));
 
+    SetPermanentInvariants();
+
     StateOfDomicile_ = mc_state_from_string(ProductData_->datum("InsCoDomicile"));
     StateOfJurisdiction_ = yare_input_.StateOfJurisdiction;
     PremiumTaxState_     = yare_input_.PremiumTaxState    ;
@@ -252,7 +254,7 @@ void BasicValues::Init()
     // determined by a strategy.
     InitialTargetPremium = 0.0;
 
-    SetPermanentInvariants();
+    SetMaxSurvivalDur();
 
     Init7702();
     Init7702A();
@@ -264,6 +266,8 @@ void BasicValues::GPTServerInit()
 {
     ProductData_.reset(new product_data(yare_input_.ProductName));
     Database_.reset(new product_database(yare_input_));
+
+    SetPermanentInvariants();
 
     IssueAge = yare_input_.IssueAge;
     RetAge   = yare_input_.RetirementAge;
@@ -334,7 +338,7 @@ void BasicValues::GPTServerInit()
     PremiumTax_    .reset(new premium_tax    (PremiumTaxState_, StateOfDomicile_, yare_input_.AmortizePremiumLoad, *Database_, *StratifiedCharges_));
     Loads_         .reset(new Loads          (*this));
 
-    SetPermanentInvariants();
+    SetMaxSurvivalDur();
 
     Init7702();
 }
@@ -703,7 +707,12 @@ LMI_ASSERT(0 == a_year); // As noted above.
         }
 }
 
-//============================================================================
+/// Establish up front some values that cannot later change.
+///
+/// Values set here depend on Database_, and thus on yare_input_ and
+/// on ProductData_, but not on any other shared_ptr members--so they
+/// can reliably be used in initializing those other members.
+
 void BasicValues::SetPermanentInvariants()
 {
     MinIssSpecAmt       = Database_->Query(DB_MinIssSpecAmt        );
@@ -807,8 +816,6 @@ void BasicValues::SetPermanentInvariants()
     MaxNAAR             = yare_input_.MaximumNaar;
 
     Database_->Query(MinPremIntSpread_, DB_MinPremIntSpread);
-
-    SetMaxSurvivalDur();
 }
 
 namespace
@@ -842,7 +849,10 @@ void BasicValues::SetRoundingFunctors()
     set_rounding_rule(round_interest_rate_7702_, RoundingRules_->datum("RoundIntRate7702"));
 }
 
-//============================================================================
+/// Establish maximum survivorship duration.
+///
+/// Depends on MortalityRates_ for life-expectancy calculation.
+
 void BasicValues::SetMaxSurvivalDur()
 {
     switch(yare_input_.SurviveToType)
