@@ -684,6 +684,7 @@ double BasicValues::GetTgtPrem
     ) const
 {
 LMI_ASSERT(0 == a_year); // As noted above.
+// GetModalTgtPrem() now respects DB_TgtPremFixedAtIssue.
     if(TgtPremFixedAtIssue)
         {
         if(0 == a_year)
@@ -911,7 +912,6 @@ void BasicValues::SetMaxSurvivalDur()
 }
 
 //============================================================================
-// For now at least, calls the same subroutine as GetModalTgtPrem().
 double BasicValues::GetModalMinPrem
     (int         a_year
     ,mcenum_mode a_mode
@@ -928,7 +928,8 @@ double BasicValues::GetModalTgtPrem
     ,double      a_specamt
     ) const
 {
-    double modal_prem = GetModalPrem(a_year, a_mode, a_specamt, TgtPremType);
+    int const target_year = TgtPremFixedAtIssue ? 0 : a_year;
+    double modal_prem = GetModalPrem(target_year, a_mode, a_specamt, TgtPremType);
 
     // TODO ?? Probably this should reflect policy fee. Some products
     // define only an annual target premium, and don't specify how to
