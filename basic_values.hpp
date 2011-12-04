@@ -131,12 +131,7 @@ class LMI_SO BasicValues
     boost::shared_ptr<Irc7702>            Irc7702_;
     boost::shared_ptr<Irc7702A>           Irc7702A_;
 
-    double GetTgtPrem
-        (int          a_year
-        ,double       a_specamt
-        ,mcenum_dbopt a_dbopt
-        ,mcenum_mode  a_mode
-        ) const;
+    double GetAnnualTgtPrem(int a_year, double a_specamt) const;
 
     std::vector<double> const& GetCorridorFactor() const;
     std::vector<double> const& SpreadFor7702() const;
