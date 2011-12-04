@@ -28737,3 +28737,25 @@ Refactor to support more extensive caching of database values.
   ihs_basicval.cpp
 Refactor, caching database values more extensively.
 
+20111203T1918Z <gchicares@sbcglobal.net> [603]
+
+  ihs_basicval.cpp
+Respect 'TgtPremFixedAtIssue' in GetModalTgtPrem().
+
+20111204T0121Z <gchicares@sbcglobal.net> [602]
+
+  ihs_avstrtgy.cpp
+Respect 'TgtPremFixedAtIssue' in the 'mce_pmt_target' case.
+
+20111204T0140Z <gchicares@sbcglobal.net> [600]
+
+  basic_values.hpp
+  gpt_specamt.cpp
+  ihs_basicval.cpp
+Resolve marked defects.
+
+20111204T0142Z <gchicares@sbcglobal.net> [600]
+
+  ihs_avmly.cpp
+Remove assertions that can never fire.
+
