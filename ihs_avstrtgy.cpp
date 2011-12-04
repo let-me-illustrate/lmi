@@ -225,11 +225,9 @@ double AccountValue::DoPerformPmtStrategy
             }
         case mce_pmt_target:
             {
-// TODO ?? Shouldn't a modalized version of something like
-//   InitialTargetPremium
-//   AnnualTargetPrem
-// be used instead, at least in the 'TgtPremFixedAtIssue' case?
-            return GetModalTgtPrem(Year, a_CurrentMode, ActualSpecAmt);
+            int const target_year = TgtPremFixedAtIssue ? 0 : Year;
+            double sa = InvariantValues().SpecAmt[target_year];
+            return GetModalTgtPrem(Year, a_CurrentMode, sa);
             }
         case mce_pmt_mep:
             {
