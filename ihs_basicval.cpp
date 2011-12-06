@@ -1278,79 +1278,21 @@ double BasicValues::GetModalSpecAmtCorridor
 /// "pay deductions" strategy, however, doesn't have a useful analog
 /// for determining specamt as a function of initial premium: the
 /// contract would almost certainly lapse after one year. Therefore,
-/// calling this function elicits an error message.
+/// calling this function elicits an error message. SOMEDAY !! It
+/// would be better to disable this strategy in the GUI.
 
 double BasicValues::GetModalSpecAmtMlyDed
-    (mcenum_mode a_ee_mode
-    ,double      a_ee_pmt
-    ,mcenum_mode a_er_mode
-    ,double      a_er_pmt
+    (mcenum_mode // a_ee_mode
+    ,double      // a_ee_pmt
+    ,mcenum_mode // a_er_mode
+    ,double      // a_er_pmt
     ) const
 {
-    if(!global_settings::instance().regression_testing())
-        {
-        fatal_error()
-            << "No maximum specified amount is defined for this product."
-            << LMI_FLUSH
-            ;
-        }
-
-    // Soon this ancient implementation will be expunged. Original
-    // 'todo' defect markers have been replaced with the word "DEFECT"
-    // in capital letters: they no longer count toward the global
-    // total because they're already unreachable for end users.
-
-    // For now, we just assume that ee mode governs...only a guess...
-    mcenum_mode guess_mode = a_ee_mode;
-    double z = a_ee_mode * a_ee_pmt + a_er_mode * a_er_pmt;
-    z /= guess_mode;
-
-    double annual_charge = Loads_->annual_policy_fee(mce_gen_curr)[0];
-
-    double wp_rate = 0.0;
-    if(yare_input_.WaiverOfPremiumBenefit)
-        {
-        // For simplicity, ignore Database_->Query(DB_WpMax)
-        wp_rate = MortalityRates_->WpRates()[0];
-        if(0.0 != 1.0 + wp_rate)
-            {
-            annual_charge /= (1.0 + wp_rate);
-            }
-        }
-
-    z -= annual_charge;
-
-    // DEFECT Use first-year values only--don't want this to vary by year.
-    z /= GetAnnuityValueMlyDed(0, guess_mode);
-    // DEFECT only *target* load?
-// DEFECT Looks like none of our test decks exercise this line.
-    z *= 1.0 - Loads_->target_total_load(mce_gen_curr)[0];
-
-    // DEFECT Is this correct now?
-    if(yare_input_.WaiverOfPremiumBenefit && 0.0 != 1.0 + wp_rate)
-        {
-        // For simplicity, ignore Database_->Query(DB_WpMax)
-        z /= (1.0 + wp_rate);
-        }
-
-    if(yare_input_.AccidentalDeathBenefit)
-        {
-        // DEFECT For simplicity, ignore Database_->Query(DB_AdbLimit)
-        z -= MortalityRates_->AdbRates()[0];
-        }
-    // DEFECT Other riders should be considered here.
-
-    z -= Loads_->monthly_policy_fee(mce_gen_curr)[0];
-    // DEFECT Probably we should respect banding. This is a
-    // conservative shortcut.
-    z /= MortalityRates_->MonthlyCoiRatesBand0(mce_gen_curr)[0];
-    z *= 1.0 + InterestRates_->GenAcctNetRate
-        (mce_gen_guar
-        ,mce_monthly_rate
-        )[0]
+    fatal_error()
+        << "No maximum specified amount is defined for this product."
+        << LMI_FLUSH
         ;
-
-    return round_max_specamt()(z);
+    return 0.0;
 }
 
 /// 'Unusual' banding is one particular approach we needed to model.
