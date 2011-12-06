@@ -264,14 +264,14 @@ class LMI_SO BasicValues
         ,mcenum_mode a_er_mode
         ,double      a_er_pmt
         ) const;
-    // Deprecated--used only by the lmi branch, which does not
-    // distinguish ee from er premium.
+    // Deprecated--used only by the antediluvian branch, which does
+    // not distinguish ee from er premium.
     double GetModalMaxSpecAmt
         (mcenum_mode a_mode
         ,double      a_pmt
         ) const;
-    // Deprecated--used only by the lmi branch, which does not
-    // distinguish ee from er premium.
+    // Deprecated--used only by the antediluvian branch, which does
+    // not distinguish ee from er premium.
     double GetModalTgtSpecAmt
         (mcenum_mode a_mode
         ,double      a_pmt
