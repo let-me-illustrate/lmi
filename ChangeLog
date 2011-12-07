@@ -28759,3 +28759,20 @@ Resolve marked defects.
   ihs_avmly.cpp
 Remove assertions that can never fire.
 
+20111206T2355Z <gchicares@sbcglobal.net> [600]
+
+  ihs_basicval.cpp
+Follow through on 20090118T1124Z deprecation.
+
+20111206T2356Z <gchicares@sbcglobal.net> [600]
+
+  basic_values.hpp
+Correct misleading documentation.
+
+20111207T0059Z <gchicares@sbcglobal.net> [600]
+
+  basic_values.hpp
+  ihs_avstrtgy.cpp
+  ihs_basicval.cpp
+Refactor for parallelism.
+
