@@ -246,12 +246,6 @@ class LMI_SO BasicValues
         ,mcenum_mode a_er_mode
         ,double      a_er_pmt
         ) const;
-    double GetModalSpecAmtCorridor
-        (mcenum_mode a_ee_mode
-        ,double      a_ee_pmt
-        ,mcenum_mode a_er_mode
-        ,double      a_er_pmt
-        ) const;
     double GetModalSpecAmtGLP
         (mcenum_mode a_ee_mode
         ,double      a_ee_pmt
@@ -264,6 +258,13 @@ class LMI_SO BasicValues
         ,mcenum_mode a_er_mode
         ,double      a_er_pmt
         ) const;
+    double GetModalSpecAmtCorridor
+        (mcenum_mode a_ee_mode
+        ,double      a_ee_pmt
+        ,mcenum_mode a_er_mode
+        ,double      a_er_pmt
+        ) const;
+    double GetModalSpecAmtSalary   (int   a_year) const;
     // Deprecated--used only by the antediluvian branch, which does
     // not distinguish ee from er premium.
     double GetModalMaxSpecAmt

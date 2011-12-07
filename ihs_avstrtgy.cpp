@@ -58,11 +58,7 @@
 /// argument for some strategies but not for others would introduce
 /// inconsistency in addition to complexity.
 ///
-/// The result of a salary-based strategy is constrained to be
-/// nonnegative, because if 'SalarySpecifiedAmountOffset' is
-/// sufficiently large, then specamt would be negative, which cannot
-/// make any sense. Other than that, no minimum is imposed here; see
-/// PerformSpecAmtStrategy().
+/// No minimum is imposed here; see PerformSpecAmtStrategy().
 
 double AccountValue::CalculateSpecAmtFromStrategy
     (int actual_year
@@ -144,16 +140,7 @@ double AccountValue::CalculateSpecAmtFromStrategy
             }
         case mce_sa_salary:
             {
-            double z =
-                  yare_input_.ProjectedSalary[actual_year]
-                * yare_input_.SalarySpecifiedAmountFactor
-                ;
-            if(0.0 != yare_input_.SalarySpecifiedAmountCap)
-                {
-                z = std::min(z, yare_input_.SalarySpecifiedAmountCap);
-                }
-            z -= yare_input_.SalarySpecifiedAmountOffset;
-            return std::max(0.0, z);
+            return GetModalSpecAmtSalary(actual_year);
             }
         default:
             {

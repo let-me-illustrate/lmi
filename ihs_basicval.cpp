@@ -1274,6 +1274,27 @@ double BasicValues::GetModalSpecAmtCorridor
     return round_min_specamt()(annualized_pmt * rate);
 }
 
+/// Calculate specified amount based on salary.
+///
+/// The result of a salary-based strategy is constrained to be
+/// nonnegative, because if 'SalarySpecifiedAmountOffset' is
+/// sufficiently large, then specamt would be negative, which cannot
+/// make any sense.
+
+double BasicValues::GetModalSpecAmtSalary(int a_year) const
+{
+    double z =
+          yare_input_.ProjectedSalary[a_year]
+        * yare_input_.SalarySpecifiedAmountFactor
+        ;
+    if(0.0 != yare_input_.SalarySpecifiedAmountCap)
+        {
+        z = std::min(z, yare_input_.SalarySpecifiedAmountCap);
+        }
+    z -= yare_input_.SalarySpecifiedAmountOffset;
+    return round_min_specamt()(std::max(0.0, z));
+}
+
 /// In general, strategies linking specamt and premium commute. The
 /// "pay deductions" strategy, however, doesn't have a useful analog
 /// for determining specamt as a function of initial premium: the
