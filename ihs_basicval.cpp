@@ -1151,12 +1151,7 @@ double BasicValues::GetModalSpecAmt
         }
     else if(oe_modal_table == premium_type)
         {
-        // TODO ?? This is dubious. If the table specified is a
-        // seven-pay table, then this seems not to give the same
-        // result as the seven-pay premium type.
-        return round_min_specamt()
-            (annualized_pmt / GetModalPremTgtFromTable(0, mce_annual, 1)
-            );
+        return round_min_specamt()(annualized_pmt / MortalityRates_->TargetPremiumRates()[0]);
         }
     else
         {
