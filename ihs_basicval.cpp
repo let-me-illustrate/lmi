@@ -1118,37 +1118,15 @@ double BasicValues::GetModalPremMlyDed
 }
 
 //============================================================================
-double BasicValues::GetModalSpecAmtMax
-    (mcenum_mode a_ee_mode
-    ,double      a_ee_pmt
-    ,mcenum_mode a_er_mode
-    ,double      a_er_pmt
-    ) const
+double BasicValues::GetModalSpecAmtMax(double annualized_pmt) const
 {
-    return GetModalSpecAmt
-            (a_ee_mode
-            ,a_ee_pmt
-            ,a_er_mode
-            ,a_er_pmt
-            ,MinPremType
-            );
+    return GetModalSpecAmt(annualized_pmt, MinPremType);
 }
 
 //============================================================================
-double BasicValues::GetModalSpecAmtTgt
-    (mcenum_mode a_ee_mode
-    ,double      a_ee_pmt
-    ,mcenum_mode a_er_mode
-    ,double      a_er_pmt
-    ) const
+double BasicValues::GetModalSpecAmtTgt(double annualized_pmt) const
 {
-    return GetModalSpecAmt
-            (a_ee_mode
-            ,a_ee_pmt
-            ,a_er_mode
-            ,a_er_pmt
-            ,TgtPremType
-            );
+    return GetModalSpecAmt(annualized_pmt, TgtPremType);
 }
 
 /// Calculate specified amount as a simple function of premium.
@@ -1159,37 +1137,23 @@ double BasicValues::GetModalSpecAmtTgt
 /// duration.
 
 double BasicValues::GetModalSpecAmt
-    (mcenum_mode           a_ee_mode
-    ,double                a_ee_pmt
-    ,mcenum_mode           a_er_mode
-    ,double                a_er_pmt
-    ,oenum_modal_prem_type a_prem_type
+    (double                annualized_pmt
+    ,oenum_modal_prem_type premium_type
     ) const
 {
-    if(oe_monthly_deduction == a_prem_type)
+    if(oe_monthly_deduction == premium_type)
         {
-        return GetModalSpecAmtMlyDed
-            (a_ee_mode
-            ,a_ee_pmt
-            ,a_er_mode
-            ,a_er_pmt
-            );
+        return GetModalSpecAmtMlyDed(annualized_pmt, mce_annual);
         }
-    else if(oe_modal_nonmec == a_prem_type)
+    else if(oe_modal_nonmec == premium_type)
         {
-        return GetModalSpecAmtMinNonMec
-            (a_ee_mode
-            ,a_ee_pmt
-            ,a_er_mode
-            ,a_er_pmt
-            );
+        return GetModalSpecAmtMinNonMec(annualized_pmt);
         }
-    else if(oe_modal_table == a_prem_type)
+    else if(oe_modal_table == premium_type)
         {
         // TODO ?? This is dubious. If the table specified is a
         // seven-pay table, then this seems not to give the same
         // result as the seven-pay premium type.
-        double annualized_pmt = a_ee_mode * a_ee_pmt + a_er_mode * a_er_pmt;
         return round_min_specamt()
             (annualized_pmt / GetModalPremTgtFromTable(0, mce_annual, 1)
             );
@@ -1197,7 +1161,7 @@ double BasicValues::GetModalSpecAmt
     else
         {
         fatal_error()
-            << "Unknown modal premium type " << a_prem_type << '.'
+            << "Unknown modal premium type " << premium_type << '.'
             << LMI_FLUSH
             ;
         }
@@ -1210,50 +1174,22 @@ double BasicValues::GetModalSpecAmt
 /// changes dramatically complicate the relationship between premium
 /// and specified amount.
 
-double BasicValues::GetModalSpecAmtMinNonMec
-    (mcenum_mode a_ee_mode
-    ,double      a_ee_pmt
-    ,mcenum_mode a_er_mode
-    ,double      a_er_pmt
-    ) const
+double BasicValues::GetModalSpecAmtMinNonMec(double annualized_pmt) const
 {
-    double annualized_pmt = a_ee_mode * a_ee_pmt + a_er_mode * a_er_pmt;
-    return round_min_specamt()
-        (annualized_pmt / MortalityRates_->SevenPayRates()[0]
-        );
+    return round_min_specamt()(annualized_pmt / MortalityRates_->SevenPayRates()[0]);
 }
 
 //============================================================================
-double BasicValues::GetModalSpecAmtGLP
-    (mcenum_mode a_ee_mode
-    ,double      a_ee_pmt
-    ,mcenum_mode a_er_mode
-    ,double      a_er_pmt
-    ) const
+double BasicValues::GetModalSpecAmtGLP(double annualized_pmt) const
 {
-    double annualized_pmt = a_ee_mode * a_ee_pmt + a_er_mode * a_er_pmt;
-    return gpt_specamt::CalculateGLPSpecAmt
-        (*this
-        ,0
-        ,annualized_pmt
-        ,effective_dbopt_7702(DeathBfts_->dbopt()[0], Equiv7702DBO3)
-        );
+    mcenum_dbopt_7702 const z = effective_dbopt_7702(DeathBfts_->dbopt()[0], Equiv7702DBO3);
+    return gpt_specamt::CalculateGLPSpecAmt(*this, 0, annualized_pmt, z);
 }
 
 //============================================================================
-double BasicValues::GetModalSpecAmtGSP
-    (mcenum_mode a_ee_mode
-    ,double      a_ee_pmt
-    ,mcenum_mode a_er_mode
-    ,double      a_er_pmt
-    ) const
+double BasicValues::GetModalSpecAmtGSP(double annualized_pmt) const
 {
-    double annualized_pmt = a_ee_mode * a_ee_pmt + a_er_mode * a_er_pmt;
-    return gpt_specamt::CalculateGSPSpecAmt
-        (*this
-        ,0
-        ,annualized_pmt
-        );
+    return gpt_specamt::CalculateGSPSpecAmt(*this, 0, annualized_pmt);
 }
 
 /// Calculate specified amount using a corridor ratio.
@@ -1262,16 +1198,9 @@ double BasicValues::GetModalSpecAmtGSP
 /// strategy makes sense only at issue. Thus, arguments should
 /// represent initial premium and mode.
 
-double BasicValues::GetModalSpecAmtCorridor
-    (mcenum_mode a_ee_mode
-    ,double      a_ee_pmt
-    ,mcenum_mode a_er_mode
-    ,double      a_er_pmt
-    ) const
+double BasicValues::GetModalSpecAmtCorridor(double annualized_pmt) const
 {
-    double annualized_pmt = a_ee_mode * a_ee_pmt + a_er_mode * a_er_pmt;
-    double rate = GetCorridorFactor()[0];
-    return round_min_specamt()(annualized_pmt * rate);
+    return round_min_specamt()(annualized_pmt * GetCorridorFactor()[0]);
 }
 
 /// Calculate specified amount based on salary.
@@ -1302,12 +1231,7 @@ double BasicValues::GetModalSpecAmtSalary(int a_year) const
 /// calling this function elicits an error message. SOMEDAY !! It
 /// would be better to disable this strategy in the GUI.
 
-double BasicValues::GetModalSpecAmtMlyDed
-    (mcenum_mode // a_ee_mode
-    ,double      // a_ee_pmt
-    ,mcenum_mode // a_er_mode
-    ,double      // a_er_pmt
-    ) const
+double BasicValues::GetModalSpecAmtMlyDed(double, mcenum_mode) const
 {
     fatal_error()
         << "No maximum specified amount is defined for this product."
@@ -1359,10 +1283,7 @@ std::vector<double> const& BasicValues::GetBandedCoiRates
 /// may not prevent the contract from lapsing; both those outcomes are
 /// likely to frustrate customers.
 
-double BasicValues::GetAnnuityValueMlyDed
-    (int         a_year
-    ,mcenum_mode a_mode
-    ) const
+double BasicValues::GetAnnuityValueMlyDed(int a_year, mcenum_mode a_mode) const
 {
     LMI_ASSERT(0.0 != a_mode);
     double spread = 0.0;

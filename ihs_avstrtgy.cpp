@@ -78,6 +78,12 @@ double AccountValue::CalculateSpecAmtFromStrategy
         return r;
         }
 
+    double annualized_pmt =
+            InvariantValues().EeMode[reference_year].value()
+          * InvariantValues().EePmt [reference_year]
+        +   InvariantValues().ErMode[reference_year].value()
+          * InvariantValues().ErPmt [reference_year]
+        ;
     switch(yare_input_.SpecifiedAmountStrategy[actual_year])
         {
         case mce_sa_input_scalar:
@@ -86,61 +92,31 @@ double AccountValue::CalculateSpecAmtFromStrategy
             }
         case mce_sa_maximum:
             {
-            return GetModalSpecAmtMax
-                (InvariantValues().EeMode[reference_year].value()
-                ,InvariantValues().EePmt [reference_year]
-                ,InvariantValues().ErMode[reference_year].value()
-                ,InvariantValues().ErPmt [reference_year]
-                );
+            return GetModalSpecAmtMax      (annualized_pmt);
             }
         case mce_sa_target:
             {
-            return GetModalSpecAmtTgt
-                (InvariantValues().EeMode[reference_year].value()
-                ,InvariantValues().EePmt [reference_year]
-                ,InvariantValues().ErMode[reference_year].value()
-                ,InvariantValues().ErPmt [reference_year]
-                );
+            return GetModalSpecAmtTgt      (annualized_pmt);
             }
         case mce_sa_mep:
             {
-            return GetModalSpecAmtMinNonMec
-                (InvariantValues().EeMode[reference_year].value()
-                ,InvariantValues().EePmt [reference_year]
-                ,InvariantValues().ErMode[reference_year].value()
-                ,InvariantValues().ErPmt [reference_year]
-                );
+            return GetModalSpecAmtMinNonMec(annualized_pmt);
             }
         case mce_sa_glp:
             {
-            return GetModalSpecAmtGLP
-                (InvariantValues().EeMode[reference_year].value()
-                ,InvariantValues().EePmt [reference_year]
-                ,InvariantValues().ErMode[reference_year].value()
-                ,InvariantValues().ErPmt [reference_year]
-                );
+            return GetModalSpecAmtGLP      (annualized_pmt);
             }
         case mce_sa_gsp:
             {
-            return GetModalSpecAmtGSP
-                (InvariantValues().EeMode[reference_year].value()
-                ,InvariantValues().EePmt [reference_year]
-                ,InvariantValues().ErMode[reference_year].value()
-                ,InvariantValues().ErPmt [reference_year]
-                );
+            return GetModalSpecAmtGSP      (annualized_pmt);
             }
         case mce_sa_corridor:
             {
-            return GetModalSpecAmtCorridor
-                (InvariantValues().EeMode[reference_year].value()
-                ,InvariantValues().EePmt [reference_year]
-                ,InvariantValues().ErMode[reference_year].value()
-                ,InvariantValues().ErPmt [reference_year]
-                );
+            return GetModalSpecAmtCorridor (annualized_pmt);
             }
         case mce_sa_salary:
             {
-            return GetModalSpecAmtSalary(actual_year);
+            return GetModalSpecAmtSalary   (actual_year);
             }
         default:
             {
