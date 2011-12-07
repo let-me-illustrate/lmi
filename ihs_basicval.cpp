@@ -1191,7 +1191,7 @@ double BasicValues::GetModalSpecAmt
         // result as the seven-pay premium type.
         double annualized_pmt = a_ee_mode * a_ee_pmt + a_er_mode * a_er_pmt;
         return round_min_specamt()
-            (annualized_pmt / GetModalPremTgtFromTable(0, a_ee_mode, 1)
+            (annualized_pmt / GetModalPremTgtFromTable(0, mce_annual, 1)
             );
         }
     else
