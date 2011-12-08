@@ -28776,3 +28776,31 @@ Correct misleading documentation.
   ihs_basicval.cpp
 Refactor for parallelism.
 
+20111207T1259Z <gchicares@sbcglobal.net> [600]
+
+  ihs_basicval.cpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch: dividing annualized premium by the modal premium rate
+per dollar does not give specamt if mode is not annual.
+
+20111207T1313Z <gchicares@sbcglobal.net> [600]
+
+  basic_values.hpp
+  ihs_avstrtgy.cpp
+  ihs_basicval.cpp
+Refactor for simplicity.
+
+20111207T1447Z <gchicares@sbcglobal.net> [599]
+
+  ihs_basicval.cpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch: the annual premium for one dollar of specamt is not the
+same as the tabular rate when the former includes a policy fee.
+
+20111208T2242Z <gchicares@sbcglobal.net> [597]
+
+  ihs_basicval.cpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch: when calculating specamt from target, any applicable
+policy fee must be accounted for.
+

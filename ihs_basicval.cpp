@@ -701,6 +701,11 @@ void BasicValues::SetPermanentInvariants()
     TgtPremType         = static_cast<oenum_modal_prem_type>(static_cast<int>(Database_->Query(DB_TgtPremType)));
     TgtPremFixedAtIssue = Database_->Query(DB_TgtPremFixedAtIssue  );
     TgtPremMonthlyPolFee= Database_->Query(DB_TgtPremMonthlyPolFee );
+    // Assertion: see comments on GetModalPremTgtFromTable().
+    LMI_ASSERT
+        (  0.0 == TgtPremMonthlyPolFee
+        || (oe_modal_table == TgtPremType && oe_modal_table != MinPremType)
+        );
     CurrCoiTable0Limit  = Database_->Query(DB_CurrCoiTable0Limit   );
     CurrCoiTable1Limit  = Database_->Query(DB_CurrCoiTable1Limit   );
     LMI_ASSERT(0.0                <= CurrCoiTable0Limit);
@@ -886,7 +891,11 @@ double BasicValues::GetModalMinPrem
     return GetModalPrem(a_year, a_mode, a_specamt, MinPremType);
 }
 
-//============================================================================
+/// Calculate target premium.
+///
+/// 'TgtPremMonthlyPolFee' is not added here, because it is added in
+/// GetModalPremTgtFromTable().
+
 double BasicValues::GetModalTgtPrem
     (int         a_year
     ,mcenum_mode a_mode
@@ -894,14 +903,7 @@ double BasicValues::GetModalTgtPrem
     ) const
 {
     int const target_year = TgtPremFixedAtIssue ? 0 : a_year;
-    double modal_prem = GetModalPrem(target_year, a_mode, a_specamt, TgtPremType);
-
-    // TODO ?? Probably this should reflect policy fee. Some products
-    // define only an annual target premium, and don't specify how to
-    // modalize it.
-//      modal_prem += POLICYFEE / a_mode;
-
-    return modal_prem;
+    return GetModalPrem(target_year, a_mode, a_specamt, TgtPremType);
 }
 
 //============================================================================
@@ -914,17 +916,14 @@ double BasicValues::GetModalPrem
 {
     if(oe_monthly_deduction == a_prem_type)
         {
-        return GetModalPremMlyDed(a_year, a_mode, a_specamt);
+        return GetModalPremMlyDed      (a_year, a_mode, a_specamt);
         }
     else if(oe_modal_nonmec == a_prem_type)
         {
-        return GetModalPremMaxNonMec(a_year, a_mode, a_specamt);
+        return GetModalPremMaxNonMec   (a_year, a_mode, a_specamt);
         }
     else if(oe_modal_table == a_prem_type)
         {
-        // The fn s/b generalized to allow an input premium file and an input
-        // policy fee. If oe_modal_table is ever used for other than tgt prem,
-        // it will be wrong. TODO ?? Fix this.
         return GetModalPremTgtFromTable(a_year, a_mode, a_specamt);
         }
     else
@@ -957,8 +956,30 @@ double BasicValues::GetModalPremMaxNonMec
 /// Calculate premium using a target-premium ratio.
 ///
 /// Only the initial target-premium rate is used here, because that's
-/// generally fixed at issue. However, this calculation remains naive
-/// in that the initial specified amount may also be fixed at issue.
+/// generally fixed at issue. This calculation remains naive in that
+/// the initial specified amount may also be fixed at issue, but that
+/// choice is left to the caller.
+///
+/// 'TgtPremMonthlyPolFee' is applied here, not in GetModalTgtPrem(),
+/// because it is appropriate only here. In the other two cases that
+/// GetModalPrem() contemplates:
+///  - 'oe_monthly_deduction': deductions would naturally include any
+///    policy fee;
+///  - 'oe_modal_nonmec': 7702A seven-pay premiums are net by their
+///    nature; if it is nonetheless desired to add a policy fee to a
+///    (conservative) table-derived 7pp, then 'oe_modal_table' should
+///    be used instead.
+/// Therefore, an assertion (where 'TgtPremMonthlyPolFee' is assiged)
+/// requires that the fee be zero in those cases, and also fires if
+/// this function is used for minimum premium with a nonzero fee
+/// (because no GetModalPremMinFromTable() has yet been written).
+///
+/// It is assumed that 'TgtPremMonthlyPolFee' is on an annual basis
+/// (DATABASE !! thus, its name is misleading and should be changed)
+/// and that it can be modalized pro rata.
+///
+/// As the GetModalSpecAmt() documentation for 'oe_modal_table' says,
+/// target and minimum premiums really ought to distinguished.
 
 double BasicValues::GetModalPremTgtFromTable
     (int      // a_year // Unused.
@@ -1131,9 +1152,16 @@ double BasicValues::GetModalSpecAmtTgt(double annualized_pmt) const
 
 /// Calculate specified amount as a simple function of premium.
 ///
-/// Only scalar premiums and modes are used here. They're intended to
-/// represent initial values. Reason: it's generally inappropriate for
-/// a specified-amount strategy to produce a result that varies by
+/// A choice of several such simple functions is offered here to avoid
+/// code duplication in GetModalSpecAmtMax() and GetModalSpecAmtTgt().
+/// SOMEDAY !! However, in the 'oe_modal_table' case, distinct target
+/// and minimum tables and policy fees should be provided instead, and
+/// the present implementation moved into the calling functions.
+///
+/// Argument 'annualized_pmt' is net of any policy fee, such as might
+/// be included in a target premium. It's only a scalar, intended to
+/// represent an initial premium; reason: it's generally inappropriate
+/// for a specified-amount strategy to produce a result that varies by
 /// duration.
 
 double BasicValues::GetModalSpecAmt
@@ -1151,7 +1179,11 @@ double BasicValues::GetModalSpecAmt
         }
     else if(oe_modal_table == premium_type)
         {
-        return round_min_specamt()(annualized_pmt / MortalityRates_->TargetPremiumRates()[0]);
+        return round_min_specamt()
+            (
+                (annualized_pmt - TgtPremMonthlyPolFee)
+            /   MortalityRates_->TargetPremiumRates()[0]
+            );
         }
     else
         {
