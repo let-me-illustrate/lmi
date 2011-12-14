@@ -745,6 +745,9 @@ bool CensusViewDataViewModel::SetValueByRow(wxVariant const& variant, unsigned r
 
     cell = new_val;
 
+    Input& model = view_.cell_parms()[row];
+    model.Reconcile();
+
     view_.document().Modify(true);
 
     return true;
