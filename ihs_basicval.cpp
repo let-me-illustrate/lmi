@@ -250,7 +250,10 @@ void BasicValues::Init()
     Loads_         .reset(new Loads          (*this));
 
     // The target premium can't be ascertained yet if specamt is
-    // determined by a strategy.
+    // determined by a strategy. This data member is used only by
+    // Init7702(), and is meaningful only when that function is called
+    // by GPTServerInit(); the value assigned here is overridden by a
+    // downstream call to Irc7702::Initialize7702().
     InitialTargetPremium = 0.0;
 
     SetMaxSurvivalDur();
