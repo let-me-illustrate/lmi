@@ -104,12 +104,7 @@ class FindSpecAmt
         {
         SpecAmt = a_Trial;
         Irc7702_.Initialize7702(a_Trial);
-        const_cast<double&>(Irc7702_.TargetPremium) = Values_.GetTgtPrem
-            (Duration
-            ,SpecAmt
-            ,mce_option1 // TODO ?? Should pass dbopt.
-            ,mce_annual
-            );
+        const_cast<double&>(Irc7702_.TargetPremium) = Values_.GetAnnualTgtPrem(Duration, SpecAmt);
         return
                 Irc7702_.CalculatePremium
                     (EIOBasis_

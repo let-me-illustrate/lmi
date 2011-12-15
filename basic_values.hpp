@@ -26,7 +26,8 @@
 
 #include "config.hpp"
 
-#include "dbnames.hpp" // e_database_key
+#include "actuarial_table.hpp"          // e_actuarial_table_method
+#include "dbnames.hpp"                  // e_database_key
 #include "mc_enum_type_enums.hpp"
 #include "oecumenic_enumerations.hpp"
 #include "round_to.hpp"
@@ -130,12 +131,7 @@ class LMI_SO BasicValues
     boost::shared_ptr<Irc7702>            Irc7702_;
     boost::shared_ptr<Irc7702A>           Irc7702A_;
 
-    double GetTgtPrem
-        (int          a_year
-        ,double       a_specamt
-        ,mcenum_dbopt a_dbopt
-        ,mcenum_mode  a_mode
-        ) const;
+    double GetAnnualTgtPrem(int a_year, double a_specamt) const;
 
     std::vector<double> const& GetCorridorFactor() const;
     std::vector<double> const& SpreadFor7702() const;
@@ -232,50 +228,21 @@ class LMI_SO BasicValues
         ,double      a_bft_amt
         ,double      a_specamt
         ) const;
-    double GetModalSpecAmtMax
-        (mcenum_mode a_ee_mode
-        ,double      a_ee_pmt
-        ,mcenum_mode a_er_mode
-        ,double      a_er_pmt
-        ) const;
-    double GetModalSpecAmtTgt
-        (mcenum_mode a_ee_mode
-        ,double      a_ee_pmt
-        ,mcenum_mode a_er_mode
-        ,double      a_er_pmt
-        ) const;
-    double GetModalSpecAmtMinNonMec
-        (mcenum_mode a_ee_mode
-        ,double      a_ee_pmt
-        ,mcenum_mode a_er_mode
-        ,double      a_er_pmt
-        ) const;
-    double GetModalSpecAmtCorridor
-        (mcenum_mode a_ee_mode
-        ,double      a_ee_pmt
-        ,mcenum_mode a_er_mode
-        ,double      a_er_pmt
-        ) const;
-    double GetModalSpecAmtGLP
-        (mcenum_mode a_ee_mode
-        ,double      a_ee_pmt
-        ,mcenum_mode a_er_mode
-        ,double      a_er_pmt
-        ) const;
-    double GetModalSpecAmtGSP
-        (mcenum_mode a_ee_mode
-        ,double      a_ee_pmt
-        ,mcenum_mode a_er_mode
-        ,double      a_er_pmt
-        ) const;
-    // Deprecated--used only by the lmi branch, which does not
-    // distinguish ee from er premium.
+    double GetModalSpecAmtMax      (double annualized_pmt) const;
+    double GetModalSpecAmtTgt      (double annualized_pmt) const;
+    double GetModalSpecAmtMinNonMec(double annualized_pmt) const;
+    double GetModalSpecAmtGLP      (double annualized_pmt) const;
+    double GetModalSpecAmtGSP      (double annualized_pmt) const;
+    double GetModalSpecAmtCorridor (double annualized_pmt) const;
+    double GetModalSpecAmtSalary   (int a_year) const;
+    // Deprecated--used only by the antediluvian branch, which does
+    // not distinguish ee from er premium.
     double GetModalMaxSpecAmt
         (mcenum_mode a_mode
         ,double      a_pmt
         ) const;
-    // Deprecated--used only by the lmi branch, which does not
-    // distinguish ee from er premium.
+    // Deprecated--used only by the antediluvian branch, which does
+    // not distinguish ee from er premium.
     double GetModalTgtSpecAmt
         (mcenum_mode a_mode
         ,double      a_pmt
@@ -326,6 +293,13 @@ class LMI_SO BasicValues
     bool                         TermIsDbFor7702;
     bool                         TermIsDbFor7702A;
     double                       ExpPerKLimit;
+    oenum_modal_prem_type        MinPremType;
+    oenum_modal_prem_type        TgtPremType;
+    bool                         TgtPremFixedAtIssue;
+    double                       TgtPremMonthlyPolFee;
+    double                       CurrCoiTable0Limit;
+    double                       CurrCoiTable1Limit;
+    e_actuarial_table_method     CoiInforceReentry;
     mcenum_anticipated_deduction MaxWDDed_;
     double                       MaxWDAVMult;
     mcenum_anticipated_deduction MaxLoanDed_;
@@ -384,22 +358,11 @@ class LMI_SO BasicValues
         ,double      a_specamt
         ) const;
     double GetModalSpecAmt
-        (mcenum_mode           a_ee_mode
-        ,double                a_ee_pmt
-        ,mcenum_mode           a_er_mode
-        ,double                a_er_pmt
-        ,oenum_modal_prem_type a_prem_type
+        (double                annualized_pmt
+        ,oenum_modal_prem_type premium_type
         ) const;
-    double GetModalSpecAmtMlyDed
-        (mcenum_mode a_ee_mode
-        ,double      a_ee_pmt
-        ,mcenum_mode a_er_mode
-        ,double      a_er_pmt
-        ) const;
-    double GetAnnuityValueMlyDed
-        (int         a_year
-        ,mcenum_mode a_mode
-        ) const;
+    double GetModalSpecAmtMlyDed(double annualized_pmt, mcenum_mode) const;
+    double GetAnnuityValueMlyDed(int a_year, mcenum_mode a_mode) const;
 
     std::vector<double> GetActuarialTable
         (std::string const& TableFile

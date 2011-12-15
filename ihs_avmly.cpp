@@ -1725,9 +1725,7 @@ void AccountValue::TxSetTermAmt()
         }
 
     // TODO ?? Assumes that term rider lasts exactly as long as no-lapse guarantee.
-    LMI_ASSERT(BasicValues::NoLapseMinDur == Database_->Query(DB_NoLapseMinDur));
-    LMI_ASSERT(BasicValues::NoLapseMinAge == Database_->Query(DB_NoLapseMinAge));
-
+    // DATABASE !! Similar entities should be established for term.
     if
         (  (BasicValues::NoLapseMinDur <= Year)
         && (BasicValues::NoLapseMinAge <= Year + BasicValues::GetIssueAge())

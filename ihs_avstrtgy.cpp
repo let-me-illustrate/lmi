@@ -58,11 +58,7 @@
 /// argument for some strategies but not for others would introduce
 /// inconsistency in addition to complexity.
 ///
-/// The result of a salary-based strategy is constrained to be
-/// nonnegative, because if 'SalarySpecifiedAmountOffset' is
-/// sufficiently large, then specamt would be negative, which cannot
-/// make any sense. Other than that, no minimum is imposed here; see
-/// PerformSpecAmtStrategy().
+/// No minimum is imposed here; see PerformSpecAmtStrategy().
 
 double AccountValue::CalculateSpecAmtFromStrategy
     (int actual_year
@@ -82,6 +78,12 @@ double AccountValue::CalculateSpecAmtFromStrategy
         return r;
         }
 
+    double annualized_pmt =
+            InvariantValues().EeMode[reference_year].value()
+          * InvariantValues().EePmt [reference_year]
+        +   InvariantValues().ErMode[reference_year].value()
+          * InvariantValues().ErPmt [reference_year]
+        ;
     switch(yare_input_.SpecifiedAmountStrategy[actual_year])
         {
         case mce_sa_input_scalar:
@@ -90,70 +92,31 @@ double AccountValue::CalculateSpecAmtFromStrategy
             }
         case mce_sa_maximum:
             {
-            return GetModalSpecAmtMax
-                (InvariantValues().EeMode[reference_year].value()
-                ,InvariantValues().EePmt [reference_year]
-                ,InvariantValues().ErMode[reference_year].value()
-                ,InvariantValues().ErPmt [reference_year]
-                );
+            return GetModalSpecAmtMax      (annualized_pmt);
             }
         case mce_sa_target:
             {
-            return GetModalSpecAmtTgt
-                (InvariantValues().EeMode[reference_year].value()
-                ,InvariantValues().EePmt [reference_year]
-                ,InvariantValues().ErMode[reference_year].value()
-                ,InvariantValues().ErPmt [reference_year]
-                );
+            return GetModalSpecAmtTgt      (annualized_pmt);
             }
         case mce_sa_mep:
             {
-            return GetModalSpecAmtMinNonMec
-                (InvariantValues().EeMode[reference_year].value()
-                ,InvariantValues().EePmt [reference_year]
-                ,InvariantValues().ErMode[reference_year].value()
-                ,InvariantValues().ErPmt [reference_year]
-                );
+            return GetModalSpecAmtMinNonMec(annualized_pmt);
             }
         case mce_sa_glp:
             {
-            return GetModalSpecAmtGLP
-                (InvariantValues().EeMode[reference_year].value()
-                ,InvariantValues().EePmt [reference_year]
-                ,InvariantValues().ErMode[reference_year].value()
-                ,InvariantValues().ErPmt [reference_year]
-                );
+            return GetModalSpecAmtGLP      (annualized_pmt);
             }
         case mce_sa_gsp:
             {
-            return GetModalSpecAmtGSP
-                (InvariantValues().EeMode[reference_year].value()
-                ,InvariantValues().EePmt [reference_year]
-                ,InvariantValues().ErMode[reference_year].value()
-                ,InvariantValues().ErPmt [reference_year]
-                );
+            return GetModalSpecAmtGSP      (annualized_pmt);
             }
         case mce_sa_corridor:
             {
-            return GetModalSpecAmtCorridor
-                (InvariantValues().EeMode[reference_year].value()
-                ,InvariantValues().EePmt [reference_year]
-                ,InvariantValues().ErMode[reference_year].value()
-                ,InvariantValues().ErPmt [reference_year]
-                );
+            return GetModalSpecAmtCorridor (annualized_pmt);
             }
         case mce_sa_salary:
             {
-            double z =
-                  yare_input_.ProjectedSalary[actual_year]
-                * yare_input_.SalarySpecifiedAmountFactor
-                ;
-            if(0.0 != yare_input_.SalarySpecifiedAmountCap)
-                {
-                z = std::min(z, yare_input_.SalarySpecifiedAmountCap);
-                }
-            z -= yare_input_.SalarySpecifiedAmountOffset;
-            return std::max(0.0, z);
+            return GetModalSpecAmtSalary   (actual_year);
             }
         default:
             {
@@ -225,13 +188,9 @@ double AccountValue::DoPerformPmtStrategy
             }
         case mce_pmt_target:
             {
-// TODO ?? Shouldn't a modalized version of something like
-//   InitialTargetPremium
-//   AnnualTargetPrem
-// be used instead, at least in the
-//       if(Database_->Query(DB_TgtPremFixedAtIssue))
-// case?
-            return GetModalTgtPrem(Year, a_CurrentMode, ActualSpecAmt);
+            int const target_year = TgtPremFixedAtIssue ? 0 : Year;
+            double sa = InvariantValues().SpecAmt[target_year];
+            return GetModalTgtPrem(Year, a_CurrentMode, sa);
             }
         case mce_pmt_mep:
             {
