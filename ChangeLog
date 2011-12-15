@@ -28719,3 +28719,111 @@ Improve documentation.
   objects.make
 Refactor.
 
+20111201T1302Z <gchicares@sbcglobal.net> [603]
+
+  ihs_basicval.cpp
+Improve documentation, adumbrating some planned changes.
+
+20111203T1512Z <gchicares@sbcglobal.net> [603]
+
+  ihs_basicval.cpp
+Refactor to support more extensive caching of database values.
+
+20111203T1746Z <gchicares@sbcglobal.net> [603]
+
+  basic_values.hpp
+  ihs_acctval.cpp
+  ihs_avstrtgy.cpp
+  ihs_basicval.cpp
+Refactor, caching database values more extensively.
+
+20111203T1918Z <gchicares@sbcglobal.net> [603]
+
+  ihs_basicval.cpp
+Respect 'TgtPremFixedAtIssue' in GetModalTgtPrem().
+
+20111204T0121Z <gchicares@sbcglobal.net> [602]
+
+  ihs_avstrtgy.cpp
+Respect 'TgtPremFixedAtIssue' in the 'mce_pmt_target' case.
+
+20111204T0140Z <gchicares@sbcglobal.net> [600]
+
+  basic_values.hpp
+  gpt_specamt.cpp
+  ihs_basicval.cpp
+Resolve marked defects.
+
+20111204T0142Z <gchicares@sbcglobal.net> [600]
+
+  ihs_avmly.cpp
+Remove assertions that can never fire.
+
+20111206T2355Z <gchicares@sbcglobal.net> [600]
+
+  ihs_basicval.cpp
+Follow through on 20090118T1124Z deprecation.
+
+20111206T2356Z <gchicares@sbcglobal.net> [600]
+
+  basic_values.hpp
+Correct misleading documentation.
+
+20111207T0059Z <gchicares@sbcglobal.net> [600]
+
+  basic_values.hpp
+  ihs_avstrtgy.cpp
+  ihs_basicval.cpp
+Refactor for parallelism.
+
+20111207T1259Z <gchicares@sbcglobal.net> [600]
+
+  ihs_basicval.cpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch: dividing annualized premium by the modal premium rate
+per dollar does not give specamt if mode is not annual.
+
+20111207T1313Z <gchicares@sbcglobal.net> [600]
+
+  basic_values.hpp
+  ihs_avstrtgy.cpp
+  ihs_basicval.cpp
+Refactor for simplicity.
+
+20111207T1447Z <gchicares@sbcglobal.net> [599]
+
+  ihs_basicval.cpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch: the annual premium for one dollar of specamt is not the
+same as the tabular rate when the former includes a policy fee.
+
+20111208T2242Z <gchicares@sbcglobal.net> [597]
+
+  ihs_basicval.cpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch: when calculating specamt from target, any applicable
+policy fee must be accounted for.
+
+20111214T0031Z <gchicares@sbcglobal.net> [597]
+
+  ihs_basicval.cpp
+Improve documentation.
+
+20111214T0038Z <gchicares@sbcglobal.net> [597]
+
+  census_view.cpp
+Revert row-height change of 20110807T2144Z (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2011-11/msg00001.html
+
+20111214T0041Z <gchicares@sbcglobal.net> [597]
+
+  census_view.cpp
+Use default control sizes only when necessary (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2011-11/msg00001.html
+
+20111214T0047Z <gchicares@sbcglobal.net> [597]
+
+  census_view.cpp
+Reconcile MVC Model when a value is modified (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2011-11/msg00003.html
+

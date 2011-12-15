@@ -303,12 +303,16 @@ wxWindow* DateRenderer::DoCreateEditor
      ,wxRect const& rect
      ,tn_range_variant_data const& data)
 {
+    // Always use default height for editor controls
+    wxRect r(rect);
+    r.height = -1;
+
     wxDatePickerCtrl* ctrl = new(wx) wxDatePickerCtrl
         (parent
         ,wxID_ANY
         ,ConvertDateToWx(value_cast<calendar_date>(data.value))
-        ,rect.GetTopLeft()
-        ,rect.GetSize());
+        ,r.GetTopLeft()
+        ,r.GetSize());
 
     ctrl->SetRange
         (ConvertDateToWx(jdn_t(static_cast<int>(data.min)))
@@ -400,11 +404,7 @@ wxWindow* DatumSequenceRenderer::CreateEditorCtrl(wxWindow* parent, wxRect label
     ctrl->input(*data->input);
     ctrl->field_name(data->field);
 
-    // Always use default height for editor controls
-    wxRect rect(labelRect);
-    rect.height = -1;
-
-    ctrl->SetSize(rect);
+    ctrl->SetSize(labelRect);
 
     return ctrl;
 }
@@ -745,6 +745,9 @@ bool CensusViewDataViewModel::SetValueByRow(wxVariant const& variant, unsigned r
 
     cell = new_val;
 
+    Input& model = view_.cell_parms()[row];
+    model.Reconcile();
+
     view_.document().Modify(true);
 
     return true;
@@ -947,11 +950,6 @@ wxWindow* CensusView::CreateChildWindow()
         ,wxDefaultSize
         ,wxDV_ROW_LINES | wxDV_MULTIPLE
         );
-
-    // Use same row height as used by wxListCtrl without icons. By default,
-    // wxDataViewCtrl uses slightly larger spacing, but we prefer to fit more
-    // on the screen over slightly improved readability.
-    list_window_->SetRowHeight(list_window_->GetCharHeight() + 1);
 
     list_window_->AssociateModel(list_model_.get());
 

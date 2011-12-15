@@ -28,7 +28,6 @@
 
 #include "basic_values.hpp"
 
-#include "actuarial_table.hpp"
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "calendar_date.hpp"
@@ -170,6 +169,8 @@ void BasicValues::Init()
     ProductData_.reset(new product_data(yare_input_.ProductName));
     Database_.reset(new product_database(yare_input_));
 
+    SetPermanentInvariants();
+
     StateOfDomicile_ = mc_state_from_string(ProductData_->datum("InsCoDomicile"));
     StateOfJurisdiction_ = yare_input_.StateOfJurisdiction;
     PremiumTaxState_     = yare_input_.PremiumTaxState    ;
@@ -249,10 +250,13 @@ void BasicValues::Init()
     Loads_         .reset(new Loads          (*this));
 
     // The target premium can't be ascertained yet if specamt is
-    // determined by a strategy.
+    // determined by a strategy. This data member is used only by
+    // Init7702(), and is meaningful only when that function is called
+    // by GPTServerInit(); the value assigned here is overridden by a
+    // downstream call to Irc7702::Initialize7702().
     InitialTargetPremium = 0.0;
 
-    SetPermanentInvariants();
+    SetMaxSurvivalDur();
 
     Init7702();
     Init7702A();
@@ -264,6 +268,8 @@ void BasicValues::GPTServerInit()
 {
     ProductData_.reset(new product_data(yare_input_.ProductName));
     Database_.reset(new product_database(yare_input_));
+
+    SetPermanentInvariants();
 
     IssueAge = yare_input_.IssueAge;
     RetAge   = yare_input_.RetirementAge;
@@ -334,7 +340,7 @@ void BasicValues::GPTServerInit()
     PremiumTax_    .reset(new premium_tax    (PremiumTaxState_, StateOfDomicile_, yare_input_.AmortizePremiumLoad, *Database_, *StratifiedCharges_));
     Loads_         .reset(new Loads          (*this));
 
-    SetPermanentInvariants();
+    SetMaxSurvivalDur();
 
     Init7702();
 }
@@ -662,48 +668,19 @@ void BasicValues::Init7702A()
         );
 }
 
-//============================================================================
-// [This comment block will soon be expunged. This function is called
-// only by FindSpecAmt::operator(), but that GPT calculation could
-// just as well call GetModalTgtPrem() directly. No product design
-// currently supported has a target premium that varies by dbopt,
-// so at most a "SOMEDAY" marker is warranted. The caching of
-// InitialTargetPremium is unreliable if this function isn't first
-// called with an a_year of zero; it's meaningless anyway, because
-// the function happens to be called only with an a_year of zero.]
-// Needed for guideline premium.
-// TODO ?? a_dbopt is ignored for now, but some product designs will need it.
-double BasicValues::GetTgtPrem
-    (int          a_year
-    ,double       a_specamt
-    ,mcenum_dbopt // a_dbopt Unused for now.
-    ,mcenum_mode  a_mode
-    ) const
+/// Public function used for GPT specamt calculation.
+
+double BasicValues::GetAnnualTgtPrem(int a_year, double a_specamt) const
 {
-LMI_ASSERT(0 == a_year); // As noted above.
-    if(Database_->Query(DB_TgtPremFixedAtIssue))
-        {
-        if(0 == a_year)
-            {
-            InitialTargetPremium = GetModalTgtPrem
-                (a_year
-                ,a_mode
-                ,a_specamt
-                );
-            }
-        return InitialTargetPremium;
-        }
-    else
-        {
-        return GetModalTgtPrem
-            (a_year
-            ,a_mode
-            ,a_specamt
-            );
-        }
+    return GetModalTgtPrem(a_year, mce_annual, a_specamt);
 }
 
-//============================================================================
+/// Establish up front some values that cannot later change.
+///
+/// Values set here depend on Database_, and thus on yare_input_ and
+/// on ProductData_, but not on any other shared_ptr members--so they
+/// can reliably be used in initializing those other members.
+
 void BasicValues::SetPermanentInvariants()
 {
     MinIssSpecAmt       = Database_->Query(DB_MinIssSpecAmt        );
@@ -723,6 +700,20 @@ void BasicValues::SetPermanentInvariants()
     TermIsDbFor7702     = Database_->Query(DB_TermIsDbFor7702      );
     TermIsDbFor7702A    = Database_->Query(DB_TermIsDbFor7702A     );
     ExpPerKLimit        = Database_->Query(DB_ExpSpecAmtLimit      );
+    MinPremType         = static_cast<oenum_modal_prem_type>(static_cast<int>(Database_->Query(DB_MinPremType)));
+    TgtPremType         = static_cast<oenum_modal_prem_type>(static_cast<int>(Database_->Query(DB_TgtPremType)));
+    TgtPremFixedAtIssue = Database_->Query(DB_TgtPremFixedAtIssue  );
+    TgtPremMonthlyPolFee= Database_->Query(DB_TgtPremMonthlyPolFee );
+    // Assertion: see comments on GetModalPremTgtFromTable().
+    LMI_ASSERT
+        (  0.0 == TgtPremMonthlyPolFee
+        || (oe_modal_table == TgtPremType && oe_modal_table != MinPremType)
+        );
+    CurrCoiTable0Limit  = Database_->Query(DB_CurrCoiTable0Limit   );
+    CurrCoiTable1Limit  = Database_->Query(DB_CurrCoiTable1Limit   );
+    LMI_ASSERT(0.0                <= CurrCoiTable0Limit);
+    LMI_ASSERT(CurrCoiTable0Limit <= CurrCoiTable1Limit);
+    CoiInforceReentry   = static_cast<e_actuarial_table_method>(static_cast<int>(Database_->Query(DB_CoiInforceReentry)));
     MaxWDDed_           = static_cast<mcenum_anticipated_deduction>(static_cast<int>(Database_->Query(DB_MaxWdDed)));
     MaxWDAVMult         = Database_->Query(DB_MaxWdAcctValMult     );
     MaxLoanDed_         = static_cast<mcenum_anticipated_deduction>(static_cast<int>(Database_->Query(DB_MaxLoanDed)));
@@ -807,8 +798,6 @@ void BasicValues::SetPermanentInvariants()
     MaxNAAR             = yare_input_.MaximumNaar;
 
     Database_->Query(MinPremIntSpread_, DB_MinPremIntSpread);
-
-    SetMaxSurvivalDur();
 }
 
 namespace
@@ -842,7 +831,10 @@ void BasicValues::SetRoundingFunctors()
     set_rounding_rule(round_interest_rate_7702_, RoundingRules_->datum("RoundIntRate7702"));
 }
 
-//============================================================================
+/// Establish maximum survivorship duration.
+///
+/// Depends on MortalityRates_ for life-expectancy calculation.
+
 void BasicValues::SetMaxSurvivalDur()
 {
     switch(yare_input_.SurviveToType)
@@ -893,35 +885,28 @@ void BasicValues::SetMaxSurvivalDur()
 }
 
 //============================================================================
-// For now at least, calls the same subroutine as GetModalTgtPrem().
 double BasicValues::GetModalMinPrem
     (int         a_year
     ,mcenum_mode a_mode
     ,double      a_specamt
     ) const
 {
-    oenum_modal_prem_type const PremType =
-        static_cast<oenum_modal_prem_type>(static_cast<int>(Database_->Query(DB_MinPremType)));
-    return GetModalPrem(a_year, a_mode, a_specamt, PremType);
+    return GetModalPrem(a_year, a_mode, a_specamt, MinPremType);
 }
 
-//============================================================================
+/// Calculate target premium.
+///
+/// 'TgtPremMonthlyPolFee' is not added here, because it is added in
+/// GetModalPremTgtFromTable().
+
 double BasicValues::GetModalTgtPrem
     (int         a_year
     ,mcenum_mode a_mode
     ,double      a_specamt
     ) const
 {
-    oenum_modal_prem_type const PremType =
-        static_cast<oenum_modal_prem_type>(static_cast<int>(Database_->Query(DB_TgtPremType)));
-    double modal_prem = GetModalPrem(a_year, a_mode, a_specamt, PremType);
-
-    // TODO ?? Probably this should reflect policy fee. Some products
-    // define only an annual target premium, and don't specify how to
-    // modalize it.
-//      modal_prem += POLICYFEE / a_mode;
-
-    return modal_prem;
+    int const target_year = TgtPremFixedAtIssue ? 0 : a_year;
+    return GetModalPrem(target_year, a_mode, a_specamt, TgtPremType);
 }
 
 //============================================================================
@@ -934,17 +919,14 @@ double BasicValues::GetModalPrem
 {
     if(oe_monthly_deduction == a_prem_type)
         {
-        return GetModalPremMlyDed(a_year, a_mode, a_specamt);
+        return GetModalPremMlyDed      (a_year, a_mode, a_specamt);
         }
     else if(oe_modal_nonmec == a_prem_type)
         {
-        return GetModalPremMaxNonMec(a_year, a_mode, a_specamt);
+        return GetModalPremMaxNonMec   (a_year, a_mode, a_specamt);
         }
     else if(oe_modal_table == a_prem_type)
         {
-        // The fn s/b generalized to allow an input premium file and an input
-        // policy fee. If oe_modal_table is ever used for other than tgt prem,
-        // it will be wrong. TODO ?? Fix this.
         return GetModalPremTgtFromTable(a_year, a_mode, a_specamt);
         }
     else
@@ -977,8 +959,30 @@ double BasicValues::GetModalPremMaxNonMec
 /// Calculate premium using a target-premium ratio.
 ///
 /// Only the initial target-premium rate is used here, because that's
-/// generally fixed at issue. However, this calculation remains naive
-/// in that the initial specified amount may also be fixed at issue.
+/// generally fixed at issue. This calculation remains naive in that
+/// the initial specified amount may also be fixed at issue, but that
+/// choice is left to the caller.
+///
+/// 'TgtPremMonthlyPolFee' is applied here, not in GetModalTgtPrem(),
+/// because it is appropriate only here. In the other two cases that
+/// GetModalPrem() contemplates:
+///  - 'oe_monthly_deduction': deductions would naturally include any
+///    policy fee;
+///  - 'oe_modal_nonmec': 7702A seven-pay premiums are net by their
+///    nature; if it is nonetheless desired to add a policy fee to a
+///    (conservative) table-derived 7pp, then 'oe_modal_table' should
+///    be used instead.
+/// Therefore, an assertion (where 'TgtPremMonthlyPolFee' is assiged)
+/// requires that the fee be zero in those cases, and also fires if
+/// this function is used for minimum premium with a nonzero fee
+/// (because no GetModalPremMinFromTable() has yet been written).
+///
+/// It is assumed that 'TgtPremMonthlyPolFee' is on an annual basis
+/// (DATABASE !! thus, its name is misleading and should be changed)
+/// and that it can be modalized pro rata.
+///
+/// As the GetModalSpecAmt() documentation for 'oe_modal_table' says,
+/// target and minimum premiums really ought to distinguished.
 
 double BasicValues::GetModalPremTgtFromTable
     (int      // a_year // Unused.
@@ -988,7 +992,7 @@ double BasicValues::GetModalPremTgtFromTable
 {
     return round_max_premium()
         (
-            (   Database_->Query(DB_TgtPremMonthlyPolFee)
+            (   TgtPremMonthlyPolFee
             +       a_specamt
                 *   ldbl_eps_plus_one()
                 *   MortalityRates_->TargetPremiumRates()[0]
@@ -1138,92 +1142,56 @@ double BasicValues::GetModalPremMlyDed
 }
 
 //============================================================================
-double BasicValues::GetModalSpecAmtMax
-    (mcenum_mode a_ee_mode
-    ,double      a_ee_pmt
-    ,mcenum_mode a_er_mode
-    ,double      a_er_pmt
-    ) const
+double BasicValues::GetModalSpecAmtMax(double annualized_pmt) const
 {
-    oenum_modal_prem_type const prem_type = static_cast<oenum_modal_prem_type>
-        (static_cast<int>(Database_->Query(DB_MinPremType))
-        );
-    return GetModalSpecAmt
-            (a_ee_mode
-            ,a_ee_pmt
-            ,a_er_mode
-            ,a_er_pmt
-            ,prem_type
-            );
+    return GetModalSpecAmt(annualized_pmt, MinPremType);
 }
 
 //============================================================================
-double BasicValues::GetModalSpecAmtTgt
-    (mcenum_mode a_ee_mode
-    ,double      a_ee_pmt
-    ,mcenum_mode a_er_mode
-    ,double      a_er_pmt
-    ) const
+double BasicValues::GetModalSpecAmtTgt(double annualized_pmt) const
 {
-    oenum_modal_prem_type const prem_type = static_cast<oenum_modal_prem_type>
-        (static_cast<int>(Database_->Query(DB_TgtPremType))
-        );
-    return GetModalSpecAmt
-            (a_ee_mode
-            ,a_ee_pmt
-            ,a_er_mode
-            ,a_er_pmt
-            ,prem_type
-            );
+    return GetModalSpecAmt(annualized_pmt, TgtPremType);
 }
 
 /// Calculate specified amount as a simple function of premium.
 ///
-/// Only scalar premiums and modes are used here. They're intended to
-/// represent initial values. Reason: it's generally inappropriate for
-/// a specified-amount strategy to produce a result that varies by
+/// A choice of several such simple functions is offered here to avoid
+/// code duplication in GetModalSpecAmtMax() and GetModalSpecAmtTgt().
+/// SOMEDAY !! However, in the 'oe_modal_table' case, distinct target
+/// and minimum tables and policy fees should be provided instead, and
+/// the present implementation moved into the calling functions.
+///
+/// Argument 'annualized_pmt' is net of any policy fee, such as might
+/// be included in a target premium. It's only a scalar, intended to
+/// represent an initial premium; reason: it's generally inappropriate
+/// for a specified-amount strategy to produce a result that varies by
 /// duration.
 
 double BasicValues::GetModalSpecAmt
-    (mcenum_mode           a_ee_mode
-    ,double                a_ee_pmt
-    ,mcenum_mode           a_er_mode
-    ,double                a_er_pmt
-    ,oenum_modal_prem_type a_prem_type
+    (double                annualized_pmt
+    ,oenum_modal_prem_type premium_type
     ) const
 {
-    if(oe_monthly_deduction == a_prem_type)
+    if(oe_monthly_deduction == premium_type)
         {
-        return GetModalSpecAmtMlyDed
-            (a_ee_mode
-            ,a_ee_pmt
-            ,a_er_mode
-            ,a_er_pmt
-            );
+        return GetModalSpecAmtMlyDed(annualized_pmt, mce_annual);
         }
-    else if(oe_modal_nonmec == a_prem_type)
+    else if(oe_modal_nonmec == premium_type)
         {
-        return GetModalSpecAmtMinNonMec
-            (a_ee_mode
-            ,a_ee_pmt
-            ,a_er_mode
-            ,a_er_pmt
-            );
+        return GetModalSpecAmtMinNonMec(annualized_pmt);
         }
-    else if(oe_modal_table == a_prem_type)
+    else if(oe_modal_table == premium_type)
         {
-        // TODO ?? This is dubious. If the table specified is a
-        // seven-pay table, then this seems not to give the same
-        // result as the seven-pay premium type.
-        double annualized_pmt = a_ee_mode * a_ee_pmt + a_er_mode * a_er_pmt;
         return round_min_specamt()
-            (annualized_pmt / GetModalPremTgtFromTable(0, a_ee_mode, 1)
+            (
+                (annualized_pmt - TgtPremMonthlyPolFee)
+            /   MortalityRates_->TargetPremiumRates()[0]
             );
         }
     else
         {
         fatal_error()
-            << "Unknown modal premium type " << a_prem_type << '.'
+            << "Unknown modal premium type " << premium_type << '.'
             << LMI_FLUSH
             ;
         }
@@ -1236,50 +1204,22 @@ double BasicValues::GetModalSpecAmt
 /// changes dramatically complicate the relationship between premium
 /// and specified amount.
 
-double BasicValues::GetModalSpecAmtMinNonMec
-    (mcenum_mode a_ee_mode
-    ,double      a_ee_pmt
-    ,mcenum_mode a_er_mode
-    ,double      a_er_pmt
-    ) const
+double BasicValues::GetModalSpecAmtMinNonMec(double annualized_pmt) const
 {
-    double annualized_pmt = a_ee_mode * a_ee_pmt + a_er_mode * a_er_pmt;
-    return round_min_specamt()
-        (annualized_pmt / MortalityRates_->SevenPayRates()[0]
-        );
+    return round_min_specamt()(annualized_pmt / MortalityRates_->SevenPayRates()[0]);
 }
 
 //============================================================================
-double BasicValues::GetModalSpecAmtGLP
-    (mcenum_mode a_ee_mode
-    ,double      a_ee_pmt
-    ,mcenum_mode a_er_mode
-    ,double      a_er_pmt
-    ) const
+double BasicValues::GetModalSpecAmtGLP(double annualized_pmt) const
 {
-    double annualized_pmt = a_ee_mode * a_ee_pmt + a_er_mode * a_er_pmt;
-    return gpt_specamt::CalculateGLPSpecAmt
-        (*this
-        ,0
-        ,annualized_pmt
-        ,effective_dbopt_7702(DeathBfts_->dbopt()[0], Equiv7702DBO3)
-        );
+    mcenum_dbopt_7702 const z = effective_dbopt_7702(DeathBfts_->dbopt()[0], Equiv7702DBO3);
+    return gpt_specamt::CalculateGLPSpecAmt(*this, 0, annualized_pmt, z);
 }
 
 //============================================================================
-double BasicValues::GetModalSpecAmtGSP
-    (mcenum_mode a_ee_mode
-    ,double      a_ee_pmt
-    ,mcenum_mode a_er_mode
-    ,double      a_er_pmt
-    ) const
+double BasicValues::GetModalSpecAmtGSP(double annualized_pmt) const
 {
-    double annualized_pmt = a_ee_mode * a_ee_pmt + a_er_mode * a_er_pmt;
-    return gpt_specamt::CalculateGSPSpecAmt
-        (*this
-        ,0
-        ,annualized_pmt
-        );
+    return gpt_specamt::CalculateGSPSpecAmt(*this, 0, annualized_pmt);
 }
 
 /// Calculate specified amount using a corridor ratio.
@@ -1288,95 +1228,46 @@ double BasicValues::GetModalSpecAmtGSP
 /// strategy makes sense only at issue. Thus, arguments should
 /// represent initial premium and mode.
 
-double BasicValues::GetModalSpecAmtCorridor
-    (mcenum_mode a_ee_mode
-    ,double      a_ee_pmt
-    ,mcenum_mode a_er_mode
-    ,double      a_er_pmt
-    ) const
+double BasicValues::GetModalSpecAmtCorridor(double annualized_pmt) const
 {
-    double annualized_pmt = a_ee_mode * a_ee_pmt + a_er_mode * a_er_pmt;
-    double rate = GetCorridorFactor()[0];
-    return round_min_specamt()(annualized_pmt * rate);
+    return round_min_specamt()(annualized_pmt * GetCorridorFactor()[0]);
+}
+
+/// Calculate specified amount based on salary.
+///
+/// The result of a salary-based strategy is constrained to be
+/// nonnegative, because if 'SalarySpecifiedAmountOffset' is
+/// sufficiently large, then specamt would be negative, which cannot
+/// make any sense.
+
+double BasicValues::GetModalSpecAmtSalary(int a_year) const
+{
+    double z =
+          yare_input_.ProjectedSalary[a_year]
+        * yare_input_.SalarySpecifiedAmountFactor
+        ;
+    if(0.0 != yare_input_.SalarySpecifiedAmountCap)
+        {
+        z = std::min(z, yare_input_.SalarySpecifiedAmountCap);
+        }
+    z -= yare_input_.SalarySpecifiedAmountOffset;
+    return round_min_specamt()(std::max(0.0, z));
 }
 
 /// In general, strategies linking specamt and premium commute. The
 /// "pay deductions" strategy, however, doesn't have a useful analog
 /// for determining specamt as a function of initial premium: the
 /// contract would almost certainly lapse after one year. Therefore,
-/// calling this function elicits an error message.
+/// calling this function elicits an error message. SOMEDAY !! It
+/// would be better to disable this strategy in the GUI.
 
-double BasicValues::GetModalSpecAmtMlyDed
-    (mcenum_mode a_ee_mode
-    ,double      a_ee_pmt
-    ,mcenum_mode a_er_mode
-    ,double      a_er_pmt
-    ) const
+double BasicValues::GetModalSpecAmtMlyDed(double, mcenum_mode) const
 {
-    if(!global_settings::instance().regression_testing())
-        {
-        fatal_error()
-            << "No maximum specified amount is defined for this product."
-            << LMI_FLUSH
-            ;
-        }
-
-    // Soon this ancient implementation will be expunged. Original
-    // 'todo' defect markers have been replaced with the word "DEFECT"
-    // in capital letters: they no longer count toward the global
-    // total because they're already unreachable for end users.
-
-    // For now, we just assume that ee mode governs...only a guess...
-    mcenum_mode guess_mode = a_ee_mode;
-    double z = a_ee_mode * a_ee_pmt + a_er_mode * a_er_pmt;
-    z /= guess_mode;
-
-    double annual_charge = Loads_->annual_policy_fee(mce_gen_curr)[0];
-
-    double wp_rate = 0.0;
-    if(yare_input_.WaiverOfPremiumBenefit)
-        {
-        // For simplicity, ignore Database_->Query(DB_WpMax)
-        wp_rate = MortalityRates_->WpRates()[0];
-        if(0.0 != 1.0 + wp_rate)
-            {
-            annual_charge /= (1.0 + wp_rate);
-            }
-        }
-
-    z -= annual_charge;
-
-    // DEFECT Use first-year values only--don't want this to vary by year.
-    z /= GetAnnuityValueMlyDed(0, guess_mode);
-    // DEFECT only *target* load?
-// DEFECT Looks like none of our test decks exercise this line.
-    z *= 1.0 - Loads_->target_total_load(mce_gen_curr)[0];
-
-    // DEFECT Is this correct now?
-    if(yare_input_.WaiverOfPremiumBenefit && 0.0 != 1.0 + wp_rate)
-        {
-        // For simplicity, ignore Database_->Query(DB_WpMax)
-        z /= (1.0 + wp_rate);
-        }
-
-    if(yare_input_.AccidentalDeathBenefit)
-        {
-        // DEFECT For simplicity, ignore Database_->Query(DB_AdbLimit)
-        z -= MortalityRates_->AdbRates()[0];
-        }
-    // DEFECT Other riders should be considered here.
-
-    z -= Loads_->monthly_policy_fee(mce_gen_curr)[0];
-    // DEFECT Probably we should respect banding. This is a
-    // conservative shortcut.
-    z /= MortalityRates_->MonthlyCoiRatesBand0(mce_gen_curr)[0];
-    z *= 1.0 + InterestRates_->GenAcctNetRate
-        (mce_gen_guar
-        ,mce_monthly_rate
-        )[0]
+    fatal_error()
+        << "No maximum specified amount is defined for this product."
+        << LMI_FLUSH
         ;
-
-    return round_max_specamt()(z);
+    return 0.0;
 }
 
 /// 'Unusual' banding is one particular approach we needed to model.
@@ -1392,15 +1283,11 @@ std::vector<double> const& BasicValues::GetBandedCoiRates
 {
     if(UseUnusualCOIBanding && mce_gen_guar != rate_basis)
         {
-        double band_0_limit = Database_->Query(DB_CurrCoiTable0Limit);
-        double band_1_limit = Database_->Query(DB_CurrCoiTable1Limit);
-        LMI_ASSERT(0.0 <= band_0_limit);
-        LMI_ASSERT(band_0_limit <= band_1_limit);
-        if(band_0_limit <= a_specamt && a_specamt < band_1_limit)
+        if(CurrCoiTable0Limit <= a_specamt && a_specamt < CurrCoiTable1Limit)
             {
             return MortalityRates_->MonthlyCoiRatesBand1(rate_basis);
             }
-        else if(band_1_limit <= a_specamt)
+        else if(CurrCoiTable1Limit <= a_specamt)
             {
             return MortalityRates_->MonthlyCoiRatesBand2(rate_basis);
             }
@@ -1426,10 +1313,7 @@ std::vector<double> const& BasicValues::GetBandedCoiRates
 /// may not prevent the contract from lapsing; both those outcomes are
 /// likely to frustrate customers.
 
-double BasicValues::GetAnnuityValueMlyDed
-    (int         a_year
-    ,mcenum_mode a_mode
-    ) const
+double BasicValues::GetAnnuityValueMlyDed(int a_year, mcenum_mode a_mode) const
 {
     LMI_ASSERT(0.0 != a_mode);
     double spread = 0.0;
@@ -1465,19 +1349,14 @@ std::vector<double> BasicValues::GetActuarialTable
     ,long int           TableNumber
     ) const
 {
-    e_actuarial_table_method const method =
-        static_cast<e_actuarial_table_method>
-            (static_cast<int>(Database_->Query(DB_CoiInforceReentry))
-            );
-
-    if(DB_CurrCoiTable == TableID && e_reenter_never != method)
+    if(DB_CurrCoiTable == TableID && e_reenter_never != CoiInforceReentry)
         {
         return actuarial_table_rates_elaborated
             (TableFile
             ,TableNumber
             ,GetIssueAge()
             ,GetLength()
-            ,method
+            ,CoiInforceReentry
             ,yare_input_.InforceYear
             ,duration_ceiling(yare_input_.EffectiveDate, yare_input_.LastCoiReentryDate)
             );
@@ -1855,10 +1734,7 @@ std::vector<double> BasicValues::GetCurrCOIRates0() const
 
 std::vector<double> BasicValues::GetCurrCOIRates1() const
 {
-    if
-        ( Database_->Query(DB_CurrCoiTable0Limit)
-        < std::numeric_limits<double>::max()
-        )
+    if(CurrCoiTable0Limit < std::numeric_limits<double>::max())
         {
         return GetTable
             (ProductData_->datum("CurrCOIFilename")
@@ -1876,10 +1752,7 @@ std::vector<double> BasicValues::GetCurrCOIRates1() const
 
 std::vector<double> BasicValues::GetCurrCOIRates2() const
 {
-    if
-        ( Database_->Query(DB_CurrCoiTable1Limit)
-        < std::numeric_limits<double>::max()
-        )
+    if(CurrCoiTable1Limit < std::numeric_limits<double>::max())
         {
         return GetTable
             (ProductData_->datum("CurrCOIFilename")
@@ -2018,7 +1891,7 @@ std::vector<double> BasicValues::GetTgtPremRates() const
     return GetTable
         (ProductData_->datum("TgtPremFilename")
         ,DB_TgtPremTable
-        ,oe_modal_table == Database_->Query(DB_TgtPremType)
+        ,oe_modal_table == TgtPremType
         );
 }
 
