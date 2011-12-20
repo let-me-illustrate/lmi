@@ -1,0 +1,24 @@
+Index: wxWidgets-2.9.3/src/common/stopwatch.cpp
+===================================================================
+--- old/wxWidgets-2.9.3/src/common/stopwatch.cpp (revision 69921)
++++ new/wxWidgets-2.9.3/src/common/stopwatch.cpp (revision 70012)
+@@ -38,4 +38,5 @@
+     #endif
+     #include "wx/log.h"
++    #include "wx/thread.h"
+ #endif //WX_PRECOMP
+ 
+@@ -65,5 +66,5 @@
+     }
+ 
+-    wxCriticalSection cs;
++    wxCRIT_SECT_DECLARE_MEMBER(cs);
+     LARGE_INTEGER freq;
+     bool init;
+@@ -83,5 +84,5 @@
+     if ( !gs_perfCounter.init )
+     {
+-        wxCriticalSectionLocker lock(gs_perfCounter.cs);
++        wxCRIT_SECT_LOCKER(lock, gs_perfCounter.cs);
+         ::QueryPerformanceFrequency(&gs_perfCounter.freq);
+ 
