@@ -25,7 +25,7 @@ this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
 # Configurable settings ########################################################
 
-wx_version    := 2.9.2
+wx_version    := 2.9.3
 
 mingw_dir     := /MinGW_
 
@@ -43,6 +43,7 @@ wx-2.8.9-md5  := b0b2d0f6915a21ca6f33896ee8f50387
 wx-2.8.10-md5 := 0461c2085ac1ad7e648aa84c4ba51dd1
 wx-2.9.0-md5  := 09058928eeb72853142c062bdec056ce
 wx-2.9.2-md5  := d6cec5bd331ba90b74c1e2fcb0563620
+wx-2.9.3-md5  := 6b6003713289ea4d3cd9b49c5db5b721
 
 wx_md5            := $(wx-$(wx_version)-md5)
 
