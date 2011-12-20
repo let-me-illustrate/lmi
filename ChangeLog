@@ -28827,3 +28827,9 @@ Use default control sizes only when necessary (VS). See:
 Reconcile MVC Model when a value is modified (VS). See:
   http://lists.nongnu.org/archive/html/lmi/2011-11/msg00003.html
 
+20111220T0033Z <gchicares@sbcglobal.net> [597]
+
+  install_wx.make
+  wx-2.9.3.patch [new file]
+Upgrade to wx-2.9.3 .
+
