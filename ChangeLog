@@ -28833,3 +28833,14 @@ Reconcile MVC Model when a value is modified (VS). See:
   wx-2.9.3.patch [new file]
 Upgrade to wx-2.9.3 .
 
+20111223T1706Z <gchicares@sbcglobal.net> [597]
+
+  ihs_server7702test.cpp
+Improve GPT server shared-library test by making it self validating
+and correcting the target premium.
+
+20111223T1707Z <gchicares@sbcglobal.net> [597]
+
+  workhorse.make
+Add a target to test the GPT server.
+
