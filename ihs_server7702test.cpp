@@ -21,6 +21,12 @@
 
 // $Id$
 
+// The purpose of this file is to test the GPT server by loading it
+// dynamically as a shared library.
+
+// This is C++, but is largely written in C so that a C version may
+// easily be written if desired.
+
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
@@ -29,18 +35,20 @@
 #include "ihs_server7702.hpp"
 
 #include "handle_exceptions.hpp"
-#include "path_utility.hpp" // initialize_filesystem()
+#include "path_utility.hpp"             // initialize_filesystem()
 #include "so_attributes.hpp"
 
 #if defined LMI_POSIX
-#   include <dlfcn.h>   // dlopen()
+#   include <dlfcn.h>                   // dlopen()
 #elif defined LMI_MSW
-#   include <windows.h> // LoadLibrary()
+#   include <windows.h>                 // LoadLibrary()
 #else // Unknown platform.
 #   error "Unknown platform. Consider contributing support."
 #endif // Unknown platform.
 
-#include <stdio.h>
+#include <exception>                    // set_terminate()
+#include <stdio.h>                      // fprintf()
+#include <string.h>                     // strcmp()
 
 #if !defined __cplusplus
 typedef int     bool        ;
@@ -196,22 +204,14 @@ int main()
         " 45 45\nMale\nMale\nNonsmoker\nNonsmoker\nPreferred\nPreferred\nCT\nCT\nA\nA\n"
         " 1000000 1000000 1000000 1000000 0 0 0 0 0 0"
         "\nA=+25%\nA=+25%\n0 0\nNone\nNone\nP=+400%\nP=+400%\n"
-        " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 51640"
+        " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 55394.15"
         ;
 
-/* output should be:
-
-Ancient results, now suspected always to have been incorrect:
-1 0 0 19643.11999999999898136593 213777.04000000000814907253 19643.1199999999989
-8136593 213777.04000000000814907253 0.00000000000000000000 0.0000000000000000000
-0 0.00000000000000000000 0.00000000000000000000 1000000.00000000000000000000
-
-as of revision 5299:
-1 0 0 22110.68343118850680184551 239162.50350465354858897626 22110.6834311885068
-0184551 239162.50350465354858897626 0.00000000000000000000 0.0000000000000000000
-0 0.00000000000000000000 0.00000000000000000000
-
-*/
+    char e[] =
+        "1 0 0 22110.68343118850680184551 239162.50350465354858897626 22110.6834311885068"
+        "0184551 239162.50350465354858897626 0.00000000000000000000 0.0000000000000000000"
+        "0 0.00000000000000000000 0.00000000000000000000\n"
+        ;
 
     char o[16384];
 /*
@@ -235,15 +235,16 @@ as of revision 5299:
 
         InitializeServer7702();
         RunServer7702FromString(c, o);
-        std::fprintf
-            (stdout
-            ,"%s\n"
-            ,o
-            );
+        if(0 != strcmp(o, e))
+            {
+            fprintf(stdout, "Error: %s\n", o);
+            return 1;
+            }
         }
     catch(...)
         {
         report_exception();
+        return 2;
         }
 }
 
