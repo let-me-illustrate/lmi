@@ -808,6 +808,7 @@ inline std::vector<std::string> const& CensusViewDataViewModel::all_headers() co
 IMPLEMENT_DYNAMIC_CLASS(CensusView, ViewEx)
 
 BEGIN_EVENT_TABLE(CensusView, ViewEx)
+    EVT_DATAVIEW_ITEM_ACTIVATED(ID_LISTWINDOW, CensusView::UponActivated)
     EVT_DATAVIEW_ITEM_CONTEXT_MENU(ID_LISTWINDOW, CensusView::UponRightClick)
     EVT_MENU(XRCID("edit_cell"             ),CensusView::UponEditCell )
     EVT_MENU(XRCID("edit_class"            ),CensusView::UponEditClass)
@@ -1275,7 +1276,11 @@ wxMenuBar* CensusView::MenuBar() const
 
 void CensusView::UponEditCell(wxCommandEvent&)
 {
-    int cell_number = selected_row();
+    edit_cell(selected_row());
+}
+
+void CensusView::edit_cell(int cell_number)
+{
     Input& modifiable_parms = cell_parms()[cell_number];
     std::string const title = cell_title(cell_number);
 
@@ -1357,6 +1362,11 @@ void CensusView::UponColumnWidthFixed(wxCommandEvent&)
         {
         list_window_->GetColumn(j)->SetWidth(wxCOL_WIDTH_DEFAULT);
         }
+}
+
+void CensusView::UponActivated(wxDataViewEvent& e)
+{
+    edit_cell(list_model_->GetRow(e.GetItem()));
 }
 
 void CensusView::UponRightClick(wxDataViewEvent&)

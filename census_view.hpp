@@ -77,6 +77,7 @@ class CensusView
     void UponColumnWidthVarying     (wxCommandEvent&);
     void UponColumnWidthFixed       (wxCommandEvent&);
     void UponPasteCensus            (wxCommandEvent&);
+    void UponActivated              (wxDataViewEvent&);
     void UponRightClick             (wxDataViewEvent&);
     void UponPrintCase              (wxCommandEvent&);
     void UponPrintCaseToDisk        (wxCommandEvent&);
@@ -127,6 +128,8 @@ class CensusView
     int selected_row();
 
     void update_class_names();
+
+    void edit_cell(int cell_number);
 
     bool all_changes_have_been_validated_;
 
