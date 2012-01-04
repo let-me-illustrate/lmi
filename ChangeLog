@@ -29332,3 +29332,9 @@ Add a target to test the GPT server.
   zero_test.cpp
 Update copyright notices.
 
+20120104T2303Z <gchicares@sbcglobal.net> [597]
+
+  census_view.cpp
+Use textctrls rather than spinctrls for doubles (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2011-12/msg00015.html
+
