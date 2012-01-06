@@ -842,6 +842,7 @@ double Irc7702::CalculateGLP
         ,a_LeastBftAmtEver
         ,PvNpfLvlTgt[Get4PctBasis(a_DBOpt)][a_Duration]
         ,PvNpfLvlExc[Get4PctBasis(a_DBOpt)][a_Duration]
+        ,TargetPremium
         );
 }
 
@@ -862,10 +863,17 @@ double Irc7702::CalculateGSP
         ,a_LeastBftAmtEver
         ,PvNpfSglTgt[Opt1Int6Pct][a_Duration]
         ,PvNpfSglExc[Opt1Int6Pct][a_Duration]
+        ,TargetPremium
         );
 }
 
-//============================================================================
+/// Calculate a guideline premium.
+///
+/// This function encompasses both GLP and GSP. It is designed to have
+/// no side effects, and to depend only on its arguments and on data
+/// members that are set in the ctor and not subsequently changed--so
+/// it's safe for FindSpecAmt::operator()() to call it iteratively.
+
 double Irc7702::CalculatePremium
     (EIOBasis const& a_EIOBasis
     ,int             a_Duration
@@ -874,13 +882,14 @@ double Irc7702::CalculatePremium
     ,double          a_LeastBftAmtEver
     ,double          a_NetPmtFactorTgt
     ,double          a_NetPmtFactorExc
+    ,double          a_TargetPremium
     ) const
 {
     LMI_ASSERT(a_SpecAmt <= a_BftAmt);
     LMI_ASSERT(0.0 != a_NetPmtFactorTgt);
     LMI_ASSERT(0.0 != a_NetPmtFactorExc);
 
-    // TODO ?? This implementation is correct only if TargetPremium
+    // TODO ?? This implementation is correct only if target premium
     // is fixed forever at issue; otherwise, distinct target premiums
     // must be passed for each of the quantities A, B, and C. Should
     // those targets be calculated for status x+[t], or x+t? (The
@@ -897,7 +906,7 @@ double Irc7702::CalculatePremium
         /
         a_NetPmtFactorTgt
         ;
-    if(z <= TargetPremium)
+    if(z <= a_TargetPremium)
         {
         return z;
         }
@@ -908,7 +917,7 @@ double Irc7702::CalculatePremium
         +   std::min(SpecAmtLoadLimit, a_SpecAmt) * PvChgSpecAmt[a_EIOBasis][a_Duration]
         +   std::min(ADDLimit, a_SpecAmt) * PvChgADD[a_EIOBasis][a_Duration]
         +   a_BftAmt * PvChgMort[a_EIOBasis][a_Duration]
-        +       TargetPremium
+        +       a_TargetPremium
             *   (a_NetPmtFactorExc - a_NetPmtFactorTgt)
         )
         /

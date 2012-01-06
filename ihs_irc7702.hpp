@@ -169,6 +169,7 @@ class Irc7702
         ,double                     a_LeastBftAmtEver
         ,double                     a_NetPmtFactorTgt
         ,double                     a_NetPmtFactorExc
+        ,double                     a_TargetPremium
         ) const;
     static EIOBasis Get4PctBasis
         (mcenum_dbopt_7702          a_DBOpt
