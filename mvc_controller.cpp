@@ -508,7 +508,7 @@ bool MvcController::ModelAndViewValuesEquivalent(std::string const& name) const
 
 std::string MvcController::NameOfControlToDeferEvaluating() const
 {
-    wxWindow* w = dynamic_cast<wxTextCtrl*>(last_focused_window_);
+    wxWindow* w = dynamic_cast<wxTextCtrl      *>(last_focused_window_);
     if(!w)    w = dynamic_cast<wxSpinCtrl      *>(last_focused_window_);
     if(!w)    w = dynamic_cast<wxDatePickerCtrl*>(last_focused_window_);
 
