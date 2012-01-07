@@ -721,7 +721,13 @@ void Irc7702::Initialize7702
     Initialize7702(a_SpecAmt);
     PresentBftAmt       = a_BftAmt;
     PriorBftAmt         = PresentBftAmt;
-    LeastBftAmtEver     = PresentBftAmt; // was set to PresentSpecAmt by Initialize7702(a_SpecAmt); what if DB != SA?
+// This:
+//  LeastBftAmtEver     = PresentBftAmt;
+// would appear correct: ...BftAmt assigned from ...BftAmt. However,
+// as pointed out above, 'EndowmentBenefit' would be a better name,
+// so initializing it to PresentSpecAmt as elsewhere is actually
+// correct.
+    LeastBftAmtEver     = PresentSpecAmt;
     TargetPremium       = a_TargetPremium;
     PresentGLP = CalculateGLP
         (InforceDuration    // TODO ?? a_Duration...what if inforce?
