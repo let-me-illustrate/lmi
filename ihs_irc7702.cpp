@@ -696,21 +696,18 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
     std::reverse(diff_lvl.begin(), diff_lvl.end());
 }
 
-// For illustrations, we can't initialize everything in the ctor.
-// For instance, specamt might need to be calculated as a function
-// of GLP or GSP, so it cannot always be known before the GPT
-// calculations are available; and guideline premiums cannot be
-// determined until specamt is set. Therefore, we need these
-// functions to initialize these things after specamt has been set.
-//
+/// For illustrations, we can't initialize everything in the ctor.
+/// For instance, specamt might need to be calculated as a function
+/// of GLP or GSP, so it cannot always be known before the GPT
+/// calculations are available; and guideline premiums cannot be
+/// determined until specamt is set. Therefore, we need this function
+/// to initialize these things after specamt has been set. The server
+/// doesn't use it.
 
-//============================================================================
-// TODO ?? Is there any reason why dbopt would change?
-// --not used by server
 void Irc7702::Initialize7702
     (double            a_BftAmt
     ,double            a_SpecAmt
-    ,mcenum_dbopt_7702 a_DBOpt
+    ,mcenum_dbopt_7702 a_DBOpt // TODO ?? Is there any reason why dbopt would be changed here?
     ,double            a_TargetPremium
     )
 {
@@ -718,7 +715,8 @@ void Irc7702::Initialize7702
     LMI_ASSERT(0.0 <= a_TargetPremium);
     PresentDBOpt        = a_DBOpt;
     PriorDBOpt          = PresentDBOpt;
-    Initialize7702(a_SpecAmt);
+    PresentSpecAmt      = a_SpecAmt;
+    PriorSpecAmt        = PresentSpecAmt;
     PresentBftAmt       = a_BftAmt;
     PriorBftAmt         = PresentBftAmt;
 // This:
@@ -745,36 +743,6 @@ void Irc7702::Initialize7702
         ,LeastBftAmtEver
         );
     PriorGSP = PresentGSP;  // TODO ?? Not if inforce case.
-}
-
-//============================================================================
-// Designed for use by FindSpecAmt, which treats specamt and bftamt as equal.
-//
-// Soon this function will be eliminated. It is no longer needed by
-// FindSpecAmt. It is called only within the present TU, by the "full"
-// four-argument overload of Initialize7702() into which its useful
-// contents will soon be inserted inline. The zero-initializations
-// will not be so inserted: they are needless for FindSpecAmt, and
-// harmful otherwise because they cause inforce cases to be incorrect.
-void Irc7702::Initialize7702
-    (double a_SpecAmt
-    ) const
-{
-    // TODO ?? Some variables set in the ctor are reset here. Can
-    // this be avoided?
-
-    PresentSpecAmt  = a_SpecAmt;
-
-    PriorSpecAmt    = PresentSpecAmt;
-    LeastBftAmtEver = PresentSpecAmt;
-
-    CumGLP          = 0.0;
-    GptLimit        = 0.0;
-    CumPmts         = 0.0;
-    PresentGLP      = 0.0;
-    PriorGLP        = 0.0;
-    PresentGSP      = 0.0;
-    PriorGSP        = 0.0;
 }
 
 //============================================================================

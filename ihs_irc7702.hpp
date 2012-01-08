@@ -99,7 +99,6 @@ class Irc7702
         );
     ~Irc7702();
 
-    // TODO ?? Not sure why we need this non-const variant.
     void Initialize7702
         (double                     a_BftAmt
         ,double                     a_SpecAmt
@@ -139,9 +138,6 @@ class Irc7702
         ,double                     a_BftAmt
         ,double                     a_SpecAmt
         ,double                     a_LeastBftAmtEver
-        ) const;
-    void Initialize7702
-        (double                     a_SpecAmt
         ) const;
     double GetLeastBftAmtEver() const;
     double RoundedGLP() const;
@@ -187,9 +183,9 @@ class Irc7702
 
     double                     PresentBftAmt;
     double                     PriorBftAmt;
-    mutable double             PresentSpecAmt;
-    mutable double             PriorSpecAmt;
-    mutable double             LeastBftAmtEver;// Lowest bft amt since issue date // TODO ?? NOT!
+    double                     PresentSpecAmt;
+    double                     PriorSpecAmt;
+    double                     LeastBftAmtEver;// Lowest bft amt since issue date // TODO ?? NOT!
     mcenum_dbopt_7702          PresentDBOpt;   // Present death benefit option
     mcenum_dbopt_7702          PriorDBOpt;     // Prior death benefit option
 
@@ -216,13 +212,13 @@ class Irc7702
 
     int                        Length;
 
-    mutable double             PresentGLP;
-    mutable double             PriorGLP;
-    mutable double             PresentGSP;
-    mutable double             PriorGSP;
-    mutable double             CumGLP;     // Cumulative GLP
-    mutable double             GptLimit;   // Guideline limit: max(cum GLP, GSP)
-    mutable double             CumPmts;    // Cumulative payments
+    double                     PresentGLP;
+    double                     PriorGLP;
+    double                     PresentGSP;
+    double                     PriorGSP;
+    double                     CumGLP;     // Cumulative GLP
+    double                     GptLimit;   // Guideline limit: max(cum GLP, GSP)
+    double                     CumPmts;    // Cumulative payments
 
     // Commutation functions
 // TODO ?? Apparently the original reason for using smart pointers
