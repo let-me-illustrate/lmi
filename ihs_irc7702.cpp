@@ -749,6 +749,13 @@ void Irc7702::Initialize7702
 
 //============================================================================
 // Designed for use by FindSpecAmt, which treats specamt and bftamt as equal.
+//
+// Soon this function will be eliminated. It is no longer needed by
+// FindSpecAmt. It is called only within the present TU, by the "full"
+// four-argument overload of Initialize7702() into which its useful
+// contents will soon be inserted inline. The zero-initializations
+// will not be so inserted: they are needless for FindSpecAmt, and
+// harmful otherwise because they cause inforce cases to be incorrect.
 void Irc7702::Initialize7702
     (double a_SpecAmt
     ) const
