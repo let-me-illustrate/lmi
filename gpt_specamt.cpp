@@ -103,7 +103,6 @@ class FindSpecAmt
     double operator()(double a_Trial)
         {
         SpecAmt = a_Trial;
-        Irc7702_.Initialize7702(a_Trial); // No longer needed.
         return
                 Irc7702_.CalculatePremium
                     (EIOBasis_
