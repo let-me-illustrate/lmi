@@ -88,7 +88,8 @@ class Irc7702
         ,round_to<double>    const& a_round_min_specamt
         ,round_to<double>    const& a_round_max_specamt
 // TODO ?? Should we have default arguments at all?
-        ,int                        a_InforceDuration = 0
+        ,int                        a_InforceYear     = 0
+        ,int                        a_InforceMonth    = 0
         ,double                     a_InforceCumGLP   = 0.0
         ,double                     a_InforceGSP      = 0.0
         ,double                     a_PriorBftAmt     = 0.0
@@ -205,7 +206,8 @@ class Irc7702
     round_to<double>           round_min_specamt;
     round_to<double>           round_max_specamt;
 
-    int const                  InforceDuration;
+    int const                  InforceYear;
+    int const                  InforceMonth;
     // TODO ?? Is inforce cum GLP needed?
     double const               InforceCumGLP;
     double const               InforceGSP;
