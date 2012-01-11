@@ -203,14 +203,14 @@ Irc7702::Irc7702
         LeastBftAmtEver = a_LeastBftAmtEver;
         LMI_ASSERT(LeastBftAmtEver <= PriorBftAmt);
         LMI_ASSERT(LeastBftAmtEver <= PresentBftAmt);
-//      PriorDBOpt      = PresentDBOpt;     // TODO ??
-// TODO ?? Think more about inforce.
-        PresentGLP      = 0.0;  // TODO ??
-        PriorGLP        = 0.0;
-        CumGLP          = InforceCumGLP;    // TODO ?? Don't need as member?
-        PresentGSP      = 0.0;
-        PriorGSP        = a_InforceGSP;     // TODO ?? Don't need as member?
-        GptLimit        = 0.0;  // TODO ??
+        PriorDBOpt      = PresentDBOpt; // TODO ?? a_PriorDBOpt is unused; is it even wanted?
+        // TODO ?? Must these be members? The arguments could be used here instead.
+        PresentGLP      = InforceGLP;
+        PriorGLP        = InforceGLP;
+        CumGLP          = InforceCumGLP;
+        PresentGSP      = InforceGSP;
+        PriorGSP        = InforceGSP;
+        GptLimit        = std::max(CumGLP, PresentGSP);
         CumPmts         = a_InforceCumPremsPaid;
 // to handle inforce, we need to know:
 // the quantity A in A+B-C (i.e. both GSP and GLP)
