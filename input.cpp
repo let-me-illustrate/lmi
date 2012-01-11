@@ -154,8 +154,8 @@ Input::Input()
 //    ,PolicyNumber                     ("")
 //    ,InforceAsOfDate                  ("")
 //    ,InforceTaxBasis                  ("")
-//    ,InforceCumulativeGlp             ("")
 //    ,InforceGlp                       ("")
+//    ,InforceCumulativeGlp             ("")
 //    ,InforceGsp                       ("")
 //    ,InforceSevenPayPremium           ("")
 //    ,InforceIsMec                     ("")
@@ -459,8 +459,8 @@ void Input::AscribeMembers()
     ascribe("PolicyNumber"                          , &Input::PolicyNumber                          );
     ascribe("InforceAsOfDate"                       , &Input::InforceAsOfDate                       );
     ascribe("InforceTaxBasis"                       , &Input::InforceTaxBasis                       );
-    ascribe("InforceCumulativeGlp"                  , &Input::InforceCumulativeGlp                  );
     ascribe("InforceGlp"                            , &Input::InforceGlp                            );
+    ascribe("InforceCumulativeGlp"                  , &Input::InforceCumulativeGlp                  );
     ascribe("InforceGsp"                            , &Input::InforceGsp                            );
     ascribe("InforceSevenPayPremium"                , &Input::InforceSevenPayPremium                );
     ascribe("InforceIsMec"                          , &Input::InforceIsMec                          );

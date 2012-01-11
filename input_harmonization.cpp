@@ -289,8 +289,8 @@ void Input::DoHarmonize()
         ,std::max(InforceAsOfDate.value(), InforceAsOfDate.minimum())
         );
 
-    InforceCumulativeGlp.enable(mce_gpt == DefinitionOfLifeInsurance);
     InforceGlp          .enable(mce_gpt == DefinitionOfLifeInsurance);
+    InforceCumulativeGlp.enable(mce_gpt == DefinitionOfLifeInsurance);
     InforceGsp          .enable(mce_gpt == DefinitionOfLifeInsurance);
 
     bool non_mec = mce_no == InforceIsMec;

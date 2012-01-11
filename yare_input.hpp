@@ -178,8 +178,8 @@ class yare_input
 //    std::string                       PolicyNumber                    ;
 //    calendar_date                     InforceAsOfDate                 ;
     double                            InforceTaxBasis                 ;
-//    double                            InforceCumulativeGlp            ;
 //    double                            InforceGlp                      ;
+//    double                            InforceCumulativeGlp            ;
 //    double                            InforceGsp                      ;
 //    double                            InforceSevenPayPremium          ;
     bool                              InforceIsMec                    ;

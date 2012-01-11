@@ -348,8 +348,8 @@ class LMI_SO Input
     datum_string             PolicyNumber                    ;
     tnr_date                 InforceAsOfDate                 ;
     tnr_nonnegative_double   InforceTaxBasis                 ;
-    tnr_nonnegative_double   InforceCumulativeGlp            ;
     tnr_nonnegative_double   InforceGlp                      ;
+    tnr_nonnegative_double   InforceCumulativeGlp            ;
     tnr_nonnegative_double   InforceGsp                      ;
     tnr_nonnegative_double   InforceSevenPayPremium          ;
     mce_yes_or_no            InforceIsMec                    ;
