@@ -88,14 +88,16 @@ class Irc7702
         ,round_to<double>    const& a_round_min_specamt
         ,round_to<double>    const& a_round_max_specamt
 // TODO ?? Should we have default arguments at all?
-        ,int                        a_InforceYear     = 0
-        ,int                        a_InforceMonth    = 0
-        ,double                     a_InforceCumGLP   = 0.0
-        ,double                     a_InforceGSP      = 0.0
-        ,double                     a_PriorBftAmt     = 0.0
-        ,double                     a_PriorSpecAmt    = 0.0
-        ,double                     a_LeastBftAmtEver = 0.0
-        ,mcenum_dbopt_7702          a_PriorDBOpt      = mce_option1_for_7702
+        ,int                        a_InforceYear         = 0
+        ,int                        a_InforceMonth        = 0
+        ,double                     a_InforceGLP          = 0.0
+        ,double                     a_InforceCumGLP       = 0.0
+        ,double                     a_InforceGSP          = 0.0
+        ,double                     a_InforceCumPremsPaid = 0.0
+        ,double                     a_PriorBftAmt         = 0.0
+        ,double                     a_PriorSpecAmt        = 0.0
+        ,double                     a_LeastBftAmtEver     = 0.0
+        ,mcenum_dbopt_7702          a_PriorDBOpt          = mce_option1_for_7702
         // TODO ?? Perhaps other arguments are needed for inforce.
         );
     ~Irc7702();
@@ -208,9 +210,11 @@ class Irc7702
 
     int const                  InforceYear;
     int const                  InforceMonth;
-    // TODO ?? Is inforce cum GLP needed?
+    // These data are needed for enforcing future guideline limits.
+    double const               InforceGLP;
     double const               InforceCumGLP;
     double const               InforceGSP;
+    double const               InforceCumPremsPaid;
 
     int                        Length;
 

@@ -97,8 +97,6 @@ namespace
 //
 // need these in ctor?
 //  ,double     a_CumPmtYtd
-//  ,double     a_CumPmtSinceIssue
-//
 
 // Server questions and answers:
 // check each pmt? --no, admin system does that
@@ -136,8 +134,10 @@ Irc7702::Irc7702
     ,round_to<double>    const& a_round_max_specamt
     ,int                        a_InforceYear
     ,int                        a_InforceMonth
+    ,double                     a_InforceGLP
     ,double                     a_InforceCumGLP
     ,double                     a_InforceGSP
+    ,double                     a_InforceCumPremsPaid
     ,double                     a_PriorBftAmt
     ,double                     a_PriorSpecAmt
     ,double                     a_LeastBftAmtEver
@@ -172,8 +172,10 @@ Irc7702::Irc7702
     ,round_max_specamt  (a_round_max_specamt)
     ,InforceYear        (a_InforceYear)
     ,InforceMonth       (a_InforceMonth)
+    ,InforceGLP         (a_InforceGLP)
     ,InforceCumGLP      (a_InforceCumGLP)
     ,InforceGSP         (a_InforceGSP)
+    ,InforceCumPremsPaid(a_InforceCumPremsPaid)
 {
     LMI_ASSERT(a_PresentSpecAmt <= a_PresentBftAmt);
     LMI_ASSERT(a_PriorSpecAmt <= a_PriorBftAmt);
@@ -209,7 +211,7 @@ Irc7702::Irc7702
         PresentGSP      = 0.0;
         PriorGSP        = a_InforceGSP;     // TODO ?? Don't need as member?
         GptLimit        = 0.0;  // TODO ??
-        CumPmts         = 0.0;  // TODO ??
+        CumPmts         = a_InforceCumPremsPaid;
 // to handle inforce, we need to know:
 // the quantity A in A+B-C (i.e. both GSP and GLP)
 //  CumGLP
