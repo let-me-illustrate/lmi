@@ -134,7 +134,8 @@ Irc7702::Irc7702
     ,round_to<double>    const& a_round_max_premium
     ,round_to<double>    const& a_round_min_specamt
     ,round_to<double>    const& a_round_max_specamt
-    ,int                        a_InforceDuration
+    ,int                        a_InforceYear
+    ,int                        a_InforceMonth
     ,double                     a_InforceCumGLP
     ,double                     a_InforceGSP
     ,double                     a_PriorBftAmt
@@ -169,7 +170,8 @@ Irc7702::Irc7702
     ,round_max_premium  (a_round_max_premium)
     ,round_min_specamt  (a_round_min_specamt)
     ,round_max_specamt  (a_round_max_specamt)
-    ,InforceDuration    (a_InforceDuration)
+    ,InforceYear        (a_InforceYear)
+    ,InforceMonth       (a_InforceMonth)
     ,InforceCumGLP      (a_InforceCumGLP)
     ,InforceGSP         (a_InforceGSP)
 {
@@ -177,7 +179,7 @@ Irc7702::Irc7702
     LMI_ASSERT(a_PriorSpecAmt <= a_PriorBftAmt);
     LMI_ASSERT(0.0 <= a_TargetPremium);
     // TODO ?? Instead put these in initializer-list and write assertions?
-    if(0 == InforceDuration)
+    if(0 == InforceYear)
         {
         PriorBftAmt     = a_PresentBftAmt;
         PriorSpecAmt    = a_PresentSpecAmt;
@@ -728,7 +730,7 @@ void Irc7702::Initialize7702
     LeastBftAmtEver     = PresentSpecAmt;
     TargetPremium       = a_TargetPremium;
     PresentGLP = CalculateGLP
-        (InforceDuration    // TODO ?? a_Duration...what if inforce?
+        (InforceYear        // TODO ?? a_Year...what if inforce?
         ,PresentBftAmt
         ,PresentSpecAmt
         ,LeastBftAmtEver
@@ -737,7 +739,7 @@ void Irc7702::Initialize7702
     PriorGLP = PresentGLP;  // TODO ?? Not if inforce case.
 
     PresentGSP = CalculateGSP
-        (0  // TODO ?? a_Duration
+        (0  // TODO ?? a_Year
         ,PresentBftAmt
         ,PresentSpecAmt
         ,LeastBftAmtEver
@@ -807,7 +809,7 @@ Irc7702::EIOBasis Irc7702::Get4PctBasis
 
 //============================================================================
 double Irc7702::CalculateGLP
-    (int               a_Duration
+    (int               a_Year
     ,double            a_BftAmt
     ,double            a_SpecAmt
     ,double            a_LeastBftAmtEver
@@ -817,19 +819,19 @@ double Irc7702::CalculateGLP
     LMI_ASSERT(a_SpecAmt <= a_BftAmt);
     return CalculatePremium
         (Get4PctBasis(a_DBOpt)
-        ,a_Duration
+        ,a_Year
         ,a_BftAmt
         ,a_SpecAmt
         ,a_LeastBftAmtEver
-        ,PvNpfLvlTgt[Get4PctBasis(a_DBOpt)][a_Duration]
-        ,PvNpfLvlExc[Get4PctBasis(a_DBOpt)][a_Duration]
+        ,PvNpfLvlTgt[Get4PctBasis(a_DBOpt)][a_Year]
+        ,PvNpfLvlExc[Get4PctBasis(a_DBOpt)][a_Year]
         ,TargetPremium
         );
 }
 
 //============================================================================
 double Irc7702::CalculateGSP
-    (int    a_Duration
+    (int    a_Year
     ,double a_BftAmt
     ,double a_SpecAmt
     ,double a_LeastBftAmtEver
@@ -838,12 +840,12 @@ double Irc7702::CalculateGSP
     LMI_ASSERT(a_SpecAmt <= a_BftAmt);
     return CalculatePremium
         (Opt1Int6Pct
-        ,a_Duration
+        ,a_Year
         ,a_BftAmt
         ,a_SpecAmt
         ,a_LeastBftAmtEver
-        ,PvNpfSglTgt[Opt1Int6Pct][a_Duration]
-        ,PvNpfSglExc[Opt1Int6Pct][a_Duration]
+        ,PvNpfSglTgt[Opt1Int6Pct][a_Year]
+        ,PvNpfSglExc[Opt1Int6Pct][a_Year]
         ,TargetPremium
         );
 }
@@ -857,7 +859,7 @@ double Irc7702::CalculateGSP
 
 double Irc7702::CalculatePremium
     (EIOBasis const& a_EIOBasis
-    ,int             a_Duration
+    ,int             a_Year
     ,double          a_BftAmt
     ,double          a_SpecAmt
     ,double          a_LeastBftAmtEver
@@ -879,10 +881,10 @@ double Irc7702::CalculatePremium
     // consistent with the way durational loads are treated here.)
     double z =
         (   DEndt[a_EIOBasis] * a_LeastBftAmtEver
-        +   PvChgPol[a_EIOBasis][a_Duration]
-        +   std::min(SpecAmtLoadLimit, a_SpecAmt) * PvChgSpecAmt[a_EIOBasis][a_Duration]
-        +   std::min(ADDLimit, a_SpecAmt) * PvChgADD[a_EIOBasis][a_Duration]
-        +   a_BftAmt * PvChgMort[a_EIOBasis][a_Duration]
+        +   PvChgPol[a_EIOBasis][a_Year]
+        +   std::min(SpecAmtLoadLimit, a_SpecAmt) * PvChgSpecAmt[a_EIOBasis][a_Year]
+        +   std::min(ADDLimit, a_SpecAmt) * PvChgADD[a_EIOBasis][a_Year]
+        +   a_BftAmt * PvChgMort[a_EIOBasis][a_Year]
         )
         /
         a_NetPmtFactorTgt
@@ -894,10 +896,10 @@ double Irc7702::CalculatePremium
 
     return
         (   DEndt[a_EIOBasis] * a_LeastBftAmtEver
-        +   PvChgPol[a_EIOBasis][a_Duration]
-        +   std::min(SpecAmtLoadLimit, a_SpecAmt) * PvChgSpecAmt[a_EIOBasis][a_Duration]
-        +   std::min(ADDLimit, a_SpecAmt) * PvChgADD[a_EIOBasis][a_Duration]
-        +   a_BftAmt * PvChgMort[a_EIOBasis][a_Duration]
+        +   PvChgPol[a_EIOBasis][a_Year]
+        +   std::min(SpecAmtLoadLimit, a_SpecAmt) * PvChgSpecAmt[a_EIOBasis][a_Year]
+        +   std::min(ADDLimit, a_SpecAmt) * PvChgADD[a_EIOBasis][a_Year]
+        +   a_BftAmt * PvChgMort[a_EIOBasis][a_Year]
         +       a_TargetPremium
             *   (a_NetPmtFactorExc - a_NetPmtFactorTgt)
         )
