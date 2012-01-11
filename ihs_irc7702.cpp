@@ -732,7 +732,7 @@ void Irc7702::Initialize7702
     LeastBftAmtEver     = PresentSpecAmt;
     TargetPremium       = a_TargetPremium;
     PresentGLP = CalculateGLP
-        (InforceYear        // TODO ?? a_Year...what if inforce?
+        (0                  // TODO ?? What if inforce?
         ,PresentBftAmt
         ,PresentSpecAmt
         ,LeastBftAmtEver
@@ -741,7 +741,7 @@ void Irc7702::Initialize7702
     PriorGLP = PresentGLP;  // TODO ?? Not if inforce case.
 
     PresentGSP = CalculateGSP
-        (0  // TODO ?? a_Year
+        (0
         ,PresentBftAmt
         ,PresentSpecAmt
         ,LeastBftAmtEver
