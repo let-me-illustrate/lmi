@@ -1,6 +1,6 @@
 // Internal Revenue Code section 7702 (definition of life insurance).
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -97,8 +97,6 @@ namespace
 //
 // need these in ctor?
 //  ,double     a_CumPmtYtd
-//  ,double     a_CumPmtSinceIssue
-//
 
 // Server questions and answers:
 // check each pmt? --no, admin system does that
@@ -134,9 +132,12 @@ Irc7702::Irc7702
     ,round_to<double>    const& a_round_max_premium
     ,round_to<double>    const& a_round_min_specamt
     ,round_to<double>    const& a_round_max_specamt
-    ,int                        a_InforceDuration
+    ,int                        a_InforceYear
+    ,int                        a_InforceMonth
+    ,double                     a_InforceGLP
     ,double                     a_InforceCumGLP
     ,double                     a_InforceGSP
+    ,double                     a_InforceCumPremsPaid
     ,double                     a_PriorBftAmt
     ,double                     a_PriorSpecAmt
     ,double                     a_LeastBftAmtEver
@@ -169,28 +170,31 @@ Irc7702::Irc7702
     ,round_max_premium  (a_round_max_premium)
     ,round_min_specamt  (a_round_min_specamt)
     ,round_max_specamt  (a_round_max_specamt)
-    ,InforceDuration    (a_InforceDuration)
+    ,InforceYear        (a_InforceYear)
+    ,InforceMonth       (a_InforceMonth)
+    ,InforceGLP         (a_InforceGLP)
     ,InforceCumGLP      (a_InforceCumGLP)
     ,InforceGSP         (a_InforceGSP)
+    ,InforceCumPremsPaid(a_InforceCumPremsPaid)
 {
     LMI_ASSERT(a_PresentSpecAmt <= a_PresentBftAmt);
     LMI_ASSERT(a_PriorSpecAmt <= a_PriorBftAmt);
     LMI_ASSERT(0.0 <= a_TargetPremium);
     // TODO ?? Instead put these in initializer-list and write assertions?
-    if(0 == InforceDuration)
+    if(0 == InforceYear)
         {
         PriorBftAmt     = a_PresentBftAmt;
         PriorSpecAmt    = a_PresentSpecAmt;
         // TODO ?? Assert that this is <= least-bft arg?
         LeastBftAmtEver = a_PresentSpecAmt;
-        CumGLP          = 0.0;
-        GptLimit        = 0.0;
-        CumPmts         = 0.0;
+        PriorDBOpt      = PresentDBOpt;
         PresentGLP      = 0.0;
         PriorGLP        = 0.0;
+        CumGLP          = 0.0;
         PresentGSP      = 0.0;
         PriorGSP        = 0.0;
-        PriorDBOpt      = PresentDBOpt;
+        GptLimit        = 0.0;
+        CumPmts         = 0.0;
         }
     else
         {
@@ -199,15 +203,15 @@ Irc7702::Irc7702
         LeastBftAmtEver = a_LeastBftAmtEver;
         LMI_ASSERT(LeastBftAmtEver <= PriorBftAmt);
         LMI_ASSERT(LeastBftAmtEver <= PresentBftAmt);
+//      PriorDBOpt      = PresentDBOpt;     // TODO ??
 // TODO ?? Think more about inforce.
-        CumGLP          = InforceCumGLP;    // TODO ?? Don't need as member?
-        GptLimit        = 0.0;  // TODO ??
-        CumPmts         = 0.0;  // TODO ??
         PresentGLP      = 0.0;  // TODO ??
         PriorGLP        = 0.0;
+        CumGLP          = InforceCumGLP;    // TODO ?? Don't need as member?
         PresentGSP      = 0.0;
         PriorGSP        = a_InforceGSP;     // TODO ?? Don't need as member?
-//      PriorDBOpt      = PresentDBOpt;     // TODO ??
+        GptLimit        = 0.0;  // TODO ??
+        CumPmts         = a_InforceCumPremsPaid;
 // to handle inforce, we need to know:
 // the quantity A in A+B-C (i.e. both GSP and GLP)
 //  CumGLP
@@ -696,21 +700,18 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
     std::reverse(diff_lvl.begin(), diff_lvl.end());
 }
 
-// For illustrations, we can't initialize everything in the ctor.
-// For instance, specamt might need to be calculated as a function
-// of GLP or GSP, so it cannot always be known before the GPT
-// calculations are available; and guideline premiums cannot be
-// determined until specamt is set. Therefore, we need these
-// functions to initialize these things after specamt has been set.
-//
+/// For illustrations, we can't initialize everything in the ctor.
+/// For instance, specamt might need to be calculated as a function
+/// of GLP or GSP, so it cannot always be known before the GPT
+/// calculations are available; and guideline premiums cannot be
+/// determined until specamt is set. Therefore, we need this function
+/// to initialize these things after specamt has been set. The server
+/// doesn't use it.
 
-//============================================================================
-// TODO ?? Is there any reason why dbopt would change?
-// --not used by server
 void Irc7702::Initialize7702
     (double            a_BftAmt
     ,double            a_SpecAmt
-    ,mcenum_dbopt_7702 a_DBOpt
+    ,mcenum_dbopt_7702 a_DBOpt // TODO ?? Is there any reason why dbopt would be changed here?
     ,double            a_TargetPremium
     )
 {
@@ -718,13 +719,20 @@ void Irc7702::Initialize7702
     LMI_ASSERT(0.0 <= a_TargetPremium);
     PresentDBOpt        = a_DBOpt;
     PriorDBOpt          = PresentDBOpt;
-    Initialize7702(a_SpecAmt);
+    PresentSpecAmt      = a_SpecAmt;
+    PriorSpecAmt        = PresentSpecAmt;
     PresentBftAmt       = a_BftAmt;
     PriorBftAmt         = PresentBftAmt;
-    LeastBftAmtEver     = PresentBftAmt; // was set to PresentSpecAmt by Initialize7702(a_SpecAmt); what if DB != SA?
+// This:
+//  LeastBftAmtEver     = PresentBftAmt;
+// would appear correct: ...BftAmt assigned from ...BftAmt. However,
+// as pointed out above, 'EndowmentBenefit' would be a better name,
+// so initializing it to PresentSpecAmt as elsewhere is actually
+// correct.
+    LeastBftAmtEver     = PresentSpecAmt;
     TargetPremium       = a_TargetPremium;
     PresentGLP = CalculateGLP
-        (InforceDuration    // TODO ?? a_Duration...what if inforce?
+        (InforceYear        // TODO ?? a_Year...what if inforce?
         ,PresentBftAmt
         ,PresentSpecAmt
         ,LeastBftAmtEver
@@ -733,35 +741,12 @@ void Irc7702::Initialize7702
     PriorGLP = PresentGLP;  // TODO ?? Not if inforce case.
 
     PresentGSP = CalculateGSP
-        (0  // TODO ?? a_Duration
+        (0  // TODO ?? a_Year
         ,PresentBftAmt
         ,PresentSpecAmt
         ,LeastBftAmtEver
         );
     PriorGSP = PresentGSP;  // TODO ?? Not if inforce case.
-}
-
-//============================================================================
-// Designed for use by FindSpecAmt, which treats specamt and bftamt as equal.
-void Irc7702::Initialize7702
-    (double a_SpecAmt
-    ) const
-{
-    // TODO ?? Some variables set in the ctor are reset here. Can
-    // this be avoided?
-
-    PresentSpecAmt  = a_SpecAmt;
-
-    PriorSpecAmt    = PresentSpecAmt;
-    LeastBftAmtEver = PresentSpecAmt;
-
-    CumGLP          = 0.0;
-    GptLimit        = 0.0;
-    CumPmts         = 0.0;
-    PresentGLP      = 0.0;
-    PriorGLP        = 0.0;
-    PresentGSP      = 0.0;
-    PriorGSP        = 0.0;
 }
 
 //============================================================================
@@ -826,7 +811,7 @@ Irc7702::EIOBasis Irc7702::Get4PctBasis
 
 //============================================================================
 double Irc7702::CalculateGLP
-    (int               a_Duration
+    (int               a_Year
     ,double            a_BftAmt
     ,double            a_SpecAmt
     ,double            a_LeastBftAmtEver
@@ -836,18 +821,19 @@ double Irc7702::CalculateGLP
     LMI_ASSERT(a_SpecAmt <= a_BftAmt);
     return CalculatePremium
         (Get4PctBasis(a_DBOpt)
-        ,a_Duration
+        ,a_Year
         ,a_BftAmt
         ,a_SpecAmt
         ,a_LeastBftAmtEver
-        ,PvNpfLvlTgt[Get4PctBasis(a_DBOpt)][a_Duration]
-        ,PvNpfLvlExc[Get4PctBasis(a_DBOpt)][a_Duration]
+        ,PvNpfLvlTgt[Get4PctBasis(a_DBOpt)][a_Year]
+        ,PvNpfLvlExc[Get4PctBasis(a_DBOpt)][a_Year]
+        ,TargetPremium
         );
 }
 
 //============================================================================
 double Irc7702::CalculateGSP
-    (int    a_Duration
+    (int    a_Year
     ,double a_BftAmt
     ,double a_SpecAmt
     ,double a_LeastBftAmtEver
@@ -856,31 +842,39 @@ double Irc7702::CalculateGSP
     LMI_ASSERT(a_SpecAmt <= a_BftAmt);
     return CalculatePremium
         (Opt1Int6Pct
-        ,a_Duration
+        ,a_Year
         ,a_BftAmt
         ,a_SpecAmt
         ,a_LeastBftAmtEver
-        ,PvNpfSglTgt[Opt1Int6Pct][a_Duration]
-        ,PvNpfSglExc[Opt1Int6Pct][a_Duration]
+        ,PvNpfSglTgt[Opt1Int6Pct][a_Year]
+        ,PvNpfSglExc[Opt1Int6Pct][a_Year]
+        ,TargetPremium
         );
 }
 
-//============================================================================
+/// Calculate a guideline premium.
+///
+/// This function encompasses both GLP and GSP. It is designed to have
+/// no side effects, and to depend only on its arguments and on data
+/// members that are set in the ctor and not subsequently changed--so
+/// it's safe for FindSpecAmt::operator()() to call it iteratively.
+
 double Irc7702::CalculatePremium
     (EIOBasis const& a_EIOBasis
-    ,int             a_Duration
+    ,int             a_Year
     ,double          a_BftAmt
     ,double          a_SpecAmt
     ,double          a_LeastBftAmtEver
     ,double          a_NetPmtFactorTgt
     ,double          a_NetPmtFactorExc
+    ,double          a_TargetPremium
     ) const
 {
     LMI_ASSERT(a_SpecAmt <= a_BftAmt);
     LMI_ASSERT(0.0 != a_NetPmtFactorTgt);
     LMI_ASSERT(0.0 != a_NetPmtFactorExc);
 
-    // TODO ?? This implementation is correct only if TargetPremium
+    // TODO ?? This implementation is correct only if target premium
     // is fixed forever at issue; otherwise, distinct target premiums
     // must be passed for each of the quantities A, B, and C. Should
     // those targets be calculated for status x+[t], or x+t? (The
@@ -889,26 +883,26 @@ double Irc7702::CalculatePremium
     // consistent with the way durational loads are treated here.)
     double z =
         (   DEndt[a_EIOBasis] * a_LeastBftAmtEver
-        +   PvChgPol[a_EIOBasis][a_Duration]
-        +   std::min(SpecAmtLoadLimit, a_SpecAmt) * PvChgSpecAmt[a_EIOBasis][a_Duration]
-        +   std::min(ADDLimit, a_SpecAmt) * PvChgADD[a_EIOBasis][a_Duration]
-        +   a_BftAmt * PvChgMort[a_EIOBasis][a_Duration]
+        +   PvChgPol[a_EIOBasis][a_Year]
+        +   std::min(SpecAmtLoadLimit, a_SpecAmt) * PvChgSpecAmt[a_EIOBasis][a_Year]
+        +   std::min(ADDLimit, a_SpecAmt) * PvChgADD[a_EIOBasis][a_Year]
+        +   a_BftAmt * PvChgMort[a_EIOBasis][a_Year]
         )
         /
         a_NetPmtFactorTgt
         ;
-    if(z <= TargetPremium)
+    if(z <= a_TargetPremium)
         {
         return z;
         }
 
     return
         (   DEndt[a_EIOBasis] * a_LeastBftAmtEver
-        +   PvChgPol[a_EIOBasis][a_Duration]
-        +   std::min(SpecAmtLoadLimit, a_SpecAmt) * PvChgSpecAmt[a_EIOBasis][a_Duration]
-        +   std::min(ADDLimit, a_SpecAmt) * PvChgADD[a_EIOBasis][a_Duration]
-        +   a_BftAmt * PvChgMort[a_EIOBasis][a_Duration]
-        +       TargetPremium
+        +   PvChgPol[a_EIOBasis][a_Year]
+        +   std::min(SpecAmtLoadLimit, a_SpecAmt) * PvChgSpecAmt[a_EIOBasis][a_Year]
+        +   std::min(ADDLimit, a_SpecAmt) * PvChgADD[a_EIOBasis][a_Year]
+        +   a_BftAmt * PvChgMort[a_EIOBasis][a_Year]
+        +       a_TargetPremium
             *   (a_NetPmtFactorExc - a_NetPmtFactorTgt)
         )
         /

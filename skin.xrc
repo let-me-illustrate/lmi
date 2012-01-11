@@ -5,7 +5,7 @@
 <!--
     Let me illustrate...: wxWindows xml input-notebook resources.
 
-    Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
+    Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2 as
@@ -1582,13 +1582,13 @@ demonstrate a defect in the wx library. See
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
-                                        <label>Cumulative GLP</label>
+                                        <label>GLP</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <object class="wxTextCtrl" name="InforceCumulativeGlp">
-                                        <help>Cumulative guideline level premium since issue (not yet implemented)</help>
+                                    <object class="wxTextCtrl" name="InforceGlp">
+                                        <help>Inforce guideline level premium (not yet implemented)</help>
                                         <size>80,-1</size>
                                         <value>0</value>
                                     </object>
@@ -1597,13 +1597,13 @@ demonstrate a defect in the wx library. See
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
-                                        <label>GLP</label>
+                                        <label>Cumulative GLP</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <object class="wxTextCtrl" name="InforceGlp">
-                                        <help>Inforce guideline level premium (not yet implemented)</help>
+                                    <object class="wxTextCtrl" name="InforceCumulativeGlp">
+                                        <help>Cumulative guideline level premium since issue (not yet implemented)</help>
                                         <size>80,-1</size>
                                         <value>0</value>
                                     </object>

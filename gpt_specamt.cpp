@@ -1,6 +1,6 @@
 // Determine specamt from GLP or GSP.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -103,8 +103,6 @@ class FindSpecAmt
     double operator()(double a_Trial)
         {
         SpecAmt = a_Trial;
-        Irc7702_.Initialize7702(a_Trial);
-        const_cast<double&>(Irc7702_.TargetPremium) = Values_.GetAnnualTgtPrem(Duration, SpecAmt);
         return
                 Irc7702_.CalculatePremium
                     (EIOBasis_
@@ -114,6 +112,7 @@ class FindSpecAmt
                     ,a_Trial
                     ,NetPmtFactorTgt
                     ,NetPmtFactorExc
+                    ,Values_.GetAnnualTgtPrem(Duration, SpecAmt)
                     )
             -   Premium
             ;

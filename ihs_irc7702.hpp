@@ -1,6 +1,6 @@
 // Internal Revenue Code section 7702 (definition of life insurance).
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -88,18 +88,20 @@ class Irc7702
         ,round_to<double>    const& a_round_min_specamt
         ,round_to<double>    const& a_round_max_specamt
 // TODO ?? Should we have default arguments at all?
-        ,int                        a_InforceDuration = 0
-        ,double                     a_InforceCumGLP   = 0.0
-        ,double                     a_InforceGSP      = 0.0
-        ,double                     a_PriorBftAmt     = 0.0
-        ,double                     a_PriorSpecAmt    = 0.0
-        ,double                     a_LeastBftAmtEver = 0.0
-        ,mcenum_dbopt_7702          a_PriorDBOpt      = mce_option1_for_7702
+        ,int                        a_InforceYear         = 0
+        ,int                        a_InforceMonth        = 0
+        ,double                     a_InforceGLP          = 0.0
+        ,double                     a_InforceCumGLP       = 0.0
+        ,double                     a_InforceGSP          = 0.0
+        ,double                     a_InforceCumPremsPaid = 0.0
+        ,double                     a_PriorBftAmt         = 0.0
+        ,double                     a_PriorSpecAmt        = 0.0
+        ,double                     a_LeastBftAmtEver     = 0.0
+        ,mcenum_dbopt_7702          a_PriorDBOpt          = mce_option1_for_7702
         // TODO ?? Perhaps other arguments are needed for inforce.
         );
     ~Irc7702();
 
-    // TODO ?? Not sure why we need this non-const variant.
     void Initialize7702
         (double                     a_BftAmt
         ,double                     a_SpecAmt
@@ -140,9 +142,6 @@ class Irc7702
         ,double                     a_SpecAmt
         ,double                     a_LeastBftAmtEver
         ) const;
-    void Initialize7702
-        (double                     a_SpecAmt
-        ) const;
     double GetLeastBftAmtEver() const;
     double RoundedGLP() const;
     double RoundedGSP() const;
@@ -169,6 +168,7 @@ class Irc7702
         ,double                     a_LeastBftAmtEver
         ,double                     a_NetPmtFactorTgt
         ,double                     a_NetPmtFactorExc
+        ,double                     a_TargetPremium
         ) const;
     static EIOBasis Get4PctBasis
         (mcenum_dbopt_7702          a_DBOpt
@@ -186,9 +186,9 @@ class Irc7702
 
     double                     PresentBftAmt;
     double                     PriorBftAmt;
-    mutable double             PresentSpecAmt;
-    mutable double             PriorSpecAmt;
-    mutable double             LeastBftAmtEver;// Lowest bft amt since issue date // TODO ?? NOT!
+    double                     PresentSpecAmt;
+    double                     PriorSpecAmt;
+    double                     LeastBftAmtEver;// Lowest bft amt since issue date // TODO ?? NOT!
     mcenum_dbopt_7702          PresentDBOpt;   // Present death benefit option
     mcenum_dbopt_7702          PriorDBOpt;     // Prior death benefit option
 
@@ -208,20 +208,23 @@ class Irc7702
     round_to<double>           round_min_specamt;
     round_to<double>           round_max_specamt;
 
-    int const                  InforceDuration;
-    // TODO ?? Is inforce cum GLP needed?
+    int const                  InforceYear;
+    int const                  InforceMonth;
+    // These data are needed for enforcing future guideline limits.
+    double const               InforceGLP;
     double const               InforceCumGLP;
     double const               InforceGSP;
+    double const               InforceCumPremsPaid;
 
     int                        Length;
 
-    mutable double             PresentGLP;
-    mutable double             PriorGLP;
-    mutable double             PresentGSP;
-    mutable double             PriorGSP;
-    mutable double             CumGLP;     // Cumulative GLP
-    mutable double             GptLimit;   // Guideline limit: max(cum GLP, GSP)
-    mutable double             CumPmts;    // Cumulative payments
+    double                     PresentGLP;
+    double                     PriorGLP;
+    double                     PresentGSP;
+    double                     PriorGSP;
+    double                     CumGLP;     // Cumulative GLP
+    double                     GptLimit;   // Guideline limit: max(cum GLP, GSP)
+    double                     CumPmts;    // Cumulative payments
 
     // Commutation functions
 // TODO ?? Apparently the original reason for using smart pointers

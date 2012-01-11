@@ -1,6 +1,6 @@
 // MVC Model for life-insurance illustrations.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -348,8 +348,8 @@ class LMI_SO Input
     datum_string             PolicyNumber                    ;
     tnr_date                 InforceAsOfDate                 ;
     tnr_nonnegative_double   InforceTaxBasis                 ;
-    tnr_nonnegative_double   InforceCumulativeGlp            ;
     tnr_nonnegative_double   InforceGlp                      ;
+    tnr_nonnegative_double   InforceCumulativeGlp            ;
     tnr_nonnegative_double   InforceGsp                      ;
     tnr_nonnegative_double   InforceSevenPayPremium          ;
     mce_yes_or_no            InforceIsMec                    ;

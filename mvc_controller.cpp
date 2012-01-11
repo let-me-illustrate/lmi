@@ -1,6 +1,6 @@
 // MVC Controller.
 //
-// Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
+// Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -508,7 +508,7 @@ bool MvcController::ModelAndViewValuesEquivalent(std::string const& name) const
 
 std::string MvcController::NameOfControlToDeferEvaluating() const
 {
-    wxWindow* w = dynamic_cast<wxTextCtrl*>(last_focused_window_);
+    wxWindow* w = dynamic_cast<wxTextCtrl      *>(last_focused_window_);
     if(!w)    w = dynamic_cast<wxSpinCtrl      *>(last_focused_window_);
     if(!w)    w = dynamic_cast<wxDatePickerCtrl*>(last_focused_window_);
 
