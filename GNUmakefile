@@ -1,6 +1,6 @@
 # Top-level lmi makefile.
 #
-# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
+# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -362,8 +362,8 @@ check_concinnity: source_clean custom_tools
 # either in the last days of the old year or the first days of the
 # new, so they can't be derived dynamically from the current date.
 
-old_year := 2010
-new_year := 2011
+old_year := 2011
+new_year := 2012
 
 backup_directory := saved_$(old_year)
 
@@ -384,14 +384,15 @@ happy_new_year: source_clean
 	      $$z; \
 	  done;
 	$(RM) --force BOY
-	$(ECHO) "Check these potential issues:"
+	@$(ECHO) "Check these potential issues:"
 	@$(GREP) '$(old_year)[, ]*$(old_year)' * || true
 	@$(GREP) '$(new_year)[, ]*$(old_year)' * || true
 	@$(GREP) '$(new_year)[, ]*$(new_year)' * || true
 	@$(GREP) '$(old_year)' *.?pp \
 	  | $(SED) \
 	    -e '/$(old_year)[, ]*$(new_year)/d' \
-	    -e '/[[:alnum:]_.]*: *\/\//d' \
+	    -e'/[$$]Id: .* $(old_year)-.*[$$]/d' \
+	    -e'/http:\/\/lists.nongnu.org\/archive\/html\/lmi\/$(old_year)/d' \
 	  || true
 	@$(GREP) $(unutterable) * \
 	  | $(SED) \

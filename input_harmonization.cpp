@@ -1,6 +1,6 @@
 // Life-insurance illustration input--control harmonization.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -289,8 +289,8 @@ void Input::DoHarmonize()
         ,std::max(InforceAsOfDate.value(), InforceAsOfDate.minimum())
         );
 
-    InforceCumulativeGlp.enable(mce_gpt == DefinitionOfLifeInsurance);
     InforceGlp          .enable(mce_gpt == DefinitionOfLifeInsurance);
+    InforceCumulativeGlp.enable(mce_gpt == DefinitionOfLifeInsurance);
     InforceGsp          .enable(mce_gpt == DefinitionOfLifeInsurance);
 
     bool non_mec = mce_no == InforceIsMec;

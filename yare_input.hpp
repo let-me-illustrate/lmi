@@ -1,6 +1,6 @@
 // Illustration input ready for use in calculations.
 //
-// Copyright (C) 2008, 2009, 2010, 2011 Gregory W. Chicares.
+// Copyright (C) 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -178,10 +178,11 @@ class yare_input
 //    std::string                       PolicyNumber                    ;
 //    calendar_date                     InforceAsOfDate                 ;
     double                            InforceTaxBasis                 ;
-//    double                            InforceCumulativeGlp            ;
-//    double                            InforceGlp                      ;
-//    double                            InforceGsp                      ;
-//    double                            InforceSevenPayPremium          ;
+    double                            InforceGlp                      ;
+    double                            InforceCumulativeGlp            ;
+    double                            InforceGsp                      ;
+// INPUT !! Also need inforce 7702 premiums paid and inforce 7702A amounts paid, and their YTD portions.
+    double                            InforceSevenPayPremium          ;
     bool                              InforceIsMec                    ;
     calendar_date                     LastMaterialChangeDate          ;
     double                            InforceDcv                      ;

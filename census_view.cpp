@@ -1,6 +1,6 @@
 // Census manager.
 //
-// Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
+// Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -53,8 +53,9 @@
 #include <wx/menu.h>
 #include <wx/msgdlg.h>
 #include <wx/spinctrl.h>
-#include <wx/xrc/xmlres.h>
+#include <wx/valnum.h>
 #include <wx/wupdlock.h>
+#include <wx/xrc/xmlres.h>
 
 #include <algorithm>
 #include <cctype>
@@ -246,42 +247,50 @@ std::string IntSpinRenderer::DoGetValueFromEditor(wxWindow* editor)
     return value_cast<std::string>(spin->GetValue());
 }
 
-// class DoubleSpinRenderer
+// class DoubleRangeRenderer
 
-class DoubleSpinRenderer
+class DoubleRangeRenderer
     :public RangeTypeRenderer
 {
   public:
-    DoubleSpinRenderer() : RangeTypeRenderer() {}
+    DoubleRangeRenderer() : RangeTypeRenderer() {}
 
   protected:
     virtual wxWindow* DoCreateEditor(wxWindow* parent, wxRect const& rect, tn_range_variant_data const& data);
     virtual std::string DoGetValueFromEditor(wxWindow* editor);
 };
 
-wxWindow* DoubleSpinRenderer::DoCreateEditor
+wxWindow* DoubleRangeRenderer::DoCreateEditor
     (wxWindow* parent
      ,wxRect const& rect
      ,tn_range_variant_data const& data)
 {
-    return new(wx) wxSpinCtrlDouble
+    wxFloatingPointValidator<double> val;
+    val.SetRange(data.min, data.max);
+
+    wxTextCtrl* ctrl = new(wx) wxTextCtrl
         (parent
         ,wxID_ANY
         ,data.value
         ,rect.GetTopLeft()
         ,rect.GetSize()
-        ,wxSP_ARROW_KEYS | wxTE_PROCESS_ENTER
-        ,data.min
-        ,data.max
-        ,value_cast<double>(data.value));
+        ,wxTE_PROCESS_ENTER
+        ,val);
+
+    // select the text in the control an place the cursor at the end
+    // (same as wxDataViewTextRenderer)
+    ctrl->SetInsertionPointEnd();
+    ctrl->SelectAll();
+
+    return ctrl;
 }
 
-std::string DoubleSpinRenderer::DoGetValueFromEditor(wxWindow* editor)
+std::string DoubleRangeRenderer::DoGetValueFromEditor(wxWindow* editor)
 {
-    wxSpinCtrlDouble* spin = dynamic_cast<wxSpinCtrlDouble*>(editor);
-    LMI_ASSERT(spin);
+    wxTextCtrl* ctrl = dynamic_cast<wxTextCtrl*>(editor);
+    LMI_ASSERT(ctrl);
 
-    return value_cast<std::string>(spin->GetValue());
+    return ctrl->GetValue().ToStdString();
 }
 
 // class DateRenderer
@@ -600,7 +609,7 @@ class renderer_double_range_convertor : public renderer_range_convertor
   public:
     virtual wxDataViewRenderer* create_renderer(any_member<Input> const&) const
     {
-        return new(wx) DoubleSpinRenderer();
+        return new(wx) DoubleRangeRenderer();
     }
 };
 

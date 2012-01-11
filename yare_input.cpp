@@ -1,6 +1,6 @@
 // Illustration input ready for use in calculations.
 //
-// Copyright (C) 2008, 2009, 2010, 2011 Gregory W. Chicares.
+// Copyright (C) 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -123,6 +123,10 @@ yare_input::yare_input(Input const& z)
     SpouseRiderAmount               = z.SpouseRiderAmount              .value();
     SpouseIssueAge                  = z.SpouseIssueAge                 .value();
     InforceTaxBasis                 = z.InforceTaxBasis                .value();
+    InforceGlp                      = z.InforceGlp                     .value();
+    InforceCumulativeGlp            = z.InforceCumulativeGlp           .value();
+    InforceGsp                      = z.InforceGsp                     .value();
+    InforceSevenPayPremium          = z.InforceSevenPayPremium         .value();
     InforceIsMec                    = z.InforceIsMec                   .value();
     LastMaterialChangeDate          = z.LastMaterialChangeDate         .value();
     InforceDcv                      = z.InforceDcv                     .value();
@@ -138,34 +142,33 @@ yare_input::yare_input(Input const& z)
     HoneymoonEndorsement            = z.HoneymoonEndorsement           .value();
     PostHoneymoonSpread             = z.PostHoneymoonSpread            .value();
     InforceHoneymoonValue           = z.InforceHoneymoonValue          .value();
-    ExtraMonthlyCustodialFee        = convert_vector_type<double              >(z.ExtraMonthlyCustodialFeeRealized_       );
-    ExtraCompensationOnAssets       = convert_vector_type<double              >(z.ExtraCompensationOnAssetsRealized_      );
-    ExtraCompensationOnPremium      = convert_vector_type<double              >(z.ExtraCompensationOnPremiumRealized_     );
-    PartialMortalityMultiplier      = convert_vector_type<double              >(z.PartialMortalityMultiplierRealized_     );
-    CurrentCoiMultiplier            = convert_vector_type<double              >(z.CurrentCoiMultiplierRealized_           );
-    CorporationTaxBracket           = convert_vector_type<double              >(z.CorporationTaxBracketRealized_          );
-    TaxBracket                      = convert_vector_type<double              >(z.TaxBracketRealized_                     );
-    ProjectedSalary                 = convert_vector_type<double              >(z.ProjectedSalaryRealized_                );
-    SpecifiedAmount                 = convert_vector_type<double              >(z.SpecifiedAmountRealized_                );
-    DeathBenefitOption              = convert_vector_type<mcenum_dbopt        >(z.DeathBenefitOptionRealized_             );
-    Payment                         = convert_vector_type<double              >(z.PaymentRealized_                        );
-    PaymentMode                     = convert_vector_type<mcenum_mode         >(z.PaymentModeRealized_                    );
-    CorporationPayment              = convert_vector_type<double              >(z.CorporationPaymentRealized_             );
-    CorporationPaymentMode          = convert_vector_type<mcenum_mode         >(z.CorporationPaymentModeRealized_         );
-    GeneralAccountRate              = convert_vector_type<double              >(z.GeneralAccountRateRealized_             );
-    SeparateAccountRate             = convert_vector_type<double              >(z.SeparateAccountRateRealized_            );
-    NewLoan                         = convert_vector_type<double              >(z.NewLoanRealized_                        );
-    Withdrawal                      = convert_vector_type<double              >(z.WithdrawalRealized_                     );
-    FlatExtra                       = convert_vector_type<double              >(z.FlatExtraRealized_                      );
-    HoneymoonValueSpread            = convert_vector_type<double              >(z.HoneymoonValueSpreadRealized_           );
-    PremiumHistory                  = convert_vector_type<double              >(z.PremiumHistoryRealized_                 );
-    SpecamtHistory                  = convert_vector_type<double              >(z.SpecamtHistoryRealized_                 );
-// INPUT !! Not yet implemented:
-    FundAllocations                 = convert_vector_type<double              >(z.FundAllocationsRealized_                );
-    CashValueEnhancementRate        = convert_vector_type<double              >(z.CashValueEnhancementRateRealized_       );
-    SpecifiedAmountStrategy         = convert_vector_type<mcenum_sa_strategy  >(z.SpecifiedAmountStrategyRealized_        );
-    PaymentStrategy                 = convert_vector_type<mcenum_pmt_strategy >(z.PaymentStrategyRealized_      );
-    CorporationPaymentStrategy      = convert_vector_type<mcenum_pmt_strategy >(z.CorporationPaymentStrategyRealized_     );
+    ExtraMonthlyCustodialFee        = convert_vector_type<double              >(z.ExtraMonthlyCustodialFeeRealized_   );
+    ExtraCompensationOnAssets       = convert_vector_type<double              >(z.ExtraCompensationOnAssetsRealized_  );
+    ExtraCompensationOnPremium      = convert_vector_type<double              >(z.ExtraCompensationOnPremiumRealized_ );
+    PartialMortalityMultiplier      = convert_vector_type<double              >(z.PartialMortalityMultiplierRealized_ );
+    CurrentCoiMultiplier            = convert_vector_type<double              >(z.CurrentCoiMultiplierRealized_       );
+    CorporationTaxBracket           = convert_vector_type<double              >(z.CorporationTaxBracketRealized_      );
+    TaxBracket                      = convert_vector_type<double              >(z.TaxBracketRealized_                 );
+    ProjectedSalary                 = convert_vector_type<double              >(z.ProjectedSalaryRealized_            );
+    SpecifiedAmount                 = convert_vector_type<double              >(z.SpecifiedAmountRealized_            );
+    DeathBenefitOption              = convert_vector_type<mcenum_dbopt        >(z.DeathBenefitOptionRealized_         );
+    Payment                         = convert_vector_type<double              >(z.PaymentRealized_                    );
+    PaymentMode                     = convert_vector_type<mcenum_mode         >(z.PaymentModeRealized_                );
+    CorporationPayment              = convert_vector_type<double              >(z.CorporationPaymentRealized_         );
+    CorporationPaymentMode          = convert_vector_type<mcenum_mode         >(z.CorporationPaymentModeRealized_     );
+    GeneralAccountRate              = convert_vector_type<double              >(z.GeneralAccountRateRealized_         );
+    SeparateAccountRate             = convert_vector_type<double              >(z.SeparateAccountRateRealized_        );
+    NewLoan                         = convert_vector_type<double              >(z.NewLoanRealized_                    );
+    Withdrawal                      = convert_vector_type<double              >(z.WithdrawalRealized_                 );
+    FlatExtra                       = convert_vector_type<double              >(z.FlatExtraRealized_                  );
+    HoneymoonValueSpread            = convert_vector_type<double              >(z.HoneymoonValueSpreadRealized_       );
+    PremiumHistory                  = convert_vector_type<double              >(z.PremiumHistoryRealized_             );
+    SpecamtHistory                  = convert_vector_type<double              >(z.SpecamtHistoryRealized_             );
+    FundAllocations                 = convert_vector_type<double              >(z.FundAllocationsRealized_            ); // INPUT !! Not yet implemented.
+    CashValueEnhancementRate        = convert_vector_type<double              >(z.CashValueEnhancementRateRealized_   );
+    SpecifiedAmountStrategy         = convert_vector_type<mcenum_sa_strategy  >(z.SpecifiedAmountStrategyRealized_    );
+    PaymentStrategy                 = convert_vector_type<mcenum_pmt_strategy >(z.PaymentStrategyRealized_            );
+    CorporationPaymentStrategy      = convert_vector_type<mcenum_pmt_strategy >(z.CorporationPaymentStrategyRealized_ );
 }
 
 yare_input::~yare_input()

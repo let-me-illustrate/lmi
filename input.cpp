@@ -1,6 +1,6 @@
 // MVC Model for life-insurance illustrations.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -154,8 +154,8 @@ Input::Input()
 //    ,PolicyNumber                     ("")
 //    ,InforceAsOfDate                  ("")
 //    ,InforceTaxBasis                  ("")
-//    ,InforceCumulativeGlp             ("")
 //    ,InforceGlp                       ("")
+//    ,InforceCumulativeGlp             ("")
 //    ,InforceGsp                       ("")
 //    ,InforceSevenPayPremium           ("")
 //    ,InforceIsMec                     ("")
@@ -459,8 +459,8 @@ void Input::AscribeMembers()
     ascribe("PolicyNumber"                          , &Input::PolicyNumber                          );
     ascribe("InforceAsOfDate"                       , &Input::InforceAsOfDate                       );
     ascribe("InforceTaxBasis"                       , &Input::InforceTaxBasis                       );
-    ascribe("InforceCumulativeGlp"                  , &Input::InforceCumulativeGlp                  );
     ascribe("InforceGlp"                            , &Input::InforceGlp                            );
+    ascribe("InforceCumulativeGlp"                  , &Input::InforceCumulativeGlp                  );
     ascribe("InforceGsp"                            , &Input::InforceGsp                            );
     ascribe("InforceSevenPayPremium"                , &Input::InforceSevenPayPremium                );
     ascribe("InforceIsMec"                          , &Input::InforceIsMec                          );

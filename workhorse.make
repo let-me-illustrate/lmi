@@ -1,6 +1,6 @@
 # Main lmi makefile, invoked by 'GNUmakefile'.
 #
-# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011 Gregory W. Chicares.
+# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -117,6 +117,7 @@ ifeq (,$(USE_SO_ATTRIBUTES))
     gpt_server$(EXEEXT) \
     gpt_so_test$(EXEEXT) \
     ihs_crc_comp$(EXEEXT) \
+    libgpt$(SHREXT) \
 
   ifneq (mpatrol,$(findstring mpatrol,$(build_type)))
     default_targets += \
@@ -1234,6 +1235,23 @@ cgi_tests: $(test_data) configurable_settings.xml antediluvian_cgi$(EXEEXT)
 	      - $(src_dir)/cgi.touchstone \
 	  | $(WC)   -l \
 	  | $(SED)  -e 's/^/  /' -e 's/$$/ errors/'
+
+################################################################################
+
+# Test GPT server.
+
+# Eventually the gpt_server$(EXEEXT) part of this recipe will be
+# replaced by a set of '.gpt' files for use with 'make system_test'.
+
+.PHONY: gpt_server_tests
+gpt_server_tests: gpt_server$(EXEEXT) gpt_so_test$(EXEEXT)
+	@cd $(data_dir) && $(CURDIR)/gpt_so_test$(EXEEXT)
+	@cd $(data_dir) && $(CURDIR)/gpt_server$(EXEEXT) \
+	  <$(test_dir)/gpt_server.test.in \
+	  >$(CURDIR)/gpt_server.test.out
+	@$(DIFF) gpt_server.test.out $(test_dir)/gpt_server.test.touchstone \
+	  && $(ECHO) GPT server test succeeded. \
+	  || $(ECHO) GPT server test FAILED.
 
 ################################################################################
 
