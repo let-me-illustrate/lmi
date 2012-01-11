@@ -1582,13 +1582,13 @@ demonstrate a defect in the wx library. See
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
-                                        <label>Cumulative GLP</label>
+                                        <label>GLP</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <object class="wxTextCtrl" name="InforceCumulativeGlp">
-                                        <help>Cumulative guideline level premium since issue (not yet implemented)</help>
+                                    <object class="wxTextCtrl" name="InforceGlp">
+                                        <help>Inforce guideline level premium (not yet implemented)</help>
                                         <size>80,-1</size>
                                         <value>0</value>
                                     </object>
@@ -1597,13 +1597,13 @@ demonstrate a defect in the wx library. See
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
-                                        <label>GLP</label>
+                                        <label>Cumulative GLP</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <object class="wxTextCtrl" name="InforceGlp">
-                                        <help>Inforce guideline level premium (not yet implemented)</help>
+                                    <object class="wxTextCtrl" name="InforceCumulativeGlp">
+                                        <help>Cumulative guideline level premium since issue (not yet implemented)</help>
                                         <size>80,-1</size>
                                         <value>0</value>
                                     </object>

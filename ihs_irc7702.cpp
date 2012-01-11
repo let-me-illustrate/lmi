@@ -183,14 +183,14 @@ Irc7702::Irc7702
         PriorSpecAmt    = a_PresentSpecAmt;
         // TODO ?? Assert that this is <= least-bft arg?
         LeastBftAmtEver = a_PresentSpecAmt;
-        CumGLP          = 0.0;
-        GptLimit        = 0.0;
-        CumPmts         = 0.0;
+        PriorDBOpt      = PresentDBOpt;
         PresentGLP      = 0.0;
         PriorGLP        = 0.0;
+        CumGLP          = 0.0;
         PresentGSP      = 0.0;
         PriorGSP        = 0.0;
-        PriorDBOpt      = PresentDBOpt;
+        GptLimit        = 0.0;
+        CumPmts         = 0.0;
         }
     else
         {
@@ -199,15 +199,15 @@ Irc7702::Irc7702
         LeastBftAmtEver = a_LeastBftAmtEver;
         LMI_ASSERT(LeastBftAmtEver <= PriorBftAmt);
         LMI_ASSERT(LeastBftAmtEver <= PresentBftAmt);
+//      PriorDBOpt      = PresentDBOpt;     // TODO ??
 // TODO ?? Think more about inforce.
-        CumGLP          = InforceCumGLP;    // TODO ?? Don't need as member?
-        GptLimit        = 0.0;  // TODO ??
-        CumPmts         = 0.0;  // TODO ??
         PresentGLP      = 0.0;  // TODO ??
         PriorGLP        = 0.0;
+        CumGLP          = InforceCumGLP;    // TODO ?? Don't need as member?
         PresentGSP      = 0.0;
         PriorGSP        = a_InforceGSP;     // TODO ?? Don't need as member?
-//      PriorDBOpt      = PresentDBOpt;     // TODO ??
+        GptLimit        = 0.0;  // TODO ??
+        CumPmts         = 0.0;  // TODO ??
 // to handle inforce, we need to know:
 // the quantity A in A+B-C (i.e. both GSP and GLP)
 //  CumGLP
