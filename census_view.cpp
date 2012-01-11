@@ -992,6 +992,8 @@ wxWindow* CensusView::CreateChildWindow()
         ,wxDV_ROW_LINES | wxDV_MULTIPLE
         );
 
+    list_window_->GetMainWindow()->Bind(wxEVT_CHAR, &CensusView::UponCharPressed, this);
+
     list_window_->AssociateModel(list_model_.get());
 
     // Show headers.
@@ -1795,3 +1797,19 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
     LMI_ASSERT(!class_parms().empty());
 }
 
+void CensusView::UponCharPressed(wxKeyEvent& e)
+{
+    // Use Alt+Enter to trigger inline editing in addition to
+    // the standard F2 key.
+    if(WXK_RETURN == e.GetKeyCode() && wxMOD_ALT == e.GetModifiers())
+        {
+        wxDataViewColumn* col = list_window_->GetCurrentColumn();
+        if(col)
+            {
+            list_window_->EditItem(list_window_->GetCurrentItem(), col);
+            return;
+            }
+        }
+
+    e.Skip();
+}

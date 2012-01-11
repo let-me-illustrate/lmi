@@ -87,6 +87,7 @@ class CensusView
     void UponUpdateAlwaysEnabled    (wxUpdateUIEvent&);
     void UponUpdateSingleSelection  (wxUpdateUIEvent&);
     void UponUpdateNonemptySelection(wxUpdateUIEvent&);
+    void UponCharPressed            (wxKeyEvent&);
 
     bool DoAllCells(mcenum_emission);
 
