@@ -29411,6 +29411,13 @@ year), yet does not affect the (also wrong) value of initial GSP.
 
   ihs_irc7702.cpp
 Fix defect introduced 20050114T1947Z, from an original file predating
-the lmi epoch, as noted as such ab initio: absent an adjustment event,
+the lmi epoch, and noted as such ab initio: absent an adjustment event
 it is incorrect to calculate guidelines as of inforce duration.
+
+20120111T1746Z <gchicares@sbcglobal.net> [592]
+
+  ihs_irc7702.cpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch: a case in force after the issue date isn't new business
+even if it's still in the first year.
 

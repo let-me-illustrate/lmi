@@ -181,7 +181,7 @@ Irc7702::Irc7702
     LMI_ASSERT(a_PriorSpecAmt <= a_PriorBftAmt);
     LMI_ASSERT(0.0 <= a_TargetPremium);
     // TODO ?? Instead put these in initializer-list and write assertions?
-    if(0 == InforceYear)
+    if(0 == InforceYear && 0 == InforceMonth)
         {
         PriorBftAmt     = a_PresentBftAmt;
         PriorSpecAmt    = a_PresentSpecAmt;
