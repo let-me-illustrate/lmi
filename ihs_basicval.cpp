@@ -644,6 +644,17 @@ void BasicValues::Init7702()
             ,round_max_premium()
             ,round_min_specamt()
             ,round_max_specamt()
+            ,yare_input_.InforceYear
+            ,yare_input_.InforceMonth
+            ,yare_input_.InforceGlp
+            ,yare_input_.InforceCumulativeGlp
+            ,yare_input_.InforceGsp
+            ,yare_input_.InforceCumulativePayments // Wrong--this is not 7702 "premiums paid".
+// If these are never passed, then should they be arguments at all?
+//            ,a_PriorBftAmt
+//            ,a_PriorSpecAmt
+//            ,a_LeastBftAmtEver
+//            ,a_PriorDBOpt
             )
         );
 }

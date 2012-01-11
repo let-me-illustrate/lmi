@@ -29394,3 +29394,16 @@ Distinguish inforce year and inforce month for future use.
   ihs_irc7702.hpp
 Add two data documented as missing.
 
+20120111T1034Z <gchicares@sbcglobal.net> [593]
+
+  yare_input.cpp
+  yare_input.hpp
+Prepare inforce tax fields for use.
+
+20120111T1507Z <gchicares@sbcglobal.net> [593]
+
+  ihs_basicval.cpp
+Pass inforce inputs to GPT class. This change causes initial GLP to
+change from one wrong value to another (but not in the first inforce
+year), yet does not affect the (also wrong) value of initial GSP.
+
