@@ -178,10 +178,11 @@ class yare_input
 //    std::string                       PolicyNumber                    ;
 //    calendar_date                     InforceAsOfDate                 ;
     double                            InforceTaxBasis                 ;
-//    double                            InforceGlp                      ;
-//    double                            InforceCumulativeGlp            ;
-//    double                            InforceGsp                      ;
-//    double                            InforceSevenPayPremium          ;
+    double                            InforceGlp                      ;
+    double                            InforceCumulativeGlp            ;
+    double                            InforceGsp                      ;
+// INPUT !! Also need inforce 7702 premiums paid and inforce 7702A amounts paid, and their YTD portions.
+    double                            InforceSevenPayPremium          ;
     bool                              InforceIsMec                    ;
     calendar_date                     LastMaterialChangeDate          ;
     double                            InforceDcv                      ;
