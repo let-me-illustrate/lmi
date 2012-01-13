@@ -138,8 +138,8 @@ namespace
         ,e7702AUnnecPm
         ,e7702ADbAdj
         ,e7702A7pp
-        ,e7702ACumPmts
         ,e7702ACum7pp
+        ,e7702AAmountsPaid
         ,e7702AIsMec
         ,eGSP
         ,eGLP
@@ -232,8 +232,8 @@ namespace
         v[e7702AUnnecPm]        = "7702A unnec prem";
         v[e7702ADbAdj]          = "7702A DB adjustment";
         v[e7702A7pp]            = "7702A 7pp";
-        v[e7702ACumPmts]        = "7702A cum pmts";
         v[e7702ACum7pp]         = "7702A cum 7pp";
+        v[e7702AAmountsPaid]    = "7702A amounts paid";
         v[e7702AIsMec]          = "Is MEC";
         v[eGSP]                 = "GSP";
         v[eGLP]                 = "GLP";
@@ -481,8 +481,8 @@ void AccountValue::DebugPrint()
         SetMonthlyDetail(e7702AUnnecPm       ,UnnecessaryPremium           );
         SetMonthlyDetail(e7702ADbAdj         ,Irc7702A_->DebugGetDbAdj   ());
         SetMonthlyDetail(e7702A7pp           ,Irc7702A_->DebugGet7pp     ());
-        SetMonthlyDetail(e7702ACumPmts       ,Irc7702A_->DebugGetCumPmts ());
         SetMonthlyDetail(e7702ACum7pp        ,Irc7702A_->DebugGetCum7pp  ());
+        SetMonthlyDetail(e7702AAmountsPaid   ,Irc7702A_->DebugGetCumPmts ());
         }
     else
         {
@@ -496,8 +496,8 @@ void AccountValue::DebugPrint()
         SetMonthlyDetail(e7702AUnnecPm       ,not_applicable()             );
         SetMonthlyDetail(e7702ADbAdj         ,not_applicable()             );
         SetMonthlyDetail(e7702A7pp           ,not_applicable()             );
-        SetMonthlyDetail(e7702ACumPmts       ,not_applicable()             );
         SetMonthlyDetail(e7702ACum7pp        ,not_applicable()             );
+        SetMonthlyDetail(e7702AAmountsPaid   ,not_applicable()             );
         }
     SetMonthlyDetail(e7702AIsMec         ,InvariantValues().IsMec          );
 
