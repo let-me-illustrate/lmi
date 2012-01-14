@@ -52,6 +52,7 @@
 #include <wx/icon.h>
 #include <wx/menu.h>
 #include <wx/msgdlg.h>
+#include <wx/settings.h>
 #include <wx/spinctrl.h>
 #include <wx/valnum.h>
 #include <wx/wupdlock.h>
@@ -708,6 +709,8 @@ class CensusViewDataViewModel : public wxDataViewIndexListModel
 
     virtual void GetValueByRow(wxVariant& variant, unsigned int row, unsigned int col) const;
     virtual bool SetValueByRow(wxVariant const&, unsigned int, unsigned int);
+    virtual bool IsEnabledByRow(unsigned int row, unsigned int col) const;
+    virtual bool GetAttrByRow(unsigned row, unsigned col, wxDataViewItemAttr& attr) const;
 
     virtual unsigned int GetColumnCount() const;
 
@@ -760,6 +763,34 @@ bool CensusViewDataViewModel::SetValueByRow(wxVariant const& variant, unsigned r
     view_.document().Modify(true);
 
     return true;
+}
+
+bool CensusViewDataViewModel::IsEnabledByRow(unsigned int row, unsigned int col) const
+{
+    if(col == Col_CellNum)
+        {
+        return false;
+        }
+    else
+        {
+        any_member<Input> const& value = cell_at(row, col);
+        return member_cast<datum_base>(value)->is_enabled();
+        }
+}
+
+bool CensusViewDataViewModel::GetAttrByRow(unsigned row, unsigned col, wxDataViewItemAttr& attr) const
+{
+    if(!IsEnabledByRow(row, col))
+        {
+        // Indicate non-editable items with grayed out text.
+        static wxColour s_gray = wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT);
+        attr.SetColour(s_gray);
+        return true;
+        }
+    else
+        {
+        return false;
+        }
 }
 
 unsigned int CensusViewDataViewModel::GetColumnCount() const
@@ -1412,6 +1443,15 @@ void CensusView::Update()
 
     update_class_names();
     update_visible_columns();
+
+    for
+        (std::vector<Input>::iterator i = cell_parms().begin()
+        ;i != cell_parms().end()
+        ;++i
+        )
+        {
+        i->Harmonize();
+        }
 
     // All displayed data is valid when this function ends.
     all_changes_have_been_validated_ = true;

@@ -135,13 +135,13 @@ class LMI_SO MvcModel
 
     void Reconcile();
     void TestInitialConsistency();
+    void Harmonize();
 
   private:
     void AdaptExternalities();
     void CustomizeInitialValues();
     void EnforceCircumscription(std::string const&);
     void EnforceProscription   (std::string const&);
-    void Harmonize();
     void Transmogrify();
 
     virtual datum_base const* DoBaseDatumPointer(std::string const&) const = 0;
