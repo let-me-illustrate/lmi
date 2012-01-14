@@ -963,6 +963,34 @@ double Irc7702::RoundedGSP() const
     return round_max_premium(PresentGSP);
 }
 
+/// Trivial accessor for monthly trace.
+
+double Irc7702::glp() const
+{
+    return PresentGLP;
+}
+
+/// Trivial accessor for monthly trace.
+
+double Irc7702::cum_glp() const
+{
+    return CumGLP;
+}
+
+/// Trivial accessor for monthly trace.
+
+double Irc7702::gsp() const
+{
+    return PresentGSP;
+}
+
+/// Trivial accessor for monthly trace.
+
+double Irc7702::premiums_paid() const
+{
+    return CumPmts;
+}
+
 // TODO ?? This should be a separate, standalone unit test.
 #ifdef TESTING
 

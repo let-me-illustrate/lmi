@@ -145,6 +145,10 @@ class Irc7702
     double GetLeastBftAmtEver() const;
     double RoundedGLP() const;
     double RoundedGSP() const;
+    double glp          () const;
+    double cum_glp      () const;
+    double gsp          () const;
+    double premiums_paid() const;
 
   private:
     // Interest and DB Option basis
