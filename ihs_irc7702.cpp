@@ -731,22 +731,42 @@ void Irc7702::Initialize7702
 // correct.
     LeastBftAmtEver     = PresentSpecAmt;
     TargetPremium       = a_TargetPremium;
-    PresentGLP = CalculateGLP
-        (0                  // TODO ?? What if inforce?
-        ,PresentBftAmt
-        ,PresentSpecAmt
-        ,LeastBftAmtEver
-        ,PresentDBOpt
-        );
-    PriorGLP = PresentGLP;  // TODO ?? Not if inforce case.
 
-    PresentGSP = CalculateGSP
-        (0
-        ,PresentBftAmt
-        ,PresentSpecAmt
-        ,LeastBftAmtEver
-        );
-    PriorGSP = PresentGSP;  // TODO ?? Not if inforce case.
+    if(0 == InforceYear && 0 == InforceMonth)
+        {
+        PresentGLP = CalculateGLP
+            (0
+            ,PresentBftAmt
+            ,PresentSpecAmt
+            ,LeastBftAmtEver
+            ,PresentDBOpt
+            );
+        PriorGLP = PresentGLP;
+        PresentGSP = CalculateGSP
+            (0
+            ,PresentBftAmt
+            ,PresentSpecAmt
+            ,LeastBftAmtEver
+            );
+        PriorGSP = PresentGSP;
+        }
+    else
+        {
+        // TODO ?? None of this should be necessary, but this function
+        // is called for every basis, though it probably should be
+        // called only once, for basis 'mce_run_gen_curr_sep_full'.
+        // For other bases, many GPT data are not updated; e.g.,
+        // GLP isn't changed, so cumulative GLP isn't correct even
+        // though it's correctly initialized here. If this block can
+        // be expunged, then the 'Inforce*' members may be unneeded.
+        PresentGLP = InforceGLP;
+        PriorGLP   = PresentGLP;
+        PresentGSP = InforceGSP;
+        PriorGSP   = PresentGSP;
+        CumGLP     = InforceCumGLP;
+        GptLimit   = std::max(CumGLP, PresentGSP);
+        CumPmts    = InforceCumPremsPaid;
+        }
 }
 
 //============================================================================
