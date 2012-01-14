@@ -141,8 +141,10 @@ namespace
         ,e7702ACum7pp
         ,e7702AAmountsPaid
         ,e7702AIsMec
-        ,eGSP
         ,eGLP
+        ,eCumGLP
+        ,eGSP
+        ,e7702PremiumsPaid
         // Insert new enumerators above
         ,eLast
         };
@@ -213,7 +215,7 @@ namespace
         v[eMaxLoan]             = "Max loan";
         v[eNewLoan]             = "New loan";
         v[eTaxBasis]            = "Tax basis";
-        v[eCumNoLapsePrem]      = "Cum no lapse prem";
+        v[eCumNoLapsePrem]      = "Cumulative no lapse prem";
         v[eNoLapseActive]       = "No lapse active";
         v[eEOMAV]               = "EOM AV";
         v[eHMValue]             = "Honeymoon value";
@@ -232,11 +234,13 @@ namespace
         v[e7702AUnnecPm]        = "7702A unnec prem";
         v[e7702ADbAdj]          = "7702A DB adjustment";
         v[e7702A7pp]            = "7702A 7pp";
-        v[e7702ACum7pp]         = "7702A cum 7pp";
+        v[e7702ACum7pp]         = "7702A cumulative 7pp";
         v[e7702AAmountsPaid]    = "7702A amounts paid";
         v[e7702AIsMec]          = "Is MEC";
-        v[eGSP]                 = "GSP";
         v[eGLP]                 = "GLP";
+        v[eCumGLP]              = "Cumulative GLP";
+        v[eGSP]                 = "GSP";
+        v[e7702PremiumsPaid]    = "7702 premiums paid";
 
         return v;
     }
@@ -501,8 +505,10 @@ void AccountValue::DebugPrint()
         }
     SetMonthlyDetail(e7702AIsMec         ,InvariantValues().IsMec          );
 
-    SetMonthlyDetail(eGSP                ,Irc7702_->RoundedGSP            ());
-    SetMonthlyDetail(eGLP                ,Irc7702_->RoundedGLP            ());
+    SetMonthlyDetail(eGLP                ,Irc7702_->glp                   ());
+    SetMonthlyDetail(eCumGLP             ,Irc7702_->cum_glp               ());
+    SetMonthlyDetail(eGSP                ,Irc7702_->gsp                   ());
+    SetMonthlyDetail(e7702PremiumsPaid   ,Irc7702_->premiums_paid         ());
 
     std::copy
         (DebugRecord.begin()
