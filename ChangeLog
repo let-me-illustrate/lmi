@@ -29428,3 +29428,27 @@ Fix defect introduced 20050114T1947Z, from an original file predating
 the lmi epoch: initialize inforce data not to a constant zero, but
 instead from input values.
 
+20120113T1426Z <gchicares@sbcglobal.net> [588]
+
+  ihs_avdebug.cpp
+Remove needless "Is material change" field. If there is a material
+change, then the seven-pay premium almost certainly changes.
+
+20120113T2236Z <gchicares@sbcglobal.net> [588]
+
+  ihs_avdebug.cpp
+Rename and move the 7702A "amounts paid" field.
+
+20120114T0126Z <gchicares@sbcglobal.net> [588]
+
+  ihs_avdebug.cpp
+  ihs_irc7702.cpp
+  ihs_irc7702.hpp
+Reorder and augment GPT fields; don't round them in monthly trace.
+
+20120114T0251Z <gchicares@sbcglobal.net> [586]
+
+  ihs_irc7702.cpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch: don't override inforce input values.
+
