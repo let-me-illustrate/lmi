@@ -453,11 +453,13 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
             }
         }
 
+    // INPUT !! Need inforce tgtprem.
     double annual_target_premium = GetModalTgtPrem
         (0
         ,mce_annual
         ,InvariantValues().SpecAmt[0]
         );
+    // It is at best superfluous to do this for every basis.
     Irc7702_->Initialize7702
         (InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
         ,InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
@@ -892,8 +894,13 @@ void AccountValue::InitializeYear()
     SetAnnualInvariants();
 
     PremiumTax_->start_new_year();
-    Irc7702_->UpdateBOY7702();
-    Irc7702A_->UpdateBOY7702A(Year);
+    // Skip this in an incomplete initial inforce year.
+    // Premium tax should perhaps be handled similarly.
+    if(Year != InforceYear || 0 == InforceMonth)
+        {
+        Irc7702_ ->UpdateBOY7702();
+        Irc7702A_->UpdateBOY7702A(Year);
+        }
 
     MonthsPolicyFees            = 0.0;
     SpecAmtLoad                 = 0.0;

@@ -29457,3 +29457,13 @@ the lmi epoch: don't override inforce input values.
   skin.xrc
 No longer label GPT inforce fields as unimplemented.
 
+20120115T1358Z <gchicares@sbcglobal.net> [586]
+
+  ihs_acctval.cpp
+Refactor for clarity.
+
+20120115T1429Z <gchicares@sbcglobal.net> [586]
+
+  ihs_acctval.cpp
+Do not increment cumulative GLP in an incomplete initial inforce year.
+
