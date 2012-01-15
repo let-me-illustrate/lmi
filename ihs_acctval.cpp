@@ -892,6 +892,8 @@ void AccountValue::InitializeYear()
     SetAnnualInvariants();
 
     PremiumTax_->start_new_year();
+    Irc7702_->UpdateBOY7702();
+    Irc7702A_->UpdateBOY7702A(Year);
 
     MonthsPolicyFees            = 0.0;
     SpecAmtLoad                 = 0.0;
@@ -935,9 +937,6 @@ void AccountValue::InitializeYear()
 // MEC avoidance may require issuing a contract at a higher specamt than input.
 void AccountValue::InitializeSpecAmt()
 {
-    Irc7702_->UpdateBOY7702();
-    Irc7702A_->UpdateBOY7702A(Year);
-
     YearsSpecAmt        = DeathBfts_->specamt()[Year];
 
     // TODO ?? These variables are set in current run and used in guar and midpt.
