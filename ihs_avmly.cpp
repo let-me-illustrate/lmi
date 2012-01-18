@@ -1150,6 +1150,7 @@ but position could be reversed for variable policy with bad curr performance
         }
 
     GptForceout = Irc7702_->Forceout();
+    // TODO ?? On other bases, nothing is forced out, and payments aren't limited.
     process_distribution(GptForceout);
     YearsTotalGptForceout += GptForceout;
 
