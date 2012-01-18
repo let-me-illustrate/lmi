@@ -481,7 +481,6 @@ void AccountValue::DebugPrint()
             );
         SetMonthlyDetail(e7702ANetMaxNecPm   ,NetMaxNecessaryPremium       );
         SetMonthlyDetail(e7702AGrossMaxNecPm ,GrossMaxNecessaryPremium     );
-
         SetMonthlyDetail(e7702AUnnecPm       ,UnnecessaryPremium           );
         SetMonthlyDetail(e7702ADbAdj         ,Irc7702A_->DebugGetDbAdj   ());
         SetMonthlyDetail(e7702A7pp           ,Irc7702A_->DebugGet7pp     ());
@@ -505,10 +504,25 @@ void AccountValue::DebugPrint()
         }
     SetMonthlyDetail(e7702AIsMec         ,InvariantValues().IsMec          );
 
-    SetMonthlyDetail(eGLP                ,Irc7702_->glp                   ());
-    SetMonthlyDetail(eCumGLP             ,Irc7702_->cum_glp               ());
-    SetMonthlyDetail(eGSP                ,Irc7702_->gsp                   ());
-    SetMonthlyDetail(e7702PremiumsPaid   ,Irc7702_->premiums_paid         ());
+    bool irc7702_data_irrelevant =
+           mce_gpt != DefnLifeIns_
+        || mce_run_gen_curr_sep_full != RunBasis_
+        ;
+
+    if(!irc7702_data_irrelevant)
+        {
+        SetMonthlyDetail(eGLP                ,Irc7702_->glp              ());
+        SetMonthlyDetail(eCumGLP             ,Irc7702_->cum_glp          ());
+        SetMonthlyDetail(eGSP                ,Irc7702_->gsp              ());
+        SetMonthlyDetail(e7702PremiumsPaid   ,Irc7702_->premiums_paid    ());
+        }
+    else
+        {
+        SetMonthlyDetail(eGLP                ,not_applicable()             );
+        SetMonthlyDetail(eCumGLP             ,not_applicable()             );
+        SetMonthlyDetail(eGSP                ,not_applicable()             );
+        SetMonthlyDetail(e7702PremiumsPaid   ,not_applicable()             );
+        }
 
     std::copy
         (DebugRecord.begin()
