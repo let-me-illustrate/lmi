@@ -629,8 +629,6 @@ void BasicValues::Init7702()
             ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
             ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
             ,effective_dbopt_7702(yare_input_.DeathBenefitOption[0], Equiv7702DBO3)
-            // TODO ?? Using the guaranteed basis for all the following should
-            // be an optional behavior.
             ,Loads_->annual_policy_fee    (mce_gen_curr)
             ,Loads_->monthly_policy_fee   (mce_gen_curr)
             ,Loads_->specified_amount_load(mce_gen_curr)
