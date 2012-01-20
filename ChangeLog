@@ -29467,3 +29467,30 @@ Refactor for clarity.
   ihs_acctval.cpp
 Do not increment cumulative GLP in an incomplete initial inforce year.
 
+20120118T1122Z <gchicares@sbcglobal.net> [587]
+
+  ihs_avmly.cpp
+Mark a defect.
+
+20120118T1340Z <gchicares@sbcglobal.net> [587]
+
+  ihs_avdebug.cpp
+Suppress irrelevant monthly-trace data.
+
+20120119T2209Z <gchicares@sbcglobal.net> [586]
+
+  ihs_basicval.cpp
+Remove a comment rendered senseless by the passage of time.
+
+20120120T1026Z <gchicares@sbcglobal.net> [586]
+
+  test_coding_rules.cpp
+Allow a new marker for issues of taxation.
+
+20120120T1034Z <gchicares@sbcglobal.net> [586]
+
+  ihs_basicval.cpp
+  ihs_irc7702.cpp
+  ihs_irc7702.hpp
+Remove unwanted arguments from Irc7702::Irc7702().
+

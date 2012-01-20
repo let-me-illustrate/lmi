@@ -138,10 +138,7 @@ Irc7702::Irc7702
     ,double                     a_InforceCumGLP
     ,double                     a_InforceGSP
     ,double                     a_InforceCumPremsPaid
-    ,double                     a_PriorBftAmt
-    ,double                     a_PriorSpecAmt
     ,double                     a_LeastBftAmtEver
-    ,mcenum_dbopt_7702          a_PriorDBOpt
     )
     :Test7702           (a_Test7702)
     ,IssueAge           (a_IssueAge)
@@ -152,11 +149,11 @@ Irc7702::Irc7702
     ,Ig                 (a_Ig)
     ,IntDed             (a_IntDed)
     ,PresentBftAmt      (a_PresentBftAmt)
-    ,PriorBftAmt        (a_PriorBftAmt)
+    ,PriorBftAmt        (a_PresentBftAmt)
     ,PresentSpecAmt     (a_PresentSpecAmt)
-    ,PriorSpecAmt       (a_PriorSpecAmt)
+    ,PriorSpecAmt       (a_PresentSpecAmt)
     ,PresentDBOpt       (a_PresentDBOpt)
-    ,PriorDBOpt         (a_PriorDBOpt)
+    ,PriorDBOpt         (a_PresentDBOpt)
     ,AnnChgPol          (a_AnnChgPol)
     ,MlyChgPol          (a_MlyChgPol)
     ,MlyChgSpecAmt      (a_MlyChgSpecAmt)
@@ -178,7 +175,6 @@ Irc7702::Irc7702
     ,InforceCumPremsPaid(a_InforceCumPremsPaid)
 {
     LMI_ASSERT(a_PresentSpecAmt <= a_PresentBftAmt);
-    LMI_ASSERT(a_PriorSpecAmt <= a_PriorBftAmt);
     LMI_ASSERT(0.0 <= a_TargetPremium);
     // TODO ?? Instead put these in initializer-list and write assertions?
     if(0 == InforceYear && 0 == InforceMonth)
@@ -198,12 +194,12 @@ Irc7702::Irc7702
         }
     else
         {
-        PriorBftAmt     = a_PriorBftAmt;
-        PriorSpecAmt    = a_PriorSpecAmt;
+        PriorBftAmt     = a_PresentBftAmt;
+        PriorSpecAmt    = a_PresentSpecAmt;
         LeastBftAmtEver = a_LeastBftAmtEver;
         LMI_ASSERT(LeastBftAmtEver <= PriorBftAmt);
         LMI_ASSERT(LeastBftAmtEver <= PresentBftAmt);
-        PriorDBOpt      = PresentDBOpt; // TODO ?? a_PriorDBOpt is unused; is it even wanted?
+        PriorDBOpt      = PresentDBOpt; // TODO ?? handle this (and some others) in initializer-list instead
         // TODO ?? Must these be members? The arguments could be used here instead.
         PresentGLP      = InforceGLP;
         PriorGLP        = InforceGLP;
@@ -761,9 +757,9 @@ void Irc7702::Initialize7702
         // be expunged, then the 'Inforce*' members may be unneeded.
         PresentGLP = InforceGLP;
         PriorGLP   = PresentGLP;
+        CumGLP     = InforceCumGLP;
         PresentGSP = InforceGSP;
         PriorGSP   = PresentGSP;
-        CumGLP     = InforceCumGLP;
         GptLimit   = std::max(CumGLP, PresentGSP);
         CumPmts    = InforceCumPremsPaid;
         }

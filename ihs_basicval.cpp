@@ -647,12 +647,8 @@ void BasicValues::Init7702()
             ,yare_input_.InforceGlp
             ,yare_input_.InforceCumulativeGlp
             ,yare_input_.InforceGsp
-            ,yare_input_.InforceCumulativePayments // Wrong--this is not 7702 "premiums paid".
-// If these are never passed, then should they be arguments at all?
-//            ,a_PriorBftAmt
-//            ,a_PriorSpecAmt
-//            ,a_LeastBftAmtEver
-//            ,a_PriorDBOpt
+            ,yare_input_.InforceCumulativePayments // TAXATION !! INPUT !! Wrong--this is not 7702 "premiums paid".
+            ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
             )
         );
 }
