@@ -94,10 +94,7 @@ class Irc7702
         ,double                     a_InforceCumGLP       = 0.0
         ,double                     a_InforceGSP          = 0.0
         ,double                     a_InforceCumPremsPaid = 0.0
-        ,double                     a_PriorBftAmt         = 0.0
-        ,double                     a_PriorSpecAmt        = 0.0
         ,double                     a_LeastBftAmtEver     = 0.0
-        ,mcenum_dbopt_7702          a_PriorDBOpt          = mce_option1_for_7702
         // TODO ?? Perhaps other arguments are needed for inforce.
         );
     ~Irc7702();
