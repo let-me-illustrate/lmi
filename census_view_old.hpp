@@ -1,4 +1,4 @@
-// Census manager.
+// Census manager--obsolescent listview version.
 //
 // Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
 //
@@ -67,7 +67,7 @@ class CensusView
     virtual wxMenuBar* MenuBar() const;
 
     void UponAddCell                (wxCommandEvent&);
-    void UponBeginLabelEdit         (wxListEvent&); // TODO ?? Expunge.
+    void UponBeginLabelEdit         (wxListEvent&); // PORT !! Expunge.
     void UponDeleteCells            (wxCommandEvent&);
     void UponEditCell               (wxCommandEvent&);
     void UponEditClass              (wxCommandEvent&);
