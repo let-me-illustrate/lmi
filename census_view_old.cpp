@@ -1,4 +1,4 @@
-// Census manager.
+// Census manager--obsolescent listview version.
 //
 // Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
 //
@@ -60,12 +60,12 @@
 #include <iterator>
 #include <sstream>
 
-// TODO ?? Can't this macro be dispensed with?
+// PORT !! Can't this macro be dispensed with?
 #define ID_LISTWINDOW 12345
 
 namespace
 {
-    // TODO ?? Add description and unit tests; consider relocating,
+    // PORT !! Add description and unit tests; consider relocating,
     // and include "miscellany.hpp" only in ultimate location.
     std::string insert_spaces_between_words(std::string const& s)
     {
@@ -103,7 +103,7 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
     EVT_MENU(XRCID("column_width_varying"  ),CensusView::UponColumnWidthVarying)
     EVT_MENU(XRCID("column_width_fixed"    ),CensusView::UponColumnWidthFixed)
 
-// TODO ?? There has to be a better way than this.
+// PORT !! There has to be a better way than this.
     EVT_UPDATE_UI(XRCID("edit_cell"            ),CensusView::UponUpdateApplicable)
     EVT_UPDATE_UI(XRCID("edit_class"           ),CensusView::UponUpdateApplicable)
     EVT_UPDATE_UI(XRCID("edit_case"            ),CensusView::UponUpdateApplicable)
@@ -118,7 +118,7 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
     EVT_UPDATE_UI(XRCID("delete_cells"         ),CensusView::UponUpdateApplicable)
     EVT_UPDATE_UI(XRCID("column_width_varying" ),CensusView::UponUpdateApplicable)
     EVT_UPDATE_UI(XRCID("column_width_fixed"   ),CensusView::UponUpdateApplicable)
-// TODO ?? Not label-edit.
+// PORT !! Not label-edit.
 //    EVT_LIST_BEGIN_LABEL_EDIT(ID_LISTWINDOW,CensusView::UponBeginLabelEdit)
 // Don't do this either--it's triggered by spacebar.
 //    EVT_LIST_ITEM_ACTIVATED(ID_LISTWINDOW  ,CensusView::UponBeginLabelEdit)
@@ -167,7 +167,7 @@ inline std::vector<Input> const& CensusView::class_parms() const
     return document().doc_.class_parms_;
 }
 
-// TODO ?? Is this abstraction actually useful?
+// PORT !! Is this abstraction actually useful?
 std::string CensusView::cell_title(int index)
 {
     std::string full_name(cell_parms()[index]["InsuredName"].str());
@@ -180,7 +180,7 @@ std::string CensusView::cell_title(int index)
     return title.str();
 }
 
-// TODO ?? Is this abstraction actually useful?
+// PORT !! Is this abstraction actually useful?
 std::string CensusView::class_title(int index)
 {
     std::string class_name = class_name_from_cell_number(index);
@@ -198,7 +198,7 @@ std::string CensusView::class_title(int index)
     return title.str();
 }
 
-// TODO ?? Is this abstraction actually useful?
+// PORT !! Is this abstraction actually useful?
 std::string CensusView::class_name_from_cell_number(int cell_number) const
 {
     return cell_parms()[cell_number]["EmployeeClass"].str();
@@ -209,7 +209,7 @@ Input* CensusView::class_parms_from_class_name(std::string const& class_name)
     std::vector<Input>::iterator i = class_parms().begin();
     while(i != class_parms().end())
         {
-        // TODO ?? Add an any_member operator== instead.
+        // PORT !! Add an any_member operator== instead.
         if(class_name == (*i)["EmployeeClass"].str())
             {
             return &*i;
@@ -326,13 +326,13 @@ bool CensusView::is_invalid()
             );
         if(wxYES == z)
             {
-            // TODO ?? Reserved for grid implementation.
+            // PORT !! Reserved for grid implementation.
             }
         }
     return false;
 }
 
-// TODO ?? Reserved for a grid implementation.
+// PORT !! Reserved for a grid implementation.
 int CensusView::selected_column()
 {
     return 0;
@@ -340,18 +340,18 @@ int CensusView::selected_column()
 
 int CensusView::selected_row()
 {
-// TODO ?? Lossy type conversion: GetFirstSelected() returns a long
+// PORT !! Lossy type conversion: GetFirstSelected() returns a long
 // int, here and elsewhere in this file.
     int row = list_window_->GetFirstSelected();
     if(row < 0)
         {
         row = 0;
-// TODO ?? Reserve for grid implementation.
+// PORT !! Reserve for grid implementation.
 //        fatal_error() << "No row selected." << LMI_FLUSH;
         }
     if(static_cast<int>(cell_parms().size()) <= row)
         {
-// TODO ?? OK if about to delete?
+// PORT !! OK if about to delete?
 //        fatal_error() << "Invalid row selected." << LMI_FLUSH;
         }
     return row;
@@ -384,12 +384,12 @@ void CensusView::update_class_names()
     std::sort(all_class_names.begin(), all_class_names.end());
     std::unique_copy(all_class_names.begin(), all_class_names.end(), iin);
 
-// TODO ?? need parms for each?
+// PORT !! need parms for each?
 //    if find name in class array
 //        OK
 //    else
 //        create: copy from first matching individual
-// TODO ?? and if unmatching element in class array: delete it?
+// PORT !! and if unmatching element in class array: delete it?
 
     // Rebuild vector of class parameters so that it contains
     // an element for each class in use.
@@ -411,7 +411,7 @@ void CensusView::update_class_names()
             // insert its parameters into the rebuilt vector.
             std::vector<Input>::const_iterator j = cell_parms().begin();
             bool found = false;
-            // TODO ?? There has to be a nicer way to do this with STL.
+            // PORT !! There has to be a nicer way to do this with STL.
             while(j != cell_parms().end())
                 {
                 if(*n == (*j)["EmployeeClass"].str())
@@ -460,8 +460,8 @@ void CensusView::apply_changes
     //   if case  defaults changed: all cells and all class defaults;
     //   if class defaults changed: all cells in the class.
 
-    // TODO ?? temp string for new value, eeclass?
-    // TODO ?? combine class and indv vectors for case changes?
+    // PORT !! temp string for new value, eeclass?
+    // PORT !! combine class and indv vectors for case changes?
 
     std::vector<std::string> headers_of_changed_parameters;
     std::vector<std::string> const& all_headers(case_parms()[0].member_names());
@@ -558,7 +558,7 @@ void CensusView::DisplayAllVaryingData()
             ,value_cast<std::string>(row)
             ,0
             );
-        // TODO ?? Necessary? Move to subfunction?
+        // PORT !! Necessary? Move to subfunction?
 //        long index = ?
 //        list_window_->SetItemData(index, row);
 
@@ -596,7 +596,7 @@ void CensusView::UponBeginLabelEdit(wxListEvent& event)
         return;
         }
 
-    // TODO ?? Wouldn't it be better just to have edit_parameters()
+    // PORT !! Wouldn't it be better just to have edit_parameters()
     // say whether it changed anything?
     if(temp_parms != original_parms)
         {
@@ -618,7 +618,7 @@ void CensusView::UponEditCell(wxCommandEvent&)
         return;
         }
 
-    // TODO ?? Wouldn't it be better just to have edit_parameters()
+    // PORT !! Wouldn't it be better just to have edit_parameters()
     // say whether it changed anything?
     if(temp_parms != original_parms)
         {
@@ -690,14 +690,14 @@ void CensusView::UponEditCase(wxCommandEvent&)
 // "note that under MSW for SetColumnWidth() to work we need to create the
 // items with images initially even if we specify dummy image id"
 //
-// TODO ?? Offer both ways of autosizing.
+// PORT !! Offer both ways of autosizing.
 //
 void CensusView::UponColumnWidthVarying(wxCommandEvent&)
 {
     wxWindowUpdateLocker u(list_window_);
     for(int j = 0; j < list_window_->GetColumnCount(); ++j)
         {
-// TODO ?? Pick one, and remove the other?
+// PORT !! Pick one, and remove the other?
 //        list_window_->SetColumnWidth(j, wxLIST_AUTOSIZE);
         list_window_->SetColumnWidth(j, wxLIST_AUTOSIZE_USEHEADER);
         }
@@ -710,7 +710,7 @@ void CensusView::UponColumnWidthFixed(wxCommandEvent&)
     for(int j = 0; j < list_window_->GetColumnCount(); ++j)
         {
         // WX !! Sad to hardcode '80', but that's the undocumented wx default.
-        // TODO ?? If it's a default, then why must it be specified?
+        // PORT !! If it's a default, then why must it be specified?
         list_window_->SetColumnWidth(j, 80);
         }
 }
@@ -756,13 +756,13 @@ void CensusView::UpdatePreservingSelection()
     // Save active cell.
     int selection = selected_row();
     int top_row = list_window_->GetTopItem();
-// TODO ?? Reserve for grid implementation.
+// PORT !! Reserve for grid implementation.
 //    int c = selected_column();
 
     Update();
 
     // Restore active cell.
-    // TODO ?? Better would be to restore to previously active col and row
+    // PORT !! Better would be to restore to previously active col and row
     // as determined by col hdr and cell #.
     //
     // This is kind of nasty. There's no SetTopItem(). Maybe it can be
@@ -933,7 +933,7 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
         }
     LMI_ASSERT(expurgated_cell_parms.size() == n_items - n_sel_items);
 
-//    cell_parms().swap(expurgated_cell_parms); // TODO ?? Would this be better?
+//    cell_parms().swap(expurgated_cell_parms); // PORT !! Would this be better?
     cell_parms() = expurgated_cell_parms;
 
     Update();
@@ -1023,7 +1023,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
                     << "Last valid value, if any: " << values.back()
                     << LMI_FLUSH
                     ;
-// TODO ?? It would be better to use fatal_error() instead of
+// PORT !! It would be better to use fatal_error() instead of
 // warning() followed by fatal_error() with a short string, but
 // apparently that can segfault with very long strings. Is there
 // a limit on exception size that should be tested here?
