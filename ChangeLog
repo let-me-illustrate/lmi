@@ -29494,3 +29494,12 @@ Allow a new marker for issues of taxation.
   ihs_irc7702.hpp
 Remove unwanted arguments from Irc7702::Irc7702().
 
+20120121T1136Z <gchicares@sbcglobal.net> [615]
+
+  census_view_old.cpp
+  census_view_old.hpp
+Restore wxListView census manager from revision 5304 under a new name,
+updating only copyright, header name, and include guards for now. The
+goal is to release a stable system while wxDVC development continues,
+but without changes like those made 20111026T1342Z and 20111028T1211Z.
+
