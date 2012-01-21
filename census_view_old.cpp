@@ -84,47 +84,47 @@ namespace
     }
 }
 
-IMPLEMENT_DYNAMIC_CLASS(CensusView, ViewEx)
+IMPLEMENT_DYNAMIC_CLASS(CensusViewOld, ViewEx)
 
-BEGIN_EVENT_TABLE(CensusView, ViewEx)
-    EVT_CONTEXT_MENU(                        CensusView::UponRightClick)
-    EVT_MENU(XRCID("edit_cell"             ),CensusView::UponEditCell )
-    EVT_MENU(XRCID("edit_class"            ),CensusView::UponEditClass)
-    EVT_MENU(XRCID("edit_case"             ),CensusView::UponEditCase )
-    EVT_MENU(XRCID("run_cell"              ),CensusView::UponRunCell)
-//    EVT_MENU(XRCID("run_class"             ),CensusView::UponRunClass)   // SOMEDAY !! This may be useful for large cases.
-    EVT_MENU(XRCID("run_case"              ),CensusView::UponRunCase)
-    EVT_MENU(XRCID("print_case"            ),CensusView::UponPrintCase)
-    EVT_MENU(XRCID("print_case_to_disk"    ),CensusView::UponPrintCaseToDisk)
-    EVT_MENU(XRCID("print_spreadsheet"     ),CensusView::UponRunCaseToSpreadsheet)
-    EVT_MENU(XRCID("paste_census"          ),CensusView::UponPasteCensus)
-    EVT_MENU(XRCID("add_cell"              ),CensusView::UponAddCell)
-    EVT_MENU(XRCID("delete_cells"          ),CensusView::UponDeleteCells)
-    EVT_MENU(XRCID("column_width_varying"  ),CensusView::UponColumnWidthVarying)
-    EVT_MENU(XRCID("column_width_fixed"    ),CensusView::UponColumnWidthFixed)
+BEGIN_EVENT_TABLE(CensusViewOld, ViewEx)
+    EVT_CONTEXT_MENU(                        CensusViewOld::UponRightClick)
+    EVT_MENU(XRCID("edit_cell"             ),CensusViewOld::UponEditCell )
+    EVT_MENU(XRCID("edit_class"            ),CensusViewOld::UponEditClass)
+    EVT_MENU(XRCID("edit_case"             ),CensusViewOld::UponEditCase )
+    EVT_MENU(XRCID("run_cell"              ),CensusViewOld::UponRunCell)
+//    EVT_MENU(XRCID("run_class"             ),CensusViewOld::UponRunClass)   // SOMEDAY !! This may be useful for large cases.
+    EVT_MENU(XRCID("run_case"              ),CensusViewOld::UponRunCase)
+    EVT_MENU(XRCID("print_case"            ),CensusViewOld::UponPrintCase)
+    EVT_MENU(XRCID("print_case_to_disk"    ),CensusViewOld::UponPrintCaseToDisk)
+    EVT_MENU(XRCID("print_spreadsheet"     ),CensusViewOld::UponRunCaseToSpreadsheet)
+    EVT_MENU(XRCID("paste_census"          ),CensusViewOld::UponPasteCensus)
+    EVT_MENU(XRCID("add_cell"              ),CensusViewOld::UponAddCell)
+    EVT_MENU(XRCID("delete_cells"          ),CensusViewOld::UponDeleteCells)
+    EVT_MENU(XRCID("column_width_varying"  ),CensusViewOld::UponColumnWidthVarying)
+    EVT_MENU(XRCID("column_width_fixed"    ),CensusViewOld::UponColumnWidthFixed)
 
 // PORT !! There has to be a better way than this.
-    EVT_UPDATE_UI(XRCID("edit_cell"            ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("edit_class"           ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("edit_case"            ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("run_cell"             ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("run_class"            ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("run_case"             ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("print_case"           ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("print_case_to_disk"   ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("print_spreadsheet"    ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("paste_census"         ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("add_cell"             ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("delete_cells"         ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("column_width_varying" ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("column_width_fixed"   ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("edit_cell"            ),CensusViewOld::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("edit_class"           ),CensusViewOld::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("edit_case"            ),CensusViewOld::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("run_cell"             ),CensusViewOld::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("run_class"            ),CensusViewOld::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("run_case"             ),CensusViewOld::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("print_case"           ),CensusViewOld::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("print_case_to_disk"   ),CensusViewOld::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("print_spreadsheet"    ),CensusViewOld::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("paste_census"         ),CensusViewOld::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("add_cell"             ),CensusViewOld::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("delete_cells"         ),CensusViewOld::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("column_width_varying" ),CensusViewOld::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("column_width_fixed"   ),CensusViewOld::UponUpdateApplicable)
 // PORT !! Not label-edit.
-//    EVT_LIST_BEGIN_LABEL_EDIT(ID_LISTWINDOW,CensusView::UponBeginLabelEdit)
+//    EVT_LIST_BEGIN_LABEL_EDIT(ID_LISTWINDOW,CensusViewOld::UponBeginLabelEdit)
 // Don't do this either--it's triggered by spacebar.
-//    EVT_LIST_ITEM_ACTIVATED(ID_LISTWINDOW  ,CensusView::UponBeginLabelEdit)
+//    EVT_LIST_ITEM_ACTIVATED(ID_LISTWINDOW  ,CensusViewOld::UponBeginLabelEdit)
 END_EVENT_TABLE()
 
-CensusView::CensusView()
+CensusViewOld::CensusViewOld()
     :ViewEx                          ()
     ,all_changes_have_been_validated_(true)
     ,composite_is_available_         (false)
@@ -133,42 +133,42 @@ CensusView::CensusView()
 {
 }
 
-CensusView::~CensusView()
+CensusViewOld::~CensusViewOld()
 {
 }
 
-inline std::vector<Input>& CensusView::case_parms()
-{
-    return document().doc_.case_parms_;
-}
-
-inline std::vector<Input> const& CensusView::case_parms() const
+inline std::vector<Input>& CensusViewOld::case_parms()
 {
     return document().doc_.case_parms_;
 }
 
-inline std::vector<Input>& CensusView::cell_parms()
+inline std::vector<Input> const& CensusViewOld::case_parms() const
+{
+    return document().doc_.case_parms_;
+}
+
+inline std::vector<Input>& CensusViewOld::cell_parms()
 {
     return document().doc_.cell_parms_;
 }
 
-inline std::vector<Input> const& CensusView::cell_parms() const
+inline std::vector<Input> const& CensusViewOld::cell_parms() const
 {
     return document().doc_.cell_parms_;
 }
 
-inline std::vector<Input>& CensusView::class_parms()
+inline std::vector<Input>& CensusViewOld::class_parms()
 {
     return document().doc_.class_parms_;
 }
 
-inline std::vector<Input> const& CensusView::class_parms() const
+inline std::vector<Input> const& CensusViewOld::class_parms() const
 {
     return document().doc_.class_parms_;
 }
 
 // PORT !! Is this abstraction actually useful?
-std::string CensusView::cell_title(int index)
+std::string CensusViewOld::cell_title(int index)
 {
     std::string full_name(cell_parms()[index]["InsuredName"].str());
     std::ostringstream title;
@@ -181,7 +181,7 @@ std::string CensusView::cell_title(int index)
 }
 
 // PORT !! Is this abstraction actually useful?
-std::string CensusView::class_title(int index)
+std::string CensusViewOld::class_title(int index)
 {
     std::string class_name = class_name_from_cell_number(index);
 
@@ -199,12 +199,12 @@ std::string CensusView::class_title(int index)
 }
 
 // PORT !! Is this abstraction actually useful?
-std::string CensusView::class_name_from_cell_number(int cell_number) const
+std::string CensusViewOld::class_name_from_cell_number(int cell_number) const
 {
     return cell_parms()[cell_number]["EmployeeClass"].str();
 }
 
-Input* CensusView::class_parms_from_class_name(std::string const& class_name)
+Input* CensusViewOld::class_parms_from_class_name(std::string const& class_name)
 {
     std::vector<Input>::iterator i = class_parms().begin();
     while(i != class_parms().end())
@@ -222,7 +222,7 @@ Input* CensusView::class_parms_from_class_name(std::string const& class_name)
     // Determine which columns need to be displayed because their rows
     // would not all be identical--i.e. because at least one cell or one
     // class default differs from the case default wrt that column.
-bool CensusView::column_value_varies_across_cells
+bool CensusViewOld::column_value_varies_across_cells
     (std::string        const& header
     ,std::vector<Input> const& cells
     ) const
@@ -238,7 +238,7 @@ bool CensusView::column_value_varies_across_cells
     return false;
 }
 
-wxWindow* CensusView::CreateChildWindow()
+wxWindow* CensusViewOld::CreateChildWindow()
 {
     list_window_ = new(wx) wxListView
         (GetFrame()
@@ -254,7 +254,7 @@ wxWindow* CensusView::CreateChildWindow()
     return list_window_;
 }
 
-CensusDocument& CensusView::document() const
+CensusDocument& CensusViewOld::document() const
 {
     return safely_dereference_as<CensusDocument>(GetDocument());
 }
@@ -269,7 +269,7 @@ CensusDocument& CensusView::document() const
 // Only DisplayAllVaryingData() uses the data member this assigns,
 // so move the logic into that function (if that remains true).
 //
-void CensusView::identify_varying_columns()
+void CensusViewOld::identify_varying_columns()
 {
     headers_of_varying_parameters_.clear();
     std::vector<std::string> const& all_headers(case_parms()[0].member_names());
@@ -286,7 +286,7 @@ void CensusView::identify_varying_columns()
         }
 }
 
-int CensusView::edit_parameters
+int CensusViewOld::edit_parameters
     (Input&             lmi_input
     ,std::string const& name
     )
@@ -315,7 +315,7 @@ int CensusView::edit_parameters
     return rc;
 }
 
-bool CensusView::is_invalid()
+bool CensusViewOld::is_invalid()
 {
     if(!all_changes_have_been_validated_)
         {
@@ -333,12 +333,12 @@ bool CensusView::is_invalid()
 }
 
 // PORT !! Reserved for a grid implementation.
-int CensusView::selected_column()
+int CensusViewOld::selected_column()
 {
     return 0;
 }
 
-int CensusView::selected_row()
+int CensusViewOld::selected_row()
 {
 // PORT !! Lossy type conversion: GetFirstSelected() returns a long
 // int, here and elsewhere in this file.
@@ -361,7 +361,7 @@ int CensusView::selected_row()
 // scratch; and update the vector of class default parameters,
 // adding any new classes, and purging any that are no longer in use
 // by any cell.
-void CensusView::update_class_names()
+void CensusViewOld::update_class_names()
 {
     // Extract names and add them even if they might be duplicates.
     std::vector<std::string> all_class_names;
@@ -447,7 +447,7 @@ void CensusView::update_class_names()
 ///     employee class of the old parameters;
 ///   otherwise, to all cells in the entire census.
 
-void CensusView::apply_changes
+void CensusViewOld::apply_changes
     (Input const& new_parms
     ,Input const& old_parms
     ,bool         for_this_class_only
@@ -540,7 +540,7 @@ void CensusView::apply_changes
     composite_is_available_ = false;
 }
 
-void CensusView::DisplayAllVaryingData()
+void CensusViewOld::DisplayAllVaryingData()
 {
     // Column zero (cell serial number) is always shown.
     list_window_->InsertColumn(0, "Cell");
@@ -572,20 +572,20 @@ void CensusView::DisplayAllVaryingData()
         }
 }
 
-wxIcon CensusView::Icon() const
+wxIcon CensusViewOld::Icon() const
 {
     return IconFromXmlResource("census_view_icon");
 }
 
-wxMenuBar* CensusView::MenuBar() const
+wxMenuBar* CensusViewOld::MenuBar() const
 {
     return MenuBarFromXmlResource("census_view_menu");
 }
 
 ///* TODO expunge?
 // Double-click handler.
-// Factor out code: exact duplicate of CensusView::UponEditCell().
-void CensusView::UponBeginLabelEdit(wxListEvent& event)
+// Factor out code: exact duplicate of CensusViewOld::UponEditCell().
+void CensusViewOld::UponBeginLabelEdit(wxListEvent& event)
 {
     int cell_number = selected_row();
     Input& original_parms = cell_parms()[cell_number];
@@ -607,7 +607,7 @@ void CensusView::UponBeginLabelEdit(wxListEvent& event)
 }
 //*/
 
-void CensusView::UponEditCell(wxCommandEvent&)
+void CensusViewOld::UponEditCell(wxCommandEvent&)
 {
     int cell_number = selected_row();
     Input& original_parms = cell_parms()[cell_number];
@@ -628,7 +628,7 @@ void CensusView::UponEditCell(wxCommandEvent&)
         }
 }
 
-void CensusView::UponEditClass(wxCommandEvent&)
+void CensusViewOld::UponEditClass(wxCommandEvent&)
 {
     int cell_number = selected_row();
     std::string class_name = class_name_from_cell_number(cell_number);
@@ -657,7 +657,7 @@ void CensusView::UponEditClass(wxCommandEvent&)
         }
 }
 
-void CensusView::UponEditCase(wxCommandEvent&)
+void CensusViewOld::UponEditCase(wxCommandEvent&)
 {
     Input& original_parms = case_parms()[0];
     Input temp_parms(original_parms);
@@ -692,7 +692,7 @@ void CensusView::UponEditCase(wxCommandEvent&)
 //
 // PORT !! Offer both ways of autosizing.
 //
-void CensusView::UponColumnWidthVarying(wxCommandEvent&)
+void CensusViewOld::UponColumnWidthVarying(wxCommandEvent&)
 {
     wxWindowUpdateLocker u(list_window_);
     for(int j = 0; j < list_window_->GetColumnCount(); ++j)
@@ -704,7 +704,7 @@ void CensusView::UponColumnWidthVarying(wxCommandEvent&)
 }
 
 // Shrink all nonfrozen columns to default width.
-void CensusView::UponColumnWidthFixed(wxCommandEvent&)
+void CensusViewOld::UponColumnWidthFixed(wxCommandEvent&)
 {
     wxWindowUpdateLocker u(list_window_);
     for(int j = 0; j < list_window_->GetColumnCount(); ++j)
@@ -715,7 +715,7 @@ void CensusView::UponColumnWidthFixed(wxCommandEvent&)
         }
 }
 
-void CensusView::UponRightClick(wxContextMenuEvent&)
+void CensusViewOld::UponRightClick(wxContextMenuEvent&)
 {
     wxMenu* census_menu = wxXmlResource::Get()->LoadMenu("census_menu_ref");
     LMI_ASSERT(census_menu);
@@ -723,7 +723,7 @@ void CensusView::UponRightClick(wxContextMenuEvent&)
     delete census_menu;
 }
 
-void CensusView::UponUpdateApplicable(wxUpdateUIEvent& e)
+void CensusViewOld::UponUpdateApplicable(wxUpdateUIEvent& e)
 {
     e.Enable(true);
 }
@@ -735,7 +735,7 @@ void CensusView::UponUpdateApplicable(wxUpdateUIEvent& e)
 //  due to editing, then display it no longer.
 // Similarly, if an old employee class is no longer used, remove it; and
 //  if a new one comes into use, display it.
-void CensusView::Update()
+void CensusViewOld::Update()
 {
     wxWindowUpdateLocker u(list_window_);
 
@@ -749,7 +749,7 @@ void CensusView::Update()
     all_changes_have_been_validated_ = true;
 }
 
-void CensusView::UpdatePreservingSelection()
+void CensusViewOld::UpdatePreservingSelection()
 {
     wxWindowUpdateLocker u(list_window_);
 
@@ -774,17 +774,17 @@ void CensusView::UpdatePreservingSelection()
     list_window_->EnsureVisible(selection);
 }
 
-void CensusView::UponPrintCase(wxCommandEvent&)
+void CensusViewOld::UponPrintCase(wxCommandEvent&)
 {
     DoAllCells(mce_emit_pdf_to_printer);
 }
 
-void CensusView::UponPrintCaseToDisk(wxCommandEvent&)
+void CensusViewOld::UponPrintCaseToDisk(wxCommandEvent&)
 {
     DoAllCells(mce_emit_pdf_file);
 }
 
-void CensusView::UponRunCase(wxCommandEvent&)
+void CensusViewOld::UponRunCase(wxCommandEvent&)
 {
     if(is_invalid())
         {
@@ -794,7 +794,7 @@ void CensusView::UponRunCase(wxCommandEvent&)
     ViewComposite();
 }
 
-void CensusView::UponRunCell(wxCommandEvent&)
+void CensusViewOld::UponRunCell(wxCommandEvent&)
 {
     if(is_invalid())
         {
@@ -805,7 +805,7 @@ void CensusView::UponRunCell(wxCommandEvent&)
     ViewOneCell(cell_number);
 }
 
-void CensusView::ViewOneCell(int index)
+void CensusViewOld::ViewOneCell(int index)
 {
     std::string const name(cell_parms()[index]["InsuredName"].str());
     IllustrationView& illview = MakeNewIllustrationDocAndView
@@ -815,7 +815,7 @@ void CensusView::ViewOneCell(int index)
     illview.Run(&cell_parms()[index]);
 }
 
-void CensusView::ViewComposite()
+void CensusViewOld::ViewComposite()
 {
     // Run all cells if necessary to (re)generate composite numbers.
     if(!composite_is_available_)
@@ -841,7 +841,7 @@ void CensusView::ViewComposite()
         }
 }
 
-bool CensusView::DoAllCells(mcenum_emission emission)
+bool CensusViewOld::DoAllCells(mcenum_emission emission)
 {
     assert_consistency(case_parms()[0], cell_parms()[0]);
 
@@ -855,7 +855,7 @@ bool CensusView::DoAllCells(mcenum_emission emission)
     return true;
 }
 
-void CensusView::UponAddCell(wxCommandEvent&)
+void CensusViewOld::UponAddCell(wxCommandEvent&)
 {
     if(is_invalid())
         {
@@ -867,7 +867,7 @@ void CensusView::UponAddCell(wxCommandEvent&)
     document().Modify(true);
 }
 
-void CensusView::UponDeleteCells(wxCommandEvent&)
+void CensusViewOld::UponDeleteCells(wxCommandEvent&)
 {
     if(is_invalid())
         {
@@ -941,7 +941,7 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
 }
 
 // Print tab-delimited output to file loadable in spreadsheet programs.
-void CensusView::UponRunCaseToSpreadsheet(wxCommandEvent&)
+void CensusViewOld::UponRunCaseToSpreadsheet(wxCommandEvent&)
 {
     std::string spreadsheet_filename =
             base_filename()
@@ -968,7 +968,7 @@ void CensusView::UponRunCaseToSpreadsheet(wxCommandEvent&)
 /// file are assumed to represent user intention). In this case,
 /// pasted data is appended to the cells that were already present.
 
-void CensusView::UponPasteCensus(wxCommandEvent&)
+void CensusViewOld::UponPasteCensus(wxCommandEvent&)
 {
     std::string const census_data = ClipboardEx::GetText();
 

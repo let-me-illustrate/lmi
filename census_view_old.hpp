@@ -45,16 +45,16 @@ class CensusDocument;
 class WXDLLIMPEXP_FWD_CORE wxListEvent;
 class WXDLLIMPEXP_FWD_CORE wxListView;
 
-class CensusView
+class CensusViewOld
     :        public  ViewEx
-    ,        private lmi::uncopyable <CensusView>
-    ,virtual private obstruct_slicing<CensusView>
+    ,        private lmi::uncopyable <CensusViewOld>
+    ,virtual private obstruct_slicing<CensusViewOld>
 {
     friend class CensusDocument;
 
   public:
-    CensusView();
-    virtual ~CensusView();
+    CensusViewOld();
+    virtual ~CensusViewOld();
 
   private:
     void DisplayAllVaryingData();
@@ -139,7 +139,7 @@ class CensusView
 
     wxListView* list_window_;
 
-    DECLARE_DYNAMIC_CLASS(CensusView)
+    DECLARE_DYNAMIC_CLASS(CensusViewOld)
     DECLARE_EVENT_TABLE()
 };
 
