@@ -61,7 +61,7 @@
 #include <sstream>
 
 // PORT !! Can't this macro be dispensed with?
-#define ID_LISTWINDOW 12345
+#define ID_LISTWINDOW 23456
 
 namespace
 {
