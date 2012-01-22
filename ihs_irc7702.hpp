@@ -73,6 +73,7 @@ class Irc7702
         ,std::vector<double> const& a_IntDed
         ,double                     a_PresentBftAmt
         ,double                     a_PresentSpecAmt
+        ,double                     a_LeastBftAmtEver
         ,mcenum_dbopt_7702          a_PresentDBOpt
         ,std::vector<double> const& a_AnnChgPol
         ,std::vector<double> const& a_MlyChgPol
@@ -93,7 +94,6 @@ class Irc7702
         ,double                     a_InforceCumGLP
         ,double                     a_InforceGSP
         ,double                     a_InforceCumPremsPaid
-        ,double                     a_LeastBftAmtEver
         // TODO ?? Perhaps other arguments are needed for inforce.
         );
     ~Irc7702();

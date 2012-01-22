@@ -628,6 +628,7 @@ void BasicValues::Init7702()
             ,SpreadFor7702_
             ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
             ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
+            ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
             ,effective_dbopt_7702(yare_input_.DeathBenefitOption[0], Equiv7702DBO3)
             ,Loads_->annual_policy_fee    (mce_gen_curr)
             ,Loads_->monthly_policy_fee   (mce_gen_curr)
@@ -648,7 +649,6 @@ void BasicValues::Init7702()
             ,yare_input_.InforceCumulativeGlp
             ,yare_input_.InforceGsp
             ,yare_input_.InforceCumulativePayments // TAXATION !! INPUT !! Wrong--this is not 7702 "premiums paid".
-            ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
             )
         );
 }
