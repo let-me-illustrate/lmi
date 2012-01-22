@@ -43,6 +43,7 @@ class LMI_SO multiple_cell_document
 // TODO ?? Avoid long-distance friendship...in single-cell class, too.
     friend class CensusDocument;
     friend class CensusView;
+    friend class CensusViewOld; // Obsolescent listview version.
 
   public:
     multiple_cell_document();
