@@ -29503,3 +29503,39 @@ updating only copyright, header name, and include guards for now. The
 goal is to release a stable system while wxDVC development continues,
 but without changes like those made 20111026T1342Z and 20111028T1211Z.
 
+20120121T1144Z <gchicares@sbcglobal.net> [586]
+
+  census_view_old.cpp
+  census_view_old.hpp
+Replace defect markers in obsolescent code restored 20120121T1136Z.
+
+20120121T1300Z <gchicares@sbcglobal.net> [586]
+
+  census_view_old.cpp
+  census_view_old.hpp
+Rename class.
+
+20120121T1303Z <gchicares@sbcglobal.net> [586]
+
+  census_view_old.cpp
+Redefine a macro, out of an abundance of caution.
+
+20120122T1246Z <gchicares@sbcglobal.net> [586]
+
+  Makefile.am
+  census_document.hpp
+  multiple_cell_document.hpp
+  objects.make
+Compile and link code added 20120121T1136Z and renamed 20120121T1300Z.
+
+20120122T1350Z <gchicares@sbcglobal.net> [586]
+
+  census_document.cpp
+  census_document.hpp
+Rule out an ostensible error.
+
+20120122T1357Z <gchicares@sbcglobal.net> [586]
+
+  main_wx.cpp
+Use wxDVC only with a password never given to end users.
+
