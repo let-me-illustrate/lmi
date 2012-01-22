@@ -39,6 +39,7 @@ class CensusDocument
     ,private lmi::uncopyable<CensusDocument>
 {
     friend class CensusView;
+    friend class CensusViewOld; // Obsolescent listview version.
 
   public:
     CensusDocument();
