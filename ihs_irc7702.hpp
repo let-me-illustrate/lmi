@@ -87,14 +87,13 @@ class Irc7702
         ,round_to<double>    const& a_round_max_premium
         ,round_to<double>    const& a_round_min_specamt
         ,round_to<double>    const& a_round_max_specamt
-// TODO ?? Should we have default arguments at all?
-        ,int                        a_InforceYear         = 0
-        ,int                        a_InforceMonth        = 0
-        ,double                     a_InforceGLP          = 0.0
-        ,double                     a_InforceCumGLP       = 0.0
-        ,double                     a_InforceGSP          = 0.0
-        ,double                     a_InforceCumPremsPaid = 0.0
-        ,double                     a_LeastBftAmtEver     = 0.0
+        ,int                        a_InforceYear
+        ,int                        a_InforceMonth
+        ,double                     a_InforceGLP
+        ,double                     a_InforceCumGLP
+        ,double                     a_InforceGSP
+        ,double                     a_InforceCumPremsPaid
+        ,double                     a_LeastBftAmtEver
         // TODO ?? Perhaps other arguments are needed for inforce.
         );
     ~Irc7702();
