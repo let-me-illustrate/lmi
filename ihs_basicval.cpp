@@ -95,7 +95,7 @@ template std::string mc_str(mcenum_class   );
 template std::string mc_str(mcenum_uw_basis);
 
 //============================================================================
-// TODO ?? Not for general use--use for GPT server only. This is bad design.
+// TODO ?? Not for general use--use for GPT server only. This is bad design. TAXATION !! Eliminate this.
 BasicValues::BasicValues
     (std::string  const& a_ProductName
     ,mcenum_gender       a_Gender
@@ -253,7 +253,8 @@ void BasicValues::Init()
     // determined by a strategy. This data member is used only by
     // Init7702(), and is meaningful only when that function is called
     // by GPTServerInit(); the value assigned here is overridden by a
-    // downstream call to Irc7702::Initialize7702().
+    // downstream call to Irc7702::Initialize7702(). TAXATION !! So
+    // eliminate the member when it becomes unnecessary.
     InitialTargetPremium = 0.0;
 
     SetMaxSurvivalDur();
@@ -263,7 +264,7 @@ void BasicValues::Init()
 }
 
 //============================================================================
-// TODO ??  Not for general use--use for GPT server only, for now--refactor later
+// TODO ??  Not for general use--use for GPT server only, for now. TAXATION !! refactor later
 void BasicValues::GPTServerInit()
 {
     ProductData_.reset(new product_data(yare_input_.ProductName));
@@ -438,6 +439,9 @@ double BasicValues::InvestmentManagementFee() const
     return z;
 }
 
+// TAXATION !! Reconsider unconditional initialization.
+// TAXATION !! For 7702A, offer a choice: tables or first principles.
+
 /// Initialize 7702 object.
 ///
 /// This function is called unconditionally, even for CVAT cases that
@@ -502,7 +506,7 @@ void BasicValues::Init7702()
     // Monthly guar net int for 7702, with 4 or 6% min, is
     //   greater of {4%, 6%} and annual guar int rate
     //   less 7702 spread
-    // TODO ?? We need to subtract other things too, e.g. comp (sometimes)...
+    // TODO ?? TAXATION !! We need to subtract other things too, e.g. comp (sometimes)...
     //   transformed to monthly (simple subtraction?).
     // These interest rates belong here because they're used by
     // DCV calculations in the account value class as well as
@@ -510,6 +514,10 @@ void BasicValues::Init7702()
 
     std::vector<double> guar_int;
     Database_->Query(guar_int, DB_GuarInt);
+// TAXATION !! Rework this. The intention is to make the 7702 interest
+// rate no less, at any duration, than the guaranteed loan rate--here,
+// the fixed rate charged on loans, minus the guaranteed loan spread
+// (if any).
 /*
     switch(yare_input_.LoanRateType)
         {
@@ -609,7 +617,7 @@ void BasicValues::Init7702()
 
     // TODO ?? We should avoid reading the rate file again; but
     // the GPT server doesn't initialize a MortalityRates object
-    // that would hold those rates.
+    // that would hold those rates. TAXATION !! Rework this.
     std::vector<double> local_mly_charge_add(Length, 0.0);
     if(yare_input_.AccidentalDeathBenefit)
         {
@@ -656,16 +664,16 @@ void BasicValues::Init7702()
 //============================================================================
 void BasicValues::Init7702A()
 {
-    int magic = 0; // TODO ?? A kludge.
+    int magic = 0; // TODO ?? TAXATION !! A kludge.
     Irc7702A_.reset
         (new Irc7702A
             (magic
             ,DefnLifeIns_
             ,DefnMaterialChange_
-            ,false // TODO ?? Joint life: hardcoded for now.
+            ,false // TODO ?? TAXATION !! Joint life: hardcoded for now.
             ,yare_input_.AvoidMecMethod
-            ,true  // TODO ?? Use table for 7pp: hardcoded for now.
-            ,true  // TODO ?? Use table for NSP: hardcoded for now.
+            ,true  // TODO ?? TAXATION !! Use table for 7pp: hardcoded for now.
+            ,true  // TODO ?? TAXATION !! Use table for NSP: hardcoded for now.
             ,MortalityRates_->SevenPayRates()
             ,MortalityRates_->CvatNspRates()
             ,round_max_premium()

@@ -40,6 +40,10 @@
 #include <limits>
 #include <numeric>
 
+// TAXATION !! Update this block comment, or simply delete it. The
+// client-server model is important, but not predominantly so. It is
+// no longer desirable to document basic C++ for C programmers here.
+//
 // The corridor factor may as well reside on the client system: it's
 // just a constant vector of 101 numbers. We make it available for
 // any client that wants us to supply it.
@@ -76,28 +80,33 @@ namespace
         return v;
         }
 
-    // Use 7702 int rate for DB discount in NAAR
+    // Use 7702 int rate for DB discount in NAAR. TAXATION !! Does it
+    // make sense to retain this?
     bool g_UseIcForIg = true;
 } // Unnamed namespace.
 
-// General concerns
+// TAXATION !! General concerns
 //
-// flat extras
+// TAXATION !! Explain why flat extras are generally ignored.
 //
-// off-anniversary processing
+// TAXATION !! Support off-anniversary adjustment events, though not
+// in illustrations.
 //
-// signal forceouts
-// signal if gp limit becomes negative
+// TAXATION !! Are forceouts signalled properly by the server? in illustrations?
 //
-// always allow min pmt to keep contract in force
+// TAXATION !! Signal if gp limit becomes negative; always allow min pmt to keep
+// contract in force.
 //
-// maturity duration
+// TAXATION !! What if maturity duration is beyond age 100?
 //
-// riders
+// TAXATION !! Are riders adequately supported?
 //
-// need these in ctor?
+// TAXATION !! need this in ctor?
 //  ,double     a_CumPmtYtd
+//
+// TAXATION !! 7702(f)(7)(B-E)
 
+// TAXATION !! Document these points in some more appropriate fashion:
 // Server questions and answers:
 // check each pmt? --no, admin system does that
 // maintain current and last GSP, GLP --no, admin system does that
@@ -176,13 +185,13 @@ Irc7702::Irc7702
 {
     LMI_ASSERT(a_PresentSpecAmt <= a_PresentBftAmt);
     LMI_ASSERT(0.0 <= a_TargetPremium);
-    // TODO ?? Instead put these in initializer-list and write assertions?
+    // TODO ?? TAXATION !! Instead put these in initializer-list and write assertions?
     if(0 == InforceYear && 0 == InforceMonth)
         {
         PriorBftAmt     = a_PresentBftAmt;
         PriorSpecAmt    = a_PresentSpecAmt;
-        // TODO ?? Assert that this is <= least-bft arg?
-        LeastBftAmtEver = a_PresentSpecAmt;
+        // TODO ?? TAXATION !! Assert that this is <= least-bft arg?
+        LeastBftAmtEver = a_PresentSpecAmt; // TAXATION !! Why not a_LeastBftAmtEver?
         PriorDBOpt      = PresentDBOpt;
         PresentGLP      = 0.0;
         PriorGLP        = 0.0;
@@ -194,13 +203,15 @@ Irc7702::Irc7702
         }
     else
         {
+        // TAXATION !! Why Prior from Prior here, but from Present above?
+        // and, below, from Present for dbopt?
         PriorBftAmt     = a_PresentBftAmt;
         PriorSpecAmt    = a_PresentSpecAmt;
         LeastBftAmtEver = a_LeastBftAmtEver;
         LMI_ASSERT(LeastBftAmtEver <= PriorBftAmt);
         LMI_ASSERT(LeastBftAmtEver <= PresentBftAmt);
-        PriorDBOpt      = PresentDBOpt; // TODO ?? handle this (and some others) in initializer-list instead
-        // TODO ?? Must these be members? The arguments could be used here instead.
+        PriorDBOpt      = PresentDBOpt; // TODO ?? TAXATION !! handle this (and some others) in initializer-list instead
+        // TODO ?? TAXATION !! Must these be members? The arguments could be used here instead.
         PresentGLP      = InforceGLP;
         PriorGLP        = InforceGLP;
         CumGLP          = InforceCumGLP;
@@ -208,6 +219,7 @@ Irc7702::Irc7702
         PriorGSP        = InforceGSP;
         GptLimit        = std::max(CumGLP, PresentGSP);
         CumPmts         = a_InforceCumPremsPaid;
+// TAXATION !! Are these comments still useful?
 // to handle inforce, we need to know:
 // the quantity A in A+B-C (i.e. both GSP and GLP)
 //  CumGLP
@@ -229,6 +241,7 @@ void Irc7702::ProcessGptPmt
     )
 {
 // TODO ?? Duration and CumPmt args not yet used.
+// TAXATION !! Would Duration somehow be used for verification?
     if(mce_gpt != Test7702)
         {
         return;
@@ -239,6 +252,7 @@ void Irc7702::ProcessGptPmt
 }
 
 //============================================================================
+// TAXATION !! Update this block comment.
 // Adjustable events processed here:
 //  actual changes in DB arising from:
 //      changes in SA
@@ -284,9 +298,11 @@ void Irc7702::ProcessAdjustableEvent
     LMI_ASSERT(materially_equal(PresentSpecAmt, a_PriorSpecAmt));
     LMI_ASSERT(PresentDBOpt == a_PriorDBOpt);
     LMI_ASSERT(0.0 <= a_TargetPremium);
+    // TAXATION !! Update this block comment:
     // Should be called only when something actually changed: either
     //   dbopt changed; or
     //   specamt changed, causing an actual change in bftamt.
+    //   TAXATION !! ...or bft amt, if 7702 DB is defined as that
     // For illustrations only, we assume:
     //   no changes in ratings
     //   no liberalizations in charges
@@ -312,6 +328,8 @@ void Irc7702::ProcessAdjustableEvent
 
     // Apply A + B - C method for both GLP and GSP.
 
+// TAXATION !! The name should certainly be changed; should the
+// old behavior be retained conditionally?
 // We changed our interpretation, but it'd be nice to preserve
 // the old functionality, conditional on a behavior flag. And
 // the name is poor: shouldn't it just be 'EndowmentBenefit'?
@@ -321,14 +339,14 @@ void Irc7702::ProcessAdjustableEvent
         (a_Duration
         ,PresentBftAmt
         ,PresentSpecAmt
-        ,PresentSpecAmt // LeastBftAmtEver
+        ,PresentSpecAmt // TAXATION !! LeastBftAmtEver
         ,PresentDBOpt
         );
     double c_level = CalculateGLP
         (a_Duration
         ,PriorBftAmt
         ,PriorSpecAmt
-        ,PriorSpecAmt // LeastBftAmtEver
+        ,PriorSpecAmt // TAXATION !! LeastBftAmtEver
         ,PriorDBOpt
         );
     PriorGLP = PresentGLP;
@@ -338,19 +356,20 @@ void Irc7702::ProcessAdjustableEvent
         (a_Duration
         ,PresentBftAmt
         ,PresentSpecAmt
-        ,PresentSpecAmt // LeastBftAmtEver
+        ,PresentSpecAmt // TAXATION !! LeastBftAmtEver
         );
     double c_single = CalculateGSP
         (a_Duration
         ,PriorBftAmt
         ,PriorSpecAmt
-        ,PriorSpecAmt // LeastBftAmtEver
+        ,PriorSpecAmt // TAXATION !! LeastBftAmtEver
         );
     PriorGSP = PresentGSP;
     PresentGSP = PriorGSP + b_single - c_single;
 // Test for negative guideline...then do what if negative?
 // --refer to actuarial department (see specs)
-    CumGLP = CumGLP + PresentGLP - PriorGLP;
+// TAXATION !! shouldn't that be handled here?
+    CumGLP = CumGLP + PresentGLP - PriorGLP; // TAXATION !! Eh? Because prior GLP was already added?
     GptLimit = std::max(CumGLP, PresentGSP);
 }
 
@@ -376,8 +395,10 @@ void Irc7702::Init()
 {
     Length = Qc.size();
     // TODO ?? Assumes that endowment age is always 100--should pass as arg instead.
+    // TAXATION !! Is the comment above correct? Maturity age is passed as an argument.
     LMI_ASSERT(Length == EndtAge - IssueAge);
 
+    // TAXATION !! "For now": a decade has passed...
     // For now, always perform both GPT and CVAT calculations.
     // GLP might be wanted for some purpose in a CVAT product.
     // The extra overhead is not enormous.
@@ -389,7 +410,7 @@ void Irc7702::Init()
     InitPvVectors(Opt1Int6Pct);
     // TODO ?? We can delete the commutation functions here, rather than in
     // the dtor, to save some space. We defer doing so until the
-    // program is complete.
+    // program is complete. TAXATION !! It would be better not to use pointers--see header.
 }
 
 //============================================================================
@@ -464,7 +485,7 @@ void Irc7702::InitCorridor()
 {
     // CVAT corridor
     // TODO ?? Substandard: set last NSP to 1.0? ignore flats? set NSP[omega] to 1?
-    // --better to ignore susbstandard
+    // TAXATION !! --better to ignore susbstandard
     CvatCorridor.resize(Length);
     // ET !! CvatCorridor = CommFns[Opt1Int4Pct]->aD() / CommFns[Opt1Int4Pct]->kM();
     std::vector<double> denominator(CommFns[Opt1Int4Pct]->kM());
@@ -621,7 +642,7 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 
     // ET !! PvNpfSglTgt[a_EIOBasis] = (1.0 - LoadTgt) * comm_fns.aD();
     std::vector<double>& npf_sgl_tgt = PvNpfSglTgt[a_EIOBasis];
-//  LMI_ASSERT(u_length == npf_sgl_tgt.size());
+//  LMI_ASSERT(u_length == npf_sgl_tgt.size()); // TAXATION !! Expunge if truly unwanted.
     npf_sgl_tgt = LoadTgt;
     LMI_ASSERT(u_length == npf_sgl_tgt.size());
     std::transform(npf_sgl_tgt.begin(), npf_sgl_tgt.end(), npf_sgl_tgt.begin()
@@ -637,7 +658,7 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
         ,std::multiplies<double>()
         );
     std::vector<double>& npf_lvl_tgt = PvNpfLvlTgt[a_EIOBasis];
-//  LMI_ASSERT(u_length == npf_lvl_tgt.size());
+//  LMI_ASSERT(u_length == npf_lvl_tgt.size()); // TAXATION !! Expunge if truly unwanted.
     npf_lvl_tgt = npf_sgl_tgt;
     LMI_ASSERT(u_length == npf_lvl_tgt.size());
     std::reverse(npf_lvl_tgt.begin(), npf_lvl_tgt.end());
@@ -648,13 +669,13 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 
     // ET !! PvNpfSglExc[a_EIOBasis] = (1.0 - LoadExc) * comm_fns.aD();
     std::vector<double>& npf_sgl_exc = PvNpfSglExc[a_EIOBasis];
-//  LMI_ASSERT(u_length == npf_sgl_exc.size());
+//  LMI_ASSERT(u_length == npf_sgl_exc.size()); // TAXATION !! Expunge if truly unwanted.
     npf_sgl_exc = LoadExc;
     LMI_ASSERT(u_length == npf_sgl_exc.size());
     std::transform(npf_sgl_exc.begin(), npf_sgl_exc.end(), npf_sgl_exc.begin()
         ,std::bind1st(std::minus<double>(), 1.0)
         );
-    LMI_ASSERT(u_length == npf_sgl_tgt.size());
+    LMI_ASSERT(u_length == npf_sgl_tgt.size()); // TAXATION !! Shouldn't this be npf_sgl_exc?
     LMI_ASSERT(u_length == comm_fns.aD().size());
     std::transform
         (npf_sgl_exc.begin()
@@ -664,7 +685,7 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
         ,std::multiplies<double>()
         );
     std::vector<double>& npf_lvl_exc = PvNpfLvlExc[a_EIOBasis];
-//  LMI_ASSERT(u_length == npf_lvl_exc.size());
+//  LMI_ASSERT(u_length == npf_lvl_exc.size()); // TAXATION !! Expunge if truly unwanted.
     npf_lvl_exc = npf_sgl_exc;
     LMI_ASSERT(u_length == npf_lvl_exc.size());
     std::reverse(npf_lvl_exc.begin(), npf_lvl_exc.end());
@@ -675,7 +696,7 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 
     // ET !! PvLoadDiffSgl[a_EIOBasis] = npf_sgl_exc - npf_sgl_tgt;
     std::vector<double>& diff_sgl = PvLoadDiffSgl[a_EIOBasis];
-//  LMI_ASSERT(u_length == diff_sgl.size());
+//  LMI_ASSERT(u_length == diff_sgl.size()); // TAXATION !! Expunge if truly unwanted.
     diff_sgl.resize(Length);
     LMI_ASSERT(u_length == diff_sgl.size());
     LMI_ASSERT(u_length == npf_sgl_exc.size());
@@ -688,7 +709,7 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
         ,std::minus<double>()
         );
     std::vector<double>& diff_lvl = PvLoadDiffLvl[a_EIOBasis];
-//  LMI_ASSERT(u_length == diff_lvl.size());
+//  LMI_ASSERT(u_length == diff_lvl.size()); // TAXATION !! Expunge if truly unwanted.
     diff_lvl.resize(Length);
     LMI_ASSERT(u_length == diff_lvl.size());
     std::reverse(diff_lvl.begin(), diff_lvl.end());
@@ -707,7 +728,7 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 void Irc7702::Initialize7702
     (double            a_BftAmt
     ,double            a_SpecAmt
-    ,mcenum_dbopt_7702 a_DBOpt // TODO ?? Is there any reason why dbopt would be changed here?
+    ,mcenum_dbopt_7702 a_DBOpt // TODO ?? TAXATION !! Is there any reason why dbopt would be changed here?
     ,double            a_TargetPremium
     )
 {
@@ -719,7 +740,7 @@ void Irc7702::Initialize7702
     PriorSpecAmt        = PresentSpecAmt;
     PresentBftAmt       = a_BftAmt;
     PriorBftAmt         = PresentBftAmt;
-// This:
+// TAXATION !! This:
 //  LeastBftAmtEver     = PresentBftAmt;
 // would appear correct: ...BftAmt assigned from ...BftAmt. However,
 // as pointed out above, 'EndowmentBenefit' would be a better name,
@@ -748,6 +769,7 @@ void Irc7702::Initialize7702
         }
     else
         {
+        // TAXATION !! Revisit this.
         // TODO ?? None of this should be necessary, but this function
         // is called for every basis, though it probably should be
         // called only once, for basis 'mce_run_gen_curr_sep_full'.
@@ -773,6 +795,9 @@ void Irc7702::UpdateBOY7702()
     // be OK because illustration systems confine most transactions
     // to anniversaries and we envision that an admin system client
     // will do this calculation itself.
+    // TAXATION !! Rewrite that comment. It is true that off-anniversary
+    // changes aren't handled at present, but the work done here would
+    // never be done at any other time.
     CumGLP += PresentGLP;
     GptLimit = std::max(CumGLP, PresentGSP);
 }
@@ -890,6 +915,7 @@ double Irc7702::CalculatePremium
     LMI_ASSERT(0.0 != a_NetPmtFactorTgt);
     LMI_ASSERT(0.0 != a_NetPmtFactorExc);
 
+    // TAXATION !! Deal with this:
     // TODO ?? This implementation is correct only if target premium
     // is fixed forever at issue; otherwise, distinct target premiums
     // must be passed for each of the quantities A, B, and C. Should
@@ -926,19 +952,22 @@ double Irc7702::CalculatePremium
         ;
 }
 
+// TAXATION !! Deal with this stuff.
 // Nothing past this point is intended for use by the GPT server
 
 // General concerns outside the scope of the standalone server
 //
-// combine txs on same date
+// combine txs on same date TAXATION !! isn't that up to the server?
 //
-// track cum pmts - wds and forceouts
+// track cum pmts less wds and forceouts TAXATION !! is it necessary
+// to add code here to accumulate those debits?
 //
-// current mort for substd
+// current mort for substd TAXATION !! is that outside the scope of this code?
 //
-// set SA at issue to reflect dumpins and 1035s
+// set SA at issue to reflect dumpins and 1035s TAXATION !! That could be
+// done for option two, but is probably a mistake.
 //
-// naming--SA vs SpecAmt, etc.
+// naming--SA vs SpecAmt, etc. TAXATION !! a grand renaming is desirable
 //
 
 /*
@@ -946,7 +975,7 @@ double Irc7702::CalculatePremium
 void Irc7702::InitSevenPayPrem()
 {
         // 7PP = MO / (N0-N7) (limit 7 to maturity year)
-        // add flat extras to 7PP?
+        // TAXATION !! add flat extras to 7PP?
         double denom = CFFourPctMin->N()[j];
         if((7 + j) < q.size())
             {
@@ -1007,7 +1036,7 @@ double Irc7702::premiums_paid() const
     return CumPmts;
 }
 
-// TODO ?? This should be a separate, standalone unit test.
+// TAXATION !! TODO ?? This should be a separate, standalone unit test.
 #ifdef TESTING
 
 #include "ihs_timer.hpp"
@@ -1031,6 +1060,7 @@ static double const Q[100] =    // I think this is unisex unismoke ANB 80CSO
 
 int main()
 {
+// TAXATION !! Update or remove these timings.
 // timing to construct Irc7702:
 // RW: about 37 msec
 // OS: about 93 msec; about 41 if we disable index checking
