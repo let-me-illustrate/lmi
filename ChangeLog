@@ -29539,3 +29539,38 @@ Rule out an ostensible error.
   main_wx.cpp
 Use wxDVC only with a password never given to end users.
 
+20120122T1935Z <gchicares@sbcglobal.net> [585]
+
+  ihs_irc7702.hpp
+Remove needless argument defaults.
+
+20120122T2254Z <gchicares@sbcglobal.net> [585]
+
+  ihs_basicval.cpp
+  ihs_irc7702.cpp
+  ihs_irc7702.hpp
+Sort ctor arguments to harmonize with member declaration order.
+
+20120125T0959Z <gchicares@sbcglobal.net> [585]
+
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_reg_d.xrc
+No longer label GPT inforce fields as unimplemented.
+
+20120125T1519Z <gchicares@sbcglobal.net> [585]
+
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+  ihs_irc7702.cpp
+  ihs_irc7702.hpp
+  ihs_irc7702a.cpp
+  ihs_irc7702a.hpp
+Mark some taxation issues.
+
+20120125T1522Z <gchicares@sbcglobal.net> [585]
+
+  version.hpp
+Designate release candidate.
+
