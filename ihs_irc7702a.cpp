@@ -21,11 +21,11 @@
 
 // $Id$
 
-// TODO ?? Make this a server app. Consider where to store DB, SA history.
+// TODO ?? TAXATION !! Make this a server app. Consider where to store DB, SA history.
 
-// TODO ?? Do we need a separate function to handle withdrawals?
+// TODO ?? TAXATION !! Do we need a separate function to handle withdrawals?
 
-// TODO ?? Treat ROP increases as material changes exactly where needed.
+// TODO ?? TAXATION !! Treat ROP increases as material changes exactly where needed.
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -51,7 +51,7 @@ namespace
 static int const         months_per_year              = 12          ;
 static long double const years_per_month              = 1.0L / 12.0L;
 static int const         statutory_max_endowment_age  = 100         ;
-// TODO ?? Test period not limited to seven years for survivorship.
+// TODO ?? TAXATION !! Test period not limited to seven years for survivorship.
 static int const         usual_test_period_length     = 7           ;
 }
 
@@ -116,8 +116,9 @@ Irc7702A::Irc7702A
     // Set flags for implementation choices. Assigning values here
     // looks superfluous because it duplicates the initializer-list;
     // they're grouped here to emphasize them for maintainers.
+    // TAXATION !! DATABASE !! Each should either be eliminated or moved to the database.
     InterpolateNspOnly      = false;
-    Exch1035IsMatChg        = true; // TODO ?? Silly--remove.
+    Exch1035IsMatChg        = true; // TODO ?? TAXATION !! Silly--remove.
     CorrHidesIncr           = false;
 
     switch(DefnMaterialChange)
@@ -140,7 +141,7 @@ Irc7702A::Irc7702A
             break;
         case mce_later_of_increase_or_unnecessary_premium:
             {
-            // TODO ?? Not implemented yet.
+            // TODO ?? TAXATION !! Not implemented yet.
             fatal_error()
                 << "mce_later_of_increase_or_unnecessary_premium not implemented."
                 << LMI_FLUSH
@@ -216,14 +217,14 @@ void Irc7702A::Initialize7702A
     double lowest_bft = *std::min_element(a_Bfts.begin(), a_Bfts.end());
     // Allow Bfts to be zero for solves.
     LMI_ASSERT(0.0 <= lowest_bft);
-    // TODO ?? Should we assert that this equals 'a_LowestBft'?
+    // TODO ?? TAXATION !! Should we assert that this equals 'a_LowestBft'?
     // If we can, then we don't need the latter as an argument.
 
     Ignore = false;
     if(a_Ignore || (mce_cvat != DefnLifeIns && mce_gpt != DefnLifeIns))
         {
         Ignore = true;
-        // TODO ?? An early return here as a speed optimization is not yet
+        // TODO ?? TAXATION !! An early return here as a speed optimization is not yet
         // safe. Routines to print optional monthly calculation detail rely
         // on sane values for some of the variables below. We could make
         // those routines depend on the early return condition here, or
@@ -234,12 +235,12 @@ void Irc7702A::Initialize7702A
 
     UnnecPremPaid = false;
     IsMec = false;
-    // TODO ?? I dislike this variable name because a contract can become a MEC
+    // TODO ?? TAXATION !! I dislike this variable name because a contract can become a MEC
     // at issue even when the variable's value is false.
     if(a_MecAtIssue)
         {
         IsMec = true;
-        // TODO ?? An early return here as a speed optimization is not yet
+        // TODO ?? TAXATION !! An early return here as a speed optimization is not yet
         // safe. Routines to print optional monthly calculation detail rely
         // on sane values for some of the variables below. We could make
         // those routines depend on the early return condition here, or
@@ -256,7 +257,7 @@ void Irc7702A::Initialize7702A
     PolicyYear          = a_PolicyYear;
     PolicyMonth         = a_PolicyMonth;
 
-    // TODO ?? Not for survivorship.
+    // TODO ?? TAXATION !! Not for survivorship.
     TestPeriodLen   = months_per_year * usual_test_period_length;
     TestPeriodDur   = a_ContractMonth + months_per_year * a_ContractYear;
 
@@ -266,7 +267,7 @@ void Irc7702A::Initialize7702A
             std::min(a_EndtAge, statutory_max_endowment_age)
         -   a_IssueAge
         ;
-    // TODO ?? Do we really need '1 +'?
+    // TODO ?? TAXATION !! Do we really need '1 +'?
     unsigned int max_dur = 1 + months_per_year * max_years;
     Pmts.assign(max_dur, 0.0);
     Bfts.assign(max_dur, 0.0);
@@ -274,11 +275,11 @@ void Irc7702A::Initialize7702A
     LMI_ASSERT(a_Pmts.size() <= max_years);
     for(unsigned int j = 0; j < a_Pmts.size(); ++j)
         {
-        // TODO ?? OK to treat premium history as annual?
+        // TODO ?? TAXATION !! OK to treat premium history as annual?
         Pmts[j * months_per_year] = a_Pmts[j];
         }
     LMI_ASSERT(a_Bfts.size() <= max_years);
-// UpdateBft7702A() updates this, thus:
+// TAXATION !! UpdateBft7702A() updates this, thus:
 //    Bfts[TestPeriodDur] = current_bft;
 // so should we make sure Bfts[TestPeriodDur] is zero here?
     for(unsigned int j = 0; j < a_Bfts.size(); ++j)
@@ -291,10 +292,10 @@ void Irc7702A::Initialize7702A
 
     CumPmts         = std::accumulate(a_Pmts.begin(), a_Pmts.end(), 0.0);
 
-    AssumedBft      = a_LowestBft; // TODO ?? Is this needed? Is it not always Bfts[0]?
+    AssumedBft      = a_LowestBft; // TAXATION !! TODO ?? Is this needed? Is it not always Bfts[0]?
     LowestBft       = a_LowestBft;
 
-    // For now, make do with the data available. Ultimately, pass
+    // TAXATION !! For now, make do with the data available. Ultimately, pass
     // duration of last material change as an argument.
     double const z = std::floor
         ( (    PolicyYear +     PolicyMonth / 12.0)
@@ -306,7 +307,7 @@ void Irc7702A::Initialize7702A
     state_.B2_deduced_px7_rate = SevenPPRateVec[duration_of_last_mc];
     SavedNecPrem    = 0.0;
     UnnecPrem       = 0.0;
-    SavedNSP        = NSPVec[PolicyYear]; // TODO ?? Ignores interpolation.
+    SavedNSP        = NSPVec[PolicyYear]; // TODO ?? TAXATION !! Ignores interpolation.
     state_.B3_deduced_nsp_rate = NSPVec[PolicyYear];
 
     Determine7PP
@@ -381,6 +382,7 @@ void Irc7702A::UpdateBOY7702A(int a_PolicyYear)
         // applying it irregularly is beyond the pale. We emulate this
         // ill-advised behavior only as an exercise in matching
         // another system. Do not use this for production.
+        // TAXATION !! Remove support for this misbegotten concept.
         double NSPBeg       = NSPVec[PolicyYear];
         double NSPEnd       = NSPVec[1 + PolicyYear];
         double lo_decrement = NSPBeg    * years_per_month;
@@ -419,7 +421,7 @@ void Irc7702A::UpdateBOY7702A(int a_PolicyYear)
         }
 
     // state_.Q4_cum_px7 and state_.Q5_cum_amt_pd are not updated here
-    // even though this function modifies CumSevenPP. Perhaps that
+    // even though this function modifies CumSevenPP. TAXATION !! Perhaps that
     // modification is a mistake: this function is called at the
     // beginning of each policy year, but the premium limit applies
     // to contract years.
@@ -634,7 +636,7 @@ double Irc7702A::MaxNonMecPremium
         }
     else
         {
-        // TODO ?? For GPT, this is presumed valid but not yet tested.
+        // TODO ?? TAXATION !! For GPT, this is presumed valid but not yet tested.
         //
         // Initially assume the result is less than target. If it
         // turns out to be greater, then use a different formula.
@@ -717,6 +719,7 @@ double Irc7702A::UpdatePmt7702A
     (double a_DeemedCashValue
     ,double a_Payment
     ,bool   a_ThisPaymentIsUnnecessary
+// TAXATION !! Eliminate these unused arguments?
     ,double // a_TargetPrem
     ,double // a_LoadTarget
     ,double // a_LoadExcess
@@ -728,7 +731,7 @@ double Irc7702A::UpdatePmt7702A
         return a_Payment;
         }
 
-// TODO ?? Not necessarily true if we net out WD?
+// TODO ?? TAXATION !! Not necessarily true if we net out WD?
 //  LMI_ASSERT(0.0 <= a_Payment);
 
     // As long as we're MEC testing, this function should be called whenever a
@@ -736,20 +739,20 @@ double Irc7702A::UpdatePmt7702A
     // called, the payment for the current duration should have its default
     // value of zero.
     //
-    // TODO ?? But then how will we handle a WD? Separate function?
+    // TODO ?? TAXATION !! But then how will we handle a WD? Separate function?
     //
     // Changed anyway: called twice a month when there's a material change.
 //    LMI_ASSERT(0.0 == Pmts[TestPeriodDur]);
 
     // During the test period (only), we accumulate premiums and compare
-    // to the seven-pay limit. We store premium history for this period(or longer?)
+    // to the seven-pay limit. We store premium history for this period (or longer?)
     // so that we can perform this comparison afresh in retrospect when
     // Bfts decreases.
     if(TestPeriodDur < TestPeriodLen)
         {
         // Reduce pmt to seven-pay limit if desired before recording it.
         // This won't avoid a retrospective MEC if Bfts later decreases.
-        // TODO ?? This is unnecessary now--premium limited in caller.
+        // TODO ?? TAXATION !! This is unnecessary now--premium limited in caller.
         /*
         if(mce_reduce_prem == AvoidMec)
             {
@@ -768,7 +771,7 @@ double Irc7702A::UpdatePmt7702A
         if(CumSevenPP < CumPmts)
             {
             IsMec = true;
-/* TODO ?? Reenable after testing.
+/* TODO ?? TAXATION !! Reenable after testing.
             if(mce_reduce_prem == AvoidMec)
                 {
                 warning()
@@ -786,7 +789,7 @@ double Irc7702A::UpdatePmt7702A
 
     // Test for unnecessary premium, which we deem to be a material change
 
-// TODO ?? Under GPT always MatChg if (iff?) GLP increased or if pmt increases ROP Bfts.
+// TODO ?? TAXATION !! Under GPT always MatChg if (iff?) GLP increased or if pmt increases ROP Bfts.
 
     if(mce_gpt == DefnLifeIns)
         {
@@ -805,10 +808,10 @@ double Irc7702A::UpdatePmt7702A
 
     // Reduce pmt to necessary premium if desired before accepting it.
     // This won't avoid a retrospective MEC if Bfts later decreases.
-    // TODO ?? Anyway, why limit premium to necessary?
+    // TODO ?? TAXATION !! Anyway, why limit premium to necessary?
     if(mce_reduce_prem == AvoidMec)
         {
-    // TODO ?? Not needed unless we try handling MEC avoidance here.
+    // TODO ?? TAXATION !! Not needed unless we try handling MEC avoidance here.
 /*
     double max_necessary_prem = MaxNecessaryPremium
         (a_DeemedCashValue
@@ -837,7 +840,7 @@ double Irc7702A::UpdatePmt7702A
         // never occur.
         //
         // However, a material change must be processed before any
-        // unnecessary premium is accepted. This code defectively
+        // unnecessary premium is accepted. This code defectively [TAXATION !! <-- Fix the defect then.]
         // accepts it while raising a flag calling for the material
         // change to be processed later. That's okay as long as a
         // material change has just been processed--but in that case
@@ -887,15 +890,15 @@ double Irc7702A::UpdatePmt7702A
 
 //============================================================================
 // record and test monthly Bfts
-// This function always returns zero, so it shouldn't return anything.
+// TAXATION !! This function always returns zero, so it shouldn't return anything.
 double Irc7702A::UpdateBft7702A
-    (double // a_DeemedCashValue // TODO ?? Not used.
+    (double // a_DeemedCashValue // TODO ?? TAXATION !! Not used.
     ,double  a_NewDB
     ,double  a_OldDB
     ,bool    a_IsInCorridor
     ,double  a_NewSA
     ,double  a_OldSA
-    ,double  // a_CashValue // TODO ?? Not used.
+    ,double  // a_CashValue // TODO ?? TAXATION !! Not used.
     )
 {
     if(Ignore || IsMec)
@@ -911,7 +914,7 @@ double Irc7702A::UpdateBft7702A
 
     // I believe that the death benefit, unlike the premium, can be set more
     // than once per month in the present code. I do not know whether or not
-    // this can be avoided. TODO ?? Figure this out.
+    // this can be avoided. TODO ?? TAXATION !! Figure this out.
     LMI_ASSERT(TestPeriodDur < static_cast<int>(Bfts.size()));
 
     double current_bft = 0.0;
@@ -986,7 +989,7 @@ double Irc7702A::UpdateBft7702A
     // One school of thought treats any Bft increase following any unnec prem
     // as a MatChg.
 #ifdef THIS_IS_NOT_DEFINED
-    // TODO ?? Recognizing a MatChg wipes the slate clean: it is as though no
+    // TODO ?? TAXATION !! Recognizing a MatChg wipes the slate clean: it is as though no
     // unnecessary premium had ever been paid. So 'UnnecPremEver' is
     // a nonsensical notion.
     if(UnnecPremPaid && AssumedBft < current_bft)
@@ -997,14 +1000,14 @@ double Irc7702A::UpdateBft7702A
 
     if(is_material_change)
         {
-// Suppressed--see note above:
+// TAXATION !! Suppressed--see note above:
 //        LMI_ASSERT(AssumedBft < current_bft); // No decrease is a MC.
         IsMatChg = true;
         state_.D3_incr_is_mc = true;
 /*
         RedressMatChg
             (a_DeemedCashValue
-            ,0.0            // TODO ?? a_UnnecPrem
+            ,0.0            // TODO ?? TAXATION !! a_UnnecPrem
             ,0.0            // a_NecPrem
             ,a_CashValue
             );
@@ -1019,15 +1022,15 @@ double Irc7702A::UpdateBft7702A
 // recalculate 7pp and apply retroactively to beginning of 7 yr period
 void Irc7702A::TestBftDecrease(double a_NewBft)
 {
-    // TODO ?? Is AssumedBft always equal to LowestBft?
+    // TODO ?? TAXATION !! Is AssumedBft always equal to LowestBft?
 
     // Bfts reductions during any seven-year test period need to be tested.
     // In addition, only for second-to-die (but not first-to-die) contracts,
     // Bfts reductions have to be tested whenever they occur, even if it's
     // outside any seven-year test period; but such testing covers only
     // seven years in any event.
-    // VERIFY Bfts decrease at end of period, and just beyond; also dur zero
-    // VERIFY same with survivorship; also in last contract month
+    // TAXATION !! VERIFY Bfts decrease at end of period, and just beyond; also dur zero
+    // TAXATION !! VERIFY same with survivorship; also in last contract month
     if(!(IsSurvivorship || TestPeriodDur < TestPeriodLen))
         {
         return;
@@ -1041,7 +1044,7 @@ void Irc7702A::TestBftDecrease(double a_NewBft)
 
     // Recalculate 7pp to reflect lower death benefit.
     //
-    // TODO ?? If the benefit decreases subsequent to a MatChg, then the 7pp
+    // TODO ?? TAXATION !! If the benefit decreases subsequent to a MatChg, then the 7pp
     // recalculation should use AV, NecPrem, and NSP as of the last MatChg.
     Determine7PP
         (a_NewBft
@@ -1054,7 +1057,7 @@ void Irc7702A::TestBftDecrease(double a_NewBft)
 
     // Retest all premiums from beginning of test period.
     //
-    // TODO ?? We also need to test for unnecessary premium in retrospect.
+    // TODO ?? TAXATION !! We also need to test for unnecessary premium in retrospect. [obsolete interpretation?]
     //
     // Recalculate CumSevenPP because SevenPP changed.
     CumSevenPP = 0.0;
@@ -1133,7 +1136,7 @@ void Irc7702A::RedressMatChg
     ,double  a_CashValue
     )
 {
-// TODO ?? I think all public functions in this class need this test:
+// TODO ?? TAXATION !! I think all public functions in this class need this test:
     if(Ignore || IsMec || !IsMaterialChangeInQueue())
         {
         return;
@@ -1148,11 +1151,11 @@ void Irc7702A::RedressMatChg
     // 'SavedDCV' is used only for monthly trace.
     SavedDCV = a_DeemedCashValue;
 
-    // TODO ?? What if account value is less than zero here?
+    // TODO ?? TAXATION !! What if account value is less than zero here?
 
     // Recalculate 7pp to reflect material change
     Determine7PP
-// TODO ?? If MatChg due to unnec prem, should Bfts reflect any corridor increase?
+// TODO ?? TAXATION !! If MatChg due to unnec prem, should Bfts reflect any corridor increase?
 // Yes.
         (Bfts[TestPeriodDur]    // a_Bft
         ,false                  // a_TriggeredByBftDecrease
@@ -1171,7 +1174,7 @@ void Irc7702A::RedressMatChg
         (Pmts.begin()
         ,Pmts.begin() + TestPeriodDur
         );
-// TODO ?? Is the latest payment still there?
+// TODO ?? TAXATION !! Is the latest payment still there?
 
     // Start new 7 pay period
     TestPeriodDur = 0;
@@ -1204,7 +1207,7 @@ void Irc7702A::RedressMatChg
 
 //============================================================================
 // update 7pp
-// Restructure this--too many TriggeredBy's
+// TAXATION !! Restructure this--too many TriggeredBy's
 void Irc7702A::Determine7PP
     (double a_Bft
     ,bool   // a_TriggeredByBftDecrease
@@ -1216,7 +1219,7 @@ void Irc7702A::Determine7PP
 {
     // We always treat payment of unnecessary premium as a material change
     // So this test is unnecessary; so is the parm in the conditional.
-    // TODO ?? NO LONGER TRUE.
+    // TODO ?? TAXATION !! NO LONGER TRUE.
     if(a_TriggeredByUnnecPrem)
         {
         LMI_ASSERT(a_TriggeredByMatChg);
@@ -1227,7 +1230,7 @@ void Irc7702A::Determine7PP
     // Store new values for
     //  Saved7PPRate, SavedAVBeforeMatChg, SavedNecPrem, and SavedNSP
     // iff 7pp recalculation due to material change. (But how could
-    // a material change mutate 'Saved7PPRate'?)
+    // a material change mutate 'Saved7PPRate'?) [TAXATION !! rethink that]
     // But leave those values undisturbed if triggered by Bfts decrease.
     if(a_TriggeredByMatChg)
         {
@@ -1238,7 +1241,7 @@ void Irc7702A::Determine7PP
         // premium was paid. Otherwise, the premium, which was all necessary,
         // simply went into the AV. SavedNecPrem is used only to adjust
         // the AV saved prior to a material change.
-        // TODO ?? Is that rigorous?
+        // TODO ?? TAXATION !! Is that rigorous?
         if(a_TriggeredByUnnecPrem)
             {
             SavedNecPrem = a_NecPrem;
@@ -1252,7 +1255,7 @@ void Irc7702A::Determine7PP
         {
         // No material change--either we're initializing, or processing
         // a Bfts decrease. NO...could be an inforce case.
-// TODO ?? expunge
+// TODO ?? TAXATION !! expunge
 //        LMI_ASSERT
 //            (   a_TriggeredByBftDecrease
 //            ||  (0 == PolicyYear && 0 == PolicyMonth)
@@ -1271,7 +1274,7 @@ void Irc7702A::Determine7PP
 // pass DCV as an argument; maybe we should drop the assertion. Note
 // that 'SavedDCV', because of its limited purpose, isn't reliably
 // initialized; I'm not sure we should promote that variable to a
-// first-class citizen by initializing it carefully.
+// first-class citizen by initializing it carefully. [TAXATION !! Address this.]
             LMI_ASSERT
                 (   0.0                 == SavedAVBeforeMatChg
                 ||  materially_equal(SavedDCV, SavedAVBeforeMatChg)
@@ -1280,7 +1283,7 @@ void Irc7702A::Determine7PP
             LMI_ASSERT(materially_equal(SevenPPRateVec[0], Saved7PPRate));
             LMI_ASSERT(materially_equal(NSPVec[0], SavedNSP));
             }
-/* TODO ?? Expunge this perhaps. Not sure what we should do if someone
+/* TODO ?? TAXATION !! Expunge this perhaps. Not sure what we should do if someone
 tries running an inforce case as of month 0, year 0.
         // In either of these two cases--initialization or Bfts reduction--the
         // a_AVBeforeMatChg and a_NecPrem arguments are not used, so give a
@@ -1313,7 +1316,7 @@ tries running an inforce case as of month 0, year 0.
     // worry about whether the denominator is zero. For instance, Bfts
     // is allowed to be zero for solves.
     double bft_adjustment = SavedAVBeforeMatChg / SavedNSP;
-// TODO ?? expunge
+// TODO ?? TAXATION !! expunge
 //    double bft_adjustment =
 //            (SavedAVBeforeMatChg + SavedNecPrem)
 //        /   SavedNSP
@@ -1327,7 +1330,7 @@ tries running an inforce case as of month 0, year 0.
         {
         SevenPP = 0.0;
         }
-// TODO ?? AssumedBft should reflect any Bfts increase--AFTER the MatChg?
+// TODO ?? TAXATION !! AssumedBft should reflect any Bfts increase--AFTER the MatChg?
 }
 
 //============================================================================
@@ -1340,7 +1343,7 @@ double Irc7702A::DetermineLowestBft() const
         ,Bfts.begin() + std::min(TestPeriodLen, TestPeriodDur)
         );
     LMI_ASSERT(Bfts.begin() <= last_bft_in_test_period);
-// This is harmful for inforce if inforce history is unreliable:
+// TAXATION !! This is harmful for inforce if inforce history is unreliable:
     LowestBft = *std::min_element(Bfts.begin(), last_bft_in_test_period);
     return LowestBft;
 }
@@ -1349,13 +1352,13 @@ double Irc7702A::DetermineLowestBft() const
 // determine lowest non-MEC spec amt
 double Irc7702A::SAIncreaseToAvoidMec(bool a_TriggeredByUnnecPrem)
 {
-// TODO ?? Specs say DB, but isn't this SA?
+// TODO ?? TAXATION !! Specs say DB, but isn't this SA?
     double av = SavedAVBeforeMatChg;
     if(a_TriggeredByUnnecPrem)  // TODO ?? iff MatChg triggered by unnec prem?
         {
         av += SavedNecPrem;
         }
-    // Why aren't we using something like "SavedUnnecPrem" instead?
+    // TAXATION !! Why aren't we using something like "SavedUnnecPrem" instead?
     double new_bft =
             UnnecPrem / Saved7PPRate
         +   av
@@ -1365,7 +1368,7 @@ double Irc7702A::SAIncreaseToAvoidMec(bool a_TriggeredByUnnecPrem)
 // Specs say this formula is for Bfts increase to avoid MEC when unnec prem
 // paid. Also need to handle case where prem exceeds 7pp. Also need to handle
 // dumpins. Also need to handle Bfts decrease (complicated). Also need to
-// reflect new 7pp upon MatChg. TODO ?? Where should we do all this?
+// reflect new 7pp upon MatChg. TODO ?? TAXATION !! Where should we do all this?
 //
 // Events that are MatChgs:
 //   1035 exchange--but we treat that as a special case
@@ -1378,6 +1381,7 @@ double Irc7702A::SAIncreaseToAvoidMec(bool a_TriggeredByUnnecPrem)
     return new_bft;
 }
 
+// TAXATION !! Rewrite or remove this block comment:
 /*
  * // Entry points
  *

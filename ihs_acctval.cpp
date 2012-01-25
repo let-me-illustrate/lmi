@@ -460,6 +460,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         ,InvariantValues().SpecAmt[0]
         );
     // It is at best superfluous to do this for every basis.
+    // TAXATION !! Don't do that then.
     Irc7702_->Initialize7702
         (InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
         ,InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
@@ -472,7 +473,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
 
     // This is notionally called once per *current*-basis run
     // and actually called once per run, with calculations suppressed
-    // for all other bases. TODO ?? How should we handle MEC-avoid
+    // for all other bases. TODO ?? TAXATION !! How should we handle MEC-avoid
     // solves on bases other than current?
 
     InvariantValues().InforceYear  = yare_input_.InforceYear;
@@ -504,7 +505,8 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     if(0 == InforceYear && 0 == InforceMonth)
         {
         // No need to initialize 'pmts_7702a' in this case.
-        // This assumes the term rider can be treated as death benefit.
+        // TAXATION !! This assumes the term rider can be treated as death benefit.
+        // TAXATION !! DATABASE !! That should be a database flag.
         bfts_7702a.push_back
             (   InvariantValues().SpecAmt[0]
             +   InvariantValues().TermSpecAmt[0]
@@ -520,6 +522,10 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
             ,std::back_inserter(pmts_7702a)
             );
         // Specamt history starts at policy year zero and must be offset.
+        // TAXATION !! That's wrong, because contract-year history cannot
+        // generally be obtained from policy-year history by any integral
+        // offset; but doesn't LDB provide all the information required,
+        // if only it were used in preference to this?
         int const offset = duration_ceiling
             (yare_input_.EffectiveDate
             ,yare_input_.LastMaterialChangeDate
@@ -533,7 +539,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     double lowest_death_benefit = yare_input_.InforceLeastDeathBenefit;
     if(0 == InforceYear && 0 == InforceMonth)
         {
-        lowest_death_benefit = bfts_7702a.front();
+        lowest_death_benefit = bfts_7702a.front(); // TAXATION !! See above--use input LDB instead.
         }
     Irc7702A_->Initialize7702A
         (mce_run_gen_curr_sep_full != RunBasis_
@@ -545,11 +551,13 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         ,yare_input_.InforceContractYear
         ,yare_input_.InforceContractMonth
         ,yare_input_.InforceAvBeforeLastMc
-        ,lowest_death_benefit
+        ,lowest_death_benefit // TAXATION !! See above--use input LDB instead.
         ,pmts_7702a
         ,bfts_7702a
         );
 
+    //  TAXATION !! Move this before 7702 and 7702A stuff, to make it
+    // harder to overlook.
     daily_interest_accounting = contains
         (yare_input_.Comments
         ,"idiosyncrasy_daily_interest_accounting"
@@ -587,7 +595,7 @@ void AccountValue::SetInitialValues()
 {
     // These inforce things belong in input struct.
     // TODO ?? The list is not complete; others will be required:
-    // payment history; surrender charges; DCV history?
+    // payment history; surrender charges; DCV history? TAXATION !! Resolve this.
     InforceYear                 = yare_input_.InforceYear                    ;
     InforceMonth                = yare_input_.InforceMonth                   ;
     InforceAVGenAcct            = yare_input_.InforceGeneralAccountValue     ;
@@ -604,7 +612,7 @@ void AccountValue::SetInitialValues()
     Month                       = InforceMonth;
     CoordinateCounters();
 
-    DB7702A                     = 0.0;  // TODO ?? This seems silly.
+    DB7702A                     = 0.0;  // TODO ?? TAXATION !! This seems silly.
 
     AVRegLn                     = InforceAVRegLn;
     AVPrfLn                     = InforceAVPrfLn;
@@ -895,7 +903,7 @@ void AccountValue::InitializeYear()
 
     PremiumTax_->start_new_year();
     // Skip this in an incomplete initial inforce year.
-    // Premium tax should perhaps be handled similarly.
+    // TAXATION !! Premium tax should perhaps be handled similarly.
     if(Year != InforceYear || 0 == InforceMonth)
         {
         Irc7702_ ->UpdateBOY7702();
@@ -1495,6 +1503,9 @@ void AccountValue::SetAnnualInvariants()
 */
     YearsTotLoadTgt         = Loads_->target_total_load     (GenBasis_)[Year];
     YearsTotLoadExc         = Loads_->excess_total_load     (GenBasis_)[Year];
+    // TAXATION !! This '_lowest_premium_tax' approach needs to be
+    // reworked: there should be an option (at least) to use the
+    // current tax rates.
     YearsTotLoadTgtLowestPremtax = Loads_->target_premium_load_7702_lowest_premium_tax()[Year];
     YearsTotLoadExcLowestPremtax = Loads_->excess_premium_load_7702_lowest_premium_tax()[Year];
     YearsPremLoadTgt        = Loads_->target_premium_load   (GenBasis_)[Year];
