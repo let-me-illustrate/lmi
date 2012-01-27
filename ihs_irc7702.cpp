@@ -211,7 +211,6 @@ Irc7702::Irc7702
         LMI_ASSERT(LeastBftAmtEver <= PriorBftAmt);
         LMI_ASSERT(LeastBftAmtEver <= PresentBftAmt);
         PriorDBOpt      = PresentDBOpt; // TODO ?? TAXATION !! handle this (and some others) in initializer-list instead
-        // TODO ?? TAXATION !! Must these be members? The arguments could be used here instead.
         PresentGLP      = InforceGLP;
         PriorGLP        = InforceGLP;
         CumGLP          = InforceCumGLP;
