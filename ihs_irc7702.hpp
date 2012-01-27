@@ -222,9 +222,9 @@ class Irc7702
 
     double                     PresentGLP;
     double                     PriorGLP;
+    double                     CumGLP;     // Cumulative GLP
     double                     PresentGSP;
     double                     PriorGSP;
-    double                     CumGLP;     // Cumulative GLP
     double                     GptLimit;   // Guideline limit: max(cum GLP, GSP)
     double                     CumPmts;    // Cumulative payments
 
