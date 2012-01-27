@@ -29574,3 +29574,19 @@ Mark some taxation issues.
   version.hpp
 Designate release candidate.
 
+20120127T1249Z <gchicares@sbcglobal.net> [584]
+
+  ihs_irc7702.cpp
+Assert that endowment benefit does not exceed specamt.
+
+20120127T1256Z <gchicares@sbcglobal.net> [583]
+
+  ihs_irc7702.cpp
+Expunge a redundant comment (cf. line 778).
+
+20120127T1416Z <gchicares@sbcglobal.net> [581]
+
+  ihs_irc7702.cpp
+  ihs_irc7702.hpp
+Prefer to perform initialization in initializer-list.
+

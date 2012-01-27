@@ -161,6 +161,7 @@ Irc7702::Irc7702
     ,PriorBftAmt        (a_PresentBftAmt)
     ,PresentSpecAmt     (a_PresentSpecAmt)
     ,PriorSpecAmt       (a_PresentSpecAmt)
+    ,LeastBftAmtEver    (a_LeastBftAmtEver)
     ,PresentDBOpt       (a_PresentDBOpt)
     ,PriorDBOpt         (a_PresentDBOpt)
     ,AnnChgPol          (a_AnnChgPol)
@@ -182,47 +183,26 @@ Irc7702::Irc7702
     ,InforceCumGLP      (a_InforceCumGLP)
     ,InforceGSP         (a_InforceGSP)
     ,InforceCumPremsPaid(a_InforceCumPremsPaid)
+    ,PresentGLP         (a_InforceGLP)
+    ,PriorGLP           (a_InforceGLP)
+    ,CumGLP             (a_InforceCumGLP)
+    ,PresentGSP         (a_InforceGSP)
+    ,PriorGSP           (a_InforceGSP)
+    ,GptLimit           (std::max(a_InforceCumGLP, a_InforceGSP))
+    ,CumPmts            (a_InforceCumPremsPaid)
 {
     LMI_ASSERT(a_PresentSpecAmt  <= a_PresentBftAmt );
     LMI_ASSERT(a_LeastBftAmtEver <= a_PresentSpecAmt);
     LMI_ASSERT(0.0 <= a_TargetPremium);
-    // TODO ?? TAXATION !! Instead put these in initializer-list and write assertions?
     if(0 == InforceYear && 0 == InforceMonth)
         {
-        PriorBftAmt     = a_PresentBftAmt;
-        PriorSpecAmt    = a_PresentSpecAmt;
-        LeastBftAmtEver = a_PresentSpecAmt; // TAXATION !! Why not a_LeastBftAmtEver?
-        PriorDBOpt      = PresentDBOpt;
-        PresentGLP      = 0.0;
-        PriorGLP        = 0.0;
-        CumGLP          = 0.0;
-        PresentGSP      = 0.0;
-        PriorGSP        = 0.0;
-        GptLimit        = 0.0;
-        CumPmts         = 0.0;
-        }
-    else
-        {
-        // TAXATION !! Why Prior from Prior here, but from Present above?
-        // and, below, from Present for dbopt?
-        PriorBftAmt     = a_PresentBftAmt;
-        PriorSpecAmt    = a_PresentSpecAmt;
-        LeastBftAmtEver = a_LeastBftAmtEver;
-        LMI_ASSERT(LeastBftAmtEver <= PriorBftAmt);
-        LMI_ASSERT(LeastBftAmtEver <= PresentBftAmt);
-        PriorDBOpt      = PresentDBOpt; // TODO ?? TAXATION !! handle this (and some others) in initializer-list instead
-        PresentGLP      = InforceGLP;
-        PriorGLP        = InforceGLP;
-        CumGLP          = InforceCumGLP;
-        PresentGSP      = InforceGSP;
-        PriorGSP        = InforceGSP;
-        GptLimit        = std::max(CumGLP, PresentGSP);
-        CumPmts         = a_InforceCumPremsPaid;
-// TAXATION !! Are these comments still useful?
-// to handle inforce, we need to know:
-// the quantity A in A+B-C (i.e. both GSP and GLP)
-//  CumGLP
-//  CumPmts--as specially defined by 7702
+        LMI_ASSERT(0.0 == PresentGLP);
+        LMI_ASSERT(0.0 == PriorGLP  );
+        LMI_ASSERT(0.0 == CumGLP    );
+        LMI_ASSERT(0.0 == PresentGSP);
+        LMI_ASSERT(0.0 == PriorGSP  );
+        LMI_ASSERT(0.0 == GptLimit  );
+        LMI_ASSERT(0.0 == CumPmts   );
         }
     Init();
 }
