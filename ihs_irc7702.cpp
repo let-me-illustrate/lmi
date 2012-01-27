@@ -183,14 +183,14 @@ Irc7702::Irc7702
     ,InforceGSP         (a_InforceGSP)
     ,InforceCumPremsPaid(a_InforceCumPremsPaid)
 {
-    LMI_ASSERT(a_PresentSpecAmt <= a_PresentBftAmt);
+    LMI_ASSERT(a_PresentSpecAmt  <= a_PresentBftAmt );
+    LMI_ASSERT(a_LeastBftAmtEver <= a_PresentSpecAmt);
     LMI_ASSERT(0.0 <= a_TargetPremium);
     // TODO ?? TAXATION !! Instead put these in initializer-list and write assertions?
     if(0 == InforceYear && 0 == InforceMonth)
         {
         PriorBftAmt     = a_PresentBftAmt;
         PriorSpecAmt    = a_PresentSpecAmt;
-        // TODO ?? TAXATION !! Assert that this is <= least-bft arg?
         LeastBftAmtEver = a_PresentSpecAmt; // TAXATION !! Why not a_LeastBftAmtEver?
         PriorDBOpt      = PresentDBOpt;
         PresentGLP      = 0.0;
