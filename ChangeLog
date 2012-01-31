@@ -29601,7 +29601,7 @@ Document member functions at definition rather than at declaration.
   ihs_irc7702a.cpp
 Mark a defect.
 
-20120131T1147Z <gchicares@sbcglobal.net> [580]
+20120131T1149Z <gchicares@sbcglobal.net> [580]
 
   ihs_basicval.cpp
   ihs_irc7702a.cpp
@@ -29609,4 +29609,16 @@ Mark a defect.
   irc7702a_test.cpp
   mec_server.cpp
 Abjure "magic".
+
+20120131T1336Z <gchicares@sbcglobal.net> [579]
+
+  ihs_irc7702a.cpp
+  ihs_irc7702a.hpp
+Expunge misbegotten NSP interpolation.
+
+20120131T1339Z <gchicares@sbcglobal.net> [578]
+
+  ihs_irc7702a.cpp
+  ihs_irc7702a.hpp
+Expunge a silly flag.
 
