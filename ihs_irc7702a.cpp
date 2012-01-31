@@ -49,7 +49,6 @@
 namespace
 {
 static int const         months_per_year              = 12          ;
-static long double const years_per_month              = 1.0L / 12.0L;
 static int const         statutory_max_endowment_age  = 100         ;
 // TODO ?? TAXATION !! Test period not limited to seven years for survivorship.
 static int const         usual_test_period_length     = 7           ;
@@ -74,7 +73,6 @@ Irc7702A::Irc7702A
     ,ElectiveIncrIsMatChg (true)
     ,Exch1035IsMatChg     (true)
     ,CorrHidesIncr        (false)
-    ,InterpolateNspOnly   (false)
     ,IsSurvivorship       (a_IsSurvivorship)
     ,AvoidMec             (a_AvoidMec)
     ,Use7PPTable          (a_Use7PPTable)
@@ -115,7 +113,6 @@ Irc7702A::Irc7702A
     // looks superfluous because it duplicates the initializer-list;
     // they're grouped here to emphasize them for maintainers.
     // TAXATION !! DATABASE !! Each should either be eliminated or moved to the database.
-    InterpolateNspOnly      = false;
     Exch1035IsMatChg        = true; // TODO ?? TAXATION !! Silly--remove.
     CorrHidesIncr           = false;
 
@@ -253,10 +250,7 @@ void Irc7702A::Initialize7702A
         // return;
         }
 
-    // MlyInterpNSP has 13 values, to cover beg and end of each of 12 months,
-    // so that we can perform material change calculations at the end of the
-    // twelfth month if desired.
-    MlyInterpNSP.assign(1 + months_per_year, 0.0);
+    Ax = 0.0;
 
     PolicyYear          = a_PolicyYear;
     PolicyMonth         = a_PolicyMonth;
@@ -311,7 +305,7 @@ void Irc7702A::Initialize7702A
     state_.B2_deduced_px7_rate = SevenPPRateVec[duration_of_last_mc];
     SavedNecPrem    = 0.0;
     UnnecPrem       = 0.0;
-    SavedNSP        = NSPVec[PolicyYear]; // TODO ?? TAXATION !! Ignores interpolation.
+    SavedNSP        = NSPVec[PolicyYear];
     state_.B3_deduced_nsp_rate = NSPVec[PolicyYear];
 
     Determine7PP
@@ -350,7 +344,7 @@ void Irc7702A::Initialize7702A
 }
 
 //============================================================================
-/// Update cumulative 7pp; interpolate NSP (TAXATION !! remove interpolation)
+/// Update cumulative 7pp.
 ///
 /// Called at beginning of each policy year. TODO ?? TAXATION !! No, that's
 /// wrong if contract year and policy year don't coincide.
@@ -374,59 +368,7 @@ void Irc7702A::UpdateBOY7702A(int a_PolicyYear)
         CumSevenPP += SevenPP;
         }
 
-    if(!InterpolateNspOnly)
-        {
-        MlyInterpNSP.assign(MlyInterpNSP.size(), NSPVec[PolicyYear]);
-        }
-    else
-        {
-        // We are aware of one system that uses monthly interpolation
-        // for 7702A NSP but not for any other purpose (such as the
-        // CVAT "corridor", which ought to be the reciprocal). This is
-        // an extraordinary and unsound notion with no support in the
-        // statute or the legislative history. Interpolation per se
-        // may be in accordance with generally accepted actuarial
-        // principles, but making up a new calculation rule and
-        // applying it irregularly is beyond the pale. We emulate this
-        // ill-advised behavior only as an exercise in matching
-        // another system. Do not use this for production.
-        // TAXATION !! Remove support for this misbegotten concept.
-        double NSPBeg       = NSPVec[PolicyYear];
-        double NSPEnd       = NSPVec[1 + PolicyYear];
-        double lo_decrement = NSPBeg    * years_per_month;
-        double hi_increment = NSPEnd    * years_per_month;
-        double lo_val       = NSPBeg;
-        double hi_val       = 0.0;
-        for
-            (std::vector<double>::iterator nsp_iter = MlyInterpNSP.begin()
-            ;nsp_iter != MlyInterpNSP.end()
-            ;nsp_iter++
-            )
-            {
-            *nsp_iter = lo_val + hi_val;
-            lo_val -= lo_decrement;
-            hi_val += hi_increment;
-            }
-
-        // If correct increments and decrements were applied the correct number
-        // of times, then
-        //   lo_val should equal zero minus lo_decrement, and
-        //   hi_val should equal the next year's NSP plus hi_increment
-        LMI_ASSERT(materially_equal(lo_val, (-lo_decrement)));
-        LMI_ASSERT(materially_equal(hi_val, (NSPEnd + hi_increment)));
-        // The average of the interpolated values should equal the average
-        // of the endpoints
-        double avg_interp =
-                std::accumulate(MlyInterpNSP.begin(), MlyInterpNSP.end(), 0.0)
-            /   MlyInterpNSP.size();
-        double avg_endpts =
-            (NSPBeg + NSPEnd)
-            /   2.0;
-        LMI_ASSERT(materially_equal(avg_interp, avg_endpts));
-        // We do not assert that NSP increases by duration. That might not be
-        // true in the case of a high substandard rating that is "forgiven"
-        // after some period of time.
-        }
+    Ax = NSPVec[PolicyYear];
 
     // state_.Q4_cum_px7 and state_.Q5_cum_amt_pd are not updated here
     // even though this function modifies CumSevenPP. TAXATION !! Perhaps that
@@ -493,7 +435,7 @@ void Irc7702A::Update1035Exch7702A
     // issue date. So if the amount eventually received is too high,
     // an irremediable MEC results. We hesitate to "avoid" a MEC by
     // increasing the initial benefit because of this.
-    if(a_Bft * MlyInterpNSP[PolicyMonth] < a_Net1035Amount)
+    if(a_Bft * Ax < a_Net1035Amount)
         {
         IsMec = true;
         }
@@ -658,10 +600,10 @@ double Irc7702A::MaxNonMecPremium
         // turns out to be greater, then use a different formula.
         double g =
                   SevenPPRateVec[PolicyYear]
-                * ( MlyInterpNSP[PolicyMonth] * Bfts[TestPeriodDur]
+                * ( Ax * Bfts[TestPeriodDur]
                   - a_CashValue
                   )
-                / ( MlyInterpNSP[PolicyMonth]
+                / ( Ax
                   + SevenPPRateVec[PolicyYear] * (1.0 - a_LoadTarget)
                   )
                 ;
@@ -669,11 +611,11 @@ double Irc7702A::MaxNonMecPremium
             {
             g =
                   SevenPPRateVec[PolicyYear]
-                * ( MlyInterpNSP[PolicyMonth] * Bfts[TestPeriodDur]
+                * ( Ax * Bfts[TestPeriodDur]
                   - a_CashValue
                   - a_TargetPrem * (a_LoadTarget - a_LoadExcess)
                   )
-                / ( MlyInterpNSP[PolicyMonth]
+                / ( Ax
                   + SevenPPRateVec[PolicyYear] * ( 1.0 - a_LoadTarget)
                   )
                 ;
@@ -703,7 +645,7 @@ double Irc7702A::MaxNecessaryPremium
         }
 
     DetermineLowestBft();
-    double nsp = MlyInterpNSP[PolicyMonth] * LowestBft;
+    double nsp = Ax * LowestBft;
 
     LMI_ASSERT(0.0 <= a_DeemedCashValue);
     // We don't assert
@@ -1261,7 +1203,7 @@ void Irc7702A::Determine7PP
         {
         Saved7PPRate = SevenPPRateVec[PolicyYear];
         SavedAVBeforeMatChg = a_AVBeforeMatChg;
-        SavedNSP = MlyInterpNSP[PolicyMonth];
+        SavedNSP = Ax;
         // Save the necessary portion of the premium only if unnecessary
         // premium was paid. Otherwise, the premium, which was all necessary,
         // simply went into the AV. SavedNecPrem is used only to adjust
