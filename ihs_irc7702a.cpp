@@ -354,7 +354,8 @@ void Irc7702A::Initialize7702A
 //============================================================================
 /// Update cumulative 7pp; interpolate NSP (TAXATION !! remove interpolation)
 ///
-/// Called at beginning of each policy year.
+/// Called at beginning of each policy year. TODO ?? TAXATION !! No, that's
+/// wrong if contract year and policy year don't coincide.
 
 void Irc7702A::UpdateBOY7702A(int a_PolicyYear)
 {
