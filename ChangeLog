@@ -29590,3 +29590,23 @@ Expunge a redundant comment (cf. line 778).
   ihs_irc7702.hpp
 Prefer to perform initialization in initializer-list.
 
+20120131T1050Z <gchicares@sbcglobal.net> [581]
+
+  ihs_irc7702a.cpp
+  ihs_irc7702a.hpp
+Document member functions at definition rather than at declaration.
+
+20120131T1059Z <gchicares@sbcglobal.net> [582]
+
+  ihs_irc7702a.cpp
+Mark a defect.
+
+20120131T1147Z <gchicares@sbcglobal.net> [580]
+
+  ihs_basicval.cpp
+  ihs_irc7702a.cpp
+  ihs_irc7702a.hpp
+  irc7702a_test.cpp
+  mec_server.cpp
+Abjure "magic".
+

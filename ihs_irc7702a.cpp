@@ -57,8 +57,7 @@ static int const         usual_test_period_length     = 7           ;
 
 //============================================================================
 Irc7702A::Irc7702A
-    (int                         a_magic
-    ,mcenum_defn_life_ins        a_DefnLifeIns
+    (mcenum_defn_life_ins        a_DefnLifeIns
     ,mcenum_defn_material_change a_DefnMaterialChange
     ,bool                        a_IsSurvivorship
     ,mcenum_mec_avoid_method     a_AvoidMec
@@ -69,7 +68,6 @@ Irc7702A::Irc7702A
     ,round_to<double>    const&  a_RoundNonMecPrem
     )
     :state_               ()
-    ,magic                (a_magic)
     ,DefnLifeIns          (a_DefnLifeIns)
     ,DefnMaterialChange   (a_DefnMaterialChange)
     ,UnnecPremIsMatChg    (false)
