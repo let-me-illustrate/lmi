@@ -215,7 +215,6 @@ class Irc7702A
 
     bool UnnecPremIsMatChg;
     bool ElectiveIncrIsMatChg;
-    bool Exch1035IsMatChg;
     bool CorrHidesIncr;
 
     bool const      IsSurvivorship; // is policy multilife and not first to die?

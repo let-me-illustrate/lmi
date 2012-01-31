@@ -71,8 +71,7 @@ Irc7702A::Irc7702A
     ,DefnMaterialChange   (a_DefnMaterialChange)
     ,UnnecPremIsMatChg    (false)
     ,ElectiveIncrIsMatChg (true)
-    ,Exch1035IsMatChg     (true)
-    ,CorrHidesIncr        (false)
+    ,CorrHidesIncr        (false) // TAXATION !! DATABASE !! This should either be eliminated or moved to the database.
     ,IsSurvivorship       (a_IsSurvivorship)
     ,AvoidMec             (a_AvoidMec)
     ,Use7PPTable          (a_Use7PPTable)
@@ -108,13 +107,6 @@ Irc7702A::Irc7702A
         Ignore = true;
         return;
         }
-
-    // Set flags for implementation choices. Assigning values here
-    // looks superfluous because it duplicates the initializer-list;
-    // they're grouped here to emphasize them for maintainers.
-    // TAXATION !! DATABASE !! Each should either be eliminated or moved to the database.
-    Exch1035IsMatChg        = true; // TODO ?? TAXATION !! Silly--remove.
-    CorrHidesIncr           = false;
 
     switch(DefnMaterialChange)
         {
@@ -450,7 +442,7 @@ void Irc7702A::Update1035Exch7702A
         LMI_ASSERT(0 == PolicyYear && 0 == PolicyMonth);
         Bfts[TestPeriodDur] = a_Bft;
 
-        if(Exch1035IsMatChg && 0.0 != a_Net1035Amount)
+        if(0.0 != a_Net1035Amount)
             {
             IsMatChg = true;
             RedressMatChg
