@@ -160,7 +160,7 @@ class Irc7702A
     double  DebugGet7ppRate         () const
         {return SevenPPRateVec[PolicyYear];}
     double  DebugGetNsp             () const
-        {return MlyInterpNSP[PolicyMonth] * LowestBft;}
+        {return Ax * LowestBft;}
     double  DebugGetLowestBft       () const
         {return LowestBft;}
     double  DebugGetSavedDCV        () const
@@ -217,7 +217,6 @@ class Irc7702A
     bool ElectiveIncrIsMatChg;
     bool Exch1035IsMatChg;
     bool CorrHidesIncr;
-    bool InterpolateNspOnly;
 
     bool const      IsSurvivorship; // is policy multilife and not first to die?
     mcenum_mec_avoid_method AvoidMec; // TODO ?? TAXATION !! Document what this does.
@@ -238,7 +237,7 @@ class Irc7702A
     // TODO ?? TAXATION !! Maybe not--Bfts might be DB.
     std::vector<double> Bfts;           // "death benefit" for 7702A
     std::vector<double> Pmts;           // premium net of deductible withdrawals
-    std::vector<double> MlyInterpNSP;   // monthly interpolated NSP per $
+    double Ax;
 
     e_death_benefit_definition DBDefn;
 
@@ -260,9 +259,8 @@ class Irc7702A
     int             TestPeriodLen;  // length (months) of test period
     int             TestPeriodDur;  // duration (months) since beginning of
                                     //   current test period
-    // We need policy year for table lookups, and month for NSP interpolation TAXATION !! eliminate interpolation
-    int             PolicyYear;     // duration since issue (full years)
-    int             PolicyMonth;    // duration since issue (months)
+    int             PolicyYear;     // full years since issue
+    int             PolicyMonth;    // full months since policy anniversary
     double          AssumedBft;     // death bft assumed in setting last SevenPP
 
     // These values are saved at each material change, and used for
@@ -270,7 +268,7 @@ class Irc7702A
     double          Saved7PPRate;   // seven-pay premium per $
     double          SavedAVBeforeMatChg;// account value prior to material change
     double          SavedNecPrem;   // maximum necessary premium
-    double          SavedNSP;       // interpolated NSP
+    double          SavedNSP;
     double          SavedDCV;       // deemed cash value
 
     // TAXATION !! Need these be 'mutable'?
