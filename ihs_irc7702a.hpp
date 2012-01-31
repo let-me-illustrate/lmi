@@ -50,8 +50,7 @@ class Irc7702A
     enum e_death_benefit_definition {e_death_benefit_7702A, e_specamt_7702A};
 
     Irc7702A
-        (int                         a_magic
-        ,mcenum_defn_life_ins        a_DefnLifeIns
+        (mcenum_defn_life_ins        a_DefnLifeIns
         ,mcenum_defn_material_change a_DefnMaterialChange
         ,bool                        a_IsSurvivorship
         ,mcenum_mec_avoid_method     a_AvoidMec
@@ -210,8 +209,6 @@ class Irc7702A
 
 // NOTE: table lookup really means supplied via arguments ?
 // TODO ?? TAXATION !! Need to calculate if not table lookup.
-
-    int magic; // TODO ?? TAXATION !! Temporary kludge.
 
     mcenum_defn_life_ins DefnLifeIns;
     mcenum_defn_material_change DefnMaterialChange;

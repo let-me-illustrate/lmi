@@ -231,8 +231,7 @@ mec_state test_one_days_7702A_transactions
     std::vector<double> const& chosen_7Px = Use7702ATables ? tabular_7Px : analytic_7Px;
 
     Irc7702A z
-        (0
-        ,DefinitionOfLifeInsurance
+        (DefinitionOfLifeInsurance
         ,DefinitionOfMaterialChange
         ,false // Survivorship: hardcoded for now.
         ,mce_allow_mec

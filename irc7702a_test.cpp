@@ -223,8 +223,7 @@ int test_main(int, char*[])
     nsp.push_back(.3);
 
     Irc7702A z
-        (0
-        ,mce_cvat
+        (mce_cvat
         ,mce_earlier_of_increase_or_unnecessary_premium
         ,false
         ,mce_allow_mec

@@ -664,11 +664,9 @@ void BasicValues::Init7702()
 //============================================================================
 void BasicValues::Init7702A()
 {
-    int magic = 0; // TODO ?? TAXATION !! A kludge.
     Irc7702A_.reset
         (new Irc7702A
-            (magic
-            ,DefnLifeIns_
+            (DefnLifeIns_
             ,DefnMaterialChange_
             ,false // TODO ?? TAXATION !! Joint life: hardcoded for now.
             ,yare_input_.AvoidMecMethod
