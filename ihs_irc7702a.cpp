@@ -193,8 +193,14 @@ Irc7702A::~Irc7702A()
 {
 }
 
-//============================================================================
-// Set initial values on issue or inforce date.
+/// Set initial values on issue or inforce date.
+///
+/// This is notionally called once per *current*-basis run
+/// and actually called once per run, with calculations suppressed
+/// for all other bases by setting Ignore (q.v.). TAXATION !! If
+/// that's really a good idea, then handle GPT likewise, and call
+/// GPT functions unconditionally in monthiversary code.
+
 void Irc7702A::Initialize7702A
     (bool   a_Ignore
     ,bool   a_MecAtIssue
@@ -346,7 +352,10 @@ void Irc7702A::Initialize7702A
 }
 
 //============================================================================
-// interpolate NSP; update cum 7pp
+/// Update cumulative 7pp; interpolate NSP (TAXATION !! remove interpolation)
+///
+/// Called at beginning of each policy year.
+
 void Irc7702A::UpdateBOY7702A(int a_PolicyYear)
 {
     if(Ignore || IsMec)
@@ -427,7 +436,10 @@ void Irc7702A::UpdateBOY7702A(int a_PolicyYear)
     // to contract years.
 }
 
-//============================================================================
+/// Reset some state variables.
+///
+/// Called at beginning of each policy month.
+
 void Irc7702A::UpdateBOM7702A(int a_PolicyMonth)
 {
     if(Ignore || IsMec)
@@ -441,8 +453,10 @@ void Irc7702A::UpdateBOM7702A(int a_PolicyMonth)
     LMI_ASSERT(0 <= PolicyMonth);
 }
 
-//============================================================================
-// Increment policy month; return MEC status.
+/// Increment policy month; return MEC status.
+///
+/// Called at end of each policy month.
+
 bool Irc7702A::UpdateEOM7702A()
 {
     if(!(Ignore || IsMec))
@@ -452,10 +466,13 @@ bool Irc7702A::UpdateEOM7702A()
     return IsMec;
 }
 
-//============================================================================
-// Process 1035 exchange as material change
-// TODO ?? Unnecessary premium tested later, not here?
-// TODO ?? Second argument won't be needed after we redo class AccountValue.
+/// Process 1035 exchange, treating it like a material change.
+///
+/// TODO ?? TAXATION !! Unnecessary premium tested later, not here?
+/// TODO ?? TAXATION !! Second argument won't be needed after we redo class AccountValue.
+///
+/// Called whenever 1035 exchange paid.
+
 void Irc7702A::Update1035Exch7702A
     (double& a_DeemedCashValue
     ,double  a_Net1035Amount
@@ -713,8 +730,10 @@ double Irc7702A::MaxNecessaryPremium
     return state_.Q2_max_nec_prem_gross;
 }
 
-//============================================================================
-// record and test monthly Pmts
+/// Record and test monthly Pmts; return max non-mec premium if called for.
+///
+/// Called whenever premium is about to be paid.
+
 double Irc7702A::UpdatePmt7702A
     (double a_DeemedCashValue
     ,double a_Payment
@@ -888,9 +907,12 @@ double Irc7702A::UpdatePmt7702A
     return a_Payment;
 }
 
-//============================================================================
-// record and test monthly Bfts
-// TAXATION !! This function always returns zero, so it shouldn't return anything.
+/// Record and test monthly Bfts; return min non-mec Bft if called for.
+///
+/// TAXATION !! This function always returns zero, so it shouldn't return anything.
+///
+/// Called whenever Bfts changed.
+
 double Irc7702A::UpdateBft7702A
     (double // a_DeemedCashValue // TODO ?? TAXATION !! Not used.
     ,double  a_NewDB
@@ -1017,9 +1039,8 @@ double Irc7702A::UpdateBft7702A
     return 0.0;
 }
 
-//============================================================================
-// if within a test period:
-// recalculate 7pp and apply retroactively to beginning of 7 yr period
+/// If within a test period, recalculate 7pp and test retrospectively.
+
 void Irc7702A::TestBftDecrease(double a_NewBft)
 {
     // TODO ?? TAXATION !! Is AssumedBft always equal to LowestBft?
@@ -1118,17 +1139,21 @@ void Irc7702A::TestBftDecrease(double a_NewBft)
     state_.Q5_cum_amt_pd = CumPmts;
 }
 
-//============================================================================
+/// Queue a material change for later handling.
+
 void Irc7702A::InduceMaterialChange()
 {
     IsMatChg = true;
 }
 
-//============================================================================
-// handle material change:
-// recalculate 7pp
-// determine whether MEC
-// start new 7 pay period; terminate old one
+/// Handle material change.
+///
+/// Recalculate 7pp.
+/// Determine whether MEC.
+/// Start new 7 pay period; terminate old one.
+///
+/// TODO ?? TAXATION !! Called right before monthly deduction?
+
 void Irc7702A::RedressMatChg
     (double& a_DeemedCashValue
     ,double  a_UnnecPrem
@@ -1205,9 +1230,10 @@ void Irc7702A::RedressMatChg
     state_.Q5_cum_amt_pd = CumPmts;
 }
 
-//============================================================================
-// update 7pp
-// TAXATION !! Restructure this--too many TriggeredBy's
+/// Update 7pp.
+///
+/// TAXATION !! Restructure this--too many TriggeredBy's
+
 void Irc7702A::Determine7PP
     (double a_Bft
     ,bool   // a_TriggeredByBftDecrease
@@ -1333,8 +1359,8 @@ tries running an inforce case as of month 0, year 0.
 // TODO ?? TAXATION !! AssumedBft should reflect any Bfts increase--AFTER the MatChg?
 }
 
-//============================================================================
-// update LowestBft dynamically
+/// Update LowestBft dynamically.
+
 double Irc7702A::DetermineLowestBft() const
 {
     LMI_ASSERT(0 <= TestPeriodLen && 0 <= TestPeriodDur);
@@ -1348,8 +1374,8 @@ double Irc7702A::DetermineLowestBft() const
     return LowestBft;
 }
 
-//============================================================================
-// determine lowest non-MEC spec amt
+/// Determine lowest non-MEC spec amt.
+
 double Irc7702A::SAIncreaseToAvoidMec(bool a_TriggeredByUnnecPrem)
 {
 // TODO ?? TAXATION !! Specs say DB, but isn't this SA?

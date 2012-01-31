@@ -73,11 +73,7 @@ class Irc7702A
         );
     ~Irc7702A();
 
-// TAXATION !! Move documentation of functions to '.cpp' file.
-    // This is notionally called once per *current*-basis run
-    // and actually called once per run, with calculations suppressed
-    // for all other bases by setting Ignore (q.v.). TAXATION !! Is that good?
-    void Initialize7702A                    // set initial values at issue
+    void Initialize7702A
         (bool   a_Ignore
         ,bool   a_MecAtIssue
         ,int    a_IssueAge
@@ -91,28 +87,18 @@ class Irc7702A
         ,std::vector<double> const& a_Pmts
         ,std::vector<double> const& a_Bfts
         );
-    // Always call at beginning of policy year
-    // interpolate NSP; update cum 7pp // TAXATION !! That interpolation is a poor idea.
     void UpdateBOY7702A
         (int a_PolicyYear
         );
-    // Always call at beginning of policy month
     void UpdateBOM7702A
         (int a_PolicyMonth
         );
-    // Always call at end of policy month
-    // update policy month
-    // return MEC status
     bool UpdateEOM7702A();
-    // Always call whenever 1035 exchange paid
     void Update1035Exch7702A
         (double& a_DeemedCashValue
         ,double  a_Net1035Amount
         ,double  a_Bft
         );
-    // Always call whenever premium is about to be paid
-    // record and test monthly pmt
-    // return max non-mec premium if called for
     double UpdatePmt7702A
         (double a_DeemedCashValue
         ,double a_Payment
@@ -122,9 +108,6 @@ class Irc7702A
         ,double a_LoadExcess
         ,double a_CashValue
         );
-    // Always call whenever Bfts changed
-    // record and test monthly Bfts
-    // return min non-mec Bft if called for
     double UpdateBft7702A
         (double  // a_DeemedCashValue // TAXATION !! Is this argument useful?
         ,double  a_NewDB
@@ -134,9 +117,7 @@ class Irc7702A
         ,double  a_OldSA
         ,double  a_CashValue
         );
-    // Queue a material change for later handling.
     void InduceMaterialChange();
-    // TODO ?? TAXATION !! Handle material change--always call right before monthly deduction?
     void RedressMatChg
         (double& a_DeemedCashValue
         ,double  a_UnnecPrem
@@ -208,10 +189,10 @@ class Irc7702A
         {return IsMatChg;}
 
   private:
-    void    TestBftDecrease         // recalculate 7pp; perform 7 pay test
+    void    TestBftDecrease
         (double a_NewBft
         );
-    void    Determine7PP            // update SevenPP
+    void    Determine7PP
         (double a_Bft
         ,bool   a_TriggeredByBftDecrease
         ,bool   a_TriggeredByMatChg
@@ -220,10 +201,10 @@ class Irc7702A
         ,double a_NecPrem
         );
     // TODO ?? TAXATION !! Wouldn't this need to be public?
-    double  SAIncreaseToAvoidMec    // determine lowest non-MEC spec amt
+    double  SAIncreaseToAvoidMec
         (bool a_TriggeredByUnnecPrem
         );
-    double  DetermineLowestBft() const; // update LowestBft dynamically
+    double  DetermineLowestBft() const;
 
     mutable mec_state state_;
 
