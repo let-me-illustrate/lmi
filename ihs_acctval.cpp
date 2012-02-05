@@ -904,6 +904,8 @@ void AccountValue::InitializeYear()
     PremiumTax_->start_new_year();
     // Skip this in an incomplete initial inforce year.
     // TAXATION !! Premium tax should perhaps be handled similarly.
+    // TAXATION !! For 7702A, some rates change on policy anniversary
+    // because age does, but cum 7pp changes on contract anniversary.
     if(Year != InforceYear || 0 == InforceMonth)
         {
         Irc7702_ ->UpdateBOY7702();
