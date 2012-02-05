@@ -449,11 +449,16 @@ double BasicValues::InvestmentManagementFee() const
 ///   - GLP and GSP premium and specamt strategies are always offered;
 ///   - at least one known product uses GLP as a handy proxy for a
 ///     minimum no-lapse premium, even when the GPT is not elected.
+/// TAXATION !! OTOH, such strategies need not always be offered, and
+/// the cited product's implementation actually uses 7pp, not GLP.
 ///
 /// To conform to the practices of certain admin systems, DCV COI
 /// rates are stored in a rounded table, but calculations from first
 /// principles (GLP, GSP, 7PP, e.g.) use unrounded monthly rates;
 /// thus, necessary premium uses both. But this is immaterial.
+/// TAXATION !! DATABASE !! The database should offer rounding
+/// options; and should this comment be moved to the TUs that
+/// implement taxation?
 
 void BasicValues::Init7702()
 {

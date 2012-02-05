@@ -339,7 +339,10 @@ void Irc7702A::Initialize7702A
 /// Update cumulative 7pp.
 ///
 /// Called at beginning of each policy year. TODO ?? TAXATION !! No, that's
-/// wrong if contract year and policy year don't coincide.
+/// wrong if contract year and policy year don't coincide; however, it is
+/// correct to update Ax on policy anniversary, though the things done here
+/// that are appropriately done on policy anniversary are not necessarily
+/// needful.
 
 void Irc7702A::UpdateBOY7702A(int a_PolicyYear)
 {

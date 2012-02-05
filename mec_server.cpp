@@ -244,7 +244,7 @@ mec_state test_one_days_7702A_transactions
 
     z.Initialize7702A
         (false       // a_Ignore
-        ,InforceIsMec
+        ,InforceIsMec // TAXATION !! also use 1035-is-mec fields?
         ,input.issue_age()
         ,input.maturity_age()
         ,InforceYear
@@ -339,7 +339,7 @@ mec_state test_one_days_7702A_transactions
     if(0.0 != total_1035_amount)
         {
         z.Update1035Exch7702A
-            (InforceDcv
+            (InforceDcv // TAXATION !! Assert that this is zero?
             ,total_1035_amount
             ,old_benefit_amount
             );
