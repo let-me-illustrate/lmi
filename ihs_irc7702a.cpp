@@ -242,8 +242,6 @@ void Irc7702A::Initialize7702A
         // return;
         }
 
-    Ax = 0.0;
-
     PolicyYear          = a_PolicyYear;
     PolicyMonth         = a_PolicyMonth;
 
@@ -297,8 +295,9 @@ void Irc7702A::Initialize7702A
     state_.B2_deduced_px7_rate = SevenPPRateVec[duration_of_last_mc];
     SavedNecPrem    = 0.0;
     UnnecPrem       = 0.0;
-    SavedNSP        = NSPVec[PolicyYear];
-    state_.B3_deduced_nsp_rate = NSPVec[PolicyYear];
+    Ax                         = NSPVec[PolicyYear];
+    SavedNSP                   = Ax;
+    state_.B3_deduced_nsp_rate = Ax;
 
     Determine7PP
         (a_LowestBft         // a_Bft
