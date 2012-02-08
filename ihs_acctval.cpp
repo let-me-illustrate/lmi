@@ -276,9 +276,10 @@ double AccountValue::RunAllApplicableBases()
     double z = 0.0;
 
     // TODO ?? Normally, running on the current basis determines the
-    // overriding values for all components of outlay--premiums,
-    // loans, and withdrawals. For a solve on any basis other than
-    // current, the overriding values could be determined two ways:
+    // overriding values for all components of outlay--e.g., premiums,
+    // forceouts, loans, and withdrawals. For a solve on any basis
+    // other than current, the overriding values could be determined
+    // in two ways:
     //
     // (1) on the current basis--but then the solve won't be right;
     //
@@ -429,8 +430,10 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     InvariantValues().Init(this);
 
     OldDBOpt = InvariantValues().DBOpt[0].value();
+    // TAXATION !! 'OldSA' and 'OldDB' need to be distinguished for 7702 and 7702A,
+    // with inclusion of term dependent on 'TermIsDbFor7702' and 'TermIsDbFor7702A'.
     OldSA = InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0];
-    // TODO ?? Shouldn't we increase initial SA if contract in corridor at issue?
+    // TODO ?? TAXATION !! Shouldn't we increase initial SA if contract in corridor at issue?
     OldDB = OldSA;
 
     SurrChg_.assign(BasicValues::GetLength(), 0.0);
@@ -461,6 +464,8 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         );
     // It is at best superfluous to do this for every basis.
     // TAXATION !! Don't do that then.
+    // TAXATION !! This assumes the term rider can be treated as death benefit;
+    // use 'TermIsDbFor7702'.
     Irc7702_->Initialize7702
         (InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
         ,InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
@@ -506,7 +511,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         {
         // No need to initialize 'pmts_7702a' in this case.
         // TAXATION !! This assumes the term rider can be treated as death benefit.
-        // TAXATION !! DATABASE !! That should be a database flag.
+        // TAXATION !! DATABASE !! That should be a database flag. Wait...it already is.
         bfts_7702a.push_back
             (   InvariantValues().SpecAmt[0]
             +   InvariantValues().TermSpecAmt[0]
@@ -595,7 +600,7 @@ void AccountValue::SetInitialValues()
 {
     // These inforce things belong in input struct.
     // TODO ?? The list is not complete; others will be required:
-    // payment history; surrender charges; DCV history? TAXATION !! Resolve this.
+    // payment history; surrender charges; DCV history? TAXATION !! INPUT !! Resolve this.
     InforceYear                 = yare_input_.InforceYear                    ;
     InforceMonth                = yare_input_.InforceMonth                   ;
     InforceAVGenAcct            = yare_input_.InforceGeneralAccountValue     ;
@@ -683,7 +688,7 @@ void AccountValue::SetInitialValues()
 
     // Assume by default that the policy never lapses or becomes a MEC,
     // so that the lapse and MEC durations are the last possible month.
-    // TODO ?? Last possible month? Why? In that month, it doesn't quite
+    // TODO ?? TAXATION !! Last possible month? Why? In that month, it doesn't quite
     // lapse, and it's certainly wrong to assume it becomes a MEC then.
     ItLapsed                    = false;
     VariantValues().LapseMonth  = 11;
@@ -1355,7 +1360,7 @@ void AccountValue::FinalizeYear()
         InvariantValues().EeGrossPmt[Year]  = 0.0;
         InvariantValues().ErGrossPmt[Year]  = 0.0;
 
-        // TODO ?? This is a temporary workaround until we do it right.
+        // TODO ?? TAXATION !! This is a temporary workaround until we do it right.
         // Forceouts should be a distinct component, passed separately
         // to ledger values. Probably we should treat 1035 exchanges
         // and NAAR 'forceouts' the same way.

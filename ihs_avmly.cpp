@@ -129,6 +129,8 @@ void AccountValue::DoMonthDR()
         ,DBReflectingCorr + TermDB // DB7702A
         ,OldDB // prior_db_7702A
         ,DBReflectingCorr == DBIgnoringCorr
+        // TAXATION !! This assumes the term rider can be treated as death benefit;
+        // use 'TermIsDbFor7702A'.
         ,ActualSpecAmt + TermSpecAmt
         ,OldSA // prior_sa_7702A
         ,CashValueFor7702()
@@ -137,7 +139,7 @@ void AccountValue::DoMonthDR()
     NetPmts[Month]   = 0.0; // TODO ?? expunge as being unnecessary
     GrossPmts[Month] = 0.0; // TODO ?? expunge as being unnecessary
     TxExch1035();
-    // TODO ?? Is this where spec amt should be increased by GPT?
+    // TODO ?? TAXATION !! Is this where spec amt should be increased by GPT?
 
     double kludge_account_value = std::max(TotalAccountValue(), HoneymoonValue);
     if(0 == Year && 0 == Month)
@@ -555,7 +557,7 @@ void AccountValue::TxExch1035()
     // Policy issue date is always a modal payment date.
     GrossPmts[Month] = External1035Amount + Internal1035Amount;
 
-// TODO ?? This looks like a good idea, but it would prevent the
+// TODO ?? TAXATION !! This looks like a good idea, but it would prevent the
 // initial seven-pay premium from being set.
 //    if(0.0 == GrossPmts[Month])
 //        {
@@ -615,6 +617,8 @@ void AccountValue::TxExch1035()
     Irc7702A_->Update1035Exch7702A
         (Dcv
         ,NetPmts[Month]
+        // TAXATION !! This assumes the term rider can be treated as death benefit;
+        // use 'TermIsDbFor7702A'.
         ,ActualSpecAmt + TermSpecAmt
 //        ,DBReflectingCorr + TermDB // TAXATION !! Alternate if 7702A benefit is DB?
         );
@@ -853,11 +857,11 @@ void AccountValue::ChangeSurrChgSpecAmtBy(double delta)
 //============================================================================
 void AccountValue::InitializeMonth()
 {
-    // TODO ?? GPT--perform only if current basis?
+    // TODO ?? TAXATION !! GPT--perform only if current basis?
     TxSetDeathBft();
     TxSetTermAmt();
 
-// TODO ?? Resolve this issue.
+// TODO ?? TAXATION !! Resolve this issue.
 /* Jacob--you said: <jacob>
     // It seems that these calls cause problems if
     // we have both SA and DBO change at the same
@@ -887,6 +891,8 @@ void AccountValue::InitializeMonth()
     sales_load_       = 0.0;
     premium_tax_load_ = 0.0;
     dac_tax_load_     = 0.0;
+    // TAXATION !! 'OldSA' and 'OldDB' need to be distinguished for 7702 and 7702A,
+    // with inclusion of term dependent on 'TermIsDbFor7702' and 'TermIsDbFor7702A'.
     OldSA = ActualSpecAmt + TermSpecAmt;
     OldDB = DBReflectingCorr + TermDB;
 
@@ -1076,7 +1082,7 @@ void AccountValue::TxSpecAmtChange()
 //============================================================================
 void AccountValue::TxTestGPT()
 {
-/* TODO ?? Is is sufficient to calculate forceouts on curr basis only?
+/* TODO ?? TAXATION !! Is is sufficient to calculate forceouts on curr basis only?
 100000 SA
  30000 AV curr
  20000 AV guar
@@ -1103,7 +1109,7 @@ mentioned above?
     // DB option.
     //
     // Illustrations allow no adjustable events at issue.
-    // TODO ?? If this assumption is not valid, then OldSA, OldDB, and
+    // TODO ?? TAXATION !! If this assumption is not valid, then OldSA, OldDB, and
     // OldDBOpt need to be initialized more carefully.
     if(0 == Year && 0 == Month)
         {
@@ -1128,7 +1134,7 @@ mentioned above?
     // effect cannot be combined with other adjustable events because
     // the premium in question must first be tested against the
     // guideline premium limit. We should probably ignore any effect
-    // of ROP premium unless a forceout is required. TODO ?? Confirm this.
+    // of ROP premium unless a forceout is required. TODO ?? TAXATION !! Confirm this.
     //
     TxSetDeathBft();
     TxSetTermAmt();
@@ -1143,6 +1149,8 @@ mentioned above?
     mcenum_dbopt_7702 const new_dbopt(effective_dbopt_7702(YearsDBOpt, Equiv7702DBO3));
     mcenum_dbopt_7702 const old_dbopt(effective_dbopt_7702(OldDBOpt  , Equiv7702DBO3));
     // TAXATION !! This may require revision if DB is treated as the 7702 benefit.
+    // TAXATION !! This assumes the term rider can be treated as death benefit;
+    // use 'TermIsDbFor7702'.
     bool adj_event =
             (
                 !materially_equal(OldSA, ActualSpecAmt + TermSpecAmt)
@@ -1158,6 +1166,8 @@ mentioned above?
             (Year
             ,DBReflectingCorr + TermDB
             ,OldDB
+            // TAXATION !! This assumes the term rider can be treated as death benefit;
+            // use 'TermIsDbFor7702'.
             ,ActualSpecAmt + TermSpecAmt
             ,OldSA
             ,new_dbopt
@@ -1191,7 +1201,7 @@ mentioned above?
 //============================================================================
 // All payments must be made here.
 // Process premium payment reflecting premium load.
-// TODO ?? Contains hooks for guideline premium test; they need to be
+// TODO ?? TAXATION !! Contains hooks for guideline premium test; they need to be
 //   fleshed out.
 // Ignores strategies such as pay guideline premium, which are handled
 //   in PerformE[er]PmtStrategy().
@@ -1558,7 +1568,7 @@ void AccountValue::TxLoanRepay()
 // TODO ?? ActualLoan should be eliminated. It's used only in two functions,
 // one that takes a loan, and one that repays a loan.
 
-    // TODO ?? This idiom seems too cute.
+    // TODO ?? This idiom seems too cute. And it can return -0.0 .
     // Maximum repayment is total debt.
     ActualLoan = -std::min(-RequestedLoan, RegLnBal);
 
@@ -1642,6 +1652,7 @@ void AccountValue::TxSetDeathBft(bool force_eoy_behavior)
     // Total account value is unloaned plus loaned.
     // TODO ?? Should we use CSV here?
     double AV = TotalAccountValue();
+// TAXATION !! Revisit this--it affects 'DB7702A':
 // > TxSetDeathBft() needs to be called every time a new solve-spec amt
 // > is applied to determine the death benefit. But you don't really want to
 // > add the sales load (actually a percent of the sales load) to the AV
@@ -1655,21 +1666,21 @@ void AccountValue::TxSetDeathBft(bool force_eoy_behavior)
         case mce_option1:
             {
             DBIgnoringCorr = ActualSpecAmt;
-            DB7702A = ActualSpecAmt;
+            DB7702A        = ActualSpecAmt;
             }
             break;
         case mce_option2:
             {
             // Negative AV doesn't decrease death benefit.
             DBIgnoringCorr = ActualSpecAmt + std::max(0.0, AV);
-            DB7702A = ActualSpecAmt;
+            DB7702A        = ActualSpecAmt;
             }
             break;
         case mce_rop:
             {
             // SA + sum of premiums less withdrawals, but not < SA.
             DBIgnoringCorr = ActualSpecAmt + std::max(0.0, CumPmts);
-            DB7702A = ActualSpecAmt + std::max(0.0, CumPmts);
+            DB7702A        = ActualSpecAmt + std::max(0.0, CumPmts);
             }
             break;
         default:
@@ -1821,6 +1832,7 @@ void AccountValue::TxSetCoiCharge()
 // TODO ?? This doesn't work. We need to reconsider the basic transactions.
 //  double naar_forceout = std::max(0.0, NAAR - MaxNAAR);
 //  process_distribution(naar_forceout);
+// TAXATION !! Should this be handled at the same time as GPT forceouts?
 
     DcvNaar = material_difference
         (std::max(DcvDeathBft, DBIgnoringCorr) * DBDiscountRate[Year]
