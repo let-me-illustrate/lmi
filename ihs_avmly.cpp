@@ -858,6 +858,12 @@ void AccountValue::ChangeSurrChgSpecAmtBy(double delta)
 void AccountValue::InitializeMonth()
 {
     // TODO ?? TAXATION !! GPT--perform only if current basis?
+    // Resolution: Call these two functions below, after various
+    // members are set to zero, and expunge the comment above.
+    // Calling them only for GPT illustrations is too fragile;
+    // if there's any reason not to call them here, then they
+    // presumably shouldn't be called here in any case--see the
+    // block comment a few lines below.
     TxSetDeathBft();
     TxSetTermAmt();
 
@@ -884,6 +890,13 @@ void AccountValue::InitializeMonth()
     I'm not convinced yet. There has to be a better way.
     These functions were called here for some reason;
     we need to figure out why.
+
+    // Resolution: Expunge this entire comment. If those functions
+    // are called ten times, and that's a problem, then calling them
+    // nine times (or ten in some situations) is not the solution.
+    // Conditionalizing the supposed cause of a problem just makes it
+    // harder to eradicate. And the condition given above cannot be
+    // correct anyway.
 */
 
     GptForceout       = 0.0;
@@ -1097,6 +1110,12 @@ TAXATION !! Revisit those issues. Furthermore, should forceout really
 vary by basis? Probably not if it shows up only in an "outlay" column
 that's shared by all bases...but then what about the variable scenario
 mentioned above?
+
+//Resolution: The comments above will be expunged. As has been made clear
+elsewhere, forceouts are indeed part of outlay, which must be the same
+for all bases. The scenario above is invalid: SA must be the same for
+all bases, so all use "70000 curr" and "80000 guar" is just wrong.
+
 */
 
     if(mce_gpt != DefnLifeIns_ || mce_run_gen_curr_sep_full != RunBasis_)
