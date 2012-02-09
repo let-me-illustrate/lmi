@@ -857,53 +857,16 @@ void AccountValue::ChangeSurrChgSpecAmtBy(double delta)
 //============================================================================
 void AccountValue::InitializeMonth()
 {
-    // TODO ?? TAXATION !! GPT--perform only if current basis?
-    // Resolution: Call these two functions below, after various
-    // members are set to zero, and expunge the comment above.
-    // Calling them only for GPT illustrations is too fragile;
-    // if there's any reason not to call them here, then they
-    // presumably shouldn't be called here in any case--see the
-    // block comment a few lines below.
-    TxSetDeathBft();
-    TxSetTermAmt();
-
-// TODO ?? TAXATION !! Resolve this issue.
-/* Jacob--you said: <jacob>
-    // It seems that these calls cause problems if
-    // we have both SA and DBO change at the same
-    // time. I _think_ it's because these calls
-    // get made too many times, and the 'last' values
-    // we want when get to the GPT tests have been
-    // overwritten by the previous calls. However,
-    // we still need to call these if we're in the
-    // corridor, hence the final test. There may be
-    // a more elegant solution, but this is a solution.
-    if(    mce_gpt                   != DefnLifeIns_
-        || mce_run_gen_curr_sep_full != RunBasis_
-        || DBReflectingCorr          != DBIgnoringCorr
-       )
-        {
-        TxSetDeathBft();
-        TxSetTermAmt();
-        }
-    </jacob>
-    I'm not convinced yet. There has to be a better way.
-    These functions were called here for some reason;
-    we need to figure out why.
-
-    // Resolution: Expunge this entire comment. If those functions
-    // are called ten times, and that's a problem, then calling them
-    // nine times (or ten in some situations) is not the solution.
-    // Conditionalizing the supposed cause of a problem just makes it
-    // harder to eradicate. And the condition given above cannot be
-    // correct anyway.
-*/
-
     GptForceout       = 0.0;
     premium_load_     = 0.0;
     sales_load_       = 0.0;
     premium_tax_load_ = 0.0;
     dac_tax_load_     = 0.0;
+
+    // Set BOM DB for 7702 and 7702A.
+    TxSetDeathBft();
+    TxSetTermAmt();
+
     // TAXATION !! 'OldSA' and 'OldDB' need to be distinguished for 7702 and 7702A,
     // with inclusion of term dependent on 'TermIsDbFor7702' and 'TermIsDbFor7702A'.
     OldSA = ActualSpecAmt + TermSpecAmt;
@@ -1095,29 +1058,6 @@ void AccountValue::TxSpecAmtChange()
 //============================================================================
 void AccountValue::TxTestGPT()
 {
-/* TODO ?? TAXATION !! Is is sufficient to calculate forceouts on curr basis only?
-100000 SA
- 30000 AV curr
- 20000 AV guar
-change opt 2 -> opt 1
-new SA:
- 70000 curr
- 80000 guar
-if forceout needed, it will be higher for curr--OK
-but position could be reversed for variable policy with bad curr performance
-
-TAXATION !! Revisit those issues. Furthermore, should forceout really
-vary by basis? Probably not if it shows up only in an "outlay" column
-that's shared by all bases...but then what about the variable scenario
-mentioned above?
-
-//Resolution: The comments above will be expunged. As has been made clear
-elsewhere, forceouts are indeed part of outlay, which must be the same
-for all bases. The scenario above is invalid: SA must be the same for
-all bases, so all use "70000 curr" and "80000 guar" is just wrong.
-
-*/
-
     if(mce_gpt != DefnLifeIns_ || mce_run_gen_curr_sep_full != RunBasis_)
         {
         return;

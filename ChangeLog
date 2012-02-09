@@ -29641,3 +29641,19 @@ Fix defect introduced 20120115T1429Z while fixing another defect.
   version.hpp
 Designate release candidate.
 
+20120208T1453Z <gchicares@sbcglobal.net> [578]
+
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+Improve layout and documentation, marking some taxation issues.
+
+20120208T2159Z <gchicares@sbcglobal.net> [578]
+
+  ihs_avmly.cpp
+Improve documention, discussing several issues to be resolved soon.
+
+20120209T1323Z <gchicares@sbcglobal.net> [575]
+
+  ihs_avmly.cpp
+Apply changes discussed 20120208T2159Z.
+
