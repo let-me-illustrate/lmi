@@ -1047,8 +1047,12 @@ void Irc7702A::TestBftDecrease(double a_NewBft)
         // payments together; but we don't need to, since we're a MEC
         // and the cumulative payments are no longer relevant.
         fatal_error()
-            << "Cumulative premium during most recent seven-pay period"
-            << " should be " << CumPmts
+            << "While processing a decrease in"
+            << " policy month " << PolicyMonth
+            << ", policy year " << PolicyYear
+            << ", " << TestPeriodDur
+            << " months after beginning of most recent seven-pay period"
+            << ", cumulative premium should be " << CumPmts
             << " but is " << cum_prem
             << "; discrepancy is " << (cum_prem - CumPmts) << "."
             << LMI_FLUSH
