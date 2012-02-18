@@ -121,7 +121,7 @@ census_run_result run_census_in_series::operator()
             IllusVal IV(serial_file_path(file, name, j, "hastur").string());
             IV.run(cells[j]);
             composite.PlusEq(*IV.ledger());
-            result.usec_for_output_ += emit_ledger
+            result.seconds_for_output_ += emit_ledger
                 (serial_file_path(file, name, j, "hastur")
                 ,file
                 ,*IV.ledger()
@@ -136,7 +136,7 @@ census_run_result run_census_in_series::operator()
         }
     meter->culminate();
 
-    result.usec_for_output_ += emit_ledger
+    result.seconds_for_output_ += emit_ledger
         (serial_file_path(file, "composite", -1, "hastur")
         ,file
         ,composite
@@ -144,9 +144,9 @@ census_run_result run_census_in_series::operator()
         );
 
   done:
-    double total_usec = timer.stop().elapsed_usec();
-    status() << Timer::elapsed_msec_str(total_usec) << std::flush;
-    result.usec_for_calculations_ = total_usec - result.usec_for_output_;
+    double total_seconds = timer.stop().elapsed_seconds();
+    status() << Timer::elapsed_msec_str(total_seconds) << std::flush;
+    result.seconds_for_calculations_ = total_seconds - result.seconds_for_output_;
     return result;
 }
 
@@ -603,7 +603,7 @@ census_run_result run_census_in_parallel::operator()
     for(i = cell_values.begin(); i != cell_values.end(); ++i, ++j)
         {
         std::string const name(cells[j]["InsuredName"].str());
-        result.usec_for_output_ += emit_ledger
+        result.seconds_for_output_ += emit_ledger
             (serial_file_path(file, name, j, "hastur")
             ,file
             ,*(*i)->ledger_from_av()
@@ -612,7 +612,7 @@ census_run_result run_census_in_parallel::operator()
         }
     }
 
-    result.usec_for_output_ += emit_ledger
+    result.seconds_for_output_ += emit_ledger
         (serial_file_path(file, "composite", -1, "hastur")
         ,file
         ,composite
@@ -620,9 +620,9 @@ census_run_result run_census_in_parallel::operator()
         );
 
   done:
-    double total_usec = timer.stop().elapsed_usec();
-    status() << Timer::elapsed_msec_str(total_usec) << std::flush;
-    result.usec_for_calculations_ = total_usec - result.usec_for_output_;
+    double total_seconds = timer.stop().elapsed_seconds();
+    status() << Timer::elapsed_msec_str(total_seconds) << std::flush;
+    result.seconds_for_calculations_ = total_seconds - result.seconds_for_output_;
     return result;
 }
 
