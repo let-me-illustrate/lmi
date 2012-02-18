@@ -29,10 +29,9 @@
 #include "xml_serializable.hpp"
 
 #include "alert.hpp"
-#include "any_member.hpp"         // MemberSymbolTable<>
+#include "any_member.hpp"               // MemberSymbolTable<>
 #include "contains.hpp"
-#include "platform_dependent.hpp" // access()
-#include "value_cast.hpp"
+#include "platform_dependent.hpp"       // access()
 #include "xml_lmi.hpp"
 
 #include <boost/static_assert.hpp>
@@ -40,8 +39,8 @@
 
 #include <xmlwrapp/nodes_view.h>
 
-#include <algorithm>              // std::copy(), std::find()
-#include <iterator>               // std::back_inserter
+#include <algorithm>                    // std::copy(), std::find()
+#include <iterator>                     // std::back_inserter
 #include <sstream>
 #include <vector>
 
@@ -101,13 +100,11 @@ void xml_serializable<T>::read(xml::element const& x)
             ;
         }
 
-    std::string file_version_string;
-    if(!xml_lmi::get_attr(x, "version", file_version_string))
+    int file_version = 0;
+    if(!xml_lmi::get_attr(x, "version", file_version))
         {
         handle_missing_version_attribute();
-        file_version_string = "0";
         }
-    int file_version = value_cast<int>(file_version_string);
 
 // COMPILER !! Borland doesn't find operator==() in ns xml.
 #ifdef __BORLANDC__
@@ -198,9 +195,7 @@ inline T const& xml_serializable<T>::t() const
 template<typename T>
 void xml_serializable<T>::immit_members_into(xml::element& root) const
 {
-// XMLWRAPP !! There's no way to set an integer attribute.
-    std::string const version(value_cast<std::string>(class_version()));
-    xml_lmi::set_attr(root, "version", version.c_str());
+    xml_lmi::set_attr(root, "version", class_version());
 
     std::vector<std::string>::const_iterator i;
     for(i = t().member_names().begin(); i != t().member_names().end(); ++i)

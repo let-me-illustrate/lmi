@@ -29657,3 +29657,31 @@ Improve documention, discussing several issues to be resolved soon.
   ihs_avmly.cpp
 Apply changes discussed 20120208T2159Z.
 
+20120217T1802Z <gchicares@sbcglobal.net> [575]
+
+  ihs_irc7702a.cpp
+Improve a diagnostic message.
+
+20120218T0706Z <gchicares@sbcglobal.net> [575]
+
+  emit_ledger.cpp
+  group_values.cpp
+  group_values.hpp
+  illustrator.cpp
+  illustrator.hpp
+  main_cgi.cpp
+  mec_server.cpp
+  mec_server.hpp
+  timer.cpp
+  timer.hpp
+  timer_test.cpp
+  vector_test.cpp
+Fix defect introduced 20050605T0355Z: usec confused with sec.
+
+20120218T1307Z <gchicares@sbcglobal.net> [575]
+
+  xml_lmi.cpp
+  xml_lmi.hpp
+  xml_serializable.tpp
+Add and use functions to manipulate attributes as integers.
+
