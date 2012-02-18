@@ -65,13 +65,6 @@
 /// and that latency is a significant concern. This class uses a high-
 /// resolution timer if available; it's a sharp tool that lets you
 /// make your own decision about that rationale.
-///
-/// Class timer design.
-///
-/// ctor postconditions: frequency_ != 0. Throws if a nonzero
-/// frequency_ cannot be determined.
-///
-/// elapsed_msec_str(), elapsed_usec(), stop(), restart(): nomen est omen.
 
 class LMI_SO Timer
     :private lmi::uncopyable<Timer>
@@ -86,9 +79,9 @@ class LMI_SO Timer
     Timer&      restart();
     Timer&      stop();
 
-    static std::string elapsed_msec_str(double);
+    static std::string elapsed_msec_str(double seconds);
     std::string        elapsed_msec_str() const;
-    double             elapsed_usec() const;
+    double             elapsed_seconds() const;
 
   private:
     elapsed_t   calibrate();
@@ -190,7 +183,7 @@ AliquotTimer<F>::AliquotTimer(F f, double max_seconds)
 
     f_();
     timer.stop();
-    initial_trial_time_ = timer.elapsed_usec();
+    initial_trial_time_ = timer.elapsed_seconds();
     unit_time_ = initial_trial_time_;
     std::ostringstream oss;
     oss
@@ -229,7 +222,7 @@ AliquotTimer<F>& AliquotTimer<F>::operator()()
         f_();
         }
     timer.stop();
-    unit_time_ = timer.elapsed_usec() / j;
+    unit_time_ = timer.elapsed_seconds() / j;
     std::ostringstream oss;
     oss
         << std::scientific << std::setprecision(3)

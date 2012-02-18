@@ -59,16 +59,16 @@ class LMI_SO illustrator
 
     boost::shared_ptr<Ledger const> principal_ledger() const;
 
-    double usec_for_input       () const;
-    double usec_for_calculations() const;
-    double usec_for_output      () const;
+    double seconds_for_input       () const;
+    double seconds_for_calculations() const;
+    double seconds_for_output      () const;
 
   private:
     mcenum_emission emission_;
     boost::shared_ptr<Ledger const> principal_ledger_;
-    double usec_for_input_;
-    double usec_for_calculations_;
-    double usec_for_output_;
+    double seconds_for_input_;
+    double seconds_for_calculations_;
+    double seconds_for_output_;
 };
 
 Input const& LMI_SO default_cell();
