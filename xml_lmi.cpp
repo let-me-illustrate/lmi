@@ -30,6 +30,7 @@
 
 #include "alert.hpp"
 #include "istream_to_string.hpp"
+#include "value_cast.hpp"
 
 #include <xmlwrapp/attributes.h>
 #include <xmlwrapp/document.h>
@@ -356,6 +357,24 @@ bool get_attr
         }
 }
 
+bool get_attr
+    (xml::element const& element
+    ,std::string const&  name
+    ,int&                value
+    )
+{
+    std::string s;
+    if(get_attr(element, name, s))
+        {
+        value = value_cast<int>(s);
+        return true;
+        }
+    else
+        {
+        return false;
+        }
+}
+
 void set_attr
     (xml::element&      element
     ,std::string const& name
@@ -371,6 +390,15 @@ void set_attr
         fatal_error() << e.what() << LMI_FLUSH;
         throw "Unreachable--silences a compiler diagnostic.";
         }
+}
+
+void set_attr
+    (xml::element&      element
+    ,std::string const& name
+    ,int                value
+    )
+{
+    set_attr(element, name, value_cast<std::string>(value));
 }
 } // namespace xml_lmi
 

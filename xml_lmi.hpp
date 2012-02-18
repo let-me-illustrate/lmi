@@ -116,6 +116,11 @@ namespace xml_lmi
         ,std::string const& name
         ,std::string&       value
         );
+    bool get_attr
+        (xml::element const&
+        ,std::string const& name
+        ,int&               value
+        );
 
     /// Set a given attribute of an xml element.
 
@@ -123,6 +128,11 @@ namespace xml_lmi
         (xml::element&
         ,std::string const& name
         ,std::string const& value
+        );
+    void set_attr
+        (xml::element&
+        ,std::string const& name
+        ,int                value
         );
 } // namespace xml_lmi
 
