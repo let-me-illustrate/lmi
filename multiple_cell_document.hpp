@@ -59,6 +59,9 @@ class LMI_SO multiple_cell_document
 
   private:
     void parse(xml::element const&);
+
+    void assert_vector_sizes_are_sane() const;
+
     std::string const& xml_root_name() const;
 
     // Default parameters for the whole case, stored as a vector for
