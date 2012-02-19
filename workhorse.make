@@ -1036,12 +1036,15 @@ sample.policy:
 
 # Test data.
 
+sample.cns: $(src_dir)/sample.cns
+	$(CP) --preserve --update $< .
+
+sample.ill: $(src_dir)/sample.ill
+	$(CP) --preserve --update $< .
+
 test_data := \
   sample.cns \
   sample.ill \
-
-$(test_data):
-	@$(CP) --preserve --update $(src_dir)/$@ .
 
 ################################################################################
 
