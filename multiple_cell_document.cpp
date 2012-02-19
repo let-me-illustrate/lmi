@@ -44,6 +44,7 @@ multiple_cell_document::multiple_cell_document()
     ,class_parms_ (1)
     ,cell_parms_  (1)
 {
+    assert_vector_sizes_are_sane();
 }
 
 //============================================================================
@@ -51,11 +52,23 @@ multiple_cell_document::multiple_cell_document(std::string const& filename)
 {
     xml_lmi::dom_parser parser(filename);
     parse(parser.root_node(xml_root_name()));
+    assert_vector_sizes_are_sane();
 }
 
 //============================================================================
 multiple_cell_document::~multiple_cell_document()
 {
+}
+
+/// Verify invariants.
+///
+/// Throws if any asserted invariant does not hold.
+
+void multiple_cell_document::assert_vector_sizes_are_sane() const
+{
+    LMI_ASSERT(1 == case_parms_.size());
+    LMI_ASSERT(    !class_parms_.empty());
+    LMI_ASSERT(    !cell_parms_ .empty());
 }
 
 //============================================================================
@@ -206,6 +219,8 @@ void multiple_cell_document::parse(xml::element const& root)
             << LMI_FLUSH
             ;
         }
+
+    assert_vector_sizes_are_sane();
 }
 
 //============================================================================
@@ -218,6 +233,8 @@ void multiple_cell_document::read(std::istream const& is)
 //============================================================================
 void multiple_cell_document::write(std::ostream& os) const
 {
+    assert_vector_sizes_are_sane();
+
     xml_lmi::xml_document document(xml_root_name());
     xml::element& root = document.root_node();
 
