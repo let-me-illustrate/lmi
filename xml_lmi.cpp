@@ -263,15 +263,6 @@ std::string xml_lmi::xml_document::str()
     return s;
 }
 
-void add_node
-    (xml::element&      element
-    ,std::string const& name
-    ,std::string const& content
-    )
-{
-    element.push_back(xml::element(name.c_str(), content.c_str()));
-}
-
 xml::node::const_iterator retrieve_element
     (xml::element const& parent
     ,std::string  const& name

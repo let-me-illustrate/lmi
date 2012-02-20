@@ -78,12 +78,6 @@ namespace xml_lmi
         boost::scoped_ptr<Document>    document_;
     };
 
-    void add_node
-        (xml::element&
-        ,std::string const& name
-        ,std::string const& content
-        );
-
     /// Find an element subnode by name, throwing if it is not found.
 
     xml::node::const_iterator retrieve_element
