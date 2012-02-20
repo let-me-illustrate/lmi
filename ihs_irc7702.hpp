@@ -49,7 +49,7 @@ class ULCommFns;
 // premium) and the bftamt (for death benefit), even though those two
 // arguments may be equal.
 
-// TODO ?? Is this still true?
+// TODO ?? TAXATION !! Is this still true?
 // No rounding is performed in this class. Round the values it calculates
 // as needed, being sure to round conservatively if at all. Unrounded
 // values are especially needed for the iterative specamt calculation.
@@ -73,6 +73,7 @@ class Irc7702
         ,std::vector<double> const& a_IntDed
         ,double                     a_PresentBftAmt
         ,double                     a_PresentSpecAmt
+        ,double                     a_LeastBftAmtEver
         ,mcenum_dbopt_7702          a_PresentDBOpt
         ,std::vector<double> const& a_AnnChgPol
         ,std::vector<double> const& a_MlyChgPol
@@ -87,18 +88,13 @@ class Irc7702
         ,round_to<double>    const& a_round_max_premium
         ,round_to<double>    const& a_round_min_specamt
         ,round_to<double>    const& a_round_max_specamt
-// TODO ?? Should we have default arguments at all?
-        ,int                        a_InforceYear         = 0
-        ,int                        a_InforceMonth        = 0
-        ,double                     a_InforceGLP          = 0.0
-        ,double                     a_InforceCumGLP       = 0.0
-        ,double                     a_InforceGSP          = 0.0
-        ,double                     a_InforceCumPremsPaid = 0.0
-        ,double                     a_PriorBftAmt         = 0.0
-        ,double                     a_PriorSpecAmt        = 0.0
-        ,double                     a_LeastBftAmtEver     = 0.0
-        ,mcenum_dbopt_7702          a_PriorDBOpt          = mce_option1_for_7702
-        // TODO ?? Perhaps other arguments are needed for inforce.
+        ,int                        a_InforceYear
+        ,int                        a_InforceMonth
+        ,double                     a_InforceGLP
+        ,double                     a_InforceCumGLP
+        ,double                     a_InforceGSP
+        ,double                     a_InforceCumPremsPaid
+        // TODO ?? TAXATION !! Perhaps other arguments are needed for inforce.
         );
     ~Irc7702();
 
@@ -114,7 +110,7 @@ class Irc7702
         ,double&                    a_Pmt
         ,double&                    a_CumPmt
         );
-    // Returns forceout if any, else 0.0 .
+    // Returns forceout if any, else 0.0 . TAXATION !! But it's void.
     void ProcessAdjustableEvent
         (int                        a_Duration
         ,double                     a_NewBftAmt
@@ -145,6 +141,10 @@ class Irc7702
     double GetLeastBftAmtEver() const;
     double RoundedGLP() const;
     double RoundedGSP() const;
+    double glp          () const;
+    double cum_glp      () const;
+    double gsp          () const;
+    double premiums_paid() const;
 
   private:
     // Interest and DB Option basis
@@ -174,6 +174,8 @@ class Irc7702
         (mcenum_dbopt_7702          a_DBOpt
         );
 
+    // TAXATION !! Comments are unreliable (e.g., 7702 test may be
+    // neither CVAT nor GPT), and should be improved or removed.
     mcenum_defn_life_ins const Test7702;   // 7702 test: CVAT or GPT
     int const                  IssueAge;   // Issue age
     int const                  EndtAge;    // Endowment age
@@ -188,7 +190,7 @@ class Irc7702
     double                     PriorBftAmt;
     double                     PresentSpecAmt;
     double                     PriorSpecAmt;
-    double                     LeastBftAmtEver;// Lowest bft amt since issue date // TODO ?? NOT!
+    double                     LeastBftAmtEver;// Lowest bft amt since issue date // TODO ?? TAXATION !! NOT!
     mcenum_dbopt_7702          PresentDBOpt;   // Present death benefit option
     mcenum_dbopt_7702          PriorDBOpt;     // Prior death benefit option
 
@@ -220,22 +222,27 @@ class Irc7702
 
     double                     PresentGLP;
     double                     PriorGLP;
+    double                     CumGLP;     // Cumulative GLP
     double                     PresentGSP;
     double                     PriorGSP;
-    double                     CumGLP;     // Cumulative GLP
     double                     GptLimit;   // Guideline limit: max(cum GLP, GSP)
     double                     CumPmts;    // Cumulative payments
 
     // Commutation functions
 // TODO ?? Apparently the original reason for using smart pointers
 // was to minimize stack usage in a 16-bit environment; clearly that
-// doesn't matter anymore.
+// doesn't matter anymore. TAXATION !! Don't do that then.
 //
-// TODO ?? Consider using std::vector instead of array members.
+// TODO ?? TAXATION !! Consider using std::vector instead of array members.
     boost::scoped_ptr<ULCommFns> CommFns       [NumIOBases];
     // After the Init- functions have executed, we can delete the
     // rather sizeable ULCommFns objects, as long as we keep the
-    // endowment-year value of D for each basis.
+    // endowment-year value of D for each basis. TAXATION !! But
+    // not if they're created on the stack. And the meaning of
+    // "sizeable" has changed since that comment was written; the
+    // object contains nine vectors of double, each of potential
+    // length 100, and 9 * 8 * 100 = 7200 bytes is negligible in
+    // the twenty-first century.
     double                     DEndt           [NumIOBases];
 
     // GPT corridor factors for attained ages [IssueAge, 100]
@@ -249,16 +256,18 @@ class Irc7702
     std::vector<double>        PvChgSpecAmt    [NumIOBases];
     std::vector<double>        PvChgADD        [NumIOBases];
     std::vector<double>        PvChgMort       [NumIOBases];
-    // TODO ?? Perhaps -Sgl/Lvl and -Tgt/Exc should be dimensions.
+    // TODO ?? TAXATION !! Perhaps -Sgl/Lvl and -Tgt/Exc should be dimensions.
     std::vector<double>        PvNpfSglTgt     [NumIOBases];
     std::vector<double>        PvNpfLvlTgt     [NumIOBases];
     std::vector<double>        PvNpfSglExc     [NumIOBases];
     std::vector<double>        PvNpfLvlExc     [NumIOBases];
-// TODO ?? Not necessary?
+// TODO ?? TAXATION !! Not necessary?
     std::vector<double>        PvLoadDiffSgl   [NumIOBases];
     std::vector<double>        PvLoadDiffLvl   [NumIOBases];
 };
 
+// TAXATION !! Update this, and move it to a better location.
+//
 // Implementation thoughts
 //
 // This class was designed to be instantiated by a C++ illustration

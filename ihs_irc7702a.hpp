@@ -36,7 +36,7 @@
 
 void LMI_SO TestIrc7702A();
 
-// TODO ?? Known defects:
+// TAXATION !! TODO ?? Known defects:
 //   need to handle withdrawals correctly;
 //   7-pay premium strategy changes premium when spec amt changes;
 //   should optionally calculate factors e.g. 7pp, NSP from first principles.
@@ -50,16 +50,16 @@ class Irc7702A
     enum e_death_benefit_definition {e_death_benefit_7702A, e_specamt_7702A};
 
     Irc7702A
-        (int                         a_magic
-        ,mcenum_defn_life_ins        a_DefnLifeIns
+        (mcenum_defn_life_ins        a_DefnLifeIns
         ,mcenum_defn_material_change a_DefnMaterialChange
         ,bool                        a_IsSurvivorship
         ,mcenum_mec_avoid_method     a_AvoidMec
         ,bool                        a_Use7PPTable
         ,bool                        a_UseNSPTable
-        ,std::vector<double> const&  a_SevenPPRateVec// TODO ?? Assume table passed, for now.
-        ,std::vector<double> const&  a_NSPVec        // TODO ?? Assume table passed, for now.
+        ,std::vector<double> const&  a_SevenPPRateVec// TODO ?? TAXATION !! Assume table passed, for now.
+        ,std::vector<double> const&  a_NSPVec        // TODO ?? TAXATION !! Assume table passed, for now.
         ,round_to<double>    const&  a_RoundNonMecPrem
+// TAXATION !! Either use these arguments or eliminate them.
 //      ,unsigned int                a_IssueAge
 //      ,double                      a_Face
 //      ,mcenum_dbopt_7702           a_DBOpt
@@ -68,14 +68,11 @@ class Irc7702A
 //      ,std::vector<double> const&  a_PremLoad
 //      ,std::vector<double> const&  a_PerKCharge
 //      ,std::vector<double> const&  a_PolFee
-// probably other arguments are needed for reproposals
+// TAXATION !! probably other arguments are needed for reproposals
         );
     ~Irc7702A();
 
-    // This is notionally called once per *current*-basis run
-    // and actually called once per run, with calculations suppressed
-    // for all other bases by setting Ignore (q.v.).
-    void Initialize7702A                    // set initial values at issue
+    void Initialize7702A
         (bool   a_Ignore
         ,bool   a_MecAtIssue
         ,int    a_IssueAge
@@ -89,28 +86,18 @@ class Irc7702A
         ,std::vector<double> const& a_Pmts
         ,std::vector<double> const& a_Bfts
         );
-    // Always call at beginning of policy year
-    // interpolate NSP; update cum 7pp
     void UpdateBOY7702A
         (int a_PolicyYear
         );
-    // Always call at beginning of policy month
     void UpdateBOM7702A
         (int a_PolicyMonth
         );
-    // Always call at end of policy month
-    // update policy month
-    // return MEC status
     bool UpdateEOM7702A();
-    // Always call whenever 1035 exchange paid
     void Update1035Exch7702A
         (double& a_DeemedCashValue
         ,double  a_Net1035Amount
         ,double  a_Bft
         );
-    // Always call whenever premium is about to be paid
-    // record and test monthly pmt
-    // return max non-mec premium if called for
     double UpdatePmt7702A
         (double a_DeemedCashValue
         ,double a_Payment
@@ -120,11 +107,8 @@ class Irc7702A
         ,double a_LoadExcess
         ,double a_CashValue
         );
-    // Always call whenever Bfts changed
-    // record and test monthly Bfts
-    // return min non-mec Bft if called for
     double UpdateBft7702A
-        (double  // a_DeemedCashValue
+        (double  // a_DeemedCashValue // TAXATION !! Is this argument useful?
         ,double  a_NewDB
         ,double  a_OldDB
         ,bool    a_IsInCorridor
@@ -132,9 +116,7 @@ class Irc7702A
         ,double  a_OldSA
         ,double  a_CashValue
         );
-    // Queue a material change for later handling.
     void InduceMaterialChange();
-    // TODO ?? Handle material change--always call right before monthly deduction?
     void RedressMatChg
         (double& a_DeemedCashValue
         ,double  a_UnnecPrem
@@ -157,7 +139,7 @@ class Irc7702A
         ,double a_LoadExcess
         ,double a_CashValue
         ) const;
-    // SOMEDAY !! Consider using accessors like Irc7702::RoundedGLP()
+    // TAXATION !! Consider using accessors like Irc7702::RoundedGLP()
     // to encapsulate rounding within this class.
     double GetPresent7pp() const        {return SevenPP;}
     bool IsMecAlready() const           {return IsMec;}
@@ -172,13 +154,13 @@ class Irc7702A
     // for other purposes. They may be changed or eliminated in future
     // versions. I don't regard them as part of the public interface,
     // although they physically happen to be so.
-    // TODO ?? IOW, 'friend' would be better?
+    // TODO ?? TAXATION !! IOW, 'friend' would be better?
     int     DebugGetTestDur         () const
         {return TestPeriodDur - 1;  /* we already incremented it */}
     double  DebugGet7ppRate         () const
         {return SevenPPRateVec[PolicyYear];}
     double  DebugGetNsp             () const
-        {return MlyInterpNSP[PolicyMonth] * LowestBft;}
+        {return Ax * LowestBft;}
     double  DebugGetLowestBft       () const
         {return LowestBft;}
     double  DebugGetSavedDCV        () const
@@ -206,10 +188,10 @@ class Irc7702A
         {return IsMatChg;}
 
   private:
-    void    TestBftDecrease         // recalculate 7pp; perform 7 pay test
+    void    TestBftDecrease
         (double a_NewBft
         );
-    void    Determine7PP            // update SevenPP
+    void    Determine7PP
         (double a_Bft
         ,bool   a_TriggeredByBftDecrease
         ,bool   a_TriggeredByMatChg
@@ -217,30 +199,26 @@ class Irc7702A
         ,double a_AVBeforeMatChg
         ,double a_NecPrem
         );
-    // TODO ?? Wouldn't this need to be public?
-    double  SAIncreaseToAvoidMec    // determine lowest non-MEC spec amt
+    // TODO ?? TAXATION !! Wouldn't this need to be public?
+    double  SAIncreaseToAvoidMec
         (bool a_TriggeredByUnnecPrem
         );
-    double  DetermineLowestBft() const; // update LowestBft dynamically
+    double  DetermineLowestBft() const;
 
     mutable mec_state state_;
 
 // NOTE: table lookup really means supplied via arguments ?
-// TODO ?? Need to calculate if not table lookup.
-
-    int magic; // TODO ?? Temporary kludge.
+// TODO ?? TAXATION !! Need to calculate if not table lookup.
 
     mcenum_defn_life_ins DefnLifeIns;
     mcenum_defn_material_change DefnMaterialChange;
 
     bool UnnecPremIsMatChg;
     bool ElectiveIncrIsMatChg;
-    bool Exch1035IsMatChg;
     bool CorrHidesIncr;
-    bool InterpolateNspOnly;
 
     bool const      IsSurvivorship; // is policy multilife and not first to die?
-    mcenum_mec_avoid_method AvoidMec; // TODO ?? Document what this does.
+    mcenum_mec_avoid_method AvoidMec; // TODO ?? TAXATION !! Document what this does.
     bool const      Use7PPTable;    // get SevenPP from table, not calculation
     bool const      UseNSPTable;    // get NSP from table, not calculation
 
@@ -250,14 +228,15 @@ class Irc7702A
     round_to<double> RoundNonMecPrem;
 
     // Note that death benefit and pmts may not have their usual meanings.
-    // Pmts is premium net of deductible withdrawals.
+    // TAXATION !! [Explain why.]
+    // Pmts is premium net of deductible withdrawals. [TAXATION !! globally prefer "nontaxable" to "deductible"]
     // Bfts is SA, plus tax basis for ROP. The corridor is conservatively
     //   ignored to prevent the policy from becoming a MEC retroactively
     //   due to poor investment performance.
-    // TODO ?? Maybe not--Bfts might be DB.
+    // TODO ?? TAXATION !! Maybe not--Bfts might be DB.
     std::vector<double> Bfts;           // "death benefit" for 7702A
     std::vector<double> Pmts;           // premium net of deductible withdrawals
-    std::vector<double> MlyInterpNSP;   // monthly interpolated NSP per $
+    double Ax;
 
     e_death_benefit_definition DBDefn;
 
@@ -279,9 +258,8 @@ class Irc7702A
     int             TestPeriodLen;  // length (months) of test period
     int             TestPeriodDur;  // duration (months) since beginning of
                                     //   current test period
-    // We need policy year for table lookups, and month for NSP interpolation
-    int             PolicyYear;     // duration since issue (full years)
-    int             PolicyMonth;    // duration since issue (months)
+    int             PolicyYear;     // full years since issue
+    int             PolicyMonth;    // full months since policy anniversary
     double          AssumedBft;     // death bft assumed in setting last SevenPP
 
     // These values are saved at each material change, and used for
@@ -289,12 +267,14 @@ class Irc7702A
     double          Saved7PPRate;   // seven-pay premium per $
     double          SavedAVBeforeMatChg;// account value prior to material change
     double          SavedNecPrem;   // maximum necessary premium
-    double          SavedNSP;       // interpolated NSP
+    double          SavedNSP;
     double          SavedDCV;       // deemed cash value
 
+    // TAXATION !! Need these be 'mutable'?
     mutable double  NetNecessaryPrem;   // maximum necessary premium, no loads
     mutable double  GrossNecessaryPrem; // max nec prem grossed up for prem load
 
+// TAXATION !! Is this stuff useful? q and i might be, but the others?
 //  std::vector<double> const&  q;
 //  std::vector<double> const&  i;
 //  std::vector<double> const&  PremLoad;

@@ -1084,12 +1084,15 @@ sample.policy:
 
 # Test data.
 
+sample.cns: $(src_dir)/sample.cns
+	$(CP) --preserve --update $< .
+
+sample.ill: $(src_dir)/sample.ill
+	$(CP) --preserve --update $< .
+
 test_data := \
   sample.cns \
   sample.ill \
-
-$(test_data):
-	@$(CP) --preserve --update $(src_dir)/$@ .
 
 ################################################################################
 
@@ -1281,9 +1284,17 @@ $(touchstone_md5sums): $(touchstone_files)
 testdeck_suffixes    := cns ill ini mec
 test_result_suffixes := test test0 monthly_trace.* mec.tsv mec.xml
 
+# These files summarize system-test results and their differences from
+# results saved in $(touchstone_dir). Datestamps are embedded in their
+# names to accumulate history in $(test_dir), which permits comparison
+# across several versions. An undatestamped copy of the md5sums is
+# made for storage in a version-control system (which naturally keeps
+# historical versions in its own way).
+
 system_test_analysis := $(test_dir)/analysis-$(yyyymmddhhmm)
 system_test_diffs    := $(test_dir)/diffs-$(yyyymmddhhmm)
 system_test_md5sums  := $(test_dir)/md5sums-$(yyyymmddhhmm)
+system_test_md5sums2 := $(test_dir)/md5sums
 
 %.cns: test_emission := emit_quietly,emit_test_data
 %.ill: test_emission := emit_quietly,emit_test_data
@@ -1335,6 +1346,7 @@ system_test: $(data_dir)/configurable_settings.xml $(touchstone_md5sums) install
 	@testdecks=`$(LS) --sort=size $(testdecks) || $(ECHO) $(testdecks)` \
 	  && $(MAKE) --file=$(this_makefile) --directory=$(test_dir) $$testdecks
 	@$(SORT) --key=2 $(system_test_md5sums) --output=$(system_test_md5sums)
+	@$(CP) --preserve --update $(system_test_md5sums) $(system_test_md5sums2)
 	@$(SORT) $(system_test_analysis) --output=$(system_test_analysis)
 	@-< $(system_test_analysis) $(SED) \
 	  -e ';/rel err.*e-0*1[5-9]/d' \

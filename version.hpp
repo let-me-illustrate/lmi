@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Gregory W. Chicares.
+// Copyright (C) 2012 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -24,7 +24,7 @@
 
 #include "config.hpp"
 
-#define LMI_VERSION "20111128T1029Z"
+#define LMI_VERSION "20120206T1342Z"
 
 #endif // version_hpp
 

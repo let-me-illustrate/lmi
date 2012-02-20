@@ -352,7 +352,7 @@ int test_main(int, char*[])
     demo1();
 
     std::cout
-        << "        Time (usec) for array0 = array1 + array2 by various methods"
+        << "        Time (seconds) for array0 = array1 + array2 by various methods"
         << '\n'
         << " length          C             et       et/C         va       va/c"
         << '\n'

@@ -231,8 +231,7 @@ mec_state test_one_days_7702A_transactions
     std::vector<double> const& chosen_7Px = Use7702ATables ? tabular_7Px : analytic_7Px;
 
     Irc7702A z
-        (0
-        ,DefinitionOfLifeInsurance
+        (DefinitionOfLifeInsurance
         ,DefinitionOfMaterialChange
         ,false // Survivorship: hardcoded for now.
         ,mce_allow_mec
@@ -245,7 +244,7 @@ mec_state test_one_days_7702A_transactions
 
     z.Initialize7702A
         (false       // a_Ignore
-        ,InforceIsMec
+        ,InforceIsMec // TAXATION !! also use 1035-is-mec fields?
         ,input.issue_age()
         ,input.maturity_age()
         ,InforceYear
@@ -340,7 +339,7 @@ mec_state test_one_days_7702A_transactions
     if(0.0 != total_1035_amount)
         {
         z.Update1035Exch7702A
-            (InforceDcv
+            (InforceDcv // TAXATION !! Assert that this is zero?
             ,total_1035_amount
             ,old_benefit_amount
             );
@@ -498,10 +497,10 @@ mec_state test_one_days_7702A_transactions
 } // Unnamed namespace.
 
 mec_server::mec_server(mcenum_emission emission)
-    :emission_              (emission)
-    ,usec_for_input_        (0.0)
-    ,usec_for_calculations_ (0.0)
-    ,usec_for_output_       (0.0)
+    :emission_                 (emission)
+    ,seconds_for_input_        (0.0)
+    ,seconds_for_calculations_ (0.0)
+    ,seconds_for_output_       (0.0)
 {
 }
 
@@ -527,7 +526,7 @@ bool mec_server::operator()(fs::path const& file_path)
             }
         mec_xml_document doc;
         doc.read(ifs);
-        usec_for_input_ = timer.stop().elapsed_usec();
+        seconds_for_input_ = timer.stop().elapsed_seconds();
         return operator()(file_path, doc.input_data());
         }
     else
@@ -548,13 +547,13 @@ bool mec_server::operator()(fs::path const& file_path, mec_input const& z)
 {
     Timer timer;
     state_ = test_one_days_7702A_transactions(file_path, z);
-    usec_for_calculations_ = timer.stop().elapsed_usec();
+    seconds_for_calculations_ = timer.stop().elapsed_seconds();
     timer.restart();
     if(mce_emit_test_data && emission_)
         {
         state_.save(fs::change_extension(file_path, ".mec.xml"));
         }
-    usec_for_output_       = timer.stop().elapsed_usec();
+    seconds_for_output_       = timer.stop().elapsed_seconds();
     conditionally_show_timings_on_stdout();
     return true;
 }
@@ -565,11 +564,11 @@ void mec_server::conditionally_show_timings_on_stdout() const
         {
         std::cout
             << "\n    Input:        "
-            << Timer::elapsed_msec_str(usec_for_input_)
+            << Timer::elapsed_msec_str(seconds_for_input_)
             << "\n    Calculations: "
-            << Timer::elapsed_msec_str(usec_for_calculations_)
+            << Timer::elapsed_msec_str(seconds_for_calculations_)
             << "\n    Output:       "
-            << Timer::elapsed_msec_str(usec_for_output_)
+            << Timer::elapsed_msec_str(seconds_for_output_)
             << '\n'
             ;
         }
@@ -580,18 +579,18 @@ mec_state mec_server::state() const
     return state_;
 }
 
-double mec_server::usec_for_input() const
+double mec_server::seconds_for_input() const
 {
-    return usec_for_input_;
+    return seconds_for_input_;
 }
 
-double mec_server::usec_for_calculations() const
+double mec_server::seconds_for_calculations() const
 {
-    return usec_for_calculations_;
+    return seconds_for_calculations_;
 }
 
-double mec_server::usec_for_output() const
+double mec_server::seconds_for_output() const
 {
-    return usec_for_output_;
+    return seconds_for_output_;
 }
 

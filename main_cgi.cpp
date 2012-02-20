@@ -526,7 +526,7 @@ void ShowOutput(cgicc::Cgicc const& data)
 
     std::cout
         << "      Input:        "
-        << Timer::elapsed_msec_str(timer.stop().elapsed_usec())
+        << Timer::elapsed_msec_str(timer.stop().elapsed_seconds())
         << "<BR>\n"
         ;
     if("" == census_data)
@@ -557,10 +557,10 @@ void ShowIllusOutput(Input const& a_input)
     std::cout << "<hr>\n\n";
     std::cout
         << "    Calculations: "
-        << Timer::elapsed_msec_str(run_functor.usec_for_calculations())
+        << Timer::elapsed_msec_str(run_functor.seconds_for_calculations())
         << "<BR>\n"
         << "    Output:       "
-        << Timer::elapsed_msec_str(run_functor.usec_for_output())
+        << Timer::elapsed_msec_str(run_functor.seconds_for_output())
         << "<BR>\n"
         ;
 }
@@ -667,10 +667,10 @@ void ShowCensusOutput
     std::cout << "<hr>\n\n";
     std::cout
         << "    Calculations: "
-        << Timer::elapsed_msec_str(run_functor.usec_for_calculations())
+        << Timer::elapsed_msec_str(run_functor.seconds_for_calculations())
         << "<BR>\n"
         << "    Output:       "
-        << Timer::elapsed_msec_str(run_functor.usec_for_output())
+        << Timer::elapsed_msec_str(run_functor.seconds_for_output())
         << "<BR>\n"
         ;
 

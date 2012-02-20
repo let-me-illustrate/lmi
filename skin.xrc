@@ -1588,7 +1588,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxTextCtrl" name="InforceGlp">
-                                        <help>Inforce guideline level premium (not yet implemented)</help>
+                                        <help>Inforce guideline level premium</help>
                                         <size>80,-1</size>
                                         <value>0</value>
                                     </object>
@@ -1603,7 +1603,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxTextCtrl" name="InforceCumulativeGlp">
-                                        <help>Cumulative guideline level premium since issue (not yet implemented)</help>
+                                        <help>Cumulative guideline level premium since issue</help>
                                         <size>80,-1</size>
                                         <value>0</value>
                                     </object>
@@ -1618,7 +1618,7 @@ demonstrate a defect in the wx library. See
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxTextCtrl" name="InforceGsp">
-                                        <help>Inforce guideline single premium (not yet implemented)</help>
+                                        <help>Inforce guideline single premium</help>
                                         <size>80,-1</size>
                                         <value>0</value>
                                     </object>

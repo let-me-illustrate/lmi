@@ -64,16 +64,16 @@ class LMI_SO mec_server
 
     mec_state state() const;
 
-    double usec_for_input       () const;
-    double usec_for_calculations() const;
-    double usec_for_output      () const;
+    double seconds_for_input       () const;
+    double seconds_for_calculations() const;
+    double seconds_for_output      () const;
 
   private:
     mcenum_emission emission_;
     mec_state state_;
-    double usec_for_input_;
-    double usec_for_calculations_;
-    double usec_for_output_;
+    double seconds_for_input_;
+    double seconds_for_calculations_;
+    double seconds_for_output_;
 };
 
 #endif // mec_server_hpp

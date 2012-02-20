@@ -29394,3 +29394,329 @@ Distinguish inforce year and inforce month for future use.
   ihs_irc7702.hpp
 Add two data documented as missing.
 
+20120111T1034Z <gchicares@sbcglobal.net> [593]
+
+  yare_input.cpp
+  yare_input.hpp
+Prepare inforce tax fields for use.
+
+20120111T1507Z <gchicares@sbcglobal.net> [593]
+
+  ihs_basicval.cpp
+Pass inforce inputs to GPT class. This change causes initial GLP to
+change from one wrong value to another (but not in the first inforce
+year), yet does not affect the (also wrong) value of initial GSP.
+
+20120111T1723Z <gchicares@sbcglobal.net> [592]
+
+  ihs_irc7702.cpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch, and noted as such ab initio: absent an adjustment event
+it is incorrect to calculate guidelines as of inforce duration.
+
+20120111T1746Z <gchicares@sbcglobal.net> [592]
+
+  ihs_irc7702.cpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch: a case in force after the issue date isn't new business
+even if it's still in the first year.
+
+20120111T1926Z <gchicares@sbcglobal.net> [588]
+
+  ihs_irc7702.cpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch: initialize inforce data not to a constant zero, but
+instead from input values.
+
+20120113T1426Z <gchicares@sbcglobal.net> [588]
+
+  ihs_avdebug.cpp
+Remove needless "Is material change" field. If there is a material
+change, then the seven-pay premium almost certainly changes.
+
+20120113T2236Z <gchicares@sbcglobal.net> [588]
+
+  ihs_avdebug.cpp
+Rename and move the 7702A "amounts paid" field.
+
+20120114T0126Z <gchicares@sbcglobal.net> [588]
+
+  ihs_avdebug.cpp
+  ihs_irc7702.cpp
+  ihs_irc7702.hpp
+Reorder and augment GPT fields; don't round them in monthly trace.
+
+20120114T0251Z <gchicares@sbcglobal.net> [586]
+
+  ihs_irc7702.cpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch: don't override inforce input values.
+
+20120115T1035Z <gchicares@sbcglobal.net> [586]
+
+  skin.xrc
+No longer label GPT inforce fields as unimplemented.
+
+20120115T1358Z <gchicares@sbcglobal.net> [586]
+
+  ihs_acctval.cpp
+Refactor for clarity.
+
+20120115T1429Z <gchicares@sbcglobal.net> [586]
+
+  ihs_acctval.cpp
+Do not increment cumulative GLP in an incomplete initial inforce year.
+
+20120118T1122Z <gchicares@sbcglobal.net> [587]
+
+  ihs_avmly.cpp
+Mark a defect.
+
+20120118T1340Z <gchicares@sbcglobal.net> [587]
+
+  ihs_avdebug.cpp
+Suppress irrelevant monthly-trace data.
+
+20120119T2209Z <gchicares@sbcglobal.net> [586]
+
+  ihs_basicval.cpp
+Remove a comment rendered senseless by the passage of time.
+
+20120120T1026Z <gchicares@sbcglobal.net> [586]
+
+  test_coding_rules.cpp
+Allow a new marker for issues of taxation.
+
+20120120T1034Z <gchicares@sbcglobal.net> [586]
+
+  ihs_basicval.cpp
+  ihs_irc7702.cpp
+  ihs_irc7702.hpp
+Remove unwanted arguments from Irc7702::Irc7702().
+
+20120121T1136Z <gchicares@sbcglobal.net> [615]
+
+  census_view_old.cpp
+  census_view_old.hpp
+Restore wxListView census manager from revision 5304 under a new name,
+updating only copyright, header name, and include guards for now. The
+goal is to release a stable system while wxDVC development continues,
+but without changes like those made 20111026T1342Z and 20111028T1211Z.
+
+20120121T1144Z <gchicares@sbcglobal.net> [586]
+
+  census_view_old.cpp
+  census_view_old.hpp
+Replace defect markers in obsolescent code restored 20120121T1136Z.
+
+20120121T1300Z <gchicares@sbcglobal.net> [586]
+
+  census_view_old.cpp
+  census_view_old.hpp
+Rename class.
+
+20120121T1303Z <gchicares@sbcglobal.net> [586]
+
+  census_view_old.cpp
+Redefine a macro, out of an abundance of caution.
+
+20120122T1246Z <gchicares@sbcglobal.net> [586]
+
+  Makefile.am
+  census_document.hpp
+  multiple_cell_document.hpp
+  objects.make
+Compile and link code added 20120121T1136Z and renamed 20120121T1300Z.
+
+20120122T1350Z <gchicares@sbcglobal.net> [586]
+
+  census_document.cpp
+  census_document.hpp
+Rule out an ostensible error.
+
+20120122T1357Z <gchicares@sbcglobal.net> [586]
+
+  main_wx.cpp
+Use wxDVC only with a password never given to end users.
+
+20120122T1935Z <gchicares@sbcglobal.net> [585]
+
+  ihs_irc7702.hpp
+Remove needless argument defaults.
+
+20120122T2254Z <gchicares@sbcglobal.net> [585]
+
+  ihs_basicval.cpp
+  ihs_irc7702.cpp
+  ihs_irc7702.hpp
+Sort ctor arguments to harmonize with member declaration order.
+
+20120125T0959Z <gchicares@sbcglobal.net> [585]
+
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_reg_d.xrc
+No longer label GPT inforce fields as unimplemented.
+
+20120125T1519Z <gchicares@sbcglobal.net> [585]
+
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+  ihs_irc7702.cpp
+  ihs_irc7702.hpp
+  ihs_irc7702a.cpp
+  ihs_irc7702a.hpp
+Mark some taxation issues.
+
+20120125T1522Z <gchicares@sbcglobal.net> [585]
+
+  version.hpp
+Designate release candidate.
+
+20120127T1249Z <gchicares@sbcglobal.net> [584]
+
+  ihs_irc7702.cpp
+Assert that endowment benefit does not exceed specamt.
+
+20120127T1256Z <gchicares@sbcglobal.net> [583]
+
+  ihs_irc7702.cpp
+Expunge a redundant comment (cf. line 778).
+
+20120127T1416Z <gchicares@sbcglobal.net> [581]
+
+  ihs_irc7702.cpp
+  ihs_irc7702.hpp
+Prefer to perform initialization in initializer-list.
+
+20120131T1050Z <gchicares@sbcglobal.net> [581]
+
+  ihs_irc7702a.cpp
+  ihs_irc7702a.hpp
+Document member functions at definition rather than at declaration.
+
+20120131T1059Z <gchicares@sbcglobal.net> [582]
+
+  ihs_irc7702a.cpp
+Mark a defect.
+
+20120131T1149Z <gchicares@sbcglobal.net> [580]
+
+  ihs_basicval.cpp
+  ihs_irc7702a.cpp
+  ihs_irc7702a.hpp
+  irc7702a_test.cpp
+  mec_server.cpp
+Abjure "magic".
+
+20120131T1336Z <gchicares@sbcglobal.net> [579]
+
+  ihs_irc7702a.cpp
+  ihs_irc7702a.hpp
+Expunge misbegotten NSP interpolation.
+
+20120131T1339Z <gchicares@sbcglobal.net> [578]
+
+  ihs_irc7702a.cpp
+  ihs_irc7702a.hpp
+Expunge a silly flag.
+
+20120205T0342Z <gchicares@sbcglobal.net> [578]
+
+  ihs_acctval.cpp
+  ihs_basicval.cpp
+  ihs_irc7702a.cpp
+  mec_server.cpp
+Mark some taxation issues.
+
+20120206T1341Z <gchicares@sbcglobal.net> [578]
+
+  DefectLog
+  ihs_irc7702a.cpp
+Fix defect introduced 20120115T1429Z while fixing another defect.
+
+20120206T1342Z <gchicares@sbcglobal.net> [578]
+
+  version.hpp
+Designate release candidate.
+
+20120208T1453Z <gchicares@sbcglobal.net> [578]
+
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+Improve layout and documentation, marking some taxation issues.
+
+20120208T2159Z <gchicares@sbcglobal.net> [578]
+
+  ihs_avmly.cpp
+Improve documention, discussing several issues to be resolved soon.
+
+20120209T1323Z <gchicares@sbcglobal.net> [575]
+
+  ihs_avmly.cpp
+Apply changes discussed 20120208T2159Z.
+
+20120217T1802Z <gchicares@sbcglobal.net> [575]
+
+  ihs_irc7702a.cpp
+Improve a diagnostic message.
+
+20120218T0706Z <gchicares@sbcglobal.net> [575]
+
+  emit_ledger.cpp
+  group_values.cpp
+  group_values.hpp
+  illustrator.cpp
+  illustrator.hpp
+  main_cgi.cpp
+  mec_server.cpp
+  mec_server.hpp
+  timer.cpp
+  timer.hpp
+  timer_test.cpp
+  vector_test.cpp
+Fix defect introduced 20050605T0355Z: usec confused with sec.
+
+20120218T1307Z <gchicares@sbcglobal.net> [575]
+
+  xml_lmi.cpp
+  xml_lmi.hpp
+  xml_serializable.tpp
+Add and use functions to manipulate attributes as integers.
+
+20120219T1246Z <gchicares@sbcglobal.net> [575]
+
+  workhorse.make
+Update build directory's unit-test data from source directory.
+
+20120219T1303Z <gchicares@sbcglobal.net> [575]
+
+  ledger_xml_io.cpp
+Suggest a future improvement.
+
+20120219T1405Z <gchicares@sbcglobal.net> [575]
+
+  multiple_cell_document.cpp
+  multiple_cell_document.hpp
+Assert certain invariants.
+
+20120220T0158Z <gchicares@sbcglobal.net> [573]
+
+  multiple_cell_document.cpp
+  multiple_cell_document.hpp
+  sample.cns
+Write more-idiomatic xml. See:
+  http://lists.nongnu.org/archive/html/lmi/2010-08/msg00016.html
+
+20120220T0201Z <gchicares@sbcglobal.net> [573]
+
+  xml_lmi.cpp
+Update time of version change.
+
+20120220T0203Z <gchicares@sbcglobal.net> [573]
+
+  xml_lmi.cpp
+  xml_lmi.hpp
+Expunge a function disused since 20120220T0158Z.
+

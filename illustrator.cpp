@@ -50,10 +50,10 @@
 #include <string>
 
 illustrator::illustrator(mcenum_emission emission)
-    :emission_              (emission)
-    ,usec_for_input_        (0.0)
-    ,usec_for_calculations_ (0.0)
-    ,usec_for_output_       (0.0)
+    :emission_                 (emission)
+    ,seconds_for_input_        (0.0)
+    ,seconds_for_calculations_ (0.0)
+    ,seconds_for_output_       (0.0)
 {
 }
 
@@ -69,14 +69,14 @@ bool illustrator::operator()(fs::path const& file_path)
         Timer timer;
         multiple_cell_document doc(file_path.string());
         assert_consistency(doc.case_parms()[0], doc.cell_parms()[0]);
-        usec_for_input_ = timer.stop().elapsed_usec();
+        seconds_for_input_ = timer.stop().elapsed_seconds();
         return operator()(file_path, doc.cell_parms());
         }
     else if(".ill" == extension)
         {
         Timer timer;
         single_cell_document doc(file_path.string());
-        usec_for_input_ = timer.stop().elapsed_usec();
+        seconds_for_input_ = timer.stop().elapsed_seconds();
         return operator()(file_path, doc.input_data());
         }
     else if(".ini" == extension)
@@ -85,18 +85,18 @@ bool illustrator::operator()(fs::path const& file_path)
         Timer timer;
         Input input;
         bool close_when_done = custom_io_0_read(input, file_path.string());
-        usec_for_input_ = timer.stop().elapsed_usec();
+        seconds_for_input_ = timer.stop().elapsed_seconds();
         timer.restart();
         IllusVal z(file_path.string());
         z.run(input);
         principal_ledger_ = z.ledger();
-        usec_for_calculations_ = timer.stop().elapsed_usec();
+        seconds_for_calculations_ = timer.stop().elapsed_seconds();
         fs::path out_file =
             file_path.string() == c.custom_input_filename()
             ? c.custom_output_filename()
             : fs::change_extension(file_path, ".test0")
             ;
-        usec_for_output_ = emit_ledger
+        seconds_for_output_ = emit_ledger
             (out_file
             ,out_file
             ,*z.ledger()
@@ -125,8 +125,8 @@ bool illustrator::operator()(fs::path const& file_path, Input const& z)
     IllusVal IV(file_path.string());
     IV.run(z);
     principal_ledger_ = IV.ledger();
-    usec_for_calculations_ = timer.stop().elapsed_usec();
-    usec_for_output_ = emit_ledger
+    seconds_for_calculations_ = timer.stop().elapsed_seconds();
+    seconds_for_output_ = emit_ledger
         (file_path
         ,file_path
         ,*IV.ledger()
@@ -142,8 +142,8 @@ bool illustrator::operator()(fs::path const& file_path, std::vector<Input> const
     run_census runner;
     result = runner(file_path, emission_, z);
     principal_ledger_ = runner.composite();
-    usec_for_calculations_ = result.usec_for_calculations_;
-    usec_for_output_       = result.usec_for_output_      ;
+    seconds_for_calculations_ = result.seconds_for_calculations_;
+    seconds_for_output_       = result.seconds_for_output_      ;
     conditionally_show_timings_on_stdout();
     return result.completed_normally_;
 }
@@ -154,11 +154,11 @@ void illustrator::conditionally_show_timings_on_stdout() const
         {
         std::cout
             << "\n    Input:        "
-            << Timer::elapsed_msec_str(usec_for_input_)
+            << Timer::elapsed_msec_str(seconds_for_input_)
             << "\n    Calculations: "
-            << Timer::elapsed_msec_str(usec_for_calculations_)
+            << Timer::elapsed_msec_str(seconds_for_calculations_)
             << "\n    Output:       "
-            << Timer::elapsed_msec_str(usec_for_output_)
+            << Timer::elapsed_msec_str(seconds_for_output_)
             << '\n'
             ;
         }
@@ -175,19 +175,19 @@ boost::shared_ptr<Ledger const> illustrator::principal_ledger() const
     return principal_ledger_;
 }
 
-double illustrator::usec_for_input() const
+double illustrator::seconds_for_input() const
 {
-    return usec_for_input_;
+    return seconds_for_input_;
 }
 
-double illustrator::usec_for_calculations() const
+double illustrator::seconds_for_calculations() const
 {
-    return usec_for_calculations_;
+    return seconds_for_calculations_;
 }
 
-double illustrator::usec_for_output() const
+double illustrator::seconds_for_output() const
 {
-    return usec_for_output_;
+    return seconds_for_output_;
 }
 
 Input const& default_cell()

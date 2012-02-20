@@ -117,6 +117,6 @@ double emit_ledger
         }
 
   done:
-    return timer.stop().elapsed_usec();
+    return timer.stop().elapsed_seconds();
 }
 

@@ -51,7 +51,11 @@
 #   endif // LMI_MS_HEADER_INCLUDED
 #endif // LMI_MSW
 
-//============================================================================
+/// Create, calibrate, and start a timer.
+///
+/// Postcondition: 0 < frequency_. Throws if a positive frequency_
+/// cannot be determined.
+
 Timer::Timer()
     :elapsed_time_      (0)
     ,is_running_        (false)
@@ -66,12 +70,12 @@ Timer::Timer()
     start();
 }
 
-//============================================================================
 Timer::~Timer()
 {
 }
 
-//============================================================================
+/// Set elapsed time to zero, and restart timer.
+
 Timer& Timer::restart()
 {
     elapsed_time_ = 0;
@@ -79,7 +83,8 @@ Timer& Timer::restart()
     return *this;
 }
 
-//============================================================================
+/// Stop timer and mark elapsed time. Throws if timer was not running.
+
 Timer& Timer::stop()
 {
     if(!is_running_)
@@ -95,37 +100,46 @@ Timer& Timer::stop()
     return *this;
 }
 
-//============================================================================
-std::string Timer::elapsed_msec_str(double z)
+/// Format argument as a string representing integral milliseconds.
+
+std::string Timer::elapsed_msec_str(double seconds)
 {
     std::ostringstream oss;
-    oss << std::fixed << std::setprecision(0) << 1000.0 * z;
+    oss << std::fixed << std::setprecision(0) << 1000.0 * seconds;
     oss << " milliseconds";
     return oss.str();
 }
 
-//============================================================================
+/// Elapsed time as a string representing integral milliseconds.
+
 std::string Timer::elapsed_msec_str() const
 {
-    return elapsed_msec_str(elapsed_usec());
+    return elapsed_msec_str(elapsed_seconds());
 }
 
-//============================================================================
-double Timer::elapsed_usec() const
+/// Elapsed time in seconds.
+///
+/// Preconditions:
+///  - Timer must have been stopped; throws if it is still running.
+///  - frequency_ must be nonzero (guaranteed by ctor), so that
+///    dividing by it is safe.
+///
+/// The static_casts are necessary in case elapsed_t is integral.
+
+double Timer::elapsed_seconds() const
 {
     if(is_running_)
         {
         throw std::logic_error
-            ("Timer::elapsed_usec() called, but timer is still running."
+            ("Timer::elapsed_seconds() called, but timer is still running."
             );
         }
 
-    // The static_casts are necessary in case elapsed_t is integral.
-    // It is impossible for frequency_ to be zero.
     return static_cast<double>(elapsed_time_) / static_cast<double>(frequency_);
 }
 
-//============================================================================
+/// Ascertain timer frequency in ticks per second.
+
 elapsed_t Timer::calibrate()
 {
 #if defined LMI_POSIX
@@ -145,7 +159,8 @@ elapsed_t Timer::calibrate()
 #endif // Unknown platform.
 }
 
-//============================================================================
+/// Start timer. Throws if it was already running.
+
 void Timer::start()
 {
     if(is_running_)
@@ -159,7 +174,8 @@ void Timer::start()
     time_when_started_ = inspect();
 }
 
-//============================================================================
+/// Ticks elapsed since timer started.
+
 elapsed_t Timer::inspect() const
 {
 #if defined LMI_POSIX

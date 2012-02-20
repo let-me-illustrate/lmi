@@ -121,13 +121,16 @@ void AccountValue::DoMonthDR()
     TxTakeWD();
 
     TxTestGPT();
-    // TODO ?? Doesn't this mean dumpins and 1035s get ignored?
+    // TODO ?? TAXATION !! Doesn't this mean dumpins and 1035s get ignored?
     LMI_ASSERT(0.0 <= Dcv);
+    // TAXATION !! Is it really useful to comment the arguments here?
     Irc7702A_->UpdateBft7702A
         (Dcv
         ,DBReflectingCorr + TermDB // DB7702A
         ,OldDB // prior_db_7702A
         ,DBReflectingCorr == DBIgnoringCorr
+        // TAXATION !! This assumes the term rider can be treated as death benefit;
+        // use 'TermIsDbFor7702A'.
         ,ActualSpecAmt + TermSpecAmt
         ,OldSA // prior_sa_7702A
         ,CashValueFor7702()
@@ -136,7 +139,7 @@ void AccountValue::DoMonthDR()
     NetPmts[Month]   = 0.0; // TODO ?? expunge as being unnecessary
     GrossPmts[Month] = 0.0; // TODO ?? expunge as being unnecessary
     TxExch1035();
-    // TODO ?? Is this where spec amt should be increased by GPT?
+    // TODO ?? TAXATION !! Is this where spec amt should be increased by GPT?
 
     double kludge_account_value = std::max(TotalAccountValue(), HoneymoonValue);
     if(0 == Year && 0 == Month)
@@ -153,7 +156,7 @@ void AccountValue::DoMonthDR()
           + GetRefundableSalesLoad()
 //          + std::max(0.0, ExpRatReserve) // This would be added if it existed.
         );
-// TODO ?? Use CashValueFor7702() instead?
+// TODO ?? TAXATION !! Use CashValueFor7702() instead?
     double max_necessary_premium = Irc7702A_->MaxNecessaryPremium
         (Dcv
         ,AnnualTargetPrem
@@ -169,18 +172,22 @@ void AccountValue::DoMonthDR()
         ,kludge_account_value
         );
 
-    // Saved for monthly detail report only.
+    // Saved for monthly detail report only. TAXATION !! Then are
+    // these still needed...perhaps in order to report their values
+    // prior to accepting any payment?
     NetMaxNecessaryPremium   = Irc7702A_->DebugGetNetMaxNecPm  ();
     GrossMaxNecessaryPremium = Irc7702A_->DebugGetGrossMaxNecPm();
 
     TxAscertainDesiredPayment();
     TxLimitPayment(max_non_mec_premium);
 
+    // TAXATION !! This line recognizes a withdrawal for 7702A;
+    // shouldn't there be similar code here for GPT?
     if(0 == Month)
         {
         Irc7702A_->UpdatePmt7702A
             (Dcv
-            ,-NetWD
+            ,-NetWD // TAXATION !! This should be gross, not net.
             ,false
             ,AnnualTargetPrem
             ,YearsTotLoadTgtLowestPremtax
@@ -550,20 +557,22 @@ void AccountValue::TxExch1035()
     // Policy issue date is always a modal payment date.
     GrossPmts[Month] = External1035Amount + Internal1035Amount;
 
-// TODO ?? This looks like a good idea, but it would prevent the
+// TODO ?? TAXATION !! This looks like a good idea, but it would prevent the
 // initial seven-pay premium from being set.
 //    if(0.0 == GrossPmts[Month])
 //        {
 //        return;
 //        }
 
+// TAXATION !! This condition, or a similar one, guards several GPT calls,
+// but not all (ProcessAdjustableEvent(), e.g.); should this be made uniform?
 // TODO ?? Perhaps this condition should be:
 //    if(!SolvingForGuarPremium && Solving || mce_run_gen_curr_sep_full == RunBasis_)
     if(Solving || mce_run_gen_curr_sep_full == RunBasis_)
         {
         if(!SolvingForGuarPremium)
             {
-            double fake_cum_pmt = 0.0; // TODO ?? Needs work.
+            double fake_cum_pmt = 0.0; // TODO ?? TAXATION !! Needs work.
             Irc7702_->ProcessGptPmt(Year, GrossPmts[Month], fake_cum_pmt);
             }
         // Limit external 1035 first, then internal, as necessary to avoid
@@ -603,13 +612,15 @@ void AccountValue::TxExch1035()
     DBReflectingCorr = 0.0;
     TxSetDeathBft();
     TxSetTermAmt();
-    // TODO ?? Should 1035 exchanges be handled somewhere else?
+    // TODO ?? TAXATION !! Should 1035 exchanges be handled somewhere else?
     HOPEFULLY(0.0 == Dcv);
     Irc7702A_->Update1035Exch7702A
         (Dcv
         ,NetPmts[Month]
+        // TAXATION !! This assumes the term rider can be treated as death benefit;
+        // use 'TermIsDbFor7702A'.
         ,ActualSpecAmt + TermSpecAmt
-//        ,DBReflectingCorr + TermDB
+//        ,DBReflectingCorr + TermDB // TAXATION !! Alternate if 7702A benefit is DB?
         );
 
     if(HoneymoonActive)
@@ -846,44 +857,25 @@ void AccountValue::ChangeSurrChgSpecAmtBy(double delta)
 //============================================================================
 void AccountValue::InitializeMonth()
 {
-    // TODO ?? GPT--perform only if current basis?
-    TxSetDeathBft();
-    TxSetTermAmt();
-
-// TODO ?? Resolve this issue.
-/* Jacob--you said: <jacob>
-    // It seems that these calls cause problems if
-    // we have both SA and DBO change at the same
-    // time. I _think_ it's because these calls
-    // get made too many times, and the 'last' values
-    // we want when get to the GPT tests have been
-    // overwritten by the previous calls. However,
-    // we still need to call these if we're in the
-    // corridor, hence the final test. There may be
-    // a more elegant solution, but this is a solution.
-    if(    mce_gpt                   != DefnLifeIns_
-        || mce_run_gen_curr_sep_full != RunBasis_
-        || DBReflectingCorr          != DBIgnoringCorr
-       )
-        {
-        TxSetDeathBft();
-        TxSetTermAmt();
-        }
-    </jacob>
-    I'm not convinced yet. There has to be a better way.
-    These functions were called here for some reason;
-    we need to figure out why.
-*/
-
     GptForceout       = 0.0;
     premium_load_     = 0.0;
     sales_load_       = 0.0;
     premium_tax_load_ = 0.0;
     dac_tax_load_     = 0.0;
+
+    // Set BOM DB for 7702 and 7702A.
+    TxSetDeathBft();
+    TxSetTermAmt();
+
+    // TAXATION !! 'OldSA' and 'OldDB' need to be distinguished for 7702 and 7702A,
+    // with inclusion of term dependent on 'TermIsDbFor7702' and 'TermIsDbFor7702A'.
     OldSA = ActualSpecAmt + TermSpecAmt;
     OldDB = DBReflectingCorr + TermDB;
 
-    // TODO ?? CVAT only?
+    // TODO ?? CVAT only? TAXATION !! Consider whether and how 7702A
+    // functions should be guarded generally, with due regard to the
+    // definitional test chosen. This function probably should be
+    // called for GPT as well as CVAT.
     Irc7702A_->UpdateBOM7702A(Month);
 }
 
@@ -1060,24 +1052,12 @@ void AccountValue::TxSpecAmtChange()
 
     ChangeSpecAmtBy(YearsSpecAmt - ActualSpecAmt);
 
-    // TODO ?? Should 7702 or 7702A processing be done here?
+    // TODO ?? TAXATION !! Should 7702 or 7702A processing be done here?
 }
 
 //============================================================================
 void AccountValue::TxTestGPT()
 {
-/* TODO ?? Is is sufficient to calculate forceouts on curr basis only?
-100000 SA
- 30000 AV curr
- 20000 AV guar
-change opt 2 -> opt 1
-new SA:
- 70000 curr
- 80000 guar
-if forceout needed, it will be higher for curr--OK
-but position could be reversed for variable policy with bad curr performance
-*/
-
     if(mce_gpt != DefnLifeIns_ || mce_run_gen_curr_sep_full != RunBasis_)
         {
         return;
@@ -1088,7 +1068,7 @@ but position could be reversed for variable policy with bad curr performance
     // DB option.
     //
     // Illustrations allow no adjustable events at issue.
-    // TODO ?? If this assumption is not valid, then OldSA, OldDB, and
+    // TODO ?? TAXATION !! If this assumption is not valid, then OldSA, OldDB, and
     // OldDBOpt need to be initialized more carefully.
     if(0 == Year && 0 == Month)
         {
@@ -1113,7 +1093,7 @@ but position could be reversed for variable policy with bad curr performance
     // effect cannot be combined with other adjustable events because
     // the premium in question must first be tested against the
     // guideline premium limit. We should probably ignore any effect
-    // of ROP premium unless a forceout is required. TODO ?? Confirm this.
+    // of ROP premium unless a forceout is required. TODO ?? TAXATION !! Confirm this.
     //
     TxSetDeathBft();
     TxSetTermAmt();
@@ -1127,6 +1107,9 @@ but position could be reversed for variable policy with bad curr performance
     //
     mcenum_dbopt_7702 const new_dbopt(effective_dbopt_7702(YearsDBOpt, Equiv7702DBO3));
     mcenum_dbopt_7702 const old_dbopt(effective_dbopt_7702(OldDBOpt  , Equiv7702DBO3));
+    // TAXATION !! This may require revision if DB is treated as the 7702 benefit.
+    // TAXATION !! This assumes the term rider can be treated as death benefit;
+    // use 'TermIsDbFor7702'.
     bool adj_event =
             (
                 !materially_equal(OldSA, ActualSpecAmt + TermSpecAmt)
@@ -1136,11 +1119,14 @@ but position could be reversed for variable policy with bad curr performance
         ;
     if(adj_event)
         {
-        // TODO ?? Perhaps we should pass 'A' of 'A+B-C' for validation.
+        // TODO ?? TAXATION !! Perhaps we should pass 'A' of 'A+B-C' for validation.
+        // Or maybe not, because we can't match it if there was a plan change.
         Irc7702_->ProcessAdjustableEvent
             (Year
             ,DBReflectingCorr + TermDB
             ,OldDB
+            // TAXATION !! This assumes the term rider can be treated as death benefit;
+            // use 'TermIsDbFor7702'.
             ,ActualSpecAmt + TermSpecAmt
             ,OldSA
             ,new_dbopt
@@ -1150,6 +1136,7 @@ but position could be reversed for variable policy with bad curr performance
         }
 
     GptForceout = Irc7702_->Forceout();
+    // TODO ?? TAXATION !! On other bases, nothing is forced out, and payments aren't limited.
     process_distribution(GptForceout);
     YearsTotalGptForceout += GptForceout;
 
@@ -1166,14 +1153,14 @@ but position could be reversed for variable policy with bad curr performance
         Irc7702A_->InduceMaterialChange();
         }
 
-    // TODO ?? GPT--perform only if current basis?
+    // TODO ?? TAXATION !! GPT--perform only if current basis?
     OldDBOpt = YearsDBOpt;
 }
 
 //============================================================================
 // All payments must be made here.
 // Process premium payment reflecting premium load.
-// TODO ?? Contains hooks for guideline premium test; they need to be
+// TODO ?? TAXATION !! Contains hooks for guideline premium test; they need to be
 //   fleshed out.
 // Ignores strategies such as pay guideline premium, which are handled
 //   in PerformE[er]PmtStrategy().
@@ -1230,7 +1217,7 @@ void AccountValue::TxAscertainDesiredPayment()
             // illustration-reg guaranteed premium.
             if(!SolvingForGuarPremium)
                 {
-                double fake_cum_pmt = 0.0; // TODO ?? Needs work.
+                double fake_cum_pmt = 0.0; // TODO ?? TAXATION !! Needs work.
                 Irc7702_->ProcessGptPmt(Year, eepmt, fake_cum_pmt);
                 }
             EeGrossPmts[Month] += eepmt;
@@ -1243,7 +1230,7 @@ void AccountValue::TxAscertainDesiredPayment()
             // illustration-reg guaranteed premium.
             if(!SolvingForGuarPremium)
                 {
-                double fake_cum_pmt = 0.0; // TODO ?? Needs work.
+                double fake_cum_pmt = 0.0; // TODO ?? TAXATION !! Needs work.
                 Irc7702_->ProcessGptPmt(Year, erpmt, fake_cum_pmt);
                 }
             ErGrossPmts[Month] += erpmt;
@@ -1276,7 +1263,7 @@ void AccountValue::TxAscertainDesiredPayment()
         // illustration-reg guaranteed premium.
         if(!SolvingForGuarPremium)
             {
-            double fake_cum_pmt = 0.0; // TODO ?? Needs work.
+            double fake_cum_pmt = 0.0; // TODO ?? TAXATION !! Needs work.
             Irc7702_->ProcessGptPmt(Year, Dumpin, fake_cum_pmt);
             }
         EeGrossPmts[Month] += Dumpin;
@@ -1286,6 +1273,8 @@ void AccountValue::TxAscertainDesiredPayment()
 }
 
 //============================================================================
+// TAXATION !! Should this be called for gpt? or, if it's called,
+// should it assert that it has no effect?
 void AccountValue::TxLimitPayment(double a_maxpmt)
 {
 // Subtract premium load from gross premium yielding net premium.
@@ -1293,7 +1282,7 @@ void AccountValue::TxLimitPayment(double a_maxpmt)
     // This is needed only for current-basis or solve-basis runs.
     // Otherwise we're doing too much work, and maybe doing things
     // we shouldn't.
-// TODO ?? Clean this up, and put GPT limit here, on prem net of WD.
+// TODO ?? TAXATION !! Clean this up, and put GPT limit here, on prem net of WD.
 
     HOPEFULLY(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
 
@@ -1369,8 +1358,9 @@ void AccountValue::TxRecognizePaymentFor7702A
         );
     LMI_ASSERT(0.0 <= Dcv);
 
-    // TODO ?? Not correct yet--need to test pmt less deductible WD; and
-    // shouldn't we deduct the *gross* WD?
+    // TODO ?? TAXATION !! Not correct yet--need to test pmt less deductible WD; and
+    // shouldn't we deduct the *gross* WD? [Yes, if any fee is part of the
+    // WD, which it normally is.]
     double amount_paid_7702A = a_pmt;
     Irc7702A_->UpdatePmt7702A
         (Dcv
@@ -1419,8 +1409,11 @@ void AccountValue::TxAcceptPayment(double a_pmt)
     // TODO ?? This thing isn't really the tax basis as it should be
     // because we subtract all WDs without regard to taxability:
     // if WDs exceed basis, 7702A calculations are incorrect.
+    // TAXATION !! Fix this. Nontaxable WDs are handled much like
+    // GPT forceouts. Generally, WDs are nontaxable up to basis for
+    // non-MECs, except for 7702(f)(7)(B-E).
     TaxBasis += a_pmt;
-    // TODO ?? Save ee and er bases separately e.g. for split dollar;
+    // TODO ?? TAXATION !! Save ee and er bases separately e.g. for split dollar;
     // call them EeTaxBasis and ErTaxBasis.
 }
 
@@ -1534,7 +1527,7 @@ void AccountValue::TxLoanRepay()
 // TODO ?? ActualLoan should be eliminated. It's used only in two functions,
 // one that takes a loan, and one that repays a loan.
 
-    // TODO ?? This idiom seems too cute.
+    // TODO ?? This idiom seems too cute. And it can return -0.0 .
     // Maximum repayment is total debt.
     ActualLoan = -std::min(-RequestedLoan, RegLnBal);
 
@@ -1574,12 +1567,16 @@ void AccountValue::TxSetBOMAV()
             }
         else
             {
+            // TAXATION !! We could at least change this in xrc help elements:
             // USER !! User documentation should explain that this
             // includes any 7702-integrated term rider.
             //
             // Some products have loads that depend on the initial
             // specified amount, which probably includes term; if it
             // doesn't, then a new input field would need to be added.
+            //
+            // TAXATION !! Is this really desirable? INPUT !! Should we
+            // instead capture specamt as of issue date for this purpose?
             z = yare_input_.SpecamtHistory.front();
             }
         SpecAmtLoadBase = std::max(z, NetPmts[Month] * YearsCorridorFactor);
@@ -1606,7 +1603,7 @@ void AccountValue::TxSetBOMAV()
 // Set death benefit reflecting corridor and death benefit option.
 void AccountValue::TxSetDeathBft(bool force_eoy_behavior)
 {
-    // TODO ?? Should 7702 or 7702A processing be done here?
+    // TODO ?? TAXATION !! Should 7702 or 7702A processing be done here?
     // If so, then this code may be useful:
 //    double prior_db_7702A = DB7702A;
 //    double prior_sa_7702A = ActualSpecAmt;
@@ -1614,6 +1611,7 @@ void AccountValue::TxSetDeathBft(bool force_eoy_behavior)
     // Total account value is unloaned plus loaned.
     // TODO ?? Should we use CSV here?
     double AV = TotalAccountValue();
+// TAXATION !! Revisit this--it affects 'DB7702A':
 // > TxSetDeathBft() needs to be called every time a new solve-spec amt
 // > is applied to determine the death benefit. But you don't really want to
 // > add the sales load (actually a percent of the sales load) to the AV
@@ -1627,21 +1625,21 @@ void AccountValue::TxSetDeathBft(bool force_eoy_behavior)
         case mce_option1:
             {
             DBIgnoringCorr = ActualSpecAmt;
-            DB7702A = ActualSpecAmt;
+            DB7702A        = ActualSpecAmt;
             }
             break;
         case mce_option2:
             {
             // Negative AV doesn't decrease death benefit.
             DBIgnoringCorr = ActualSpecAmt + std::max(0.0, AV);
-            DB7702A = ActualSpecAmt;
+            DB7702A        = ActualSpecAmt;
             }
             break;
         case mce_rop:
             {
             // SA + sum of premiums less withdrawals, but not < SA.
             DBIgnoringCorr = ActualSpecAmt + std::max(0.0, CumPmts);
-            DB7702A = ActualSpecAmt + std::max(0.0, CumPmts);
+            DB7702A        = ActualSpecAmt + std::max(0.0, CumPmts);
             }
             break;
         default:
@@ -1688,6 +1686,7 @@ void AccountValue::TxSetDeathBft(bool force_eoy_behavior)
     DBReflectingCorr = round_death_benefit()(DBReflectingCorr);
     // This overrides the value assigned above. There's more than one
     // way to interpret 7702A "death benefit"; this is just one.
+    // TAXATION !! DATABASE !! Offer a choice of interpretations.
     DB7702A = DBReflectingCorr + TermDB;
 
     DcvDeathBft = std::max
@@ -1700,7 +1699,7 @@ void AccountValue::TxSetDeathBft(bool force_eoy_behavior)
                 )
             )
         );
-    // TODO ?? Should 7702 or 7702A processing be done here?
+    // TODO ?? TAXATION !! Should 7702 or 7702A processing be done here?
     // If so, then this code may be useful:
 /*
     // Try moving this here...
@@ -1792,6 +1791,7 @@ void AccountValue::TxSetCoiCharge()
 // TODO ?? This doesn't work. We need to reconsider the basic transactions.
 //  double naar_forceout = std::max(0.0, NAAR - MaxNAAR);
 //  process_distribution(naar_forceout);
+// TAXATION !! Should this be handled at the same time as GPT forceouts?
 
     DcvNaar = material_difference
         (std::max(DcvDeathBft, DBIgnoringCorr) * DBDiscountRate[Year]
@@ -2624,15 +2624,15 @@ void AccountValue::TxTakeWD()
         }
 
     CumPmts     -= NetWD;
-    TaxBasis    -= NetWD;
+    TaxBasis    -= NetWD; // TODO ?? TAXATION !! This should be gross, not net; how about the line above and the line below?
     CumWD       += NetWD;
+    // TAXATION !! What about 7702A "amounts paid"?
 
     if(Solving || mce_run_gen_curr_sep_full == RunBasis_)
         {
         if(!SolvingForGuarPremium)
             {
             double fake_cum_pmt = 0.0; // TODO ?? Needs work.
-            // TODO ?? Should also use *gross* above in CumPmts etc.
             double premiums_paid_increment = -GrossWD;
             Irc7702_->ProcessGptPmt(Year, premiums_paid_increment, fake_cum_pmt);
             }
