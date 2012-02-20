@@ -77,7 +77,7 @@ void multiple_cell_document::assert_vector_sizes_are_sane() const
 /// What is now called version 0 had no "version" attribute.
 ///
 /// version 0: [prior to the lmi epoch]
-/// version 1: 20120219T1414Z
+/// version 1: 20120220T0158Z
 
 int multiple_cell_document::class_version() const
 {
