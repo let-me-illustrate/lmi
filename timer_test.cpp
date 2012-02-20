@@ -112,7 +112,7 @@ void TimerTest::TestResolution()
             break;
             }
         }
-    double observed = timer.stop().elapsed_usec();
+    double observed = timer.stop().elapsed_seconds();
     double relative_error = std::fabs(observed - interval) / interval;
 
     BOOST_TEST_RELATION(relative_error,<,2.0*clock_resolution);
@@ -143,9 +143,9 @@ void TimerTest::TestExceptions()
         );
 
     BOOST_TEST_THROW
-        (timer.elapsed_usec()
+        (timer.elapsed_seconds()
         ,std::logic_error
-        ,"Timer::elapsed_usec() called, but timer is still running."
+        ,"Timer::elapsed_seconds() called, but timer is still running."
         );
 }
 

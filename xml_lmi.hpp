@@ -78,12 +78,6 @@ namespace xml_lmi
         boost::scoped_ptr<Document>    document_;
     };
 
-    void add_node
-        (xml::element&
-        ,std::string const& name
-        ,std::string const& content
-        );
-
     /// Find an element subnode by name, throwing if it is not found.
 
     xml::node::const_iterator retrieve_element
@@ -116,6 +110,11 @@ namespace xml_lmi
         ,std::string const& name
         ,std::string&       value
         );
+    bool get_attr
+        (xml::element const&
+        ,std::string const& name
+        ,int&               value
+        );
 
     /// Set a given attribute of an xml element.
 
@@ -123,6 +122,11 @@ namespace xml_lmi
         (xml::element&
         ,std::string const& name
         ,std::string const& value
+        );
+    void set_attr
+        (xml::element&
+        ,std::string const& name
+        ,int                value
         );
 } // namespace xml_lmi
 

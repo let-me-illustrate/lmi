@@ -934,6 +934,10 @@ void Ledger::write(xml::element& x) const
 </supplementalreport>
 */
 
+// SOMEDAY !! It is inefficient to push_back() data into xml elements
+// and then push_back() those populated elements into the root. Avoid
+// needless copying by using insert() to create the intermediate
+// elements and using the iterator it returns to write leaf elements.
     x.push_back(scalar);
     x.push_back(data);
     x.push_back(supplementalreport);

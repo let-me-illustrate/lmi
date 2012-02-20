@@ -39,13 +39,17 @@ class CensusDocument
     ,private lmi::uncopyable<CensusDocument>
 {
     friend class CensusView;
+    friend class CensusViewOld; // Obsolescent listview version.
 
   public:
     CensusDocument();
     virtual ~CensusDocument();
 
   private:
+// Not used at present; restore when obsolescent class CensusView is expunged.
+#if 0
     wxDataViewCtrl& PredominantViewWindow() const;
+#endif // 0
 
     // wxDocument overrides.
     virtual bool OnCreate(wxString const& filename, long int flags);

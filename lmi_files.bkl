@@ -117,6 +117,7 @@
     alert_wx.cpp
     census_document.cpp
     census_view.cpp
+    census_view_old.cpp
     database_document.cpp
     database_view.cpp
     database_view_editor.cpp

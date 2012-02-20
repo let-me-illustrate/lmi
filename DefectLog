@@ -522,3 +522,84 @@ it is not used in a normal build.
 
 Repairs postponed: None.
 
+20120206T1341Z <gchicares@sbcglobal.net>
+
+Symptom: An off-anniversary inforce case with minimum monthly payments
+was incorrectly identified as a MEC.
+
+Discovered: By local end users, within one day after a production
+release, while running production cases.
+
+Location: In 'ihs_acctval.cpp', these "Update" calls used to be
+unconditional, which was wrong:
+
+|    // Skip this in an incomplete initial inforce year.
+...
+|    if(Year != InforceYear || 0 == InforceMonth)
+|        {
+|        Irc7702_ ->UpdateBOY7702();
+|        Irc7702A_->UpdateBOY7702A(Year);
+|        }
+
+On 20120115T1429Z, they were made conditional.
+
+Premonitory defect markers: None at the time of the release. On
+20120131T1059Z this marker was added to 'ihs_irc7702a.cpp':
+
+|/// Called at beginning of each policy year. TODO ?? TAXATION !! No, that's
+|/// wrong if contract year and policy year don't coincide.
+
+Cause: The proximate cause is that 'Ax' was initialized to zero by
+Irc7702A::Initialize7702A(), and is set appropriately downstream by
+Irc7702A::UpdateBOY7702A() iff the latter was called--but it truly
+should not be called in an incomplete initial inforce year because it
+increments cumulative 7PP. No regression test covered the scenario
+that elicits the observed error, even though it's a common scenario.
+The ultimate cause is that management was permitted to accept an
+unfinished implementation for long-term production by overriding our
+objection that it didn't yet comply with the tax code.
+
+Genesis: Introduced 20120115T1429Z while fixing a different defect.
+
+Provident safeguards: None.
+
+Similar defects elsewhere: Approximately two hundred taxation issues
+were identified and marked in a code audit just before the release.
+
+Critique of the past: Avoid releasing a prototype that appears to work
+tolerably well in "most" cases. Include the commonest scenarios in
+regression tests.
+
+Watchwords for the future: When reworking old code with so many
+interdependent defects, avoid releasing a series of incremental
+improvements into production, because concomitant defects are apt to
+affect more end users than any particular improvement. It is better to
+hear
+  "This big release fixes many problems, some of which affected me,
+  yet it introduces a couple of new problems for me"
+once than
+  "It's nice that you fixed something I don't care about, but you
+  broke something that I depend on"
+repeatedly.
+
+Person-hours spent on diagnosis and repair: Thirty-eight.
+
+Automated tests: The case that triggered this investigation, with
+client data removed, has been adopted as a new regression test. Test
+coverage for GPT and MEC testing is still inadequate. On the other
+hand, since 20111223T1707Z an outside consultant's acceptance tests
+for the standalone GPT server have routinely been run, though those
+tests do not cover integration between GPT code and illustrations.
+
+Repairs completed: Irc7702A::Initialize7702A() now initializes 'Ax' to
+the same value already used for 'SavedNSP', which in this case is the
+value Irc7702A::UpdateBOY7702A() formerly assigned to it. It would be
+wrong to revert the condition for calling Irc7702A_->UpdateBOY7702A()
+that was added 20120115T1429Z, because that would reinstate an error
+(the 7PP for the first inforce year was added to cumulative 7PP, which
+already included it).
+
+Repairs postponed: The sole purpose of the minimal repair completed
+today is to fix a regression error; the two hundred or so taxation
+issues mentioned above are as yet unaddressed.
+

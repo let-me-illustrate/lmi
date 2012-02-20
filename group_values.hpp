@@ -52,14 +52,14 @@ class Ledger;
 struct census_run_result
 {
     census_run_result()
-        :completed_normally_    (true)
-        ,usec_for_calculations_ (0.0)
-        ,usec_for_output_       (0.0)
+        :completed_normally_       (true)
+        ,seconds_for_calculations_ (0.0)
+        ,seconds_for_output_       (0.0)
         {}
 
     bool completed_normally_;
-    double usec_for_calculations_;
-    double usec_for_output_;
+    double seconds_for_calculations_;
+    double seconds_for_output_;
 };
 
 /// Run all cells in a census.

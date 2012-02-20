@@ -276,9 +276,10 @@ double AccountValue::RunAllApplicableBases()
     double z = 0.0;
 
     // TODO ?? Normally, running on the current basis determines the
-    // overriding values for all components of outlay--premiums,
-    // loans, and withdrawals. For a solve on any basis other than
-    // current, the overriding values could be determined two ways:
+    // overriding values for all components of outlay--e.g., premiums,
+    // forceouts, loans, and withdrawals. For a solve on any basis
+    // other than current, the overriding values could be determined
+    // in two ways:
     //
     // (1) on the current basis--but then the solve won't be right;
     //
@@ -429,8 +430,10 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     InvariantValues().Init(this);
 
     OldDBOpt = InvariantValues().DBOpt[0].value();
+    // TAXATION !! 'OldSA' and 'OldDB' need to be distinguished for 7702 and 7702A,
+    // with inclusion of term dependent on 'TermIsDbFor7702' and 'TermIsDbFor7702A'.
     OldSA = InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0];
-    // TODO ?? Shouldn't we increase initial SA if contract in corridor at issue?
+    // TODO ?? TAXATION !! Shouldn't we increase initial SA if contract in corridor at issue?
     OldDB = OldSA;
 
     SurrChg_.assign(BasicValues::GetLength(), 0.0);
@@ -453,11 +456,16 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
             }
         }
 
+    // INPUT !! Need inforce tgtprem.
     double annual_target_premium = GetModalTgtPrem
         (0
         ,mce_annual
         ,InvariantValues().SpecAmt[0]
         );
+    // It is at best superfluous to do this for every basis.
+    // TAXATION !! Don't do that then.
+    // TAXATION !! This assumes the term rider can be treated as death benefit;
+    // use 'TermIsDbFor7702'.
     Irc7702_->Initialize7702
         (InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
         ,InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
@@ -470,7 +478,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
 
     // This is notionally called once per *current*-basis run
     // and actually called once per run, with calculations suppressed
-    // for all other bases. TODO ?? How should we handle MEC-avoid
+    // for all other bases. TODO ?? TAXATION !! How should we handle MEC-avoid
     // solves on bases other than current?
 
     InvariantValues().InforceYear  = yare_input_.InforceYear;
@@ -502,7 +510,8 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     if(0 == InforceYear && 0 == InforceMonth)
         {
         // No need to initialize 'pmts_7702a' in this case.
-        // This assumes the term rider can be treated as death benefit.
+        // TAXATION !! This assumes the term rider can be treated as death benefit.
+        // TAXATION !! DATABASE !! That should be a database flag. Wait...it already is.
         bfts_7702a.push_back
             (   InvariantValues().SpecAmt[0]
             +   InvariantValues().TermSpecAmt[0]
@@ -518,6 +527,10 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
             ,std::back_inserter(pmts_7702a)
             );
         // Specamt history starts at policy year zero and must be offset.
+        // TAXATION !! That's wrong, because contract-year history cannot
+        // generally be obtained from policy-year history by any integral
+        // offset; but doesn't LDB provide all the information required,
+        // if only it were used in preference to this?
         int const offset = duration_ceiling
             (yare_input_.EffectiveDate
             ,yare_input_.LastMaterialChangeDate
@@ -531,7 +544,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     double lowest_death_benefit = yare_input_.InforceLeastDeathBenefit;
     if(0 == InforceYear && 0 == InforceMonth)
         {
-        lowest_death_benefit = bfts_7702a.front();
+        lowest_death_benefit = bfts_7702a.front(); // TAXATION !! See above--use input LDB instead.
         }
     Irc7702A_->Initialize7702A
         (mce_run_gen_curr_sep_full != RunBasis_
@@ -543,11 +556,13 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         ,yare_input_.InforceContractYear
         ,yare_input_.InforceContractMonth
         ,yare_input_.InforceAvBeforeLastMc
-        ,lowest_death_benefit
+        ,lowest_death_benefit // TAXATION !! See above--use input LDB instead.
         ,pmts_7702a
         ,bfts_7702a
         );
 
+    //  TAXATION !! Move this before 7702 and 7702A stuff, to make it
+    // harder to overlook.
     daily_interest_accounting = contains
         (yare_input_.Comments
         ,"idiosyncrasy_daily_interest_accounting"
@@ -585,7 +600,7 @@ void AccountValue::SetInitialValues()
 {
     // These inforce things belong in input struct.
     // TODO ?? The list is not complete; others will be required:
-    // payment history; surrender charges; DCV history?
+    // payment history; surrender charges; DCV history? TAXATION !! INPUT !! Resolve this.
     InforceYear                 = yare_input_.InforceYear                    ;
     InforceMonth                = yare_input_.InforceMonth                   ;
     InforceAVGenAcct            = yare_input_.InforceGeneralAccountValue     ;
@@ -602,7 +617,7 @@ void AccountValue::SetInitialValues()
     Month                       = InforceMonth;
     CoordinateCounters();
 
-    DB7702A                     = 0.0;  // TODO ?? This seems silly.
+    DB7702A                     = 0.0;  // TODO ?? TAXATION !! This seems silly.
 
     AVRegLn                     = InforceAVRegLn;
     AVPrfLn                     = InforceAVPrfLn;
@@ -673,7 +688,7 @@ void AccountValue::SetInitialValues()
 
     // Assume by default that the policy never lapses or becomes a MEC,
     // so that the lapse and MEC durations are the last possible month.
-    // TODO ?? Last possible month? Why? In that month, it doesn't quite
+    // TODO ?? TAXATION !! Last possible month? Why? In that month, it doesn't quite
     // lapse, and it's certainly wrong to assume it becomes a MEC then.
     ItLapsed                    = false;
     VariantValues().LapseMonth  = 11;
@@ -892,6 +907,15 @@ void AccountValue::InitializeYear()
     SetAnnualInvariants();
 
     PremiumTax_->start_new_year();
+    // Skip this in an incomplete initial inforce year.
+    // TAXATION !! Premium tax should perhaps be handled similarly.
+    // TAXATION !! For 7702A, some rates change on policy anniversary
+    // because age does, but cum 7pp changes on contract anniversary.
+    if(Year != InforceYear || 0 == InforceMonth)
+        {
+        Irc7702_ ->UpdateBOY7702();
+        Irc7702A_->UpdateBOY7702A(Year);
+        }
 
     MonthsPolicyFees            = 0.0;
     SpecAmtLoad                 = 0.0;
@@ -935,9 +959,6 @@ void AccountValue::InitializeYear()
 // MEC avoidance may require issuing a contract at a higher specamt than input.
 void AccountValue::InitializeSpecAmt()
 {
-    Irc7702_->UpdateBOY7702();
-    Irc7702A_->UpdateBOY7702A(Year);
-
     YearsSpecAmt        = DeathBfts_->specamt()[Year];
 
     // TODO ?? These variables are set in current run and used in guar and midpt.
@@ -1339,7 +1360,7 @@ void AccountValue::FinalizeYear()
         InvariantValues().EeGrossPmt[Year]  = 0.0;
         InvariantValues().ErGrossPmt[Year]  = 0.0;
 
-        // TODO ?? This is a temporary workaround until we do it right.
+        // TODO ?? TAXATION !! This is a temporary workaround until we do it right.
         // Forceouts should be a distinct component, passed separately
         // to ledger values. Probably we should treat 1035 exchanges
         // and NAAR 'forceouts' the same way.
@@ -1489,6 +1510,9 @@ void AccountValue::SetAnnualInvariants()
 */
     YearsTotLoadTgt         = Loads_->target_total_load     (GenBasis_)[Year];
     YearsTotLoadExc         = Loads_->excess_total_load     (GenBasis_)[Year];
+    // TAXATION !! This '_lowest_premium_tax' approach needs to be
+    // reworked: there should be an option (at least) to use the
+    // current tax rates.
     YearsTotLoadTgtLowestPremtax = Loads_->target_premium_load_7702_lowest_premium_tax()[Year];
     YearsTotLoadExcLowestPremtax = Loads_->excess_premium_load_7702_lowest_premium_tax()[Year];
     YearsPremLoadTgt        = Loads_->target_premium_load   (GenBasis_)[Year];

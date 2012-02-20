@@ -186,6 +186,7 @@ lmi_wx_SOURCES = \
     alert_wx.cpp \
     census_document.cpp \
     census_view.cpp \
+    census_view_old.cpp \
     database_document.cpp \
     database_view.cpp \
     database_view_editor.cpp \
@@ -966,6 +967,7 @@ noinst_HEADERS = \
     ce_product_name.hpp \
     census_document.hpp \
     census_view.hpp \
+    census_view_old.hpp \
     comma_punct.hpp \
     commutation_functions.hpp \
     config.hpp \

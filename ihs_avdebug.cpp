@@ -138,12 +138,13 @@ namespace
         ,e7702AUnnecPm
         ,e7702ADbAdj
         ,e7702A7pp
-        ,e7702ACumPmts
         ,e7702ACum7pp
-        ,e7702AIsMatChg
+        ,e7702AAmountsPaid
         ,e7702AIsMec
-        ,eGSP
         ,eGLP
+        ,eCumGLP
+        ,eGSP
+        ,e7702PremiumsPaid
         // Insert new enumerators above
         ,eLast
         };
@@ -214,7 +215,7 @@ namespace
         v[eMaxLoan]             = "Max loan";
         v[eNewLoan]             = "New loan";
         v[eTaxBasis]            = "Tax basis";
-        v[eCumNoLapsePrem]      = "Cum no lapse prem";
+        v[eCumNoLapsePrem]      = "Cumulative no lapse prem";
         v[eNoLapseActive]       = "No lapse active";
         v[eEOMAV]               = "EOM AV";
         v[eHMValue]             = "Honeymoon value";
@@ -233,12 +234,13 @@ namespace
         v[e7702AUnnecPm]        = "7702A unnec prem";
         v[e7702ADbAdj]          = "7702A DB adjustment";
         v[e7702A7pp]            = "7702A 7pp";
-        v[e7702ACumPmts]        = "7702A cum pmts";
-        v[e7702ACum7pp]         = "7702A cum 7pp";
-        v[e7702AIsMatChg]       = "Is material change";
+        v[e7702ACum7pp]         = "7702A cumulative 7pp";
+        v[e7702AAmountsPaid]    = "7702A amounts paid";
         v[e7702AIsMec]          = "Is MEC";
-        v[eGSP]                 = "GSP";
         v[eGLP]                 = "GLP";
+        v[eCumGLP]              = "Cumulative GLP";
+        v[eGSP]                 = "GSP";
+        v[e7702PremiumsPaid]    = "7702 premiums paid";
 
         return v;
     }
@@ -479,13 +481,11 @@ void AccountValue::DebugPrint()
             );
         SetMonthlyDetail(e7702ANetMaxNecPm   ,NetMaxNecessaryPremium       );
         SetMonthlyDetail(e7702AGrossMaxNecPm ,GrossMaxNecessaryPremium     );
-
         SetMonthlyDetail(e7702AUnnecPm       ,UnnecessaryPremium           );
         SetMonthlyDetail(e7702ADbAdj         ,Irc7702A_->DebugGetDbAdj   ());
         SetMonthlyDetail(e7702A7pp           ,Irc7702A_->DebugGet7pp     ());
-        SetMonthlyDetail(e7702ACumPmts       ,Irc7702A_->DebugGetCumPmts ());
         SetMonthlyDetail(e7702ACum7pp        ,Irc7702A_->DebugGetCum7pp  ());
-        SetMonthlyDetail(e7702AIsMatChg      ,Irc7702A_->DebugGetIsMatChg());
+        SetMonthlyDetail(e7702AAmountsPaid   ,Irc7702A_->DebugGetCumPmts ());
         }
     else
         {
@@ -499,14 +499,30 @@ void AccountValue::DebugPrint()
         SetMonthlyDetail(e7702AUnnecPm       ,not_applicable()             );
         SetMonthlyDetail(e7702ADbAdj         ,not_applicable()             );
         SetMonthlyDetail(e7702A7pp           ,not_applicable()             );
-        SetMonthlyDetail(e7702ACumPmts       ,not_applicable()             );
         SetMonthlyDetail(e7702ACum7pp        ,not_applicable()             );
-        SetMonthlyDetail(e7702AIsMatChg      ,not_applicable()             );
+        SetMonthlyDetail(e7702AAmountsPaid   ,not_applicable()             );
         }
     SetMonthlyDetail(e7702AIsMec         ,InvariantValues().IsMec          );
 
-    SetMonthlyDetail(eGSP                ,Irc7702_->RoundedGSP            ());
-    SetMonthlyDetail(eGLP                ,Irc7702_->RoundedGLP            ());
+    bool irc7702_data_irrelevant =
+           mce_gpt != DefnLifeIns_
+        || mce_run_gen_curr_sep_full != RunBasis_
+        ;
+
+    if(!irc7702_data_irrelevant)
+        {
+        SetMonthlyDetail(eGLP                ,Irc7702_->glp              ());
+        SetMonthlyDetail(eCumGLP             ,Irc7702_->cum_glp          ());
+        SetMonthlyDetail(eGSP                ,Irc7702_->gsp              ());
+        SetMonthlyDetail(e7702PremiumsPaid   ,Irc7702_->premiums_paid    ());
+        }
+    else
+        {
+        SetMonthlyDetail(eGLP                ,not_applicable()             );
+        SetMonthlyDetail(eCumGLP             ,not_applicable()             );
+        SetMonthlyDetail(eGSP                ,not_applicable()             );
+        SetMonthlyDetail(e7702PremiumsPaid   ,not_applicable()             );
+        }
 
     std::copy
         (DebugRecord.begin()

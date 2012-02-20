@@ -37,6 +37,7 @@
 
 #include <istream>
 #include <ostream>
+#include <stdexcept>
 
 //============================================================================
 multiple_cell_document::multiple_cell_document()
@@ -44,6 +45,7 @@ multiple_cell_document::multiple_cell_document()
     ,class_parms_ (1)
     ,cell_parms_  (1)
 {
+    assert_vector_sizes_are_sane();
 }
 
 //============================================================================
@@ -51,11 +53,35 @@ multiple_cell_document::multiple_cell_document(std::string const& filename)
 {
     xml_lmi::dom_parser parser(filename);
     parse(parser.root_node(xml_root_name()));
+    assert_vector_sizes_are_sane();
 }
 
 //============================================================================
 multiple_cell_document::~multiple_cell_document()
 {
+}
+
+/// Verify invariants.
+///
+/// Throws if any asserted invariant does not hold.
+
+void multiple_cell_document::assert_vector_sizes_are_sane() const
+{
+    LMI_ASSERT(1 == case_parms_.size());
+    LMI_ASSERT(    !class_parms_.empty());
+    LMI_ASSERT(    !cell_parms_ .empty());
+}
+
+/// Backward-compatibility serial number of this class's xml version.
+///
+/// What is now called version 0 had no "version" attribute.
+///
+/// version 0: [prior to the lmi epoch]
+/// version 1: 20120220T0158Z
+
+int multiple_cell_document::class_version() const
+{
+    return 1;
 }
 
 //============================================================================
@@ -65,15 +91,85 @@ std::string const& multiple_cell_document::xml_root_name() const
     return s;
 }
 
-//============================================================================
+namespace
+{
+/// Throw an exception while pretending to return an lvalue.
+///
+/// Motivating example:
+///   X& x(boolean ? x1 : throw("oops"));
+/// It is handy to write a throw-expression as the last operand in a
+/// cascaded conditional-expression. However, that doesn't work when
+/// an lvalue must be returned: according to C++2003, [15/1] a throw-
+/// expression is of type void, so [5.16/2] the conditional-expression
+/// above returns an lvalue. The motivating example works correctly
+/// when rewritten this way:
+///   X& x(boolean ? x1 : invalid<X>("oops"));
+
+template<typename T>
+T& hurl(std::string const& s)
+{
+    throw std::runtime_error(s.c_str());
+}
+} // Unnamed namespace.
+
+/// Read xml into vectors of class Input.
+///
+/// The optional "size_hint" attributes improve speed remarkably.
+
 void multiple_cell_document::parse(xml::element const& root)
 {
-// TODO ?? It doesn't seem right to depend on node order.
-// See note below--perhaps do something like this:
-//    int NumberOfCases;
-//    is >> NumberOfCases;
-//    LMI_ASSERT(1 == NumberOfCases);
+    int file_version = 0;
+    if(!xml_lmi::get_attr(root, "version", file_version))
+        {
+        parse_v0(root);
+        return;
+        }
 
+    // Version 0 should have been handled above.
+    LMI_ASSERT(0 < file_version);
+    if(class_version() < file_version)
+        {
+        fatal_error() << "Incompatible file version." << LMI_FLUSH;
+        }
+
+    case_parms_ .clear();
+    class_parms_.clear();
+    cell_parms_ .clear();
+
+    xml::const_nodes_view const elements(root.elements());
+    typedef xml::const_nodes_view::const_iterator cnvi;
+    Input cell;
+    int counter = 0;
+    for(cnvi i = elements.begin(); i != elements.end(); ++i)
+        {
+        std::string const tag(i->get_name());
+        std::vector<Input>& v
+            ( ("case_default"     == tag) ? case_parms_
+            : ("class_defaults"   == tag) ? class_parms_
+            : ("particular_cells" == tag) ? cell_parms_
+            : hurl<std::vector<Input> >("Unexpected element '" + tag + "'.")
+            );
+        int size_hint = 0;
+        if(xml_lmi::get_attr(*i, "size_hint", size_hint))
+            {
+            v.reserve(size_hint);
+            }
+        xml::const_nodes_view const subelements(i->elements());
+        for(cnvi j = subelements.begin(); j != subelements.end(); ++j)
+            {
+            *j >> cell;
+            v.push_back(cell);
+            status() << "Read " << ++counter << " cells." << std::flush;
+            }
+        }
+
+    assert_vector_sizes_are_sane();
+}
+
+/// Parse obsolete version 0 xml (for backward compatibility).
+
+void multiple_cell_document::parse_v0(xml::element const& root)
+{
     Input temp;
 
     xml::const_nodes_view const elements(root.elements());
@@ -206,6 +302,8 @@ void multiple_cell_document::parse(xml::element const& root)
             << LMI_FLUSH
             ;
         }
+
+    assert_vector_sizes_are_sane();
 }
 
 //============================================================================
@@ -218,40 +316,32 @@ void multiple_cell_document::read(std::istream const& is)
 //============================================================================
 void multiple_cell_document::write(std::ostream& os) const
 {
+    assert_vector_sizes_are_sane();
+
     xml_lmi::xml_document document(xml_root_name());
     xml::element& root = document.root_node();
+    xml_lmi::set_attr(root, "version", class_version());
 
-// TODO ?? Diagnostics will be cryptic if the xml doesn't follow
-// the required layout. Perhaps they could be improved. Maybe it
-// would be better to restructure the document so that each set
-// of cells, with its cardinal number, is a distinct node, e.g.:
-//
-//    root.push_back
-//        (xml::element
-//            ("NumberOfCases"
-//            ,value_cast<std::string>(case_parms_.size()).c_str()
-//            )
-//        );
-    root << case_parms_[0];
+    xml::element case_default("case_default");
+    xml::node::iterator case_i = root.insert(case_default);
+    case_parms_[0].write(*case_i);
 
-    xml_lmi::add_node
-        (root
-        ,"NumberOfClasses"
-        ,value_cast<std::string>(class_parms_.size()).c_str()
-        );
-    for(unsigned int j = 0; j < class_parms_.size(); j++)
+    typedef std::vector<Input>::const_iterator svii;
+
+    xml::element class_defaults("class_defaults");
+    xml::node::iterator classes_i = root.insert(class_defaults);
+    xml_lmi::set_attr(*classes_i, "size_hint", class_parms_.size());
+    for(svii i = class_parms_.begin(); i != class_parms_.end(); ++i)
         {
-        root << class_parms_[j];
+        i->write(*classes_i);
         }
 
-    xml_lmi::add_node
-        (root
-        ,"NumberOfCells"
-        ,value_cast<std::string>(cell_parms_.size()).c_str()
-        );
-    for(unsigned int j = 0; j < cell_parms_.size(); j++)
+    xml::element particular_cells("particular_cells");
+    xml::node::iterator cells_i = root.insert(particular_cells);
+    xml_lmi::set_attr(*cells_i, "size_hint", cell_parms_.size());
+    for(svii i = cell_parms_.begin(); i != cell_parms_.end(); ++i)
         {
-        root << cell_parms_[j];
+        i->write(*cells_i);
         }
 
     os << document;
