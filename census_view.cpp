@@ -465,6 +465,150 @@ bool DatumSequenceRenderer::GetValue(wxVariant& value) const
     return true;
 }
 
+/// Data needed to create UI for mc_enum types.
+
+// We need to hold both the selected value and corresponding mc_enum_base so
+// that we can display only allowed values in inline editor's wxChoice. Custom
+// wxVariantData is necessary for that, there's no side-channel to pass allowed
+// values to the renderer.
+struct mc_enum_variant_data
+    :public wxVariantData
+{
+    mc_enum_variant_data(std::string const& value_, mc_enum_base const* datum_)
+        :value(value_), datum(datum_)
+    {
+    }
+
+    virtual bool Eq(wxVariantData& data) const
+    {
+        mc_enum_variant_data* d = dynamic_cast<mc_enum_variant_data*>(&data);
+        if(!d)
+            return false;
+        return value == d->value;
+    }
+
+    virtual wxString GetType() const { return typeid(mc_enum_variant_data).name(); }
+
+    virtual wxVariantData* Clone() const
+    {
+        return new(wx) mc_enum_variant_data(value, datum);
+    }
+
+    std::string value;
+    mc_enum_base const* datum;
+};
+
+// wxDataViewChoiceRenderer only works with static list of choices, so we need
+// to implement a custom renderer that behaves just like
+// wxDataViewChoiceRenderer, except for one detail: the list of allowed values
+// is not constant for the column, but is determined in CreateEditorCtrl()
+// before showing the control. It is taken from mc_enum data, which means that
+// it cannot use a string stored in wxVariant either -- a custom data type,
+// mc_enum_variant_data, must be used to pass both the value and the enum to
+// the renderer.
+class EnumRenderer
+    :public wxDataViewCustomRenderer
+{
+  public:
+    EnumRenderer();
+    virtual bool HasEditorCtrl() const { return true; }
+    virtual wxWindow* CreateEditorCtrl(wxWindow* parent, wxRect labelRect, wxVariant const& value);
+    virtual bool GetValueFromEditorCtrl(wxWindow* editor, wxVariant& value);
+    virtual bool Render(wxRect rect, wxDC* dc, int state);
+    virtual wxSize GetSize() const;
+    virtual bool SetValue(wxVariant const& value);
+    virtual bool GetValue(wxVariant& value) const;
+
+    std::string  m_value;
+    mc_enum_base const* m_datum;
+};
+
+EnumRenderer::EnumRenderer()
+    :wxDataViewCustomRenderer(typeid(mc_enum_variant_data).name(), wxDATAVIEW_CELL_EDITABLE, wxDVR_DEFAULT_ALIGNMENT)
+    ,m_datum(0)
+{
+}
+
+wxWindow* EnumRenderer::CreateEditorCtrl(wxWindow* parent, wxRect labelRect, wxVariant const& value)
+{
+    mc_enum_variant_data const* data = dynamic_cast<mc_enum_variant_data*>(value.GetData());
+    LMI_ASSERT(data);
+    LMI_ASSERT(data->datum);
+
+    wxArrayString choices;
+    for(std::size_t j = 0; j < data->datum->cardinality(); ++j)
+        {
+        if(data->datum->is_allowed(j))
+            {
+            choices.push_back(data->datum->str(j));
+            }
+        }
+
+    wxChoice* ctrl = new(wx) wxChoice
+        (parent
+        ,wxID_ANY
+        ,labelRect.GetTopLeft()
+        ,wxSize(labelRect.GetWidth(), -1)
+        ,choices
+        );
+
+    ctrl->SetStringSelection(data->value);
+
+    return ctrl;
+}
+
+bool EnumRenderer::GetValueFromEditorCtrl(wxWindow* editor, wxVariant& value)
+{
+    wxChoice* ctrl = dynamic_cast<wxChoice*>(editor);
+    LMI_ASSERT(ctrl);
+
+    value = new(wx) mc_enum_variant_data
+        (ctrl->GetStringSelection().ToStdString()
+        ,m_datum);
+    return true;
+}
+
+bool EnumRenderer::Render(wxRect rect, wxDC* dc, int state)
+{
+    RenderText(m_value, 0, rect, dc, state);
+    return true;
+}
+
+wxSize EnumRenderer::GetSize() const
+{
+    wxSize sz;
+
+    std::vector<std::string> const& choices = m_datum->all_strings();
+    std::vector<std::string>::const_iterator i;
+    for(i = choices.begin(); i != choices.end(); ++i)
+        {
+        sz.IncTo(GetTextExtent(*i));
+        }
+
+    // Add space for wxChoice's chrome in the same way that
+    // wxDataViewChoiceRenderer does it:
+    sz.x += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+    sz.x += GetTextExtent("M").x;
+
+    return sz;
+}
+
+bool EnumRenderer::SetValue(wxVariant const& value)
+{
+    mc_enum_variant_data const* data = dynamic_cast<mc_enum_variant_data*>(value.GetData());
+    LMI_ASSERT(data);
+
+    m_value = data->value;
+    m_datum = data->datum;
+    return true;
+}
+
+bool EnumRenderer::GetValue(wxVariant& value) const
+{
+    value = new(wx) mc_enum_variant_data(m_value, m_datum);
+    return true;
+}
+
 // This class is used to implement conversion to and from wxVariant for use by
 // wxDVC renderers in a single place.
 
@@ -519,27 +663,24 @@ class renderer_enum_convertor : public renderer_type_convertor
 {
     virtual wxVariant to_variant(any_member<Input> const& x, Input const&, std::string const&) const
     {
-        return wxString(x.str());
+        return new(wx) mc_enum_variant_data(x.str(), member_cast<mc_enum_base>(x));
     }
 
     virtual std::string from_variant(wxVariant const& x) const
     {
-        return x.GetString().ToStdString();
+        mc_enum_variant_data const* data = dynamic_cast<mc_enum_variant_data*>(x.GetData());
+        LMI_ASSERT(data);
+        return data->value;
     }
 
     virtual char const* variant_type() const
     {
-        return "string";
+        return typeid(mc_enum_variant_data).name();
     }
 
     virtual wxDataViewRenderer* create_renderer(any_member<Input> const& representative_value) const
     {
-        mc_enum_base const* as_enum = member_cast<mc_enum_base>(representative_value);
-
-        std::vector<std::string> const& all_strings = as_enum->all_strings();
-        wxArrayString choices;
-        choices.assign(all_strings.begin(), all_strings.end());
-        return new(wx) wxDataViewChoiceRenderer(choices, wxDATAVIEW_CELL_EDITABLE);
+        return new(wx) EnumRenderer();
     }
 };
 
