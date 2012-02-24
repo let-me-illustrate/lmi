@@ -29725,9 +29725,15 @@ Expunge a function disused since 20120220T0158Z.
   workhorse.make
 Copy system-test md5sums to support a version-control system.
 
-20120224T1137Z <gchicares@sbcglobal.net> [573]
+20120224T1138Z <gchicares@sbcglobal.net> [573]
 
   wx-2.9.3.patch
 Apply wx changeset 70308. See:
   http://lists.nongnu.org/archive/html/lmi/2012-01/msg00011.html
+
+20120224T1222Z <gchicares@sbcglobal.net> [573]
+
+  wx-2.9.3.patch
+Apply wx changeset 70318. See:
+  http://lists.nongnu.org/archive/html/lmi/2012-01/msg00012.html
 
