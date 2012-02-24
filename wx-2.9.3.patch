@@ -21,4 +21,36 @@ Index: wxWidgets-2.9.3/src/common/stopwatch.cpp
 -        wxCriticalSectionLocker lock(gs_perfCounter.cs);
 +        wxCRIT_SECT_LOCKER(lock, gs_perfCounter.cs);
          ::QueryPerformanceFrequency(&gs_perfCounter.freq);
+
+Index: old/wxWidgets-2.9.3/src/generic/datavgen.cpp
+===================================================================
+--- old/wxWidgets-2.9.3/src/generic/datavgen.cpp (revision 70201)
++++ old/wxWidgets-2.9.3/src/generic/datavgen.cpp (revision 70308)
+@@ -623,4 +623,7 @@
+     void ChangeCurrentRow( unsigned int row );
+     bool TryAdvanceCurrentColumn(wxDataViewTreeNode *node, bool forward);
++
++    wxDataViewColumn *GetCurrentColumn() const { return m_currentCol; }
++    void ClearCurrentColumn() { m_currentCol = NULL; }
  
+     bool IsSingleSel() const { return !GetParent()->HasFlag(wxDV_MULTIPLE); }
+@@ -4743,4 +4746,8 @@
+     m_colsBestWidths.erase(m_colsBestWidths.begin() + GetColumnIndex(column));
+     m_cols.Erase(ret);
++
++    if ( m_clientArea->GetCurrentColumn() == column )
++        m_clientArea->ClearCurrentColumn();
++
+     OnColumnsCountChanged();
+ 
+@@ -4753,5 +4760,9 @@
+     m_cols.Clear();
+     m_colsBestWidths.clear();
++
++    m_clientArea->ClearCurrentColumn();
++
+     OnColumnsCountChanged();
++
+     return true;
+ }
+
