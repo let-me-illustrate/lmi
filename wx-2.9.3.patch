@@ -53,4 +53,26 @@ Index: old/wxWidgets-2.9.3/src/generic/datavgen.cpp
 +
      return true;
  }
+Index: old/wxWidgets-2.9.3/src/generic/datavgen.cpp
+===================================================================
+--- old/wxWidgets-2.9.3/src/generic/datavgen.cpp (revision 70308)
++++ old/wxWidgets-2.9.3/src/generic/datavgen.cpp (revision 70318)
+@@ -3528,4 +3528,5 @@
+     {
+         case WXK_RETURN:
++            if ( !event.HasModifiers() )
+             {
+                 // Enter activates the item, i.e. sends wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED to
+@@ -3547,4 +3548,5 @@
+
+         case WXK_SPACE:
++            if ( !event.HasModifiers() )
+             {
+                 // Space toggles activatable items or -- if not activatable --
+@@ -3576,4 +3578,5 @@
+
+         case WXK_F2:
++            if ( !event.HasModifiers() )
+             {
+                 if( !m_selection.empty() )
 
