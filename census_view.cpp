@@ -88,6 +88,13 @@ std::string insert_spaces_between_words(std::string const& s)
     return r;
 }
 
+template<typename T>
+inline char const* variant_and_dvc_type_name()
+{
+    return typeid(T).name();
+}
+
+
 /// Data needed to create UI for tn_range<> types.
 
 struct tn_range_variant_data
@@ -111,7 +118,7 @@ struct tn_range_variant_data
         return value == d->value && min == d->min && max == d->max;
     }
 
-    virtual wxString GetType() const { return typeid(tn_range_variant_data).name(); }
+    virtual wxString GetType() const { return variant_and_dvc_type_name<tn_range_variant_data>(); }
 
     virtual wxVariantData* Clone() const
     {
@@ -149,7 +156,7 @@ class RangeTypeRenderer
 
 RangeTypeRenderer::RangeTypeRenderer()
     :wxDataViewCustomRenderer
-    (typeid(tn_range_variant_data).name()
+    (variant_and_dvc_type_name<tn_range_variant_data>()
     ,wxDATAVIEW_CELL_EDITABLE
     ,wxDVR_DEFAULT_ALIGNMENT)
 {
@@ -366,7 +373,7 @@ struct input_sequence_variant_data
         return value == d->value;
     }
 
-    virtual wxString GetType() const { return typeid(input_sequence_variant_data).name(); }
+    virtual wxString GetType() const { return variant_and_dvc_type_name<input_sequence_variant_data>(); }
 
     virtual wxVariantData* Clone() const
     {
@@ -397,7 +404,11 @@ class DatumSequenceRenderer
 };
 
 DatumSequenceRenderer::DatumSequenceRenderer()
-    :wxDataViewCustomRenderer(typeid(input_sequence_variant_data).name(), wxDATAVIEW_CELL_EDITABLE, wxDVR_DEFAULT_ALIGNMENT)
+    :wxDataViewCustomRenderer
+        (variant_and_dvc_type_name<input_sequence_variant_data>()
+        ,wxDATAVIEW_CELL_EDITABLE
+        ,wxDVR_DEFAULT_ALIGNMENT
+        )
     ,m_input(0)
 {
 }
@@ -487,7 +498,7 @@ struct mc_enum_variant_data
         return value == d->value;
     }
 
-    virtual wxString GetType() const { return typeid(mc_enum_variant_data).name(); }
+    virtual wxString GetType() const { return variant_and_dvc_type_name<mc_enum_variant_data>(); }
 
     virtual wxVariantData* Clone() const
     {
@@ -524,7 +535,11 @@ class EnumRenderer
 };
 
 EnumRenderer::EnumRenderer()
-    :wxDataViewCustomRenderer(typeid(mc_enum_variant_data).name(), wxDATAVIEW_CELL_EDITABLE, wxDVR_DEFAULT_ALIGNMENT)
+    :wxDataViewCustomRenderer
+        (variant_and_dvc_type_name<mc_enum_variant_data>()
+        ,wxDATAVIEW_CELL_EDITABLE
+        ,wxDVR_DEFAULT_ALIGNMENT
+        )
     ,m_datum(0)
 {
 }
@@ -675,7 +690,7 @@ class renderer_enum_convertor : public renderer_type_convertor
 
     virtual char const* variant_type() const
     {
-        return typeid(mc_enum_variant_data).name();
+        return variant_and_dvc_type_name<mc_enum_variant_data>();
     }
 
     virtual wxDataViewRenderer* create_renderer(any_member<Input> const& representative_value) const
@@ -703,7 +718,7 @@ class renderer_sequence_convertor : public renderer_type_convertor
 
     virtual char const* variant_type() const
     {
-        return typeid(input_sequence_variant_data).name();
+        return variant_and_dvc_type_name<input_sequence_variant_data>();
     }
 
     virtual wxDataViewRenderer* create_renderer(any_member<Input> const&) const
@@ -733,7 +748,7 @@ class renderer_range_convertor : public renderer_type_convertor
 
     virtual char const* variant_type() const
     {
-        return typeid(tn_range_variant_data).name();
+        return variant_and_dvc_type_name<tn_range_variant_data>();
     }
 };
 
