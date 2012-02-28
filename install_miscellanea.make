@@ -92,6 +92,7 @@ MKDIR  := mkdir
 MV     := mv
 PATCH  := patch
 RM     := rm
+SORT   := sort
 TAR    := tar
 TOUCH  := touch
 WGET   := wget
@@ -134,7 +135,8 @@ all: boost cgicc fop md5sum_msw sample xmlwrapp
 # For some targets,
 #  - fresh md5sums are generated, then
 #  - saved md5sums are checked, then
-#  - the fresh and saved md5sums are compared against each other.
+#  - the fresh and saved md5sums are compared against each other
+#    (after sorting, because 'md5sum' output order is unspecified).
 # This may seem redundant. The first step is not removed because it
 # makes both sets of md5sums available for comparison in case they
 # differ, and also because it guides regeneration of the saved md5sums
@@ -157,7 +159,9 @@ cgicc: $(file_list)
 	$(MV) scratch/$(stem)/cgicc/*.cpp $(third_party_source_dir)/cgicc/
 	cd $(destination) && $(MD5SUM) include/cgicc/* src/cgicc/* >$(stem).md5sums
 	cd $(destination) && $(MD5SUM) --check $(CURDIR)/$(stem).md5sums
-	$(DIFF) $(stem).md5sums $(destination)/$(stem).md5sums && $(RM) $(destination)/$(stem).md5sums
+	$(SORT) --key=2 --output=$(stem).X                $(stem).md5sums
+	$(SORT) --key=2 --output=$(stem).Y $(destination)/$(stem).md5sums
+	$(DIFF) --unified $(stem).X $(stem).Y && $(RM) $(destination)/$(stem).md5sums $(stem).X $(stem).Y
 
 # When the 'fop' tarball is extracted, this message:
 #   tar: A lone zero block at 20398
@@ -206,7 +210,9 @@ xmlwrapp: $(file_list)
 	$(MV) scratch/$(stem)/src/libxslt/* $(third_party_source_dir)/libxslt/
 	cd $(destination) && $(MD5SUM) include/xmlwrapp/* include/xsltwrapp/* src/libxml/* src/libxslt/* >$(stem).md5sums
 	cd $(destination) && $(MD5SUM) --check $(CURDIR)/$(stem).md5sums
-	$(DIFF) $(stem).md5sums $(destination)/$(stem).md5sums && $(RM) $(destination)/$(stem).md5sums
+	$(SORT) --key=2 --output=$(stem).X                $(stem).md5sums
+	$(SORT) --key=2 --output=$(stem).Y $(destination)/$(stem).md5sums
+	$(DIFF) --unified $(stem).X $(stem).Y && $(RM) $(destination)/$(stem).md5sums $(stem).X $(stem).Y
 
 $(file_list): initial_setup
 
