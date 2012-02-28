@@ -29752,3 +29752,10 @@ Don't assume 'md5sum' output is sorted.
   install_wx.make
 Make generated script executable.
 
+20120228T1113Z <gchicares@sbcglobal.net> [573]
+
+  xmlwrapp-0.6.0.md5sums
+  xmlwrapp-0.6.0.patch [new file]
+Prefer <X/> to <X></X> for empty elements. See:
+  http://lists.nongnu.org/archive/html/lmi/2012-02/msg00013.html
+
