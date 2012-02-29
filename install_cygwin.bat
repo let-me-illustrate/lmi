@@ -23,7 +23,7 @@
 
 @ECHO OFF
 
-@REM Install both Cygwin-1.5 and Cygwin-1.7 .
+@REM Install both Cygwin-1.5 and Cygwin-1.7 . See file 'INSTALL'.
 @REM
 @REM Motivation: in case any problem is encountered with the current version,
 @REM it is convenient to have the older version to fall back on.
@@ -77,7 +77,6 @@ echo C:/opt/lmi/MinGW-20090203 /MinGW_        lmi_specific binary,user 0 0 >> fs
 echo C:/opt/lmi                /opt/lmi       lmi_specific binary,user 0 0 >> fstab
 echo C:/lmi                    /lmi           lmi_specific binary,user 0 0 >> fstab
 echo C:/cache_for_lmi          /cache_for_lmi lmi_specific binary,user 0 0 >> fstab
-cd C:\cache_for_lmi
 echo Cygwin-1.7 installation seems to have succeeded
 GOTO End
 
@@ -86,4 +85,5 @@ echo Cygwin appears already to have been installed
 GOTO End
 
 :End
+cd C:\cache_for_lmi
 
