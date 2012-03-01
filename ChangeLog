@@ -29775,3 +29775,14 @@ version, for testing.
   install_cygwin.bat
 Presumptively run 'rebaseall' for msw 7 only.
 
+20120301T1226Z <gchicares@sbcglobal.net> [573]
+
+  GNUmakefile
+Permit 'make check_concinnity' to run in an arbitrary directory. E.g.:
+| make src_dir=/lmi/src/lmi -f /lmi/src/lmi/GNUmakefile check_concinnity
+
+20120301T1227Z <gchicares@sbcglobal.net> [573]
+
+  test_coding_rules.cpp
+Recognize some of lmi's xml files.
+
