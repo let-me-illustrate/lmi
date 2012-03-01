@@ -29759,3 +29759,19 @@ Make generated script executable.
 Prefer <X/> to <X></X> for empty elements. See:
   http://lists.nongnu.org/archive/html/lmi/2012-02/msg00013.html
 
+20120229T1043Z <gchicares@sbcglobal.net> [573]
+
+  install_cygwin.bat
+Always end in a directory known to exist.
+
+20120301T0619Z <gchicares@sbcglobal.net> [573]
+
+  install_cygwin.bat
+Presumptively run 'rebaseall'. For the nonce, do so regardless of msw
+version, for testing.
+
+20120301T0928Z <gchicares@sbcglobal.net> [573]
+
+  install_cygwin.bat
+Presumptively run 'rebaseall' for msw 7 only.
+

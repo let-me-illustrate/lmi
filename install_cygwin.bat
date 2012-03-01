@@ -53,6 +53,8 @@ FOR /L %%i IN (1,1,5) DO (
   CALL :TryToInstall_1_5
   IF NOT EXIST C:\cygwin\NUL (
     echo Cygwin-1.5 installation seems to have succeeded on iteration %%i
+    ver | findstr /L "6.1."
+    IF ERRORLEVEL 1 GOTO Got_1_5
     cd C:\cygwin-1_5\bin
     C:\cygwin-1_5\bin\ash rebaseall
     echo Cygwin-1.5 rebased
@@ -87,6 +89,8 @@ echo C:/opt/lmi                /opt/lmi       lmi_specific binary,user 0 0 >> fs
 echo C:/lmi                    /lmi           lmi_specific binary,user 0 0 >> fstab
 echo C:/cache_for_lmi          /cache_for_lmi lmi_specific binary,user 0 0 >> fstab
 echo Cygwin-1.7 installation seems to have succeeded
+ver | findstr /L "6.1."
+IF ERRORLEVEL 1 GOTO End
 cd C:\cygwin-1_7\bin
 C:\cygwin-1_7\bin\dash -l -i -c "rebaseall"
 echo Cygwin-1.7 rebased
