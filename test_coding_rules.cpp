@@ -41,7 +41,7 @@
 #include <boost/filesystem/path.hpp>
 #include <boost/regex.hpp>
 
-#include <cstddef>        // std::size_t
+#include <cstddef>                      // std::size_t
 #include <ctime>
 #include <iomanip>
 #include <ios>
@@ -53,7 +53,9 @@
 #include <stdexcept>
 #include <string>
 
-std::map<std::string, bool> my_taboos();
+std::string my_taboo_indulgence();       // See 'my_test_coding_rules.cpp'.
+
+std::map<std::string, bool> my_taboos(); // See 'my_test_coding_rules.cpp'.
 
 // Open predefined standard streams in binary mode.
 //
@@ -922,17 +924,20 @@ void enforce_taboos(file const& f)
         taboo(f, "WIN32", boost::regex::icase);
         }
 
-    // Unspeakable private taboos.
-    std::map<std::string, bool> const z = my_taboos();
-    typedef std::map<std::string, bool>::const_iterator mci;
-    for(mci i = z.begin(); i != z.end(); ++i)
+    if(!boost::regex_search(f.data(), boost::regex(my_taboo_indulgence())))
         {
-        boost::regex::flag_type syntax =
-            i->second
-            ? boost::regex::ECMAScript | boost::regex::icase
-            : boost::regex::ECMAScript
-            ;
-        taboo(f, i->first, syntax);
+        // Unspeakable private taboos.
+        std::map<std::string, bool> const z = my_taboos();
+        typedef std::map<std::string, bool>::const_iterator mci;
+        for(mci i = z.begin(); i != z.end(); ++i)
+            {
+            boost::regex::flag_type syntax =
+                i->second
+                ? boost::regex::ECMAScript | boost::regex::icase
+                : boost::regex::ECMAScript
+                ;
+            taboo(f, i->first, syntax);
+            }
         }
 }
 
