@@ -73,6 +73,8 @@ namespace xml_lmi
         void save(std::string const& filename);
         std::string str();
 
+        void add_comment(std::string const&);
+
       private:
         std::string                    error_context_;
         boost::scoped_ptr<Document>    document_;
