@@ -31,7 +31,8 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
-#include "data_directory.hpp" // AddDataDir()
+#include "data_directory.hpp"           // AddDataDir()
+#include "my_proem.hpp"                 // ::write_proem()
 #include "xml_serialize.hpp"
 
 #include <boost/filesystem/convenience.hpp>
@@ -274,6 +275,14 @@ void rounding_rules::write_element
 {
     rounding_parameters const& r = *member_cast<rounding_parameters>(operator[](name));
     xml_serialize::set_element(parent, name, r);
+}
+
+void rounding_rules::write_proem
+    (xml_lmi::xml_document& document
+    ,std::string const&     file_leaf_name
+    ) const
+{
+    ::write_proem(document, file_leaf_name);
 }
 
 void rounding_rules::write_rounding_files()
