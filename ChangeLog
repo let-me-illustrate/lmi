@@ -29786,3 +29786,39 @@ Permit 'make check_concinnity' to run in an arbitrary directory. E.g.:
   test_coding_rules.cpp
 Recognize some of lmi's xml files.
 
+20120306T1742Z <gchicares@sbcglobal.net> [573]
+
+  my_test_coding_rules.cpp
+  test_coding_rules.cpp
+Allow proprietary files to contain "taboo" strings.
+
+20120307T1025Z <gchicares@sbcglobal.net> [573]
+
+  xml_lmi.cpp
+  xml_lmi.hpp
+Add a convenience function for writing comments in xml documents.
+
+20120307T1745Z <gchicares@sbcglobal.net> [573]
+
+  Makefile.am
+  my_proem.cpp [new file]
+  my_proem.hpp [new file]
+  objects.make
+Establish proem for xml product files.
+
+20120307T1747Z <gchicares@sbcglobal.net> [573]
+
+  antediluvian_stubs.cpp
+  dbdict.cpp
+  dbdict.hpp
+  fund_data.cpp
+  product_data.cpp
+  product_data.hpp
+  rounding_rules.cpp
+  rounding_rules.hpp
+  stratified_charges.cpp
+  stratified_charges.hpp
+  xml_serializable.hpp
+  xml_serializable.tpp
+Add proem to xml product files.
+
