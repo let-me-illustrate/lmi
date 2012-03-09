@@ -86,6 +86,10 @@ class LMI_SO DBDictionary
         (xml::element&       parent
         ,std::string const&  name
         ) const;
+    virtual void write_proem
+        (xml_lmi::xml_document& document
+        ,std::string const&     file_leaf_name
+        ) const;
 
     static std::string cached_filename_;
 

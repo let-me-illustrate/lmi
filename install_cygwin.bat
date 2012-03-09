@@ -23,7 +23,7 @@
 
 @ECHO OFF
 
-@REM Install both Cygwin-1.5 and Cygwin-1.7 .
+@REM Install both Cygwin-1.5 and Cygwin-1.7 . See file 'INSTALL'.
 @REM
 @REM Motivation: in case any problem is encountered with the current version,
 @REM it is convenient to have the older version to fall back on.
@@ -37,6 +37,10 @@
 @REM for conservatism five are allowed. Postinstall script 'autoconf2.5.sh'
 @REM fails because '/usr/share/info/autoconf2.61.info.gz' doesn't exist, but
 @REM it's acceptable if only that 'info' page is missing.
+@REM
+@REM For the 'rebaseall' commands, see:
+@REM   http://cygwin.com/ml/cygwin/2012-01/msg00269.html
+@REM   http://cygwin.com/ml/cygwin/2005-07/msg00825.html
 
 IF EXIST C:\cygwin\NUL     GOTO FoundOldInstallation
 IF EXIST C:\cygwin-1_5\NUL GOTO FoundOldInstallation
@@ -49,6 +53,11 @@ FOR /L %%i IN (1,1,5) DO (
   CALL :TryToInstall_1_5
   IF NOT EXIST C:\cygwin\NUL (
     echo Cygwin-1.5 installation seems to have succeeded on iteration %%i
+    ver | findstr /L "6.1."
+    IF ERRORLEVEL 1 GOTO Got_1_5
+    cd C:\cygwin-1_5\bin
+    C:\cygwin-1_5\bin\ash rebaseall
+    echo Cygwin-1.5 rebased
     GOTO Got_1_5
   )
   echo Anomalous 'C:\cygwin' directory present after iteration %%i
@@ -58,6 +67,7 @@ echo Cygwin-1.5 installation has failed
 GOTO End
 
 :TryToInstall_1_5
+cd C:\cache_for_lmi
 START "Installing Cygwin-1.5" /WAIT setup-legacy ^
   --quiet-mode --no-shortcuts ^
   --site ftp://mirror.mcs.anl.gov/pub/cygwin/ ^
@@ -66,6 +76,7 @@ START "Installing Cygwin-1.5" /WAIT setup-legacy ^
 GOTO:EOF
 
 :Got_1_5
+cd C:\cache_for_lmi
 START "Installing Cygwin-1.7" /WAIT setup ^
   --quiet-mode ^
   --site ftp://mirror.mcs.anl.gov/pub/cygwin/ ^
@@ -77,8 +88,12 @@ echo C:/opt/lmi/MinGW-20090203 /MinGW_        lmi_specific binary,user 0 0 >> fs
 echo C:/opt/lmi                /opt/lmi       lmi_specific binary,user 0 0 >> fstab
 echo C:/lmi                    /lmi           lmi_specific binary,user 0 0 >> fstab
 echo C:/cache_for_lmi          /cache_for_lmi lmi_specific binary,user 0 0 >> fstab
-cd C:\cache_for_lmi
 echo Cygwin-1.7 installation seems to have succeeded
+ver | findstr /L "6.1."
+IF ERRORLEVEL 1 GOTO End
+cd C:\cygwin-1_7\bin
+C:\cygwin-1_7\bin\dash -l -i -c "rebaseall"
+echo Cygwin-1.7 rebased
 GOTO End
 
 :FoundOldInstallation
@@ -86,4 +101,5 @@ echo Cygwin appears already to have been installed
 GOTO End
 
 :End
+cd C:\cache_for_lmi
 

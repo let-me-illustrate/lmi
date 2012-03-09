@@ -235,6 +235,7 @@ common_common_objects := \
   miscellany.o \
   multiple_cell_document.o \
   mvc_model.o \
+  my_proem.o \
   name_value_pairs.o \
   null_stream.o \
   outlay.o \
@@ -416,6 +417,7 @@ gpt_objects := \
   miscellany.o \
   mortality_rates_fetch.o \
   mvc_model.o \
+  my_proem.o \
   null_stream.o \
   outlay.o \
   path_utility.o \
@@ -699,6 +701,7 @@ input_test$(EXEEXT): \
   miscellany.o \
   multiple_cell_document.o \
   mvc_model.o \
+  my_proem.o \
   null_stream.o \
   path_utility.o \
   premium_tax.o \
@@ -804,6 +807,7 @@ premium_tax_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
   $(xmlwrapp_objects) \
+  calendar_date.o \
   data_directory.o \
   database.o \
   datum_base.o \
@@ -817,6 +821,8 @@ premium_tax_test$(EXEEXT): \
   mc_enum_types.o \
   mc_enum_types_aux.o \
   miscellany.o \
+  my_proem.o \
+  null_stream.o \
   path_utility.o \
   premium_tax.o \
   premium_tax_test.o \
@@ -833,6 +839,7 @@ product_file_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
   $(xmlwrapp_objects) \
+  calendar_date.o \
   data_directory.o \
   database.o \
   datum_base.o \
@@ -848,6 +855,8 @@ product_file_test$(EXEEXT): \
   mc_enum_types.o \
   mc_enum_types_aux.o \
   miscellany.o \
+  my_proem.o \
+  null_stream.o \
   path_utility.o \
   premium_tax.o \
   product_data.o \
@@ -1043,6 +1052,7 @@ product_files$(EXEEXT): \
   my_db.o \
   my_fund.o \
   my_prod.o \
+  my_proem.o \
   my_rnd.o \
   my_tier.o \
   liblmi$(SHREXT) \

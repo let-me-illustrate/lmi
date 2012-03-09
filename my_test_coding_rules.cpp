@@ -29,10 +29,25 @@
 #include <map>
 #include <string>
 
-/// Public dummy for private taboo regexen.
+/// Files containing this regex are exempt from private taboos.
+///
+/// Copy this file to '../products/src' and edit the copy to specify
+/// a regex (such as a specific license notice) that grants an
+/// indulgence to utter what would otherwise be taboo.
+///
+/// This dummy implementation exempts only files containing '\v',
+/// which is always forbidden for files subject to taboos; thus,
+/// it grants no effective indulgence at all.
+
+std::string my_taboo_indulgence()
+{
+    return "\v";
+}
+
+/// List of private taboo regexen.
 ///
 /// Copy this file to '../products/src' and edit the copy to express
-/// private taboos--anything that shouldn't be uttered in the
+/// private taboos--anything that shouldn't be uttered in the public
 /// repository, even to forbid it, such as a client's name.
 
 std::map<std::string, bool> my_taboos()

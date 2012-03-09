@@ -33,8 +33,9 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "contains.hpp"
-#include "data_directory.hpp" // AddDataDir()
-#include "miscellany.hpp"     // lmi_array_size()
+#include "data_directory.hpp"           // AddDataDir()
+#include "miscellany.hpp"               // lmi_array_size()
+#include "my_proem.hpp"                 // ::write_proem()
 #include "xml_serialize.hpp"
 
 #include <boost/filesystem/convenience.hpp>
@@ -319,6 +320,14 @@ void product_data::write_element
 {
     glossed_string const& r = *member_cast<glossed_string>(operator[](name));
     xml_serialize::set_element(parent, name, r);
+}
+
+void product_data::write_proem
+    (xml_lmi::xml_document& document
+    ,std::string const&     file_leaf_name
+    ) const
+{
+    ::write_proem(document, file_leaf_name);
 }
 
 bool product_data::is_detritus(std::string const& s) const

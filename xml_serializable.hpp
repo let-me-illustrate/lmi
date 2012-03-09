@@ -71,6 +71,10 @@ class LMI_SO xml_serializable
         (xml::element&       parent
         ,std::string const&  name
         ) const;
+    virtual void write_proem
+        (xml_lmi::xml_document& document
+        ,std::string const&     file_leaf_name
+        ) const;
 
     // Backward compatibility.
     virtual void handle_missing_version_attribute() const;

@@ -50,6 +50,7 @@
     miscellany.cpp
     multiple_cell_document.cpp
     mvc_model.cpp
+    my_proem.cpp
     name_value_pairs.cpp
     null_stream.cpp
     outlay.cpp

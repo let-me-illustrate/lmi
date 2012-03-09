@@ -41,7 +41,7 @@
 #include <boost/filesystem/path.hpp>
 #include <boost/regex.hpp>
 
-#include <cstddef>        // std::size_t
+#include <cstddef>                      // std::size_t
 #include <ctime>
 #include <iomanip>
 #include <ios>
@@ -53,7 +53,9 @@
 #include <stdexcept>
 #include <string>
 
-std::map<std::string, bool> my_taboos();
+std::string my_taboo_indulgence();       // See 'my_test_coding_rules.cpp'.
+
+std::map<std::string, bool> my_taboos(); // See 'my_test_coding_rules.cpp'.
 
 // Open predefined standard streams in binary mode.
 //
@@ -184,6 +186,7 @@ file::file(std::string const& file_path)
     // Sort these lists by enumerator, but keep 'e_ephemeral' last.
     phylum_ =
           ".ico"        == extension() ? e_binary
+        : ".ini"        == extension() ? e_binary
         : ".png"        == extension() ? e_binary
         : ".txt"        == extension() ? e_binary
         : ".xpm"        == extension() ? e_binary
@@ -207,6 +210,12 @@ file::file(std::string const& file_path)
         : ".touchstone" == extension() ? e_touchstone
         : ".cns"        == extension() ? e_xml_input
         : ".ill"        == extension() ? e_xml_input
+        : ".mec"        == extension() ? e_xml_input
+        : ".database"   == extension() ? e_xml_other
+        : ".funds"      == extension() ? e_xml_other
+        : ".policy"     == extension() ? e_xml_other
+        : ".rounding"   == extension() ? e_xml_other
+        : ".strata"     == extension() ? e_xml_other
         : ".xml"        == extension() ? e_xml_other
         : ".xrc"        == extension() ? e_xml_other
         : ".xsd"        == extension() ? e_xml_other
@@ -915,17 +924,20 @@ void enforce_taboos(file const& f)
         taboo(f, "WIN32", boost::regex::icase);
         }
 
-    // Unspeakable private taboos.
-    std::map<std::string, bool> const z = my_taboos();
-    typedef std::map<std::string, bool>::const_iterator mci;
-    for(mci i = z.begin(); i != z.end(); ++i)
+    if(!boost::regex_search(f.data(), boost::regex(my_taboo_indulgence())))
         {
-        boost::regex::flag_type syntax =
-            i->second
-            ? boost::regex::ECMAScript | boost::regex::icase
-            : boost::regex::ECMAScript
-            ;
-        taboo(f, i->first, syntax);
+        // Unspeakable private taboos.
+        std::map<std::string, bool> const z = my_taboos();
+        typedef std::map<std::string, bool>::const_iterator mci;
+        for(mci i = z.begin(); i != z.end(); ++i)
+            {
+            boost::regex::flag_type syntax =
+                i->second
+                ? boost::regex::ECMAScript | boost::regex::icase
+                : boost::regex::ECMAScript
+                ;
+            taboo(f, i->first, syntax);
+            }
         }
 }
 

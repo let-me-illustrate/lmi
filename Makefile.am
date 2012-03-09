@@ -320,6 +320,7 @@ liblmi_common_sources = \
     miscellany.cpp \
     multiple_cell_document.cpp \
     mvc_model.cpp \
+    my_proem.cpp \
     name_value_pairs.cpp \
     null_stream.cpp \
     outlay.cpp \
@@ -468,6 +469,7 @@ product_files_SOURCES = \
     my_db.cpp \
     my_fund.cpp \
     my_prod.cpp \
+    my_proem.cpp \
     my_rnd.cpp \
     my_tier.cpp
 product_files_LDADD = \
@@ -669,6 +671,7 @@ test_input_SOURCES = \
   miscellany.cpp \
   multiple_cell_document.cpp \
   mvc_model.cpp \
+  my_proem.cpp \
   null_stream.cpp \
   path_utility.cpp \
   premium_tax.cpp \
@@ -785,6 +788,7 @@ test_path_utility_LDADD = \
 
 test_premium_tax_SOURCES = \
   $(common_test_objects) \
+  calendar_date.cpp \
   data_directory.cpp \
   database.cpp \
   datum_base.cpp \
@@ -798,6 +802,8 @@ test_premium_tax_SOURCES = \
   mc_enum_types.cpp \
   mc_enum_types_aux.cpp \
   miscellany.cpp \
+  my_proem.cpp \
+  null_stream.cpp \
   path_utility.cpp \
   premium_tax.cpp \
   premium_tax_test.cpp \
@@ -816,6 +822,7 @@ test_print_matrix_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_product_file_SOURCES = \
   $(common_test_objects) \
+  calendar_date.cpp \
   data_directory.cpp \
   database.cpp \
   datum_base.cpp \
@@ -830,6 +837,8 @@ test_product_file_SOURCES = \
   mc_enum_types.cpp \
   mc_enum_types_aux.cpp \
   miscellany.cpp \
+  my_proem.cpp \
+  null_stream.cpp \
   path_utility.cpp \
   premium_tax.cpp \
   product_data.cpp \
@@ -1074,6 +1083,7 @@ noinst_HEADERS = \
     mvc_controller.tpp \
     mvc_model.hpp \
     mvc_view.hpp \
+    my_proem.hpp \
     name_value_pairs.hpp \
     ncnnnpnn.hpp \
     null_stream.hpp \

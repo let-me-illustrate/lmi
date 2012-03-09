@@ -1345,9 +1345,9 @@ system_test: $(data_dir)/configurable_settings.xml $(touchstone_md5sums) install
 	@[ "$(strip $(testdecks))" != "" ] || ( $(ECHO) No testdecks. && false )
 	@testdecks=`$(LS) --sort=size $(testdecks) || $(ECHO) $(testdecks)` \
 	  && $(MAKE) --file=$(this_makefile) --directory=$(test_dir) $$testdecks
-	@$(SORT) --key=2 $(system_test_md5sums) --output=$(system_test_md5sums)
+	@$(SORT) --output=$(system_test_analysis) $(system_test_analysis)
+	@$(SORT) --key=2  --output=$(system_test_md5sums) $(system_test_md5sums)
 	@$(CP) --preserve --update $(system_test_md5sums) $(system_test_md5sums2)
-	@$(SORT) $(system_test_analysis) --output=$(system_test_analysis)
 	@-< $(system_test_analysis) $(SED) \
 	  -e ';/rel err.*e-0*1[5-9]/d' \
 	  -e ';/abs.*0\.00.*rel/d' \

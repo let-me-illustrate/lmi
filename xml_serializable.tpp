@@ -34,6 +34,7 @@
 #include "platform_dependent.hpp"       // access()
 #include "xml_lmi.hpp"
 
+#include <boost/filesystem/convenience.hpp> // basename()
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_base_and_derived.hpp>
 
@@ -81,6 +82,7 @@ template<typename T>
 void xml_serializable<T>::save(fs::path const& path) const
 {
     xml_lmi::xml_document document(xml_root_name());
+    write_proem(document, fs::basename(path));
     immit_members_into(document.root_node());
     document.save(path.string());
 }
@@ -269,6 +271,18 @@ void xml_serializable<T>::write_element
     ) const
 {
     parent.push_back(xml::element(name.c_str(), t()[name].str().c_str()));
+}
+
+/// Write proemial information such as a license notice.
+///
+/// This default implementation writes nothing.
+
+template<typename T>
+void xml_serializable<T>::write_proem
+    (xml_lmi::xml_document& // document
+    ,std::string const&     // file_leaf_name
+    ) const
+{
 }
 
 /// React to absence of required 'version' attribute.

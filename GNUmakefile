@@ -298,7 +298,7 @@ TEST_CODING_RULES := $(build_directory)/test_coding_rules$(EXEEXT)
 
 .PHONY: custom_tools
 custom_tools:
-	@$(MAKE) test_coding_rules$(EXEEXT)
+	@$(MAKE) --file=$(this_makefile) --directory=$(src_dir) test_coding_rules$(EXEEXT)
 	@$(CP) --preserve --update $(TEST_CODING_RULES) /opt/lmi/local/bin
 
 ################################################################################
@@ -328,7 +328,7 @@ check_concinnity: source_clean custom_tools
 	@$(TOUCH) --date=$(yyyymm)22 CANDIDATE
 	@[ TODAY -nt CANDIDATE ] && [ version.hpp -ot BOM ] \
 	  && $(ECHO) "Is it time to 'make release_candidate'?" || true
-	@[ license.cpp -ot BOY ] \
+	@[ -f license.cpp ] && [ license.cpp -ot BOY ] \
 	  && $(ECHO) "Make the 'happy_new_year' target." || true
 	@$(RM) --force CANDIDATE
 	@$(RM) --force TODAY

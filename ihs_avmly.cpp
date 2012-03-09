@@ -1069,7 +1069,8 @@ void AccountValue::TxTestGPT()
     //
     // Illustrations allow no adjustable events at issue.
     // TODO ?? TAXATION !! If this assumption is not valid, then OldSA, OldDB, and
-    // OldDBOpt need to be initialized more carefully.
+    // OldDBOpt need to be initialized more carefully. It's not valid as long as
+    // withdrawals are not forbidden in the first year.
     if(0 == Year && 0 == Month)
         {
         return;

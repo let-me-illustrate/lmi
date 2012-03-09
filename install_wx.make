@@ -102,6 +102,7 @@ config_options = \
 
 # Utilities ####################################################################
 
+CHMOD  := chmod
 ECHO   := echo
 MD5SUM := md5sum
 MKDIR  := mkdir
@@ -177,6 +178,7 @@ portable_script:
 	$(ECHO) 'else'                              >>wx-config-portable
 	$(ECHO) 'echo Bad argument $$1'             >>wx-config-portable
 	$(ECHO) 'fi'                                >>wx-config-portable
+	$(CHMOD) 755 wx-config-portable
 
 .PHONY: clobber
 clobber:
