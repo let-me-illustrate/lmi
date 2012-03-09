@@ -263,6 +263,25 @@ std::string xml_lmi::xml_document::str()
     return s;
 }
 
+/// Add an xml comment just before the root (first element node).
+///
+/// For readability, the comment is padded with single spaces.
+
+void xml_lmi::xml_document::add_comment(std::string const& s)
+{
+    xml::node::iterator i = document_->begin();
+    for(xml::node::iterator i = document_->begin(); i != document_->end(); ++i)
+        {
+        if(xml::node::type_element == i->get_type())
+            {
+            std::string t = ' ' + s + ' ';
+            document_->insert(i, xml::node(xml::node::comment(t.c_str())));
+            return;
+            }
+        }
+    fatal_error() << "Cannot add comment to rootless document." << LMI_FLUSH;
+}
+
 xml::node::const_iterator retrieve_element
     (xml::element const& parent
     ,std::string  const& name

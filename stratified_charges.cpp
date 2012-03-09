@@ -33,8 +33,9 @@
 #include "assert_lmi.hpp"
 #include "contains.hpp"
 #include "data_directory.hpp"
-#include "ieee754.hpp"            // infinity<>()
-#include "miscellany.hpp"         // minmax<>()
+#include "ieee754.hpp"                  // infinity<>()
+#include "miscellany.hpp"               // minmax<>()
+#include "my_proem.hpp"                 // ::write_proem()
 #include "stratified_algorithms.hpp"
 #include "xml_lmi.hpp"
 #include "xml_serialize.hpp"
@@ -572,6 +573,14 @@ void stratified_charges::write_element
     ) const
 {
     xml_serialize::set_element(parent, name, datum(name));
+}
+
+void stratified_charges::write_proem
+    (xml_lmi::xml_document& document
+    ,std::string const&     file_leaf_name
+    ) const
+{
+    ::write_proem(document, file_leaf_name);
 }
 
 void stratified_charges::write_stratified_files()

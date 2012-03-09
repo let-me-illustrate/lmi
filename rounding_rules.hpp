@@ -129,6 +129,10 @@ class LMI_SO rounding_rules
         (xml::element&       parent
         ,std::string const&  name
         ) const;
+    virtual void write_proem
+        (xml_lmi::xml_document& document
+        ,std::string const&     file_leaf_name
+        ) const;
 
     rounding_parameters round_specamt_           ;
     rounding_parameters round_death_benefit_     ;

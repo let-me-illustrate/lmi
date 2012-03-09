@@ -29720,3 +29720,105 @@ Update time of version change.
   xml_lmi.hpp
 Expunge a function disused since 20120220T0158Z.
 
+20120220T1222Z <gchicares@sbcglobal.net> [573]
+
+  workhorse.make
+Copy system-test md5sums to support a version-control system.
+
+20120224T1138Z <gchicares@sbcglobal.net> [573]
+
+  wx-2.9.3.patch
+Apply wx changeset 70308. See:
+  http://lists.nongnu.org/archive/html/lmi/2012-01/msg00011.html
+
+20120224T1223Z <gchicares@sbcglobal.net> [573]
+
+  wx-2.9.3.patch
+Apply wx changeset 70318. See:
+  http://lists.nongnu.org/archive/html/lmi/2012-01/msg00012.html
+
+20120228T0954Z <gchicares@sbcglobal.net> [573]
+
+  workhorse.make
+Use POSIXLY_CORRECT 'sort' option order.
+
+20120228T1050Z <gchicares@sbcglobal.net> [573]
+
+  install_miscellanea.make
+Don't assume 'md5sum' output is sorted.
+
+20120228T1051Z <gchicares@sbcglobal.net> [573]
+
+  install_wx.make
+Make generated script executable.
+
+20120228T1113Z <gchicares@sbcglobal.net> [573]
+
+  xmlwrapp-0.6.0.md5sums
+  xmlwrapp-0.6.0.patch [new file]
+Prefer <X/> to <X></X> for empty elements. See:
+  http://lists.nongnu.org/archive/html/lmi/2012-02/msg00013.html
+
+20120229T1043Z <gchicares@sbcglobal.net> [573]
+
+  install_cygwin.bat
+Always end in a directory known to exist.
+
+20120301T0619Z <gchicares@sbcglobal.net> [573]
+
+  install_cygwin.bat
+Presumptively run 'rebaseall'. For the nonce, do so regardless of msw
+version, for testing.
+
+20120301T0928Z <gchicares@sbcglobal.net> [573]
+
+  install_cygwin.bat
+Presumptively run 'rebaseall' for msw 7 only.
+
+20120301T1226Z <gchicares@sbcglobal.net> [573]
+
+  GNUmakefile
+Permit 'make check_concinnity' to run in an arbitrary directory. E.g.:
+| make src_dir=/lmi/src/lmi -f /lmi/src/lmi/GNUmakefile check_concinnity
+
+20120301T1227Z <gchicares@sbcglobal.net> [573]
+
+  test_coding_rules.cpp
+Recognize some of lmi's xml files.
+
+20120306T1742Z <gchicares@sbcglobal.net> [573]
+
+  my_test_coding_rules.cpp
+  test_coding_rules.cpp
+Allow proprietary files to contain "taboo" strings.
+
+20120307T1025Z <gchicares@sbcglobal.net> [573]
+
+  xml_lmi.cpp
+  xml_lmi.hpp
+Add a convenience function for writing comments in xml documents.
+
+20120307T1745Z <gchicares@sbcglobal.net> [573]
+
+  Makefile.am
+  my_proem.cpp [new file]
+  my_proem.hpp [new file]
+  objects.make
+Establish proem for xml product files.
+
+20120307T1747Z <gchicares@sbcglobal.net> [573]
+
+  antediluvian_stubs.cpp
+  dbdict.cpp
+  dbdict.hpp
+  fund_data.cpp
+  product_data.cpp
+  product_data.hpp
+  rounding_rules.cpp
+  rounding_rules.hpp
+  stratified_charges.cpp
+  stratified_charges.hpp
+  xml_serializable.hpp
+  xml_serializable.tpp
+Add proem to xml product files.
+

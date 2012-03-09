@@ -462,13 +462,15 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         ,mce_annual
         ,InvariantValues().SpecAmt[0]
         );
+    double sa =
+                             InvariantValues().SpecAmt    [0]
+        + (TermIsDbFor7702 ? InvariantValues().TermSpecAmt[0] : 0.0)
+        ;
     // It is at best superfluous to do this for every basis.
     // TAXATION !! Don't do that then.
-    // TAXATION !! This assumes the term rider can be treated as death benefit;
-    // use 'TermIsDbFor7702'.
     Irc7702_->Initialize7702
-        (InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
-        ,InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
+        (sa
+        ,sa
         ,effective_dbopt_7702(InvariantValues().DBOpt[0].value(), Equiv7702DBO3)
         ,annual_target_premium
         );
@@ -510,11 +512,9 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     if(0 == InforceYear && 0 == InforceMonth)
         {
         // No need to initialize 'pmts_7702a' in this case.
-        // TAXATION !! This assumes the term rider can be treated as death benefit.
-        // TAXATION !! DATABASE !! That should be a database flag. Wait...it already is.
         bfts_7702a.push_back
-            (   InvariantValues().SpecAmt[0]
-            +   InvariantValues().TermSpecAmt[0]
+            (                     InvariantValues().SpecAmt    [0]
+            + (TermIsDbFor7702A ? InvariantValues().TermSpecAmt[0] : 0.0)
             );
         }
     else

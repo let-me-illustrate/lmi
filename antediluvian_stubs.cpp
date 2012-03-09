@@ -121,6 +121,12 @@ void product_data::write_element
     ) const
 {}
 
+void product_data::write_proem
+    (xml_lmi::xml_document&
+    ,std::string const&
+    ) const
+{}
+
 bool product_data::is_detritus(std::string const&) const
 {
     return false;

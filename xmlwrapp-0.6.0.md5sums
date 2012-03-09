@@ -18,7 +18,7 @@ b8270964ad71874057a9ca51ca00a1b6 *src/libxml/document.cxx
 11c9c65c6cef31a817025466d77081dd *src/libxml/dtd_impl.h
 426d8e51666685d69f2ea6750f615ad3 *src/libxml/event_parser.cxx
 ecb3350fac8e600f2197d38a60324e6c *src/libxml/init.cxx
-de391fcf51fd4fb792f4c42edca7360d *src/libxml/node.cxx
+78eed3d30ccd32613a501f8f8873361d *src/libxml/node.cxx
 2b3eb874f694c33bee016970f1c00565 *src/libxml/node_iterator.cxx
 c5d1a7e13771e5c11e379813fa977b7b *src/libxml/node_iterator.h
 fde6f21507051ad6ba778fc16dd60401 *src/libxml/node_manip.cxx

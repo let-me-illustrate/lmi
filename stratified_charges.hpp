@@ -30,7 +30,6 @@
 #include "mc_enum_type_enums.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
-#include "xml_lmi_fwd.hpp"
 #include "xml_serializable.hpp"
 
 #include <string>
@@ -174,6 +173,10 @@ class LMI_SO stratified_charges
     virtual void write_element
         (xml::element&       parent
         ,std::string const&  name
+        ) const;
+    virtual void write_proem
+        (xml_lmi::xml_document& document
+        ,std::string const&     file_leaf_name
         ) const;
 
     double banded_curr_sepacct_load
