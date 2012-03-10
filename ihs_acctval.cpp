@@ -924,6 +924,7 @@ void AccountValue::InitializeYear()
     SepAcctLoad                 = 0.0;
 
     YearsTotalCoiCharge         = 0.0;
+    YearsTotalRiderCharges      = 0.0;
     YearsAVRelOnDeath           = 0.0;
     YearsLoanRepaidOnDeath      = 0.0;
     YearsGrossClaims            = 0.0;

@@ -561,6 +561,7 @@ class LMI_SO AccountValue
     double  mlydedtonextmodalpmtdate; // Antediluvian.
 
     double  YearsTotalCoiCharge;
+    double  YearsTotalRiderCharges;
     double  YearsAVRelOnDeath;
     double  YearsLoanRepaidOnDeath;
     double  YearsGrossClaims;
