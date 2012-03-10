@@ -102,6 +102,7 @@ std::map<std::string,ledger_metadata> const& ledger_metadata_map()
         m["TermPurchased_Guaranteed"   ] = ledger_metadata(0, oe_format_normal    , "Guar Term Amt Purchased"               ); // "Guaranteed Term Purchased"
         m["COICharge_Current"          ] = ledger_metadata(0, oe_format_normal    , "Curr COI Charge"                       ); // "Current Mortality Charge"
         m["COICharge_Guaranteed"       ] = ledger_metadata(0, oe_format_normal    , "Guar COI Charge"                       ); // "Guaranteed Mortality Charge"
+        m["RiderCharges_Current"       ] = ledger_metadata(0, oe_format_normal    , "Curr Rider Charges"                    ); // "Current Rider Charges"
         m["IrrCsv_Current"             ] = ledger_metadata(2, oe_format_percentage, "Curr IRR on CSV"                       ); // "Current Cash Value IRR"
         m["IrrCsv_Guaranteed"          ] = ledger_metadata(2, oe_format_percentage, "Guar IRR on CSV"                       ); // "Guaranteed Cash Value IRR"
         m["IrrDb_Current"              ] = ledger_metadata(2, oe_format_percentage, "Curr IRR on DB"                        ); // "Current Death Benefit IRR"
@@ -546,6 +547,7 @@ void PrintFormTabDelimited
         ,"SpecifiedAmountLoad"
         ,"MonthlyFlatExtra"
         ,"MortalityCharge"
+        ,"RiderCharges"
         ,"NetMortalityCharge"
         ,"SeparateAccountCharges"
         ,"CurrentSeparateAccountInterestRate"
@@ -607,6 +609,7 @@ void PrintFormTabDelimited
         os << Curr_.value_str("SpecAmtLoad"           ,j) << '\t';
         os << Invar.value_str("MonthlyFlatExtra"      ,j) << '\t';
         os << Curr_.value_str("COICharge"             ,j) << '\t';
+        os << Curr_.value_str("RiderCharges"          ,j) << '\t';
         os << Curr_.value_str("NetCOICharge"          ,j) << '\t';
         os << Curr_.value_str("SepAcctCharges"        ,j) << '\t';
 
