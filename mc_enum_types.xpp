@@ -576,6 +576,7 @@
     ,mce_guaranteed_term_purchased \
     ,mce_current_mortality_charge \
     ,mce_guaranteed_mortality_charge \
+    ,mce_current_rider_charges \
     ,mce_current_cash_value_irr \
     ,mce_guaranteed_cash_value_irr \
     ,mce_current_death_benefit_irr \
@@ -634,6 +635,7 @@
     ,"TermPurchased_Guaranteed" \
     ,"COICharge_Current" \
     ,"COICharge_Guaranteed" \
+    ,"RiderCharges_Current" \
     ,"IrrCsv_Current" \
     ,"IrrCsv_Guaranteed" \
     ,"IrrDb_Current" \
@@ -694,6 +696,7 @@
     ,"Guaranteed Term Purchased" \
     ,"Current Mortality Charge" \
     ,"Guaranteed Mortality Charge" \
+    ,"Current Rider Charges" \
     ,"Current Cash Value IRR" \
     ,"Guaranteed Cash Value IRR" \
     ,"Current Death Benefit IRR" \
