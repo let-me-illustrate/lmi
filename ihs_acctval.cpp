@@ -681,8 +681,6 @@ void AccountValue::SetInitialValues()
         NoLapseActive           = false;
         }
 
-    RiderDeductions             = 0.0;
-
     TermRiderActive             = true;
     TermDB                      = 0.0;
 
@@ -724,6 +722,7 @@ void AccountValue::SetInitialValues()
         }
 
     CoiCharge                   = 0.0;
+    RiderDeductions             = 0.0;
     NetCoiCharge                = 0.0;
     MlyDed                      = 0.0;
     CumulativeSalesLoad         = 0.0; // INFORCE !! Add to inforce input.
