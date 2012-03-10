@@ -1944,6 +1944,7 @@ void AccountValue::TxDoMlyDed()
         ;
 
     RiderCharges = simple_rider_charges + TermCharge + WpCharge;
+    YearsTotalRiderCharges += RiderCharges;
     MlyDed = CoiCharge + RiderCharges;
 
     process_deduction(MlyDed);
