@@ -96,7 +96,7 @@ namespace
         ,eTermAmount
         ,eTermRate
         ,eTermCharge
-        ,eTotalRiderCharge
+        ,eTotalRiderCharges
         ,eTotalMonthlyDeds
         ,eGenAcctIntRate
         ,eGenAcctIntCred
@@ -192,7 +192,7 @@ namespace
         v[eTermAmount]          = "Term amount";
         v[eTermRate]            = "Term rate";
         v[eTermCharge]          = "Term charge";
-        v[eTotalRiderCharge]    = "Total rider charge";
+        v[eTotalRiderCharges]   = "Total rider charges";
         v[eTotalMonthlyDeds]    = "Total monthly deductions";
         v[eGenAcctIntRate]      = "Unloaned GA interest rate";
         v[eGenAcctIntCred]      = "Unloaned GA interest credited";
@@ -375,7 +375,7 @@ void AccountValue::DebugPrint()
     SetMonthlyDetail(eTermAmount         ,TermDB                           );
     SetMonthlyDetail(eTermRate           ,YearsTermRate                    );
     SetMonthlyDetail(eTermCharge         ,TermCharge                       );
-    SetMonthlyDetail(eTotalRiderCharge   ,RiderDeductions                  );
+    SetMonthlyDetail(eTotalRiderCharges  ,RiderCharges                     );
     SetMonthlyDetail(eTotalMonthlyDeds   ,MlyDed                           );
 
     SetMonthlyDetail(eGenAcctIntRate     ,ActualMonthlyRate(YearsGenAcctIntRate              ));
