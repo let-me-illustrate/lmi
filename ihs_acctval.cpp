@@ -1296,6 +1296,7 @@ void AccountValue::FinalizeYear()
     // Monthly deduction detail
 
     VariantValues().COICharge         [Year] = YearsTotalCoiCharge        ;
+    VariantValues().RiderCharges      [Year] = YearsTotalRiderCharges     ;
     VariantValues().AVRelOnDeath      [Year] = YearsAVRelOnDeath          ;
     VariantValues().ClaimsPaid        [Year] = YearsGrossClaims           ;
     VariantValues().DeathProceedsPaid [Year] = YearsDeathProceeds         ;
