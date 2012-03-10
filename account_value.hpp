@@ -409,7 +409,7 @@ class LMI_SO AccountValue
     double  SepAcctPaymentAllocation;
     double  NAAR;
     double  CoiCharge;
-    double  RiderDeductions;
+    double  RiderCharges;
     double  NetCoiCharge;
     double  SpecAmtLoadBase;
     double  DacTaxRsv;
