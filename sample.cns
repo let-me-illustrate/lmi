@@ -203,7 +203,7 @@
       <ZipCode/>
     </cell>
   </case_default>
-  <class_defaults size_hint="1">
+  <class_defaults>
     <cell version="6">
       <AccidentalDeathBenefit>No</AccidentalDeathBenefit>
       <Address/>
@@ -406,7 +406,7 @@
       <ZipCode/>
     </cell>
   </class_defaults>
-  <particular_cells size_hint="1">
+  <particular_cells>
     <cell version="6">
       <AccidentalDeathBenefit>No</AccidentalDeathBenefit>
       <Address/>

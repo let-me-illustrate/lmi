@@ -29869,3 +29869,21 @@ Add 'RiderCharges' to ledger.
   mc_enum_types.xpp
 Provide 'RiderCharges' for certain reports.
 
+20120312T0515Z <gchicares@sbcglobal.net> [573]
+
+  input_test.cpp
+Demonstrate xmlwrapp improvement committed 20120228T1113Z.
+
+20120312T0525Z <gchicares@sbcglobal.net> [573]
+
+  input_test.cpp
+Simplify.
+
+20120312T1359Z <gchicares@sbcglobal.net> [573]
+
+  multiple_cell_document.cpp
+  sample.cns
+Eradicate 'size_hint'. See:
+  http://lists.nongnu.org/archive/html/lmi/2012-02/msg00010.html
+  http://lists.nongnu.org/archive/html/lmi/2012-02/msg00012.html
+
