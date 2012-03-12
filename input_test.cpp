@@ -46,6 +46,8 @@
 
 #include <boost/bind.hpp>
 
+#define LMI_USING_XML_SAVE_OPTION
+
 #if defined BOOST_MSVC || defined __BORLANDC__
 #   include <cfloat> // floating-point hardware control
 #endif // defined BOOST_MSVC || defined __BORLANDC__
@@ -393,6 +395,9 @@ void input_test::test_document_io
 // SOMEDAY !! XMLWRAPP !! Update 'xmlwrapp' to write empty elements as such:
 //   http://mail.gnome.org/archives/xml/2007-May/msg00007.html
 //   http://mail.gnome.org/archives/xml/2006-July/msg00048.html
+// Actually, the issue has been resolved in a better way:
+//   http://lists.nongnu.org/archive/html/lmi/2012-02/msg00007.html
+// and therefore this conditional block will soon be removed.
 
     std::ostringstream oss0;
     document.write(oss0);
