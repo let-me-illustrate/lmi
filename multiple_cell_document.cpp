@@ -36,6 +36,7 @@
 #include <xmlwrapp/nodes_view.h>
 
 #include <istream>
+#include <iterator>                     // std::distance()
 #include <ostream>
 #include <stdexcept>
 
@@ -113,8 +114,6 @@ T& hurl(std::string const& s)
 } // Unnamed namespace.
 
 /// Read xml into vectors of class Input.
-///
-/// The optional "size_hint" attributes improve speed remarkably.
 
 void multiple_cell_document::parse(xml::element const& root)
 {
@@ -149,12 +148,8 @@ void multiple_cell_document::parse(xml::element const& root)
             : ("particular_cells" == tag) ? cell_parms_
             : hurl<std::vector<Input> >("Unexpected element '" + tag + "'.")
             );
-        int size_hint = 0;
-        if(xml_lmi::get_attr(*i, "size_hint", size_hint))
-            {
-            v.reserve(size_hint);
-            }
         xml::const_nodes_view const subelements(i->elements());
+        v.reserve(std::distance(subelements.begin(), subelements.end()));
         for(cnvi j = subelements.begin(); j != subelements.end(); ++j)
             {
             *j >> cell;
@@ -330,7 +325,6 @@ void multiple_cell_document::write(std::ostream& os) const
 
     xml::element class_defaults("class_defaults");
     xml::node::iterator classes_i = root.insert(class_defaults);
-    xml_lmi::set_attr(*classes_i, "size_hint", class_parms_.size());
     for(svii i = class_parms_.begin(); i != class_parms_.end(); ++i)
         {
         i->write(*classes_i);
@@ -338,7 +332,6 @@ void multiple_cell_document::write(std::ostream& os) const
 
     xml::element particular_cells("particular_cells");
     xml::node::iterator cells_i = root.insert(particular_cells);
-    xml_lmi::set_attr(*cells_i, "size_hint", cell_parms_.size());
     for(svii i = cell_parms_.begin(); i != cell_parms_.end(); ++i)
         {
         i->write(*cells_i);

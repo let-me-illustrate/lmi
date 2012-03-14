@@ -29822,3 +29822,68 @@ Establish proem for xml product files.
   xml_serializable.tpp
 Add proem to xml product files.
 
+20120308T1057Z <gchicares@sbcglobal.net> [573]
+
+  ihs_avmly.cpp
+Improve documentation.
+
+20120308T1819Z <gchicares@sbcglobal.net> [573]
+
+  ihs_acctval.cpp
+Resolve some taxation issues.
+
+20120310T0953Z <gchicares@sbcglobal.net> [573]
+
+  account_value.hpp
+  ihs_acctval.cpp
+Refactor, moving data member 'RiderDeductions'.
+
+20120310T1029Z <gchicares@sbcglobal.net> [573]
+
+  account_value.hpp
+  ihs_acctval.cpp
+  ihs_avdebug.cpp
+  ihs_avmly.cpp
+Rename data member 'RiderDeductions' to 'RiderCharges'; change header
+in monthly trace accordingly.
+
+20120310T1154Z <gchicares@sbcglobal.net> [573]
+
+  account_value.hpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+Accumulate rider deductions by policy year.
+
+20120310T2217Z <gchicares@sbcglobal.net> [573]
+
+  ihs_acctval.cpp
+  ledger_variant.cpp
+  ledger_variant.hpp
+  ledger_xml_io.cpp
+Add 'RiderCharges' to ledger.
+
+20120310T2257Z <gchicares@sbcglobal.net> [573]
+
+  ledger_text_formats.cpp
+  mc_enum_types.cpp
+  mc_enum_types.xpp
+Provide 'RiderCharges' for certain reports.
+
+20120312T0515Z <gchicares@sbcglobal.net> [573]
+
+  input_test.cpp
+Demonstrate xmlwrapp improvement committed 20120228T1113Z.
+
+20120312T0525Z <gchicares@sbcglobal.net> [573]
+
+  input_test.cpp
+Simplify.
+
+20120312T1359Z <gchicares@sbcglobal.net> [573]
+
+  multiple_cell_document.cpp
+  sample.cns
+Eradicate 'size_hint'. See:
+  http://lists.nongnu.org/archive/html/lmi/2012-02/msg00010.html
+  http://lists.nongnu.org/archive/html/lmi/2012-02/msg00012.html
+

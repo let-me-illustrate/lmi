@@ -301,6 +301,7 @@ void Ledger::write(xml::element& x) const
 //    title_map["ProducerCompensation"            ] = " _____________ Producer Compensation";
     title_map["ProjectedCoiCharge_Current"      ] = "Experience Rating Projected COI Charge";
     title_map["RefundableSalesLoad"             ] = " _____________ Refundable Sales Load";
+    title_map["RiderCharges_Current"            ] = " _____________ _____________ Curr Rider Charges";
     title_map["Salary"                          ] = " _____________ _____________ Salary";
     title_map["SepAcctCharges_Current"          ] = "Curr Sep Acct Charges";
     title_map["SepAcctCharges_Guaranteed"       ] = "Guar Sep Acct Charges";
@@ -562,6 +563,7 @@ void Ledger::write(xml::element& x) const
     format_map["ProducerCompensation"              ] = f1;
     format_map["ProjectedCoiCharge"                ] = f1;
     format_map["RefundableSalesLoad"               ] = f1;
+    format_map["RiderCharges"                      ] = f1;
     format_map["Salary"                            ] = f1;
     format_map["SepAcctCharges"                    ] = f1;
     format_map["SpecAmt"                           ] = f1;

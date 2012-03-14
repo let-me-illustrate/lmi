@@ -85,6 +85,7 @@ void LedgerVariant::Alloc(int len)
     Length  = len;
 
     BegYearVectors  ["COICharge"            ] = &COICharge              ;
+    BegYearVectors  ["RiderCharges"         ] = &RiderCharges           ;
     BegYearVectors  ["ExpenseCharges"       ] = &ExpenseCharges         ;
 
     // Account value released on death might at first seem to be
@@ -204,6 +205,7 @@ void LedgerVariant::Init
 //  CSVNet          =
 //  CV7702          =
 //  COICharge       =
+//  RiderCharges    =
 //  ExpenseCharges  =
     MlySAIntRate               = bv.InterestRates_->SepAcctNetRate
         (SepBasis_
