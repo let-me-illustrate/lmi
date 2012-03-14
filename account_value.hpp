@@ -366,8 +366,6 @@ class LMI_SO AccountValue
     std::vector<double> loan_ullage_;
     std::vector<double> withdrawal_ullage_;
 
-    double RiderDeductions;
-
     double CumPmts;
     double TaxBasis;
     // This supports solves for tax basis. Eventually it should be
@@ -411,6 +409,7 @@ class LMI_SO AccountValue
     double  SepAcctPaymentAllocation;
     double  NAAR;
     double  CoiCharge;
+    double  RiderCharges;
     double  NetCoiCharge;
     double  SpecAmtLoadBase;
     double  DacTaxRsv;
@@ -562,6 +561,7 @@ class LMI_SO AccountValue
     double  mlydedtonextmodalpmtdate; // Antediluvian.
 
     double  YearsTotalCoiCharge;
+    double  YearsTotalRiderCharges;
     double  YearsAVRelOnDeath;
     double  YearsLoanRepaidOnDeath;
     double  YearsGrossClaims;

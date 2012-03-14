@@ -1943,8 +1943,9 @@ void AccountValue::TxDoMlyDed()
         +   DcvWpCharge
         ;
 
-    RiderDeductions = simple_rider_charges + TermCharge + WpCharge;
-    MlyDed = CoiCharge + RiderDeductions;
+    RiderCharges = simple_rider_charges + TermCharge + WpCharge;
+    YearsTotalRiderCharges += RiderCharges;
+    MlyDed = CoiCharge + RiderCharges;
 
     process_deduction(MlyDed);
     Dcv -= dcv_mly_ded;
@@ -2832,7 +2833,7 @@ void AccountValue::TxTestLapse()
     // Perform no-lapse test.
     if(NoLapseActive && ! NoLapseAlwaysActive)
         {
-        CumNoLapsePrem += MlyNoLapsePrem + RiderDeductions;
+        CumNoLapsePrem += MlyNoLapsePrem + RiderCharges;
         if
             (       NoLapseMinAge <= Year + BasicValues::GetIssueAge()
                 &&  NoLapseMinDur <= Year

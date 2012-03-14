@@ -91,6 +91,7 @@ class LMI_SO LedgerVariant
 
     // BOY vectors.
     std::vector<double> COICharge;
+    std::vector<double> RiderCharges;
     std::vector<double> ExpenseCharges;
     std::vector<double> AVRelOnDeath;
     std::vector<double> NetIntCredited;

@@ -52,9 +52,6 @@
 #include <cstdio> // std::remove()
 #include <fstream>
 #include <ios>
-#if !defined LMI_USING_XML_SAVE_OPTION
-#   include <sstream>
-#endif // !defined LMI_USING_XML_SAVE_OPTION
 #include <string>
 
 class input_test
@@ -387,38 +384,12 @@ void input_test::test_document_io
 {
     DocumentClass document(original_filename);
     std::ofstream ofs(replica_filename.c_str(), ios_out_trunc_binary());
-#if defined LMI_USING_XML_SAVE_OPTION
     document.write(ofs);
-#else  // !defined LMI_USING_XML_SAVE_OPTION
-// SOMEDAY !! XMLWRAPP !! Update 'xmlwrapp' to write empty elements as such:
-//   http://mail.gnome.org/archives/xml/2007-May/msg00007.html
-//   http://mail.gnome.org/archives/xml/2006-July/msg00048.html
-
-    std::ostringstream oss0;
-    document.write(oss0);
-    std::string const s(oss0.str());
-
-    std::istringstream iss(s);
-    std::ostringstream oss1;
-    for(;EOF != iss.peek();)
-        {
-        std::string line;
-        std::getline(iss, line);
-        std::string::size_type z = line.find("><");
-        if(std::string::npos != z)
-            {
-            line.erase(z);
-            line += "/>";
-            }
-        oss1 << line << '\n';
-        }
-
-    ofs << oss1.str();
-#endif // !defined LMI_USING_XML_SAVE_OPTION
     if(test_speed_only)
         {
         return;
         }
+
     ofs.close();
     bool okay = files_are_identical(original_filename, replica_filename);
     INVOKE_BOOST_TEST(okay, file, line);

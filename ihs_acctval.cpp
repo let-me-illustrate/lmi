@@ -681,8 +681,6 @@ void AccountValue::SetInitialValues()
         NoLapseActive           = false;
         }
 
-    RiderDeductions             = 0.0;
-
     TermRiderActive             = true;
     TermDB                      = 0.0;
 
@@ -724,6 +722,7 @@ void AccountValue::SetInitialValues()
         }
 
     CoiCharge                   = 0.0;
+    RiderCharges                = 0.0;
     NetCoiCharge                = 0.0;
     MlyDed                      = 0.0;
     CumulativeSalesLoad         = 0.0; // INFORCE !! Add to inforce input.
@@ -925,6 +924,7 @@ void AccountValue::InitializeYear()
     SepAcctLoad                 = 0.0;
 
     YearsTotalCoiCharge         = 0.0;
+    YearsTotalRiderCharges      = 0.0;
     YearsAVRelOnDeath           = 0.0;
     YearsLoanRepaidOnDeath      = 0.0;
     YearsGrossClaims            = 0.0;
@@ -1296,6 +1296,7 @@ void AccountValue::FinalizeYear()
     // Monthly deduction detail
 
     VariantValues().COICharge         [Year] = YearsTotalCoiCharge        ;
+    VariantValues().RiderCharges      [Year] = YearsTotalRiderCharges     ;
     VariantValues().AVRelOnDeath      [Year] = YearsAVRelOnDeath          ;
     VariantValues().ClaimsPaid        [Year] = YearsGrossClaims           ;
     VariantValues().DeathProceedsPaid [Year] = YearsDeathProceeds         ;
