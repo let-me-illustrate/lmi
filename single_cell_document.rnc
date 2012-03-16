@@ -21,7 +21,10 @@
 
 # $Id$
 
+start =
 element single_cell_document {
-    external "cell.rnc"
+    cell_element
 }
+
+include "cell.rnc"
 

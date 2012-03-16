@@ -24,7 +24,7 @@
 # This schema is meant not for standalone use, but rather for
 # inclusion from other schemata.
 
-start =
+cell_element =
 element cell {
     attribute version {"6"},
 
