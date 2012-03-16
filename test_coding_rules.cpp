@@ -96,11 +96,12 @@ enum enum_phylum
     ,e_make       = 1 << 10
     ,e_md5        = 1 << 11
     ,e_patch      = 1 << 12
-    ,e_script     = 1 << 13
-    ,e_synopsis   = 1 << 14
-    ,e_touchstone = 1 << 15
-    ,e_xml_input  = 1 << 16
-    ,e_xml_other  = 1 << 17
+    ,e_relax_ng   = 1 << 13
+    ,e_script     = 1 << 14
+    ,e_synopsis   = 1 << 15
+    ,e_touchstone = 1 << 16
+    ,e_xml_input  = 1 << 17
+    ,e_xml_other  = 1 << 18
     };
 
 enum enum_kingdom
@@ -201,6 +202,7 @@ file::file(std::string const& file_path)
         : ".make"       == extension() ? e_make
         : ".md5sums"    == extension() ? e_md5
         : ".patch"      == extension() ? e_patch
+        : ".rnc"        == extension() ? e_relax_ng
         : ".ac"         == extension() ? e_script
         : ".bat"        == extension() ? e_script
         : ".m4"         == extension() ? e_script
