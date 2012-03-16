@@ -21,17 +21,20 @@
 
 # $Id$
 
+start =
 element multiple_cell_document {
     attribute version {"1"},
 
     element case_default {
-        external "cell.rnc"
+        cell_element
     },
     element class_defaults {
-        external "cell.rnc" +
+        cell_element +
     },
     element particular_cells {
-        external "cell.rnc" +
+        cell_element +
     }
 }
+
+include "cell.rnc"
 
