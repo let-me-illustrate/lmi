@@ -29887,3 +29887,36 @@ Eradicate 'size_hint'. See:
   http://lists.nongnu.org/archive/html/lmi/2012-02/msg00010.html
   http://lists.nongnu.org/archive/html/lmi/2012-02/msg00012.html
 
+20120316T0753Z <gchicares@sbcglobal.net> [573]
+
+  test_coding_rules.cpp
+Handle '.rnc' files.
+
+20120316T0845Z <gchicares@sbcglobal.net> [573]
+
+  cell.rnc                   [new file]
+  multiple_cell_document.rnc [new file]
+  single_cell_document.rnc   [new file]
+Add RELAX NG schemata for input files from external systems (VS). See:
+  http://savannah.nongnu.org/support/?107981
+
+20120316T1113Z <gchicares@sbcglobal.net> [573]
+
+  cell.rnc
+  multiple_cell_document.rnc
+  single_cell_document.rnc
+Prefer 'include' to 'external', to sidestep a 'trang' defect. See:
+  http://lists.nongnu.org/archive/html/lmi/2012-03/msg00015.html
+
+20120322T1113Z <gchicares@sbcglobal.net> [573]
+
+  cell.xsd                   [new file]
+  multiple_cell_document.xsd [new file]
+  single_cell_document.xsd   [new file]
+Add XSD schemata.
+
+20120322T1117Z <gchicares@sbcglobal.net> [573]
+
+  test_schemata.sh [new file]
+Test schemata.
+
