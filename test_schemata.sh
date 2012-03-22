@@ -189,7 +189,8 @@ diff --unified=0 touchstone.eraseme ill.eraseme
 java -jar $jar_dir/trang.jar multiple_cell_document.rnc multiple_cell_document.xsd
 java -jar $jar_dir/trang.jar single_cell_document.rnc   single_cell_document.xsd
 sed -e 's/  *$//' -i *.xsd
-diff --unified=0 --from-file=$src_dir *.xsd || echo "Dubious '*.xsd' in repository."
+diff --unified=0 --ignore-matching-lines='<!-- [$]Id:.*[$] -->' --from-file=$src_dir *.xsd \
+    || echo "Dubious '*.xsd' in repository."
 
 echo "Done."
 

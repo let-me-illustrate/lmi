@@ -29920,3 +29920,8 @@ Add XSD schemata.
   test_schemata.sh [new file]
 Test schemata.
 
+20120322T1923Z <gchicares@sbcglobal.net> [573]
+
+  test_schemata.sh
+Ignore differences in RCS Id.
+
