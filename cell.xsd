@@ -1053,6 +1053,7 @@
       <xs:enumeration value="TermPurchased_Guaranteed"/>
       <xs:enumeration value="COICharge_Current"/>
       <xs:enumeration value="COICharge_Guaranteed"/>
+      <xs:enumeration value="RiderCharges_Current"/>
       <xs:enumeration value="IrrCsv_Current"/>
       <xs:enumeration value="IrrCsv_Guaranteed"/>
       <xs:enumeration value="IrrDb_Current"/>
