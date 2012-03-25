@@ -29925,3 +29925,14 @@ Test schemata.
   test_schemata.sh
 Ignore differences in RCS Id.
 
+20120323T1144Z <gchicares@sbcglobal.net> [573]
+
+  cell.rnc
+  cell.xsd
+Accommodate 'RiderCharges' added 20120310T2257Z.
+
+20120325T1227Z <gchicares@sbcglobal.net> [573]
+
+  version.hpp
+Designate release candidate.
+
