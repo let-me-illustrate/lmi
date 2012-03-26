@@ -665,11 +665,8 @@
       <xs:enumeration value="No"/>
     </xs:restriction>
   </xs:simpleType>
-  <!--
-    We cannot validate the sequences better without a parser; simple regex
-    pattern wouldn't cover them.
-  -->
-  <!-- Various tn_range types: -->
+  <!-- It is infeasible to validate an input sequence with a regex. -->
+  <!-- Numeric-range types. -->
   <xs:simpleType name="nonnegative_double">
     <xs:restriction base="xs:double">
       <xs:minInclusive value="0"/>
@@ -681,13 +678,13 @@
       <xs:maxInclusive value="1"/>
     </xs:restriction>
   </xs:simpleType>
+  <!-- Calendar-date bounds: [1752-09-14, 9999-12-31] -->
   <xs:simpleType name="calendar_date_int">
     <xs:restriction base="xs:nonNegativeInteger">
       <xs:minInclusive value="2361222"/>
       <xs:maxInclusive value="5373484"/>
     </xs:restriction>
   </xs:simpleType>
-  <!-- last_yyyy_date_jdn -->
   <xs:simpleType name="age_int">
     <xs:restriction base="xs:nonNegativeInteger">
       <xs:maxInclusive value="99"/>
@@ -703,10 +700,7 @@
       <xs:maxInclusive value="11"/>
     </xs:restriction>
   </xs:simpleType>
-  <!--
-    Enumerations that are used more than once in the schema or are too big to be
-    defined inline:
-  -->
+  <!-- Enumerations. -->
   <xs:simpleType name="mcenum_to_point">
     <xs:restriction base="xs:token">
       <xs:enumeration value="Retirement"/>

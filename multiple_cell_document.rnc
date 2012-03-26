@@ -21,20 +21,13 @@
 
 # $Id$
 
-start =
-element multiple_cell_document {
-    attribute version {"1"},
+start = element multiple_cell_document
+    {attribute version {"1"}
 
-    element case_default {
-        cell_element
-    },
-    element class_defaults {
-        cell_element +
-    },
-    element particular_cells {
-        cell_element +
+    ,element case_default     {cell_element  }
+    ,element class_defaults   {cell_element +}
+    ,element particular_cells {cell_element +}
     }
-}
 
 include "cell.rnc"
 
