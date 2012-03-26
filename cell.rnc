@@ -24,208 +24,207 @@
 # This schema is meant not for standalone use, but rather for
 # inclusion from other schemata.
 
-cell_element =
-element cell {
-    attribute version {"6"},
+cell_element = element cell
+    {attribute version {"6"}
 
-    element AccidentalDeathBenefit {lmibool},
-    element Address {text},
-    element AgentAddress {text},
-    element AgentCity {text},
-    element AgentId {text},
-    element AgentName {text},
-    element AgentPhone {text},
-    element AgentState {mcenum_state},
-    element AgentZipCode {text},
-    element AmortizePremiumLoad {lmibool},
-    element AvoidMecMethod {"Allow MEC"|"Reduce premium"},
-    element BlendGender {lmibool},
-    element BlendSmoking {lmibool},
-    element CashValueEnhancementRate {numeric_sequence},
-    element ChildRider {lmibool},
-    element ChildRiderAmount {nonnegative_double},
-    element City {text},
-    element Comments {text},
-    element CorporationAddress {text},
-    element CorporationCity {text},
-    element CorporationName {text},
-    element CorporationPayment {payment_sequence},
-    element CorporationPaymentMode {mode_sequence},
-    element CorporationPremiumTableFactor {nonnegative_double},
-    element CorporationState {mcenum_state},
-    element CorporationTaxBracket {numeric_sequence},
-    element CorporationZipCode {text},
-    element Country {mcenum_country},
-    element CountryCoiMultiplier {nonnegative_double},
-    element CreateSupplementalReport {lmibool},
-    element CurrentCoiMultiplier {numeric_sequence},
-    element DateOfBirth {calendar_date_int},
-    element DeathBenefitOption {dbo_sequence},
-    element DeathBenefitOptionFromIssue {"A"|"B"|"ROP"},
-    element DeathBenefitOptionFromRetirement {"A"|"B"|"ROP"},
-    element DefinitionOfLifeInsurance {"CVAT"|"GPT"|"Not 7702 compliant"},
-    element DefinitionOfMaterialChange {"Unnecessary premium"
+    ,element AccidentalDeathBenefit           {lmibool}
+    ,element Address                          {text}
+    ,element AgentAddress                     {text}
+    ,element AgentCity                        {text}
+    ,element AgentId                          {text}
+    ,element AgentName                        {text}
+    ,element AgentPhone                       {text}
+    ,element AgentState                       {mcenum_state}
+    ,element AgentZipCode                     {text}
+    ,element AmortizePremiumLoad              {lmibool}
+    ,element AvoidMecMethod                   {"Allow MEC"|"Reduce premium"}
+    ,element BlendGender                      {lmibool}
+    ,element BlendSmoking                     {lmibool}
+    ,element CashValueEnhancementRate         {numeric_sequence}
+    ,element ChildRider                       {lmibool}
+    ,element ChildRiderAmount                 {nonnegative_double}
+    ,element City                             {text}
+    ,element Comments                         {text}
+    ,element CorporationAddress               {text}
+    ,element CorporationCity                  {text}
+    ,element CorporationName                  {text}
+    ,element CorporationPayment               {payment_sequence}
+    ,element CorporationPaymentMode           {mode_sequence}
+    ,element CorporationPremiumTableFactor    {nonnegative_double}
+    ,element CorporationState                 {mcenum_state}
+    ,element CorporationTaxBracket            {numeric_sequence}
+    ,element CorporationZipCode               {text}
+    ,element Country                          {mcenum_country}
+    ,element CountryCoiMultiplier             {nonnegative_double}
+    ,element CreateSupplementalReport         {lmibool}
+    ,element CurrentCoiMultiplier             {numeric_sequence}
+    ,element DateOfBirth                      {calendar_date_int}
+    ,element DeathBenefitOption               {dbo_sequence}
+    ,element DeathBenefitOptionFromIssue      {"A"|"B"|"ROP"}
+    ,element DeathBenefitOptionFromRetirement {"A"|"B"|"ROP"}
+    ,element DefinitionOfLifeInsurance        {"CVAT"|"GPT"|"Not 7702 compliant"}
+    ,element DefinitionOfMaterialChange       {"Unnecessary premium"
                                        |"Benefit increase"
                                        |"Later of increase or unnecessary premium"
                                        |"Earlier of increase or unnecessary premium"
-                                       |"GPT adjustment event"},
-    element Dumpin {nonnegative_double},
-    element EffectiveDate {calendar_date_int},
-    element EffectiveDateToday {lmibool},
-    element EmployeeClass {text},
-    element ExperienceRatingInitialKFactor {nonnegative_double},
-    element ExperienceReserveRate {proportion_double},
-    element External1035ExchangeAmount {nonnegative_double},
-    element External1035ExchangeBasis {nonnegative_double},
-    element External1035ExchangeFromMec {lmibool},
-    element ExtraCompensationOnAssets {numeric_sequence},
-    element ExtraCompensationOnPremium {numeric_sequence},
-    element ExtraMonthlyCustodialFee {numeric_sequence},
-    element FlatExtra {numeric_sequence},
-    element Franchise {text},
-    element FundAllocations {numeric_sequence},
-    element FundChoiceType {"Average fund"
+                                       |"GPT adjustment event"}
+    ,element Dumpin                           {nonnegative_double}
+    ,element EffectiveDate                    {calendar_date_int}
+    ,element EffectiveDateToday               {lmibool}
+    ,element EmployeeClass                    {text}
+    ,element ExperienceRatingInitialKFactor   {nonnegative_double}
+    ,element ExperienceReserveRate            {proportion_double}
+    ,element External1035ExchangeAmount       {nonnegative_double}
+    ,element External1035ExchangeBasis        {nonnegative_double}
+    ,element External1035ExchangeFromMec      {lmibool}
+    ,element ExtraCompensationOnAssets        {numeric_sequence}
+    ,element ExtraCompensationOnPremium       {numeric_sequence}
+    ,element ExtraMonthlyCustodialFee         {numeric_sequence}
+    ,element FlatExtra                        {numeric_sequence}
+    ,element Franchise                        {text}
+    ,element FundAllocations                  {numeric_sequence}
+    ,element FundChoiceType                   {"Average fund"
                            |"Override fund"
-                           |"Choose funds"},
-    element Gender {"Female"|"Male"|"Unisex"},
-    element GeneralAccountRate {numeric_sequence},
-    element GeneralAccountRateType {"Credited rate"|"Earned rate"},
-    element GroupUnderwritingType {"Medical"
+                           |"Choose funds"}
+    ,element Gender                           {"Female"|"Male"|"Unisex"}
+    ,element GeneralAccountRate               {numeric_sequence}
+    ,element GeneralAccountRateType           {"Credited rate"|"Earned rate"}
+    ,element GroupUnderwritingType            {"Medical"
                                   |"Paramedical"
                                   |"Nonmedical"
                                   |"Simplified issue"
-                                  |"Guaranteed issue"},
-    element HoneymoonEndorsement {lmibool},
-    element HoneymoonValueSpread {numeric_sequence},
-    element IncludeInComposite {lmibool},
-    element IndividualPaymentAmount {nonnegative_double},
-    element IndividualPaymentMode {"Annual"
+                                  |"Guaranteed issue"}
+    ,element HoneymoonEndorsement             {lmibool}
+    ,element HoneymoonValueSpread             {numeric_sequence}
+    ,element IncludeInComposite               {lmibool}
+    ,element IndividualPaymentAmount          {nonnegative_double}
+    ,element IndividualPaymentMode            {"Annual"
                                   |"Semiannual"
                                   |"Quarterly"
-                                  |"Monthly"},
-    element IndividualPaymentStrategy {"PmtInputScalar"
+                                  |"Monthly"}
+    ,element IndividualPaymentStrategy        {"PmtInputScalar"
                                       |"PmtMinimum"
                                       |"PmtTarget"
                                       |"PmtMEP"
                                       |"PmtGLP"
                                       |"PmtGSP"
                                       |"PmtCorridor"
-                                      |"PmtTable"},
-    element IndividualPaymentToAge {age_int},
-    element IndividualPaymentToAlternative {mcenum_to_point},
-    element IndividualPaymentToDuration {duration_int},
-    element InforceAsOfDate {calendar_date_int},
-    element InforceAvBeforeLastMc {nonnegative_double},
-    element InforceContractMonth {month_int},
-    element InforceContractYear {duration_int},
-    element InforceCumulativeGlp {nonnegative_double},
-    element InforceCumulativeNoLapsePremium {nonnegative_double},
-    element InforceCumulativePayments {nonnegative_double},
-    element InforceDcv {nonnegative_double},
-    element InforceGeneralAccountValue {nonnegative_double},
-    element InforceGlp {nonnegative_double},
-    element InforceGsp {nonnegative_double},
-    element InforceHoneymoonValue {nonnegative_double},
-    element InforceIsMec {lmibool},
-    element InforceLeastDeathBenefit {nonnegative_double},
-    element InforceMonth {month_int},
-    element InforceNetExperienceReserve {xsd:double},
-    element InforcePreferredLoanBalance {nonnegative_double},
-    element InforcePreferredLoanValue {nonnegative_double},
-    element InforceRegularLoanBalance {nonnegative_double},
-    element InforceRegularLoanValue {nonnegative_double},
-    element InforceSeparateAccountValue {nonnegative_double},
-    element InforceSevenPayPremium {nonnegative_double},
-    element InforceTaxBasis {nonnegative_double},
-    element InforceYear {duration_int},
-    element InforceYtdNetCoiCharge {nonnegative_double},
-    element InputFundManagementFee {nonnegative_double},
-    element InsuredName {text},
-    element InsuredPremiumTableFactor {nonnegative_double},
-    element Internal1035ExchangeAmount {nonnegative_double},
-    element Internal1035ExchangeBasis {nonnegative_double},
-    element Internal1035ExchangeFromMec {lmibool},
-    element IssueAge {age_int},
-    element LastCoiReentryDate {calendar_date_int},
-    element LastMaterialChangeDate {calendar_date_int},
-    element LoanAmount {nonnegative_double},
-    element LoanFromAge {age_int},
-    element LoanFromAlternative {mcenum_from_point},
-    element LoanFromDuration {duration_int},
-    element LoanRate {proportion_double},
-    element LoanRateType {"Fixed loan rate"|"Variable loan rate"},
-    element LoanToAge {age_int},
-    element LoanToAlternative {mcenum_to_point},
-    element LoanToDuration {duration_int},
-    element MaleProportion {proportion_double},
-    element MaximumNaar {nonnegative_double},
-    element NewLoan {numeric_sequence},
-    element NonsmokerProportion {proportion_double},
-    element NumberOfIdenticalLives {xsd:nonNegativeInteger},
-    element OverrideCoiMultiplier {lmibool},
-    element OverrideExperienceReserveRate {lmibool},
-    element OverrideFundManagementFee {lmibool},
-    element PartialMortalityMultiplier {numeric_sequence},
-    element Payment {payment_sequence},
-    element PaymentMode {mode_sequence},
-    element PolicyNumber {text},
-    element PostHoneymoonSpread {proportion_double},
-    element PremiumHistory {numeric_sequence},
-    element PremiumTaxState {mcenum_state},
-    # ProductName is class ce_product_name, we cannot validate it any better
-    element ProductName {text},
-    element ProjectedSalary {numeric_sequence},
-    element RetireesCanEnroll {lmibool},
-    element RetirementAge {age_int},
-    element RunOrder {"Life by life"|"Month by month"},
-    element SalarySpecifiedAmountCap {nonnegative_double},
-    element SalarySpecifiedAmountFactor {nonnegative_double},
-    element SalarySpecifiedAmountOffset {nonnegative_double},
-    element SeparateAccountRate {numeric_sequence},
-    element SeparateAccountRateType {"Net rate"|"Gross rate"},
-    element Smoking {"Smoker"|"Nonsmoker"|"Unismoke"},
-    element SolveBasis {"Current"|"Guaranteed"|"Midpoint"},
-    element SolveBeginTime {duration_int},
-    element SolveBeginYear {duration_int},
-    element SolveEndTime {duration_int},
-    element SolveEndYear {duration_int},
-    element SolveFromWhich {mcenum_from_point},
-    element SolveSeparateAccountBasis {"Hypothetical"
+                                      |"PmtTable"}
+    ,element IndividualPaymentToAge           {age_int}
+    ,element IndividualPaymentToAlternative   {mcenum_to_point}
+    ,element IndividualPaymentToDuration      {duration_int}
+    ,element InforceAsOfDate                  {calendar_date_int}
+    ,element InforceAvBeforeLastMc            {nonnegative_double}
+    ,element InforceContractMonth             {month_int}
+    ,element InforceContractYear              {duration_int}
+    ,element InforceCumulativeGlp             {nonnegative_double}
+    ,element InforceCumulativeNoLapsePremium  {nonnegative_double}
+    ,element InforceCumulativePayments        {nonnegative_double}
+    ,element InforceDcv                       {nonnegative_double}
+    ,element InforceGeneralAccountValue       {nonnegative_double}
+    ,element InforceGlp                       {nonnegative_double}
+    ,element InforceGsp                       {nonnegative_double}
+    ,element InforceHoneymoonValue            {nonnegative_double}
+    ,element InforceIsMec                     {lmibool}
+    ,element InforceLeastDeathBenefit         {nonnegative_double}
+    ,element InforceMonth                     {month_int}
+    ,element InforceNetExperienceReserve      {xsd:double}
+    ,element InforcePreferredLoanBalance      {nonnegative_double}
+    ,element InforcePreferredLoanValue        {nonnegative_double}
+    ,element InforceRegularLoanBalance        {nonnegative_double}
+    ,element InforceRegularLoanValue          {nonnegative_double}
+    ,element InforceSeparateAccountValue      {nonnegative_double}
+    ,element InforceSevenPayPremium           {nonnegative_double}
+    ,element InforceTaxBasis                  {nonnegative_double}
+    ,element InforceYear                      {duration_int}
+    ,element InforceYtdNetCoiCharge           {nonnegative_double}
+    ,element InputFundManagementFee           {nonnegative_double}
+    ,element InsuredName                      {text}
+    ,element InsuredPremiumTableFactor        {nonnegative_double}
+    ,element Internal1035ExchangeAmount       {nonnegative_double}
+    ,element Internal1035ExchangeBasis        {nonnegative_double}
+    ,element Internal1035ExchangeFromMec      {lmibool}
+    ,element IssueAge                         {age_int}
+    ,element LastCoiReentryDate               {calendar_date_int}
+    ,element LastMaterialChangeDate           {calendar_date_int}
+    ,element LoanAmount                       {nonnegative_double}
+    ,element LoanFromAge                      {age_int}
+    ,element LoanFromAlternative              {mcenum_from_point}
+    ,element LoanFromDuration                 {duration_int}
+    ,element LoanRate                         {proportion_double}
+    ,element LoanRateType                     {"Fixed loan rate"|"Variable loan rate"}
+    ,element LoanToAge                        {age_int}
+    ,element LoanToAlternative                {mcenum_to_point}
+    ,element LoanToDuration                   {duration_int}
+    ,element MaleProportion                   {proportion_double}
+    ,element MaximumNaar                      {nonnegative_double}
+    ,element NewLoan                          {numeric_sequence}
+    ,element NonsmokerProportion              {proportion_double}
+    ,element NumberOfIdenticalLives           {xsd:nonNegativeInteger}
+    ,element OverrideCoiMultiplier            {lmibool}
+    ,element OverrideExperienceReserveRate    {lmibool}
+    ,element OverrideFundManagementFee        {lmibool}
+    ,element PartialMortalityMultiplier       {numeric_sequence}
+    ,element Payment                          {payment_sequence}
+    ,element PaymentMode                      {mode_sequence}
+    ,element PolicyNumber                     {text}
+    ,element PostHoneymoonSpread              {proportion_double}
+    ,element PremiumHistory                   {numeric_sequence}
+    ,element PremiumTaxState                  {mcenum_state}
+    # Enumerators for 'ProductName' depend on run-time context.
+    ,element ProductName                      {text}
+    ,element ProjectedSalary                  {numeric_sequence}
+    ,element RetireesCanEnroll                {lmibool}
+    ,element RetirementAge                    {age_int}
+    ,element RunOrder                         {"Life by life"|"Month by month"}
+    ,element SalarySpecifiedAmountCap         {nonnegative_double}
+    ,element SalarySpecifiedAmountFactor      {nonnegative_double}
+    ,element SalarySpecifiedAmountOffset      {nonnegative_double}
+    ,element SeparateAccountRate              {numeric_sequence}
+    ,element SeparateAccountRateType          {"Net rate"|"Gross rate"}
+    ,element Smoking                          {"Smoker"|"Nonsmoker"|"Unismoke"}
+    ,element SolveBasis                       {"Current"|"Guaranteed"|"Midpoint"}
+    ,element SolveBeginTime                   {duration_int}
+    ,element SolveBeginYear                   {duration_int}
+    ,element SolveEndTime                     {duration_int}
+    ,element SolveEndYear                     {duration_int}
+    ,element SolveFromWhich                   {mcenum_from_point}
+    ,element SolveSeparateAccountBasis        {"Hypothetical"
                                       |"Zero"
-                                      |"Half of hypothetical"},
-    element SolveTarget {"Endowment"
+                                      |"Half of hypothetical"}
+    ,element SolveTarget                      {"Endowment"
                         |"Target CSV"
                         |"CSV = tax basis"
-                        |"Avoid MEC"},
-    element SolveTargetCashSurrenderValue {nonnegative_double},
-    element SolveTargetTime {duration_int},
-    element SolveTargetYear {duration_int},
-    element SolveTgtAtWhich {mcenum_to_point},
-    element SolveToWhich {mcenum_to_point},
-    element SolveType {"No solve"
+                        |"Avoid MEC"}
+    ,element SolveTargetCashSurrenderValue    {nonnegative_double}
+    ,element SolveTargetTime                  {duration_int}
+    ,element SolveTargetYear                  {duration_int}
+    ,element SolveTgtAtWhich                  {mcenum_to_point}
+    ,element SolveToWhich                     {mcenum_to_point}
+    ,element SolveType                        {"No solve"
                       |"Specified amount"
                       |"Employee premium"
                       |"Employer premium"
                       |"Loan"
-                      |"Withdrawal"},
-    element SpecamtHistory {numeric_sequence},
-    element SpecifiedAmount {specamt_sequence},
-    element SpecifiedAmountFromIssue {nonnegative_double},
-    element SpecifiedAmountFromRetirement {nonnegative_double},
-    element SpecifiedAmountStrategyFromIssue {"SAInputScalar"
+                      |"Withdrawal"}
+    ,element SpecamtHistory                   {numeric_sequence}
+    ,element SpecifiedAmount                  {specamt_sequence}
+    ,element SpecifiedAmountFromIssue         {nonnegative_double}
+    ,element SpecifiedAmountFromRetirement    {nonnegative_double}
+    ,element SpecifiedAmountStrategyFromIssue {"SAInputScalar"
                                              |"SAMaximum"
                                              |"SATarget"
                                              |"SAMEP"
                                              |"SAGLP"
                                              |"SAGSP"
                                              |"SACorridor"
-                                             |"SASalary"},
-    element SpouseIssueAge {age_int},
-    element SpouseRider {lmibool},
-    element SpouseRiderAmount {nonnegative_double},
-    element State {mcenum_state},
-    element StateOfJurisdiction {mcenum_state},
-    element SubstandardTable {"None"
+                                             |"SASalary"}
+    ,element SpouseIssueAge                   {age_int}
+    ,element SpouseRider                      {lmibool}
+    ,element SpouseRiderAmount                {nonnegative_double}
+    ,element State                            {mcenum_state}
+    ,element StateOfJurisdiction              {mcenum_state}
+    ,element SubstandardTable                 {"None"
                              |"A=+25%"
                              |"B=+50%"
                              |"C=+75%"
@@ -235,79 +234,80 @@ element cell {
                              |"H=+200%"
                              |"J=+250%"
                              |"L=+300%"
-                             |"P=+400%"},
-    element SupplementalReportColumn00 {mcenum_report_column},
-    element SupplementalReportColumn01 {mcenum_report_column},
-    element SupplementalReportColumn02 {mcenum_report_column},
-    element SupplementalReportColumn03 {mcenum_report_column},
-    element SupplementalReportColumn04 {mcenum_report_column},
-    element SupplementalReportColumn05 {mcenum_report_column},
-    element SupplementalReportColumn06 {mcenum_report_column},
-    element SupplementalReportColumn07 {mcenum_report_column},
-    element SupplementalReportColumn08 {mcenum_report_column},
-    element SupplementalReportColumn09 {mcenum_report_column},
-    element SupplementalReportColumn10 {mcenum_report_column},
-    element SupplementalReportColumn11 {mcenum_report_column},
-    element SurviveToAge {age_int},
-    element SurviveToType {"No survival limit"
+                             |"P=+400%"}
+    ,element SupplementalReportColumn00       {mcenum_report_column}
+    ,element SupplementalReportColumn01       {mcenum_report_column}
+    ,element SupplementalReportColumn02       {mcenum_report_column}
+    ,element SupplementalReportColumn03       {mcenum_report_column}
+    ,element SupplementalReportColumn04       {mcenum_report_column}
+    ,element SupplementalReportColumn05       {mcenum_report_column}
+    ,element SupplementalReportColumn06       {mcenum_report_column}
+    ,element SupplementalReportColumn07       {mcenum_report_column}
+    ,element SupplementalReportColumn08       {mcenum_report_column}
+    ,element SupplementalReportColumn09       {mcenum_report_column}
+    ,element SupplementalReportColumn10       {mcenum_report_column}
+    ,element SupplementalReportColumn11       {mcenum_report_column}
+    ,element SurviveToAge                     {age_int}
+    ,element SurviveToType                    {"No survival limit"
                           |"Survive to age limit"
                           |"Survive to duration limit"
-                          |"Survive to life expectancy"},
-    element SurviveToYear {duration_int},
-    element TaxBracket {numeric_sequence},
-    element TermAdjustmentMethod {"Adjust base first"
+                          |"Survive to life expectancy"}
+    ,element SurviveToYear                    {duration_int}
+    ,element TaxBracket                       {numeric_sequence}
+    ,element TermAdjustmentMethod             {"Adjust base first"
                                  |"Adjust term first"
-                                 |"Adjust base and term proportionately"},
-    element TermRider {lmibool},
-    element TermRiderAmount {nonnegative_double},
-    element TermRiderProportion {proportion_double},
-    element TermRiderUseProportion {lmibool},
-    element TotalSpecifiedAmount {nonnegative_double},
-    element UnderwritingClass {"Preferred"|"Standard"|"Rated"|"Ultra"},
-    element UseAverageOfAllFunds {lmibool},
-    element UseCurrentDeclaredRate {lmibool},
-    element UseDOB {lmibool},
-    element UseExperienceRating {lmibool},
-    element UsePartialMortality {lmibool},
-    element WaiverOfPremiumBenefit {lmibool},
-    element WithdrawToBasisThenLoan {lmibool},
-    element Withdrawal {numeric_sequence},
-    element WithdrawalAmount {nonnegative_double},
-    element WithdrawalFromAge {age_int},
-    element WithdrawalFromAlternative {mcenum_from_point},
-    element WithdrawalFromDuration {duration_int},
-    element WithdrawalToAge {age_int},
-    element WithdrawalToAlternative {mcenum_to_point},
-    element WithdrawalToDuration {duration_int},
-    element ZipCode {text}
-}
+                                 |"Adjust base and term proportionately"}
+    ,element TermRider                        {lmibool}
+    ,element TermRiderAmount                  {nonnegative_double}
+    ,element TermRiderProportion              {proportion_double}
+    ,element TermRiderUseProportion           {lmibool}
+    ,element TotalSpecifiedAmount             {nonnegative_double}
+    ,element UnderwritingClass                {"Preferred"|"Standard"|"Rated"|"Ultra"}
+    ,element UseAverageOfAllFunds             {lmibool}
+    ,element UseCurrentDeclaredRate           {lmibool}
+    ,element UseDOB                           {lmibool}
+    ,element UseExperienceRating              {lmibool}
+    ,element UsePartialMortality              {lmibool}
+    ,element WaiverOfPremiumBenefit           {lmibool}
+    ,element WithdrawToBasisThenLoan          {lmibool}
+    ,element Withdrawal                       {numeric_sequence}
+    ,element WithdrawalAmount                 {nonnegative_double}
+    ,element WithdrawalFromAge                {age_int}
+    ,element WithdrawalFromAlternative        {mcenum_from_point}
+    ,element WithdrawalFromDuration           {duration_int}
+    ,element WithdrawalToAge                  {age_int}
+    ,element WithdrawalToAlternative          {mcenum_to_point}
+    ,element WithdrawalToDuration             {duration_int}
+    ,element ZipCode                          {text}
+    }
 
 lmibool = "Yes"|"No"
 
-# We cannot validate the sequences better without a parser; simple regex
-# pattern wouldn't cover them.
+# It is infeasible to validate an input sequence with a regex.
+
 numeric_sequence = text
 payment_sequence = text
-mode_sequence = text
-dbo_sequence = text
+mode_sequence    = text
+dbo_sequence     = text
 specamt_sequence = text
 
-# Various tn_range types:
-nonnegative_double = xsd:double { minInclusive = "0" }
-proportion_double = xsd:double {
-                        minInclusive = "0"
-                        maxInclusive = "1"
-                    }
-calendar_date_int = xsd:nonNegativeInteger {
-                        minInclusive = "2361222" # gregorian_epoch_jdn
-                        maxInclusive = "5373484" # last_yyyy_date_jdn
-                    }
-age_int = xsd:nonNegativeInteger { maxInclusive = "99" }
-duration_int = xsd:nonNegativeInteger { maxInclusive = "100" }
-month_int = xsd:nonNegativeInteger { maxInclusive = "11" }
+# Numeric-range types.
 
-# Enumerations that are used more than once in the schema or are too big to be
-# defined inline:
+nonnegative_double = xsd:double             {minInclusive = "0"                               }
+
+proportion_double  = xsd:double             {minInclusive = "0"       maxInclusive = "1"      }
+
+# Calendar-date bounds: [1752-09-14, 9999-12-31]
+calendar_date_int  = xsd:nonNegativeInteger {minInclusive = "2361222" maxInclusive = "5373484"}
+
+age_int            = xsd:nonNegativeInteger {                         maxInclusive = "99"     }
+
+duration_int       = xsd:nonNegativeInteger {                         maxInclusive = "100"    }
+
+month_int          = xsd:nonNegativeInteger {                         maxInclusive = "11"     }
+
+# Enumerations.
+
 mcenum_to_point = "Retirement"|"Year"|"Age"|"Maturity"
 
 mcenum_from_point = "Issue"|"Year"|"Age"|"Retirement"
