@@ -38,7 +38,7 @@ jar_dir=/opt/lmi/third_party/rng
 
 # Data for testing.
 
-cp --preserve --update $src_dir/sample.cns $src_dir/sample.ill .
+cp --preserve $src_dir/sample.cns $src_dir/sample.ill .
 
 # Primary schemata (RNC: RELAX NG, compact syntax).
 #
@@ -48,7 +48,7 @@ cp --preserve --update $src_dir/sample.cns $src_dir/sample.ill .
 #
 # Only RNC is to be edited; XSD and RNG are generated from it.
 
-cp --preserve --update $src_dir/cell.rnc $src_dir/multiple_cell_document.rnc $src_dir/single_cell_document.rnc .
+cp --preserve $src_dir/cell.rnc $src_dir/multiple_cell_document.rnc $src_dir/single_cell_document.rnc .
 
 # Test RNC files with 'jing'.
 
@@ -64,7 +64,7 @@ java -jar $jar_dir/jing.jar -c single_cell_document.rnc   sample.ill
 # XSD, generated from RNG, is stored in the repository because it's
 # widely used.
 
-cp --preserve --update $src_dir/cell.xsd $src_dir/multiple_cell_document.xsd $src_dir/single_cell_document.xsd .
+cp --preserve $src_dir/cell.xsd $src_dir/multiple_cell_document.xsd $src_dir/single_cell_document.xsd .
 
 # Test XSD files with 'jing'.
 
