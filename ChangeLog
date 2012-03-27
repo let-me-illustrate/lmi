@@ -29936,3 +29936,38 @@ Accommodate 'RiderCharges' added 20120310T2257Z.
   version.hpp
 Designate release candidate.
 
+20120325T1232Z <gchicares@sbcglobal.net> [573]
+
+  mc_enum_types.xpp
+Improve concinnity, so that this command:
+  sed -e'/_NAMES/,/};/!d' -e's/ \\$//;s/_NAMES/ =/;s/{/  /' \
+      -e 's/ *};//;s/#define //;s/^    ,/    | /;s/,  / | /g'
+can be used to generate enumerations for 'cell.rnc'.
+
+20120326T1059Z <gchicares@sbcglobal.net> [573]
+
+  test_schemata.sh
+Copy files from working directory to /tmp even if they are older.
+
+20120326T1231Z <gchicares@sbcglobal.net> [573]
+
+  cell.rnc
+  cell.xsd
+  multiple_cell_document.rnc
+  single_cell_document.rnc
+Reformat; improve documentation. Translating RNG to XSD with 'trang'
+can mangle commentary, e.g., changing this:
+  minInclusive = "2361222" # gregorian_epoch_jdn
+  maxInclusive = "5373484" # last_yyyy_date_jdn
+to the single line
+  <!-- last_yyyy_date_jdn -->
+inscrutably following the definition of the calendar-date type.
+
+20120327T1222Z <gchicares@sbcglobal.net> [573]
+
+  cell.rnc
+  cell.xsd
+  test_schemata.sh
+Regenerate enumerations, using the technique described 20120325T1232Z.
+This makes it easier to annotate them.
+
