@@ -121,7 +121,7 @@ http://www.w3.org/TR/xml-schema-1#cvc-complex-type.2.4.a?StateOfJurisdictionMang
 Element 'InforceDcv': [facet 'minInclusive'] The value '-12345.67' is less than the minimum value allowed ('0').
 Element 'InforceDcv': '-12345.67' is not a valid value of the atomic type 'nonnegative_double'.
 Element 'PremiumTaxState': [facet 'enumeration'] The value 'FC' is not an element of the set {'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'PR', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY', 'XX'}.
-Element 'PremiumTaxState': 'FC' is not a valid value of the atomic type 'mcenum_state'.
+Element 'PremiumTaxState': 'FC' is not a valid value of the atomic type 'state'.
 Element 'StateOfJurisdictionMangledTag': This element is not expected. Expected is ( StateOfJurisdiction ).
 sample_bad fails to validate
   invalid input, jing, .rng:
