@@ -1,0 +1,1050 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <!--
+    RELAX NG schema for a single cell (class Input).
+
+    Copyright (C) 2012 Gregory W. Chicares.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 2 as
+    published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software Foundation,
+    Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+
+    http://savannah.nongnu.org/projects/lmi
+    email: <gchicares@sbcglobal.net>
+    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+  -->
+  <!-- $Id$ -->
+  <!--
+    This schema is meant not for standalone use, but rather for
+    inclusion from other schemata.
+  -->
+  <xs:complexType name="cell_element">
+    <xs:sequence>
+      <xs:element ref="cell"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="cell">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="AccidentalDeathBenefit"/>
+        <xs:element ref="Address"/>
+        <xs:element ref="AgentAddress"/>
+        <xs:element ref="AgentCity"/>
+        <xs:element ref="AgentId"/>
+        <xs:element ref="AgentName"/>
+        <xs:element ref="AgentPhone"/>
+        <xs:element ref="AgentState"/>
+        <xs:element ref="AgentZipCode"/>
+        <xs:element ref="AmortizePremiumLoad"/>
+        <xs:element ref="AvoidMecMethod"/>
+        <xs:element ref="BlendGender"/>
+        <xs:element ref="BlendSmoking"/>
+        <xs:element ref="CashValueEnhancementRate"/>
+        <xs:element ref="ChildRider"/>
+        <xs:element ref="ChildRiderAmount"/>
+        <xs:element ref="City"/>
+        <xs:element ref="Comments"/>
+        <xs:element ref="CorporationAddress"/>
+        <xs:element ref="CorporationCity"/>
+        <xs:element ref="CorporationName"/>
+        <xs:element ref="CorporationPayment"/>
+        <xs:element ref="CorporationPaymentMode"/>
+        <xs:element ref="CorporationPremiumTableFactor"/>
+        <xs:element ref="CorporationState"/>
+        <xs:element ref="CorporationTaxBracket"/>
+        <xs:element ref="CorporationZipCode"/>
+        <xs:element ref="Country"/>
+        <xs:element ref="CountryCoiMultiplier"/>
+        <xs:element ref="CreateSupplementalReport"/>
+        <xs:element ref="CurrentCoiMultiplier"/>
+        <xs:element ref="DateOfBirth"/>
+        <xs:element ref="DeathBenefitOption"/>
+        <xs:element ref="DeathBenefitOptionFromIssue"/>
+        <xs:element ref="DeathBenefitOptionFromRetirement"/>
+        <xs:element ref="DefinitionOfLifeInsurance"/>
+        <xs:element ref="DefinitionOfMaterialChange"/>
+        <xs:element ref="Dumpin"/>
+        <xs:element ref="EffectiveDate"/>
+        <xs:element ref="EffectiveDateToday"/>
+        <xs:element ref="EmployeeClass"/>
+        <xs:element ref="ExperienceRatingInitialKFactor"/>
+        <xs:element ref="ExperienceReserveRate"/>
+        <xs:element ref="External1035ExchangeAmount"/>
+        <xs:element ref="External1035ExchangeBasis"/>
+        <xs:element ref="External1035ExchangeFromMec"/>
+        <xs:element ref="ExtraCompensationOnAssets"/>
+        <xs:element ref="ExtraCompensationOnPremium"/>
+        <xs:element ref="ExtraMonthlyCustodialFee"/>
+        <xs:element ref="FlatExtra"/>
+        <xs:element ref="Franchise"/>
+        <xs:element ref="FundAllocations"/>
+        <xs:element ref="FundChoiceType"/>
+        <xs:element ref="Gender"/>
+        <xs:element ref="GeneralAccountRate"/>
+        <xs:element ref="GeneralAccountRateType"/>
+        <xs:element ref="GroupUnderwritingType"/>
+        <xs:element ref="HoneymoonEndorsement"/>
+        <xs:element ref="HoneymoonValueSpread"/>
+        <xs:element ref="IncludeInComposite"/>
+        <xs:element ref="IndividualPaymentAmount"/>
+        <xs:element ref="IndividualPaymentMode"/>
+        <xs:element ref="IndividualPaymentStrategy"/>
+        <xs:element ref="IndividualPaymentToAge"/>
+        <xs:element ref="IndividualPaymentToAlternative"/>
+        <xs:element ref="IndividualPaymentToDuration"/>
+        <xs:element ref="InforceAsOfDate"/>
+        <xs:element ref="InforceAvBeforeLastMc"/>
+        <xs:element ref="InforceContractMonth"/>
+        <xs:element ref="InforceContractYear"/>
+        <xs:element ref="InforceCumulativeGlp"/>
+        <xs:element ref="InforceCumulativeNoLapsePremium"/>
+        <xs:element ref="InforceCumulativePayments"/>
+        <xs:element ref="InforceDcv"/>
+        <xs:element ref="InforceGeneralAccountValue"/>
+        <xs:element ref="InforceGlp"/>
+        <xs:element ref="InforceGsp"/>
+        <xs:element ref="InforceHoneymoonValue"/>
+        <xs:element ref="InforceIsMec"/>
+        <xs:element ref="InforceLeastDeathBenefit"/>
+        <xs:element ref="InforceMonth"/>
+        <xs:element ref="InforceNetExperienceReserve"/>
+        <xs:element ref="InforcePreferredLoanBalance"/>
+        <xs:element ref="InforcePreferredLoanValue"/>
+        <xs:element ref="InforceRegularLoanBalance"/>
+        <xs:element ref="InforceRegularLoanValue"/>
+        <xs:element ref="InforceSeparateAccountValue"/>
+        <xs:element ref="InforceSevenPayPremium"/>
+        <xs:element ref="InforceTaxBasis"/>
+        <xs:element ref="InforceYear"/>
+        <xs:element ref="InforceYtdNetCoiCharge"/>
+        <xs:element ref="InputFundManagementFee"/>
+        <xs:element ref="InsuredName"/>
+        <xs:element ref="InsuredPremiumTableFactor"/>
+        <xs:element ref="Internal1035ExchangeAmount"/>
+        <xs:element ref="Internal1035ExchangeBasis"/>
+        <xs:element ref="Internal1035ExchangeFromMec"/>
+        <xs:element ref="IssueAge"/>
+        <xs:element ref="LastCoiReentryDate"/>
+        <xs:element ref="LastMaterialChangeDate"/>
+        <xs:element ref="LoanAmount"/>
+        <xs:element ref="LoanFromAge"/>
+        <xs:element ref="LoanFromAlternative"/>
+        <xs:element ref="LoanFromDuration"/>
+        <xs:element ref="LoanRate"/>
+        <xs:element ref="LoanRateType"/>
+        <xs:element ref="LoanToAge"/>
+        <xs:element ref="LoanToAlternative"/>
+        <xs:element ref="LoanToDuration"/>
+        <xs:element ref="MaleProportion"/>
+        <xs:element ref="MaximumNaar"/>
+        <xs:element ref="NewLoan"/>
+        <xs:element ref="NonsmokerProportion"/>
+        <xs:element ref="NumberOfIdenticalLives"/>
+        <xs:element ref="OverrideCoiMultiplier"/>
+        <xs:element ref="OverrideExperienceReserveRate"/>
+        <xs:element ref="OverrideFundManagementFee"/>
+        <xs:element ref="PartialMortalityMultiplier"/>
+        <xs:element ref="Payment"/>
+        <xs:element ref="PaymentMode"/>
+        <xs:element ref="PolicyNumber"/>
+        <xs:element ref="PostHoneymoonSpread"/>
+        <xs:element ref="PremiumHistory"/>
+        <xs:element ref="PremiumTaxState"/>
+        <xs:element ref="ProductName"/>
+        <xs:element ref="ProjectedSalary"/>
+        <xs:element ref="RetireesCanEnroll"/>
+        <xs:element ref="RetirementAge"/>
+        <xs:element ref="RunOrder"/>
+        <xs:element ref="SalarySpecifiedAmountCap"/>
+        <xs:element ref="SalarySpecifiedAmountFactor"/>
+        <xs:element ref="SalarySpecifiedAmountOffset"/>
+        <xs:element ref="SeparateAccountRate"/>
+        <xs:element ref="SeparateAccountRateType"/>
+        <xs:element ref="Smoking"/>
+        <xs:element ref="SolveBasis"/>
+        <xs:element ref="SolveBeginTime"/>
+        <xs:element ref="SolveBeginYear"/>
+        <xs:element ref="SolveEndTime"/>
+        <xs:element ref="SolveEndYear"/>
+        <xs:element ref="SolveFromWhich"/>
+        <xs:element ref="SolveSeparateAccountBasis"/>
+        <xs:element ref="SolveTarget"/>
+        <xs:element ref="SolveTargetCashSurrenderValue"/>
+        <xs:element ref="SolveTargetTime"/>
+        <xs:element ref="SolveTargetYear"/>
+        <xs:element ref="SolveTgtAtWhich"/>
+        <xs:element ref="SolveToWhich"/>
+        <xs:element ref="SolveType"/>
+        <xs:element ref="SpecamtHistory"/>
+        <xs:element ref="SpecifiedAmount"/>
+        <xs:element ref="SpecifiedAmountFromIssue"/>
+        <xs:element ref="SpecifiedAmountFromRetirement"/>
+        <xs:element ref="SpecifiedAmountStrategyFromIssue"/>
+        <xs:element ref="SpouseIssueAge"/>
+        <xs:element ref="SpouseRider"/>
+        <xs:element ref="SpouseRiderAmount"/>
+        <xs:element ref="State"/>
+        <xs:element ref="StateOfJurisdiction"/>
+        <xs:element ref="SubstandardTable"/>
+        <xs:element ref="SupplementalReportColumn00"/>
+        <xs:element ref="SupplementalReportColumn01"/>
+        <xs:element ref="SupplementalReportColumn02"/>
+        <xs:element ref="SupplementalReportColumn03"/>
+        <xs:element ref="SupplementalReportColumn04"/>
+        <xs:element ref="SupplementalReportColumn05"/>
+        <xs:element ref="SupplementalReportColumn06"/>
+        <xs:element ref="SupplementalReportColumn07"/>
+        <xs:element ref="SupplementalReportColumn08"/>
+        <xs:element ref="SupplementalReportColumn09"/>
+        <xs:element ref="SupplementalReportColumn10"/>
+        <xs:element ref="SupplementalReportColumn11"/>
+        <xs:element ref="SurviveToAge"/>
+        <xs:element ref="SurviveToType"/>
+        <xs:element ref="SurviveToYear"/>
+        <xs:element ref="TaxBracket"/>
+        <xs:element ref="TermAdjustmentMethod"/>
+        <xs:element ref="TermRider"/>
+        <xs:element ref="TermRiderAmount"/>
+        <xs:element ref="TermRiderProportion"/>
+        <xs:element ref="TermRiderUseProportion"/>
+        <xs:element ref="TotalSpecifiedAmount"/>
+        <xs:element ref="UnderwritingClass"/>
+        <xs:element ref="UseAverageOfAllFunds"/>
+        <xs:element ref="UseCurrentDeclaredRate"/>
+        <xs:element ref="UseDOB"/>
+        <xs:element ref="UseExperienceRating"/>
+        <xs:element ref="UsePartialMortality"/>
+        <xs:element ref="WaiverOfPremiumBenefit"/>
+        <xs:element ref="WithdrawToBasisThenLoan"/>
+        <xs:element ref="Withdrawal"/>
+        <xs:element ref="WithdrawalAmount"/>
+        <xs:element ref="WithdrawalFromAge"/>
+        <xs:element ref="WithdrawalFromAlternative"/>
+        <xs:element ref="WithdrawalFromDuration"/>
+        <xs:element ref="WithdrawalToAge"/>
+        <xs:element ref="WithdrawalToAlternative"/>
+        <xs:element ref="WithdrawalToDuration"/>
+        <xs:element ref="ZipCode"/>
+      </xs:sequence>
+      <xs:attribute name="version" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="6"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AccidentalDeathBenefit" type="yes_or_no"/>
+  <xs:element name="Address" type="xs:string"/>
+  <xs:element name="AgentAddress" type="xs:string"/>
+  <xs:element name="AgentCity" type="xs:string"/>
+  <xs:element name="AgentId" type="xs:string"/>
+  <xs:element name="AgentName" type="xs:string"/>
+  <xs:element name="AgentPhone" type="xs:string"/>
+  <xs:element name="AgentState" type="state"/>
+  <xs:element name="AgentZipCode" type="xs:string"/>
+  <xs:element name="AmortizePremiumLoad" type="yes_or_no"/>
+  <xs:element name="AvoidMecMethod" type="mec_avoid_method"/>
+  <xs:element name="BlendGender" type="yes_or_no"/>
+  <xs:element name="BlendSmoking" type="yes_or_no"/>
+  <xs:element name="CashValueEnhancementRate" type="xs:string"/>
+  <xs:element name="ChildRider" type="yes_or_no"/>
+  <xs:element name="ChildRiderAmount" type="nonnegative_double"/>
+  <xs:element name="City" type="xs:string"/>
+  <xs:element name="Comments" type="xs:string"/>
+  <xs:element name="CorporationAddress" type="xs:string"/>
+  <xs:element name="CorporationCity" type="xs:string"/>
+  <xs:element name="CorporationName" type="xs:string"/>
+  <xs:element name="CorporationPayment" type="xs:string"/>
+  <xs:element name="CorporationPaymentMode" type="xs:string"/>
+  <xs:element name="CorporationPremiumTableFactor" type="nonnegative_double"/>
+  <xs:element name="CorporationState" type="state"/>
+  <xs:element name="CorporationTaxBracket" type="xs:string"/>
+  <xs:element name="CorporationZipCode" type="xs:string"/>
+  <xs:element name="Country" type="country"/>
+  <xs:element name="CountryCoiMultiplier" type="nonnegative_double"/>
+  <xs:element name="CreateSupplementalReport" type="yes_or_no"/>
+  <xs:element name="CurrentCoiMultiplier" type="xs:string"/>
+  <xs:element name="DateOfBirth" type="calendar_date_int"/>
+  <xs:element name="DeathBenefitOption" type="xs:string"/>
+  <xs:element name="DeathBenefitOptionFromIssue" type="dbopt"/>
+  <xs:element name="DeathBenefitOptionFromRetirement" type="dbopt"/>
+  <xs:element name="DefinitionOfLifeInsurance" type="defn_life_ins"/>
+  <xs:element name="DefinitionOfMaterialChange" type="defn_material_change"/>
+  <xs:element name="Dumpin" type="nonnegative_double"/>
+  <xs:element name="EffectiveDate" type="calendar_date_int"/>
+  <xs:element name="EffectiveDateToday" type="yes_or_no"/>
+  <xs:element name="EmployeeClass" type="xs:string"/>
+  <xs:element name="ExperienceRatingInitialKFactor" type="nonnegative_double"/>
+  <xs:element name="ExperienceReserveRate" type="proportion_double"/>
+  <xs:element name="External1035ExchangeAmount" type="nonnegative_double"/>
+  <xs:element name="External1035ExchangeBasis" type="nonnegative_double"/>
+  <xs:element name="External1035ExchangeFromMec" type="yes_or_no"/>
+  <xs:element name="ExtraCompensationOnAssets" type="xs:string"/>
+  <xs:element name="ExtraCompensationOnPremium" type="xs:string"/>
+  <xs:element name="ExtraMonthlyCustodialFee" type="xs:string"/>
+  <xs:element name="FlatExtra" type="xs:string"/>
+  <xs:element name="Franchise" type="xs:string"/>
+  <xs:element name="FundAllocations" type="xs:string"/>
+  <xs:element name="FundChoiceType" type="fund_input_method"/>
+  <xs:element name="Gender" type="gender"/>
+  <xs:element name="GeneralAccountRate" type="xs:string"/>
+  <xs:element name="GeneralAccountRateType" type="gen_acct_rate_type"/>
+  <xs:element name="GroupUnderwritingType" type="uw_basis"/>
+  <xs:element name="HoneymoonEndorsement" type="yes_or_no"/>
+  <xs:element name="HoneymoonValueSpread" type="xs:string"/>
+  <xs:element name="IncludeInComposite" type="yes_or_no"/>
+  <xs:element name="IndividualPaymentAmount" type="nonnegative_double"/>
+  <xs:element name="IndividualPaymentMode" type="mode"/>
+  <xs:element name="IndividualPaymentStrategy" type="pmt_strategy"/>
+  <xs:element name="IndividualPaymentToAge" type="age_int"/>
+  <xs:element name="IndividualPaymentToAlternative" type="to_point"/>
+  <xs:element name="IndividualPaymentToDuration" type="duration_int"/>
+  <xs:element name="InforceAsOfDate" type="calendar_date_int"/>
+  <xs:element name="InforceAvBeforeLastMc" type="nonnegative_double"/>
+  <xs:element name="InforceContractMonth" type="month_int"/>
+  <xs:element name="InforceContractYear" type="duration_int"/>
+  <xs:element name="InforceCumulativeGlp" type="nonnegative_double"/>
+  <xs:element name="InforceCumulativeNoLapsePremium" type="nonnegative_double"/>
+  <xs:element name="InforceCumulativePayments" type="nonnegative_double"/>
+  <xs:element name="InforceDcv" type="nonnegative_double"/>
+  <xs:element name="InforceGeneralAccountValue" type="nonnegative_double"/>
+  <xs:element name="InforceGlp" type="nonnegative_double"/>
+  <xs:element name="InforceGsp" type="nonnegative_double"/>
+  <xs:element name="InforceHoneymoonValue" type="nonnegative_double"/>
+  <xs:element name="InforceIsMec" type="yes_or_no"/>
+  <xs:element name="InforceLeastDeathBenefit" type="nonnegative_double"/>
+  <xs:element name="InforceMonth" type="month_int"/>
+  <xs:element name="InforceNetExperienceReserve" type="xs:double"/>
+  <xs:element name="InforcePreferredLoanBalance" type="nonnegative_double"/>
+  <xs:element name="InforcePreferredLoanValue" type="nonnegative_double"/>
+  <xs:element name="InforceRegularLoanBalance" type="nonnegative_double"/>
+  <xs:element name="InforceRegularLoanValue" type="nonnegative_double"/>
+  <xs:element name="InforceSeparateAccountValue" type="nonnegative_double"/>
+  <xs:element name="InforceSevenPayPremium" type="nonnegative_double"/>
+  <xs:element name="InforceTaxBasis" type="nonnegative_double"/>
+  <xs:element name="InforceYear" type="duration_int"/>
+  <xs:element name="InforceYtdNetCoiCharge" type="nonnegative_double"/>
+  <xs:element name="InputFundManagementFee" type="nonnegative_double"/>
+  <xs:element name="InsuredName" type="xs:string"/>
+  <xs:element name="InsuredPremiumTableFactor" type="nonnegative_double"/>
+  <xs:element name="Internal1035ExchangeAmount" type="nonnegative_double"/>
+  <xs:element name="Internal1035ExchangeBasis" type="nonnegative_double"/>
+  <xs:element name="Internal1035ExchangeFromMec" type="yes_or_no"/>
+  <xs:element name="IssueAge" type="age_int"/>
+  <xs:element name="LastCoiReentryDate" type="calendar_date_int"/>
+  <xs:element name="LastMaterialChangeDate" type="calendar_date_int"/>
+  <xs:element name="LoanAmount" type="nonnegative_double"/>
+  <xs:element name="LoanFromAge" type="age_int"/>
+  <xs:element name="LoanFromAlternative" type="from_point"/>
+  <xs:element name="LoanFromDuration" type="duration_int"/>
+  <xs:element name="LoanRate" type="proportion_double"/>
+  <xs:element name="LoanRateType" type="loan_rate_type"/>
+  <xs:element name="LoanToAge" type="age_int"/>
+  <xs:element name="LoanToAlternative" type="to_point"/>
+  <xs:element name="LoanToDuration" type="duration_int"/>
+  <xs:element name="MaleProportion" type="proportion_double"/>
+  <xs:element name="MaximumNaar" type="nonnegative_double"/>
+  <xs:element name="NewLoan" type="xs:string"/>
+  <xs:element name="NonsmokerProportion" type="proportion_double"/>
+  <xs:element name="NumberOfIdenticalLives" type="xs:nonNegativeInteger"/>
+  <xs:element name="OverrideCoiMultiplier" type="yes_or_no"/>
+  <xs:element name="OverrideExperienceReserveRate" type="yes_or_no"/>
+  <xs:element name="OverrideFundManagementFee" type="yes_or_no"/>
+  <xs:element name="PartialMortalityMultiplier" type="xs:string"/>
+  <xs:element name="Payment" type="xs:string"/>
+  <xs:element name="PaymentMode" type="xs:string"/>
+  <xs:element name="PolicyNumber" type="xs:string"/>
+  <xs:element name="PostHoneymoonSpread" type="proportion_double"/>
+  <xs:element name="PremiumHistory" type="xs:string"/>
+  <xs:element name="PremiumTaxState" type="state"/>
+  <xs:element name="ProductName" type="xs:string"/>
+  <xs:element name="ProjectedSalary" type="xs:string"/>
+  <xs:element name="RetireesCanEnroll" type="yes_or_no"/>
+  <xs:element name="RetirementAge" type="age_int"/>
+  <xs:element name="RunOrder" type="run_order"/>
+  <xs:element name="SalarySpecifiedAmountCap" type="nonnegative_double"/>
+  <xs:element name="SalarySpecifiedAmountFactor" type="nonnegative_double"/>
+  <xs:element name="SalarySpecifiedAmountOffset" type="nonnegative_double"/>
+  <xs:element name="SeparateAccountRate" type="xs:string"/>
+  <xs:element name="SeparateAccountRateType" type="sep_acct_rate_type"/>
+  <xs:element name="Smoking" type="smoking"/>
+  <xs:element name="SolveBasis" type="gen_basis"/>
+  <xs:element name="SolveBeginTime" type="duration_int"/>
+  <xs:element name="SolveBeginYear" type="duration_int"/>
+  <xs:element name="SolveEndTime" type="duration_int"/>
+  <xs:element name="SolveEndYear" type="duration_int"/>
+  <xs:element name="SolveFromWhich" type="from_point"/>
+  <xs:element name="SolveSeparateAccountBasis" type="sep_basis"/>
+  <xs:element name="SolveTarget" type="solve_target"/>
+  <xs:element name="SolveTargetCashSurrenderValue" type="nonnegative_double"/>
+  <xs:element name="SolveTargetTime" type="duration_int"/>
+  <xs:element name="SolveTargetYear" type="duration_int"/>
+  <xs:element name="SolveTgtAtWhich" type="to_point"/>
+  <xs:element name="SolveToWhich" type="to_point"/>
+  <xs:element name="SolveType" type="solve_type"/>
+  <xs:element name="SpecamtHistory" type="xs:string"/>
+  <xs:element name="SpecifiedAmount" type="xs:string"/>
+  <xs:element name="SpecifiedAmountFromIssue" type="nonnegative_double"/>
+  <xs:element name="SpecifiedAmountFromRetirement" type="nonnegative_double"/>
+  <xs:element name="SpecifiedAmountStrategyFromIssue" type="sa_strategy"/>
+  <xs:element name="SpouseIssueAge" type="age_int"/>
+  <xs:element name="SpouseRider" type="yes_or_no"/>
+  <xs:element name="SpouseRiderAmount" type="nonnegative_double"/>
+  <xs:element name="State" type="state"/>
+  <xs:element name="StateOfJurisdiction" type="state"/>
+  <xs:element name="SubstandardTable" type="table_rating"/>
+  <xs:element name="SupplementalReportColumn00" type="report_column"/>
+  <xs:element name="SupplementalReportColumn01" type="report_column"/>
+  <xs:element name="SupplementalReportColumn02" type="report_column"/>
+  <xs:element name="SupplementalReportColumn03" type="report_column"/>
+  <xs:element name="SupplementalReportColumn04" type="report_column"/>
+  <xs:element name="SupplementalReportColumn05" type="report_column"/>
+  <xs:element name="SupplementalReportColumn06" type="report_column"/>
+  <xs:element name="SupplementalReportColumn07" type="report_column"/>
+  <xs:element name="SupplementalReportColumn08" type="report_column"/>
+  <xs:element name="SupplementalReportColumn09" type="report_column"/>
+  <xs:element name="SupplementalReportColumn10" type="report_column"/>
+  <xs:element name="SupplementalReportColumn11" type="report_column"/>
+  <xs:element name="SurviveToAge" type="age_int"/>
+  <xs:element name="SurviveToType" type="survival_limit"/>
+  <xs:element name="SurviveToYear" type="duration_int"/>
+  <xs:element name="TaxBracket" type="xs:string"/>
+  <xs:element name="TermAdjustmentMethod" type="term_adj_method"/>
+  <xs:element name="TermRider" type="yes_or_no"/>
+  <xs:element name="TermRiderAmount" type="nonnegative_double"/>
+  <xs:element name="TermRiderProportion" type="proportion_double"/>
+  <xs:element name="TermRiderUseProportion" type="yes_or_no"/>
+  <xs:element name="TotalSpecifiedAmount" type="nonnegative_double"/>
+  <xs:element name="UnderwritingClass" type="class"/>
+  <xs:element name="UseAverageOfAllFunds" type="yes_or_no"/>
+  <xs:element name="UseCurrentDeclaredRate" type="yes_or_no"/>
+  <xs:element name="UseDOB" type="yes_or_no"/>
+  <xs:element name="UseExperienceRating" type="yes_or_no"/>
+  <xs:element name="UsePartialMortality" type="yes_or_no"/>
+  <xs:element name="WaiverOfPremiumBenefit" type="yes_or_no"/>
+  <xs:element name="WithdrawToBasisThenLoan" type="yes_or_no"/>
+  <xs:element name="Withdrawal" type="xs:string"/>
+  <xs:element name="WithdrawalAmount" type="nonnegative_double"/>
+  <xs:element name="WithdrawalFromAge" type="age_int"/>
+  <xs:element name="WithdrawalFromAlternative" type="from_point"/>
+  <xs:element name="WithdrawalFromDuration" type="duration_int"/>
+  <xs:element name="WithdrawalToAge" type="age_int"/>
+  <xs:element name="WithdrawalToAlternative" type="to_point"/>
+  <xs:element name="WithdrawalToDuration" type="duration_int"/>
+  <xs:element name="ZipCode" type="xs:string"/>
+  <!-- It is infeasible to validate an input sequence with a regex. -->
+  <!-- Numeric-range types. -->
+  <xs:simpleType name="nonnegative_double">
+    <xs:restriction base="xs:double">
+      <xs:minInclusive value="0"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="proportion_double">
+    <xs:restriction base="xs:double">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- Calendar-date bounds: [1752-09-14, 9999-12-31] -->
+  <xs:simpleType name="calendar_date_int">
+    <xs:restriction base="xs:nonNegativeInteger">
+      <xs:minInclusive value="2361222"/>
+      <xs:maxInclusive value="5373484"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="age_int">
+    <xs:restriction base="xs:nonNegativeInteger">
+      <xs:maxInclusive value="99"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="duration_int">
+    <xs:restriction base="xs:nonNegativeInteger">
+      <xs:maxInclusive value="100"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="month_int">
+    <xs:restriction base="xs:nonNegativeInteger">
+      <xs:maxInclusive value="11"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- Enumerations. -->
+  <xs:simpleType name="yes_or_no">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="No"/>
+      <xs:enumeration value="Yes"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="gender">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Female"/>
+      <xs:enumeration value="Male"/>
+      <xs:enumeration value="Unisex"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="smoking">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Smoker"/>
+      <xs:enumeration value="Nonsmoker"/>
+      <xs:enumeration value="Unismoke"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="class">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Preferred"/>
+      <xs:enumeration value="Standard"/>
+      <xs:enumeration value="Rated"/>
+      <xs:enumeration value="Ultra"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="dbopt">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="A"/>
+      <xs:enumeration value="B"/>
+      <xs:enumeration value="ROP"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="mode">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Annual"/>
+      <xs:enumeration value="Semiannual"/>
+      <xs:enumeration value="Quarterly"/>
+      <xs:enumeration value="Monthly"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="gen_basis">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Current"/>
+      <xs:enumeration value="Guaranteed"/>
+      <xs:enumeration value="Midpoint"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="sep_basis">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Hypothetical"/>
+      <xs:enumeration value="Zero"/>
+      <xs:enumeration value="Half of hypothetical"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="uw_basis">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Medical"/>
+      <xs:enumeration value="Paramedical"/>
+      <xs:enumeration value="Nonmedical"/>
+      <xs:enumeration value="Simplified issue"/>
+      <xs:enumeration value="Guaranteed issue"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="table_rating">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="None"/>
+      <xs:enumeration value="A=+25%"/>
+      <xs:enumeration value="B=+50%"/>
+      <xs:enumeration value="C=+75%"/>
+      <xs:enumeration value="D=+100%"/>
+      <xs:enumeration value="E=+125%"/>
+      <xs:enumeration value="F=+150%"/>
+      <xs:enumeration value="H=+200%"/>
+      <xs:enumeration value="J=+250%"/>
+      <xs:enumeration value="L=+300%"/>
+      <xs:enumeration value="P=+400%"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="solve_type">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="No solve"/>
+      <xs:enumeration value="Specified amount"/>
+      <xs:enumeration value="Employee premium"/>
+      <xs:enumeration value="Employer premium"/>
+      <xs:enumeration value="Loan"/>
+      <xs:enumeration value="Withdrawal"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="solve_target">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Endowment"/>
+      <xs:enumeration value="Target CSV"/>
+      <xs:enumeration value="CSV = tax basis"/>
+      <xs:enumeration value="Avoid MEC"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="pmt_strategy">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="PmtInputScalar"/>
+      <xs:enumeration value="PmtMinimum"/>
+      <xs:enumeration value="PmtTarget"/>
+      <xs:enumeration value="PmtMEP"/>
+      <xs:enumeration value="PmtGLP"/>
+      <xs:enumeration value="PmtGSP"/>
+      <xs:enumeration value="PmtCorridor"/>
+      <xs:enumeration value="PmtTable"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="sa_strategy">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="SAInputScalar"/>
+      <xs:enumeration value="SAMaximum"/>
+      <xs:enumeration value="SATarget"/>
+      <xs:enumeration value="SAMEP"/>
+      <xs:enumeration value="SAGLP"/>
+      <xs:enumeration value="SAGSP"/>
+      <xs:enumeration value="SACorridor"/>
+      <xs:enumeration value="SASalary"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="gen_acct_rate_type">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Credited rate"/>
+      <xs:enumeration value="Earned rate"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="sep_acct_rate_type">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Net rate"/>
+      <xs:enumeration value="Gross rate"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="loan_rate_type">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Fixed loan rate"/>
+      <xs:enumeration value="Variable loan rate"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="fund_input_method">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Average fund"/>
+      <xs:enumeration value="Override fund"/>
+      <xs:enumeration value="Choose funds"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="run_order">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Life by life"/>
+      <xs:enumeration value="Month by month"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="survival_limit">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="No survival limit"/>
+      <xs:enumeration value="Survive to age limit"/>
+      <xs:enumeration value="Survive to duration limit"/>
+      <xs:enumeration value="Survive to life expectancy"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="term_adj_method">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Adjust base first"/>
+      <xs:enumeration value="Adjust term first"/>
+      <xs:enumeration value="Adjust base and term proportionately"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="state">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="AL"/>
+      <xs:enumeration value="AK"/>
+      <xs:enumeration value="AZ"/>
+      <xs:enumeration value="AR"/>
+      <xs:enumeration value="CA"/>
+      <xs:enumeration value="CO"/>
+      <xs:enumeration value="CT"/>
+      <xs:enumeration value="DE"/>
+      <xs:enumeration value="DC"/>
+      <xs:enumeration value="FL"/>
+      <xs:enumeration value="GA"/>
+      <xs:enumeration value="HI"/>
+      <xs:enumeration value="ID"/>
+      <xs:enumeration value="IL"/>
+      <xs:enumeration value="IN"/>
+      <xs:enumeration value="IA"/>
+      <xs:enumeration value="KS"/>
+      <xs:enumeration value="KY"/>
+      <xs:enumeration value="LA"/>
+      <xs:enumeration value="ME"/>
+      <xs:enumeration value="MD"/>
+      <xs:enumeration value="MA"/>
+      <xs:enumeration value="MI"/>
+      <xs:enumeration value="MN"/>
+      <xs:enumeration value="MS"/>
+      <xs:enumeration value="MO"/>
+      <xs:enumeration value="MT"/>
+      <xs:enumeration value="NE"/>
+      <xs:enumeration value="NV"/>
+      <xs:enumeration value="NH"/>
+      <xs:enumeration value="NJ"/>
+      <xs:enumeration value="NM"/>
+      <xs:enumeration value="NY"/>
+      <xs:enumeration value="NC"/>
+      <xs:enumeration value="ND"/>
+      <xs:enumeration value="OH"/>
+      <xs:enumeration value="OK"/>
+      <xs:enumeration value="OR"/>
+      <xs:enumeration value="PA"/>
+      <xs:enumeration value="PR"/>
+      <xs:enumeration value="RI"/>
+      <xs:enumeration value="SC"/>
+      <xs:enumeration value="SD"/>
+      <xs:enumeration value="TN"/>
+      <xs:enumeration value="TX"/>
+      <xs:enumeration value="UT"/>
+      <xs:enumeration value="VT"/>
+      <xs:enumeration value="VA"/>
+      <xs:enumeration value="WA"/>
+      <xs:enumeration value="WV"/>
+      <xs:enumeration value="WI"/>
+      <xs:enumeration value="WY"/>
+      <xs:enumeration value="XX"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="country">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="AD"/>
+      <xs:enumeration value="AE"/>
+      <xs:enumeration value="AF"/>
+      <xs:enumeration value="AG"/>
+      <xs:enumeration value="AI"/>
+      <xs:enumeration value="AL"/>
+      <xs:enumeration value="AM"/>
+      <xs:enumeration value="AN"/>
+      <xs:enumeration value="AO"/>
+      <xs:enumeration value="AQ"/>
+      <xs:enumeration value="AR"/>
+      <xs:enumeration value="AS"/>
+      <xs:enumeration value="AT"/>
+      <xs:enumeration value="AU"/>
+      <xs:enumeration value="AW"/>
+      <xs:enumeration value="AZ"/>
+      <xs:enumeration value="BA"/>
+      <xs:enumeration value="BB"/>
+      <xs:enumeration value="BD"/>
+      <xs:enumeration value="BE"/>
+      <xs:enumeration value="BF"/>
+      <xs:enumeration value="BG"/>
+      <xs:enumeration value="BH"/>
+      <xs:enumeration value="BI"/>
+      <xs:enumeration value="BJ"/>
+      <xs:enumeration value="BM"/>
+      <xs:enumeration value="BN"/>
+      <xs:enumeration value="BO"/>
+      <xs:enumeration value="BR"/>
+      <xs:enumeration value="BS"/>
+      <xs:enumeration value="BT"/>
+      <xs:enumeration value="BV"/>
+      <xs:enumeration value="BW"/>
+      <xs:enumeration value="BY"/>
+      <xs:enumeration value="BZ"/>
+      <xs:enumeration value="CA"/>
+      <xs:enumeration value="CC"/>
+      <xs:enumeration value="CD"/>
+      <xs:enumeration value="CF"/>
+      <xs:enumeration value="CG"/>
+      <xs:enumeration value="CH"/>
+      <xs:enumeration value="CI"/>
+      <xs:enumeration value="CK"/>
+      <xs:enumeration value="CL"/>
+      <xs:enumeration value="CM"/>
+      <xs:enumeration value="CN"/>
+      <xs:enumeration value="CO"/>
+      <xs:enumeration value="CR"/>
+      <xs:enumeration value="CU"/>
+      <xs:enumeration value="CV"/>
+      <xs:enumeration value="CX"/>
+      <xs:enumeration value="CY"/>
+      <xs:enumeration value="CZ"/>
+      <xs:enumeration value="DE"/>
+      <xs:enumeration value="DJ"/>
+      <xs:enumeration value="DK"/>
+      <xs:enumeration value="DM"/>
+      <xs:enumeration value="DO"/>
+      <xs:enumeration value="DZ"/>
+      <xs:enumeration value="EC"/>
+      <xs:enumeration value="EE"/>
+      <xs:enumeration value="EG"/>
+      <xs:enumeration value="EH"/>
+      <xs:enumeration value="ER"/>
+      <xs:enumeration value="ES"/>
+      <xs:enumeration value="ET"/>
+      <xs:enumeration value="FI"/>
+      <xs:enumeration value="FJ"/>
+      <xs:enumeration value="FK"/>
+      <xs:enumeration value="FM"/>
+      <xs:enumeration value="FO"/>
+      <xs:enumeration value="FR"/>
+      <xs:enumeration value="GA"/>
+      <xs:enumeration value="GB"/>
+      <xs:enumeration value="GD"/>
+      <xs:enumeration value="GE"/>
+      <xs:enumeration value="GF"/>
+      <xs:enumeration value="GH"/>
+      <xs:enumeration value="GI"/>
+      <xs:enumeration value="GL"/>
+      <xs:enumeration value="GM"/>
+      <xs:enumeration value="GN"/>
+      <xs:enumeration value="GP"/>
+      <xs:enumeration value="GQ"/>
+      <xs:enumeration value="GR"/>
+      <xs:enumeration value="GS"/>
+      <xs:enumeration value="GT"/>
+      <xs:enumeration value="GU"/>
+      <xs:enumeration value="GW"/>
+      <xs:enumeration value="GY"/>
+      <xs:enumeration value="HK"/>
+      <xs:enumeration value="HM"/>
+      <xs:enumeration value="HN"/>
+      <xs:enumeration value="HR"/>
+      <xs:enumeration value="HT"/>
+      <xs:enumeration value="HU"/>
+      <xs:enumeration value="ID"/>
+      <xs:enumeration value="IE"/>
+      <xs:enumeration value="IL"/>
+      <xs:enumeration value="IN"/>
+      <xs:enumeration value="IO"/>
+      <xs:enumeration value="IQ"/>
+      <xs:enumeration value="IR"/>
+      <xs:enumeration value="IS"/>
+      <xs:enumeration value="IT"/>
+      <xs:enumeration value="JM"/>
+      <xs:enumeration value="JO"/>
+      <xs:enumeration value="JP"/>
+      <xs:enumeration value="KE"/>
+      <xs:enumeration value="KG"/>
+      <xs:enumeration value="KH"/>
+      <xs:enumeration value="KI"/>
+      <xs:enumeration value="KM"/>
+      <xs:enumeration value="KN"/>
+      <xs:enumeration value="KP"/>
+      <xs:enumeration value="KR"/>
+      <xs:enumeration value="KW"/>
+      <xs:enumeration value="KY"/>
+      <xs:enumeration value="KZ"/>
+      <xs:enumeration value="LA"/>
+      <xs:enumeration value="LB"/>
+      <xs:enumeration value="LC"/>
+      <xs:enumeration value="LI"/>
+      <xs:enumeration value="LK"/>
+      <xs:enumeration value="LR"/>
+      <xs:enumeration value="LS"/>
+      <xs:enumeration value="LT"/>
+      <xs:enumeration value="LU"/>
+      <xs:enumeration value="LV"/>
+      <xs:enumeration value="LY"/>
+      <xs:enumeration value="MA"/>
+      <xs:enumeration value="MC"/>
+      <xs:enumeration value="MD"/>
+      <xs:enumeration value="MG"/>
+      <xs:enumeration value="MH"/>
+      <xs:enumeration value="MK"/>
+      <xs:enumeration value="ML"/>
+      <xs:enumeration value="MM"/>
+      <xs:enumeration value="MN"/>
+      <xs:enumeration value="MO"/>
+      <xs:enumeration value="MP"/>
+      <xs:enumeration value="MQ"/>
+      <xs:enumeration value="MR"/>
+      <xs:enumeration value="MS"/>
+      <xs:enumeration value="MT"/>
+      <xs:enumeration value="MU"/>
+      <xs:enumeration value="MV"/>
+      <xs:enumeration value="MW"/>
+      <xs:enumeration value="MX"/>
+      <xs:enumeration value="MY"/>
+      <xs:enumeration value="MZ"/>
+      <xs:enumeration value="NA"/>
+      <xs:enumeration value="NC"/>
+      <xs:enumeration value="NE"/>
+      <xs:enumeration value="NF"/>
+      <xs:enumeration value="NG"/>
+      <xs:enumeration value="NI"/>
+      <xs:enumeration value="NL"/>
+      <xs:enumeration value="NO"/>
+      <xs:enumeration value="NP"/>
+      <xs:enumeration value="NR"/>
+      <xs:enumeration value="NU"/>
+      <xs:enumeration value="NZ"/>
+      <xs:enumeration value="OM"/>
+      <xs:enumeration value="PA"/>
+      <xs:enumeration value="PE"/>
+      <xs:enumeration value="PF"/>
+      <xs:enumeration value="PG"/>
+      <xs:enumeration value="PH"/>
+      <xs:enumeration value="PK"/>
+      <xs:enumeration value="PL"/>
+      <xs:enumeration value="PM"/>
+      <xs:enumeration value="PN"/>
+      <xs:enumeration value="PR"/>
+      <xs:enumeration value="PS"/>
+      <xs:enumeration value="PT"/>
+      <xs:enumeration value="PW"/>
+      <xs:enumeration value="PY"/>
+      <xs:enumeration value="QA"/>
+      <xs:enumeration value="RE"/>
+      <xs:enumeration value="RO"/>
+      <xs:enumeration value="RU"/>
+      <xs:enumeration value="RW"/>
+      <xs:enumeration value="SA"/>
+      <xs:enumeration value="SB"/>
+      <xs:enumeration value="SC"/>
+      <xs:enumeration value="SD"/>
+      <xs:enumeration value="SE"/>
+      <xs:enumeration value="SG"/>
+      <xs:enumeration value="SH"/>
+      <xs:enumeration value="SI"/>
+      <xs:enumeration value="SJ"/>
+      <xs:enumeration value="SK"/>
+      <xs:enumeration value="SL"/>
+      <xs:enumeration value="SM"/>
+      <xs:enumeration value="SN"/>
+      <xs:enumeration value="SO"/>
+      <xs:enumeration value="SR"/>
+      <xs:enumeration value="ST"/>
+      <xs:enumeration value="SV"/>
+      <xs:enumeration value="SY"/>
+      <xs:enumeration value="SZ"/>
+      <xs:enumeration value="TC"/>
+      <xs:enumeration value="TD"/>
+      <xs:enumeration value="TF"/>
+      <xs:enumeration value="TG"/>
+      <xs:enumeration value="TH"/>
+      <xs:enumeration value="TJ"/>
+      <xs:enumeration value="TK"/>
+      <xs:enumeration value="TM"/>
+      <xs:enumeration value="TN"/>
+      <xs:enumeration value="TO"/>
+      <xs:enumeration value="TP"/>
+      <xs:enumeration value="TR"/>
+      <xs:enumeration value="TT"/>
+      <xs:enumeration value="TV"/>
+      <xs:enumeration value="TW"/>
+      <xs:enumeration value="TZ"/>
+      <xs:enumeration value="UA"/>
+      <xs:enumeration value="UG"/>
+      <xs:enumeration value="UM"/>
+      <xs:enumeration value="US"/>
+      <xs:enumeration value="UY"/>
+      <xs:enumeration value="UZ"/>
+      <xs:enumeration value="VA"/>
+      <xs:enumeration value="VC"/>
+      <xs:enumeration value="VE"/>
+      <xs:enumeration value="VG"/>
+      <xs:enumeration value="VI"/>
+      <xs:enumeration value="VN"/>
+      <xs:enumeration value="VU"/>
+      <xs:enumeration value="WF"/>
+      <xs:enumeration value="WS"/>
+      <xs:enumeration value="YE"/>
+      <xs:enumeration value="YT"/>
+      <xs:enumeration value="YU"/>
+      <xs:enumeration value="ZA"/>
+      <xs:enumeration value="ZM"/>
+      <xs:enumeration value="ZW"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="defn_life_ins">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="CVAT"/>
+      <xs:enumeration value="GPT"/>
+      <xs:enumeration value="Not 7702 compliant"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="mec_avoid_method">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Allow MEC"/>
+      <xs:enumeration value="Reduce premium"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="defn_material_change">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Unnecessary premium"/>
+      <xs:enumeration value="Benefit increase"/>
+      <xs:enumeration value="Later of increase or unnecessary premium"/>
+      <xs:enumeration value="Earlier of increase or unnecessary premium"/>
+      <xs:enumeration value="GPT adjustment event"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="from_point">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Issue"/>
+      <xs:enumeration value="Year"/>
+      <xs:enumeration value="Age"/>
+      <xs:enumeration value="Retirement"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="to_point">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Retirement"/>
+      <xs:enumeration value="Year"/>
+      <xs:enumeration value="Age"/>
+      <xs:enumeration value="Maturity"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="report_column">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="[none]"/>
+      <xs:enumeration value="AttainedAge"/>
+      <xs:enumeration value="PolicyYear"/>
+      <xs:enumeration value="InforceLives"/>
+      <xs:enumeration value="SpecAmt"/>
+      <xs:enumeration value="TermSpecAmt"/>
+      <xs:enumeration value="CorridorFactor"/>
+      <xs:enumeration value="AnnGAIntRate_Current"/>
+      <xs:enumeration value="AnnSAIntRate_Current"/>
+      <xs:enumeration value="Outlay"/>
+      <xs:enumeration value="EeGrossPmt"/>
+      <xs:enumeration value="ErGrossPmt"/>
+      <xs:enumeration value="NetWD"/>
+      <xs:enumeration value="NewCashLoan"/>
+      <xs:enumeration value="TotalLoanBalance_Current"/>
+      <xs:enumeration value="TotalLoanBalance_Guaranteed"/>
+      <xs:enumeration value="AcctVal_Current"/>
+      <xs:enumeration value="AcctVal_Guaranteed"/>
+      <xs:enumeration value="CSVNet_Current"/>
+      <xs:enumeration value="CSVNet_Guaranteed"/>
+      <xs:enumeration value="EOYDeathBft_Current"/>
+      <xs:enumeration value="EOYDeathBft_Guaranteed"/>
+      <xs:enumeration value="BaseDeathBft_Current"/>
+      <xs:enumeration value="BaseDeathBft_Guaranteed"/>
+      <xs:enumeration value="TermPurchased_Current"/>
+      <xs:enumeration value="TermPurchased_Guaranteed"/>
+      <xs:enumeration value="COICharge_Current"/>
+      <xs:enumeration value="COICharge_Guaranteed"/>
+      <xs:enumeration value="RiderCharges_Current"/>
+      <xs:enumeration value="IrrCsv_Current"/>
+      <xs:enumeration value="IrrCsv_Guaranteed"/>
+      <xs:enumeration value="IrrDb_Current"/>
+      <xs:enumeration value="IrrDb_Guaranteed"/>
+      <xs:enumeration value="ExperienceReserve_Current"/>
+      <xs:enumeration value="NetClaims_Current"/>
+      <xs:enumeration value="NetCOICharge_Current"/>
+      <xs:enumeration value="ProjectedCoiCharge_Current"/>
+      <xs:enumeration value="KFactor_Current"/>
+      <xs:enumeration value="GrossPmt"/>
+      <xs:enumeration value="LoanIntAccrued_Current"/>
+      <xs:enumeration value="NetDeathBenefit"/>
+      <xs:enumeration value="DeathProceedsPaid_Current"/>
+      <xs:enumeration value="ClaimsPaid_Current"/>
+      <xs:enumeration value="AVRelOnDeath_Current"/>
+      <xs:enumeration value="SpecAmtLoad_Current"/>
+      <xs:enumeration value="GrossIntCredited_Current"/>
+      <xs:enumeration value="NetIntCredited_Current"/>
+      <xs:enumeration value="SepAcctCharges_Current"/>
+      <xs:enumeration value="PolicyFee_Current"/>
+      <xs:enumeration value="AVGenAcct_CurrentZero"/>
+      <xs:enumeration value="AVGenAcct_GuaranteedZero"/>
+      <xs:enumeration value="AVSepAcct_CurrentZero"/>
+      <xs:enumeration value="AVSepAcct_GuaranteedZero"/>
+      <xs:enumeration value="AcctVal_CurrentZero"/>
+      <xs:enumeration value="AcctVal_GuaranteedZero"/>
+      <xs:enumeration value="CSVNet_CurrentZero"/>
+      <xs:enumeration value="CSVNet_GuaranteedZero"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

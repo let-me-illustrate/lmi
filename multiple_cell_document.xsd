@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:include schemaLocation="cell.xsd"/>
+  <!--
+    RELAX NG schema for '.cns' files (class multiple_cell_document).
+
+    Copyright (C) 2012 Gregory W. Chicares.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 2 as
+    published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software Foundation,
+    Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+
+    http://savannah.nongnu.org/projects/lmi
+    email: <gchicares@sbcglobal.net>
+    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+  -->
+  <!-- $Id$ -->
+  <xs:element name="multiple_cell_document">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="case_default"/>
+        <xs:element ref="class_defaults"/>
+        <xs:element ref="particular_cells"/>
+      </xs:sequence>
+      <xs:attribute name="version" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="case_default">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="cell"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="class_defaults">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="cell"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="particular_cells">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="cell"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

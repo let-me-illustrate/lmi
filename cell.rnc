@@ -1,0 +1,505 @@
+# RELAX NG schema for a single cell (class Input).
+#
+# Copyright (C) 2012 Gregory W. Chicares.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 as
+# published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software Foundation,
+# Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+#
+# http://savannah.nongnu.org/projects/lmi
+# email: <gchicares@sbcglobal.net>
+# snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+# $Id$
+
+# This schema is meant not for standalone use, but rather for
+# inclusion from other schemata.
+
+cell_element = element cell
+    {attribute version {"6"}
+
+    ,element AccidentalDeathBenefit           {yes_or_no}
+    ,element Address                          {text}
+    ,element AgentAddress                     {text}
+    ,element AgentCity                        {text}
+    ,element AgentId                          {text}
+    ,element AgentName                        {text}
+    ,element AgentPhone                       {text}
+    ,element AgentState                       {state}
+    ,element AgentZipCode                     {text}
+    ,element AmortizePremiumLoad              {yes_or_no}
+    ,element AvoidMecMethod                   {mec_avoid_method}
+    ,element BlendGender                      {yes_or_no}
+    ,element BlendSmoking                     {yes_or_no}
+    ,element CashValueEnhancementRate         {numeric_sequence}
+    ,element ChildRider                       {yes_or_no}
+    ,element ChildRiderAmount                 {nonnegative_double}
+    ,element City                             {text}
+    ,element Comments                         {text}
+    ,element CorporationAddress               {text}
+    ,element CorporationCity                  {text}
+    ,element CorporationName                  {text}
+    ,element CorporationPayment               {payment_sequence}
+    ,element CorporationPaymentMode           {mode_sequence}
+    ,element CorporationPremiumTableFactor    {nonnegative_double}
+    ,element CorporationState                 {state}
+    ,element CorporationTaxBracket            {numeric_sequence}
+    ,element CorporationZipCode               {text}
+    ,element Country                          {country}
+    ,element CountryCoiMultiplier             {nonnegative_double}
+    ,element CreateSupplementalReport         {yes_or_no}
+    ,element CurrentCoiMultiplier             {numeric_sequence}
+    ,element DateOfBirth                      {calendar_date_int}
+    ,element DeathBenefitOption               {dbo_sequence}
+    ,element DeathBenefitOptionFromIssue      {dbopt}
+    ,element DeathBenefitOptionFromRetirement {dbopt}
+    ,element DefinitionOfLifeInsurance        {defn_life_ins}
+    ,element DefinitionOfMaterialChange       {defn_material_change}
+    ,element Dumpin                           {nonnegative_double}
+    ,element EffectiveDate                    {calendar_date_int}
+    ,element EffectiveDateToday               {yes_or_no}
+    ,element EmployeeClass                    {text}
+    ,element ExperienceRatingInitialKFactor   {nonnegative_double}
+    ,element ExperienceReserveRate            {proportion_double}
+    ,element External1035ExchangeAmount       {nonnegative_double}
+    ,element External1035ExchangeBasis        {nonnegative_double}
+    ,element External1035ExchangeFromMec      {yes_or_no}
+    ,element ExtraCompensationOnAssets        {numeric_sequence}
+    ,element ExtraCompensationOnPremium       {numeric_sequence}
+    ,element ExtraMonthlyCustodialFee         {numeric_sequence}
+    ,element FlatExtra                        {numeric_sequence}
+    ,element Franchise                        {text}
+    ,element FundAllocations                  {numeric_sequence}
+    ,element FundChoiceType                   {fund_input_method}
+    ,element Gender                           {gender}
+    ,element GeneralAccountRate               {numeric_sequence}
+    ,element GeneralAccountRateType           {gen_acct_rate_type}
+    ,element GroupUnderwritingType            {uw_basis}
+    ,element HoneymoonEndorsement             {yes_or_no}
+    ,element HoneymoonValueSpread             {numeric_sequence}
+    ,element IncludeInComposite               {yes_or_no}
+    ,element IndividualPaymentAmount          {nonnegative_double}
+    ,element IndividualPaymentMode            {mode}
+    ,element IndividualPaymentStrategy        {pmt_strategy}
+    ,element IndividualPaymentToAge           {age_int}
+    ,element IndividualPaymentToAlternative   {to_point}
+    ,element IndividualPaymentToDuration      {duration_int}
+    ,element InforceAsOfDate                  {calendar_date_int}
+    ,element InforceAvBeforeLastMc            {nonnegative_double}
+    ,element InforceContractMonth             {month_int}
+    ,element InforceContractYear              {duration_int}
+    ,element InforceCumulativeGlp             {nonnegative_double}
+    ,element InforceCumulativeNoLapsePremium  {nonnegative_double}
+    ,element InforceCumulativePayments        {nonnegative_double}
+    ,element InforceDcv                       {nonnegative_double}
+    ,element InforceGeneralAccountValue       {nonnegative_double}
+    ,element InforceGlp                       {nonnegative_double}
+    ,element InforceGsp                       {nonnegative_double}
+    ,element InforceHoneymoonValue            {nonnegative_double}
+    ,element InforceIsMec                     {yes_or_no}
+    ,element InforceLeastDeathBenefit         {nonnegative_double}
+    ,element InforceMonth                     {month_int}
+    ,element InforceNetExperienceReserve      {xsd:double}
+    ,element InforcePreferredLoanBalance      {nonnegative_double}
+    ,element InforcePreferredLoanValue        {nonnegative_double}
+    ,element InforceRegularLoanBalance        {nonnegative_double}
+    ,element InforceRegularLoanValue          {nonnegative_double}
+    ,element InforceSeparateAccountValue      {nonnegative_double}
+    ,element InforceSevenPayPremium           {nonnegative_double}
+    ,element InforceTaxBasis                  {nonnegative_double}
+    ,element InforceYear                      {duration_int}
+    ,element InforceYtdNetCoiCharge           {nonnegative_double}
+    ,element InputFundManagementFee           {nonnegative_double}
+    ,element InsuredName                      {text}
+    ,element InsuredPremiumTableFactor        {nonnegative_double}
+    ,element Internal1035ExchangeAmount       {nonnegative_double}
+    ,element Internal1035ExchangeBasis        {nonnegative_double}
+    ,element Internal1035ExchangeFromMec      {yes_or_no}
+    ,element IssueAge                         {age_int}
+    ,element LastCoiReentryDate               {calendar_date_int}
+    ,element LastMaterialChangeDate           {calendar_date_int}
+    ,element LoanAmount                       {nonnegative_double}
+    ,element LoanFromAge                      {age_int}
+    ,element LoanFromAlternative              {from_point}
+    ,element LoanFromDuration                 {duration_int}
+    ,element LoanRate                         {proportion_double}
+    ,element LoanRateType                     {loan_rate_type}
+    ,element LoanToAge                        {age_int}
+    ,element LoanToAlternative                {to_point}
+    ,element LoanToDuration                   {duration_int}
+    ,element MaleProportion                   {proportion_double}
+    ,element MaximumNaar                      {nonnegative_double}
+    ,element NewLoan                          {numeric_sequence}
+    ,element NonsmokerProportion              {proportion_double}
+    ,element NumberOfIdenticalLives           {xsd:nonNegativeInteger}
+    ,element OverrideCoiMultiplier            {yes_or_no}
+    ,element OverrideExperienceReserveRate    {yes_or_no}
+    ,element OverrideFundManagementFee        {yes_or_no}
+    ,element PartialMortalityMultiplier       {numeric_sequence}
+    ,element Payment                          {payment_sequence}
+    ,element PaymentMode                      {mode_sequence}
+    ,element PolicyNumber                     {text}
+    ,element PostHoneymoonSpread              {proportion_double}
+    ,element PremiumHistory                   {numeric_sequence}
+    ,element PremiumTaxState                  {state}
+    # Enumerators for 'ProductName' depend on run-time context.
+    ,element ProductName                      {text}
+    ,element ProjectedSalary                  {numeric_sequence}
+    ,element RetireesCanEnroll                {yes_or_no}
+    ,element RetirementAge                    {age_int}
+    ,element RunOrder                         {run_order}
+    ,element SalarySpecifiedAmountCap         {nonnegative_double}
+    ,element SalarySpecifiedAmountFactor      {nonnegative_double}
+    ,element SalarySpecifiedAmountOffset      {nonnegative_double}
+    ,element SeparateAccountRate              {numeric_sequence}
+    ,element SeparateAccountRateType          {sep_acct_rate_type}
+    ,element Smoking                          {smoking}
+    ,element SolveBasis                       {gen_basis}
+    ,element SolveBeginTime                   {duration_int}
+    ,element SolveBeginYear                   {duration_int}
+    ,element SolveEndTime                     {duration_int}
+    ,element SolveEndYear                     {duration_int}
+    ,element SolveFromWhich                   {from_point}
+    ,element SolveSeparateAccountBasis        {sep_basis}
+    ,element SolveTarget                      {solve_target}
+    ,element SolveTargetCashSurrenderValue    {nonnegative_double}
+    ,element SolveTargetTime                  {duration_int}
+    ,element SolveTargetYear                  {duration_int}
+    ,element SolveTgtAtWhich                  {to_point}
+    ,element SolveToWhich                     {to_point}
+    ,element SolveType                        {solve_type}
+    ,element SpecamtHistory                   {numeric_sequence}
+    ,element SpecifiedAmount                  {specamt_sequence}
+    ,element SpecifiedAmountFromIssue         {nonnegative_double}
+    ,element SpecifiedAmountFromRetirement    {nonnegative_double}
+    ,element SpecifiedAmountStrategyFromIssue {sa_strategy}
+    ,element SpouseIssueAge                   {age_int}
+    ,element SpouseRider                      {yes_or_no}
+    ,element SpouseRiderAmount                {nonnegative_double}
+    ,element State                            {state}
+    ,element StateOfJurisdiction              {state}
+    ,element SubstandardTable                 {table_rating}
+    ,element SupplementalReportColumn00       {report_column}
+    ,element SupplementalReportColumn01       {report_column}
+    ,element SupplementalReportColumn02       {report_column}
+    ,element SupplementalReportColumn03       {report_column}
+    ,element SupplementalReportColumn04       {report_column}
+    ,element SupplementalReportColumn05       {report_column}
+    ,element SupplementalReportColumn06       {report_column}
+    ,element SupplementalReportColumn07       {report_column}
+    ,element SupplementalReportColumn08       {report_column}
+    ,element SupplementalReportColumn09       {report_column}
+    ,element SupplementalReportColumn10       {report_column}
+    ,element SupplementalReportColumn11       {report_column}
+    ,element SurviveToAge                     {age_int}
+    ,element SurviveToType                    {survival_limit}
+    ,element SurviveToYear                    {duration_int}
+    ,element TaxBracket                       {numeric_sequence}
+    ,element TermAdjustmentMethod             {term_adj_method}
+    ,element TermRider                        {yes_or_no}
+    ,element TermRiderAmount                  {nonnegative_double}
+    ,element TermRiderProportion              {proportion_double}
+    ,element TermRiderUseProportion           {yes_or_no}
+    ,element TotalSpecifiedAmount             {nonnegative_double}
+    ,element UnderwritingClass                {class}
+    ,element UseAverageOfAllFunds             {yes_or_no}
+    ,element UseCurrentDeclaredRate           {yes_or_no}
+    ,element UseDOB                           {yes_or_no}
+    ,element UseExperienceRating              {yes_or_no}
+    ,element UsePartialMortality              {yes_or_no}
+    ,element WaiverOfPremiumBenefit           {yes_or_no}
+    ,element WithdrawToBasisThenLoan          {yes_or_no}
+    ,element Withdrawal                       {numeric_sequence}
+    ,element WithdrawalAmount                 {nonnegative_double}
+    ,element WithdrawalFromAge                {age_int}
+    ,element WithdrawalFromAlternative        {from_point}
+    ,element WithdrawalFromDuration           {duration_int}
+    ,element WithdrawalToAge                  {age_int}
+    ,element WithdrawalToAlternative          {to_point}
+    ,element WithdrawalToDuration             {duration_int}
+    ,element ZipCode                          {text}
+    }
+
+# It is infeasible to validate an input sequence with a regex.
+
+numeric_sequence = text
+payment_sequence = text
+mode_sequence    = text
+dbo_sequence     = text
+specamt_sequence = text
+
+# Numeric-range types.
+
+nonnegative_double = xsd:double             {minInclusive = "0"                               }
+
+proportion_double  = xsd:double             {minInclusive = "0"       maxInclusive = "1"      }
+
+# Calendar-date bounds: [1752-09-14, 9999-12-31]
+calendar_date_int  = xsd:nonNegativeInteger {minInclusive = "2361222" maxInclusive = "5373484"}
+
+age_int            = xsd:nonNegativeInteger {                         maxInclusive = "99"     }
+
+duration_int       = xsd:nonNegativeInteger {                         maxInclusive = "100"    }
+
+month_int          = xsd:nonNegativeInteger {                         maxInclusive = "11"     }
+
+# Enumerations.
+
+yes_or_no =
+      "No"
+    | "Yes"
+
+gender =
+      "Female"
+    | "Male"
+    | "Unisex"
+
+smoking =
+      "Smoker"
+    | "Nonsmoker"
+    | "Unismoke"
+
+class =
+      "Preferred"
+    | "Standard"
+    | "Rated"
+    | "Ultra"
+
+dbopt =
+      "A"
+    | "B"
+    | "ROP"
+
+mode =
+      "Annual"
+    | "Semiannual"
+    | "Quarterly"
+    | "Monthly"
+
+gen_basis =
+      "Current"
+    | "Guaranteed"
+    | "Midpoint"
+
+sep_basis =
+      "Hypothetical"
+    | "Zero"
+    | "Half of hypothetical"
+
+uw_basis =
+      "Medical"
+    | "Paramedical"
+    | "Nonmedical"
+    | "Simplified issue"
+    | "Guaranteed issue"
+
+table_rating =
+      "None"
+    | "A=+25%"
+    | "B=+50%"
+    | "C=+75%"
+    | "D=+100%"
+    | "E=+125%"
+    | "F=+150%"
+    | "H=+200%"
+    | "J=+250%"
+    | "L=+300%"
+    | "P=+400%"
+
+solve_type =
+      "No solve"
+    | "Specified amount"
+    | "Employee premium"
+    | "Employer premium"
+    | "Loan"
+    | "Withdrawal"
+
+solve_target =
+      "Endowment"
+    | "Target CSV"
+    | "CSV = tax basis"
+    | "Avoid MEC"
+
+pmt_strategy =
+      "PmtInputScalar"
+    | "PmtMinimum"
+    | "PmtTarget"
+    | "PmtMEP"
+    | "PmtGLP"
+    | "PmtGSP"
+    | "PmtCorridor"
+    | "PmtTable"
+
+sa_strategy =
+      "SAInputScalar"
+    | "SAMaximum"
+    | "SATarget"
+    | "SAMEP"
+    | "SAGLP"
+    | "SAGSP"
+    | "SACorridor"
+    | "SASalary"
+
+gen_acct_rate_type =
+      "Credited rate"
+    | "Earned rate"
+
+sep_acct_rate_type =
+      "Net rate"
+    | "Gross rate"
+
+loan_rate_type =
+      "Fixed loan rate"
+    | "Variable loan rate"
+
+fund_input_method =
+      "Average fund"
+    | "Override fund"
+    | "Choose funds"
+
+run_order =
+      "Life by life"
+    | "Month by month"
+
+survival_limit =
+      "No survival limit"
+    | "Survive to age limit"
+    | "Survive to duration limit"
+    | "Survive to life expectancy"
+
+term_adj_method =
+      "Adjust base first"
+    | "Adjust term first"
+    | "Adjust base and term proportionately"
+
+state =
+      "AL" | "AK" | "AZ" | "AR" | "CA" | "CO" | "CT" | "DE" | "DC" | "FL"
+    | "GA" | "HI" | "ID" | "IL" | "IN" | "IA" | "KS" | "KY" | "LA" | "ME"
+    | "MD" | "MA" | "MI" | "MN" | "MS" | "MO" | "MT" | "NE" | "NV" | "NH"
+    | "NJ" | "NM" | "NY" | "NC" | "ND" | "OH" | "OK" | "OR" | "PA" | "PR"
+    | "RI" | "SC" | "SD" | "TN" | "TX" | "UT" | "VT" | "VA" | "WA" | "WV"
+    | "WI" | "WY"
+    | "XX"
+
+country =
+      "AD" | "AE" | "AF" | "AG" | "AI" | "AL" | "AM" | "AN" | "AO" | "AQ"
+    | "AR" | "AS" | "AT" | "AU" | "AW" | "AZ" | "BA" | "BB" | "BD" | "BE"
+    | "BF" | "BG" | "BH" | "BI" | "BJ" | "BM" | "BN" | "BO" | "BR" | "BS"
+    | "BT" | "BV" | "BW" | "BY" | "BZ" | "CA" | "CC" | "CD" | "CF" | "CG"
+    | "CH" | "CI" | "CK" | "CL" | "CM" | "CN" | "CO" | "CR" | "CU" | "CV"
+    | "CX" | "CY" | "CZ" | "DE" | "DJ" | "DK" | "DM" | "DO" | "DZ" | "EC"
+    | "EE" | "EG" | "EH" | "ER" | "ES" | "ET" | "FI" | "FJ" | "FK" | "FM"
+    | "FO" | "FR" | "GA" | "GB" | "GD" | "GE" | "GF" | "GH" | "GI" | "GL"
+    | "GM" | "GN" | "GP" | "GQ" | "GR" | "GS" | "GT" | "GU" | "GW" | "GY"
+    | "HK" | "HM" | "HN" | "HR" | "HT" | "HU" | "ID" | "IE" | "IL" | "IN"
+    | "IO" | "IQ" | "IR" | "IS" | "IT" | "JM" | "JO" | "JP" | "KE" | "KG"
+    | "KH" | "KI" | "KM" | "KN" | "KP" | "KR" | "KW" | "KY" | "KZ" | "LA"
+    | "LB" | "LC" | "LI" | "LK" | "LR" | "LS" | "LT" | "LU" | "LV" | "LY"
+    | "MA" | "MC" | "MD" | "MG" | "MH" | "MK" | "ML" | "MM" | "MN" | "MO"
+    | "MP" | "MQ" | "MR" | "MS" | "MT" | "MU" | "MV" | "MW" | "MX" | "MY"
+    | "MZ" | "NA" | "NC" | "NE" | "NF" | "NG" | "NI" | "NL" | "NO" | "NP"
+    | "NR" | "NU" | "NZ" | "OM" | "PA" | "PE" | "PF" | "PG" | "PH" | "PK"
+    | "PL" | "PM" | "PN" | "PR" | "PS" | "PT" | "PW" | "PY" | "QA" | "RE"
+    | "RO" | "RU" | "RW" | "SA" | "SB" | "SC" | "SD" | "SE" | "SG" | "SH"
+    | "SI" | "SJ" | "SK" | "SL" | "SM" | "SN" | "SO" | "SR" | "ST" | "SV"
+    | "SY" | "SZ" | "TC" | "TD" | "TF" | "TG" | "TH" | "TJ" | "TK" | "TM"
+    | "TN" | "TO" | "TP" | "TR" | "TT" | "TV" | "TW" | "TZ" | "UA" | "UG"
+    | "UM" | "US" | "UY" | "UZ" | "VA" | "VC" | "VE" | "VG" | "VI" | "VN"
+    | "VU" | "WF" | "WS" | "YE" | "YT" | "YU" | "ZA" | "ZM" | "ZW"
+
+defn_life_ins =
+      "CVAT"
+    | "GPT"
+    | "Not 7702 compliant"
+
+mec_avoid_method =
+      "Allow MEC"
+    | "Reduce premium"
+
+defn_material_change =
+      "Unnecessary premium"
+    | "Benefit increase"
+    | "Later of increase or unnecessary premium"
+    | "Earlier of increase or unnecessary premium"
+    | "GPT adjustment event"
+
+from_point =
+      "Issue"
+    | "Year"
+    | "Age"
+    | "Retirement"
+
+to_point =
+      "Retirement"
+    | "Year"
+    | "Age"
+    | "Maturity"
+
+report_column =
+      "[none]"
+    | "AttainedAge"
+    | "PolicyYear"
+    | "InforceLives"
+    | "SpecAmt"
+    | "TermSpecAmt"
+    | "CorridorFactor"
+    | "AnnGAIntRate_Current"
+    | "AnnSAIntRate_Current"
+    | "Outlay"
+    | "EeGrossPmt"
+    | "ErGrossPmt"
+    | "NetWD"
+    | "NewCashLoan"
+    | "TotalLoanBalance_Current"
+    | "TotalLoanBalance_Guaranteed"
+    | "AcctVal_Current"
+    | "AcctVal_Guaranteed"
+    | "CSVNet_Current"
+    | "CSVNet_Guaranteed"
+    | "EOYDeathBft_Current"
+    | "EOYDeathBft_Guaranteed"
+    | "BaseDeathBft_Current"
+    | "BaseDeathBft_Guaranteed"
+    | "TermPurchased_Current"
+    | "TermPurchased_Guaranteed"
+    | "COICharge_Current"
+    | "COICharge_Guaranteed"
+    | "RiderCharges_Current"
+    | "IrrCsv_Current"
+    | "IrrCsv_Guaranteed"
+    | "IrrDb_Current"
+    | "IrrDb_Guaranteed"
+    | "ExperienceReserve_Current"
+    | "NetClaims_Current"
+    | "NetCOICharge_Current"
+    | "ProjectedCoiCharge_Current"
+    | "KFactor_Current"
+    | "GrossPmt"
+    | "LoanIntAccrued_Current"
+    | "NetDeathBenefit"
+    | "DeathProceedsPaid_Current"
+    | "ClaimsPaid_Current"
+    | "AVRelOnDeath_Current"
+    | "SpecAmtLoad_Current"
+    | "GrossIntCredited_Current"
+    | "NetIntCredited_Current"
+    | "SepAcctCharges_Current"
+    | "PolicyFee_Current"
+    | "AVGenAcct_CurrentZero"
+    | "AVGenAcct_GuaranteedZero"
+    | "AVSepAcct_CurrentZero"
+    | "AVSepAcct_GuaranteedZero"
+    | "AcctVal_CurrentZero"
+    | "AcctVal_GuaranteedZero"
+    | "CSVNet_CurrentZero"
+    | "CSVNet_GuaranteedZero"
+
