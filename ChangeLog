@@ -29971,3 +29971,14 @@ inscrutably following the definition of the calendar-date type.
 Regenerate enumerations, using the technique described 20120325T1232Z.
 This makes it easier to annotate them.
 
+20120410T1707Z <gchicares@sbcglobal.net> [573]
+
+  cell.rnc
+Alter layout in anticipation of adding annotations.
+
+20120410T1712Z <gchicares@sbcglobal.net> [573]
+
+  cell.rnc
+  cell.xsd
+Improve documentation.
+
