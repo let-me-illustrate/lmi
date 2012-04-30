@@ -228,6 +228,7 @@ file::file(std::string const& file_path)
         : phyloanalyze("Log$")         ? e_log
         : phyloanalyze("GNUmakefile$") ? e_make
         : phyloanalyze("^Makefile")    ? e_make
+        : phyloanalyze("^md5sums$")    ? e_md5
         : phyloanalyze("^INSTALL$")    ? e_synopsis
         : phyloanalyze("^README")      ? e_synopsis
         : phyloanalyze("^eraseme")     ? e_ephemeral
@@ -871,7 +872,10 @@ void check_reserved_names(file const& f)
 
 void enforce_taboos(file const& f)
 {
-    if(f.phyloanalyze("test_coding_rules"))
+    if
+        (   f.phyloanalyze("test_coding_rules")
+        ||  f.phyloanalyze("^md5sums$")
+        )
         {
         return;
         }

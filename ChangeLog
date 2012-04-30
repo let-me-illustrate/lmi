@@ -29982,3 +29982,8 @@ Alter layout in anticipation of adding annotations.
   cell.xsd
 Improve documentation.
 
+20120430T1735Z <gchicares@sbcglobal.net> [573]
+
+  test_coding_rules.cpp
+Allow a file named 'md5sums'.
+
