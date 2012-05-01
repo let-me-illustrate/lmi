@@ -334,6 +334,9 @@ check_concinnity: source_clean custom_tools
 	@$(RM) --force TODAY
 	@$(RM) --force BOM
 	@$(RM) --force BOY
+	@[ -f md5sums ] \
+	  && <md5sums $(SED) -e'/\.test$$\|\.test0$$\|\.tsv$$\|\.xml$$/d' \
+	  | $(MD5SUM) --check || true
 	@for z in $(build_directory)/*.d; do [ -s $$z ]         || echo $$z; done;
 	@for z in $(build_directory)/*.o; do [ -f $${z%%.o}.d ] || echo $$z; done;
 	@$(LS) --classify ./* \
