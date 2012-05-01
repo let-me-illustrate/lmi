@@ -29987,3 +29987,23 @@ Improve documentation.
   test_coding_rules.cpp
 Allow a file named 'md5sums'.
 
+20120501T1455Z <gchicares@sbcglobal.net> [573]
+
+  GNUmakefile
+Validate using 'md5sums' if it exists.
+
+20120501T1516Z <gchicares@sbcglobal.net> [573]
+
+  install_cygwin.bat
+Presumptively run 'rebaseall' for legacy version only.
+
+20120501T1520Z <gchicares@sbcglobal.net> [573]
+
+  install_cygwin.bat
+Install 'unzip' package.
+
+20120501T1535Z <gchicares@sbcglobal.net> [573]
+
+  install_miscellanea.make
+Install 'jing' and 'trang'.
+
