@@ -89,11 +89,14 @@ echo C:/opt/lmi                /opt/lmi       lmi_specific binary,user 0 0 >> fs
 echo C:/lmi                    /lmi           lmi_specific binary,user 0 0 >> fstab
 echo C:/cache_for_lmi          /cache_for_lmi lmi_specific binary,user 0 0 >> fstab
 echo Cygwin-1.7 installation seems to have succeeded
-ver | findstr /L "6.1."
-IF ERRORLEVEL 1 GOTO End
-cd C:\cygwin-1_7\bin
-C:\cygwin-1_7\bin\dash -l -i -c "rebaseall"
-echo Cygwin-1.7 rebased
+@REM The '_autorebase' facility has made it unnecessary to invoke any
+@REM explicit rebase command for non-legacy versions. See:
+@REM   http://cygwin.com/ml/cygwin/2012-03/msg00700.html
+@REM ver | findstr /L "6.1."
+@REM IF ERRORLEVEL 1 GOTO End
+@REM cd C:\cygwin-1_7\bin
+@REM C:\cygwin-1_7\bin\dash -l -i -c "rebaseall"
+@REM echo Cygwin-1.7 rebased
 GOTO End
 
 :FoundOldInstallation
