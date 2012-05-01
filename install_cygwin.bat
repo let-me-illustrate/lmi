@@ -72,7 +72,7 @@ START "Installing Cygwin-1.5" /WAIT setup-legacy ^
   --quiet-mode --no-shortcuts ^
   --site ftp://mirror.mcs.anl.gov/pub/cygwin/ ^
   --root C:/cygwin-1_5 --packages ^
-  cvs,doxygen,gdb,libtool,make,openssh,patch,rsync,subversion,wget,zsh
+  cvs,doxygen,gdb,libtool,make,openssh,patch,rsync,subversion,unzip,wget,zsh
 GOTO:EOF
 
 :Got_1_5
@@ -81,7 +81,7 @@ START "Installing Cygwin-1.7" /WAIT setup ^
   --quiet-mode ^
   --site ftp://mirror.mcs.anl.gov/pub/cygwin/ ^
   --root C:/cygwin-1_7 --packages ^
-  cvs,doxygen,gdb,libtool,make,openssh,patch,rsync,subversion,wget,zsh
+  cvs,doxygen,gdb,libtool,make,openssh,patch,rsync,subversion,unzip,wget,zsh
 cd C:\cygwin-1_7\etc
 echo # >> fstab
 echo C:/opt/lmi/MinGW-20090203 /MinGW_        lmi_specific binary,user 0 0 >> fstab
