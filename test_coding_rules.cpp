@@ -31,13 +31,13 @@
 #include "handle_exceptions.hpp"
 #include "istream_to_string.hpp"
 #include "main_common.hpp"
-#include "miscellany.hpp" // lmi_array_size()
+#include "miscellany.hpp"               // lmi_array_size()
 #include "obstruct_slicing.hpp"
 #include "uncopyable_lmi.hpp"
 
-#include <boost/filesystem/convenience.hpp>
+#include <boost/filesystem/convenience.hpp> // fs::extension()
 #include <boost/filesystem/fstream.hpp>
-#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/operations.hpp>  // fs::exists(), fs::is_directory()
 #include <boost/filesystem/path.hpp>
 #include <boost/regex.hpp>
 
@@ -50,7 +50,7 @@
 #include <ostream>
 #include <set>
 #include <sstream>
-#include <stdexcept>
+#include <stdexcept>                    // std::runtime_error
 #include <string>
 
 std::string my_taboo_indulgence();       // See 'my_test_coding_rules.cpp'.
@@ -445,8 +445,9 @@ void check_copyright(file const& f)
     std::time_t const t0 = fs::last_write_time(f.path());
     std::tm const*const t1 = std::gmtime(&t0);
     LMI_ASSERT(NULL != t1);
+    int const year = 1900 + t1->tm_year;
     std::ostringstream oss;
-    oss << "Copyright \\(C\\)[^\\n]*" << 1900 + t1->tm_year;
+    oss << "Copyright \\(C\\)[^\\n]*" << year;
     require(f, oss.str(), "lacks current copyright.");
 }
 
