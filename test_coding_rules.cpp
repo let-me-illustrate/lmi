@@ -422,9 +422,22 @@ void check_config_hpp(file const& f)
         }
 }
 
-// SOMEDAY !! This test could be liberalized to permit copyright
-// notices to span multiple lines. For now, it is assumed that the
-// year appears on the same line as the word "Copyright".
+/// Check required copyright notices; report if absent or not current.
+///
+/// References:
+///   http://www.gnu.org/licenses/gpl-howto.html
+/// | The copyright notice should include the year in which you
+/// | finished preparing the release
+///   http://www.gnu.org/prep/maintain/maintain.html#Copyright-Notices
+/// | When you add the new year, it is not required to keep track of
+/// | which files have seen significant changes in the new year and
+/// | which have not. It is recommended and simpler to add the new
+/// | year to all files in the package, and be done with it for the
+/// | rest of the year.
+///
+/// SOMEDAY !! This test could be liberalized to permit copyright
+/// notices to span multiple lines. For now, it is assumed that the
+/// year appears on the same line as the word "Copyright".
 
 void check_copyright(file const& f)
 {
@@ -439,8 +452,8 @@ void check_copyright(file const& f)
         return;
         }
 
-    std::time_t const t0 = fs::last_write_time(f.path());
-    std::tm const*const t1 = std::gmtime(&t0);
+    std::time_t const t0 = std::time(0);
+    std::tm const*const t1 = std::localtime(&t0);
     LMI_ASSERT(NULL != t1);
     int const year = 1900 + t1->tm_year;
     std::ostringstream oss;

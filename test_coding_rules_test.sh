@@ -62,15 +62,6 @@ Copyright (C)
 "(c) 1999": lower-case 'c' is incorrect in ASCII copyright symbol.
 EOF
 
-cat >eraseme_copyright_002 <<EOF
-$good_rcsid $good_url
-This would seem to be all right:
-// Copyright (C) 1900, `date -u +'%Y'`, 2100
-but the datestamp is changed to the beginning of the msw epoch.
-Don't use the unix epoch, because that causes mayhem on msw.
-EOF
-touch --date=19800102 eraseme_copyright_002
-
 # Files in general: defect markers.
 
 Q='?'
@@ -406,7 +397,6 @@ Exception--file 'an_unexpected_file': File is unexpectedly uncategorizable.
 Exception--file 'another.unexpected.file': File is unexpectedly uncategorizable.
 File 'eraseme_copyright_001' lacks current copyright.
 File 'eraseme_copyright_001' breaks taboo '\(c\) *[0-9]'.
-File 'eraseme_copyright_002' lacks current copyright.
 File 'eraseme_cpp_001.cpp' must not include 'config.hpp'.
 File 'eraseme_cpp_002.cpp' has misindented label ' wrong   :'.
 File 'eraseme_cpp_002.cpp' has misindented label '   No2   :'.
