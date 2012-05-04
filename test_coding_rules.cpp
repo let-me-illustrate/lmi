@@ -426,9 +426,6 @@ void check_config_hpp(file const& f)
 // notices to span multiple lines. For now, it is assumed that the
 // year appears on the same line as the word "Copyright".
 
-// SOMEDAY !! Move the 'GNUmakefile' logic to exclude certain other
-// files hither.
-
 void check_copyright(file const& f)
 {
     if
