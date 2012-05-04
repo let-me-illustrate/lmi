@@ -30007,3 +30007,25 @@ Install 'unzip' package.
   install_miscellanea.make
 Install 'jing' and 'trang'.
 
+20120504T1020Z <gchicares@sbcglobal.net> [573]
+
+  test_coding_rules.cpp
+Refactor to support a forthcoming change.
+
+20120504T1030Z <gchicares@sbcglobal.net> [573]
+
+  test_coding_rules.cpp
+Remove a marker for an issue resolved 20080107T0556Z.
+
+20120504T1120Z <gchicares@sbcglobal.net> [573]
+
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+For copyright, use current civil year, not last-modified year.
+
+20120504T1236Z <gchicares@sbcglobal.net> [573]
+
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+Require an additional copyright notice in html files.
+
