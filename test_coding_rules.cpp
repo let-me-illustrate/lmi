@@ -434,6 +434,17 @@ void check_config_hpp(file const& f)
 /// | which have not. It is recommended and simpler to add the new
 /// | year to all files in the package, and be done with it for the
 /// | rest of the year.
+/// ...
+/// | stick with parenthesized ‘C’ unless you know that C-in-a-circle
+/// | will work.
+///
+/// For html files, two copyright notices are required. The first
+/// appears in a comment near the top of the file, and uses "(C)" for
+/// concinnity with non-html files. The second appears in displayed
+/// text, generally toward the bottom, and uses '&copy;' because the
+/// circle-C symbol is reliably available and more attractive. Both
+/// notices must include the current year, except that html versions
+/// of the GPL use the FSF's copyright years in the '&copy;' notice.
 ///
 /// SOMEDAY !! This test could be liberalized to permit copyright
 /// notices to span multiple lines. For now, it is assumed that the
@@ -456,9 +467,17 @@ void check_copyright(file const& f)
     std::tm const*const t1 = std::localtime(&t0);
     LMI_ASSERT(NULL != t1);
     int const year = 1900 + t1->tm_year;
+
     std::ostringstream oss;
     oss << "Copyright \\(C\\)[^\\n]*" << year;
     require(f, oss.str(), "lacks current copyright.");
+
+    if(f.is_of_phylum(e_html) && !f.phyloanalyze("^COPYING"))
+        {
+        std::ostringstream oss;
+        oss << "Copyright &copy;[^\\n]*" << year;
+        require(f, oss.str(), "lacks current secondary copyright.");
+        }
 }
 
 void check_cxx(file const& f)

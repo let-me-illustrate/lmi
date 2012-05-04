@@ -62,6 +62,24 @@ Copyright (C)
 "(c) 1999": lower-case 'c' is incorrect in ASCII copyright symbol.
 EOF
 
+# html files: copyright.
+
+cat >eraseme_copyright_002.html <<EOF
+$boilerplate
+Copyright &copy; `date -u +'%Y'`
+EOF
+
+cat >eraseme_copyright_003.html <<EOF
+$good_rcsid $good_url
+Missing "(C)" copyright.
+Copyright &copy; `date -u +'%Y'`
+EOF
+
+cat >eraseme_copyright_004.html <<EOF
+$boilerplate
+Missing circle-C copyright.
+EOF
+
 # Files in general: defect markers.
 
 Q='?'
@@ -397,6 +415,8 @@ Exception--file 'an_unexpected_file': File is unexpectedly uncategorizable.
 Exception--file 'another.unexpected.file': File is unexpectedly uncategorizable.
 File 'eraseme_copyright_001' lacks current copyright.
 File 'eraseme_copyright_001' breaks taboo '\(c\) *[0-9]'.
+File 'eraseme_copyright_003.html' lacks current copyright.
+File 'eraseme_copyright_004.html' lacks current secondary copyright.
 File 'eraseme_cpp_001.cpp' must not include 'config.hpp'.
 File 'eraseme_cpp_002.cpp' has misindented label ' wrong   :'.
 File 'eraseme_cpp_002.cpp' has misindented label '   No2   :'.
