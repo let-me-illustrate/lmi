@@ -47,20 +47,25 @@ third_party_source_dir  := $(destination)/src
 boost_archive    := boost_1_38_0.tar.bz2
 cgicc_archive    := cgicc-3.1.4.tar.bz2
 fop_archive      := fop-0.20.5-bin.tar.gz
+jing_archive     := jing-20091111.zip
 md5sum_msw_exe   := md5sum.exe
 sample_archive   := lmi-data-20050618T1440Z.tar.bz2
+trang_archive    := trang-20091111.zip
 xmlwrapp_archive := xmlwrapp-0.6.0.tar.gz
 
 file_list := \
   $(boost_archive) \
   $(cgicc_archive) \
   $(fop_archive) \
+  $(jing_archive) \
   $(md5sum_msw_exe) \
   $(sample_archive) \
+  $(trang_archive) \
   $(xmlwrapp_archive) \
 
 boost cgicc xmlwrapp: stem =               $(basename $(basename $($@_archive)))
 fop:                  stem = $(subst -bin,,$(basename $(basename $($@_archive))))
+jing trang:           stem =                          $(basename $($@_archive))
 md5sum_msw:           stem = $(md5sum_msw_exe)
 sample:               stem = data
 
@@ -69,15 +74,19 @@ sample:               stem = data
 $(boost_archive)-url    := $(sf_mirror)/boost/$(boost_archive)
 $(cgicc_archive)-url    := ftp://ftp.gnu.org/pub/gnu/cgicc/$(cgicc_archive)
 $(fop_archive)-url      := http://archive.apache.org/dist/xmlgraphics/fop/binaries/$(fop_archive)
+$(jing_archive)-url     := http://jing-trang.googlecode.com/files/$(jing_archive)
 $(md5sum_msw_exe)-url   := http://etree.org/cgi-bin/counter.cgi/software/md5sum.exe#!md5!eb574b236133e60c989c6f472f07827b
 $(sample_archive)-url   := http://download.savannah.gnu.org/releases/lmi/$(sample_archive)
+$(trang_archive)-url    := http://jing-trang.googlecode.com/files/$(trang_archive)
 $(xmlwrapp_archive)-url := $(sf_mirror)/xmlwrapp/$(xmlwrapp_archive)
 
 $(boost_archive)-md5    := 5eca2116d39d61382b8f8235915cb267
 $(cgicc_archive)-md5    := 6cb5153fc9fa64b4e50c7962aa557bbe
 $(fop_archive)-md5      := d6b43e3eddf9378536ad8127bc057d41
+$(jing_archive)-md5     := 13eef193921409a1636377d1efbf9843
 $(md5sum_msw_exe)-md5   := eb574b236133e60c989c6f472f07827b
 $(sample_archive)-md5   := e7f07133abfc3b9c2252dfa3b61191bc
+$(trang_archive)-md5    := 9d31799b948c350850eb9dd14e5b832d
 $(xmlwrapp_archive)-md5 := 331369a1b0e0539b1ce95a67e4c2bec4
 
 # Utilities ####################################################################
@@ -95,6 +104,7 @@ RM     := rm
 SORT   := sort
 TAR    := tar
 TOUCH  := touch
+UNZIP  := unzip
 WGET   := wget
 
 # Error messages ###############################################################
@@ -116,7 +126,7 @@ scratch_exists = \
 # Targets ######################################################################
 
 .PHONY: all
-all: boost cgicc fop md5sum_msw sample xmlwrapp
+all: boost cgicc fop jing md5sum_msw sample trang xmlwrapp
 
 # Patches were generated according to this advice:
 #
@@ -173,6 +183,12 @@ fop: $(file_list)
 	@$(MKDIR) $(destination)/$(stem)
 	$(MV) scratch/$(stem)/* $(destination)/$(stem)
 
+.PHONY: jing
+jing: $(file_list)
+	@$(MKDIR) --parents $(destination)/rng
+	$(MV) scratch/$(stem)/bin/$@.jar         $(destination)/rng
+	$(MV) scratch/$(stem)/bin/xercesImpl.jar $(destination)/rng
+
 # The 'md5sum_msw' binary is required only by the msw-specific
 # 'fardel' target. On other platforms, it can't be executed, but it
 # could be used to create a cross 'fardel'.
@@ -196,6 +212,11 @@ md5sum_msw: $(file_list)
 sample: $(file_list)
 	@-$(MKDIR) --parents $(prefix)/data
 	$(MV) scratch/$(stem)/* $(prefix)/data
+
+.PHONY: trang
+trang: $(file_list)
+	@$(MKDIR) --parents $(destination)/rng
+	$(MV) scratch/$(stem)/$@.jar $(destination)/rng
 
 .PHONY: xmlwrapp
 xmlwrapp: $(file_list)
@@ -252,6 +273,12 @@ WGETFLAGS := '--timestamping'
 	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $($@-url)
 	$(ECHO) "$($@-md5) *$(cache_dir)/$@" | $(MD5SUM) --check
 	$(CHMOD) 750 $(cache_dir)/$@
+
+.PHONY: %.zip
+%.zip:
+	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $($@-url)
+	$(ECHO) "$($@-md5) *$(cache_dir)/$@" | $(MD5SUM) --check
+	-$(UNZIP) $(cache_dir)/$@ -d scratch
 
 # Maintenance ##################################################################
 

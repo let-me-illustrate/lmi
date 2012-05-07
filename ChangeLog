@@ -29982,3 +29982,50 @@ Alter layout in anticipation of adding annotations.
   cell.xsd
 Improve documentation.
 
+20120430T1735Z <gchicares@sbcglobal.net> [573]
+
+  test_coding_rules.cpp
+Allow a file named 'md5sums'.
+
+20120501T1455Z <gchicares@sbcglobal.net> [573]
+
+  GNUmakefile
+Validate using 'md5sums' if it exists.
+
+20120501T1516Z <gchicares@sbcglobal.net> [573]
+
+  install_cygwin.bat
+Presumptively run 'rebaseall' for legacy version only.
+
+20120501T1520Z <gchicares@sbcglobal.net> [573]
+
+  install_cygwin.bat
+Install 'unzip' package.
+
+20120501T1535Z <gchicares@sbcglobal.net> [573]
+
+  install_miscellanea.make
+Install 'jing' and 'trang'.
+
+20120504T1020Z <gchicares@sbcglobal.net> [573]
+
+  test_coding_rules.cpp
+Refactor to support a forthcoming change.
+
+20120504T1030Z <gchicares@sbcglobal.net> [573]
+
+  test_coding_rules.cpp
+Remove a marker for an issue resolved 20080107T0556Z.
+
+20120504T1120Z <gchicares@sbcglobal.net> [573]
+
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+For copyright, use current civil year, not last-modified year.
+
+20120504T1236Z <gchicares@sbcglobal.net> [573]
+
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+Require an additional copyright notice in html files.
+

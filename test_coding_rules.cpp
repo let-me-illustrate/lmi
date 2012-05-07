@@ -31,13 +31,13 @@
 #include "handle_exceptions.hpp"
 #include "istream_to_string.hpp"
 #include "main_common.hpp"
-#include "miscellany.hpp" // lmi_array_size()
+#include "miscellany.hpp"               // lmi_array_size()
 #include "obstruct_slicing.hpp"
 #include "uncopyable_lmi.hpp"
 
-#include <boost/filesystem/convenience.hpp>
+#include <boost/filesystem/convenience.hpp> // fs::extension()
 #include <boost/filesystem/fstream.hpp>
-#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/operations.hpp>  // fs::exists(), fs::is_directory()
 #include <boost/filesystem/path.hpp>
 #include <boost/regex.hpp>
 
@@ -50,7 +50,7 @@
 #include <ostream>
 #include <set>
 #include <sstream>
-#include <stdexcept>
+#include <stdexcept>                    // std::runtime_error
 #include <string>
 
 std::string my_taboo_indulgence();       // See 'my_test_coding_rules.cpp'.
@@ -228,6 +228,7 @@ file::file(std::string const& file_path)
         : phyloanalyze("Log$")         ? e_log
         : phyloanalyze("GNUmakefile$") ? e_make
         : phyloanalyze("^Makefile")    ? e_make
+        : phyloanalyze("^md5sums$")    ? e_md5
         : phyloanalyze("^INSTALL$")    ? e_synopsis
         : phyloanalyze("^README")      ? e_synopsis
         : phyloanalyze("^eraseme")     ? e_ephemeral
@@ -421,12 +422,33 @@ void check_config_hpp(file const& f)
         }
 }
 
-// SOMEDAY !! This test could be liberalized to permit copyright
-// notices to span multiple lines. For now, it is assumed that the
-// year appears on the same line as the word "Copyright".
-
-// SOMEDAY !! Move the 'GNUmakefile' logic to exclude certain other
-// files hither.
+/// Check required copyright notices; report if absent or not current.
+///
+/// References:
+///   http://www.gnu.org/licenses/gpl-howto.html
+/// | The copyright notice should include the year in which you
+/// | finished preparing the release
+///   http://www.gnu.org/prep/maintain/maintain.html#Copyright-Notices
+/// | When you add the new year, it is not required to keep track of
+/// | which files have seen significant changes in the new year and
+/// | which have not. It is recommended and simpler to add the new
+/// | year to all files in the package, and be done with it for the
+/// | rest of the year.
+/// ...
+/// | stick with parenthesized ‘C’ unless you know that C-in-a-circle
+/// | will work.
+///
+/// For html files, two copyright notices are required. The first
+/// appears in a comment near the top of the file, and uses "(C)" for
+/// concinnity with non-html files. The second appears in displayed
+/// text, generally toward the bottom, and uses '&copy;' because the
+/// circle-C symbol is reliably available and more attractive. Both
+/// notices must include the current year, except that html versions
+/// of the GPL use the FSF's copyright years in the '&copy;' notice.
+///
+/// SOMEDAY !! This test could be liberalized to permit copyright
+/// notices to span multiple lines. For now, it is assumed that the
+/// year appears on the same line as the word "Copyright".
 
 void check_copyright(file const& f)
 {
@@ -441,12 +463,21 @@ void check_copyright(file const& f)
         return;
         }
 
-    std::time_t const t0 = fs::last_write_time(f.path());
-    std::tm const*const t1 = std::gmtime(&t0);
+    std::time_t const t0 = std::time(0);
+    std::tm const*const t1 = std::localtime(&t0);
     LMI_ASSERT(NULL != t1);
+    int const year = 1900 + t1->tm_year;
+
     std::ostringstream oss;
-    oss << "Copyright \\(C\\)[^\\n]*" << 1900 + t1->tm_year;
+    oss << "Copyright \\(C\\)[^\\n]*" << year;
     require(f, oss.str(), "lacks current copyright.");
+
+    if(f.is_of_phylum(e_html) && !f.phyloanalyze("^COPYING"))
+        {
+        std::ostringstream oss;
+        oss << "Copyright &copy;[^\\n]*" << year;
+        require(f, oss.str(), "lacks current secondary copyright.");
+        }
 }
 
 void check_cxx(file const& f)
@@ -871,7 +902,10 @@ void check_reserved_names(file const& f)
 
 void enforce_taboos(file const& f)
 {
-    if(f.phyloanalyze("test_coding_rules"))
+    if
+        (   f.phyloanalyze("test_coding_rules")
+        ||  f.phyloanalyze("^md5sums$")
+        )
         {
         return;
         }
