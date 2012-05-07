@@ -30029,3 +30029,11 @@ For copyright, use current civil year, not last-modified year.
   test_coding_rules_test.sh
 Require an additional copyright notice in html files.
 
+20120507T1507Z <gchicares@sbcglobal.net> [573]
+
+  lmi.ico
+Increase color depth to avoid an msw7 backward-compatibility defect:
+monochrome icons, supported by msw for a quarter of a century, now
+fail bizarrely. See:
+  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00001.html
+
