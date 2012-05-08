@@ -30037,3 +30037,8 @@ monochrome icons, supported by msw for a quarter of a century, now
 fail bizarrely. See:
   http://lists.nongnu.org/archive/html/lmi/2012-05/msg00001.html
 
+20120508T1347Z <gchicares@sbcglobal.net> [573]
+
+  GNUmakefile
+Make 'happy_new_year' target usable in webpages directory.
+

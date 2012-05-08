@@ -384,14 +384,15 @@ happy_new_year: source_clean
 	    && $(SED) \
 	      --in-place='$(backup_directory)/*' \
 	      -e'/$(unutterable)/s/$(old_year)/$(old_year), $(new_year)/' \
-	      $$z; \
+	      $$z \
+	    || true; \
 	  done;
 	$(RM) --force BOY
 	@$(ECHO) "Check these potential issues:"
 	@$(GREP) '$(old_year)[, ]*$(old_year)' * || true
 	@$(GREP) '$(new_year)[, ]*$(old_year)' * || true
 	@$(GREP) '$(new_year)[, ]*$(new_year)' * || true
-	@$(GREP) '$(old_year)' *.?pp \
+	@[ -z $(wildcard *.?pp) ] || $(GREP) '$(old_year)' *.?pp \
 	  | $(SED) \
 	    -e '/$(old_year)[, ]*$(new_year)/d' \
 	    -e'/[$$]Id: .* $(old_year)-.*[$$]/d' \
@@ -403,13 +404,14 @@ happy_new_year: source_clean
 	    -e '/$(unutterable).*$(new_year) Vadim Zeitlin/d' \
 	    -e '/unutterable := $(unutterable)/d' \
 	    -e '/$(unutterable) (C) .(yyyy) Gregory W. Chicares/d' \
-	    -e '/$(unutterable) (C) 1989, 1991 Free Software Foundation, Inc./d' \
+	    -e '/$(unutterable) \((C)\|&copy;\) 1989, 1991 Free Software Foundation, Inc./d' \
 	    -e '/$(unutterable) (C) 1987, 1989 Free Software Foundation, Inc./d' \
 	    -e '/$(unutterable) (C) 1987, 1989, 1992 Free Software Foundation, Inc./d' \
 	    -e '/$(unutterable) (C) 1995, 1996 Free Software Foundation, Inc./d' \
 	    -e '/$(unutterable) 1995, 1996, 2000 Free Software Foundation, Inc./d' \
 	    -e '/$(unutterable) (C) <year>  <name of author>/d' \
 	    -e '/Gnomovision version 69, $(unutterable) (C) year name of author/d' \
+	    -e '/$(unutterable) (C) <var>yyyy<\/var>  *<var>name of author<\/var>/d' \
 	    -e '/$(unutterable) (C) &lt;year&gt;  &lt;name of author&gt;/d' \
 	    -e '/GNU cgicc $(unutterable) (C) 1996, 1997, 1998, 1999, 2000 Stephen F. Booth/d' \
 	    -e '/$(unutterable) and license notices for graphics files/d' \
