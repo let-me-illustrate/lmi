@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+    "http://www.w3.org/TR/html4/strict.dtd">
+
+<!--
+    Let me illustrate... user manual.
+
+    Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 2 as
+    published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software Foundation,
+    Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+
+    http://savannah.nongnu.org/projects/lmi
+    email: <gchicares@sbcglobal.net>
+    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+    $Id$
+-->
+
+<html>
+
+<head>
+<!--
+  "windows-1252" isn't msw-specific: it works with GTK, too. See:
+    http://lists.nongnu.org/archive/html/lmi/2008-03/msg00019.html
+  With wx-3, use unicode instead.
+-->
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>Let me illustrate&hellip;</title>
+</head>
+
+<body>
+
+<h3>Frequently asked questions</h3>
+
+<ul>
+  <li>
+    <a href="faq.html#how_census_blank">
+      Why does a new census appear blank?
+    </a>
+  </li>
+  <li>
+    <a href="faq.html#how_month_by_month">
+      What&rsquo;s &ldquo;month-by-month&rdquo; processing order?
+      Why doesn&rsquo;t it permit solves?
+    </a>
+  </li>
+  <li>
+    <a href="faq.html#how_changes_detected">
+      Why can&rsquo;t the death benefit be decreased directly?
+    </a>
+  </li>
+</ul>
+
+<h5><a name="how_census_blank">Why does a new census appear blank?</a></h5>
+<p>
+When you create a new census, it contains one cell with all input
+fields set to default values. But the
+<a href="group_tutorial.html#how_census_interpret">census display</a>
+shows only columns that differ from their defaults, so there&rsquo;s
+nothing to show except the <samp>Cell</samp> column.
+</p>
+
+<h5><a name="how_month_by_month">What&rsquo;s &ldquo;month-by-month&rdquo; processing order? Why doesn&rsquo;t it permit solves?</a></h5>
+<p>
+Normally every cell stands alone, and you run them one after another.
+It&rsquo;s like a baton race: only one person runs at a time.
+</p>
+<p>
+That&rsquo;s fine as long as no one&rsquo;s values depend on what
+happens inside anyone else&rsquo;s contract.
+But sometimes all the contracts in a group depend on each other.
+That happens if fund charges are &ldquo;tiered&rdquo; by total case
+assets.
+For example, charges may be twenty-five basis points on the first
+$1,000,000, and fifteen basis points on anything over $1,000,000.
+The charges in the second month depend on the first month&rsquo;s
+total account value for everyone combined.
+You can&rsquo;t run each cell independently, one at a time.
+You must run everyone together, one month at a time.
+It can&rsquo;t be a baton race: it has to be a three-legged race.
+</p>
+<p>
+A three-legged race can be inefficient.
+Universal life uses monthly processing.
+That means a lot of values have to be calculated when you run a cell.
+When you run one cell at a time, <tt>lmi</tt> keeps only the year-end
+values needed for printing an illustration, and throws the rest away
+to save space.
+But everyone&rsquo;s monthly values have to be kept when you run a
+whole group one month at a time.
+With a really large case, your computer may not have room for all
+those numbers.
+</p>
+<p>
+Here&rsquo;s another complication.
+The first contract processed in some month might make the case&rsquo;s
+assets cross from one tier into another.
+That affects other contracts processed later in the same month.
+<tt>lmi</tt> runs everyone in the order shown in the census.
+If you change that order, you get different results.
+The same thing happens in administration, too.
+</p>
+<p>
+Running a group month by month also makes solves hard.
+Suppose you want to solve for level premium to endow.
+Running one cell at a time, it&rsquo;s easy.
+Try one premium. If the contract doesn&rsquo;t endow, try another.
+You&rsquo;ve probably done this by hand, although the computer can do
+it faster.
+But you can&rsquo;t isolate one contract and run its values to
+maturity if they depend on the values of all other contracts.
+You have to run them all together.
+Imagine doing that by hand.
+That&rsquo;s what makes solves hard.
+If an approximation is good enough, run solves one cell at a time.
+</p>
+
+<h5><a name="how_changes_detected">Why can&rsquo;t the death benefit be decreased directly?</a></h5>
+<p>
+You can set the <em>specified amount</em> directly. The death benefit
+may be different&mdash;for instance, because of the corridor.
+</p>
+<!-- TODO ?? This seems quite incorrect.
+<p>
+Suppose you illustrate a $1,000,000 specified amount with the
+increasing death benefit option. After a few years, the death benefit
+may have increased to $1,500,000. Then you might want to take a large
+withdrawal and make the death benefit decrease to the original
+$1,000,000.
+</p>
+<p>
+If you set the specified amount in that year to $1,000,000, then
+<tt>lmi</tt> sees that it&rsquo;s already $1,000,000, so there&rsquo;s
+no change. Any other amount would be a change. If you want to get back
+to the original amount, try changing it to $999,999.99.
+That&rsquo;s probably close enough.
+</p>
+-->
+
+<hr>
+
+<p>
+Copyright &copy; 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
+This program, including its documentation, is free software. Read the
+<a href="COPYING.html">terms</a>
+under which you can redistribute and modify it.
+</p>
+
+<p>
+Maintained by
+<a href="mailto:&#103;&#99;&#104;&#105;&#99;&#97;&#114;&#101;&#115;@sbcglobal.net">
+Gregory W. Chicares</a>. The latest version of this file can be found
+at the <tt>lmi</tt>
+<a href="http://savannah.nongnu.org/projects/lmi/">website</a>.
+</p>
+
+</body>
+
+</html>
+
