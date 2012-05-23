@@ -77,16 +77,11 @@ Close the "Command prompt" window.
 
 (2) Install lmi
 
-Start 'bash', and enable pasting:
+Start a Cygwin shell:
 
-  Start | Programs | Cygwin | Cygwin Bash Shell
-  alt-Spacebar | Properties | Options
-  check both "QuickEdit Mode" and "Insert Mode"
-  OK
-  select "Modify shortcut that started this window"
-  OK
+  Start | Programs | Cygwin | Cygwin Terminal
 
-Copy and paste the following into 'bash':
+Copy the following, and paste it (Shift-Insert) into the shell:
 
   mkdir -p /tmp
   export TMP=/tmp
@@ -98,7 +93,7 @@ Copy and paste the following into 'bash':
   ./install_msw.sh >$logfile 2>&1; tar -cjf $logfile.tar.bz2 $logfile
 
 Installation proceeds silently for about an hour. When you see
-"Finished building lmi", copy and paste these lines into 'bash':
+"Finished building lmi", copy and paste these lines into the shell:
 
   export PATH=/opt/lmi/local/bin:/opt/lmi/local/lib:$PATH
   cd /opt/lmi/bin; ./lmi_wx_shared --data_path=/opt/lmi/data
