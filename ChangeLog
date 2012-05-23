@@ -30060,3 +30060,14 @@ Mirror cvs user-manual webpages.
   workhorse.make
 Use mirrored user manual, eliminating cvs dependency in makefiles.
 
+20120523T2011Z <gchicares@sbcglobal.net> [578]
+
+  INSTALL
+Update instructions for starting 'bash': the default terminal is now
+'mintty'.
+
+20120523T2014Z <gchicares@sbcglobal.net> [578]
+
+  version.hpp
+Designate release candidate.
+
