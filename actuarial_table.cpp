@@ -83,39 +83,22 @@ namespace
     }
 } // Unnamed namespace.
 
-actuarial_table::actuarial_table(std::string const& filename, int table_number)
-    :filename_       (filename)
-    ,table_number_   (table_number)
-    ,table_type_     (-1)
+actuarial_table_base::actuarial_table_base()
+    :table_type_     (-1)
     ,min_age_        (-1)
     ,max_age_        (-1)
     ,select_period_  (-1)
     ,max_select_age_ (-1)
-    ,table_offset_   (-1)
 {
-    if(table_number_ <= 0)
-        {
-        fatal_error()
-            << "There is no table number "
-            << table_number_
-            << " in file '"
-            << filename_
-            << "'."
-            << LMI_FLUSH
-            ;
-        }
-
-    find_table();
-    parse_table();
 }
 
-actuarial_table::~actuarial_table()
+actuarial_table_base::~actuarial_table_base()
 {
 }
 
 /// Read a given number of values for a given issue age.
 
-std::vector<double> actuarial_table::values(int issue_age, int length) const
+std::vector<double> actuarial_table_base::values(int issue_age, int length) const
 {
     return specific_values(issue_age, length);
 }
@@ -127,7 +110,7 @@ std::vector<double> actuarial_table::values(int issue_age, int length) const
 /// method: method-specific adjustments are not permitted to render
 /// sane what was insane ab ovo.
 
-std::vector<double> actuarial_table::values_elaborated
+std::vector<double> actuarial_table_base::values_elaborated
     (int                      issue_age
     ,int                      length
     ,e_actuarial_table_method method
@@ -192,6 +175,31 @@ std::vector<double> actuarial_table::values_elaborated
         }
 }
 
+soa_actuarial_table::soa_actuarial_table(std::string const& filename, int table_number)
+    :filename_       (filename)
+    ,table_number_   (table_number)
+    ,table_offset_   (-1)
+{
+    if(table_number_ <= 0)
+        {
+        fatal_error()
+            << "There is no table number "
+            << table_number_
+            << " in file '"
+            << filename_
+            << "'."
+            << LMI_FLUSH
+            ;
+        }
+
+    find_table();
+    parse_table();
+}
+
+soa_actuarial_table::~soa_actuarial_table()
+{
+}
+
 /// Find the table specified by table_number_.
 ///
 /// SOA documentation does not specify the domain of table numbers,
@@ -207,7 +215,7 @@ std::vector<double> actuarial_table::values_elaborated
 /// Asserting that the table number is nonzero makes it safe to use
 /// zero as a sentry.
 
-void actuarial_table::find_table()
+void soa_actuarial_table::find_table()
 {
     LMI_ASSERT(0 != table_number_);
 
@@ -302,7 +310,7 @@ void actuarial_table::find_table()
 ///   15   2-byte integer:  Maximum select age (if zero, then it's max age)
 ///   17   8-byte doubles:  Table values
 
-void actuarial_table::parse_table()
+void soa_actuarial_table::parse_table()
 {
     LMI_ASSERT(-1 == table_type_    );
     LMI_ASSERT(-1 == min_age_       );
@@ -447,7 +455,7 @@ void actuarial_table::parse_table()
 /// taken as unlimited, so its value should be max_age_; this
 /// implementation makes it so after the fact.
 
-void actuarial_table::read_values(std::istream& is, int nominal_length)
+void soa_actuarial_table::read_values(std::istream& is, int nominal_length)
 {
     if('S' != table_type_)
         {
@@ -504,7 +512,7 @@ void actuarial_table::read_values(std::istream& is, int nominal_length)
 /// considered preferable to throw an exception, in case permitting
 /// issue age to exceed max_select_age_ is an inadvertent mistake.
 
-std::vector<double> actuarial_table::specific_values
+std::vector<double> soa_actuarial_table::specific_values
     (int issue_age
     ,int length
     ) const
@@ -583,7 +591,7 @@ std::vector<double> actuarial_table_rates
     ,int                length
     )
 {
-    actuarial_table z(table_filename, table_number);
+    soa_actuarial_table z(table_filename, table_number);
     return z.values(issue_age, length);
 }
 
@@ -597,7 +605,7 @@ std::vector<double> actuarial_table_rates_elaborated
     ,int                      reset_duration
     )
 {
-    actuarial_table z(table_filename, table_number);
+    soa_actuarial_table z(table_filename, table_number);
     return z.values_elaborated
         (issue_age
         ,length
