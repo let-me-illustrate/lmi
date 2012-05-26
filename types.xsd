@@ -1,0 +1,769 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <!--
+    RELAX NG schema for custom types.
+
+    Copyright (C) 2012 Gregory W. Chicares.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 2 as
+    published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software Foundation,
+    Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+
+    http://savannah.nongnu.org/projects/lmi
+    email: <gchicares@sbcglobal.net>
+    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+  -->
+  <!-- $Id$ -->
+  <!--
+    This schema is meant not for standalone use, but rather for
+    inclusion from other schemata.
+  -->
+  <!-- It is infeasible to validate an input sequence with a regex. -->
+  <!-- Numeric-range types. -->
+  <xs:simpleType name="nonnegative_double">
+    <xs:annotation>
+      <xs:documentation>Floating-point number greater than or equal to zero.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:double">
+      <xs:minInclusive value="0"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="proportion_double">
+    <xs:annotation>
+      <xs:documentation>Floating-point number between zero and one, inclusive.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:double">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="calendar_date_int">
+    <xs:annotation>
+      <xs:documentation>Julian Day Number between 1752-09-14 and 9999-12-31, inclusive.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:nonNegativeInteger">
+      <xs:minInclusive value="2361222"/>
+      <xs:maxInclusive value="5373484"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="age_int">
+    <xs:annotation>
+      <xs:documentation>Attained age: integer between zero and 99, inclusive.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:nonNegativeInteger">
+      <xs:maxInclusive value="99"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="duration_int">
+    <xs:annotation>
+      <xs:documentation>Time interval in years: integer between zero and 100, inclusive.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:nonNegativeInteger">
+      <xs:maxInclusive value="100"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="month_int">
+    <xs:annotation>
+      <xs:documentation>Time interval in months: integer between zero and eleven, inclusive.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:nonNegativeInteger">
+      <xs:maxInclusive value="11"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- Enumerations. -->
+  <xs:simpleType name="yes_or_no">
+    <xs:annotation>
+      <xs:documentation>'Yes' or 'No'. 'No' is listed first because it is usually the better default.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="No"/>
+      <xs:enumeration value="Yes"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="gender">
+    <xs:annotation>
+      <xs:documentation>Gender. 'Unisex' is for contracts that don't distinguish rates by gender.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Female"/>
+      <xs:enumeration value="Male"/>
+      <xs:enumeration value="Unisex"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="smoking">
+    <xs:annotation>
+      <xs:documentation>Smoking. 'Unismoke' is for contracts that don't distinguish rates
+by smoking. Some contracts speak of tobacco use instead of smoking,
+but none use both, so a single set of enumerators suffices.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Smoker"/>
+      <xs:enumeration value="Nonsmoker"/>
+      <xs:enumeration value="Unismoke"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="class">
+    <xs:annotation>
+      <xs:documentation>Underwriting class. Use "Rated" for contracts with table ratings.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Preferred"/>
+      <xs:enumeration value="Standard"/>
+      <xs:enumeration value="Rated"/>
+      <xs:enumeration value="Ultra"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="dbopt">
+    <xs:annotation>
+      <xs:documentation>Death benefit option: 'A' = level; 'B' = increasing; 'ROP' = return of premium.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="A"/>
+      <xs:enumeration value="B"/>
+      <xs:enumeration value="ROP"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="mode">
+    <xs:annotation>
+      <xs:documentation>Payment mode.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Annual"/>
+      <xs:enumeration value="Semiannual"/>
+      <xs:enumeration value="Quarterly"/>
+      <xs:enumeration value="Monthly"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="gen_basis">
+    <xs:annotation>
+      <xs:documentation>Basis for expense and general-account rates.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Current"/>
+      <xs:enumeration value="Guaranteed"/>
+      <xs:enumeration value="Midpoint"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="sep_basis">
+    <xs:annotation>
+      <xs:documentation>Basis for separate-account rates.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Hypothetical"/>
+      <xs:enumeration value="Zero"/>
+      <xs:enumeration value="Half of hypothetical"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="uw_basis">
+    <xs:annotation>
+      <xs:documentation>Type of underwriting.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Medical"/>
+      <xs:enumeration value="Paramedical"/>
+      <xs:enumeration value="Nonmedical"/>
+      <xs:enumeration value="Simplified issue"/>
+      <xs:enumeration value="Guaranteed issue"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="table_rating">
+    <xs:annotation>
+      <xs:documentation>Industry-standard table rating, or 'None'.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="None"/>
+      <xs:enumeration value="A=+25%"/>
+      <xs:enumeration value="B=+50%"/>
+      <xs:enumeration value="C=+75%"/>
+      <xs:enumeration value="D=+100%"/>
+      <xs:enumeration value="E=+125%"/>
+      <xs:enumeration value="F=+150%"/>
+      <xs:enumeration value="H=+200%"/>
+      <xs:enumeration value="J=+250%"/>
+      <xs:enumeration value="L=+300%"/>
+      <xs:enumeration value="P=+400%"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="solve_type">
+    <xs:annotation>
+      <xs:documentation>Parameter to be solved for.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="No solve"/>
+      <xs:enumeration value="Specified amount"/>
+      <xs:enumeration value="Employee premium"/>
+      <xs:enumeration value="Employer premium"/>
+      <xs:enumeration value="Loan"/>
+      <xs:enumeration value="Withdrawal"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="solve_target">
+    <xs:annotation>
+      <xs:documentation>Solve goal.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Endowment"/>
+      <xs:enumeration value="Target CSV"/>
+      <xs:enumeration value="CSV = tax basis"/>
+      <xs:enumeration value="Avoid MEC"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="pmt_strategy">
+    <xs:annotation>
+      <xs:documentation>Optional strategy to determine payment as a function of specified amount.
+'PmtInputScalar' is obsolete.
+'PmtMEP' uses 7702A 7PP rate.
+'Table' uses an external table (e.g., New York Table D for group insurance).</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="PmtInputScalar"/>
+      <xs:enumeration value="PmtMinimum"/>
+      <xs:enumeration value="PmtTarget"/>
+      <xs:enumeration value="PmtMEP"/>
+      <xs:enumeration value="PmtGLP"/>
+      <xs:enumeration value="PmtGSP"/>
+      <xs:enumeration value="PmtCorridor"/>
+      <xs:enumeration value="PmtTable"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="sa_strategy">
+    <xs:annotation>
+      <xs:documentation>Optional strategy to determine specified amount as a function of premium.
+'SAInputScalar' is obsolete.
+'SAMEP' uses 7702A 7PP rate.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="SAInputScalar"/>
+      <xs:enumeration value="SAMaximum"/>
+      <xs:enumeration value="SATarget"/>
+      <xs:enumeration value="SAMEP"/>
+      <xs:enumeration value="SAGLP"/>
+      <xs:enumeration value="SAGSP"/>
+      <xs:enumeration value="SACorridor"/>
+      <xs:enumeration value="SASalary"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="gen_acct_rate_type">
+    <xs:annotation>
+      <xs:documentation>General-account rate: before or after spread.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Credited rate"/>
+      <xs:enumeration value="Earned rate"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="sep_acct_rate_type">
+    <xs:annotation>
+      <xs:documentation>Separate-account rate: before or after spread.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Net rate"/>
+      <xs:enumeration value="Gross rate"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="loan_rate_type">
+    <xs:annotation>
+      <xs:documentation>Loan rate: fixed or variable.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Fixed loan rate"/>
+      <xs:enumeration value="Variable loan rate"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="fund_input_method">
+    <xs:annotation>
+      <xs:documentation>Fund-allocation overrides, for payments that aren't peremptorily
+allocated to the general account (e.g., employer payments on some
+group UL contracts might always go into the general account).
+Conceptually:
+'Average': use mean separate-account fee.
+'Override': use scalar input separate-account fee.
+'Choose': respect input fund allocations.
+However, there's no GUI for fund allocation yet, so, for the nonce,
+the meanings in practice are:
+'Average': allocate all payments to separate account.
+'Choose': allocate all payments to general account.
+Reason: the GUI, once it exists, will by default allocate all
+payments to the general account if no separate-account funds are
+selected.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Average fund"/>
+      <xs:enumeration value="Override fund"/>
+      <xs:enumeration value="Choose funds"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="run_order">
+    <xs:annotation>
+      <xs:documentation>Order in which different individuals in a census are processed.
+By default, illustrations are created independently, in series:
+one life at a time. Alternatively, all lives may be run together
+in parallel, which requires more memory but permits them to affect
+each other, as when individual charges depend on total case assets.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Life by life"/>
+      <xs:enumeration value="Month by month"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="survival_limit">
+    <xs:annotation>
+      <xs:documentation>Presumed moment of death, for partial mortality.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="No survival limit"/>
+      <xs:enumeration value="Survive to age limit"/>
+      <xs:enumeration value="Survive to duration limit"/>
+      <xs:enumeration value="Survive to life expectancy"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="term_adj_method">
+    <xs:annotation>
+      <xs:documentation>Order in which term and base are affected by changes in total
+specified amount.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Adjust base first"/>
+      <xs:enumeration value="Adjust term first"/>
+      <xs:enumeration value="Adjust base and term proportionately"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="state">
+    <xs:annotation>
+      <xs:documentation>USPS two-letter abbreviations for the fifty US states, plus
+  'DC' (District of Columbia)
+  'PR' (Puerto Rico)
+and 'XX', a fictitious state used for non-US business.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="AL"/>
+      <xs:enumeration value="AK"/>
+      <xs:enumeration value="AZ"/>
+      <xs:enumeration value="AR"/>
+      <xs:enumeration value="CA"/>
+      <xs:enumeration value="CO"/>
+      <xs:enumeration value="CT"/>
+      <xs:enumeration value="DE"/>
+      <xs:enumeration value="DC"/>
+      <xs:enumeration value="FL"/>
+      <xs:enumeration value="GA"/>
+      <xs:enumeration value="HI"/>
+      <xs:enumeration value="ID"/>
+      <xs:enumeration value="IL"/>
+      <xs:enumeration value="IN"/>
+      <xs:enumeration value="IA"/>
+      <xs:enumeration value="KS"/>
+      <xs:enumeration value="KY"/>
+      <xs:enumeration value="LA"/>
+      <xs:enumeration value="ME"/>
+      <xs:enumeration value="MD"/>
+      <xs:enumeration value="MA"/>
+      <xs:enumeration value="MI"/>
+      <xs:enumeration value="MN"/>
+      <xs:enumeration value="MS"/>
+      <xs:enumeration value="MO"/>
+      <xs:enumeration value="MT"/>
+      <xs:enumeration value="NE"/>
+      <xs:enumeration value="NV"/>
+      <xs:enumeration value="NH"/>
+      <xs:enumeration value="NJ"/>
+      <xs:enumeration value="NM"/>
+      <xs:enumeration value="NY"/>
+      <xs:enumeration value="NC"/>
+      <xs:enumeration value="ND"/>
+      <xs:enumeration value="OH"/>
+      <xs:enumeration value="OK"/>
+      <xs:enumeration value="OR"/>
+      <xs:enumeration value="PA"/>
+      <xs:enumeration value="PR"/>
+      <xs:enumeration value="RI"/>
+      <xs:enumeration value="SC"/>
+      <xs:enumeration value="SD"/>
+      <xs:enumeration value="TN"/>
+      <xs:enumeration value="TX"/>
+      <xs:enumeration value="UT"/>
+      <xs:enumeration value="VT"/>
+      <xs:enumeration value="VA"/>
+      <xs:enumeration value="WA"/>
+      <xs:enumeration value="WV"/>
+      <xs:enumeration value="WI"/>
+      <xs:enumeration value="WY"/>
+      <xs:enumeration value="XX"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="country">
+    <xs:annotation>
+      <xs:documentation>International standard country code [ISO 3166-1-Alpha-2 as of 2000-08-21].</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="AD"/>
+      <xs:enumeration value="AE"/>
+      <xs:enumeration value="AF"/>
+      <xs:enumeration value="AG"/>
+      <xs:enumeration value="AI"/>
+      <xs:enumeration value="AL"/>
+      <xs:enumeration value="AM"/>
+      <xs:enumeration value="AN"/>
+      <xs:enumeration value="AO"/>
+      <xs:enumeration value="AQ"/>
+      <xs:enumeration value="AR"/>
+      <xs:enumeration value="AS"/>
+      <xs:enumeration value="AT"/>
+      <xs:enumeration value="AU"/>
+      <xs:enumeration value="AW"/>
+      <xs:enumeration value="AZ"/>
+      <xs:enumeration value="BA"/>
+      <xs:enumeration value="BB"/>
+      <xs:enumeration value="BD"/>
+      <xs:enumeration value="BE"/>
+      <xs:enumeration value="BF"/>
+      <xs:enumeration value="BG"/>
+      <xs:enumeration value="BH"/>
+      <xs:enumeration value="BI"/>
+      <xs:enumeration value="BJ"/>
+      <xs:enumeration value="BM"/>
+      <xs:enumeration value="BN"/>
+      <xs:enumeration value="BO"/>
+      <xs:enumeration value="BR"/>
+      <xs:enumeration value="BS"/>
+      <xs:enumeration value="BT"/>
+      <xs:enumeration value="BV"/>
+      <xs:enumeration value="BW"/>
+      <xs:enumeration value="BY"/>
+      <xs:enumeration value="BZ"/>
+      <xs:enumeration value="CA"/>
+      <xs:enumeration value="CC"/>
+      <xs:enumeration value="CD"/>
+      <xs:enumeration value="CF"/>
+      <xs:enumeration value="CG"/>
+      <xs:enumeration value="CH"/>
+      <xs:enumeration value="CI"/>
+      <xs:enumeration value="CK"/>
+      <xs:enumeration value="CL"/>
+      <xs:enumeration value="CM"/>
+      <xs:enumeration value="CN"/>
+      <xs:enumeration value="CO"/>
+      <xs:enumeration value="CR"/>
+      <xs:enumeration value="CU"/>
+      <xs:enumeration value="CV"/>
+      <xs:enumeration value="CX"/>
+      <xs:enumeration value="CY"/>
+      <xs:enumeration value="CZ"/>
+      <xs:enumeration value="DE"/>
+      <xs:enumeration value="DJ"/>
+      <xs:enumeration value="DK"/>
+      <xs:enumeration value="DM"/>
+      <xs:enumeration value="DO"/>
+      <xs:enumeration value="DZ"/>
+      <xs:enumeration value="EC"/>
+      <xs:enumeration value="EE"/>
+      <xs:enumeration value="EG"/>
+      <xs:enumeration value="EH"/>
+      <xs:enumeration value="ER"/>
+      <xs:enumeration value="ES"/>
+      <xs:enumeration value="ET"/>
+      <xs:enumeration value="FI"/>
+      <xs:enumeration value="FJ"/>
+      <xs:enumeration value="FK"/>
+      <xs:enumeration value="FM"/>
+      <xs:enumeration value="FO"/>
+      <xs:enumeration value="FR"/>
+      <xs:enumeration value="GA"/>
+      <xs:enumeration value="GB"/>
+      <xs:enumeration value="GD"/>
+      <xs:enumeration value="GE"/>
+      <xs:enumeration value="GF"/>
+      <xs:enumeration value="GH"/>
+      <xs:enumeration value="GI"/>
+      <xs:enumeration value="GL"/>
+      <xs:enumeration value="GM"/>
+      <xs:enumeration value="GN"/>
+      <xs:enumeration value="GP"/>
+      <xs:enumeration value="GQ"/>
+      <xs:enumeration value="GR"/>
+      <xs:enumeration value="GS"/>
+      <xs:enumeration value="GT"/>
+      <xs:enumeration value="GU"/>
+      <xs:enumeration value="GW"/>
+      <xs:enumeration value="GY"/>
+      <xs:enumeration value="HK"/>
+      <xs:enumeration value="HM"/>
+      <xs:enumeration value="HN"/>
+      <xs:enumeration value="HR"/>
+      <xs:enumeration value="HT"/>
+      <xs:enumeration value="HU"/>
+      <xs:enumeration value="ID"/>
+      <xs:enumeration value="IE"/>
+      <xs:enumeration value="IL"/>
+      <xs:enumeration value="IN"/>
+      <xs:enumeration value="IO"/>
+      <xs:enumeration value="IQ"/>
+      <xs:enumeration value="IR"/>
+      <xs:enumeration value="IS"/>
+      <xs:enumeration value="IT"/>
+      <xs:enumeration value="JM"/>
+      <xs:enumeration value="JO"/>
+      <xs:enumeration value="JP"/>
+      <xs:enumeration value="KE"/>
+      <xs:enumeration value="KG"/>
+      <xs:enumeration value="KH"/>
+      <xs:enumeration value="KI"/>
+      <xs:enumeration value="KM"/>
+      <xs:enumeration value="KN"/>
+      <xs:enumeration value="KP"/>
+      <xs:enumeration value="KR"/>
+      <xs:enumeration value="KW"/>
+      <xs:enumeration value="KY"/>
+      <xs:enumeration value="KZ"/>
+      <xs:enumeration value="LA"/>
+      <xs:enumeration value="LB"/>
+      <xs:enumeration value="LC"/>
+      <xs:enumeration value="LI"/>
+      <xs:enumeration value="LK"/>
+      <xs:enumeration value="LR"/>
+      <xs:enumeration value="LS"/>
+      <xs:enumeration value="LT"/>
+      <xs:enumeration value="LU"/>
+      <xs:enumeration value="LV"/>
+      <xs:enumeration value="LY"/>
+      <xs:enumeration value="MA"/>
+      <xs:enumeration value="MC"/>
+      <xs:enumeration value="MD"/>
+      <xs:enumeration value="MG"/>
+      <xs:enumeration value="MH"/>
+      <xs:enumeration value="MK"/>
+      <xs:enumeration value="ML"/>
+      <xs:enumeration value="MM"/>
+      <xs:enumeration value="MN"/>
+      <xs:enumeration value="MO"/>
+      <xs:enumeration value="MP"/>
+      <xs:enumeration value="MQ"/>
+      <xs:enumeration value="MR"/>
+      <xs:enumeration value="MS"/>
+      <xs:enumeration value="MT"/>
+      <xs:enumeration value="MU"/>
+      <xs:enumeration value="MV"/>
+      <xs:enumeration value="MW"/>
+      <xs:enumeration value="MX"/>
+      <xs:enumeration value="MY"/>
+      <xs:enumeration value="MZ"/>
+      <xs:enumeration value="NA"/>
+      <xs:enumeration value="NC"/>
+      <xs:enumeration value="NE"/>
+      <xs:enumeration value="NF"/>
+      <xs:enumeration value="NG"/>
+      <xs:enumeration value="NI"/>
+      <xs:enumeration value="NL"/>
+      <xs:enumeration value="NO"/>
+      <xs:enumeration value="NP"/>
+      <xs:enumeration value="NR"/>
+      <xs:enumeration value="NU"/>
+      <xs:enumeration value="NZ"/>
+      <xs:enumeration value="OM"/>
+      <xs:enumeration value="PA"/>
+      <xs:enumeration value="PE"/>
+      <xs:enumeration value="PF"/>
+      <xs:enumeration value="PG"/>
+      <xs:enumeration value="PH"/>
+      <xs:enumeration value="PK"/>
+      <xs:enumeration value="PL"/>
+      <xs:enumeration value="PM"/>
+      <xs:enumeration value="PN"/>
+      <xs:enumeration value="PR"/>
+      <xs:enumeration value="PS"/>
+      <xs:enumeration value="PT"/>
+      <xs:enumeration value="PW"/>
+      <xs:enumeration value="PY"/>
+      <xs:enumeration value="QA"/>
+      <xs:enumeration value="RE"/>
+      <xs:enumeration value="RO"/>
+      <xs:enumeration value="RU"/>
+      <xs:enumeration value="RW"/>
+      <xs:enumeration value="SA"/>
+      <xs:enumeration value="SB"/>
+      <xs:enumeration value="SC"/>
+      <xs:enumeration value="SD"/>
+      <xs:enumeration value="SE"/>
+      <xs:enumeration value="SG"/>
+      <xs:enumeration value="SH"/>
+      <xs:enumeration value="SI"/>
+      <xs:enumeration value="SJ"/>
+      <xs:enumeration value="SK"/>
+      <xs:enumeration value="SL"/>
+      <xs:enumeration value="SM"/>
+      <xs:enumeration value="SN"/>
+      <xs:enumeration value="SO"/>
+      <xs:enumeration value="SR"/>
+      <xs:enumeration value="ST"/>
+      <xs:enumeration value="SV"/>
+      <xs:enumeration value="SY"/>
+      <xs:enumeration value="SZ"/>
+      <xs:enumeration value="TC"/>
+      <xs:enumeration value="TD"/>
+      <xs:enumeration value="TF"/>
+      <xs:enumeration value="TG"/>
+      <xs:enumeration value="TH"/>
+      <xs:enumeration value="TJ"/>
+      <xs:enumeration value="TK"/>
+      <xs:enumeration value="TM"/>
+      <xs:enumeration value="TN"/>
+      <xs:enumeration value="TO"/>
+      <xs:enumeration value="TP"/>
+      <xs:enumeration value="TR"/>
+      <xs:enumeration value="TT"/>
+      <xs:enumeration value="TV"/>
+      <xs:enumeration value="TW"/>
+      <xs:enumeration value="TZ"/>
+      <xs:enumeration value="UA"/>
+      <xs:enumeration value="UG"/>
+      <xs:enumeration value="UM"/>
+      <xs:enumeration value="US"/>
+      <xs:enumeration value="UY"/>
+      <xs:enumeration value="UZ"/>
+      <xs:enumeration value="VA"/>
+      <xs:enumeration value="VC"/>
+      <xs:enumeration value="VE"/>
+      <xs:enumeration value="VG"/>
+      <xs:enumeration value="VI"/>
+      <xs:enumeration value="VN"/>
+      <xs:enumeration value="VU"/>
+      <xs:enumeration value="WF"/>
+      <xs:enumeration value="WS"/>
+      <xs:enumeration value="YE"/>
+      <xs:enumeration value="YT"/>
+      <xs:enumeration value="YU"/>
+      <xs:enumeration value="ZA"/>
+      <xs:enumeration value="ZM"/>
+      <xs:enumeration value="ZW"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="defn_life_ins">
+    <xs:annotation>
+      <xs:documentation>7702 definitional test, if any.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="CVAT"/>
+      <xs:enumeration value="GPT"/>
+      <xs:enumeration value="Not 7702 compliant"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="mec_avoid_method">
+    <xs:annotation>
+      <xs:documentation>Special logic, if any, to avoid a MEC. Formerly, another choice
+tried to avoid a MEC by increasing the specified amount, but that
+proved unworkable (e.g., because of underwriting).</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Allow MEC"/>
+      <xs:enumeration value="Reduce premium"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="defn_material_change">
+    <xs:annotation>
+      <xs:documentation>7702A definition of material change. For the nonce, use
+"Earlier of" with CVAT, and "adjustment event" with GPT.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Unnecessary premium"/>
+      <xs:enumeration value="Benefit increase"/>
+      <xs:enumeration value="Later of increase or unnecessary premium"/>
+      <xs:enumeration value="Earlier of increase or unnecessary premium"/>
+      <xs:enumeration value="GPT adjustment event"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="from_point">
+    <xs:annotation>
+      <xs:documentation>Inclusive start of a half-open interval, used e.g. for input sequences.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Issue"/>
+      <xs:enumeration value="Year"/>
+      <xs:enumeration value="Age"/>
+      <xs:enumeration value="Retirement"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="to_point">
+    <xs:annotation>
+      <xs:documentation>Exclusive end of a half-open interval used e.g. for input sequences.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Retirement"/>
+      <xs:enumeration value="Year"/>
+      <xs:enumeration value="Age"/>
+      <xs:enumeration value="Maturity"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="report_column">
+    <xs:annotation>
+      <xs:documentation>Column on optional supplemental report.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="[none]"/>
+      <xs:enumeration value="AttainedAge"/>
+      <xs:enumeration value="PolicyYear"/>
+      <xs:enumeration value="InforceLives"/>
+      <xs:enumeration value="SpecAmt"/>
+      <xs:enumeration value="TermSpecAmt"/>
+      <xs:enumeration value="CorridorFactor"/>
+      <xs:enumeration value="AnnGAIntRate_Current"/>
+      <xs:enumeration value="AnnSAIntRate_Current"/>
+      <xs:enumeration value="Outlay"/>
+      <xs:enumeration value="EeGrossPmt"/>
+      <xs:enumeration value="ErGrossPmt"/>
+      <xs:enumeration value="NetWD"/>
+      <xs:enumeration value="NewCashLoan"/>
+      <xs:enumeration value="TotalLoanBalance_Current"/>
+      <xs:enumeration value="TotalLoanBalance_Guaranteed"/>
+      <xs:enumeration value="AcctVal_Current"/>
+      <xs:enumeration value="AcctVal_Guaranteed"/>
+      <xs:enumeration value="CSVNet_Current"/>
+      <xs:enumeration value="CSVNet_Guaranteed"/>
+      <xs:enumeration value="EOYDeathBft_Current"/>
+      <xs:enumeration value="EOYDeathBft_Guaranteed"/>
+      <xs:enumeration value="BaseDeathBft_Current"/>
+      <xs:enumeration value="BaseDeathBft_Guaranteed"/>
+      <xs:enumeration value="TermPurchased_Current"/>
+      <xs:enumeration value="TermPurchased_Guaranteed"/>
+      <xs:enumeration value="COICharge_Current"/>
+      <xs:enumeration value="COICharge_Guaranteed"/>
+      <xs:enumeration value="RiderCharges_Current"/>
+      <xs:enumeration value="IrrCsv_Current"/>
+      <xs:enumeration value="IrrCsv_Guaranteed"/>
+      <xs:enumeration value="IrrDb_Current"/>
+      <xs:enumeration value="IrrDb_Guaranteed"/>
+      <xs:enumeration value="ExperienceReserve_Current"/>
+      <xs:enumeration value="NetClaims_Current"/>
+      <xs:enumeration value="NetCOICharge_Current"/>
+      <xs:enumeration value="ProjectedCoiCharge_Current"/>
+      <xs:enumeration value="KFactor_Current"/>
+      <xs:enumeration value="GrossPmt"/>
+      <xs:enumeration value="LoanIntAccrued_Current"/>
+      <xs:enumeration value="NetDeathBenefit"/>
+      <xs:enumeration value="DeathProceedsPaid_Current"/>
+      <xs:enumeration value="ClaimsPaid_Current"/>
+      <xs:enumeration value="AVRelOnDeath_Current"/>
+      <xs:enumeration value="SpecAmtLoad_Current"/>
+      <xs:enumeration value="GrossIntCredited_Current"/>
+      <xs:enumeration value="NetIntCredited_Current"/>
+      <xs:enumeration value="SepAcctCharges_Current"/>
+      <xs:enumeration value="PolicyFee_Current"/>
+      <xs:enumeration value="AVGenAcct_CurrentZero"/>
+      <xs:enumeration value="AVGenAcct_GuaranteedZero"/>
+      <xs:enumeration value="AVSepAcct_CurrentZero"/>
+      <xs:enumeration value="AVSepAcct_GuaranteedZero"/>
+      <xs:enumeration value="AcctVal_CurrentZero"/>
+      <xs:enumeration value="AcctVal_GuaranteedZero"/>
+      <xs:enumeration value="CSVNet_CurrentZero"/>
+      <xs:enumeration value="CSVNet_GuaranteedZero"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
