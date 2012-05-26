@@ -48,7 +48,7 @@ cp --preserve $src_dir/sample.cns $src_dir/sample.ill .
 #
 # Only RNC is to be edited; XSD and RNG are generated from it.
 
-cp --preserve $src_dir/cell.rnc $src_dir/multiple_cell_document.rnc $src_dir/single_cell_document.rnc .
+cp --preserve $src_dir/cell.rnc $src_dir/multiple_cell_document.rnc $src_dir/single_cell_document.rnc $src_dir/types.rnc .
 
 # Test RNC files with 'jing'.
 

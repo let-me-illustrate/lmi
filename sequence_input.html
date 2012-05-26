@@ -1,0 +1,253 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+    "http://www.w3.org/TR/html4/strict.dtd">
+
+<!--
+    Let me illustrate... user manual.
+
+    Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 2 as
+    published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software Foundation,
+    Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+
+    http://savannah.nongnu.org/projects/lmi
+    email: <gchicares@sbcglobal.net>
+    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+    $Id$
+-->
+
+<html>
+
+<head>
+<!--
+  "windows-1252" isn't msw-specific: it works with GTK, too. See:
+    http://lists.nongnu.org/archive/html/lmi/2008-03/msg00019.html
+  With wx-3, use unicode instead.
+-->
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>Let me illustrate&hellip;</title>
+</head>
+
+<body>
+
+<h3>Working with sequence input</h3>
+
+<p>
+Sometimes input amounts need to change from one year to the next.
+</p>
+<p>
+<img src="ellipsis.png" alt="[ellipsis.png]">
+&nbsp;
+You see this button at the right end of each field that can vary by
+duration. Press it to enter a sequence of values. A dialog like this
+pops up:
+</p>
+<p>
+<img src="sequence_editor.png" width="610" height="226" alt="[screenshot]">
+</p>
+<p>
+You don&rsquo;t have to remember keywords like <samp>sevenpay</samp>
+and <samp>retirement</samp>&mdash;just pick them from the drop-down
+lists.
+</p>
+<p>
+When you click <samp>OK</samp>, the dialog closes, and you see the
+sequence in a compact mathematical form:
+</p>
+<pre>
+        sevenpay 7; 250000 retirement; 100000 #10; 75000 @95; 50000
+</pre>
+<p>
+If you wish, you can enter sequences in that form yourself.
+Here&rsquo;s how.
+</p>
+<p>
+When values change every year, separate them with semicolons.
+If the face amount starts at $100,000 and goes up $10,000 every year
+for five years, type
+</p>
+<pre>
+        100000; 110000; 120000; 130000; 140000; 150000
+</pre>
+<p>
+The last value repeats until the end, as you&rsquo;d expect.
+It doesn&rsquo;t &ldquo;run out of numbers&rdquo; and drop to zero.
+In this case, the face amount stays at $150,000 until maturity.
+</p>
+<p>
+You can type spaces if you like, or leave them out.
+But don&rsquo;t write a dollar sign, and don&rsquo;t separate
+thousands with commas.
+Not every country uses dollars, and some write a comma after every
+fourth digit.
+</p>
+<p>
+Values can vary even if they aren&rsquo;t numbers.
+For instance, a payment mode of
+</p>
+<pre>
+        annual; monthly
+</pre>
+<p>
+means annual in the first year, and monthly thereafter.
+For values like payment mode that aren&rsquo;t numbers, the
+<a href="pasting_to_a_census.html">pasting instructions</a>
+list the words you can use.
+</p>
+<p>
+Suppose you want to pay a $10,000 premium every year for the first
+twenty policy years, and then stop.
+You don&rsquo;t have to type the number twenty times.
+Just say
+</p>
+<pre>
+        10000 20; 0
+</pre>
+<p>
+Remember to put a zero at the end, because the last value repeats.
+</p>
+<p>
+To pay $10,000 a year for the first ten policy years, then $5,000
+a year until the end of the fifteenth year, type
+</p>
+<pre>
+        10000 10; 5000 15; 0
+</pre>
+<p>
+You may want to enter payments that depend on attained age.
+Type
+</p>
+<pre>
+        10000 @70; 0
+</pre>
+<p>
+to pay $10,000 every year until age 70.
+You can even make that the
+<a href="group_tutorial.html#how_census_defaults">default</a>
+payment pattern for a whole group.
+It means a different number of years for different issue ages.
+Or you can make the pattern use retirement age: type
+</p>
+<pre>
+        10000 retirement; 0
+</pre>
+<p>
+to pay $10,000 until retirement.
+To take a $5,000 withdrawal each year after retirement, type
+</p>
+<pre>
+        0 retirement; 5000
+</pre>
+<p>
+You can also say
+</p>
+<pre>
+        0 retirement; 5000 maturity
+</pre>
+<p>
+if you want to spell it all out.
+</p>
+<p>
+Sometimes you want a value to apply for a certain number of years.
+Type
+</p>
+<pre>
+        0 retirement; 5000 #10; 0
+</pre>
+<p>
+to get a withdrawal of $5,000 for ten years, no matter when retirement
+starts.
+</p>
+<p>
+As that example shows, you can mix different ways of saying what
+periods of time you mean.
+Read it piece by piece:
+</p>
+<pre>
+        0 retirement
+</pre>
+<p>
+means &ldquo;zero until retirement&rdquo;, and then
+</p>
+<pre>
+        5000 #10
+</pre>
+<p>
+means &ldquo;$5,000 a year for the next ten years&rdquo;.
+</p>
+<p>
+Whatever way you enter a sequence, error messages show it in a
+standard mathematical notation:
+</p>
+<ul>
+<li>
+&lsquo;[&rsquo; and &lsquo;]&rsquo; begin and end an interval,
+including the endpoints.
+</li>
+<li>
+&lsquo;(&rsquo; and &lsquo;)&rsquo; begin and end an interval,
+excluding the endpoints.
+</li>
+</ul>
+<p>
+You can use that notation yourself if you want.
+For example, you can write the last example above as
+</p>
+<pre>
+        0,[0,retirement);10000,[retirement,#10);0
+</pre>
+<p>
+Remember:
+</p>
+<ul>
+<li>
+The last value repeats, because that&rsquo;s usually what you want.
+Make the last value zero if that&rsquo;s what you mean.
+</li>
+<li>
+&lsquo;#&rsquo; means &ldquo;for some number of years&rdquo;, so
+<kbd>#10</kbd> means for the next ten years.
+</li>
+<li>
+&lsquo;@&rsquo; means &ldquo;until some attained age&rdquo;, so
+<kbd>@65</kbd> means until age 65.
+</li>
+<li>
+A duration with no &lsquo;#&rsquo; or &lsquo;@&rsquo; means
+&ldquo;until some policy anniversary&rdquo;,
+so a payment mode of <kbd>monthly 10; annual</kbd>
+means monthly until the end of the tenth policy year, then annual.
+</li>
+</ul>
+
+<hr>
+
+<p>
+Copyright &copy; 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
+This program, including its documentation, is free software. Read the
+<a href="COPYING.html">terms</a>
+under which you can redistribute and modify it.
+</p>
+
+<p>
+Maintained by
+<a href="mailto:&#103;&#99;&#104;&#105;&#99;&#97;&#114;&#101;&#115;@sbcglobal.net">
+Gregory W. Chicares</a>. The latest version of this file can be found
+at the <tt>lmi</tt>
+<a href="http://savannah.nongnu.org/projects/lmi/">website</a>.
+</p>
+
+</body>
+
+</html>
+

@@ -1,0 +1,425 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+    "http://www.w3.org/TR/html4/strict.dtd">
+
+<!--
+    Let me illustrate... user manual.
+
+    Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 2 as
+    published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software Foundation,
+    Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+
+    http://savannah.nongnu.org/projects/lmi
+    email: <gchicares@sbcglobal.net>
+    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+    $Id$
+-->
+
+<html>
+
+<head>
+<!--
+  "windows-1252" isn't msw-specific: it works with GTK, too. See:
+    http://lists.nongnu.org/archive/html/lmi/2008-03/msg00019.html
+  With wx-3, use unicode instead.
+-->
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>Let me illustrate&hellip;</title>
+</head>
+
+<body>
+
+<h3>Command reference</h3>
+
+<ul>
+  <li>
+    <a href="menu_commands.html#menu_file">
+      File menu
+    </a>
+  </li>
+  <li>
+    <a href="menu_commands.html#menu_illus">
+      Illustration menu
+    </a>
+  </li>
+  <li>
+    <a href="menu_commands.html#menu_census">
+      Census menu
+    </a>
+  </li>
+  <li>
+    <a href="menu_commands.html#menu_window">
+      Window menu
+    </a>
+  </li>
+  <li>
+    <a href="menu_commands.html#menu_help">
+      Help menu
+    </a>
+  </li>
+</ul>
+
+<h5><a name="menu_file">File menu</a></h5>
+<p>
+The <samp>File</samp> menu lets you set preferences, print, and work with documents.
+</p>
+<p>
+<img src="new.png" alt="[new.png]">
+&nbsp;
+<samp>File | New</samp>
+</p>
+<p>
+Create a new document.
+The new window has a made-up title like <samp>unnamed1</samp>.
+You give the document a real name when you save it.
+</p>
+<p>
+<img src="open.png" alt="[open.png]">
+&nbsp;
+<samp>File | Open</samp>
+</p>
+<p>
+Open an existing document.
+You can also open files by dragging and dropping them on <tt>lmi</tt>.
+</p>
+<p>
+<img src="close.png" alt="[close.png]">
+&nbsp;
+<samp>File | Close</samp>
+</p>
+<p>
+Close the current document.
+</p>
+<p>
+<img src="save.png" alt="[save.png]">
+&nbsp;
+<samp>File | Save</samp>
+</p>
+<p>
+Save the current document, without changing its name or location.
+If it&rsquo;s a new document, this works just like the
+<samp>File | Save as</samp> command.
+</p>
+<p>
+<img src="save-as.png" alt="[save-as.png]">
+&nbsp;
+<samp>File | Save as</samp>
+</p>
+<p>
+Save the current document under a new name or in a new location.
+A file that already exists isn&rsquo;t overwritten unless you
+confirm that you really want to replace it.
+</p>
+<p>
+<img src="print.png" alt="[print.png]">
+&nbsp;
+<samp>File | Print</samp>
+</p>
+<p>
+Print the current document.
+See other print commands on the
+<a href="menu_commands.html#menu_census">Census menu</a>.
+</p>
+<p>
+<img src="print-options.png" alt="[print-options.png]">
+&nbsp;
+<samp>File | Page setup</samp>
+</p>
+<p>
+Select a printer and choose printing options. These settings apply
+to everything you print in <tt>lmi</tt>.
+</p>
+<p>
+<img src="print-preview.png" alt="[print-preview.png]">
+&nbsp;
+<samp>File | Print preview</samp>
+</p>
+<p>
+See what this document looks like when printed.
+</p>
+<p>
+<img src="default-cell.png" alt="[default-cell.png]">
+&nbsp;
+<samp>File | Default</samp>
+</p>
+<p>
+Edit the default cell, which is the basis for any new case you create.
+</p>
+<p>
+<img src="preferences.png" alt="[preferences.png]">
+&nbsp;
+<samp>File | Preferences</samp>
+</p>
+<p>
+Manage preferences.
+</p>
+<p>
+<img src="exit.png" alt="[exit.png]">
+&nbsp;
+<samp>File | Exit</samp>
+</p>
+<p>
+Exit <tt>lmi</tt>.
+If you&rsquo;ve changed any document without saving it, you&rsquo;re
+prompted to save before exiting.
+</p>
+<p>
+At the bottom of the <samp>File</samp> menu is a list of the last nine
+files you&rsquo;ve worked with. Pick a file from that list to open it.
+</p>
+
+<h5><a name="menu_illus">Illustration menu</a></h5>
+<p>
+The <samp>Illustration</samp> menu lets you work with individual
+cases.
+</p>
+<p>
+<img src="edit-cell.png" alt="[edit-cell.png]">
+&nbsp;
+<samp>Illustration | Edit cell</samp>
+</p>
+<p>
+Edit this cell.
+</p>
+<p>
+<img src="copy-cell.png" alt="[copy-cell.png]">
+&nbsp;
+<samp>Illustration | Copy calculation summary</samp>
+</p>
+<p>
+Copy calculation summary to the clipboard.
+<!-- TODO ?? Explain the calculation summary. -->
+</p>
+<p>
+<img src="copy.png" alt="[copy.png]">
+&nbsp;
+<samp>Illustration | Copy full illustration data</samp>
+</p>
+<p>
+Copy full illustration data to the clipboard.
+</p>
+
+<h5><a name="menu_census">Census menu</a></h5>
+<p>
+The <samp>Census</samp> menu lets you work with group cases.
+</p>
+<p>
+<img src="edit-cell.png" alt="[edit-cell.png]">
+&nbsp;
+<samp>Census | Edit cell</samp>
+</p>
+<p>
+Edit the selected cell. Highlight any cell to select it for editing.
+</p>
+<p>
+<img src="edit-class.png" alt="[edit-class.png]">
+&nbsp;
+<samp>Census | Edit class defaults</samp>
+</p>
+<p>
+Edit defaults for the selected cell&rsquo;s class.
+If you make any changes and press <samp>OK</samp>, you can optionally
+apply the changes to all cells in this class.
+</p>
+<p>
+<img src="edit-case.png" alt="[edit-case.png]">
+&nbsp;
+<samp>Census | Edit case defaults</samp>
+</p>
+<p>
+Edit case defaults.
+These defaults are used whenever you add a new cell to the case.
+If you make any changes and press <samp>OK</samp>, you can optionally
+apply the changes to all cells and all classes in the census.
+</p>
+<p>
+<img src="run-cell.png" alt="[run-cell.png]">
+&nbsp;
+<samp>Census | Run selected cell</samp>
+</p>
+<p>
+Run selected cell and show its calculation summary.
+</p>
+<p>
+<img src="run-case.png" alt="[run-case.png]">
+&nbsp;
+<samp>Census | Run case</samp>
+</p>
+<p>
+Run all cells and show a composite calculation summary.
+</p>
+<p>
+<img src="print-case.png" alt="[print-case.png]">
+&nbsp;
+<samp>Census | Print case</samp>
+</p>
+<p>
+Print an illustration for every cell and a composite of all cells.
+This may use a lot of paper.
+</p>
+<p>
+<img src="save-pdf.png" alt="[save-pdf.png]">
+&nbsp;
+<samp>Census | Print case to disk</samp>
+</p>
+<p>
+Print an illustration for every cell and a composite of all cells,
+sending output to the disk rather than the printer.
+</p>
+<p>
+<img src="write-spreadsheet.png" alt="[write-spreadsheet.png]">
+&nbsp;
+<samp>Census | Print case to spreadsheet</samp>
+</p>
+<p>
+Run every cell and a composite of all cells, and write the results to
+a spreadsheet file.
+</p>
+<p>
+<img src="paste-case.png" alt="[paste-case.png]">
+&nbsp;
+<samp>Census | Paste census data</samp>
+</p>
+<p>
+Fill the census by
+<a href="pasting_to_a_census.html">pasting</a>
+data.
+</p>
+<p>
+<img src="insert-rows.png" alt="[insert-rows.png]">
+&nbsp;
+<samp>Census | Add cell</samp>
+</p>
+<p>
+Add a new cell, based on case defaults, at the bottom of the census.
+</p>
+<p>
+<img src="delete-row.png" alt="[delete-row.png]">
+&nbsp;
+<samp>Census | Delete cell(s)</samp>
+</p>
+<p>
+Delete selected cells.
+</p>
+<p>
+<img src="varying-width.png" alt="[varying-width.png]">
+&nbsp;
+<samp>Census | Varying column width</samp>
+</p>
+<p>
+Vary each column&rsquo;s width to show its full contents.
+</p>
+<p>
+<img src="fixed-width.png" alt="[fixed-width.png]">
+&nbsp;
+<samp>Census | Fixed column width</samp>
+</p>
+<p>
+Show all columns with the same fixed width. Any field that&rsquo;s too
+long to fit is cut off so you can see more columns at a time.
+</p>
+
+<h5><a name="menu_window">Window menu</a></h5>
+<p>
+The <samp>Window</samp> menu lets you rearrange the screen.
+</p>
+<p>
+<img src="window-cascade.png" alt="[window-cascade.png]">
+&nbsp;
+<samp>Window | Cascade</samp>
+</p>
+<p>
+Make all windows the same size, and overlap them so their title bars
+are all visible.
+</p>
+<p>
+<img src="window-next.png" alt="[window-next.png]">
+&nbsp;
+<samp>Window | Next</samp>
+</p>
+<p>
+Go to the next window.
+</p>
+<p>
+<img src="window-previous.png" alt="[window-previous.png]">
+&nbsp;
+<samp>Window | Previous</samp>
+</p>
+<p>
+Go to the previous window.
+</p>
+<p>
+<img src="window-tile-horizontally.png" alt="[window-tile-horizontally.png]">
+&nbsp;
+<samp>Window | Tile horizontally</samp>
+</p>
+<p>
+Make all windows the same size, and stack them side by side without
+overlap.
+</p>
+<p>
+<img src="window-tile-vertically.png" alt="[window-tile-vertically.png]">
+&nbsp;
+<samp>Window | Tile vertically</samp>
+</p>
+<p>
+Make all windows the same size, and stack them top to bottom without
+overlap.
+</p>
+
+<h5><a name="menu_help">Help menu</a></h5>
+<p>
+The <samp>Help</samp> menu lets you read <tt>lmi</tt>&rsquo;s
+documentation. It also tells you what version you&rsquo;re using,
+and shows the copyright and license.
+</p>
+<p>
+<img src="help.png" alt="[help.png]">
+&nbsp;
+<samp>Help | Contents</samp>
+</p>
+<p>
+Show user manual.
+</p>
+<p>
+<img src="about.png" alt="[about.png]">
+&nbsp;
+<samp>Help | About&hellip;</samp>
+</p>
+<p>
+Show copyright, license, and version.
+</p>
+<!-- TODO ?? Also describe contextual help. -->
+
+<hr>
+
+<p>
+Copyright &copy; 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
+This program, including its documentation, is free software. Read the
+<a href="COPYING.html">terms</a>
+under which you can redistribute and modify it.
+</p>
+
+<p>
+Maintained by
+<a href="mailto:&#103;&#99;&#104;&#105;&#99;&#97;&#114;&#101;&#115;@sbcglobal.net">
+Gregory W. Chicares</a>. The latest version of this file can be found
+at the <tt>lmi</tt>
+<a href="http://savannah.nongnu.org/projects/lmi/">website</a>.
+</p>
+
+</body>
+
+</html>
+
