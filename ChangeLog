@@ -30029,3 +30029,45 @@ For copyright, use current civil year, not last-modified year.
   test_coding_rules_test.sh
 Require an additional copyright notice in html files.
 
+20120507T1507Z <gchicares@sbcglobal.net> [573]
+
+  lmi.ico
+Increase color depth to avoid an msw7 backward-compatibility defect:
+monochrome icons, supported by msw for a quarter of a century, now
+fail bizarrely. See:
+  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00001.html
+
+20120508T1347Z <gchicares@sbcglobal.net> [573]
+
+  GNUmakefile
+Make 'happy_new_year' target usable in webpages directory.
+
+20120515T1248Z <gchicares@sbcglobal.net> [578]
+
+  COPYING.html
+  faq.html
+  group_tutorial.html
+  individual_tutorial.html
+  menu_commands.html
+  pasting_to_a_census.html
+  sequence_input.html
+  user_manual.html
+Mirror cvs user-manual webpages.
+
+20120515T1249Z <gchicares@sbcglobal.net> [578]
+
+  install_msw.sh
+  workhorse.make
+Use mirrored user manual, eliminating cvs dependency in makefiles.
+
+20120523T2011Z <gchicares@sbcglobal.net> [578]
+
+  INSTALL
+Update instructions for starting 'bash': the default terminal is now
+'mintty'.
+
+20120523T2014Z <gchicares@sbcglobal.net> [578]
+
+  version.hpp
+Designate release candidate.
+

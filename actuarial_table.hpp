@@ -148,7 +148,6 @@ class actuarial_table
         ) const;
 
     std::string const& filename       () const {return filename_       ;}
-    int                table_number   () const {return table_number_   ;}
     char               table_type     () const {return table_type_     ;}
     int                min_age        () const {return min_age_        ;}
     int                max_age        () const {return max_age_        ;}

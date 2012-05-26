@@ -81,7 +81,6 @@ umount "/opt/lmi"
 mkdir /opt
 mount --force "C:/opt" "/opt"
 mkdir --parents /opt/lmi/src/lmi
-mkdir --parents /opt/lmi/share/doc/lmi
 umount "/opt"
 mount --force "C:/opt/lmi" "/opt/lmi"
 
@@ -91,44 +90,11 @@ cygcheck -s -v -r | tr --delete '\r'
 
 java -version
 
-# Avoid bogus "failed to open /home/wherever/.cvspass for reading".
-
-touch ~/.cvspass
-
-# Use 'pserver' unless 'ssh-agent' is active. This helps developers
-# who are behind a firewall that blocks port 2401 but allows 'ssh'
-# access. It is assumed that they have pointed $CVSROOT to
-#   cvs.sv.gnu.org:/sources/lmi
-# as is usual, and that they will switch back there manually after
-# running this script.
-#
-# As a last resort, a screen scraper could be used, e.g.
-#   http://downloads.sourceforge.net/cvsgrab/cvsgrab-2.3.tar.gz
-# with a command line such as this:
-#   /cvsgrab-2.3/cvsgrab.sh \
-#     -url http://cvs.sv.gnu.org/viewvc/lmi/lmi/ \
-#     -destDir cvsgrab \
-#     -webInterface ViewVC1_0
-# Unfortunately, that 'cvsgrab' command adds '-kb' to every file, so
-# developers should take care not to use it.
-
-export CVS_RSH="ssh"
-echo $CVSROOT
-ps -ef | grep --quiet ssh-agent \
-  || export CVSROOT=":pserver:anonymous@cvs.savannah.nongnu.org:/sources/lmi"
-
-echo $CVSROOT
 cd /opt/lmi/src
 # Prefer http to svn's own protocol because it works better from
 # behind corporate firewalls.
 #svn checkout svn://svn.sv.nongnu.org/lmi/lmi/trunk lmi
 svn checkout http://svn.sv.nongnu.org/svn/lmi/lmi/trunk lmi
-
-export CVSROOT=${CVSROOT%%/sources/lmi}/web/lmi
-echo $CVSROOT
-cd /opt/lmi/share/doc
-# Not yet available via svn...
-cvs -z3 checkout -P lmi
 
 cd /opt/lmi/src/lmi
 

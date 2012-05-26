@@ -891,11 +891,8 @@ lmi_msw_res.o: lmi.ico
 # component can produce a mismatched set.
 
 # SOMEDAY !! Follow the GNU Coding Standards more closely, writing
-#   bindir datadir docdir srcdir
-# all with no '_', and changing the value of $(data_dir). These are
-# intended by the GCS to represent destinations, but here $(htmldir)
-# is actually a source at present: it's the directory to which the
-# savannah 'web' cvs has been downloaded.
+#   bindir datadir srcdir
+# all with no '_', and changing the value of $(data_dir).
 
 prefix         := /opt/lmi
 exec_prefix    := $(prefix)
@@ -911,7 +908,7 @@ data_files := \
   $(wildcard $(addprefix $(src_dir)/,*.ico *.png *.xml *.xrc *.xsd *.xsl)) \
 
 help_files := \
-  $(wildcard $(addprefix $(htmldir)/,*.html)) \
+  $(wildcard $(addprefix $(src_dir)/,*.html)) \
 
 .PHONY: install
 install: $(default_targets)

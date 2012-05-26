@@ -1,0 +1,94 @@
+# RELAX NG schema for '.xtable' files (class actuarial_table).
+#
+# Copyright (C) 2012 Gregory W. Chicares.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 as
+# published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software Foundation,
+# Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+#
+# http://savannah.nongnu.org/projects/lmi
+# email: <gchicares@sbcglobal.net>
+# snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+# $Id$
+
+start =
+    element table
+        {element description {text}?
+        ,(basic_table
+         |smoking_element
+         |gender_element
+         )
+        }
+
+smoking_element =
+    element smoking
+        {element item
+            {attribute for {smoking}
+            ,(basic_table|gender_element)
+            }+
+        }
+
+gender_element =
+    element gender
+        {element item
+            {attribute for {gender}
+            ,basic_table
+            }+
+        }
+
+basic_table =
+         aggregate_element
+        |duration_element
+        |select_element
+        |select_and_ultimate_element
+
+aggregate_element =
+    element aggregate {aggregate_content}
+
+aggregate_content =
+    element value
+        {attribute age {table_age_int}
+        ,proportion_double
+        }+
+
+duration_element =
+    element duration {duration_content}
+
+duration_content =
+    element value {proportion_double}+
+
+select_element =
+    element select
+        {attribute period  {xsd:positiveInteger}
+        ,element row
+            {attribute age {table_age_int}
+            ,element value
+                {proportion_double
+                }+
+            }+
+        }
+
+select_and_ultimate_element =
+    element select-and-ultimate
+        {select_element
+        ,element ultimate {aggregate_content}
+        }
+
+## Attained age (deliberately less restrictive than the similar type in 'types.rnc').
+table_age_int      = xsd:nonNegativeInteger
+
+## Time interval in years (deliberately less restrictive than the similar type in 'types.rnc').
+table_duration_int = xsd:nonNegativeInteger
+
+include "types.rnc"
+
