@@ -30071,3 +30071,38 @@ Update instructions for starting 'bash': the default terminal is now
   version.hpp
 Designate release candidate.
 
+20120526T1023Z <gchicares@sbcglobal.net> [578]
+
+  cell.rnc
+  cell.xsd
+  test_schemata.sh
+  types.rnc [new file]
+  types.xsd [new file]
+Refactor, splitting types into a separate file to allow reuse. See:
+  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00006.html
+
+20120526T1035Z <gchicares@sbcglobal.net> [578]
+
+  actuarial_table.rnc [new file]
+Add RNG schema for xml tables (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00006.html
+
+20120526T1117Z <gchicares@sbcglobal.net> [578]
+
+  actuarial_table.hpp
+Remove an unused member function (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00007.html
+
+20120526T1133Z <gchicares@sbcglobal.net> [578]
+
+  test_coding_rules.cpp
+Allow a new marker for SOA-to-xml table-migration issues.
+
+20120526T1229Z <gchicares@sbcglobal.net> [578]
+
+  actuarial_table.cpp
+  actuarial_table.hpp
+Refactor to facilitate an impending change (VS), crucially adding a
+virtual dtor to the base class. See:
+  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00008.html
+

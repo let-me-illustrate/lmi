@@ -115,8 +115,48 @@ enum e_actuarial_table_method
     ,e_reenter_upon_rate_reset     = 2
     };
 
+/// Base class for actuarial tables, both XML and binary.
+/// SOA !! This is only temporary, merge with xml_actuarial_table into
+/// single class once we remove binary SOA format support
+
+class actuarial_table_base
+{
+  public:
+    actuarial_table_base();
+    virtual ~actuarial_table_base();
+
+    std::vector<double> values(int issue_age, int length) const;
+    std::vector<double> values_elaborated
+        (int                      issue_age
+        ,int                      length
+        ,e_actuarial_table_method method
+        ,int                      inforce_duration
+        ,int                      reset_duration
+        ) const;
+
+    char               table_type     () const {return table_type_     ;}
+    int                min_age        () const {return min_age_        ;}
+    int                max_age        () const {return max_age_        ;}
+    int                select_period  () const {return select_period_  ;}
+    int                max_select_age () const {return max_select_age_ ;}
+
+  protected:
+    virtual std::vector<double> specific_values(int issue_age, int length) const = 0;
+
+    // Table parameters, in order read from table header.
+    char table_type_     ;
+    int  min_age_        ;
+    int  max_age_        ;
+    int  select_period_  ;
+    int  max_select_age_ ;
+};
+
 /// Read a table from a database in the binary format designed by the
 /// Society of Actuaries (SOA) and used for the tables SOA publishes.
+///
+/// This is deprecated, old format, this class' code is left in only
+/// temporarily for the purpose of validating the new XML-based format
+/// loader's correctness.
 ///
 /// Do not check CRCs of these tables as the SOA software does. Tests
 /// show that CRC checking makes the illustration system considerably
@@ -130,29 +170,16 @@ enum e_actuarial_table_method
 /// has apparently chosen to leave them that way for backward
 /// compatibility.
 
-class actuarial_table
-    :        private lmi::uncopyable <actuarial_table>
-    ,virtual private obstruct_slicing<actuarial_table>
+class soa_actuarial_table
+    :        public  actuarial_table_base
+    ,        private lmi::uncopyable <soa_actuarial_table>
+    ,virtual private obstruct_slicing<soa_actuarial_table>
 {
   public:
-    actuarial_table(std::string const& filename, int table_number);
-    ~actuarial_table();
-
-    std::vector<double> values(int issue_age, int length) const;
-    std::vector<double> values_elaborated
-        (int                      issue_age
-        ,int                      length
-        ,e_actuarial_table_method method
-        ,int                      inforce_duration
-        ,int                      reset_duration
-        ) const;
+    soa_actuarial_table(std::string const& filename, int table_number);
+    ~soa_actuarial_table();
 
     std::string const& filename       () const {return filename_       ;}
-    char               table_type     () const {return table_type_     ;}
-    int                min_age        () const {return min_age_        ;}
-    int                max_age        () const {return max_age_        ;}
-    int                select_period  () const {return select_period_  ;}
-    int                max_select_age () const {return max_select_age_ ;}
 
   private:
     void find_table();
@@ -164,17 +191,13 @@ class actuarial_table
     std::string filename_     ;
     int         table_number_ ;
 
-    // Table parameters, in order read from table header.
-    char table_type_     ;
-    int  min_age_        ;
-    int  max_age_        ;
-    int  select_period_  ;
-    int  max_select_age_ ;
-
+    // Table data.
     std::vector<double> data_;
 
     std::streampos table_offset_;
 };
+
+typedef soa_actuarial_table actuarial_table;
 
 /// Convenience function: read particular values from a table stored
 /// in the SOA table-manager format.
