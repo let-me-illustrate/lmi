@@ -33,7 +33,9 @@
 
 #include <cmath>
 #include <ios>
+#include <iostream>
 #include <istream>
+#include <ostream>
 
 inline bool almost_equal_doubles(double a, double b)
 {
@@ -67,7 +69,7 @@ void report_vector_difference
               << std::endl;
 
     std::cerr << boost::format("   \t%|10|\t%|10|") % "xml" % "soa" << std::endl;
-    for(int i = 0; i < data_xml.size(); i++)
+    for(unsigned int i = 0; i < data_xml.size(); i++)
         {
             if(!almost_equal_doubles(data_xml[i], data_soa[i]))
                 {
@@ -106,8 +108,8 @@ void test_single_table(char const* filename, int index)
             {
             std::vector<double> result_xml = xml.values(start, length);
             std::vector<double> result_soa = soa.values(start, length);
-            LMI_ASSERT(result_xml.size() == length);
-            LMI_ASSERT(result_soa.size() == length);
+            LMI_ASSERT(result_xml.size() == static_cast<unsigned int>(length));
+            LMI_ASSERT(result_soa.size() == static_cast<unsigned int>(length));
             if(!almost_equal_doubles(result_xml, result_soa))
                 report_vector_difference(start, result_xml, result_soa);
             }

@@ -36,7 +36,9 @@
 #include <xmlwrapp/node.h>
 
 #include <ios>
+#include <iostream>
 #include <istream>
+#include <ostream>
 
 /************************************************************************
  misc helpers
@@ -61,7 +63,7 @@ xml::node xml_for_aggregate_table(soa_actuarial_table const& t)
     std::vector<double> const values =
         t.values(t.min_age(), t.max_age() - t.min_age() + 1);
 
-    for(int i = 0; i < values.size(); i++)
+    for(unsigned int i = 0; i < values.size(); i++)
         {
         xml::node v("value", as_str(values[i]));
         v.get_attributes().insert("age", as_str(t.min_age() + i));
@@ -78,7 +80,7 @@ xml::node xml_for_duration_table(soa_actuarial_table const& t)
     std::vector<double> const values =
         t.values(t.min_age(), t.max_age() - t.min_age() + 1);
 
-    for(int i = 0; i < values.size(); i++)
+    for(unsigned int i = 0; i < values.size(); i++)
         {
         xml::node v("value", as_str(values[i]));
         n.insert(v);
