@@ -1,3 +1,30 @@
+// Convert SOA tables to xml.
+//
+// Copyright (C) 2012 Gregory W. Chicares.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2 as
+// published by the Free Software Foundation.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software Foundation,
+// Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+//
+// http://savannah.nongnu.org/projects/lmi
+// email: <gchicares@sbcglobal.net>
+// snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+// $Id$
+
+#ifdef __BORLANDC__
+#   include "pchfile.hpp"
+#   pragma hdrstop
+#endif // __BORLANDC__
 
 #include "soa_helpers.hpp"
 
@@ -16,13 +43,12 @@
  ************************************************************************/
 
 template<typename T>
-inline const char *as_str(T x)
+inline char const* as_str(T x)
 {
     static std::string tmp;
     tmp = value_cast<std::string>(x);
     return tmp.c_str();
 }
-
 
 /************************************************************************
  conversion code
@@ -106,7 +132,6 @@ xml::node xml_for_select_and_ultimate_table(soa_actuarial_table const& t)
     return n;
 }
 
-
 void export_single_table(char const* filename, int index, char const* description)
 {
     fs::path table_path(filename);
@@ -151,7 +176,7 @@ void export_single_table(char const* filename, int index, char const* descriptio
 
 void export_soa_file(char const* filename)
 {
-    const std::vector<soa_record_info> tables = list_soa_file_tables(filename);
+    std::vector<soa_record_info> const tables = list_soa_file_tables(filename);
 
     for(std::vector<soa_record_info>::const_iterator i = tables.begin()
         ;i != tables.end()
@@ -161,20 +186,20 @@ void export_soa_file(char const* filename)
         }
 }
 
-
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     try
-    {
+        {
         for(int i = 1; i < argc; i++)
             {
             export_soa_file(argv[i]);
             }
         return 0;
-    }
-    catch ( const std::exception& e )
-    {
+        }
+    catch(std::exception const& e)
+        {
         std::cerr << "Error: " << e.what() << std::endl;
         return 1;
-    }
+        }
 }
+
