@@ -28,6 +28,7 @@
 
 #include "obstruct_slicing.hpp"
 #include "uncopyable_lmi.hpp"
+#include "xml_lmi_fwd.hpp"
 
 #include <iosfwd>
 #include <string>
@@ -115,6 +116,15 @@ enum e_actuarial_table_method
     ,e_reenter_upon_rate_reset     = 2
     };
 
+/// Types of actuarial tables.
+
+enum e_table_type
+    {e_table_invalid               = -1
+    ,e_table_aggregate             = 'A'
+    ,e_table_duration              = 'D'
+    ,e_table_select_and_ultimate   = 'S'
+    };
+
 /// Base class for actuarial tables, both XML and binary.
 /// SOA !! This is only temporary, merge with xml_actuarial_table into
 /// single class once we remove binary SOA format support
@@ -149,6 +159,45 @@ class actuarial_table_base
     int  max_age_        ;
     int  select_period_  ;
     int  max_select_age_ ;
+};
+
+/// Read actuarial table from XML file.
+
+class actuarial_table
+    :        public  actuarial_table_base
+    ,        private lmi::uncopyable <actuarial_table>
+    ,virtual private obstruct_slicing<actuarial_table>
+{
+  public:
+    actuarial_table(std::string const& filename, int table_number);
+    ~actuarial_table();
+
+  protected:
+    std::vector<double> specific_values(int issue_age, int length) const;
+
+  private:
+    void load_xml_table                    (std::string const& filename);
+    void load_xml_aggregate_table          (xml::element const& node);
+    void load_xml_duration_table           (xml::element const& node);
+    void load_xml_select_table             (xml::element const& node);
+    void load_xml_select_and_ultimate_table(xml::element const& node);
+    void load_xml_table_with_ages          (xml::element const& node
+                                            ,std::vector<double>& data
+                                            ,int& min_age
+                                            ,int& max_age
+                                            );
+
+    // Table data. For 1D tables (e_table_aggregate and e_table_duration), this
+    // is the vector of values from min_age_ to max_age_.
+    // For e_table_select_and_ultimate, the content is organized by rows, with
+    // select_period_ entries per row, with rows ranging from min_age_ to
+    // max_select_age_.
+    std::vector<double> data_;
+
+    // For e_table_select_and_ultimate, this vector contains the ultimate
+    // column. The first value, ultimate_[0], is for min_age_+select_period_,
+    // the last is for max_select_age_.
+    std::vector<double> ultimate_;
 };
 
 /// Read a table from a database in the binary format designed by the
@@ -196,8 +245,6 @@ class soa_actuarial_table
 
     std::streampos table_offset_;
 };
-
-typedef soa_actuarial_table actuarial_table;
 
 /// Convenience function: read particular values from a table stored
 /// in the SOA table-manager format.
