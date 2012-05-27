@@ -540,9 +540,11 @@ account_value_test$(EXEEXT): \
 actuarial_table_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
+  $(xmlwrapp_objects) \
   actuarial_table.o \
   actuarial_table_test.o \
   timer.o \
+  xml_lmi.o \
 
 alert_test$(EXEEXT): \
   $(common_test_objects) \
