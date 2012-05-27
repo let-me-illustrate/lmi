@@ -38,6 +38,9 @@
 #include <boost/static_assert.hpp>
 
 #include <climits>   // CHAR_BIT
+#include <exception>
+#include <string>
+#include <vector>
 
 /************************************************************************
  misc helpers
@@ -67,7 +70,7 @@ std::vector<soa_record_info> list_soa_file_tables(char const* filename)
     fs::ifstream index_ifs(index_path, ios_in_binary());
     if(!index_ifs)
         {
-        error(boost::format("File '%1%' is required but could not be found.") % index_path);
+        error(boost::format("File '%1%' is required but could not be found.") % index_path.string());
         }
 
     // Index records have fixed length:
@@ -96,7 +99,7 @@ std::vector<soa_record_info> list_soa_file_tables(char const* filename)
                 break;
             error(
                 boost::format("Table index file file '%1%': attempted to read %2% bytes, but got %3% bytes instead.")
-                % index_path
+                % index_path.string()
                 % index_record_length
                 % index_ifs
                 );
