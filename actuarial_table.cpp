@@ -905,6 +905,29 @@ std::vector<double> soa_actuarial_table::specific_values
     return v;
 }
 
+namespace
+{
+    inline bool almost_equal_doubles(double a, double b)
+    {
+        return std::abs(a - b) < 0.00000001;
+    }
+
+    bool almost_equal_doubles(std::vector<double> const& a, std::vector<double> const& b)
+    {
+        if(a.size() != b.size())
+            return false;
+
+        size_t const size = a.size();
+        for(size_t i = 0; i < size; i++)
+            {
+            if(!almost_equal_doubles(a[i], b[i]))
+                return false;
+            }
+
+        return true;
+    }
+} // Unnamed namespace.
+
 std::vector<double> actuarial_table_rates
     (std::string const& table_filename
     ,int                table_number
@@ -912,8 +935,21 @@ std::vector<double> actuarial_table_rates
     ,int                length
     )
 {
+    actuarial_table     z    (table_filename, table_number);
+    soa_actuarial_table z_soa(table_filename, table_number);
+
+    std::vector<double> values    (z.values(issue_age, length));
+    std::vector<double> values_soa(z_soa.values(issue_age, length));
+
+    // SOA !! Temporarily verify correctness of XML implementation,
+    // remove this once satisfied
+    LMI_ASSERT(almost_equal_doubles(values, values_soa));
+    return values;
+#if 0
+// SOA !! Ultimately, there will be only one class:
     actuarial_table z(table_filename, table_number);
     return z.values(issue_age, length);
+#endif // 0
 }
 
 std::vector<double> actuarial_table_rates_elaborated
@@ -926,6 +962,30 @@ std::vector<double> actuarial_table_rates_elaborated
     ,int                      reset_duration
     )
 {
+    actuarial_table     z    (table_filename, table_number);
+    soa_actuarial_table z_soa(table_filename, table_number);
+
+    std::vector<double> values(z.values_elaborated
+        (issue_age
+        ,length
+        ,method
+        ,inforce_duration
+        ,reset_duration
+        ));
+    std::vector<double> values_soa(z_soa.values_elaborated
+        (issue_age
+        ,length
+        ,method
+        ,inforce_duration
+        ,reset_duration
+        ));
+
+    // SOA !! Temporarily verify correctness of XML implementation,
+    // remove this once satisfied
+    LMI_ASSERT(almost_equal_doubles(values, values_soa));
+    return values;
+#if 0
+// SOA !! Ultimately, there will be only one class:
     actuarial_table z(table_filename, table_number);
     return z.values_elaborated
         (issue_age
@@ -934,5 +994,6 @@ std::vector<double> actuarial_table_rates_elaborated
         ,inforce_duration
         ,reset_duration
         );
+#endif // 0
 }
 
