@@ -42,6 +42,25 @@
     <include file="presets/wx.bkl"/>
     <include file="lmi_files.bkl"/>
 
+    <option name="USE_XML_TABLES">
+        <values>0,1</values>
+        <values-description>Legacy_SOA,</values-description>
+        <description>Use XML version of actuarial_table?</description>
+    </option>
+
+    <set var="BUILDDIR_1">
+        <if cond="WX_DEBUG=='1'">Debug</if>
+        <if cond="WX_DEBUG=='0'">Release</if>
+    </set>
+    <set var="BUILDDIR_2">
+        <if cond="USE_XML_TABLES=='0'">LegacySOA</if>
+    </set>
+    <set var="BUILDDIR_3">
+        <if cond="WX_SHARED=='1'">_DLL</if>
+    </set>
+
+    <set var="BUILDDIR">$(BUILDDIR_1)$(BUILDDIR_2)$(BUILDDIR_3)</set>
+
     <template id="lmibase">
         <include>$(SRCDIR)</include>
         <warnings>max</warnings>
@@ -76,6 +95,11 @@
             LMI_PCH_HEADER="$(LMI_PCH_HEADER)"
         </set>
         <define>$(LMI_PCH_HEADER_DEFINE)</define>
+
+        <set var="LMI_USE_XML_TABLES_DEFINE">
+            <if cond="USE_XML_TABLES=='1'">LMI_USE_XML_TABLES</if>
+        </set>
+        <define>$(LMI_USE_XML_TABLES_DEFINE)</define>
     </template>
 
     <template id="lmilib" template="wx-lib,wxlike,lmibase"/>
