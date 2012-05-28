@@ -30144,3 +30144,20 @@ Fix 'make check_concinnity' issues in files just added.
 Compile table-migration tools; fix compiler diagnostics. See, e.g.:
   http://lists.nongnu.org/archive/html/lmi/2012-05/msg00013.html
 
+20120528T0949Z <gchicares@sbcglobal.net> [578]
+
+  actuarial_table.cpp
+Test binary and xml implementations against each other (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00015.html
+
+20120528T1121Z <gchicares@sbcglobal.net> [578]
+
+  actuarial_table.cpp
+  actuarial_table.hpp
+Permit switching between implementations, with binary as the default.
+This default shields production from temporary effects of the xml
+implementation (some small numerical differences in system testing,
+and a performance issue discussed here:
+  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00018.html
+) while xml development continues.
+
