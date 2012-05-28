@@ -170,7 +170,7 @@ class xml_actuarial_table
 {
   public:
     xml_actuarial_table(std::string const& filename, int table_number);
-    ~xml_actuarial_table();
+    virtual ~xml_actuarial_table();
 
   protected:
     std::vector<double> specific_values(int issue_age, int length) const;
@@ -181,11 +181,12 @@ class xml_actuarial_table
     void load_xml_duration_table           (xml::element const& node);
     void load_xml_select_table             (xml::element const& node);
     void load_xml_select_and_ultimate_table(xml::element const& node);
-    void load_xml_table_with_ages          (xml::element const& node
-                                            ,std::vector<double>& data
-                                            ,int& min_age
-                                            ,int& max_age
-                                            );
+    void load_xml_table_with_ages
+        (xml::element const& node
+        ,std::vector<double>& data
+        ,int& min_age
+        ,int& max_age
+        );
 
     // Table data. For 1D tables (e_table_aggregate and e_table_duration), this
     // is the vector of values from min_age_ to max_age_.
@@ -226,7 +227,7 @@ class soa_actuarial_table
 {
   public:
     soa_actuarial_table(std::string const& filename, int table_number);
-    ~soa_actuarial_table();
+    virtual ~soa_actuarial_table();
 
     std::string const& filename       () const {return filename_       ;}
 

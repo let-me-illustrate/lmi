@@ -31,8 +31,8 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "miscellany.hpp"
-#include "oecumenic_enumerations.hpp" // methuselah
-#include "path_utility.hpp" // fs::path inserter
+#include "oecumenic_enumerations.hpp"   // methuselah
+#include "path_utility.hpp"             // fs::path inserter
 #include "value_cast.hpp"
 #include "xml_lmi.hpp"
 
@@ -44,12 +44,12 @@
 
 #include <xmlwrapp/nodes_view.h>
 
-#include <algorithm> // std::max(), std::min()
-#include <cctype>    // std::toupper()
-#include <climits>   // CHAR_BIT
+#include <algorithm>                    // std::max(), std::min()
+#include <cctype>                       // std::toupper()
+#include <climits>                      // CHAR_BIT
 #include <ios>
 #include <istream>
-#include <iterator>  // std::distance()
+#include <iterator>                     // std::distance()
 #include <limits>
 
 namespace
