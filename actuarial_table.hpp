@@ -163,14 +163,14 @@ class actuarial_table_base
 
 /// Read actuarial table from XML file.
 
-class actuarial_table
+class xml_actuarial_table
     :        public  actuarial_table_base
-    ,        private lmi::uncopyable <actuarial_table>
-    ,virtual private obstruct_slicing<actuarial_table>
+    ,        private lmi::uncopyable <xml_actuarial_table>
+    ,virtual private obstruct_slicing<xml_actuarial_table>
 {
   public:
-    actuarial_table(std::string const& filename, int table_number);
-    ~actuarial_table();
+    xml_actuarial_table(std::string const& filename, int table_number);
+    ~xml_actuarial_table();
 
   protected:
     std::vector<double> specific_values(int issue_age, int length) const;
@@ -268,6 +268,14 @@ std::vector<double> actuarial_table_rates_elaborated
     ,int                      inforce_duration
     ,int                      reset_duration
     );
+
+// #define LMI_USE_XML_TABLES
+
+#if defined LMI_USE_XML_TABLES
+typedef xml_actuarial_table actuarial_table;
+#else  // !defined LMI_USE_XML_TABLES
+typedef soa_actuarial_table actuarial_table;
+#endif // !defined LMI_USE_XML_TABLES
 
 #endif // actuarial_table_hpp
 

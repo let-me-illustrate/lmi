@@ -180,7 +180,7 @@ std::vector<double> actuarial_table_base::values_elaborated
         }
 }
 
-actuarial_table::actuarial_table(std::string const& filename, int table_number)
+xml_actuarial_table::xml_actuarial_table(std::string const& filename, int table_number)
 {
     // SOA !! This is temporary code for API compatibility with soa_actuarial_table.
     // It should be changed so that the constructor takes only a single
@@ -192,11 +192,11 @@ actuarial_table::actuarial_table(std::string const& filename, int table_number)
     load_xml_table(xmlfile);
 }
 
-actuarial_table::~actuarial_table()
+xml_actuarial_table::~xml_actuarial_table()
 {
 }
 
-void actuarial_table::load_xml_table(std::string const& filename)
+void xml_actuarial_table::load_xml_table(std::string const& filename)
 {
     xml_lmi::dom_parser parser(filename);
     xml::element root(parser.root_node("table"));
@@ -232,7 +232,7 @@ void actuarial_table::load_xml_table(std::string const& filename)
         }
 }
 
-void actuarial_table::load_xml_table_with_ages
+void xml_actuarial_table::load_xml_table_with_ages
     (xml::element const& node
     ,std::vector<double>& data
     ,int& min_age
@@ -281,7 +281,7 @@ void actuarial_table::load_xml_table_with_ages
     LMI_ASSERT(data.size() == size_t(max_age - min_age + 1));
 }
 
-void actuarial_table::load_xml_aggregate_table(xml::element const& node)
+void xml_actuarial_table::load_xml_aggregate_table(xml::element const& node)
 {
     load_xml_table_with_ages
         (node
@@ -293,7 +293,7 @@ void actuarial_table::load_xml_aggregate_table(xml::element const& node)
     table_type_ = e_table_aggregate;
 }
 
-void actuarial_table::load_xml_duration_table(xml::element const& node)
+void xml_actuarial_table::load_xml_duration_table(xml::element const& node)
 {
     xml::const_nodes_view const values = node.elements("value");
 
@@ -308,7 +308,7 @@ void actuarial_table::load_xml_duration_table(xml::element const& node)
     table_type_ = e_table_duration;
 }
 
-void actuarial_table::load_xml_select_table(xml::element const& node)
+void xml_actuarial_table::load_xml_select_table(xml::element const& node)
 {
     xml::const_nodes_view const rows = node.elements("row");
 
@@ -384,7 +384,7 @@ void actuarial_table::load_xml_select_table(xml::element const& node)
     table_type_ = e_table_select_and_ultimate;
 }
 
-void actuarial_table::load_xml_select_and_ultimate_table(xml::element const& node)
+void xml_actuarial_table::load_xml_select_and_ultimate_table(xml::element const& node)
 {
     load_xml_select_table(*xml_lmi::retrieve_element(node, "select"));
 
@@ -411,7 +411,7 @@ void actuarial_table::load_xml_select_and_ultimate_table(xml::element const& nod
     table_type_ = e_table_select_and_ultimate;
 }
 
-std::vector<double> actuarial_table::specific_values
+std::vector<double> xml_actuarial_table::specific_values
     (int issue_age
     ,int length
     ) const
@@ -935,7 +935,8 @@ std::vector<double> actuarial_table_rates
     ,int                length
     )
 {
-    actuarial_table     z    (table_filename, table_number);
+#if defined LMI_USE_XML_TABLES
+    xml_actuarial_table     z(table_filename, table_number);
     soa_actuarial_table z_soa(table_filename, table_number);
 
     std::vector<double> values    (z.values(issue_age, length));
@@ -945,11 +946,11 @@ std::vector<double> actuarial_table_rates
     // remove this once satisfied
     LMI_ASSERT(almost_equal_doubles(values, values_soa));
     return values;
-#if 0
+#else  // !defined LMI_USE_XML_TABLES
 // SOA !! Ultimately, there will be only one class:
     actuarial_table z(table_filename, table_number);
     return z.values(issue_age, length);
-#endif // 0
+#endif // !defined LMI_USE_XML_TABLES
 }
 
 std::vector<double> actuarial_table_rates_elaborated
@@ -962,7 +963,8 @@ std::vector<double> actuarial_table_rates_elaborated
     ,int                      reset_duration
     )
 {
-    actuarial_table     z    (table_filename, table_number);
+#if defined LMI_USE_XML_TABLES
+    xml_actuarial_table     z(table_filename, table_number);
     soa_actuarial_table z_soa(table_filename, table_number);
 
     std::vector<double> values(z.values_elaborated
@@ -984,7 +986,7 @@ std::vector<double> actuarial_table_rates_elaborated
     // remove this once satisfied
     LMI_ASSERT(almost_equal_doubles(values, values_soa));
     return values;
-#if 0
+#else  // !defined LMI_USE_XML_TABLES
 // SOA !! Ultimately, there will be only one class:
     actuarial_table z(table_filename, table_number);
     return z.values_elaborated
@@ -994,6 +996,6 @@ std::vector<double> actuarial_table_rates_elaborated
         ,inforce_duration
         ,reset_duration
         );
-#endif // 0
+#endif // !defined LMI_USE_XML_TABLES
 }
 
