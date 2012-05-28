@@ -143,4 +143,21 @@
         <sys-lib>xmlwrapp$(WX3RDPARTYLIBPOSTFIX)</sys-lib>
         <sys-lib>libxml2</sys-lib>
     </exe>
+
+    <exe id="soa2xml" template="wxconsole,lmiapp">
+        <sources>soa2xml.cpp</sources>
+        <headers>soa_helpers.hpp</headers>
+        <library>lmi</library>
+        <sys-lib>xmlwrapp$(WX3RDPARTYLIBPOSTFIX)</sys-lib>
+        <sys-lib>libxml2</sys-lib>
+    </exe>
+
+    <exe id="soa_stress_test" template="wxconsole,lmiapp">
+        <sources>soa_stress_test.cpp</sources>
+        <headers>soa_helpers.hpp</headers>
+        <library>lmi</library>
+        <sys-lib>xmlwrapp$(WX3RDPARTYLIBPOSTFIX)</sys-lib>
+        <sys-lib>libxml2</sys-lib>
+    </exe>
+
 </makefile>
