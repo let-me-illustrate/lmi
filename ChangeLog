@@ -30071,3 +30071,93 @@ Update instructions for starting 'bash': the default terminal is now
   version.hpp
 Designate release candidate.
 
+20120526T1023Z <gchicares@sbcglobal.net> [578]
+
+  cell.rnc
+  cell.xsd
+  test_schemata.sh
+  types.rnc [new file]
+  types.xsd [new file]
+Refactor, splitting types into a separate file to allow reuse. See:
+  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00006.html
+
+20120526T1035Z <gchicares@sbcglobal.net> [578]
+
+  actuarial_table.rnc [new file]
+Add RNG schema for xml tables (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00006.html
+
+20120526T1117Z <gchicares@sbcglobal.net> [578]
+
+  actuarial_table.hpp
+Remove an unused member function (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00007.html
+
+20120526T1133Z <gchicares@sbcglobal.net> [578]
+
+  test_coding_rules.cpp
+Allow a new marker for SOA-to-xml table-migration issues.
+
+20120526T1229Z <gchicares@sbcglobal.net> [578]
+
+  actuarial_table.cpp
+  actuarial_table.hpp
+Refactor to facilitate an impending change (VS), crucially adding a
+virtual dtor to the base class. See:
+  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00008.html
+
+20120527T1604Z <gchicares@sbcglobal.net> [578]
+
+  actuarial_table.cpp
+  actuarial_table.hpp
+  actuarial_table_test.cpp
+  objects.make
+Experimentally implement loading of xml tables (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00009.html
+
+20120527T1615Z <gchicares@sbcglobal.net> [578]
+
+  soa2xml.cpp     [new file]
+  soa_helpers.hpp [new file]
+Add binary-to-xml migration tool. See:
+  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00010.html
+
+20120527T1616Z <gchicares@sbcglobal.net> [578]
+
+  soa_stress_test.cpp [new file]
+Add binary-versus-xml test tool. See:
+  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00011.html
+
+20120527T1636Z <gchicares@sbcglobal.net> [578]
+
+  soa2xml.cpp
+  soa_helpers.hpp
+  soa_stress_test.cpp
+Fix 'make check_concinnity' issues in files just added.
+
+20120527T1653Z <gchicares@sbcglobal.net> [578]
+
+  objects.make
+  soa2xml.cpp
+  soa_helpers.hpp
+  soa_stress_test.cpp
+Compile table-migration tools; fix compiler diagnostics. See, e.g.:
+  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00013.html
+
+20120528T0949Z <gchicares@sbcglobal.net> [578]
+
+  actuarial_table.cpp
+Test binary and xml implementations against each other (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00015.html
+
+20120528T1121Z <gchicares@sbcglobal.net> [578]
+
+  actuarial_table.cpp
+  actuarial_table.hpp
+Permit switching between implementations, with binary as the default.
+This default shields production from temporary effects of the xml
+implementation (some small numerical differences in system testing,
+and a performance issue discussed here:
+  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00018.html
+) while xml development continues.
+

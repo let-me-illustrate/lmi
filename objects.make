@@ -545,9 +545,11 @@ account_value_test$(EXEEXT): \
 actuarial_table_test$(EXEEXT): \
   $(boost_common_objects) \
   $(common_test_objects) \
+  $(xmlwrapp_objects) \
   actuarial_table.o \
   actuarial_table_test.o \
   timer.o \
+  xml_lmi.o \
 
 alert_test$(EXEEXT): \
   $(common_test_objects) \
@@ -1035,6 +1037,27 @@ bcc_rc$(EXEEXT): \
   license.o \
   system_command.o \
   system_command_non_wx.o \
+
+# Temporary tools for migration from binary to xml actuarial tables.
+# SOA !! Expunge after migration.
+
+soa2xml$(EXEEXT): \
+  $(boost_filesystem_objects) \
+  $(xmlwrapp_objects) \
+  actuarial_table.o \
+  alert.o \
+  alert_cli.o \
+  soa2xml.o \
+  xml_lmi.o \
+
+soa_stress_test$(EXEEXT): \
+  $(boost_filesystem_objects) \
+  $(xmlwrapp_objects) \
+  actuarial_table.o \
+  alert.o \
+  alert_cli.o \
+  soa_stress_test.o \
+  xml_lmi.o \
 
 ################################################################################
 
