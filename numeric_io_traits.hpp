@@ -81,9 +81,9 @@ inline int floating_point_decimals(T t)
 {
     BOOST_STATIC_ASSERT(boost::is_float<T>::value);
 #if defined _MSC_VER
-    // Not only does Visual C++ write infinity as "1.#INF" rather than "inf",
-    // it respects decimals specification, "shortening" it into "1." if we
-    // return 0 here.
+    // COMPILER !! Not only does Visual C++ write infinity as "1.#INF" rather
+    // than "inf", it respects decimals specification, "shortening" it into
+    // "1." if we return 0 here.
     if(is_infinite(t))
         {
         return 4;
@@ -342,10 +342,19 @@ template<> struct numeric_conversion_traits<float>
     static T strtoT(char const* nptr, char** endptr)
         {
 #if defined _MSC_VER
-        if(0 == strcmp(nptr, "inf"))
+        // COMPILER !! MSVC strtod() doesn't support C99 "inf[inity]" nor
+        // "nan[(...)]" strings nor hexadecimal notation so provide our
+        // work around for at least the first one of them which we actually
+        // need. This workaround is, of course, incomplete as it doesn't
+        // even support "-inf" without mentioning long and non-lower-case
+        // versions or NaN support.
+        if(strncmp(nptr, "inf", 3) == 0)
             {
-            *endptr = const_cast<char*>(nptr) + 3;
-            return infinity<T>();
+            if(endptr)
+                {
+                *endptr = const_cast<char *>(nptr) + 3;
+                }
+            return std::numeric_limits<T>::infinity();
             }
 #endif // defined _MSC_VER
         return strtof(nptr, endptr);
@@ -361,10 +370,19 @@ template<> struct numeric_conversion_traits<double>
     static T strtoT(char const* nptr, char** endptr)
         {
 #if defined _MSC_VER
-        if(0 == strcmp(nptr, "inf"))
+        // COMPILER !! MSVC strtod() doesn't support C99 "inf[inity]" nor
+        // "nan[(...)]" strings nor hexadecimal notation so provide our
+        // work around for at least the first one of them which we actually
+        // need. This workaround is, of course, incomplete as it doesn't
+        // even support "-inf" without mentioning long and non-lower-case
+        // versions or NaN support.
+        if(strncmp(nptr, "inf", 3) == 0)
             {
-            *endptr = const_cast<char*>(nptr) + 3;
-            return infinity<T>();
+            if(endptr)
+                {
+                *endptr = const_cast<char *>(nptr) + 3;
+                }
+            return std::numeric_limits<T>::infinity();
             }
 #endif // defined _MSC_VER
         return std::strtod(nptr, endptr);
