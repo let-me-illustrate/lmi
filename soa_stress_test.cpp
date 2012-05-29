@@ -86,7 +86,7 @@ void report_vector_difference
 void test_single_table(char const* filename, int index)
 {
     soa_actuarial_table soa(filename, index);
-    actuarial_table     xml(filename, index);
+    xml_actuarial_table xml(filename, index);
 
     LMI_ASSERT( soa.table_type() == xml.table_type()         );
 
