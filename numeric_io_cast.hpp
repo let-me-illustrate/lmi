@@ -309,6 +309,10 @@ struct numeric_converter<std::string, From>
             }
         else
             {
+#if defined _MSC_VER
+            if(0 == std::strcmp(buffer, "1.#INF"))
+                return "inf";
+#endif // defined _MSC_VER
             return numeric_conversion_traits<From>::simplify(To(buffer));
             }
         }

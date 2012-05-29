@@ -80,6 +80,15 @@ template<typename T>
 inline int floating_point_decimals(T t)
 {
     BOOST_STATIC_ASSERT(boost::is_float<T>::value);
+#if defined _MSC_VER
+    // Not only does Visual C++ write infinity as "1.#INF" rather than "inf",
+    // it respects decimals specification, "shortening" it into "1." if we
+    // return 0 here.
+    if(is_infinite(t))
+        {
+        return 4;
+        }
+#endif // defined _MSC_VER
     // Avoid taking the logarithm of zero or infinity.
     if(0 == t || is_infinite(t))
         {
@@ -331,7 +340,16 @@ template<> struct numeric_conversion_traits<float>
     static int digits(T t) {return floating_point_decimals(t);}
     static char const* fmt() {return "%#.*f";}
     static T strtoT(char const* nptr, char** endptr)
-        {return strtof(nptr, endptr);}
+        {
+#if defined _MSC_VER
+        if(0 == strcmp(nptr, "inf"))
+            {
+            *endptr = const_cast<char*>(nptr) + 3;
+            return infinity<T>();
+            }
+#endif // defined _MSC_VER
+        return strtof(nptr, endptr);
+        }
 };
 
 template<> struct numeric_conversion_traits<double>
@@ -341,7 +359,16 @@ template<> struct numeric_conversion_traits<double>
     static int digits(T t) {return floating_point_decimals(t);}
     static char const* fmt() {return "%#.*f";}
     static T strtoT(char const* nptr, char** endptr)
-        {return std::strtod(nptr, endptr);}
+        {
+#if defined _MSC_VER
+        if(0 == strcmp(nptr, "inf"))
+            {
+            *endptr = const_cast<char*>(nptr) + 3;
+            return infinity<T>();
+            }
+#endif // defined _MSC_VER
+        return std::strtod(nptr, endptr);
+        }
 };
 
 #if !defined LMI_COMPILER_PROVIDES_STRTOLD
