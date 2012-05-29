@@ -310,6 +310,8 @@ struct numeric_converter<std::string, From>
         else
             {
 #if defined _MSC_VER
+            // COMPILER !! MSVC formats infinity into a string as "1.#INF", not
+            // "inf" as gcc does and C99/C++11 mandates. Translate it manually.
             if(0 == std::strcmp(buffer, "1.#INF"))
                 return "inf";
 #endif // defined _MSC_VER
