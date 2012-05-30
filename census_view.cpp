@@ -41,17 +41,18 @@
 #include "input_sequence_entry.hpp"
 #include "ledger.hpp"
 #include "ledger_text_formats.hpp"
-#include "miscellany.hpp" // is_ok_for_cctype()
+#include "miscellany.hpp"               // is_ok_for_cctype()
 #include "path_utility.hpp"
 #include "safely_dereference_as.hpp"
 #include "wx_new.hpp"
-#include "wx_utility.hpp" // class ClipboardEx
+#include "wx_utility.hpp"               // class ClipboardEx
 
 #include <wx/dataview.h>
 #include <wx/datectrl.h>
 #include <wx/icon.h>
 #include <wx/menu.h>
 #include <wx/msgdlg.h>
+#include <wx/settings.h>
 #include <wx/spinctrl.h>
 #include <wx/valnum.h>
 #include <wx/wupdlock.h>
@@ -59,8 +60,9 @@
 
 #include <algorithm>
 #include <cctype>
-#include <cstdio>         // std::remove()
-#include <istream>        // std::ws
+#include <cstddef>                      // std::size_t
+#include <cstdio>                       // std::remove()
+#include <istream>                      // std::ws
 #include <iterator>
 #include <sstream>
 
@@ -1592,7 +1594,7 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
         list_model_->RowValueChanged(j, CensusViewDataViewModel::Col_CellNum);
 
     unsigned int const newsel = std::min
-        (static_cast<unsigned int>(erasures.front())
+        (static_cast<std::size_t>(erasures.front())
         ,cell_parms().size() - 1
         );
     wxDataViewItem const& y = list_model_->GetItem(newsel);

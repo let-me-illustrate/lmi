@@ -30,6 +30,7 @@
 
 #include "actuarial_table.hpp"
 #include "assert_lmi.hpp"
+#include "materially_equal.hpp"
 
 #include <cmath>
 #include <ios>
@@ -39,7 +40,7 @@
 
 inline bool almost_equal_doubles(double a, double b)
 {
-    return std::abs(a - b) < 0.00000001;
+    return materially_equal(a, b, 2.0E-15L);
 }
 
 inline bool almost_equal_doubles(std::vector<double> const& a, std::vector<double> const& b)
@@ -68,12 +69,12 @@ void report_vector_difference
                % start
               << std::endl;
 
-    std::cerr << boost::format("   \t%|10|\t%|10|") % "xml" % "soa" << std::endl;
+    std::cerr << boost::format("   \t%|25|\t%|25|") % "xml" % "soa" << std::endl;
     for(unsigned int i = 0; i < data_xml.size(); i++)
         {
             if(!almost_equal_doubles(data_xml[i], data_soa[i]))
                 {
-                std::cerr << boost::format("[%d]\t%|10|\t%|10|")
+                std::cerr << boost::format("[%d]\t%|25.20|\t%|25.20|")
                            % i
                            % data_xml[i]
                            % data_soa[i]
@@ -86,7 +87,7 @@ void report_vector_difference
 void test_single_table(char const* filename, int index)
 {
     soa_actuarial_table soa(filename, index);
-    actuarial_table     xml(filename, index);
+    xml_actuarial_table xml(filename, index);
 
     LMI_ASSERT( soa.table_type() == xml.table_type()         );
 

@@ -30161,3 +30161,28 @@ and a performance issue discussed here:
   http://lists.nongnu.org/archive/html/lmi/2012-05/msg00018.html
 ) while xml development continues.
 
+20120528T1136Z <gchicares@sbcglobal.net> [578]
+
+  actuarial_table.cpp
+  actuarial_table.hpp
+Improve concinnity.
+
+20120529T0935Z <gchicares@sbcglobal.net> [578]
+
+  soa_stress_test.cpp
+Remove dependency on conditional introduced 20120528T1121Z (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00019.html
+
+20120529T2028Z <gchicares@sbcglobal.net> [578]
+
+  actuarial_table.cpp
+  soa_stress_test.cpp
+Tighten tolerance on binary-versus-xml tests. See:
+  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00022.html
+
+20120529T2059Z <gchicares@sbcglobal.net> [578]
+
+  census_view.cpp
+Fix assorted warnings (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00016.html
+

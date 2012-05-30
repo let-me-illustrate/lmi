@@ -30,6 +30,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "materially_equal.hpp"
 #include "miscellany.hpp"
 #include "oecumenic_enumerations.hpp"   // methuselah
 #include "path_utility.hpp"             // fs::path inserter
@@ -47,6 +48,7 @@
 #include <algorithm>                    // std::max(), std::min()
 #include <cctype>                       // std::toupper()
 #include <climits>                      // CHAR_BIT
+#include <iomanip>                      // std::setprecision()
 #include <ios>
 #include <istream>
 #include <iterator>                     // std::distance()
@@ -907,11 +909,6 @@ std::vector<double> soa_actuarial_table::specific_values
 
 namespace
 {
-    inline bool almost_equal_doubles(double a, double b)
-    {
-        return std::abs(a - b) < 0.00000001;
-    }
-
     bool almost_equal_doubles(std::vector<double> const& a, std::vector<double> const& b)
     {
         if(a.size() != b.size())
@@ -920,8 +917,20 @@ namespace
         size_t const size = a.size();
         for(size_t i = 0; i < size; i++)
             {
-            if(!almost_equal_doubles(a[i], b[i]))
+            if(!materially_equal(a[i], b[i], 2.0E-15L))
+                {
+                warning()
+                    << i << " i\n"
+                    << value_cast<std::string>(a[i]) << " ... a[i]\n"
+                    << value_cast<std::string>(b[i]) << " ... b[i]\n"
+                    << std::setprecision(20)
+                    << a[i] << " a[i]\n"
+                    << b[i] << " b[i]\n"
+                    << value_cast<std::string>((b[i] - a[i]) / b[i]) << " (b[i] - a[i]) / b[i]\n"
+                    << LMI_FLUSH
+                    ;
                 return false;
+                }
             }
 
         return true;
