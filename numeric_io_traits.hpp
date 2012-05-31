@@ -26,11 +26,12 @@
 
 #include "config.hpp"
 
-#include "ieee754.hpp" // is_infinite<>()
+#include "ieee754.hpp"                  // is_infinite<>()
 
-#include <algorithm>   // std::max()
-#include <cmath>       // C99 functions fabsl(), log10l(), strtold()
-#include <cstdlib>     // std::strto*()
+#include <algorithm>                    // std::max()
+#include <cmath>                        // C99 functions fabsl(), log10l(), strtold()
+#include <cstdlib>                      // std::strto*()
+#include <cstring>                      // std::strncmp()
 #include <limits>
 #include <stdexcept>
 #include <string>
@@ -80,6 +81,15 @@ template<typename T>
 inline int floating_point_decimals(T t)
 {
     BOOST_STATIC_ASSERT(boost::is_float<T>::value);
+#if defined LMI_MSC || defined LMI_COMO_WITH_MINGW
+    // COMPILER !! Not only does MSVC write infinity as "1.#INF" rather
+    // than "inf", it respects decimals specification, "shortening" it
+    // into "1." if we return 0 here.
+    if(is_infinite(t))
+        {
+        return 4;
+        }
+#endif // defined LMI_MSC || defined LMI_COMO_WITH_MINGW
     // Avoid taking the logarithm of zero or infinity.
     if(0 == t || is_infinite(t))
         {
@@ -331,7 +341,25 @@ template<> struct numeric_conversion_traits<float>
     static int digits(T t) {return floating_point_decimals(t);}
     static char const* fmt() {return "%#.*f";}
     static T strtoT(char const* nptr, char** endptr)
-        {return strtof(nptr, endptr);}
+        {
+#if defined LMI_MSC || defined LMI_COMO_WITH_MINGW
+        // COMPILER !! MSVC strtod() doesn't support C99 "inf[inity]" nor
+        // "nan[(...)]" strings nor hexadecimal notation so provide our
+        // work around for at least the first one of them which we actually
+        // need. This workaround is, of course, incomplete as it doesn't
+        // even support "-inf" without mentioning long and non-lower-case
+        // versions or NaN support.
+        if(0 == std::strncmp(nptr, "inf", 3))
+            {
+            if(endptr)
+                {
+                *endptr = const_cast<char *>(nptr) + 3;
+                }
+            return std::numeric_limits<T>::infinity();
+            }
+#endif // defined LMI_MSC || defined LMI_COMO_WITH_MINGW
+        return strtof(nptr, endptr);
+        }
 };
 
 template<> struct numeric_conversion_traits<double>
@@ -341,7 +369,25 @@ template<> struct numeric_conversion_traits<double>
     static int digits(T t) {return floating_point_decimals(t);}
     static char const* fmt() {return "%#.*f";}
     static T strtoT(char const* nptr, char** endptr)
-        {return std::strtod(nptr, endptr);}
+        {
+#if defined LMI_MSC || defined LMI_COMO_WITH_MINGW
+        // COMPILER !! MSVC strtod() doesn't support C99 "inf[inity]" nor
+        // "nan[(...)]" strings nor hexadecimal notation so provide our
+        // work around for at least the first one of them which we actually
+        // need. This workaround is, of course, incomplete as it doesn't
+        // even support "-inf" without mentioning long and non-lower-case
+        // versions or NaN support.
+        if(0 == std::strncmp(nptr, "inf", 3))
+            {
+            if(endptr)
+                {
+                *endptr = const_cast<char *>(nptr) + 3;
+                }
+            return std::numeric_limits<T>::infinity();
+            }
+#endif // defined LMI_MSC || defined LMI_COMO_WITH_MINGW
+        return std::strtod(nptr, endptr);
+        }
 };
 
 #if !defined LMI_COMPILER_PROVIDES_STRTOLD
