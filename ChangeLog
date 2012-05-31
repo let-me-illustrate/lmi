@@ -30186,3 +30186,11 @@ Tighten tolerance on binary-versus-xml tests. See:
 Fix assorted warnings (VS). See:
   http://lists.nongnu.org/archive/html/lmi/2012-05/msg00016.html
 
+20120531T1516Z <gchicares@sbcglobal.net> [578]
+
+  numeric_io_cast.hpp
+  numeric_io_traits.hpp
+  numeric_io_test.cpp
+Work around strtod("inf") defect in msvcrt (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00021.html
+

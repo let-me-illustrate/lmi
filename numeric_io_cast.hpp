@@ -29,9 +29,10 @@
 #include "numeric_io_traits.hpp"
 #include "rtti_lmi.hpp"
 
+#include <cstring>                      // std::strcmp()
 #include <sstream>
 #include <stdexcept>
-#include <stdio.h> // snprintf() (C99, not C++98).
+#include <stdio.h>                      // snprintf() (C99, not C++98).
 #include <string>
 #include <typeinfo>
 
@@ -309,6 +310,14 @@ struct numeric_converter<std::string, From>
             }
         else
             {
+#if defined LMI_MSC || defined LMI_COMO_WITH_MINGW
+            // COMPILER !! MSVC formats infinity into a string as "1.#INF", not
+            // "inf" as gcc does and C99/C++11 mandates. Translate it manually.
+            if(0 == std::strcmp(buffer, "1.#INF"))
+                {
+                return "inf";
+                }
+#endif // defined LMI_MSC || defined LMI_COMO_WITH_MINGW
             return numeric_conversion_traits<From>::simplify(To(buffer));
             }
         }
