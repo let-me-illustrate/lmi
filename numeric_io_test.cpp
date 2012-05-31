@@ -185,15 +185,18 @@ int test_main(int, char*[])
     // that converts to '1.0'.
     BOOST_TEST_EQUAL(inf_dbl, numeric_io_cast<double>(inf_str));
 
-    // These conversions fail for como with msvcrt, because the latter
-    // defectively prints infinity as "1.#INF"; and for borland
-    // (FWIW), which prints infinity as "+INF".
+    // These conversions fail for borland (FWIW), which prints
+    // infinity as "+INF".
     try
         {
-        BOOST_TEST_EQUAL(inf_dbl, numeric_io_cast<double>("inf"));
-        BOOST_TEST_EQUAL(inf_dbl, numeric_io_cast<double>("INF"));
-        BOOST_TEST_EQUAL(inf_dbl, numeric_io_cast<double>("infinity"));
-        BOOST_TEST_EQUAL(inf_dbl, numeric_io_cast<double>("INFINITY"));
+        BOOST_TEST_EQUAL( inf_dbl, numeric_io_cast<double>( "inf"));
+        BOOST_TEST_EQUAL( inf_dbl, numeric_io_cast<double>( "INF"));
+        BOOST_TEST_EQUAL( inf_dbl, numeric_io_cast<double>( "infinity"));
+        BOOST_TEST_EQUAL( inf_dbl, numeric_io_cast<double>( "INFINITY"));
+        BOOST_TEST_EQUAL(-inf_dbl, numeric_io_cast<double>("-inf"));
+        BOOST_TEST_EQUAL(-inf_dbl, numeric_io_cast<double>("-INF"));
+        BOOST_TEST_EQUAL(-inf_dbl, numeric_io_cast<double>("-infinity"));
+        BOOST_TEST_EQUAL(-inf_dbl, numeric_io_cast<double>("-INFINITY"));
         }
     catch(...)
         {

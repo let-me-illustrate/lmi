@@ -30194,3 +30194,8 @@ Fix assorted warnings (VS). See:
 Work around strtod("inf") defect in msvcrt (VS). See:
   http://lists.nongnu.org/archive/html/lmi/2012-05/msg00021.html
 
+20120531T1726Z <gchicares@sbcglobal.net> [578]
+
+  numeric_io_test.cpp
+Augment unit tests for infinities.
+
