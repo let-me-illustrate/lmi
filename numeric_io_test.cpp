@@ -265,6 +265,7 @@ int test_main(int, char*[])
     test_interconvertibility((long double)( 0.0L),    "0", __FILE__, __LINE__);
     test_interconvertibility((long double)( 1.5L),  "1.5", __FILE__, __LINE__);
     test_interconvertibility((long double)(-2.5L), "-2.5", __FILE__, __LINE__);
+    BOOST_TEST_EQUAL(numeric_io_cast<long double>("3.36210314311209350626e-4932"), std::numeric_limits<long double>::min());
 #endif // !defined LMI_MSVCRT
 
     test_interconvertibility(std::string("  as  df  "), "  as  df  ", __FILE__, __LINE__);
@@ -362,6 +363,7 @@ int test_main(int, char*[])
 
     BOOST_TEST_EQUAL  ("1"  , numeric_io_cast<std::string>(1.0 + 2.2204460492503131e-16));
     BOOST_TEST_EQUAL  ("0.5", numeric_io_cast<std::string>(0.5 + 2.2204460492503131e-16));
+    BOOST_TEST_UNEQUAL("0.4", numeric_io_cast<std::string>(0.4 + 2.2204460492503131e-16));
     BOOST_TEST_UNEQUAL("0.1", numeric_io_cast<std::string>(0.1 + 2.2204460492503131e-16));
 
     // 1 +/- epsilon must be formatted as apparent unity.
