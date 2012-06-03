@@ -30199,3 +30199,27 @@ Work around strtod("inf") defect in msvcrt (VS). See:
   numeric_io_test.cpp
 Augment unit tests for infinities.
 
+20120603T1829Z <gchicares@sbcglobal.net> [578]
+
+  config.hpp
+  config_ming323.hpp
+  numeric_io_cast.hpp
+  numeric_io_traits.hpp
+Refactor.
+
+20120603T1902Z <gchicares@sbcglobal.net> [578]
+
+  numeric_io_traits.hpp
+Refactor.
+
+20120603T1917Z <gchicares@sbcglobal.net> [578]
+
+  numeric_io_traits.hpp
+Restructure, extending "INF" treatment to long double.
+
+20120603T1950Z <gchicares@sbcglobal.net> [578]
+
+  numeric_io_traits.hpp
+Improve treatment of infinities. See (VZ):
+  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00030.html
+
