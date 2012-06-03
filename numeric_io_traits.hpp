@@ -329,12 +329,6 @@ template<> struct numeric_conversion_traits<Floating>
         {return simplify_floating_point(s);}
 };
 
-#if defined LMI_MSVCRT
-// COMPILER !! This workaround is rather poor, of course.
-inline float strtof(char const* nptr, char** endptr)
-{return std::strtod(nptr, endptr);}
-#endif // defined LMI_MSVCRT
-
 template<> struct numeric_conversion_traits<float>
     :public numeric_conversion_traits<Floating>
 {
@@ -342,8 +336,8 @@ template<> struct numeric_conversion_traits<float>
     static int digits(T t) {return floating_point_decimals(t);}
     static char const* fmt() {return "%#.*f";}
     static T strtoT(char const* nptr, char** endptr)
-        {
 #if defined LMI_MSVCRT
+        {
         // COMPILER !! This C runtime's strtod() doesn't support C99 "inf[inity]" nor
         // "nan[(...)]" strings nor hexadecimal notation so provide our
         // work around for at least the first one of them which we actually
@@ -358,9 +352,12 @@ template<> struct numeric_conversion_traits<float>
                 }
             return std::numeric_limits<T>::infinity();
             }
-#endif // defined LMI_MSVCRT
-        return strtof(nptr, endptr);
+        // This C runtime provides no strtof().
+        return std::strtod(nptr, endptr);
         }
+#else  // !defined LMI_MSVCRT
+        {return strtof(nptr, endptr);}
+#endif // !defined LMI_MSVCRT
 };
 
 template<> struct numeric_conversion_traits<double>
@@ -370,7 +367,6 @@ template<> struct numeric_conversion_traits<double>
     static int digits(T t) {return floating_point_decimals(t);}
     static char const* fmt() {return "%#.*f";}
     static T strtoT(char const* nptr, char** endptr)
-        {
 #if defined LMI_MSVCRT
         // COMPILER !! This C runtime's strtod() doesn't support C99 "inf[inity]" nor
         // "nan[(...)]" strings nor hexadecimal notation so provide our
@@ -378,6 +374,7 @@ template<> struct numeric_conversion_traits<double>
         // need. This workaround is, of course, incomplete as it doesn't
         // even support "-inf" without mentioning long and non-lower-case
         // versions or NaN support.
+        {
         if(0 == std::strncmp(nptr, "inf", 3))
             {
             if(endptr)
@@ -386,16 +383,12 @@ template<> struct numeric_conversion_traits<double>
                 }
             return std::numeric_limits<T>::infinity();
             }
-#endif // defined LMI_MSVCRT
         return std::strtod(nptr, endptr);
         }
+#else  // !defined LMI_MSVCRT
+        {return std::strtod(nptr, endptr);}
+#endif // !defined LMI_MSVCRT
 };
-
-#if defined LMI_MSVCRT
-// COMPILER !! This workaround is rather poor, of course.
-inline long double strtold(char const* nptr, char** endptr)
-{return std::strtod(nptr, endptr);}
-#endif // defined LMI_MSVCRT
 
 template<> struct numeric_conversion_traits<long double>
     :public numeric_conversion_traits<Floating>
@@ -410,7 +403,12 @@ template<> struct numeric_conversion_traits<long double>
     static char const* fmt() {return "%#.*Lf";}
 #endif // !defined LMI_MSVCRT
     static T strtoT(char const* nptr, char** endptr)
+#if defined LMI_MSVCRT
+// This lacks the "INF" enhancements used for float and double...
+        {return std::strtod(nptr, endptr);}
+#else  // !defined LMI_MSVCRT
         {return strtold(nptr, endptr);}
+#endif // !defined LMI_MSVCRT
 };
 
 #endif // numeric_io_traits_hpp
