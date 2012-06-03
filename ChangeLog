@@ -30223,3 +30223,23 @@ Restructure, extending "INF" treatment to long double.
 Improve treatment of infinities. See (VZ):
   http://lists.nongnu.org/archive/html/lmi/2012-05/msg00030.html
 
+20120603T2018Z <gchicares@sbcglobal.net> [578]
+
+  numeric_io_test.cpp
+Improve layout.
+
+20120603T2020Z <gchicares@sbcglobal.net> [578]
+
+  numeric_io_test.cpp
+Remove an obsolete comment.
+
+20120603T2025Z <gchicares@sbcglobal.net> [578]
+
+  numeric_io_test.cpp
+Conditionally enable a test that had been suppressed.
+
+20120603T2043Z <gchicares@sbcglobal.net> [578]
+
+  numeric_io_test.cpp
+Augment unit tests.
+
