@@ -31,7 +31,7 @@
 #include <algorithm>                    // std::max()
 #include <cmath>                        // C99 functions fabsl(), log10l(), strtold()
 #include <cstdlib>                      // std::strto*()
-#include <cstring>                      // std::strncmp()
+#include <cstring>                      // std::strcmp(), std::strlen()
 #include <limits>
 #include <stdexcept>
 #include <string>
@@ -330,26 +330,44 @@ template<> struct numeric_conversion_traits<Floating>
 };
 
 #if defined LMI_MSVCRT
-/// COMPILER !! This C runtime's strtod() doesn't support C99 "inf[inity]" nor
-/// "nan[(...)]" strings nor hexadecimal notation so provide our
-/// work around for at least the first one of them which we actually
-/// need. This workaround is, of course, incomplete as it doesn't
-/// even support "-inf" without mentioning long and non-lower-case
-/// versions or NaN support.
+/// COMPILER !! This C runtime's strtod() doesn't understand C99's
+/// "inf[inity]". Work around that, but don't worry about NaNs.
 
 double strtoFDL_msvc(char const* nptr, char** endptr)
 {
-    {
-    if(0 == std::strncmp(nptr, "inf", 3))
+    if(!nptr || !endptr)
         {
-        if(endptr)
-            {
-            *endptr = const_cast<char *>(nptr) + 3;
-            }
-        return std::numeric_limits<double>::infinity();
+        throw std::runtime_error("Numeric conversion: precondition failure.");
         }
-    return std::strtod(nptr, endptr);
-    }
+    char* rendptr; // Pointer to which second std::strtod() argument refers.
+    double z = std::strtod(nptr, &rendptr);
+    if('\0' == *rendptr)
+        {
+        *endptr = rendptr;
+        return z;
+        }
+    else
+        {
+        bool negative = '-' == *nptr;
+        if(negative) {++nptr;}
+        if
+            (  0 == std::strcmp(nptr, "inf")
+            || 0 == std::strcmp(nptr, "INF")
+            || 0 == std::strcmp(nptr, "infinity")
+            || 0 == std::strcmp(nptr, "INFINITY")
+            )
+            {
+            *endptr = const_cast<char*>(nptr) + std::strlen(nptr);
+            return negative
+                ? -std::numeric_limits<double>::infinity()
+                :  std::numeric_limits<double>::infinity()
+                ;
+            }
+        else
+            {
+            throw std::invalid_argument("Numeric conversion failed.");
+            }
+        }
 }
 #endif // defined LMI_MSVCRT
 
