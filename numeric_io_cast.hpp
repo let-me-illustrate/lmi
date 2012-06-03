@@ -310,14 +310,14 @@ struct numeric_converter<std::string, From>
             }
         else
             {
-#if defined LMI_MSC || defined LMI_COMO_WITH_MINGW
-            // COMPILER !! MSVC formats infinity into a string as "1.#INF", not
-            // "inf" as gcc does and C99/C++11 mandates. Translate it manually.
+#if defined LMI_MSVCRT
+            // COMPILER !! This C runtime formats infinity as "1.#INF".
+            // Instead, force C99 "inf".
             if(0 == std::strcmp(buffer, "1.#INF"))
                 {
                 return "inf";
                 }
-#endif // defined LMI_MSC || defined LMI_COMO_WITH_MINGW
+#endif // defined LMI_MSVCRT
             return numeric_conversion_traits<From>::simplify(To(buffer));
             }
         }
