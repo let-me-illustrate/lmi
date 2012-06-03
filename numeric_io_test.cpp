@@ -180,9 +180,6 @@ int test_main(int, char*[])
     double volatile const inf_dbl = std::numeric_limits<double>::infinity();
     std::string     const inf_str = numeric_io_cast<std::string>(inf_dbl);
 
-    // This test fails for como with msvcrt, because the latter
-    // defectively prints infinity as "1.#INF". Distressingly,
-    // that converts to '1.0'.
     BOOST_TEST_EQUAL(inf_dbl, numeric_io_cast<double>(inf_str));
 
     // These conversions fail for borland (FWIW), which prints
