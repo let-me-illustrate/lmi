@@ -260,15 +260,12 @@ int test_main(int, char*[])
     test_interconvertibility( double(2.0 / 3.0), "0.666666666666667" , __FILE__, __LINE__);
     test_interconvertibility( 0.666666666666667, "0.666666666666667" , __FILE__, __LINE__);
 
-#if 0
-// COMPILER !! MinGW gcc-3.2.3 doesn't support long double conversions
-// because it uses the ms C runtime library; como with MinGW gcc as
-// its underlying C compiler has the same problem.
-//
+#if !defined LMI_MSVCRT
+// COMPILER !! This C runtime doesn't support long double conversions.
     test_interconvertibility((long double)( 0.0L),    "0", __FILE__, __LINE__);
     test_interconvertibility((long double)( 1.5L),  "1.5", __FILE__, __LINE__);
     test_interconvertibility((long double)(-2.5L), "-2.5", __FILE__, __LINE__);
-#endif // 0
+#endif // !defined LMI_MSVCRT
 
     test_interconvertibility(std::string("  as  df  "), "  as  df  ", __FILE__, __LINE__);
     // The converse
