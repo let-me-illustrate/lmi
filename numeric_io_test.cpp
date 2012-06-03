@@ -300,7 +300,7 @@ int test_main(int, char*[])
     BOOST_TEST_THROW(numeric_io_cast<double>(    ""), std::invalid_argument, "");
     BOOST_TEST_THROW(numeric_io_cast<double>(  "1e"), std::invalid_argument, "");
 
-    BOOST_TEST_THROW(numeric_io_cast<long double>(    ""), std::invalid_argument, "");
+    BOOST_TEST_THROW(numeric_io_cast<long double>(""), std::invalid_argument, "");
 
 #if defined __MINGW32__ && defined __GNUC__ && LMI_GCC_VERSION < 30404
     std::cerr
@@ -361,10 +361,10 @@ int test_main(int, char*[])
     // so double(2/3) has 15 accurate digits. In this case, only
     // DBL_DIG digits are accurate.
     //
-    //                     1111111
-    //            1234567890123456
+    //                                                1111111
+    //                                       1234567890123456
     test_interconvertibility((1.0 / 3.0), "0.3333333333333333", __FILE__, __LINE__);
-    test_interconvertibility((2.0 / 3.0),  "0.666666666666667", __FILE__, __LINE__);
+    test_interconvertibility((2.0 / 3.0), "0.666666666666667" , __FILE__, __LINE__);
 
     BOOST_TEST_EQUAL  ("1"  , numeric_io_cast<std::string>(1.0 + 2.2204460492503131e-16));
     BOOST_TEST_EQUAL  ("0.5", numeric_io_cast<std::string>(0.5 + 2.2204460492503131e-16));
