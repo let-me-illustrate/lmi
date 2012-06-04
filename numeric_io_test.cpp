@@ -132,9 +132,9 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL( 3, floating_point_decimals(-1000.0f));
     BOOST_TEST_EQUAL(15, floating_point_decimals(-1000.0L));
 
-#if !defined LMI_MSC && !defined LMI_COMO_WITH_MINGW
+#if !defined LMI_MSVCRT
     BOOST_TEST_EQUAL( 0, floating_point_decimals(infinity<double>()));
-#endif // !defined LMI_MSC && !defined LMI_COMO_WITH_MINGW
+#endif // !defined LMI_MSVCRT
 
     // Consider the number of exact decimal digits in the neighborhood
     // of epsilon's reciprocal for type double, which is approximately
