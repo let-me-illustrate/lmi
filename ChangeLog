@@ -30186,3 +30186,60 @@ Tighten tolerance on binary-versus-xml tests. See:
 Fix assorted warnings (VS). See:
   http://lists.nongnu.org/archive/html/lmi/2012-05/msg00016.html
 
+20120531T1516Z <gchicares@sbcglobal.net> [578]
+
+  numeric_io_cast.hpp
+  numeric_io_traits.hpp
+  numeric_io_test.cpp
+Work around strtod("inf") defect in msvcrt (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00021.html
+
+20120531T1726Z <gchicares@sbcglobal.net> [578]
+
+  numeric_io_test.cpp
+Augment unit tests for infinities.
+
+20120603T1829Z <gchicares@sbcglobal.net> [578]
+
+  config.hpp
+  config_ming323.hpp
+  numeric_io_cast.hpp
+  numeric_io_traits.hpp
+Refactor.
+
+20120603T1902Z <gchicares@sbcglobal.net> [578]
+
+  numeric_io_traits.hpp
+Refactor.
+
+20120603T1917Z <gchicares@sbcglobal.net> [578]
+
+  numeric_io_traits.hpp
+Restructure, extending "INF" treatment to long double.
+
+20120603T1950Z <gchicares@sbcglobal.net> [578]
+
+  numeric_io_traits.hpp
+Improve treatment of infinities. See (VZ):
+  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00030.html
+
+20120603T2018Z <gchicares@sbcglobal.net> [578]
+
+  numeric_io_test.cpp
+Improve layout.
+
+20120603T2020Z <gchicares@sbcglobal.net> [578]
+
+  numeric_io_test.cpp
+Remove an obsolete comment.
+
+20120603T2025Z <gchicares@sbcglobal.net> [578]
+
+  numeric_io_test.cpp
+Conditionally enable a test that had been suppressed.
+
+20120603T2043Z <gchicares@sbcglobal.net> [578]
+
+  numeric_io_test.cpp
+Augment unit tests.
+

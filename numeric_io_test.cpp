@@ -132,7 +132,9 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL( 3, floating_point_decimals(-1000.0f));
     BOOST_TEST_EQUAL(15, floating_point_decimals(-1000.0L));
 
+#if !defined LMI_MSVCRT
     BOOST_TEST_EQUAL( 0, floating_point_decimals(infinity<double>()));
+#endif // !defined LMI_MSVCRT
 
     // Consider the number of exact decimal digits in the neighborhood
     // of epsilon's reciprocal for type double, which is approximately
@@ -178,20 +180,20 @@ int test_main(int, char*[])
     double volatile const inf_dbl = std::numeric_limits<double>::infinity();
     std::string     const inf_str = numeric_io_cast<std::string>(inf_dbl);
 
-    // This test fails for como with msvcrt, because the latter
-    // defectively prints infinity as "1.#INF". Distressingly,
-    // that converts to '1.0'.
     BOOST_TEST_EQUAL(inf_dbl, numeric_io_cast<double>(inf_str));
 
-    // These conversions fail for como with msvcrt, because the latter
-    // defectively prints infinity as "1.#INF"; and for borland
-    // (FWIW), which prints infinity as "+INF".
+    // These conversions fail for borland (FWIW), which prints
+    // infinity as "+INF".
     try
         {
-        BOOST_TEST_EQUAL(inf_dbl, numeric_io_cast<double>("inf"));
-        BOOST_TEST_EQUAL(inf_dbl, numeric_io_cast<double>("INF"));
-        BOOST_TEST_EQUAL(inf_dbl, numeric_io_cast<double>("infinity"));
-        BOOST_TEST_EQUAL(inf_dbl, numeric_io_cast<double>("INFINITY"));
+        BOOST_TEST_EQUAL( inf_dbl, numeric_io_cast<double>( "inf"));
+        BOOST_TEST_EQUAL( inf_dbl, numeric_io_cast<double>( "INF"));
+        BOOST_TEST_EQUAL( inf_dbl, numeric_io_cast<double>( "infinity"));
+        BOOST_TEST_EQUAL( inf_dbl, numeric_io_cast<double>( "INFINITY"));
+        BOOST_TEST_EQUAL(-inf_dbl, numeric_io_cast<double>("-inf"));
+        BOOST_TEST_EQUAL(-inf_dbl, numeric_io_cast<double>("-INF"));
+        BOOST_TEST_EQUAL(-inf_dbl, numeric_io_cast<double>("-infinity"));
+        BOOST_TEST_EQUAL(-inf_dbl, numeric_io_cast<double>("-INFINITY"));
         }
     catch(...)
         {
@@ -258,15 +260,13 @@ int test_main(int, char*[])
     test_interconvertibility( double(2.0 / 3.0), "0.666666666666667" , __FILE__, __LINE__);
     test_interconvertibility( 0.666666666666667, "0.666666666666667" , __FILE__, __LINE__);
 
-#if 0
-// COMPILER !! MinGW gcc-3.2.3 doesn't support long double conversions
-// because it uses the ms C runtime library; como with MinGW gcc as
-// its underlying C compiler has the same problem.
-//
+#if !defined LMI_MSVCRT
+// COMPILER !! This C runtime doesn't support long double conversions.
     test_interconvertibility((long double)( 0.0L),    "0", __FILE__, __LINE__);
     test_interconvertibility((long double)( 1.5L),  "1.5", __FILE__, __LINE__);
     test_interconvertibility((long double)(-2.5L), "-2.5", __FILE__, __LINE__);
-#endif // 0
+    BOOST_TEST_EQUAL(numeric_io_cast<long double>("3.36210314311209350626e-4932"), std::numeric_limits<long double>::min());
+#endif // !defined LMI_MSVCRT
 
     test_interconvertibility(std::string("  as  df  "), "  as  df  ", __FILE__, __LINE__);
     // The converse
@@ -295,7 +295,7 @@ int test_main(int, char*[])
     BOOST_TEST_THROW(numeric_io_cast<double>(    ""), std::invalid_argument, "");
     BOOST_TEST_THROW(numeric_io_cast<double>(  "1e"), std::invalid_argument, "");
 
-    BOOST_TEST_THROW(numeric_io_cast<long double>(    ""), std::invalid_argument, "");
+    BOOST_TEST_THROW(numeric_io_cast<long double>(""), std::invalid_argument, "");
 
 #if defined __MINGW32__ && defined __GNUC__ && LMI_GCC_VERSION < 30404
     std::cerr
@@ -356,13 +356,14 @@ int test_main(int, char*[])
     // so double(2/3) has 15 accurate digits. In this case, only
     // DBL_DIG digits are accurate.
     //
-    //                     1111111
-    //            1234567890123456
+    //                                                1111111
+    //                                       1234567890123456
     test_interconvertibility((1.0 / 3.0), "0.3333333333333333", __FILE__, __LINE__);
-    test_interconvertibility((2.0 / 3.0),  "0.666666666666667", __FILE__, __LINE__);
+    test_interconvertibility((2.0 / 3.0), "0.666666666666667" , __FILE__, __LINE__);
 
     BOOST_TEST_EQUAL  ("1"  , numeric_io_cast<std::string>(1.0 + 2.2204460492503131e-16));
     BOOST_TEST_EQUAL  ("0.5", numeric_io_cast<std::string>(0.5 + 2.2204460492503131e-16));
+    BOOST_TEST_UNEQUAL("0.4", numeric_io_cast<std::string>(0.4 + 2.2204460492503131e-16));
     BOOST_TEST_UNEQUAL("0.1", numeric_io_cast<std::string>(0.1 + 2.2204460492503131e-16));
 
     // 1 +/- epsilon must be formatted as apparent unity.

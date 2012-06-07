@@ -26,11 +26,12 @@
 
 #include "config.hpp"
 
-#include "ieee754.hpp" // is_infinite<>()
+#include "ieee754.hpp"                  // is_infinite<>()
 
-#include <algorithm>   // std::max()
-#include <cmath>       // C99 functions fabsl(), log10l(), strtold()
-#include <cstdlib>     // std::strto*()
+#include <algorithm>                    // std::max()
+#include <cmath>                        // C99 functions fabsl(), log10l(), strtold()
+#include <cstdlib>                      // std::strto*()
+#include <cstring>                      // std::strcmp(), std::strlen()
 #include <limits>
 #include <stdexcept>
 #include <string>
@@ -80,15 +81,16 @@ template<typename T>
 inline int floating_point_decimals(T t)
 {
     BOOST_STATIC_ASSERT(boost::is_float<T>::value);
-#if defined _MSC_VER
-    // COMPILER !! Not only does Visual C++ write infinity as "1.#INF" rather
-    // than "inf", it respects decimals specification, "shortening" it into
-    // "1." if we return 0 here.
+#if defined LMI_MSVCRT
+    // COMPILER !! This C runtime not only writes infinity as "1.#INF"
+    // instead of "inf" but also "respects" the precision specifier
+    // when doing so, truncating it to "1." if this function were to
+    // return zero.
     if(is_infinite(t))
         {
         return 4;
         }
-#endif // defined _MSC_VER
+#endif // defined LMI_MSVCRT
     // Avoid taking the logarithm of zero or infinity.
     if(0 == t || is_infinite(t))
         {
@@ -327,11 +329,47 @@ template<> struct numeric_conversion_traits<Floating>
         {return simplify_floating_point(s);}
 };
 
-#if !defined LMI_COMPILER_PROVIDES_STRTOF
-// COMPILER !! This workaround is rather poor, of course.
-inline float strtof(char const* nptr, char** endptr)
-{return std::strtod(nptr, endptr);}
-#endif // !defined LMI_COMPILER_PROVIDES_STRTOF
+#if defined LMI_MSVCRT
+/// COMPILER !! This C runtime's strtod() doesn't understand C99's
+/// "inf[inity]". Work around that, but don't worry about NaNs.
+
+double strtoFDL_msvc(char const* nptr, char** endptr)
+{
+    if(!nptr || !endptr)
+        {
+        throw std::runtime_error("Numeric conversion: precondition failure.");
+        }
+    char* rendptr; // Pointer to which second std::strtod() argument refers.
+    double z = std::strtod(nptr, &rendptr);
+    if('\0' == *rendptr)
+        {
+        *endptr = rendptr;
+        return z;
+        }
+    else
+        {
+        bool negative = '-' == *nptr;
+        if(negative) {++nptr;}
+        if
+            (  0 == std::strcmp(nptr, "inf")
+            || 0 == std::strcmp(nptr, "INF")
+            || 0 == std::strcmp(nptr, "infinity")
+            || 0 == std::strcmp(nptr, "INFINITY")
+            )
+            {
+            *endptr = const_cast<char*>(nptr) + std::strlen(nptr);
+            return negative
+                ? -std::numeric_limits<double>::infinity()
+                :  std::numeric_limits<double>::infinity()
+                ;
+            }
+        else
+            {
+            throw std::invalid_argument("Numeric conversion failed.");
+            }
+        }
+}
+#endif // defined LMI_MSVCRT
 
 template<> struct numeric_conversion_traits<float>
     :public numeric_conversion_traits<Floating>
@@ -340,25 +378,11 @@ template<> struct numeric_conversion_traits<float>
     static int digits(T t) {return floating_point_decimals(t);}
     static char const* fmt() {return "%#.*f";}
     static T strtoT(char const* nptr, char** endptr)
-        {
-#if defined _MSC_VER
-        // COMPILER !! MSVC strtod() doesn't support C99 "inf[inity]" nor
-        // "nan[(...)]" strings nor hexadecimal notation so provide our
-        // work around for at least the first one of them which we actually
-        // need. This workaround is, of course, incomplete as it doesn't
-        // even support "-inf" without mentioning long and non-lower-case
-        // versions or NaN support.
-        if(strncmp(nptr, "inf", 3) == 0)
-            {
-            if(endptr)
-                {
-                *endptr = const_cast<char *>(nptr) + 3;
-                }
-            return std::numeric_limits<T>::infinity();
-            }
-#endif // defined _MSC_VER
-        return strtof(nptr, endptr);
-        }
+#if defined LMI_MSVCRT
+        {return strtoFDL_msvc(nptr, endptr);}
+#else  // !defined LMI_MSVCRT
+        {return strtof(nptr, endptr);}
+#endif // !defined LMI_MSVCRT
 };
 
 template<> struct numeric_conversion_traits<double>
@@ -368,49 +392,31 @@ template<> struct numeric_conversion_traits<double>
     static int digits(T t) {return floating_point_decimals(t);}
     static char const* fmt() {return "%#.*f";}
     static T strtoT(char const* nptr, char** endptr)
-        {
-#if defined _MSC_VER
-        // COMPILER !! MSVC strtod() doesn't support C99 "inf[inity]" nor
-        // "nan[(...)]" strings nor hexadecimal notation so provide our
-        // work around for at least the first one of them which we actually
-        // need. This workaround is, of course, incomplete as it doesn't
-        // even support "-inf" without mentioning long and non-lower-case
-        // versions or NaN support.
-        if(strncmp(nptr, "inf", 3) == 0)
-            {
-            if(endptr)
-                {
-                *endptr = const_cast<char *>(nptr) + 3;
-                }
-            return std::numeric_limits<T>::infinity();
-            }
-#endif // defined _MSC_VER
-        return std::strtod(nptr, endptr);
-        }
+#if defined LMI_MSVCRT
+        {return strtoFDL_msvc(nptr, endptr);}
+#else  // !defined LMI_MSVCRT
+        {return std::strtod(nptr, endptr);}
+#endif // !defined LMI_MSVCRT
 };
-
-#if !defined LMI_COMPILER_PROVIDES_STRTOLD
-// COMPILER !! This workaround is rather poor, of course.
-inline long double strtold(char const* nptr, char** endptr)
-{return std::strtod(nptr, endptr);}
-#endif // !defined LMI_COMPILER_PROVIDES_STRTOLD
-
-// COMPILER !! MinGW gcc-3.x doesn't support "%Lf" correctly because
-// it uses the defective ms C runtime library.
 
 template<> struct numeric_conversion_traits<long double>
     :public numeric_conversion_traits<Floating>
 {
     typedef long double T;
     static int digits(T t) {return floating_point_decimals(t);}
-#if defined __MINGW32__ && defined __GNUC__ && __GNUC__ == 3
+#if defined LMI_MSVCRT
+// COMPILER !! This C runtime doesn't support "%Lf" correctly.
     static char const* fmt()
         {throw std::domain_error("Type 'long double' not supported.");}
-#else  // Not MinGW gcc prior to version 4.
+#else  // !defined LMI_MSVCRT
     static char const* fmt() {return "%#.*Lf";}
-#endif // Not MinGW gcc prior to version 4.
+#endif // !defined LMI_MSVCRT
     static T strtoT(char const* nptr, char** endptr)
+#if defined LMI_MSVCRT
+        {return strtoFDL_msvc(nptr, endptr);}
+#else  // !defined LMI_MSVCRT
         {return strtold(nptr, endptr);}
+#endif // !defined LMI_MSVCRT
 };
 
 #endif // numeric_io_traits_hpp
