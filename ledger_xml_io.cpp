@@ -197,8 +197,8 @@ void Ledger::write(xml::element& x) const
     // they are defined only on a current basis--experience-rating
     // columns, e.g.
 
-    title_map["AVGenAcct_CurrentZero"           ] = "Curr Charges 0% Account Value Gen Acct";
-    title_map["AVGenAcct_GuaranteedZero"        ] = "Guar Charges 0% Account Value Gen Acct";
+    title_map["AVGenAcct_CurrentZero"           ] = "Curr Charges Account Value Gen Acct";
+    title_map["AVGenAcct_GuaranteedZero"        ] = "Guar Charges Account Value Gen Acct";
     title_map["AVRelOnDeath_Current"            ] = "Account Value ____Released on Death";
     title_map["AVSepAcct_CurrentZero"           ] = "Curr Charges 0% Account Value Sep Acct";
     title_map["AVSepAcct_GuaranteedZero"        ] = "Guar Charges 0% Account Value Sep Acct";

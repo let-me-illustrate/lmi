@@ -129,6 +129,10 @@ namespace fs = boost::filesystem;
 #    define LMI_MSC
 #endif // defined _MSC_VER && !defined LMI_GCC_VERSION && !defined LMI_COMO_WITH_MINGW
 
+#if defined LMI_COMO_WITH_MINGW || defined LMI_MSC || defined __MINGW32__ && defined LMI_GCC_VERSION && LMI_GCC_VERSION < 30405
+#   define LMI_MSVCRT
+#endif // Compilers that use the msvc C runtime, without corrections such as libmingwex.
+
 #if defined HAVE_CONFIG_H // Using autoconf.
 #   include "config.h"
 #else // Not using autoconf.

@@ -43,6 +43,14 @@
 // Version numbers are in 'include/_mingw.h' here:
 //   http://cygwin.com/cgi-bin/cvsweb.cgi/src/winsup/mingw/?cvsroot=src
 
+#if 308 <= LMI_MINGW_VERSION
+#   define LMI_COMPILER_PROVIDES_EXPM1L
+#endif // 308 <= LMI_MINGW_VERSION
+
+#if 202 <= LMI_MINGW_VERSION
+#   define LMI_COMPILER_PROVIDES_LOG1PL
+#endif // 202 <= LMI_MINGW_VERSION
+
 #if 200 <= LMI_MINGW_VERSION
 #   define LMI_COMPILER_PROVIDES_ISNAN
 #endif // 200 <= LMI_MINGW_VERSION
