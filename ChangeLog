@@ -30255,8 +30255,13 @@ Refactor.
   mc_enum_types.xpp
 Change the headings of certain exotic columns.
 
-20120606T1626Z <wboutin@massmutual.com> [578]
+20120608T1631Z <wboutin@massmutual.com> [578]
 
   nasd.xsl
 Specify basis of three columns.
+
+20120608T1645Z <wboutin@massmutual.com> [578]
+
+  fo_common.xsl
+Untangle a variable formerly used for tracking numbers.
 
