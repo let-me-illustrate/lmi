@@ -158,20 +158,25 @@
   </xsl:template>
 
   <!--
-  The field 'InsCoPhone' contains two compliance tracking numbers.
-  The first one is for new business, which could start at 1st position.
-  The second one is for inforce, which always starts at the 20-th.
+  Formerly, the field 'InsCoPhone' contained two compliance tracking numbers,
+  but more were needed to distinguish inforce and new business composites.
   -->
   <xsl:variable name="compliance_tracking_string">
     <xsl:choose>
       <xsl:when test="$scalars/IsInforce!='1'">
-        <xsl:if test="string-length($scalars/InsCoPhone) &gt; 19">
-          <xsl:value-of select="substring($scalars/InsCoPhone, 1, 20)"/>
+        <xsl:if test="$scalars/Composite='1'">
+          <xsl:value-of select="$scalars/CompositeTrackingNumber"/>
+        </xsl:if>
+        <xsl:if test="$scalars/Composite!='1'">
+          <xsl:value-of select="$scalars/PresaleTrackingNumber"/>
         </xsl:if>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:if test="string-length($scalars/InsCoPhone) &gt; 21">
-          <xsl:value-of select="substring($scalars/InsCoPhone, 21)"/>
+        <xsl:if test="$scalars/Composite='1'">
+          <xsl:value-of select="$scalars/InforceCompositeTrackingNumber"/>
+        </xsl:if>
+        <xsl:if test="$scalars/Composite!='1'">
+          <xsl:value-of select="$scalars/InforceTrackingNumber"/>
         </xsl:if>
       </xsl:otherwise>
     </xsl:choose>
